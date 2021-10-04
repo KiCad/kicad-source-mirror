@@ -35,14 +35,12 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_lastNotebookPage( -1 ),
     m_macHack( true )
 {
-    m_bpButtonCalcAtt->SetBitmap( KiBitmap( BITMAPS::small_down ) );
     m_bpButtonAnalyze->SetBitmap( KiBitmap( BITMAPS::small_down ) );
     m_bpButtonSynthetize->SetBitmap( KiBitmap( BITMAPS::small_up ) );
 
     SetKiway( this, aKiway );
     m_currTransLine     = nullptr;
     m_currTransLineType = DEFAULT_TYPE;
-    m_currAttenuator    = nullptr;
     m_TWMode = TW_MASTER_CURRENT;
     m_TWNested = false;
 
@@ -64,21 +62,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     for( int ii = 0; ii < 8; ii++ )
         m_transline_list.push_back( new TRANSLINE_IDENT( tltype_list[ii] ) );
-
-    // Populate attenuator list ordered like in dialog menu list
-    m_attenuator_list.push_back( new ATTENUATOR_PI() );
-    m_attenuator_list.push_back( new ATTENUATOR_TEE() );
-    m_attenuator_list.push_back( new ATTENUATOR_BRIDGE() );
-    m_attenuator_list.push_back( new ATTENUATOR_SPLITTER() );
-    m_currAttenuator = m_attenuator_list[0];
-
-    m_staticTextAttMsg->SetFont( KIUI::GetInfoFont( this ).Italic() );
-
-    m_attZinUnit->SetLabel( wxT( "Ω" ) );
-    m_attZoutUnit->SetLabel( wxT( "Ω" ) );
-    m_attR1Unit->SetLabel( wxT( "Ω" ) );
-    m_attR2Unit->SetLabel( wxT( "Ω" ) );
-    m_attR3Unit->SetLabel( wxT( "Ω" ) );
 
     m_reqResUnits->SetLabel( wxT( "kΩ" ) );
     m_exclude1Units->SetLabel( wxT( "kΩ" ) );
@@ -110,8 +93,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     initColorCodePanel();
     initViaSizePanel();
     initESeriesPanel();
-
-    SetAttenuator( m_AttenuatorsSelection->GetSelection() );
 
     ToleranceSelection( m_rbToleranceSelection->GetSelection() );
 
@@ -151,9 +132,6 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
         delete m_transline_list[ii];
 
-    for( unsigned ii = 0; ii < m_attenuator_list.size(); ii++ )
-        delete m_attenuator_list[ii];
-
     delete m_ccValueNamesBitmap;
     delete m_ccValuesBitmap;
     delete m_ccMultipliersBitmap;
@@ -177,27 +155,25 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
         event2.SetInt( m_currTransLineType );
         m_TranslineSelection->Command( event2 );
 
-        for( int i = 0; i < m_attenuator_list.size(); ++i )
+        for( int i = 0; i < m_panelAttenuators->m_AttenuatorList.size(); ++i )
         {
-            if( m_attenuator_list[i] == m_currAttenuator )
+            if( m_panelAttenuators->m_AttenuatorList[i] == m_panelAttenuators->m_CurrAttenuator )
             {
-                event2.SetEventObject( m_AttenuatorsSelection );
+                event2.SetEventObject( m_panelAttenuators->GetAttenuatorsSelector() );
                 event2.SetInt( i );
-                m_AttenuatorsSelection->Command( event2 );
+                m_panelAttenuators->GetAttenuatorsSelector()->Command( event2 );
                 break;
             }
         }
+
+        m_panelAttenuators->UpdateUI();
 
         ToleranceSelection( m_rbToleranceSelection->GetSelection() );
 
        	m_viaBitmap->SetBitmap( KiBitmap( BITMAPS::viacalc ) );
        	m_panelViaSize->Layout();
 
-        m_attenuatorBitmap->SetBitmap( *m_currAttenuator->m_SchBitMap );
        	m_panelRegulators->Layout();
-
-       	m_attenuatorBitmap->GetParent()->Layout();
-       	m_attenuatorBitmap->GetParent()->Refresh();
 
         m_panelESeriesHelp->Refresh();
         m_htmlWinFormulas->Refresh();
@@ -276,8 +252,10 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     m_currTransLineType = static_cast<TRANSLINE_TYPE_ID>( cfg->m_TransLine.type );
     m_Notebook->ChangeSelection( cfg->m_LastPage );
     m_rbToleranceSelection->SetSelection( cfg->m_ColorCodeTolerance );
-    m_AttenuatorsSelection->SetSelection( cfg->m_Attenuators.type );
     m_BoardClassesUnitsSelector->SetSelection( cfg->m_BoardClassUnits );
+
+    // Attenuators panel config:
+    m_panelAttenuators->LoadSettings( cfg );
 
     // Regul panel config:
     m_panelRegulators->LoadSettings( cfg );
@@ -288,9 +266,6 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     for( TRANSLINE_IDENT* transline : m_transline_list )
         transline->ReadConfig();
-
-    for( ATTENUATOR* attenuator : m_attenuator_list )
-        attenuator->ReadConfig();
 }
 
 
@@ -308,7 +283,6 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     {
         cfg->m_LastPage = m_Notebook->GetSelection();
         cfg->m_TransLine.type = m_currTransLineType;
-        cfg->m_Attenuators.type = m_AttenuatorsSelection->GetSelection();
         cfg->m_ColorCodeTolerance = m_rbToleranceSelection->GetSelection();
         cfg->m_BoardClassUnits = m_BoardClassesUnitsSelector->GetSelection();
 
@@ -316,6 +290,7 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_Electrical.spacing_voltage = m_ElectricalSpacingVoltage->GetValue();
 
         m_panelRegulators->Regulators_WriteConfig( cfg );
+        m_panelAttenuators->SaveSettings( cfg );
     }
 
     writeTrackWidthConfig();
@@ -324,9 +299,6 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
         m_transline_list[ii]->WriteConfig();
-
-    for( unsigned ii = 0; ii < m_attenuator_list.size(); ii++ )
-        m_attenuator_list[ii]->WriteConfig();
 }
 
 

@@ -17,6 +17,7 @@ class UNIT_SELECTOR_RESISTOR;
 class UNIT_SELECTOR_THICKNESS;
 
 #include "panel_regulator.h"
+#include "panel_attenuators.h"
 #include "widgets/unit_selector.h"
 #include "kiway_player.h"
 #include <wx/string.h>
@@ -29,18 +30,18 @@ class UNIT_SELECTOR_THICKNESS;
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/radiobox.h>
-#include <wx/statbmp.h>
-#include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/statbox.h>
-#include <wx/button.h>
-#include <wx/bmpbuttn.h>
-#include <wx/html/htmlwin.h>
+#include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/radiobut.h>
+#include <wx/statbox.h>
+#include <wx/button.h>
+#include <wx/html/htmlwin.h>
+#include <wx/radiobox.h>
+#include <wx/statbmp.h>
 #include <wx/choice.h>
+#include <wx/bmpbuttn.h>
 #include <wx/grid.h>
 #include <wx/notebook.h>
 #include <wx/frame.h>
@@ -59,32 +60,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxMenuBar* m_menubar;
 		wxNotebook* m_Notebook;
 		PANEL_REGULATOR* m_panelRegulators;
-		wxPanel* m_panelAttenuators;
-		wxRadioBox* m_AttenuatorsSelection;
-		wxStaticBitmap* m_attenuatorBitmap;
-		wxStaticText* m_attenuationLabel;
-		wxTextCtrl* m_AttValueCtrl;
-		wxStaticText* m_attUnit;
-		wxStaticText* m_attenuationZinLabel;
-		wxTextCtrl* m_ZinValueCtrl;
-		wxStaticText* m_attZinUnit;
-		wxStaticText* m_ZoutLabel;
-		wxTextCtrl* m_ZoutValueCtrl;
-		wxStaticText* m_attZoutUnit;
-		wxButton* m_buttonAlcAtt;
-		wxBitmapButton* m_bpButtonCalcAtt;
-		wxStaticText* m_attenuatorR1Label;
-		wxTextCtrl* m_Att_R1_Value;
-		wxStaticText* m_attR1Unit;
-		wxStaticText* m_attenuatorR2Label;
-		wxTextCtrl* m_Att_R2_Value;
-		wxStaticText* m_attR2Unit;
-		wxStaticText* m_attenuatorR3Label;
-		wxTextCtrl* m_Att_R3_Value;
-		wxStaticText* m_attR3Unit;
-		wxStaticText* m_staticTextAttMsg;
-		wxHtmlWindow* m_Attenuator_Messages;
-		wxHtmlWindow* m_panelAttFormula;
+		PANEL_ATTENUATORS* m_panelAttenuators;
 		wxPanel* m_panelESeries;
 		wxStaticText* m_ESrequired;
 		wxTextCtrl* m_ResRequired;
@@ -351,8 +327,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClosePcbCalc( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void OnAttenuatorSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCalculateAttenuator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnESeriesSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCalculateESeries( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnToleranceSelection( wxCommandEvent& event ) { event.Skip(); }

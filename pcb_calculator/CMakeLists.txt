@@ -9,7 +9,6 @@ include_directories(
 
 set( PCB_CALCULATOR_SRCS
     eserie.cpp
-    attenuators.cpp
     board_classes_values.cpp
     colorcode.cpp
     common_data.cpp
@@ -18,6 +17,7 @@ set( PCB_CALCULATOR_SRCS
     pcb_calculator_frame.cpp
     pcb_calculator_settings.cpp
     datafile_read_write.cpp
+    panel_attenuators.cpp
     panel_regulator.cpp
     tracks_width_versus_current.cpp
     via.cpp
@@ -36,6 +36,7 @@ set( PCB_CALCULATOR_SRCS
     dialogs/pcb_calculator_frame_base.cpp
     dialogs/dialog_regulator_form_base.cpp
     dialogs/dialog_regulator_form.cpp
+    dialogs/panel_attenuators_base.cpp
     dialogs/panel_regulator_base.cpp
     ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )

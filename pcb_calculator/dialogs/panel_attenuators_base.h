@@ -1,0 +1,80 @@
+///////////////////////////////////////////////////////////////////////////
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// http://www.wxformbuilder.org/
+//
+// PLEASE DO *NOT* EDIT THIS FILE!
+///////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
+#include <wx/string.h>
+#include <wx/radiobox.h>
+#include <wx/gdicmn.h>
+#include <wx/font.h>
+#include <wx/colour.h>
+#include <wx/settings.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/statbmp.h>
+#include <wx/sizer.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
+#include <wx/statbox.h>
+#include <wx/button.h>
+#include <wx/bmpbuttn.h>
+#include <wx/html/htmlwin.h>
+#include <wx/panel.h>
+
+///////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class PANEL_ATTENUATORS_BASE
+///////////////////////////////////////////////////////////////////////////////
+class PANEL_ATTENUATORS_BASE : public wxPanel
+{
+	private:
+
+	protected:
+		wxRadioBox* m_AttenuatorsSelection;
+		wxStaticBitmap* m_attenuatorBitmap;
+		wxStaticText* m_attenuationLabel;
+		wxTextCtrl* m_AttValueCtrl;
+		wxStaticText* m_attUnit;
+		wxStaticText* m_attenuationZinLabel;
+		wxTextCtrl* m_ZinValueCtrl;
+		wxStaticText* m_attZinUnit;
+		wxStaticText* m_ZoutLabel;
+		wxTextCtrl* m_ZoutValueCtrl;
+		wxStaticText* m_attZoutUnit;
+		wxButton* m_buttonAlcAtt;
+		wxBitmapButton* m_bpButtonCalcAtt;
+		wxStaticText* m_attenuatorR1Label;
+		wxTextCtrl* m_Att_R1_Value;
+		wxStaticText* m_attR1Unit;
+		wxStaticText* m_attenuatorR2Label;
+		wxTextCtrl* m_Att_R2_Value;
+		wxStaticText* m_attR2Unit;
+		wxStaticText* m_attenuatorR3Label;
+		wxTextCtrl* m_Att_R3_Value;
+		wxStaticText* m_attR3Unit;
+		wxStaticText* m_staticTextAttMsg;
+		wxHtmlWindow* m_Attenuator_Messages;
+		wxHtmlWindow* m_panelAttFormula;
+
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnAttenuatorSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCalculateAttenuator( wxCommandEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		~PANEL_ATTENUATORS_BASE();
+
+};
+

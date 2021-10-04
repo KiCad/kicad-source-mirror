@@ -271,27 +271,6 @@ private:
     void OnToleranceSelection( wxCommandEvent& event ) override;
     void ToleranceSelection( int aSelection );
 
-    // Attenuators Panel
-    void OnAttenuatorSelection( wxCommandEvent& event ) override;
-    void SetAttenuator( unsigned aIdx );
-    void OnCalculateAttenuator( wxCommandEvent& event ) override;
-    void TransfPanelDataToAttenuator();
-    void TransfAttenuatorDataToPanel();
-    void TransfAttenuatorResultsToPanel();
-
-    // Regulators Panel
-#if 0
-    void OnRegulatorCalcButtonClick( wxCommandEvent& event ) override;
-    void OnRegulatorResetButtonClick( wxCommandEvent& event ) override;
-    void OnRegulTypeSelection( wxCommandEvent& event ) override;
-    void OnRegulatorSelection( wxCommandEvent& event ) override;
-    void OnDataFileSelection( wxCommandEvent& event ) override;
-    void OnAddRegulator( wxCommandEvent& event ) override;
-    void OnEditRegulator( wxCommandEvent& event ) override;
-    void OnRemoveRegulator( wxCommandEvent& event ) override;
-#endif
-
-
 private:
     enum                         // Which dimension is controlling the track width / current
     {                            // calculations:
@@ -305,9 +284,6 @@ private:
     enum TRANSLINE_TYPE_ID        m_currTransLineType;
     TRANSLINE*                    m_currTransLine;
     std::vector<TRANSLINE_IDENT*> m_transline_list;
-
-    ATTENUATOR*                   m_currAttenuator;
-    std::vector<ATTENUATOR*>      m_attenuator_list;
 
     wxBitmap*                     m_ccValueNamesBitmap;
     wxBitmap*                     m_ccValuesBitmap;
