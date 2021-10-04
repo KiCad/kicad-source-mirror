@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -124,7 +124,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
     if( !aSearchHierarchy )
         sheetList.push_back( *m_CurrentSheet );
     else
-        sheetList.BuildSheetList( g_RootSheet );
+        sheetList.BuildSheetList( g_RootSheet, false );
 
     for( SCH_SHEET_PATHS_ITER it = sheetList.begin(); it != sheetList.end(); ++it )
     {

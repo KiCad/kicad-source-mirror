@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -451,7 +451,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
 {
     unsigned       i;
     SCH_ITEM*      item;
-    SCH_SHEET_LIST hierarchy( g_RootSheet );    // This is the entire schematic hierarcy.
+    SCH_SHEET_LIST hierarchy( g_RootSheet, false );    // This is the entire schematic hierarcy.
 
     if( m_blockItems.GetCount() == 0 )
     {
@@ -468,6 +468,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
     // the destination sheet. Moreover new sheets create new sheetpaths, and component
     // alternante references must be created and cleared
     bool hasSheetPasted = false;
+
     // Keep trace of existing sheet paths. Paste block can modify this list
     SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
 

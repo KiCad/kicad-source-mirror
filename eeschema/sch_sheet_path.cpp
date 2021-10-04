@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,7 +178,6 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
         t = t->Next();
     }
 }
-
 
 
 void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
@@ -423,15 +422,12 @@ SCH_SHEET* SCH_SHEET_PATH::FindSheetByName( const wxString& aSheetName )
 }
 
 
-/********************************************************************/
-/* Class SCH_SHEET_LIST to handle the list of Sheets in a hierarchy */
-/********************************************************************/
-SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet )
+SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet, bool aCheckIntegrity )
 {
     m_isRootSheet = false;
 
     if( aSheet != NULL )
-        BuildSheetList( aSheet );
+        BuildSheetList( aSheet, aCheckIntegrity );
 }
 
 
@@ -451,7 +447,7 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheetByPath( const wxString& aPath, bool aHum
 }
 
 
-void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
+void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity )
 {
     wxCHECK_RET( aSheet != NULL, wxT( "Cannot build sheet list from undefined sheet." ) );
 
@@ -480,21 +476,30 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
             {
                 SCH_SHEET* sheet = (SCH_SHEET*) item;
 
-                if( !m_currentSheetPath.TestForRecursion(
-                            sheet->GetFileName(), aSheet->GetFileName() ) )
-                    BuildSheetList( sheet );
+                if( aCheckIntegrity )
+                {
+                    if( !m_currentSheetPath.TestForRecursion( sheet->GetFileName(),
+                                                              aSheet->GetFileName() ) )
+                        BuildSheetList( sheet, true );
+                    else
+                        badSheets.push_back( sheet );
+                }
                 else
-                    badSheets.push_back( sheet );
+                {
+                    BuildSheetList( sheet, false );
+                }
             }
 
             item = item->Next();
         }
 
-
-        for( auto sheet : badSheets )
+        if( aCheckIntegrity )
         {
-            aSheet->GetScreen()->Remove( sheet );
-            aSheet->GetScreen()->SetModify();
+            for( auto sheet : badSheets )
+            {
+                aSheet->GetScreen()->Remove( sheet );
+                aSheet->GetScreen()->SetModify();
+            }
         }
     }
 
@@ -608,6 +613,7 @@ void SCH_SHEET_LIST::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aInclu
     for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
         (*it).GetComponents( aReferences, aIncludePowerSymbols, aForceIncludeOrphanComponents );
 }
+
 
 void SCH_SHEET_LIST::GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
                                              bool aIncludePowerSymbols )

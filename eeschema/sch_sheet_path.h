@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -330,12 +330,11 @@ private:
 public:
 
     /**
-     * Constructor
-     * build a flattened list of SCH_SHEET_PATH objects from \a aSheet.
+     * Build a flattened list of SCH_SHEET_PATH objects from \a aSheet.
      *
-     * If aSheet == NULL, then this is an empty hierarchy which the user can populate.
+     * If aSheet == NULL, then this is the full hierarchy built from the root sheet.
      */
-    SCH_SHEET_LIST( SCH_SHEET* aSheet = NULL );
+    SCH_SHEET_LIST( SCH_SHEET* aSheet = nullptr, bool aCheckIntegrity = true );
 
     ~SCH_SHEET_LIST() {}
 
@@ -470,15 +469,17 @@ public:
     SCH_SHEET* FindSheetByName( const wxString& aSheetName );
 
     /**
-     * Function BuildSheetList
-     * builds the list of sheets and their sheet path from \a aSheet.
+     * Build the list of sheets and their sheet path from \a aSheet.
+     *
      * If \a aSheet is the root sheet, the full sheet path and sheet list are built.
      *
      * @param aSheet is the starting sheet from which the list is built, or NULL
      *               indicating that g_RootSheet should be used.
+     * @param aIntegrityCheck set to true to test for sheet recursion while building the
+     *                        hierarchy.
      * @throw std::bad_alloc if the memory for the sheet path list could not be allocated.
      */
-    void BuildSheetList( SCH_SHEET* aSheet );
+    void BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity );
 };
 
 #endif // CLASS_DRAWSHEET_PATH_H
