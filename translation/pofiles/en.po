@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-03 16:55-0700\n"
+"POT-Creation-Date: 2021-10-04 08:53-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3826,17 +3826,17 @@ msgstr "Full-Window Crosshairs"
 msgid "Switch display of full-window crosshairs"
 msgstr "Switch display of full-window crosshairs"
 
-msgid "Single Layer View Mode"
-msgstr "Single Layer View Mode"
+msgid "Inactive Layer View Mode"
+msgstr "Inactive Layer View Mode"
 
 msgid "Toggle inactive layers between normal and dimmed"
 msgstr "Toggle inactive layers between normal and dimmed"
 
-msgid "Single Layer View Mode (3-state)"
-msgstr "Single Layer View Mode (3-state)"
+msgid "Inactive Layer View Mode (3-state)"
+msgstr "Inactive Layer View Mode (3-state)"
 
-msgid "Toggle inactive layers between normal, dimmed, and hidden"
-msgstr "Toggle inactive layers between normal, dimmed, and hidden"
+msgid "Cycle inactive layers between normal, dimmed, and hidden"
+msgstr "Cycle inactive layers between normal, dimmed, and hidden"
 
 msgid "Select item(s)"
 msgstr "Select item(s)"
@@ -6827,8 +6827,8 @@ msgstr "Net Classes"
 msgid "Text Variables"
 msgstr "Text Variables"
 
-msgid "Project is missing or read-only. Changes will not be saved."
-msgstr "Project is missing or read-only. Changes will not be saved."
+msgid "Project is missing or read-only. Settings will not be editable."
+msgstr "Project is missing or read-only. Settings will not be editable."
 
 #, c-format
 msgid ""
@@ -13651,10 +13651,6 @@ msgstr ""
 msgid "Error writing objects to clipboard"
 msgstr "Error writing objects to clipboard"
 
-#, c-format
-msgid "Attenuation more than %f dB"
-msgstr "Attenuation more than %f dB"
-
 msgid ""
 "### Bridged Tee Attenuator\n"
 "__Zin__ desired input impedance in &#x2126;<br>\n"
@@ -13769,84 +13765,6 @@ msgstr "µA"
 msgid "Regulator Parameters"
 msgstr "Regulator Parameters"
 
-msgid ""
-"Type of the regulator.\n"
-"There are 2 types:\n"
-"- regulators which have a dedicated sense pin for the voltage regulation.\n"
-"- 3 terminal pins."
-msgstr ""
-"Type of the regulator.\n"
-"There are 2 types:\n"
-"- regulators which have a dedicated sense pin for the voltage regulation.\n"
-"- 3 terminal pins."
-
-msgid "Standard Type"
-msgstr "Standard Type"
-
-msgid "3 Terminal Type"
-msgstr "3 Terminal Type"
-
-msgid "Formula"
-msgstr "Formula"
-
-msgid "R1:"
-msgstr "R1:"
-
-msgid "kOhm"
-msgstr "kOhm"
-
-msgid "R2:"
-msgstr "R2:"
-
-msgid "Vout:"
-msgstr "Vout:"
-
-msgid ""
-"The internal reference voltage of the regulator.\n"
-"Should not be 0."
-msgstr ""
-"The internal reference voltage of the regulator.\n"
-"Should not be 0."
-
-msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr "For 3 terminal regulators only, the  Adjust pin current."
-
-msgid "Calculate"
-msgstr "Calculate"
-
-msgid "Regulator"
-msgstr "Regulator"
-
-msgid "Regulators data file:"
-msgstr "Regulators data file:"
-
-msgid "The name of the data file which stores known regulators parameters."
-msgstr "The name of the data file which stores known regulators parameters."
-
-msgid "Browse"
-msgstr "Browse"
-
-msgid "Edit Regulator"
-msgstr "Edit Regulator"
-
-msgid "Edit the current selected regulator."
-msgstr "Edit the current selected regulator."
-
-msgid "Add Regulator"
-msgstr "Add Regulator"
-
-msgid "Enter a new item to the current list of available regulators"
-msgstr "Enter a new item to the current list of available regulators"
-
-msgid "Remove Regulator"
-msgstr "Remove Regulator"
-
-msgid "Remove an item from the current list of available regulators"
-msgstr "Remove an item from the current list of available regulators"
-
-msgid "Regulators"
-msgstr "Regulators"
-
 msgid "PI"
 msgstr "PI"
 
@@ -13877,50 +13795,20 @@ msgstr "Zin:"
 msgid "Zout:"
 msgstr "Zout:"
 
+msgid "Calculate"
+msgstr "Calculate"
+
+msgid "R1:"
+msgstr "R1:"
+
+msgid "R2:"
+msgstr "R2:"
+
 msgid "R3:"
 msgstr "R3:"
 
-msgid "RF Attenuators"
-msgstr "RF Attenuators"
-
-msgid "Inputs"
-msgstr "Inputs"
-
-msgid "Required resistance:"
-msgstr "Required resistance:"
-
-msgid "Exclude value 1:"
-msgstr "Exclude value 1:"
-
-msgid "Exclude value 2:"
-msgstr "Exclude value 2:"
-
-msgid "E1"
-msgstr "E1"
-
-msgid "E3"
-msgstr "E3"
-
-msgid "E6"
-msgstr "E6"
-
-msgid "E12"
-msgstr "E12"
-
-msgid "Solutions"
-msgstr "Solutions"
-
-msgid "Simple solution:"
-msgstr "Simple solution:"
-
-msgid "3R solution:"
-msgstr "3R solution:"
-
-msgid "4R solution:"
-msgstr "4R solution:"
-
-msgid "E-Series"
-msgstr "E-Series"
+msgid "Formula"
+msgstr "Formula"
 
 msgid "10% / 5%"
 msgstr "10% / 5%"
@@ -13946,102 +13834,68 @@ msgstr "4th Band"
 msgid "Multiplier"
 msgstr "Multiplier"
 
-msgid "Color Code"
-msgstr "Color Code"
+msgid ""
+"Type of the regulator.\n"
+"There are 2 types:\n"
+"- regulators which have a dedicated sense pin for the voltage regulation.\n"
+"- 3 terminal pins."
+msgstr ""
+"Type of the regulator.\n"
+"There are 2 types:\n"
+"- regulators which have a dedicated sense pin for the voltage regulation.\n"
+"- 3 terminal pins."
 
-msgid "Microstrip Line"
-msgstr "Microstrip Line"
+msgid "Standard Type"
+msgstr "Standard Type"
 
-msgid "Coplanar wave guide"
-msgstr "Coplanar wave guide"
+msgid "3 Terminal Type"
+msgstr "3 Terminal Type"
 
-msgid "Coplanar wave guide w/ ground plane"
-msgstr "Coplanar wave guide w/ ground plane"
+msgid "kOhm"
+msgstr "kOhm"
 
-msgid "Rectangular Waveguide"
-msgstr "Rectangular Waveguide"
-
-msgid "Coaxial Line"
-msgstr "Coaxial Line"
-
-msgid "Coupled Microstrip Line"
-msgstr "Coupled Microstrip Line"
-
-msgid "Stripline"
-msgstr "Stripline"
-
-msgid "Twisted Pair"
-msgstr "Twisted Pair"
-
-msgid "Transmission Line Type"
-msgstr "Transmission Line Type"
-
-msgid "Substrate Parameters"
-msgstr "Substrate Parameters"
-
-msgid "Er:"
-msgstr "Er:"
-
-msgid "..."
-msgstr "…"
-
-msgid "Tan delta:"
-msgstr "Tan delta:"
-
-msgid "Rho:"
-msgstr "Rho:"
-
-msgid "Specific resistance in ohms * meters"
-msgstr "Specific resistance in ohms * meters"
-
-msgid "H:"
-msgstr "H:"
-
-msgid "H_t:"
-msgstr "H_t:"
-
-msgid "T:"
-msgstr "T:"
-
-msgid "Rough:"
-msgstr "Rough:"
-
-msgid "Insulator mu:"
-msgstr "Insulator mu:"
-
-msgid "Conductor mu:"
-msgstr "Conductor mu:"
-
-msgid "Component Parameters"
-msgstr "Component Parameters"
+msgid "Vout:"
+msgstr "Vout:"
 
 msgid ""
-"Zdiff =\n"
-"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
+"The internal reference voltage of the regulator.\n"
+"Should not be 0."
 msgstr ""
-"Zdiff =\n"
-"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
+"The internal reference voltage of the regulator.\n"
+"Should not be 0."
 
-msgid "Zcommon = Zeven / 2"
-msgstr "Zcommon = Zeven / 2"
+msgid "For 3 terminal regulators only, the  Adjust pin current."
+msgstr "For 3 terminal regulators only, the  Adjust pin current."
 
-msgid "Physical Parameters"
-msgstr "Physical Parameters"
+msgid "Regulator"
+msgstr "Regulator"
 
-msgid "Analyze"
-msgstr "Analyze"
+msgid "Regulators data file:"
+msgstr "Regulators data file:"
 
-msgid "Synthesize"
-msgstr "Synthesize"
+msgid "The name of the data file which stores known regulators parameters."
+msgstr "The name of the data file which stores known regulators parameters."
 
-msgid "Electrical Parameters"
-msgstr "Electrical Parameters"
+msgid "Browse"
+msgstr "Browse"
 
-msgid "Results"
-msgstr "Results"
+msgid "Edit Regulator"
+msgstr "Edit Regulator"
 
-msgid "TransLine"
-msgstr "TransLine"
+msgid "Edit the current selected regulator."
+msgstr "Edit the current selected regulator."
+
+msgid "Add Regulator"
+msgstr "Add Regulator"
+
+msgid "Enter a new item to the current list of available regulators"
+msgstr "Enter a new item to the current list of available regulators"
+
+msgid "Remove Regulator"
+msgstr "Remove Regulator"
+
+msgid "Remove an item from the current list of available regulators"
+msgstr "Remove an item from the current list of available regulators"
 
 msgid "Finished hole diameter (D):"
 msgstr "Finished hole diameter (D):"
@@ -14078,6 +13932,12 @@ msgstr "Applied current:"
 
 msgid "Plating resistivity:"
 msgstr "Plating resistivity:"
+
+msgid "Specific resistance in ohms * meters"
+msgstr "Specific resistance in ohms * meters"
+
+msgid "..."
+msgstr "…"
 
 msgid "ohm-meter"
 msgstr "ohm-meter"
@@ -14117,6 +13977,9 @@ msgstr ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
 "Some parameters cannot be calculated for a via inside a copper zone."
+
+msgid "Results"
+msgstr "Results"
 
 msgid "Resistance:"
 msgstr "Resistance:"
@@ -14186,6 +14049,139 @@ msgstr "Inductive reactance for given rise time and calculated inductance"
 
 msgid "Top view of via"
 msgstr "Top view of via"
+
+msgid "Regulators"
+msgstr "Regulators"
+
+msgid "RF Attenuators"
+msgstr "RF Attenuators"
+
+msgid "Inputs"
+msgstr "Inputs"
+
+msgid "Required resistance:"
+msgstr "Required resistance:"
+
+msgid "Exclude value 1:"
+msgstr "Exclude value 1:"
+
+msgid "Exclude value 2:"
+msgstr "Exclude value 2:"
+
+msgid "E1"
+msgstr "E1"
+
+msgid "E3"
+msgstr "E3"
+
+msgid "E6"
+msgstr "E6"
+
+msgid "E12"
+msgstr "E12"
+
+msgid "Solutions"
+msgstr "Solutions"
+
+msgid "Simple solution:"
+msgstr "Simple solution:"
+
+msgid "3R solution:"
+msgstr "3R solution:"
+
+msgid "4R solution:"
+msgstr "4R solution:"
+
+msgid "E-Series"
+msgstr "E-Series"
+
+msgid "Color Code"
+msgstr "Color Code"
+
+msgid "Microstrip Line"
+msgstr "Microstrip Line"
+
+msgid "Coplanar wave guide"
+msgstr "Coplanar wave guide"
+
+msgid "Coplanar wave guide w/ ground plane"
+msgstr "Coplanar wave guide w/ ground plane"
+
+msgid "Rectangular Waveguide"
+msgstr "Rectangular Waveguide"
+
+msgid "Coaxial Line"
+msgstr "Coaxial Line"
+
+msgid "Coupled Microstrip Line"
+msgstr "Coupled Microstrip Line"
+
+msgid "Stripline"
+msgstr "Stripline"
+
+msgid "Twisted Pair"
+msgstr "Twisted Pair"
+
+msgid "Transmission Line Type"
+msgstr "Transmission Line Type"
+
+msgid "Substrate Parameters"
+msgstr "Substrate Parameters"
+
+msgid "Er:"
+msgstr "Er:"
+
+msgid "Tan delta:"
+msgstr "Tan delta:"
+
+msgid "Rho:"
+msgstr "Rho:"
+
+msgid "H:"
+msgstr "H:"
+
+msgid "H_t:"
+msgstr "H_t:"
+
+msgid "T:"
+msgstr "T:"
+
+msgid "Rough:"
+msgstr "Rough:"
+
+msgid "Insulator mu:"
+msgstr "Insulator mu:"
+
+msgid "Conductor mu:"
+msgstr "Conductor mu:"
+
+msgid "Component Parameters"
+msgstr "Component Parameters"
+
+msgid ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
+msgstr ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
+
+msgid "Zcommon = Zeven / 2"
+msgstr "Zcommon = Zeven / 2"
+
+msgid "Physical Parameters"
+msgstr "Physical Parameters"
+
+msgid "Analyze"
+msgstr "Analyze"
+
+msgid "Synthesize"
+msgstr "Synthesize"
+
+msgid "Electrical Parameters"
+msgstr "Electrical Parameters"
+
+msgid "TransLine"
+msgstr "TransLine"
 
 msgid "Current:"
 msgstr "Current:"
@@ -14394,6 +14390,10 @@ msgstr ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 
+#, c-format
+msgid "Attenuation more than %f dB"
+msgstr "Attenuation more than %f dB"
+
 msgid "PCB Calculator data file"
 msgstr "PCB Calculator data file"
 
@@ -14418,6 +14418,12 @@ msgstr "Vref set to 0 !"
 
 msgid "Incorrect value for R1 R2"
 msgstr "Incorrect value for R1 R2"
+
+msgid "Relative Dielectric Constants"
+msgstr "Relative Dielectric Constants"
+
+msgid "Electrical Resistivity in Ohm*m"
+msgstr "Electrical Resistivity in Ohm*m"
 
 msgid "Write Data Failed"
 msgstr "Write Data Failed"
@@ -14479,9 +14485,6 @@ msgstr ""
 "__dt__ = temperature rise above ambient in ºC  \n"
 "__W,H__ = width and thickness in mils  \n"
 "__K__ = 0.024 for internal traces or 0.048 for external traces\n"
-
-msgid "Relative Dielectric Constants"
-msgstr "Relative Dielectric Constants"
 
 msgid "Dielectric Loss Factor"
 msgstr "Dielectric Loss Factor"
@@ -14648,9 +14651,6 @@ msgstr "Relative permittivity of environment"
 
 msgid "Cable length"
 msgstr "Cable length"
-
-msgid "Electrical Resistivity in Ohm*m"
-msgstr "Electrical Resistivity in Ohm*m"
 
 msgid "um"
 msgstr "um"
@@ -15507,6 +15507,9 @@ msgstr "Pre-defined Sizes"
 
 msgid "Custom Rules"
 msgstr "Custom Rules"
+
+msgid "Project is missing or read-only. Some settings will not be editable."
+msgstr "Project is missing or read-only. Some settings will not be editable."
 
 #, c-format
 msgid ""
@@ -25213,6 +25216,24 @@ msgstr "Show board ratsnest"
 msgid "Curved Ratsnest Lines"
 msgstr "Curved Ratsnest Lines"
 
+msgid "Ratsnest Mode (3-state)"
+msgstr "Ratsnest Mode (3-state)"
+
+msgid ""
+"Cycle between showing ratsnests for all layers, just visible layers, and none"
+msgstr ""
+"Cycle between showing ratsnests for all layers, just visible layers, and none"
+
+msgid "Net Color Mode (3-state)"
+msgstr "Net Color Mode (3-state)"
+
+msgid ""
+"Cycle between using net and netclass colors for all nets, just ratsnests, "
+"and none"
+msgstr ""
+"Cycle between using net and netclass colors for all nets, just ratsnests, "
+"and none"
+
 msgid "Sketch Tracks"
 msgstr "Sketch Tracks"
 
@@ -25849,6 +25870,10 @@ msgstr "Filter nets"
 msgid "Layer Display Options"
 msgstr "Layer Display Options"
 
+#, c-format
+msgid "Inactive layers (%s):"
+msgstr "Inactive layers (%s):"
+
 msgid "Inactive layers:"
 msgstr "Inactive layers:"
 
@@ -25873,6 +25898,10 @@ msgstr "Flip board view"
 msgid "Net Display Options"
 msgstr "Net Display Options"
 
+#, c-format
+msgid "Net colors (%s):"
+msgstr "Net colors (%s):"
+
 msgid "Net colors:"
 msgstr "Net colors:"
 
@@ -25888,20 +25917,27 @@ msgstr "Net and netclass colors are shown on the ratsnest only"
 msgid "Net and netclass colors are not shown"
 msgstr "Net and netclass colors are not shown"
 
+#, c-format
+msgid "Ratsnest display (%s):"
+msgstr "Ratsnest display (%s):"
+
 msgid "Ratsnest display:"
 msgstr "Ratsnest display:"
 
-msgid "Choose what ratsnest lines to display"
-msgstr "Choose what ratsnest lines to display"
+msgid "Choose which ratsnest lines to display"
+msgstr "Choose which ratsnest lines to display"
 
-msgid "Ratsnest lines are shown to items on all layers"
-msgstr "Ratsnest lines are shown to items on all layers"
+msgid "Show ratsnest lines to items on all layers"
+msgstr "Show ratsnest lines to items on all layers"
 
 msgid "Visible layers"
 msgstr "Visible layers"
 
-msgid "Ratsnest lines are shown to items on visible layers"
-msgstr "Ratsnest lines are shown to items on visible layers"
+msgid "Show ratsnest lines to items on visible layers"
+msgstr "Show ratsnest lines to items on visible layers"
+
+msgid "Hide all ratsnest lines"
+msgstr "Hide all ratsnest lines"
 
 msgid "Set Net Color"
 msgstr "Set Net Color"
@@ -26119,11 +26155,8 @@ msgstr "Show the Net Inspector"
 msgid "Configure net classes"
 msgstr "Configure net classes"
 
-msgid "Presets:"
-msgstr "Presets:"
-
-msgid "(Ctrl+Tab)"
-msgstr "(Ctrl+Tab)"
+msgid "Presets (Ctrl+Tab):"
+msgstr "Presets (Ctrl+Tab):"
 
 msgid "(unsaved)"
 msgstr "(unsaved)"
@@ -26346,6 +26379,33 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Single Layer View Mode"
+#~ msgstr "Single Layer View Mode"
+
+#~ msgid "Single Layer View Mode (3-state)"
+#~ msgstr "Single Layer View Mode (3-state)"
+
+#~ msgid "Toggle inactive layers between normal, dimmed, and hidden"
+#~ msgstr "Toggle inactive layers between normal, dimmed, and hidden"
+
+#~ msgid "Project is missing or read-only. Changes will not be saved."
+#~ msgstr "Project is missing or read-only. Changes will not be saved."
+
+#~ msgid "Choose what ratsnest lines to display"
+#~ msgstr "Choose what ratsnest lines to display"
+
+#~ msgid "Ratsnest lines are shown to items on all layers"
+#~ msgstr "Ratsnest lines are shown to items on all layers"
+
+#~ msgid "Ratsnest lines are shown to items on visible layers"
+#~ msgstr "Ratsnest lines are shown to items on visible layers"
+
+#~ msgid "Presets:"
+#~ msgstr "Presets:"
+
+#~ msgid "(Ctrl+Tab)"
+#~ msgstr "(Ctrl+Tab)"
 
 #, c-format
 #~ msgid ""

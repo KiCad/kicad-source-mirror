@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-03 16:55-0700\n"
+"POT-Creation-Date: 2021-10-04 08:53-0700\n"
 "PO-Revision-Date: 2021-10-01 07:18+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -106,8 +106,8 @@ msgstr "Y："
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:49
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:94
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:139
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:782
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:794
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:545
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:557
 msgid "Z:"
 msgstr "Z："
 
@@ -304,7 +304,7 @@ msgstr "匯出目前的檢視為 JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
-#: common/tool/actions.cpp:563 pcbnew/footprint_viewer_frame.cpp:942
+#: common/tool/actions.cpp:564 pcbnew/footprint_viewer_frame.cpp:942
 #: pcbnew/pcb_base_frame.cpp:518
 msgid "3D Viewer"
 msgstr "3D 檢視器"
@@ -318,7 +318,7 @@ msgstr "複製 3D 影像"
 msgid "Raytracing"
 msgstr "光線追蹤"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:112 common/tool/actions.cpp:599
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:112 common/tool/actions.cpp:600
 #: cvpcb/menubar.cpp:74 eeschema/menubar.cpp:276
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:165
 #: gerbview/menubar.cpp:212 kicad/menubar.cpp:180
@@ -327,7 +327,7 @@ msgstr "光線追蹤"
 msgid "Preferences..."
 msgstr "偏好設定..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:113 common/tool/actions.cpp:599
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:113 common/tool/actions.cpp:600
 #: cvpcb/menubar.cpp:75 eeschema/menubar.cpp:277
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:166
 #: gerbview/menubar.cpp:213 kicad/menubar.cpp:181
@@ -1404,9 +1404,9 @@ msgstr "in^3"
 #: common/base_units.cpp:471
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:88
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:299
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:319
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:339
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:131
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:151
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:171
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:381
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:281
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:168
@@ -1745,7 +1745,7 @@ msgstr "複製 KiCad 版本資訊到剪貼簿"
 msgid "&Report Bug"
 msgstr "回報 Bug (&R)"
 
-#: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:652
+#: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:653
 msgid "Report a problem with KiCad"
 msgstr "回報 KiCad 的問題"
 
@@ -2035,42 +2035,42 @@ msgstr "選擇全域%s庫表文件："
 #: eeschema/dialogs/dialog_spice_model_base.cpp:177
 #: eeschema/dialogs/dialog_spice_model_base.cpp:181
 #: eeschema/dialogs/dialog_spice_model_base.cpp:185
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:698
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:713
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:728
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:833
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:837
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:841
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:845
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:849
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:853
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:857
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:861
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:865
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:869
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:873
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:877
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:881
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:885
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:889
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:893
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1127
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1139
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1151
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1165
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1179
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1191
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1207
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1221
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1237
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1394
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1406
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1418
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1430
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1492
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1504
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1516
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1528
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:228
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:240
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:252
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:266
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:280
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:292
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:308
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:322
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:338
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:461
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:476
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:491
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:596
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:600
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:604
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:608
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:612
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:616
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:620
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:624
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:628
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:632
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:636
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:640
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:644
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:648
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:652
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:656
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:803
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:815
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:827
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:839
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:901
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:913
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:925
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:937
 msgid "dummy"
 msgstr "假"
 
@@ -3301,7 +3301,8 @@ msgstr "縮放"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:559
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:714
 #: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1472
-#: pcbnew/widgets/appearance_controls.cpp:677 pcbnew/zone.cpp:1402
+#: pcbnew/widgets/appearance_controls.cpp:699
+#: pcbnew/widgets/appearance_controls.cpp:741 pcbnew/zone.cpp:1402
 msgid "None"
 msgstr "無"
 
@@ -3473,7 +3474,7 @@ msgid "Clearance"
 msgstr "間隙"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:43
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1552
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:961
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:201
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:104
 #: pcbnew/tools/board_inspection_tool.cpp:727
@@ -3481,7 +3482,7 @@ msgid "Track Width"
 msgstr "佈線寬度"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:44
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1269
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:202
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:108
 msgid "Via Size"
@@ -3550,7 +3551,7 @@ msgid "Net name filter:"
 msgstr "網路名稱篩選："
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:140
-#: pcbnew/widgets/appearance_controls.cpp:860
+#: pcbnew/widgets/appearance_controls.cpp:895
 msgid "Show All Nets"
 msgstr "顯示所有網路"
 
@@ -3606,9 +3607,9 @@ msgstr "文字取代"
 
 #: common/dialogs/wx_html_report_panel.cpp:206
 #: common/dialogs/wx_html_report_panel.cpp:230
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:292
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:312
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:332
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:124
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:144
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:164
 msgid "Error:"
 msgstr "錯誤："
 
@@ -3652,7 +3653,8 @@ msgstr "顯示："
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:174
 #: pcbnew/dialogs/dialog_drc_base.cpp:151
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:36
-#: pcbnew/widgets/appearance_controls.cpp:664
+#: pcbnew/widgets/appearance_controls.cpp:683
+#: pcbnew/widgets/appearance_controls.cpp:725
 msgid "All"
 msgstr "所有"
 
@@ -4107,7 +4109,7 @@ msgid "Sheet Pin"
 msgstr "圖框引腳"
 
 #: common/eda_item.cpp:287 eeschema/dialogs/dialog_migrate_buses.cpp:101
-#: pcbnew/tools/pcb_actions.cpp:1226
+#: pcbnew/tools/pcb_actions.cpp:1236
 msgid "Sheet"
 msgstr "圖框"
 
@@ -4160,7 +4162,7 @@ msgstr "繪製項目"
 #: gerbview/gerber_file_image.cpp:352 gerbview/gerber_file_image.cpp:356
 #: gerbview/gerber_file_image.cpp:359
 #: pcbnew/microwave/microwave_polygon.cpp:128
-#: pcbnew/widgets/appearance_controls.cpp:599
+#: pcbnew/widgets/appearance_controls.cpp:607
 msgid "Normal"
 msgstr "正常"
 
@@ -5101,7 +5103,7 @@ msgstr "封裝背面"
 #: common/layer_id.cpp:145
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:64
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:114
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:100
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "Values"
@@ -5181,7 +5183,7 @@ msgstr "無鍍銅孔"
 
 #: common/layer_id.cpp:162 pcbnew/dialogs/panel_edit_options_base.cpp:318
 #: pcbnew/widgets/appearance_controls.cpp:349
-#: pcbnew/widgets/appearance_controls.cpp:670
+#: pcbnew/widgets/appearance_controls.cpp:691
 msgid "Ratsnest"
 msgstr "飛線"
 
@@ -5961,159 +5963,162 @@ msgid "Switch display of full-window crosshairs"
 msgstr "開關全屏十字游標"
 
 #: common/tool/actions.cpp:533
-msgid "Single Layer View Mode"
+#, fuzzy
+msgid "Inactive Layer View Mode"
 msgstr "單層檢視模式"
 
-#: common/tool/actions.cpp:533
+#: common/tool/actions.cpp:534
 msgid "Toggle inactive layers between normal and dimmed"
 msgstr "在正常和暗顯之間切換非活動圖層"
 
-#: common/tool/actions.cpp:539
-msgid "Single Layer View Mode (3-state)"
+#: common/tool/actions.cpp:540
+#, fuzzy
+msgid "Inactive Layer View Mode (3-state)"
 msgstr "單層檢視模式(三態)"
 
-#: common/tool/actions.cpp:540
-msgid "Toggle inactive layers between normal, dimmed, and hidden"
+#: common/tool/actions.cpp:541
+#, fuzzy
+msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr "在正常、暗顯和隱藏之間切換非活動圖層"
 
-#: common/tool/actions.cpp:545
+#: common/tool/actions.cpp:546
 msgid "Select item(s)"
 msgstr "選擇項目"
 
-#: common/tool/actions.cpp:552
+#: common/tool/actions.cpp:553
 msgid "Measure Tool"
 msgstr "測量工具"
 
-#: common/tool/actions.cpp:552
+#: common/tool/actions.cpp:553
 msgid "Interactively measure distance between points"
 msgstr "互動測量點之間的距離"
 
-#: common/tool/actions.cpp:563
+#: common/tool/actions.cpp:564
 msgid "Show 3D viewer window"
 msgstr "顯示 3D 檢視器視窗"
 
-#: common/tool/actions.cpp:568 eeschema/symbol_viewer_frame.cpp:101
+#: common/tool/actions.cpp:569 eeschema/symbol_viewer_frame.cpp:101
 #: eeschema/symbol_viewer_frame.cpp:920
 msgid "Symbol Library Browser"
 msgstr "符號庫瀏覽器"
 
-#: common/tool/actions.cpp:568
+#: common/tool/actions.cpp:569
 msgid "Browse symbol libraries"
 msgstr "瀏覽符號庫"
 
-#: common/tool/actions.cpp:573 eeschema/eeschema_config.cpp:237
+#: common/tool/actions.cpp:574 eeschema/eeschema_config.cpp:237
 #: eeschema/symbol_editor/symbol_editor.cpp:163
 #: kicad/tools/kicad_manager_actions.cpp:75
 msgid "Symbol Editor"
 msgstr "符號編輯器"
 
-#: common/tool/actions.cpp:573
+#: common/tool/actions.cpp:574
 msgid "Create, delete and edit symbols"
 msgstr "建立，刪除和編輯符號"
 
-#: common/tool/actions.cpp:578 pcbnew/footprint_viewer_frame.cpp:110
+#: common/tool/actions.cpp:579 pcbnew/footprint_viewer_frame.cpp:110
 #: pcbnew/footprint_viewer_frame.cpp:992
 msgid "Footprint Library Browser"
 msgstr "瀏覽封裝庫"
 
-#: common/tool/actions.cpp:578
+#: common/tool/actions.cpp:579
 msgid "Browse footprint libraries"
 msgstr "瀏覽封裝庫"
 
-#: common/tool/actions.cpp:583 kicad/tools/kicad_manager_actions.cpp:87
+#: common/tool/actions.cpp:584 kicad/tools/kicad_manager_actions.cpp:87
 #: pcbnew/footprint_edit_frame.cpp:804 pcbnew/footprint_edit_frame.cpp:925
 #: pcbnew/menubar_footprint_editor.cpp:89
 msgid "Footprint Editor"
 msgstr "封裝編輯器"
 
-#: common/tool/actions.cpp:583
+#: common/tool/actions.cpp:584
 msgid "Create, delete and edit footprints"
 msgstr "建立，刪除和編輯封裝"
 
-#: common/tool/actions.cpp:589
+#: common/tool/actions.cpp:590
 msgid "Update PCB from Schematic..."
 msgstr "從原理圖更新 PCB..."
 
-#: common/tool/actions.cpp:589
+#: common/tool/actions.cpp:590
 msgid "Update PCB with changes made to schematic"
 msgstr "根據原理圖的修改更新 PCB"
 
-#: common/tool/actions.cpp:594
+#: common/tool/actions.cpp:595
 msgid "Update Schematic from PCB..."
 msgstr "從 PCB 更新原理圖..."
 
-#: common/tool/actions.cpp:594
+#: common/tool/actions.cpp:595
 msgid "Update schematic with changes made to PCB"
 msgstr "根據 PCB 的變化更新原理圖"
 
-#: common/tool/actions.cpp:604
+#: common/tool/actions.cpp:605
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:71
 msgid "Configure Paths..."
 msgstr "設定路徑..."
 
-#: common/tool/actions.cpp:604
+#: common/tool/actions.cpp:605
 msgid "Edit path configuration environment variables"
 msgstr "編輯路徑環境變數設定"
 
-#: common/tool/actions.cpp:609
+#: common/tool/actions.cpp:610
 msgid "Manage Symbol Libraries..."
 msgstr "管理符號庫..."
 
-#: common/tool/actions.cpp:610
+#: common/tool/actions.cpp:611
 msgid "Edit the global and project symbol library lists"
 msgstr "編輯全域性和工程符號庫表"
 
-#: common/tool/actions.cpp:615
+#: common/tool/actions.cpp:616
 msgid "Manage Footprint Libraries..."
 msgstr "管理封裝庫..."
 
-#: common/tool/actions.cpp:616
+#: common/tool/actions.cpp:617
 msgid "Edit the global and project footprint library lists"
 msgstr "編輯全域性和專案封裝庫列表"
 
-#: common/tool/actions.cpp:621
+#: common/tool/actions.cpp:622
 msgid "Getting Started with KiCad"
 msgstr "KiCad 入門"
 
-#: common/tool/actions.cpp:622
+#: common/tool/actions.cpp:623
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "開啟“KiCad 入門”手冊"
 
-#: common/tool/actions.cpp:627
+#: common/tool/actions.cpp:628
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:368
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:200
 msgid "Help"
 msgstr "說明"
 
-#: common/tool/actions.cpp:628
+#: common/tool/actions.cpp:629
 msgid "Open product documentation in a web browser"
 msgstr "在 Web 瀏覽器中開啟產品文件"
 
-#: common/tool/actions.cpp:634
+#: common/tool/actions.cpp:635
 msgid "List Hotkeys..."
 msgstr "快速鍵列表..."
 
-#: common/tool/actions.cpp:635
+#: common/tool/actions.cpp:636
 msgid "Displays current hotkeys table and corresponding commands"
 msgstr "顯示目前的快速鍵表和相對應的指令"
 
-#: common/tool/actions.cpp:640
+#: common/tool/actions.cpp:641
 msgid "Get Involved"
 msgstr "參與 KiCad"
 
-#: common/tool/actions.cpp:641
+#: common/tool/actions.cpp:642
 msgid "Open \"Contribute to KiCad\" in a web browser"
 msgstr "在 Web 瀏覽器中開啟“參與 KiCad”"
 
-#: common/tool/actions.cpp:646
+#: common/tool/actions.cpp:647
 msgid "Donate"
 msgstr "捐款"
 
-#: common/tool/actions.cpp:647
+#: common/tool/actions.cpp:648
 msgid "Open \"Donate to KiCad\" in a web browser"
 msgstr "在 Web 瀏覽器中開啟“向 KiCad 捐款”"
 
-#: common/tool/actions.cpp:651
+#: common/tool/actions.cpp:652
 msgid "Report Bug"
 msgstr "回報 Bug"
 
@@ -6373,9 +6378,9 @@ msgstr "篩選："
 #: common/widgets/paged_dialog.cpp:72 common/widgets/paged_dialog.cpp:375
 #: eeschema/dialogs/dialog_bom_base.cpp:115
 #: pcb_calculator/dialogs/panel_regulator_base.cpp:171
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:903
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1259
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1542
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:360
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:666
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:951
 msgid "Reset to Defaults"
 msgstr "重置為預設值"
 
@@ -6796,7 +6801,7 @@ msgstr "引腳數量"
 #: cvpcb/cvpcb_mainframe.cpp:731 eeschema/sch_symbol.cpp:1401
 #: eeschema/sch_symbol.cpp:1405 eeschema/sch_symbol.cpp:1435
 #: eeschema/symbol_editor/symbol_editor.cpp:194
-#: pcbnew/tools/pcb_control.cpp:1178
+#: pcbnew/tools/pcb_control.cpp:1218
 msgid "Library"
 msgstr "庫"
 
@@ -8272,13 +8277,13 @@ msgid "Open the Schematic Setup... dialog"
 msgstr "開啟“原理圖設定...”對話方塊"
 
 #: eeschema/dialogs/dialog_erc.cpp:628
-#: eeschema/dialogs/dialog_schematic_setup.cpp:73
+#: eeschema/dialogs/dialog_schematic_setup.cpp:72
 msgid "Pin Conflicts Map"
 msgstr "引腳衝突對映"
 
 #: eeschema/dialogs/dialog_erc.cpp:632
-#: eeschema/dialogs/dialog_schematic_setup.cpp:72
-#: pcbnew/dialogs/dialog_board_setup.cpp:108 pcbnew/dialogs/dialog_drc.cpp:585
+#: eeschema/dialogs/dialog_schematic_setup.cpp:71
+#: pcbnew/dialogs/dialog_board_setup.cpp:107 pcbnew/dialogs/dialog_drc.cpp:585
 msgid "Violation Severity"
 msgstr "違規嚴重程度"
 
@@ -8312,7 +8317,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc_base.cpp:42 gerbview/files.cpp:681
 #: gerbview/job_file_reader.cpp:241
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:167
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:153
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:91
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:202
 msgid "Messages"
@@ -9104,7 +9109,7 @@ msgid "units"
 msgstr "單元"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:272
-#: eeschema/dialogs/dialog_schematic_setup.cpp:67
+#: eeschema/dialogs/dialog_schematic_setup.cpp:66
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:118
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:238
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:211
@@ -9545,7 +9550,7 @@ msgid "Schematic size"
 msgstr "圖框大小"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:283
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1615
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1024
 msgid "A5"
 msgstr "A5"
 
@@ -9575,9 +9580,9 @@ msgstr "A0"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:300
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1019
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1183
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1293
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:120
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:284
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:702
 msgid "A"
 msgstr "A"
 
@@ -10010,52 +10015,52 @@ msgstr "取代 (&R)"
 msgid "Replace &All"
 msgstr "全部取代 (&A)"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:41
+#: eeschema/dialogs/dialog_schematic_setup.cpp:40
 msgid "Schematic Setup"
 msgstr "原理圖設定"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:42
+#: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Import Settings from Another Project..."
 msgstr "從另一個專案匯入設定..."
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:68
+#: eeschema/dialogs/dialog_schematic_setup.cpp:67
 msgid "Formatting"
 msgstr "格式化"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:69
+#: eeschema/dialogs/dialog_schematic_setup.cpp:68
 #: eeschema/eeschema_config.cpp:72
 msgid "Field Name Templates"
 msgstr "欄位名稱模板"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:71
+#: eeschema/dialogs/dialog_schematic_setup.cpp:70
 msgid "Electrical Rules"
 msgstr "電氣規則"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:75
+#: eeschema/dialogs/dialog_schematic_setup.cpp:74
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1005
 #: pcbnew/dialogs/dialog_board_statistics.cpp:668
 #: pcbnew/footprint_libraries_utils.cpp:517
 msgid "Project"
 msgstr "工程"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:76
-#: pcbnew/dialogs/dialog_board_setup.cpp:106
-#: pcbnew/widgets/appearance_controls.cpp:499
+#: eeschema/dialogs/dialog_schematic_setup.cpp:75
+#: pcbnew/dialogs/dialog_board_setup.cpp:105
+#: pcbnew/widgets/appearance_controls.cpp:498
 #: pcbnew/widgets/appearance_controls_base.cpp:118
 msgid "Net Classes"
 msgstr "網路類表"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:77
-#: pcbnew/dialogs/dialog_board_setup.cpp:101
+#: eeschema/dialogs/dialog_schematic_setup.cpp:76
+#: pcbnew/dialogs/dialog_board_setup.cpp:100
 msgid "Text Variables"
 msgstr "文字變數"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:89
-#: pcbnew/dialogs/dialog_board_setup.cpp:147
-msgid "Project is missing or read-only. Changes will not be saved."
+#: eeschema/dialogs/dialog_schematic_setup.cpp:90
+#, fuzzy
+msgid "Project is missing or read-only. Settings will not be editable."
 msgstr "專案遺失或為唯讀。變更將不會被儲存。"
 
-#: eeschema/dialogs/dialog_schematic_setup.cpp:154
+#: eeschema/dialogs/dialog_schematic_setup.cpp:161
 #, c-format
 msgid ""
 "Error importing settings from project:\n"
@@ -10315,11 +10320,11 @@ msgid "Amperes"
 msgstr "安培"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:595
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:80
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:91
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:129
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:140
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:151
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:66
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:77
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:115
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:126
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:137
 msgid "Ohms"
 msgstr "Ω"
 
@@ -10376,9 +10381,9 @@ msgstr "源 2"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
 #: pcb_calculator/dialogs/panel_regulator_base.cpp:120
 #: pcb_calculator/dialogs/panel_regulator_base.cpp:136
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1143
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1422
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1520
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:244
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:831
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:929
 msgid "V"
 msgstr "V"
 
@@ -10823,7 +10828,7 @@ msgid "Amplitude:"
 msgstr "幅度："
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:490
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:635
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:398
 msgid "Frequency:"
 msgstr "頻率："
 
@@ -11099,7 +11104,7 @@ msgstr ""
 "對於門而言，這是“德摩根”轉換"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:142
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:806
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:569
 #: pcbnew/dialogs/dialog_create_array_base.cpp:241
 #: pcbnew/dialogs/dialog_move_exact.cpp:204
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:120
@@ -12636,7 +12641,7 @@ msgid "Alias of"
 msgstr "別名的"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:83
-#: pcbnew/footprint.cpp:924 pcbnew/tools/pcb_control.cpp:1189
+#: pcbnew/footprint.cpp:924 pcbnew/tools/pcb_control.cpp:1229
 #: pcbnew/zone.cpp:623
 msgid "Unknown"
 msgstr "未知"
@@ -15404,19 +15409,19 @@ msgstr "SPICE 中的模擬電路"
 msgid "Opens the datasheet in a browser"
 msgstr "在瀏覽器中開啟資料表"
 
-#: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1148
+#: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1158
 msgid "Create Corner"
 msgstr "建立拐角"
 
-#: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1148
+#: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1158
 msgid "Create a corner"
 msgstr "建立拐角"
 
-#: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1153
+#: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1163
 msgid "Remove Corner"
 msgstr "移除拐角"
 
-#: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1153
+#: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1163
 msgid "Remove corner"
 msgstr "移除拐角"
 
@@ -17613,12 +17618,12 @@ msgid "PCB Background"
 msgstr "PCB 背景"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:122
-#: pcbnew/widgets/appearance_controls.cpp:1592
+#: pcbnew/widgets/appearance_controls.cpp:1630
 msgid "Show All Layers"
 msgstr "顯示所有層"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:126
-#: pcbnew/widgets/appearance_controls.cpp:1579
+#: pcbnew/widgets/appearance_controls.cpp:1617
 msgid "Hide All Layers But Active"
 msgstr "隱藏除當前工作層的所有層"
 
@@ -17627,7 +17632,7 @@ msgid "Always Hide All Layers But Active"
 msgstr "總是隱藏除當前工作層的所有層"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:133
-#: pcbnew/widgets/appearance_controls.cpp:1595
+#: pcbnew/widgets/appearance_controls.cpp:1633
 msgid "Hide All Layers"
 msgstr "隱藏所有層"
 
@@ -17644,8 +17649,8 @@ msgid "Change Render Color for"
 msgstr "變更算繪顏色"
 
 #: gerbview/widgets/layer_widget.cpp:343
-#: pcbnew/widgets/appearance_controls.cpp:1920
-#: pcbnew/widgets/appearance_controls.cpp:2124
+#: pcbnew/widgets/appearance_controls.cpp:1959
+#: pcbnew/widgets/appearance_controls.cpp:2163
 msgid ""
 "Left double click or middle click for color change, right click for menu"
 msgstr "雙擊滑鼠左鍵或點選中鍵修改顏色，單擊右鍵彈出選單"
@@ -19250,11 +19255,6 @@ msgstr ""
 msgid "Error writing objects to clipboard"
 msgstr "將物件寫入剪貼簿時出錯"
 
-#: pcb_calculator/attenuators.cpp:128
-#, c-format
-msgid "Attenuation more than %f dB"
-msgstr "衰減大於 %f dB, 請重新設定"
-
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
 msgid ""
 "### Bridged Tee Attenuator\n"
@@ -19383,6 +19383,107 @@ msgstr "uA"
 msgid "Regulator Parameters"
 msgstr "穩壓器引數"
 
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:21
+msgid "PI"
+msgstr "PI（π）"
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:21
+msgid "Tee"
+msgstr "T 型"
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:21
+msgid "Bridged tee"
+msgstr "橋 T 型"
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:21
+msgid "Resistive splitter"
+msgstr "電阻分流器"
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:23
+msgid "Attenuators"
+msgstr "衰減器"
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:40
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:23
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:687
+#: pcbnew/footprint_wizard_frame.cpp:198
+msgid "Parameters"
+msgstr "引數"
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:48
+msgid "Attenuation:"
+msgstr "衰減："
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:55
+msgid "dB"
+msgstr "dB"
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:59
+msgid "Zin:"
+msgstr "輸入阻抗 (Zin):"
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:70
+msgid "Zout:"
+msgstr "輸出阻抗 (Zout):"
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:90
+#: pcb_calculator/dialogs/panel_regulator_base.cpp:165
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:181
+msgid "Calculate"
+msgstr "計算"
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:108
+#: pcb_calculator/dialogs/panel_regulator_base.cpp:85
+msgid "R1:"
+msgstr "R1："
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:119
+#: pcb_calculator/dialogs/panel_regulator_base.cpp:99
+msgid "R2:"
+msgstr "R2："
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:130
+msgid "R3:"
+msgstr "R3:"
+
+#: pcb_calculator/dialogs/panel_attenuators_base.cpp:170
+#: pcb_calculator/dialogs/panel_regulator_base.cpp:55
+msgid "Formula"
+msgstr "計算公式"
+
+#: pcb_calculator/dialogs/panel_color_code_base.cpp:20
+msgid "10% / 5%"
+msgstr "10% / 5%"
+
+#: pcb_calculator/dialogs/panel_color_code_base.cpp:20
+msgid "<= 2%"
+msgstr "<= 2%"
+
+#: pcb_calculator/dialogs/panel_color_code_base.cpp:22
+#: pcb_calculator/dialogs/panel_color_code_base.cpp:54
+msgid "Tolerance"
+msgstr "誤差"
+
+#: pcb_calculator/dialogs/panel_color_code_base.cpp:34
+msgid "1st Band"
+msgstr "第一環"
+
+#: pcb_calculator/dialogs/panel_color_code_base.cpp:38
+msgid "2nd Band"
+msgstr "第二環"
+
+#: pcb_calculator/dialogs/panel_color_code_base.cpp:42
+msgid "3rd Band"
+msgstr "第三環"
+
+#: pcb_calculator/dialogs/panel_color_code_base.cpp:46
+msgid "4th Band"
+msgstr "第四環"
+
+#: pcb_calculator/dialogs/panel_color_code_base.cpp:50
+msgid "Multiplier"
+msgstr "乘數"
+
 #: pcb_calculator/dialogs/panel_regulator_base.cpp:29
 msgid ""
 "Type of the regulator.\n"
@@ -19403,28 +19504,13 @@ msgstr "標準"
 msgid "3 Terminal Type"
 msgstr "三端"
 
-#: pcb_calculator/dialogs/panel_regulator_base.cpp:55
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:184
-msgid "Formula"
-msgstr "計算公式"
-
-#: pcb_calculator/dialogs/panel_regulator_base.cpp:85
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:122
-msgid "R1:"
-msgstr "R1："
-
 #: pcb_calculator/dialogs/panel_regulator_base.cpp:92
 #: pcb_calculator/dialogs/panel_regulator_base.cpp:106
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:220
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:231
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:242
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:52
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:63
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:74
 msgid "kOhm"
 msgstr "kOhm"
-
-#: pcb_calculator/dialogs/panel_regulator_base.cpp:99
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:133
-msgid "R2:"
-msgstr "R2："
 
 #: pcb_calculator/dialogs/panel_regulator_base.cpp:113
 msgid "Vout:"
@@ -19441,12 +19527,6 @@ msgstr ""
 #: pcb_calculator/dialogs/panel_regulator_base.cpp:145
 msgid "For 3 terminal regulators only, the  Adjust pin current."
 msgstr "僅三端穩壓器，調節引腳電流。"
-
-#: pcb_calculator/dialogs/panel_regulator_base.cpp:165
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:104
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:349
-msgid "Calculate"
-msgstr "計算"
 
 #: pcb_calculator/dialogs/panel_regulator_base.cpp:185
 msgid "Regulator"
@@ -19489,371 +19569,112 @@ msgstr "移除穩壓器"
 msgid "Remove an item from the current list of available regulators"
 msgstr "刪除目前的列表中可用的穩壓器選項"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:26
-msgid "Regulators"
-msgstr "穩壓器"
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:31
+msgid "Finished hole diameter (D):"
+msgstr "成品通孔直徑 (D)："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:35
-msgid "PI"
-msgstr "PI（π）"
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:45
+msgid "Plating thickness (T):"
+msgstr "鍍層厚度 (T)："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:35
-msgid "Tee"
-msgstr "T 型"
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:57
+msgid "Via length:"
+msgstr "過孔長度："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:35
-msgid "Bridged tee"
-msgstr "橋 T 型"
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:59
+msgid "Via length is the board thickness for through hole vias"
+msgstr "通孔長度是透過的電路板厚度"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:35
-msgid "Resistive splitter"
-msgstr "電阻分流器"
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:71
+msgid "Via pad diameter:"
+msgstr "過孔焊盤外徑："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:37
-msgid "Attenuators"
-msgstr "衰減器"
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:73
+msgid "Diameter of pad surrounding via (annular ring)"
+msgstr "透過（環形環）的焊盤直徑"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:54
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:922
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1278
-#: pcbnew/footprint_wizard_frame.cpp:198
-msgid "Parameters"
-msgstr "引數"
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:85
+msgid "Clearance hole diameter:"
+msgstr "間隙孔直徑："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:62
-msgid "Attenuation:"
-msgstr "衰減："
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:87
+msgid "Diameter of clearance hole in ground plane(s)"
+msgstr "地平面通孔直徑"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:69
-msgid "dB"
-msgstr "dB"
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:99
+msgid "Z0:"
+msgstr "Z0："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:73
-msgid "Zin:"
-msgstr "輸入阻抗 (Zin):"
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:101
+msgid "Characteristic impedance of conductor"
+msgstr "導體的特性阻抗"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:84
-msgid "Zout:"
-msgstr "輸出阻抗 (Zout):"
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:113
+msgid "Applied current:"
+msgstr "應用電流："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:144
-msgid "R3:"
-msgstr "R3:"
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:124
+msgid "Plating resistivity:"
+msgstr "鍍層電阻率："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:196
-msgid "RF Attenuators"
-msgstr "RF 衰減器"
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:126
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:292
+msgid "Specific resistance in ohms * meters"
+msgstr "電阻率 歐姆*米"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:205
-msgid "Inputs"
-msgstr "輸入"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:213
-msgid "Required resistance:"
-msgstr "所需電阻："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:224
-msgid "Exclude value 1:"
-msgstr "排除值 1："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:235
-msgid "Exclude value 2:"
-msgstr "排除值 2："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:255
-msgid "E1"
-msgstr "E1"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:258
-msgid "E3"
-msgstr "E3"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:261
-msgid "E6"
-msgstr "E6"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:265
-msgid "E12"
-msgstr "E12"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:275
-msgid "Solutions"
-msgstr "解決方案"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:283
-msgid "Simple solution:"
-msgstr "簡單的解決方案："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:303
-msgid "3R solution:"
-msgstr "3R 解決方案："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:323
-msgid "4R solution:"
-msgstr "4R 解決方案："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:383
-msgid "E-Series"
-msgstr "E 系列"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:391
-msgid "10% / 5%"
-msgstr "10% / 5%"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:391
-msgid "<= 2%"
-msgstr "<= 2%"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:393
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:425
-msgid "Tolerance"
-msgstr "誤差"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:405
-msgid "1st Band"
-msgstr "第一環"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:409
-msgid "2nd Band"
-msgstr "第二環"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:413
-msgid "3rd Band"
-msgstr "第三環"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:417
-msgid "4th Band"
-msgstr "第四環"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:421
-msgid "Multiplier"
-msgstr "乘數"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:454
-msgid "Color Code"
-msgstr "色環電阻"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:462
-msgid "Microstrip Line"
-msgstr "微帶線"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:462
-msgid "Coplanar wave guide"
-msgstr "共面波導"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:462
-msgid "Coplanar wave guide w/ ground plane"
-msgstr "共面波導與接地層"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:462
-msgid "Rectangular Waveguide"
-msgstr "矩形波導"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:462
-msgid "Coaxial Line"
-msgstr "同軸線"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:462
-msgid "Coupled Microstrip Line"
-msgstr "耦合微帶線"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:462
-msgid "Stripline"
-msgstr "帶狀線"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:462
-msgid "Twisted Pair"
-msgstr "雙絞線"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:464
-msgid "Transmission Line Type"
-msgstr "傳輸線型別"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:481
-msgid "Substrate Parameters"
-msgstr "基板引數"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:489
-msgid "Er:"
-msgstr "Er："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:499
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:518
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:539
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1035
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1057
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:136
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:158
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:262
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:281
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:302
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:666
 msgid "..."
 msgstr "..."
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:508
-msgid "Tan delta:"
-msgstr "介損:"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:527
-msgid "Rho:"
-msgstr "Rho："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:529
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1025
-msgid "Specific resistance in ohms * meters"
-msgstr "電阻率 歐姆*米"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:548
-msgid "H:"
-msgstr "H："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:560
-msgid "H_t:"
-msgstr "H_t："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:572
-msgid "T:"
-msgstr "T："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:584
-msgid "Rough:"
-msgstr "表面粗糙度："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:596
-msgid "Insulator mu:"
-msgstr "絕緣子畝："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:608
-msgid "Conductor mu:"
-msgstr "導體 mu:"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:627
-msgid "Component Parameters"
-msgstr "元件引數"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:665
-msgid ""
-"Zdiff =\n"
-"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
-msgstr ""
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:671
-msgid "Zcommon = Zeven / 2"
-msgstr "Zcommon = Zeven / 2"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:690
-msgid "Physical Parameters"
-msgstr "物理引數"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:758
-msgid "Analyze"
-msgstr "分析"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:761
-msgid "Synthesize"
-msgstr "合成"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:774
-msgid "Electrical Parameters"
-msgstr "電氣引數"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:825
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1114
-msgid "Results"
-msgstr "結果"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:913
-msgid "TransLine"
-msgstr "傳輸線路"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:930
-msgid "Finished hole diameter (D):"
-msgstr "成品通孔直徑 (D)："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:944
-msgid "Plating thickness (T):"
-msgstr "鍍層厚度 (T)："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:956
-msgid "Via length:"
-msgstr "過孔長度："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:958
-msgid "Via length is the board thickness for through hole vias"
-msgstr "通孔長度是透過的電路板厚度"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:970
-msgid "Via pad diameter:"
-msgstr "過孔焊盤外徑："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:972
-msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "透過（環形環）的焊盤直徑"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:984
-msgid "Clearance hole diameter:"
-msgstr "間隙孔直徑："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:986
-msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "地平面通孔直徑"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:998
-msgid "Z0:"
-msgstr "Z0："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1000
-msgid "Characteristic impedance of conductor"
-msgstr "導體的特性阻抗"
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1012
-msgid "Applied current:"
-msgstr "應用電流："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1023
-msgid "Plating resistivity:"
-msgstr "鍍層電阻率："
-
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1041
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1327
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:142
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:736
 msgid "ohm-meter"
 msgstr "歐姆 - 米"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1045
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:146
 msgid "Substrate relative permittivity:"
 msgstr "基板相對介電常數："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1047
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:148
 msgid "Relative dielectric constant (epsilon r)"
 msgstr "相對介電常數 (epsilon r)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1066
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1297
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:167
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:706
 msgid "Temperature rise:"
 msgstr "溫升："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1068
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:169
 msgid "Maximum acceptable rise in temperature"
 msgstr "最大溫升"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1075
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1304
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:176
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:713
 msgid "deg C"
 msgstr "攝氏度"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1079
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:180
 msgid "Pulse rise time:"
 msgstr "脈衝上升時間:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1081
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:182
 msgid "Pulse rise time to calculate reactance"
 msgstr "計算電抗的脈衝上升時間"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1088
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:189
 msgid "ns"
 msgstr "ns"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1090
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:191
 msgid "nanoseconds"
 msgstr "ns"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1100
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:201
 msgid ""
 "Warning:\n"
 "Via pad diameter >= Clearance hole diameter.\n"
@@ -19863,226 +19684,405 @@ msgstr ""
 "過孔焊盤直徑 >= 間隙過孔直徑。\n"
 "無法計算一些引數，因覆銅區內有一個過孔。"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1123
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1402
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1500
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:215
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:588
+msgid "Results"
+msgstr "結果"
+
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:224
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:811
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:909
 msgid "Resistance:"
 msgstr "阻抗："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1131
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1241
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1410
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1508
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:232
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:342
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:819
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:917
 msgid "ohm"
 msgstr "歐姆"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1135
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1414
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1512
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:236
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:823
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:921
 msgid "Voltage drop:"
 msgstr "壓降："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1147
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1426
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1524
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:248
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:835
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:933
 msgid "Power loss:"
 msgstr "電源損耗："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1155
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1434
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1532
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:256
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:843
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:941
 msgid "W"
 msgstr "W"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1159
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:260
 msgid "Thermal resistance:"
 msgstr "熱阻："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1161
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:262
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
 msgstr "使用導熱係數 401 瓦特/(米-開爾文)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1169
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:270
 msgid "deg C/W"
 msgstr "攝氏度/瓦"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1173
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:274
 msgid "Estimated ampacity:"
 msgstr "估計的載流量："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1175
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:276
 msgid "Based on temperature rise"
 msgstr "溫升"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1187
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:288
 msgid "Capacitance:"
 msgstr "電容："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1195
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:296
 msgid "pF"
 msgstr "pF"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1197
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:298
 msgid "pico-Farad"
 msgstr "pF"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1201
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:302
 msgid "Rise time degradation:"
 msgstr "上升時間下降:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1203
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:304
 msgid "Rise time degradation for given Z0 and calculated capacitance"
 msgstr "給定 Z0 的上升時間衰減和計算電容"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1211
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:312
 msgid "ps"
 msgstr "ps"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1213
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:314
 msgid "picoseconds"
 msgstr "ps"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1217
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:318
 msgid "Inductance:"
 msgstr "電感："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1225
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:326
 msgid "nH"
 msgstr "nH"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1227
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:328
 msgid "nano-Henry"
 msgstr "nH"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1231
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:332
 msgid "Reactance:"
 msgstr "電抗："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1233
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:334
 msgid "Inductive reactance for given rise time and calculated inductance"
 msgstr "給定上升時間和計算電感的感抗"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1252
+#: pcb_calculator/dialogs/panel_via_size_base.cpp:353
 msgid "Top view of via"
 msgstr "過孔的頂檢視"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1286
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:26
+msgid "Regulators"
+msgstr "穩壓器"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:28
+msgid "RF Attenuators"
+msgstr "RF 衰減器"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:37
+msgid "Inputs"
+msgstr "輸入"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:45
+msgid "Required resistance:"
+msgstr "所需電阻："
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:56
+msgid "Exclude value 1:"
+msgstr "排除值 1："
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:67
+msgid "Exclude value 2:"
+msgstr "排除值 2："
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:87
+msgid "E1"
+msgstr "E1"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:90
+msgid "E3"
+msgstr "E3"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:93
+msgid "E6"
+msgstr "E6"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:97
+msgid "E12"
+msgstr "E12"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:107
+msgid "Solutions"
+msgstr "解決方案"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:115
+msgid "Simple solution:"
+msgstr "簡單的解決方案："
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:135
+msgid "3R solution:"
+msgstr "3R 解決方案："
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:155
+msgid "4R solution:"
+msgstr "4R 解決方案："
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:215
+msgid "E-Series"
+msgstr "E 系列"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:217
+msgid "Color Code"
+msgstr "色環電阻"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
+msgid "Microstrip Line"
+msgstr "微帶線"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
+msgid "Coplanar wave guide"
+msgstr "共面波導"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
+msgid "Coplanar wave guide w/ ground plane"
+msgstr "共面波導與接地層"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
+msgid "Rectangular Waveguide"
+msgstr "矩形波導"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
+msgid "Coaxial Line"
+msgstr "同軸線"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
+msgid "Coupled Microstrip Line"
+msgstr "耦合微帶線"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
+msgid "Stripline"
+msgstr "帶狀線"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:225
+msgid "Twisted Pair"
+msgstr "雙絞線"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:227
+msgid "Transmission Line Type"
+msgstr "傳輸線型別"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:244
+msgid "Substrate Parameters"
+msgstr "基板引數"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:252
+msgid "Er:"
+msgstr "Er："
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:271
+msgid "Tan delta:"
+msgstr "介損:"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:290
+msgid "Rho:"
+msgstr "Rho："
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:311
+msgid "H:"
+msgstr "H："
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:323
+msgid "H_t:"
+msgstr "H_t："
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:335
+msgid "T:"
+msgstr "T："
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:347
+msgid "Rough:"
+msgstr "表面粗糙度："
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:359
+msgid "Insulator mu:"
+msgstr "絕緣子畝："
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:371
+msgid "Conductor mu:"
+msgstr "導體 mu:"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:390
+msgid "Component Parameters"
+msgstr "元件引數"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:428
+msgid ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
+msgstr ""
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:434
+msgid "Zcommon = Zeven / 2"
+msgstr "Zcommon = Zeven / 2"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:453
+msgid "Physical Parameters"
+msgstr "物理引數"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:521
+msgid "Analyze"
+msgstr "分析"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:524
+msgid "Synthesize"
+msgstr "合成"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:537
+msgid "Electrical Parameters"
+msgstr "電氣引數"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:676
+msgid "TransLine"
+msgstr "傳輸線路"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:695
 msgid "Current:"
 msgstr "電流："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1308
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:717
 msgid "Conductor length:"
 msgstr "導線長度："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1320
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:729
 msgid "Copper resistivity:"
 msgstr "銅電阻率："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1347
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:756
 msgid "External Layer Traces"
 msgstr "外層佈線"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1355
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1453
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:764
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:862
 msgid "Trace width:"
 msgstr "佈線寬度："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1369
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1467
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:778
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:876
 msgid "Trace thickness:"
 msgstr "佈線粗細："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1390
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1488
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:799
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:897
 msgid "Cross-section area:"
 msgstr "截面積："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1398
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1496
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:807
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:905
 msgid "mm ^ 2"
 msgstr "mm ^ 2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1445
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:854
 msgid "Internal Layer Traces"
 msgstr "內層佈線"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1570
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:979
 msgid "Voltage > 500 V:"
 msgstr "電壓 > 500 V："
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1577
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:986
 msgid "Update Values"
 msgstr "更新電壓值"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1585
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:994
 msgid "Note: Values are minimal values (from IPC 2221)"
 msgstr "注意：表內數值最小值 (來自《IPC-2221 印製板通用設計標準》)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1611
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1020
 msgid "B1"
 msgstr "B1"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1612
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1021
 msgid "B2"
 msgstr "B2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1613
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1022
 msgid "B3"
 msgstr "B3"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1614
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1023
 msgid "B4"
 msgstr "B4"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1616
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1025
 msgid "A6"
 msgstr "A6"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1617
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1026
 msgid "A7"
 msgstr "A7"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1633
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1042
 msgid "0 .. 15 V"
 msgstr "0 .. 15 V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1634
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1043
 msgid "16 .. 30 V"
 msgstr "16 .. 30 V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1635
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1044
 msgid "31 .. 50 V"
 msgstr "31 .. 50 V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1636
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1045
 msgid "51 .. 100 V"
 msgstr "51 .. 100 V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1637
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1046
 msgid "101 .. 150 V"
 msgstr "101 .. 150 V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1638
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1047
 msgid "151 .. 170 V"
 msgstr "151 .. 170 V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1639
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1048
 msgid "171 .. 250 V"
 msgstr "171 .. 250 V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1640
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1049
 msgid "251 .. 300 V"
 msgstr "251 .. 300 V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1641
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1050
 msgid "301 .. 500 V"
 msgstr "301 .. 500 V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1642
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1051
 msgid " > 500 V"
 msgstr " > 500 V"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1651
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1060
 msgid ""
 "*  B1 - Internal Conductors\n"
 "*  B2 - External Conductors, uncoated, sea level to 3050 m\n"
@@ -20102,73 +20102,73 @@ msgstr ""
 "*  A6 - 外部元件引線/端接，無塗層\n"
 "*  A7 - 外部元件引線端接，帶保形塗層（任何高度）"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1662
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1071
 msgid "Electrical Spacing"
 msgstr "電氣間距"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1681
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1090
 msgid "Note: Values are minimal values"
 msgstr "注意：該值為最小值"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1706
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1115
 msgid "Class 1"
 msgstr "類別 1"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1707
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1116
 msgid "Class 2"
 msgstr "類別 2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1708
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1117
 msgid "Class 3"
 msgstr "類別 3"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1709
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1118
 msgid "Class 4"
 msgstr "類別 4"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1710
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1119
 msgid "Class 5"
 msgstr "類別 5"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1711
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1120
 msgid "Class 6"
 msgstr "類別 6"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1722
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1131
 msgid "Lines width"
 msgstr "線寬"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1723
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1132
 msgid "Min clearance"
 msgstr "最小間距"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1724
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1133
 msgid "Via: (diam - drill)"
 msgstr "過孔：（外徑 - 內徑）"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1725
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1134
 msgid "Plated Pad: (diam - drill)"
 msgstr "金屬化焊盤：（外徑 - 內徑）"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1726
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1135
 msgid "NP Pad: (diam - drill)"
 msgstr "非金屬化焊盤：（外徑 - 內徑）"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1745
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1154
 msgid "Board Classes"
 msgstr "電路板類別"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.h:383
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.h:275
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "PCB Calculator"
 msgstr "PCB 計算器"
 
-#: pcb_calculator/eserie.cpp:319 pcb_calculator/eserie.cpp:338
-#: pcb_calculator/eserie.cpp:364
+#: pcb_calculator/eserie.cpp:326 pcb_calculator/eserie.cpp:345
+#: pcb_calculator/eserie.cpp:371
 msgid "Exact"
 msgstr "精確"
 
-#: pcb_calculator/eserie.cpp:347 pcb_calculator/eserie.cpp:370
+#: pcb_calculator/eserie.cpp:354 pcb_calculator/eserie.cpp:377
 msgid "Not worth using"
 msgstr "不值得使用"
 
@@ -20222,6 +20222,11 @@ msgstr ""
 "\tR1 | R2 |...| Rn\t並聯電阻\n"
 "\tR1 + (R2 | R3)...\t以上任意組合\n"
 
+#: pcb_calculator/panel_attenuators.cpp:193
+#, c-format
+msgid "Attenuation more than %f dB"
+msgstr "衰減大於 %f dB, 請重新設定"
+
 #: pcb_calculator/panel_regulator.cpp:147
 #, fuzzy
 msgid "PCB Calculator data file"
@@ -20256,11 +20261,20 @@ msgstr "Vref 已經被設定為 0 ！"
 msgid "Incorrect value for R1 R2"
 msgstr "R1 R2 的值錯誤"
 
-#: pcb_calculator/pcb_calculator_frame.cpp:239
+#: pcb_calculator/panel_via_size.cpp:86
+#: pcb_calculator/transline_dlg_funct.cpp:121
+msgid "Relative Dielectric Constants"
+msgstr "相對介電常數"
+
+#: pcb_calculator/panel_via_size.cpp:100
+msgid "Electrical Resistivity in Ohm*m"
+msgstr "電阻率（以 Ohm*m 為單位）"
+
+#: pcb_calculator/pcb_calculator_frame.cpp:196
 msgid "Write Data Failed"
 msgstr "寫入資料失敗"
 
-#: pcb_calculator/pcb_calculator_frame.cpp:243
+#: pcb_calculator/pcb_calculator_frame.cpp:200
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
@@ -20268,7 +20282,7 @@ msgstr ""
 "沒有要儲存修改的資料檔名。\n"
 "是否要退出並放棄變更？"
 
-#: pcb_calculator/pcb_calculator_frame.cpp:253
+#: pcb_calculator/pcb_calculator_frame.cpp:210
 #, c-format
 msgid ""
 "Unable to write file '%s'\n"
@@ -20317,10 +20331,6 @@ msgstr ""
 "__dt__ = 環境溫度溫升（單位：攝氏度） \n"
 "__W，H__ = 佈線的寬度和厚度 （單位：密耳）\n"
 "__K__ = 0.024 用於內部佈線，0.048 用於外部佈線\n"
-
-#: pcb_calculator/transline_dlg_funct.cpp:121 pcb_calculator/via.cpp:68
-msgid "Relative Dielectric Constants"
-msgstr "相對介電常數"
 
 #: pcb_calculator/transline_dlg_funct.cpp:139
 msgid "Dielectric Loss Factor"
@@ -20620,10 +20630,6 @@ msgstr "環境的相對介電常數"
 msgid "Cable length"
 msgstr "電纜長度"
 
-#: pcb_calculator/via.cpp:82
-msgid "Electrical Resistivity in Ohm*m"
-msgstr "電阻率（以 Ohm*m 為單位）"
-
 #: pcb_calculator/widgets/unit_selector.cpp:35
 msgid "um"
 msgstr "um"
@@ -20697,7 +20703,7 @@ msgstr "印刷電路板"
 #: pcbnew/board.cpp:1171 pcbnew/dialogs/dialog_board_statistics.cpp:692
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:77
 #: pcbnew/netinfo_item.cpp:95 pcbnew/pcb_draw_panel_gal.cpp:474
-#: pcbnew/tools/pcb_control.cpp:1194 pcbnew/widgets/appearance_controls.cpp:337
+#: pcbnew/tools/pcb_control.cpp:1234 pcbnew/widgets/appearance_controls.cpp:337
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
 msgstr "焊盤"
@@ -21731,63 +21737,68 @@ msgstr "位號"
 msgid "Geographical Reannotation"
 msgstr "位置重新標註"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:53
+#: pcbnew/dialogs/dialog_board_setup.cpp:52
 msgid "Board Setup"
 msgstr "電路板設定"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:54
+#: pcbnew/dialogs/dialog_board_setup.cpp:53
 msgid "Import Settings from Another Board..."
 msgstr "從另一個電路板匯入設定..."
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:81
+#: pcbnew/dialogs/dialog_board_setup.cpp:80
 msgid "Board Stackup"
 msgstr "電路板壓層"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:89
+#: pcbnew/dialogs/dialog_board_setup.cpp:88
 msgid "Board Editor Layers"
 msgstr "電路板編輯器圖層"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:92
+#: pcbnew/dialogs/dialog_board_setup.cpp:91
 msgid "Physical Stackup"
 msgstr "物理壓層"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:96
+#: pcbnew/dialogs/dialog_board_setup.cpp:95
 msgid "Board Finish"
 msgstr "電路板完成"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:97 pcbnew/dialogs/dialog_plot.cpp:960
+#: pcbnew/dialogs/dialog_board_setup.cpp:96 pcbnew/dialogs/dialog_plot.cpp:960
 msgid "Solder Mask/Paste"
 msgstr "阻焊/錫膏"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:99
+#: pcbnew/dialogs/dialog_board_setup.cpp:98
 msgid "Text & Graphics"
 msgstr "文字與圖形"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:100
+#: pcbnew/dialogs/dialog_board_setup.cpp:99
 msgid "Defaults"
 msgstr "預設"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:103
+#: pcbnew/dialogs/dialog_board_setup.cpp:102
 msgid "Design Rules"
 msgstr "設計規則"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:104 pcbnew/router/router_tool.cpp:835
+#: pcbnew/dialogs/dialog_board_setup.cpp:103 pcbnew/router/router_tool.cpp:835
 #: pcbnew/router/router_tool.cpp:856
 msgid "Constraints"
 msgstr "約束"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:105 pcbnew/edit_track_width.cpp:178
+#: pcbnew/dialogs/dialog_board_setup.cpp:104 pcbnew/edit_track_width.cpp:178
 #: pcbnew/edit_track_width.cpp:198
 msgid "Pre-defined Sizes"
 msgstr "預定義尺寸"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:107
+#: pcbnew/dialogs/dialog_board_setup.cpp:106
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
 #: pcbnew/dialogs/dialog_drc.cpp:192 pcbnew/pcb_edit_frame.cpp:1687
 msgid "Custom Rules"
 msgstr "自定義規則"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:182
+#: pcbnew/dialogs/dialog_board_setup.cpp:123
+#, fuzzy
+msgid "Project is missing or read-only. Some settings will not be editable."
+msgstr "專案遺失或為唯讀。變更將不會被儲存。"
+
+#: pcbnew/dialogs/dialog_board_setup.cpp:186
 #, c-format
 msgid ""
 "Error importing settings from board:\n"
@@ -21796,12 +21807,12 @@ msgstr ""
 "從電路板匯入設定錯誤：\n"
 "無法載入關聯專案檔案 %s"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:202 pcbnew/files.cpp:620
-#: pcbnew/tools/pcb_control.cpp:1080
+#: pcbnew/dialogs/dialog_board_setup.cpp:206 pcbnew/files.cpp:620
+#: pcbnew/tools/pcb_control.cpp:1120
 msgid "Loading PCB"
 msgstr "PCB 載入中"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:224
+#: pcbnew/dialogs/dialog_board_setup.cpp:228
 #, c-format
 msgid ""
 "Error loading board file:\n"
@@ -24307,7 +24318,6 @@ msgid "Unlocked tracks"
 msgstr "解鎖佈線"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
-#: pcbnew/widgets/appearance_controls.cpp:696
 msgid "All layers"
 msgstr "所有層"
 
@@ -26733,7 +26743,7 @@ msgid "Show or hide net names on pads and/or tracks."
 msgstr "顯示/隱藏焊盤或佈線上的網路名稱。"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
-#: pcbnew/tools/pcb_actions.cpp:824
+#: pcbnew/tools/pcb_actions.cpp:834
 msgid "Show pad numbers"
 msgstr "顯示焊盤編號"
 
@@ -26920,22 +26930,22 @@ msgid "Moves the track segment without moving connected tracks"
 msgstr "移動佈線段而不移動連線的佈線"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:346
-#: pcbnew/tools/pcb_actions.cpp:1370
+#: pcbnew/tools/pcb_actions.cpp:1380
 msgid "Drag (45 degree mode)"
 msgstr "拖動 (45 度模式)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:347
-#: pcbnew/tools/pcb_actions.cpp:1371
+#: pcbnew/tools/pcb_actions.cpp:1381
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr "在保持連線佈線 45 度的情況下拖動佈線段。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:351
-#: pcbnew/tools/pcb_actions.cpp:1377
+#: pcbnew/tools/pcb_actions.cpp:1387
 msgid "Drag (free angle)"
 msgstr "拖動(自由角度)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:352
-#: pcbnew/tools/pcb_actions.cpp:1378
+#: pcbnew/tools/pcb_actions.cpp:1388
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr "在不限制佈線角度的情況下，拖拽佈線中最近的連線點。"
@@ -29539,7 +29549,7 @@ msgstr ""
 "PCB 複製到：\n"
 "\"%s\""
 
-#: pcbnew/footprint.cpp:926 pcbnew/tools/pcb_control.cpp:1191
+#: pcbnew/footprint.cpp:926 pcbnew/tools/pcb_control.cpp:1231
 msgid "Last Change"
 msgstr "最後修改"
 
@@ -29584,12 +29594,12 @@ msgstr "3D 形狀： %s"
 msgid "<none>"
 msgstr "<無>"
 
-#: pcbnew/footprint.cpp:968 pcbnew/tools/pcb_control.cpp:1197
+#: pcbnew/footprint.cpp:968 pcbnew/tools/pcb_control.cpp:1237
 #, c-format
 msgid "Doc: %s"
 msgstr "文件：%s"
 
-#: pcbnew/footprint.cpp:969 pcbnew/tools/pcb_control.cpp:1198
+#: pcbnew/footprint.cpp:969 pcbnew/tools/pcb_control.cpp:1238
 #, c-format
 msgid "Keywords: %s"
 msgstr "關鍵字：%s"
@@ -32837,8 +32847,8 @@ msgstr "選擇的專案被鎖定。"
 msgid "Drag Anyway"
 msgstr "仍然拖動"
 
-#: pcbnew/router/router_tool.cpp:1860 pcbnew/tools/pcb_actions.cpp:1357
-#: pcbnew/tools/pcb_actions.cpp:1363
+#: pcbnew/router/router_tool.cpp:1860 pcbnew/tools/pcb_actions.cpp:1367
+#: pcbnew/tools/pcb_actions.cpp:1373
 msgid "Break Track"
 msgstr "分割佈線"
 
@@ -34514,552 +34524,575 @@ msgstr "顯示線路板飛線"
 msgid "Curved Ratsnest Lines"
 msgstr "彎曲的飛線"
 
+#: pcbnew/tools/pcb_actions.cpp:798
+#, fuzzy
+msgid "Ratsnest Mode (3-state)"
+msgstr "單層檢視模式(三態)"
+
 #: pcbnew/tools/pcb_actions.cpp:799
+#, fuzzy
+msgid ""
+"Cycle between showing ratsnests for all layers, just visible layers, and none"
+msgstr "在顯示填充覆銅、線框覆銅和草圖覆銅之間迴圈"
+
+#: pcbnew/tools/pcb_actions.cpp:803
+#, fuzzy
+msgid "Net Color Mode (3-state)"
+msgstr "單層檢視模式(三態)"
+
+#: pcbnew/tools/pcb_actions.cpp:804
+#, fuzzy
+msgid ""
+"Cycle between using net and netclass colors for all nets, just ratsnests, "
+"and none"
+msgstr "網路和網路類顏色僅在飛線上顯示"
+
+#: pcbnew/tools/pcb_actions.cpp:809
 msgid "Sketch Tracks"
 msgstr "佈線草圖"
 
-#: pcbnew/tools/pcb_actions.cpp:799
+#: pcbnew/tools/pcb_actions.cpp:809
 msgid "Show tracks in outline mode"
 msgstr "在輪廓模式下顯示佈線"
 
-#: pcbnew/tools/pcb_actions.cpp:804
+#: pcbnew/tools/pcb_actions.cpp:814
 msgid "Sketch Pads"
 msgstr "焊盤草圖"
 
-#: pcbnew/tools/pcb_actions.cpp:804
+#: pcbnew/tools/pcb_actions.cpp:814
 msgid "Show pads in outline mode"
 msgstr "在輪廓模式下顯示焊盤"
 
-#: pcbnew/tools/pcb_actions.cpp:809
+#: pcbnew/tools/pcb_actions.cpp:819
 msgid "Sketch Vias"
 msgstr "過孔草圖"
 
-#: pcbnew/tools/pcb_actions.cpp:809
+#: pcbnew/tools/pcb_actions.cpp:819
 msgid "Show vias in outline mode"
 msgstr "在輪廓模式下顯示過孔"
 
-#: pcbnew/tools/pcb_actions.cpp:814
+#: pcbnew/tools/pcb_actions.cpp:824
 msgid "Sketch Graphic Items"
 msgstr "草圖圖形專案"
 
-#: pcbnew/tools/pcb_actions.cpp:814
+#: pcbnew/tools/pcb_actions.cpp:824
 msgid "Show graphic items in outline mode"
 msgstr "在輪廓模式下顯示圖形專案"
 
-#: pcbnew/tools/pcb_actions.cpp:819
+#: pcbnew/tools/pcb_actions.cpp:829
 msgid "Sketch Text Items"
 msgstr "草圖文字項"
 
-#: pcbnew/tools/pcb_actions.cpp:819
+#: pcbnew/tools/pcb_actions.cpp:829
 msgid "Show footprint texts in line mode"
 msgstr "在行模式下顯示封裝文字"
 
-#: pcbnew/tools/pcb_actions.cpp:829
+#: pcbnew/tools/pcb_actions.cpp:839
 #, fuzzy
 msgid "Draw Zone Fills"
 msgstr "刪除覆銅填充"
 
-#: pcbnew/tools/pcb_actions.cpp:829
+#: pcbnew/tools/pcb_actions.cpp:839
 msgid "Show filled areas of zones"
 msgstr "顯示覆銅的填充區域"
 
-#: pcbnew/tools/pcb_actions.cpp:834
+#: pcbnew/tools/pcb_actions.cpp:844
 #, fuzzy
 msgid "Draw Zone Outlines"
 msgstr "刪除區域邊界"
 
-#: pcbnew/tools/pcb_actions.cpp:834
+#: pcbnew/tools/pcb_actions.cpp:844
 msgid "Show only zone boundaries"
 msgstr "僅顯示覆銅邊界"
 
-#: pcbnew/tools/pcb_actions.cpp:839
+#: pcbnew/tools/pcb_actions.cpp:849
 msgid "Draw Zone Fill Fracture Borders"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:844
+#: pcbnew/tools/pcb_actions.cpp:854
 msgid "Draw Zone Fill Triangulation"
 msgstr ""
 
-#: pcbnew/tools/pcb_actions.cpp:850
+#: pcbnew/tools/pcb_actions.cpp:860
 msgid "Toggle Zone Display"
 msgstr "切換覆銅顯示"
 
-#: pcbnew/tools/pcb_actions.cpp:851
+#: pcbnew/tools/pcb_actions.cpp:861
 #, fuzzy
 msgid "Cycle between showing zone fills and just their outlines"
 msgstr "在顯示填充覆銅、線框覆銅和草圖覆銅之間迴圈"
 
-#: pcbnew/tools/pcb_actions.cpp:859
+#: pcbnew/tools/pcb_actions.cpp:869
 msgid "Switch to Component (F.Cu) layer"
 msgstr "切換到元件層（頂層銅層）"
 
-#: pcbnew/tools/pcb_actions.cpp:865
+#: pcbnew/tools/pcb_actions.cpp:875
 msgid "Switch to Inner layer 1"
 msgstr "切換到內層 1"
 
-#: pcbnew/tools/pcb_actions.cpp:871
+#: pcbnew/tools/pcb_actions.cpp:881
 msgid "Switch to Inner layer 2"
 msgstr "切換到內層 2"
 
-#: pcbnew/tools/pcb_actions.cpp:877
+#: pcbnew/tools/pcb_actions.cpp:887
 msgid "Switch to Inner layer 3"
 msgstr "切換到內層 3"
 
-#: pcbnew/tools/pcb_actions.cpp:883
+#: pcbnew/tools/pcb_actions.cpp:893
 msgid "Switch to Inner layer 4"
 msgstr "切換到內層 4"
 
-#: pcbnew/tools/pcb_actions.cpp:889
+#: pcbnew/tools/pcb_actions.cpp:899
 msgid "Switch to Inner layer 5"
 msgstr "切換到內層 5"
 
-#: pcbnew/tools/pcb_actions.cpp:895
+#: pcbnew/tools/pcb_actions.cpp:905
 msgid "Switch to Inner layer 6"
 msgstr "切換到內層 6"
 
-#: pcbnew/tools/pcb_actions.cpp:900
+#: pcbnew/tools/pcb_actions.cpp:910
 msgid "Switch to Inner layer 7"
 msgstr "切換到內層 7"
 
-#: pcbnew/tools/pcb_actions.cpp:905
+#: pcbnew/tools/pcb_actions.cpp:915
 msgid "Switch to Inner layer 8"
 msgstr "切換到內層 8"
 
-#: pcbnew/tools/pcb_actions.cpp:910
+#: pcbnew/tools/pcb_actions.cpp:920
 msgid "Switch to Inner layer 9"
 msgstr "切換到內層 9"
 
-#: pcbnew/tools/pcb_actions.cpp:915
+#: pcbnew/tools/pcb_actions.cpp:925
 msgid "Switch to Inner layer 10"
 msgstr "切換到內層 10"
 
-#: pcbnew/tools/pcb_actions.cpp:920
+#: pcbnew/tools/pcb_actions.cpp:930
 msgid "Switch to Inner layer 11"
 msgstr "切換到內層 11"
 
-#: pcbnew/tools/pcb_actions.cpp:925
+#: pcbnew/tools/pcb_actions.cpp:935
 msgid "Switch to Inner layer 12"
 msgstr "切換到內層 12"
 
-#: pcbnew/tools/pcb_actions.cpp:930
+#: pcbnew/tools/pcb_actions.cpp:940
 msgid "Switch to Inner layer 13"
 msgstr "切換到內層 13"
 
-#: pcbnew/tools/pcb_actions.cpp:935
+#: pcbnew/tools/pcb_actions.cpp:945
 msgid "Switch to Inner layer 14"
 msgstr "切換到內層 14"
 
-#: pcbnew/tools/pcb_actions.cpp:940
+#: pcbnew/tools/pcb_actions.cpp:950
 msgid "Switch to Inner layer 15"
 msgstr "切換到內層 15"
 
-#: pcbnew/tools/pcb_actions.cpp:945
+#: pcbnew/tools/pcb_actions.cpp:955
 msgid "Switch to Inner layer 16"
 msgstr "切換到內層 16"
 
-#: pcbnew/tools/pcb_actions.cpp:950
+#: pcbnew/tools/pcb_actions.cpp:960
 msgid "Switch to Inner layer 17"
 msgstr "切換到內層 17"
 
-#: pcbnew/tools/pcb_actions.cpp:955
+#: pcbnew/tools/pcb_actions.cpp:965
 msgid "Switch to Inner layer 18"
 msgstr "切換到內層 18"
 
-#: pcbnew/tools/pcb_actions.cpp:960
+#: pcbnew/tools/pcb_actions.cpp:970
 msgid "Switch to Inner layer 19"
 msgstr "切換到內層 19"
 
-#: pcbnew/tools/pcb_actions.cpp:965
+#: pcbnew/tools/pcb_actions.cpp:975
 msgid "Switch to Inner layer 20"
 msgstr "切換到內層 20"
 
-#: pcbnew/tools/pcb_actions.cpp:970
+#: pcbnew/tools/pcb_actions.cpp:980
 msgid "Switch to Inner layer 21"
 msgstr "切換到內層 21"
 
-#: pcbnew/tools/pcb_actions.cpp:975
+#: pcbnew/tools/pcb_actions.cpp:985
 msgid "Switch to Inner layer 22"
 msgstr "切換到內層 22"
 
-#: pcbnew/tools/pcb_actions.cpp:980
+#: pcbnew/tools/pcb_actions.cpp:990
 msgid "Switch to Inner layer 23"
 msgstr "切換到內層 23"
 
-#: pcbnew/tools/pcb_actions.cpp:985
+#: pcbnew/tools/pcb_actions.cpp:995
 msgid "Switch to Inner layer 24"
 msgstr "切換到內層 24"
 
-#: pcbnew/tools/pcb_actions.cpp:990
+#: pcbnew/tools/pcb_actions.cpp:1000
 msgid "Switch to Inner layer 25"
 msgstr "切換到內層 25"
 
-#: pcbnew/tools/pcb_actions.cpp:995
+#: pcbnew/tools/pcb_actions.cpp:1005
 msgid "Switch to Inner layer 26"
 msgstr "切換到內層 26"
 
-#: pcbnew/tools/pcb_actions.cpp:1000
+#: pcbnew/tools/pcb_actions.cpp:1010
 msgid "Switch to Inner layer 27"
 msgstr "切換到內層 27"
 
-#: pcbnew/tools/pcb_actions.cpp:1005
+#: pcbnew/tools/pcb_actions.cpp:1015
 msgid "Switch to Inner layer 28"
 msgstr "切換到內層 28"
 
-#: pcbnew/tools/pcb_actions.cpp:1010
+#: pcbnew/tools/pcb_actions.cpp:1020
 msgid "Switch to Inner layer 29"
 msgstr "切換到內層 29"
 
-#: pcbnew/tools/pcb_actions.cpp:1015
+#: pcbnew/tools/pcb_actions.cpp:1025
 msgid "Switch to Inner layer 30"
 msgstr "切換到內層 30"
 
-#: pcbnew/tools/pcb_actions.cpp:1021
+#: pcbnew/tools/pcb_actions.cpp:1031
 msgid "Switch to Copper (B.Cu) layer"
 msgstr "切換到底層銅層"
 
-#: pcbnew/tools/pcb_actions.cpp:1027
+#: pcbnew/tools/pcb_actions.cpp:1037
 msgid "Switch to Next Layer"
 msgstr "切換到下一層"
 
-#: pcbnew/tools/pcb_actions.cpp:1033
+#: pcbnew/tools/pcb_actions.cpp:1043
 msgid "Switch to Previous Layer"
 msgstr "切換到上一層"
 
-#: pcbnew/tools/pcb_actions.cpp:1039
+#: pcbnew/tools/pcb_actions.cpp:1049
 msgid "Toggle Layer"
 msgstr "切換圖層"
 
-#: pcbnew/tools/pcb_actions.cpp:1039
+#: pcbnew/tools/pcb_actions.cpp:1049
 msgid "Switch between layers in active layer pair"
 msgstr "在活動圖層對中的圖層之間切換"
 
-#: pcbnew/tools/pcb_actions.cpp:1046
+#: pcbnew/tools/pcb_actions.cpp:1056
 msgid "Increase Layer Opacity"
 msgstr "增大圖層不透明度"
 
-#: pcbnew/tools/pcb_actions.cpp:1046
+#: pcbnew/tools/pcb_actions.cpp:1056
 msgid "Make the current layer less transparent"
 msgstr "使目前的圖層稍微不透明"
 
-#: pcbnew/tools/pcb_actions.cpp:1053
+#: pcbnew/tools/pcb_actions.cpp:1063
 msgid "Decrease Layer Opacity"
 msgstr "減小圖層不透明度"
 
-#: pcbnew/tools/pcb_actions.cpp:1053
+#: pcbnew/tools/pcb_actions.cpp:1063
 msgid "Make the current layer more transparent"
 msgstr "使目前的層更加透明"
 
-#: pcbnew/tools/pcb_actions.cpp:1064
+#: pcbnew/tools/pcb_actions.cpp:1074
 msgid "Show Board Statistics"
 msgstr "顯示電路板統計資訊"
 
-#: pcbnew/tools/pcb_actions.cpp:1064
+#: pcbnew/tools/pcb_actions.cpp:1074
 msgid "Shows board statistics"
 msgstr "顯示電路板統計資訊"
 
-#: pcbnew/tools/pcb_actions.cpp:1068
+#: pcbnew/tools/pcb_actions.cpp:1078
 msgid "Clearance Resolution..."
 msgstr "間隙解析..."
 
-#: pcbnew/tools/pcb_actions.cpp:1069
+#: pcbnew/tools/pcb_actions.cpp:1079
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr "顯示兩個選定物件之間活動層的間隙解析"
 
-#: pcbnew/tools/pcb_actions.cpp:1074
+#: pcbnew/tools/pcb_actions.cpp:1084
 msgid "Constraints Resolution..."
 msgstr "約束解析..."
 
-#: pcbnew/tools/pcb_actions.cpp:1075
+#: pcbnew/tools/pcb_actions.cpp:1085
 msgid "Show constraints resolution for the selected object"
 msgstr "顯示所選物件的約束解析"
 
-#: pcbnew/tools/pcb_actions.cpp:1081
+#: pcbnew/tools/pcb_actions.cpp:1091
 msgid "Geographical Reannotate..."
 msgstr "位置重新批註..."
 
-#: pcbnew/tools/pcb_actions.cpp:1081
+#: pcbnew/tools/pcb_actions.cpp:1091
 msgid "Reannotate PCB in geographical order"
 msgstr "按位置順序重新批註 PCB"
 
-#: pcbnew/tools/pcb_actions.cpp:1086
+#: pcbnew/tools/pcb_actions.cpp:1096
 msgid "Repair Board"
 msgstr "修復電路板"
 
-#: pcbnew/tools/pcb_actions.cpp:1087
+#: pcbnew/tools/pcb_actions.cpp:1097
 msgid "Run various diagnostics and attempt to repair board"
 msgstr "執行各種診斷程式並嘗試修復電路板"
 
-#: pcbnew/tools/pcb_actions.cpp:1092
+#: pcbnew/tools/pcb_actions.cpp:1102
 msgid "Repair Footprint"
 msgstr "修復封裝"
 
-#: pcbnew/tools/pcb_actions.cpp:1093
+#: pcbnew/tools/pcb_actions.cpp:1103
 msgid "Run various diagnostics and attempt to repair footprint"
 msgstr "執行各種診斷程式並嘗試修復封裝"
 
-#: pcbnew/tools/pcb_actions.cpp:1100
+#: pcbnew/tools/pcb_actions.cpp:1110
 msgid "Align to Top"
 msgstr "向上對齊"
 
-#: pcbnew/tools/pcb_actions.cpp:1101
+#: pcbnew/tools/pcb_actions.cpp:1111
 msgid "Aligns selected items to the top edge"
 msgstr "對齊選擇的項到頂邊"
 
-#: pcbnew/tools/pcb_actions.cpp:1105
+#: pcbnew/tools/pcb_actions.cpp:1115
 msgid "Align to Bottom"
 msgstr "向下對齊"
 
-#: pcbnew/tools/pcb_actions.cpp:1106
+#: pcbnew/tools/pcb_actions.cpp:1116
 msgid "Aligns selected items to the bottom edge"
 msgstr "對齊選擇的項到底邊"
 
-#: pcbnew/tools/pcb_actions.cpp:1110
+#: pcbnew/tools/pcb_actions.cpp:1120
 msgid "Align to Left"
 msgstr "向左對齊"
 
-#: pcbnew/tools/pcb_actions.cpp:1111
+#: pcbnew/tools/pcb_actions.cpp:1121
 msgid "Aligns selected items to the left edge"
 msgstr "對齊選擇的項到左邊"
 
-#: pcbnew/tools/pcb_actions.cpp:1115
+#: pcbnew/tools/pcb_actions.cpp:1125
 msgid "Align to Right"
 msgstr "向右對齊"
 
-#: pcbnew/tools/pcb_actions.cpp:1116
+#: pcbnew/tools/pcb_actions.cpp:1126
 msgid "Aligns selected items to the right edge"
 msgstr "對齊選擇的項到右邊"
 
-#: pcbnew/tools/pcb_actions.cpp:1119
+#: pcbnew/tools/pcb_actions.cpp:1129
 msgid "Align to Vertical Center"
 msgstr "與垂直中心對齊"
 
-#: pcbnew/tools/pcb_actions.cpp:1120
+#: pcbnew/tools/pcb_actions.cpp:1130
 msgid "Aligns selected items to the vertical center"
 msgstr "將選定的專案垂直居中"
 
-#: pcbnew/tools/pcb_actions.cpp:1124
+#: pcbnew/tools/pcb_actions.cpp:1134
 msgid "Align to Horizontal Center"
 msgstr "與水平中心對齊"
 
-#: pcbnew/tools/pcb_actions.cpp:1125
+#: pcbnew/tools/pcb_actions.cpp:1135
 msgid "Aligns selected items to the horizontal center"
 msgstr "將選定的專案水平居中"
 
-#: pcbnew/tools/pcb_actions.cpp:1130
+#: pcbnew/tools/pcb_actions.cpp:1140
 msgid "Distribute Horizontally"
 msgstr "水平分佈"
 
-#: pcbnew/tools/pcb_actions.cpp:1131
+#: pcbnew/tools/pcb_actions.cpp:1141
 msgid "Distributes selected items along the horizontal axis"
 msgstr "所選項沿水平軸分佈"
 
-#: pcbnew/tools/pcb_actions.cpp:1135
+#: pcbnew/tools/pcb_actions.cpp:1145
 msgid "Distribute Vertically"
 msgstr "垂直分佈"
 
-#: pcbnew/tools/pcb_actions.cpp:1136
+#: pcbnew/tools/pcb_actions.cpp:1146
 msgid "Distributes selected items along the vertical axis"
 msgstr "所選項沿垂直軸分佈"
 
-#: pcbnew/tools/pcb_actions.cpp:1172
+#: pcbnew/tools/pcb_actions.cpp:1182
 msgid "Position Relative To..."
 msgstr "相対位置..."
 
-#: pcbnew/tools/pcb_actions.cpp:1173
+#: pcbnew/tools/pcb_actions.cpp:1183
 msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr "精確移動選擇項"
 
-#: pcbnew/tools/pcb_actions.cpp:1210
+#: pcbnew/tools/pcb_actions.cpp:1220
 msgid "Select/Expand Connection"
 msgstr "選擇/擴充套件連線"
 
-#: pcbnew/tools/pcb_actions.cpp:1211
+#: pcbnew/tools/pcb_actions.cpp:1221
 msgid ""
 "Selects a connection or expands an existing selection to junctions, pads, or "
 "entire connections"
 msgstr "選擇連線或將現有選擇擴充套件到結點、焊盤或整個連線"
 
-#: pcbnew/tools/pcb_actions.cpp:1216
+#: pcbnew/tools/pcb_actions.cpp:1226
 msgid "Select All Tracks in Net"
 msgstr "選擇網中的所有佈線"
 
-#: pcbnew/tools/pcb_actions.cpp:1217
+#: pcbnew/tools/pcb_actions.cpp:1227
 msgid "Selects all tracks & vias belonging to the same net."
 msgstr "選擇所有屬於同一網路的佈線與過孔。"
 
-#: pcbnew/tools/pcb_actions.cpp:1221
+#: pcbnew/tools/pcb_actions.cpp:1231
 msgid "Deselect All Tracks in Net"
 msgstr "取消選擇網路中的所有佈線"
 
-#: pcbnew/tools/pcb_actions.cpp:1222
+#: pcbnew/tools/pcb_actions.cpp:1232
 msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "取消選擇屬於同一網的所有佈線和過孔。"
 
-#: pcbnew/tools/pcb_actions.cpp:1227
+#: pcbnew/tools/pcb_actions.cpp:1237
 msgid "Selects all footprints and tracks in the schematic sheet"
 msgstr "選擇原理圖圖框中的所有封裝和佈線"
 
-#: pcbnew/tools/pcb_actions.cpp:1232
+#: pcbnew/tools/pcb_actions.cpp:1242
 msgid "Items in Same Hierarchical Sheet"
 msgstr "同一層次圖框中的專案"
 
-#: pcbnew/tools/pcb_actions.cpp:1233
+#: pcbnew/tools/pcb_actions.cpp:1243
 msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "選擇同一原理圖中的所有封裝和佈線"
 
-#: pcbnew/tools/pcb_actions.cpp:1238
+#: pcbnew/tools/pcb_actions.cpp:1248
 msgid "Filter Selected Items..."
 msgstr "過濾所選專案..."
 
-#: pcbnew/tools/pcb_actions.cpp:1238
+#: pcbnew/tools/pcb_actions.cpp:1248
 msgid "Remove items from the selection by type"
 msgstr "按型別從選區刪除專案"
 
-#: pcbnew/tools/pcb_actions.cpp:1246 pcbnew/tools/zone_filler_tool.cpp:211
+#: pcbnew/tools/pcb_actions.cpp:1256 pcbnew/tools/zone_filler_tool.cpp:211
 msgid "Fill Zone"
 msgstr "填充覆銅"
 
-#: pcbnew/tools/pcb_actions.cpp:1246
+#: pcbnew/tools/pcb_actions.cpp:1256
 msgid "Update copper fill of selected zone(s)"
 msgstr "更新選取區域中的鋪銅"
 
-#: pcbnew/tools/pcb_actions.cpp:1252 pcbnew/tools/zone_filler_tool.cpp:154
+#: pcbnew/tools/pcb_actions.cpp:1262 pcbnew/tools/zone_filler_tool.cpp:154
 msgid "Fill All Zones"
 msgstr "填充所有覆銅"
 
-#: pcbnew/tools/pcb_actions.cpp:1252
+#: pcbnew/tools/pcb_actions.cpp:1262
 #, fuzzy
 msgid "Update copper fill of all zones"
 msgstr "取消填充所有覆銅"
 
-#: pcbnew/tools/pcb_actions.cpp:1257 pcbnew/tools/zone_filler_tool.cpp:249
+#: pcbnew/tools/pcb_actions.cpp:1267 pcbnew/tools/zone_filler_tool.cpp:249
 msgid "Unfill Zone"
 msgstr "取消填充覆銅"
 
-#: pcbnew/tools/pcb_actions.cpp:1257
+#: pcbnew/tools/pcb_actions.cpp:1267
 msgid "Remove copper fill from selected zone(s)"
 msgstr "移除選取區域中的鋪銅"
 
-#: pcbnew/tools/pcb_actions.cpp:1263 pcbnew/tools/zone_filler_tool.cpp:267
+#: pcbnew/tools/pcb_actions.cpp:1273 pcbnew/tools/zone_filler_tool.cpp:267
 msgid "Unfill All Zones"
 msgstr "取消填充所有覆銅"
 
-#: pcbnew/tools/pcb_actions.cpp:1263
+#: pcbnew/tools/pcb_actions.cpp:1273
 #, fuzzy
 msgid "Remove copper fill from all zones"
 msgstr "移除所有覆銅的填充"
 
-#: pcbnew/tools/pcb_actions.cpp:1271
+#: pcbnew/tools/pcb_actions.cpp:1281
 msgid "Place Selected Footprints"
 msgstr "放置選定的封裝"
 
-#: pcbnew/tools/pcb_actions.cpp:1272
+#: pcbnew/tools/pcb_actions.cpp:1282
 msgid "Performs automatic placement of selected components"
 msgstr "執行選定元件的自動放置"
 
-#: pcbnew/tools/pcb_actions.cpp:1276
+#: pcbnew/tools/pcb_actions.cpp:1286
 msgid "Place Off-Board Footprints"
 msgstr "放置板外封裝"
 
-#: pcbnew/tools/pcb_actions.cpp:1277
+#: pcbnew/tools/pcb_actions.cpp:1287
 msgid "Performs automatic placement of components outside board area"
 msgstr "在板區域外執行元件的自動放置"
 
-#: pcbnew/tools/pcb_actions.cpp:1285
+#: pcbnew/tools/pcb_actions.cpp:1295
 msgid "Route Single Track"
 msgstr "單軌互動式佈線"
 
-#: pcbnew/tools/pcb_actions.cpp:1285
+#: pcbnew/tools/pcb_actions.cpp:1295
 msgid "Route tracks"
 msgstr "佈線"
 
-#: pcbnew/tools/pcb_actions.cpp:1292
+#: pcbnew/tools/pcb_actions.cpp:1302
 msgid "Route Differential Pair"
 msgstr "差動對互動佈線"
 
-#: pcbnew/tools/pcb_actions.cpp:1292
+#: pcbnew/tools/pcb_actions.cpp:1302
 msgid "Route differential pairs"
 msgstr "佈線差動對"
 
-#: pcbnew/tools/pcb_actions.cpp:1298
+#: pcbnew/tools/pcb_actions.cpp:1308
 msgid "Interactive Router Settings..."
 msgstr "互動式佈線設定..."
 
-#: pcbnew/tools/pcb_actions.cpp:1298
+#: pcbnew/tools/pcb_actions.cpp:1308
 msgid "Open Interactive Router settings"
 msgstr "開啟互動佈線設定"
 
-#: pcbnew/tools/pcb_actions.cpp:1303
+#: pcbnew/tools/pcb_actions.cpp:1313
 msgid "Differential Pair Dimensions..."
 msgstr "差動對尺寸..."
 
-#: pcbnew/tools/pcb_actions.cpp:1303
+#: pcbnew/tools/pcb_actions.cpp:1313
 msgid "Open Differential Pair Dimension settings"
 msgstr "開啟差動對尺寸設定"
 
-#: pcbnew/tools/pcb_actions.cpp:1308
+#: pcbnew/tools/pcb_actions.cpp:1318
 msgid "Router Highlight Mode"
 msgstr "佈線強調顯示模式"
 
-#: pcbnew/tools/pcb_actions.cpp:1308
+#: pcbnew/tools/pcb_actions.cpp:1318
 msgid "Switch router to highlight mode"
 msgstr "將佈線切換到強調顯示模式"
 
-#: pcbnew/tools/pcb_actions.cpp:1313
+#: pcbnew/tools/pcb_actions.cpp:1323
 msgid "Router Shove Mode"
 msgstr "佈線推擠模式"
 
-#: pcbnew/tools/pcb_actions.cpp:1313
+#: pcbnew/tools/pcb_actions.cpp:1323
 msgid "Switch router to shove mode"
 msgstr "將佈線切換到推擠模式"
 
-#: pcbnew/tools/pcb_actions.cpp:1318
+#: pcbnew/tools/pcb_actions.cpp:1328
 msgid "Router Walkaround Mode"
 msgstr "佈線繞走模式"
 
-#: pcbnew/tools/pcb_actions.cpp:1318
+#: pcbnew/tools/pcb_actions.cpp:1328
 msgid "Switch router to walkaround mode"
 msgstr "將佈線切換到繞走模式"
 
-#: pcbnew/tools/pcb_actions.cpp:1323
+#: pcbnew/tools/pcb_actions.cpp:1333
 msgid "Set Layer Pair..."
 msgstr "設定層對..."
 
-#: pcbnew/tools/pcb_actions.cpp:1323
+#: pcbnew/tools/pcb_actions.cpp:1333
 msgid "Change active layer pair for routing"
 msgstr "變更佈線的活動層對"
 
-#: pcbnew/tools/pcb_actions.cpp:1330
+#: pcbnew/tools/pcb_actions.cpp:1340
 msgid "Tune length of a single track"
 msgstr "調整單軌佈線長度"
 
-#: pcbnew/tools/pcb_actions.cpp:1337
+#: pcbnew/tools/pcb_actions.cpp:1347
 msgid "Tune length of a differential pair"
 msgstr "調整差動對佈線長度"
 
-#: pcbnew/tools/pcb_actions.cpp:1344
+#: pcbnew/tools/pcb_actions.cpp:1354
 msgid "Tune skew of a differential pair"
 msgstr "調整差動對佈線偏移"
 
-#: pcbnew/tools/pcb_actions.cpp:1353
+#: pcbnew/tools/pcb_actions.cpp:1363
 msgid "Undo Last Segment"
 msgstr "復原最後一段線段"
 
-#: pcbnew/tools/pcb_actions.cpp:1353
+#: pcbnew/tools/pcb_actions.cpp:1363
 msgid "Walks the current track back one segment."
 msgstr "使目前的走線復原一個線段。"
 
-#: pcbnew/tools/pcb_actions.cpp:1358 pcbnew/tools/pcb_actions.cpp:1364
+#: pcbnew/tools/pcb_actions.cpp:1368 pcbnew/tools/pcb_actions.cpp:1374
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr "將佈線拆分為在游標位置連線的兩個段。"
 
-#: pcbnew/tools/pcb_actions.cpp:1388
+#: pcbnew/tools/pcb_actions.cpp:1398
 msgid "Length Tuning Settings..."
 msgstr "長度最佳化設定..."
 
-#: pcbnew/tools/pcb_actions.cpp:1389
+#: pcbnew/tools/pcb_actions.cpp:1399
 msgid "Sets the length tuning parameters for currently routed item."
 msgstr "設定目前的佈線項長度調整引數。"
 
@@ -35075,15 +35108,15 @@ msgid ""
 "all fills."
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:545
+#: pcbnew/tools/pcb_control.cpp:585
 msgid "Item locked."
 msgstr "專案已鎖定。"
 
-#: pcbnew/tools/pcb_control.cpp:819
+#: pcbnew/tools/pcb_control.cpp:859
 msgid "Invalid clipboard contents"
 msgstr "無效的剪貼簿內容"
 
-#: pcbnew/tools/pcb_control.cpp:1087
+#: pcbnew/tools/pcb_control.cpp:1127
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -35092,11 +35125,11 @@ msgstr ""
 "電路板載入錯誤。\n"
 "%s"
 
-#: pcbnew/tools/pcb_control.cpp:1164
+#: pcbnew/tools/pcb_control.cpp:1204
 msgid "Selected Items"
 msgstr "選中項"
 
-#: pcbnew/tools/pcb_control.cpp:1181
+#: pcbnew/tools/pcb_control.cpp:1221
 msgid "Footprint Name"
 msgstr "封裝名稱"
 
@@ -35322,7 +35355,7 @@ msgid "No Layers"
 msgstr "沒有圖層"
 
 #: pcbnew/widgets/appearance_controls.cpp:378
-#: pcbnew/widgets/appearance_controls_base.cpp:175
+#: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "All Layers"
 msgstr "所有圖層"
 
@@ -35350,352 +35383,375 @@ msgstr "底層"
 msgid "Back Assembly View"
 msgstr "底層裝配檢視"
 
-#: pcbnew/widgets/appearance_controls.cpp:444
+#: pcbnew/widgets/appearance_controls.cpp:443
 msgid "Filter nets"
 msgstr "篩選網路"
 
-#: pcbnew/widgets/appearance_controls.cpp:580
+#: pcbnew/widgets/appearance_controls.cpp:583
 msgid "Layer Display Options"
 msgstr "圖層顯示選項"
 
-#: pcbnew/widgets/appearance_controls.cpp:590
+#: pcbnew/widgets/appearance_controls.cpp:595
+#, fuzzy, c-format
+msgid "Inactive layers (%s):"
+msgstr "非活動圖層："
+
+#: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Inactive layers:"
 msgstr "非活動圖層："
 
-#: pcbnew/widgets/appearance_controls.cpp:602
+#: pcbnew/widgets/appearance_controls.cpp:611
 msgid "Inactive layers will be shown in full color"
 msgstr "非活動圖層將以全綵顯示"
 
-#: pcbnew/widgets/appearance_controls.cpp:606
+#: pcbnew/widgets/appearance_controls.cpp:616
 msgid "Dim"
 msgstr "暗顯"
 
-#: pcbnew/widgets/appearance_controls.cpp:608
+#: pcbnew/widgets/appearance_controls.cpp:618
 msgid "Inactive layers will be dimmed"
 msgstr "非活動圖層將變暗"
 
-#: pcbnew/widgets/appearance_controls.cpp:612
+#: pcbnew/widgets/appearance_controls.cpp:623
 msgid "Hide"
 msgstr "隱藏"
 
-#: pcbnew/widgets/appearance_controls.cpp:614
+#: pcbnew/widgets/appearance_controls.cpp:625
 msgid "Inactive layers will be hidden"
 msgstr "非活動圖層將被隱藏"
 
-#: pcbnew/widgets/appearance_controls.cpp:624
+#: pcbnew/widgets/appearance_controls.cpp:636
 msgid "Flip board view"
 msgstr "翻轉電路板檢視"
 
-#: pcbnew/widgets/appearance_controls.cpp:646
+#: pcbnew/widgets/appearance_controls.cpp:658
 msgid "Net Display Options"
 msgstr "網路顯示選項"
 
-#: pcbnew/widgets/appearance_controls.cpp:655
+#: pcbnew/widgets/appearance_controls.cpp:670
+#, fuzzy, c-format
+msgid "Net colors (%s):"
+msgstr "網路顏色："
+
+#: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Net colors:"
 msgstr "網路顏色："
 
-#: pcbnew/widgets/appearance_controls.cpp:658
+#: pcbnew/widgets/appearance_controls.cpp:677
 msgid "Choose when to show net and netclass colors"
 msgstr "選擇何時顯示網路和網路類顏色"
 
-#: pcbnew/widgets/appearance_controls.cpp:666
+#: pcbnew/widgets/appearance_controls.cpp:686
 msgid "Net and netclass colors are shown on all copper items"
 msgstr "網路和網路類顏色顯示在所有銅層物件上"
 
-#: pcbnew/widgets/appearance_controls.cpp:673
+#: pcbnew/widgets/appearance_controls.cpp:694
 msgid "Net and netclass colors are shown on the ratsnest only"
 msgstr "網路和網路類顏色僅在飛線上顯示"
 
-#: pcbnew/widgets/appearance_controls.cpp:679
+#: pcbnew/widgets/appearance_controls.cpp:701
 msgid "Net and netclass colors are not shown"
 msgstr "不顯示網路和網路類顏色"
 
-#: pcbnew/widgets/appearance_controls.cpp:687
+#: pcbnew/widgets/appearance_controls.cpp:712
+#, fuzzy, c-format
+msgid "Ratsnest display (%s):"
+msgstr "飛線顯示："
+
+#: pcbnew/widgets/appearance_controls.cpp:714
 msgid "Ratsnest display:"
 msgstr "飛線顯示："
 
-#: pcbnew/widgets/appearance_controls.cpp:690
-msgid "Choose what ratsnest lines to display"
+#: pcbnew/widgets/appearance_controls.cpp:719
+#, fuzzy
+msgid "Choose which ratsnest lines to display"
 msgstr "選擇要顯示的飛線"
 
-#: pcbnew/widgets/appearance_controls.cpp:698
-msgid "Ratsnest lines are shown to items on all layers"
+#: pcbnew/widgets/appearance_controls.cpp:729
+#, fuzzy
+msgid "Show ratsnest lines to items on all layers"
 msgstr "飛線顯示為所有圖層上的專案"
 
-#: pcbnew/widgets/appearance_controls.cpp:703
+#: pcbnew/widgets/appearance_controls.cpp:734
 msgid "Visible layers"
 msgstr "可見層"
 
-#: pcbnew/widgets/appearance_controls.cpp:705
-msgid "Ratsnest lines are shown to items on visible layers"
+#: pcbnew/widgets/appearance_controls.cpp:736
+#, fuzzy
+msgid "Show ratsnest lines to items on visible layers"
 msgstr "飛線線顯示為可見圖層上的專案"
 
-#: pcbnew/widgets/appearance_controls.cpp:846
+#: pcbnew/widgets/appearance_controls.cpp:743
+#, fuzzy
+msgid "Hide all ratsnest lines"
+msgstr "隱藏臨時網路"
+
+#: pcbnew/widgets/appearance_controls.cpp:881
 msgid "Set Net Color"
 msgstr "設定網路顏色"
 
-#: pcbnew/widgets/appearance_controls.cpp:848
+#: pcbnew/widgets/appearance_controls.cpp:884
 #, c-format
 msgid "Highlight %s"
 msgstr "強調顯示 %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:851
-#: pcbnew/widgets/appearance_controls.cpp:2179
+#: pcbnew/widgets/appearance_controls.cpp:887
+#: pcbnew/widgets/appearance_controls.cpp:2218
 #, c-format
 msgid "Select Tracks and Vias in %s"
 msgstr "選擇 %s 中的導線和過孔"
 
-#: pcbnew/widgets/appearance_controls.cpp:854
-#: pcbnew/widgets/appearance_controls.cpp:2183
+#: pcbnew/widgets/appearance_controls.cpp:890
+#: pcbnew/widgets/appearance_controls.cpp:2222
 #, c-format
 msgid "Unselect Tracks and Vias in %s"
 msgstr "取消選擇 %s 中的導線和過孔"
 
-#: pcbnew/widgets/appearance_controls.cpp:862
+#: pcbnew/widgets/appearance_controls.cpp:897
 msgid "Hide All Other Nets"
 msgstr "隱藏所有其他網路"
 
-#: pcbnew/widgets/appearance_controls.cpp:893
+#: pcbnew/widgets/appearance_controls.cpp:929
 #, c-format
 msgid "Click to hide ratsnest for %s"
 msgstr "單擊以隱藏 %s 的飛線"
 
-#: pcbnew/widgets/appearance_controls.cpp:894
+#: pcbnew/widgets/appearance_controls.cpp:930
 #, c-format
 msgid "Click to show ratsnest for %s"
 msgstr "單擊以顯示 %s 的飛線"
 
-#: pcbnew/widgets/appearance_controls.cpp:903
+#: pcbnew/widgets/appearance_controls.cpp:939
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
 msgstr "雙擊(或中鍵單擊)變更顏色，右鍵單擊檢視更多動作"
 
-#: pcbnew/widgets/appearance_controls.cpp:1398
+#: pcbnew/widgets/appearance_controls.cpp:1436
 msgid "Double click or middle click for color change, right click for menu"
 msgstr "雙擊或中鍵變更顏色，右鍵單擊選單"
 
-#: pcbnew/widgets/appearance_controls.cpp:1405
+#: pcbnew/widgets/appearance_controls.cpp:1443
 msgid "Show or hide this layer"
 msgstr "顯示或隱藏此層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1478
+#: pcbnew/widgets/appearance_controls.cpp:1516
 msgid "Front copper layer"
 msgstr "頂層銅層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1479
+#: pcbnew/widgets/appearance_controls.cpp:1517
 msgid "Back copper layer"
 msgstr "底層銅層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1480
+#: pcbnew/widgets/appearance_controls.cpp:1518
 msgid "Inner copper layer"
 msgstr "內部銅層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1506
+#: pcbnew/widgets/appearance_controls.cpp:1544
 msgid "Adhesive on board's front"
 msgstr "頂層粘膠"
 
-#: pcbnew/widgets/appearance_controls.cpp:1507
+#: pcbnew/widgets/appearance_controls.cpp:1545
 msgid "Adhesive on board's back"
 msgstr "底層粘膠"
 
-#: pcbnew/widgets/appearance_controls.cpp:1508
+#: pcbnew/widgets/appearance_controls.cpp:1546
 msgid "Solder paste on board's front"
 msgstr "頂層錫膏"
 
-#: pcbnew/widgets/appearance_controls.cpp:1509
+#: pcbnew/widgets/appearance_controls.cpp:1547
 msgid "Solder paste on board's back"
 msgstr "底層錫膏"
 
-#: pcbnew/widgets/appearance_controls.cpp:1510
+#: pcbnew/widgets/appearance_controls.cpp:1548
 msgid "Silkscreen on board's front"
 msgstr "頂層網版印刷"
 
-#: pcbnew/widgets/appearance_controls.cpp:1511
+#: pcbnew/widgets/appearance_controls.cpp:1549
 msgid "Silkscreen on board's back"
 msgstr "底層網版印刷"
 
-#: pcbnew/widgets/appearance_controls.cpp:1512
+#: pcbnew/widgets/appearance_controls.cpp:1550
 msgid "Solder mask on board's front"
 msgstr "頂層阻焊"
 
-#: pcbnew/widgets/appearance_controls.cpp:1513
+#: pcbnew/widgets/appearance_controls.cpp:1551
 msgid "Solder mask on board's back"
 msgstr "底層阻焊"
 
-#: pcbnew/widgets/appearance_controls.cpp:1514
+#: pcbnew/widgets/appearance_controls.cpp:1552
 msgid "Explanatory drawings"
 msgstr "圖形說明"
 
-#: pcbnew/widgets/appearance_controls.cpp:1515
+#: pcbnew/widgets/appearance_controls.cpp:1553
 msgid "Explanatory comments"
 msgstr "描述性註釋"
 
-#: pcbnew/widgets/appearance_controls.cpp:1516
-#: pcbnew/widgets/appearance_controls.cpp:1517
+#: pcbnew/widgets/appearance_controls.cpp:1554
+#: pcbnew/widgets/appearance_controls.cpp:1555
 msgid "User defined meaning"
 msgstr "使用者自訂的釋義"
 
-#: pcbnew/widgets/appearance_controls.cpp:1518
+#: pcbnew/widgets/appearance_controls.cpp:1556
 msgid "Board's perimeter definition"
 msgstr "定義電路板的邊框輪廓"
 
-#: pcbnew/widgets/appearance_controls.cpp:1519
+#: pcbnew/widgets/appearance_controls.cpp:1557
 msgid "Board's edge setback outline"
 msgstr "電路板電氣邊界層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1520
+#: pcbnew/widgets/appearance_controls.cpp:1558
 msgid "Footprint courtyards on board's front"
 msgstr "頂層上的封裝外框"
 
-#: pcbnew/widgets/appearance_controls.cpp:1521
+#: pcbnew/widgets/appearance_controls.cpp:1559
 msgid "Footprint courtyards on board's back"
 msgstr "底層上的封裝外框"
 
-#: pcbnew/widgets/appearance_controls.cpp:1522
+#: pcbnew/widgets/appearance_controls.cpp:1560
 msgid "Footprint assembly on board's front"
 msgstr "頂層封裝裝配"
 
-#: pcbnew/widgets/appearance_controls.cpp:1523
+#: pcbnew/widgets/appearance_controls.cpp:1561
 msgid "Footprint assembly on board's back"
 msgstr "底層封裝裝配"
 
-#: pcbnew/widgets/appearance_controls.cpp:1524
+#: pcbnew/widgets/appearance_controls.cpp:1562
 msgid "User defined layer 1"
 msgstr "使用者自訂的圖層 1"
 
-#: pcbnew/widgets/appearance_controls.cpp:1525
+#: pcbnew/widgets/appearance_controls.cpp:1563
 msgid "User defined layer 2"
 msgstr "使用者自訂的圖層 2"
 
-#: pcbnew/widgets/appearance_controls.cpp:1526
+#: pcbnew/widgets/appearance_controls.cpp:1564
 msgid "User defined layer 3"
 msgstr "使用者自訂的圖層 3"
 
-#: pcbnew/widgets/appearance_controls.cpp:1527
+#: pcbnew/widgets/appearance_controls.cpp:1565
 msgid "User defined layer 4"
 msgstr "使用者自訂的圖層 4"
 
-#: pcbnew/widgets/appearance_controls.cpp:1528
+#: pcbnew/widgets/appearance_controls.cpp:1566
 msgid "User defined layer 5"
 msgstr "使用者自訂的圖層 5"
 
-#: pcbnew/widgets/appearance_controls.cpp:1529
+#: pcbnew/widgets/appearance_controls.cpp:1567
 msgid "User defined layer 6"
 msgstr "使用者自訂的圖層 6"
 
-#: pcbnew/widgets/appearance_controls.cpp:1530
+#: pcbnew/widgets/appearance_controls.cpp:1568
 msgid "User defined layer 7"
 msgstr "使用者自訂的圖層 7"
 
-#: pcbnew/widgets/appearance_controls.cpp:1531
+#: pcbnew/widgets/appearance_controls.cpp:1569
 msgid "User defined layer 8"
 msgstr "使用者自訂的圖層 8"
 
-#: pcbnew/widgets/appearance_controls.cpp:1532
+#: pcbnew/widgets/appearance_controls.cpp:1570
 msgid "User defined layer 9"
 msgstr "使用者自訂的圖層 9"
 
-#: pcbnew/widgets/appearance_controls.cpp:1570
+#: pcbnew/widgets/appearance_controls.cpp:1608
 msgid "Show All Copper Layers"
 msgstr "顯示所有銅層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1573
+#: pcbnew/widgets/appearance_controls.cpp:1611
 msgid "Hide All Copper Layers"
 msgstr "隱藏所有銅層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1584
+#: pcbnew/widgets/appearance_controls.cpp:1622
 msgid "Show All Non Copper Layers"
 msgstr "顯示所有非銅層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1587
+#: pcbnew/widgets/appearance_controls.cpp:1625
 msgid "Hide All Non Copper Layers"
 msgstr "隱藏所有非銅層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1601
+#: pcbnew/widgets/appearance_controls.cpp:1639
 msgid "Show Only Front Assembly Layers"
 msgstr "僅顯示頂裝配層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1603
+#: pcbnew/widgets/appearance_controls.cpp:1642
 msgid "Show Only Front Layers"
 msgstr "僅顯示頂層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1609
+#: pcbnew/widgets/appearance_controls.cpp:1648
 msgid "Show Only Inner Layers"
 msgstr "僅顯示內層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1613
+#: pcbnew/widgets/appearance_controls.cpp:1652
 msgid "Show Only Back Layers"
 msgstr "僅顯示底層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1616
+#: pcbnew/widgets/appearance_controls.cpp:1655
 msgid "Show Only Back Assembly Layers"
 msgstr "僅顯示底裝配層"
 
-#: pcbnew/widgets/appearance_controls.cpp:1943
+#: pcbnew/widgets/appearance_controls.cpp:1982
 #, c-format
 msgid "Show or hide %s"
 msgstr "顯示或隱藏 %s"
 
-#: pcbnew/widgets/appearance_controls.cpp:1984
+#: pcbnew/widgets/appearance_controls.cpp:2023
 #, c-format
 msgid "Set opacity of %s"
 msgstr "設定 %s 的不透明度"
 
-#: pcbnew/widgets/appearance_controls.cpp:2140
+#: pcbnew/widgets/appearance_controls.cpp:2179
 #, c-format
 msgid "Show or hide ratsnest for nets in %s"
 msgstr "顯示或隱藏 %s 中的網路飛線"
 
-#: pcbnew/widgets/appearance_controls.cpp:2171
+#: pcbnew/widgets/appearance_controls.cpp:2210
 msgid "Set Netclass Color"
 msgstr "設定網路類顏色"
 
-#: pcbnew/widgets/appearance_controls.cpp:2176
+#: pcbnew/widgets/appearance_controls.cpp:2215
 #, c-format
 msgid "Highlight Nets in %s"
 msgstr "強調顯示 %s 中的網路"
 
-#: pcbnew/widgets/appearance_controls.cpp:2190
+#: pcbnew/widgets/appearance_controls.cpp:2229
 msgid "Show All Netclasses"
 msgstr "顯示所有網路類"
 
-#: pcbnew/widgets/appearance_controls.cpp:2193
+#: pcbnew/widgets/appearance_controls.cpp:2232
 msgid "Hide All Other Netclasses"
 msgstr "隱藏所有其他網路類"
 
-#: pcbnew/widgets/appearance_controls.cpp:2247
+#: pcbnew/widgets/appearance_controls.cpp:2286
 msgid "Save preset..."
 msgstr "儲存預設..."
 
-#: pcbnew/widgets/appearance_controls.cpp:2248
+#: pcbnew/widgets/appearance_controls.cpp:2287
 msgid "Delete preset..."
 msgstr "刪除預設..."
 
-#: pcbnew/widgets/appearance_controls.cpp:2326
+#: pcbnew/widgets/appearance_controls.cpp:2365
 msgid "Layer preset name:"
 msgstr "層預設名稱："
 
-#: pcbnew/widgets/appearance_controls.cpp:2326
+#: pcbnew/widgets/appearance_controls.cpp:2365
 msgid "Save Layer Preset"
 msgstr "儲存層預設"
 
-#: pcbnew/widgets/appearance_controls.cpp:2367
+#: pcbnew/widgets/appearance_controls.cpp:2406
 msgid "Presets"
 msgstr "預設"
 
-#: pcbnew/widgets/appearance_controls.cpp:2379
+#: pcbnew/widgets/appearance_controls.cpp:2418
 msgid "Delete Preset"
 msgstr "刪除預設"
 
-#: pcbnew/widgets/appearance_controls.cpp:2380
+#: pcbnew/widgets/appearance_controls.cpp:2419
 msgid "Select preset:"
 msgstr "選擇預設："
 
-#: pcbnew/widgets/appearance_controls.cpp:2845
+#: pcbnew/widgets/appearance_controls.cpp:2894
 msgid "Open Preferences"
 msgstr "開啟偏好設定"
 
-#: pcbnew/widgets/appearance_controls.cpp:2859
+#: pcbnew/widgets/appearance_controls.cpp:2908
 msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
@@ -35713,19 +35769,16 @@ msgstr "展示網檢查器"
 msgid "Configure net classes"
 msgstr "設定網路類別"
 
-#: pcbnew/widgets/appearance_controls_base.cpp:164
-msgid "Presets:"
-msgstr "預設："
-
-#: pcbnew/widgets/appearance_controls_base.cpp:168
-msgid "(Ctrl+Tab)"
+#: pcbnew/widgets/appearance_controls_base.cpp:161
+#, fuzzy
+msgid "Presets (Ctrl+Tab):"
 msgstr "(Ctrl+Tab)"
 
-#: pcbnew/widgets/appearance_controls_base.cpp:175
+#: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "(unsaved)"
 msgstr "(未儲存)"
 
-#: pcbnew/widgets/appearance_controls_base.cpp:179
+#: pcbnew/widgets/appearance_controls_base.cpp:169
 msgid "Layer presets"
 msgstr "層預設"
 
@@ -36009,6 +36062,9 @@ msgstr "KiCad 原理圖"
 #: resources/linux/mime/kicad-kicad.xml.in:25
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 印刷電路板"
+
+#~ msgid "Presets:"
+#~ msgstr "預設："
 
 #, c-format
 #~ msgid ""
@@ -43066,9 +43122,6 @@ msgstr "KiCad 印刷電路板"
 #~ msgstr ""
 #~ "當使用傳統工具箱走線/編輯走線時，\n"
 #~ "啟用設計規則檢查 對於先進工具集使用走線>互動式走線設定..."
-
-#~ msgid "Hide board ratsnest"
-#~ msgstr "隱藏臨時網路"
 
 #~ msgid "Show vias in fill mode"
 #~ msgstr "在填充模式顯示通孔"
