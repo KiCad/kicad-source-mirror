@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-03 16:55-0700\n"
-"PO-Revision-Date: 2021-09-29 17:58+0000\n"
+"PO-Revision-Date: 2021-10-04 15:52+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -16210,14 +16210,12 @@ msgid "Align Elements to Grid"
 msgstr "将元素与网格对齐"
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save Current Sheet Copy As..."
-msgstr "另存当前图页 (&U)"
+msgstr "将当前图纸副本另存为..."
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
-msgstr "将当前文档的副本保存到其他位置"
+msgstr "将当前图纸的副本保存到其他位置或以另一个名称进行保存"
 
 #: eeschema/tools/ee_inspection_tool.cpp:282
 #, c-format
@@ -26703,13 +26701,11 @@ msgstr "高亮显示网 (焊盘或线路)。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
-#, fuzzy
 msgid "Graphics Editing"
-msgstr "布线编辑"
+msgstr "图像编辑"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
-#, fuzzy
 msgid "Limit actions to 45 degrees from start"
 msgstr "将动作从起始点算起的角度限制在 45 度"
 
@@ -29666,7 +29662,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:906
 #: pcbnew/footprint_viewer_frame.cpp:720
 msgid "Previous footprint placement still in progress."
-msgstr ""
+msgstr "之前的封装放置仍在进行中。"
 
 #: pcbnew/footprint_libraries_utils.cpp:995
 msgid "Save Footprint As"
