@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-01 07:18+0000\n"
+"PO-Revision-Date: 2021-10-05 17:11+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -1428,14 +1428,14 @@ msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "ไม่สามารถสร้างเส้นทางสมบูรณ์ '%s' เทียบกับ '%s'"
 
 #: common/common.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created."
-msgstr "สร้างไดเรคตอรีทางออก '%s' สำเร็จ\n"
+msgstr "สร้างไดเรคตอรีทางออก '%s' สำเร็จ"
 
 #: common/common.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "ไม่สามารถสร้างไดเร็คตอรีทางออก '%s'\n"
+msgstr "ไม่สามารถสร้างไดเร็คตอรีทางออก '%s'"
 
 #: common/common.cpp:608
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -2927,9 +2927,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "เลือกโปรแกรมดู PDF ที่ชอบ"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Antialiasing"
-msgstr "ต้านความไม่เรียบ:"
+msgstr "ต้านความไม่เรียบ"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -4516,11 +4515,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "ไม่สามารถหาโปรแกรมดูสำหรับ PDF '%s'"
 
 #: common/gestfich.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"เกิดปัญหาระหว่างเรียกใช้งานโปรแกรมดู PDF\n"
-"คำสั่งคือ '%s'"
+msgstr "เกิดปัญหาระหว่างเรียกใช้โปรแกรมดู PDF คือ '%s'"
 
 #: common/gestfich.cpp:301
 #, c-format
@@ -5393,25 +5390,22 @@ msgid "Error loading project footprint library table."
 msgstr "ผิดพลาด ไม่สามารถอ่านตารางไลบรารีฟุ้ทพรินท์"
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:266
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "ไม่สามารถเปิดไฟล์ในคลัง\n"
+msgstr "ไม่สามารถเปิดไฟล์ในคลัง"
 
 #: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:274
-#, fuzzy
 msgid "Invalid archive file format."
-msgstr "รูปแบบไฟล์ในคลังไม่ถูกต้อง\n"
+msgstr "รูปแบบไฟล์ในคลังไม่ถูกต้อง"
 
 #: common/project/project_archiver.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "กำลังแตกไฟล์ '%s'\n"
+msgstr "กำลังแตกไฟล์ '%s'"
 
 #: common/project/project_archiver.cpp:95 kicad/pcm/pcm_task_manager.cpp:193
 #: kicad/pcm/pcm_task_manager.cpp:234
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "ผิดพลาด การแตกไฟล์!\n"
+msgstr "ผิดพลาด การแตกไฟล์!"
 
 #: common/project/project_archiver.cpp:159 eeschema/dialogs/dialog_erc.cpp:760
 #: eeschema/dialogs/dialog_plot_schematic.cpp:517
@@ -5444,19 +5438,19 @@ msgid "Failed to create file '%s'."
 msgstr "สร้างไฟล์ '%s' ผิดพลาด"
 
 #: common/project/project_archiver.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "กำลังเก็บไฟล์ '%s' เข้าคลัง\n"
+msgstr "กำลังเก็บไฟล์ '%s' เข้าคลัง"
 
 #: common/project/project_archiver.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "ล้มเหลวที่จะเก็บไฟล์ '%s' เข้าคลัง\n"
+msgstr "ล้มเหลวที่จะเก็บไฟล์ '%s' เข้าคลัง"
 
 #: common/project/project_archiver.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "บีบอัดไฟล์ '%s' สำเร็จ (%s ไม่บีบ, %s บีบอัด)\n"
+msgstr "บีบอัดไฟล์ '%s' สำเร็จ (%s ไม่บีบ, %s บีบอัด)"
 
 #: common/rc_item.cpp:353
 msgid "Excluded "
@@ -6687,9 +6681,8 @@ msgid "Specctra DSN file"
 msgstr "ไฟล์ Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:521
-#, fuzzy
 msgid "Specctra Session file"
-msgstr "รวมไฟล์เซสชั่น Specctra:"
+msgstr "รวมไฟล์เซสชั่น Specctra"
 
 #: common/wildcards_and_files_ext.cpp:528
 msgid "IPC-D-356 Test Files"
@@ -7408,9 +7401,8 @@ msgid "Nickname '%s' already in use."
 msgstr "ชื่อเล่น '%s' ถูกใช้แล้ว"
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:683
-#, fuzzy
 msgid "Generator File"
-msgstr "ไฟล์ผู้สร้าง:"
+msgstr "ไฟล์ผู้สร้าง"
 
 #: eeschema/dialogs/dialog_bom.cpp:439
 msgid "Generator file name not found."
@@ -8322,9 +8314,9 @@ msgid "Violation Severity"
 msgstr "ระดับการละเมิด"
 
 #: eeschema/dialogs/dialog_erc.cpp:755 pcbnew/dialogs/dialog_gendrill.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "สร้างไฟล์รายงาน '%s'\n"
+msgstr "สร้างไฟล์รายงาน '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:773
 #, c-format
@@ -11850,9 +11842,8 @@ msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr "สัดส่วนเปอร์เซ็นต์ของขนาดข้อความ ที่ทำให้เลื่อนตำแหน่งเหนือหรือใต้เส้นลวดหรือบัส"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label size:"
-msgstr "ป้ายชื่อส่วนกลาง"
+msgstr "ป้ายชื่อส่วนกลาง:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
 #, fuzzy
@@ -13437,9 +13428,9 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "สัญลักษณ์พาวเวอร์สร้างป้ายชื่อส่วนกลางชื่อ '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1938
-#, fuzzy, c-format
+#, c-format
 msgid "Port %s has no connections."
-msgstr "การเชื่อมต่อแพ็ด:"
+msgstr "พอร์ต %s ไม่มีการเชื่อมต่อ"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2129
 #, c-format
@@ -13998,7 +13989,6 @@ msgid "Syntax Help"
 msgstr "ช่วยเหลือไวยากรณ์"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14199,8 +14189,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
+"<i>refdes</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14215,8 +14205,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>ข้อกำหนดบัส</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>เน็ตผลลัพธ์</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14267,11 +14257,12 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "</table>\n"
+"\n"
 
 #: eeschema/sch_validators.cpp:102
 #, c-format
@@ -16823,9 +16814,8 @@ msgid ""
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
-#, fuzzy
 msgid "Coordinates Format"
-msgstr "รูปแบบพิกัด:"
+msgstr "รูปแบบพิกัด"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:53
 msgid "The coordinates format is not specified in Excellon format."
@@ -17027,14 +17017,12 @@ msgid "Gerber files (.g* .lgr .pho)"
 msgstr "ไฟล์เกอร์เบอร์ (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:145
-#, fuzzy
 msgid "Top layer"
-msgstr "ไปยังเลเยอร์:"
+msgstr "เลเยอร์ด้านบน"
 
 #: gerbview/files.cpp:146
-#, fuzzy
 msgid "Bottom layer"
-msgstr "เลเยอร์ด้าน ล่าง/หลัง:"
+msgstr "เลเยอร์ด้านล่าง"
 
 #: gerbview/files.cpp:147
 #, fuzzy
@@ -17072,9 +17060,8 @@ msgid "Keep-out layer"
 msgstr "เก็บเลเยอร์ด้านนอก"
 
 #: gerbview/files.cpp:154
-#, fuzzy
 msgid "Mechanical layers"
-msgstr "เลเยอร์เทคนิคคัล:"
+msgstr "เลเยอร์ทางกล"
 
 #: gerbview/files.cpp:155
 #, fuzzy
@@ -17995,9 +17982,9 @@ msgid "Libraries (%d)"
 msgstr "ไลบรารี"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Color themes (%d)"
-msgstr "ธีมสี:"
+msgstr "ธีมชุดสี (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:315
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
@@ -18072,9 +18059,8 @@ msgid "Discard action"
 msgstr "ล้างทิ้งการแก้ไข"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
-#, fuzzy
 msgid "Install from file..."
-msgstr "ไม่สามารถเปลี่ยนชื่อไฟล์ ... "
+msgstr "ติดตั้งจากไฟล์..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:136
 #, fuzzy
@@ -18109,9 +18095,8 @@ msgid "Waiting..."
 msgstr "กำลังอ่าน…"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall progress"
-msgstr "คุณสมบัติวัสดุ:"
+msgstr "ภาพรวมคืบหน้า"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
@@ -18141,9 +18126,9 @@ msgid "Package identifier: %s\n"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "License: %s\n"
-msgstr "ไลเซ็นส์"
+msgstr "ไลเซ็นส์:%s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
@@ -18223,9 +18208,8 @@ msgid "Inst Size"
 msgstr "ขนาดข้อความ"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Comp"
-msgstr "บริษัท:"
+msgstr "Comp"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:105
 #, fuzzy
@@ -18248,11 +18232,9 @@ msgid "Error loading schema: %s"
 msgstr "เกิดข้อผิดพลาดในการอ่านวงจร '%s'"
 
 #: kicad/pcm/pcm.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading installed packages list: %s"
-msgstr ""
-"เกิดข้อผิดพลาดโหลดรายชื่อเน็ต\n"
-"%s"
+msgstr "เกิดข้อผิดพลาดโหลดรายการแพ็คเกจ:%s"
 
 #: kicad/pcm/pcm.cpp:186
 #, c-format
@@ -18274,12 +18256,15 @@ msgid "Unable to load repository url"
 msgstr "ไม่สามารถโหลด %s ไฟล์"
 
 #: kicad/pcm/pcm.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse repository:\n"
 "\n"
 "%s"
-msgstr "ไม่สามารถตีความ '%s' ใน '%s'"
+msgstr ""
+"ไม่สามารถตีความที่เก็บข้อมูล:\n"
+"\n"
+"'%s"
 
 #: kicad/pcm/pcm.cpp:265
 msgid "Fetching repository packages"
@@ -18294,12 +18279,15 @@ msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
-msgstr "ไม่สามารถตีความ '%s' ใน '%s'"
+msgstr ""
+"ไม่สามารถตีความข้อมูลแพ็กเกจ:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:378
 msgid ""
@@ -18323,9 +18311,8 @@ msgid "Local file"
 msgstr "แก้ไขไฟล์เฉพาะที่..."
 
 #: kicad/pcm/pcm_task_manager.cpp:63
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "ไม่สามารถสร้างไฟล์งาน '%s'"
+msgstr "ไม่สามารถสร้างไดเร็คตอรีสำหรับดาวน์โหลด!"
 
 #: kicad/pcm/pcm_task_manager.cpp:92
 #, c-format
@@ -18336,9 +18323,9 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting package '%s'."
-msgstr "กำลังแตกไฟล์ '%s'\n"
+msgstr "กำลังแตกแพ็คเกจ '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:116
 #, c-format
@@ -18351,23 +18338,28 @@ msgid "Downloading package url: '%s'"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to download url %s\n"
 "%s"
-msgstr "โหลด '%s' ไม่สำเร็จ"
+msgstr ""
+"ดาวน์โหลดจาก %s ไม่สำเร็จ\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:249
 msgid "Aborting package installation."
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse package metadata:\n"
 "\n"
 "%s"
-msgstr "ไม่สามารถสร้าง %s"
+msgstr ""
+"ไม่สามารถสังเคราะห์ข้อมูลแพ็คเกจ:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:306
 msgid "Archive does not contain a valid metadata.json file"
@@ -18858,9 +18850,8 @@ msgid "Printing"
 msgstr "การพิมพ์"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:554
-#, fuzzy
 msgid "Predefined Keywords"
-msgstr "ความกว้างที่กำหนดไว้ล่วงหน้า:"
+msgstr "คำสำคัญที่กำหนดไว้แล้ว"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:557
 msgid "Texts can include keywords."
@@ -18889,9 +18880,8 @@ msgid "(sheet count)"
 msgstr "ทำซ้ำการนับ"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:571
-#, fuzzy
 msgid "(paper size)"
-msgstr "ผู้ใช้กำหนดขนาดกระดาษ:"
+msgstr "(ขนาดกระดาษ)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "Show on all pages"
@@ -20594,9 +20584,8 @@ msgid "Dielectric losses (odd):"
 msgstr "การสูญเสียในอิเล็กทริก (คี่):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Differential Impedance (Zd):"
-msgstr "ช่องว่างระหว่างคู่ดิฟแพร์"
+msgstr "อิมพีแดนซ์คู่ดิฟแพร์ (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
@@ -20864,14 +20853,12 @@ msgid "Loss Tg:"
 msgstr "การสูญเสีย Tg:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
-#, fuzzy
 msgid "Common materials:"
-msgstr "ร่วมกันในหน่วยทั้งหมด"
+msgstr "วัสดุร่วมกัน:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:57
-#, fuzzy
 msgid "Dielectric Material Characteristics"
-msgstr "คุณลักษณะไดอิเล็กทริกของวัสดุ:"
+msgstr "คุณลักษณะไดอิเล็กทริกของวัสดุ"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
@@ -22127,12 +22114,8 @@ msgid "No layer selected."
 msgstr "ไม่ได้เลือกเลเยอร์"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:868
-#, fuzzy
 msgid "Selecting <no net> will create an isolated copper island."
-msgstr ""
-"ไม่มีเน็ตในผลลัพธ์\n"
-"ในบริเวณไม่เชื่อมต่อ\n"
-"เกาะทองแดง"
+msgstr "การเลือก<ไม่มีเน็ต>จะสร้างเกาะทองแดงที่โดดเดี่ยว"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:46
 msgid ""
@@ -26655,9 +26638,8 @@ msgid "End layer:"
 msgstr "เลเยอร์สิ้นสุด:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:280
-#, fuzzy
 msgid "Annular rings:"
-msgstr "ความกว้างวงแหวน"
+msgstr "กลมเป็นวงแหวน:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 #, fuzzy
@@ -26878,9 +26860,8 @@ msgstr "เน้นสีที่เน็ต (สำหรับแพ็ด�
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
-#, fuzzy
 msgid "Graphics Editing"
-msgstr "การแก้ไขแทร็ก"
+msgstr "การแก้ไขกราฟิก"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
@@ -28066,7 +28047,6 @@ msgid "Check rule syntax"
 msgstr "ตรวจสอบไวยากรณ์ของกฎ"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29819,14 +29799,13 @@ msgid "No footprints to export!"
 msgstr "ไม่มีฟุ้ทพรินท์สำหรับส่งออก!"
 
 #: pcbnew/footprint_libraries_utils.cpp:687
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprints on board to refer to %s?"
-msgstr "ปรับปรุงฟุ้ทพรินท์ทั้งหมดบนบอร์ด"
+msgstr "ปรับปรุงฟุ้ทพรินท์ทั้งหมดบนบอร์ดเพื่ออ้างถึง %s?"
 
 #: pcbnew/footprint_libraries_utils.cpp:734
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "ปรับปรุงฟุ้ทพรินท์ให้รวมการเปลี่ยนจากไลบบรารี"
+msgstr "ปรับปรุงฟุ้ทพรินท์บนบอร์ดให้อ้างถึงไลบรารีใหม่?"
 
 #: pcbnew/footprint_libraries_utils.cpp:874
 #: pcbnew/footprint_viewer_frame.cpp:712
@@ -32540,9 +32519,8 @@ msgid "existing track"
 msgstr "เมื่อสร้างแทร็ก"
 
 #: pcbnew/router/pns_kicad_iface.cpp:477 pcbnew/router/pns_kicad_iface.cpp:490
-#, fuzzy
 msgid "board minimum width"
-msgstr "ความกว้างขั้นต่ำ:"
+msgstr "ความกว้างบอร์ดขั้นต่ำ"
 
 #: pcbnew/router/pns_kicad_iface.cpp:486
 #, fuzzy
@@ -33051,9 +33029,8 @@ msgid "Do not prefix path with footprint UUID."
 msgstr "ไม่ต้องนำหน้าเส้นทางด้วย UUID ของฟุ้ทพรินท์"
 
 #: pcbnew/tools/board_editor_control.cpp:392
-#, fuzzy
 msgid "Specctra Session File"
-msgstr "รวมไฟล์เซสชั่น Specctra:"
+msgstr "ไฟล์เซสชั่น Specctra"
 
 #: pcbnew/tools/board_editor_control.cpp:419
 msgid "Specctra DSN File"
@@ -33403,9 +33380,8 @@ msgid "Plated Board Edge: "
 msgstr "ชุบขอบบอร์ด: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:511
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "คอนเน็กเตอร์ชนิดบอร์ดเสียบ:"
+msgstr "คอนเน็กเตอร์ชนิดบอร์ดเสียบ: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:519
 #, fuzzy
@@ -35779,9 +35755,8 @@ msgid "Configure net classes"
 msgstr "ปรับแต่งเน็ตคลาส"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:161
-#, fuzzy
 msgid "Presets (Ctrl+Tab):"
-msgstr "(Ctrl+แท็บ)"
+msgstr "ตั้งค่าไว้ (Ctrl+Tab):"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "(unsaved)"
