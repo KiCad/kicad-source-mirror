@@ -27,7 +27,6 @@
 
 #include <build_version.h>
 #include <class_regulator_data.h>
-#include <common.h>
 #include <datafile_read_write.h>
 #include <string_utils.h>
 #include <locale_io.h>

@@ -29,7 +29,6 @@
 #include <kiface_base.h>
 
 #include <string_utils.h>
-//#include "pcb_calculator_frame.h"
 #include "pcb_calculator_settings.h"
 #include "units_scales.h"
 #include <panel_track_width.h>

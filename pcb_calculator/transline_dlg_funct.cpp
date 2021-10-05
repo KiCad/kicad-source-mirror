@@ -23,7 +23,8 @@
 
 #include <bitmaps.h>
 #include "common_data.h"
-#include "pcb_calculator_frame.h"
+#include "panel_transline.h"
+#include <widgets/unit_selector.h>
 
 
 extern double DoubleFromString( const wxString& TextValue );
@@ -108,7 +109,7 @@ static bool findMatch( wxArrayString& aList, const wxString& aValue, int& aIdx )
 }
 
 
-void PCB_CALCULATOR_FRAME::OnTranslineEpsilonR_Button( wxCommandEvent& event )
+void PANEL_TRANSLINE::OnTranslineEpsilonR_Button( wxCommandEvent& event )
 {
     wxArrayString list = StandardRelativeDielectricConstantList();
     list.Add( "" );  // Add an empty line for no selection
@@ -126,7 +127,7 @@ void PCB_CALCULATOR_FRAME::OnTranslineEpsilonR_Button( wxCommandEvent& event )
 }
 
 
-void PCB_CALCULATOR_FRAME::OnTranslineTanD_Button( wxCommandEvent& event )
+void PANEL_TRANSLINE::OnTranslineTanD_Button( wxCommandEvent& event )
 {
     wxArrayString list = StandardLossTangentList();
     list.Add( "" );  // Add an empty line for no selection
@@ -144,7 +145,7 @@ void PCB_CALCULATOR_FRAME::OnTranslineTanD_Button( wxCommandEvent& event )
 }
 
 
-void PCB_CALCULATOR_FRAME::OnTranslineRho_Button( wxCommandEvent& event )
+void PANEL_TRANSLINE::OnTranslineRho_Button( wxCommandEvent& event )
 {
     wxArrayString list = StandardResistivityList();
     list.Add( "" );  // Add an empty line for no selection
@@ -171,7 +172,7 @@ struct DLG_PRM_DATA
 };
 
 
-void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType )
+void PANEL_TRANSLINE::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType )
 {
     m_currTransLineType = aType;
 
@@ -393,7 +394,7 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
 }
 
 
-void PCB_CALCULATOR_FRAME::TransfDlgDataToTranslineParams()
+void PANEL_TRANSLINE::TransfDlgDataToTranslineParams()
 {
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
 
@@ -417,7 +418,7 @@ void PCB_CALCULATOR_FRAME::TransfDlgDataToTranslineParams()
 }
 
 
-void PCB_CALCULATOR_FRAME::OnTranslineSelection( wxCommandEvent& event )
+void PANEL_TRANSLINE::OnTranslineSelection( wxCommandEvent& event )
 {
     enum TRANSLINE_TYPE_ID id = (enum TRANSLINE_TYPE_ID) event.GetSelection();
 
@@ -425,16 +426,16 @@ void PCB_CALCULATOR_FRAME::OnTranslineSelection( wxCommandEvent& event )
 
     // Texts and units choice widgets can have their size modified:
     // The new size must be taken in account
-    m_panelTransline->GetSizer()->Layout();
-    m_panelTransline->Refresh();
+    GetSizer()->Layout();
+    Refresh();
 }
 
 
-void PCB_CALCULATOR_FRAME::OnTransLineResetButtonClick( wxCommandEvent& event )
+void PANEL_TRANSLINE::OnTransLineResetButtonClick( wxCommandEvent& event )
 {
     TranslineTypeSelection( DEFAULT_TYPE );
     m_TranslineSelection->SetSelection( DEFAULT_TYPE );
 
-    m_panelTransline->GetSizer()->Layout();
-    m_panelTransline->Refresh();
+    GetSizer()->Layout();
+    Refresh();
 }

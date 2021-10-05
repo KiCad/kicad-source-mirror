@@ -45,12 +45,9 @@
 #include <cmath>
 #include <wx/choicdlg.h>
 
-//#include <kiface_base.h>
 #include <bitmaps.h>
 
-#include "attenuators/attenuator_classes.h"
 #include "common_data.h"
-//#include "pcb_calculator_frame.h"
 #include "pcb_calculator_settings.h"
 #include "units_scales.h"
 #include "panel_via_size.h"

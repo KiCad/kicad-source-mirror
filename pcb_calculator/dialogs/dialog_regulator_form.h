@@ -39,20 +39,9 @@ class REGULATOR_DATA;
 class DIALOG_REGULATOR_FORM : public DIALOG_REGULATOR_FORM_BASE
 {
 public:
-    DIALOG_REGULATOR_FORM( PANEL_REGULATOR* parent, const wxString& aRegName )
-            : DIALOG_REGULATOR_FORM_BASE( parent )
-    {
-        m_textCtrlName->SetValue( aRegName );
-        m_textCtrlName->Enable( aRegName.IsEmpty() );
-        UpdateDialog();
+    DIALOG_REGULATOR_FORM( PANEL_REGULATOR* parent, const wxString& aRegName );
 
-        m_sdbSizerOK->SetDefault();
-
-        // Now all widgets have the size fixed, call FinishDialogSettings
-        finishDialogSettings();
-    }
-
-    ~DIALOG_REGULATOR_FORM(){};
+    ~DIALOG_REGULATOR_FORM();
 
     /**
      * @return true if regulator parameters are acceptable.

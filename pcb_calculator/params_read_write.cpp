@@ -23,6 +23,7 @@
 #include <wx/msgdlg.h>
 
 #include "pcb_calculator_frame.h"
+#include "panel_transline.h"
 #include "transline/transline.h"
 
 /*
@@ -78,55 +79,57 @@ double DoubleFromString( const wxString& TextValue )
 }
 
 
+// A helper function to get a reference to the PANEL_TRANSLINE
+PANEL_TRANSLINE* getTranslinePanel()
+{
+    PCB_CALCULATOR_FRAME* frame = (PCB_CALCULATOR_FRAME*) wxTheApp->GetTopWindow();
+    return frame->GetPanelTransline();
+}
+
+
 // Functions to Read/Write parameters in pcb_calculator main frame:
 // They are only wrapper to actual functions, so all transline functions do not
 // depend on Graphic User Interface
 void SetPropertyInDialog( enum PRMS_ID aPrmId, double value )
 {
-    PCB_CALCULATOR_FRAME* frame = (PCB_CALCULATOR_FRAME*) wxTheApp->GetTopWindow();
-    frame->SetPrmValue( aPrmId, value );
+    getTranslinePanel()->SetPrmValue( aPrmId, value );
 }
 
 void SetPropertyBgColorInDialog( enum PRMS_ID aPrmId, const KIGFX::COLOR4D* aCol )
 {
-    PCB_CALCULATOR_FRAME* frame = (PCB_CALCULATOR_FRAME*) wxTheApp->GetTopWindow();
-    frame->SetPrmBgColor( aPrmId, aCol );
+    getTranslinePanel()->SetPrmBgColor( aPrmId, aCol );
 }
 
 /* Puts the text into the given result line.
 */
 void SetResultInDialog( int line, const char* aText )
 {
-    PCB_CALCULATOR_FRAME* frame = (PCB_CALCULATOR_FRAME*) wxTheApp->GetTopWindow();
-    wxString              msg   = wxString::FromUTF8( aText );
-    frame->SetResult( line, msg );
+    wxString msg   = wxString::FromUTF8( aText );
+    getTranslinePanel()->SetResult( line, msg );
 }
 
 /* print aValue into the given result line.
 */
 void SetResultInDialog( int aLineNumber, double aValue, const char* aText )
 {
-    PCB_CALCULATOR_FRAME* frame = (PCB_CALCULATOR_FRAME*) wxTheApp->GetTopWindow();
     wxString              msg   = wxString::FromUTF8( aText );
     wxString              fullmsg;
     fullmsg.Printf( wxT( "%g " ), aValue );
     fullmsg += msg;
-    frame->SetResult( aLineNumber, fullmsg );
+    getTranslinePanel()->SetResult( aLineNumber, fullmsg );
 }
 
 /* Returns a named property value. */
 double GetPropertyInDialog( enum PRMS_ID aPrmId )
 {
-    PCB_CALCULATOR_FRAME* frame = (PCB_CALCULATOR_FRAME*) wxTheApp->GetTopWindow();
-    return frame->GetPrmValue( aPrmId );
+    return getTranslinePanel()->GetPrmValue( aPrmId );
 }
 
 // Returns true if the param aPrmId is selected
 // Has meaning only for params that have a radio button
 bool IsSelectedInDialog( enum PRMS_ID aPrmId )
 {
-    PCB_CALCULATOR_FRAME* frame = (PCB_CALCULATOR_FRAME*) wxTheApp->GetTopWindow();
-    return frame->IsPrmSelected( aPrmId );
+    return getTranslinePanel()->IsPrmSelected( aPrmId );
 }
 
 
@@ -136,7 +139,7 @@ bool IsSelectedInDialog( enum PRMS_ID aPrmId )
  * @param aPrmId = param id to write
  * @return the value always in normalized unit (meter, Hz, Ohm, radian)
  */
-double PCB_CALCULATOR_FRAME::GetPrmValue( enum PRMS_ID aPrmId ) const
+double PANEL_TRANSLINE::GetPrmValue( enum PRMS_ID aPrmId ) const
 {
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
     for( unsigned ii = 0; ii < tr_ident->GetPrmsCount(); ii++ )
@@ -154,7 +157,7 @@ double PCB_CALCULATOR_FRAME::GetPrmValue( enum PRMS_ID aPrmId ) const
  * @param aPrmId = param id to write
  * @param aValue = value to write
  */
-void PCB_CALCULATOR_FRAME::SetPrmValue( enum PRMS_ID aPrmId, double aValue )
+void PANEL_TRANSLINE::SetPrmValue( enum PRMS_ID aPrmId, double aValue )
 {
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
     for( unsigned ii = 0; ii < tr_ident->GetPrmsCount(); ii++ )
@@ -180,7 +183,7 @@ void PCB_CALCULATOR_FRAME::SetPrmValue( enum PRMS_ID aPrmId, double aValue )
  * @param aPrmId = @ref PRMS_ID of the parameter
  * @param aCol = color ( @ref KIGFX::COLOR4D * )
  */
-void PCB_CALCULATOR_FRAME::SetPrmBgColor( enum PRMS_ID aPrmId, const KIGFX::COLOR4D* aCol )
+void PANEL_TRANSLINE::SetPrmBgColor( enum PRMS_ID aPrmId, const KIGFX::COLOR4D* aCol )
 {
     wxColour wxcol = wxColour( static_cast<unsigned char>( aCol->r * 255 ),
             static_cast<unsigned char>( aCol->g * 255 ),
@@ -214,7 +217,7 @@ void PCB_CALCULATOR_FRAME::SetPrmBgColor( enum PRMS_ID aPrmId, const KIGFX::COLO
  * @param aLineNumber = the line (0 to MSG_CNT_MAX-1) wher to display the text
  * @param aText = the text to display
  */
-void PCB_CALCULATOR_FRAME::SetResult( int aLineNumber, const wxString& aText )
+void PANEL_TRANSLINE::SetResult( int aLineNumber, const wxString& aText )
 {
     #define MSG_CNT_MAX 8
     wxStaticText* messages[MSG_CNT_MAX] =
@@ -238,7 +241,7 @@ void PCB_CALCULATOR_FRAME::SetResult( int aLineNumber, const wxString& aText )
  * @return true if the param aPrmId is selected
  * Has meaning only for params that have a radio button
  */
-bool PCB_CALCULATOR_FRAME::IsPrmSelected( enum PRMS_ID aPrmId ) const
+bool PANEL_TRANSLINE::IsPrmSelected( enum PRMS_ID aPrmId ) const
 {
     switch( aPrmId )
     {

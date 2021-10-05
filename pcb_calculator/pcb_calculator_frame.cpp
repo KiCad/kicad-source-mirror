@@ -26,49 +26,19 @@
 #include "pcb_calculator_settings.h"
 
 
-// extension of pcb_calculator data filename:
-const wxString DataFileNameExt( wxT( "pcbcalc" ) );
-
-
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_CALCULATOR_FRAME_BASE( aParent ),
     m_lastNotebookPage( -1 ),
     m_macHack( true )
 {
-    m_bpButtonAnalyze->SetBitmap( KiBitmap( BITMAPS::small_down ) );
-    m_bpButtonSynthetize->SetBitmap( KiBitmap( BITMAPS::small_up ) );
-
     SetKiway( this, aKiway );
-    m_currTransLine     = nullptr;
-    m_currTransLineType = DEFAULT_TYPE;
 
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
                             // some methods in code and avoid link errors
 
-    // Populate transline list ordered like in dialog menu list
-    const static TRANSLINE_TYPE_ID tltype_list[8] =
-    {
-        MICROSTRIP_TYPE,
-        CPW_TYPE,
-        GROUNDED_CPW_TYPE,
-        RECTWAVEGUIDE_TYPE,
-        COAX_TYPE,
-        C_MICROSTRIP_TYPE,
-        STRIPLINE_TYPE,
-        TWISTEDPAIR_TYPE
-    };
-
-    for( int ii = 0; ii < 8; ii++ )
-        m_transline_list.push_back( new TRANSLINE_IDENT( tltype_list[ii] ) );
-
-    m_EpsilonR_label->SetLabel( wxT( "εr" ) );
-
     LoadSettings( config() );
 
     m_panelRegulators->ReadDataFile();
-
-    TranslineTypeSelection( m_currTransLineType );
-    m_TranslineSelection->SetSelection( m_currTransLineType );
 
     // Give an icon
     wxIcon icon;
@@ -95,9 +65,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
 {
-    for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
-        delete m_transline_list[ii];
-
     // This needed for OSX: avoids further OnDraw processing after this destructor and before
     // the native window is destroyed
     this->Freeze();
@@ -112,9 +79,9 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
         // This is getting seriously ridiculous....
 
         wxCommandEvent event2( wxEVT_RADIOBUTTON );
-        event2.SetEventObject( m_TranslineSelection );
-        event2.SetInt( m_currTransLineType );
-        m_TranslineSelection->Command( event2 );
+        event2.SetEventObject( m_panelTransline->GetTranslineSelector() );
+        event2.SetInt( m_panelTransline->GetCurrTransLineType() );
+         m_panelTransline->GetTranslineSelector()->Command( event2 );
 
         for( int i = 0; i < m_panelAttenuators->m_AttenuatorList.size(); ++i )
         {
@@ -204,8 +171,9 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     PCB_CALCULATOR_SETTINGS* cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( aCfg );
 
-    m_currTransLineType = static_cast<TRANSLINE_TYPE_ID>( cfg->m_TransLine.type );
     m_Notebook->ChangeSelection( cfg->m_LastPage );
+
+    m_panelTransline->LoadSettings( cfg );
 
     // Attenuators panel config:
     m_panelAttenuators->LoadSettings( cfg );
@@ -215,9 +183,6 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     // color panel config:
     m_panelColorCode->LoadSettings( cfg );
-
-    for( TRANSLINE_IDENT* transline : m_transline_list )
-        transline->ReadConfig();
 
     m_panelViaSize->LoadSettings( cfg );
     m_panelTrackWidth->LoadSettings( cfg );
@@ -240,8 +205,8 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     if( cfg )
     {
         cfg->m_LastPage = m_Notebook->GetSelection();
-        cfg->m_TransLine.type = m_currTransLineType;
 
+        m_panelTransline->SaveSettings( cfg );
         m_panelRegulators->Regulators_WriteConfig( cfg );
         m_panelAttenuators->SaveSettings( cfg );
         m_panelColorCode->SaveSettings( cfg );
@@ -251,27 +216,4 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         m_panelBoardClass->SaveSettings( cfg );
     }
 
-
-    for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
-        m_transline_list[ii]->WriteConfig();
-}
-
-
-void PCB_CALCULATOR_FRAME::OnTranslineAnalyse( wxCommandEvent& event )
-{
-    if( m_currTransLine )
-    {
-        TransfDlgDataToTranslineParams();
-        m_currTransLine->analyze();
-    }
-}
-
-
-void PCB_CALCULATOR_FRAME::OnTranslineSynthetize( wxCommandEvent& event )
-{
-    if( m_currTransLine )
-    {
-        TransfDlgDataToTranslineParams();
-        m_currTransLine->synthesize();
-    }
 }

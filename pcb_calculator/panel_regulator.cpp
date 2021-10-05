@@ -26,15 +26,18 @@
 #include <wx/msgdlg.h>
 
 #include "class_regulator_data.h"
-#include "pcb_calculator_frame.h"
 #include "pcb_calculator_settings.h"
 
 #include "dialogs/dialog_regulator_form.h"
-#include "../dialogs/panel_regulator.h"
+#include "dialogs/panel_regulator.h"
 
 #include <bitmaps.h>
 
 extern double DoubleFromString( const wxString& TextValue );
+
+// extension of pcb_calculator data filename:
+static const wxString DataFileNameExt( wxT( "pcbcalc" ) );
+
 
 PANEL_REGULATOR::PANEL_REGULATOR( wxWindow* parent, wxWindowID id,
                                   const wxPoint& pos, const wxSize& size,

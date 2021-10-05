@@ -27,7 +27,6 @@
 #include <string_utils.h>
 #include "pcb_calculator_settings.h"
 #include <panel_eserie.h>
-//#include <widgets/unit_selector.h>
 
 #include <i18n_utility.h>   // For _HKI definition
 wxString eseries_help =
