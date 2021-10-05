@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-05 12:58+0000\n"
+"PO-Revision-Date: 2021-10-05 13:03+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -35594,9 +35594,9 @@ msgid "Layer Display Options"
 msgstr "레이어 표시 옵션"
 
 #: pcbnew/widgets/appearance_controls.cpp:595
-#, fuzzy, c-format
+#, c-format
 msgid "Inactive layers (%s):"
-msgstr "비활성 레이어:"
+msgstr "비활성 레이어 (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Inactive layers:"
@@ -35631,9 +35631,9 @@ msgid "Net Display Options"
 msgstr "네트 표시 옵션"
 
 #: pcbnew/widgets/appearance_controls.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "Net colors (%s):"
-msgstr "네트 색상:"
+msgstr "네트 색상 (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Net colors:"
@@ -35656,16 +35656,15 @@ msgid "Net and netclass colors are not shown"
 msgstr "네트와 네트클래스 색상 표시하지 않음"
 
 #: pcbnew/widgets/appearance_controls.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "Ratsnest display (%s):"
-msgstr "연결선 표시:"
+msgstr "연결선 표시 (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:714
 msgid "Ratsnest display:"
 msgstr "연결선 표시:"
 
 #: pcbnew/widgets/appearance_controls.cpp:719
-#, fuzzy
 msgid "Choose which ratsnest lines to display"
 msgstr "어떤 연결선을 표시할 지 선택"
 
