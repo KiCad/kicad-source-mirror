@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-04 15:52+0000\n"
+"PO-Revision-Date: 2021-10-05 17:11+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -5133,7 +5133,7 @@ msgstr "通孔焊盘"
 #: pcbnew/widgets/appearance_controls.cpp:335
 #: pcbnew/widgets/panel_selection_filter_base.cpp:37
 msgid "Tracks"
-msgstr "线路"
+msgstr "布线"
 
 #: common/layer_id.cpp:154
 msgid "Through vias"
@@ -5946,23 +5946,20 @@ msgid "Switch display of full-window crosshairs"
 msgstr "切换全屏十字光标"
 
 #: common/tool/actions.cpp:533
-#, fuzzy
 msgid "Inactive Layer View Mode"
-msgstr "单层视图模式"
+msgstr "非活动图层视图模式"
 
 #: common/tool/actions.cpp:534
 msgid "Toggle inactive layers between normal and dimmed"
 msgstr "在正常和暗显之间切换非活动图层"
 
 #: common/tool/actions.cpp:540
-#, fuzzy
 msgid "Inactive Layer View Mode (3-state)"
-msgstr "单层视图模式(三态)"
+msgstr "非活动图层视图模式 (三态)"
 
 #: common/tool/actions.cpp:541
-#, fuzzy
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
-msgstr "在正常、暗显和隐藏之间切换非活动图层"
+msgstr "在正常、暗显和隐藏三种状态之间循环非活动图层"
 
 #: common/tool/actions.cpp:546
 msgid "Select item(s)"
@@ -10022,9 +10019,8 @@ msgid "Text Variables"
 msgstr "文本变量"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:90
-#, fuzzy
 msgid "Project is missing or read-only. Settings will not be editable."
-msgstr "工程缺失或为只读。变更将不会保存。"
+msgstr "工程缺失或为只读。设置将不可编辑。"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:161
 #, c-format
@@ -21662,9 +21658,8 @@ msgid "Custom Rules"
 msgstr "自定义规则"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:123
-#, fuzzy
 msgid "Project is missing or read-only. Some settings will not be editable."
-msgstr "工程缺失或为只读。变更将不会保存。"
+msgstr "工程缺失或为只读。一些设置将不可编辑。"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:186
 #, c-format
@@ -34333,27 +34328,23 @@ msgid "Curved Ratsnest Lines"
 msgstr "弯曲的飞线"
 
 #: pcbnew/tools/pcb_actions.cpp:798
-#, fuzzy
 msgid "Ratsnest Mode (3-state)"
-msgstr "单层视图模式(三态)"
+msgstr "飞线模式 (三态)"
 
 #: pcbnew/tools/pcb_actions.cpp:799
-#, fuzzy
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
-msgstr "循环显示区域填充和及它们的轮廓"
+msgstr "在显示所有图层的飞线、仅显示可见图层的飞线和不显示图层飞线三种状态之间循环"
 
 #: pcbnew/tools/pcb_actions.cpp:803
-#, fuzzy
 msgid "Net Color Mode (3-state)"
-msgstr "单层视图模式(三态)"
+msgstr "网络颜色视图模式 (三态)"
 
 #: pcbnew/tools/pcb_actions.cpp:804
-#, fuzzy
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
-msgstr "网络和网络类颜色仅在飞线上显示"
+msgstr "在下列三种状态间循环：为所有网络使用网络和网络类颜色、仅为飞线使用网络和网络类颜色和不使用网络和网络类颜色"
 
 #: pcbnew/tools/pcb_actions.cpp:809
 msgid "Sketch Tracks"
@@ -35196,9 +35187,9 @@ msgid "Layer Display Options"
 msgstr "图层显示选项"
 
 #: pcbnew/widgets/appearance_controls.cpp:595
-#, fuzzy, c-format
+#, c-format
 msgid "Inactive layers (%s):"
-msgstr "非活动图层："
+msgstr "非活动图层（%s）："
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Inactive layers:"
@@ -35233,9 +35224,9 @@ msgid "Net Display Options"
 msgstr "网络显示选项"
 
 #: pcbnew/widgets/appearance_controls.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "Net colors (%s):"
-msgstr "网络颜色："
+msgstr "网络颜色（%s）："
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Net colors:"
@@ -35258,37 +35249,33 @@ msgid "Net and netclass colors are not shown"
 msgstr "不显示网络和网络类颜色"
 
 #: pcbnew/widgets/appearance_controls.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "Ratsnest display (%s):"
-msgstr "飞线显示："
+msgstr "飞线显示（%s）："
 
 #: pcbnew/widgets/appearance_controls.cpp:714
 msgid "Ratsnest display:"
 msgstr "飞线显示："
 
 #: pcbnew/widgets/appearance_controls.cpp:719
-#, fuzzy
 msgid "Choose which ratsnest lines to display"
 msgstr "选择要显示的飞线"
 
 #: pcbnew/widgets/appearance_controls.cpp:729
-#, fuzzy
 msgid "Show ratsnest lines to items on all layers"
-msgstr "飞线显示为所有图层上的项目"
+msgstr "显示所有图层上的项目飞线"
 
 #: pcbnew/widgets/appearance_controls.cpp:734
 msgid "Visible layers"
 msgstr "可见层"
 
 #: pcbnew/widgets/appearance_controls.cpp:736
-#, fuzzy
 msgid "Show ratsnest lines to items on visible layers"
-msgstr "飞线线显示为可见图层上的项目"
+msgstr "显示可见层的项目飞线"
 
 #: pcbnew/widgets/appearance_controls.cpp:743
-#, fuzzy
 msgid "Hide all ratsnest lines"
-msgstr "隐藏电路板飞线"
+msgstr "隐藏所有飞线"
 
 #: pcbnew/widgets/appearance_controls.cpp:881
 msgid "Set Net Color"
@@ -35574,9 +35561,8 @@ msgid "Configure net classes"
 msgstr "配置网络类"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:161
-#, fuzzy
 msgid "Presets (Ctrl+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "预设 (Ctrl+Tab)："
 
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "(unsaved)"
