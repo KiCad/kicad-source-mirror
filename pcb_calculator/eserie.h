@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <vector>
+#include <string>
 
 /**
  * E-Values derived from a geometric sequence formula by Charles Renard were already
