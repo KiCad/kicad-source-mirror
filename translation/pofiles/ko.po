@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-05 12:47+0000\n"
+"PO-Revision-Date: 2021-10-05 12:56+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -34734,9 +34734,8 @@ msgid "Curved Ratsnest Lines"
 msgstr "곡선 연결선"
 
 #: pcbnew/tools/pcb_actions.cpp:798
-#, fuzzy
 msgid "Ratsnest Mode (3-state)"
-msgstr "단일 레이어 표시 모드 (3개 상태)"
+msgstr "연결선 모드 (3 상태)"
 
 #: pcbnew/tools/pcb_actions.cpp:799
 #, fuzzy
