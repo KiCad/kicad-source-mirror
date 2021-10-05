@@ -78,8 +78,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     BoardClassesUpdateData( m_BoardClassesUnitsSelector->GetUnitScale() );
 
-    ElectricalSpacingUpdateData( m_ElectricalSpacingUnitsSelector->GetUnitScale() );
-
     // Give an icon
     wxIcon icon;
     wxIconBundle icon_bundle;
@@ -95,7 +93,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Autosize the row label column to be sure label are not truncated
     m_gridClassesValuesDisplay->SetRowLabelSize( wxGRID_AUTOSIZE );
-    m_gridElectricalSpacingValues->SetRowLabelSize( wxGRID_AUTOSIZE );
 
     GetSizer()->SetSizeHints( this );
 
@@ -234,16 +231,12 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     // color panel config:
     m_panelColorCode->LoadSettings( cfg );
 
-    // Electrical panel config
-    m_ElectricalSpacingUnitsSelector->SetSelection( cfg->m_Electrical.spacing_units );
-    m_ElectricalSpacingVoltage->SetValue( cfg->m_Electrical.spacing_voltage );
-
     for( TRANSLINE_IDENT* transline : m_transline_list )
         transline->ReadConfig();
 
     m_panelViaSize->LoadSettings( cfg );
-
     m_panelTrackWidth->LoadSettings( cfg );
+    m_panelElectricalSpacing->LoadSettings( cfg );
 }
 
 
@@ -263,14 +256,12 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_TransLine.type = m_currTransLineType;
         cfg->m_BoardClassUnits = m_BoardClassesUnitsSelector->GetSelection();
 
-        cfg->m_Electrical.spacing_units = m_ElectricalSpacingUnitsSelector->GetSelection();
-        cfg->m_Electrical.spacing_voltage = m_ElectricalSpacingVoltage->GetValue();
-
         m_panelRegulators->Regulators_WriteConfig( cfg );
         m_panelAttenuators->SaveSettings( cfg );
         m_panelColorCode->SaveSettings( cfg );
         m_panelViaSize->SaveSettings( cfg );
         m_panelTrackWidth->SaveSettings( cfg );
+        m_panelElectricalSpacing->SaveSettings( cfg );
     }
 
 

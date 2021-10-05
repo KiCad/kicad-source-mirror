@@ -11,14 +11,14 @@ set( PCB_CALCULATOR_SRCS
     eserie.cpp
     board_classes_values.cpp
     common_data.cpp
-    electrical_spacing_values.cpp
     params_read_write.cpp
     pcb_calculator_frame.cpp
     pcb_calculator_settings.cpp
     datafile_read_write.cpp
     panel_attenuators.cpp
-    panel_regulator.cpp
     panel_color_code.cpp
+    panel_electrical_spacing.cpp
+    panel_regulator.cpp
     panel_track_width.cpp
     panel_via_size.cpp
     transline_ident.cpp
@@ -41,6 +41,7 @@ set( PCB_CALCULATOR_SRCS
     dialogs/panel_color_code_base.cpp
     dialogs/panel_via_size_base.cpp
     dialogs/panel_track_width_base.cpp
+    dialogs/panel_electrical_spacing_base.cpp
     ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )
 

@@ -20,6 +20,7 @@ class UNIT_SELECTOR_RESISTOR;
 #include "panel_color_code.h"
 #include "panel_via_size.h"
 #include "panel_track_width.h"
+#include "panel_electrical_spacing.h"
 #include "kiway_player.h"
 #include <wx/string.h>
 #include <wx/menu.h>
@@ -176,16 +177,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxButton* m_buttonTransLineReset;
 		PANEL_VIA_SIZE* m_panelViaSize;
 		PANEL_TRACK_WIDTH* m_panelTrackWidth;
-		wxPanel* m_panelElectricalSpacing;
-		UNIT_SELECTOR_LEN* m_ElectricalSpacingUnitsSelector;
-		wxStaticLine* m_staticline2;
-		wxStaticText* m_staticText891;
-		wxTextCtrl* m_ElectricalSpacingVoltage;
-		wxButton* m_buttonElectSpacingRefresh;
-		wxBoxSizer* m_electricalSpacingSizer;
-		wxStaticText* m_staticTextElectricalSpacing;
-		wxGrid* m_gridElectricalSpacingValues;
-		wxStaticText* m_staticText88;
+		PANEL_ELECTRICAL_SPACING* m_panelElectricalSpacing;
 		wxPanel* m_panelBoardClass;
 		UNIT_SELECTOR_LEN* m_BoardClassesUnitsSelector;
 		wxStaticText* m_staticTextBrdClass;
@@ -204,8 +196,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnTranslineAnalyse( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineSynthetize( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTransLineResetButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnElectricalSpacingRefresh( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBoardClassesUnitsSelection( wxCommandEvent& event ) { event.Skip(); }
 
 

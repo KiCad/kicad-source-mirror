@@ -116,12 +116,6 @@ private:
      */
     void OnESeriesSelection( wxCommandEvent& event ) override;
 
-
-    // Electrical spacing panel:
-    void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) override;
-    void OnElectricalSpacingRefresh( wxCommandEvent& event ) override;
-    void ElectricalSpacingUpdateData( double aUnitScale );
-
     /**
      * Called on new transmission line selection.
      */

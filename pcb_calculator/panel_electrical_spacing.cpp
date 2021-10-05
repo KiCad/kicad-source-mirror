@@ -2,11 +2,11 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -14,20 +14,26 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <wx/app.h>
+/* see
+ * http://www.desmith.net/NMdS/Electronics/TraceWidth.html
+ * http://www.ultracad.com/articles/pcbtemp.pdf
+ * for more info
+ */
 
-#include "pcb_calculator_frame.h"
+#include <string_utils.h>
+#include "pcb_calculator_settings.h"
+#include <panel_electrical_spacing.h>
+#include <widgets/unit_selector.h>
 #include "units_scales.h"
 
 extern double DoubleFromString( const wxString& TextValue );
+
+// The IPC2221 formula used to calculate track width is valid only for copper material
+const double copper_resistivity = 1.72e-8;
 
 
 #define VALUE_COUNT 7
@@ -98,22 +104,54 @@ static double clist[CLASS_COUNT][VALUE_COUNT] =
     // These last values are used to calculate spacing for voltage > 500V
     // there are not the spacing
     { 0.0025 * UNIT_MM, 0.005 * UNIT_MM,  0.025 * UNIT_MM, 0.00305 * UNIT_MM,
-        0.00305 * UNIT_MM,  0.00305 * UNIT_MM, 0.00305 * UNIT_MM }, // > 500V
+      0.00305 * UNIT_MM,  0.00305 * UNIT_MM, 0.00305 * UNIT_MM }, // > 500V
 };
 
 
-void PCB_CALCULATOR_FRAME::OnElectricalSpacingUnitsSelection( wxCommandEvent& event )
+PANEL_ELECTRICAL_SPACING::PANEL_ELECTRICAL_SPACING( wxWindow* parent, wxWindowID id,
+                                const wxPoint& pos, const wxSize& size,
+                                long style, const wxString& name ) :
+        PANEL_ELECTRICAL_SPACING_BASE( parent, id, pos, size, style, name )
+{
+    // Autosize the row label column to be sure label are not truncated
+    m_gridElectricalSpacingValues->SetRowLabelSize( wxGRID_AUTOSIZE );
+}
+
+
+PANEL_ELECTRICAL_SPACING::~PANEL_ELECTRICAL_SPACING()
+{
+}
+
+
+void PANEL_ELECTRICAL_SPACING::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
+{
+    aCfg->m_Electrical.spacing_units = m_ElectricalSpacingUnitsSelector->GetSelection();
+    aCfg->m_Electrical.spacing_voltage = m_ElectricalSpacingVoltage->GetValue();
+}
+
+
+void PANEL_ELECTRICAL_SPACING::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
+{
+    m_ElectricalSpacingUnitsSelector->SetSelection( aCfg->m_Electrical.spacing_units );
+    m_ElectricalSpacingVoltage->SetValue( aCfg->m_Electrical.spacing_voltage );
+
+    ElectricalSpacingUpdateData( m_ElectricalSpacingUnitsSelector->GetUnitScale() );
+}
+
+
+
+void PANEL_ELECTRICAL_SPACING::OnElectricalSpacingUnitsSelection( wxCommandEvent& event )
 {
     ElectricalSpacingUpdateData( m_ElectricalSpacingUnitsSelector->GetUnitScale() );
 }
 
-void PCB_CALCULATOR_FRAME::OnElectricalSpacingRefresh( wxCommandEvent& event )
+void PANEL_ELECTRICAL_SPACING::OnElectricalSpacingRefresh( wxCommandEvent& event )
 {
     ElectricalSpacingUpdateData( m_ElectricalSpacingUnitsSelector->GetUnitScale() );
 }
 
 
-void PCB_CALCULATOR_FRAME::ElectricalSpacingUpdateData( double aUnitScale )
+void PANEL_ELECTRICAL_SPACING::ElectricalSpacingUpdateData( double aUnitScale )
 {
     wxString txt;
     double voltage = 500.0;     // to calculate values at V > 500V
