@@ -27,6 +27,9 @@
 #include <wx/spinctrl.h>
 #include <wx/srchctrl.h>
 #include <wx/stc/stc.h>
+#include <wx/scrolbar.h>
+#include <wx/scrolwin.h>
+#include <wx/grid.h>
 #include <widgets/ui_common.h>
 
 #include <algorithm>
@@ -267,4 +270,39 @@ bool KIUI::IsInputControlEditable( wxWindow* aFocus )
 bool KIUI::IsModalDialogFocused()
 {
     return Pgm().m_ModalDialogCount > 0;
+}
+
+
+void KIUI::Disable( wxWindow* aWindow )
+{
+    wxScrollBar*      scrollBar = dynamic_cast<wxScrollBar*>( aWindow );
+    wxGrid*           grid = dynamic_cast<wxGrid*>( aWindow );
+    wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( aWindow );
+    wxControl*        control = dynamic_cast<wxControl*>( aWindow );
+
+    if( scrollBar )
+    {
+        // Leave a scroll bar active
+    }
+    else if( grid )
+    {
+        for( int row = 0; row < grid->GetNumberRows(); ++row )
+        {
+            for( int col = 0; col < grid->GetNumberCols(); ++col )
+                grid->SetReadOnly( row, col );
+        }
+    }
+    else if( scintilla )
+    {
+        scintilla->SetReadOnly( true );
+    }
+    else if( control )
+    {
+        control->Disable();
+    }
+    else
+    {
+        for( wxWindow* child : aWindow->GetChildren() )
+            Disable( child );
+    }
 }

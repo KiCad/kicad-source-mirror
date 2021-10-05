@@ -95,6 +95,12 @@ bool IsInputControlEditable( wxWindow* aControl );
 
 bool IsModalDialogFocused();
 
+/**
+ * Makes a window read-only.  Does some extra work over wxWindow::Disable() to make sure you
+ * can still scroll around in sub-windows.
+ */
+void Disable( wxWindow* aWindow );
+
 }
 
 SEVERITY SeverityFromString( const wxString& aSeverity );

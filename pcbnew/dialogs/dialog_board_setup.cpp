@@ -113,25 +113,15 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 
 	// Connect Events
 	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
-                         wxBookCtrlEventHandler( DIALOG_BOARD_SETUP::OnPageChange ),
-                         nullptr, this );
+                         wxBookCtrlEventHandler( DIALOG_BOARD_SETUP::OnPageChange ), nullptr,
+                         this );
 
     finishDialogSettings();
 
     if( Prj().IsReadOnly() )
     {
-        m_infoBar->ShowMessage( _( "Project is missing or read-only. "
-                                   "Some settings will not be editable." ),
-                                wxICON_WARNING );
-
-        m_boardFinish->Disable();
-        m_maskAndPaste->Disable();
-        m_textAndGraphics->Disable();
-        m_textVars->Disable();
-        m_constraints->Disable();
-        m_tracksAndVias->Disable();
-        m_netclasses->Disable();
-        m_severities->Disable();
+        m_infoBar->ShowMessage( _( "Project is missing or read-only. Some settings will not "
+                                   "be editable." ), wxICON_WARNING );
     }
 }
 
@@ -139,23 +129,25 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 DIALOG_BOARD_SETUP::~DIALOG_BOARD_SETUP()
 {
 	m_treebook->Disconnect( wxEVT_TREEBOOK_PAGE_CHANGED,
-                            wxBookCtrlEventHandler( DIALOG_BOARD_SETUP::OnPageChange ),
-                            nullptr, this );
+                            wxBookCtrlEventHandler( DIALOG_BOARD_SETUP::OnPageChange ), nullptr,
+                            this );
 }
 
 
 void DIALOG_BOARD_SETUP::OnPageChange( wxBookCtrlEvent& event )
 {
-    if( event.GetSelection() == m_physicalStackupPage )
+    int page = event.GetSelection();
+
+    if( page == m_physicalStackupPage )
         m_physicalStackup->OnLayersOptionsChanged( m_layers->GetUILayerMask() );
-    else if( event.GetSelection() == m_layerSetupPage )
+    else if( page == m_layerSetupPage )
         m_layers->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
+    else
+        KIUI::Disable( m_treebook->GetPage( page ) );
 
 #ifdef __WXMAC__
     // Work around an OSX bug where the wxGrid children don't get placed correctly until
     // the first resize event
-    int page = event.GetSelection();
-
     if( m_macHack[ page ] )
     {
         wxSize pageSize = m_treebook->GetPage( page )->GetSize();

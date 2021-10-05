@@ -87,16 +87,8 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
     if( Prj().IsReadOnly() )
     {
-        m_infoBar->ShowMessage( _( "Project is missing or read-only. "
-                                   "Settings will not be editable." ),
-                                wxICON_WARNING );
-
-        m_formatting->Disable();
-        m_fieldNameTemplates->Disable();
-        m_severities->Disable();
-        m_pinMap->Disable();
-        m_netclasses->Disable();
-        m_textVars->Disable();
+        m_infoBar->ShowMessage( _( "Project is missing or read-only. Settings will not be "
+                                   "editable." ), wxICON_WARNING );
     }
 }
 
@@ -112,6 +104,8 @@ DIALOG_SCHEMATIC_SETUP::~DIALOG_SCHEMATIC_SETUP()
 void DIALOG_SCHEMATIC_SETUP::OnPageChange( wxBookCtrlEvent& event )
 {
     int page = event.GetSelection();
+
+    KIUI::Disable( m_treebook->GetPage( page ) );
 
     // Enable the reset button only if the page is resettable
     if( m_resetButton )
