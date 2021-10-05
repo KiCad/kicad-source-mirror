@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-04 15:52+0000\n"
+"PO-Revision-Date: 2021-10-05 17:11+0000\n"
 "Last-Translator: Augusto Fraga Giachero <afg@augustofg.net>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -12743,8 +12743,8 @@ msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"Salvar o '% s' como um formato KiCad atual (*.kicad_sym) e substitir a "
-"entrada legada na tabela?"
+"Salvar '%s' como um formato KiCad atual (*.kicad_sym) e substitir a entrada "
+"legada na tabela?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:747
 #, c-format
@@ -13531,9 +13531,9 @@ msgid "Pos Y"
 msgstr "Pos Y"
 
 #: eeschema/lib_pin.cpp:1188
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s [%s, %s, %s]"
-msgstr "Pino %s, %s, %s"
+msgstr "Pino %s [%s, %s, %s]"
 
 #: eeschema/lib_pin.cpp:1196
 #, fuzzy, c-format
@@ -13541,9 +13541,9 @@ msgid "Pin %s [%s, %s]"
 msgstr "Pino %s, %s, %s"
 
 #: eeschema/lib_polyline.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline, %d points"
-msgstr "Polilinha em (%s, %s) com %d pontos"
+msgstr "Polilinha, %d pontos"
 
 #: eeschema/lib_polyline.h:47
 msgid "PolyLine"
@@ -13749,9 +13749,9 @@ msgid "NonLogic"
 msgstr "Não-lógico"
 
 #: eeschema/project_rescue.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Rename %s to %s"
-msgstr "Renomear para %s"
+msgstr "Renomear de %s para %s"
 
 #: eeschema/project_rescue.cpp:302 eeschema/project_rescue.cpp:462
 #, c-format
@@ -13972,49 +13972,49 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Valor SCH_FILE desconhecido: %d"
 
 #: eeschema/sch_line.cpp:709
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Wire, length %s"
-msgstr "Centro vertical:"
+msgstr "Fio vertical, comprimento %s"
 
 #: eeschema/sch_line.cpp:710
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Bus, length %s"
-msgstr "Contagem vertical:"
+msgstr "Barramento vertical, comprimento %s"
 
 #: eeschema/sch_line.cpp:711
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Graphic Line, length %s"
-msgstr "Gráfico da PCI %s, comprimento %s em %s"
+msgstr "Linha gráfica vertical, comprimento %s"
 
 #: eeschema/sch_line.cpp:718
-#, fuzzy, c-format
+#, c-format
 msgid "Horizontal Wire, length %s"
-msgstr "Inverter horizontalmente"
+msgstr "Fio horizontal, comprimento %s"
 
 #: eeschema/sch_line.cpp:719
-#, fuzzy, c-format
+#, c-format
 msgid "Horizontal Bus, length %s"
-msgstr "Contagem horizontal:"
+msgstr "Barramento horizontal, comprimento %s"
 
 #: eeschema/sch_line.cpp:720
-#, fuzzy, c-format
+#, c-format
 msgid "Horizontal Graphic Line, length %s"
-msgstr "Gráfico da PCI %s, comprimento %s em %s"
+msgstr "Linha gráfica horizontal, comprimento %s"
 
 #: eeschema/sch_line.cpp:727
-#, fuzzy, c-format
+#, c-format
 msgid "Wire, length %s"
-msgstr "Comprimento da pastilha"
+msgstr "Fio, comprimento %s"
 
 #: eeschema/sch_line.cpp:728
-#, fuzzy, c-format
+#, c-format
 msgid "Bus, length %s"
-msgstr "Comprimento da Placa"
+msgstr "Barramento, comprimento %s"
 
 #: eeschema/sch_line.cpp:729
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Line, length %s"
-msgstr "Gráfico da PCI %s, comprimento %s em %s"
+msgstr "Linha gráfica, comprimento %s"
 
 #: eeschema/sch_line.cpp:881
 msgid "Graphical"
@@ -14101,9 +14101,9 @@ msgid "Unknown Record id: %d."
 msgstr "Código de erro DRC desconhecido %d"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:608
-#, fuzzy, c-format
+#, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "Ficheiro %s não foi encontrado"
+msgstr "O proprietário do pino (%d) não foi encontrado."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:653
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1889
