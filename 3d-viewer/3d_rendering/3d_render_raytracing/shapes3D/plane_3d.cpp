@@ -118,9 +118,7 @@ bool XY_PLANE::Intersects( const BBOX_3D& aBBox ) const
 }
 
 
-SFVEC3F XY_PLANE::GetDiffuseColor( const HITINFO& aHitInfo ) const
+SFVEC3F XY_PLANE::GetDiffuseColor( const HITINFO& /* aHitInfo */ ) const
 {
-    (void)aHitInfo; // unused
-
     return m_diffusecolor;
 }

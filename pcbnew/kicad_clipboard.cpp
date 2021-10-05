@@ -27,6 +27,7 @@
 
 #include <build_version.h>
 #include <board.h>
+#include <ignore.h>
 #include <pad.h>
 #include <pcb_group.h>
 #include <pcb_shape.h>
@@ -294,7 +295,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
     {
         wxTextDataObject data;
         clipboard->GetData( data );
-        ( void )data.GetText(); // Keep unused variable
+        ignore_unused( data.GetText() );
     }
     #endif
 }
@@ -373,7 +374,7 @@ void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
     {
         wxTextDataObject data;
         clipboard->GetData( data );
-        ( void )data.GetText(); // Keep unused variable
+        ignore_unused( data.GetText() );
     }
 }
 

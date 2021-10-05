@@ -131,11 +131,9 @@ public:
     void SetDirection( const SFVEC3F& aDir ) { m_inv_direction = -aDir; }
 
     // Imported functions from LIGHT
-    void GetLightParameters( const SFVEC3F& aHitPoint, SFVEC3F& aOutVectorToLight,
+    void GetLightParameters( const SFVEC3F& /* aHitPoint */, SFVEC3F& aOutVectorToLight,
                              SFVEC3F& aOutLightColor, float& aOutDistance ) const override
     {
-        (void)aHitPoint; // unused
-
         aOutVectorToLight = m_inv_direction;
         aOutDistance      = std::numeric_limits<float>::infinity();
         aOutLightColor    = m_color;

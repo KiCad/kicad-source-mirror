@@ -37,9 +37,8 @@
 static wxString StartLine( wxT( "." ) );
 
 bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
-                                             unsigned aNetlistOptions )
+                                             unsigned /* aNetlistOptions */ )
 {
-    (void)aNetlistOptions;      //unused
     int ret = 0;
     FILE* f = nullptr;
 

@@ -24,6 +24,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <ignore.h>
 #include <kiway.h>
 #include <sch_io_mgr.h>
 
@@ -64,7 +65,7 @@ BOOST_AUTO_TEST_CASE( Load )
 
     BOOST_TEST_MESSAGE( fn.GetFullPath() );
 
-    (void) pi;
+    ignore_unused( pi );
     // This doesn't work with a null KiWay.
     // const SCH_SHEET* sheet = pi->Load( fn.GetFullPath(), nullptr );
     // BOOST_CHECK_NE( nullptr, sheet );

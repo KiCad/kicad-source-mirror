@@ -74,6 +74,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <ignore.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <pcb_text.h>
@@ -459,7 +460,7 @@ BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
 
     loadAllSections( bool( aAppendToMe ) );
 
-    (void)boardDeleter.release(); // give it up so we dont delete it on exit
+    ignore_unused( boardDeleter.release() ); // give it up so we dont delete it on exit
     m_progressReporter = nullptr;
     return m_board;
 }
@@ -1876,7 +1877,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     dseg->SetLayer( leg_layer2new( m_cu_count,  layer ) );
                     break;
                 case 1:
-                    (void)intParse( data );
+                    ignore_unused( intParse( data ) );
                     break;
                 case 2:
                     double angle;
@@ -2397,7 +2398,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         else if( TESTLINE( "ZAux" ) )       // aux info found
         {
             // e.g. "ZAux 7 E"
-            int     ignore = intParse( line + SZ( "ZAux" ), &data );
+            ignore_unused( intParse( line + SZ( "ZAux" ), &data ) );
             char*   hopt   = strtok_r( (char*) data, delims, (char**) &data );
 
             if( !hopt )
@@ -2417,8 +2418,6 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                                 zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
-
-            (void) ignore;
 
             // Set hatch mode later, after reading corner outline data
         }
@@ -2473,7 +2472,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         {
             // e.g. "ZOptions 0 32 F 200 200"
             int     fillmode    = intParse( line + SZ( "ZOptions" ), &data );
-            static_cast<void>( intParse( data, &data ) ); // Ignored
+            ignore_unused( intParse( data, &data ) );
             char    fillstate   = data[1];      // here e.g. " F"
             BIU     thermalReliefGap = biuParse( data += 2 , &data );  // +=2 for " F"
             BIU     thermalReliefCopperBridge = biuParse( data );
@@ -2686,7 +2685,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
         }
         else if( TESTLINE( "Sb" ) )
         {
-            int ignore     = biuParse( line + SZ( "Sb" ), &data );
+            ignore_unused( biuParse( line + SZ( "Sb" ), &data ) );
             BIU crossBarOx = biuParse( data, &data );
             BIU crossBarOy = biuParse( data, &data );
             BIU crossBarFx = biuParse( data, &data );
@@ -2696,74 +2695,60 @@ void LEGACY_PLUGIN::loadDIMENSION()
             dim->SetLineThickness( width );
             dim->UpdateHeight( wxPoint( crossBarFx, crossBarFy ),
                                wxPoint( crossBarOx, crossBarOy ) );
-            (void) ignore;
         }
         else if( TESTLINE( "Sd" ) )
         {
-            int ignore         = intParse( line + SZ( "Sd" ), &data );
+            ignore_unused( intParse( line + SZ( "Sd" ), &data ) );
             BIU featureLineDOx = biuParse( data, &data );
             BIU featureLineDOy = biuParse( data, &data );
-            BIU featureLineDFx = biuParse( data, &data );
-            BIU featureLineDFy = biuParse( data );
+
+            ignore_unused( biuParse( data, &data ) );
+            ignore_unused( biuParse( data ) );
 
             dim->SetStart( wxPoint( featureLineDOx, featureLineDOy ) );
-            ( void )ignore;
-            ( void )featureLineDFx;
-            ( void )featureLineDFy;
         }
         else if( TESTLINE( "Sg" ) )
         {
-            int ignore         = intParse( line + SZ( "Sg" ), &data );
+            ignore_unused( intParse( line + SZ( "Sg" ), &data ) );
             BIU featureLineGOx = biuParse( data, &data );
             BIU featureLineGOy = biuParse( data, &data );
-            BIU featureLineGFx = biuParse( data, &data );
-            BIU featureLineGFy = biuParse( data );
 
-            (void) ignore;
+            ignore_unused( biuParse( data, &data ) );
+            ignore_unused( biuParse( data ) );
+
             dim->SetEnd( wxPoint( featureLineGOx, featureLineGOy ) );
-            ( void )ignore;
-            ( void )featureLineGFx;
-            ( void )featureLineGFy;
         }
         else if( TESTLINE( "S1" ) )        // Arrow: no longer imported
         {
-            int ignore      = intParse( line + SZ( "S1" ), &data );
+            ignore_unused( intParse( line + SZ( "S1" ), &data ) );
             biuParse( data, &data );    // skipping excessive data
             biuParse( data, &data );    // skipping excessive data
             biuParse( data, &data );
             biuParse( data );
-
-            (void) ignore;
         }
         else if( TESTLINE( "S2" ) )        // Arrow: no longer imported
         {
-            int ignore    = intParse( line + SZ( "S2" ), &data );
+            ignore_unused( intParse( line + SZ( "S2" ), &data ) );
             biuParse( data, &data );    // skipping excessive data
             biuParse( data, &data );    // skipping excessive data
             biuParse( data, &data );
             biuParse( data, &data );
-
-            (void) ignore;
         }
         else if( TESTLINE( "S3" ) )        // Arrow: no longer imported
         {
-            int ignore    = intParse( line + SZ( "S3" ), &data );
+            ignore_unused( intParse( line + SZ( "S3" ), &data ) );
             biuParse( data, &data );    // skipping excessive data
             biuParse( data, &data );    // skipping excessive data
             biuParse( data, &data );
             biuParse( data, &data );
-
-            (void) ignore;
         }
         else if( TESTLINE( "S4" ) )        // Arrow: no longer imported
         {
-            int ignore    = intParse( line + SZ( "S4" ), &data );
+            ignore_unused( intParse( line + SZ( "S4" ), &data ) );
             biuParse( data, &data );    // skipping excessive data
             biuParse( data, &data );    // skipping excessive data
             biuParse( data, &data );
             biuParse( data, &data );
-
-            (void) ignore;
         }
     }
 

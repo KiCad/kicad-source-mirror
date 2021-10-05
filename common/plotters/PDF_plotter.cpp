@@ -34,6 +34,7 @@
 #include <wx/zstream.h>
 
 #include <advanced_config.h>
+#include <ignore.h>
 #include <macros.h>
 #include <trigo.h>
 
@@ -535,7 +536,7 @@ void PDF_PLOTTER::closePdfStream()
 
     int rc = fread( inbuf, 1, stream_len, workFile );
     wxASSERT( rc == stream_len );
-    (void) rc;
+    ignore_unused( rc );
 
     // We are done with the temporary file, junk it
     fclose( workFile );

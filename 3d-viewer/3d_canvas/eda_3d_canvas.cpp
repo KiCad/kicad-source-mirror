@@ -837,10 +837,8 @@ void EDA_3D_CANVAS::OnMiddleUp( wxMouseEvent& event )
 }
 
 
-void EDA_3D_CANVAS::OnTimerTimeout_Editing( wxTimerEvent& event )
+void EDA_3D_CANVAS::OnTimerTimeout_Editing( wxTimerEvent& /* event */ )
 {
-    (void)event;
-
     m_mouse_is_moving = false;
     m_mouse_was_moved = false;
 

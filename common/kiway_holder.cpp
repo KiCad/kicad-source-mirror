@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <ignore.h>
 #include <kiway.h>
 #include <kiway_holder.h>
 #include <project.h>
@@ -47,11 +48,11 @@ void KIWAY_HOLDER::SetKiway( wxWindow* aDest, KIWAY* aKiway )
     if( !strcmp( typeid(aDest).name(), "DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB" ) )
     {
         int breakhere=1;
-        (void) breakhere;
+        ignore_unused( breakhere );
     }
 #endif
 
-    (void) aDest;
+    ignore_unused( aDest );
 
     m_kiway = aKiway;
 }

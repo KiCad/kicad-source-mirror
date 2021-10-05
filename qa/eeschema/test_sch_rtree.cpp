@@ -27,6 +27,7 @@
  */
 
 #include <convert_to_biu.h>
+#include <ignore.h>
 #include <sch_junction.h>
 #include <sch_no_connect.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -65,7 +66,7 @@ BOOST_AUTO_TEST_CASE( Default )
     int count = 0;
     for( auto item : m_tree )
     {
-        static_cast<void>( item );
+        ignore_unused( item );
         count++;
     }
 
@@ -76,7 +77,7 @@ BOOST_AUTO_TEST_CASE( Default )
         count = 0;
         for( auto item : m_tree.OfType( KICAD_T( type ) ) )
         {
-            static_cast<void>( item );
+            ignore_unused( item );
             count++;
         }
 
@@ -90,7 +91,7 @@ BOOST_AUTO_TEST_CASE( Default )
         count = 0;
         for( auto item : m_tree.Overlapping( SCH_JUNCTION_T, bbox ) )
         {
-            static_cast<void>( item );
+            ignore_unused( item );
             count++;
         }
 
@@ -111,7 +112,7 @@ BOOST_AUTO_TEST_CASE( Junctions )
 
     for( auto item : m_tree.OfType( SCH_JUNCTION_T ) )
     {
-        static_cast<void>( item );
+        ignore_unused( item );
         count++;
     }
 
@@ -120,7 +121,7 @@ BOOST_AUTO_TEST_CASE( Junctions )
     count = 0;
     for( auto item : m_tree.OfType( SCH_NO_CONNECT_T ) )
     {
-        static_cast<void>( item );
+        ignore_unused( item );
         count++;
     }
 
@@ -199,7 +200,7 @@ BOOST_AUTO_TEST_CASE( MixedElements )
 
     for( auto item : m_tree.OfType( SCH_JUNCTION_T ) )
     {
-        static_cast<void>( item );
+        ignore_unused( item );
         count++;
     }
 
@@ -208,7 +209,7 @@ BOOST_AUTO_TEST_CASE( MixedElements )
     count = 0;
     for( auto item : m_tree.OfType( SCH_NO_CONNECT_T ) )
     {
-        static_cast<void>( item );
+        ignore_unused( item );
         count++;
     }
 
@@ -261,7 +262,7 @@ BOOST_AUTO_TEST_CASE( SingleElementTree )
 
     for( auto item : m_tree.OfType( SCH_JUNCTION_T ) )
     {
-        static_cast<void>( item );
+        ignore_unused( item );
         count++;
     }
 
@@ -270,7 +271,7 @@ BOOST_AUTO_TEST_CASE( SingleElementTree )
     count = 0;
     for( auto item : m_tree.OfType( SCH_NO_CONNECT_T ) )
     {
-        static_cast<void>( item );
+        ignore_unused( item );
         count++;
     }
 

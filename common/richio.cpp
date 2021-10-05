@@ -26,6 +26,7 @@
 #include <cstdarg>
 #include <config.h> // HAVE_FGETC_NOLOCK
 
+#include <ignore.h>
 #include <richio.h>
 #include <errno.h>
 
@@ -93,8 +94,7 @@ std::string StrPrintf( const char* format, ... )
     va_list     args;
 
     va_start( args, format );
-    int ignore = vprint( &ret, format, args );
-    (void) ignore;
+    ignore_unused( vprint( &ret, format, args ) );
     va_end( args );
 
     return ret;

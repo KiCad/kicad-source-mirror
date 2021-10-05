@@ -43,6 +43,7 @@
 #include <footprint.h>
 #include <geometry/shape_line_chain.h>
 
+#include <ignore.h>
 #include <netclass.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -5078,7 +5079,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     break;
 
                 case T_arc_segments:
-                    static_cast<void>( parseInt( "arc segment count" ) );
+                    ignore_unused( parseInt( "arc segment count" ) );
                     NeedRIGHT();
                     break;
 

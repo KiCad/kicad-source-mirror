@@ -38,6 +38,7 @@ using namespace std::placeholders;
 #include <footprint_tree_pane.h>
 #include <footprint_viewer_frame.h>
 #include <fp_lib_table.h>
+#include <ignore.h>
 #include <io_mgr.h>
 #include <string_utils.h>
 #include <kiway.h>
@@ -201,8 +202,7 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
     viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true, this );
 
     wxString    fpid;
-    int ret = viewer->ShowModal( &fpid, this );
-    (void) ret;     // make static analyser quiet
+    ignore_unused( viewer->ShowModal( &fpid, this ) );
 
     viewer->Destroy();
 

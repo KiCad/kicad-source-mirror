@@ -32,6 +32,7 @@
 #include <qa_utils/utility_registry.h>
 
 #include <board.h>
+#include <ignore.h>
 #include <zone.h>
 #include <profile.h>
 
@@ -242,7 +243,7 @@ int polygon_triangulation_main( int argc, char *argv[] )
 
                     poly.CacheTriangulation();
 
-                    (void) poly;
+                    ignore_unused( poly );
 #if 0
                 PROF_COUNTER unfrac("unfrac");
                 poly.Unfracture( SHAPE_POLY_SET::PM_FAST );

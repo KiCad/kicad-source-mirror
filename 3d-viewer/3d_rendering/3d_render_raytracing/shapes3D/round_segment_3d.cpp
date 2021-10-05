@@ -415,9 +415,7 @@ bool ROUND_SEGMENT::Intersects( const BBOX_3D& aBBox ) const
 }
 
 
-SFVEC3F ROUND_SEGMENT::GetDiffuseColor( const HITINFO& aHitInfo ) const
+SFVEC3F ROUND_SEGMENT::GetDiffuseColor( const HITINFO& /* aHitInfo */ ) const
 {
-    (void)aHitInfo; // unused
-
     return m_diffusecolor;
 }

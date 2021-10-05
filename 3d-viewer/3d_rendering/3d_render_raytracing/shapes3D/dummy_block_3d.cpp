@@ -86,9 +86,7 @@ bool DUMMY_BLOCK::Intersects( const BBOX_3D& aBBox ) const
 }
 
 
-SFVEC3F DUMMY_BLOCK::GetDiffuseColor( const HITINFO& aHitInfo ) const
+SFVEC3F DUMMY_BLOCK::GetDiffuseColor( const HITINFO& /* aHitInfo */ ) const
 {
-    (void)aHitInfo; // unused
-
     return m_diffusecolor;
 }

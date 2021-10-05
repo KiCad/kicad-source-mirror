@@ -37,9 +37,8 @@
 
 
 bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
-                                               unsigned aNetlistOptions )
+                                               unsigned /* aNetlistOptions */ )
 {
-    (void)aNetlistOptions;      //unused
     FILE* f = nullptr;
     wxString    field;
     wxString    footprint;

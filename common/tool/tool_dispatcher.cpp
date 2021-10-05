@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <ignore.h>
 #include <macros.h>
 #include <trace_helpers.h>
 
@@ -378,7 +379,7 @@ OPT<TOOL_EVENT> TOOL_DISPATCHER::GetToolEvent( wxKeyEvent* aKeyEvent, bool* keyI
 #ifdef __APPLE__
         if( unicode_key >= 'A' && unicode_key <= 'Z' && key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
 #else
-        (void) unicode_key; //not used: avoid compil warning
+        ignore_unused( unicode_key );
 
         if( key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
 #endif

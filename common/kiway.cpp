@@ -24,6 +24,7 @@
 
 #include <cstring>
 
+#include <ignore.h>
 #include <macros.h>
 #include <kiway.h>
 #include <kiway_player.h>
@@ -280,7 +281,7 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             if( kiface->OnKifaceStart( m_program, m_ctl ) )
             {
                 // Tell dso's wxDynamicLibrary destructor not to Unload() the program image.
-                (void) dso.Detach();
+                ignore_unused( dso.Detach() );
 
                 return m_kiface[aFaceId] = kiface;
             }

@@ -33,6 +33,7 @@
 #include <gestfich.h>
 #include <hierarch.h>
 #include <dialogs/html_message_box.h>
+#include <ignore.h>
 #include <invoke_sch_dialog.h>
 #include <string_utils.h>
 #include <kiface_base.h>
@@ -755,7 +756,7 @@ void SCH_EDIT_FRAME::ResolveERCExclusions()
     for( SCH_MARKER* marker : Schematic().ResolveERCExclusions() )
     {
         SCH_SHEET_PATH errorPath;
-        (void) sheetList.GetItem( marker->GetRCItem()->GetMainItemID(), &errorPath );
+        ignore_unused( sheetList.GetItem( marker->GetRCItem()->GetMainItemID(), &errorPath ) );
 
         if( errorPath.LastScreen() )
             errorPath.LastScreen()->Append( marker );

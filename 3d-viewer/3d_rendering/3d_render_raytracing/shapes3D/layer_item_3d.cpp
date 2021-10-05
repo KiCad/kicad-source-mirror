@@ -475,9 +475,7 @@ bool LAYER_ITEM::Intersects( const BBOX_3D& aBBox ) const
 }
 
 
-SFVEC3F LAYER_ITEM::GetDiffuseColor( const HITINFO& aHitInfo ) const
+SFVEC3F LAYER_ITEM::GetDiffuseColor( const HITINFO& /* aHitInfo */ ) const
 {
-    (void)aHitInfo; // unused
-
     return m_diffusecolor;
 }

@@ -839,10 +839,8 @@ void RENDER_3D_RAYTRACE::renderBlockTracing( GLubyte* ptrPBO, signed int iBlock 
 }
 
 
-void RENDER_3D_RAYTRACE::postProcessShading( GLubyte* ptrPBO, REPORTER* aStatusReporter )
+void RENDER_3D_RAYTRACE::postProcessShading( GLubyte* /* ptrPBO */, REPORTER* aStatusReporter )
 {
-    (void)ptrPBO; // unused
-
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
     {
         if( aStatusReporter )
@@ -894,10 +892,8 @@ void RENDER_3D_RAYTRACE::postProcessShading( GLubyte* ptrPBO, REPORTER* aStatusR
 }
 
 
-void RENDER_3D_RAYTRACE::postProcessBlurFinish( GLubyte* ptrPBO, REPORTER* aStatusReporter )
+void RENDER_3D_RAYTRACE::postProcessBlurFinish( GLubyte* ptrPBO, REPORTER* /* aStatusReporter */ )
 {
-    (void) aStatusReporter; //unused
-
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
     {
         // Now blurs the shader result and compute the final color

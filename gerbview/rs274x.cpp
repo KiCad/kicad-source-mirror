@@ -31,6 +31,7 @@
 
 #include <gerbview.h>
 #include <gerber_file_image.h>
+#include <ignore.h>
 #include <macros.h>
 #include <X2_gerber_attributes.h>
 #include <gbr_metadata.h>
@@ -897,7 +898,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         break;
     }
 
-    (void) seq_len;     // quiet g++, or delete the unused variable.
+    ignore_unused( seq_len );
 
     ok = GetEndOfBlock( aBuff, aBuffSize, aText, m_Current_File );
 

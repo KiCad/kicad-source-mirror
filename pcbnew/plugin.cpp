@@ -72,10 +72,8 @@ void PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString&
 }
 
 
-void PLUGIN::PrefetchLib( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+void PLUGIN::PrefetchLib( const wxString&, const PROPERTIES* )
 {
-    (void) aLibraryPath;
-    (void) aProperties;
 }
 
 

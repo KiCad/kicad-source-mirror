@@ -23,6 +23,7 @@
  */
 
 #include <dialog_shim.h>
+#include <ignore.h>
 #include <kiway_player.h>
 #include <pgm_base.h>
 #include <tool/tool_manager.h>
@@ -336,6 +337,8 @@ static void selectAllInTextCtrls( wxWindowList& children )
             {
                 childTextCtrl->SelectAll();
             }
+#else
+            ignore_unused( childTextCtrl );
 #endif
         }
         else if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( child ) )
@@ -536,8 +539,7 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
             // isn't closing anyway)
             if( Validate() )
             {
-                bool success = TransferDataFromWindow();
-                (void) success;
+                ignore_unused( TransferDataFromWindow() );
             }
         }
         else if( id == GetEscapeId() ||
