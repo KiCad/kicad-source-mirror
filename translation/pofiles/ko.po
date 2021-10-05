@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-05 13:03+0000\n"
+"PO-Revision-Date: 2021-10-05 17:11+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -4032,7 +4032,6 @@ msgid "Pad"
 msgstr "패드"
 
 #: common/eda_item.cpp:254 common/eda_item.cpp:257
-#, fuzzy
 msgid "Graphic"
 msgstr "그래픽"
 
@@ -4068,12 +4067,10 @@ msgid "Target"
 msgstr "표적"
 
 #: common/eda_item.cpp:268
-#, fuzzy
 msgid "ItemList"
 msgstr "항목 목록"
 
 #: common/eda_item.cpp:269
-#, fuzzy
 msgid "NetInfo"
 msgstr "네트 정보"
 
@@ -35669,7 +35666,6 @@ msgid "Choose which ratsnest lines to display"
 msgstr "어떤 연결선을 표시할 지 선택"
 
 #: pcbnew/widgets/appearance_controls.cpp:729
-#, fuzzy
 msgid "Show ratsnest lines to items on all layers"
 msgstr "모든 레이어의 개체에 연결선 표시"
 
@@ -35678,14 +35674,12 @@ msgid "Visible layers"
 msgstr "표시 레이어"
 
 #: pcbnew/widgets/appearance_controls.cpp:736
-#, fuzzy
 msgid "Show ratsnest lines to items on visible layers"
-msgstr "보이는 레이어의 개체에만 연결선 표시"
+msgstr "표시 레이어의 개체에만 연결선 표시"
 
 #: pcbnew/widgets/appearance_controls.cpp:743
-#, fuzzy
 msgid "Hide all ratsnest lines"
-msgstr "모듈 연결선 보이기"
+msgstr "모든 연결선 숨기기"
 
 #: pcbnew/widgets/appearance_controls.cpp:881
 msgid "Set Net Color"
@@ -35973,9 +35967,8 @@ msgid "Configure net classes"
 msgstr "네트 클래스 설정"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:161
-#, fuzzy
 msgid "Presets (Ctrl+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "사전 설정 (Ctrl+Tab):"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "(unsaved)"
