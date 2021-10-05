@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-09-25 12:08+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2021-10-05 12:47+0000\n"
+"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4549,11 +4549,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "'%s'에 대한 PDF 뷰어를 찾을 수 없음."
 
 #: common/gestfich.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"PDF 뷰어를 실행하는 동안 문제가 발생했습니다.\n"
-"명령어는 '%s'입니다."
+msgstr "PDF 뷰어 '%s'를 실행하는 중에 문제가 발생했습니다."
 
 #: common/gestfich.cpp:301
 #, c-format
@@ -5998,23 +5996,20 @@ msgid "Switch display of full-window crosshairs"
 msgstr "전체 화면에 십자선 표시 여부 선택"
 
 #: common/tool/actions.cpp:533
-#, fuzzy
 msgid "Inactive Layer View Mode"
-msgstr "단일 레이어 표시 모드"
+msgstr "비활성 레이어 표시 모드"
 
 #: common/tool/actions.cpp:534
 msgid "Toggle inactive layers between normal and dimmed"
 msgstr "비활성화한 레이어를 표시하기 / 흐리게 표시하기 간 전환"
 
 #: common/tool/actions.cpp:540
-#, fuzzy
 msgid "Inactive Layer View Mode (3-state)"
-msgstr "단일 레이어 표시 모드 (3개 상태)"
+msgstr "비활성 레이어 표시 모드 (3 상태)"
 
 #: common/tool/actions.cpp:541
-#, fuzzy
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
-msgstr "비활성화한 레이어를 표시하기 / 흐리게 표시하기 / 숨기기 간 전환"
+msgstr "비활성 레이어를 표시하기 / 흐리게 표시하기 / 숨기기 간 전환"
 
 #: common/tool/actions.cpp:546
 msgid "Select item(s)"
@@ -8417,9 +8412,8 @@ msgid "Electrical Rules Checker"
 msgstr "전기적 규칙 검사기 (ERC)"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:131
-#, fuzzy
 msgid "Power symbol value field text cannot be changed."
-msgstr "(전원 심볼 값 필드 텍스트는 변경할 수 없습니다.)"
+msgstr "전원 심볼 값 필드 텍스트는 변경할 수 없습니다."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
@@ -8430,9 +8424,8 @@ msgid "Value may not be empty."
 msgstr "값을 비워둘 수 없습니다."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:340
-#, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "영역 속성 대화창을 닫은 후 영역 다시 채우기"
+msgstr "시트 파일명은 시트 설정 대화 상자에서만 변경할 수 있습니다."
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
@@ -9230,9 +9223,9 @@ msgid "Text:"
 msgstr "텍스트:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "(%s)"
-msgstr "X 옵셋"
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -10128,9 +10121,8 @@ msgid "Text Variables"
 msgstr "텍스트 변수"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:90
-#, fuzzy
 msgid "Project is missing or read-only. Settings will not be editable."
-msgstr "프로젝트를 찾을 수 없거나 읽기 전용입니다. 변경점은 저장되지 않습니다."
+msgstr "프로젝트를 찾을 수 없거나 읽기 전용입니다. 설정은 수정할 수 없습니다."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:161
 #, c-format
@@ -12818,15 +12810,13 @@ msgstr "아니오"
 
 #: eeschema/lib_field.cpp:445 eeschema/lib_text.cpp:363
 #: eeschema/sch_field.cpp:503
-#, fuzzy
 msgid "H Justification"
-msgstr "위치 맞춤"
+msgstr "수평 위치 맞추기"
 
 #: eeschema/lib_field.cpp:454 eeschema/lib_text.cpp:372
 #: eeschema/sch_field.cpp:512
-#, fuzzy
 msgid "V Justification"
-msgstr "위치 맞춤"
+msgstr "수직 위치 맞추기"
 
 #: eeschema/lib_item.cpp:54 eeschema/lib_pin.cpp:1041 eeschema/sch_pin.cpp:184
 #: eeschema/sch_pin.cpp:204 eeschema/sch_text.cpp:758
@@ -16396,14 +16386,12 @@ msgid "Align Elements to Grid"
 msgstr "그리드에 요소 정렬"
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save Current Sheet Copy As..."
-msgstr "다른 이름으로 저장 (&A)..."
+msgstr "현재의 시트 복사본을 다음으로 저장..."
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
-msgstr "현재 문서의 복사본을 다른 위치에 저장"
+msgstr "현재 시트의 복사본을 다른 경로나 이름으로 저장"
 
 #: eeschema/tools/ee_inspection_tool.cpp:282
 #, c-format
@@ -21888,9 +21876,8 @@ msgid "Custom Rules"
 msgstr "사용자 정의 규칙"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:123
-#, fuzzy
 msgid "Project is missing or read-only. Some settings will not be editable."
-msgstr "프로젝트를 찾을 수 없거나 읽기 전용입니다. 변경점은 저장되지 않습니다."
+msgstr "프로젝트를 찾을 수 없거나 읽기 전용입니다. 몇몇 설정은 수정할 수 없습니다."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:186
 #, c-format
@@ -23727,9 +23714,8 @@ msgstr "기판 제조 속성"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:272
 #: pcbnew/footprint_libraries_utils.cpp:1135
-#, fuzzy
 msgid "Footprint type:"
-msgstr "풋프린트 이름:"
+msgstr "풋프린트 유형:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
@@ -26908,28 +26894,24 @@ msgid "Clearance Outlines"
 msgstr "클리어런스 외곽선"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing"
-msgstr "배선 생성 시 보이기"
+msgstr "배선 시에 표시"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing w/ via clearance at end"
-msgstr "마지막에 비아 클리어런스와 함께 표시하기"
+msgstr "비아 클리어런스와 배선 시 끝에 표시하기"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing and editing"
-msgstr "배선 생성 및 수정 시 보이기"
+msgstr "배선 및 편집 시에 표시하기"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show always"
 msgstr "항상 표시"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
-#, fuzzy
 msgid "Track && Via Clearances"
-msgstr "배선 클리어런스"
+msgstr "배선과 비아 클리어런스"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
@@ -26944,9 +26926,8 @@ msgid "Show pad clearance"
 msgstr "패드 클리어런스 표시"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Scroll cross-probed items into view"
-msgstr "교차 조사 항목의 중앙 보기"
+msgstr "교차 조사 항목 표시로 스크롤"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -27010,13 +26991,11 @@ msgstr "네트 강조 (패드 또는 배선용)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
-#, fuzzy
 msgid "Graphics Editing"
-msgstr "배선 편집"
+msgstr "그래픽 편집"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
-#, fuzzy
 msgid "Limit actions to 45 degrees from start"
 msgstr "시작점에서 45도로 동작 제한"
 
@@ -29056,7 +29035,7 @@ msgstr "차동 비결합 길이 너무 긺"
 
 #: pcbnew/drc/drc_item.cpp:206
 msgid "Footprint type doesn't match footprint pads"
-msgstr ""
+msgstr "풋프린트 형식이 풋프린트 패드와 일치하지 않습니다"
 
 #: pcbnew/drc/drc_item.cpp:327
 #, c-format
@@ -29784,19 +29763,19 @@ msgid "Footprint %s"
 msgstr "풋프린트 %s"
 
 #: pcbnew/footprint.cpp:2091
-#, fuzzy, c-format
+#, c-format
 msgid "Expected \"Through hole\" type but set to \"%s\""
-msgstr "%s의 %s에 대한 스루홀 패드"
+msgstr "\"스루홀\" 형식을 예상하였으나 \"%s\"(으)로 설정되었습니다"
 
 #: pcbnew/footprint.cpp:2095
 #, c-format
 msgid "Expected \"SMD\" type but set to \"%s\""
-msgstr ""
+msgstr "\"SMD\" 형식을 예상하였으나 \"%s\"(으)로 설정되었습니다"
 
 #: pcbnew/footprint.cpp:2099
 #, c-format
 msgid "Expected \"Other\" type but set to \"%s\""
-msgstr ""
+msgstr "\"기타\" 형식을 예상하였으나 \"%s\"(으)로 설정되었습니다"
 
 #: pcbnew/footprint.cpp:2203 pcbnew/pad.cpp:1542 pcbnew/zone.cpp:1416
 msgid "Clearance Override"
@@ -30007,7 +29986,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:906
 #: pcbnew/footprint_viewer_frame.cpp:720
 msgid "Previous footprint placement still in progress."
-msgstr ""
+msgstr "이전의 풋프린트 배치가 진행 중입니다."
 
 #: pcbnew/footprint_libraries_utils.cpp:995
 msgid "Save Footprint As"
@@ -33577,9 +33556,8 @@ msgid "Thickness (mm)"
 msgstr "두께 (mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
-#, fuzzy
 msgid "Thickness (inches)"
-msgstr "두께 (마일)"
+msgstr "두께 (인치)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
 msgid "Thickness (mils)"
@@ -33590,9 +33568,8 @@ msgid "Loss Tangent"
 msgstr "손실 탄젠트"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:314
-#, fuzzy
 msgid "Dielectric"
-msgstr "유전체 %d"
+msgstr "유전체"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:366
 msgid "Insert board stackup table"
@@ -33639,12 +33616,10 @@ msgid "Plated Board Edge: "
 msgstr "도금 된 보드 가장자리: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:511
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "에지 카드 커넥터:"
+msgstr "에지 카드 커넥터: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:519
-#, fuzzy
 msgid "Yes, Bevelled"
 msgstr "예, 경사진"
 
