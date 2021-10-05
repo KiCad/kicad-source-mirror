@@ -57,7 +57,7 @@ public:
 
     void PrevMarker();
     void NextMarker();
-    void SelectMarker( PCB_MARKER* aMarker );
+    void SelectMarker( const PCB_MARKER* aMarker );
 
     void ExcludeMarker();
 
@@ -97,6 +97,8 @@ private:
 
     void OnChangingNotebookPage( wxNotebookEvent& aEvent ) override;
 
+    void centerMarkerIdleHandler( wxIdleEvent& aEvent );
+
     void deleteAllMarkers( bool aIncludeExclusions );
     void refreshEditor();
 
@@ -126,7 +128,9 @@ private:
     RC_ITEMS_PROVIDER* m_footprintWarningsProvider;
     RC_TREE_MODEL*     m_footprintWarningsTreeModel;
 
-    int                m_severities;
+    const PCB_MARKER*  m_centerMarkerOnIdle;
+
+    int                m_severities;        // A mask of SEVERITY flags
 };
 
 #endif  // _DIALOG_DRC_H_

@@ -275,13 +275,25 @@ int DRC_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
 
         if( selection.GetSize() == 1 && selection.Front()->Type() == PCB_MARKER_T )
         {
-            m_drcDialog->Show( true );
+            if( !m_drcDialog->IsShown() )
+                m_drcDialog->Show( true );
+
             m_drcDialog->Raise();
             m_drcDialog->SelectMarker( static_cast<PCB_MARKER*>( selection.Front() ) );
         }
     }
 
     return 0;
+}
+
+
+void DRC_TOOL::CrossProbe( const PCB_MARKER* aMarker )
+{
+    if( !IsDRCDialogShown() )
+        ShowDRCDialog( nullptr );
+
+    m_drcDialog->Raise();
+    m_drcDialog->SelectMarker( aMarker );
 }
 
 

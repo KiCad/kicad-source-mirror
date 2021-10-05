@@ -40,6 +40,7 @@
 #include <connectivity/connectivity_data.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/drc_tool.h>
 #include <dialogs/dialog_dimension_properties.h>
 
 // Handles the selection of command events.
@@ -155,6 +156,10 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 
     case PCB_GROUP_T:
         m_toolManager->RunAction( PCB_ACTIONS::groupProperties, true, aItem );
+        break;
+
+    case PCB_MARKER_T:
+        m_toolManager->GetTool<DRC_TOOL>()->CrossProbe( static_cast<PCB_MARKER*>( aItem ) );
         break;
 
     default:

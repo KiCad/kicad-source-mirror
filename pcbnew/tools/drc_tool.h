@@ -51,17 +51,10 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     /**
-     * Open a dialog and prompts the user, then if a test run button is
-     * clicked, runs the test(s) and creates the MARKERS.  The dialog is only
-     * created if it is not already in existence.
+     * Opens the DRC dialog.  The dialog is only created if it is not already in existence.
      *
-     * @param aParent is the parent window for wxWidgets. Usually the PCB editor frame
-     * but can be another dialog
-     * if aParent == NULL (default), the parent will be the PCB editor frame
-     * and the dialog will be not modal (just float on parent
-     * if aParent is specified, the dialog will be modal.
-     * The modal mode is mandatory if the dialog is created from another dialog, not
-     * from the PCB editor frame
+     * @param aParent is the parent window for modal invocations.  If nullptr, the parent will
+     * be the PCB_EDIT_FRAME and the dialog will be modeless.
      */
     void ShowDRCDialog( wxWindow* aParent );
 
@@ -69,15 +62,11 @@ public:
 
     /**
      * Check to see if the DRC_TOOL dialog is currently shown
-     *
-     * @return true if the dialog is shown
      */
     bool IsDRCDialogShown();
 
     /**
      * Check to see if the DRC engine is running the tests
-     *
-     * @return true if the DRC engine is running the tests
      */
     bool IsDRCRunning() const { return m_drcRunning; }
 
@@ -97,6 +86,12 @@ public:
     int PrevMarker( const TOOL_EVENT& aEvent );
     int NextMarker( const TOOL_EVENT& aEvent );
     int CrossProbe( const TOOL_EVENT& aEvent );
+
+    /**
+     * A more "active" CrossProbe which will open the DRC dialog if it is closed.  Used when
+     * double-clicking on a marker.
+     */
+    void CrossProbe( const PCB_MARKER* aMarker );
 
     int ExcludeMarker( const TOOL_EVENT& aEvent );
 

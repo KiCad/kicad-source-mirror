@@ -227,7 +227,8 @@ public:
 
     void PrevMarker();
     void NextMarker();
-    void SelectMarker( MARKER_BASE* aMarker );
+    void SelectMarker( const MARKER_BASE* aMarker );
+    void CenterMarker( const MARKER_BASE* aMarker );
 
     bool IsContainer( wxDataViewItem const& aItem ) const override;
 
