@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-05 12:56+0000\n"
+"PO-Revision-Date: 2021-10-05 12:58+0000\n"
 "Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -34738,22 +34738,19 @@ msgid "Ratsnest Mode (3-state)"
 msgstr "연결선 모드 (3 상태)"
 
 #: pcbnew/tools/pcb_actions.cpp:799
-#, fuzzy
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
-msgstr "영역 채움과 영역의 외곽선 표시 주기"
+msgstr "모든 레이어 / 표시 레이어 / 없음 간 연결선 표시 방법 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:803
-#, fuzzy
 msgid "Net Color Mode (3-state)"
-msgstr "단일 레이어 표시 모드 (3개 상태)"
+msgstr "네트 색 모드 (3개 상태)"
 
 #: pcbnew/tools/pcb_actions.cpp:804
-#, fuzzy
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
-msgstr "연결선에 대해서만 네트와 네트클래스 색상 표시"
+msgstr "모든 네트에 대해서 / 연결선에 대해서 / 없음 간 네트와 네트클래스 색 사용 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:809
 msgid "Sketch Tracks"
