@@ -680,88 +680,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_Notebook->AddPage( m_panelTrackWidth, _("Track Width"), false );
 	m_panelElectricalSpacing = new PANEL_ELECTRICAL_SPACING( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_Notebook->AddPage( m_panelElectricalSpacing, _("Electrical Spacing"), false );
-	m_panelBoardClass = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizerBoardClass;
-	bSizerBoardClass = new wxBoxSizer( wxHORIZONTAL );
-
-	wxBoxSizer* bSizerUnitsMargins;
-	bSizerUnitsMargins = new wxBoxSizer( wxVERTICAL );
-
-	wxArrayString m_BoardClassesUnitsSelectorChoices;
-	m_BoardClassesUnitsSelector = new UNIT_SELECTOR_LEN( m_panelBoardClass, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_BoardClassesUnitsSelectorChoices, 0 );
-	m_BoardClassesUnitsSelector->SetSelection( 0 );
-	bSizerUnitsMargins->Add( m_BoardClassesUnitsSelector, 0, wxTOP|wxBOTTOM|wxRIGHT, 32 );
-
-
-	bSizerBoardClass->Add( bSizerUnitsMargins, 0, wxLEFT, 10 );
-
-	wxBoxSizer* brdclsSizerRight;
-	brdclsSizerRight = new wxBoxSizer( wxVERTICAL );
-
-	m_staticTextBrdClass = new wxStaticText( m_panelBoardClass, wxID_ANY, _("Note: Values are minimal values"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextBrdClass->Wrap( -1 );
-	m_staticTextBrdClass->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-
-	brdclsSizerRight->Add( m_staticTextBrdClass, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-
-	m_gridClassesValuesDisplay = new wxGrid( m_panelBoardClass, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-
-	// Grid
-	m_gridClassesValuesDisplay->CreateGrid( 5, 6 );
-	m_gridClassesValuesDisplay->EnableEditing( false );
-	m_gridClassesValuesDisplay->EnableGridLines( true );
-	m_gridClassesValuesDisplay->EnableDragGridSize( false );
-	m_gridClassesValuesDisplay->SetMargins( 0, 0 );
-
-	// Columns
-	m_gridClassesValuesDisplay->SetColSize( 0, 100 );
-	m_gridClassesValuesDisplay->SetColSize( 1, 100 );
-	m_gridClassesValuesDisplay->SetColSize( 2, 100 );
-	m_gridClassesValuesDisplay->SetColSize( 3, 100 );
-	m_gridClassesValuesDisplay->SetColSize( 4, 100 );
-	m_gridClassesValuesDisplay->SetColSize( 5, 100 );
-	m_gridClassesValuesDisplay->EnableDragColMove( false );
-	m_gridClassesValuesDisplay->EnableDragColSize( true );
-	m_gridClassesValuesDisplay->SetColLabelSize( 30 );
-	m_gridClassesValuesDisplay->SetColLabelValue( 0, _("Class 1") );
-	m_gridClassesValuesDisplay->SetColLabelValue( 1, _("Class 2") );
-	m_gridClassesValuesDisplay->SetColLabelValue( 2, _("Class 3") );
-	m_gridClassesValuesDisplay->SetColLabelValue( 3, _("Class 4") );
-	m_gridClassesValuesDisplay->SetColLabelValue( 4, _("Class 5") );
-	m_gridClassesValuesDisplay->SetColLabelValue( 5, _("Class 6") );
-	m_gridClassesValuesDisplay->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Rows
-	m_gridClassesValuesDisplay->SetRowSize( 0, 24 );
-	m_gridClassesValuesDisplay->SetRowSize( 1, 24 );
-	m_gridClassesValuesDisplay->SetRowSize( 2, 24 );
-	m_gridClassesValuesDisplay->SetRowSize( 3, 24 );
-	m_gridClassesValuesDisplay->SetRowSize( 4, 24 );
-	m_gridClassesValuesDisplay->EnableDragRowSize( false );
-	m_gridClassesValuesDisplay->SetRowLabelSize( 160 );
-	m_gridClassesValuesDisplay->SetRowLabelValue( 0, _("Lines width") );
-	m_gridClassesValuesDisplay->SetRowLabelValue( 1, _("Min clearance") );
-	m_gridClassesValuesDisplay->SetRowLabelValue( 2, _("Via: (diam - drill)") );
-	m_gridClassesValuesDisplay->SetRowLabelValue( 3, _("Plated Pad: (diam - drill)") );
-	m_gridClassesValuesDisplay->SetRowLabelValue( 4, _("NP Pad: (diam - drill)") );
-	m_gridClassesValuesDisplay->SetRowLabelAlignment( wxALIGN_RIGHT, wxALIGN_CENTER );
-
-	// Label Appearance
-
-	// Cell Defaults
-	m_gridClassesValuesDisplay->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );
-	brdclsSizerRight->Add( m_gridClassesValuesDisplay, 0, wxALL|wxEXPAND, 5 );
-
-	m_panelShowClassPrms = new wxPanel( m_panelBoardClass, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	brdclsSizerRight->Add( m_panelShowClassPrms, 1, wxALL|wxEXPAND, 5 );
-
-
-	bSizerBoardClass->Add( brdclsSizerRight, 1, wxEXPAND, 5 );
-
-
-	m_panelBoardClass->SetSizer( bSizerBoardClass );
-	m_panelBoardClass->Layout();
-	bSizerBoardClass->Fit( m_panelBoardClass );
+	m_panelBoardClass = new PANEL_BOARD_CLASS( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_Notebook->AddPage( m_panelBoardClass, _("Board Classes"), false );
 
 	bmainFrameSizer->Add( m_Notebook, 1, wxEXPAND, 5 );
@@ -790,7 +709,6 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_SynthetizeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnTranslineSynthetize ), NULL, this );
 	m_bpButtonSynthetize->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnTranslineSynthetize ), NULL, this );
 	m_buttonTransLineReset->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnTransLineResetButtonClick ), NULL, this );
-	m_BoardClassesUnitsSelector->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnBoardClassesUnitsSelection ), NULL, this );
 }
 
 PCB_CALCULATOR_FRAME_BASE::~PCB_CALCULATOR_FRAME_BASE()
@@ -812,6 +730,5 @@ PCB_CALCULATOR_FRAME_BASE::~PCB_CALCULATOR_FRAME_BASE()
 	m_SynthetizeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnTranslineSynthetize ), NULL, this );
 	m_bpButtonSynthetize->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnTranslineSynthetize ), NULL, this );
 	m_buttonTransLineReset->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnTransLineResetButtonClick ), NULL, this );
-	m_BoardClassesUnitsSelector->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnBoardClassesUnitsSelection ), NULL, this );
 
 }

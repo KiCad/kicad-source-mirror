@@ -79,10 +79,6 @@ public:
      */
     bool IsPrmSelected( enum PRMS_ID aPrmId ) const;
 
-    // Board classes panel:
-    void OnBoardClassesUnitsSelection( wxCommandEvent& event ) override;
-    void BoardClassesUpdateData( double aUnitScale );
-
     // Calculator doesn't host a tool framework
     wxWindow* GetToolCanvas() const override
     {

@@ -21,6 +21,7 @@ class UNIT_SELECTOR_RESISTOR;
 #include "panel_via_size.h"
 #include "panel_track_width.h"
 #include "panel_electrical_spacing.h"
+#include "panel_board_class.h"
 #include "kiway_player.h"
 #include <wx/string.h>
 #include <wx/menu.h>
@@ -44,7 +45,6 @@ class UNIT_SELECTOR_RESISTOR;
 #include <wx/statbmp.h>
 #include <wx/choice.h>
 #include <wx/bmpbuttn.h>
-#include <wx/grid.h>
 #include <wx/notebook.h>
 #include <wx/frame.h>
 
@@ -178,11 +178,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		PANEL_VIA_SIZE* m_panelViaSize;
 		PANEL_TRACK_WIDTH* m_panelTrackWidth;
 		PANEL_ELECTRICAL_SPACING* m_panelElectricalSpacing;
-		wxPanel* m_panelBoardClass;
-		UNIT_SELECTOR_LEN* m_BoardClassesUnitsSelector;
-		wxStaticText* m_staticTextBrdClass;
-		wxGrid* m_gridClassesValuesDisplay;
-		wxPanel* m_panelShowClassPrms;
+		PANEL_BOARD_CLASS* m_panelBoardClass;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClosePcbCalc( wxCloseEvent& event ) { event.Skip(); }
@@ -196,7 +192,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnTranslineAnalyse( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineSynthetize( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTransLineResetButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnBoardClassesUnitsSelection( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

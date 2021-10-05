@@ -76,8 +76,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     initESeriesPanel();
 
-    BoardClassesUpdateData( m_BoardClassesUnitsSelector->GetUnitScale() );
-
     // Give an icon
     wxIcon icon;
     wxIconBundle icon_bundle;
@@ -90,9 +88,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     icon_bundle.AddIcon( icon );
 
     SetIcons( icon_bundle );
-
-    // Autosize the row label column to be sure label are not truncated
-    m_gridClassesValuesDisplay->SetRowLabelSize( wxGRID_AUTOSIZE );
 
     GetSizer()->SetSizeHints( this );
 
@@ -220,7 +215,6 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     m_currTransLineType = static_cast<TRANSLINE_TYPE_ID>( cfg->m_TransLine.type );
     m_Notebook->ChangeSelection( cfg->m_LastPage );
-    m_BoardClassesUnitsSelector->SetSelection( cfg->m_BoardClassUnits );
 
     // Attenuators panel config:
     m_panelAttenuators->LoadSettings( cfg );
@@ -237,6 +231,7 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     m_panelViaSize->LoadSettings( cfg );
     m_panelTrackWidth->LoadSettings( cfg );
     m_panelElectricalSpacing->LoadSettings( cfg );
+    m_panelBoardClass->LoadSettings( cfg );
 }
 
 
@@ -254,7 +249,6 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     {
         cfg->m_LastPage = m_Notebook->GetSelection();
         cfg->m_TransLine.type = m_currTransLineType;
-        cfg->m_BoardClassUnits = m_BoardClassesUnitsSelector->GetSelection();
 
         m_panelRegulators->Regulators_WriteConfig( cfg );
         m_panelAttenuators->SaveSettings( cfg );
@@ -262,6 +256,7 @@ void PCB_CALCULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         m_panelViaSize->SaveSettings( cfg );
         m_panelTrackWidth->SaveSettings( cfg );
         m_panelElectricalSpacing->SaveSettings( cfg );
+        m_panelBoardClass->SaveSettings( cfg );
     }
 
 
