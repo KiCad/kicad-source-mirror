@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-09-27 13:40+0000\n"
+"PO-Revision-Date: 2021-10-14 07:35+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3119,7 +3119,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:236
 msgid "days"
-msgstr ""
+msgstr "dnů"
 
 #: common/dialogs/panel_common_settings_base.cpp:249
 msgid "Project Backup"
@@ -4050,7 +4050,6 @@ msgid "Pad"
 msgstr "Ploška"
 
 #: common/eda_item.cpp:254 common/eda_item.cpp:257
-#, fuzzy
 msgid "Graphic"
 msgstr "Grafika"
 
@@ -4086,14 +4085,12 @@ msgid "Target"
 msgstr "Lícovací značky"
 
 #: common/eda_item.cpp:268
-#, fuzzy
 msgid "ItemList"
-msgstr "Seznam položek"
+msgstr "SeznamPoložek"
 
 #: common/eda_item.cpp:269
-#, fuzzy
 msgid "NetInfo"
-msgstr "Info sítě"
+msgstr "InfoSítě"
 
 #: common/eda_item.cpp:270 pcbnew/pcb_group.cpp:334
 #: pcbnew/tools/pcb_actions.cpp:682
@@ -4569,11 +4566,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "Nelze najít prohlížeč PDF pro '%s'."
 
 #: common/gestfich.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"Problém při spuštění prohlížeče PDF.\n"
-"Příkaz je '%s'."
+msgstr "Problém při spuštění PDF prohlížeče '%s'."
 
 #: common/gestfich.cpp:301
 #, c-format
@@ -6013,9 +6008,8 @@ msgid "Switch display of full-window crosshairs"
 msgstr "Přepnout zobrazení na kříž přes celé okno"
 
 #: common/tool/actions.cpp:533
-#, fuzzy
 msgid "Inactive Layer View Mode"
-msgstr "Režim zobrazení jedné vrstvy"
+msgstr "Režim zobrazení Neaktivní vrstva"
 
 #: common/tool/actions.cpp:534
 msgid "Toggle inactive layers between normal and dimmed"
@@ -8457,9 +8451,8 @@ msgid "Value may not be empty."
 msgstr "Hodnota nemůže být prázdná."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:340
-#, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Zobrazí okno vlastností položky"
+msgstr "Název souboru listu lze změnit pouze v okně Vlastnosti listu."
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
@@ -9263,9 +9256,9 @@ msgid "Text:"
 msgstr "Text:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "(%s)"
-msgstr " (%s):"
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -12862,15 +12855,13 @@ msgstr "Ne"
 
 #: eeschema/lib_field.cpp:445 eeschema/lib_text.cpp:363
 #: eeschema/sch_field.cpp:503
-#, fuzzy
 msgid "H Justification"
-msgstr "Odsazení:"
+msgstr "H zarovnání"
 
 #: eeschema/lib_field.cpp:454 eeschema/lib_text.cpp:372
 #: eeschema/sch_field.cpp:512
-#, fuzzy
 msgid "V Justification"
-msgstr "Odsazení:"
+msgstr "V zarovnání"
 
 #: eeschema/lib_item.cpp:54 eeschema/lib_pin.cpp:1041 eeschema/sch_pin.cpp:184
 #: eeschema/sch_pin.cpp:204 eeschema/sch_text.cpp:758
@@ -16981,7 +16972,7 @@ msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "Usually: 3:3 in mm and 2:4 in inches"
-msgstr ""
+msgstr "Většinou: 3:3 v mm a 2:4 v palcích"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:70
 msgid "Format for mm"
@@ -17245,7 +17236,7 @@ msgstr "Načítání %u/%zu %s..."
 #: gerbview/files.cpp:287
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr ""
+msgstr "<b>Soubor gerber job nemůže být načten jako soubor plot</b> <i>%s</i>"
 
 #: gerbview/files.cpp:386
 msgid "Open NC (Excellon) Drill File(s)"
@@ -17935,7 +17926,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr ""
+msgstr "Správa balíčků ke stažení z repozitářů Kicadu a třetích stran"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -18119,7 +18110,7 @@ msgstr "Otevřít adresář projektu Průzkumníku souborů"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
 msgid "Please enter fully qualified repository url"
-msgstr ""
+msgstr "Zadejte prosím úplnou adresu url repozitáře"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
 msgid "Add repository"
@@ -18221,7 +18212,6 @@ msgid "Apply changes"
 msgstr "Použít změny"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:139
-#, fuzzy
 msgid "Discard changes"
 msgstr "Zrušit změny"
 
@@ -18239,9 +18229,8 @@ msgid "All downloads finished"
 msgstr "Všechna stahování dokončena"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download progress"
-msgstr "Nahrávám 3D knihovny"
+msgstr "Postup stahování"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
 msgid "Waiting..."
@@ -18257,7 +18246,7 @@ msgstr "Podrobnosti"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying package changes"
-msgstr ""
+msgstr "Použití změn v balíčku"
 
 #: kicad/pcm/dialogs/panel_package.cpp:84
 #, fuzzy
@@ -18276,7 +18265,7 @@ msgstr "Metadata"
 #: kicad/pcm/dialogs/panel_packages_view.cpp:154
 #, c-format
 msgid "Package identifier: %s\n"
-msgstr ""
+msgstr "Identifikátor balíčku: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
 #, c-format
@@ -18297,9 +18286,8 @@ msgid "Maintainer"
 msgstr "Správce"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:191
-#, fuzzy
 msgid "Resources"
-msgstr "Zaměnit zdroje"
+msgstr "Zdroje"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:266
 msgid "Pick a package on the left panel to view it's description."
@@ -18314,14 +18302,12 @@ msgid "Error downloading package"
 msgstr "Chyba stahování balíčku"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:352
-#, fuzzy
 msgid "Save package"
-msgstr "Uložit změny"
+msgstr "Uložit balíček"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:364
-#, fuzzy
 msgid "Downloading package"
-msgstr "Nahrávám 3D knihovny"
+msgstr "Stáhnout balíček"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:380
 msgid ""
@@ -18446,9 +18432,8 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm.cpp:428
-#, fuzzy
 msgid "Downloading resources"
-msgstr "Nahrávám 3D knihovny"
+msgstr "Stáhnout zdroje"
 
 #: kicad/pcm/pcm.cpp:442
 msgid ""
@@ -18478,9 +18463,9 @@ msgid "Extracting package '%s'."
 msgstr "Rozbalování balíčku '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr "Odstraňuji nepoužité pouzdro %s."
+msgstr "Odstranění staženého archivu '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:157
 #, c-format
@@ -18544,7 +18529,7 @@ msgstr "Balíček %s odinstalován"
 
 #: kicad/pcm/pcm_task_manager.cpp:445
 msgid "Aborting remaining tasks."
-msgstr ""
+msgstr "Přerušení zbývajících úkolů."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -18999,9 +18984,8 @@ msgid "Printing"
 msgstr "Tisk"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:554
-#, fuzzy
 msgid "Predefined Keywords"
-msgstr "Předdefinované šířky:"
+msgstr "Definované klíčová slova"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:557
 msgid "Texts can include keywords."
@@ -19791,7 +19775,7 @@ msgstr "ohm-metr"
 
 #: pcb_calculator/dialogs/panel_via_size_base.cpp:146
 msgid "Substrate relative permittivity:"
-msgstr ""
+msgstr "Relativní permeabilita substrátu:"
 
 #: pcb_calculator/dialogs/panel_via_size_base.cpp:148
 msgid "Relative dielectric constant (epsilon r)"
@@ -20078,7 +20062,7 @@ msgstr "Hrubý:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:359
 msgid "Insulator mu:"
-msgstr ""
+msgstr "Izolace µ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:371
 msgid "Conductor mu:"
@@ -20321,11 +20305,11 @@ msgstr "Kalkulátor DPS"
 #: pcb_calculator/eserie.cpp:326 pcb_calculator/eserie.cpp:345
 #: pcb_calculator/eserie.cpp:371
 msgid "Exact"
-msgstr ""
+msgstr "Přesně"
 
 #: pcb_calculator/eserie.cpp:354 pcb_calculator/eserie.cpp:377
 msgid "Not worth using"
-msgstr ""
+msgstr "Nestojí za to použít"
 
 #: pcb_calculator/eserie_help.h:2
 msgid ""
@@ -20354,6 +20338,30 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
+"Série E definovaná v normě IEC 60063 je běžně uznávaným systémem\n"
+"preferovaných hodnot pro elektronické součástky. Dostupné hodnoty\n"
+"jsou přibližně rovnoměrně rozložené na logaritmické stupnici.\n"
+"\n"
+"\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
+"\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
+"\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
+"\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
+"\n"
+"Kalkulačka najde kombinace standardních součástek řady E pro\n"
+"vytvoření libovolných hodnot. Můžete zadat požadovaný odpor od 0,0025 až "
+"4000 kΩ.\n"
+"Zadaná řešení používají maximálně 4 komponenty.\n"
+"\n"
+"Ve výchozím nastavení je hodnota požadavku vždy vyloučena z sady řešení.  Je "
+"také možné specifikovat\n"
+"až dvě další hodnoty vyloučené z řešení, pokud tyto hodnoty součástek nejsou "
+"k dispozici\n"
+"\n"
+"Řešení jsou uvedena v následujících formátech:\n"
+"\n"
+"\tR1 + R2 +...+ Rn\trezistory v sérii\n"
+"\tR1 | R2 |...| Rn\trezistory paralelně\n"
+"\tR1 + (R2|R3)...\t\tjakákoliv kombinace výše uvedených\n"
 
 #: pcb_calculator/panel_attenuators.cpp:193
 #, c-format
@@ -20361,9 +20369,8 @@ msgid "Attenuation more than %f dB"
 msgstr "Ǔtlumu více než %f dB"
 
 #: pcb_calculator/panel_regulator.cpp:147
-#, fuzzy
 msgid "PCB Calculator data file"
-msgstr "Soubor dat PCB Calculatoru (*.%s)|*.%s"
+msgstr "Soubor dat PCB Calculatoru"
 
 #: pcb_calculator/panel_regulator.cpp:150
 msgid "Select PCB Calculator Data File"
@@ -21029,11 +21036,11 @@ msgstr "Upravit odemčené dielektrické vrstvy"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:208
 #, c-format
 msgid "Value too small (min value %s)."
-msgstr ""
+msgstr "Hodnota příliš malá (min hodnota %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:228
 msgid "All dielectric  thickness layers are locked"
-msgstr ""
+msgstr "Všechny tloušťky dielektrických vrstev jsou uzamčeny"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:295
 #, c-format
@@ -21413,7 +21420,7 @@ msgstr "Žádná DPS k přečíslování!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:297
 msgid "PCB successfully reannotated"
-msgstr ""
+msgstr "DPS úspěšně přečíslována"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:298
 msgid ""
@@ -22915,7 +22922,7 @@ msgstr "Mimo"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:104
 msgid "Inline"
-msgstr ""
+msgstr "V řadě"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:325
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:68
@@ -23278,7 +23285,7 @@ msgstr "STEP export"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "temp"
-msgstr ""
+msgstr "temp"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:36
 msgid "Coordinates"
@@ -23322,7 +23329,7 @@ msgstr "Ignorovat virtuální součástky"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:113
 msgid "Substitute similarly named models"
-msgstr ""
+msgstr "Vyměnit modely s podobným názvem"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:114
 msgid "Replace VRML models with STEP models of the same name"
@@ -23587,7 +23594,7 @@ msgstr "&Rozlišovat velikost"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
-msgstr ""
+msgstr "Vrátit se na začátek"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 #, fuzzy
@@ -23744,9 +23751,8 @@ msgstr "Atributy výroby"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:272
 #: pcbnew/footprint_libraries_utils.cpp:1135
-#, fuzzy
 msgid "Footprint type:"
-msgstr "Filtr pouzder:"
+msgstr "Typ pouzdra:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
@@ -24081,9 +24087,9 @@ msgstr ""
 "<b>Přidat vybranou možnost</b>."
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "Options for Library '%s'"
-msgstr "Možnosti pro knihovnu \"%s\""
+msgstr "Možnosti pro knihovnu '%s'"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:25
 msgid "Plugin Options"
@@ -24138,9 +24144,8 @@ msgstr ""
 "vytvoří pouze jeden soubor obsahující všechny pouzdra k umístění\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
-#, fuzzy
 msgid "Include only SMD footprints"
-msgstr "Zahrnout &pouzdra"
+msgstr "Zahrnout pouze SMD pouzdra"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 #, fuzzy
@@ -25335,9 +25340,8 @@ msgid "Warning: Castellated property is for PTH pads."
 msgstr "Varování: Vlastnost Castellated lze nastavit pouze na PTH ploškách."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1385
-#, fuzzy
 msgid "Warning: BGA property is for SMD pads."
-msgstr "Varování: Vlastnost BGA lze nastavit pouze na SMD plošky."
+msgstr "Varování: Vlastnost BGA je pro na SMD plošky."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1394
 msgid "Error: Negative corner size."
@@ -30086,7 +30090,7 @@ msgstr "Centimetr"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:56
 msgid "Feet"
-msgstr ""
+msgstr "Stopy"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:252
 msgid "Open File"
@@ -30834,7 +30838,7 @@ msgstr "BGA"
 
 #: pcbnew/pad.cpp:902
 msgid "Fiducial global"
-msgstr ""
+msgstr "Globální značka"
 
 #: pcbnew/pad.cpp:903
 msgid "Fiducial local"
@@ -30862,9 +30866,8 @@ msgid "Length in Package"
 msgstr "Délka v pouzdře"
 
 #: pcbnew/pad.cpp:949
-#, fuzzy
 msgid "Hole X / Y"
-msgstr "Vrtání X / Y"
+msgstr "Otvor X / Y"
 
 #: pcbnew/pad.cpp:959 pcbnew/pcb_track.cpp:725 pcbnew/pcb_track.cpp:768
 #: pcbnew/router/router_tool.cpp:1960 pcbnew/zone.cpp:634
@@ -31367,9 +31370,8 @@ msgid "File not found: '%s'. 3D-model not imported."
 msgstr "Soubor nenalezen: '%s'. 3D-model neimportován."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1485
-#, fuzzy
 msgid "Loading nets..."
-msgstr "Načítání..."
+msgstr "Načítání sítí..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1506
 #, fuzzy
@@ -31387,9 +31389,8 @@ msgstr ""
 "přesunut na vrstvu ECO1_USER."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1641
-#, fuzzy
 msgid "Loading rules..."
-msgstr "Načítání souborů Gerber..."
+msgstr "Načítání pravidel..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1673
 #, fuzzy
@@ -31397,9 +31398,8 @@ msgid "Loading board regions..."
 msgstr "Načítání souborů Gerber..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1695
-#, fuzzy
 msgid "Loading zones..."
-msgstr "Načítání..."
+msgstr "Načítání zón..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1751
 #, c-format
@@ -31421,9 +31421,8 @@ msgid "Loading zone fills..."
 msgstr "Sestavování zón..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1908
-#, fuzzy
 msgid "Loading arcs..."
-msgstr "Načítání..."
+msgstr "Načítání oblouků..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1969
 #, fuzzy, c-format
@@ -31442,9 +31441,8 @@ msgstr ""
 "Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2065
-#, fuzzy
 msgid "Loading pads..."
-msgstr "Načítání..."
+msgstr "Načítání plošek..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2125
 #, c-format
@@ -31507,9 +31505,8 @@ msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2475
-#, fuzzy
 msgid "Loading vias..."
-msgstr "Načítání..."
+msgstr "Načítání prokovů..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2516
 #, c-format
@@ -31518,9 +31515,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2537
-#, fuzzy
 msgid "Loading tracks..."
-msgstr "Načítání..."
+msgstr "Načítání spojů..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2585
 #, fuzzy, c-format
@@ -31539,9 +31535,8 @@ msgstr ""
 "Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2644
-#, fuzzy
 msgid "Loading text..."
-msgstr "Načítání..."
+msgstr "Načítání textu..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2655
 #, c-format
@@ -31557,9 +31552,8 @@ msgstr ""
 "Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2829
-#, fuzzy
 msgid "Loading rectangles..."
-msgstr "Načítání souborů Gerber..."
+msgstr "Načítání obdélníků..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2849
 #, fuzzy, c-format
@@ -31880,9 +31874,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'"
-msgstr "Nelze číst soubor \"%s\""
+msgstr "Nelze číst soubor '%s'"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1078
 #, fuzzy, c-format
@@ -32062,9 +32056,9 @@ msgstr "Knihovna '%s' nemá žádné pouzdro '%s'."
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:347
 #: pcbnew/plugins/kicad/pcb_parser.cpp:665
 #: pcbnew/plugins/kicad/pcb_parser.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown token '%s'"
-msgstr "Neznámý token \"%s\""
+msgstr "Neznámý token '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:354
 #, c-format
@@ -32091,9 +32085,9 @@ msgstr "Neočekávaný soubor \"%s\" byl nalezen v cestě knihovny \"%s\"."
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1028
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2672
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3239
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' cannot be deleted."
-msgstr "Knihovnu pouzder \"%s\" nelze odstranit."
+msgstr "Knihovnu pouzder '%s' nelze odstranit."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:172
 #, c-format
@@ -32738,9 +32732,8 @@ msgstr ""
 "spoje."
 
 #: pcbnew/router/router_tool.cpp:139
-#, fuzzy
 msgid "Select Layer and Place Micro Via..."
-msgstr "Vybrat vrstvu a umístit průchozí prokov..."
+msgstr "Vybrat vrstvu a umístit mikro prokov..."
 
 #: pcbnew/router/router_tool.cpp:140
 #, fuzzy
@@ -32936,14 +32929,13 @@ msgid "Routing Track"
 msgstr "Propojit jednotlivý spoj"
 
 #: pcbnew/router/router_tool.cpp:1940
-#, fuzzy
 msgid "(no net)"
-msgstr "<žádná síť>"
+msgstr "(žádná síť)"
 
 #: pcbnew/router/router_tool.cpp:1946
-#, fuzzy, c-format
+#, c-format
 msgid "Track Width: %s"
-msgstr "Šířka spoje"
+msgstr "Šířka spoje: %s"
 
 #: pcbnew/router/router_tool.cpp:1968
 msgid "Diff Pair Gap"
@@ -33103,9 +33095,8 @@ msgid "Omit extra information"
 msgstr "Bitmapa info"
 
 #: pcbnew/tools/board_editor_control.cpp:136
-#, fuzzy
 msgid "Omit nets"
-msgstr "Filtr sítí"
+msgstr "Vynechat sítě"
 
 #: pcbnew/tools/board_editor_control.cpp:138
 msgid "Do not prefix path with footprint UUID."
@@ -33120,19 +33111,17 @@ msgid "Specctra DSN File"
 msgstr "Soubor Specctra DSN"
 
 #: pcbnew/tools/board_editor_control.cpp:443
-#, fuzzy
 msgid "Export Board Netlist"
-msgstr "Exportovat Netlist"
+msgstr "Exportovat Netlist desky"
 
 #: pcbnew/tools/board_editor_control.cpp:444
-#, fuzzy
 msgid "KiCad board netlist files"
-msgstr "Soubory netlistu KiCadu"
+msgstr "Soubory netlistu desek KiCadu"
 
 #: pcbnew/tools/board_editor_control.cpp:458
-#, fuzzy, c-format
+#, c-format
 msgid "Path `%s` is read only."
-msgstr "Knihovna \"%s\" je pouze pro čtení."
+msgstr "Knihovna `%s` je pouze pro čtení."
 
 #: pcbnew/tools/board_editor_control.cpp:459
 msgid "I/O Error"
@@ -33476,14 +33465,12 @@ msgid "Plated Board Edge: "
 msgstr "Pokovená hrana desky: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:511
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "Konektory na hraně karty:"
+msgstr "Konektory na hraně karty: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:519
-#, fuzzy
 msgid "Yes, Bevelled"
-msgstr "Ano, zkosené"
+msgstr "Ano, zkosený"
 
 #: pcbnew/tools/drawing_tool.cpp:80
 msgid "Select Via Size"
@@ -33898,9 +33885,8 @@ msgid "Add a zone with the same settings as an existing zone"
 msgstr "Přidat zónu se stejnými parametry jako má existující zóna"
 
 #: pcbnew/tools/pcb_actions.cpp:185
-#, fuzzy
 msgid "Import Graphics..."
-msgstr "Import &grafiky..."
+msgstr "Import grafiky..."
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Import 2D drawing file"
@@ -35287,9 +35273,8 @@ msgid "Sets the length tuning parameters for currently routed item."
 msgstr "Nastaví parametry ladění délky pro aktuálně kreslenou položku."
 
 #: pcbnew/tools/pcb_control.cpp:214
-#, fuzzy
 msgid "Don't show again"
-msgstr "Znovu neukazovat"
+msgstr "Znovu nezobrazovat"
 
 #: pcbnew/tools/pcb_control.cpp:228
 #, c-format
@@ -35591,9 +35576,9 @@ msgid "Layer Display Options"
 msgstr "Nastavení zobrazení"
 
 #: pcbnew/widgets/appearance_controls.cpp:595
-#, fuzzy, c-format
+#, c-format
 msgid "Inactive layers (%s):"
-msgstr "Neaktivní vrstvy:"
+msgstr "Neaktivní vrstvy (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Inactive layers:"
@@ -35630,9 +35615,9 @@ msgid "Net Display Options"
 msgstr "Nastavení zobrazení"
 
 #: pcbnew/widgets/appearance_controls.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "Net colors (%s):"
-msgstr "Barva sítě:"
+msgstr "Barva sítě (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Net colors:"
@@ -36166,9 +36151,8 @@ msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad editor schémat (Samostatně)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
-#, fuzzy
 msgid "Schematic Capture Tool"
-msgstr "Barva čáry schématu"
+msgstr "Schematický nástroj pro zachycení"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
