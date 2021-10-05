@@ -48,7 +48,7 @@ const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx )
     static void* locale = nullptr;
     static wxString sheetnameDefault;
     static wxString sheetfilenameDefault;
-    static wxString fieldDefault;
+    static wxString userFieldDefault;
 
     // Fetching translations can take a surprising amount of time when loading libraries,
     // so only do it when necessary.
@@ -56,7 +56,7 @@ const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx )
     {
         sheetnameDefault     = _( "Sheet name" );
         sheetfilenameDefault = _( "Sheet file" );
-        fieldDefault         = _( "Field%d" );
+        userFieldDefault     = _( "Field%d" );
         locale = Pgm().GetLocale();
     }
 
@@ -65,7 +65,7 @@ const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx )
     {
     case  SHEETNAME:     return sheetnameDefault;
     case  SHEETFILENAME: return sheetfilenameDefault;
-    default:             return wxString::Format( fieldDefault, aFieldNdx );
+    default:             return wxString::Format( userFieldDefault, aFieldNdx );
     }
 }
 
@@ -265,8 +265,8 @@ bool SCH_SHEET::UsesDefaultStroke() const
 void SCH_SHEET::SwapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem->Type() == SCH_SHEET_T,
-            wxString::Format( wxT( "SCH_SHEET object cannot swap data with %s object." ),
-                    aItem->GetClass() ) );
+                 wxString::Format( wxT( "SCH_SHEET object cannot swap data with %s object." ),
+                                   aItem->GetClass() ) );
 
     SCH_SHEET* sheet = ( SCH_SHEET* ) aItem;
 
@@ -357,11 +357,11 @@ bool SCH_SHEET::IsVerticalOrientation() const
     {
         switch( pin->GetEdge() )
         {
-        case SHEET_SIDE::LEFT: leftRight++; break;
-        case SHEET_SIDE::RIGHT: leftRight++; break;
-        case SHEET_SIDE::TOP: topBottom++; break;
+        case SHEET_SIDE::LEFT:   leftRight++; break;
+        case SHEET_SIDE::RIGHT:  leftRight++; break;
+        case SHEET_SIDE::TOP:    topBottom++; break;
         case SHEET_SIDE::BOTTOM: topBottom++; break;
-        default:                             break;
+        default:                              break;
         }
     }
 
@@ -375,7 +375,8 @@ bool SCH_SHEET::HasUndefinedPins() const
     {
         /* Search the schematic for a hierarchical label corresponding to this sheet label. */
         const SCH_HIERLABEL* HLabel = nullptr;
-        for( auto aItem : m_screen->Items().OfType( SCH_HIER_LABEL_T ) )
+
+        for( SCH_ITEM* aItem : m_screen->Items().OfType( SCH_HIER_LABEL_T ) )
         {
             if( !pin->GetText().CmpNoCase( static_cast<SCH_HIERLABEL*>( aItem )->GetText() ) )
             {
@@ -470,26 +471,26 @@ int SCH_SHEET::GetMinHeight( bool aFromTop ) const
 
 void SCH_SHEET::CleanupSheet()
 {
-    auto i = m_pins.begin();
+    std::vector<SCH_SHEET_PIN*> pins = m_pins;
 
-    while( i != m_pins.end() )
+    m_pins.clear();
+
+    for( SCH_SHEET_PIN* pin : pins )
     {
         /* Search the schematic for a hierarchical label corresponding to this sheet label. */
         const SCH_HIERLABEL* HLabel = nullptr;
 
         for( SCH_ITEM* aItem : m_screen->Items().OfType( SCH_HIER_LABEL_T ) )
         {
-            if( (*i)->GetText().CmpNoCase( static_cast<SCH_HIERLABEL*>( aItem )->GetText() ) == 0 )
+            if( pin->GetText().CmpNoCase( static_cast<SCH_HIERLABEL*>( aItem )->GetText() ) == 0 )
             {
                 HLabel = static_cast<SCH_HIERLABEL*>( aItem );
                 break;
             }
         }
 
-        if( HLabel == nullptr )   // Hlabel not found: delete sheet label.
-            i = m_pins.erase( i );
-        else
-            ++i;
+        if( HLabel )
+            m_pins.push_back( pin );
     }
 }
 
@@ -646,7 +647,7 @@ bool SCH_SHEET::SearchHierarchy( const wxString& aFilename, SCH_SCREEN** aScreen
             }
         }
 
-        for( auto aItem : m_screen->Items().OfType( SCH_SHEET_T ) )
+        for( SCH_ITEM* aItem : m_screen->Items().OfType( SCH_SHEET_T ) )
         {
             SCH_SHEET*  sheet  = static_cast<SCH_SHEET*>( aItem );
             SCH_SCREEN* screen = sheet->m_screen;
