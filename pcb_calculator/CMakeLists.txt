@@ -18,6 +18,7 @@ set( PCB_CALCULATOR_SRCS
     panel_board_class.cpp
     panel_color_code.cpp
     panel_electrical_spacing.cpp
+    panel_eserie.cpp
     panel_regulator.cpp
     panel_track_width.cpp
     panel_via_size.cpp
@@ -40,6 +41,7 @@ set( PCB_CALCULATOR_SRCS
     dialogs/panel_board_class_base.cpp
     dialogs/panel_regulator_base.cpp
     dialogs/panel_color_code_base.cpp
+    dialogs/panel_eserie_base.cpp
     dialogs/panel_via_size_base.cpp
     dialogs/panel_track_width_base.cpp
     dialogs/panel_electrical_spacing_base.cpp

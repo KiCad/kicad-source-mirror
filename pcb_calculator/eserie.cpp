@@ -20,9 +20,7 @@
  */
 
 #include <array>
-
-#include <string_utils.h>
-#include "pcb_calculator_frame.h"
+#include "panel_eserie.h"
 
 
 extern double DoubleFromString( const wxString& TextValue );
@@ -37,10 +35,6 @@ extern double DoubleFromString( const wxString& TextValue );
 #endif
 
 #include "eserie.h"
-
-
-wxString eseries_help =
-#include "eserie_help.h"
 
 E_SERIE r;
 
@@ -289,7 +283,7 @@ void E_SERIE::strip4( void )
 }
 
 
-void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
+void PANEL_E_SERIE::OnCalculateESeries( wxCommandEvent& event )
 {
     double   reqr;            // required resistor stored in local copy
     double   error, err3 = 0;
@@ -382,7 +376,8 @@ void PCB_CALCULATOR_FRAME::OnCalculateESeries( wxCommandEvent& event )
     m_ESeries_Sol4R->SetValue( fs );
 }
 
-void PCB_CALCULATOR_FRAME::OnESeriesSelection( wxCommandEvent& event )
+
+void PANEL_E_SERIE::OnESeriesSelection( wxCommandEvent& event )
 {
     if( event.GetEventObject() == m_e1 )
         r.SetSeries( E1 );
@@ -392,13 +387,4 @@ void PCB_CALCULATOR_FRAME::OnESeriesSelection( wxCommandEvent& event )
         r.SetSeries( E12 );
     else
         r.SetSeries( E6 );
-}
-
-void PCB_CALCULATOR_FRAME::initESeriesPanel()    // initialize ESeries tab at each pcb-calculator start
-{
-    wxString msg;
-
-    // show markdown formula explanation in lower help panel
-    ConvertMarkdown2Html( wxGetTranslation( eseries_help ), msg );
-    m_panelESeriesHelp->SetPage( msg );
 }

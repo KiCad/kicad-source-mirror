@@ -96,23 +96,6 @@ private:
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     /**
-     * Panel-specific initializers
-     */
-    void initESeriesPanel();
-
-    /**
-     * Called on calculate button and executes all E-series calculations
-     */
-    void OnCalculateESeries( wxCommandEvent& event ) override;
-
-    /**
-     * Radio Buttons to select the E-serie for the resistor calculator.
-     *
-     * @param event contains the radio button state.
-     */
-    void OnESeriesSelection( wxCommandEvent& event ) override;
-
-    /**
      * Called on new transmission line selection.
      */
     void OnTranslineSelection( wxCommandEvent& event ) override;

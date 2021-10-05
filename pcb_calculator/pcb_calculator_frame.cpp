@@ -61,10 +61,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     for( int ii = 0; ii < 8; ii++ )
         m_transline_list.push_back( new TRANSLINE_IDENT( tltype_list[ii] ) );
 
-    m_reqResUnits->SetLabel( wxT( "kΩ" ) );
-    m_exclude1Units->SetLabel( wxT( "kΩ" ) );
-    m_exclude2Units->SetLabel( wxT( "kΩ" ) );
-
     m_EpsilonR_label->SetLabel( wxT( "εr" ) );
 
     LoadSettings( config() );
@@ -73,8 +69,6 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     TranslineTypeSelection( m_currTransLineType );
     m_TranslineSelection->SetSelection( m_currTransLineType );
-
-    initESeriesPanel();
 
     // Give an icon
     wxIcon icon;
@@ -138,9 +132,6 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
        	m_panelViaSize->Layout();
 
        	m_panelRegulators->Layout();
-
-        m_panelESeriesHelp->Refresh();
-        //m_htmlWinFormulas->Refresh();
 
         // Until it's shown on screen the above won't work; but doing it anyway at least keeps
         // putting new OnUpdateUI events into the queue until it *is* shown on screen.
@@ -232,6 +223,7 @@ void PCB_CALCULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     m_panelTrackWidth->LoadSettings( cfg );
     m_panelElectricalSpacing->LoadSettings( cfg );
     m_panelBoardClass->LoadSettings( cfg );
+    m_panelESeries->LoadSettings( cfg );
 }
 
 

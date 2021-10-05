@@ -17,6 +17,7 @@ class UNIT_SELECTOR_RESISTOR;
 
 #include "panel_regulator.h"
 #include "panel_attenuators.h"
+#include "panel_eserie.h"
 #include "panel_color_code.h"
 #include "panel_via_size.h"
 #include "panel_track_width.h"
@@ -33,17 +34,15 @@ class UNIT_SELECTOR_RESISTOR;
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
-#include <wx/sizer.h>
-#include <wx/statline.h>
-#include <wx/radiobut.h>
-#include <wx/statbox.h>
-#include <wx/button.h>
-#include <wx/html/htmlwin.h>
 #include <wx/radiobox.h>
 #include <wx/statbmp.h>
+#include <wx/sizer.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
+#include <wx/button.h>
 #include <wx/choice.h>
+#include <wx/statbox.h>
+#include <wx/radiobut.h>
 #include <wx/bmpbuttn.h>
 #include <wx/notebook.h>
 #include <wx/frame.h>
@@ -63,39 +62,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxNotebook* m_Notebook;
 		PANEL_REGULATOR* m_panelRegulators;
 		PANEL_ATTENUATORS* m_panelAttenuators;
-		wxPanel* m_panelESeries;
-		wxStaticText* m_ESrequired;
-		wxTextCtrl* m_ResRequired;
-		wxStaticText* m_reqResUnits;
-		wxStaticText* m_ESrequired1;
-		wxTextCtrl* m_ResExclude1;
-		wxStaticText* m_exclude1Units;
-		wxStaticText* m_ESrequired11;
-		wxTextCtrl* m_ResExclude2;
-		wxStaticText* m_exclude2Units;
-		wxStaticLine* m_staticline6;
-		wxRadioButton* m_e1;
-		wxRadioButton* m_e3;
-		wxRadioButton* m_e6;
-		wxRadioButton* m_e12;
-		wxStaticText* m_ESerieSimpleSolution;
-		wxTextCtrl* m_ESeries_Sol2R;
-		wxStaticText* m_ESeriesSimpleErr;
-		wxTextCtrl* m_ESeriesError2R;
-		wxStaticText* m_ESeriesSimplePercent;
-		wxStaticText* m_ESerie3RSolution1;
-		wxTextCtrl* m_ESeries_Sol3R;
-		wxStaticText* m_ESeriesAltErr;
-		wxTextCtrl* m_ESeriesError3R;
-		wxStaticText* m_ESeriesAltPercent;
-		wxStaticText* m_ESeries4RSolution;
-		wxTextCtrl* m_ESeries_Sol4R;
-		wxStaticText* m_ESeriesAltErr1;
-		wxTextCtrl* m_ESeriesError4R;
-		wxStaticText* m_ESeriesAltPercent1;
-		wxStaticLine* m_staticline7;
-		wxButton* m_buttonEScalculate;
-		wxHtmlWindow* m_panelESeriesHelp;
+		PANEL_E_SERIE* m_panelESeries;
 		PANEL_COLOR_CODE* m_panelColorCode;
 		wxPanel* m_panelTransline;
 		wxRadioBox* m_TranslineSelection;
@@ -183,8 +150,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClosePcbCalc( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void OnESeriesSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCalculateESeries( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineEpsilonR_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineTanD_Button( wxCommandEvent& event ) { event.Skip(); }
