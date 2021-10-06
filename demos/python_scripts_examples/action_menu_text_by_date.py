@@ -1,6 +1,6 @@
 #  text_by_date.py
 #
-# Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+# Copyright (C) 2017 KiCad Developers, see AUTHORS.TXT for contributors.
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by

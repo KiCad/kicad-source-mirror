@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.TXT for contributors.
  * @author Kristoffer Ödmark
  *
  * This program is free software; you can redistribute it and/or

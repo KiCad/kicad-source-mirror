@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 S.Kocjan <s.kocjan@o2.pl>
- * Copyright (C) 2020 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

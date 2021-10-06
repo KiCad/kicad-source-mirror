@@ -6,7 +6,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2014 Kicad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2014 Kicad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
