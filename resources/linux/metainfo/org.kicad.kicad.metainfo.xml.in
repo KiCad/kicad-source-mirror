@@ -33,10 +33,11 @@
         <keyword>KiCad</keyword>
         <keyword>EDA</keyword>
         <keyword>PCB</keyword>
-        <keyword>Schema</keyword>
+        <keyword>Schematic</keyword>
+        <keyword>Circuit board</keyword>
+        <keyword>Gerber</keyword>
         <keyword>PcbNew</keyword>
         <keyword>Eeschema</keyword>
-        <keyword>Gerber</keyword>
     </keywords>
 
     <categories>
@@ -74,8 +75,8 @@
         </screenshot>
     </screenshots>
 
-    <url type="homepage">https://kicad.org/</url>
-    <url type="bugtracker">https://kicad.org/help/report-an-issue/</url>
+    <url type="homepage">https://www.kicad.org/</url>
+    <url type="bugtracker">https://www.kicad.org/help/report-an-issue/</url>
     <url type="help">https://docs.kicad.org/</url>
     <url type="donation">https://go.kicad.org/donate</url>
     <url type="translate">https://hosted.weblate.org/projects/kicad/</url>
