@@ -212,6 +212,7 @@ void EE_POINT_EDITOR::Reset( RESET_REASON aReason )
     EE_TOOL_BASE::Reset( aReason );
 
     m_editPoints.reset();
+    m_editedPoint = nullptr;
 }
 
 
@@ -229,11 +230,23 @@ bool EE_POINT_EDITOR::Init()
 }
 
 
+int EE_POINT_EDITOR::clearEditedPoints( const TOOL_EVENT& aEvent )
+{
+    setEditedPoint( nullptr );
+
+    return 0;
+}
+
+
 void EE_POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 {
     EDIT_POINT* point = m_editedPoint;
 
-    if( aEvent.IsMotion() )
+    if( !m_editPoints )
+    {
+        point = nullptr;
+    }
+    else if( aEvent.IsMotion() )
     {
         point = m_editPoints->FindPoint( aEvent.Position(), getView() );
     }
@@ -911,6 +924,7 @@ void EE_POINT_EDITOR::setTransitions()
     Go( &EE_POINT_EDITOR::addCorner,         EE_ACTIONS::pointEditorAddCorner.MakeEvent() );
     Go( &EE_POINT_EDITOR::removeCorner,      EE_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
     Go( &EE_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
+    Go( &EE_POINT_EDITOR::clearEditedPoints, EVENTS::ClearedEvent );
 }
 
 

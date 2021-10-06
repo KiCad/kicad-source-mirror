@@ -67,6 +67,9 @@ private:
     ///< Update which point is being edited.
     void updateEditedPoint( const TOOL_EVENT& aEvent );
 
+    ///< Clear references to the points
+    int clearEditedPoints( const TOOL_EVENT& aEvent );
+
     ///< Set the current point being edited. NULL means none.
     void setEditedPoint( EDIT_POINT* aPoint );
 
