@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "html_window.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -21,10 +22,10 @@
 #include <wx/statline.h>
 #include <wx/radiobut.h>
 #include <wx/statbox.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/html/htmlwin.h>
 #include <wx/panel.h>
 
@@ -70,9 +71,9 @@ class PANEL_E_SERIE_BASE : public wxPanel
 		wxStaticText* m_ESeriesAltPercent1;
 		wxStaticLine* m_staticline7;
 		wxButton* m_buttonEScalculate;
-		wxHtmlWindow* m_panelESeriesHelp;
+		HTML_WINDOW* m_panelESeriesHelp;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnESeriesSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCalculateESeries( wxCommandEvent& event ) { event.Skip(); }
 
@@ -80,6 +81,7 @@ class PANEL_E_SERIE_BASE : public wxPanel
 	public:
 
 		PANEL_E_SERIE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 677,453 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_E_SERIE_BASE();
 
 };

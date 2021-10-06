@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "html_window.h"
 #include <wx/string.h>
 #include <wx/radiobox.h>
 #include <wx/gdicmn.h>
@@ -63,10 +64,10 @@ class PANEL_ATTENUATORS_BASE : public wxPanel
 		wxTextCtrl* m_Att_R3_Value;
 		wxStaticText* m_attR3Unit;
 		wxStaticText* m_staticTextAttMsg;
-		wxHtmlWindow* m_Attenuator_Messages;
-		wxHtmlWindow* m_panelAttFormula;
+		HTML_WINDOW* m_Attenuator_Messages;
+		HTML_WINDOW* m_panelAttFormula;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnAttenuatorSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCalculateAttenuator( wxCommandEvent& event ) { event.Skip(); }
 
@@ -74,6 +75,7 @@ class PANEL_ATTENUATORS_BASE : public wxPanel
 	public:
 
 		PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_ATTENUATORS_BASE();
 
 };

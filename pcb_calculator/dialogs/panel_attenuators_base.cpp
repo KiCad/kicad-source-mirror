@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -157,7 +157,7 @@ PANEL_ATTENUATORS_BASE::PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id,
 
 	bSizerMessages->Add( bSizerIndentLabel, 0, wxLEFT, 6 );
 
-	m_Attenuator_Messages = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_NO_SELECTION|wxHW_SCROLLBAR_AUTO );
+	m_Attenuator_Messages = new HTML_WINDOW( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_NO_SELECTION|wxHW_SCROLLBAR_AUTO );
 	bSizerMessages->Add( m_Attenuator_Messages, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 8 );
 
 
@@ -169,7 +169,7 @@ PANEL_ATTENUATORS_BASE::PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id,
 	wxStaticBoxSizer* sbRightSizerFormula;
 	sbRightSizerFormula = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Formula") ), wxVERTICAL );
 
-	m_panelAttFormula = new wxHtmlWindow( sbRightSizerFormula->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
+	m_panelAttFormula = new HTML_WINDOW( sbRightSizerFormula->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
 	sbRightSizerFormula->Add( m_panelAttFormula, 1, wxEXPAND|wxBOTTOM, 5 );
 
 

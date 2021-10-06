@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,6 +13,7 @@
 class UNIT_SELECTOR_LEN;
 class UNIT_SELECTOR_THICKNESS;
 
+#include "html_window.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -25,10 +26,10 @@ class UNIT_SELECTOR_THICKNESS;
 #include <wx/statbox.h>
 #include <wx/html/htmlwin.h>
 #include <wx/statline.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -54,7 +55,7 @@ class PANEL_TRACK_WIDTH_BASE : public wxPanel
 		wxStaticText* m_staticText103;
 		wxTextCtrl* m_TWResistivity;
 		wxStaticText* m_resistivityUnits;
-		wxHtmlWindow* m_htmlWinFormulas;
+		HTML_WINDOW* m_htmlWinFormulas;
 		wxStaticText* m_staticTextExtWidth;
 		wxTextCtrl* m_ExtTrackWidthValue;
 		UNIT_SELECTOR_LEN* m_TW_ExtTrackWidth_choiceUnit;
@@ -99,7 +100,7 @@ class PANEL_TRACK_WIDTH_BASE : public wxPanel
 		wxStaticText* m_staticText7911;
 		wxButton* m_buttonTrackWidthReset;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnTWCalculateFromCurrent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTWParametersChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTWCalculateFromExtWidth( wxCommandEvent& event ) { event.Skip(); }
@@ -110,6 +111,7 @@ class PANEL_TRACK_WIDTH_BASE : public wxPanel
 	public:
 
 		PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 623,457 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_TRACK_WIDTH_BASE();
 
 };
