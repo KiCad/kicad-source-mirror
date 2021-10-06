@@ -55,22 +55,22 @@
     <screenshots>
         <screenshot type="default">
             <caption>KiCad Main Window</caption>
-            <image width="1034" height="610">https://kicad.org/img/screenshots/appstream/kicad_6.png</image>
+            <image width="1034" height="610">https://www.kicad.org/img/screenshots/appstream/kicad_6.png</image>
         </screenshot>
 
         <screenshot>
             <caption>KiCad Schematic Editor</caption>
-            <image width="1600" height="900">https://kicad.org/img/screenshots/appstream/eeschema_6.png</image>
+            <image width="1600" height="900">https://www.kicad.org/img/screenshots/appstream/eeschema_6.png</image>
         </screenshot>
 
         <screenshot>
             <caption>KiCad PCB Layout Editor</caption>
-            <image width="1600" height="900">https://kicad.org/img/screenshots/appstream/pcbnew_6.png</image>
+            <image width="1600" height="900">https://www.kicad.org/img/screenshots/appstream/pcbnew_6.png</image>
         </screenshot>
 
         <screenshot>
             <caption>KiCad 3D Viewer</caption>
-            <image width="1600" height="900">https://kicad.org/img/screenshots/appstream/3dviewer_6.png</image>
+            <image width="1600" height="900">https://www.kicad.org/img/screenshots/appstream/3dviewer_6.png</image>
         </screenshot>
     </screenshots>
 
