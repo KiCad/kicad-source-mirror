@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-04 15:51+0000\n"
+"PO-Revision-Date: 2021-10-14 07:35+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6021,11 +6021,8 @@ msgid "Switch units"
 msgstr "Canvia les unitats"
 
 #: common/tool/actions.cpp:505
-#, fuzzy
 msgid "Switch between imperial and metric units"
-msgstr ""
-"Falta de correspondència entre les etiquetes jeràrquiques i les fulles dels "
-"pins"
+msgstr "Canvia entre unitats imperials i unitats mètriques"
 
 #: common/tool/actions.cpp:510
 msgid "Polar Coordinates"
@@ -6056,18 +6053,16 @@ msgid "Switch display of full-window crosshairs"
 msgstr "Canvia a mostrar retícules en finestra sencera"
 
 #: common/tool/actions.cpp:533
-#, fuzzy
 msgid "Inactive Layer View Mode"
-msgstr "Mode de vista d'una capa"
+msgstr "Mode de vista de capa inactiva"
 
 #: common/tool/actions.cpp:534
 msgid "Toggle inactive layers between normal and dimmed"
 msgstr ""
 
 #: common/tool/actions.cpp:540
-#, fuzzy
 msgid "Inactive Layer View Mode (3-state)"
-msgstr "Mode de vista d'una capa"
+msgstr "Mode de vista de capa inactiva (3-estats)"
 
 #: common/tool/actions.cpp:541
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
@@ -6086,9 +6081,8 @@ msgid "Interactively measure distance between points"
 msgstr ""
 
 #: common/tool/actions.cpp:564
-#, fuzzy
 msgid "Show 3D viewer window"
-msgstr "Mostra la finestra de la consola"
+msgstr "Mostra la finestra del visor 3D"
 
 #: common/tool/actions.cpp:569 eeschema/symbol_viewer_frame.cpp:101
 #: eeschema/symbol_viewer_frame.cpp:920
@@ -6166,9 +6160,8 @@ msgid "Manage Footprint Libraries..."
 msgstr "Gestiona les biblioteques d'empremtes..."
 
 #: common/tool/actions.cpp:617
-#, fuzzy
 msgid "Edit the global and project footprint library lists"
-msgstr "Edita la taula de les biblioteques d'empremtes"
+msgstr "Edita les llistes biblioteques d'empremtes globals i de projecte"
 
 #: common/tool/actions.cpp:622
 msgid "Getting Started with KiCad"
@@ -6394,9 +6387,8 @@ msgid "Always"
 msgstr "Sempre"
 
 #: common/widgets/gal_options_panel.cpp:162
-#, fuzzy
 msgid "When grid shown"
-msgstr "Estableix l'origen de la quadrícula"
+msgstr "Quan es mostri la quadrícula"
 
 #: common/widgets/gal_options_panel.cpp:162
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:341
@@ -6407,21 +6399,18 @@ msgid "Never"
 msgstr "Mai"
 
 #: common/widgets/gal_options_panel.cpp:188
-#, fuzzy
 msgid "Cursor Options"
-msgstr "Opcions Gerber"
+msgstr "Opcions del cursor"
 
 #: common/widgets/gal_options_panel.cpp:194
-#, fuzzy
 msgid "Small crosshair"
-msgstr "Creu petita"
+msgstr "Retícula petita"
 
 #: common/widgets/gal_options_panel.cpp:195
 msgid "Full window crosshair"
 msgstr ""
 
 #: common/widgets/gal_options_panel.cpp:200
-#, fuzzy
 msgid "Cursor Shape"
 msgstr "Forma del cursor"
 
@@ -6434,9 +6423,8 @@ msgid "Always show crosshairs"
 msgstr ""
 
 #: common/widgets/grid_text_button_helpers.cpp:379
-#, fuzzy
 msgid "Select a File"
-msgstr "Selecciona un fitxer"
+msgstr "Selecciona un Fitxer"
 
 #: common/widgets/mathplot.cpp:1665
 msgid "Center plot view to this position"
@@ -6463,9 +6451,8 @@ msgid "<no net>"
 msgstr ""
 
 #: common/widgets/net_selector.cpp:59
-#, fuzzy
 msgid "<create net>"
-msgstr "Crea zones"
+msgstr "<crea xarxa>"
 
 #: common/widgets/net_selector.cpp:84
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:625
@@ -6479,9 +6466,8 @@ msgstr "Filtre:"
 #: pcb_calculator/dialogs/panel_via_size_base.cpp:360
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:666
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:951
-#, fuzzy
 msgid "Reset to Defaults"
-msgstr "Estableix al valor predeterminat"
+msgstr "Restableix als valors predeterminats"
 
 #: common/widgets/paged_dialog.cpp:368
 #, c-format
@@ -6515,36 +6501,33 @@ msgid "Set Hotkey"
 msgstr "Estableix la drecera"
 
 #: common/widgets/widget_hotkey_list.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "El nom %s està reservat, i no pot ser utilitzat."
+msgstr "La drecera '%s' està reservada per KiCad i no pot ser assignada."
 
 #: common/widgets/widget_hotkey_list.cpp:392
 msgid "Edit..."
 msgstr "Edita..."
 
 #: common/widgets/widget_hotkey_list.cpp:393
-#, fuzzy
 msgid "Undo Changes"
-msgstr "Sense canvis"
+msgstr "Desfés els canvis"
 
 #: common/widgets/widget_hotkey_list.cpp:394
-#, fuzzy
 msgid "Clear Assigned Hotkey"
-msgstr "Neteja l'anotació"
+msgstr "Neteja la drecera assignada"
 
 #: common/widgets/widget_hotkey_list.cpp:395
-#, fuzzy
 msgid "Restore Default"
-msgstr "Estableix al valor predeterminat"
+msgstr "Restableix al valor predeterminat"
 
 #: common/widgets/widget_hotkey_list.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
 msgstr ""
-"<%s>ja està assignat a «%s» en la secció «%s». Esteu segur que voleu canviar "
+"'%s' ja està assignat a '%s' a la secció '%s'. Estàs segur que vols canviar "
 "la seva assignació?"
 
 #: common/widgets/widget_hotkey_list.cpp:437
@@ -6556,93 +6539,76 @@ msgid "Command"
 msgstr "Ordre"
 
 #: common/widgets/widget_hotkey_list.cpp:460
-#, fuzzy
 msgid "(double-click to edit)"
-msgstr "Feu doble clic per a editar-ho"
+msgstr "(doble clic per editar)"
 
 #: common/widgets/widget_hotkey_list.cpp:463
 msgid "Hotkey"
 msgstr "Drecera de teclat"
 
 #: common/wildcards_and_files_ext.cpp:183
-#, fuzzy
 msgid "All files"
-msgstr "Fitxers de perforació"
+msgstr "Tots els fitxers"
 
 #: common/wildcards_and_files_ext.cpp:189
-#, fuzzy
 msgid "KiCad drawing symbol files"
-msgstr "Fitxers d'esquemàtics de KiCad (*.sch)|*.sch"
+msgstr "Fitxers de dibuixos de símbols de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:195
-#, fuzzy
 msgid "KiCad symbol library files"
-msgstr "Fitxers de biblioteques de components de KiCad (*.lib)|*.lib"
+msgstr "Fitxers de biblioteques de símbols de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:202
-#, fuzzy
 msgid "KiCad legacy symbol library files"
-msgstr "Fitxers de biblioteques de components de KiCad (*.lib)|*.lib"
+msgstr "Fitxers antics de biblioteques de símbols de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:208
-#, fuzzy
 msgid "All KiCad symbol library files"
-msgstr "Fitxers de biblioteques de components de KiCad (*.lib)|*.lib"
+msgstr "Tots els fitxers de biblioteques de símbols de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:215
-#, fuzzy
 msgid "KiCad project files"
-msgstr "Fitxer del projecte de KiCad"
+msgstr "Fitxers de projectes de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:221
-#, fuzzy
 msgid "KiCad legacy project files"
-msgstr "Fitxer del projecte de KiCad"
+msgstr "Fitxers antics de projectes de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:228
-#, fuzzy
 msgid "All KiCad project files"
-msgstr "Fitxer del projecte de KiCad"
+msgstr "Tots els fitxers de projectes de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:235
-#, fuzzy
 msgid "KiCad legacy schematic files"
-msgstr "Fitxers d'esquemàtics de KiCad (*.sch)|*.sch"
+msgstr "Fitxers antics d'esquemàtics de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:242
-#, fuzzy
 msgid "KiCad s-expression schematic files"
-msgstr "Fitxers d'esquemàtics de KiCad (*.sch)|*.sch"
+msgstr "Fitxers d'esquemàtics s-expression de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:249
-#, fuzzy
 msgid "Altium schematic files"
-msgstr "Fitxers d'esquemàtics de KiCad (*.sch)|*.sch"
+msgstr "Fitxers d'esquemàtics d'Altium"
 
 #: common/wildcards_and_files_ext.cpp:255
-#, fuzzy
 msgid "CADSTAR Schematic Archive files"
-msgstr "Fitxers d'esquemàtics de KiCad (*.sch)|*.sch"
+msgstr "Fitxers arxivats d'esquemàtics de CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:261
-#, fuzzy
 msgid "CADSTAR Archive files"
-msgstr "Fitxer d'arxiu <%s>"
+msgstr "Fitxers arxivats de CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:267
-#, fuzzy
 msgid "Eagle XML schematic files"
-msgstr "Fitxers d'esquemàtics de KiCad (*.sch)|*.sch"
+msgstr "Fitxers d'esquemàtics XML d'Eagle"
 
 #: common/wildcards_and_files_ext.cpp:273
-#, fuzzy
 msgid "Eagle XML files"
-msgstr "Fitxers dels PCB en XML d'Eagle ver. 6.x (*.brd)|*.brd"
+msgstr "Fitxers XML d'Eagle"
 
 #: common/wildcards_and_files_ext.cpp:279
-#, fuzzy
 msgid "KiCad netlist files"
-msgstr "Fitxers netlist de KiCad (*.net)|*.net"
+msgstr "Fitxers de llistes de xarxes de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:285 gerbview/files.cpp:50
 msgid "Gerber files"
@@ -6650,24 +6616,20 @@ msgstr "Fitxers Gerber"
 
 #: common/wildcards_and_files_ext.cpp:291
 #: common/wildcards_and_files_ext.cpp:332
-#, fuzzy
 msgid "KiCad printed circuit board files"
-msgstr "Fitxers de plaques de circuits impresos de KiCad (*.brd)|*.brd"
+msgstr "Fitxers de plaques de circuits impresos de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:297
-#, fuzzy
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr "Fitxers dels PCB en XML d'Eagle ver. 6.x (*.brd)|*.brd"
+msgstr "Fitxers de PCBs en XML d'Eagle ver. 6.x"
 
 #: common/wildcards_and_files_ext.cpp:302
-#, fuzzy
 msgid "CADSTAR PCB Archive files"
-msgstr "Fitxer d'arxiu <%s>"
+msgstr "Fitxers arxivats de PCB's de CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:307
-#, fuzzy
 msgid "P-Cad 200x ASCII PCB files"
-msgstr "Fitxers dels PCB en ASCII de P-Cad 200x (*.pcb)|*.pcb"
+msgstr "Fitxers de PCB's en ASCII de P-Cad 200x"
 
 #: common/wildcards_and_files_ext.cpp:312
 msgid "Altium Designer PCB files"
@@ -6686,63 +6648,52 @@ msgid "Fabmaster PCB files"
 msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:339
-#, fuzzy
 msgid "KiCad footprint files"
-msgstr "No és un fitxer d'empremta"
+msgstr "Fitxers d'empremtes de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:346
-#, fuzzy
 msgid "KiCad footprint library paths"
-msgstr "Fitxer de biblioteca d'empremtes PCB de Geda (*.fp)|*.fp"
+msgstr "Camins de biblioteques d'empremtes de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:353
-#, fuzzy
 msgid "Legacy footprint library files"
-msgstr "Fitxer de biblioteca d'empremtes PCB de Geda (*.fp)|*.fp"
+msgstr "Fitxers antics de biblioteques d'empremtes"
 
 #: common/wildcards_and_files_ext.cpp:359
-#, fuzzy
 msgid "Eagle ver. 6.x XML library files"
-msgstr "Fitxers de biblioteques en XML d'Eagle ver. 6.x (*.lbr)|*.lbr"
+msgstr "Fitxers de biblioteques en XML d'Eagle ver. 6.x"
 
 #: common/wildcards_and_files_ext.cpp:365
-#, fuzzy
 msgid "Geda PCB footprint library files"
-msgstr "Fitxer de biblioteca d'empremtes PCB de Geda (*.fp)|*.fp"
+msgstr "Fitxers de biblioteques d'empremtes PCB's de Geda"
 
 #: common/wildcards_and_files_ext.cpp:371
-#, fuzzy
 msgid "Drawing sheet files"
-msgstr "Dibuixos"
+msgstr "Fitxers de fulles de dibuix"
 
 #: common/wildcards_and_files_ext.cpp:379
-#, fuzzy
 msgid "KiCad symbol footprint link files"
-msgstr "Fitxer de biblioteca d'empremtes PCB de Geda (*.fp)|*.fp"
+msgstr "Fitxers d'enllaços d'empremtes de símbols de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:387 gerbview/files.cpp:69
 msgid "Drill files"
 msgstr "Fitxers de perforació"
 
 #: common/wildcards_and_files_ext.cpp:394
-#, fuzzy
 msgid "SVG files"
-msgstr "Fitxers Gerber"
+msgstr "Fitxers SVG"
 
 #: common/wildcards_and_files_ext.cpp:400
-#, fuzzy
 msgid "HTML files"
-msgstr "Fitxers zip"
+msgstr "Fitxers HTML"
 
 #: common/wildcards_and_files_ext.cpp:406
-#, fuzzy
 msgid "CSV Files"
-msgstr "Fitxer ERC"
+msgstr "Fitxers CSV"
 
 #: common/wildcards_and_files_ext.cpp:412
-#, fuzzy
 msgid "Portable document format files"
-msgstr "Cerca un element al document"
+msgstr "Fitxers PDF"
 
 #: common/wildcards_and_files_ext.cpp:418
 #, fuzzy
