@@ -617,6 +617,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             // We are checking if we should display a pencil when hovering over anchors
             // for "auto starting" wires when clicked
+            getViewControls()->ForceCursorPosition( false );
+
             if( CollectHits( collector, evt->Position() ) )
             {
                 narrowSelection( collector, evt->Position(), false, false );
@@ -658,10 +660,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         rolloverItem = collector[0]->m_Uuid;
                     }
                 }
-            }
-            else
-            {
-                getViewControls()->ForceCursorPosition( false );
             }
         }
         else
