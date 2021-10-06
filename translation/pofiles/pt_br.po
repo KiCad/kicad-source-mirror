@@ -36892,7 +36892,7 @@ msgstr "Projeto KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
 msgid "KiCad Schematic"
-msgstr "Esquema Eletrônico do KiCad"
+msgstr "Esquema KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:25
 msgid "KiCad Printed Circuit Board"
