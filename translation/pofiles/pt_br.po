@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-05 17:11+0000\n"
-"Last-Translator: Augusto Fraga Giachero <afg@augustofg.net>\n"
+"PO-Revision-Date: 2021-10-06 20:07+0000\n"
+"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
 "Language: pt_br\n"
@@ -56,11 +56,11 @@ msgstr "Caminhos disponíveis:"
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
 msgid "Configure Paths"
-msgstr "Configurar caminhos"
+msgstr "Configure os caminhos"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model_base.h:63
 msgid "Select 3D Model"
-msgstr "Selecionar Modelo 3D"
+msgstr "Selecione o modelo 3D"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
@@ -149,51 +149,50 @@ msgstr "Pré-visualização"
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:192
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 msgid "Enable/disable orthographic projection"
-msgstr "Ativar/Desativar a projeção ortogonal"
+msgstr "Ative/Desative a projeção ortogonal"
 
 #: 3d-viewer/3d_cache/dialogs/panel_preview_3d_model_base.cpp:221
 msgid "Reload board and 3D models"
-msgstr "Recarregar Placa e modelos 3D"
+msgstr "Recarregue a placa e os modelos 3D"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:357
 msgid "Build board outline"
-msgstr "Criar contorno da placa"
+msgstr "Crie o contorno da placa"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:535
 msgid "Create layers"
-msgstr "Criar camadas"
+msgstr "Crie as camadas"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:709
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:103
 msgid "No footprint loaded."
-msgstr "Nenhum footprint carregado."
+msgstr "Nenhumfootprint foi carregado."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:725
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"O contorno da representação real do componente está malformado ou não "
-"existe. Execute o verificador da representação real do componente para uma "
-"análise completa."
+"O contorno do footprint do componente está ausente ou malformado. Execute o "
+"Verificador do footprint do componente para uma análise completa."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:734
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"O contorno da placa está faltando ou mal formado. Execute a RDC para uma "
-"análise completa."
+"O contorno da placa está faltando ou malformado. Execute o DRC para realizar "
+"uma análise completa."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:227
 msgid "Create tracks and vias"
-msgstr "Criar trilhas e vias"
+msgstr "Crie as trilhas e as vias"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:687
 msgid "Create zones"
-msgstr "Criar zonas"
+msgstr "Crie as zonas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:756
 msgid "Simplifying copper layers polygons"
-msgstr "Simplificando os polígonos das camadas de cobre"
+msgstr "Simplificando os polígonos das camadas com cobre"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:766
 msgid "Simplifying polygons on F_Cu"
@@ -206,28 +205,29 @@ msgstr "Simplificando os polígonos em B_Cu"
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:807
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Simplificando os %d das camadas de cobre"
+msgstr "Simplificando os %d das camadas com cobre"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:846
 msgid "Simplify holes contours"
-msgstr "Simplificar os contornos dos furos"
+msgstr "Simplifique os contornos dos furos"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:875
 msgid "Build Tech layers"
-msgstr "Montar as camadas técnicas"
+msgstr "Monte as camadas técnicas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:909
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "Montar a camada técnica %d"
+msgstr "Monte a camada técnica %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1054
 msgid "Build BVH for holes and vias"
-msgstr "Montar BVH para furos e vias"
+msgstr "Monte o BVH para os furos e as vias"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "Sua versão do OpenGL não é suportada. Requerido >= 1.5."
+msgstr ""
+"A sua versão do OpenGL não é compatível. O mínimo necessário é a versão 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
@@ -237,13 +237,13 @@ msgstr "Último tempo de renderização %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:721
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr "Net %s\tClasse %s\tPad %s"
+msgstr "Net %s\tNetClass %s\tNomeIlha %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:746
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:759
 #, c-format
 msgid "Net %s\tNetClass %s"
-msgstr "Net %s\tClasse %s"
+msgstr "Net %s\tNetClass %s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:397
 msgid "Load Raytracing: board"
@@ -256,13 +256,13 @@ msgstr "Carregando o raytracing: camadas"
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:795
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:650
 msgid "Loading 3D models..."
-msgstr "Carregando modelos 3D..."
+msgstr "Carregando os modelos 3D..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/create_scene.cpp:934
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:660
 #, c-format
 msgid "Reload time %.3f s"
-msgstr "Tempo de carregamento %.3f s"
+msgstr "Tempo do carregamento %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:179
 #: 3d-viewer/3d_rendering/legacy/render_3d_legacy.cpp:560
@@ -272,7 +272,7 @@ msgstr "Carregando…"
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:344
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr "Tempo de renderização %.3f s"
+msgstr "Tempo da renderização %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:398
 #, c-format
@@ -281,7 +281,7 @@ msgstr "Renderizando: %.0f %%"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/render_3d_raytrace.cpp:849
 msgid "Rendering: Post processing shader"
-msgstr "Renderizando: Pós processando shader"
+msgstr "Renderizando: O oós processando do shader"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:450
 msgid "Load OpenGL: board"
@@ -289,7 +289,7 @@ msgstr "Carregar OpenGL: placa"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:483
 msgid "Load OpenGL: holes and vias"
-msgstr "Carregar OpenGL: furos e vias"
+msgstr "Carregar OpenGL: os furos e as vias"
 
 #: 3d-viewer/3d_rendering/legacy/create_scene.cpp:549
 msgid "Load OpenGL: layers"
@@ -314,11 +314,11 @@ msgstr "Carregando %s..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
-msgstr "Exportar Visualização Atual como PNG…"
+msgstr "Exporte a visualização atual como PNG…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 msgid "Export Current View as JPEG..."
-msgstr "Exportar Visualização Atual como JPG…"
+msgstr "Exporte a visualização atual como JPEG…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
@@ -329,12 +329,12 @@ msgstr "Visualizador 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:69
 msgid "Copy 3D Image"
-msgstr "Copiar imagem 3D"
+msgstr "Copie a imagem 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:107
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
 msgid "Raytracing"
-msgstr "Calcular iluminação"
+msgstr "Calculando a iluminação"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:112 common/tool/actions.cpp:600
 #: cvpcb/menubar.cpp:74 eeschema/menubar.cpp:276
@@ -352,11 +352,11 @@ msgstr "Preferências…"
 #: pagelayout_editor/menubar.cpp:157 pcbnew/menubar_footprint_editor.cpp:232
 #: pcbnew/menubar_pcb_editor.cpp:446
 msgid "Show preferences for all open tools"
-msgstr "Exibir preferências para todas as ferramentas abertas"
+msgstr "Exiba as preferências para todas as ferramentas abertas"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 msgid "Reset to Default Settings"
-msgstr "Voltar Ajustes Padrão"
+msgstr "Redefina as configurações padrão"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 msgid "3D Grid"
@@ -396,15 +396,15 @@ msgstr "&Preferências"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Reload board"
-msgstr "Recarregar placa"
+msgstr "Recarregar a placa"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:60
 msgid "Copy 3D image to clipboard"
-msgstr "Copiar imagem 3D para a área de transferência"
+msgstr "Copie a imagem 3D para a área de transferência"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 msgid "Render current view using Raytracing"
-msgstr "Renderizar a tela atual utilizando iluminação (Raytracing)"
+msgstr "Renderize a tela atual utilizando a iluminação (Raytracing)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:23
 msgid "Environment Colors"
@@ -428,7 +428,7 @@ msgstr "Cor do corpo da placa"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
 msgid "Use board stackup colors"
-msgstr "Usar cores do stackup da placa"
+msgstr "Usar as cores do empilhamento da placa"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:69
 msgid "Use colors:"
@@ -464,19 +464,19 @@ msgstr "Camadas da placa"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:23
 msgid "Show silkscreen layers"
-msgstr "Exibir camadas de serigrafia"
+msgstr "Exiba as camadas da serigrafia"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:26
 msgid "Show solder mask layers"
-msgstr "Exibir camadas de máscara de solda"
+msgstr "Exiba as camadas da máscara de solda"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:29
 msgid "Show solder paste layers"
-msgstr "Exibir camadas de pasta de solda"
+msgstr "Exiba as camadas da pasta de solda"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:32
 msgid "Show adhesive layers"
-msgstr "Exibir camadas de adesivo"
+msgstr "Exiba as camadas do adesivo"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:39
 msgid "User Layers (not shown in realistic mode)"
@@ -484,15 +484,15 @@ msgstr "Camadas do usuário (não exibido no modo realístico)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show comments and drawings layers"
-msgstr "Exibir camadas de comentários e desenhos"
+msgstr "Exiba as camadas dos comentários e dos desenhos"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Show ECO layers"
-msgstr "Exibir camadas ECO"
+msgstr "Exiba as camadas ECO"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:57
 msgid "Render Options"
-msgstr "Opções de renderização"
+msgstr "Opções da renderização"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:59
 msgid "Realistic mode"
@@ -500,16 +500,16 @@ msgstr "Modo realístico"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:62
 msgid "Show board body"
-msgstr "Exibir corpo da placa"
+msgstr "Exiba o corpo da placa"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:65
 msgid "Show filled areas in zones"
-msgstr "Exibir áreas preenchidas dentro de zonas"
+msgstr "Exiba as áreas preenchidas dentro das zonas"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
-msgstr "Subtrair máscara de solda da serigrafia"
+msgstr "Subtraia a máscara de solda da serigrafia"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:71
 msgid "Clip silkscreen at via annuli"
@@ -517,11 +517,11 @@ msgstr "Corte a serigrafia na via anelar"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Use bare copper color for unplated copper"
-msgstr "Usar cor de cobre para regiões sem banho (cobre exposto)"
+msgstr "Use a cor de cobre para as regiões sem revestimento (cobre exposto)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:75
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr "Usar cores diferentes para regiões de cobre com e sem banho. (Lento)"
+msgstr "Use cores diferentes para o cobre revestido e o não revestido. (Lento)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:82
 msgid "Material properties:"
@@ -545,7 +545,7 @@ msgstr "Opções da câmera"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:104
 msgid "Rotation Increment:"
-msgstr "Incremento de Rotação:"
+msgstr "Incremento da rotação:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:112
 #: common/base_units.cpp:477 pcb_calculator/widgets/unit_selector.cpp:130
@@ -557,15 +557,15 @@ msgstr "Incremento de Rotação:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1342
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
 msgid "deg"
-msgstr "°"
+msgstr "graus"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:122
 msgid "Enable animation"
-msgstr "Habilitar animação"
+msgstr "Ative a animação"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:129
 msgid "Animation speed:"
-msgstr "Velocidade de animação:"
+msgstr "Velocidade da animação:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:23
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:21
@@ -574,11 +574,11 @@ msgstr "Opções da renderização"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:25
 msgid "Show model bounding boxes"
-msgstr "Exibir caixas delimitadoras do modelo"
+msgstr "Exiba as caixas delimitadoras do modelo"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:28
 msgid "Show copper thickness"
-msgstr "Exibir espessura do cobre"
+msgstr "Exiba a espessura do cobre"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
@@ -607,7 +607,8 @@ msgstr "8x"
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:45
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
-"Visualização 3D deve ser fechada e reaberta para aplicar essa configuração"
+"A visualização 3D deve ser fechada e reaberta que está configuração seja "
+"aplicada"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:49
 msgid "Selection color:"
@@ -615,23 +616,23 @@ msgstr "Seleção da cor:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:63
 msgid "While Moving"
-msgstr "Enquanto movendo"
+msgstr "Enquanto se move"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:65
 msgid "Disable anti-aliasing"
-msgstr "Desabilitar anti serrilhamento da imagem"
+msgstr "Desative o anti serrilhamento da imagem"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:68
 msgid "Disable thickness"
-msgstr "Desabilitar espessura"
+msgstr "Desative a espessura"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:71
 msgid "Disable vias"
-msgstr "Desabilitar vias"
+msgstr "Desative as vias"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:74
 msgid "Disable holes"
-msgstr "Desativar furos"
+msgstr "Desative os furos"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
@@ -672,13 +673,13 @@ msgstr "Sombras:"
 msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
-msgstr "Número de raios de luz lançados para avaliar um ponto de sombra"
+msgstr "A quantidade dos raios de luz lançados para avaliar um ponto de sombra"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:77
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:95
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:115
 msgid "Random direction factor of the cast rays"
-msgstr "Fator de aleatoriedade de direção para os raios de luz"
+msgstr "Fator de aleatoriedade da direção para os raios de luz"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:84
 msgid "Reflections:"
@@ -686,16 +687,17 @@ msgstr "Reflexões:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:89
 msgid "Number of rays that will be cast to evaluate a reflection point"
-msgstr "Número de raios que serão lançados para avaliar um ponto de reflexão"
+msgstr ""
+"A quantidade dos raios que serão lançados para avaliar um ponto de reflexão"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:100
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
-"Número de interações que um raio pode viajar através de objetos. (maior "
-"número de níveis melhoram os resultados, especialmente em placas com "
-"transparência)"
+"As interações indicam que um raio pode viajar através dos objetos. (a maior "
+"quantidade dos níveis melhora os resultados, especialmente nas placas muito "
+"transparentes)"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:104
 msgid "Refractions:"
@@ -703,11 +705,12 @@ msgstr "Refrações:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:109
 msgid "Number of rays that will be cast to evaluate a refraction point"
-msgstr "Número de raios que serão lançados para avaliar um ponto de refração"
+msgstr ""
+"A quantidade dos raios que serão lançados para avaliar um ponto de refração"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:120
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr "Quantidade de reflexões que um raio pode acertar objetos reflexivos"
+msgstr "A quantidade das reflexões que um raio pode acertar objetos reflexivos"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
 msgid "Lights Configuration"
@@ -792,14 +795,14 @@ msgstr "Cores"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:660
 msgid "3D Image File Name"
-msgstr "Nome do arquivo de Imagem 3D"
+msgstr "Nome do arquivo da Imagem 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:681
 #: common/eda_base_frame.cpp:1051 common/eda_base_frame.cpp:1056
 #: pcbnew/plugins/altium/altium_pcb.cpp:1461
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr "Permissões insuficientes necessárias para salvar o arquivo '%s'."
+msgstr "Permissões insuficientes para salvar o arquivo '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:682 common/confirm.cpp:130
 #: common/confirm.cpp:296 common/dialogs/panel_setup_severities.cpp:43
@@ -814,7 +817,7 @@ msgstr "Erro"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:715
 msgid "Failed to copy image to clipboard"
-msgstr "Falha ao copiar imagem para a área de transferência"
+msgstr "Houve uma falha ao copiar a imagem para a área de transferência"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "Can't save file"
@@ -830,43 +833,43 @@ msgstr "Rotação do pivô central (clique na roda central do mouse)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Rotate X Clockwise"
-msgstr "Girar em X no Sentido Horário"
+msgstr "Gire X no sentido horário"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:53
 msgid "Rotate X Counterclockwise"
-msgstr "Girar em X no Sentido Anti-horário"
+msgstr "Gire X no sentido anti-horário"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:58
 msgid "Rotate Y Clockwise"
-msgstr "Girar em Y no Sentido Horário"
+msgstr "Gire Y no sentido horário"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Rotate Y Counterclockwise"
-msgstr "Girar em Y no Sentido Anti-horário"
+msgstr "Gire Y no sentido anti-horário"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:68
 msgid "Rotate Z Clockwise"
-msgstr "Girar em Z no Sentido Horário"
+msgstr "Gire Z no sentido horário"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:73
 msgid "Rotate Z Counterclockwise"
-msgstr "Girar em Z no Sentido Anti-horário"
+msgstr "Gire Z no sentido anti-horário"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Move board Left"
-msgstr "Mover placa à Esquerda"
+msgstr "Mova a placa à esquerda"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:85
 msgid "Move board Right"
-msgstr "Mover placa à Direira"
+msgstr "Mova a placa à direira"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:91
 msgid "Move board Up"
-msgstr "Mover placa para Cima"
+msgstr "Mova a placa para cima"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:97
 msgid "Move board Down"
-msgstr "Mover placa para Baixo"
+msgstr "Mova placa para baixo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:103
 msgid "Home view"
@@ -874,7 +877,7 @@ msgstr "Vista inicial"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:109
 msgid "Reset view"
-msgstr "Redefinir vista"
+msgstr "Redefina a vista"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip Board"
@@ -882,11 +885,11 @@ msgstr "Vire a placa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip the board view"
-msgstr "Espelhar visualização da placa"
+msgstr "Vire visualização da placa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 msgid "Toggle orthographic projection"
-msgstr "Ativar/Desativar a projeção ortogonal"
+msgstr "Ative/Desative a projeção ortogonal"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:126
 msgid "View Front"
@@ -918,19 +921,19 @@ msgstr "Sem Grade 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "3D Grid 10mm"
-msgstr "Grade 3D de 10mm"
+msgstr "Grade 3D com 10mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:171
 msgid "3D Grid 5mm"
-msgstr "Grade 3D de 5mm"
+msgstr "Grade 3D com 5mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
-msgstr "Grade 3D de 2,5mm"
+msgstr "Grade 3D com 2,5mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:181
 msgid "3D Grid 1mm"
-msgstr "Grade 3D de 1mm"
+msgstr "Grade 3D com 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
 msgid "Render Realistic Materials"
@@ -938,7 +941,7 @@ msgstr "Renderização real dos materiais"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
-msgstr "Usar todas as propriedades de materiais de cada arquivo de modelo 3D"
+msgstr "Use todas as propriedades dos materiais de cada arquivo no modelo 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
 msgid "Render Solid Colors"
@@ -946,7 +949,7 @@ msgstr "Renderize cores sólidas"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Utilizar apenas a propriedade difusa da cor do arquivo de modelo 3D"
+msgstr "Utilize apenas a propriedade difusa da cor do arquivo no modelo 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
@@ -954,11 +957,11 @@ msgstr "Renderize cores CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr "Utilizar o estilo de cor do CAD baseado na cor difusa do material"
+msgstr "Utilize o estilo de cor do CAD com base na cor difusa do material"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
 msgid "Toggle Through Hole 3D models"
-msgstr "Exibir/Ocultar modelos 3D dos furos"
+msgstr "Alterne os modelos 3D dos pin through-hole"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
 msgid "Toggle 3D models for 'Through hole' type components"
@@ -966,11 +969,12 @@ msgstr "Alterne os modelos 3D para os componentes do tipo 'pin through-hole'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle SMD 3D models"
-msgstr "Exibir/Ocultar modelos 3D de componentes SMD"
+msgstr "Alterne os modelos 3D dos componentes SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "Alterne o modelos 3D para o componentes do tipo 'surface mount'"
+msgstr ""
+"Alterne o modelos 3D para os componentes do tipo 'montagem na superfície'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle Other 3D models"
@@ -978,11 +982,11 @@ msgstr "Alterne os outros modelos 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr "Exibir/Ocultar modelos 3D para componentes tipo 'Outros'"
+msgstr "Altere os modelos 3D para os componentes tipo 'Outros'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
-msgstr "Exibir Caixas Delimitadoras do Modelo"
+msgstr "Exiba as caixas delimitadoras do modelo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:235
 msgid "Toggle realistic mode"
@@ -994,11 +998,11 @@ msgstr "Alterne a exibição do corpo da placa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:245
 msgid "Show 3D Axis"
-msgstr "Mostrar eixos"
+msgstr "Mostre os eixos 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:250
 msgid "Toggle zone display"
-msgstr "Exibir/Ocultar Zona"
+msgstr "Alterne a exibição da zona"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle adhesive display"
@@ -1010,15 +1014,15 @@ msgstr "Alterne a exibição das camadas adesivas"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle silkscreen display"
-msgstr "Exibir/Ocultar serigrafia"
+msgstr "Alterne a exibição da serigrafia"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle display of silkscreen layers"
-msgstr "Exibir/Ocultar camadas de serigrafia"
+msgstr "Alterne as camadas da serigrafia"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle solder mask display"
-msgstr "Exibir/Ocultar máscara de solda"
+msgstr "Alterne a máscara de solda"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle display of solder mask layers"
@@ -1026,7 +1030,7 @@ msgstr "Alterne a exibição das camadas da máscara de solda"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Toggle solder paste display"
-msgstr "Exibir/Ocultar pasta de solda"
+msgstr "Alterne a pasta de solda"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Toggle display of solder paste layers"
@@ -1034,19 +1038,19 @@ msgstr "Alterne a exibição das camadas da pasta de solda"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle comments display"
-msgstr "Exibir/Ocultar comentários"
+msgstr "Alterne os comentários"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle display of comments and drawings layers"
-msgstr "Exibir/Ocultar camadas de comentários e desenhos"
+msgstr "Alterne as camadas dos comentários e dos desenhos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Toggle ECO display"
-msgstr "Exibir/Ocultar ECO"
+msgstr "Alterne a exibição ECO"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Toggle display of ECO layers"
-msgstr "Exibir/Ocultar camadas de ECO"
+msgstr "Alterne as camadas ECO"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:159 common/base_units.cpp:435
 #: common/dialogs/dialog_grid_settings_base.cpp:41
@@ -1160,21 +1164,21 @@ msgstr "DPI"
 #: eeschema/tools/sch_drawing_tools.cpp:490
 #: pagelayout_editor/pl_editor_frame.cpp:844
 msgid "Choose Image"
-msgstr "Escolher Imagem"
+msgstr "Escolher uma imagem"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:344
 #: eeschema/tools/sch_drawing_tools.cpp:491
 #: pagelayout_editor/pl_editor_frame.cpp:845
 msgid "Image Files"
-msgstr "Ficheiros de Imagem"
+msgstr "Arquivos da imagem"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:706
 msgid "Unable to export to the Clipboard"
-msgstr "Não foi possível exportar para a Área de Transferência"
+msgstr "Não foi possível exportar para a área de transferência"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:742
 msgid "Create Logo File"
-msgstr "Criar ficheiro de logotipo"
+msgstr "Crie o arquivo do logotipo"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:759
 #: bitmap2component/bitmap2cmp_gui.cpp:799
@@ -1190,15 +1194,15 @@ msgstr "Crie o arquivo PostScript"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:819
 msgid "Create Symbol Library"
-msgstr "Criar Biblioteca de Símbolos"
+msgstr "Crie a biblioteca dos símbolos"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:858
 msgid "Create Footprint Library"
-msgstr "Criar Biblioteca de Footprint"
+msgstr "Crie a biblioteca do footprint do componente"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:900
 msgid "Error allocating memory for potrace bitmap"
-msgstr "Erro ao alocar memória para o bitmap pirrace"
+msgstr "houve um erro ao alocar a memória para o bitmap potrace"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:927
 #: common/dialogs/wx_html_report_panel_base.cpp:41
@@ -1212,15 +1216,15 @@ msgstr "Erros"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:24
 msgid "Original Picture"
-msgstr "Imagem Original"
+msgstr "Imagem original"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:29
 msgid "Greyscale Picture"
-msgstr "Imagem em Escala de Cinza"
+msgstr "Imagem em escala de cinza"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:32
 msgid "Black&&White Picture"
-msgstr "Imagem em Preto e Branco"
+msgstr "Imagem em &&preto-e-branco"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
 msgid "Bitmap Information"
@@ -1244,7 +1248,7 @@ msgstr "pontos"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:66
 msgid "Bitmap PPI:"
-msgstr "PPI Bitmap:"
+msgstr "PPI bitmap:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:78
 msgid "PPI"
@@ -1260,11 +1264,11 @@ msgstr "bits"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
 msgid "Output Parameters"
-msgstr "Parâmetros de Saída"
+msgstr "Parâmetros da saída"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
-msgstr "Travar relação entre altura/largura"
+msgstr "Travar a relação entre a altura/largura"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:122
 #: common/dialogs/dialog_page_settings_base.cpp:32
@@ -1279,16 +1283,16 @@ msgstr "300"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:149
 msgid "Load Bitmap"
-msgstr "Carregar Bitmap"
+msgstr "Carregue o bitmap"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:152
 msgid "Export to File"
-msgstr "Exportar para ficheiro"
+msgstr "Exporte para o arquivo"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:155
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:145
 msgid "Export to Clipboard"
-msgstr "Exportar para a Área de Transferência"
+msgstr "Exporte para a área de transferência"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Symbol (.kicad_sym file)"
@@ -1296,7 +1300,7 @@ msgstr "Símbolo (arquivo .kicad_sym)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
-msgstr "Representação real do componente (arquivo .kicad_mod)"
+msgstr "footprint (arquivo .kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Postscript (.ps file)"
@@ -1304,28 +1308,28 @@ msgstr "Postscript (arquivo .ps)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "Folha de desenho (arquivo .kicad_wks)"
+msgstr "Folha do desenho (arquivo .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:43
 msgid "Output Format"
-msgstr "Formato de Saída"
+msgstr "Formato de saída"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:165
 msgid "Image Options"
-msgstr "Opções de Imagem"
+msgstr "Opções da imagem"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:167
 msgid "Black / White Threshold:"
-msgstr "Limite de Preto / Branco:"
+msgstr "Limite do Preto / Branco:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:172
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
 msgstr ""
-"Ajustar o nível para conversão da imagem em escala de cinza para preto e "
-"branco."
+"Ajuste o nível para a conversão da imagem na escala de cinza para "
+"preto-e-branco."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:176
 #: gerbview/gerber_file_image.cpp:352
@@ -1335,20 +1339,20 @@ msgstr "Negativo"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:526
 msgid "Front silk screen"
-msgstr "Serigrafia frontal"
+msgstr "Serigrafia da frente"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:532
 msgid "Front solder mask"
-msgstr "Máscara de solda frontal"
+msgstr "Máscara de solda da frente"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 msgid "User layer Eco1"
-msgstr "Camada de utilizador Eco1"
+msgstr "Camada do usuário Eco1"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 msgid "User layer Eco2"
-msgstr "Camada de utilizador Eco2"
+msgstr "Camada do usuário Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
 msgid "Board Layer for Outline"
@@ -1360,22 +1364,22 @@ msgid ""
 "The reference designator and value are always placed on the silk screen "
 "layer (but will be marked invisible)."
 msgstr ""
-"Escolha a camada de placa para aplicar o contorno.\n"
-"O designador de referência e o valor são sempre colocados na camada da tela "
-"de serigrafia (mas serão marcados como invisíveis)."
+"Escolha a camada da placa para aplicar o contorno.\n"
+"O designador de referência e o valor são sempre colocados na camada da "
+"serigrafia da tela (mas serão marcados como invisíveis)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "Bitmap to Component Converter"
-msgstr "Conversor de Bitmap para Componente"
+msgstr "Conversor de bitmap para componente"
 
 #: common/base_units.cpp:437
 msgid "sq. mm"
-msgstr "mm²"
+msgstr "sq. mm"
 
 #: common/base_units.cpp:439
 msgid "cu. mm"
-msgstr "mm³"
+msgstr "cu. mm"
 
 #: common/base_units.cpp:449 common/eda_draw_frame.cpp:539
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -1400,11 +1404,11 @@ msgstr "mil"
 
 #: common/base_units.cpp:451
 msgid "sq. mils"
-msgstr "mil²"
+msgstr "sq. mil"
 
 #: common/base_units.cpp:453
 msgid "cu. mils"
-msgstr "mil³"
+msgstr "cu. mil"
 
 #: common/base_units.cpp:463
 msgid "in"
@@ -1412,11 +1416,11 @@ msgstr "in"
 
 #: common/base_units.cpp:465
 msgid "sq. in"
-msgstr "in²"
+msgstr "sq. in"
 
 #: common/base_units.cpp:467
 msgid "cu. in"
-msgstr "in³"
+msgstr "cu. in"
 
 #: common/base_units.cpp:471
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
@@ -1441,8 +1445,8 @@ msgstr "%"
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
-"Falha na expansão de variáveis de ambiente: faltando '%c' na posição %u em "
-"'%s'."
+"Houve uma falha na expansão das variáveis do ambiente: faltando '%c' na "
+"posição %u em '%s'."
 
 #: common/common.cpp:308
 #, c-format
@@ -1461,23 +1465,24 @@ msgstr "Não foi possível criar a pasta de saída '%s'."
 
 #: common/common.cpp:608
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr "O sistema operacional não é suportado pelo KiCad e suas dependências."
+msgstr ""
+"O sistema operacional não é compatível com o KiCad e as suas dependências."
 
 #: common/common.cpp:610
 msgid "Unsupported Operating System"
-msgstr "Sistema operacional não compatível"
+msgstr "O sistema operacional não compatível"
 
 #: common/common.cpp:613
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
-"Problemas com o KiCad neste sistema não podem ser reportados no bugtracker "
-"oficial."
+"Quaisquer problemas com o KiCad neste sistema, não podem ser reportados no "
+"bugtracker oficial."
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
-msgstr "Não mostrar novamente"
+msgstr "Não mostre novamente"
 
 #: common/confirm.cpp:127
 msgid "Message"
@@ -1511,7 +1516,7 @@ msgstr "Houve um erro ao abrir o arquivo"
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
 msgstr ""
-"Salvar o mesmo arquivo em instâncias diferentes pode produzir resultados "
+"Ao salvar o mesmo arquivo em instâncias diferentes pode produzir resultados "
 "inesperados."
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:259
@@ -1526,7 +1531,7 @@ msgstr "Abra mesmo assim"
 
 #: common/confirm.cpp:180 common/confirm.cpp:217
 msgid "Save Changes?"
-msgstr "Salvar as alterações?"
+msgstr "Deseja salvar as alterações?"
 
 #: common/confirm.cpp:182 common/confirm.cpp:219
 msgid "If you don't save, all your changes will be permanently lost."
@@ -1538,23 +1543,23 @@ msgstr "Se não salvar, todas as alterações serão perdidas permanentemente."
 #: eeschema/widgets/tuner_slider_base.cpp:66
 #: pcbnew/footprint_libraries_utils.cpp:997
 msgid "Save"
-msgstr "Salvar"
+msgstr "Salve"
 
 #: common/confirm.cpp:184 common/confirm.cpp:220
 msgid "Discard Changes"
-msgstr "Descartar Alterações"
+msgstr "Descarte as alterações"
 
 #: common/confirm.cpp:187 common/confirm.cpp:266
 msgid "Apply to all"
-msgstr "Aplicar a todos"
+msgstr "Aplique para todos"
 
 #: common/confirm.cpp:232
 msgid "Your current changes will be permanently lost."
-msgstr "Suas mudanças atuais serão perdidas permanentemente."
+msgstr "As suas alterações atuais serão perdidas permanentemente."
 
 #: common/confirm.cpp:233 common/tool/actions.cpp:91
 msgid "Revert"
-msgstr "Reverter"
+msgstr "Reverta"
 
 #: common/confirm.cpp:233 common/confirm.cpp:260 common/tool/actions.cpp:121
 #: eeschema/dialogs/dialog_erc.cpp:277
@@ -1563,7 +1568,7 @@ msgstr "Reverter"
 #: pcbnew/dialogs/dialog_drc.cpp:251 pcbnew/plugins/kicad/pcb_parser.cpp:855
 #: pcbnew/router/router_tool.cpp:521
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr "Cancele"
 
 #: common/confirm.cpp:312
 msgid "Information"
@@ -1604,8 +1609,8 @@ msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
 msgstr ""
-"O pacote KiCad EDA é um conjunto de aplicações de código aberto para a "
-"criação de esquemas eletrónicos e placas de circuito impresso."
+"O pacote KiCad EDA é um conjunto de programas de código aberto para a "
+"criação de esquemas eletrônicos e de placas de circuito impresso."
 
 #: common/dialog_about/AboutDialog_main.cpp:134
 msgid "KiCad on the web"
@@ -1629,15 +1634,15 @@ msgstr "Rastreador de bugs"
 
 #: common/dialog_about/AboutDialog_main.cpp:162
 msgid "Report or examine bugs - "
-msgstr "Reportar ou examinar bugs - "
+msgstr "Reporte ou examine problemas - "
 
 #: common/dialog_about/AboutDialog_main.cpp:168
 msgid "KiCad users group and community"
-msgstr "Comunidade e grupos de utilizador KiCad"
+msgstr "Comunidade e grupos de usuários do KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:173
 msgid "KiCad forum - "
-msgstr "Fórum KiCad - "
+msgstr "Fórum do KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:187
 msgid "The complete KiCad EDA Suite is released under the"
@@ -1649,11 +1654,11 @@ msgstr "GNU General Public License (GPL) versão 3 ou posterior"
 
 #: common/dialog_about/AboutDialog_main.cpp:208
 msgid "Lead Development Team"
-msgstr "Time Chefe de Desenvolvimento"
+msgstr "Líder do time de desenvolvimento"
 
 #: common/dialog_about/AboutDialog_main.cpp:209
 msgid "Lead Development Alumni"
-msgstr "Time Auxiliar de Desenvolvimento"
+msgstr "Líder do time auxiliar de desenvolvimento"
 
 #: common/dialog_about/AboutDialog_main.cpp:210
 msgid "Additional Contributions By"
@@ -1665,7 +1670,7 @@ msgstr "Outros"
 
 #: common/dialog_about/AboutDialog_main.cpp:711
 msgid "KiCad Librarian Team"
-msgstr "Time KiCad para bibliotecas"
+msgstr "Time de bibliotecários do KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:726
 msgid "3D models by"
@@ -1677,7 +1682,7 @@ msgstr "Símbolos por"
 
 #: common/dialog_about/AboutDialog_main.cpp:745
 msgid "Footprints by"
-msgstr "Footprints por"
+msgstr "footprints por"
 
 #: common/dialog_about/AboutDialog_main.cpp:758
 msgid "Icons by"
@@ -1731,11 +1736,11 @@ msgstr "Licença"
 msgid "Could not open clipboard to write version information."
 msgstr ""
 "Não foi possível acessar a área de transferência para gravar as informações "
-"de versão."
+"da versão."
 
 #: common/dialog_about/dialog_about.cpp:477
 msgid "Clipboard Error"
-msgstr "Erro na Área de Transferência"
+msgstr "Erro na área de transferência"
 
 #: common/dialog_about/dialog_about.cpp:486
 msgid "Copied..."
@@ -1743,7 +1748,7 @@ msgstr "Copiado…"
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
-msgstr "Título do Aplicativo"
+msgstr "Título do aplicativo"
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Copyright Info"
@@ -1751,27 +1756,27 @@ msgstr "Informações de direito autoral"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Build Version Info"
-msgstr "Informações da Versão Compilada"
+msgstr "Informações da versão compilada"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr "Informações de Versão da Biblioteca"
+msgstr "Informações da versão da biblioteca"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
-msgstr "&Copiar Informações de Versão"
+msgstr "&Copie as informações da versão"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
-msgstr "Copiar informações da versão do KiCad para a área de transferência"
+msgstr "Copie as informações da versão do KiCad para a área de transferência"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr "&Reportar um erro"
+msgstr "&Reporte um erro"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:653
 msgid "Report a problem with KiCad"
-msgstr "Reportar um problema com o KiCad"
+msgstr "Reporte um problema com o KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:89
 msgid "&OK"
@@ -1779,12 +1784,11 @@ msgstr "&OK"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:48
 msgid "Report"
-msgstr "Informe"
+msgstr "Relatório"
 
 #: common/dialogs/dialog_color_picker.cpp:94
-#, fuzzy
 msgid "Clear Color"
-msgstr "Limpar Cor"
+msgstr "Remove a cor"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -1826,11 +1830,11 @@ msgstr "Valor:"
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:96
 msgid "Color Picker"
-msgstr "Seletor de Cor"
+msgstr "Seletor da cor"
 
 #: common/dialogs/dialog_color_picker_base.cpp:154
 msgid "Defined Colors"
-msgstr "Cores Definidas"
+msgstr "Cores definidas"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
@@ -1842,17 +1846,17 @@ msgstr "Pré-visualização (antigo/novo):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
-msgstr "Redefinir para o Padrão"
+msgstr "Redefina para o padrão"
 
 #: common/dialogs/dialog_configure_paths.cpp:257
 #: common/dialogs/dialog_configure_paths.cpp:330
 msgid "Environment variable name cannot be empty."
-msgstr "Nome da variável de ambiente não pode ser vazio."
+msgstr "O nome da variável do ambiente não pode estar vazio."
 
 #: common/dialogs/dialog_configure_paths.cpp:265
 #: common/dialogs/dialog_configure_paths.cpp:332
 msgid "Environment variable path cannot be empty."
-msgstr "Caminho de variável de ambiente não pode estar vazio."
+msgstr "O caminho de variável do ambiente não pode estar vazio."
 
 #: common/dialogs/dialog_configure_paths.cpp:295
 #: common/dialogs/dialog_configure_paths.cpp:337
@@ -1862,14 +1866,14 @@ msgstr "O alias do caminho de pesquisa 3D não pode estar vazio."
 #: common/dialogs/dialog_configure_paths.cpp:303
 #: common/dialogs/dialog_configure_paths.cpp:339
 msgid "3D search path cannot be empty."
-msgstr "O caminho de pesquisa 3D não pode estar vazio."
+msgstr "O caminho da pesquisa 3D não pode estar vazio."
 
 #: common/dialogs/dialog_configure_paths.cpp:354
 msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
 msgstr ""
-"Esse caminho foi definido  externamente para o processo em execução e\n"
+"Esse caminho foi definido externamente para o processo em execução e\n"
 "só será substituído temporariamente."
 
 #: common/dialogs/dialog_configure_paths.cpp:356
@@ -1880,26 +1884,26 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"A próxima vez que o Kicad for iniciado, quaisquer locais de ficheiro que já\n"
-"tenham sido definidos serão honrados e qualquer configuração realizada\n"
-"na caixa de diálogo de configuração de locais de ficheiros será ignorada.\n"
-"Se você não quiser este comportamento, renomeie quaisquer entradas "
-"conflitantes\n"
-"ou remova as variáveis de ambiente externas do seu sistema."
+"Da próxima vez que o KiCad for iniciado, quaisquer caminhos que já foram\n"
+"definidos serão mantidos e quaisquer configurações definidas no caminho\n"
+"no diálogo de configuração será ignorado.  Caso não tenha sido a intenção de "
+"ter\n"
+"este comportamento, ou renomeie quaisquer entradas contraditórias ou remova\n"
+"a(s) variável(eis) externa(s) do ambiente do seu sistema."
 
 #: common/dialogs/dialog_configure_paths.cpp:374
 #, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "O nome %s é reservado e não pode ser usado."
+msgstr "O nome %s está reservado e não pode ser usado."
 
 #: common/dialogs/dialog_configure_paths.cpp:517
 msgid "File Browser..."
-msgstr "Navegador de Ficheiros..."
+msgstr "Navegador de arquivos..."
 
 #: common/dialogs/dialog_configure_paths.cpp:521
 #: common/widgets/grid_text_button_helpers.cpp:407
 msgid "Select Path"
-msgstr "Selecionar Caminho"
+msgstr "Selecione o caminho"
 
 #: common/dialogs/dialog_configure_paths.cpp:603
 msgid ""
@@ -1909,11 +1913,11 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"Entre com o nome e o valor de cada variável de ambiente.  Entradas em "
-"cinzento são de nomes definidos externamente pelo sistema ou utilizador. "
-"Variáveis de ambiente definidas pelo sistema ou utilizador tem precedência "
-"em relação às definidas nesta tabela, isto significa que, neste caso, os "
-"valores desta tabela serão ignorados."
+"Insira o nome e o valor para cada variável de ambiente.  As entradas em "
+"cinza são os nomes que já foram definidos externamente no nível do sistema "
+"ou do usuário.  As variáveis de ambiente definidas no nível do sistema ou do "
+"usuário têm precedência sobre as definidas nesta tabela.  Significa que os "
+"valores nesta tabela são ignorados."
 
 #: common/dialogs/dialog_configure_paths.cpp:609
 msgid ""
@@ -1921,17 +1925,17 @@ msgid ""
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
 msgstr ""
-"Para garantir que nomes de variáveis de ambiente sejam válidos em todas as "
+"Para garantir que nomes das variáveis do ambiente sejam válidos em todas as "
 "plataformas, o campo nome irá aceitar apenas letras maiúsculas, dígitos e o "
 "caractere sublinhado."
 
 #: common/dialogs/dialog_configure_paths.cpp:624
 msgid "Environment Variable Help"
-msgstr "Ajuda de Variáveis de Ambiente"
+msgstr "Ajuda das variáveis do ambiente"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:22
 msgid "Environment Variables"
-msgstr "Variáveis de Ambiente"
+msgstr "Variáveis do ambiente"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:80
@@ -1965,7 +1969,7 @@ msgstr "Caminho"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:74
 msgid "3D Search Paths"
-msgstr "Caminhos de Pesquisa 3D"
+msgstr "Caminhos da pesquisa 3D"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:92 common/eda_item.cpp:297
 msgid "Alias"
@@ -1974,7 +1978,7 @@ msgstr "Alias"
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr "Configurar a Tabela de Biblioteca %s Global"
+msgstr "Configure a tabela da biblioteca global %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
 #, c-format
@@ -1985,19 +1989,17 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"O KiCad foi executado pela primeira vez utilizando a nova tabela de "
-"biblioteca %s para\n"
-"acessar bibliotecas.  Para que o KiCad acesse bibliotecas %s,\n"
-"você deve configurar sua tabela de biblioteca %s global.  Por favor, "
-"selecione uma\n"
-"das opções abaixo.  Se não tiver certeza de qual opção selecionar, por "
-"favor\n"
-"utilize a seleção padrão."
+"KiCad foi executado pela primeira vez usando a nova tabela da biblioteca %s "
+"para\n"
+"acessar as bibliotecas.  Para que o KiCad acesse as bibliotecas %s,\n"
+"você deve configurar a sua tabela global %s da biblioteca.  Selecione uma\n"
+"das opções abaixo.  Caso não tenha certeza de qual opção selecionar,\n"
+"use a seleção padrão."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "Copiar tabela de biblioteca %s global (recomendado)"
+msgstr "Copie a tabela da biblioteca global %s (recomendado)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
@@ -2005,26 +2007,26 @@ msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
 msgstr ""
-"Selecione esta opção se não tiver certeza sobre como configurar a tabela de "
-"biblioteca %s global"
+"Selecione esta opção caso não tenha certeza sobre como configurar a tabela "
+"global %s da biblioteca"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr "Copiar tabela de biblioteca %s global personalizada"
+msgstr "Copie a tabela global personalizada da biblioteca %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
-"Selecione esta opção para copiar um ficheiro de tabela de biblioteca %s "
+"Selecione esta opção para copiar um arquivo de tabela de biblioteca %s "
 "diferente do padrão"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr "Criar uma tabela de biblioteca %s global vazia"
+msgstr "Crie uma tabela global vazia da biblioteca %s"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
@@ -2037,7 +2039,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
 msgid "Select global %s library table file:"
-msgstr "Selecione o ficheiro da tabela da biblioteca %s global:"
+msgstr "Selecione o arquivo da tabela global da biblioteca %s:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2115,15 +2117,15 @@ msgstr "fictício"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
-msgstr "Selecionar um ficheiro"
+msgstr "Selecione um arquivo"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:56
 msgid "Configure Global Library Table"
-msgstr "Configurar Tabela de Biblioteca Global"
+msgstr "Configure a tabela global da biblioteca"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:26 common/tool/actions.cpp:463
 msgid "Grid Origin"
-msgstr "Origem da Grade"
+msgstr "Origem da grade"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:63
 #: common/dialogs/dialog_grid_settings_base.cpp:78
@@ -2158,7 +2160,7 @@ msgstr "Grade atual"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
-msgstr "Grade Definida pelo utilizador"
+msgstr "Grade definida pelo usuário"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:91
 msgid "Size X:"
@@ -2170,7 +2172,7 @@ msgstr "Tamanho Y:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:123
 msgid "Fast Switching"
-msgstr "Troca Rápida"
+msgstr "Troca rápida"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:131
 msgid "Grid 1:"
@@ -2187,29 +2189,27 @@ msgstr "Grade 2:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:173 common/tool/actions.cpp:469
 msgid "Reset Grid Origin"
-msgstr "Redefinir Origem da Grade"
+msgstr "Redefina a origem da grade"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
-#, fuzzy
 msgid "Reset Grid Sizes"
-msgstr "Tamanhos Responsivos"
+msgstr "Redefina os tamanhos da grade"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
-#, fuzzy
 msgid "Resets the list of grid sizes to default values"
-msgstr "Definir em 0 para utilizar valores padrão"
+msgstr "Redefina a lista dos tamanhos da grade para os valores iniciais"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
-msgstr "Configurações da Grade"
+msgstr "Configurações da grade"
 
 #: common/dialogs/dialog_hotkey_list.cpp:34
 msgid "Hotkey List"
-msgstr "Lista de Atalhos"
+msgstr "Lista dos atalhos"
 
 #: common/dialogs/dialog_image_editor.cpp:72
 msgid "Incorrect scale number"
-msgstr "Número de escala incorreto"
+msgstr "Número da escala incorreto"
 
 #: common/dialogs/dialog_image_editor.cpp:82
 #, c-format
@@ -2223,8 +2223,7 @@ msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
 msgstr ""
-"Esta escala resulta numa imagem muito grande (%.1f mm ou %.2f in). Tem "
-"certeza?"
+"Esta escala resulta numa imagem muito grande (%.1f mm ou %.2f). Tem certeza?"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33
 msgid "Grey"
@@ -2239,17 +2238,16 @@ msgid "Image Editor"
 msgstr "Editor de Imagem"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
-#, fuzzy
 msgid "Skip Locked Items"
-msgstr "Bloqueado: Sim"
+msgstr "Ignore os itens bloqueados"
 
 #: common/dialogs/dialog_locked_items_query.cpp:36
 msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
-"Remover items bloqueados da seleção e aplicar a operação somente a items "
-"desbloqueados (se existem)."
+"Remova os itens bloqueados da seleção e aplique a operação somente aos itens "
+"desbloqueados (caso existam)."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
@@ -2258,42 +2256,41 @@ msgstr "A seleção possuí %d itens bloqueados."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr "Esses itens serão ignorados a menos que você substitua as travas."
+msgstr "Esses itens serão ignorados a menos que você substitua os bloqueios."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr "Lembrar a decisão para esta sessão."
+msgstr "Lembre-se da decisão para esta sessão."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
-"Lembrar a opção selecionada durante o resto dessa sessão\n"
-"Este aviso não será mostrado novamente até que o KiCad seja reiniciado."
+"Lembre-se da opção selecionada para o restante desta sessão.\n"
+"Esta caixa de diálogo não será exibida novamente até que o KiCad seja "
+"reiniciado."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
-#, fuzzy
 msgid "Override Locks"
-msgstr "Texto Oculto"
+msgstr "Substitua os bloqueios"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:56
 msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
-"Substitua as travas e aplique a operação em todos os itens selecionados.\n"
-"Todos os itens com travas permanecerão travados após a conclusão da operação."
+"Substitua os bloqueios e aplique a operação em todos os itens selecionados.\n"
+"Todos os itens com bloqueios permanecerão travados após a conclusão da "
+"operação."
 
 #: common/dialogs/dialog_locked_items_query_base.h:56
-#, fuzzy
 msgid "Locked Items"
-msgstr "Bloqueado: Sim"
+msgstr "Itens bloqueados"
 
 #: common/dialogs/dialog_migrate_settings.cpp:31
-#, fuzzy
 msgid "Quit KiCad"
-msgstr "&Sobre o KiCad"
+msgstr "Encerrar o KiCad"
 
 #: common/dialogs/dialog_migrate_settings.cpp:51
 #: common/dialogs/dialog_migrate_settings_base.cpp:21
@@ -2303,12 +2300,11 @@ msgstr "Bem vindo ao KiCad %s!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:61
 msgid "Import settings from a previous version (none found)"
-msgstr "Importar configurações de versões anteriores (nada encontrado)"
+msgstr "Importe as configurações das versões anteriores (nada encontrado)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:123
-#, fuzzy
 msgid "Select Settings Path"
-msgstr "Selecionar Caminho"
+msgstr "Selecione o caminho das configurações"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:30
 msgid "How would you like to configure KiCad?"
@@ -2316,40 +2312,35 @@ msgstr "Como gostaria de configurar o KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
 msgid "Import settings from a previous version at:"
-msgstr "Importar configurações de uma versão anterior em:"
+msgstr "Importe as configurações de uma versão anterior em:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
-#, fuzzy
 msgid "Choose a different path"
-msgstr "Ajustar a inclinação de um par diferencial"
+msgstr "Escolha um caminho diferente"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
 msgstr "O caminho selecionado não contém as configurações válidas do KiCad!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
-#, fuzzy
 msgid "Import library configuration from previous version"
-msgstr "Importar configurações de versões anteriores (nada encontrado)"
+msgstr "Importe a configuração da biblioteca da versão anterior"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
-"Quando estiver selecionado, as tabelas dos símbolos da biblioteca e a "
-"representação real da versão anterior do componente serão importado para "
-"esta versão"
+"Quando estiver selecionado, as tabelas dos símbolos da biblioteca e o "
+"footprint da versão anterior do componente será importado para esta versão"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "Voltar Ajustes Padrão"
+msgstr "Inicie com as configurações padrão"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
-#, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "Locais dos Ficheiros"
+msgstr "Configure o caminho das configurações do KiCad"
 
 #: common/dialogs/dialog_page_settings.cpp:57
 msgid "A5 148x210mm"
@@ -2409,24 +2400,24 @@ msgstr "Tabloide 279x432 mm"
 
 #: common/dialogs/dialog_page_settings.cpp:71
 msgid "User (Custom)"
-msgstr "Utilizador (Customizado)"
+msgstr "Usuário (Personalizado)"
 
 #: common/dialogs/dialog_page_settings.cpp:103
 msgid "Preview Settings"
-msgstr "Configurações de Pré-visualização"
+msgstr "Configurações da pré-visualização"
 
 #: common/dialogs/dialog_page_settings.cpp:104
 msgid "Preview Paper"
-msgstr "Pré-visualizar a Folha"
+msgstr "Pré-visualize a folha"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Title Block Data"
-msgstr "Pré-visualizar a Legenda"
+msgstr "Pré-visualize o título do bloco de dados"
 
 #: common/dialogs/dialog_page_settings.cpp:109
 #: common/dialogs/dialog_page_settings_base.h:145
 msgid "Page Settings"
-msgstr "Configurações de Página"
+msgstr "Configurações da página"
 
 #: common/dialogs/dialog_page_settings.cpp:110
 #: common/dialogs/dialog_page_settings_base.cpp:25
@@ -2435,12 +2426,12 @@ msgstr "Papel"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 msgid "Title Block"
-msgstr "Legenda"
+msgstr "Título do bloco"
 
 #: common/dialogs/dialog_page_settings.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "Ficheiro de esquema \"%s\" não foi encontrado."
+msgstr "O arquivo da folha de desenho '%s' não foi encontrado."
 
 #: common/dialogs/dialog_page_settings.cpp:546
 msgid "the translation for paper size must preserve original spellings"
@@ -2457,9 +2448,8 @@ msgid "Landscape"
 msgstr "Paisagem"
 
 #: common/dialogs/dialog_page_settings.cpp:793
-#, fuzzy
 msgid "Select Drawing Sheet File"
-msgstr "Modo de Desenho"
+msgstr "Selecione o arquivo da folha de desenho"
 
 #: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
@@ -2478,7 +2468,7 @@ msgstr "Orientação:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:55
 msgid "Custom paper size:"
-msgstr "Tamanho de papel customizado:"
+msgstr "Tamanho do papel personalizado:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:67
 #: pcbnew/dialogs/dialog_board_statistics.cpp:104
@@ -2489,7 +2479,7 @@ msgstr "Altura:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:80
 msgid "Custom paper height."
-msgstr "Comprimento customizado."
+msgstr "Comprimento personalizado."
 
 #: common/dialogs/dialog_page_settings_base.cpp:84
 #: common/dialogs/dialog_page_settings_base.cpp:105
@@ -2573,7 +2563,7 @@ msgstr "Largura:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:101
 msgid "Custom paper width."
-msgstr "Largura customizada."
+msgstr "Largura personalizada."
 
 #: common/dialogs/dialog_page_settings_base.cpp:112
 #: common/dialogs/dialog_page_settings_base.cpp:223
@@ -2590,7 +2580,7 @@ msgstr "Largura customizada."
 #: common/dialogs/dialog_page_settings_base.cpp:355
 #: common/dialogs/dialog_page_settings_base.cpp:367
 msgid "Export to other sheets"
-msgstr "Copiar nas outras folhas"
+msgstr "Copie nas outras folhas"
 
 #: common/dialogs/dialog_page_settings_base.cpp:140
 #: gerbview/widgets/gerbview_layer_widget.cpp:100
@@ -2606,12 +2596,12 @@ msgstr "Ficheiro:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:172
 msgid "Title Block Parameters"
-msgstr "Parâmetros da Legenda"
+msgstr "Parâmetros do título do bloco"
 
 #: common/dialogs/dialog_page_settings_base.cpp:182
 #, c-format
 msgid "Number of sheets: %d"
-msgstr "Número de folhas: %d"
+msgstr "Quantidade das folhas: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:189
 #, c-format
@@ -3291,7 +3281,7 @@ msgstr "Opção"
 #: common/dialogs/panel_mouse_settings.cpp:85
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
-"Apenas uma ação pode ser atribuída para cada configuração de rolagem vertical"
+"Apenas uma ação pode ser atribuída para cada configuração da rolagem vertical"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
@@ -5553,7 +5543,7 @@ msgid ""
 "or missing."
 msgstr ""
 "Falta um byte nulo no final da lista de propriedades. Os dados que foram "
-"importados podem estar com erro de formação ou estão ausentes."
+"importados podem estar malformados ou estão faltando."
 
 #: common/plugins/altium/altium_parser.cpp:247
 #, c-format
@@ -6525,7 +6515,7 @@ msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
-"Gráficos de software (para computadores que não são compatíveis com os "
+"Gráficos via software (para computadores que não são compatíveis com os "
 "requisitos de aceleração via hardware do KiCad)"
 
 #: common/widgets/gal_options_panel.cpp:103
@@ -7713,7 +7703,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Pesquisado:\n"
+"Buscado:\n"
 "\t%s\n"
 "\t%s"
 
@@ -7987,8 +7977,8 @@ msgstr ""
 "\n"
 "# 2 - O arquivo Netlist intermediário\n"
 "\n"
-"Os arquivos BOM (e os arquivos netlist) podem ser criados a partir de um "
-"*arquivo netlist intermediário* criado pelo Eeschema.\n"
+"Os arquivos BOM (e os arquivos netlist) podem ser criados a partir de um *"
+"arquivo netlist intermediário* criado pelo Eeschema.\n"
 "\n"
 "Este arquivo usa uma sintaxe XML e é chamado de netlist intermediária. A "
 "netlist intermediária inclui uma grande quantidade de dados sobre a sua "
@@ -8056,8 +8046,8 @@ msgstr ""
 "No Windows a linha de comando é o seguinte.\n"
 "\n"
 "```\n"
-"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%I"
-"\"\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
+"I\"\n"
 "```\n"
 "\n"
 "No Linux o comando fica assim.\n"
@@ -8070,8 +8060,8 @@ msgstr ""
 "Não se esqueça das aspas duplas ao redor dos nomes dos arquivos, isso "
 "permite que eles tenham espaços após a substituição pelo Eeschema.\n"
 "\n"
-"Caso um script Python seja usado, a linha de comando será algo como "
-"(dependendo do script Python):\n"
+"Caso um script Python seja usado, a linha de comando será algo como ("
+"dependendo do script Python):\n"
 "\n"
 "```\n"
 "python f:/kicad/bin/plugins/bom-in-python/myconverter.py \"%I\" \"%O\"\n"
@@ -8080,8 +8070,8 @@ msgstr ""
 "ou\n"
 "\n"
 "```\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" "
-"\"%O\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" \"%"
+"O\"\n"
 "```\n"
 "\n"
 "O formato da linha de comando aceita parâmetros para os nomes dos arquivos. "
@@ -8096,8 +8086,8 @@ msgstr ""
 " * `%O`: o nome do arquivo e o seu caminho completo (sem a extensão) do\n"
 "arquivo de saída que foi escolhido pelo usuário.\n"
 "\n"
-"O `%I` será substituído pelo nome do arquivo intermediário (normalmente o "
-"nome de arquivo completo da folha principal com a extensão \".xml\").\n"
+"O `%I` será substituído pelo nome do arquivo intermediário real (normalmente "
+"o nome de arquivo completo da folha principal com a extensão \".xml\").\n"
 "O `%O` será substituído pelo nome atual do arquivo que foi gerado (o nome "
 "completo do arquivo da folha principal menos a extensão).\n"
 "O `%B` será substituído pelo apelido do arquivo atual que foi gerado (o nome "
@@ -8136,12 +8126,12 @@ msgstr ""
 "\n"
 "No Linux:\n"
 "`` `\n"
-"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-"xsl \"%I\"\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"%I\"\n"
 "`` `\n"
 "\n"
 "Os exemplos acima assumem que `xsltproc` está instalado em seu PC com "
-"Windows e arquivos xsl localizados em` <caminho_para_o_kicad> /kicad/bin/"
+"Windows e arquivos xsl localizados em `<caminho_para_o_kicad>/kicad/bin/"
 "plugins/`.\n"
 "\n"
 "\n"
@@ -8161,8 +8151,8 @@ msgstr ""
 "\n"
 "No Windows:\n"
 "`` `\n"
-"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
-"\"%O.html\"\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" \"%O"
+".html\"\n"
 "`` `\n"
 "\n"
 "No Linux:\n"
@@ -8312,7 +8302,7 @@ msgstr "*** footprint não foi encontrado ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:570
 msgid "*** new symbol has too few units ***"
-msgstr "***o novo símbolo tem poucas unidades ***"
+msgstr "*** o novo símbolo tem poucas unidades ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 #, fuzzy
@@ -8575,12 +8565,12 @@ msgstr "Erro: ilha não tem camada"
 
 #: eeschema/dialogs/dialog_erc.cpp:196
 msgid "Errors, Warnings and Exclusions"
-msgstr "Erros, avisos e exclusões"
+msgstr "Os erros, os avisos e as exclusões"
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr "%d símbolo(s) requer anotação.<br><br>"
+msgstr "%d símbolo(s) precisam de uma anotação.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:306
 msgid "-------- ERC cancelled by user.<br><br>"
@@ -8696,7 +8686,7 @@ msgstr "As violações não serão verificadas ou informadas"
 
 #: eeschema/dialogs/dialog_erc.cpp:531
 msgid "Edit pin-to-pin conflict map..."
-msgstr "Edite o mapa do conflito pino a pino ..."
+msgstr "Edite o mapa de conflito pino a pino ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:535 pcbnew/dialogs/dialog_drc.cpp:480
 #, fuzzy
@@ -8717,7 +8707,7 @@ msgstr "Mapa dos conflitos dos pinos"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: pcbnew/dialogs/dialog_board_setup.cpp:107 pcbnew/dialogs/dialog_drc.cpp:585
 msgid "Violation Severity"
-msgstr "Gravidade da Violação"
+msgstr "Gravidade da violação"
 
 #: eeschema/dialogs/dialog_erc.cpp:755 pcbnew/dialogs/dialog_gendrill.cpp:474
 #, fuzzy, c-format
@@ -9036,8 +9026,7 @@ msgstr "Alternar para Editor de Esquemas"
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
 msgid "Set color to transparent to use Schematic Editor colors."
-msgstr ""
-"Defina a cor como transparente para usar as cores do Editor do Esquemático."
+msgstr "Defina a cor como transparente para usar as cores do editor do esquema."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 #, fuzzy
@@ -9207,8 +9196,7 @@ msgid ""
 msgstr ""
 "Selecione o símbolo na biblioteca atual como sendo o símbolo principal.\n"
 "\n"
-"Antes isso era conhecido anteriormente como um apelido (alias).  Não "
-"selecione\n"
+"Antes isso era conhecido como um apelido (alias).  Não selecione\n"
 "um símbolo já existente para criar um novo símbolo principal."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:51
@@ -9470,7 +9458,7 @@ msgstr ""
 "Selecione o símbolo para derivar este símbolo ou selecione\n"
 "<Nenhum> para um símbolo principal.\n"
 "\n"
-"Símbolos derivados antes eram anteriormente de apelidos.\n"
+"Os símbolos derivados eram anteriormente chamados de apelidos.\n"
 "Este não é mais o caso e todos os símbolos também são\n"
 "derivado de outros símbolos ou eles estão sozinhos como\n"
 "símbolos principais."
@@ -9566,7 +9554,7 @@ msgstr "Deslocamento da posição:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:242
 msgid "Margin between the pin name position and the symbol body."
-msgstr "A margem entre a posição do nome do pino e o corpo do símbolo."
+msgstr "A margem entre a posição do nome do pino e do corpo do símbolo."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:133
@@ -9794,7 +9782,7 @@ msgid ""
 "%I will be replaced by the actual spice netlist name"
 msgstr ""
 "Digite o comando para executar o Spice\n"
-"Geralmente é <caminho para o binário do spice > %I\n"
+"Geralmente é <o caminho para o binário do spice> %I\n"
 "O %I será substituído pelo nome real da netlist"
 
 #: eeschema/dialogs/dialog_netlist.cpp:344
@@ -9879,8 +9867,8 @@ msgid ""
 "Similar pins will be automatically added to other units, if this pin is not "
 "common to all units"
 msgstr ""
-"Pinos semelhantes serão adicionados automaticamente a outras unidades, caso "
-"este pino não seja comum em todas as unidades"
+"Os pinos semelhantes serão adicionados automaticamente as outras unidades, "
+"caso este pino não seja comum em todas as unidades"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:151
 #, fuzzy
@@ -10220,7 +10208,7 @@ msgstr "Cor de fundo"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
-msgstr "Trace a cor de fundo caso o formato gerado seja compatível"
+msgstr "Plote a cor de fundo caso o formato gerado seja compatível"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:87
 #, fuzzy
@@ -10229,7 +10217,7 @@ msgstr "Cor:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:94
 msgid "Select the color theme to use for plotting"
-msgstr "Selecione o tema das cores que serão utilizados na plotagem"
+msgstr "Selecione o tema das cores que serão utilizadas na plotagem"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:98
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:186
@@ -10312,7 +10300,7 @@ msgstr "Cor de fundo"
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:35
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:216
 msgid "Use a different color theme for printing:"
-msgstr "Use um tema com uma cor diferente para imprimir:"
+msgstr "Use um tema com uma cor diferente para a impressão:"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:103
 msgid ""
@@ -10588,7 +10576,7 @@ msgid ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 msgstr ""
-"Erro ao importar as configurações do projeto:\n"
+"Houve um erro ao importar as configurações do projeto:\n"
 "O arquivo do projeto %s não pôde ser carregado."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36
@@ -10626,7 +10614,7 @@ msgstr "Passivo"
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:98
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:33
 msgid "Syntax help"
-msgstr "Ajuda de sintaxe"
+msgstr "Ajuda da sintaxe"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:99
@@ -11760,8 +11748,8 @@ msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
-"Isso é útil para adicionar símbolos da representação real do componente na "
-"placa como fiduciais\n"
+"Isso é útil para adicionar os símbolos do footprint do componente na placa "
+"como fiduciais\n"
 "e logotipos que você não quer que apareçam na lista de exportação dos "
 "materiais"
 
@@ -11771,7 +11759,7 @@ msgid ""
 "materials but\n"
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
-"Isso é útil para adicionar símbolos que só são exportados para a lista de "
+"Isso é útil para adicionar os símbolos que só são exportados para a lista de "
 "materiais, mas\n"
 "não é necessário fazer o layout da placa como fixadores mecânicos e gabinetes"
 
@@ -12067,10 +12055,10 @@ msgid ""
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
-"Normalmente a representação real do componente está vinculado aos seus "
-"símbolos através das suas IDs exclusivas.  Selecione esta opção caso queira "
-"apenas redefinir as ligações da representação real do componente com base "
-"nos seus designadores de referência."
+"Normalmente o footprint do componente está vinculado aos seus símbolos "
+"através das suas IDs exclusivas.  Selecione esta opção caso queira apenas "
+"redefinir as ligações do footprint do componente com base nos seus "
+"designadores de referência."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
@@ -12087,9 +12075,8 @@ msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
 msgstr ""
-"Atualize as associações da representação real dos símbolos cujas "
-"representação reais foram substituídas por diferentes representações reais "
-"na PCI."
+"Atualize as associações dos símbolos do footprint cujas representação reais "
+"foram substituídas por diferentes footprints na PCI."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
@@ -12227,7 +12214,7 @@ msgstr "Rede destacada: %s"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "Destaque os nets quando estiverem destacadas no editor da PCI"
+msgstr "Destaque as nets quando estiverem destacadas no editor da PCI"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "&Restrict buses and wires to H and V orientation"
@@ -12251,8 +12238,8 @@ msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
-"Quando ativo, é possível iniciar a fiação clicando nos pinos desconectados "
-"mesmo quando a ferramenta de arame não está ativa"
+"Quando ativo, é possível iniciar a fiação clicando nos pinos sem conexão "
+"mesmo quando a ferramenta arame não estiver ativa"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:41
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -12280,7 +12267,7 @@ msgid ""
 "If enabled, clicking on a pin select the parent symbol.\n"
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
-"No editor esquemático:\n"
+"No editor do esquema:\n"
 "Se ativo, ao clicar no pino, o símbolo relacionado será selecionado.\n"
 "Caso seja desativado, apenas um pino será selecionado ao clicar num pino."
 
@@ -12479,8 +12466,8 @@ msgstr "Orientação do texto"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr ""
-"A porcentagem do tamanho do texto para deslocar o texto acima ou abaixo do "
-"fio ou do barramento"
+"A porcentagem de deslocamento do tamanho do texto para acima ou para abaixo "
+"do fio ou do barramento"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
 #, fuzzy
@@ -12738,13 +12725,13 @@ msgstr ""
 "lib) para que possa ser salvo com o formato KiCad atual (*.kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:741
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"Salvar '%s' como um formato KiCad atual (*.kicad_sym) e substitir a entrada "
-"legada na tabela?"
+"Deseja Salvar o '%s' como um formato KiCad atual (*.kicad_sym) e substituir "
+"a entrada legada na tabela?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:747
 #, c-format
@@ -12752,8 +12739,8 @@ msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
 msgstr ""
-"Salvar as bibliotecas de formato legado %d com o formato atual do KiCad (*."
-"kicad_sym) e substituir as entradas legadas na tabela?"
+"Deseja salvar as bibliotecas com formato legado %d no formato atual do KiCad "
+"(*.kicad_sym) e substituir as entradas legadas na tabela?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
 #: pcbnew/dialogs/dialog_export_step.cpp:350
@@ -13086,7 +13073,7 @@ msgstr "Conexão inválida entre itens de barramento e de rede"
 
 #: eeschema/erc_item.cpp:126 pcbnew/drc/drc_item.cpp:174
 msgid "Unresolved text variable"
-msgstr "Variável de texto não resolvida"
+msgstr "Há uma variável de texto não resolvida"
 
 #: eeschema/erc_item.cpp:130
 #, fuzzy
@@ -13138,8 +13125,8 @@ msgid ""
 "Creating a project will enable features such as text variables, net classes, "
 "and ERC exclusions"
 msgstr ""
-"A criação de um projeto permitirá recursos como variáveis de texto, classes "
-"de rede e exclusões ERC"
+"A criação de um projeto permitirá que os recursos como as variáveis do "
+"texto, das classes da rede e as exclusões ERC"
 
 #: eeschema/files-io.cpp:124 eeschema/files-io.cpp:1143
 #, fuzzy, c-format
@@ -13243,16 +13230,16 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
-"Isso pode resultar num esquema corrompido sob certas condições.  Caso o "
+"Sob certas condições, isso pode resultar num esquema corrompido.  Caso o "
 "esquema não tenha nenhum símbolo ausente ao abrir, salve-o imediatamente "
 "antes de fazer qualquer alteração para evitar a perda dos dados.  Caso haja "
-"símbolos ausentes, será preciso fazer o recarregamento do esquema para a "
-"recuperação manual do esquemático, do arquivo da biblioteca em cache e dos "
+"símbolos ausentes, será preciso fazer o recarregamento do esquema para fazer "
+"a recuperação manual do esquema, do arquivo da biblioteca em cache e dos "
 "símbolos."
 
 #: eeschema/files-io.cpp:401
 msgid "Load Without Cache File"
-msgstr "Carregar sem o arquivo cache"
+msgstr "Carregue sem o arquivo cache"
 
 #: eeschema/files-io.cpp:402
 #, fuzzy
@@ -13670,7 +13657,7 @@ msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
 msgstr ""
-"Vários símbolos têm o mesmo designador de referência.\n"
+"Vários símbolos possuem o mesmo designador de referência.\n"
 "A anotação deve ser corrigida antes da simulação."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:125
@@ -14118,11 +14105,11 @@ msgstr "Exibir tipo &elétrico de pino"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:697
 msgid "Pin has unexpected outer edge type."
-msgstr "O pino possui um tipo inesperado de borda externa."
+msgstr "O pino possui um tipo de borda externa inesperada."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:700
 msgid "Pin has unexpected inner edge type."
-msgstr "O pino possui um tipo inesperado de borda interna."
+msgstr "O pino possui um tipo de borda interna inesperada."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:863
 #, fuzzy, c-format
@@ -14191,7 +14178,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1821
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr "O símbolo de energia cria um rótulo global com nome '%s'"
+msgstr "O símbolo de energia cria um rótulo global com o nome '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1938
 #, fuzzy, c-format
@@ -14251,10 +14238,10 @@ msgid ""
 msgstr ""
 "O design é muito grande e não pode ser importado para o KiCad. \n"
 "Reduza o tamanho máximo do projeto no CADSTAR navegando para:\n"
-"Aba Design -> Propriedades -> Opções de design -> Tamanho máximo do "
-"design. \n"
-"Tamanho do projeto atual:%.2f, %.2f milímetros. \n"
-"Tamanho máximo permitido do projeto:%.2f, %.2f milímetros.\n"
+"Aba Design -> Propriedades -> Opções do desenho -> Tamanho máximo do design. "
+"\n"
+"O tamanho do projeto atual:%.2f, %.2f milímetros. \n"
+"O tamanho máximo permitido do projeto:%.2f, %.2f milímetros.\n"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:129
 #, c-format
@@ -14304,7 +14291,7 @@ msgid ""
 "library."
 msgstr ""
 "A definição da peça '%s' faz referência ao símbolo '%s' ('%s' alternativo) "
-"que não foi encontrado na biblioteca de símbolos. A parte não foi carregada "
+"que não foi encontrado nos símbolos da biblioteca. A parte não foi carregada "
 "na biblioteca KiCad."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:431
@@ -14331,8 +14318,9 @@ msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
 msgstr ""
-"A ID de símbolo '%s' é uma referência de sinal ou do sinal global mas possui "
-"muitos pinos. O número esperado de pinos é 1, mas foram encontrados %d."
+"A ID de símbolo '%s' é uma referência de sinal ou do sinal global, mas, "
+"possui muitos pinos. A quantidade esperada dos pinos é 1, mas, foram "
+"encontrados %d."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:677
 #, c-format
@@ -14350,23 +14338,23 @@ msgid ""
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
-"O símbolo '%s' foi dimensionado no esquema CADSTAR original mas não é "
+"O símbolo '%s' foi dimensionado no esquema CADSTAR original, mas, não é "
 "compatível com KiCad. Quando o símbolo é recarregado da biblioteca, ele será "
 "revertido para a escala original 1:1."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1145
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
 msgstr ""
-"O símbolo de documentação '%s' refere-se à ID de definição do símbolo "
-"'% ' que não existe na biblioteca. O símbolo não foi carregado."
+"O símbolo de documentação '%s' refere-se à ID de definição do símbolo '%s' "
+"que não existe na biblioteca. O símbolo não foi carregado."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1252
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
-"Variáveis de texto não puderam ser definidas porque não há um projeto "
+"As variáveis do texto não puderam ser definidas porque não há um projeto "
 "anexado."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1695
@@ -14376,9 +14364,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
-"O símbolo '%s' foi girado num ângulo de %.1f graus no design original do "
-"CADSTAR mas o KiCad só suporta ângulos de rotação múltiplos de 90 graus. Os "
-"fios de conexão precisarão de fixação manual."
+"O símbolo '%s' foi rotacionado num ângulo de %.1f graus no design original "
+"do CADSTAR, mas, o KiCad só suporta ângulos de rotação múltiplos de 90 "
+"graus. Os fios de conexão precisarão de fixação manual."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1709
 #, c-format
@@ -14405,7 +14393,7 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"A ID do bloco %s (nome do bloco: '%s') é desenhada na folha '%s', mas não "
+"A ID do bloco %s (nome do bloco: '%s') é desenhada na folha '%s', mas, não "
 "está vinculada a nenhuma outra folha no design. O KiCad requer que todos os "
 "símbolos de folha estejam associados a uma folha, então o bloco não foi "
 "carregado."
@@ -14417,7 +14405,7 @@ msgid ""
 "but has no Figure defined."
 msgstr ""
 "O esquema CADSTAR pode estar corrompido: o bloco %s faz referência a uma "
-"folha relacionada mas não tem nenhuma figura definida."
+"folha relacionada, mas, não tem nenhuma figura definida."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:442
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3000
@@ -14569,7 +14557,7 @@ msgstr "Nome de sinal inválido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1691
 msgid "Invalid title block comment number"
-msgstr "Número do comentário do bloco do título inválido"
+msgstr "O número do comentário do bloco do título é inválido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1790
 #, fuzzy
@@ -14688,8 +14676,8 @@ msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
-"O identificador de biblioteca de referência esquemática do símbolo '%s' é "
-"inválido. Não foi possível vincular o símbolo da biblioteca."
+"O identificador da biblioteca d símbolo de referência do esquema '%s' não é "
+"válido. Não foi possível vincular o símbolo da biblioteca."
 
 #: eeschema/sch_screen.cpp:615
 #, c-format
@@ -14697,8 +14685,8 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
-"A biblioteca dos símbolos '%s' não foi encontrada e nenhuma biblioteca "
-"retroativa da cache está disponível.  Não foi possível vincular o símbolo da "
+"A os símbolos da biblioteca '%s' não foi encontrada e nenhuma biblioteca "
+"retroativa na cache está disponível.  Não foi possível vincular o símbolo da "
 "biblioteca."
 
 #: eeschema/sch_screen.cpp:634
@@ -14826,7 +14814,7 @@ msgstr "Rótulo Hierárquico %s"
 
 #: eeschema/sch_text.cpp:1724 pcbnew/dialogs/panel_setup_rules.cpp:543
 msgid "Syntax Help"
-msgstr "Ajuda da sintaxe"
+msgstr "Ajuda de sintaxe"
 
 #: eeschema/sch_text_help_md.h:2
 msgid ""
@@ -15184,7 +15172,7 @@ msgstr "%s ou %s"
 #: eeschema/sch_validators.cpp:189
 msgid "The reference designator cannot contain text variable references"
 msgstr ""
-"O designador de referência não pode conter referências em texto das variáveis"
+"O designador de referência não pode conter referências de texto nas variáveis"
 
 #: eeschema/sch_validators.cpp:196
 msgid "Field Validation Error"
@@ -15582,7 +15570,7 @@ msgstr "Voltagem (medida)"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
-msgstr "Varredura DC"
+msgstr "Varredura CC"
 
 #: eeschema/sim/spice_simulator.cpp:73
 #, fuzzy
@@ -15714,8 +15702,8 @@ msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
-"Os símbolos nas bibliotecas legadas não são editáveis.  Use o gerenciador de "
-"bibliotecas dos símbolos para migrar para o formato atual."
+"Os símbolos nas bibliotecas legadas não são editáveis.  Use o gerenciador "
+"dos símbolos da bibliotecas para migrar para o formato atual."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:753
 #, c-format
@@ -15869,9 +15857,9 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
-"Adicione uma nova entrada à tabela da biblioteca global de símbolos.\n"
+"Adicione uma nova entrada global na tabela dos símbolos da biblioteca.\n"
 "\n"
-"O apelido da tabela da biblioteca de símbolos é sufixado com\n"
+"O apelido da tabela dos símbolos da biblioteca é sufixado com\n"
 "um inteiro para garantir que não haja entradas duplicadas na tabela."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:74
@@ -15888,9 +15876,9 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
-"Adicione uma nova entrada à tabela da biblioteca de símbolos do projeto.\n"
+"Adicione uma nova entrada dos símbolos na tabela da biblioteca do projeto.\n"
 "\n"
-"O apelido da tabela da biblioteca de símbolos é sufixado com\n"
+"O apelido da tabela dos símbolos da biblioteca é sufixado com\n"
 "um inteiro para garantir que não haja entradas duplicadas na tabela."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:146
@@ -16014,8 +16002,8 @@ msgid ""
 "\n"
 "Do you wish to delete this symbol and all of its derivatives?"
 msgstr ""
-"O símbolo %s é usado para derivar outros símbolos.\n"
-"Ao Excluir este símbolo excluirá todos os símbolos derivados dele.\n"
+"O símbolo %s é usado para a derivação dos outros símbolos.\n"
+"Ao excluir este símbolo excluirá todos os símbolos derivados dele.\n"
 "\n"
 "Deseja excluir este símbolo e todos os seus derivados?"
 
@@ -16298,8 +16286,8 @@ msgid ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
 "must be manually deleted (if desired)."
 msgstr ""
-"A representação real '%s' não está presente na PCI. Os símbolos "
-"correspondentes no esquema devem ser excluídos manualmente (caso queira)."
+"O footprint '%s' não está presente na PCI. Os símbolos correspondentes no "
+"esquema devem ser excluídos manualmente (caso queira)."
 
 #: eeschema/tools/backannotate.cpp:303
 #, fuzzy
@@ -16308,9 +16296,7 @@ msgstr "Exportar o netlist requer um esquema completamente anotado."
 
 #: eeschema/tools/backannotate.cpp:306
 msgid "Footprint re-linking cancelled by user."
-msgstr ""
-"A revinculação da representação real do componente foi cancelada pelo "
-"usuário."
+msgstr "A revinculação do footprint do componente foi cancelada pelo usuário."
 
 #: eeschema/tools/backannotate.cpp:329
 #, fuzzy, c-format
@@ -17372,7 +17358,7 @@ msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 "(Os pinos de alimentação ocultos direcionarão os nomes dos seus pinos a "
-"quaisquer uma das redes conectadas.)"
+"qualquer uma das redes conectadas.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:420
 #, fuzzy, c-format
@@ -17813,7 +17799,7 @@ msgstr "Formato do Ficheiro de Mapeamento"
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:20
 msgid "These parameters are usually specified in files, but not always."
 msgstr ""
-"Estes parâmetros são geralmente definidos nos arquivos, mas nem sempre."
+"Estes parâmetros são geralmente definidos nos arquivos, mas, nem sempre."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:29
 #, fuzzy
@@ -17839,10 +17825,10 @@ msgid ""
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trainling zeros are stripped"
 msgstr ""
-"Os inteiros nos arquivos podem ter seus zeros removidos.\n"
-"Nenhum formato de zeros à esquerda significa que os zeros à esquerda são "
+"Os números inteiros nos arquivos podem ter os seus zeros removidos.\n"
+"Nenhum formato de zeros à esquerda significa que os zeros à esquerda serão "
 "removidos\n"
-"Nenhum formato de zeros à direita significa que os zeros residuais são "
+"Nenhum formato de zeros à direita significa que os zeros residuais serão "
 "removidos"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
@@ -18377,7 +18363,7 @@ msgstr ""
 
 #: gerbview/rs274d.cpp:643
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
-msgstr "Arquivo Gerber inválido: comando do arco G74 ou G75 ausente"
+msgstr "Arquivo Gerber inválido: falta o comando do arco G74 ou G75"
 
 #: gerbview/rs274x.cpp:229
 #, c-format
@@ -18803,7 +18789,7 @@ msgstr "Esconda esta mensagem."
 
 #: include/widgets/resettable_panel.h:54
 msgid "Reset all settings on this page to their default"
-msgstr "Redefina todas as configurações nesta página para o padrão"
+msgstr "Redefina para o padrão todas as configurações nesta página"
 
 #: include/wxstream_helper.h:46
 #, fuzzy
@@ -18870,7 +18856,7 @@ msgid ""
 "designs"
 msgstr ""
 "Edite as bordas das folhas do desenho e dos títulos dos blocos para uso nos "
-"esquemas e nos projetos de design da PCI"
+"esquemas e nos projetos do desenho da PCI"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
@@ -19693,7 +19679,7 @@ msgstr "Caminho da rede: as alterações da pasta não estão sendo monitoradas"
 
 #: kicad/project_tree_pane.cpp:1184
 msgid "Local path: monitoring folder changes"
-msgstr "Caminho local: monitoramento das alterações na pasta"
+msgstr "Caminho local: monitorando das alterações na pasta"
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "New Project..."
@@ -19787,7 +19773,7 @@ msgstr "Imprimir borda e legenda"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
-msgstr "Execute o plug-in e o gerenciador de conteúdo"
+msgstr "Executa o plug-in e o gerenciador de conteúdo"
 
 #: kicad/tools/kicad_manager_actions.cpp:124
 msgid "Open Text Editor"
@@ -20141,7 +20127,7 @@ msgstr "Texto do passo:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:364
 msgid "Number of characters or digits to step text by for each repeat."
 msgstr ""
-"Quantidade dos caracteres ou dos dígitos para passar o texto a cada "
+"A quantidade dos caracteres ou dos dígitos para passar o texto a cada "
 "repetição."
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:371
@@ -20275,7 +20261,7 @@ msgstr "Biblioteca \"%s\" somente para leitura"
 
 #: pagelayout_editor/pl_editor_frame.cpp:100
 msgid "KiCad Drawing Sheet Editor"
-msgstr "Editor da Folha de Desenho do KiCad"
+msgstr "Editor da folha do desenho do KiCad"
 
 #: pagelayout_editor/pl_editor_frame.cpp:155
 msgid "coord origin: Right Bottom page corner"
@@ -20877,9 +20863,9 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Aviso:\n"
-"Através do diâmetro da ilha >= Folga do diâmetro do orifício.\n"
+"Através do diâmetro da ilha >= Folga do diâmetro do furo.\n"
 "Alguns parâmetros não podem ser calculados para uma via dentro de uma zona "
-"de cobre."
+"com cobre."
 
 #: pcb_calculator/dialogs/panel_via_size_base.cpp:215
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:588
@@ -21981,7 +21967,7 @@ msgstr "Auto-posicionando %s"
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
 msgid "Board edges must be defined on the %s layer."
-msgstr "As bordas da placa devem ser definidas na camadac%s."
+msgstr "As bordas da placa devem ser definidas na camada %s."
 
 #: pcbnew/autorouter/autoplace_tool.cpp:89
 msgid "Autoplace Components"
@@ -22274,15 +22260,15 @@ msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
 msgstr ""
-"Valor incorreto para Epsilon R (Epsilon R deve ser positivo ou nulo caso não "
-"seja usado)"
+"Valor incorreto para Epsilon R (o Epsilon R deve ser positivo ou nulo caso "
+"não seja usado)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1055
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
-"Valor incorreto para Loss tg (Loss tg deve ser positivo ou nulo caso não "
-"seja usado)"
+"Valor incorreto para Perda tg (a Perda tg deve ser positiva ou nula caso não "
+"seja usada)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1102
 msgid "A layer thickness is < 0. Fix it"
@@ -22303,7 +22289,7 @@ msgstr "Camadas de cobre:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Select the number of copper layers in the stackup"
-msgstr "Selecione a quantidade de camadas de cobre no empilhamento"
+msgstr "Selecione a quantidade das camadas com cobre no empilhamento"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:26
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:55
@@ -22541,7 +22527,7 @@ msgstr "Remover trilha curto-circuitando duas redes"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove via connected on fewer than two layers"
-msgstr "Remova a via conectada em menos de duas camadas"
+msgstr "Remove a via conectada em menos de duas camadas"
 
 #: pcbnew/cleanup_item.cpp:54
 msgid "Remove zero-length track"
@@ -22674,7 +22660,7 @@ msgid ""
 "Front footprints will start at %s"
 msgstr ""
 "\n"
-"As representações reais frontais do componente começarão em %s"
+"O footprint frontal do componente começará em %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:336
 #, c-format
@@ -22697,8 +22683,7 @@ msgid ""
 "Front footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"As representações reais frontais do componente começando com '%s' terão o "
-"prefixo removido."
+"O footprint frontal do componente começando com '%s' terá o prefixo removido."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:351
 #, c-format
@@ -22707,8 +22692,7 @@ msgid ""
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"As representações reais frontais do componente terão '%s' inserido como "
-"prefixo."
+"O footprint frontal do componente terá '%s' inserido como prefixo."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:361
 #, c-format
@@ -22717,8 +22701,8 @@ msgid ""
 "Back footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"As representações reais traseiras do componente começando com '%s' terão o "
-"prefixo removido."
+"O footprint traseiro do componente começando com '%s' terá o prefixo "
+"removido."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:367
 #, c-format
@@ -22727,8 +22711,7 @@ msgid ""
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"As representações reais traseiras do componente terão '%s' inserido como um "
-"prefixo."
+"O footprint traseiro do componente terá '%s' inserido como um prefixo."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:375
 #, c-format
@@ -22843,8 +22826,8 @@ msgid ""
 msgstr ""
 "\n"
 "A PCI tem %d designações de referência vazias ou inválidas.\n"
-"É recomendável executar o DRC com a opção 'Teste as representações reais do "
-"componente em relação ao esquema' marcada.\n"
+"É recomendável executar o DRC com a opção 'Teste os footprints em relação ao "
+"esquema' marcada.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
 #, c-format
@@ -22853,7 +22836,7 @@ msgid ""
 "RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
 "\n"
-"RefDes: %s Representação real do componente: %s:%s em %s na PCI."
+"RefDes: %s footprint: %s:%s em %s na PCI."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:616
 msgid "Reannotate anyway?"
@@ -23079,9 +23062,7 @@ msgstr "Incluir footprints &bloqueados"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:265
 msgid "Locked footprints will not be reannotated"
-msgstr ""
-"Representações reais do componente que estejam bloqueadas não serão anotadas "
-"novamente"
+msgstr "Os footprints que estejam bloqueados não serão reanotados"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:269
 #, fuzzy
@@ -23103,7 +23084,7 @@ msgstr "Designador de referência padrão:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:106
 msgid "Geographical Reannotation"
-msgstr "Reannotação Geográfica"
+msgstr "Reanotação geográfica"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:52
 msgid "Board Setup"
@@ -23498,7 +23479,7 @@ msgstr "Limpar Trilhas e Vias"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:45
 msgid "Constraints Resolution Report"
-msgstr "Relatório de resolução das restrições"
+msgstr "Relatório da solução das restrições"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:360
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
@@ -23622,7 +23603,7 @@ msgstr "Isolamento:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:186
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
-"A folga do cobre nesta zona (definido como 0 para usar a liberação da "
+"O isolamento do cobre nesta zona (definido como 0 para usar a liberação da "
 "netclass)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:197
@@ -24087,7 +24068,7 @@ msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
 msgstr ""
-"As unidades desta dimensão (\"automático\" para seguir as unidades "
+"As unidades deste dimensionamento (\"automático\" para seguir as unidades "
 "selecionadas no editor)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:130
@@ -24249,8 +24230,8 @@ msgstr "Definir dimensões da grade"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:302
 msgid "Automatically set the text orientation to match the dimension lines"
 msgstr ""
-"Defina automaticamente a orientação do texto para coincidir com as linhas de "
-"dimensão"
+"Defina automaticamente a orientação do texto para coincidir com o "
+"dimensionamento das linhas"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:190
@@ -24284,7 +24265,7 @@ msgstr "Manual"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:329
 msgid "Choose how to position the text relative to the dimension line"
-msgstr "Escolha como posicionar o texto em relação à linha de dimensão"
+msgstr "Escolha como posicionar o texto em relação a dimensão da linha"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:344
 #, fuzzy
@@ -24293,7 +24274,7 @@ msgstr "Dimensão"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:353
 msgid "Thickness of the dimension lines"
-msgstr "A espessura das linhas de dimensão"
+msgstr "A dimensão da espessura das linhas"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:139
@@ -24496,10 +24477,10 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
-"Atualize/redefina as strings: há dois casos que essas descrições precisam "
-"cobrir: o usuário substituiu uma representação real do componente na PCI e "
-"deseja removê-lo ou o usuário fez as alterações na representação real do "
-"componente na biblioteca e deseja propagá-la novamente na PCI."
+"Atualiza/redefine as strings: há dois casos que essas descrições precisam "
+"cobrir: o usuário substituiu um footprint do componente na PCI e deseja "
+"removê-lo ou o usuário fez as alterações no footprint do componente na "
+"biblioteca e deseja propagá-la novamente na PCI."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:375
 #, fuzzy, c-format
@@ -25036,9 +25017,9 @@ msgid ""
 "and can only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
-"A representação real do componente está bloqueado: não pode ser movido e "
-"orientado livremente na tela e só pode ser selecionado quando a caixa de "
-"seleção 'Itens bloqueados' estiver ativada no filtro da seleção."
+"O footprint do componente está bloqueado: não pode ser movido e orientado "
+"livremente na tela e só pode ser selecionado quando a caixa de seleção "
+"'Itens bloqueados' estiver ativada no filtro da seleção."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:396
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:322
@@ -25183,7 +25164,7 @@ msgstr "Excluir componentes sem pinos"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:291
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:194
 msgid "Exclude from BOM"
-msgstr "Exclua do BOM"
+msgstr "Exclui do BOM"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:313
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:213
@@ -25348,9 +25329,8 @@ msgid ""
 "The library ID and footprint ID currently assigned.  Use “Change Footprint…” "
 "to assign a different footprint."
 msgstr ""
-"A ID da biblioteca e a ID da representação real atribuída atualmente.  Use "
-"“Altere a representação real do componente…” para atribuir uma representação "
-"real diferente."
+"O ID da biblioteca e a ID do footprint atribuída atualmente.  Use “Altere o "
+"footprint do componente…” para atribuir um footprint diferente."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:135
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:108
@@ -26176,7 +26156,7 @@ msgstr "Agrupar por nome"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:39
 msgid "Prevents group from being moved on canvas"
-msgstr "Impede que o grupo seja movido na tela"
+msgstr "Impede que o grupo seja movimentado na tela"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:43
 #, fuzzy
@@ -26260,7 +26240,7 @@ msgstr ">"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:61
 msgid "Add selected layers to matched layers list."
-msgstr "Adicione camadas selecionadas à lista das camadas correspondentes."
+msgstr "Adicione as camadas selecionadas à lista das camadas correspondentes."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:65
 msgid "<"
@@ -26294,8 +26274,7 @@ msgstr "Outras Camadas"
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:98
 msgid "Automatically match any unmatched layers to their KiCad equivalent."
 msgstr ""
-"Combine automaticamente qualquer camada incomparável com o seu equivalente "
-"no KiCad."
+"Combine automaticamente qualquer camada única com o seu equivalente no KiCad."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:65
 msgid "Edit Mapping of Imported Layers"
@@ -26436,7 +26415,7 @@ msgstr "O %s não pode ser vazio."
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1916
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr "A rede '%s' está em uso.  Excluir assim mesmo?"
+msgstr "A rede '%s' está em uso.  Excluir mesmo assim?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1946
 #, c-format
@@ -26692,7 +26671,7 @@ msgstr "Todas as camadas de cobre"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:918
 #, c-format
 msgid "%s, %s and connected layers"
-msgstr "%s, %s e camadas conectadas"
+msgstr "%s, %s e as camadas conectadas"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:921
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
@@ -26716,12 +26695,12 @@ msgid ""
 "Warning: Pad drill will leave no copper or drill shape and pad shape do not "
 "overlap."
 msgstr ""
-"Aviso: a broca da ilha não deixa nenhum formato no cobre ou na perfuração, a "
+"Aviso: A broca da ilha não deixa nenhum formato no cobre ou na perfuração, a "
 "forma da ilha não se sobrepõe."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1262
 msgid "Warning: Negative local clearance values will have no effect."
-msgstr "Aviso: Os valores negativos da folga local não terão efeito."
+msgstr "Aviso: Os valores negativos do isolamento local não terão efeito."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1279
 #, fuzzy
@@ -26737,8 +26716,8 @@ msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
-"Aviso: A folga negativa da máscara de solda é maior do que a ilha. Nenhuma "
-"máscara de solda será gerada."
+"Aviso: O isolamento negativo da máscara de solda é maior do que a ilha. "
+"Nenhuma máscara de solda será gerada."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1307
 #, fuzzy
@@ -26759,7 +26738,7 @@ msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
 msgstr ""
-"Aviso: Os furos passantes geralmente devem ter uma ilha de cobre em pelo "
+"Aviso: Os furos passantes geralmente devem ter uma ilha com cobre em pelo "
 "menos uma camada."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1326
@@ -26788,7 +26767,7 @@ msgstr "Erro: ilha não tem camada"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1361
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
-msgstr "Aviso: a propriedade fiducial não faz sentido nas ilhas NPTH."
+msgstr "Aviso: A propriedade fiducial não faz sentido nas ilhas NPTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1367
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
@@ -26801,7 +26780,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1379
 msgid "Warning: Castellated property is for PTH pads."
-msgstr "Aviso: A propriedade castanhada são para ilhas PTH."
+msgstr "Aviso: A propriedade do castelamento são para ilhas PTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1385
 msgid "Warning: BGA property is for SMD pads."
@@ -26883,8 +26862,8 @@ msgstr "Número da ilha:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:83
 msgid "Do not allow position of pad relative to parent footprint to be changed"
 msgstr ""
-"Não permita que a posição da ilha em relação à representação real do "
-"componente principal seja alterada"
+"Não permita que a posição da ilha em relação ao footprint do componente "
+"principal seja alterada"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 #, fuzzy
@@ -27114,13 +27093,12 @@ msgstr ""
 "Propriedade opcional para definir uma finalidade especial ou uma restrição "
 "nos arquivos de fabricação:\n"
 "O atributo BGA são para ilhas nas representações reais do BGA\n"
-"Fiducial local é um fiducial para a representação real do componente "
-"principal\n"
+"Fiducial local é um fiducial para o footprint do componente principal\n"
 "Fiducial global é um fiducial para toda a placa\n"
 "O bloco de pontos de teste é útil para definir os pontos de teste nos "
 "arquivos Gerber\n"
 "A ilha dissipadora de calor determina uma ilha térmica\n"
-"Os castelados definem as ilhas casteladas através dos furos no limite da "
+"Os castelados definem as ilhas revestidas através dos furos no limite da "
 "placa\n"
 "Estas propriedades são definidas nos arquivos Gerber X2."
 
@@ -27149,7 +27127,7 @@ msgstr "Ilha para a dissipação do calor"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:559
 msgid "Castellated pad (through hole only)"
-msgstr "Ilha castanhada (apenas através do furo)"
+msgstr "Ilha castelada (apenas através do furo passante)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:584
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -27260,8 +27238,7 @@ msgstr "Primitivas de Forma Customizada"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:953
 msgid "Footprint R1 (300K), back side (mirrored), rotated 180.0º"
 msgstr ""
-"representação real do componente R1 (300K), verso (espelhado), rotacionado "
-"em 180,0º"
+"O footprint do componente R1 (300K), verso (espelhado), rotacionado em 180,0º"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:960
 #, fuzzy
@@ -27395,7 +27372,7 @@ msgstr "Delinear polígonos"
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
 msgstr ""
-"Inclua os contornos de preenchimento da ilha nas camadas F.Fab e B.Fab ao "
+"Inclua os contornos do preenchimento da ilha nas camadas F.Fab e B.Fab ao "
 "plotar"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
@@ -28148,7 +28125,7 @@ msgstr "Afastar vias"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 msgid "Prevent vias from being placed in this area"
-msgstr "Impeça que as vias sejam colocadas nesta área"
+msgstr "Impeça que as vias sejam colocadas nesta região"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 #, fuzzy
@@ -28157,7 +28134,7 @@ msgstr "Afastar vias"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:59
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr "Gere um erro DRC caso uma ilha se sobreponha a esta área"
+msgstr "Gere um erro DRC caso uma ilha se sobreponha nesta região"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:63
 #, fuzzy
@@ -28166,7 +28143,7 @@ msgstr "Afastar áreas de cobre"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:64
 msgid "Zones will not fill copper into this area"
-msgstr "As zonas não preencherão esta área com cobre"
+msgstr "As zonas não serão preenchidas com cobre nesta região"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:68
 #, fuzzy
@@ -28176,8 +28153,8 @@ msgstr "Nenhum footprint"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr ""
-"Gere um erro DRC caso a região da representação real do componente se "
-"sobrepuser nesta área"
+"Gere um erro DRC caso a região do footprint do componente se sobreponha "
+"nesta região"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
 #, fuzzy
@@ -28187,7 +28164,7 @@ msgstr "Nome do alias:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr "Um nome exclusivo para esta região da área para uso nas regras de DRC"
+msgstr "Um nome único para a regra da região para uso nas regras do DRC"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:96
 msgid "Constrain outline to H, V and 45 deg"
@@ -28479,8 +28456,8 @@ msgid ""
 "Remove from the board unlocked footprints which are not linked to a "
 "schematic symbol."
 msgstr ""
-"Remova do quadro as representações reais do componente desbloqueado que não "
-"estejam vinculadas a um símbolo esquemático."
+"Remove da placa os footprints desbloqueados que não estejam vinculados a um "
+"símbolo no esquema."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
 #, fuzzy
@@ -28584,7 +28561,7 @@ msgstr "Visão central nos itens de sondagem cruzada"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
-msgstr "Destaque as redes quando estiverem destacadas no editor do esquemático"
+msgstr "Destaque as redes quando estiverem destacadas no editor do esquema"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:90
 #, fuzzy
@@ -28596,8 +28573,8 @@ msgid ""
 "When enabled, edits to the board will cause the 3D view to refresh (may be "
 "slow with larger boards)"
 msgstr ""
-"Quando ativado, as edições no quadro farão com que a visualização 3D seja "
-"atualizada (pode ser lenta com placas maiores)"
+"Quando ativado, as edições na placa farão com que a visualização 3D seja "
+"atualizada (pode ser lenta nas placas maiores)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Magnetic pads"
@@ -28632,8 +28609,8 @@ msgstr "Adicionar recurso de microondas"
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
 msgstr ""
-"Se marcado, as ilhas podem ser movidas em relação ao resto da representação "
-"real do componente."
+"Se estiver marcado, as ilhas podem ser movidas em relação ao resto do "
+"footprint do componente."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:97
 #: pcbnew/dialogs/panel_edit_options_base.cpp:168
@@ -28755,7 +28732,7 @@ msgstr "Arrasta a junção mais próxima na trilha sem restringir seu ângulo."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:376
 msgid "Draw an outline to show the sheet size."
-msgstr "Desenhe um contorno para mostrar o tamanho da folha."
+msgstr "Desenhe um contorno para mostrar o tamanho da página."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:380
 #, fuzzy
@@ -28768,7 +28745,7 @@ msgid ""
 "using the Zone Properties dialog"
 msgstr ""
 "Se marcado, as zonas serão preenchidas novamente após a edição das "
-"propriedades da zona usando a caixa de diálogo Propriedades da Zona"
+"propriedades da zona usando a caixa de diálogo propriedades da zona"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:130
 #, fuzzy
@@ -28944,7 +28921,7 @@ msgstr "Eixo Y"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:43
 msgid "Select which the direction on the screen in which the Y axis increases."
-msgstr "Selecione a direção na tela onde o eixo Y aumenta."
+msgstr "Seleciona a direção na tela onde o eixo Y aumenta."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:25
 #, fuzzy
@@ -28985,7 +28962,7 @@ msgid ""
 "of performance."
 msgstr ""
 "O desvio máximo permitido entre um arco ou um círculo verdadeiro e os "
-"segmentos usados para aproximá-los.  Valores menores produzem gráficos mais "
+"segmentos usados para aproximá-los.  Valores menores geral gráficos mais "
 "suaves em detrimento do desempenho."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:86
@@ -29041,7 +29018,7 @@ msgid ""
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
 msgstr ""
-"Quando ativado, a distância entre as camadas de cobre será incluída nos "
+"Quando ativado, a distância entre as camadas com cobre será incluída nos "
 "cálculos do comprimento da trilha para as trilhas com vias.  Quando "
 "desativado, a altura do empilhamento é ignorada."
 
@@ -29056,9 +29033,9 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
-"A folga mínima entre os itens de cobre que não pertencem à mesma rede.  Se "
-"definido, este é um mínimo absoluto que não pode ser reduzido pela classe da "
-"rede, pelas regras personalizadas ou por outras configurações."
+"O isolamento mínimo entre os itens com cobre que não pertencem à mesma "
+"rede.  Se definido, este é um mínimo absoluto que não pode ser reduzido pela "
+"classe da rede, pelas regras personalizadas ou por outras configurações."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
@@ -29111,9 +29088,9 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
-"A folga mínima entre um furo e um item de cobre não associado.  Caso seja "
-"definido, este é um mínimo absoluto e não pode ser reduzido pelas regras "
-"personalizadas ou por outras configurações."
+"O isolamento mínimo entre um furo e um item com cobre não associado.  Caso "
+"seja definido, este é um mínimo absoluto e não pode ser reduzido pelas "
+"regras personalizadas ou por outras configurações."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
 #, fuzzy
@@ -29126,9 +29103,9 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
-"A folga mínima entre a borda da placa e qualquer item de cobre.  Caso seja "
-"definido, este é um mínimo absoluto e não pode ser reduzido pelas regras "
-"personalizadas ou por outras configurações."
+"O isolamento mínimo entre a borda da placa e qualquer item com cobre.  Caso "
+"seja definido, este é um mínimo absoluto e não pode ser reduzido pelas "
+"regras personalizadas ou por outras configurações."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
 #, fuzzy
@@ -29145,7 +29122,7 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
-"O tamanho mínimo do pin through-hole.  Caso seja definido, este é um mínimo "
+"O tamanho mínimo do furo passante.  Caso seja definido, este é um mínimo "
 "absoluto e não pode ser reduzido pelas classes da rede, pelas regras "
 "personalizadas ou por outras configurações."
 
@@ -29160,9 +29137,9 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
-"A folga mínima entre dois furos perfurados.   Caso seja definido, este é um "
-"mínimo absoluto e não pode ser reduzido pelas regras personalizadas ou por "
-"outras configurações. (Nota: não se aplica a furos fresados.)"
+"O isolamento mínimo entre dois furos perfurados.   Caso seja definido, este "
+"é um mínimo absoluto e não pode ser reduzido pelas regras personalizadas ou "
+"por outras configurações. (Nota: não se aplica a furos fresados.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 #, fuzzy
@@ -29178,7 +29155,7 @@ msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"O diâmetro mínimo para as micro-vias.  Caso seja definido, este é um mínimo "
+"O diâmetro mínimo das micro-vias.  Caso seja definido, este é um mínimo "
 "absoluto e não pode ser reduzido pleas classes da rede, pelas regras "
 "personalizadas ou por outras configurações."
 
@@ -29213,8 +29190,8 @@ msgid ""
 "within a single footprint.)"
 msgstr ""
 "Espaço mínimo entre dois itens na mesma camada da serigrafia.  Caso seja "
-"definido, pode melhorar a legibilidade.  (Observação: não se aplica a várias "
-"formas numa única representação real do componente.)"
+"definido, pode melhorar a legibilidade.  (Observação: não se aplica nos "
+"diversos formatos com um único footprint do componente.)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 #, fuzzy
@@ -29271,10 +29248,10 @@ msgid ""
 "\n"
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
-"As configurações importadas têm menos camadas de cobre do que a placa atual "
+"As configurações importadas têm menos camadas com cobre do que a placa atual "
 "(%i em vez de %i).\n"
 "\n"
-"Continue e exclua as camadas extras de cobre internas da placa atual?"
+"Continue e exclua as camadas extras com cobre internas da placa atual?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:778
 msgid "Inner Layers To Be Deleted"
@@ -29925,7 +29902,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:115
 msgid "Additional clearance as a percentage of the pad size."
-msgstr "Folga adicional como uma porcentagem do tamanho da ilha."
+msgstr "Porcentagem do isolamento adicional do tamanho da ilha."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:129
 #, fuzzy
@@ -30195,7 +30172,7 @@ msgstr ""
 "### Tipos de restrição\n"
 "\n"
 " * annular\\_width\n"
-" * clearance (folga)\n"
+" * clearance (isolamento)\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
@@ -30275,18 +30252,18 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.insideCourtyard('<footprint_refdes>')\n"
-"Verdadeiro caso qualquer parte de `A` esteja dentro do pedaço principal da "
-"representação real do componente informado.\n"
+"Verdadeiro caso qualquer parte de `A` esteja dentro do pedaço principal do "
+"footprint do componente informado.\n"
 "<br><br>\n"
 "\n"
 "    A.insideFrontCourtyard('<footprint_refdes>')\n"
-"Verdadeiro caso qualquer parte de `A` esteja dentro do pedaço frontal da "
-"representação real do componente informado.\n"
+"Verdadeiro caso qualquer parte de `A` esteja dentro do pedaço frontal do "
+"footprint do componente informado.\n"
 "<br><br>\n"
 "\n"
 "    A.insideBackCourtyard('<footprint_refdes>')\n"
-"Verdadeiro caso qualquer parte de `A` esteja dentro do pedaço traseiro da "
-"representação real do componente informado.\n"
+"Verdadeiro caso qualquer parte de `A` esteja dentro do pedaço traseiro do "
+"footprint do componente informado.\n"
 "<br><br>\n"
 "\n"
 "    A.insideArea('<zone_name>')\n"
@@ -30354,16 +30331,16 @@ msgstr ""
 "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
 "\n"
 "\n"
-"    (rule \"Através do furo para rastrear a folga\"  \n"
+"    (regra \"Através do furo para rastrear o isolamento\"  \n"
 "        (constraint hole_clearance (min 0.254mm))\n"
 "        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
 "    \n"
-"    (rule \"Ilha para rastrear a folga\"  \n"
+"    (regra \"Ilha para rastrear o isolamento\"  \n"
 "        (constraint clearance (min 0.2mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
 "\n"
 "\n"
-"    (rule \"folga para recorte de 1 mm\"\n"
+"    (regra \"isolamento para o recorte de 1 mm\"\n"
 "        (constraint clearance (min 0.8mm))\n"
 "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
@@ -30382,8 +30359,8 @@ msgstr ""
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
 "        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
 "\n"
-"    # Especifica uma folga maior em torno de qualquer par de diferenças\n"
-"    (rule \"folga dp\"\n"
+"    # Especifica um isolamento maior em torno de qualquer par de diferenças\n"
+"    (regra \"isolamento dp\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 
@@ -30396,8 +30373,8 @@ msgstr "Propriedades padrão para novos itens gráficos:"
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
 msgstr ""
-"Unidades padrão para as dimensões (\"automático\" para seguir as unidades "
-"escolhidas da IU)"
+"Unidades padrão para o dimensionamento (\"automático\" para seguir as "
+"unidades escolhidas da IU)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:100
 #, fuzzy
@@ -30406,7 +30383,7 @@ msgstr "Posição X:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:108
 msgid "Where to position the dimension text relative to the dimension line"
-msgstr "Onde posicionar o texto da dimensão em relação à linha da dimensão"
+msgstr "Onde posicionar o texto dimensionado em relação a linha dimensionada"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:122
 #, fuzzy
@@ -30416,8 +30393,8 @@ msgstr "Manter texto na vertical"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:123
 msgid "When checked, dimension text will be kept aligned with dimension lines"
 msgstr ""
-"Quando for marcado, o texto da dimensão será mantido alinhado com as linhas "
-"da dimensão"
+"Quando for marcado, a dimensão do texto será mantido alinhado com a dimensão "
+"das linhas"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:135
 msgid "How many digits of precision to show"
@@ -30501,7 +30478,7 @@ msgstr "Escala X restrita."
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
-msgstr "restrições de configuração da micro-via da placa"
+msgstr "configuração das restrições da micro-via da placa"
 
 #: pcbnew/drc/drc_engine.cpp:244 pcbnew/drc/drc_engine.cpp:325
 #: pcbnew/drc/drc_engine.cpp:353
@@ -30531,7 +30508,7 @@ msgstr "Isolamento entre as zonas cobreadas..."
 #: pcbnew/drc/drc_engine.cpp:800 pcbnew/drc/drc_engine.cpp:815
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "Substituição local em %s; folga: %s."
+msgstr "Substituição local no %s; isolamento: %s."
 
 #: pcbnew/drc/drc_engine.cpp:831
 #, fuzzy
@@ -30584,8 +30561,8 @@ msgstr "Verificando Zonas"
 #: pcbnew/drc/drc_engine.cpp:937
 msgid "Board and netclass clearances apply only between copper items."
 msgstr ""
-"As autorizações da placa e da netclass aplicam-se apenas entre itens de "
-"cobre."
+"Os isolamentos da placa e da classe da rede se aplicam apenas entre os itens "
+"com cobre."
 
 #: pcbnew/drc/drc_engine.cpp:983
 #, fuzzy
@@ -30599,7 +30576,7 @@ msgstr "Escala X restrita."
 
 #: pcbnew/drc/drc_engine.cpp:1007
 msgid "Keepout layer(s) not matched."
-msgstr "Camada(s) de retenção não compatível(s)."
+msgstr "As camada(s) de retenção não coincidem."
 
 #: pcbnew/drc/drc_engine.cpp:1011 pcbnew/drc/drc_engine.cpp:1032
 #, fuzzy, c-format
@@ -30636,7 +30613,7 @@ msgstr "Regra aplicada; substitui as restrições anteriores."
 
 #: pcbnew/drc/drc_engine.cpp:1088
 msgid "Membership not satisfied; constraint ignored."
-msgstr "Associação não satisfeita; restrição ignorada."
+msgstr "A associação não foi satisfeita; restrição ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:1089
 msgid "Condition not satisfied; rule ignored."
@@ -30891,7 +30868,7 @@ msgstr "Faltando:"
 
 #: pcbnew/drc/drc_rule_parser.cpp:108
 msgid "Missing version statement."
-msgstr "Fala a declaração de versão."
+msgstr "Fala a declaração da versão."
 
 #: pcbnew/drc/drc_rule_parser.cpp:120
 msgid "Missing version number."
@@ -30949,7 +30926,7 @@ msgstr "Faltando:"
 #: pcbnew/drc/drc_rule_parser.cpp:257
 #, c-format
 msgid "Missing constraint type.|  Expected %s."
-msgstr "Falta um tipo de restrição.| Esperado %s."
+msgstr "Falta um tipo de restrição.|  Esperado %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:294
 #, c-format
@@ -31161,18 +31138,17 @@ msgstr "Footprint faltando"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:143
 msgid "No corresponding pin found in schematic."
-msgstr "Nenhum pino correspondente foi encontrado no esquema."
+msgstr "No esquema não foi encontrado nenhum pino correspondente."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:152
 #, c-format
 msgid "Pad missing net given by schematic (%s)."
-msgstr "Rede ausente da ilha informada pelo esquema (%s)."
+msgstr "Falta rede na ilha informada pelo esquema (%s)."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:162
 #, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)."
-msgstr ""
-"A rede da ilha (%s) não corresponde à rede informada pelo esquema (%s)."
+msgstr "A rede da ilha (%s) não bate com a rede informada pelo esquema (%s)."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:182
 #, fuzzy, c-format
@@ -31186,7 +31162,7 @@ msgstr "Verificando footprints contra o esquema...\n"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:225
 msgid "No netlist provided, skipping LVS."
-msgstr "Nenhuma netlist foir informada, ignorando o LVS."
+msgstr "Nenhuma netlist foi informada, ignorando o LVS."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:126
 #, fuzzy, c-format
@@ -31210,7 +31186,7 @@ msgstr "Isolamento e Configurações Locais"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:228
 msgid "Gathering length-constrained connections..."
-msgstr "Reunindo conexões com comprimento limitado..."
+msgstr "Obtendo as conexões com comprimento limitado..."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:325
 #, fuzzy
@@ -31249,7 +31225,7 @@ msgstr "Verificando a serigrafia para os itens sobrepostos..."
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:160
 #, c-format
 msgid "Testing %d silkscreen features against %d board items."
-msgstr "Testando %d recursos sa serigrafia em relação aos %d itens da placa."
+msgstr "Testando %d recursos da serigrafia em relação aos %d itens da placa."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:100
 msgid "Checking silkscreen for potential soldermask clipping..."
@@ -31259,7 +31235,8 @@ msgstr "Verificando a serigrafia para o potencial corte da máscara de solda..."
 #, c-format
 msgid "Testing %d mask apertures against %d silkscreen features."
 msgstr ""
-"Testando %d as aberturas da máscara em relação aos %d recursos da serigrafia."
+"Testando as aberturas das %d máscaras em relação aos %d recursos da "
+"serigrafia."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:83
 #, fuzzy
@@ -31607,7 +31584,7 @@ msgstr "Excluir ilhas da serigrafia"
 
 #: pcbnew/footprint.cpp:957
 msgid "exclude from BOM"
-msgstr "exclua da lista de materiais (BOM)"
+msgstr "exclui da lista de materiais (BOM)"
 
 #: pcbnew/footprint.cpp:959
 #, fuzzy
@@ -31716,8 +31693,7 @@ msgstr "Footprint \"%s\" salvo"
 #: pcbnew/footprint_edit_frame.cpp:471
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
-msgstr ""
-"Editando %s a partir do quadro.  Ao salvar irá atualizará apenas a placa."
+msgstr "Editando %s a partir da placa.  A gravação atualizará apenas a placa."
 
 #: pcbnew/footprint_edit_frame.cpp:767
 #, fuzzy, c-format
@@ -33105,7 +33081,7 @@ msgid ""
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
 "Recebi um erro ao ler a netlist.  Relate este problema para a equipe KiCad "
-"usando o menu Ajuda->Relatar problema."
+"usando o menu Ajuda->Relate um problema."
 
 #: pcbnew/pcb_edit_frame.cpp:1500
 #, fuzzy, c-format
@@ -33297,7 +33273,7 @@ msgstr "Furo"
 #: pcbnew/pcb_track.cpp:774
 #, c-format
 msgid "Min Annular Width: %s"
-msgstr "Largura anular mínima: %s"
+msgstr "Largura anular mín: %s"
 
 #: pcbnew/pcb_track.cpp:791
 msgid "NetCode"
@@ -33460,8 +33436,8 @@ msgid ""
 "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"O polígono encontrado numa camada Altium (%d) snum equivalente no KiCad. Ele "
-"foi movido para a camada Eco1_User do KiCad."
+"O polígono encontrado numa camada Altium (%d) sem um equivalente no KiCad. "
+"Ele foi movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1641
 #, fuzzy
@@ -33508,8 +33484,8 @@ msgid ""
 "Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Proteção de arco encontrada numa camada Altium (%d) sem um equivalente no "
-"KiCad. Ele foi movido para a camada Eco1_User do KiCad."
+"Uma região de exclusão do arco foi encontrada numa camada Altium (%d) sem um "
+"equivalente no KiCad. Ele foi movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1988
 #, c-format
@@ -33517,8 +33493,8 @@ msgid ""
 "Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Arco encontrado numa camada Altium (%d) snum equivalente no KiCad. Ele foi "
-"movido para a camada Eco1_User do KiCad."
+"Um arco foi encontrado numa camada Altium (%d) sem um equivalente no KiCad. "
+"Ele foi movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2065
 #, fuzzy
@@ -33529,15 +33505,12 @@ msgstr "Carregando…"
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
-"Representação real do componente %s ilha %s não está marcado como "
-"multicamada, porém é uma ilha TH."
+"footprint %s ilha %s não está marcado como multicamada, porém é uma ilha TH."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2145
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr ""
-"A representação real do componete %s ilha %s tnum orifício quadrado (ainda "
-"não é compatível)."
+msgstr "Footprint %s ilha %s tem um furo quadrado (ainda não é compatível)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2167
 #, c-format
@@ -33545,29 +33518,25 @@ msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"A representação real do componente %s ilha %s tem uma rotação no orifício "
-"com %f graus. O KiCad suporta apenas rotações com 90 graus."
+"footprint %s ilha %s tem uma rotação no furo com %f graus. O KiCad suporta "
+"apenas rotações com 90 graus."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2181
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr ""
-"A representação real do componente %s ilha %s usa um buraco com tipo "
-"desconhecido %d."
+msgstr "footprint %s ilha %s usa um buraco com tipo desconhecido %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2199
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
-"A representação real do componente %s ilha %s usa uma pilha complexa de "
-"ilhas (ainda não é compatível)."
+"footprint %s ilha %s usa uma pilha complexa de ilhas (ainda não é "
+"compatível)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2233
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
-msgstr ""
-"A representação real do componente %s ilha %s usa uma ilha com forma "
-"desconhecida."
+msgstr "footprint %s ilha %s usa uma ilha com forma desconhecida."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2292
 #, c-format
@@ -33586,7 +33555,7 @@ msgstr "Área de cobre pertence a uma rede que não tem ilhas"
 #: pcbnew/plugins/altium/altium_pcb.cpp:2307
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr "A ilha sem cobre %s tem um orifício que não é compatível."
+msgstr "A ilha sem cobre %s tem um furo que não é compatível."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2312
 #, c-format
@@ -33623,8 +33592,8 @@ msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Guarda da trilha foi encontrada numa camada Altium (%d) sem um equivalente "
-"no KiCad Ele foi movido para a camada Eco1_User do KiCad."
+"A região de exclusão da trilha foi encontrada numa camada Altium (%d) sem um "
+"equivalente no KiCad Ele foi movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2603
 #, c-format
@@ -33678,7 +33647,7 @@ msgid ""
 msgstr ""
 "O arquivo selecionado indica que as redes podem estar fora de sincronização "
 "com o esquema. Recomenda-se que você execute um procedimento de 'Alinhamento "
-"de Redes' no CADSTAR e importe novamente para evitar inconsistências entre a "
+"da redes' no CADSTAR e importe novamente para evitar inconsistências entre a "
 "PCI e o esquema. "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:130
@@ -33732,9 +33701,9 @@ msgid ""
 "design rules were imported. It is recommended that you review the design "
 "rules that have been applied."
 msgstr ""
-"As regras de design do KiCad são diferentes das do CADSTAR. Apenas as regras "
-"compatíveis de design foram importadas. É recomendável que as regras de "
-"design que foram aplicadas sejam revisadas."
+"As regras do desenho do KiCad são diferentes das do CADSTAR. Apenas as "
+"regras compatíveis do desenho foram importadas. É recomendável que as regras "
+"do desenho que foram aplicadas sejam revisadas."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:854
 #, c-format
@@ -33744,8 +33713,8 @@ msgid ""
 "not imported."
 msgstr ""
 "A região CADSTAR '%s' no componente '%s' da biblioteca não possuem "
-"equivalentes no KiCad. A área não é uma via nem uma rota da área de "
-"isolamento. A área não foi importada."
+"equivalentes no KiCad. A área não é uma via numa rota da área de isolamento. "
+"A área não foi importada."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:946
 #, c-format
@@ -33801,9 +33770,9 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
-"A ID da dimensão %s tem um estilo 'Externo' no CADSTAR. Estilos de dimensão "
-"externa ainda não são compatíveis no KiCad. O objeto da dimensão foi "
-"importado com um estilo interno."
+"A ID da dimensão %s tem um estilo 'Externo' no CADSTAR. O dimensionamento "
+"externo dos estilos ainda não são compatíveis no KiCad. A dimensão do objeto "
+"foi importado com um estilo interno."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1375
 #, c-format
@@ -33924,8 +33893,8 @@ msgid ""
 "has been applied instead. When the template is re-filled the thermal reliefs "
 "will be removed."
 msgstr ""
-"O modelo CADSTAR '%s' possui alívios térmicos no design original, mas não há "
-"um equivalente no KiCad que corresponda às configurações originais do "
+"O modelo CADSTAR '%s' possui alívios térmicos no design original, mas, não "
+"há um equivalente no KiCad que corresponda às configurações originais do "
 "CADSTAR. Em vez disso, o preenchimento sólido foi aplicado. Quando o modelo "
 "for preenchido novamente, os alívios térmicos serão removidos."
 
@@ -33937,8 +33906,8 @@ msgid ""
 "created."
 msgstr ""
 "A camada CADSTAR '%s' está definida como uma camada de alimentação. No "
-"entanto, não existe nenhuma rede com esse nome. A camada foi carregada, mas "
-"nenhuma zona de cobre foi criada."
+"entanto, não existe nenhuma rede com esse nome. A camada foi carregada, mas, "
+"nenhuma zona com cobre foi criada."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2032
 msgid ""
@@ -33947,7 +33916,7 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"O projeto CADSTAR contém elementos de COBRE que não possuem um equivalente "
+"O projeto CADSTAR contém elementos com COBRE que não possuem um equivalente "
 "direto no KiCad. Estes foram importados como uma Zona KiCad se sólidos ou "
 "preenchidos, ou como uma Trilha KiCad caso a forma seja um contorno não "
 "preenchido (aberto ou fechado)."
@@ -34050,7 +34019,7 @@ msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimetres were applied instead."
 msgstr ""
-"A ID de dimensão %s usa um tipo de unidade que não é compatível com o KiCad. "
+"A ID da dimensão %s usa um tipo de unidade que não é compatível com o KiCad. "
 "Em vez disso, a unidade de milímetro foi aplicada."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3774
@@ -34060,10 +34029,10 @@ msgid ""
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
-"O projeto CADSTAR contém redes com uma 'Classe de Rede' atribuída. O KiCad "
-"não possui um equivalente à 'Classe de Rede' do CADSTAR, portanto, estes "
-"elementos não foram importados. Nota: a versão da 'Classe de rede' do KiCad "
-"é mais próxima do 'Código de roteamento da rede' do CADSTAR (que foi "
+"O projeto CADSTAR contém redes com uma 'Classe da rede' já atribuída. O "
+"KiCad não possui um equivalente à 'Classe da rede' do CADSTAR, portanto, "
+"estes elementos não foram importados. Nota: a versão da 'Classe da rede' do "
+"KiCad é mais próxima do 'Código de roteamento da rede' do CADSTAR (que foi "
 "importado para todas as redes)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3784
@@ -34135,7 +34104,7 @@ msgstr "Seção FABMASTER desconhecida %s:%s na linha %zu."
 #, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
 msgstr ""
-"Tamanho de linha inválida na linha J %zu. Esperando 11 elementos, mas "
+"Tamanho de linha inválida na linha J %zu. Esperando 11 elementos, mas, "
 "encontrou %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:291
@@ -34161,20 +34130,20 @@ msgstr "Não foi possível localizar o ficheiro de biblioteca %s"
 #, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
 msgstr ""
-"Tamanho inválido da linha na linha %zu. Esperando %zu elementos, mas "
+"Tamanho inválido da linha na linha %zu. Esperando %zu elementos, mas, "
 "encontrou %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:494
 #, c-format
 msgid "Expecting drill size value but found %s!%s!%s in row %zu."
 msgstr ""
-"Esperando o valor do tamanho da broca, mas encontrou %s!%s!%s na linha %zu."
+"Esperando o valor do tamanho da broca, mas, encontrou %s!%s!%s na linha %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:542
 #, c-format
 msgid "Expecting pad size values but found %s : %s in row %zu."
 msgstr ""
-"Esperando os valores do tamanho do bloco, mas encontrou %s:%s na linha %zu."
+"Esperando os valores do tamanho do bloco, mas, encontrou %s:%s na linha %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:564
 #, fuzzy, c-format
@@ -34185,7 +34154,7 @@ msgstr "Tamanho inválido: %lld: muito grande"
 #, c-format
 msgid "Expecting pad offset values but found %s:%s in row %zu."
 msgstr ""
-"Esperando os valores de deslocamento da ilha, mas encontrou %s:%s na linha "
+"Esperando os valores de deslocamento da ilha, mas, encontrou %s:%s na linha "
 "%zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:644
@@ -34213,7 +34182,7 @@ msgstr "Propriedade desconhecida '%s'"
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1121
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
-msgstr "Contagem inválida do tokens. Era esperado 8, mas encontrou %zu."
+msgstr "Contagem inválida dos tokens. Era esperado 8, mas, encontrou %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1256
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1445
@@ -34225,7 +34194,7 @@ msgstr "Formato inválido para a string record_tag '%s' na linha %zu."
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
 msgstr ""
-"Tamanho inválido da linha na linha %zu.  Esperando %zu elementos, mas "
+"Tamanho inválido da linha na linha %zu.  Esperando %zu elementos, mas, "
 "encontrou %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1455
@@ -34254,8 +34223,8 @@ msgstr "Não foi possível localizar o ficheiro de biblioteca %s"
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
 msgstr ""
-"Esperando que os dados do etch estejam na camada de cobre. Uma linha foi "
-"encontrada na camada '%s'"
+"Esperando que os dados da gravura (etch) estejam na camada com cobre. Uma "
+"linha foi encontrada na camada '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:91
 #, c-format
@@ -34332,13 +34301,13 @@ msgstr ""
 "biblioteca de footprint \"%s\""
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Please report this bug.  Error validating group structure: %s\n"
 "\n"
 "Save anyway?"
 msgstr ""
-"Relate este problema.  Houve um erro ao validar a estrutura do grupo:% s\n"
+"Relate este problema.  Houve um erro ao validar a estrutura do grupo: %s\n"
 "\n"
 "Deseja salvar assim mesmo?"
 
@@ -35118,7 +35087,7 @@ msgid ""
 "Event file: %s\n"
 "Board dump: %s"
 msgstr ""
-"Arquivo de evento: %s\n"
+"Arquivo do evento: %s\n"
 "Despejo da placa: %s"
 
 #: pcbnew/router/router_tool.cpp:521
@@ -35373,7 +35342,7 @@ msgstr "Filtrar Redes"
 
 #: pcbnew/tools/board_editor_control.cpp:138
 msgid "Do not prefix path with footprint UUID."
-msgstr "Não prefixe o caminho com o UUID da representação real do componente."
+msgstr "Não prefixe o caminho com o UUID do footprint do componente."
 
 #: pcbnew/tools/board_editor_control.cpp:392
 #, fuzzy
@@ -35407,7 +35376,7 @@ msgstr "Erro"
 #: pcbnew/tools/board_editor_control.cpp:547
 #, c-format
 msgid "Orphaned net %s re-parented.\n"
-msgstr "Rede órfã %s foi reassociada.\n"
+msgstr "A rede órfã %s foi reassociada.\n"
 
 #: pcbnew/tools/board_editor_control.cpp:604
 #: pcbnew/tools/footprint_editor_control.cpp:564
@@ -35506,12 +35475,12 @@ msgstr "Contornos do Afastamento"
 
 #: pcbnew/tools/board_inspection_tool.cpp:264
 msgid "Select two items for a clearance resolution report."
-msgstr "Selecione dois itens para um relatório da resolução de folga."
+msgstr "Selecione dois itens para um relatório da resolução do isolamento."
 
 #: pcbnew/tools/board_inspection_tool.cpp:279
 #: pcbnew/tools/board_inspection_tool.cpp:292
 msgid "Cannot generate clearance report on empty group."
-msgstr "Não é possível gerar um relatório de liberação num grupo vazio."
+msgstr "Não é possível gerar um relatório de isolamento num grupo vazio."
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
 #, fuzzy
@@ -35543,7 +35512,8 @@ msgstr "Isolamentos entre zonas...\n"
 #: pcbnew/tools/board_inspection_tool.cpp:423
 #, c-format
 msgid "Overridden by larger thermal relief from %s;clearance: %s."
-msgstr "Foi substituído por um alívio térmico maior a partir de %s; folga: %s."
+msgstr ""
+"Foi substituído por um alívio térmico maior a partir de %s; isolamento: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:434
 #: pcbnew/tools/board_inspection_tool.cpp:444
@@ -35553,7 +35523,7 @@ msgstr "Isolamento:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:469
 msgid "Items belong to the same net. Clearance is 0."
-msgstr "Os itens pertencem à mesma rede. A folga é 0."
+msgstr "Os itens pertencem à mesma rede. O isolamento é 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:498
 #, fuzzy
@@ -35649,9 +35619,7 @@ msgstr "Afastar vias"
 
 #: pcbnew/tools/board_inspection_tool.cpp:830
 msgid "Report may be incomplete: some footprint courtyards are malformed."
-msgstr ""
-"O relatório pode estar incompleto: algumas representações reais do "
-"componente estão malformados."
+msgstr "O relatório pode estar incompleto: alguns footprints estão malformados."
 
 #: pcbnew/tools/board_inspection_tool.cpp:831
 msgid "Run DRC for a full analysis."
@@ -36110,7 +36078,7 @@ msgstr "Estatísticas da Placa"
 
 #: pcbnew/tools/pcb_actions.cpp:111
 msgid "Add a board characteristics table on a graphic layer"
-msgstr "Adicione uma tabela das características da placa numa camada gráfica"
+msgstr "Adicione uma tabela com as características da placa numa camada gráfica"
 
 #: pcbnew/tools/pcb_actions.cpp:116
 #, fuzzy
@@ -36119,7 +36087,7 @@ msgstr "Adicionar Segmento"
 
 #: pcbnew/tools/pcb_actions.cpp:117
 msgid "Add a board stackup table on a graphic layer"
-msgstr "Adicione uma tabela de empilhamento da placa numa camada gráfica"
+msgstr "Adiciona uma tabela de empilhamento da placa numa camada gráfica"
 
 #: pcbnew/tools/pcb_actions.cpp:129
 #, fuzzy
@@ -36519,7 +36487,7 @@ msgstr "Limpar Trilhas & Vias…"
 
 #: pcbnew/tools/pcb_actions.cpp:449
 msgid "Cleanup redundant items, shorting items, etc."
-msgstr "Limpe os itens redundantes, os itens em curto, etc."
+msgstr "Limpa os itens redundantes, os itens em curto, etc."
 
 #: pcbnew/tools/pcb_actions.cpp:454
 #, fuzzy
@@ -36528,7 +36496,7 @@ msgstr "Gráficos..."
 
 #: pcbnew/tools/pcb_actions.cpp:455
 msgid "Cleanup redundant items, etc."
-msgstr "Limpe os itens redundantes, etc."
+msgstr "Limpa os itens redundantes, etc."
 
 #: pcbnew/tools/pcb_actions.cpp:462
 msgid "Add Microwave Gap"
@@ -36758,7 +36726,7 @@ msgstr "Alternar Largura da Trilha Para a Próxima"
 
 #: pcbnew/tools/pcb_actions.cpp:611
 msgid "Change track width to next pre-defined size"
-msgstr "Altere a largura da trilha para o próximo tamanho predefinido"
+msgstr "Altera a largura da trilha para o próximo tamanho predefinido"
 
 #: pcbnew/tools/pcb_actions.cpp:616
 msgid "Switch Track Width to Previous"
@@ -36766,7 +36734,7 @@ msgstr "Alternar Largura da Trilha Para a Anterior"
 
 #: pcbnew/tools/pcb_actions.cpp:616
 msgid "Change track width to previous pre-defined size"
-msgstr "Altere a largura da trilha para o tamanho predefinido anterior"
+msgstr "Alterna a largura da trilha para o tamanho predefinido anteriormente"
 
 #: pcbnew/tools/pcb_actions.cpp:621
 msgid "Increase Via Size"
@@ -36774,7 +36742,7 @@ msgstr "Aumentar Tamanho da Via"
 
 #: pcbnew/tools/pcb_actions.cpp:621
 msgid "Change via size to next pre-defined size"
-msgstr "Altere o tamanho da via para o próximo tamanho predefinido"
+msgstr "Alterna o tamanho da via para o próximo tamanho predefinido"
 
 #: pcbnew/tools/pcb_actions.cpp:626
 msgid "Decrease Via Size"
@@ -36782,7 +36750,7 @@ msgstr "Diminuir Tamanho da Via"
 
 #: pcbnew/tools/pcb_actions.cpp:626
 msgid "Change via size to previous pre-defined size"
-msgstr "Altere o tamanho da via para o tamanho pré-definido anterior"
+msgstr "Alterna o tamanho da via para o tamanho predefinido anteriormente"
 
 #: pcbnew/tools/pcb_actions.cpp:635
 msgid "Merge Zones"
@@ -36873,11 +36841,11 @@ msgstr "Mover Item"
 
 #: pcbnew/tools/pcb_actions.cpp:692
 msgid "Remove items from group"
-msgstr "Remova os itens do grupo"
+msgstr "Remove os itens do grupo"
 
 #: pcbnew/tools/pcb_actions.cpp:697
 msgid "Enter Group"
-msgstr "Entre no Grupo"
+msgstr "Entre no grupo"
 
 #: pcbnew/tools/pcb_actions.cpp:697
 #, fuzzy
@@ -36989,7 +36957,7 @@ msgstr "Inverter Visualização da Placa"
 
 #: pcbnew/tools/pcb_actions.cpp:782
 msgid "View board from the opposite side"
-msgstr "Veja o quadro do lado oposto"
+msgstr "Veja a placa do lado oposto"
 
 #: pcbnew/tools/pcb_actions.cpp:788
 msgid "Show Ratsnest"
@@ -37288,7 +37256,7 @@ msgstr "Contornos do Afastamento"
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
-"Mostre a resolução da folga para a camada ativa entre os dois objetos "
+"Mostre a resolução do isolamento para a camada ativa entre os dois objetos "
 "selecionados"
 
 #: pcbnew/tools/pcb_actions.cpp:1084
@@ -37569,7 +37537,7 @@ msgstr "Contornar"
 
 #: pcbnew/tools/pcb_actions.cpp:1328
 msgid "Switch router to walkaround mode"
-msgstr "Mudar o roteador para o modo walkaround (passeio)"
+msgstr "Mude o roteador para o modo contorno (contorno)"
 
 #: pcbnew/tools/pcb_actions.cpp:1333
 msgid "Set Layer Pair..."
@@ -37879,7 +37847,7 @@ msgstr "Exclusões"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "DRC violations which have been individually excluded"
-msgstr "Violações do DRC que foram excluídas individualmente"
+msgstr "As violações do DRC que foram excluídas individualmente"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Show footprint and text origins as a cross"
@@ -37928,7 +37896,7 @@ msgstr "Camada traseira"
 
 #: pcbnew/widgets/appearance_controls.cpp:395
 msgid "Back Assembly View"
-msgstr "Vista de montagem traseira"
+msgstr "Vista da montagem traseira"
 
 #: pcbnew/widgets/appearance_controls.cpp:443
 #, fuzzy
@@ -37952,7 +37920,7 @@ msgstr "Ilhas não revestidas:"
 
 #: pcbnew/widgets/appearance_controls.cpp:611
 msgid "Inactive layers will be shown in full color"
-msgstr "As camadas inativas serão mostradas em cores"
+msgstr "As camadas inativas serão mostradas com cores"
 
 #: pcbnew/widgets/appearance_controls.cpp:616
 msgid "Dim"
@@ -37998,15 +37966,17 @@ msgstr "Escolha quando mostrar as cores para a net e a netclass"
 
 #: pcbnew/widgets/appearance_controls.cpp:686
 msgid "Net and netclass colors are shown on all copper items"
-msgstr "As cores net e netclass são mostradas em todos os itens com cobre"
+msgstr ""
+"As cores da rede e da classe da rede são mostradas em todos os itens com "
+"cobre"
 
 #: pcbnew/widgets/appearance_controls.cpp:694
 msgid "Net and netclass colors are shown on the ratsnest only"
-msgstr "As cores da net e netclass são mostradas apenas no ratsnest"
+msgstr "As cores da rede e da classe da rede são mostradas apenas no ratnest"
 
 #: pcbnew/widgets/appearance_controls.cpp:701
 msgid "Net and netclass colors are not shown"
-msgstr "As cores da net e da netclass não são mostradas"
+msgstr "As cores da rede e da classe da rede não são mostradas"
 
 #: pcbnew/widgets/appearance_controls.cpp:712
 #, fuzzy, c-format
@@ -38074,12 +38044,12 @@ msgstr "Ocultar Todas as Camadas de Cobre"
 #: pcbnew/widgets/appearance_controls.cpp:929
 #, c-format
 msgid "Click to hide ratsnest for %s"
-msgstr "Clique para ocultar o rastnet para %s"
+msgstr "Clique para ocultar o ratnest para %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:930
 #, c-format
 msgid "Click to show ratsnest for %s"
-msgstr "Clique para mostrar o rastnet para %s"
+msgstr "Clique para mostrar o ratnest para %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:939
 #, fuzzy
@@ -38276,7 +38246,7 @@ msgstr "Exibir ou ocultar DCodes"
 #: pcbnew/widgets/appearance_controls.cpp:2023
 #, c-format
 msgid "Set opacity of %s"
-msgstr "Defina a opacidade do %s"
+msgstr "Define a opacidade do %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2179
 #, fuzzy, c-format
@@ -38349,7 +38319,7 @@ msgid ""
 "enable color editing."
 msgstr ""
 "O tema atual das cores é somente leitura.  Crie um novo tema nas "
-"Preferências para ativar a edição das cores."
+"preferências para ativar a edição das cores."
 
 #: pcbnew/widgets/appearance_controls_base.cpp:45
 #, fuzzy
@@ -38417,7 +38387,7 @@ msgstr "Outras páginas"
 
 #: pcbnew/zone.cpp:552
 msgid "Rule Area"
-msgstr "Área de ajuste"
+msgstr "Regra da região"
 
 #: pcbnew/zone.cpp:554
 #, fuzzy
@@ -38579,7 +38549,7 @@ msgstr "Ficheiros de esquema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr "Editor de esquemas autônomo para esquemas KiCad"
+msgstr "Editor autônomo de esquemas para os esquemas do KiCad"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 #, fuzzy
@@ -38665,7 +38635,8 @@ msgstr ""
 "plotagem assim como a exportação dos dados para diferentes formatos. O KiCad "
 "inclui também uma biblioteca de componentes de alta qualidade com milhares "
 "de símbolos, representação real do componente e dos modelos 3D. O KiCad "
-"precisa de poucos recursos do sistema e funciona em Linux, Windows e macOS."
+"precisa de poucos recursos do sistema e funciona no Linux, no Windows e no "
+"macOS."
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
 #, fuzzy
