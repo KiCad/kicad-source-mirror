@@ -30,6 +30,7 @@
 #include <wx/stattext.h>
 #include <wx/statbox.h>
 
+#include <ignore.h>
 #include <widgets/gal_options_panel.h>
 #include <eda_draw_frame.h>
 
