@@ -542,7 +542,7 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
                     else
                         otherUnit->GetField( DATASHEET_FIELD )->SetText( m_text );
 
-                    editFrame->UpdateItem( otherUnit );
+                    editFrame->UpdateItem( otherUnit, false, true );
                 }
             }
         }

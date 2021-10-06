@@ -213,7 +213,7 @@ public:
     /**
      * Mark an item for refresh.
      */
-    void UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete = false );
+    void UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete = false, bool aUpdateRtree = false );
 
     /**
      * Mark selected items for refresh.

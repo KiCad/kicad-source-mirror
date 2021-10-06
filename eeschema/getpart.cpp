@@ -226,7 +226,7 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
 
         TestDanglingEnds();
 
-        UpdateItem( aSymbol );
+        UpdateItem( aSymbol, false, true );
         OnModify();
     }
 }
@@ -270,6 +270,6 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_SYMBOL* aSymbol )
     if( aSymbol->IsSelected() )
         m_toolManager->RunAction( EE_ACTIONS::addItemToSel, true, aSymbol );
 
-    UpdateItem( aSymbol );
+    UpdateItem( aSymbol, false, true );
     OnModify();
 }

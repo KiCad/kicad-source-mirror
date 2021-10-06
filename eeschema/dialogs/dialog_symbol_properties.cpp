@@ -730,7 +730,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
                 otherUnit->GetField( DATASHEET_FIELD )->SetText( m_fields->at( DATASHEET_FIELD ).GetText() );
                 otherUnit->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
                 otherUnit->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
-                GetParent()->UpdateItem( otherUnit );
+                GetParent()->UpdateItem( otherUnit, false, true );
             }
         }
     }
@@ -748,7 +748,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     currentScreen->Append( m_symbol );
     GetParent()->TestDanglingEnds();
-    GetParent()->UpdateItem( m_symbol );
+    GetParent()->UpdateItem( m_symbol, false, true );
     GetParent()->OnModify();
 
     // This must go after OnModify() so that the connectivity graph will have been updated.

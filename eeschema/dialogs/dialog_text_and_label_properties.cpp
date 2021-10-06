@@ -380,7 +380,7 @@ bool DIALOG_TEXT_AND_LABEL_PROPERTIES::TransferDataFromWindow()
         }
     }
 
-    m_Parent->UpdateItem( m_CurrentText );
+    m_Parent->UpdateItem( m_CurrentText, false, true );
     m_Parent->GetCanvas()->Refresh();
     m_Parent->OnModify();
 

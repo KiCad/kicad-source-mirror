@@ -194,7 +194,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
         }
     }
 
-    m_frame->UpdateItem( aPin );
+    m_frame->UpdateItem( aPin, false, true );
     m_frame->OnModify( );
 
     std::vector<MSG_PANEL_ITEM> items;

@@ -551,7 +551,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         }
 
         connections = head->IsConnectable();
-        m_frame->UpdateItem( head );
+        m_frame->UpdateItem( head, false, true );
     }
     else
     {
@@ -627,7 +627,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         }
 
         connections |= item->IsConnectable();
-        m_frame->UpdateItem( item );
+        m_frame->UpdateItem( item, false, true );
         updateItem( item, true );
     }
 
@@ -760,7 +760,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         }
 
         connections = item->IsConnectable();
-        m_frame->UpdateItem( item );
+        m_frame->UpdateItem( item, false, true );
     }
     else if( selection.GetSize() > 1 )
     {
@@ -815,7 +815,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             }
 
             connections |= item->IsConnectable();
-            m_frame->UpdateItem( item );
+            m_frame->UpdateItem( item, false, true );
         }
     }
 
@@ -1134,7 +1134,7 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     if( m_frame->eeconfig()->m_AutoplaceFields.enable || parentType == SCH_SHEET_T )
         static_cast<SCH_ITEM*>( aField->GetParent() )->AutoAutoplaceFields( m_frame->GetScreen() );
 
-    m_frame->UpdateItem( aField );
+    m_frame->UpdateItem( aField, false, true );
     m_frame->OnModify();
 
     // This must go after OnModify() so that the connectivity graph will have been updated.

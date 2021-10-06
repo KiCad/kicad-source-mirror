@@ -544,7 +544,7 @@ int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
     {
         if( item->Replace( data, sheet ) )
         {
-            m_frame->UpdateItem( item );
+            m_frame->UpdateItem( item, false, true );
             m_frame->GetCurrentSheet().UpdateAllScreenReferences();
             m_frame->OnModify();
         }
@@ -575,7 +575,7 @@ int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
         {
             if( item->Replace( data, sheet ) )
             {
-                m_frame->UpdateItem( item );
+                m_frame->UpdateItem( item, false, true );
                 modified = true;
             }
 

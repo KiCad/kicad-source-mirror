@@ -705,7 +705,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                     m_busUnfold.flipY = flipY;
                     m_busUnfold.flipX = flipX;
 
-                    m_frame->UpdateItem( entry );
+                    m_frame->UpdateItem( entry, false, true );
                     m_wires.front()->SetStartPoint( entry->GetEnd() );
                 }
 

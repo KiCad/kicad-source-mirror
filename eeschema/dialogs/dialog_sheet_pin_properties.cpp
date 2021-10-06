@@ -125,7 +125,7 @@ bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataFromWindow()
     auto shape = static_cast<PINSHEETLABEL_SHAPE>( m_choiceConnectionType->GetCurrentSelection() );
     m_sheetPin->SetShape( shape );
 
-    m_frame->UpdateItem( m_sheetPin );
+    m_frame->UpdateItem( m_sheetPin, false, true );
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();
 

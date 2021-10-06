@@ -175,7 +175,7 @@ bool DIALOG_LINE_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
         stroke.SetColor( m_colorSwatch->GetSwatchColor() );
 
         strokeItem->SetStroke( stroke );
-        m_frame->UpdateItem( strokeItem );
+        m_frame->UpdateItem( strokeItem, false, true );
     }
 
     m_frame->GetCanvas()->Refresh();
