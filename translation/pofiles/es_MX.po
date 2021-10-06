@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-03 23:55+0000\n"
+"PO-Revision-Date: 2021-10-14 07:36+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -395,14 +395,12 @@ msgid "Render current view using Raytracing"
 msgstr "Renderizar la vista actual utilizando Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:23
-#, fuzzy
 msgid "Environment Colors"
-msgstr "Variables de entorno"
+msgstr "Colores de Entorno"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "Inicio de las referencias traseras:"
+msgstr "Inicio del gradiente de fondo:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:37
 msgid "Background gradient end:"
@@ -413,9 +411,8 @@ msgid "Solder paste:"
 msgstr "Pasta de soldadura:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "Color del cuerpo de la placa"
+msgstr "Colores de la Placa"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:66
 #, fuzzy
@@ -423,9 +420,8 @@ msgid "Use board stackup colors"
 msgstr "Inserte la tabla de apilado de placa"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "Colores de redes:"
+msgstr "Usar colores:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
@@ -958,23 +954,21 @@ msgid "Toggle Through Hole 3D models"
 msgstr "Mostrar modelos 3D pasantes"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
-#, fuzzy
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "Mostrar modelos 3D con atributo \"Pasante\""
+msgstr "Alternar modelos 3D para componentes con el atributo \"Pasante\""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle SMD 3D models"
 msgstr "Mostrar modelos 3D SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
-#, fuzzy
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "Mostrar modelos 3D con atributo \"montaje superficial\""
+msgstr ""
+"Alternar modelos 3D ccomponentes con el atributo \"montaje superficial\""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
-#, fuzzy
 msgid "Toggle Other 3D models"
-msgstr "Mostrar modelos 3D SMD"
+msgstr "Alternar modelos 3D de Otros"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
@@ -1291,9 +1285,8 @@ msgid "Export to Clipboard"
 msgstr "Exportar al portapapeles"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Symbol (.kicad_sym file)"
-msgstr "Símbolo (archivo .lib)"
+msgstr "Símbolo (archivo .kicad_sym)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Footprint (.kicad_mod file)"
@@ -1506,9 +1499,8 @@ msgid "Warning"
 msgstr "Aviso"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Error"
-msgstr "Error al guardar el archivo"
+msgstr "Error al abrir el archivo"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
@@ -1522,9 +1514,8 @@ msgid "OK"
 msgstr "Aceptar"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169
-#, fuzzy
 msgid "Open Anyway"
-msgstr "Guardar de todas formas"
+msgstr "Abrir de todas formas"
 
 #: common/confirm.cpp:180 common/confirm.cpp:217
 msgid "Save Changes?"
@@ -3065,9 +3056,8 @@ msgid "Canvas scale:"
 msgstr "Escala del lienzo:"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
-#, fuzzy
 msgid "Apply icon scaling to fonts"
-msgstr "Aplicar secuencia de acciones"
+msgstr "Aplicar escalado de iconos a las fuentes"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
@@ -3616,10 +3606,9 @@ msgid "Default"
 msgstr "Por defecto"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
-#, fuzzy
 msgid "Set color to transparent to use KiCad default color."
 msgstr ""
-"Establezca el color como transparente para utilizar el color por defecto de "
+"Establezca el color a transparente para utilizar el color por defecto de "
 "KiCad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
@@ -3936,7 +3925,7 @@ msgstr "&Acerca de KiCad"
 
 #: common/eda_base_frame.cpp:457
 msgid "&Help"
-msgstr "A&yuda"
+msgstr "&Ayuda"
 
 #: common/eda_base_frame.cpp:941
 #, c-format
@@ -3991,14 +3980,14 @@ msgid "Documentation File"
 msgstr "Archivo de documentación"
 
 #: common/eda_doc.cpp:145
-#, fuzzy, c-format
+#, c-format
 msgid "Documentation file '%s' not found."
-msgstr "No se ha encontrado el archivo de esquema '%s'."
+msgstr "No se ha encontrado el archivo de documentación '%s'."
 
 #: common/eda_doc.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown MIME type for documentation file '%s'"
-msgstr "Tipo MIME desconocido del archivo '%s'"
+msgstr "Tipo de MIME desconocido para el archivo de documentación '%s'"
 
 #: common/eda_draw_frame.cpp:141 common/tool/actions.cpp:486
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:27
@@ -4096,7 +4085,6 @@ msgid "Pad"
 msgstr "Pad"
 
 #: common/eda_item.cpp:254 common/eda_item.cpp:257
-#, fuzzy
 msgid "Graphic"
 msgstr "Gráficos"
 
@@ -4132,12 +4120,10 @@ msgid "Target"
 msgstr "Mira de centrado"
 
 #: common/eda_item.cpp:268
-#, fuzzy
 msgid "ItemList"
 msgstr "Lista de elementos"
 
 #: common/eda_item.cpp:269
-#, fuzzy
 msgid "NetInfo"
 msgstr "Información de red"
 
@@ -4770,15 +4756,15 @@ msgstr ""
 "kiface '%s'."
 
 #: common/kiway.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
-"Error de instalación fatal.\n"
-"No puede cargarse el archivo:\n"
+"Error de instalación fatal. El archivo:\n"
 "\"%s\"\n"
+"no pudo ser cargado\n"
 
 #: common/kiway.cpp:301
 msgid "It is missing.\n"
@@ -5392,9 +5378,8 @@ msgid "No default editor found, you must choose one."
 msgstr "No se ha encontrado editor por defecto, debe escoger uno."
 
 #: common/pgm_base.cpp:186 common/pgm_base.cpp:188
-#, fuzzy
 msgid "Executable file"
-msgstr "Archivos ejecutables ("
+msgstr "Archivo ejecutable"
 
 #: common/pgm_base.cpp:198
 msgid "Select Preferred Editor"
@@ -5437,9 +5422,8 @@ msgstr "No puede abrirse al archivo '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2349
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2648
-#, fuzzy
 msgid "File import cancelled by user."
-msgstr "Apertura cancelada por el usuario."
+msgstr "Importación del archivo cancelada por el usuario."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2366
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2384
@@ -6531,9 +6515,11 @@ msgid "Set Hotkey"
 msgstr "Crear atajo"
 
 #: common/widgets/widget_hotkey_list.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "El nombre %s está reservado, y no puede utilizarse aquí."
+msgstr ""
+"La combinación de teclas \"%s\" está reservada en KiCad, y no se puede "
+"asignar."
 
 #: common/widgets/widget_hotkey_list.cpp:392
 msgid "Edit..."
@@ -8647,7 +8633,6 @@ msgid "-- leave unchanged --"
 msgstr "- dejar sin cambios -"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
-#, fuzzy
 msgid "H Align (fields only):"
 msgstr "Alineamiento H (solo campos):"
 
@@ -8656,7 +8641,6 @@ msgid "Visible (fields only)"
 msgstr "Visible (solo campos)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:251
-#, fuzzy
 msgid "V Align (fields only):"
 msgstr "Alineamiento V (solo campos):"
 
@@ -8682,7 +8666,6 @@ msgid "Sheet background color:"
 msgstr "Color de fondo de la hoja:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:339
-#, fuzzy
 msgid "Junction size:"
 msgstr "Tamaño del punto de unión:"
 
@@ -30575,7 +30558,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:906
 #: pcbnew/footprint_viewer_frame.cpp:720
 msgid "Previous footprint placement still in progress."
-msgstr ""
+msgstr "La colocación de la huella anterior aún está progreso."
 
 #: pcbnew/footprint_libraries_utils.cpp:995
 msgid "Save Footprint As"
@@ -36332,9 +36315,9 @@ msgid "Layer Display Options"
 msgstr "Opciones de visualización de capas"
 
 #: pcbnew/widgets/appearance_controls.cpp:595
-#, fuzzy, c-format
+#, c-format
 msgid "Inactive layers (%s):"
-msgstr "Capas inactivas:"
+msgstr "Capas inactivas (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Inactive layers:"
@@ -36369,9 +36352,9 @@ msgid "Net Display Options"
 msgstr "Opciones de visualización de redes"
 
 #: pcbnew/widgets/appearance_controls.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "Net colors (%s):"
-msgstr "Colores de redes:"
+msgstr "Colores de redes (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Net colors:"
@@ -36397,9 +36380,9 @@ msgid "Net and netclass colors are not shown"
 msgstr "Los colores de red y clases de red no se muestran"
 
 #: pcbnew/widgets/appearance_controls.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "Ratsnest display (%s):"
-msgstr "Visualización de líneas aéreas:"
+msgstr "Visualización de líneas aéreas (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:714
 msgid "Ratsnest display:"
@@ -36720,9 +36703,8 @@ msgid "Configure net classes"
 msgstr "Configurar clases de redes"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:161
-#, fuzzy
 msgid "Presets (Ctrl+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "Preajustes (Ctrl+Tab):"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "(unsaved)"
