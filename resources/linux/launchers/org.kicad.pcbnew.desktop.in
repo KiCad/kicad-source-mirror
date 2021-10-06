@@ -10,3 +10,4 @@ Name=KiCad PCB Editor (Standalone)
 GenericName=PCB layout editor
 Comment=Standalone circuit board editor for KiCad boards
 Keywords=pcbnew
+X-AppStream-Ignore=true

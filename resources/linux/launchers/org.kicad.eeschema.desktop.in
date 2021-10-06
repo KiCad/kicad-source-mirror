@@ -10,3 +10,4 @@ Name=KiCad Schematic Editor (Standalone)
 GenericName=Schematic Capture Tool
 Comment=Standalone schematic editor for KiCad schematics
 Keywords=eeschema
+X-AppStream-Ignore=true

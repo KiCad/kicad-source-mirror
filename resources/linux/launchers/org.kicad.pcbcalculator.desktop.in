@@ -8,3 +8,4 @@ Exec=pcb_calculator
 Name=KiCad PCB Calculator
 GenericName=PCB Calculator
 Comment=Calculator for various electronics-related computations
+X-AppStream-Ignore=true

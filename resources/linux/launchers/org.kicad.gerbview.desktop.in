@@ -10,3 +10,4 @@ Name=KiCad Gerber Viewer
 GenericName=Gerber File Viewer
 Comment=View Gerber files
 Keywords=gerbview
+X-AppStream-Ignore=true

@@ -9,3 +9,4 @@ Name=KiCad Image Converter
 GenericName=Bitmap to Component Converter
 Comment=Create a component from a bitmap for use with KiCad
 Keywords=bitmap2component
+X-AppStream-Ignore=true
