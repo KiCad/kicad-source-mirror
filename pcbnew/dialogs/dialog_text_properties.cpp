@@ -216,7 +216,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     else if( m_MultiLineText->IsShown() )
     {
         BOARD*   board = m_Parent->GetBoard();
-        wxString converted = board->ConvertKIIDsToCrossReferences( m_edaText->GetText() );
+        wxString converted = board->ConvertKIIDsToCrossReferences(
+                UnescapeString( m_edaText->GetText() ) );
 
         m_MultiLineText->SetValue( converted );
         m_MultiLineText->SetSelection( -1, -1 );
