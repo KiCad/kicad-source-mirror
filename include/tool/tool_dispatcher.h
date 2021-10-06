@@ -120,6 +120,9 @@ private:
     ///< The last mouse cursor position (in world coordinates).
     VECTOR2D m_lastMousePos;
 
+    ///< The last mouse cursor position (in screen coordinates).
+    VECTOR2D m_lastMousePosScreen;
+
     ///< State of mouse buttons.
     std::vector<BUTTON_STATE*> m_buttons;
 
