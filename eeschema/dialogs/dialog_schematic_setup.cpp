@@ -105,7 +105,8 @@ void DIALOG_SCHEMATIC_SETUP::OnPageChange( wxBookCtrlEvent& event )
 {
     int page = event.GetSelection();
 
-    KIUI::Disable( m_treebook->GetPage( page ) );
+    if( Prj().IsReadOnly() )
+        KIUI::Disable( m_treebook->GetPage( page ) );
 
     // Enable the reset button only if the page is resettable
     if( m_resetButton )

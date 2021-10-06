@@ -142,7 +142,7 @@ void DIALOG_BOARD_SETUP::OnPageChange( wxBookCtrlEvent& event )
         m_physicalStackup->OnLayersOptionsChanged( m_layers->GetUILayerMask() );
     else if( page == m_layerSetupPage )
         m_layers->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
-    else
+    else if( Prj().IsReadOnly() )
         KIUI::Disable( m_treebook->GetPage( page ) );
 
 #ifdef __WXMAC__
