@@ -483,6 +483,16 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
             pad->ImportSettingsFrom( *(m_frame->GetDesignSettings().m_Pad_Master.get()) );
 
+            // If the user has set the footprint type to SMD, we assume that they would like to place
+            // SMD pads
+            if( m_board->GetFirstFootprint()->GetAttributes() & FP_SMD )
+            {
+                pad->SetAttribute( PAD_ATTRIB::SMD );
+                pad->SetShape( PAD_SHAPE::ROUNDRECT );
+                pad->SetSizeX( 1.5 * pad->GetSizeY() );
+                pad->SetLayerSet( PAD::SMDMask() );
+            }
+
             if( pad->CanHaveNumber() )
             {
                 wxString padNumber = m_padTool->GetLastPadNumber();
