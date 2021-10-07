@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-06 06:36+0000\n"
+"PO-Revision-Date: 2021-10-14 07:35+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -295,7 +295,7 @@ msgstr "ส่งออกมุมมองนี้เป็น JPEG…"
 #: common/tool/actions.cpp:564 pcbnew/footprint_viewer_frame.cpp:942
 #: pcbnew/pcb_base_frame.cpp:518
 msgid "3D Viewer"
-msgstr "มองภาพ3มิติ"
+msgstr "โปรแกรมดู3มิติ"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:69
 msgid "Copy 3D Image"
@@ -357,7 +357,7 @@ msgstr "แก้ไข"
 #: pcbnew/menubar_footprint_editor.cpp:243 pcbnew/menubar_pcb_editor.cpp:458
 #: pcbnew/toolbars_footprint_viewer.cpp:182
 msgid "&View"
-msgstr "มอง"
+msgstr "มุมมอง"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:148 cvpcb/menubar.cpp:89
 #: gerbview/menubar.cpp:226 kicad/menubar.cpp:194
@@ -576,7 +576,7 @@ msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:45
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
-msgstr "ต้องปิดและเปิดมอง3มิติอีกครั้งเพื่อให้การตั้งค่ามีผล"
+msgstr "ต้องปิดและเปิดโปรแกรมมอง3มิติอีกครั้งเพื่อให้การตั้งค่ามีผล"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:49
 msgid "Selection color:"
@@ -2119,7 +2119,7 @@ msgstr "กริด 1:"
 #: common/dialogs/dialog_grid_settings_base.cpp:142
 #: common/dialogs/dialog_grid_settings_base.cpp:157
 msgid "(hotkey)"
-msgstr "(คีย์ย่อ)"
+msgstr "(คีย์ร้อน)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:146
 msgid "Grid 2:"
@@ -2143,7 +2143,7 @@ msgstr "กำหนดค่ากริด"
 
 #: common/dialogs/dialog_hotkey_list.cpp:34
 msgid "Hotkey List"
-msgstr "รายการคีย์ย่อ"
+msgstr "รายการคีย์ร้อน"
 
 #: common/dialogs/dialog_image_editor.cpp:72
 msgid "Incorrect scale number"
@@ -2344,7 +2344,7 @@ msgstr "กระดาษพรีวิว"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Title Block Data"
-msgstr "พริวิวข้อมูลไตเติ้ล"
+msgstr "พริวิวข้อมูลบล็อกหัวเรื่อง"
 
 #: common/dialogs/dialog_page_settings.cpp:109
 #: common/dialogs/dialog_page_settings_base.h:145
@@ -2358,7 +2358,7 @@ msgstr "กระดาษ"
 
 #: common/dialogs/dialog_page_settings.cpp:111
 msgid "Title Block"
-msgstr "ไตเติ้ล"
+msgstr "บล็อกหัวเรื่อง"
 
 #: common/dialogs/dialog_page_settings.cpp:474
 #, c-format
@@ -2527,7 +2527,7 @@ msgstr "ไฟล์:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:172
 msgid "Title Block Parameters"
-msgstr "พารามิเตอร์ไตเติ้ล"
+msgstr "พารามิเตอร์บล็อกหัวเรื่อง"
 
 #: common/dialogs/dialog_page_settings_base.cpp:182
 #, c-format
@@ -2744,7 +2744,7 @@ msgstr "ขาวดำ"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 msgid "Print border and title block"
-msgstr "พิมพ์ขอบนอกและกรอบไตเติ้ล"
+msgstr "พิมพ์ขอบนอกและบล็อกหัวเรื่อง"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
@@ -2912,7 +2912,7 @@ msgstr "ต้านความไม่เรียบ"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
-msgstr "เร่งกราฟิก:"
+msgstr "ใช้ตัวเร่งกราฟิก:"
 
 #: common/dialogs/panel_common_settings_base.cpp:34
 #: common/dialogs/panel_common_settings_base.cpp:44
@@ -3007,13 +3007,15 @@ msgstr "เลื่อนเมาส์ไปจุดกำเนิดขอ
 
 #: common/dialogs/panel_common_settings_base.cpp:180
 msgid "First hotkey selects tool"
-msgstr "คีย์ด่วนแรกเลือกเครื่องมือ"
+msgstr "คีย์ร้อนแรกเลือกเครื่องมือ"
 
 #: common/dialogs/panel_common_settings_base.cpp:181
 msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
-msgstr "ถ้าไม่เลือก คีย์ด่วนจะทำงานทันที ถึงแม้ว่าคำสั่งที่เกี่ยวข้อง ไม่ถูกเลือกมาก่อน"
+msgstr ""
+"ถ้าไม่เลือก,คีย์ร้อนจะทำงานทันที ถึงแม้ว่าคำสั่งที่เกี่ยวข้อง "
+"ไม่ถูกเลือกมาก่อน"
 
 #: common/dialogs/panel_common_settings_base.cpp:189
 msgid "Session"
@@ -3078,7 +3080,7 @@ msgstr "แบ็คอัพโครงการอัตโนมัติ"
 #: common/dialogs/panel_common_settings_base.cpp:257
 msgid ""
 "Automatically create backup archives of the current project when saving files"
-msgstr "สร้างไฟล์แบ็คอัพโครงการอัตโนมัติ เมื่อสั่งบันทึกไฟล์"
+msgstr "สร้างไฟล์หน่วยเก็บถาวรแบ็คอัพโครงการอัตโนมัติ เมื่อสั่งบันทึกไฟล์"
 
 #: common/dialogs/panel_common_settings_base.cpp:261
 msgid "Create backups when auto save occurs"
@@ -3145,20 +3147,20 @@ msgstr "ย้อนกลับทั้งหมดในกรอบสนท
 
 #: common/dialogs/panel_hotkeys_editor.cpp:135
 msgid "Import Hotkeys..."
-msgstr "นำเข้าคีย์ด่วน…"
+msgstr "นำเข้าคีย์ร้อน…"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:136
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
-msgstr "นำเข้าการกำหนดคีย์ด่วนจากไฟล์ภายนอก แทนค่าปัจจุบัน"
+msgstr "นำเข้าการกำหนดคีย์ร้อนจากไฟล์ภายนอก แทนค่าปัจจุบัน"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:198
 msgid "Import Hotkeys File:"
-msgstr "นำเข้าไฟล์คีย์ด่วน:"
+msgstr "นำเข้าไฟล์คีย์ร้อน:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:246
 msgid "| Action | Default Hotkey | Description"
-msgstr "| พฤติกรรม | คีย์ด่วนปริยาย | อธิบาย"
+msgstr "| พฤติกรรม | คีย์ร้อนปริยาย | อธิบาย"
 
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: pcbnew/dialogs/panel_edit_options_base.cpp:208
@@ -3200,7 +3202,7 @@ msgstr "ระหว่างวาดเส้นทองแดง หรื�
 
 #: common/dialogs/panel_mouse_settings_base.cpp:38
 msgid "Use zoom acceleration"
-msgstr "ใช้ขยายแบบเร่ง"
+msgstr "ใช้การขยายแบบเร่ง"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:39
 msgid "Zoom faster when scrolling quickly"
@@ -3848,7 +3850,7 @@ msgstr "เมาส์และทัชแพ็ด"
 
 #: common/eda_base_frame.cpp:992
 msgid "Hotkeys"
-msgstr "คีย์ย่อ"
+msgstr "คีย์ร้อน"
 
 #: common/eda_base_frame.cpp:1046
 #, c-format
@@ -3944,16 +3946,17 @@ msgid ""
 "If you'd like to choose later, select Accelerated Graphics in the "
 "Preferences menu."
 msgstr ""
-"KiCad ใช้ความสามารถกราฟิกการ์ดเพื่อให้คุณได้รับประสบการณ์ที่ราบเรียบและลื่นไหล "
-"แต่ทางเลือกนี้ปิดไว้โดยปริยาย เนื่องจากไม่สามารถใช้งานได้บนทุกคอมพิวเตอร์\n"
+"KiCad ใช้ความสามารถกราฟิกการ์ดเพื่อให้คุณได้รับประสบการณ์ที่ราบเรียบและลื่"
+"นไหล แต่ทางเลือกนี้ปิดไว้โดยปริยาย "
+"เนื่องจากไม่สามารถใช้งานได้บนทุกคอมพิวเตอร์\n"
 "\n"
 "คุณต้องการทดลองความเร่งบนกราฟิกการ์ด?\n"
 "\n"
-"หากคุณต้องการเลือกภายหลัง เลือกเร่งกราฟิกในเมนูตั้งความชอบ"
+"หากคุณต้องการเลือกภายหลัง เลือกเร่งกราฟิกในเมนู 'ตั้งความชอบ'"
 
 #: common/eda_draw_frame.cpp:1097
 msgid "Enable Graphics Acceleration"
-msgstr "ใช้งานเร่งความเร็วกราฟิก"
+msgstr "เปิดใช้งานเร่งความเร็วกราฟิก"
 
 #: common/eda_draw_frame.cpp:1099
 msgid "&Enable Acceleration"
@@ -5280,13 +5283,12 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "ไฟล์ภาษาของ KiCad ไม่ได้ติดตั้ง"
 
 #: common/plugins/altium/altium_parser.cpp:116
-#, fuzzy
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
 msgstr ""
-"สําหรับการนําเข้า Altium เราจะถือว่าไบต์ว่าง(null byte)ที่ส่วนท้ายของรายการคุณสมบัติ "
-"ข้อมูลที่นําเข้าอาจมีรูปแบบที่ไม่ถูกต้องหรือสูญหายไป"
+"ไม่พบไบท์ว่างที่จุดสิ้นสุดของรายการคุณสมบัติ "
+"ข้อมูลที่นำเข้าอาจจะฟังก์ชั่นผิดรูปหรือไม่พบ"
 
 #: common/plugins/altium/altium_parser.cpp:247
 #, c-format
@@ -5362,11 +5364,11 @@ msgstr "ผิดพลาด ไม่สามารถอ่านตาร�
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:266
 msgid "Could not open archive file."
-msgstr "ไม่สามารถเปิดไฟล์ในคลัง"
+msgstr "ไม่สามารถเปิดไฟล์หน่วยเก็บถาวร"
 
 #: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:274
 msgid "Invalid archive file format."
-msgstr "รูปแบบไฟล์ในคลังไม่ถูกต้อง"
+msgstr "รูปแบบไฟล์หน่วยเก็บถาวรไม่ถูกต้อง"
 
 #: common/project/project_archiver.cpp:72
 #, c-format
@@ -5411,12 +5413,12 @@ msgstr "สร้างไฟล์ '%s' ผิดพลาด"
 #: common/project/project_archiver.cpp:205
 #, c-format
 msgid "Archived file '%s'."
-msgstr "กำลังเก็บไฟล์ '%s' เข้าคลัง"
+msgstr "เก็บไฟล์หน่วยเก็บถาวร '%s'"
 
 #: common/project/project_archiver.cpp:215
 #, c-format
 msgid "Failed to archive file '%s'."
-msgstr "ล้มเหลวที่จะเก็บไฟล์ '%s' เข้าคลัง"
+msgstr "ล้มเหลวจะเก็บไฟล์หน่วยเก็บถาวร '%s'"
 
 #: common/project/project_archiver.cpp:241
 #, c-format
@@ -5550,7 +5552,7 @@ msgstr "ตั้งค่าหน้ากระดาษ…"
 
 #: common/tool/actions.cpp:96
 msgid "Settings for paper size and title block info"
-msgstr "ตั้งค่าขนาดกระดาษและไตเติ้ล"
+msgstr "ตั้งค่าขนาดกระดาษและข้อมูลบล็อกหัวเรื่อง"
 
 #: common/tool/actions.cpp:102 kicad/project_tree_pane.cpp:790
 msgid "Print..."
@@ -6066,11 +6068,11 @@ msgstr "เปิดเอกสารผลิตภัณฑ์ในเว็
 
 #: common/tool/actions.cpp:635
 msgid "List Hotkeys..."
-msgstr "รายการคีย์ด่วน…"
+msgstr "รายการคีย์ร้อน…"
 
 #: common/tool/actions.cpp:636
 msgid "Displays current hotkeys table and corresponding commands"
-msgstr "แสดงตารางแป้นลัดปัจจุบันและคําสั่งที่สอดคล้องกัน"
+msgstr "แสดงตารางคีย์ร้อนปัจจุบันและคําสั่งที่สอดคล้องกัน"
 
 #: common/tool/actions.cpp:641
 msgid "Get Involved"
@@ -6205,7 +6207,7 @@ msgstr "ไม่มีฟุ้ทพรินท์ปริยาย"
 
 #: common/widgets/gal_options_panel.cpp:85
 msgid "Accelerated graphics"
-msgstr "ตัวเร่งกราฟิก"
+msgstr "กราฟิกเร่งความเร็ว"
 
 #: common/widgets/gal_options_panel.cpp:85
 msgid "Fallback graphics"
@@ -6217,14 +6219,15 @@ msgstr "เครื่องจักรเรนเดอร์"
 
 #: common/widgets/gal_options_panel.cpp:90
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr "ตัวเร่งกราฟิกในฮาร์ดแวร์ (แนะนำ)"
+msgstr "ตัวเร่งความเร็วกราฟิกในฮาร์ดแวร์ (แนะนำ)"
 
 #: common/widgets/gal_options_panel.cpp:91
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
-"ซอฟต์แวร์กราฟิก (สำหรับคอมพิวเตอร์ที่ไม่สนับสนุน ตัวเร่งกราฟิกในฮาร์ดแวร์ ตามแบบ KiCad)"
+"ซอฟต์แวร์กราฟิก (สำหรับคอมพิวเตอร์ที่ไม่สนับสนุน ตัวเร่งกราฟิกในฮาร์ดแวร์ "
+"ตามความต้องการของ KiCad)"
 
 #: common/widgets/gal_options_panel.cpp:103
 msgid "Grid Options"
@@ -6372,7 +6375,7 @@ msgstr "%s ต้องน้อยกว่า %s"
 
 #: common/widgets/widget_hotkey_list.cpp:98
 msgid "Press a new hotkey, or press Esc to cancel..."
-msgstr "กดคีย์ด่วนใหม่, หรือกด ESC เพื่อยกเลิก…"
+msgstr "กดคีย์ร้อนใหม่, หรือกด ESC เพื่อยกเลิก…"
 
 #: common/widgets/widget_hotkey_list.cpp:105
 msgid "Command:"
@@ -6384,12 +6387,12 @@ msgstr "คีย์ขณะนี้:"
 
 #: common/widgets/widget_hotkey_list.cpp:145
 msgid "Set Hotkey"
-msgstr "ตั้งคีย์ด่วน"
+msgstr "ตั้งคีย์ร้อน"
 
 #: common/widgets/widget_hotkey_list.cpp:341
 #, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "'%s' ถูกสงวนไว้ในคีย์ย่อของ KiCad และไม่สามารถกำหนดซ้ำ"
+msgstr "'%s' ถูกสงวนไว้ในคีย์ร้อนของ KiCad และไม่สามารถกำหนดซ้ำ"
 
 #: common/widgets/widget_hotkey_list.cpp:392
 msgid "Edit..."
@@ -6401,7 +6404,7 @@ msgstr "ย้อนกลับเปลี่ยนแปลง"
 
 #: common/widgets/widget_hotkey_list.cpp:394
 msgid "Clear Assigned Hotkey"
-msgstr "ล้างคีย์ด่วน"
+msgstr "ล้างคีย์ร้อน"
 
 #: common/widgets/widget_hotkey_list.cpp:395
 msgid "Restore Default"
@@ -6428,7 +6431,7 @@ msgstr "(ดับเบิ้ลคลิกเพื่อแก้ไข)"
 
 #: common/widgets/widget_hotkey_list.cpp:463
 msgid "Hotkey"
-msgstr "คีย์ด่วน"
+msgstr "คีย์ร้อน"
 
 #: common/wildcards_and_files_ext.cpp:183
 msgid "All files"
@@ -6476,11 +6479,11 @@ msgstr "ไฟล์วงจรไฟฟ้า Altium"
 
 #: common/wildcards_and_files_ext.cpp:255
 msgid "CADSTAR Schematic Archive files"
-msgstr "คลังไฟล์วงจรไฟฟ้า CADSTAR"
+msgstr "ไฟล์หน่วยเก็บถาวรวงจรไฟฟ้า CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:261
 msgid "CADSTAR Archive files"
-msgstr "คลังไฟล์ CADSTAR"
+msgstr "ไฟล์หน่วยเก็บถาวร CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:267
 msgid "Eagle XML schematic files"
@@ -6509,7 +6512,7 @@ msgstr "ไฟล์พีซีบี Eagle ver.6.x XML"
 
 #: common/wildcards_and_files_ext.cpp:302
 msgid "CADSTAR PCB Archive files"
-msgstr "คลังไฟล์พีซีบี CADSTAR"
+msgstr "ไฟล์หน่วยเก็บถาวรพีซีบี CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:307
 msgid "P-Cad 200x ASCII PCB files"
@@ -6670,7 +6673,7 @@ msgstr "ไฟล์ Jpeg"
 
 #: common/wildcards_and_files_ext.cpp:554
 msgid "Hotkey file"
-msgstr "ไฟล์คีย์ย่อ"
+msgstr "ไฟล์คีย์ร้อน"
 
 #: cvpcb/auto_associate.cpp:105
 #, c-format
@@ -6761,7 +6764,7 @@ msgstr "ฟุ้ทพรินท์ '%s' ไม่ถูกต้อง"
 #: eeschema/sch_symbol.cpp:1418 eeschema/symbol_editor/symbol_editor.cpp:1246
 #: eeschema/symbol_viewer_frame.cpp:369 pcbnew/generate_footprint_info.cpp:37
 msgid "Keywords"
-msgstr "คำหลัก"
+msgstr "คำสำคัญ"
 
 #: cvpcb/cvpcb_mainframe.cpp:718
 msgid "Pin Count"
@@ -6790,7 +6793,7 @@ msgstr "กรองโดย %s"
 #: cvpcb/cvpcb_mainframe.cpp:764
 #, c-format
 msgid "Description: %s;  Keywords: %s"
-msgstr "คำอธิบาย: %s;\tคำหลัก:%s"
+msgstr "คำอธิบาย: %s;  คำสำคัญ:%s"
 
 #: cvpcb/cvpcb_mainframe.cpp:796
 #, c-format
@@ -6901,7 +6904,7 @@ msgstr "ตัวแปรสภาพแวดล้อมที่มีอย
 #: pcbnew/footprint_wizard_frame.cpp:330 pcbnew/fp_text.cpp:272
 #: pcbnew/fp_text_grid_table.cpp:110 pcbnew/pcb_dimension.cpp:310
 msgid "Value"
-msgstr "มูลค่า"
+msgstr "ค่า"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
@@ -9367,9 +9370,8 @@ msgid "Alternate Pin Name"
 msgstr "ชื่อเรียกอื่นของขา"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:145
-#, fuzzy
 msgid "Synchronized pins edit mode, and this pin is new"
-msgstr "โหมดแก้ไขขาซิงโครไนซ์"
+msgstr "โหมดแก้ไขขาแบบซิงโครไนซ์,และนี้คือขาใหม่"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:146
 msgid ""
@@ -9405,6 +9407,8 @@ msgid ""
 "Synchronized pin edit mode is enabled.\n"
 "Similar pins will be edited, regardless this option."
 msgstr ""
+"เปิดใช้งานโหมดแก้ไขขาชนิดซิงโครไนซ์\n"
+"ขาที่คล้ายคลึงกันจะถูกแก้ไข,โดยไม่สนใจทางเลือกนี้"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "If checked, this pin will exist in all units."
@@ -9691,7 +9695,7 @@ msgstr "พล็อตกระดาษเขียนแบบ"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
 msgid "Plot the drawing sheet border and title block"
-msgstr "พล็อตขอบนอกและไตเติ้ลของกระดาษเขียนแบบ"
+msgstr "พล็อตขอบนอกและบล็อกหัวเรื่องกระดาษเขียนแบบ"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -9772,7 +9776,7 @@ msgstr "พิมพ์หน้า %d"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr "พิมพ์หน้ากระดาษอ้างอิงและไตเติ้ล"
+msgstr "พิมพ์หน้ากระดาษอ้างอิงและบล็อกหัวเรื่อง"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
@@ -11448,7 +11452,7 @@ msgstr "ปรับปรุงค่าความเกี่ยวโยง
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr "ปรับมูลค่าในสัญลักษณ์ ที่ได้ถูกแทนมาแล้วในพีซีบี"
+msgstr "ปรับค่าในสัญลักษณ์ ที่ได้ถูกแทนมาแล้วในพีซีบี"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 msgid "Net names"
@@ -11800,9 +11804,8 @@ msgid "Global label size:"
 msgstr "ป้ายชื่อส่วนกลาง:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
-#, fuzzy
 msgid "Percentage of the text size to use as space around a global label"
-msgstr "สัดส่วนเปอร์เซ็นต์ของขนาดข้อความ ที่ทำให้เลื่อนตำแหน่งเหนือหรือใต้เส้นลวดหรือบัส"
+msgstr "เปอร์เซ็นต์ของขนาดข้อความ เพื่อใช้เป็นช่องว่างรอบๆป้ายชื่อส่วนกลาง"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:107
 msgid "Default line thickness:"
@@ -11898,14 +11901,12 @@ msgid "Color Theme"
 msgstr "ธีมมีสี"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
-#, fuzzy
 msgid "Use schematic editor color theme"
-msgstr "ใช้ธีมสีของ Eeschema"
+msgstr "ใช้ธีมสีของเครื่องมือแก้ไขวงจร"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:31
-#, fuzzy
 msgid "Use theme:"
-msgstr "เวลาขาขึ้น:"
+msgstr "ใช้ธีม:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:29
 msgid "&Default line width:"
@@ -12382,18 +12383,16 @@ msgid "Schematic Files"
 msgstr "ไฟล์วงจร"
 
 #: eeschema/files-io.cpp:75
-#, fuzzy
 msgid "Create a new project for this schematic"
-msgstr "สร้างโครงการใหม่สําหรับพีซีบอร์ดนี้"
+msgstr "สร้างโครงการใหม่สําหรับวงจรนี้"
 
 #: eeschema/files-io.cpp:77
-#, fuzzy
 msgid ""
 "Creating a project will enable features such as text variables, net classes, "
 "and ERC exclusions"
 msgstr ""
-"การสร้างโปรเจ็กต์จะเปิดใช้งานฟีเจอร์ต่างๆ เช่น กฎการออกแบบ , เน็ตคลาส "
-"และการตั้งค่าตามกำหนดของเลเยอร์"
+"การสร้างโปรเจ็กต์จะเปิดใช้ความสามารถต่างๆ เช่น "
+"ตัวแปรข้อความ,เน็ตคลาสและการยกเว้น ERC"
 
 #: eeschema/files-io.cpp:124 eeschema/files-io.cpp:1143
 #, c-format
@@ -12713,15 +12712,13 @@ msgstr "ไม่ใช่"
 
 #: eeschema/lib_field.cpp:445 eeschema/lib_text.cpp:363
 #: eeschema/sch_field.cpp:503
-#, fuzzy
 msgid "H Justification"
-msgstr "จัดพอเหมาะ"
+msgstr "จัดพอเหมาะตาม H"
 
 #: eeschema/lib_field.cpp:454 eeschema/lib_text.cpp:372
 #: eeschema/sch_field.cpp:512
-#, fuzzy
 msgid "V Justification"
-msgstr "จัดพอเหมาะ"
+msgstr "จัดพอเหมาะตาม V"
 
 #: eeschema/lib_item.cpp:54 eeschema/lib_pin.cpp:1041 eeschema/sch_pin.cpp:184
 #: eeschema/sch_pin.cpp:204 eeschema/sch_text.cpp:758
@@ -13277,14 +13274,13 @@ msgid "Cannot open file '%s'."
 msgstr "ไม่สามารถเปิดไฟล์ '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr "ไฟล์หน่วยเก็บข้อมูลไม่ได้แยกวิเคราะห์อย่างสมบูรณ์ เนื่องจากเหลือ %d ไบต์"
+msgstr "ไฟล์ข้อมูลไม่ได้แยกวิเคราะห์อย่างสมบูรณ์ (คงเหลือ %d ไบต์)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:478
-#, fuzzy
 msgid "Compile mask not currently supported."
-msgstr "ต่อบัสให้สำเร็จกับเซ็กเมนต์ปัจจุบัน"
+msgstr "ยังไม่สนับสนุนการกรองระหว่างการรวบรวม"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:491
 #, c-format
@@ -13292,9 +13288,9 @@ msgid "Unknown Record id: %d."
 msgstr "รหัสบันทึกที่ไม่รู้จัก: %d"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:608
-#, fuzzy, c-format
+#, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "ไม่พบเจ้าของชื่อไฟล์ (%d)"
+msgstr "ไม่พบเจ้าของขา (%d)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:653
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1889
@@ -13314,9 +13310,9 @@ msgid "Pin has unexpected inner edge type."
 msgstr "ขามีประเภทขอบด้านนอกที่ไม่คาดคิด"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "Label's owner (%d) not found."
-msgstr "ไม่พบเจ้าของชื่อไฟล์ (%d)"
+msgstr "ไม่พบเจ้าของป้ายชื่อ (%d)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
 #, c-format
@@ -13324,48 +13320,47 @@ msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "เบซิเยร์มี %d จุดควบคุม คาดว่าจะมีอย่างน้อย 2 แห่ง"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1037
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier's owner (%d) not found."
-msgstr "ไม่พบเจ้าของทางเข้าแผ่นวงจร (%d)"
+msgstr "ไม่พบเจ้าของเบซิเยร์ (%d)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1142
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "ไม่พบเจ้าของชื่อไฟล์ (%d)"
+msgstr "ไม่พบเจ้าของโพลีไลน์ (%d)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1201
-#, fuzzy, c-format
+#, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "ไม่พบเจ้าของชื่อไฟล์ (%d)"
+msgstr "ไม่พบเจ้าของรูปหลายเหลี่ยม (%d)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1282
-#, fuzzy, c-format
+#, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "ไม่พบเจ้าของชื่อชีต (%d)"
+msgstr "ไม่พบเจ้าของสี่เหลี่ยมมุมโค้งมน (%d)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1319
-#, fuzzy
 msgid "Arcs on schematic not currently supported."
-msgstr "ไม่มีวงจรเปิดอยู่ในขณะนี้"
+msgstr "ขณะนี้ยังไม่สนับสนุนส่วนโค้งบนวงจร"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1329
-#, fuzzy, c-format
+#, c-format
 msgid "Arc's owner (%d) not found."
-msgstr "ไม่พบเจ้าของทางเข้าแผ่นวงจร (%d)"
+msgstr "ไม่พบเจ้าของส่วนโค้ง (%d)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1355
 msgid "Arcs in symbols cannot exceed 180 degrees."
 msgstr "ส่วนโค้งในสัญลักษณ์ต้องไม่เกิน 180 องศา"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1395
-#, fuzzy, c-format
+#, c-format
 msgid "Line's owner (%d) not found."
-msgstr "ไม่พบเจ้าของชื่อไฟล์ (%d)"
+msgstr "ไม่พบเจ้าของเส้นตรง (%d)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1466
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "ไม่พบเจ้าของชื่อชีต (%d)"
+msgstr "ไม่พบเจ้าของรูปสี่เหลื่ยมผืนผ้า (%d)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1534
 #, c-format
@@ -13403,29 +13398,29 @@ msgid "File not found %s."
 msgstr "หาไฟล์ไม่พบ %s"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2228
-#, fuzzy, c-format
+#, c-format
 msgid "Sheetname's owner (%d) not found."
 msgstr "ไม่พบเจ้าของชื่อชีต (%d)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2251
-#, fuzzy, c-format
+#, c-format
 msgid "Filename's owner (%d) not found."
 msgstr "ไม่พบเจ้าของชื่อไฟล์ (%d)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2285
-#, fuzzy, c-format
+#, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "ไม่พบเจ้าของทางเข้าแผ่นวงจร (%d)"
+msgstr "ไม่พบเจ้าของผู้ถูกอ้างอิง (%d)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2420
-#, fuzzy, c-format
+#, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "ไม่พบเจ้าของชื่อไฟล์ (%d)"
+msgstr "ไม่พบเจ้าของการดำเนินงาน (%d)"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2430
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "ไม่พบเจ้าของชื่อไฟล์ (%d)"
+msgstr "ไม่พบเจ้าของฟุ้ทพรินท์ (%d)"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:75
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:73
@@ -13700,7 +13695,7 @@ msgstr "ชนิดหน้าไม่ถูกต้อง"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1691
 msgid "Invalid title block comment number"
-msgstr "หมายเลขความคิดเห็นบนไตเติ้ลบล็อกไม่ถูกต้อง"
+msgstr "หมายเลขความคิดเห็นบนบล็อกหัวเรื่องไม่ถูกต้อง"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1790
 msgid "Invalid sheet pin name"
@@ -13806,11 +13801,13 @@ msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "การตั้งค่าสัญลักษณ์วงจร '%s %s' ตัวระบุไลบรารีเป็น '%s'"
 
 #: eeschema/sch_screen.cpp:599
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
-msgstr "การอ้างอิงสัญลักษณ์วงจร '%s' ตัวระบุไลบรารีไม่ถูกต้อง ไม่สามารถเชื่อมโยงไลบรารีสัญลักษณ์"
+msgstr ""
+"การอ้างอิงสัญลักษณ์วงจร '%s' ตัวระบุไลบรารีไม่ถูกต้อง "
+"ไม่สามารถเชื่อมโยงไลบรารีสัญลักษณ์"
 
 #: eeschema/sch_screen.cpp:615
 #, c-format
@@ -14300,14 +14297,12 @@ msgid "Field Validation Error"
 msgstr "ข้อผิดพลาดในการตรวจสอบฟิลด์"
 
 #: eeschema/sch_validators.cpp:226
-#, fuzzy
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
-msgstr "ชื่อสัญญาณมี '[' หรือ ']' แต่ไม่ใช่ชื่อบัสเวกเตอร์ที่ถูกต้อง"
+msgstr "ชื่อสัญญาณมี '{' และ '}' แต่ไม่ใช่ชื่อบัสที่ถูกต้อง"
 
 #: eeschema/sch_validators.cpp:231
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
-msgstr "ชื่อสัญญาณมี '[' หรือ ']' แต่ไม่ใช่ชื่อบัสเวกเตอร์ที่ถูกต้อง"
+msgstr "ชื่อสัญญาณมี '{' หรือ '}' แต่ไม่ใช่ชื่อบัสที่ถูกต้อง"
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -14320,14 +14315,14 @@ msgstr ""
 "ต้นกำเนิดที่ใดที่หนึ่งในลำดับขั้นแบบแผน"
 
 #: eeschema/sheet.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The schematic '%s' has not had its symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
-"วงจร '%s' ไม่มีลิงก์ไลบรารีสัญลักษณ์ที่จับคู่ไปยังตารางไลบรารีสัญลักษณ์ โครงการที่เป็นของวงจรนี้ "
-"ต้องทำการจับคู่อีกครั้งก่อน จึงจะนำเข้าโครงการปัจจุบันได้"
+"วงจร '%s' ไม่มีลิงก์ไลบรารีสัญลักษณ์ที่จับคู่ไปยังตารางไลบรารีสัญลักษณ์  "
+"โครงการของวงจรนี้ต้องทำการจับคู่อีกครั้ง ก่อนจะนำเข้าสู่โครงการ"
 
 #: eeschema/sheet.cpp:147
 msgid ""
@@ -14495,9 +14490,8 @@ msgid "Signal"
 msgstr "สัญญาณ"
 
 #: eeschema/sim/sim_plot_frame.cpp:1087
-#, fuzzy
 msgid "noname"
-msgstr "ชื่อขา"
+msgstr "ไม่มีชื่อ"
 
 #: eeschema/sim/sim_plot_frame.cpp:1136
 msgid "Open simulation workbook"
@@ -16253,14 +16247,12 @@ msgid "Align Elements to Grid"
 msgstr "จัดองค์ประกอบเข้าหากริด"
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save Current Sheet Copy As..."
-msgstr "บันทึกสำเนาเป็น…"
+msgstr "บันทึกแผ่นปัจจุบันเป็นสำเนาชื่อ..."
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
-msgstr "บันทึกสำเนาเอกสารปัจจุบันไปที่ตำแหน่งอื่น"
+msgstr "บันทึกสำเนาแผ่นวงจรปัจจุบันไปที่ตำแหน่งอื่นหรือชื่ออื่น"
 
 #: eeschema/tools/ee_inspection_tool.cpp:282
 #, c-format
@@ -16439,7 +16431,7 @@ msgstr "แก้ไขฟิลด์ %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:1124
 #: eeschema/tools/symbol_editor_edit_tool.cpp:522
-#, fuzzy, c-format
+#, c-format
 msgid "Edit '%s' Field"
 msgstr "แก้ไขฟิลด์ %s"
 
@@ -16477,9 +16469,8 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "เน็ตต้องมีป้ายกำกับเพื่อกำหนดเน็ตคลาส"
 
 #: eeschema/tools/sch_editor_control.cpp:1002
-#, fuzzy
 msgid "Bus has no members to assign netclass to."
-msgstr "เน็ตต้องมีป้ายกำกับเพื่อกำหนดเน็ตคลาส"
+msgstr "บัสไม่มีสมาชิกที่จะกำหนดเน็ตคลาส"
 
 #: eeschema/tools/sch_editor_control.cpp:1035
 msgid "Netclasses"
@@ -16543,9 +16534,8 @@ msgid "Can't save file '%s'."
 msgstr "ไม่สามารถบันทึกไฟล์ '%s'"
 
 #: eeschema/tools/symbol_editor_control.cpp:436
-#, fuzzy
 msgid "SVG File Name"
-msgstr "ชื่อไฟล์"
+msgstr "ชื่อไฟล์ SVG"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:518
 msgid "Edit Symbol Name"
@@ -16746,31 +16736,28 @@ msgid "Sketch polygons"
 msgstr "ร่างรูปหลายเหลี่ยม"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:18
-#, fuzzy
 msgid "File Format"
-msgstr "รูปแบบไฟล์แผนที่"
+msgstr "รูปแบบไฟล์"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:20
 msgid "These parameters are usually specified in files, but not always."
-msgstr ""
+msgstr "พารามิเตอร์เหล่านี้ปกติจะถูกระบุในไฟล์,แต่ไม่จำเป็นเสมอไป"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:29
-#, fuzzy
 msgid "File units"
-msgstr "หน่วย"
+msgstr "หน่วยของไฟล์"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
-msgstr ""
+msgstr "ไม่มีเลขศูนย์นำหน้า (รูปแบบ TZ)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No trailing zeros (LZ format)"
-msgstr ""
+msgstr "ไม่มีเลขศูนย์ตามท้าย (รูปแบบ LZ)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:35
-#, fuzzy
 msgid "Zero format"
-msgstr "รูปแบบศูนย์"
+msgstr "รูปแบบเลขศูนย์"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
 msgid ""
@@ -16778,6 +16765,9 @@ msgid ""
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trainling zeros are stripped"
 msgstr ""
+"เลขจำนวนเต็มในไฟล์ สามารถระงับเลขศูนย์ได้\n"
+"รูปแบบไม่มีเลขศูนย์นำหน้า หมายความว่าเลขศูนย์ด้านหน้าถูกตัด\n"
+"รูปแบบไม่มีเลขศูนย์ตามท้าย  หมายความว่าเลขศูนย์ด้านท้ายถูกตัด"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "Coordinates Format"
@@ -16785,20 +16775,19 @@ msgstr "รูปแบบพิกัด"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:53
 msgid "The coordinates format is not specified in Excellon format."
-msgstr ""
+msgstr "รูปแบบพิกัดไม่ได้ระบุในไฟล์ Excellon"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:57
 msgid "(The decimal format does not use these settings)"
-msgstr ""
+msgstr "(รูปแบบทศนิยมไม่ได้ใช้ในการตั้งค่านี้)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "Usually: 3:3 in mm and 2:4 in inches"
-msgstr ""
+msgstr "โดยปกติ: 3:3ในหน่วยมม. และ 2:4 ในหน่วยนิ้ว"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:70
-#, fuzzy
 msgid "Format for mm"
-msgstr "รูปแบบ"
+msgstr "รูปแบบสำหรับ มม."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:74
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:84
@@ -16866,9 +16855,8 @@ msgid ":"
 msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:90
-#, fuzzy
 msgid "Format for inches"
-msgstr "ความชอบของรูปแบบ"
+msgstr "รูปแบบสำหรับนิ้ว"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:22
 msgid "Full size"
@@ -16922,7 +16910,7 @@ msgstr "ไม่มีเลเยอร์ว่างจะโหลดไฟ
 
 #: gerbview/excellon_read_drill_file.cpp:283
 msgid "Error reading EXCELLON drill file"
-msgstr "เกิดข้อผิดพลาดในการอ่านไฟล์การเจาะ EXCELLON"
+msgstr "เกิดข้อผิดพลาดในการอ่านไฟล์การเจาะ Excellon"
 
 #: gerbview/excellon_read_drill_file.cpp:446
 #, c-format
@@ -16991,53 +16979,44 @@ msgid "Bottom layer"
 msgstr "เลเยอร์ด้านล่าง"
 
 #: gerbview/files.cpp:147
-#, fuzzy
 msgid "Bottom solder resist"
-msgstr "โซลเดอร์เพสต์ด้านล่าง"
+msgstr "โซลเดอร์รีซิสด้านล่าง"
 
 #: gerbview/files.cpp:148
-#, fuzzy
 msgid "Top solder resist"
-msgstr "โซลเดอร์เพสต์ด้านบน"
+msgstr "โซลเดอร์รีซิสด้านบน"
 
 #: gerbview/files.cpp:149
-#, fuzzy
 msgid "Bottom overlay"
-msgstr "โซลเดอร์มาสก์ด้านล่าง"
+msgstr "โอเวอร์เลย์ด้านล่าง"
 
 #: gerbview/files.cpp:150
-#, fuzzy
 msgid "Top overlay"
-msgstr "โซลเดอร์มาสก์ด้านบน"
+msgstr "โอเวอร์เลย์ด้านบน"
 
 #: gerbview/files.cpp:151
-#, fuzzy
 msgid "Bottom paste"
-msgstr "โซลเดอร์เพสต์ด้านล่าง"
+msgstr "เพสต์ด้านล่าง"
 
 #: gerbview/files.cpp:152
-#, fuzzy
 msgid "Top paste"
-msgstr "โซลเดอร์เพสต์ด้านบน"
+msgstr "เพสต์ด้านบน"
 
 #: gerbview/files.cpp:153
-#, fuzzy
 msgid "Keep-out layer"
-msgstr "เก็บเลเยอร์ด้านนอก"
+msgstr "เลเยอร์ป้องกัน"
 
 #: gerbview/files.cpp:154
 msgid "Mechanical layers"
 msgstr "เลเยอร์ทางกล"
 
 #: gerbview/files.cpp:155
-#, fuzzy
 msgid "Top Pad Master"
-msgstr "โซลเดอร์เพสต์ด้านบน"
+msgstr "แพ็ดมาสเตอร์ด้านบน"
 
 #: gerbview/files.cpp:156
-#, fuzzy
 msgid "Bottom Pad Master"
-msgstr "โซลเดอร์เพสต์ด้านล่าง"
+msgstr "แพ็ดมาสเตอร์ด้านล่าง"
 
 #: gerbview/files.cpp:174
 msgid "Open Gerber File(s)"
@@ -17229,9 +17208,8 @@ msgid "GerbView"
 msgstr "เกิร์บวิว"
 
 #: gerbview/gerbview_frame.cpp:1062
-#, fuzzy
 msgid "Excellon Options"
-msgstr "ตัวเลือกปลั๊กอิน"
+msgstr "ตัวเลือก Excellon"
 
 #: gerbview/job_file_reader.cpp:157
 msgid "This job file uses an outdated format. Please recreate it."
@@ -17262,9 +17240,9 @@ msgid "Open Recent Zip File"
 msgstr "เปิดไฟล์บีบอัดล่าสุด"
 
 #: gerbview/readgerb.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found"
-msgstr "ไฟล์ '%s' หาไม่พบ"
+msgstr "ไฟล์ '%s' ไม่พบ"
 
 #: gerbview/readgerb.cpp:88
 msgid ""
@@ -17339,13 +17317,13 @@ msgstr "เปิดไฟล์พล็อตเกอร์เบอร์บ
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Excellon Drill File(s)..."
-msgstr "เปิดไฟล์เจาะเอ็กเซลลอน..."
+msgstr "เปิดไฟล์เจาะ Excellon..."
 
 #: gerbview/tools/gerbview_actions.cpp:46
 msgid ""
 "Open Excellon drill file(s) on the current layer. Previous data will be "
 "deleted"
-msgstr "เปิดไฟล์เจาะเอ็กซิลลอนบนเลเยอร์ปัจจุบัน ข้อมูลก่อนหน้าจะถูกลบ"
+msgstr "เปิดไฟล์เจาะ Excellon บนเลเยอร์ปัจจุบัน ข้อมูลก่อนหน้าจะถูกลบ"
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Gerber Job File..."
@@ -17357,11 +17335,11 @@ msgstr "เปิดไฟล์งานเกอร์เบอร์และ
 
 #: gerbview/tools/gerbview_actions.cpp:57
 msgid "Open Zip Archive File..."
-msgstr "เปิดไฟล์บีบอัดจากคลัง…"
+msgstr "เปิดไฟล์บีบอัดจากหน่วยเก็บถาวร…"
 
 #: gerbview/tools/gerbview_actions.cpp:58
 msgid "Open a zipped archive (Gerber and Drill) file"
-msgstr "เปิดไฟล์บีบอัดจากคลัง (Gerber and Drill)"
+msgstr "เปิดไฟล์บีบอัดจากหน่วยเก็บถาวร (ไฟล์เกอร์เบอร์และไฟล์เจาะ)"
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Show Layers Manager"
@@ -17583,7 +17561,7 @@ msgstr "แสดงจุดกริด (x,y)"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:101
 msgid "Show drawing sheet border and title block"
-msgstr "แสดงขอบนอกกระดาษเขียนแบบและบล็อกชื่อเรื่อง"
+msgstr "แสดงขอบนอกกระดาษเขียนแบบและบล็อกหัวเรื่อง"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
 msgid "PCB Background"
@@ -17669,7 +17647,7 @@ msgstr "นิพจน์ที่มีรูปแบบที่ไม่ถ
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
-msgstr "ล้างตั้งค่าปุ่มลัดทั้งหมดเป็นค่าปริยายของ KiCad"
+msgstr "ล้างตั้งค่าปุ่มคีย์ร้อนทั้งหมดเป็นค่าปริยายของ KiCad"
 
 #: include/project.h:41
 msgid "untitled"
@@ -17684,9 +17662,8 @@ msgid "Reset all settings on this page to their default"
 msgstr "ล้างตั้งค่าทั้งหมดในหน้านี้ให้เป็นค่าปริยาย"
 
 #: include/wxstream_helper.h:46
-#, fuzzy
 msgid "Failed to output data"
-msgstr "ข้อมูลส่งออกผิดพลาด"
+msgstr "ข้อมูลส่งออกล้มเหลว"
 
 #: kicad/dialogs/dialog_template_selector.cpp:132
 msgid "<html><h1>Template Selector</h1></html>"
@@ -17744,7 +17721,7 @@ msgstr "แก้ไขขอบนอกแผ่นเขียนแบบแ
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr ""
+msgstr "จัดการแพ็กเกจที่ดาวน์โหลดได้จากที่เก็บของ KiCad และบุคคลที่สาม"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -17774,7 +17751,7 @@ msgstr "กำลังแตกไฟล์โครงการใน '%s'\n"
 
 #: kicad/files-io.cpp:117
 msgid "Archive Project Files"
-msgstr "เก็บเข้าคลังไฟล์โครงการ"
+msgstr "เก็บไฟล์โปรเจ็คเข้าหน่วยเก็บถาวร"
 
 #: kicad/import_project.cpp:83
 msgid "KiCad Project Destination"
@@ -17810,7 +17787,7 @@ msgstr ""
 
 #: kicad/import_project.cpp:229
 msgid "Import CADSTAR Archive Project Files"
-msgstr "นำเข้าไฟล์จากคลังโครงการ CADSTAR"
+msgstr "นำเข้าไฟล์โครงการ CADSTAR จากหน่วยเก็บถาวร"
 
 #: kicad/import_project.cpp:237
 msgid "Import Eagle Project Files"
@@ -17869,7 +17846,7 @@ msgstr "โครงการ CADSTAR..."
 
 #: kicad/menubar.cpp:103
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
-msgstr "นำเข้าวงจรในคลัง CADSTAR และ PCB (*.csa, *.cpa)"
+msgstr "นำเข้าวงจร CADSTAR และ PCB (*.csa, *.cpa) จากหน่วยเก็บถาวร"
 
 #: kicad/menubar.cpp:107
 msgid "EAGLE Project..."
@@ -17881,7 +17858,7 @@ msgstr "นำเข้าวงจร EAGLE CAD XML และพีซีบอ
 
 #: kicad/menubar.cpp:115
 msgid "&Archive Project..."
-msgstr "เก็บโครงการเข้าคลัง..."
+msgstr "เก็บโปรเจ็คเข้าหน่วยเก็บถาวร..."
 
 #: kicad/menubar.cpp:116
 msgid "Archive all needed project files into zip archive"
@@ -17889,11 +17866,11 @@ msgstr "เก็บไฟล์โครงการที่จำเป็น
 
 #: kicad/menubar.cpp:120
 msgid "&Unarchive Project..."
-msgstr "นำออกโครงการจากคลัง..."
+msgstr "นำโปรเจ็กออกจากหน่วยเก็บถาวร..."
 
 #: kicad/menubar.cpp:121 kicad/menubar.cpp:229
 msgid "Unarchive project files from zip archive"
-msgstr "ยกเลิกการเก็บถาวรไฟล์โครงการจากไฟล์ zip"
+msgstr "นำโปรเจ็กไฟล์ออกจากจากไฟล์บีบอัด"
 
 #: kicad/menubar.cpp:136
 msgid "Browse Project Files"
@@ -17913,7 +17890,7 @@ msgstr "แก้ไขไฟล์เฉพาะที่ในโปรแก
 
 #: kicad/menubar.cpp:225
 msgid "Archive all project files"
-msgstr "เก็บเข้าคลังไฟล์โครงการทั้งหมด"
+msgstr "เก็บไฟล์โครงการทั้งหมดเข้าหน่วยเก็บถาวร"
 
 #: kicad/menubar.cpp:238
 msgid "Reveal project folder in Finder"
@@ -17925,22 +17902,20 @@ msgstr "เปิดไดเร็กทอรีโครงการในไ
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
 msgid "Please enter fully qualified repository url"
-msgstr ""
+msgstr "กรุณาป้อน URL ของคลังเก็บแบบเต็มรูปแบบ"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
-#, fuzzy
 msgid "Add repository"
-msgstr "เพิ่มเส้นลวดไปทางเข้าบัส"
+msgstr "เพิ่มคลังเก็บ"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-#, fuzzy
 msgid "Manage Repositores"
-msgstr "จัดการคําจํากัดความบัส"
+msgstr "จัดการที่เก็บ"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
-#, fuzzy, c-format
+#, c-format
 msgid "Plugins (%d)"
-msgstr "การละเมิด (%d)"
+msgstr "ปลั๊กอิน (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
 #, c-format
@@ -17956,52 +17931,50 @@ msgstr "ธีมชุดสี (%d)"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
 #, c-format
 msgid "Repository (%d)"
-msgstr ""
+msgstr "คลังเก็บ (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:72
 #: kicad/pcm/dialogs/panel_package.cpp:76
 #: kicad/pcm/dialogs/panel_package_base.cpp:65
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:108
 msgid "Install"
-msgstr ""
+msgstr "ติดตั้ง"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:105 kicad/pcm/dialogs/panel_package.cpp:80
 msgid "Uninstall"
-msgstr ""
+msgstr "ถอนการติดตั้ง"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160
-#, fuzzy
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
-msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบชิ้นส่วนที่เลือก?"
+msgstr ""
+"คุณแน่ใจว่าต้องการปิดตัวจัดการแพ็คเกจและละทิ้งการเปลี่ยนแปลงที่ค้างอยู่?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:162
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "ผู้จัดการปลั๊กอินและเนื้อหา"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:235
-#, fuzzy
 msgid "Choose package file"
-msgstr "เลือกภาพ"
+msgstr "เลือกไฟล์แพ็คเกจ"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:330
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:117
 #, c-format
 msgid "Pending (%d)"
-msgstr ""
+msgstr "ค้างอยู่ (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:365
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:60
 #, c-format
 msgid "Installed (%d)"
-msgstr ""
+msgstr "ติดตั้งแล้ว (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage"
-msgstr "ตัวจัดการเลเยอร์"
+msgstr "จัดการ"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:82
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
@@ -18015,50 +17988,45 @@ msgid "Package"
 msgstr "แพ็คเกจ"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
-#, fuzzy
 msgid "Repository"
-msgstr "รายงาน"
+msgstr "คลังเก็บ"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:103
-#, fuzzy
 msgid "Discard action"
-msgstr "ล้างทิ้งการแก้ไข"
+msgstr "ละทิ้งการกระทํา"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
 msgid "Install from file..."
 msgstr "ติดตั้งจากไฟล์..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:136
-#, fuzzy
 msgid "Apply changes"
-msgstr "บันทึกการเปลี่ยนแปลง"
+msgstr "ประยุกต์การเปลี่ยนแปลง"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:139
-#, fuzzy
 msgid "Discard changes"
-msgstr "ล้างทิ้งการแก้ไข"
+msgstr "ละทิ้งการเปลี่ยนแปลง"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:73
 msgid "Plugin And Content Manager"
-msgstr ""
+msgstr "ผู้จัดการปลั๊กอินและเนื้อหา"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
 msgid "Downloaded %lld/%lld Kb"
-msgstr ""
+msgstr "ดาวน์โหลดแล้ว %lld/%lld Kb"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:150
 msgid "All downloads finished"
-msgstr ""
+msgstr "การดาวน์โหลดทั้งหมดเสร็จสิ้น"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 msgid "Download progress"
-msgstr ""
+msgstr "ความคืบหน้าในการดาวน์โหลด"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
-#, fuzzy
 msgid "Waiting..."
-msgstr "กำลังอ่าน…"
+msgstr "กำลังรอ…"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
 msgid "Overall progress"
@@ -18066,30 +18034,28 @@ msgstr "ภาพรวมคืบหน้า"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
-msgstr ""
+msgstr "รายละเอียด"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying package changes"
-msgstr ""
+msgstr "กําลังนําการเปลี่ยนแปลงแพคเกจไปใช้"
 
 #: kicad/pcm/dialogs/panel_package.cpp:84
-#, fuzzy
 msgid "Pending install"
-msgstr "ทางเลือกการเรนเดอร์"
+msgstr "อยู่ระหว่างการติดตั้ง"
 
 #: kicad/pcm/dialogs/panel_package.cpp:88
-#, fuzzy
 msgid "Pending uninstall"
-msgstr "เครื่องจักรเรนเดอร์"
+msgstr "รอถอนการติดตั้ง"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:147
 msgid "Metadata"
-msgstr ""
+msgstr "ข้อมูลเมตา"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:154
 #, c-format
 msgid "Package identifier: %s\n"
-msgstr ""
+msgstr "ตัวระบุแพ็คเกจ:%s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
 #, c-format
@@ -18099,103 +18065,97 @@ msgstr "ไลเซ็นส์:%s\n"
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
 msgid "Tags: %s\n"
-msgstr ""
+msgstr "แท็ก: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:184
 msgid "Author"
-msgstr ""
+msgstr "ผู้แต่ง"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:187
 msgid "Maintainer"
-msgstr ""
+msgstr "ผู้ดูแล"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:191
-#, fuzzy
 msgid "Resources"
-msgstr "สลับแหล่งกำเนิด"
+msgstr "ทรัพยากร"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:266
 msgid "Pick a package on the left panel to view it's description."
-msgstr ""
+msgstr "เลือกแพ็คเกจที่แผงด้านซ้ายเพื่อดูคําอธิบาย"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:342
 msgid "Package download url is not specified"
-msgstr ""
+msgstr "ไม่ได้ระบุ URL เพื่อดาวน์โหลดแพ็คเกจ"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:343
-#, fuzzy
 msgid "Error downloading package"
-msgstr "ผิดพลาดอ่านเครื่องมือแก้ไข"
+msgstr "ข้อผิดพลาดในการดาวน์โหลดแพ็คเกจ"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:352
-#, fuzzy
 msgid "Save package"
-msgstr "บันทึกการเปลี่ยนแปลง"
+msgstr "บันทึกแพ็คเกจ"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:364
 msgid "Downloading package"
-msgstr ""
+msgstr "กำลังดาวน์โหลดแพ็คเกจ"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:380
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
 msgstr ""
+"ไม่สามารถตรวจสอบความสมบูรณ์ของแพ็คเกจที่ดาวน์โหลด,ค่าแฮชไม่ตรง "
+"คุณแน่ใจว่าต้องการเก็บไฟล์นี้ไว้?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:382
-#, fuzzy
 msgid "Keep downloaded file"
-msgstr "ไม่ให้เติมทองแดง"
+msgstr "เก็บไฟล์ที่ดาวน์โหลดไว้"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:419
 msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
 msgstr ""
+"แพ็คเกจเวอร์ชั่นนี้เข้ากันไม่ได้กับเวอร์ชันหรือแพลตฟอร์ม KiCad ของคุณ "
+"คุณแน่ใจว่าต้องการติดตั้งต่อไป?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:421
-#, fuzzy
 msgid "Install package"
-msgstr "ในแพคเกจ"
+msgstr "ติดตั้งแพ็คเกจ"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:64
-#, fuzzy
 msgid "Show all versions"
-msgstr "แสดงเวียทั้งหมด"
+msgstr "แสดงเวอร์ชั่นทั้งหมด"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
-#, fuzzy
 msgid "Dl Size"
-msgstr "ขนาด X"
+msgstr "ขนาด Dl"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Inst Size"
-msgstr "ขนาดข้อความ"
+msgstr "ขนาด Inst"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
 msgid "Comp"
 msgstr "Comp"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:105
-#, fuzzy
 msgid "Download"
-msgstr "ลง"
+msgstr "ดาวน์โหลด"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
-#, fuzzy
 msgid "Versions"
-msgstr "รุ่น"
+msgstr "เวอร์ชั่น"
 
 #: kicad/pcm/pcm.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "ไฟล์วงจร '%s' หาไม่พบ"
+msgstr "ไฟล์วงจร '%s' ไม่พบ"
 
 #: kicad/pcm/pcm.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr "เกิดข้อผิดพลาดในการอ่านวงจร '%s'"
+msgstr "เกิดข้อผิดพลาดอ่านวงจร %s"
 
 #: kicad/pcm/pcm.cpp:108
 #, c-format
@@ -18205,21 +18165,19 @@ msgstr "เกิดข้อผิดพลาดโหลดรายการ
 #: kicad/pcm/pcm.cpp:186
 #, c-format
 msgid "Downloading %lld/%lld Kb"
-msgstr ""
+msgstr "กําลังดาวน์โหลด %lld/%lld Kb"
 
 #: kicad/pcm/pcm.cpp:211
-#, fuzzy
 msgid "Download is too large."
-msgstr "ขนาดไม่ถูก %lld: ใหญ่เกินไป"
+msgstr "ขนาดดาวน์โหลดใหญ่เกินไป"
 
 #: kicad/pcm/pcm.cpp:225
 msgid "Fetching repository"
-msgstr ""
+msgstr "กําลังดึงข้อมูลจากคลังเก็บ"
 
 #: kicad/pcm/pcm.cpp:227
-#, fuzzy
 msgid "Unable to load repository url"
-msgstr "ไม่สามารถโหลด %s ไฟล์"
+msgstr "ไม่สามารถอ่านคลังเก็บจาก url"
 
 #: kicad/pcm/pcm.cpp:243
 #, c-format
@@ -18228,21 +18186,21 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"ไม่สามารถตีความที่เก็บข้อมูล:\n"
+"ไม่สามารถตีความคลังเก็บข้อมูล:\n"
 "\n"
 "'%s"
 
 #: kicad/pcm/pcm.cpp:265
 msgid "Fetching repository packages"
-msgstr ""
+msgstr "กำลังดึงแพ็คเกจคลังเก็บ"
 
 #: kicad/pcm/pcm.cpp:267
 msgid "Unable to load repository packages url."
-msgstr ""
+msgstr "ไม่สามารถโหลด url แพ็คเกจคลังเก็บ"
 
 #: kicad/pcm/pcm.cpp:275
 msgid "Packages hash doesn't match. Repository may be corrupted."
-msgstr ""
+msgstr "เลขแฮชแพ็คเกจไม่ตรง คลังเก็บอาจเสียหาย"
 
 #: kicad/pcm/pcm.cpp:291
 #, c-format
@@ -18258,23 +18216,21 @@ msgstr ""
 #: kicad/pcm/pcm.cpp:378
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
-msgstr ""
+msgstr "แคชของแพ็คเกจสำหรับคลังเก็บปัจจุบันเสียหาย,มันจะถูกดาวน์โหลดใหม่"
 
 #: kicad/pcm/pcm.cpp:428
-#, fuzzy
 msgid "Downloading resources"
-msgstr "สลับแหล่งกำเนิด"
+msgstr "กำลังดาวน์โหลดทรัพยากร"
 
 #: kicad/pcm/pcm.cpp:442
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
-msgstr ""
+msgstr "เลขแฮชของไฟล์ทรัพยากรไม่ตรงและจะไม่นำมาใช้ คลังเก็บข้อมูลอาจเสียหาย"
 
 #: kicad/pcm/pcm.cpp:587
-#, fuzzy
 msgid "Local file"
-msgstr "แก้ไขไฟล์เฉพาะที่..."
+msgstr "ไฟล์เฉพาะที่"
 
 #: kicad/pcm/pcm_task_manager.cpp:63
 msgid "Unable to create download directory!"
@@ -18287,6 +18243,9 @@ msgid ""
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
 msgstr ""
+"เลขแฮชของหน่วยเก็บถาวรที่ดาวน์โหลดมาสําหรับแพ็คเกจ %s ไม่ตรง "
+"ซึ่งอาจบ่งบอกถึงปัญหาของแพ็คเกจ,ถ้าประเด็นยังคงมีต่อเนื่อง "
+"กรุณารายงานไปยังผู้ดูแลที่คลังเก็บแพ็คเกจ"
 
 #: kicad/pcm/pcm_task_manager.cpp:101
 #, c-format
@@ -18296,12 +18255,12 @@ msgstr "กำลังแตกแพ็คเกจ '%s'"
 #: kicad/pcm/pcm_task_manager.cpp:116
 #, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr ""
+msgstr "กำลังลบไฟล์หน่วยเก็บถาวรที่ดาวน์โหลด '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:157
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr ""
+msgstr "กําลังดาวน์โหลดแพ็คเกจ url: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:170
 #, c-format
@@ -18314,7 +18273,7 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:249
 msgid "Aborting package installation."
-msgstr ""
+msgstr "กําลังยกเลิกการติดตั้งแพ็คเกจ"
 
 #: kicad/pcm/pcm_task_manager.cpp:297
 #, c-format
@@ -18329,12 +18288,11 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:306
 msgid "Archive does not contain a valid metadata.json file"
-msgstr ""
+msgstr "ไฟล์เก็บถาวรไม่มีส่วน metadata.json ที่ถูกต้อง"
 
 #: kicad/pcm/pcm_task_manager.cpp:314
-#, fuzzy
 msgid "Archive metadata must have a single version defined"
-msgstr "ระต้องระบุไฟล์กับชีตวงจร"
+msgstr "ข้อมูลเมตาของหน่วยเก็บถาวรต้องมีการกําหนดเวอร์ชั่นเดียว"
 
 #: kicad/pcm/pcm_task_manager.cpp:326
 #, c-format
@@ -18342,25 +18300,26 @@ msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
 "this package."
 msgstr ""
+"แพ็คเกจที่มีตัวระบุ %s ถูกติดตั้งอยู่แล้ว,คุณต้องถอนการติดตั้งแพ็คเกจนี้ก่อน"
 
 #: kicad/pcm/pcm_task_manager.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Removing directory %s"
-msgstr "นำเน็ตที่มีแพ็ดเดียว %s ออก"
+msgstr "กําลังเอาไดเร็กทอรีออก %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove directory %s"
-msgstr "ไม่สามารถสร้างโฟลเดอร์ '%s'"
+msgstr "ล้มเหลวที่จะนำไดเร็กตอรีออก %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:376
 #, c-format
 msgid "Package %s uninstalled"
-msgstr ""
+msgstr "แพ็คเกจ %s ถอนการติดตั้งแล้ว"
 
 #: kicad/pcm/pcm_task_manager.cpp:445
 msgid "Aborting remaining tasks."
-msgstr ""
+msgstr "กําลังยกเลิกงานที่เหลืออยู่"
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -18600,11 +18559,11 @@ msgstr "เรียกใช้การคำนวณอุปกรณ์ �
 
 #: kicad/tools/kicad_manager_actions.cpp:110
 msgid "Edit drawing sheet borders and title block"
-msgstr "แก้ไขขอบนอกแผ่นเขียนแบบและบล็อกชื่อเรื่อง"
+msgstr "แก้ไขขอบนอกแผ่นเขียนแบบและบล็อกหัวเรื่อง"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
-msgstr ""
+msgstr "เรียกใช้ปลั๊กอินและตัวจัดการเนื้อหา"
 
 #: kicad/tools/kicad_manager_actions.cpp:124
 msgid "Open Text Editor"
@@ -18819,29 +18778,27 @@ msgstr "คำสำคัญที่กำหนดไว้แล้ว"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:557
 msgid "Texts can include keywords."
-msgstr ""
+msgstr "ข้อความสามารถมีคำสำคัญได้"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:558
 msgid "Keyword notation is ${keyword}"
-msgstr ""
+msgstr "สัญกรณ์คําสําคัญคือ ${คําสําคัญ}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Each keyword is replaced by its value"
-msgstr ""
+msgstr "คําสําคัญแต่ละคําจะถูกแทนที่ด้วยค่าของคําสําคัญนั้น"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "These build-in keywords are always available:"
-msgstr ""
+msgstr "คำสำคัญกำหนดไว้ภายในเหล่านี้พร้อมใช้งานเสมอ:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:564
-#, fuzzy
 msgid "(sheet number)"
-msgstr "หมายเลขแผ่น:%d"
+msgstr "(หมายเลขแผ่น)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:565
-#, fuzzy
 msgid "(sheet count)"
-msgstr "ทำซ้ำการนับ"
+msgstr "(จำนวนแผ่น)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:571
 msgid "(paper size)"
@@ -19187,31 +19144,31 @@ msgstr "การตั้งค่าหน้าพรีวิว..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Edit preview data for page size and title block"
-msgstr "แก้ไขข้อมูลพรีวิวสำหรับขนาดหน้าและชื่อบล็อก"
+msgstr "แก้ไขข้อมูลพรีวิวสำหรับขนาดหน้าและบล็อกหัวเรื่อง"
 
 #: pagelayout_editor/tools/pl_actions.cpp:92
 msgid "Show title block in preview mode"
-msgstr "แสดงหัวเรื่องในโหมดพรีวิว"
+msgstr "แสดงบล็อกหัวเรื่องในโหมดพรีวิว"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 msgstr ""
-"แสดงบล็อคชื่อในโหมดพรีวิว:\n"
+"แสดงบล็อกหัวเรื่องในโหมดพรีวิว:\n"
 "ตัวยึดข้อความจะถูกแทนที่ด้วยข้อมูลพรีวิว"
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
 msgid "Show title block in edit mode"
-msgstr "แสดงหัวเรื่องในโหมดแก้ไข"
+msgstr "แสดงบล็อกหัวเรื่องในโหมดแก้ไข"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 msgid ""
 "Show title block in edit mode:\n"
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
-"แสดงหัวเรื่องในโหมดแก้ไข:\n"
-"ตัวยึดข้อความจะแสดงเป็นโทเค็น ${keyword}"
+"แสดงบล็อกหัวเรื่องในโหมดแก้ไข:\n"
+"ตัววางตำแหน่งข้อความจะแสดงเป็นโทเค็น ${keyword}"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:505
 msgid "Error writing objects to clipboard"
@@ -19904,6 +19861,8 @@ msgid ""
 "Zdiff =\n"
 "2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 msgstr ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:434
 msgid "Zcommon = Zeven / 2"
@@ -20172,7 +20131,8 @@ msgstr ""
 "E1: 1.0 - - - - - - - - - - -\n"
 "\n"
 "เครื่องคิดเลขนี้ค้นหาการรวมกันของส่วนประกอบ E-series มาตรฐานกับ\n"
-"สร้างมูลค่าตามอำเภอใจ คุณสามารถป้อนความต้านทานที่ต้องการได้ตั้งแต่ 0.0025 ถึง 4000 kΩ\n"
+"สร้างค่าตามอำเภอใจ คุณสามารถป้อนความต้านทานที่ต้องการได้ตั้งแต่ 0.0025 ถึง "
+"4000 kΩ\n"
 "โซลูชันที่ใช้ส่วนประกอบมากถึง 4 ตัวจะได้รับ\n"
 "\n"
 "โดยปริยาย ค่าคำขอจะถูกแยกออกจากชุดโซลูชันเสมอ นอกจากนี้ยังสามารถระบุ\n"
@@ -20190,9 +20150,8 @@ msgid "Attenuation more than %f dB"
 msgstr "การลดทอนมากกว่า %f ดีบี"
 
 #: pcb_calculator/panel_regulator.cpp:147
-#, fuzzy
 msgid "PCB Calculator data file"
-msgstr "ไฟล์ข้อมูลเครื่องคิดเลขพีซีบี (*.%s)|*.%s"
+msgstr "ไฟล์ข้อมูลเครื่องคิดเลขพีซีบี"
 
 #: pcb_calculator/panel_regulator.cpp:150
 msgid "Select PCB Calculator Data File"
@@ -20834,7 +20793,7 @@ msgstr "ชุบขอบบอร์ด"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
 msgid "Copper finish:"
-msgstr "ทองแดงเสร็จ:"
+msgstr "เคลือบทองแดงก่อนเสร็จ:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 msgid "Edge card connectors:"
@@ -20864,21 +20823,20 @@ msgstr "ใส่ค่าความหนาบอร์ดใน %s:"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
 #, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr ""
+msgstr "ป้อนความหนาของบอร์ดที่คาดไว้ (ค่าต่ำสุด %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
-#, fuzzy
 msgid "Adjust Unlocked Dielectric Layers"
-msgstr "เพิ่มเลเยอร์ไดอิเล็กทริก"
+msgstr "ปรับแต่งเลเยอร์ไดอิเล็กทริกที่ปลดล็อค"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:208
 #, c-format
 msgid "Value too small (min value %s)."
-msgstr ""
+msgstr "ค่าน้อยเกินไป (ค่าต่ำสุด %s)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:228
 msgid "All dielectric  thickness layers are locked"
-msgstr ""
+msgstr "ไดอิเล็กทริกทั้งหมด  ความหนาของเลเยอร์ถูกล็อค"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:295
 #, c-format
@@ -20928,9 +20886,8 @@ msgid "A layer thickness is < 0. Fix it"
 msgstr "ความหนาของเลเยอร์คือ < 0 ต้องแก้ไข"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1524
-#, fuzzy
 msgid "Custom..."
-msgstr "กำหนดเอง"
+msgstr "กำหนดเอง..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
@@ -21025,18 +20982,16 @@ msgid "Id"
 msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
-#, fuzzy
 msgid "Loss Tan"
-msgstr "สูญเสียแทนเจนต์"
+msgstr "Loss Tan"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:132
 msgid "Board thickness from stackup:"
 msgstr "ความหนาของบอร์ดจากสแต็กอัพ:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:139
-#, fuzzy
 msgid "Adjust Dielectric Thickness"
-msgstr "เพิ่มเลเยอร์ไดอิเล็กทริก"
+msgstr "ปรับความหนาไดอิเล็กทริก"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:39
 msgid "ENIG"
@@ -21101,7 +21056,7 @@ msgstr "น้ำเงิน"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:67
 msgid "Purple"
-msgstr ""
+msgstr "สีม่วง"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:68
 msgid "Black"
@@ -21750,9 +21705,8 @@ msgid "Custom Rules"
 msgstr "กฎที่กำหนดเอง"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:123
-#, fuzzy
 msgid "Project is missing or read-only. Some settings will not be editable."
-msgstr "โครงการไม่พบหรืออ่านเท่านั้น การเปลี่ยนแปลงไม่บันทึก"
+msgstr "ไม่พบโครงการหรืออ่านอย่างเดียวเท่านั้น การตั้งค่าบางอย่างจะแก้ไขไม่ได้"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:186
 #, c-format
@@ -22090,9 +22044,8 @@ msgstr ""
 "เฉพาะชื่อเน็ตที่ตรงกันจะแสดงที่นี่"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:53
-#, fuzzy
 msgid "Hide auto-generated net names"
-msgstr "ชื่อขาสำรองไม่ถูกต้อง"
+msgstr "ซ่อนการตั้งชื่อเน็ตอัตโนมัติ"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:60
 msgid "Sort nets by pad count"
@@ -22217,7 +22170,6 @@ msgid "Clearance between pads in the same net and filled areas."
 msgstr "ระยะห่างระหว่างแพ็ดในเน็ตเดียวกัน และพื้นที่ระบายเต็ม"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
-#, fuzzy
 msgid "Thermal spoke width:"
 msgstr "ความกว้างของซี่ล้อบรรเทาความร้อน:"
 
@@ -23095,9 +23047,8 @@ msgid "Select a STEP export filename"
 msgstr "เลือกชื่อไฟล์การส่งออก STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:143
-#, fuzzy
 msgid "STEP files"
-msgstr "ไฟล์ SVG"
+msgstr "ไฟล์ STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:210
 msgid "Non-unity scaled models:"
@@ -23131,7 +23082,7 @@ msgstr "ส่งออกชนิด STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "temp"
-msgstr ""
+msgstr "ชั่วคราว"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:36
 msgid "Coordinates"
@@ -23254,7 +23205,7 @@ msgstr "ส่งออกเป็นองค์ประกอบสีดํ
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
-msgstr "หน้าที่มีกรอบและบล็อคชื่อเรื่อง"
+msgstr "หน้าที่มีกรอบและบล็อกหัวเรื่อง"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Current page size"
@@ -23491,7 +23442,7 @@ msgstr "แก้ไขคุณสมบัติฟุ้ทพรินท์
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:581
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:522
 msgid "Reference and value are mandatory."
-msgstr "ค่าอ้างอิงและมูลค่าเป็นสิ่งบังคับ"
+msgstr "อ้างอิงและค่าเป็นสิ่งบังคับ"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:53
@@ -23578,9 +23529,8 @@ msgstr "คุณลักษณะการผลิต"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:272
 #: pcbnew/footprint_libraries_utils.cpp:1135
-#, fuzzy
 msgid "Footprint type:"
-msgstr "ชื่อฟุ้ทพรินท์:"
+msgstr "ชนิดฟุ้ทพรินท์:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
@@ -23931,9 +23881,8 @@ msgid "CSV"
 msgstr "CSV"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
-#, fuzzy
 msgid "Gerber (experimental)"
-msgstr "เกอร์เบอร์ (กำลังทดลองอย่างมาก)"
+msgstr "เกอร์เบอร์ (กำลังทดลอง)"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:50
 msgid "Format"
@@ -23960,9 +23909,8 @@ msgstr ""
 "สร้างไฟล์เดียวที่มีฟุ้ทพรินท์ที่วางทั้งหมด\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
-#, fuzzy
 msgid "Include only SMD footprints"
-msgstr "รวมฟุ้ทพรินท์"
+msgstr "รวมเฉพาะฟุ้ทพรินท์ SMD เท่านั้น"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Exclude all footprints with through hole pads"
@@ -24040,7 +23988,7 @@ msgstr "รูปแบบไฟล์เจาะ"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 msgid "Excellon"
-msgstr "เอ็กเซลลอน"
+msgstr "Excellon"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Mirror Y axis"
@@ -24160,7 +24108,7 @@ msgstr "รูปแบบศูนย์"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:114
 msgid "Choose EXCELLON numbers notation"
-msgstr "เลือกรูปแบบตัวเลข EXCELLON"
+msgstr "เลือกรูปแบบตัวเลข Excellon"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:128 pcbnew/pcb_dimension.cpp:313
 msgid "Precision"
@@ -24545,9 +24493,8 @@ msgid "Group name:"
 msgstr "ชื่อกลุ่ม:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:39
-#, fuzzy
 msgid "Prevents group from being moved on canvas"
-msgstr "ป้องกันไม่ย้ายชิ้นส่วนและ/หรือปรับขนาดบนผืนผ้าใบ"
+msgstr "ป้องกันกลุ่มจากการย้ายบนผืนผ้าใบ"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:43
 msgid "Group members:"
@@ -24830,9 +24777,8 @@ msgid "Select Netlist"
 msgstr "เลือกรายชื่อเน็ต"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:143
-#, fuzzy
 msgid "Please choose a valid netlist file."
-msgstr "โปรด เลือกไฟล์รายชื่อเน็ตที่ถูกต้อง"
+msgstr "โปรดเลือกไฟล์รายชื่อเน็ตที่ถูกต้อง"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:149 pcbnew/dialogs/dialog_netlist.cpp:184
 msgid "The netlist file does not exist."
@@ -26606,9 +26552,8 @@ msgid "Annular rings:"
 msgstr "กลมเป็นวงแหวน:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
-#, fuzzy
 msgid "Start, end, and connected layers"
-msgstr "%s, %s และเลเยอร์ที่เชื่อมต่อ"
+msgstr "เริ่มต้น,สิ้นสุด,และเลเยอร์ที่เชื่อมต่อ"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
@@ -26724,28 +26669,24 @@ msgid "Clearance Outlines"
 msgstr "ระยะห่างเค้าโครง"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing"
-msgstr "แสดงเมื่อสร้างแทร็ก"
+msgstr "แสดงเมื่อเร้าติ้ง"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing w/ via clearance at end"
-msgstr "แสดงกับระยะห่างเวียที่ด้านปลาย"
+msgstr "แสดงเมื่อเร้าติ้งกับ/ระยะห่างเวียที่ด้านปลาย"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing and editing"
-msgstr "แสดงเมื่อสร้างและแก้ไขแทร็ก"
+msgstr "แสดงเมื่อเร้าติ้งและแก้ไข"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show always"
 msgstr "แสดงเสมอ"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
-#, fuzzy
 msgid "Track && Via Clearances"
-msgstr "ระยะห่างแทร็ก"
+msgstr "ระยะห่างแทร็ก&&เวีย"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
@@ -26760,9 +26701,8 @@ msgid "Show pad clearance"
 msgstr "แสดงระยะห่างแพ็ด"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Scroll cross-probed items into view"
-msgstr "วางกึ่งกลางมุมมอง ของชิ้นส่วนที่ครอส-โพรบ"
+msgstr "เลื่อนชิ้นส่วนที่ครอส-โพรบเข้ามาในมุมมอง"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -26796,7 +26736,7 @@ msgstr "ขั้นองศา สำหรับคำสั่งหมุ�
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:58
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
-msgstr "ตั้งค่าการเพิ่มขึ้น (เป็นองศา) สำหรับเมนูบริบทและการหมุนปุ่มลัด"
+msgstr "ตั้งค่าการเพิ่มขึ้น (เป็นองศา) สำหรับเมนูบริบทและการหมุนคีย์ร้อน"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
 msgid "Allow free pads"
@@ -26829,9 +26769,8 @@ msgstr "การแก้ไขกราฟิก"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
-#, fuzzy
 msgid "Limit actions to 45 degrees from start"
-msgstr "จำกัดเส้นตรงไว้ที่ 45 องศา"
+msgstr "จำกัดการกระทำไว้ที่ 45 องศาจากเริ่มต้น"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
 msgid "Magnetic Points"
@@ -26996,7 +26935,7 @@ msgstr "การแทนที่เส้นทาง"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:222
 msgid "Error: illegal or empty filename."
-msgstr ""
+msgstr "ผิดพลาด: ชื่อไฟล์ไม่ถูกต้องหรือว่างเปล่า"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:379
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -27004,14 +26943,12 @@ msgid "File not found"
 msgstr "ไม่พบไฟล์"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:384
-#, fuzzy
 msgid "Unable to open file"
-msgstr "ไม่สามารถโหลด %s ไฟล์"
+msgstr "ไม่สามารถเปิดไฟล์"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:389
-#, fuzzy
 msgid "Unknown error"
-msgstr "ไม่รู้จักเมธอด"
+msgstr "ความผิดพลาดที่ไม่อาจระบุได้"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:38
 msgid "3D Model(s)"
@@ -27121,6 +27058,9 @@ msgid ""
 "to approximate it.  Smaller values produce smoother graphics at the expense "
 "of performance."
 msgstr ""
+"ค่าเบี่ยงเบนสูงสุดที่ยอมได้ระหว่างส่วนโค้งหรือวงกลมและส่วนที่ใช้ในการประมาณค่"
+"านั้น  "
+"ค่าที่น้อยกว่าจะสร้างกราฟิกที่ราบเรียบขึ้นโดยแลกกับประสิทธิภาพที่ลดลงไปบ้าง"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:86
 #, c-format
@@ -27185,6 +27125,9 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
+"ระยะห่างขั้นต่ำระหว่างชิ้นส่วนทองแดงของต่างเน็ต  "
+"หากตั้งค่าไว้,นี่เป็นค่าต่ำสุดซึ่งไม่สามารถลดลงไปอีก "
+"ตามเน็ตคลาส,กฎที่กำหนดเอง,หรือการตั้งค่าอื่นๆ"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
@@ -27195,6 +27138,8 @@ msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"ความกว้างของแทร็กขั้นต่ำ  หากตั้งค่าไว้,นี่เป็นค่าต่ำสุดซึ่งไม่สามารถลดลงไปอี"
+"ก ตามเน็ตคลาส,กฎที่กำหนดเอง,หรือการตั้งค่าอื่นๆ"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
 msgid "Minimum annular width:"
@@ -27205,6 +27150,9 @@ msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"ความกว้างของวงแหวนขั้นต่ำ  "
+"หากตั้งค่าไว้,นี่เป็นค่าต่ำสุดซึ่งไม่สามารถลดลงไปอีก "
+"ตามเน็ตคลาส,กฎที่กำหนดเอง,หรือการตั้งค่าอื่นๆ"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
@@ -27215,11 +27163,13 @@ msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"ขนาดเส้นผ่านศูนย์กลางเวียขั้นต่ำ  "
+"หากตั้งค่าไว้,นี่เป็นค่าต่ำสุดซึ่งไม่สามารถลดลงไปอีก "
+"ตามเน็ตคลาส,กฎที่กำหนดเอง,หรือการตั้งค่าอื่นๆ"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
-#, fuzzy
 msgid "Copper to hole clearance:"
-msgstr "ระยะห่างรูเจาะทองแดง:"
+msgstr "ระยะห่างจากทองแดงถึงรูเจาะ:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:261
 msgid ""
@@ -27227,11 +27177,13 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
+"ค่าระยะห่างต่ำสุดระหว่างรูเจาะและทองแดงที่ไม่เกี่ยวข้องกัน  "
+"หากตั้งค่าไว้,นี่เป็นค่าต่ำสุดซึ่งไม่สามารถลดลงไปอีก "
+"ตามกฎที่กำหนดเองหรือการตั้งค่าอื่นๆ"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
-#, fuzzy
 msgid "Copper to edge clearance:"
-msgstr "ระยะห่างขอบทองแดง:"
+msgstr "ระยะห่างจากขอบถึงทองแดง:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:277
 msgid ""
@@ -27239,6 +27191,9 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
+"ระยะห่างขั้นต่ำระหว่างขอบบอร์ดกับชิ้นส่วนทองแดง  "
+"หากตั้งค่าไว้,นี่เป็นค่าต่ำสุดซึ่งไม่สามารถลดลงไปอีก "
+"ตามกฎที่กำหนดเองหรือการตั้งค่าอื่นๆ"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
 msgid "Holes"
@@ -27253,6 +27208,8 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
+"ขนาดต่ำสุดของรูเจาะเวีย  หากตั้งค่าไว้,นี่เป็นค่าต่ำสุดซึ่งไม่สามารถลดลงไปอี"
+"ก ตามเน็ตคลาส,กฎที่กำหนดเอง,หรือการตั้งค่าอื่นๆ"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Hole to hole clearance:"
@@ -27264,6 +27221,10 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
+"ค่าระยะห่างขั้นต่ำระหว่างรูเจาะ   "
+"หากตั้งค่าไว้,นี่เป็นค่าต่ำสุดซึ่งไม่สามารถลดลงไปอีก "
+"ตามกฎที่กำหนดเอง,หรือการตั้งค่าอื่นๆ (หมายเหตุ: "
+"ไม่สามารถใช้กับรูประเภทกัด-เฉพาะเจาะเท่านั้น)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 msgid "uVias"
@@ -27278,6 +27239,9 @@ msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"เส้นผ่าศูนย์กลางขั้นต่ำสําหรับไมโครเวีย   "
+"หากตั้งค่าไว้,นี่เป็นค่าต่ำสุดซึ่งไม่สามารถลดลงไปอีก "
+"ตามเน็ตคลาส,กฎที่กำหนดเอง,หรือการตั้งค่าอื่นๆ"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 msgid "Minimum uVia hole:"
@@ -27288,6 +27252,9 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"ขนาดรูเจาะขั้นต่ำของไมโครเวีย   "
+"หากตั้งค่าไว้,นี่เป็นค่าต่ำสุดซึ่งไม่สามารถลดลงไปอีก "
+"ตามเน็ตคลาส,กฎที่กำหนดเอง,หรือการตั้งค่าอื่นๆ"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
@@ -27303,6 +27270,9 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
+"ระยะห่างขั้นต่ำระหว่างสองสิ่งบนเลเยอร์ซิลค์สกรีน  "
+"หากตั้งค่าไว้จะทำให้อ่านง่ายขึ้น (หมายเหตุ: "
+"ไม่มีผลบังคับกับรูปร่างในฟุ้ทพรินท์)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -27897,16 +27867,16 @@ msgid "User9"
 msgstr "ผู้ใช้9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board house's recommendations for solder mask clearance and minimum "
 "web width."
-msgstr "ใช้คำแนะนำตามผู้ผลิตบอร์ดของคุณ สำหรับระยะห่างโซลเดอร์มาส์กและความกว้างเชื่อมต่อ"
+msgstr ""
+"ใช้คำแนะนำตามผู้ผลิตบอร์ดของคุณ "
+"สำหรับระยะห่างโซลเดอร์มาส์กและความกว้างเชื่อมต่อ"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
-#, fuzzy
 msgid "If none are provided, setting the values to zero is suggested."
-msgstr "หากไม่ได้ระบุ แนะนำให้ตั้งค่าเป็นศูนย์"
+msgstr "หากไม่ได้ระบุ,แนะนำให้ตั้งค่าเป็นศูนย์"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:56
 msgid ""
@@ -27923,7 +27893,6 @@ msgid ""
 msgstr "ค่าระยะห่างเป็นบวก หมายถึงพื้นที่ใหญ่กว่าแพ็ด (ปกติสำหรับโซลเดอร์มาส์ก)"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
-#, fuzzy
 msgid "Solder mask minimum web width:"
 msgstr "ขนาดเชื่อมต่ออย่างต่ำของโซลเดอร์มาส์ก:"
 
@@ -28507,24 +28476,20 @@ msgid "board setup constraints"
 msgstr "ตั้งค่าบอร์ดส่วนข้อจำกัด"
 
 #: pcbnew/drc/drc_engine.cpp:175
-#, fuzzy
 msgid "board setup constraints silk"
-msgstr "ตั้งค่าบอร์ดส่วนข้อจำกัด"
+msgstr "ตั้งค่าบอร์ดกำหนดข้อจำกัดซิลค์"
 
 #: pcbnew/drc/drc_engine.cpp:181
-#, fuzzy
 msgid "board setup constraints hole"
-msgstr "ตั้งค่าบอร์ดส่วนข้อจำกัด"
+msgstr "ตั้งค่าบอร์ดกำหนดข้อจำกัดรูเจาะ"
 
 #: pcbnew/drc/drc_engine.cpp:186
-#, fuzzy
 msgid "board setup constraints edge"
-msgstr "ตั้งค่าบอร์ดส่วนข้อจำกัด"
+msgstr "ตั้งค่าบอร์ดกำหนดข้อจำกัดขอบบอร์ด"
 
 #: pcbnew/drc/drc_engine.cpp:191
-#, fuzzy
 msgid "board setup constraints courtyard"
-msgstr "ตั้งค่าบอร์ดส่วนข้อจำกัด"
+msgstr "ตั้งค่าบอร์ดกำหนดข้อจำกัดลานสนาม"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
@@ -28561,9 +28526,8 @@ msgid "Local override on %s; clearance: %s."
 msgstr "ทับค่าเฉพาะที่บน %s; ระยะห่าง: %s"
 
 #: pcbnew/drc/drc_engine.cpp:831
-#, fuzzy
 msgid "board minimum"
-msgstr "บอร์ดสำเร็จ"
+msgstr "บอร์ดขั้นต่ำ"
 
 #: pcbnew/drc/drc_engine.cpp:834
 #, c-format
@@ -28571,17 +28535,16 @@ msgid "Board minimum clearance: %s."
 msgstr "ระยะห่างขั้นต่ำของบอร์ด: %s"
 
 #: pcbnew/drc/drc_engine.cpp:843
-#, fuzzy
 msgid "board minimum hole"
-msgstr "ระยะห่างขั้นต่ำของบอร์ด: %s"
+msgstr "จำนวนรูเจาะบนบอร์ดขั้นต่ำ"
 
 #: pcbnew/drc/drc_engine.cpp:846
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "ระยะห่างขั้นต่ำของบอร์ด: %s"
+msgstr "ระยะห่างขั้นต่ำของรูเจาะบนบอร์ด: %s"
 
 #: pcbnew/drc/drc_engine.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: %s."
 msgstr "ตรวจสอบ %s; ระยะห่าง: %s"
 
@@ -28599,9 +28562,9 @@ msgid "Checking %s %s: %s."
 msgstr "กำลังตรวจสอบ %s %s:%s"
 
 #: pcbnew/drc/drc_engine.cpp:918
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "เชื่อมต่ออีกครั้ง %s ขา %s จาก %s ถึง %s"
+msgstr "ตรวจสอบ %s: ต่ำสุด %s; เลือก %s; สูงสุด %s"
 
 #: pcbnew/drc/drc_engine.cpp:929
 #, c-format
@@ -28837,7 +28800,7 @@ msgstr "ความยาวช่วงไม่เข้าคู่ของ
 
 #: pcbnew/drc/drc_item.cpp:206
 msgid "Footprint type doesn't match footprint pads"
-msgstr ""
+msgstr "ชนิดฟุ้ทพรินท์ไม่ตรงกับแพ็ดของฟุ้ทพรินท์"
 
 #: pcbnew/drc/drc_item.cpp:327
 #, c-format
@@ -28846,7 +28809,7 @@ msgstr "กฎ:%s"
 
 #: pcbnew/drc/drc_item.cpp:329
 msgid "Local override"
-msgstr ""
+msgstr "การทับค่าเฉพาะที่"
 
 #: pcbnew/drc/drc_rule.h:137
 #, c-format
@@ -28933,9 +28896,9 @@ msgid "Missing constraint type.|  Expected %s."
 msgstr "ขาดชนิดข้อจํากัด.|  ต้องการ %s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Rule already has a '%s' constraint."
-msgstr "พื้นที่กฎ '%s' ไม่อนุญาตให้มีแทร็ก"
+msgstr "ภายในกฎมีข้อจำกัด '%s'"
 
 #: pcbnew/drc/drc_rule_parser.cpp:352
 msgid "Missing min value."
@@ -29258,7 +29221,7 @@ msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:194
 msgid "They have been exported as oval pads."
-msgstr ""
+msgstr "ทั้งหมดส่งออกเป็นแพ็ดรูปวงรี"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
 #: pcbnew/exporters/export_vrml.cpp:577
@@ -29345,7 +29308,7 @@ msgid "Created file '%s'."
 msgstr "สร้างไฟล์ '%s'"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Created Gerber job file '%s'."
 msgstr "สร้างไฟล์งานเกอร์เบอร์ '%s'"
 
@@ -29487,13 +29450,13 @@ msgstr ""
 "ไม่สามารถเปลี่ยนชื่อไฟล์ชั่วคราว '%s."
 
 #: pcbnew/files.cpp:1154
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
 msgstr ""
 "สำเนาบอร์ดไปที่:\n"
-"\"%s\""
+"%s"
 
 #: pcbnew/footprint.cpp:926 pcbnew/tools/pcb_control.cpp:1231
 msgid "Last Change"
@@ -29567,12 +29530,12 @@ msgstr "คาดหวังชนิด \"รูเจาะทะลุ\" แ
 #: pcbnew/footprint.cpp:2095
 #, c-format
 msgid "Expected \"SMD\" type but set to \"%s\""
-msgstr ""
+msgstr "คาดหวังชนิด \"SMD\" แต่ตั้งเป็น \"%s\""
 
 #: pcbnew/footprint.cpp:2099
 #, c-format
 msgid "Expected \"Other\" type but set to \"%s\""
-msgstr ""
+msgstr "คาดหวังชนิด \"อื่นๆ\" แต่ตั้งเป็น \"%s\""
 
 #: pcbnew/footprint.cpp:2203 pcbnew/pad.cpp:1542 pcbnew/zone.cpp:1416
 msgid "Clearance Override"
@@ -29782,7 +29745,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:906
 #: pcbnew/footprint_viewer_frame.cpp:720
 msgid "Previous footprint placement still in progress."
-msgstr ""
+msgstr "ยังคงอยู่ในกระบวนการจัดวางฟุ้ทพรินท์ตัวก่อนหน้า"
 
 #: pcbnew/footprint_libraries_utils.cpp:995
 msgid "Save Footprint As"
@@ -29833,7 +29796,7 @@ msgid ""
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pad count."
 msgstr ""
-"กรองชื่อฟุ้ทพรินท์,คําหลัก,คําอธิบายและจํานวนแพ็ด\n"
+"กรองโดยใช้ชื่อฟุ้ทพรินท์,คําสำคัญ,คําอธิบายและจํานวนแพ็ด\n"
 "คําค้นหาจะถูกคั่นด้วยช่องว่าง  คําค้นหาทั้งหมดต้องตรงกัน\n"
 "คําที่เป็นตัวเลขจะตรงกับจํานวนแพ็ดด้วย"
 
@@ -30271,7 +30234,6 @@ msgstr "ค่ารัศมีสตับส่วนโค้ง:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:80
 #: pcbnew/microwave/microwave_footprint.cpp:95
-#, fuzzy
 msgid "Create Microwave Footprint"
 msgstr "สร้างฟุ้ทพรินท์ไมโครเวฟ"
 
@@ -30312,7 +30274,6 @@ msgid "Component Value:"
 msgstr "ค่าคอมโพเนนต์:"
 
 #: pcbnew/microwave/microwave_polygon.cpp:111
-#, fuzzy
 msgid "Complex Shape"
 msgstr "รูปร่างที่ซับซ้อน"
 
@@ -30325,9 +30286,8 @@ msgid "Read Shape Description File..."
 msgstr "อ่านไฟล์คำอธิบายรูปร่าง..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:210
-#, fuzzy
 msgid "Shape Description File"
-msgstr "อ่านไฟล์คำอธิบายรูปร่าง..."
+msgstr "ไฟล์คำอธิบายรูปร่าง"
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
 msgid "Shape has a null size."
@@ -30914,6 +30874,8 @@ msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
+"ได้รับแจ้งข้อผิดพลาดระหว่างอ่านรายชื่อเน็ต   กรุณารายงานปัญหานี้แก่ทีมงาน "
+"KiCad โดยใช้เมนู ช่วยเหลือ->รายงานข้อผิดพลาด"
 
 #: pcbnew/pcb_edit_frame.cpp:1500
 #, c-format
@@ -32473,23 +32435,20 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:463
-#, fuzzy
 msgid "existing track"
-msgstr "เมื่อสร้างแทร็ก"
+msgstr "แทร็กที่มีอยู่แล้ว"
 
 #: pcbnew/router/pns_kicad_iface.cpp:477 pcbnew/router/pns_kicad_iface.cpp:490
 msgid "board minimum width"
 msgstr "ความกว้างบอร์ดขั้นต่ำ"
 
 #: pcbnew/router/pns_kicad_iface.cpp:486
-#, fuzzy
 msgid "netclass 'Default'"
-msgstr "เน็ตคลาส '%s'"
+msgstr "เน็ตคลาส 'ค่าปริยาย'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:488
-#, fuzzy
 msgid "user choice"
-msgstr "ตัวเลือกร้านค้า"
+msgstr "ตัวเลือกผู้ใช้"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1063
 #, c-format
@@ -32812,14 +32771,12 @@ msgid "Net Class: %s"
 msgstr "เน็ตคลาส:%s"
 
 #: pcbnew/router/router_tool.cpp:1940
-#, fuzzy
 msgid "Routing Track"
-msgstr "เดินแทร็กเส้นเดียว"
+msgstr "เดินลายเส้นแทร็ก"
 
 #: pcbnew/router/router_tool.cpp:1940
-#, fuzzy
 msgid "(no net)"
-msgstr "<ไม่มีเน็ต>"
+msgstr "(ไม่มีเน็ต)"
 
 #: pcbnew/router/router_tool.cpp:1946
 #, c-format
@@ -32827,7 +32784,6 @@ msgid "Track Width: %s"
 msgstr "ขนาดแทร็ก:%s"
 
 #: pcbnew/router/router_tool.cpp:1968
-#, fuzzy
 msgid "Diff Pair Gap"
 msgstr "ช่องว่างระหว่างคู่ดิฟแพร์"
 
@@ -32942,6 +32898,9 @@ msgid ""
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
+"เลือกความกว้างปริยายสำหรับแทร็กใหม่ โปรดทราบว่าความกว้างนี้ถูกทับได้ด้วยความก"
+"ว้างขั้นต่ำจากบอร์ด,หรือจากความกว้างของแทร็กที่มีอยู่ หากเปิดใช้งานคุณสมบัติ "
+"'ใช้ความกว้างของแทร็กที่มีอยู่'"
 
 #: pcbnew/toolbars_pcb_editor.cpp:540
 msgid ""
@@ -33110,9 +33069,8 @@ msgid "Cannot generate clearance report on empty group."
 msgstr "ไม่สามารถสร้างรายงานระยะห่างสำหรับกลุ่มที่ว่างเปล่า"
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
-#, fuzzy
 msgid "Zone connection resolution for:"
-msgstr "แก้ปัญหาระยะห่างรูเจาะสำหรับ:"
+msgstr "แก้ปัญหาการเชื่อมต่อโซนสำหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 #, c-format
@@ -33155,9 +33113,8 @@ msgid "Silkscreen clearance resolution for:"
 msgstr "แก้ปัญหาระยะห่างซิลค์สกรีนสำหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
-#, fuzzy
 msgid "Courtyard clearance resolution for:"
-msgstr "แก้ปัญหาระยะห่างสําหรับ:"
+msgstr "แก้ปัญหาระยะห่างลานสนามสําหรับ:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:566
 msgid "Hole clearance resolution for:"
@@ -33165,7 +33122,7 @@ msgstr "แก้ปัญหาระยะห่างรูเจาะสำ
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
-msgstr ""
+msgstr "ชิ้นส่วนไม่มีเลเยอร์เกี่ยวข้องกัน:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:678
 msgid "Select an item for a constraints resolution report."
@@ -33248,9 +33205,8 @@ msgid "Item allowed at current location."
 msgstr "ชิ้นส่วนที่อนุญาต ณ ตำแหน่งปัจจุบัน"
 
 #: pcbnew/tools/convert_tool.cpp:76
-#, fuzzy
 msgid "Create from Selection"
-msgstr "นำออกจากการเลือก"
+msgstr "สร้างขึ้นจากการเลือก"
 
 #: pcbnew/tools/convert_tool.cpp:210
 msgid "Convert shapes to polygon"
@@ -33277,9 +33233,8 @@ msgid "Thickness (mm)"
 msgstr "ความหนา (มม.)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
-#, fuzzy
 msgid "Thickness (inches)"
-msgstr "ความหนา (มิล)"
+msgstr "ความหนา(นิ้ว)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
 msgid "Thickness (mils)"
@@ -33290,9 +33245,8 @@ msgid "Loss Tangent"
 msgstr "สูญเสียแทนเจนต์"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:314
-#, fuzzy
 msgid "Dielectric"
-msgstr "ไดอิเล็กทริก %d"
+msgstr "Dielectric"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:366
 msgid "Insert board stackup table"
@@ -33316,7 +33270,7 @@ msgstr "แทร็ก/ระยะห่าง ขั้นต่ำ: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:453
 msgid "Copper Finish: "
-msgstr "ทองแดงเสร็จสิ้น: "
+msgstr "เคลือบทองแดงก่อนเสร็จ: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:461
 msgid "Castellated pads: "
@@ -33343,9 +33297,8 @@ msgid "Edge card connectors: "
 msgstr "คอนเน็กเตอร์ชนิดบอร์ดเสียบ: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:519
-#, fuzzy
 msgid "Yes, Bevelled"
-msgstr "ใช่, เอียง"
+msgstr "ใช่, ขอบเอียง"
 
 #: pcbnew/tools/drawing_tool.cpp:80
 msgid "Select Via Size"
@@ -33491,7 +33444,6 @@ msgid "Selection copied"
 msgstr "สำเนาการเลือกแล้ว"
 
 #: pcbnew/tools/edit_tool.cpp:2459
-#, fuzzy
 msgid "Copy canceled"
 msgstr "ยกเลิกสำเนาแล้ว"
 
@@ -33559,25 +33511,22 @@ msgid "Recombine pads"
 msgstr "รวมแพ็ดใหม่"
 
 #: pcbnew/tools/pcb_actions.cpp:48
-#, fuzzy
 msgid "Create Polygon from Selection"
-msgstr "สร้างรูปหลายเหลี่ยมกราฟิกจากส่วนที่เลือก"
+msgstr "สร้างรูปหลายเหลี่ยมจากที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Creates a graphic polygon from the selection"
 msgstr "สร้างรูปหลายเหลี่ยมกราฟิกจากส่วนที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:53
-#, fuzzy
 msgid "Create Zone from Selection"
-msgstr "นำออกจากการเลือก"
+msgstr "สร้างโซนจากที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Creates a copper zone from the selection"
 msgstr "สร้างโซนทองแดงจากส่วนที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:58
-#, fuzzy
 msgid "Create Rule Area from Selection"
 msgstr "สร้างพื้นที่กฎจากส่วนที่เลือก"
 
@@ -33586,33 +33535,28 @@ msgid "Creates a rule area from the selection"
 msgstr "สร้างพื้นที่กฎจากส่วนที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:63
-#, fuzzy
 msgid "Create Lines from Selection"
-msgstr "สร้างเส้นตรงกราฟิกจากสิ่งที่เลือก"
+msgstr "สร้างเส้นตรงจากสิ่งที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:63
 msgid "Creates graphic lines from the selection"
 msgstr "สร้างเส้นตรงกราฟิกจากสิ่งที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:68
-#, fuzzy
 msgid "Create Arc from Selection"
-msgstr "นำออกจากการเลือก"
+msgstr "สร้างส่วนโค้งจากสิ่งที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:68
-#, fuzzy
 msgid "Creates an arc from the selected line segment"
-msgstr "สร้างส่วนโค้งจากส่วนของเส้นตรง"
+msgstr "สร้างส่วนโค้งจากส่วนของเส้นตรงที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:73
-#, fuzzy
 msgid "Create Tracks from Selection"
-msgstr "สร้างเส้นตรงกราฟิกจากสิ่งที่เลือก"
+msgstr "สร้างแทร็กจากสิ่งที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:73
-#, fuzzy
 msgid "Creates tracks from the selected graphic lines"
-msgstr "ล้างเลเยอร์กราฟิกที่เลือก"
+msgstr "สร้างแทร็กจากเส้นตรงกราฟิกที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw Line"
@@ -34318,13 +34262,12 @@ msgid "Lock or unlock selected items"
 msgstr "ล็อกหรือปลดล็อกชิ้นส่วนที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:667
-#, fuzzy
 msgid "Toggle 45 Limit"
-msgstr "สลับเปิดปิดเน้นสีเน็ต"
+msgstr "สลับเปิดปิดข้อจำกัด45"
 
 #: pcbnew/tools/pcb_actions.cpp:667
 msgid "Limit actions to 45 degrees from the starting point"
-msgstr ""
+msgstr "จำกัดการกระทำที่ 45 องศาจากจุดเริ่มต้น"
 
 #: pcbnew/tools/pcb_actions.cpp:672
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -34467,26 +34410,25 @@ msgid "Curved Ratsnest Lines"
 msgstr "เส้นแร็ทเน็ตโค้ง"
 
 #: pcbnew/tools/pcb_actions.cpp:798
-#, fuzzy
 msgid "Ratsnest Mode (3-state)"
-msgstr "โหมดแสดงเลเยอร์เดียว (3 สถานะ)"
+msgstr "โหมดแร็ทเน็ต (3 สถานะ)"
 
 #: pcbnew/tools/pcb_actions.cpp:799
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
 msgstr ""
+"วนวงกลมระหว่างแสดงแร็ทเน็ทของทุกเลเยอร์,เฉพาะเลเยอร์ที่มองเห็น,และไม่แสดง"
 
 #: pcbnew/tools/pcb_actions.cpp:803
-#, fuzzy
 msgid "Net Color Mode (3-state)"
-msgstr "โหมดแสดงเลเยอร์เดียว (3 สถานะ)"
+msgstr "โหมดแสดงสีเน็ต (3 สถานะ)"
 
 #: pcbnew/tools/pcb_actions.cpp:804
-#, fuzzy
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
-msgstr "สีของเน็ตและเน็ตคลาสจะแสดงบนแร็ทเน็ตเท่านั้น"
+msgstr ""
+"วนวงกลมระหว่างใช้สีของเน็ตและเน็ตคลาสสำหรับทุกเน็ต,เฉพาะแร็ทเน็ต,และไม่แสดง"
 
 #: pcbnew/tools/pcb_actions.cpp:809
 msgid "Sketch Tracks"
@@ -34529,18 +34471,16 @@ msgid "Show footprint texts in line mode"
 msgstr "แสดงข้อความฟุ้ทพรินท์ในโหมดเส้น"
 
 #: pcbnew/tools/pcb_actions.cpp:839
-#, fuzzy
 msgid "Draw Zone Fills"
-msgstr "ไฟล์แผ่นเขียนแบบ"
+msgstr "วาดการเติมในโซน"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Show filled areas of zones"
 msgstr "แสดงบริเวณเติมโซน"
 
 #: pcbnew/tools/pcb_actions.cpp:844
-#, fuzzy
 msgid "Draw Zone Outlines"
-msgstr "ระยะห่างเค้าโครง"
+msgstr "วาดเค้าโครงของโซน"
 
 #: pcbnew/tools/pcb_actions.cpp:844
 msgid "Show only zone boundaries"
@@ -34548,20 +34488,19 @@ msgstr "แสดงเฉพาะขอบเขตโซน"
 
 #: pcbnew/tools/pcb_actions.cpp:849
 msgid "Draw Zone Fill Fracture Borders"
-msgstr ""
+msgstr "วาดการเติมโซนเป็นขอบนอกแตกหัก"
 
 #: pcbnew/tools/pcb_actions.cpp:854
 msgid "Draw Zone Fill Triangulation"
-msgstr ""
+msgstr "วาดการเติมโซนเป็นสามเหลี่ยม"
 
 #: pcbnew/tools/pcb_actions.cpp:860
 msgid "Toggle Zone Display"
 msgstr "สลับเปิดปิดการแสดงโซน"
 
 #: pcbnew/tools/pcb_actions.cpp:861
-#, fuzzy
 msgid "Cycle between showing zone fills and just their outlines"
-msgstr "หมุนวนระหว่างการแสดงโซนเติมเต็ม,โซนเฟรมเส้นลวดและโซนแบบโครงร่าง"
+msgstr "วนวงกลมระหว่างแสดงโซนเติมเต็มและโซนแบบโครงร่าง"
 
 #: pcbnew/tools/pcb_actions.cpp:869
 msgid "Switch to Component (F.Cu) layer"
@@ -34895,36 +34834,32 @@ msgid "Fill Zone"
 msgstr "เติมโซน"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
-#, fuzzy
 msgid "Update copper fill of selected zone(s)"
-msgstr "ปรับปรุงฟุ้ทพรินท์ที่เลือก"
+msgstr "ปรับปรุงการเติมทองแดงในโซนที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:1262 pcbnew/tools/zone_filler_tool.cpp:154
 msgid "Fill All Zones"
 msgstr "เติมโซนทั้งหมด"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
-#, fuzzy
 msgid "Update copper fill of all zones"
-msgstr "ไม่เติมโซนทั้งหมด"
+msgstr "ปรับปรุงการเติมทองแดงของทุกโซน"
 
 #: pcbnew/tools/pcb_actions.cpp:1267 pcbnew/tools/zone_filler_tool.cpp:249
 msgid "Unfill Zone"
 msgstr "ไม่เติมโซน"
 
 #: pcbnew/tools/pcb_actions.cpp:1267
-#, fuzzy
 msgid "Remove copper fill from selected zone(s)"
-msgstr "นำชิ้นส่วนออกจากการเลือก"
+msgstr "ลบการเติมทองแดงออกจากโซนที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:1273 pcbnew/tools/zone_filler_tool.cpp:267
 msgid "Unfill All Zones"
 msgstr "ยกเลิกเติมโซนทั้งหมด"
 
 #: pcbnew/tools/pcb_actions.cpp:1273
-#, fuzzy
 msgid "Remove copper fill from all zones"
-msgstr "เชื่อมต่อโซนทองแดงอีกจาก %s ถึง %s"
+msgstr "ลบการเติมทองแดงออกจากโซนทั้งหมด"
 
 #: pcbnew/tools/pcb_actions.cpp:1281
 msgid "Place Selected Footprints"
@@ -35040,9 +34975,8 @@ msgid "Sets the length tuning parameters for currently routed item."
 msgstr "ตั้งค่าพารามิเตอร์การปรับความยาวสำหรับชิ้นส่วนที่กำลังเดินลายเส้น"
 
 #: pcbnew/tools/pcb_control.cpp:214
-#, fuzzy
 msgid "Don't show again"
-msgstr "ไม่แสดงอีกต่อไป"
+msgstr "ไม่ต้องแสดงอีก"
 
 #: pcbnew/tools/pcb_control.cpp:228
 #, c-format
@@ -35050,6 +34984,8 @@ msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
 msgstr ""
+"เติมโซนไม่หมด ใช้คำสั่ง แก้ไข>เติมโซนทั้งหมด (%s) "
+"ถ้าหากคุณต้องการเห็นการเติมทั้งหมด"
 
 #: pcbnew/tools/pcb_control.cpp:585
 msgid "Item locked."
@@ -35406,28 +35342,24 @@ msgid "Ratsnest display:"
 msgstr "แสดงแร็ทเน็ต:"
 
 #: pcbnew/widgets/appearance_controls.cpp:719
-#, fuzzy
 msgid "Choose which ratsnest lines to display"
-msgstr "เลือกแร็ทเน็ตเส้นอะไรที่จะแสดง"
+msgstr "เลือกแร็ทเน็ตเส้นใดที่จะแสดง"
 
 #: pcbnew/widgets/appearance_controls.cpp:729
-#, fuzzy
 msgid "Show ratsnest lines to items on all layers"
-msgstr "เส้นแร็ทเน็ตจะแสดงเป็นชิ้นส่วนในทุกเลเยอร์"
+msgstr "แสดงเส้นแร็ทเน็ตเป็นชิ้นส่วนในทุกเลเยอร์"
 
 #: pcbnew/widgets/appearance_controls.cpp:734
 msgid "Visible layers"
 msgstr "เลเยอร์ที่มองเห็น"
 
 #: pcbnew/widgets/appearance_controls.cpp:736
-#, fuzzy
 msgid "Show ratsnest lines to items on visible layers"
-msgstr "เส้นแร็ทเน็ตจะแสดงต่อชิ้นส่วนบนเลเยอร์ที่มองเห็นได้"
+msgstr "แสดงเส้นแร็ทเน็ตเป็นชิ้นส่วนในเลเยอร์ที่มองเห็น"
 
 #: pcbnew/widgets/appearance_controls.cpp:743
-#, fuzzy
 msgid "Hide all ratsnest lines"
-msgstr "ซ่อนช่องฟุ้ทพรินท์ทั้งหมด"
+msgstr "ซ่อนเส้นแร็ทเน็ตทั้งหมด"
 
 #: pcbnew/widgets/appearance_controls.cpp:881
 msgid "Set Net Color"
