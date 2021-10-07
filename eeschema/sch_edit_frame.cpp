@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -507,7 +507,7 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
     int            sheet_count = g_RootSheet->CountSheets();
     int            SheetNumber = 1;
     wxString       current_sheetpath = m_CurrentSheet->Path();
-    SCH_SHEET_LIST sheetList( g_RootSheet );
+    SCH_SHEET_LIST sheetList( g_RootSheet, false );
 
     // Examine all sheets path to find the current sheets path,
     // and count them from root to the current sheet path:
@@ -642,7 +642,8 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
     if( Kiface().IsSingle() )
     {
-        LIB_EDIT_FRAME* libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
+        LIB_EDIT_FRAME* libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR,
+                                                                         false );
         if( libeditFrame && !libeditFrame->Close() )   // Can close component editor?
             return;
 
@@ -661,7 +662,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     if( simFrame && !simFrame->Close() )   // Can close the simulator?
         return;
 
-    SCH_SHEET_LIST sheetList( g_RootSheet );
+    SCH_SHEET_LIST sheetList( g_RootSheet, false );
 
     if( sheetList.IsModified() )
     {
@@ -1377,7 +1378,6 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
 
         undoItem = parentSheet;
     }
-
     else if( item->Type() == SCH_FIELD_T )
     {
         parentComponent = (SCH_COMPONENT*) item->GetParent();
@@ -1394,7 +1394,7 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
         // for all new sheet paths added by the new sheet (if this sheet is loaded from
         // and existing sheet or a existing file, it can also contain subsheets)
         bool doClearAnnotation = false;
-        SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
+        SCH_SHEET_LIST initial_sheetpathList( g_RootSheet, false );
 
         if( item->Type() == SCH_SHEET_T )
         {
@@ -1506,7 +1506,9 @@ void SCH_EDIT_FRAME::UpdateTitle()
                 title += _( " [Read Only]" );
         }
         else
+        {
             title += _( " [no file]" );
+        }
     }
 
     SetTitle( title );

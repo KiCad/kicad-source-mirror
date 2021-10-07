@@ -470,7 +470,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
     bool hasSheetPasted = false;
 
     // Keep trace of existing sheet paths. Paste block can modify this list
-    SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
+    SCH_SHEET_LIST initial_sheetpathList( g_RootSheet, false );
 
     for( i = 0; i < m_blockItems.GetCount(); i++ )
     {
