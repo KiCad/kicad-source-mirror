@@ -1127,6 +1127,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName, b
 
     // Static to store user preference for a session
     static int footprintType = 1;
+    int footprintTranslated = FP_SMD;
 
     // Ask for the new footprint name
     if( footprintName.IsEmpty() && !aQuiet )
@@ -1139,16 +1140,18 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName, b
         if( dlg.ShowModal() != wxID_OK )
             return nullptr;    //Aborted by user
 
-        switch( dlg.GetChoice() )
+        footprintType = dlg.GetChoice();
+
+        switch( footprintType )
         {
         case 0:
-            footprintType = FP_THROUGH_HOLE;
+            footprintTranslated = FP_THROUGH_HOLE;
             break;
         case 1:
-            footprintType = FP_SMD;
+            footprintTranslated = FP_SMD;
             break;
         default:
-            footprintType = 0;
+            footprintTranslated = 0;
         }
     }
 
@@ -1172,7 +1175,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName, b
     // Update its name in lib
     footprint->SetFPID( LIB_ID( wxEmptyString, footprintName ) );
 
-    footprint->SetAttributes( footprintType );
+    footprint->SetAttributes( footprintTranslated );
 
     PCB_LAYER_ID txt_layer;
     wxPoint default_pos;
