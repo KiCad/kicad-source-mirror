@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,11 +17,13 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	bmainSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_notebook->SetMinSize( wxSize( -1,100 ) );
 
-	bmainSizer->Add( m_notebook, 0, wxEXPAND | wxALL, 3 );
+
+	bmainSizer->Add( m_notebook, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
 
 	m_htmlWin = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxHW_SCROLLBAR_AUTO );
-	bmainSizer->Add( m_htmlWin, 1, wxALL|wxEXPAND, 10 );
+	bmainSizer->Add( m_htmlWin, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bsizerTemplateSelector;
 	bsizerTemplateSelector = new wxBoxSizer( wxHORIZONTAL );
@@ -81,7 +83,7 @@ TEMPLATE_SELECTION_PANEL_BASE::TEMPLATE_SELECTION_PANEL_BASE( wxWindow* parent, 
 {
 	m_SizerBase = new wxBoxSizer( wxHORIZONTAL );
 
-	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL );
+	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
 	m_scrolledWindow->SetScrollRate( 5, 5 );
 	m_SizerChoice = new wxGridSizer( 1, 0, 0, 0 );
 
@@ -89,7 +91,7 @@ TEMPLATE_SELECTION_PANEL_BASE::TEMPLATE_SELECTION_PANEL_BASE( wxWindow* parent, 
 	m_scrolledWindow->SetSizer( m_SizerChoice );
 	m_scrolledWindow->Layout();
 	m_SizerChoice->Fit( m_scrolledWindow );
-	m_SizerBase->Add( m_scrolledWindow, 0, wxEXPAND | wxALL, 3 );
+	m_SizerBase->Add( m_scrolledWindow, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( m_SizerBase );
@@ -105,20 +107,20 @@ TEMPLATE_WIDGET_BASE::TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id, con
 	this->SetMinSize( wxSize( 108,-1 ) );
 	this->SetMaxSize( wxSize( 108,-1 ) );
 
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerMain;
+	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
 	m_bitmapIcon = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 64,64 ), 0 );
 	m_bitmapIcon->SetMinSize( wxSize( 64,64 ) );
 
-	bSizer4->Add( m_bitmapIcon, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 3 );
+	bSizerMain->Add( m_bitmapIcon, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 3 );
 
 	m_staticTitle = new wxStaticText( this, wxID_ANY, _("Project Template Title"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL );
 	m_staticTitle->Wrap( 100 );
-	bSizer4->Add( m_staticTitle, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 3 );
+	bSizerMain->Add( m_staticTitle, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 3 );
 
 
-	this->SetSizer( bSizer4 );
+	this->SetSizer( bSizerMain );
 	this->Layout();
 }
 

@@ -68,6 +68,8 @@ protected:
     wxNotebookPage* m_parent;
     wxString  m_templatesPath;      ///< the path to access to the folder
                                     ///< containing the templates (which are also folders)
+    int       m_minHeight;          ///< minimal height to show templates (this is the height
+                                    ///< of the biggest template widget)
 
 public:
     /**
@@ -77,6 +79,10 @@ public:
     TEMPLATE_SELECTION_PANEL( wxNotebookPage* aParent, const wxString& aPath );
 
     const wxString& GetPath() { return m_templatesPath; }
+
+    void AddTemplateWidget( TEMPLATE_WIDGET* aTemplateWidget );
+
+    int GetMinHeight() { return m_minHeight; }
 };
 
 

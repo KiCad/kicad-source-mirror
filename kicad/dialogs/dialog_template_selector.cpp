@@ -35,6 +35,15 @@ TEMPLATE_SELECTION_PANEL::TEMPLATE_SELECTION_PANEL( wxNotebookPage* aParent,
 {
     m_parent = aParent;
     m_templatesPath = aPath;
+    m_minHeight = 0;
+}
+
+
+void TEMPLATE_SELECTION_PANEL::AddTemplateWidget( TEMPLATE_WIDGET* aTemplateWidget )
+{
+    m_SizerChoice->Add( aTemplateWidget );
+    int height = aTemplateWidget->GetBestSize().GetHeight();
+    m_minHeight = std::max( m_minHeight, height );
 }
 
 
@@ -96,17 +105,19 @@ void TEMPLATE_WIDGET::OnMouse( wxMouseEvent& event )
 
 void DIALOG_TEMPLATE_SELECTOR::onNotebookResize( wxSizeEvent& event )
 {
+    // Ensure all panels have the full available width:
     for( size_t i = 0; i < m_notebook->GetPageCount(); i++ )
     {
-        m_panels[i]->SetSize( m_notebook->GetSize().GetWidth() - 6,
-                              m_panels[i]->m_SizerChoice->GetSize().GetHeight() );
-        m_panels[i]->m_SizerBase->FitInside( m_panels[i] );
-        m_panels[i]->m_scrolledWindow->SetSize( m_panels[i]->GetSize().GetWidth() - 6,
-                                                m_panels[i]->GetSize().GetHeight() - 6 );
-        m_panels[i]->m_SizerChoice->FitInside( m_panels[i]->m_scrolledWindow );
+        // Gives a little margin for panel horizontal size, especially to show the
+        // full scroll bars of wxScrolledWindow
+        // Fix me if a better way exists
+        const int h_margin = 10;
+
+        int max_width = m_notebook->GetClientSize().GetWidth() - h_margin;
+        m_panels[i]->SetSize( max_width, -1);
     }
 
-    m_notebook->Refresh();
+    Refresh();
 
     event.Skip();
 }
@@ -151,15 +162,7 @@ void DIALOG_TEMPLATE_SELECTOR::AddTemplate( int aPage, PROJECT_TEMPLATE* aTempla
 {
     TEMPLATE_WIDGET* w = new TEMPLATE_WIDGET( m_panels[aPage]->m_scrolledWindow, this  );
     w->SetTemplate( aTemplate );
-
-    m_panels[aPage]->m_SizerChoice->Add( w );
-    m_panels[aPage]->m_SizerChoice->Layout();
-    m_panels[aPage]->SetSize( m_notebook->GetSize().GetWidth() - 6,
-                              m_panels[aPage]->m_SizerChoice->GetSize().GetHeight() );
-    m_panels[aPage]->m_SizerBase->FitInside( m_panels[aPage] );
-    m_panels[aPage]->m_scrolledWindow->SetSize( m_panels[aPage]->GetSize().GetWidth() - 6,
-                                                m_panels[aPage]->GetSize().GetHeight() - 6 );
-    m_panels[aPage]->m_SizerChoice->FitInside( m_panels[aPage]->m_scrolledWindow );
+    m_panels[aPage]->AddTemplateWidget( w );
 
     m_notebook->Refresh();
 }
@@ -187,6 +190,16 @@ void DIALOG_TEMPLATE_SELECTOR::AddTemplatesPage( const wxString& aTitle, wxFileN
         m_tcTemplatePath->SetValue( path );
 
     buildPageContent( path, m_notebook->GetPageCount() - 1 );
+
+    // Ensure m_notebook has a minimal height to show the template widgets:
+    // and add a margin for scroll bars and decorations
+    // FIX ME: find a better way to allow space for these items: the value works on MSW
+    // but is too big on GTK. But I did not find a better way (JPC)
+    const int margin = 50;
+    int min_height = tpanel->GetMinHeight() + margin;
+
+    if( m_notebook->GetMinClientSize().GetHeight() < min_height )
+        m_notebook->SetMinClientSize( wxSize( -1, min_height ) );
 }
 
 

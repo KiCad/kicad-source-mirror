@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,7 +54,7 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnPageChange( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnHtmlLinkActivated( wxHtmlLinkEvent& event ) { event.Skip(); }
 		virtual void onDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
@@ -63,7 +63,8 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Project Template Selector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,540 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Project Template Selector"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 640,540 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_TEMPLATE_SELECTOR_BASE();
 
 };
@@ -83,6 +84,7 @@ class TEMPLATE_SELECTION_PANEL_BASE : public wxPanel
 		wxGridSizer* m_SizerChoice;
 
 		TEMPLATE_SELECTION_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,140 ), long style = wxTAB_TRAVERSAL|wxBORDER_NONE, const wxString& name = wxEmptyString );
+
 		~TEMPLATE_SELECTION_PANEL_BASE();
 
 };
@@ -101,6 +103,7 @@ class TEMPLATE_WIDGET_BASE : public wxPanel
 	public:
 
 		TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 108,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~TEMPLATE_WIDGET_BASE();
 
 };
