@@ -1216,14 +1216,19 @@ void EDA_BASE_FRAME::OnMaximize( wxMaximizeEvent& aEvent )
 wxSize EDA_BASE_FRAME::GetWindowSize()
 {
 #ifdef __WXGTK__
+    wxSize winSize = GetSize();
+
     // GTK includes the window decorations in the normal GetSize call,
     // so we have to use a GTK-specific sizing call that returns the
     // non-decorated window size.
-    int width  = 0;
-    int height = 0;
-    GTKDoGetSize( &width, &height );
+    if( m_ident == KICAD_MAIN_FRAME_T )
+    {
+        int width  = 0;
+        int height = 0;
+        GTKDoGetSize( &width, &height );
 
-    wxSize winSize( width, height );
+        winSize.Set( width, height );
+    }
 #else
     wxSize winSize = GetSize();
 #endif
