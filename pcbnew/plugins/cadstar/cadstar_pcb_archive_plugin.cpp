@@ -138,6 +138,10 @@ BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppe
         }
     }
 
+    // Need to set legacy loading so that netclassess and design rules are loaded correctly
+    m_board->m_LegacyNetclassesLoaded = true;
+    m_board->m_LegacyDesignSettingsLoaded = true;
+
     m_loaded_footprints = tempPCB.GetLoadedLibraryFootpints();
 
     return m_board;

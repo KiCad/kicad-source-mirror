@@ -657,8 +657,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
 
     applyNetClassRule( "T_T", ds.GetDefault(), &::NETCLASS::SetClearance );
 
-    m_board->m_LegacyNetclassesLoaded = true;
-
     wxLogWarning( _( "KiCad design rules are different from CADSTAR ones. Only the compatible "
                      "design rules were imported. It is recommended that you review the design "
                      "rules that have been applied." ) );
