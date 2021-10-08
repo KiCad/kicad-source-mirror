@@ -26,9 +26,11 @@
 #define TRANSLINE_IDENT_H
 
 #include <vector>
-#include <wx/bitmap.h>
 
 #include "transline/transline.h"
+
+// Forward declare the bitmaps enum from bitmaps/bitmap_list.h
+enum class BITMAPS : unsigned int;
 
 // An enum to handle muwave shapes:
 enum TRANSLINE_TYPE_ID {
@@ -126,7 +128,7 @@ public:
 
 public:
     enum TRANSLINE_TYPE_ID m_Type;              // The type of transline handled
-    wxBitmap *             m_Icon;              // An icon to display in dialogs
+    BITMAPS                m_BitmapName;        // The name of the bitmap to display in dialogs
     TRANSLINE*             m_TLine;             // The TRANSLINE itself
     wxArrayString          m_Messages;          // messages for results
 

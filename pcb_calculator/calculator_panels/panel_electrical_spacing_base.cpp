@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,7 +11,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_ELECTRICAL_SPACING_BASE::PANEL_ELECTRICAL_SPACING_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_ELECTRICAL_SPACING_BASE::PANEL_ELECTRICAL_SPACING_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : CALCULATOR_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bSizerElectricalClearance;
 	bSizerElectricalClearance = new wxBoxSizer( wxHORIZONTAL );
@@ -22,7 +22,7 @@ PANEL_ELECTRICAL_SPACING_BASE::PANEL_ELECTRICAL_SPACING_BASE( wxWindow* parent, 
 	wxArrayString m_ElectricalSpacingUnitsSelectorChoices;
 	m_ElectricalSpacingUnitsSelector = new UNIT_SELECTOR_LEN( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ElectricalSpacingUnitsSelectorChoices, 0 );
 	m_ElectricalSpacingUnitsSelector->SetSelection( -1 );
-	m_ElectricalSpacingUnitsSelector->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT, false, wxEmptyString ) );
+	m_ElectricalSpacingUnitsSelector->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	bLeftSizerElectricalClearance->Add( m_ElectricalSpacingUnitsSelector, 0, wxEXPAND|wxALL, 10 );
 
@@ -46,7 +46,7 @@ PANEL_ELECTRICAL_SPACING_BASE::PANEL_ELECTRICAL_SPACING_BASE( wxWindow* parent, 
 
 	m_staticTextElectricalSpacing = new wxStaticText( this, wxID_ANY, _("Note: Values are minimal values (from IPC 2221)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextElectricalSpacing->Wrap( -1 );
-	m_staticTextElectricalSpacing->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextElectricalSpacing->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_electricalSpacingSizer->Add( m_staticTextElectricalSpacing, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
@@ -69,7 +69,6 @@ PANEL_ELECTRICAL_SPACING_BASE::PANEL_ELECTRICAL_SPACING_BASE( wxWindow* parent, 
 	m_gridElectricalSpacingValues->SetColSize( 6, 100 );
 	m_gridElectricalSpacingValues->EnableDragColMove( false );
 	m_gridElectricalSpacingValues->EnableDragColSize( true );
-	m_gridElectricalSpacingValues->SetColLabelSize( 30 );
 	m_gridElectricalSpacingValues->SetColLabelValue( 0, _("B1") );
 	m_gridElectricalSpacingValues->SetColLabelValue( 1, _("B2") );
 	m_gridElectricalSpacingValues->SetColLabelValue( 2, _("B3") );
@@ -77,6 +76,7 @@ PANEL_ELECTRICAL_SPACING_BASE::PANEL_ELECTRICAL_SPACING_BASE( wxWindow* parent, 
 	m_gridElectricalSpacingValues->SetColLabelValue( 4, _("A5") );
 	m_gridElectricalSpacingValues->SetColLabelValue( 5, _("A6") );
 	m_gridElectricalSpacingValues->SetColLabelValue( 6, _("A7") );
+	m_gridElectricalSpacingValues->SetColLabelSize( 30 );
 	m_gridElectricalSpacingValues->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -91,7 +91,6 @@ PANEL_ELECTRICAL_SPACING_BASE::PANEL_ELECTRICAL_SPACING_BASE( wxWindow* parent, 
 	m_gridElectricalSpacingValues->SetRowSize( 8, 24 );
 	m_gridElectricalSpacingValues->SetRowSize( 9, 24 );
 	m_gridElectricalSpacingValues->EnableDragRowSize( false );
-	m_gridElectricalSpacingValues->SetRowLabelSize( 100 );
 	m_gridElectricalSpacingValues->SetRowLabelValue( 0, _("0 .. 15 V") );
 	m_gridElectricalSpacingValues->SetRowLabelValue( 1, _("16 .. 30 V") );
 	m_gridElectricalSpacingValues->SetRowLabelValue( 2, _("31 .. 50 V") );
@@ -102,6 +101,7 @@ PANEL_ELECTRICAL_SPACING_BASE::PANEL_ELECTRICAL_SPACING_BASE( wxWindow* parent, 
 	m_gridElectricalSpacingValues->SetRowLabelValue( 7, _("251 .. 300 V") );
 	m_gridElectricalSpacingValues->SetRowLabelValue( 8, _("301 .. 500 V") );
 	m_gridElectricalSpacingValues->SetRowLabelValue( 9, _(" > 500 V") );
+	m_gridElectricalSpacingValues->SetRowLabelSize( 100 );
 	m_gridElectricalSpacingValues->SetRowLabelAlignment( wxALIGN_RIGHT, wxALIGN_CENTER );
 
 	// Label Appearance

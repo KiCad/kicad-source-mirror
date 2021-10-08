@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include "html_window.h"
+#include "calculator_panel.h"
 #include <wx/string.h>
 #include <wx/radiobox.h>
 #include <wx/gdicmn.h>
@@ -36,7 +37,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_ATTENUATORS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_ATTENUATORS_BASE : public wxPanel
+class PANEL_ATTENUATORS_BASE : public CALCULATOR_PANEL
 {
 	private:
 

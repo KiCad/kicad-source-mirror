@@ -65,6 +65,24 @@ PANEL_ATTENUATORS::~PANEL_ATTENUATORS()
 }
 
 
+void PANEL_ATTENUATORS::ThemeChanged()
+{
+    // Update the bitmaps
+    m_bpButtonCalcAtt->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+    m_attenuatorBitmap->SetBitmap( KiBitmap( m_CurrAttenuator->m_SchBitmapName ) );
+
+    // Update the font
+    m_staticTextAttMsg->SetFont( KIUI::GetInfoFont( this ).Italic() );
+
+    // Update the HTML windows
+    m_Attenuator_Messages->ThemeChanged();
+    m_panelAttFormula->ThemeChanged();
+
+    Layout();
+    Refresh();
+}
+
+
 void PANEL_ATTENUATORS::UpdateUI()
 {
     m_attenuatorBitmap->SetBitmap( KiBitmap( m_CurrAttenuator->m_SchBitmapName ) );

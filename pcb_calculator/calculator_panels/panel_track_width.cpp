@@ -66,6 +66,12 @@ PANEL_TRACK_WIDTH::~PANEL_TRACK_WIDTH()
 }
 
 
+void PANEL_TRACK_WIDTH::ThemeChanged()
+{
+    m_htmlWinFormulas->ThemeChanged();
+}
+
+
 void PANEL_TRACK_WIDTH::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     aCfg->m_TrackWidth.current                   = m_TrackCurrentValue->GetValue();

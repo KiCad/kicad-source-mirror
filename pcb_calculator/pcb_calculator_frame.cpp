@@ -19,6 +19,7 @@
  */
 #include <wx/msgdlg.h>
 #include <bitmaps.h>
+#include <bitmap_store.h>
 #include <geometry/shape_poly_set.h>
 #include <kiface_base.h>
 #include "attenuators/attenuator_classes.h"
@@ -60,6 +61,9 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     if( m_framePos == wxDefaultPosition )
         Centre();
+
+    Bind( wxEVT_SYS_COLOUR_CHANGED,
+          wxSysColourChangedEventHandler( PCB_CALCULATOR_FRAME::onThemeChanged ), this );
 }
 
 
@@ -68,6 +72,25 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
     // This needed for OSX: avoids further OnDraw processing after this destructor and before
     // the native window is destroyed
     this->Freeze();
+}
+
+
+void PCB_CALCULATOR_FRAME::onThemeChanged( wxSysColourChangedEvent &aEvent )
+{
+    // Force the bitmaps to refresh
+    GetBitmapStore()->ThemeChanged();
+
+    // Update the panels
+    m_panelTransline->ThemeChanged();
+    m_panelRegulators->ThemeChanged();
+    m_panelAttenuators->ThemeChanged();
+    m_panelColorCode->ThemeChanged();
+    m_panelViaSize->ThemeChanged();
+    m_panelTrackWidth->ThemeChanged();
+    m_panelElectricalSpacing->ThemeChanged();
+    m_panelBoardClass->ThemeChanged();
+
+    aEvent.Skip();
 }
 
 

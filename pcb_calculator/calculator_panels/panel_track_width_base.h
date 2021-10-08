@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -14,6 +14,7 @@ class UNIT_SELECTOR_LEN;
 class UNIT_SELECTOR_THICKNESS;
 
 #include "html_window.h"
+#include "calculator_panels/calculator_panel.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -38,7 +39,7 @@ class UNIT_SELECTOR_THICKNESS;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_TRACK_WIDTH_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_TRACK_WIDTH_BASE : public wxPanel
+class PANEL_TRACK_WIDTH_BASE : public CALCULATOR_PANEL
 {
 	private:
 

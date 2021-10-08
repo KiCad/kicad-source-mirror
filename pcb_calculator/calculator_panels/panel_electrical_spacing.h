@@ -34,12 +34,15 @@ public:
                      long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
     ~PANEL_ELECTRICAL_SPACING();
 
-    void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg );
-    void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg );
+    // Methods from CALCULATOR_PANEL that must be overriden
+    void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
+    void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
+    void ThemeChanged() override;
 
     void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) override;
     void OnElectricalSpacingRefresh( wxCommandEvent& event ) override;
     void ElectricalSpacingUpdateData( double aUnitScale );
+
 };
 
 #endif

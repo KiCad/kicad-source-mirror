@@ -75,6 +75,12 @@ PANEL_VIA_SIZE::~PANEL_VIA_SIZE()
 }
 
 
+void PANEL_VIA_SIZE::ThemeChanged()
+{
+    m_viaBitmap->SetBitmap( KiBitmap( BITMAPS::viacalc ) );
+}
+
+
 void PANEL_VIA_SIZE::OnViaEpsilonR_Button( wxCommandEvent& event )
 {
     //Shows a list of current relative dielectric constant(Er) and select a value.

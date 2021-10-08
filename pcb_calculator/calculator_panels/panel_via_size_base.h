@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,6 +13,7 @@
 class UNIT_SELECTOR_LEN;
 
 #include "widgets/unit_selector.h"
+#include "calculator_panels/calculator_panel.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -21,10 +22,10 @@ class UNIT_SELECTOR_LEN;
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/choice.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/statbmp.h>
@@ -36,7 +37,7 @@ class UNIT_SELECTOR_LEN;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_VIA_SIZE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_VIA_SIZE_BASE : public wxPanel
+class PANEL_VIA_SIZE_BASE : public CALCULATOR_PANEL
 {
 	private:
 
@@ -106,7 +107,7 @@ class PANEL_VIA_SIZE_BASE : public wxPanel
 		wxStaticBitmap* m_viaBitmap;
 		wxButton* m_buttonViaReset;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnViaCalculate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnViaRho_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnViaEpsilonR_Button( wxCommandEvent& event ) { event.Skip(); }
@@ -117,6 +118,7 @@ class PANEL_VIA_SIZE_BASE : public wxPanel
 	public:
 
 		PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 554,417 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_VIA_SIZE_BASE();
 
 };

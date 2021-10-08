@@ -34,11 +34,10 @@ public:
                      long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
     ~PANEL_VIA_SIZE();
 
-    void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg );
-    /**
-     * Write via size parameters in configuration.
-     */
-    void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg );
+    // Methods from CALCULATOR_PANEL that must be overriden
+    void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
+    void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
+    void ThemeChanged() override;
 
     /**
      * Called when the user changes any value in the via calculator.
@@ -72,6 +71,7 @@ public:
                           double aEstimatedAmpacity, double aThermalResistance,
                           double aCapacitance, double aTimeDegradation, double aInductance,
                           double aReactance );
+
 private:
 };
 

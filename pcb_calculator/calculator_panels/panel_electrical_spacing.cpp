@@ -123,6 +123,12 @@ PANEL_ELECTRICAL_SPACING::~PANEL_ELECTRICAL_SPACING()
 }
 
 
+void PANEL_ELECTRICAL_SPACING::ThemeChanged()
+{
+    // TODO: Only the grid needs updating, but it isn't done automatically (https://trac.wxwidgets.org/ticket/19279)
+}
+
+
 void PANEL_ELECTRICAL_SPACING::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     aCfg->m_Electrical.spacing_units = m_ElectricalSpacingUnitsSelector->GetSelection();

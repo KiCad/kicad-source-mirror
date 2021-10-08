@@ -39,6 +39,11 @@ public:
 
     bool SetPage( const wxString& aSource ) override;
 
+    /*
+     * Notify the HTML window the theme has changed.
+     */
+    void ThemeChanged();
+
 private:
     void onThemeChanged( wxSysColourChangedEvent &aEvent );
 

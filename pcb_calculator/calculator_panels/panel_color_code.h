@@ -35,8 +35,11 @@ public:
 
     void OnToleranceSelection( wxCommandEvent& event ) override;
     void ToleranceSelection( int aSelection );
-    void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg );
-    void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg );
+
+    // Methods from CALCULATOR_PANEL that must be overriden
+    void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
+    void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
+    void ThemeChanged() override;
 
 private:
     void initColorCodePanel();

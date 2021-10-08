@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,7 +11,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : CALCULATOR_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bSizeTransline;
 	bSizeTransline = new wxBoxSizer( wxHORIZONTAL );
@@ -224,13 +224,13 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_staticTextZdiff = new wxStaticText( this, wxID_ANY, _("Zdiff =\n2*Z0( (1 - 0.48exp( -0.96*S/H ) )"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextZdiff->Wrap( -1 );
-	m_staticTextZdiff->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextZdiff->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_fgSizerZcomment->Add( m_staticTextZdiff, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	m_staticTextZcommon = new wxStaticText( this, wxID_ANY, _("Zcommon = Zeven / 2"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL );
 	m_staticTextZcommon->Wrap( -1 );
-	m_staticTextZcommon->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextZcommon->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	m_fgSizerZcomment->Add( m_staticTextZcommon, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 

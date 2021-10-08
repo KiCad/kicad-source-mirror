@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,7 +11,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : CALCULATOR_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bSizerViaSize;
 	bSizerViaSize = new wxBoxSizer( wxHORIZONTAL );
@@ -200,7 +200,7 @@ PANEL_VIA_SIZE_BASE::PANEL_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id, const
 
 	m_staticTextWarning = new wxStaticText( this, wxID_ANY, _("Warning:\nVia pad diameter >= Clearance hole diameter.\nSome parameters cannot be calculated for a via inside a copper zone."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextWarning->Wrap( -1 );
-	m_staticTextWarning->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextWarning->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	bSizerViaLeftColumn->Add( m_staticTextWarning, 0, wxALL|wxEXPAND, 10 );
 

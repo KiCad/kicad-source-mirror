@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "calculator_panels/calculator_panel.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -34,7 +35,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_REGULATOR_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_REGULATOR_BASE : public wxPanel
+class PANEL_REGULATOR_BASE : public CALCULATOR_PANEL
 {
 	private:
 
@@ -73,7 +74,7 @@ class PANEL_REGULATOR_BASE : public wxPanel
 		wxButton* m_buttonAddItem;
 		wxButton* m_buttonRemoveItem;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnRegulTypeSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegulatorCalcButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegulatorResetButtonClick( wxCommandEvent& event ) { event.Skip(); }
@@ -87,6 +88,7 @@ class PANEL_REGULATOR_BASE : public wxPanel
 	public:
 
 		PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 688,436 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_REGULATOR_BASE();
 
 };

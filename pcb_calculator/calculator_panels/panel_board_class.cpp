@@ -38,6 +38,12 @@ PANEL_BOARD_CLASS::~PANEL_BOARD_CLASS()
 }
 
 
+void PANEL_BOARD_CLASS::ThemeChanged()
+{
+    // TODO: Only the grid needs updating, but it isn't done automatically (https://trac.wxwidgets.org/ticket/19279)
+}
+
+
 void PANEL_BOARD_CLASS::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     aCfg->m_BoardClassUnits = m_BoardClassesUnitsSelector->GetSelection();

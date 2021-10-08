@@ -49,7 +49,13 @@ bool HTML_WINDOW::SetPage( const wxString& aSource )
 }
 
 
-void HTML_WINDOW::onThemeChanged( wxSysColourChangedEvent &aEvent )
+void HTML_WINDOW::ThemeChanged()
 {
     SetPage( m_pageSource );
+}
+
+
+void HTML_WINDOW::onThemeChanged( wxSysColourChangedEvent &aEvent )
+{
+    ThemeChanged();
 }

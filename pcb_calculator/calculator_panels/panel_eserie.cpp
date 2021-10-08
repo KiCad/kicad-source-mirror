@@ -49,6 +49,13 @@ PANEL_E_SERIE::~PANEL_E_SERIE()
 }
 
 
+void PANEL_E_SERIE::ThemeChanged()
+{
+    // Update the HTML window with the help text
+    m_panelESeriesHelp->ThemeChanged();
+}
+
+
 void PANEL_E_SERIE::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
 }

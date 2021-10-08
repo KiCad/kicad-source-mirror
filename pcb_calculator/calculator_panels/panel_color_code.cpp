@@ -42,6 +42,12 @@ PANEL_COLOR_CODE::~PANEL_COLOR_CODE()
 }
 
 
+void PANEL_COLOR_CODE::ThemeChanged()
+{
+    // Nothing to do for this panel
+}
+
+
 void PANEL_COLOR_CODE::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     m_rbToleranceSelection->SetSelection( aCfg->m_ColorCodeTolerance );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -15,6 +15,7 @@ class UNIT_SELECTOR_FREQUENCY;
 class UNIT_SELECTOR_LEN;
 class UNIT_SELECTOR_RESISTOR;
 
+#include "calculator_panels/calculator_panel.h"
 #include <wx/string.h>
 #include <wx/radiobox.h>
 #include <wx/gdicmn.h>
@@ -41,7 +42,7 @@ class UNIT_SELECTOR_RESISTOR;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_TRANSLINE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_TRANSLINE_BASE : public wxPanel
+class PANEL_TRANSLINE_BASE : public CALCULATOR_PANEL
 {
 	private:
 
@@ -124,7 +125,7 @@ class PANEL_TRANSLINE_BASE : public wxPanel
 		wxStaticText* m_Message8;
 		wxButton* m_buttonTransLineReset;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnTranslineSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineEpsilonR_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineTanD_Button( wxCommandEvent& event ) { event.Skip(); }
@@ -137,6 +138,7 @@ class PANEL_TRANSLINE_BASE : public wxPanel
 	public:
 
 		PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 724,460 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_TRANSLINE_BASE();
 
 };

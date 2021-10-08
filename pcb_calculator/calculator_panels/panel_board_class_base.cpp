@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,7 +11,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_BOARD_CLASS_BASE::PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_BOARD_CLASS_BASE::PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : CALCULATOR_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bSizerBoardClass;
 	bSizerBoardClass = new wxBoxSizer( wxHORIZONTAL );
@@ -32,7 +32,7 @@ PANEL_BOARD_CLASS_BASE::PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id,
 
 	m_staticTextBrdClass = new wxStaticText( this, wxID_ANY, _("Note: Values are minimal values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBrdClass->Wrap( -1 );
-	m_staticTextBrdClass->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextBrdClass->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	brdclsSizerRight->Add( m_staticTextBrdClass, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
@@ -54,13 +54,13 @@ PANEL_BOARD_CLASS_BASE::PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id,
 	m_gridClassesValuesDisplay->SetColSize( 5, 100 );
 	m_gridClassesValuesDisplay->EnableDragColMove( false );
 	m_gridClassesValuesDisplay->EnableDragColSize( true );
-	m_gridClassesValuesDisplay->SetColLabelSize( 30 );
 	m_gridClassesValuesDisplay->SetColLabelValue( 0, _("Class 1") );
 	m_gridClassesValuesDisplay->SetColLabelValue( 1, _("Class 2") );
 	m_gridClassesValuesDisplay->SetColLabelValue( 2, _("Class 3") );
 	m_gridClassesValuesDisplay->SetColLabelValue( 3, _("Class 4") );
 	m_gridClassesValuesDisplay->SetColLabelValue( 4, _("Class 5") );
 	m_gridClassesValuesDisplay->SetColLabelValue( 5, _("Class 6") );
+	m_gridClassesValuesDisplay->SetColLabelSize( 30 );
 	m_gridClassesValuesDisplay->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -70,12 +70,12 @@ PANEL_BOARD_CLASS_BASE::PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id,
 	m_gridClassesValuesDisplay->SetRowSize( 3, 24 );
 	m_gridClassesValuesDisplay->SetRowSize( 4, 24 );
 	m_gridClassesValuesDisplay->EnableDragRowSize( false );
-	m_gridClassesValuesDisplay->SetRowLabelSize( 160 );
 	m_gridClassesValuesDisplay->SetRowLabelValue( 0, _("Lines width") );
 	m_gridClassesValuesDisplay->SetRowLabelValue( 1, _("Min clearance") );
 	m_gridClassesValuesDisplay->SetRowLabelValue( 2, _("Via: (diam - drill)") );
 	m_gridClassesValuesDisplay->SetRowLabelValue( 3, _("Plated Pad: (diam - drill)") );
 	m_gridClassesValuesDisplay->SetRowLabelValue( 4, _("NP Pad: (diam - drill)") );
+	m_gridClassesValuesDisplay->SetRowLabelSize( 160 );
 	m_gridClassesValuesDisplay->SetRowLabelAlignment( wxALIGN_RIGHT, wxALIGN_CENTER );
 
 	// Label Appearance

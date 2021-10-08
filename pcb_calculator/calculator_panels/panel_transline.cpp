@@ -63,6 +63,15 @@ PANEL_TRANSLINE::~PANEL_TRANSLINE()
 }
 
 
+void PANEL_TRANSLINE::ThemeChanged()
+{
+    // Update the bitmaps
+    m_bpButtonAnalyze->SetBitmap( KiBitmap( BITMAPS::small_down ) );
+    m_bpButtonSynthetize->SetBitmap( KiBitmap( BITMAPS::small_up ) );
+    m_translineBitmap->SetBitmap( KiBitmap( m_transline_list[m_currTransLineType]->m_BitmapName ) );
+}
+
+
 void PANEL_TRANSLINE::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     aCfg->m_TransLine.type = m_currTransLineType;

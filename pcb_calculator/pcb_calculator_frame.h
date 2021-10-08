@@ -51,6 +51,8 @@ private:
 
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
+    void onThemeChanged( wxSysColourChangedEvent &aEvent );
+
     // Config read-write, virtual from EDA_BASE_FRAME
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;

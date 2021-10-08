@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "calculator_panels/calculator_panel.h"
 #include <wx/string.h>
 #include <wx/radiobox.h>
 #include <wx/gdicmn.h>
@@ -30,7 +31,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_COLOR_CODE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_COLOR_CODE_BASE : public wxPanel
+class PANEL_COLOR_CODE_BASE : public CALCULATOR_PANEL
 {
 	private:
 
@@ -49,13 +50,14 @@ class PANEL_COLOR_CODE_BASE : public wxPanel
 		wxStaticBitmap* m_Band_mult_bitmap;
 		wxStaticBitmap* m_Band_tol_bitmap;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnToleranceSelection( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
 		PANEL_COLOR_CODE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_COLOR_CODE_BASE();
 
 };

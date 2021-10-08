@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/intl.h>
 class UNIT_SELECTOR_LEN;
 
+#include "calculator_panels/calculator_panel.h"
 #include <wx/string.h>
 #include <wx/choice.h>
 #include <wx/gdicmn.h>
@@ -29,7 +30,7 @@ class UNIT_SELECTOR_LEN;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_BOARD_CLASS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_BOARD_CLASS_BASE : public wxPanel
+class PANEL_BOARD_CLASS_BASE : public CALCULATOR_PANEL
 {
 	private:
 
@@ -39,13 +40,14 @@ class PANEL_BOARD_CLASS_BASE : public wxPanel
 		wxGrid* m_gridClassesValuesDisplay;
 		wxPanel* m_panelShowClassPrms;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnBoardClassesUnitsSelection( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
 		PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 701,347 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_BOARD_CLASS_BASE();
 
 };

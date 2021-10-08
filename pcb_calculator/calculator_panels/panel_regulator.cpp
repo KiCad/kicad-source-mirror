@@ -60,6 +60,14 @@ PANEL_REGULATOR::~PANEL_REGULATOR()
 }
 
 
+void PANEL_REGULATOR::ThemeChanged()
+{
+    // Update the bitmaps
+    m_bitmapRegul3pins->SetBitmap( KiBitmap( BITMAPS::regul_3pins ) );
+    m_bitmapRegul4pins->SetBitmap( KiBitmap( BITMAPS::regul ) );
+}
+
+
 void PANEL_REGULATOR::OnRegulatorCalcButtonClick( wxCommandEvent& event )
 {
     RegulatorsSolve();
@@ -414,6 +422,7 @@ void PANEL_REGULATOR::Regulators_WriteConfig( PCB_CALCULATOR_SETTINGS* aCfg )
     }
 }
 
+
 void PANEL_REGULATOR::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     m_RegulR1Value->SetValue( aCfg->m_Regulators.r1 );
@@ -432,6 +441,12 @@ void PANEL_REGULATOR::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
     for( int ii = 0; ii < 3; ii++ )
         regprms[ii]->SetValue( aCfg->m_Regulators.last_param == ii );
 
+}
+
+
+void PANEL_REGULATOR::SaveSettings( PCB_CALCULATOR_SETTINGS *aCfg )
+{
+    // TODO: This was empty for some reason, should we actually save settings here?
 }
 
 

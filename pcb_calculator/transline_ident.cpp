@@ -80,10 +80,10 @@ double TRANSLINE_PRM::FromUserUnit()
 
 TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
 {
-    m_Type = aType;               // The type of transline handled
-    m_Icon = nullptr;             // An xpm icon to display in dialogs
-    m_TLine = nullptr;            // The TRANSLINE itself
-    m_HasPrmSelection = false;    // true if selection of parameters must be enabled in dialog menu
+    m_Type = aType;                         // The type of transline handled
+    m_BitmapName = BITMAPS::INVALID_BITMAP; // The icon to display
+    m_TLine = nullptr;                      // The TRANSLINE itself
+    m_HasPrmSelection = false;              // true if selection of parameters must be enabled in dialog menu
 
     // Add common prms:
     // Default values are for FR4
@@ -112,8 +112,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
     switch( m_Type )
     {
     case MICROSTRIP_TYPE:      // microstrip
-        m_TLine = new MICROSTRIP();
-        m_Icon  = KiBitmapNew( BITMAPS::microstrip );
+        m_TLine      = new MICROSTRIP();
+        m_BitmapName = BITMAPS::microstrip;
 
         m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
         m_Messages.Add( _( "Conductor losses:" ) );
@@ -153,8 +153,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case CPW_TYPE:          // coplanar waveguide
-        m_TLine = new COPLANAR();
-        m_Icon  = KiBitmapNew( BITMAPS::cpw );
+        m_TLine           = new COPLANAR();
+        m_BitmapName      = BITMAPS::cpw;
         m_HasPrmSelection = true;
 
         m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
@@ -187,8 +187,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case GROUNDED_CPW_TYPE:      // grounded coplanar waveguide
-        m_TLine = new GROUNDEDCOPLANAR();
-        m_Icon  = KiBitmapNew( BITMAPS::cpw_back );
+        m_TLine           = new GROUNDEDCOPLANAR();
+        m_BitmapName      = BITMAPS::cpw_back;
         m_HasPrmSelection = true;
 
         m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
@@ -222,8 +222,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
 
 
     case RECTWAVEGUIDE_TYPE:      // rectangular waveguide
-        m_TLine = new RECTWAVEGUIDE();
-        m_Icon  = KiBitmapNew( BITMAPS::rectwaveguide );
+        m_TLine           = new RECTWAVEGUIDE();
+        m_BitmapName      = BITMAPS::rectwaveguide;
         m_HasPrmSelection = true;
 
         m_Messages.Add( _( "ZF(H10) = Ey / Hx:" ) );
@@ -258,8 +258,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case COAX_TYPE:      // coaxial cable
-        m_TLine = new COAX();
-        m_Icon  = KiBitmapNew( BITMAPS::coax );
+        m_TLine           = new COAX();
+        m_BitmapName      = BITMAPS::coax;
         m_HasPrmSelection = true;
 
         m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
@@ -295,8 +295,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case C_MICROSTRIP_TYPE:      // coupled microstrip
-        m_TLine = new C_MICROSTRIP();
-        m_Icon  = KiBitmapNew( BITMAPS::c_microstrip );
+        m_TLine           = new C_MICROSTRIP();
+        m_BitmapName      = BITMAPS::c_microstrip;
         m_HasPrmSelection = true;
 
         m_Messages.Add( wxString::Format( _( "Effective %s (even):" ), wxT( "εr" ) ) );
@@ -344,8 +344,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case STRIPLINE_TYPE:      // stripline
-        m_TLine = new STRIPLINE();
-        m_Icon  = KiBitmapNew( BITMAPS::stripline );
+        m_TLine      = new STRIPLINE();
+        m_BitmapName = BITMAPS::stripline;
 
         m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
         m_Messages.Add( _( "Conductor losses:" ) );
@@ -377,8 +377,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case TWISTEDPAIR_TYPE:      // twisted pair
-        m_TLine = new TWISTEDPAIR();
-        m_Icon  = KiBitmapNew( BITMAPS::twistedpair );
+        m_TLine           = new TWISTEDPAIR();
+        m_BitmapName      = BITMAPS::twistedpair;
         m_HasPrmSelection = true;
 
         m_Messages.Add( wxString::Format( _( "Effective %s:" ), wxT( "εr" ) ) );
@@ -423,7 +423,6 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
 TRANSLINE_IDENT::~TRANSLINE_IDENT()
 {
     delete m_TLine;
-    delete m_Icon;
 
     for( auto& ii : m_prms_List )
         delete ii;

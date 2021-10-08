@@ -34,8 +34,10 @@ public:
                      long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
     ~PANEL_BOARD_CLASS();
 
-    void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg );
-    void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg );
+    // Methods from CALCULATOR_PANEL that must be overriden
+    void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
+    void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
+    void ThemeChanged() override;
 
     void OnBoardClassesUnitsSelection( wxCommandEvent& event ) override;
     void BoardClassesUpdateData( double aUnitScale );
