@@ -22,7 +22,7 @@
 #include <array>
 #include <algorithm>
 
-#include "panel_eserie.h"
+#include <calculator_panels/panel_eserie.h>
 
 /* If BENCHMARK is defined, any 4R E12 calculations will print its execution time to console
  * My Hasswell Enthusiast reports 225 mSec what are reproducible within plusminus 2 percent

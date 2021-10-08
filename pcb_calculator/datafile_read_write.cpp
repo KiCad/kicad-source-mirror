@@ -26,6 +26,7 @@
 #include <wx/msgdlg.h>
 
 #include <build_version.h>
+#include <calculator_panels/panel_regulator.h>
 #include <class_regulator_data.h>
 #include <datafile_read_write.h>
 #include <string_utils.h>
@@ -34,7 +35,6 @@
 #include <pcb_calculator_datafile_lexer.h>
 #include <pcb_calculator_frame.h>
 #include <pgm_base.h>
-#include <panel_regulator.h>
 
 
 using namespace PCBCALC_DATA_T;

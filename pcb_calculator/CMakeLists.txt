@@ -14,15 +14,24 @@ set( PCB_CALCULATOR_SRCS
     pcb_calculator_frame.cpp
     pcb_calculator_settings.cpp
     datafile_read_write.cpp
-    panel_attenuators.cpp
-    panel_board_class.cpp
-    panel_color_code.cpp
-    panel_electrical_spacing.cpp
-    panel_eserie.cpp
-    panel_regulator.cpp
-    panel_track_width.cpp
-    panel_transline.cpp
-    panel_via_size.cpp
+    calculator_panels/panel_attenuators.cpp
+    calculator_panels/panel_attenuators_base.cpp
+    calculator_panels/panel_board_class.cpp
+    calculator_panels/panel_board_class_base.cpp
+    calculator_panels/panel_color_code.cpp
+    calculator_panels/panel_color_code_base.cpp
+    calculator_panels/panel_electrical_spacing.cpp
+    calculator_panels/panel_electrical_spacing_base.cpp
+    calculator_panels/panel_eserie.cpp
+    calculator_panels/panel_eserie_base.cpp
+    calculator_panels/panel_regulator.cpp
+    calculator_panels/panel_regulator_base.cpp
+    calculator_panels/panel_track_width.cpp
+    calculator_panels/panel_track_width_base.cpp
+    calculator_panels/panel_transline.cpp
+    calculator_panels/panel_transline_base.cpp
+    calculator_panels/panel_via_size.cpp
+    calculator_panels/panel_via_size_base.cpp
     transline_ident.cpp
     widgets/unit_selector.cpp
     transline/transline.cpp
@@ -38,15 +47,6 @@ set( PCB_CALCULATOR_SRCS
     dialogs/pcb_calculator_frame_base.cpp
     dialogs/dialog_regulator_form_base.cpp
     dialogs/dialog_regulator_form.cpp
-    dialogs/panel_attenuators_base.cpp
-    dialogs/panel_board_class_base.cpp
-    dialogs/panel_regulator_base.cpp
-    dialogs/panel_color_code_base.cpp
-    dialogs/panel_electrical_spacing_base.cpp
-    dialogs/panel_eserie_base.cpp
-    dialogs/panel_via_size_base.cpp
-    dialogs/panel_track_width_base.cpp
-    dialogs/panel_transline_base.cpp
     ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )
 

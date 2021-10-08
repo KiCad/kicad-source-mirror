@@ -19,9 +19,13 @@
 
 #ifndef PANEL_ATTENUATORS_H
 #define PANEL_ATTENUATORS_H
+
 #include "panel_attenuators_base.h"
 
+#include <vector>
+
 class  ATTENUATOR;
+class PCB_CALCULATOR_SETTINGS;
 
 class PANEL_ATTENUATORS : public PANEL_ATTENUATORS_BASE
 {

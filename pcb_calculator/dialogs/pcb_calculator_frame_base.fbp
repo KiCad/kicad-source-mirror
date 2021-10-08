@@ -190,7 +190,7 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="subclass">PANEL_REGULATOR; panel_regulator.h; Not forward_declare</property>
+                                <property name="subclass">PANEL_REGULATOR; calculator_panels/panel_regulator.h; Not forward_declare</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
@@ -247,7 +247,7 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="subclass">PANEL_ATTENUATORS; panel_attenuators.h; Not forward_declare</property>
+                                <property name="subclass">PANEL_ATTENUATORS; calculator_panels/panel_attenuators.h; Not forward_declare</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
@@ -304,7 +304,7 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="subclass">PANEL_E_SERIE; panel_eserie.h; Not forward_declare</property>
+                                <property name="subclass">PANEL_E_SERIE; calculator_panels/panel_eserie.h; Not forward_declare</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
@@ -361,7 +361,7 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="subclass">PANEL_COLOR_CODE; panel_color_code.h; Not forward_declare</property>
+                                <property name="subclass">PANEL_COLOR_CODE; calculator_panels/panel_color_code.h; Not forward_declare</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
@@ -418,7 +418,7 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="subclass">PANEL_TRANSLINE; panel_transline.h; Not forward_declare</property>
+                                <property name="subclass">PANEL_TRANSLINE; calculator_panels/panel_transline.h; Not forward_declare</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
@@ -475,7 +475,7 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="subclass">PANEL_VIA_SIZE; panel_via_size.h; Not forward_declare</property>
+                                <property name="subclass">PANEL_VIA_SIZE; calculator_panels/panel_via_size.h; Not forward_declare</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
@@ -532,7 +532,7 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="subclass">PANEL_TRACK_WIDTH; panel_track_width.h; Not forward_declare</property>
+                                <property name="subclass">PANEL_TRACK_WIDTH; calculator_panels/panel_track_width.h; Not forward_declare</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
@@ -589,7 +589,7 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="subclass">PANEL_ELECTRICAL_SPACING; panel_electrical_spacing.h; Not forward_declare</property>
+                                <property name="subclass">PANEL_ELECTRICAL_SPACING; calculator_panels/panel_electrical_spacing.h; ...</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
@@ -646,7 +646,7 @@
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
-                                <property name="subclass">PANEL_BOARD_CLASS; panel_board_class.h; Not forward_declare</property>
+                                <property name="subclass">PANEL_BOARD_CLASS; calculator_panels/panel_board_class.h; Not forward_declare</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>

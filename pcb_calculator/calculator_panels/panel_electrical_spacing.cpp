@@ -24,11 +24,11 @@
  * for more info
  */
 
+#include <calculator_panels/panel_electrical_spacing.h>
+#include <pcb_calculator_settings.h>
 #include <string_utils.h>
-#include "pcb_calculator_settings.h"
-#include <panel_electrical_spacing.h>
 #include <widgets/unit_selector.h>
-#include "units_scales.h"
+#include <units_scales.h>
 
 extern double DoubleFromString( const wxString& TextValue );
 

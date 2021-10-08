@@ -46,11 +46,11 @@
 #include <wx/choicdlg.h>
 
 #include <bitmaps.h>
+#include <calculator_panels/panel_via_size.h>
+#include <common_data.h>
+#include <pcb_calculator_settings.h>
+#include <units_scales.h>
 
-#include "common_data.h"
-#include "pcb_calculator_settings.h"
-#include "units_scales.h"
-#include "panel_via_size.h"
 
 extern double DoubleFromString( const wxString& TextValue );
 

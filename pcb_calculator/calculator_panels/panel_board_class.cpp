@@ -18,11 +18,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#include <string_utils.h>
-#include "pcb_calculator_settings.h"
-#include <panel_board_class.h>
+#include <calculator_panels/panel_board_class.h>
+#include <pcb_calculator_settings.h>
 #include <widgets/unit_selector.h>
-#include "units_scales.h"
+#include <units_scales.h>
 
 PANEL_BOARD_CLASS::PANEL_BOARD_CLASS( wxWindow* parent, wxWindowID id,
                                 const wxPoint& pos, const wxSize& size,

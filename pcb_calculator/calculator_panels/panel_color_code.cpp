@@ -19,8 +19,8 @@
  */
 
 #include <bitmaps.h>
-#include <panel_color_code.h>
-#include "pcb_calculator_settings.h"
+#include <calculator_panels/panel_color_code.h>
+#include <pcb_calculator_settings.h>
 
 
 PANEL_COLOR_CODE::PANEL_COLOR_CODE( wxWindow* parent, wxWindowID id,

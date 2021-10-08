@@ -28,10 +28,11 @@
 #include <cmath>
 #include <kiface_base.h>
 
+#include <calculator_panels/panel_track_width.h>
+#include <pcb_calculator_settings.h>
 #include <string_utils.h>
-#include "pcb_calculator_settings.h"
-#include "units_scales.h"
-#include <panel_track_width.h>
+#include <units_scales.h>
+
 #include <widgets/unit_selector.h>
 
 #include <i18n_utility.h>   // For _HKI definition

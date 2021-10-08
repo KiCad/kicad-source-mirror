@@ -20,8 +20,8 @@
 
 
 #include <bitmaps.h>
-#include "pcb_calculator_settings.h"
-#include <panel_transline.h>
+#include <calculator_panels/panel_transline.h>
+#include <pcb_calculator_settings.h>
 
 
 PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id,

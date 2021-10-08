@@ -25,13 +25,11 @@
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 
-#include "class_regulator_data.h"
-#include "pcb_calculator_settings.h"
-
-#include "dialogs/dialog_regulator_form.h"
-#include "dialogs/panel_regulator.h"
-
 #include <bitmaps.h>
+#include <calculator_panels/panel_regulator.h>
+#include <class_regulator_data.h>
+#include <dialogs/dialog_regulator_form.h>
+#include <pcb_calculator_settings.h>
 
 extern double DoubleFromString( const wxString& TextValue );
 

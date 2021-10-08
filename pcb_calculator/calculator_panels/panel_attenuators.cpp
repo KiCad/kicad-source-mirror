@@ -22,9 +22,9 @@
 #include <wx/choicdlg.h>
 #include <wx/msgdlg.h>
 
-#include "pcb_calculator_settings.h"
-#include "attenuators/attenuator_classes.h"
-#include "../dialogs/panel_attenuators.h"
+#include <attenuators/attenuator_classes.h>
+#include <calculator_panels/panel_attenuators.h>
+#include <pcb_calculator_settings.h>
 
 #include <bitmaps.h>
 #include <string_utils.h>

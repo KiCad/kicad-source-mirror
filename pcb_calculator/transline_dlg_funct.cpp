@@ -22,8 +22,8 @@
 #include <wx/settings.h>
 
 #include <bitmaps.h>
-#include "common_data.h"
-#include "panel_transline.h"
+#include <calculator_panels/panel_transline.h>
+#include <common_data.h>
 #include <widgets/unit_selector.h>
 
 
