@@ -2001,6 +2001,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
                                                 ERROR_LOC::ERROR_INSIDE );
                     }
 
+                    poly.ClearArcs();
                     rawPolys.BooleanAdd( poly, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
                 }
 
@@ -2008,6 +2009,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
             else
             {
                 rawPolys = getPolySetFromCadstarShape( csCopper.Shape, -1 );
+                rawPolys.ClearArcs();
                 rawPolys.Inflate( copperWidth / 2, 32 );
             }
 
@@ -2043,7 +2045,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
 
 
         if( csCopper.Shape.Type == SHAPE_TYPE::OPENSHAPE
-                || csCopper.Shape.Type == SHAPE_TYPE::OUTLINE )
+            || csCopper.Shape.Type == SHAPE_TYPE::OUTLINE )
         {
             std::vector<PCB_SHAPE*> outlineShapes = getShapesFromVertices( csCopper.Shape.Vertices );
 
@@ -2908,6 +2910,8 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
         for( PCB_SHAPE* shape : cutoutShapes )
             delete shape;
     }
+
+    polySet.ClearArcs();
 
     if( aLineThickness > 0 )
         polySet.Inflate( aLineThickness / 2, 32,
