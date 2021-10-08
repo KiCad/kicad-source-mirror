@@ -35,6 +35,7 @@
 #include <wx/fileconf.h>
 #include <wx/filename.h>
 #include <wx/log.h>
+#include <wx/stdstream.h>
 #include <wx/wfstream.h>
 
 const wxChar* const traceSettings = wxT( "KICAD_SETTINGS" );
@@ -262,12 +263,13 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
 
         try
         {
-            FILE* fp = wxFopen( path.GetFullPath(), wxT( "rt" ) );
+            wxFFileInputStream fp( path.GetFullPath(), wxT( "rt" ) );
+            wxStdInputStream fstream( fp );
 
-            if( fp )
+            if( fp.IsOk() )
             {
                 *static_cast<nlohmann::json*>( m_internals.get() ) =
-                        nlohmann::json::parse( fp, nullptr,
+                        nlohmann::json::parse( fstream, nullptr,
                                                /* allow_exceptions = */ true,
                                                /* ignore_comments  = */ true );
 
