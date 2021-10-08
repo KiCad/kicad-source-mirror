@@ -12,7 +12,9 @@
 #ifndef ATTENUATORFUNC_H
 #define ATTENUATORFUNC_H
 
-class wxBitmap;
+// Forward declare the bitmaps enum from bitmaps/bitmap_list.h
+enum class BITMAPS : unsigned int;
+
 class wxString;
 
 enum ATTENUATORS_TYPE {
@@ -61,7 +63,7 @@ public:
     double           m_R1;                  // value of R1
     double           m_R2;                  // value of R2
     double           m_R3;                  // value of R3 (if any)
-    wxBitmap*        m_SchBitMap;           // The schema of this attenuator
+    BITMAPS          m_SchBitmapName;       // The schema of this attenuator
     wxString*        m_FormulaName;         // The HTML/markdown text name of the formula
 
 protected:

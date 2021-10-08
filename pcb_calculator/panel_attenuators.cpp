@@ -67,7 +67,7 @@ PANEL_ATTENUATORS::~PANEL_ATTENUATORS()
 
 void PANEL_ATTENUATORS::UpdateUI()
 {
-    m_attenuatorBitmap->SetBitmap( *m_CurrAttenuator->m_SchBitMap );
+    m_attenuatorBitmap->SetBitmap( KiBitmap( m_CurrAttenuator->m_SchBitmapName ) );
 
     m_attenuatorBitmap->GetParent()->Layout();
     m_attenuatorBitmap->GetParent()->Refresh();
@@ -142,7 +142,7 @@ void PANEL_ATTENUATORS::TransfPanelDataToAttenuator()
 
 void PANEL_ATTENUATORS::TransfAttenuatorDataToPanel()
 {
-    m_attenuatorBitmap->SetBitmap( *m_CurrAttenuator->m_SchBitMap );
+    m_attenuatorBitmap->SetBitmap( KiBitmap( m_CurrAttenuator->m_SchBitmapName ) );
 
     wxString msg;
 
