@@ -20,8 +20,9 @@
 
 #include <wx/msgdlg.h>
 
-#include "class_regulator_data.h"
-#include "pcb_calculator_frame.h"
+#include <calculator_panels/panel_regulator.h>
+#include <class_regulator_data.h>
+#include <pcb_calculator_frame.h>
 #include "dialog_regulator_form.h"
 
 

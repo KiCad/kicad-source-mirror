@@ -20,6 +20,7 @@
 #ifndef PCB_CALCULATOR_H
 #define PCB_CALCULATOR_H
 
+#include "calculator_panels/calculator_panel.h"
 #include "pcb_calculator_frame_base.h"
 
 class APP_SETTINGS_BASE;
@@ -42,8 +43,21 @@ public:
         return nullptr;
     }
 
-    // Accessor:
-    PANEL_TRANSLINE* GetPanelTransline() { return m_panelTransline; }
+    /*
+     * Return the panel of given type or nullptr if there is no such panel exists.
+     */
+    template<typename T>
+    T* GetCalculator()
+    {
+        std::map<const char*, CALCULATOR_PANEL*>::iterator panel = m_panelTypes.find( typeid( T ).name() );
+
+        if( panel != m_panelTypes.end() )
+            return static_cast<T*>( panel->second );
+
+        return nullptr;
+    }
+
+    void AddCalculator( CALCULATOR_PANEL *aPanel, const wxString& panelUIName );
 
 private:
     // Event handlers
@@ -51,7 +65,7 @@ private:
 
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
-    void onThemeChanged( wxSysColourChangedEvent &aEvent );
+    void onThemeChanged( wxSysColourChangedEvent& aEvent );
 
     // Config read-write, virtual from EDA_BASE_FRAME
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
@@ -60,6 +74,11 @@ private:
 private:
     int                           m_lastNotebookPage;
     bool                          m_macHack;
+
+    std::vector<CALCULATOR_PANEL*>           m_panels;
+    std::map<const char*, CALCULATOR_PANEL*> m_panelTypes;
+
+
 };
 
 

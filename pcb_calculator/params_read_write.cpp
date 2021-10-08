@@ -83,7 +83,7 @@ double DoubleFromString( const wxString& TextValue )
 PANEL_TRANSLINE* getTranslinePanel()
 {
     PCB_CALCULATOR_FRAME* frame = (PCB_CALCULATOR_FRAME*) wxTheApp->GetTopWindow();
-    return frame->GetPanelTransline();
+    return frame->GetCalculator<PANEL_TRANSLINE>();
 }
 
 
