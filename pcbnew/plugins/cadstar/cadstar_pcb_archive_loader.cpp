@@ -1879,24 +1879,29 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
 
         // Cadstar supports having a spoke width thinner than the minimum thickness of the zone, but
         // this is not permitted in KiCad. We load it as solid fill instead.
-        if( csTemplate.Pouring.ThermalReliefOnPads && reliefWidth > 0 && spokeWidth > minThickness )
+        if( csTemplate.Pouring.ThermalReliefOnPads && reliefWidth > 0 )
         {
+            if( spokeWidth < minThickness )
+            {
+                wxLogWarning( wxString::Format(
+                        _( "The CADSTAR template '%s' has thermal reliefs in the original design "
+                           "but the spoke width (%.2f mm) is thinner than the minimum thickness of "
+                           "the zone (%.2f mm). KiCad requires the minimum thickness of the zone "
+                           "to be preserved. Therefore the minimum thickness has been applied as "
+                           "the new spoke width and will be applied next time the zones are "
+                           "filled." ),
+                        csTemplate.Name, (double) getKiCadLength( spokeWidth ) / 1E6,
+                        (double) getKiCadLength( minThickness ) / 1E6 ) );
+
+                spokeWidth = minThickness;
+            }
+
             zone->SetThermalReliefGap( reliefWidth );
             zone->SetThermalReliefSpokeWidth( spokeWidth );
             zone->SetPadConnection( ZONE_CONNECTION::THERMAL );
         }
         else
         {
-            if( csTemplate.Pouring.ThermalReliefOnPads && spokeWidth > minThickness )
-            {
-                wxLogWarning( wxString::Format(
-                        _( "The CADSTAR template '%s' has thermal reliefs in the original design "
-                           "but there is no KiCad equivalent to the original CADSTAR settings. "
-                           "Solid fill has been applied instead. When the template is re-filled "
-                           "the thermal reliefs will be removed." ),
-                        csTemplate.Name ) );
-            }
-
             zone->SetPadConnection( ZONE_CONNECTION::FULL );
         }
 
