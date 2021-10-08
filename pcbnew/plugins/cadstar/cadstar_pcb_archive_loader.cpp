@@ -821,8 +821,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF_PCB& aComponent,
 
         if( area.NoVias || area.NoTracks )
         {
-            ZONE* zone = getZoneFromCadstarShape( area.Shape, getLineThickness( area.LineCodeID ),
-                                                  aFootprint );
+            int   lineThickness = 0; // CADSTAR areas only use the line width for display purpose
+            ZONE* zone = getZoneFromCadstarShape( area.Shape, lineThickness, aFootprint );
 
             aFootprint->Add( zone, ADD_MODE::APPEND );
 
@@ -1522,8 +1522,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadAreas()
 
         if( area.NoVias || area.NoTracks || area.Keepout || area.Routing )
         {
-            ZONE* zone = getZoneFromCadstarShape( area.Shape, getLineThickness( area.LineCodeID ),
-                                                  m_board );
+            int   lineThickness = 0; // CADSTAR areas only use the line width for display purpose
+            ZONE* zone = getZoneFromCadstarShape( area.Shape, lineThickness, m_board );
 
             m_board->Add( zone, ADD_MODE::APPEND );
 
