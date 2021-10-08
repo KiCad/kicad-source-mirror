@@ -30,6 +30,7 @@
 #include <map>
 #include <vector>
 #include <wx/filename.h>
+#include <wx/log.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 #include <wx/utils.h>
@@ -424,6 +425,8 @@ bool readIGES( Handle( TDocStd_Document ) & m_doc, const char* fname )
 
 bool readSTEP( Handle(TDocStd_Document)& m_doc, const char* fname )
 {
+    wxLogTrace( MASK_OCE, "Reading step file %s", fname );
+
     STEPCAFControl_Reader reader;
     IFSelect_ReturnStatus stat  = reader.ReadFile( fname );
 
@@ -624,6 +627,7 @@ bool processShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
     TopoDS_Iterator it;
     bool ret = false;
 
+    wxLogTrace( MASK_OCE, "Processing shell" );
     for( it.Initialize( shape, false, false ); it.More(); it.Next() )
     {
         const TopoDS_Face& face = TopoDS::Face( it.Value() );
@@ -644,6 +648,8 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
     std::string partID;
     Quantity_Color col;
     Quantity_Color* lcolor = nullptr;
+
+    wxLogTrace( MASK_OCE, "Processing solid" );
 
     // Search the whole model first to make sure something exists (may or may not have color)
     if( !data.m_assy->Search( shape, label ) )
@@ -710,14 +716,20 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
 
     if( !loc.IsIdentity() )
     {
+        wxLogTrace( MASK_OCE, "Solid has location" );
         gp_Trsf T = loc.Transformation();
         gp_XYZ coord = T.TranslationPart();
         childNode.SetTranslation( SGPOINT( coord.X(), coord.Y(), coord.Z() ) );
+        wxLogTrace( MASK_OCE, "Translation %f, %f, %f", coord.X(), coord.Y(), coord.Z() );
         gp_XYZ axis;
         Standard_Real angle;
 
         if( T.GetRotation( axis, angle ) )
+        {
             childNode.SetRotation( SGVECTOR( axis.X(), axis.Y(), axis.Z() ), angle );
+            wxLogTrace( MASK_OCE, "Rotation %f, %f, %f, angle %f", axis.X(), axis.Y(), axis.Z(),
+                        angle );
+        }
     }
 
     std::vector< SGNODE* >* component = nullptr;
@@ -762,16 +774,24 @@ bool processComp( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
     const TopLoc_Location& loc = shape.Location();
     bool ret = false;
 
+    wxLogTrace( MASK_OCE, "Processing component" );
+
     if( !loc.IsIdentity() )
     {
+        wxLogTrace( MASK_OCE, "Component has location" );
         gp_Trsf T = loc.Transformation();
         gp_XYZ coord = T.TranslationPart();
         childNode.SetTranslation( SGPOINT( coord.X(), coord.Y(), coord.Z() ) );
+        wxLogTrace( MASK_OCE, "Translation %f, %f, %f", coord.X(), coord.Y(), coord.Z() );
         gp_XYZ axis;
         Standard_Real angle;
 
         if( T.GetRotation( axis, angle ) )
+        {
             childNode.SetRotation( SGVECTOR( axis.X(), axis.Y(), axis.Z() ), angle );
+            wxLogTrace( MASK_OCE, "Rotation %f, %f, %f, angle %f", axis.X(), axis.Y(), axis.Z(),
+                        angle );
+        }
     }
 
     for( it.Initialize( shape, false, false ); it.More(); it.Next() )
@@ -827,6 +847,8 @@ bool processNode( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
     TopAbs_ShapeEnum stype = shape.ShapeType();
     bool ret = false;
     data.hasSolid = false;
+
+    wxLogTrace( MASK_OCE, "Processing node" );
 
     switch( stype )
     {
