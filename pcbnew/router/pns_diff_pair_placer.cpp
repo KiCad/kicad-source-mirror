@@ -580,8 +580,13 @@ bool DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     setWorld( Router()->GetWorld() );
     m_currentNode = m_world;
 
-    if( !FindDpPrimitivePair( m_currentNode, aP, aStartItem, m_start ) )
+    wxString err_msg;
+
+    if( !FindDpPrimitivePair( m_currentNode, aP, aStartItem, m_start, &err_msg ) )
+    {
+        Router()->SetFailureReason( err_msg );
         return false;
+    }
 
     m_netP = m_start.PrimP()->Net();
     m_netN = m_start.PrimN()->Net();
