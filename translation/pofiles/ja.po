@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-03 23:55+0000\n"
+"PO-Revision-Date: 2021-10-14 07:35+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3630,7 +3630,7 @@ msgstr "変数名は空欄にできません。"
 
 #: common/dialogs/panel_text_variables_base.cpp:37
 msgid "Variable Name"
-msgstr "環境変数名"
+msgstr "変数名"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
 msgid "Text Substitution"
@@ -10011,12 +10011,12 @@ msgstr "プロジェクト レスキュー ヘルパー"
 #: pcbnew/dialogs/dialog_import_settings.cpp:46
 #: pcbnew/dialogs/dialog_import_settings_base.h:66
 msgid "Import Settings"
-msgstr "インポート設定"
+msgstr "設定をインポート"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:62
 #: pcbnew/dialogs/dialog_import_settings.cpp:116
 msgid "Import Settings From"
-msgstr "インポート設定元"
+msgstr "設定のインポート元"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:74
 #: pcbnew/dialogs/dialog_import_settings.cpp:128
@@ -10064,7 +10064,7 @@ msgstr "違反の深刻度"
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:67
 msgid "Net classes"
-msgstr "ネット クラス"
+msgstr "ネットクラス"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
@@ -25078,7 +25078,7 @@ msgstr "レポート ファイル"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:44
 msgid "Show zero pad nets"
-msgstr "ゼロ パッド ネットを表示"
+msgstr "パッドがないネットも表示"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
 msgid "Group by:"
@@ -25867,7 +25867,7 @@ msgstr "座標はアンカー パッド、回転角 0.0 度への相対です。
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:265
 msgid "Pad Properties"
-msgstr "パッド プロパティ"
+msgstr "パッドのプロパティ"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:354
 msgid "Pad Custom Shape Geometry Transform"
@@ -33994,7 +33994,7 @@ msgstr "新しいメンバーをクリックしてください..."
 
 #: pcbnew/tools/pad_tool.cpp:143
 msgid "Paste Pad Properties"
-msgstr "ペースト パッド プロパティ"
+msgstr "パッドのプロパティをペースト"
 
 #: pcbnew/tools/pad_tool.cpp:259
 msgid "Push Pad Settings"
@@ -34415,7 +34415,7 @@ msgstr "ファイルにへフットプリントをエクスポート"
 
 #: pcbnew/tools/pcb_actions.cpp:385
 msgid "Footprint Properties..."
-msgstr "フットプリント プロパティ..."
+msgstr "フットプリントのプロパティ..."
 
 #: pcbnew/tools/pcb_actions.cpp:385
 msgid "Edit footprint properties"
@@ -34549,7 +34549,7 @@ msgstr "高周波基板用に指定長の線を作成"
 
 #: pcbnew/tools/pcb_actions.cpp:490
 msgid "Copy Pad Properties to Default"
-msgstr "デフォルトにパッド プロパティをコピー"
+msgstr "パッドのプロパティをデフォルト値にコピー"
 
 #: pcbnew/tools/pcb_actions.cpp:490
 msgid "Copy current pad's properties"
@@ -34561,15 +34561,15 @@ msgstr "選択されたパッドにデフォルトのパッド プロパティ�
 
 #: pcbnew/tools/pcb_actions.cpp:496
 msgid "Replace the current pad's properties with those copied earlier"
-msgstr "現在のパッド プロパティを以前にコピーしたもので置換"
+msgstr "現在のパッドのプロパティを以前にコピーしたもので置換"
 
 #: pcbnew/tools/pcb_actions.cpp:501
 msgid "Push Pad Properties to Other Pads..."
-msgstr "別のパッドにパッド プロパティをプッシュ..."
+msgstr "他のパッドにパッドのプロパティをプッシュ..."
 
 #: pcbnew/tools/pcb_actions.cpp:502
 msgid "Copy the current pad's properties to other pads"
-msgstr "現在のパッド プロパティを別のパッドにコピー"
+msgstr "現在のパッドのプロパティを別のパッドにコピー"
 
 #: pcbnew/tools/pcb_actions.cpp:507
 msgid "Renumber Pads..."
@@ -35805,9 +35805,9 @@ msgid "Layer Display Options"
 msgstr "レイヤー表示オプション"
 
 #: pcbnew/widgets/appearance_controls.cpp:595
-#, fuzzy, c-format
+#, c-format
 msgid "Inactive layers (%s):"
-msgstr "非アクティブ レイヤー:"
+msgstr "非アクティブ レイヤー (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Inactive layers:"
@@ -35867,9 +35867,9 @@ msgid "Net and netclass colors are not shown"
 msgstr "ネットとネットクラスのカラー表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "Ratsnest display (%s):"
-msgstr "ラッツネスト表示:"
+msgstr "ラッツネスト表示 (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:714
 msgid "Ratsnest display:"
@@ -35881,23 +35881,20 @@ msgid "Choose which ratsnest lines to display"
 msgstr "どのラッツネストの線を表示するかを選択"
 
 #: pcbnew/widgets/appearance_controls.cpp:729
-#, fuzzy
 msgid "Show ratsnest lines to items on all layers"
-msgstr "全てのレイヤーのアイテムへのラッツネストの線を表示"
+msgstr "すべてのレイヤーにあるアイテムへのラッツネストの線を表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:734
 msgid "Visible layers"
 msgstr "表示レイヤー"
 
 #: pcbnew/widgets/appearance_controls.cpp:736
-#, fuzzy
 msgid "Show ratsnest lines to items on visible layers"
-msgstr "表示レイヤーのアイテムへのラッツネストの線を表示"
+msgstr "可視レイヤーにあるアイテムへのラッツネストの線を表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:743
-#, fuzzy
 msgid "Hide all ratsnest lines"
-msgstr "基板のラッツネストを非表示"
+msgstr "すべてのラッツネストの線を非表示"
 
 #: pcbnew/widgets/appearance_controls.cpp:881
 msgid "Set Net Color"
@@ -36185,9 +36182,8 @@ msgid "Configure net classes"
 msgstr "ネットクラスを設定"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:161
-#, fuzzy
 msgid "Presets (Ctrl+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "プリセット (Ctrl+Tab):"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "(unsaved)"
