@@ -17,11 +17,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PCB_CALCULATOR_H
-#define PCB_CALCULATOR_H
+#ifndef PCB_CALCULATOR_FRAME_H_
+#define PCB_CALCULATOR_FRAME_H_
 
-#include "calculator_panels/calculator_panel.h"
-#include "pcb_calculator_frame_base.h"
+#include <calculator_panels/calculator_panel.h>
+#include <kiway_player.h>
+
+class wxMenuBar;
+class wxNotebook;
+class wxBoxSizer;
 
 class APP_SETTINGS_BASE;
 class KIWAY;
@@ -31,7 +35,7 @@ class PANEL_TRANSLINE;
 /**
  * PCB calculator the main frame.
  */
-class PCB_CALCULATOR_FRAME : public PCB_CALCULATOR_FRAME_BASE
+class PCB_CALCULATOR_FRAME : public KIWAY_PLAYER
 {
 public:
     PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent );
@@ -61,9 +65,9 @@ public:
 
 private:
     // Event handlers
-    void OnClosePcbCalc( wxCloseEvent& event ) override;
+    void OnClosePcbCalc( wxCloseEvent& event );
 
-    void OnUpdateUI( wxUpdateUIEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& event );
 
     void onThemeChanged( wxSysColourChangedEvent& aEvent );
 
@@ -72,8 +76,12 @@ private:
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
 private:
-    int                           m_lastNotebookPage;
-    bool                          m_macHack;
+    wxMenuBar*  m_menubar;
+    wxNotebook* m_notebook;
+    wxBoxSizer* m_mainSizer;
+
+    int         m_lastNotebookPage;
+    bool        m_macHack;
 
     std::vector<CALCULATOR_PANEL*>           m_panels;
     std::map<const char*, CALCULATOR_PANEL*> m_panelTypes;

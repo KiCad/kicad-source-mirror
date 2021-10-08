@@ -44,7 +44,6 @@ set( PCB_CALCULATOR_SRCS
     transline/twistedpair.cpp
     transline_dlg_funct.cpp
     attenuators/attenuator_classes.cpp
-    dialogs/pcb_calculator_frame_base.cpp
     dialogs/dialog_regulator_form_base.cpp
     dialogs/dialog_regulator_form.cpp
     ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
