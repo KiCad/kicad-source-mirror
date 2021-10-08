@@ -43,6 +43,7 @@
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
 #include <settings/settings_manager.h>
 #include <kiway_holder.h>
+#include <wx/defs.h>
 
 enum MODELS_TABLE_COLUMNS
 {
@@ -212,30 +213,32 @@ void PANEL_FP_PROPERTIES_3D_MODEL::On3DModelCellChanged( wxGridEvent& aEvent )
         FILENAME_RESOLVER* res = m_frame->Prj().Get3DCacheManager()->GetResolver();
         wxString           filename = m_modelsGrid->GetCellValue( aEvent.GetRow(), COL_FILENAME );
 
-        filename.Replace( "\n", "" );
-        filename.Replace( "\r", "" );
-        filename.Replace( "\t", "" );
-
-        // The user is warned about failed validation through the updateValidateStatus call below
-        if( filename.empty() || !res->ValidateFileName( filename, hasAlias ) )
+        // Perform cleanup and validation on the filename if it isn't empty
+        if( !filename.empty() )
         {
-            wxMessageBox( _( "Error: illegal or empty filename." ) );
-            aEvent.Veto();
-            return;
-        }
+            filename.Replace( "\n", "" );
+            filename.Replace( "\r", "" );
+            filename.Replace( "\t", "" );
 
-        // if the user has specified an alias in the name then prepend ':'
-        if( hasAlias )
-            filename.insert( 0, wxT( ":" ) );
+            res->ValidateFileName( filename, hasAlias );
+
+            // If the user has specified an alias in the name then prepend ':'
+            if( hasAlias )
+                filename.insert( 0, wxT( ":" ) );
 
 #ifdef __WINDOWS__
-        // In KiCad files, filenames and paths are stored using Unix notation
-        filename.Replace( wxT( "\\" ), wxT( "/" ) );
+            // In KiCad files, filenames and paths are stored using Unix notation
+            filename.Replace( wxT( "\\" ), wxT( "/" ) );
 #endif
 
-        m_shapes3D_list[ aEvent.GetRow() ].m_Filename = filename;
-        m_modelsGrid->SetCellValue( aEvent.GetRow(), COL_FILENAME, filename );
+            // Update the grid with the modified filename
+            m_modelsGrid->SetCellValue( aEvent.GetRow(), COL_FILENAME, filename );
+        }
 
+        // Save the filename in the 3D shapes table
+        m_shapes3D_list[ aEvent.GetRow() ].m_Filename = filename;
+
+        // Update the validation status
         updateValidateStatus( aEvent.GetRow() );
     }
     else if( aEvent.GetCol() == COL_SHOWN )
@@ -302,6 +305,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
         || model.m_Filename.empty() )
     {
         select3DModel( selected );
+        updateValidateStatus( selected );
         return;
     }
 
@@ -329,9 +333,9 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
     m_modelsGrid->SetCellValue( idx, COL_FILENAME, filename );
     m_modelsGrid->SetCellValue( idx, COL_SHOWN, wxT( "1" ) );
 
+    select3DModel( idx );
     updateValidateStatus( idx );
 
-    select3DModel( idx );
     m_previewPane->UpdateDummyFootprint();
 }
 
@@ -359,6 +363,8 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DRow( wxCommandEvent&  )
 
     m_modelsGrid->EnableCellEditControl( true );
     m_modelsGrid->ShowCellEditControl();
+
+    updateValidateStatus( row );
 }
 
 
@@ -372,6 +378,16 @@ void PANEL_FP_PROPERTIES_3D_MODEL::updateValidateStatus( int aRow )
         case MODEL_VALIDATE_ERRORS::MODEL_NO_ERROR:
             icon   = 0;
             errStr = "";
+            break;
+
+        case MODEL_VALIDATE_ERRORS::NO_FILENAME:
+            icon   = wxICON_WARNING;
+            errStr = _( "No filename entered" );
+            break;
+
+        case MODEL_VALIDATE_ERRORS::ILLEGAL_FILENAME:
+            icon   = wxICON_ERROR;
+            errStr = _( "Illegal filename" );
             break;
 
         case MODEL_VALIDATE_ERRORS::RESOLVE_FAIL:
@@ -398,20 +414,27 @@ void PANEL_FP_PROPERTIES_3D_MODEL::updateValidateStatus( int aRow )
 
 MODEL_VALIDATE_ERRORS PANEL_FP_PROPERTIES_3D_MODEL::validateModelExists( const wxString& aFilename )
 {
+    if( aFilename.empty() )
+        return MODEL_VALIDATE_ERRORS::NO_FILENAME;
+
+    bool               hasAlias = false;
     FILENAME_RESOLVER* resolv = m_frame->Prj().Get3DFilenameResolver();
 
     if( !resolv )
         return MODEL_VALIDATE_ERRORS::RESOLVE_FAIL;
+
+    if( !resolv->ValidateFileName( aFilename, hasAlias ) )
+        return MODEL_VALIDATE_ERRORS::ILLEGAL_FILENAME;
 
     wxString fullPath = resolv->ResolvePath( aFilename );
 
     if( fullPath.IsEmpty() )
         return MODEL_VALIDATE_ERRORS::RESOLVE_FAIL;
 
-    if( wxFileName::IsFileReadable( fullPath ) )
-        return MODEL_VALIDATE_ERRORS::MODEL_NO_ERROR;
-    else
+    if( !wxFileName::IsFileReadable( fullPath ) )
         return MODEL_VALIDATE_ERRORS::OPEN_FAIL;
+
+    return MODEL_VALIDATE_ERRORS::MODEL_NO_ERROR;
 }
 
 
