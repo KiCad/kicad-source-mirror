@@ -268,14 +268,13 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const wxPoint& 
 
     t = static_cast<PCB_TEXT*>( headStyle->Duplicate() );
 
-    if( m_frame->GetUserUnits() == EDA_UNITS::MILLIMETRES )
-        t->SetText( _( "Thickness (mm)" ) );
-
-    else if( m_frame->GetUserUnits() == EDA_UNITS::INCHES )
-        t->SetText( _( "Thickness (inches)" ) );
-
-    else if( m_frame->GetUserUnits() == EDA_UNITS::MILS )
-        t->SetText( _( "Thickness (mils)" ) );
+    switch( m_frame->GetUserUnits() )
+    {
+    case EDA_UNITS::MILLIMETRES: t->SetText( _( "Thickness (mm)" ) );     break;
+    case EDA_UNITS::INCHES:      t->SetText( _( "Thickness (inches)" ) ); break;
+    case EDA_UNITS::MILS:        t->SetText( _( "Thickness (mils)" ) );   break;
+    default:                     wxFAIL_MSG( "Unhandled unit type" );
+    }
 
     colThickness.push_back( t );
 
