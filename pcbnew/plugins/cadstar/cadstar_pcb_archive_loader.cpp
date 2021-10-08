@@ -2187,7 +2187,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
 
         // For junction points we need to find out the biggest size of the other routes connecting
         // at the junction in order to correctly apply the same "route offset" operation that the
-        // CADSTAR post processor applies when generating Manufacturing output
+        // CADSTAR post processor applies when generating Manufacturing output. The only exception
+        // is if there is just a single route at the junction point, we use that route width
         auto getJunctionSize =
             [&]( NETELEMENT_ID aJptNetElemId, const NET_PCB::CONNECTION_PCB& aConnectionToIgnore ) -> int
             {
@@ -2200,7 +2201,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
 
                     if( connection.StartNode == aConnectionToIgnore.StartNode
                         && connection.EndNode == aConnectionToIgnore.EndNode )
+                    {
                         continue;
+                    }
 
                     if( connection.StartNode == aJptNetElemId )
                     {
@@ -2212,6 +2215,18 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
                         int s = getKiCadLength( connection.Route.RouteVertices.back().RouteWidth );
                         jptsize = std::max( jptsize, s );
                     }
+                }
+
+                if( jptsize == 0 )
+                {
+                    // aConnectionToIgnore is actually the only one that has a route, so lets use that
+                    // to determine junction size
+                    NET_PCB::ROUTE_VERTEX vertex = aConnectionToIgnore.Route.RouteVertices.front();
+
+                    if( aConnectionToIgnore.EndNode == aJptNetElemId )
+                        vertex = aConnectionToIgnore.Route.RouteVertices.back();
+
+                    jptsize = getKiCadLength( vertex.RouteWidth );
                 }
 
                 return jptsize;
@@ -3743,7 +3758,9 @@ double CADSTAR_PCB_ARCHIVE_LOADER::getPolarAngle( const wxPoint& aPoint )
 NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNetID )
 {
     if( aCadstarNetID.IsEmpty() )
+    {
         return nullptr;
+    }
     else if( m_netMap.find( aCadstarNetID ) != m_netMap.end() )
     {
         return m_netMap.at( aCadstarNetID );
