@@ -3085,6 +3085,8 @@ std::vector<PCB_TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromShapes(
 
         if( aNet != nullptr )
             track->SetNet( aNet );
+        else
+            track->SetNetCode( -1 );
 
         track->SetLocked( shape->IsLocked() );
 
@@ -3815,23 +3817,24 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
         }
 
         NETINFO_ITEM* netInfo = new NETINFO_ITEM( m_board, newName, ++m_numNets );
-        m_board->Add( netInfo, ADD_MODE::APPEND );
+        NETCLASSPTR   netclass;
 
         if( m_netClassMap.find( csNet.RouteCodeID ) != m_netClassMap.end() )
         {
-            NETCLASSPTR netclass = m_netClassMap.at( csNet.RouteCodeID );
-            netInfo->SetNetClass( netclass );
+            netclass = m_netClassMap.at( csNet.RouteCodeID );
         }
         else
         {
             ROUTECODE   rc = getRouteCode( csNet.RouteCodeID );
-            NETCLASSPTR netclass( new NETCLASS( rc.Name ) );
+            netclass.reset( new NETCLASS( rc.Name ) );
             m_board->GetDesignSettings().GetNetClasses().Add( netclass );
             netclass->SetTrackWidth( getKiCadLength( rc.OptimalWidth ) );
-            netInfo->SetNetClass( netclass );
             m_netClassMap.insert( { csNet.RouteCodeID, netclass } );
         }
 
+        netclass->Add( newName );
+        netInfo->SetNetClass( netclass );
+        m_board->Add( netInfo, ADD_MODE::APPEND );
         m_netMap.insert( { aCadstarNetID, netInfo } );
         return netInfo;
     }
