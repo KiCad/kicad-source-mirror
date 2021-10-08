@@ -30,6 +30,7 @@
 #include <wx/config.h>
 #include <wx/filename.h>
 #include <wx/log.h>
+#include <wx/tokenzr.h>
 
 /*
  * Flag to enable advanced config debugging
@@ -173,6 +174,8 @@ static const wxChar Skip3DModelFileCache[] = wxT( "Skip3DModelFileCache" );
 static const wxChar Skip3DModelMemoryCache[] = wxT( "Skip3DModelMemoryCache" );
 
 static const wxChar HideVersionFromTitle[] = wxT( "HideVersionFromTitle" );
+
+static const wxChar TraceMasks[] = wxT( "TraceMasks" );
 
 } // namespace KEYS
 
@@ -392,7 +395,21 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::HideVersionFromTitle,
                                                 &m_HideVersionFromTitle, false ) );
 
+    // Special case for trace mask setting...we just grab them and set them immediately
+    // Because we even use wxLogTrace inside of advanced config
+    wxString traceMasks = "";
+    configParams.push_back( new PARAM_CFG_WXSTRING( true, AC_KEYS::TraceMasks, &traceMasks, "" ) );
+
+    // Load the config from file
     wxConfigLoadSetups( &aCfg, configParams );
+
+    // Now actually set the trace masks
+    wxStringTokenizer traceMaskTokenizer( traceMasks, "," );
+    while( traceMaskTokenizer.HasMoreTokens() )
+    {
+        wxString mask = traceMaskTokenizer.GetNextToken();
+        wxLog::AddTraceMask( mask );
+    }
 
     dumpCfg( configParams );
 
