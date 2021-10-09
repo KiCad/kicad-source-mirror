@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-04 15:52+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2021-10-14 07:35+0000\n"
+"Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2985,9 +2985,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "Выбор предпочитаемого PDF обозревателя"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Antialiasing"
-msgstr "Сглаживание:"
+msgstr "Сглаживание"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -3070,13 +3069,12 @@ msgid "Canvas scale:"
 msgstr "Масштаб холста:"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
-#, fuzzy
 msgid "Apply icon scaling to fonts"
-msgstr "Выполнить плагин действий"
+msgstr "Применить масштабирование иконок к шрифтам"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
-msgstr ""
+msgstr "(это может исправить некоторые проблемы с HiDPI в GTK)"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -4093,7 +4091,6 @@ msgid "Pad"
 msgstr "Конт.пл."
 
 #: common/eda_item.cpp:254 common/eda_item.cpp:257
-#, fuzzy
 msgid "Graphic"
 msgstr "Графика"
 
@@ -4129,12 +4126,10 @@ msgid "Target"
 msgstr "Ориентир"
 
 #: common/eda_item.cpp:268
-#, fuzzy
 msgid "ItemList"
 msgstr "Перечень элементов"
 
 #: common/eda_item.cpp:269
-#, fuzzy
 msgid "NetInfo"
 msgstr "Информация о цепи"
 
@@ -5381,9 +5376,8 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Несоответствие типов между %lf и '%s'"
 
 #: common/pgm_base.cpp:166
-#, fuzzy
 msgid "No default editor found, you must choose one."
-msgstr "Редактор по умолчанию не найден, его необходимо определить"
+msgstr "Редактор по умолчанию не определён, его необходимо выбрать."
 
 #: common/pgm_base.cpp:186 common/pgm_base.cpp:188
 msgid "Executable file"
@@ -6061,9 +6055,8 @@ msgid "Switch display of full-window crosshairs"
 msgstr "Отображать курсор в виде полноэкранного перекрестия"
 
 #: common/tool/actions.cpp:533
-#, fuzzy
 msgid "Inactive Layer View Mode"
-msgstr "Отображать только текущий слой"
+msgstr "Режим отображения неактивных слоёв"
 
 #: common/tool/actions.cpp:534
 msgid "Toggle inactive layers between normal and dimmed"
@@ -6071,12 +6064,10 @@ msgstr ""
 "Переключить отображение неактивных слоёв в нормальном или тусклом режиме"
 
 #: common/tool/actions.cpp:540
-#, fuzzy
 msgid "Inactive Layer View Mode (3-state)"
-msgstr "Контрастный режим (3 варианта)"
+msgstr "Режим отображения неактивных слоёв (3 варианта)"
 
 #: common/tool/actions.cpp:541
-#, fuzzy
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr ""
 "Переключить отображение неактивных слоёв в нормальном, тусклом или скрытом "
@@ -6520,9 +6511,9 @@ msgid "Set Hotkey"
 msgstr "Установка горячих клавиш"
 
 #: common/widgets/widget_hotkey_list.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "Имя %s зарезервировано и не может использоваться."
+msgstr "Горячая клавиша '%s' зарезервирована в KiCad и не может изменяться."
 
 #: common/widgets/widget_hotkey_list.cpp:392
 msgid "Edit..."
@@ -8512,9 +8503,8 @@ msgid "Value may not be empty."
 msgstr "Значение не может быть пустым."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:340
-#, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Перезаливать зоны после изменения параметров"
+msgstr "Имя файла листа можно изменить только в диалоге свойств листа."
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
@@ -10216,7 +10206,6 @@ msgid "Text Variables"
 msgstr "Текстовые переменные"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:90
-#, fuzzy
 msgid "Project is missing or read-only. Settings will not be editable."
 msgstr ""
 "Проект отсутствует или доступен только для чтения. Изменения не будут "
@@ -12925,15 +12914,13 @@ msgstr "Нет"
 
 #: eeschema/lib_field.cpp:445 eeschema/lib_text.cpp:363
 #: eeschema/sch_field.cpp:503
-#, fuzzy
 msgid "H Justification"
-msgstr "Выравнивание"
+msgstr "Гор. выравнивание"
 
 #: eeschema/lib_field.cpp:454 eeschema/lib_text.cpp:372
 #: eeschema/sch_field.cpp:512
-#, fuzzy
 msgid "V Justification"
-msgstr "Выравнивание"
+msgstr "Верт. выравнивание"
 
 #: eeschema/lib_item.cpp:54 eeschema/lib_pin.cpp:1041 eeschema/sch_pin.cpp:184
 #: eeschema/sch_pin.cpp:204 eeschema/sch_text.cpp:758
@@ -14539,14 +14526,12 @@ msgid "Field Validation Error"
 msgstr "Ошибка проверки поля"
 
 #: eeschema/sch_validators.cpp:226
-#, fuzzy
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
-msgstr "Имя сигнала содержит '{' или '}', но они запрещены в названиях шин"
+msgstr "Имя сигнала содержит '{' и '}', но имя шины неверно"
 
 #: eeschema/sch_validators.cpp:231
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
-msgstr "Имя сигнала содержит '[' или ']', но они запрещены в названиях шин."
+msgstr "Имя сигнала содержит '[' или ']', но имя шины неверно."
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -16517,14 +16502,12 @@ msgid "Align Elements to Grid"
 msgstr "Выровнять элементы по сетке"
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save Current Sheet Copy As..."
-msgstr "Сохранить копию как..."
+msgstr "Сохранить копию текущего листа как..."
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
-msgstr "Сохранить копию текущего документа в другом месте"
+msgstr "Сохранить копию текущего листа в другом месте или под другим именем"
 
 #: eeschema/tools/ee_inspection_tool.cpp:282
 #, c-format
@@ -16751,9 +16734,8 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "Цепь должна иметь метку для присвоения класса цепей."
 
 #: eeschema/tools/sch_editor_control.cpp:1002
-#, fuzzy
 msgid "Bus has no members to assign netclass to."
-msgstr "Шина должна иметь как минимум один сигнал для присвоения класса цепей."
+msgstr "Шина не имеет сигналов для присвоения класса цепей."
 
 #: eeschema/tools/sch_editor_control.cpp:1035
 msgid "Netclasses"
@@ -19085,9 +19067,8 @@ msgid "Keyword notation is ${keyword}"
 msgstr "Формат записи меток: ${keyword}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
-#, fuzzy
 msgid "Each keyword is replaced by its value"
-msgstr "Метки заменяются своими значениями в тексте"
+msgstr "Каждая метка заменяется своим значением"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "These build-in keywords are always available:"
@@ -22034,11 +22015,10 @@ msgid "Custom Rules"
 msgstr "Особые правила"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:123
-#, fuzzy
 msgid "Project is missing or read-only. Some settings will not be editable."
 msgstr ""
-"Проект отсутствует или доступен только для чтения. Изменения не будут "
-"сохранены."
+"Проект отсутствует или доступен только для чтения. Некоторые настройки "
+"нельзя будет изменить."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:186
 #, c-format
@@ -23895,9 +23875,8 @@ msgstr "Особенности производства"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:272
 #: pcbnew/footprint_libraries_utils.cpp:1135
-#, fuzzy
 msgid "Footprint type:"
-msgstr "Имя посад.места:"
+msgstr "Тип посад.места:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
@@ -25183,7 +25162,6 @@ msgid "Select Netlist"
 msgstr "Выбор файла списка цепей"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:143
-#, fuzzy
 msgid "Please choose a valid netlist file."
 msgstr "Пожалуйста укажите корректный файл списка цепей."
 
@@ -27135,28 +27113,24 @@ msgid "Clearance Outlines"
 msgstr "Показать контур зазора"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing"
-msgstr "При создании дорожек"
+msgstr "Отображать при создании дорожек"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing w/ via clearance at end"
-msgstr "При создании перех.отв."
+msgstr "Отображать при создании перех.отв."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing and editing"
-msgstr "При создании и редактировании дорожек"
+msgstr "Отображать при создании и редактировании"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show always"
 msgstr "Всегда"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
-#, fuzzy
 msgid "Track && Via Clearances"
-msgstr "Зазор дорожек"
+msgstr "Зазор дорожек и перех.отв."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
@@ -27171,9 +27145,8 @@ msgid "Show pad clearance"
 msgstr "Показать зазор конт.пл."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Scroll cross-probed items into view"
-msgstr "Центровать подсвеченный элемент на экране"
+msgstr "Перемещать вид к выделенным элементам при глобальном выделении"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -27239,13 +27212,11 @@ msgstr "Подсветить цепь (конт.пл. или дорожки)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
-#, fuzzy
 msgid "Graphics Editing"
-msgstr "Редактирование дорожек"
+msgstr "Редактирование графики"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
-#, fuzzy
 msgid "Limit actions to 45 degrees from start"
 msgstr "Ограничить действие 45 градусами от начальной точки"
 
@@ -27418,7 +27389,7 @@ msgstr "Подстановки путей"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:222
 msgid "Error: illegal or empty filename."
-msgstr ""
+msgstr "Ошибка: неверное или пустое имя файла."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:379
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -28357,7 +28328,6 @@ msgid "User9"
 msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board house's recommendations for solder mask clearance and minimum "
 "web width."
@@ -28366,7 +28336,6 @@ msgstr ""
 "производителем печатных плат."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
-#, fuzzy
 msgid "If none are provided, setting the values to zero is suggested."
 msgstr ""
 "Если требования отсутствуют, рекомендуется установить значения равные нулю."
@@ -29314,7 +29283,7 @@ msgstr "Разность длин диф.пары слишком велика"
 
 #: pcbnew/drc/drc_item.cpp:206
 msgid "Footprint type doesn't match footprint pads"
-msgstr ""
+msgstr "Тип посад.места не соответствует типу конт.пл."
 
 #: pcbnew/drc/drc_item.cpp:327
 #, c-format
@@ -30044,19 +30013,19 @@ msgid "Footprint %s"
 msgstr "Посад.место %s"
 
 #: pcbnew/footprint.cpp:2091
-#, fuzzy, c-format
+#, c-format
 msgid "Expected \"Through hole\" type but set to \"%s\""
-msgstr "Конт.пл. со сквозными отв. %s от %s"
+msgstr "Ожидался тип \"Сквозной монтаж\", но задано \"%s\""
 
 #: pcbnew/footprint.cpp:2095
 #, c-format
 msgid "Expected \"SMD\" type but set to \"%s\""
-msgstr ""
+msgstr "Ожидался тип \"SMD\", но задано \"%s\""
 
 #: pcbnew/footprint.cpp:2099
 #, c-format
 msgid "Expected \"Other\" type but set to \"%s\""
-msgstr ""
+msgstr "Ожидался тип \"Другой\", но задано \"%s\""
 
 #: pcbnew/footprint.cpp:2203 pcbnew/pad.cpp:1542 pcbnew/zone.cpp:1416
 msgid "Clearance Override"
@@ -30267,7 +30236,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:906
 #: pcbnew/footprint_viewer_frame.cpp:720
 msgid "Previous footprint placement still in progress."
-msgstr ""
+msgstr "Всё ещё выполняется размещение предыдущего посад.места."
 
 #: pcbnew/footprint_libraries_utils.cpp:995
 msgid "Save Footprint As"
@@ -33925,12 +33894,10 @@ msgid "Plated Board Edge: "
 msgstr "Метал. торцы: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:511
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "Краевой соединитель:"
+msgstr "Краевой соединитель: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:519
-#, fuzzy
 msgid "Yes, Bevelled"
 msgstr "Да, с фаской"
 
@@ -35055,29 +35022,27 @@ msgid "Curved Ratsnest Lines"
 msgstr "Кривые линии связей"
 
 #: pcbnew/tools/pcb_actions.cpp:798
-#, fuzzy
 msgid "Ratsnest Mode (3-state)"
-msgstr "Контрастный режим (3 варианта)"
+msgstr "Режим отображения соединений (3 варианта)"
 
 #: pcbnew/tools/pcb_actions.cpp:799
-#, fuzzy
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
 msgstr ""
-"Циклическое переключение между заполненными/обведёнными режимами отображения "
-"зон"
+"Циклическое переключение между отображением соединений на всех слоях, только "
+"на видимых слоях и без соединений"
 
 #: pcbnew/tools/pcb_actions.cpp:803
-#, fuzzy
 msgid "Net Color Mode (3-state)"
-msgstr "Контрастный режим (3 варианта)"
+msgstr "Режим отображения цветов цепей (3 варианта)"
 
 #: pcbnew/tools/pcb_actions.cpp:804
-#, fuzzy
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
-msgstr "Цвета цепей и классов цепей отображаются только для линий связи"
+msgstr ""
+"Циклическое переключение между отображением в цвете для всех цепей, только "
+"связей и без цвета"
 
 #: pcbnew/tools/pcb_actions.cpp:809
 msgid "Sketch Tracks"
@@ -35926,9 +35891,9 @@ msgid "Layer Display Options"
 msgstr "Параметры отображения слоёв"
 
 #: pcbnew/widgets/appearance_controls.cpp:595
-#, fuzzy, c-format
+#, c-format
 msgid "Inactive layers (%s):"
-msgstr "Неактивные слои:"
+msgstr "Неактивные слои (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Inactive layers:"
@@ -35963,9 +35928,9 @@ msgid "Net Display Options"
 msgstr "Параметры отображения цепей"
 
 #: pcbnew/widgets/appearance_controls.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "Net colors (%s):"
-msgstr "Цвет цепей:"
+msgstr "Цвета цепей (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Net colors:"
@@ -35988,37 +35953,33 @@ msgid "Net and netclass colors are not shown"
 msgstr "Цвета цепи и класса цепей не отображаются"
 
 #: pcbnew/widgets/appearance_controls.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "Ratsnest display (%s):"
-msgstr "Отображение линий связи:"
+msgstr "Отображение линий связи (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:714
 msgid "Ratsnest display:"
 msgstr "Отображение линий связи:"
 
 #: pcbnew/widgets/appearance_controls.cpp:719
-#, fuzzy
 msgid "Choose which ratsnest lines to display"
-msgstr "Выберите как отображать линии связей"
+msgstr "Выберите какие линии связей отображать"
 
 #: pcbnew/widgets/appearance_controls.cpp:729
-#, fuzzy
 msgid "Show ratsnest lines to items on all layers"
-msgstr "Линии связей отображаются для элементов на всех слоях"
+msgstr "Отображать линии связей для элементов на всех слоях"
 
 #: pcbnew/widgets/appearance_controls.cpp:734
 msgid "Visible layers"
 msgstr "Видимые слои"
 
 #: pcbnew/widgets/appearance_controls.cpp:736
-#, fuzzy
 msgid "Show ratsnest lines to items on visible layers"
-msgstr "Лини связей отображаются для элементов на видимых слоях"
+msgstr "Отображать линии связей для элементов на видимых слоях"
 
 #: pcbnew/widgets/appearance_controls.cpp:743
-#, fuzzy
 msgid "Hide all ratsnest lines"
-msgstr "Скрыть все поля посад.места"
+msgstr "Скрыть все линии связей"
 
 #: pcbnew/widgets/appearance_controls.cpp:881
 msgid "Set Net Color"
@@ -36310,9 +36271,8 @@ msgid "Configure net classes"
 msgstr "Настроить классы цепей"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:161
-#, fuzzy
 msgid "Presets (Ctrl+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "Наборы (Ctrl+Tab):"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "(unsaved)"
