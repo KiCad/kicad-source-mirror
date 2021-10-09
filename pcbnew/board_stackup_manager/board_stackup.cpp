@@ -517,6 +517,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSetti
     // Take in account the solder mask thickness:
     int sm_count = ( enabledLayer & LSET( 2, F_Mask, B_Mask) ).count();
     diel_thickness -= BOARD_STACKUP_ITEM::GetMaskDefaultThickness() * sm_count;
+    diel_thickness /= std::max( 1, activeCuLayerCount - 1 );
 
     int dielectric_idx = 0;
 

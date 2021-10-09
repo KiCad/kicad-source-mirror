@@ -205,8 +205,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::initStackupItem( const LAYER&          aCadstar
         //TODO add Resistivity when KiCad supports it
     }
 
-    aKiCadItem->SetLayerName( aCadstarLayer.Name );
-    aKiCadItem->SetThickness( getKiCadLength( aCadstarLayer.Thickness ), aDielectricSublayer );
+    if( !aCadstarLayer.Name.IsEmpty() )
+        aKiCadItem->SetLayerName( aCadstarLayer.Name );
+
+    if( aCadstarLayer.Thickness != 0 )
+        aKiCadItem->SetThickness( getKiCadLength( aCadstarLayer.Thickness ), aDielectricSublayer );
 }
 
 
@@ -358,11 +361,13 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
             LAYER_BLOCK layerBlock = cadstarBoardStackup.at( stackIndex );
             LAYER_BLOCK layerBlockBelow = cadstarBoardStackup.at( stackIndex + 1 );
 
-            // We should have made sure all layer blocks have at least one construction layer
-            wxASSERT( layerBlock.ConstructionLayers.size() > 0 );
+            if( layerBlock.ConstructionLayers.size() == 0 )
+            {
+                ++stackIndex;
+                continue; // Older cadstar designs have no construction layers - use KiCad defaults
+            }
 
             int dielectricId = stackIndex + 1;
-            // item->SetBrdLayerId();
             item->SetDielectricLayerId( dielectricId );
 
             //Prepreg or core?
