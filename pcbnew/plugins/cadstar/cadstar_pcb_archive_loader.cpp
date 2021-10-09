@@ -301,7 +301,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
     wxASSERT( cadstarBoardStackup.back().ConstructionLayers.size() == 0 );
 
     // Create a new stackup from default stackup list
-    BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
+    BOARD_DESIGN_SETTINGS& boardDesignSettings = m_board->GetDesignSettings();
+    BOARD_STACKUP&         stackup = boardDesignSettings.GetStackupDescriptor();
     stackup.RemoveAll();
     m_board->SetEnabledLayers( LSET::AllLayersMask() );
     m_board->SetVisibleLayers( LSET::AllLayersMask() );
@@ -423,6 +424,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
             ++stackIndex;
         }
     }
+
+    int thickness = stackup.BuildBoardThicknessFromStackup();
+    boardDesignSettings.SetBoardThickness( thickness );
+    boardDesignSettings.m_HasStackup = true;
 
     int numElecAndPowerLayers = 0;
 
