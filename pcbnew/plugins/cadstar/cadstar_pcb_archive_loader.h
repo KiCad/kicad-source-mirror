@@ -55,6 +55,7 @@ public:
         m_doneSpacingClassWarning = false;
         m_doneNetClassWarning     = false;
         m_numNets                 = 0;
+        m_numCopperLayers         = 0 ;
         m_progressReporter        = aProgressReporter;
     }
 
@@ -133,6 +134,7 @@ private:
     bool m_doneNetClassWarning;                          ///< Used by getKiCadNet() to avoid
                                                          ///< multiple duplicate warnings
     int m_numNets;                                       ///< Number of nets loaded so far
+    int m_numCopperLayers;                               ///< Number of layers in the design
 
 
     // Functions for loading individual elements:
@@ -407,6 +409,7 @@ private:
     wxString   getAttributeName( const ATTRIBUTE_ID& aCadstarAttributeID );
     wxString   getAttributeValue( const ATTRIBUTE_ID&        aCadstarAttributeID,
               const std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>& aCadstarAttributeMap );
+    LAYER_TYPE getLayerType( const LAYER_ID aCadstarLayerID );
 
     // Helper Functions for obtaining individual elements as KiCad elements:
     double     getHatchCodeAngleDegrees( const HATCHCODE_ID& aCadstarHatchcodeID );

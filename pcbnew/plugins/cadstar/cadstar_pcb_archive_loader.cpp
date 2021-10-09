@@ -256,18 +256,18 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
     if( currentBlock.IsInitialised() )
         cadstarBoardStackup.push_back( currentBlock );
 
-    int totalCopperLayers = cadstarBoardStackup.size();
+    m_numCopperLayers = cadstarBoardStackup.size();
 
     // Special case: last layer in the stackup is a construction layer, we need to use B.Cu as a
     // dummy layer
     if( cadstarBoardStackup.back().ConstructionLayers.size() > 0 )
     {
         cadstarBoardStackup.push_back( LAYER_BLOCK() ); //Add dummy layer at the end
-        ++totalCopperLayers;
+        ++m_numCopperLayers;
     }
 
     // Make sure it is an even number of layers (KiCad doesn't yet support unbalanced stack-ups)
-    if( ( totalCopperLayers % 2 ) != 0 )
+    if( ( m_numCopperLayers % 2 ) != 0 )
     {
         LAYER_BLOCK bottomLayer = cadstarBoardStackup.back();
         cadstarBoardStackup.pop_back();
@@ -294,10 +294,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         cadstarBoardStackup.push_back( secondToLastLayer );
         cadstarBoardStackup.push_back( dummyLayer );
         cadstarBoardStackup.push_back( bottomLayer );
-        ++totalCopperLayers;
+        ++m_numCopperLayers;
     }
 
-    wxASSERT( totalCopperLayers == cadstarBoardStackup.size() );
+    wxASSERT( m_numCopperLayers == cadstarBoardStackup.size() );
     wxASSERT( cadstarBoardStackup.back().ConstructionLayers.size() == 0 );
 
     // Create a new stackup from default stackup list
@@ -305,8 +305,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
     stackup.RemoveAll();
     m_board->SetEnabledLayers( LSET::AllLayersMask() );
     m_board->SetVisibleLayers( LSET::AllLayersMask() );
-    m_board->SetCopperLayerCount( totalCopperLayers );
-    stackup.BuildDefaultStackupList( &m_board->GetDesignSettings(), totalCopperLayers );
+    m_board->SetCopperLayerCount( m_numCopperLayers );
+    stackup.BuildDefaultStackupList( &m_board->GetDesignSettings(), m_numCopperLayers );
 
     size_t stackIndex = 0;
 
@@ -672,6 +672,26 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
         wxString   fpName = component.ReferenceName + ( ( component.Alternate.size() > 0 ) ?
                                               ( wxT( " (" ) + component.Alternate + wxT( ")" ) ) :
                                               wxT( "" ) );
+
+        // Check that we are not loading a documentation symbol.
+        // Documentation symbols in CADSTAR are graphical "footprints" that can be assigned
+        // to any layer. The definition in the library assigns all elements to an undefined layer.
+        LAYER_ID componentLayer;
+
+        if( component.Figures.size() > 0 )
+        {
+            FIGURE firstFigure = component.Figures.begin()->second;
+            componentLayer = firstFigure.LayerID;
+        }
+        else if( component.Texts.size() > 0 )
+        {
+            TEXT firstText = component.Texts.begin()->second;
+            componentLayer = firstText.LayerID;
+        }
+
+        if( !componentLayer.IsEmpty() && getLayerType( componentLayer ) == LAYER_TYPE::NOLAYER )
+            continue; // don't process documentation symbols
+
         FOOTPRINT* footprint = new FOOTPRINT( m_board );
         footprint->SetPosition( getKiCadPoint( component.Origin ) );
 
@@ -3382,6 +3402,18 @@ wxString CADSTAR_PCB_ARCHIVE_LOADER::getAttributeValue( const ATTRIBUTE_ID& aCad
 }
 
 
+CADSTAR_PCB_ARCHIVE_LOADER::LAYER_TYPE
+CADSTAR_PCB_ARCHIVE_LOADER::getLayerType( const LAYER_ID aCadstarLayerID )
+{
+    if( Assignments.Layerdefs.Layers.find( aCadstarLayerID ) != Assignments.Layerdefs.Layers.end() )
+    {
+        return Assignments.Layerdefs.Layers.at( aCadstarLayerID ).Type;
+    }
+
+    return LAYER_TYPE::UNDEFINED;
+}
+
+
 CADSTAR_PCB_ARCHIVE_LOADER::PART CADSTAR_PCB_ARCHIVE_LOADER::getPart(
         const PART_ID& aCadstarPartID )
 {
@@ -3844,7 +3876,7 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
 PCB_LAYER_ID CADSTAR_PCB_ARCHIVE_LOADER::getKiCadCopperLayerID( unsigned int aLayerNum,
                                                                 bool aDetectMaxLayer )
 {
-    if( aDetectMaxLayer && aLayerNum == Assignments.Technology.MaxPhysicalLayer )
+    if( aDetectMaxLayer && aLayerNum == m_numCopperLayers )
         return PCB_LAYER_ID::B_Cu;
 
     switch( aLayerNum )
@@ -3912,12 +3944,11 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::isLayerSet( const LAYER_ID& aCadstarLayerID )
 
 PCB_LAYER_ID CADSTAR_PCB_ARCHIVE_LOADER::getKiCadLayer( const LAYER_ID& aCadstarLayerID )
 {
-    if( Assignments.Layerdefs.Layers.find( aCadstarLayerID ) != Assignments.Layerdefs.Layers.end() )
+    if( getLayerType( aCadstarLayerID ) == LAYER_TYPE::NOLAYER )
     {
-        if( Assignments.Layerdefs.Layers.at( aCadstarLayerID ).Type == LAYER_TYPE::NOLAYER )
-            //The "no layer" is common for CADSTAR documentation symbols
-            //map it to undefined layer for later processing
-            return PCB_LAYER_ID::UNDEFINED_LAYER;
+        //The "no layer" is common for CADSTAR documentation symbols
+        //map it to undefined layer for later processing
+        return PCB_LAYER_ID::UNDEFINED_LAYER;
     }
 
     wxCHECK( m_layermap.find( aCadstarLayerID ) != m_layermap.end(),
@@ -3929,19 +3960,21 @@ PCB_LAYER_ID CADSTAR_PCB_ARCHIVE_LOADER::getKiCadLayer( const LAYER_ID& aCadstar
 
 LSET CADSTAR_PCB_ARCHIVE_LOADER::getKiCadLayerSet( const LAYER_ID& aCadstarLayerID )
 {
-    LAYER& layer = Assignments.Layerdefs.Layers.at( aCadstarLayerID );
+    LAYER_TYPE layerType = getLayerType( aCadstarLayerID );
 
-    switch( layer.Type )
+    switch( layerType )
     {
     case LAYER_TYPE::ALLDOC:
         return LSET( 4, PCB_LAYER_ID::Dwgs_User, PCB_LAYER_ID::Cmts_User, PCB_LAYER_ID::Eco1_User,
                 PCB_LAYER_ID::Eco2_User );
 
     case LAYER_TYPE::ALLELEC:
-        return LSET::AllCuMask();
+        return LSET::AllCuMask( m_numCopperLayers );
 
     case LAYER_TYPE::ALLLAYER:
-        return LSET::AllLayersMask();
+        return LSET::AllLayersMask()
+               ^ ( LSET::AllCuMask( m_numCopperLayers ) ^ LSET::AllCuMask( MAX_CU_LAYERS ) )
+               ^ ( LSET( PCB_LAYER_ID::Rescue ) );
 
     default:
         return LSET( getKiCadLayer( aCadstarLayerID ) );
