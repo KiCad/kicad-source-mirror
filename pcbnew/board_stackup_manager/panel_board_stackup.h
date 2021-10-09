@@ -115,7 +115,6 @@ public:
     wxColor GetSelectedColor( int aRow ) const;
 
     BOARD_STACKUP&  GetStackup() { return m_stackup; }
-    int GetPcbThickness();
 
     // Called by wxWidgets: transfer current settings stored in m_stackup to the board
     bool TransferDataFromWindow() override;
