@@ -40,14 +40,6 @@ public:
     void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
     void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
     void ThemeChanged() override;
-
-private:
-    void initColorCodePanel();
-
-    wxBitmap* m_ccValueNamesBitmap;
-    wxBitmap* m_ccValuesBitmap;
-    wxBitmap* m_ccMultipliersBitmap;
-    wxBitmap* m_ccTolerancesBitmap;
 };
 
 #endif

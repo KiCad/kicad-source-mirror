@@ -28,7 +28,6 @@ PANEL_COLOR_CODE::PANEL_COLOR_CODE( wxWindow* parent, wxWindowID id,
                                   long style, const wxString& name ) :
         PANEL_COLOR_CODE_BASE( parent, id, pos, size, style, name )
 {
-    initColorCodePanel();
     ToleranceSelection( m_rbToleranceSelection->GetSelection() );
 
     // Needed on wxWidgets 3.0 to ensure sizers are correctly set
@@ -38,16 +37,20 @@ PANEL_COLOR_CODE::PANEL_COLOR_CODE( wxWindow* parent, wxWindowID id,
 
 PANEL_COLOR_CODE::~PANEL_COLOR_CODE()
 {
-    delete m_ccValueNamesBitmap;
-    delete m_ccValuesBitmap;
-    delete m_ccMultipliersBitmap;
-    delete m_ccTolerancesBitmap;
 }
 
 
 void PANEL_COLOR_CODE::ThemeChanged()
 {
-    // Nothing to do for this panel
+    // Update the bitmaps
+    m_Band1bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value_and_name ) );
+    m_Band2bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value ) );
+    m_Band3bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value ) );
+    m_Band4bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value ) );
+    m_Band_mult_bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_multiplier ) );
+    m_Band_tol_bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_tolerance ) );
+
+    Refresh();
 }
 
 
@@ -61,15 +64,6 @@ void PANEL_COLOR_CODE::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 void PANEL_COLOR_CODE::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     aCfg->m_ColorCodeTolerance = m_rbToleranceSelection->GetSelection();
-}
-
-
-void PANEL_COLOR_CODE::initColorCodePanel()
-{
-    m_ccValueNamesBitmap  = KiBitmapNew( BITMAPS::color_code_value_and_name );
-    m_ccValuesBitmap      = KiBitmapNew( BITMAPS::color_code_value );
-    m_ccMultipliersBitmap = KiBitmapNew( BITMAPS::color_code_multiplier );
-    m_ccTolerancesBitmap  = KiBitmapNew( BITMAPS::color_code_tolerance );
 }
 
 
@@ -94,12 +88,12 @@ void PANEL_COLOR_CODE::ToleranceSelection( int aSelection )
     GetSizer()->Layout();
 
     // All this shouldn't be necessary but if you want the bitmaps to show up on OSX it is.
-    m_Band1bitmap->SetBitmap( *m_ccValueNamesBitmap );
-   	m_Band2bitmap->SetBitmap( *m_ccValuesBitmap );
-   	m_Band3bitmap->SetBitmap( *m_ccValuesBitmap );
-   	m_Band4bitmap->SetBitmap( *m_ccValuesBitmap );
-   	m_Band_mult_bitmap->SetBitmap( *m_ccMultipliersBitmap );
-   	m_Band_tol_bitmap->SetBitmap( *m_ccTolerancesBitmap );
+    m_Band1bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value_and_name ) );
+    m_Band2bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value ) );
+    m_Band3bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value ) );
+    m_Band4bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_value ) );
+    m_Band_mult_bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_multiplier ) );
+    m_Band_tol_bitmap->SetBitmap( KiBitmap( BITMAPS::color_code_tolerance ) );
 
     Refresh();
 }
