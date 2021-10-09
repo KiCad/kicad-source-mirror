@@ -3866,7 +3866,8 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
         else
         {
             ROUTECODE   rc = getRouteCode( csNet.RouteCodeID );
-            netclass.reset( new NETCLASS( rc.Name ) );
+            netclass.reset( new NETCLASS( *m_board->GetDesignSettings().GetDefault() ) );
+            netclass->SetName( rc.Name );
             m_board->GetDesignSettings().GetNetClasses().Add( netclass );
             netclass->SetTrackWidth( getKiCadLength( rc.OptimalWidth ) );
             m_netClassMap.insert( { csNet.RouteCodeID, netclass } );
