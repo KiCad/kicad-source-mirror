@@ -58,6 +58,9 @@ PANEL_TRACK_WIDTH::PANEL_TRACK_WIDTH( wxWindow* parent, wxWindowID id,
 
     m_TWMode = TW_MASTER_CURRENT;
     m_TWNested = false;
+
+    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
+    GetSizer()->SetSizeHints( this );
 }
 
 

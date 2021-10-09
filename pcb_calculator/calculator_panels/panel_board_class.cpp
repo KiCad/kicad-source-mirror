@@ -30,6 +30,9 @@ PANEL_BOARD_CLASS::PANEL_BOARD_CLASS( wxWindow* parent, wxWindowID id,
 {
     // Autosize the row label column to be sure label are not truncated
     m_gridClassesValuesDisplay->SetRowLabelSize( wxGRID_AUTOSIZE );
+
+    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
+    GetSizer()->SetSizeHints( this );
 }
 
 

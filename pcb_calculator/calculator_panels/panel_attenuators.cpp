@@ -47,6 +47,7 @@ PANEL_ATTENUATORS::PANEL_ATTENUATORS( wxWindow* parent, wxWindowID id,
     m_AttenuatorList.push_back( new ATTENUATOR_BRIDGE() );
     m_AttenuatorList.push_back( new ATTENUATOR_SPLITTER() );
     m_CurrAttenuator = m_AttenuatorList[0];
+    SetAttenuator( 0 );     // Ensure an attenuator and especially its bitmap are set
 
     m_staticTextAttMsg->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
@@ -55,6 +56,9 @@ PANEL_ATTENUATORS::PANEL_ATTENUATORS( wxWindow* parent, wxWindowID id,
     m_attR1Unit->SetLabel( wxT( "Ω" ) );
     m_attR2Unit->SetLabel( wxT( "Ω" ) );
     m_attR3Unit->SetLabel( wxT( "Ω" ) );
+
+    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
+    GetSizer()->SetSizeHints( this );
 }
 
 

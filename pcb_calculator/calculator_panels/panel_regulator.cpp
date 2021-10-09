@@ -53,6 +53,9 @@ PANEL_REGULATOR::PANEL_REGULATOR( wxWindow* parent, wxWindowID id,
 
     m_choiceRegulatorSelector->Append( m_RegulatorList.GetRegList() );
     SelectLastSelectedRegulator();
+
+    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
+    GetSizer()->SetSizeHints( this );
 }
 
 PANEL_REGULATOR::~PANEL_REGULATOR()

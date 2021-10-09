@@ -67,6 +67,9 @@ PANEL_VIA_SIZE::PANEL_VIA_SIZE( wxWindow* parent, wxWindowID id,
     m_viaReactanceUnits->SetLabel( wxT( "Ω" ) );
 
     m_viaBitmap->SetBitmap( KiBitmap( BITMAPS::viacalc ) );
+
+    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
+    GetSizer()->SetSizeHints( this );
 }
 
 

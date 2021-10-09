@@ -41,6 +41,14 @@ PANEL_E_SERIE::PANEL_E_SERIE( wxWindow* parent, wxWindowID id,
     m_reqResUnits->SetLabel( wxT( "kΩ" ) );
     m_exclude1Units->SetLabel( wxT( "kΩ" ) );
     m_exclude2Units->SetLabel( wxT( "kΩ" ) );
+
+    // show markdown formula explanation in lower help panel
+    wxString msg;
+    ConvertMarkdown2Html( wxGetTranslation( eseries_help ), msg );
+    m_panelESeriesHelp->SetPage( msg );
+
+    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
+    GetSizer()->SetSizeHints( this );
 }
 
 
@@ -63,10 +71,4 @@ void PANEL_E_SERIE::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 
 void PANEL_E_SERIE::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
-    // initialize ESeries tab at each pcb-calculator start
-    wxString msg;
-
-    // show markdown formula explanation in lower help panel
-    ConvertMarkdown2Html( wxGetTranslation( eseries_help ), msg );
-    m_panelESeriesHelp->SetPage( msg );
 }

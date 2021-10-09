@@ -90,6 +90,11 @@ void PANEL_TRANSLINE::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 
     TranslineTypeSelection( m_currTransLineType );
     m_TranslineSelection->SetSelection( m_currTransLineType );
+
+    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
+    // It also remove a minor cosmetic issue on wxWidgets 3.5 on MSW
+    // Called here after the current selected transline bitmaps are enabled/disabled
+    GetSizer()->SetSizeHints( this );
 }
 
 

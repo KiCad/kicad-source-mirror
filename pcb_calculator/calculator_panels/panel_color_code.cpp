@@ -30,6 +30,9 @@ PANEL_COLOR_CODE::PANEL_COLOR_CODE( wxWindow* parent, wxWindowID id,
 {
     initColorCodePanel();
     ToleranceSelection( m_rbToleranceSelection->GetSelection() );
+
+    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
+    GetSizer()->SetSizeHints( this );
 }
 
 

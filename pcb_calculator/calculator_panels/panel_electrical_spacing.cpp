@@ -115,6 +115,9 @@ PANEL_ELECTRICAL_SPACING::PANEL_ELECTRICAL_SPACING( wxWindow* parent, wxWindowID
 {
     // Autosize the row label column to be sure label are not truncated
     m_gridElectricalSpacingValues->SetRowLabelSize( wxGRID_AUTOSIZE );
+
+    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
+    GetSizer()->SetSizeHints( this );
 }
 
 
