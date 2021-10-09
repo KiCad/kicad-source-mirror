@@ -1408,10 +1408,6 @@ void APPEARANCE_CONTROLS::rebuildLayers()
     m_windowLayersSizerItem->SetFlag( m_windowLayersSizerItem->GetFlag() & ~wxTOP );
 #endif
 
-    m_layerSettings.clear();
-    m_layerSettingsMap.clear();
-    m_layersOuterSizer->Clear( true );
-
     auto appendLayer =
             [&]( std::unique_ptr<APPEARANCE_SETTING>& aSetting )
             {
@@ -1500,39 +1496,21 @@ void APPEARANCE_CONTROLS::rebuildLayers()
                 label->Bind( wxEVT_RIGHT_DOWN, &APPEARANCE_CONTROLS::rightClickHandler, this );
             };
 
-    // Add right click handling to show the conterxt menu when clicking to the free area in
-    // m_windowLayers (below the layer items)
-    m_windowLayers->Bind( wxEVT_RIGHT_DOWN, &APPEARANCE_CONTROLS::rightClickHandler, this );
-
-    wxString dsc;
-
-    // show all coppers first, with front on top, back on bottom, then technical layers
-    for( LSEQ cu_stack = enabled.CuStack(); cu_stack; ++cu_stack )
-    {
-        PCB_LAYER_ID layer = *cu_stack;
-
-        switch( layer )
-        {
-            case F_Cu: dsc = _( "Front copper layer" ); break;
-            case B_Cu: dsc = _( "Back copper layer" );  break;
-            default:   dsc = _( "Inner copper layer" ); break;
-        }
-
-        m_layerSettings.emplace_back(
-                std::make_unique<APPEARANCE_SETTING>( board->GetLayerName( layer ), layer, dsc ) );
-
-        std::unique_ptr<APPEARANCE_SETTING>& setting = m_layerSettings.back();
-
-        m_layerSettingsMap[layer] = setting.get();
-
-        appendLayer( setting );
-
-        if( m_isFpEditor && LSET::ForbiddenFootprintLayers().test( layer ) )
-        {
-            setting->ctl_text->Disable();
-            setting->ctl_color->SetToolTip( wxEmptyString );
-        }
-    }
+    auto updateLayer =
+            [&]( std::unique_ptr<APPEARANCE_SETTING>& aSetting )
+            {
+                int layer = aSetting->id;
+                aSetting->visible = visible[layer];
+                aSetting->ctl_panel->Show();
+                aSetting->ctl_panel->SetId( layer );
+                aSetting->ctl_indicator->SetWindowID( layer );
+                aSetting->ctl_color->SetWindowID( layer );
+                aSetting->ctl_color->SetSwatchColor( theme->GetColor( layer ), false );
+                aSetting->ctl_visibility->SetWindowID( layer );
+                aSetting->ctl_text->SetLabelText( aSetting->label );
+                aSetting->ctl_text->SetId( layer );
+                aSetting->ctl_text->SetToolTip( aSetting->tooltip );
+            };
 
     // technical layers are shown in this order:
     // Because they are static, wxGetTranslation must be explicitly
@@ -1570,6 +1548,76 @@ void APPEARANCE_CONTROLS::rebuildLayers()
         { User_9,           _( "User defined layer 9" ) },
     };
 
+    // There is a spacer added to the end of the list that we need to remove and re-add
+    // after possibly adding additional layers
+    if( m_layersOuterSizer->GetItemCount() > 0 )
+    {
+        m_layersOuterSizer->Detach( m_layersOuterSizer->GetItemCount() - 1 );
+    }
+    // Otherwise, this is the first time we are updating the control, so we need to attach
+    // the handler
+    else
+    {
+        // Add right click handling to show the context menu when clicking to the free area in
+        // m_windowLayers (below the layer items)
+        m_windowLayers->Bind( wxEVT_RIGHT_DOWN, &APPEARANCE_CONTROLS::rightClickHandler, this );
+    }
+
+    std::size_t total_layers = enabled.CuStack().size();
+
+    for( const auto& entry : non_cu_seq )
+    {
+        if( enabled[entry.layerId] )
+            total_layers++;
+    }
+
+    // Adds layers to the panel until we have enough to hold our total count
+    while( total_layers > m_layerSettings.size() )
+        m_layerSettings.push_back( std::make_unique<APPEARANCE_SETTING>() );
+
+    // We never delete layers from the panel, only hide them.  This saves us
+    // having to recreate the (possibly) later with minimal overhead
+    for( std::size_t ii = total_layers; ii < m_layerSettings.size(); ++ii )
+    {
+        if( m_layerSettings[ii]->ctl_panel )
+            m_layerSettings[ii]->ctl_panel->Show( false );
+    }
+
+    auto layer_it = m_layerSettings.begin();
+
+    // show all coppers first, with front on top, back on bottom, then technical layers
+    for( LSEQ cu_stack = enabled.CuStack(); cu_stack; ++cu_stack, ++layer_it )
+    {
+        PCB_LAYER_ID layer = *cu_stack;
+        wxString dsc;
+
+        switch( layer )
+        {
+            case F_Cu: dsc = _( "Front copper layer" ); break;
+            case B_Cu: dsc = _( "Back copper layer" );  break;
+            default:   dsc = _( "Inner copper layer" ); break;
+        }
+
+        std::unique_ptr<APPEARANCE_SETTING>& setting = *layer_it;
+
+        setting->label = board->GetLayerName( layer );
+        setting->id = layer;
+        setting->tooltip = dsc;
+
+        if( setting->ctl_panel == nullptr )
+            appendLayer( setting );
+        else
+            updateLayer( setting );
+
+        m_layerSettingsMap[layer] = setting.get();
+
+        if( m_isFpEditor && LSET::ForbiddenFootprintLayers().test( layer ) )
+        {
+            setting->ctl_text->Disable();
+            setting->ctl_color->SetToolTip( wxEmptyString );
+        }
+    }
+
     for( const auto& entry : non_cu_seq )
     {
         PCB_LAYER_ID layer = entry.layerId;
@@ -1577,20 +1625,26 @@ void APPEARANCE_CONTROLS::rebuildLayers()
         if( !enabled[layer] )
             continue;
 
-        m_layerSettings.emplace_back( std::make_unique<APPEARANCE_SETTING>(
-                board->GetLayerName( layer ), layer, wxGetTranslation( entry.tooltip ) ) );
+        std::unique_ptr<APPEARANCE_SETTING>& setting = *layer_it;
 
-        std::unique_ptr<APPEARANCE_SETTING>& setting = m_layerSettings.back();
+        setting->label = board->GetLayerName( layer );
+        setting->id = layer;
+        setting->tooltip = entry.tooltip;
+
+        if( setting->ctl_panel == nullptr )
+            appendLayer( setting );
+        else
+            updateLayer( setting );
 
         m_layerSettingsMap[layer] = setting.get();
-
-        appendLayer( setting );
 
         if( m_isFpEditor && LSET::ForbiddenFootprintLayers().test( layer ) )
         {
             setting->ctl_text->Disable();
             setting->ctl_color->SetToolTip( wxEmptyString );
         }
+
+        ++layer_it;
     }
 
     m_layersOuterSizer->AddSpacer( 10 );

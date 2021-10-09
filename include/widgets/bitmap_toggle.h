@@ -25,7 +25,7 @@
 #ifndef _BITMAP_TOGGLE_H
 #define _BITMAP_TOGGLE_H
 
-#include <wx/bitmap.h>
+#include <wx/statbmp.h>
 #include <wx/panel.h>
 
 #include <gal/color4d.h>
@@ -53,6 +53,16 @@ public:
 
     ///< Read the checkbox state
     bool GetValue() const { return m_checked; }
+
+    /**
+     * Updates the window ID of this control and its children
+     * @param aId new Window ID to set
+     */
+    void SetWindowID( wxWindowID aId )
+    {
+        SetId( aId );
+        m_bitmap->SetId( aId );
+    }
 
 private:
     bool m_checked;

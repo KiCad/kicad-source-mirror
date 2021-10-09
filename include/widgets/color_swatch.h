@@ -100,6 +100,16 @@ public:
     KIGFX::COLOR4D GetSwatchColor() const;
 
     /**
+     * Updates the window ID of this control and its children
+     * @param aId new Window ID to set
+     */
+    void SetWindowID( wxWindowID aId )
+    {
+        SetId( aId );
+        m_swatch->SetId( aId );
+    }
+
+    /**
      * Prompt for a new colour, using the colour picker dialog.
      *
      * A colour change event will be sent if it's set.

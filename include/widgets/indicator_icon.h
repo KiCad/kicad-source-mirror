@@ -24,7 +24,7 @@
 #ifndef ROW_INDICATOR__H_
 #define ROW_INDICATOR__H_
 
-#include <wx/bitmap.h>
+#include <wx/statbmp.h>
 #include <wx/panel.h>
 
 class wxStaticBitmap;
@@ -96,6 +96,16 @@ public:
      * @return the current state of the indicator
      */
     ICON_ID GetIndicatorState() const;
+
+    /**
+     * Updates the window ID of this control and its children
+     * @param aId new Window ID to set
+     */
+    void SetWindowID( wxWindowID aId )
+    {
+        SetId( aId );
+        m_bitmap->SetId( aId );
+    }
 
 private:
 
