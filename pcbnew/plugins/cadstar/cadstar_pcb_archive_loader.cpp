@@ -1858,19 +1858,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
 
         zone->SetMinIslandArea( minIslandArea );
 
-        // In cadstar zone clearance is in addition to the design rule "copper to copper"
+        // In cadstar zone clearance is in addition to the global clearance.
+        // TODO: need to create custom rules for individual items: zone to pad, zone to track, etc.
         int clearance = getKiCadLength( csTemplate.Pouring.AdditionalIsolation );
-
-        if( Assignments.Codedefs.SpacingCodes.find( wxT( "C_C" ) )
-            != Assignments.Codedefs.SpacingCodes.end() )
-        {
-            int copperToCopper = Assignments.Codedefs.SpacingCodes.at( wxT( "C_C" ) ).Spacing;
-            clearance += getKiCadLength( copperToCopper );
-        }
-        else
-        {
-            clearance += m_board->GetDesignSettings().m_MinClearance;
-        }
+        clearance += m_board->GetDesignSettings().m_MinClearance;
 
         zone->SetLocalClearance( clearance );
 
