@@ -654,7 +654,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
     ds.m_ViasMinAnnularWidth = ds.m_TrackMinWidth / 2; // Not specified, assumed half track width
     ds.m_MinThroughDrill = PCB_IU_PER_MM * 0.0508; // CADSTAR does not specify a minimum hole size
                                                    // so set to minimum permitted in KiCad (2 mils)
-    ds.m_HoleClearance = ds.m_CopperEdgeClearance; // Not specified, assumed same as edge
+    ds.m_HoleClearance = 0; // Testing suggests cadstar might not have a copper-to-hole clearance
 
     auto applyNetClassRule = [&]( wxString aID, NETCLASS* aNetClassPtr,
                                      void ( NETCLASS::*aFunc )( int ) ) {
