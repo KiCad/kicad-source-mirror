@@ -40,12 +40,12 @@
 class REGULATOR_DATA
 {
 public:
-    REGULATOR_DATA( const wxString& aName, double aVref, int aType, double aIadj = 0)
+    REGULATOR_DATA( const wxString& aName, double aVref, int aType, double aIadj = 0) :
+            m_Name( aName ),
+            m_Type( aType ),
+            m_Vref( aVref ),
+            m_Iadj( aIadj )
     {
-        m_Type = aType;
-        m_Vref = aVref;
-        m_Name = aName;
-        m_Iadj = aIadj;
     }
 
 public:
@@ -60,11 +60,11 @@ public:
 class REGULATOR_LIST
 {
 public:
-    REGULATOR_LIST() {};
+    REGULATOR_LIST() {}
     ~REGULATOR_LIST()
     {
-        for( unsigned ii = 0; ii < m_List.size(); ii++ )
-            delete m_List[ii];
+        for( REGULATOR_DATA* regulator : m_List )
+            delete regulator;
     }
 
     unsigned int GetCount()
@@ -90,12 +90,10 @@ public:
 
     REGULATOR_DATA* GetReg( const wxString& aName )
     {
-        for( unsigned ii = 0; ii < m_List.size(); ii++ )
+        for( REGULATOR_DATA* regulator : m_List )
         {
-            if( aName.CmpNoCase( m_List[ii]->m_Name ) == 0 )
-            {
-                return  m_List[ii];
-            }
+            if( aName.CmpNoCase( regulator->m_Name ) == 0 )
+                return regulator;
         }
         return nullptr;
     }
@@ -136,8 +134,9 @@ public:
     wxArrayString GetRegList() const
     {
         wxArrayString list;
-        for( unsigned ii = 0; ii < m_List.size(); ii++ )
-            list.Add( m_List[ii]->m_Name );
+
+        for( REGULATOR_DATA* regulator : m_List )
+            list.Add( regulator->m_Name );
 
         return list;
     }

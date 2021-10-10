@@ -27,9 +27,9 @@
 #include "units_scales.h"
 
 UNIT_SELECTOR_LEN::UNIT_SELECTOR_LEN( wxWindow *parent, wxWindowID id,
-                  const wxPoint& pos, const wxSize& size,
-                  const wxArrayString& choices, long style )
-                : UNIT_SELECTOR( parent, id, pos, size, choices, style )
+                                      const wxPoint& pos, const wxSize& size,
+                                      const wxArrayString& choices, long style ) :
+        UNIT_SELECTOR( parent, id, pos, size, choices, style )
 {
     Append( _( "mm" ) );
     Append( _( "um" ) );

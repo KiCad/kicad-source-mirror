@@ -50,8 +50,6 @@ private:
     double atten_cond;       // Loss in conductors (dB)
     double fc10;             // Cutoff frequency for TE10 mode
 
-public:
-private:
     double kval_square();
     double kc_square( int, int );
     double fc( int, int );

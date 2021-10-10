@@ -19,6 +19,7 @@
  */
 
 
+#include "transline_ident.h"
 #include <bitmaps.h>
 #include <calculator_panels/panel_transline.h>
 #include <pcb_calculator_settings.h>
@@ -26,11 +27,11 @@
 PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id,
                                 const wxPoint& pos, const wxSize& size,
                                 long style, const wxString& name ) :
-        PANEL_TRANSLINE_BASE( parent, id, pos, size, style, name )
+        PANEL_TRANSLINE_BASE( parent, id, pos, size, style, name ),
+        m_currTransLine( nullptr ),
+        m_currTransLineType( DEFAULT_TYPE )
 {
     SetName( GetWindowName() );
-    m_currTransLine     = nullptr;
-    m_currTransLineType = DEFAULT_TYPE;
 
     m_bpButtonAnalyze->SetBitmap( KiBitmap( BITMAPS::small_down ) );
     m_bpButtonSynthetize->SetBitmap( KiBitmap( BITMAPS::small_up ) );
@@ -58,8 +59,8 @@ PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id,
 
 PANEL_TRANSLINE::~PANEL_TRANSLINE()
 {
-    for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
-        delete m_transline_list[ii];
+    for( TRANSLINE_IDENT* transline : m_transline_list )
+        delete transline;
 }
 
 
@@ -76,8 +77,8 @@ void PANEL_TRANSLINE::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     aCfg->m_TransLine.type = m_currTransLineType;
 
-    for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
-        m_transline_list[ii]->WriteConfig();
+    for( TRANSLINE_IDENT* transline : m_transline_list )
+        transline->WriteConfig();
 }
 
 

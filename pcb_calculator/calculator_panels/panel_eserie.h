@@ -50,8 +50,6 @@ public:
      * @param event contains the radio button state.
      */
     void OnESeriesSelection( wxCommandEvent& event ) override;
-
-    void OnSystemThemeChange( wxSysColourChangedEvent &aEvent );
 };
 
 #endif

@@ -86,31 +86,43 @@ public:
     double      getProperty( enum PRMS_ID aPrmId );
 
 
-    void getProperties( void );
-    void checkProperties( void );
+    void getProperties();
+    void checkProperties();
     void setResult( int, double, const char* );
     void setResult( int, const char* );
     bool isSelected( enum PRMS_ID aPrmId );
 
     void         Init();
     virtual void synthesize();
-    virtual void calc(){};
-    /** @brief Computation for analysis
+    virtual void calc() {}
+
+    /**
+     * Computation for analysis
      */
     virtual void calcAnalyze(){};
-    /** @brief Computation for synthesis
+
+    /**
+     * Computation for synthesis
      **/
-    virtual void calcSynthesize(){};
-    /** @brief Shows synthesis results and checks for errors / warnings.
+    virtual void calcSynthesize() {}
+
+    /**
+     * Shows synthesis results and checks for errors / warnings.
      **/
-    virtual void showAnalyze(){};
-    /** @brief Shows analysis results and checks for errors / warnings.
+    virtual void showAnalyze() {}
+
+    /**
+     * Shows analysis results and checks for errors / warnings.
      **/
-    virtual void showSynthesize(){};
-    /** @brief Shows results
+    virtual void showSynthesize() {}
+
+    /**
+     * Shows results
      **/
-    virtual void   show_results(){};
+    virtual void   show_results() {}
+
     void           analyze();
+
     KIGFX::COLOR4D errCol  = KIGFX::COLOR4D( 1, 0.63, 0.63, 1 );
     KIGFX::COLOR4D warnCol = KIGFX::COLOR4D( 1, 1, 0.57, 1 );
     KIGFX::COLOR4D okCol   = KIGFX::COLOR4D( 1, 1, 1, 1 );

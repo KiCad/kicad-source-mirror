@@ -56,8 +56,8 @@ void COPLANAR::calcAnalyze()
     double zl_factor;
 
     // compute the necessary quasi-static approx. (K1, K3, er(0) and Z(0))
-    k1 = m_parameters[PHYS_WIDTH_PRM]
-         / ( m_parameters[PHYS_WIDTH_PRM] + m_parameters[PHYS_S_PRM] + m_parameters[PHYS_S_PRM] );
+    k1   = m_parameters[PHYS_WIDTH_PRM]
+           / ( m_parameters[PHYS_WIDTH_PRM] + m_parameters[PHYS_S_PRM] + m_parameters[PHYS_S_PRM] );
     kk1  = ellipk( k1 );
     kpk1 = ellipk( sqrt( 1 - k1 * k1 ) );
     q1   = kk1 / kpk1;
@@ -137,6 +137,7 @@ void COPLANAR::calcAnalyze()
 
     // loss constant factors (computed only once for efficiency's sake)
     double ac = 0;
+
     if( m_parameters[T_PRM] > 0 )
     {
         // equations by GHIONE
@@ -145,6 +146,7 @@ void COPLANAR::calcAnalyze()
         double b = a + m_parameters[PHYS_S_PRM];
         ac       = ( M_PI + log( n * a ) ) / a + ( M_PI + log( n * b ) ) / b;
     }
+
     double ac_factor = ac / ( 4 * ZF0 * kk1 * kpk1 * ( 1 - k1 * k1 ) );
     double ad_factor = ( m_parameters[EPSILONR_PRM] / ( m_parameters[EPSILONR_PRM] - 1 ) )
                        * m_parameters[TAND_PRM] * M_PI / C0;
@@ -196,13 +198,9 @@ void COPLANAR::show_results()
 void COPLANAR::calcSynthesize()
 {
     if( isSelected( PHYS_WIDTH_PRM ) )
-    {
         minimizeZ0Error1D( &( m_parameters[PHYS_WIDTH_PRM] ) );
-    }
     else
-    {
         minimizeZ0Error1D( &( m_parameters[PHYS_S_PRM] ) );
-    }
 }
 
 // -------------------------------------------------------------------
@@ -223,6 +221,7 @@ void COPLANAR::showSynthesize()
         else
             setErrorLevel( PHYS_S_PRM, TRANSLINE_WARNING );
     }
+
     if( !std::isfinite( m_parameters[PHYS_WIDTH_PRM] ) || m_parameters[PHYS_WIDTH_PRM] <= 0 )
     {
         if( isSelected( PHYS_WIDTH_PRM ) )
@@ -230,6 +229,7 @@ void COPLANAR::showSynthesize()
         else
             setErrorLevel( PHYS_WIDTH_PRM, TRANSLINE_WARNING );
     }
+
     if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0 )
         setErrorLevel( PHYS_LEN_PRM, TRANSLINE_ERROR );
 

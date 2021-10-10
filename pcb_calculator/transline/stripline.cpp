@@ -45,6 +45,7 @@ double STRIPLINE::lineImpedance( double height, double& ac )
     double hmt = height - m_parameters[T_PRM];
 
     ac = sqrt( m_parameters[FREQUENCY_PRM] / m_parameters[SIGMA_PRM] / 17.2 );
+
     if( m_parameters[PHYS_WIDTH_PRM] / hmt >= 0.35 )
     {
         ZL = m_parameters[PHYS_WIDTH_PRM]
@@ -112,22 +113,16 @@ void STRIPLINE::showAnalyze()
     setProperty( ANG_L_PRM, m_parameters[ANG_L_PRM] );
 
     if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
-    {
         setErrorLevel( Z0_PRM, TRANSLINE_ERROR );
-    }
+
     if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
-    {
         setErrorLevel( ANG_L_PRM, TRANSLINE_ERROR );
-    }
 
     if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0 )
-    {
         setErrorLevel( PHYS_LEN_PRM, TRANSLINE_WARNING );
-    }
+
     if( !std::isfinite( m_parameters[PHYS_WIDTH_PRM] ) || m_parameters[PHYS_WIDTH_PRM] < 0 )
-    {
         setErrorLevel( PHYS_WIDTH_PRM, TRANSLINE_WARNING );
-    }
 
     if( m_parameters[STRIPLINE_A_PRM] + m_parameters[T_PRM] >= m_parameters[H_PRM] )
     {
@@ -144,22 +139,16 @@ void STRIPLINE::showSynthesize()
     setProperty( PHYS_WIDTH_PRM, m_parameters[PHYS_WIDTH_PRM] );
 
     if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0 )
-    {
         setErrorLevel( PHYS_LEN_PRM, TRANSLINE_ERROR );
-    }
+
     if( !std::isfinite( m_parameters[PHYS_WIDTH_PRM] ) || m_parameters[PHYS_WIDTH_PRM] < 0 )
-    {
         setErrorLevel( PHYS_WIDTH_PRM, TRANSLINE_ERROR );
-    }
 
     if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
-    {
         setErrorLevel( Z0_PRM, TRANSLINE_WARNING );
-    }
+
     if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
-    {
         setErrorLevel( ANG_L_PRM, TRANSLINE_WARNING );
-    }
 
     if( m_parameters[STRIPLINE_A_PRM] + m_parameters[T_PRM] >= m_parameters[H_PRM] )
     {

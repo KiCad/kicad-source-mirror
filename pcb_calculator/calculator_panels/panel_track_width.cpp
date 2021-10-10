@@ -48,16 +48,15 @@ const double copper_resistivity = 1.72e-8;
 PANEL_TRACK_WIDTH::PANEL_TRACK_WIDTH( wxWindow* parent, wxWindowID id,
                                 const wxPoint& pos, const wxSize& size,
                                 long style, const wxString& name ) :
-        PANEL_TRACK_WIDTH_BASE( parent, id, pos, size, style, name )
+        PANEL_TRACK_WIDTH_BASE( parent, id, pos, size, style, name ),
+        m_TWMode( TW_MASTER_CURRENT ),
+        m_TWNested( false )
 {
     m_trackTempUnits->SetLabel( wxT( "°C" ) );
     m_resistivityUnits->SetLabel( wxT( "Ω•m" ) );
 
     m_extTrackResUnits->SetLabel( wxT( "Ω" ) );
     m_intTrackResUnits->SetLabel( wxT( "Ω" ) );
-
-    m_TWMode = TW_MASTER_CURRENT;
-    m_TWNested = false;
 
     // Needed on wxWidgets 3.0 to ensure sizers are correctly set
     GetSizer()->SetSizeHints( this );
@@ -97,15 +96,9 @@ void PANEL_TRACK_WIDTH::OnTWParametersChanged( wxCommandEvent& event )
 {
     switch(m_TWMode)
     {
-    case TW_MASTER_CURRENT:
-        OnTWCalculateFromCurrent( event );
-        break;
-    case TW_MASTER_EXT_WIDTH:
-        OnTWCalculateFromExtWidth( event );
-        break;
-    case TW_MASTER_INT_WIDTH:
-        OnTWCalculateFromIntWidth( event );
-        break;
+    case TW_MASTER_CURRENT:   OnTWCalculateFromCurrent( event );   break;
+    case TW_MASTER_EXT_WIDTH: OnTWCalculateFromExtWidth( event );  break;
+    case TW_MASTER_INT_WIDTH: OnTWCalculateFromIntWidth( event );  break;
     }
 }
 
@@ -262,8 +255,8 @@ void PANEL_TRACK_WIDTH::OnTWResetButtonClick( wxCommandEvent& event )
 }
 
 
-void PANEL_TRACK_WIDTH::TWDisplayValues( double aCurrent, double aExtWidth,
-        double aIntWidth, double aExtThickness, double aIntThickness )
+void PANEL_TRACK_WIDTH::TWDisplayValues( double aCurrent, double aExtWidth, double aIntWidth,
+                                         double aExtThickness, double aIntThickness )
 {
     wxString msg;
 
@@ -342,7 +335,7 @@ void PANEL_TRACK_WIDTH::TWUpdateModeDisplay()
     wxFont controlfont;
 
     // Set the font weight of the current.
-    labelfont = m_staticTextCurrent->GetFont();
+    labelfont   = m_staticTextCurrent->GetFont();
     controlfont = m_TrackCurrentValue->GetFont();
 
     if( m_TWMode == TW_MASTER_CURRENT )
@@ -360,7 +353,7 @@ void PANEL_TRACK_WIDTH::TWUpdateModeDisplay()
     m_TrackCurrentValue->SetFont( controlfont );
 
     // Set the font weight of the external track width.
-    labelfont = m_staticTextExtWidth->GetFont();
+    labelfont   = m_staticTextExtWidth->GetFont();
     controlfont = m_ExtTrackWidthValue->GetFont();
 
     if( m_TWMode == TW_MASTER_EXT_WIDTH )
@@ -378,7 +371,7 @@ void PANEL_TRACK_WIDTH::TWUpdateModeDisplay()
     m_ExtTrackWidthValue->SetFont( controlfont );
 
     // Set the font weight of the internal track width.
-    labelfont = m_staticTextIntWidth->GetFont();
+    labelfont   = m_staticTextIntWidth->GetFont();
     controlfont = m_IntTrackWidthValue->GetFont();
 
     if( m_TWMode == TW_MASTER_INT_WIDTH )
@@ -409,7 +402,7 @@ void PANEL_TRACK_WIDTH::TWUpdateModeDisplay()
  * Of course we want to know trackWidth
  */
 double PANEL_TRACK_WIDTH::TWCalculateWidth( double aCurrent, double aThickness, double aDeltaT_C,
-                                          bool aUseInternalLayer )
+                                            bool aUseInternalLayer )
 {
     // Appropriate scale for requested layer.
     double scale = aUseInternalLayer ? 0.024 : 0.048;
@@ -432,7 +425,7 @@ double PANEL_TRACK_WIDTH::TWCalculateWidth( double aCurrent, double aThickness, 
 
 
 double PANEL_TRACK_WIDTH::TWCalculateCurrent( double aWidth, double aThickness, double aDeltaT_C,
-                                                 bool aUseInternalLayer )
+                                              bool aUseInternalLayer )
 {
     // Appropriate scale for requested layer.
     double scale = aUseInternalLayer ? 0.024 : 0.048;
@@ -441,7 +434,7 @@ double PANEL_TRACK_WIDTH::TWCalculateCurrent( double aWidth, double aThickness, 
     aThickness /= UNIT_MIL;
     aWidth     /= UNIT_MIL;
 
-    double area = aThickness * aWidth;
+    double area    = aThickness * aWidth;
     double current = scale * pow( aDeltaT_C, 0.44 ) * pow( area, 0.725 );
 
     return current;
@@ -488,6 +481,7 @@ void PANEL_TRACK_WIDTH::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 
     // Enable calculations and perform the initial one.
     m_TWNested = false;
+
     wxCommandEvent dummy;
     OnTWParametersChanged( dummy );
 }

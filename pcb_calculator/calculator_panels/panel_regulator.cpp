@@ -40,11 +40,10 @@ static const wxString DataFileNameExt( wxT( "pcbcalc" ) );
 PANEL_REGULATOR::PANEL_REGULATOR( wxWindow* parent, wxWindowID id,
                                   const wxPoint& pos, const wxSize& size,
                                   long style, const wxString& name ) :
-        PANEL_REGULATOR_BASE( parent, id, pos, size, style, name )
+        PANEL_REGULATOR_BASE( parent, id, pos, size, style, name ),
+        m_RegulatorListChanged( false )
 {
     SetName( GetWindowName() );
-
-    m_RegulatorListChanged = false;
 
     m_IadjUnitLabel->SetLabel( wxT( "µA" ) );
     m_r1Units->SetLabel( wxT( "kΩ" ) );
@@ -86,9 +85,9 @@ void PANEL_REGULATOR::OnRegulatorResetButtonClick( wxCommandEvent& event )
     m_RegulVrefValue->SetValue( wxT( "3" ) );
     m_RegulVoutValue->SetValue( wxT( "12" ) );
     m_choiceRegType->SetSelection( 0 );
-    m_rbRegulR1->SetValue( 1 );
-    m_rbRegulR2->SetValue( 0 );
-    m_rbRegulVout->SetValue( 0 );
+    m_rbRegulR1->SetValue( true );
+    m_rbRegulR2->SetValue( false );
+    m_rbRegulVout->SetValue( false );
     RegulatorPageUpdate();
 }
 
@@ -133,8 +132,8 @@ void PANEL_REGULATOR::OnRegulTypeSelection( wxCommandEvent& event )
 
 void PANEL_REGULATOR::OnRegulatorSelection( wxCommandEvent& event )
 {
-    wxString name = m_choiceRegulatorSelector->GetStringSelection();
-    REGULATOR_DATA * item = m_RegulatorList.GetReg( name );
+    wxString        name = m_choiceRegulatorSelector->GetStringSelection();
+    REGULATOR_DATA* item = m_RegulatorList.GetReg( name );
 
     if( item )
     {
@@ -164,7 +163,7 @@ void PANEL_REGULATOR::OnDataFileSelection( wxCommandEvent& event )
     wxFileDialog dlg( this, _("Select PCB Calculator Data File"),
                       wxEmptyString, fullfilename, wildcard, wxFD_OPEN );
 
-    if (dlg.ShowModal() == wxID_CANCEL)
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     fullfilename = dlg.GetPath();
@@ -178,7 +177,9 @@ void PANEL_REGULATOR::OnDataFileSelection( wxCommandEvent& event )
     {
         if( wxMessageBox( _( "Do you want to load this file and replace current regulator list?" ) )
             != wxID_OK )
+        {
             return;
+        }
     }
 
     if( ReadDataFile() )
@@ -228,7 +229,7 @@ void PANEL_REGULATOR::OnAddRegulator( wxCommandEvent& event )
 void PANEL_REGULATOR::OnEditRegulator( wxCommandEvent& event )
 {
     wxString name = m_choiceRegulatorSelector->GetStringSelection();
-    REGULATOR_DATA * item  = m_RegulatorList.GetReg( name );
+    REGULATOR_DATA* item  = m_RegulatorList.GetReg( name );
 
     if( item == nullptr )
         return;
@@ -240,7 +241,7 @@ void PANEL_REGULATOR::OnEditRegulator( wxCommandEvent& event )
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    REGULATOR_DATA * new_item = dlg.BuildRegulatorFromData();
+    REGULATOR_DATA* new_item = dlg.BuildRegulatorFromData();
     m_RegulatorList.Replace( new_item );
 
     m_RegulatorListChanged = true;
@@ -324,14 +325,14 @@ void PANEL_REGULATOR::RegulatorsSolve()
     int r2scale = 1000;
 
     // Read values from panel:
-    txt = m_RegulR1Value->GetValue();
-    r1 = DoubleFromString(txt) * r1scale;
-    txt = m_RegulR2Value->GetValue();
-    r2 = DoubleFromString(txt) * r2scale;
-    txt = m_RegulVrefValue->GetValue();
-    vref = DoubleFromString(txt);
-    txt = m_RegulVoutValue->GetValue();
-    vout = DoubleFromString(txt);
+    txt  = m_RegulR1Value->GetValue();
+    r1   = DoubleFromString( txt ) * r1scale;
+    txt  = m_RegulR2Value->GetValue();
+    r2   = DoubleFromString( txt ) * r2scale;
+    txt  = m_RegulVrefValue->GetValue();
+    vref = DoubleFromString( txt );
+    txt  = m_RegulVoutValue->GetValue();
+    vout = DoubleFromString( txt );
 
     // Some tests:
     if( vout < vref && id != 2 )
@@ -357,7 +358,7 @@ void PANEL_REGULATOR::RegulatorsSolve()
     {
         // 3 terminal regulator
         txt = m_RegulIadjValue->GetValue();
-        double iadj = DoubleFromString(txt);
+        double iadj = DoubleFromString( txt );
 
         // iadj is given in micro amp, so convert it in amp.
         iadj /= 1000000;
@@ -412,10 +413,7 @@ void PANEL_REGULATOR::Regulators_WriteConfig( PCB_CALCULATOR_SETTINGS* aCfg )
     aCfg->m_Regulators.type = m_choiceRegType->GetSelection();
 
     // Store the parameter selection that was recently calculated (R1, R2 or Vout)
-    wxRadioButton * regprms[3] =
-    {
-        m_rbRegulR1, m_rbRegulR2, m_rbRegulVout
-    };
+    wxRadioButton* regprms[3] = { m_rbRegulR1, m_rbRegulR2, m_rbRegulVout };
 
     for( int ii = 0; ii < 3; ii++ )
     {

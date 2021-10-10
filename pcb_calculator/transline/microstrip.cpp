@@ -248,7 +248,7 @@ double MICROSTRIP::Z0_dispersion(
         double u, double e_r, double e_r_eff_0, double e_r_eff_f, double f_n )
 {
     double R_1, R_2, R_3, R_4, R_5, R_6, R_7, R_8, R_9, R_10, R_11, R_12, R_13, R_14, R_15, R_16,
-            R_17, D, tmpf;
+           R_17, D, tmpf;
 
     R_1 = 0.03891 * pow( e_r, 1.4 );
     R_2 = 0.267 * pow( u, 7.0 );
@@ -484,7 +484,6 @@ void MICROSTRIP::showSynthesize()
         setErrorLevel( PHYS_WIDTH_PRM, TRANSLINE_ERROR );
 
     // Check for warnings
-
     if( !std::isfinite( m_parameters[Z0_PRM] ) || ( m_parameters[Z0_PRM] < 0 ) )
         setErrorLevel( Z0_PRM, TRANSLINE_WARNING );
 

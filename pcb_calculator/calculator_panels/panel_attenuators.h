@@ -24,7 +24,7 @@
 
 #include <vector>
 
-class  ATTENUATOR;
+class ATTENUATOR;
 class PCB_CALCULATOR_SETTINGS;
 
 class PANEL_ATTENUATORS : public PANEL_ATTENUATORS_BASE
@@ -38,7 +38,7 @@ public:
 
     static wxString GetWindowName() { return wxT( "PANEL_ATTENUATORS" ); }
 
-    wxRadioBox*  GetAttenuatorsSelector() { return m_AttenuatorsSelection; }
+    wxRadioBox* GetAttenuatorsSelector() { return m_AttenuatorsSelection; }
 
     // Methods from CALCULATOR_PANEL that must be overriden
     void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
@@ -55,8 +55,8 @@ public:
     void TransfAttenuatorResultsToPanel();
 
 public:
-    ATTENUATOR*                   m_CurrAttenuator;
-    std::vector<ATTENUATOR*>      m_AttenuatorList;
+    ATTENUATOR*              m_CurrAttenuator;
+    std::vector<ATTENUATOR*> m_AttenuatorList;
 
 };
 

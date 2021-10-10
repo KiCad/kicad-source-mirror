@@ -77,7 +77,7 @@ void E_SERIE::combine4( uint32_t aSize )
     double      tmp;
     std::string s;
 
-    m_results[S4R].e_use = false;                          // disable 4R solution, until
+    m_results[S4R].e_use   = false;                          // disable 4R solution, until
     m_results[S4R].e_value = m_results[S3R].e_value;         // 4R becomes better than 3R solution
 
     #ifdef BENCHMARK
@@ -128,7 +128,7 @@ void E_SERIE::combine4( uint32_t aSize )
 }
 
 
-void E_SERIE::NewCalc( void )
+void E_SERIE::NewCalc()
 {
     for( R_DATA& i : m_cmb_lut )
         i.e_use = false;                // before any calculation is done, assume that
@@ -141,7 +141,7 @@ void E_SERIE::NewCalc( void )
 }
 
 
-uint32_t E_SERIE::combine2( void )
+uint32_t E_SERIE::combine2()
 {
     uint32_t    combi2R = 0;                // target index counts calculated 2R combinations
     std::string s;
@@ -171,7 +171,7 @@ uint32_t E_SERIE::combine2( void )
             }
         }
     }
-    return ( combi2R );
+    return combi2R;
 }
 
 
@@ -221,15 +221,15 @@ void E_SERIE::combine3( uint32_t aSize )
             }
         }
     }
-                                                 // if there is a 3R result with remaining deviation
+
+    // If there is a 3R result with remaining deviation consider to search a possibly better 4R solution
+    // calculate 4R for small series always
     if(( m_results[S3R].e_use == true ) && tmp )
-    {                                            // consider to search a possibly better 4R solution
-        combine4( aSize );                       // calculate 4R for small series always
-    }
+        combine4( aSize );
 }
 
 
-void E_SERIE::Calculate( void )
+void E_SERIE::Calculate()
 {
     uint32_t no_of_2Rcombi = 0;
 
@@ -244,7 +244,7 @@ void E_SERIE::Calculate( void )
 }
 
 
-void E_SERIE::strip3( void )
+void E_SERIE::strip3()
 {
     std::string s;
 
@@ -263,7 +263,7 @@ void E_SERIE::strip3( void )
 }
 
 
-void E_SERIE::strip4( void )
+void E_SERIE::strip4()
 {
     std::string s;
 

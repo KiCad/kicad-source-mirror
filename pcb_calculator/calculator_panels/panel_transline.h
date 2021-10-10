@@ -44,7 +44,7 @@ public:
     void ThemeChanged() override;
 
     // Accessors:
-    wxRadioBox* GetTranslineSelector() { return m_TranslineSelection; }
+    wxRadioBox*       GetTranslineSelector() { return m_TranslineSelection; }
     TRANSLINE_TYPE_ID GetCurrTransLineType() { return m_currTransLineType; }
 
     /**

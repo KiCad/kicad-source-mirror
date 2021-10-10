@@ -87,7 +87,7 @@ TRANSLINE::~TRANSLINE()
 }
 
 
-void TRANSLINE::Init( void )
+void TRANSLINE::Init()
 {
     wxColour wxcol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
     okCol          = KIGFX::COLOR4D( wxcol );
@@ -128,6 +128,8 @@ void TRANSLINE::setResult( int line, const char* text )
 {
     SetResultInDialog( line, text );
 }
+
+
 void TRANSLINE::setResult( int line, double value, const char* text )
 {
     SetResultInDialog( line, value, text );
@@ -140,28 +142,31 @@ double TRANSLINE::getProperty( enum PRMS_ID aPrmId )
     return GetPropertyInDialog( aPrmId );
 }
 
+
 /** @function getProperties
  *
  *  Get all properties from the UI. Computes some extra ones.
  **/
-void TRANSLINE::getProperties( void )
+void TRANSLINE::getProperties()
 {
-    int i;
-    for( i = 0; i < DUMMY_PRM; ++i )
+    for( int i = 0; i < DUMMY_PRM; ++i )
     {
         m_parameters[i] = getProperty( (PRMS_ID) i );
         setErrorLevel( (PRMS_ID) i, TRANSLINE_OK );
     }
+
     m_parameters[SIGMA_PRM]       = 1.0 / getProperty( RHO_PRM );
     m_parameters[EPSILON_EFF_PRM] = 1.0;
     m_parameters[SKIN_DEPTH_PRM]  = skin_depth();
 }
+
+
 /** @function checkProperties
  *
  *  Checks the input parameters (ie: negative length).
  *  Does not check for incompatibility between values as this depends on the line shape.
  **/
-void TRANSLINE::checkProperties( void )
+void TRANSLINE::checkProperties()
 {
     // Do not check for values that are results of analyzing / synthesizing
     // Do not check for transline specific incompatibilities ( like " conductor height should be lesser than dielectric height")
@@ -269,17 +274,20 @@ void TRANSLINE::ellipke( double arg, double& k, double& e )
     {
         double a, b, c, fr, s, fk = 1, fe = 1, t, da = arg;
         int    i;
+
         if( arg < 0 )
         {
             fk = 1 / sqrt( 1 - arg );
             fe = sqrt( 1 - arg );
             da = -arg / ( 1 - arg );
         }
+
         a  = 1;
         b  = sqrt( 1 - da );
         c  = sqrt( da );
         fr = 0.5;
         s  = fr * c * c;
+
         for( i = 0; i < iMax; i++ )
         {
             t = ( a + b ) / 2;
@@ -288,6 +296,7 @@ void TRANSLINE::ellipke( double arg, double& k, double& e )
             a = t;
             fr *= 2;
             s += fr * c * c;
+
             if( c / a < NR_EPSI )
                 break;
         }
@@ -349,9 +358,7 @@ bool TRANSLINE::minimizeZ0Error1D( double* aVar )
     }
 
     if( ( !std::isfinite( *aVar ) ) || ( *aVar == 0 ) )
-    {
         *aVar = 0.001;
-    }
 
     /* required value of Z0 */
     Z0_dest = m_parameters[Z0_PRM];
@@ -383,8 +390,10 @@ bool TRANSLINE::minimizeZ0Error1D( double* aVar )
         slope = ( Z0_result - Z0_current ) / increment;
         slope = ( Z0_dest - Z0_current ) / slope - increment;
         *aVar += slope;
+
         if( *aVar <= 0.0 )
             *aVar = increment;
+
         /* find new error */
         /* compute parameters */
         calcAnalyze();
@@ -427,14 +436,8 @@ void TRANSLINE::setErrorLevel( PRMS_ID aP, char aErrorLevel )
 {
     switch( aErrorLevel )
     {
-    case( TRANSLINE_WARNING ):
-        SetPropertyBgColorInDialog( aP, &warnCol );
-        break;
-    case( TRANSLINE_ERROR ):
-        SetPropertyBgColorInDialog( aP, &errCol );
-        break;
-    default:
-        SetPropertyBgColorInDialog( aP, &okCol );
-        break;
+    case TRANSLINE_WARNING:  SetPropertyBgColorInDialog( aP, &warnCol );  break;
+    case TRANSLINE_ERROR:    SetPropertyBgColorInDialog( aP, &errCol );   break;
+    default:                 SetPropertyBgColorInDialog( aP, &okCol );    break;
     }
 }

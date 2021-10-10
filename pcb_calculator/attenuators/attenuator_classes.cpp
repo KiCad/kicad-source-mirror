@@ -34,18 +34,18 @@ wxString splitter_formula =
 
 ATTENUATOR::ATTENUATOR( ATTENUATORS_TYPE aTopology )
 {
-    m_Name        = wxT("att_base");
-    m_Error       = false;
-    m_Topology    = aTopology;
-    m_ResultCount = 3;              // If 3 values must be calculated
-    m_Zin = 50;                     // Ohms
-    m_Zin_Enable = true;
-    m_Zout = 50;                    // Ohms
-    m_Attenuation = 6.0;            // dB
+    m_Name               = wxT( "att_base" );
+    m_Error              = false;
+    m_Topology           = aTopology;
+    m_ResultCount        = 3;           // If 3 values must be calculated
+    m_Zin                = 50;          // Ohms
+    m_Zin_Enable         = true;
+    m_Zout               = 50;          // Ohms
+    m_Attenuation        = 6.0;         // dB
     m_Attenuation_Enable = true;
-    m_MinimumATT    = 0.0;          // dB
-    m_SchBitmapName = BITMAPS::INVALID_BITMAP;
-    m_FormulaName   = nullptr;
+    m_MinimumATT         = 0.0;         // dB
+    m_SchBitmapName      = BITMAPS::INVALID_BITMAP;
+    m_FormulaName        = nullptr;
 
     // Initialize these variables mainly to avoid warnings from a static analyzer
     m_R1 = 0.0;
@@ -86,7 +86,7 @@ void ATTENUATOR::WriteConfig()
 
 ATTENUATOR_PI::ATTENUATOR_PI() : ATTENUATOR( PI_TYPE )
 {
-    m_Name = wxT("att_pi");
+    m_Name          = wxT( "att_pi" );
     m_SchBitmapName = BITMAPS::att_pi;
     m_FormulaName   = &pi_formula;
 }
@@ -107,7 +107,7 @@ bool ATTENUATOR_PI::Calculate()
 
 ATTENUATOR_TEE::ATTENUATOR_TEE() : ATTENUATOR( TEE_TYPE )
 {
-    m_Name = wxT("att_tee");
+    m_Name          = wxT( "att_tee" );
     m_SchBitmapName = BITMAPS::att_tee;
     m_FormulaName   = &tee_formula;
 }
@@ -128,7 +128,7 @@ bool ATTENUATOR_TEE::Calculate()
 
 ATTENUATOR_BRIDGE::ATTENUATOR_BRIDGE() : ATTENUATOR( BRIDGE_TYPE )
 {
-    m_Name = wxT("att_bridge");
+    m_Name          = wxT( "att_bridge" );
     m_Zin_Enable    = false;
     m_ResultCount   = 2;
     m_SchBitmapName = BITMAPS::att_bridge;
@@ -139,6 +139,7 @@ ATTENUATOR_BRIDGE::ATTENUATOR_BRIDGE() : ATTENUATOR( BRIDGE_TYPE )
 bool ATTENUATOR_BRIDGE::Calculate()
 {
     m_Zin = m_Zout;
+
     if( !ATTENUATOR::Calculate() )
         return false;
 
@@ -152,21 +153,21 @@ bool ATTENUATOR_BRIDGE::Calculate()
 
 ATTENUATOR_SPLITTER::ATTENUATOR_SPLITTER() : ATTENUATOR( SPLITTER_TYPE )
 {
-    m_Name = wxT("att_splitter");
+    m_Name               = wxT( "att_splitter" );
     m_Attenuation_Enable = false;
-    m_Attenuation = 6.0;
-    m_MinimumATT    = 6.0;
-    m_Zin_Enable    = false;
-    m_SchBitmapName = BITMAPS::att_splitter;
-    m_FormulaName   = &splitter_formula;
+    m_Attenuation        = 6.0;
+    m_MinimumATT         = 6.0;
+    m_Zin_Enable         = false;
+    m_SchBitmapName      = BITMAPS::att_splitter;
+    m_FormulaName        = &splitter_formula;
 }
 
 
 bool ATTENUATOR_SPLITTER::Calculate()
 {
     m_Attenuation = 6.0;
-    m_Zin = m_Zout;
-    m_R1  = m_R2 = m_R3 = m_Zout / 3.0;
+    m_Zin         = m_Zout;
+    m_R1          = m_R2 = m_R3 = m_Zout / 3.0;
     return true;
 }
 

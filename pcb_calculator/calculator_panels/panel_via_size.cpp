@@ -94,7 +94,7 @@ void PANEL_VIA_SIZE::OnViaEpsilonR_Button( wxCommandEvent& event )
     wxString value = wxGetSingleChoice( wxEmptyString, _("Relative Dielectric Constants"),
                                         list).BeforeFirst( ' ' );
 
-    if( ! value.IsEmpty() )
+    if( !value.IsEmpty() )
         m_textCtrlPlatingPermittivity->SetValue( value );
 }
 
@@ -104,10 +104,10 @@ void PANEL_VIA_SIZE::OnViaRho_Button( wxCommandEvent& event )
     wxArrayString list = StandardResistivityList();
 
     // Shows a list of current Specific resistance list (rho) and select a value
-    wxString value = wxGetSingleChoice( wxEmptyString,
-            _("Electrical Resistivity in Ohm*m"), list).BeforeFirst( ' ' );
+    wxString value = wxGetSingleChoice( wxEmptyString, _( "Electrical Resistivity in Ohm*m" ),
+                                        list ).BeforeFirst( ' ' );
 
-    if( ! value.IsEmpty() )
+    if( !value.IsEmpty() )
         m_textCtrlPlatingResistivity->SetValue( value );
 }
 
@@ -217,12 +217,12 @@ void PANEL_VIA_SIZE::OnViaCalculate( wxCommandEvent& event )
     double pulseRiseTime       = std::abs( DoubleFromString( m_textCtrlRiseTime->GetValue() ) );
 
     // Normalize units
-    finishedHoleDia    *= m_choiceHoleDia->GetUnitScale();
-    platingThickness   *= m_choicePlatingThickness->GetUnitScale();
-    viaLength          *= m_choiceViaLength->GetUnitScale();
-    padDia             *= m_choiceViaPadDia->GetUnitScale();
-    clearanceDia       *= m_choiceClearanceDia->GetUnitScale();
-    charImpedance      *= m_choiceImpedance->GetUnitScale();
+    finishedHoleDia  *= m_choiceHoleDia->GetUnitScale();
+    platingThickness *= m_choicePlatingThickness->GetUnitScale();
+    viaLength        *= m_choiceViaLength->GetUnitScale();
+    padDia           *= m_choiceViaPadDia->GetUnitScale();
+    clearanceDia     *= m_choiceClearanceDia->GetUnitScale();
+    charImpedance    *= m_choiceImpedance->GetUnitScale();
     // platingResistivity is ok: it is in Ohm*m in tables
 
     // Calculate cross-sectional area of the via's cylindrical structure [3]
@@ -264,12 +264,13 @@ void PANEL_VIA_SIZE::OnViaCalculate( wxCommandEvent& event )
 
     // Update the display
     VSDisplayValues( viaResistance, voltageDrop, powerLoss, estimatedAmpacity,
-        thermalResistance, capacitance, timeDegradation, inductance, reactance );
+                     thermalResistance, capacitance, timeDegradation, inductance, reactance );
 }
 
-void PANEL_VIA_SIZE::VSDisplayValues( double aViaResistance, double aVoltageDrop,
-        double aPowerLoss, double aEstimatedAmpacity, double aThermalResistance,
-        double aCapacitance, double aTimeDegradation, double aInductance, double aReactance )
+void PANEL_VIA_SIZE::VSDisplayValues( double aViaResistance, double aVoltageDrop, double aPowerLoss,
+                                      double aEstimatedAmpacity, double aThermalResistance,
+                                      double aCapacitance, double aTimeDegradation, double aInductance,
+                                      double aReactance )
 {
     wxString msg;
 

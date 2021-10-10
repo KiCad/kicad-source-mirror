@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <array>
 #include <vector>
 #include <string>
 
@@ -129,12 +130,12 @@ public:
     /**
      *  initialize next calculation and erase results from previous calculation
      */
-    void NewCalc( void );
+    void NewCalc();
 
     /**
      * called on calculate button to execute all the 2R, 3R and 4R calculations
      */
-    void Calculate( void );
+    void Calculate();
 
     /**
      * Interface for CheckBox, RadioButton, RequriedResistor and calculated Results
@@ -142,7 +143,7 @@ public:
     void SetSeries( uint32_t aSeries ) { m_series = aSeries; }
     void SetRequiredValue( double aValue ) { m_required_value = aValue; }
 
-    std::array<R_DATA,S4R+1> GetResults( void ) { return m_results; }
+    std::array<R_DATA,S4R+1> GetResults() { return m_results; }
 
 private:
     /**
@@ -151,7 +152,7 @@ private:
      * Pre-calculated value combinations are saved in intermediate look up table m_cmb_lut
      * @return is the number of found combinations what also depends from exclude values
     */
-    uint32_t combine2( void );
+    uint32_t combine2();
 
     /**
      * Search for closest two component solution
@@ -187,7 +188,7 @@ private:
      * and      R1|(R2|R3) become R1|R2|R3
      * while    R1+(R2|R3) or (R1+R2)|R3) remains untouched
      */
-    void strip3( void );
+    void strip3();
 
     /*
      * Strip redundant braces from four component result
@@ -196,7 +197,7 @@ private:
      * and      (R1|R2)|(R2|R3) become R1|R2|R3|R4
      * while    (R1+R2)|(R3+R4) remains untouched
      */
-    void strip4( void );
+    void strip4();
 
 private:
     std::vector<std::vector<R_DATA>> m_luts

@@ -133,20 +133,14 @@ void COAX::showAnalyze()
 
     // Check for errors
     if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
-    {
         setErrorLevel( Z0_PRM, TRANSLINE_ERROR );
-    }
 
     if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
-    {
         setErrorLevel( ANG_L_PRM, TRANSLINE_ERROR );
-    }
 
     // Find warnings to display - physical parameters
     if( !std::isfinite( m_parameters[PHYS_DIAM_IN_PRM] ) || m_parameters[PHYS_DIAM_IN_PRM] <= 0.0 )
-    {
         setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_WARNING );
-    }
 
     if( !std::isfinite( m_parameters[PHYS_DIAM_OUT_PRM] )
             || m_parameters[PHYS_DIAM_OUT_PRM] <= 0.0 )
@@ -161,9 +155,7 @@ void COAX::showAnalyze()
     }
 
     if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0.0 )
-    {
         setErrorLevel( PHYS_LEN_PRM, TRANSLINE_WARNING );
-    }
 }
 
 void COAX::showSynthesize()
@@ -172,6 +164,7 @@ void COAX::showSynthesize()
         setProperty( PHYS_DIAM_IN_PRM, m_parameters[PHYS_DIAM_IN_PRM] );
     else if( isSelected( PHYS_DIAM_OUT_PRM ) )
         setProperty( PHYS_DIAM_OUT_PRM, m_parameters[PHYS_DIAM_OUT_PRM] );
+
     setProperty( PHYS_LEN_PRM, m_parameters[PHYS_LEN_PRM] );
 
     // Check for errors
@@ -201,19 +194,14 @@ void COAX::showSynthesize()
     }
 
     if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0.0 )
-    {
         setErrorLevel( PHYS_LEN_PRM, TRANSLINE_ERROR );
-    }
+
     // Check for warnings
     if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
-    {
         setErrorLevel( Z0_PRM, TRANSLINE_WARNING );
-    }
 
     if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
-    {
         setErrorLevel( ANG_L_PRM, TRANSLINE_WARNING );
-    }
 }
 /*
  * show_results() - show results
@@ -234,8 +222,11 @@ void COAX::show_results()
     m_parameters[CUTOFF_FREQUENCY_PRM] =
             C0
             / ( M_PI * ( m_parameters[PHYS_DIAM_OUT_PRM] + m_parameters[MUR_PRM] ) / (double) n );
+
     if( m_parameters[CUTOFF_FREQUENCY_PRM] > m_parameters[FREQUENCY_PRM] )
+    {
         strcpy( text, "none" );
+    }
     else
     {
         strcpy( text, "H(1,1) " );
@@ -244,6 +235,7 @@ void COAX::show_results()
                 C0
                 / ( 2 * ( m_parameters[PHYS_DIAM_OUT_PRM] - m_parameters[MUR_PRM] )
                         / (double) ( m - 1 ) );
+
         while( ( m_parameters[CUTOFF_FREQUENCY_PRM] <= m_parameters[FREQUENCY_PRM] ) && ( m < 10 ) )
         {
             sprintf( txt, "H(n,%d) ", m );
@@ -261,10 +253,13 @@ void COAX::show_results()
     m_parameters[CUTOFF_FREQUENCY_PRM] =
             C0 / ( 2 * ( m_parameters[PHYS_DIAM_OUT_PRM] - m_parameters[MUR_PRM] ) / (double) m );
     if( m_parameters[CUTOFF_FREQUENCY_PRM] > m_parameters[FREQUENCY_PRM] )
+    {
         strcpy( text, "none" );
+    }
     else
     {
         strcpy( text, "" );
+
         while( ( m_parameters[CUTOFF_FREQUENCY_PRM] <= m_parameters[FREQUENCY_PRM] ) && ( m < 10 ) )
         {
             sprintf( txt, "E(n,%d) ", m );

@@ -54,9 +54,9 @@ bool PANEL_REGULATOR::ReadDataFile()
         return false;
 
     // Switch the locale to standard C (needed to read/write floating point numbers)
-    LOCALE_IO   toggle;
+    LOCALE_IO toggle;
 
-    PCB_CALCULATOR_DATAFILE * datafile = new PCB_CALCULATOR_DATAFILE( &m_RegulatorList );
+    PCB_CALCULATOR_DATAFILE* datafile = new PCB_CALCULATOR_DATAFILE( &m_RegulatorList );
 
    // dataReader dtor will close file
     FILE_LINE_READER dataReader( file, GetDataFilename() );
@@ -92,7 +92,7 @@ bool PANEL_REGULATOR::ReadDataFile()
 bool PANEL_REGULATOR::WriteDataFile()
 {
     // Switch the locale to standard C (needed to read/write floating point numbers)
-    LOCALE_IO   toggle;
+    LOCALE_IO toggle;
 
     auto datafile = std::make_unique<PCB_CALCULATOR_DATAFILE>( &m_RegulatorList );
 
@@ -149,9 +149,8 @@ void PCB_CALCULATOR_DATAFILE::Format( OUTPUTFORMATTER* aFormatter,
     // Write regulators list:
     aFormatter->Print( aNestLevel++, "(%s\n", getTokenName( T_regulators ) );
 
-    for( unsigned ii = 0; ii < m_list->m_List.size(); ii++ )
+    for( REGULATOR_DATA* item : m_list->m_List )
     {
-        REGULATOR_DATA * item = m_list->m_List[ii];
         aFormatter->Print( aNestLevel, "(%s %s\n", getTokenName( T_regulator ),
                            aFormatter->Quotew(item->m_Name ).c_str() );
         aFormatter->Print( aNestLevel+1, "(%s %g)\n", getTokenName( T_reg_vref ),

@@ -66,7 +66,7 @@ public:
      * @return the scaling factor to convert users units
      * to normalized units (meter)
      */
-    virtual double GetUnitScale() override;
+    double GetUnitScale() override;
 };
 
 class UNIT_SELECTOR_THICKNESS: public UNIT_SELECTOR
@@ -81,7 +81,7 @@ public:
      * @return the scaling factor to convert users units
      * to normalized units (meter) including oz/ft^2
      */
-    virtual double GetUnitScale() override;
+    double GetUnitScale() override;
 };
 
 class UNIT_SELECTOR_FREQUENCY: public UNIT_SELECTOR
@@ -96,7 +96,7 @@ public:
      * @return the scaling factor to convert users units
      * to normalized units (Hz)
      */
-    virtual double GetUnitScale() override;
+    double GetUnitScale() override;
 };
 
 class UNIT_SELECTOR_ANGLE: public UNIT_SELECTOR
@@ -111,7 +111,7 @@ public:
      * @return the scaling factor to convert users units
      * to normalized units (Hz)
      */
-    virtual double GetUnitScale() override;
+    double GetUnitScale() override;
 };
 
 class UNIT_SELECTOR_RESISTOR: public UNIT_SELECTOR
@@ -126,7 +126,7 @@ public:
      * @return the scaling factor to convert users units
      * to normalized units (Hz)
      */
-    virtual double GetUnitScale() override;
+    double GetUnitScale() override;
 };
 
 #endif  // UNIT_SELECTOR_H

@@ -109,6 +109,7 @@ double RECTWAVEGUIDE::alphac()
         for( m = 1; m <= mmax; m++ )
         {
             f_c = fc( m, n );
+
             if( *f > f_c )
             {
                 switch( n )
@@ -139,6 +140,7 @@ double RECTWAVEGUIDE::alphac()
         for( m = 1; m <= mmax; m++ )
         {
             f_c = fc( m, n );
+
             if( *f > f_c )
             {
                 ac += ( ( 2. * Rs ) / ( *b * ZF0 * sqrt( 1.0 - pow( ( f_c / *f ), 2.0 ) ) ) )
@@ -386,7 +388,9 @@ void RECTWAVEGUIDE::show_results()
 
     // show possible TE modes (H modes)
     if( m_parameters[FREQUENCY_PRM] < fc( 1, 0 ) )
+    {
         strcpy( text, "none" );
+    }
     else
     {
         strcpy( text, "" );
@@ -396,11 +400,14 @@ void RECTWAVEGUIDE::show_results()
             {
                 if( ( m == 0 ) && ( n == 0 ) )
                     continue;
+
                 if( m_parameters[FREQUENCY_PRM] >= ( fc( m, n ) ) )
                 {
                     sprintf( txt, "H(%d,%d) ", m, n );
                     if( ( strlen( text ) + strlen( txt ) + 5 ) < MAXSTRLEN )
+                    {
                         strcat( text, txt );
+                    }
                     else
                     {
                         strcat( text, "..." );
@@ -414,7 +421,9 @@ void RECTWAVEGUIDE::show_results()
 
     // show possible TM modes (E modes)
     if( m_parameters[FREQUENCY_PRM] < fc( 1, 1 ) )
+    {
         strcpy( text, "none" );
+    }
     else
     {
         strcpy( text, "" );
@@ -426,7 +435,9 @@ void RECTWAVEGUIDE::show_results()
                 {
                     sprintf( txt, "E(%d,%d) ", m, n );
                     if( ( strlen( text ) + strlen( txt ) + 5 ) < MAXSTRLEN )
+                    {
                         strcat( text, txt );
+                    }
                     else
                     {
                         strcat( text, "..." );

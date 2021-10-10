@@ -70,6 +70,7 @@ void TWISTEDPAIR::calcAnalyze()
 
     double tw = atan( m_parameters[TWISTEDPAIR_TWIST_PRM] * M_PI
                       * m_parameters[PHYS_DIAM_OUT_PRM] ); // pitch angle
+
     m_parameters[EPSILON_EFF_PRM] =
             m_parameters[TWISTEDPAIR_EPSILONR_ENV_PRM]
             + ( 0.25 + 0.0007 * tw * tw )
@@ -111,20 +112,14 @@ void TWISTEDPAIR::showAnalyze()
 
     // Check for errors
     if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
-    {
         setErrorLevel( Z0_PRM, TRANSLINE_ERROR );
-    }
 
     if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
-    {
         setErrorLevel( ANG_L_PRM, TRANSLINE_ERROR );
-    }
 
     // Find warnings to display - physical parameters
     if( !std::isfinite( m_parameters[PHYS_DIAM_IN_PRM] ) || m_parameters[PHYS_DIAM_IN_PRM] <= 0.0 )
-    {
         setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_WARNING );
-    }
 
     if( !std::isfinite( m_parameters[PHYS_DIAM_OUT_PRM] )
             || m_parameters[PHYS_DIAM_OUT_PRM] <= 0.0 )
@@ -139,9 +134,7 @@ void TWISTEDPAIR::showAnalyze()
     }
 
     if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0.0 )
-    {
         setErrorLevel( PHYS_LEN_PRM, TRANSLINE_WARNING );
-    }
 }
 
 void TWISTEDPAIR::showSynthesize()
@@ -150,6 +143,7 @@ void TWISTEDPAIR::showSynthesize()
         setProperty( PHYS_DIAM_IN_PRM, m_parameters[PHYS_DIAM_IN_PRM] );
     else if( isSelected( PHYS_DIAM_OUT_PRM ) )
         setProperty( PHYS_DIAM_OUT_PRM, m_parameters[PHYS_DIAM_OUT_PRM] );
+
     setProperty( PHYS_LEN_PRM, m_parameters[PHYS_LEN_PRM] );
 
     // Check for errors
@@ -179,19 +173,14 @@ void TWISTEDPAIR::showSynthesize()
     }
 
     if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0.0 )
-    {
         setErrorLevel( PHYS_LEN_PRM, TRANSLINE_ERROR );
-    }
+
     // Check for warnings
     if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
-    {
         setErrorLevel( Z0_PRM, TRANSLINE_WARNING );
-    }
 
     if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
-    {
         setErrorLevel( ANG_L_PRM, TRANSLINE_WARNING );
-    }
 }
 
 

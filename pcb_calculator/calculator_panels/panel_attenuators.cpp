@@ -66,8 +66,8 @@ PANEL_ATTENUATORS::PANEL_ATTENUATORS( wxWindow* parent, wxWindowID id,
 
 PANEL_ATTENUATORS::~PANEL_ATTENUATORS()
 {
-    for( unsigned ii = 0; ii < m_AttenuatorList.size(); ii++ )
-        delete m_AttenuatorList[ii];
+    for( ATTENUATOR* attenuator : m_AttenuatorList )
+        delete attenuator;
 }
 
 
@@ -116,8 +116,8 @@ void PANEL_ATTENUATORS::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 
     aCfg->m_Attenuators.type = m_AttenuatorsSelection->GetSelection();
 
-    for( unsigned ii = 0; ii < m_AttenuatorList.size(); ii++ )
-        m_AttenuatorList[ii]->WriteConfig();
+    for( ATTENUATOR* attenuator : m_AttenuatorList )
+        attenuator->WriteConfig();
 }
 
 
@@ -224,6 +224,7 @@ void PANEL_ATTENUATORS::TransfAttenuatorResultsToPanel()
         msg = wxT( "--" );
         m_Att_R1_Value->SetValue( msg );
         m_Att_R2_Value->SetValue( msg );
+
         if( m_CurrAttenuator->m_ResultCount  >= 3 )
             m_Att_R3_Value->SetValue( msg );
 

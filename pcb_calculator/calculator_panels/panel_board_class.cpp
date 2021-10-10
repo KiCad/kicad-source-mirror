@@ -66,7 +66,7 @@ void PANEL_BOARD_CLASS::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 class BOARD_MIN_SIZE_VALUES
 {
 public:
-    int m_Class;                    // Class Id
+    int    m_Class;                 // Class Id
     double m_Lines;                 // min copper lines width
     double m_Clearance;             // min dist between copper lines
     double m_ViaDiamDiff;           // Min value for diff between Via diameter
@@ -76,16 +76,15 @@ public:
     double m_PadDiamDiffNotPlated;  // Min value for diff between Pad diameter
                                     // and its hole diameter (not plated)
 public:
-    BOARD_MIN_SIZE_VALUES( int aClass, double aLines,
-                    double aClearance, double aViaDiffPlated,
-                    double aPadDiffPlated , double aPadDiffNotPlated )
+    BOARD_MIN_SIZE_VALUES( int aClass, double aLines, double aClearance, double aViaDiffPlated,
+                           double aPadDiffPlated , double aPadDiffNotPlated ) :
+            m_Class( aClass ),
+            m_Lines( aLines ),
+            m_Clearance( aClearance ),
+            m_ViaDiamDiff( aViaDiffPlated ),
+            m_PadDiamDiffPlated( aPadDiffPlated ),
+            m_PadDiamDiffNotPlated( aPadDiffNotPlated )
     {
-        m_Class = aClass;
-        m_Lines = aLines;
-        m_Clearance = aClearance;
-        m_ViaDiamDiff = aViaDiffPlated;
-        m_PadDiamDiffPlated = aPadDiffPlated;
-        m_PadDiamDiffNotPlated = aPadDiffNotPlated;
     }
 };
 
@@ -130,6 +129,7 @@ void PANEL_BOARD_CLASS::BoardClassesUpdateData( double aUnitScale )
     wxString txt;
     #define FMT wxT("%g")
     #define NO_VALUE wxT("--")
+
     for( int ii = 0; ii < BRDCLASS_COUNT; ii ++ )
     {
         // Display min tracks width
@@ -144,6 +144,7 @@ void PANEL_BOARD_CLASS::BoardClassesUpdateData( double aUnitScale )
             txt.Printf( FMT, clist[ii].m_Clearance / aUnitScale);
         else
             txt = NO_VALUE;
+
         m_gridClassesValuesDisplay->SetCellValue(1, ii, txt );
 
         // Display min Via diam diff
@@ -151,6 +152,7 @@ void PANEL_BOARD_CLASS::BoardClassesUpdateData( double aUnitScale )
             txt.Printf( FMT, clist[ii].m_ViaDiamDiff / aUnitScale);
         else
             txt = NO_VALUE;
+
         m_gridClassesValuesDisplay->SetCellValue(2, ii, txt );
 
         // Display min Pad diam diff (plated)
@@ -158,6 +160,7 @@ void PANEL_BOARD_CLASS::BoardClassesUpdateData( double aUnitScale )
             txt.Printf( FMT, clist[ii].m_PadDiamDiffPlated / aUnitScale);
         else
             txt = NO_VALUE;
+
         m_gridClassesValuesDisplay->SetCellValue(3, ii, txt );
 
         // Display min Pad diam diff (non plated)
@@ -165,6 +168,7 @@ void PANEL_BOARD_CLASS::BoardClassesUpdateData( double aUnitScale )
             txt.Printf( FMT, clist[ii].m_PadDiamDiffNotPlated / aUnitScale);
         else
             txt = NO_VALUE;
+
         m_gridClassesValuesDisplay->SetCellValue(4, ii, txt );
     }
 }

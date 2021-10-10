@@ -217,13 +217,9 @@ double C_MICROSTRIP::delta_q_cover_even( double h2h )
     double q_c;
 
     if( h2h <= 39 )
-    {
         q_c = tanh( 1.626 + 0.107 * h2h - 1.733 / sqrt( h2h ) );
-    }
     else
-    {
         q_c = 1.0;
-    }
 
     return q_c;
 }
@@ -238,13 +234,9 @@ double C_MICROSTRIP::delta_q_cover_odd( double h2h )
     double q_c;
 
     if( h2h <= 7 )
-    {
         q_c = tanh( 9.575 / ( 7.0 - h2h ) - 2.965 + 1.68 * h2h - 0.311 * h2h * h2h );
-    }
     else
-    {
         q_c = 1.0;
-    }
 
     return q_c;
 }
@@ -351,22 +343,17 @@ double C_MICROSTRIP::delta_Z0_odd_cover( double g, double u, double h2h )
     f_o = pow( u, J );
 
     G = 2.178 - 0.796 * g;
+
     if( g > 0.858 )
-    {
         K = log10( 20.492 * pow( g, 0.174 ) );
-    }
     else
-    {
         K = 1.30;
-    }
+
     if( g > 0.873 )
-    {
         L = 2.51 * pow( g, -0.462 );
-    }
     else
-    {
         L = 2.674;
-    }
+
     g_o = 270.0 * ( 1.0 - tanh( G + K * sqrt( 1.0 + h2h ) - L / ( 1.0 + h2h ) ) );
 
     delta_Z0_odd = f_o * g_o;
@@ -404,9 +391,9 @@ void C_MICROSTRIP::Z0_even_odd()
     Q_1    = 0.8695 * pow( u_t_e, 0.194 );
     Q_2    = 1.0 + 0.7519 * g + 0.189 * pow( g, 2.31 );
     Q_3    = 0.1975 + pow( ( 16.6 + pow( ( 8.4 / g ), 6.0 ) ), -0.387 )
-          + log( pow( g, 10.0 ) / ( 1.0 + pow( g / 3.4, 10.0 ) ) ) / 241.0;
-    Q_4 = 2.0 * Q_1
-          / ( Q_2 * ( exp( -g ) * pow( u_t_e, Q_3 ) + ( 2.0 - exp( -g ) ) * pow( u_t_e, -Q_3 ) ) );
+             + log( pow( g, 10.0 ) / ( 1.0 + pow( g / 3.4, 10.0 ) ) ) / 241.0;
+    Q_4    = 2.0 * Q_1
+             / ( Q_2 * ( exp( -g ) * pow( u_t_e, Q_3 ) + ( 2.0 - exp( -g ) ) * pow( u_t_e, -Q_3 ) ) );
     /* static even-mode impedance */
     Z0_e_0 = Z0_single * sqrt( er_eff_single / er_eff )
              / ( 1.0 - sqrt( er_eff_single ) * Q_4 * Z0_single / ZF0 );
@@ -419,11 +406,11 @@ void C_MICROSTRIP::Z0_even_odd()
     er_eff = er_eff_o_0;
     Q_5    = 1.794 + 1.14 * log( 1.0 + 0.638 / ( g + 0.517 * pow( g, 2.43 ) ) );
     Q_6    = 0.2305 + log( pow( g, 10.0 ) / ( 1.0 + pow( g / 5.8, 10.0 ) ) ) / 281.3
-          + log( 1.0 + 0.598 * pow( g, 1.154 ) ) / 5.1;
-    Q_7  = ( 10.0 + 190.0 * g * g ) / ( 1.0 + 82.3 * g * g * g );
-    Q_8  = exp( -6.5 - 0.95 * log( g ) - pow( g / 0.15, 5.0 ) );
-    Q_9  = log( Q_7 ) * ( Q_8 + 1.0 / 16.5 );
-    Q_10 = ( Q_2 * Q_4 - Q_5 * exp( log( u_t_o ) * Q_6 * pow( u_t_o, -Q_9 ) ) ) / Q_2;
+             + log( 1.0 + 0.598 * pow( g, 1.154 ) ) / 5.1;
+    Q_7    = ( 10.0 + 190.0 * g * g ) / ( 1.0 + 82.3 * g * g * g );
+    Q_8    = exp( -6.5 - 0.95 * log( g ) - pow( g / 0.15, 5.0 ) );
+    Q_9    = log( Q_7 ) * ( Q_8 + 1.0 / 16.5 );
+    Q_10   = ( Q_2 * Q_4 - Q_5 * exp( log( u_t_o ) * Q_6 * pow( u_t_o, -Q_9 ) ) ) / Q_2;
 
     /* static odd-mode impedance */
     Z0_o_0 = Z0_single * sqrt( er_eff_single / er_eff )
@@ -453,14 +440,14 @@ void C_MICROSTRIP::er_eff_freq()
 
     er_eff = er_eff_e_0;
     P_1    = 0.27488 + ( 0.6315 + 0.525 / pow( 1.0 + 0.0157 * f_n, 20.0 ) ) * u
-          - 0.065683 * exp( -8.7513 * u );
-    P_2 = 0.33622 * ( 1.0 - exp( -0.03442 * m_parameters[EPSILONR_PRM] ) );
-    P_3 = 0.0363 * exp( -4.6 * u ) * ( 1.0 - exp( -pow( f_n / 38.7, 4.97 ) ) );
-    P_4 = 1.0 + 2.751 * ( 1.0 - exp( -pow( m_parameters[EPSILONR_PRM] / 15.916, 8.0 ) ) );
-    P_5 = 0.334 * exp( -3.3 * pow( m_parameters[EPSILONR_PRM] / 15.0, 3.0 ) ) + 0.746;
-    P_6 = P_5 * exp( -pow( f_n / 18.0, 0.368 ) );
-    P_7 = 1.0
-          + 4.069 * P_6 * pow( g, 0.479 ) * exp( -1.347 * pow( g, 0.595 ) - 0.17 * pow( g, 2.5 ) );
+             - 0.065683 * exp( -8.7513 * u );
+    P_2    = 0.33622 * ( 1.0 - exp( -0.03442 * m_parameters[EPSILONR_PRM] ) );
+    P_3    = 0.0363 * exp( -4.6 * u ) * ( 1.0 - exp( -pow( f_n / 38.7, 4.97 ) ) );
+    P_4    = 1.0 + 2.751 * ( 1.0 - exp( -pow( m_parameters[EPSILONR_PRM] / 15.916, 8.0 ) ) );
+    P_5    = 0.334 * exp( -3.3 * pow( m_parameters[EPSILONR_PRM] / 15.0, 3.0 ) ) + 0.746;
+    P_6    = P_5 * exp( -pow( f_n / 18.0, 0.368 ) );
+    P_7    = 1.0
+             + 4.069 * P_6 * pow( g, 0.479 ) * exp( -1.347 * pow( g, 0.595 ) - 0.17 * pow( g, 2.5 ) );
 
     F_e = P_1 * P_2 * pow( ( P_3 * P_4 + 0.1844 * P_7 ) * f_n, 1.5763 );
     /* even-mode effective dielectric constant */
@@ -469,14 +456,14 @@ void C_MICROSTRIP::er_eff_freq()
     er_eff = er_eff_o_0;
     P_8    = 0.7168 * ( 1.0 + 1.076 / ( 1.0 + 0.0576 * ( m_parameters[EPSILONR_PRM] - 1.0 ) ) );
     P_9    = P_8
-          - 0.7913 * ( 1.0 - exp( -pow( f_n / 20.0, 1.424 ) ) )
+             - 0.7913 * ( 1.0 - exp( -pow( f_n / 20.0, 1.424 ) ) )
                     * atan( 2.481 * pow( m_parameters[EPSILONR_PRM] / 8.0, 0.946 ) );
-    P_10 = 0.242 * pow( m_parameters[EPSILONR_PRM] - 1.0, 0.55 );
-    P_11 = 0.6366 * ( exp( -0.3401 * f_n ) - 1.0 ) * atan( 1.263 * pow( u / 3.0, 1.629 ) );
-    P_12 = P_9 + ( 1.0 - P_9 ) / ( 1.0 + 1.183 * pow( u, 1.376 ) );
-    P_13 = 1.695 * P_10 / ( 0.414 + 1.605 * P_10 );
-    P_14 = 0.8928 + 0.1072 * ( 1.0 - exp( -0.42 * pow( f_n / 20.0, 3.215 ) ) );
-    P_15 = fabs( 1.0 - 0.8928 * ( 1.0 + P_11 ) * P_12 * exp( -P_13 * pow( g, 1.092 ) ) / P_14 );
+    P_10   = 0.242 * pow( m_parameters[EPSILONR_PRM] - 1.0, 0.55 );
+    P_11   = 0.6366 * ( exp( -0.3401 * f_n ) - 1.0 ) * atan( 1.263 * pow( u / 3.0, 1.629 ) );
+    P_12   = P_9 + ( 1.0 - P_9 ) / ( 1.0 + 1.183 * pow( u, 1.376 ) );
+    P_13   = 1.695 * P_10 / ( 0.414 + 1.605 * P_10 );
+    P_14   = 0.8928 + 0.1072 * ( 1.0 - exp( -0.42 * pow( f_n / 20.0, 3.215 ) ) );
+    P_15   = fabs( 1.0 - 0.8928 * ( 1.0 + P_11 ) * P_12 * exp( -P_13 * pow( g, 1.092 ) ) / P_14 );
 
     F_o = P_1 * P_2 * pow( ( P_3 * P_4 + 0.1844 ) * f_n * P_15, 1.5763 );
     /* odd-mode effective dielectric constant */
@@ -605,8 +592,8 @@ void C_MICROSTRIP::diff_impedance()
 }
 
 
-void C_MICROSTRIP::syn_err_fun(
-        double* f1, double* f2, double s_h, double w_h, double e_r, double w_h_se, double w_h_so )
+void C_MICROSTRIP::syn_err_fun( double* f1, double* f2, double s_h, double w_h, double e_r,
+                                double w_h_se, double w_h_so )
 {
     double g, he;
 
@@ -617,13 +604,9 @@ void C_MICROSTRIP::syn_err_fun(
     *f2 = ( 2.0 / M_PI ) * acosh( ( 2.0 * he - g - 1.0 ) / ( g - 1.0 ) );
 
     if( e_r <= 6.0 )
-    {
         *f2 += ( 4.0 / ( M_PI * ( 1.0 + e_r / 2.0 ) ) ) * acosh( 1.0 + 2.0 * w_h / s_h );
-    }
     else
-    {
         *f2 += ( 1.0 / M_PI ) * acosh( 1.0 + 2.0 * w_h / s_h );
-    }
 
     *f1 -= w_h_se;
     *f2 -= w_h_so;
