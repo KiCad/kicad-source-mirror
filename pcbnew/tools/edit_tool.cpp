@@ -2458,7 +2458,10 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
                                      _( "Selection copied" ),
                                      _( "Copy canceled" ),
                                      refPoint ) )
+            {
+                frame()->PopTool( tool );
                 return 0;
+            }
         }
         else
         {
