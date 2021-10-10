@@ -960,7 +960,7 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Rotation" ), wxString::Format( "%.4g", GetOrientationDegrees() ) );
 
-    msg.Printf( _( "Footprint: %s" ), m_fpid.Format().c_str() );
+    msg.Printf( _( "Footprint: %s" ), m_fpid.GetUniStringLibId() );
     msg2.Printf( _( "3D-Shape: %s" ), m_3D_Drawings.empty() ? _( "<none>" )
                                                             : m_3D_Drawings.front().m_Filename );
     aList.emplace_back( msg, msg2 );
