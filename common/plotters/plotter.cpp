@@ -138,19 +138,19 @@ double PLOTTER::userToDeviceSize( double size ) const
 
 double PLOTTER::GetDotMarkLenIU() const
 {
-    return userToDeviceSize( DOT_MARK_LEN( GetCurrentLineWidth() ) );
+    return userToDeviceSize( dot_mark_len( GetCurrentLineWidth() ) );
 }
 
 
 double PLOTTER::GetDashMarkLenIU() const
 {
-    return userToDeviceSize( DASH_MARK_LEN( GetCurrentLineWidth() ) );
+    return userToDeviceSize( dash_mark_len( GetCurrentLineWidth() ) );
 }
 
 
 double PLOTTER::GetDashGapLenIU() const
 {
-    return userToDeviceSize( DASH_GAP_LEN( GetCurrentLineWidth() ) );
+    return userToDeviceSize( dash_gap_len( GetCurrentLineWidth() ) );
 }
 
 

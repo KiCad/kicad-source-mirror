@@ -1075,13 +1075,19 @@ void CAIRO_GAL_BASE::flushPath()
                                m_fillColor.a );
 
         if( m_isStrokeEnabled )
+        {
+            cairo_set_line_width( m_currentContext, m_lineWidthInPixels );
             cairo_fill_preserve( m_currentContext );
+        }
         else
+        {
             cairo_fill( m_currentContext );
+        }
     }
 
     if( m_isStrokeEnabled )
     {
+        cairo_set_line_width( m_currentContext, m_lineWidthInPixels );
         cairo_set_source_rgba( m_currentContext, m_strokeColor.r, m_strokeColor.g, m_strokeColor.b,
                                m_strokeColor.a );
         cairo_stroke( m_currentContext );

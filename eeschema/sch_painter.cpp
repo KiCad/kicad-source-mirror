@@ -1305,20 +1305,20 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
         clip.Normalize();
 
         double theta = atan2( end.y - start.y, end.x - start.x );
-        double strokes[] = { 1.0, DASH_GAP_LEN( width ), 1.0, DASH_GAP_LEN( width ) };
+        double strokes[] = { 1.0, dash_gap_len( width ), 1.0, dash_gap_len( width ) };
 
         switch( lineStyle )
         {
         default:
         case PLOT_DASH_TYPE::DASH:
-            strokes[0] = strokes[2] = DASH_MARK_LEN( width );
+            strokes[0] = strokes[2] = dash_mark_len( width );
             break;
         case PLOT_DASH_TYPE::DOT:
-            strokes[0] = strokes[2] = DOT_MARK_LEN( width );
+            strokes[0] = strokes[2] = dot_mark_len( width );
             break;
         case PLOT_DASH_TYPE::DASHDOT:
-            strokes[0] = DASH_MARK_LEN( width );
-            strokes[2] = DOT_MARK_LEN( width );
+            strokes[0] = dash_mark_len( width );
+            strokes[2] = dot_mark_len( width );
             break;
         }
 
