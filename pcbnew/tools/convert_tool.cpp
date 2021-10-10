@@ -306,9 +306,9 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
         auto insert =
                 [&]( EDA_ITEM* aItem, VECTOR2I aAnchor, bool aDirection )
                 {
-                    if( aItem->Type() == PCB_ARC_T ||
-                        ( aItem->Type() == PCB_SHAPE_T &&
-                          static_cast<PCB_SHAPE*>( aItem )->GetShape() == SHAPE_T::ARC ) )
+                    if( aItem->Type() == PCB_ARC_T
+                        || ( ( aItem->Type() == PCB_SHAPE_T || aItem->Type() == PCB_FP_SHAPE_T )
+                             && static_cast<PCB_SHAPE*>( aItem )->GetShape() == SHAPE_T::ARC ) )
                     {
                         SHAPE_ARC arc;
 
@@ -376,9 +376,9 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
         // Start with the first object and walk "right"
         // Note if the first object is an arc, we don't need to insert its first point here, the
         // whole arc will be inserted at anchor B inside process()
-        if( !( candidate->Type() == PCB_ARC_T ||
-               ( candidate->Type() == PCB_SHAPE_T &&
-                 static_cast<PCB_SHAPE*>( candidate )->GetShape() == SHAPE_T::ARC ) ) )
+        if( !( candidate->Type() == PCB_ARC_T
+               || ( ( candidate->Type() == PCB_SHAPE_T || candidate->Type() == PCB_FP_SHAPE_T )
+                    && static_cast<PCB_SHAPE*>( candidate )->GetShape() == SHAPE_T::ARC ) ) )
         {
             insert( candidate, anchors->A, true );
         }
