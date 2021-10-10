@@ -60,7 +60,7 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         m_unconnectedTreeModel( nullptr ),
         m_footprintWarningsProvider( nullptr ),
         m_footprintWarningsTreeModel( nullptr ),
-        m_centerMarkerOnIdle(nullptr),
+        m_centerMarkerOnIdle( nullptr ),
         m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
     SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
