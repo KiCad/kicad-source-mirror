@@ -401,18 +401,21 @@ void EDA_3D_MODEL_VIEWER::OnMagnify( wxMouseEvent& event )
 
 void EDA_3D_MODEL_VIEWER::OnMouseMove( wxMouseEvent& event )
 {
-    m_trackBallCamera.SetCurWindowSize( GetNativePixelSize() );
+    const wxSize&  nativeWinSize  = GetNativePixelSize();
+    const wxPoint& nativePosition = GetNativePosition( event.GetPosition() );
+
+    m_trackBallCamera.SetCurWindowSize( nativeWinSize );
 
     if( event.Dragging() )
     {
         if( event.LeftIsDown() )            // Drag
-            m_trackBallCamera.Drag( event.GetPosition() );
+            m_trackBallCamera.Drag( nativePosition );
 
         // orientation has changed, redraw mesh
         Refresh( false );
     }
 
-    m_trackBallCamera.SetCurMousePosition( event.GetPosition() );
+    m_trackBallCamera.SetCurMousePosition( nativePosition );
 }
 
 

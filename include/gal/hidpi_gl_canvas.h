@@ -47,6 +47,11 @@ public:
     virtual wxSize GetNativePixelSize() const;
 
     /**
+     * Convert the given point from client coordinates to native pixel coordinates.
+     */
+    wxPoint GetNativePosition( const wxPoint& aPoint ) const;
+
+    /**
      * Set the canvas scale factor, probably for a hi-DPI display.
      */
     void SetScaleFactor( double aFactor );

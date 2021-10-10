@@ -50,6 +50,18 @@ wxSize HIDPI_GL_CANVAS::GetNativePixelSize() const
 }
 
 
+wxPoint HIDPI_GL_CANVAS::GetNativePosition( const wxPoint& aPoint ) const
+{
+    wxPoint nativePoint = aPoint;
+
+    const double scaleFactor = GetScaleFactor();
+    nativePoint.x *= scaleFactor;
+    nativePoint.y *= scaleFactor;
+
+    return nativePoint;
+}
+
+
 void HIDPI_GL_CANVAS::SetScaleFactor( double aNewScaleFactor )
 {
     m_scale_factor = aNewScaleFactor;

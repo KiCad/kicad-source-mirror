@@ -638,7 +638,7 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
     }
 
     // Update the cursor current mouse position on the camera
-    m_camera.SetCurMousePosition( event.GetPosition() );
+    m_camera.SetCurMousePosition( GetNativePosition( event.GetPosition() ) );
 }
 
 
@@ -670,14 +670,17 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
     if( m_camera_is_moving )
         return;
 
-    m_camera.SetCurWindowSize( GetNativePixelSize() );
+    const wxSize&  nativeWinSize  = GetNativePixelSize();
+    const wxPoint& nativePosition = GetNativePosition( event.GetPosition() );
+
+    m_camera.SetCurWindowSize( nativeWinSize );
 
     if( event.Dragging() )
     {
         if( event.LeftIsDown() )            // Drag
-            m_camera.Drag( event.GetPosition() );
+            m_camera.Drag( nativePosition );
         else if( event.MiddleIsDown() )     // Pan
-            m_camera.Pan( event.GetPosition() );
+            m_camera.Pan( nativePosition );
 
         m_mouse_is_moving = true;
         m_mouse_was_moved = true;
@@ -687,8 +690,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
         Request_refresh();
     }
 
-    const wxPoint eventPosition = event.GetPosition();
-    m_camera.SetCurMousePosition( eventPosition );
+    m_camera.SetCurMousePosition( nativePosition );
 
     if( !event.Dragging() &&
         ( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY ) )
