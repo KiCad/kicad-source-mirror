@@ -505,9 +505,6 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     m_modified = false;
     m_width = 0;
 
-    // Rigs the wxGrid to highlight the active column properly on Windows on keyboard nav
-    m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
     // Connect Events
     m_grid->Connect( wxEVT_GRID_COL_SORT,
                      wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr, this );
