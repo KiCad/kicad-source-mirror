@@ -40,6 +40,7 @@
 #include <settings/settings_manager.h>
 #include <widgets/infobar.h>
 #include <eda_3d_viewer_settings.h>
+#include <board_design_settings.h>
 
 PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAME* aFrame,
                                                 FOOTPRINT* aFootprint,
@@ -80,7 +81,8 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     {
         m_spinXscale, m_spinYscale, m_spinZscale,
         m_spinXrot, m_spinYrot, m_spinZrot,
-        m_spinXoffset,m_spinYoffset, m_spinZoffset
+        m_spinXoffset,m_spinYoffset, m_spinZoffset,
+        m_spinBoardThickness
     };
 
     for( wxSpinButton* button : spinButtonList )
@@ -129,6 +131,10 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
         Connect( eventType, wxMenuEventHandler( PANEL_PREVIEW_3D_MODEL::OnMenuEvent ), nullptr,
                  this );
     }
+
+    // load initial board thickness value
+    boardthickness->ChangeValue( formatBoardThicknessValue(
+            Iu2Millimeter( m_dummyBoard->GetDesignSettings().GetBoardThickness() ) ) );
 
 #ifdef __WXOSX__
     // Call layout once to get the proper button sizes after the bitmaps have been set
@@ -268,6 +274,15 @@ wxString PANEL_PREVIEW_3D_MODEL::formatOffsetValue( double aValue )
                              EDA_UNIT_UTILS::GetText( m_userUnits ) );
 }
 
+wxString PANEL_PREVIEW_3D_MODEL::formatBoardThicknessValue( double aValue )
+{
+    // Convert from internal units (mm) to user units
+    if( m_userUnits == EDA_UNITS::INCHES )
+        aValue /= 25.4f;
+
+    return wxString::Format( "%.2f %s", aValue, GetAbbreviatedUnitsLabel( m_userUnits ) );
+}
+
 
 void PANEL_PREVIEW_3D_MODEL::SetSelectedModel( int idx )
 {
@@ -361,6 +376,15 @@ void PANEL_PREVIEW_3D_MODEL::onOpacitySlider( wxCommandEvent& event )
     }
 }
 
+void PANEL_PREVIEW_3D_MODEL::updateBoardThickness( wxCommandEvent& event )
+{
+    m_boardAdapter.GetBoard()->GetDesignSettings().SetBoardThickness(
+            ValueFromString( m_userUnits, boardthickness->GetValue() ) );
+
+    m_previewPane->ReloadRequest();
+    m_previewPane->Request_refresh();
+}
+
 
 void PANEL_PREVIEW_3D_MODEL::doIncrementScale( wxSpinEvent& event, double aSign )
 {
@@ -432,6 +456,25 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementOffset( wxSpinEvent& event, double aSign
     textCtrl->SetValue( formatOffsetValue( curr_value_mm ) );
 }
 
+
+void PANEL_PREVIEW_3D_MODEL::doIncrementBoardThickness( wxSpinEvent& aEvent, double aSign )
+{
+    wxSpinButton* spinCtrl = (wxSpinButton*) aEvent.GetEventObject();
+    wxTextCtrl*   textCtrl = boardthickness;
+
+    double step = BOARD_THICKNESS_INCREMENT_MM;
+
+    if( m_userUnits == EDA_UNITS::INCHES )
+        step = BOARD_THICKNESS_INCREMENT_MIL / 1000.0;
+
+    double curr_value = DoubleValueFromString( m_userUnits, textCtrl->GetValue() ) / IU_PER_MM;
+
+    curr_value += ( step * aSign );
+    curr_value = std::max( 0.0, curr_value );
+    curr_value = std::min( curr_value, MAX_BOARD_THICKNESS );
+
+    textCtrl->SetValue( formatBoardThicknessValue( curr_value ) );
+}
 
 void PANEL_PREVIEW_3D_MODEL::onMouseWheelScale( wxMouseEvent& event )
 {
@@ -508,6 +551,33 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelOffset( wxMouseEvent& event )
     curr_value_mm = std::min( curr_value_mm, MAX_OFFSET );
 
     textCtrl->SetValue( formatOffsetValue( curr_value_mm ) );
+}
+
+void PANEL_PREVIEW_3D_MODEL::onMouseWheelBoardThickness( wxMouseEvent& event )
+{
+    wxTextCtrl* textCtrl = (wxTextCtrl*) event.GetEventObject();
+
+    double step = BOARD_THICKNESS_INCREMENT_MM;
+
+    if( event.ShiftDown( ))
+        step = BOARD_THICKNESS_INCREMENT_MM_FINE;
+
+    if(m_userUnits==EDA_UNITS::INCHES)
+    {
+        step = BOARD_THICKNESS_INCREMENT_MIL/1000.0;
+
+        if(event.ShiftDown())
+            step = BOARD_THICKNESS_INCREMENT_MIL_FINE/1000.0;
+    }
+
+    if (event.GetWheelRotation()>=0)
+        step = -step;
+
+    double curr_value = DoubleValueFromString(m_userUnits, textCtrl->GetValue()) / IU_PER_MM;
+
+    curr_value += step;
+    curr_value = std::max( 0.0, curr_value );
+    curr_value = std::min( curr_value, MAX_BOARD_THICKNESS );
 }
 
 

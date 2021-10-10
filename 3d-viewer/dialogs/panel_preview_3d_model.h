@@ -48,6 +48,7 @@
 #define MAX_SCALE          10000.0
 #define MAX_ROTATION       180.0
 #define MAX_OFFSET         1000.0
+#define MAX_BOARD_THICKNESS 100.0
 
 #define SCALE_INCREMENT_FINE       0.02
 #define SCALE_INCREMENT            0.1
@@ -61,6 +62,12 @@
 
 #define OFFSET_INCREMENT_MIL       25.0
 #define OFFSET_INCREMENT_MIL_FINE  5.0
+
+#define BOARD_THICKNESS_INCREMENT_MM 0.2
+#define BOARD_THICKNESS_INCREMENT_MM_FINE 0.05
+
+#define BOARD_THICKNESS_INCREMENT_MIL 10.0
+#define BOARD_THICKNESS_INCREMENT_MIL_FINE 2.0
 
 
 // Declared classes to create pointers
@@ -116,6 +123,7 @@ private:
 	void onMouseWheelScale( wxMouseEvent& event ) override;
 	void onMouseWheelRot( wxMouseEvent& event ) override;
 	void onMouseWheelOffset( wxMouseEvent& event ) override;
+    void onMouseWheelBoardThickness( wxMouseEvent& event ) override;
 
 	void onIncrementRot( wxSpinEvent& event ) override
     {
@@ -141,16 +149,28 @@ private:
     {
         doIncrementOffset( event, -1.0 );
     }
+	void onIncrementBoardThickness( wxSpinEvent& event ) override
+    {
+        doIncrementBoardThickness( event, 1.0 );
+    }
+	void onDecrementBoardThickness( wxSpinEvent& event ) override
+    {
+        doIncrementBoardThickness( event, -1.0 );
+    }
 
     void onOpacitySlider( wxCommandEvent& event ) override;
+
+    void updateBoardThickness( wxCommandEvent& event ) override;
 
     void doIncrementScale( wxSpinEvent& aEvent, double aSign );
     void doIncrementRotation( wxSpinEvent& aEvent, double aSign );
     void doIncrementOffset( wxSpinEvent& aEvent, double aSign );
+    void doIncrementBoardThickness( wxSpinEvent& aEvent, double aSign );
 
     wxString formatScaleValue( double aValue );
     wxString formatRotationValue( double aValue );
     wxString formatOffsetValue( double aValue );
+    wxString formatBoardThicknessValue( double aValue );
 
 	void View3DISO( wxCommandEvent& event ) override
     {
