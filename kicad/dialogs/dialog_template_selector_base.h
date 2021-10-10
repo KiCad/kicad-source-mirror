@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "html_window.h"
 #include "dialog_shim.h"
 #include <wx/gdicmn.h>
 #include <wx/notebook.h>
@@ -44,7 +45,7 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 
 	protected:
 		wxNotebook* m_notebook;
-		wxHtmlWindow* m_htmlWin;
+		HTML_WINDOW* m_htmlWin;
 		wxStaticText* m_staticTextTpath;
 		wxTextCtrl* m_tcTemplatePath;
 		wxBitmapButton* m_browseButton;

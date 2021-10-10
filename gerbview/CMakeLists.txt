@@ -10,6 +10,7 @@ include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     dialogs
     ${CMAKE_SOURCE_DIR}/common
+    ${CMAKE_SOURCE_DIR}/common/dialogs
     ${CMAKE_SOURCE_DIR}/3d-viewer
     ${INC_AFTER}
     )

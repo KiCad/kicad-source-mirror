@@ -80,20 +80,7 @@ HTML_MESSAGE_BOX::~HTML_MESSAGE_BOX()
 
 void HTML_MESSAGE_BOX::reload()
 {
-    // Handle light/dark mode colors...
-
-    wxTextCtrl dummy( m_host, wxID_ANY );
-    wxColour   foreground = dummy.GetForegroundColour();
-    wxColour   background = dummy.GetBackgroundColour();
-
-    m_htmlWindow->SetPage( wxString::Format( wxT( "<html>"
-                                                  "  <body bgcolor='%s' text='%s'>"
-                                                  "    %s"
-                                                  "  </body>"
-                                                  "</html>" ),
-                                             background.GetAsString( wxC2S_HTML_SYNTAX ),
-                                             foreground.GetAsString( wxC2S_HTML_SYNTAX ),
-                                             m_source ) );
+    m_htmlWindow->SetPage( m_source );
 }
 
 

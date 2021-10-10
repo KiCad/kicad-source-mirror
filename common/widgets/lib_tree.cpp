@@ -27,7 +27,6 @@
 #include <wxdataviewctrl_helpers.h>
 #include <wx/artprov.h>
 #include <wx/sizer.h>
-#include <wx/html/htmlwin.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
 #include <wx/srchctrl.h>
@@ -37,14 +36,12 @@
 
 
 LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
-                    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter,
-                    WIDGETS aWidgets, wxHtmlWindow* aDetails )
-    : wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-               wxWANTS_CHARS | wxTAB_TRAVERSAL | wxNO_BORDER ),
-      m_lib_table( aLibTable ),
-      m_adapter( aAdapter ),
-      m_query_ctrl( nullptr ),
-      m_details_ctrl( nullptr )
+                    wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter, WIDGETS aWidgets,
+                    HTML_WINDOW* aDetails ) :
+        wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                 wxWANTS_CHARS | wxTAB_TRAVERSAL | wxNO_BORDER ),
+        m_lib_table( aLibTable ), m_adapter( aAdapter ), m_query_ctrl( nullptr ),
+        m_details_ctrl( nullptr )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -101,9 +98,9 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
         {
             wxPoint html_size = ConvertDialogToPixels( wxPoint( 80, 80 ) );
 
-            m_details_ctrl = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition,
-                                               wxSize( html_size.x, html_size.y ),
-                                               wxHW_SCROLLBAR_AUTO );
+            m_details_ctrl =
+                    new HTML_WINDOW( this, wxID_ANY, wxDefaultPosition,
+                                     wxSize( html_size.x, html_size.y ), wxHW_SCROLLBAR_AUTO );
 
             sizer->Add( m_details_ctrl, 2, wxTOP | wxEXPAND, 5 );
         }
@@ -473,20 +470,10 @@ void LIB_TREE::onPreselect( wxCommandEvent& aEvent )
         int unit = 0;
         LIB_ID id = GetSelectedLibId( &unit );
 
-        wxString htmlColor = GetBackgroundColour().GetAsString( wxC2S_HTML_SYNTAX );
-        wxString textColor = GetForegroundColour().GetAsString( wxC2S_HTML_SYNTAX );
-        wxString linkColor = wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT )
-                                     .GetAsString( wxC2S_HTML_SYNTAX );
-
-        wxString html = wxString::Format( wxT( "<html><body bgcolor='%s' text='%s' link='%s'>" ),
-                                          htmlColor, textColor, linkColor );
-
         if( id.IsValid() )
-            html.Append( m_adapter->GenerateInfo( id, unit ) );
-
-        html.Append( wxT( "</body></html>" ) );
-
-        m_details_ctrl->SetPage( html );
+            m_details_ctrl->SetPage( m_adapter->GenerateInfo( id, unit ) );
+        else
+            m_details_ctrl->SetPage( wxEmptyString );
     }
 
     aEvent.Skip();

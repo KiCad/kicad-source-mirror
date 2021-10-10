@@ -27,13 +27,13 @@
 #include "dialog_shim.h"
 #include <symbol_tree_model_adapter.h>
 #include <footprint_info.h>
+#include <html_window.h>
 
 class wxCheckBox;
 class wxStaticBitmap;
 class wxTextCtrl;
 class wxStdDialogButtonSizer;
 class wxDataViewCtrl;
-class wxHtmlWindow;
 class wxHtmlLinkEvent;
 class wxPanel;
 class wxChoice;
@@ -214,7 +214,7 @@ protected:
     wxCheckBox*               m_keepSymbol;
     wxCheckBox*               m_useUnits;
     LIB_TREE*                 m_tree;
-    wxHtmlWindow*             m_details;
+    HTML_WINDOW*              m_details;
 
     SCH_BASE_FRAME*           m_parent;
     int                       m_deMorganConvert;

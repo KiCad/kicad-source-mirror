@@ -33,7 +33,6 @@ class wxStaticBitmap;
 class wxTextCtrl;
 class wxStdDialogButtonSizer;
 class wxDataViewCtrl;
-class wxHtmlWindow;
 class wxHtmlLinkEvent;
 class wxPanel;
 class wxChoice;

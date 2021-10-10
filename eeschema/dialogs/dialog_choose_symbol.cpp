@@ -104,8 +104,8 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
         wxBoxSizer* detailsSizer = new wxBoxSizer( wxVERTICAL );
         detailsPanel->SetSizer( detailsSizer );
 
-        m_details = new wxHtmlWindow( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                      wxHW_SCROLLBAR_AUTO );
+        m_details = new HTML_WINDOW( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                     wxHW_SCROLLBAR_AUTO );
         detailsSizer->Add( m_details, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
         detailsPanel->Layout();
         detailsSizer->Fit( detailsPanel );

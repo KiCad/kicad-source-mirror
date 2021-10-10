@@ -171,7 +171,7 @@
                         <property name="show">1</property>
                         <property name="size">-1,-1</property>
                         <property name="style">wxHW_SCROLLBAR_AUTO</property>
-                        <property name="subclass"></property>
+                        <property name="subclass">HTML_WINDOW; html_window.h; </property>
                         <property name="toolbar_pane">0</property>
                         <property name="tooltip"></property>
                         <property name="window_extra_style"></property>

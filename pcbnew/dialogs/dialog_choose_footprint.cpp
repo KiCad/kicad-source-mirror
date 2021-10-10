@@ -54,7 +54,7 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
           m_external_browser_requested( false )
 {
     auto          sizer = new wxBoxSizer( wxVERTICAL );
-    wxHtmlWindow* details = nullptr;
+    HTML_WINDOW*  details = nullptr;
 
     m_vsplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                         wxSP_LIVE_UPDATE );
@@ -69,8 +69,8 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
     auto detailsSizer = new wxBoxSizer( wxVERTICAL );
     detailsPanel->SetSizer( detailsSizer );
 
-    details = new wxHtmlWindow( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                wxHW_SCROLLBAR_AUTO );
+    details = new HTML_WINDOW( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                               wxHW_SCROLLBAR_AUTO );
     detailsSizer->Add( details, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
     detailsPanel->Layout();
     detailsSizer->Fit( detailsPanel );

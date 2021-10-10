@@ -392,34 +392,16 @@ void DIALOG_ABOUT::createNotebookHtmlPage( wxNotebook* aParent, const wxString& 
 
     wxBoxSizer* bSizer = new wxBoxSizer( wxVERTICAL );
 
-    wxString htmlPage = wxEmptyString, htmlContent = html;
-
-    // to have a unique look background color for HTML pages is set to the default as it is
-    // used for all the other widgets
-    wxString htmlColor = ( GetBackgroundColour() ).GetAsString( wxC2S_HTML_SYNTAX );
-    wxString textColor = GetForegroundColour().GetAsString( wxC2S_HTML_SYNTAX );
-    wxString linkColor =
-            wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT ).GetAsString( wxC2S_HTML_SYNTAX );
-
-    // beginning of HTML structure
-    htmlPage.Append( wxString::Format( wxT( "<html><body bgcolor='%s' text='%s' link='%s'>" ),
-                                       htmlColor, textColor, linkColor ) );
-
-    htmlPage.Append( htmlContent );
-
-    // end of HTML structure indicated by closing tags
-    htmlPage.Append( wxT( "</body></html>" ) );
-
     int flags = aSelection ? wxHW_SCROLLBAR_AUTO : ( wxHW_SCROLLBAR_AUTO | wxHW_NO_SELECTION );
 
     // the HTML page is going to be created with previously created HTML content
-    auto htmlWindow = new wxHtmlWindow( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, flags );
+    auto htmlWindow = new HTML_WINDOW( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, flags );
 
     // HTML font set to font properties as they are used for widgets to have an unique look
     // under different platforms with HTML
     wxFont font = GetFont();
     htmlWindow->SetStandardFonts( font.GetPointSize(), font.GetFaceName(), font.GetFaceName() );
-    htmlWindow->SetPage( htmlPage );
+    htmlWindow->SetPage( html );
 
     // the HTML window shall not be used to open external links, thus this task is delegated
     // to users default browser

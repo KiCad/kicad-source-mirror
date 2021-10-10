@@ -38,6 +38,7 @@ public:
                  const wxString& aName="htmlWindow" );
 
     bool SetPage( const wxString& aSource ) override;
+    bool AppendToPage( const wxString& aSource );
 
     /*
      * Notify the HTML window the theme has changed.
@@ -45,7 +46,7 @@ public:
     void ThemeChanged();
 
 private:
-    void onThemeChanged( wxSysColourChangedEvent &aEvent );
+    void onThemeChanged( wxSysColourChangedEvent& aEvent );
 
     wxString m_pageSource;
 };

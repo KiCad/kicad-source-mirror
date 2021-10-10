@@ -27,9 +27,8 @@
 
 WX_HTML_REPORT_BOX::WX_HTML_REPORT_BOX( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                                         const wxSize& size, long style ) :
-    wxHtmlWindow( parent, id, pos, size, style ),
-    m_units( EDA_UNITS::MILLIMETRES ),
-    m_immediateMode( false )
+        HTML_WINDOW( parent, id, pos, size, style ),
+        m_units( EDA_UNITS::MILLIMETRES ), m_immediateMode( false )
 {
     Flush();
 
@@ -69,26 +68,7 @@ void WX_HTML_REPORT_BOX::Flush()
     for( const wxString& line : m_messages )
         html += generateHtml( line );
 
-    SetPage( addHeader( html ) );
-}
-
-
-wxString WX_HTML_REPORT_BOX::addHeader( const wxString& aBody )
-{
-    // Handle light/dark mode colors...
-
-    wxTextCtrl dummy( GetParent(), wxID_ANY );
-    wxColour   foreground = dummy.GetForegroundColour();
-    wxColour   background = dummy.GetBackgroundColour();
-
-    return wxString::Format( wxT( "<html>"
-                                  "  <body bgcolor='%s' text='%s'>"
-                                  "    %s"
-                                  "  </body>"
-                                  "</html>" ),
-                             background.GetAsString( wxC2S_HTML_SYNTAX ),
-                             foreground.GetAsString( wxC2S_HTML_SYNTAX ),
-                             aBody );
+    SetPage( html );
 }
 
 

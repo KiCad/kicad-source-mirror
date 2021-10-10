@@ -55,23 +55,7 @@ public:
     ~DIALOG_DISPLAY_HTML_TEXT()
     { }
 
-    void SetPage( const wxString& message )
-    {
-        // Handle light/dark mode colors...
-
-        wxTextCtrl dummy( GetParent(), wxID_ANY );
-        wxColour   foreground = dummy.GetForegroundColour();
-        wxColour   background = dummy.GetBackgroundColour();
-
-        m_htmlWindow->SetPage( wxString::Format( wxT( "<html>"
-                                                      "  <body bgcolor='%s' text='%s'>"
-                                                      "    %s"
-                                                      "  </body>"
-                                                      "</html>" ),
-                                                 background.GetAsString( wxC2S_HTML_SYNTAX ),
-                                                 foreground.GetAsString( wxC2S_HTML_SYNTAX ),
-                                                 message ) );
-    }
+    void SetPage( const wxString& message ) { m_htmlWindow->SetPage( message ); }
 };
 
 
@@ -468,16 +452,10 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
     }
     else
     {
-        wxColour bgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
-        wxColour fgcolor = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
-        wxString outmsg = wxString::Format( "<html><body bgcolor='%s' text='%s'>",
-                                            bgcolor.GetAsString( wxC2S_HTML_SYNTAX ),
-                                            fgcolor.GetAsString( wxC2S_HTML_SYNTAX ) );
+        wxString outmsg;
 
         for( const wxString& single_msg : messages )
             outmsg += single_msg;
-
-        outmsg += "</body></html>";
 
         DIALOG_DISPLAY_HTML_TEXT error_display( m_frame, wxID_ANY, _( "Symbol Warnings" ),
                                                 wxDefaultPosition, wxSize( 700, 350 ) );

@@ -27,10 +27,10 @@
 
 #include <wx/panel.h>
 #include <lib_tree_model_adapter.h>
+#include <html_window.h>
 
 class wxDataViewCtrl;
 class wxTextCtrl;
-class wxHtmlWindow;
 class wxHtmlLinkEvent;
 class wxSearchCtrl;
 class wxTimer;
@@ -55,12 +55,12 @@ public:
      * @param aLibTable table containing libraries and items to display
      * @param aAdapter a LIB_TREE_MODEL_ADAPTER instance to use
      * @param aWidgets selection of sub-widgets to include
-     * @param aDetails if not null, a custom wxHtmlWindow to hold symbol details. If null this
+     * @param aDetails if not null, a custom HTML_WINDOW to hold symbol details. If null this
      *                 will be created inside the LIB_TREE.
      */
     LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
-              wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter,
-              WIDGETS aWidgets = ALL, wxHtmlWindow *aDetails = nullptr );
+              wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter, WIDGETS aWidgets = ALL,
+              HTML_WINDOW* aDetails = nullptr );
 
     ~LIB_TREE() override;
 
@@ -178,7 +178,7 @@ protected:
 
     wxSearchCtrl*    m_query_ctrl;
     wxDataViewCtrl*  m_tree_ctrl;
-    wxHtmlWindow*    m_details_ctrl;
+    HTML_WINDOW*     m_details_ctrl;
     wxTimer*         m_debounceTimer;
 
     LIB_ID           m_last_libid;

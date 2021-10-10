@@ -130,7 +130,7 @@ void WX_HTML_REPORT_PANEL::Flush( bool aSort )
     for( const auto& line : m_reportTail )
         html += generateHtml( line );
 
-    m_htmlView->SetPage( addHeader( html ) );
+    m_htmlView->SetPage( html );
     scrollToBottom();
 }
 
@@ -154,25 +154,6 @@ void WX_HTML_REPORT_PANEL::updateBadges()
 
     count = Count(RPT_SEVERITY_WARNING );
     m_warningsBadge->UpdateNumber( count, RPT_SEVERITY_WARNING );
-}
-
-
-wxString WX_HTML_REPORT_PANEL::addHeader( const wxString& aBody )
-{
-    // Handle light/dark mode colors...
-
-    wxTextCtrl dummy( GetParent(), wxID_ANY );
-    wxColour   foreground = dummy.GetForegroundColour();
-    wxColour   background = dummy.GetBackgroundColour();
-
-    return wxString::Format( wxT( "<html>"
-                                  "  <body bgcolor='%s' text='%s'>"
-                                  "    %s"
-                                  "  </body>"
-                                  "</html>" ),
-                             background.GetAsString( wxC2S_HTML_SYNTAX ),
-                             foreground.GetAsString( wxC2S_HTML_SYNTAX ),
-                             aBody );
 }
 
 

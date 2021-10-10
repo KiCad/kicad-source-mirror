@@ -22,13 +22,13 @@
 
 #include <reporter.h>
 #include <vector>
-#include <wx/html/htmlwin.h>
+#include <html_window.h>
 #include <eda_units.h>
 
 /**
  * A slimmed down version of #WX_HTML_REPORT_PANEL
  */
-class WX_HTML_REPORT_BOX : public wxHtmlWindow, public REPORTER
+class WX_HTML_REPORT_BOX : public HTML_WINDOW, public REPORTER
 {
 public:
     WX_HTML_REPORT_BOX( wxWindow* parent, wxWindowID id = wxID_ANY,

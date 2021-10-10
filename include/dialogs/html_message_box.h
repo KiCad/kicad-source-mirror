@@ -25,7 +25,7 @@
 #ifndef HTML_MESSAGE_BOX_H
 #define HTML_MESSAGE_BOX_H
 
-#include <dialogs/dialog_display_html_text_base.h>
+#include <dialog_display_html_text_base.h>
 
 
 class HTML_MESSAGE_BOX : public DIALOG_DISPLAY_HTML_TEXT_BASE

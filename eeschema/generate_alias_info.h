@@ -28,7 +28,7 @@ class SYMBOL_LIB_TABLE;
 
 /**
  * Return an HTML page describing a #LIB_ID in a #SYMBOL_LIB_TABLE. This is suitable for inclusion
- * in a wxHtmlWindow.
+ * in a HTML_WINDOW (wxHtmlWindow).
  */
 wxString GenerateAliasInfo( SYMBOL_LIB_TABLE* aSymLibTable, LIB_ID const& aLibId, int aUnit );
 

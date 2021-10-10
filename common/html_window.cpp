@@ -27,8 +27,8 @@
 
 
 HTML_WINDOW::HTML_WINDOW( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos,
-                          const wxSize& aSize, long aStyle, const wxString& aName )
-    : wxHtmlWindow( aParent, aId, aPos, aSize, aStyle, aName )
+                          const wxSize& aSize, long aStyle, const wxString& aName ) :
+        wxHtmlWindow( aParent, aId, aPos, aSize, aStyle, aName )
 {
     Bind( wxEVT_SYS_COLOUR_CHANGED,
           wxSysColourChangedEventHandler( HTML_WINDOW::onThemeChanged ), this );
@@ -39,13 +39,25 @@ bool HTML_WINDOW::SetPage( const wxString& aSource )
 {
     m_pageSource = aSource;
 
-    wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
-    wxColour fg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+    wxString fgColor =
+            wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ).GetAsString( wxC2S_HTML_SYNTAX );
+    wxString bgColor =
+            wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ).GetAsString( wxC2S_HTML_SYNTAX );
+    wxString linkColor =
+            wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT ).GetAsString( wxC2S_HTML_SYNTAX );
 
-    return wxHtmlWindow::SetPage( "<body text=\"" + fg.GetAsString( wxC2S_HTML_SYNTAX ) + "\""
-                                  + " bgcolor=\"" + bg.GetAsString( wxC2S_HTML_SYNTAX ) + "\">\n"
-                                  + aSource
-                                  + "\n</body>" );
+    wxString html = wxString::Format( wxT( "<html>\n<body text='%s' bgcolor='%s' link='%s'>\n" ),
+                                      fgColor, bgColor, linkColor );
+    html.Append( aSource );
+    html.Append( wxT( "\n</body>\n</html>" ) );
+
+    return wxHtmlWindow::SetPage( html );
+}
+
+
+bool HTML_WINDOW::AppendToPage( const wxString& aSource )
+{
+    return SetPage( m_pageSource + aSource );
 }
 
 
