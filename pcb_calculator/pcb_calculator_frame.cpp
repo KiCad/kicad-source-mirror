@@ -137,8 +137,6 @@ void PCB_CALCULATOR_FRAME::AddCalculator( CALCULATOR_PANEL *aPanel, const wxStri
 {
     // Update internal structures
     m_panels.push_back( aPanel );
-    m_panelTypes[ typeid( aPanel ).name() ] = aPanel;
-
     m_notebook->AddPage( aPanel, panelUIName, false );
 }
 

@@ -42,6 +42,8 @@ PANEL_REGULATOR::PANEL_REGULATOR( wxWindow* parent, wxWindowID id,
                                   long style, const wxString& name ) :
         PANEL_REGULATOR_BASE( parent, id, pos, size, style, name )
 {
+    SetName( GetWindowName() );
+
     m_RegulatorListChanged = false;
 
     m_IadjUnitLabel->SetLabel( wxT( "µA" ) );

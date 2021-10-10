@@ -36,6 +36,8 @@ public:
                      long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
     ~PANEL_ATTENUATORS();
 
+    static wxString GetWindowName() { return wxT( "PANEL_ATTENUATORS" ); }
+
     wxRadioBox*  GetAttenuatorsSelector() { return m_AttenuatorsSelection; }
 
     // Methods from CALCULATOR_PANEL that must be overriden

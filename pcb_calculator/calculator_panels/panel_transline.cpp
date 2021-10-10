@@ -23,12 +23,12 @@
 #include <calculator_panels/panel_transline.h>
 #include <pcb_calculator_settings.h>
 
-
 PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id,
                                 const wxPoint& pos, const wxSize& size,
                                 long style, const wxString& name ) :
         PANEL_TRANSLINE_BASE( parent, id, pos, size, style, name )
 {
+    SetName( GetWindowName() );
     m_currTransLine     = nullptr;
     m_currTransLineType = DEFAULT_TYPE;
 

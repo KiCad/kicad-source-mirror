@@ -35,6 +35,8 @@ public:
 
 
 public:
+    static wxString GetWindowName() { return wxT( "PANEL_REGULATOR" ); }
+
     void OnRegulatorCalcButtonClick( wxCommandEvent& event ) override;
     void OnRegulatorResetButtonClick( wxCommandEvent& event ) override;
     void OnRegulTypeSelection( wxCommandEvent& event ) override;

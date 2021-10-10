@@ -82,8 +82,10 @@ double DoubleFromString( const wxString& TextValue )
 // A helper function to get a reference to the PANEL_TRANSLINE
 PANEL_TRANSLINE* getTranslinePanel()
 {
-    PCB_CALCULATOR_FRAME* frame = (PCB_CALCULATOR_FRAME*) wxTheApp->GetTopWindow();
-    return frame->GetCalculator<PANEL_TRANSLINE>();
+    PANEL_TRANSLINE* panel = static_cast <PANEL_TRANSLINE*>(
+                                wxFindWindowByName( PANEL_TRANSLINE::GetWindowName() ) );
+    wxASSERT( panel );
+    return panel;
 }
 
 

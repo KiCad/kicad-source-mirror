@@ -49,16 +49,14 @@ public:
 
     /*
      * Return the panel of given type or nullptr if there is no such panel exists.
+     * Note: GetWindowName() is a static function expected existing in panels that
+     * can be retrieved by GetCalculator() and returning the wxWindow name used to
+     * create a panel
      */
     template<typename T>
     T* GetCalculator()
     {
-        std::map<const char*, CALCULATOR_PANEL*>::iterator panel = m_panelTypes.find( typeid( T ).name() );
-
-        if( panel != m_panelTypes.end() )
-            return static_cast<T*>( panel->second );
-
-        return nullptr;
+        return static_cast<T*>( wxFindWindowByName( T::GetWindowName() ) );
     }
 
     void AddCalculator( CALCULATOR_PANEL *aPanel, const wxString& panelUIName );
@@ -84,9 +82,6 @@ private:
     bool        m_macHack;
 
     std::vector<CALCULATOR_PANEL*>           m_panels;
-    std::map<const char*, CALCULATOR_PANEL*> m_panelTypes;
-
-
 };
 
 
