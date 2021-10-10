@@ -3850,18 +3850,39 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
         NETINFO_ITEM* netInfo = new NETINFO_ITEM( m_board, newName, ++m_numNets );
         NETCLASSPTR   netclass;
 
-        if( m_netClassMap.find( csNet.RouteCodeID ) != m_netClassMap.end() )
+         std::tuple<ROUTECODE_ID, NETCLASS_ID, SPACING_CLASS_ID> key = { csNet.RouteCodeID,
+                                                                        csNet.NetClassID,
+                                                                        csNet.SpacingClassID };
+
+        if( m_netClassMap.find( key ) != m_netClassMap.end() )
         {
-            netclass = m_netClassMap.at( csNet.RouteCodeID );
+            netclass = m_netClassMap.at( key );
         }
         else
         {
-            ROUTECODE   rc = getRouteCode( csNet.RouteCodeID );
+            wxString  netClassName;
+
+
+            ROUTECODE rc = getRouteCode( csNet.RouteCodeID );
+            netClassName += wxT( "Route code: " ) + rc.Name;
+
+            if( !csNet.NetClassID.IsEmpty() )
+            {
+                CADSTAR_NETCLASS nc = Assignments.Codedefs.NetClasses.at( csNet.NetClassID );
+                netClassName += wxT( " | Net class: " ) + nc.Name;
+            }
+
+            if( !csNet.SpacingClassID.IsEmpty() )
+            {
+                SPCCLASSNAME sp = Assignments.Codedefs.SpacingClassNames.at( csNet.SpacingClassID );
+                netClassName += wxT( " | Spacing class: " ) + sp.Name;
+            }
+
             netclass.reset( new NETCLASS( *m_board->GetDesignSettings().GetDefault() ) );
-            netclass->SetName( rc.Name );
+            netclass->SetName( netClassName );
             m_board->GetDesignSettings().GetNetClasses().Add( netclass );
             netclass->SetTrackWidth( getKiCadLength( rc.OptimalWidth ) );
-            m_netClassMap.insert( { csNet.RouteCodeID, netclass } );
+            m_netClassMap.insert( { key, netclass } );
         }
 
         netclass->Add( newName );
