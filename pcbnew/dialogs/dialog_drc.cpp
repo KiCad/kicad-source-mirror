@@ -60,6 +60,7 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         m_unconnectedTreeModel( nullptr ),
         m_footprintWarningsProvider( nullptr ),
         m_footprintWarningsTreeModel( nullptr ),
+        m_centerMarkerOnIdle(nullptr),
         m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
     SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
@@ -769,6 +770,7 @@ void DIALOG_DRC::SelectMarker( const PCB_MARKER* aMarker )
 void DIALOG_DRC::centerMarkerIdleHandler( wxIdleEvent& aEvent )
 {
     m_markersTreeModel->CenterMarker( m_centerMarkerOnIdle );
+    m_centerMarkerOnIdle = nullptr;
     Unbind( wxEVT_IDLE, &DIALOG_DRC::centerMarkerIdleHandler, this );
 }
 

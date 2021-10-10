@@ -601,9 +601,11 @@ void RC_TREE_MODEL::SelectMarker( const MARKER_BASE* aMarker )
         if( candidate->m_RcItem->GetParent() == aMarker )
         {
             m_view->Select( ToItem( candidate ) );
-            break;
+            return;
         }
     }
+
+    wxFAIL_MSG( "Unable to select marker" );
 }
 
 
@@ -614,9 +616,11 @@ void RC_TREE_MODEL::CenterMarker( const MARKER_BASE* aMarker )
         if( candidate->m_RcItem->GetParent() == aMarker )
         {
             m_view->EnsureVisible( ToItem( candidate ) );
-            break;
+            return;
         }
     }
+
+    wxFAIL_MSG( "Unable to center marker" );
 }
 
 
