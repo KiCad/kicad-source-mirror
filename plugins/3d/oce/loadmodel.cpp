@@ -74,6 +74,7 @@
 
 #include <TDF_LabelSequence.hxx>
 #include <TDF_ChildIterator.hxx>
+#include <TDF_Tool.hxx>
 #include <TDataStd_Name.hxx>
 
 #include "plugins/3dapi/ifsg_all.h"
@@ -326,45 +327,33 @@ static wxString getLabelName( const TDF_Label& label )
     return txt;
 }
 
-
-void getTag( TDF_Label& label, std::string& aTag )
+/**
+ * Gets the absolute tag string for a given label in the form of ##:##:##:##
+ *
+ * @param aLabel is the label to get the string for
+ * @param aTag is the resulting tag string based by reference
+ */
+void getTag( const TDF_Label& aLabel, std::string& aTag )
 {
-    if( label.IsNull() )
+    std::ostringstream ostr;
+
+    if( aLabel.IsNull() )
     {
         wxLogTrace( MASK_OCE, "Null label passed to getTag" );
         return;
     }
 
-    std::string rtag;   // tag in reverse
-    aTag.clear();
-    int id = label.Tag();
-    std::ostringstream ostr;
-    ostr << id;
-    rtag = ostr.str();
-    ostr.str( "" );
-    ostr.clear();
+    TColStd_ListOfInteger tagList;
+    TDF_Tool::TagList( aLabel, tagList );
 
-    TDF_Label nlab = label.Father();
-
-    while( !nlab.IsNull() )
+    for( TColStd_ListOfInteger::Iterator it( tagList ); it.More(); it.Next() )
     {
-        rtag.append( 1, ':' );
-        id = nlab.Tag();
-        ostr << id;
-        rtag.append( ostr.str() );
-        ostr.str( "" );
-        ostr.clear();
-        nlab = nlab.Father();
-    };
-
-    std::string::reverse_iterator bI = rtag.rbegin();
-    std::string::reverse_iterator eI = rtag.rend();
-
-    while( bI != eI )
-    {
-        aTag.append( 1, *bI );
-        ++bI;
+        ostr << it.Value();
+        ostr << ":";
     }
+
+    aTag = ostr.str();
+    aTag.pop_back();    // kill the last colon
 }
 
 
