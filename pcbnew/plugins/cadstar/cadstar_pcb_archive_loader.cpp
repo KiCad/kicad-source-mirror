@@ -807,28 +807,13 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
             m_librarycopperpads[aComponent.ID][anchorPad.ID].push_back( aFootprint->Pads().size() );
             totalCopperPads++;
 
-            // Now renumber all the associated pads if they are PCB Only
-            int numRenames = 0;
+            // Now renumber all the associated pads
             COMPONENT_PAD associatedPad;
 
             for( PAD_ID padID : compCopper.AssociatedPadIDs )
             {
-                associatedPad = aComponent.ComponentPads.at( padID );
-
-                if( associatedPad.PCBonlyPad )
-                {
-                    PAD* assocPad = getPadReference( aFootprint, padID );
-                    assocPad->SetNumber( pad->GetNumber() );
-                    ++numRenames;
-                }
-            }
-
-            if( numRenames < compCopper.AssociatedPadIDs.size() - 1 )
-            {
-                // This is an older design of thermal pad. The schematic will
-                // have multiple pins for the same pad, so lets use the
-                // "allow thermal pads" hack
-                aFootprint->SetKeywords( wxT( "allow thermal pads" ) );
+                PAD* assocPad = getPadReference( aFootprint, padID );
+                assocPad->SetNumber( pad->GetNumber() );
             }
         }
         else
@@ -982,9 +967,19 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 
     pad->SetLayerSet( padLayerSet );
 
-    pad->SetNumber( aCadstarPad.Identifier.IsEmpty() ?
-                          wxString::Format( wxT( "%ld" ), aCadstarPad.ID ) :
-                          aCadstarPad.Identifier );
+    if( aCadstarPad.PCBonlyPad )
+    {
+        // PCB Only pads in CADSTAR do not have a representation in the schematic - they are
+        // purely mechanical pads that have no net associated with them. Make the pad name
+        // empty to avoid warnings when importing from the schematic
+        pad->SetNumber( wxT( "" ) );
+    }
+    else
+    {
+        pad->SetNumber( aCadstarPad.Identifier.IsEmpty()
+                                ? wxString::Format( wxT( "%ld" ), aCadstarPad.ID )
+                                : aCadstarPad.Identifier );
+    }
 
     if( csPadcode.Shape.Size == 0 )
     {
