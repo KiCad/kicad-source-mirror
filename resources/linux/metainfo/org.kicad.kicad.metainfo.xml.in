@@ -22,9 +22,9 @@
         <binary>pcb_calculator</binary>
         <mediatype>application/x-gerber</mediatype>
         <mediatype>application/x-excellon</mediatype>
-        <mediatype>application/x-kicad-project</mediatype>
-        <mediatype>application/x-kicad-schematic</mediatype>
-        <mediatype>application/x-kicad-pcb</mediatype>
+        <mediatype>application/x-kicad6-project</mediatype>
+        <mediatype>application/x-kicad6-schematic</mediatype>
+        <mediatype>application/x-kicad6-pcb</mediatype>
     </provides>
 
     <translation type="gettext">kicad</translation>
@@ -76,10 +76,10 @@
     </screenshots>
 
     <url type="homepage">https://www.kicad.org/</url>
-    <url type="bugtracker">https://www.kicad.org/help/report-an-issue/</url>
-    <url type="help">https://docs.kicad.org/</url>
+    <url type="bugtracker">https://go.kicad.org/issue</url>
+    <url type="help">https://go.kicad.org/docs/6</url>
     <url type="donation">https://go.kicad.org/donate</url>
-    <url type="translate">https://hosted.weblate.org/projects/kicad/</url>
+    <url type="translate">https://go.kicad.org/translate</url>
 
     <update_contact>kicad-developers@lists.launchpad.net</update_contact>
     <developer_name>The KiCad Developers</developer_name>
