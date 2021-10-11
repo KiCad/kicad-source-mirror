@@ -20,6 +20,9 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ *
+ *
+ * Some code lifted from FreeCAD, copyright (c) 2018 Zheng, Lei (realthunder) under GPLv2
  */
 
 #include <iostream>
@@ -82,6 +85,7 @@
 
 // log mask for wxLogTrace
 #define MASK_OCE "PLUGIN_OCE"
+//#define DUMP_LABELS
 
 // precision for mesh creation; 0.07 should be good enough for ECAD viewing
 #define USER_PREC (0.14)
@@ -310,23 +314,6 @@ FormatType fileType( const char* aFileName )
 }
 
 
-static wxString getLabelName( const TDF_Label& label )
-{
-    wxString txt;
-    Handle( TDataStd_Name ) name;
-    if( !label.IsNull() && label.FindAttribute( TDataStd_Name::GetID(), name ) )
-    {
-        TCollection_ExtendedString extstr = name->Get();
-        char*                      str = new char[extstr.LengthOfCString() + 1];
-        extstr.ToUTF8CString( str );
-
-        txt = wxString::FromUTF8( str );
-        delete[] str;
-        txt = txt.Trim();
-    }
-    return txt;
-}
-
 /**
  * Gets the absolute tag string for a given label in the form of ##:##:##:##
  *
@@ -355,6 +342,139 @@ void getTag( const TDF_Label& aLabel, std::string& aTag )
     aTag = ostr.str();
     aTag.pop_back();    // kill the last colon
 }
+
+
+#ifdef DUMP_LABELS
+static wxString getLabelName( const TDF_Label& aLabel )
+{
+    wxString txt;
+    Handle( TDataStd_Name ) name;
+    if( !aLabel.IsNull() && aLabel.FindAttribute( TDataStd_Name::GetID(), name ) )
+    {
+        TCollection_ExtendedString extstr = name->Get();
+        char*                      str = new char[extstr.LengthOfCString() + 1];
+        extstr.ToUTF8CString( str );
+
+        txt = wxString::FromUTF8( str );
+        delete[] str;
+        txt = txt.Trim();
+    }
+    return txt;
+}
+
+
+/**
+ * Gets a string for a given TopAbs_ShapeEnum element
+ *
+ * @param aShape enum value to convert
+ */
+std::string getShapeName( TopAbs_ShapeEnum aShape )
+{
+    switch( aShape )
+    {
+    case TopAbs_COMPOUND: return "COMPOUND";
+    case TopAbs_COMPSOLID: return "COMPSOLID";
+    case TopAbs_SOLID: return "SOLID";
+    case TopAbs_SHELL: return "SHELL";
+    case TopAbs_FACE: return "FACE";
+    case TopAbs_WIRE: return "WIRE";
+    case TopAbs_EDGE: return "EDGE";
+    case TopAbs_VERTEX: return "VERTEX";
+    case TopAbs_SHAPE: return "SHAPE";
+    }
+
+    return "UNKNOWN";
+}
+
+static int colorFloatToDecimal( float aVal )
+{
+    return aVal * 255;
+}
+
+
+static inline std::ostream& operator<<( std::ostream& aOStream, const Quantity_ColorRGBA& aColor )
+{
+    Quantity_Color rgb = aColor.GetRGB();
+
+    return aOStream << "rgba(" << colorFloatToDecimal( rgb.Red() ) << ","
+                    << colorFloatToDecimal( rgb.Green() ) << ","
+                    << colorFloatToDecimal( rgb.Blue() ) << ","
+                    << colorFloatToDecimal( aColor.Alpha() )
+                    << ")";
+}
+
+
+/**
+ * Gets a string for a given TopAbs_ShapeEnum element
+ *
+ * @param aLabel Label to convert
+ * @param aShapeTool Handle to shape tool being used
+ * @param aColorTool Handle to color tool being used
+ * @param aPregMsg Any prefixed message to insert (used for indentation in dump)
+ */
+static void printLabel( TDF_Label aLabel, Handle( XCAFDoc_ShapeTool ) aShapeTool,
+                        Handle( XCAFDoc_ColorTool ) aColorTool, const char* aPreMsg = nullptr )
+{
+    if( aLabel.IsNull() )
+        return;
+
+    if( !aPreMsg )
+        aPreMsg = "Label: ";
+
+    TCollection_AsciiString entry;
+    TDF_Tool::Entry( aLabel, entry );
+    std::ostringstream ss;
+    ss << aPreMsg << entry << ", " << getLabelName( aLabel )
+       << ( aShapeTool->IsShape( aLabel ) ? ", shape" : "" )
+       << ( aShapeTool->IsTopLevel( aLabel ) ? ", topLevel" : "" )
+       << ( aShapeTool->IsFree( aLabel ) ? ", free" : "" )
+       << ( aShapeTool->IsAssembly( aLabel ) ? ", assembly" : "" )
+       << ( aShapeTool->IsSimpleShape( aLabel ) ? ", simple" : "" )
+       << ( aShapeTool->IsCompound( aLabel ) ? ", compound" : "" )
+       << ( aShapeTool->IsReference( aLabel ) ? ", reference" : "" )
+       << ( aShapeTool->IsComponent( aLabel ) ? ", component" : "" )
+       << ( aShapeTool->IsSubShape( aLabel ) ? ", subshape" : "" );
+
+    if( aShapeTool->IsSubShape( aLabel ) )
+    {
+        auto shape = aShapeTool->GetShape( aLabel );
+        if( !shape.IsNull() )
+            ss << ", " << getShapeName( shape.ShapeType() );
+    }
+
+    if( aShapeTool->IsShape( aLabel ) )
+    {
+        Quantity_ColorRGBA c;
+        if( aColorTool->GetColor( aLabel, XCAFDoc_ColorGen, c ) )
+            ss << ", gc: " << c;
+        if( aColorTool->GetColor( aLabel, XCAFDoc_ColorSurf, c ) )
+            ss << ", sc: " << c;
+        if( aColorTool->GetColor( aLabel, XCAFDoc_ColorCurv, c ) )
+            ss << ", cc: " << c;
+    }
+
+    wxLogTrace( MASK_OCE, ss.str().c_str() );
+}
+
+
+/**
+ * Dumps a label and the entire tree underneath it
+ *
+ * @param aLabel Label to convert
+ * @param aShapeTool Handle to shape tool being used
+ * @param aColorTool Handle to color tool being used
+ * @param aDepth Indentation level to offset labels (used recursively by dumpLabels)
+ */
+static void dumpLabels( TDF_Label aLabel, Handle( XCAFDoc_ShapeTool ) aShapeTool,
+                        Handle( XCAFDoc_ColorTool ) aColorTool, int aDepth = 0 )
+{
+    std::string indent( aDepth * 2, ' ' );
+    printLabel( aLabel, aShapeTool, aColorTool, indent.c_str() );
+    TDF_ChildIterator it;
+    for( it.Initialize( aLabel ); it.More(); it.Next() )
+        dumpLabels( it.Value(), aShapeTool, aColorTool, aDepth + 1 );
+}
+#endif
 
 
 bool getColor( DATA& data, TDF_Label label, Quantity_Color& color )
@@ -575,6 +695,10 @@ SCENEGRAPH* LoadModel( char const* filename )
 
     data.m_assy = XCAFDoc_DocumentTool::ShapeTool( data.m_doc->Main() );
     data.m_color = XCAFDoc_DocumentTool::ColorTool( data.m_doc->Main() );
+
+    #ifdef DUMP_LABELS
+    dumpLabels( data.m_doc->Main(), data.m_assy, data.m_color );
+    #endif
 
     // retrieve all free shapes
     TDF_LabelSequence frshapes;
@@ -856,10 +980,10 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
 
     if( shapeLabel.HasChild() )
     {
+        wxLogTrace( MASK_OCE, "Label %d has children", labelTag );
         TDF_ChildIterator it;
         for( it.Initialize( shapeLabel ); it.More(); it.Next() )
         {
-            wxLogTrace( MASK_OCE, "Processing label %d child....", labelTag );
             if( processLabel( it.Value(), aData, pptr, aItems ) )
                 ret = true;
         }
