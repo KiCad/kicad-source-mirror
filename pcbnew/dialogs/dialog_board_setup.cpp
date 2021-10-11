@@ -238,8 +238,14 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
     {
         otherBoard->SetProject( otherPrj );
 
+        // If layers options are imported, import also the stackup
+        // layers options and stackup are linked, so they cannot be imported
+        // separately, and stackup can be imported only after layers options
         if( importDlg.m_LayersOpt->GetValue() )
+        {
             m_layers->ImportSettingsFrom( otherBoard );
+            m_physicalStackup->ImportSettingsFrom( otherBoard );
+        }
 
         if( importDlg.m_TextAndGraphicsOpt->GetValue() )
             m_textAndGraphics->ImportSettingsFrom( otherBoard );
@@ -255,18 +261,6 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
 
         if( importDlg.m_MaskAndPasteOpt->GetValue() )
             m_maskAndPaste->ImportSettingsFrom( otherBoard );
-
-        // If layers options are imported, import also the stackup
-        // layers options and stackup are linked, so they cannot be imported
-        // separately, and stackup can be imported only after layers options
-        //
-        // Note also currently only the list of enabled layers can be imported, because
-        // we import settings from a .pro project file, not the settings inside
-        // a board, and info only living in the board is not imported.
-        // TODO: Add import of physical settings now that we are actually loading the board here
-
-        if( importDlg.m_LayersOpt->GetValue() )
-            m_physicalStackup->ImportSettingsFrom( otherBoard );
 
         if( importDlg.m_SeveritiesOpt->GetValue() )
             m_severities->ImportSettingsFrom( otherBoard->GetDesignSettings().m_DRCSeverities );

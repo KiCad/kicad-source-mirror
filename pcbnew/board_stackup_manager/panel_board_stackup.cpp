@@ -1215,11 +1215,11 @@ void PANEL_SETUP_BOARD_STACKUP::ImportSettingsFrom( BOARD* aBoard )
     m_enabledLayers = m_panelLayers->GetUILayerMask() & BOARD_STACKUP::StackupAllowedBrdLayers();
     synchronizeWithBoard( true );
 
-    m_brdSettings = savedSettings;
-    m_board = savedBrd;
-
     rebuildLayerStackPanel();
     computeBoardThickness();
+
+    m_brdSettings = savedSettings;
+    m_board = savedBrd;
 }
 
 
