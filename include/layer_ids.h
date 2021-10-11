@@ -29,6 +29,7 @@
 #include <set>
 #include <vector>
 #include <bitset>
+#include <stdexcept>
 #include <wx/string.h>
 
 
@@ -573,7 +574,14 @@ public:
      */
     bool Contains( PCB_LAYER_ID aLayer )
     {
-        return test( aLayer );
+        try
+        {
+            return test( aLayer );
+        }
+        catch( std::out_of_range& )
+        {
+            return false;
+        }
     }
 
     /**
