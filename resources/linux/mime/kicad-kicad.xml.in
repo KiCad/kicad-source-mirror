@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-    <mime-type type="application/x-kicad6-project">
+    <mime-type type="application/x-kicad-project">
         <sub-class-of type="text/plain"/>
-        <comment>KiCad 6 Project</comment>
-        <generic-icon name="application-x-kicad6-project"/>
+        <comment>KiCad Project</comment>
+        <generic-icon name="application-x-kicad-project"/>
         <glob pattern="*.pro" weight="40"/>
         <glob pattern="*.kicad_pro" weight="50"/>
     </mime-type>
-    <mime-type type="application/x-kicad6-schematic">
+    <mime-type type="application/x-kicad-schematic">
         <sub-class-of type="text/plain"/>
-        <comment>KiCad 6 Schematic</comment>
-        <generic-icon name="application-x-kicad6-schematic"/>
+        <comment>KiCad Schematic</comment>
+        <generic-icon name="application-x-kicad-schematic"/>
         <glob pattern="*.sch" weight="40"/>
         <glob pattern="*.kicad_sch" weight="50"/>
         <magic priority="50">
@@ -22,10 +22,10 @@
             <match type="string" offset="0" value="EESchema Schematic File"/>
         </magic>
     </mime-type>
-    <mime-type type="application/x-kicad6-pcb">
+    <mime-type type="application/x-kicad-pcb">
         <sub-class-of type="text/plain"/>
-        <comment>KiCad 6 Printed Circuit Board</comment>
-        <generic-icon name="application-x-kicad6-pcb"/>
+        <comment>KiCad Printed Circuit Board</comment>
+        <generic-icon name="application-x-kicad-pcb"/>
         <glob pattern="*.kicad_pcb" weight="50"/>
         <magic priority="50">
             <!--The new board file (.kicad_pcb) header-->

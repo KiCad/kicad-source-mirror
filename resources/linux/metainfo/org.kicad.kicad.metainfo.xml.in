@@ -22,9 +22,9 @@
         <binary>pcb_calculator</binary>
         <mediatype>application/x-gerber</mediatype>
         <mediatype>application/x-excellon</mediatype>
-        <mediatype>application/x-kicad6-project</mediatype>
-        <mediatype>application/x-kicad6-schematic</mediatype>
-        <mediatype>application/x-kicad6-pcb</mediatype>
+        <mediatype>application/x-kicad-project</mediatype>
+        <mediatype>application/x-kicad-schematic</mediatype>
+        <mediatype>application/x-kicad-pcb</mediatype>
     </provides>
 
     <translation type="gettext">kicad</translation>
