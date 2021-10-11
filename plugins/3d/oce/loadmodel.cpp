@@ -85,7 +85,7 @@
 
 // log mask for wxLogTrace
 #define MASK_OCE "PLUGIN_OCE"
-//#define DUMP_LABELS
+#define MASK_OCE_EXTRA "PLUGIN_OCE_EXTRA"
 
 // precision for mesh creation; 0.07 should be good enough for ECAD viewing
 #define USER_PREC (0.14)
@@ -344,7 +344,6 @@ void getTag( const TDF_Label& aLabel, std::string& aTag )
 }
 
 
-#ifdef DUMP_LABELS
 static wxString getLabelName( const TDF_Label& aLabel )
 {
     wxString txt;
@@ -474,7 +473,6 @@ static void dumpLabels( TDF_Label aLabel, Handle( XCAFDoc_ShapeTool ) aShapeTool
     for( it.Initialize( aLabel ); it.More(); it.Next() )
         dumpLabels( it.Value(), aShapeTool, aColorTool, aDepth + 1 );
 }
-#endif
 
 
 bool getColor( DATA& data, TDF_Label label, Quantity_Color& color )
@@ -696,9 +694,11 @@ SCENEGRAPH* LoadModel( char const* filename )
     data.m_assy = XCAFDoc_DocumentTool::ShapeTool( data.m_doc->Main() );
     data.m_color = XCAFDoc_DocumentTool::ColorTool( data.m_doc->Main() );
 
-    #ifdef DUMP_LABELS
-    dumpLabels( data.m_doc->Main(), data.m_assy, data.m_color );
-    #endif
+    // Check if the log mask is enabled otherwise the dump routine may be expensive before the wxLog call
+    if( wxLog::IsAllowedTraceMask( MASK_OCE ) )
+    {
+        dumpLabels( data.m_doc->Main(), data.m_assy, data.m_color );
+    }
 
     // retrieve all free shapes
     TDF_LabelSequence frshapes;
