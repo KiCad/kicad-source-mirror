@@ -826,6 +826,25 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             {
                 m_globalLabelsMap.at( netTerm.SymbolID )->SetText( netName );
             }
+            else if( !net.Name.IsEmpty() && Schematic.Symbols.count( netTerm.SymbolID )
+                     && netTerm.HasNetLabel )
+            {
+                // This is a named net that connects to a schematic symbol pin - we need to put a label
+                SCH_LABEL* label = new SCH_LABEL();
+                label->SetText( netName );
+
+                POINT pinLocation = getLocationOfNetElement( net, netTerm.ID );
+                label->SetPosition( getKiCadPoint( pinLocation ) );
+                label->SetVisible( true );
+
+                applyTextSettings( label, netTerm.NetLabel.TextCodeID, netTerm.NetLabel.Alignment,
+                                   netTerm.NetLabel.Justification );
+
+                netlabels.insert( { netTerm.ID, label } );
+
+                LAYER_ID sheet = Schematic.Symbols.at( netTerm.SymbolID ).LayerID;
+                m_sheetMap.at( sheet )->GetScreen()->Append( label );
+            }
         }
 
         auto getHierarchicalLabel =
