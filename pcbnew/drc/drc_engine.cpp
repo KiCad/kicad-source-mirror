@@ -1261,55 +1261,46 @@ int DRC_ENGINE::MatchDpSuffix( const wxString& aNetName, wxString& aComplementNe
                                wxString& aBaseDpName )
 {
     int rv = 0;
+    int count = 0;
 
-    if( aNetName.EndsWith( "+" ) )
+    for( auto it = aNetName.rbegin(); it != aNetName.rend() && rv == 0; ++it, ++count )
     {
-        aComplementNet = "-";
-        rv = 1;
+        int ch = *it;
+
+        if( ( ch >= '0' && ch <= '9' ) || ch == '_' )
+        {
+            continue;
+        }
+        else if( ch == '+' )
+        {
+            aComplementNet = "-";
+            rv = 1;
+        }
+        else if( ch == '-' )
+        {
+            aComplementNet = "+";
+            rv = -1;
+        }
+        else if( ch == 'N' )
+        {
+            aComplementNet = "P";
+            rv = -1;
+        }
+        else if ( ch == 'P' )
+        {
+            aComplementNet = "N";
+            rv = 1;
+        }
+        else
+        {
+            break;
+        }
     }
-    else if( aNetName.EndsWith( "P" ) )
+
+    if( rv != 0 && count >= 1 )
     {
-        aComplementNet = "N";
-        rv = 1;
-    }
-    else if( aNetName.EndsWith( "-" ) )
-    {
-        aComplementNet = "+";
-        rv = -1;
-    }
-    else if( aNetName.EndsWith( "N" ) )
-    {
-        aComplementNet = "P";
-        rv = -1;
-    }
-    // Match P followed by 2 digits
-    else if( aNetName.Right( 2 ).IsNumber() && aNetName.Right( 3 ).Left( 1 ) == "P" )
-    {
-        aComplementNet = "N" + aNetName.Right( 2 );
-        rv = 1;
-    }
-    // Match P followed by 1 digit
-    else if( aNetName.Right( 1 ).IsNumber() && aNetName.Right( 2 ).Left( 1 ) == "P" )
-    {
-        aComplementNet = "N" + aNetName.Right( 1 );
-        rv = 1;
-    }
-    // Match N followed by 2 digits
-    else if( aNetName.Right( 2 ).IsNumber() && aNetName.Right( 3 ).Left( 1 ) == "N" )
-    {
-        aComplementNet = "P" + aNetName.Right( 2 );
-        rv = -1;
-    }
-    // Match N followed by 1 digit
-    else if( aNetName.Right( 1 ).IsNumber() && aNetName.Right( 2 ).Left( 1 ) == "N" )
-    {
-        aComplementNet = "P" + aNetName.Right( 1 );
-        rv = -1;
-    }
-    if( rv != 0 )
-    {
-        aBaseDpName = aNetName.Left( aNetName.Length() - aComplementNet.Length() );
-        aComplementNet = aBaseDpName + aComplementNet;
+        aBaseDpName = aNetName.Left( aNetName.Length() - count );
+        aComplementNet = aBaseDpName + aComplementNet + aNetName.Right( count - 1 );
     }
 
     return rv;
