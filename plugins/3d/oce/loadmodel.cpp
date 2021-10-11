@@ -74,6 +74,7 @@
 
 #include <TDF_LabelSequence.hxx>
 #include <TDF_ChildIterator.hxx>
+#include <TDataStd_Name.hxx>
 
 #include "plugins/3dapi/ifsg_all.h"
 
@@ -305,6 +306,24 @@ FormatType fileType( const char* aFileName )
         return FMT_IGES;
 
     return FMT_NONE;
+}
+
+
+static wxString getLabelName( const TDF_Label& label )
+{
+    wxString txt;
+    Handle( TDataStd_Name ) name;
+    if( !label.IsNull() && label.FindAttribute( TDataStd_Name::GetID(), name ) )
+    {
+        TCollection_ExtendedString extstr = name->Get();
+        char*                      str = new char[extstr.LengthOfCString() + 1];
+        extstr.ToUTF8CString( str );
+
+        txt = wxString::FromUTF8( str );
+        delete[] str;
+        txt = txt.Trim();
+    }
+    return txt;
 }
 
 
