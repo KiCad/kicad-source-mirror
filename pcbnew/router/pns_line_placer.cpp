@@ -1616,12 +1616,8 @@ void LINE_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
 
     if( !m_idle )
     {
-        // If the track width was originally determined from the rules resolver ("use netclass
-        // width") or continuing from an existing track, we don't want to change the width unless
-        // the user is moving to an explicitly-specified value.
-        // NOTE: This doesn't quite correctly handle the case of moving *from* an explicit value
-        // *to* the "use netclass width" value, but that is more complicated to handle.
-        if( m_sizes.TrackWidthIsExplicit() )
+        // If the track width continues from an existing track, we don't want to change the width.
+        if( m_sizes.TrackWidthIsExplicit() || m_startItem->Kind() != ITEM::SEGMENT_T )
         {
             m_head.SetWidth( m_sizes.TrackWidth() );
             m_tail.SetWidth( m_sizes.TrackWidth() );
