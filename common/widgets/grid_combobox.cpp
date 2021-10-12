@@ -90,6 +90,9 @@ void GRID_CELL_COMBOBOX::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
     // Work around a wxWidgets bug where the drop-down is the wrong width on the first drop.
     Combo()->Set( Combo()->GetStrings() );
 
+    Combo()->ChangeValue( m_value );
+    Combo()->SelectAll();
+
 #ifdef __WXOSX_COCOA__
     // This is a work around for the combobox being simply dismissed when a
     // choice is made in it under OS X. The bug is almost certainly due to a

@@ -1011,7 +1011,13 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
 
 void SCH_SCREEN::GetHierarchicalItems( std::vector<SCH_ITEM*>* aItems ) const
 {
-    static KICAD_T hierarchicalTypes[] = { SCH_SYMBOL_T, SCH_SHEET_T, SCH_GLOBAL_LABEL_T, EOT };
+    static KICAD_T hierarchicalTypes[] = { SCH_SYMBOL_T,
+                                           SCH_SHEET_T,
+                                           SCH_LABEL_T,
+                                           SCH_HIER_LABEL_T,
+                                           SCH_NETCLASS_FLAG_T,
+                                           SCH_GLOBAL_LABEL_T,
+                                           EOT };
 
     for( SCH_ITEM* item : Items() )
     {
@@ -1113,6 +1119,7 @@ SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy ) const
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
+        case SCH_NETCLASS_FLAG_T:
             if( item->HitTest( aPosition, aAccuracy ) )
                 return static_cast<SCH_TEXT*>( item );
 

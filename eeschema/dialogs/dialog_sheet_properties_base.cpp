@@ -69,7 +69,7 @@ DIALOG_SHEET_PROPERTIES_BASE::DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wx
 
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_grid->SetMinSize( wxSize( -1,180 ) );
+	m_grid->SetMinSize( wxSize( -1,120 ) );
 
 	sbFields->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
 
@@ -173,7 +173,7 @@ DIALOG_SHEET_PROPERTIES_BASE::DIALOG_SHEET_PROPERTIES_BASE( wxWindow* parent, wx
 	bSizer6->Add( 0, 0, 3, wxEXPAND, 5 );
 
 
-	mainSizer->Add( bSizer6, 0, wxALL|wxEXPAND, 5 );
+	mainSizer->Add( bSizer6, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );

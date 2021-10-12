@@ -479,6 +479,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( EE_ACTIONS::placeNoConnect );
     CURRENT_TOOL( EE_ACTIONS::placeJunction );
     CURRENT_TOOL( EE_ACTIONS::placeLabel );
+    CURRENT_TOOL( EE_ACTIONS::placeClassLabel );
     CURRENT_TOOL( EE_ACTIONS::placeGlobalLabel );
     CURRENT_TOOL( EE_ACTIONS::placeHierLabel );
     CURRENT_TOOL( EE_ACTIONS::drawSheet );
@@ -1135,6 +1136,9 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 
 static void inheritNetclass( const SCH_SHEET_PATH& aSheetPath, SCH_TEXT* aItem )
 {
+    if( CONNECTION_SUBGRAPH::GetDriverPriority( aItem ) == CONNECTION_SUBGRAPH::PRIORITY::NONE )
+        return;
+
     // Netclasses are assigned to subgraphs by association with their netname.  However, when
     // a new label is attached to an existing subgraph (with an existing netclass association),
     // the association will be lost as the label will drive its name on to the graph.
@@ -1434,7 +1438,7 @@ void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
 
     for( SCH_GLOBALLABEL* globalLabel : globalLabels )
     {
-        globalLabel->GetIntersheetRefs()->SetVisible( show );
+        globalLabel->GetFields()[0].SetVisible( show );
 
         if( show )
         {
@@ -1450,19 +1454,7 @@ void SCH_EDIT_FRAME::ShowAllIntersheetRefs( bool aShow )
     if( aShow )
         RecomputeIntersheetRefs();
 
-    SCH_SCREENS screens( Schematic().Root() );
-
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
-    {
-        for( SCH_ITEM* item : screen->Items().OfType( SCH_GLOBAL_LABEL_T ) )
-        {
-            SCH_GLOBALLABEL* gLabel = (SCH_GLOBALLABEL*)( item );
-            SCH_FIELD*       intersheetRef = gLabel->GetIntersheetRefs();
-
-            intersheetRef->SetVisible( aShow );
-            UpdateItem( intersheetRef, true );
-        }
-    }
+    GetCanvas()->GetView()->SetLayerVisible( LAYER_INTERSHEET_REFS, aShow );
 }
 
 

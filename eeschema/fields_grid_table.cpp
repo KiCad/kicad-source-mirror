@@ -27,17 +27,22 @@
 #include <fields_grid_table.h>
 #include <sch_base_frame.h>
 #include <sch_field.h>
+#include <sch_text.h>
 #include <sch_validators.h>
 #include <validators.h>
+#include <sch_edit_frame.h>
+#include <netclass.h>
 #include <symbol_library.h>
+#include <schematic.h>
 #include <template_fieldnames.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <wildcards_and_files_ext.h>
 #include <project/project_file.h>
+#include <project/net_settings.h>
 #include "eda_doc.h"
 #include <wx/settings.h>
 #include <string_utils.h>
-
+#include <widgets/grid_combobox.h>
 
 enum
 {
@@ -83,6 +88,28 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
         m_urlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
         m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
         m_filepathValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETFILENAME_V )
+{
+    initGrid( aGrid );
+}
+
+
+template <class T>
+FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
+                                         WX_GRID* aGrid, SCH_LABEL_BASE* aLabel ) :
+        m_frame( aFrame ),
+        m_dialog( aDialog ),
+        m_userUnits( aDialog->GetUserUnits() ),
+        m_grid( aGrid ),
+        m_parentType( SCH_LABEL_LOCATE_ANY_T ),
+        m_mandatoryFieldCount( aLabel->GetMandatoryFieldCount() ),
+        m_part( nullptr ),
+        m_fieldNameValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_NAME ),
+        m_referenceValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), 0 ),
+        m_valueValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), 0 ),
+        m_libIdValidator(),
+        m_urlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
+        m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
+        m_filepathValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), 0 )
 {
     initGrid( aGrid );
 }
@@ -169,6 +196,23 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
     m_orientationAttr->SetEditor( new wxGridCellChoiceEditor( orientationNames ) );
     m_orientationAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
 
+    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+    wxArrayString   existingNetclasses;
+
+    if( editFrame )
+    {
+        // Load the combobox with existing existingNetclassNames
+        NET_SETTINGS& netSettings = editFrame->Schematic().Prj().GetProjectFile().NetSettings();
+
+        existingNetclasses.push_back( netSettings.m_NetClasses.GetDefault()->GetName() );
+
+        for( const std::pair<const wxString, NETCLASSPTR>& pair : netSettings.m_NetClasses )
+            existingNetclasses.push_back( pair.second->GetName() );
+    }
+
+    m_netclassAttr = new wxGridCellAttr;
+    m_netclassAttr->SetEditor( new GRID_CELL_COMBOBOX( existingNetclasses ) );
+
     m_frame->Bind( UNITS_CHANGED, &FIELDS_GRID_TABLE<T>::onUnitsChanged, this );
 }
 
@@ -188,6 +232,7 @@ FIELDS_GRID_TABLE<T>::~FIELDS_GRID_TABLE()
     m_vAlignAttr->DecRef();
     m_hAlignAttr->DecRef();
     m_orientationAttr->DecRef();
+    m_netclassAttr->DecRef();
 
     m_frame->Unbind( UNITS_CHANGED, &FIELDS_GRID_TABLE<T>::onUnitsChanged, this );
 }
@@ -321,6 +366,12 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
             m_filepathAttr->IncRef();
             return m_filepathAttr;
         }
+        else if( ( m_parentType == SCH_LABEL_LOCATE_ANY_T )
+                && this->at( (size_t) aRow ).GetCanonicalName() == wxT( "Netclass" ) )
+        {
+            m_netclassAttr->IncRef();
+            return m_netclassAttr;
+        }
         else
         {
             wxString fn = GetValue( aRow, FDC_NAME );
@@ -341,8 +392,6 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
                 return m_nonUrlAttr;
             }
         }
-
-        return nullptr;
 
     case FDC_TEXT_SIZE:
     case FDC_POSX:
@@ -383,17 +432,31 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     switch( aCol )
     {
     case FDC_NAME:
-        // Use default field name for mandatory fields, because they are translated
+        // Use default field names for mandatory and system fields because they are translated
         // according to the current locale
-        if( aRow < m_mandatoryFieldCount )
+        if( m_parentType == SCH_SYMBOL_T )
         {
-            if( m_parentType == SCH_SYMBOL_T )
+            if( aRow < m_mandatoryFieldCount )
                 return TEMPLATE_FIELDNAME::GetDefaultFieldName( aRow );
-            else if( m_parentType == SCH_SHEET_T )
-                return SCH_SHEET::GetDefaultFieldName( aRow );
+            else
+                return field.GetName( false );
         }
-
-        return field.GetName( false );
+        else if( m_parentType == SCH_SHEET_T )
+        {
+            if( aRow < m_mandatoryFieldCount )
+                return SCH_SHEET::GetDefaultFieldName( aRow );
+            else
+                return field.GetName( false );
+        }
+        else if( m_parentType == SCH_LABEL_LOCATE_ANY_T )
+        {
+            return SCH_LABEL_BASE::GetDefaultFieldName( field.GetCanonicalName(), false );
+        }
+        else
+        {
+            wxFAIL_MSG( "Unhandled field owner type." );
+            return field.GetName( false );
+        }
 
     case FDC_VALUE:
         return UnescapeString( field.GetText() );
@@ -679,8 +742,8 @@ bool FIELDS_GRID_TABLE<T>::BoolFromString( wxString aValue ) const
     }
     else
     {
-        wxFAIL_MSG( wxString::Format( "string '%s' can't be converted to boolean "
-                                      "correctly, it will have been perceived as FALSE", aValue ) );
+        wxFAIL_MSG( wxString::Format( "string '%s' can't be converted to boolean correctly and "
+                                      "will be perceived as FALSE", aValue ) );
         return false;
     }
 }

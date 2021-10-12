@@ -1752,11 +1752,11 @@ SCH_SHEET_PIN* SCH_SEXPR_PARSER::parseSchSheetPin( SCH_SHEET* aSheet )
 
     switch( token )
     {
-    case T_input:          sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_INPUT );        break;
-    case T_output:         sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_OUTPUT );       break;
-    case T_bidirectional:  sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_BIDI );         break;
-    case T_tri_state:      sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_TRISTATE );     break;
-    case T_passive:        sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );  break;
+    case T_input:          sheetPin->SetShape( LABEL_FLAG_SHAPE::L_INPUT );        break;
+    case T_output:         sheetPin->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );       break;
+    case T_bidirectional:  sheetPin->SetShape( LABEL_FLAG_SHAPE::L_BIDI );         break;
+    case T_tri_state:      sheetPin->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );     break;
+    case T_passive:        sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );  break;
     default:
         Expecting( "input, output, bidirectional, tri_state, or passive" );
     }
@@ -2135,6 +2135,7 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
         case T_label:
         case T_global_label:
         case T_hierarchical_label:
+        case T_netclass_flag:
             screen->Append( static_cast<SCH_ITEM*>( parseSchText() ) );
             break;
 
@@ -2155,8 +2156,8 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
 
         default:
             Expecting( "symbol, paper, page, title_block, bitmap, sheet, junction, no_connect, "
-                       "bus_entry, line, bus, text, label, global_label, hierarchical_label, "
-                       "symbol_instances, or bus_alias" );
+                       "bus_entry, line, bus, text, label, class_label, global_label, "
+                       "hierarchical_label, symbol_instances, or bus_alias" );
         }
     }
 
@@ -3123,9 +3124,14 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
     case T_label:               text = std::make_unique<SCH_LABEL>();         break;
     case T_global_label:        text = std::make_unique<SCH_GLOBALLABEL>();   break;
     case T_hierarchical_label:  text = std::make_unique<SCH_HIERLABEL>();     break;
+    case T_netclass_flag:       text = std::make_unique<SCH_NETCLASS_FLAG>(); break;
     default:
         wxCHECK_MSG( false, nullptr, "Cannot parse " + GetTokenString( CurTok() ) + " as text." );
     }
+
+    // Clear any auto-created fields; we want what's in the file and only what's in the file
+    if( text->Type() != SCH_TEXT_T )
+        static_cast<SCH_LABEL_BASE*>( text.get() )->GetFields().clear();
 
     // We'll reset this if we find a fields_autoplaced token
     text->ClearFieldsAutoplaced();
@@ -3169,16 +3175,33 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
             switch( token )
             {
-            case T_input:          text->SetShape( PINSHEETLABEL_SHAPE::PS_INPUT );        break;
-            case T_output:         text->SetShape( PINSHEETLABEL_SHAPE::PS_OUTPUT );       break;
-            case T_bidirectional:  text->SetShape( PINSHEETLABEL_SHAPE::PS_BIDI );         break;
-            case T_tri_state:      text->SetShape( PINSHEETLABEL_SHAPE::PS_TRISTATE );     break;
-            case T_passive:        text->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );  break;
+            case T_input:          text->SetShape( LABEL_FLAG_SHAPE::L_INPUT );        break;
+            case T_output:         text->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );       break;
+            case T_bidirectional:  text->SetShape( LABEL_FLAG_SHAPE::L_BIDI );         break;
+            case T_tri_state:      text->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );     break;
+            case T_passive:        text->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );  break;
+            case T_dot:            text->SetShape( LABEL_FLAG_SHAPE::F_DOT );          break;
+            case T_round:          text->SetShape( LABEL_FLAG_SHAPE::F_ROUND );        break;
+            case T_diamond:        text->SetShape( LABEL_FLAG_SHAPE::F_DIAMOND );      break;
+            case T_rectangle:      text->SetShape( LABEL_FLAG_SHAPE::F_RECTANGLE );    break;
             default:
-                Expecting( "input, output, bidirectional, tri_state, or passive" );
+                Expecting( "input, output, bidirectional, tri_state, passive, dot, round, diamond"
+                           "or rectangle" );
             }
 
             NeedRIGHT();
+            break;
+
+        case T_length:
+        {
+            if( text->Type() != SCH_NETCLASS_FLAG_T )
+                Unexpected( T_length );
+
+            SCH_NETCLASS_FLAG* label = static_cast<SCH_NETCLASS_FLAG*>( text.get() );
+
+            label->SetPinLength( parseInternalUnits( "pin length" ) );
+            NeedRIGHT();
+        }
             break;
 
         case T_fields_autoplaced:
@@ -3214,7 +3237,7 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
             if( text->Type() == SCH_GLOBAL_LABEL_T )
             {
                 SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( text.get() );
-                SCH_FIELD*       field = label->GetIntersheetRefs();
+                SCH_FIELD*       field = &label->GetFields()[0];
 
                 field->SetTextPos( parseXY() );
                 NeedRIGHT();
@@ -3230,22 +3253,27 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
             break;
 
         case T_property:
-            if( text->Type() == SCH_GLOBAL_LABEL_T )
-            {
-                SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( text.get() );
-                SCH_FIELD*       field = parseSchField( label );
+        {
+            if( text->Type() == SCH_TEXT_T )
+                Unexpected( T_property );
 
-                field->SetLayer( LAYER_GLOBLABEL );
-                label->SetIntersheetRefs( *field );
+            SCH_FIELD* field = parseSchField( text.get() );
 
-                delete field;
-            }
+            static_cast<SCH_LABEL_BASE*>( text.get() )->GetFields().emplace_back( *field );
+
+            delete field;
             break;
+        }
 
         default:
             Expecting( "at, shape, iref, uuid or effects" );
         }
     }
+
+    SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( text.get() );
+
+    if( label && label->GetFields().empty() )
+        label->SetFieldsAutoplaced();
 
     return text.release();
 }

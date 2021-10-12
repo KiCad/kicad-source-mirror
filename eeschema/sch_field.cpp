@@ -90,7 +90,7 @@ void SCH_FIELD::SetId( int aId )
         default:            SetLayer( LAYER_SHEETFIELDS );   break;
         }
     }
-    else
+    else if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
         switch( m_id )
         {
@@ -99,11 +99,25 @@ void SCH_FIELD::SetId( int aId )
         default:              SetLayer( LAYER_FIELDS );        break;
         }
     }
+    else
+    {
+        // We can't use defined IDs for labels because there can be multiple net class
+        // assignments.
+
+        if( GetCanonicalName() == wxT( "Netclass" ) )
+            SetLayer( LAYER_NETCLASS_REFS );
+        else if( GetCanonicalName() == wxT( "Intersheetrefs" ) )
+            SetLayer( LAYER_INTERSHEET_REFS );
+        else
+            SetLayer( LAYER_FIELDS );
+    }
 }
 
 
 wxString SCH_FIELD::GetShownText( int aDepth ) const
 {
+    KICAD_T labelTypes[] = { SCH_LABEL_LOCATE_ANY_T, EOT };
+
     std::function<bool( wxString* )> symbolResolver =
             [&]( wxString* token ) -> bool
             {
@@ -136,11 +150,11 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
                 return sheet->ResolveTextVar( token, aDepth + 1 );
             };
 
-    std::function<bool( wxString* )> globalLabelResolver =
+    std::function<bool( wxString* )> labelResolver =
             [&]( wxString* token ) -> bool
             {
-                SCH_GLOBALLABEL* globalLabel = static_cast<SCH_GLOBALLABEL*>( m_parent );
-                return globalLabel->ResolveTextVar( token, aDepth + 1 );
+                SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
+                return label->ResolveTextVar( token, aDepth + 1 );
             };
 
     PROJECT*  project = nullptr;
@@ -161,8 +175,8 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
                 text = ExpandTextVars( text, &symbolResolver, nullptr, project );
             else if( m_parent && m_parent->Type() == SCH_SHEET_T )
                 text = ExpandTextVars( text, &sheetResolver, nullptr, project );
-            else if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
-                text = ExpandTextVars( text, &globalLabelResolver, nullptr, project );
+            else if( m_parent && m_parent->IsType( labelTypes ) )
+                text = ExpandTextVars( text, &labelResolver, nullptr, project );
             else
                 text = ExpandTextVars( text, project );
         }
@@ -484,7 +498,8 @@ bool SCH_FIELD::IsReplaceable() const
     }
     else if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
     {
-        return false;
+        if( m_id == 0 /* IntersheetRefs */ )
+            return false;
     }
 
     return true;
@@ -553,6 +568,10 @@ bool SCH_FIELD::Replace( const wxFindReplaceData& aSearchData, void* aAuxData )
             // about it not being undoable, checking for recursive hierarchies, reloading
             // sheets, etc.  See DIALOG_SHEET_PROPERTIES::TransferDataFromWindow().
         }
+    }
+    else
+    {
+        isReplaced = EDA_TEXT::Replace( aSearchData );
     }
 
     return isReplaced;
@@ -677,24 +696,42 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
 
 wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 {
-    if( !m_name.IsEmpty() )
-        return m_name;
-    else if( aUseDefaultName )
-    {
-        if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
-            return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
-        else if( m_parent && m_parent->Type() == SCH_SHEET_T )
-            return SCH_SHEET::GetDefaultFieldName( m_id );
-        else if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
-            return _( "Intersheet References" );
-    }
+    KICAD_T labelTypes[] = { SCH_LABEL_LOCATE_ANY_T, EOT };
 
-    return wxEmptyString;
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+    {
+        if( m_id < MANDATORY_FIELDS )
+            return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
+        else if( m_name.IsEmpty() && aUseDefaultName )
+            return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
+        else
+            return m_name;
+    }
+    else if( m_parent && m_parent->Type() == SCH_SHEET_T )
+    {
+        if( m_id < SHEET_MANDATORY_FIELDS )
+            return SCH_SHEET::GetDefaultFieldName( m_id );
+        else if( m_name.IsEmpty() && aUseDefaultName )
+            return SCH_SHEET::GetDefaultFieldName( m_id );
+        else
+            return m_name;
+    }
+    else if( m_parent && m_parent->IsType( labelTypes ) )
+    {
+        return SCH_LABEL_BASE::GetDefaultFieldName( m_name, aUseDefaultName );
+    }
+    else
+    {
+        wxFAIL_MSG( "Unhandled field owner type." );
+        return m_name;
+    }
 }
 
 
 wxString SCH_FIELD::GetCanonicalName() const
 {
+    KICAD_T labelTypes[] = { SCH_LABEL_LOCATE_ANY_T, EOT };
+
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
         switch( m_id )
@@ -703,6 +740,7 @@ wxString SCH_FIELD::GetCanonicalName() const
         case  VALUE_FIELD:     return wxT( "Value" );
         case  FOOTPRINT_FIELD: return wxT( "Footprint" );
         case  DATASHEET_FIELD: return wxT( "Datasheet" );
+        default:               return m_name;
         }
     }
     else if( m_parent && m_parent->Type() == SCH_SHEET_T )
@@ -711,14 +749,24 @@ wxString SCH_FIELD::GetCanonicalName() const
         {
         case  SHEETNAME:     return wxT( "Sheetname" );
         case  SHEETFILENAME: return wxT( "Sheetfile" );
+        default:             return m_name;
         }
     }
-    else if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
+    else if( m_parent && m_parent->IsType( labelTypes ) )
     {
-        return wxT( "Intersheet References" );
+        // These should be stored in canonical format, but just in case:
+        if( m_name == _( "Net Class" ) )
+            return wxT( "Netclass" );
+        else if (m_name == _( "Sheet References" ) )
+            return wxT( "Intersheetrefs" );
+        else
+            return m_name;
     }
-
-    return m_name;
+    else
+    {
+        wxFAIL_MSG( "Unhandled field owner type." );
+        return m_name;
+    }
 }
 
 

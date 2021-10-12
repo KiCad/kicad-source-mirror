@@ -322,7 +322,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
 
     if( cfg )
     {
-        m_shownColumns = cfg->m_Appearance.edit_component_visible_columns;
+        m_shownColumns = cfg->m_Appearance.edit_symbol_visible_columns;
         m_fieldsGrid->ShowHideColumns( m_shownColumns );
     }
 
@@ -379,7 +379,7 @@ DIALOG_SYMBOL_PROPERTIES::~DIALOG_SYMBOL_PROPERTIES()
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
 
     if( cfg )
-        cfg->m_Appearance.edit_component_visible_columns = m_fieldsGrid->GetShownColumns();
+        cfg->m_Appearance.edit_symbol_visible_columns = m_fieldsGrid->GetShownColumns();
 
     // Prevents crash bug in wxGrid's d'tor
     m_fieldsGrid->DestroyTable( m_fields );

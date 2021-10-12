@@ -83,6 +83,7 @@ public:
     static TOOL_ACTION placeJunction;
     static TOOL_ACTION placeBusWireEntry;
     static TOOL_ACTION placeLabel;
+    static TOOL_ACTION placeClassLabel;
     static TOOL_ACTION placeGlobalLabel;
     static TOOL_ACTION placeHierLabel;
     static TOOL_ACTION drawSheet;
@@ -127,6 +128,7 @@ public:
     static TOOL_ACTION showDeMorganAlternate;
     static TOOL_ACTION editSymbolUnit;
     static TOOL_ACTION toLabel;
+    static TOOL_ACTION toCLabel;
     static TOOL_ACTION toHLabel;
     static TOOL_ACTION toGLabel;
     static TOOL_ACTION toText;

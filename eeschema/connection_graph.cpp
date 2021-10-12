@@ -119,7 +119,7 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
                 {
                     SCH_SHEET_PIN* p = static_cast<SCH_SHEET_PIN*>( c );
 
-                    if( p->GetShape() == PINSHEETLABEL_SHAPE::PS_OUTPUT )
+                    if( p->GetShape() == LABEL_FLAG_SHAPE::L_OUTPUT )
                     {
                         m_driver = c;
                         break;
@@ -258,7 +258,8 @@ std::vector<SCH_ITEM*> CONNECTION_SUBGRAPH::GetBusLabels() const
             break;
         }
 
-        default: break;
+        default:
+            break;
         }
     }
 

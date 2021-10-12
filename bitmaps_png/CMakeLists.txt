@@ -77,6 +77,10 @@ set( BMAPS_SMALL
     icon_pagelayout_editor_16
     icon_pcbcalculator_16
     icon_pcbnew_16
+    label_align_left
+    label_align_right
+    label_align_top
+    label_align_bottom
     list_nets_16
     options_generic_16
     pinorient_right
@@ -113,6 +117,18 @@ set( BMAPS_SMALL
     small_trash
     small_up
     small_warning
+    text_horizontal
+    text_vertical
+    text_align_left
+    text_align_center
+    text_align_right
+    text_align_bottom
+    text_align_top
+    text_valign_top
+    text_valign_center
+    text_valign_bottom
+    text_bold
+    text_italic
     tree_nosel
     tree_sel
     visibility
@@ -130,6 +146,7 @@ set( BMAPS_MID
     add_bus2bus
     add_bus
     add_center_dimension
+    add_class_flag
     add_circle
     add_component
     add_corner

@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class BITMAP_BUTTON;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -26,7 +28,6 @@
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/choice.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
@@ -46,24 +47,31 @@ class DIALOG_LIB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_TextValueSelectButton;
 		wxStaticText* m_note;
 		wxCheckBox* m_visible;
-		wxStaticText* m_xPosLabel;
-		wxTextCtrl* m_xPosCtrl;
-		wxStaticText* m_xPosUnits;
-		wxCheckBox* m_italic;
-		wxStaticText* m_orientLabel;
-		wxChoice* m_orientChoice;
-		wxStaticText* m_yPosLabel;
-		wxTextCtrl* m_yPosCtrl;
-		wxStaticText* m_yPosUnits;
-		wxCheckBox* m_bold;
-		wxStaticText* m_hAlignLabel;
-		wxChoice* m_hAlignChoice;
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
-		wxStaticText* m_vAlignLabel;
-		wxChoice* m_vAlignChoice;
+		BITMAP_BUTTON* m_separator1;
+		BITMAP_BUTTON* m_horizontal;
+		BITMAP_BUTTON* m_vertical;
+		BITMAP_BUTTON* m_separator2;
+		BITMAP_BUTTON* m_bold;
+		BITMAP_BUTTON* m_italic;
+		BITMAP_BUTTON* m_separator3;
+		BITMAP_BUTTON* m_hAlignLeft;
+		BITMAP_BUTTON* m_hAlignCenter;
+		BITMAP_BUTTON* m_hAlignRight;
+		BITMAP_BUTTON* m_separator4;
+		BITMAP_BUTTON* m_vAlignTop;
+		BITMAP_BUTTON* m_vAlignCenter;
+		BITMAP_BUTTON* m_vAlignBottom;
+		BITMAP_BUTTON* m_separator5;
+		wxStaticText* m_xPosLabel;
+		wxTextCtrl* m_xPosCtrl;
+		wxStaticText* m_xPosUnits;
 		wxCheckBox* m_CommonUnit;
+		wxStaticText* m_yPosLabel;
+		wxTextCtrl* m_yPosCtrl;
+		wxStaticText* m_yPosUnits;
 		wxCheckBox* m_CommonConvert;
 		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
@@ -73,6 +81,7 @@ class DIALOG_LIB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseDialog( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnSetFocusText( wxFocusEvent& event ) { event.Skip(); }
+		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnTextValueSelectButtonClick( wxCommandEvent& event ) { event.Skip(); }
 
 

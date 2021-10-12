@@ -53,7 +53,7 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxStr
     else
         SetSide( SHEET_SIDE::LEFT );
 
-    m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
+    m_shape      = LABEL_FLAG_SHAPE::L_INPUT;
     m_isDangling = true;
     m_number     = 2;
 }
@@ -308,13 +308,13 @@ void SCH_SHEET_PIN::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
      * for INPUT type the icon is the OUTPUT shape of SCH_HIERLABEL
      * for OUTPUT type the icon is the INPUT shape of SCH_HIERLABEL
      */
-    PINSHEETLABEL_SHAPE shape = m_shape;
+    LABEL_FLAG_SHAPE shape = m_shape;
 
     switch( shape )
     {
-    case PINSHEETLABEL_SHAPE::PS_INPUT:  shape = PINSHEETLABEL_SHAPE::PS_OUTPUT; break;
-    case PINSHEETLABEL_SHAPE::PS_OUTPUT: shape = PINSHEETLABEL_SHAPE::PS_INPUT;  break;
-    default:                                                                     break;
+    case LABEL_FLAG_SHAPE::L_INPUT:  shape = LABEL_FLAG_SHAPE::L_OUTPUT; break;
+    case LABEL_FLAG_SHAPE::L_OUTPUT: shape = LABEL_FLAG_SHAPE::L_INPUT;  break;
+    default:                                                             break;
     }
 
     SCH_HIERLABEL::CreateGraphicShape( aSettings, aPoints, aPos, shape );

@@ -46,7 +46,8 @@
 #include <schematic.h>
 #include <symbol_library.h>
 #include <eeschema_settings.h>
-#include <dialogs/dialog_text_and_label_properties.h>
+#include <dialogs/dialog_label_properties.h>
+#include <dialogs/dialog_text_properties.h>
 #include <dialogs/dialog_line_wire_bus_properties.h>
 #include <dialogs/dialog_junction_props.h>
 #include <dialogs/dialog_sheet_pin_properties.h>
@@ -57,11 +58,13 @@
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
-        m_lastSheetPinType( PINSHEETLABEL_SHAPE::PS_INPUT ),
-        m_lastGlobalLabelShape( PINSHEETLABEL_SHAPE::PS_INPUT ),
+        m_lastSheetPinType( LABEL_FLAG_SHAPE::L_INPUT ),
+        m_lastGlobalLabelShape( LABEL_FLAG_SHAPE::L_INPUT ),
+        m_lastNetClassFlagShape( LABEL_FLAG_SHAPE::F_ROUND ),
         m_lastTextOrientation( LABEL_SPIN_STYLE::RIGHT ),
         m_lastTextBold( false ),
         m_lastTextItalic( false ),
+        m_lastNetClassFlagItalic( true ),
         m_lastFillStyle( FILL_T::NO_FILL ),
         m_inPlaceSymbol( false ),
         m_inDrawShape( false ),
@@ -876,6 +879,11 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         textItem = new SCH_LABEL( (wxPoint) aPosition );
         break;
 
+    case LAYER_NETCLASS_REFS:
+        textItem = new SCH_NETCLASS_FLAG( (wxPoint) aPosition );
+        textItem->SetShape( m_lastNetClassFlagShape );
+        break;
+
     case LAYER_HIERLABEL:
         textItem = new SCH_HIERLABEL( (wxPoint) aPosition );
         textItem->SetShape( m_lastGlobalLabelShape );
@@ -884,10 +892,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     case LAYER_GLOBLABEL:
         textItem = new SCH_GLOBALLABEL( (wxPoint) aPosition );
         textItem->SetShape( m_lastGlobalLabelShape );
-
-        if( settings.m_IntersheetRefsShow )
-            static_cast<SCH_GLOBALLABEL*>( textItem )->GetIntersheetRefs()->SetVisible( true );
-
+        static_cast<SCH_GLOBALLABEL*>( textItem )->GetFields()[0].SetVisible( true );
         break;
 
     default:
@@ -897,26 +902,60 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
 
     textItem->SetParent( schematic );
     textItem->SetBold( m_lastTextBold );
-    textItem->SetItalic( m_lastTextItalic );
+
+    if( textItem->Type() == SCH_NETCLASS_FLAG_T )
+        textItem->SetItalic( m_lastNetClassFlagItalic );
+    else
+        textItem->SetItalic( m_lastTextItalic );
+
     textItem->SetLabelSpinStyle( m_lastTextOrientation );
     textItem->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
     textItem->SetFlags( IS_NEW | IS_MOVING );
 
-    DIALOG_TEXT_AND_LABEL_PROPERTIES dlg( m_frame, textItem );
+    if( aType == LAYER_NOTES )
+    {
+        DIALOG_TEXT_PROPERTIES dlg( m_frame, textItem );
 
-    // Must be quasi modal for syntax help
-    if( dlg.ShowQuasiModal() != wxID_OK || NoPrintableChars( textItem->GetText() ) )
+        // Must be quasi modal for syntax help
+        if( dlg.ShowQuasiModal() != wxID_OK )
+        {
+            delete textItem;
+            return nullptr;
+        }
+    }
+    else
+    {
+        DIALOG_LABEL_PROPERTIES dlg( m_frame, static_cast<SCH_LABEL_BASE*>( textItem ) );
+
+        // Must be quasi modal for syntax help
+        if( dlg.ShowQuasiModal() != wxID_OK )
+        {
+            delete textItem;
+            return nullptr;
+        }
+    }
+
+    wxString text = textItem->GetText();
+
+    if( textItem->Type() != SCH_NETCLASS_FLAG_T && NoPrintableChars( text ) )
     {
         delete textItem;
         return nullptr;
     }
 
     m_lastTextBold = textItem->IsBold();
-    m_lastTextItalic = textItem->IsItalic();
+
+    if( textItem->Type() == SCH_NETCLASS_FLAG_T )
+        m_lastNetClassFlagItalic = textItem->IsItalic();
+    else
+        m_lastTextItalic = textItem->IsItalic();
+
     m_lastTextOrientation = textItem->GetLabelSpinStyle();
 
     if( textItem->Type() == SCH_GLOBAL_LABEL_T || textItem->Type() == SCH_HIER_LABEL_T )
         m_lastGlobalLabelShape = textItem->GetShape();
+    else if( textItem->Type() == SCH_NETCLASS_FLAG_T )
+        m_lastNetClassFlagShape = textItem->GetShape();
 
     return textItem;
 }
@@ -990,6 +1029,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     bool isText        = aEvent.IsAction( &EE_ACTIONS::placeSchematicText );
     bool isGlobalLabel = aEvent.IsAction( &EE_ACTIONS::placeGlobalLabel );
     bool isHierLabel   = aEvent.IsAction( &EE_ACTIONS::placeHierLabel );
+    bool isClassLabel  = aEvent.IsAction( &EE_ACTIONS::placeClassLabel );
     bool isNetLabel    = aEvent.IsAction( &EE_ACTIONS::placeLabel );
     bool isSheetPin    = aEvent.IsAction( &EE_ACTIONS::importSheetPin );
     int  snapLayer     = isText ? LAYER_GRAPHICS : LAYER_CONNECTABLE;
@@ -1009,6 +1049,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LABEL_GLOBAL );
                 else if( isNetLabel )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LABEL_NET );
+                else if( isClassLabel )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LABEL_NET );    // JEY TODO: LABEL_CLASS cursor
                 else if( isHierLabel )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LABEL_HIER );
                 else
@@ -1043,7 +1085,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
     // Prime the pump if the tool isn't being re-activated
     if( aEvent.HasPosition() || ( !aEvent.IsReactivate()
-            && ( isText || isGlobalLabel || isHierLabel || isNetLabel ) ) )
+            && ( isText || isGlobalLabel || isHierLabel || isClassLabel || isNetLabel ) ) )
     {
         m_toolMgr->RunAction( ACTIONS::cursorClick );
     }
@@ -1123,6 +1165,10 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 else if( isNetLabel )
                 {
                     item = createNewText( cursorPos, LAYER_LOCLABEL );
+                }
+                else if( isClassLabel )
+                {
+                    item = createNewText( cursorPos, LAYER_NETCLASS_REFS );
                 }
                 else if( isSheetPin )
                 {
@@ -1601,6 +1647,7 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::placeJunction.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::SingleClickPlace,    EE_ACTIONS::placeBusWireEntry.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeClassLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeHierLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeGlobalLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawSheet,           EE_ACTIONS::drawSheet.MakeEvent() );

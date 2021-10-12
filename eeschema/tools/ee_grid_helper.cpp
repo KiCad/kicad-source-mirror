@@ -293,6 +293,7 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
     case SCH_LABEL_T:
+    case SCH_NETCLASS_FLAG_T:
     case SCH_BUS_WIRE_ENTRY_T:
     {
         std::vector<wxPoint> pts = aItem->GetConnectionPoints();

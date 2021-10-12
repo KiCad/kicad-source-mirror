@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="text_italic.svg"
+   inkscape:version="1.0.2 (e86c8708, 2021-01-15)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1440"
+     inkscape:window-height="800"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="21.189179"
+     inkscape:cx="3.6665432"
+     inkscape:cy="9.8749969"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_glabel</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs174">
+    <style
+       id="style172">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:#1a81c4;}.cls-2{stroke:#545454;}.cls-3{fill:#545454;}</style>
+  </defs>
+  <title
+     id="title176">add_glabel</title>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;fill:#333333;fill-opacity:1;stroke:none;"
+     x="6.6611366"
+     y="20.488951"
+     id="text863"><tspan
+       sodipodi:role="line"
+       id="tspan861"
+       x="6.6611366"
+       y="20.488951"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#333333;">I</tspan></text>
+</svg>

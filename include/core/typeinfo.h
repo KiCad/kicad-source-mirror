@@ -133,6 +133,7 @@ enum KICAD_T
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
+    SCH_NETCLASS_FLAG_T,
     SCH_FIELD_T,
     SCH_SYMBOL_T,
     SCH_SHEET_PIN_T,
@@ -152,7 +153,8 @@ enum KICAD_T
     SCH_ITEM_LOCATE_BUS_T,
     SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
 
-    // Same for picking labels attached to wires and/or buses
+    // Same for picking labels, or labels attached to wires and/or buses
+    SCH_LABEL_LOCATE_ANY_T,
     SCH_LABEL_LOCATE_WIRE_T,
     SCH_LABEL_LOCATE_BUS_T,
 

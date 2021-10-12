@@ -296,6 +296,11 @@ TOOL_ACTION EE_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
         _( "Add Label" ), _( "Add a net label" ),
         BITMAPS::add_label, AF_ACTIVATE );
 
+TOOL_ACTION EE_ACTIONS::placeClassLabel( "eeschema.InteractiveDrawing.placeClassLabel",
+        AS_GLOBAL, 0, "",
+        _( "Add Net Class Flag" ), _( "Add a net class flag" ),
+        BITMAPS::add_class_flag, AF_ACTIVATE );
+
 TOOL_ACTION EE_ACTIONS::placeHierLabel( "eeschema.InteractiveDrawing.placeHierarchicalLabel",
         AS_GLOBAL,
         'H', LEGACY_HK_NAME( "Add Hierarchical Label" ),
@@ -467,6 +472,11 @@ TOOL_ACTION EE_ACTIONS::toLabel( "eeschema.InteractiveEdit.toLabel",
         AS_GLOBAL, 0, "",
         _( "Change to Label" ), _( "Change existing item to a label" ),
         BITMAPS::add_line_label, AF_NONE, (void*) SCH_LABEL_T );
+
+TOOL_ACTION EE_ACTIONS::toCLabel( "eeschema.InteractiveEdit.toCLabel",
+        AS_GLOBAL, 0, "",
+        _( "Change to Net Class Flag" ), _( "Change existing item to a net class flag" ),
+        BITMAPS::add_class_flag, AF_NONE, (void*) SCH_NETCLASS_FLAG_T );
 
 TOOL_ACTION EE_ACTIONS::toHLabel( "eeschema.InteractiveEdit.toHLabel",
         AS_GLOBAL, 0, "",

@@ -25,6 +25,8 @@ data
 date
 default
 diameter
+diamond
+dot
 edge_clock_high
 effects
 end
@@ -63,6 +65,7 @@ members
 mid
 mirror
 name
+netclass_flag
 no
 no_connect
 non_logic
@@ -100,6 +103,7 @@ reference
 required
 rev
 right
+round
 scale
 shape
 sheet

@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <widgets/bitmap_button.h>
 #include <bitmaps.h>
 #include <kiway.h>
 #include <confirm.h>
@@ -68,6 +69,51 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
                 wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
             } );
     m_StyledTextCtrl->SetEOLMode( wxSTC_EOL_LF );   // Normalize EOL across platforms
+
+    m_separator1->SetIsSeparator();
+
+    m_horizontal->SetIsCheckButton();
+    m_horizontal->SetBitmap( KiBitmap( BITMAPS::text_horizontal ) );
+    m_vertical->SetIsCheckButton();
+    m_vertical->SetBitmap( KiBitmap( BITMAPS::text_vertical ) );
+
+    m_separator2->SetIsSeparator();
+
+    m_bold->SetIsCheckButton();
+    m_bold->SetBitmap( KiBitmap( BITMAPS::text_bold ) );
+    m_italic->SetIsCheckButton();
+    m_italic->SetBitmap( KiBitmap( BITMAPS::text_italic ) );
+
+    m_separator3->SetIsSeparator();
+
+    m_hAlignLeft->SetIsCheckButton();
+    m_hAlignLeft->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
+    m_hAlignCenter->SetIsCheckButton();
+    m_hAlignCenter->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
+    m_hAlignRight->SetIsCheckButton();
+    m_hAlignRight->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
+
+    m_separator4->SetIsSeparator();
+
+    m_vAlignTop->SetIsCheckButton();
+    m_vAlignTop->SetBitmap( KiBitmap( BITMAPS::text_valign_top ) );
+    m_vAlignCenter->SetIsCheckButton();
+    m_vAlignCenter->SetBitmap( KiBitmap( BITMAPS::text_valign_center ) );
+    m_vAlignBottom->SetIsCheckButton();
+    m_vAlignBottom->SetBitmap( KiBitmap( BITMAPS::text_valign_bottom ) );
+
+    m_separator5->SetIsSeparator();
+
+    m_horizontal->Bind( wxEVT_BUTTON, &DIALOG_FIELD_PROPERTIES::onOrientButton, this );
+    m_vertical->Bind( wxEVT_BUTTON, &DIALOG_FIELD_PROPERTIES::onOrientButton, this );
+
+    m_hAlignLeft->Bind( wxEVT_BUTTON, &DIALOG_FIELD_PROPERTIES::onHAlignButton, this );
+    m_hAlignCenter->Bind( wxEVT_BUTTON, &DIALOG_FIELD_PROPERTIES::onHAlignButton, this );
+    m_hAlignRight->Bind( wxEVT_BUTTON, &DIALOG_FIELD_PROPERTIES::onHAlignButton, this );
+
+    m_vAlignTop->Bind( wxEVT_BUTTON, &DIALOG_FIELD_PROPERTIES::onVAlignButton, this );
+    m_vAlignCenter->Bind( wxEVT_BUTTON, &DIALOG_FIELD_PROPERTIES::onVAlignButton, this );
+    m_vAlignBottom->Bind( wxEVT_BUTTON, &DIALOG_FIELD_PROPERTIES::onVAlignButton, this );
 
     m_text = aTextItem->GetText();
     m_isItalic = aTextItem->IsItalic();
@@ -210,6 +256,36 @@ void DIALOG_FIELD_PROPERTIES::OnSetFocusText( wxFocusEvent& event )
 }
 
 
+void DIALOG_FIELD_PROPERTIES::onOrientButton( wxCommandEvent& aEvent )
+{
+    for( BITMAP_BUTTON* btn : { m_horizontal, m_vertical } )
+    {
+        if( btn->IsChecked() && btn != aEvent.GetEventObject() )
+            btn->Check( false );
+    }
+}
+
+
+void DIALOG_FIELD_PROPERTIES::onHAlignButton( wxCommandEvent& aEvent )
+{
+    for( BITMAP_BUTTON* btn : { m_hAlignLeft, m_hAlignCenter, m_hAlignRight } )
+    {
+        if( btn->IsChecked() && btn != aEvent.GetEventObject() )
+            btn->Check( false );
+    }
+}
+
+
+void DIALOG_FIELD_PROPERTIES::onVAlignButton( wxCommandEvent& aEvent )
+{
+    for( BITMAP_BUTTON* btn : { m_vAlignTop, m_vAlignTop, m_vAlignBottom } )
+    {
+        if( btn->IsChecked() && btn != aEvent.GetEventObject() )
+            btn->Check( false );
+    }
+}
+
+
 bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
 {
     if( m_TextCtrl->IsShown() )
@@ -220,12 +296,28 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
     m_posX.SetValue( m_position.x );
     m_posY.SetValue( m_position.y );
     m_textSize.SetValue( m_size );
-    m_orientChoice->SetSelection( m_isVertical ? 1 : 0 );
-    m_hAlignChoice->SetSelection( m_horizontalJustification );
-    m_vAlignChoice->SetSelection( m_verticalJustification );
+
+    m_horizontal->Check( !m_isVertical );
+    m_vertical->Check( m_isVertical );
+
+    m_italic->Check( m_isItalic );
+    m_bold->Check( m_isBold );
+
+    switch ( m_horizontalJustification )
+    {
+    case GR_TEXT_HJUSTIFY_LEFT:   m_hAlignLeft->Check( true );   break;
+    case GR_TEXT_HJUSTIFY_CENTER: m_hAlignCenter->Check( true ); break;
+    case GR_TEXT_HJUSTIFY_RIGHT:  m_hAlignRight->Check( true );  break;
+    }
+
+    switch ( m_verticalJustification )
+    {
+    case GR_TEXT_VJUSTIFY_TOP:    m_vAlignTop->Check( true );    break;
+    case GR_TEXT_VJUSTIFY_CENTER: m_vAlignCenter->Check( true ); break;
+    case GR_TEXT_VJUSTIFY_BOTTOM: m_vAlignBottom->Check( true ); break;
+    }
+
     m_visible->SetValue( m_isVisible );
-    m_italic->SetValue( m_isItalic );
-    m_bold->SetValue( m_isBold );
 
     return true;
 }
@@ -268,14 +360,29 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
         }
     }
 
-    m_isVertical = m_orientChoice->GetSelection() == 1;
     m_position = wxPoint( m_posX.GetValue(), m_posY.GetValue() );
     m_size = m_textSize.GetValue();
-    m_horizontalJustification = m_hAlignChoice->GetSelection();
-    m_verticalJustification = m_vAlignChoice->GetSelection();
+
+    m_isVertical = m_vertical->IsChecked();
+
+    m_isBold = m_bold->IsChecked();
+    m_isItalic = m_italic->IsChecked();
+
+    if( m_hAlignLeft->IsChecked() )
+        m_horizontalJustification = GR_TEXT_HJUSTIFY_LEFT;
+    else if( m_hAlignCenter->IsChecked() )
+        m_horizontalJustification = GR_TEXT_HJUSTIFY_CENTER;
+    else
+        m_horizontalJustification = GR_TEXT_HJUSTIFY_RIGHT;
+
+    if( m_vAlignTop->IsChecked() )
+        m_verticalJustification = GR_TEXT_VJUSTIFY_TOP;
+    else if( m_vAlignCenter->IsChecked() )
+        m_verticalJustification = GR_TEXT_VJUSTIFY_CENTER;
+    else
+        m_verticalJustification = GR_TEXT_VJUSTIFY_BOTTOM;
+
     m_isVisible = m_visible->GetValue();
-    m_isItalic = m_italic->GetValue();
-    m_isBold = m_bold->GetValue();
 
     return true;
 }

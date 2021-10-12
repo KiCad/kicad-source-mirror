@@ -29,6 +29,8 @@
 #include <wx/renderer.h>
 #include <wx/settings.h>
 
+#define wxCONTROL_SEPARATOR wxCONTROL_SPECIAL
+
 
 BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos,
                               const wxSize& aSize, int aStyles ) :
@@ -38,8 +40,28 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& 
         m_acceptDraggedInClicks( false )
 {
     if( aSize == wxDefaultSize )
-        SetMinSize( wxButton::GetDefaultSize() );
+        SetMinSize( wxButton::GetDefaultSize() + wxSize( m_padding * 2, m_padding * 2) );
 
+    setupEvents();
+}
+
+
+BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxBitmap& aDummyBitmap,
+                              const wxPoint& aPos, const wxSize& aSize, int aStyles ) :
+        wxPanel( aParent, aId, aPos, aSize, aStyles ),
+        m_buttonState( 0 ),
+        m_padding( 5 ),
+        m_acceptDraggedInClicks( false )
+{
+    if( aSize == wxDefaultSize )
+        SetMinSize( wxButton::GetDefaultSize() + wxSize( m_padding * 2, m_padding * 2) );
+
+    setupEvents();
+}
+
+
+void BITMAP_BUTTON::setupEvents()
+{
     Bind( wxEVT_PAINT,        &BITMAP_BUTTON::OnPaint,          this );
     Bind( wxEVT_LEFT_UP,      &BITMAP_BUTTON::OnLeftButtonUp,   this );
     Bind( wxEVT_LEFT_DOWN,    &BITMAP_BUTTON::OnLeftButtonDown, this );
@@ -58,7 +80,7 @@ BITMAP_BUTTON::~BITMAP_BUTTON()
 void BITMAP_BUTTON::SetPadding( int aPadding )
 {
     m_padding = aPadding;
-    SetMinSize( m_unadjustedMinSize + wxSize( aPadding * 2, aPadding * 2) );
+    SetMinSize( m_unadjustedMinSize + wxSize( aPadding * 2, aPadding * 2 ) );
 }
 
 
@@ -109,7 +131,9 @@ void BITMAP_BUTTON::OnKillFocus( wxEvent& aEvent )
 
 void BITMAP_BUTTON::OnSetFocus( wxEvent& aEvent )
 {
-    setFlag( wxCONTROL_FOCUSED );
+    if( !hasFlag( wxCONTROL_CHECKABLE ) )
+        setFlag( wxCONTROL_FOCUSED );
+
     Refresh();
     aEvent.Skip();
 }
@@ -119,19 +143,15 @@ void BITMAP_BUTTON::OnLeftButtonUp( wxMouseEvent& aEvent )
 {
     // Only create a button event when the control is enabled
     // and only accept clicks that came without prior mouse-down if configured
-    if( !hasFlag( wxCONTROL_DISABLED ) &&
-       ( m_acceptDraggedInClicks || hasFlag( wxCONTROL_PRESSED | wxCONTROL_FOCUSED ) ) )
+    if( !hasFlag( wxCONTROL_DISABLED )
+            && ( m_acceptDraggedInClicks || hasFlag( wxCONTROL_PRESSED | wxCONTROL_FOCUSED ) ) )
     {
-        wxEvtHandler* pEventHandler = GetEventHandler();
-        wxASSERT( pEventHandler );
-
-        pEventHandler->CallAfter(
-                [=]()
-                {
-                    wxCommandEvent evt( wxEVT_BUTTON, GetId() );
-                    evt.SetEventObject( this );
-                    GetEventHandler()->ProcessEvent( evt );
-                } );
+        GetEventHandler()->CallAfter( [=]()
+                                      {
+                                          wxCommandEvent evt( wxEVT_BUTTON, GetId() );
+                                          evt.SetEventObject( this );
+                                          GetEventHandler()->ProcessEvent( evt );
+                                      } );
     }
 
     clearFlag( wxCONTROL_PRESSED );
@@ -143,7 +163,29 @@ void BITMAP_BUTTON::OnLeftButtonUp( wxMouseEvent& aEvent )
 
 void BITMAP_BUTTON::OnLeftButtonDown( wxMouseEvent& aEvent )
 {
-    setFlag( wxCONTROL_PRESSED );
+    if( hasFlag( wxCONTROL_CHECKABLE ) )
+    {
+        if( hasFlag( wxCONTROL_CHECKED ) )
+        {
+            clearFlag( wxCONTROL_CHECKED );
+        }
+        else
+        {
+            setFlag( wxCONTROL_CHECKED );
+
+            GetEventHandler()->CallAfter( [=]()
+                                          {
+                                              wxCommandEvent evt( wxEVT_BUTTON, GetId() );
+                                              evt.SetEventObject( this );
+                                              GetEventHandler()->ProcessEvent( evt );
+                                          } );
+        }
+    }
+    else
+    {
+        setFlag( wxCONTROL_PRESSED );
+    }
+
     Refresh();
 
     aEvent.Skip();
@@ -158,6 +200,13 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
     // The drawing rectangle
     wxRect    rect( wxPoint( 0, 0 ), GetSize() );
     wxPaintDC dc( this );
+
+    if( hasFlag( wxCONTROL_SEPARATOR ) )
+    {
+        dc.SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) ) );
+        dc.DrawLine( wxPoint( GetSize().x / 2, 0 ), wxPoint( GetSize().x / 2, GetSize().y ) );
+        return;
+    }
 
     // This drawing is done so the button looks the same as an AUI toolbar button
     if( !hasFlag( wxCONTROL_DISABLED ) )
@@ -214,12 +263,35 @@ bool BITMAP_BUTTON::Enable( bool aEnable )
 }
 
 
+void BITMAP_BUTTON::SetIsCheckButton()
+{
+    setFlag( wxCONTROL_CHECKABLE );
+}
+
+
+void BITMAP_BUTTON::SetIsSeparator()
+{
+    setFlag( wxCONTROL_SEPARATOR | wxCONTROL_DISABLED );
+    SetMinSize( wxSize( m_padding * 2, wxButton::GetDefaultSize().y ) );
+}
+
+
 void BITMAP_BUTTON::Check( bool aCheck )
 {
+    wxASSERT_MSG( hasFlag( wxCONTROL_CHECKABLE ), "Button is not a checkButton." );
+
     if( aCheck )
         setFlag( wxCONTROL_CHECKED );
     else
         clearFlag( wxCONTROL_CHECKED );
 
     Refresh();
+}
+
+
+bool BITMAP_BUTTON::IsChecked() const
+{
+    wxASSERT_MSG( hasFlag( wxCONTROL_CHECKABLE ), "Button is not a checkButton." );
+
+    return hasFlag( wxCONTROL_CHECKED );
 }

@@ -39,8 +39,9 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200827  // Remove host tag.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200908  // Add include in BOM and on board support.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20201005  // Separate ki_fp_filters by spaces.
-//#define SEXPR_SYMBOL_LIB_FILE_VERSION 20210619   // Change pin overbar syntax from `~...~` to `~{...}`.
-#define SEXPR_SYMBOL_LIB_FILE_VERSION 20211014   // Arc formatting.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20210619   // Change pin overbar syntax from `~...~` to `~{...}`.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20211014   // Arc formatting.
+#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220101   // Class flags.
 
 
 /**
@@ -68,4 +69,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20210621  // Update overbar syntax in bus aliases.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20211123  // R/W uuids for junctions.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20220101  // Circles, arcs, rects, polys & beziers
-#define SEXPR_SCHEMATIC_FILE_VERSION 20220102  // Dash-dot-dot
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20220102  // Dash-dot-dot
+#define SEXPR_SCHEMATIC_FILE_VERSION 20220103  // Label fields

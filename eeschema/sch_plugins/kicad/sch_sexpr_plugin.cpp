@@ -203,16 +203,20 @@ static float getPinAngle( int aOrientation )
 }
 
 
-static const char* getSheetPinShapeToken( PINSHEETLABEL_SHAPE aShape )
+static const char* getSheetPinShapeToken( LABEL_FLAG_SHAPE aShape )
 {
     switch( aShape )
     {
-    case PINSHEETLABEL_SHAPE::PS_INPUT:       return SCHEMATIC_LEXER::TokenName( T_input );
-    case PINSHEETLABEL_SHAPE::PS_OUTPUT:      return SCHEMATIC_LEXER::TokenName( T_output );
-    case PINSHEETLABEL_SHAPE::PS_BIDI:        return SCHEMATIC_LEXER::TokenName( T_bidirectional );
-    case PINSHEETLABEL_SHAPE::PS_TRISTATE:    return SCHEMATIC_LEXER::TokenName( T_tri_state );
-    case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED: return SCHEMATIC_LEXER::TokenName( T_passive );
-    default:         wxFAIL;                  return SCHEMATIC_LEXER::TokenName( T_passive );
+    case LABEL_FLAG_SHAPE::L_INPUT:       return SCHEMATIC_LEXER::TokenName( T_input );
+    case LABEL_FLAG_SHAPE::L_OUTPUT:      return SCHEMATIC_LEXER::TokenName( T_output );
+    case LABEL_FLAG_SHAPE::L_BIDI:        return SCHEMATIC_LEXER::TokenName( T_bidirectional );
+    case LABEL_FLAG_SHAPE::L_TRISTATE:    return SCHEMATIC_LEXER::TokenName( T_tri_state );
+    case LABEL_FLAG_SHAPE::L_UNSPECIFIED: return SCHEMATIC_LEXER::TokenName( T_passive );
+    case LABEL_FLAG_SHAPE::F_DOT:         return SCHEMATIC_LEXER::TokenName( T_dot );
+    case LABEL_FLAG_SHAPE::F_ROUND:       return SCHEMATIC_LEXER::TokenName( T_round );
+    case LABEL_FLAG_SHAPE::F_DIAMOND:     return SCHEMATIC_LEXER::TokenName( T_diamond );
+    case LABEL_FLAG_SHAPE::F_RECTANGLE:   return SCHEMATIC_LEXER::TokenName( T_rectangle );
+    default:         wxFAIL;              return SCHEMATIC_LEXER::TokenName( T_passive );
     }
 }
 
@@ -243,6 +247,7 @@ static const char* getTextTypeToken( KICAD_T aType )
     case SCH_LABEL_T:         return SCHEMATIC_LEXER::TokenName( T_label );
     case SCH_GLOBAL_LABEL_T:  return SCHEMATIC_LEXER::TokenName( T_global_label );
     case SCH_HIER_LABEL_T:    return SCHEMATIC_LEXER::TokenName( T_hierarchical_label );
+    case SCH_NETCLASS_FLAG_T: return SCHEMATIC_LEXER::TokenName( T_netclass_flag );
     default:     wxFAIL;      return SCHEMATIC_LEXER::TokenName( T_text );
     }
 }
@@ -822,6 +827,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
+        case SCH_NETCLASS_FLAG_T:
             saveText( static_cast<SCH_TEXT*>( item ), 1 );
             break;
 
@@ -967,6 +973,7 @@ void SCH_SEXPR_PLUGIN::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSelect
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
+        case SCH_NETCLASS_FLAG_T:
             saveText( static_cast< SCH_TEXT* >( item ), 0 );
             break;
 
@@ -1120,20 +1127,10 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
 {
     wxCHECK_RET( aField != nullptr && m_out != nullptr, "" );
 
-    wxString fieldName = aField->GetName();
+    wxString fieldName = aField->GetCanonicalName();
 
     // For some reason (bug in legacy parser?) the field ID for non-mandatory fields is -1 so
     // check for this in order to correctly use the field name.
-    if( aField->GetParent()->Type() == SCH_SYMBOL_T )
-    {
-        if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
-            fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId(), false );
-    }
-    else if( aField->GetParent()->Type() == SCH_SHEET_T )
-    {
-        if( aField->GetId() >= 0 && aField->GetId() < SHEET_MANDATORY_FIELDS )
-            fieldName = SCH_SHEET::GetDefaultFieldName( aField->GetId(), false );
-    }
 
     if( aField->GetId() == -1 /* undefined ID */ )
     {
@@ -1430,8 +1427,20 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
                   getTextTypeToken( aText->Type() ),
                   m_out->Quotew( aText->GetText() ).c_str() );
 
-    if( ( aText->Type() == SCH_GLOBAL_LABEL_T ) || ( aText->Type() == SCH_HIER_LABEL_T ) )
+    if( aText->Type() == SCH_NETCLASS_FLAG_T )
+    {
+        SCH_NETCLASS_FLAG* label = static_cast<SCH_NETCLASS_FLAG*>( aText );
+
+        m_out->Print( 0, " (length %s)",
+                      FormatInternalUnits( label->GetPinLength() ).c_str() );
+    }
+
+    if( aText->Type() == SCH_GLOBAL_LABEL_T
+            || aText->Type() == SCH_HIER_LABEL_T
+            || aText->Type() == SCH_NETCLASS_FLAG_T )
+    {
         m_out->Print( 0, " (shape %s)", getSheetPinShapeToken( aText->GetShape() ) );
+    }
 
     if( aText->GetText().Length() < 50 )
     {
@@ -1457,10 +1466,12 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
 
     m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aText->m_Uuid.AsString() ) );
 
-    if( ( aText->Type() == SCH_GLOBAL_LABEL_T ) )
+    SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( aText );
+
+    if( label )
     {
-        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( aText );
-        saveField( label->GetIntersheetRefs(), aNestLevel + 1 );
+        for( SCH_FIELD& field : label->GetFields() )
+            saveField( &field, aNestLevel + 1 );
     }
 
     m_out->Print( aNestLevel, ")\n" );   // Closes text token.

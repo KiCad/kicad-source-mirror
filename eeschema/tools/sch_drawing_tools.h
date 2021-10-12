@@ -84,11 +84,13 @@ private:
     std::vector<PICKED_SYMBOL> m_symbolHistoryList;
     std::vector<PICKED_SYMBOL> m_powerHistoryList;
 
-    PINSHEETLABEL_SHAPE        m_lastSheetPinType;
-    PINSHEETLABEL_SHAPE        m_lastGlobalLabelShape;
+    LABEL_FLAG_SHAPE           m_lastSheetPinType;
+    LABEL_FLAG_SHAPE           m_lastGlobalLabelShape;
+    LABEL_FLAG_SHAPE           m_lastNetClassFlagShape;
     LABEL_SPIN_STYLE           m_lastTextOrientation;
     bool                       m_lastTextBold;
     bool                       m_lastTextItalic;
+    bool                       m_lastNetClassFlagItalic;
     FILL_T                     m_lastFillStyle;
 
     ///< Re-entrancy guards

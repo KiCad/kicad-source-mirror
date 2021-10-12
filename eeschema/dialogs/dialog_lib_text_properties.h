@@ -30,6 +30,7 @@
 #include <widgets/unit_binder.h>
 
 class SYMBOL_EDIT_FRAME;
+class SCINTILLA_TRICKS;
 class LIB_TEXT;
 
 
@@ -37,9 +38,14 @@ class DIALOG_LIB_TEXT_PROPERTIES : public DIALOG_LIB_TEXT_PROPERTIES_BASE
 {
 public:
     DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT* aText );
-    ~DIALOG_LIB_TEXT_PROPERTIES() override {};
+    ~DIALOG_LIB_TEXT_PROPERTIES() override;
 
 private:
+    void onOrientButton( wxCommandEvent &aEvent );
+    void onHAlignButton( wxCommandEvent &aEvent );
+    void onVAlignButton( wxCommandEvent &aEvent );
+    void onMultiLineTCLostFocus( wxFocusEvent& event ) override;
+
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
@@ -49,6 +55,7 @@ private:
     UNIT_BINDER        m_posX;
     UNIT_BINDER        m_posY;
     UNIT_BINDER        m_textSize;
+    SCINTILLA_TRICKS*  m_scintillaTricks;
 };
 
 

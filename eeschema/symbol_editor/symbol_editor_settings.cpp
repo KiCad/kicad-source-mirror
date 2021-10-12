@@ -61,9 +61,11 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "defaults.pin_num_size",
                                            &m_Defaults.pin_num_size, DEFAULT_PINNUM_SIZE ) );
 
-    m_params.emplace_back( new PARAM<int>( "repeat.label_delta", &m_Repeat.label_delta, 1 ) );
+    m_params.emplace_back( new PARAM<int>( "repeat.label_delta",
+                                           &m_Repeat.label_delta, 1 ) );
 
-    m_params.emplace_back( new PARAM<int>( "repeat.pin_step", &m_Repeat.pin_step, 100 ) );
+    m_params.emplace_back( new PARAM<int>( "repeat.pin_step",
+                                           &m_Repeat.pin_step, 100 ) );
 
     m_params.emplace_back( new PARAM<bool>( "show_pin_electrical_type",
                                             &m_ShowPinElectricalType, true ) );
@@ -71,7 +73,7 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "lib_table_width",
                                            &m_LibWidth, 250 ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "edit_component_visible_columns",
+    m_params.emplace_back( new PARAM<wxString>( "edit_symbol_visible_columns",
                                                 &m_EditSymbolVisibleColumns, "0 1 2 3 4 5 6 7" ) );
 
     m_params.emplace_back( new PARAM<wxString>( "pin_table_visible_columns",
@@ -101,21 +103,22 @@ bool SYMBOL_EDITOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
         Set( gridSizePtr,  1 );
     }
 
-    ret &= fromLegacy<int>( aCfg, "DefaultWireWidth",           "defaults.line_width" );
-    ret &= fromLegacy<int>( aCfg, "DefaultPinLength",           "defaults.pin_length" );
-    ret &= fromLegacy<int>( aCfg, "LibeditPinNameSize",         "defaults.pin_name_size" );
-    ret &= fromLegacy<int>( aCfg, "LibeditPinNumSize",          "defaults.pin_num_size" );
+    ret &= fromLegacy<int>( aCfg, "DefaultWireWidth",              "defaults.line_width" );
+    ret &= fromLegacy<int>( aCfg, "DefaultPinLength",              "defaults.pin_length" );
+    ret &= fromLegacy<int>( aCfg, "LibeditPinNameSize",            "defaults.pin_name_size" );
+    ret &= fromLegacy<int>( aCfg, "LibeditPinNumSize",             "defaults.pin_num_size" );
 
-    ret &= fromLegacy<int>( aCfg, "LibeditRepeatLabelInc",      "repeat.label_delta" );
-    ret &= fromLegacy<int>( aCfg, "LibeditPinRepeatStep",       "repeat.pin_step" );
-    ret &= fromLegacy<int>( aCfg, "LibeditRepeatStepX",         "repeat.x_step" );
-    ret &= fromLegacy<int>( aCfg, "LibeditRepeatStepY",         "repeat.y_step" );
+    ret &= fromLegacy<int>( aCfg, "LibeditRepeatLabelInc",         "repeat.label_delta" );
+    ret &= fromLegacy<int>( aCfg, "LibeditPinRepeatStep",          "repeat.pin_step" );
+    ret &= fromLegacy<int>( aCfg, "LibeditRepeatStepX",            "repeat.x_step" );
+    ret &= fromLegacy<int>( aCfg, "LibeditRepeatStepY",            "repeat.y_step" );
 
     ret &= fromLegacy<int>(  aCfg, "LibeditLibWidth",              "lib_table_width" );
     ret &= fromLegacy<bool>( aCfg, "LibeditShowPinElectricalType", "show_pin_electrical_type" );
 
-    ret &= fromLegacyString( aCfg, "LibEditFieldsShownColumns", "edit_component_visible_columns" );
-    ret &= fromLegacyString( aCfg, "PinTableShownColumns",      "pin_table_visible_columns" );
+    ret &= fromLegacyString( aCfg, "LibEditFieldsShownColumns",    "edit_symbol_visible_columns" );
+
+    ret &= fromLegacyString( aCfg, "PinTableShownColumns",         "pin_table_visible_columns" );
 
     return ret;
 }

@@ -224,7 +224,8 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
     HANDLE_ITEM( SCH_LINE_T, SCH_LINE );
     HANDLE_ITEM( SCH_SHAPE_T, SCH_SHAPE );
     HANDLE_ITEM( SCH_TEXT_T, SCH_TEXT );
-    HANDLE_ITEM( SCH_LABEL_T, SCH_TEXT );
+    HANDLE_ITEM( SCH_LABEL_T, SCH_LABEL );
+    HANDLE_ITEM( SCH_NETCLASS_FLAG_T, SCH_NETCLASS_FLAG );
     HANDLE_ITEM( SCH_FIELD_T, SCH_FIELD );
     HANDLE_ITEM( SCH_HIER_LABEL_T, SCH_HIERLABEL );
     HANDLE_ITEM( SCH_GLOBAL_LABEL_T, SCH_GLOBALLABEL );
@@ -278,6 +279,10 @@ float SCH_PAINTER::getShadowWidth( bool aForHighlight ) const
 
 COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows ) const
 {
+    // We don't (yet?) have a separate color for intersheet refs
+    if( aLayer == LAYER_INTERSHEET_REFS )
+        aLayer = LAYER_GLOBLABEL;
+
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
 
     if( aItem->Type() == SCH_LINE_T )
@@ -414,6 +419,19 @@ float SCH_PAINTER::getTextThickness( const LIB_TEXT* aItem, bool aDrawingShadows
 static VECTOR2D mapCoords( const wxPoint& aCoord )
 {
     return VECTOR2D( aCoord.x, -aCoord.y );
+}
+
+
+static bool isFieldsLayer( int aLayer )
+{
+    return aLayer == LAYER_REFERENCEPART
+        || aLayer == LAYER_VALUEPART
+        || aLayer == LAYER_INTERSHEET_REFS
+        || aLayer == LAYER_NETCLASS_REFS
+        || aLayer == LAYER_FIELDS
+        || aLayer == LAYER_SHEETNAME
+        || aLayer == LAYER_SHEETFILENAME
+        || aLayer == LAYER_SHEETFIELDS;
 }
 
 
@@ -1416,11 +1434,12 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
 
     switch( aText->Type() )
     {
-    case SCH_SHEET_PIN_T:     aLayer = LAYER_SHEETLABEL; break;
-    case SCH_HIER_LABEL_T:    aLayer = LAYER_HIERLABEL;  break;
-    case SCH_GLOBAL_LABEL_T:  aLayer = LAYER_GLOBLABEL;  break;
-    case SCH_LABEL_T:         aLayer = LAYER_LOCLABEL;   break;
-    default:                  aLayer = LAYER_NOTES;      break;
+    case SCH_SHEET_PIN_T:     aLayer = LAYER_SHEETLABEL;    break;
+    case SCH_HIER_LABEL_T:    aLayer = LAYER_HIERLABEL;     break;
+    case SCH_GLOBAL_LABEL_T:  aLayer = LAYER_GLOBLABEL;     break;
+    case SCH_NETCLASS_FLAG_T: aLayer = LAYER_NETCLASS_REFS; break;
+    case SCH_LABEL_T:         aLayer = LAYER_LOCLABEL;      break;
+    default:                  aLayer = LAYER_NOTES;         break;
     }
 
     COLOR4D color = getRenderColor( aText, aLayer, drawingShadows );
@@ -1547,6 +1566,20 @@ static void orientSymbol( LIB_SYMBOL* symbol, int orientation )
 
 void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
 {
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
+    {
+        for( const SCH_FIELD& field : aSymbol->GetFields() )
+            draw( &field, aLayer );
+    }
+
+    if( isFieldsLayer( aLayer ) )
+        return;
+
+    if( drawingShadows && !( aSymbol->IsBrightened() || aSymbol->IsSelected() ) )
+        return;
+
     int unit = aSymbol->GetUnitSelection( &m_schematic->CurrentSheet() );
     int convert = aSymbol->GetConvert();
 
@@ -1589,10 +1622,6 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
     }
 
     draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert() );
-
-    // The fields are SCH_SYMBOL-specific so don't need to be copied/oriented/translated
-    for( const SCH_FIELD& field : aSymbol->GetFields() )
-        draw( &field, aLayer );
 }
 
 
@@ -1601,6 +1630,9 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
     if( drawingShadows && !( aField->IsBrightened() || aField->IsSelected() ) )
+        return;
+
+    if( !drawingShadows && aField->GetLayer() != aLayer )
         return;
 
     aLayer = aField->GetLayer();
@@ -1656,6 +1688,13 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
      *   GetBoundingBox to know the text coordinate considered as centered
      */
     EDA_RECT bbox = aField->GetBoundingBox();
+
+    if( aField->GetParent() && aField->GetParent()->Type() == SCH_GLOBAL_LABEL_T )
+    {
+        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( aField->GetParent() );
+        bbox.Offset( label->GetSchematicTextOffset( &m_schSettings ) );
+    }
+
     wxPoint  textpos = bbox.Centre();
 
     m_gal->SetIsStroke( true );
@@ -1696,12 +1735,18 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
+void SCH_PAINTER::draw( const SCH_GLOBALLABEL *aLabel, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
-        draw( aLabel->GetIntersheetRefs(), aLayer );
+    {
+        for( const SCH_FIELD& field : aLabel->GetFields() )
+            draw( &field, aLayer );
+    }
+
+    if( isFieldsLayer( aLayer ) )
+        return;
 
     if( drawingShadows && !( aLabel->IsBrightened() || aLabel->IsSelected() ) )
         return;
@@ -1729,13 +1774,42 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->DrawPolyline( pts2 );
 
-    draw( static_cast<SCH_TEXT*>( aLabel ), aLayer );
+    draw( static_cast<const SCH_TEXT*>( aLabel ), aLayer );
 }
 
 
-void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
+void SCH_PAINTER::draw( const SCH_LABEL *aLabel, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
+    {
+        for( const SCH_FIELD& field : aLabel->GetFields() )
+            draw( &field, aLayer );
+    }
+
+    if( isFieldsLayer( aLayer ) )
+        return;
+
+    if( drawingShadows && !( aLabel->IsBrightened() || aLabel->IsSelected() ) )
+        return;
+
+    draw( static_cast<const SCH_TEXT*>( aLabel ), aLayer );
+}
+
+
+void SCH_PAINTER::draw( const SCH_HIERLABEL *aLabel, int aLayer )
+{
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
+    {
+        for( const SCH_FIELD& field : aLabel->GetFields() )
+            draw( &field, aLayer );
+    }
+
+    if( isFieldsLayer( aLayer ) )
+        return;
 
     if( drawingShadows && !( aLabel->IsBrightened() || aLabel->IsSelected() ) )
         return;
@@ -1772,9 +1846,76 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
 }
 
 
+void SCH_PAINTER::draw( const SCH_NETCLASS_FLAG *aLabel, int aLayer )
+{
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
+    {
+        for( const SCH_FIELD& field : aLabel->GetFields() )
+            draw( &field, aLayer );
+    }
+
+    if( isFieldsLayer( aLayer ) )
+        return;
+
+    if( drawingShadows && !( aLabel->IsBrightened() || aLabel->IsSelected() ) )
+        return;
+
+    COLOR4D color = getRenderColor( aLabel, LAYER_NETCLASS_REFS, drawingShadows );
+
+    if( aLayer == LAYER_DANGLING )
+    {
+        if( aLabel->IsDangling() )
+        {
+            drawDanglingSymbol( aLabel->GetTextPos(), color, Mils2iu( DANGLING_SYMBOL_SIZE / 2 ),
+                                drawingShadows, aLabel->IsBrightened() );
+        }
+
+        return;
+    }
+
+    std::vector<wxPoint> pts;
+    std::deque<VECTOR2D> pts2;
+
+    aLabel->CreateGraphicShape( &m_schSettings, pts, aLabel->GetTextPos() );
+
+    for( const wxPoint& p : pts )
+        pts2.emplace_back( VECTOR2D( p.x, p.y ) );
+
+    m_gal->SetIsFill( false );
+    m_gal->SetFillColor( color );
+    m_gal->SetIsStroke( true );
+    m_gal->SetLineWidth( getTextThickness( aLabel, drawingShadows ) );
+    m_gal->SetStrokeColor( color );
+
+    if( aLabel->GetShape() == LABEL_FLAG_SHAPE::F_DOT )
+    {
+        m_gal->DrawLine( pts2[0], pts2[1] );
+        m_gal->SetIsFill( true );
+        m_gal->DrawCircle( pts2[2], ( pts2[2] - pts2[1] ).EuclideanNorm() );
+    }
+    else if( aLabel->GetShape() == LABEL_FLAG_SHAPE::F_ROUND )
+    {
+        m_gal->DrawLine( pts2[0], pts2[1] );
+        m_gal->DrawCircle( pts2[2], ( pts2[2] - pts2[1] ).EuclideanNorm() );
+    }
+    else
+    {
+        m_gal->DrawPolyline( pts2 );
+    }
+}
+
+
 void SCH_PAINTER::draw( const SCH_SHEET *aSheet, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
+    {
+        for( const SCH_FIELD& field : aSheet->GetFields() )
+            draw( &field, aLayer );
+    }
 
     if( aLayer == LAYER_HIERLABEL || aLayer == LAYER_SELECTION_SHADOWS )
     {
@@ -1838,12 +1979,6 @@ void SCH_PAINTER::draw( const SCH_SHEET *aSheet, int aLayer )
         m_gal->SetIsFill( false );
 
         m_gal->DrawRectangle( pos, pos + size );
-
-        if( drawingShadows && !eeconfig()->m_Selection.draw_selected_children )
-            return;
-
-        for( const SCH_FIELD& field : aSheet->GetFields() )
-            draw( &field, aLayer );
     }
 }
 

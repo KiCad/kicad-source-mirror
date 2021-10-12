@@ -59,6 +59,26 @@ public:
         return wxT( "SCH_LINE" );
     }
 
+    bool IsType( const KICAD_T aScanTypes[] ) const override
+    {
+        if( SCH_ITEM::IsType( aScanTypes ) )
+            return true;
+
+        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        {
+            if( *p == SCH_ITEM_LOCATE_WIRE_T && m_layer == LAYER_WIRE )
+                return true;
+
+            if ( *p == SCH_ITEM_LOCATE_BUS_T && m_layer == LAYER_BUS )
+                return true;
+
+            if ( *p == SCH_ITEM_LOCATE_GRAPHIC_LINE_T && m_layer == LAYER_NOTES )
+                return true;
+        }
+
+        return false;
+    }
+
     bool IsEndPoint( const wxPoint& aPoint ) const
     {
         return aPoint == m_start || aPoint == m_end;

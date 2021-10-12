@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="add_class_flag.svg"
+   inkscape:version="1.0.2 (e86c8708, 2021-01-15)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1440"
+     inkscape:window-height="800"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="26.841039"
+     inkscape:cx="13.076515"
+     inkscape:cy="15.990298"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>label</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs157961">
+    <style
+       id="style157959">.cls-1{fill:#545454;}.cls-2{fill:#1a81c4;}</style>
+  </defs>
+  <title
+     id="title157963">label</title>
+  <text
+     xml:space="preserve"
+     style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#ded3dd;fill-opacity:1;stroke:#ded3dd;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     x="12.126078"
+     y="15.398792"
+     id="text15403"
+     transform="scale(0.98961654,1.0104924)"><tspan
+       sodipodi:role="line"
+       id="tspan15401"
+       x="12.126078"
+       y="15.398792"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ded3dd;fill-opacity:1;stroke:#ded3dd;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">A</tspan></text>
+  <ellipse
+     style="fill:none;stroke:#ded3dd;stroke-width:2.00692913;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path843"
+     cx="6.8751192"
+     cy="9.1359987"
+     rx="3.6851397"
+     ry="3.6851389" />
+  <rect
+     style="fill:none;stroke:#ded3dd;stroke-width:1.6063;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect845"
+     width="0.54948211"
+     height="3.6666667"
+     x="6.5501499"
+     y="14.00015" />
+</svg>

@@ -1548,7 +1548,7 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
     sheetIt->second->AddPin( sheetPin );
 
     sheetPin->SetText( elem.name );
-    sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
+    sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
     //sheetPin->SetLabelSpinStyle( getSpinStyle( term.OrientAngle, false ) );
     //sheetPin->SetPosition( getKiCadPoint( term.Position ) );
 
@@ -1584,16 +1584,16 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
     {
     default:
     case ASCH_PORT_IOTYPE::UNSPECIFIED:
-        sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
+        sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
         break;
     case ASCH_PORT_IOTYPE::OUTPUT:
-        sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_OUTPUT );
+        sheetPin->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
         break;
     case ASCH_PORT_IOTYPE::INPUT:
-        sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_INPUT );
+        sheetPin->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
         break;
     case ASCH_PORT_IOTYPE::BIDI:
-        sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_BIDI );
+        sheetPin->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
         break;
     }
 }
@@ -1972,16 +1972,16 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     {
     default:
     case ASCH_PORT_IOTYPE::UNSPECIFIED:
-        label->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
+        label->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
         break;
     case ASCH_PORT_IOTYPE::OUTPUT:
-        label->SetShape( PINSHEETLABEL_SHAPE::PS_OUTPUT );
+        label->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
         break;
     case ASCH_PORT_IOTYPE::INPUT:
-        label->SetShape( PINSHEETLABEL_SHAPE::PS_INPUT );
+        label->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
         break;
     case ASCH_PORT_IOTYPE::BIDI:
-        label->SetShape( PINSHEETLABEL_SHAPE::PS_BIDI );
+        label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
         break;
     }
 

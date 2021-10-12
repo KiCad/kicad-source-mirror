@@ -165,10 +165,15 @@ public:
         {
             if( *p == SCH_ITEM_LOCATE_WIRE_T && m_layer == LAYER_WIRE )
                 return true;
-            else if ( *p == SCH_ITEM_LOCATE_BUS_T && m_layer == LAYER_BUS )
+
+            if ( *p == SCH_ITEM_LOCATE_BUS_T && m_layer == LAYER_BUS )
                 return true;
-            else if ( *p == SCH_ITEM_LOCATE_GRAPHIC_LINE_T && m_layer == LAYER_NOTES )
+
+            if ( *p == SCH_ITEM_LOCATE_GRAPHIC_LINE_T
+                    && Type() == SCH_LINE_T && m_layer == LAYER_NOTES )
+            {
                 return true;
+            }
         }
 
         return false;

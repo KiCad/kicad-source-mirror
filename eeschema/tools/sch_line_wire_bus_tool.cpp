@@ -224,6 +224,7 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
     ctxMenu.AddSeparator( 100 );
     ctxMenu.AddItem( EE_ACTIONS::placeJunction,      wireOrBusTool && EE_CONDITIONS::Idle, 100 );
     ctxMenu.AddItem( EE_ACTIONS::placeLabel,         wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::placeClassLabel,    wireOrBusTool && EE_CONDITIONS::Idle, 100 );
     ctxMenu.AddItem( EE_ACTIONS::placeGlobalLabel,   wireOrBusTool && EE_CONDITIONS::Idle, 100 );
     ctxMenu.AddItem( EE_ACTIONS::placeHierLabel,     wireOrBusTool && EE_CONDITIONS::Idle, 100 );
     ctxMenu.AddItem( EE_ACTIONS::breakWire,          wireOrBusTool && EE_CONDITIONS::Idle, 100 );

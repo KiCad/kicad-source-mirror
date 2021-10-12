@@ -90,16 +90,21 @@ private:
 };
 
 /*
- * Shape/Type of #SCH_HIERLABEL and #SCH_GLOBALLABEL.
+ * Shape/Type of #SCH_HIERLABEL, #SCH_GLOBALLABEL and #SCH_NETCLASS_FLAG.
  */
-enum class PINSHEETLABEL_SHAPE
+enum LABEL_FLAG_SHAPE
 {
-    PS_INPUT,           // use "PS_INPUT" instead of "INPUT" to avoid colliding
-                        // with a Windows header on msys2
-    PS_OUTPUT,
-    PS_BIDI,
-    PS_TRISTATE,
-    PS_UNSPECIFIED
+    L_INPUT,
+    L_OUTPUT,
+    L_BIDI,
+    L_TRISTATE,
+    L_UNSPECIFIED,
+
+    F_FIRST,
+    F_DOT = F_FIRST,
+    F_ROUND,
+    F_DIAMOND,
+    F_RECTANGLE
 };
 
 
@@ -112,12 +117,6 @@ public:
     SCH_TEXT( const wxPoint& aPos = wxPoint( 0, 0 ), const wxString& aText = wxEmptyString,
               KICAD_T aType = SCH_TEXT_T );
 
-    /**
-     * Clone \a aText into a new object.  All members are copied as is except
-     * for the #m_isDangling member which is set to false.  This prevents newly
-     * copied objects derived from #SCH_TEXT from having their connection state
-     * improperly set.
-     */
     SCH_TEXT( const SCH_TEXT& aText );
 
     ~SCH_TEXT() { }
@@ -131,13 +130,6 @@ public:
     {
         return wxT( "SCH_TEXT" );
     }
-
-    /**
-     * Return the set of contextual text variable tokens for this text item.
-     *
-     * @param[out] aVars
-     */
-    void GetContextualTextVars( wxArrayString* aVars ) const;
 
     wxString GetShownText( int aDepth = 0 ) const override;
 
@@ -158,9 +150,8 @@ public:
     virtual void     SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle );
     LABEL_SPIN_STYLE GetLabelSpinStyle() const  { return m_spin_style; }
 
-    PINSHEETLABEL_SHAPE GetShape() const        { return m_shape; }
-
-    void SetShape( PINSHEETLABEL_SHAPE aShape ) { m_shape = aShape; }
+    virtual LABEL_FLAG_SHAPE GetShape() const        { return L_UNSPECIFIED; }
+    virtual void SetShape( LABEL_FLAG_SHAPE aShape ) { }
 
     /**
      * This offset depends on the orientation, the type of text, and the area required to
@@ -172,18 +163,6 @@ public:
 
     void Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
 
-    /**
-     * Calculate the graphic shape (a polygon) associated to the text.
-     *
-     * @param aPoints A buffer to fill with polygon corners coordinates
-     * @param Pos Position of the shape, for texts and labels: do nothing
-     */
-    virtual void CreateGraphicShape( const RENDER_SETTINGS* aSettings,
-                                     std::vector<wxPoint>& aPoints, const wxPoint& Pos ) const
-    {
-        aPoints.clear();
-    }
-
     void SwapData( SCH_ITEM* aItem ) override;
 
     const EDA_RECT GetBoundingBox() const override;
@@ -192,11 +171,7 @@ public:
 
     int GetTextOffset( const RENDER_SETTINGS* aSettings = nullptr ) const;
 
-    int GetLabelBoxExpansion( const RENDER_SETTINGS* aSettings = nullptr ) const;
-
     int GetPenWidth() const override;
-
-    // Geometric transforms (used in block operations):
 
     void Move( const wxPoint& aMoveVector ) override
     {
@@ -222,16 +197,6 @@ public:
 
     virtual bool IsReplaceable() const override { return true; }
 
-    void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
-
-    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                              const SCH_SHEET_PATH* aPath = nullptr ) override;
-
-    bool IsDangling() const override { return m_isDangling; }
-    void SetIsDangling( bool aIsDangling ) { m_isDangling = aIsDangling; }
-
-    std::vector<wxPoint> GetConnectionPoints() const override;
-
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
@@ -246,7 +211,10 @@ public:
 
     void Plot( PLOTTER* aPlotter ) const override;
 
-    EDA_ITEM* Clone() const override;
+    EDA_ITEM* Clone() const override
+    {
+        return new SCH_TEXT( *this );
+    }
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -257,14 +225,6 @@ public:
     static HTML_MESSAGE_BOX* ShowSyntaxHelp( wxWindow* aParentWindow );
 
 protected:
-    PINSHEETLABEL_SHAPE m_shape;
-
-    /// True if not connected to another object if the object derive from SCH_TEXT
-    /// supports connections.
-    bool m_isDangling;
-
-    CONNECTION_TYPE m_connectionType;
-
     /**
      * The orientation of text and any associated drawing elements of derived objects.
      *  - 0 is the horizontal and left justified.
@@ -279,7 +239,117 @@ protected:
 };
 
 
-class SCH_LABEL : public SCH_TEXT
+class SCH_LABEL_BASE : public SCH_TEXT
+{
+public:
+    SCH_LABEL_BASE( const wxPoint& aPos, const wxString& aText, KICAD_T aType );
+
+    SCH_LABEL_BASE( const SCH_LABEL_BASE& aLabel );
+
+    // Abstract class
+    virtual wxString GetClass() const override = 0;
+
+    bool IsType( const KICAD_T aScanTypes[] ) const override;
+
+    void SwapData( SCH_ITEM* aItem ) override;
+
+    LABEL_FLAG_SHAPE GetShape() const override        { return m_shape; }
+    void SetShape( LABEL_FLAG_SHAPE aShape ) override { m_shape = aShape; }
+
+    static const wxString GetDefaultFieldName( const wxString& aName, bool aUseDefaultName );
+
+    virtual int GetMandatoryFieldCount() { return 0; }
+
+    std::vector<SCH_FIELD>& GetFields() { return m_fields; }
+    const std::vector<SCH_FIELD>& GetFields() const { return m_fields; }
+
+    /**
+     * Set multiple schematic fields.
+     *
+     * @param aFields are the fields to set in this symbol.
+     */
+    void SetFields( const std::vector<SCH_FIELD>& aFields )
+    {
+        m_fields = aFields;     // vector copying, length is changed possibly
+    }
+
+    void Move( const wxPoint& aMoveVector ) override
+    {
+        SCH_TEXT::Move( aMoveVector );
+
+        for( SCH_FIELD& field : m_fields )
+            field.Offset( aMoveVector );
+    }
+
+    void Rotate( const wxPoint& aCenter ) override;
+    void Rotate90( bool aClockwise ) override;
+
+    void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
+
+    virtual bool ResolveTextVar( wxString* token, int aDepth ) const;
+
+    wxString GetShownText( int aDepth = 0 ) const override;
+
+    void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
+
+    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+
+    /**
+     * Calculate the graphic shape (a polygon) associated to the text.
+     *
+     * @param aPoints A buffer to fill with polygon corners coordinates
+     * @param Pos Position of the shape, for texts and labels: do nothing
+     */
+    virtual void CreateGraphicShape( const RENDER_SETTINGS* aSettings,
+                                     std::vector<wxPoint>& aPoints, const wxPoint& Pos ) const
+    {
+        aPoints.clear();
+    }
+
+    int GetLabelBoxExpansion( const RENDER_SETTINGS* aSettings = nullptr ) const;
+
+    /**
+     * Return the bounding box of the label only, without taking in account its fields.
+     */
+    virtual const EDA_RECT GetBodyBoundingBox() const;
+
+    /**
+     * Return the bounding box of the label including its fields.
+     */
+    const EDA_RECT GetBoundingBox() const override;
+
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+
+    std::vector<wxPoint> GetConnectionPoints() const override;
+
+    void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
+
+    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
+                              const SCH_SHEET_PATH* aPath = nullptr ) override;
+
+    bool IsDangling() const override { return m_isDangling; }
+    void SetIsDangling( bool aIsDangling ) { m_isDangling = aIsDangling; }
+
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
+
+    void Plot( PLOTTER* aPlotter ) const override;
+
+    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
+
+protected:
+    std::vector<SCH_FIELD>  m_fields;
+
+    LABEL_FLAG_SHAPE        m_shape;
+
+    CONNECTION_TYPE         m_connectionType;
+    bool                    m_isDangling;
+};
+
+
+class SCH_LABEL : public SCH_LABEL_BASE
 {
 public:
     SCH_LABEL( const wxPoint& aPos = wxPoint( 0, 0 ), const wxString& aText = wxEmptyString );
@@ -298,9 +368,7 @@ public:
         return wxT( "SCH_LABEL" );
     }
 
-    bool IsType( const KICAD_T aScanTypes[] ) const override;
-
-    const EDA_RECT GetBoundingBox() const override;
+    const EDA_RECT GetBodyBoundingBox() const override;
 
     bool IsConnectable() const override { return true; }
 
@@ -316,7 +384,10 @@ public:
 
     bool IsReplaceable() const override { return true; }
 
-    EDA_ITEM* Clone() const override;
+    EDA_ITEM* Clone() const override
+    {
+        return new SCH_LABEL( *this );
+    }
 
     bool IsPointClickableAnchor( const wxPoint& aPos ) const override
     {
@@ -331,7 +402,55 @@ private:
 };
 
 
-class SCH_GLOBALLABEL : public SCH_TEXT
+class SCH_NETCLASS_FLAG : public SCH_LABEL_BASE
+{
+public:
+    SCH_NETCLASS_FLAG( const wxPoint& aPos = wxPoint( 0, 0 ) );
+
+    SCH_NETCLASS_FLAG( const SCH_NETCLASS_FLAG& aClassLabel );
+
+    ~SCH_NETCLASS_FLAG() { }
+
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && SCH_NETCLASS_FLAG_T == aItem->Type();
+    }
+
+    wxString GetClass() const override
+    {
+        return wxT( "SCH_NETCLASS_FLAG" );
+    }
+
+    EDA_ITEM* Clone() const override
+    {
+        return new SCH_NETCLASS_FLAG( *this );
+    }
+
+    int GetPinLength() const { return m_pinLength; }
+    void SetPinLength( int aLength ) { m_pinLength = aLength; }
+
+    void CreateGraphicShape( const RENDER_SETTINGS* aSettings, std::vector<wxPoint>& aPoints,
+                             const wxPoint& aPos ) const override;
+
+    void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
+
+    wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
+
+    bool IsConnectable() const override { return true; }
+
+    bool CanConnect( const SCH_ITEM* aItem ) const override
+    {
+        return aItem->Type() == SCH_LINE_T &&
+                ( aItem->GetLayer() == LAYER_WIRE || aItem->GetLayer() == LAYER_BUS );
+    }
+
+private:
+    int       m_pinLength;
+    int       m_symbolSize;
+};
+
+
+class SCH_GLOBALLABEL : public SCH_LABEL_BASE
 {
 public:
     SCH_GLOBALLABEL( const wxPoint& aPos = wxPoint( 0, 0 ), const wxString& aText = wxEmptyString );
@@ -350,16 +469,13 @@ public:
         return wxT( "SCH_GLOBALLABEL" );
     }
 
-    EDA_ITEM* Clone() const override;
+    EDA_ITEM* Clone() const override
+    {
+        return new SCH_GLOBALLABEL( *this );
+    }
 
-    void SwapData( SCH_ITEM* aItem ) override;
+    int GetMandatoryFieldCount() override { return 1; }
 
-    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
-
-    void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
-
-    void Rotate( const wxPoint& aCenter ) override;
-    void Rotate90( bool aClockwise ) override;
     void MirrorSpinStyle( bool aLeftRight ) override;
 
     void MirrorHorizontally( int aCenter ) override;
@@ -369,32 +485,10 @@ public:
 
     wxPoint GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const override;
 
-    /**
-     * Return the bounding box on the global label only, without taking in account
-     * the intersheet references.
-     */
-    const EDA_RECT GetBoundingBoxBase() const;
-
-    /**
-     * Return the bounding box on the global label only, including the intersheet references.
-     */
-    const EDA_RECT GetBoundingBox() const override;
-
-    /**
-     * Override basic hit test to allow testing separately for label and intersheet refs
-     * which can move independently
-     * @return True if hit in either label or associated intersheet ref
-     */
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
-    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
-
     void CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
                              std::vector<wxPoint>& aPoints, const wxPoint& aPos ) const override;
 
-    void UpdateIntersheetRefProps();
-    void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
-
-    bool ResolveTextVar( wxString* token, int aDepth ) const;
+    bool ResolveTextVar( wxString* token, int aDepth ) const override;
 
     bool IsConnectable() const override { return true; }
 
@@ -404,26 +498,15 @@ public:
                 ( aItem->GetLayer() == LAYER_WIRE || aItem->GetLayer() == LAYER_BUS );
     }
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAPS GetMenuImage() const override;
 
-    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
-
-    void Plot( PLOTTER* aPlotter ) const override;
-
-    SCH_FIELD* GetIntersheetRefs() { return &m_intersheetRefsField; }
-    void SetIntersheetRefs( const SCH_FIELD& aField ) { m_intersheetRefsField = aField; }
-
     bool IsPointClickableAnchor( const wxPoint& aPos ) const override
     {
         return m_isDangling && GetPosition() == aPos;
-    }
-
-    void Move( const wxPoint& aMoveVector ) override
-    {
-        SCH_TEXT::Move( aMoveVector );
-        m_intersheetRefsField.Move( aMoveVector );
     }
 
 private:
@@ -431,12 +514,10 @@ private:
     {
         return EDA_TEXT::GetTextPos() == aPosition;
     }
-
-    SCH_FIELD m_intersheetRefsField;
 };
 
 
-class SCH_HIERLABEL : public SCH_TEXT
+class SCH_HIERLABEL : public SCH_LABEL_BASE
 {
 public:
     SCH_HIERLABEL( const wxPoint& aPos = wxPoint( 0, 0 ), const wxString& aText = wxEmptyString,
@@ -445,8 +526,6 @@ public:
     // Do not create a copy constructor.  The one generated by the compiler is adequate.
 
     ~SCH_HIERLABEL() { }
-
-    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -465,9 +544,9 @@ public:
     void CreateGraphicShape( const RENDER_SETTINGS* aSettings, std::vector<wxPoint>& aPoints,
                              const wxPoint& aPos ) const override;
     void CreateGraphicShape( const RENDER_SETTINGS* aSettings, std::vector<wxPoint>& aPoints,
-                             const wxPoint& aPos, PINSHEETLABEL_SHAPE aShape ) const;
+                             const wxPoint& aPos, LABEL_FLAG_SHAPE aShape ) const;
 
-    const EDA_RECT GetBoundingBox() const override;
+    const EDA_RECT GetBodyBoundingBox() const override;
 
     bool IsConnectable() const override { return true; }
 
@@ -481,7 +560,10 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    EDA_ITEM* Clone() const override;
+    EDA_ITEM* Clone() const override
+    {
+        return new SCH_HIERLABEL( *this );
+    }
 
     bool IsPointClickableAnchor( const wxPoint& aPos ) const override
     {

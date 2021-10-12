@@ -403,6 +403,8 @@ void BACK_ANNOTATE::applyChangelist()
                 }
             }
         }
+
+        // JEY TODO: back-annotate netclass changes?
     }
 
     if( !m_dryRun )

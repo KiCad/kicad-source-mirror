@@ -43,6 +43,11 @@ public:
                    const wxSize& aSize = wxDefaultSize,
                    int aStyles = wxBORDER_NONE | wxTAB_TRAVERSAL );
 
+    // For use with wxFormBuilder on a sub-classed wxBitmapButton
+    BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxBitmap& aDummyBitmap,
+                   const wxPoint& aPos = wxDefaultPosition, const wxSize& aSize = wxDefaultSize,
+                   int aStyles = wxBORDER_NONE | wxTAB_TRAVERSAL );
+
     ~BITMAP_BUTTON();
 
     /**
@@ -68,17 +73,27 @@ public:
 
     /**
      * Enable the button.
-     *
-     * @param aEnable is true to enable, false to disable.
      */
     bool Enable( bool aEnable = true ) override;
 
     /**
+     * Setup the control as a two-state button (checked or unchecked).
+     */
+    void SetIsCheckButton();
+
+    /**
      * Check the control. This is the equivalent to toggling a toolbar button.
-     *
-     * @param aCheck is true to check, false to uncheck.
      */
     void Check( bool aCheck = true );
+
+    bool IsChecked() const;
+
+    /**
+     * Render button as a toolbar separator.
+     *
+     * Also disables the button.  Bitmap, if set, is ignored.
+     */
+    void SetIsSeparator();
 
     /**
      * Accept mouse-up as click even if mouse-down happened outside of the control
@@ -88,6 +103,8 @@ public:
     void AcceptDragInAsClick( bool aAcceptDragIn = true );
 
 protected:
+    void setupEvents();
+
     void OnMouseLeave( wxEvent& aEvent );
     void OnMouseEnter( wxEvent& aEvent );
     void OnKillFocus( wxEvent& aEvent );
@@ -106,25 +123,17 @@ protected:
         m_buttonState &= ~aFlag;
     }
 
-    bool hasFlag( int aFlag )
+    bool hasFlag( int aFlag ) const
     {
         return m_buttonState & aFlag;
     }
 
 private:
-    ///< Bitmap shown when button is enabled
     wxBitmap  m_normalBitmap;
-
-    ///< Bitmap shown when button is disabled
     wxBitmap  m_disabledBitmap;
 
-    ///< Current state of the button
     int       m_buttonState;
-
-    ///< Padding on each side of the bitmap
     int       m_padding;
-
-    ///< Size without the padding
     wxSize    m_unadjustedMinSize;
 
     ///< Accept mouse-up as click even if mouse-down happened outside of the control

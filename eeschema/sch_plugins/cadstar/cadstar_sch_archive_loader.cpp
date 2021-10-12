@@ -345,7 +345,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadHierarchicalSheetPins()
                     sheetPin = new SCH_SHEET_PIN( sheet );
 
                 sheetPin->SetText( name );
-                sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
+                sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
                 sheetPin->SetLabelSpinStyle( getSpinStyle( term.OrientAngle, false ) );
                 sheetPin->SetPosition( getKiCadPoint( term.Position ) );
 
@@ -665,13 +665,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 netLabel->SetLabelSpinStyle( getSpinStyle( sym.OrientAngle, sym.Mirror ) );
 
                 if( libSymDef.Alternate.Lower().Contains( "in" ) )
-                    netLabel->SetShape( PINSHEETLABEL_SHAPE::PS_INPUT );
+                    netLabel->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
                 else if( libSymDef.Alternate.Lower().Contains( "bi" ) )
-                    netLabel->SetShape( PINSHEETLABEL_SHAPE::PS_BIDI );
+                    netLabel->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
                 else if( libSymDef.Alternate.Lower().Contains( "out" ) )
-                    netLabel->SetShape( PINSHEETLABEL_SHAPE::PS_OUTPUT );
+                    netLabel->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
                 else
-                    netLabel->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
+                    netLabel->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
 
                 SCH_SCREEN* screen = m_sheetMap.at( sym.LayerID )->GetScreen();
 

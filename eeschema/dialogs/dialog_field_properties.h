@@ -80,6 +80,11 @@ protected:
      */
     virtual void OnSetFocusText( wxFocusEvent& event ) override;
 
+    void onOrientButton( wxCommandEvent &aEvent );
+    void onHAlignButton( wxCommandEvent &aEvent );
+    void onVAlignButton( wxCommandEvent &aEvent );
+
+protected:
     UNIT_BINDER m_posX;
     UNIT_BINDER m_posY;
     UNIT_BINDER m_textSize;

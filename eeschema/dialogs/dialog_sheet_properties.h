@@ -43,21 +43,6 @@ public:
     ~DIALOG_SHEET_PROPERTIES() override;
 
 private:
-    SCH_EDIT_FRAME* m_frame;
-    SCH_SHEET*      m_sheet;
-    bool*           m_clearAnnotationNewItems;
-
-    int             m_width;
-    int             m_delayedFocusRow;
-    int             m_delayedFocusColumn;
-    wxString        m_shownColumns;
-
-    FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
-    UNIT_BINDER                   m_borderWidth;
-
-    SCH_SHEET                     m_dummySheet;
-    SCH_FIELD                     m_dummySheetNameField;
-
     bool onSheetFilenameChanged( const wxString& aNewFilename );
 
     bool TransferDataToWindow() override;
@@ -76,6 +61,22 @@ private:
     void OnInitDlg( wxInitDialogEvent& event ) override;
 
     void AdjustGridColumns( int aWidth );
+
+private:
+    SCH_EDIT_FRAME*               m_frame;
+    SCH_SHEET*                    m_sheet;
+    bool*                         m_clearAnnotationNewItems;
+
+    int                           m_width;
+    int                           m_delayedFocusRow;
+    int                           m_delayedFocusColumn;
+    wxString                      m_shownColumns;
+
+    FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
+    UNIT_BINDER                   m_borderWidth;
+
+    SCH_SHEET                     m_dummySheet;
+    SCH_FIELD                     m_dummySheetNameField;
 };
 
 #endif // DIALOG_SHEET_PROPERTIES_H

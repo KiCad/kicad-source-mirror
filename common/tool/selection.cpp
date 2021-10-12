@@ -70,7 +70,7 @@ bool SELECTION::Contains( EDA_ITEM* aItem ) const
 /// Returns the center point of the selection area bounding box.
 VECTOR2I SELECTION::GetCenter() const
 {
-    KICAD_T textTypes[] = { SCH_TEXT_T, SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, EOT };
+    KICAD_T textTypes[] = { SCH_TEXT_T, SCH_LABEL_LOCATE_ANY_T, EOT };
     bool    hasOnlyText = true;
 
     // If the selection contains only texts calculate the center as the mean of all positions

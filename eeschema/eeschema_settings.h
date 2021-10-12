@@ -35,8 +35,9 @@ class EESCHEMA_SETTINGS : public APP_SETTINGS_BASE
 public:
     struct APPEARANCE
     {
-        wxString edit_component_visible_columns;
+        wxString edit_symbol_visible_columns;
         wxString edit_sheet_visible_columns;
+        wxString edit_label_visible_columns;
         int  erc_severities;
         bool footprint_preview;
         bool navigator_stays_open;

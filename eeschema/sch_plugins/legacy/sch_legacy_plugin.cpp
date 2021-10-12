@@ -1082,20 +1082,20 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
 
                 switch( parseChar( aReader, line, &line ) )
                 {
-                case 'I': sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_INPUT );       break;
-                case 'O': sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_OUTPUT );      break;
-                case 'B': sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_BIDI );        break;
-                case 'T': sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_TRISTATE );    break;
-                case 'U': sheetPin->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED ); break;
+                case 'I': sheetPin->SetShape( LABEL_FLAG_SHAPE::L_INPUT );       break;
+                case 'O': sheetPin->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );      break;
+                case 'B': sheetPin->SetShape( LABEL_FLAG_SHAPE::L_BIDI );        break;
+                case 'T': sheetPin->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );    break;
+                case 'U': sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED ); break;
                 default:  SCH_PARSE_ERROR( "invalid sheet pin type", aReader, line );
                 }
 
                 switch( parseChar( aReader, line, &line ) )
                 {
-                case 'R': sheetPin->SetSide( SHEET_SIDE::RIGHT ); break;
-                case 'T': sheetPin->SetSide( SHEET_SIDE::TOP ); break;
+                case 'R': sheetPin->SetSide( SHEET_SIDE::RIGHT );  break;
+                case 'T': sheetPin->SetSide( SHEET_SIDE::TOP );    break;
                 case 'B': sheetPin->SetSide( SHEET_SIDE::BOTTOM ); break;
-                case 'L': sheetPin->SetSide( SHEET_SIDE::LEFT ); break;
+                case 'L': sheetPin->SetSide( SHEET_SIDE::LEFT );   break;
                 default:
                     SCH_PARSE_ERROR( "invalid sheet pin side", aReader, line );
                 }
@@ -1404,13 +1404,13 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( LINE_READER& aReader )
 }
 
 // clang-format off
-const std::map<PINSHEETLABEL_SHAPE, const char*> sheetLabelNames
+const std::map<LABEL_FLAG_SHAPE, const char*> sheetLabelNames
 {
-    { PINSHEETLABEL_SHAPE::PS_INPUT,       "Input" },
-    { PINSHEETLABEL_SHAPE::PS_OUTPUT,      "Output" },
-    { PINSHEETLABEL_SHAPE::PS_BIDI,        "BiDi" },
-    { PINSHEETLABEL_SHAPE::PS_TRISTATE,    "3State" },
-    { PINSHEETLABEL_SHAPE::PS_UNSPECIFIED, "UnSpc" },
+    { LABEL_FLAG_SHAPE::L_INPUT,       "Input" },
+    { LABEL_FLAG_SHAPE::L_OUTPUT,      "Output" },
+    { LABEL_FLAG_SHAPE::L_BIDI,        "BiDi" },
+    { LABEL_FLAG_SHAPE::L_TRISTATE,    "3State" },
+    { LABEL_FLAG_SHAPE::L_UNSPECIFIED, "UnSpc" },
 };
 // clang-format on
 
@@ -2272,11 +2272,11 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
         switch( pin->GetShape() )
         {
         default:
-        case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED: type = 'U'; break;
-        case PINSHEETLABEL_SHAPE::PS_INPUT:       type = 'I'; break;
-        case PINSHEETLABEL_SHAPE::PS_OUTPUT:      type = 'O'; break;
-        case PINSHEETLABEL_SHAPE::PS_BIDI:        type = 'B'; break;
-        case PINSHEETLABEL_SHAPE::PS_TRISTATE:    type = 'T'; break;
+        case LABEL_FLAG_SHAPE::L_UNSPECIFIED: type = 'U'; break;
+        case LABEL_FLAG_SHAPE::L_INPUT:       type = 'I'; break;
+        case LABEL_FLAG_SHAPE::L_OUTPUT:      type = 'O'; break;
+        case LABEL_FLAG_SHAPE::L_BIDI:        type = 'B'; break;
+        case LABEL_FLAG_SHAPE::L_TRISTATE:    type = 'T'; break;
         }
 
         m_out->Print( 0, "F%d %s %c %c %-3d %-3d %-3d\n",

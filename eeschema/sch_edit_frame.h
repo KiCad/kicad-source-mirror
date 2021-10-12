@@ -40,7 +40,6 @@
 #include <eeschema_settings.h>
 #include <math/box2.h>
 #include <sch_base_frame.h>
-#include <sch_text.h> // enum PINSHEETLABEL_SHAPE
 #include <template_fieldnames.h>
 
 class STATUS_TEXT_POPUP;

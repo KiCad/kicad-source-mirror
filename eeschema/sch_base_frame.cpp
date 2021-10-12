@@ -316,7 +316,13 @@ void SCH_BASE_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aUpda
             GetCanvas()->GetView()->Update( aItem );
 
         // Some children are drawn from their parents.  Mark them for re-paint.
-        static KICAD_T parentTypes[] = { SCH_SYMBOL_T, SCH_SHEET_T, SCH_GLOBAL_LABEL_T, EOT };
+        static KICAD_T parentTypes[] = { SCH_SYMBOL_T,
+                                         SCH_SHEET_T,
+                                         SCH_LABEL_T,
+                                         SCH_GLOBAL_LABEL_T,
+                                         SCH_HIER_LABEL_T,
+                                         SCH_NETCLASS_FLAG_T,
+                                         EOT };
 
         if( parent && parent->IsType( parentTypes ) )
             GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );

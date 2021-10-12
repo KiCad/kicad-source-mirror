@@ -88,7 +88,7 @@ public:
 
     bool IsHypertext() const override
     {
-        return m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T;
+        return m_id == 0 && m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T;
     }
 
     void DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) override;

@@ -594,11 +594,14 @@ void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 
 void SCH_SHEET::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 4;
-    aLayers[0]  = LAYER_HIERLABEL;
-    aLayers[1]  = LAYER_SHEET;
-    aLayers[2]  = LAYER_SHEET_BACKGROUND;
-    aLayers[3]  = LAYER_SELECTION_SHADOWS;
+    aCount     = 7;
+    aLayers[0] = LAYER_HIERLABEL;
+    aLayers[1] = LAYER_SHEETNAME;
+    aLayers[2] = LAYER_SHEETFILENAME;
+    aLayers[3] = LAYER_SHEETFIELDS;
+    aLayers[4] = LAYER_SHEET;
+    aLayers[5] = LAYER_SHEET_BACKGROUND;
+    aLayers[6] = LAYER_SELECTION_SHADOWS;
 }
 
 

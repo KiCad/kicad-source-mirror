@@ -2318,16 +2318,16 @@ bool SCH_EAGLE_PLUGIN::CheckHeader( const wxString& aFileName )
 
 void SCH_EAGLE_PLUGIN::moveLabels( SCH_LINE* aWire, const wxPoint& aNewEndPoint )
 {
-    for( SCH_ITEM* item : m_currentSheet->GetScreen()->Items().Overlapping( aWire->GetBoundingBox() ) )
+    static KICAD_T labelTypes[] = { SCH_LABEL_LOCATE_ANY_T, EOT };
+    SCH_SCREEN*    screen = m_currentSheet->GetScreen();
+
+    for( SCH_ITEM* item : screen->Items().Overlapping( aWire->GetBoundingBox() ) )
     {
-        if( item->Type() == SCH_LABEL_T || item->Type() == SCH_GLOBAL_LABEL_T )
-        {
-            if( TestSegmentHit( item->GetPosition(), aWire->GetStartPoint(), aWire->GetEndPoint(),
-                                0 ) )
-            {
-                item->SetPosition( aNewEndPoint );
-            }
-        }
+        if( !item->IsType( labelTypes ) )
+            continue;
+
+        if( TestSegmentHit( item->GetPosition(), aWire->GetStartPoint(), aWire->GetEndPoint(), 0 ) )
+            item->SetPosition( aNewEndPoint );
     }
 }
 

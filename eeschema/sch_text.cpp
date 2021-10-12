@@ -28,7 +28,7 @@
  * @brief Code for handling schematic texts (texts, labels, hlabels and global labels).
  */
 
-#include <sch_symbol.h>
+#include <pgm_base.h>
 #include <sch_edit_frame.h>
 #include <plotters/plotter.h>
 #include <widgets/msgpanel.h>
@@ -214,10 +214,7 @@ LABEL_SPIN_STYLE LABEL_SPIN_STYLE::MirrorY()
 
 SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
         SCH_ITEM( nullptr, aType ),
-        EDA_TEXT( text ),
-        m_shape( PINSHEETLABEL_SHAPE::PS_INPUT ),
-        m_isDangling( false ),
-        m_connectionType( CONNECTION_TYPE::NONE )
+        EDA_TEXT( text )
 {
     m_layer = LAYER_NOTES;
 
@@ -230,17 +227,8 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
 SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
         SCH_ITEM( aText ),
         EDA_TEXT( aText ),
-        m_shape( aText.m_shape ),
-        m_isDangling( aText.m_isDangling ),
-        m_connectionType( aText.m_connectionType ),
         m_spin_style( aText.m_spin_style )
 { }
-
-
-EDA_ITEM* SCH_TEXT::Clone() const
-{
-    return new SCH_TEXT( *this );
-}
 
 
 bool SCH_TEXT::IncrementLabel( int aIncrement )
@@ -265,14 +253,10 @@ wxPoint SCH_TEXT::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) con
     switch( GetLabelSpinStyle() )
     {
     case LABEL_SPIN_STYLE::UP:
-    case LABEL_SPIN_STYLE::BOTTOM:
-        text_offset.x = -dist;
-        break; // Vert Orientation
+    case LABEL_SPIN_STYLE::BOTTOM: text_offset.x = -dist;  break; // Vert Orientation
     default:
     case LABEL_SPIN_STYLE::LEFT:
-    case LABEL_SPIN_STYLE::RIGHT:
-        text_offset.y = -dist;
-        break; // Horiz Orientation
+    case LABEL_SPIN_STYLE::RIGHT:  text_offset.y = -dist;  break; // Horiz Orientation
     }
 
     return text_offset;
@@ -336,46 +320,40 @@ void SCH_TEXT::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
     switch( aSpinStyle )
     {
     default:
-        wxASSERT_MSG( 1, "Bad spin style" );
-        break;
+        wxFAIL_MSG( "Bad spin style" );
+        m_spin_style = LABEL_SPIN_STYLE::RIGHT; // Handle the error spin style by resetting
+        KI_FALLTHROUGH;
 
     case LABEL_SPIN_STYLE::RIGHT: // Horiz Normal Orientation
-        //
-        m_spin_style = LABEL_SPIN_STYLE::RIGHT; // Handle the error spin style by resetting
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
 
     case LABEL_SPIN_STYLE::UP: // Vert Orientation UP
         SetTextAngle( TEXT_ANGLE_VERT );
         SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
 
     case LABEL_SPIN_STYLE::LEFT: // Horiz Orientation - Right justified
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
 
     case LABEL_SPIN_STYLE::BOTTOM: //  Vert Orientation BOTTOM
         SetTextAngle( TEXT_ANGLE_VERT );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
     }
+
+    SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
 }
 
 
 void SCH_TEXT::SwapData( SCH_ITEM* aItem )
 {
-    SCH_TEXT* item = (SCH_TEXT*) aItem;
+    SCH_TEXT* item = static_cast<SCH_TEXT*>( aItem );
 
     std::swap( m_layer, item->m_layer );
-
-    std::swap( m_shape, item->m_shape );
-    std::swap( m_isDangling, item->m_isDangling );
     std::swap( m_spin_style, item->m_spin_style );
 
     SwapText( *item );
@@ -420,7 +398,595 @@ int SCH_TEXT::GetTextOffset( const RENDER_SETTINGS* aSettings ) const
 }
 
 
-int SCH_TEXT::GetLabelBoxExpansion( const RENDER_SETTINGS* aSettings ) const
+int SCH_TEXT::GetPenWidth() const
+{
+    return GetEffectiveTextPenWidth();
+}
+
+
+void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+{
+    COLOR4D color = aSettings->GetLayerColor( m_layer );
+    wxPoint text_offset = aOffset + GetSchematicTextOffset( aSettings );
+
+    EDA_TEXT::Print( aSettings, text_offset, color );
+}
+
+
+const EDA_RECT SCH_TEXT::GetBoundingBox() const
+{
+    EDA_RECT rect = GetTextBox();
+
+    if( GetTextAngle() != 0 ) // Rotate rect.
+    {
+        wxPoint pos = rect.GetOrigin();
+        wxPoint end = rect.GetEnd();
+
+        RotatePoint( &pos, GetTextPos(), GetTextAngle() );
+        RotatePoint( &end, GetTextPos(), GetTextAngle() );
+
+        rect.SetOrigin( pos );
+        rect.SetEnd( end );
+    }
+
+    rect.Normalize();
+    return rect;
+}
+
+
+wxString getElectricalTypeLabel( LABEL_FLAG_SHAPE aType )
+{
+    switch( aType )
+    {
+    case LABEL_FLAG_SHAPE::L_INPUT:       return _( "Input" );
+    case LABEL_FLAG_SHAPE::L_OUTPUT:      return _( "Output" );
+    case LABEL_FLAG_SHAPE::L_BIDI:        return _( "Bidirectional" );
+    case LABEL_FLAG_SHAPE::L_TRISTATE:    return _( "Tri-State" );
+    case LABEL_FLAG_SHAPE::L_UNSPECIFIED: return _( "Passive" );
+    default:                              return wxT( "???" );
+    }
+}
+
+
+wxString SCH_TEXT::GetShownText( int aDepth ) const
+{
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                if( token->Contains( ':' ) )
+                {
+                    if( Schematic()->ResolveCrossReference( token, aDepth ) )
+                        return true;
+                }
+                else
+                {
+                    SCHEMATIC* schematic = Schematic();
+                    SCH_SHEET* sheet = schematic ? schematic->CurrentSheet().Last() : nullptr;
+
+                    if( sheet && sheet->ResolveTextVar( token, aDepth + 1 ) )
+                        return true;
+                }
+
+                return false;
+            };
+
+    std::function<bool( wxString* )> schematicTextResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return Schematic()->ResolveTextVar( token, aDepth + 1 );
+            };
+
+    wxString text = EDA_TEXT::GetShownText();
+
+    if( text == "~" )   // Legacy placeholder for empty string
+    {
+        text = "";
+    }
+    else if( HasTextVars() )
+    {
+        PROJECT* project = nullptr;
+
+        if( Schematic() )
+            project = &Schematic()->Prj();
+
+        if( aDepth < 10 )
+            text = ExpandTextVars( text, &textResolver, &schematicTextResolver, project );
+    }
+
+    return text;
+}
+
+
+wxString SCH_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
+{
+    return wxString::Format( _( "Graphic Text '%s'" ), ShortenedShownText() );
+}
+
+
+BITMAPS SCH_TEXT::GetMenuImage() const
+{
+    return BITMAPS::text;
+}
+
+
+bool SCH_TEXT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+{
+    EDA_RECT bBox = GetBoundingBox();
+    bBox.Inflate( aAccuracy );
+    return bBox.Contains( aPosition );
+}
+
+
+bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_RECT bBox = GetBoundingBox();
+    bBox.Inflate( aAccuracy );
+
+    if( aContained )
+        return aRect.Contains( bBox );
+
+    return aRect.Intersects( bBox );
+}
+
+
+void SCH_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount = 2;
+    aLayers[0] = m_layer;
+    aLayers[1] = LAYER_SELECTION_SHADOWS;
+}
+
+
+void SCH_TEXT::Plot( PLOTTER* aPlotter ) const
+{
+    static std::vector<wxPoint> s_poly;
+
+    RENDER_SETTINGS* settings = aPlotter->RenderSettings();
+    SCH_CONNECTION*  connection = Connection();
+    int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
+    COLOR4D          color = settings->GetLayerColor( layer );
+    int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
+
+    penWidth = std::max( penWidth, settings->GetMinPenWidth() );
+    aPlotter->SetCurrentLineWidth( penWidth );
+
+    std::vector<wxPoint> positions;
+    wxArrayString strings_list;
+    wxStringSplit( GetShownText(), strings_list, '\n' );
+    positions.reserve( strings_list.Count() );
+
+    GetLinePositions( positions, (int) strings_list.Count() );
+
+    for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
+    {
+        wxPoint textpos = positions[ii] + GetSchematicTextOffset( aPlotter->RenderSettings() );
+        wxString& txt = strings_list.Item( ii );
+        aPlotter->Text( textpos, color, txt, GetTextAngle(), GetTextSize(), GetHorizJustify(),
+                        GetVertJustify(), penWidth, IsItalic(), IsBold() );
+    }
+}
+
+
+void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+{
+    wxString msg;
+
+    // Don't use GetShownText() here; we want to show the user the variable references
+    aList.emplace_back( _( "Graphic Text" ), UnescapeString( GetText() ) );
+
+    wxString textStyle[] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold Italic" ) };
+    int style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;
+    aList.emplace_back( _( "Style" ), textStyle[style] );
+
+    aList.emplace_back( _( "Text Size" ), MessageTextFromValue( aFrame->GetUserUnits(),
+                                                                GetTextWidth() ) );
+
+    switch( GetLabelSpinStyle() )
+    {
+    case LABEL_SPIN_STYLE::LEFT:   msg = _( "Align right" );   break;
+    case LABEL_SPIN_STYLE::UP:     msg = _( "Align bottom" );  break;
+    case LABEL_SPIN_STYLE::RIGHT:  msg = _( "Align left" );    break;
+    case LABEL_SPIN_STYLE::BOTTOM: msg = _( "Align top" );     break;
+    default:                       msg = wxT( "???" );         break;
+    }
+
+    aList.emplace_back( _( "Justification" ), msg );
+}
+
+
+#if defined(DEBUG)
+
+void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
+{
+    // XML output:
+    wxString s = GetClass();
+
+    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str()
+                                 << " layer=\"" << m_layer << '"'
+                                 << '>'
+                                 << TO_UTF8( GetText() )
+                                 << "</" << s.Lower().mb_str() << ">\n";
+}
+
+#endif
+
+
+SCH_LABEL_BASE::SCH_LABEL_BASE( const wxPoint& aPos, const wxString& aText, KICAD_T aType ) :
+        SCH_TEXT( aPos, aText, aType )
+{
+    SetMultilineAllowed( false );
+    SetFieldsAutoplaced();
+}
+
+
+SCH_LABEL_BASE::SCH_LABEL_BASE( const SCH_LABEL_BASE& aLabel ) :
+        SCH_TEXT( aLabel ),
+        m_shape( aLabel.m_shape ),
+        m_connectionType( aLabel.m_connectionType ),
+        m_isDangling( aLabel.m_isDangling )
+{
+    SetMultilineAllowed( false );
+
+    m_fields = aLabel.m_fields;
+
+    for( SCH_FIELD& field : m_fields )
+        field.SetParent( this );
+}
+
+
+const wxString SCH_LABEL_BASE::GetDefaultFieldName( const wxString& aName, bool aUseDefaultName )
+{
+    static void* locale = nullptr;
+    static wxString intersheetRefsDefault;
+    static wxString netclassRefDefault;
+    static wxString userFieldDefault;
+
+    // Fetching translations can take a surprising amount of time when loading libraries,
+    // so only do it when necessary.
+    if( Pgm().GetLocale() != locale )
+    {
+        intersheetRefsDefault = _( "Sheet References" );
+        netclassRefDefault    = _( "Net Class" );
+        userFieldDefault      = _( "Field" );
+        locale = Pgm().GetLocale();
+    }
+
+    if( aName == wxT( "Intersheetrefs" ) )
+        return intersheetRefsDefault;
+    else if( aName == wxT( "Netclass" ) )
+        return netclassRefDefault;
+    else if( aName.IsEmpty() && aUseDefaultName )
+        return userFieldDefault;
+    else
+        return aName;
+}
+
+
+bool SCH_LABEL_BASE::IsType( const KICAD_T aScanTypes[] ) const
+{
+    static KICAD_T wireTypes[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_PIN_T, EOT };
+    static KICAD_T busTypes[] = { SCH_ITEM_LOCATE_BUS_T, EOT };
+
+    if( SCH_TEXT::IsType( aScanTypes ) )
+        return true;
+
+    for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+    {
+        if( *p == SCH_LABEL_LOCATE_ANY_T )
+            return true;
+
+        if( *p == SCH_LABEL_LOCATE_WIRE_T )
+        {
+            wxCHECK_MSG( Schematic(), false, "No parent SCHEMATIC set for SCH_LABEL!" );
+
+            for( SCH_ITEM* connection : m_connected_items.at( Schematic()->CurrentSheet() ) )
+            {
+                if( connection->IsType( wireTypes ) )
+                    return true;
+            }
+        }
+
+        if ( *p == SCH_LABEL_LOCATE_BUS_T )
+        {
+            wxCHECK_MSG( Schematic(), false, "No parent SCHEMATIC set for SCH_LABEL!" );
+
+            for( SCH_ITEM* connection : m_connected_items.at( Schematic()->CurrentSheet() ) )
+            {
+                if( connection->IsType( busTypes ) )
+                    return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+
+void SCH_LABEL_BASE::SwapData( SCH_ITEM* aItem )
+{
+    SCH_TEXT::SwapData( aItem );
+
+    SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
+
+    m_fields.swap( label->m_fields );
+    std::swap( m_fieldsAutoplaced, label->m_fieldsAutoplaced );
+
+    for( SCH_FIELD& field : m_fields )
+        field.SetParent( this );
+
+    for( SCH_FIELD& field : label->m_fields )
+        field.SetParent( label );
+
+    std::swap( m_shape, label->m_shape );
+    std::swap( m_connectionType, label->m_connectionType );
+    std::swap( m_isDangling, label->m_isDangling );
+}
+
+
+void SCH_LABEL_BASE::Rotate( const wxPoint& aCenter )
+{
+    wxPoint pt = GetTextPos();
+    RotatePoint( &pt, aCenter, 900 );
+    wxPoint offset = pt - GetTextPos();
+
+    Rotate90( false );
+
+    SetTextPos( GetTextPos() + offset );
+
+    for( SCH_FIELD& field : m_fields )
+        field.SetTextPos( field.GetTextPos() + offset );
+}
+
+
+void SCH_LABEL_BASE::Rotate90( bool aClockwise )
+{
+    SCH_TEXT::Rotate90( aClockwise );
+
+    if( m_fieldsAutoplaced == FIELDS_AUTOPLACED_AUTO )
+    {
+        AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+    }
+    else
+    {
+        for( SCH_FIELD& field : m_fields )
+        {
+            if( field.GetTextAngle() == TEXT_ANGLE_VERT
+                    && field.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+            {
+                if( !aClockwise )
+                    field.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+
+                field.SetTextAngle( TEXT_ANGLE_HORIZ );
+            }
+            else if( field.GetTextAngle() == TEXT_ANGLE_VERT
+                        && field.GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+            {
+                if( !aClockwise )
+                    field.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+
+                field.SetTextAngle( TEXT_ANGLE_HORIZ );
+            }
+            else if( field.GetTextAngle() == TEXT_ANGLE_HORIZ
+                        && field.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+            {
+                if( aClockwise )
+                    field.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+
+                field.SetTextAngle( TEXT_ANGLE_VERT );
+            }
+            else if( field.GetTextAngle() == TEXT_ANGLE_HORIZ
+                        && field.GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+            {
+                if( aClockwise )
+                    field.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+
+                field.SetTextAngle( TEXT_ANGLE_VERT );
+            }
+
+            wxPoint pos = field.GetTextPos();
+            RotatePoint( &pos, GetPosition(), aClockwise ? -900 : 900 );
+            field.SetTextPos( pos );
+        }
+    }
+}
+
+
+void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
+{
+    int margin = GetTextOffset() * 2;
+    int labelLen = GetBodyBoundingBox().GetSizeMax();
+    int accumulated = GetTextHeight() / 2;
+
+    if( Type() == SCH_GLOBAL_LABEL_T )
+        accumulated += margin + GetPenWidth() + margin;
+
+    for( SCH_FIELD& field : m_fields )
+    {
+        wxPoint offset( 0, 0 );
+
+        switch( GetLabelSpinStyle() )
+        {
+        default:
+        case LABEL_SPIN_STYLE::LEFT:
+            field.SetTextAngle( TEXT_ANGLE_HORIZ );
+            field.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+
+            if( Type() == SCH_GLOBAL_LABEL_T && field.GetId() == 0 )
+                offset.x = - ( labelLen + margin );
+            else
+                offset.y = accumulated + field.GetTextHeight() / 2;
+
+            break;
+
+        case LABEL_SPIN_STYLE::UP:
+            field.SetTextAngle( TEXT_ANGLE_VERT );
+            field.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+
+            if( Type() == SCH_GLOBAL_LABEL_T && field.GetId() == 0 )
+                offset.y = - ( labelLen + margin );
+            else
+                offset.x = accumulated + field.GetTextHeight() / 2;
+
+            break;
+
+        case LABEL_SPIN_STYLE::RIGHT:
+            field.SetTextAngle( TEXT_ANGLE_HORIZ );
+            field.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+
+            if( Type() == SCH_GLOBAL_LABEL_T && field.GetId() == 0 )
+                offset.x = labelLen + margin;
+            else
+                offset.y = accumulated + field.GetTextHeight() / 2;
+
+            break;
+
+        case LABEL_SPIN_STYLE::BOTTOM:
+            field.SetTextAngle( TEXT_ANGLE_VERT );
+            field.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+
+            if( Type() == SCH_GLOBAL_LABEL_T && field.GetId() == 0 )
+                offset.y = labelLen + margin;
+            else
+                offset.x = accumulated + field.GetTextHeight() / 2;
+
+            break;
+        }
+
+        field.SetTextPos( GetTextPos() + offset );
+
+        if( Type() != SCH_GLOBAL_LABEL_T || field.GetId() > 0 )
+            accumulated += field.GetTextHeight() + margin;
+    }
+
+    m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
+}
+
+
+bool SCH_LABEL_BASE::ResolveTextVar( wxString* token, int aDepth ) const
+{
+    if( ( Type() == SCH_GLOBAL_LABEL_T || Type() == SCH_HIER_LABEL_T || Type() == SCH_SHEET_PIN_T )
+         && token->IsSameAs( wxT( "CONNECTION_TYPE" ) ) )
+    {
+        const SCH_LABEL_BASE* label = static_cast<const SCH_LABEL_BASE*>( this );
+        *token = getElectricalTypeLabel( label->GetShape() );
+        return true;
+    }
+
+    for( size_t i = 0; i < m_fields.size(); ++i )
+    {
+        if( token->IsSameAs( m_fields[i].GetName() ) )
+        {
+            *token = m_fields[i].GetShownText( aDepth + 1 );
+            return true;
+        }
+    }
+
+    if( Type() == SCH_SHEET_PIN_T && m_parent )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
+
+        if( sheet->ResolveTextVar( token, aDepth ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+wxString SCH_LABEL_BASE::GetShownText( int aDepth ) const
+{
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return ResolveTextVar( token, aDepth );
+            };
+
+    std::function<bool( wxString* )> schematicTextResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return Schematic()->ResolveTextVar( token, aDepth + 1 );
+            };
+
+    wxString text = EDA_TEXT::GetShownText();
+
+    if( text == "~" )   // Legacy placeholder for empty string
+    {
+        text = "";
+    }
+    else if( HasTextVars() )
+    {
+        PROJECT* project = nullptr;
+
+        if( Schematic() )
+            project = &Schematic()->Prj();
+
+        if( aDepth < 10 )
+            text = ExpandTextVars( text, &textResolver, &schematicTextResolver, project );
+    }
+
+    return text;
+}
+
+
+void SCH_LABEL_BASE::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction )
+{
+    for( SCH_FIELD& field : m_fields )
+        aFunction( &field );
+}
+
+
+SEARCH_RESULT SCH_LABEL_BASE::Visit( INSPECTOR aInspector, void* testData,
+                                     const KICAD_T aFilterTypes[] )
+{
+    KICAD_T stype;
+
+    if( IsType( aFilterTypes ) )
+    {
+        if( SEARCH_RESULT::QUIT == aInspector( this, nullptr ) )
+            return SEARCH_RESULT::QUIT;
+    }
+
+    for( const KICAD_T* p = aFilterTypes; (stype = *p) != EOT; ++p )
+    {
+        if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_T )
+        {
+            for( SCH_FIELD& field : m_fields )
+            {
+                if( SEARCH_RESULT::QUIT == aInspector( &field, this ) )
+                    return SEARCH_RESULT::QUIT;
+            }
+        }
+    }
+
+    return SEARCH_RESULT::CONTINUE;
+}
+
+
+void SCH_LABEL_BASE::GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList )
+{
+    DANGLING_END_ITEM item( LABEL_END, this, GetTextPos() );
+    aItemList.push_back( item );
+}
+
+
+std::vector<wxPoint> SCH_LABEL_BASE::GetConnectionPoints() const
+{
+    return { GetTextPos() };
+}
+
+
+void SCH_LABEL_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount     = 5;
+    aLayers[0] = LAYER_DANGLING;
+    aLayers[1] = LAYER_DEVICE;
+    aLayers[2] = LAYER_NETCLASS_REFS;
+    aLayers[3] = LAYER_FIELDS;
+    aLayers[4] = LAYER_SELECTION_SHADOWS;
+}
+
+
+int SCH_LABEL_BASE::GetLabelBoxExpansion( const RENDER_SETTINGS* aSettings ) const
 {
     double ratio;
 
@@ -437,39 +1003,93 @@ int SCH_TEXT::GetLabelBoxExpansion( const RENDER_SETTINGS* aSettings ) const
 }
 
 
-int SCH_TEXT::GetPenWidth() const
+const EDA_RECT SCH_LABEL_BASE::GetBodyBoundingBox() const
 {
-    return GetEffectiveTextPenWidth();
+    // build the bounding box of the label only, without taking into account its fields
+
+    EDA_RECT             box;
+    std::vector<wxPoint> pts;
+
+    CreateGraphicShape( nullptr, pts, GetTextPos() );
+
+    for( const wxPoint& pt : pts )
+        box.Merge( pt );
+
+    box.Inflate( GetEffectiveTextPenWidth() / 2 );
+    box.Normalize();
+    return box;
 }
 
 
-void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+const EDA_RECT SCH_LABEL_BASE::GetBoundingBox() const
 {
-    COLOR4D color = aSettings->GetLayerColor( m_layer );
-    wxPoint text_offset = aOffset + GetSchematicTextOffset( aSettings );
+    // build the bounding box of the entire net class flag, including both the symbol and the
+    // net class reference text
 
-    EDA_TEXT::Print( aSettings, text_offset, color );
+    EDA_RECT box( GetBodyBoundingBox() );
+
+    for( const SCH_FIELD& field : m_fields )
+        box.Merge( field.GetBoundingBox() );
+
+    box.Normalize();
+
+    return box;
 }
 
 
-void SCH_TEXT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
+bool SCH_LABEL_BASE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    // Normal text labels cannot be tested for dangling ends.
-    if( Type() == SCH_TEXT_T )
-        return;
+    EDA_RECT bbox = GetBodyBoundingBox();
+    bbox.Inflate( aAccuracy );
 
-    DANGLING_END_ITEM item( LABEL_END, this, GetTextPos() );
-    aItemList.push_back( item );
+    if( bbox.Contains( aPosition ) )
+        return true;
+
+    for( const SCH_FIELD& field : m_fields )
+    {
+        if( field.IsVisible() )
+        {
+            bbox = field.GetBoundingBox();
+            bbox.Inflate( aAccuracy );
+
+            if( bbox.Contains( aPosition ) )
+                return bbox.Contains( aPosition );
+        }
+    }
+
+    return false;
 }
 
 
-bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                                    const SCH_SHEET_PATH* aPath )
+bool SCH_LABEL_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    // Normal text labels cannot be tested for dangling ends.
-    if( Type() == SCH_TEXT_T )
+    EDA_RECT rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContained )
+    {
+        return rect.Contains( GetBoundingBox() );
+    }
+    else
+    {
+        if( rect.Intersects( GetBodyBoundingBox() ) )
+            return true;
+
+        for( const SCH_FIELD& field : m_fields )
+        {
+            if( field.IsVisible() && rect.Intersects( field.GetBoundingBox() ) )
+                return true;
+        }
+
         return false;
+    }
+}
 
+
+bool SCH_LABEL_BASE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
+                                          const SCH_SHEET_PATH* aPath )
+{
     bool previousState = m_isDangling;
     m_isDangling       = true;
     m_connectionType   = CONNECTION_TYPE::NONE;
@@ -542,218 +1162,14 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
 }
 
 
-std::vector<wxPoint> SCH_TEXT::GetConnectionPoints() const
-{
-    // Normal text labels do not have connection points.  All others do.
-    if( Type() == SCH_TEXT_T )
-        return {};
-
-    return { GetTextPos() };
-}
-
-
-const EDA_RECT SCH_TEXT::GetBoundingBox() const
-{
-    EDA_RECT rect = GetTextBox();
-
-    if( GetTextAngle() != 0 ) // Rotate rect.
-    {
-        wxPoint pos = rect.GetOrigin();
-        wxPoint end = rect.GetEnd();
-
-        RotatePoint( &pos, GetTextPos(), GetTextAngle() );
-        RotatePoint( &end, GetTextPos(), GetTextAngle() );
-
-        rect.SetOrigin( pos );
-        rect.SetEnd( end );
-    }
-
-    rect.Normalize();
-    return rect;
-}
-
-
-wxString getElectricalTypeLabel( PINSHEETLABEL_SHAPE aType )
-{
-    switch( aType )
-    {
-    case PINSHEETLABEL_SHAPE::PS_INPUT:       return _( "Input" );
-    case PINSHEETLABEL_SHAPE::PS_OUTPUT:      return _( "Output" );
-    case PINSHEETLABEL_SHAPE::PS_BIDI:        return _( "Bidirectional" );
-    case PINSHEETLABEL_SHAPE::PS_TRISTATE:    return _( "Tri-State" );
-    case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED: return _( "Passive" );
-    default:                                  return wxT( "???" );
-    }
-}
-
-
-void SCH_TEXT::GetContextualTextVars( wxArrayString* aVars ) const
-{
-    if( Type() == SCH_GLOBAL_LABEL_T || Type() == SCH_HIER_LABEL_T || Type() == SCH_SHEET_PIN_T )
-        aVars->push_back( wxT( "CONNECTION_TYPE" ) );
-
-    if( Type() == SCH_SHEET_PIN_T && m_parent )
-        static_cast<SCH_SHEET*>( m_parent )->GetContextualTextVars( aVars );
-}
-
-
-wxString SCH_TEXT::GetShownText( int aDepth ) const
-{
-    std::function<bool( wxString* )> textResolver =
-            [&]( wxString* token ) -> bool
-            {
-                if( ( Type() == SCH_GLOBAL_LABEL_T
-                        || Type() == SCH_HIER_LABEL_T
-                        || Type() == SCH_SHEET_PIN_T )
-                     && token->IsSameAs( wxT( "CONNECTION_TYPE" ) ) )
-                {
-                    *token = getElectricalTypeLabel( GetShape() );
-                    return true;
-                }
-
-                if( Type() == SCH_SHEET_PIN_T && m_parent )
-                {
-                    SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
-
-                    if( sheet->ResolveTextVar( token, aDepth ) )
-                        return true;
-                }
-
-                if( Type() == SCH_TEXT_T )
-                {
-                    if( token->Contains( ':' ) )
-                    {
-                        if( Schematic()->ResolveCrossReference( token, aDepth ) )
-                            return true;
-                    }
-                    else
-                    {
-                        SCHEMATIC* schematic = Schematic();
-                        SCH_SHEET* sheet = schematic ? schematic->CurrentSheet().Last() : nullptr;
-
-                        if( sheet && sheet->ResolveTextVar( token, aDepth + 1 ) )
-                            return true;
-                    }
-                }
-
-                return false;
-            };
-
-    std::function<bool( wxString* )> schematicTextResolver =
-            [&]( wxString* token ) -> bool
-            {
-                return Schematic()->ResolveTextVar( token, aDepth + 1 );
-            };
-
-    wxString text = EDA_TEXT::GetShownText();
-
-    if( text == "~" )   // Legacy placeholder for empty string
-    {
-        text = "";
-    }
-    else if( HasTextVars() )
-    {
-        wxCHECK_MSG( Schematic(), wxEmptyString, "No parent SCHEMATIC set for SCH_TEXT!" );
-
-        PROJECT* project = nullptr;
-
-        if( Schematic() )
-            project = &Schematic()->Prj();
-
-        if( aDepth < 10 )
-            text = ExpandTextVars( text, &textResolver, &schematicTextResolver, project );
-    }
-
-    return text;
-}
-
-
-wxString SCH_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
-{
-    return wxString::Format( _( "Graphic Text '%s'" ), ShortenedShownText() );
-}
-
-
-BITMAPS SCH_TEXT::GetMenuImage() const
-{
-    return BITMAPS::text;
-}
-
-
-bool SCH_TEXT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
-{
-    EDA_RECT bBox = GetBoundingBox();
-    bBox.Inflate( aAccuracy );
-    return bBox.Contains( aPosition );
-}
-
-
-bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
-{
-    EDA_RECT bBox = GetBoundingBox();
-    bBox.Inflate( aAccuracy );
-
-    if( aContained )
-        return aRect.Contains( bBox );
-
-    return aRect.Intersects( bBox );
-}
-
-
-void SCH_TEXT::Plot( PLOTTER* aPlotter ) const
-{
-    static std::vector<wxPoint> s_poly;
-
-    RENDER_SETTINGS* settings = aPlotter->RenderSettings();
-    SCH_CONNECTION*  connection = Connection();
-    int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
-    COLOR4D          color = settings->GetLayerColor( layer );
-    int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
-
-    penWidth = std::max( penWidth, settings->GetMinPenWidth() );
-    aPlotter->SetCurrentLineWidth( penWidth );
-
-    if( IsMultilineAllowed() )
-    {
-        std::vector<wxPoint> positions;
-        wxArrayString strings_list;
-        wxStringSplit( GetShownText(), strings_list, '\n' );
-        positions.reserve( strings_list.Count() );
-
-        GetLinePositions( positions, (int) strings_list.Count() );
-
-        for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
-        {
-            wxPoint textpos = positions[ii] + GetSchematicTextOffset( aPlotter->RenderSettings() );
-            wxString& txt = strings_list.Item( ii );
-            aPlotter->Text( textpos, color, txt, GetTextAngle(), GetTextSize(), GetHorizJustify(),
-                            GetVertJustify(), penWidth, IsItalic(), IsBold() );
-        }
-    }
-    else
-    {
-        wxPoint textpos = GetTextPos() + GetSchematicTextOffset( aPlotter->RenderSettings() );
-
-        aPlotter->Text( textpos, color, GetShownText(), GetTextAngle(), GetTextSize(),
-                        GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold() );
-    }
-
-    // Draw graphic symbol for global or hierarchical labels
-    CreateGraphicShape( aPlotter->RenderSettings(), s_poly, GetTextPos() );
-
-    if( s_poly.size() )
-        aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
-}
-
-
-void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void SCH_LABEL_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 
     switch( Type() )
     {
-    case SCH_TEXT_T:          msg = _( "Graphic Text" );           break;
     case SCH_LABEL_T:         msg = _( "Label" );                  break;
+    case SCH_NETCLASS_FLAG_T: msg = _( "Net Class Flag" );         break;
     case SCH_GLOBAL_LABEL_T:  msg = _( "Global Label" );           break;
     case SCH_HIER_LABEL_T:    msg = _( "Hierarchical Label" );     break;
     case SCH_SHEET_PIN_T:     msg = _( "Hierarchical Sheet Pin" ); break;
@@ -768,14 +1184,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
         aList.emplace_back( _( "Type" ), getElectricalTypeLabel( GetShape() ) );
 
     wxString textStyle[] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold Italic" ) };
-    int style = 0;
-
-    if( IsItalic() )
-        style = 1;
-
-    if( IsBold() )
-        style += 2;
-
+    int style = IsBold() && IsItalic() ? 3 : IsBold() ? 2 : IsItalic() ? 1 : 0;
     aList.emplace_back( _( "Style" ), textStyle[style] );
 
     aList.emplace_back( _( "Text Size" ), MessageTextFromValue( aFrame->GetUserUnits(),
@@ -816,82 +1225,64 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 }
 
 
-#if defined(DEBUG)
-
-void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
+void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter ) const
 {
-    // XML output:
-    wxString s = GetClass();
+    static std::vector<wxPoint> s_poly;
 
-    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str()
-                                 << " layer=\"" << m_layer << '"'
-                                 << " shape=\"" << static_cast<int>( m_shape ) << '"'
-                                 << " dangling=\"" << m_isDangling << '"'
-                                 << '>'
-                                 << TO_UTF8( GetText() )
-                                 << "</" << s.Lower().mb_str() << ">\n";
+    RENDER_SETTINGS* settings = aPlotter->RenderSettings();
+    SCH_CONNECTION*  connection = Connection();
+    int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
+    COLOR4D          color = settings->GetLayerColor( layer );
+    int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
+
+    penWidth = std::max( penWidth, settings->GetMinPenWidth() );
+    aPlotter->SetCurrentLineWidth( penWidth );
+
+    wxPoint textpos = GetTextPos() + GetSchematicTextOffset( aPlotter->RenderSettings() );
+
+    aPlotter->Text( textpos, color, GetShownText(), GetTextAngle(), GetTextSize(),
+                    GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold() );
+
+    CreateGraphicShape( aPlotter->RenderSettings(), s_poly, GetTextPos() );
+
+    if( s_poly.size() )
+        aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
 }
 
-#endif
+
+void SCH_LABEL_BASE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+{
+    static std::vector<wxPoint> s_poly;
+
+    SCH_CONNECTION* connection = Connection();
+    int             layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
+    wxDC*           DC = aSettings->GetPrintDC();
+    COLOR4D         color = aSettings->GetLayerColor( layer );
+    int             penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    wxPoint         text_offset = aOffset + GetSchematicTextOffset( aSettings );
+
+    EDA_TEXT::Print( aSettings, text_offset, color );
+
+    CreateGraphicShape( aSettings, s_poly, GetTextPos() + aOffset );
+
+    if( !s_poly.empty() )
+        GRPoly( nullptr, DC, s_poly.size(), &s_poly[0], false, penWidth, color, color );
+
+    for( SCH_FIELD& field : m_fields )
+        field.Print( aSettings, aOffset );
+}
 
 
-SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text )
-        : SCH_TEXT( pos, text, SCH_LABEL_T )
+SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
+        SCH_LABEL_BASE( pos, text, SCH_LABEL_T )
 {
     m_layer      = LAYER_LOCLABEL;
-    m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
+    m_shape      = LABEL_FLAG_SHAPE::L_INPUT;
     m_isDangling = true;
-    SetMultilineAllowed( false );
 }
 
 
-EDA_ITEM* SCH_LABEL::Clone() const
-{
-    return new SCH_LABEL( *this );
-}
-
-
-bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
-{
-    static KICAD_T wireTypes[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_PIN_T, EOT };
-    static KICAD_T busTypes[] = { SCH_ITEM_LOCATE_BUS_T, EOT };
-
-    if( SCH_ITEM::IsType( aScanTypes ) )
-        return true;
-
-    wxCHECK_MSG( Schematic(), false, "No parent SCHEMATIC set for SCH_LABEL!" );
-
-    SCH_SHEET_PATH current = Schematic()->CurrentSheet();
-
-    for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
-    {
-        if( *p == SCH_LABEL_LOCATE_WIRE_T )
-        {
-            wxASSERT( m_connected_items.count( current ) );
-
-            for( SCH_ITEM* connection : m_connected_items.at( current ) )
-            {
-                if( connection->IsType( wireTypes ) )
-                    return true;
-            }
-        }
-        else if ( *p == SCH_LABEL_LOCATE_BUS_T )
-        {
-            wxASSERT( m_connected_items.count( current ) );
-
-            for( SCH_ITEM* connection : m_connected_items.at( current ) )
-            {
-                if( connection->IsType( busTypes ) )
-                    return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-
-const EDA_RECT SCH_LABEL::GetBoundingBox() const
+const EDA_RECT SCH_LABEL::GetBodyBoundingBox() const
 {
     EDA_RECT rect = GetTextBox();
 
@@ -919,18 +1310,6 @@ const EDA_RECT SCH_LABEL::GetBoundingBox() const
 }
 
 
-void SCH_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
-{
-    aCount = 0;
-
-    if( m_layer != LAYER_NOTES )
-        aLayers[ aCount++ ] = LAYER_DANGLING;
-
-    aLayers[ aCount++ ] = m_layer;
-    aLayers[ aCount++ ] = LAYER_SELECTION_SHADOWS;
-}
-
-
 wxString SCH_LABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Label '%s'" ), ShortenedShownText() );
@@ -943,86 +1322,176 @@ BITMAPS SCH_LABEL::GetMenuImage() const
 }
 
 
-SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
-        SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T ),
-        m_intersheetRefsField( { 0, 0 }, 0, this )
+SCH_NETCLASS_FLAG::SCH_NETCLASS_FLAG( const wxPoint& pos ) :
+        SCH_LABEL_BASE( pos, wxEmptyString, SCH_NETCLASS_FLAG_T )
 {
-    m_layer      = LAYER_GLOBLABEL;
-    m_shape      = PINSHEETLABEL_SHAPE::PS_BIDI;
+    m_layer      = LAYER_NETCLASS_REFS;
+    m_shape      = LABEL_FLAG_SHAPE::F_ROUND;
+    m_pinLength  = Mils2iu( 100 );
+    m_symbolSize = Mils2iu( 20 );
     m_isDangling = true;
-    SetMultilineAllowed( false );
 
-    SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+    m_fields.emplace_back( SCH_FIELD( { 0, 0 }, 0, this, _( "Net Class" ) ) );
+    m_fields[0].SetLayer( LAYER_NETCLASS_REFS );
+    m_fields[0].SetVisible( true );
+    m_fields[0].SetItalic( true );
+    m_fields[0].SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+}
 
-    m_intersheetRefsField.SetText( wxT( "${INTERSHEET_REFS}" ) );
-    m_intersheetRefsField.SetLayer( LAYER_GLOBLABEL );
-    m_intersheetRefsField.SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+
+SCH_NETCLASS_FLAG::SCH_NETCLASS_FLAG( const SCH_NETCLASS_FLAG& aClassLabel ) :
+        SCH_LABEL_BASE( aClassLabel )
+{
+    m_pinLength = aClassLabel.m_pinLength;
+    m_symbolSize = aClassLabel.m_symbolSize;
+}
+
+
+void SCH_NETCLASS_FLAG::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
+                                            std::vector<wxPoint>& aPoints,
+                                            const wxPoint& aPos ) const
+{
+    int symbolSize = m_symbolSize;
+
+    aPoints.clear();
+
+    switch( m_shape )
+    {
+    case LABEL_FLAG_SHAPE::F_DOT:
+        symbolSize = KiROUND( symbolSize * 0.7 );
+        KI_FALLTHROUGH;
+
+    case LABEL_FLAG_SHAPE::F_ROUND:
+        // First 3 points are used for generating shape
+        aPoints.emplace_back( wxPoint(             0, 0                        ) );
+        aPoints.emplace_back( wxPoint(             0, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( wxPoint(             0, m_pinLength              ) );
+        // These points are just used to bulk out the bounding box
+        aPoints.emplace_back( wxPoint( -m_symbolSize, m_pinLength              ) );
+        aPoints.emplace_back( wxPoint(             0, m_pinLength              ) );
+        aPoints.emplace_back( wxPoint(  m_symbolSize, m_pinLength + symbolSize ) );
+        break;
+
+    case LABEL_FLAG_SHAPE::F_DIAMOND:
+        aPoints.emplace_back( wxPoint(                 0, 0                        ) );
+        aPoints.emplace_back( wxPoint(                 0, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( wxPoint( -2 * m_symbolSize, m_pinLength              ) );
+        aPoints.emplace_back( wxPoint(                 0, m_pinLength + symbolSize ) );
+        aPoints.emplace_back( wxPoint(  2 * m_symbolSize, m_pinLength              ) );
+        aPoints.emplace_back( wxPoint(                 0, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( wxPoint(                 0, 0                        ) );
+        break;
+
+    case LABEL_FLAG_SHAPE::F_RECTANGLE:
+        symbolSize = KiROUND( symbolSize * 0.8 );
+
+        aPoints.emplace_back( wxPoint(               0, 0                        ) );
+        aPoints.emplace_back( wxPoint(               0, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( wxPoint( -2 * symbolSize, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( wxPoint( -2 * symbolSize, m_pinLength + symbolSize ) );
+        aPoints.emplace_back( wxPoint(  2 * symbolSize, m_pinLength + symbolSize ) );
+        aPoints.emplace_back( wxPoint(  2 * symbolSize, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( wxPoint(               0, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( wxPoint(               0, 0                        ) );
+        break;
+
+    default:
+        break;
+    }
+
+    // Rotate outlines and move corners to real position
+    for( wxPoint& aPoint : aPoints )
+    {
+        switch( GetLabelSpinStyle() )
+        {
+        default:
+        case LABEL_SPIN_STYLE::LEFT:                                 break;
+        case LABEL_SPIN_STYLE::UP:     RotatePoint( &aPoint, -900 ); break;
+        case LABEL_SPIN_STYLE::RIGHT:  RotatePoint( &aPoint, 1800 ); break;
+        case LABEL_SPIN_STYLE::BOTTOM: RotatePoint( &aPoint, 900 );  break;
+        }
+
+        aPoint += aPos;
+    }
+}
+
+
+void SCH_NETCLASS_FLAG::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
+{
+    int margin = GetTextOffset();
+    int symbolWidth = m_symbolSize;
+    int origin = m_pinLength;
+
+    if( m_shape == LABEL_FLAG_SHAPE::F_DIAMOND || m_shape == LABEL_FLAG_SHAPE::F_RECTANGLE )
+        symbolWidth *= 2;
+
+    if( IsItalic() )
+        margin = KiROUND( margin * 1.5 );
+
+    wxPoint offset;
+
+    for( SCH_FIELD& field : m_fields )
+    {
+        switch( GetLabelSpinStyle() )
+        {
+        default:
+        case LABEL_SPIN_STYLE::LEFT:
+            field.SetTextAngle( TEXT_ANGLE_HORIZ );
+            offset = { symbolWidth + margin, origin };
+            break;
+
+        case LABEL_SPIN_STYLE::UP:
+            field.SetTextAngle( TEXT_ANGLE_VERT );
+            offset = { -origin, -( symbolWidth + margin ) };
+            break;
+
+        case LABEL_SPIN_STYLE::RIGHT:
+            field.SetTextAngle( TEXT_ANGLE_HORIZ );
+            offset = { symbolWidth + margin, -origin };
+            break;
+
+        case LABEL_SPIN_STYLE::BOTTOM:
+            field.SetTextAngle( TEXT_ANGLE_VERT );
+            offset = { origin, -( symbolWidth + margin ) };
+            break;
+        }
+
+        field.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        field.SetTextPos( GetPosition() + offset );
+
+        origin -= field.GetTextHeight() + margin;
+    }
+
     m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
 }
 
 
+wxString SCH_NETCLASS_FLAG::GetSelectMenuText( EDA_UNITS aUnits ) const
+{
+    return wxString::Format( _( "Net Class Flag" ), ShortenedShownText() );
+}
+
+
+SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
+        SCH_LABEL_BASE( pos, text, SCH_GLOBAL_LABEL_T )
+{
+    m_layer      = LAYER_GLOBLABEL;
+    m_shape      = LABEL_FLAG_SHAPE::L_BIDI;
+    m_isDangling = true;
+
+    SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+
+    m_fields.emplace_back( SCH_FIELD( { 0, 0 }, 0, this, _( "Sheet References" ) ) );
+    m_fields[0].SetText( wxT( "${INTERSHEET_REFS}" ) );
+    m_fields[0].SetVisible( true );
+    m_fields[0].SetLayer( LAYER_INTERSHEET_REFS );
+    m_fields[0].SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+}
+
+
 SCH_GLOBALLABEL::SCH_GLOBALLABEL( const SCH_GLOBALLABEL& aGlobalLabel ) :
-        SCH_TEXT( aGlobalLabel ),
-        m_intersheetRefsField( { 0, 0 }, 0, this )
+        SCH_LABEL_BASE( aGlobalLabel )
 {
-    m_intersheetRefsField = aGlobalLabel.m_intersheetRefsField;
-
-    // Re-parent the fields, which before this had aGlobalLabel as parent
-    m_intersheetRefsField.SetParent( this );
-
-    m_fieldsAutoplaced = aGlobalLabel.m_fieldsAutoplaced;
-}
-
-
-EDA_ITEM* SCH_GLOBALLABEL::Clone() const
-{
-    return new SCH_GLOBALLABEL( *this );
-}
-
-
-void SCH_GLOBALLABEL::SwapData( SCH_ITEM* aItem )
-{
-    SCH_TEXT::SwapData( aItem );
-
-    SCH_GLOBALLABEL* globalLabel = static_cast<SCH_GLOBALLABEL*>( aItem );
-
-    // Swap field data wholesale...
-    std::swap( m_intersheetRefsField, globalLabel->m_intersheetRefsField );
-
-    // ...and then reset parent pointers.
-    globalLabel->m_intersheetRefsField.SetParent( globalLabel );
-    m_intersheetRefsField.SetParent( this );
-}
-
-
-SEARCH_RESULT SCH_GLOBALLABEL::Visit( INSPECTOR aInspector, void* testData,
-                                      const KICAD_T aFilterTypes[] )
-{
-    KICAD_T stype;
-
-    for( const KICAD_T* p = aFilterTypes;  (stype = *p) != EOT;   ++p )
-    {
-        // If caller wants to inspect my type
-        if( stype == SCH_LOCATE_ANY_T || stype == Type() )
-        {
-            if( SEARCH_RESULT::QUIT == aInspector( this, nullptr ) )
-                return SEARCH_RESULT::QUIT;
-        }
-
-        if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_T )
-        {
-            if( SEARCH_RESULT::QUIT == aInspector( GetIntersheetRefs(), this ) )
-                return SEARCH_RESULT::QUIT;
-        }
-    }
-
-    return SEARCH_RESULT::CONTINUE;
-}
-
-
-void SCH_GLOBALLABEL::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction )
-{
-    aFunction( &m_intersheetRefsField );
 }
 
 
@@ -1035,14 +1504,14 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSetting
 
     switch( m_shape )
     {
-    case PINSHEETLABEL_SHAPE::PS_INPUT:
-    case PINSHEETLABEL_SHAPE::PS_BIDI:
-    case PINSHEETLABEL_SHAPE::PS_TRISTATE:
+    case LABEL_FLAG_SHAPE::L_INPUT:
+    case LABEL_FLAG_SHAPE::L_BIDI:
+    case LABEL_FLAG_SHAPE::L_TRISTATE:
         horiz += GetTextHeight() * 3 / 4;  // Use three-quarters-height as proxy for triangle size
         break;
 
-    case PINSHEETLABEL_SHAPE::PS_OUTPUT:
-    case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED:
+    case LABEL_FLAG_SHAPE::L_OUTPUT:
+    case LABEL_FLAG_SHAPE::L_UNSPECIFIED:
     default:
         break;
     }
@@ -1060,91 +1529,8 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSetting
 
 void SCH_GLOBALLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 {
-    m_spin_style = aSpinStyle;
-
-    switch( aSpinStyle )
-    {
-    default:
-        wxASSERT_MSG( 1, "Bad spin style" );
-        m_spin_style = LABEL_SPIN_STYLE::RIGHT;
-        KI_FALLTHROUGH;
-
-    case LABEL_SPIN_STYLE::RIGHT: // Horiz Normal Orientation
-        SetTextAngle( TEXT_ANGLE_HORIZ );
-        SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        break;
-
-    case LABEL_SPIN_STYLE::UP: // Vert Orientation UP
-        SetTextAngle( TEXT_ANGLE_VERT );
-        SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        break;
-
-    case LABEL_SPIN_STYLE::LEFT: // Horiz Orientation
-        SetTextAngle( TEXT_ANGLE_HORIZ );
-        SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        break;
-
-    case LABEL_SPIN_STYLE::BOTTOM: //  Vert Orientation BOTTOM
-        SetTextAngle( TEXT_ANGLE_VERT );
-        SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        break;
-    }
-}
-
-
-void SCH_GLOBALLABEL::Rotate( const wxPoint& aCenter )
-{
-    wxPoint pt = GetTextPos();
-    RotatePoint( &pt, aCenter, 900 );
-    wxPoint offset = pt - GetTextPos();
-
-    Rotate90( false );
-
-    SetTextPos( GetTextPos() + offset );
-    m_intersheetRefsField.SetTextPos( m_intersheetRefsField.GetTextPos() + offset );
-}
-
-
-void SCH_GLOBALLABEL::Rotate90( bool aClockwise )
-{
-    SCH_TEXT::Rotate90( aClockwise );
-
-    if( m_intersheetRefsField.GetTextAngle() == TEXT_ANGLE_VERT
-            && m_intersheetRefsField.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
-    {
-        if( !aClockwise )
-            m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-
-        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_HORIZ );
-    }
-    else if( m_intersheetRefsField.GetTextAngle() == TEXT_ANGLE_VERT
-                && m_intersheetRefsField.GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
-    {
-        if( !aClockwise )
-            m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-
-        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_HORIZ );
-    }
-    else if( m_intersheetRefsField.GetTextAngle() == TEXT_ANGLE_HORIZ
-                && m_intersheetRefsField.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
-    {
-        if( aClockwise )
-            m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-
-        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_VERT );
-    }
-    else if( m_intersheetRefsField.GetTextAngle() == TEXT_ANGLE_HORIZ
-                && m_intersheetRefsField.GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
-    {
-        if( aClockwise )
-            m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-
-        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_VERT );
-    }
-
-    wxPoint pos = m_intersheetRefsField.GetTextPos();
-    RotatePoint( &pos, GetPosition(), aClockwise ? -900 : 900 );
-    m_intersheetRefsField.SetTextPos( pos );
+    SCH_TEXT::SetLabelSpinStyle( aSpinStyle );
+    SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
 }
 
 
@@ -1152,24 +1538,27 @@ void SCH_GLOBALLABEL::MirrorSpinStyle( bool aLeftRight )
 {
     SCH_TEXT::MirrorSpinStyle( aLeftRight );
 
-    if( ( aLeftRight && m_intersheetRefsField.GetTextAngle() == TEXT_ANGLE_HORIZ )
-            || ( !aLeftRight && m_intersheetRefsField.GetTextAngle() == TEXT_ANGLE_VERT ) )
+    for( SCH_FIELD& field : m_fields )
     {
-        if( m_intersheetRefsField.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
-            m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        if( ( aLeftRight && field.GetTextAngle() == TEXT_ANGLE_HORIZ )
+                || ( !aLeftRight && field.GetTextAngle() == TEXT_ANGLE_VERT ) )
+        {
+            if( field.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+                field.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            else
+                field.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        }
+
+        wxPoint pos = field.GetTextPos();
+        wxPoint delta = GetPosition() - pos;
+
+        if( aLeftRight )
+            pos.x = GetPosition().x + delta.x;
         else
-            m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+            pos.y = GetPosition().y + delta.y;
+
+        field.SetTextPos( pos );
     }
-
-    wxPoint pos = m_intersheetRefsField.GetTextPos();
-    wxPoint delta = GetPosition() - pos;
-
-    if( aLeftRight )
-        pos.x = GetPosition().x + delta.x;
-    else
-        pos.y = GetPosition().y + delta.y;
-
-    m_intersheetRefsField.SetTextPos( pos );
 }
 
 
@@ -1178,16 +1567,19 @@ void SCH_GLOBALLABEL::MirrorHorizontally( int aCenter )
     wxPoint old_pos = GetPosition();
     SCH_TEXT::MirrorHorizontally( aCenter );
 
-    if( m_intersheetRefsField.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
-       m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-    else
-       m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+    for( SCH_FIELD& field : m_fields )
+    {
+        if( field.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+           field.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        else
+           field.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
 
-    wxPoint pos = m_intersheetRefsField.GetTextPos();
-    wxPoint delta = old_pos - pos;
-    pos.x = GetPosition().x + delta.x;
+        wxPoint pos = field.GetTextPos();
+        wxPoint delta = old_pos - pos;
+        pos.x = GetPosition().x + delta.x;
 
-    m_intersheetRefsField.SetPosition( pos );
+        field.SetPosition( pos );
+    }
 }
 
 
@@ -1195,66 +1587,15 @@ void SCH_GLOBALLABEL::MirrorVertically( int aCenter )
 {
     wxPoint old_pos = GetPosition();
     SCH_TEXT::MirrorVertically( aCenter );
-    wxPoint pos = m_intersheetRefsField.GetTextPos();
-    wxPoint delta = old_pos - pos;
-    pos.y = GetPosition().y + delta.y;
 
-    m_intersheetRefsField.SetPosition( pos );
-}
-
-
-void SCH_GLOBALLABEL::UpdateIntersheetRefProps()
-{
-    m_intersheetRefsField.SetTextSize( GetTextSize() );
-    m_intersheetRefsField.SetItalic( IsItalic() );
-    m_intersheetRefsField.SetBold( IsBold() );
-    m_intersheetRefsField.SetTextThickness( GetTextThickness() );
-
-    if( m_fieldsAutoplaced == FIELDS_AUTOPLACED_AUTO )
-        AutoplaceFields( nullptr, false );
-}
-
-
-void SCH_GLOBALLABEL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
-{
-    int margin = GetTextOffset() * 2;
-    int labelLen = GetBoundingBoxBase().GetSizeMax();
-    int penOffset = GetPenWidth() / 2;
-
-    // Set both axes to penOffset; we're going to overwrite the text axis below
-    wxPoint offset( -penOffset, -penOffset );
-
-    switch( GetLabelSpinStyle() )
+    for( SCH_FIELD& field : m_fields )
     {
-    default:
-    case LABEL_SPIN_STYLE::LEFT:
-        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_HORIZ );
-        m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        offset.x = - ( labelLen + margin / 2 );
-        break;
+        wxPoint pos = field.GetTextPos();
+        wxPoint delta = old_pos - pos;
+        pos.y = GetPosition().y + delta.y;
 
-    case LABEL_SPIN_STYLE::UP:
-        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_VERT );
-        m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        offset.y = - ( labelLen + margin / 2 );
-        break;
-
-    case LABEL_SPIN_STYLE::RIGHT:
-        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_HORIZ );
-        m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        offset.x = labelLen + margin /2 ;
-        break;
-
-    case LABEL_SPIN_STYLE::BOTTOM:
-        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_VERT );
-        m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        offset.y = labelLen + margin / 2;
-        break;
+        field.SetPosition( pos );
     }
-
-    m_intersheetRefsField.SetTextPos( GetPosition() + offset );
-
-    m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
 }
 
 
@@ -1307,44 +1648,24 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
         return true;
     }
 
-    return false;
+    return SCH_LABEL_BASE::ResolveTextVar( token, aDepth );
 }
 
 
-void SCH_GLOBALLABEL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_GLOBALLABEL::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    static std::vector<wxPoint> s_poly;
-
-    SCH_CONNECTION* connection = Connection();
-    int             layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
-    wxDC*           DC = aSettings->GetPrintDC();
-    COLOR4D         color = aSettings->GetLayerColor( layer );
-    int             penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
-    wxPoint         text_offset = aOffset + GetSchematicTextOffset( aSettings );
-
-    EDA_TEXT::Print( aSettings, text_offset, color );
-
-    CreateGraphicShape( aSettings, s_poly, GetTextPos() + aOffset );
-    GRPoly( nullptr, DC, s_poly.size(), &s_poly[0], false, penWidth, color, color );
-
-    if( Schematic()->Settings().m_IntersheetRefsShow )
-        m_intersheetRefsField.Print( aSettings, aOffset );
-}
-
-
-void SCH_GLOBALLABEL::Plot( PLOTTER* aPlotter ) const
-{
-    SCH_TEXT::Plot( aPlotter );
-
-    bool show = Schematic()->Settings().m_IntersheetRefsShow;
-
-    if ( show )
-        m_intersheetRefsField.Plot( aPlotter );
+    aCount     = 5;
+    aLayers[0] = LAYER_DEVICE;
+    aLayers[1] = LAYER_INTERSHEET_REFS;
+    aLayers[2] = LAYER_NETCLASS_REFS;
+    aLayers[3] = LAYER_FIELDS;
+    aLayers[4] = LAYER_SELECTION_SHADOWS;
 }
 
 
 void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
-                                          std::vector<wxPoint>& aPoints, const wxPoint& Pos ) const
+                                          std::vector<wxPoint>& aPoints,
+                                          const wxPoint& aPos ) const
 {
     int margin    = GetLabelBoxExpansion( aRenderSettings );
     int halfSize  = ( GetTextHeight() / 2 ) + margin;
@@ -1368,36 +1689,25 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
 
     switch( m_shape )
     {
-    case PINSHEETLABEL_SHAPE::PS_INPUT:
+    case LABEL_FLAG_SHAPE::L_INPUT:
         x_offset = -halfSize;
         aPoints[0].x += halfSize;
         break;
 
-    case PINSHEETLABEL_SHAPE::PS_OUTPUT:
+    case LABEL_FLAG_SHAPE::L_OUTPUT:
         aPoints[3].x -= halfSize;
         break;
 
-    case PINSHEETLABEL_SHAPE::PS_BIDI:
-    case PINSHEETLABEL_SHAPE::PS_TRISTATE:
+    case LABEL_FLAG_SHAPE::L_BIDI:
+    case LABEL_FLAG_SHAPE::L_TRISTATE:
         x_offset = -halfSize;
         aPoints[0].x += halfSize;
         aPoints[3].x -= halfSize;
         break;
 
-    case PINSHEETLABEL_SHAPE::PS_UNSPECIFIED:
+    case LABEL_FLAG_SHAPE::L_UNSPECIFIED:
     default:
         break;
-    }
-
-    int angle = 0;
-
-    switch( GetLabelSpinStyle() )
-    {
-    default:
-    case LABEL_SPIN_STYLE::LEFT:                 break;
-    case LABEL_SPIN_STYLE::UP:     angle = -900; break;
-    case LABEL_SPIN_STYLE::RIGHT:  angle = 1800; break;
-    case LABEL_SPIN_STYLE::BOTTOM: angle = 900;  break;
     }
 
     // Rotate outlines and move corners in real position
@@ -1405,81 +1715,19 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
     {
         aPoint.x += x_offset;
 
-        if( angle )
-            RotatePoint( &aPoint, angle );
+        switch( GetLabelSpinStyle() )
+        {
+        default:
+        case LABEL_SPIN_STYLE::LEFT:                                 break;
+        case LABEL_SPIN_STYLE::UP:     RotatePoint( &aPoint, -900 ); break;
+        case LABEL_SPIN_STYLE::RIGHT:  RotatePoint( &aPoint, 1800 ); break;
+        case LABEL_SPIN_STYLE::BOTTOM: RotatePoint( &aPoint, 900 );  break;
+        }
 
-        aPoint += Pos;
+        aPoint += aPos;
     }
 
     aPoints.push_back( aPoints[0] ); // closing
-}
-
-
-const EDA_RECT SCH_GLOBALLABEL::GetBoundingBoxBase() const
-{
-    // build the bounding box on the global label only, without taking in account
-    // the intersheets references, just the bounding box of the graphic shape
-    int x  = GetTextPos().x;
-    int y  = GetTextPos().y;
-    int penWidth = GetEffectiveTextPenWidth();
-    int margin = GetTextOffset();
-    int height   = ( ( GetTextHeight() * 15 ) / 10 ) + penWidth + margin;
-    int length = LenSize( GetShownText(), penWidth )
-                 + height                 // add height for triangular shapes
-                 - margin;                // margin added to height not needed here
-
-    int dx, dy;
-
-    switch( GetLabelSpinStyle() )    // respect orientation
-    {
-    default:
-    case LABEL_SPIN_STYLE::LEFT:
-        dx = -length;
-        dy = height;
-        y -= height / 2;
-        break;
-
-    case LABEL_SPIN_STYLE::UP:
-        dx = height;
-        dy = -length;
-        x -= height / 2;
-        break;
-
-    case LABEL_SPIN_STYLE::RIGHT:
-        dx = length;
-        dy = height;
-        y -= height / 2;
-        break;
-
-    case LABEL_SPIN_STYLE::BOTTOM:
-        dx = height;
-        dy = length;
-        x -= height / 2;
-        break;
-    }
-
-    EDA_RECT box( wxPoint( x, y ), wxSize( dx, dy ) );
-
-    box.Normalize();
-    return box;
-}
-
-
-const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
-{
-    // build the bounding box on the global label only, including the intersheets references
-    // full bounding box if they are shown
-
-    EDA_RECT box( GetBoundingBoxBase() );
-
-    // Note: Schematic() can be null in preference preview panel
-    if( Schematic() && Schematic()->Settings().m_IntersheetRefsShow )
-    {
-        box.Merge( m_intersheetRefsField.GetBoundingBox() );
-        box.Normalize();
-    }
-
-    return box;
 }
 
 
@@ -1495,132 +1743,19 @@ BITMAPS SCH_GLOBALLABEL::GetMenuImage() const
 }
 
 
-bool SCH_GLOBALLABEL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
-{
-    EDA_RECT bbox = GetBoundingBoxBase();
-    bbox.Inflate( aAccuracy );
-
-    if( !bbox.Contains( aPosition ) )
-    {
-        if( Schematic() && Schematic()->Settings().m_IntersheetRefsShow )
-        {
-            bbox = m_intersheetRefsField.GetBoundingBox();
-            bbox.Inflate( aAccuracy );
-
-            return bbox.Contains( aPosition );
-        }
-
-        return false;
-    }
-
-    return true;
-}
-
-
-bool SCH_GLOBALLABEL::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
-{
-    EDA_RECT bbox = GetBoundingBoxBase();
-
-    if( aContained )
-    {
-        if( Schematic() && Schematic()->Settings().m_IntersheetRefsShow )
-            bbox.Merge( m_intersheetRefsField.GetBoundingBox() );
-
-        bbox.Inflate( aAccuracy );
-        return aRect.Contains( bbox );
-    }
-
-    bbox.Inflate( aAccuracy );
-
-    if( aRect.Intersects( bbox ) )
-        return true;
-
-    if( Schematic() && Schematic()->Settings().m_IntersheetRefsShow )
-    {
-        bbox = m_intersheetRefsField.GetBoundingBox();
-        bbox.Inflate( aAccuracy );
-
-        return aRect.Intersects( bbox );
-    }
-
-    return false;
-}
-
-
-SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType )
-        : SCH_TEXT( pos, text, aType )
+SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
+        SCH_LABEL_BASE( pos, text, aType )
 {
     m_layer      = LAYER_HIERLABEL;
-    m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
+    m_shape      = LABEL_FLAG_SHAPE::L_INPUT;
     m_isDangling = true;
-    SetMultilineAllowed( false );
-}
-
-
-EDA_ITEM* SCH_HIERLABEL::Clone() const
-{
-    return new SCH_HIERLABEL( *this );
 }
 
 
 void SCH_HIERLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 {
-    m_spin_style = aSpinStyle;
-
-    // Assume "Right" and Left" mean which side of the port symbol the text will be on
-    // If we are left of the symbol, we want to right justify to line up with the symbol
-    switch( aSpinStyle )
-    {
-    default:
-        wxLogWarning( "SetLabelSpinStyle bad spin style" );
-        break;
-
-    case LABEL_SPIN_STYLE::LEFT:
-        //
-        m_spin_style = LABEL_SPIN_STYLE::LEFT; // Handle the error spin style by resetting
-        SetTextAngle( TEXT_ANGLE_HORIZ );
-        SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-        break;
-
-    case LABEL_SPIN_STYLE::UP:
-        SetTextAngle( TEXT_ANGLE_VERT );
-        SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-        break;
-
-    case LABEL_SPIN_STYLE::RIGHT:
-        SetTextAngle( TEXT_ANGLE_HORIZ );
-        SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-        break;
-
-    case LABEL_SPIN_STYLE::BOTTOM:
-        SetTextAngle( TEXT_ANGLE_VERT );
-        SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-        break;
-    }
-}
-
-
-void SCH_HIERLABEL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset )
-{
-    wxCHECK_RET( Schematic(), "No parent SCHEMATIC set for SCH_LABEL!" );
-
-    static std::vector <wxPoint> Poly;
-
-    wxDC*           DC = aSettings->GetPrintDC();
-    SCH_CONNECTION* conn = Connection();
-    bool            isBus = conn && conn->IsBus();
-    COLOR4D         color = aSettings->GetLayerColor( isBus ? LAYER_BUS : m_layer );
-    int             penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
-    wxPoint         textOffset = offset + GetSchematicTextOffset( aSettings );
-
-    EDA_TEXT::Print( aSettings, textOffset, color );
-
-    CreateGraphicShape( aSettings, Poly, GetTextPos() + offset );
-    GRPoly( nullptr, DC, Poly.size(), &Poly[0], false, penWidth, color, color );
+    SCH_TEXT::SetLabelSpinStyle( aSpinStyle );
+    SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
 }
 
 
@@ -1633,7 +1768,7 @@ void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
 
 void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
                                         std::vector<wxPoint>& aPoints, const wxPoint& aPos,
-                                        PINSHEETLABEL_SHAPE aShape ) const
+                                        LABEL_FLAG_SHAPE aShape ) const
 {
     int* Template = TemplateShape[static_cast<int>( aShape )][static_cast<int>( m_spin_style )];
     int  halfSize = GetTextHeight() / 2;
@@ -1656,7 +1791,7 @@ void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
 }
 
 
-const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
+const EDA_RECT SCH_HIERLABEL::GetBodyBoundingBox() const
 {
     int penWidth = GetEffectiveTextPenWidth();
     int margin = GetTextOffset();

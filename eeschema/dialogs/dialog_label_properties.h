@@ -21,53 +21,64 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_TEXT_AND_LABEL_PROPERTIES_H
-#define DIALOG_TEXT_AND_LABEL_PROPERTIES_H
+#ifndef DIALOG_LABEL_PROPERTIES_H
+#define DIALOG_LABEL_PROPERTIES_H
 
+#include <fields_grid_table.h>
 #include <widgets/unit_binder.h>
 #include <sch_text.h>
 #include <sch_validators.h>
-#include <dialog_text_and_label_properties_base.h>
+#include <dialog_label_properties_base.h>
 
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
-class SCINTILLA_TRICKS;
 class HTML_MESSAGE_BOX;
 
 
-class DIALOG_TEXT_AND_LABEL_PROPERTIES : public DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE
+class DIALOG_LABEL_PROPERTIES : public DIALOG_LABEL_PROPERTIES_BASE
 {
 public:
-    DIALOG_TEXT_AND_LABEL_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
-    ~DIALOG_TEXT_AND_LABEL_PROPERTIES();
-
-    // This class is shared for numerous tasks: a couple of single line labels and
-    // multi-line text fields.  Since the desired size of the multi-line text field editor
-    // is often larger, we retain separate sizes based on the dialog titles.
-    void SetTitle( const wxString& aTitle ) override;
+    DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_LABEL_BASE* aLabel );
+    ~DIALOG_LABEL_PROPERTIES();
 
 private:
-    void onScintillaCharAdded( wxStyledTextEvent &aEvent );
-
     void OnEnterKey( wxCommandEvent& aEvent ) override;
     void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;
-    void onMultiLineTCLostFocus( wxFocusEvent& event ) override;
+
+    void onSpinButton( wxCommandEvent &aEvent );
+
+    // event handlers
+    void OnAddField( wxCommandEvent& event ) override;
+    void OnDeleteField( wxCommandEvent& event ) override;
+    void OnMoveUp( wxCommandEvent& event ) override;
+    void OnMoveDown( wxCommandEvent& event ) override;
+    void OnSizeGrid( wxSizeEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& event ) override;
+
+    void AdjustGridColumns( int aWidth );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    SCH_EDIT_FRAME*       m_Parent;
-    SCH_TEXT*             m_CurrentText;
-    wxWindow*             m_activeTextCtrl;
-    wxTextEntry*          m_activeTextEntry;
-    UNIT_BINDER           m_textSize;
-    SCH_NETNAME_VALIDATOR m_netNameValidator;
-    SCINTILLA_TRICKS*     m_scintillaTricks;
+private:
+    SCH_EDIT_FRAME*               m_Parent;
+    int                           m_width;
+    int                           m_delayedFocusRow;
+    int                           m_delayedFocusColumn;
 
-    HTML_MESSAGE_BOX*     m_helpWindow;
+    SCH_LABEL_BASE*               m_currentLabel;
+    wxTextEntry*                  m_activeTextEntry;
+    SCH_NETNAME_VALIDATOR         m_netNameValidator;
+
+    FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
+    wxString                      m_shownColumns;
+
+    UNIT_BINDER                   m_textSize;
+
+    HTML_MESSAGE_BOX*             m_helpWindow;
 };
 
 
 
-#endif // DIALOG_TEXT_AND_LABEL_PROPERTIES_H
+#endif // DIALOG_LABEL_PROPERTIES_H
