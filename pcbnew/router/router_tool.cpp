@@ -1190,7 +1190,6 @@ void ROUTER_TOOL::performRouting()
     }
 
     m_router->CommitRouting();
-    m_router->StopRouting();
 
     finishInteractive();
 }

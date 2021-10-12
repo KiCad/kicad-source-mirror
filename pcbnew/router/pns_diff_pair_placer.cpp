@@ -54,16 +54,12 @@ DIFF_PAIR_PLACER::DIFF_PAIR_PLACER( ROUTER* aRouter ) :
     m_orthoMode = false;
     m_snapOnTarget = false;
     m_currentEndItem = nullptr;
-    m_currentMode = RM_MarkObstacles;
     m_currentTraceOk = false;
     m_idle = true;
 }
 
 DIFF_PAIR_PLACER::~DIFF_PAIR_PLACER()
-{
-    if( m_shove )
-        delete m_shove;
-}
+{}
 
 
 void DIFF_PAIR_PLACER::setWorld( NODE* aWorld )
@@ -133,12 +129,12 @@ bool DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNe
 
     bool solidsOnly = true;
 
-    if( m_currentMode == RM_MarkObstacles )
+    if( Settings().Mode() == RM_MarkObstacles )
     {
         aNewP = aP;
         return true;
     }
-    else if( m_currentMode == RM_Walkaround )
+    else if( Settings().Mode() == RM_Walkaround )
     {
         solidsOnly = false;
     }
@@ -324,7 +320,7 @@ bool DIFF_PAIR_PLACER::rhWalkOnly( const VECTOR2I& aP )
 
 bool DIFF_PAIR_PLACER::route( const VECTOR2I& aP )
 {
-    switch( m_currentMode )
+    switch( Settings().Mode() )
     {
     case RM_MarkObstacles:
         return rhMarkObstacles( aP );
@@ -621,17 +617,8 @@ void DIFF_PAIR_PLACER::initPlacement()
 
     m_lastNode = nullptr;
     m_currentNode = rootNode;
-    m_currentMode = Settings().Mode();
 
-    if( m_shove )
-        delete m_shove;
-
-    m_shove = nullptr;
-
-    if( m_currentMode == RM_Shove || m_currentMode == RM_Smart )
-    {
-        m_shove = new SHOVE( m_currentNode, Router() );
-    }
+    m_shove = std::make_unique<SHOVE>( m_currentNode, Router() );
 }
 
 

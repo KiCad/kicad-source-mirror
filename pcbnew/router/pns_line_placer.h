@@ -28,12 +28,12 @@
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 
-#include "pns_sizes_settings.h"
-#include "pns_node.h"
-#include "pns_via.h"
 #include "pns_line.h"
-#include "pns_placement_algo.h"
 #include "pns_mouse_trail_tracer.h"
+#include "pns_node.h"
+#include "pns_placement_algo.h"
+#include "pns_sizes_settings.h"
+#include "pns_via.h"
 
 namespace PNS {
 
@@ -203,7 +203,6 @@ public:
      */
     bool SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP );
 
-
 private:
     /**
      * Re-route the current track to point aP. Returns true, when routing has completed
@@ -353,7 +352,6 @@ private:
     VECTOR2I       m_currentStart;
     LINE           m_currentTrace;
 
-    PNS_MODE       m_currentMode;
     ITEM*          m_startItem;
 
     bool           m_idle;

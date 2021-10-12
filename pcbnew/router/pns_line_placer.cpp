@@ -51,7 +51,6 @@ LINE_PLACER::LINE_PLACER( ROUTER* aRouter ) :
     m_placingVia = false;
     m_currentNet = 0;
     m_currentLayer = 0;
-    m_currentMode = RM_MarkObstacles;
     m_startItem = nullptr;
     m_chainedPlacement = false;
     m_orthoMode = false;
@@ -806,7 +805,7 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead )
 
 bool LINE_PLACER::routeHead( const VECTOR2I& aP, LINE& aNewHead )
 {
-    switch( m_currentMode )
+    switch( Settings().Mode() )
     {
     case RM_MarkObstacles:
         return rhMarkObstacles( aP, aNewHead );
@@ -1144,7 +1143,7 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
     NODE *n;
 
-    if ( m_shove )
+    if ( Settings().Mode() == PNS::RM_Shove || Settings().Mode() == PNS::RM_Smart )
         n = m_shove->CurrentNode();
     else
         n = m_currentNode;
@@ -1189,12 +1188,8 @@ void LINE_PLACER::initPlacement()
 
     m_lastNode = nullptr;
     m_currentNode = m_world;
-    m_currentMode = Settings().Mode();
 
-    m_shove.reset();
-
-    if( m_currentMode == RM_Shove || m_currentMode == RM_Smart )
-        m_shove = std::make_unique<SHOVE>( m_world->Branch(), Router() );
+    m_shove = std::make_unique<SHOVE>( m_world->Branch(), Router() );
 }
 
 
@@ -1249,7 +1244,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
     LINE pl = Trace();
 
-    if( m_currentMode == RM_MarkObstacles )
+    if( Settings().Mode() == RM_MarkObstacles )
     {
         // Mark Obstacles is sort of a half-manual, half-automated mode in which the
         // user has more responsibility and authority.
@@ -1405,8 +1400,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         m_currentNode = m_lastNode;
         m_lastNode = m_lastNode->Branch();
 
-        if( m_shove )
-            m_shove->AddLockedSpringbackNode( m_currentNode );
+        m_shove->AddLockedSpringbackNode( m_currentNode );
 
         DIRECTION_45 lastSegDir = pl.EndsWithVia() ? DIRECTION_45::UNDEFINED : d_last;
 
@@ -1451,10 +1445,11 @@ bool LINE_PLACER::UnfixRoute()
     m_mouseTrailTracer.SetDefaultDirections( m_initial_direction, m_direction );
     m_mouseTrailTracer.AddTrailPoint( m_p_start );
 
-    if( m_shove )
+    m_shove->RewindSpringbackTo( m_currentNode );
+    m_shove->UnlockSpringbackNode( m_currentNode );
+
+    if( Settings().Mode() == PNS::RM_Shove || Settings().Mode() == PNS::RM_Smart )
     {
-        m_shove->RewindSpringbackTo( m_currentNode );
-        m_shove->UnlockSpringbackNode( m_currentNode );
         m_currentNode = m_shove->CurrentNode();
         m_currentNode->KillChildren();
     }
@@ -1696,7 +1691,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aForce
     VIA v( makeVia( aP ) );
     v.SetNet( aHead.Net() );
 
-    if( m_currentMode == RM_MarkObstacles )
+    if( Settings().Mode() == RM_MarkObstacles )
     {
         aHead.AppendVia( v );
         return true;
@@ -1705,7 +1700,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aForce
     VECTOR2I force;
     VECTOR2I lead = aP - m_p_start;
 
-    bool solidsOnly = ( m_currentMode != RM_Walkaround );
+    bool solidsOnly = ( Settings().Mode() != RM_Walkaround );
 
     if( v.PushoutForce( m_currentNode, lead, force, solidsOnly, 40 ) )
     {
