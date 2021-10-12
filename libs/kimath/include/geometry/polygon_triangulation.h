@@ -468,6 +468,15 @@ private:
             }
         }
 
+        // Check to see if we are left with only three points in the polygon
+        if( aPoint->next && aPoint->prev == aPoint->next->next )
+        {
+            // Three concave points will never be able to be triangulated because they were
+            // created by an intersecting polygon, so just drop them.
+            if( area( aPoint->prev, aPoint, aPoint->next ) >= 0 )
+                return true;
+        }
+
         /*
          * At this point, our polygon should be fully tessellated.
          */
