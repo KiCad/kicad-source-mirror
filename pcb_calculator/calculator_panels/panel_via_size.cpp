@@ -60,8 +60,6 @@ PANEL_VIA_SIZE::PANEL_VIA_SIZE( wxWindow* parent, wxWindowID id,
                                 long style, const wxString& name ) :
         PANEL_VIA_SIZE_BASE( parent, id, pos, size, style, name )
 {
-    SetName( GetWindowName() );
-
     m_viaResistivityUnits->SetLabel( wxT( "Ω•m" ) );
     m_viaTempUnits->SetLabel( wxT( "°C" ) );
     m_viaResUnits->SetLabel( wxT( "Ω" ) );

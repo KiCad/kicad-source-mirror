@@ -36,8 +36,6 @@ public:
                      long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
     ~PANEL_TRANSLINE();
 
-    static wxString GetWindowName() { return wxT( "PANEL_TRANSLINE" ); }
-
     // Methods from CALCULATOR_PANEL that must be overriden
     void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
     void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;

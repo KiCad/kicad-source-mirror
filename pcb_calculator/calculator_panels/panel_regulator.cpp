@@ -43,8 +43,6 @@ PANEL_REGULATOR::PANEL_REGULATOR( wxWindow* parent, wxWindowID id,
         PANEL_REGULATOR_BASE( parent, id, pos, size, style, name ),
         m_RegulatorListChanged( false )
 {
-    SetName( GetWindowName() );
-
     m_IadjUnitLabel->SetLabel( wxT( "µA" ) );
     m_r1Units->SetLabel( wxT( "kΩ" ) );
     m_r2Units->SetLabel( wxT( "kΩ" ) );

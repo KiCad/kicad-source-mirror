@@ -22,6 +22,8 @@
 #include <wx/notebook.h>
 #include <wx/sizer.h>
 
+#include <typeinfo>
+
 #include <bitmaps.h>
 #include <bitmap_store.h>
 #include <geometry/shape_poly_set.h>
@@ -137,6 +139,8 @@ void PCB_CALCULATOR_FRAME::AddCalculator( CALCULATOR_PANEL *aPanel, const wxStri
 {
     // Update internal structures
     m_panels.push_back( aPanel );
+    m_panelTypes[ typeid( *aPanel ).hash_code() ] = aPanel;
+
     m_notebook->AddPage( aPanel, panelUIName, false );
 }
 
@@ -160,7 +164,18 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
     {
         // Kick all the things that wxWidgets can't seem to redraw on its own.
         // This is getting seriously ridiculous....
-        if( PANEL_TRANSLINE* translinePanel = GetCalculator<PANEL_TRANSLINE>() )
+        PANEL_TRANSLINE*          translinePanel   = GetCalculator<PANEL_TRANSLINE>();
+        PANEL_ATTENUATORS*        attenPanel       = GetCalculator<PANEL_ATTENUATORS>();
+        PANEL_VIA_SIZE*           viaSizePanel     = GetCalculator<PANEL_VIA_SIZE>();
+        PANEL_REGULATOR*          regulPanel       = GetCalculator<PANEL_REGULATOR>();
+        PANEL_ELECTRICAL_SPACING* elecSpacingPanel = GetCalculator<PANEL_ELECTRICAL_SPACING>();
+
+        wxASSERT( translinePanel );
+        wxASSERT( attenPanel );
+        wxASSERT( viaSizePanel );
+        wxASSERT( regulPanel );
+        wxASSERT( elecSpacingPanel );
+
         {
             wxCommandEvent event2( wxEVT_RADIOBUTTON );
             event2.SetEventObject( translinePanel->GetTranslineSelector() );
@@ -169,29 +184,22 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
             translinePanel->GetTranslineSelector()->Command( event2 );
         }
 
-        if( PANEL_ATTENUATORS* attenPanel = GetCalculator<PANEL_ATTENUATORS>() )
+        for( int i = 0; i < attenPanel->m_AttenuatorList.size(); ++i )
         {
-            for( int i = 0; i < attenPanel->m_AttenuatorList.size(); ++i )
+            if( attenPanel->m_AttenuatorList[i] == attenPanel->m_CurrAttenuator )
             {
-                if( attenPanel->m_AttenuatorList[i] == attenPanel->m_CurrAttenuator )
-                {
-                    wxCommandEvent event2( wxEVT_RADIOBUTTON );
-                    event2.SetEventObject( attenPanel->GetAttenuatorsSelector() );
-                    event2.SetInt( i );
+                wxCommandEvent event2( wxEVT_RADIOBUTTON );
+                event2.SetEventObject( attenPanel->GetAttenuatorsSelector() );
+                event2.SetInt( i );
 
-                    attenPanel->GetAttenuatorsSelector()->Command( event2 );
-                    break;
-                }
+                attenPanel->GetAttenuatorsSelector()->Command( event2 );
+                break;
             }
-
-            attenPanel->UpdateUI();
         }
 
-        if( PANEL_VIA_SIZE* viaSizePanel = GetCalculator<PANEL_VIA_SIZE>() )
-       	    viaSizePanel->Layout();
-
-        if( PANEL_REGULATOR* regulPanel = GetCalculator<PANEL_REGULATOR>() )
-       	    regulPanel->Layout();
+        attenPanel->UpdateUI();
+   	    viaSizePanel->Layout();
+  	    regulPanel->Layout();
 
         // Until it's shown on screen the above won't work; but doing it anyway at least keeps
         // putting new OnUpdateUI events into the queue until it *is* shown on screen.
@@ -202,20 +210,17 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
 #ifdef __WXMAC__
             if( m_macHack )
             {
-                if( PANEL_ELECTRICAL_SPACING* elecSpacingPanel = GetCalculator<PANEL_ELECTRICAL_SPACING>() )
-                {
-                    wxSize pageSize = elecSpacingPanel->GetSize();
+                wxSize pageSize = elecSpacingPanel->GetSize();
 
-                    pageSize.x -= 100;
-                    elecSpacingPanel->SetSize( pageSize );
-                    elecSpacingPanel->Layout();
+                pageSize.x -= 100;
+                elecSpacingPanel->SetSize( pageSize );
+                elecSpacingPanel->Layout();
 
-                    pageSize.x += 100;
-                    elecSpacingPanel->SetSize( pageSize );
-                    elecSpacingPanel->Layout();
+                pageSize.x += 100;
+                elecSpacingPanel->SetSize( pageSize );
+                elecSpacingPanel->Layout();
 
-                    m_macHack = false;
-                }
+                m_macHack = false;
             }
 #endif
 
@@ -229,7 +234,9 @@ void PCB_CALCULATOR_FRAME::OnClosePcbCalc( wxCloseEvent& event )
 {
     PANEL_REGULATOR* regPanel = GetCalculator<PANEL_REGULATOR>();
 
-    if( regPanel && regPanel->m_RegulatorListChanged )
+    wxASSERT( regPanel );
+
+    if( regPanel->m_RegulatorListChanged )
     {
         wxString msg;
         wxString title = _( "Write Data Failed" );

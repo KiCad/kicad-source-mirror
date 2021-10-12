@@ -24,6 +24,7 @@
 #include <calculator_panels/panel_transline.h>
 #include <pcb_calculator_settings.h>
 
+
 PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id,
                                 const wxPoint& pos, const wxSize& size,
                                 long style, const wxString& name ) :
@@ -31,8 +32,6 @@ PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id,
         m_currTransLine( nullptr ),
         m_currTransLineType( DEFAULT_TYPE )
 {
-    SetName( GetWindowName() );
-
     m_bpButtonAnalyze->SetBitmap( KiBitmap( BITMAPS::small_down ) );
     m_bpButtonSynthetize->SetBitmap( KiBitmap( BITMAPS::small_up ) );
 

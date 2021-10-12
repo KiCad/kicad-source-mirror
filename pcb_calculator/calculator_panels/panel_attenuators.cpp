@@ -38,8 +38,6 @@ PANEL_ATTENUATORS::PANEL_ATTENUATORS( wxWindow* parent, wxWindowID id,
                                   long style, const wxString& name ) :
         PANEL_ATTENUATORS_BASE( parent, id, pos, size, style, name )
 {
-    SetName( GetWindowName() );
-
     m_CurrAttenuator = nullptr;
     m_bpButtonCalcAtt->SetBitmap( KiBitmap( BITMAPS::small_down ) );
 

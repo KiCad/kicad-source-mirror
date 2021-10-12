@@ -33,7 +33,7 @@ public:
         : wxPanel( aParent, aId, aPos, aSize, aStyle, aName )
     {}
 
-    ~CALCULATOR_PANEL() {}
+    virtual ~CALCULATOR_PANEL() {}
 
     /**
      * Load the settings into the panel
