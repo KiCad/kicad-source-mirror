@@ -103,6 +103,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( BOARD* aBoard, PROJECT* aProject )
         // operations to join them together into a single polygon.
         long numSteps = Layout.Coppers.size();
 
+        // A large amount is also spent calculating zone priorities
+        numSteps += ( Layout.Templates.size() * Layout.Templates.size() ) / 2;
+
         m_progressReporter->SetMaxProgress( numSteps );
     }
 
@@ -120,7 +123,19 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( BOARD* aBoard, PROJECT* aProject )
     loadDocumentationSymbols();
     loadTemplates();
     loadCoppers(); // Progress reporting is here as significantly most amount of time spent
-    calculateZonePriorities();
+
+    for( PCB_LAYER_ID id : LSET::AllCuMask( m_numCopperLayers ).Seq() )
+    {
+        if( !calculateZonePriorities( id ) )
+        {
+            wxLogError( wxString::Format( _( "Unable to determine zone fill priorities for layer "
+                                             "'%s'. A best attempt has been made but it is "
+                                             "possible that DRC errors exist and that manual "
+                                             "editing of the zone priorities is required." ),
+                                          m_board->GetLayerName( id ) ) );
+        }
+    }
+
     loadNets();
     loadTextVariables();
 
@@ -3616,83 +3631,141 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
     }
 }
 
-
-void CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities()
+bool CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities( PCB_LAYER_ID& aLayer )
 {
     std::map<TEMPLATE_ID, std::set<TEMPLATE_ID>> winningOverlaps;
-    std::set<std::pair<TEMPLATE_ID, TEMPLATE_ID>> scheduleInferPriorityFromOutline;
 
-    // Calculate the intersection between aPolygon and the outline of aZone
-    auto intersectionArea = [&]( const SHAPE_POLY_SET& aPolygon, ZONE* aZone ) -> double
-                            {
-                                SHAPE_POLY_SET intersectShape( *aZone->Outline() );
+    auto inflateValue =
+        [&]( ZONE* aZoneA, ZONE* aZoneB )
+        {
+            int extra = getKiCadLength( Assignments.Codedefs.SpacingCodes.at( "C_C" ).Spacing )
+                        - m_board->GetDesignSettings().m_MinClearance;
 
-                                intersectShape.BooleanIntersection( aPolygon,
-                                                                    SHAPE_POLY_SET::PM_FAST );
-                                return intersectShape.Area();
-                            };
+            int retval = std::max( aZoneA->GetLocalClearance(), aZoneB->GetLocalClearance() );
+
+            retval += extra;
+
+            return retval;
+        };
+
+    // Find the error in fill area when guessing that aHigherZone gets filled before aLowerZone
+    auto errorArea =
+        [&]( ZONE* aLowerZone, ZONE* aHigherZone ) -> double
+        {
+            SHAPE_POLY_SET intersectShape( *aHigherZone->Outline() );
+            intersectShape.Inflate( inflateValue( aLowerZone, aHigherZone ) , 32 );
+
+            SHAPE_POLY_SET lowerZoneFill( aLowerZone->GetFilledPolysList( aLayer ) );
+
+            SHAPE_POLY_SET lowerZoneOutline( *aLowerZone->Outline() );
+
+            lowerZoneOutline.BooleanSubtract( intersectShape,
+                                                SHAPE_POLY_SET::PM_FAST );
+
+            lowerZoneFill.BooleanSubtract( lowerZoneOutline,
+                                            SHAPE_POLY_SET::PM_FAST );
+
+            double leftOverArea = lowerZoneFill.Area();
+
+            return leftOverArea;
+        };
+
+    auto intersectionAreaOfZoneOutlines =
+        [&]( ZONE* aZoneA, ZONE* aZoneB ) -> double
+        {
+            SHAPE_POLY_SET outLineA( *aZoneA->Outline() );
+            outLineA.Inflate( inflateValue( aZoneA, aZoneB ), 32 );
+
+            SHAPE_POLY_SET outLineB( *aZoneA->Outline() );
+            outLineB.Inflate( inflateValue( aZoneA, aZoneB ), 32 );
+
+            outLineA.BooleanIntersection( outLineB, SHAPE_POLY_SET::PM_FAST );
+
+            return outLineA.Area();
+        };
 
     // Lambda to determine if the zone with template ID 'a' is lower priority than 'b'
-    auto isLowerPriority =  [&]( const TEMPLATE_ID& a, const TEMPLATE_ID& b ) -> bool
-                            {
-                                return winningOverlaps[b].count( a ) > 0;
-                            };
+    auto isLowerPriority =
+        [&]( const TEMPLATE_ID& a, const TEMPLATE_ID& b ) -> bool
+        {
+            return winningOverlaps[b].count( a ) > 0;
+        };
 
     for( std::map<TEMPLATE_ID, ZONE*>::iterator it1 = m_zonesMap.begin();
          it1 != m_zonesMap.end(); ++it1 )
     {
-        TEMPLATE     thisTemplate = Layout.Templates.at( it1->first );
-        PCB_LAYER_ID thisLayer = getKiCadLayer( thisTemplate.LayerID );
-        ZONE*        thisZone = it1->second;
+        TEMPLATE& thisTemplate = Layout.Templates.at( it1->first );
+        ZONE*     thisZone = it1->second;
+
+        if( !thisZone->GetLayerSet().Contains( aLayer ) )
+            continue;
 
         for( std::map<TEMPLATE_ID, ZONE*>::iterator it2 = it1;
             it2 != m_zonesMap.end(); ++it2 )
         {
-            TEMPLATE     otherTemplate = Layout.Templates.at( it2->first );
-            PCB_LAYER_ID otherLayer = getKiCadLayer( otherTemplate.LayerID );
-            ZONE*        otherZone = it2->second;
+            TEMPLATE& otherTemplate = Layout.Templates.at( it2->first );
+            ZONE*     otherZone = it2->second;
 
             if( thisTemplate.ID == otherTemplate.ID )
                 continue;
 
-            if( thisLayer != otherLayer )
+            if( !otherZone->GetLayerSet().Contains( aLayer ) )
+            {
+                checkPoint();
                 continue;
+            }
 
-            SHAPE_POLY_SET thisZonePolyFill = thisZone->GetFilledPolysList( thisLayer );
-            SHAPE_POLY_SET otherZonePolyFill = otherZone->GetFilledPolysList( otherLayer );
+            if( intersectionAreaOfZoneOutlines( thisZone, otherZone ) == 0 )
+            {
+                checkPoint();
+                continue; // The zones do not interact in any way
+            }
+
+            SHAPE_POLY_SET thisZonePolyFill = thisZone->GetFilledPolysList( aLayer );
+            SHAPE_POLY_SET otherZonePolyFill = otherZone->GetFilledPolysList( aLayer );
 
             if( thisZonePolyFill.Area() > 0.0 && otherZonePolyFill.Area() > 0.0 )
             {
-                // Intersect the filled polygons of thisZone with the *outline* of otherZone
-                double areaThis = intersectionArea( thisZonePolyFill, otherZone );
+                // Test if this zone were lower priority than other zone, what is the error?
+                double areaThis = errorArea( thisZone, otherZone );
                 // Viceversa
-                double areaOther = intersectionArea( otherZonePolyFill, thisZone );
+                double areaOther = errorArea( otherZone, thisZone );
 
-                // Best effort: Compare Areas
-                // If thisZone's fill polygons overlap otherZone's outline *and* the opposite
-                // is true: otherZone's fill polygons overlap thisZone's outline then compare the
-                // intersection areas to decide which of the two zones should have higher priority
-                // There are some edge cases where this might not work, but it is in the minority.
                 if( areaThis > areaOther )
                 {
+                    // thisTemplate is filled before otherTemplate
                     winningOverlaps[thisTemplate.ID].insert( otherTemplate.ID );
-                }
-                else if( areaOther > 0.0 )
-                {
-                    winningOverlaps[otherTemplate.ID].insert( thisTemplate.ID );
                 }
                 else
                 {
-                    scheduleInferPriorityFromOutline.insert(
-                            { thisTemplate.ID, otherTemplate.ID } );
+                    // thisTemplate is filled AFTER otherTemplate
+                    winningOverlaps[otherTemplate.ID].insert( thisTemplate.ID );
                 }
+            }
+            else if( thisZonePolyFill.Area() > 0.0 )
+            {
+                // The other template is not filled, this one wins
+                winningOverlaps[thisTemplate.ID].insert( otherTemplate.ID );
+            }
+            else if( otherZonePolyFill.Area() > 0.0 )
+            {
+                // This template is not filled, the other one wins
+                winningOverlaps[otherTemplate.ID].insert( thisTemplate.ID );
             }
             else
             {
-                // One of the templates is not poured in the original CADSTAR design.
-                // Lets infer the priority based of the outlines instead
-                scheduleInferPriorityFromOutline.insert( { thisTemplate.ID, otherTemplate.ID } );
+                // Neither of the templates is poured - use zone outlines instead (bigger outlines
+                // get a lower priority)
+                if( intersectionAreaOfZoneOutlines( thisZone, otherZone ) != 0 )
+                {
+                    if( thisZone->Outline()->Area() > otherZone->Outline()->Area() )
+                        winningOverlaps[otherTemplate.ID].insert( thisTemplate.ID );
+                    else
+                        winningOverlaps[thisTemplate.ID].insert( otherTemplate.ID );
+                }
             }
+
+            checkPoint();
         }
     }
 
@@ -3738,6 +3811,22 @@ void CADSTAR_PCB_ARCHIVE_LOADER::calculateZonePriorities()
         prevID = id;
     }
 
+    // Verify
+    for( const std::pair<TEMPLATE_ID, std::set<TEMPLATE_ID>>& idPair : winningOverlaps )
+    {
+        const TEMPLATE_ID& winningID = idPair.first;
+
+        for( const TEMPLATE_ID& losingID : idPair.second )
+        {
+            if( m_zonesMap.at( losingID )->GetPriority()
+                > m_zonesMap.at( winningID )->GetPriority() )
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 

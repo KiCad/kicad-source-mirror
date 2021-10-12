@@ -181,7 +181,7 @@ private:
     /**
      * @brief Tries to make a best guess as to the zone priorities based on the pour status.
      */
-    void calculateZonePriorities();
+    bool calculateZonePriorities( PCB_LAYER_ID& aLayer );
 
     //Helper functions for drawing /loading objects onto screen:
 
