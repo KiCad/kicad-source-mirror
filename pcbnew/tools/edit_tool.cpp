@@ -1828,21 +1828,19 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
             }
         }
 
+        // in "alternative" mode, deletion is not just a simple list of selected items,
+        // it removes whole tracks, not just segments
+        if( isAlt && ( selectionCopy.HasType( PCB_TRACE_T ) || selectionCopy.HasType( PCB_VIA_T ) ) )
+        {
+            m_toolMgr->RunAction( PCB_ACTIONS::selectConnection, true );
+
+        }
+
         selectionCopy = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
                 },
                 true /* prompt user regarding locked items */ );
-    }
-
-    bool isHover = selectionCopy.IsHover();
-
-    // in "alternative" mode, deletion is not just a simple list of selected items,
-    // it removes whole tracks, not just segments
-    if( isAlt && isHover
-            && ( selectionCopy.HasType( PCB_TRACE_T ) || selectionCopy.HasType( PCB_VIA_T ) ) )
-    {
-        m_toolMgr->RunAction( PCB_ACTIONS::selectConnection, true );
     }
 
     // As we are about to remove items, they have to be removed from the selection first
