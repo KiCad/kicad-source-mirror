@@ -174,6 +174,9 @@ void SHAPE_LINE_CHAIN::splitArc( ssize_t aPtIndex, bool aCoincident )
     if( !IsSharedPt( aPtIndex ) && IsArcStart( aPtIndex ) )
         return; // Nothing to do
 
+    if( !IsPtOnArc( aPtIndex ) )
+        return; // Nothing to do
+
     wxCHECK_MSG( aPtIndex < static_cast<ssize_t>( m_shapes.size() ), /* void */,
                  "Invalid point index requested." );
 

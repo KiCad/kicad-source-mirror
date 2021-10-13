@@ -650,46 +650,6 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET
     c.Execute( aType, solution, ClipperLib::pftNonZero, ClipperLib::pftNonZero );
 
     importTree( &solution, zValues, arcBuffer );
-
-    // amend arcs for the intersection points
-    for( auto& poly : m_polys )
-    {
-        for( size_t i = 0; i < poly.size(); i++ )
-        {
-            for( int j = 0; j < poly[i].PointCount(); j++ )
-            {
-                const VECTOR2I& pt = poly[i].CPoint( j );
-
-                if( newIntersectPoints.find( pt ) != newIntersectPoints.end() )
-                {
-                    const std::pair<ssize_t, ssize_t>& shape = poly[i].CShapes()[j];
-                    CLIPPER_Z_VALUE                    zval = newIntersectPoints.at( pt );
-
-                    // Fixup arc end points to match the new intersection points found in clipper
-                    // @todo consider editing the intersection point to be the "true" arc
-                    //       intersection.
-                    if( poly[i].IsSharedPt( j ) )
-                    {
-                        poly[i].amendArcEnd( shape.first, pt );
-                        poly[i].amendArcStart( shape.second, pt );
-                    }
-                    else if( poly[i].IsArcStart( j ) )
-                    {
-                        poly[i].amendArcStart( shape.first, pt );
-                    }
-                    else if( poly[i].IsArcEnd( j ) )
-                    {
-                        poly[i].amendArcEnd( shape.first, pt );
-                    }
-                    else
-                    {
-                        poly[i].splitArc( j );
-                    }
-                }
-            }
-        }
-
-    }
 }
 
 
