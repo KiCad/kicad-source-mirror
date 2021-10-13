@@ -31,6 +31,7 @@
 #include <tools/kicad_manager_control.h>
 #include <dialogs/dialog_template_selector.h>
 #include <gestfich.h>
+#include <string_utils.h>
 #include <paths.h>
 #include <wx/checkbox.h>
 #include <wx/dir.h>
@@ -789,7 +790,9 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
         m_frame->PrintMsg( msg );
 
 #ifdef __WXMAC__
-        wxExecute( wxString::Format( "osascript -e 'activate application \"%s\"' ", execFile ) );
+        // Use concatenation to avoid double-quote bug in wxWidgets 3.1.5 OSX.
+        wxExecute( "osascript -e 'activate application \""
+                    + EscapeString( execFile, CTX_QUOTED_STR ) + "\"' " );
 #endif
     }
     else

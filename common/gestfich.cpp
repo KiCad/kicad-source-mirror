@@ -36,6 +36,7 @@
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <gestfich.h>
+#include <string_utils.h>
 
 void QuoteString( wxString& string )
 {
@@ -261,14 +262,14 @@ bool doPrintFile( const wxString& file, bool aDryRun )
 
     if( !application.IsEmpty() )
     {
-        wxString ascript;
-        ascript.Printf( "osascript -e 'tell application \"%s\"' "
-                                  "-e '   set srcFileRef to (open POSIX file \"%s\")' "
-                                  "-e '   activate' "
-                                  "-e '   print srcFileRef print dialog true' "
-                                  "-e 'end tell' ",
-                        application,
-                        file );
+        // Use concatenation to avoid double-quote bug in wxWidgets 3.1.5 OSX.
+        wxString ascript = "osascript -e 'tell application \""
+                            + EscapeString( application, CTX_QUOTED_STR ) + "\"' "
+                            + "-e '   set srcFileRef to (open POSIX file \""
+                            + EscapeString( file, CTX_QUOTED_STR ) + "\")' "
+                            + "-e '   activate' "
+                            + "-e '   print srcFileRef print dialog true' "
+                            + "-e 'end tell' ";
 
         if( !aDryRun )
             wxExecute( ascript );
