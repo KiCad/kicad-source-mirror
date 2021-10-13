@@ -74,7 +74,11 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent, bool aInFP ) :
     m_islandRemovalMode = ISLAND_REMOVAL_MODE::ALWAYS;
     aParent->GetZoneSettings().ExportSetting( *this );
 
-    m_needRefill = false;   // True only after some edition.
+    m_ZoneMinThickness = Mils2iu( ZONE_THICKNESS_MIL );
+    m_thermalReliefSpokeWidth = Mils2iu( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL );
+    m_thermalReliefGap = Mils2iu( ZONE_THERMAL_RELIEF_GAP_MIL );
+
+    m_needRefill = false;   // True only after edits.
 }
 
 
