@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="15" />
+    <FileVersion major="1" minor="16" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -52,6 +52,7 @@
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Layer Selection</property>
             <property name="tooltip"></property>
+            <property name="two_step_creation">0</property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
             <property name="window_style"></property>
@@ -353,7 +354,7 @@
                                                 <property name="caption"></property>
                                                 <property name="caption_visible">1</property>
                                                 <property name="center_pane">0</property>
-                                                <property name="choices">&quot;2 Layers&quot; &quot;4 Layers&quot; &quot;6 Layers&quot; &quot;8 Layers&quot; &quot;10 Layers&quot; &quot;12 Layers&quot; &quot;14 Layers&quot; &quot;16 Layers&quot;</property>
+                                                <property name="choices">&quot;2 Layers&quot; &quot;4 Layers&quot; &quot;6 Layers&quot; &quot;8 Layers&quot; &quot;10 Layers&quot; &quot;12 Layers&quot; &quot;14 Layers&quot; &quot;16 Layers&quot; &quot;18 Layers&quot; &quot;20 Layers&quot; &quot;22 Layers&quot; &quot;24 Layers&quot; &quot;26 Layers&quot; &quot;28 Layers&quot; &quot;30 Layers&quot; &quot;32 Layers&quot; &quot;&quot; &quot;&quot; &quot;&quot;</property>
                                                 <property name="close_button">1</property>
                                                 <property name="context_help"></property>
                                                 <property name="context_menu">1</property>
