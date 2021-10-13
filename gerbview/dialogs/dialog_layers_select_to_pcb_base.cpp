@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -96,9 +96,6 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	m_comboCopperLayersCount->Append( _("28 Layers") );
 	m_comboCopperLayersCount->Append( _("30 Layers") );
 	m_comboCopperLayersCount->Append( _("32 Layers") );
-	m_comboCopperLayersCount->Append( wxEmptyString );
-	m_comboCopperLayersCount->Append( wxEmptyString );
-	m_comboCopperLayersCount->Append( wxEmptyString );
 	bSizerLyrCnt->Add( m_comboCopperLayersCount, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
