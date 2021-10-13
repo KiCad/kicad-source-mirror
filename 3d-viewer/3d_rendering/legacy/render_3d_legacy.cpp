@@ -1186,48 +1186,27 @@ void RENDER_3D_LEGACY::render3dModelsSelected( bool aRenderTopOrBot, bool aRende
     // Go for all footprints
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
-        const bool isIntersected = fp == m_currentRollOverItem;
         bool highlight = false;
 
         if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) )
         {
-            if( isIntersected )
-            {
-                if( aRenderSelectedOnly )
-                    highlight = m_boardAdapter.GetFlag( FL_HIGHLIGHT_ROLLOVER_ITEM );
-            }
-            else if( ( aRenderSelectedOnly && !fp->IsSelected() )
-                     || ( !aRenderSelectedOnly && fp->IsSelected() ) )
-            {
-                continue;
-            }
-        }
+            if( fp->IsSelected() )
+                highlight = true;
 
-        if( highlight )
-        {
-            glEnable( GL_POLYGON_OFFSET_LINE );
-            glPolygonOffset( 8.0, 1.0 );
-            glPolygonMode( GL_FRONT, GL_LINE );
-            glLineWidth( 6 );
+            if( m_boardAdapter.GetFlag( FL_HIGHLIGHT_ROLLOVER_ITEM ) && fp == m_currentRollOverItem )
+                highlight = true;
+
+            if( aRenderSelectedOnly != highlight )
+                continue;
         }
 
         if( !fp->Models().empty() )
         {
             if( m_boardAdapter.IsFootprintShown( (FOOTPRINT_ATTR_T) fp->GetAttributes() ) )
             {
-                if( ( aRenderTopOrBot && !fp->IsFlipped() )
-                 || ( !aRenderTopOrBot && fp->IsFlipped() ) )
-                {
-                    renderFootprint( fp, aRenderTransparentOnly, isIntersected );
-                }
+                if( aRenderTopOrBot == !fp->IsFlipped() )
+                    renderFootprint( fp, aRenderTransparentOnly, highlight );
             }
-        }
-
-        if( highlight )
-        {
-            // Restore
-            glDisable( GL_POLYGON_OFFSET_LINE );
-            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
         }
     }
 

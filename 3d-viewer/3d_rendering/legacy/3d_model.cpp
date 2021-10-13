@@ -419,10 +419,9 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
                      reinterpret_cast<const void*>( offsetof( VERTEX, m_nrm ) ) );
 
     glColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( VERTEX ),
-                    reinterpret_cast<const void*>(
-                                     m_materialMode == MATERIAL_MODE::CAD_MODE
-                                     ? offsetof( VERTEX, m_cad_color )
-                                     : offsetof( VERTEX, m_color ) ) );
+                    reinterpret_cast<const void*>( m_materialMode == MATERIAL_MODE::CAD_MODE
+                                                         ? offsetof( VERTEX, m_cad_color )
+                                                         : offsetof( VERTEX, m_color ) ) );
 
     glTexCoordPointer( 2, GL_FLOAT, sizeof( VERTEX ),
                        reinterpret_cast<const void*>( offsetof( VERTEX, m_tex_uv ) ) );
@@ -448,11 +447,12 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
             break;
 
         case MATERIAL_MODE::DIFFUSE_ONLY:
-            OglSetDiffuseMaterial( mat.m_Diffuse, aOpacity );
+            OglSetDiffuseMaterial( mat.m_Diffuse, aOpacity, aUseSelectedMaterial, aSelectionColor );
             break;
 
         case MATERIAL_MODE::CAD_MODE:
-            OglSetDiffuseMaterial( MaterialDiffuseToColorCAD( mat.m_Diffuse ), aOpacity );
+            OglSetDiffuseMaterial( MaterialDiffuseToColorCAD( mat.m_Diffuse ), aOpacity,
+                                   aUseSelectedMaterial, aSelectionColor );
             break;
 
         default:
@@ -511,8 +511,8 @@ void MODEL_3D::DrawBboxes() const
     glColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( VERTEX ),
                     reinterpret_cast<const void*>( offsetof( VERTEX, m_color ) ) );
 
-    unsigned int idx_size = m_bbox_index_buffer_type == GL_UNSIGNED_SHORT
-                            ? sizeof( GLushort ) : sizeof( GLuint );
+    unsigned int idx_size = m_bbox_index_buffer_type == GL_UNSIGNED_SHORT ? sizeof( GLushort )
+                                                                          : sizeof( GLuint );
 
     glDrawElements( GL_LINES, bbox_idx_count * m_meshes_bbox.size(), m_bbox_index_buffer_type,
                     reinterpret_cast<const void*>( 

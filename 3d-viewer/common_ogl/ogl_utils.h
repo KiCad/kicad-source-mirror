@@ -52,7 +52,9 @@ void OglSetMaterial( const SMATERIAL& aMaterial, float aOpacity,
  *
  * @param aMaterialDiffuse the diffuse color to assign to material properties.
  */
-void OglSetDiffuseMaterial( const SFVEC3F& aMaterialDiffuse, float aOpacity );
+void OglSetDiffuseMaterial( const SFVEC3F& aMaterialDiffuse, float aOpacity,
+                            bool aUseSelectedMaterial = false,
+                            SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) );
 
 /**
  * Generate a new OpenGL texture.
