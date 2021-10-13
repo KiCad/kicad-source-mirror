@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-04 08:53-0700\n"
-"PO-Revision-Date: 2021-10-05 17:11+0000\n"
+"PO-Revision-Date: 2021-10-14 07:35+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -30,7 +30,7 @@ msgstr "Wszystkie pliki"
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
 msgid "All supported files (%s)"
-msgstr "Wszystkie obsługiwane formaty (%s)"
+msgstr "Wszystkie obsługiwane pliki (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dialog_select_3d_model_base.cpp:58
 msgid "Available paths:"
@@ -162,8 +162,8 @@ msgstr ""
 #: 3d-viewer/3d_canvas/board_adapter.cpp:734
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Brak obrysu płytki lub jest zniekształcony. Uruchom DRC, by go w pełni "
-"przeanalizować."
+"Brak obrysu płytki lub jest zniekształcony. Uruchom DRC, by przeprowadzić "
+"pełną analizę."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:227
 msgid "Create tracks and vias"
@@ -188,7 +188,7 @@ msgstr "Upraszczanie poligonów na warstwie dolnej"
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:807
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Upraszczanie %d poligonów na warstwach miedzi"
+msgstr "Upraszczanie %d warstw miedzi"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:846
 msgid "Simplify holes contours"
@@ -214,7 +214,7 @@ msgstr "Twoja wersja OpenGL nie jest obsługiwana. Wymagane minimum to 1.5."
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:531
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr "Czas renderowania %.0f ms"
+msgstr "Czas ostatniego renderowania %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:721
 #, c-format
@@ -307,7 +307,7 @@ msgstr "Eksportuj bieżący widok jako plik JPEG..."
 #: common/tool/actions.cpp:564 pcbnew/footprint_viewer_frame.cpp:942
 #: pcbnew/pcb_base_frame.cpp:518
 msgid "3D Viewer"
-msgstr "Podgląd 3D"
+msgstr "Przeglądarka 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:69
 msgid "Copy 3D Image"
@@ -402,7 +402,7 @@ msgstr "Końcowy kolor gradientu tła:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:50
 msgid "Solder paste:"
-msgstr "Pasta na górze:"
+msgstr "Pasta lutownicza:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_colors_base.cpp:64
 msgid "Board Colors"
@@ -454,7 +454,7 @@ msgstr "Pokaż warstwy z soldermaską"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:29
 msgid "Show solder paste layers"
-msgstr "Pokaż warstwy do nakładania pasty"
+msgstr "Pokaż warstwy pasty"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_display_options_base.cpp:32
 msgid "Show adhesive layers"
@@ -564,7 +564,7 @@ msgstr "Pokaż grubość miedzi"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
-msgstr "Elementy podświetlone przy najechaniu myszą"
+msgstr "Podświetlaj elementy po najechaniu myszą"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:37
 msgid "Anti-aliasing:"
@@ -614,7 +614,7 @@ msgstr "Wyłącz przelotki"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_opengl_options_base.cpp:74
 msgid "Disable holes"
-msgstr "Wyłącz dziury"
+msgstr "Wyłącz otwory"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
@@ -698,7 +698,7 @@ msgstr "Konfiguracja świateł"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:139
 msgid "Ambient camera light:"
-msgstr "Oświetlenie otoczenia:"
+msgstr "Światło otoczenia kamery:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:151
 msgid "Top light:"
@@ -728,7 +728,7 @@ msgstr "Jasny 5:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:245
 msgid "Light 2:"
-msgstr "Jasny2:"
+msgstr "Jasny 2:"
 
 #: 3d-viewer/3d_viewer/dialogs/panel_3D_raytracing_options_base.cpp:263
 msgid "Light 6:"
@@ -801,7 +801,7 @@ msgstr "Nie można skopiować obrazu do schowka"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "Can't save file"
-msgstr "Nie mogę zapisać pliku"
+msgstr "Nie można zapisać pliku"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:43
 msgid "Center pivot rotation"
@@ -897,7 +897,7 @@ msgstr "Pokaż od dołu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:161
 msgid "No 3D Grid"
-msgstr "Brak siatki"
+msgstr "Brak siatki 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "3D Grid 10mm"
@@ -962,7 +962,7 @@ msgstr "Przełącz modele 3D pozostałych elementów"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr "Przełącz modele 3D dla komponentów typu \"Inne\""
+msgstr "Przełącz modele 3D dla komponentów typu 'Inne'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
@@ -978,7 +978,7 @@ msgstr "Przełącza wyświetlanie ciała płytki"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:245
 msgid "Show 3D Axis"
-msgstr "Pokaż oś 3D"
+msgstr "Pokaż osie 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:250
 msgid "Toggle zone display"
