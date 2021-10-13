@@ -59,12 +59,8 @@ option( KICAD_SCRIPTING_WXPYTHON
     ON )
 mark_as_advanced( KICAD_SCRIPTING_WXPYTHON )
 
-option( KICAD_USE_OCE
-    "Build tools and plugins related to OpenCascade Community Edition (default OFF)"
-    OFF )
-
 option( KICAD_USE_OCC
-    "Build tools and plugins related to OpenCascade Technology (overrides KICAD_USE_OCE, default ON)"
+    "Build tools and plugins related to OpenCascade Technology (default ON)"
     ON )
 
 option( KICAD_INSTALL_DEMOS
@@ -480,14 +476,8 @@ if( KICAD_SPICE )
     add_definitions( -DKICAD_SPICE )
 endif()
 
-if( KICAD_USE_OCE )
-    add_definitions( -DKICAD_USE_OCE )
-endif()
-
 if( KICAD_USE_OCC )
     add_definitions( -DKICAD_USE_OCC )
-    remove_definitions( -DKICAD_USE_OCE )
-    unset( KICAD_USE_OCE CACHE )
 endif()
 
 if( KICAD_USE_EGL AND UNIX AND NOT APPLE )
@@ -736,24 +726,18 @@ if( KICAD_SPICE )
     find_package( ngspice REQUIRED )
 endif()
 
-# Find OpenCascade Community Edition, required for STEP plugin and tools
-if( KICAD_USE_OCE )
-    set( OCC_LIBRARIES TKBinXCAF TKPCAF TKSTEP TKXDESTEP TKIGES TKXDEIGES )
-
-    find_package( OCE 0.18 REQUIRED ${OCC_LIBRARIES} )
-    include_directories( SYSTEM ${OCE_INCLUDE_DIRS} )
-
-elseif( KICAD_USE_OCC )
+# Find OpenCascade, required for STEP plugin and tools
+if( KICAD_USE_OCC )
     find_package(OpenCASCADE)
     if( NOT OCC_FOUND )
         MESSAGE( FATAL_ERROR "================================================================\n"
                              " KICAD_USE_OCC=True but OpenCASCADE was not found!\n"
                              "================================================================\n")
     endif()
-    if( OCC_VERSION_STRING VERSION_LESS 6.9.0 )
+    if( OCC_VERSION_STRING VERSION_LESS 7.3.0 )
         MESSAGE( FATAL_ERROR "================================================================\n"
                              "OpenCASCADE version ${OCC_VERSION_STRING} was found.\n"
-                             "  KiCad requires a minimum version of 6.9.0\n"
+                             "  KiCad requires a minimum version of 7.3.0\n"
                              "================================================================\n")
     endif()
     include_directories( SYSTEM ${OCC_INCLUDE_DIR} )
