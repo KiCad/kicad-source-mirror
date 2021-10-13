@@ -1229,14 +1229,14 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
             aLayers[aCount++] = each_layer;
     }
 
-#ifdef __WXDEBUG__
+#ifdef DEBUG
     if( aCount == 0 )    // Should not occur
     {
         wxString msg;
         msg.Printf( wxT( "footprint %s, pad %s: could not find valid layer for pad" ),
                 GetParent() ? GetParent()->GetReference() : "<null>",
                 GetNumber().IsEmpty() ? "(unnumbered)" : GetNumber() );
-        wxLogWarning( msg );
+        wxLogDebug( msg );
     }
 #endif
 }
