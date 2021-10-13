@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009-2015 Jean-Pierre Charras, jp.charras wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -478,7 +478,7 @@ public:
      *
      * @param aFileName A wxFileName object containing the file name to check.
      */
-    void CheckForAutoSaveFile( const wxFileName& aFileName );
+    virtual void CheckForAutoSaveFile( const wxFileName& aFileName );
 
     /**
      * Update the status bar information.

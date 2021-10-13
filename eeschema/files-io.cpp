@@ -55,6 +55,7 @@
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
 #include <drawing_sheet/ds_data_model.h>
+#include <wx/app.h>
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx/log.h>
@@ -237,8 +238,12 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
     else
     {
-        // This will rename the file if there is an autosave and the user want to recover.
-		CheckForAutoSaveFile( fullFileName );
+        wxFileName autoSaveFn = fullFileName;
+
+        autoSaveFn.SetName( getAutoSaveFileName() );
+        autoSaveFn.ClearExt();
+
+		CheckForAutoSaveFile( autoSaveFn );
 
         SetScreen( nullptr );
 
@@ -336,7 +341,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             else
             {
                 // Double check to ensure no legacy library list entries have been
-                // added to the projec file symbol library list.
+                // added to the project file symbol library list.
                 wxString paths;
                 wxArrayString libNames;
 
@@ -996,6 +1001,10 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         success &= saveSchematicFile( screens.GetSheet( i ), tmpFn.GetFullPath() );
     }
 
+    // One or more of the modified sheets did not save correctly so update the auto save file.
+    if( !aSaveAs && !success )
+        success &= updateAutoSaveFile();
+
     if( aSaveAs && success )
         LockFile( Schematic().RootScreen()->GetFileName() );
 
@@ -1105,7 +1114,7 @@ bool SCH_EDIT_FRAME::doAutoSave()
             autoSaveOk = false;
     }
 
-    if( autoSaveOk )
+    if( autoSaveOk && updateAutoSaveFile() )
     {
         m_autoSaveState = false;
 
@@ -1254,3 +1263,198 @@ bool SCH_EDIT_FRAME::AskToSaveChanges()
 
     return true;
 }
+
+
+bool SCH_EDIT_FRAME::updateAutoSaveFile()
+{
+    wxFileName tmpFn = Prj().GetProjectFullName();
+    wxFileName autoSaveFileName( tmpFn.GetPath(), getAutoSaveFileName() );
+
+    wxLogTrace( traceAutoSave, "Creating auto save file %s", autoSaveFileName.GetFullPath() );
+
+    wxCHECK( autoSaveFileName.IsDirWritable(), false );
+
+    wxFileName fn;
+    SCH_SCREENS screens( Schematic().Root() );
+    std::vector< wxString > autoSavedFiles;
+
+    for( size_t i = 0; i < screens.GetCount(); i++ )
+    {
+        // Only create auto save files for the schematics that have been modified.
+        if( !screens.GetScreen( i )->IsContentModified() )
+            continue;
+
+        fn = screens.GetScreen( i )->GetFileName();
+
+        // Auto save file name is the normal file name prefixed with GetAutoSavePrefix().
+        fn.SetName( GetAutoSaveFilePrefix() + fn.GetName() );
+        autoSavedFiles.emplace_back( fn.GetFullPath() );
+    }
+
+    wxTextFile autoSaveFile( autoSaveFileName.GetFullPath() );
+
+    if( autoSaveFileName.FileExists() && !wxRemoveFile( autoSaveFileName.GetFullPath() ) )
+    {
+        wxLogTrace( traceAutoSave, "Error removing auto save file %s",
+                    autoSaveFileName.GetFullPath() );
+
+        return false;
+    }
+
+    // No modified sheet files to save.
+    if( autoSavedFiles.empty() )
+        return true;
+
+    if( !autoSaveFile.Create() )
+        return false;
+
+    for( const wxString fileName : autoSavedFiles )
+    {
+        wxLogTrace( traceAutoSave, "Adding auto save file %s to %s",
+                    fileName, autoSaveFileName.GetName() );
+        autoSaveFile.AddLine( fileName );
+    }
+
+    if( !autoSaveFile.Write() )
+        return false;
+
+    wxLogTrace( traceAutoSave, "Auto save file '%s' written", autoSaveFileName.GetFullName() );
+
+    return true;
+}
+
+
+void SCH_EDIT_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
+{
+    wxCHECK_RET( aFileName.IsOk(), wxT( "Invalid file name!" ) );
+
+    wxLogTrace( traceAutoSave,
+                wxT( "Checking for auto save file " ) + aFileName.GetFullPath() );
+
+    if( !aFileName.FileExists() )
+        return;
+
+    wxString msg = _(
+            "Well this is potentially embarrassing!\n"
+            "It appears that the last time you were editing one or more of the schematic files\n"
+            "were not saved properly.  Do you wish to restore the last saved edits you made?" );
+
+    int response = wxMessageBox( msg, Pgm().App().GetAppDisplayName(), wxYES_NO | wxICON_QUESTION,
+                                 this );
+
+    wxTextFile autoSaveFile( aFileName.GetFullPath() );
+
+    if( !autoSaveFile.Open() )
+    {
+        msg.Printf( _( "The file '%s` could not be opened.\n"
+                       "Manual recovery of automatically saved files is required." ),
+                    aFileName.GetFullPath() );
+
+        wxMessageBox( msg, Pgm().App().GetAppDisplayName(), wxOK | wxICON_EXCLAMATION, this );
+        return;
+    }
+
+    if( response == wxYES )
+    {
+        wxArrayString unrecoveredFiles;
+
+        for( wxString fn = autoSaveFile.GetFirstLine(); !autoSaveFile.Eof();
+             fn = autoSaveFile.GetNextLine() )
+        {
+            wxFileName recoveredFn = fn;
+            wxString tmp = recoveredFn.GetName();
+
+            // Strip "_autosave-" prefix from the auto save file name.
+            tmp.Replace( GetAutoSaveFilePrefix(), wxT( "" ), false );
+            recoveredFn.SetName( tmp );
+
+            wxFileName backupFn = recoveredFn;
+
+            backupFn.SetExt( backupFn.GetExt() + BackupFileSuffix );
+
+            wxLogTrace( traceAutoSave, wxT( "Recovering auto save file:\n"
+                                            "  Original file:  '%s'\n"
+                                            "  Backup file:    '%s'\n"
+                                            "  Auto save file: '%s'" ),
+                        recoveredFn.GetFullPath(), backupFn.GetFullPath(), fn );
+
+            // Attempt to back up the last schematic file before overwriting it with the auto
+            // save file.
+            if( !wxRenameFile( recoveredFn.GetFullPath(), backupFn.GetFullPath() ) )
+            {
+                unrecoveredFiles.Add( recoveredFn.GetFullPath() );
+            }
+            else if( !wxRenameFile( fn, recoveredFn.GetFullPath() ) )
+            {
+                unrecoveredFiles.Add( recoveredFn.GetFullPath() );
+            }
+        }
+
+        if( !unrecoveredFiles.IsEmpty() )
+        {
+            msg = _( "The following automatically saved file(s) could not be restored\n" );
+
+            for( size_t i = 0; i < unrecoveredFiles.GetCount(); i++ )
+                msg += unrecoveredFiles[i] + wxT( "\n" );
+
+            msg += _( "Manual recovery will be required to restore the file(s) above." );
+            wxMessageBox( msg, Pgm().App().GetAppDisplayName(), wxOK | wxICON_EXCLAMATION,
+                          this );
+        }
+    }
+    else
+    {
+        wxArrayString unremovedFiles;
+
+        for( wxString fn = autoSaveFile.GetFirstLine(); !autoSaveFile.Eof();
+             fn = autoSaveFile.GetNextLine() )
+        {
+            wxLogTrace( traceAutoSave, wxT( "Removing auto save file " ) + fn );
+
+            if( !wxRemoveFile( fn ) )
+            {
+                unremovedFiles.Add( fn );
+            }
+        }
+
+        if( !unremovedFiles.IsEmpty() )
+        {
+            msg = _( "The following automatically saved file(s) could not be removed\n" );
+
+            for( size_t i = 0; i < unremovedFiles.GetCount(); i++ )
+                msg += unremovedFiles[i] + wxT( "\n" );
+
+            msg += _( "Manual removal will be required for the file(s) above." );
+            wxMessageBox( msg, Pgm().App().GetAppDisplayName(), wxOK | wxICON_EXCLAMATION,
+                          this );
+        }
+    }
+
+    // Remove the auto save master file.
+    wxLogTrace( traceAutoSave, wxT( "Removing auto save file '%s'" ), aFileName.GetFullPath() );
+
+    if( !wxRemoveFile( aFileName.GetFullPath() ) )
+    {
+        msg.Printf( _( "The automatic save master file\n"
+                       "'%s'\n"
+                       "could not be deleted." ), aFileName.GetFullPath() );
+
+        wxMessageDialog dlg( this, msg, Pgm().App().GetAppDisplayName(),
+                             wxOK | wxICON_EXCLAMATION | wxCENTER );
+
+        dlg.SetExtendedMessage(
+                _( "This file must be manually removed or the auto save feature will be\n"
+                   "shown every time the schematic editor is launched." ) );
+
+        dlg.ShowModal();
+    }
+}
+
+
+const wxString& SCH_EDIT_FRAME::getAutoSaveFileName() const
+{
+    static wxString autoSaveFileName( wxT( "#auto_saved_files#" ) );
+
+    return autoSaveFileName;
+}
+

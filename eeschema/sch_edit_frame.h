@@ -409,8 +409,8 @@ public:
      *
      * @return Number of annotation errors found.
      * @param aReporter A handler for error reporting.
-     * @param aAnnotateScope See #ANNOTATE_SCOPE_T Check the current sheet only if true.  Otherwise check the entire
-     *                      schematic.
+     * @param aAnnotateScope See #ANNOTATE_SCOPE_T Check the current sheet only if true.
+     *                       Otherwise check the entire schematic.
      */
     int CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
                        ANNOTATE_SCOPE_T         aAnnotateScope = ANNOTATE_ALL );
@@ -473,7 +473,8 @@ public:
     void LoadProject();
 
     /**
-     * Saves the currently-open schematic (including its hierarchy) and associated project
+     * Save the currently-open schematic (including its hierarchy) and associated project.
+     *
      * @param aSaveAs is true to perform a Save As operation (rename the schematic and project).
      *                This may only be done in standalone mode.
      * @return true if the schematic was saved
@@ -822,6 +823,14 @@ public:
 
     void ShowAllIntersheetRefs( bool aShow );
 
+    /**
+     * This overloaded version checks if the auto save master file "#auto_saved_files#" exists
+     * and recovers all of the schematic files listed in it.
+     *
+     * @param aFileName is the project auto save master file name.
+     */
+    virtual void CheckForAutoSaveFile( const wxFileName& aFileName ) override;
+
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -907,6 +916,10 @@ private:
      * @param aMap is a map to fill
      */
     void mapExistingAnnotation( std::map<wxString, wxString>& aMap );
+
+    bool updateAutoSaveFile();
+
+    const wxString& getAutoSaveFileName() const;
 
 private:
     // The schematic editor control class should be able to access some internal

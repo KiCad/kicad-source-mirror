@@ -704,9 +704,15 @@ void SCH_EDIT_FRAME::doCloseWindow()
         // Auto save file name is the normal file name prepended with GetAutoSaveFilePrefix().
         fn.SetName( GetAutoSaveFilePrefix() + fn.GetName() );
 
-        if( fn.FileExists() && fn.IsFileWritable() )
+        if( fn.IsFileWritable() )
             wxRemoveFile( fn.GetFullPath() );
     }
+
+    wxFileName tmpFn = Prj().GetProjectFullName();
+    wxFileName autoSaveFileName( tmpFn.GetPath(), getAutoSaveFileName() );
+
+    if( autoSaveFileName.IsFileWritable() )
+        wxRemoveFile( autoSaveFileName.GetFullPath() );
 
     sheetlist.ClearModifyStatus();
 
