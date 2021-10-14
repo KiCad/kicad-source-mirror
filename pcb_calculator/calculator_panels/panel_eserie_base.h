@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -55,6 +55,7 @@ class PANEL_E_SERIE_BASE : public CALCULATOR_PANEL
 		wxRadioButton* m_e3;
 		wxRadioButton* m_e6;
 		wxRadioButton* m_e12;
+		wxRadioButton* m_e24;
 		wxStaticText* m_ESerieSimpleSolution;
 		wxTextCtrl* m_ESeries_Sol2R;
 		wxStaticText* m_ESeriesSimpleErr;
