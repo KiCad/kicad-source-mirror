@@ -1612,10 +1612,14 @@ void LINE_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
     if( !m_idle )
     {
         // If the track width continues from an existing track, we don't want to change the width.
-        if( m_sizes.TrackWidthIsExplicit() || m_startItem->Kind() != ITEM::SEGMENT_T )
+        // Disallow changing width after the first segment has been fixed because we don't want to
+        // go back and rip up tracks or allow DRC errors
+        if( m_sizes.TrackWidthIsExplicit() || ( !HasPlacedAnything()
+                        && ( !m_startItem || m_startItem->Kind() != ITEM::SEGMENT_T ) ) )
         {
             m_head.SetWidth( m_sizes.TrackWidth() );
             m_tail.SetWidth( m_sizes.TrackWidth() );
+            m_currentTrace.SetWidth( m_sizes.TrackWidth() );
         }
 
         if( m_head.EndsWithVia() )
