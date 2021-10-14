@@ -39,15 +39,14 @@ bool HTML_WINDOW::SetPage( const wxString& aSource )
 {
     m_pageSource = aSource;
 
-    wxString fgColor =
-            wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ).GetAsString( wxC2S_HTML_SYNTAX );
-    wxString bgColor =
-            wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ).GetAsString( wxC2S_HTML_SYNTAX );
-    wxString linkColor =
-            wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT ).GetAsString( wxC2S_HTML_SYNTAX );
+    wxColour fgColor   = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+    wxColour bgColor   = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
+    wxColour linkColor = wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT );
 
     wxString html = wxString::Format( wxT( "<html>\n<body text='%s' bgcolor='%s' link='%s'>\n" ),
-                                      fgColor, bgColor, linkColor );
+                                      fgColor.GetAsString( wxC2S_HTML_SYNTAX ),
+                                      bgColor.GetAsString( wxC2S_HTML_SYNTAX ),
+                                      linkColor.GetAsString( wxC2S_HTML_SYNTAX ) );
     html.Append( aSource );
     html.Append( wxT( "\n</body>\n</html>" ) );
 

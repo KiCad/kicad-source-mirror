@@ -208,7 +208,8 @@ void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColo
         for( int jj = 0; jj < NBCOLORS; ++jj, grid_col++ )
         {
             if( grid_col * table_row_count >= NBCOLORS )
-            {   // the current grid row is filled, and we must fill the next grid row
+            {
+                // the current grid row is filled, and we must fill the next grid row
                 grid_col = 0;
                 grid_row++;
             }
@@ -617,10 +618,12 @@ void DIALOG_COLOR_PICKER::onRGBMouseDrag( wxMouseEvent& event )
         return;
     }
 
-    if( m_selectedCursor != &m_cursorBitmapRed &&
-        m_selectedCursor != &m_cursorBitmapGreen &&
-        m_selectedCursor != &m_cursorBitmapBlue )
+    if( m_selectedCursor != &m_cursorBitmapRed
+     && m_selectedCursor != &m_cursorBitmapGreen
+     && m_selectedCursor != &m_cursorBitmapBlue )
+    {
         return;
+    }
 
     // Adjust the HSV cursor position to follow the mouse cursor
     // The cursor position is relative to the m_bitmapHSV wxBitmap center
@@ -711,8 +714,10 @@ bool DIALOG_COLOR_PICKER::setHSvaluesFromCursor( const wxPoint& aMouseCursor )
     double dist_from_centre = hypot( (double)mousePos.x, (double)mousePos.y );
 
     if( dist_from_centre > half_size )
+    {
         // Saturation cannot be calculated:
         return false;
+    }
 
     m_cursorBitmapHSV = mousePos;
 

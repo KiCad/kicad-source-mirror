@@ -98,9 +98,9 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
         {
             wxPoint html_size = ConvertDialogToPixels( wxPoint( 80, 80 ) );
 
-            m_details_ctrl =
-                    new HTML_WINDOW( this, wxID_ANY, wxDefaultPosition,
-                                     wxSize( html_size.x, html_size.y ), wxHW_SCROLLBAR_AUTO );
+            m_details_ctrl = new HTML_WINDOW( this, wxID_ANY, wxDefaultPosition,
+                                              wxSize( html_size.x, html_size.y ),
+                                              wxHW_SCROLLBAR_AUTO );
 
             sizer->Add( m_details_ctrl, 2, wxTOP | wxEXPAND, 5 );
         }

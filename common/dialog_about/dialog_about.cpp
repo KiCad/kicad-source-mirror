@@ -116,14 +116,14 @@ wxFlexGridSizer* DIALOG_ABOUT::createFlexGridSizer()
 void DIALOG_ABOUT::createNotebooks()
 {
     createNotebookHtmlPage( m_notebook, _( "About" ), IMAGES::INFORMATION,
-            m_info.GetDescription() );
+                            m_info.GetDescription() );
 
     wxString version = GetVersionInfoData( m_titleName, true );
 
     createNotebookHtmlPage( m_notebook, _( "Version" ), IMAGES::VERSION, version, true );
 
     createNotebookPageByCategory( m_notebook, _( "Developers" ) , IMAGES::DEVELOPERS,
-                        m_info.GetDevelopers() );
+                                  m_info.GetDevelopers() );
     createNotebookPage( m_notebook, _( "Doc Writers" ), IMAGES::DOCWRITERS,
                         m_info.GetDocWriters() );
 
@@ -308,7 +308,7 @@ void DIALOG_ABOUT::createNotebookPageByCategory( wxNotebook* aParent, const wxSt
                     if( sub_contributor->GetExtra() != wxEmptyString )
                     {
                         wxStaticText* mail = wxStaticTextRef( m_scrolledWindow1,
-                                                               sub_contributor->GetExtra() );
+                                                              sub_contributor->GetExtra() );
                         fgSizer1->Add( mail, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
                     }
                     else
@@ -360,8 +360,7 @@ void DIALOG_ABOUT::createNotebookPageByCategory( wxNotebook* aParent, const wxSt
         // Email address of contributor at third column
         if ( contributor->GetExtra() != wxEmptyString )
         {
-            wxStaticText* mail = wxStaticTextRef( m_scrolledWindow1,
-                                                   contributor->GetExtra() );
+            wxStaticText* mail = wxStaticTextRef( m_scrolledWindow1, contributor->GetExtra() );
             fgSizer1->Add( mail, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
         }
         else
@@ -395,7 +394,8 @@ void DIALOG_ABOUT::createNotebookHtmlPage( wxNotebook* aParent, const wxString& 
     int flags = aSelection ? wxHW_SCROLLBAR_AUTO : ( wxHW_SCROLLBAR_AUTO | wxHW_NO_SELECTION );
 
     // the HTML page is going to be created with previously created HTML content
-    auto htmlWindow = new HTML_WINDOW( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, flags );
+    HTML_WINDOW* htmlWindow = new HTML_WINDOW( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                               flags );
 
     // HTML font set to font properties as they are used for widgets to have an unique look
     // under different platforms with HTML
@@ -431,13 +431,9 @@ wxStaticBitmap* DIALOG_ABOUT::createStaticBitmap( wxScrolledWindow* aParent, wxB
                                                  wxDefaultPosition, wxDefaultSize, 0 );
 
     if( aIcon )
-    {
         bitmap->SetBitmap( *aIcon );
-    }
     else
-    {
         bitmap->SetBitmap( KiBitmap( BITMAPS::right ) );
-    }
 
     return bitmap;
 }

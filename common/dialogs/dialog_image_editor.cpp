@@ -93,7 +93,9 @@ bool DIALOG_IMAGE_EDITOR::CheckValues()
         if( !IsOK( this, wxString::Format( _( "This scale results in an image which is very large "
                                               "(%.1f mm or %.2f in). Are you sure?" ),
                                            25.4 / 300 * size_max, size_max /300.0 ) ) )
+        {
             return false;
+        }
     }
 
     return true;

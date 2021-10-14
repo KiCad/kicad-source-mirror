@@ -33,16 +33,15 @@
 DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent, TOOL_MANAGER* aToolMgr ):
     DIALOG_SHIM( aParent, wxID_ANY, _( "Hotkey List" ) )
 {
-    const auto margin = KIUI::GetStdMargin();
-
-    auto main_sizer = new wxBoxSizer( wxVERTICAL );
+    const int   margin = KIUI::GetStdMargin();
+    wxBoxSizer* main_sizer = new wxBoxSizer( wxVERTICAL );
 
     m_hk_list = new PANEL_HOTKEYS_EDITOR( aParent, this, true );
     m_hk_list->AddHotKeys( aToolMgr );
 
     main_sizer->Add( m_hk_list, 1, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, margin );
 
-    auto sdb_sizer = new wxStdDialogButtonSizer;
+    wxStdDialogButtonSizer* sdb_sizer = new wxStdDialogButtonSizer;
     sdb_sizer->AddButton( new wxButton( this, wxID_OK ) );
     sdb_sizer->Realize();
 
