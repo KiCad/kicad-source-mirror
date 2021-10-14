@@ -66,7 +66,9 @@
 SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
     BASE_SCREEN( aParent, SCH_SCREEN_T ),
     m_fileFormatVersionAtLoad( 0 ),
-    m_paper( wxT( "A4" ) )
+    m_paper( wxT( "A4" ) ),
+    m_isReadOnly( false ),
+    m_fileExists( false )
 {
     m_modification_sync = 0;
     m_refCount = 0;

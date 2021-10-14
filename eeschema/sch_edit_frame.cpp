@@ -1231,16 +1231,20 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
 
 void SCH_EDIT_FRAME::UpdateTitle()
 {
+    SCH_SCREEN* screen = GetScreen();
+
+    wxCHECK( screen, /* void */ );
+
     wxString title;
 
-    if( !GetScreen()->GetFileName().IsEmpty() )
+    if( !screen->GetFileName().IsEmpty() )
     {
-        wxFileName fn( Prj().AbsolutePath( GetScreen()->GetFileName() ) );
+        wxFileName fn( Prj().AbsolutePath( screen->GetFileName() ) );
         bool       readOnly = false;
         bool       unsaved = false;
 
-        if( fn.IsOk() && fn.FileExists() )
-            readOnly = !fn.IsFileWritable();
+        if( fn.IsOk() && screen->FileExists() )
+            readOnly = screen->IsReadOnly();
         else
             unsaved = true;
 

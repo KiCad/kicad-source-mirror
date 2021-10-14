@@ -144,6 +144,12 @@ public:
 
     const wxString& GetFileName() const                     { return m_fileName; }
 
+    void SetFileReadOnly( bool aIsReadOnly )                { m_isReadOnly = aIsReadOnly; }
+    bool IsReadOnly() const                                 { return m_isReadOnly; }
+
+    void SetFileExists( bool aFileExists )                  { m_fileExists = aFileExists; }
+    bool FileExists() const                                 { return m_fileExists; }
+
     const wxPoint& GetAuxOrigin() const                     { return m_aux_origin; }
     void SetAuxOrigin( const wxPoint& aPosition )           { m_aux_origin = aPosition; }
 
@@ -511,6 +517,11 @@ private:
 
     bool        m_zoomInitialized;          // Set to true once the zoom value is initialized with
                                             // `InitZoom()`.
+
+    bool        m_isReadOnly;               ///< Read only status of the screen file.
+
+    ///< Flag to indicate the file associated with this screen has been created.
+    bool        m_fileExists;
 
     /// List of bus aliases stored in this screen.
     std::unordered_set< std::shared_ptr< BUS_ALIAS > > m_aliases;

@@ -519,6 +519,9 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
                 m_error += ioe.What();
             }
 
+            aSheet->GetScreen()->SetFileReadOnly( !fileName.IsFileWritable() );
+            aSheet->GetScreen()->SetFileExists( true );
+
             // This was moved out of the try{} block so that any sheets definitionsthat
             // the plugin fully parsed before the exception was raised will be loaded.
             for( SCH_ITEM* aItem : aSheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
@@ -594,6 +597,8 @@ void SCH_SEXPR_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEM
     m_out = &formatter;     // no ownership
 
     Format( aSheet );
+
+    aSheet->GetScreen()->SetFileExists( true );
 }
 
 

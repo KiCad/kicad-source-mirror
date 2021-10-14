@@ -744,6 +744,9 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
                 m_error += ioe.What();
             }
 
+            aSheet->GetScreen()->SetFileReadOnly( !fileName.IsFileWritable() );
+            aSheet->GetScreen()->SetFileExists( true );
+
             for( auto aItem : aSheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
             {
                 wxCHECK2( aItem->Type() == SCH_SHEET_T, continue );
@@ -1864,6 +1867,7 @@ std::shared_ptr<BUS_ALIAS> SCH_LEGACY_PLUGIN::loadBusAlias( LINE_READER& aReader
     {
         buf.clear();
         parseUnquotedString( buf, aReader, line, &line, true );
+
         if( buf.Len() > 0 )
         {
             busAlias->AddMember( buf );
@@ -1895,6 +1899,8 @@ void SCH_LEGACY_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHE
     m_out = &formatter;     // no ownership
 
     Format( aSheet );
+
+    aSheet->GetScreen()->SetFileExists( true );
 }
 
 
