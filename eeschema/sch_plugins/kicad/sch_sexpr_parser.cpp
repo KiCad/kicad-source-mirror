@@ -1018,7 +1018,6 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
     }
     else if( hasAngles )
     {
-        arc->SetCenter( pos );
         /**
          * This accounts for an oddity in the old library format, where the symbol is overdefined.
          * The previous draw (based on wxwidgets) used start point and end point and always drew
@@ -1032,9 +1031,12 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
             arc->SetStart( arc->GetEnd() );
             arc->SetEnd( temp );
         }
+        arc->SetCenter( pos );
     }
     else
+    {
         wxFAIL_MSG( "Setting arc without either midpoint or angles not implemented." );
+    }
 
     return arc.release();
 }

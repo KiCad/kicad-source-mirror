@@ -627,7 +627,6 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
                 shape->SetStart( primitive->GetStart() );
                 shape->SetEnd( primitive->GetEnd() );
                 shape->SetCenter( primitive->GetCenter() );
-                shape->SetArcAngle( primitive->GetArcAngle() );
                 break;
 
             case SHAPE_T::BEZIER:
@@ -766,7 +765,6 @@ void PAD_TOOL::recombinePad( PAD* aPad )
             pcbShape->SetStart( fpShape->GetStart() );
             pcbShape->SetEnd( fpShape->GetEnd() );
             pcbShape->SetCenter( fpShape->GetCenter() );
-            pcbShape->SetArcAngle( fpShape->GetArcAngle() );
             break;
 
         case SHAPE_T::BEZIER:

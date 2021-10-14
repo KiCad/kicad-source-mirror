@@ -602,13 +602,8 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR
     VECTOR2I start = aStart;
     VECTOR2I end = aEnd;
     VECTOR2I center = aCenter;
-    VECTOR2D startLine = aStart - aCenter;
-    VECTOR2D endLine   = aEnd - aCenter;
-    double   newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
-
-    bool clockwise;
-    bool movingStart;
-    bool arcValid = true;
+    bool     movingStart;
+    bool     arcValid = true;
 
     VECTOR2I p1, p2, p3;
     // p1 does not move, p2 does.
@@ -723,23 +718,14 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR
 
         // This is just to limit the radius, so nothing overflows later when drawing.
         if( abs( v2.y / ( R - v2.x ) ) > ADVANCED_CFG::GetCfg().m_DrawArcCenterMaxAngle )
-        {
             arcValid = false;
-        }
 
         // Never recorded a problem, but still checking.
         if( !std::isfinite( delta ) )
-        {
             arcValid = false;
-        }
 
         // v4 is the new center
         v4 = ( !transformCircle ) ? VECTOR2D( -delta, 0 ) : VECTOR2D( 2 * R + delta, 0 );
-
-        clockwise = aArc->GetArcAngle() > 0;
-
-        if( transformCircle )
-            clockwise = !clockwise;
 
         tmpx = v4.x * u1.x + v4.y * u2.x;
         tmpy = v4.x * u1.y + v4.y * u2.y;
@@ -748,24 +734,14 @@ void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR
 
         center = v4 + aCenter;
 
-        startLine = start - center;
-        endLine   = end - center;
-        newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
-
-        if( clockwise && newAngle < 0.0 )
-            newAngle += 3600.0;
-        else if( !clockwise && newAngle > 0.0 )
-            newAngle -= 3600.0;
-
         if( arcValid )
         {
-            aArc->SetCenter( (wxPoint) aCenter );
-            aArc->SetArcAngle( newAngle );
+            aArc->SetCenter( (wxPoint) center );
 
             if( movingStart )
-                aArc->SetStart( (wxPoint) aStart );
+                aArc->SetStart( (wxPoint) start );
             else
-                aArc->SetEnd( (wxPoint) aEnd );
+                aArc->SetEnd( (wxPoint) end );
         }
     }
 }
@@ -878,7 +854,6 @@ void PCB_POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, const VECTOR2
                                                   const VECTOR2I& aEnd,
                                                   const VECTOR2I& aCursor ) const
 {
-    bool clockwise;
     bool movingStart;
 
     VECTOR2I p1, p2;
@@ -932,19 +907,7 @@ void PCB_POINT_EDITOR::editArcEndpointKeepCenter( PCB_SHAPE* aArc, const VECTOR2
     p1 = p1 + aCenter;
     p2 = p2 + aCenter;
 
-    clockwise = aArc->GetArcAngle() > 0;
-
-    VECTOR2D startLine = aStart - aCenter;
-    VECTOR2D endLine   = aEnd - aCenter;
-    double   newAngle  = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
-
-    if( clockwise && newAngle < 0.0 )
-        newAngle += 3600.0;
-    else if( !clockwise && newAngle > 0.0 )
-        newAngle -= 3600.0;
-
     aArc->SetCenter( (wxPoint) aCenter );
-    aArc->SetArcAngle( newAngle );
 
     if( movingStart )
         aArc->SetStart( (wxPoint) aStart );

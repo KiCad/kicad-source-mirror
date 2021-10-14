@@ -254,7 +254,9 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
         c = aTransform.TransformCoordinate( getCenter() ) + aOffset;
 
         CalcArcAngles( t1, t2 );
-        aTransform.MapAngles( &t1, &t2 );
+
+        if( t1 > t2 )
+            aTransform.MapAngles( &t1, &t2 );
     }
 
     if( forceNoFill || GetFillType() == FILL_T::NO_FILL )
@@ -264,7 +266,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-            GRArc1( nullptr, DC, pt2.x, pt2.y, pt1.x, pt1.y, c.x, c.y, penWidth, color );
+            GRArc1( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, c.x, c.y, penWidth, color );
             break;
 
         case SHAPE_T::CIRCLE:
@@ -295,7 +297,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-            GRFilledArc( nullptr, DC, c.x, c.y, t1, t2, GetRadius(), penWidth, color, color );
+            GRFilledArc( nullptr, DC, c.x, c.y, -t2, -t1, GetRadius(), penWidth, color, color );
             break;
 
         case SHAPE_T::CIRCLE:
@@ -333,7 +335,7 @@ const EDA_RECT LIB_SHAPE::GetBoundingBox() const
 }
 
 
-void LIB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
+void LIB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
@@ -390,225 +392,6 @@ BITMAPS LIB_SHAPE::GetMenuImage() const
 }
 
 
-void LIB_SHAPE::BeginEdit( const wxPoint& aPosition )
-{
-    switch( GetShape() )
-    {
-    case SHAPE_T::SEGMENT:
-    case SHAPE_T::CIRCLE:
-    case SHAPE_T::RECT:
-        SetPosition( aPosition );
-        SetEnd( aPosition );
-        break;
-
-    case SHAPE_T::ARC:
-        SetArcGeometry( aPosition, aPosition, aPosition );
-        SetEditState( 1 );
-        break;
-
-    case SHAPE_T::POLY:
-        m_poly.NewOutline();
-        m_poly.Outline( 0 ).SetClosed( false );
-
-        // Start and end of the first segment (co-located for now)
-        m_poly.Outline( 0 ).Append( aPosition );
-        m_poly.Outline( 0 ).Append( aPosition, true );
-        break;
-
-    default:
-        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
-    }
-}
-
-
-bool LIB_SHAPE::ContinueEdit( const wxPoint& aPosition )
-{
-    switch( GetShape() )
-    {
-    case SHAPE_T::ARC:
-    case SHAPE_T::SEGMENT:
-    case SHAPE_T::CIRCLE:
-    case SHAPE_T::RECT:
-        return false;
-
-    case SHAPE_T::POLY:
-    {
-        SHAPE_LINE_CHAIN& poly = m_poly.Outline( 0 );
-
-        // do not add zero-length segments
-        if( poly.CPoint( poly.GetPointCount() - 2 ) != poly.CLastPoint() )
-            poly.Append( aPosition, true );
-    }
-        return true;
-
-    default:
-        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
-        return false;
-    }
-}
-
-
-void LIB_SHAPE::CalcEdit( const wxPoint& aPosition )
-{
-#define sq( x ) pow( x, 2 )
-
-    switch( GetShape() )
-    {
-    case SHAPE_T::SEGMENT:
-    case SHAPE_T::CIRCLE:
-    case SHAPE_T::RECT:
-        SetEnd( aPosition );
-        break;
-
-    case SHAPE_T::ARC:
-    {
-        int radius = GetRadius();
-
-        // Edit state 0: drawing: place start
-        // Edit state 1: drawing: place end (center calculated for 90-degree subtended angle)
-        // Edit state 2: point edit: move start (center calculated for invariant subtended angle)
-        // Edit state 3: point edit: move end (center calculated for invariant subtended angle)
-        // Edit state 4: point edit: move center
-        // Edit state 5: point edit: move arc-mid-point
-
-        switch( m_editState )
-        {
-        case 0:
-            SetArcGeometry( aPosition, aPosition, aPosition );
-            return;
-
-        case 1:
-            m_end = aPosition;
-            radius = KiROUND( sqrt( sq( GetLineLength( m_start, m_end ) ) / 2.0 ) );
-            break;
-            break;
-
-        case 2:
-        case 3:
-        {
-            wxPoint v = m_start - m_end;
-            double chordBefore = sq( v.x ) + sq( v.y );
-
-            if( m_editState == 2 )
-                m_start = aPosition;
-            else
-                m_end = aPosition;
-
-            v = m_start - m_end;
-            double chordAfter = sq( v.x ) + sq( v.y );
-            double ratio = chordAfter / chordBefore;
-
-            if( ratio != 0 )
-            {
-                radius = std::max( int( sqrt( sq( radius ) * ratio ) ) + 1,
-                                   int( sqrt( chordAfter ) / 2 ) + 1 );
-            }
-        }
-            break;
-
-        case 4:
-        {
-            double chordA = GetLineLength( m_start, aPosition );
-            double chordB = GetLineLength( m_end, aPosition );
-            radius = int( ( chordA + chordB ) / 2.0 ) + 1;
-        }
-            break;
-
-        case 5:
-            SetArcGeometry( GetStart(), aPosition, GetEnd() );
-            return;
-        }
-
-        // Calculate center based on start, end, and radius
-        //
-        // Let 'l' be the length of the chord and 'm' the middle point of the chord
-        double  l = GetLineLength( m_start, m_end );
-        wxPoint m = ( m_start + m_end ) / 2;
-
-        // Calculate 'd', the vector from the chord midpoint to the center
-        wxPoint d;
-        d.x = KiROUND( sqrt( sq( radius ) - sq( l/2 ) ) * ( m_start.y - m_end.y ) / l );
-        d.y = KiROUND( sqrt( sq( radius ) - sq( l/2 ) ) * ( m_end.x - m_start.x ) / l );
-
-        wxPoint c1 = m + d;
-        wxPoint c2 = m - d;
-
-        // Solution gives us 2 centers; we need to pick one:
-        switch( m_editState )
-        {
-        case 1:
-        {
-            // Keep center clockwise from chord while drawing
-            wxPoint chordVector = m_end - m_start;
-            double  chordAngle = ArcTangente( chordVector.y, chordVector.x );
-            NORMALIZE_ANGLE_POS( chordAngle );
-
-            wxPoint c1Test = c1;
-            RotatePoint( &c1Test, m_start, -chordAngle );
-
-            m_arcCenter = c1Test.x > 0 ? c2 : c1;
-        }
-            break;
-
-        case 2:
-        case 3:
-            // Pick the one closer to the old center
-            m_arcCenter = GetLineLength( c1, m_arcCenter ) < GetLineLength( c2, m_arcCenter ) ? c1 : c2;
-            break;
-
-        case 4:
-            // Pick the one closer to the mouse position
-            m_arcCenter = GetLineLength( c1, aPosition ) < GetLineLength( c2, aPosition ) ? c1 : c2;
-            break;
-        }
-    }
-        break;
-
-    case SHAPE_T::POLY:
-        m_poly.Outline( 0 ).SetPoint( m_poly.Outline( 0 ).GetPointCount() - 1, aPosition );
-        break;
-
-    default:
-        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
-    }
-}
-
-
-void LIB_SHAPE::EndEdit()
-{
-    switch( GetShape() )
-    {
-    case SHAPE_T::ARC:
-    case SHAPE_T::SEGMENT:
-    case SHAPE_T::CIRCLE:
-    case SHAPE_T::RECT:
-        break;
-
-    case SHAPE_T::POLY:
-    {
-        SHAPE_LINE_CHAIN& poly = m_poly.Outline( 0 );
-
-        if( poly.GetPointCount() > 2 )
-        {
-            if( poly.CPoint( poly.GetPointCount() - 2 ) == poly.CLastPoint() )
-            {
-                poly.SetClosed( true );
-                poly.Remove( poly.GetPointCount() - 1 );
-            }
-            else
-            {
-                poly.SetClosed( false );
-            }
-        }
-    }
-        break;
-
-    default:
-        wxFAIL_MSG( "LIB_SHAPE::EndEdit not implemented for " + SHAPE_T_asString() );
-    }
-}
-
-
 void LIB_SHAPE::AddPoint( const wxPoint& aPosition )
 {
     if( GetShape() == SHAPE_T::POLY )
@@ -622,30 +405,6 @@ void LIB_SHAPE::AddPoint( const wxPoint& aPosition )
     {
         wxFAIL_MSG( "LIB_SHAPE::AddPoint not implemented for " + SHAPE_T_asString() );
     }
-}
-
-
-double LIB_SHAPE::GetArcAngleStart() const
-{
-    int startAngle, endAngle;
-    CalcArcAngles( startAngle, endAngle );
-
-    if( startAngle > endAngle )
-        TRANSFORM().MapAngles( &startAngle, &endAngle );
-
-    return startAngle;
-}
-
-
-double LIB_SHAPE::GetArcAngleEnd() const
-{
-    int startAngle, endAngle;
-    CalcArcAngles( startAngle, endAngle );
-
-    if( startAngle > endAngle )
-        TRANSFORM().MapAngles( &startAngle, &endAngle );
-
-    return endAngle;
 }
 
 

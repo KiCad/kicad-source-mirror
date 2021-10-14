@@ -39,7 +39,8 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200827  // Remove host tag.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20200908  // Add include in BOM and on board support.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20201005  // Separate ki_fp_filters by spaces.
-#define SEXPR_SYMBOL_LIB_FILE_VERSION 20210619   // Change pin overbar syntax from `~...~` to `~{...}`.
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION 20210619   // Change pin overbar syntax from `~...~` to `~{...}`.
+#define SEXPR_SYMBOL_LIB_FILE_VERSION 20211014   // Arc formatting.
 
 
 /**

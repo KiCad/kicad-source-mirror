@@ -1721,8 +1721,6 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
     aArc.SetStart( (wxPoint) vec );
     vec = aMgr.GetEndRadiusEnd();
     aArc.SetEnd( (wxPoint) vec );
-
-    aArc.SetArcAngle( RAD2DECIDEG( -aMgr.GetSubtended() ) );
 }
 
 

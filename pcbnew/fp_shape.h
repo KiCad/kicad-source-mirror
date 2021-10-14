@@ -71,7 +71,9 @@ public:
      * Sets the angle for arcs, and normalizes it within the range 0 - 360 degrees.
      * @param aAngle is tenths of degrees, but will soon be degrees.
      */
-    void SetArcAngleAndEnd0( double aAngle );
+    void SetArcAngleAndEnd0( double aAngle, bool aCheckNegativeAngle = false );
+
+    void SetArcGeometry0( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd );
 
     /**
      * Move an edge of the footprint.
@@ -120,6 +122,8 @@ public:
 
     wxPoint GetCenter0() const;
     void SetCenter0( const wxPoint& aPt );
+
+    wxPoint GetArcMid0() const;
 
     /**
      * Set relative coordinates from draw coordinates.

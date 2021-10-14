@@ -311,6 +311,16 @@ private:
         return parseDouble( GetTokenText( aToken ) );
     }
 
+    /**
+     * Parse angles into deci-degrees.
+     */
+    double parseAngle() { return parseDouble() * 10.0; }
+
+    inline double parseAngle( const char* aExpected )
+    {
+        return parseDouble( aExpected ) * 10.0;
+    }
+
     int parseBoardUnits();
 
     int parseBoardUnits( const char* aExpected );

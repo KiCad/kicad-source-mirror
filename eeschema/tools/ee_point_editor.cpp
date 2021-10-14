@@ -326,14 +326,11 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 modified = true;
             }
 
-            bool snap = !evt->DisableGridSnapping();
+            bool       snap = !evt->DisableGridSnapping();
+            EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( item );
 
-            if( item->Type() == LIB_SHAPE_T
-                    && static_cast<LIB_SHAPE*>( item )->GetShape() == SHAPE_T::ARC
-                    && getEditedPointIndex() == ARC_CENTER )
-            {
+            if( shape && shape->GetShape() == SHAPE_T::ARC && getEditedPointIndex() == ARC_CENTER )
                 snap = false;
-            }
 
             m_editedPoint->SetPosition( controls->GetCursorPosition( snap ) );
 

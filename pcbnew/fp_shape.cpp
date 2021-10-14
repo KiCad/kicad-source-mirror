@@ -55,22 +55,23 @@ void FP_SHAPE::SetLocalCoord()
 
     if( fp == NULL )
     {
-        m_start0 = m_start;
-        m_end0 = m_end;
+        m_start0     = m_start;
+        m_end0       = m_end;
         m_arcCenter0 = m_arcCenter;
         m_bezierC1_0 = m_bezierC1;
         m_bezierC2_0 = m_bezierC2;
         return;
     }
 
-    m_start0 = m_start - fp->GetPosition();
-    m_end0 = m_end - fp->GetPosition();
+    m_start0     = m_start     - fp->GetPosition();
+    m_end0       = m_end       - fp->GetPosition();
     m_arcCenter0 = m_arcCenter - fp->GetPosition();
-    m_bezierC1_0 = m_bezierC1 - fp->GetPosition();
-    m_bezierC2_0 = m_bezierC2 - fp->GetPosition();
+    m_bezierC1_0 = m_bezierC1  - fp->GetPosition();
+    m_bezierC2_0 = m_bezierC2  - fp->GetPosition();
+
     double angle = fp->GetOrientation();
-    RotatePoint( &m_start0.x, &m_start0.y, -angle );
-    RotatePoint( &m_end0.x, &m_end0.y, -angle );
+    RotatePoint( &m_start0.x,     &m_start0.y,     -angle );
+    RotatePoint( &m_end0.x,       &m_end0.y,       -angle );
     RotatePoint( &m_arcCenter0.x, &m_arcCenter0.y, -angle );
     RotatePoint( &m_bezierC1_0.x, &m_bezierC1_0.y, -angle );
     RotatePoint( &m_bezierC2_0.x, &m_bezierC2_0.y, -angle );
@@ -81,11 +82,11 @@ void FP_SHAPE::SetDrawCoord()
 {
     FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_parent );
 
-    m_start      = m_start0;
-    m_end        = m_end0;
+    m_start     = m_start0;
+    m_end       = m_end0;
     m_arcCenter = m_arcCenter0;
-    m_bezierC1   = m_bezierC1_0;
-    m_bezierC2   = m_bezierC2_0;
+    m_bezierC1  = m_bezierC1_0;
+    m_bezierC2  = m_bezierC2_0;
 
     if( fp )
     {
@@ -95,11 +96,11 @@ void FP_SHAPE::SetDrawCoord()
         RotatePoint( &m_bezierC1.x, &m_bezierC1.y, fp->GetOrientation() );
         RotatePoint( &m_bezierC2.x, &m_bezierC2.y, fp->GetOrientation() );
 
-        m_start      += fp->GetPosition();
-        m_end        += fp->GetPosition();
+        m_start     += fp->GetPosition();
+        m_end       += fp->GetPosition();
         m_arcCenter += fp->GetPosition();
-        m_bezierC1   += fp->GetPosition();
-        m_bezierC2   += fp->GetPosition();
+        m_bezierC1  += fp->GetPosition();
+        m_bezierC2  += fp->GetPosition();
     }
 
     RebuildBezierToSegmentsPointsList( m_width );
@@ -172,13 +173,29 @@ void FP_SHAPE::SetCenter0( const wxPoint& aCenter )
 }
 
 
-void FP_SHAPE::SetArcAngleAndEnd0( double aAngle )
+wxPoint FP_SHAPE::GetArcMid0() const
 {
-    PCB_SHAPE::SetArcAngle( aAngle );
+    wxPoint mid0 = m_start0;
+    RotatePoint( &mid0, m_arcCenter0, -GetArcAngle() / 2.0 );
+    return mid0;
+}
 
-    wxPoint end = GetStart0();
-    RotatePoint( &end, GetCenter0(), -m_arcAngle );
-    SetEnd0( end );
+
+void FP_SHAPE::SetArcAngleAndEnd0( double aAngle, bool aCheckNegativeAngle )
+{
+    m_end0 = m_start0;
+    RotatePoint( &m_end0, m_arcCenter0, -NormalizeAngle360Max( aAngle ) );
+
+    if( aCheckNegativeAngle && aAngle < 0 )
+        std::swap( m_start0, m_end0 );
+}
+
+
+void FP_SHAPE::SetArcGeometry0( const wxPoint& aStart0, const wxPoint& aMid0, const wxPoint& aEnd0 )
+{
+    m_start0 = aStart0;
+    m_end0 = aEnd0;
+    m_arcCenter0 = CalcArcCenter( aStart0, aMid0, aEnd0 );
 }
 
 
@@ -367,6 +384,11 @@ static struct FP_SHAPE_DESC
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( FP_SHAPE );
+        propMgr.AddTypeCast( new TYPE_CAST<FP_SHAPE, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<FP_SHAPE, EDA_SHAPE> );
+        propMgr.AddTypeCast( new TYPE_CAST<FP_SHAPE, PCB_SHAPE> );
+        propMgr.InheritsAfter( TYPE_HASH( FP_SHAPE ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( FP_SHAPE ), TYPE_HASH( EDA_SHAPE ) );
         propMgr.InheritsAfter( TYPE_HASH( FP_SHAPE ), TYPE_HASH( PCB_SHAPE ) );
 
         propMgr.AddProperty( new PROPERTY<FP_SHAPE, wxString>( _HKI( "Parent" ),

@@ -815,7 +815,6 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
         arc->SetCenter( wxPoint( center ) );
         arc->SetStart( wxPoint( start ) );
         arc->SetEnd( wxPoint( end ) );
-        arc->SetArcAngle( CalcArcAngle( start, mid, end ) );
 
         commit.Add( arc );
     }

@@ -316,10 +316,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     }
 
     if( m_item->GetShape() == SHAPE_T::ARC )
-    {
         m_item->SetCenter( CalcArcCenter( m_item->GetStart(), m_item->GetEnd(), m_AngleValue ) );
-        m_item->SetArcAngle( m_AngleValue * 10.0 );
-    }
 
     if( m_fp_item )
     {

@@ -33,12 +33,13 @@
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
 #include <eda_shape.h>
-
+#include <plotters/plotter.h>
 
 EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
     m_shape( aType ),
     m_width( aLineWidth ),
-    m_fill( aFill )
+    m_fill( aFill ),
+    m_editState( 0 )
 {
 }
 
@@ -432,38 +433,29 @@ void EDA_SHAPE::SetCenter( const wxPoint& aCenter )
 wxPoint EDA_SHAPE::GetArcMid() const
 {
     wxPoint mid = m_start;
-    RotatePoint( &mid, m_arcCenter, -m_arcAngle / 2.0 );
+    RotatePoint( &mid, m_arcCenter, -GetArcAngle() / 2.0 );
     return mid;
 }
 
 
-double EDA_SHAPE::GetArcAngleStart() const
+void EDA_SHAPE::CalcArcAngles( double& aStartAngle, double& aEndAngle ) const
 {
-    wxPoint arcStart = GetStart();
-    wxPoint center = getCenter();
-    double  angleStart = ArcTangente( arcStart.y - center.y, arcStart.x - center.x );
+    VECTOR2D startRadial( GetStart() - getCenter() );
+    VECTOR2D endRadial( GetEnd() - getCenter() );
 
-    // Normalize it to 0 ... 360 deg, to avoid discontinuity for angles near 180 deg
-    // because 180 deg and -180 are very near angles when ampping betewwen -180 ... 180 deg.
-    // and this is not easy to handle in calculations
-    NORMALIZE_ANGLE_POS( angleStart );
+    aStartAngle = 180.0 / M_PI * atan2( startRadial.y, startRadial.x );
+    aEndAngle = 180.0 / M_PI * atan2( endRadial.y, endRadial.x );
 
-    return angleStart;
-}
+    if( aEndAngle == aStartAngle )
+        aEndAngle = aStartAngle + 360.0;   // ring, not null
 
-
-double EDA_SHAPE::GetArcAngleEnd() const
-{
-    wxPoint arcEnd = GetEnd();
-    wxPoint center = getCenter();
-    double  angleStart = ArcTangente( arcEnd.y - center.y, arcEnd.x - center.x );
-
-    // Normalize it to 0 ... 360 deg, to avoid discontinuity for angles near 180 deg
-    // because 180 deg and -180 are very near angles when ampping betewwen -180 ... 180 deg.
-    // and this is not easy to handle in calculations
-    NORMALIZE_ANGLE_POS( angleStart );
-
-    return angleStart;
+    if( aStartAngle > aEndAngle )
+    {
+        if( aEndAngle < 0 )
+            aEndAngle = NormalizeAngleDegrees( aEndAngle, 0.0, 360.0 );
+        else
+            aStartAngle = NormalizeAngleDegrees( aStartAngle, -360.0, 0.0 );
+    }
 }
 
 
@@ -495,34 +487,30 @@ void EDA_SHAPE::SetArcGeometry( const wxPoint& aStart, const wxPoint& aMid, cons
     m_start = aStart;
     m_end = aEnd;
     m_arcCenter = CalcArcCenter( aStart, aMid, aEnd );
+}
 
+
+double EDA_SHAPE::GetArcAngle() const
+{
     VECTOR2D startLine = m_start - m_arcCenter;
-    VECTOR2D endLine   = aEnd - m_arcCenter;
-    bool     clockwise = m_arcAngle > 0;
+    VECTOR2D endLine   = m_end - m_arcCenter;
 
-    m_arcAngle = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
+    double arcAngle = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
 
-    if( clockwise && m_arcAngle < 0.0 )
-        m_arcAngle += 3600.0;
-    else if( !clockwise && m_arcAngle > 0.0 )
-        m_arcAngle -= 3600.0;
+    if( arcAngle < 0.0 )
+        arcAngle += 3600.0;
+
+    return arcAngle;
 }
 
 
-void EDA_SHAPE::SetArcAngle( double aAngle )
+void EDA_SHAPE::SetArcAngleAndEnd( double aAngle, bool aCheckNegativeAngle )
 {
-    // m_Angle must be >= -360 and <= +360 degrees
-    m_arcAngle = NormalizeAngle360Max( aAngle );
-}
-
-
-void EDA_SHAPE::SetArcAngleAndEnd( double aAngle )
-{
-    // m_Angle must be >= -360 and <= +360 degrees
-    m_arcAngle = NormalizeAngle360Max( aAngle );
-
     m_end = m_start;
-    RotatePoint( &m_end, m_arcCenter, -m_arcAngle );
+    RotatePoint( &m_end, m_arcCenter, -NormalizeAngle360Max( aAngle ) );
+
+    if( aCheckNegativeAngle && aAngle < 0 )
+        std::swap( m_start, m_end );
 }
 
 
@@ -684,39 +672,28 @@ bool EDA_SHAPE::hitTest( const wxPoint& aPosition, int aAccuracy ) const
     case SHAPE_T::ARC:
     {
         wxPoint relPos = aPosition - getCenter();
-        int radius = GetRadius();
-        int dist   = KiROUND( EuclideanNorm( relPos ) );
+        int     radius = GetRadius();
+        int     dist   = KiROUND( EuclideanNorm( relPos ) );
 
         if( abs( radius - dist ) <= maxdist )
         {
-            // For arcs, the test point angle must be >= arc angle start
-            // and <= arc angle end
-            // However angle values > 360 deg are not easy to handle
-            // so we calculate the relative angle between arc start point and teast point
-            // this relative arc should be < arc angle if arc angle > 0 (CW arc)
-            // and > arc angle if arc angle < 0 (CCW arc)
-            double arc_angle_start = GetArcAngleStart();    // Always 0.0 ... 360 deg, in 0.1 deg
-            double arc_swept_angle = GetArcAngleEnd() - arc_angle_start;
+            double startAngle;
+            double endAngle;
+            CalcArcAngles( startAngle, endAngle );
 
-            double arc_hittest = ArcTangente( relPos.y, relPos.x );
+            double relPosAngle = 180.0 / M_PI * atan2( relPos.y, relPos.x );
 
-            // Calculate relative angle between the starting point of the arc, and the test point
-            arc_hittest -= arc_angle_start;
+            if( relPosAngle >= startAngle && relPosAngle <= endAngle )
+                return true;
 
-            // Normalise arc_hittest between 0 ... 360 deg
-            NORMALIZE_ANGLE_POS( arc_hittest );
+            relPosAngle = NormalizeAngleDegrees( relPosAngle, 0.0, 360.0 );
 
-            // Check angle: inside the arc angle when it is > 0 and outside the not drawn arc when
-            // it is < 0
-            if( arc_swept_angle >= 0.0 )
-                return arc_hittest <= arc_swept_angle;
-            else
-                return arc_hittest >= ( 3600.0 + arc_swept_angle );
+            if( relPosAngle >= startAngle && relPosAngle <= endAngle )
+                return true;
+
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     case SHAPE_T::BEZIER:
@@ -1012,16 +989,12 @@ void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
             quarter = 1;
     }
 
-    int radius = GetRadius();
-    int angle = (int) GetArcAngleStart() % 900 + m_arcAngle;
-    bool directionCW = ( m_arcAngle > 0 );      // Is the direction of arc clockwise?
-
-    // Make the angle positive, so we go clockwise and merge points belonging to the arc
-    if( !directionCW )
-    {
-        angle = 900 - angle;
-        quarter = ( quarter + 3 ) % 4;       // -1 modulo arithmetic
-    }
+    int      radius = GetRadius();
+    VECTOR2I startRadial = GetStart() - getCenter();
+    VECTOR2I endRadial = GetEnd() - getCenter();
+    double   angleStart = ArcTangente( startRadial.y, startRadial.x );
+    double   arcAngle = RAD2DECIDEG( endRadial.Angle() - startRadial.Angle() );
+    int      angle = (int) NormalizeAnglePos( angleStart ) % 900 + NormalizeAnglePos( arcAngle );
 
     while( angle > 900 )
     {
@@ -1033,18 +1006,13 @@ void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
         case 3: aBBox.Merge( wxPoint( m_arcCenter.x + radius, m_arcCenter.y          ) ); break;  // right
         }
 
-        if( directionCW )
-            ++quarter;
-        else
-            quarter += 3;       // -1 modulo arithmetic
-
-        quarter %= 4;
+        ++quarter %= 4;
         angle -= 900;
     }
 
-    aBBox.Inflate( m_width );   // Technically m_width / 2, but it doesn't hurt to have the
-                                // bounding box a bit large to account for drawing clearances,
-                                // etc.
+    aBBox.Inflate( GetWidth() );   // Technically m_width / 2, but it doesn't hurt to have the
+                                   // bounding box a bit large to account for drawing clearances,
+                                   // etc.
 }
 
 
@@ -1065,7 +1033,7 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes() const
     switch( m_shape )
     {
     case SHAPE_T::ARC:
-        effectiveShapes.emplace_back( new SHAPE_ARC( m_arcCenter, m_start, m_arcAngle / 10.0,
+        effectiveShapes.emplace_back( new SHAPE_ARC( m_arcCenter, m_start, GetArcAngle() / 10.0,
                                                      m_width ) );
         break;
 
@@ -1193,6 +1161,221 @@ int EDA_SHAPE::GetPointCount() const
 }
 
 
+void EDA_SHAPE::beginEdit( const wxPoint& aPosition )
+{
+    switch( GetShape() )
+    {
+    case SHAPE_T::SEGMENT:
+    case SHAPE_T::CIRCLE:
+    case SHAPE_T::RECT:
+        SetStart( aPosition );
+        SetEnd( aPosition );
+        break;
+
+    case SHAPE_T::ARC:
+        SetArcGeometry( aPosition, aPosition, aPosition );
+        m_editState = 1;
+        break;
+
+    case SHAPE_T::POLY:
+        m_poly.NewOutline();
+        m_poly.Outline( 0 ).SetClosed( false );
+
+        // Start and end of the first segment (co-located for now)
+        m_poly.Outline( 0 ).Append( aPosition );
+        m_poly.Outline( 0 ).Append( aPosition, true );
+        break;
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    }
+}
+
+
+bool EDA_SHAPE::continueEdit( const wxPoint& aPosition )
+{
+    switch( GetShape() )
+    {
+    case SHAPE_T::ARC:
+    case SHAPE_T::SEGMENT:
+    case SHAPE_T::CIRCLE:
+    case SHAPE_T::RECT:
+        return false;
+
+    case SHAPE_T::POLY:
+    {
+        SHAPE_LINE_CHAIN& poly = m_poly.Outline( 0 );
+
+        // do not add zero-length segments
+        if( poly.CPoint( poly.GetPointCount() - 2 ) != poly.CLastPoint() )
+            poly.Append( aPosition, true );
+    }
+        return true;
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+        return false;
+    }
+}
+
+
+void EDA_SHAPE::calcEdit( const wxPoint& aPosition )
+{
+#define sq( x ) pow( x, 2 )
+
+    switch( GetShape() )
+    {
+    case SHAPE_T::SEGMENT:
+    case SHAPE_T::CIRCLE:
+    case SHAPE_T::RECT:
+        SetEnd( aPosition );
+        break;
+
+    case SHAPE_T::ARC:
+    {
+        int radius = GetRadius();
+
+        // Edit state 0: drawing: place start
+        // Edit state 1: drawing: place end (center calculated for 90-degree subtended angle)
+        // Edit state 2: point edit: move start (center calculated for invariant subtended angle)
+        // Edit state 3: point edit: move end (center calculated for invariant subtended angle)
+        // Edit state 4: point edit: move center
+        // Edit state 5: point edit: move arc-mid-point
+
+        switch( m_editState )
+        {
+        case 0:
+            SetArcGeometry( aPosition, aPosition, aPosition );
+            return;
+
+        case 1:
+            m_end = aPosition;
+            radius = KiROUND( sqrt( sq( GetLineLength( m_start, m_end ) ) / 2.0 ) );
+            break;
+
+        case 2:
+        case 3:
+        {
+            wxPoint v = m_start - m_end;
+            double chordBefore = sq( v.x ) + sq( v.y );
+
+            if( m_editState == 2 )
+                m_start = aPosition;
+            else
+                m_end = aPosition;
+
+            v = m_start - m_end;
+            double chordAfter = sq( v.x ) + sq( v.y );
+            double ratio = chordAfter / chordBefore;
+
+            if( ratio != 0 )
+            {
+                radius = std::max( int( sqrt( sq( radius ) * ratio ) ) + 1,
+                                   int( sqrt( chordAfter ) / 2 ) + 1 );
+            }
+        }
+            break;
+
+        case 4:
+        {
+            double chordA = GetLineLength( m_start, aPosition );
+            double chordB = GetLineLength( m_end, aPosition );
+            radius = int( ( chordA + chordB ) / 2.0 ) + 1;
+        }
+            break;
+
+        case 5:
+            SetArcGeometry( GetStart(), aPosition, GetEnd() );
+            return;
+        }
+
+        // Calculate center based on start, end, and radius
+        //
+        // Let 'l' be the length of the chord and 'm' the middle point of the chord
+        double  l = GetLineLength( m_start, m_end );
+        wxPoint m = ( m_start + m_end ) / 2;
+
+        // Calculate 'd', the vector from the chord midpoint to the center
+        wxPoint d;
+        d.x = KiROUND( sqrt( sq( radius ) - sq( l/2 ) ) * ( m_start.y - m_end.y ) / l );
+        d.y = KiROUND( sqrt( sq( radius ) - sq( l/2 ) ) * ( m_end.x - m_start.x ) / l );
+
+        wxPoint c1 = m + d;
+        wxPoint c2 = m - d;
+
+        // Solution gives us 2 centers; we need to pick one:
+        switch( m_editState )
+        {
+        case 1:
+        {
+            // Keep center clockwise from chord while drawing
+            wxPoint chordVector = m_end - m_start;
+            double  chordAngle = ArcTangente( chordVector.y, chordVector.x );
+            NORMALIZE_ANGLE_POS( chordAngle );
+
+            wxPoint c1Test = c1;
+            RotatePoint( &c1Test, m_start, -chordAngle );
+
+            m_arcCenter = c1Test.x > 0 ? c2 : c1;
+        }
+            break;
+
+        case 2:
+        case 3:
+            // Pick the one closer to the old center
+            m_arcCenter = GetLineLength( c1, m_arcCenter ) < GetLineLength( c2, m_arcCenter ) ? c1 : c2;
+            break;
+
+        case 4:
+            // Pick the one closer to the mouse position
+            m_arcCenter = GetLineLength( c1, aPosition ) < GetLineLength( c2, aPosition ) ? c1 : c2;
+            break;
+        }
+    }
+        break;
+
+    case SHAPE_T::POLY:
+        m_poly.Outline( 0 ).SetPoint( m_poly.Outline( 0 ).GetPointCount() - 1, aPosition );
+        break;
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    }
+}
+
+
+void EDA_SHAPE::endEdit()
+{
+    switch( GetShape() )
+    {
+    case SHAPE_T::ARC:
+    case SHAPE_T::SEGMENT:
+    case SHAPE_T::CIRCLE:
+    case SHAPE_T::RECT:
+        break;
+
+    case SHAPE_T::POLY:
+    {
+        SHAPE_LINE_CHAIN& poly = m_poly.Outline( 0 );
+
+        // do not include last point twice
+        if( poly.GetPointCount() > 2 )
+        {
+            if( poly.CPoint( poly.GetPointCount() - 2 ) == poly.CLastPoint() )
+            {
+                poly.SetClosed( true );
+                poly.Remove( poly.GetPointCount() - 1 );
+            }
+        }
+    }
+        break;
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    }
+}
+
+
 void EDA_SHAPE::SwapShape( EDA_SHAPE* aImage )
 {
     EDA_SHAPE* image = dynamic_cast<EDA_SHAPE*>( aImage );
@@ -1203,7 +1386,6 @@ void EDA_SHAPE::SwapShape( EDA_SHAPE* aImage )
     std::swap( m_end, image->m_end );
     std::swap( m_arcCenter, image->m_arcCenter );
     std::swap( m_shape, image->m_shape );
-    std::swap( m_arcAngle, image->m_arcAngle );
     std::swap( m_bezierC1, image->m_bezierC1 );
     std::swap( m_bezierC2, image->m_bezierC2 );
     std::swap( m_bezierPoints, image->m_bezierPoints );
@@ -1243,3 +1425,43 @@ int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
 
     return 0;
 }
+
+
+static struct EDA_SHAPE_DESC
+{
+    EDA_SHAPE_DESC()
+    {
+        ENUM_MAP<SHAPE_T>::Instance()
+                    .Map( SHAPE_T::SEGMENT, _HKI( "Segment" ) )
+                    .Map( SHAPE_T::RECT,    _HKI( "Rectangle" ) )
+                    .Map( SHAPE_T::ARC,     _HKI( "Arc" ) )
+                    .Map( SHAPE_T::CIRCLE,  _HKI( "Circle" ) )
+                    .Map( SHAPE_T::POLY,    _HKI( "Polygon" ) )
+                    .Map( SHAPE_T::BEZIER,  _HKI( "Bezier" ) );
+        ENUM_MAP<PLOT_DASH_TYPE>::Instance()
+                    .Map( PLOT_DASH_TYPE::DEFAULT,    _HKI( "Default" ) )
+                    .Map( PLOT_DASH_TYPE::SOLID,      _HKI( "Solid" ) )
+                    .Map( PLOT_DASH_TYPE::DASH,       _HKI( "Dashed" ) )
+                    .Map( PLOT_DASH_TYPE::DOT,        _HKI( "Dotted" ) )
+                    .Map( PLOT_DASH_TYPE::DASHDOT,    _HKI( "Dash-Dot" ) );
+
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( EDA_SHAPE );
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, SHAPE_T>( _HKI( "Shape" ),
+                    &EDA_SHAPE::SetShape, &EDA_SHAPE::GetShape ) );
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start X" ),
+                    &EDA_SHAPE::SetStartX, &EDA_SHAPE::GetStartX ) );
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start Y" ),
+                    &EDA_SHAPE::SetStartY, &EDA_SHAPE::GetStartY ) );
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End X" ),
+                    &EDA_SHAPE::SetEndX, &EDA_SHAPE::GetEndX ) );
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End Y" ),
+                    &EDA_SHAPE::SetEndY, &EDA_SHAPE::GetEndY ) );
+        // TODO: m_arcCenter, m_bezierC1, m_bezierC2, m_poly
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Line Width" ),
+                    &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth ) );
+    }
+} _EDA_SHAPE_DESC;
+
+ENUM_TO_WXANY( SHAPE_T )
+ENUM_TO_WXANY( PLOT_DASH_TYPE )

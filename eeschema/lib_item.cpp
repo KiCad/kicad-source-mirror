@@ -35,8 +35,7 @@ const int fill_tab[3] = { 'N', 'F', 'f' };
 LIB_ITEM::LIB_ITEM( KICAD_T aType, LIB_SYMBOL* aSymbol, int aUnit, int aConvert ) :
     EDA_ITEM( aSymbol, aType ),
     m_unit( aUnit ),
-    m_convert( aConvert ),
-    m_editState( 0 )
+    m_convert( aConvert )
 {
 }
 

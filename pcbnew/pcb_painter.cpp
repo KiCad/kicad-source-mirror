@@ -1408,12 +1408,16 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     }
 
     case SHAPE_T::ARC:
+    {
+        double startAngle;
+        double endAngle;
+        aShape->CalcArcAngles( startAngle, endAngle );
+
         if( sketch )
         {
             m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(),
-                                   DECIDEG2RAD( aShape->GetArcAngleStart() ),
-                                   DECIDEG2RAD( aShape->GetArcAngleStart() + aShape->GetArcAngle() ), // Change this
-                                   thickness, m_maxError );
+                                   DEG2RAD( startAngle ), DEG2RAD( endAngle ), thickness,
+                                   m_maxError );
         }
         else
         {
@@ -1421,11 +1425,11 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             m_gal->SetIsStroke( false );
 
             m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(),
-                                   DECIDEG2RAD( aShape->GetArcAngleStart() ),
-                                   DECIDEG2RAD( aShape->GetArcAngleStart() + aShape->GetArcAngle() ), // Change this
-                                   thickness, m_maxError );
+                                   DEG2RAD( startAngle ), DEG2RAD( endAngle ), thickness,
+                                   m_maxError );
         }
         break;
+    }
 
     case SHAPE_T::CIRCLE:
         if( sketch )

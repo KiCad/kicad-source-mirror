@@ -101,9 +101,11 @@ class PCB_TEXT;
 //#define SEXPR_BOARD_FILE_VERSION    20210623  // Add support for reading/writing arcs in polygons
 //#define SEXPR_BOARD_FILE_VERSION    20210722  // Reading/writing group locked flags
 //#define SEXPR_BOARD_FILE_VERSION    20210824  // Opacity in 3D colors
-#define SEXPR_BOARD_FILE_VERSION      20210925  // Locked flag for fp_text
+//#define SEXPR_BOARD_FILE_VERSION    20210925  // Locked flag for fp_text
+#define SEXPR_BOARD_FILE_VERSION      20211014  // Arc formatting
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
+#define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting
 
 #define CTL_OMIT_PAD_NETS           (1 << 1)    ///< Omit pads net names (useless in library)
 #define CTL_OMIT_TSTAMPS            (1 << 2)    ///< Omit component time stamp (useless in library)

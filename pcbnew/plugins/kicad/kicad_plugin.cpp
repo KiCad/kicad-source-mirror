@@ -820,11 +820,11 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
         break;
 
     case SHAPE_T::ARC:
-        m_out->Print( aNestLevel, "(gr_arc%s (start %s) (end %s) (angle %s)",
+        m_out->Print( aNestLevel, "(gr_arc%s (start %s) (mid %s) (end %s)",
                       locked.c_str(),
-                      FormatInternalUnits( aShape->GetCenter() ).c_str(),
                       FormatInternalUnits( aShape->GetStart() ).c_str(),
-                      FormatAngle( aShape->GetArcAngle() ).c_str() );
+                      FormatInternalUnits( aShape->GetArcMid() ).c_str(),
+                      FormatInternalUnits( aShape->GetEnd() ).c_str() );
         break;
 
     case SHAPE_T::POLY:
@@ -954,11 +954,11 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
         break;
 
     case SHAPE_T::ARC:
-        m_out->Print( aNestLevel, "(fp_arc%s (start %s) (end %s) (angle %s)",
+        m_out->Print( aNestLevel, "(fp_arc%s (start %s) (mid %s) (end %s)",
                       locked.c_str(),
-                      FormatInternalUnits( aFPShape->GetCenter0() ).c_str(),
                       FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
-                      FormatAngle( aFPShape->GetArcAngle() ).c_str() );
+                      FormatInternalUnits( aFPShape->GetArcMid0() ).c_str(),
+                      FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
         break;
 
     case SHAPE_T::POLY:
@@ -1630,10 +1630,10 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
                 break;
 
             case SHAPE_T::ARC:
-                m_out->Print( nested_level, "(gr_arc (start %s) (end %s) (angle %s)",
-                              FormatInternalUnits( primitive->GetCenter() ).c_str(),
+                m_out->Print( aNestLevel, "(gr_arc (start %s) (mid %s) (end %s)",
                               FormatInternalUnits( primitive->GetStart() ).c_str(),
-                              FormatAngle( primitive->GetArcAngle() ).c_str() );
+                              FormatInternalUnits( primitive->GetArcMid() ).c_str(),
+                              FormatInternalUnits( primitive->GetEnd() ).c_str() );
                 break;
 
             case SHAPE_T::CIRCLE:

@@ -120,13 +120,13 @@ public:
     void SetCenter( const wxPoint& aCenter );
 
     /**
-     * Set the angle for arcs, and normalizes it within the range 0 - 360 degrees.
+     * Set the end point from the angle center and start.
      *
-     * @param aAngle is tenths of degrees, but will soon be degrees.
+     * @param aAngle is tenths of degrees.
      */
-    void SetArcAngle( double aAngle );
-    void SetArcAngleAndEnd( double aAngle );
-    double GetArcAngle() const              { return m_arcAngle; }
+    void SetArcAngleAndEnd( double aAngle, bool aCheckNegativeAngle = false );
+
+    double GetArcAngle() const;
 
     // Some attributes are read only, since they are derived from m_Start, m_End, and m_Angle.
     // No Set...() function for these attributes.
@@ -135,14 +135,10 @@ public:
     std::vector<wxPoint> GetRectCorners() const;
 
     /**
-     * @return the angle of the starting point of this arc, between 0 and 3600 in 0.1 deg.
+     * Calc arc start and end angles such that aStartAngle < aEndAngle.  Each may be between
+     * -360.0 and 360.0.
      */
-    virtual double GetArcAngleStart() const;
-
-    /**
-     * @return the angle of the ending point of this arc, between 0 and 3600 in 0.1 deg.
-     */
-    virtual double GetArcAngleEnd() const;
+    void CalcArcAngles( double& aStartAngle, double& aEndAngle ) const;
 
     int GetRadius() const;
 
@@ -252,6 +248,12 @@ protected:
 
     const std::vector<wxPoint> buildBezierToSegmentsPointsList( int aMinSegLen  ) const;
 
+    void beginEdit( const wxPoint& aStartPoint );
+    bool continueEdit( const wxPoint& aPosition );
+    void calcEdit( const wxPoint& aPosition );
+    void endEdit();
+    void setEditState( int aState ) { m_editState = aState; }
+
 protected:
     SHAPE_T              m_shape;        // Shape: line, Circle, Arc
     int                  m_width;        // thickness of lines ...
@@ -260,13 +262,14 @@ protected:
     wxPoint              m_end;          // Line end point or Circle 3 o'clock point
 
     wxPoint              m_arcCenter;    // Used only for Arcs: arc end point
-    double               m_arcAngle;     // Used only for Arcs: Arc angle in 1/10 deg
 
     wxPoint              m_bezierC1;     // Bezier Control Point 1
     wxPoint              m_bezierC2;     // Bezier Control Point 2
 
     std::vector<wxPoint> m_bezierPoints;
     SHAPE_POLY_SET       m_poly;         // Stores the S_POLYGON shape
+
+    int                  m_editState;
 };
 
 #endif  // EDA_SHAPE_H

@@ -71,10 +71,11 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    void BeginEdit( const wxPoint& aStartPoint ) override;
-    bool ContinueEdit( const wxPoint& aPosition ) override;
-    void CalcEdit( const wxPoint& aPosition ) override;
-    void EndEdit() override;
+    void BeginEdit( const wxPoint& aStartPoint ) override  { beginEdit( aStartPoint ); }
+    bool ContinueEdit( const wxPoint& aPosition ) override { return continueEdit( aPosition ); }
+    void CalcEdit( const wxPoint& aPosition ) override     { calcEdit( aPosition ); }
+    void EndEdit() override                                { endEdit(); }
+    void SetEditState( int aState )                        { setEditState( aState ); }
 
     void AddPoint( const wxPoint& aPosition );
 
@@ -82,13 +83,11 @@ public:
 
     void MoveTo( const wxPoint& aPosition ) override;
 
-    wxPoint GetPosition() const override { return getPosition(); }
+    wxPoint GetPosition() const override                  { return getPosition(); }
     void SetPosition( const wxPoint& aPosition ) override { setPosition( aPosition ); }
 
     wxPoint GetCenter() const { return getCenter(); }
 
-    double GetArcAngleStart() const override;
-    double GetArcAngleEnd() const override;
     void CalcArcAngles( int& aStartAngle, int& aEndAngle ) const;
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;

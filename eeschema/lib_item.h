@@ -127,12 +127,6 @@ public:
     virtual void CalcEdit( const wxPoint& aPosition ) {}
 
     /**
-     * For use by more complex editing routines that need to indicate what phase they are in.
-     * @param aState
-     */
-    virtual void SetEditState( int aState ) { m_editState = aState; }
-
-    /**
      * Draw an item
      *
      * @param aDC Device Context (can be null)
@@ -320,8 +314,6 @@ protected:
      * body styles.  This is typially used for representing DeMorgan variants in KiCad.
      */
     int         m_convert;
-
-    int         m_editState;
 };
 
 
