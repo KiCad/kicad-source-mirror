@@ -53,10 +53,12 @@ PANEL_TRACK_WIDTH::PANEL_TRACK_WIDTH( wxWindow* parent, wxWindowID id,
         m_TWNested( false )
 {
     m_trackTempUnits->SetLabel( wxT( "°C" ) );
-    m_resistivityUnits->SetLabel( wxT( "Ω•m" ) );
+    m_resistivityUnits->SetLabel( wxT( "Ω⋅m" ) );
 
-    m_extTrackResUnits->SetLabel( wxT( "Ω" ) );
-    m_intTrackResUnits->SetLabel( wxT( "Ω" ) );
+    m_extTrackResUnits->SetLabel( wxT( "Ω" ) );
+    m_intTrackResUnits->SetLabel( wxT( "Ω" ) );
+
+    m_staticText63->SetLabel( _( "Temperature rise" ) + wxT( " (ΔT):" ) );
 
     // Needed on wxWidgets 3.0 to ensure sizers are correctly set
     GetSizer()->SetSizeHints( this );

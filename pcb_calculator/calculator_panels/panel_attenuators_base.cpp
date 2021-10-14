@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -45,7 +45,7 @@ PANEL_ATTENUATORS_BASE::PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerAttPrms->SetFlexibleDirection( wxBOTH );
 	fgSizerAttPrms->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_attenuationLabel = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("Attenuation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_attenuationLabel = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("Attenuation (a):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attenuationLabel->Wrap( -1 );
 	fgSizerAttPrms->Add( m_attenuationLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 

@@ -1,9 +1,9 @@
 ### Bridged Tee Attenuator
-__Zin__ desired input impedance in &#x2126;<br>
-__Zout__ desired output impedance<br>
-__Z<sub>0</sub> = Zin = Zout__<br><br>
+___a___ is attenuation in dB  
+___Z<sub>in</sub>___ is desired input impedance in &#x2126;  
+___Z<sub>out</sub>___ is desired output impedance in &#x2126;  
+___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___  
 
-* __a__ attenuation in dB
-* __L = 10<sup>a/20</sup>__ (the loss)<br><br>
-* ___R1 = Z<sub>0</sub> \* (L - 1)___
-* ___R2 = Z<sub>0</sub> / (L - 1)___
+___L = 10<sup>a/20</up>___
+___R<sub>1</sub> = Z<sub>0</sub> &sdot; (L&minus;1)___  
+___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___

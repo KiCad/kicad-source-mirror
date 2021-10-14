@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,7 +28,7 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerTWprms->SetFlexibleDirection( wxBOTH );
 	fgSizerTWprms->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextCurrent = new wxStaticText( sbSizerTW_Prms->GetStaticBox(), wxID_ANY, _("Current:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextCurrent = new wxStaticText( sbSizerTW_Prms->GetStaticBox(), wxID_ANY, _("Current (I):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCurrent->Wrap( -1 );
 	fgSizerTWprms->Add( m_staticTextCurrent, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxBOTTOM, 5 );
 
@@ -51,6 +51,7 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerTWprms->Add( m_trackTempUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 	m_staticText66 = new wxStaticText( sbSizerTW_Prms->GetStaticBox(), wxID_ANY, _("Conductor length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText66->SetLabelMarkup( _("Conductor length:") );
 	m_staticText66->Wrap( -1 );
 	fgSizerTWprms->Add( m_staticText66, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxBOTTOM, 5 );
 
@@ -67,6 +68,8 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerTWprms->Add( m_staticText103, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxBOTTOM, 5 );
 
 	m_TWResistivity = new wxTextCtrl( sbSizerTW_Prms->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_TWResistivity->Enable( false );
+
 	fgSizerTWprms->Add( m_TWResistivity, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_resistivityUnits = new wxStaticText( sbSizerTW_Prms->GetStaticBox(), wxID_ANY, _("ohm-meter"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -97,7 +100,7 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerTW_Results->SetFlexibleDirection( wxBOTH );
 	fgSizerTW_Results->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextExtWidth = new wxStaticText( sbSizerTW_Result->GetStaticBox(), wxID_ANY, _("Trace width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextExtWidth = new wxStaticText( sbSizerTW_Result->GetStaticBox(), wxID_ANY, _("Trace width (W):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextExtWidth->Wrap( -1 );
 	m_staticTextExtWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
@@ -111,7 +114,7 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	m_TW_ExtTrackWidth_choiceUnit->SetSelection( 0 );
 	fgSizerTW_Results->Add( m_TW_ExtTrackWidth_choiceUnit, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_staticText65 = new wxStaticText( sbSizerTW_Result->GetStaticBox(), wxID_ANY, _("Trace thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText65 = new wxStaticText( sbSizerTW_Result->GetStaticBox(), wxID_ANY, _("Trace thickness (H):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText65->Wrap( -1 );
 	fgSizerTW_Results->Add( m_staticText65, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -195,7 +198,7 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerTW_Results1->SetFlexibleDirection( wxBOTH );
 	fgSizerTW_Results1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextIntWidth = new wxStaticText( sbSizerTW_Result1->GetStaticBox(), wxID_ANY, _("Trace width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextIntWidth = new wxStaticText( sbSizerTW_Result1->GetStaticBox(), wxID_ANY, _("Trace width (W):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextIntWidth->Wrap( -1 );
 	m_staticTextIntWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
@@ -209,7 +212,7 @@ PANEL_TRACK_WIDTH_BASE::PANEL_TRACK_WIDTH_BASE( wxWindow* parent, wxWindowID id,
 	m_TW_IntTrackWidth_choiceUnit->SetSelection( 0 );
 	fgSizerTW_Results1->Add( m_TW_IntTrackWidth_choiceUnit, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_staticText652 = new wxStaticText( sbSizerTW_Result1->GetStaticBox(), wxID_ANY, _("Trace thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText652 = new wxStaticText( sbSizerTW_Result1->GetStaticBox(), wxID_ANY, _("Trace thickness (H):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText652->Wrap( -1 );
 	fgSizerTW_Results1->Add( m_staticText652, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 

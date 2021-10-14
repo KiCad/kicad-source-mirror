@@ -60,11 +60,11 @@ PANEL_VIA_SIZE::PANEL_VIA_SIZE( wxWindow* parent, wxWindowID id,
                                 long style, const wxString& name ) :
         PANEL_VIA_SIZE_BASE( parent, id, pos, size, style, name )
 {
-    m_viaResistivityUnits->SetLabel( wxT( "Ω•m" ) );
+    m_viaResistivityUnits->SetLabel( wxT( "Ω⋅m" ) );
     m_viaTempUnits->SetLabel( wxT( "°C" ) );
-    m_viaResUnits->SetLabel( wxT( "Ω" ) );
+    m_viaResUnits->SetLabel( wxT( "Ω" ) );
     m_viaThermalResUnits->SetLabel( wxT( "°C/W" ) );
-    m_viaReactanceUnits->SetLabel( wxT( "Ω" ) );
+    m_viaReactanceUnits->SetLabel( wxT( "Ω" ) );
 
     m_viaBitmap->SetBitmap( KiBitmap( BITMAPS::viacalc ) );
 
