@@ -86,6 +86,7 @@ void SCINTILLA_TRICKS::setupStyles()
 
     m_te->SetSelForeground( true, highlightText );
     m_te->SetSelBackground( true, highlight );
+    m_te->SetCaretForeground( foreground );
 
     if( !m_singleLine )
     {
@@ -105,7 +106,6 @@ void SCINTILLA_TRICKS::setupStyles()
     unsigned char b = highlight.Blue();
    	wxColour::MakeGrey( &r, &g, &b );
    	highlight.Set( r, g, b );
-
     m_te->StyleSetForeground( wxSTC_STYLE_BRACELIGHT, highlightText );
     m_te->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, highlight );
     m_te->StyleSetForeground( wxSTC_STYLE_BRACEBAD, *wxRED );
