@@ -1,4 +1,5 @@
 
+%include eda_shape.h
 %include pcb_shape.h
 %extend PCB_SHAPE
 {
@@ -9,6 +10,7 @@
     %}
 }
 %{
+#include <eda_shape.h>
 #include <pcb_shape.h>
 %}
 
