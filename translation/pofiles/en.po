@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-04 08:53-0700\n"
+"POT-Creation-Date: 2021-10-15 12:28-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2589,18 +2589,6 @@ msgstr "Sheet"
 msgid "SCH Screen"
 msgstr "SCH Screen"
 
-msgid "Arc"
-msgstr "Arc"
-
-msgid "Circle"
-msgstr "Circle"
-
-msgid "Polyline"
-msgstr "Polyline"
-
-msgid "Bezier"
-msgstr "Bezier"
-
 msgid "Symbol Field"
 msgstr "Symbol Field"
 
@@ -2609,6 +2597,72 @@ msgstr "Gerber Layout"
 
 msgid "Draw Item"
 msgstr "Draw Item"
+
+msgid "Rect"
+msgstr "Rect"
+
+msgid "Arc"
+msgstr "Arc"
+
+msgid "Circle"
+msgstr "Circle"
+
+msgid "Bezier Curve"
+msgstr "Bezier Curve"
+
+msgid "Polygon"
+msgstr "Polygon"
+
+msgid "Shape"
+msgstr "Shape"
+
+msgid "Radius"
+msgstr "Radius"
+
+msgid "Angle"
+msgstr "Angle"
+
+msgid "Curve"
+msgstr "Curve"
+
+msgid "Length"
+msgstr "Length"
+
+msgid "Points"
+msgstr "Points"
+
+msgid "Width"
+msgstr "Width"
+
+msgid "Height"
+msgstr "Height"
+
+msgid "Segment"
+msgstr "Segment"
+
+msgid "Unrecognized"
+msgstr "Unrecognized"
+
+msgid "Line width"
+msgstr "Line width"
+
+msgid "Bezier"
+msgstr "Bezier"
+
+msgid "Start X"
+msgstr "Start X"
+
+msgid "Start Y"
+msgstr "Start Y"
+
+msgid "End X"
+msgstr "End X"
+
+msgid "End Y"
+msgstr "End Y"
+
+msgid "Line Width"
+msgstr "Line Width"
 
 msgid "Normal"
 msgstr "Normal"
@@ -2645,12 +2699,6 @@ msgstr "Mirrored"
 
 msgid "Visible"
 msgstr "Visible"
-
-msgid "Width"
-msgstr "Width"
-
-msgid "Height"
-msgstr "Height"
 
 msgid "Horizontal Justification"
 msgstr "Horizontal Justification"
@@ -5889,9 +5937,6 @@ msgstr "Number Text Size"
 msgid "Name Text Size"
 msgstr "Name Text Size"
 
-msgid "Length"
-msgstr "Length"
-
 msgid "X Position"
 msgstr "X Position"
 
@@ -7765,9 +7810,6 @@ msgstr "Justification"
 msgid "Bold and italic"
 msgstr "Bold and italic"
 
-msgid "Shape"
-msgstr "Shape"
-
 msgid "Changes To Be Applied"
 msgstr "Changes To Be Applied"
 
@@ -8662,6 +8704,56 @@ msgstr "Importing Schematic"
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "The current schematic has been modified.  Save changes?"
 
+msgid ""
+"Well this is potentially embarrassing!\n"
+"It appears that the last time you were editing one or more of the schematic "
+"files\n"
+"were not saved properly.  Do you wish to restore the last saved edits you "
+"made?"
+msgstr ""
+"Well this is potentially embarrassing!\n"
+"It appears that the last time you were editing one or more of the schematic "
+"files\n"
+"were not saved properly.  Do you wish to restore the last saved edits you "
+"made?"
+
+#, c-format
+msgid ""
+"The file '%s` could not be opened.\n"
+"Manual recovery of automatically saved files is required."
+msgstr ""
+"The file '%s` could not be opened.\n"
+"Manual recovery of automatically saved files is required."
+
+msgid "The following automatically saved file(s) could not be restored\n"
+msgstr "The following automatically saved file(s) could not be restored\n"
+
+msgid "Manual recovery will be required to restore the file(s) above."
+msgstr "Manual recovery will be required to restore the file(s) above."
+
+msgid "The following automatically saved file(s) could not be removed\n"
+msgstr "The following automatically saved file(s) could not be removed\n"
+
+msgid "Manual removal will be required for the file(s) above."
+msgstr "Manual removal will be required for the file(s) above."
+
+#, c-format
+msgid ""
+"The automatic save master file\n"
+"'%s'\n"
+"could not be deleted."
+msgstr ""
+"The automatic save master file\n"
+"'%s'\n"
+"could not be deleted."
+
+msgid ""
+"This file must be manually removed or the auto save feature will be\n"
+"shown every time the schematic editor is launched."
+msgstr ""
+"This file must be manually removed or the auto save feature will be\n"
+"shown every time the schematic editor is launched."
+
 msgid "Alias of"
 msgstr "Alias of"
 
@@ -8692,23 +8784,6 @@ msgstr "Root"
 #, c-format
 msgid "(page %s)"
 msgstr "(page %s)"
-
-msgid "Line Width"
-msgstr "Line Width"
-
-msgid "Bounding Box"
-msgstr "Bounding Box"
-
-#, c-format
-msgid "Arc, radius %s"
-msgstr "Arc, radius %s"
-
-msgid "Radius"
-msgstr "Radius"
-
-#, c-format
-msgid "Circle, radius %s"
-msgstr "Circle, radius %s"
 
 msgid "Yes"
 msgstr "Yes"
@@ -8749,11 +8824,20 @@ msgid "Pin %s [%s, %s]"
 msgstr "Pin %s [%s, %s]"
 
 #, c-format
+msgid "Arc, radius %s"
+msgstr "Arc, radius %s"
+
+#, c-format
+msgid "Circle, radius %s"
+msgstr "Circle, radius %s"
+
+#, c-format
 msgid "Polyline, %d points"
 msgstr "Polyline, %d points"
 
-msgid "PolyLine"
-msgstr "PolyLine"
+#, c-format
+msgid "Bezier Curve, %d points"
+msgstr "Bezier Curve, %d points"
 
 #, c-format
 msgid "Graphic Text '%s'"
@@ -9187,9 +9271,6 @@ msgstr "Arcs on schematic not currently supported."
 #, c-format
 msgid "Arc's owner (%d) not found."
 msgstr "Arc's owner (%d) not found."
-
-msgid "Arcs in symbols cannot exceed 180 degrees."
-msgstr "Arcs in symbols cannot exceed 180 degrees."
 
 #, c-format
 msgid "Line's owner (%d) not found."
@@ -11789,6 +11870,30 @@ msgstr "14 Layers"
 msgid "16 Layers"
 msgstr "16 Layers"
 
+msgid "18 Layers"
+msgstr "18 Layers"
+
+msgid "20 Layers"
+msgstr "20 Layers"
+
+msgid "22 Layers"
+msgstr "22 Layers"
+
+msgid "24 Layers"
+msgstr "24 Layers"
+
+msgid "26 Layers"
+msgstr "26 Layers"
+
+msgid "28 Layers"
+msgstr "28 Layers"
+
+msgid "30 Layers"
+msgstr "30 Layers"
+
+msgid "32 Layers"
+msgstr "32 Layers"
+
 msgid "Store Choice"
 msgstr "Store Choice"
 
@@ -12504,8 +12609,8 @@ msgstr "Reset all settings on this page to their default"
 msgid "Failed to output data"
 msgstr "Failed to output data"
 
-msgid "<html><h1>Template Selector</h1></html>"
-msgstr "<html><h1>Template Selector</h1></html>"
+msgid "<h1>Template Selector</h1>"
+msgstr "<h1>Template Selector</h1>"
 
 msgid "Select Templates Directory"
 msgstr "Select Templates Directory"
@@ -13741,29 +13846,9 @@ msgstr ""
 "* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 
-msgid "Data file error."
-msgstr "Data file error."
-
-msgid "Vref:"
-msgstr "Vref:"
-
-msgid "Volt"
-msgstr "Volt"
-
-msgid "Separate sense pin"
-msgstr "Separate sense pin"
-
-msgid "3 terminals regulator"
-msgstr "3 terminals regulator"
-
-msgid "Iadj:"
-msgstr "Iadj:"
-
-msgid "uA"
-msgstr "µA"
-
-msgid "Regulator Parameters"
-msgstr "Regulator Parameters"
+#, c-format
+msgid "Attenuation more than %f dB"
+msgstr "Attenuation more than %f dB"
 
 msgid "PI"
 msgstr "PI"
@@ -13810,6 +13895,42 @@ msgstr "R3:"
 msgid "Formula"
 msgstr "Formula"
 
+msgid "Note: Values are minimal values"
+msgstr "Note: Values are minimal values"
+
+msgid "Class 1"
+msgstr "Class 1"
+
+msgid "Class 2"
+msgstr "Class 2"
+
+msgid "Class 3"
+msgstr "Class 3"
+
+msgid "Class 4"
+msgstr "Class 4"
+
+msgid "Class 5"
+msgstr "Class 5"
+
+msgid "Class 6"
+msgstr "Class 6"
+
+msgid "Lines width"
+msgstr "Lines width"
+
+msgid "Min clearance"
+msgstr "Min clearance"
+
+msgid "Via: (diam - drill)"
+msgstr "Via: (diam - drill)"
+
+msgid "Plated Pad: (diam - drill)"
+msgstr "Plated Pad: (diam - drill)"
+
+msgid "NP Pad: (diam - drill)"
+msgstr "NP Pad: (diam - drill)"
+
 msgid "10% / 5%"
 msgstr "10% / 5%"
 
@@ -13833,382 +13954,6 @@ msgstr "4th Band"
 
 msgid "Multiplier"
 msgstr "Multiplier"
-
-msgid ""
-"Type of the regulator.\n"
-"There are 2 types:\n"
-"- regulators which have a dedicated sense pin for the voltage regulation.\n"
-"- 3 terminal pins."
-msgstr ""
-"Type of the regulator.\n"
-"There are 2 types:\n"
-"- regulators which have a dedicated sense pin for the voltage regulation.\n"
-"- 3 terminal pins."
-
-msgid "Standard Type"
-msgstr "Standard Type"
-
-msgid "3 Terminal Type"
-msgstr "3 Terminal Type"
-
-msgid "kOhm"
-msgstr "kOhm"
-
-msgid "Vout:"
-msgstr "Vout:"
-
-msgid ""
-"The internal reference voltage of the regulator.\n"
-"Should not be 0."
-msgstr ""
-"The internal reference voltage of the regulator.\n"
-"Should not be 0."
-
-msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr "For 3 terminal regulators only, the  Adjust pin current."
-
-msgid "Regulator"
-msgstr "Regulator"
-
-msgid "Regulators data file:"
-msgstr "Regulators data file:"
-
-msgid "The name of the data file which stores known regulators parameters."
-msgstr "The name of the data file which stores known regulators parameters."
-
-msgid "Browse"
-msgstr "Browse"
-
-msgid "Edit Regulator"
-msgstr "Edit Regulator"
-
-msgid "Edit the current selected regulator."
-msgstr "Edit the current selected regulator."
-
-msgid "Add Regulator"
-msgstr "Add Regulator"
-
-msgid "Enter a new item to the current list of available regulators"
-msgstr "Enter a new item to the current list of available regulators"
-
-msgid "Remove Regulator"
-msgstr "Remove Regulator"
-
-msgid "Remove an item from the current list of available regulators"
-msgstr "Remove an item from the current list of available regulators"
-
-msgid "Finished hole diameter (D):"
-msgstr "Finished hole diameter (D):"
-
-msgid "Plating thickness (T):"
-msgstr "Plating thickness (T):"
-
-msgid "Via length:"
-msgstr "Via length:"
-
-msgid "Via length is the board thickness for through hole vias"
-msgstr "Via length is the board thickness for through hole vias"
-
-msgid "Via pad diameter:"
-msgstr "Via pad diameter:"
-
-msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "Diameter of pad surrounding via (annular ring)"
-
-msgid "Clearance hole diameter:"
-msgstr "Clearance hole diameter:"
-
-msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "Diameter of clearance hole in ground plane(s)"
-
-msgid "Z0:"
-msgstr "Z0:"
-
-msgid "Characteristic impedance of conductor"
-msgstr "Characteristic impedance of conductor"
-
-msgid "Applied current:"
-msgstr "Applied current:"
-
-msgid "Plating resistivity:"
-msgstr "Plating resistivity:"
-
-msgid "Specific resistance in ohms * meters"
-msgstr "Specific resistance in ohms * meters"
-
-msgid "..."
-msgstr "…"
-
-msgid "ohm-meter"
-msgstr "ohm-meter"
-
-msgid "Substrate relative permittivity:"
-msgstr "Substrate relative permittivity:"
-
-msgid "Relative dielectric constant (epsilon r)"
-msgstr "Relative dielectric constant (epsilon r)"
-
-msgid "Temperature rise:"
-msgstr "Temperature rise:"
-
-msgid "Maximum acceptable rise in temperature"
-msgstr "Maximum acceptable rise in temperature"
-
-msgid "deg C"
-msgstr "deg C"
-
-msgid "Pulse rise time:"
-msgstr "Pulse rise time:"
-
-msgid "Pulse rise time to calculate reactance"
-msgstr "Pulse rise time to calculate reactance"
-
-msgid "ns"
-msgstr "ns"
-
-msgid "nanoseconds"
-msgstr "nanoseconds"
-
-msgid ""
-"Warning:\n"
-"Via pad diameter >= Clearance hole diameter.\n"
-"Some parameters cannot be calculated for a via inside a copper zone."
-msgstr ""
-"Warning:\n"
-"Via pad diameter >= Clearance hole diameter.\n"
-"Some parameters cannot be calculated for a via inside a copper zone."
-
-msgid "Results"
-msgstr "Results"
-
-msgid "Resistance:"
-msgstr "Resistance:"
-
-msgid "ohm"
-msgstr "ohm"
-
-msgid "Voltage drop:"
-msgstr "Voltage drop:"
-
-msgid "Power loss:"
-msgstr "Power loss:"
-
-msgid "W"
-msgstr "W"
-
-msgid "Thermal resistance:"
-msgstr "Thermal resistance:"
-
-msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
-msgstr "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
-
-msgid "deg C/W"
-msgstr "deg C/W"
-
-msgid "Estimated ampacity:"
-msgstr "Estimated ampacity:"
-
-msgid "Based on temperature rise"
-msgstr "Based on temperature rise"
-
-msgid "Capacitance:"
-msgstr "Capacitance:"
-
-msgid "pF"
-msgstr "pF"
-
-msgid "pico-Farad"
-msgstr "pico-Farad"
-
-msgid "Rise time degradation:"
-msgstr "Rise time degradation:"
-
-msgid "Rise time degradation for given Z0 and calculated capacitance"
-msgstr "Rise time degradation for given Z0 and calculated capacitance"
-
-msgid "ps"
-msgstr "ps"
-
-msgid "picoseconds"
-msgstr "picoseconds"
-
-msgid "Inductance:"
-msgstr "Inductance:"
-
-msgid "nH"
-msgstr "nH"
-
-msgid "nano-Henry"
-msgstr "nano-Henry"
-
-msgid "Reactance:"
-msgstr "Reactance:"
-
-msgid "Inductive reactance for given rise time and calculated inductance"
-msgstr "Inductive reactance for given rise time and calculated inductance"
-
-msgid "Top view of via"
-msgstr "Top view of via"
-
-msgid "Regulators"
-msgstr "Regulators"
-
-msgid "RF Attenuators"
-msgstr "RF Attenuators"
-
-msgid "Inputs"
-msgstr "Inputs"
-
-msgid "Required resistance:"
-msgstr "Required resistance:"
-
-msgid "Exclude value 1:"
-msgstr "Exclude value 1:"
-
-msgid "Exclude value 2:"
-msgstr "Exclude value 2:"
-
-msgid "E1"
-msgstr "E1"
-
-msgid "E3"
-msgstr "E3"
-
-msgid "E6"
-msgstr "E6"
-
-msgid "E12"
-msgstr "E12"
-
-msgid "Solutions"
-msgstr "Solutions"
-
-msgid "Simple solution:"
-msgstr "Simple solution:"
-
-msgid "3R solution:"
-msgstr "3R solution:"
-
-msgid "4R solution:"
-msgstr "4R solution:"
-
-msgid "E-Series"
-msgstr "E-Series"
-
-msgid "Color Code"
-msgstr "Color Code"
-
-msgid "Microstrip Line"
-msgstr "Microstrip Line"
-
-msgid "Coplanar wave guide"
-msgstr "Coplanar wave guide"
-
-msgid "Coplanar wave guide w/ ground plane"
-msgstr "Coplanar wave guide w/ ground plane"
-
-msgid "Rectangular Waveguide"
-msgstr "Rectangular Waveguide"
-
-msgid "Coaxial Line"
-msgstr "Coaxial Line"
-
-msgid "Coupled Microstrip Line"
-msgstr "Coupled Microstrip Line"
-
-msgid "Stripline"
-msgstr "Stripline"
-
-msgid "Twisted Pair"
-msgstr "Twisted Pair"
-
-msgid "Transmission Line Type"
-msgstr "Transmission Line Type"
-
-msgid "Substrate Parameters"
-msgstr "Substrate Parameters"
-
-msgid "Er:"
-msgstr "Er:"
-
-msgid "Tan delta:"
-msgstr "Tan delta:"
-
-msgid "Rho:"
-msgstr "Rho:"
-
-msgid "H:"
-msgstr "H:"
-
-msgid "H_t:"
-msgstr "H_t:"
-
-msgid "T:"
-msgstr "T:"
-
-msgid "Rough:"
-msgstr "Rough:"
-
-msgid "Insulator mu:"
-msgstr "Insulator mu:"
-
-msgid "Conductor mu:"
-msgstr "Conductor mu:"
-
-msgid "Component Parameters"
-msgstr "Component Parameters"
-
-msgid ""
-"Zdiff =\n"
-"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
-msgstr ""
-"Zdiff =\n"
-"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
-
-msgid "Zcommon = Zeven / 2"
-msgstr "Zcommon = Zeven / 2"
-
-msgid "Physical Parameters"
-msgstr "Physical Parameters"
-
-msgid "Analyze"
-msgstr "Analyze"
-
-msgid "Synthesize"
-msgstr "Synthesize"
-
-msgid "Electrical Parameters"
-msgstr "Electrical Parameters"
-
-msgid "TransLine"
-msgstr "TransLine"
-
-msgid "Current:"
-msgstr "Current:"
-
-msgid "Conductor length:"
-msgstr "Conductor length:"
-
-msgid "Copper resistivity:"
-msgstr "Copper resistivity:"
-
-msgid "External Layer Traces"
-msgstr "External Layer Traces"
-
-msgid "Trace width:"
-msgstr "Trace width:"
-
-msgid "Trace thickness:"
-msgstr "Trace thickness:"
-
-msgid "Cross-section area:"
-msgstr "Cross-section area:"
-
-msgid "mm ^ 2"
-msgstr "mm²"
-
-msgid "Internal Layer Traces"
-msgstr "Internal Layer Traces"
 
 msgid "Voltage > 500 V:"
 msgstr "Voltage > 500 V:"
@@ -14288,111 +14033,47 @@ msgstr ""
 "*  A7 - External Component lead termination, with conformal coating (any "
 "elevation)"
 
-msgid "Electrical Spacing"
-msgstr "Electrical Spacing"
+msgid "Inputs"
+msgstr "Inputs"
 
-msgid "Note: Values are minimal values"
-msgstr "Note: Values are minimal values"
+msgid "Required resistance:"
+msgstr "Required resistance:"
 
-msgid "Class 1"
-msgstr "Class 1"
+msgid "kOhm"
+msgstr "kOhm"
 
-msgid "Class 2"
-msgstr "Class 2"
+msgid "Exclude value 1:"
+msgstr "Exclude value 1:"
 
-msgid "Class 3"
-msgstr "Class 3"
+msgid "Exclude value 2:"
+msgstr "Exclude value 2:"
 
-msgid "Class 4"
-msgstr "Class 4"
+msgid "E1"
+msgstr "E1"
 
-msgid "Class 5"
-msgstr "Class 5"
+msgid "E3"
+msgstr "E3"
 
-msgid "Class 6"
-msgstr "Class 6"
+msgid "E6"
+msgstr "E6"
 
-msgid "Lines width"
-msgstr "Lines width"
+msgid "E12"
+msgstr "E12"
 
-msgid "Min clearance"
-msgstr "Min clearance"
+msgid "E24"
+msgstr "E24"
 
-msgid "Via: (diam - drill)"
-msgstr "Via: (diam - drill)"
+msgid "Solutions"
+msgstr "Solutions"
 
-msgid "Plated Pad: (diam - drill)"
-msgstr "Plated Pad: (diam - drill)"
+msgid "Simple solution:"
+msgstr "Simple solution:"
 
-msgid "NP Pad: (diam - drill)"
-msgstr "NP Pad: (diam - drill)"
+msgid "3R solution:"
+msgstr "3R solution:"
 
-msgid "Board Classes"
-msgstr "Board Classes"
-
-msgid "PCB Calculator"
-msgstr "PCB Calculator"
-
-msgid "Exact"
-msgstr "Exact"
-
-msgid "Not worth using"
-msgstr "Not worth using"
-
-msgid ""
-"E-series defined in IEC 60063 are a widely accepted system of preferred\n"
-"numbers for electronic components.  Available values are approximately\n"
-"equally spaced in a logarithmic scale.\n"
-"\n"
-"\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
-"\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
-"\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
-"\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
-"\n"
-"This calculator finds combinations of standard E-series components to\n"
-"create arbitrary values.  You can enter the required resistance from 0.0025 "
-"to 4000 kΩ.\n"
-"Solutions using up to 4 components are given.\n"
-"\n"
-"By default, the request value is always excluded from the solution set.  It "
-"is also possible to specify\n"
-"up to two additional values to exclude from the solution if these component "
-"values are not available\n"
-"\n"
-"Solutions are given in the following formats:\n"
-"\n"
-"\tR1 + R2 +...+ Rn\tresistors in series\n"
-"\tR1 | R2 |...| Rn\tresistors in parallel\n"
-"\tR1 + (R2|R3)...\t\tany combination of the above\n"
-msgstr ""
-"E-series defined in IEC 60063 are a widely accepted system of preferred\n"
-"numbers for electronic components.  Available values are approximately\n"
-"equally spaced in a logarithmic scale.\n"
-"\n"
-"\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
-"\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
-"\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
-"\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
-"\n"
-"This calculator finds combinations of standard E-series components to\n"
-"create arbitrary values.  You can enter the required resistance from 0.0025 "
-"to 4000 kΩ.\n"
-"Solutions using up to 4 components are given.\n"
-"\n"
-"By default, the request value is always excluded from the solution set.  It "
-"is also possible to specify\n"
-"up to two additional values to exclude from the solution if these component "
-"values are not available\n"
-"\n"
-"Solutions are given in the following formats:\n"
-"\n"
-"\tR1 + R2 +...+ Rn\tresistors in series\n"
-"\tR1 | R2 |...| Rn\tresistors in parallel\n"
-"\tR1 + (R2|R3)...\t\tany combination of the above\n"
-
-#, c-format
-msgid "Attenuation more than %f dB"
-msgstr "Attenuation more than %f dB"
+msgid "4R solution:"
+msgstr "4R solution:"
 
 msgid "PCB Calculator data file"
 msgstr "PCB Calculator data file"
@@ -14410,6 +14091,9 @@ msgstr "Unable to read data file '%s'."
 msgid "This regulator is already in list. Aborted"
 msgstr "This regulator is already in list. Aborted"
 
+msgid "Remove Regulator"
+msgstr "Remove Regulator"
+
 msgid "Vout must be greater than vref"
 msgstr "Vout must be greater than vref"
 
@@ -14419,11 +14103,439 @@ msgstr "Vref set to 0 !"
 msgid "Incorrect value for R1 R2"
 msgstr "Incorrect value for R1 R2"
 
+msgid ""
+"Type of the regulator.\n"
+"There are 2 types:\n"
+"- regulators which have a dedicated sense pin for the voltage regulation.\n"
+"- 3 terminal pins."
+msgstr ""
+"Type of the regulator.\n"
+"There are 2 types:\n"
+"- regulators which have a dedicated sense pin for the voltage regulation.\n"
+"- 3 terminal pins."
+
+msgid "Standard Type"
+msgstr "Standard Type"
+
+msgid "3 Terminal Type"
+msgstr "3 Terminal Type"
+
+msgid "Vout:"
+msgstr "Vout:"
+
+msgid "Vref:"
+msgstr "Vref:"
+
+msgid ""
+"The internal reference voltage of the regulator.\n"
+"Should not be 0."
+msgstr ""
+"The internal reference voltage of the regulator.\n"
+"Should not be 0."
+
+msgid "Iadj:"
+msgstr "Iadj:"
+
+msgid "For 3 terminal regulators only, the  Adjust pin current."
+msgstr "For 3 terminal regulators only, the  Adjust pin current."
+
+msgid "uA"
+msgstr "µA"
+
+msgid "Regulator"
+msgstr "Regulator"
+
+msgid "Regulators data file:"
+msgstr "Regulators data file:"
+
+msgid "The name of the data file which stores known regulators parameters."
+msgstr "The name of the data file which stores known regulators parameters."
+
+msgid "Browse"
+msgstr "Browse"
+
+msgid "Edit Regulator"
+msgstr "Edit Regulator"
+
+msgid "Edit the current selected regulator."
+msgstr "Edit the current selected regulator."
+
+msgid "Add Regulator"
+msgstr "Add Regulator"
+
+msgid "Enter a new item to the current list of available regulators"
+msgstr "Enter a new item to the current list of available regulators"
+
+msgid "Remove an item from the current list of available regulators"
+msgstr "Remove an item from the current list of available regulators"
+
+msgid "Current:"
+msgstr "Current:"
+
+msgid "Temperature rise:"
+msgstr "Temperature rise:"
+
+msgid "deg C"
+msgstr "deg C"
+
+msgid "Conductor length:"
+msgstr "Conductor length:"
+
+msgid "Copper resistivity:"
+msgstr "Copper resistivity:"
+
+msgid "ohm-meter"
+msgstr "ohm-meter"
+
+msgid "External Layer Traces"
+msgstr "External Layer Traces"
+
+msgid "Trace width:"
+msgstr "Trace width:"
+
+msgid "Trace thickness:"
+msgstr "Trace thickness:"
+
+msgid "Cross-section area:"
+msgstr "Cross-section area:"
+
+msgid "mm ^ 2"
+msgstr "mm²"
+
+msgid "Resistance:"
+msgstr "Resistance:"
+
+msgid "ohm"
+msgstr "ohm"
+
+msgid "Voltage drop:"
+msgstr "Voltage drop:"
+
+msgid "Power loss:"
+msgstr "Power loss:"
+
+msgid "W"
+msgstr "W"
+
+msgid "Internal Layer Traces"
+msgstr "Internal Layer Traces"
+
+msgid "Microstrip Line"
+msgstr "Microstrip Line"
+
+msgid "Coplanar wave guide"
+msgstr "Coplanar wave guide"
+
+msgid "Coplanar wave guide w/ ground plane"
+msgstr "Coplanar wave guide w/ ground plane"
+
+msgid "Rectangular Waveguide"
+msgstr "Rectangular Waveguide"
+
+msgid "Coaxial Line"
+msgstr "Coaxial Line"
+
+msgid "Coupled Microstrip Line"
+msgstr "Coupled Microstrip Line"
+
+msgid "Stripline"
+msgstr "Stripline"
+
+msgid "Twisted Pair"
+msgstr "Twisted Pair"
+
+msgid "Transmission Line Type"
+msgstr "Transmission Line Type"
+
+msgid "Substrate Parameters"
+msgstr "Substrate Parameters"
+
+msgid "Er:"
+msgstr "Er:"
+
+msgid "..."
+msgstr "…"
+
+msgid "Tan delta:"
+msgstr "Tan delta:"
+
+msgid "Rho:"
+msgstr "Rho:"
+
+msgid "Specific resistance in ohms * meters"
+msgstr "Specific resistance in ohms * meters"
+
+msgid "H:"
+msgstr "H:"
+
+msgid "H_t:"
+msgstr "H_t:"
+
+msgid "T:"
+msgstr "T:"
+
+msgid "Rough:"
+msgstr "Rough:"
+
+msgid "Insulator mu:"
+msgstr "Insulator mu:"
+
+msgid "Conductor mu:"
+msgstr "Conductor mu:"
+
+msgid "Component Parameters"
+msgstr "Component Parameters"
+
+msgid ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
+msgstr ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
+
+msgid "Zcommon = Zeven / 2"
+msgstr "Zcommon = Zeven / 2"
+
+msgid "Physical Parameters"
+msgstr "Physical Parameters"
+
+msgid "Analyze"
+msgstr "Analyze"
+
+msgid "Synthesize"
+msgstr "Synthesize"
+
+msgid "Electrical Parameters"
+msgstr "Electrical Parameters"
+
+msgid "Results"
+msgstr "Results"
+
 msgid "Relative Dielectric Constants"
 msgstr "Relative Dielectric Constants"
 
 msgid "Electrical Resistivity in Ohm*m"
 msgstr "Electrical Resistivity in Ohm*m"
+
+msgid "Finished hole diameter (D):"
+msgstr "Finished hole diameter (D):"
+
+msgid "Plating thickness (T):"
+msgstr "Plating thickness (T):"
+
+msgid "Via length:"
+msgstr "Via length:"
+
+msgid "Via length is the board thickness for through hole vias"
+msgstr "Via length is the board thickness for through hole vias"
+
+msgid "Via pad diameter:"
+msgstr "Via pad diameter:"
+
+msgid "Diameter of pad surrounding via (annular ring)"
+msgstr "Diameter of pad surrounding via (annular ring)"
+
+msgid "Clearance hole diameter:"
+msgstr "Clearance hole diameter:"
+
+msgid "Diameter of clearance hole in ground plane(s)"
+msgstr "Diameter of clearance hole in ground plane(s)"
+
+msgid "Z0:"
+msgstr "Z0:"
+
+msgid "Characteristic impedance of conductor"
+msgstr "Characteristic impedance of conductor"
+
+msgid "Applied current:"
+msgstr "Applied current:"
+
+msgid "Plating resistivity:"
+msgstr "Plating resistivity:"
+
+msgid "Substrate relative permittivity:"
+msgstr "Substrate relative permittivity:"
+
+msgid "Relative dielectric constant (epsilon r)"
+msgstr "Relative dielectric constant (epsilon r)"
+
+msgid "Maximum acceptable rise in temperature"
+msgstr "Maximum acceptable rise in temperature"
+
+msgid "Pulse rise time:"
+msgstr "Pulse rise time:"
+
+msgid "Pulse rise time to calculate reactance"
+msgstr "Pulse rise time to calculate reactance"
+
+msgid "ns"
+msgstr "ns"
+
+msgid "nanoseconds"
+msgstr "nanoseconds"
+
+msgid ""
+"Warning:\n"
+"Via pad diameter >= Clearance hole diameter.\n"
+"Some parameters cannot be calculated for a via inside a copper zone."
+msgstr ""
+"Warning:\n"
+"Via pad diameter >= Clearance hole diameter.\n"
+"Some parameters cannot be calculated for a via inside a copper zone."
+
+msgid "Thermal resistance:"
+msgstr "Thermal resistance:"
+
+msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
+msgstr "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
+
+msgid "deg C/W"
+msgstr "deg C/W"
+
+msgid "Estimated ampacity:"
+msgstr "Estimated ampacity:"
+
+msgid "Based on temperature rise"
+msgstr "Based on temperature rise"
+
+msgid "Capacitance:"
+msgstr "Capacitance:"
+
+msgid "pF"
+msgstr "pF"
+
+msgid "pico-Farad"
+msgstr "pico-Farad"
+
+msgid "Rise time degradation:"
+msgstr "Rise time degradation:"
+
+msgid "Rise time degradation for given Z0 and calculated capacitance"
+msgstr "Rise time degradation for given Z0 and calculated capacitance"
+
+msgid "ps"
+msgstr "ps"
+
+msgid "picoseconds"
+msgstr "picoseconds"
+
+msgid "Inductance:"
+msgstr "Inductance:"
+
+msgid "nH"
+msgstr "nH"
+
+msgid "nano-Henry"
+msgstr "nano-Henry"
+
+msgid "Reactance:"
+msgstr "Reactance:"
+
+msgid "Inductive reactance for given rise time and calculated inductance"
+msgstr "Inductive reactance for given rise time and calculated inductance"
+
+msgid "Top view of via"
+msgstr "Top view of via"
+
+msgid "Data file error."
+msgstr "Data file error."
+
+msgid "Volt"
+msgstr "Volt"
+
+msgid "Separate sense pin"
+msgstr "Separate sense pin"
+
+msgid "3 terminals regulator"
+msgstr "3 terminals regulator"
+
+msgid "Regulator Parameters"
+msgstr "Regulator Parameters"
+
+msgid "Exact"
+msgstr "Exact"
+
+msgid "Not worth using"
+msgstr "Not worth using"
+
+msgid ""
+"E-series are defined in IEC 60063.\n"
+"\n"
+"Available values are approximately equally spaced in a logarithmic scale.\n"
+"\n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
+"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
+"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\n"
+"- This calculator finds combinations of standard E-series (between 10Ω and "
+"1MΩ) to create arbitrary values.\n"
+"- You can enter the required resistance from 0.0025 to 4000 kΩ.\n"
+"- Solutions using up to 4 components are given.\n"
+"\n"
+"By default, the request value is always excluded from the solution set.  It "
+"is also possible to specify\n"
+"up to two additional values to exclude from the solution if these component "
+"values are not available\n"
+"\n"
+"Solutions are given in the following formats:\n"
+"\n"
+"\tR1 + R2 +...+ Rn\tresistors in series\n"
+"\tR1 | R2 |...| Rn\tresistors in parallel\n"
+"\tR1 + (R2|R3)...\t\tany combination of the above\n"
+msgstr ""
+"E-series are defined in IEC 60063.\n"
+"\n"
+"Available values are approximately equally spaced in a logarithmic scale.\n"
+"\n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
+"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
+"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\n"
+"- This calculator finds combinations of standard E-series (between 10Ω and "
+"1MΩ) to create arbitrary values.\n"
+"- You can enter the required resistance from 0.0025 to 4000 kΩ.\n"
+"- Solutions using up to 4 components are given.\n"
+"\n"
+"By default, the request value is always excluded from the solution set.  It "
+"is also possible to specify\n"
+"up to two additional values to exclude from the solution if these component "
+"values are not available\n"
+"\n"
+"Solutions are given in the following formats:\n"
+"\n"
+"\tR1 + R2 +...+ Rn\tresistors in series\n"
+"\tR1 | R2 |...| Rn\tresistors in parallel\n"
+"\tR1 + (R2|R3)...\t\tany combination of the above\n"
+
+msgid "PCB Calculator"
+msgstr "PCB Calculator"
+
+msgid "Regulators"
+msgstr "Regulators"
+
+msgid "RF Attenuators"
+msgstr "RF Attenuators"
+
+msgid "E-Series"
+msgstr "E-Series"
+
+msgid "Color Code"
+msgstr "Color Code"
+
+msgid "TransLine "
+msgstr "TransLine "
+
+msgid "Electrical Spacing"
+msgstr "Electrical Spacing"
+
+msgid "Board Classes"
+msgstr "Board Classes"
 
 msgid "Write Data Failed"
 msgstr "Write Data Failed"
@@ -14547,9 +14659,6 @@ msgstr "conductor"
 
 msgid "Relative permeability (mu) of conductor"
 msgstr "Relative permeability (mu) of conductor"
-
-msgid "Line width"
-msgstr "Line width"
 
 msgid "Line length"
 msgstr "Line length"
@@ -14722,15 +14831,6 @@ msgstr "NetName"
 
 msgid "NetClass"
 msgstr "NetClass"
-
-msgid "Rect"
-msgstr "Rect"
-
-msgid "Bezier Curve"
-msgstr "Bezier Curve"
-
-msgid "Polygon"
-msgstr "Polygon"
 
 msgid "all copper layers"
 msgstr "all copper layers"
@@ -16944,11 +17044,11 @@ msgid "Clearance Overrides and Settings"
 msgstr "Clearance Overrides and Settings"
 
 msgid ""
-"The library ID and footprint ID currently assigned.  Use “Change Footprint…” "
-"to assign a different footprint."
+"The library ID and footprint ID currently assigned.  Use \"Change "
+"Footprint...\" to assign a different footprint."
 msgstr ""
-"The library ID and footprint ID currently assigned.  Use “Change Footprint…” "
-"to assign a different footprint."
+"The library ID and footprint ID currently assigned.  Use \"Change "
+"Footprint...\" to assign a different footprint."
 
 msgid "Footprint Properties"
 msgstr "Footprint Properties"
@@ -17794,9 +17894,6 @@ msgstr "degree"
 
 msgid "Non Copper Zones Properties"
 msgstr "Non Copper Zones Properties"
-
-msgid "Segment"
-msgstr "Segment"
 
 msgid "Ring"
 msgstr "Ring"
@@ -19414,8 +19511,11 @@ msgstr "Add Existing"
 msgid "Path Substitutions"
 msgstr "Path Substitutions"
 
-msgid "Error: illegal or empty filename."
-msgstr "Error: illegal or empty filename."
+msgid "No filename entered"
+msgstr "No filename entered"
+
+msgid "Illegal filename"
+msgstr "Illegal filename"
 
 msgid "File not found"
 msgstr "File not found"
@@ -21655,9 +21755,6 @@ msgstr "Ref."
 msgid "Display"
 msgstr "Display"
 
-msgid "Angle"
-msgstr "Angle"
-
 #, c-format
 msgid "Reference '%s'"
 msgstr "Reference '%s'"
@@ -22483,21 +22580,6 @@ msgstr "Marker (%s)"
 msgid "Drawing"
 msgstr "Drawing"
 
-msgid "Curve"
-msgstr "Curve"
-
-msgid "Points"
-msgstr "Points"
-
-msgid "Unrecognized"
-msgstr "Unrecognized"
-
-msgid "End X"
-msgstr "End X"
-
-msgid "End Y"
-msgstr "End Y"
-
 msgid "PCB Target"
 msgstr "PCB Target"
 
@@ -23035,15 +23117,17 @@ msgstr ""
 
 #, c-format
 msgid ""
-"The CADSTAR template '%s' has thermal reliefs in the original design but "
-"there is no KiCad equivalent to the original CADSTAR settings. Solid fill "
-"has been applied instead. When the template is re-filled the thermal reliefs "
-"will be removed."
+"The CADSTAR template '%s' has thermal reliefs in the original design but the "
+"spoke width (%.2f mm) is thinner than the minimum thickness of the zone "
+"(%.2f mm). KiCad requires the minimum thickness of the zone to be preserved. "
+"Therefore the minimum thickness has been applied as the new spoke width and "
+"will be applied next time the zones are filled."
 msgstr ""
-"The CADSTAR template '%s' has thermal reliefs in the original design but "
-"there is no KiCad equivalent to the original CADSTAR settings. Solid fill "
-"has been applied instead. When the template is re-filled the thermal reliefs "
-"will be removed."
+"The CADSTAR template '%s' has thermal reliefs in the original design but the "
+"spoke width (%.2f mm) is thinner than the minimum thickness of the zone "
+"(%.2f mm). KiCad requires the minimum thickness of the zone to be preserved. "
+"Therefore the minimum thickness has been applied as the new spoke width and "
+"will be applied next time the zones are filled."
 
 #, c-format
 msgid ""
@@ -25976,15 +26060,6 @@ msgstr "Double click or middle click for color change, right click for menu"
 msgid "Show or hide this layer"
 msgstr "Show or hide this layer"
 
-msgid "Front copper layer"
-msgstr "Front copper layer"
-
-msgid "Back copper layer"
-msgstr "Back copper layer"
-
-msgid "Inner copper layer"
-msgstr "Inner copper layer"
-
 msgid "Adhesive on board's front"
 msgstr "Adhesive on board's front"
 
@@ -26062,6 +26137,15 @@ msgstr "User defined layer 8"
 
 msgid "User defined layer 9"
 msgstr "User defined layer 9"
+
+msgid "Front copper layer"
+msgstr "Front copper layer"
+
+msgid "Back copper layer"
+msgstr "Back copper layer"
+
+msgid "Inner copper layer"
+msgstr "Inner copper layer"
 
 msgid "Show All Copper Layers"
 msgstr "Show All Copper Layers"
@@ -26379,6 +26463,97 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Polyline"
+#~ msgstr "Polyline"
+
+#~ msgid "Bounding Box"
+#~ msgstr "Bounding Box"
+
+#~ msgid "PolyLine"
+#~ msgstr "PolyLine"
+
+#~ msgid "Arcs in symbols cannot exceed 180 degrees."
+#~ msgstr "Arcs in symbols cannot exceed 180 degrees."
+
+#~ msgid "<html><h1>Template Selector</h1></html>"
+#~ msgstr "<html><h1>Template Selector</h1></html>"
+
+#~ msgid "TransLine"
+#~ msgstr "TransLine"
+
+#~ msgid ""
+#~ "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
+#~ "numbers for electronic components.  Available values are approximately\n"
+#~ "equally spaced in a logarithmic scale.\n"
+#~ "\n"
+#~ "\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
+#~ "\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
+#~ "\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
+#~ "\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
+#~ "\n"
+#~ "This calculator finds combinations of standard E-series components to\n"
+#~ "create arbitrary values.  You can enter the required resistance from "
+#~ "0.0025 to 4000 kΩ.\n"
+#~ "Solutions using up to 4 components are given.\n"
+#~ "\n"
+#~ "By default, the request value is always excluded from the solution set.  "
+#~ "It is also possible to specify\n"
+#~ "up to two additional values to exclude from the solution if these "
+#~ "component values are not available\n"
+#~ "\n"
+#~ "Solutions are given in the following formats:\n"
+#~ "\n"
+#~ "\tR1 + R2 +...+ Rn\tresistors in series\n"
+#~ "\tR1 | R2 |...| Rn\tresistors in parallel\n"
+#~ "\tR1 + (R2|R3)...\t\tany combination of the above\n"
+#~ msgstr ""
+#~ "E-series defined in IEC 60063 are a widely accepted system of preferred\n"
+#~ "numbers for electronic components.  Available values are approximately\n"
+#~ "equally spaced in a logarithmic scale.\n"
+#~ "\n"
+#~ "\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
+#~ "\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
+#~ "\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
+#~ "\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
+#~ "\n"
+#~ "This calculator finds combinations of standard E-series components to\n"
+#~ "create arbitrary values.  You can enter the required resistance from "
+#~ "0.0025 to 4000 kΩ.\n"
+#~ "Solutions using up to 4 components are given.\n"
+#~ "\n"
+#~ "By default, the request value is always excluded from the solution set.  "
+#~ "It is also possible to specify\n"
+#~ "up to two additional values to exclude from the solution if these "
+#~ "component values are not available\n"
+#~ "\n"
+#~ "Solutions are given in the following formats:\n"
+#~ "\n"
+#~ "\tR1 + R2 +...+ Rn\tresistors in series\n"
+#~ "\tR1 | R2 |...| Rn\tresistors in parallel\n"
+#~ "\tR1 + (R2|R3)...\t\tany combination of the above\n"
+
+#~ msgid ""
+#~ "The library ID and footprint ID currently assigned.  Use “Change "
+#~ "Footprint…” to assign a different footprint."
+#~ msgstr ""
+#~ "The library ID and footprint ID currently assigned.  Use “Change "
+#~ "Footprint…” to assign a different footprint."
+
+#~ msgid "Error: illegal or empty filename."
+#~ msgstr "Error: illegal or empty filename."
+
+#, c-format
+#~ msgid ""
+#~ "The CADSTAR template '%s' has thermal reliefs in the original design but "
+#~ "there is no KiCad equivalent to the original CADSTAR settings. Solid fill "
+#~ "has been applied instead. When the template is re-filled the thermal "
+#~ "reliefs will be removed."
+#~ msgstr ""
+#~ "The CADSTAR template '%s' has thermal reliefs in the original design but "
+#~ "there is no KiCad equivalent to the original CADSTAR settings. Solid fill "
+#~ "has been applied instead. When the template is re-filled the thermal "
+#~ "reliefs will be removed."
 
 #~ msgid "Single Layer View Mode"
 #~ msgstr "Single Layer View Mode"
@@ -36432,13 +36607,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Annotation not complete.  ERC cannot be run.  "
 #~ msgstr "Annotation not complete.  ERC cannot be run.  "
-
-#~ msgid ""
-#~ "The library ID and footprint ID currently assigned.  Use \"Change "
-#~ "Footprint...\" to assign a different footprint."
-#~ msgstr ""
-#~ "The library ID and footprint ID currently assigned.  Use \"Change "
-#~ "Footprint...\" to assign a different footprint."
 
 #~ msgid "<root_sheet>"
 #~ msgstr "<root_sheet>"
