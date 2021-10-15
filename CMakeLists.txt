@@ -728,7 +728,7 @@ endif()
 
 # Find OpenCascade, required for STEP plugin and tools
 if( KICAD_USE_OCC )
-    find_package(OpenCASCADE)
+    find_package(OCC)
     if( NOT OCC_FOUND )
         MESSAGE( FATAL_ERROR "================================================================\n"
                              " KICAD_USE_OCC=True but OpenCASCADE was not found!\n"
