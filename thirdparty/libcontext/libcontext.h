@@ -41,6 +41,9 @@
     #elif __aarch64__
         #define LIBCONTEXT_PLATFORM_linux_arm64
         #define LIBCONTEXT_CALL_CONVENTION
+    #elif (__loongarch__ && _LOONGARCH_SIM == _ABILP64)
+        #define LIBCONTEXT_PLATFORM_linux_loong64
+        #define LIBCONTEXT_CALL_CONVENTION
     #elif (__mips__ && _MIPS_SIM == _ABI64)
         #define LIBCONTEXT_PLATFORM_linux_mips_n64
         #define LIBCONTEXT_CALL_CONVENTION
