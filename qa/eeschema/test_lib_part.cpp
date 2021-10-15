@@ -278,7 +278,7 @@ BOOST_AUTO_TEST_CASE( Compare )
     // Draw item list contents comparison tests.
     testPart.AddDrawItem( new LIB_SHAPE( &testPart, SHAPE_T::RECT ) );
     m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::ARC ) );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
     m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_SHAPE_T ) );
     m_part_no_data.AddDrawItem( new LIB_PIN( &m_part_no_data ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
