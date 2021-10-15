@@ -867,7 +867,6 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     // update footprint in the current board,
     // not just add it to the board with total disregard for the netlist...
     PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
-    TOOL_MANAGER*   toolMgr = pcbframe->GetToolManager();
 
     if( pcbframe == nullptr )       // happens when the board editor is not active (or closed)
     {
@@ -875,6 +874,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         return false;
     }
 
+    TOOL_MANAGER*   toolMgr = pcbframe->GetToolManager();
     BOARD*     mainpcb  = pcbframe->GetBoard();
     FOOTPRINT* sourceFootprint  = nullptr;
     FOOTPRINT* editorFootprint = GetBoard()->GetFirstFootprint();
