@@ -228,7 +228,6 @@ void OpenFile( const wxString& file )
 bool doPrintFile( const wxString& file, bool aDryRun )
 {
     wxString ext = wxFileName( file ).GetExt();
-    wxString application;
 
 #ifdef __WXMSW__
     wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( ext );
@@ -253,26 +252,30 @@ bool doPrintFile( const wxString& file, bool aDryRun )
 #endif
 
 #ifdef __WXMAC__
+    wxString app;
+
     if( ext == "ps" || ext == "pdf" )
-        application = "Preview";
+        app = "Preview";
     else if( ext == "csv" )
-        application = "Numbers";
-    else if( ext == "txt" || ext == "rpt" || ext == "pos" || ext == "cmp" || ext == "net" )
-        application = "TextEdit";
+        app = "Numbers";
+    else if( ext == "txt" )
+        app = "TextEdit";
+    else if( ext == "rpt" || ext == "pos" || ext == "cmp" || ext == "net" || ext == "kicad_dru" )
+        app = "TextEdit";
 
-    if( !application.IsEmpty() )
+    if( !app.IsEmpty() )
     {
-        // Use concatenation to avoid double-quote bug in wxWidgets 3.1.5 OSX.
-        wxString ascript = "osascript -e 'tell application \""
-                            + EscapeString( application, CTX_QUOTED_STR ) + "\"' "
-                            + "-e '   set srcFileRef to (open POSIX file \""
-                            + EscapeString( file, CTX_QUOTED_STR ) + "\")' "
-                            + "-e '   activate' "
-                            + "-e '   print srcFileRef print dialog true' "
-                            + "-e 'end tell' ";
-
         if( !aDryRun )
+        {
+            wxString ascript = "osascript ";
+            ascript += "-e 'tell app \"" + app + "\"' ";
+            ascript += "-e '   set srcFileRef to (open POSIX file \"" + EscapeString( file, CTX_QUOTED_STR ) + "\")' ";
+            ascript += "-e '   activate' ";
+            ascript += "-e '   print srcFileRef print dialog true' ";
+            ascript += "-e 'end tell' ";
+
             wxExecute( ascript );
+        }
 
         return true;
     }
@@ -281,7 +284,8 @@ bool doPrintFile( const wxString& file, bool aDryRun )
 #ifdef __WXGTK__
     if( ext == "ps" || ext == "pdf"
             || ext == "csv"
-            || ext == "txt" || ext == "rpt" || ext == "pos" || ext == "cmp" || ext == "net" )
+            || ext == "txt"
+            || ext == "rpt" || ext == "pos" || ext == "cmp" || ext == "net" || ext == "kicad_dru" )
     {
         if( !aDryRun )
         {

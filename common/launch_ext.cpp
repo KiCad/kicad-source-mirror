@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -25,7 +25,7 @@
 void LaunchExternal( const wxString& aPath )
 {
 #ifdef __WXMAC__
-    const wchar_t* args[] = { L"open", L"--args", aPath.wc_str() };
+    const wchar_t* args[] = { L"open", aPath.wc_str(), nullptr };
     wxExecute( const_cast<wchar_t**>( args ) );
 #else
     wxString path( aPath );
