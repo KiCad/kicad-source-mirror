@@ -914,6 +914,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
     wxPoint pos;
     int startAngle;
     int endAngle;
+    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS fill;
     bool hasMidPoint = false;
     bool hasAngles = false;
@@ -979,22 +980,15 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
                 }
 
                 default:
-                    Expecting( "at, length, or angle" );
+                    Expecting( "at, length, or angles" );
                 }
             }
 
             break;
 
         case T_stroke:
-            NeedLEFT();
-            token = NextTok();
-
-            if( token != T_width )
-                Expecting( "width" );
-
-            arc->SetWidth( parseInternalUnits( "stroke width" ) );
-            NeedRIGHT();   // Closes width token;
-            NeedRIGHT();   // Closes stroke token;
+            parseStroke( stroke );
+            arc->SetWidth( stroke.GetWidth() );
             break;
 
         case T_fill:
@@ -1048,6 +1042,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseBezier()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a bezier." ) );
 
     T token;
+    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS fill;
     std::unique_ptr<LIB_SHAPE> bezier = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::BEZIER );
 
@@ -1082,15 +1077,8 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseBezier()
             break;
 
         case T_stroke:
-            NeedLEFT();
-            token = NextTok();
-
-            if( token != T_width )
-                Expecting( "width" );
-
-            bezier->SetWidth( parseInternalUnits( "stroke width" ) );
-            NeedRIGHT();   // Closes width token;
-            NeedRIGHT();   // Closes stroke token;
+            parseStroke( stroke );
+            bezier->SetWidth( stroke.GetWidth() );
             break;
 
         case T_fill:
@@ -1115,6 +1103,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseCircle()
     T token;
     wxPoint center;
     int radius;
+    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS fill;
     std::unique_ptr<LIB_SHAPE> circle = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::CIRCLE );
 
@@ -1141,15 +1130,8 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseCircle()
             break;
 
         case T_stroke:
-            NeedLEFT();
-            token = NextTok();
-
-            if( token != T_width )
-                Expecting( "width" );
-
-            circle->SetWidth( parseInternalUnits( "stroke width" ) );
-            NeedRIGHT();   // Closes width token;
-            NeedRIGHT();   // Closes stroke token;
+            parseStroke( stroke );
+            circle->SetWidth( stroke.GetWidth() );
             break;
 
         case T_fill:
@@ -1398,6 +1380,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parsePolyLine()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a poly." ) );
 
     T token;
+    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS fill;
     std::unique_ptr<LIB_SHAPE> poly = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::POLY );
 
@@ -1432,15 +1415,8 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parsePolyLine()
             break;
 
         case T_stroke:
-            NeedLEFT();
-            token = NextTok();
-
-            if( token != T_width )
-                Expecting( "width" );
-
-            poly->SetWidth( parseInternalUnits( "stroke width" ) );
-            NeedRIGHT();   // Closes width token;
-            NeedRIGHT();   // Closes stroke token;
+            parseStroke( stroke );
+            poly->SetWidth( stroke.GetWidth() );
             break;
 
         case T_fill:
@@ -1463,6 +1439,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseRectangle()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a rectangle." ) );
 
     T token;
+    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS fill;
     std::unique_ptr<LIB_SHAPE> rectangle = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::RECT );
 
@@ -1489,15 +1466,8 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseRectangle()
             break;
 
         case T_stroke:
-            NeedLEFT();
-            token = NextTok();
-
-            if( token != T_width )
-                Expecting( "width" );
-
-            rectangle->SetWidth( parseInternalUnits( "stroke width" ) );
-            NeedRIGHT();   // Closes width token;
-            NeedRIGHT();   // Closes stroke token;
+            parseStroke( stroke );
+            rectangle->SetWidth( stroke.GetWidth() );
             break;
 
         case T_fill:
@@ -2547,7 +2517,7 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a sheet." ) );
 
     T token;
-    STROKE_PARAMS stroke;
+    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS fill;
     SCH_FIELD* field;
     std::vector<SCH_FIELD> fields;
@@ -2741,7 +2711,7 @@ SCH_BUS_WIRE_ENTRY* SCH_SEXPR_PARSER::parseBusEntry()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a bus entry." ) );
 
     T token;
-    STROKE_PARAMS stroke;
+    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     std::unique_ptr<SCH_BUS_WIRE_ENTRY> busEntry = std::make_unique<SCH_BUS_WIRE_ENTRY>();
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -2792,7 +2762,7 @@ SCH_BUS_WIRE_ENTRY* SCH_SEXPR_PARSER::parseBusEntry()
 SCH_LINE* SCH_SEXPR_PARSER::parseLine()
 {
     T token;
-    STROKE_PARAMS stroke;
+    STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     std::unique_ptr<SCH_LINE> line = std::make_unique<SCH_LINE>();
 
     switch( CurTok() )
