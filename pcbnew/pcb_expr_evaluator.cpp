@@ -473,10 +473,14 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
         {
             PCB_VIA*           via = static_cast<PCB_VIA*>( aItem );
             const SHAPE_CIRCLE holeShape( via->GetPosition(), via->GetDrillValue() );
+            LSET               overlap = via->GetLayerSet() & aArea->GetLayerSet();
 
             /// Avoid buried vias that don't overlap the zone's layers
-            if( ( via->GetLayerSet() & aArea->GetLayerSet() ).any() )
+            if( overlap.count() > 0 )
+            {
+                if( aCtx->GetLayer() == UNDEFINED_LAYER || overlap.Contains( aCtx->GetLayer() ) )
                 return areaOutline.Collide( &holeShape );
+            }
         }
 
         return false;
@@ -548,8 +552,11 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
         {
             for( PCB_LAYER_ID layer : aArea->GetLayerSet().Seq() )
             {
-                if( zoneRTree->QueryColliding( aItemBBox, &areaOutline, layer ) )
-                    return true;
+                if( aCtx->GetLayer() == layer || aCtx->GetLayer() == UNDEFINED_LAYER )
+                {
+                    if( zoneRTree->QueryColliding( aItemBBox, &areaOutline, layer ) )
+                        return true;
+                }
             }
         }
 
@@ -557,7 +564,8 @@ bool calcIsInsideArea( BOARD_ITEM* aItem, const EDA_RECT& aItemBBox, PCB_EXPR_CO
     }
     else
     {
-        if( !( aArea->GetLayerSet().Contains( aCtx->GetLayer() ) ) )
+        if( aCtx->GetLayer() != UNDEFINED_LAYER
+                && !( aArea->GetLayerSet().Contains( aCtx->GetLayer() ) ) )
             return false;
 
         if( !shape )
@@ -921,7 +929,7 @@ public:
 
         PCB_LAYER_ID layerId = ToLAYER_ID( (int) AsDouble() );
 
-        return mask.test( layerId );
+        return mask.Contains( layerId );
     }
 };
 
