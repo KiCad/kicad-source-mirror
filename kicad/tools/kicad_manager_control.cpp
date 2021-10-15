@@ -790,9 +790,9 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
         m_frame->PrintMsg( msg );
 
 #ifdef __WXMAC__
-        // Use concatenation to avoid double-quote bug in wxWidgets 3.1.5 OSX.
-        wxExecute( "osascript -e 'activate application \""
-                    + EscapeString( execFile, CTX_QUOTED_STR ) + "\"' " );
+        // This non-parameterized use of wxExecute is fine because execFile is not derived
+        // from user input.
+        wxExecute( "osascript -e 'activate application \"" + execFile + "\"'" );
 #endif
     }
     else

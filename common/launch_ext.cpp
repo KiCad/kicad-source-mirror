@@ -25,7 +25,8 @@
 void LaunchExternal( const wxString& aPath )
 {
 #ifdef __WXMAC__
-    wxExecute( wxString::Format( "open \"%s\"", aPath ) );
+    const wchar_t* args[] = { L"open", L"--args", aPath.wc_str() };
+    wxExecute( const_cast<wchar_t**>( args ) );
 #else
     wxString path( aPath );
 

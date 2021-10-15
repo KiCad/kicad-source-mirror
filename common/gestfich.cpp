@@ -145,7 +145,7 @@ int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProce
 
         args[i] = nullptr;
 
-        return wxExecute( const_cast< wchar_t**>( args ), wxEXEC_ASYNC, aCallback );
+        return wxExecute( const_cast<wchar_t**>( args ), wxEXEC_ASYNC, aCallback );
     }
 
     wxString msg;
