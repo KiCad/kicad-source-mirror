@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-15 12:28-0700\n"
-"PO-Revision-Date: 2021-10-05 17:11+0000\n"
-"Last-Translator: Ji Yoon Choi <chichoon.choi@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2021-10-16 03:50+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4268,14 +4268,12 @@ msgid "Bezier"
 msgstr "베지어"
 
 #: common/eda_shape.cpp:1452
-#, fuzzy
 msgid "Start X"
-msgstr "시작 레이어"
+msgstr "시작 X"
 
 #: common/eda_shape.cpp:1454
-#, fuzzy
 msgid "Start Y"
-msgstr "시작 레이어"
+msgstr "시작 Y"
 
 #: common/eda_shape.cpp:1456 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
@@ -12785,7 +12783,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "현재 회로도가 수정되었습니다.\t변경 사항을 저장할까요?"
 
 #: eeschema/files-io.cpp:1338
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -12794,10 +12791,8 @@ msgid ""
 "made?"
 msgstr ""
 "이건 정말 난처한 일이네요!\n"
-"마지막으로 파일을 편집한 시간인\n"
-"\"%s\"에\n"
-"파일이 제대로 저장되지 않았습니다. 마지막으로 저장한 편집 내용을 복원하시겠습"
-"니까?"
+"마지막으로 하나 이상의 회로도 파일을 편집하는 중이었던 것 같습니다.\n"
+"파일이 제대로 저장되지 않았습니다.  마지막으로 저장한 편집 내용을 복원하시겠습니까?"
 
 #: eeschema/files-io.cpp:1349
 #, c-format
@@ -12805,38 +12800,43 @@ msgid ""
 "The file '%s` could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
+"'%s' 파일을 열 수 없습니다.\n"
+"자동으로 저장된 파일의 수동 복구가 필요합니다."
 
 #: eeschema/files-io.cpp:1395
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "자동 저장 파일 '%s'은(는) 삭제될 수 없습니다!"
+msgstr "다음 자동 저장 파일을 복원할 수 없습니다\n"
 
 #: eeschema/files-io.cpp:1400
 msgid "Manual recovery will be required to restore the file(s) above."
-msgstr ""
+msgstr "위의 파일을 복원하려면 수동 복구가 필요합니다."
 
 #: eeschema/files-io.cpp:1422
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "자동 저장 파일 '%s'은(는) 삭제될 수 없습니다!"
+msgstr "다음 자동 저장 파일을 제거할 수 없습니다\n"
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
-msgstr ""
+msgstr "위의 파일을 수동으로 제거해야 합니다."
 
 #: eeschema/files-io.cpp:1438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "자동 저장 파일 '%s'은(는) 삭제될 수 없습니다!"
+msgstr ""
+"자동 저장 마스터 파일\n"
+"'%s'은(는)\n"
+"삭제될 수 없습니다."
 
 #: eeschema/files-io.cpp:1446
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
 msgstr ""
+"이 파일은 수동으로 제거해야 하며 자동 저장 기능은\n"
+"회로도 편집기가 시작될 때마다 표시됩니다."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1397
 msgid "Alias of"
@@ -12972,9 +12972,9 @@ msgid "Polyline, %d points"
 msgstr "폴리선, %d개 점"
 
 #: eeschema/lib_shape.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "베지어 곡선"
+msgstr "베지어 곡선, %d 포인트"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -16895,44 +16895,36 @@ msgid "16 Layers"
 msgstr "16 레이어"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:91
-#, fuzzy
 msgid "18 Layers"
-msgstr "8 레이어"
+msgstr "18 레이어"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:92
-#, fuzzy
 msgid "20 Layers"
-msgstr "2 레이어"
+msgstr "20 레이어"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:93
-#, fuzzy
 msgid "22 Layers"
-msgstr "2 레이어"
+msgstr "22 레이어"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:94
-#, fuzzy
 msgid "24 Layers"
-msgstr "4 레이어"
+msgstr "24 레이어"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:95
-#, fuzzy
 msgid "26 Layers"
-msgstr "6 레이어"
+msgstr "26 레이어"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:96
-#, fuzzy
 msgid "28 Layers"
-msgstr "8 레이어"
+msgstr "28 레이어"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:97
-#, fuzzy
 msgid "30 Layers"
-msgstr "10 레이어"
+msgstr "30 레이어"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:98
-#, fuzzy
 msgid "32 Layers"
-msgstr "2 레이어"
+msgstr "32 레이어"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:110
 msgid "Store Choice"
@@ -17963,9 +17955,8 @@ msgid "Failed to output data"
 msgstr "데이터 출력에 실패하였습니다"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html><h1>템플릿 선택기</h1></html>"
+msgstr "<h1>템플릿 선택기</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -19865,9 +19856,8 @@ msgid "E12"
 msgstr "E12"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:84
-#, fuzzy
 msgid "E24"
-msgstr "24"
+msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:94
 msgid "Solutions"
@@ -20420,7 +20410,6 @@ msgid "Not worth using"
 msgstr "사용 가치가 없음"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20449,27 +20438,28 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"IEC 600063에 정의된 E-시리즈는 전자 부품에 대한 표준 수로 \n"
-"널리 사용되는 기본 시스템입니다.  사용 가능한 값은 대략\n"
-"로그 스케일을 따라 일정한 간격으로 배치되어 있습니다.\n"
+"E-시리즈는 IEC 60063에 정의되어 있습니다.\n"
 "\n"
-"\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
-"\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
-"\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
-"\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
+"사용 가능한 값은 대략 로그 스케일을 따라 일정한 간격으로 배치되어 있습니다.\n"
 "\n"
-"이 계산기는 임의의 값을 생성할 수 있도록 표준 E-시리즈 부품의 \n"
-"조합을 찾아냅니다. 사용자는 0.0025 부터 4000 kΩ까지 필요한 저항을\n"
-"입력할 수 있습니다. 최대 4개의 부품을 사용하는 해답이 주어집니다.\n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
+"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
+"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
 "\n"
-"기본값으로, 요청되는 값은 항상 해답 세트에서 제외됩니다.  또한 이 컴포넌트\n"
-"값을 사용할 수 없는 경우, 추가적으로 해답에서 제외할 값을 두 개까지 지정할 "
-"수 있습니다.\n"
+"- 이 계산기는 임의의 값을 생성하기 위해 표준 E-시리즈(10Ω과 1MΩ 사이)의 조합을 찾습니다.\n"
+"- 필요한 저항은 0.0025~4000kΩ 범위에서 입력할 수 있습니다.\n"
+"- 최대 4개의 구성요소를 사용하는 솔루션이 제공됩니다.\n"
 "\n"
-"해답은 다음과 같은 형식으로 주어집니다.\n"
+"기본적으로 요청 값은 솔루션 세트에서 항상 제외됩니다. 이러한 구성 요소 값을\n"
+"사용할 수 없는 경우 솔루션에서 제외할 추가 값을 최대 2개까지 지정할 수도 있습니다\n"
 "\n"
-"\tR1 + R2 +...+ Rn\t직렬 연결에서의 조합\n"
-"\tR1 | R2 |...| Rn\t병렬 연결에서의 조합\n"
+"솔루션은 다음 형식으로 제공됩니다:\n"
+"\n"
+"\tR1 + R2 +...+ Rn\t직렬저항 조합\n"
+"\tR1 | R2 |...| Rn\t\t병렬저항 조합\n"
 "\tR1 + (R2|R3)...\t\t위의 임의의 조합\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:49
@@ -20494,9 +20484,8 @@ msgid "Color Code"
 msgstr "색상 코드"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "전송선"
+msgstr "전송선 "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -24040,13 +24029,10 @@ msgid "Clearance Overrides and Settings"
 msgstr "클리어런스 재정의 및 설정"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:438
-#, fuzzy
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
-msgstr ""
-"라이브러리 ID와 풋프린트 ID가 이미 할당되어 있습니다.  \"풋프린트 바꾸기..."
-"\" 를 사용하여 다른 풋프린트에 할당하세요."
+msgstr "이미 할당된 라이브러리 ID와 풋프린트 ID 입니다.  \"풋프린트 바꾸기...\" 를 사용하여 다른 풋프린트를 할당하세요."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:135
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:108
@@ -27291,14 +27277,12 @@ msgid "Path Substitutions"
 msgstr "경로 대체"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "No filename entered"
-msgstr "파일 이름이 없습니다! 중지됨"
+msgstr "파일 이름을 입력하지 않았습니다"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
-#, fuzzy
 msgid "Illegal filename"
-msgstr "잘못된 파일 이름: %s"
+msgstr "잘못된 파일 이름"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -31992,6 +31976,9 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
+"CADSTAR 템플릿 '%s'는 원래 디자인에 열 릴리프가 있지만 스포크 너비(%.2f mm)가 영역의 최소 두께(%.2f mm)보다 "
+"얇습니다. KiCad는 영역의 최소 두께를 유지해야 합니다. 따라서 최소 두께가 새 스포크 너비로 적용되었으며 다음에 구역이 채워질 때 "
+"적용됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1948
 #, c-format
