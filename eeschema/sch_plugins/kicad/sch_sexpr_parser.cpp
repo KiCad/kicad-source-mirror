@@ -907,17 +907,20 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
     wxCHECK_MSG( CurTok() == T_arc, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as an arc." ) );
 
-    T token;
-    wxPoint startPoint;
-    wxPoint midPoint;
-    wxPoint endPoint;
-    wxPoint pos;
-    int startAngle;
-    int endAngle;
+    T             token;
+    wxPoint       startPoint( 1, 0 );   // Initialize to a non-degenerate arc just for safety
+    wxPoint       midPoint( 1, 1 );
+    wxPoint       endPoint( 0, 1 );
+    bool          hasMidPoint = false;
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
-    FILL_PARAMS fill;
-    bool hasMidPoint = false;
-    bool hasAngles = false;
+    FILL_PARAMS   fill;
+
+    // Parameters for legacy format
+    wxPoint       center( 0, 0 );
+    int           startAngle = 0;
+    int           endAngle = 900;
+    bool          hasAngles = false;
+
     std::unique_ptr<LIB_SHAPE> arc = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::ARC );
 
     arc->SetUnit( m_unit );
@@ -959,7 +962,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
                 switch( token )
                 {
                 case T_at:
-                    pos = parseXY();
+                    center = parseXY();
                     NeedRIGHT();
                     break;
 
@@ -1006,9 +1009,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
 
     if( hasMidPoint )
     {
-        VECTOR2I center = CalcArcCenter( arc->GetStart(), midPoint, arc->GetEnd() );
-
-        arc->SetCenter( (wxPoint) center );
+        arc->SetCenter( (wxPoint) CalcArcCenter( arc->GetStart(), midPoint, arc->GetEnd() ) );
     }
     else if( hasAngles )
     {
@@ -1025,7 +1026,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
             arc->SetStart( arc->GetEnd() );
             arc->SetEnd( temp );
         }
-        arc->SetCenter( pos );
+        arc->SetCenter( center );
     }
     else
     {
@@ -1041,9 +1042,10 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseBezier()
     wxCHECK_MSG( CurTok() == T_bezier, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a bezier." ) );
 
-    T token;
+    T             token;
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
-    FILL_PARAMS fill;
+    FILL_PARAMS   fill;
+
     std::unique_ptr<LIB_SHAPE> bezier = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::BEZIER );
 
     bezier->SetUnit( m_unit );
@@ -1100,11 +1102,12 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseCircle()
     wxCHECK_MSG( CurTok() == T_circle, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a circle." ) );
 
-    T token;
-    wxPoint center;
-    int radius;
+    T             token;
+    wxPoint       center( 0, 0 );
+    int           radius = 1;     // defaulting to 0 could result in troublesome math....
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
-    FILL_PARAMS fill;
+    FILL_PARAMS   fill;
+
     std::unique_ptr<LIB_SHAPE> circle = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::CIRCLE );
 
     circle->SetUnit( m_unit );
@@ -1239,24 +1242,11 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
 
             switch( parseInt( "pin orientation" ) )
             {
-            case 0:
-                pin->SetOrientation( PIN_RIGHT );
-                break;
-
-            case 90:
-                pin->SetOrientation( PIN_UP );
-                break;
-
-            case 180:
-                pin->SetOrientation( PIN_LEFT );
-                break;
-
-            case 270:
-                pin->SetOrientation( PIN_DOWN );
-                break;
-
-            default:
-                Expecting( "0, 90, 180, or 270" );
+            case 0:   pin->SetOrientation( PIN_RIGHT ); break;
+            case 90:  pin->SetOrientation( PIN_UP );    break;
+            case 180: pin->SetOrientation( PIN_LEFT );  break;
+            case 270: pin->SetOrientation( PIN_DOWN );  break;
+            default:  Expecting( "0, 90, 180, or 270" );
             }
 
             NeedRIGHT();
