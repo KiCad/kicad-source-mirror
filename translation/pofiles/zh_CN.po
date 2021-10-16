@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-15 12:28-0700\n"
-"PO-Revision-Date: 2021-10-05 17:11+0000\n"
+"PO-Revision-Date: 2021-10-16 13:26+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -4233,14 +4233,12 @@ msgid "Bezier"
 msgstr "贝塞尔曲线"
 
 #: common/eda_shape.cpp:1452
-#, fuzzy
 msgid "Start X"
-msgstr "起点 Y："
+msgstr "起点 X"
 
 #: common/eda_shape.cpp:1454
-#, fuzzy
 msgid "Start Y"
-msgstr "起点 Y："
+msgstr "起点 Y"
 
 #: common/eda_shape.cpp:1456 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
@@ -12662,7 +12660,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "当前原理图已被修改。是否保存更改？"
 
 #: eeschema/files-io.cpp:1338
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -12670,10 +12667,9 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"这可能存在问题！\n"
-"似乎你在上次编辑文件\n"
-"\"%s\"\n"
-"后没有正确保存它, 你是否希望恢复上次保存的修改内容？"
+"好吧，这可能有点尴尬！\n"
+"看来你上次编辑过的一个或多个原理图文件没有正确保存\n"
+"是否要恢复你所做的最后一批已保存的编辑？"
 
 #: eeschema/files-io.cpp:1349
 #, c-format
@@ -12681,38 +12677,43 @@ msgid ""
 "The file '%s` could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
+"无法打开文件“%s”。\n"
+"需要手动恢复自动保存的文件。"
 
 #: eeschema/files-io.cpp:1395
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "自动保存文件 '%s' 不能被删除！"
+msgstr "无法恢复以下自动保存的文件\n"
 
 #: eeschema/files-io.cpp:1400
 msgid "Manual recovery will be required to restore the file(s) above."
-msgstr ""
+msgstr "需要手动恢复才能恢复以上文件。"
 
 #: eeschema/files-io.cpp:1422
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "自动保存文件 '%s' 不能被删除！"
+msgstr "无法删除以下自动保存的文件\n"
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
-msgstr ""
+msgstr "上述文件需要手动删除。"
 
 #: eeschema/files-io.cpp:1438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "自动保存文件 '%s' 不能被删除！"
+msgstr ""
+"无法删除\n"
+"自动保存的\n"
+"主文件'%s'。"
 
 #: eeschema/files-io.cpp:1446
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
 msgstr ""
+"此文件必须手动删除，\n"
+"否则每次启动原理图编辑器时都会显示自动保存功能。"
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1397
 msgid "Alias of"
@@ -12848,9 +12849,9 @@ msgid "Polyline, %d points"
 msgstr "多段线，%d 点"
 
 #: eeschema/lib_shape.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "贝塞尔曲线"
+msgstr "贝塞尔曲线，%d 点"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -16708,44 +16709,36 @@ msgid "16 Layers"
 msgstr "16 层"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:91
-#, fuzzy
 msgid "18 Layers"
-msgstr "8 层"
+msgstr "18 层"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:92
-#, fuzzy
 msgid "20 Layers"
-msgstr "2 层"
+msgstr "20 层"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:93
-#, fuzzy
 msgid "22 Layers"
-msgstr "2 层"
+msgstr "22 层"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:94
-#, fuzzy
 msgid "24 Layers"
-msgstr "4 层"
+msgstr "24 层"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:95
-#, fuzzy
 msgid "26 Layers"
-msgstr "6 层"
+msgstr "26 层"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:96
-#, fuzzy
 msgid "28 Layers"
-msgstr "8 层"
+msgstr "28 层"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:97
-#, fuzzy
 msgid "30 Layers"
-msgstr "10 层"
+msgstr "30 层"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:98
-#, fuzzy
 msgid "32 Layers"
-msgstr "2 层"
+msgstr "32 层"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:110
 msgid "Store Choice"
@@ -17771,9 +17764,8 @@ msgid "Failed to output data"
 msgstr "未能输出数据"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html><h1>选择模板</h1></html>"
+msgstr "<h1>模板选择器</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -19657,9 +19649,8 @@ msgid "E12"
 msgstr "E12"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:84
-#, fuzzy
 msgid "E24"
-msgstr "24"
+msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:94
 msgid "Solutions"
@@ -20286,9 +20277,8 @@ msgid "Color Code"
 msgstr "色环电阻"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "传输线路"
+msgstr "传输线 "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -27003,14 +26993,12 @@ msgid "Path Substitutions"
 msgstr "路径替换"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "No filename entered"
-msgstr "没有选中的文件！"
+msgstr "未输入文件名"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
-#, fuzzy
 msgid "Illegal filename"
-msgstr "无效的文件名：%s"
+msgstr "非法文件名"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -31641,6 +31629,8 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
+"CADSTAR 模板“%s”在原始设计中具有散热片，但辐条宽度 (%.2f mm) 比区域的最小厚度 (%.2f mm) 更薄。KiCad "
+"要求保留区域的最小厚度。因此，已将最小厚度用作新的辐条宽度，并将在下次填充区域时应用。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1948
 #, c-format
