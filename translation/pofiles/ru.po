@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-15 12:28-0700\n"
-"PO-Revision-Date: 2021-10-14 07:35+0000\n"
+"PO-Revision-Date: 2021-10-16 13:26+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4327,14 +4327,12 @@ msgid "Bezier"
 msgstr "Кривая Безье"
 
 #: common/eda_shape.cpp:1452
-#, fuzzy
 msgid "Start X"
-msgstr "Начальный слой"
+msgstr "Начало X"
 
 #: common/eda_shape.cpp:1454
-#, fuzzy
 msgid "Start Y"
-msgstr "Начальный слой"
+msgstr "Начало Y"
 
 #: common/eda_shape.cpp:1456 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
@@ -12891,7 +12889,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "Текущая схема изменена. Сохранить?"
 
 #: eeschema/files-io.cpp:1338
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -12899,10 +12896,9 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"Возможны некоторые затруднения!\n"
-"При последнем редактировании файл\n"
-"\"%s\"\n"
-"не был корректно сохранён. Хотите восстановить последние изменения?"
+"При последнем редактировании файла или нескольких файлов схемы\n"
+"сохранение было выполнено некорректно.\n"
+"Желаете восстановить последние сохранённые изменения?"
 
 #: eeschema/files-io.cpp:1349
 #, c-format
@@ -12910,38 +12906,43 @@ msgid ""
 "The file '%s` could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
+"Файл '%s' не удаётся открыть.\n"
+"Требуется вручную восстановить автоматически сохранённые файлы."
 
 #: eeschema/files-io.cpp:1395
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "Не удалось удалить файл авто-сохранения '%s'!"
+msgstr "Следующие автоматически сохранённые файлы не удаётся восстановить\n"
 
 #: eeschema/files-io.cpp:1400
 msgid "Manual recovery will be required to restore the file(s) above."
-msgstr ""
+msgstr "Перечисленных выше файлы нужно восстановить вручную."
 
 #: eeschema/files-io.cpp:1422
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "Не удалось удалить файл авто-сохранения '%s'!"
+msgstr "Следующие автоматически сохранённые файлы не удаётся удалить\n"
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
-msgstr ""
+msgstr "Перечисленные выше файлы нужно удалить вручную."
 
 #: eeschema/files-io.cpp:1438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "Не удалось удалить файл авто-сохранения '%s'!"
+msgstr ""
+"Главный файл авто-сохранения\n"
+"'%s'\n"
+"не удаётся удалить."
 
 #: eeschema/files-io.cpp:1446
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
 msgstr ""
+"Этот файл должен быть удалён вручную, иначе функция авто-сохранения\n"
+"будет отображаться при каждом запуске редактора схем."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1397
 msgid "Alias of"
@@ -13078,9 +13079,9 @@ msgid "Polyline, %d points"
 msgstr "Ломаная линия, %d точек"
 
 #: eeschema/lib_shape.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Кривая Безье"
+msgstr "Кривая Безье, %d точек"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -17015,44 +17016,36 @@ msgid "16 Layers"
 msgstr "16 слоёв"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:91
-#, fuzzy
 msgid "18 Layers"
-msgstr "8 слоёв"
+msgstr "18 слоёв"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:92
-#, fuzzy
 msgid "20 Layers"
-msgstr "2 слоя"
+msgstr "20 слоёв"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:93
-#, fuzzy
 msgid "22 Layers"
-msgstr "2 слоя"
+msgstr "22 слоев"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:94
-#, fuzzy
 msgid "24 Layers"
-msgstr "4 слоя"
+msgstr "24 слоя"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:95
-#, fuzzy
 msgid "26 Layers"
-msgstr "6 слоёв"
+msgstr "26 слоёв"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:96
-#, fuzzy
 msgid "28 Layers"
-msgstr "8 слоёв"
+msgstr "28 слоёв"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:97
-#, fuzzy
 msgid "30 Layers"
-msgstr "10 слоёв"
+msgstr "30 слоёв"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:98
-#, fuzzy
 msgid "32 Layers"
-msgstr "2 слоя"
+msgstr "32 слоя"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:110
 msgid "Store Choice"
@@ -18082,9 +18075,8 @@ msgid "Failed to output data"
 msgstr "Не удалось вывести данные"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html><h1>Выбор шаблона</h1></html>"
+msgstr "<h1>Выбор шаблона</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -19988,9 +19980,8 @@ msgid "E12"
 msgstr "E12"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:84
-#, fuzzy
 msgid "E24"
-msgstr "24"
+msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:94
 msgid "Solutions"
@@ -20545,7 +20536,6 @@ msgid "Not worth using"
 msgstr "Не стоит использовать"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20574,20 +20564,22 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"E-series определена в IEC 60063 - это широко применяемая система специально\n"
-"подобранных номиналов для электронных компонентов (ряд номиналов).\n"
+"E-series определена в IEC 60063.\n"
+"\n"
 "Доступные значения равномерно распределены по логарифмической шкале.\n"
 "\n"
-"\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
-"\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
-"\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
+"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
+"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
 "\n"
-"Данный калькулятор находит комбинации стандартных номиналов для образования "
-"требуемого значения.\n"
-"Можно рассчитать произвольное сопротивление в диапазоне от 0.0025 до 4000 "
+"- Данный калькулятор находит комбинации стандартных номиналов (от 10 до 1М "
+"Ом) для образования требуемого значения.\n"
+"- Можно рассчитать произвольное сопротивление в диапазоне от 0.0025 до 4000 "
 "кОм.\n"
-"Решения состоят максимум из 4 компонентов.\n"
+"- Решения состоят максимум из 4 компонентов.\n"
 "\n"
 "По умолчанию, заданное значение исключается из результирующих значений. "
 "Дополнительно можно\n"
@@ -20623,9 +20615,8 @@ msgid "Color Code"
 msgstr "Цветовой код"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "Линия передачи"
+msgstr "Линия передачи "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -24205,13 +24196,12 @@ msgid "Clearance Overrides and Settings"
 msgstr "Настройки зазоров"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:438
-#, fuzzy
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
 "Идентификаторы библиотеки и посад.места уже назначены. Воспользуйтесь "
-"командой \"Заменить посад.место...\"."
+"командой \"Заменить посад.место...\" чтобы назначить другое посад.место."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:135
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:108
@@ -27516,14 +27506,12 @@ msgid "Path Substitutions"
 msgstr "Подстановки путей"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "No filename entered"
-msgstr "Файл не выбран!"
+msgstr "Имя файла не задано"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
-#, fuzzy
 msgid "Illegal filename"
-msgstr "Неверное имя файла: %s"
+msgstr "Неверное имя файла"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -32262,6 +32250,11 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
+"В шаблоне CADSTAR '%s' имеется мостик терморазгрузки, но его ширина (%.2f мм)"
+" тоньше минимальной ширины для зоны (%.2f мм). KiCad требует чтобы "
+"минимальная ширина зоны была соблюдена. Следовательно, минимальная толщина "
+"будет установлена для мостика терморазгрузки и будет применена при следующей "
+"заливке зон."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1948
 #, c-format
