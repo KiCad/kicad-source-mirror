@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-15 12:28-0700\n"
-"PO-Revision-Date: 2021-10-14 07:35+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2021-10-16 13:25+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29744,7 +29744,7 @@ msgstr "Regel: %s"
 
 #: pcbnew/drc/drc_item.cpp:329
 msgid "Local override"
-msgstr "Lokale Übersteuerung"
+msgstr "Lokale Überschreibung"
 
 #: pcbnew/drc/drc_rule.h:137
 #, c-format
@@ -30489,7 +30489,7 @@ msgstr "Typ \"Sonstige\" erwartet, aber war \"%s\""
 
 #: pcbnew/footprint.cpp:2203 pcbnew/pad.cpp:1542 pcbnew/zone.cpp:1420
 msgid "Clearance Override"
-msgstr "Übersteuerung des Freiraums"
+msgstr "Überschreibung des Freiraums"
 
 #: pcbnew/footprint.cpp:2206 pcbnew/pad.cpp:1519
 msgid "Solderpaste Margin Override"
@@ -33442,8 +33442,8 @@ msgid ""
 "the nets belonging to a differential pair end with either N/P or +/-."
 msgstr ""
 "Kann zugehörige Netze für das Differentialpaar nicht finden. Bitte "
-"sicherstellen, dass das Netznamen, welches zum Differentialpaar gehören, mit "
-"N/P oder +/- enden."
+"sicherstellen, dass Netznamen, welche zum Differentialpaar gehören, mit N/P "
+"oder +/- enden."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:492
 msgid ""
@@ -33471,9 +33471,9 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"Kann das zugehörige Netz des differenzielle Signalpaares für die "
-"Längenanpassung nicht finden. Bitte sicherstellen, dass das Netz welches zum "
-"differenziellen Signalpaar gehört mit _N/_P oder +/- endet."
+"Kann das zugehörige Netz des Differentialpaars für die Längenanpassung nicht "
+"finden. Bitte sicherstellen, dass Netznamen, welche zum Differentialpaar "
+"gehören, mit _N/_P oder +/- enden."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:438
 #: pcbnew/router/pns_meander_placer.cpp:277
@@ -33540,9 +33540,9 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"Kann das zugehörige Netz des differenziellen Signalpaares für die Anpassung "
-"des Versatzes nicht finden. Bitte sicherstellen, dass das Netz welches zum "
-"differenziellen Signalpaar gehört mit _N/_P oder +/- endet."
+"Kann das zugehörige Netz des Differentialpaars für die Anpassung des "
+"Versatzes nicht finden. Bitte sicherstellen, dass Netznamen, welche zum "
+"Differentialpaar gehören, mit _N/_P oder +/- enden."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:165
 msgid "Too long: skew "
