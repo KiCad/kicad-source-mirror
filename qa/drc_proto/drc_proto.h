@@ -104,7 +104,7 @@ public:
 
     virtual void SetCurrentProgress( double aProgress ) override
     {
-        PROGRESS_REPORTER::SetCurrentProgress( aProgress );
+        PROGRESS_REPORTER_BASE::SetCurrentProgress( aProgress );
         updateUI();
     }
 
