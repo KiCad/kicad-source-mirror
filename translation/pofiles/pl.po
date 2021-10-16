@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-15 12:28-0700\n"
-"PO-Revision-Date: 2021-10-14 07:35+0000\n"
+"PO-Revision-Date: 2021-10-16 13:25+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4301,14 +4301,12 @@ msgid "Bezier"
 msgstr "Krzywa Beziera"
 
 #: common/eda_shape.cpp:1452
-#, fuzzy
 msgid "Start X"
-msgstr "Początkowa warstwa"
+msgstr "Początek X"
 
 #: common/eda_shape.cpp:1454
-#, fuzzy
 msgid "Start Y"
-msgstr "Początkowa warstwa"
+msgstr "Początek Y"
 
 #: common/eda_shape.cpp:1456 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
@@ -12940,7 +12938,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "Bieżący schemat został zmodyfikowany.  Zapisać zmiany?"
 
 #: eeschema/files-io.cpp:1338
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -12949,10 +12946,8 @@ msgid ""
 "made?"
 msgstr ""
 "Sytuacja potencjalnie niebezpieczna!\n"
-"Wygląda na to, że ostatnie zmiany w pliku\n"
-"\"%s\"\n"
-"nie zostały zapisane poprawnie.  Czy chcesz przywrócić ostatnie zapisane "
-"zmiany?"
+"Wygląda na to, że ostatnie zmiany w pliku lub plikach schematów nie zostały\n"
+"zapisane poprawnie.  Czy chcesz przywrócić ostatnie zapisane zmiany?"
 
 #: eeschema/files-io.cpp:1349
 #, c-format
@@ -12960,38 +12955,45 @@ msgid ""
 "The file '%s` could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
+"Plik '%s' nie mógł być otwarty.\n"
+"Wymagane jest ręczne odzyskanie pliku z automatycznie zapisanych plików."
 
 #: eeschema/files-io.cpp:1395
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "Plik autozapisu '%s' nie może zostać usunięty!"
+msgstr ""
+"Następujące, automatycznie zapisane pliki nie mogły zostać przywrócone\n"
 
 #: eeschema/files-io.cpp:1400
 msgid "Manual recovery will be required to restore the file(s) above."
-msgstr ""
+msgstr "Aby przywrócić powyższe pliki, wymagane będzie ich ręczne odzyskanie."
 
 #: eeschema/files-io.cpp:1422
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "Plik autozapisu '%s' nie może zostać usunięty!"
+msgstr "Następujące, automatycznie zapisane pliki nie mogły zostać usunięte\n"
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
-msgstr ""
+msgstr "W przypadku powyższych plików wymagane będzie ich ręczne usunięcie."
 
 #: eeschema/files-io.cpp:1438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "Plik autozapisu '%s' nie może zostać usunięty!"
+msgstr ""
+"Nie udało się usunąć automatycznego\n"
+"zapisu pliku głównego\n"
+"'%s'."
 
 #: eeschema/files-io.cpp:1446
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
 msgstr ""
+"Ten plik musi zostać usunięty ręcznie, w przeciwnym wypadku funkcja "
+"automatycznego zapisywania będzie\n"
+"wyświetlana przy każdym uruchomieniu edytora schematów."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1397
 msgid "Alias of"
@@ -13129,9 +13131,9 @@ msgid "Polyline, %d points"
 msgstr "Linia łamana, złożona z %d węzłów"
 
 #: eeschema/lib_shape.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Krzywa Beziera"
+msgstr "Krzywa Beziera, %d punktów"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -15066,7 +15068,7 @@ msgstr "Przyrost rezystancji"
 
 #: eeschema/sim/sim_plot_panel.cpp:414
 msgid "Temperature (swept)"
-msgstr "Przyrost temperatury"
+msgstr "Temperatura (przesiewowo)"
 
 #: eeschema/sim/sim_plot_panel.cpp:419
 msgid "Voltage (measured)"
@@ -15074,7 +15076,7 @@ msgstr "Napięcie (zmierzone)"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "DC Sweep"
-msgstr "DC Sweep"
+msgstr "Przemiatanie DC"
 
 #: eeschema/sim/spice_simulator.cpp:73
 msgid "Pole-zero"
@@ -17098,44 +17100,36 @@ msgid "16 Layers"
 msgstr "16 warstw"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:91
-#, fuzzy
 msgid "18 Layers"
-msgstr "8 warstw"
+msgstr "18 warstw"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:92
-#, fuzzy
 msgid "20 Layers"
-msgstr "2 warstwy"
+msgstr "20 warstwy"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:93
-#, fuzzy
 msgid "22 Layers"
-msgstr "2 warstwy"
+msgstr "22 warstwy"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:94
-#, fuzzy
 msgid "24 Layers"
-msgstr "4 warstwy"
+msgstr "24 warstwy"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:95
-#, fuzzy
 msgid "26 Layers"
-msgstr "6 warstw"
+msgstr "26 warstw"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:96
-#, fuzzy
 msgid "28 Layers"
-msgstr "8 warstw"
+msgstr "28 warstw"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:97
-#, fuzzy
 msgid "30 Layers"
-msgstr "10 warstw"
+msgstr "30 warstw"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:98
-#, fuzzy
 msgid "32 Layers"
-msgstr "2 warstwy"
+msgstr "32 warstwy"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:110
 msgid "Store Choice"
@@ -18174,9 +18168,8 @@ msgid "Failed to output data"
 msgstr "Nie udało się wygenerować danych"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html><h1>Proszę wybrać szablon</h1></html>"
+msgstr "<h1>Proszę wybrać szablon</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -20089,9 +20082,8 @@ msgid "E12"
 msgstr "E12"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:84
-#, fuzzy
 msgid "E24"
-msgstr "24"
+msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:94
 msgid "Solutions"
@@ -20647,7 +20639,6 @@ msgid "Not worth using"
 msgstr "Nie warte użycia"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20676,19 +20667,22 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Seria E zdefiniowana w normie IEC 60063 to powszechnie akceptowany system\n"
-"preferowanych wartości dla elementów elektronicznych.  Dostępne wartości\n"
-"są w przybliżeniu równomiernie rozłożone na skali logarytmicznej.\n"
+"Seria E zdefiniowana została w normie IEC 60063.\n"
 "\n"
-"\tE12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"\tE6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
-"\tE3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
-"\tE1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+"Dostępne wartości są w przybliżeniu równomiernie rozłożone na skali "
+"logarytmicznej.\n"
 "\n"
-"Ten kalkulator znajduje kombinację standardowych rezystancji z serii E by "
-"ją\n"
-"utworzyć.  Można wprowadzić wymaganą rezystancję od 0,0025 do 4000 kΩ. \n"
-"Podane rozwiązania wykorzystują maksymalnie 4 składniki.  \n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
+"\tE6(20%):  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
+"\tE3(50%):  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
+"\tE1     :   1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\n"
+"- Ten kalkulator znajduje kombinację standardowych rezystancji z serii E ("
+"pomiędzy 10Ω a 1MΩ) by ją utworzyć.\n"
+"- Można wprowadzić wymaganą rezystancję od 0,0025 do 4000 kΩ.\n"
+"- Podane rozwiązania wykorzystują maksymalnie 4 składniki.\n"
 "\n"
 "Domyślnie żądania wartość jest zawsze wykluczona z zestawu rozwiązań.  "
 "Możliwe jest również określenie\n"
@@ -20723,9 +20717,8 @@ msgid "Color Code"
 msgstr "Kody kolorów"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "Linia trasmisyjna"
+msgstr "Linia transmisyjna "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -21538,27 +21531,27 @@ msgstr "HAL SnPb"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:42
 msgid "HAL lead-free"
-msgstr "HAL lead-free"
+msgstr "HAL bezołowiowy"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:43
 msgid "Hard gold"
-msgstr "Twarde złocenie"
+msgstr "Złocenie twarde"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:44
 msgid "Immersion tin"
-msgstr "Cyna immersyjna"
+msgstr "Cynowanie chemiczne"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:45
 msgid "Immersion nickel"
-msgstr "Chemiczne niklowanie"
+msgstr "Niklowanie chemiczne"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:46
 msgid "Immersion silver"
-msgstr "Chemiczne srebrzenie"
+msgstr "Srebrzenie chemiczne"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:47
 msgid "Immersion gold"
-msgstr "Złocenie immersyjne"
+msgstr "Złocenie chemiczne"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:48
 msgid "HT_OSP"
@@ -21607,11 +21600,13 @@ msgstr "Nieokreślony"
 
 #: pcbnew/build_BOM_from_board.cpp:81
 msgid "Cannot export BOM: there are no footprints on the PCB."
-msgstr "Nie można wyeksportować BOM: nie ma żadnych footprintów na PCB."
+msgstr ""
+"Nie można wyeksportować listy materiałowej: nie ma żadnych footprintów na "
+"PCB."
 
 #: pcbnew/build_BOM_from_board.cpp:91
 msgid "Save Bill of Materials"
-msgstr "Zapisz listę materiałów"
+msgstr "Zapisz listę materiałową"
 
 #: pcbnew/build_BOM_from_board.cpp:111
 msgid "Designator"
@@ -27641,14 +27636,12 @@ msgid "Path Substitutions"
 msgstr "Odpowiedniki ścieżek"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "No filename entered"
-msgstr "Nie wybrano pliku!"
+msgstr "Nie podano nazwy pliku"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
-#, fuzzy
 msgid "Illegal filename"
-msgstr "Nieprawidłowa nazwa pliku: %s"
+msgstr "Nieprawidłowa nazwa pliku"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -32411,6 +32404,11 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
+"Szablon CADSTAR '%s' ma w oryginalnym projekcie łącza termiczne, lecz "
+"szerokość łącza (%.2f mm) jest cieńsza niż minimalna grubość strefy (%.2f mm)"
+". KiCad wymaga zachowania minimalnej grubości strefy. Dlatego jako nową "
+"szerokość łącza zastosowano minimalną grubość, która zostanie zastosowana "
+"przy następnym wypełnieniu stref."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1948
 #, c-format
