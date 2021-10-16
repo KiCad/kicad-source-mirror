@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-15 12:28-0700\n"
-"PO-Revision-Date: 2021-10-16 03:50+0000\n"
+"PO-Revision-Date: 2021-10-16 13:25+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -18424,7 +18424,7 @@ msgstr "DL 크기"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
 msgid "Inst Size"
-msgstr "Inst 크기"
+msgstr "인스턴스 크기"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
 msgid "Comp"
