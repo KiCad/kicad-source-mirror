@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-15 12:28-0700\n"
-"PO-Revision-Date: 2021-10-14 07:36+0000\n"
+"PO-Revision-Date: 2021-10-16 13:26+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -4335,14 +4335,12 @@ msgid "Bezier"
 msgstr "Bezier"
 
 #: common/eda_shape.cpp:1452
-#, fuzzy
 msgid "Start X"
-msgstr "Iniciar X:"
+msgstr "Inicia X"
 
 #: common/eda_shape.cpp:1454
-#, fuzzy
 msgid "Start Y"
-msgstr "Iniciar Y:"
+msgstr "Inicia Y"
 
 #: common/eda_shape.cpp:1456 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
@@ -12994,7 +12992,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "O esquema atual foi modificado.  Deseja salvar as alterações?"
 
 #: eeschema/files-io.cpp:1338
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -13002,11 +12999,11 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"Isso é potencialmente constrangedor!\n"
-"Parece que da última vez que você editou o arquivo\n"
-"\"%s\"\n"
-"ele não foi salvo corretamente.  Deseja restaurar as últimas edições salvas "
-"que você fez?"
+"Bom, isso é bem constrangedor!\n"
+"Parece que a última vez que você estava editando um ou mais dos arquivos do "
+"esquema\n"
+"eles não foram salvos corretamente.  Deseja restaurar as últimas edições "
+"salvas anteriormente?"
 
 #: eeschema/files-io.cpp:1349
 #, c-format
@@ -13014,38 +13011,50 @@ msgid ""
 "The file '%s` could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
+"O arquivo '%s' não pôde ser aberto.\n"
+"É preciso fazer a recuperação manual dos arquivos que foram salvos "
+"automaticamente."
 
 #: eeschema/files-io.cpp:1395
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "O arquivo com salvamento automático '%s' não pôde ser removido!"
+msgstr ""
+"Os seguintes arquivos que foram salvos automaticamente não puderam ser "
+"restaurados\n"
 
 #: eeschema/files-io.cpp:1400
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
+"Será preciso fazer a recuperação manual para restaurar o(s) arquivo(s) acima."
 
 #: eeschema/files-io.cpp:1422
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "O arquivo com salvamento automático '%s' não pôde ser removido!"
+msgstr ""
+"Os seguintes arquivos que foram salvos automaticamente não puderam ser "
+"removidos\n"
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
-msgstr ""
+msgstr "Será preciso fazer a remoção manual para os arquivos acima."
 
 #: eeschema/files-io.cpp:1438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "O arquivo com salvamento automático '%s' não pôde ser removido!"
+msgstr ""
+"A gravação automática do arquivo mestre\n"
+"'%s'\n"
+"não pôde ser excluído."
 
 #: eeschema/files-io.cpp:1446
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
 msgstr ""
+"Este arquivo deve ser removido manualmente ou o recurso de salvamento "
+"automático será\n"
+"mostrado cada vez que o editor do esquema for iniciado."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1397
 msgid "Alias of"
@@ -13183,9 +13192,9 @@ msgid "Polyline, %d points"
 msgstr "Polilinha, %d pontos"
 
 #: eeschema/lib_shape.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Curva Bezier"
+msgstr "Curva Bezier, %d pontos"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -17169,44 +17178,36 @@ msgid "16 Layers"
 msgstr "16 Camadas"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:91
-#, fuzzy
 msgid "18 Layers"
-msgstr "8 Camadas"
+msgstr "18 Camadas"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:92
-#, fuzzy
 msgid "20 Layers"
-msgstr "2 Camadas"
+msgstr "20 Camadas"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:93
-#, fuzzy
 msgid "22 Layers"
-msgstr "2 Camadas"
+msgstr "22 Camadas"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:94
-#, fuzzy
 msgid "24 Layers"
-msgstr "4 Camadas"
+msgstr "24 Camadas"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:95
-#, fuzzy
 msgid "26 Layers"
-msgstr "6 Camadas"
+msgstr "26 Camadas"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:96
-#, fuzzy
 msgid "28 Layers"
-msgstr "8 Camadas"
+msgstr "28 Camadas"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:97
-#, fuzzy
 msgid "30 Layers"
-msgstr "10 Camadas"
+msgstr "30 Camadas"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:98
-#, fuzzy
 msgid "32 Layers"
-msgstr "2 Camadas"
+msgstr "32 Camadas"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:110
 msgid "Store Choice"
@@ -18248,9 +18249,8 @@ msgid "Failed to output data"
 msgstr "Houve uma falha ao enviar os dados"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html><h1>Seletor de modelo</h1></html>"
+msgstr "<h1>Seletor de modelo</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -20172,9 +20172,8 @@ msgid "E12"
 msgstr "E12"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:84
-#, fuzzy
 msgid "E24"
-msgstr "24"
+msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:94
 msgid "Solutions"
@@ -20737,7 +20736,6 @@ msgid "Not worth using"
 msgstr "Não vale a pena usar"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20766,21 +20764,23 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"A série E definida pela IEC 60063 é um sistema amplamente aceito para a\n"
-"numeração dos componentes eletrônicos.  Os valores disponíveis são "
-"aproximadamente\n"
-"espaçados igualmente numa escala logarítmica.\n"
+"A série E definida pela IEC 60063.\n"
 "\n"
-"\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
-"\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
-"\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
-"\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
+"Os valores disponíveis são aproximadamente espaçados igualmente numa escala "
+"logarítmica.\n"
 "\n"
-"Esta calculadora encontra diferentes combinações dos componentes "
-"predefinidos da série E para\n"
-"criar valores arbitrários.  Você pode inserir a resistência necessária a "
-"partir de 0,0025 até 4000 kΩ.\n"
-"As soluções que usem até 4 componentes são fornecidas.\n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
+"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
+"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\n"
+"- Esta calculadora encontra diferentes combinações dos componentes "
+"predefinidos da série E (entre 10Ω e 1MΩ) para criar valores arbitrários.\n"
+"- Você pode inserir a resistência necessária a partir de 0,0025 até 4000 kΩ."
+"\n"
+"- As soluções que usem até 4 componentes são fornecidas.\n"
 "\n"
 "Por padrão, o valor da solicitação é sempre excluído do conjunto das "
 "soluções.  Também é possível definir\n"
@@ -20791,7 +20791,7 @@ msgstr ""
 "\n"
 "\tR1 + R2 +...+ Rn\tresistores em série\n"
 "\tR1 | R2 |...| Rn\tresistores em paralelo\n"
-"\tR1 + (R2|R3)...\t\tqualquer uma das conmbinações anteriores\n"
+"\tR1 + (R2|R3)...\t\tqualquer uma das combinações anteriores\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:49
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
@@ -20815,9 +20815,8 @@ msgid "Color Code"
 msgstr "Código das cores"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "Linha da transmissão"
+msgstr "Linha da transmissão "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -24407,12 +24406,11 @@ msgid "Clearance Overrides and Settings"
 msgstr "Compensações do isolamento e configurações"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:438
-#, fuzzy
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
-"O ID da biblioteca e a ID do footprint atribuída atualmente.  Use “Altere o "
+"O ID da biblioteca e o ID do footprint atribuído atualmente.  Use “Altere o "
 "footprint do componente…” para atribuir um footprint diferente."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:135
@@ -27732,14 +27730,12 @@ msgid "Path Substitutions"
 msgstr "Substituições de caminho"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "No filename entered"
-msgstr "Nenhum arquivo foi selecionado!"
+msgstr "Nenhum nome de arquivo foi inserido"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
-#, fuzzy
 msgid "Illegal filename"
-msgstr "Nome de ficheiro inválido: %s"
+msgstr "Nome de arquivo ilegal"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -32517,6 +32513,11 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
+"O modelo CADSTAR '%s' tem relevos térmicos no desenho original, porém a "
+"largura do raio (%.2f mm) é mais fina do que a espessura mínima da zona ("
+"%.2f mm). O KiCad requer que a espessura mínima da zona seja preservada. "
+"Portanto, a espessura mínima foi aplicada à medida que a nova largura do "
+"raio e será aplicada na próxima vez que as zonas forem preenchidas."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1948
 #, c-format
