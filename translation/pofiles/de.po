@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-15 12:28-0700\n"
-"PO-Revision-Date: 2021-10-17 21:47+0000\n"
+"PO-Revision-Date: 2021-10-17 23:42+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -22716,8 +22716,8 @@ msgstr "Auskehlungsradius:"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:503
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr ""
-"Die Breite des Wärmeabführungsspeichers kann nicht kleiner als die "
-"Minimalbreite sein."
+"Die Speichenbreite einer thermischen Entlastung kann nicht kleiner als die "
+"Mindestbreite sein."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:532
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:255
@@ -22853,7 +22853,7 @@ msgstr "Entlastungen für PTH"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:225
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:734
 msgid "Thermal relief gap:"
-msgstr "Abstand zur thermischen Abführung:"
+msgstr "Spalt der thermischen Entlastung:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:227
 msgid ""
@@ -22869,7 +22869,7 @@ msgstr "Freiraum zwischen Pads im selben Netz und gefüllten Flächen."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
 msgid "Thermal spoke width:"
-msgstr "Breite thermischer Wärmeabführungsspeicher:"
+msgstr "Speichenbreite der thermischen Entlastung:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 msgid "Width of copper in thermal reliefs."
@@ -24527,7 +24527,7 @@ msgstr ""
 "für diesen Footprint.\n"
 "Wenn auf 0 gesetzt, wird der globale Wert verwendet.\n"
 "Dieser Wert kann überschrieben werden durch den Wert im Reiter\n"
-"'Freiraum-Überschreibungen und -Einstellungen' im Dialog 'Pad Eigenschaften'."
+"'Freiraum-Überschreibungen und -Einstellungen' im Dialog 'Pad-Eigenschaften'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:261
 msgid ""
@@ -24547,7 +24547,7 @@ msgstr ""
 "ist.\n"
 "Dieser Wert kann durch den Wert im Reiter 'Freiraum-Überschreibungen und -"
 "Einstellungen' \n"
-"im Dialog 'Pad Eigenschaften' überschrieben werden ."
+"im Dialog 'Pad-Eigenschaften' überschrieben werden ."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:274
 msgid ""
@@ -24569,7 +24569,7 @@ msgstr ""
 "ist.\n"
 "Dieser Wert kann durch den Wert im Reiter 'Freiraum-Überschreibungen und "
 "-Einstellungen'\n"
-"im Dialog 'Pad Eigenschaften' überschrieben werden."
+"im Dialog 'Pad-Eigenschaften' überschrieben werden."
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:144
 msgid "All footprint generator scripts were loaded"
@@ -26234,15 +26234,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:710
 msgid "Pad connection:"
-msgstr "Art der Verbindung:"
+msgstr "Pad-Verbindung:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:714
 msgid "From parent footprint"
-msgstr "Vom Ursprungs-Footprint"
+msgstr "Vom übergeordneten Footprint übernehmen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:723
 msgid "Thermal relief spoke width:"
-msgstr "Speichenbreite der therm. Entlastung:"
+msgstr "Speichenbreite der thermischen Entlastung:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:745
 msgid "Custom pad shape in zone:"
@@ -26326,7 +26326,7 @@ msgstr "Koordinaten sind relativ zum Ankerpad, rotiert um 0,0 Grad."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:265
 msgid "Pad Properties"
-msgstr "Pad Eigenschaften"
+msgstr "Pad-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:354
 msgid "Pad Custom Shape Geometry Transform"
@@ -27124,7 +27124,7 @@ msgstr "Pads unterschiedlicher ypen nicht modifizieren"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 msgid "Push Pad Properties"
-msgstr "Pad Eigenschaften anwenden"
+msgstr "Pad-Eigenschaften anwenden"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:154
 msgid "No layers selected."
@@ -28131,7 +28131,7 @@ msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Mindestdurchmesser von Micro-Vias.  Falls gesetzt, ist dies ein absolutes "
+"Mindestdurchmesser von Mikro-Vias.  Falls gesetzt, ist dies ein absolutes "
 "Minimum, das nicht durch Netzklassen, benutzerdefinierte Regeln oder andere "
 "Einstellungen unterschritten werden kann."
 
@@ -28144,7 +28144,7 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Die minimale Micro-Via-Lochgröße.  Falls gesetzt, ist dies ein absolutes "
+"Die minimale Mikro-Via-Lochgröße.  Falls gesetzt, ist dies ein absolutes "
 "Minimum und kann nicht durch Netzklassen, benutzerdefinierte Regeln oder "
 "andere Einstellungen reduziert werden."
 
@@ -34562,7 +34562,7 @@ msgstr "Klicken Sie auf neues Mitglied ..."
 
 #: pcbnew/tools/pad_tool.cpp:144
 msgid "Paste Pad Properties"
-msgstr "Pad Eigenschaften anwenden"
+msgstr "Pad-Eigenschaften anwenden"
 
 #: pcbnew/tools/pad_tool.cpp:260
 msgid "Push Pad Settings"
@@ -35127,7 +35127,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:482
 msgid "Add Microwave Line"
-msgstr "Microwellen-Linie hinzufügen"
+msgstr "Mikrowellen-Linie hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:482
 msgid "Create line of specified length for microwave applications"
@@ -35135,29 +35135,29 @@ msgstr "Linie spezifischer Länge für Mikrowellen-Applikationen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:490
 msgid "Copy Pad Properties to Default"
-msgstr "Pad Eigenschaften zum Standard kopieren"
+msgstr "Pad-Eigenschaften zu Standard-Eigenschaften kopieren"
 
 #: pcbnew/tools/pcb_actions.cpp:490
 msgid "Copy current pad's properties"
-msgstr "Kopiere aktuelle Pad Eigenschaften"
+msgstr "Kopiert Eigenschaften des aktuellen Pads in die Standard-Eigenschaften"
 
 #: pcbnew/tools/pcb_actions.cpp:495
 msgid "Paste Default Pad Properties to Selected"
-msgstr "Einfügen Standard Pad Eigenschaften auf Auswahl"
+msgstr "Standard-Pad-Eigenschaften auf Auswahl anwenden"
 
 #: pcbnew/tools/pcb_actions.cpp:496
 msgid "Replace the current pad's properties with those copied earlier"
 msgstr ""
-"Ersetzt die aktuellen Pad Eigenschaften mit denen die zuvor kopiert worden "
-"sind"
+"Ersetzt die Eigenschaften des aktuellen Pads durch die (ggf. zuvor kopierten)"
+" Standard-Pad-Eigenschaften"
 
 #: pcbnew/tools/pcb_actions.cpp:501
 msgid "Push Pad Properties to Other Pads..."
-msgstr "Übertrage Pad Eigenschaften auf andere Pads..."
+msgstr "Pad-Eigenschaften auf andere Pads übertragen..."
 
 #: pcbnew/tools/pcb_actions.cpp:502
 msgid "Copy the current pad's properties to other pads"
-msgstr "Kopiere aktuelle Pad-Einstellungen zu anderen Pads"
+msgstr "Überträgt aktuelle Pad-Eigenschaften zu den Eigenschaften anderer Pads"
 
 #: pcbnew/tools/pcb_actions.cpp:507
 msgid "Renumber Pads..."
@@ -35174,7 +35174,7 @@ msgstr "Pad hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:513
 msgid "Add a pad"
-msgstr "Pad hinzufügen"
+msgstr "Fügt ein Pad hinzu"
 
 #: pcbnew/tools/pcb_actions.cpp:519
 msgid "Edit Pad as Graphic Shapes"
@@ -35196,7 +35196,7 @@ msgstr "Gruppiert alle berührenden Grafikformen im bearbeiteten Pad neu"
 
 #: pcbnew/tools/pcb_actions.cpp:532
 msgid "Default Pad Properties..."
-msgstr "Standard Pad Eigenschaften..."
+msgstr "Standard-Pad-Eigenschaften..."
 
 #: pcbnew/tools/pcb_actions.cpp:532
 msgid "Edit the pad properties used when creating new pads"
