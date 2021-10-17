@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-15 12:28-0700\n"
-"PO-Revision-Date: 2021-10-17 23:42+0000\n"
+"PO-Revision-Date: 2021-10-18 19:17+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -6176,7 +6176,7 @@ msgstr "Anzeige eines fensterfüllenden Fadenkreuzes ein-/ausschalten"
 
 #: common/tool/actions.cpp:533
 msgid "Inactive Layer View Mode"
-msgstr "Darstellung inaktiver Lagen"
+msgstr "Inaktive Lagen abblenden"
 
 #: common/tool/actions.cpp:534
 msgid "Toggle inactive layers between normal and dimmed"
@@ -6184,7 +6184,7 @@ msgstr "Darstellung inaktiver Lagen zwischen normal und abgeblendet umschalten"
 
 #: common/tool/actions.cpp:540
 msgid "Inactive Layer View Mode (3-state)"
-msgstr "Darstellung inaktiver Lagen (3 Zustände)"
+msgstr "Inaktive Lagen ab-/ausblenden (3 Modi)"
 
 #: common/tool/actions.cpp:541
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
@@ -8549,7 +8549,7 @@ msgstr "Es wird von der %s Liste ausgeschlossen"
 #: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:469
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr "Ändern des Schweregrades auf Fehler für alle '%s' Verstöße"
+msgstr "Ändern des Schweregrads auf Fehler für alle '%s' Verstöße"
 
 #: eeschema/dialogs/dialog_erc.cpp:514 eeschema/dialogs/dialog_erc.cpp:520
 #: pcbnew/dialogs/dialog_drc.cpp:471 pcbnew/dialogs/dialog_drc.cpp:478
@@ -8561,7 +8561,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc.cpp:518 pcbnew/dialogs/dialog_drc.cpp:476
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "Ändern des Schweregrades auf Warnung für alle '%s' Verstöße"
+msgstr "Ändern des Schweregrads auf Warnung für alle '%s' Verstöße"
 
 #: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:482
 #, c-format
@@ -22853,7 +22853,7 @@ msgstr "Entlastungen für PTH"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:225
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:734
 msgid "Thermal relief gap:"
-msgstr "Spalt der thermischen Entlastung:"
+msgstr "Radius der thermischen Entlastung:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:227
 msgid ""
@@ -36432,7 +36432,7 @@ msgstr "Inaktive Lagen werden in voller Farbe angezeigt"
 
 #: pcbnew/widgets/appearance_controls.cpp:616
 msgid "Dim"
-msgstr "Dimmen"
+msgstr "Abblenden"
 
 #: pcbnew/widgets/appearance_controls.cpp:618
 msgid "Inactive layers will be dimmed"
