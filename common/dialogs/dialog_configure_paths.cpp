@@ -621,7 +621,7 @@ void DIALOG_CONFIGURE_PATHS::OnHelp( wxCommandEvent& event )
 
     }
 
-    m_helpDialog = new HTML_MESSAGE_BOX( nullptr, this, _( "Environment Variable Help" ) );
+    m_helpDialog = new HTML_MESSAGE_BOX( nullptr, _( "Environment Variable Help" ) );
     m_helpDialog->SetDialogSizeInDU( 400, 250 );
 
     m_helpDialog->AddHTML_Text( msg );

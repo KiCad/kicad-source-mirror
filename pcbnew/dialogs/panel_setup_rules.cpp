@@ -540,7 +540,7 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
     msg.Replace( "Ctrl+", "Cmd+" );
 #endif
 
-    m_helpWindow = new HTML_MESSAGE_BOX( nullptr, this, _( "Syntax Help" ) );
+    m_helpWindow = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
     m_helpWindow->SetDialogSizeInDU( 320, 320 );
 
     wxString html_txt;

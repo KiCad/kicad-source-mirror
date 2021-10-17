@@ -35,8 +35,6 @@ public:
                       const wxPoint& aPosition = wxDefaultPosition,
                       const wxSize& aSize = wxDefaultSize );
 
-    HTML_MESSAGE_BOX( wxWindow* aParent, wxWindow* aHost, const wxString& aTitle );
-
     ~HTML_MESSAGE_BOX() override;
 
     /**
@@ -92,7 +90,6 @@ protected:
     virtual void OnCharHook( wxKeyEvent& aEvt ) override;
 
 private:
-    wxWindow* m_host;
     wxString  m_source;
 };
 

@@ -29,28 +29,9 @@
 #include <dialogs/html_message_box.h>
 
 
-HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* aParent, wxWindow* aHost, const wxString& aTitle ) :
-    DIALOG_DISPLAY_HTML_TEXT_BASE( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize ),
-    m_host( aHost )
-{
-    m_htmlWindow->SetLayoutDirection( wxLayout_LeftToRight );
-    ListClear();
-
-    Center();
-
-    m_sdbSizer1OK->SetDefault();
-
-    reload();
-
-    Bind( wxEVT_SYS_COLOUR_CHANGED,
-          wxSysColourChangedEventHandler( HTML_MESSAGE_BOX::onThemeChanged ), this );
-}
-
-
 HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* aParent, const wxString& aTitle,
                                     const wxPoint& aPosition, const wxSize& aSize ) :
-    DIALOG_DISPLAY_HTML_TEXT_BASE( nullptr, wxID_ANY, aTitle, aPosition, aSize ),
-    m_host( aParent )
+    DIALOG_DISPLAY_HTML_TEXT_BASE( aParent, wxID_ANY, aTitle, aPosition, aSize )
 {
     m_htmlWindow->SetLayoutDirection( wxLayout_LeftToRight );
     ListClear();

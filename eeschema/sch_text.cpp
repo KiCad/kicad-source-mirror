@@ -1721,7 +1721,7 @@ HTML_MESSAGE_BOX* SCH_TEXT::ShowSyntaxHelp( wxWindow* aParentWindow )
 #include "sch_text_help_md.h"
      ;
 
-    HTML_MESSAGE_BOX* dlg = new HTML_MESSAGE_BOX( nullptr, aParentWindow, _( "Syntax Help" ) );
+    HTML_MESSAGE_BOX* dlg = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
     wxSize            sz( 320, 320 );
 
     dlg->SetMinSize( dlg->ConvertDialogToPixels( sz ) );
