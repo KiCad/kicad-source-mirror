@@ -2190,17 +2190,18 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets( LAYER_ID aCadstarSheetID,
             loadSheetAndChildSheets( block.AssocLayerID, blockExtents.first, blockExtents.second,
                                      aSheet );
 
+            // Hide all KiCad sheet properties (sheet name/filename is not applicable in CADSTAR)
+            SCH_SHEET* loadedSheet = m_sheetMap.at( block.AssocLayerID );
+            SCH_FIELDS fields = loadedSheet->GetFields();
+
+            for( SCH_FIELD& field : fields )
+            {
+                field.SetVisible( false );
+            }
+
             if( block.HasBlockLabel )
             {
                 // Add the block label as a separate field
-                SCH_SHEET* loadedSheet = m_sheetMap.at( block.AssocLayerID );
-                SCH_FIELDS fields      = loadedSheet->GetFields();
-
-                for( SCH_FIELD& field : fields )
-                {
-                    field.SetVisible( false );
-                }
-
                 SCH_FIELD blockNameField( getKiCadPoint( block.BlockLabel.Position ), 2,
                         loadedSheet, wxString( "Block name" ) );
                 blockNameField.SetText( block.Name );
@@ -2214,8 +2215,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets( LAYER_ID aCadstarSheetID,
                                     block.BlockLabel.Mirror );
 
                 fields.push_back( blockNameField );
-                loadedSheet->SetFields( fields );
             }
+
+            loadedSheet->SetFields( fields );
         }
     }
 }
