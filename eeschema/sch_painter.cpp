@@ -1639,7 +1639,7 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
     if( drawingShadows && !aLabel->IsSelected() )
         return;
 
-    COLOR4D color = getRenderColor( aLabel, LAYER_SHEETLABEL, drawingShadows );
+    COLOR4D color = getRenderColor( aLabel, LAYER_HIERLABEL, drawingShadows );
 
     if( m_schematic )
     {
