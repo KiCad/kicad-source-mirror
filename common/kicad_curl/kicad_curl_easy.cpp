@@ -24,6 +24,8 @@
 
 // kicad_curl_easy.h **must be** included before any wxWidgets header to avoid conflicts
 // at least on Windows/msys2
+#include <curl/curl.h>
+#include <curl/easy.h>
 #include <kicad_curl/kicad_curl.h>
 #include <kicad_curl/kicad_curl_easy.h>
 
@@ -111,6 +113,9 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() : m_headers( nullptr )
 
     curl_easy_setopt( m_CURL, CURLOPT_WRITEFUNCTION, write_callback );
     curl_easy_setopt( m_CURL, CURLOPT_WRITEDATA, (void*) &m_buffer );
+
+    // Only allow HTTP and HTTPS protocols
+    curl_easy_setopt( m_CURL, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS );
 
     wxPlatformInfo platformInfo;
     wxString application( Pgm().App().GetAppName() );
