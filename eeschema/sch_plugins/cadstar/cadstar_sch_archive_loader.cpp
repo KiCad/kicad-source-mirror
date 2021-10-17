@@ -2840,7 +2840,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
         bool              isUnique = true;
 
         auto removeSegment =
-                [&]( SHAPE_LINE_CHAIN& aLineToRemove )
+                [&]( SHAPE_LINE_CHAIN aLineToRemove )
                 {
                     uniqueSegments.erase( aLineToRemove.CPoint( 0 ) );
                     uniqueSegments.erase( aLineToRemove.CPoint( 1 ) );
@@ -2860,6 +2860,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
 
             if( isUnique && pt0 != pt1 )
             {
+                // we are only interested in vertical or horizontal segments
                 if( pt0.x == pt1.x || pt0.y == pt1.y )
                 {
                     uniqueSegments.insert( { poly.CPoint( 0 ), poly } );
