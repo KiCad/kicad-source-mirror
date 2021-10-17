@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-15 12:28-0700\n"
-"PO-Revision-Date: 2021-10-14 07:35+0000\n"
+"PO-Revision-Date: 2021-10-18 19:17+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4286,14 +4286,12 @@ msgid "Bezier"
 msgstr "Bezierova křivka"
 
 #: common/eda_shape.cpp:1452
-#, fuzzy
 msgid "Start X"
-msgstr "Počátek X:"
+msgstr "Začátek X"
 
 #: common/eda_shape.cpp:1454
-#, fuzzy
 msgid "Start Y"
-msgstr "Počátek Y:"
+msgstr "Začátek Y"
 
 #: common/eda_shape.cpp:1456 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
@@ -12832,7 +12830,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "Aktuální schéma bylo upraveno.  Uložit změny?"
 
 #: eeschema/files-io.cpp:1338
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -12841,8 +12838,7 @@ msgid ""
 "made?"
 msgstr ""
 "To je poněkud rozpačité!\n"
-"Zdá se, že když jste naposled upravovali soubor\n"
-"\"%s\"\n"
+"Zdá se, že když jste naposled upravovali jeden nebo více souborů schématu\n"
 "nebyl správně uložen. Přejete si obnovit poslední uložené úpravy, které jste "
 "provedli?"
 
@@ -14074,7 +14070,7 @@ msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "Nastavení symbolu schématu '%s %s' identifikátor knihovny na '%s'."
 
 #: eeschema/sch_screen.cpp:601
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
@@ -14582,24 +14578,24 @@ msgstr ""
 "Název signálu obsahuje znaky '[' or ']' ale není platný název sběrnice."
 
 #: eeschema/sheet.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
-"Změny listu nelze provést, protože cílový list již obsahuje list \"%s\" nebo "
+"Změny listu nelze provést, protože cílový list již obsahuje list '%s' nebo "
 "některou z jejích podskupin jako nadřazený někde v schematické hierarchii."
 
 #: eeschema/sheet.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The schematic '%s' has not had its symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
-"Ve schématu \"%s\" nebyly přemapovány odkazy na knihovnu symbolů do tabulky "
-"knihovny symbolů. Projekt, ke kterému toto schéma patří, musí být před "
+"Ve schématu '%s' nebyly přemapovány odkazy na knihovnu symbolů do tabulky "
+"knihovny symbolů.  Projekt, ke kterému toto schéma patří, musí být před "
 "importem do aktuálního projektu nejprve přemapován."
 
 #: eeschema/sheet.cpp:147
@@ -14642,13 +14638,13 @@ msgid "Continue Load Schematic"
 msgstr "Pokračovat v načítání schématu"
 
 #: eeschema/sheet.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The project library table '%s' does not exist or cannot be read.  This may "
 "result in broken symbol links for the schematic.  Do you wish to continue?"
 msgstr ""
-"Tabulka knihoven projektu \"%s\" neexistuje nebo ji nelze přečíst. To může "
-"mít za následek nefunkční odkazy na symboly schématu. Chcete pokračovat?"
+"Tabulka knihoven projektu '%s' neexistuje nebo ji nelze přečíst.  To může "
+"mít za následek nefunkční odkazy na symboly schématu.  Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:313
 msgid ""
@@ -14671,7 +14667,7 @@ msgstr ""
 "následek nefunkční odkazy na knihovnu symbolů pro schéma. Chcete pokračovat?"
 
 #: eeschema/sheet.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file name '%s' can cause issues with an existing file name\n"
 "already defined in the schematic on systems that support case\n"
@@ -14681,9 +14677,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Název souboru \"%s\" může způsobit problémy s existujícím názvem souboru\n"
-"již definován ve schématu na systémech, které podporují případ\n"
-"necitlivé názvy souborů. Pokud to zkopírujete, způsobí to problémy\n"
+"Název souboru '%s' může způsobit problémy s existujícím názvem souboru\n"
+"již definovaném ve schématu na systémech, které podporují případ\n"
+"necitlivosti na velikost písmen v názvech souborů.  Pokud to zkopírujete\n"
 "projekt do operačního systému, který podporuje jména souborů nerozlišující "
 "velká a malá\n"
 "písmena.\n"
@@ -15081,13 +15077,13 @@ msgid "Library '%s' already exists."
 msgstr "Knihovna '%s' již existuje."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:836
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
 "Nelze vytvořit soubor knihovny '%s'.\n"
-"Zkontrolujte povolení zápisu."
+"Zkontrolujte oprávnění zápisu a zkuste to znovu."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:846
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:211
@@ -16939,44 +16935,36 @@ msgid "16 Layers"
 msgstr "16 vrstev"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:91
-#, fuzzy
 msgid "18 Layers"
-msgstr "8 vrstev"
+msgstr "18 vrstev"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:92
-#, fuzzy
 msgid "20 Layers"
-msgstr "2 vrstvy"
+msgstr "20 vrstev"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:93
-#, fuzzy
 msgid "22 Layers"
-msgstr "2 vrstvy"
+msgstr "22 vrstev"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:94
-#, fuzzy
 msgid "24 Layers"
-msgstr "4 vrstvy"
+msgstr "24 vrstev"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:95
-#, fuzzy
 msgid "26 Layers"
-msgstr "6 vrstev"
+msgstr "26 vrstev"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:96
-#, fuzzy
 msgid "28 Layers"
-msgstr "8 vrstev"
+msgstr "28 vrstev"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:97
-#, fuzzy
 msgid "30 Layers"
-msgstr "10 vrstev"
+msgstr "30 vrstev"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:98
-#, fuzzy
 msgid "32 Layers"
-msgstr "2 vrstvy"
+msgstr "32 vrstev"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:110
 msgid "Store Choice"
@@ -18014,9 +18002,8 @@ msgid "Failed to output data"
 msgstr "Selhaly výstupní data"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html><h1>Výběr šablony</h1></html>"
+msgstr "<h1>Výběr šablony</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -18492,9 +18479,8 @@ msgid "Inst Size"
 msgstr "Nastavit výchozí velikost"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Comp"
-msgstr "Společnost:"
+msgstr "Společnost"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:105
 msgid "Download"
@@ -18647,9 +18633,8 @@ msgid "Archive does not contain a valid metadata.json file"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:314
-#, fuzzy
 msgid "Archive metadata must have a single version defined"
-msgstr "List musí mít specifikovaný soubor."
+msgstr "Metadata archivu musí mít jednu definovanou verzi"
 
 #: kicad/pcm/pcm_task_manager.cpp:326
 #, c-format
@@ -19326,9 +19311,8 @@ msgid "General Options"
 msgstr "Obecné možnosti"
 
 #: pagelayout_editor/files.cpp:55
-#, fuzzy
 msgid "Drawing Sheet File"
-msgstr "Výkresový list"
+msgstr "Soubor výkresového listu"
 
 #: pagelayout_editor/files.cpp:61 pagelayout_editor/files.cpp:105
 msgid "The current drawing sheet has been modified. Save changes?"
@@ -19410,14 +19394,12 @@ msgid "coord origin: %s"
 msgstr "počátek souřadnic: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:901
-#, fuzzy
 msgid "New drawing sheet file is unsaved"
-msgstr "Nový soubor schématu není uložen"
+msgstr "Nový soubor výkresového listu není uložen"
 
 #: pagelayout_editor/pl_editor_frame.cpp:905
-#, fuzzy
 msgid "Drawing sheet changes are unsaved"
-msgstr "Změny pouzdra nejsou uloženy"
+msgstr "Změny výkresového listu nejsou uloženy"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
 msgid "Page Width"
@@ -19484,9 +19466,8 @@ msgid "Add a bitmap image"
 msgstr "Přidat bitmapový obrázek"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
-#, fuzzy
 msgid "Append Existing Drawing Sheet..."
-msgstr "Přidat existující soubor rozložení stránky..."
+msgstr "Přidat existující soubor výkresového listu..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:74
 #, fuzzy
@@ -19923,9 +19904,8 @@ msgid "E12"
 msgstr "E12"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:84
-#, fuzzy
 msgid "E24"
-msgstr "24"
+msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:94
 msgid "Solutions"
@@ -20477,7 +20457,6 @@ msgid "Not worth using"
 msgstr "Nestojí za to použít"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20506,19 +20485,21 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Série E definovaná v normě IEC 60063 je běžně uznávaným systémem\n"
-"preferovaných hodnot pro elektronické součástky. Dostupné hodnoty\n"
-"jsou přibližně rovnoměrně rozložené na logaritmické stupnici.\n"
+"Série E definovaná v  IEC 60063.\n"
 "\n"
-"\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
-"\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
-"\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
-"\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
+"Dostupné hodnoty jsou přibližně stejně rozmístěny v logaritmickém měřítku.\n"
 "\n"
-"Kalkulačka najde kombinace standardních součástek řady E pro\n"
-"vytvoření libovolných hodnot. Můžete zadat požadovaný odpor od 0,0025 až "
-"4000 kΩ.\n"
-"Zadaná řešení používají maximálně 4 komponenty.\n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
+"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
+"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
+"\n"
+"- Tato kalkulačka najde kombinace řady E (mezi 10Ω a 1MΩ) k vytvoření "
+"libovolných hodnot.\n"
+"- Můžete zadat požadovaný odpor od 0,0025 do 4000 kΩ.\n"
+"- Zadaná řešení používají maximálně 4 komponenty.\n"
 "\n"
 "Ve výchozím nastavení je hodnota požadavku vždy vyloučena z sady řešení.  Je "
 "také možné specifikovat\n"
@@ -20553,9 +20534,8 @@ msgid "Color Code"
 msgstr "Barevný kód"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "Přenosové vedení"
+msgstr "Přenosové vedení "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -21354,9 +21334,8 @@ msgid "Hard gold"
 msgstr "Tvrdé zlato"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:44
-#, fuzzy
 msgid "Immersion tin"
-msgstr "Informace o verzi"
+msgstr "Imersní cín"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:45
 msgid "Immersion nickel"
@@ -21506,9 +21485,8 @@ msgstr "Polygon nesmí být sám se protínající"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:540
 #: pcbnew/convert_shape_list_to_polygon.cpp:783
-#, fuzzy
 msgid "(not a closed shape)"
-msgstr "(Není soubor Kicadu)"
+msgstr "(není uzavřen tvar)"
 
 #: pcbnew/cross-probing.cpp:170
 #, c-format
@@ -21911,9 +21889,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:242
-#, fuzzy
 msgid "Front prefix:"
-msgstr "Prefix jména plošky:"
+msgstr "Předpona pro horní stranu:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:244
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:249
@@ -21923,9 +21900,8 @@ msgstr ""
 "Volitelná předpona pro reference schématu na straně součástek (např.F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
-#, fuzzy
 msgid "Back prefix:"
-msgstr "Prefix jména plošky:"
+msgstr "Předpona pro spodní stranu:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:255
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:260
@@ -22508,9 +22484,8 @@ msgstr "Typ výplně:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:274
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
-#, fuzzy
 msgid "Solid fill"
-msgstr "Pevné"
+msgstr "Pevné vyplnění"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:274
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
@@ -22816,9 +22791,8 @@ msgstr ""
 "Byla přesunuta na první povolenou vrstvu."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:280
-#, fuzzy
 msgid "Change dimension properties"
-msgstr "Změnit vlastnosti textu"
+msgstr "Změnit vlastnosti rozměru"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:20
 #, fuzzy
@@ -23219,37 +23193,32 @@ msgid "Change all footprints on board"
 msgstr "Změnit všechna pouzdra na desce"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
-#, fuzzy
 msgid "Change selected footprint(s)"
-msgstr "Změnit vybrané pouzdro"
+msgstr "Změnit vybrané pouzdro(a)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
 msgid "Change footprints matching reference designator:"
 msgstr "Změnit pouzdra v souladu s referencí schématu:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
-#, fuzzy
 msgid "Change footprints matching value:"
-msgstr "%s pouzdra s hodnotou:"
+msgstr "Změnit pouzdra s touto hodnotou:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
 msgid "Change footprints with library id:"
 msgstr "Změňte pouzdra pomocí ID knihovny:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
-#, fuzzy
 msgid "Update text layers and visibilities"
-msgstr "Učinit vybrané pole viditelné"
+msgstr "Aktualizovat vrstvy textu a viditelnost"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:81
-#, fuzzy
 msgid "Update text sizes, styles and positions"
-msgstr "Vynulovat existující očíslování"
+msgstr "Aktualizovat velikosti textu, styly a pozice"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
-#, fuzzy
 msgid "Update fabrication attributes"
-msgstr "Výstupy pro &výrobu"
+msgstr "Aktualizovat atributy výroby"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:83
 msgid "Update 3D models"
@@ -23282,9 +23251,8 @@ msgid "Update all footprints on board"
 msgstr "Aktualizovat všechny pouzdra na desce"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:27
-#, fuzzy
 msgid "Update selected footprint(s)"
-msgstr "Aktualizovat vybrané pouzdro"
+msgstr "Aktualizovat vybrané pouzdro(a)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
 #, fuzzy
@@ -23292,14 +23260,12 @@ msgid "Update footprints matching reference designator:"
 msgstr "%s pouzdro s odkazem:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:38
-#, fuzzy
 msgid "Update footprints matching value:"
-msgstr "%s pouzdra s hodnotou:"
+msgstr "Aktualizovat pouzdra podle hodnoty:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:44
-#, fuzzy
 msgid "Update footprints with library id:"
-msgstr "%s pouzdro s označením:"
+msgstr "Aktualizovat pouzdra s identifikátorem knihovny:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 msgid "New footprint library id:"
@@ -30015,14 +29981,13 @@ msgid "No footprints to export!"
 msgstr "Žádná pouzdra k exportu!"
 
 #: pcbnew/footprint_libraries_utils.cpp:687
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprints on board to refer to %s?"
-msgstr "Aktualizovat pouzdro na desce"
+msgstr "Aktualizovat pouzdro na desce aby se odkazoval na %s?"
 
 #: pcbnew/footprint_libraries_utils.cpp:734
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "Uložit pouzdro do aktivní knihovny"
+msgstr "Aktualizovat pouzdra na desce, aby se odkazoval na novou knihovnu?"
 
 #: pcbnew/footprint_libraries_utils.cpp:873
 #: pcbnew/footprint_viewer_frame.cpp:712
@@ -36075,9 +36040,8 @@ msgid "Configure net classes"
 msgstr "Konfigurace cest"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:161
-#, fuzzy
 msgid "Presets (Ctrl+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "Přednastavuje (Ctrl+Tab):"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "(unsaved)"
@@ -36313,7 +36277,7 @@ msgstr "Editor návrhu DPS"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
-msgstr ""
+msgstr "Samostatný editor desky pro KiCad desky"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "pcbnew"
