@@ -1308,7 +1308,7 @@ bool SCH_EDIT_FRAME::updateAutoSaveFile()
     if( !autoSaveFile.Create() )
         return false;
 
-    for( const wxString fileName : autoSavedFiles )
+    for( const wxString& fileName : autoSavedFiles )
     {
         wxLogTrace( traceAutoSave, "Adding auto save file %s to %s",
                     fileName, autoSaveFileName.GetName() );
