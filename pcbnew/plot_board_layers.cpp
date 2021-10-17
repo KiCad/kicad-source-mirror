@@ -308,8 +308,10 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             wxSize      padDelta = pad->GetDelta(); // has meaning only for trapezoidal pads
             double      padCornerRadius = pad->GetRoundRectCornerRadius();
 
-            // Don't draw a null size item :
-            if( padPlotsSize.x <= 0 || padPlotsSize.y <= 0 )
+            // Don't draw a 0 sized pad.
+            // Note: a custom pad can have its pad anchor with size = 0
+            if( pad->GetShape() != PAD_SHAPE::CUSTOM
+                && ( padPlotsSize.x <= 0 || padPlotsSize.y <= 0 ) )
                 continue;
 
             switch( pad->GetShape() )
