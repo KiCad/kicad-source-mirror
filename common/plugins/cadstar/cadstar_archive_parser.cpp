@@ -2339,18 +2339,22 @@ XNODE* CADSTAR_ARCHIVE_PARSER::LoadArchiveFile( const wxString& aFileName,
 
     DSNLEXER lexer( emptyKeywords, 0, fp, aFileName );
 
-    long currentPosition = 0;
+    auto currentProgress =  [&]() -> double
+                            {
+                                return static_cast<double>( ftell( fp ) ) / fileSize;
+                            };
+
+    double previousReportedProgress = -1.0;
 
     while( ( tok = lexer.NextTok() ) != DSN_EOF )
     {
-        if( aProgressReporter )
+        if( aProgressReporter && ( currentProgress() - previousReportedProgress ) > 0.01 )
         {
             if( !aProgressReporter->KeepRefreshing() )
                 THROW_IO_ERROR( _( "File import cancelled by user." ) );
 
-            currentPosition = ftell( fp );
-            double currentprogress = static_cast<double>( currentPosition ) / fileSize;
-            aProgressReporter->SetCurrentProgress( currentprogress );
+            aProgressReporter->SetCurrentProgress( currentProgress() );
+            previousReportedProgress = currentProgress();
         }
 
         if( tok == DSN_RIGHT )
