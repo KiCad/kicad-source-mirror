@@ -36,6 +36,7 @@
 #include <plotters/plotter.h>
 
 EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
+    m_endsSwapped( false ),
     m_shape( aType ),
     m_width( aLineWidth ),
     m_fill( aFill ),
@@ -487,6 +488,7 @@ void EDA_SHAPE::SetArcGeometry( const wxPoint& aStart, const wxPoint& aMid, cons
     m_start = aStart;
     m_end = aEnd;
     m_arcCenter = CalcArcCenter( aStart, aMid, aEnd );
+    m_endsSwapped = false;
 }
 
 
@@ -510,7 +512,10 @@ void EDA_SHAPE::SetArcAngleAndEnd( double aAngle, bool aCheckNegativeAngle )
     RotatePoint( &m_end, m_arcCenter, -NormalizeAngle360Max( aAngle ) );
 
     if( aCheckNegativeAngle && aAngle < 0 )
+    {
         std::swap( m_start, m_end );
+        m_endsSwapped = true;
+    }
 }
 
 

@@ -96,9 +96,24 @@ public:
     const wxPoint& GetStart() const         { return m_start; }
     int GetStartY()                         { return m_start.y; }
     int GetStartX()                         { return m_start.x; }
-    void SetStart( const wxPoint& aStart )  { m_start = aStart; }
-    void SetStartY( int y )                 { m_start.y = y; }
-    void SetStartX( int x )                 { m_start.x = x; }
+
+    void SetStart( const wxPoint& aStart )
+    {
+        m_start = aStart;
+        m_endsSwapped = false;
+    }
+
+    void SetStartY( int y )
+    {
+        m_start.y = y;
+        m_endsSwapped = false;
+    }
+
+    void SetStartX( int x )
+    {
+        m_start.x = x;
+        m_endsSwapped = false;
+    }
 
     /**
      * Return the ending point of the graphic.
@@ -106,9 +121,24 @@ public:
     const wxPoint& GetEnd() const           { return m_end; }
     int GetEndY()                           { return m_end.y; }
     int GetEndX()                           { return m_end.x; }
-    void SetEnd( const wxPoint& aEnd )      { m_end = aEnd; }
-    void SetEndY( int y )                   { m_end.y = y; }
-    void SetEndX( int x )                   { m_end.x = x; }
+
+    void SetEnd( const wxPoint& aEnd )
+    {
+        m_end = aEnd;
+        m_endsSwapped = false;
+    }
+
+    void SetEndY( int y )
+    {
+        m_end.y = y;
+        m_endsSwapped = false;
+    }
+
+    void SetEndX( int x )
+    {
+        m_end.x = x;
+        m_endsSwapped = false;
+    }
 
     void SetBezierC1( const wxPoint& aPt )  { m_bezierC1 = aPt; }
     const wxPoint& GetBezierC1() const      { return m_bezierC1; }
@@ -127,6 +157,12 @@ public:
     void SetArcAngleAndEnd( double aAngle, bool aCheckNegativeAngle = false );
 
     double GetArcAngle() const;
+
+    /**
+     * Have the start and end points been swapped since they were set?
+     * @return true if they have
+    */
+    bool EndsSwapped() const { return m_endsSwapped; }
 
     // Some attributes are read only, since they are derived from m_Start, m_End, and m_Angle.
     // No Set...() function for these attributes.
@@ -255,6 +291,7 @@ protected:
     void setEditState( int aState ) { m_editState = aState; }
 
 protected:
+    bool                 m_endsSwapped;  // true if start/end were swapped e.g. SetArcAngleAndEnd
     SHAPE_T              m_shape;        // Shape: line, Circle, Arc
     int                  m_width;        // thickness of lines ...
     FILL_T               m_fill;

@@ -2845,7 +2845,7 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
         if( cw )
             shape->SetArcAngleAndEnd( NormalizeAnglePos( arcAngle ) );
         else
-            shape->SetArcAngleAndEnd( NormalizeAngleNeg( arcAngle ) );
+            shape->SetArcAngleAndEnd( NormalizeAngleNeg( arcAngle ), true );
 
         break;
     }
@@ -3056,13 +3056,20 @@ std::vector<PCB_TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromShapes(
             if( shape->GetClass() == wxT( "MGRAPHIC" ) )
             {
                 FP_SHAPE* fp_shape = (FP_SHAPE*) shape;
-                SHAPE_ARC arc( fp_shape->GetCenter0(), fp_shape->GetStart0(),
-                               fp_shape->GetArcAngle() / 10.0 );
+                SHAPE_ARC arc( fp_shape->GetStart0(), fp_shape->GetArcMid0(), fp_shape->GetEnd0(), 0 );
+
+                if( fp_shape->EndsSwapped() )
+                    arc.Reverse();
+
                 track = new PCB_ARC( aParentContainer, &arc );
             }
             else
             {
-                SHAPE_ARC arc( shape->GetCenter(), shape->GetStart(), shape->GetArcAngle() / 10.0 );
+                SHAPE_ARC arc( shape->GetStart(), shape->GetArcMid(), shape->GetEnd(), 0 );
+
+                if( shape->EndsSwapped() )
+                    arc.Reverse();
+
                 track = new PCB_ARC( aParentContainer, &arc );
             }
             break;
@@ -3107,8 +3114,6 @@ std::vector<PCB_TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromShapes(
         // Apply route offsetting, mimmicking the behaviour of the CADSTAR post processor
         if( prevTrack != nullptr )
         {
-            track->SetStart( prevTrack->GetEnd() ); // remove discontinuities if possible
-
             int offsetAmount = ( track->GetWidth() / 2 ) - ( prevTrack->GetWidth() / 2 );
 
             if( offsetAmount > 0 )
