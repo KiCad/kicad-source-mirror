@@ -104,7 +104,7 @@ bool KICADPAD::Read( const SEXPR::SEXPR* aEntry )
 bool KICADPAD::parseDrill( const SEXPR::SEXPR* aDrill )
 {
     // form: (drill {oval} X {Y})
-    const char bad_drill[] = "* corrupt module in PCB file; bad drill";
+    const char bad_drill[] = "* corrupt pad in PCB file; bad drill";
     int nchild = aDrill->GetNumberOfChildren();
 
     if( nchild < 2 )
@@ -123,6 +123,7 @@ bool KICADPAD::parseDrill( const SEXPR::SEXPR* aDrill )
     {
         if( child->GetSymbol() == "oval" )
         {
+            m_drill.oval = true;
             child = aDrill->GetChild( ++idx );
         }
         else
