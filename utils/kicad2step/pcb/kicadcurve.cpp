@@ -30,6 +30,7 @@
 #include <cmath>
 #include <iostream>
 #include <sstream>
+#include <../../../libs/kimath/include/geometry/shape_arc.h>
 
 
 KICADCURVE::KICADCURVE()
@@ -40,6 +41,7 @@ KICADCURVE::KICADCURVE()
     m_layer = LAYER_NONE;
     m_startangle = 0.0;
     m_endangle = 0.0;
+    m_arcHasMiddlePoint = false;
 
     return;
 }
@@ -142,6 +144,13 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
             if( !Get2DCoordinate( child, m_end ) )
                 return false;
         }
+        else if( text == "mid" )
+        {
+            if( !Get2DCoordinate( child, m_middle ) )
+                return false;
+
+            m_arcHasMiddlePoint = true;
+        }
         else if( text == "angle" )
         {
             if( child->GetNumberOfChildren() < 2
@@ -175,6 +184,29 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
             if( *layer == "Edge.Cuts" )
                 m_layer = LAYER_EDGE;
         }
+    }
+
+    // New arcs are defined by start middle and end points instead of center,
+    // start and arc angle
+    // So convert new params to old params
+    if( CURVE_ARC == aCurveType && m_arcHasMiddlePoint )
+    {
+        // To caculate old params, we are using SHAPE_ARC, but SHAPE_ARC use
+        // integer coords. So to avoid truncations, use a scaling factor.
+        // 1e5 is enough.
+        const double scale = 1e5;
+        SHAPE_ARC new_arc( VECTOR2I( m_start.x*scale, m_start.y*scale ),
+                           VECTOR2I( m_middle.x*scale, m_middle.y*scale ),
+                           VECTOR2I( m_end.x*scale, m_end.y*scale ), 0 );
+
+        VECTOR2I center = new_arc.GetCenter();
+        m_start.x = center.x/scale;
+        m_start.y = center.y/scale;
+        m_end.x = new_arc.GetP0().x/scale;
+        m_end.y = new_arc.GetP0().y/scale;
+        m_ep.x = new_arc.GetP1().x/scale;
+        m_ep.y = new_arc.GetP1().y/scale;
+        m_angle = new_arc.GetCentralAngle() / 180.0 * M_PI;
     }
 
     return true;

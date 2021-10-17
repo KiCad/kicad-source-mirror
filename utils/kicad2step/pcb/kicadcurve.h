@@ -55,6 +55,7 @@ public:
     LAYERS     m_layer;         // layer of the glyph
     DOUBLET    m_start;         // start point of line or center for arc and circle
     DOUBLET    m_end;           // end point of line, first point on arc or circle
+    DOUBLET    m_middle;        // middle point on arc for recent files
     DOUBLET    m_ep;            // actual endpoint, to be computed in the case of arcs
     DOUBLET    m_bezierctrl1;   // for bezier curve only first control point
     DOUBLET    m_bezierctrl2;   // for bezier curve only second control point
@@ -62,6 +63,7 @@ public:
     double     m_angle;         // subtended angle of arc
     double     m_startangle;
     double     m_endangle;
+    bool       m_arcHasMiddlePoint; // true if an arc id defined by 3 points
 
     std::vector<DOUBLET> m_poly; // vector of polygon points
 };

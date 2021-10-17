@@ -29,7 +29,9 @@ add_library( kicad2step_lib STATIC
 target_include_directories( kicad2step_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include # for core
-    ${Boost_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIR}        # see commit 03bce554
+    ${CMAKE_SOURCE_DIR}/libs/kimath/include
+    ${INC_AFTER}
 )
 
 target_link_libraries( kicad2step_lib
@@ -37,6 +39,7 @@ target_link_libraries( kicad2step_lib
     ${wxWidgets_LIBRARIES}
     ${OCC_LIBRARIES}
     ${ZLIB_LIBRARIES}
+    kimath
 )
 
 set( K2S_FILES
