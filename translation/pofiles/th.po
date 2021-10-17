@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-15 12:28-0700\n"
-"PO-Revision-Date: 2021-10-14 07:35+0000\n"
+"PO-Revision-Date: 2021-10-18 19:17+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -4217,14 +4217,12 @@ msgid "Bezier"
 msgstr "เบซิเยร์"
 
 #: common/eda_shape.cpp:1452
-#, fuzzy
 msgid "Start X"
-msgstr "เลเยอร์เริ่มต้น"
+msgstr "เริ่ม X"
 
 #: common/eda_shape.cpp:1454
-#, fuzzy
 msgid "Start Y"
-msgstr "เลเยอร์เริ่มต้น"
+msgstr "เริ่ม Y"
 
 #: common/eda_shape.cpp:1456 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
@@ -12679,7 +12677,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "วงจรปัจจุบันได้รับการแก้ไข บันทึกการเปลี่ยนแปลง?"
 
 #: eeschema/files-io.cpp:1338
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -12687,10 +12684,9 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"นี่ช่างน่าขายหน้า!\n"
-"ปรากฏว่าครั้งล่าสุดที่คุณแก้ไขไฟล์\n"
-"\"%s\"\n"
-"ไม่ได้บันทึกอย่างถูกต้อง\tคุณต้องการย้อนกลับไปใช้บันทึกครั้งก่อนหน้าหรือไม่?"
+"นี่เป็นสิ่งที่ช่างน่าขายหน้า!\n"
+"มันคล้ายกับว่าครั้งล่าสุดที่คุณแก้ไขไฟล์วงจร\n"
+"ไม่ได้บันทึกอย่างถูกต้อง  คุณต้องการย้อนกลับไปใช้บันทึกครั้งก่อนหน้าหรือไม่?"
 
 #: eeschema/files-io.cpp:1349
 #, c-format
@@ -12698,38 +12694,43 @@ msgid ""
 "The file '%s` could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
+"ไฟล์ '%s' ไม่สามารถเปิด\n"
+"จำเป็นต้องใช้การแก้ไขด้วยตนเอง สำหรับไฟล์บันทึกอัตโนมัติ"
 
 #: eeschema/files-io.cpp:1395
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "ไม่สามารถเอาไฟล์บันทึกอัตโนมัติ '%s' ออกได้!"
+msgstr "ไฟล์บันทึกอัตโนมัติต่อไปนี้ ไม่สามารถกู้กลับคืน\n"
 
 #: eeschema/files-io.cpp:1400
 msgid "Manual recovery will be required to restore the file(s) above."
-msgstr ""
+msgstr "ต้องทำการกู้คืนด้วยต้นเอง สำหรับไฟล์ด้านบน"
 
 #: eeschema/files-io.cpp:1422
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "ไม่สามารถเอาไฟล์บันทึกอัตโนมัติ '%s' ออกได้!"
+msgstr "ไฟล์บันทึกอัตโนมัติตามนี้ ไม่สามารถลบออก\n"
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
-msgstr ""
+msgstr "ต้องทำการลบไฟล์ด้านบน ด้วยตนเอง"
 
 #: eeschema/files-io.cpp:1438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "ไม่สามารถเอาไฟล์บันทึกอัตโนมัติ '%s' ออกได้!"
+msgstr ""
+"ไฟล์บันทึกอัตโนมัติหลัก\n"
+"'%s'\n"
+"ไม่สามารถลบออก"
 
 #: eeschema/files-io.cpp:1446
 msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
 msgstr ""
+"ไฟล์นี้จะต้องลบออกด้วยตนเอง ไม่เช่นนั้นฟังก์ชั่นการบันทึกอัตโนมัติ\n"
+"จะแสดงทุกครั้งที่คุณเปิดโปรแกรมแก้ไขวงจร"
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1397
 msgid "Alias of"
@@ -12865,9 +12866,9 @@ msgid "Polyline, %d points"
 msgstr "เส้นหลายเหลี่ยม %d จุด"
 
 #: eeschema/lib_shape.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "เส้นโค้งเบซิเย่ร์"
+msgstr "เส้นโค้งเบซิเย่ร์, %d จุด"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -16729,44 +16730,36 @@ msgid "16 Layers"
 msgstr "16 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:91
-#, fuzzy
 msgid "18 Layers"
-msgstr "8 เลเยอร์"
+msgstr "18 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:92
-#, fuzzy
 msgid "20 Layers"
-msgstr "2 เลเยอร์"
+msgstr "20 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:93
-#, fuzzy
 msgid "22 Layers"
-msgstr "2 เลเยอร์"
+msgstr "22 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:94
-#, fuzzy
 msgid "24 Layers"
-msgstr "4 เลเยอร์"
+msgstr "24 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:95
-#, fuzzy
 msgid "26 Layers"
-msgstr "6 เลเยอร์"
+msgstr "26 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:96
-#, fuzzy
 msgid "28 Layers"
-msgstr "8 เลเยอร์"
+msgstr "28 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:97
-#, fuzzy
 msgid "30 Layers"
-msgstr "10 เลเยอร์"
+msgstr "30 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:98
-#, fuzzy
 msgid "32 Layers"
-msgstr "2 เลเยอร์"
+msgstr "32 เลเยอร์"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:110
 msgid "Store Choice"
@@ -17792,9 +17785,8 @@ msgid "Failed to output data"
 msgstr "ข้อมูลส่งออกล้มเหลว"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html> <h1> ตัวเลือกแม่แบบ</h1></html>"
+msgstr "<h1> ตัวเลือกแม่แบบ</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -19682,9 +19674,8 @@ msgid "E12"
 msgstr "อี12"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:84
-#, fuzzy
 msgid "E24"
-msgstr "24"
+msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:94
 msgid "Solutions"
@@ -20237,7 +20228,6 @@ msgid "Not worth using"
 msgstr "ไม่คุ้มค่าจะใช้"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20266,27 +20256,31 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"E-series ที่กำหนดใน IEC 60063 เป็นระบบที่ต้องการอย่างกว้างขวาง\n"
-"ตัวเลขสำหรับชิ้นส่วนอิเล็กทรอนิกส์ ค่าที่ใช้ได้จะอยู่ที่ประมาณ\n"
-"เว้นระยะเท่ากันในระดับลอการิทึม\n"
+"ซีรี่ส์อิเล็กทรอนิกส์ถูกกําหนดใน IEC 60063\n"
 "\n"
-"E12: 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"E6: 1.0 - 1.5 - 2.2 - 3.3 - 4.7 - 6.8 -\n"
-"E3: 1.0 - - - 2.2 - - - 4.7 - - -\n"
-"E1: 1.0 - - - - - - - - - - -\n"
+"ค่าที่มีอยู่จะเว้นระยะห่างเท่าๆ กันในระดับลอการิทึม\n"
 "\n"
-"เครื่องคิดเลขนี้ค้นหาการรวมกันของส่วนประกอบ E-series มาตรฐานกับ\n"
-"สร้างค่าตามอำเภอใจ คุณสามารถป้อนความต้านทานที่ต้องการได้ตั้งแต่ 0.0025 ถึง 4000 kΩ\n"
-"โซลูชันที่ใช้ส่วนประกอบมากถึง 4 ตัวจะได้รับ\n"
+"E24(5%): 1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 4.7 "
+"5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6(20%): 1.0 - 1.5 - 2.2 - 3.3 - 4.7 - 6.8 -\n"
+"\tE3(50%): 1.0 - - - 2.2 - - - 4.7 - - -\n"
+"\tE1 : 1.0 - - - - - - - - - - -\n"
 "\n"
-"โดยปริยาย ค่าคำขอจะถูกแยกออกจากชุดโซลูชันเสมอ นอกจากนี้ยังสามารถระบุ\n"
-"ค่าเพิ่มเติมสูงสุดสองค่าที่จะแยกออกจากโซลูชันหากไม่มีค่าส่วนประกอบเหล่านี้\n"
+"- เครื่องคิดเลขนี้พบการรวมกันของ E-series มาตรฐาน (ระหว่าง 10Ω และ 1MΩ) "
+"เพื่อสร้างค่าโดยพลการ\n"
+"- คุณสามารถป้อนแนวต้านที่ต้องการได้ตั้งแต่ 0.0025 ถึง 4000 kΩ\n"
+"- มีโซลูชันที่ใช้ส่วนประกอบสูงสุด 4 ชิ้น\n"
 "\n"
-"โซลูชันมีให้ในรูปแบบต่อไปนี้:\n"
+"ตามค่าเริ่มต้น ค่าการร้องขอจะถูกแยกออกจากชุดโซลูชันเสมอ  "
+"นอกจากนี้ยังสามารถระบุได้\n"
+"มีค่าเพิ่มเติมสูงสุดสองค่าที่จะแยกออกจากโซลูชัน\n"
 "\n"
-"R1 + R2 +...+ ตัวต้านทาน Rn ในอนุกรม\n"
-"R1 | R2 |...| ตัวต้านทาน Rn แบบขนาน\n"
-"R1 + (R2|R3)... ใดๆ ก็ตามข้างต้น\n"
+"โซลูชันจะได้รับในรูปแบบต่อไปนี้:\n"
+"\n"
+"R1 + R2 +...+ Rn ในซีรีส์\n"
+"| R1 | R2...|\tตัวต้านทาน Rn แบบขนาน\n"
+"R1 + (R2| R3)...\t\tการรวมกันของข้างต้นใด ๆ ข้างต้น\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:49
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
@@ -20310,9 +20304,8 @@ msgid "Color Code"
 msgstr "รหัสสี"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "สายส่ง"
+msgstr "สายส่ง "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -23826,12 +23819,12 @@ msgid "Clearance Overrides and Settings"
 msgstr "ระยะห่างทับค่าและการตั้งค่า"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:438
-#, fuzzy
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
-"ไออีของไลบรารีและไอดีของฟุ้ทพรินท์ได้กำหนดแล้ว  ใช้คำสั่ง \"เปลี่ยนฟุ้ทพรินท์...\" เพื่อกำหนดใหม่"
+"ไออีของไลบรารีและไอดีของฟุ้ทพรินท์ได้กำหนดแล้ว  ใช้คำสั่ง \"เปล"
+"ี่ยนฟุ้ทพรินท์...\" เพื่อกำหนดฟุ้ทพรินท์ที่แตกต่าง"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:135
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:108
@@ -27039,14 +27032,12 @@ msgid "Path Substitutions"
 msgstr "การแทนที่เส้นทาง"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "No filename entered"
-msgstr "ไม่ได้เลือกไฟล์!"
+msgstr "ไม่ได้ป้อนชื่อไฟล์"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
-#, fuzzy
 msgid "Illegal filename"
-msgstr "ชื่อไฟล์ไม่ถูกต้อง: %s"
+msgstr "ชื่อไฟล์ไม่ถูกต้อง"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -31686,6 +31677,10 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
+"แม่แบบ CADSTAR '%s' มีแพ็ดบรรเทาความร้อน แต่ความกว้างก้านแพ็ด (%.2f มม.) "
+"บางกว่าความหนาต่ําสุดของโซน (%.2f มม.) KiCad "
+"ต้องการความหนาขั้นต่ําของโซนเพื่อเก็บรักษาไว้ ดังนั้นความหนาขั้นต่ําจึงถูกนํา"
+"มาใช้เป็นความกว้างของก้านแพ็ดใหม่และจะถูกนําไปใช้ในครั้งต่อไปที่มีการเติมโซน"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1948
 #, c-format
