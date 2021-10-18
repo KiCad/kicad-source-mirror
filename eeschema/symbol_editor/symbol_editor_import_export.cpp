@@ -91,7 +91,9 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
     wxString symbolName = symbols[0];
     LIB_SYMBOL* entry = pi->LoadSymbol( fn.GetFullPath(), symbolName );
 
-    if( m_libMgr->SymbolExists( symbols[0], libName ) )
+    entry->SetName( EscapeString( entry->GetName(), CTX_LIBID ) );
+
+    if( m_libMgr->SymbolExists( entry->GetName(), libName ) )
     {
         msg.Printf( _( "Symbol %s already exists in library '%s'." ), symbolName, libName );
 
@@ -105,7 +107,7 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
 
     m_libMgr->UpdateSymbol( entry, libName );
     SyncLibraries( false );
-    LoadSymbol( symbolName, libName, 1 );
+    LoadSymbol( entry->GetName(), libName, 1 );
 }
 
 
