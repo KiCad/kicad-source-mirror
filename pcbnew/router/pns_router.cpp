@@ -478,7 +478,7 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
 
                 if( itemToMark->Kind() == ITEM::SOLID_T )
                 {
-                    if( holeOnly || !m_iface->IsFlashedOnLayer( itemToMark, itemToMark->Layer() ) )
+                    if( holeOnly || !m_iface->IsFlashedOnLayer( itemToMark, currentItem->Layer() ) )
                     {
                         SOLID* solid = static_cast<SOLID*>( tmp.get() );
                         solid->SetShape( solid->Hole()->Clone() );
