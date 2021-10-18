@@ -2153,7 +2153,7 @@ int CONNECTION_GRAPH::RunERC()
     // represent multiple sheets with multiple subgraphs.  We can tell these apart by drivers.
     std::set<SCH_ITEM*> seenDriverInstances;
 
-    for( auto&& subgraph : m_subgraphs )
+    for( CONNECTION_SUBGRAPH* subgraph : m_subgraphs )
     {
         // Graph is supposed to be up-to-date before calling RunERC()
         wxASSERT( !subgraph->m_dirty );
@@ -2233,31 +2233,73 @@ int CONNECTION_GRAPH::RunERC()
 
 bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubgraph )
 {
-    if( !aSubgraph->m_second_driver )
-        return true;
+    /*
+     * This was changed late in 6.0 to fix https://gitlab.com/kicad/code/kicad/-/issues/9367
+     * so I'm going to leave the original code in for just a little while.  If anyone comes
+     * across this in 7.0 development (or later), feel free to delete.
+     */
+#if 0
+    if( aSubgraph->m_second_driver )
+    {
+        SCH_ITEM* primary   = aSubgraph->m_first_driver;
+        SCH_ITEM* secondary = aSubgraph->m_second_driver;
 
-    SCH_ITEM* primary   = aSubgraph->m_first_driver;
-    SCH_ITEM* secondary = aSubgraph->m_second_driver;
+        wxPoint pos = primary->Type() == SCH_PIN_T ?
+                      static_cast<SCH_PIN*>( primary )->GetTransformedPosition() :
+                      primary->GetPosition();
 
-    wxPoint pos = primary->Type() == SCH_PIN_T ?
-                  static_cast<SCH_PIN*>( primary )->GetTransformedPosition() :
-                  primary->GetPosition();
+        wxString primaryName   = aSubgraph->GetNameForDriver( primary );
+        wxString secondaryName = aSubgraph->GetNameForDriver( secondary );
 
-    wxString primaryName   = aSubgraph->GetNameForDriver( primary );
-    wxString secondaryName = aSubgraph->GetNameForDriver( secondary );
+        wxString msg = wxString::Format( _( "Both %s and %s are attached to the same "
+                                            "items; %s will be used in the netlist" ),
+                                         primaryName, secondaryName, primaryName );
 
-    wxString msg = wxString::Format( _( "Both %s and %s are attached to the same "
-                                        "items; %s will be used in the netlist" ),
-                                     primaryName, secondaryName, primaryName );
+        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DRIVER_CONFLICT );
+        ercItem->SetItems( primary, secondary );
+        ercItem->SetErrorMessage( msg );
 
-    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DRIVER_CONFLICT );
-    ercItem->SetItems( primary, secondary );
-    ercItem->SetErrorMessage( msg );
+        SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
+        aSubgraph->m_sheet.LastScreen()->Append( marker );
 
-    SCH_MARKER* marker = new SCH_MARKER( ercItem, pos );
-    aSubgraph->m_sheet.LastScreen()->Append( marker );
+        return false;
+    }
+#else
+    if( aSubgraph->m_multiple_drivers )
+    {
+        for( SCH_ITEM* driver : aSubgraph->m_drivers )
+        {
+            if( driver == aSubgraph->m_driver )
+                continue;
 
-    return false;
+            if( driver->Type() == SCH_GLOBAL_LABEL_T
+                    || driver->Type() == SCH_HIER_LABEL_T
+                    || driver->Type() == SCH_LABEL_T )
+            {
+                wxString primaryName   = aSubgraph->GetNameForDriver( aSubgraph->m_driver );
+                wxString secondaryName = aSubgraph->GetNameForDriver( driver );
+
+                if( primaryName == secondaryName )
+                    continue;
+
+                wxString msg = wxString::Format( _( "Both %s and %s are attached to the same "
+                                                    "items; %s will be used in the netlist" ),
+                                                 primaryName, secondaryName, primaryName );
+
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_DRIVER_CONFLICT );
+                ercItem->SetItems( aSubgraph->m_driver, driver );
+                ercItem->SetErrorMessage( msg );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, driver->GetPosition() );
+                aSubgraph->m_sheet.LastScreen()->Append( marker );
+
+                return false;
+            }
+        }
+    }
+#endif
+
+    return true;
 }
 
 
