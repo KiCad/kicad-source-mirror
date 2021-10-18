@@ -1134,7 +1134,8 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName, b
     {
         WX_TEXT_ENTRY_DIALOG dlg( this, _( "Enter footprint name:" ), _( "New Footprint" ),
                                   footprintName, _( "Footprint type:" ),
-                                  { _( "Through hole" ), _( "SMD" ), _( "Other" ) }, footprintType );
+                                  { _( "Through hole" ), _( "SMD" ), _( "Other" ) },
+                                  footprintType );
         dlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR( &footprintName ) );
 
         if( dlg.ShowModal() != wxID_OK )

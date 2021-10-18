@@ -38,9 +38,12 @@ WX_TEXT_ENTRY_DIALOG::WX_TEXT_ENTRY_DIALOG( wxWindow* aParent,
 }
 
 
-WX_TEXT_ENTRY_DIALOG::WX_TEXT_ENTRY_DIALOG( wxWindow* aParent, const wxString& aLabel, const wxString& aCaption,
-                      const wxString& aDefaultValue, const wxString& aChoiceCaption,
-                      const std::vector<wxString>& aChoices, int aDefaultChoice ) :
+WX_TEXT_ENTRY_DIALOG::WX_TEXT_ENTRY_DIALOG( wxWindow* aParent, const wxString& aLabel,
+                                            const wxString& aCaption,
+                                            const wxString& aDefaultValue,
+                                            const wxString& aChoiceCaption,
+                                            const std::vector<wxString>& aChoices,
+                                            int aDefaultChoice ) :
               WX_TEXT_ENTRY_DIALOG( aParent, aLabel, aCaption, aDefaultValue )
 {
     m_choiceLabel->SetLabel( aChoiceCaption );

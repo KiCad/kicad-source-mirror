@@ -264,7 +264,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 
 	m_HoleClearanceUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_HoleClearanceUnits->Wrap( -1 );
-	fgFeatureConstraints->Add( m_HoleClearanceUnits, 0, wxALL, 5 );
+	fgFeatureConstraints->Add( m_HoleClearanceUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_bitmapEdgeClearance = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapEdgeClearance, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
