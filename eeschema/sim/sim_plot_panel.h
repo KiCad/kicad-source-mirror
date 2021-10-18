@@ -301,6 +301,9 @@ private:
     ///< @brief Construct the plot axes for DC simulation plot.
     void prepareDCAxes();
 
+    ///> Create/Ensure axes are available for plotting
+    void updateAxes();
+
     SIM_PLOT_COLORS m_colors;
 
     // Top-level plot window

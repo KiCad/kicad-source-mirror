@@ -32,8 +32,6 @@
 #include <algorithm>
 #include <limits>
 
-#include <wx/regex.h>
-
 
 static wxString formatFloat( double x, int nDigits )
 {
@@ -318,6 +316,32 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( const wxString& aCommand, wxWindow* parent,
 
     UpdatePlotColors();
 
+    updateAxes();
+
+    // a mpInfoLegend displays le name of traces on the left top panel corner:
+    m_legend = new mpInfoLegend( wxRect( 0, 40, 200, 40 ), wxTRANSPARENT_BRUSH );
+    m_legend->SetVisible( false );
+    m_plotWin->AddLayer( m_legend );
+
+    m_plotWin->EnableDoubleBuffer( true );
+    m_plotWin->UpdateAll();
+
+    m_sizer->Add( m_plotWin, 1, wxALL | wxEXPAND, 1 );
+    SetSizer( m_sizer );
+}
+
+
+SIM_PLOT_PANEL::~SIM_PLOT_PANEL()
+{
+    // ~mpWindow destroys all the added layers, so there is no need to destroy m_traces contents
+}
+
+
+void SIM_PLOT_PANEL::updateAxes()
+{
+    if( m_axis_x )
+        return;
+
     switch( GetType() )
     {
         case ST_AC:
@@ -370,34 +394,28 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( const wxString& aCommand, wxWindow* parent,
         m_axis_y2->SetNameAlign ( mpALIGN_RIGHT );
         m_plotWin->AddLayer( m_axis_y2 );
     }
-
-    // a mpInfoLegend displays le name of traces on the left top panel corner:
-    m_legend = new mpInfoLegend( wxRect( 0, 40, 200, 40 ), wxTRANSPARENT_BRUSH );
-    m_legend->SetVisible( false );
-    m_plotWin->AddLayer( m_legend );
-
-    m_plotWin->EnableDoubleBuffer( true );
-    m_plotWin->UpdateAll();
-
-    m_sizer->Add( m_plotWin, 1, wxALL | wxEXPAND, 1 );
-    SetSizer( m_sizer );
 }
-
-
-SIM_PLOT_PANEL::~SIM_PLOT_PANEL()
-{
-    // ~mpWindow destroys all the added layers, so there is no need to destroy m_traces contents
-}
-
 
 void SIM_PLOT_PANEL::prepareDCAxes()
 {
-    wxRegEx simCmd( "^.dc[[:space:]]+([[:alnum:]]+\\M).*", wxRE_ADVANCED | wxRE_ICASE );
+    wxString sim_cmd = getSimCommand().Lower();
+    wxString rem;
 
-    if( simCmd.Matches( getSimCommand() ) )
+    if( sim_cmd.StartsWith( ".dc ", &rem ) )
     {
-        switch( static_cast<char>( simCmd.GetMatch( getSimCommand().Lower(), 1 ).GetChar( 0 ) ) )
+        wxChar ch;
+
+        try
         {
+            ch = rem.GetChar( 0 );
+        }
+        catch( ... )
+        {;}
+
+        switch( ch )
+        {
+        // Make sure that we have a reliable default (even if incorrectly labeled)
+        default:
         case 'v':
             m_axis_x =
                     new LIN_SCALE<mpScaleX>( _( "Voltage (swept)" ), wxT( "V" ), mpALIGN_BOTTOM );
@@ -442,7 +460,7 @@ void SIM_PLOT_PANEL::UpdatePlotColors()
 void SIM_PLOT_PANEL::UpdateTraceStyle( TRACE* trace )
 {
     int        type = trace->GetType();
-    wxPenStyle penStyle = ( ( type & SPT_AC_PHASE || type & SPT_CURRENT ) && m_dotted_cp )
+    wxPenStyle penStyle = ( ( ( type & SPT_AC_PHASE ) || ( type & SPT_CURRENT ) ) && m_dotted_cp )
                                   ? wxPENSTYLE_DOT
                                   : wxPENSTYLE_SOLID;
     trace->SetPen( wxPen( trace->GetTraceColour(), 2, penStyle ) );
@@ -455,6 +473,8 @@ bool SIM_PLOT_PANEL::addTrace( const wxString& aTitle, const wxString& aName, in
 {
     TRACE* trace = nullptr;
     wxString name = aTitle;
+
+    updateAxes();
 
     // Find previous entry, if there is one
     auto prev = m_traces.find( name );
