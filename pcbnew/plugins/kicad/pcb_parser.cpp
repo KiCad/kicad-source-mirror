@@ -2409,13 +2409,13 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
         }
         else
         {
-            wxPoint start, mid, end;
+            wxPoint arc_start, arc_mid, arc_end;
 
             if( token != T_start )
                 Expecting( T_start );
 
-            start.x = parseBoardUnits( "X coordinate" );
-            start.y = parseBoardUnits( "Y coordinate" );
+            arc_start.x = parseBoardUnits( "X coordinate" );
+            arc_start.y = parseBoardUnits( "Y coordinate" );
             NeedRIGHT();
             NeedLEFT();
             token = NextTok();
@@ -2423,8 +2423,8 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
             if( token != T_mid )
                 Expecting( T_mid );
 
-            mid.x = parseBoardUnits( "X coordinate" );
-            mid.y = parseBoardUnits( "Y coordinate" );
+            arc_mid.x = parseBoardUnits( "X coordinate" );
+            arc_mid.y = parseBoardUnits( "Y coordinate" );
             NeedRIGHT();
             NeedLEFT();
             token = NextTok();
@@ -2432,11 +2432,11 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
             if( token != T_end )
                 Expecting( T_end );
 
-            end.x = parseBoardUnits( "X coordinate" );
-            end.y = parseBoardUnits( "Y coordinate" );
+            arc_end.x = parseBoardUnits( "X coordinate" );
+            arc_end.y = parseBoardUnits( "Y coordinate" );
             NeedRIGHT();
 
-            shape->SetArcGeometry( start, mid, end );
+            shape->SetArcGeometry( arc_start, arc_mid, arc_end );
         }
 
         break;
@@ -3709,13 +3709,13 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
         }
         else
         {
-            wxPoint start, mid, end;
+            wxPoint arc_start, arc_mid, arc_end;
 
             if( token != T_start )
                 Expecting( T_start );
 
-            start.x = parseBoardUnits( "X coordinate" );
-            start.y = parseBoardUnits( "Y coordinate" );
+            arc_start.x = parseBoardUnits( "X coordinate" );
+            arc_start.y = parseBoardUnits( "Y coordinate" );
             NeedRIGHT();
             NeedLEFT();
             token = NextTok();
@@ -3723,8 +3723,8 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
             if( token != T_mid )
                 Expecting( T_mid );
 
-            mid.x = parseBoardUnits( "X coordinate" );
-            mid.y = parseBoardUnits( "Y coordinate" );
+            arc_mid.x = parseBoardUnits( "X coordinate" );
+            arc_mid.y = parseBoardUnits( "Y coordinate" );
             NeedRIGHT();
             NeedLEFT();
             token = NextTok();
@@ -3732,11 +3732,11 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
             if( token != T_end )
                 Expecting( T_end );
 
-            end.x = parseBoardUnits( "X coordinate" );
-            end.y = parseBoardUnits( "Y coordinate" );
+            arc_end.x = parseBoardUnits( "X coordinate" );
+            arc_end.y = parseBoardUnits( "Y coordinate" );
             NeedRIGHT();
 
-            shape->SetArcGeometry0( start, mid, end );
+            shape->SetArcGeometry0( arc_start, arc_mid, arc_end );
         }
 
         break;
