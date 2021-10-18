@@ -613,8 +613,12 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     if( dynamic_cast<PCB_TRACK*>( other) )
         testClearance = false;
 
-    // Pads of the same (defined) net get a waiver on clearance and hole tests
-    if( otherPad && pad->GetNetCode() && otherPad->GetNetCode() == pad->GetNetCode() )
+    int padNet = pad->GetNetCode();
+    int otherPadNet = otherPad ? otherPad->GetNetCode() : 0;
+    int otherViaNet = otherVia ? otherVia->GetNetCode() : 0;
+
+    // Pads and vias of the same (defined) net get a waiver on clearance and hole tests
+    if( ( otherPadNet && otherPadNet == padNet ) || ( otherViaNet && otherViaNet == padNet ) )
     {
         testClearance = false;
         testHoles = false;
