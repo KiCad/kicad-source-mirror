@@ -459,7 +459,10 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     if( principalItemCount == 1 )
     {
-        rotPoint = head->GetPosition();
+        if( moving && selection.HasReferencePoint() )
+            rotPoint = (wxPoint) selection.GetReferencePoint();
+        else
+            rotPoint = head->GetPosition();
 
         if( !moving )
             saveCopyInUndoList( head, UNDO_REDO::CHANGED );
@@ -470,10 +473,8 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( head );
 
-            if( clockwise )
-                symbol->SetOrientation( SYM_ROTATE_CLOCKWISE );
-            else
-                symbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
+            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
+                symbol->Rotate( rotPoint );
 
             if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                 symbol->AutoAutoplaceFields( m_frame->GetScreen() );
@@ -555,7 +556,10 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     }
     else
     {
-        rotPoint = m_frame->GetNearestGridPosition( (wxPoint)selection.GetCenter() );
+        if( moving && selection.HasReferencePoint() )
+            rotPoint = (wxPoint) selection.GetReferencePoint();
+        else
+            rotPoint = m_frame->GetNearestGridPosition( (wxPoint) selection.GetCenter() );
     }
 
     for( unsigned ii = 0; ii < selection.GetSize(); ii++ )

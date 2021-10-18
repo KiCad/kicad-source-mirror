@@ -320,6 +320,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     {
                         // User wants to warp the mouse
                         m_cursor = grid.BestDragOrigin( m_cursor, snapLayer, selection );
+                        selection.SetReferencePoint( m_cursor );
                     }
                     else
                     {
@@ -357,6 +358,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 moveItem( item, delta );
                 updateItem( item, false );
             }
+
+            if( selection.HasReferencePoint() )
+                selection.SetReferencePoint( selection.GetReferencePoint() + delta );
 
             m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
         }

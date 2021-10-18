@@ -1086,9 +1086,12 @@ EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
     }
     else        // Trim an existing selection by aFilterList
     {
+        bool isMoving = false;
+
         for( int i = (int) m_selection.GetSize() - 1; i >= 0; --i )
         {
             EDA_ITEM* item = (EDA_ITEM*) m_selection.GetItem( i );
+            isMoving = static_cast<SCH_ITEM*>( item )->IsMoving();
 
             if( !item->IsType( aFilterList ) )
             {
@@ -1096,9 +1099,10 @@ EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
                 m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
             }
         }
-    }
 
-    updateReferencePoint();
+        if( !isMoving )
+            updateReferencePoint();
+    }
 
     return m_selection;
 }
