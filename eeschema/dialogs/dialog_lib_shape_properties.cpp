@@ -84,7 +84,7 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
     m_checkApplyToAllConversions->Enable( enblConvOptStyle );
 
     if( shape )
-        m_fillCtrl->SetSelection( static_cast<int>( shape->GetFillType() ) );
+        m_fillCtrl->SetSelection( static_cast<int>( shape->GetFillType() ) - 1 );
 
     m_fillCtrl->Enable( shape != nullptr );
 
@@ -100,7 +100,7 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataFromWindow()
     EDA_SHAPE*  shape = dynamic_cast<EDA_SHAPE*>( m_item );
 
     if( shape )
-        shape->SetFillMode((FILL_T) std::max( m_fillCtrl->GetSelection(), 0 ));
+        shape->SetFillMode( static_cast<FILL_T>( std::max( m_fillCtrl->GetSelection() + 1, 1 ) ) );
 
     if( shape )
         shape->SetWidth( m_lineWidth.GetValue() );

@@ -49,6 +49,7 @@ enum class SHAPE_T : int
 };
 
 
+// WARNING: Do not change these values without updating dialogs that depend on their position values
 enum class FILL_T : int
 {
     NO_FILL = 1,
