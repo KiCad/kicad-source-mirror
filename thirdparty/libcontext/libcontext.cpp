@@ -533,9 +533,8 @@ __asm (
 
 #if defined(LIBCONTEXT_PLATFORM_apple_arm64) && defined(LIBCONTEXT_COMPILER_gcc)
 __asm (
-".cpu    generic+fp+simd\n"
 ".text\n"
-".align  2\n"
+".balign  16\n"
 ".global _jump_fcontext\n"
 "_jump_fcontext:\n"
 "    # prepare stack for GP + FPU\n"
