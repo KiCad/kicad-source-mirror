@@ -401,9 +401,11 @@ void SIM_PLOT_PANEL::prepareDCAxes()
     wxString sim_cmd = getSimCommand().Lower();
     wxString rem;
 
-    if( sim_cmd.StartsWith( ".dc ", &rem ) )
+    if( sim_cmd.StartsWith( ".dc", &rem ) )
     {
         wxChar ch;
+
+        rem.Trim( false );
 
         try
         {
