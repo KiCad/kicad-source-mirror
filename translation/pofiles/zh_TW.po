@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-15 12:28-0700\n"
+"POT-Creation-Date: 2021-10-18 12:18-0700\n"
 "PO-Revision-Date: 2021-10-01 07:18+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -1551,8 +1551,8 @@ msgstr "確認"
 
 #: common/confirm.cpp:325 eeschema/symbol_editor/symbol_editor.cpp:446
 #: eeschema/symbol_editor/symbol_editor.cpp:703
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:98
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:161
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:100
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:163
 #: eeschema/tools/symbol_editor_pin_tool.cpp:239 kicad/import_project.cpp:103
 #: kicad/tools/kicad_manager_control.cpp:263
 #: pcbnew/dialogs/dialog_export_idf.cpp:162
@@ -1575,7 +1575,7 @@ msgstr "確認"
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
 #: pcbnew/footprint_libraries_utils.cpp:985
-#: pcbnew/footprint_libraries_utils.cpp:1244
+#: pcbnew/footprint_libraries_utils.cpp:1245
 msgid "Description"
 msgstr "描述"
 
@@ -3372,7 +3372,7 @@ msgstr "重置為滑鼠預設值"
 msgid "Reset to Trackpad Defaults"
 msgstr "重置為觸控板預設值"
 
-#: common/dialogs/panel_setup_netclasses.cpp:85 common/eda_shape.cpp:1443
+#: common/dialogs/panel_setup_netclasses.cpp:85 common/eda_shape.cpp:1448
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:45
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:219
@@ -3383,19 +3383,19 @@ msgstr "重置為觸控板預設值"
 msgid "Solid"
 msgstr "實心"
 
-#: common/dialogs/panel_setup_netclasses.cpp:87 common/eda_shape.cpp:1444
+#: common/dialogs/panel_setup_netclasses.cpp:87 common/eda_shape.cpp:1449
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:46
 msgid "Dashed"
 msgstr "虛線"
 
-#: common/dialogs/panel_setup_netclasses.cpp:89 common/eda_shape.cpp:1445
+#: common/dialogs/panel_setup_netclasses.cpp:89 common/eda_shape.cpp:1450
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:47
 msgid "Dotted"
 msgstr "點線"
 
-#: common/dialogs/panel_setup_netclasses.cpp:91 common/eda_shape.cpp:1446
+#: common/dialogs/panel_setup_netclasses.cpp:91 common/eda_shape.cpp:1451
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:48
 msgid "Dash-Dot"
@@ -3521,7 +3521,7 @@ msgstr "匯流排粗細"
 msgid "Line Style"
 msgstr "線型"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:59 common/eda_shape.cpp:1442
+#: common/dialogs/panel_setup_netclasses_base.cpp:59 common/eda_shape.cpp:1447
 #: common/pgm_base.cpp:72 common/widgets/footprint_select_widget.cpp:142
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:66
 #: eeschema/dialogs/dialog_junction_props.cpp:36
@@ -3717,7 +3717,7 @@ msgstr "文字"
 
 #: common/drawing_sheet/ds_data_item.cpp:371
 #: common/drawing_sheet/ds_draw_item.cpp:114 common/eda_item.cpp:277
-#: common/eda_shape.cpp:56 eeschema/pin_type.cpp:76
+#: common/eda_shape.cpp:57 eeschema/pin_type.cpp:76
 #: gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:135
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
@@ -3726,8 +3726,8 @@ msgid "Line"
 msgstr "線"
 
 #: common/drawing_sheet/ds_data_item.cpp:372
-#: common/drawing_sheet/ds_draw_item.cpp:118 common/eda_shape.cpp:559
-#: common/eda_shape.cpp:1436
+#: common/drawing_sheet/ds_draw_item.cpp:118 common/eda_shape.cpp:564
+#: common/eda_shape.cpp:1441
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1464
 msgid "Rectangle"
 msgstr "矩形"
@@ -3950,7 +3950,7 @@ msgid "Units"
 msgstr "單元"
 
 #: common/eda_draw_frame.cpp:956 eeschema/dialogs/panel_sym_lib_table.cpp:494
-#: pcbnew/footprint_libraries_utils.cpp:1261
+#: pcbnew/footprint_libraries_utils.cpp:1262
 msgid "Select Library"
 msgstr "選擇庫"
 
@@ -4129,11 +4129,11 @@ msgstr "Gerber 佈局"
 msgid "Draw Item"
 msgstr "繪製項目"
 
-#: common/eda_shape.cpp:57 pcbnew/pad.cpp:1098
+#: common/eda_shape.cpp:58 pcbnew/pad.cpp:1098
 msgid "Rect"
 msgstr "矩形"
 
-#: common/eda_shape.cpp:58 common/eda_shape.cpp:535 common/eda_shape.cpp:1437
+#: common/eda_shape.cpp:59 common/eda_shape.cpp:540 common/eda_shape.cpp:1442
 #: gerbview/gerber_draw_item.cpp:234
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:114
 #: pcbnew/dialogs/dialog_pad_properties.cpp:712
@@ -4141,7 +4141,7 @@ msgstr "矩形"
 msgid "Arc"
 msgstr "弧"
 
-#: common/eda_shape.cpp:59 common/eda_shape.cpp:528 common/eda_shape.cpp:1438
+#: common/eda_shape.cpp:60 common/eda_shape.cpp:533 common/eda_shape.cpp:1443
 #: gerbview/gerber_draw_item.cpp:237
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1096
@@ -4149,16 +4149,16 @@ msgstr "弧"
 msgid "Circle"
 msgstr "圓形"
 
-#: common/eda_shape.cpp:60
+#: common/eda_shape.cpp:61
 msgid "Bezier Curve"
 msgstr "貝塞爾曲線"
 
-#: common/eda_shape.cpp:61 common/eda_shape.cpp:552 common/eda_shape.cpp:1439
+#: common/eda_shape.cpp:62 common/eda_shape.cpp:557 common/eda_shape.cpp:1444
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2119
 msgid "Polygon"
 msgstr "多邊形"
 
-#: common/eda_shape.cpp:523 common/eda_shape.cpp:1450
+#: common/eda_shape.cpp:528 common/eda_shape.cpp:1455
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:134
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:118
@@ -4168,33 +4168,33 @@ msgstr "多邊形"
 msgid "Shape"
 msgstr "形狀"
 
-#: common/eda_shape.cpp:531 common/eda_shape.cpp:541
+#: common/eda_shape.cpp:536 common/eda_shape.cpp:546
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:181
 #: pcbnew/pcb_track.cpp:696
 msgid "Radius"
 msgstr "半徑"
 
-#: common/eda_shape.cpp:538 common/eda_shape.cpp:578 pcbnew/fp_text.cpp:294
+#: common/eda_shape.cpp:543 common/eda_shape.cpp:583 pcbnew/fp_text.cpp:294
 #: pcbnew/pcb_text.cpp:124
 msgid "Angle"
 msgstr "角度"
 
-#: common/eda_shape.cpp:545
+#: common/eda_shape.cpp:550
 msgid "Curve"
 msgstr "曲線"
 
-#: common/eda_shape.cpp:548 common/eda_shape.cpp:573
+#: common/eda_shape.cpp:553 common/eda_shape.cpp:578
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:58
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:52
 #: eeschema/lib_pin.cpp:1047 eeschema/sch_pin.cpp:209
 msgid "Length"
 msgstr "長度"
 
-#: common/eda_shape.cpp:555
+#: common/eda_shape.cpp:560
 msgid "Points"
 msgstr "點"
 
-#: common/eda_shape.cpp:562 common/eda_text.cpp:703 eeschema/sch_bitmap.cpp:203
+#: common/eda_shape.cpp:567 common/eda_text.cpp:703 eeschema/sch_bitmap.cpp:203
 #: pcbnew/dialogs/dialog_board_statistics.cpp:676
 #: pcbnew/dialogs/dialog_board_statistics.cpp:686
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:54
@@ -4208,7 +4208,7 @@ msgstr "點"
 msgid "Width"
 msgstr "寬度"
 
-#: common/eda_shape.cpp:565 common/eda_text.cpp:707 eeschema/sch_bitmap.cpp:204
+#: common/eda_shape.cpp:570 common/eda_text.cpp:707 eeschema/sch_bitmap.cpp:204
 #: pcbnew/dialogs/dialog_board_statistics.cpp:678
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
@@ -4218,18 +4218,18 @@ msgstr "寬度"
 msgid "Height"
 msgstr "高度"
 
-#: common/eda_shape.cpp:570 common/eda_shape.cpp:1435
+#: common/eda_shape.cpp:575 common/eda_shape.cpp:1440
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:82
 #: pcbnew/dialogs/dialog_pad_properties.cpp:700
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2115
 msgid "Segment"
 msgstr "線段"
 
-#: common/eda_shape.cpp:583
+#: common/eda_shape.cpp:588
 msgid "Unrecognized"
 msgstr "無法識別"
 
-#: common/eda_shape.cpp:587 pcb_calculator/transline_ident.cpp:144
+#: common/eda_shape.cpp:592 pcb_calculator/transline_ident.cpp:144
 #: pcb_calculator/transline_ident.cpp:176
 #: pcb_calculator/transline_ident.cpp:210
 #: pcb_calculator/transline_ident.cpp:327
@@ -4237,34 +4237,34 @@ msgstr "無法識別"
 msgid "Line width"
 msgstr "線寬"
 
-#: common/eda_shape.cpp:1440
+#: common/eda_shape.cpp:1445
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:100
 #: pcbnew/dialogs/dialog_pad_properties.cpp:706
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2117
 msgid "Bezier"
 msgstr "貝塞爾曲線"
 
-#: common/eda_shape.cpp:1452
+#: common/eda_shape.cpp:1457
 #, fuzzy
 msgid "Start X"
 msgstr "X 起點:"
 
-#: common/eda_shape.cpp:1454
+#: common/eda_shape.cpp:1459
 #, fuzzy
 msgid "Start Y"
 msgstr "Y 起點:"
 
-#: common/eda_shape.cpp:1456 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
+#: common/eda_shape.cpp:1461 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
 msgid "End X"
 msgstr "結束點 X"
 
-#: common/eda_shape.cpp:1458 pcbnew/pcb_shape.cpp:263 pcbnew/pcb_track.cpp:1121
+#: common/eda_shape.cpp:1463 pcbnew/pcb_shape.cpp:263 pcbnew/pcb_track.cpp:1121
 #: pcbnew/pcb_track.cpp:1138
 msgid "End Y"
 msgstr "結束點 Y"
 
-#: common/eda_shape.cpp:1461
+#: common/eda_shape.cpp:1466
 msgid "Line Width"
 msgstr "線寬"
 
@@ -5416,21 +5416,21 @@ msgstr "無法將 \"%s\" 轉換成 double。"
 msgid "Cannot open file '%s'"
 msgstr "無法開啟檔案 ‘%s’"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2349
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2648
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
 #, fuzzy
 msgid "File import cancelled by user."
 msgstr "使用者取消了開啟動作。"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2366
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2384
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2400
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2406
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2412
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2370
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2388
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2404
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2410
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2416
 msgid "The selected file is not valid or might be corrupt!"
 msgstr "所選檔案無效或可能已損壞！"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2511
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2515
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
 msgstr "'%s' 中非預期的點數。找到 %d，但需要 %d。"
@@ -7318,24 +7318,24 @@ msgstr "重複的項目 %s%s\n"
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "不同的值：%s%d%s (%s) 和 %s%d%s (%s)"
 
-#: eeschema/connection_graph.cpp:2249
+#: eeschema/connection_graph.cpp:2254 eeschema/connection_graph.cpp:2285
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "%s 和 %s 都連線到同一根導線上；選擇 %s 作為用於網路列表的標籤"
 
-#: eeschema/connection_graph.cpp:2467
+#: eeschema/connection_graph.cpp:2509
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "網路 %s 以圖形方式連線到匯流排 %s，但不是匯流排的成員"
 
-#: eeschema/connection_graph.cpp:2875
+#: eeschema/connection_graph.cpp:2917
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "圖框引腳 %s 在圖框內沒有匹配的分層標籤"
 
-#: eeschema/connection_graph.cpp:2892
+#: eeschema/connection_graph.cpp:2934
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "層次標籤 %s 在母體圖框內沒有匹配的圖框引腳"
@@ -11052,12 +11052,12 @@ msgid "External data"
 msgstr "外部資料"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:919
-#: eeschema/sim/sim_plot_panel.cpp:342
+#: eeschema/sim/sim_plot_panel.cpp:366
 msgid "Voltage"
 msgstr "電壓"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:919
-#: eeschema/sim/sim_plot_panel.cpp:343 eeschema/sim/sim_plot_panel.cpp:420
+#: eeschema/sim/sim_plot_panel.cpp:367 eeschema/sim/sim_plot_panel.cpp:440
 msgid "Current"
 msgstr "電流"
 
@@ -13121,7 +13121,7 @@ msgid "No symbols were rescued."
 msgstr "未還原元件符號。"
 
 #: eeschema/project_rescue.cpp:691
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:190
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:192
 #, c-format
 msgid "Failed to create symbol library file '%s'."
 msgstr "無法建立元件庫檔案 \"%s\"。"
@@ -13579,14 +13579,14 @@ msgstr ""
 "CADSTAR 設計包含沒有 KiCad 等效項的分組項目。所有分組的項目都已取消分組。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:144
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:145
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:160
 msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
 msgstr "CADSTAR 設計包含沒有 KiCad 等效項的重用塊。匯入期間已丟棄重用塊資訊。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:248
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:150
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:165
 msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
@@ -13783,67 +13783,67 @@ msgid "Invalid pin names definition"
 msgstr "無效的行定義"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:767
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1733
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1693
 #, fuzzy
 msgid "Invalid property name"
 msgstr "無效的訊號名稱"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:775
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1741
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1701
 msgid "Empty property name"
 msgstr "空的屬性名稱"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:784
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1749
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1709
 #, fuzzy
 msgid "Invalid property value"
 msgstr "無效的 Spice 值字串"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1293
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1265
 #, fuzzy
 msgid "Invalid pin name"
 msgstr "無效的訊號名稱"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1331
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1303
 #, fuzzy
 msgid "Invalid pin number"
 msgstr "無效的訊號名稱"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1368
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1340
 #, fuzzy
 msgid "Invalid alternate pin name"
 msgstr "備用引腳號"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1532
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1492
 #, fuzzy
 msgid "Invalid text string"
 msgstr "無效的 Spice 值字串"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1579
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1539
 #, fuzzy
 msgid "Invalid page type"
 msgstr "過孔直徑無效"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1707
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1667
 msgid "Invalid title block comment number"
 msgstr "無效的標題區註解編號"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1806
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1766
 #, fuzzy
 msgid "Invalid sheet pin name"
 msgstr "無效的訊號名稱"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1814
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1774
 #, fuzzy
 msgid "Empty sheet pin name"
 msgstr "再製分頁名稱"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2265
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2225
 #, fuzzy
 msgid "Invalid symbol library name"
 msgstr "無效的符號庫識別符號"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2285
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2245
 #, fuzzy
 msgid "Invalid symbol library ID"
 msgstr "無效的符號庫識別符號"
@@ -14747,44 +14747,44 @@ msgstr "訊號"
 msgid "Cursors"
 msgstr "游標"
 
-#: eeschema/sim/sim_plot_panel.cpp:324 eeschema/sim/sim_plot_panel.cpp:336
+#: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
 #: pcb_calculator/transline_ident.cpp:108
 msgid "Frequency"
 msgstr "頻率"
 
-#: eeschema/sim/sim_plot_panel.cpp:325
+#: eeschema/sim/sim_plot_panel.cpp:349
 msgid "Gain"
 msgstr "增益"
 
-#: eeschema/sim/sim_plot_panel.cpp:326
+#: eeschema/sim/sim_plot_panel.cpp:350
 msgid "Phase"
 msgstr "相位"
 
-#: eeschema/sim/sim_plot_panel.cpp:337
+#: eeschema/sim/sim_plot_panel.cpp:361
 msgid "noise [(V or A)^2/Hz]"
 msgstr "噪音 [(V 或 A)^2/Hz]"
 
-#: eeschema/sim/sim_plot_panel.cpp:341
+#: eeschema/sim/sim_plot_panel.cpp:365
 msgid "Time"
 msgstr "時間"
 
-#: eeschema/sim/sim_plot_panel.cpp:403
+#: eeschema/sim/sim_plot_panel.cpp:423
 msgid "Voltage (swept)"
 msgstr "電壓（掃描）"
 
-#: eeschema/sim/sim_plot_panel.cpp:407
+#: eeschema/sim/sim_plot_panel.cpp:427
 msgid "Current (swept)"
 msgstr "電流 (swept)"
 
-#: eeschema/sim/sim_plot_panel.cpp:410
+#: eeschema/sim/sim_plot_panel.cpp:430
 msgid "Resistance (swept)"
 msgstr "電阻 (swept)"
 
-#: eeschema/sim/sim_plot_panel.cpp:414
+#: eeschema/sim/sim_plot_panel.cpp:434
 msgid "Temperature (swept)"
 msgstr "溫度 (swept)"
 
-#: eeschema/sim/sim_plot_panel.cpp:419
+#: eeschema/sim/sim_plot_panel.cpp:439
 msgid "Voltage (measured)"
 msgstr "電壓(測量)"
 
@@ -14936,7 +14936,7 @@ msgstr ""
 "請確認您具備寫入權限並且再試一次。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:846
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:211
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:213
 msgid "Could not open the library file."
 msgstr "無法開啟庫檔案。"
 
@@ -15106,8 +15106,8 @@ msgstr "符號 \"%s\" 已存在於庫 \"%s\" 中。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:447
 #: eeschema/symbol_editor/symbol_editor.cpp:704
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:99
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:162
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:101
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:164
 #: kicad/tools/kicad_manager_control.cpp:265
 #: pcbnew/dialogs/dialog_export_idf.cpp:163
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:122
@@ -15137,7 +15137,7 @@ msgstr "您必須儲存到一個不同位置。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:627 include/lib_table_grid.h:179
 #: pcbnew/footprint_libraries_utils.cpp:984
-#: pcbnew/footprint_libraries_utils.cpp:1243
+#: pcbnew/footprint_libraries_utils.cpp:1244
 msgid "Nickname"
 msgstr "別稱"
 
@@ -15240,7 +15240,7 @@ msgid "Undefined!"
 msgstr "未定義！"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1224
-#: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:394
+#: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:400
 #: pcbnew/fp_text.cpp:466 pcbnew/pad.cpp:1545
 msgid "Parent"
 msgstr "母體"
@@ -15271,36 +15271,36 @@ msgstr "無法匯入符號庫 \"%s\"。"
 msgid "Symbol library file '%s' is empty."
 msgstr "符號庫 \"%s\" 為空。"
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:96
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:157
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:98
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:159
 #, c-format
 msgid "Symbol %s already exists in library '%s'."
 msgstr "符號 \"%s\" 已存在於庫 \"%s\" 中。"
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:119
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:121
 msgid "There is no symbol selected to save."
 msgstr "尚未選擇要儲存的符號。"
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:128
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:130
 msgid "Export Symbol"
 msgstr "匯出符號"
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:149
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:151
 #, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
 msgstr "試圖載入符號庫檔案 \"%s\" 時發生錯誤。"
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:172
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:174
 #, c-format
 msgid "Insufficient permissions to save library '%s'."
 msgstr "儲存檔案 \"%s\" 所需的權限不足。"
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:192
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:194
 #, c-format
 msgid "Error creating symbol library '%s'."
 msgstr "建立符號庫 \"%s\" 時發生錯誤。"
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:199
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:201
 #, c-format
 msgid "Symbol %s saved to library '%s'."
 msgstr "符號 \"%s\" 已儲存到庫中 \"%s\"。"
@@ -16496,13 +16496,13 @@ msgstr "符號警告"
 msgid "No datasheet defined."
 msgstr "未定義資料表。"
 
-#: eeschema/tools/ee_selection_tool.cpp:1555
+#: eeschema/tools/ee_selection_tool.cpp:1559
 #: pagelayout_editor/tools/pl_selection_tool.cpp:618
 #: pcbnew/tools/pcb_selection_tool.cpp:1812
 msgid "Select &All\tA"
 msgstr "全選 (&A)\tA"
 
-#: eeschema/tools/ee_selection_tool.cpp:1558
+#: eeschema/tools/ee_selection_tool.cpp:1562
 #: pcbnew/tools/pcb_selection_tool.cpp:1815
 msgid "&Expand Selection\tE"
 msgstr "展開選定內容 (&E)\tE"
@@ -16555,32 +16555,32 @@ msgstr "尚未選擇符號"
 msgid "symbol is not multi-unit"
 msgstr "符號不是多單元"
 
-#: eeschema/tools/sch_edit_tool.cpp:892
+#: eeschema/tools/sch_edit_tool.cpp:896
 msgid "Label value cannot go below zero"
 msgstr "標籤值不能小於零"
 
-#: eeschema/tools/sch_edit_tool.cpp:1120 eeschema/tools/sch_edit_tool.cpp:1122
+#: eeschema/tools/sch_edit_tool.cpp:1124 eeschema/tools/sch_edit_tool.cpp:1126
 #: eeschema/tools/symbol_editor_edit_tool.cpp:513
 #, c-format
 msgid "Edit %s Field"
 msgstr "編輯 %s 欄位"
 
-#: eeschema/tools/sch_edit_tool.cpp:1124
+#: eeschema/tools/sch_edit_tool.cpp:1128
 #: eeschema/tools/symbol_editor_edit_tool.cpp:515
 #, fuzzy, c-format
 msgid "Edit '%s' Field"
 msgstr "編輯 %s 欄位"
 
-#: eeschema/tools/sch_edit_tool.cpp:1704
+#: eeschema/tools/sch_edit_tool.cpp:1708
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "您是否希望從此表中刪除未引用的引腳？"
 
-#: eeschema/tools/sch_edit_tool.cpp:1764
+#: eeschema/tools/sch_edit_tool.cpp:1768
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "輸入圖框路徑 %s 的頁碼"
 
-#: eeschema/tools/sch_edit_tool.cpp:1767
+#: eeschema/tools/sch_edit_tool.cpp:1771
 msgid "Edit Sheet Page Number"
 msgstr "編輯圖紙頁碼"
 
@@ -16643,11 +16643,11 @@ msgstr "匯流排沒有成員"
 msgid "Press <ESC> to cancel drawing."
 msgstr "按下 <ESC> 取消繪圖。"
 
-#: eeschema/tools/sch_move_tool.cpp:376
+#: eeschema/tools/sch_move_tool.cpp:380
 msgid "Press <ESC> to cancel drag."
 msgstr "按下 <ESC> 取消拖動。"
 
-#: eeschema/tools/sch_move_tool.cpp:378
+#: eeschema/tools/sch_move_tool.cpp:382
 #: pagelayout_editor/tools/pl_edit_tool.cpp:214
 msgid "Press <ESC> to cancel move."
 msgstr "按下 <ESC> 取消移動。"
@@ -29203,11 +29203,11 @@ msgstr "正在檢查覆銅..."
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:358
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:445
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:490
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:674
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:702
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:724
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:749
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:986
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:678
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:706
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:728
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:753
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:990
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:213
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:240
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:100
@@ -29217,7 +29217,7 @@ msgstr "正在檢查覆銅..."
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s 間隙 %s; 實際 %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:650
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:654
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(網路 %s 和 %s)"
@@ -30007,7 +30007,7 @@ msgstr "輸入封裝名稱:"
 msgid "New Footprint"
 msgstr "新建封裝"
 
-#: pcbnew/footprint_libraries_utils.cpp:1164
+#: pcbnew/footprint_libraries_utils.cpp:1165
 msgid "No footprint name defined."
 msgstr "沒有定義封裝名稱."
 
@@ -31591,20 +31591,28 @@ msgstr ""
 "選中的檔案指示網路可能與原理圖不同步。建議您在 CADSTAR 中執行對齊網路程式並重"
 "新匯入，以避免 PCB 和原理圖之間的不一致。 "
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:130
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:131
+#, c-format
+msgid ""
+"Unable to determine zone fill priorities for layer '%s'. A best attempt has "
+"been made but it is possible that DRC errors exist and that manual editing "
+"of the zone priorities is required."
+msgstr ""
+
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:145
 msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
 msgstr "CADSTAR 設計包含沒有 KiCad 等效項目的佈線元素。未載入這些元素。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:137
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:152
 #, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
 msgstr "這個 CADSTAR 設計包含沒有 KiCad 等效項目的變數。僅變數 '%s'被載入。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:174
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:189
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
@@ -31613,7 +31621,7 @@ msgstr ""
 "CADSTAR 圖層 \"%s\" 沒有 KiCad 等效的項目。此圖層上的所有元素都對映到 KiCad "
 "圖層 \"%s\"。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:187
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:202
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
@@ -31622,17 +31630,17 @@ msgstr ""
 "CADSTAR 圖層 '%s' 被假定為技術層。此圖層上的所有元素都對映到 KiCad 圖層 "
 "'%s'。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:483
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:498
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
 msgstr "圖層堆疊中非預期的圖層 \"%s\"。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:641
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:656
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
 msgstr "未找到設計規則 %s。這被忽略。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:670
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:685
 msgid ""
 "KiCad design rules are different from CADSTAR ones. Only the compatible "
 "design rules were imported. It is recommended that you review the design "
@@ -31641,7 +31649,7 @@ msgstr ""
 "KiCad 設計規則與 CADSTAR 設計規則不同。僅匯入相容的設計規則。建議您檢視已應用"
 "的設計規則。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:867
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:882
 #, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
@@ -31651,7 +31659,7 @@ msgstr ""
 "CADSTAR 區域 \"%s\" 在庫元件 '%s' 中，沒有 KiCad 等效的項目。該區域既不是過孔"
 "也不是佈線禁止區。該區域沒有被匯入。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:959
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:974
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' is a complex pad stack, which is not "
@@ -31661,7 +31669,7 @@ msgstr ""
 "CADSTAR 焊盤定義 '%s' 是一個複雜的焊盤疊，KiCad 不支援它。請檢查匯入的焊盤，"
 "因為它們可能需要人工修正。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1175
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1190
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
@@ -31670,17 +31678,17 @@ msgstr ""
 "CADSTAR 焊盤定義 '%s' 在焊盤形狀之外具有通孔形狀。這個通孔已經移到了焊盤的中"
 "心。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1208
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1223
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "CADSTAR 焊盤定義 '%s' 有匯入錯誤：%s"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1250
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1265
 #, c-format
 msgid "Unable to find group ID %s in the group definitions."
 msgstr "該檔案似乎已損壞。無法在組合定義中尋找組合 ID %s。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1256
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1271
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
@@ -31688,7 +31696,7 @@ msgstr ""
 "該檔案似乎已損壞。無法在組合對映中尋找子組合 %s（母體組合 ID = %s，名稱 = "
 "%s）。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1331
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1346
 #, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
@@ -31697,7 +31705,7 @@ msgstr ""
 "尺度 ID %s 是一個角度尺寸，KiCad 中沒有與之等效的東西。取而代之的是一個對齊的"
 "尺度。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1342
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1357
 #, c-format
 msgid ""
 "Dimension ID %s has 'External' style in CADSTAR. External dimension styles "
@@ -31707,19 +31715,19 @@ msgstr ""
 "尺寸 ID%s在 CADSTAR 中有“外部”樣式。KiCad 尚不支援外部尺寸樣式。軟體使用內部"
 "尺寸樣式匯入了尺寸物件。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1398
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1413
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
 msgstr "非預期的尺標型別 （ID %s）。未被匯入。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1533
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1548
 #, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
 msgstr "尺標 %s 是一個沒有 KiCad 等效項目的角度標註。因此物件未被匯入。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1573
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1588
 #, c-format
 msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
@@ -31729,24 +31737,24 @@ msgstr ""
 "CADSTAR 區域 '%s' 在 CADSTAR 中標記為放置區域。KiCad 中不支援放置區域。僅匯入"
 "了該區域支援的元素。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1582
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1597
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
 msgstr "CADSTAR 區域 '%s' 沒有 KiCad 等效的項目。不支援單純放置區域。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1609
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1624
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
 msgstr "無法在庫中尋找元件 \"%s\" (符號定義 ID：\"%s\")"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1727
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1742
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
 msgstr "無法在庫中尋找文件符號 (符號定義 ID：'%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1796
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1811
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
@@ -31755,7 +31763,7 @@ msgstr ""
 "CADSTAR 模板 '%s' 啟用了設定“允許再無佈線區”。此設定沒有 KiCad 等效項，因此已"
 "被忽略。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1804
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1819
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
@@ -31764,7 +31772,7 @@ msgstr ""
 "這個 CADSTAR 模板 '%s' 啟用了設定“盒式隔離引腳”。此設定沒有 KiCad 等效項，因"
 "此已被忽略。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1812
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1827
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
@@ -31773,7 +31781,7 @@ msgstr ""
 "這個 CADSTAR 模板 '%s' 啟用了“自動重灌”設定。此設定沒有 KiCad 等效項，因此已"
 "被忽略。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1823
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1838
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
@@ -31783,7 +31791,7 @@ msgstr ""
 "CADSTAR 模板 '%s' 具有為“條子寬度（兩焊盤之間的間隙）”設定定義的非零值。對此"
 "沒有 KiCad 等效項，因此忽略此設定。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1833
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1848
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
@@ -31795,7 +31803,7 @@ msgstr ""
 "離\"。KiCad 不區分這兩個設定。不相交覆銅的設定已作為 KiCad 覆銅的最小覆銅面積"
 "應用。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1884
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1899
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
@@ -31805,7 +31813,7 @@ msgstr ""
 "CADSTAR 模板 '%s' 在焊盤和過孔中具有不同的防散熱設定。KiCad 僅支援這兩種設定"
 "的單一設定。已應用焊盤的設定。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1901
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1916
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has thermal reliefs in the original design but the "
@@ -31815,7 +31823,7 @@ msgid ""
 "will be applied next time the zones are filled."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1948
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1963
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
@@ -31825,7 +31833,7 @@ msgstr ""
 "CADSTAR 層 '%s' 被定義為電源層。然而，不存在具有該名稱的網路。已載入層，但未"
 "建立覆銅區。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2053
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2068
 msgid ""
 "The CADSTAR design contains COPPER elements, which have no direct KiCad "
 "equivalent. These have been imported as a KiCad Zone if solid or hatch "
@@ -31836,25 +31844,25 @@ msgstr ""
 "它們已匯入為 KiCad 覆銅；如果形狀是未填充的輪廓(開放或閉合)，則它們將匯入為 "
 "KiCad 佈線。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2158
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2173
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
 msgstr "網路 '%s' 引用了不存在的元件 ID '%s'。這一點已經被忽略了。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2164
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2179
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
 msgstr "網路 '%s' 引用了不存在的焊盤索引 '%d' 在元件 '%s' 中 。這被忽略了。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2330
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2345
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr "由於未載入任何專案，因此無法設定文字變數。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2437
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2452
 #, c-format
 msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
@@ -31864,7 +31872,7 @@ msgstr ""
 "透過程式碼 '%s' 的 CADSTAR 具有與定義的圓不同的形狀。KiCad 僅支援圓形過孔，因"
 "此此過孔型別已變更為直徑為 %.2f mm 的圓形過孔。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2654
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2669
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
@@ -31873,7 +31881,7 @@ msgstr ""
 "'%s' 的形狀是在 CADSTAR 中填充的圖案填充，該 CADSTAR 沒有 KiCad 等效項。改用"
 "實心填充。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3488
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3508
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
@@ -31883,7 +31891,7 @@ msgstr ""
 "CADSTAR 圖案填充程式碼 '%s' 定義了 %d 個圖案填充。KiCad 僅支援相距 90 度的兩"
 "個圖案填充(剖面線)。匯入的剖面線為交叉線。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3498
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3518
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
@@ -31893,7 +31901,7 @@ msgstr ""
 "CADSTAR 圖案填充程式碼 '%s' 的每個圖案填充具有不同的線寬。KiCad 只支援一種寬"
 "度的快取。匯入的圖案填充使用第一個圖案填充定義中定義的寬度，即 %.2f mm。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3510
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3530
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
@@ -31904,7 +31912,7 @@ msgstr ""
 "步驟大小的快取。匯入的圖案填充使用第一個圖案填充定義中定義的步長，即 %.2f "
 "mm。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3523
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3543
 #, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
@@ -31916,14 +31924,14 @@ msgstr ""
 "隔 90 度的圖案填充。匯入的圖案填充有兩個相距 90 度的圖案填充，方向與水平方向"
 "成 %.1f 度。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3596
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3616
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimetres were applied instead."
 msgstr "尺寸 ID %s 使用了 KiCad 不支援的一種單位。改為使用毫米。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3813
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3907
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
@@ -31934,7 +31942,7 @@ msgstr ""
 "素，因此沒有匯入這些元素。注：KiCad 的“網路類”版本更接近 CADSTAR 的“網路路線"
 "編碼”(已為所有網路匯入)。"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3823
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3917
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "

@@ -5,11 +5,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-15 12:28-0700\n"
+"POT-Creation-Date: 2021-10-18 12:18-0700\n"
 "PO-Revision-Date: 2021-10-16 13:25+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
-"master-source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
+"source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1556,8 +1556,8 @@ msgstr "Informacja"
 
 #: common/confirm.cpp:325 eeschema/symbol_editor/symbol_editor.cpp:446
 #: eeschema/symbol_editor/symbol_editor.cpp:703
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:98
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:161
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:100
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:163
 #: eeschema/tools/symbol_editor_pin_tool.cpp:239 kicad/import_project.cpp:103
 #: kicad/tools/kicad_manager_control.cpp:263
 #: pcbnew/dialogs/dialog_export_idf.cpp:162
@@ -1580,7 +1580,7 @@ msgstr "Potwierdzenie"
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
 #: pcbnew/footprint_libraries_utils.cpp:985
-#: pcbnew/footprint_libraries_utils.cpp:1244
+#: pcbnew/footprint_libraries_utils.cpp:1245
 msgid "Description"
 msgstr "Opis"
 
@@ -3430,7 +3430,7 @@ msgstr "Resetuj do domyślnych dla myszy"
 msgid "Reset to Trackpad Defaults"
 msgstr "Resetuj do domyślnych dla płytki dotykowej"
 
-#: common/dialogs/panel_setup_netclasses.cpp:85 common/eda_shape.cpp:1443
+#: common/dialogs/panel_setup_netclasses.cpp:85 common/eda_shape.cpp:1448
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:45
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:219
@@ -3441,19 +3441,19 @@ msgstr "Resetuj do domyślnych dla płytki dotykowej"
 msgid "Solid"
 msgstr "Pełny"
 
-#: common/dialogs/panel_setup_netclasses.cpp:87 common/eda_shape.cpp:1444
+#: common/dialogs/panel_setup_netclasses.cpp:87 common/eda_shape.cpp:1449
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:46
 msgid "Dashed"
 msgstr "Kreskowana"
 
-#: common/dialogs/panel_setup_netclasses.cpp:89 common/eda_shape.cpp:1445
+#: common/dialogs/panel_setup_netclasses.cpp:89 common/eda_shape.cpp:1450
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:47
 msgid "Dotted"
 msgstr "Kropkowana"
 
-#: common/dialogs/panel_setup_netclasses.cpp:91 common/eda_shape.cpp:1446
+#: common/dialogs/panel_setup_netclasses.cpp:91 common/eda_shape.cpp:1451
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:48
 msgid "Dash-Dot"
@@ -3579,7 +3579,7 @@ msgstr "Grubość magistrali"
 msgid "Line Style"
 msgstr "Styl linii"
 
-#: common/dialogs/panel_setup_netclasses_base.cpp:59 common/eda_shape.cpp:1442
+#: common/dialogs/panel_setup_netclasses_base.cpp:59 common/eda_shape.cpp:1447
 #: common/pgm_base.cpp:72 common/widgets/footprint_select_widget.cpp:142
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:66
 #: eeschema/dialogs/dialog_junction_props.cpp:36
@@ -3774,7 +3774,7 @@ msgstr "Tekst"
 
 #: common/drawing_sheet/ds_data_item.cpp:371
 #: common/drawing_sheet/ds_draw_item.cpp:114 common/eda_item.cpp:277
-#: common/eda_shape.cpp:56 eeschema/pin_type.cpp:76
+#: common/eda_shape.cpp:57 eeschema/pin_type.cpp:76
 #: gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:135
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:61
@@ -3783,8 +3783,8 @@ msgid "Line"
 msgstr "Linia"
 
 #: common/drawing_sheet/ds_data_item.cpp:372
-#: common/drawing_sheet/ds_draw_item.cpp:118 common/eda_shape.cpp:559
-#: common/eda_shape.cpp:1436
+#: common/drawing_sheet/ds_draw_item.cpp:118 common/eda_shape.cpp:564
+#: common/eda_shape.cpp:1441
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1464
 msgid "Rectangle"
 msgstr "Prostokąt"
@@ -4008,7 +4008,7 @@ msgid "Units"
 msgstr "Jednostki"
 
 #: common/eda_draw_frame.cpp:956 eeschema/dialogs/panel_sym_lib_table.cpp:494
-#: pcbnew/footprint_libraries_utils.cpp:1261
+#: pcbnew/footprint_libraries_utils.cpp:1262
 msgid "Select Library"
 msgstr "Wybór biblioteki"
 
@@ -4185,11 +4185,11 @@ msgstr "Układ plików Gerber"
 msgid "Draw Item"
 msgstr "Rysuj element"
 
-#: common/eda_shape.cpp:57 pcbnew/pad.cpp:1098
+#: common/eda_shape.cpp:58 pcbnew/pad.cpp:1098
 msgid "Rect"
 msgstr "Prostokąt"
 
-#: common/eda_shape.cpp:58 common/eda_shape.cpp:535 common/eda_shape.cpp:1437
+#: common/eda_shape.cpp:59 common/eda_shape.cpp:540 common/eda_shape.cpp:1442
 #: gerbview/gerber_draw_item.cpp:234
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:114
 #: pcbnew/dialogs/dialog_pad_properties.cpp:712
@@ -4197,7 +4197,7 @@ msgstr "Prostokąt"
 msgid "Arc"
 msgstr "Łuk"
 
-#: common/eda_shape.cpp:59 common/eda_shape.cpp:528 common/eda_shape.cpp:1438
+#: common/eda_shape.cpp:60 common/eda_shape.cpp:533 common/eda_shape.cpp:1443
 #: gerbview/gerber_draw_item.cpp:237
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1096
@@ -4205,16 +4205,16 @@ msgstr "Łuk"
 msgid "Circle"
 msgstr "Okrąg"
 
-#: common/eda_shape.cpp:60
+#: common/eda_shape.cpp:61
 msgid "Bezier Curve"
 msgstr "Krzywa Beziera"
 
-#: common/eda_shape.cpp:61 common/eda_shape.cpp:552 common/eda_shape.cpp:1439
+#: common/eda_shape.cpp:62 common/eda_shape.cpp:557 common/eda_shape.cpp:1444
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2119
 msgid "Polygon"
 msgstr "Wielokąt"
 
-#: common/eda_shape.cpp:523 common/eda_shape.cpp:1450
+#: common/eda_shape.cpp:528 common/eda_shape.cpp:1455
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:134
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:118
@@ -4224,33 +4224,33 @@ msgstr "Wielokąt"
 msgid "Shape"
 msgstr "Kształt"
 
-#: common/eda_shape.cpp:531 common/eda_shape.cpp:541
+#: common/eda_shape.cpp:536 common/eda_shape.cpp:546
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:181
 #: pcbnew/pcb_track.cpp:696
 msgid "Radius"
 msgstr "Promień"
 
-#: common/eda_shape.cpp:538 common/eda_shape.cpp:578 pcbnew/fp_text.cpp:294
+#: common/eda_shape.cpp:543 common/eda_shape.cpp:583 pcbnew/fp_text.cpp:294
 #: pcbnew/pcb_text.cpp:124
 msgid "Angle"
 msgstr "Kąt"
 
-#: common/eda_shape.cpp:545
+#: common/eda_shape.cpp:550
 msgid "Curve"
 msgstr "Krzywa"
 
-#: common/eda_shape.cpp:548 common/eda_shape.cpp:573
+#: common/eda_shape.cpp:553 common/eda_shape.cpp:578
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:58
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:52
 #: eeschema/lib_pin.cpp:1047 eeschema/sch_pin.cpp:209
 msgid "Length"
 msgstr "Długość"
 
-#: common/eda_shape.cpp:555
+#: common/eda_shape.cpp:560
 msgid "Points"
 msgstr "Punkty"
 
-#: common/eda_shape.cpp:562 common/eda_text.cpp:703 eeschema/sch_bitmap.cpp:203
+#: common/eda_shape.cpp:567 common/eda_text.cpp:703 eeschema/sch_bitmap.cpp:203
 #: pcbnew/dialogs/dialog_board_statistics.cpp:676
 #: pcbnew/dialogs/dialog_board_statistics.cpp:686
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:54
@@ -4264,7 +4264,7 @@ msgstr "Punkty"
 msgid "Width"
 msgstr "Szerokość"
 
-#: common/eda_shape.cpp:565 common/eda_text.cpp:707 eeschema/sch_bitmap.cpp:204
+#: common/eda_shape.cpp:570 common/eda_text.cpp:707 eeschema/sch_bitmap.cpp:204
 #: pcbnew/dialogs/dialog_board_statistics.cpp:678
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
@@ -4274,18 +4274,18 @@ msgstr "Szerokość"
 msgid "Height"
 msgstr "Wysokość"
 
-#: common/eda_shape.cpp:570 common/eda_shape.cpp:1435
+#: common/eda_shape.cpp:575 common/eda_shape.cpp:1440
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:82
 #: pcbnew/dialogs/dialog_pad_properties.cpp:700
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2115
 msgid "Segment"
 msgstr "Segment"
 
-#: common/eda_shape.cpp:583
+#: common/eda_shape.cpp:588
 msgid "Unrecognized"
 msgstr "Nierozpoznany"
 
-#: common/eda_shape.cpp:587 pcb_calculator/transline_ident.cpp:144
+#: common/eda_shape.cpp:592 pcb_calculator/transline_ident.cpp:144
 #: pcb_calculator/transline_ident.cpp:176
 #: pcb_calculator/transline_ident.cpp:210
 #: pcb_calculator/transline_ident.cpp:327
@@ -4293,32 +4293,32 @@ msgstr "Nierozpoznany"
 msgid "Line width"
 msgstr "Szerokość linii"
 
-#: common/eda_shape.cpp:1440
+#: common/eda_shape.cpp:1445
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:100
 #: pcbnew/dialogs/dialog_pad_properties.cpp:706
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2117
 msgid "Bezier"
 msgstr "Krzywa Beziera"
 
-#: common/eda_shape.cpp:1452
+#: common/eda_shape.cpp:1457
 msgid "Start X"
 msgstr "Początek X"
 
-#: common/eda_shape.cpp:1454
+#: common/eda_shape.cpp:1459
 msgid "Start Y"
 msgstr "Początek Y"
 
-#: common/eda_shape.cpp:1456 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
+#: common/eda_shape.cpp:1461 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
 msgid "End X"
 msgstr "Koniec X"
 
-#: common/eda_shape.cpp:1458 pcbnew/pcb_shape.cpp:263 pcbnew/pcb_track.cpp:1121
+#: common/eda_shape.cpp:1463 pcbnew/pcb_shape.cpp:263 pcbnew/pcb_track.cpp:1121
 #: pcbnew/pcb_track.cpp:1138
 msgid "End Y"
 msgstr "Koniec Y"
 
-#: common/eda_shape.cpp:1461
+#: common/eda_shape.cpp:1466
 msgid "Line Width"
 msgstr "Szerokość linii"
 
@@ -5485,20 +5485,20 @@ msgstr "Nie można dokonać konwersji ciągu '%s' do wartości typu double."
 msgid "Cannot open file '%s'"
 msgstr "Nie można otworzyć pliku '%s'"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2349
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2648
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
 msgid "File import cancelled by user."
 msgstr "Importowanie pliku zostało anulowane przez użytkownika."
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2366
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2384
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2400
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2406
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2412
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2370
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2388
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2404
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2410
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2416
 msgid "The selected file is not valid or might be corrupt!"
 msgstr "Zaznaczony plik nie jest prawidłowy lub może być uszkodzony!"
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2511
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2515
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
 msgstr ""
@@ -7421,7 +7421,7 @@ msgstr "Elementy zduplikowane %s%s\n"
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Różne wartości dla %s%d%s (%s) i %s%d%s (%s)"
 
-#: eeschema/connection_graph.cpp:2249
+#: eeschema/connection_graph.cpp:2254 eeschema/connection_graph.cpp:2285
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -7429,7 +7429,7 @@ msgstr ""
 "Zarówno %s, jak i %s są powiązane z tym samym elementem. %s został wybrany "
 "jako nazwa na liście sieci"
 
-#: eeschema/connection_graph.cpp:2467
+#: eeschema/connection_graph.cpp:2509
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -7437,14 +7437,14 @@ msgstr ""
 "Sieć %s jest graficznie połączona z magistralą %s ale nie jest członkiem tej "
 "magistrali"
 
-#: eeschema/connection_graph.cpp:2875
+#: eeschema/connection_graph.cpp:2917
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Pin hierarchiczny %s nie ma odpowiednika w etykietach hierarchicznych "
 "wewnątrz arkusza"
 
-#: eeschema/connection_graph.cpp:2892
+#: eeschema/connection_graph.cpp:2934
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -11230,12 +11230,12 @@ msgid "External data"
 msgstr "Dane zewnętrzne"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:919
-#: eeschema/sim/sim_plot_panel.cpp:342
+#: eeschema/sim/sim_plot_panel.cpp:366
 msgid "Voltage"
 msgstr "Napięcie"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:919
-#: eeschema/sim/sim_plot_panel.cpp:343 eeschema/sim/sim_plot_panel.cpp:420
+#: eeschema/sim/sim_plot_panel.cpp:367 eeschema/sim/sim_plot_panel.cpp:440
 msgid "Current"
 msgstr "Prąd"
 
@@ -13362,7 +13362,7 @@ msgid "No symbols were rescued."
 msgstr "Żadne symbole nie zostały odzyskake."
 
 #: eeschema/project_rescue.cpp:691
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:190
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:192
 #, c-format
 msgid "Failed to create symbol library file '%s'."
 msgstr "Nie dało się utworzyć pliku bibliotek symboli '%s'."
@@ -13833,7 +13833,7 @@ msgstr ""
 "programie KiCad. Wszelkie zgrupowane elementy zostały rozgrupowane."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:144
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:145
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:160
 msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
@@ -13843,7 +13843,7 @@ msgstr ""
 "zostały odrzucone podczas importu."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:248
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:150
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:165
 msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
@@ -14058,57 +14058,57 @@ msgid "Invalid pin names definition"
 msgstr "Nieprawidłowa definicja nazw pinów"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:767
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1733
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1693
 msgid "Invalid property name"
 msgstr "Nieprawidłowa nazwa właściwości"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:775
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1741
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1701
 msgid "Empty property name"
 msgstr "Pusta nazwa właściwości"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:784
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1749
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1709
 msgid "Invalid property value"
 msgstr "Niepoprawna wartość właściwości"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1293
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1265
 msgid "Invalid pin name"
 msgstr "Nieprawidłowa nazwa pinu"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1331
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1303
 msgid "Invalid pin number"
 msgstr "Nieprawidłowy numer pinu"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1368
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1340
 msgid "Invalid alternate pin name"
 msgstr "Nieprawidłowa alternatywna nazwa pinu"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1532
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1492
 msgid "Invalid text string"
 msgstr "Nieprawidłowy ciąg tekstu"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1579
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1539
 msgid "Invalid page type"
 msgstr "Nieprawidłowy typ strony"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1707
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1667
 msgid "Invalid title block comment number"
 msgstr "Nieprawidłowa liczba komentarzy w tabelce tytułowej"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1806
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1766
 msgid "Invalid sheet pin name"
 msgstr "Nieprawidłowa nazwa pinu hierarchicznego"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1814
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1774
 msgid "Empty sheet pin name"
 msgstr "Pusta nazwa arkusza pinów"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2265
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2225
 msgid "Invalid symbol library name"
 msgstr "Niepoprawna nazwa symbolu w bibliotece"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2285
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2245
 msgid "Invalid symbol library ID"
 msgstr "Niepoprawny identyfikator symbolu w bibliotece"
 
@@ -15033,44 +15033,44 @@ msgstr "Sygnały"
 msgid "Cursors"
 msgstr "Kursory"
 
-#: eeschema/sim/sim_plot_panel.cpp:324 eeschema/sim/sim_plot_panel.cpp:336
+#: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
 #: pcb_calculator/transline_ident.cpp:108
 msgid "Frequency"
 msgstr "Częstotliwość"
 
-#: eeschema/sim/sim_plot_panel.cpp:325
+#: eeschema/sim/sim_plot_panel.cpp:349
 msgid "Gain"
 msgstr "Wzmocnienie"
 
-#: eeschema/sim/sim_plot_panel.cpp:326
+#: eeschema/sim/sim_plot_panel.cpp:350
 msgid "Phase"
 msgstr "Faza"
 
-#: eeschema/sim/sim_plot_panel.cpp:337
+#: eeschema/sim/sim_plot_panel.cpp:361
 msgid "noise [(V or A)^2/Hz]"
 msgstr "szum [(V lub A)^2/Hz]"
 
-#: eeschema/sim/sim_plot_panel.cpp:341
+#: eeschema/sim/sim_plot_panel.cpp:365
 msgid "Time"
 msgstr "Czas"
 
-#: eeschema/sim/sim_plot_panel.cpp:403
+#: eeschema/sim/sim_plot_panel.cpp:423
 msgid "Voltage (swept)"
 msgstr "Przyrost napięcia"
 
-#: eeschema/sim/sim_plot_panel.cpp:407
+#: eeschema/sim/sim_plot_panel.cpp:427
 msgid "Current (swept)"
 msgstr "Przyrost prądu"
 
-#: eeschema/sim/sim_plot_panel.cpp:410
+#: eeschema/sim/sim_plot_panel.cpp:430
 msgid "Resistance (swept)"
 msgstr "Przyrost rezystancji"
 
-#: eeschema/sim/sim_plot_panel.cpp:414
+#: eeschema/sim/sim_plot_panel.cpp:434
 msgid "Temperature (swept)"
 msgstr "Temperatura (przesiewowo)"
 
-#: eeschema/sim/sim_plot_panel.cpp:419
+#: eeschema/sim/sim_plot_panel.cpp:439
 msgid "Voltage (measured)"
 msgstr "Napięcie (zmierzone)"
 
@@ -15228,7 +15228,7 @@ msgstr ""
 "ponownie."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:846
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:211
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:213
 msgid "Could not open the library file."
 msgstr "Nie można otworzyć pliku biblioteki."
 
@@ -15396,8 +15396,8 @@ msgstr "Symbol '%s' istnieje już w bibliotece '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:447
 #: eeschema/symbol_editor/symbol_editor.cpp:704
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:99
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:162
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:101
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:164
 #: kicad/tools/kicad_manager_control.cpp:265
 #: pcbnew/dialogs/dialog_export_idf.cpp:163
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:122
@@ -15427,7 +15427,7 @@ msgstr "Musisz zapisać w innej lokalizacji."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:627 include/lib_table_grid.h:179
 #: pcbnew/footprint_libraries_utils.cpp:984
-#: pcbnew/footprint_libraries_utils.cpp:1243
+#: pcbnew/footprint_libraries_utils.cpp:1244
 msgid "Nickname"
 msgstr "Nazwa skrótowa"
 
@@ -15532,7 +15532,7 @@ msgid "Undefined!"
 msgstr "Niezdefiniowany!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1224
-#: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:394
+#: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:400
 #: pcbnew/fp_text.cpp:466 pcbnew/pad.cpp:1545
 msgid "Parent"
 msgstr "Nadrzędny"
@@ -15563,36 +15563,36 @@ msgstr "Nie można zaimportować biblioteki symboli '%s'."
 msgid "Symbol library file '%s' is empty."
 msgstr "Plik biblioteki symboli '%s' jest pusty."
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:96
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:157
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:98
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:159
 #, c-format
 msgid "Symbol %s already exists in library '%s'."
 msgstr "Symbol %s istnieje już w bibliotece '%s'."
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:119
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:121
 msgid "There is no symbol selected to save."
 msgstr "Nie ma zaznaczonych symboli do zapisu."
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:128
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:130
 msgid "Export Symbol"
 msgstr "Eksportuj symbol"
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:149
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:151
 #, c-format
 msgid "Error occurred attempting to load symbol library file '%s'."
 msgstr "Wystąpił błąd podczas próby załadowania pliku biblioteki '%s'."
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:172
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:174
 #, c-format
 msgid "Insufficient permissions to save library '%s'."
 msgstr "Niewystarczające uprawnienia by zapisać bibliotekę '%s'."
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:192
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:194
 #, c-format
 msgid "Error creating symbol library '%s'."
 msgstr "Błąd podczas tworzenia biblioteki symboli '%s'."
 
-#: eeschema/symbol_editor/symbol_editor_import_export.cpp:199
+#: eeschema/symbol_editor/symbol_editor_import_export.cpp:201
 #, c-format
 msgid "Symbol %s saved to library '%s'."
 msgstr "Symbol %s zapisany w bibliotece '%s'."
@@ -16812,13 +16812,13 @@ msgstr "Ostrzeżenia symboli"
 msgid "No datasheet defined."
 msgstr "Nie zdefiniowano pola z dokumentacją."
 
-#: eeschema/tools/ee_selection_tool.cpp:1555
+#: eeschema/tools/ee_selection_tool.cpp:1559
 #: pagelayout_editor/tools/pl_selection_tool.cpp:618
 #: pcbnew/tools/pcb_selection_tool.cpp:1812
 msgid "Select &All\tA"
 msgstr "Wybierz wszystkie\tA"
 
-#: eeschema/tools/ee_selection_tool.cpp:1558
+#: eeschema/tools/ee_selection_tool.cpp:1562
 #: pcbnew/tools/pcb_selection_tool.cpp:1815
 msgid "&Expand Selection\tE"
 msgstr "Rozszerz zaznaczenie\tE"
@@ -16871,32 +16871,32 @@ msgstr "nie wybrano symbolu"
 msgid "symbol is not multi-unit"
 msgstr "symbol nie jest symbolem wieloczęściowm"
 
-#: eeschema/tools/sch_edit_tool.cpp:892
+#: eeschema/tools/sch_edit_tool.cpp:896
 msgid "Label value cannot go below zero"
 msgstr "Wartość etykiety nie może zejść poniżej zera"
 
-#: eeschema/tools/sch_edit_tool.cpp:1120 eeschema/tools/sch_edit_tool.cpp:1122
+#: eeschema/tools/sch_edit_tool.cpp:1124 eeschema/tools/sch_edit_tool.cpp:1126
 #: eeschema/tools/symbol_editor_edit_tool.cpp:513
 #, c-format
 msgid "Edit %s Field"
 msgstr "Edytuj pole %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1124
+#: eeschema/tools/sch_edit_tool.cpp:1128
 #: eeschema/tools/symbol_editor_edit_tool.cpp:515
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "Edytuj pole '%s'"
 
-#: eeschema/tools/sch_edit_tool.cpp:1704
+#: eeschema/tools/sch_edit_tool.cpp:1708
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Czy oczyścić teraz niezdefiniowane piny z tego arkusza?"
 
-#: eeschema/tools/sch_edit_tool.cpp:1764
+#: eeschema/tools/sch_edit_tool.cpp:1768
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Wprowadź numer strony dla ścieżki arkusza %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1767
+#: eeschema/tools/sch_edit_tool.cpp:1771
 msgid "Edit Sheet Page Number"
 msgstr "Edycja numeru strony arkusza"
 
@@ -16961,11 +16961,11 @@ msgstr "Magistrala nie posiada sygnałów"
 msgid "Press <ESC> to cancel drawing."
 msgstr "Naciśnij <ESC> by anulować rysowanie."
 
-#: eeschema/tools/sch_move_tool.cpp:376
+#: eeschema/tools/sch_move_tool.cpp:380
 msgid "Press <ESC> to cancel drag."
 msgstr "Naciśnij <ESC> by anulować przeciąganie."
 
-#: eeschema/tools/sch_move_tool.cpp:378
+#: eeschema/tools/sch_move_tool.cpp:382
 #: pagelayout_editor/tools/pl_edit_tool.cpp:214
 msgid "Press <ESC> to cancel move."
 msgstr "Naciśnij <ESC> by anulować przesuwanie."
@@ -20679,8 +20679,8 @@ msgstr ""
 "\tE3(50%):  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
 "\tE1     :   1,0  -   -   -   -   -   -   -   -   -   -   -\n"
 "\n"
-"- Ten kalkulator znajduje kombinację standardowych rezystancji z serii E ("
-"pomiędzy 10Ω a 1MΩ) by ją utworzyć.\n"
+"- Ten kalkulator znajduje kombinację standardowych rezystancji z serii E "
+"(pomiędzy 10Ω a 1MΩ) by ją utworzyć.\n"
 "- Można wprowadzić wymaganą rezystancję od 0,0025 do 4000 kΩ.\n"
 "- Podane rozwiązania wykorzystują maksymalnie 4 składniki.\n"
 "\n"
@@ -29721,11 +29721,11 @@ msgstr "Sprawdzam wypełnione strefy..."
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:358
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:445
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:490
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:674
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:702
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:724
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:749
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:986
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:678
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:706
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:728
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:753
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:990
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:213
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:240
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:100
@@ -29735,7 +29735,7 @@ msgstr "Sprawdzam wypełnione strefy..."
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s prześwit %s; obecnie %s)"
 
-#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:650
+#: pcbnew/drc/drc_test_provider_copper_clearance.cpp:654
 #, c-format
 msgid "(nets %s and %s)"
 msgstr "(sieci %s oraz %s)"
@@ -30545,7 +30545,7 @@ msgstr "Wpisz nazwę footprintu:"
 msgid "New Footprint"
 msgstr "Nowy footprint"
 
-#: pcbnew/footprint_libraries_utils.cpp:1164
+#: pcbnew/footprint_libraries_utils.cpp:1165
 msgid "No footprint name defined."
 msgstr "Nie zdefiniowana nazwa footprintu."
 
@@ -32163,7 +32163,15 @@ msgstr ""
 "zaimportowanie, aby uniknąć niespójności między płytką drukowaną a "
 "schematem. "
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:130
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:131
+#, c-format
+msgid ""
+"Unable to determine zone fill priorities for layer '%s'. A best attempt has "
+"been made but it is possible that DRC errors exist and that manual editing "
+"of the zone priorities is required."
+msgstr ""
+
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:145
 msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
@@ -32171,7 +32179,7 @@ msgstr ""
 "Projekt CADSTAR zawiera elementy trasowania Trunk, które nie mają "
 "odpowiedników w programie KiCad. Te elementy nie zostały załadowane."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:137
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:152
 #, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
@@ -32180,7 +32188,7 @@ msgstr ""
 "Projekt CADSTAR zawiera warianty, które nie mają odpowiedników w programie "
 "KiCad. Został załadowany wyłącznie wariant '%s'."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:174
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:189
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
@@ -32190,7 +32198,7 @@ msgstr ""
 "wszystkie elementy na tej warstwie zostały zamapowane do warstwy programu "
 "KiCad \"%s\"."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:187
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:202
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
@@ -32199,17 +32207,17 @@ msgstr ""
 "Założono, że warstwa CADSTAR \"%s\" jest warstwą techniczną. Wszystkie "
 "elementy na tej warstwie zostały zamapowane do warstwy programu KiCad \"%s\"."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:483
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:498
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
 msgstr "Niespodziewana warstwa '%s' w stosie warstw."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:641
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:656
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
 msgstr "Reguła projektowa %s nie została znaleziona. Została zignorowana."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:670
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:685
 msgid ""
 "KiCad design rules are different from CADSTAR ones. Only the compatible "
 "design rules were imported. It is recommended that you review the design "
@@ -32219,7 +32227,7 @@ msgstr ""
 "tylko zgodne reguły projektowe. Zaleca się zapoznanie się z zastosowanymi "
 "regułami projektowymi."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:867
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:882
 #, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
@@ -32230,7 +32238,7 @@ msgstr ""
 "odpowiednika w programie KiCad. Obszar ten nie jest obszarem chronionym ani "
 "przelotką. Obszar nie został zaimportowany."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:959
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:974
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' is a complex pad stack, which is not "
@@ -32241,7 +32249,7 @@ msgstr ""
 "jest wspierany w programie KiCad. Proszę sprawdzić zaimportowane pola, gdyż "
 "mogą wymagać ręcznych poprawek."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1175
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1190
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
@@ -32250,17 +32258,17 @@ msgstr ""
 "Definicja pola CADSTAR '%s' ma kształt otworu poza kształtem pola. Otwór "
 "został przeniesiony na środek pola."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1208
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1223
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "Definicja pola CADSTAR '%s' zwróciła błędy podczas importu: %s"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1250
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1265
 #, c-format
 msgid "Unable to find group ID %s in the group definitions."
 msgstr "Nie można znaleźć identyfikatora grupy %s w definicjach grup."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1256
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1271
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
@@ -32268,7 +32276,7 @@ msgstr ""
 "Nie można znaleźć identyfikatora podgrupy %s w mapie definicji grup (ID "
 "grupy nadrzędnej=%s, Nazwa=%s)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1331
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1346
 #, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
@@ -32277,7 +32285,7 @@ msgstr ""
 "Wymiar o ID %s to wymiar kątowy, który nie ma odpowiednika w programie "
 "KiCad. Zamiast tego załadowano wymiar prosty."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1342
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1357
 #, c-format
 msgid ""
 "Dimension ID %s has 'External' style in CADSTAR. External dimension styles "
@@ -32288,13 +32296,13 @@ msgstr ""
 "wymiarów zewnętrznych nie są jeszcze obsługiwane w programie KiCad. Zamiast "
 "tego obiekt został zaimportowany z wewnętrznym stylem wymiarowania."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1398
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1413
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
 msgstr ""
 "Nieoczekiwany typ wymiaru (identyfikator %s). Nie został zaimportowany."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1533
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1548
 #, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
@@ -32303,7 +32311,7 @@ msgstr ""
 "Rozmiar %s to rozmiar łukowy, który nie ma odpowiednika w programie KiCad. "
 "Obiekt nie został zaimportowany."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1573
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1588
 #, c-format
 msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
@@ -32314,7 +32322,7 @@ msgstr ""
 "lokowania nie są obsługiwane w programie KiCad. Zaimportowano tylko "
 "obsługiwane elementy dla tego obszaru."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1582
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1597
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
@@ -32323,17 +32331,17 @@ msgstr ""
 "Obszar CADSTAR '%s' nie ma odpowiednika programu KiCad. Obszary czystego "
 "lokowania nie są obsługiwane."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1609
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1624
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
 msgstr "Nie można odnaleźć komponentu '%s' w bibliotece (Symdef ID: '%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1727
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1742
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
 msgstr "Nie można znaleźć dokumentacji symbolu w bibliotece (Symdef ID: '%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1796
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1811
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
@@ -32342,7 +32350,7 @@ msgstr ""
 "Szablon CADSTAR '%s' ma włączone ustawienie 'Allow in No Routing Areas'. To "
 "ustawienie nie ma odpowiednika w programie KiCad, więc zostało zignorowane."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1804
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1819
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
@@ -32351,7 +32359,7 @@ msgstr ""
 "Szablon CADSTAR '%s' ma włączone ustawienie 'Box Isolated Pins'. To "
 "ustawienie nie ma odpowiednika w programie KiCad, więc zostało zignorowane."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1812
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1827
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
@@ -32360,7 +32368,7 @@ msgstr ""
 "Szablon CADSTAR '%s' ma włączone ustawienie 'Automatic Repour'. To "
 "ustawienie nie ma odpowiednika w programie KiCad, więc zostało zignorowane."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1823
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1838
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
@@ -32371,7 +32379,7 @@ msgstr ""
 "To ustawienie nie ma odpowiednika w programie KiCad, więc zostało "
 "zignorowane."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1833
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1848
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
@@ -32384,7 +32392,7 @@ msgstr ""
 "dwóch ustawień. Ustawienie dla rozłącznej miedzi zostało zastosowane jako "
 "minimalny izolowany obszar strefy KiCad."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1884
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1899
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
@@ -32395,7 +32403,7 @@ msgstr ""
 "przelotkach. KiCad obsługuje tylko jedno ustawienie dla obu. Zastosowano "
 "ustawienie dla padów."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1901
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1916
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has thermal reliefs in the original design but the "
@@ -32405,12 +32413,12 @@ msgid ""
 "will be applied next time the zones are filled."
 msgstr ""
 "Szablon CADSTAR '%s' ma w oryginalnym projekcie łącza termiczne, lecz "
-"szerokość łącza (%.2f mm) jest cieńsza niż minimalna grubość strefy (%.2f mm)"
-". KiCad wymaga zachowania minimalnej grubości strefy. Dlatego jako nową "
+"szerokość łącza (%.2f mm) jest cieńsza niż minimalna grubość strefy (%.2f "
+"mm). KiCad wymaga zachowania minimalnej grubości strefy. Dlatego jako nową "
 "szerokość łącza zastosowano minimalną grubość, która zostanie zastosowana "
 "przy następnym wypełnieniu stref."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1948
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1963
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
@@ -32421,7 +32429,7 @@ msgstr ""
 "istnieje sieć o takiej nazwie. Warstwa została załadowana, ale nie utworzono "
 "strefy."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2053
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2068
 msgid ""
 "The CADSTAR design contains COPPER elements, which have no direct KiCad "
 "equivalent. These have been imported as a KiCad Zone if solid or hatch "
@@ -32434,7 +32442,7 @@ msgstr ""
 "ścieżka KiCad, jeśli kształt był niewypełnionym konturem (otwartym lub "
 "zamkniętym)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2158
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2173
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
@@ -32443,7 +32451,7 @@ msgstr ""
 "Sieć '%s' odwołuje się do identyfikatora składnika '%s', który nie istnieje. "
 "Zostało to zignorowane."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2164
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2179
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
@@ -32452,13 +32460,13 @@ msgstr ""
 "Sieć '%s' odwołuje się do nieistniejącego indeksu wypełnienia '%d' w "
 "składniku '%s'. Zostało to zignorowane."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2330
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2345
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr ""
 "Nie można ustawiać zmiennych tekstowych, ponieważ nie załadowano żadnego "
 "projektu."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2437
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2452
 #, c-format
 msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
@@ -32469,7 +32477,7 @@ msgstr ""
 "obsługuje tylko przelotki okrągłe, więc ten typ przelotu został zmieniony na "
 "przelotkę o okrągłym kształcie o średnicy %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2654
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2669
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
@@ -32478,7 +32486,7 @@ msgstr ""
 "Kształt '%s' to wypełnienie kreskowane w programie CADSTAR, który nie ma "
 "odpowiednika w programie KiCad. Zamiast tego użyto pełnego wypełnienia."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3488
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3508
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
@@ -32489,7 +32497,7 @@ msgstr ""
 "tylko 2 kreskowania (kreskowanie) pod kątem 90 stopni. Zaimportowane "
 "kreskowanie jest kreskowane prosto."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3498
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3518
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
@@ -32501,7 +32509,7 @@ msgstr ""
 "wykorzystuje szerokość zdefiniowaną w pierwszej definicji kreskowania, tj."
 "%.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3510
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3530
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
@@ -32513,7 +32521,7 @@ msgstr ""
 "Zaimportowane kreskowanie wykorzystuje rozmiar kroku zdefiniowany w "
 "pierwszej definicji kreskowania, tj. %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3523
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3543
 #, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
@@ -32526,7 +32534,7 @@ msgstr ""
 "kreskowanie ma dwa kreskowania pod kątem 90 stopni, zorientowane względem "
 "%.1f stopni od poziomu."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3596
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3616
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
@@ -32535,7 +32543,7 @@ msgstr ""
 "Identyfikator wymiaru %s używa typu jednostki, który nie jest obsługiwany w "
 "programie KiCad. Zamiast tego zastosowano jednostki w milimetrach."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3813
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3907
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
@@ -32547,7 +32555,7 @@ msgstr ""
 "Uwaga: Wersja klas sieci programu KiCad jest bliższa 'Net Route Code' z "
 "programu CADSTAR (które zostały zaimportowane dla wszystkich sieci)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3823
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3917
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
