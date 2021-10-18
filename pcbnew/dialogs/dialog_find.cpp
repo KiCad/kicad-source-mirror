@@ -51,10 +51,9 @@ bool FindIncludeReferences = true;
 bool FindIncludeMarkers = true;
 
 
-DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aFrame ) : DIALOG_FIND_BASE( aFrame )
+DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME *aFrame ) :
+        DIALOG_FIND_BASE( aFrame, wxID_ANY, _( "Find" ) )
 {
-    SetTitle( _( "Find" ) );
-
     m_frame = aFrame;
     GetSizer()->SetSizeHints( this );
 
