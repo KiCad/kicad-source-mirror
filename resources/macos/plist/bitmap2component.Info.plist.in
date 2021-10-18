@@ -7,7 +7,7 @@
     <key>CFBundleExecutable</key>             <string>bitmap2component</string>
     <key>CFBundleGetInfoString</key>          <string></string>
     <key>CFBundleIconFile</key>               <string>bitmap2component.icns</string>
-    <key>CFBundleIdentifier</key>             <string>org.kicad-pcb.bitmap2component</string>
+    <key>CFBundleIdentifier</key>             <string>org.kicad.bitmap2component</string>
     <key>CFBundleInfoDictionaryVersion</key>  <string>6.0</string>
     <key>CFBundleLongVersionString</key>      <string>@KICAD_VERSION_FULL@</string>
     <key>CFBundleName</key>                   <string>Bitmap 2 Component</string>

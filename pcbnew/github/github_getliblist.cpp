@@ -217,7 +217,7 @@ bool GITHUB_GETLIBLIST::remoteGetJSON( const std::string& aFullURLCommand, wxStr
     wxLogDebug( wxT( "Attempting to download: " ) + aFullURLCommand );
 
     kcurl.SetURL( aFullURLCommand );
-    kcurl.SetUserAgent( "http://kicad-pcb.org" );
+    kcurl.SetUserAgent( "https://www.kicad.org" );
     kcurl.SetHeader( "Accept", m_option_string );
     kcurl.SetFollowRedirects( true );
 

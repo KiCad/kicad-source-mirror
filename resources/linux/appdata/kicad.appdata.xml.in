@@ -86,10 +86,10 @@
     </screenshot>
   </screenshots>
 
-  <url type="homepage">https://kicad.org/</url>
-  <url type="bugtracker">https://kicad.org/help/report-a-bug/</url>
-  <url type="help">https://docs.kicad.org/</url>
-  <url type="donation">https://kicad.org/</url>
+  <url type="homepage">https://www.kicad.org/</url>
+  <url type="bugtracker">https://go.kicad.org/issue</url>
+  <url type="help">https://go.kicad.org/docs/5.1</url>
+  <url type="donation">https://go.kicad.org/donate</url>
 
   <update_contact>kicad-developers@lists.launchpad.net</update_contact>
   <developer_name>The KiCad Developers</developer_name>
