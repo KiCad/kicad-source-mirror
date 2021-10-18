@@ -224,12 +224,6 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
                 newItem->Flip( newItem->GetPosition(), frame()->Settings().m_FlipLeftRight );
                 view()->Update( &preview );
             }
-            else if( evt->IsAction( &PCB_ACTIONS::viaSizeInc )
-                    || evt->IsAction( &PCB_ACTIONS::viaSizeDec ) )
-            {
-                // Refresh preview after event runs
-                m_toolMgr->RunAction( ACTIONS::refreshPreview );
-            }
             else if( evt->IsAction( &PCB_ACTIONS::properties ) )
             {
                 frame()->OnEditItemRequest( newItem.get() );
