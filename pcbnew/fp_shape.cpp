@@ -245,6 +245,12 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         if( GetShape() == SHAPE_T::BEZIER )
             RebuildBezierToSegmentsPointsList( m_width );
 
+        if( GetShape() == SHAPE_T::ARC )
+        {
+            std::swap( m_start, m_end );
+            std::swap( m_start0, m_end0 );
+        }
+
         break;
 
     case SHAPE_T::POLY:
