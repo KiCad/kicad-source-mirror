@@ -2239,7 +2239,7 @@ bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubg
      * across this in 7.0 development (or later), feel free to delete.
      */
 #if 0
-    if( aSubgraph->m_second_driver )
+    if( aSubgraph && aSubgraph->m_second_driver )
     {
         SCH_ITEM* primary   = aSubgraph->m_first_driver;
         SCH_ITEM* secondary = aSubgraph->m_second_driver;
@@ -2265,7 +2265,7 @@ bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubg
         return false;
     }
 #else
-    if( aSubgraph->m_multiple_drivers )
+    if( aSubgraph && aSubgraph->m_multiple_drivers )
     {
         for( SCH_ITEM* driver : aSubgraph->m_drivers )
         {
