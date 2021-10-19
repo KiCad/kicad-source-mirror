@@ -477,6 +477,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     if( m_currentPad )
     {
+        SetTitle( _( "Pad Properties" ) );
+
         m_locked->SetValue( m_currentPad->IsLocked() );
         m_isFlipped = m_currentPad->IsFlipped();
 
@@ -501,6 +503,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
     }
     else
     {
+        SetTitle( _( "Default Pad Properties for Add Pad Tool" ) );
+
         m_locked->Hide();
         m_isFlipped = false;
     }

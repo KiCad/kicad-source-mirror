@@ -10761,7 +10761,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Footprint R1 (300K), back side (mirrored), rotated 180.0º</property>
+                                <property name="label"></property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -10868,11 +10868,11 @@
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
-                            <property name="proportion">1</property>
+                            <property name="proportion">0</property>
                             <object class="spacer" expanded="0">
                                 <property name="height">0</property>
                                 <property name="permission">protected</property>
-                                <property name="width">20</property>
+                                <property name="width">40</property>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">

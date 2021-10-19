@@ -64,9 +64,7 @@ PAD::PAD( FOOTPRINT* parent ) :
     m_lengthPadToDie      = 0;
 
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
-    {
         m_pos = GetParent()->GetPosition();
-    }
 
     SetShape( PAD_SHAPE::CIRCLE );               // Default pad shape is PAD_CIRCLE.
     SetAnchorPadShape( PAD_SHAPE::CIRCLE );      // Default shape for custom shaped pads
@@ -86,14 +84,14 @@ PAD::PAD( FOOTPRINT* parent ) :
     m_chamferScale = 0.2;                        // Size of chamfer: ratio of smallest of X,Y size
     m_chamferPositions  = RECT_NO_CHAMFER;       // No chamfered corner
 
-    m_zoneConnection    = ZONE_CONNECTION::INHERITED; // Use parent setting by default
-    m_thermalWidth      = 0;                        // Use parent setting by default
-    m_thermalGap        = 0;                        // Use parent setting by default
+    m_zoneConnection = ZONE_CONNECTION::INHERITED; // Use parent setting by default
+    m_thermalWidth = 0;                            // Use parent setting by default
+    m_thermalGap = 0;                              // Use parent setting by default
 
     m_customShapeClearanceArea = CUST_PAD_SHAPE_IN_ZONE_OUTLINE;
 
     // Set layers mask to default for a standard thru hole pad.
-    m_layerMask           = PTHMask();
+    m_layerMask = PTHMask();
 
     SetSubRatsnest( 0 );                       // used in ratsnest calculations
 
@@ -1367,9 +1365,9 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     // I am not sure the m_LengthPadToDie must be imported, because this is
     // a parameter really specific to a given pad (JPC).
     // So this is currently non imported
-    #if 0
+#if 0
     SetPadToDieLength( aMasterPad.GetPadToDieLength() );
-    #endif
+#endif
 
     // The pad orientation, for historical reasons is the
     // pad rotation + parent rotation.

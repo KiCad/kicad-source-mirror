@@ -481,17 +481,27 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
         std::unique_ptr<BOARD_ITEM> CreateItem() override
         {
             PAD* pad = new PAD( m_board->GetFirstFootprint() );
+            PAD* master = m_frame->GetDesignSettings().m_Pad_Master.get();
 
-            pad->ImportSettingsFrom( *(m_frame->GetDesignSettings().m_Pad_Master.get()) );
+            pad->ImportSettingsFrom( *master );
 
-            // If the user has set the footprint type to SMD, we assume that they would like to place
-            // SMD pads
-            if( m_board->GetFirstFootprint()->GetAttributes() & FP_SMD )
+            // If the footprint type and master pad type directly conflict then make some
+            // adjustments.  Otherwise assume the user set what they wanted.
+            if( ( m_board->GetFirstFootprint()->GetAttributes() & FP_SMD )
+                    && master->GetAttribute() == PAD_ATTRIB::PTH )
             {
                 pad->SetAttribute( PAD_ATTRIB::SMD );
                 pad->SetShape( PAD_SHAPE::ROUNDRECT );
                 pad->SetSizeX( 1.5 * pad->GetSizeY() );
                 pad->SetLayerSet( PAD::SMDMask() );
+            }
+            else if( ( m_board->GetFirstFootprint()->GetAttributes() & FP_THROUGH_HOLE )
+                    && master->GetAttribute() == PAD_ATTRIB::SMD )
+            {
+                pad->SetAttribute( PAD_ATTRIB::PTH );
+                pad->SetShape( PAD_SHAPE::CIRCLE );
+                pad->SetSize( wxSize( pad->GetSizeX(), pad->GetSizeX() ) );
+                pad->SetLayerSet( PAD::PTHMask() );
             }
 
             if( pad->CanHaveNumber() )

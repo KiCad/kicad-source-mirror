@@ -950,7 +950,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bottomSizer;
 	bottomSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_parentInfo = new wxStaticText( this, wxID_ANY, _("Footprint R1 (300K), back side (mirrored), rotated 180.0º"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_parentInfo = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_parentInfo->Wrap( -1 );
 	bottomSizer->Add( m_parentInfo, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 8 );
 
@@ -961,7 +961,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bottomSizer->Add( m_cbShowPadOutline, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bottomSizer->Add( 20, 0, 1, wxEXPAND, 5 );
+	bottomSizer->Add( 40, 0, 0, wxEXPAND, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
