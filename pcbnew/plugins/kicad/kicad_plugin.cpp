@@ -265,8 +265,11 @@ void FP_CACHE::Load()
                 FILE_LINE_READER    reader( fn.GetFullPath() );
 
                 m_owner->m_parser->SetLineReader( &reader );
-                // Ensure a previous parsing does not interacts with the new parsing:
+
+                // For better or worse (mostly worse), the parser is a long-lived object.
+                // Make sure we start with a fresh state.
                 m_owner->m_parser->InitParserState();
+                m_owner->m_parser->SetBoard( nullptr );     // calls PCB_PARSER::init()
 
                 FOOTPRINT* footprint = (FOOTPRINT*) m_owner->m_parser->Parse();
                 wxString   fpName = fn.GetName();
