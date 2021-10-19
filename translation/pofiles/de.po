@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-18 12:18-0700\n"
-"PO-Revision-Date: 2021-10-18 19:17+0000\n"
+"PO-Revision-Date: 2021-10-19 20:27+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1275,7 +1275,7 @@ msgstr "Ausgabeparameter"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
-msgstr "Verhältnis Höhe/Breite beibehalten"
+msgstr "Verhältnis Höhe/Breite sperren"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:122
 #: common/dialogs/dialog_page_settings_base.cpp:32
@@ -2415,7 +2415,7 @@ msgstr "Benutzerdefiniert"
 
 #: common/dialogs/dialog_page_settings.cpp:103
 msgid "Preview Settings"
-msgstr "Vorschau Einstellungen"
+msgstr "Vorschau-Einstellungen"
 
 #: common/dialogs/dialog_page_settings.cpp:104
 msgid "Preview Paper"
@@ -2592,7 +2592,7 @@ msgstr "Benutzerdefinierte Papierbreite."
 #: common/dialogs/dialog_page_settings_base.cpp:355
 #: common/dialogs/dialog_page_settings_base.cpp:367
 msgid "Export to other sheets"
-msgstr "In andere Schaltpläne exportieren"
+msgstr "In andere Blätter übernehmen"
 
 #: common/dialogs/dialog_page_settings_base.cpp:140
 #: gerbview/widgets/gerbview_layer_widget.cpp:100
@@ -3870,11 +3870,11 @@ msgstr "Anzahl Wiederholungen"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "Repeat Label Increment"
-msgstr "Wiederholen Ettikierungsschritt"
+msgstr "Bezeichnerinkrement bei Wiederholung"
 
 #: common/drawing_sheet/ds_draw_item.cpp:153
 msgid "Repeat Position Increment"
-msgstr "Wiederholen inkrementieren Position"
+msgstr "Positionsinkrement bei Wiederholung"
 
 #: common/drawing_sheet/ds_draw_item.cpp:155
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
@@ -4346,14 +4346,12 @@ msgid "Bezier"
 msgstr "Bezierkurve"
 
 #: common/eda_shape.cpp:1457
-#, fuzzy
 msgid "Start X"
-msgstr "Bus zeichnen"
+msgstr "Start X"
 
 #: common/eda_shape.cpp:1459
-#, fuzzy
 msgid "Start Y"
-msgstr "Bus zeichnen"
+msgstr "Start Y"
 
 #: common/eda_shape.cpp:1461 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
@@ -6164,7 +6162,7 @@ msgstr "Cursor immer anzeigen"
 
 #: common/tool/actions.cpp:522
 msgid "Display crosshairs even in selection tool"
-msgstr "Anzeige Fadenkreuz auch im Auswahlwerkzeug"
+msgstr "Fadenkreuz auch im Auswahlwerkzeug anzeigen"
 
 #: common/tool/actions.cpp:527
 msgid "Full-Window Crosshairs"
@@ -7601,7 +7599,7 @@ msgstr "Lösche Annotationen"
 
 #: eeschema/dialogs/dialog_annotate_base.h:81
 msgid "Annotate Schematic"
-msgstr "Schaltplan-annotieren"
+msgstr "Schaltplan annotieren"
 
 #: eeschema/dialogs/dialog_bom.cpp:133
 msgid "Generate"
@@ -9104,11 +9102,11 @@ msgstr "Versatz der Pinnamen-Position:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
 msgid "Show pin number text"
-msgstr "Text von Pinnummer anzeigen"
+msgstr "Text mit Pinnummer anzeigen"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:124
 msgid "Show pin name text"
-msgstr "Text von Pinnamen anzeigen"
+msgstr "Text mit Pinname anzeigen"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:128
 msgid "Pin name inside"
@@ -9605,7 +9603,7 @@ msgstr "Export Netzliste"
 
 #: eeschema/dialogs/dialog_netlist.cpp:300
 msgid "Simulator requires a fully annotated schematic."
-msgstr "Simulator benötigt einen komplett annotierten Schaltplan."
+msgstr "Simulator benötigt einen vollständig annotierten Schaltplan."
 
 #: eeschema/dialogs/dialog_netlist.cpp:323
 msgid "Reformat passive symbol values"
@@ -9651,7 +9649,7 @@ msgstr "%s Export"
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr ""
-"Exportieren der Netzliste benötigt einen komplett annotierten Schaltplan."
+"Exportieren der Netzliste benötigt einen vollständig annotierten Schaltplan."
 
 #: eeschema/dialogs/dialog_netlist.cpp:626
 msgid "This plugin already exists."
@@ -10752,7 +10750,7 @@ msgstr "Endwert:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:179
 msgid "Increment step:"
-msgstr "Erhöhungsschritt:"
+msgstr "Schrittweite:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:199
 msgid "Swap sources"
@@ -11876,7 +11874,7 @@ msgstr "Versteckte Felder anzeigen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:34
 msgid "Show page limi&ts"
-msgstr "Anzeige von Seiten&rändern"
+msgstr "Seiten&ränder anzeigen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:42
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:71
@@ -11894,15 +11892,17 @@ msgstr "Zeichne selektierte untergeordnete Elemente"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:50
 msgid "Fill selected shapes"
-msgstr "Ausfüllen der ausgewählten Formen"
+msgstr "Ausgewählte Formen ausfüllen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
 msgid "&Highlight thickness:"
-msgstr "&Hervorhebungsstärke:"
+msgstr "Breite der &Hervorhebung:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:70
 msgid "(highlight color can be edited in the \"Colors\" page)"
-msgstr "(Hervorhebungsfarbe kann in Seite \"Farben\" verändert werden)"
+msgstr ""
+"(Farbe der Hervorhebung kann auf der Unterseite \"Farben\" eingestellt "
+"werden)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
@@ -11930,7 +11930,8 @@ msgstr "Netze hervorheben wenn sie im Platinen-Editor hervorgehoben sind"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "&Restrict buses and wires to H and V orientation"
 msgstr ""
-"&Begrenze Ausrichtung von Bussen und Verbindungen auf Horizontal und Vertikal"
+"Ausrichtung von Bussen und Verbindungen auf horizontal und vertikal "
+"&beschränken"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "Mouse drag performs drag (G) operation"
@@ -11938,7 +11939,9 @@ msgstr "Ziehen mit der Maus führt eine Ziehoperation (G) durch"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:28
 msgid "If unchecked, mouse drag will perform move (M) operation"
-msgstr "Wenn deaktiviert führt das Ziehen mit der Maus ein Bewegen (m) durch"
+msgstr ""
+"Wenn nicht ausgewählt, wird beim Ziehen mit der Maus ein Verschiebevorgang "
+"(M) ausgeführt"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:32
 msgid "Automatically start wires on unconnected pins"
@@ -12071,17 +12074,17 @@ msgstr "Wiederholte Elemente"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:221
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:111
 msgid "&Horizontal pitch:"
-msgstr "&Horizontaler Pitch:"
+msgstr "&Horizontaler Abstand:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:232
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:122
 msgid "&Vertical pitch:"
-msgstr "&Vertikaler Pitch:"
+msgstr "&Vertikaler Abstand:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:243
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:147
 msgid "Label increment:"
-msgstr "Erhöhungswert Bezeichner:"
+msgstr "Bezeichner-Schrittweite:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:260
 msgid "Dialog Preferences"
@@ -12715,7 +12718,7 @@ msgstr ""
 #: eeschema/erc_item.cpp:102
 msgid "Conflict between bus alias definitions across schematic sheets"
 msgstr ""
-"Konflikt zwischen Bus Alias Definitionen innerhalb der Schaltplanblätter"
+"Konflikt zwischen Bus-Alias-Definitionen innerhalb der Schaltplanblätter"
 
 #: eeschema/erc_item.cpp:106
 msgid "More than one name given to this bus or net"
@@ -13046,6 +13049,9 @@ msgid ""
 "The file '%s` could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
+"Die Datei \"%s\" konnte nicht geöffnet werden.\n"
+"Manuelle Wiederherstellung automatisch gespeicherter Dateien ist "
+"erforderlich."
 
 #: eeschema/files-io.cpp:1395
 #, fuzzy
@@ -13056,6 +13062,8 @@ msgstr ""
 #: eeschema/files-io.cpp:1400
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
+"Zur Wiederherstellung der oben genannten Datei(en) ist eine manuelle "
+"Wiederherstellung erforderlich."
 
 #: eeschema/files-io.cpp:1422
 #, fuzzy
@@ -13065,7 +13073,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
-msgstr ""
+msgstr "Die oben genannte(n) Datei(en) müssen manuell entfernt werden."
 
 #: eeschema/files-io.cpp:1438
 #, fuzzy, c-format
@@ -13218,9 +13226,9 @@ msgid "Polyline, %d points"
 msgstr "Linienzug mit %d Punkten"
 
 #: eeschema/lib_shape.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Bezierkurve"
+msgstr "Bezierkurve, %d Punkte"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -15087,8 +15095,8 @@ msgstr "Zeige SPICE-Netzliste..."
 #: eeschema/sim/sim_plot_frame_base.cpp:75
 msgid "Shows current simulation's netlist. Useful for debugging SPICE errors."
 msgstr ""
-"Anzeige der Netzliste der aktuellen Simulation, hilfreich beim Debuggen von "
-"SPICE Fehlern."
+"Anzeige der Netzliste der aktuellen Simulation. Hilfreich beim Debuggen von "
+"SPICE-Fehlern."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:80
 msgid "Settings..."
@@ -15856,7 +15864,7 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:303
 msgid "Re-linking footprints requires a fully annotated schematic."
-msgstr "Footprint-Neuverknüpfung benötigt komplett annotierten Schaltplan."
+msgstr "Footprint-Neuverknüpfung benötigt vollständig annotierten Schaltplan."
 
 #: eeschema/tools/backannotate.cpp:306
 msgid "Footprint re-linking cancelled by user."
@@ -16674,7 +16682,7 @@ msgstr "Darstellung versteckter Textfelder umschalten"
 
 #: eeschema/tools/ee_actions.cpp:644
 msgid "Force H/V Wires and Buses"
-msgstr "Begrenze H/V Ausrichtung von Bussen und Verbindungen"
+msgstr "H/V-Ausrichtung von Bussen und Verbindungen erzwingen"
 
 #: eeschema/tools/ee_actions.cpp:644
 msgid "Switch H & V only mode for new wires and buses"
@@ -17102,7 +17110,7 @@ msgstr "Keine Symbolbibliothek gewählt."
 #: eeschema/tools/symbol_editor_control.cpp:386
 #: eeschema/tools/symbol_editor_control.cpp:426
 msgid "No symbol to export"
-msgstr "Kein Symbol zum exportieren"
+msgstr "Kein Symbol zu exportieren"
 
 #: eeschema/tools/symbol_editor_control.cpp:397
 msgid "Image File Name"
@@ -17226,44 +17234,36 @@ msgid "16 Layers"
 msgstr "16 Lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:91
-#, fuzzy
 msgid "18 Layers"
-msgstr "8 Lagen"
+msgstr "18 Lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:92
-#, fuzzy
 msgid "20 Layers"
-msgstr "2 Lagen"
+msgstr "20 Lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:93
-#, fuzzy
 msgid "22 Layers"
-msgstr "2 Lagen"
+msgstr "22 Lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:94
-#, fuzzy
 msgid "24 Layers"
-msgstr "4 Lagen"
+msgstr "24 Lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:95
-#, fuzzy
 msgid "26 Layers"
-msgstr "6 Lagen"
+msgstr "26 Lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:96
-#, fuzzy
 msgid "28 Layers"
-msgstr "8 Lagen"
+msgstr "28 Lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:97
-#, fuzzy
 msgid "30 Layers"
-msgstr "10 Lagen"
+msgstr "30 Lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:98
-#, fuzzy
 msgid "32 Layers"
-msgstr "2 Lagen"
+msgstr "32 Lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:110
 msgid "Store Choice"
@@ -17516,7 +17516,7 @@ msgstr "Blattgröße"
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:28
 #: pcbnew/dialogs/panel_edit_options_base.cpp:374
 msgid "Show page limits"
-msgstr "Anzeige von Seitenrändern"
+msgstr "Seitenbegrenzungen anzeigen"
 
 #: gerbview/events_called_functions.cpp:178 gerbview/gerbview_frame.cpp:165
 msgid "Layers Manager"
@@ -18304,9 +18304,8 @@ msgid "Failed to output data"
 msgstr "Datenausgabe fehlgeschlagen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html><h1>Vorlagenauswahl</h1></html>"
+msgstr "<h1>Vorlagenauswahl</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -19809,7 +19808,7 @@ msgstr "Die Liste der Elemente im Zeichnungsblatt anzeigen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Page Preview Settings..."
-msgstr "Einstellungen Seitevorschau..."
+msgstr "Seitenvorschau einrichten..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Edit preview data for page size and title block"
@@ -27597,7 +27596,8 @@ msgstr "Schrittweite für &Drehbefehle:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:58
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr ""
-"Einstellung für den Rotationswinkel (in Grad) in Kontextmenüs und Hotkeys."
+"Einstellung der Winkelschrittweite (in °) bei Rotation per Kontextmenü oder "
+"Hotkey."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
 msgid "Allow free pads"
@@ -34461,7 +34461,7 @@ msgstr "Alle Flächen ausfüllen..."
 #: pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr ""
-"Schaltplan-Paritätstest benötigt einen komplett annotierten Schaltplan."
+"Schaltplan-Paritätstest benötigt einen vollständig annotierten Schaltplan."
 
 #: pcbnew/tools/drc_tool.cpp:208
 msgid "DRC"
@@ -34570,7 +34570,7 @@ msgstr "Klicken Sie auf neues Mitglied ..."
 
 #: pcbnew/tools/pad_tool.cpp:144
 msgid "Paste Pad Properties"
-msgstr "Pad-Eigenschaften anwenden"
+msgstr "Pad-Eigenschaften einfügen"
 
 #: pcbnew/tools/pad_tool.cpp:260
 msgid "Push Pad Settings"
@@ -35143,7 +35143,7 @@ msgstr "Linie spezifischer Länge für Mikrowellen-Applikationen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:490
 msgid "Copy Pad Properties to Default"
-msgstr "Pad-Eigenschaften zu Standard-Eigenschaften kopieren"
+msgstr "Pad-Eigenschaften zum Standard kopieren"
 
 #: pcbnew/tools/pcb_actions.cpp:490
 msgid "Copy current pad's properties"
@@ -35156,7 +35156,7 @@ msgstr "Standard-Pad-Eigenschaften auf Auswahl anwenden"
 #: pcbnew/tools/pcb_actions.cpp:496
 msgid "Replace the current pad's properties with those copied earlier"
 msgstr ""
-"Ersetzt die Eigenschaften des aktuellen Pads durch die (ggf. zuvor "
+"Ersetzt die Eigenschaften der ausgewählten Pads durch die (ggf. zuvor "
 "kopierten) Standard-Pad-Eigenschaften"
 
 #: pcbnew/tools/pcb_actions.cpp:501
@@ -36378,7 +36378,7 @@ msgstr "DRC-Verstöße, die individuell ausgeschlossen wurden"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Show footprint and text origins as a cross"
-msgstr "Footprint- und Textbeginn mit Kreuz anzeigen"
+msgstr "Footprint- und Textursprung mit Kreuz anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Show drawing sheet borders and title block"
