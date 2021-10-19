@@ -879,7 +879,17 @@ void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos )
     }
 
     if( centerView )
-        GetCanvas()->GetView()->SetCenter( aPos, dialogScreenRects );
+    {
+        try
+        {
+            GetCanvas()->GetView()->SetCenter( aPos, dialogScreenRects );
+        }
+        catch( const ClipperLib::clipperException& exc )
+        {
+            wxLogError( wxT( "Clipper library error '%s' occurred centering object." ),
+                        exc.what() );
+        }
+    }
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPos );
 }

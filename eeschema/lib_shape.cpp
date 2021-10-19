@@ -115,8 +115,8 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     wxPoint start = aTransform.TransformCoordinate( m_start ) + aOffset;
     wxPoint end = aTransform.TransformCoordinate( m_end ) + aOffset;
     wxPoint center;
-    int     startAngle;
-    int     endAngle;
+    int     startAngle = 0;
+    int     endAngle = 0;
     int     pen_size = GetEffectivePenWidth( aPlotter->RenderSettings() );
     FILL_T fill = aFill ? m_fill : FILL_T::NO_FILL;
 
