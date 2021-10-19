@@ -94,8 +94,19 @@ void DIALOG_GLOBAL_DELETION::onCheckDeleteFootprints( wxCommandEvent& event )
 
 void DIALOG_GLOBAL_DELETION::onCheckDeleteDrawings( wxCommandEvent& event )
 {
-    m_drawingFilterLocked->Enable( m_delDrawings->GetValue() );
-    m_drawingFilterUnlocked->Enable( m_delDrawings->GetValue() );
+    bool enable = m_delDrawings->GetValue() || m_delBoardEdges->GetValue();
+
+    m_drawingFilterLocked->Enable( enable );
+    m_drawingFilterUnlocked->Enable( enable );
+}
+
+
+void DIALOG_GLOBAL_DELETION::onCheckDeleteBoardOutlines( wxCommandEvent& event )
+{
+    bool enable = m_delDrawings->GetValue() || m_delBoardEdges->GetValue();
+
+    m_drawingFilterLocked->Enable( enable );
+    m_drawingFilterUnlocked->Enable( enable );
 }
 
 

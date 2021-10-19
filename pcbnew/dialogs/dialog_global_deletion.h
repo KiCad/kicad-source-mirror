@@ -39,6 +39,7 @@ private:
     void onCheckDeleteTracks( wxCommandEvent& event ) override;
     void onCheckDeleteFootprints( wxCommandEvent& event ) override;
     void onCheckDeleteDrawings( wxCommandEvent& event ) override;
+    void onCheckDeleteBoardOutlines( wxCommandEvent& event ) override;
 
     PCB_EDIT_FRAME* m_Parent;
     LAYER_NUM m_currentLayer;
