@@ -68,6 +68,7 @@ enum PCB_DRC_CODE {
     DRCE_NET_CONFLICT,                   // pad net doesn't match netlist
 
     DRCE_FOOTPRINT_TYPE_MISMATCH,        // footprint attribute does not match actual pads
+    DRCE_PAD_TH_WITH_NO_HOLE,            // footprint has Plated Through-Hole with no hole
 
     DRCE_UNRESOLVED_VARIABLE,
     DRCE_SILK_MASK_CLEARANCE,            // silkscreen clipped by mask (potentially leaving it
@@ -172,6 +173,7 @@ private:
     static DRC_ITEM diffPairGapOutOfRange;
     static DRC_ITEM diffPairUncoupledLengthTooLong;
     static DRC_ITEM footprintTypeMismatch;
+    static DRC_ITEM footprintTHPadhasNoHole;
 
 private:
     DRC_RULE*          m_violatingRule = nullptr;

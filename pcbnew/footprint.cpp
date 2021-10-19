@@ -2105,6 +2105,30 @@ void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxStri
     }
 }
 
+void FOOTPRINT::CheckFootprintTHPadNoHoles(
+                const std::function<void( const wxString& msg, const wxPoint& position )>*
+                aErrorHandler )
+{
+    if( aErrorHandler == nullptr )
+        return;
+
+    for( const PAD* pad: Pads() )
+    {
+
+        if( pad->GetAttribute() != PAD_ATTRIB::PTH
+            && pad->GetAttribute() != PAD_ATTRIB::NPTH )
+            continue;
+
+        if( pad->GetDrillSizeX() < 1 || pad->GetDrillSizeX() < 1 )
+        {
+            wxString msg;
+            msg.Printf( _( "(pad \"%s\")" ), pad->GetNumber() );
+
+            (*aErrorHandler)( msg, pad->GetPosition() );
+        }
+    }
+}
+
 
 void FOOTPRINT::SwapData( BOARD_ITEM* aImage )
 {

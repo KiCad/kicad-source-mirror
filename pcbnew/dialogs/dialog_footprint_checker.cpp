@@ -133,7 +133,21 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
                 m_frame->GetCanvas()->GetView()->Add( marker );
             };
 
+    const std::function<void( const wxString& msg, const wxPoint& position )> tstHoleInTHPad =
+            [&]( const wxString& aMsg, const wxPoint& aPosition )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_PAD_TH_WITH_NO_HOLE );
+
+                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + aMsg );
+                drcItem->SetItems( footprint );
+
+                PCB_MARKER* marker = new PCB_MARKER( drcItem, aPosition );
+                board->Add( marker );
+                m_frame->GetCanvas()->GetView()->Add( marker );
+            };
+
     footprint->CheckFootprintAttributes( &typeWarning );
+    footprint->CheckFootprintTHPadNoHoles( &tstHoleInTHPad );
     m_checksRun = true;
 
     SetMarkersProvider( new BOARD_DRC_ITEMS_PROVIDER( m_frame->GetBoard() ) );
