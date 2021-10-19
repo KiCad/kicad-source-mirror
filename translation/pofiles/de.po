@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-18 12:18-0700\n"
-"PO-Revision-Date: 2021-10-19 20:27+0000\n"
+"PO-Revision-Date: 2021-10-21 11:49+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -13029,7 +13029,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "Der aktuelle Schaltplan wurde geändert.  Änderungen speichern?"
 
 #: eeschema/files-io.cpp:1338
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -13037,11 +13036,11 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"Nun, das ist möglicherweise peinlich!\n"
-"Es scheint, dass nach dem Editieren der Datei\n"
-"\"%s\"\n"
-"diese nicht ordnungsgemäß gespeichert wurde. Möchten Sie die letzten "
-"Änderungen wiederherstellen?"
+"Huch, das tut uns leid!\n"
+"Es scheint, dass bei Ihrer letzten Bearbeitung eine oder mehrere "
+"Schaltplandateien\n"
+"nicht ordnungsgemäß gespeichert wurden.  Möchten Sie die letzten "
+"gespeicherten Änderungen wiederherstellen?"
 
 #: eeschema/files-io.cpp:1349
 #, c-format
@@ -13054,10 +13053,10 @@ msgstr ""
 "erforderlich."
 
 #: eeschema/files-io.cpp:1395
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
 msgstr ""
-"Die automatisch gespeicherte Datei \"%s\" konnte nicht gelöscht werden!"
+"Die folgenden automatisch gespeicherten Dateien konnten nicht "
+"wiederhergestellt werden\n"
 
 #: eeschema/files-io.cpp:1400
 msgid "Manual recovery will be required to restore the file(s) above."
@@ -13066,10 +13065,10 @@ msgstr ""
 "Wiederherstellung erforderlich."
 
 #: eeschema/files-io.cpp:1422
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr ""
-"Die automatisch gespeicherte Datei \"%s\" konnte nicht gelöscht werden!"
+"Die folgenden automatisch gespeicherten Dateien konnten nicht gelöscht "
+"werden\n"
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
@@ -13082,7 +13081,9 @@ msgid ""
 "'%s'\n"
 "could not be deleted."
 msgstr ""
-"Die automatisch gespeicherte Datei \"%s\" konnte nicht gelöscht werden!"
+"Die automatisch gespeicherte Stammdatei\n"
+"\"%s\"\n"
+"konnte nicht gelöscht werden."
 
 #: eeschema/files-io.cpp:1446
 msgid ""
@@ -24464,13 +24465,12 @@ msgid "Clearance Overrides and Settings"
 msgstr "Freiraum-Überschreibungen und -Einstellungen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:438
-#, fuzzy
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
-"Die aktuell zugewiesene Bibliotheks-ID und Footprint-ID. Verwenden Sie "
-"\"Ändere Footprint...\", um einen anderen Footprint zuzuweisen."
+"Die aktuell zugewiesene Bibliotheks-ID und Footprint-ID.  Verwenden Sie "
+"\"Footprint ändern...\", um einen anderen Footprint zuzuweisen."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:135
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:108
