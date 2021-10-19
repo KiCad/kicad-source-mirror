@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-18 12:18-0700\n"
-"PO-Revision-Date: 2021-10-15 11:31+0200\n"
+"POT-Creation-Date: 2021-10-19 14:43+0200\n"
+"PO-Revision-Date: 2021-10-19 14:44+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -2621,6 +2621,7 @@ msgid "Revision:"
 msgstr "Révision:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:238
+#: eeschema/dialogs/dialog_netlist - new.cpp:385
 #: eeschema/dialogs/dialog_netlist.cpp:385
 msgid "Title:"
 msgstr "Titre:"
@@ -2717,6 +2718,7 @@ msgstr "Prévisualisation"
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:134
 #: eeschema/dialogs/dialog_change_symbols.cpp:156
 #: eeschema/dialogs/dialog_erc.cpp:80 eeschema/dialogs/dialog_erc.cpp:314
+#: eeschema/dialogs/dialog_netlist - new.cpp:269
 #: eeschema/dialogs/dialog_netlist.cpp:269
 #: eeschema/dialogs/dialog_plot_schematic.cpp:113
 #: eeschema/dialogs/dialog_print_using_printer.cpp:148
@@ -4335,14 +4337,12 @@ msgid "Bezier"
 msgstr "Bézier"
 
 #: common/eda_shape.cpp:1457
-#, fuzzy
 msgid "Start X"
-msgstr "Point de Départ X:"
+msgstr "Départ X"
 
 #: common/eda_shape.cpp:1459
-#, fuzzy
 msgid "Start Y"
-msgstr "Point de Départ Y:"
+msgstr "Départ Y"
 
 #: common/eda_shape.cpp:1461 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
@@ -5878,6 +5878,7 @@ msgstr "Changer contraintes des méthodes d'édition"
 
 #: common/tool/actions.cpp:208 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
+#: pcbnew/dialogs/dialog_find.cpp:55
 msgid "Find"
 msgstr "Chercher"
 
@@ -7148,7 +7149,7 @@ msgstr "Variables d'env. pour chemins relatifs:"
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:43
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:63
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:54
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:447 pcbnew/footprint.cpp:2198
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:447 pcbnew/footprint.cpp:2222
 #: pcbnew/footprint_wizard_frame.cpp:330 pcbnew/fp_text.cpp:272
 #: pcbnew/fp_text_grid_table.cpp:110 pcbnew/pcb_dimension.cpp:310
 msgid "Value"
@@ -7637,7 +7638,8 @@ msgstr "Ajouter Générateur"
 msgid "Nickname '%s' already in use."
 msgstr "Un nom logique '%s' existe déjà."
 
-#: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:683
+#: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist -
+#: new.cpp:709 eeschema/dialogs/dialog_netlist.cpp:683
 msgid "Generator File"
 msgstr "Fichier Générateur"
 
@@ -8915,7 +8917,7 @@ msgstr "Style graphique"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:2200 pcbnew/fp_text_grid_table.cpp:96
+#: pcbnew/footprint.cpp:2224 pcbnew/fp_text_grid_table.cpp:96
 #: pcbnew/pad.cpp:1498
 msgid "Orientation"
 msgstr "Orientation"
@@ -9584,27 +9586,33 @@ msgstr "Accepter Nom"
 msgid "Migrate Buses"
 msgstr "Migration des Bus"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:268
 #: eeschema/dialogs/dialog_netlist.cpp:268
 #: eeschema/dialogs/dialog_netlist_base.h:69
 msgid "Export Netlist"
 msgstr "Exporter Netliste"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:300
 #: eeschema/dialogs/dialog_netlist.cpp:300
 msgid "Simulator requires a fully annotated schematic."
 msgstr "La simulation nécessite un schéma complètement numéroté."
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:323
 #: eeschema/dialogs/dialog_netlist.cpp:323
 msgid "Reformat passive symbol values"
 msgstr "Reformater les valeurs des composants passifs"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:324
 #: eeschema/dialogs/dialog_netlist.cpp:324
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
 msgstr "Reformater les valeurs des composants passifs, par exemple 1M-> 1Meg"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:329
 #: eeschema/dialogs/dialog_netlist.cpp:329
 msgid "External simulator command:"
 msgstr "Commande simulateur externe :"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:330
 #: eeschema/dialogs/dialog_netlist.cpp:330
 msgid ""
 "Enter the command line to run spice\n"
@@ -9615,38 +9623,46 @@ msgstr ""
 "Habituellement <path to spice binary> %I\n"
 "%I sera remplacé par le nom réel de la netliste spice</path>"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:344
 #: eeschema/dialogs/dialog_netlist.cpp:344
 msgid "Create Netlist and Run Simulator Command"
 msgstr "Créer la Netlist et Exécuter la commande de simulation"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:395
 #: eeschema/dialogs/dialog_netlist.cpp:395
 msgid "Netlist command:"
 msgstr "Commande netliste:"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:441
 #: eeschema/dialogs/dialog_netlist.cpp:441
 msgid "Save Netlist File"
 msgstr "Sauver Fichier Netliste"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:499
 #: eeschema/dialogs/dialog_netlist.cpp:474
 #, c-format
 msgid "%s Export"
 msgstr "Export %s"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:528
 #: eeschema/dialogs/dialog_netlist.cpp:503
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr ""
 "L'exportation de la net liste nécessite un schéma complètement numéroté."
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:652
 #: eeschema/dialogs/dialog_netlist.cpp:626
 msgid "This plugin already exists."
 msgstr "Ce plugin existe déjà."
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:685
 #: eeschema/dialogs/dialog_netlist.cpp:659
 msgid "You must provide a netlist generator command string"
 msgstr ""
 "Vous devez fournir une ligne de commande pour le générateur de netliste"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:691
 #: eeschema/dialogs/dialog_netlist.cpp:665
 msgid "You must provide a netlist generator title"
 msgstr "Vous devez fournir un titre pour le générateur de netliste"
@@ -10149,7 +10165,7 @@ msgstr "Mesure Prise"
 #: eeschema/dialogs/dialog_rescue_each.cpp:132
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:958
 #: eeschema/sch_symbol.cpp:1376 eeschema/sch_symbol.cpp:1423
-#: pcbnew/footprint.cpp:2196
+#: pcbnew/footprint.cpp:2220
 msgid "Reference"
 msgstr "Référence"
 
@@ -13218,9 +13234,9 @@ msgid "Polyline, %d points"
 msgstr "Poly-ligne, %d points"
 
 #: eeschema/lib_shape.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Courbe de Bézier"
+msgstr "Courbe de Bézier, %d points"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -17293,7 +17309,7 @@ msgstr "Sélection couche: %s"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:112
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:53
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47
-#: pcbnew/footprint.cpp:2191 pcbnew/footprint.cpp:2194 pcbnew/fp_text.cpp:289
+#: pcbnew/footprint.cpp:2215 pcbnew/footprint.cpp:2218 pcbnew/fp_text.cpp:289
 #: pcbnew/fp_text_grid_table.cpp:95 pcbnew/pad.cpp:890
 #: pcbnew/pcb_dimension.cpp:352 pcbnew/pcb_dimension.cpp:1056
 #: pcbnew/pcb_shape.cpp:159 pcbnew/pcb_target.cpp:154 pcbnew/pcb_text.cpp:120
@@ -19411,7 +19427,7 @@ msgstr "Les textes peuvent inclure des mots-clés."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:558
 msgid "Keyword notation is ${keyword}"
-msgstr "La notation des mots-clés est ${mot-clé} "
+msgstr "La notation des mots-clés est ${mot-clé}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Each keyword is replaced by its value"
@@ -20790,6 +20806,7 @@ msgid ""
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
 "Les séries sont définies dans IEC 60063. \n"
+"\n"
 "Les valeurs disponibles sont approximativement également espacées dans une "
 "échelle logarithmique.\n"
 "\n"
@@ -20798,7 +20815,7 @@ msgstr ""
 "\tE12(10%): 1,0  1,2  1,5  1,8  2,2  2,7  3,3  3,9  4,7  5,6  6,8  8,2\n"
 "\tE6(20%):  1,0   -   1,5   -   2,2   -   3,3   -   4,7   -   6,8   -\n"
 "\tE3(50%):  1,0   -    -    -   2,2   -    -    -   4,7   -    -    -\n"
-"\tE1:  1,0   -    -    -    -    -    -    -    -    -    -    -\n"
+"\tE1     :  1,0   -    -    -    -    -    -    -    -    -    -    -\n"
 "\n"
 "- Cette calculatrice trouve des combinaisons  de la série E (entre 10Ω et "
 "1MΩ) pour créer des valeurs arbitraires. \n"
@@ -21427,7 +21444,7 @@ msgstr "Matériaux communs:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:57
 msgid "Dielectric Material Characteristics"
-msgstr "Caractéristiques du Matériau Diélectrique:"
+msgstr "Caractéristiques du Matériau Diélectrique"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
@@ -24043,29 +24060,29 @@ msgstr "Inclure &zones"
 msgid "Filter Selected Items"
 msgstr "Filtrer Eléments Sélectionnés"
 
-#: pcbnew/dialogs/dialog_find.cpp:227
+#: pcbnew/dialogs/dialog_find.cpp:228
 msgid "Searching..."
 msgstr "Recherche..."
 
-#: pcbnew/dialogs/dialog_find.cpp:345
+#: pcbnew/dialogs/dialog_find.cpp:346
 #, c-format
 msgid "'%s' not found"
 msgstr "'%s' non trouvé."
 
-#: pcbnew/dialogs/dialog_find.cpp:353
+#: pcbnew/dialogs/dialog_find.cpp:354
 msgid "No more items to show"
 msgstr "Plus d'objets à montrer"
 
-#: pcbnew/dialogs/dialog_find.cpp:355
+#: pcbnew/dialogs/dialog_find.cpp:356
 msgid "No hits"
 msgstr "Pas de cible"
 
-#: pcbnew/dialogs/dialog_find.cpp:362
+#: pcbnew/dialogs/dialog_find.cpp:363
 #, c-format
 msgid "'%s' found"
 msgstr "'%s' trouvé"
 
-#: pcbnew/dialogs/dialog_find.cpp:365
+#: pcbnew/dialogs/dialog_find.cpp:366
 #, c-format
 msgid "Hit(s): %ld / %lu"
 msgstr "Cible(s): %ld / %lu"
@@ -25147,9 +25164,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:133
 msgid "Error loading footprint library table."
-msgstr ""
-"Une erreur s'est produite lors du chargement de la table des librairie "
-"d'empreintes"
+msgstr "Erreur lors du chargement de la table des librairie d'empreintes."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:178
 msgid "Circle Properties"
@@ -29681,12 +29696,16 @@ msgstr "Longueur de Paire non couplée trop longue"
 msgid "Footprint type doesn't match footprint pads"
 msgstr "Le type d’empreinte ne correspond pas aux type de pads"
 
-#: pcbnew/drc/drc_item.cpp:327
+#: pcbnew/drc/drc_item.cpp:210
+msgid "Through hole pad has no hole"
+msgstr "Le pad à trou traversant n'a pas de trou"
+
+#: pcbnew/drc/drc_item.cpp:334
 #, c-format
 msgid "Rule: %s"
 msgstr "Règle: %s"
 
-#: pcbnew/drc/drc_item.cpp:329
+#: pcbnew/drc/drc_item.cpp:336
 msgid "Local override"
 msgstr "Forçage local"
 
@@ -30434,23 +30453,28 @@ msgstr "Type \"SMD\" attendu mais défini comme \"%s\""
 msgid "Expected \"Other\" type but set to \"%s\""
 msgstr "Type \"Autre\" attendu mais défini comme \"%s\""
 
-#: pcbnew/footprint.cpp:2203 pcbnew/pad.cpp:1542 pcbnew/zone.cpp:1420
+#: pcbnew/footprint.cpp:2125
+#, c-format
+msgid "(pad \"%s\")"
+msgstr "(pad \"%s\")"
+
+#: pcbnew/footprint.cpp:2227 pcbnew/pad.cpp:1542 pcbnew/zone.cpp:1420
 msgid "Clearance Override"
 msgstr "Forçage d'Isolation"
 
-#: pcbnew/footprint.cpp:2206 pcbnew/pad.cpp:1519
+#: pcbnew/footprint.cpp:2230 pcbnew/pad.cpp:1519
 msgid "Solderpaste Margin Override"
 msgstr "Forçage Marge Pate à Souder"
 
-#: pcbnew/footprint.cpp:2210 pcbnew/pad.cpp:1522
+#: pcbnew/footprint.cpp:2234 pcbnew/pad.cpp:1522
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Forçage Marge de Soudure"
 
-#: pcbnew/footprint.cpp:2213 pcbnew/pad.cpp:1524 pcbnew/zone.cpp:1431
+#: pcbnew/footprint.cpp:2237 pcbnew/pad.cpp:1524 pcbnew/zone.cpp:1431
 msgid "Thermal Relief Width"
 msgstr "Largeur Frein Thermique"
 
-#: pcbnew/footprint.cpp:2217 pcbnew/pad.cpp:1527 pcbnew/zone.cpp:1428
+#: pcbnew/footprint.cpp:2241 pcbnew/pad.cpp:1527 pcbnew/zone.cpp:1428
 msgid "Thermal Relief Gap"
 msgstr "Longueur Frein Thermique"
 
@@ -32331,6 +32355,9 @@ msgid ""
 "been made but it is possible that DRC errors exist and that manual editing "
 "of the zone priorities is required."
 msgstr ""
+"Impossible de déterminer les priorités de zones pour la couche '%s'. Une "
+"tentative a été faite, mais il est possible que des erreurs DRC existent et "
+"qu’une édition manuelle des priorités de zone soit nécessaire."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:145
 msgid ""
@@ -33225,7 +33252,7 @@ msgstr "Manque '$EndMODULE' pour le MODULE '%s'."
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1377
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
-msgstr "Forme de pad '%c=0x%02x' inconnue ligne: %d, empreinte:'%s'"
+msgstr "Forme de pad '%c=0x%02x' inconnue ligne: %d, empreinte:'%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1567
 #, c-format
@@ -36896,6 +36923,11 @@ msgstr "Exécution de remplissage des polygones..."
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -36906,9 +36938,10 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
@@ -36922,9 +36955,10 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -36934,9 +36968,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -36951,6 +36985,10 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -36958,6 +36996,11 @@ msgstr "Calculateur pour PCB KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
 msgid "KiCad PCB Editor (Standalone)"
@@ -36970,10 +37013,6 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -37028,6 +37067,9 @@ msgstr "Schématique KiCad"
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
 
+#~ msgid "Footprint through hole pad has no hole"
+#~ msgstr "Le pad à trou traversant n'a pas de trou."
+
 #~ msgid "Polyline"
 #~ msgstr "PolyLigne"
 
@@ -37039,12 +37081,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Arcs in symbols cannot exceed 180 degrees."
 #~ msgstr "Les arcs dans les symboles ne peuvent pas dépasser 180 degrés."
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
 
 #~ msgid ""
 #~ "The library ID and footprint ID currently assigned.  Use “Change "
@@ -37308,9 +37344,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "If you want a board perimeter layer"
 #~ msgstr "Si vous voulez une couche contour du circuit imprimé"
-
-#~ msgid "pad %s"
-#~ msgstr "pad %s"
 
 #~ msgid "All Files (*.*)|*.*"
 #~ msgstr "Tous les fichiers (*.*)|*.*"
