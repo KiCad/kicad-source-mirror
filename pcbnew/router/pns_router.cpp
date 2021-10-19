@@ -481,10 +481,14 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
                     if( holeOnly || !m_iface->IsFlashedOnLayer( itemToMark, currentItem->Layer() ) )
                     {
                         SOLID* solid = static_cast<SOLID*>( tmp.get() );
-                        solid->SetShape( solid->Hole()->Clone() );
 
-                        // Leave the pad flashing around the highlighted hole
-                        removeOriginal = false;
+                        if( solid->Hole() )
+                        {
+                            solid->SetShape( solid->Hole()->Clone() );
+
+                            // Leave the pad flashing around the highlighted hole
+                            removeOriginal = false;
+                        }
                     }
                 }
 
