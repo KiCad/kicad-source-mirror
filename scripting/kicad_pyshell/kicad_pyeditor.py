@@ -19,7 +19,7 @@ from wx import stc
 def KiNewId():
     try:
         wx.NewIdRef
-    except NameError:
+    except ( NameError, AttributeError ):
         return wx.NewId()
     else:
         return wx.NewIdRef()
