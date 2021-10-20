@@ -494,15 +494,12 @@ void EDA_SHAPE::SetArcGeometry( const wxPoint& aStart, const wxPoint& aMid, cons
 
 double EDA_SHAPE::GetArcAngle() const
 {
-    VECTOR2D startLine = m_start - m_arcCenter;
-    VECTOR2D endLine   = m_end - m_arcCenter;
+    double startAngle;
+    double endAngle;
 
-    double arcAngle = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
+    CalcArcAngles( startAngle, endAngle );
 
-    if( arcAngle < 0.0 )
-        arcAngle += 3600.0;
-
-    return arcAngle;
+    return ( endAngle - startAngle ) * 10;
 }
 
 
