@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-18 12:18-0700\n"
-"PO-Revision-Date: 2021-10-18 19:17+0000\n"
+"PO-Revision-Date: 2021-10-21 11:50+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -3232,7 +3232,7 @@ msgstr "ท่าทางการลาก"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:99
 msgid "Left button drag:"
-msgstr "ปุ่มซ้ายลาก:"
+msgstr "เมาส์ปุ่มซ้ายลาก:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Draw selection rectangle"
@@ -3248,7 +3248,7 @@ msgstr "ลากวัตถุใดๆ (เลือกก่อนหรื�
 
 #: common/dialogs/panel_mouse_settings_base.cpp:112
 msgid "Middle button drag:"
-msgstr "เมาส์ปุ่มกลางลาก:"
+msgstr "เมาส์ปุ่มกลางลาก:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:116
 #: common/dialogs/panel_mouse_settings_base.cpp:129
@@ -3285,7 +3285,7 @@ msgstr "ไม่มี"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:125
 msgid "Right button drag:"
-msgstr "เมาส์ปุ่มขวาลาก:"
+msgstr "เมาส์ปุ่มขวาลาก:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:145
 msgid "Scroll Gestures"
@@ -5212,7 +5212,7 @@ msgstr "เวียเจาะทะลุ"
 
 #: common/layer_id.cpp:155
 msgid "Bl/Buried vias"
-msgstr "Bl/Buried เวีย"
+msgstr "เวียตาบอด/ฝัง"
 
 #: common/layer_id.cpp:156
 msgid "Micro-vias"
@@ -5254,7 +5254,7 @@ msgstr "ระวัง DRC"
 
 #: common/layer_id.cpp:165
 msgid "DRC errors"
-msgstr "ผิดพลาด DRC"
+msgstr "ผิดพลาดดีอาร์ซี"
 
 #: common/layer_id.cpp:166
 msgid "DRC exclusions"
@@ -23646,7 +23646,7 @@ msgstr "รูเจาะทะลุ"
 #: pcbnew/footprint_libraries_utils.cpp:1137 pcbnew/pad.cpp:1113
 #: pcbnew/pad.cpp:1458
 msgid "SMD"
-msgstr "SMD"
+msgstr "เอสเอ็มดี"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
@@ -31462,6 +31462,9 @@ msgid ""
 "been made but it is possible that DRC errors exist and that manual editing "
 "of the zone priorities is required."
 msgstr ""
+"ไม่สามารถกำหนดระดับความสำคัญการเติมโซนสำหรับเลเยอร์ '%s' "
+"เราได้พยายามอย่างดีที่สุดแล้ว แต่อาจเป็นเพราะมีความผิดพลาด DRC คงอยู่ "
+"ดังนั้นจึงจำเป็นต้องแก้ไขลำดับความสำคัญของโซนด้วยตนเอง"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:145
 msgid ""
