@@ -827,12 +827,16 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 {
                     if( aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
                     {
-                        int gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aItem, aLayer );
+                        bool ignoreLineWidths = false;
+                        int  gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aItem, aLayer );
 
                         if( aItem->IsOnLayer( Edge_Cuts ) )
                         {
                             gap = std::max( gap, evalRulesForItems( EDGE_CLEARANCE_CONSTRAINT,
                                                                     aZone, aItem, Edge_Cuts ) );
+
+                            ignoreLineWidths = true;
+                            gap = std::max( gap, bds.GetDRCEpsilon() );
                         }
 
                         if( aItem->IsOnLayer( Margin ) )
@@ -841,7 +845,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                                                                     aZone, aItem, Margin ) );
                         }
 
-                        addKnockout( aItem, aLayer, gap, aItem->IsOnLayer( Edge_Cuts ), aHoles );
+                        addKnockout( aItem, aLayer, gap, ignoreLineWidths, aHoles );
                     }
                 }
             };

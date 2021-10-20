@@ -31,7 +31,6 @@
 #include <pad.h>
 #include <pcb_dimension.h>
 #include <pcb_track.h>
-#include <string_utils.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <zone.h>
@@ -41,7 +40,6 @@
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
-#include <geometry/shape_rect.h>
 #include <geometry/shape_line_chain.h>
 
 
