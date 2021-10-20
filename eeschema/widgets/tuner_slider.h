@@ -78,9 +78,17 @@ private:
     void updateSlider();
     void updateValueText();
 
+    void updateMax();
+    void updateValue();
+    void updateMin();
+
     void onClose( wxCommandEvent& event ) override;
     void onSave( wxCommandEvent& event ) override;
     void onSliderChanged( wxScrollEvent& event ) override;
+
+    void onMaxKillFocus( wxFocusEvent& event ) override;
+    void onValueKillFocus( wxFocusEvent& event ) override;
+    void onMinKillFocus( wxFocusEvent& event ) override;
 
     void onMaxTextEnter( wxCommandEvent& event ) override;
     void onValueTextEnter( wxCommandEvent& event ) override;

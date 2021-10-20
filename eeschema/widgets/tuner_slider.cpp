@@ -131,6 +131,52 @@ void TUNER_SLIDER::updateValueText()
 }
 
 
+void TUNER_SLIDER::updateMax()
+{
+    try
+    {
+        SPICE_VALUE newMax( m_maxText->GetValue() );
+        SetMax( newMax );
+    }
+    catch( const KI_PARAM_ERROR& )
+    {
+        // Restore the previous value
+        m_maxText->SetValue( m_max.ToOrigString() );
+    }
+}
+
+
+void TUNER_SLIDER::updateValue()
+{
+    try
+    {
+        SPICE_VALUE newCur( m_valueText->GetValue() );
+        SetValue( newCur );
+        m_changed = true;
+    }
+    catch( const KI_PARAM_ERROR& )
+    {
+        // Restore the previous value
+        m_valueText->SetValue( m_value.ToOrigString() );
+    }
+}
+
+
+void TUNER_SLIDER::updateMin()
+{
+    try
+    {
+        SPICE_VALUE newMin( m_minText->GetValue() );
+        SetMin( newMin );
+    }
+    catch( const KI_PARAM_ERROR& )
+    {
+        // Restore the previous value
+        m_minText->SetValue( m_min.ToOrigString() );
+    }
+}
+
+
 void TUNER_SLIDER::onClose( wxCommandEvent& event )
 {
     m_frame->RemoveTuner( this );
@@ -153,49 +199,39 @@ void TUNER_SLIDER::onSliderChanged( wxScrollEvent& event )
 }
 
 
+void TUNER_SLIDER::onMaxKillFocus( wxFocusEvent& event )
+{
+    updateMax();
+}
+
+
+void TUNER_SLIDER::onValueKillFocus( wxFocusEvent& event )
+{
+    updateValue();
+}
+
+
+void TUNER_SLIDER::onMinKillFocus( wxFocusEvent& event )
+{
+    updateMin();
+}
+
+
 void TUNER_SLIDER::onMaxTextEnter( wxCommandEvent& event )
 {
-    try
-    {
-        SPICE_VALUE newMax( m_maxText->GetValue() );
-        SetMax( newMax );
-    }
-    catch( const KI_PARAM_ERROR& )
-    {
-        // Restore the previous value
-        m_maxText->SetValue( m_max.ToOrigString() );
-    }
+    updateMax();
 }
 
 
 void TUNER_SLIDER::onValueTextEnter( wxCommandEvent& event )
 {
-    try
-    {
-        SPICE_VALUE newCur( m_valueText->GetValue() );
-        SetValue( newCur );
-        m_changed = true;
-    }
-    catch( const KI_PARAM_ERROR& )
-    {
-        // Restore the previous value
-        m_valueText->SetValue( m_value.ToOrigString() );
-    }
+    updateValue();
 }
 
 
 void TUNER_SLIDER::onMinTextEnter( wxCommandEvent& event )
 {
-    try
-    {
-        SPICE_VALUE newMin( m_minText->GetValue() );
-        SetMin( newMin );
-    }
-    catch( const KI_PARAM_ERROR& )
-    {
-        // Restore the previous value
-        m_minText->SetValue( m_min.ToOrigString() );
-    }
+    updateMin();
 }
 
 
