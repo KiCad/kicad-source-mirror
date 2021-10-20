@@ -16,14 +16,6 @@ from wx.py.editor import Editor, openSingle, openMultiple, saveSingle, messageDi
 from wx.py.buffer import Buffer
 from wx import stc
 
-def KiNewId():
-    try:
-        wx.NewIdRef
-    except ( NameError, AttributeError ):
-        return wx.NewId()
-    else:
-        return wx.NewIdRef()
-
 ID_NEW = wx.ID_NEW
 ID_OPEN = wx.ID_OPEN
 ID_REVERT = wx.ID_REVERT
@@ -39,38 +31,38 @@ ID_COPY = wx.ID_COPY
 ID_PASTE = wx.ID_PASTE
 ID_CLEAR = wx.ID_CLEAR
 ID_SELECTALL = wx.ID_SELECTALL
-ID_EMPTYBUFFER = KiNewId()
+ID_EMPTYBUFFER = 0
 ID_ABOUT = wx.ID_ABOUT
-ID_HELP = KiNewId()
-ID_AUTOCOMP_SHOW = KiNewId()
-ID_AUTOCOMP_MAGIC = KiNewId()
-ID_AUTOCOMP_SINGLE = KiNewId()
-ID_AUTOCOMP_DOUBLE = KiNewId()
-ID_CALLTIPS_SHOW = KiNewId()
-ID_CALLTIPS_INSERT = KiNewId()
-ID_COPY_PLUS = KiNewId()
-ID_NAMESPACE = KiNewId()
-ID_PASTE_PLUS = KiNewId()
-ID_WRAP = KiNewId()
-ID_TOGGLE_MAXIMIZE = KiNewId()
-ID_SHOW_LINENUMBERS = KiNewId()
-ID_ENABLESHELLMODE = KiNewId()
-ID_ENABLEAUTOSYMPY = KiNewId()
-ID_AUTO_SAVESETTINGS = KiNewId()
-ID_SAVEACOPY = KiNewId()
-ID_SAVEHISTORY = KiNewId()
-ID_SAVEHISTORYNOW = KiNewId()
-ID_CLEARHISTORY = KiNewId()
-ID_SAVESETTINGS = KiNewId()
-ID_DELSETTINGSFILE = KiNewId()
-ID_EDITSTARTUPSCRIPT = KiNewId()
-ID_EXECSTARTUPSCRIPT = KiNewId()
-ID_SHOWPYSLICESTUTORIAL = KiNewId()
+ID_HELP = 0
+ID_AUTOCOMP_SHOW = 0
+ID_AUTOCOMP_MAGIC = 0
+ID_AUTOCOMP_SINGLE = 0
+ID_AUTOCOMP_DOUBLE = 0
+ID_CALLTIPS_SHOW = 0
+ID_CALLTIPS_INSERT = 0
+ID_COPY_PLUS = 0
+ID_NAMESPACE = 0
+ID_PASTE_PLUS = 0
+ID_WRAP = 0
+ID_TOGGLE_MAXIMIZE = 0
+ID_SHOW_LINENUMBERS = 0
+ID_ENABLESHELLMODE = 0
+ID_ENABLEAUTOSYMPY = 0
+ID_AUTO_SAVESETTINGS = 0
+ID_SAVEACOPY = 0
+ID_SAVEHISTORY = 0
+ID_SAVEHISTORYNOW = 0
+ID_CLEARHISTORY = 0
+ID_SAVESETTINGS = 0
+ID_DELSETTINGSFILE = 0
+ID_EDITSTARTUPSCRIPT = 0
+ID_EXECSTARTUPSCRIPT = 0
+ID_SHOWPYSLICESTUTORIAL = 0
 ID_FIND = wx.ID_FIND
-ID_FINDNEXT = KiNewId()
-ID_FINDPREVIOUS = KiNewId()
-ID_SHOWTOOLS = KiNewId()
-ID_HIDEFOLDINGMARGIN = KiNewId()
+ID_FINDNEXT = 0
+ID_FINDPREVIOUS = 0
+ID_SHOWTOOLS = 0
+ID_HIDEFOLDINGMARGIN = 0
 
 INTRO = "KiCad - Python Shell"
 
@@ -92,6 +84,37 @@ class KiCadPyFrame():
 
         self.parent.Bind(wx.EVT_ICONIZE, self.OnIconize)
 
+    def SetIDs( self ):
+        ID_EMPTYBUFFER = self.parent.NewControlId()
+        ID_HELP = self.parent.NewControlId()
+        ID_AUTOCOMP_SHOW = self.parent.NewControlId()
+        ID_AUTOCOMP_MAGIC = self.parent.NewControlId()
+        ID_AUTOCOMP_SINGLE = self.parent.NewControlId()
+        ID_AUTOCOMP_DOUBLE = self.parent.NewControlId()
+        ID_CALLTIPS_SHOW = self.parent.NewControlId()
+        ID_CALLTIPS_INSERT = self.parent.NewControlId()
+        ID_COPY_PLUS = self.parent.NewControlId()
+        ID_NAMESPACE = self.parent.NewControlId()
+        ID_PASTE_PLUS = self.parent.NewControlId()
+        ID_WRAP = self.parent.NewControlId()
+        ID_TOGGLE_MAXIMIZE = self.parent.NewControlId()
+        ID_SHOW_LINENUMBERS = self.parent.NewControlId()
+        ID_ENABLESHELLMODE = self.parent.NewControlId()
+        ID_ENABLEAUTOSYMPY = self.parent.NewControlId()
+        ID_AUTO_SAVESETTINGS = self.parent.NewControlId()
+        ID_SAVEACOPY = self.parent.NewControlId()
+        ID_SAVEHISTORY = self.parent.NewControlId()
+        ID_SAVEHISTORYNOW = self.parent.NewControlId()
+        ID_CLEARHISTORY = self.parent.NewControlId()
+        ID_SAVESETTINGS = self.parent.NewControlId()
+        ID_DELSETTINGSFILE = self.parent.NewControlId()
+        ID_EDITSTARTUPSCRIPT = self.parent.NewControlId()
+        ID_EXECSTARTUPSCRIPT = self.parent.NewControlId()
+        ID_SHOWPYSLICESTUTORIAL = self.parent.NewControlId()
+        ID_FINDNEXT = self.parent.NewControlId()
+        ID_FINDPREVIOUS = self.parent.NewControlId()
+        ID_SHOWTOOLS = self.parent.NewControlId()
+        ID_HIDEFOLDINGMARGIN = self.parent.NewControlId()
 
     def OnIconize(self, event):
         """Event handler for Iconize."""
