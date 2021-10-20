@@ -559,27 +559,78 @@ int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
 {
     wxFindReplaceData& data = m_frame->GetFindReplaceData();
+    bool               currentSheetOnly = ( data.GetFlags() & FR_CURRENT_SHEET_ONLY ) > 0;
     bool               modified = false;
 
     if( data.GetFindString().IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
 
-    SCH_SHEET_LIST schematic = m_frame->Schematic().GetSheets();
-    SCH_SCREENS    screens( m_frame->Schematic().Root() );
-
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
-    {
-        SCH_SHEET_PATH* sheet = schematic.FindSheetForScreen( screen );
-
-        for( EDA_ITEM* item = nextMatch( screen, sheet, nullptr, data ); item;  )
-        {
-            if( item->Replace( data, sheet ) )
+    auto doReplace =
+            [&]( SCH_ITEM* aItem, SCH_SHEET_PATH* aSheet, wxFindReplaceData& aData )
             {
-                m_frame->UpdateItem( item, false, true );
-                modified = true;
-            }
+                if( aItem->Replace( aData, aSheet ) )
+                {
+                    m_frame->UpdateItem( aItem, false, true );
+                    modified = true;
+                }
+            };
 
-            item = nextMatch( screen, sheet, dynamic_cast<SCH_ITEM*>( item ), data );
+    if( currentSheetOnly )
+    {
+        SCH_SHEET_PATH* currentSheet = &m_frame->GetCurrentSheet();
+
+        SCH_ITEM* item = nextMatch( m_frame->GetScreen(), currentSheet, nullptr, data );
+
+        while( item )
+        {
+            doReplace( item, currentSheet, data );
+            item = nextMatch( m_frame->GetScreen(), currentSheet, item, data );
+        }
+    }
+    else
+    {
+        SCH_SHEET_LIST allSheets = m_frame->Schematic().GetSheets();
+        SCH_SCREENS    screens( m_frame->Schematic().Root() );
+
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+        {
+            SCH_SHEET_LIST sheets = allSheets.FindAllSheetsForScreen( screen );
+
+            for( unsigned ii = 0; ii < sheets.size(); ++ii )
+            {
+                SCH_ITEM* item = nextMatch( screen, &sheets[ii], nullptr, data );
+
+                while( item )
+                {
+                    if( ii == 0 )
+                    {
+                        doReplace( item, &sheets[0], data );
+                    }
+                    else if( item->Type() == SCH_FIELD_T )
+                    {
+                        SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+
+                        if( field->GetParent() && field->GetParent()->Type() == SCH_SYMBOL_T )
+                        {
+                            switch( field->GetId() )
+                            {
+                            case REFERENCE_FIELD:
+                            case VALUE_FIELD:
+                            case FOOTPRINT_FIELD:
+                                // must be handled for each distinct sheet
+                                doReplace( field, &sheets[ii], data );
+                                break;
+
+                            default:
+                                // handled in first iteration
+                                break;
+                            }
+                        }
+                    }
+
+                    item = nextMatch( screen, &sheets[ii], item, data );
+                }
+            }
         }
     }
 
