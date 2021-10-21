@@ -440,7 +440,6 @@ void DIALOG_BOM::OnEditGenerator( wxCommandEvent& event )
         return;
     }
 
-    QuoteString( pluginFile );
     wxString editorname = Pgm().GetTextEditor();
 
     if( !editorname.IsEmpty() )
