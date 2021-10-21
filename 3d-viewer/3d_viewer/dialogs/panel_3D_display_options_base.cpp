@@ -14,23 +14,40 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxHORIZONTAL );
 
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
+
 	wxBoxSizer* bSizeLeft;
 	bSizeLeft = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbBoardLayers;
 	sbBoardLayers = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Board Layers") ), wxVERTICAL );
 
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 0, 1, 5, 0 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
 	m_checkBoxSilkscreen = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show silkscreen layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbBoardLayers->Add( m_checkBoxSilkscreen, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_checkBoxSilkscreen, 0, 0, 5 );
+
+	m_checkBoxSubtractMaskFromSilk = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Clip silkscreen at solder mask edges"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_checkBoxSubtractMaskFromSilk, 0, wxLEFT, 25 );
+
+	m_checkBoxClipSilkOnViaAnnulus = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Clip silkscreen at via annuli"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_checkBoxClipSilkOnViaAnnulus, 0, wxLEFT, 25 );
 
 	m_checkBoxSolderMask = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show solder mask layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbBoardLayers->Add( m_checkBoxSolderMask, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_checkBoxSolderMask, 0, wxTOP, 8 );
 
 	m_checkBoxSolderpaste = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show solder paste layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbBoardLayers->Add( m_checkBoxSolderpaste, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_checkBoxSolderpaste, 0, 0, 5 );
 
 	m_checkBoxAdhesive = new wxCheckBox( sbBoardLayers->GetStaticBox(), wxID_ANY, _("Show adhesive layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbBoardLayers->Add( m_checkBoxAdhesive, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_checkBoxAdhesive, 0, 0, 5 );
+
+
+	sbBoardLayers->Add( fgSizer1, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizeLeft->Add( sbBoardLayers, 0, wxEXPAND|wxALL, 5 );
@@ -38,17 +55,17 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	wxStaticBoxSizer* sbUserLayers;
 	sbUserLayers = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Layers (not shown in realistic mode)") ), wxVERTICAL );
 
-	m_checkBoxComments = new wxCheckBox( sbUserLayers->GetStaticBox(), wxID_ANY, _("Show comments and drawings layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxComments = new wxCheckBox( sbUserLayers->GetStaticBox(), wxID_ANY, _("Show comment and drawing layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbUserLayers->Add( m_checkBoxComments, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_checkBoxECO = new wxCheckBox( sbUserLayers->GetStaticBox(), wxID_ANY, _("Show ECO layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbUserLayers->Add( m_checkBoxECO, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizeLeft->Add( sbUserLayers, 0, wxALL|wxEXPAND, 5 );
+	bSizeLeft->Add( sbUserLayers, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerMain->Add( bSizeLeft, 3, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 10 );
+	bSizer7->Add( bSizeLeft, 0, wxEXPAND|wxTOP|wxLEFT, 10 );
 
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
@@ -64,12 +81,6 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 
 	m_checkBoxAreas = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Show filled areas in zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbRenderOptions->Add( m_checkBoxAreas, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
-	m_checkBoxSubtractMaskFromSilk = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Subtract soldermask from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbRenderOptions->Add( m_checkBoxSubtractMaskFromSilk, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
-	m_checkBoxClipSilkOnViaAnnulus = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Clip silkscreen at via annuli"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbRenderOptions->Add( m_checkBoxClipSilkOnViaAnnulus, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_checkBoxRenderPlatedPadsAsPlated = new wxCheckBox( sbRenderOptions->GetStaticBox(), wxID_ANY, _("Use bare copper color for unplated copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkBoxRenderPlatedPadsAsPlated->SetToolTip( _("Use different colors for plated and unplated copper. (Slow)") );
@@ -101,7 +112,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	wxBoxSizer* bSizerRotAngle;
 	bSizerRotAngle = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextRotAngle = new wxStaticText( sbCameraOptions->GetStaticBox(), wxID_ANY, _("Rotation Increment:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRotAngle = new wxStaticText( sbCameraOptions->GetStaticBox(), wxID_ANY, _("Rotation increment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotAngle->Wrap( -1 );
 	bSizerRotAngle->Add( m_staticTextRotAngle, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -139,10 +150,13 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	sbCameraOptions->Add( bSizerSlider, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
-	bSizerRight->Add( sbCameraOptions, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
+	bSizerRight->Add( sbCameraOptions, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
-	bSizerMain->Add( bSizerRight, 4, wxEXPAND|wxRIGHT|wxTOP, 10 );
+	bSizer7->Add( bSizerRight, 0, wxEXPAND|wxRIGHT|wxTOP, 10 );
+
+
+	bSizerMain->Add( bSizer7, 0, 0, 5 );
 
 
 	this->SetSizer( bSizerMain );

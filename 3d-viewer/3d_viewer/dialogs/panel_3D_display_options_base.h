@@ -37,6 +37,8 @@ class PANEL_3D_DISPLAY_OPTIONS_BASE : public wxPanel
 
 	protected:
 		wxCheckBox* m_checkBoxSilkscreen;
+		wxCheckBox* m_checkBoxSubtractMaskFromSilk;
+		wxCheckBox* m_checkBoxClipSilkOnViaAnnulus;
 		wxCheckBox* m_checkBoxSolderMask;
 		wxCheckBox* m_checkBoxSolderpaste;
 		wxCheckBox* m_checkBoxAdhesive;
@@ -45,8 +47,6 @@ class PANEL_3D_DISPLAY_OPTIONS_BASE : public wxPanel
 		wxCheckBox* m_checkBoxRealisticMode;
 		wxCheckBox* m_checkBoxBoardBody;
 		wxCheckBox* m_checkBoxAreas;
-		wxCheckBox* m_checkBoxSubtractMaskFromSilk;
-		wxCheckBox* m_checkBoxClipSilkOnViaAnnulus;
 		wxCheckBox* m_checkBoxRenderPlatedPadsAsPlated;
 		wxStaticText* m_materialPropertiesLabel;
 		wxChoice* m_materialProperties;
