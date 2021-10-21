@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-18 12:18-0700\n"
-"PO-Revision-Date: 2021-10-21 11:49+0000\n"
+"PO-Revision-Date: 2021-10-22 19:22+0000\n"
 "Last-Translator: CJ van der Hoeven <KeesEnJoa@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
@@ -2970,9 +2970,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "Selecteer voorkeurs PDF-viewer"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Antialiasing"
-msgstr "Anti-kartelvorming:"
+msgstr "Anti-kartelvorming"
 
 #: common/dialogs/panel_common_settings_base.cpp:30
 msgid "Accelerated graphics:"
@@ -4115,12 +4114,10 @@ msgid "Target"
 msgstr "Doel"
 
 #: common/eda_item.cpp:268
-#, fuzzy
 msgid "ItemList"
-msgstr "Lijst met dingen"
+msgstr "Lijst met items"
 
 #: common/eda_item.cpp:269
-#, fuzzy
 msgid "NetInfo"
 msgstr "Net Info"
 
@@ -4318,14 +4315,12 @@ msgid "Bezier"
 msgstr "Bezier"
 
 #: common/eda_shape.cpp:1457
-#, fuzzy
 msgid "Start X"
-msgstr "Start DRC"
+msgstr "Start X"
 
 #: common/eda_shape.cpp:1459
-#, fuzzy
 msgid "Start Y"
-msgstr "Start DRC"
+msgstr "Start Y"
 
 #: common/eda_shape.cpp:1461 pcbnew/pcb_shape.cpp:261 pcbnew/pcb_track.cpp:1119
 #: pcbnew/pcb_track.cpp:1136
@@ -6149,7 +6144,6 @@ msgid "Inactive Layer View Mode (3-state)"
 msgstr "Single Layer View Mode (3-standen)"
 
 #: common/tool/actions.cpp:541
-#, fuzzy
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr "Schakel inactieve lagen tussen normaal, gedimd en verborgen"
 
@@ -8590,10 +8584,9 @@ msgid "Electrical Rules Checker"
 msgstr "Controle van elektrische regels"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:131
-#, fuzzy
 msgid "Power symbol value field text cannot be changed."
 msgstr ""
-"(Tekst in het waardeveld van het krachtsymbool kan niet worden gewijzigd.)"
+"Tekst in het waardeveld van het power-symbool kan niet worden gewijzigd."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
@@ -8604,9 +8597,8 @@ msgid "Value may not be empty."
 msgstr "Waarde mag niet leeg zijn."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:340
-#, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Zone opnieuw vullen na sluiten van de zone-property dialog"
+msgstr "Bestand-naam kan alleen gewijzigd worden in de Sheet property dialoog."
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
@@ -10313,10 +10305,10 @@ msgid "Text Variables"
 msgstr "Tekstvariabelen"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:90
-#, fuzzy
 msgid "Project is missing or read-only. Settings will not be editable."
 msgstr ""
-"Project ontbreekt of is alleen-lezen. Wijzigingen worden niet opgeslagen."
+"Project ontbreekt of is alleen-lezen. Instellingen kunnen niet gewijzigd "
+"worden."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:156
 #, c-format
@@ -12948,7 +12940,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "Het huidige schema is aangepast. Wijzigingen opslaan?"
 
 #: eeschema/files-io.cpp:1338
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -12957,10 +12948,9 @@ msgid ""
 "made?"
 msgstr ""
 "Nou, dit is mogelijk beschamend!\n"
-"Het lijkt erop dat u het bestand de laatste keer aan het bewerken was\n"
-"\"%s\"\n"
-"het is niet correct opgeslagen. Wilt u de laatst opgeslagen bewerkingen die "
-"u heeft aangebracht, herstellen?"
+"Het lijkt erop dat u het bestand na de laatste bewerking niet correct is "
+"opgeslagen.\n"
+"Wilt u de laatst opgeslagen bewerkingen terughalen?"
 
 #: eeschema/files-io.cpp:1349
 #, c-format
@@ -12972,30 +12962,31 @@ msgstr ""
 "U moet automatisch bewaarde bestanden handmatig terugzetten."
 
 #: eeschema/files-io.cpp:1395
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "Het auto-save bestand '%s' kan niet worden verwijderd!"
+msgstr "Het volgende auto-save bestand kan niet worden teruggehaald\n"
 
 #: eeschema/files-io.cpp:1400
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "U moet bovenstaande bestand(en) handmatig terugzetten."
 
 #: eeschema/files-io.cpp:1422
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "Het auto-save bestand '%s' kan niet worden verwijderd!"
+msgstr "Het volgende auto-save bestand(en) kan niet worden verwijderd!\n"
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
 msgstr "U moet bovenstaande bestand(en) handmatig verwijderen."
 
 #: eeschema/files-io.cpp:1438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "Het auto-save bestand '%s' kan niet worden verwijderd!"
+msgstr ""
+"Het auto-save master-bestand\n"
+"'%s'\n"
+"kan niet worden verwijderd."
 
 #: eeschema/files-io.cpp:1446
 msgid ""
@@ -13074,15 +13065,13 @@ msgstr "Nee"
 
 #: eeschema/lib_field.cpp:445 eeschema/lib_text.cpp:363
 #: eeschema/sch_field.cpp:503
-#, fuzzy
 msgid "H Justification"
-msgstr "Rechtvaardiging"
+msgstr "H lijnbreedte aanpassen"
 
 #: eeschema/lib_field.cpp:454 eeschema/lib_text.cpp:372
 #: eeschema/sch_field.cpp:512
-#, fuzzy
 msgid "V Justification"
-msgstr "Rechtvaardiging"
+msgstr "V lijnhoogte aanpassen"
 
 #: eeschema/lib_item.cpp:47 eeschema/lib_pin.cpp:1041 eeschema/sch_pin.cpp:184
 #: eeschema/sch_pin.cpp:204 eeschema/sch_text.cpp:758
@@ -13143,9 +13132,9 @@ msgid "Polyline, %d points"
 msgstr "Polylijn, %d punten"
 
 #: eeschema/lib_shape.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Bezier Golf"
+msgstr "Bezier kromme, %d punten"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -14347,7 +14336,6 @@ msgid "Syntax Help"
 msgstr "Syntaxis Help"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14489,7 +14477,7 @@ msgid ""
 "<i>Note that markup has precedence over bus definitions.</i>\n"
 "\n"
 msgstr ""
-"<tafel>\n"
+"<table>\n"
 "    <tr>\n"
 "        <th> Markup </th>\n"
 "        <th> </th>\n"
@@ -14551,8 +14539,8 @@ msgstr ""
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp>${refdes:field}</samp> </td>\n"
 "        <td> </td>\n"
-"        <td> & nbsp; <br> <samp> <i> field_value </i> van symbool <i>refdes</"
-"i></samp> </td>\n"
+"        <td> & nbsp; <br> <samp> <i> field_value </i> van symbool "
+"<i>refdes</i></samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp>${R3:VALUE}</samp> </td>\n"
@@ -14579,8 +14567,8 @@ msgstr ""
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp>D [0..7 ]</samp> </td>\n"
 "        <td> </td>\n"
-"        <td> & nbsp; <br> <samp> D0, D1, D2, D3, D4, D5, D6, D7 </samp> </"
-"td>\n"
+"        <td> & nbsp; <br> <samp> D0, D1, D2, D3, D4, D5, D6, D7 </samp> </td>"
+"\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td> <br> </td>\n"
@@ -14601,8 +14589,8 @@ msgstr ""
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp> voorvoegsel {net1 net2 ...} </samp> </td>\n"
 "        <td> </td>\n"
-"        <td> & nbsp; <br> <samp> prefix.net1, prefix.net2, ... </samp> </"
-"td>\n"
+"        <td> & nbsp; <br> <samp> prefix.net1, prefix.net2, ... </samp> </td>"
+"\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp> USB1 {DP DM} </samp> </td>\n"
@@ -14626,6 +14614,7 @@ msgstr ""
 "1 </sub>, MEM.D <sub> 2 </sub> , MEM.LATCH </samp> </td>\n"
 "    </tr>\n"
 "</table>\n"
+"\n"
 
 #: eeschema/sch_validators.cpp:102
 #, c-format
@@ -14704,15 +14693,12 @@ msgid "Field Validation Error"
 msgstr "Veldvalidatiefout"
 
 #: eeschema/sch_validators.cpp:226
-#, fuzzy
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
-msgstr ""
-"Signaal-naam bevat '{' of '}' maar is geen geldige vector-bus-groep-naam"
+msgstr "Signaal-naam bevat '{' of '}' maar is geen geldige bus-naam"
 
 #: eeschema/sch_validators.cpp:231
-#, fuzzy
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
-msgstr "Signaal-naam bevat '[' of ']' maar is geen geldige vector-bus-naam."
+msgstr "Signaal-naam bevat '[' of ']' maar is geen geldige bus-naam."
 
 #: eeschema/sheet.cpp:63
 #, c-format
@@ -16712,12 +16698,10 @@ msgid "Align Elements to Grid"
 msgstr "Lijn elementen uit op raster"
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save Current Sheet Copy As..."
-msgstr "Opslaan &als (huidige tekening)"
+msgstr "Kopie van deze tekening opslaan als..."
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Bewaar een kopie van het huidige document op een andere locatie"
 
@@ -16937,7 +16921,6 @@ msgid "Net must be labeled to assign a netclass."
 msgstr "Net moet worden gelabeld om een netclass toe te wijzen."
 
 #: eeschema/tools/sch_editor_control.cpp:1002
-#, fuzzy
 msgid "Bus has no members to assign netclass to."
 msgstr "Bus moet minstens één draad hebben om een net-class toe te wijzen."
 
@@ -17115,44 +17098,36 @@ msgid "16 Layers"
 msgstr "16 lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:91
-#, fuzzy
 msgid "18 Layers"
-msgstr "8 lagen"
+msgstr "18 lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:92
-#, fuzzy
 msgid "20 Layers"
-msgstr "2 lagen"
+msgstr "20 lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:93
-#, fuzzy
 msgid "22 Layers"
-msgstr "2 lagen"
+msgstr "22 lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:94
-#, fuzzy
 msgid "24 Layers"
-msgstr "4 lagen"
+msgstr "24 lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:95
-#, fuzzy
 msgid "26 Layers"
-msgstr "6 lagen"
+msgstr "26 lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:96
-#, fuzzy
 msgid "28 Layers"
-msgstr "8 lagen"
+msgstr "28 lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:97
-#, fuzzy
 msgid "30 Layers"
-msgstr "10 lagen"
+msgstr "30 lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:98
-#, fuzzy
 msgid "32 Layers"
-msgstr "2 lagen"
+msgstr "32 lagen"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:110
 msgid "Store Choice"
@@ -18188,9 +18163,8 @@ msgid "Failed to output data"
 msgstr "output data mislukt"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html> <h1> Sjabloonkiezer </h1> </html>"
+msgstr "<h1> Sjabloonkiezer </h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -19321,9 +19295,8 @@ msgid "Keyword notation is ${keyword}"
 msgstr "Keyword notatie is ${keyword}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
-#, fuzzy
 msgid "Each keyword is replaced by its value"
-msgstr "Keywords worden vervangen door de waarde van de tekst"
+msgstr "Elk keyword wordt vervangen door de corresponderende waarde"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "These build-in keywords are always available:"
@@ -19821,12 +19794,10 @@ msgid "Tee"
 msgstr "T-stuk"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
-#, fuzzy
 msgid "Bridged tee"
 msgstr "Overbrugd T-stuk"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
-#, fuzzy
 msgid "Resistive splitter"
 msgstr "Resistieve splitter"
 
@@ -20101,9 +20072,8 @@ msgid "E12"
 msgstr "E12"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:84
-#, fuzzy
 msgid "E24"
-msgstr "24"
+msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:94
 msgid "Solutions"
@@ -20744,9 +20714,8 @@ msgid "Color Code"
 msgstr "Kleuren modus"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "TransLine"
+msgstr "TransLine "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -22271,10 +22240,10 @@ msgid "Custom Rules"
 msgstr "Aangepaste DRC regels"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:123
-#, fuzzy
 msgid "Project is missing or read-only. Some settings will not be editable."
 msgstr ""
-"Project ontbreekt of is alleen-lezen. Wijzigingen worden niet opgeslagen."
+"Project ontbreekt of is alleen-lezen. Sommige instellingen kunnen niet "
+"gewijzigd worden."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:178
 #, c-format
@@ -24137,9 +24106,8 @@ msgstr "Fabricage-attributen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:272
 #: pcbnew/footprint_libraries_utils.cpp:1136
-#, fuzzy
 msgid "Footprint type:"
-msgstr "Voetafdruk naam:"
+msgstr "Footprint type:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
@@ -24336,13 +24304,12 @@ msgid "Clearance Overrides and Settings"
 msgstr "Clearance vrijgave en instellingen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:438
-#, fuzzy
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
-"De bibliotheek-ID en footprint-ID die momenteel zijn toegewezen. Gebruik "
-"\"Change Footprint ...\" om een andere footprint toe te wijzen."
+"De bibliotheek-ID en footprint-ID zijn momenteel toegewezen. Gebruik \"Change"
+" Footprint ...\" om een andere footprint te kiezen."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:135
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:108
@@ -25416,9 +25383,8 @@ msgid "Select Netlist"
 msgstr "Selecteer Netlijst"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:143
-#, fuzzy
 msgid "Please choose a valid netlist file."
-msgstr "Kies een geldig netlijstbestand."
+msgstr "Kies een geldig netlijst bestand."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:149 pcbnew/dialogs/dialog_netlist.cpp:184
 msgid "The netlist file does not exist."
@@ -27371,9 +27337,8 @@ msgid "Clearance Outlines"
 msgstr "Opruimingsoverzicht"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing"
-msgstr "Tonen bij het maken van tracks"
+msgstr "Tonen bij het plaatsen van tracks"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 #, fuzzy
@@ -27381,18 +27346,16 @@ msgid "Show when routing w/ via clearance at end"
 msgstr "Toon met via klaring aan het einde"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing and editing"
-msgstr "Laat zien bij het maken en bewerken van tracks"
+msgstr "Laat zien bij het plaatsen en bewerken van tracks"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show always"
 msgstr "Altijd laten zien"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
-#, fuzzy
 msgid "Track && Via Clearances"
-msgstr "Spoorvrijheid"
+msgstr "Clearance voor Tracks en Vias"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
@@ -27482,9 +27445,8 @@ msgstr "Track bewerken"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
-#, fuzzy
 msgid "Limit actions to 45 degrees from start"
-msgstr "Akties beperken tot 45 graden vanaf start-punt"
+msgstr "Beperk akties tot 45 graden vanaf start-punt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
 msgid "Magnetic Points"
@@ -27658,14 +27620,12 @@ msgid "Path Substitutions"
 msgstr "Padvervangingen"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "No filename entered"
-msgstr "Geen bestand geselecteerd!"
+msgstr "Geen bestand-naam ingevoerd"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
-#, fuzzy
 msgid "Illegal filename"
-msgstr "Ongeldige bestandsnaam: %s"
+msgstr "Ongeldige bestandsnaam"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -28604,7 +28564,6 @@ msgid "User9"
 msgstr "Gebruiker9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board house's recommendations for solder mask clearance and minimum "
 "web width."
@@ -28613,7 +28572,6 @@ msgstr ""
 "soldeermasker en de minimale brugbreedte."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
-#, fuzzy
 msgid "If none are provided, setting the values to zero is suggested."
 msgstr ""
 "Als er geen wordt opgegeven, wordt aangeraden de waarden op nul te zetten."
@@ -30086,9 +30044,9 @@ msgid "Footprint %s"
 msgstr "Voetafdruk %s"
 
 #: pcbnew/footprint.cpp:2091
-#, fuzzy, c-format
+#, c-format
 msgid "Expected \"Through hole\" type but set to \"%s\""
-msgstr "Doorgaand pad %s van %s"
+msgstr "Type zou \"Through hole\" moeten zijn, maar is \"%s\""
 
 #: pcbnew/footprint.cpp:2095
 #, c-format
@@ -31977,6 +31935,9 @@ msgid ""
 "been made but it is possible that DRC errors exist and that manual editing "
 "of the zone priorities is required."
 msgstr ""
+"Zone-fill prioriteiten voor laag '%s' zijn onbepaald. We doen ons best maar "
+"mogelijk ontstaan er DRC fouten en moet u de zone-prioriteiten handmatig "
+"aanpassen."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:145
 msgid ""
@@ -32222,6 +32183,11 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
+"Het CADSTAR template '%s' heeft thermal reliefs in het oorspronkelijke "
+"ontwerp, maar de spaak-breedte daarvan (%.2f mm) is kleiner dan de minimum "
+"breedte voor deze zone (%.2f). KICAD handhaaft de minimum breedte voor de "
+"zone. Daarom wordt de minimum zone breedte toegepast als de nieuwe spaak-"
+"breedte zodra de zones opnieuw worden gevuld."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1963
 #, c-format
@@ -33959,7 +33925,6 @@ msgid "Edge card connectors: "
 msgstr "Edge card connectoren: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:518
-#, fuzzy
 msgid "Yes, Bevelled"
 msgstr "Ja, afgeschuind"
 
@@ -35095,27 +35060,27 @@ msgid "Curved Ratsnest Lines"
 msgstr "Gebogen Ratsnest-lijnen"
 
 #: pcbnew/tools/pcb_actions.cpp:798
-#, fuzzy
 msgid "Ratsnest Mode (3-state)"
-msgstr "Single Layer View Mode (3-standen)"
+msgstr "Ratsnest Mode (3-standen)"
 
 #: pcbnew/tools/pcb_actions.cpp:799
-#, fuzzy
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
-msgstr "Schakel tussen het tonen van gevulde zones of alleen de zone-grenzen"
+msgstr ""
+"Schakel tussen het tonen van ratsnest voor alle lagen, alleen voor de "
+"zichtbare lagen, of geen lagen"
 
 #: pcbnew/tools/pcb_actions.cpp:803
-#, fuzzy
 msgid "Net Color Mode (3-state)"
-msgstr "Single Layer View Mode (3-standen)"
+msgstr "Net kleur Mode (3-standen)"
 
 #: pcbnew/tools/pcb_actions.cpp:804
-#, fuzzy
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
-msgstr "Net- en netklasse-kleuren worden alleen op het ratsnest getoond"
+msgstr ""
+"Schakel Net- en netklasse-kleuren voor alle nets, alleen voor ratsnests, of "
+"geen"
 
 #: pcbnew/tools/pcb_actions.cpp:809
 msgid "Sketch Tracks"
@@ -35969,9 +35934,9 @@ msgid "Layer Display Options"
 msgstr "Laagweergave-opties"
 
 #: pcbnew/widgets/appearance_controls.cpp:595
-#, fuzzy, c-format
+#, c-format
 msgid "Inactive layers (%s):"
-msgstr "Niet-actieve lagen:"
+msgstr "Niet-actieve lagen (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Inactive layers:"
@@ -36006,9 +35971,9 @@ msgid "Net Display Options"
 msgstr "Net weergave-opties"
 
 #: pcbnew/widgets/appearance_controls.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "Net colors (%s):"
-msgstr "Net kleuren:"
+msgstr "Net kleuren (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Net colors:"
@@ -36031,37 +35996,33 @@ msgid "Net and netclass colors are not shown"
 msgstr "Net- en netklasse-kleuren worden niet weergegeven"
 
 #: pcbnew/widgets/appearance_controls.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "Ratsnest display (%s):"
-msgstr "Ratsnest-weergave:"
+msgstr "Ratsnest-weergave (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:714
 msgid "Ratsnest display:"
 msgstr "Ratsnest-weergave:"
 
 #: pcbnew/widgets/appearance_controls.cpp:719
-#, fuzzy
 msgid "Choose which ratsnest lines to display"
-msgstr "Kies welke ratsnest-lijnen je wilt weergeven"
+msgstr "Kies welke ratsnest-lijnen je wilt zien"
 
 #: pcbnew/widgets/appearance_controls.cpp:729
-#, fuzzy
 msgid "Show ratsnest lines to items on all layers"
-msgstr "Ratsnest-lijnen worden getoond aan items op alle lagen"
+msgstr "Toon ratsnest-lijnen naar items op alle lagen"
 
 #: pcbnew/widgets/appearance_controls.cpp:734
 msgid "Visible layers"
 msgstr "Zichtbare lagen"
 
 #: pcbnew/widgets/appearance_controls.cpp:736
-#, fuzzy
 msgid "Show ratsnest lines to items on visible layers"
-msgstr "Ratsnest-lijnen worden getoond aan items op zichtbare lagen"
+msgstr "Toon ratsnest-lijnen naar items op zichtbare lagen"
 
 #: pcbnew/widgets/appearance_controls.cpp:743
-#, fuzzy
 msgid "Hide all ratsnest lines"
-msgstr "Verberg bord ratsnest"
+msgstr "Verberg alle ratsnest lijnen"
 
 #: pcbnew/widgets/appearance_controls.cpp:881
 msgid "Set Net Color"
@@ -36353,9 +36314,8 @@ msgid "Configure net classes"
 msgstr "Configureer net-klassen"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:161
-#, fuzzy
 msgid "Presets (Ctrl+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "Voorvoegsel (Ctrl+Tab):"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "(unsaved)"
