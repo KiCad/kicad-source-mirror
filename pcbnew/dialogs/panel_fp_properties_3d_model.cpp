@@ -39,8 +39,8 @@
 #include <dialog_footprint_properties_fp_editor.h>
 #include "filename_resolver.h"
 #include <pgm_base.h>
-#include "3d_cache/dialogs/panel_preview_3d_model.h"
-#include "3d_cache/dialogs/3d_cache_dialogs.h"
+#include "dialogs/panel_preview_3d_model.h"
+#include "dialogs/3d_cache_dialogs.h"
 #include <settings/settings_manager.h>
 #include <kiway_holder.h>
 #include <wx/defs.h>

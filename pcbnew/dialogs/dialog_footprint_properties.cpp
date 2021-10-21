@@ -43,8 +43,8 @@
 
 #include <panel_fp_properties_3d_model.h>
 
-#include "3d_cache/dialogs/3d_cache_dialogs.h"
-#include "3d_cache/dialogs/panel_preview_3d_model.h"
+#include "dialogs/3d_cache_dialogs.h"
+#include "dialogs/panel_preview_3d_model.h"
 
 #include <dialog_footprint_properties.h>
 
