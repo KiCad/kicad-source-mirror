@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,14 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  ogl_legacy_utils.cpp
- * @brief
- */
-
-
 #include "../../common_ogl/openGL_includes.h"
-#include "ogl_legacy_utils.h"
+#include "opengl_utils.h"
 #include <trigo.h>
 #include <wx/debug.h>   // For the wxASSERT
 

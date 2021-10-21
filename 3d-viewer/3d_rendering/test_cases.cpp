@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,12 +28,12 @@
  * @brief it run only once and only in debug build
  */
 
-#include "3d_render_raytracing/frustum.h"
-#include "3d_render_raytracing/shapes2D/bbox_2d.h"
-#include "3d_render_raytracing/shapes2D/filled_circle_2d.h"
-#include "3d_render_raytracing/shapes2D/polygon_2d.h"
-#include "3d_render_raytracing/shapes2D/round_segment_2d.h"
-#include "3d_render_raytracing/shapes3D/bbox_3d.h"
+#include "raytracing/frustum.h"
+#include "raytracing/shapes2D/bbox_2d.h"
+#include "raytracing/shapes2D/filled_circle_2d.h"
+#include "raytracing/shapes2D/polygon_2d.h"
+#include "raytracing/shapes2D/round_segment_2d.h"
+#include "raytracing/shapes3D/bbox_3d.h"
 #include <wx/debug.h>
 
 //#ifdef DEBUG

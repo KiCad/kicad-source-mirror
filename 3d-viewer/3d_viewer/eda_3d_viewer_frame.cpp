@@ -195,7 +195,7 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
     auto raytracingCondition =
             [this]( const SELECTION& aSel )
             {
-                return m_boardAdapter.GetRenderEngine() != RENDER_ENGINE::OPENGL_LEGACY;
+                return m_boardAdapter.GetRenderEngine() != RENDER_ENGINE::OPENGL;
             };
 
     RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW,
@@ -265,14 +265,14 @@ void EDA_3D_VIEWER_FRAME::NewDisplay( bool aForceImmediateRedraw )
 void EDA_3D_VIEWER_FRAME::Redraw()
 {
     // Only update in OpenGL for an interactive interaction
-    if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
+    if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL )
         m_canvas->Request_refresh( true );
 }
 
 
 void EDA_3D_VIEWER_FRAME::refreshRender()
 {
-    if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
+    if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL )
         m_canvas->Request_refresh();
     else
         NewDisplay( true );
@@ -351,10 +351,10 @@ void EDA_3D_VIEWER_FRAME::OnRenderEngineSelection( wxCommandEvent &event )
 {
     const RENDER_ENGINE old_engine = m_boardAdapter.GetRenderEngine();
 
-    if( old_engine == RENDER_ENGINE::OPENGL_LEGACY )
+    if( old_engine == RENDER_ENGINE::OPENGL )
         m_boardAdapter.SetRenderEngine( RENDER_ENGINE::RAYTRACING );
     else
-        m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL_LEGACY );
+        m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL );
 
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::OnRenderEngineSelection type %s ",
                 ( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::RAYTRACING ) ? "Raytrace" :
@@ -370,7 +370,7 @@ void EDA_3D_VIEWER_FRAME::OnDisableRayTracing( wxCommandEvent& aEvent )
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER_FRAME::%s disabling ray tracing.", __WXFUNCTION__ );
 
     m_disable_ray_tracing = true;
-    m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL_LEGACY );
+    m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL );
 }
 
 
@@ -506,7 +506,7 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
                                 "EDA_3D_VIEWER_FRAME::LoadSettings render setting Ray Trace" :
                                 "EDA_3D_VIEWER_FRAME::LoadSettings render setting OpenGL" );
 #else
-        m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL_LEGACY );
+        m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL );
 #endif
 
         m_boardAdapter.SetMaterialMode( static_cast<MATERIAL_MODE>( cfg->m_Render.material_mode ) );

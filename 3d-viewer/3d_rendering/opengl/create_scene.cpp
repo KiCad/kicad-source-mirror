@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "render_3d_legacy.h"
-#include "ogl_legacy_utils.h"
+#include "render_3d_opengl.h"
+#include "opengl_utils.h"
 #include <board.h>
 #include <footprint.h>
 #include "../../3d_math.h"
@@ -34,9 +34,9 @@
 #include <eda_3d_viewer_frame.h>
 
 
-void RENDER_3D_LEGACY::addObjectTriangles( const FILLED_CIRCLE_2D* aFilledCircle,
-                                           TRIANGLE_DISPLAY_LIST* aDstLayer,
-                                           float aZtop, float aZbot )
+void RENDER_3D_OPENGL::addObjectTriangles( const FILLED_CIRCLE_2D* aFilledCircle,
+                                           TRIANGLE_DISPLAY_LIST* aDstLayer, float aZtop,
+                                           float aZbot )
 {
     const SFVEC2F& center = aFilledCircle->GetCenter();
     const float radius = aFilledCircle->GetRadius() * 2.0f; // Double because the render triangle
@@ -64,7 +64,7 @@ void RENDER_3D_LEGACY::addObjectTriangles( const FILLED_CIRCLE_2D* aFilledCircle
 }
 
 
-void RENDER_3D_LEGACY::addObjectTriangles( const POLYGON_4PT_2D* aPoly,
+void RENDER_3D_OPENGL::addObjectTriangles( const POLYGON_4PT_2D* aPoly,
                                            TRIANGLE_DISPLAY_LIST* aDstLayer,
                                            float aZtop, float aZbot )
 {
@@ -78,7 +78,7 @@ void RENDER_3D_LEGACY::addObjectTriangles( const POLYGON_4PT_2D* aPoly,
 }
 
 
-void RENDER_3D_LEGACY::generateRing( const SFVEC2F& aCenter, float aInnerRadius,
+void RENDER_3D_OPENGL::generateRing( const SFVEC2F& aCenter, float aInnerRadius,
                                      float aOuterRadius, unsigned int aNr_sides_per_circle,
                                      std::vector< SFVEC2F >& aInnerContourResult,
                                      std::vector< SFVEC2F >& aOuterContourResult,
@@ -112,9 +112,8 @@ void RENDER_3D_LEGACY::generateRing( const SFVEC2F& aCenter, float aInnerRadius,
 }
 
 
-void RENDER_3D_LEGACY::addObjectTriangles( const RING_2D* aRing,
-                                                     TRIANGLE_DISPLAY_LIST* aDstLayer,
-                                                     float aZtop, float aZbot )
+void RENDER_3D_OPENGL::addObjectTriangles( const RING_2D* aRing, TRIANGLE_DISPLAY_LIST* aDstLayer,
+                                           float aZtop, float aZbot )
 {
     const SFVEC2F& center = aRing->GetCenter();
     const float inner = aRing->GetInnerRadius();
@@ -147,7 +146,7 @@ void RENDER_3D_LEGACY::addObjectTriangles( const RING_2D* aRing,
 }
 
 
-void RENDER_3D_LEGACY::addObjectTriangles( const TRIANGLE_2D* aTri,
+void RENDER_3D_OPENGL::addObjectTriangles( const TRIANGLE_2D* aTri,
                                            TRIANGLE_DISPLAY_LIST* aDstLayer,
                                            float aZtop, float aZbot )
 {
@@ -159,7 +158,7 @@ void RENDER_3D_LEGACY::addObjectTriangles( const TRIANGLE_2D* aTri,
 }
 
 
-void RENDER_3D_LEGACY::addObjectTriangles( const ROUND_SEGMENT_2D* aSeg,
+void RENDER_3D_OPENGL::addObjectTriangles( const ROUND_SEGMENT_2D* aSeg,
                                            TRIANGLE_DISPLAY_LIST* aDstLayer,
                                            float aZtop, float aZbot )
 {
@@ -244,7 +243,7 @@ void RENDER_3D_LEGACY::addObjectTriangles( const ROUND_SEGMENT_2D* aSeg,
 }
 
 
-OPENGL_RENDER_LIST* RENDER_3D_LEGACY::generateHoles( const LIST_OBJECT2D& aListHolesObject2d,
+OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateHoles( const LIST_OBJECT2D& aListHolesObject2d,
                                                      const SHAPE_POLY_SET& aPoly, float aZtop,
                                                      float aZbot, bool aInvertFaces,
                                                      const BVH_CONTAINER_2D* aThroughHoles )
@@ -277,7 +276,7 @@ OPENGL_RENDER_LIST* RENDER_3D_LEGACY::generateHoles( const LIST_OBJECT2D& aListH
                 break;
 
             default:
-                wxFAIL_MSG( "RENDER_3D_LEGACY::generateHoles: Object type is not implemented" );
+                wxFAIL_MSG( "RENDER_3D_OPENGL::generateHoles: Object type is not implemented" );
                 break;
             }
         }
@@ -300,7 +299,7 @@ OPENGL_RENDER_LIST* RENDER_3D_LEGACY::generateHoles( const LIST_OBJECT2D& aListH
 }
 
 
-OPENGL_RENDER_LIST* RENDER_3D_LEGACY::generateLayerList( const BVH_CONTAINER_2D* aContainer,
+OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D* aContainer,
                                                          const SHAPE_POLY_SET* aPolyList,
                                                          PCB_LAYER_ID aLayerId,
                                                          const BVH_CONTAINER_2D* aThroughHoles )
@@ -359,7 +358,7 @@ OPENGL_RENDER_LIST* RENDER_3D_LEGACY::generateLayerList( const BVH_CONTAINER_2D*
             break;
 
         default:
-            wxFAIL_MSG( "RENDER_3D_LEGACY: Object type is not implemented" );
+            wxFAIL_MSG( "RENDER_3D_OPENGL: Object type is not implemented" );
             break;
         }
     }
@@ -375,7 +374,7 @@ OPENGL_RENDER_LIST* RENDER_3D_LEGACY::generateLayerList( const BVH_CONTAINER_2D*
 }
 
 
-OPENGL_RENDER_LIST* RENDER_3D_LEGACY::createBoard( const SHAPE_POLY_SET& aBoardPoly,
+OPENGL_RENDER_LIST* RENDER_3D_OPENGL::createBoard( const SHAPE_POLY_SET& aBoardPoly,
                                                    const BVH_CONTAINER_2D* aThroughHoles )
 {
     OPENGL_RENDER_LIST* dispLists = nullptr;
@@ -431,7 +430,7 @@ OPENGL_RENDER_LIST* RENDER_3D_LEGACY::createBoard( const SHAPE_POLY_SET& aBoardP
 }
 
 
-void RENDER_3D_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter )
+void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter )
 {
     m_reloadRequested = false;
 
@@ -662,9 +661,9 @@ void RENDER_3D_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 }
 
 
-void RENDER_3D_LEGACY::addTopAndBottomTriangles( TRIANGLE_DISPLAY_LIST* aDst, const SFVEC2F& v0,
-                                                 const SFVEC2F& v1, const SFVEC2F& v2,
-                                                 float top, float bot )
+void RENDER_3D_OPENGL::addTopAndBottomTriangles( TRIANGLE_DISPLAY_LIST* aDst, const SFVEC2F& v0,
+                                                 const SFVEC2F& v1, const SFVEC2F& v2, float top,
+                                                 float bot )
 {
     aDst->m_layer_bot_triangles->AddTriangle( SFVEC3F( v0.x, v0.y, bot ),
                                               SFVEC3F( v1.x, v1.y, bot ),
@@ -676,8 +675,7 @@ void RENDER_3D_LEGACY::addTopAndBottomTriangles( TRIANGLE_DISPLAY_LIST* aDst, co
 }
 
 
-void RENDER_3D_LEGACY::getLayerZPos( PCB_LAYER_ID aLayerID, float& aOutZtop,
-                                     float& aOutZbot ) const
+void RENDER_3D_OPENGL::getLayerZPos( PCB_LAYER_ID aLayerID, float& aOutZtop, float& aOutZbot ) const
 {
     aOutZbot = m_boardAdapter.GetLayerBottomZPos( aLayerID );
     aOutZtop = m_boardAdapter.GetLayerTopZPos( aLayerID );
@@ -691,7 +689,7 @@ void RENDER_3D_LEGACY::getLayerZPos( PCB_LAYER_ID aLayerID, float& aOutZtop,
 }
 
 
-void RENDER_3D_LEGACY::generateCylinder( const SFVEC2F& aCenter, float aInnerRadius,
+void RENDER_3D_OPENGL::generateCylinder( const SFVEC2F& aCenter, float aInnerRadius,
                                          float aOuterRadius, float aZtop, float aZbot,
                                          unsigned int aNr_sides_per_circle,
                                          TRIANGLE_DISPLAY_LIST* aDstLayer )
@@ -725,7 +723,7 @@ void RENDER_3D_LEGACY::generateCylinder( const SFVEC2F& aCenter, float aInnerRad
 }
 
 
-void RENDER_3D_LEGACY::generateViasAndPads()
+void RENDER_3D_OPENGL::generateViasAndPads()
 {
     if( !m_boardAdapter.GetBoard() )
         return;
@@ -869,7 +867,7 @@ void RENDER_3D_LEGACY::generateViasAndPads()
 }
 
 
-void RENDER_3D_LEGACY::Load3dModelsIfNeeded()
+void RENDER_3D_OPENGL::Load3dModelsIfNeeded()
 {
     if( m_3dModelMap.size() > 0 )
         return;
@@ -887,7 +885,7 @@ void RENDER_3D_LEGACY::Load3dModelsIfNeeded()
 }
 
 
-void RENDER_3D_LEGACY::load3dModels( REPORTER* aStatusReporter )
+void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
 {
     if( !m_boardAdapter.GetBoard() )
         return;

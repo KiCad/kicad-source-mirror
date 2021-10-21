@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
 
 #include <atomic>
 #include "board_adapter.h"
-#include "3d_rendering/3d_render_raytracing/accelerators/accelerator_3d.h"
+#include "3d_rendering/raytracing/accelerators/accelerator_3d.h"
 #include "3d_rendering/render_3d_base.h"
 #include "3d_cache/3d_cache.h"
 #include <gal/hidpi_gl_canvas.h>
@@ -39,7 +39,7 @@ class WX_INFOBAR;
 class wxStatusBar;
 class BOARD;
 class RENDER_3D_RAYTRACE;
-class RENDER_3D_LEGACY;
+class RENDER_3D_OPENGL;
 
 
 /**
@@ -97,7 +97,7 @@ public:
     }
 
     /**
-     * @return the current render ( a RENDER_3D_RAYTRACE* or a RENDER_3D_LEGACY* render )
+     * @return the current render ( a RENDER_3D_RAYTRACE* or a RENDER_3D_OPENGL* render )
      */
     RENDER_3D_BASE* GetCurrentRender() const { return m_3d_render; }
 
@@ -267,7 +267,7 @@ private:
     CAMERA&                m_camera;
     RENDER_3D_BASE*        m_3d_render;
     RENDER_3D_RAYTRACE*    m_3d_render_raytracing;
-    RENDER_3D_LEGACY*      m_3d_render_ogl_legacy;
+    RENDER_3D_OPENGL*      m_3d_render_opengl;
 
     static const float     m_delta_move_step_factor;  // Step factor to used with cursor on
                                                       // relation to the current zoom

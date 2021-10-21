@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,33 +23,40 @@
  */
 
 /**
- * @file layer_item_3d.h
+ * @file frustum.h
+ * @brief Implement a frustum that is used for ray packet tests.
  */
 
-#ifndef _LAYER_ITEM_H_
-#define _LAYER_ITEM_H_
+#ifndef _FRUSTUM_H_
+#define _FRUSTUM_H_
 
-#include "object_3d.h"
-#include "../shapes2D/object_2d.h"
+#include "shapes3D/bbox_3d.h"
+#include "ray.h"
 
-
-class LAYER_ITEM : public OBJECT_3D
+// !TODO: optimize with SSE
+//#if(GLM_ARCH != GLM_ARCH_PURE)
+#if 0
+#error not implemented
+#else
+struct FRUSTUM
 {
 public:
-    LAYER_ITEM( const OBJECT_2D* aObject2D, float aZMin, float aZMax );
+    void GenerateFrustum( const RAY& topLeft, const RAY& topRight, const RAY& bottomLeft,
+                          const RAY& bottomRight );
 
-    void SetColor( SFVEC3F aObjColor ) { m_diffusecolor = aObjColor; }
-
-    bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const override;
-    bool IntersectP(const RAY& aRay , float aMaxDistance ) const override;
-    bool Intersects( const BBOX_3D& aBBox ) const override;
-    SFVEC3F GetDiffuseColor( const HITINFO& aHitInfo ) const override;
-
-protected:
-    const OBJECT_2D* m_object2d;
+    /**
+     * Intersect \a aBBox with this frustum.
+     *
+     * @param aBBox is a bounding box to test.
+     * @return true if the bounding box intersects this frustum.
+     */
+    bool Intersect( const BBOX_3D& aBBox ) const;
 
 private:
-    SFVEC3F m_diffusecolor;
+        SFVEC3F m_normals[4];
+        SFVEC3F m_point[4];
 };
+#endif
 
-#endif // _LAYER_ITEM_H_
+
+#endif // _FRUSTUM_H_

@@ -27,9 +27,9 @@
 
 #include <array>
 #include <vector>
-#include "../3d_rendering/3d_render_raytracing/accelerators/container_2d.h"
-#include "../3d_rendering/3d_render_raytracing/accelerators/container_3d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes3D/bbox_3d.h"
+#include "../3d_rendering/raytracing/accelerators/container_2d.h"
+#include "../3d_rendering/raytracing/accelerators/container_3d.h"
+#include "../3d_rendering/raytracing/shapes3D/bbox_3d.h"
 #include "../3d_rendering/camera.h"
 #include "../3d_enums.h"
 #include "../3d_cache/3d_cache.h"

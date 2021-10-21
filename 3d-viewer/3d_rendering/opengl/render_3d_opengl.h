@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,22 +22,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file render_3d_legacy.h
- */
-
-#ifndef RENDER_3D_LEGACY_H_
-#define RENDER_3D_LEGACY_H_
+#ifndef RENDER_3D_OPENGL_H
+#define RENDER_3D_OPENGL_H
 
 #include "../render_3d_base.h"
 #include "layer_triangles.h"
 
-#include "../3d_render_raytracing/shapes2D/polygon_2d.h"
-#include "../3d_render_raytracing/shapes2D/triangle_2d.h"
-#include "../3d_render_raytracing/shapes2D/4pt_polygon_2d.h"
-#include "../3d_render_raytracing/shapes2D/filled_circle_2d.h"
-#include "../3d_render_raytracing/shapes2D/ring_2d.h"
-#include "../3d_render_raytracing/shapes2D/round_segment_2d.h"
+#include "../raytracing/shapes2D/polygon_2d.h"
+#include "../raytracing/shapes2D/triangle_2d.h"
+#include "../raytracing/shapes2D/4pt_polygon_2d.h"
+#include "../raytracing/shapes2D/filled_circle_2d.h"
+#include "../raytracing/shapes2D/ring_2d.h"
+#include "../raytracing/shapes2D/round_segment_2d.h"
 
 #include "3d_model.h"
 
@@ -53,14 +49,14 @@ typedef std::map< wxString, MODEL_3D* > MAP_3DMODEL;
 #define SIZE_OF_CIRCLE_TEXTURE 1024
 
 /**
- * Object to render the board using openGL legacy mode.
+ * Object to render the board using openGL.
  */
-class RENDER_3D_LEGACY : public RENDER_3D_BASE
+class RENDER_3D_OPENGL : public RENDER_3D_BASE
 {
 public:
-    explicit RENDER_3D_LEGACY( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter, CAMERA& aCamera );
+    explicit RENDER_3D_OPENGL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter, CAMERA& aCamera );
 
-    ~RENDER_3D_LEGACY();
+    ~RENDER_3D_OPENGL();
 
     void SetCurWindowSize( const wxSize& aSize ) override;
     bool Redraw( bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter ) override;
@@ -220,4 +216,4 @@ private:
                                             ///< outline.
 };
 
-#endif // RENDER_3D_LEGACY_H_
+#endif // RENDER_3D_OPENGL_H

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,9 +32,9 @@
  */
 
 #include "board_adapter.h"
-#include "../3d_rendering/3d_render_raytracing/shapes2D/ring_2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes2D/filled_circle_2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes3D/cylinder_3d.h"
+#include "../3d_rendering/raytracing/shapes2D/ring_2d.h"
+#include "../3d_rendering/raytracing/shapes2D/filled_circle_2d.h"
+#include "../3d_rendering/raytracing/shapes3D/cylinder_3d.h"
 
 #include <board.h>
 #include <board_design_settings.h>
@@ -205,8 +205,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         BVH_CONTAINER_2D *layerContainer = new BVH_CONTAINER_2D;
         m_layerMap[curr_layer_id] = layerContainer;
 
-        if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
-          && ( m_renderEngine == RENDER_ENGINE::OPENGL_LEGACY ) )
+        if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) && m_renderEngine == RENDER_ENGINE::OPENGL )
         {
             SHAPE_POLY_SET* layerPoly    = new SHAPE_POLY_SET;
             m_layers_poly[curr_layer_id] = layerPoly;
@@ -419,8 +418,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     }
 
     // Creates vertical outline contours of the tracks and add it to the poly of the layer
-    if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
-      && ( m_renderEngine == RENDER_ENGINE::OPENGL_LEGACY ) )
+    if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) && m_renderEngine == RENDER_ENGINE::OPENGL )
     {
         for( PCB_LAYER_ID curr_layer_id : layer_id )
         {
@@ -560,8 +558,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     }
 
     // Add footprints PADs poly contours (vertical outlines)
-    if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
-      && ( m_renderEngine == RENDER_ENGINE::OPENGL_LEGACY ) )
+    if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) && m_renderEngine == RENDER_ENGINE::OPENGL )
     {
         for( PCB_LAYER_ID curr_layer_id : layer_id )
         {
@@ -641,8 +638,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     }
 
     // Add graphic item on copper layers to poly contours (vertical outlines)
-    if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
-      && ( m_renderEngine == RENDER_ENGINE::OPENGL_LEGACY ) )
+    if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) && m_renderEngine == RENDER_ENGINE::OPENGL )
     {
         for( PCB_LAYER_ID cur_layer_id : layer_id )
         {
@@ -729,7 +725,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     }
 
                     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
-                      && ( m_renderEngine == RENDER_ENGINE::OPENGL_LEGACY )
+                      && m_renderEngine == RENDER_ENGINE::OPENGL
                       && layerPolyContainer != m_layers_poly.end() )
                     {
                         auto mut_it = layer_lock.find( layer );
@@ -755,8 +751,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     if( aStatusReporter )
         aStatusReporter->Report( _( "Simplifying copper layers polygons" ) );
 
-    if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
-      && ( m_renderEngine == RENDER_ENGINE::OPENGL_LEGACY ) )
+    if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) && m_renderEngine == RENDER_ENGINE::OPENGL )
     {
         if( GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) && GetFlag( FL_USE_REALISTIC_MODE ) )
         {

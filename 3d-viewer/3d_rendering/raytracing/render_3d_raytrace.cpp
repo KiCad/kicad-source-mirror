@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file render_3d_raytrace.cpp
- */
-
 #include <gal/opengl/kiglew.h>    // Must be included first
 
 #include <algorithm>
@@ -297,7 +293,7 @@ void RENDER_3D_RAYTRACE::render( GLubyte* ptrPBO, REPORTER* aStatusReporter )
         if( m_cameraLight )
             m_cameraLight->SetDirection( -m_camera.GetDir() );
 
-        if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
+        if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL )
         {
             // Set all pixels of PBO transparent (Alpha to 0)
             // This way it will draw the full buffer but only shows the updated (

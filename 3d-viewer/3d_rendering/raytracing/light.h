@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,8 @@
  * @brief Declare and implement light sources.
  */
 
-#ifndef _LIGHT_H_
-#define _LIGHT_H_
+#ifndef LIGHT_H
+#define LIGHT_H
 
 #include "ray.h"
 #include "hitinfo.h"
@@ -145,4 +145,4 @@ private:
 };
 
 
-#endif // _LIGHT_H_
+#endif // LIGHT_H

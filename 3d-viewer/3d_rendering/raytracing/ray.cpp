@@ -22,12 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  ray.cpp
- * @brief
- */
-
-
 #include "ray.h"
 #include "../../3d_fastmath.h"
 #include <cstdio>

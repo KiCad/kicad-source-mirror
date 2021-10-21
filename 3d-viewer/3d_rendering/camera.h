@@ -30,7 +30,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "../3d_rendering/3d_render_raytracing/ray.h"
+#include "../3d_rendering/raytracing/ray.h"
 #include <wx/gdicmn.h>  // for wxSize
 #include <vector>
 

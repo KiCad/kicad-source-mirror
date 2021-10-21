@@ -15,8 +15,8 @@ include_directories(
     )
 
 # directories
-set( DIR_DLG 3d_cache/dialogs )
-set( DIR_RAY 3d_rendering/3d_render_raytracing )
+set( DIR_DLG dialogs )
+set( DIR_RAY 3d_rendering/raytracing )
 set( DIR_RAY_ACC ${DIR_RAY}/accelerators )
 set( DIR_RAY_2D ${DIR_RAY}/shapes2D )
 set( DIR_RAY_3D ${DIR_RAY}/shapes3D )
@@ -39,11 +39,11 @@ set(3D-VIEWER_SRCS
     3d_canvas/eda_3d_canvas.cpp
     3d_canvas/eda_3d_canvas_pivot.cpp
     3d_model_viewer/eda_3d_model_viewer.cpp
-    3d_rendering/legacy/3d_model.cpp
-    3d_rendering/legacy/ogl_legacy_utils.cpp
-    3d_rendering/legacy/create_scene.cpp
-    3d_rendering/legacy/render_3d_legacy.cpp
-    3d_rendering/legacy/layer_triangles.cpp
+    3d_rendering/opengl/3d_model.cpp
+    3d_rendering/opengl/opengl_utils.cpp
+    3d_rendering/opengl/create_scene.cpp
+    3d_rendering/opengl/render_3d_opengl.cpp
+    3d_rendering/opengl/layer_triangles.cpp
     ${DIR_RAY_ACC}/accelerator_3d.cpp
     ${DIR_RAY_ACC}/bvh_packet_traversal.cpp
     ${DIR_RAY_ACC}/bvh_pbrt.cpp

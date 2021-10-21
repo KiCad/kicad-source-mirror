@@ -24,8 +24,8 @@
 
 #include <gal/opengl/kiglew.h>    // Must be included first
 
-#include "render_3d_legacy.h"
-#include "ogl_legacy_utils.h"
+#include "render_3d_opengl.h"
+#include "opengl_utils.h"
 #include "common_ogl/ogl_utils.h"
 #include <footprint.h>
 #include <3d_math.h>
@@ -39,10 +39,11 @@
  */
 #define UNITS3D_TO_UNITSPCB (IU_PER_MM)
 
-RENDER_3D_LEGACY::RENDER_3D_LEGACY( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
+RENDER_3D_OPENGL::RENDER_3D_OPENGL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter,
+                                    CAMERA& aCamera ) :
         RENDER_3D_BASE( aCanvas, aAdapter, aCamera )
 {
-    wxLogTrace( m_logTrace, wxT( "RENDER_3D_LEGACY::RENDER_3D_LEGACY" ) );
+    wxLogTrace( m_logTrace, wxT( "RENDER_3D_OPENGL::RENDER_3D_OPENGL" ) );
 
     m_layers.clear();
     m_outerLayerHoles.clear();
@@ -70,9 +71,9 @@ RENDER_3D_LEGACY::RENDER_3D_LEGACY( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdap
 }
 
 
-RENDER_3D_LEGACY::~RENDER_3D_LEGACY()
+RENDER_3D_OPENGL::~RENDER_3D_OPENGL()
 {
-    wxLogTrace( m_logTrace, wxT( "RENDER_3D_LEGACY::~RENDER_3D_LEGACY" ) );
+    wxLogTrace( m_logTrace, wxT( "RENDER_3D_OPENGL::RENDER_3D_OPENGL" ) );
 
     freeAllLists();
 
@@ -80,13 +81,13 @@ RENDER_3D_LEGACY::~RENDER_3D_LEGACY()
 }
 
 
-int RENDER_3D_LEGACY::GetWaitForEditingTimeOut()
+int RENDER_3D_OPENGL::GetWaitForEditingTimeOut()
 {
     return 50; // ms
 }
 
 
-void RENDER_3D_LEGACY::SetCurWindowSize( const wxSize& aSize )
+void RENDER_3D_OPENGL::SetCurWindowSize( const wxSize& aSize )
 {
     if( m_windowSize != aSize )
     {
@@ -98,7 +99,7 @@ void RENDER_3D_LEGACY::SetCurWindowSize( const wxSize& aSize )
 }
 
 
-void RENDER_3D_LEGACY::setLightFront( bool enabled )
+void RENDER_3D_OPENGL::setLightFront( bool enabled )
 {
     if( enabled )
         glEnable( GL_LIGHT0 );
@@ -107,7 +108,7 @@ void RENDER_3D_LEGACY::setLightFront( bool enabled )
 }
 
 
-void RENDER_3D_LEGACY::setLightTop( bool enabled )
+void RENDER_3D_OPENGL::setLightTop( bool enabled )
 {
     if( enabled )
         glEnable( GL_LIGHT1 );
@@ -116,7 +117,7 @@ void RENDER_3D_LEGACY::setLightTop( bool enabled )
 }
 
 
-void RENDER_3D_LEGACY::setLightBottom( bool enabled )
+void RENDER_3D_OPENGL::setLightBottom( bool enabled )
 {
     if( enabled )
         glEnable( GL_LIGHT2 );
@@ -125,7 +126,7 @@ void RENDER_3D_LEGACY::setLightBottom( bool enabled )
 }
 
 
-void RENDER_3D_LEGACY::render3dArrows()
+void RENDER_3D_OPENGL::render3dArrows()
 {
     const float arrow_size = RANGE_SCALE_3D * 0.30f;
 
@@ -164,7 +165,7 @@ void RENDER_3D_LEGACY::render3dArrows()
 }
 
 
-void RENDER_3D_LEGACY::setupMaterials()
+void RENDER_3D_OPENGL::setupMaterials()
 {
     m_materials = {};
 
@@ -313,7 +314,7 @@ void RENDER_3D_LEGACY::setupMaterials()
 }
 
 
-void RENDER_3D_LEGACY::setLayerMaterial( PCB_LAYER_ID aLayerID )
+void RENDER_3D_OPENGL::setLayerMaterial( PCB_LAYER_ID aLayerID )
 {
     switch( aLayerID )
     {
@@ -390,7 +391,7 @@ void RENDER_3D_LEGACY::setLayerMaterial( PCB_LAYER_ID aLayerID )
 }
 
 
-SFVEC4F RENDER_3D_LEGACY::getLayerColor( PCB_LAYER_ID aLayerID )
+SFVEC4F RENDER_3D_OPENGL::getLayerColor( PCB_LAYER_ID aLayerID )
 {
     SFVEC4F layerColor = m_boardAdapter.GetLayerColor( aLayerID );
 
@@ -494,13 +495,13 @@ void init_lights( void )
 }
 
 
-void RENDER_3D_LEGACY::setCopperMaterial()
+void RENDER_3D_OPENGL::setCopperMaterial()
 {
     OglSetMaterial( m_materials.m_NonPlatedCopper, 1.0f );
 }
 
 
-void RENDER_3D_LEGACY::setPlatedCopperAndDepthOffset( PCB_LAYER_ID aLayer_id )
+void RENDER_3D_OPENGL::setPlatedCopperAndDepthOffset( PCB_LAYER_ID aLayer_id )
 {
     glEnable( GL_POLYGON_OFFSET_FILL );
     glPolygonOffset(-0.1f, -2.0f );
@@ -508,13 +509,13 @@ void RENDER_3D_LEGACY::setPlatedCopperAndDepthOffset( PCB_LAYER_ID aLayer_id )
 }
 
 
-void RENDER_3D_LEGACY::unsetDepthOffset()
+void RENDER_3D_OPENGL::unsetDepthOffset()
 {
     glDisable( GL_POLYGON_OFFSET_FILL );
 }
 
 
-void RENDER_3D_LEGACY::renderBoardBody( bool aSkipRenderHoles )
+void RENDER_3D_OPENGL::renderBoardBody( bool aSkipRenderHoles )
 {
     m_materials.m_EpoxyBoard.m_Diffuse   = m_boardAdapter.m_BoardBodyColor;
 
@@ -542,7 +543,7 @@ void RENDER_3D_LEGACY::renderBoardBody( bool aSkipRenderHoles )
 }
 
 
-bool RENDER_3D_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
+bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                                REPORTER* aWarningReporter )
 {
     // Initialize OpenGL
@@ -973,7 +974,7 @@ bool RENDER_3D_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 }
 
 
-bool RENDER_3D_LEGACY::initializeOpenGL()
+bool RENDER_3D_OPENGL::initializeOpenGL()
 {
     glEnable( GL_LINE_SMOOTH );
     glShadeModel( GL_SMOOTH );
@@ -1016,7 +1017,7 @@ bool RENDER_3D_LEGACY::initializeOpenGL()
 }
 
 
-void RENDER_3D_LEGACY::setArrowMaterial()
+void RENDER_3D_OPENGL::setArrowMaterial()
 {
     glEnable( GL_COLOR_MATERIAL );
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
@@ -1035,7 +1036,7 @@ void RENDER_3D_LEGACY::setArrowMaterial()
 }
 
 
-void RENDER_3D_LEGACY::freeAllLists()
+void RENDER_3D_OPENGL::freeAllLists()
 {
     if( glIsList( m_grid ) )
         glDeleteLists( m_grid, 1 );
@@ -1117,7 +1118,7 @@ void RENDER_3D_LEGACY::freeAllLists()
 }
 
 
-void RENDER_3D_LEGACY::renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPosition,
+void RENDER_3D_OPENGL::renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPosition,
                                               bool aDrawMiddleSegments, bool aSkipRenderHoles )
 {
     wxASSERT( (aLayerID == B_Mask) || (aLayerID == F_Mask) );
@@ -1175,7 +1176,7 @@ void RENDER_3D_LEGACY::renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPos
 }
 
 
-void RENDER_3D_LEGACY::render3dModelsSelected( bool aRenderTopOrBot, bool aRenderTransparentOnly,
+void RENDER_3D_OPENGL::render3dModelsSelected( bool aRenderTopOrBot, bool aRenderTransparentOnly,
                                                bool aRenderSelectedOnly )
 {
     if( !m_boardAdapter.GetBoard() )
@@ -1214,7 +1215,7 @@ void RENDER_3D_LEGACY::render3dModelsSelected( bool aRenderTopOrBot, bool aRende
 }
 
 
-void RENDER_3D_LEGACY::render3dModels( bool aRenderTopOrBot, bool aRenderTransparentOnly )
+void RENDER_3D_OPENGL::render3dModels( bool aRenderTopOrBot, bool aRenderTransparentOnly )
 {
     if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) )
         render3dModelsSelected( aRenderTopOrBot, aRenderTransparentOnly, true );
@@ -1223,7 +1224,7 @@ void RENDER_3D_LEGACY::render3dModels( bool aRenderTopOrBot, bool aRenderTranspa
 }
 
 
-void RENDER_3D_LEGACY::renderFootprint( const FOOTPRINT* aFootprint, bool aRenderTransparentOnly,
+void RENDER_3D_OPENGL::renderFootprint( const FOOTPRINT* aFootprint, bool aRenderTransparentOnly,
                                         bool aIsSelected )
 {
     if( !aFootprint->Models().empty() )
@@ -1324,7 +1325,7 @@ void RENDER_3D_LEGACY::renderFootprint( const FOOTPRINT* aFootprint, bool aRende
 }
 
 
-void RENDER_3D_LEGACY::generate3dGrid( GRID3D_TYPE aGridType )
+void RENDER_3D_OPENGL::generate3dGrid( GRID3D_TYPE aGridType )
 {
     if( glIsList( m_grid ) )
         glDeleteLists( m_grid, 1 );

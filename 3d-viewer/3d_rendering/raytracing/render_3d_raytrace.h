@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file render_3d_raytrace.h
- */
-
 #ifndef RENDER_3D_RAYTRACE_H
 #define RENDER_3D_RAYTRACE_H
 

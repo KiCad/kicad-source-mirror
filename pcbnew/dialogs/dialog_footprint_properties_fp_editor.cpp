@@ -39,7 +39,7 @@
 #include <footprint_editor_settings.h>
 #include <dialog_footprint_properties_fp_editor.h>
 #include <panel_fp_properties_3d_model.h>
-#include "3d_rendering/legacy/3d_model.h"
+#include "3d_rendering/opengl/3d_model.h"
 #include "filename_resolver.h"
 #include <pgm_base.h>
 #include "dialogs/panel_preview_3d_model.h"

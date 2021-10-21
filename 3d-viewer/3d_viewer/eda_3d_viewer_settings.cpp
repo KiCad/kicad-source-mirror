@@ -38,8 +38,8 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
           m_Camera()
 {
     m_params.emplace_back( new PARAM<int>( "render.engine", &m_Render.engine,
-                                           static_cast<int>( RENDER_ENGINE::OPENGL_LEGACY ),
-                                           static_cast<int>( RENDER_ENGINE::OPENGL_LEGACY ),
+                                           static_cast<int>( RENDER_ENGINE::OPENGL ),
+                                           static_cast<int>( RENDER_ENGINE::OPENGL ),
                                            static_cast<int>( RENDER_ENGINE::RAYTRACING ) ) );
 
     m_params.emplace_back( new PARAM<int>( "render.grid_type", &m_Render.grid_type,

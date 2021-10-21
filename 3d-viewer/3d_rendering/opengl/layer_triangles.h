@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,18 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file layer_triangles.h
- */
-
-#ifndef TRIANGLE_DISPLAY_LIST_H_
-#define TRIANGLE_DISPLAY_LIST_H_
+#ifndef TRIANGLE_DISPLAY_LIST_H
+#define TRIANGLE_DISPLAY_LIST_H
 
 #include "../../common_ogl/openGL_includes.h"
 #include <plugins/3dapi/xv3d_types.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
-#include <3d_render_raytracing/accelerators/container_2d.h>
+#include <raytracing/accelerators/container_2d.h>
 #include <vector>
 #include <mutex>
 
@@ -245,4 +241,4 @@ private:
     bool    m_draw_it_transparent;
 };
 
-#endif // TRIANGLE_DISPLAY_LIST_H_
+#endif // TRIANGLE_DISPLAY_LIST_H

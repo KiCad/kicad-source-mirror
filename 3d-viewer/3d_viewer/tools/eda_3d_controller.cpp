@@ -29,7 +29,7 @@
 #include <kiface_base.h>
 #include <tools/eda_3d_controller.h>
 #include "eda_3d_actions.h"
-#include <3d_rendering/legacy/render_3d_legacy.h>
+#include <3d_rendering/opengl/render_3d_opengl.h>
 
 
 bool EDA_3D_CONTROLLER::Init()
@@ -162,7 +162,7 @@ int EDA_3D_CONTROLLER::RotateView( const TOOL_EVENT& aEvent )
     default:                wxFAIL;                             break;
     }
 
-    if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
+    if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL )
         m_canvas->Request_refresh();
     else
         m_canvas->RenderRaytracingRequest();
@@ -190,7 +190,7 @@ int EDA_3D_CONTROLLER::ToggleOrtho( const TOOL_EVENT& aEvent )
 {
     m_camera->ToggleProjection();
 
-    if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
+    if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL )
         m_canvas->Request_refresh();
     else
         m_canvas->RenderRaytracingRequest();
@@ -218,7 +218,7 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
     case FL_RENDER_RAYTRACING_REFRACTIONS:
     case FL_RENDER_RAYTRACING_REFLECTIONS:
     case FL_RENDER_RAYTRACING_ANTI_ALIASING:
-        if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
+        if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL )
             m_canvas->Request_refresh();
         else
             m_canvas->RenderRaytracingRequest();
@@ -229,9 +229,9 @@ int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
     case FL_FP_ATTRIBUTES_NORMAL_INSERT:
     case FL_FP_ATTRIBUTES_VIRTUAL:
         // Loading 3D shapes can be needed if not yet loaded
-        if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL_LEGACY )
+        if( m_boardAdapter->GetRenderEngine() == RENDER_ENGINE::OPENGL )
         {
-            RENDER_3D_LEGACY* render = static_cast< RENDER_3D_LEGACY* > ( m_canvas->GetCurrentRender() );
+            RENDER_3D_OPENGL* render = static_cast<RENDER_3D_OPENGL*>( m_canvas->GetCurrentRender() );
             render->Load3dModelsIfNeeded();
             m_canvas->Request_refresh();
         }

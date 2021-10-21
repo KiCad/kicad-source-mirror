@@ -204,7 +204,7 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
 
     if( cfg )
     {
-        m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL_LEGACY );
+        m_boardAdapter.SetRenderEngine( RENDER_ENGINE::OPENGL );
         m_boardAdapter.SetFlag( FL_USE_REALISTIC_MODE, cfg->m_Render.realistic );
         m_boardAdapter.SetMaterialMode( static_cast<MATERIAL_MODE>( cfg->m_Render.material_mode ) );
 

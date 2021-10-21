@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,13 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  ray.h
- * @brief
- */
-
-#ifndef _RAY_H_
-#define _RAY_H_
+#ifndef RAY_H
+#define RAY_H
 
 #include <plugins/3dapi/xv3d_types.h>
 
@@ -165,4 +160,4 @@ struct RAY4
 #endif
 
 
-#endif // _RAY_H_
+#endif // RAY_H

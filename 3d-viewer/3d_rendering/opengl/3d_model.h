@@ -23,18 +23,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file 3d_model.h
- * @brief Implement a legacy 3D model render.
- */
-
 #ifndef _MODEL_3D_H_
 #define _MODEL_3D_H_
 
 #include <vector>
 #include <plugins/3dapi/c3dmodel.h>
 #include "../../common_ogl/openGL_includes.h"
-#include "../3d_render_raytracing/shapes3D/bbox_3d.h"
+#include "../raytracing/shapes3D/bbox_3d.h"
 #include "../../3d_enums.h"
 
 #include <wx/chartype.h>

@@ -26,7 +26,7 @@
 #include "board_adapter.h"
 #include <board_design_settings.h>
 #include <board_stackup_manager/board_stackup.h>
-#include <3d_rendering/3d_render_raytracing/shapes2D/polygon_2d.h>
+#include <3d_rendering/raytracing/shapes2D/polygon_2d.h>
 #include <board.h>
 #include <dialogs/dialog_color_picker.h>
 #include <3d_math.h>
@@ -81,7 +81,7 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     if( PgmOrNull() )
         m_colors = Pgm().GetSettingsManager().GetColorSettings();
 
-    m_renderEngine = RENDER_ENGINE::OPENGL_LEGACY;
+    m_renderEngine = RENDER_ENGINE::OPENGL;
     m_materialMode = MATERIAL_MODE::NORMAL;
 
     m_boardPos = wxPoint();

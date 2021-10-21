@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,13 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file raypacket.h
- * @brief
- */
-
-#ifndef _RAYPACKET_H_
-#define _RAYPACKET_H_
+#ifndef RAYPACKET_H
+#define RAYPACKET_H
 
 #include "ray.h"
 #include "frustum.h"
@@ -65,4 +60,4 @@ void RAYPACKET_InitRays_with2DDisplacement( const CAMERA& aCamera, const SFVEC2F
                                             const SFVEC2F& a2DWindowsPosDisplacementFactor,
                                             RAY* aRayPck );
 
-#endif // _RAYPACKET_H_
+#endif // RAYPACKET_H

@@ -31,7 +31,7 @@
 #include <gal/opengl/kiglew.h>    // Must be included first
 
 #include "3d_model.h"
-#include "ogl_legacy_utils.h"
+#include "opengl_utils.h"
 #include "../common_ogl/ogl_utils.h"
 #include "../3d_math.h"
 #include <wx/debug.h>

@@ -30,10 +30,10 @@
  *  board_items_to_polygon_shape_transform.cpp
  */
 
-#include "../3d_rendering/3d_render_raytracing/shapes2D/ring_2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes2D/filled_circle_2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes2D/round_segment_2d.h"
-#include "../3d_rendering/3d_render_raytracing/shapes2D/triangle_2d.h"
+#include "../3d_rendering/raytracing/shapes2D/ring_2d.h"
+#include "../3d_rendering/raytracing/shapes2D/filled_circle_2d.h"
+#include "../3d_rendering/raytracing/shapes2D/round_segment_2d.h"
+#include "../3d_rendering/raytracing/shapes2D/triangle_2d.h"
 #include <board_adapter.h>
 #include <board.h>
 #include <footprint.h>
