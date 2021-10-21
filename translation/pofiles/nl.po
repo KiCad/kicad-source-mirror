@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-18 12:18-0700\n"
-"PO-Revision-Date: 2021-10-04 15:51+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2021-10-21 11:49+0000\n"
+"Last-Translator: CJ van der Hoeven <KeesEnJoa@gmail.com>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12968,6 +12968,8 @@ msgid ""
 "The file '%s` could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
+"Bestand '%s' kan niet worden geopend.\n"
+"U moet automatisch bewaarde bestanden handmatig terugzetten."
 
 #: eeschema/files-io.cpp:1395
 #, fuzzy
@@ -12976,7 +12978,7 @@ msgstr "Het auto-save bestand '%s' kan niet worden verwijderd!"
 
 #: eeschema/files-io.cpp:1400
 msgid "Manual recovery will be required to restore the file(s) above."
-msgstr ""
+msgstr "U moet bovenstaande bestand(en) handmatig terugzetten."
 
 #: eeschema/files-io.cpp:1422
 #, fuzzy
@@ -12985,7 +12987,7 @@ msgstr "Het auto-save bestand '%s' kan niet worden verwijderd!"
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
-msgstr ""
+msgstr "U moet bovenstaande bestand(en) handmatig verwijderen."
 
 #: eeschema/files-io.cpp:1438
 #, fuzzy, c-format
@@ -13000,6 +13002,9 @@ msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
 msgstr ""
+"U moet dit bestand handmatig verwijderen. Anders wordt de auto-save functie "
+"telkens\n"
+"getoond bij het starten van de schema-editor."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1397
 msgid "Alias of"
@@ -29349,7 +29354,7 @@ msgstr "Lengte differentieel afgekoppeld te lang"
 
 #: pcbnew/drc/drc_item.cpp:206
 msgid "Footprint type doesn't match footprint pads"
-msgstr ""
+msgstr "Footprint type komt niet overeen met footprint pads"
 
 #: pcbnew/drc/drc_item.cpp:327
 #, c-format
@@ -30088,12 +30093,12 @@ msgstr "Doorgaand pad %s van %s"
 #: pcbnew/footprint.cpp:2095
 #, c-format
 msgid "Expected \"SMD\" type but set to \"%s\""
-msgstr ""
+msgstr "Type \"%s\" zou \"SMD\" moeten zijn"
 
 #: pcbnew/footprint.cpp:2099
 #, c-format
 msgid "Expected \"Other\" type but set to \"%s\""
-msgstr ""
+msgstr "Type \"%s\" zou \"Other\" moeten zijn"
 
 #: pcbnew/footprint.cpp:2203 pcbnew/pad.cpp:1542 pcbnew/zone.cpp:1420
 msgid "Clearance Override"
@@ -30306,7 +30311,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:906
 #: pcbnew/footprint_viewer_frame.cpp:720
 msgid "Previous footprint placement still in progress."
-msgstr ""
+msgstr "De vorige footprint-plaatsing is nog in behandeling."
 
 #: pcbnew/footprint_libraries_utils.cpp:995
 msgid "Save Footprint As"
