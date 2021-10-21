@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="15" />
+    <FileVersion major="1" minor="16" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -14,6 +14,7 @@
         <property name="file">dialog_symbol_fields_table_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_symbol_fields_table_base</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -50,6 +52,7 @@
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Symbol Fields Table</property>
             <property name="tooltip"></property>
+            <property name="two_step_creation">0</property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
             <property name="window_style"></property>
@@ -188,7 +191,7 @@
                                             <property name="permission">none</property>
                                             <object class="sizeritem" expanded="0">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALL|wxEXPAND</property>
+                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxCheckBox" expanded="0">
                                                     <property name="BottomDockable">1</property>
@@ -263,7 +266,7 @@
                                             </object>
                                             <object class="sizeritem" expanded="0">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxBitmapButton" expanded="0">
                                                     <property name="BottomDockable">1</property>
@@ -274,6 +277,7 @@
                                                     <property name="aui_name"></property>
                                                     <property name="aui_position"></property>
                                                     <property name="aui_row"></property>
+                                                    <property name="auth_needed">0</property>
                                                     <property name="best_size"></property>
                                                     <property name="bg"></property>
                                                     <property name="bitmap"></property>
@@ -367,7 +371,7 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxEXPAND|wxTOP|wxBOTTOM|wxLEFT</property>
+                                        <property name="flag">wxALL|wxEXPAND</property>
                                         <property name="proportion">0</property>
                                         <object class="wxButton" expanded="1">
                                             <property name="BottomDockable">1</property>
@@ -378,6 +382,7 @@
                                             <property name="aui_name"></property>
                                             <property name="aui_position"></property>
                                             <property name="aui_row"></property>
+                                            <property name="auth_needed">0</property>
                                             <property name="best_size"></property>
                                             <property name="bg"></property>
                                             <property name="bitmap"></property>
@@ -628,6 +633,7 @@
                                 <property name="aui_name"></property>
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
+                                <property name="auth_needed">0</property>
                                 <property name="best_size"></property>
                                 <property name="bg"></property>
                                 <property name="bitmap"></property>

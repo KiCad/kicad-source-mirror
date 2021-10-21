@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,18 +24,18 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_staticTextType = new wxStaticText( m_swItemProperties, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextType->Wrap( -1 );
-	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextType->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_SLANT, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizerButt->Add( m_staticTextType, 1, wxALL|wxALIGN_CENTER_VERTICAL, 4 );
+	bSizerButt->Add( m_staticTextType, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 4 );
 
 	m_buttonHelp = new wxButton( m_swItemProperties, wxID_ANY, _("Help"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizerButt->Add( m_buttonHelp, 0, wxALL, 5 );
+	bSizerButt->Add( m_buttonHelp, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxString m_choicePageOptChoices[] = { _("Show on all pages"), _("First page only"), _("Subsequent pages only") };
 	int m_choicePageOptNChoices = sizeof( m_choicePageOptChoices ) / sizeof( wxString );
 	m_choicePageOpt = new wxChoice( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePageOptNChoices, m_choicePageOptChoices, 0 );
 	m_choicePageOpt->SetSelection( 2 );
-	bSizerButt->Add( m_choicePageOpt, 0, wxALL|wxEXPAND, 4 );
+	bSizerButt->Add( m_choicePageOpt, 0, wxALL|wxEXPAND|wxRIGHT, 4 );
 
 
 	m_SizerItemProperties->Add( bSizerButt, 0, wxEXPAND, 5 );
@@ -52,6 +52,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_stcText->SetViewWhiteSpace( false );
 	m_stcText->SetMarginWidth( 2, 0 );
 	m_stcText->SetIndentationGuides( false );
+	m_stcText->SetReadOnly( false );
 	m_stcText->SetMarginWidth( 1, 0 );
 	m_stcText->SetMarginWidth( 0, 0 );
 	m_stcText->MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );
@@ -134,7 +135,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_TextTextSizeXUnits = new wxStaticText( m_swItemProperties, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextTextSizeXUnits->Wrap( -1 );
-	fgSizer2->Add( m_TextTextSizeXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
+	fgSizer2->Add( m_TextTextSizeXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT|wxRIGHT, 5 );
 
 	m_staticTextTsizeY = new wxStaticText( m_swItemProperties, wxID_ANY, _("Text height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTsizeY->Wrap( -1 );
@@ -158,7 +159,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_TextConstraintXUnits = new wxStaticText( m_swItemProperties, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextConstraintXUnits->Wrap( -1 );
-	fgSizer2->Add( m_TextConstraintXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
+	fgSizer2->Add( m_TextConstraintXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT|wxRIGHT, 5 );
 
 	m_staticTextConstraintY = new wxStaticText( m_swItemProperties, wxID_ANY, _("Max height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextConstraintY->Wrap( -1 );
@@ -218,7 +219,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_TextPosYUnits = new wxStaticText( sbSizerPos->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextPosYUnits->Wrap( -1 );
-	fgSizer3->Add( m_TextPosYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
+	fgSizer3->Add( m_TextPosYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT|wxRIGHT, 5 );
 
 	m_staticTextOrgPos = new wxStaticText( sbSizerPos->GetStaticBox(), wxID_ANY, _("From:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOrgPos->Wrap( -1 );
@@ -232,7 +233,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_comboBoxCornerPos->SetSelection( 2 );
 	m_comboBoxCornerPos->SetMinSize( wxSize( 132,-1 ) );
 
-	fgSizer3->Add( m_comboBoxCornerPos, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	fgSizer3->Add( m_comboBoxCornerPos, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
 	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -285,7 +286,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_comboBoxCornerEnd->SetSelection( 3 );
 	m_comboBoxCornerEnd->SetMinSize( wxSize( 132,-1 ) );
 
-	fgSizer4->Add( m_comboBoxCornerEnd, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	fgSizer4->Add( m_comboBoxCornerEnd, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
 	fgSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -351,7 +352,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer8->Add( m_staticTextRepeatCnt, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_textCtrlRepeatCount = new wxTextCtrl( m_sbStep->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer8->Add( m_textCtrlRepeatCount, 0, wxEXPAND|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer8->Add( m_textCtrlRepeatCount, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
 
 
 	fgSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -363,7 +364,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_textCtrlTextIncrement = new wxTextCtrl( m_sbStep->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrlTextIncrement->SetToolTip( _("Number of characters or digits to step text by for each repeat.") );
 
-	fgSizer8->Add( m_textCtrlTextIncrement, 0, wxEXPAND|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer8->Add( m_textCtrlTextIncrement, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
 
 
 	fgSizer8->Add( 0, 0, 0, wxEXPAND, 5 );
@@ -392,7 +393,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_TextStepYUnits = new wxStaticText( m_sbStep->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextStepYUnits->Wrap( -1 );
-	fgSizer8->Add( m_TextStepYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
+	fgSizer8->Add( m_TextStepYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT|wxRIGHT, 5 );
 
 
 	m_sbStep->Add( fgSizer8, 0, wxEXPAND|wxBOTTOM, 5 );
@@ -579,6 +580,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	this->SetSizer( bSizerpanel );
 	this->Layout();
+	bSizerpanel->Fit( this );
 
 	// Connect Events
 	m_notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( PANEL_PROPERTIES_BASE::OnPageChanged ), NULL, this );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -193,7 +193,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 
 	m_staticTextPreview = new wxStaticText( m_sizerFormat->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPreview->Wrap( -1 );
-	m_staticTextPreview->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextPreview->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	gbSizerFormat->Add( m_staticTextPreview, wxGBPosition( 4, 1 ), wxGBSpan( 1, 4 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -293,20 +293,20 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	m_cbTextOrientation->Append( _("90.0") );
 	m_cbTextOrientation->Append( _("-90.0") );
 	m_cbTextOrientation->Append( _("180.0") );
-	gbSizerText->Add( m_cbTextOrientation, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
+	gbSizerText->Add( m_cbTextOrientation, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_cbItalic = new wxCheckBox( m_sizerText->GetStaticBox(), wxID_ANY, _("Italic"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizerText->Add( m_cbItalic, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizerText->Add( m_cbItalic, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 	m_cbKeepAligned = new wxCheckBox( m_sizerText->GetStaticBox(), wxID_ANY, _("Keep aligned with dimension"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbKeepAligned->SetToolTip( _("Automatically set the text orientation to match the dimension lines") );
 
-	gbSizerText->Add( m_cbKeepAligned, wxGBPosition( 4, 4 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizerText->Add( m_cbKeepAligned, wxGBPosition( 4, 4 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 	m_cbMirrored = new wxCheckBox( m_sizerText->GetStaticBox(), wxID_ANY, _("Mirrored"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbMirrored->SetToolTip( _("Mirror text") );
 
-	gbSizerText->Add( m_cbMirrored, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizerText->Add( m_cbMirrored, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 	m_lblJustification = new wxStaticText( m_sizerText->GetStaticBox(), wxID_ANY, _("Justification:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblJustification->Wrap( -1 );

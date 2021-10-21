@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,6 +35,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_MultiLineText->SetViewWhiteSpace( false );
 	m_MultiLineText->SetMarginWidth( 2, 0 );
 	m_MultiLineText->SetIndentationGuides( true );
+	m_MultiLineText->SetReadOnly( false );
 	m_MultiLineText->SetMarginWidth( 1, 0 );
 	m_MultiLineText->SetMarginWidth( 0, 0 );
 	m_MultiLineText->MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );
@@ -100,7 +101,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	fgSizerSetup->Add( 0, 0, 0, wxRIGHT|wxLEFT, 40 );
 
 	m_Visible = new wxCheckBox( this, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerSetup->Add( m_Visible, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgSizerSetup->Add( m_Visible, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	fgSizerSetup->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -119,7 +120,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	fgSizerSetup->Add( m_SizeXUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_Italic = new wxCheckBox( this, wxID_ANY, _("Italic"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerSetup->Add( m_Italic, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgSizerSetup->Add( m_Italic, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	fgSizerSetup->Add( 0, 0, 0, 0, 5 );
@@ -189,7 +190,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_Mirrored = new wxCheckBox( this, wxID_ANY, _("Mirrored"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Mirrored->SetToolTip( _("Mirror text") );
 
-	fgSizerSetup->Add( m_Mirrored, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerSetup->Add( m_Mirrored, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerSetup->Add( 0, 0, 0, 0, 5 );
@@ -210,7 +211,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_KeepUpright = new wxCheckBox( this, wxID_ANY, _("Keep upright"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_KeepUpright->SetToolTip( _("Keep text upright") );
 
-	fgSizerSetup->Add( m_KeepUpright, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerSetup->Add( m_KeepUpright, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerSetup->Add( 0, 0, 1, wxEXPAND, 5 );

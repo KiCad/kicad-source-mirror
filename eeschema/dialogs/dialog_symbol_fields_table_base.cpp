@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,7 +32,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_groupSymbolsBox->SetValue(true);
 	m_groupSymbolsBox->SetToolTip( _("Group symbols together based on common properties") );
 
-	bGroupSizer->Add( m_groupSymbolsBox, 0, wxALL|wxEXPAND, 5 );
+	bGroupSizer->Add( m_groupSymbolsBox, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	bGroupSizer->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -40,7 +40,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_bRefresh = new wxBitmapButton( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bRefresh->SetMinSize( wxSize( 30,30 ) );
 
-	bGroupSizer->Add( m_bRefresh, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bGroupSizer->Add( m_bRefresh, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	bLeftSizer->Add( bGroupSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 2 );
@@ -51,7 +51,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bLeftSizer->Add( m_fieldsCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_addFieldButton = new wxButton( m_leftPanel, wxID_ANY, _("Add Field..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_addFieldButton, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bLeftSizer->Add( m_addFieldButton, 0, wxALL|wxEXPAND, 5 );
 
 
 	m_leftPanel->SetSizer( bLeftSizer );

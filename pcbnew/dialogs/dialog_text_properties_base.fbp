@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="15" />
+    <FileVersion major="1" minor="16" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -14,6 +14,7 @@
         <property name="file">dialog_text_properties_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">DIALOG_TEXT_PROPERTIES_BASE</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -50,6 +52,7 @@
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Text Properties</property>
             <property name="tooltip"></property>
+            <property name="two_step_creation">0</property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
             <property name="window_style"></property>
@@ -179,6 +182,7 @@
                                 <property name="permission">protected</property>
                                 <property name="pin_button">1</property>
                                 <property name="pos"></property>
+                                <property name="read_only">0</property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
@@ -564,7 +568,7 @@
                         </object>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
                             <property name="proportion">0</property>
                             <object class="wxCheckBox" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -825,7 +829,7 @@
                         </object>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
                             <property name="proportion">0</property>
                             <object class="wxCheckBox" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -1712,7 +1716,7 @@
                         </object>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxCheckBox" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -1973,7 +1977,7 @@
                         </object>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxCheckBox" expanded="0">
                                 <property name="BottomDockable">1</property>

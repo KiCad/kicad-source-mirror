@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,7 +29,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxStaticText* antialiasingLabel;
 	antialiasingLabel = new wxStaticText( bAntiAliasing->GetStaticBox(), wxID_ANY, _("Accelerated graphics:"), wxDefaultPosition, wxDefaultSize, 0 );
 	antialiasingLabel->Wrap( -1 );
-	gbSizer11->Add( antialiasingLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer11->Add( antialiasingLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxString m_antialiasingChoices[] = { _("No Antialiasing"), _("Fast Antialiasing"), _("High Quality Antialiasing") };
 	int m_antialiasingNChoices = sizeof( m_antialiasingChoices ) / sizeof( wxString );
@@ -39,7 +39,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	m_antialiasingFallbackLabel = new wxStaticText( bAntiAliasing->GetStaticBox(), wxID_ANY, _("Fallback graphics:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_antialiasingFallbackLabel->Wrap( -1 );
-	gbSizer11->Add( m_antialiasingFallbackLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer11->Add( m_antialiasingFallbackLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	wxString m_antialiasingFallbackChoices[] = { _("No Antialiasing"), _("Fast Antialiasing"), _("High Quality Antialiasing") };
 	int m_antialiasingFallbackNChoices = sizeof( m_antialiasingFallbackChoices ) / sizeof( wxString );
@@ -156,7 +156,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_sbUserInterface->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_scaleFonts = new wxCheckBox( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("Apply icon scaling to fonts"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_sbUserInterface->Add( m_scaleFonts, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_sbUserInterface->Add( m_scaleFonts, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_fontScalingHelp = new wxStaticText( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("(This workaround will improve some GTK HiDPI font scaling issues.)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fontScalingHelp->Wrap( -1 );
@@ -175,12 +175,13 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Editing") ), wxVERTICAL );
 
 	m_warpMouseOnMove = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Warp mouse to origin of moved object"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer4->Add( m_warpMouseOnMove, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_warpMouseOnMove->SetValue(true);
+	sbSizer4->Add( m_warpMouseOnMove, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_NonImmediateActions = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("First hotkey selects tool"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_NonImmediateActions->SetToolTip( _("If not checked, hotkeys will immediately perform an action even if the relevant tool was not previously selected.") );
 
-	sbSizer4->Add( m_NonImmediateActions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizer4->Add( m_NonImmediateActions, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
 	rightSizer->Add( sbSizer4, 0, wxEXPAND|wxALL, 5 );
@@ -192,7 +193,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_cbRememberOpenFiles->SetValue(true);
 	m_cbRememberOpenFiles->SetToolTip( _("If checked, launching a project will also launch tools such as eeschema and pcbnew with previously open files") );
 
-	sbSizer5->Add( m_cbRememberOpenFiles, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizer5->Add( m_cbRememberOpenFiles, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
 	sbSizer5->Add( 0, 5, 0, 0, 5 );
@@ -215,7 +216,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxStaticText* minutesLabel;
 	minutesLabel = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("minutes"), wxDefaultPosition, wxDefaultSize, 0 );
 	minutesLabel->Wrap( -1 );
-	gbSizer1->Add( minutesLabel, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( minutesLabel, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticTextFileHistorySize = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("File history size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextFileHistorySize->Wrap( -1 );
@@ -256,12 +257,12 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_cbBackupEnabled = new wxCheckBox( sbSizer41->GetStaticBox(), wxID_ANY, _("Automatically backup projects"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbBackupEnabled->SetToolTip( _("Automatically create backup archives of the current project when saving files") );
 
-	gbSizer3->Add( m_cbBackupEnabled, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer3->Add( m_cbBackupEnabled, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT, 5 );
 
 	m_cbBackupAutosave = new wxCheckBox( sbSizer41->GetStaticBox(), wxID_ANY, _("Create backups when auto save occurs"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbBackupAutosave->SetToolTip( _("Create backups when the auto save feature is enabled.  If not checked, backups will only be created when you manually save a file.") );
 
-	gbSizer3->Add( m_cbBackupAutosave, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer3->Add( m_cbBackupAutosave, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT, 5 );
 
 	m_staticText9 = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, _("Maximum backups to keep:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );

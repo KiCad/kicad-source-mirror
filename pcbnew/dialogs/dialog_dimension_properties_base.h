@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -109,7 +109,7 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnDimensionUnitsChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
@@ -118,6 +118,7 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dimension Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
+
 		~DIALOG_DIMENSION_PROPERTIES_BASE();
 
 };

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,7 +49,6 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_itemsGrid->SetColSize( 10, 110 );
 	m_itemsGrid->EnableDragColMove( false );
 	m_itemsGrid->EnableDragColSize( true );
-	m_itemsGrid->SetColLabelSize( 24 );
 	m_itemsGrid->SetColLabelValue( 0, _("Text Items") );
 	m_itemsGrid->SetColLabelValue( 1, _("Show") );
 	m_itemsGrid->SetColLabelValue( 2, _("Width") );
@@ -61,13 +60,14 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_itemsGrid->SetColLabelValue( 8, _("Unconstrained") );
 	m_itemsGrid->SetColLabelValue( 9, _("X Offset") );
 	m_itemsGrid->SetColLabelValue( 10, _("Y Offset") );
+	m_itemsGrid->SetColLabelSize( 24 );
 	m_itemsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
 	m_itemsGrid->EnableDragRowSize( false );
-	m_itemsGrid->SetRowLabelSize( 160 );
 	m_itemsGrid->SetRowLabelValue( 0, _("Reference designator") );
 	m_itemsGrid->SetRowLabelValue( 1, _("Value") );
+	m_itemsGrid->SetRowLabelSize( 160 );
 	m_itemsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance
@@ -137,7 +137,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 
 	m_allow90Label = new wxStaticText( m_sizerAP->GetStaticBox(), wxID_ANY, _("Allow 90 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_allow90Label->Wrap( -1 );
-	m_sizerAllow90->Add( m_allow90Label, 0, 0, 5 );
+	m_sizerAllow90->Add( m_allow90Label, 0, wxLEFT, 5 );
 
 	m_CostRot90Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sizerAllow90->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -152,7 +152,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 
 	m_allow180Label = new wxStaticText( m_sizerAP->GetStaticBox(), wxID_ANY, _("Allow 180 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_allow180Label->Wrap( -1 );
-	m_sizerAllow180->Add( m_allow180Label, 0, 0, 5 );
+	m_sizerAllow180->Add( m_allow180Label, 0, wxLEFT, 5 );
 
 	m_CostRot180Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
 	m_sizerAllow180->Add( m_CostRot180Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -204,7 +204,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_PanelGeneral->SetSizer( m_PanelPropertiesBoxSizer );
 	m_PanelGeneral->Layout();
 	m_PanelPropertiesBoxSizer->Fit( m_PanelGeneral );
-	m_NoteBook->AddPage( m_PanelGeneral, _("General"), true );
+	m_NoteBook->AddPage( m_PanelGeneral, _("General"), false );
 	m_PanelClearances = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelClearances;
 	bSizerPanelClearances = new wxBoxSizer( wxVERTICAL );
@@ -316,7 +316,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_PanelClearances->SetSizer( bSizerPanelClearances );
 	m_PanelClearances->Layout();
 	bSizerPanelClearances->Fit( m_PanelClearances );
-	m_NoteBook->AddPage( m_PanelClearances, _("Clearance Overrides and Settings"), false );
+	m_NoteBook->AddPage( m_PanelClearances, _("Clearance Overrides and Settings"), true );
 
 	m_GeneralBoxSizer->Add( m_NoteBook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 

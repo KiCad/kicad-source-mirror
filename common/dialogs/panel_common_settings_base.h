@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -86,7 +86,7 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxSpinCtrl* m_backupLimitTotalSize;
 		wxStaticText* m_staticText17;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnTextEditorClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUpdateUIPdfPath( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnPDFViewerClick( wxCommandEvent& event ) { event.Skip(); }
@@ -96,6 +96,7 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 	public:
 
 		PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_COMMON_SETTINGS_BASE();
 
 };

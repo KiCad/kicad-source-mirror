@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Sep  3 2020)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -221,7 +221,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	bSizer7->Add( m_selectLibrary, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	fgSizer3->Add( bSizer7, 1, wxEXPAND, 5 );
+	fgSizer3->Add( bSizer7, 1, wxBOTTOM|wxEXPAND, 5 );
 
 	m_staticText5 = new wxStaticText( m_model, wxID_ANY, _("Model:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
@@ -258,6 +258,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_libraryContents->SetViewWhiteSpace( false );
 	m_libraryContents->SetMarginWidth( 2, 0 );
 	m_libraryContents->SetIndentationGuides( false );
+	m_libraryContents->SetReadOnly( false );
 	m_libraryContents->SetMarginWidth( 1, 0 );
 	m_libraryContents->SetMarginType( 0, wxSTC_MARGIN_NUMBER );
 	m_libraryContents->SetMarginWidth( 0, m_libraryContents->TextWidth( wxSTC_STYLE_LINENUMBER, wxT("_99999") ) );
@@ -309,16 +310,16 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText10 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("DC:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
-	fgSizer6->Add( m_staticText10, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer6->Add( m_staticText10, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_genDc = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_genDc->SetMinSize( wxSize( 60,-1 ) );
 
-	fgSizer6->Add( m_genDc, 0, wxALL|wxEXPAND, 5 );
+	fgSizer6->Add( m_genDc, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText113 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText113->Wrap( -1 );
-	fgSizer6->Add( m_staticText113, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer6->Add( m_staticText113, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer6->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -331,32 +332,32 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText11 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("AC magnitude:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
-	fgSizer6->Add( m_staticText11, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer6->Add( m_staticText11, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_genAcMag = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_genAcMag->SetMinSize( wxSize( 60,-1 ) );
 
-	fgSizer6->Add( m_genAcMag, 0, wxALL|wxEXPAND, 5 );
+	fgSizer6->Add( m_genAcMag, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_staticText111 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText111->Wrap( -1 );
-	fgSizer6->Add( m_staticText111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer6->Add( m_staticText111, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText12 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("AC phase:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
-	fgSizer6->Add( m_staticText12, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	fgSizer6->Add( m_staticText12, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_genAcPhase = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_genAcPhase->SetMinSize( wxSize( 60,-1 ) );
 
-	fgSizer6->Add( m_genAcPhase, 0, wxALL|wxEXPAND, 5 );
+	fgSizer6->Add( m_genAcPhase, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_staticText112 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("radians"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText112->Wrap( -1 );
-	fgSizer6->Add( m_staticText112, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer6->Add( m_staticText112, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbSizer1->Add( fgSizer6, 1, wxEXPAND, 5 );
+	sbSizer1->Add( fgSizer6, 1, wxBOTTOM|wxEXPAND, 5 );
 
 
 	bSizer4->Add( sbSizer1, 0, wxALL|wxEXPAND, 5 );
@@ -383,7 +384,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText131 = new wxStaticText( m_pwrPulse, wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText131->Wrap( -1 );
-	fgSizer7->Add( m_staticText131, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer7->Add( m_staticText131, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText14 = new wxStaticText( m_pwrPulse, wxID_ANY, _("Pulsed value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText14->Wrap( -1 );
@@ -394,7 +395,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText132 = new wxStaticText( m_pwrPulse, wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText132->Wrap( -1 );
-	fgSizer7->Add( m_staticText132, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer7->Add( m_staticText132, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText15 = new wxStaticText( m_pwrPulse, wxID_ANY, _("Delay time:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText15->Wrap( -1 );
@@ -405,7 +406,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText133 = new wxStaticText( m_pwrPulse, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText133->Wrap( -1 );
-	fgSizer7->Add( m_staticText133, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer7->Add( m_staticText133, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText16 = new wxStaticText( m_pwrPulse, wxID_ANY, _("Rise time:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16->Wrap( -1 );
@@ -416,7 +417,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText134 = new wxStaticText( m_pwrPulse, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText134->Wrap( -1 );
-	fgSizer7->Add( m_staticText134, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer7->Add( m_staticText134, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText17 = new wxStaticText( m_pwrPulse, wxID_ANY, _("Fall time:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText17->Wrap( -1 );
@@ -427,7 +428,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText135 = new wxStaticText( m_pwrPulse, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText135->Wrap( -1 );
-	fgSizer7->Add( m_staticText135, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer7->Add( m_staticText135, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText18 = new wxStaticText( m_pwrPulse, wxID_ANY, _("Pulse width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText18->Wrap( -1 );
@@ -438,7 +439,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText136 = new wxStaticText( m_pwrPulse, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText136->Wrap( -1 );
-	fgSizer7->Add( m_staticText136, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer7->Add( m_staticText136, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText20 = new wxStaticText( m_pwrPulse, wxID_ANY, _("Period:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText20->Wrap( -1 );
@@ -449,7 +450,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText137 = new wxStaticText( m_pwrPulse, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText137->Wrap( -1 );
-	fgSizer7->Add( m_staticText137, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer7->Add( m_staticText137, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	m_pwrPulse->SetSizer( fgSizer7 );
@@ -474,7 +475,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText211 = new wxStaticText( m_pwrSin, wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText211->Wrap( -1 );
-	fgSizer8->Add( m_staticText211, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer8->Add( m_staticText211, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText22 = new wxStaticText( m_pwrSin, wxID_ANY, _("Amplitude:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText22->Wrap( -1 );
@@ -534,71 +535,71 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText26 = new wxStaticText( m_pwrExp, wxID_ANY, _("Initial value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText26->Wrap( -1 );
-	fgSizer9->Add( m_staticText26, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer9->Add( m_staticText26, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_expInit = new wxTextCtrl( m_pwrExp, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_expInit->SetMinSize( wxSize( 100,-1 ) );
 
-	fgSizer9->Add( m_expInit, 0, wxALL|wxEXPAND, 5 );
+	fgSizer9->Add( m_expInit, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText261 = new wxStaticText( m_pwrExp, wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText261->Wrap( -1 );
-	fgSizer9->Add( m_staticText261, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer9->Add( m_staticText261, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText27 = new wxStaticText( m_pwrExp, wxID_ANY, _("Pulsed value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText27->Wrap( -1 );
-	fgSizer9->Add( m_staticText27, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer9->Add( m_staticText27, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_expPulsed = new wxTextCtrl( m_pwrExp, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer9->Add( m_expPulsed, 0, wxALL|wxEXPAND, 5 );
+	fgSizer9->Add( m_expPulsed, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText262 = new wxStaticText( m_pwrExp, wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText262->Wrap( -1 );
-	fgSizer9->Add( m_staticText262, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer9->Add( m_staticText262, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText28 = new wxStaticText( m_pwrExp, wxID_ANY, _("Rise delay time:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText28->Wrap( -1 );
-	fgSizer9->Add( m_staticText28, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer9->Add( m_staticText28, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_expRiseDelay = new wxTextCtrl( m_pwrExp, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer9->Add( m_expRiseDelay, 0, wxALL|wxEXPAND, 5 );
+	fgSizer9->Add( m_expRiseDelay, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText263 = new wxStaticText( m_pwrExp, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText263->Wrap( -1 );
-	fgSizer9->Add( m_staticText263, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer9->Add( m_staticText263, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText29 = new wxStaticText( m_pwrExp, wxID_ANY, _("Rise time constant:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText29->Wrap( -1 );
-	fgSizer9->Add( m_staticText29, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer9->Add( m_staticText29, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_expRiseConst = new wxTextCtrl( m_pwrExp, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer9->Add( m_expRiseConst, 0, wxALL|wxEXPAND, 5 );
+	fgSizer9->Add( m_expRiseConst, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText264 = new wxStaticText( m_pwrExp, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText264->Wrap( -1 );
-	fgSizer9->Add( m_staticText264, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer9->Add( m_staticText264, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText30 = new wxStaticText( m_pwrExp, wxID_ANY, _("Fall delay time:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText30->Wrap( -1 );
-	fgSizer9->Add( m_staticText30, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer9->Add( m_staticText30, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_expFallDelay = new wxTextCtrl( m_pwrExp, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer9->Add( m_expFallDelay, 0, wxALL|wxEXPAND, 5 );
+	fgSizer9->Add( m_expFallDelay, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText265 = new wxStaticText( m_pwrExp, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText265->Wrap( -1 );
-	fgSizer9->Add( m_staticText265, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer9->Add( m_staticText265, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText31 = new wxStaticText( m_pwrExp, wxID_ANY, _("Fall time constant:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText31->Wrap( -1 );
-	fgSizer9->Add( m_staticText31, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer9->Add( m_staticText31, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_expFallConst = new wxTextCtrl( m_pwrExp, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer9->Add( m_expFallConst, 0, wxALL|wxEXPAND, 5 );
+	fgSizer9->Add( m_expFallConst, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText266 = new wxStaticText( m_pwrExp, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText266->Wrap( -1 );
-	fgSizer9->Add( m_staticText266, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer9->Add( m_staticText266, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	m_pwrExp->SetSizer( fgSizer9 );
@@ -673,82 +674,82 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText138 = new wxStaticText( m_pwrFm, wxID_ANY, _("Offset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText138->Wrap( -1 );
-	fgSizer11->Add( m_staticText138, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer11->Add( m_staticText138, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_fmOffset = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_fmOffset->SetMinSize( wxSize( 100,-1 ) );
 
-	fgSizer11->Add( m_fmOffset, 0, wxALL|wxEXPAND, 5 );
+	fgSizer11->Add( m_fmOffset, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText1311 = new wxStaticText( m_pwrFm, wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1311->Wrap( -1 );
-	fgSizer11->Add( m_staticText1311, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer11->Add( m_staticText1311, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText141 = new wxStaticText( m_pwrFm, wxID_ANY, _("Amplitude:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText141->Wrap( -1 );
-	fgSizer11->Add( m_staticText141, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer11->Add( m_staticText141, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_fmAmplitude = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer11->Add( m_fmAmplitude, 0, wxALL|wxEXPAND, 5 );
+	fgSizer11->Add( m_fmAmplitude, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText1321 = new wxStaticText( m_pwrFm, wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1321->Wrap( -1 );
-	fgSizer11->Add( m_staticText1321, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer11->Add( m_staticText1321, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText151 = new wxStaticText( m_pwrFm, wxID_ANY, _("Carrier frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText151->Wrap( -1 );
-	fgSizer11->Add( m_staticText151, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer11->Add( m_staticText151, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_fmFcarrier = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer11->Add( m_fmFcarrier, 0, wxALL|wxEXPAND, 5 );
+	fgSizer11->Add( m_fmFcarrier, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText1331 = new wxStaticText( m_pwrFm, wxID_ANY, _("Hertz"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1331->Wrap( -1 );
-	fgSizer11->Add( m_staticText1331, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer11->Add( m_staticText1331, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText161 = new wxStaticText( m_pwrFm, wxID_ANY, _("Modulation index:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText161->Wrap( -1 );
-	fgSizer11->Add( m_staticText161, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer11->Add( m_staticText161, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_fmModIndex = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer11->Add( m_fmModIndex, 0, wxALL|wxEXPAND, 5 );
+	fgSizer11->Add( m_fmModIndex, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText1341 = new wxStaticText( m_pwrFm, wxID_ANY, _("-"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1341->Wrap( -1 );
-	fgSizer11->Add( m_staticText1341, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer11->Add( m_staticText1341, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText171 = new wxStaticText( m_pwrFm, wxID_ANY, _("Signal frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText171->Wrap( -1 );
-	fgSizer11->Add( m_staticText171, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer11->Add( m_staticText171, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_fmFsignal = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer11->Add( m_fmFsignal, 0, wxALL|wxEXPAND, 5 );
+	fgSizer11->Add( m_fmFsignal, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText1351 = new wxStaticText( m_pwrFm, wxID_ANY, _("Hertz"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1351->Wrap( -1 );
-	fgSizer11->Add( m_staticText1351, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer11->Add( m_staticText1351, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText181 = new wxStaticText( m_pwrFm, wxID_ANY, _("Carrier phase:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText181->Wrap( -1 );
-	fgSizer11->Add( m_staticText181, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer11->Add( m_staticText181, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_fmPhaseC = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer11->Add( m_fmPhaseC, 0, wxALL|wxEXPAND, 5 );
+	fgSizer11->Add( m_fmPhaseC, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText1361 = new wxStaticText( m_pwrFm, wxID_ANY, _("degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1361->Wrap( -1 );
-	fgSizer11->Add( m_staticText1361, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer11->Add( m_staticText1361, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText201 = new wxStaticText( m_pwrFm, wxID_ANY, _("Signal phase:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText201->Wrap( -1 );
-	fgSizer11->Add( m_staticText201, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer11->Add( m_staticText201, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_fmPhaseS = new wxTextCtrl( m_pwrFm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer11->Add( m_fmPhaseS, 0, wxALL|wxEXPAND, 5 );
+	fgSizer11->Add( m_fmPhaseS, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText1371 = new wxStaticText( m_pwrFm, wxID_ANY, _("degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1371->Wrap( -1 );
-	fgSizer11->Add( m_staticText1371, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer11->Add( m_staticText1371, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	m_pwrFm->SetSizer( fgSizer11 );
@@ -764,71 +765,71 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText1381 = new wxStaticText( m_pwrAm, wxID_ANY, _("Amplitude:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1381->Wrap( -1 );
-	fgSizer12->Add( m_staticText1381, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer12->Add( m_staticText1381, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_amAmplitude = new wxTextCtrl( m_pwrAm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_amAmplitude->SetMinSize( wxSize( 100,-1 ) );
 
-	fgSizer12->Add( m_amAmplitude, 0, wxALL|wxEXPAND, 5 );
+	fgSizer12->Add( m_amAmplitude, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText13111 = new wxStaticText( m_pwrAm, wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13111->Wrap( -1 );
-	fgSizer12->Add( m_staticText13111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer12->Add( m_staticText13111, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText1411 = new wxStaticText( m_pwrAm, wxID_ANY, _("Offset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1411->Wrap( -1 );
-	fgSizer12->Add( m_staticText1411, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer12->Add( m_staticText1411, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_amOffset = new wxTextCtrl( m_pwrAm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer12->Add( m_amOffset, 0, wxALL|wxEXPAND, 5 );
+	fgSizer12->Add( m_amOffset, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText13211 = new wxStaticText( m_pwrAm, wxID_ANY, _("Volts/Amps"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13211->Wrap( -1 );
-	fgSizer12->Add( m_staticText13211, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer12->Add( m_staticText13211, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText1511 = new wxStaticText( m_pwrAm, wxID_ANY, _("Modulating frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1511->Wrap( -1 );
-	fgSizer12->Add( m_staticText1511, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer12->Add( m_staticText1511, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_amModulatingFreq = new wxTextCtrl( m_pwrAm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer12->Add( m_amModulatingFreq, 0, wxALL|wxEXPAND, 5 );
+	fgSizer12->Add( m_amModulatingFreq, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText13311 = new wxStaticText( m_pwrAm, wxID_ANY, _("Hertz"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13311->Wrap( -1 );
-	fgSizer12->Add( m_staticText13311, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer12->Add( m_staticText13311, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText1611 = new wxStaticText( m_pwrAm, wxID_ANY, _("Carrier frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1611->Wrap( -1 );
-	fgSizer12->Add( m_staticText1611, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer12->Add( m_staticText1611, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_amCarrierFreq = new wxTextCtrl( m_pwrAm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer12->Add( m_amCarrierFreq, 0, wxALL|wxEXPAND, 5 );
+	fgSizer12->Add( m_amCarrierFreq, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText13411 = new wxStaticText( m_pwrAm, wxID_ANY, _("Hertz"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13411->Wrap( -1 );
-	fgSizer12->Add( m_staticText13411, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer12->Add( m_staticText13411, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText1711 = new wxStaticText( m_pwrAm, wxID_ANY, _("Signal delay:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1711->Wrap( -1 );
-	fgSizer12->Add( m_staticText1711, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer12->Add( m_staticText1711, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_amSignalDelay = new wxTextCtrl( m_pwrAm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer12->Add( m_amSignalDelay, 0, wxALL|wxEXPAND, 5 );
+	fgSizer12->Add( m_amSignalDelay, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText13511 = new wxStaticText( m_pwrAm, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13511->Wrap( -1 );
-	fgSizer12->Add( m_staticText13511, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer12->Add( m_staticText13511, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText1811 = new wxStaticText( m_pwrAm, wxID_ANY, _("Carrier phase:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1811->Wrap( -1 );
-	fgSizer12->Add( m_staticText1811, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer12->Add( m_staticText1811, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_amPhase = new wxTextCtrl( m_pwrAm, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer12->Add( m_amPhase, 0, wxALL|wxEXPAND, 5 );
+	fgSizer12->Add( m_amPhase, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText13611 = new wxStaticText( m_pwrAm, wxID_ANY, _("degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13611->Wrap( -1 );
-	fgSizer12->Add( m_staticText13611, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer12->Add( m_staticText13611, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	m_pwrAm->SetSizer( fgSizer12 );
@@ -848,55 +849,55 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText27111 = new wxStaticText( m_pwrRandom, wxID_ANY, _("Type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText27111->Wrap( -1 );
-	fgSizer13->Add( m_staticText27111, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer13->Add( m_staticText27111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxString m_rnTypeChoices[] = { _("Uniform"), _("Gaussian"), _("Exponential"), _("Poisson") };
 	int m_rnTypeNChoices = sizeof( m_rnTypeChoices ) / sizeof( wxString );
 	m_rnType = new wxChoice( m_pwrRandom, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_rnTypeNChoices, m_rnTypeChoices, 0 );
 	m_rnType->SetSelection( 0 );
-	fgSizer13->Add( m_rnType, 0, wxALL|wxEXPAND, 5 );
+	fgSizer13->Add( m_rnType, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 
 	fgSizer13->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_staticText26711 = new wxStaticText( m_pwrRandom, wxID_ANY, _("Individual value duration:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText26711->Wrap( -1 );
-	fgSizer13->Add( m_staticText26711, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer13->Add( m_staticText26711, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_rnTS = new wxTextCtrl( m_pwrRandom, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer13->Add( m_rnTS, 0, wxALL|wxEXPAND, 5 );
+	fgSizer13->Add( m_rnTS, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText262111 = new wxStaticText( m_pwrRandom, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText262111->Wrap( -1 );
-	fgSizer13->Add( m_staticText262111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer13->Add( m_staticText262111, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticText28111 = new wxStaticText( m_pwrRandom, wxID_ANY, _("Time delay:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText28111->Wrap( -1 );
-	fgSizer13->Add( m_staticText28111, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer13->Add( m_staticText28111, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_rnTD = new wxTextCtrl( m_pwrRandom, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer13->Add( m_rnTD, 0, wxALL|wxEXPAND, 5 );
+	fgSizer13->Add( m_rnTD, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText263111 = new wxStaticText( m_pwrRandom, wxID_ANY, _("seconds"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText263111->Wrap( -1 );
-	fgSizer13->Add( m_staticText263111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+	fgSizer13->Add( m_staticText263111, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_rnParam1Text = new wxStaticText( m_pwrRandom, wxID_ANY, _("Range:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rnParam1Text->Wrap( -1 );
-	fgSizer13->Add( m_rnParam1Text, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer13->Add( m_rnParam1Text, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_rnParam1 = new wxTextCtrl( m_pwrRandom, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer13->Add( m_rnParam1, 0, wxALL|wxEXPAND, 5 );
+	fgSizer13->Add( m_rnParam1, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 
 	fgSizer13->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_rnParam2Text = new wxStaticText( m_pwrRandom, wxID_ANY, _("Offset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rnParam2Text->Wrap( -1 );
-	fgSizer13->Add( m_rnParam2Text, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer13->Add( m_rnParam2Text, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_rnParam2 = new wxTextCtrl( m_pwrRandom, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer13->Add( m_rnParam2, 0, wxALL|wxEXPAND, 5 );
+	fgSizer13->Add( m_rnParam2, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 
 	fgSizer13->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -965,6 +966,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	this->SetSizer( bSizer1 );
 	this->Layout();
+	bSizer1->Fit( this );
 
 	this->Centre( wxBOTH );
 
