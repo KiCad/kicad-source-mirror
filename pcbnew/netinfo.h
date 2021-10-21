@@ -41,6 +41,7 @@ class wxPoint;
 class LINE_READER;
 class EDA_DRAW_FRAME;
 class PAD;
+class PCB_TRACK;
 class BOARD;
 class BOARD_ITEM;
 class MSG_PANEL_ITEM;
@@ -57,6 +58,7 @@ class PCB_BASE_FRAME;
 #define LOCAL_RATSNEST_ITEM 0x8000   /* Line between two pads of a single footprint. */
 
 DECL_VEC_FOR_SWIG( PADS_VEC, PAD* )
+DECL_VEC_FOR_SWIG( TRACKS_VEC, PCB_TRACK* )
 
 /**
  * Handle the data for a net.
