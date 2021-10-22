@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-22 20:01+0200\n"
+"POT-Creation-Date: 2021-10-22 12:32-0700\n"
 "PO-Revision-Date: 2021-10-22 20:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -323,7 +323,7 @@ msgstr "Nom du fichier Image 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:681
 #: common/eda_base_frame.cpp:1051 common/eda_base_frame.cpp:1056
-#: pcbnew/plugins/altium/altium_pcb.cpp:1455
+#: pcbnew/plugins/altium/altium_pcb.cpp:1453
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "Autorisations requises insuffisantes pour enregistrer le fichier '%s'."
@@ -750,7 +750,7 @@ msgstr "Incrément de rotation :"
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:152
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:59
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:347
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1342
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1350
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
 msgid "deg"
 msgstr "deg"
@@ -985,11 +985,11 @@ msgstr "Echelle"
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:85
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:111
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:425
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1122
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1148
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1174
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1200
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1310
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1130
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1156
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1182
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1208
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1318
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:61
 #: pcbnew/microwave/microwave_polygon.cpp:145
 msgid "X:"
@@ -1011,11 +1011,11 @@ msgstr "X:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:325
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:386
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:436
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1133
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1159
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1185
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1211
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1321
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1141
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1167
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1193
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1219
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1329
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:78
 #: pcbnew/microwave/microwave_polygon.cpp:154
 msgid "Y:"
@@ -1150,11 +1150,11 @@ msgstr "mm"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:159
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:109
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:611
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:624
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:730
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:741
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:632
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:645
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:738
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:749
 #: pcbnew/dialogs/dialog_plot_base.cpp:378
 msgid "Inch"
 msgstr "Pouce"
@@ -1436,7 +1436,7 @@ msgstr "inch^3"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:256
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:297
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:650
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:658
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:164
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:119
 msgid "%"
@@ -2141,16 +2141,16 @@ msgstr "Origine de la Grille"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:189
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:239
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:305
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:675
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:695
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:849
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:861
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:873
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:882
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:894
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:906
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:918
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:930
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:683
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:703
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:857
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:869
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:881
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:890
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:902
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:914
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:926
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:938
 #: pcbnew/dialogs/panel_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_display_options_base.cpp:102
 #: pcbnew/dialogs/panel_edit_options_base.cpp:255
@@ -2529,19 +2529,19 @@ msgstr "Hauteur de la page (utilisateur)."
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:118
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:129
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:181
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1129
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1140
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1155
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1166
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1181
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1192
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1207
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1218
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1232
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1255
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1317
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1328
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1493
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1137
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1148
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1163
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1174
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1189
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1200
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1215
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1226
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1240
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1263
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1325
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1336
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1501
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:87
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:116
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:127
@@ -2629,7 +2629,6 @@ msgid "Revision:"
 msgstr "Révision:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:238
-#: eeschema/dialogs/dialog_netlist - new.cpp:385
 #: eeschema/dialogs/dialog_netlist.cpp:385
 msgid "Title:"
 msgstr "Titre:"
@@ -2726,7 +2725,6 @@ msgstr "Prévisualisation"
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:134
 #: eeschema/dialogs/dialog_change_symbols.cpp:156
 #: eeschema/dialogs/dialog_erc.cpp:80 eeschema/dialogs/dialog_erc.cpp:314
-#: eeschema/dialogs/dialog_netlist - new.cpp:269
 #: eeschema/dialogs/dialog_netlist.cpp:269
 #: eeschema/dialogs/dialog_plot_schematic.cpp:113
 #: eeschema/dialogs/dialog_print_using_printer.cpp:148
@@ -2859,7 +2857,7 @@ msgstr "Options Page..."
 #: common/dialogs/dialog_text_entry_base.cpp:33
 #: common/dialogs/dialog_unit_entry_base.cpp:22
 #: kicad/pcm/dialogs/panel_package_base.cpp:55
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1523
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1531
 msgid "MyLabel"
 msgstr "MyLabel"
 
@@ -3389,11 +3387,11 @@ msgstr "Zoom"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:406
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:306
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:82
-#: pcbnew/dialogs/dialog_pad_properties.cpp:925
-#: pcbnew/dialogs/dialog_pad_properties.cpp:934
-#: pcbnew/dialogs/dialog_pad_properties.cpp:944
+#: pcbnew/dialogs/dialog_pad_properties.cpp:927
+#: pcbnew/dialogs/dialog_pad_properties.cpp:936
+#: pcbnew/dialogs/dialog_pad_properties.cpp:946
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:559
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:714
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:722
 #: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1470
 #: pcbnew/widgets/appearance_controls.cpp:699
 #: pcbnew/widgets/appearance_controls.cpp:741 pcbnew/zone.cpp:1406
@@ -3474,7 +3472,7 @@ msgstr "Réinitialiser aux Défauts de Trackpad"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:221
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:406
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:306
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:714 pcbnew/zone.cpp:625
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:722 pcbnew/zone.cpp:625
 #: pcbnew/zone.cpp:1408
 msgid "Solid"
 msgstr "Solide"
@@ -4236,8 +4234,8 @@ msgstr "Rect"
 #: common/eda_shape.cpp:59 common/eda_shape.cpp:537 common/eda_shape.cpp:1439
 #: gerbview/gerber_draw_item.cpp:234
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:114
-#: pcbnew/dialogs/dialog_pad_properties.cpp:716
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2120
+#: pcbnew/dialogs/dialog_pad_properties.cpp:718
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2130
 msgid "Arc"
 msgstr "Arc"
 
@@ -4254,7 +4252,7 @@ msgid "Bezier Curve"
 msgstr "Courbe de Bézier"
 
 #: common/eda_shape.cpp:62 common/eda_shape.cpp:554 common/eda_shape.cpp:1441
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2123
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2133
 msgid "Polygon"
 msgstr "Polygone"
 
@@ -4320,8 +4318,8 @@ msgstr "Hauteur"
 
 #: common/eda_shape.cpp:572 common/eda_shape.cpp:1437
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:82
-#: pcbnew/dialogs/dialog_pad_properties.cpp:704
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2119
+#: pcbnew/dialogs/dialog_pad_properties.cpp:706
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2129
 msgid "Segment"
 msgstr "Segment"
 
@@ -4339,8 +4337,8 @@ msgstr "Largeur de ligne"
 
 #: common/eda_shape.cpp:1442
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:100
-#: pcbnew/dialogs/dialog_pad_properties.cpp:710
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2121
+#: pcbnew/dialogs/dialog_pad_properties.cpp:712
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2131
 msgid "Bezier"
 msgstr "Bézier"
 
@@ -7646,8 +7644,7 @@ msgstr "Ajouter Générateur"
 msgid "Nickname '%s' already in use."
 msgstr "Un nom logique '%s' existe déjà."
 
-#: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist -
-#: new.cpp:709 eeschema/dialogs/dialog_netlist.cpp:683
+#: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:683
 msgid "Generator File"
 msgstr "Fichier Générateur"
 
@@ -8779,8 +8776,8 @@ msgstr "Alignement V (champs seulement) :"
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:25
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:308
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:174
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1245
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1486
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1253
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1494
 msgid "Line width:"
 msgstr "Largeur de ligne:"
 
@@ -9002,7 +8999,7 @@ msgstr "Numéros de pins:"
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:42
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:56
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:341
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1490
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1498
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:71
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:88
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
@@ -9582,33 +9579,27 @@ msgstr "Accepter Nom"
 msgid "Migrate Buses"
 msgstr "Migration des Bus"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:268
 #: eeschema/dialogs/dialog_netlist.cpp:268
 #: eeschema/dialogs/dialog_netlist_base.h:69
 msgid "Export Netlist"
 msgstr "Exporter Netliste"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:300
 #: eeschema/dialogs/dialog_netlist.cpp:300
 msgid "Simulator requires a fully annotated schematic."
 msgstr "La simulation nécessite un schéma complètement numéroté."
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:323
 #: eeschema/dialogs/dialog_netlist.cpp:323
 msgid "Reformat passive symbol values"
 msgstr "Reformater les valeurs des composants passifs"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:324
 #: eeschema/dialogs/dialog_netlist.cpp:324
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
 msgstr "Reformater les valeurs des composants passifs, par exemple 1M-> 1Meg"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:329
 #: eeschema/dialogs/dialog_netlist.cpp:329
 msgid "External simulator command:"
 msgstr "Commande simulateur externe :"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:330
 #: eeschema/dialogs/dialog_netlist.cpp:330
 msgid ""
 "Enter the command line to run spice\n"
@@ -9619,46 +9610,38 @@ msgstr ""
 "Habituellement <path to spice binary> %I\n"
 "%I sera remplacé par le nom réel de la netliste spice</path>"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:344
 #: eeschema/dialogs/dialog_netlist.cpp:344
 msgid "Create Netlist and Run Simulator Command"
 msgstr "Créer la Netlist et Exécuter la commande de simulation"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:395
 #: eeschema/dialogs/dialog_netlist.cpp:395
 msgid "Netlist command:"
 msgstr "Commande netliste:"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:441
 #: eeschema/dialogs/dialog_netlist.cpp:441
 msgid "Save Netlist File"
 msgstr "Sauver Fichier Netliste"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:499
 #: eeschema/dialogs/dialog_netlist.cpp:474
 #, c-format
 msgid "%s Export"
 msgstr "Export %s"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:528
 #: eeschema/dialogs/dialog_netlist.cpp:503
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr ""
 "L'exportation de la net liste nécessite un schéma complètement numéroté."
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:652
 #: eeschema/dialogs/dialog_netlist.cpp:626
 msgid "This plugin already exists."
 msgstr "Ce plugin existe déjà."
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:685
 #: eeschema/dialogs/dialog_netlist.cpp:659
 msgid "You must provide a netlist generator command string"
 msgstr ""
 "Vous devez fournir une ligne de commande pour le générateur de netliste"
 
-#: eeschema/dialogs/dialog_netlist - new.cpp:691
 #: eeschema/dialogs/dialog_netlist.cpp:665
 msgid "You must provide a netlist generator title"
 msgstr "Vous devez fournir un titre pour le générateur de netliste"
@@ -13202,11 +13185,11 @@ msgstr "oui"
 msgid "Converted"
 msgstr "Converti"
 
-#: eeschema/lib_pin.cpp:1055 pcbnew/dialogs/dialog_pad_properties_base.cpp:1445
+#: eeschema/lib_pin.cpp:1055 pcbnew/dialogs/dialog_pad_properties_base.cpp:1453
 msgid "Pos X"
 msgstr "Pos X"
 
-#: eeschema/lib_pin.cpp:1056 pcbnew/dialogs/dialog_pad_properties_base.cpp:1446
+#: eeschema/lib_pin.cpp:1056 pcbnew/dialogs/dialog_pad_properties_base.cpp:1454
 msgid "Pos Y"
 msgstr "Pos Y"
 
@@ -19519,7 +19502,7 @@ msgid "End Position"
 msgstr "Position de Fin"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:319
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1332
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1340
 msgid "Rotation:"
 msgstr "Rotation:"
 
@@ -22223,7 +22206,7 @@ msgstr "Référence schématique de départ pour le dessus."
 #: pcbnew/dialogs/dialog_create_array_base.cpp:182
 #: pcbnew/dialogs/dialog_create_array_base.cpp:306
 #: pcbnew/dialogs/dialog_create_array_base.cpp:313
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1362
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1370
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:48
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:105
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:163
@@ -22845,7 +22828,7 @@ msgid "Reliefs for PTH"
 msgstr "Freins thermiques pour PTH"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:227
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:734
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:742
 msgid "Thermal relief gap:"
 msgstr "Longueur frein thermique:"
 
@@ -23138,7 +23121,7 @@ msgid "Vertical center:"
 msgstr "Centre vertical:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:229
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1222
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1230
 msgid "Radius:"
 msgstr "Rayon:"
 
@@ -23959,7 +23942,7 @@ msgid "Are you sure you want to overwrite the existing file?"
 msgstr "Êtes-vous certain de que vouloir écraser le ficher existant?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:254
-#: pcbnew/plugins/altium/altium_pcb.cpp:1419
+#: pcbnew/plugins/altium/altium_pcb.cpp:1417
 #, c-format
 msgid "Failed to create folder '%s'."
 msgstr "Impossible de créer le répertoire '%s'."
@@ -24306,6 +24289,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:319
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:219
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:588
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:596
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
 msgstr ""
@@ -24315,6 +24299,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:223
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:592
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:600
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
@@ -24324,7 +24309,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:333
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:233
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:602
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:610
 msgid "Pad clearance:"
 msgstr "Isolation pad:"
 
@@ -24340,7 +24325,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:346
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:246
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:615
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:623
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
 msgid "Solder mask clearance:"
 msgstr "Marge vernis épargne:"
@@ -24359,7 +24344,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:359
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:259
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:628
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:636
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:93
 msgid "Solder paste absolute clearance:"
 msgstr "Marge absolue masque pâte à souder:"
@@ -24381,7 +24366,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:372
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:641
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:649
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 msgid "Solder paste relative clearance:"
 msgstr "Marge relative masque pâte à souder:"
@@ -24405,8 +24390,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:388
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:288
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:663
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:687
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:671
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:695
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
 msgstr ""
@@ -24414,7 +24399,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:392
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:292
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:667
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:675
 msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
@@ -24424,7 +24409,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:400
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:300
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:702
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:710
 msgid "Connection to Copper Zones"
 msgstr "Connexion aux Zones de Cuivre"
 
@@ -24440,13 +24425,13 @@ msgstr "Utiliser option zone"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:406
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:306
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:714
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:722
 msgid "Thermal relief"
 msgstr "Frein thermique"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:419
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:319
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:768
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:776
 msgid "Clearance Overrides and Settings"
 msgstr "Forçage d'Isolation et Options"
 
@@ -25232,8 +25217,8 @@ msgid "Arc angle:"
 msgstr "Angle de l'arc:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:165
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1262
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1497
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1270
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1505
 msgid "Filled shape"
 msgstr "Forme remplie"
 
@@ -25656,99 +25641,99 @@ msgstr "Sélectionner un sommet avant d'ajouter le nouveau sommet suivant."
 msgid "Select a corner to delete."
 msgstr "Sélectionner un sommet à supprimer."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:480
+#: pcbnew/dialogs/dialog_pad_properties.cpp:172
 #: pcbnew/dialogs/dialog_pad_properties_base.h:265
 msgid "Pad Properties"
 msgstr "Propriétés du Pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:494
+#: pcbnew/dialogs/dialog_pad_properties.cpp:179
+msgid "Default Pad Properties for Add Pad Tool"
+msgstr "Propriétés par Défaut du Pad pour Ajouter Pad"
+
+#: pcbnew/dialogs/dialog_pad_properties.cpp:490
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
 msgstr "Empreinte %s (%s), %s, orientation %g deg"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:497
+#: pcbnew/dialogs/dialog_pad_properties.cpp:493
 #: pcbnew/dialogs/dialog_text_properties.cpp:236
 msgid "back side (mirrored)"
 msgstr "coté cuivre (miroir)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:498
+#: pcbnew/dialogs/dialog_pad_properties.cpp:493
 #: pcbnew/dialogs/dialog_text_properties.cpp:236
 msgid "front side"
 msgstr "coté dessus"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:506
-msgid "Default Pad Properties for Add Pad Tool"
-msgstr "Propriétés par Défaut du Pad pour Ajouter Pad"
-
-#: pcbnew/dialogs/dialog_pad_properties.cpp:698
+#: pcbnew/dialogs/dialog_pad_properties.cpp:700
 msgid "width"
 msgstr "largeur"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:705
-#: pcbnew/dialogs/dialog_pad_properties.cpp:711
+#: pcbnew/dialogs/dialog_pad_properties.cpp:707
+#: pcbnew/dialogs/dialog_pad_properties.cpp:713
 msgid "from"
 msgstr "de"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:706
-#: pcbnew/dialogs/dialog_pad_properties.cpp:712
+#: pcbnew/dialogs/dialog_pad_properties.cpp:708
+#: pcbnew/dialogs/dialog_pad_properties.cpp:714
 msgid "to"
 msgstr "à"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:717
+#: pcbnew/dialogs/dialog_pad_properties.cpp:719
 msgid "center"
 msgstr "centre"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:718
+#: pcbnew/dialogs/dialog_pad_properties.cpp:720
 msgid "start"
 msgstr "début"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:719
+#: pcbnew/dialogs/dialog_pad_properties.cpp:721
 msgid "angle"
 msgstr "angle"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:724
+#: pcbnew/dialogs/dialog_pad_properties.cpp:726
 msgid "ring"
 msgstr "anneau"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:726
+#: pcbnew/dialogs/dialog_pad_properties.cpp:728
 msgid "circle"
 msgstr "cercle"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:729
+#: pcbnew/dialogs/dialog_pad_properties.cpp:731
 msgid "radius"
 msgstr "rayon"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:735
+#: pcbnew/dialogs/dialog_pad_properties.cpp:737
 #, c-format
 msgid "corners count %d"
 msgstr "nombre de sommets %d"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:920
+#: pcbnew/dialogs/dialog_pad_properties.cpp:922
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 msgid "All copper layers"
 msgstr "Toutes couches cuivre"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:921
+#: pcbnew/dialogs/dialog_pad_properties.cpp:923
 #, c-format
 msgid "%s, %s and connected layers"
 msgstr "%s, %s et couches connectées"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:924
+#: pcbnew/dialogs/dialog_pad_properties.cpp:926
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 msgid "Connected layers only"
 msgstr "Couches connectées seulement"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:929
+#: pcbnew/dialogs/dialog_pad_properties.cpp:931
 #, c-format
 msgid "%s and %s"
 msgstr "%s et %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1229
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1234
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1237
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1242
 msgid "Warning: Pad size is less than zero."
 msgstr "Attention: La taille de la pastille est plus petite que zéro."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1259
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1267
 msgid ""
 "Warning: Pad drill will leave no copper or drill shape and pad shape do not "
 "overlap."
@@ -25756,12 +25741,12 @@ msgstr ""
 "Avertissement : Le perçage du pad ne laisse pas de cuivre ou la forme du "
 "trou et celle du du pad ne se recouvrent pas."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1265
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1273
 msgid "Warning: Negative local clearance values will have no effect."
 msgstr ""
 "Attention: Les valeurs locales négatives d'isolation n’auront aucun effet."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1282
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1290
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
@@ -25769,7 +25754,7 @@ msgstr ""
 "Attention: marge négative du masque de soudure plus grande que des "
 "dimensions de primitive. Les résultats peuvent être surprenants."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1291
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1299
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
@@ -25777,7 +25762,7 @@ msgstr ""
 "Erreur: Isolation négative pour le masque de soudure plus grande que le pad. "
 "Aucun masque de soudure ne sera généré."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1310
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1318
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
@@ -25785,11 +25770,11 @@ msgstr ""
 "Attention: Marges négatives plus grandes que le pad  Aucun masque de pate à "
 "souder ne sera généré."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1317
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1325
 msgid "Error: pad has no layer."
 msgstr "Erreur: le pad n'est sur aucune couche."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1323
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1331
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
@@ -25797,15 +25782,15 @@ msgstr ""
 "Avertissement : les pads traversants devrait normalement avoir une pastille "
 "de cuivre sur au moins une couche."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1329
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1337
 msgid "Too large value for pad delta size."
 msgstr "Valeur trop grande pour delta du pad."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1338
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1346
 msgid "Warning: Through hole pad has no hole."
 msgstr "Attention: Le pad à trou traversant n'a pas de trou."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1345
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1353
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use an SMD pad "
 "instead."
@@ -25813,80 +25798,80 @@ msgstr ""
 "Attention: les pads de connecteurs n'ont pas de pâte à souder. Utiliser les "
 "pads CMS à la place."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1355
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1363
 msgid "Warning: SMD pad has no outer layers."
 msgstr "Erreur: le pad SMS n'est sur aucune couche extérieure."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1364
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1372
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
 msgstr ""
 "Attention: La propriété \"Fiducial\" n'a pas de sens pour des pads à trou "
 "non métallisé."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1370
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1378
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
 msgstr ""
 "Attention: La propriété \"Testpoint\" n'a pas de sens pour des pads à trou "
 "non métallisé."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1376
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1384
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
 msgstr ""
 "Attention: La propriété \"Heatsink\" n'a pas de sens pour des pads à trou "
 "non métallisé."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1382
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1390
 msgid "Warning: Castellated property is for PTH pads."
 msgstr ""
 "Attention: La propriété \"Castellated\" peut être utilisé uniquement pour "
 "pad à trou métallisé."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1388
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1396
 msgid "Warning: BGA property is for SMD pads."
 msgstr ""
 "Attention: La propriété BGA ne peut être utilisée que pour les pads CMS."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1397
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1405
 msgid "Error: Negative corner size."
 msgstr "Erreur: Valeur négative pour la taille du coin."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1399
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1407
 msgid "Warning: Corner size will make pad circular."
 msgstr "Avertissement : La taille du coin rendra le pad circulaire."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1409
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1417
 msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr ""
 "Erreur : La forme personnalisée du pad doit se résumer à un seul polygone."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1415
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1423
 msgid "Pad Properties Errors"
 msgstr "Erreurs sur Paramètres du Pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1416
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1424
 msgid "Pad Properties Warnings"
 msgstr "Avertissements sur Paramètres du Pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1647
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1657
 msgid "Modify pad"
 msgstr "Modifier pad"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2031
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2174
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2208
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2041
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2184
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2218
 msgid "No shape selected"
 msgstr "Pas de forme sélectionnée"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2122
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2132
 msgid "Ring/Circle"
 msgstr "Anneau/Cercle"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2126
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2136
 msgid "Shape type:"
 msgstr "Type de forme:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2126
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:795
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2136
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:803
 msgid "Add Primitive"
 msgstr "Ajouter Primitive"
 
@@ -26174,7 +26159,7 @@ msgstr ""
 "Mettre ces valeurs à 0 pour utiliser les valeurs de l'empreinte parente ou "
 "les valeurs de la netclasse."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:604
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:612
 msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
@@ -26183,7 +26168,7 @@ msgstr ""
 "Si 0, la valeur locale de l'empreinte ou la valeur en Netclasse sera "
 "utilisée."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:617
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:625
 msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
@@ -26192,7 +26177,7 @@ msgstr ""
 "Si 0, la valeur locale de l'empreinte ou la valeur en Netclasse sera "
 "utilisée."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:630
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:638
 msgid ""
 "This is the local clearance between this pad and the solder paste.\n"
 "If 0, the footprint value or the global value is used.\n"
@@ -26207,7 +26192,7 @@ msgstr ""
 "de la valeur d'isolation.\n"
 "Une valeur négative signifie que le masque est plus petit que le pad."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:643
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:651
 msgid ""
 "This is the local clearance ratio in percent between this pad and the solder "
 "paste.\n"
@@ -26224,91 +26209,91 @@ msgstr ""
 "La marge finale est la somme de cette valeur et du rapport de marge\n"
 "Une valeur négative signifie que le masque est plus petit que le pad."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:710
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:718
 msgid "Pad connection:"
 msgstr "Connexion des pads:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:714
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:722
 msgid "From parent footprint"
 msgstr "Du parent de l'empreinte"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:723
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:731
 msgid "Thermal relief spoke width:"
 msgstr "Largeur frein thermique:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:745
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:753
 msgid "Custom pad shape in zone:"
 msgstr "Forme du pad en zone:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:749
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:757
 msgid "Use pad shape"
 msgstr "Utiliser la forme du pad"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:749
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:757
 msgid "Use pad convex hull"
 msgstr "Utiliser l'enveloppe convexe du pad"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:775
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:783
 msgid "Primitives list:"
 msgstr "Liste des primitives:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:779
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:787
 msgid "Note: coordinates are relative to anchor pad, orientation 0."
 msgstr "Note: les coordonnées sont relatives au pad d’ancrage, orientation 0."
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:798
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:806
 msgid "Edit Primitive"
 msgstr "Éditer Primitive"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:801
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:809
 msgid "Duplicate Primitive"
 msgstr "Dupliquer Primitive"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:804
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:812
 msgid "Transform Primitive"
 msgstr "Transformer Primitive"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:810
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:818
 msgid "Delete Primitive"
 msgstr "Supprimer Primitive"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:823
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:831
 msgid "Custom Shape Primitives"
 msgstr "Primitives de la Forme Utilisateur"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:960
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:968
 msgid "Preview pad in sketch mode"
 msgstr "Pad en mode contour"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1118
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1126
 msgid "Start point"
 msgstr "Point de départ"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1144
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1152
 msgid "Control point 1"
 msgstr "Point de controle 1"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1170
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1178
 msgid "Control point 2"
 msgstr "Point de controle 2"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1196
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1204
 msgid "End point"
 msgstr "Position Fin"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1306
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1314
 msgid "Move vector"
 msgstr "Vecteur de dépl"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1355
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1363
 msgid "Scaling factor:"
 msgstr "Facteur d'échelle:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1377
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1385
 msgid "Duplicate:"
 msgstr "Doubles:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1545
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1553
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
 msgstr "Les coordonnées sont relatives au pad d’ancrage, orientation 0,0 deg."
 
@@ -32098,16 +32083,16 @@ msgstr "'%s' n'a pas été complètement  lu."
 msgid "File not found: '%s'."
 msgstr "Fichier non trouvé: '%s'."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:931
+#: pcbnew/plugins/altium/altium_pcb.cpp:929
 #, c-format
 msgid "Duplicate netclass name '%s'."
 msgstr "Nom de Netclasse '%s' dupliqué."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1071
-#: pcbnew/plugins/altium/altium_pcb.cpp:1157
-#: pcbnew/plugins/altium/altium_pcb.cpp:1227
-#: pcbnew/plugins/altium/altium_pcb.cpp:1304
-#: pcbnew/plugins/altium/altium_pcb.cpp:1328
+#: pcbnew/plugins/altium/altium_pcb.cpp:1069
+#: pcbnew/plugins/altium/altium_pcb.cpp:1155
+#: pcbnew/plugins/altium/altium_pcb.cpp:1225
+#: pcbnew/plugins/altium/altium_pcb.cpp:1302
+#: pcbnew/plugins/altium/altium_pcb.cpp:1326
 #, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -32116,31 +32101,31 @@ msgstr ""
 "Cote trouvée sur couche Altium (%d) qui n'a pas d'équivalent dans Kicad. "
 "Placée sur couche Eco1_User ."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1371
-#: pcbnew/plugins/altium/altium_pcb.cpp:1378
+#: pcbnew/plugins/altium/altium_pcb.cpp:1369
+#: pcbnew/plugins/altium/altium_pcb.cpp:1376
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr "Dimension du type %d ignorée (non encore prise en charge)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1420
+#: pcbnew/plugins/altium/altium_pcb.cpp:1418
 msgid "No 3D-models will be imported."
 msgstr "Aucun modèle 3D ne sera importé."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1443
+#: pcbnew/plugins/altium/altium_pcb.cpp:1441
 #, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "Fichier non trouvé: '%s'. Modèle 3D non importé."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1479
+#: pcbnew/plugins/altium/altium_pcb.cpp:1477
 msgid "Loading nets..."
 msgstr "Chargement nets..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1500
+#: pcbnew/plugins/altium/altium_pcb.cpp:1498
 msgid "Loading polygons..."
 msgstr "Chargement polygones..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1513
-#: pcbnew/plugins/altium/altium_pcb.cpp:1764
+#: pcbnew/plugins/altium/altium_pcb.cpp:1511
+#: pcbnew/plugins/altium/altium_pcb.cpp:1762
 #, c-format
 msgid ""
 "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -32149,19 +32134,19 @@ msgstr ""
 "Polygone trouvée sur couche Altium (%d) qui n'a pas d'équivalent dans Kicad. "
 "Placé sur couche Eco1_User."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1635
+#: pcbnew/plugins/altium/altium_pcb.cpp:1633
 msgid "Loading rules..."
 msgstr "Chargement règles..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1667
+#: pcbnew/plugins/altium/altium_pcb.cpp:1665
 msgid "Loading board regions..."
 msgstr "Chargement régions..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1689
+#: pcbnew/plugins/altium/altium_pcb.cpp:1687
 msgid "Loading zones..."
 msgstr "Chargement zones..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1745
+#: pcbnew/plugins/altium/altium_pcb.cpp:1743
 #, c-format
 msgid ""
 "Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -32170,20 +32155,20 @@ msgstr ""
 "Zone trouvée sur couche Altium (%d) qui n'a pas d'équivalent dans Kicad. "
 "Placé sur couche Eco1_User."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1798
+#: pcbnew/plugins/altium/altium_pcb.cpp:1796
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Forme de polygone ignorée type %d (non encore prise en charge)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1812
+#: pcbnew/plugins/altium/altium_pcb.cpp:1810
 msgid "Loading zone fills..."
 msgstr "Chargement du remplissage de zones..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1901
+#: pcbnew/plugins/altium/altium_pcb.cpp:1899
 msgid "Loading arcs..."
 msgstr "Chargement arcs..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1966
+#: pcbnew/plugins/altium/altium_pcb.cpp:1964
 #, c-format
 msgid ""
 "Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -32192,7 +32177,7 @@ msgstr ""
 "Arc de zone interdite sur couche Altium (%d) qui n'a pas d'équivalent dans "
 "Kicad. Placé sur couche Eco1_User à la place."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1985
+#: pcbnew/plugins/altium/altium_pcb.cpp:1983
 #, c-format
 msgid ""
 "Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -32201,23 +32186,23 @@ msgstr ""
 "Arc  sur couche Altium (%d) qui n'a pas d'équivalent dans Kicad. Placé sur "
 "couche Eco1_User à la place."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2065
+#: pcbnew/plugins/altium/altium_pcb.cpp:2063
 msgid "Loading pads..."
 msgstr "Chargement des pads..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2125
+#: pcbnew/plugins/altium/altium_pcb.cpp:2123
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "L’empreinte %s pad %s n’est pas marquée comme multicouche, mais est un pad "
 "traversant."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2145
+#: pcbnew/plugins/altium/altium_pcb.cpp:2143
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "P’empreinte %s, pad '%s’a un trou carré. (non supporté)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2167
+#: pcbnew/plugins/altium/altium_pcb.cpp:2165
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -32226,24 +32211,24 @@ msgstr ""
 "Le pad '%s’de l’empreinte %s a un trou avec rotation de %f degrés. KiCad ne "
 "supporte que des rotations de 90 degrés."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2181
+#: pcbnew/plugins/altium/altium_pcb.cpp:2179
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "L’empreinte %s, pad %s, utilise un trou de type %d inconnu."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2199
+#: pcbnew/plugins/altium/altium_pcb.cpp:2197
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "Le pad '%s’de l'empreinte %s utilise une pile de pads complexe, qui n’est "
 "pas encore pris en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2233
+#: pcbnew/plugins/altium/altium_pcb.cpp:2231
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "L’empreinte %s pad %s utilise une forme de pad inconnue."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2292
+#: pcbnew/plugins/altium/altium_pcb.cpp:2290
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -32252,34 +32237,34 @@ msgstr ""
 "Le pad non cuivre %s sur la couche Altium %d n’a pas d’équivalent KiCad. Mis "
 "sur Eco1_User à la place."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2301
+#: pcbnew/plugins/altium/altium_pcb.cpp:2299
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 "Le pad non-cuivre %s est connecté à un net, ce qui n’est pas pris en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2307
+#: pcbnew/plugins/altium/altium_pcb.cpp:2305
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Le pad non en cuivre %s a un trou, qui n’est pas pris en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2312
+#: pcbnew/plugins/altium/altium_pcb.cpp:2310
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Le pad non-cuivre %s utilise une pile de pad complexe (non encore prise en "
 "charge)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2466
+#: pcbnew/plugins/altium/altium_pcb.cpp:2464
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Le pad %s non cuivre utilise une forme de pad inconnue."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2475
+#: pcbnew/plugins/altium/altium_pcb.cpp:2473
 msgid "Loading vias..."
 msgstr "Chargement des vias..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2516
+#: pcbnew/plugins/altium/altium_pcb.cpp:2514
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -32287,11 +32272,11 @@ msgstr ""
 "La via de la couche %d à %d utilise une couche non-cuivre, qui n’est pas "
 "prise en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2537
+#: pcbnew/plugins/altium/altium_pcb.cpp:2535
 msgid "Loading tracks..."
 msgstr "Chargement des pistes..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2584
+#: pcbnew/plugins/altium/altium_pcb.cpp:2582
 #, c-format
 msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -32300,27 +32285,27 @@ msgstr ""
 "Zone interdite pour pistes trouvée sur couche Altium (%d) qui n'a pas "
 "d'équivalent dans Kicad. Placé sur couche Eco1_User à la place."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2602
-#, c-format
+#: pcbnew/plugins/altium/altium_pcb.cpp:2600
+#, fuzzy, c-format
 msgid ""
-"Track found on an Altium layer (%d) with no KiCadequivalent. It has been "
+"Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
 "Piste trouvée sur une couche d’Altium (%d) sans équivalent KiCad. Elle a été "
 "déplacée vers la couche KiCad Eco1_User."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2643
+#: pcbnew/plugins/altium/altium_pcb.cpp:2641
 msgid "Loading text..."
 msgstr "Chargement des textes..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2654
+#: pcbnew/plugins/altium/altium_pcb.cpp:2652
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 "Ignore le code-barre sur la couche Altium %d (pas pris en charge "
 "actuellement)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2742
+#: pcbnew/plugins/altium/altium_pcb.cpp:2740
 #, c-format
 msgid ""
 "Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -32329,11 +32314,11 @@ msgstr ""
 "Texte sur couche Altium (%d) qui n'a pas d'équivalent dans Kicad. Placé sur "
 "couche Eco1_User à la place."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2828
+#: pcbnew/plugins/altium/altium_pcb.cpp:2826
 msgid "Loading rectangles..."
 msgstr "Chargement rectangles..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2848
+#: pcbnew/plugins/altium/altium_pcb.cpp:2846
 #, c-format
 msgid ""
 "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -34529,15 +34514,15 @@ msgstr "Le groupe est dans un état inconsistant :"
 msgid "Click on new member..."
 msgstr "Cliquer sur le nouveau membre..."
 
-#: pcbnew/tools/pad_tool.cpp:144
+#: pcbnew/tools/pad_tool.cpp:140
 msgid "Paste Pad Properties"
 msgstr "Coller Propriétés du Pad"
 
-#: pcbnew/tools/pad_tool.cpp:260
+#: pcbnew/tools/pad_tool.cpp:255
 msgid "Push Pad Settings"
 msgstr "Exporter Caract. Pads"
 
-#: pcbnew/tools/pad_tool.cpp:317
+#: pcbnew/tools/pad_tool.cpp:312
 #, c-format
 msgid ""
 "Click on pad %s%d\n"
@@ -34546,29 +34531,29 @@ msgstr ""
 "Cliquez sur le pad %s%d\n"
 "Appuyez sur Echap pour annuler ou double-cliquez pour valider"
 
-#: pcbnew/tools/pad_tool.cpp:336 pcbnew/tools/pad_tool.cpp:434
+#: pcbnew/tools/pad_tool.cpp:331 pcbnew/tools/pad_tool.cpp:429
 msgid "Renumber pads"
 msgstr "Renuméroter pads"
 
-#: pcbnew/tools/pad_tool.cpp:538
+#: pcbnew/tools/pad_tool.cpp:533
 msgid "Place pad"
 msgstr "Place pad"
 
-#: pcbnew/tools/pad_tool.cpp:574
+#: pcbnew/tools/pad_tool.cpp:569
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
 msgstr "Mode Edition de Pad.  Appuyez à nouveau sur %s pour sortir."
 
-#: pcbnew/tools/pad_tool.cpp:579
+#: pcbnew/tools/pad_tool.cpp:574
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
 msgstr "Mode Edition de Pad.  Appuyez sur %s pour sortir."
 
-#: pcbnew/tools/pad_tool.cpp:670
+#: pcbnew/tools/pad_tool.cpp:665
 msgid "Edit pad shapes"
 msgstr "Modifier les formes du pad"
 
-#: pcbnew/tools/pad_tool.cpp:803
+#: pcbnew/tools/pad_tool.cpp:798
 msgid "Recombine pads"
 msgstr "Recombiner pads"
 
@@ -36930,11 +36915,6 @@ msgstr "Exécution de remplissage des polygones..."
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-msgid "bitmap2component"
-msgstr "bitmap2component"
-
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -36945,10 +36925,9 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+msgid "bitmap2component"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
@@ -36962,10 +36941,9 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -36975,9 +36953,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
-msgid "kicad"
-msgstr "kicad"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -36992,10 +36970,6 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
-msgid "pcbcalculator"
-msgstr "pcbcalculator"
-
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -37003,11 +36977,6 @@ msgstr "Calculateur pour PCB KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
 msgid "KiCad PCB Editor (Standalone)"
@@ -37020,6 +36989,10 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -37073,6 +37046,12 @@ msgstr "Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
+
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "pcbcalculator"
 
 #~ msgid "OpenGL"
 #~ msgstr "OpenGL"

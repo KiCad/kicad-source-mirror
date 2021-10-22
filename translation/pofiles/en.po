@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-18 12:18-0700\n"
+"POT-Creation-Date: 2021-10-22 12:32-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -14,49 +14,6 @@ msgstr ""
 
 msgid "All Files"
 msgstr "All Files"
-
-#, c-format
-msgid "All supported files (%s)"
-msgstr "All supported files (%s)"
-
-msgid "Available paths:"
-msgstr "Available paths:"
-
-msgid "Configure Paths"
-msgstr "Configure Paths"
-
-msgid "Select 3D Model"
-msgstr "Select 3D Model"
-
-msgid "Scale"
-msgstr "Scale"
-
-msgid "X:"
-msgstr "X:"
-
-msgid "Y:"
-msgstr "Y:"
-
-msgid "Z:"
-msgstr "Z:"
-
-msgid "Rotation"
-msgstr "Rotation"
-
-msgid "Offset"
-msgstr "Offset"
-
-msgid "Opacity"
-msgstr "Opacity"
-
-msgid "Preview"
-msgstr "Preview"
-
-msgid "Enable/disable orthographic projection"
-msgstr "Enable/disable orthographic projection"
-
-msgid "Reload board and 3D models"
-msgstr "Reload board and 3D models"
 
 msgid "Build board outline"
 msgstr "Build board outline"
@@ -124,33 +81,6 @@ msgstr "Net %s\tNetClass %s\tPadName %s"
 msgid "Net %s\tNetClass %s"
 msgstr "Net %s\tNetClass %s"
 
-msgid "Load Raytracing: board"
-msgstr "Load Raytracing: board"
-
-msgid "Load Raytracing: layers"
-msgstr "Load Raytracing: layers"
-
-msgid "Loading 3D models..."
-msgstr "Loading 3D models..."
-
-#, c-format
-msgid "Reload time %.3f s"
-msgstr "Reload time %.3f s"
-
-msgid "Loading..."
-msgstr "Loading…"
-
-#, c-format
-msgid "Rendering time %.3f s"
-msgstr "Rendering time %.3f s"
-
-#, c-format
-msgid "Rendering: %.0f %%"
-msgstr "Rendering: %.0f %%"
-
-msgid "Rendering: Post processing shader"
-msgstr "Rendering: Post processing shader"
-
 msgid "Load OpenGL: board"
 msgstr "Load OpenGL: board"
 
@@ -164,9 +94,36 @@ msgstr "Load OpenGL: layers"
 msgid "Load OpenGL layer %d"
 msgstr "Load OpenGL layer %d"
 
+msgid "Loading 3D models..."
+msgstr "Loading 3D models..."
+
+#, c-format
+msgid "Reload time %.3f s"
+msgstr "Reload time %.3f s"
+
 #, c-format
 msgid "Loading %s..."
 msgstr "Loading %s..."
+
+msgid "Loading..."
+msgstr "Loading…"
+
+msgid "Load Raytracing: board"
+msgstr "Load Raytracing: board"
+
+msgid "Load Raytracing: layers"
+msgstr "Load Raytracing: layers"
+
+#, c-format
+msgid "Rendering time %.3f s"
+msgstr "Rendering time %.3f s"
+
+#, c-format
+msgid "Rendering: %.0f %%"
+msgstr "Rendering: %.0f %%"
+
+msgid "Rendering: Post processing shader"
+msgstr "Rendering: Post processing shader"
 
 msgid "Export Current View as PNG..."
 msgstr "Export Current View as PNG…"
@@ -216,6 +173,224 @@ msgstr "Copy 3D image to clipboard"
 msgid "Render current view using Raytracing"
 msgstr "Render current view using Raytracing"
 
+msgid "KiCad 3D Viewer"
+msgstr "KiCad 3D Viewer"
+
+msgid "General"
+msgstr "General"
+
+msgid "Realtime Renderer"
+msgstr "Realtime Renderer"
+
+msgid "Raytracing Renderer"
+msgstr "Raytracing Renderer"
+
+msgid "Colors"
+msgstr "Colors"
+
+msgid "3D Image File Name"
+msgstr "3D Image File Name"
+
+#, c-format
+msgid "Insufficient permissions to save file '%s'."
+msgstr "Insufficient permissions to save file '%s'."
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Failed to copy image to clipboard"
+msgstr "Failed to copy image to clipboard"
+
+msgid "Can't save file"
+msgstr "Can't save file"
+
+msgid "Center pivot rotation"
+msgstr "Center pivot rotation"
+
+msgid "Center pivot rotation (middle mouse click)"
+msgstr "Center pivot rotation (middle mouse click)"
+
+msgid "Rotate X Clockwise"
+msgstr "Rotate X Clockwise"
+
+msgid "Rotate X Counterclockwise"
+msgstr "Rotate X Counterclockwise"
+
+msgid "Rotate Y Clockwise"
+msgstr "Rotate Y Clockwise"
+
+msgid "Rotate Y Counterclockwise"
+msgstr "Rotate Y Counterclockwise"
+
+msgid "Rotate Z Clockwise"
+msgstr "Rotate Z Clockwise"
+
+msgid "Rotate Z Counterclockwise"
+msgstr "Rotate Z Counterclockwise"
+
+msgid "Move board Left"
+msgstr "Move board Left"
+
+msgid "Move board Right"
+msgstr "Move board Right"
+
+msgid "Move board Up"
+msgstr "Move board Up"
+
+msgid "Move board Down"
+msgstr "Move board Down"
+
+msgid "Home view"
+msgstr "Home view"
+
+msgid "Reset view"
+msgstr "Reset view"
+
+msgid "Flip Board"
+msgstr "Flip Board"
+
+msgid "Flip the board view"
+msgstr "Flip the board view"
+
+msgid "Toggle orthographic projection"
+msgstr "Toggle orthographic projection"
+
+msgid "Enable/disable orthographic projection"
+msgstr "Enable/disable orthographic projection"
+
+msgid "View Front"
+msgstr "View Front"
+
+msgid "View Back"
+msgstr "View Back"
+
+msgid "View Left"
+msgstr "View Left"
+
+msgid "View Right"
+msgstr "View Right"
+
+msgid "View Top"
+msgstr "View Top"
+
+msgid "View Bottom"
+msgstr "View Bottom"
+
+msgid "No 3D Grid"
+msgstr "No 3D Grid"
+
+msgid "3D Grid 10mm"
+msgstr "3D Grid 10mm"
+
+msgid "3D Grid 5mm"
+msgstr "3D Grid 5mm"
+
+msgid "3D Grid 2.5mm"
+msgstr "3D Grid 2.5mm"
+
+msgid "3D Grid 1mm"
+msgstr "3D Grid 1mm"
+
+msgid "Render Realistic Materials"
+msgstr "Render Realistic Materials"
+
+msgid "Use all material properties from each 3D model file"
+msgstr "Use all material properties from each 3D model file"
+
+msgid "Render Solid Colors"
+msgstr "Render Solid Colors"
+
+msgid "Use only the diffuse color property from model 3D model file"
+msgstr "Use only the diffuse color property from model 3D model file"
+
+msgid "Render CAD Colors"
+msgstr "Render CAD Colors"
+
+msgid "Use a CAD color style based on the diffuse color of the material"
+msgstr "Use a CAD color style based on the diffuse color of the material"
+
+msgid "Toggle Through Hole 3D models"
+msgstr "Toggle Through Hole 3D models"
+
+msgid "Toggle 3D models for 'Through hole' type components"
+msgstr "Toggle 3D models for 'Through hole' type components"
+
+msgid "Toggle SMD 3D models"
+msgstr "Toggle SMD 3D models"
+
+msgid "Toggle 3D models for 'Surface mount' type components"
+msgstr "Toggle 3D models for 'Surface mount' type components"
+
+msgid "Toggle Other 3D models"
+msgstr "Toggle Other 3D models"
+
+msgid "Toggle 3D models for 'Other' type components"
+msgstr "Toggle 3D models for 'Other' type components"
+
+msgid "Show Model Bounding Boxes"
+msgstr "Show Model Bounding Boxes"
+
+msgid "Toggle realistic mode"
+msgstr "Toggle realistic mode"
+
+msgid "Toggle board body display"
+msgstr "Toggle board body display"
+
+msgid "Show 3D Axis"
+msgstr "Show 3D Axis"
+
+msgid "Toggle zone display"
+msgstr "Toggle zone display"
+
+msgid "Toggle adhesive display"
+msgstr "Toggle adhesive display"
+
+msgid "Toggle display of adhesive layers"
+msgstr "Toggle display of adhesive layers"
+
+msgid "Toggle silkscreen display"
+msgstr "Toggle silkscreen display"
+
+msgid "Toggle display of silkscreen layers"
+msgstr "Toggle display of silkscreen layers"
+
+msgid "Toggle solder mask display"
+msgstr "Toggle solder mask display"
+
+msgid "Toggle display of solder mask layers"
+msgstr "Toggle display of solder mask layers"
+
+msgid "Toggle solder paste display"
+msgstr "Toggle solder paste display"
+
+msgid "Toggle display of solder paste layers"
+msgstr "Toggle display of solder paste layers"
+
+msgid "Toggle comments display"
+msgstr "Toggle comments display"
+
+msgid "Toggle display of comments and drawings layers"
+msgstr "Toggle display of comments and drawings layers"
+
+msgid "Toggle ECO display"
+msgstr "Toggle ECO display"
+
+msgid "Toggle display of ECO layers"
+msgstr "Toggle display of ECO layers"
+
+#, c-format
+msgid "All supported files (%s)"
+msgstr "All supported files (%s)"
+
+msgid "Available paths:"
+msgstr "Available paths:"
+
+msgid "Configure Paths"
+msgstr "Configure Paths"
+
+msgid "Select 3D Model"
+msgstr "Select 3D Model"
+
 msgid "Environment Colors"
 msgstr "Environment Colors"
 
@@ -261,6 +436,12 @@ msgstr "Board Layers"
 msgid "Show silkscreen layers"
 msgstr "Show silkscreen layers"
 
+msgid "Clip silkscreen at solder mask edges"
+msgstr "Clip silkscreen at solder mask edges"
+
+msgid "Clip silkscreen at via annuli"
+msgstr "Clip silkscreen at via annuli"
+
 msgid "Show solder mask layers"
 msgstr "Show solder mask layers"
 
@@ -273,8 +454,8 @@ msgstr "Show adhesive layers"
 msgid "User Layers (not shown in realistic mode)"
 msgstr "User Layers (not shown in realistic mode)"
 
-msgid "Show comments and drawings layers"
-msgstr "Show comments and drawings layers"
+msgid "Show comment and drawing layers"
+msgstr "Show comment and drawing layers"
 
 msgid "Show ECO layers"
 msgstr "Show ECO layers"
@@ -290,12 +471,6 @@ msgstr "Show board body"
 
 msgid "Show filled areas in zones"
 msgstr "Show filled areas in zones"
-
-msgid "Subtract soldermask from silkscreen"
-msgstr "Subtract soldermask from silkscreen"
-
-msgid "Clip silkscreen at via annuli"
-msgstr "Clip silkscreen at via annuli"
 
 msgid "Use bare copper color for unplated copper"
 msgstr "Use bare copper color for unplated copper"
@@ -318,8 +493,8 @@ msgstr "CAD colors"
 msgid "Camera Options"
 msgstr "Camera Options"
 
-msgid "Rotation Increment:"
-msgstr "Rotation Increment:"
+msgid "Rotation increment:"
+msgstr "Rotation increment:"
 
 msgid "deg"
 msgstr "deg"
@@ -478,204 +653,32 @@ msgstr "Light 4:"
 msgid "Light 8:"
 msgstr "Light 8:"
 
-msgid "KiCad 3D Viewer"
-msgstr "KiCad 3D Viewer"
+msgid "Scale"
+msgstr "Scale"
 
-msgid "Display Options"
-msgstr "Display Options"
+msgid "X:"
+msgstr "X:"
 
-msgid "OpenGL"
-msgstr "OpenGL"
+msgid "Y:"
+msgstr "Y:"
 
-msgid "Colors"
-msgstr "Colors"
+msgid "Z:"
+msgstr "Z:"
 
-msgid "3D Image File Name"
-msgstr "3D Image File Name"
+msgid "Rotation"
+msgstr "Rotation"
 
-#, c-format
-msgid "Insufficient permissions to save file '%s'."
-msgstr "Insufficient permissions to save file '%s'."
+msgid "Offset"
+msgstr "Offset"
 
-msgid "Error"
-msgstr "Error"
+msgid "Opacity"
+msgstr "Opacity"
 
-msgid "Failed to copy image to clipboard"
-msgstr "Failed to copy image to clipboard"
+msgid "Preview"
+msgstr "Preview"
 
-msgid "Can't save file"
-msgstr "Can't save file"
-
-msgid "Center pivot rotation"
-msgstr "Center pivot rotation"
-
-msgid "Center pivot rotation (middle mouse click)"
-msgstr "Center pivot rotation (middle mouse click)"
-
-msgid "Rotate X Clockwise"
-msgstr "Rotate X Clockwise"
-
-msgid "Rotate X Counterclockwise"
-msgstr "Rotate X Counterclockwise"
-
-msgid "Rotate Y Clockwise"
-msgstr "Rotate Y Clockwise"
-
-msgid "Rotate Y Counterclockwise"
-msgstr "Rotate Y Counterclockwise"
-
-msgid "Rotate Z Clockwise"
-msgstr "Rotate Z Clockwise"
-
-msgid "Rotate Z Counterclockwise"
-msgstr "Rotate Z Counterclockwise"
-
-msgid "Move board Left"
-msgstr "Move board Left"
-
-msgid "Move board Right"
-msgstr "Move board Right"
-
-msgid "Move board Up"
-msgstr "Move board Up"
-
-msgid "Move board Down"
-msgstr "Move board Down"
-
-msgid "Home view"
-msgstr "Home view"
-
-msgid "Reset view"
-msgstr "Reset view"
-
-msgid "Flip Board"
-msgstr "Flip Board"
-
-msgid "Flip the board view"
-msgstr "Flip the board view"
-
-msgid "Toggle orthographic projection"
-msgstr "Toggle orthographic projection"
-
-msgid "View Front"
-msgstr "View Front"
-
-msgid "View Back"
-msgstr "View Back"
-
-msgid "View Left"
-msgstr "View Left"
-
-msgid "View Right"
-msgstr "View Right"
-
-msgid "View Top"
-msgstr "View Top"
-
-msgid "View Bottom"
-msgstr "View Bottom"
-
-msgid "No 3D Grid"
-msgstr "No 3D Grid"
-
-msgid "3D Grid 10mm"
-msgstr "3D Grid 10mm"
-
-msgid "3D Grid 5mm"
-msgstr "3D Grid 5mm"
-
-msgid "3D Grid 2.5mm"
-msgstr "3D Grid 2.5mm"
-
-msgid "3D Grid 1mm"
-msgstr "3D Grid 1mm"
-
-msgid "Render Realistic Materials"
-msgstr "Render Realistic Materials"
-
-msgid "Use all material properties from each 3D model file"
-msgstr "Use all material properties from each 3D model file"
-
-msgid "Render Solid Colors"
-msgstr "Render Solid Colors"
-
-msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Use only the diffuse color property from model 3D model file"
-
-msgid "Render CAD Colors"
-msgstr "Render CAD Colors"
-
-msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr "Use a CAD color style based on the diffuse color of the material"
-
-msgid "Toggle Through Hole 3D models"
-msgstr "Toggle Through Hole 3D models"
-
-msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "Toggle 3D models for 'Through hole' type components"
-
-msgid "Toggle SMD 3D models"
-msgstr "Toggle SMD 3D models"
-
-msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "Toggle 3D models for 'Surface mount' type components"
-
-msgid "Toggle Other 3D models"
-msgstr "Toggle Other 3D models"
-
-msgid "Toggle 3D models for 'Other' type components"
-msgstr "Toggle 3D models for 'Other' type components"
-
-msgid "Show Model Bounding Boxes"
-msgstr "Show Model Bounding Boxes"
-
-msgid "Toggle realistic mode"
-msgstr "Toggle realistic mode"
-
-msgid "Toggle board body display"
-msgstr "Toggle board body display"
-
-msgid "Show 3D Axis"
-msgstr "Show 3D Axis"
-
-msgid "Toggle zone display"
-msgstr "Toggle zone display"
-
-msgid "Toggle adhesive display"
-msgstr "Toggle adhesive display"
-
-msgid "Toggle display of adhesive layers"
-msgstr "Toggle display of adhesive layers"
-
-msgid "Toggle silkscreen display"
-msgstr "Toggle silkscreen display"
-
-msgid "Toggle display of silkscreen layers"
-msgstr "Toggle display of silkscreen layers"
-
-msgid "Toggle solder mask display"
-msgstr "Toggle solder mask display"
-
-msgid "Toggle display of solder mask layers"
-msgstr "Toggle display of solder mask layers"
-
-msgid "Toggle solder paste display"
-msgstr "Toggle solder paste display"
-
-msgid "Toggle display of solder paste layers"
-msgstr "Toggle display of solder paste layers"
-
-msgid "Toggle comments display"
-msgstr "Toggle comments display"
-
-msgid "Toggle display of comments and drawings layers"
-msgstr "Toggle display of comments and drawings layers"
-
-msgid "Toggle ECO display"
-msgstr "Toggle ECO display"
-
-msgid "Toggle display of ECO layers"
-msgstr "Toggle display of ECO layers"
+msgid "Reload board and 3D models"
+msgstr "Reload board and 3D models"
 
 msgid "mm"
 msgstr "mm"
@@ -6221,9 +6224,6 @@ msgstr "Margin between the pin name position and the symbol body."
 msgid "units"
 msgstr "units"
 
-msgid "General"
-msgstr "General"
-
 msgid "Footprint filters:"
 msgstr "Footprint filters:"
 
@@ -8341,6 +8341,9 @@ msgid ""
 msgstr ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
+
+msgid "Display Options"
+msgstr "Display Options"
 
 msgid "Editing Options"
 msgstr "Editing Options"
@@ -17919,6 +17922,12 @@ msgstr "Select a corner to add the new corner after."
 msgid "Select a corner to delete."
 msgstr "Select a corner to delete."
 
+msgid "Pad Properties"
+msgstr "Pad Properties"
+
+msgid "Default Pad Properties for Add Pad Tool"
+msgstr "Default Pad Properties for Add Pad Tool"
+
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
 msgstr "Footprint %s (%s), %s, rotated %g deg"
@@ -18373,9 +18382,6 @@ msgstr "Delete Primitive"
 msgid "Custom Shape Primitives"
 msgstr "Custom Shape Primitives"
 
-msgid "Footprint R1 (300K), back side (mirrored), rotated 180.0º"
-msgstr "Footprint R1 (300K), back side (mirrored), rotated 180.0º"
-
 msgid "Preview pad in sketch mode"
 msgstr "Preview pad in sketch mode"
 
@@ -18402,9 +18408,6 @@ msgstr "Duplicate:"
 
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
 msgstr "Coordinates are relative to anchor pad, rotated 0.0 deg."
-
-msgid "Pad Properties"
-msgstr "Pad Properties"
 
 msgid "Pad Custom Shape Geometry Transform"
 msgstr "Pad Custom Shape Geometry Transform"
@@ -18559,6 +18562,9 @@ msgid ""
 msgstr ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
+
+msgid "Subtract soldermask from silkscreen"
+msgstr "Subtract soldermask from silkscreen"
 
 msgid "Remove silkscreen from areas without soldermask"
 msgstr "Remove silkscreen from areas without soldermask"
@@ -20929,6 +20935,9 @@ msgstr "Differential uncoupled length too long"
 msgid "Footprint type doesn't match footprint pads"
 msgstr "Footprint type doesn't match footprint pads"
 
+msgid "Through hole pad has no hole"
+msgstr "Through hole pad has no hole"
+
 #, c-format
 msgid "Rule: %s"
 msgstr "Rule: %s"
@@ -21475,6 +21484,10 @@ msgstr "Expected \"SMD\" type but set to \"%s\""
 #, c-format
 msgid "Expected \"Other\" type but set to \"%s\""
 msgstr "Expected \"Other\" type but set to \"%s\""
+
+#, c-format
+msgid "(pad \"%s\")"
+msgstr "(pad \"%s\")"
 
 msgid "Clearance Override"
 msgstr "Clearance Override"
@@ -22870,10 +22883,10 @@ msgstr ""
 
 #, c-format
 msgid ""
-"Track found on an Altium layer (%d) with no KiCadequivalent. It has been "
+"Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Track found on an Altium layer (%d) with no KiCadequivalent. It has been "
+"Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 
 msgid "Loading text..."
@@ -26473,6 +26486,26 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Show comments and drawings layers"
+#~ msgstr "Show comments and drawings layers"
+
+#~ msgid "Rotation Increment:"
+#~ msgstr "Rotation Increment:"
+
+#~ msgid "OpenGL"
+#~ msgstr "OpenGL"
+
+#~ msgid "Footprint R1 (300K), back side (mirrored), rotated 180.0º"
+#~ msgstr "Footprint R1 (300K), back side (mirrored), rotated 180.0º"
+
+#, c-format
+#~ msgid ""
+#~ "Track found on an Altium layer (%d) with no KiCadequivalent. It has been "
+#~ "moved to KiCad layer Eco1_User."
+#~ msgstr ""
+#~ "Track found on an Altium layer (%d) with no KiCadequivalent. It has been "
+#~ "moved to KiCad layer Eco1_User."
 
 #~ msgid "Polyline"
 #~ msgstr "Polyline"
