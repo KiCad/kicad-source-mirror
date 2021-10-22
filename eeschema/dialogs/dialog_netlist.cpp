@@ -300,7 +300,10 @@ void NETLIST_DIALOG::OnRunExternSpiceCommand( wxCommandEvent& event )
     if( m_Parent->ReadyToNetlist( _( "Simulator requires a fully annotated schematic." ) ) )
     {
         m_Parent->WriteNetListFile( NET_TYPE_SPICE, fn.GetFullPath(), netlist_opt, nullptr );
-        wxExecute( commandLine, wxEXEC_ASYNC );
+        commandLine.Trim( true ).Trim( false );
+
+        if( !commandLine.IsEmpty() )
+            wxExecute( commandLine, wxEXEC_ASYNC );
     }
 }
 
