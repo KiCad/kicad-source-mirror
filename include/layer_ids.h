@@ -191,8 +191,8 @@ enum GAL_LAYER_ID: int
     LAYER_VIA_BBLIND         = GAL_LAYER_ID_START +  2, ///< to draw blind/buried vias
     LAYER_VIA_THROUGH        = GAL_LAYER_ID_START +  3, ///< to draw usual through hole vias
     LAYER_NON_PLATEDHOLES    = GAL_LAYER_ID_START +  4, ///< handle color for not plated holes (holes, not pads)
-    LAYER_MOD_TEXT_FR        = GAL_LAYER_ID_START +  5,
-    LAYER_MOD_TEXT_BK        = GAL_LAYER_ID_START +  6,
+    LAYER_MOD_TEXT           = GAL_LAYER_ID_START +  5,
+//  LAYER_MOD_TEXT_BK deprecated                  +  6,
     LAYER_MOD_TEXT_INVISIBLE = GAL_LAYER_ID_START +  7, ///< text marked as invisible
     LAYER_ANCHOR             = GAL_LAYER_ID_START +  8, ///< anchor of items having an anchor point (texts, footprints)
     LAYER_PAD_FR             = GAL_LAYER_ID_START +  9, ///< smd pads, front layer

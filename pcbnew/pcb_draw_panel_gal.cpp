@@ -75,8 +75,7 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     User_8, ZONE_LAYER_FOR( User_8 ),
     User_9, ZONE_LAYER_FOR( User_9 ),
 
-    LAYER_MOD_TEXT_FR,
-    LAYER_MOD_REFERENCES, LAYER_MOD_VALUES,
+    LAYER_MOD_TEXT, LAYER_MOD_REFERENCES, LAYER_MOD_VALUES,
 
     LAYER_RATSNEST,
     LAYER_ANCHOR,
@@ -134,7 +133,6 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     B_CrtYd, ZONE_LAYER_FOR( B_CrtYd ),
     B_Fab, ZONE_LAYER_FOR( B_Fab ),
 
-    LAYER_MOD_TEXT_BK,
     LAYER_DRAWINGSHEET
 };
 
@@ -607,12 +605,10 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
 
     // Front footprints
     m_view->SetRequired( LAYER_PAD_FR, F_Cu );
-    m_view->SetRequired( LAYER_MOD_TEXT_FR, LAYER_MOD_FR );
     m_view->SetRequired( LAYER_PAD_FR_NETNAMES, LAYER_PAD_FR );
 
     // Back footprints
     m_view->SetRequired( LAYER_PAD_BK, B_Cu );
-    m_view->SetRequired( LAYER_MOD_TEXT_BK, LAYER_MOD_BK );
     m_view->SetRequired( LAYER_PAD_BK_NETNAMES, LAYER_PAD_BK );
 
     m_view->SetLayerTarget( LAYER_SELECT_OVERLAY, KIGFX::TARGET_OVERLAY );

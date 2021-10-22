@@ -938,8 +938,7 @@ GAL_SET GAL_SET::DefaultVisible()
         LAYER_VIA_BBLIND,
         LAYER_VIA_THROUGH,
         LAYER_NON_PLATEDHOLES,
-        LAYER_MOD_TEXT_FR,
-        LAYER_MOD_TEXT_BK,
+        LAYER_MOD_TEXT,
         // LAYER_MOD_TEXT_INVISIBLE,    // Invisible text hidden by default
         LAYER_ANCHOR,
         LAYER_PAD_FR,

@@ -786,11 +786,11 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
             // 3rd "&&" conditionals handle that.
             valueLayerIsVisible = board->IsLayerVisible( m_value->GetLayer() )
                                   && board->IsElementVisible( LAYER_MOD_VALUES )
-                                  && board->IsElementVisible( LAYER_MOD_TEXT_FR );
+                                  && board->IsElementVisible( LAYER_MOD_TEXT );
 
             refLayerIsVisible = board->IsLayerVisible( m_reference->GetLayer() )
                                 && board->IsElementVisible( LAYER_MOD_REFERENCES )
-                                && board->IsElementVisible( LAYER_MOD_TEXT_FR );
+                                && board->IsElementVisible( LAYER_MOD_TEXT );
         }
 
 

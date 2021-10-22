@@ -160,8 +160,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         setVisibility( LAYER_MOD_BK );
         setVisibility( LAYER_MOD_VALUES );
         setVisibility( LAYER_MOD_REFERENCES );
-        setVisibility( LAYER_MOD_TEXT_FR );
-        setVisibility( LAYER_MOD_TEXT_BK );
+        setVisibility( LAYER_MOD_TEXT );
         setVisibility( LAYER_MOD_TEXT_INVISIBLE );
         setVisibility( LAYER_PADS );
         setVisibility( LAYER_PAD_FR );
@@ -209,7 +208,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         // be drawn on some other (technical) layers.
         const int alwaysEnabled[] =
                 {
-                    LAYER_MOD_TEXT_FR, LAYER_MOD_TEXT_BK, LAYER_MOD_FR, LAYER_MOD_BK,
+                    LAYER_MOD_TEXT, LAYER_MOD_FR, LAYER_MOD_BK,
                     LAYER_MOD_VALUES, LAYER_MOD_REFERENCES, LAYER_TRACKS, LAYER_ZONES, LAYER_PADS,
                     LAYER_VIAS, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND,
                     LAYER_PAD_FR, LAYER_PAD_BK, LAYER_PADS_TH

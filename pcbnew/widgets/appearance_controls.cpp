@@ -342,7 +342,7 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR( _( "Through-hole Pads" ),LAYER_PADS_TH,            _( "Show through-hole pads" ) ),
     RR( _( "Values" ),           LAYER_MOD_VALUES,         _( "Show footprint values" ) ),
     RR( _( "References" ),       LAYER_MOD_REFERENCES,     _( "Show footprint references" ) ),
-    RR( _( "Footprint Text" ),   LAYER_MOD_TEXT_FR,        _( "Show all footprint text" ) ),
+    RR( _( "Footprint Text" ),   LAYER_MOD_TEXT,           _( "Show all footprint text" ) ),
     RR( _( "Hidden Text" ),      LAYER_MOD_TEXT_INVISIBLE, _( "Show footprint text marked as invisible" ) ),
     RR(),
     RR(),
@@ -366,7 +366,7 @@ static std::set<int> s_allowedInFpEditor =
             LAYER_PADS_TH,
             LAYER_MOD_VALUES,
             LAYER_MOD_REFERENCES,
-            LAYER_MOD_TEXT_FR,
+            LAYER_MOD_TEXT,
             LAYER_MOD_TEXT_INVISIBLE,
             LAYER_GRID
         };
@@ -1937,7 +1937,7 @@ void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool i
         syncLayerPresetSelection();
         break;
 
-    case LAYER_MOD_TEXT_FR:
+    case LAYER_MOD_TEXT:
         // Because Footprint Text is a meta-control that also can disable values/references,
         // drag them along here so that the user is less likely to be confused.
         if( isFinal )
@@ -1957,8 +1957,8 @@ void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool i
         // meta-control is disabled, we should put it back on.
         if( isVisible )
         {
-            onObjectVisibilityChanged( LAYER_MOD_TEXT_FR, isVisible, false );
-            m_objectSettingsMap[LAYER_MOD_TEXT_FR]->ctl_visibility->SetValue( isVisible );
+            onObjectVisibilityChanged( LAYER_MOD_TEXT, isVisible, false );
+            m_objectSettingsMap[LAYER_MOD_TEXT]->ctl_visibility->SetValue( isVisible );
         }
         break;
 
