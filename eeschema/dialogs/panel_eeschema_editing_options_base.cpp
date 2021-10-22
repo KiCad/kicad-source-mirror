@@ -244,7 +244,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_labelIncrementLabel->Wrap( -1 );
 	fgSizerRepeatOpt1->Add( m_labelIncrementLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
-	m_spinLabelRepeatStep = new wxSpinCtrl( repeatSizer->GetStaticBox(), wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -10, 10, 1 );
+	m_spinLabelRepeatStep = new wxSpinCtrl( repeatSizer->GetStaticBox(), wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, -1000000, 1000000, 1 );
 	fgSizerRepeatOpt1->Add( m_spinLabelRepeatStep, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 

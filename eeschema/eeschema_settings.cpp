@@ -156,7 +156,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_Drawing.auto_start_wires, true ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.repeat_label_increment",
-            &m_Drawing.repeat_label_increment, 1, -10, 10 ) );
+            &m_Drawing.repeat_label_increment, 1 ) );
 
     m_params.emplace_back( new PARAM<COLOR4D>( "drawing.default_sheet_border_color",
             &m_Drawing.default_sheet_border_color, COLOR4D::UNSPECIFIED ) );
