@@ -1,3 +1,8 @@
+#
+# This program source code file is part of KiCad, a free EDA CAD application.
+#
+# Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+#
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation; either version 2 of the License, or
@@ -22,7 +27,7 @@ import math
 class FootprintWizard(pcbnew.FootprintWizardPlugin):
     """!
     A class to simplify many aspects of footprint creation, leaving only
-    the foot-print specific routines to the wizards themselves.
+    the footprint specific routines to the wizards themselves.
 
     Inherit this class to make a new wizard.
 
@@ -528,7 +533,7 @@ class FootprintWizardDrawingAids:
             return 1
         return 0
 
-    def Arc(self, cx, cy, sx, sy, a):
+    def Arc(self, cx, cy, sx, sy, angle):
         """!
         Draw an arc based on centre, start and angle
 
@@ -541,24 +546,26 @@ class FootprintWizardDrawingAids:
         @param cy: the y coordinate of the arc centre
         @param sx: the x coordinate of the arc start point
         @param sy: the y coordinate of the arc start point
-        @param a: the arc's central angle (in deci-degrees)
+        @param angle: the arc's central angle (in deci-degrees)
         """
-        circle = pcbnew.FP_SHAPE(self.module)
-        circle.SetWidth(self.dc['lineThickness'])
+        arc = pcbnew.FP_SHAPE(self.module)
+        arc.SetShape(pcbnew.SHAPE_T_ARC)
+        arc.SetWidth(self.dc['lineThickness'])
 
         center = self.TransformPoint(cx, cy)
         start = self.TransformPoint(sx, sy)
 
-        circle.SetLayer(self.dc['layer'])
-        circle.SetShape(pcbnew.S_ARC)
+        arc.SetLayer(self.dc['layer'])
 
         # check if the angle needs to be reverse (a flip scaling)
         if self.MyCmp(self.dc['transform'][0], 0) != self.MyCmp(self.dc['transform'][4], 0):
-            a = -a
+            angle = -angle
 
-        circle.SetAngle(a)
-        circle.SetStartEnd(center, start)
-        self.module.Add(circle)
+        arc.SetCenter(center)
+        arc.SetStart(start)
+        arc.SetArcAngleAndEnd(angle, True)
+        arc.SetLocalCoord()
+        self.module.Add(arc)
 
     def HLine(self, x, y, l):
         """!
