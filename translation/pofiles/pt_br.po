@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-22 12:32-0700\n"
-"PO-Revision-Date: 2021-10-21 11:50+0000\n"
+"PO-Revision-Date: 2021-10-25 13:17+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -313,14 +313,12 @@ msgid "General"
 msgstr "Geral"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
-#, fuzzy
 msgid "Realtime Renderer"
-msgstr "Revela no Finder"
+msgstr "Renderizador em tempo real"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "Opções de iluminação (Raytracing)"
+msgstr "Renderizador Raytracing"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:240
@@ -672,9 +670,8 @@ msgid "Show silkscreen layers"
 msgstr "Exiba as camadas da serigrafia"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Corte a serigrafia na via anelar"
+msgstr "Corte a serigrafia nas bordas da máscara de solda"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
@@ -697,9 +694,8 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "Camadas do usuário (não exibido no modo realístico)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
-msgstr "Exiba as camadas dos comentários e dos desenhos"
+msgstr "Mostre as camadas com os comentários e com os desenhos"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:61
 msgid "Show ECO layers"
@@ -750,7 +746,6 @@ msgid "Camera Options"
 msgstr "Opções da câmera"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
 msgstr "Incremento da rotação:"
 
@@ -25622,9 +25617,8 @@ msgid "Pad Properties"
 msgstr "Propriedades da ilha"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:179
-#, fuzzy
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "Propriedades de ilha padrão..."
+msgstr "Propriedades predefinidas da ilha para a ferramenta de adição da ilha"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:490
 #, c-format
@@ -29657,9 +29651,8 @@ msgid "Footprint type doesn't match footprint pads"
 msgstr "O tipo do footprint não bate com os footprints das ilhas"
 
 #: pcbnew/drc/drc_item.cpp:210
-#, fuzzy
 msgid "Through hole pad has no hole"
-msgstr "Aviso: A ilha do furo passante não tem furo."
+msgstr "A ilha do furo passante não tem furo"
 
 #: pcbnew/drc/drc_item.cpp:334
 #, c-format
@@ -30413,7 +30406,7 @@ msgstr "Tipo \"Outro\" esperado, mas, foi definido para \"%s\""
 #: pcbnew/footprint.cpp:2125
 #, c-format
 msgid "(pad \"%s\")"
-msgstr ""
+msgstr "(ilha \"%s\")"
 
 #: pcbnew/footprint.cpp:2227 pcbnew/pad.cpp:1540 pcbnew/zone.cpp:1420
 msgid "Clearance Override"
@@ -32242,13 +32235,13 @@ msgstr ""
 "equivalente no KiCad Ele foi movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2600
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
 "Uma trilha foi encontrada numa camada Altium (%d) sem um equivalente no "
-"KiCad. Ele foi movido para a camada Eco1_User do KiCad."
+"KiCad. Ela foi movida para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2641
 msgid "Loading text..."
