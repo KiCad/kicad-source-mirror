@@ -288,12 +288,12 @@ PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
     case ALTIUM_LAYER::MECHANICAL_8:      return User_8;
     case ALTIUM_LAYER::MECHANICAL_9:      return User_9;
     case ALTIUM_LAYER::MECHANICAL_10:     return Dwgs_User;
-    case ALTIUM_LAYER::MECHANICAL_11:     return Eco1_User;
-    case ALTIUM_LAYER::MECHANICAL_12:     return Eco2_User;
-    case ALTIUM_LAYER::MECHANICAL_13:     return F_Fab;
-    case ALTIUM_LAYER::MECHANICAL_14:     return B_Fab;
-    case ALTIUM_LAYER::MECHANICAL_15:     return F_CrtYd;
-    case ALTIUM_LAYER::MECHANICAL_16:     return B_CrtYd;
+    case ALTIUM_LAYER::MECHANICAL_11:     return Eco2_User; //Eco1 is used for unknown elements
+    case ALTIUM_LAYER::MECHANICAL_12:     return F_Fab;
+    case ALTIUM_LAYER::MECHANICAL_13:     return B_Fab; // Don't use courtyard layers for other purposes
+    case ALTIUM_LAYER::MECHANICAL_14:     return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::MECHANICAL_15:     return UNDEFINED_LAYER;
+    case ALTIUM_LAYER::MECHANICAL_16:     return UNDEFINED_LAYER;
 
     case ALTIUM_LAYER::DRILL_DRAWING:     return Dwgs_User;
     case ALTIUM_LAYER::MULTI_LAYER:       return UNDEFINED_LAYER;
@@ -766,9 +766,8 @@ void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
                 static_cast<PCB_LAYER_ID>( curLayer++ ) } );
 
         if( ( *it )->GetType() != BS_ITEM_TYPE_COPPER )
-        {
             THROW_IO_ERROR( "Board6 stream, unexpected item while parsing stackup" );
-        }
+
         ( *it )->SetThickness( layer.copperthick );
 
         ALTIUM_LAYER alayer = static_cast<ALTIUM_LAYER>( altiumLayerId );
@@ -788,19 +787,18 @@ void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
         if( klayer == B_Cu )
         {
             if( layer.nextId != 0 )
-            {
                 THROW_IO_ERROR( "Board6 stream, unexpected id while parsing last stackup layer" );
-            }
+
             // overwrite entry from internal -> bottom
             m_layermap[alayer] = B_Cu;
             break;
         }
 
         ++it;
+
         if( ( *it )->GetType() != BS_ITEM_TYPE_DIELECTRIC )
-        {
             THROW_IO_ERROR( "Board6 stream, unexpected item while parsing stackup" );
-        }
+
         ( *it )->SetThickness( layer.dielectricthick, 0 );
         ( *it )->SetMaterial( layer.dielectricmaterial.empty() ?
                                       NotSpecifiedPrm() :
@@ -2599,7 +2597,7 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
 
         if( klayer == UNDEFINED_LAYER )
         {
-            wxLogWarning( _( "Track found on an Altium layer (%d) with no KiCadequivalent. "
+            wxLogWarning( _( "Track found on an Altium layer (%d) with no KiCad equivalent. "
                              "It has been moved to KiCad layer Eco1_User." ),
                           elem.layer );
             klayer = Eco1_User;
