@@ -166,6 +166,7 @@ DRAWING_TOOL::DRAWING_TOOL() :
     m_frame( nullptr ),
     m_mode( MODE::NONE ),
     m_inDrawingTool( false ),
+    m_layer( UNDEFINED_LAYER ),
     m_stroke( 1, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED )
 {
 }
@@ -1441,9 +1442,14 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
     EDA_UNITS        userUnits = m_frame->GetUserUnits();
     PCB_GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     PCB_SHAPE*&      graphic = *aGraphic;
-    PCB_LAYER_ID     drawingLayer = m_frame->GetActiveLayer();
 
-    m_stroke.SetWidth( getSegmentWidth( drawingLayer ) );
+    if( m_layer != m_frame->GetActiveLayer() )
+    {
+        m_layer = m_frame->GetActiveLayer();
+        m_stroke.SetWidth( getSegmentWidth( m_layer ) );
+        m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+        m_stroke.SetColor( COLOR4D::UNSPECIFIED );
+    }
 
     // geometric construction manager
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPointManager;
@@ -1501,7 +1507,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), drawingLayer );
+        cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), m_layer );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
@@ -1541,18 +1547,23 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
-            drawingLayer = m_frame->GetActiveLayer();
-            m_stroke.SetWidth( getSegmentWidth( drawingLayer ) );
+            if( m_layer != m_frame->GetActiveLayer() )
+            {
+                m_layer = m_frame->GetActiveLayer();
+                m_stroke.SetWidth( getSegmentWidth( m_layer ) );
+                m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+                m_stroke.SetColor( COLOR4D::UNSPECIFIED );
+            }
 
             if( graphic )
             {
-                if( !m_view->IsLayerVisible( drawingLayer ) )
+                if( !m_view->IsLayerVisible( m_layer ) )
                 {
-                    m_frame->GetAppearancePanel()->SetLayerVisible( drawingLayer, true );
+                    m_frame->GetAppearancePanel()->SetLayerVisible( m_layer, true );
                     m_frame->GetCanvas()->Refresh();
                 }
 
-                graphic->SetLayer( drawingLayer );
+                graphic->SetLayer( m_layer );
                 graphic->SetStroke( m_stroke );
                 m_view->Update( &preview );
                 frame()->SetMsgPanel( graphic );
@@ -1592,13 +1603,11 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                     aStartingPoint = NULLOPT;
                 }
 
-                m_stroke.SetWidth( getSegmentWidth( drawingLayer ) );
-
                 // Init the new item attributes
                 graphic->SetShape( static_cast<SHAPE_T>( shape ) );
                 graphic->SetFilled( false );
                 graphic->SetStroke( m_stroke );
-                graphic->SetLayer( drawingLayer );
+                graphic->SetLayer( m_layer );
                 grid.SetSkipPoint( cursorPos );
 
                 twoPointManager.SetOrigin( (wxPoint) cursorPos );
@@ -1612,9 +1621,9 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
 
-                if( !m_view->IsLayerVisible( drawingLayer ) )
+                if( !m_view->IsLayerVisible( m_layer ) )
                 {
-                    m_frame->GetAppearancePanel()->SetLayerVisible( drawingLayer, true );
+                    m_frame->GetAppearancePanel()->SetLayerVisible( m_layer, true );
                     m_frame->GetCanvas()->Refresh();
                 }
 
@@ -1762,11 +1771,13 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
 {
     PCB_SHAPE*&  graphic = *aGraphic;
 
-    wxCHECK( graphic, 0 );
-
-    PCB_LAYER_ID drawingLayer = m_frame->GetActiveLayer();
-
-    m_stroke.SetWidth( getSegmentWidth( drawingLayer ) );
+    if( m_layer != m_frame->GetActiveLayer() )
+    {
+        m_layer = m_frame->GetActiveLayer();
+        m_stroke.SetWidth( getSegmentWidth( m_layer ) );
+        m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+        m_stroke.SetColor( COLOR4D::UNSPECIFIED );
+    }
 
     // Arc geometric construction manager
     KIGFX::PREVIEW::ARC_GEOM_MANAGER arcManager;
@@ -1815,7 +1826,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
 
         setCursor();
 
-        graphic->SetLayer( drawingLayer );
+        graphic->SetLayer( m_layer );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
@@ -1866,17 +1877,14 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
 
-                drawingLayer = m_frame->GetActiveLayer();
-                m_stroke.SetWidth( getSegmentWidth( drawingLayer ) );
-
                 // Init the new item attributes
                 // (non-geometric, those are handled by the manager)
                 graphic->SetShape( SHAPE_T::ARC );
                 graphic->SetStroke( m_stroke );
 
-                if( !m_view->IsLayerVisible( drawingLayer ) )
+                if( !m_view->IsLayerVisible( m_layer ) )
                 {
-                    m_frame->GetAppearancePanel()->SetLayerVisible( drawingLayer, true );
+                    m_frame->GetAppearancePanel()->SetLayerVisible( m_layer, true );
                     m_frame->GetCanvas()->Refresh();
                 }
 
@@ -1901,18 +1909,23 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
-            drawingLayer = m_frame->GetActiveLayer();
-            m_stroke.SetWidth( getSegmentWidth( drawingLayer ) );
+            if( m_layer != m_frame->GetActiveLayer() )
+            {
+                m_layer = m_frame->GetActiveLayer();
+                m_stroke.SetWidth( getSegmentWidth( m_layer ) );
+                m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+                m_stroke.SetColor( COLOR4D::UNSPECIFIED );
+            }
 
             if( graphic )
             {
-                if( !m_view->IsLayerVisible( drawingLayer ) )
+                if( !m_view->IsLayerVisible( m_layer ) )
                 {
-                    m_frame->GetAppearancePanel()->SetLayerVisible( drawingLayer, true );
+                    m_frame->GetAppearancePanel()->SetLayerVisible( m_layer, true );
                     m_frame->GetCanvas()->Refresh();
                 }
 
-                graphic->SetLayer( drawingLayer );
+                graphic->SetLayer( m_layer );
                 graphic->SetStroke( m_stroke );
                 m_view->Update( &preview );
                 frame()->SetMsgPanel( graphic );

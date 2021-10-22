@@ -41,6 +41,7 @@
 #include <widgets/unit_binder.h>
 
 #include <dialog_graphic_item_properties_base.h>
+#include <tools/drawing_tool.h>
 
 class DIALOG_GRAPHIC_ITEM_PROPERTIES : public DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
 {
@@ -154,7 +155,15 @@ void PCB_BASE_EDIT_FRAME::ShowGraphicItemPropertiesDialog( BOARD_ITEM* aItem )
     wxCHECK_RET( aItem != NULL, wxT( "ShowGraphicItemPropertiesDialog() error: NULL item" ) );
 
     DIALOG_GRAPHIC_ITEM_PROPERTIES dlg( this, aItem );
-    dlg.ShowQuasiModal();
+
+    if( dlg.ShowQuasiModal() == wxID_OK )
+    {
+        if( aItem->IsOnLayer( GetActiveLayer() ) )
+        {
+            DRAWING_TOOL* drawingTool = m_toolManager->GetTool<DRAWING_TOOL>();
+            drawingTool->SetStroke( aItem->GetStroke(), GetActiveLayer() );
+        }
+    }
 }
 
 

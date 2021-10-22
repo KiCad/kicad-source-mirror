@@ -202,6 +202,12 @@ public:
     ///< Set up handlers for various events.
     void setTransitions() override;
 
+    void SetStroke( const STROKE_PARAMS& aStroke, PCB_LAYER_ID aLayer )
+    {
+        m_layer = aLayer;
+        m_stroke = aStroke;
+    }
+
 private:
     /**
      * Start drawing a selected shape (i.e. PCB_SHAPE).
@@ -270,6 +276,7 @@ private:
     MODE                      m_mode;
     bool                      m_inDrawingTool;     // Re-entrancy guard
 
+    PCB_LAYER_ID              m_layer;             // The layer we last drew on
     STROKE_PARAMS             m_stroke;            // Current stroke for multi-segment drawing
     static const unsigned int WIDTH_STEP;          // Amount of width change for one -/+ key press
 
