@@ -79,7 +79,6 @@ private:
     void recombinePad( PAD* aPad );
 
     wxString       m_lastPadNumber;
-    bool           m_padCopied;    // Indicates there are valid settings in the Master Pad object
 
     bool           m_wasHighContrast;
     KIID           m_editPad;

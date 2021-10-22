@@ -317,7 +317,7 @@
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="moveable">1</property>
-                                                                    <property name="name">m_PadType</property>
+                                                                    <property name="name">m_padType</property>
                                                                     <property name="pane_border">1</property>
                                                                     <property name="pane_position"></property>
                                                                     <property name="pane_size"></property>
@@ -386,7 +386,7 @@
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="moveable">1</property>
-                                                                    <property name="name">m_PadNumText</property>
+                                                                    <property name="name">m_padNumLabel</property>
                                                                     <property name="pane_border">1</property>
                                                                     <property name="pane_position"></property>
                                                                     <property name="pane_size"></property>
@@ -449,7 +449,7 @@
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="moveable">1</property>
-                                                                    <property name="name">m_PadNumCtrl</property>
+                                                                    <property name="name">m_padNumCtrl</property>
                                                                     <property name="pane_border">1</property>
                                                                     <property name="pane_position"></property>
                                                                     <property name="pane_size"></property>
@@ -518,7 +518,7 @@
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="moveable">1</property>
-                                                                    <property name="name">m_PadNameText</property>
+                                                                    <property name="name">m_padNetLabel</property>
                                                                     <property name="pane_border">1</property>
                                                                     <property name="pane_position"></property>
                                                                     <property name="pane_size"></property>
@@ -584,7 +584,7 @@
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="moveable">1</property>
-                                                                    <property name="name">m_PadNetSelector</property>
+                                                                    <property name="name">m_padNetSelector</property>
                                                                     <property name="pane_border">1</property>
                                                                     <property name="pane_position"></property>
                                                                     <property name="pane_size"></property>

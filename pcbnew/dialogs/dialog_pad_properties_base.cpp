@@ -37,25 +37,25 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_padTypeLabel->Wrap( -1 );
 	gbSizerCommon->Add( m_padTypeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	wxString m_PadTypeChoices[] = { _("Through-hole"), _("SMD"), _("Edge Connector"), _("NPTH, Mechanical"), _("SMD Aperture") };
-	int m_PadTypeNChoices = sizeof( m_PadTypeChoices ) / sizeof( wxString );
-	m_PadType = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PadTypeNChoices, m_PadTypeChoices, 0 );
-	m_PadType->SetSelection( 0 );
-	gbSizerCommon->Add( m_PadType, wxGBPosition( 0, 1 ), wxGBSpan( 1, 5 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	wxString m_padTypeChoices[] = { _("Through-hole"), _("SMD"), _("Edge Connector"), _("NPTH, Mechanical"), _("SMD Aperture") };
+	int m_padTypeNChoices = sizeof( m_padTypeChoices ) / sizeof( wxString );
+	m_padType = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_padTypeNChoices, m_padTypeChoices, 0 );
+	m_padType->SetSelection( 0 );
+	gbSizerCommon->Add( m_padType, wxGBPosition( 0, 1 ), wxGBSpan( 1, 5 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 
-	m_PadNumText = new wxStaticText( m_panelGeneral, wxID_ANY, _("Pad number:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PadNumText->Wrap( -1 );
-	gbSizerCommon->Add( m_PadNumText, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_padNumLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Pad number:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_padNumLabel->Wrap( -1 );
+	gbSizerCommon->Add( m_padNumLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_PadNumCtrl = new wxTextCtrl( m_panelGeneral, wxID_PADNUMCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizerCommon->Add( m_PadNumCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 5 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_padNumCtrl = new wxTextCtrl( m_panelGeneral, wxID_PADNUMCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerCommon->Add( m_padNumCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 5 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_PadNameText = new wxStaticText( m_panelGeneral, wxID_ANY, _("Net name:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PadNameText->Wrap( -1 );
-	gbSizerCommon->Add( m_PadNameText, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_padNetLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Net name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_padNetLabel->Wrap( -1 );
+	gbSizerCommon->Add( m_padNetLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_PadNetSelector = new NET_SELECTOR( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizerCommon->Add( m_PadNetSelector, wxGBPosition( 2, 1 ), wxGBSpan( 1, 5 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	m_padNetSelector = new NET_SELECTOR( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizerCommon->Add( m_padNetSelector, wxGBPosition( 2, 1 ), wxGBSpan( 1, 5 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 	m_posXLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_posXLabel->Wrap( -1 );
@@ -593,6 +593,14 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_staticTextInfoNegVal->Wrap( -1 );
 	sbClearancesSizer->Add( m_staticTextInfoNegVal, 0, wxBOTTOM|wxRIGHT, 10 );
 
+	m_staticTextInfoPosValue = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Positive clearance means area bigger than the pad (usual for mask clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoPosValue->Wrap( -1 );
+	sbClearancesSizer->Add( m_staticTextInfoPosValue, 0, wxTOP|wxRIGHT, 10 );
+
+	m_staticTextInfoNegVal = new wxStaticText( sbClearancesSizer->GetStaticBox(), wxID_ANY, _("Negative clearance means area smaller than the pad (usual for paste clearance)."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoNegVal->Wrap( -1 );
+	sbClearancesSizer->Add( m_staticTextInfoNegVal, 0, wxBOTTOM|wxRIGHT, 10 );
+
 	wxFlexGridSizer* fgClearancesGridSizer;
 	fgClearancesGridSizer = new wxFlexGridSizer( 4, 3, 0, 0 );
 	fgClearancesGridSizer->AddGrowableCol( 1 );
@@ -985,8 +993,8 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnInitDialog ) );
 	m_panelGeneral->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnUpdateUI ), NULL, this );
-	m_PadType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::PadTypeSelected ), NULL, this );
-	m_PadNumCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_padType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::PadTypeSelected ), NULL, this );
+	m_padNumCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_PadShapeSelector->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadShapeSelection ), NULL, this );
 	m_trapDeltaCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_trapAxisCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );
@@ -1045,8 +1053,8 @@ DIALOG_PAD_PROPERTIES_BASE::~DIALOG_PAD_PROPERTIES_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnInitDialog ) );
 	m_panelGeneral->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnUpdateUI ), NULL, this );
-	m_PadType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::PadTypeSelected ), NULL, this );
-	m_PadNumCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
+	m_padType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::PadTypeSelected ), NULL, this );
+	m_padNumCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_PadShapeSelector->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPadShapeSelection ), NULL, this );
 	m_trapDeltaCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_trapAxisCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnSetLayers ), NULL, this );

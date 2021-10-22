@@ -26,9 +26,7 @@
 #include <macros.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
-#include <view/view.h>
 #include <tool/tool_manager.h>
-#include <bitmaps.h>
 #include <board_design_settings.h>
 #include <board_item.h>
 #include <footprint.h>
@@ -45,7 +43,6 @@
 
 PAD_TOOL::PAD_TOOL() :
         PCB_TOOL_BASE( "pcbnew.PadTool" ),
-        m_padCopied( false ),
         m_wasHighContrast( false ),
         m_editPad( niluuid )
 {}
@@ -60,7 +57,6 @@ void PAD_TOOL::Reset( RESET_REASON aReason )
     if( aReason == MODEL_RELOAD )
         m_lastPadNumber = wxT( "1" );
 
-    m_padCopied = false;
     m_editPad = niluuid;
 }
 
@@ -164,7 +160,6 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
         {
             const PAD& selPad = static_cast<const PAD&>( *item );
             frame()->GetDesignSettings().m_Pad_Master->ImportSettingsFrom( selPad );
-            m_padCopied = true;
         }
     }
 

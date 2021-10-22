@@ -64,11 +64,11 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxPanel* m_panelGeneral;
 		wxBoxSizer* m_LeftBoxSizer;
 		wxStaticText* m_padTypeLabel;
-		wxChoice* m_PadType;
-		wxStaticText* m_PadNumText;
-		wxTextCtrl* m_PadNumCtrl;
-		wxStaticText* m_PadNameText;
-		NET_SELECTOR* m_PadNetSelector;
+		wxChoice* m_padType;
+		wxStaticText* m_padNumLabel;
+		wxTextCtrl* m_padNumCtrl;
+		wxStaticText* m_padNetLabel;
+		NET_SELECTOR* m_padNetSelector;
 		wxStaticText* m_posXLabel;
 		wxTextCtrl* m_posXCtrl;
 		wxStaticText* m_posXUnits;

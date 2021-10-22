@@ -106,18 +106,7 @@ void PCB_BASE_FRAME::ShowPadPropertiesDialog( PAD* aPad )
 {
     DIALOG_PAD_PROPERTIES dlg( this, aPad );
 
-    if( dlg.ShowQuasiModal() == wxID_OK )       // QuasiModal required for NET_SELECTOR
-    {
-        // aPad can be NULL, if the dialog is called from the footprint editor
-        // to set the default pad setup
-        if( aPad )
-        {
-            PAD_TOOL* padTools = m_toolManager->GetTool<PAD_TOOL>();
-
-            if( padTools )
-                padTools->SetLastPadNumber( aPad->GetNumber() );
-        }
-    }
+    dlg.ShowQuasiModal();
 }
 
 
@@ -163,8 +152,8 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
-    m_PadNetSelector->SetBoard( m_board );
-    m_PadNetSelector->SetNetInfo( &m_board->GetNetInfo() );
+    m_padNetSelector->SetBoard( m_board );
+    m_padNetSelector->SetNetInfo( &m_board->GetNetInfo() );
 
     m_OrientValidator.SetRange( -360.0, 360.0 );
     m_orientation->SetValidator( m_OrientValidator );
@@ -180,13 +169,22 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
 
     if( aPad )
     {
+        SetTitle( _( "Pad Properties" ) );
+
         *m_dummyPad = *aPad;
         m_dummyPad->ClearFlags( SELECTED|BRIGHTENED );
     }
     else
     {
-        // We are editing a "master" pad, i.e. a template to create new pads
+        SetTitle( _( "Default Pad Properties for Add Pad Tool" ) );
+
         *m_dummyPad = *m_padMaster;
+    }
+
+    if( m_isFpEditor )
+    {
+        m_padNetLabel->Show( false );
+        m_padNetSelector->Show( false );
     }
 
     // Pad needs to have a parent for painting; use the parent board for its design settings
@@ -227,11 +225,11 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     // Initialize canvas to be able to display the dummy pad:
     prepareCanvas();
 
-    SetInitialFocus( m_PadNumCtrl );
+    SetInitialFocus( m_padNumCtrl );
     m_sdbSizerOK->SetDefault();
     m_canUpdate = true;
 
-    m_PadNetSelector->Connect( NET_SELECTED,
+    m_padNetSelector->Connect( NET_SELECTED,
                                wxCommandEventHandler( DIALOG_PAD_PROPERTIES::OnValuesChanged ),
                                nullptr, this );
 
@@ -245,7 +243,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
 
 DIALOG_PAD_PROPERTIES::~DIALOG_PAD_PROPERTIES()
 {
-    m_PadNetSelector->Disconnect( NET_SELECTED,
+    m_padNetSelector->Disconnect( NET_SELECTED,
                                   wxCommandEventHandler( DIALOG_PAD_PROPERTIES::OnValuesChanged ),
                                   nullptr, this );
 
@@ -477,8 +475,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     if( m_currentPad )
     {
-        SetTitle( _( "Pad Properties" ) );
-
         m_locked->SetValue( m_currentPad->IsLocked() );
         m_isFlipped = m_currentPad->IsFlipped();
 
@@ -494,8 +490,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
             msg.Printf( _("Footprint %s (%s), %s, rotated %g deg"),
                          footprint->Reference().GetShownText(),
                          footprint->Value().GetShownText(),
-                         footprint->IsFlipped() ? _( "back side (mirrored)" )
-                                                : _( "front side" ),
+                         footprint->IsFlipped() ? _( "back side (mirrored)" ) : _( "front side" ),
                          footprint->GetOrientationDegrees() );
         }
 
@@ -503,8 +498,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
     }
     else
     {
-        SetTitle( _( "Default Pad Properties for Add Pad Tool" ) );
-
         m_locked->Hide();
         m_isFlipped = false;
     }
@@ -519,8 +512,17 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     m_FlippedWarningSizer->Show( m_isFlipped );
 
-    m_PadNumCtrl->SetValue( m_dummyPad->GetNumber() );
-    m_PadNetSelector->SetSelectedNetcode( m_dummyPad->GetNetCode() );
+    if( m_currentPad )
+    {
+        m_padNumCtrl->SetValue( m_dummyPad->GetNumber() );
+    }
+    else
+    {
+        PAD_TOOL* padTool = m_parent->GetToolManager()->GetTool<PAD_TOOL>();
+        m_padNumCtrl->SetValue( padTool->GetLastPadNumber() );
+    }
+
+    m_padNetSelector->SetSelectedNetcode( m_dummyPad->GetNetCode() );
 
     // Display current pad parameters units:
     m_posX.ChangeValue( m_dummyPad->GetPosition().x );
@@ -620,16 +622,16 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     if( aperture )
     {
-        m_PadType->SetSelection( APERTURE_DLG_TYPE );
+        m_padType->SetSelection( APERTURE_DLG_TYPE );
     }
     else
     {
         switch( m_dummyPad->GetAttribute() )
         {
-        case PAD_ATTRIB::PTH:    m_PadType->SetSelection( PTH_DLG_TYPE ); break;
-        case PAD_ATTRIB::SMD:    m_PadType->SetSelection( SMD_DLG_TYPE ); break;
-        case PAD_ATTRIB::CONN:   m_PadType->SetSelection( CONN_DLG_TYPE ); break;
-        case PAD_ATTRIB::NPTH:   m_PadType->SetSelection( NPTH_DLG_TYPE ); break;
+        case PAD_ATTRIB::PTH:    m_padType->SetSelection( PTH_DLG_TYPE ); break;
+        case PAD_ATTRIB::SMD:    m_padType->SetSelection( SMD_DLG_TYPE ); break;
+        case PAD_ATTRIB::CONN:   m_padType->SetSelection( CONN_DLG_TYPE ); break;
+        case PAD_ATTRIB::NPTH:   m_padType->SetSelection( NPTH_DLG_TYPE ); break;
         }
     }
 
@@ -914,7 +916,7 @@ void DIALOG_PAD_PROPERTIES::UpdateLayersDropdown()
 {
     m_rbCopperLayersSel->Clear();
 
-    switch( m_PadType->GetSelection() )
+    switch( m_padType->GetSelection() )
     {
     case PTH_DLG_TYPE:
         m_rbCopperLayersSel->Append( _( "All copper layers" ) );
@@ -953,7 +955,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     bool hasConnection = true;
     bool hasProperty = true;
 
-    switch( m_PadType->GetSelection() )
+    switch( m_padType->GetSelection() )
     {
     case PTH_DLG_TYPE:      hasHole = true;  hasConnection = true;  hasProperty = true;  break;
     case SMD_DLG_TYPE:      hasHole = false; hasConnection = true;  hasProperty = true;  break;
@@ -978,14 +980,14 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 
     if( !hasConnection )
     {
-        m_PadNumCtrl->ChangeValue( wxEmptyString );
-        m_PadNetSelector->SetSelectedNetcode( 0 );
+        m_padNumCtrl->ChangeValue( wxEmptyString );
+        m_padNetSelector->SetSelectedNetcode( 0 );
         m_padToDieOpt->SetValue( false );
     }
-    else if( m_PadNumCtrl->GetValue().IsEmpty() && m_currentPad )
+    else if( m_padNumCtrl->GetValue().IsEmpty() && m_currentPad )
     {
-        m_PadNumCtrl->ChangeValue( m_currentPad->GetNumber() );
-        m_PadNetSelector->SetSelectedNetcode( m_currentPad->GetNetCode() );
+        m_padNumCtrl->ChangeValue( m_currentPad->GetNumber() );
+        m_padNetSelector->SetSelectedNetcode( m_currentPad->GetNetCode() );
     }
 
     if( !hasProperty )
@@ -1008,7 +1010,7 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     bool hasHole = true;
     bool hasConnection = true;
 
-    switch( m_PadType->GetSelection() )
+    switch( m_padType->GetSelection() )
     {
     case PTH_DLG_TYPE:      /* PTH */      hasHole = true;  hasConnection = true;  break;
     case SMD_DLG_TYPE:      /* SMD */      hasHole = false; hasConnection = true;  break;
@@ -1023,11 +1025,17 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     m_holeX.Enable( hasHole );
     m_holeY.Enable( hasHole && m_holeShapeCtrl->GetSelection() == 1 );
 
-    // Enable/disable Pad number, net and pad length-to-die
-    m_PadNumText->Enable( hasConnection );
-    m_PadNumCtrl->Enable( hasConnection );
-    m_PadNameText->Enable( hasConnection );
-    m_PadNetSelector->Enable( hasConnection && m_canEditNetName && m_currentPad );
+    // Enable/disable number and net
+    m_padNumLabel->Enable( hasConnection );
+    m_padNumCtrl->Enable( hasConnection );
+
+    if( m_padNetLabel->IsShown() )
+    {
+        m_padNetLabel->Enable( hasConnection && m_canEditNetName && m_currentPad );
+        m_padNetSelector->Enable( hasConnection && m_canEditNetName && m_currentPad );
+    }
+
+    // Enable/disable pad length-to-die
     m_padToDieOpt->Enable( hasConnection );
 
     if( !m_padToDieOpt->IsEnabled() )
@@ -1039,11 +1047,11 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     m_padToDie.Show( m_padToDieOpt->GetValue() );
 
     // Enable/disable Copper Layers control
-    m_rbCopperLayersSel->Enable( m_PadType->GetSelection() != APERTURE_DLG_TYPE );
+    m_rbCopperLayersSel->Enable( m_padType->GetSelection() != APERTURE_DLG_TYPE );
 
     LSET cu_set = m_dummyPad->GetLayerSet() & LSET::AllCuMask();
 
-    switch( m_PadType->GetSelection() )
+    switch( m_padType->GetSelection() )
     {
     case PTH_DLG_TYPE:
         if( !cu_set.any() )
@@ -1090,7 +1098,7 @@ void DIALOG_PAD_PROPERTIES::updatePadLayersList( LSET layer_mask, bool remove_un
 {
     UpdateLayersDropdown();
 
-    switch( m_PadType->GetSelection() )
+    switch( m_padType->GetSelection() )
     {
     case PTH_DLG_TYPE:
         if( !layer_mask.any() )
@@ -1536,6 +1544,9 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     transferDataToPad( m_padMaster );
 
+    PAD_TOOL* padTool = m_parent->GetToolManager()->GetTool<PAD_TOOL>();
+    padTool->SetLastPadNumber( m_padMaster->GetNumber() );
+
     // m_padMaster is a pattern: ensure there is no net for this pad:
     m_padMaster->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
@@ -1578,7 +1589,6 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     if( m_padMaster->GetShape() != PAD_SHAPE::CUSTOM )
         m_padMaster->DeletePrimitivesList();
 
-
     m_currentPad->SetAnchorPadShape( m_padMaster->GetAnchorPadShape() );
     m_currentPad->ReplacePrimitives( m_padMaster->GetPrimitives() );
 
@@ -1592,7 +1602,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     // For PAD_ATTRIB::NPTH, ensure there is no net name selected
     if( m_padMaster->GetAttribute() != PAD_ATTRIB::NPTH  )
-        padNetcode = m_PadNetSelector->GetSelectedNetcode();
+        padNetcode = m_padNetSelector->GetSelectedNetcode();
 
     m_currentPad->SetNetCode( padNetcode );
     m_currentPad->SetLocalClearance( m_padMaster->GetLocalClearance() );
@@ -1684,7 +1694,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
     m_OrientValidator.TransferFromWindow();
 
-    aPad->SetAttribute( code_type[m_PadType->GetSelection()] );
+    aPad->SetAttribute( code_type[m_padType->GetSelection()] );
     aPad->SetShape( code_shape[m_PadShapeSelector->GetSelection()] );
 
     if( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR )
@@ -1782,8 +1792,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         aPad->SetPadToDieLength( 0 );
 
     aPad->SetOrientation( m_OrientValue * 10.0 );
-    aPad->SetNumber( m_PadNumCtrl->GetValue() );
-    aPad->SetNetCode( m_PadNetSelector->GetSelectedNetcode() );
+    aPad->SetNumber( m_padNumCtrl->GetValue() );
+    aPad->SetNetCode( m_padNetSelector->GetSelectedNetcode() );
 
     int chamfers = 0;
 
@@ -1886,7 +1896,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     aPad->SetRemoveUnconnected( false );
     aPad->SetKeepTopBottom( false );
 
-    switch( m_PadType->GetSelection() )
+    switch( m_padType->GetSelection() )
     {
     case PTH_DLG_TYPE:
         switch( copperLayersChoice )
