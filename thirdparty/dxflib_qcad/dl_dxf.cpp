@@ -5616,707 +5616,707 @@ bool DL_Dxf::checkVariable( const char* var, DL_Codes::version version )
     else if( version==DL_VERSION_R12 )
     {
         // these are all the variables recognized by dxf r12:
-        if( !strcmp( var, "$ACADVER" ) )
+        if( !strcmp( var, "ACADVER" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$ACADVER" ) )
+        if( !strcmp( var, "ACADVER" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$ANGBASE" ) )
+        if( !strcmp( var, "ANGBASE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$ANGDIR" ) )
+        if( !strcmp( var, "ANGDIR" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$ATTDIA" ) )
+        if( !strcmp( var, "ATTDIA" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$ATTMODE" ) )
+        if( !strcmp( var, "ATTMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$ATTREQ" ) )
+        if( !strcmp( var, "ATTREQ" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$AUNITS" ) )
+        if( !strcmp( var, "AUNITS" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$AUPREC" ) )
+        if( !strcmp( var, "AUPREC" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$AXISMODE" ) )
+        if( !strcmp( var, "AXISMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$AXISUNIT" ) )
+        if( !strcmp( var, "AXISUNIT" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$BLIPMODE" ) )
+        if( !strcmp( var, "BLIPMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$CECOLOR" ) )
+        if( !strcmp( var, "CECOLOR" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$CELTYPE" ) )
+        if( !strcmp( var, "CELTYPE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$CHAMFERA" ) )
+        if( !strcmp( var, "CHAMFERA" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$CHAMFERB" ) )
+        if( !strcmp( var, "CHAMFERB" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$CLAYER" ) )
+        if( !strcmp( var, "CLAYER" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$COORDS" ) )
+        if( !strcmp( var, "COORDS" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMALT" ) )
+        if( !strcmp( var, "DIMALT" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMALTD" ) )
+        if( !strcmp( var, "DIMALTD" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMALTF" ) )
+        if( !strcmp( var, "DIMALTF" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMAPOST" ) )
+        if( !strcmp( var, "DIMAPOST" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMASO" ) )
+        if( !strcmp( var, "DIMASO" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMASZ" ) )
+        if( !strcmp( var, "DIMASZ" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMBLK" ) )
+        if( !strcmp( var, "DIMBLK" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMBLK1" ) )
+        if( !strcmp( var, "DIMBLK1" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMBLK2" ) )
+        if( !strcmp( var, "DIMBLK2" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMCEN" ) )
+        if( !strcmp( var, "DIMCEN" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMCLRD" ) )
+        if( !strcmp( var, "DIMCLRD" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMCLRE" ) )
+        if( !strcmp( var, "DIMCLRE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMCLRT" ) )
+        if( !strcmp( var, "DIMCLRT" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMDLE" ) )
+        if( !strcmp( var, "DIMDLE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMDLI" ) )
+        if( !strcmp( var, "DIMDLI" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMEXE" ) )
+        if( !strcmp( var, "DIMEXE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMEXO" ) )
+        if( !strcmp( var, "DIMEXO" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMGAP" ) )
+        if( !strcmp( var, "DIMGAP" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMLFAC" ) )
+        if( !strcmp( var, "DIMLFAC" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMLIM" ) )
+        if( !strcmp( var, "DIMLIM" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMPOST" ) )
+        if( !strcmp( var, "DIMPOST" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMRND" ) )
+        if( !strcmp( var, "DIMRND" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMSAH" ) )
+        if( !strcmp( var, "DIMSAH" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMSCALE" ) )
+        if( !strcmp( var, "DIMSCALE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMSE1" ) )
+        if( !strcmp( var, "DIMSE1" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMSE2" ) )
+        if( !strcmp( var, "DIMSE2" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMSHO" ) )
+        if( !strcmp( var, "DIMSHO" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMSOXD" ) )
+        if( !strcmp( var, "DIMSOXD" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMSTYLE" ) )
+        if( !strcmp( var, "DIMSTYLE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMTAD" ) )
+        if( !strcmp( var, "DIMTAD" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMTFAC" ) )
+        if( !strcmp( var, "DIMTFAC" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMTIH" ) )
+        if( !strcmp( var, "DIMTIH" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMTIX" ) )
+        if( !strcmp( var, "DIMTIX" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMTM" ) )
+        if( !strcmp( var, "DIMTM" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMTOFL" ) )
+        if( !strcmp( var, "DIMTOFL" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMTOH" ) )
+        if( !strcmp( var, "DIMTOH" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMTOL" ) )
+        if( !strcmp( var, "DIMTOL" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMTP" ) )
+        if( !strcmp( var, "DIMTP" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMTSZ" ) )
+        if( !strcmp( var, "DIMTSZ" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMTVP" ) )
+        if( !strcmp( var, "DIMTVP" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMTXT" ) )
+        if( !strcmp( var, "DIMTXT" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DIMZIN" ) )
+        if( !strcmp( var, "DIMZIN" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DWGCODEPAGE" ) )
+        if( !strcmp( var, "DWGCODEPAGE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$DRAGMODE" ) )
+        if( !strcmp( var, "DRAGMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$ELEVATION" ) )
+        if( !strcmp( var, "ELEVATION" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$EXTMAX" ) )
+        if( !strcmp( var, "EXTMAX" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$EXTMIN" ) )
+        if( !strcmp( var, "EXTMIN" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$FILLETRAD" ) )
+        if( !strcmp( var, "FILLETRAD" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$FILLMODE" ) )
+        if( !strcmp( var, "FILLMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$HANDLING" ) )
+        if( !strcmp( var, "HANDLING" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$HANDSEED" ) )
+        if( !strcmp( var, "HANDSEED" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$INSBASE" ) )
+        if( !strcmp( var, "INSBASE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$LIMCHECK" ) )
+        if( !strcmp( var, "LIMCHECK" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$LIMMAX" ) )
+        if( !strcmp( var, "LIMMAX" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$LIMMIN" ) )
+        if( !strcmp( var, "LIMMIN" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$LTSCALE" ) )
+        if( !strcmp( var, "LTSCALE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$LUNITS" ) )
+        if( !strcmp( var, "LUNITS" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$LUPREC" ) )
+        if( !strcmp( var, "LUPREC" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$MAXACTVP" ) )
+        if( !strcmp( var, "MAXACTVP" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$MENU" ) )
+        if( !strcmp( var, "MENU" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$MIRRTEXT" ) )
+        if( !strcmp( var, "MIRRTEXT" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$ORTHOMODE" ) )
+        if( !strcmp( var, "ORTHOMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$OSMODE" ) )
+        if( !strcmp( var, "OSMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PDMODE" ) )
+        if( !strcmp( var, "PDMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PDSIZE" ) )
+        if( !strcmp( var, "PDSIZE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PELEVATION" ) )
+        if( !strcmp( var, "PELEVATION" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PEXTMAX" ) )
+        if( !strcmp( var, "PEXTMAX" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PEXTMIN" ) )
+        if( !strcmp( var, "PEXTMIN" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PLIMCHECK" ) )
+        if( !strcmp( var, "PLIMCHECK" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PLIMMAX" ) )
+        if( !strcmp( var, "PLIMMAX" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PLIMMIN" ) )
+        if( !strcmp( var, "PLIMMIN" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PLINEGEN" ) )
+        if( !strcmp( var, "PLINEGEN" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PLINEWID" ) )
+        if( !strcmp( var, "PLINEWID" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PSLTSCALE" ) )
+        if( !strcmp( var, "PSLTSCALE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PUCSNAME" ) )
+        if( !strcmp( var, "PUCSNAME" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PUCSORG" ) )
+        if( !strcmp( var, "PUCSORG" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PUCSXDIR" ) )
+        if( !strcmp( var, "PUCSXDIR" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$PUCSYDIR" ) )
+        if( !strcmp( var, "PUCSYDIR" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$QTEXTMODE" ) )
+        if( !strcmp( var, "QTEXTMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$REGENMODE" ) )
+        if( !strcmp( var, "REGENMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SHADEDGE" ) )
+        if( !strcmp( var, "SHADEDGE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SHADEDIF" ) )
+        if( !strcmp( var, "SHADEDIF" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SKETCHINC" ) )
+        if( !strcmp( var, "SKETCHINC" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SKPOLY" ) )
+        if( !strcmp( var, "SKPOLY" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SPLFRAME" ) )
+        if( !strcmp( var, "SPLFRAME" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SPLINESEGS" ) )
+        if( !strcmp( var, "SPLINESEGS" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SPLINETYPE" ) )
+        if( !strcmp( var, "SPLINETYPE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SURFTAB1" ) )
+        if( !strcmp( var, "SURFTAB1" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SURFTAB2" ) )
+        if( !strcmp( var, "SURFTAB2" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SURFTYPE" ) )
+        if( !strcmp( var, "SURFTYPE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SURFU" ) )
+        if( !strcmp( var, "SURFU" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SURFV" ) )
+        if( !strcmp( var, "SURFV" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$TDCREATE" ) )
+        if( !strcmp( var, "TDCREATE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$TDINDWG" ) )
+        if( !strcmp( var, "TDINDWG" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$TDUPDATE" ) )
+        if( !strcmp( var, "TDUPDATE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$TDUSRTIMER" ) )
+        if( !strcmp( var, "TDUSRTIMER" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$TEXTSIZE" ) )
+        if( !strcmp( var, "TEXTSIZE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$TEXTSTYLE" ) )
+        if( !strcmp( var, "TEXTSTYLE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$THICKNESS" ) )
+        if( !strcmp( var, "THICKNESS" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$TILEMODE" ) )
+        if( !strcmp( var, "TILEMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$TRACEWID" ) )
+        if( !strcmp( var, "TRACEWID" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$UCSNAME" ) )
+        if( !strcmp( var, "UCSNAME" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$UCSORG" ) )
+        if( !strcmp( var, "UCSORG" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$UCSXDIR" ) )
+        if( !strcmp( var, "UCSXDIR" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$UCSYDIR" ) )
+        if( !strcmp( var, "UCSYDIR" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$UNITMODE" ) )
+        if( !strcmp( var, "UNITMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$USERI1" ) )
+        if( !strcmp( var, "USERI1" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$USERR1" ) )
+        if( !strcmp( var, "USERR1" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$USRTIMER" ) )
+        if( !strcmp( var, "USRTIMER" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$VISRETAIN" ) )
+        if( !strcmp( var, "VISRETAIN" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$WORLDVIEW" ) )
+        if( !strcmp( var, "WORLDVIEW" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$FASTZOOM" ) )
+        if( !strcmp( var, "FASTZOOM" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$GRIDMODE" ) )
+        if( !strcmp( var, "GRIDMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$GRIDUNIT" ) )
+        if( !strcmp( var, "GRIDUNIT" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SNAPANG" ) )
+        if( !strcmp( var, "SNAPANG" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SNAPBASE" ) )
+        if( !strcmp( var, "SNAPBASE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SNAPISOPAIR" ) )
+        if( !strcmp( var, "SNAPISOPAIR" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SNAPMODE" ) )
+        if( !strcmp( var, "SNAPMODE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SNAPSTYLE" ) )
+        if( !strcmp( var, "SNAPSTYLE" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$SNAPUNIT" ) )
+        if( !strcmp( var, "SNAPUNIT" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$VIEWCTR" ) )
+        if( !strcmp( var, "VIEWCTR" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$VIEWDIR" ) )
+        if( !strcmp( var, "VIEWDIR" ) )
         {
             return true;
         }
 
-        if( !strcmp( var, "$VIEWSIZE" ) )
+        if( !strcmp( var, "VIEWSIZE" ) )
         {
             return true;
         }
