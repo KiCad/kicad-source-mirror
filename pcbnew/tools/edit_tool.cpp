@@ -280,6 +280,9 @@ bool EDIT_TOOL::isRouterActive() const
 
 int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
 {
+    if( m_toolMgr->GetTool<ROUTER_TOOL>()->IsToolActive() )
+        return false; // don't drag when router is already active
+
     int mode = PNS::DM_ANY;
 
     if( aEvent.IsAction( &PCB_ACTIONS::dragFreeAngle ) )
