@@ -101,7 +101,8 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
     arc->SetWidth( MapLineWidth( aWidth ) );
     arc->SetCenter( MapCoordinate( aCenter ));
     arc->SetStart( MapCoordinate( aStart ) );
-    arc->SetArcAngleAndEnd( aAngle * 10.0 );     // Pcbnew uses the decidegree
+    arc->SetArcAngleAndEnd( aAngle * 10.0, /* pcbnew uses the decidegree */
+                            true /* infer winding direction from the sign of aAngle */);
 
     if( arc->Type() == PCB_FP_SHAPE_T )
         static_cast<FP_SHAPE*>( arc.get() )->SetLocalCoord();
