@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-22 12:32-0700\n"
-"PO-Revision-Date: 2021-10-21 11:50+0000\n"
+"PO-Revision-Date: 2021-10-25 13:17+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -228,7 +228,7 @@ msgstr "กริด3มิติ"
 #: pcbnew/menubar_footprint_editor.cpp:241 pcbnew/menubar_pcb_editor.cpp:456
 #: pcbnew/toolbars_footprint_viewer.cpp:181
 msgid "&File"
-msgstr "ไฟล์"
+msgstr "ไฟล์(&F)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:146 cvpcb/menubar.cpp:88
 #: eeschema/menubar.cpp:288
@@ -236,7 +236,7 @@ msgstr "ไฟล์"
 #: pagelayout_editor/menubar.cpp:167 pcbnew/menubar_footprint_editor.cpp:242
 #: pcbnew/menubar_pcb_editor.cpp:457
 msgid "&Edit"
-msgstr "แก้ไข"
+msgstr "แก้ไข(&E)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:147 eeschema/menubar.cpp:289
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:178
@@ -245,12 +245,12 @@ msgstr "แก้ไข"
 #: pcbnew/menubar_footprint_editor.cpp:243 pcbnew/menubar_pcb_editor.cpp:458
 #: pcbnew/toolbars_footprint_viewer.cpp:182
 msgid "&View"
-msgstr "มุมมอง"
+msgstr "มุมมอง(&V)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:148 cvpcb/menubar.cpp:89
 #: gerbview/menubar.cpp:226 kicad/menubar.cpp:194
 msgid "&Preferences"
-msgstr "ตั้งความชอบ"
+msgstr "ตั้งความชอบ(&P)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:55
 msgid "Reload board"
@@ -283,14 +283,12 @@ msgid "General"
 msgstr "ทั่วไป"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
-#, fuzzy
 msgid "Realtime Renderer"
-msgstr "เปิดเผยในไฟน์เดอร์"
+msgstr "ตัวเรนเดอร์ในเวลาจริง"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "เรย์เทรสซิ่ง"
+msgstr "ตัวเรนเดอร์ชนิดเรย์เทรสซิ่ง"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:240
@@ -641,9 +639,8 @@ msgid "Show silkscreen layers"
 msgstr "แสดงเลเยอร์ซิลค์สกรีน"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "ตัดซิลค์สกรีนที่เวียอนูลี"
+msgstr "ตัดซิลค์สกรีนที่ขอบของโซลเดอร์มาสก์"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
@@ -666,9 +663,8 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "เลเยอร์ผู้ใช้กำหนด (ไม่แสดงในโหมดเหมือนจริง)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
-msgstr "แสดงความคิดเห็นและเลเยอร์เขียนแบบ"
+msgstr "แสดงเลเยอร์ความคิดเห็นและเลเยอร์เขียนแบบ"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:61
 msgid "Show ECO layers"
@@ -719,9 +715,8 @@ msgid "Camera Options"
 msgstr "ทางเลือกกล้อง"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
-msgstr "เพิ่มมุมหมุน:"
+msgstr "ขั้นองศาการหมุน:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:123
 #: common/base_units.cpp:477 pcb_calculator/widgets/unit_selector.cpp:130
@@ -1725,7 +1720,7 @@ msgstr "ข้อมูลเลขรุ่น"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
-msgstr "สำเนาข้อมูลเลขรุ่น"
+msgstr "สำเนาข้อมูลเลขรุ่น(&C)"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
@@ -1733,7 +1728,7 @@ msgstr "สำเนาเลขรุ่น KiCad เข้าคลิปบ�
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr "รายงานข้อผิดพลาด"
+msgstr "รายงานข้อผิดพลาด(&R)"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:653
 msgid "Report a problem with KiCad"
@@ -1741,7 +1736,7 @@ msgstr "รายงานปัญหากับ KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:89
 msgid "&OK"
-msgstr "OK"
+msgstr "&OK"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:48
 msgid "Report"
@@ -3045,7 +3040,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:207
 msgid "&Auto save:"
-msgstr "บันทึกอัตโนมัติ:"
+msgstr "บันทึกอัตโนมัติ(&A):"
 
 #: common/dialogs/panel_common_settings_base.cpp:212
 msgid ""
@@ -3835,11 +3830,11 @@ msgstr "ตัวขั้นข้อความจะต้องเป็น
 
 #: common/eda_base_frame.cpp:454
 msgid "&About KiCad"
-msgstr "เกี่ยวกับ KiCad"
+msgstr "เกี่ยวกับ KiCad(&A)"
 
 #: common/eda_base_frame.cpp:457
 msgid "&Help"
-msgstr "ช่วยเหลือ"
+msgstr "ช่วยเหลือ(&H)"
 
 #: common/eda_base_frame.cpp:941
 #, c-format
@@ -3970,11 +3965,11 @@ msgstr "เปิดใช้งานเร่งความเร็วกร
 
 #: common/eda_draw_frame.cpp:1109
 msgid "&Enable Acceleration"
-msgstr "ใช้งานความเร่ง"
+msgstr "ใช้งานความเร่ง(&E)"
 
 #: common/eda_draw_frame.cpp:1109
 msgid "&No Thanks"
-msgstr "ไม่ ขอบคุณ"
+msgstr "ไม่,ขอบคุณ(&N)"
 
 #: common/eda_item.cpp:250
 msgid "Screen"
@@ -7380,11 +7375,11 @@ msgstr "ลำดับ"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:49
 msgid "Sort symbols by &X position"
-msgstr "เรียงสัญลักษณ์ตามตำแหน่ง X"
+msgstr "เรียงสัญลักษณ์ตามตำแหน่ง &X"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:67
 msgid "Sort symbols by &Y position"
-msgstr "เรียงสัญลักษณ์ตามตำแหน่ง Y"
+msgstr "เรียงสัญลักษณ์ตามตำแหน่ง &Y"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:82
 msgid "Keep existing annotations"
@@ -8909,7 +8904,7 @@ msgstr "สไตล์การใส่ทึบ"
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:45
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:167
 msgid "Common to all &units in symbol"
-msgstr "หน่วยร่วมกันทั้งหมดในสัญลักษณ์"
+msgstr "หน่วยร่วมกันทั้งหมดในสัญลักษณ์(&u)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
@@ -9506,11 +9501,11 @@ msgstr "ข้อมูล"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:57
 msgid "Pin &name:"
-msgstr "ชื่อขา:"
+msgstr "ชื่อขา(&n):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:64
 msgid "Pin num&ber:"
-msgstr "หมายเลขขา:"
+msgstr "หมายเลขขา(&b):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:66
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
@@ -9518,23 +9513,23 @@ msgstr "หมายเลขขา:1ถึง4ตัวอักษร แล�
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:73
 msgid "&X position:"
-msgstr "ตำแหน่ง X:"
+msgstr "ตำแหน่ง &X:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:82
 msgid "&Y position:"
-msgstr "ตำแหน่ง Y:"
+msgstr "ตำแหน่ง &Y:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:89
 msgid "&Pin length:"
-msgstr "ความยาวขา:"
+msgstr "ความยาวขา(&P):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:96
 msgid "N&ame text size:"
-msgstr "ขนาดข้อความชื่อ:"
+msgstr "ขนาดข้อความชื่อ(&a):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:103
 msgid "Number text si&ze:"
-msgstr "ขนาดตัวเลข:"
+msgstr "ขนาดตัวเลข(&z):"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:110
 msgid "Electrical type:"
@@ -9550,7 +9545,7 @@ msgstr "สไตล์กราฟิก:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:176
 msgid "&Visible"
-msgstr "มองเห็น"
+msgstr "มองเห็น(&V)"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:183
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:190
@@ -9846,7 +9841,7 @@ msgstr "พิมพ์หน้า %d"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
-msgstr "พิมพ์หน้ากระดาษอ้างอิงและบล็อกหัวเรื่อง"
+msgstr "พิมพ์หน้ากระดาษอ้างอิงและบล็อกหัวเรื่อง(&r)"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
@@ -9854,7 +9849,7 @@ msgstr "พิมพ์(หรือไม่)อ้างอิงในกร�
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:28
 msgid "Print in &black and white only"
-msgstr "พิมพ์ในแบบขาวดำเท่านั้น"
+msgstr "พิมพ์ในแบบขาวดำเท่านั้น(&b)"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:32
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:211
@@ -10008,7 +10003,7 @@ msgstr "เน็ตคลาส"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
-msgstr "ค้นหาสำหรับ:"
+msgstr "ค้นหาสำหรับ(&S):"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:36
 #: pcbnew/dialogs/dialog_find_base.cpp:33
@@ -10017,7 +10012,7 @@ msgstr "ข้อความและทางเลือกไวล์คา
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:41
 msgid "Replace &with:"
-msgstr "แทนที่ด้วย:"
+msgstr "แทนที่ด้วย(&w):"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:52
 msgid "Direction:"
@@ -10025,15 +10020,15 @@ msgstr "ทิศทาง:"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:61
 msgid "F&orward"
-msgstr "เดินหน้า"
+msgstr "เดินหน้า(&o)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:66
 msgid "&Backward"
-msgstr "ถอยหลัง"
+msgstr "ถอยหลัง(&B)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:82
 msgid "&Match case"
-msgstr "อักษรเล็กใหญ่ตรงกัน"
+msgstr "อักษรเล็กใหญ่ตรงกัน(&M)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
@@ -10047,7 +10042,7 @@ msgstr "ไวด์คาร์ด"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
 msgid "Search pin &names and numbers"
-msgstr "ค้นหาชื่อขาและหมายเลขขา"
+msgstr "ค้นหาชื่อขาและหมายเลขขา(&n)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
 msgid "Search hidden fields"
@@ -10055,7 +10050,7 @@ msgstr "เลือกช่องที่ซ่อนไว้"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
 msgid "Search the current &sheet only"
-msgstr "เลือกชีตปัจจุบันเท่านั้น"
+msgstr "เลือกชีตปัจจุบันเท่านั้น(&s)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
 msgid "Replace matches in reference designators"
@@ -10063,15 +10058,15 @@ msgstr "แทนค่าที่ตรงกันในอักษรอ้
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:115
 msgid "&Find"
-msgstr "ค้นหา"
+msgstr "ค้นหา(&F)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
 msgid "&Replace"
-msgstr "แทนที่"
+msgstr "แทนที่(&R)"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
 msgid "Replace &All"
-msgstr "แทนที่ทั้งหมด"
+msgstr "แทนที่ทั้งหมด(&A)"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:40
 msgid "Schematic Setup"
@@ -11570,7 +11565,7 @@ msgstr "ภาพปรากฏ"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:28
 msgid "S&how hidden pins"
-msgstr "แสดงขาที่ซ่อน"
+msgstr "แสดงขาที่ซ่อน(&h)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:31
 msgid "Show hidden fields"
@@ -11578,7 +11573,7 @@ msgstr "แสดงช่องที่ซ่อน"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:34
 msgid "Show page limi&ts"
-msgstr "แสดงข้อจำกัดหน้า"
+msgstr "แสดงข้อจำกัดหน้า(&t)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:42
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:71
@@ -11600,7 +11595,7 @@ msgstr "วาดทึบเต็มรูปร่าง"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
 msgid "&Highlight thickness:"
-msgstr "เน้นสีความหนา:"
+msgstr "เน้นสีความหนา(&H):"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:70
 msgid "(highlight color can be edited in the \"Colors\" page)"
@@ -11631,7 +11626,7 @@ msgstr "เน้นสีบนเน็ตเมื่อเน้นบนพ
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "&Restrict buses and wires to H and V orientation"
-msgstr "เข้มงวดทิศทางบัสและเส้นลวดไปทิศทาง H และ V เท่านั้น"
+msgstr "เข้มงวดทิศทางบัสและเส้นลวดไปทิศทาง H และ V เท่านั้น(&R)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 msgid "Mouse drag performs drag (G) operation"
@@ -11750,15 +11745,15 @@ msgstr "ช่องสัญลักษณ์จัดวางอัตโน
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:198
 msgid "A&utomatically place symbol fields"
-msgstr "จัดวางช่องสัญลักษณ์อัตโนมัติ"
+msgstr "จัดวางช่องสัญลักษณ์อัตโนมัติ(&u)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:201
 msgid "A&llow field autoplace to change justification"
-msgstr "ยอมให้ช่องวางอัตโนมัติเปลี่ยนการจัดเรียง"
+msgstr "ยอมให้ช่องวางอัตโนมัติเปลี่ยนการจัดเรียง(&l)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr "จัดเรียงช่องวางอัตโนมัติให้อยู่บนกริด50มิล เสมอ"
+msgstr "จัดเรียงช่องวางอัตโนมัติให้อยู่บนกริด50มิลเสมอ(&w)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:211
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:103
@@ -11768,12 +11763,12 @@ msgstr "ชิ้นส่วนซ้ำ"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:221
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:111
 msgid "&Horizontal pitch:"
-msgstr "ระยะแนวนอน:"
+msgstr "ระยะแนวนอน(&H):"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:232
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:122
 msgid "&Vertical pitch:"
-msgstr "ระยะแนวตั้ง:"
+msgstr "ระยะแนวตั้ง(&V):"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:243
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:147
@@ -11971,23 +11966,23 @@ msgstr "ใช้ธีม:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:29
 msgid "&Default line width:"
-msgstr "ขนาดเส้นตรงปริยาย:"
+msgstr "ขนาดเส้นตรงปริยาย(&D):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:60
 msgid "D&efault pin length:"
-msgstr "ความยาวขาปริยาย:"
+msgstr "ความยาวขาปริยาย(&e):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:71
 msgid "De&fault pin number size:"
-msgstr "ขนาดปริยายหมายเลขขา:"
+msgstr "ขนาดปริยายหมายเลขขา(&f):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:82
 msgid "Def&ault pin name size:"
-msgstr "ขนาดปริยายชื่อขา:"
+msgstr "ขนาดปริยายชื่อขา(&a):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:96
 msgid "Show pin &electrical type"
-msgstr "แสดงประเภททางไฟฟ้าของขา"
+msgstr "แสดงประเภททางไฟฟ้าของขา(&e)"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:126
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
@@ -11996,7 +11991,7 @@ msgstr "100"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:133
 msgid "&Pitch of repeated pins:"
-msgstr "ระยะห่างของขาซ้ำ:"
+msgstr "ระยะห่างของขาซ้ำ(&P):"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:137
 msgid "50"
@@ -12955,33 +12950,33 @@ msgstr "รายชื่อเน็ต…"
 #: gerbview/menubar.cpp:174 pagelayout_editor/menubar.cpp:116
 #: pcbnew/menubar_footprint_editor.cpp:138 pcbnew/menubar_pcb_editor.cpp:244
 msgid "&Units"
-msgstr "หน่วย"
+msgstr "หน่วย(&U)"
 
 #: eeschema/menubar.cpp:290
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:179
 #: pagelayout_editor/menubar.cpp:169 pcbnew/menubar_footprint_editor.cpp:244
 #: pcbnew/menubar_pcb_editor.cpp:459
 msgid "&Place"
-msgstr "วาง"
+msgstr "วาง(&P)"
 
 #: eeschema/menubar.cpp:291
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:180
 #: pagelayout_editor/menubar.cpp:170 pcbnew/menubar_footprint_editor.cpp:245
 #: pcbnew/menubar_pcb_editor.cpp:461
 msgid "&Inspect"
-msgstr "ตรวจสอบ"
+msgstr "ตรวจสอบ(&I)"
 
 #: eeschema/menubar.cpp:292 gerbview/menubar.cpp:225 kicad/menubar.cpp:193
 #: pcbnew/menubar_footprint_editor.cpp:246 pcbnew/menubar_pcb_editor.cpp:462
 msgid "&Tools"
-msgstr "เครื่องมือ"
+msgstr "เครื่องมือ(&T)"
 
 #: eeschema/menubar.cpp:293
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
 #: pagelayout_editor/menubar.cpp:171 pcbnew/menubar_footprint_editor.cpp:247
 #: pcbnew/menubar_pcb_editor.cpp:463
 msgid "P&references"
-msgstr "ตั้งความชอบ"
+msgstr "ตั้งความชอบ(&r)"
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:111
 #, c-format
@@ -14688,11 +14683,11 @@ msgstr "การจำลอง"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:101
 msgid "Show &Grid"
-msgstr "แสดงกริด"
+msgstr "แสดงกริด(&G)"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:105
 msgid "Show &Legend"
-msgstr "แสดงตำนาน"
+msgstr "แสดงตำนาน(&L)"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:111
 msgid "Dotted Current/Phase"
@@ -16459,12 +16454,12 @@ msgstr "ไม่ได้กำหนดดาต้าชีต"
 #: pagelayout_editor/tools/pl_selection_tool.cpp:618
 #: pcbnew/tools/pcb_selection_tool.cpp:1812
 msgid "Select &All\tA"
-msgstr "เลือกทั้งหมด\tA"
+msgstr "เลือกทั้งหมด(&A)\tA"
 
 #: eeschema/tools/ee_selection_tool.cpp:1562
 #: pcbnew/tools/pcb_selection_tool.cpp:1815
 msgid "&Expand Selection\tE"
-msgstr "ขยายการเลือก\tE"
+msgstr "ขยายการเลือก(&E)\tE"
 
 #: eeschema/tools/sch_drawing_tools.cpp:215
 msgid "Press <ESC> to cancel symbol creation."
@@ -17985,7 +17980,7 @@ msgstr "นำเข้าวงจร EAGLE CAD XML และพีซีบอ
 
 #: kicad/menubar.cpp:115
 msgid "&Archive Project..."
-msgstr "เก็บโปรเจ็คเข้าหน่วยเก็บถาวร..."
+msgstr "เก็บโปรเจ็คเข้าหน่วยเก็บถาวร(&A)..."
 
 #: kicad/menubar.cpp:116
 msgid "Archive all needed project files into zip archive"
@@ -17993,7 +17988,7 @@ msgstr "เก็บไฟล์โครงการที่จำเป็น
 
 #: kicad/menubar.cpp:120
 msgid "&Unarchive Project..."
-msgstr "นำโปรเจ็กออกจากหน่วยเก็บถาวร..."
+msgstr "นำโปรเจ็กออกจากหน่วยเก็บถาวร(&U)..."
 
 #: kicad/menubar.cpp:121 kicad/menubar.cpp:229
 msgid "Unarchive project files from zip archive"
@@ -22068,7 +22063,7 @@ msgstr "ล้างบอร์ด"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:22
 msgid "Delete &tracks connecting different nets"
-msgstr "ลบแทร็กเชื่อมต่อต่างเน็ต"
+msgstr "ลบแทร็กเชื่อมต่อต่างเน็ต(&t)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:23
 msgid ""
@@ -22078,7 +22073,7 @@ msgstr "ลบแทร็กที่เชื่อมต่อโหนด �
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
 msgid "&Delete redundant vias"
-msgstr "ลบเวียซ้ำซ้อน"
+msgstr "ลบเวียซ้ำซ้อน(&D)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:28
 msgid "remove vias on through hole pads and superimposed vias"
@@ -22090,7 +22085,7 @@ msgstr "ลบเวียที่เชื่อมต่อกับเลเ
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "&Merge co-linear tracks"
-msgstr "รวมแทร็กที่มีเส้นตรงร่วมกัน"
+msgstr "รวมแทร็กที่มีเส้นตรงร่วมกัน(&M)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:36
 msgid "merge aligned track segments, and remove null segments"
@@ -23415,35 +23410,35 @@ msgstr "ตัวเลือกการส่งออก VRML"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:22
 msgid "Include &footprints"
-msgstr "รวมฟุ้ทพรินท์"
+msgstr "รวมฟุ้ทพรินท์(&f)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:25
 msgid "Include t&ext items"
-msgstr "รวมชิ้นส่วนข้อความ"
+msgstr "รวมชิ้นส่วนข้อความ(&e)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:28
 msgid "Include &locked footprints"
-msgstr "รวมฟุ้ทพรินท์ที่ล็อก"
+msgstr "รวมฟุ้ทพรินท์ที่ล็อก(&l)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:31
 msgid "Include &drawings"
-msgstr "รวมเขียนแบบ"
+msgstr "รวมเขียนแบบ(&d)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:34
 msgid "Include &tracks"
-msgstr "รวมแทร็ก"
+msgstr "รวมแทร็ก(&t)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:37
 msgid "Include &board outline layer"
-msgstr "รวมเลเยอร์เค้าโครงบอร์ด"
+msgstr "รวมเลเยอร์เค้าโครงบอร์ด(&b)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:40
 msgid "Include &vias"
-msgstr "รวมเวีย"
+msgstr "รวมเวีย(&v)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:43
 msgid "Include &zones"
-msgstr "รวมโซน"
+msgstr "รวมโซน(&z)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:56
 msgid "Filter Selected Items"
@@ -25006,9 +25001,8 @@ msgid "Pad Properties"
 msgstr "คุณสมบัติแพ็ด"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:179
-#, fuzzy
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "คุณสมบัติปริยายของแพ็ด..."
+msgstr "คุณสมบัติปริยายแพ็ดสำหรับเครื่องมือเพิ่มแพ็ด"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:490
 #, c-format
@@ -26410,7 +26404,7 @@ msgstr "กฎพื้นฐาน:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
 msgid "Keep out tracks"
-msgstr "แทร็กคีบเอ้าท์"
+msgstr "แทร็กห้ามเข้า"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:49
 msgid "Prevent tracks from routing into this area"
@@ -26418,7 +26412,7 @@ msgstr "ป้องกันแทร็กไม่เข้าในบริ
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Keep out vias"
-msgstr "เวียคีบเอ้าท์"
+msgstr "เวียห้ามเข้า"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 msgid "Prevent vias from being placed in this area"
@@ -26690,27 +26684,27 @@ msgstr "ตั้งค่าคุณสมบัติของแพ็ดท
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Vias"
-msgstr "เวีย"
+msgstr "เวีย(&V)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Pads"
-msgstr "แพ็ด"
+msgstr "แพ็ด(&P)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 msgid "&Remove unused layers"
-msgstr "นำเลเยอร์ไม่ใช้ออก"
+msgstr "นำเลเยอร์ไม่ใช้ออก(&R)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:32
 msgid "Res&tore unused layers"
-msgstr "เรียกคืนเลเยอร์ไม่ใช้งาน"
+msgstr "เรียกคืนเลเยอร์ไม่ใช้งาน(&t)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:38
 msgid "&Selection only"
-msgstr "เลือกเท่านั้น"
+msgstr "เลือกเท่านั้น(&S)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
 msgid "Keep &outside layers"
-msgstr "เก็บเลเยอร์ด้านนอก"
+msgstr "เก็บเลเยอร์ด้านนอก(&o)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
 msgid "Remove Unused Pads"
@@ -26845,7 +26839,7 @@ msgstr "พลิกชิ้นส่วนบอร์ด L/R (ค่าปร
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:53
 msgid "Step for &rotate commands:"
-msgstr "ขั้นองศา สำหรับคำสั่งหมุน:"
+msgstr "ขั้นองศา สำหรับคำสั่งหมุน(&r):"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:58
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
@@ -28907,9 +28901,8 @@ msgid "Footprint type doesn't match footprint pads"
 msgstr "ชนิดฟุ้ทพรินท์ไม่ตรงกับแพ็ดของฟุ้ทพรินท์"
 
 #: pcbnew/drc/drc_item.cpp:210
-#, fuzzy
 msgid "Through hole pad has no hole"
-msgstr "คำเตือน:แพ็ดชนิดเจาะทะลุไม่มีรูเจาะ"
+msgstr "แพ็ดชนิดเจาะทะลุไม่มีรูเจาะ"
 
 #: pcbnew/drc/drc_item.cpp:334
 #, c-format
@@ -29647,9 +29640,9 @@ msgid "Expected \"Other\" type but set to \"%s\""
 msgstr "คาดหวังชนิด \"อื่นๆ\" แต่ตั้งเป็น \"%s\""
 
 #: pcbnew/footprint.cpp:2125
-#, fuzzy, c-format
+#, c-format
 msgid "(pad \"%s\")"
-msgstr "แพ็ด %s"
+msgstr "(แพ็ด \"%s\")"
 
 #: pcbnew/footprint.cpp:2227 pcbnew/pad.cpp:1540 pcbnew/zone.cpp:1420
 msgid "Clearance Override"
@@ -30179,7 +30172,7 @@ msgstr "กราฟฟิค..."
 
 #: pcbnew/menubar_footprint_editor.cpp:78
 msgid "View as &PNG..."
-msgstr "ดูเป็น PNG..."
+msgstr "ดูเป็น &PNG..."
 
 #: pcbnew/menubar_footprint_editor.cpp:79
 msgid "Create a PNG file from the current view"
@@ -30187,15 +30180,15 @@ msgstr "สร้างไฟล์ PNG จากมุมมองปัจจ�
 
 #: pcbnew/menubar_footprint_editor.cpp:150 pcbnew/menubar_pcb_editor.cpp:260
 msgid "&Drawing Mode"
-msgstr "โหมดเขียนแบบ"
+msgstr "โหมดเขียนแบบ(&D)"
 
 #: pcbnew/menubar_footprint_editor.cpp:160 pcbnew/menubar_pcb_editor.cpp:285
 msgid "&Contrast Mode"
-msgstr "โหมดการตัดกัน"
+msgstr "โหมดการตัดกัน(&C)"
 
 #: pcbnew/menubar_footprint_editor.cpp:208
 msgid "&Load Footprint from PCB..."
-msgstr "โหลดฟุ้ทพรินท์จากพีซีบี..."
+msgstr "โหลดฟุ้ทพรินท์จากพีซีบี(&L)..."
 
 #: pcbnew/menubar_footprint_editor.cpp:209
 msgid "Load a footprint from the current board into the editor"
@@ -30203,7 +30196,7 @@ msgstr "โหลดฟุ้ทพริ้นทีจากบอร์ดป
 
 #: pcbnew/menubar_footprint_editor.cpp:213
 msgid "&Insert Footprint on PCB"
-msgstr "แทรกฟุ้ทพรินท์บนพีซีบี"
+msgstr "แทรกฟุ้ทพรินท์บนพีซีบี(&I)"
 
 #: pcbnew/menubar_footprint_editor.cpp:214
 msgid "Insert footprint onto current board"
@@ -30211,7 +30204,7 @@ msgstr "แทรกฟุ้ทพรินท์ลงในบอร์ดป
 
 #: pcbnew/menubar_pcb_editor.cpp:100
 msgid "Resc&ue"
-msgstr "กู้ภัย"
+msgstr "กู้ภัย(&u)"
 
 #: pcbnew/menubar_pcb_editor.cpp:101
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
@@ -30327,7 +30320,7 @@ msgstr "ปลั๊กอินภายนอก"
 
 #: pcbnew/menubar_pcb_editor.cpp:460
 msgid "Ro&ute"
-msgstr "เดินลายเส้น"
+msgstr "เดินลายเส้น(&u)"
 
 #: pcbnew/microwave/microwave_footprint.cpp:56
 msgid "Gap Size:"
@@ -31431,13 +31424,13 @@ msgstr ""
 "Eco1_User"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2600
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"แทร็กพบในเลเยอร์ของ Altium (%d) KiCad ไม่มีเลเยอร์เทียบเท่า จะถูกย้ายไปยังเลเยอร์ "
-"Eco1_User"
+"แทร็กพบในเลเยอร์ของ Altium (%d) ไม่มีเลเยอร์เทียบเท่าในคีแคด "
+"มันจะถูกย้ายไปยังเลเยอร์ Eco1_Userของคีแคดแทน"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2641
 msgid "Loading text..."
