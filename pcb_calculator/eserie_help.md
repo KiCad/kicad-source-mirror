@@ -12,8 +12,8 @@ Available values are approximately equally spaced in a logarithmic scale.
 - You can enter the required resistance from 0.0025 to 4000 kΩ.
 - Solutions using up to 4 components are given.
 
-By default, the request value is always excluded from the solution set.  It is also possible to specify
-up to two additional values to exclude from the solution if these component values are not available
+The requested value is always excluded from the solution set.<br>
+Optionally up to two additional values can be excluded in case of component availability problems.
 
 Solutions are given in the following formats:
 
