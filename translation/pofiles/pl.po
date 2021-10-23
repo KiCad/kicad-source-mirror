@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-22 12:32-0700\n"
-"PO-Revision-Date: 2021-10-21 06:28+0000\n"
+"PO-Revision-Date: 2021-10-25 13:17+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -295,14 +295,12 @@ msgid "General"
 msgstr "Główne"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
-#, fuzzy
 msgid "Realtime Renderer"
-msgstr "Przeglądaj przez Finder"
+msgstr "Renderowanie w czasie rzeczywistym"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "Opcje renderowania raytracingu"
+msgstr "Renderowanie z opcją fotorealistości"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:240
@@ -654,9 +652,8 @@ msgid "Show silkscreen layers"
 msgstr "Pokaż warstwy opisowe"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Przytnij opis na okręgach przelotek"
+msgstr "Przytnij opis na brzegach soldermaski"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
@@ -679,7 +676,6 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "Warstwy użytkownika (nie pokazywane w trybie realistycznym)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
 msgstr "Pokaż warstwy komentarzy i rysunkowe"
 
@@ -732,9 +728,8 @@ msgid "Camera Options"
 msgstr "Opcje kamery"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
-msgstr "Przyrost rotacji:"
+msgstr "Zmiana rotacji o:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:123
 #: common/base_units.cpp:477 pcb_calculator/widgets/unit_selector.cpp:130
@@ -25522,9 +25517,10 @@ msgid "Pad Properties"
 msgstr "Właściwości pola lutowniczego"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:179
-#, fuzzy
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "Domyślne właściwości pola lutowniczego..."
+msgstr ""
+"Domyślne właściwości pola lutowniczego dla narzędzia umieszczającego pola "
+"lutownicze"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:490
 #, c-format
@@ -29565,9 +29561,8 @@ msgid "Footprint type doesn't match footprint pads"
 msgstr "Typ footprintu nie odpowiada polom footprintu"
 
 #: pcbnew/drc/drc_item.cpp:210
-#, fuzzy
 msgid "Through hole pad has no hole"
-msgstr "Ostrzeżenie: Pole lutownicze THT nie posiada otworu."
+msgstr "Pole lutownicze THT nie posiada otworu"
 
 #: pcbnew/drc/drc_item.cpp:334
 #, c-format
@@ -30316,9 +30311,9 @@ msgid "Expected \"Other\" type but set to \"%s\""
 msgstr "Spodziewano typu \"Inny typ pola lutowniczego\" ale ustawiono \"%s\""
 
 #: pcbnew/footprint.cpp:2125
-#, fuzzy, c-format
+#, c-format
 msgid "(pad \"%s\")"
-msgstr "pole %s"
+msgstr "(pole lutownicze \"%s\")"
 
 #: pcbnew/footprint.cpp:2227 pcbnew/pad.cpp:1540 pcbnew/zone.cpp:1420
 msgid "Clearance Override"
@@ -32138,13 +32133,13 @@ msgstr ""
 "KiCad. Zamiast tego umieszczono ją na Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2600
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Ścieżka ograniczeń na warstwie Altium (%d) nie ma odpowiednika w programie "
-"KiCad. Zamiast tego umieszczono ją na Eco1_User."
+"Ścieżka na warstwie Altium (%d) nie ma odpowiednika w programie KiCad. "
+"Zamiast tego umieszczono ją na Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2641
 msgid "Loading text..."
