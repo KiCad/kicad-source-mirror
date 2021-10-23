@@ -1715,7 +1715,7 @@ bool DL_Dxf::handleLWPolylineData( DL_CreationInterface*    /*creationInterface*
                 vertices[4 * vertexIndex + (groupCode / 10 - 1)] = toReal( groupValue );
             }
         }
-        else if( groupCode==42 && vertexIndex<maxVertices )
+        else if( groupCode == 42 && vertexIndex < maxVertices && vertexIndex >= 0 )
         {
             vertices[4 * vertexIndex + 3] = toReal( groupValue );
         }
