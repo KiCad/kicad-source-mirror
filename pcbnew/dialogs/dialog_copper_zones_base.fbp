@@ -3440,7 +3440,7 @@
                                                 <property name="context_help"></property>
                                                 <property name="context_menu">1</property>
                                                 <property name="default_pane">0</property>
-                                                <property name="digits">0</property>
+                                                <property name="digits">2</property>
                                                 <property name="dock">Dock</property>
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
@@ -3452,7 +3452,7 @@
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
                                                 <property name="inc">0.1</property>
-                                                <property name="initial">0.100000</property>
+                                                <property name="initial">0.1</property>
                                                 <property name="max">1</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
