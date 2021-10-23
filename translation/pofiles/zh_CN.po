@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-22 12:32-0700\n"
-"PO-Revision-Date: 2021-10-21 11:49+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2021-10-25 13:17+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -298,14 +298,12 @@ msgid "General"
 msgstr "常规"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
-#, fuzzy
 msgid "Realtime Renderer"
-msgstr "在查找器中显示"
+msgstr "实时渲染器"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "光线追踪渲染选项"
+msgstr "光线追踪渲染器"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:240
@@ -656,9 +654,8 @@ msgid "Show silkscreen layers"
 msgstr "显示丝印层"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "剪去过孔环的丝印"
+msgstr "将丝印夹在阻焊层边缘"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
@@ -681,7 +678,6 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "用户图层 (在真实渲染模式中不显示)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
 msgstr "显示注释和绘图层"
 
@@ -734,7 +730,6 @@ msgid "Camera Options"
 msgstr "相机选项"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
 msgstr "旋转增量："
 
@@ -24976,9 +24971,8 @@ msgid "Pad Properties"
 msgstr "焊盘属性"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:179
-#, fuzzy
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "默认焊盘属性..."
+msgstr "添加焊盘工具的默认焊盘属性"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:490
 #, c-format
@@ -28865,9 +28859,8 @@ msgid "Footprint type doesn't match footprint pads"
 msgstr "封装类型与封装焊盘不匹配"
 
 #: pcbnew/drc/drc_item.cpp:210
-#, fuzzy
 msgid "Through hole pad has no hole"
-msgstr "警告：通孔焊盘没有孔。"
+msgstr "通孔焊盘没有孔"
 
 #: pcbnew/drc/drc_item.cpp:334
 #, c-format
@@ -29602,9 +29595,9 @@ msgid "Expected \"Other\" type but set to \"%s\""
 msgstr "预期的类型为“其他”, 但被设为“%s”"
 
 #: pcbnew/footprint.cpp:2125
-#, fuzzy, c-format
+#, c-format
 msgid "(pad \"%s\")"
-msgstr "焊盘 %s"
+msgstr "(焊盘 \"%s\")"
 
 #: pcbnew/footprint.cpp:2227 pcbnew/pad.cpp:1540 pcbnew/zone.cpp:1420
 msgid "Clearance Override"
@@ -31386,12 +31379,11 @@ msgstr ""
 "Eco1_User 层。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2600
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
-msgstr ""
-"Altium 层 (%d) 上找到布线没有 KiCad 等效项。它已被移动至 KiCad Eco1_User 层。"
+msgstr "Altium 层 (%d) 上找到布线没有 KiCad 等效项。它已被移动至 KiCad Eco1_User 层。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2641
 msgid "Loading text..."
