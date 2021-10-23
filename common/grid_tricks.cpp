@@ -57,6 +57,7 @@ GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid ):
                     wxGridEventHandler( GRID_TRICKS::onGridLabelLeftClick ), nullptr, this );
     aGrid->Connect( GRIDTRICKS_FIRST_ID, GRIDTRICKS_LAST_ID, wxEVT_COMMAND_MENU_SELECTED,
                     wxCommandEventHandler( GRID_TRICKS::onPopupSelection ), nullptr, this );
+    aGrid->Connect( wxEVT_CHAR_HOOK, wxCharEventHandler( GRID_TRICKS::onCharHook ), nullptr, this );
     aGrid->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( GRID_TRICKS::onKeyDown ), nullptr, this );
     aGrid->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( GRID_TRICKS::onUpdateUI ),
                     nullptr, this );
@@ -358,6 +359,37 @@ void GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
                 m_grid->ShowCol( col );
         }
     }
+}
+
+
+void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
+{
+    bool handled = false;
+
+    if( ev.GetModifiers() == wxMOD_CONTROL && ev.GetKeyCode() == 'V' )
+    {
+        if( m_grid->IsCellEditControlShown() && wxTheClipboard->Open() )
+        {
+            if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
+            {
+                wxTextDataObject data;
+                wxTheClipboard->GetData( data );
+
+                if( data.GetText().Contains( COL_SEP ) || data.GetText().Contains( ROW_SEP ) )
+                {
+                    m_grid->CommitPendingChanges( true /* quiet mode */ );
+                    paste_text( data.GetText() );
+                    handled = true;
+                }
+            }
+
+            wxTheClipboard->Close();
+            m_grid->ForceRefresh();
+        }
+    }
+
+    if( !handled )
+        ev.Skip( true );
 }
 
 
