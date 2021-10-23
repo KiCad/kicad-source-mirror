@@ -98,7 +98,6 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
                                          WX_GRID* aGrid, SCH_LABEL_BASE* aLabel ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
-        m_userUnits( aDialog->GetUserUnits() ),
         m_grid( aGrid ),
         m_parentType( SCH_LABEL_LOCATE_ANY_T ),
         m_mandatoryFieldCount( aLabel->GetMandatoryFieldCount() ),
