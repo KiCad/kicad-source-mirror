@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <core/kicad_algo.h>
 #include <symbol_library.h>
 #include <confirm.h>
@@ -30,6 +32,8 @@
 #include <general.h>
 #include <kiway.h>
 #include <symbol_viewer_frame.h>
+#include <symbol_tree_model_adapter.h>
+#include <symbol_editor/symbol_editor_settings.h>
 #include <sch_symbol.h>
 #include <sch_edit_frame.h>
 #include <symbol_lib_table.h>
@@ -37,7 +41,6 @@
 #include <tools/ee_actions.h>
 
 #include <dialog_choose_symbol.h>
-#include <symbol_tree_model_adapter.h>
 
 PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibBrowser( wxTopLevelWindow* aParent,
                                                         const SCHLIB_FILTER* aFilter,
@@ -97,6 +100,10 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
     // One DIALOG_CHOOSE_SYMBOL dialog at a time.  User probably can't handle more anyway.
     if( !dialogLock.try_lock() )
         return PICKED_SYMBOL();
+
+    // Make sure settings are loaded before we start running multi-threaded symbol loaders
+    Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> adapter = SYMBOL_TREE_MODEL_ADAPTER::Create( this, libs );
     bool loaded = false;
