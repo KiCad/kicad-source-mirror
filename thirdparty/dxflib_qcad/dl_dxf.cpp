@@ -4926,7 +4926,7 @@ void DL_Dxf::writeUcs( DL_WriterA& dw )
  */
 void DL_Dxf::writeDimStyle( DL_WriterA& dw,
         double dimasz, double dimexe, double dimexo,
-        double dimgap, double dimtxt )
+        double dimgap, double dimtxt, int dimtad, bool dimtih )
 {
     dw.dxfString(  0, "TABLE" );
     dw.dxfString(  2, "DIMSTYLE" );
@@ -4994,7 +4994,8 @@ void DL_Dxf::writeDimStyle( DL_WriterA& dw,
         dw.dxfInt( 72, 0 );
     }
 
-    dw.dxfInt( 73, 0 );
+    // DIMTIH:
+    dw.dxfInt( 73, (int) dimtih );
     dw.dxfInt( 74, 0 );
 
     if( version==DL_VERSION_R12 )
@@ -5003,7 +5004,8 @@ void DL_Dxf::writeDimStyle( DL_WriterA& dw,
         dw.dxfInt( 76, 0 );
     }
 
-    dw.dxfInt( 77, 1 );
+    // DIMTAD:
+    dw.dxfInt( 77, dimtad );
     dw.dxfInt( 78, 8 );
     dw.dxfReal( 140, dimtxt );
     dw.dxfReal( 141, 2.5 );
