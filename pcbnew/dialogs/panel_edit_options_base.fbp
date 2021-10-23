@@ -2346,7 +2346,7 @@
                                                     <property name="permission">none</property>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxALL</property>
+                                                        <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxCheckBox" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -2377,7 +2377,7 @@
                                                             <property name="gripper">0</property>
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Limit actions to 45 degrees from start</property>
+                                                            <property name="label">Constrain to H, V, 45 degrees</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>

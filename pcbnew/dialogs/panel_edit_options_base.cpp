@@ -242,8 +242,8 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* sbSizerFpGraphics;
 	sbSizerFpGraphics = new wxStaticBoxSizer( new wxStaticBox( fpPage, wxID_ANY, _("Graphics Editing") ), wxVERTICAL );
 
-	m_cbFpGraphic45Mode = new wxCheckBox( sbSizerFpGraphics->GetStaticBox(), wxID_ANY, _("Limit actions to 45 degrees from start"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerFpGraphics->Add( m_cbFpGraphic45Mode, 0, wxALL, 5 );
+	m_cbFpGraphic45Mode = new wxCheckBox( sbSizerFpGraphics->GetStaticBox(), wxID_ANY, _("Constrain to H, V, 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizerFpGraphics->Add( m_cbFpGraphic45Mode, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer10->Add( sbSizerFpGraphics, 1, wxEXPAND, 5 );
