@@ -389,15 +389,13 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
                                    m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 4 );
         }
     }
-    else if( IsCopperLayer( aLayer ) )
+
+    if( IsCopperLayer( aLayer ) )
     {
+        m_view->SetTopLayer( ZONE_LAYER_FOR( aLayer ) );
+
         // Display labels for copper layers on the top
         m_view->SetTopLayer( GetNetnameLayer( aLayer ) );
-        m_view->SetTopLayer( ZONE_LAYER_FOR( aLayer ) );
-    }
-    else
-    {
-        m_view->SetTopLayer( ZONE_LAYER_FOR( aLayer ) );
     }
 
     m_view->EnableTopLayer( true );

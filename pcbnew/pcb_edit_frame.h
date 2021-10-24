@@ -760,6 +760,8 @@ protected:
 
     int inferLegacyEdgeClearance( BOARD* aBoard );
 
+    void redrawNetnames( wxTimerEvent& aEvent );
+
 public:
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
 
@@ -785,7 +787,13 @@ private:
 
     DIALOG_FIND* m_findDialog;
 
-    wxTimer* m_eventCounterTimer;
+    /**
+     * Keep track of viewport so that track net labels can be adjusted when it changes.
+     */
+    BOX2D        m_lastViewport;
+    wxTimer      m_redrawNetnamesTimer;
+
+    wxTimer*     m_eventCounterTimer;
 };
 
 #endif  // __PCB_EDIT_FRAME_H__

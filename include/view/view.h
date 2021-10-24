@@ -451,6 +451,9 @@ public:
         }
     }
 
+    /**
+     * Set a layer display-only (ie: to be rendered but not returned by hit test queries).
+     */
     inline void SetLayerDisplayOnly( int aLayer, bool aDisplayOnly = true )
     {
         wxCHECK( aLayer < (int) m_layers.size(), /*void*/ );

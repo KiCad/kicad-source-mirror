@@ -117,7 +117,7 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
     // Netnames for copper layers
     for( LSEQ cu = LSET::AllCuMask().CuStack();  cu;  ++cu )
     {
-        const COLOR4D lightLabel( 0.8, 0.8, 0.8, 0.7 );
+        const COLOR4D lightLabel( 1.0, 1.0, 1.0, 0.7 );
         const COLOR4D darkLabel = lightLabel.Inverted();
         PCB_LAYER_ID  layer = *cu;
 
@@ -538,8 +538,8 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 {
-    VECTOR2D start( aTrack->GetStart() );
-    VECTOR2D end( aTrack->GetEnd() );
+    VECTOR2I start( aTrack->GetStart() );
+    VECTOR2I end( aTrack->GetEnd() );
     int      width = aTrack->GetWidth();
     COLOR4D  color = m_pcbSettings.GetColor( aTrack, aLayer );
 
@@ -551,11 +551,23 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         if( aTrack->GetNetCode() <= NETINFO_LIST::UNCONNECTED )
             return;
 
-        VECTOR2D line = ( end - start );
+        // When drawing netnames, clip the track to the viewport
+        BOX2D    viewport;
+        VECTOR2D screenSize = m_gal->GetScreenPixelSize();
+        const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
+
+        viewport.SetOrigin( VECTOR2D( matrix * VECTOR2D( 0, 0 ) ) );
+        viewport.SetEnd( VECTOR2D( matrix * screenSize ) );
+
+        EDA_RECT clipBox( viewport.Normalize() );
+
+        ClipLine( &clipBox, start.x, start.y, end.x, end.y );
+
+        VECTOR2I line = ( end - start );
         double length = line.EuclideanNorm();
 
         // Check if the track is long enough to have a netname displayed
-        if( length < 10 * width )
+        if( length < 6 * width )
             return;
 
         const wxString& netName = UnescapeString( aTrack->GetShortNetname() );
@@ -580,7 +592,6 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
             textPosition.x += penWidth / 1.4;
             textPosition.y += penWidth / 1.4;
         }
-
 
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( false );

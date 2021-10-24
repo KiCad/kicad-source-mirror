@@ -556,12 +556,29 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     if( IsNetnameLayer( aLayer ) )
     {
+        if( GetNetCode() <= NETINFO_LIST::UNCONNECTED )
+            return HIDE;
+
         // Hide netnames on dimmed tracks
         if( renderSettings->GetHighContrast() )
         {
             if( m_layer != renderSettings->GetPrimaryHighContrastLayer() )
                 return HIDE;
         }
+
+        // When drawing netnames, clip the track to the viewport
+        VECTOR2I start( GetStart() );
+        VECTOR2I end( GetEnd() );
+        EDA_RECT clipBox( aView->GetViewport() );
+
+        ClipLine( &clipBox, start.x, start.y, end.x, end.y );
+
+        VECTOR2I line = ( end - start );
+        double length = line.EuclideanNorm();
+
+        // Check if the track is long enough to have a netname displayed
+        if( length < 6 * GetWidth() )
+            return HIDE;
 
         // Netnames will be shown only if zoom is appropriate
         return ( double ) Millimeter2iu( 4 ) / ( m_Width + 1 );

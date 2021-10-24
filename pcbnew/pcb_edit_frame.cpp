@@ -177,7 +177,8 @@ END_EVENT_TABLE()
 PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB_EDITOR, _( "PCB Editor" ), wxDefaultPosition,
                          wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PCB_EDIT_FRAME_NAME ),
-    m_exportNetlistAction( nullptr ), m_findDialog( nullptr )
+    m_exportNetlistAction( nullptr ),
+    m_findDialog( nullptr )
 {
     m_maximizeByDefault = true;
     m_showBorderAndTitleBlock = true;   // true to display sheet references
@@ -309,6 +310,22 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // to calculate the wrong zoom size.  See PCB_EDIT_FRAME::onSize().
     Bind( wxEVT_SIZE, &PCB_EDIT_FRAME::onSize, this );
 
+    // Redraw netnames (so that they fall within the current viewport) after the viewport
+    // has stopped changing.  Redrawing them without the timer moves them smoothly with scrolling,
+    // making it look like the tracks are being dragged -- which we don't want.
+    m_redrawNetnamesTimer.SetOwner( this );
+    Connect( wxEVT_TIMER, wxTimerEventHandler( PCB_EDIT_FRAME::redrawNetnames ), nullptr, this );
+
+    Bind( wxEVT_IDLE,
+            [this]( wxIdleEvent& aEvent )
+            {
+                if( GetCanvas()->GetView()->GetViewport() != m_lastViewport )
+                {
+                    m_lastViewport = GetCanvas()->GetView()->GetViewport();
+                    m_redrawNetnamesTimer.StartOnce( 100 );
+                }
+            } );
+
     resolveCanvasType();
 
     setupUnits( config() );
@@ -435,6 +452,20 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard, bool aBuildConnectivity,
 BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
 {
     return m_pcb;
+}
+
+
+void PCB_EDIT_FRAME::redrawNetnames( wxTimerEvent& aEvent )
+{
+    KIGFX::VIEW* view = GetCanvas()->GetView();
+
+    for( PCB_TRACK* track : GetBoard()->Tracks() )
+    {
+        if( track->ViewGetLOD( GetNetnameLayer( track->GetLayer() ), view ) < view->GetScale() )
+            view->Update( track, KIGFX::REPAINT );
+    }
+
+    GetCanvas()->Refresh();
 }
 
 
