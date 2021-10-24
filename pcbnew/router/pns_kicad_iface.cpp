@@ -450,6 +450,9 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     PNS::CONSTRAINT        constraint;
 
+    if( aStartItem && m_startLayer < 0 )
+        m_startLayer = aStartItem->Layer();
+
     aSizes.SetMinClearance( bds.m_MinClearance );
 
     int  trackWidth = bds.m_TrackMinWidth;
@@ -466,7 +469,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     if( !found && bds.UseNetClassTrack() && aStartItem )
     {
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem, nullptr,
-                                             aStartItem->Layer(), &constraint ) )
+                                             m_startLayer, &constraint ) )
         {
             trackWidth = std::max( trackWidth, constraint.m_Value.Opt() );
             found = true;
@@ -499,13 +502,13 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     if( bds.UseNetClassVia() && aStartItem )   // netclass value
     {
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER, aStartItem,
-                                             nullptr, aStartItem->Layer(), &constraint ) )
+                                             nullptr, m_startLayer, &constraint ) )
         {
             viaDiameter = std::max( viaDiameter, constraint.m_Value.Opt() );
         }
 
-        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_HOLE, aStartItem,
-                                             nullptr, aStartItem->Layer(), &constraint ) )
+        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_HOLE, aStartItem, nullptr,
+                                             m_startLayer, &constraint ) )
         {
             viaDrill = std::max( viaDrill, constraint.m_Value.Opt() );
         }
@@ -533,13 +536,13 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     if( bds.UseNetClassDiffPair() && aStartItem )
     {
         if( !found && m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, aStartItem,
-                                                       nullptr, aStartItem->Layer(), &constraint ) )
+                                                       nullptr, m_startLayer, &constraint ) )
         {
             diffPairWidth = std::max( diffPairWidth, constraint.m_Value.Opt() );
         }
 
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, aStartItem,
-                                             nullptr, aStartItem->Layer(), &constraint ) )
+                                             nullptr, m_startLayer, &constraint ) )
         {
             diffPairGap = std::max( diffPairGap, constraint.m_Value.Opt() );
             diffPairViaGap = std::max( diffPairViaGap, constraint.m_Value.Opt() );
@@ -833,6 +836,7 @@ PNS_KICAD_IFACE_BASE::PNS_KICAD_IFACE_BASE()
     m_board = nullptr;
     m_world = nullptr;
     m_debugDecorator = nullptr;
+    m_startLayer = -1;
 }
 
 

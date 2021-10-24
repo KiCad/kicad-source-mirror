@@ -1014,6 +1014,7 @@ bool ROUTER_TOOL::prepareInteractive()
 
     PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
 
+    m_iface->SetStartLayer( routingLayer );
     m_iface->ImportSizes( sizes, m_startItem, -1 );
     sizes.AddLayerPair( frame()->GetScreen()->m_Route_Layer_TOP,
                         frame()->GetScreen()->m_Route_Layer_BOTTOM );

@@ -72,6 +72,8 @@ public:
 
     void SetDebugDecorator( PNS::DEBUG_DECORATOR* aDec );
 
+    void SetStartLayer( int aLayer ) { m_startLayer = aLayer; }
+
     virtual PNS::NODE* GetWorld() const override
     {
         return m_world;
@@ -101,6 +103,7 @@ protected:
 protected:
     PNS::NODE* m_world;
     BOARD*     m_board;
+    int        m_startLayer;
 };
 
 class PNS_KICAD_IFACE : public PNS_KICAD_IFACE_BASE
@@ -126,6 +129,7 @@ public:
     void RemoveItem( PNS::ITEM* aItem ) override;
 
     void UpdateNet( int aNetCode ) override;
+
 
 private:
     struct OFFSET
