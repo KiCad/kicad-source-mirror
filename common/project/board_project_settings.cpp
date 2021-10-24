@@ -128,3 +128,66 @@ void PARAM_LAYER_PRESET::jsonToPresets( const nlohmann::json& aJson )
         }
     }
 }
+
+
+PARAM_VIEWPORT::PARAM_VIEWPORT( const std::string& aPath, std::vector<VIEWPORT>* aViewportList ) :
+        PARAM_LAMBDA<nlohmann::json>( aPath,
+                                      std::bind( &PARAM_VIEWPORT::viewportsToJson, this ),
+                                      std::bind( &PARAM_VIEWPORT::jsonToViewports, this, _1 ),
+                                      {} ),
+        m_viewports( aViewportList )
+{
+    wxASSERT( aViewportList );
+}
+
+
+nlohmann::json PARAM_VIEWPORT::viewportsToJson()
+{
+    nlohmann::json ret = nlohmann::json::array();
+
+    for( const VIEWPORT& viewport : *m_viewports )
+    {
+        nlohmann::json js = {
+                { "name", viewport.name },
+                { "x", viewport.rect.GetX() },
+                { "y", viewport.rect.GetY() },
+                { "w", viewport.rect.GetWidth() },
+                { "h", viewport.rect.GetHeight() }
+        };
+
+        ret.push_back( js );
+    }
+
+    return ret;
+}
+
+
+void PARAM_VIEWPORT::jsonToViewports( const nlohmann::json& aJson )
+{
+    if( aJson.empty() || !aJson.is_array() )
+        return;
+
+    m_viewports->clear();
+
+    for( const nlohmann::json& viewport : aJson )
+    {
+        if( viewport.contains( "name" ) )
+        {
+            VIEWPORT v( viewport.at( "name" ).get<wxString>() );
+
+            if( viewport.contains( "x" ) )
+                v.rect.SetX( viewport.at( "x" ).get<double>() );
+
+            if( viewport.contains( "y" ) )
+                v.rect.SetY( viewport.at( "y" ).get<double>() );
+
+            if( viewport.contains( "w" ) )
+                v.rect.SetWidth( viewport.at( "w" ).get<double>() );
+
+            if( viewport.contains( "h" ) )
+                v.rect.SetHeight( viewport.at( "h" ).get<double>() );
+
+            m_viewports->emplace_back( v );
+        }
+    }
+}

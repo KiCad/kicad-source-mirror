@@ -171,7 +171,28 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	bPresets->Add( m_cbLayerPresets, 0, wxALL|wxEXPAND, 2 );
 
 
-	bBottomMargin->Add( bPresets, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bBottomMargin->Add( bPresets, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	bBottomMargin->Add( 0, 2, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bViewports;
+	bViewports = new wxBoxSizer( wxVERTICAL );
+
+	m_viewportsLabel = new wxStaticText( this, wxID_ANY, _("Viewports (Alt+Tab):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_viewportsLabel->Wrap( -1 );
+	bViewports->Add( m_viewportsLabel, 1, wxRIGHT|wxLEFT, 2 );
+
+	wxString m_cbViewportsChoices[] = { _("(unsaved)") };
+	int m_cbViewportsNChoices = sizeof( m_cbViewportsChoices ) / sizeof( wxString );
+	m_cbViewports = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbViewportsNChoices, m_cbViewportsChoices, 0 );
+	m_cbViewports->SetSelection( 1 );
+	m_cbViewports->SetToolTip( _("Layer presets") );
+
+	bViewports->Add( m_cbViewports, 0, wxALL|wxEXPAND, 2 );
+
+
+	bBottomMargin->Add( bViewports, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_sizerOuter->Add( bBottomMargin, 0, wxBOTTOM|wxEXPAND, 2 );
@@ -195,6 +216,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_netsGrid->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelNetclasses->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_cbLayerPresets->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::onLayerPresetChanged ), NULL, this );
+	m_cbViewports->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::onViewportChanged ), NULL, this );
 }
 
 APPEARANCE_CONTROLS_BASE::~APPEARANCE_CONTROLS_BASE()
@@ -214,5 +236,6 @@ APPEARANCE_CONTROLS_BASE::~APPEARANCE_CONTROLS_BASE()
 	m_netsGrid->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_panelNetclasses->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( APPEARANCE_CONTROLS_BASE::OnSetFocus ), NULL, this );
 	m_cbLayerPresets->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::onLayerPresetChanged ), NULL, this );
+	m_cbViewports->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( APPEARANCE_CONTROLS_BASE::onViewportChanged ), NULL, this );
 
 }

@@ -29,7 +29,7 @@
 class EDA_VIEW_SWITCHER : public EDA_VIEW_SWITCHER_BASE
 {
 public:
-    EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aItems );
+    EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aItems, wxKeyCode aCtrlKey );
 
     int GetSelection() const { return m_listBox->GetSelection(); }
 
@@ -38,8 +38,9 @@ protected:
     bool Show( bool show ) override;
 
 protected:
-    bool m_tabState;
-    bool m_receivingEvents;
+    bool      m_tabState;
+    bool      m_receivingEvents;
+    wxKeyCode m_ctrlKey;
 };
 
 #endif    // EDA_VIEW_SWITCHER_H

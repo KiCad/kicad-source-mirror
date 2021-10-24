@@ -94,23 +94,43 @@ void PCB_BASE_EDIT_FRAME::doCloseWindow()
 
 bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
 {
-    static bool s_switcherShown = false;
+    static bool s_presetSwitcherShown = false;
+    static bool s_viewportSwitcherShown = false;
 
-    if( !s_switcherShown && wxGetKeyState( WXK_RAW_CONTROL ) && wxGetKeyState( WXK_TAB ) )
+    if( !s_presetSwitcherShown && wxGetKeyState( WXK_RAW_CONTROL ) && wxGetKeyState( WXK_TAB ) )
     {
         if( m_appearancePanel && this->IsActive() )
         {
             const wxArrayString& mru = m_appearancePanel->GetLayerPresetsMRU();
-            EDA_VIEW_SWITCHER    switcher( this, mru );
+            EDA_VIEW_SWITCHER    switcher( this, mru, WXK_RAW_CONTROL );
 
-            s_switcherShown = true;
+            s_presetSwitcherShown = true;
             switcher.ShowModal();
-            s_switcherShown = false;
+            s_presetSwitcherShown = false;
 
             int idx = switcher.GetSelection();
 
             if( idx >= 0 && idx < (int) mru.size() )
                 m_appearancePanel->ApplyLayerPreset( mru[idx] );
+
+            return true;
+        }
+    }
+    else if( !s_viewportSwitcherShown && wxGetKeyState( WXK_ALT ) && wxGetKeyState( WXK_TAB ) )
+    {
+        if( m_appearancePanel && this->IsActive() )
+        {
+            const wxArrayString& mru = m_appearancePanel->GetViewportsMRU();
+            EDA_VIEW_SWITCHER    switcher( this, mru, WXK_ALT );
+
+            s_viewportSwitcherShown = true;
+            switcher.ShowModal();
+            s_viewportSwitcherShown = false;
+
+            int idx = switcher.GetSelection();
+
+            if( idx >= 0 && idx < (int) mru.size() )
+                m_appearancePanel->ApplyViewport( mru[idx] );
 
             return true;
         }

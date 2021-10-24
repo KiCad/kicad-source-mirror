@@ -94,6 +94,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
         netclassColors[pair.first] = pair.second->GetPcbColor();
 
     m_appearancePanel->SetUserLayerPresets( project.m_LayerPresets );
+    m_appearancePanel->SetUserViewports( project.m_Viewports );
 
     PCB_SELECTION_TOOL*       selTool = GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     SELECTION_FILTER_OPTIONS& filterOpts = selTool->GetFilter();
@@ -145,6 +146,7 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
     project.m_BoardDrawingSheetFile = BASE_SCREEN::m_DrawingSheetFileName;
 
     project.m_LayerPresets = m_appearancePanel->GetUserLayerPresets();
+    project.m_Viewports = m_appearancePanel->GetUserViewports();
 
     RecordDRCExclusions();
 

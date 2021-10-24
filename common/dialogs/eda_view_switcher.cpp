@@ -33,10 +33,12 @@
 #endif
 
 
-EDA_VIEW_SWITCHER::EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aItems ) :
+EDA_VIEW_SWITCHER::EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aItems,
+                                      wxKeyCode aCtrlKey ) :
         EDA_VIEW_SWITCHER_BASE( aParent ),
         m_tabState( true ),
-        m_receivingEvents( false )
+        m_receivingEvents( false ),
+        m_ctrlKey( aCtrlKey )
 {
     m_listBox->InsertItems( aItems, 0 );
     m_listBox->SetSelection( std::min( 1, (int) m_listBox->GetCount() - 1 ) );
@@ -129,7 +131,7 @@ bool EDA_VIEW_SWITCHER::TryBefore( wxEvent& aEvent )
     }
 
     // Check for control key trailing edge
-    if( !wxGetKeyState( WXK_RAW_CONTROL ) )
+    if( !wxGetKeyState( m_ctrlKey ) )
     {
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
     }

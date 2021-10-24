@@ -167,8 +167,9 @@ public:
      */
     std::shared_ptr<NET_SETTINGS> m_NetSettings;
 
-    /// List of stored layer presets
-    std::vector<LAYER_PRESET> m_LayerPresets;
+
+    std::vector<LAYER_PRESET>     m_LayerPresets;   /// List of stored layer presets
+    std::vector<VIEWPORT>         m_Viewports;      /// List of stored viewports (pos + zoom)
 
 private:
     /// An list of schematic sheets in this project

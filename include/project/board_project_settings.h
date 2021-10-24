@@ -26,6 +26,7 @@
 
 // Can be removed by refactoring PARAM_LAYER_PRESET
 #include <nlohmann/json.hpp>
+#include <math/box2.h>
 
 /**
  * This file contains data structures that are saved in the project file or project local settings
@@ -179,6 +180,36 @@ private:
     void jsonToPresets( const nlohmann::json& aJson );
 
     std::vector<LAYER_PRESET>* m_presets;
+};
+
+
+struct VIEWPORT
+{
+    VIEWPORT( const wxString& aName = wxEmptyString ) :
+            name( aName )
+    { }
+
+    VIEWPORT( const wxString& aName, const BOX2D& aRect ) :
+            name( aName ),
+            rect( aRect )
+    { }
+
+    wxString name;
+    BOX2D    rect;
+};
+
+
+class PARAM_VIEWPORT : public PARAM_LAMBDA<nlohmann::json>
+{
+public:
+    PARAM_VIEWPORT( const std::string& aPath, std::vector<VIEWPORT>* aViewportList );
+
+private:
+    nlohmann::json viewportsToJson();
+
+    void jsonToViewports( const nlohmann::json& aJson );
+
+    std::vector<VIEWPORT>* m_viewports;
 };
 
 #endif // KICAD_BOARD_PROJECT_SETTINGS_H

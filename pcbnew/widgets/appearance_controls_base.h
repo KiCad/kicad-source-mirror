@@ -66,6 +66,8 @@ class APPEARANCE_CONTROLS_BASE : public WX_PANEL
 		wxBoxSizer* m_netclassOuterSizer;
 		wxStaticText* m_presetsLabel;
 		wxChoice* m_cbLayerPresets;
+		wxStaticText* m_viewportsLabel;
+		wxChoice* m_cbViewports;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSetFocus( wxFocusEvent& event ) { event.Skip(); }
@@ -75,6 +77,7 @@ class APPEARANCE_CONTROLS_BASE : public WX_PANEL
 		virtual void OnNetGridDoubleClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnNetGridRightClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void onLayerPresetChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onViewportChanged( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
