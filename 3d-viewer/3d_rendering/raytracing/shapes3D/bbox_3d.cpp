@@ -166,17 +166,8 @@ unsigned int BBOX_3D::MaxDimension() const
 
 float BBOX_3D::GetMaxDimension() const
 {
-    unsigned int max_dimensions_idx = 0;
-
     SFVEC3F extent = GetExtent();
-
-    if( extent.y > extent.x )
-        max_dimensions_idx = 1;
-
-    if( extent.z > extent.y )
-        max_dimensions_idx = 2;
-
-    return extent[max_dimensions_idx];
+    return std::max( std::max( extent.x, extent.y ), extent.z );
 }
 
 
