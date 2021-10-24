@@ -75,10 +75,6 @@ void ScriptingSetPcbEditFrame( PCB_EDIT_FRAME* aPcbEditFrame )
 
 BOARD* LoadBoard( wxString& aFileName )
 {
-    // Loading a new board is not possible if running inside KiCad
-    if( s_PcbEditFrame )
-        return nullptr;
-
     if( aFileName.EndsWith( KiCadPcbFileExtension ) )
         return LoadBoard( aFileName, IO_MGR::KICAD_SEXP );
     else if( aFileName.EndsWith( LegacyPcbFileExtension ) )
@@ -129,9 +125,6 @@ PROJECT* GetDefaultProject()
 
 BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 {
-    // Loading a new board is not possible if running inside KiCad
-    wxASSERT( !s_PcbEditFrame );
-
     wxFileName pro = aFileName;
     pro.SetExt( ProjectFileExtension );
     pro.MakeAbsolute();
@@ -145,8 +138,13 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 
     if( !project )
     {
-        GetSettingsManager()->LoadProject( projectPath );
+        GetSettingsManager()->LoadProject( projectPath, false );
         project = GetSettingsManager()->GetProject( projectPath );
+    }
+    else if( s_PcbEditFrame && project == &GetSettingsManager()->Prj() )
+    {
+        // Project is already loaded?  Then so is the board
+        return s_PcbEditFrame->GetBoard();
     }
 
     // Board cannot be loaded without a project, so create the default project
