@@ -319,6 +319,27 @@ int SHAPE_POLY_SET::VertexCount( int aOutline, int aHole  ) const
 }
 
 
+int SHAPE_POLY_SET::FullPointCount() const
+{
+    int full_count = 0;
+
+    if( m_polys.size() == 0 ) // Empty poly set
+        return full_count;
+
+    for( int ii = 0; ii < OutlineCount(); ii++ )
+    {
+        // the first polygon in m_polys[ii] is the main contour,
+        // only others are holes:
+        for( int idx = 0; idx <= HoleCount( ii ); idx++ )
+        {
+            full_count += m_polys[ii][idx].PointCount();
+        }
+    }
+
+    return full_count;
+}
+
+
 SHAPE_POLY_SET SHAPE_POLY_SET::Subset( int aFirstPolygon, int aLastPolygon )
 {
     assert( aFirstPolygon >= 0 && aLastPolygon <= OutlineCount() );

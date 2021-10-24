@@ -649,6 +649,10 @@ public:
     ///< Return the number of vertices in a given outline/hole
     int VertexCount( int aOutline = -1, int aHole = -1 ) const;
 
+    ///< Return the number of points in the shape poly set.
+    ///< mainly for reports
+    int FullPointCount() const;
+
     ///< Returns the number of holes in a given outline
     int HoleCount( int aOutline ) const
     {
