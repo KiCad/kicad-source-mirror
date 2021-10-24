@@ -45,7 +45,6 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTIN
     m_smoothDragged->SetValue( m_settings.SmoothDraggedSegments() );
     m_violateDrc->SetValue( m_settings.GetAllowDRCViolationsSetting() );
     m_freeAngleMode->SetValue( m_settings.GetFreeAngleMode() );
-    m_dragToolMode->SetSelection ( m_settings.InlineDragEnabled() ? 1 : 0 );
     m_optimizeEntireDraggedTrack->SetValue( m_settings.GetOptimizeEntireDraggedTrack() );
     m_autoPosture->SetValue( m_settings.GetAutoPosture() );
     m_fixAllSegments->SetValue( m_settings.GetFixAllSegments() );
@@ -74,7 +73,6 @@ void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
     m_settings.SetSuggestFinish ( m_suggestEnding->GetValue() );
     m_settings.SetSmartPads( m_smartPads->GetValue() );
     m_settings.SetSmoothDraggedSegments( m_smoothDragged->GetValue() );
-    m_settings.SetInlineDragEnabled( m_dragToolMode->GetSelection () ? true : false );
     m_settings.SetOptimizeEntireDraggedTrack( m_optimizeEntireDraggedTrack->GetValue() );
     m_settings.SetAutoPosture( m_autoPosture->GetValue() );
     m_settings.SetFixAllSegments( m_fixAllSegments->GetValue() );

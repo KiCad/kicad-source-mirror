@@ -262,13 +262,6 @@ bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
 }
 
 
-bool EDIT_TOOL::isInteractiveDragEnabled() const
-{
-    ROUTER_TOOL* router = m_toolMgr->GetTool<ROUTER_TOOL>();
-
-    return router && router->Router()->Settings().InlineDragEnabled();
-}
-
 
 bool EDIT_TOOL::isRouterActive() const
 {
@@ -934,7 +927,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                 // Prepare to start dragging
                 if( !( evt->IsAction( &PCB_ACTIONS::move )
                        || evt->IsAction( &PCB_ACTIONS::moveWithReference ) )
-                    && isInteractiveDragEnabled() )
+                    && ( editFrame->Settings().m_TrackDragAction != TRACK_DRAG_ACTION::MOVE ) )
                 {
                     if( invokeInlineRouter( PNS::DM_ANY ) )
                         break;

@@ -178,7 +178,6 @@ private:
     bool updateModificationPoint( PCB_SELECTION& aSelection );
 
     bool invokeInlineRouter( int aDragMode );
-    bool isInteractiveDragEnabled() const;
     bool isRouterActive() const;
 
     int doMoveSelection( TOOL_EVENT aEvent, bool aPickReference = false );

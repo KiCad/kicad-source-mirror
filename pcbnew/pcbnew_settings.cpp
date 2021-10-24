@@ -750,7 +750,7 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, p + "CanViolateDRC",         "tools.pns.can_violate_drc" );
     ret &= fromLegacy<bool>( aCfg, p + "SuggestFinish",         "tools.pns.suggest_finish" );
     ret &= fromLegacy<bool>( aCfg, p + "FreeAngleMode",         "tools.pns.free_angle_mode" );
-    ret &= fromLegacy<bool>( aCfg, p + "InlineDragEnabled",     "tools.pns.inline_drag" );
+    ret &= fromLegacy<bool>( aCfg, p + "InlineDragEnabled",     "editing.track_drag_action" );
 
     // Initialize some new PNS settings to legacy behaviors if coming from legacy
     Set( "tools.pns.fix_all_segments", false );

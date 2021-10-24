@@ -47,7 +47,6 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_smoothDraggedSegments = true;
     m_allowDRCViolations = false;
     m_freeAngleMode = false;
-    m_inlineDragEnabled = false;
     m_snapToTracks = false;
     m_snapToPads = false;
     m_optimizeEntireDraggedTrack = false;
@@ -88,7 +87,6 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
 
     m_params.emplace_back( new PARAM<bool>( "can_violate_drc", &m_allowDRCViolations, false ) );
     m_params.emplace_back( new PARAM<bool>( "free_angle_mode",  &m_freeAngleMode,     false ) );
-    m_params.emplace_back( new PARAM<bool>( "inline_drag",      &m_inlineDragEnabled, false ) );
     m_params.emplace_back( new PARAM<bool>( "snap_to_tracks",   &m_snapToTracks,      false ) );
     m_params.emplace_back( new PARAM<bool>( "snap_to_pads",     &m_snapToPads,        false ) );
     m_params.emplace_back( new PARAM<bool>( "optimize_dragged_track",

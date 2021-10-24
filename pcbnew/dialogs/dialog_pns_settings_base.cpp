@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -24,25 +24,6 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	wxStaticBoxSizer* bOptions;
 	bOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
-
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer1->AddGrowableCol( 1 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_staticText4 = new wxStaticText( bOptions->GetStaticBox(), wxID_ANY, _("Mouse drag behavior:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	fgSizer1->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	wxString m_dragToolModeChoices[] = { _("Move item"), _("Interactive drag") };
-	int m_dragToolModeNChoices = sizeof( m_dragToolModeChoices ) / sizeof( wxString );
-	m_dragToolMode = new wxChoice( bOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dragToolModeNChoices, m_dragToolModeChoices, 0 );
-	m_dragToolMode->SetSelection( 0 );
-	fgSizer1->Add( m_dragToolMode, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-
-	bOptions->Add( fgSizer1, 1, wxEXPAND, 5 );
 
 	m_freeAngleMode = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Free angle mode (no shove/walkaround)"), wxDefaultPosition, wxDefaultSize, 0 );
 	bOptions->Add( m_freeAngleMode, 0, wxTOP|wxRIGHT|wxLEFT, 5 );

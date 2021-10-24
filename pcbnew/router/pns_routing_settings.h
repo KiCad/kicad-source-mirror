@@ -143,9 +143,6 @@ public:
     int WalkaroundIterationLimit() const { return m_walkaroundIterationLimit; };
     TIME_LIMIT WalkaroundTimeLimit() const;
 
-    void SetInlineDragEnabled ( bool aEnable ) { m_inlineDragEnabled = aEnable; }
-    bool InlineDragEnabled() const { return m_inlineDragEnabled; }
-
     void SetSnapToTracks( bool aSnap ) { m_snapToTracks = aSnap; }
     void SetSnapToPads( bool aSnap ) { m_snapToPads = aSnap; }
 
@@ -177,7 +174,6 @@ private:
     bool m_smoothDraggedSegments;
     bool m_allowDRCViolations;
     bool m_freeAngleMode;
-    bool m_inlineDragEnabled;
     bool m_snapToTracks;
     bool m_snapToPads;
     bool m_optimizeEntireDraggedTrack;
