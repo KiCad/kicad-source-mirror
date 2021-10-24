@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-22 12:32-0700\n"
-"PO-Revision-Date: 2021-10-22 19:22+0000\n"
+"PO-Revision-Date: 2021-10-24 09:46+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -316,14 +316,12 @@ msgid "General"
 msgstr "Allgemein"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
-#, fuzzy
 msgid "Realtime Renderer"
-msgstr "Im Dateimanager anzeigen"
+msgstr "Echtzeit-Renderer"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "Raytracing Optionen"
+msgstr "Raytracing-Renderer"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:240
@@ -701,7 +699,6 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "Benutzerlagen (nicht angezeigt im realistischen Modus)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
 msgstr "Lagen mit Kommentaren und Zeichnungen einblenden"
 
@@ -756,7 +753,6 @@ msgid "Camera Options"
 msgstr "Kameraoptionen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
 msgstr "Rotationsinkrement:"
 
@@ -25699,9 +25695,8 @@ msgid "Pad Properties"
 msgstr "Pad-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:179
-#, fuzzy
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "Standard-Pad-Eigenschaften..."
+msgstr "Standard-Pad-Eigenschaften für Werkzeug \"Pad hinzufügen\""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:490
 #, c-format
@@ -26896,7 +26891,7 @@ msgstr "Modus"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
 msgid "Mouse drag behavior:"
-msgstr "Maus-Ziehen Verhalten:"
+msgstr "Verhalten bei Maus-Ziehen:"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
 msgid "Move item"
@@ -27707,7 +27702,7 @@ msgstr "Leiterbahnbearbeitung"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:332
 msgid "Mouse drag track behavior:"
-msgstr "Leiterbahn-Maus-Zieh-Verhalten:"
+msgstr "Verhalten beim Maus-Ziehen einer Leiterbahn:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:334
 msgid ""
@@ -29755,9 +29750,8 @@ msgid "Footprint type doesn't match footprint pads"
 msgstr "Footprint-Typ passt nicht zu Footprint-Pads"
 
 #: pcbnew/drc/drc_item.cpp:210
-#, fuzzy
 msgid "Through hole pad has no hole"
-msgstr "Warnung: Durchsteck-Pad hat kein Loch."
+msgstr "Durchsteck-Pad hat kein Loch"
 
 #: pcbnew/drc/drc_item.cpp:334
 #, c-format
@@ -30510,9 +30504,9 @@ msgid "Expected \"Other\" type but set to \"%s\""
 msgstr "Typ \"Sonstige\" erwartet, aber war \"%s\""
 
 #: pcbnew/footprint.cpp:2125
-#, fuzzy, c-format
+#, c-format
 msgid "(pad \"%s\")"
-msgstr "Pad %s"
+msgstr "(Pad \"%s\")"
 
 #: pcbnew/footprint.cpp:2227 pcbnew/pad.cpp:1540 pcbnew/zone.cpp:1420
 msgid "Clearance Override"
@@ -32363,12 +32357,12 @@ msgstr ""
 "wurde auf die KiCad-Lage Eco1_User verschoben."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2600
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Leiterbahn auf Altium-Lage %d hat kein KiCad-Äquivalent. Sie wurde auf die "
+"Leiterbahn auf Altium-Lage (%d) ohne KiCad-Äquivalent. Sie wurde auf die "
 "KiCad-Lage Eco1_User verschoben."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2641
