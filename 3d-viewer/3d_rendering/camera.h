@@ -128,6 +128,9 @@ public:
     const SFVEC3F& GetLookAtPos_T1() const { return m_lookat_pos_t1; }
 
     const SFVEC3F& GetCameraPos() const { return m_camera_pos; }
+    const SFVEC3F& GetCameraInitPos() const { return m_camera_pos_init; }
+
+    float GetCameraMinDimension() const;
 
     /**
      *  Calculate a new mouse drag position
@@ -171,7 +174,21 @@ public:
 
     bool Zoom_T1( float aFactor );
 
-    float ZoomGet() const ;
+    float GetZoom() const { return m_zoom; }
+
+    float GetMinZoom() { return m_minZoom; }
+    void  SetMinZoom( float minZoom )
+    {
+        m_minZoom = minZoom;
+        zoomChanged();
+    }
+
+    float GetMaxZoom() { return m_maxZoom; }
+    void  SetMaxZoom( float maxZoom )
+    {
+        m_maxZoom = maxZoom;
+        zoomChanged();
+    }
 
     void RotateX( float aAngleInRadians );
     void RotateY( float aAngleInRadians );
@@ -236,6 +253,7 @@ public:
     void MakeRayAtCurrrentMousePosition( SFVEC3F& aOutOrigin, SFVEC3F& aOutDirection ) const;
 
 protected:
+    void zoomChanged();
     void rebuildProjection();
     void updateFrustum();
     void updateViewMatrix();
@@ -248,6 +266,12 @@ protected:
     float m_zoom;
     float m_zoom_t0;
     float m_zoom_t1;
+
+    /**
+     * Possible 3D zoom range
+     */
+    float m_minZoom;
+    float m_maxZoom;
 
     /**
      * The window size that this camera is working.

@@ -55,6 +55,10 @@ typedef enum
 class RENDER_3D_RAYTRACE : public RENDER_3D_BASE
 {
 public:
+    // TODO: Take into account board thickness so that the camera won't move inside of the board
+    // when facing it perpendicularly.
+    static constexpr float MIN_DISTANCE_IU = 4 * PCB_IU_PER_MM;
+
     explicit RENDER_3D_RAYTRACE( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter, CAMERA& aCamera );
 
     ~RENDER_3D_RAYTRACE();

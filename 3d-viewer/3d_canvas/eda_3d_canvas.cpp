@@ -483,18 +483,25 @@ void EDA_3D_CANVAS::DoRePaint()
         {
             m_3d_render->SetCurWindowSize( clientSize );
 
-            bool reloadRaytracingForIntersectionCalculations = false;
+            bool reloadRaytracingForCalculations = false;
 
             if( m_boardAdapter.GetRenderEngine() == RENDER_ENGINE::OPENGL
                     && m_3d_render_opengl->IsReloadRequestPending() )
             {
-                reloadRaytracingForIntersectionCalculations = true;
+                reloadRaytracingForCalculations = true;
             }
 
             requested_redraw = m_3d_render->Redraw( m_mouse_was_moved || m_camera_is_moving,
                                                     &activityReporter, &warningReporter );
 
-            if( reloadRaytracingForIntersectionCalculations )
+            // Raytracer renderer is responsible for some features also used by the OpenGL
+            // renderer.
+            // FIXME: Presumably because raytracing renderer reload is called only after current
+            // renderer redraw, the old zoom value stays for a single frame. This is ugly, but only
+            // cosmetic, so I'm not fixing that for now: I don't know how to do this without
+            // reloading twice (maybe it's not too bad of an idea?) or doing a complicated
+            // refactor.
+            if( reloadRaytracingForCalculations )
                 m_3d_render_raytracing->Reload( nullptr, nullptr, true );
         }
         catch( std::runtime_error& )
@@ -510,7 +517,7 @@ void EDA_3D_CANVAS::DoRePaint()
 
     if( m_render_pivot )
     {
-        const float scale = glm::min( m_camera.ZoomGet(), 1.0f );
+        const float scale = glm::min( m_camera.GetZoom(), 1.0f );
         render_pivot( curtime_delta_s, scale * scale );
     }
 
@@ -584,7 +591,7 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
     if( m_camera_is_moving )
         return;
 
-    float delta_move = m_delta_move_step_factor * m_camera.ZoomGet();
+    float delta_move = m_delta_move_step_factor * m_camera.GetZoom();
 
     if( m_boardAdapter.GetFlag( FL_MOUSEWHEEL_PANNING ) )
         delta_move *= 0.01f * event.GetWheelRotation();
@@ -945,7 +952,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
     if( m_camera_is_moving )
         return false;
 
-    const float delta_move = m_delta_move_step_factor * m_camera.ZoomGet();
+    const float delta_move = m_delta_move_step_factor * m_camera.GetZoom();
     const float arrow_moving_time_speed = 8.0f;
     bool handled = false;
 
@@ -987,7 +994,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
-        request_start_moving_camera( glm::min( glm::max( m_camera.ZoomGet(), 1/1.26f ), 1.26f ) );
+        request_start_moving_camera( glm::min( glm::max( m_camera.GetZoom(), 1 / 1.26f ), 1.26f ) );
         return true;
 
     case WXK_END:
@@ -1023,7 +1030,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
-        request_start_moving_camera( glm::min( glm::max( m_camera.ZoomGet(), 0.5f ), 1.125f ) );
+        request_start_moving_camera( glm::min( glm::max( m_camera.GetZoom(), 0.5f ), 1.125f ) );
         return true;
 
     case ID_VIEW3D_RIGHT:
@@ -1069,7 +1076,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
-        request_start_moving_camera( glm::min( glm::max( m_camera.ZoomGet(), 0.5f ), 1.125f ) );
+        request_start_moving_camera( glm::min( glm::max( m_camera.GetZoom(), 0.5f ), 1.125f ) );
         return true;
 
     case ID_VIEW3D_BOTTOM:
@@ -1077,7 +1084,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         m_camera.SetT0_and_T1_current_T();
         m_camera.Reset_T1();
         m_camera.RotateY_T1( glm::radians( 179.999f ) );    // Rotation = 180 - epsilon
-        request_start_moving_camera( glm::min( glm::max( m_camera.ZoomGet(), 0.5f ), 1.125f ) );
+        request_start_moving_camera( glm::min( glm::max( m_camera.GetZoom(), 0.5f ), 1.125f ) );
         return true;
 
     case ID_VIEW3D_FLIP:

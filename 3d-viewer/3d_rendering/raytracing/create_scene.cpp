@@ -917,6 +917,21 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
         }
     }
 
+    // Set min. and max. zoom range. This doesn't really fit here, but moving this outside of this
+    // class would require reimplementing bounding box calculation (feel free to do this if you
+    // have time and patience).
+    if( m_objectContainer.GetList().size() > 0 )
+    {
+        /*float ratio = std::max( 1.0f, m_objectContainer.GetBBox().GetMaxDimension()
+            / m_boardAdapter.GetBBox().GetMaxDimension() );*/
+        float ratio =
+                std::max( 1.0f, m_objectContainer.GetBBox().GetMaxDimension() / RANGE_SCALE_3D );
+        m_camera.SetMaxZoom( m_camera.GetMaxZoom() * ratio );
+
+        m_camera.SetMinZoom( static_cast<float>( MIN_DISTANCE_IU * m_boardAdapter.BiuTo3dUnits()
+                                                 / -m_camera.GetCameraInitPos().z ) );
+    }
+
     // Create an accelerator
     delete m_accelerator;
     m_accelerator = new BVH_PBRT( m_objectContainer, 8, SPLITMETHOD::MIDDLE );
