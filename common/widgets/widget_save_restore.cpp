@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
 #include <wx/choice.h>
 #include <wx/notebook.h>
 #include <wx/radiobox.h>
+#include <wx/radiobut.h>
 #include <wx/textctrl.h>
 
 #include <widgets/unit_binder.h>
@@ -35,6 +36,12 @@
 void WIDGET_SAVE_RESTORE::Add( wxRadioBox& ctrl, long& dest )
 {
     m_ctrls.emplace_back( WIDGET_CTRL_TYPE_T::RADIOBOX, ctrl, dest );
+}
+
+
+void WIDGET_SAVE_RESTORE::Add( wxRadioButton& ctrl, bool& dest )
+{
+    m_ctrls.emplace_back( WIDGET_CTRL_TYPE_T::RADIOBUTTON, ctrl, dest );
 }
 
 
@@ -90,6 +97,10 @@ void WIDGET_SAVE_RESTORE::ReadConfigFromControls()
             *ctrl.m_dest.m_bool = ctrl.m_control.m_checkbox->GetValue();
             break;
 
+        case WIDGET_CTRL_TYPE_T::RADIOBUTTON:
+            *ctrl.m_dest.m_bool = ctrl.m_control.m_radiobutton->GetValue();
+            break;
+
         case WIDGET_CTRL_TYPE_T::TEXT:
             *ctrl.m_dest.m_str = ctrl.m_control.m_textctrl->GetValue();
             break;
@@ -135,6 +146,10 @@ void WIDGET_SAVE_RESTORE::RestoreConfigToControls()
         {
         case WIDGET_CTRL_TYPE_T::CHECKBOX:
             ctrl.m_control.m_checkbox->SetValue( *ctrl.m_dest.m_bool );
+            break;
+
+        case WIDGET_CTRL_TYPE_T::RADIOBUTTON:
+            ctrl.m_control.m_radiobutton->SetValue( *ctrl.m_dest.m_bool );
             break;
 
         case WIDGET_CTRL_TYPE_T::TEXT:

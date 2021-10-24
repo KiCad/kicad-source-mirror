@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@ class wxCheckBox;
 class wxChoice;
 class wxNotebook;
 class wxRadioBox;
+class wxRadioButton;
 class wxString;
 class wxTextCtrl;
 
@@ -47,6 +48,11 @@ public:
      * Bind a radiobox to a choice.
      */
     void Add( wxRadioBox& ctrl, long& dest );
+
+    /**
+     * Bind a radio button to a binary choice
+     */
+    void Add( wxRadioButton& ctrl, bool& dest );
 
     /**
      * Bind a check box to a binary choice
@@ -111,6 +117,7 @@ private:
         TEXT_DOUBLE,
         UNIT_BINDER,
         CHECKBOX,
+        RADIOBUTTON,
         RADIOBOX,
         CHOICE,
         TAB
@@ -119,6 +126,11 @@ private:
     union CONTROL {
         CONTROL( wxCheckBox* aCtrl ) :
             m_checkbox( aCtrl )
+        {
+        }
+
+        CONTROL( wxRadioButton* aCtrl ) :
+            m_radiobutton( aCtrl )
         {
         }
 
@@ -147,12 +159,13 @@ private:
         {
         }
 
-        wxCheckBox*  m_checkbox;
-        wxChoice*    m_choice;
-        wxNotebook*  m_notebook;
-        wxRadioBox*  m_radiobox;
-        wxTextCtrl*  m_textctrl;
-        UNIT_BINDER* m_unit_binder;
+        wxCheckBox*    m_checkbox;
+        wxChoice*      m_choice;
+        wxNotebook*    m_notebook;
+        wxRadioBox*    m_radiobox;
+        wxRadioButton* m_radiobutton;
+        wxTextCtrl*    m_textctrl;
+        UNIT_BINDER*   m_unit_binder;
     };
 
     union DATA {

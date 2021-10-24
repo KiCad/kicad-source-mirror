@@ -71,8 +71,8 @@ private:
      */
     const wxPoint m_originalItemPosition;
 
-    // some uses of arrays might not allow component renumbering
-    bool m_numberingEnabled;
+    // Decide whether to display pad numbering options or not
+    bool m_isFootprintEditor;
 
     UNIT_BINDER m_hSpacing, m_vSpacing;
     UNIT_BINDER m_hOffset, m_vOffset;

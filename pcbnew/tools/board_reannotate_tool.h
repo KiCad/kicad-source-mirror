@@ -40,7 +40,11 @@ public:
     bool Init() override;
     void Reset( RESET_REASON aReason ) override;
     int  ShowReannotateDialog( const TOOL_EVENT& aEvent );
+
     int  ReannotateDuplicatesInSelection();
+
+    int  ReannotateDuplicates( const PCB_SELECTION& aSelectionToReannotate,
+                               const std::vector<EDA_ITEM*>& aAdditionalFootprints );
 
 private:
     void setTransitions() override; //> Bind handlers to corresponding TOOL_ACTIONs

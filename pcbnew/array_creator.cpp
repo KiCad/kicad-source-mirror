@@ -29,6 +29,9 @@
 #include <pcb_group.h>
 #include <pad.h>
 #include <dialogs/dialog_create_array.h>
+#include <tool/tool_manager.h>
+#include <tools/board_reannotate_tool.h>
+#include <tools/pcb_selection_tool.h>
 
 /**
  * Transform a #BOARD_ITEM from the given #ARRAY_OPTIONS and an index into the array.
@@ -70,19 +73,23 @@ void ARRAY_CREATOR::Invoke()
 
     ARRAY_PAD_NUMBER_PROVIDER pad_number_provider( fp, *array_opts );
 
-    for ( int i = 0; i < m_selection.Size(); ++i )
+    std::vector<EDA_ITEM*> all_added_items;
+
+    // The first item in list is the original item. We do not modify it
+    for( int ptN = 0; ptN < array_opts->GetArraySize(); ptN++ )
     {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_selection[ i ] );
+        PCB_SELECTION items_for_this_block;
 
-        if( item->Type() == PCB_PAD_T && !m_isFootprintEditor )
+        for ( int i = 0; i < m_selection.Size(); ++i )
         {
-            // If it is not the footprint editor, then duplicate the parent footprint instead
-            item = static_cast<FOOTPRINT*>( item )->GetParent();
-        }
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_selection[ i ] );
 
-        // The first item in list is the original item. We do not modify it
-        for( int ptN = 0; ptN < array_opts->GetArraySize(); ptN++ )
-        {
+            if( item->Type() == PCB_PAD_T && !m_isFootprintEditor )
+            {
+                // If it is not the footprint editor, then duplicate the parent footprint instead
+                item = static_cast<FOOTPRINT*>( item )->GetParent();
+            }
+
             BOARD_ITEM* this_item = nullptr;
 
             if( ptN == 0 )
@@ -127,17 +134,12 @@ void ARRAY_CREATOR::Invoke()
                         break;
                     }
 
-                    // PCB items keep the same numbering
-
-                    // @TODO: renumber footprints if asked. This needs UI to enable.
-                    // something like this, but needs a "block offset" to prevent
-                    // multiple selections overlapping.
-                    // if( this_item->Type() == PCB_FOOTPRINT_T )
-                    //     static_cast<FOOTPRINT&>( *new_item ).IncrementReference( ptN );
-
                     // @TODO: we should merge zones. This is a bit tricky, because
                     // the undo command needs saving old area, if it is merged.
                 }
+
+                // Add new items to selection (footprints in the selection will be reannotated)
+                items_for_this_block.Add( this_item );
 
                 if( this_item )
                 {
@@ -192,7 +194,19 @@ void ARRAY_CREATOR::Invoke()
                 }
             }
         }
+
+        if( !m_isFootprintEditor && array_opts->ShouldReannotateFootprints() )
+        {
+            m_toolMgr->GetTool<BOARD_REANNOTATE_TOOL>()->ReannotateDuplicates( items_for_this_block,
+                                                                               all_added_items );
+        }
+
+        for( EDA_ITEM* item : items_for_this_block )
+            all_added_items.push_back( item );
     }
+
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &all_added_items );
 
     commit.Push( _( "Create an array" ) );
 }

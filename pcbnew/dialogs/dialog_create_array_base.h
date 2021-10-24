@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,6 +31,7 @@ class TEXT_CTRL_EVAL;
 #include <wx/icon.h>
 #include <wx/statbox.h>
 #include <wx/notebook.h>
+#include <wx/radiobut.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -67,6 +68,7 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxStaticText* m_labelStagger;
 		TEXT_CTRL_EVAL* m_entryStagger;
 		wxRadioBox* m_radioBoxGridStaggerType;
+		wxPanel* m_gridPadNumberingPanel;
 		wxBoxSizer* m_gridPadNumberingSizer;
 		wxRadioBox* m_radioBoxGridNumberingAxis;
 		wxCheckBox* m_checkBoxGridReverseNumbering;
@@ -99,6 +101,7 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		TEXT_CTRL_EVAL* m_entryCircCount;
 		wxStaticText* m_labelCircRotate;
 		wxCheckBox* m_entryRotateItemsCb;
+		wxPanel* m_circularPadNumberingPanel;
 		wxStaticBoxSizer* m_circPadNumberingSizer;
 		wxRadioBox* m_rbCircStartNumberingOpt;
 		wxStaticText* m_labelCircNumbering;
@@ -107,11 +110,14 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_entryCircNumberingStart;
 		wxStaticText* m_labelCircNumStep;
 		wxTextCtrl* m_entryCircNumberingStep;
+		wxPanel* m_footprintReannotatePanel;
+		wxRadioButton* m_radioBtnKeepRefs;
+		wxRadioButton* m_radioBtnUniqueRefs;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnParameterChanged( wxCommandEvent& event ) { event.Skip(); }
 
@@ -119,6 +125,7 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_CREATE_ARRAY, const wxString& title = _("Create Array"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_CREATE_ARRAY_BASE();
 
 };

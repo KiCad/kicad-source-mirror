@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,7 +70,9 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
             m_CircNumberingOffset( "1" ),
             m_CircNumberingStep( 1 ),
             m_CircRotatationStep( false ),
-            m_ArrayTypeTab( 0 )               // start on grid view
+            m_ArrayTypeTab( 0 ),              // start on grid view
+            m_FootprintKeepAnnotations( false ),
+            m_FootprintReannotate( true )     // Assign unique by default
     {
     }
 
@@ -106,6 +108,8 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
     long     m_CircNumberingStep;
     bool     m_CircRotatationStep;
     long     m_ArrayTypeTab;
+    bool     m_FootprintKeepAnnotations;
+    bool     m_FootprintReannotate;
 };
 
 // Persistent options settings
@@ -145,11 +149,11 @@ static const std::vector<NUMBERING_LIST_DATA> numberingTypeData {
 
 DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
                                           std::unique_ptr<ARRAY_OPTIONS>& aSettings,
-                                          bool enableNumbering, const wxPoint& aOrigPos ) :
+                                          bool aIsFootprintEditor, const wxPoint& aOrigPos ) :
         DIALOG_CREATE_ARRAY_BASE( aParent ),
         m_settings( aSettings ),
         m_originalItemPosition( aOrigPos ),
-        m_numberingEnabled( enableNumbering ),
+        m_isFootprintEditor( aIsFootprintEditor ),
         m_hSpacing( aParent, m_labelDx, m_entryDx, m_unitLabelDx ),
         m_vSpacing( aParent, m_labelDy, m_entryDy, m_unitLabelDy ),
         m_hOffset( aParent, m_labelOffsetX, m_entryOffsetX, m_unitLabelOffsetX ),
@@ -223,6 +227,9 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
     m_cfg_persister.Add( *m_entryCircNumberingStep, s_arrayOptions.m_CircNumberingStep );
 
     m_cfg_persister.Add( *m_gridTypeNotebook, s_arrayOptions.m_ArrayTypeTab );
+
+    m_cfg_persister.Add( *m_radioBtnKeepRefs, s_arrayOptions.m_FootprintKeepAnnotations );
+    m_cfg_persister.Add( *m_radioBtnUniqueRefs, s_arrayOptions.m_FootprintReannotate );
 
     m_cfg_persister.RestoreConfigToControls();
 
@@ -342,9 +349,9 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         newGrid->m_horizontalThenVertical = m_radioBoxGridNumberingAxis->GetSelection() == 0;
         newGrid->m_reverseNumberingAlternate = m_checkBoxGridReverseNumbering->GetValue();
 
-        newGrid->SetShouldNumber( m_numberingEnabled );
+        newGrid->SetShouldNumber( m_isFootprintEditor );
 
-        if ( m_numberingEnabled )
+        if( m_isFootprintEditor )
         {
             newGrid->SetNumberingStartIsSpecified( m_rbGridStartNumberingOpt->GetSelection() == 1 );
 
@@ -393,9 +400,9 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         ok = ok && validateLongEntry(*m_entryCircCount, newCirc->m_nPts, _("point count"), errors);
 
         newCirc->m_rotateItems = m_entryRotateItemsCb->GetValue();
-        newCirc->SetShouldNumber( m_numberingEnabled );
+        newCirc->SetShouldNumber( m_isFootprintEditor );
 
-        if ( m_numberingEnabled )
+        if( m_isFootprintEditor )
         {
             newCirc->SetNumberingStartIsSpecified( m_rbCircStartNumberingOpt->GetSelection() == 1 );
 
@@ -424,6 +431,8 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         // assign pointer and ownership here
         m_settings = std::move( newSettings );
 
+        m_settings->SetSShouldReannotateFootprints( m_radioBtnUniqueRefs->GetValue() );
+
         // persist the control state for next time
         m_cfg_persister.ReadConfigFromControls();
 
@@ -446,8 +455,13 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
 void DIALOG_CREATE_ARRAY::setControlEnablement()
 {
-    if ( m_numberingEnabled )
+    if( m_isFootprintEditor )
     {
+        m_footprintReannotatePanel->Show( false );
+
+        m_gridPadNumberingPanel->Show( true );
+        m_circularPadNumberingPanel->Show( true );
+
         // If we set the start number, we can set the other options,
         // otherwise it's a hardcoded linear array
         const bool use_set_start_grid = m_rbGridStartNumberingOpt->GetSelection() == 1;
@@ -488,9 +502,15 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
         m_entryGridPriNumberingOffset->Enable( false );
         m_entryGridSecNumberingOffset->Enable( false );
 
+        m_gridPadNumberingPanel->Show( false );
+
         // circular
         m_rbCircStartNumberingOpt->Enable( false );
         m_entryCircNumberingStart->Enable( false );
+
+        m_circularPadNumberingPanel->Show( false );
+
+        m_footprintReannotatePanel->Show( true );
     }
 }
 

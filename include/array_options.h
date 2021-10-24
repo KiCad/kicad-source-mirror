@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,6 +93,20 @@ public:
     }
 
     /*!
+     * @return are the footprints in this array reannotated to be unique (true), or do they
+     * keep the original annotation (false)?
+     */
+    bool ShouldReannotateFootprints() const
+    {
+        return m_reannotateFootprints;
+    }
+
+    void SetSShouldReannotateFootprints( bool aShouldReannotate )
+    {
+        m_reannotateFootprints = aShouldReannotate;
+    }
+
+    /*!
      * @return is the numbering is enabled and should start at a point
      * specified in these options or is it implicit according to the calling
      * code?
@@ -113,6 +127,9 @@ protected:
 
     /// True if this array numbers the new items
     bool m_shouldNumber;
+
+    /// True if this array will rename any footprints to be unique
+    bool m_reannotateFootprints;
 
     /// True if this array's number starts from the preset point
     /// False if the array numbering starts from some externally provided point

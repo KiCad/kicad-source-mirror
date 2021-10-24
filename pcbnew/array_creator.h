@@ -32,6 +32,8 @@
 #include <board_item.h>
 #include <tools/pcb_selection.h>
 
+class TOOL_MANAGER;
+
 /*!
  * Class that performs array creation by producing a dialog to gather parameters and then
  * creating and laying out the items.
@@ -40,10 +42,11 @@ class ARRAY_CREATOR
 {
 public:
     ARRAY_CREATOR( PCB_BASE_FRAME& aParent, bool aIsFootprintEditor,
-                   const PCB_SELECTION& aSelection ) :
+                   const PCB_SELECTION& aSelection, TOOL_MANAGER* aToolManager ) :
             m_parent( aParent ),
             m_isFootprintEditor( aIsFootprintEditor ),
-            m_selection( aSelection )
+            m_selection( aSelection ),
+            m_toolMgr( aToolManager )
     {}
 
     virtual ~ARRAY_CREATOR() {}
@@ -56,7 +59,8 @@ public:
 private:
     PCB_BASE_FRAME&      m_parent;
     bool                 m_isFootprintEditor;
-    const PCB_SELECTION& m_selection;
+    const PCB_SELECTION  m_selection;
+    TOOL_MANAGER*        m_toolMgr;
 };
 
 #endif /* ARRAY_CREATOR_H_ */

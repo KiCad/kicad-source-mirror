@@ -2276,7 +2276,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 
     // we have a selection to work on now, so start the tool process
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
-    ARRAY_CREATOR   array_creator( *editFrame, m_isFootprintEditor, selection );
+    ARRAY_CREATOR   array_creator( *editFrame, m_isFootprintEditor, selection, m_toolMgr );
     array_creator.Invoke();
 
     return 0;

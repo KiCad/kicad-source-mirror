@@ -68,9 +68,24 @@ int BOARD_REANNOTATE_TOOL::ReannotateDuplicatesInSelection()
     if( selection.Empty() )
         return 0;
 
-    // 1. Build list of designators on the board
+    return ReannotateDuplicates( selection, std::vector<EDA_ITEM*>() );
+}
+
+int BOARD_REANNOTATE_TOOL::ReannotateDuplicates( const PCB_SELECTION& aSelectionToReannotate,
+        const std::vector<EDA_ITEM*>& aAdditionalFootprints )
+{
+    if( aSelectionToReannotate.Empty() )
+        return 0;
+
+    // 1. Build list of designators on the board & the additional footprints
     FOOTPRINTS         fpOnBoard = m_frame->GetBoard()->Footprints();
     std::multimap<wxString, KIID> usedDesignatorsMap;
+
+    for( EDA_ITEM* item : aAdditionalFootprints )
+    {
+        if( item->Type() == PCB_FOOTPRINT_T )
+            fpOnBoard.push_back( static_cast<FOOTPRINT*>( item ) );
+    }
 
     for( FOOTPRINT* fp : fpOnBoard )
         usedDesignatorsMap.insert( { fp->GetReference(), fp->m_Uuid } );
@@ -78,7 +93,7 @@ int BOARD_REANNOTATE_TOOL::ReannotateDuplicatesInSelection()
     // 2. Get a sorted list of footprints from the selection
     FOOTPRINTS fpInSelection;
 
-    for( EDA_ITEM* item : selection )
+    for( EDA_ITEM* item : aSelectionToReannotate )
     {
         if( item->Type() == PCB_FOOTPRINT_T )
             fpInSelection.push_back( static_cast<FOOTPRINT*>( item ) );
@@ -90,7 +105,20 @@ int BOARD_REANNOTATE_TOOL::ReannotateDuplicatesInSelection()
                    int ii = StrNumCmp( aA->GetReference(), aB->GetReference(), true );
 
                    if( ii == 0 )
-                       ii = aA->m_Uuid < aB->m_Uuid; // ensure a deterministic sort
+                   {
+                       // Sort by position: x, then y
+                       if( aA->GetPosition().y == aB->GetPosition().y )
+                       {
+                           if( aA->GetPosition().x == aB->GetPosition().x )
+                               return aA->m_Uuid < aB->m_Uuid; // ensure a deterministic sort
+                           else
+                               return aA->GetPosition().x < aB->GetPosition().x;
+                       }
+                       else
+                       {
+                           return aA->GetPosition().y > aB->GetPosition().y;
+                       }
+                   }
 
                    return ii < 0;
                } );
