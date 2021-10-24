@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-22 12:32-0700\n"
-"PO-Revision-Date: 2021-10-18 19:17+0000\n"
+"PO-Revision-Date: 2021-10-25 13:17+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -299,14 +299,12 @@ msgid "General"
 msgstr "Obecné"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
-#, fuzzy
 msgid "Realtime Renderer"
-msgstr "Odhalit ve vyhledávači"
+msgstr "Reálný čas vykreslování"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "Možnosti vykreslování raytracingu"
+msgstr "Raytracing vykreslování"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:240
@@ -735,9 +733,8 @@ msgid "Camera Options"
 msgstr "Možnosti kamery"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
-msgstr "Přírůstek rotace:"
+msgstr "Přírůstek otáčení:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:123
 #: common/base_units.cpp:477 pcb_calculator/widgets/unit_selector.cpp:130
@@ -3058,7 +3055,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
-msgstr ""
+msgstr "(Toto nouzové řešení zlepší určité problémy s písmem GTK HiDPI.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -4504,6 +4501,7 @@ msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
+"Adresář obsahující pluginy třetích stran, knihovny a další obsah ke stažení."
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -5421,12 +5419,12 @@ msgstr "Chybějící jednotky pro '%s'| (%s)"
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "Neshoda typu mezi '%s' a %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1132
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "Neshoda typu mezi %lf a '%s'"
 
 #: common/pgm_base.cpp:166
 msgid "No default editor found, you must choose one."
@@ -5457,11 +5455,13 @@ msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
 msgstr ""
+"Chybějící nulový bajt na konci seznamu vlastností. Importovaná data mohou "
+"být vadná nebo chybějící."
 
 #: common/plugins/altium/altium_parser.cpp:247
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr ""
+msgstr "Jednotka '%s' nekončí na \"mil\"."
 
 #: common/plugins/altium/altium_parser.cpp:255
 #, c-format
@@ -9812,7 +9812,7 @@ msgstr "Hotovo"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1249
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr ""
+msgstr "Návrat na uživatelskou cestu '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1270
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1308
@@ -12163,7 +12163,7 @@ msgstr "Soubor knihovny symbolů \"%s\" je prázdný."
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:537
 msgid "Invalid Row Definition"
-msgstr ""
+msgstr "Neplatná definice řádku"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:539
@@ -12858,30 +12858,31 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:1395
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "Automaticky uložený soubor \"%s\" nelze odstranit!"
+msgstr "Následující automaticky uložené soubor(y) nelze obnovit\n"
 
 #: eeschema/files-io.cpp:1400
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
 
 #: eeschema/files-io.cpp:1422
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "Automaticky uložený soubor \"%s\" nelze odstranit!"
+msgstr "Následující automaticky uložené soubor(y) nelze odstranit\n"
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
 msgstr ""
 
 #: eeschema/files-io.cpp:1438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "Automaticky uložený soubor \"%s\" nelze odstranit!"
+msgstr ""
+"Automaticky uložený hlavní soubor\n"
+" '%s'\n"
+"nelze odstranit."
 
 #: eeschema/files-io.cpp:1446
 msgid ""
@@ -13024,9 +13025,9 @@ msgid "Polyline, %d points"
 msgstr "Křivka, %d bodů"
 
 #: eeschema/lib_shape.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Bezierova křivka"
+msgstr "Bezierova křivka, %d bodů"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -13543,9 +13544,8 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:474
-#, fuzzy
 msgid "Compile mask not currently supported."
-msgstr "Aktuálně není otevřeno žádné schéma."
+msgstr "Maska kompilace není aktuálně podporována."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:487
 #, c-format
@@ -16084,7 +16084,7 @@ msgstr "Automaticky umístit pole"
 
 #: eeschema/tools/ee_actions.cpp:420
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
-msgstr ""
+msgstr "Provádí algoritmus automatického umístění na polích symbolu nebo listu"
 
 #: eeschema/tools/ee_actions.cpp:425
 msgid "Change Symbols..."
@@ -16243,9 +16243,8 @@ msgid "Clear Net Highlighting"
 msgstr "Vymazat zvýraznění sítě"
 
 #: eeschema/tools/ee_actions.cpp:538 pcbnew/tools/pcb_actions.cpp:720
-#, fuzzy
 msgid "Clear any existing net highlighting"
-msgstr "Vymazat zvýraznění sítě"
+msgstr "Zrušit všechny existující zvýraznění sítě"
 
 #: eeschema/tools/ee_actions.cpp:545
 msgid "Highlight Nets"
@@ -16540,14 +16539,12 @@ msgid "Align Elements to Grid"
 msgstr "Zarovnat prvky na mřížce"
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save Current Sheet Copy As..."
-msgstr "&Uložit aktuální list jako..."
+msgstr "Uložit kopii aktuálního listu jako..."
 
 #: eeschema/tools/ee_actions.cpp:761
-#, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
-msgstr "Uložit kopii aktuálního dokumentu na jiné místo"
+msgstr "Uloží kopii aktuálního listu na jiném místě nebo pod jiným jménem"
 
 #: eeschema/tools/ee_inspection_tool.cpp:266
 #, c-format
@@ -18468,23 +18465,20 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:421
-#, fuzzy
 msgid "Install package"
-msgstr "V pouzdře"
+msgstr "Instalovat balíček"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:64
 msgid "Show all versions"
 msgstr "Zobrazit všechny verze"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
-#, fuzzy
 msgid "Dl Size"
-msgstr "Velikost X"
+msgstr "Velikost Dl"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Inst Size"
-msgstr "Nastavit výchozí velikost"
+msgstr "Velikost instalace"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
 msgid "Comp"
@@ -18523,14 +18517,12 @@ msgid "Download is too large."
 msgstr "Stahování je příliš dlouhé."
 
 #: kicad/pcm/pcm.cpp:225
-#, fuzzy
 msgid "Fetching repository"
-msgstr "Github repositář"
+msgstr "Načítání repozitáře"
 
 #: kicad/pcm/pcm.cpp:227
-#, fuzzy
 msgid "Unable to load repository url"
-msgstr "Nelze načíst soubor %s"
+msgstr "Nelze načíst adresu URL repozitáře"
 
 #: kicad/pcm/pcm.cpp:243
 #, c-format
@@ -23492,9 +23484,9 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_svg.cpp:264 pcbnew/dialogs/dialog_plot.cpp:816
 #: pcbnew/exporters/gen_footprints_placefile.cpp:284
 #: pcbnew/exporters/gen_footprints_placefile.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write plot files to folder '%s'."
-msgstr "Nelze zapisovat soubory kreslení do složky \"%s\"."
+msgstr "Nelze zapisovat soubory kreslení do složky '%s'."
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:291
 #, c-format
@@ -23545,15 +23537,13 @@ msgstr "Tisk vrstvy (vrstev) horizontálně zrcadlené"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:99
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
-#, fuzzy
 msgid "Print one page per layer"
-msgstr "Jedna stránka na vrstvu"
+msgstr "Tisk jedna stránka na vrstvu"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:105
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
-#, fuzzy
 msgid "Print board edges on all pages"
-msgstr "Tisk okrajů desky"
+msgstr "Tisk okrajů desky na všech stranách"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:71
 msgid "Export SVG File"
@@ -23599,7 +23589,6 @@ msgid "0.1 Inch"
 msgstr "0.1 palce"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
-#, fuzzy
 msgid "VRML Units for Output Files"
 msgstr "Jednotky VRML pro výstupní soubory"
 
@@ -23696,9 +23685,8 @@ msgid "Search for:"
 msgstr "Hledej:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:43
-#, fuzzy
 msgid "Match case"
-msgstr "&Rozlišovat velikost"
+msgstr "Rozlišovat velikost písmen"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
@@ -23735,9 +23723,8 @@ msgstr "Spustit kontroly"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:71
 #: pcbnew/tools/pcb_actions.cpp:390
-#, fuzzy
 msgid "Footprint Checker"
-msgstr "Prohlížeč pouzder"
+msgstr "Kontrola pouzder"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:75
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:75
@@ -24865,9 +24852,8 @@ msgid "Group members:"
 msgstr "Členové skupiny:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.h:64
-#, fuzzy
 msgid "Group Properties"
-msgstr "Vlastnosti oblouku"
+msgstr "Vlastnosti skupiny"
 
 #: pcbnew/dialogs/dialog_import_settings.cpp:52
 #: pcbnew/dialogs/dialog_import_settings.cpp:101
@@ -25141,18 +25127,16 @@ msgstr "Vytvořit hlášení..."
 
 #: pcbnew/dialogs/dialog_net_inspector_base.h:72
 #: pcbnew/tools/pcb_actions.cpp:767
-#, fuzzy
 msgid "Net Inspector"
-msgstr "&Kontrola"
+msgstr "Kontrola sítě"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:127
 msgid "Select Netlist"
 msgstr "Výběr netlistu"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:143
-#, fuzzy
 msgid "Please choose a valid netlist file."
-msgstr "Prosím, vyberte platný soubor netlistu."
+msgstr "Vyberte platný soubor netlistu."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:149 pcbnew/dialogs/dialog_netlist.cpp:184
 msgid "The netlist file does not exist."
@@ -25160,9 +25144,8 @@ msgstr "Soubor netlistu neexistuje."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:153
 #: pcbnew/dialogs/dialog_update_pcb.cpp:138
-#, fuzzy
 msgid "Changes Applied to PCB"
-msgstr "Změny provedené na DPS"
+msgstr "Změny aplikované na DPS"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:219
 #, c-format
@@ -25279,9 +25262,8 @@ msgid "Pad Properties"
 msgstr "Vlastnosti plošky"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:179
-#, fuzzy
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "Výchozí vlastnosti plošky..."
+msgstr "Výchozí vlastnosti plošky pro přidání nástroje plošky"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:490
 #, c-format
@@ -26729,18 +26711,16 @@ msgid "Prevent vias from being placed in this area"
 msgstr "Zabránit Cvpcb ukončení po uložení netlistu"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
-#, fuzzy
 msgid "Keep out pads"
-msgstr "Bez vi"
+msgstr "Bez plošek"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:59
 msgid "Raise a DRC error if a pad overlaps this area"
 msgstr "Nahlásit chybu DRC, pokud ploška překrývá tuto oblast"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:63
-#, fuzzy
 msgid "Keep out copper fill"
-msgstr "Bez zón mědi"
+msgstr "Bez vyplněné mědi"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:64
 msgid "Zones will not fill copper into this area"
@@ -26755,9 +26735,8 @@ msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
-#, fuzzy
 msgid "Area name:"
-msgstr "Název sítě:"
+msgstr "Název oblasti:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
@@ -26875,9 +26854,8 @@ msgid "Leave Nets Unchanged"
 msgstr "Nechat beze změny"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:403
-#, fuzzy
 msgid "Via hole size must be smaller than via diameter"
-msgstr "Velikost vrtáku prokovu musí být menší než průměr prokovu"
+msgstr "Velikost díry prokovu musí být menší než průměr prokovu"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:412
 msgid "Via start layer and end layer cannot be the same"
@@ -26892,9 +26870,8 @@ msgid "Updating nets"
 msgstr "Aktualizace sítí"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
-#, fuzzy
 msgid "Automatically update via nets"
-msgstr "Auto propojení plošek"
+msgstr "Automaticky aktualizovat prokovy sítí"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:36
 msgid ""
@@ -26928,9 +26905,8 @@ msgid "Track width:"
 msgstr "Šířka spoje:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:131
-#, fuzzy
 msgid "Use net class widths"
-msgstr "Použít třídy spojů šířka"
+msgstr "Použít šířky třídy spojů"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:192
 msgid "Pre-defined sizes:"
@@ -27388,9 +27364,8 @@ msgid "Path Substitutions"
 msgstr "Nahrazení cesty"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "No filename entered"
-msgstr "Soubor není zvolen!"
+msgstr "Název soubor není zvolen"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
 #, fuzzy
@@ -27683,7 +27658,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 #, fuzzy
 msgid "Minimum uVia hole:"
-msgstr "Minimální velikost uPrůchodky:"
+msgstr "Minimální velikost uProkovu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:391
 msgid ""
@@ -27740,18 +27715,18 @@ msgid "Layer must have a name."
 msgstr "Vrstva musí mít název."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:656
-#, fuzzy, c-format
+#, c-format
 msgid "%s are forbidden in layer names."
-msgstr "\"%s\" jsou ve jménech vrstev zakázány."
+msgstr "%s jsou v názvech vrstev zakázány."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:663
 msgid "Layer name \"signal\" is reserved."
 msgstr "Název vrstvy \"signál\" je vyhrazen."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:671
-#, fuzzy, c-format
+#, c-format
 msgid "Layer name '%s' already in use."
-msgstr "Název vrstvy \"%s\" se již používá."
+msgstr "Název vrstvy '%s' se již používá."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:771
 #, c-format
@@ -29801,19 +29776,19 @@ msgid "Footprint %s"
 msgstr "Pouzdro %s"
 
 #: pcbnew/footprint.cpp:2091
-#, fuzzy, c-format
+#, c-format
 msgid "Expected \"Through hole\" type but set to \"%s\""
-msgstr "Průchozí díra plošek %s na %s"
+msgstr "Očekávaný typ \"Průchozí díra\", ale definován jako \"%s\""
 
 #: pcbnew/footprint.cpp:2095
 #, c-format
 msgid "Expected \"SMD\" type but set to \"%s\""
-msgstr ""
+msgstr "Očekávaný typ \"SMD\", ale definován jako \"%s\""
 
 #: pcbnew/footprint.cpp:2099
 #, c-format
 msgid "Expected \"Other\" type but set to \"%s\""
-msgstr ""
+msgstr "Očekávaný typ \"Ostatní\", ale definován jako \"%s\""
 
 #: pcbnew/footprint.cpp:2125
 #, fuzzy, c-format
@@ -36291,7 +36266,7 @@ msgstr "EDA Suite"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "Suite of tools for schematic design and circuit board layout"
-msgstr ""
+msgstr "Sada nástrojů pro návrh schématu a desek s plošnými spoji"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
