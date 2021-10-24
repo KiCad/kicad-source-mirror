@@ -942,12 +942,14 @@ void GERBVIEW_FRAME::SetGridColor( const COLOR4D& aColor )
 
 void GERBVIEW_FRAME::DisplayGridMsg()
 {
+    VECTOR2D gridSize = GetCanvas()->GetGAL()->GetGridSize();
     wxString line;
 
     line.Printf( "grid X %s  Y %s",
-                 MessageTextFromValue( m_userUnits, GetCanvas()->GetGAL()->GetGridSize().x ),
-                 MessageTextFromValue( m_userUnits, GetCanvas()->GetGAL()->GetGridSize().y ) );
+                 MessageTextFromValue( m_userUnits, gridSize.x, false ),
+                 MessageTextFromValue( m_userUnits, gridSize.y, false ) );
 
+    SetStatusText( line, 4 );
     SetStatusText( line, 4 );
 }
 

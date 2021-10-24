@@ -25,7 +25,8 @@
 
 #include "drawing_tool.h"
 
-
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <dialogs/dialog_text_properties.h>
 #include <dialogs/dialog_track_via_size.h>
 #include <geometry/geometry_utils.h>
@@ -239,12 +240,30 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
     m_controls = getViewControls();
     m_board = getModel<BOARD>();
     m_frame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+
+    updateStatusBar();
 }
 
 
 DRAWING_TOOL::MODE DRAWING_TOOL::GetDrawingMode() const
 {
     return m_mode;
+}
+
+
+void DRAWING_TOOL::updateStatusBar() const
+{
+    if( m_frame )
+    {
+        bool constrained;
+
+        if( m_frame->IsType( FRAME_PCB_EDITOR ) )
+            constrained = m_frame->Settings().m_PcbUse45DegreeLimit;
+        else
+            constrained = m_frame->Settings().m_FpeditUse45DegreeLimit;
+
+        m_frame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" ) : _( "" ) );
+    }
 }
 
 
@@ -1380,6 +1399,8 @@ int DRAWING_TOOL::ToggleLine45degMode( const TOOL_EVENT& toolEvent )
         m_frame->Settings().m_PcbUse45DegreeLimit = !m_frame->Settings().m_PcbUse45DegreeLimit;
     else
         m_frame->Settings().m_FpeditUse45DegreeLimit = !m_frame->Settings().m_FpeditUse45DegreeLimit;
+
+    updateStatusBar();
 
     return 0;
 }

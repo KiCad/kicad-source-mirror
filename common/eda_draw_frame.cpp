@@ -111,11 +111,12 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     m_auimgr.SetFlags( wxAUI_MGR_DEFAULT );
 
-    CreateStatusBar( 7 );
+    CreateStatusBar( 8 );
 
     // set the size of the status bar subwindows:
 
     wxWindow* stsbar = GetStatusBar();
+    int       spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x * 2;
 
     int dims[] = {
 
@@ -126,22 +127,25 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         // as the width of '0' unless the font is fixed width, and it usually won't be.
 
         // zoom:
-        KIUI::GetTextSize( wxT( "Z 762000" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "Z 762000" ), stsbar ).x + spacer,
 
         // cursor coords
-        KIUI::GetTextSize( wxT( "X 0234.567890  Y 0234.567890" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "X 1234.1234  Y 1234.1234" ), stsbar ).x + spacer,
 
         // delta distances
-        KIUI::GetTextSize( wxT( "dx 0234.567890  dx 0234.567890  d 0234.567890" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "dx 1234.1234  dy 1234.1234  dist 1234.1234" ), stsbar ).x + spacer,
 
         // grid size
-        KIUI::GetTextSize( wxT( "grid X 0234.567890  Y 0234.567890" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "grid X 1234.1234  Y 1234.1234" ), stsbar ).x + spacer,
 
         // units display, Inches is bigger than mm
-        KIUI::GetTextSize( _( "Inches" ), stsbar ).x + 10,
+        KIUI::GetTextSize( _( "Inches" ), stsbar ).x + spacer,
 
-            // Size for the "Current Tool" panel; longest string from SetTool()
-        KIUI::GetTextSize( wxT( "Add layer alignment target" ), stsbar ).x + 10,
+        // Size for the "Current Tool" panel; longest string from SetTool()
+        KIUI::GetTextSize( wxT( "Add layer alignment target" ), stsbar ).x + spacer,
+
+        // constraint mode
+        KIUI::GetTextSize( _( "Constrain to H, V, 45" ), stsbar ).x + spacer
     };
 
     SetStatusWidths( arrayDim( dims ), dims );
@@ -514,6 +518,12 @@ void EDA_DRAW_FRAME::AddStandardSubMenus( TOOL_MENU& aToolMenu )
 void EDA_DRAW_FRAME::DisplayToolMsg( const wxString& msg )
 {
     SetStatusText( msg, 6 );
+}
+
+
+void EDA_DRAW_FRAME::DisplayConstraintsMsg( const wxString& msg )
+{
+    SetStatusText( msg, 7 );
 }
 
 

@@ -324,6 +324,8 @@ public:
 
     void DisplayToolMsg( const wxString& msg ) override;
 
+    void DisplayConstraintsMsg( const wxString& msg );
+
     /**
      * Called when modifying the page settings.
      * In derived classes it can be used to modify parameters like draw area size,

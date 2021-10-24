@@ -611,11 +611,12 @@ GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
 
 void PCB_BASE_FRAME::DisplayGridMsg()
 {
+    VECTOR2D gridSize = GetCanvas()->GetGAL()->GetGridSize();
     wxString line;
 
     line.Printf( "grid X %s  Y %s",
-                 MessageTextFromValue( m_userUnits, GetCanvas()->GetGAL()->GetGridSize().x ),
-                 MessageTextFromValue( m_userUnits, GetCanvas()->GetGAL()->GetGridSize().y ) );
+                 MessageTextFromValue( m_userUnits, gridSize.x, false ),
+                 MessageTextFromValue( m_userUnits, gridSize.y, false ) );
 
     SetStatusText( line, 4 );
 }
