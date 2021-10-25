@@ -47,7 +47,12 @@ protected:
 
     bool Validate() override;
 
-    virtual void onPowerCheckBox( wxCommandEvent& aEvent ) override;
+    void onPowerCheckBox( wxCommandEvent& aEvent ) override;
+    void OnText( wxCommandEvent& event ) override;
+  	void OnCombobox( wxCommandEvent& event ) override;
+  	void OnCheckBox( wxCommandEvent& event ) override;
+    void OnSpinCtrl( wxSpinEvent& event ) override;
+    void OnSpinCtrlText( wxCommandEvent& event ) override;
 
 private:
     void OnAddField( wxCommandEvent& event ) override;

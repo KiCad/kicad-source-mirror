@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -362,7 +362,21 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnDeleteField ), NULL, this );
 	m_SymbolNameCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSymbolNameKillFocus ), NULL, this );
 	m_SymbolNameCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSymbolNameText ), NULL, this );
+	m_DescCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
+	m_KeywordCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
+	m_inheritanceSelectCombo->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCombobox ), NULL, this );
+	m_inheritanceSelectCombo->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
+	m_AsConvertButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_OptionPower->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::onPowerCheckBox ), NULL, this );
+	m_excludeFromBomCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_excludeFromBoardCheckBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_SelNumberOfUnits->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrl ), NULL, this );
+	m_SelNumberOfUnits->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrlText ), NULL, this );
+	m_OptionPartsInterchangeable->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_ShowPinNumButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_ShowPinNameButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_PinsNameInsideButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_nameOffsetCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
 	m_FootprintFilterListBox->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnFilterDClick ), NULL, this );
 	m_FootprintFilterListBox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnEditFootprintFilter ), NULL, this );
 	m_addFilterButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnAddFootprintFilter ), NULL, this );
@@ -383,7 +397,21 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::~DIALOG_LIB_SYMBOL_PROPERTIES_BASE()
 	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnDeleteField ), NULL, this );
 	m_SymbolNameCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSymbolNameKillFocus ), NULL, this );
 	m_SymbolNameCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSymbolNameText ), NULL, this );
+	m_DescCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
+	m_KeywordCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
+	m_inheritanceSelectCombo->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCombobox ), NULL, this );
+	m_inheritanceSelectCombo->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
+	m_AsConvertButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_OptionPower->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::onPowerCheckBox ), NULL, this );
+	m_excludeFromBomCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_excludeFromBoardCheckBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_SelNumberOfUnits->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrl ), NULL, this );
+	m_SelNumberOfUnits->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrlText ), NULL, this );
+	m_OptionPartsInterchangeable->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_ShowPinNumButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_ShowPinNameButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_PinsNameInsideButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_nameOffsetCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnText ), NULL, this );
 	m_FootprintFilterListBox->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnFilterDClick ), NULL, this );
 	m_FootprintFilterListBox->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnEditFootprintFilter ), NULL, this );
 	m_addFilterButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnAddFootprintFilter ), NULL, this );

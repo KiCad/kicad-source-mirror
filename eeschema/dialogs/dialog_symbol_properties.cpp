@@ -536,6 +536,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
         m_fieldsGrid->ProcessTableMessage( msg );
     }
 
+    OnModify();
     m_fieldsGrid->ForceRefresh();
 #endif /* KICAD_SPICE */
 }
@@ -826,6 +827,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
 
     m_fieldsGrid->EnableCellEditControl();
     m_fieldsGrid->ShowCellEditControl();
+
+    OnModify();
 }
 
 
@@ -857,6 +860,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
         m_fieldsGrid->MakeCellVisible( std::max( 0, curRow-1 ), m_fieldsGrid->GetGridCursorCol() );
         m_fieldsGrid->SetGridCursor( std::max( 0, curRow-1 ), m_fieldsGrid->GetGridCursorCol() );
     }
+
+    OnModify();
 }
 
 
@@ -877,6 +882,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
         m_fieldsGrid->SetGridCursor( i - 1, m_fieldsGrid->GetGridCursorCol() );
         m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(),
                                        m_fieldsGrid->GetGridCursorCol() );
+
+        OnModify();
     }
     else
     {
@@ -902,6 +909,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
         m_fieldsGrid->SetGridCursor( i + 1, m_fieldsGrid->GetGridCursorCol() );
         m_fieldsGrid->MakeCellVisible( m_fieldsGrid->GetGridCursorRow(),
                                        m_fieldsGrid->GetGridCursorCol() );
+
+        OnModify();
     }
     else
     {
@@ -949,7 +958,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnPinTableCellEdited( wxGridEvent& aEvent )
     m_dataModel->SetValue( row, COL_TYPE, m_dataModel->GetValue( row, COL_TYPE ) );
     m_dataModel->SetValue( row, COL_SHAPE, m_dataModel->GetValue( row, COL_SHAPE ) );
 
-    m_modified = true;
+    OnModify();
 }
 
 
@@ -1067,4 +1076,16 @@ void DIALOG_SYMBOL_PROPERTIES::OnInitDlg( wxInitDialogEvent& event )
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+}
+
+
+void DIALOG_SYMBOL_PROPERTIES::OnCheckBox( wxCommandEvent& event )
+{
+    OnModify();
+}
+
+
+void DIALOG_SYMBOL_PROPERTIES::OnChoice( wxCommandEvent& event )
+{
+    OnModify();
 }

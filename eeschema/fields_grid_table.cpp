@@ -50,6 +50,7 @@ template <class T>
 FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
                                          WX_GRID* aGrid, LIB_SYMBOL* aSymbol ) :
         m_frame( aFrame ),
+        m_dialog( aDialog ),
         m_userUnits( aDialog->GetUserUnits() ),
         m_grid( aGrid ),
         m_parentType( SCH_SYMBOL_T ),
@@ -63,7 +64,7 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
         m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
         m_filepathValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETFILENAME )
 {
-    initGrid( aDialog, aGrid );
+    initGrid( aGrid );
 }
 
 
@@ -71,6 +72,7 @@ template <class T>
 FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
                                          WX_GRID* aGrid, SCH_SHEET* aSheet ) :
         m_frame( aFrame ),
+        m_dialog( aDialog ),
         m_userUnits( aDialog->GetUserUnits() ),
         m_grid( aGrid ),
         m_parentType( SCH_SHEET_T ),
@@ -84,12 +86,12 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
         m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
         m_filepathValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETFILENAME_V )
 {
-    initGrid( aDialog, aGrid );
+    initGrid( aGrid );
 }
 
 
 template <class T>
-void FIELDS_GRID_TABLE<T>::initGrid( DIALOG_SHIM* aDialog, WX_GRID* aGrid )
+void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
 {
     // Build the various grid cell attributes.
     // NOTE: validators and cellAttrs are member variables to get the destruction order
@@ -114,12 +116,12 @@ void FIELDS_GRID_TABLE<T>::initGrid( DIALOG_SHIM* aDialog, WX_GRID* aGrid )
     m_valueAttr->SetEditor( valueEditor );
 
     m_footprintAttr = new wxGridCellAttr;
-    GRID_CELL_FOOTPRINT_ID_EDITOR* fpIdEditor = new GRID_CELL_FOOTPRINT_ID_EDITOR( aDialog );
+    GRID_CELL_FOOTPRINT_ID_EDITOR* fpIdEditor = new GRID_CELL_FOOTPRINT_ID_EDITOR( m_dialog );
     fpIdEditor->SetValidator( m_libIdValidator );
     m_footprintAttr->SetEditor( fpIdEditor );
 
     m_urlAttr = new wxGridCellAttr;
-    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( aDialog );
+    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog );
     urlEditor->SetValidator( m_urlValidator );
     m_urlAttr->SetEditor( urlEditor );
 
@@ -137,7 +139,7 @@ void FIELDS_GRID_TABLE<T>::initGrid( DIALOG_SHIM* aDialog, WX_GRID* aGrid )
     exts.push_back( KiCadSchematicFileExtension );
     wildCard += AddFileExtListToFilter( exts );
 
-    auto filepathEditor = new GRID_CELL_PATH_EDITOR( aDialog, aGrid, &m_curdir, wildCard );
+    auto filepathEditor = new GRID_CELL_PATH_EDITOR( m_dialog, aGrid, &m_curdir, wildCard );
     filepathEditor->SetValidator( m_filepathValidator );
     m_filepathAttr->SetEditor( filepathEditor );
 
@@ -560,6 +562,8 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         break;
     }
 
+    m_dialog->OnModify();
+
     GetView()->Refresh();
 }
 
@@ -585,6 +589,8 @@ void FIELDS_GRID_TABLE<T>::SetValueAsBool( int aRow, int aCol, bool aValue )
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
         break;
     }
+
+    m_dialog->OnModify();
 }
 
 

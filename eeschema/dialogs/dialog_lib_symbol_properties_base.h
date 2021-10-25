@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -96,7 +96,12 @@ class DIALOG_LIB_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSymbolNameKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSymbolNameText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCombobox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPowerCheckBox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSpinCtrl( wxSpinEvent& event ) { event.Skip(); }
+		virtual void OnSpinCtrlText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFilterDClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnEditFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddFootprintFilter( wxCommandEvent& event ) { event.Skip(); }

@@ -488,6 +488,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
 
     m_grid->EnableCellEditControl();
     m_grid->ShowCellEditControl();
+
+    OnModify();
 }
 
 
@@ -519,6 +521,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
         m_grid->MakeCellVisible( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
         m_grid->SetGridCursor( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
     }
+
+    OnModify();
 }
 
 
@@ -538,6 +542,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 
         m_grid->SetGridCursor( i - 1, m_grid->GetGridCursorCol() );
         m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
+
+        OnModify();
     }
     else
     {
@@ -562,6 +568,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 
         m_grid->SetGridCursor( i + 1, m_grid->GetGridCursorCol() );
         m_grid->MakeCellVisible( m_grid->GetGridCursorRow(), m_grid->GetGridCursorCol() );
+
+        OnModify();
     }
     else
     {
@@ -594,6 +602,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
         m_grid->ProcessTableMessage( msg );
     }
 
+    OnModify();
     m_grid->ForceRefresh();
 #endif /* KICAD_SPICE */
 }
@@ -634,6 +643,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddFootprintFilter( wxCommandEvent& event )
 
     m_FootprintFilterListBox->Append( filterLine );
     m_FootprintFilterListBox->SetSelection( (int) m_FootprintFilterListBox->GetCount() - 1 );
+
+    OnModify();
 }
 
 
@@ -650,6 +661,8 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnDeleteFootprintFilter( wxCommandEvent& even
         else
             m_FootprintFilterListBox->SetSelection( std::max( 0, ii - 1 ) );
     }
+
+    OnModify();
 }
 
 
@@ -664,7 +677,10 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditFootprintFilter( wxCommandEvent& event 
         WX_TEXT_ENTRY_DIALOG dlg( this, _( "Filter:" ), _( "Edit Footprint Filter" ), filter );
 
         if( dlg.ShowModal() == wxID_OK && !dlg.GetValue().IsEmpty() )
+        {
             m_FootprintFilterListBox->SetString( (unsigned) idx, dlg.GetValue() );
+            OnModify();
+        }
     }
 }
 
@@ -800,4 +816,38 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::onPowerCheckBox( wxCommandEvent& aEvent )
         m_excludeFromBomCheckBox->Enable( true );
         m_excludeFromBoardCheckBox->Enable( true );
     }
+
+    OnModify();
 }
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnText( wxCommandEvent& event )
+{
+    OnModify();
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnCombobox( wxCommandEvent& event )
+{
+    OnModify();
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnCheckBox( wxCommandEvent& event )
+{
+    OnModify();
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnSpinCtrl( wxSpinEvent& event )
+{
+    OnModify();
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::OnSpinCtrlText( wxCommandEvent& event )
+{
+    OnModify();
+}
+
+

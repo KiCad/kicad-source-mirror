@@ -102,10 +102,11 @@ public:
     bool BoolFromString( wxString aValue ) const;
 
 protected:
-    void initGrid( DIALOG_SHIM* aDialog, WX_GRID* aGrid );
+    void initGrid( WX_GRID* aGrid );
 
 private:
     SCH_BASE_FRAME* m_frame;
+    DIALOG_SHIM*    m_dialog;
     EDA_UNITS       m_userUnits;
     WX_GRID*        m_grid;
     KICAD_T         m_parentType;

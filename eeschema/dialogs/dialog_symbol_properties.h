@@ -80,6 +80,8 @@ private:
     void OnCancelButtonClick( wxCommandEvent& event ) override;
     void OnInitDlg( wxInitDialogEvent& event ) override;
     void OnGridEditorShown( wxGridEvent& event ) override;
+    void OnChoice( wxCommandEvent& event ) override;
+  	void OnCheckBox( wxCommandEvent& event ) override;
 
     void OnEditSymbol( wxCommandEvent&  ) override;
     void OnEditLibrarySymbol( wxCommandEvent&  ) override;
