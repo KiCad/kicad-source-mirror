@@ -1252,7 +1252,9 @@ void DL_Dxf::addVertex( DL_CreationInterface* creationInterface )
     DL_VertexData d( getRealValue( 10, 0.0 ),
             getRealValue( 20, 0.0 ),
             getRealValue( 30, 0.0 ),
-            getRealValue( 42, 0.0 ) );
+            getRealValue( 42, 0.0 ),
+            getRealValue( 40, 0.0 ),
+            getRealValue( 41, 0.0 ) );
 
     creationInterface->addVertex( d );
 }

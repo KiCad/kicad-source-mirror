@@ -478,12 +478,14 @@ struct DXFLIB_EXPORT DL_VertexData
      * Parameters: see member variables.
      */
     DL_VertexData( double px = 0.0, double py = 0.0, double pz = 0.0,
-            double pBulge = 0.0 )
+            double pBulge = 0.0, double pStartWidth = 0.0, double pEndWidth = 0.0 )
     {
         x = px;
         y = py;
         z = pz;
         bulge = pBulge;
+        startWidth = pStartWidth;
+        endWidth = pEndWidth;
     }
 
     /*! X Coordinate of the vertex. */
@@ -498,6 +500,12 @@ struct DXFLIB_EXPORT DL_VertexData
     /*! Bulge of vertex.
      * (The tangent of 1/4 of the arc angle or 0 for lines) */
     double bulge;
+
+    /* start/end width attributes of the vertex. Allowed by the Autodesk specs (entity codes 40/41).
+     * used by certain EDA tools to encode line widths */
+    double startWidth;
+
+    double endWidth;
 };
 
 
