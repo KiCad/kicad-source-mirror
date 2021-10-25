@@ -449,6 +449,44 @@ std::shared_ptr<SHAPE> FP_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 }
 
 
+void FP_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                        PCB_LAYER_ID aLayer, int aClearance,
+                                                        int aError, ERROR_LOC aErrorLoc ) const
+{
+    struct TSEGM_2_POLY_PRMS prms;
+
+    prms.m_cornerBuffer = &aCornerBuffer;
+    prms.m_textWidth  = GetEffectiveTextPenWidth() + ( 2 * aClearance );
+    prms.m_error = aError;
+    wxSize size = GetTextSize();
+    int  penWidth = GetEffectiveTextPenWidth();
+
+    if( IsMirrored() )
+        size.x = -size.x;
+
+    GRText( nullptr, GetTextPos(), BLACK, GetShownText(), GetDrawRotation(), size,
+            GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold(),
+            addTextSegmToPoly, &prms );
+}
+
+
+void FP_TEXT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                    PCB_LAYER_ID aLayer, int aClearance,
+                                                    int aError, ERROR_LOC aErrorLoc,
+                                                    bool aIgnoreLineWidth ) const
+{
+    SHAPE_POLY_SET buffer;
+    EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( &buffer, aClearance );
+
+    const FOOTPRINT* parentFootprint = static_cast<const FOOTPRINT*>( m_parent );
+
+    if( parentFootprint )
+        buffer.Rotate( DECIDEG2RAD( GetDrawRotation() ), GetTextPos() );
+
+    aCornerBuffer.Append( buffer );
+}
+
+
 static struct FP_TEXT_DESC
 {
     FP_TEXT_DESC()

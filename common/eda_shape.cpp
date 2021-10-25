@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@
 
 #include <bezier_curves.h>
 #include <base_units.h>
+#include <convert_basic_shapes_to_polygon.h>
 #include <eda_draw_frame.h>
 #include <geometry/shape_simple.h>
 #include <geometry/shape_segment.h>
@@ -34,6 +35,7 @@
 #include <math/util.h>      // for KiROUND
 #include <eda_shape.h>
 #include <plotters/plotter.h>
+
 
 EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
     m_endsSwapped( false ),
@@ -1002,10 +1004,21 @@ void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
     {
         switch( quarter )
         {
-        case 0: aBBox.Merge( wxPoint( m_arcCenter.x,          m_arcCenter.y + radius ) ); break;  // down
-        case 1: aBBox.Merge( wxPoint( m_arcCenter.x - radius, m_arcCenter.y          ) ); break;  // left
-        case 2: aBBox.Merge( wxPoint( m_arcCenter.x,          m_arcCenter.y - radius ) ); break;  // up
-        case 3: aBBox.Merge( wxPoint( m_arcCenter.x + radius, m_arcCenter.y          ) ); break;  // right
+        case 0:
+            aBBox.Merge( wxPoint( m_arcCenter.x, m_arcCenter.y + radius ) );
+            break;  // down
+
+        case 1:
+            aBBox.Merge( wxPoint( m_arcCenter.x - radius, m_arcCenter.y ) );
+            break;  // left
+
+        case 2:
+            aBBox.Merge( wxPoint( m_arcCenter.x, m_arcCenter.y - radius ) );
+            break;  // up
+
+        case 3:
+            aBBox.Merge( wxPoint( m_arcCenter.x + radius, m_arcCenter.y ) );
+            break;  // right
         }
 
         ++quarter %= 4;
@@ -1426,6 +1439,130 @@ int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
     TEST( (int) m_fill, (int) aOther->m_fill );
 
     return 0;
+}
+
+
+void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                      int aClearanceValue,
+                                                      int aError, ERROR_LOC aErrorLoc,
+                                                      bool ignoreLineWidth ) const
+{
+    int width = ignoreLineWidth ? 0 : m_width;
+
+    width += 2 * aClearanceValue;
+
+    switch( m_shape )
+    {
+    case SHAPE_T::CIRCLE:
+        if( IsFilled() )
+        {
+            TransformCircleToPolygon( aCornerBuffer, getCenter(), GetRadius() + width / 2, aError,
+                                      aErrorLoc );
+        }
+        else
+        {
+            TransformRingToPolygon( aCornerBuffer, getCenter(), GetRadius(), width, aError,
+                                    aErrorLoc );
+        }
+
+        break;
+
+    case SHAPE_T::RECT:
+    {
+        std::vector<wxPoint> pts = GetRectCorners();
+
+        if( IsFilled() )
+        {
+            aCornerBuffer.NewOutline();
+
+            for( const wxPoint& pt : pts )
+                aCornerBuffer.Append( pt );
+        }
+
+        if( width > 0 || !IsFilled() )
+        {
+            // Add in segments
+            TransformOvalToPolygon( aCornerBuffer, pts[0], pts[1], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aCornerBuffer, pts[1], pts[2], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aCornerBuffer, pts[2], pts[3], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aCornerBuffer, pts[3], pts[0], width, aError, aErrorLoc );
+        }
+
+        break;
+    }
+
+    case SHAPE_T::ARC:
+        TransformArcToPolygon( aCornerBuffer, GetStart(), GetArcMid(), GetEnd(), width, aError,
+                               aErrorLoc );
+        break;
+
+    case SHAPE_T::SEGMENT:
+        TransformOvalToPolygon( aCornerBuffer, GetStart(), GetEnd(), width, aError, aErrorLoc );
+        break;
+
+    case SHAPE_T::POLY:
+    {
+        if( !IsPolyShapeValid() )
+            break;
+
+        // The polygon is expected to be a simple polygon; not self intersecting, no hole.
+        double  orientation = getParentOrientation();
+        wxPoint offset = getParentPosition();
+
+        // Build the polygon with the actual position and orientation:
+        std::vector<wxPoint> poly;
+        DupPolyPointsList( poly );
+
+        for( wxPoint& point : poly )
+        {
+            RotatePoint( &point, orientation );
+            point += offset;
+        }
+
+        if( IsFilled() )
+        {
+            aCornerBuffer.NewOutline();
+
+            for( const wxPoint& point : poly )
+                aCornerBuffer.Append( point.x, point.y );
+        }
+
+        if( width > 0 || !IsFilled() )
+        {
+            wxPoint pt1( poly[ poly.size() - 1] );
+
+            for( const wxPoint& pt2 : poly )
+            {
+                if( pt2 != pt1 )
+                    TransformOvalToPolygon( aCornerBuffer, pt1, pt2, width, aError, aErrorLoc );
+
+                pt1 = pt2;
+            }
+        }
+
+        break;
+    }
+
+    case SHAPE_T::BEZIER:
+    {
+        std::vector<wxPoint> ctrlPts = { GetStart(), GetBezierC1(), GetBezierC2(), GetEnd() };
+        BEZIER_POLY converter( ctrlPts );
+        std::vector< wxPoint> poly;
+        converter.GetPoly( poly, m_width );
+
+        for( unsigned ii = 1; ii < poly.size(); ii++ )
+        {
+            TransformOvalToPolygon( aCornerBuffer, poly[ii - 1], poly[ii], width, aError,
+                                    aErrorLoc );
+        }
+
+        break;
+    }
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+        break;
+    }
 }
 
 

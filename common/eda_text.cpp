@@ -36,6 +36,7 @@
 #include <base_units.h>
 #include <basic_gal.h>        // for BASIC_GAL, basic_gal
 #include <convert_to_biu.h>   // for Mils2iu
+#include <convert_basic_shapes_to_polygon.h>
 #include <eda_rect.h>         // for EDA_RECT
 #include <eda_text.h>         // for EDA_TEXT, TEXT_EFFECTS, GR_TEXT_VJUSTIF...
 #include <gal/color4d.h>      // for COLOR4D, COLOR4D::BLACK
@@ -50,6 +51,7 @@
 #include <i18n_utility.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_compound.h>
+#include <geometry/shape_poly_set.h>
 
 
 #include <wx/debug.h>           // for wxASSERT
@@ -58,6 +60,14 @@
 
 class OUTPUTFORMATTER;
 class wxFindReplaceData;
+
+
+void addTextSegmToPoly( int x0, int y0, int xf, int yf, void* aData )
+{
+    TSEGM_2_POLY_PRMS* prm = static_cast<TSEGM_2_POLY_PRMS*>( aData );
+    TransformOvalToPolygon( *prm->m_cornerBuffer, wxPoint( x0, y0 ), wxPoint( xf, yf ),
+                            prm->m_textWidth, prm->m_error, ERROR_INSIDE );
+}
 
 
 EDA_TEXT_HJUSTIFY_T EDA_TEXT::MapHorizJustify( int aHorizJustify )
@@ -665,6 +675,52 @@ int EDA_TEXT::Compare( const EDA_TEXT* aOther ) const
     TEST( m_e.bits, aOther->m_e.bits );
 
     return m_text.Cmp( aOther->m_text );
+}
+
+
+void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCornerBuffer,
+                                                           int aClearanceValue ) const
+{
+    if( GetText().Length() == 0 )
+        return;
+
+    wxPoint  corners[4];    // Buffer of polygon corners
+
+    EDA_RECT rect = GetTextBox();
+
+    // This ugly hack is because this code used to be defined in the board polygon code
+    // file rather than in the EDA_TEXT source file where it belonged.  Using the board
+    // default text width was dubious so this recreates the same code with the exception
+    // if for some reason a different default text width is require for some other object.
+#if !defined( DEFAULT_TEXT_WIDTH )
+#define LOCAL_DEFAULT_TEXT_WIDTH
+#define DEFAULT_TEXT_WIDTH            0.15
+#endif
+
+    rect.Inflate( aClearanceValue + Millimeter2iu( DEFAULT_TEXT_WIDTH ) );
+
+#if defined( LOCAL_DEFAULT_TEXT_WIDTH )
+#undef DEFAULT_TEXT_WIDTH
+#undef LOCAL_DEFAULT_TEXT_WIDTH
+#endif
+
+    corners[0].x = rect.GetOrigin().x;
+    corners[0].y = rect.GetOrigin().y;
+    corners[1].y = corners[0].y;
+    corners[1].x = rect.GetRight();
+    corners[2].x = corners[1].x;
+    corners[2].y = rect.GetBottom();
+    corners[3].y = corners[2].y;
+    corners[3].x = corners[0].x;
+
+    aCornerBuffer->NewOutline();
+
+    for( wxPoint& corner : corners )
+    {
+        // Rotate polygon
+        RotatePoint( &corner.x, &corner.y, GetTextPos().x, GetTextPos().y, GetTextAngle() );
+        aCornerBuffer->Append( corner.x, corner.y );
+    }
 }
 
 

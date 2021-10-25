@@ -1397,6 +1397,55 @@ std::shared_ptr<SHAPE> ZONE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 }
 
 
+void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                 PCB_LAYER_ID aLayer, int aClearance, int aError,
+                                                 ERROR_LOC aErrorLoc, bool aIgnoreLineWidth ) const
+{
+    wxASSERT_MSG( !aIgnoreLineWidth, "IgnoreLineWidth has no meaning for zones." );
+
+    if( !m_FilledPolysList.count( aLayer ) )
+        return;
+
+    aCornerBuffer = m_FilledPolysList.at( aLayer );
+
+    int numSegs = GetArcToSegmentCount( aClearance, aError, 360.0 );
+    aCornerBuffer.Inflate( aClearance, numSegs );
+    aCornerBuffer.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+}
+
+
+void ZONE::TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aCornerBuffer,
+                                               int aError ) const
+{
+    if( !m_FilledPolysList.count( aLayer ) || m_FilledPolysList.at( aLayer ).IsEmpty() )
+        return;
+
+    // Just add filled areas if filled polygons outlines have no thickness
+    if( !GetFilledPolysUseThickness() || GetMinThickness() == 0 )
+    {
+        const SHAPE_POLY_SET& polys = m_FilledPolysList.at( aLayer );
+        aCornerBuffer.Append( polys );
+        return;
+    }
+
+    // Filled areas have polygons with outline thickness.
+    // we must create the polygons and add inflated polys
+    SHAPE_POLY_SET polys = m_FilledPolysList.at( aLayer );
+
+    auto board = GetBoard();
+    int maxError = ARC_HIGH_DEF;
+
+    if( board )
+        maxError = board->GetDesignSettings().m_MaxError;
+
+    int numSegs = GetArcToSegmentCount( GetMinThickness(), maxError, 360.0 );
+
+    polys.InflateWithLinkedHoles( GetMinThickness()/2, numSegs, SHAPE_POLY_SET::PM_FAST );
+
+    aCornerBuffer.Append( polys );
+}
+
+
 static struct ZONE_DESC
 {
     ZONE_DESC()

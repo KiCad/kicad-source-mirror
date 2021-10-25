@@ -1447,6 +1447,129 @@ void PAD::SwapData( BOARD_ITEM* aImage )
 }
 
 
+bool PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
+                                               int aError, ERROR_LOC aErrorLoc ) const
+{
+    wxSize drillsize = GetDrillSize();
+
+    if( !drillsize.x || !drillsize.y )
+        return false;
+
+    const SHAPE_SEGMENT* seg = GetEffectiveHoleShape();
+
+    TransformOvalToPolygon( aCornerBuffer, (wxPoint) seg->GetSeg().A, (wxPoint) seg->GetSeg().B,
+                            seg->GetWidth() + aInflateValue * 2, aError, aErrorLoc );
+
+    return true;
+}
+
+
+void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                PCB_LAYER_ID aLayer, int aClearanceValue,
+                                                int aError, ERROR_LOC aErrorLoc,
+                                                bool ignoreLineWidth ) const
+{
+    wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for pads." );
+
+    // minimal segment count to approximate a circle to create the polygonal pad shape
+    // This minimal value is mainly for very small pads, like SM0402.
+    // Most of time pads are using the segment count given by aError value.
+    const int pad_min_seg_per_circle_count = 16;
+    double  angle = m_orient;
+    int     dx = m_size.x / 2;
+    int     dy = m_size.y / 2;
+
+    wxPoint padShapePos = ShapePos();         // Note: for pad having a shape offset,
+                                              // the pad position is NOT the shape position
+
+    switch( GetShape() )
+    {
+    case PAD_SHAPE::CIRCLE:
+    case PAD_SHAPE::OVAL:
+        // Note: dx == dy is not guaranteed for circle pads in legacy boards
+        if( dx == dy || ( GetShape() == PAD_SHAPE::CIRCLE ) )
+        {
+            TransformCircleToPolygon( aCornerBuffer, padShapePos, dx + aClearanceValue, aError,
+                                      aErrorLoc, pad_min_seg_per_circle_count );
+        }
+        else
+        {
+            int     half_width = std::min( dx, dy );
+            wxPoint delta( dx - half_width, dy - half_width );
+
+            RotatePoint( &delta, angle );
+
+            TransformOvalToPolygon( aCornerBuffer, padShapePos - delta, padShapePos + delta,
+                                    ( half_width + aClearanceValue ) * 2, aError, aErrorLoc,
+                                    pad_min_seg_per_circle_count );
+        }
+
+        break;
+
+    case PAD_SHAPE::TRAPEZOID:
+    case PAD_SHAPE::RECT:
+    {
+        int  ddx = GetShape() == PAD_SHAPE::TRAPEZOID ? m_deltaSize.x / 2 : 0;
+        int  ddy = GetShape() == PAD_SHAPE::TRAPEZOID ? m_deltaSize.y / 2 : 0;
+
+        SHAPE_POLY_SET outline;
+        TransformTrapezoidToPolygon( outline, padShapePos, m_size, angle, ddx, ddy,
+                                     aClearanceValue, aError, aErrorLoc );
+        aCornerBuffer.Append( outline );
+        break;
+    }
+
+    case PAD_SHAPE::CHAMFERED_RECT:
+    case PAD_SHAPE::ROUNDRECT:
+    {
+        bool doChamfer = GetShape() == PAD_SHAPE::CHAMFERED_RECT;
+
+        SHAPE_POLY_SET outline;
+        TransformRoundChamferedRectToPolygon( outline, padShapePos, m_size, angle,
+                                              GetRoundRectCornerRadius(),
+                                              doChamfer ? GetChamferRectRatio() : 0,
+                                              doChamfer ? GetChamferPositions() : 0,
+                                              aClearanceValue, aError, aErrorLoc );
+        aCornerBuffer.Append( outline );
+        break;
+    }
+
+    case PAD_SHAPE::CUSTOM:
+    {
+        SHAPE_POLY_SET outline;
+        MergePrimitivesAsPolygon( &outline, aErrorLoc );
+        outline.Rotate( -DECIDEG2RAD( m_orient ) );
+        outline.Move( VECTOR2I( m_pos ) );
+
+        if( aClearanceValue )
+        {
+            int numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
+                                                          pad_min_seg_per_circle_count );
+            int clearance = aClearanceValue;
+
+            if( aErrorLoc == ERROR_OUTSIDE )
+            {
+                int actual_error = CircleToEndSegmentDeltaRadius( clearance, numSegs );
+                clearance += GetCircleToPolyCorrection( actual_error );
+            }
+
+            outline.Inflate( clearance, numSegs );
+            outline.Simplify( SHAPE_POLY_SET::PM_FAST );
+            outline.Fracture( SHAPE_POLY_SET::PM_FAST );
+        }
+
+        aCornerBuffer.Append( outline );
+        break;
+    }
+
+    default:
+        wxFAIL_MSG( "PAD::TransformShapeWithClearanceToPolygon no implementation for "
+                    + PAD_SHAPE_T_asString( GetShape() ) );
+        break;
+    }
+}
+
+
 static struct PAD_DESC
 {
     PAD_DESC()

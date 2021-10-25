@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jpe.charras at wanadoo.fr
- * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,27 @@ class OUTPUTFORMATTER;
 class SHAPE_COMPOUND;
 class SHAPE_POLY_SET;
 class wxFindReplaceData;
+
+
+/**
+ * A helper for the text to polygon callback function.
+ *
+ * These variables are parameters used in #addTextSegmToPoly but #addTextSegmToPoly is a
+ * callback function so the cannot be sent as arguments.
+ */
+struct TSEGM_2_POLY_PRMS
+{
+    int m_textWidth;
+    int m_error;
+    SHAPE_POLY_SET* m_cornerBuffer;
+};
+
+
+/**
+ * Callback function used to convert text segments to polygons.
+ */
+extern void addTextSegmToPoly( int x0, int y0, int xf, int yf, void* aData );
+
 
 namespace KIGFX
 {

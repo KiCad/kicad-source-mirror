@@ -28,6 +28,7 @@
 #include <pcb_edit_frame.h>
 #include <base_units.h>
 #include <board.h>
+#include <convert_basic_shapes_to_polygon.h>
 #include <pcb_dimension.h>
 #include <pcb_text.h>
 #include <geometry/shape_compound.h>
@@ -499,6 +500,39 @@ OPT_VECTOR2I PCB_DIMENSION_BASE::segCircleIntersection( CIRCLE& aCircle, SEG& aS
         return NULLOPT;
 
     return OPT_VECTOR2I( endpoint );
+}
+
+
+void PCB_DIMENSION_BASE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                               PCB_LAYER_ID aLayer, int aClearance,
+                                                               int aError, ERROR_LOC aErrorLoc,
+                                                               bool aIgnoreLineWidth ) const
+{
+    wxASSERT_MSG( !aIgnoreLineWidth, "IgnoreLineWidth has no meaning for dimensions." );
+
+    for( const std::shared_ptr<SHAPE>& shape : m_shapes )
+    {
+        const SHAPE_CIRCLE*  circle = dynamic_cast<const SHAPE_CIRCLE*>( shape.get() );
+        const SHAPE_SEGMENT* seg    = dynamic_cast<const SHAPE_SEGMENT*>( shape.get() );
+
+        if( circle )
+        {
+            TransformCircleToPolygon( aCornerBuffer, (wxPoint) circle->GetCenter(),
+                                      circle->GetRadius() + m_lineThickness / 2 + aClearance,
+                                      aError, aErrorLoc );
+        }
+        else if( seg )
+        {
+            TransformOvalToPolygon( aCornerBuffer, (wxPoint) seg->GetSeg().A,
+                                    (wxPoint) seg->GetSeg().B, m_lineThickness + 2 * aClearance,
+                                    aError, aErrorLoc );
+        }
+        else
+        {
+            wxFAIL_MSG( "PCB_DIMENSION_BASE::TransformShapeWithClearanceToPolygon unexpected "
+                        "shape type." );
+        }
+    }
 }
 
 

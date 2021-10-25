@@ -2171,3 +2171,75 @@ bool BOARD::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
 }
 
 
+void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
+                                                SHAPE_POLY_SET& aOutlines ) const
+{
+    int maxError = GetDesignSettings().m_MaxError;
+
+    // convert tracks and vias:
+    for( const PCB_TRACK* track : m_tracks )
+    {
+        if( !track->IsOnLayer( aLayer ) )
+            continue;
+
+        track->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
+                                                     ERROR_INSIDE );
+    }
+
+    // convert pads and other copper items in footprints
+    for( const FOOTPRINT* footprint : m_footprints )
+    {
+        footprint->TransformPadsWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
+                                                        ERROR_INSIDE );
+
+        // Micro-wave footprints may have items on copper layers
+        footprint->TransformFPShapesWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
+                                                            ERROR_INSIDE,
+                                                            true, /* include text */
+                                                            true  /* include shapes */ );
+
+        for( const ZONE* zone : footprint->Zones() )
+        {
+            if( zone->GetLayerSet().test( aLayer ) )
+                zone->TransformSolidAreasShapesToPolygon( aLayer, aOutlines );
+        }
+    }
+
+    // convert copper zones
+    for( const ZONE* zone : Zones() )
+    {
+        if( zone->GetLayerSet().test( aLayer ) )
+            zone->TransformSolidAreasShapesToPolygon( aLayer, aOutlines );
+    }
+
+    // convert graphic items on copper layers (texts)
+    for( const BOARD_ITEM* item : m_drawings )
+    {
+        if( !item->IsOnLayer( aLayer ) )
+            continue;
+
+        switch( item->Type() )
+        {
+        case PCB_SHAPE_T:
+        {
+            const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
+            shape->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
+                                                         ERROR_INSIDE );
+            break;
+        }
+
+        case PCB_TEXT_T:
+        {
+            const PCB_TEXT* text = static_cast<const PCB_TEXT*>( item );
+            text->TransformTextShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
+                                                            ERROR_INSIDE );
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+}
+
+

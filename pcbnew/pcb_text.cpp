@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -216,6 +216,38 @@ void PCB_TEXT::SwapData( BOARD_ITEM* aImage )
 std::shared_ptr<SHAPE> PCB_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     return GetEffectiveTextShape();
+}
+
+
+void PCB_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                         PCB_LAYER_ID aLayer, int aClearanceValue,
+                                                         int aError, ERROR_LOC aErrorLoc ) const
+{
+    struct TSEGM_2_POLY_PRMS prms;
+
+    wxSize size = GetTextSize();
+
+    if( IsMirrored() )
+        size.x = -size.x;
+
+    int  penWidth = GetEffectiveTextPenWidth();
+
+    prms.m_cornerBuffer = &aCornerBuffer;
+    prms.m_textWidth = GetEffectiveTextPenWidth() + ( 2 * aClearanceValue );
+    prms.m_error = aError;
+    COLOR4D color;  // not actually used, but needed by GRText
+
+    GRText( nullptr, GetTextPos(), color, GetShownText(), GetTextAngle(), size, GetHorizJustify(),
+            GetVertJustify(), penWidth, IsItalic(), IsBold(), addTextSegmToPoly, &prms );
+}
+
+
+void PCB_TEXT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                     PCB_LAYER_ID aLayer, int aClearance,
+                                                     int aError, ERROR_LOC aErrorLoc,
+                                                     bool aIgnoreLineWidth ) const
+{
+    EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( &aCornerBuffer, aClearance );
 }
 
 

@@ -2187,6 +2187,146 @@ bool FOOTPRINT::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) co
 }
 
 
+void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                     PCB_LAYER_ID aLayer, int aClearance,
+                                                     int aMaxError, ERROR_LOC aErrorLoc,
+                                                     bool aSkipNPTHPadsWihNoCopper,
+                                                     bool aSkipPlatedPads,
+                                                     bool aSkipNonPlatedPads ) const
+{
+    for( const PAD* pad : m_pads )
+    {
+        if( aLayer != UNDEFINED_LAYER && !pad->IsOnLayer(aLayer) )
+            continue;
+
+        if( !pad->FlashLayer( aLayer ) && IsCopperLayer( aLayer ) )
+            continue;
+
+        // NPTH pads are not drawn on layers if the shape size and pos is the same
+        // as their hole:
+        if( aSkipNPTHPadsWihNoCopper && pad->GetAttribute() == PAD_ATTRIB::NPTH )
+        {
+            if( pad->GetDrillSize() == pad->GetSize() && pad->GetOffset() == wxPoint( 0, 0 ) )
+            {
+                switch( pad->GetShape() )
+                {
+                case PAD_SHAPE::CIRCLE:
+                    if( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
+                        continue;
+
+                    break;
+
+                case PAD_SHAPE::OVAL:
+                    if( pad->GetDrillShape() != PAD_DRILL_SHAPE_CIRCLE )
+                        continue;
+
+                    break;
+
+                default:
+                    break;
+                }
+            }
+        }
+
+        const bool isPlated = ( ( aLayer == F_Cu ) && pad->FlashLayer( F_Mask ) ) ||
+                              ( ( aLayer == B_Cu ) && pad->FlashLayer( B_Mask ) );
+
+        if( aSkipPlatedPads && isPlated )
+            continue;
+
+        if( aSkipNonPlatedPads && !isPlated )
+            continue;
+
+        wxSize clearance( aClearance, aClearance );
+
+        switch( aLayer )
+        {
+        case F_Mask:
+        case B_Mask:
+            clearance.x += pad->GetSolderMaskMargin();
+            clearance.y += pad->GetSolderMaskMargin();
+            break;
+
+        case F_Paste:
+        case B_Paste:
+            clearance += pad->GetSolderPasteMargin();
+            break;
+
+        default:
+            break;
+        }
+
+        // Our standard TransformShapeWithClearanceToPolygon() routines can't handle differing
+        // x:y clearance values (which get generated when a relative paste margin is used with
+        // an oblong pad).  So we apply this huge hack and fake a larger pad to run the transform
+        // on.
+        // Of course being a hack it falls down when dealing with custom shape pads (where the
+        // size is only the size of the anchor), so for those we punt and just use clearance.x.
+
+        if( ( clearance.x < 0 || clearance.x != clearance.y )
+                && pad->GetShape() != PAD_SHAPE::CUSTOM )
+        {
+            PAD dummy( *pad );
+            dummy.SetSize( pad->GetSize() + clearance + clearance );
+            dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
+                                                        aMaxError, aErrorLoc );
+        }
+        else
+        {
+            pad->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, clearance.x,
+                                                       aMaxError, aErrorLoc );
+        }
+    }
+}
+
+
+void FOOTPRINT::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                         PCB_LAYER_ID aLayer, int aClearance,
+                                                         int aError, ERROR_LOC aErrorLoc,
+                                                         bool aIncludeText,
+                                                         bool aIncludeShapes ) const
+{
+    std::vector<FP_TEXT*> texts;  // List of FP_TEXT to convert
+
+    for( BOARD_ITEM* item : GraphicalItems() )
+    {
+        if( item->Type() == PCB_FP_TEXT_T && aIncludeText )
+        {
+            FP_TEXT* text = static_cast<FP_TEXT*>( item );
+
+            if( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer && text->IsVisible() )
+                texts.push_back( text );
+        }
+
+        if( item->Type() == PCB_FP_SHAPE_T && aIncludeShapes )
+        {
+            const FP_SHAPE* outline = static_cast<FP_SHAPE*>( item );
+
+            if( aLayer != UNDEFINED_LAYER && outline->GetLayer() == aLayer )
+            {
+                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
+                                                               aError, aErrorLoc );
+            }
+        }
+    }
+
+    if( aIncludeText )
+    {
+        if( Reference().GetLayer() == aLayer && Reference().IsVisible() )
+            texts.push_back( &Reference() );
+
+        if( Value().GetLayer() == aLayer && Value().IsVisible() )
+            texts.push_back( &Value() );
+    }
+
+    for( const FP_TEXT* text : texts )
+    {
+        text->TransformTextShapeWithClearanceToPolygon( aCornerBuffer, aLayer, aClearance,
+                                                        aError, aErrorLoc );
+    }
+}
+
+
 static struct FOOTPRINT_DESC
 {
     FOOTPRINT_DESC()

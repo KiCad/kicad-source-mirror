@@ -28,6 +28,7 @@
 #include <connectivity/connectivity_data.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <convert_basic_shapes_to_polygon.h>
 #include <pcb_track.h>
 #include <base_units.h>
 #include <bitmaps.h>
@@ -1044,6 +1045,43 @@ std::shared_ptr<SHAPE> PCB_ARC::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
     return std::make_shared<SHAPE_ARC>( GetStart(), GetMid(), GetEnd(), GetWidth() );
 }
 
+
+void PCB_TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                      PCB_LAYER_ID aLayer, int aClearanceValue,
+                                                      int aError, ERROR_LOC aErrorLoc,
+                                                      bool ignoreLineWidth ) const
+{
+    wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for tracks." );
+
+
+    switch( Type() )
+    {
+    case PCB_VIA_T:
+    {
+        int radius = ( m_Width / 2 ) + aClearanceValue;
+        TransformCircleToPolygon( aCornerBuffer, m_Start, radius, aError, aErrorLoc );
+        break;
+    }
+
+    case PCB_ARC_T:
+    {
+        const PCB_ARC* arc = static_cast<const PCB_ARC*>( this );
+        int            width = m_Width + ( 2 * aClearanceValue );
+
+        TransformArcToPolygon( aCornerBuffer, arc->GetStart(), arc->GetMid(),
+                               arc->GetEnd(), width, aError, aErrorLoc );
+        break;
+    }
+
+    default:
+    {
+        int width = m_Width + ( 2 * aClearanceValue );
+
+        TransformOvalToPolygon( aCornerBuffer, m_Start, m_End, width, aError, aErrorLoc );
+        break;
+    }
+    }
+}
 
 
 #if defined(DEBUG)

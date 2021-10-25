@@ -240,6 +240,16 @@ bool PCB_SHAPE::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
 }
 
 
+void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                      PCB_LAYER_ID aLayer, int aClearanceValue,
+                                                      int aError, ERROR_LOC aErrorLoc,
+                                                      bool ignoreLineWidth ) const
+{
+    EDA_SHAPE::TransformShapeWithClearanceToPolygon( aCornerBuffer, aClearanceValue, aError,
+                                                     aErrorLoc, ignoreLineWidth );
+}
+
+
 static struct PCB_SHAPE_DESC
 {
     PCB_SHAPE_DESC()
