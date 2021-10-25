@@ -983,7 +983,12 @@ int BOARD_DESIGN_SETTINGS::GetCurrentTrackWidth() const
 
 void BOARD_DESIGN_SETTINGS::SetDiffPairIndex( unsigned aIndex )
 {
-    m_diffPairIndex = std::min( aIndex, (unsigned) 8 );
+    if( !m_DiffPairDimensionsList.empty() )
+    {
+        m_diffPairIndex = std::min( aIndex,
+                static_cast<unsigned>( m_DiffPairDimensionsList.size() ) - 1 );
+    }
+
     m_useCustomDiffPair = false;
 }
 
