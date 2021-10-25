@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-25 06:24-0700\n"
-"PO-Revision-Date: 2021-10-25 13:17+0000\n"
+"PO-Revision-Date: 2021-10-27 02:46+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -4025,9 +4025,8 @@ msgstr "Polegadas"
 
 #: common/eda_draw_frame.cpp:148 pcbnew/tools/drawing_tool.cpp:266
 #: pcbnew/tools/pcb_actions.cpp:668
-#, fuzzy
 msgid "Constrain to H, V, 45"
-msgstr "Restrinja o contorno em H, V e 45 graus"
+msgstr "Restrinja para H, V, 45"
 
 #: common/eda_draw_frame.cpp:318
 msgid "Edit User Grid..."
@@ -5326,9 +5325,8 @@ msgid "Reference designators"
 msgstr "Designadores de referência"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text"
-msgstr "Texto do footprint do componente"
+msgstr "Texto do footprint"
 
 #: common/layer_id.cpp:148
 msgid "Hidden text"
@@ -11896,15 +11894,12 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Destaque as nets quando estiverem destacadas no editor da PCI"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Constrain buses and wires to H or V"
-msgstr ""
-"&Restrinja os fios e os barramentos à orientação horizontal ou vertical"
+msgstr "Restrinja os fios e os barramentos para H ou V"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Mouse drag performs Drag (G) operation"
-msgstr "O arrasto do mouse executa a operação de arrastar (G)"
+msgstr "O arrasto do mouse executa a operação Drag (G)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:28
 msgid "If unchecked, mouse drag will perform move (M) operation"
@@ -19793,7 +19788,6 @@ msgid "Error writing objects to clipboard"
 msgstr "Houve um erro ao gravar os objetos na área de transferência"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19805,16 +19799,17 @@ msgid ""
 "___R<sub>1</sub> = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
-"### Atenuador divisor\n"
-"#### a atenuação é 6dB\n"
-"___Z<sub>in</sub>___ impedância desejada da entrada em &#x2126;<br>\n"
-"___Z<sub>out</sub>___ impedância desejada da saída em &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"### Atenuador de ponte T\n"
+"___a___ é atenuado em dB<br>\n"
+"___Z<sub>in</sub>___ é impedância desejada da entrada em &#x2126;<br>\n"
+"___Z<sub>out</sub>___ é impedância desejada da saída em &#x2126;<br>\n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
+"___L = 10<sup>a/20</up>___\n"
+"___R<sub>1</sub> = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
+"___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19828,21 +19823,19 @@ msgid ""
 "___R<sub>1</sub> = 1 / (A/Z<sub>in</sub> &minus; 1/R<sub>2</sub>)___<br>\n"
 "___R<sub>3</sub> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
 msgstr ""
-"### Atenuador T\n"
-"__Zin__ a impedância desejada na entrada em &#x2126;<br>\n"
-"__Zout__ a impedância desejada na saída<br>\n"
-"__Zin = Zout__<br><br>\n"
+"### Atenuador Pi\n"
+"___a___ é atenuado em dB<br>\n"
+"___Z<sub>in</sub>___ é impedância desejada da entrada em &#x2126;<br>\n"
+"___Z<sub>out</sub>___ é impedância desejada da saída em &#x2126;<br>\n"
 "\n"
-"* __a__ a atenuação em dB\n"
-"* __L = 10<sup>a/20</sup>__ (perda)\n"
-"* ___A = (L + 1) / (L - 1)___<br><br>\n"
-"* ___R2 = 2 &radic; (L \\* Z<sub>entrada</sub> \\* Z<sub>saída</sub> ) / (L "
-"- 1)___\n"
-"* ___R1 = Z<sub>entrada</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>saída</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R<sub>2</sub> = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; "
+"Z<sub>out</sub> / L)___<br>\n"
+"___R<sub>1</sub> = 1 / (A/Z<sub>in</sub> &minus; 1/R<sub>2</sub>)___<br>\n"
+"___R<sub>3</sub> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -19852,16 +19845,15 @@ msgid ""
 "\n"
 "___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
 msgstr ""
-"### Atenuador divisor\n"
-"#### a atenuação é 6dB\n"
-"___Z<sub>in</sub>___ impedância desejada da entrada em &#x2126;<br>\n"
-"___Z<sub>out</sub>___ impedância desejada da saída em &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"### Atenuação do divisor\n"
+"A atenuação é 6 dB  \n"
+"___Z<sub>in</sub>___ é impedância desejada da entrada em &#x2126;  \n"
+"___Z<sub>out</sub>___ é impedância desejada da saída em &#x2126;  \n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
+"___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19876,17 +19868,16 @@ msgid ""
 "___R<sub>3</sub> = Z<sub>out</sub> &middot; A &minus; R<sub>2</sub>___\n"
 msgstr ""
 "### Atenuador T\n"
-"__Zin__ a impedância desejada na entrada em &#x2126;<br>\n"
-"__Zout__ a impedância desejada na saída<br>\n"
-"__Zin = Zout__<br><br>\n"
+"___a___ é a atenuação em dB<br>\n"
+"___Z<sub>in</sub>___ é impedância desejada da entrada em &#x2126;<br>\n"
+"___Z<sub>out</sub>___ é impedância desejada da entrada em &#x2126;<br>\n"
 "\n"
-"* __a__ a atenuação em dB\n"
-"* __L = 10<sup>a/20</sup>__ (perda)\n"
-"* ___A = (L + 1) / (L - 1)___<br><br>\n"
-"* ___R2 = 2 &radic; (L \\* Z<sub>entrada</sub> \\* Z<sub>saída</sub> ) / (L "
-"- 1)___\n"
-"* ___R1 = Z<sub>entrada</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>saída</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br>\n"
+"___R<sub>2</sub> = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; "
+"Z<sub>out</sub>) / (L&minus;1)___<br>\n"
+"___R<sub>1</sub> = Z<sub>in</sub> &middot; A &minus; R<sub>2</sub>___<br>\n"
+"___R<sub>3</sub> = Z<sub>out</sub> &middot; A &minus; R<sub>2</sub>___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -19921,9 +19912,8 @@ msgid "Parameters"
 msgstr "Parâmetros"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:48
-#, fuzzy
 msgid "Attenuation (a):"
-msgstr "Atenuação:"
+msgstr "Atenuação (a):"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:55
 msgid "dB"
@@ -20334,14 +20324,12 @@ msgid "Remove an item from the current list of available regulators"
 msgstr "Remove um item da lista dos reguladores que estão disponíveis"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
-#, fuzzy
 msgid "Temperature rise"
-msgstr "Aumento da temperatura:"
+msgstr "Aumento da temperatura"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
-#, fuzzy
 msgid "Current (I):"
-msgstr "Corrente:"
+msgstr "Corrente (I):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
@@ -20373,15 +20361,13 @@ msgstr "Traços da camada externa"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:201
-#, fuzzy
 msgid "Trace width (W):"
-msgstr "Largura da trilha:"
+msgstr "Largura da trilha (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
-#, fuzzy
 msgid "Trace thickness (H):"
-msgstr "Espessura da trilha:"
+msgstr "Espessura da trilha (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:236
@@ -20756,7 +20742,6 @@ msgid "Not worth using"
 msgstr "Não vale a pena usar"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20798,20 +20783,19 @@ msgstr ""
 "\n"
 "- Esta calculadora encontra diferentes combinações dos componentes "
 "predefinidos da série E (entre 10Ω e 1MΩ) para criar valores arbitrários.\n"
-"- Você pode inserir a resistência necessária a partir de 0,0025 até 4000 "
-"kΩ.\n"
+"- Você pode inserir a resistência necessária a partir de 0,0025 até 4000 kΩ."
+"\n"
 "- As soluções que usem até 4 componentes são fornecidas.\n"
 "\n"
-"Por padrão, o valor da solicitação é sempre excluído do conjunto das "
-"soluções.  Também é possível definir\n"
-"até dois valores adicionais para excluir da solução caso estes valores do "
-"componentes não estejam disponíveis\n"
+"O valor solicitado sempre é excluído do conjunto das soluções.<br>\n"
+"Opcionalmente, até dois valores adicionais podem ser excluídos no caso de "
+"problemas de disponibilidade dos componentes.\n"
 "\n"
-"As soluções são fornecidas nos seguintes formatos:\n"
+"As soluções são oferecidas nos seguintes formatos:\n"
 "\n"
 "\tR1 + R2 +...+ Rn\tresistores em série\n"
 "\tR1 | R2 |...| Rn\tresistores em paralelo\n"
-"\tR1 + (R2|R3)...\t\tqualquer uma das combinações anteriores\n"
+"\tR1 + (R2|R3)...\t\tqualquer combinação das opções acima\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:49
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
@@ -20868,7 +20852,6 @@ msgstr ""
 "Deseja sair e abandonar suas alterações?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20906,13 +20889,15 @@ msgstr ""
 "(interno), aumentos de temperatura até 100 ºC e larguras de até 400 mil (10 "
 "mm).\n"
 "\n"
-"A fórmula do IPC 2221 é\n"
-"<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
+"A fórmula do IPC 2221 é  \n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>  \n"
 "onde:  \n"
-"__I__ = a corrente máxima em A  \n"
-"__dt__ = aumento da temperatura acima do ambiente em ºC  \n"
-"__W,H__ = a largura e a espessura em mils  \n"
-"__K__ = 0.024 para trilhas internas ou 0.048 para trilhas externas\n"
+"___I___ = a corrente máxima em A  \n"
+"___&Delta;T___ = aumento da temperatura acima do ambiente em ºC  \n"
+"___W___ é a largura em mils  \n"
+"___H___ é a espessura (altura) em mils  \n"
+"___K___ 0.024 para trilhas internas ou 0.048 para trilhas externas  \n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -27574,9 +27559,8 @@ msgid "Graphics Editing"
 msgstr "Editor gráfico"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
-#, fuzzy
 msgid "Constrain to H, V, 45 degrees"
-msgstr "Restrinja o contorno em H, V e 45 graus"
+msgstr "Restrinja para H, V e 45 graus"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
 msgid "Magnetic Points"
@@ -35304,10 +35288,11 @@ msgid "Lock or unlock selected items"
 msgstr "Bloqueia ou desbloqueia os itens que foram selecionados"
 
 #: pcbnew/tools/pcb_actions.cpp:669
-#, fuzzy
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
-msgstr "Limite as ações em 45 graus a partir do ponto inicial"
+msgstr ""
+"Limite as ações na horizontal, na vertical ou em 45 graus a partir do ponto "
+"de partida"
 
 #: pcbnew/tools/pcb_actions.cpp:674
 msgid "Prevent items from being moved and/or resized on the canvas"
