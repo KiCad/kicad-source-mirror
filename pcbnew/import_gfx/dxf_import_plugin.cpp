@@ -379,7 +379,13 @@ void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
         return;     // Error
 
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
-    double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
+    double lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
+
+    /* support for per-vertex-encoded linewidth (Cadence uses it) */
+    if( aData.startWidth > 0.0 )
+        lineWidth = aData.startWidth;
+    else if ( aData.endWidth > 0.0 )
+        lineWidth = aData.endWidth;
 
     const DL_VertexData* vertex = &aData;
 
