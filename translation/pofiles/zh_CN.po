@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-25 06:24-0700\n"
-"PO-Revision-Date: 2021-10-25 13:17+0000\n"
+"PO-Revision-Date: 2021-10-27 02:46+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -3925,9 +3925,8 @@ msgstr "英寸"
 
 #: common/eda_draw_frame.cpp:148 pcbnew/tools/drawing_tool.cpp:266
 #: pcbnew/tools/pcb_actions.cpp:668
-#, fuzzy
 msgid "Constrain to H, V, 45"
-msgstr "限制轮廓线方向水平，垂直或 45 度"
+msgstr "约束为水平、垂直或 45 度"
 
 #: common/eda_draw_frame.cpp:318
 msgid "Edit User Grid..."
@@ -11614,12 +11613,10 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "当网络在 PCB 编辑器中高亮显示时，将其高亮显示"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Constrain buses and wires to H or V"
-msgstr "限制总线和连线垂直或水平绘制 (&R)"
+msgstr "限制总线及导线为 H 或 V"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Mouse drag performs Drag (G) operation"
 msgstr "鼠标拖动执行拖动 (G) 操作"
 
@@ -19400,9 +19397,8 @@ msgid "Parameters"
 msgstr "参数"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:48
-#, fuzzy
 msgid "Attenuation (a):"
-msgstr "衰减："
+msgstr "衰减 (a)："
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:55
 msgid "dB"
@@ -19804,14 +19800,12 @@ msgid "Remove an item from the current list of available regulators"
 msgstr "删除当前列表中可用的稳压器的项"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
-#, fuzzy
 msgid "Temperature rise"
-msgstr "温升："
+msgstr "温升"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
-#, fuzzy
 msgid "Current (I):"
-msgstr "电流："
+msgstr "电流 (I)："
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
@@ -19843,15 +19837,13 @@ msgstr "外层布线"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:201
-#, fuzzy
 msgid "Trace width (W):"
-msgstr "布线宽度："
+msgstr "布线宽度 (W)："
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
-#, fuzzy
 msgid "Trace thickness (H):"
-msgstr "铜层厚度："
+msgstr "线路厚度 (H)："
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:236
@@ -26843,9 +26835,8 @@ msgid "Graphics Editing"
 msgstr "图像编辑"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
-#, fuzzy
 msgid "Constrain to H, V, 45 degrees"
-msgstr "限制轮廓线在水平，垂直和 45 度"
+msgstr "约束到水平、垂直或 45 度"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
 msgid "Magnetic Points"
@@ -34315,10 +34306,9 @@ msgid "Lock or unlock selected items"
 msgstr "锁定或解锁选中项目"
 
 #: pcbnew/tools/pcb_actions.cpp:669
-#, fuzzy
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
-msgstr "将动作从起始点算起的角度限制在 45 度"
+msgstr "将动作从起始点算起的角度限制在水平、垂直或 45 度"
 
 #: pcbnew/tools/pcb_actions.cpp:674
 msgid "Prevent items from being moved and/or resized on the canvas"
