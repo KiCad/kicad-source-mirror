@@ -262,7 +262,8 @@ void DRAWING_TOOL::updateStatusBar() const
         else
             constrained = m_frame->Settings().m_FpeditUse45DegreeLimit;
 
-        m_frame->DisplayConstraintsMsg( constrained ? _( "Constrain to H, V, 45" ) : _( "" ) );
+        m_frame->DisplayConstraintsMsg(
+                constrained ? _( "Constrain to H, V, 45" ) : wxString( "" ) );
     }
 }
 
