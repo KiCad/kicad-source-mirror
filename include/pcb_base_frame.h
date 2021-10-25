@@ -62,8 +62,8 @@ class FP_LIB_TABLE;
 class PCBNEW_SETTINGS;
 class FOOTPRINT_EDITOR_SETTINGS;
 struct MAGNETIC_SETTINGS;
+class NL_PCBNEW_PLUGIN;
 class PROGRESS_REPORTER;
-
 
 wxDECLARE_EVENT( BOARD_CHANGED, wxCommandEvent );
 
@@ -384,6 +384,8 @@ public:
 protected:
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
 
+    void handleActivateEvent( wxActivateEvent& aEvent ) override;
+
     /**
      * Attempts to load \a aFootprintId from the footprint library table.
      *
@@ -402,6 +404,9 @@ protected:
     PCB_DISPLAY_OPTIONS     m_displayOptions;
     PCB_ORIGIN_TRANSFORMS   m_originTransforms;
     PCBNEW_SETTINGS*        m_settings; // No ownership, just a shortcut
+
+private:
+    NL_PCBNEW_PLUGIN* m_spaceMouse;
 };
 
 #endif  // PCB_BASE_FRAME_H

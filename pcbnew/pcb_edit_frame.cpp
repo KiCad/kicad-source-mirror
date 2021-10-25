@@ -108,17 +108,13 @@
 
 #include <wx/filedlg.h>
 
-#if defined( KICAD_USE_3DCONNEXION )
-#include <navlib/nl_pcbnew_plugin.h>
-#endif
-
 using namespace std::placeholders;
 
 
 BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, PCB_EDIT_FRAME::OnSockRequestServer )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT, PCB_EDIT_FRAME::OnSockRequest )
-    EVT_ACTIVATE( PCB_EDIT_FRAME::OnActivate )
+
 
     EVT_CHOICE( ID_ON_ZOOM_SELECT, PCB_EDIT_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, PCB_EDIT_FRAME::OnSelectGrid )
@@ -182,7 +178,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_PCB_EDITOR, _( "PCB Editor" ),
                              wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE,
                              PCB_EDIT_FRAME_NAME ),
-        m_exportNetlistAction( nullptr ), m_findDialog( nullptr ), m_spaceMouse( nullptr )
+        m_exportNetlistAction( nullptr ), m_findDialog( nullptr )
 {
     m_maximizeByDefault = true;
     m_showBorderAndTitleBlock = true;   // true to display sheet references
@@ -372,17 +368,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 //    if( !appK2S.FileExists() )
  //       GetMenuBar()->FindItem( ID_GEN_EXPORT_FILE_STEP )->Enable( false );
 
-#if defined( KICAD_USE_3DCONNEXION )
-    try
-    {
-        m_spaceMouse = new NL_PCBNEW_PLUGIN( canvas );
-    }
-    catch( const std::system_error& e )
-    {
-        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
-    }
-#endif
-
     // AUI doesn't refresh properly on wxMac after changes in eb7dc6dd, so force it to
 #ifdef __WXMAC__
     if( Kiface().IsSingle() )
@@ -427,11 +412,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
-#if defined( KICAD_USE_3DCONNEXION )
-    if( m_spaceMouse != nullptr )
-        delete m_spaceMouse;
-#endif
-
     if( ADVANCED_CFG::GetCfg().m_ShowEventCounters )
     {
         // Stop the timer during destruction early to avoid potential event race conditions (that do happen on windows)
@@ -1258,19 +1238,6 @@ void PCB_EDIT_FRAME::onBoardLoaded()
 void PCB_EDIT_FRAME::OnDisplayOptionsChanged()
 {
     m_appearancePanel->UpdateDisplayOptions();
-}
-
-
-void PCB_EDIT_FRAME::OnActivate( wxActivateEvent& aEvent )
-{
-#if defined( KICAD_USE_3DCONNEXION )
-    if( m_spaceMouse != nullptr )
-    {
-        m_spaceMouse->SetFocus( aEvent.GetActive() );
-    }
-#endif
-
-    aEvent.Skip(); // required under wxMAC
 }
 
 
