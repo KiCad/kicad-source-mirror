@@ -294,6 +294,8 @@ public:
 #ifndef SWIG
     const std::vector<CN_EDGE> GetRatsnestForItems( const std::vector<BOARD_ITEM*> aItems );
 
+    const std::vector<CN_EDGE> GetRatsnestForPad( const PAD* aPad );
+
     const std::vector<CN_EDGE> GetRatsnestForComponent( FOOTPRINT* aComponent,
                                                         bool aSkipInternalConnections = false );
 #endif

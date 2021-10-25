@@ -39,6 +39,8 @@ using namespace std::placeholders;
 #include <dialogs/dialog_track_via_size.h>
 #include <widgets/infobar.h>
 #include <widgets/appearance_controls.h>
+#include <connectivity/connectivity_data.h>
+#include <connectivity/connectivity_algo.h>
 #include <confirm.h>
 #include <bitmaps.h>
 #include <tool/action_menu.h>
@@ -1603,17 +1605,31 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     PNS::ITEM_SET itemsToDrag;
     const FOOTPRINT* footprint = nullptr;
 
+    std::shared_ptr<CONNECTIVITY_DATA> connectivityData = board()->GetConnectivity();
+    std::vector<BOARD_ITEM*>           dynamicItems;
+    std::unique_ptr<CONNECTIVITY_DATA> dynamicData = nullptr;
+    VECTOR2I                           lastOffset;
+
     if( item->Type() == PCB_FOOTPRINT_T )
     {
         footprint = static_cast<const FOOTPRINT*>(item);
 
-        for( const PAD* pad : footprint->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             PNS::ITEM* solid = m_router->GetWorld()->FindItemByParent( pad );
 
             if( solid )
                 itemsToDrag.Add( solid );
+
+            if( pad->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
+            {
+                if( connectivityData->GetRatsnestForPad( pad ).size() > 0 )
+                    dynamicItems.push_back( pad );
+            }
         }
+
+        dynamicData = std::make_unique<CONNECTIVITY_DATA>( dynamicItems, true );
+        connectivityData->BlockRatsnestItems( dynamicItems );
     }
     else
     {
@@ -1717,6 +1733,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             {
                 VECTOR2I offset = m_endSnapPoint - p;
                 BOARD_ITEM* previewItem;
+                wxPoint fp_offset = wxPoint( offset.Rotate( footprint->GetOrientationRadians() ) );
 
                 view()->ClearPreview();
 
@@ -1727,7 +1744,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                     if( drawing->Type() == PCB_FP_SHAPE_T )
                     {
                         FP_SHAPE* shape = static_cast<FP_SHAPE*>( previewItem );
-                        wxPoint fp_offset = wxPoint( offset.Rotate( footprint->GetOrientationRadians() ) );
                         shape->FP_SHAPE::Move( fp_offset );
                     }
                     else
@@ -1756,6 +1772,11 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                     view()->AddToPreview( previewItem );
                     view()->Hide( zone, true );
                 }
+
+                // Update ratsnest
+                dynamicData->Move( offset - lastOffset );
+                lastOffset = offset;
+                connectivityData->ComputeDynamicRatsnest( dynamicItems, dynamicData.get() );
             }
         }
         else if( hasMouseMoved && ( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
@@ -1800,6 +1821,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
         view()->ClearPreview();
         view()->ShowPreview( false );
+
+        connectivityData->ClearDynamicRatsnest();
     }
 
     if( m_router->RoutingInProgress() )

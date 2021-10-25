@@ -788,7 +788,7 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
     std::vector<CN_EDGE> edges;
     std::set<BOARD_CONNECTED_ITEM*> item_set;
 
-    for( auto item : aItems )
+    for( BOARD_ITEM* item : aItems )
     {
         if( item->Type() == PCB_FOOTPRINT_T )
         {
@@ -809,22 +809,37 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
 
     for( const auto& netcode : nets )
     {
-        const auto& net = GetRatsnestForNet( netcode );
+        RN_NET* net = GetRatsnestForNet( netcode );
 
-        for( const auto& edge : net->GetEdges() )
+        for( const CN_EDGE& edge : net->GetEdges() )
         {
-            auto srcNode = edge.GetSourceNode();
-            auto dstNode = edge.GetTargetNode();
+            std::shared_ptr<CN_ANCHOR> srcNode = edge.GetSourceNode();
+            std::shared_ptr<CN_ANCHOR> dstNode = edge.GetTargetNode();
 
-            auto srcParent = srcNode->Parent();
-            auto dstParent = dstNode->Parent();
+            BOARD_CONNECTED_ITEM* srcParent = srcNode->Parent();
+            BOARD_CONNECTED_ITEM* dstParent = dstNode->Parent();
 
-            bool srcFound = ( item_set.find(srcParent) != item_set.end() );
-            bool dstFound = ( item_set.find(dstParent) != item_set.end() );
+            bool srcFound = ( item_set.find( srcParent ) != item_set.end() );
+            bool dstFound = ( item_set.find( dstParent ) != item_set.end() );
 
             if ( srcFound && dstFound )
                 edges.push_back( edge );
         }
+    }
+
+    return edges;
+}
+
+
+const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForPad( const PAD* aPad )
+{
+    std::vector<CN_EDGE> edges;
+    RN_NET* net = GetRatsnestForNet( aPad->GetNetCode() );
+
+    for( const CN_EDGE& edge : net->GetEdges() )
+    {
+        if( edge.GetSourceNode()->Parent() == aPad || edge.GetTargetNode()->Parent() == aPad )
+            edges.push_back( edge );
     }
 
     return edges;
