@@ -344,6 +344,8 @@ public:
     static TOOL_ACTION runDRC;
 
     static TOOL_ACTION editFpInFpEditor;
+    static TOOL_ACTION editLibFpInFpEditor;
+
     static TOOL_ACTION showLayersManager;
     static TOOL_ACTION showPythonConsole;
 

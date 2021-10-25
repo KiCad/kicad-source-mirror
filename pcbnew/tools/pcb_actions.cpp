@@ -234,6 +234,13 @@ TOOL_ACTION PCB_ACTIONS::editFpInFpEditor( "pcbnew.EditorControl.EditFpInFpEdito
         _( "Opens the selected footprint in the Footprint Editor" ),
         BITMAPS::module_editor );
 
+TOOL_ACTION PCB_ACTIONS::editLibFpInFpEditor( "pcbnew.EditorControl.EditLibFpInFpEditor",
+        AS_GLOBAL,
+        MD_CTRL + MD_SHIFT + 'E', "",
+        _( "Edit Library Footprint..." ),
+        _( "Opens the selected footprint in the Footprint Editor" ),
+        BITMAPS::module_editor );
+
 TOOL_ACTION PCB_ACTIONS::getAndPlace( "pcbnew.InteractiveEdit.FindMove",
         AS_GLOBAL,
         'T', LEGACY_HK_NAME( "Get and Move Footprint" ),
