@@ -829,9 +829,6 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
             OPENGL_RENDER_LIST* anti_board = m_antiBoard;
 
-            if( ( layer_id == B_Paste ) || ( layer_id == F_Paste ) )
-                anti_board = nullptr;
-
             if( anti_board )
             {
                 anti_board->ApplyScalePosition(

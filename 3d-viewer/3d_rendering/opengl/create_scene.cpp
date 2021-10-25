@@ -571,8 +571,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         {
             polyListSubtracted = *map_poly.at( layer_id );;
 
-            if( ( layer_id != B_Paste ) && ( layer_id != F_Paste ) &&
-                m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+            if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
             {
                 polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
                                                         SHAPE_POLY_SET::PM_FAST );
