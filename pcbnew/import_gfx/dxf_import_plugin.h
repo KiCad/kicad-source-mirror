@@ -373,12 +373,12 @@ private:
     DXF_IMPORT_STYLE* getImportStyle( const std::string& aStyleName );
 
     // Functions to aid in the creation of a Polyline.
-    void insertLine( const VECTOR2D& aSegStart, const VECTOR2D& aSegEnd, int aWidth );
+    void insertLine( const VECTOR2D& aSegStart, const VECTOR2D& aSegEnd, double aWidth );
     void insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aSegEnd,
-                    double aBulge, int aWidth );
+                    double aBulge, double aWidth );
 
     // Add a dxf spline (stored in m_curr_entity) to the board, after conversion to segments.
-    void insertSpline( int aWidth );
+    void insertSpline( double aWidth );
 
     // Methods from DL_CreationAdapter:
     // They are something like"call back" functions,
