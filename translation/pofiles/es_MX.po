@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-25 06:24-0700\n"
-"PO-Revision-Date: 2021-10-14 07:36+0000\n"
+"PO-Revision-Date: 2021-10-27 02:46+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -13026,30 +13026,33 @@ msgid ""
 msgstr ""
 
 #: eeschema/files-io.cpp:1395
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "¡No se puede eliminar el archivo de guardado automático '%s'!"
+msgstr ""
+"Los siguientes archivos guardados automáticamente no pueden ser restaurados\n"
 
 #: eeschema/files-io.cpp:1400
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
 
 #: eeschema/files-io.cpp:1422
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "¡No se puede eliminar el archivo de guardado automático '%s'!"
+msgstr ""
+"Los siguientes archivos guardados automáticamente no pueden ser eliminados\n"
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
 msgstr ""
 
 #: eeschema/files-io.cpp:1438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "¡No se puede eliminar el archivo de guardado automático '%s'!"
+msgstr ""
+"El archivo de guardado automático\n"
+"'%s'\n"
+"no se puede eliminar."
 
 #: eeschema/files-io.cpp:1446
 msgid ""
@@ -13195,9 +13198,9 @@ msgid "Polyline, %d points"
 msgstr "Polilínea, %d puntos"
 
 #: eeschema/lib_shape.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Curva Bézier"
+msgstr "Curva Bézier, %d puntos"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -18287,9 +18290,8 @@ msgid "Failed to output data"
 msgstr "No se pudieron generar datos"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html><h1>Selector de plantilla</h1></html>"
+msgstr "<h1>Selector de plantilla</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -20887,9 +20889,8 @@ msgid "Color Code"
 msgstr "Código color"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "Línea de transmisión"
+msgstr "Línea de transmisión "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -25699,9 +25700,8 @@ msgid "Pad Properties"
 msgstr "Propiedades de pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:179
-#, fuzzy
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "Propiedades del pad por defecto..."
+msgstr "Propiedades del pad por defecto para la herramienta Agregar Pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:490
 #, c-format
@@ -29758,9 +29758,8 @@ msgid "Footprint type doesn't match footprint pads"
 msgstr "Editor de huellas - Crear/Editar huellas"
 
 #: pcbnew/drc/drc_item.cpp:210
-#, fuzzy
 msgid "Through hole pad has no hole"
-msgstr "Advertencia: un pad de agujero pasante no tiene un agujero."
+msgstr "El pad de agujero pasante no tiene un agujero"
 
 #: pcbnew/drc/drc_item.cpp:334
 #, c-format
