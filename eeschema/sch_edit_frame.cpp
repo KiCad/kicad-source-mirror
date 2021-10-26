@@ -1285,7 +1285,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
     SCH_SHEET_PATH highlightPath;
 
     if( highlight )
-        highlightPath = highlight->Sheet();
+        highlightPath = highlight->LocalSheet();
 
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
     SCH_SHEET_LIST      list = Schematic().GetSheets();

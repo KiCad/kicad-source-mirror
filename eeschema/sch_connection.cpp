@@ -63,6 +63,7 @@
 
 SCH_CONNECTION::SCH_CONNECTION( SCH_ITEM* aParent, SCH_SHEET_PATH aPath ) :
         m_sheet( aPath ),
+        m_local_sheet( aPath ),
         m_parent( aParent ),
         m_driver( nullptr ),
         m_graph( nullptr )
@@ -73,6 +74,7 @@ SCH_CONNECTION::SCH_CONNECTION( SCH_ITEM* aParent, SCH_SHEET_PATH aPath ) :
 
 SCH_CONNECTION::SCH_CONNECTION( CONNECTION_GRAPH* aGraph ) :
         m_sheet( SCH_SHEET_PATH() ),
+        m_local_sheet( SCH_SHEET_PATH() ),
         m_parent( nullptr ),
         m_driver( nullptr ),
         m_graph( aGraph )
@@ -109,7 +111,8 @@ void SCH_CONNECTION::SetDriver( SCH_ITEM* aItem )
 
 void SCH_CONNECTION::SetSheet( SCH_SHEET_PATH aSheet )
 {
-    m_sheet = aSheet;
+    m_sheet       = aSheet;
+    m_local_sheet = aSheet;
 
     recacheName();
 
@@ -230,6 +233,7 @@ void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
     // Note: m_lastDriver is not cloned as it needs to be the last driver of *this* connection
     m_driver = aOther.Driver();
     m_sheet  = aOther.Sheet();
+    // Note: m_local_sheet is not cloned
     m_name   = aOther.m_name;
     // Note: m_local_name is not cloned if not set yet
     if( m_local_name.IsEmpty() )

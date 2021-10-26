@@ -109,6 +109,8 @@ public:
     SCH_SHEET_PATH Sheet() const { return m_sheet; }
     void SetSheet( SCH_SHEET_PATH aSheet );
 
+    SCH_SHEET_PATH LocalSheet() const { return m_local_sheet; }
+
     /**
      * Checks if the SCH_ITEM this connection is attached to can drive connections
      * Drivers can be labels, sheet pins, or symbol pins.
@@ -239,6 +241,14 @@ private:
     bool m_dirty;
 
     SCH_SHEET_PATH m_sheet; ///< The hierarchical sheet this connection is on
+
+    /**
+     * When a connection is overridden by one on a different hierarchical sheet, it will be cloned
+     * and m_sheet will point to the parent sheet.  This member stores the original sheet so that it
+     * can be used for applications such as net highlighting to retrieve the sheet of the parent
+     * item from the highlighted connection.
+     */
+    SCH_SHEET_PATH m_local_sheet;
 
     SCH_ITEM* m_parent;     ///< The SCH_ITEM this connection is owned by
 
