@@ -1948,7 +1948,20 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
     symbolEditor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, false );
 
     if( symbolEditor )
-        symbolEditor->LoadSymbolFromSchematic( symbol );
+    {
+        if( aEvent.IsAction( &EE_ACTIONS::editWithLibEdit ) )
+            symbolEditor->LoadSymbolFromSchematic( symbol );
+        else if( aEvent.IsAction( &EE_ACTIONS::editLibSymbolWithLibEdit ) )
+        {
+            symbolEditor->LoadSymbol( symbol->GetLibId(), symbol->GetConvert(), symbol->GetUnit() );
+
+            if( !symbolEditor->IsSymbolTreeShown() )
+            {
+                wxCommandEvent evt;
+                symbolEditor->OnToggleSymbolTree( evt );
+            }
+        }
+    }
 
     return 0;
 }
@@ -2184,6 +2197,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Duplicate,             ACTIONS::duplicate.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  EE_ACTIONS::editWithLibEdit.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  EE_ACTIONS::editLibSymbolWithLibEdit.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowCvpcb,             EE_ACTIONS::assignFootprints.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ImportFPAssignments,   EE_ACTIONS::importFPAssignments.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Annotate,              EE_ACTIONS::annotate.MakeEvent() );

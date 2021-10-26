@@ -251,7 +251,8 @@ bool SYMBOL_EDIT_FRAME::saveCurrentSymbol()
 
 bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConvert )
 {
-    if( GetCurSymbol() && GetCurSymbol()->GetLibId() == aLibId
+    if( !IsSymbolFromSchematic()
+            && GetCurSymbol() && GetCurSymbol()->GetLibId() == aLibId
             && GetUnit() == aUnit && GetConvert() == aConvert )
     {
         return true;

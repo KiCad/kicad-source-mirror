@@ -548,7 +548,13 @@ TOOL_ACTION EE_ACTIONS::highlightNetTool( "eeschema.EditorControl.highlightNetTo
 TOOL_ACTION EE_ACTIONS::editWithLibEdit( "eeschema.EditorControl.editWithSymbolEditor",
         AS_GLOBAL,
         MD_CTRL + 'E', LEGACY_HK_NAME( "Edit with Symbol Editor" ),
-        _( "Edit with Symbol Editor" ), _( "Open the symbol editor to edit the symbol" ),
+        _( "Edit with Symbol Editor" ), _( "Open the selected symbol in the Symbol Editor" ),
+        BITMAPS::libedit );
+
+TOOL_ACTION EE_ACTIONS::editLibSymbolWithLibEdit( "eeschema.EditorControl.editLibSymbolWithSymbolEditor",
+        AS_GLOBAL,
+        MD_CTRL + MD_SHIFT + 'E', "",
+        _( "Edit Library Symbol..." ), _( "Open the library symbol in the Symbol Editor" ),
         BITMAPS::libedit );
 
 TOOL_ACTION EE_ACTIONS::editSymbolFields( "eeschema.EditorControl.editSymbolFields",
