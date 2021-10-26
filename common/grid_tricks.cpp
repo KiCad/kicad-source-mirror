@@ -661,6 +661,9 @@ void GRID_TRICKS::cutcopy( bool doCopy, bool doDelete )
     {
         for( int col = m_sel_col_start;  col < m_sel_col_start + m_sel_col_count; ++col )
         {
+            if( !m_grid->IsColShown( col ) )
+                continue;
+
             txt += tbl->GetValue( row, col );
 
             if( col < m_sel_col_start + m_sel_col_count - 1 )   // that was not last column
