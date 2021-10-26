@@ -378,8 +378,12 @@ void PANEL_PREVIEW_3D_MODEL::onOpacitySlider( wxCommandEvent& event )
 
 void PANEL_PREVIEW_3D_MODEL::updateBoardThickness( wxCommandEvent& event )
 {
+    double curr_value = DoubleValueFromString( m_userUnits, boardthickness->GetValue() );
+    curr_value = std::min( MAX_BOARD_THICKNESS * IU_PER_MM, curr_value );
+    curr_value = std::max( curr_value, MIN_BOARD_THICKNESS * IU_PER_MM );
+
     m_boardAdapter.GetBoard()->GetDesignSettings().SetBoardThickness(
-            ValueFromString( m_userUnits, boardthickness->GetValue() ) );
+            static_cast<int>( curr_value ) );
 
     m_previewPane->ReloadRequest();
     m_previewPane->Request_refresh();
@@ -469,8 +473,11 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementBoardThickness( wxSpinEvent& aEvent, dou
 
     double curr_value = DoubleValueFromString( m_userUnits, textCtrl->GetValue() ) / IU_PER_MM;
 
+    // avoid keeping the lower limit as offset after hitting it (0.4 -> 0.2 -> 0.01 -> 0.2 -> 0.4)
+    if (curr_value <= MIN_BOARD_THICKNESS)
+        curr_value = 0;
     curr_value += ( step * aSign );
-    curr_value = std::max( 0.0, curr_value );
+    curr_value = std::max( MIN_BOARD_THICKNESS, curr_value );
     curr_value = std::min( curr_value, MAX_BOARD_THICKNESS );
 
     textCtrl->SetValue( formatBoardThicknessValue( curr_value ) );

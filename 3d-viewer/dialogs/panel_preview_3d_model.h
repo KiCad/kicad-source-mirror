@@ -48,6 +48,7 @@
 #define MAX_SCALE          10000.0
 #define MAX_ROTATION       180.0
 #define MAX_OFFSET         1000.0
+#define MIN_BOARD_THICKNESS 0.01
 #define MAX_BOARD_THICKNESS 100.0
 
 #define SCALE_INCREMENT_FINE       0.02
