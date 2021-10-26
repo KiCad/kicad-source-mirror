@@ -935,14 +935,18 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         if( checkForCancel( m_progressReporter ) )
             return;
 
-        if( otherZone->GetNetCode() != aZone->GetNetCode()
-                && otherZone->GetPriority() > aZone->GetPriority() )
+        if( otherZone->GetIsRuleArea() )
         {
-            knockoutZoneClearance( otherZone );
+            if( otherZone->GetDoNotAllowCopperPour() )
+                knockoutZoneClearance( otherZone );
         }
-        else if( otherZone->GetIsRuleArea() && otherZone->GetDoNotAllowCopperPour() )
+        else
         {
-            knockoutZoneClearance( otherZone );
+            if( otherZone->GetNetCode() != aZone->GetNetCode()
+                    && otherZone->GetPriority() > aZone->GetPriority() )
+            {
+                knockoutZoneClearance( otherZone );
+            }
         }
     }
 
@@ -953,14 +957,18 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
             if( checkForCancel( m_progressReporter ) )
                 return;
 
-            if( otherZone->GetNetCode() != aZone->GetNetCode()
-                    && otherZone->GetPriority() > aZone->GetPriority() )
+            if( otherZone->GetIsRuleArea() )
             {
-                knockoutZoneClearance( otherZone );
+                if( otherZone->GetDoNotAllowCopperPour() )
+                    knockoutZoneClearance( otherZone );
             }
-            else if( otherZone->GetIsRuleArea() && otherZone->GetDoNotAllowCopperPour() )
+            else
             {
-                knockoutZoneClearance( otherZone );
+                if( otherZone->GetNetCode() != aZone->GetNetCode()
+                        && otherZone->GetPriority() > aZone->GetPriority() )
+                {
+                    knockoutZoneClearance( otherZone );
+                }
             }
         }
     }
