@@ -2675,8 +2675,11 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
         zone->SetIsRuleArea( true );
         zone->SetDoNotAllowVias( true );
     }
+    else
+    {
+        zone->SetPriority( 50 );
+    }
 
-    zone->SetPriority( 50 );
     zone->SetLocalClearance( 0 );
     zone->SetPadConnection( ZONE_CONNECTION::FULL );
 
@@ -2947,6 +2950,10 @@ bool FABMASTER::orderZones( BOARD* aBoard )
 
     for( ZONE* zone : zones )
     {
+        /// Rule areas do not have priorities
+        if( zone->GetIsRuleArea() )
+            continue;
+
         if( zone->GetLayer() != layer )
         {
             layer = zone->GetLayer();
