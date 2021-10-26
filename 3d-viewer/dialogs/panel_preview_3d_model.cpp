@@ -134,7 +134,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
 
     // load initial board thickness value
     boardthickness->ChangeValue( formatBoardThicknessValue(
-            Iu2Millimeter( m_dummyBoard->GetDesignSettings().GetBoardThickness() ) ) );
+            Iu2Millimeter( aFrame->GetDesignSettings().GetBoardThickness() ) ) );
 
 #ifdef __WXOSX__
     // Call layout once to get the proper button sizes after the bitmaps have been set
