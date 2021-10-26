@@ -730,27 +730,26 @@ public:
     /**
      * Accessors to parameters used in Rule Area zones:
      */
-    bool GetIsRuleArea() const { return m_isRuleArea; }
+    bool GetIsRuleArea() const           { return m_isRuleArea; }
     bool GetDoNotAllowCopperPour() const { return m_doNotAllowCopperPour; }
-    bool GetDoNotAllowVias() const { return m_doNotAllowVias; }
-    bool GetDoNotAllowTracks() const { return m_doNotAllowTracks; }
-    bool GetDoNotAllowPads() const { return m_doNotAllowPads; }
+    bool GetDoNotAllowVias() const       { return m_doNotAllowVias; }
+    bool GetDoNotAllowTracks() const     { return m_doNotAllowTracks; }
+    bool GetDoNotAllowPads() const       { return m_doNotAllowPads; }
     bool GetDoNotAllowFootprints() const { return m_doNotAllowFootprints; }
     bool IsKeepout() const;
     bool KeepoutAll() const;
 
-    void SetIsRuleArea( bool aEnable ) {m_isRuleArea = aEnable; }
+    void SetIsRuleArea( bool aEnable )           { m_isRuleArea = aEnable; }
     void SetDoNotAllowCopperPour( bool aEnable ) { m_doNotAllowCopperPour = aEnable; }
-    void SetDoNotAllowVias( bool aEnable ) { m_doNotAllowVias = aEnable; }
-    void SetDoNotAllowTracks( bool aEnable ) { m_doNotAllowTracks = aEnable; }
-    void SetDoNotAllowPads( bool aEnable ) { m_doNotAllowPads = aEnable; }
+    void SetDoNotAllowVias( bool aEnable )       { m_doNotAllowVias = aEnable; }
+    void SetDoNotAllowTracks( bool aEnable )     { m_doNotAllowTracks = aEnable; }
+    void SetDoNotAllowPads( bool aEnable )       { m_doNotAllowPads = aEnable; }
     void SetDoNotAllowFootprints( bool aEnable ) { m_doNotAllowFootprints = aEnable; }
 
-    const ISLAND_REMOVAL_MODE GetIslandRemovalMode() const { return m_islandRemovalMode; }
-    void SetIslandRemovalMode( ISLAND_REMOVAL_MODE aRemove ) {
-        m_islandRemovalMode = aRemove; }
+    const ISLAND_REMOVAL_MODE GetIslandRemovalMode() const   { return m_islandRemovalMode; }
+    void SetIslandRemovalMode( ISLAND_REMOVAL_MODE aRemove ) { m_islandRemovalMode = aRemove; }
 
-    long long int GetMinIslandArea() const { return m_minIslandArea; }
+    long long int GetMinIslandArea() const       { return m_minIslandArea; }
     void SetMinIslandArea( long long int aArea ) { m_minIslandArea = aArea; }
 
     /**
