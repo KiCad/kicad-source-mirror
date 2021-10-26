@@ -236,8 +236,7 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset 
      *   to calculate so the more easily way is to use no justifications (centered text) and use
      *   GetBoundingBox to know the text coordinate considered as centered
      */
-    EDA_RECT boundaryBox = GetBoundingBox();
-    textpos = boundaryBox.Centre() + aOffset;
+    textpos = GetBoundingBox().Centre() + aOffset;
 
     GRText( DC, textpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_HJUSTIFY_CENTER,
             GR_TEXT_VJUSTIFY_CENTER, penWidth, IsItalic(), IsBold() );
@@ -714,10 +713,9 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter ) const
      *   to calculate so the easier way is to use no justifications (centered text) and use
      *   GetBoundingBox to know the text coordinate considered as centered
      */
-    EDA_RECT BoundaryBox = GetBoundingBox();
     EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_CENTER;
     EDA_TEXT_VJUSTIFY_T vjustify = GR_TEXT_VJUSTIFY_CENTER;
-    wxPoint  textpos = BoundaryBox.Centre();
+    wxPoint             textpos = GetBoundingBox().Centre();
 
     aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(),  hjustify, vjustify,
                     penWidth, IsItalic(), IsBold() );

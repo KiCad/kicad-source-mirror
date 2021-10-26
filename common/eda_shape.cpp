@@ -675,6 +675,12 @@ bool EDA_SHAPE::hitTest( const wxPoint& aPosition, int aAccuracy ) const
 
     case SHAPE_T::ARC:
     {
+        if( EuclideanNorm( aPosition - m_start ) <= maxdist )
+            return true;
+
+        if( EuclideanNorm( aPosition - m_end ) <= maxdist )
+            return true;
+
         wxPoint relPos = aPosition - getCenter();
         int     radius = GetRadius();
         int     dist   = KiROUND( EuclideanNorm( relPos ) );
@@ -767,7 +773,9 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
     case SHAPE_T::CIRCLE:
         // Test if area intersects or contains the circle:
         if( aContained )
+        {
             return arect.Contains( bb );
+        }
         else
         {
             // If the rectangle does not intersect the bounding box, this is a much quicker test
@@ -1024,10 +1032,6 @@ void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
         ++quarter %= 4;
         angle -= 900;
     }
-
-    aBBox.Inflate( GetWidth() );   // Technically m_width / 2, but it doesn't hurt to have the
-                                   // bounding box a bit large to account for drawing clearances,
-                                   // etc.
 }
 
 

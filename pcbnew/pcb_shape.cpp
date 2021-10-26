@@ -180,18 +180,10 @@ EDA_ITEM* PCB_SHAPE::Clone() const
 
 const BOX2I PCB_SHAPE::ViewBBox() const
 {
-    // For arcs - do not include the center point in the bounding box,
-    // it is redundant for displaying an arc
-    if( GetShape() == SHAPE_T::ARC )
-    {
-        EDA_RECT bbox;
-        computeArcBBox( bbox );
-        return BOX2I( bbox.GetOrigin(), bbox.GetSize() );
-    }
-
     BOX2I return_box = EDA_ITEM::ViewBBox();
-    return_box.Inflate( GetWidth() );    // Technically GetWidth() / 2, but it never hurts to be
-                                         // a bit large to account for selection shadows, etc.
+
+    // Inflate the bounding box by just a bit more for safety.
+    return_box.Inflate( GetWidth() );
 
     return return_box;
 }

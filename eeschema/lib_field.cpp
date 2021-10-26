@@ -270,12 +270,12 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
             orient = TEXT_ANGLE_HORIZ;
     }
 
-    EDA_RECT BoundaryBox = GetBoundingBox();
-    BoundaryBox.RevertYAxis();
+    EDA_RECT bbox = GetBoundingBox();
+    bbox.RevertYAxis();
 
     EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_CENTER;
     EDA_TEXT_VJUSTIFY_T vjustify = GR_TEXT_VJUSTIFY_CENTER;
-    wxPoint textpos = aTransform.TransformCoordinate( BoundaryBox.Centre() ) + aOffset;
+    wxPoint textpos = aTransform.TransformCoordinate( bbox.Centre() ) + aOffset;
 
     COLOR4D color;
 

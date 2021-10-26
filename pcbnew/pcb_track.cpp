@@ -589,6 +589,8 @@ const BOX2I PCB_TRACK::ViewBBox() const
 
     if( board )
         bbox.Inflate( 2 * board->GetDesignSettings().GetBiggestClearanceValue() );
+    else
+        bbox.Inflate( GetWidth() );     // Add a bit extra for safety
 
     return bbox;
 }

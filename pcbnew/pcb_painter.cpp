@@ -554,13 +554,17 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         m_gal->SetIsStroke( true );
 
         if( item->Type() == PCB_FOOTPRINT_T )
+        {
             m_gal->SetStrokeColor( item->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 ) :
                                    COLOR4D( MAGENTA ) );
+        }
         else
+        {
             m_gal->SetStrokeColor( item->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 ) :
-                                   COLOR4D( 0.2, 0.2, 0.2, 1 ) );
+                                   COLOR4D( 0.4, 0.4, 0.4, 1 ) );
+        }
 
-        m_gal->SetLineWidth( 1.5 / m_gal->GetWorldScale() );
+        m_gal->SetLineWidth( 1 );
         m_gal->DrawRectangle( box.GetOrigin(), box.GetEnd() );
 
         if( item->Type() == PCB_FOOTPRINT_T )

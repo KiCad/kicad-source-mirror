@@ -59,10 +59,14 @@ public:
      */
     void insert( SCH_ITEM* aItem )
     {
-        const EDA_RECT& bbox    = aItem->GetBoundingBox();
-        const int       type    = int( aItem->Type() );
-        const int       mmin[3] = { type, bbox.GetX(), bbox.GetY() };
-        const int       mmax[3] = { type, bbox.GetRight(), bbox.GetBottom() };
+        EDA_RECT bbox = aItem->GetBoundingBox();
+
+        // Inflate a bit for safety, selection shadows, etc.
+        bbox.Inflate( aItem->GetPenWidth() );
+
+        const int type    = int( aItem->Type() );
+        const int mmin[3] = { type, bbox.GetX(), bbox.GetY() };
+        const int mmax[3] = { type, bbox.GetRight(), bbox.GetBottom() };
 
         m_tree->Insert( mmin, mmax, aItem );
         m_count++;
@@ -75,10 +79,14 @@ public:
     bool remove( SCH_ITEM* aItem )
     {
         // First, attempt to remove the item using its given BBox
-        const EDA_RECT& bbox    = aItem->GetBoundingBox();
-        const int       type    = int( aItem->Type() );
-        const int       mmin[3] = { type, bbox.GetX(), bbox.GetY() };
-        const int       mmax[3] = { type, bbox.GetRight(), bbox.GetBottom() };
+        EDA_RECT bbox    = aItem->GetBoundingBox();
+
+        // Inflate a bit for safety, selection shadows, etc.
+        bbox.Inflate( aItem->GetPenWidth() );
+
+        const int type    = int( aItem->Type() );
+        const int mmin[3] = { type, bbox.GetX(), bbox.GetY() };
+        const int mmax[3] = { type, bbox.GetRight(), bbox.GetBottom() };
 
         // If we are not successful ( true == not found ), then we expand
         // the search to the full tree
@@ -117,21 +125,27 @@ public:
      */
     bool contains( const SCH_ITEM* aItem, bool aRobust = false ) const
     {
-        const EDA_RECT& bbox    = aItem->GetBoundingBox();
-        const int       type    = int( aItem->Type() );
-        const int       mmin[3] = { type, bbox.GetX(), bbox.GetY() };
-        const int       mmax[3] = { type, bbox.GetRight(), bbox.GetBottom() };
-        bool            found   = false;
+        EDA_RECT bbox    = aItem->GetBoundingBox();
 
-        auto search = [&found, &aItem]( const SCH_ITEM* aSearchItem ) {
-            if( aSearchItem == aItem )
-            {
-                found = true;
-                return false;
-            }
+        // Inflate a bit for safety, selection shadows, etc.
+        bbox.Inflate( aItem->GetPenWidth() );
 
-            return true;
-        };
+        const int type    = int( aItem->Type() );
+        const int mmin[3] = { type, bbox.GetX(), bbox.GetY() };
+        const int mmax[3] = { type, bbox.GetRight(), bbox.GetBottom() };
+        bool      found   = false;
+
+        auto search =
+                [&found, &aItem]( const SCH_ITEM* aSearchItem )
+                {
+                    if( aSearchItem == aItem )
+                    {
+                        found = true;
+                        return false;
+                    }
+
+                    return true;
+                };
 
         m_tree->Search( mmin, mmax, search );
 
