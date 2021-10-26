@@ -893,7 +893,7 @@ void DIALOG_PLOT_SCHEMATIC::restoreEnvironment( PDF_PLOTTER* aPlotter,
 void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
                                              bool aPlotDrawingSheet )
 {
-    if( m_plotBackgroundColor->GetValue() )
+    if( m_plotBackgroundColor->GetValue() && aPlotter->GetColorMode() )
     {
         aPlotter->SetColor( aPlotter->RenderSettings()->GetBackgroundColor() );
         wxPoint end( aPlotter->PageSettings().GetWidthIU(),
@@ -1084,7 +1084,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetPS( const wxString&     aFileName,
 
     plotter->StartPlot();
 
-    if( m_plotBackgroundColor->GetValue() )
+    if( m_plotBackgroundColor->GetValue() && plotter->GetColorMode() )
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
         wxPoint end( plotter->PageSettings().GetWidthIU(), plotter->PageSettings().GetHeightIU() );
@@ -1213,7 +1213,7 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( const wxString&  aFileName,
 
     plotter->StartPlot();
 
-    if( m_plotBackgroundColor->GetValue() )
+    if( m_plotBackgroundColor->GetValue() && plotter->GetColorMode() )
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
         wxPoint end( plotter->PageSettings().GetWidthIU(),

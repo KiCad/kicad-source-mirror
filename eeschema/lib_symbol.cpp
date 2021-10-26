@@ -550,26 +550,25 @@ void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint
     wxASSERT( aPlotter != nullptr );
 
     aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE ) );
-    bool fill = aPlotter->GetColorMode();
 
     // draw background for filled items using background option
     // Solid lines will be drawn after the background
     for( const LIB_ITEM& item : m_drawings )
     {
-        if( item.Type() == LIB_SHAPE_T )
-        {
-            const LIB_SHAPE& shape = static_cast<const LIB_SHAPE&>( item );
+        if( item.Type() != LIB_SHAPE_T )
+            continue;
 
-            // Do not draw items not attached to the current part
-            if( aUnit && shape.m_unit && ( shape.m_unit != aUnit ) )
-                continue;
+        const LIB_SHAPE& shape = static_cast<const LIB_SHAPE&>( item );
 
-            if( aConvert && shape.m_convert && ( shape.m_convert != aConvert ) )
-                continue;
+        // Do not draw items not attached to the current part
+        if( aUnit && shape.m_unit && ( shape.m_unit != aUnit ) )
+            continue;
 
-            if( shape.GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
-                shape.Plot( aPlotter, aOffset, fill, aTransform );
-        }
+        if( aConvert && shape.m_convert && ( shape.m_convert != aConvert ) )
+            continue;
+
+        if( shape.GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR && aPlotter->GetColorMode() )
+            shape.Plot( aPlotter, aOffset, true, aTransform );
     }
 
     // Not filled items and filled shapes are now plotted
@@ -595,7 +594,7 @@ void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint
             forceNoFill = shape.GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR;
         }
 
-        item.Plot( aPlotter, aOffset, fill && !forceNoFill, aTransform );
+        item.Plot( aPlotter, aOffset, !forceNoFill, aTransform );
     }
 }
 
