@@ -471,8 +471,8 @@ to download and [build Boost][] from source.  If you are building Boost on windo
 you will have to apply the Boost patches in the KiCad source [patches folder][].
 
 
-[download]: http://kicad-pcb.org/download/
-[KiCad website]: http://kicad-pcb.org/
+[download]: http://kicad.org/download/
+[KiCad website]: http://kicad.org/
 [KiCad Launchpad]: https://launchpad.net/kicad
 [GNU GCC]: https://gcc.gnu.org/
 [Clang]: http://clang.llvm.org/

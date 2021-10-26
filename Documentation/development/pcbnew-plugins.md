@@ -19,11 +19,11 @@ interpreter installed on the system.
 The Pcbnew Python API can be used stand-alone, i.e. no instance of Pcbnew is
 running and the board project to be manipulated is loaded and saved from and to
 file.  This approach is shown with some examples in the [user's
-documentation](http://docs.kicad-pcb.org/stable/en/pcbnew.html#_kicad_scripting_reference).
+documentation](http://docs.kicad.org/stable/en/pcbnew.html#_kicad_scripting_reference).
 
 Another documentation source is the auto-generated Doxygen reference of the
 API. It can be found
-[here](http://docs.kicad-pcb.org/doxygen-python/namespacepcbnew.html).
+[here](http://docs.kicad.org/doxygen-python/namespacepcbnew.html).
 
 # `Action Plugin` Support # {#ppi_action_pi}
 Besides the stand-alone usage of the generated Python plugin interface,

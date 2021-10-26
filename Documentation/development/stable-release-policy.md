@@ -71,7 +71,7 @@ GitHub plugin.
 
 To provide a convenient method for system packagers to build KiCad from known stable sources,
 source archives in the most common formats along with the resulting md5sum checksum will be
-added to either the KiCad developer's site on Launchpad or the main website at www.kicad-pcb.org.
+added to either the KiCad developer's site on Launchpad or the main website at www.kicad.org.
 
 # Stable Release Announcement # {#announcement}
 

@@ -304,6 +304,6 @@ Issues are still welcome for defects discovered.
 [Boost Unit Test framework]: https://www.boost.org/doc/libs/1_68_0/libs/test/doc/html/index.html
 [boost-test-functions]: https://www.boost.org/doc/libs/1_68_0/libs/test/doc/html/boost_test/utf_reference/testing_tool_ref.html
 [AFL fuzzing tool]: http://lcamtuf.coredump.cx/afl/
-[trace mask documentation]: http://docs.kicad-pcb.org/doxygen/group__trace__env__vars.html
-[trace mask documentation]: http://docs.kicad-pcb.org/doxygen/group__trace__env__vars.html
-[advanced config documentation]: http://docs.kicad-pcb.org/doxygen/namespaceAC__KEYS.html
+[trace mask documentation]: http://docs.kicad.org/doxygen/group__trace__env__vars.html
+[trace mask documentation]: http://docs.kicad.org/doxygen/group__trace__env__vars.html
+[advanced config documentation]: http://docs.kicad.org/doxygen/namespaceAC__KEYS.html
