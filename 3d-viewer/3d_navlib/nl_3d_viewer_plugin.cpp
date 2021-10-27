@@ -43,17 +43,17 @@ void NL_3D_VIEWER_PLUGIN::SetFocus( bool focus )
 #else
 
 
-NL_3DVIEWER_PLUGIN::NL_3DVIEWER_PLUGIN( EDA_3D_CANVAS* aViewport )
+NL_3D_VIEWER_PLUGIN::NL_3D_VIEWER_PLUGIN( EDA_3D_CANVAS* aViewport ) : m_impl( nullptr )
 {
 }
 
 
-void NL_3DVIEWER_PLUGIN::SetFocus( bool focus )
+void NL_3D_VIEWER_PLUGIN::SetFocus( bool focus )
 {
 }
 
 
-NL_3DVIEWER_PLUGIN::~NL_3DVIEWER_PLUGIN()
+NL_3D_VIEWER_PLUGIN::~NL_3D_VIEWER_PLUGIN()
 {
 }
 #endif
