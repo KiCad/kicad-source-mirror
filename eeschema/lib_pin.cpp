@@ -183,10 +183,10 @@ wxPoint LIB_PIN::GetPinRoot() const
     switch( m_orientation )
     {
     default:
-    case PIN_RIGHT: return wxPoint( m_position.x + m_length, m_position.y );
-    case PIN_LEFT:  return wxPoint( m_position.x - m_length, m_position.y );
-    case PIN_UP:    return wxPoint( m_position.x, m_position.y - m_length );
-    case PIN_DOWN:  return wxPoint( m_position.x, m_position.y + m_length );
+    case PIN_RIGHT: return wxPoint( m_position.x + m_length, -( m_position.y ) );
+    case PIN_LEFT:  return wxPoint( m_position.x - m_length, -( m_position.y ) );
+    case PIN_UP:    return wxPoint( m_position.x, -( m_position.y - m_length ) );
+    case PIN_DOWN:  return wxPoint( m_position.x, -( m_position.y + m_length ) );
     }
 }
 
