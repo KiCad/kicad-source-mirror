@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,13 +51,13 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bmiddleSizer;
 	bmiddleSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Included Layers") ), wxHORIZONTAL );
+	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Include Layers") ), wxHORIZONTAL );
 
 	wxArrayString m_layerCheckListBoxChoices;
 	m_layerCheckListBox = new wxCheckListBox( m_LayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_layerCheckListBoxChoices, 0 );
 	m_layerCheckListBox->SetMinSize( wxSize( 150,-1 ) );
 
-	m_LayersSizer->Add( m_layerCheckListBox, 1, wxEXPAND, 5 );
+	m_LayersSizer->Add( m_layerCheckListBox, 1, wxALL|wxEXPAND, 5 );
 
 
 	bmiddleSizer->Add( m_LayersSizer, 1, wxALL|wxEXPAND, 3 );
@@ -95,7 +95,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	gbSizer1->Add( m_includeEdgeLayerOpt, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_sketchPadsOnFabLayers = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_ALLOW_PRINT_PAD_ON_SILKSCREEN, _("Sketch pads on fab layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sketchPadsOnFabLayers = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_ALLOW_PRINT_PAD_ON_SILKSCREEN, _("Sketch pads on fabrication layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sketchPadsOnFabLayers->SetToolTip( _("Include pad outlines on F.Fab and B.Fab layers when plotting") );
 
 	gbSizer1->Add( m_sketchPadsOnFabLayers, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
@@ -166,11 +166,11 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizerWarningText;
 	bSizerWarningText = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextAlert = new wxStaticText( this, wxID_ANY, _("Global solder mask min width and/or margin are not set to 0. "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextAlert = new wxStaticText( this, wxID_ANY, _("Global solder mask minimum width and/or margin are not set to 0. "), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextAlert->Wrap( -1 );
 	bSizerWarningText->Add( m_staticTextAlert, 0, wxTOP|wxLEFT, 5 );
 
-	m_staticTextAlert1 = new wxStaticText( this, wxID_ANY, _("Most board houses expect 0 and use their constraints, especially for solder mask min width."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextAlert1 = new wxStaticText( this, wxID_ANY, _("Most board manufacturers expect 0 and use their own constraints for solder mask minimum width."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextAlert1->Wrap( 580 );
 	bSizerWarningText->Add( m_staticTextAlert1, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
@@ -225,7 +225,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxString m_coordFormatCtrlChoices[] = { _("4.5, unit mm"), _("4.6, unit mm") };
 	int m_coordFormatCtrlNChoices = sizeof( m_coordFormatCtrlChoices ) / sizeof( wxString );
 	m_coordFormatCtrl = new wxChoice( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_coordFormatCtrlNChoices, m_coordFormatCtrlChoices, 0 );
-	m_coordFormatCtrl->SetSelection( 0 );
+	m_coordFormatCtrl->SetSelection( 1 );
 	gbSizer2->Add( m_coordFormatCtrl, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_useGerberX2Format = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Use extended X2 format (recommended)"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -234,11 +234,11 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	gbSizer2->Add( m_useGerberX2Format, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	m_useGerberNetAttributes = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Include netlist attributes"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_useGerberNetAttributes->SetToolTip( _("Include netlist metadata and aperture attributes in Gerber files.\nIn X1 format, they are comments.\nUsed to check connectivity in CAM tools and Gerber viewers.") );
+	m_useGerberNetAttributes->SetToolTip( _("Include netlist metadata and aperture attributes in Gerber files.\nThey are comments in the X1 format.\nUsed to check connectivity in CAM tools and Gerber viewers.") );
 
 	gbSizer2->Add( m_useGerberNetAttributes, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 30 );
 
-	m_disableApertMacros = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Disable aperture macros (non recommended)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_disableApertMacros = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Disable aperture macros (not recommended)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_disableApertMacros->SetToolTip( _("Disable aperture macros in Gerber files\nUse *only* for broken Gerber viewers.") );
 
 	gbSizer2->Add( m_disableApertMacros, wxGBPosition( 3, 1 ), wxGBSpan( 1, 2 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 30 );
@@ -321,7 +321,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_PSOptionsSizer->Add( fgSizer2, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_forcePSA4OutputOpt = new wxCheckBox( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("Force A4 output"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PSOptionsSizer->Add( m_forcePSA4OutputOpt, 0, wxRIGHT|wxLEFT, 5 );
+	m_PSOptionsSizer->Add( m_forcePSA4OutputOpt, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
 	m_PlotOptionsSizer->Add( m_PSOptionsSizer, 0, wxALL|wxEXPAND, 5 );
@@ -337,7 +337,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	bSizerdxfLeft->Add( m_DXF_plotModeOpt, 0, wxALL, 5 );
 
-	m_DXF_plotTextStrokeFontOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Use KiCad font to plot texts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DXF_plotTextStrokeFontOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Use KiCad font to plot text"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DXF_plotTextStrokeFontOpt->SetToolTip( _("Check to use KiCad stroke font\nUncheck to plot single-line ASCII texts as editable text (using DXF font)") );
 
 	bSizerdxfLeft->Add( m_DXF_plotTextStrokeFontOpt, 0, wxALL, 5 );
