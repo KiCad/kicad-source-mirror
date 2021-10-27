@@ -1953,7 +1953,7 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
             symbolEditor->LoadSymbolFromSchematic( symbol );
         else if( aEvent.IsAction( &EE_ACTIONS::editLibSymbolWithLibEdit ) )
         {
-            symbolEditor->LoadSymbol( symbol->GetLibId(), symbol->GetConvert(), symbol->GetUnit() );
+            symbolEditor->LoadSymbol( symbol->GetLibId(), symbol->GetUnit(), symbol->GetConvert() );
 
             if( !symbolEditor->IsSymbolTreeShown() )
             {
