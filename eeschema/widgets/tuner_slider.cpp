@@ -202,24 +202,28 @@ void TUNER_SLIDER::onSliderChanged( wxScrollEvent& event )
 void TUNER_SLIDER::onMaxKillFocus( wxFocusEvent& event )
 {
     updateMax();
+    event.Skip();       // Mandatory in wxFocusEvent
 }
 
 
 void TUNER_SLIDER::onValueKillFocus( wxFocusEvent& event )
 {
     updateValue();
+    event.Skip();       // Mandatory in wxFocusEvent
 }
 
 
 void TUNER_SLIDER::onMinKillFocus( wxFocusEvent& event )
 {
     updateMin();
+    event.Skip();       // Mandatory in wxFocusEvent
 }
 
 
 void TUNER_SLIDER::onMaxTextEnter( wxCommandEvent& event )
 {
     updateMax();
+    event.Skip();       // Mandatory in wxFocusEvent
 }
 
 
