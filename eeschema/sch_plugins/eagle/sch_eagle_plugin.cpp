@@ -1120,7 +1120,12 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
                 label->SetPosition( firstWire->GetStartPoint() );
                 label->SetText( escapeName( netName ) );
                 label->SetTextSize( wxSize( Mils2iu( 40 ), Mils2iu( 40 ) ) );
-                label->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+
+                if( firstWire->GetEndPoint().x > firstWire->GetStartPoint().x )
+                    label->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+                else
+                    label->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
+
                 screen->Append( label.release() );
             }
         }
@@ -2926,7 +2931,15 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* 
                     netLabel->SetPosition( aSymbol->GetPinPhysicalPosition( pin ) );
                     netLabel->SetText( extractNetName( pin->GetName() ) );
                     netLabel->SetTextSize( wxSize( Mils2iu( 40 ), Mils2iu( 40 ) ) );
-                    netLabel->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
+
+                    switch( pin->GetOrientation() )
+                    {
+                    case PIN_LEFT:  netLabel->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );  break;
+                    case PIN_RIGHT: netLabel->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );   break;
+                    case PIN_UP:    netLabel->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );     break;
+                    case PIN_DOWN:  netLabel->SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM ); break;
+                    }
+
                     aScreen->Append( netLabel );
                 }
             }
