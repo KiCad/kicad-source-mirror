@@ -116,9 +116,4 @@ if( WIN32 )
         )
 endif()
 
-if( KICAD_USE_3DCONNEXION )
-    message( STATUS "Including 3Dconnexion SpaceMouse navigation support in PcbNew" )
-    target_link_libraries( qa_pcbnew pcbnew_navlib)
-endif()
-
 kicad_add_boost_test( qa_pcbnew qa_pcbnew )

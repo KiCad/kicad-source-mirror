@@ -609,6 +609,13 @@ target_link_libraries( pcbcommon PUBLIC
     kiplatform
 )
 
+if( KICAD_USE_3DCONNEXION )
+    message( STATUS "Including 3Dconnexion SpaceMouse navigation support in pcbcommon" )
+    add_subdirectory( ../pcbnew/navlib ./navlib)
+    target_link_libraries( pcbcommon PUBLIC pcbnew_navlib)
+endif()
+
+
 add_dependencies( pcbcommon delaunator )
 
 # The lemon grammar for the numeric evaluator

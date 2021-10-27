@@ -63,9 +63,4 @@ target_link_libraries( qa_pcbnew_tools
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )
 
-if( KICAD_USE_3DCONNEXION )
-    message( STATUS "Including 3Dconnexion SpaceMouse navigation support in PcbNew" )
-    target_link_libraries( qa_pcbnew_tools pcbnew_navlib)
-endif()
-
 kicad_add_utils_executable( qa_pcbnew_tools )

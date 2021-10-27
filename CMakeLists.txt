@@ -157,7 +157,13 @@ option( KICAD_USE_3DCONNEXION
     ON )
 
 if( KICAD_USE_3DCONNEXION )
-    add_compile_definitions( KICAD_USE_3DCONNEXION )
+    if( WIN32 )
+        add_definitions( -DKICAD_USE_3DCONNEXION )
+    elseif( APPLE )
+        add_definitions( -DKICAD_USE_3DCONNEXION )
+    else()
+        remove_definitions( -DKICAD_USE_3DCONNEXION )
+    endif()
 endif()
 
 # Global setting: exports are explicit
