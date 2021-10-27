@@ -203,6 +203,7 @@ void PCB_SHAPE::SwapData( BOARD_ITEM* aImage )
     SwapShape( image );
 
     std::swap( m_layer, image->m_layer );
+    std::swap( m_fill, image->m_fill );
     std::swap( m_flags, image->m_flags );
     std::swap( m_status, image->m_status );
     std::swap( m_parent, image->m_parent );
