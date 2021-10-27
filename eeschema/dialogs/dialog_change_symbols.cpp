@@ -203,18 +203,21 @@ void DIALOG_CHANGE_SYMBOLS::onMatchById( wxCommandEvent& aEvent )
 void DIALOG_CHANGE_SYMBOLS::onMatchTextKillFocus( wxFocusEvent& event )
 {
     updateFieldsList();
+    event.Skip();       // Mandatory in wxFocusEvent
 }
 
 
 void DIALOG_CHANGE_SYMBOLS::onMatchIDKillFocus( wxFocusEvent& event )
 {
     updateFieldsList();
+    event.Skip();       // Mandatory in wxFocusEvent
 }
 
 
 void DIALOG_CHANGE_SYMBOLS::onNewLibIDKillFocus( wxFocusEvent& event )
 {
     updateFieldsList();
+    event.Skip();       // Mandatory in wxFocusEvent
 }
 
 
