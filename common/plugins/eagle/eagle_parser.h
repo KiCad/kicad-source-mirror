@@ -646,7 +646,7 @@ struct ETEXT
     opt_erot   rot;
 
     enum {          // for align
-        CENTER,
+        CENTER = 0,
         CENTER_LEFT,
         TOP_CENTER,
         TOP_LEFT,

@@ -767,13 +767,17 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     double degrees = t.rot->degrees;
 
                     if( degrees == 90 || t.rot->spin )
+                    {
                         pcbtxt->SetTextAngle( sign * t.rot->degrees * 10 );
+                    }
                     else if( degrees == 180 )
-                        align = ETEXT::TOP_RIGHT;
+                    {
+                        align = -align;
+                    }
                     else if( degrees == 270 )
                     {
                         pcbtxt->SetTextAngle( sign * 90 * 10 );
-                        align = ETEXT::TOP_RIGHT;
+                        align = -align;
                     }
                     else
                     {
@@ -804,18 +808,22 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 switch( align )
                 {
                 case ETEXT::CENTER:
-                    // this was the default in pcbtxt's constructor
+                    pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+                    pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
                     break;
 
                 case ETEXT::CENTER_LEFT:
                     pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                    pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
                     break;
 
                 case ETEXT::CENTER_RIGHT:
                     pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                    pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
                     break;
 
                 case ETEXT::TOP_CENTER:
+                    pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
                     pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
                     break;
 
@@ -830,6 +838,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     break;
 
                 case ETEXT::BOTTOM_CENTER:
+                    pcbtxt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
                     pcbtxt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
                     break;
 
@@ -1651,6 +1660,21 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
             aFPText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
             break;
 
+        case ETEXT::CENTER:
+            aFPText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+            aFPText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+            break;
+
+        case ETEXT::CENTER_LEFT:
+            aFPText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+            aFPText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+            break;
+
+        case ETEXT::CENTER_RIGHT:
+            aFPText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            aFPText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+            break;
+
         default:
             ;
         }
@@ -1960,18 +1984,22 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     switch( align )
     {
     case ETEXT::CENTER:
-        // this was the default in pcbtxt's constructor
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
     case ETEXT::CENTER_LEFT:
         txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
     case ETEXT::CENTER_RIGHT:
         txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        txt->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
     case ETEXT::TOP_CENTER:
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
         txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
         break;
 
@@ -1986,6 +2014,7 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
         break;
 
     case ETEXT::BOTTOM_CENTER:
+        txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
         txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
 
