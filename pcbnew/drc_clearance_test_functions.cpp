@@ -296,6 +296,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool aTestPads, bool aTestZ
                 err = false;
             else if( layer1 == F_Cu  &&  layer2 == In1_Cu  )
                 err = false;
+            else if( static_cast<int>( layer2 ) - static_cast<int>( layer1 ) == 1 )
+                err = false;
 
             if( err )
             {
