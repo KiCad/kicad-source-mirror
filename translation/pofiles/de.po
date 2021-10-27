@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-25 06:24-0700\n"
-"PO-Revision-Date: 2021-10-27 02:46+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"PO-Revision-Date: 2021-10-28 01:54+0000\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -674,9 +674,8 @@ msgid "Show silkscreen layers"
 msgstr "Bestückungsdrucklagen einblenden"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Bestückungsdruck auf Via-Ringflächen aussparen"
+msgstr "Bestückungsdruck auf Löststoppmasken-Kanten aussparen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
@@ -13078,13 +13077,13 @@ msgid "Manual removal will be required for the file(s) above."
 msgstr "Die oben genannte(n) Datei(en) müssen manuell entfernt werden."
 
 #: eeschema/files-io.cpp:1438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
 msgstr ""
-"Die automatisch gespeicherte Stammdatei\n"
+"Die Masterdatei für automatisches Speichern\n"
 "\"%s\"\n"
 "konnte nicht gelöscht werden."
 
@@ -13093,6 +13092,9 @@ msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
 msgstr ""
+"Diese Datei muss manuell entfernt werden, sonst wird die automatische "
+"Speicherfunktion\n"
+"jedes Mal angezeigt, wenn der Schaltplaneditor gestartet wird."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1397
 msgid "Alias of"
@@ -19973,9 +19975,8 @@ msgid "Parameters"
 msgstr "Parameter"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:48
-#, fuzzy
 msgid "Attenuation (a):"
-msgstr "Dämpfung:"
+msgstr "Dämpfung (a):"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:55
 msgid "dB"
@@ -20381,14 +20382,12 @@ msgid "Remove an item from the current list of available regulators"
 msgstr "Entfernt ein Element von der Liste der möglichen Spannungsregler"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
-#, fuzzy
 msgid "Temperature rise"
-msgstr "Temperaturanstieg:"
+msgstr "Temperaturanstieg"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
-#, fuzzy
 msgid "Current (I):"
-msgstr "Strom:"
+msgstr "Strom (I):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
@@ -20420,15 +20419,13 @@ msgstr "Leiterbahnen äußere Lage"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:201
-#, fuzzy
 msgid "Trace width (W):"
-msgstr "Leiterbahnbreite:"
+msgstr "Leiterbahnbreite (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
-#, fuzzy
 msgid "Trace thickness (H):"
-msgstr "Leiterbahndicke:"
+msgstr "Leiterbahndicke (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:236
@@ -20883,9 +20880,8 @@ msgid "Color Code"
 msgstr "Farbcode"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "TransLine"
+msgstr "TransLine "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -27648,9 +27644,8 @@ msgid "Graphics Editing"
 msgstr "Grafikbearbeitung"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
-#, fuzzy
 msgid "Constrain to H, V, 45 degrees"
-msgstr "Umriss auf H, V und 45° beschränken"
+msgstr "Auf H, V und 45 Grad beschränken"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
 msgid "Magnetic Points"
@@ -32420,6 +32415,9 @@ msgid ""
 "been made but it is possible that DRC errors exist and that manual editing "
 "of the zone priorities is required."
 msgstr ""
+"Die Zonenfüllprioritäten für die Lage '%s' konnten nicht bestimmt werden. "
+"Trotz größter Mühe ist möglich, dass DRC-Fehler vorliegen und eine manuelle "
+"Korrektur der Zonenprioritäten erforderlich ist."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:145
 msgid ""
@@ -32668,6 +32666,11 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
+"Die CADSTAR-Vorlage '%s' hat im ursprünglichen Design thermische "
+"Entlastungen, aber die Speichenbreite (%.2f mm) ist dünner als die "
+"Mindestdicke der Zone (%.2f mm). KiCad verlangt, dass die Mindestdicke der "
+"Zone beibehalten wird. Daher wurde die Mindestdicke als neue Speichenbreite "
+"gesetzt, was beim nächsten Füllen der Zonen angewendet wird."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1963
 #, c-format
@@ -35421,10 +35424,9 @@ msgid "Lock or unlock selected items"
 msgstr "Ausgewählte Elemente sperren oder entsperren"
 
 #: pcbnew/tools/pcb_actions.cpp:669
-#, fuzzy
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
-msgstr "Aktionen auf 45 Grad vom Startpunkt begrenzen"
+msgstr "Aktionen auf horizontal, vertikal oder 45 Grad vom Startpunkt begrenzen"
 
 #: pcbnew/tools/pcb_actions.cpp:674
 msgid "Prevent items from being moved and/or resized on the canvas"
