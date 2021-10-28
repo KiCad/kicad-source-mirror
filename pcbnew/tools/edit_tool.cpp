@@ -273,6 +273,9 @@ bool EDIT_TOOL::isRouterActive() const
 
 int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
 {
+    if( !m_toolMgr->GetTool<ROUTER_TOOL>() )
+        return false; // don't drag when no router tool (i.e. fp editor)
+
     if( m_toolMgr->GetTool<ROUTER_TOOL>()->IsToolActive() )
         return false; // don't drag when router is already active
 
