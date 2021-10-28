@@ -3998,7 +3998,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveArc( LIB_SHAPE* aArc, OUTPUTFORMATTER& aFormat
                       aArc->GetUnit(),
                       aArc->GetConvert(),
                       Iu2Mils( aArc->GetWidth() ),
-                      fill_tab[ (int) aArc->GetFillType() ],
+                      fill_tab[ static_cast<int>( aArc->GetFillType() ) - 1 ],
                       Iu2Mils( aArc->GetStart().x ),
                       Iu2Mils( aArc->GetStart().y ),
                       Iu2Mils( aArc->GetEnd().x ),
@@ -4019,7 +4019,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveBezier( LIB_SHAPE* aBezier, OUTPUTFORMATTER& a
     for( const wxPoint& pt : aBezier->GetBezierPoints() )
         aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
 
-    aFormatter.Print( 0, " %c\n", fill_tab[static_cast<int>( aBezier->GetFillType() )] );
+    aFormatter.Print( 0, " %c\n", fill_tab[ static_cast<int>( aBezier->GetFillType() ) - 1 ] );
 }
 
 
@@ -4034,7 +4034,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveCircle( LIB_SHAPE* aCircle, OUTPUTFORMATTER& a
                       aCircle->GetUnit(),
                       aCircle->GetConvert(),
                       Iu2Mils( aCircle->GetWidth() ),
-                      fill_tab[static_cast<int>( aCircle->GetFillType() )] );
+                      fill_tab[ static_cast<int>( aCircle->GetFillType() ) - 1 ] );
 }
 
 
@@ -4164,7 +4164,7 @@ void SCH_LEGACY_PLUGIN_CACHE::savePolyLine( LIB_SHAPE* aPolyLine, OUTPUTFORMATTE
     for( const VECTOR2I& pt : aPolyLine->GetPolyShape().Outline( 0 ).CPoints() )
         aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
 
-    aFormatter.Print( 0, " %c\n", fill_tab[static_cast<int>( aPolyLine->GetFillType() )] );
+    aFormatter.Print( 0, " %c\n", fill_tab[ static_cast<int>( aPolyLine->GetFillType() ) - 1 ] );
 }
 
 
@@ -4180,7 +4180,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveRectangle( LIB_SHAPE* aRectangle, OUTPUTFORMAT
                       aRectangle->GetUnit(),
                       aRectangle->GetConvert(),
                       Iu2Mils( aRectangle->GetWidth() ),
-                      fill_tab[static_cast<int>( aRectangle->GetFillType() )] );
+                      fill_tab[ static_cast<int>( aRectangle->GetFillType() ) - 1 ] );
 }
 
 
