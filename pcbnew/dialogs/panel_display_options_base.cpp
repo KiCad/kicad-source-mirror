@@ -60,7 +60,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	int m_OptDisplayTracksClearanceNChoices = sizeof( m_OptDisplayTracksClearanceChoices ) / sizeof( wxString );
 	m_OptDisplayTracksClearance = new wxRadioBox( sbClearance->GetStaticBox(), ID_SHOW_CLEARANCE, _("Track && Via Clearances"), wxDefaultPosition, wxDefaultSize, m_OptDisplayTracksClearanceNChoices, m_OptDisplayTracksClearanceChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayTracksClearance->SetSelection( 3 );
-	m_OptDisplayTracksClearance->SetToolTip( _("Show or hide the track and via clearance area. If \"New track\" is selected, track clearance area is shown only when creating the track.") );
+	m_OptDisplayTracksClearance->SetToolTip( _("Show clearance outlines around tracks, and optionally the via clearance around the end of the track while routing.") );
 
 	sbClearance->Add( m_OptDisplayTracksClearance, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
