@@ -693,6 +693,10 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
             m_currentTrace.AppendVias ( makeVia( m_currentTrace.CP().CPoint( -1 ), m_netP ),
                                         makeVia( m_currentTrace.CN().CPoint( -1 ), m_netN ) );
         }
+        else
+        {
+            m_currentTrace.RemoveVias();
+        }
 
         return true;
     }
