@@ -155,7 +155,8 @@ public:
             switch( aCol )
             {
             case COL_NUMBER:
-                pin->SetNumber( aValue );
+                if( pins.size() == 1 )
+                    pin->SetNumber( aValue );
                 break;
 
             case COL_NAME:
