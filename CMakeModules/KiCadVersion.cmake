@@ -35,4 +35,4 @@
 # be set after each version tag is added to the git repo.  This will
 # give developers a reasonable idea where which branch was used to build
 # KiCad.
-set( KICAD_VERSION "5.1.11" )
+set( KICAD_VERSION "5.1.11-unknown" )
