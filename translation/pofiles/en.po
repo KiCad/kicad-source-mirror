@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-25 06:24-0700\n"
+"POT-Creation-Date: 2021-10-28 09:09-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -11364,8 +11364,11 @@ msgstr "Highlight wires and pins of a net"
 msgid "Edit with Symbol Editor"
 msgstr "Edit with Symbol Editor"
 
-msgid "Open the symbol editor to edit the symbol"
-msgstr "Open the symbol editor to edit the symbol"
+msgid "Open the selected symbol in the Symbol Editor"
+msgstr "Open the selected symbol in the Symbol Editor"
+
+msgid "Open the library symbol in the Symbol Editor"
+msgstr "Open the library symbol in the Symbol Editor"
 
 msgid "Edit Symbol Fields..."
 msgstr "Edit Symbol Fields..."
@@ -16188,6 +16191,22 @@ msgstr "Pad Numbering:"
 msgid "Circular Array"
 msgstr "Circular Array"
 
+msgid "Footprint Annotation"
+msgstr "Footprint Annotation"
+
+msgid "Keep existing reference designators"
+msgstr "Keep existing reference designators"
+
+msgid "Assign unique reference designators"
+msgstr "Assign unique reference designators"
+
+msgid ""
+"This can conflict with reference designators in the schematic that have not "
+"yet been synchronized with the board."
+msgstr ""
+"This can conflict with reference designators in the schematic that have not "
+"yet been synchronized with the board."
+
 msgid "Create Array"
 msgstr "Create Array"
 
@@ -18450,6 +18469,9 @@ msgstr "Warning: Scale option set to a very large value"
 msgid "Plot format:"
 msgstr "Plot format:"
 
+msgid "Include Layers"
+msgstr "Include Layers"
+
 msgid "Plot border and title block"
 msgstr "Plot border and title block"
 
@@ -18471,8 +18493,8 @@ msgstr "Plot Edge.Cuts on all layers"
 msgid "Do not plot the contents of the PCB edge layer on any other layers."
 msgstr "Do not plot the contents of the PCB edge layer on any other layers."
 
-msgid "Sketch pads on fab layers"
-msgstr "Sketch pads on fab layers"
+msgid "Sketch pads on fabrication layers"
+msgstr "Sketch pads on fabrication layers"
 
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
 msgstr "Include pad outlines on F.Fab and B.Fab layers when plotting"
@@ -18527,15 +18549,15 @@ msgstr "Negative plot"
 msgid "Check zone fills before plotting"
 msgstr "Check zone fills before plotting"
 
-msgid "Global solder mask min width and/or margin are not set to 0. "
-msgstr "Global solder mask min width and/or margin are not set to 0. "
+msgid "Global solder mask minimum width and/or margin are not set to 0. "
+msgstr "Global solder mask minimum width and/or margin are not set to 0. "
 
 msgid ""
-"Most board houses expect 0 and use their constraints, especially for solder "
-"mask min width."
+"Most board manufacturers expect 0 and use their own constraints for solder "
+"mask minimum width."
 msgstr ""
-"Most board houses expect 0 and use their constraints, especially for solder "
-"mask min width."
+"Most board manufacturers expect 0 and use their own constraints for solder "
+"mask minimum width."
 
 msgid "Board setup"
 msgstr "Board setup"
@@ -18600,15 +18622,15 @@ msgstr "Include netlist attributes"
 
 msgid ""
 "Include netlist metadata and aperture attributes in Gerber files.\n"
-"In X1 format, they are comments.\n"
+"They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
 "Include netlist metadata and aperture attributes in Gerber files.\n"
-"In X1 format, they are comments.\n"
+"They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 
-msgid "Disable aperture macros (non recommended)"
-msgstr "Disable aperture macros (non recommended)"
+msgid "Disable aperture macros (not recommended)"
+msgstr "Disable aperture macros (not recommended)"
 
 msgid ""
 "Disable aperture macros in Gerber files\n"
@@ -18663,8 +18685,8 @@ msgstr "Plot graphic items using their contours"
 msgid "Uncheck to plot graphic items using their center lines"
 msgstr "Uncheck to plot graphic items using their center lines"
 
-msgid "Use KiCad font to plot texts"
-msgstr "Use KiCad font to plot texts"
+msgid "Use KiCad font to plot text"
+msgstr "Use KiCad font to plot text"
 
 msgid ""
 "Check to use KiCad stroke font\n"
@@ -26482,6 +26504,37 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Open the symbol editor to edit the symbol"
+#~ msgstr "Open the symbol editor to edit the symbol"
+
+#~ msgid "Sketch pads on fab layers"
+#~ msgstr "Sketch pads on fab layers"
+
+#~ msgid "Global solder mask min width and/or margin are not set to 0. "
+#~ msgstr "Global solder mask min width and/or margin are not set to 0. "
+
+#~ msgid ""
+#~ "Most board houses expect 0 and use their constraints, especially for "
+#~ "solder mask min width."
+#~ msgstr ""
+#~ "Most board houses expect 0 and use their constraints, especially for "
+#~ "solder mask min width."
+
+#~ msgid ""
+#~ "Include netlist metadata and aperture attributes in Gerber files.\n"
+#~ "In X1 format, they are comments.\n"
+#~ "Used to check connectivity in CAM tools and Gerber viewers."
+#~ msgstr ""
+#~ "Include netlist metadata and aperture attributes in Gerber files.\n"
+#~ "In X1 format, they are comments.\n"
+#~ "Used to check connectivity in CAM tools and Gerber viewers."
+
+#~ msgid "Disable aperture macros (non recommended)"
+#~ msgstr "Disable aperture macros (non recommended)"
+
+#~ msgid "Use KiCad font to plot texts"
+#~ msgstr "Use KiCad font to plot texts"
 
 #~ msgid "Footprint text front"
 #~ msgstr "Footprint text front"
