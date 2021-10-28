@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-25 06:24-0700\n"
-"PO-Revision-Date: 2021-10-20 10:04+0000\n"
+"PO-Revision-Date: 2021-10-28 11:02+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -309,14 +309,12 @@ msgid "General"
 msgstr "일반"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
-#, fuzzy
 msgid "Realtime Renderer"
-msgstr "파인더에서 열기"
+msgstr "실시간 렌더러"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "레이트 레이싱 렌더 옵션"
+msgstr "레이트레이싱 렌더러"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:240
@@ -667,9 +665,8 @@ msgid "Show silkscreen layers"
 msgstr "실크스크린 레이어 표시"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "클립 실크 스크린 에서 비아 annuli"
+msgstr "솔더 마스크 가장자리에서 실크 스크린 클립"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
@@ -692,9 +689,8 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "사용자 레이어(실제 모드에는 표시되지 않음)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
-msgstr "주석 및 도면 레이어 표시"
+msgstr "주석 및 그리기 레이어 표시"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:61
 msgid "Show ECO layers"
@@ -745,7 +741,6 @@ msgid "Camera Options"
 msgstr "카메라 옵션"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
 msgstr "회전 증분 :"
 
@@ -3965,9 +3960,8 @@ msgstr "Inch"
 
 #: common/eda_draw_frame.cpp:148 pcbnew/tools/drawing_tool.cpp:266
 #: pcbnew/tools/pcb_actions.cpp:668
-#, fuzzy
 msgid "Constrain to H, V, 45"
-msgstr "외곽선을 수평, 수직 또는 45도 각도로 제한"
+msgstr "수평, 수직, 45도 각도로 제한"
 
 #: common/eda_draw_frame.cpp:318
 msgid "Edit User Grid..."
@@ -5249,7 +5243,6 @@ msgid "Reference designators"
 msgstr "참조 지정자"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text"
 msgstr "풋프린트 텍스트"
 
@@ -11725,14 +11718,12 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "PCB 편집기에서 강조 표시될 때 네트 강조"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Constrain buses and wires to H or V"
-msgstr "버스와 와이어를 H 및 V 방향으로 제한 (&R)"
+msgstr "버스와 와이어를 수평 또는 수직 방향으로 제한"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Mouse drag performs Drag (G) operation"
-msgstr "마우스를 끌면 끌기 (G) 작업이 수행됩니다"
+msgstr "마우스를 끌면 끌기(G) 작업을 수행"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:28
 msgid "If unchecked, mouse drag will perform move (M) operation"
@@ -19486,7 +19477,6 @@ msgid "Error writing objects to clipboard"
 msgstr "클립보드에 객체 쓰는 중에 오류 발생"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19498,16 +19488,17 @@ msgid ""
 "___R<sub>1</sub> = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
-"### 분할 감쇠기\n"
-"#### 감쇠량은 6dB\n"
-"___Z<sub>in</sub>___ 입력 임피던스 기대값 in &#x2126;<br>\n"
-"___Z<sub>out</sub>___ 출력 임피던스 기대값 in &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"### 브리지 티형 감쇠기\n"
+"___a___ is attenuation in dB<br>\n"
+"___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
+"___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
+"___L = 10<sup>a/20</up>___\n"
+"___R<sub>1</sub> = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
+"___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19521,21 +19512,19 @@ msgid ""
 "___R<sub>1</sub> = 1 / (A/Z<sub>in</sub> &minus; 1/R<sub>2</sub>)___<br>\n"
 "___R<sub>3</sub> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
 msgstr ""
-"### T형 감쇠기\n"
-"__Zin__ 입력 임피던스 기대값 in &#x2126;<br>\n"
-"__Zout__ 출력 임피던스 기대값<br>\n"
-"__Zin = Zout__<br><br>\n"
+"### 파이형 감쇠기\n"
+"___a___ is attenuation in dB<br>\n"
+"___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
+"___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "\n"
-"* __a__ 감쇠량 (dB)\n"
-"* __L = 10<sup>a/20</sup>__ (손실)\n"
-"* ___A = (L + 1) / (L - 1)___<br><br>\n"
-"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - "
-"1)___\n"
-"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R<sub>2</sub> = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; "
+"Z<sub>out</sub> / L)___<br>\n"
+"___R<sub>1</sub> = 1 / (A/Z<sub>in</sub> &minus; 1/R<sub>2</sub>)___<br>\n"
+"___R<sub>3</sub> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -19546,15 +19535,14 @@ msgid ""
 "___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
 msgstr ""
 "### 분할 감쇠기\n"
-"#### 감쇠량은 6dB\n"
-"___Z<sub>in</sub>___ 입력 임피던스 기대값 in &#x2126;<br>\n"
-"___Z<sub>out</sub>___ 출력 임피던스 기대값 in &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"Attenuation is 6 dB  \n"
+"___Z<sub>in</sub>___ is desired input impedance in &#x2126;  \n"
+"___Z<sub>out</sub>___ is desired output impedance in &#x2126;  \n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
+"___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19568,18 +19556,17 @@ msgid ""
 "___R<sub>1</sub> = Z<sub>in</sub> &middot; A &minus; R<sub>2</sub>___<br>\n"
 "___R<sub>3</sub> = Z<sub>out</sub> &middot; A &minus; R<sub>2</sub>___\n"
 msgstr ""
-"### T형 감쇠기\n"
-"__Zin__ 입력 임피던스 기대값 in &#x2126;<br>\n"
-"__Zout__ 출력 임피던스 기대값<br>\n"
-"__Zin = Zout__<br><br>\n"
+"### 티형 감쇠기\n"
+"___a___ is attenuation in dB<br>\n"
+"___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
+"___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "\n"
-"* __a__ 감쇠량 (dB)\n"
-"* __L = 10<sup>a/20</sup>__ (손실)\n"
-"* ___A = (L + 1) / (L - 1)___<br><br>\n"
-"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - "
-"1)___\n"
-"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br>\n"
+"___R<sub>2</sub> = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; "
+"Z<sub>out</sub>) / (L&minus;1)___<br>\n"
+"___R<sub>1</sub> = Z<sub>in</sub> &middot; A &minus; R<sub>2</sub>___<br>\n"
+"___R<sub>3</sub> = Z<sub>out</sub> &middot; A &minus; R<sub>2</sub>___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -19614,9 +19601,8 @@ msgid "Parameters"
 msgstr "매개변수"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:48
-#, fuzzy
 msgid "Attenuation (a):"
-msgstr "감쇠량:"
+msgstr "감쇠 (a):"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:55
 msgid "dB"
@@ -20018,14 +20004,12 @@ msgid "Remove an item from the current list of available regulators"
 msgstr "현재 사용 가능한 레귤레이터의 리스트에서 항목을 삭제합니다"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
-#, fuzzy
 msgid "Temperature rise"
-msgstr "온도 상승:"
+msgstr "온도 상승"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
-#, fuzzy
 msgid "Current (I):"
-msgstr "전류:"
+msgstr "전류 (I):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
@@ -20057,15 +20041,13 @@ msgstr "외부 레이어 추적"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:201
-#, fuzzy
 msgid "Trace width (W):"
-msgstr "배선 두께:"
+msgstr "배선 두께 (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
-#, fuzzy
 msgid "Trace thickness (H):"
-msgstr "트레이스 두께:"
+msgstr "트레이스 두께 (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:236
@@ -20436,7 +20418,6 @@ msgid "Not worth using"
 msgstr "사용 가치가 없음"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20475,14 +20456,12 @@ msgstr ""
 "\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
 "\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
 "\n"
-"- 이 계산기는 임의의 값을 생성하기 위해 표준 E-시리즈(10Ω과 1MΩ 사이)의 조합"
-"을 찾습니다.\n"
+"- 이 계산기는 임의의 값을 생성하기 위해 표준 E-시리즈(10Ω과 1MΩ 사이)의 조합을 찾습니다.\n"
 "- 필요한 저항은 0.0025~4000kΩ 범위에서 입력할 수 있습니다.\n"
 "- 최대 4개의 구성요소를 사용하는 솔루션이 제공됩니다.\n"
 "\n"
 "기본적으로 요청 값은 솔루션 세트에서 항상 제외됩니다. 이러한 구성 요소 값을\n"
-"사용할 수 없는 경우 솔루션에서 제외할 추가 값을 최대 2개까지 지정할 수도 있습"
-"니다\n"
+"사용할 수 없는 경우 솔루션에서 제외할 추가 값을 최대 2개까지 지정할 수도 있습니다\n"
 "\n"
 "솔루션은 다음 형식으로 제공됩니다:\n"
 "\n"
@@ -20545,7 +20524,6 @@ msgstr ""
 "변경 사항을 취소하고 종료 하시겠습니까?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20572,21 +20550,23 @@ msgid ""
 msgstr ""
 "최대전류를 지정하면, 배선의 폭은 이에 맞추어 계산됩니다.\n"
 "\n"
-"배선의 폭 중 하나를 지정하면, 이를 처리할 수 있는 최대 전류가 계산됩니다. 이"
-"후, 다른 배선에서 최대 전류를 처리하기 위한 폭 또한 계산됩니다.\n"
+"배선의 폭 중 하나를 지정하면, 이를 처리할 수 있는 최대 전류가 계산됩니다. 이후, 다른 배선에서 최대 전류를 처리하기 위한 폭 또한 "
+"계산됩니다.\n"
 "\n"
 "제어 값은 볼드체로 표시됩니다.\n"
 "\n"
-"계산값은 전류 최대 35A (외부) 또는 17.5A (내부), 온도 최대 100ºC, 그리고 폭 "
-"400mil (10mm) 까지의 범위에서 유효합니다.\n"
+"계산값은 전류 최대 35A (외부) 또는 17.5A (내부), 온도 최대 100ºC, 그리고 폭 400mil (10mm) 까지의 범위에서 "
+"유효합니다.\n"
 "\n"
 "IPC 2221에서의 수식은\n"
-"<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>  \n"
 "이때:  \n"
 "__I__ = 최대 전류 (A)  \n"
-"__dt__ = 주위 환경으로부터의 온도 상승 (ºC)  \n"
-"__W,H__ = 폭과 두께 (mils)  \n"
-"__K__ = 내부 배선에 대해서 0.024, 외부 배선에 대해서 0.048\n"
+"__&Delta;T__ = 주위 환경으로부터의 온도 상승 &deg;C  \n"
+"__W__ = 폭 (mils)  \n"
+"__H__ = 두께 (mils)  \n"
+"__K__ = 내부 배선에 대해서 0.024, 외부 배선에 대해서 0.048  \n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -25245,9 +25225,8 @@ msgid "Pad Properties"
 msgstr "패드 속성"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:179
-#, fuzzy
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "패드 속성 기본값..."
+msgstr "패드 도구 추가를 위한 기본 패드 속성"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:490
 #, c-format
@@ -27137,9 +27116,8 @@ msgid "Graphics Editing"
 msgstr "그래픽 편집"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
-#, fuzzy
 msgid "Constrain to H, V, 45 degrees"
-msgstr "외곽선을 수평, 수직 또는 45도 각도로 제한"
+msgstr "수평, 수직, 45도 각도로 제한"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
 msgid "Magnetic Points"
@@ -29188,9 +29166,8 @@ msgid "Footprint type doesn't match footprint pads"
 msgstr "풋프린트 형식이 풋프린트 패드와 일치하지 않습니다"
 
 #: pcbnew/drc/drc_item.cpp:210
-#, fuzzy
 msgid "Through hole pad has no hole"
-msgstr "경고: 스루홀 패드에는 홀이 없습니다."
+msgstr "스루홀 패드에 구멍이 없음"
 
 #: pcbnew/drc/drc_item.cpp:334
 #, c-format
@@ -29933,9 +29910,9 @@ msgid "Expected \"Other\" type but set to \"%s\""
 msgstr "\"기타\" 형식을 예상하였으나 \"%s\"(으)로 설정되었습니다"
 
 #: pcbnew/footprint.cpp:2125
-#, fuzzy, c-format
+#, c-format
 msgid "(pad \"%s\")"
-msgstr "패드 %s"
+msgstr "(패드\"%s\")"
 
 #: pcbnew/footprint.cpp:2227 pcbnew/pad.cpp:1540 pcbnew/zone.cpp:1420
 msgid "Clearance Override"
@@ -31737,13 +31714,12 @@ msgstr ""
 "KiCad 레이어 Eco1_User로 이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2600
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Altium 레이어 (%d) 에서 KiCad에 대응되지 않는 배선을 발견하였습니다. KiCad 레"
-"이어 Eco1_User로 이동되었습니다."
+"Altium 레이어 (%d) 에서 KiCad에 대응되지 않는 배선이 발견됨. KiCad 레이어 Eco1_User로 이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2641
 msgid "Loading text..."
@@ -34732,10 +34708,9 @@ msgid "Lock or unlock selected items"
 msgstr "선택한 항목 잠금 또는 잠금 해제"
 
 #: pcbnew/tools/pcb_actions.cpp:669
-#, fuzzy
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
-msgstr "시작점에서 45도로 동작 제한"
+msgstr "작업을 시작점에서 수평, 수직 또는 45도로 제한합니다"
 
 #: pcbnew/tools/pcb_actions.cpp:674
 msgid "Prevent items from being moved and/or resized on the canvas"
