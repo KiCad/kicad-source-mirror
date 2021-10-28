@@ -781,21 +781,41 @@ void SCH_SHEET::Rotate( const wxPoint& aCenter )
 
 void SCH_SHEET::MirrorVertically( int aCenter )
 {
+    int dy = m_pos.y;
+
     MIRROR( m_pos.y, aCenter );
     m_pos.y -= m_size.y;
+    dy -= m_pos.y;     // 0,dy is the move vector for this transform
 
     for( SCH_SHEET_PIN* sheetPin : m_pins )
         sheetPin->MirrorVertically( aCenter );
+
+    for( SCH_FIELD& field : m_fields )
+    {
+        wxPoint pos = field.GetTextPos();
+        pos.y -= dy;
+        field.SetTextPos( pos );
+    }
 }
 
 
 void SCH_SHEET::MirrorHorizontally( int aCenter )
 {
+    int dx = m_pos.x;
+
     MIRROR( m_pos.x, aCenter );
     m_pos.x -= m_size.x;
+    dx -= m_pos.x;     // dx,0 is the move vector for this transform
 
     for( SCH_SHEET_PIN* sheetPin : m_pins )
         sheetPin->MirrorHorizontally( aCenter );
+
+    for( SCH_FIELD& field : m_fields )
+    {
+        wxPoint pos = field.GetTextPos();
+        pos.x -= dx;
+        field.SetTextPos( pos );
+    }
 }
 
 

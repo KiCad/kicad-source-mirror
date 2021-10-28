@@ -1467,7 +1467,7 @@ void SCH_SYMBOL::MirrorVertically( int aCenter )
 
     SetOrientation( SYM_MIRROR_X );
     MIRROR( m_pos.y, aCenter );
-    dy -= m_pos.y;     // dy,0 is the move vector for this transform
+    dy -= m_pos.y;     // 0,dy is the move vector for this transform
 
     for( SCH_FIELD& field : m_fields )
     {
