@@ -200,6 +200,7 @@ public:
     static TOOL_ACTION routerHighlightMode;
     static TOOL_ACTION routerShoveMode;
     static TOOL_ACTION routerWalkaroundMode;
+    static TOOL_ACTION cycleRouterMode;
 
     /// Activation of the Push and Shove router (inline dragging mode)
     static TOOL_ACTION routerInlineDrag;

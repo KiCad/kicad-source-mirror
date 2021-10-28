@@ -44,6 +44,7 @@ public:
     int DpDimensionsDialog( const TOOL_EVENT& aEvent );
     int SettingsDialog( const TOOL_EVENT& aEvent );
     int ChangeRouterMode( const TOOL_EVENT& aEvent );
+    int CycleRouterMode( const TOOL_EVENT& aEvent );
     int CustomTrackWidthDialog( const TOOL_EVENT& aEvent );
 
     PNS::PNS_MODE GetRouterMode();
