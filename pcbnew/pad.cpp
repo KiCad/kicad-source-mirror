@@ -1122,13 +1122,15 @@ wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
     {
         if( GetAttribute() == PAD_ATTRIB::SMD || GetAttribute() == PAD_ATTRIB::CONN )
         {
-            return wxString::Format( _( "Pad of %s on %s" ),
+            return wxString::Format( _( "Pad %s of %s on %s" ),
+                                     GetNetnameMsg(),
                                      GetParent()->GetReference(),
                                      layerMaskDescribe() );
         }
         else
         {
-            return wxString::Format( _( "Through hole pad of %s" ),
+            return wxString::Format( _( "Through hole pad %s of %s" ),
+                                     GetNetnameMsg(),
                                      GetParent()->GetReference() );
         }
     }
@@ -1136,15 +1138,17 @@ wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
     {
         if( GetAttribute() == PAD_ATTRIB::SMD || GetAttribute() == PAD_ATTRIB::CONN )
         {
-            return wxString::Format( _( "Pad %s of %s on %s" ),
+            return wxString::Format( _( "Pad %s %s of %s on %s" ),
                                      GetNumber(),
+                                     GetNetnameMsg(),
                                      GetParent()->GetReference(),
                                      layerMaskDescribe() );
         }
         else
         {
-            return wxString::Format( _( "Through hole pad %s of %s" ),
+            return wxString::Format( _( "Through hole pad %s %s of %s" ),
                                      GetNumber(),
+                                     GetNetnameMsg(),
                                      GetParent()->GetReference() );
         }
     }
