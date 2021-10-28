@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
-"PO-Revision-Date: 2021-10-27 02:46+0000\n"
+"PO-Revision-Date: 2021-10-29 11:11+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -16491,14 +16491,12 @@ msgid "Edit with Symbol Editor"
 msgstr "Abra no editor de símbolos"
 
 #: eeschema/tools/ee_actions.cpp:551
-#, fuzzy
 msgid "Open the selected symbol in the Symbol Editor"
-msgstr "Abre o footprint selecionado no editor de footprint"
+msgstr "Abre o símbolo selecionado no editor de símbolos"
 
 #: eeschema/tools/ee_actions.cpp:557
-#, fuzzy
 msgid "Open the library symbol in the Symbol Editor"
-msgstr "Abre o editor de símbolos para editar o símbolo"
+msgstr "Abre a biblioteca do símbolo no editor de símbolos"
 
 #: eeschema/tools/ee_actions.cpp:562
 msgid "Edit Symbol Fields..."
@@ -23152,27 +23150,24 @@ msgid "Circular Array"
 msgstr "Matriz circular"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
-#, fuzzy
 msgid "Footprint Annotation"
-msgstr "localização do footprint"
+msgstr "Anotação do footprint"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
-#, fuzzy
 msgid "Keep existing reference designators"
-msgstr "Substitua as correspondências nos designadores de referência"
+msgstr "Mantenha a referência dos designadores já existentes"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
-#, fuzzy
 msgid "Assign unique reference designators"
-msgstr ""
-"Atribua os designadores de referência exclusivos para os símbolos que foram "
-"colados"
+msgstr "Atribua uma referência única dos designadores"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:357
 msgid ""
 "This can conflict with reference designators in the schematic that have not "
 "yet been synchronized with the board."
 msgstr ""
+"Isso pode entrar em conflito com a referência dos designadores no esquema "
+"que ainda não foram sincronizados com a placa."
 
 #: pcbnew/dialogs/dialog_create_array_base.h:127
 msgid "Create Array"
@@ -26346,9 +26341,8 @@ msgid "Plot format:"
 msgstr "Formato da plotagem:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
-#, fuzzy
 msgid "Include Layers"
-msgstr "Camadas inclusas"
+msgstr "Inclua camadas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
@@ -26382,9 +26376,8 @@ msgstr ""
 "Não plote o conteúdo da camada da borda da PCI em nenhuma outra camada."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
-#, fuzzy
 msgid "Sketch pads on fabrication layers"
-msgstr "Delineie as ilhas nas camadas de fabricação"
+msgstr "Esboço das ilhas nas camadas de fabricação"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
@@ -26461,20 +26454,18 @@ msgid "Check zone fills before plotting"
 msgstr "Verificar preenchimento das zonas antes de plotar"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
-#, fuzzy
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr ""
-"A largura mínima e/ou a margem da máscara de solda global não está definida "
-"como 0. "
+"A largura mínima da máscara da solda global e/ou a margem não estão "
+"definidas como 0. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
-#, fuzzy
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
 msgstr ""
-"A maioria das fabricantes de placa espera 0 e usa as suas próprioas "
-"restrições, especialmente para a largura mínima da máscara de solda."
+"A maioria das fabricantes de placa espera 0 e usa as suas próprias "
+"restrições para a largura mínima da máscara de solda."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -26553,7 +26544,6 @@ msgid "Include netlist attributes"
 msgstr "Inclui os atributos netlist"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
-#, fuzzy
 msgid ""
 "Include netlist metadata and aperture attributes in Gerber files.\n"
 "They are comments in the X1 format.\n"
@@ -26566,7 +26556,6 @@ msgstr ""
 "visualizadores Gerber."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
-#, fuzzy
 msgid "Disable aperture macros (not recommended)"
 msgstr "Desativa os macros da abertura (não recomendado)"
 
@@ -26642,9 +26631,8 @@ msgid "Uncheck to plot graphic items using their center lines"
 msgstr "Desmarque para gerar gráficos dos itens usando as suas linhas centrais"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot text"
-msgstr "Use a fonte do KiCad para traçar os textos"
+msgstr "Use a fonte do KiCad para desenhar o texto"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
 msgid ""
