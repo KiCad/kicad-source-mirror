@@ -2201,6 +2201,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets( LAYER_ID aCadstarSheetID,
 
             if( block.HasBlockLabel )
             {
+                //@todo use below code when KiCad supports multi-line fields
+                /*
                 // Add the block label as a separate field
                 SCH_FIELD blockNameField( getKiCadPoint( block.BlockLabel.Position ), 2,
                         loadedSheet, wxString( "Block name" ) );
@@ -2214,7 +2216,23 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets( LAYER_ID aCadstarSheetID,
                                     block.BlockLabel.OrientAngle,
                                     block.BlockLabel.Mirror );
 
-                fields.push_back( blockNameField );
+                fields.push_back( blockNameField );*/
+
+                // For now as as a text item (supports multi-line properly)
+                SCH_TEXT* kiTxt = new SCH_TEXT();
+
+                kiTxt->SetParent( m_schematic );
+                kiTxt->SetPosition( getKiCadPoint( block.BlockLabel.Position ) );
+                kiTxt->SetText( block.Name );
+
+                applyTextSettings( kiTxt,
+                                    block.BlockLabel.TextCodeID,
+                                    block.BlockLabel.Alignment,
+                                    block.BlockLabel.Justification,
+                                    block.BlockLabel.OrientAngle,
+                                    block.BlockLabel.Mirror );
+
+                loadItemOntoKiCadSheet( aCadstarSheetID, kiTxt );
             }
 
             loadedSheet->SetFields( fields );
