@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,13 +17,21 @@ DIALOG_FILTER_SELECTION_BASE::DIALOG_FILTER_SELECTION_BASE( wxWindow* parent, wx
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
 	wxGridSizer* gSizer1;
-	gSizer1 = new wxGridSizer( 4, 2, 3, 3 );
+	gSizer1 = new wxGridSizer( 0, 2, 3, 3 );
+
+	m_All_Items = new wxCheckBox( this, wxID_ANY, _("All items"), wxPoint( -1,-1 ), wxDefaultSize, wxCHK_3STATE );
+	gSizer1->Add( m_All_Items, 0, 0, 5 );
+
+	m_Hidden_Spacer = new wxCheckBox( this, wxID_ANY, wxEmptyString, wxPoint( -1,-1 ), wxDefaultSize, 0 );
+	m_Hidden_Spacer->Hide();
+
+	gSizer1->Add( m_Hidden_Spacer, 0, wxRESERVE_SPACE_EVEN_IF_HIDDEN, 0 );
 
 	m_Include_Modules = new wxCheckBox( this, wxID_ANY, _("Include &footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	gSizer1->Add( m_Include_Modules, 0, 0, 5 );
 
-	m_Include_PcbTextes = new wxCheckBox( this, wxID_ANY, _("Include t&ext items"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_Include_PcbTextes, 0, 0, 5 );
+	m_Include_PcbTexts = new wxCheckBox( this, wxID_ANY, _("Include t&ext items"), wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer1->Add( m_Include_PcbTexts, 0, 0, 5 );
 
 	m_IncludeLockedModules = new wxCheckBox( this, wxID_ANY, _("Include &locked footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	gSizer1->Add( m_IncludeLockedModules, 0, 0, 5 );
@@ -66,8 +74,9 @@ DIALOG_FILTER_SELECTION_BASE::DIALOG_FILTER_SELECTION_BASE( wxWindow* parent, wx
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	m_All_Items->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::allItemsClicked ), NULL, this );
 	m_Include_Modules->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::checkBoxClicked ), NULL, this );
-	m_Include_PcbTextes->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::checkBoxClicked ), NULL, this );
+	m_Include_PcbTexts->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::checkBoxClicked ), NULL, this );
 	m_IncludeLockedModules->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::checkBoxClicked ), NULL, this );
 	m_Include_Draw_Items->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::checkBoxClicked ), NULL, this );
 	m_Include_Tracks->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::checkBoxClicked ), NULL, this );
@@ -80,8 +89,9 @@ DIALOG_FILTER_SELECTION_BASE::DIALOG_FILTER_SELECTION_BASE( wxWindow* parent, wx
 DIALOG_FILTER_SELECTION_BASE::~DIALOG_FILTER_SELECTION_BASE()
 {
 	// Disconnect Events
+	m_All_Items->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::allItemsClicked ), NULL, this );
 	m_Include_Modules->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::checkBoxClicked ), NULL, this );
-	m_Include_PcbTextes->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::checkBoxClicked ), NULL, this );
+	m_Include_PcbTexts->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::checkBoxClicked ), NULL, this );
 	m_IncludeLockedModules->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::checkBoxClicked ), NULL, this );
 	m_Include_Draw_Items->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::checkBoxClicked ), NULL, this );
 	m_Include_Tracks->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_FILTER_SELECTION_BASE::checkBoxClicked ), NULL, this );

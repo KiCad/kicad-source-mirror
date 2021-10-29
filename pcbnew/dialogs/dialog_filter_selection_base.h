@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -33,8 +33,10 @@ class DIALOG_FILTER_SELECTION_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
+		wxCheckBox* m_All_Items;
+		wxCheckBox* m_Hidden_Spacer;
 		wxCheckBox* m_Include_Modules;
-		wxCheckBox* m_Include_PcbTextes;
+		wxCheckBox* m_Include_PcbTexts;
 		wxCheckBox* m_IncludeLockedModules;
 		wxCheckBox* m_Include_Draw_Items;
 		wxCheckBox* m_Include_Tracks;
@@ -47,6 +49,7 @@ class DIALOG_FILTER_SELECTION_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void allItemsClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void checkBoxClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ExecuteCommand( wxCommandEvent& event ) { event.Skip(); }
 

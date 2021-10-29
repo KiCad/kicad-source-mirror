@@ -216,7 +216,7 @@ DIALOG_FILTER_SELECTION_BASE::DIALOG_FILTER_SELECTION_BASE( wxWindow* parent, wx
 {
     // these members are initialized only to avoid warnings about non initialized vars
     m_Include_Modules = nullptr;
-    m_Include_PcbTextes = nullptr;
+    m_Include_PcbTexts = nullptr;
     m_IncludeLockedModules = nullptr;
     m_Include_Draw_Items = nullptr;
     m_Include_Tracks = nullptr;
@@ -247,6 +247,11 @@ DIALOG_FILTER_SELECTION::DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent, OPTIO
 
 
 void DIALOG_FILTER_SELECTION::checkBoxClicked( wxCommandEvent& aEvent )
+{
+}
+
+
+void DIALOG_FILTER_SELECTION::allItemsClicked( wxCommandEvent& aEvent )
 {
 }
 
