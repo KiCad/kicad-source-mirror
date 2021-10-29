@@ -2509,9 +2509,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
 
     txt->SetTextAngle( getAngleTenthDegree( aCadstarText.OrientAngle ) + aRotationAngle );
 
-    if( aCadstarText.Mirror != aMirrorInvert ) // If mirroring, invert angle to match CADSTAR
-        txt->SetTextAngle( -txt->GetTextAngle() );
-
     txt->SetMirrored( aCadstarText.Mirror );
 
     TEXTCODE tc = getTextCode( aCadstarText.TextCodeID );
