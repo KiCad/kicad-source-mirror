@@ -807,14 +807,47 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             wxPoint endPoint = (wxPoint) view()->ToScreen( m_endSnapPoint );
             endPoint = frame()->GetCanvas()->ClientToScreen( endPoint );
 
+            // Build the list of not allowed layer for the target layer
+            LSET not_allowed_ly = LSET::AllNonCuMask();
+
+            if( viaType != VIATYPE::THROUGH )
+            {
+                not_allowed_ly.set( currentLayer );
+            }
+
+            if( viaType == VIATYPE::MICROVIA )
+            {
+                // Allows only the previous or the next layer from the current layer
+                int previous_layer = currentLayer == B_Cu ? layerCount - 2
+                                                          : currentLayer - 1;
+
+                int next_layer = currentLayer >= layerCount-2 ? B_Cu
+                                                              : currentLayer + 1;
+
+                not_allowed_ly = LSET::AllLayersMask();
+
+                if( previous_layer >= F_Cu && previous_layer != currentLayer )
+                    not_allowed_ly.reset( previous_layer );
+
+                if( next_layer != currentLayer )
+                    not_allowed_ly.reset( next_layer );
+            }
+
             targetLayer = frame()->SelectOneLayer( static_cast<PCB_LAYER_ID>( currentLayer ),
-                                                   LSET::AllNonCuMask(), endPoint );
+                                                   not_allowed_ly, endPoint );
 
             // Reset the cursor to the end of the track
             controls()->SetCursorPosition( m_endSnapPoint );
 
             if( targetLayer == UNDEFINED_LAYER )    // cancelled by user
                 return 0;
+
+            // One cannot place a blind/buried via on only one layer:
+            if( viaType != VIATYPE::THROUGH )
+            {
+                if( currentLayer == targetLayer )
+                    return 0;
+            }
         }
     }
 
@@ -889,7 +922,19 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             break;
 
         case VIATYPE::MICROVIA:
-            if( currentLayer == F_Cu || currentLayer == In1_Cu )
+            // Try to use the layer pair preset, if the layers are adjacent,
+            // because a microvia is usually restricted to 2 adjacent copper layers
+            if( pairTop > pairBottom ) std::swap( pairTop, pairBottom );
+
+            if( currentLayer == pairTop && pairBottom == pairTop+1 )
+            {
+                 targetLayer = pairBottom;
+            }
+            else if( currentLayer == pairBottom && pairBottom == pairTop+1 )
+            {
+                 targetLayer = pairTop;
+            }
+            else if( currentLayer == F_Cu || currentLayer == In1_Cu )
             {
                 // front-side microvia
                 currentLayer = F_Cu;
@@ -907,8 +952,10 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             }
             else
             {
-                wxFAIL_MSG( "Invalid implicit layer pair for microvia (must be on "
-                            "or adjacent to an outer layer)." );
+                // This is not optimal: from an internal layer one can want to switch
+                // to the previous or the next internal layer
+                // but at this point we do not know what the user want.
+               targetLayer = PCB_LAYER_ID( currentLayer + 1 );
             }
             break;
 
@@ -926,10 +973,22 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
                 // so fallback and swap to the top layer of the pair by default
                 targetLayer = pairTop;
             }
+
+            // Do not create a broken via (i.e. a via on only one copper layer)
+            if( currentLayer == targetLayer )
+            {
+                WX_INFOBAR* infobar = frame()->GetInfoBar();
+                infobar->ShowMessageFor( _( "Blind/buried via need 2 different layers." ),
+                                         2000, wxICON_ERROR,
+                                         WX_INFOBAR::MESSAGE_TYPE::DRC_VIOLATION );
+                return 0;
+            }
+
             break;
 
         default:
             wxFAIL_MSG( "unexpected via type" );
+            return 0;
             break;
         }
     }
