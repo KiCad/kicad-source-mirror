@@ -445,6 +445,9 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew ) const
             }
             else if( line->HitTest( aPosition, -1 ) )
             {
+                if( aNew )
+                    breakLines[ layer ] = true;
+
                 // Defer any line midpoints until we know whether or not we're breaking them
                 midPointLines[ layer ].push_back( line );
             }
