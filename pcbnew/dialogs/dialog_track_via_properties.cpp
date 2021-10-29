@@ -279,7 +279,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                 && m_viaDiameter.GetValue() == viaDimension->m_Diameter
                 && m_viaDrill.GetValue() == viaDimension->m_Drill )
             {
-                viaSelection = ii;
+                viaSelection = ii - 1;
             }
         }
 
