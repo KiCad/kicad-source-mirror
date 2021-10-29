@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
-"PO-Revision-Date: 2021-10-16 13:26+0000\n"
+"PO-Revision-Date: 2021-10-29 11:11+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -669,9 +669,8 @@ msgid "Show silkscreen layers"
 msgstr "Показать слои шёлкографии"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Удалить шёлкографию над перех.отв."
+msgstr "Обрезать шёлкографию на краях паяльной маски"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
@@ -694,7 +693,6 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "Пользовательские слои (отсутствуют в реал. режиме)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
 msgstr "Показать слои комментариев и чертежа"
 
@@ -747,7 +745,6 @@ msgid "Camera Options"
 msgstr "Параметры камеры"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
 msgstr "Инкремент вращения:"
 
@@ -4023,9 +4020,8 @@ msgstr "Дюймы"
 
 #: common/eda_draw_frame.cpp:148 pcbnew/tools/drawing_tool.cpp:266
 #: pcbnew/tools/pcb_actions.cpp:675
-#, fuzzy
 msgid "Constrain to H, V, 45"
-msgstr "Ограничить контур ортогонально и под углом 45°"
+msgstr "Ограничить ортогонально и под углом 45°"
 
 #: common/eda_draw_frame.cpp:318
 msgid "Edit User Grid..."
@@ -5314,7 +5310,6 @@ msgid "Reference designators"
 msgstr "Обозначения"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text"
 msgstr "Текст посад.места"
 
@@ -11826,12 +11821,10 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Подсвечивать проводник в схеме при подсветке цепи на плате"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Constrain buses and wires to H or V"
 msgstr "Ограничить шины и проводники в ортогональной ориентации"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Mouse drag performs Drag (G) operation"
 msgstr "Перетаскивание мыши выполняет операцию перетаскивания (G)"
 
@@ -16336,14 +16329,12 @@ msgid "Edit with Symbol Editor"
 msgstr "Править в редакторе символов"
 
 #: eeschema/tools/ee_actions.cpp:551
-#, fuzzy
 msgid "Open the selected symbol in the Symbol Editor"
-msgstr "Открыть выбранное посад.место в редакторе посад.мест"
+msgstr "Открыть выбранный символ в редакторе символов"
 
 #: eeschema/tools/ee_actions.cpp:557
-#, fuzzy
 msgid "Open the library symbol in the Symbol Editor"
-msgstr "Обновить выделенный символ другим символом из библиотеки"
+msgstr "Обновить символ библиотеки в редакторе символов"
 
 #: eeschema/tools/ee_actions.cpp:562
 msgid "Edit Symbol Fields..."
