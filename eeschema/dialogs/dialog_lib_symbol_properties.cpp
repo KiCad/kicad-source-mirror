@@ -272,20 +272,19 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
         }
     }
 
+    /*
+     * Confirm destructive actions.
+     */
+
     if( m_SelNumberOfUnits->GetValue() < m_libEntry->GetUnitCount() )
     {
         if( !IsOK( this, _( "Delete extra units from symbol?" ) ) )
             return false;
     }
 
-    if( m_AsConvertButt->GetValue() && !m_libEntry->HasConversion() )
+    if( !m_AsConvertButt->GetValue() && m_libEntry->HasConversion() )
     {
-        if( !IsOK( this, _( "Add new pins for alternate body style (DeMorgan) to symbol?" ) ) )
-            return false;
-    }
-    else if( !m_AsConvertButt->GetValue() && m_libEntry->HasConversion() )
-    {
-        if( !IsOK( this, _( "Delete alternate body style (DeMorgan) draw items from symbol?" ) ) )
+        if( !IsOK( this, _( "Delete alternate body style (De Morgan) from symbol?" ) ) )
             return false;
     }
 

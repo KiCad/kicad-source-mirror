@@ -203,7 +203,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
         m_alternatesTurndown->Collapse();
         m_alternatesTurndown->Disable();
         m_alternatesTurndown->SetToolTip(
-                _( "Alternate pin assignments are not available for DeMorgan symbols." ) );
+                _( "Alternate pin assignments are not available for De Morgan symbols." ) );
     }
 
     // Set special attributes
@@ -221,6 +221,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
 
     m_addAlternate->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
     m_deleteAlternate->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_addAlternate->GetParent()->Layout();
 
     m_sdbSizerButtonsOK->SetDefault();
     SetInitialFocus( m_textPinName );

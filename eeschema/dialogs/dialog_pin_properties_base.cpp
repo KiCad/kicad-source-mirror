@@ -167,7 +167,7 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_checkApplyToAllParts = new wxCheckBox( this, wxID_ANY, _("Common to all &units in symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	checkboxesSizer->Add( m_checkApplyToAllParts, 0, wxBOTTOM, 3 );
 
-	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	checkboxesSizer->Add( m_checkApplyToAllConversions, 0, wxBOTTOM, 3 );
 
 
@@ -204,6 +204,9 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bAlternatesSizer;
 	bAlternatesSizer = new wxBoxSizer( wxVERTICAL );
 
+	wxBoxSizer* bRightMargin;
+	bRightMargin = new wxBoxSizer( wxVERTICAL );
+
 	m_alternatesGrid = new WX_GRID( m_alternatesTurndown->GetPane(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
@@ -236,13 +239,16 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_alternatesGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_alternatesGrid->SetMinSize( wxSize( -1,100 ) );
 
-	bAlternatesSizer->Add( m_alternatesGrid, 1, wxEXPAND|wxRIGHT, 5 );
+	bRightMargin->Add( m_alternatesGrid, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	bAlternatesSizer->Add( bRightMargin, 1, wxEXPAND|wxRIGHT, 5 );
 
 	wxBoxSizer* bButtonSizer;
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addAlternate = new wxBitmapButton( m_alternatesTurndown->GetPane(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bButtonSizer->Add( m_addAlternate, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bButtonSizer->Add( m_addAlternate, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
 	bButtonSizer->Add( 20, 0, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -251,19 +257,19 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	bButtonSizer->Add( m_deleteAlternate, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bAlternatesSizer->Add( bButtonSizer, 0, wxEXPAND|wxTOP, 5 );
+	bAlternatesSizer->Add( bButtonSizer, 0, wxTOP, 5 );
 
 
 	m_alternatesTurndown->GetPane()->SetSizer( bAlternatesSizer );
 	m_alternatesTurndown->GetPane()->Layout();
 	bAlternatesSizer->Fit( m_alternatesTurndown->GetPane() );
-	bLowerSizer->Add( m_alternatesTurndown, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bLowerSizer->Add( m_alternatesTurndown, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	mainSizer->Add( bLowerSizer, 1, wxEXPAND|wxLEFT, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizerButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerButtonsOK = new wxButton( this, wxID_OK );

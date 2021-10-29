@@ -331,7 +331,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         // free-form alternate assignments as well.  (We won't know how to map the alternates
         // back and forth when the conversion is changed.)
         m_pinTablePage->Disable();
-        m_pinTablePage->SetToolTip( _( "Alternate pin assignments are not available for DeMorgan "
+        m_pinTablePage->SetToolTip( _( "Alternate pin assignments are not available for De Morgan "
                                        "symbols." ) );
     }
     else

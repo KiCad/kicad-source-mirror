@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -73,7 +73,7 @@ DIALOG_LIB_NEW_SYMBOL_BASE::DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWind
 
 	bSizer17->Add( m_checkLockItems, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_checkHasConversion = new wxCheckBox( this, wxID_ANY, _("Create symbol with alternate body style (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkHasConversion = new wxCheckBox( this, wxID_ANY, _("Create symbol with alternate body style (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer17->Add( m_checkHasConversion, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_checkIsPowerSymbol = new wxCheckBox( this, wxID_ANY, _("Create symbol as power symbol"), wxDefaultPosition, wxDefaultSize, 0 );
