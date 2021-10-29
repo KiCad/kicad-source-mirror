@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
-"PO-Revision-Date: 2021-10-27 02:46+0000\n"
+"PO-Revision-Date: 2021-10-29 11:11+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -5201,7 +5201,6 @@ msgid "Reference designators"
 msgstr "位号"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text"
 msgstr "封装文本"
 
@@ -16043,14 +16042,12 @@ msgid "Edit with Symbol Editor"
 msgstr "用符号编辑器来编辑"
 
 #: eeschema/tools/ee_actions.cpp:551
-#, fuzzy
 msgid "Open the selected symbol in the Symbol Editor"
-msgstr "在封装编辑器中打开选择的封装"
+msgstr "在符号编辑器中打开选定的符号"
 
 #: eeschema/tools/ee_actions.cpp:557
-#, fuzzy
 msgid "Open the library symbol in the Symbol Editor"
-msgstr "更新所选符号的库符号"
+msgstr "在符号编辑器中打开库符号"
 
 #: eeschema/tools/ee_actions.cpp:562
 msgid "Edit Symbol Fields..."
@@ -22579,25 +22576,22 @@ msgid "Circular Array"
 msgstr "圆形阵列"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
-#, fuzzy
 msgid "Footprint Annotation"
-msgstr "封装位置"
+msgstr "封装注释"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
-#, fuzzy
 msgid "Keep existing reference designators"
-msgstr "替换位号中的匹配项"
+msgstr "保留现有的位号"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
-#, fuzzy
 msgid "Assign unique reference designators"
-msgstr "为所粘贴的符号分配唯一的位号"
+msgstr "分配唯一的位号"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:357
 msgid ""
 "This can conflict with reference designators in the schematic that have not "
 "yet been synchronized with the board."
-msgstr ""
+msgstr "这可能与原理图中尚未与电路板同步的位号相冲突。"
 
 #: pcbnew/dialogs/dialog_create_array_base.h:127
 msgid "Create Array"
@@ -25674,7 +25668,6 @@ msgid "Plot format:"
 msgstr "绘制格式："
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
-#, fuzzy
 msgid "Include Layers"
 msgstr "包含图层"
 
@@ -25707,9 +25700,8 @@ msgid "Do not plot the contents of the PCB edge layer on any other layers."
 msgstr "请勿在其他任何层上绘制 PCB 边框。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
-#, fuzzy
 msgid "Sketch pads on fabrication layers"
-msgstr "制造层上的草图焊盘"
+msgstr "制造层上的焊盘草图"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
@@ -25782,16 +25774,14 @@ msgid "Check zone fills before plotting"
 msgstr "在绘制之前检查覆铜填充"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
-#, fuzzy
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr "全局阻焊层最小宽度和/或边距未设置为 0。 "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
-#, fuzzy
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
-msgstr "多数板厂预期 0，并使用它们的约束，特别是对于阻焊层最小宽度。"
+msgstr "大多数电路板制造商期望 0 并使用自己的阻焊层最小宽度约束。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -25870,18 +25860,16 @@ msgid "Include netlist attributes"
 msgstr "包括网络属性"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
-#, fuzzy
 msgid ""
 "Include netlist metadata and aperture attributes in Gerber files.\n"
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"在 Gerber 文件中包含网表元数据和孔属性。\n"
-"在 X1 格式中，它们是注释。\n"
-"用于检查 CAM 工具和 Gerber 查看器中的连接。"
+"在 Gerber 文件中包含网表元数据和孔径属性。\n"
+"它们是 X1 格式的注释。\n"
+"用于检查 CAM 工具和 Gerber 查看器中的连接性。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
-#, fuzzy
 msgid "Disable aperture macros (not recommended)"
 msgstr "禁用光圈宏 (不推荐)"
 
@@ -25950,7 +25938,6 @@ msgid "Uncheck to plot graphic items using their center lines"
 msgstr "取消选中以使用图形项目的中心线绘制图形项"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot text"
 msgstr "使用 KiCad 字体绘制文本"
 
