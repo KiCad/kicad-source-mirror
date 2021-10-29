@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -173,21 +173,21 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 
 	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("Line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessLabel->Wrap( -1 );
-	fgUpperRightGridSizer->Add( m_thicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+	fgUpperRightGridSizer->Add( m_thicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_thicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgUpperRightGridSizer->Add( m_thicknessCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgUpperRightGridSizer->Add( m_thicknessCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_thicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessUnits->Wrap( -1 );
-	fgUpperRightGridSizer->Add( m_thicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	fgUpperRightGridSizer->Add( m_thicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_LayerLabel = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerLabel->Wrap( -1 );
-	fgUpperRightGridSizer->Add( m_LayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fgUpperRightGridSizer->Add( m_LayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	fgUpperRightGridSizer->Add( m_LayerSelectionCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	fgUpperRightGridSizer->Add( m_LayerSelectionCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 
 
 	fgUpperRightGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );

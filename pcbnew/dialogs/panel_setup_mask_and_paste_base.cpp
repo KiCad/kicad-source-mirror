@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,7 +29,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Use your board house's recommendations for solder mask clearance and minimum web width."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoMaskMinWidth = new wxStaticText( this, wxID_ANY, _("Use your board manufacturer's recommendations for solder mask clearance and minimum web width."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoMaskMinWidth->Wrap( -1 );
 	bSizer4->Add( m_staticTextInfoMaskMinWidth, 0, wxEXPAND, 1 );
 
@@ -136,6 +136,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 }
 
 PANEL_SETUP_MASK_AND_PASTE_BASE::~PANEL_SETUP_MASK_AND_PASTE_BASE()

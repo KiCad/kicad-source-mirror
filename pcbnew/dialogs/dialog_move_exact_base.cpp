@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,49 +16,49 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgInputSizer;
-	fgInputSizer = new wxFlexGridSizer( 0, 4, 0, 5 );
+	fgInputSizer = new wxFlexGridSizer( 0, 4, 5, 5 );
 	fgInputSizer->AddGrowableCol( 1 );
 	fgInputSizer->SetFlexibleDirection( wxBOTH );
 	fgInputSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_xLabel = new wxStaticText( this, wxID_ANY, _("Move X:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_xLabel->Wrap( -1 );
-	fgInputSizer->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	fgInputSizer->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_xEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgInputSizer->Add( m_xEntry, 0, wxEXPAND|wxTOP, 5 );
+	fgInputSizer->Add( m_xEntry, 0, wxEXPAND, 5 );
 
 	m_xUnit = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_xUnit->Wrap( -1 );
-	fgInputSizer->Add( m_xUnit, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxTOP|wxRIGHT, 5 );
+	fgInputSizer->Add( m_xUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_clearX = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	fgInputSizer->Add( m_clearX, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgInputSizer->Add( m_clearX, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_yLabel = new wxStaticText( this, wxID_ANY, _("Move Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yLabel->Wrap( -1 );
-	fgInputSizer->Add( m_yLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	fgInputSizer->Add( m_yLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_yEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgInputSizer->Add( m_yEntry, 0, wxEXPAND|wxTOP, 5 );
+	fgInputSizer->Add( m_yEntry, 0, wxEXPAND, 5 );
 
 	m_yUnit = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yUnit->Wrap( -1 );
-	fgInputSizer->Add( m_yUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgInputSizer->Add( m_yUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_clearY = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	fgInputSizer->Add( m_clearY, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_rotLabel = new wxStaticText( this, wxID_ANY, _("Rotate:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rotLabel->Wrap( -1 );
-	fgInputSizer->Add( m_rotLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	fgInputSizer->Add( m_rotLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_rotEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgInputSizer->Add( m_rotEntry, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	fgInputSizer->Add( m_rotEntry, 0, wxEXPAND, 5 );
 
 	m_rotUnit = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rotUnit->Wrap( -1 );
-	fgInputSizer->Add( m_rotUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgInputSizer->Add( m_rotUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_clearRot = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	fgInputSizer->Add( m_clearRot, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -70,10 +70,10 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	int m_anchorOptionsNChoices = sizeof( m_anchorOptionsChoices ) / sizeof( wxString );
 	m_anchorOptions = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_anchorOptionsNChoices, m_anchorOptionsChoices, 0 );
 	m_anchorOptions->SetSelection( 0 );
-	fgInputSizer->Add( m_anchorOptions, 0, wxEXPAND|wxBOTTOM, 5 );
+	fgInputSizer->Add( m_anchorOptions, 0, wxEXPAND, 5 );
 
 
-	bMainSizer->Add( fgInputSizer, 0, wxEXPAND|wxALL, 10 );
+	bMainSizer->Add( fgInputSizer, 0, wxEXPAND|wxALL, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );

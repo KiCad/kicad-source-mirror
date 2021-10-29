@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Apr 22 2021)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,14 +34,14 @@ WX_TEXT_ENTRY_DIALOG_BASE::WX_TEXT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindow
 	m_choiceLabel->Wrap( -1 );
 	m_choiceLabel->Hide();
 
-	bSizer3->Add( m_choiceLabel, 2, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizer3->Add( m_choiceLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_choiceChoices;
 	m_choice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceChoices, 0 );
 	m_choice->SetSelection( 0 );
 	m_choice->Hide();
 
-	bSizer3->Add( m_choice, 3, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizer3->Add( m_choice, 3, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerContent->Add( bSizer3, 1, wxEXPAND, 5 );
@@ -56,7 +56,7 @@ WX_TEXT_ENTRY_DIALOG_BASE::WX_TEXT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindow
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	m_mainSizer->Add( m_sdbSizer1, 0, wxALL|wxALIGN_RIGHT, 5 );
+	m_mainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( m_mainSizer );
