@@ -293,12 +293,16 @@ public:
 
     virtual ~CONTEXT()
     {
+        for( auto &v : m_ownedValues )
+        {
+            delete v;
+        }
     }
 
     VALUE* AllocValue()
     {
-        m_ownedValues.emplace_back();
-        return &m_ownedValues.back();
+        m_ownedValues.emplace_back( new VALUE );
+        return m_ownedValues.back();
     }
 
     void Push( VALUE* v )
@@ -332,7 +336,7 @@ public:
     void ReportError( const wxString& aErrorMsg );
 
 private:
-    std::vector<VALUE>  m_ownedValues;
+    std::vector<VALUE*> m_ownedValues;
     VALUE*              m_stack[100];       // std::stack not performant enough
     int                 m_stackPtr;
 
