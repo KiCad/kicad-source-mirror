@@ -144,7 +144,7 @@ option( KICAD_GAL_PROFILE
 
 option( KICAD_PCM
     "Build Plugin and Content Manager"
-    OFF )
+    ON )
 
 cmake_dependent_option( KICAD_WIN32_INSTALL_PDBS
     "Installs debug pdb to the bin folder, DO NOT USE (NOR REQUIRED) FOR DEBUGGING THE SOURCE ON MSVC. This is purely for release building.
