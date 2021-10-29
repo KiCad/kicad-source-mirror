@@ -42,8 +42,11 @@ public:
         ARRAY_CIRCULAR, ///< A circular array
     };
 
-    ARRAY_OPTIONS( ARRAY_TYPE_T aType )
-            : m_type( aType ), m_shouldNumber( false ), m_numberingStartIsSpecified( false )
+    ARRAY_OPTIONS( ARRAY_TYPE_T aType ) :
+        m_type( aType ),
+        m_shouldNumber( false ),
+        m_reannotateFootprints( false ),
+        m_numberingStartIsSpecified( false )
     {
     }
 
