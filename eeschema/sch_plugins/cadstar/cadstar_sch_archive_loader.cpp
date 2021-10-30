@@ -2840,9 +2840,14 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
 
 void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int aGateNumber )
 {
-    // Store a list of segments that are not connected to other segments and are vertical or
-    // horizontal.
-    std::map<VECTOR2I, SHAPE_LINE_CHAIN> uniqueSegments;
+    auto compLambda = []( const VECTOR2I& aA, const VECTOR2I& aB )
+    {
+        return LexicographicalCompare( aA, aB ) < 0;
+    };
+
+    // Store a list of vertical or horizontal segments in the symbol
+    // Note: Need the custom comparison function to ensure the map is sorted correctly
+    std::map<VECTOR2I, SHAPE_LINE_CHAIN, decltype( compLambda )> uniqueSegments( compLambda );
 
     LIB_ITEMS_CONTAINER::ITERATOR shapeIt = aSymbolToFix->GetDrawItems().begin( LIB_SHAPE_T );
 
@@ -2856,35 +2861,20 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
         if( shape.GetShape() != SHAPE_T::POLY )
             continue;
 
-        SHAPE_LINE_CHAIN& poly = shape.GetPolyShape().Outline( 0 );
-        bool              isUnique = true;
-
-        auto removeSegment =
-                [&]( SHAPE_LINE_CHAIN aLineToRemove )
-                {
-                    uniqueSegments.erase( aLineToRemove.CPoint( 0 ) );
-                    uniqueSegments.erase( aLineToRemove.CPoint( 1 ) );
-                    isUnique = false;
-                };
+        SHAPE_LINE_CHAIN poly = shape.GetPolyShape().Outline( 0 );
 
         if( poly.GetPointCount() == 2 )
         {
-            const VECTOR2I& pt0 = poly.CPoint( 0 );
-            const VECTOR2I& pt1 = poly.CPoint( 1 );
+            VECTOR2I pt0 = poly.CPoint( 0 );
+            VECTOR2I pt1 = poly.CPoint( 1 );
 
-            if( uniqueSegments.count( pt0 ) )
-                removeSegment( uniqueSegments.at( pt0 ) );
-
-            if( uniqueSegments.count( pt1 ) )
-                removeSegment( uniqueSegments.at( pt1 ) );
-
-            if( isUnique && pt0 != pt1 )
+            if( pt0 != pt1 && uniqueSegments.count( pt0 ) == 0 && uniqueSegments.count( pt1 ) == 0 )
             {
                 // we are only interested in vertical or horizontal segments
                 if( pt0.x == pt1.x || pt0.y == pt1.y )
                 {
-                    uniqueSegments.insert( { poly.CPoint( 0 ), poly } );
-                    uniqueSegments.insert( { poly.CPoint( 1 ), poly } );
+                    uniqueSegments.insert( { pt0, poly } );
+                    uniqueSegments.insert( { pt1, poly } );
                 }
             }
         }
