@@ -65,8 +65,6 @@ protected:
     bool TransferDataFromWindow() override;
 
 private:
-    wxCheckBoxState CurrCbState;
-
     void checkBoxClicked( wxCommandEvent& aEvent ) override;
     void allItemsClicked( wxCommandEvent& aEvent ) override;
 
