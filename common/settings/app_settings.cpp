@@ -298,7 +298,7 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
 
     int defaultGridIdx;
 
-    if( m_filename == "eeschema" || m_filename == "symbol_editor" )
+    if( m_filename == "eeschema" || m_filename == "symbol_editor" || m_filename == "pl_editor" )
         defaultGridIdx = 1;
     else
         defaultGridIdx = 4;

@@ -498,7 +498,10 @@ void PL_EDITOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     if( aCfg->m_Window.grid.sizes.empty() )
     {
-        aCfg->m_Window.grid.sizes = { "1.0 mm",
+        aCfg->m_Window.grid.sizes = { "5.00 mm",
+                                      "2.50 mm",
+                                      "2.00 mm",
+                                      "1.00 mm",
                                       "0.50 mm",
                                       "0.25 mm",
                                       "0.20 mm",
