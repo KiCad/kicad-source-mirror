@@ -395,22 +395,16 @@ void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
     if( !aSource->IsEmpty() )
         prevSelection = aSource->GetString( aSource->GetSelection() );
 
-    std::vector<wxString> sourcesList;
-    bool                  enableSrcSelection = true;
+    std::set<wxString> sourcesList;
+    bool               enableSrcSelection = true;
 
     if( aType != 'T' )
     {
         for( const auto& item : m_exporter->GetSpiceItems() )
         {
-            if( item.m_primitive == aType )
-                sourcesList.push_back( item.m_refName );
+            if( item.m_primitive == aType && !item.m_refName.IsEmpty() )
+                sourcesList.insert( item.m_refName );
         }
-
-        std::sort( sourcesList.begin(), sourcesList.end(),
-                [](wxString& a, wxString& b) -> bool
-                {
-                    return a.Len() < b.Len() || b.Cmp( a ) > 0;
-                } );
 
         if( aSource == m_dcSource2 && !m_dcEnable2->IsChecked() )
             enableSrcSelection = false;
@@ -418,7 +412,7 @@ void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
     else
     {
         prevSelection = wxT( "TEMP" );
-        sourcesList.push_back( prevSelection );
+        sourcesList.insert( prevSelection );
         enableSrcSelection = false;
     }
 
@@ -426,7 +420,7 @@ void DIALOG_SIM_SETTINGS::updateDCSources( wxChar aType, wxChoice* aSource )
 
     aSource->Clear();
 
-    for( auto& src : sourcesList )
+    for( const wxString& src : sourcesList )
         aSource->Append( src );
 
     // Try to restore the previous selection, if possible
