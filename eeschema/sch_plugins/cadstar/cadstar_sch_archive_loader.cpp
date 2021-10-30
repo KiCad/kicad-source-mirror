@@ -173,6 +173,16 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
                         bbox.Merge( field.GetBoundingBox() );
                 }
             }
+            else if( item->Type() == SCH_TEXT_T )
+            {
+                SCH_TEXT* txtItem = static_cast<SCH_TEXT*>( item );
+                wxString  txt = txtItem->GetText();
+
+                if( txt.Contains( "${" ) )
+                    continue; // We can't calculate bounding box of text items with variables
+                else
+                    bbox = txtItem->GetBoundingBox();
+            }
             else
             {
                 bbox = item->GetBoundingBox();
