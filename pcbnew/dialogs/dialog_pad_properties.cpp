@@ -131,14 +131,14 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
                              m_mixedChamferRatioUnits ),
         m_holeX( aParent, m_holeXLabel, m_holeXCtrl, m_holeXUnits ),
         m_holeY( aParent, m_holeYLabel, m_holeYCtrl, m_holeYUnits ),
-        m_OrientValidator( 3, &m_OrientValue ),
         m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits ),
         m_maskMargin( aParent, m_maskMarginLabel, m_maskMarginCtrl, m_maskMarginUnits ),
         m_pasteMargin( aParent, m_pasteMarginLabel, m_pasteMarginCtrl, m_pasteMarginUnits ),
         m_pasteMarginRatio( aParent, m_pasteMarginRatioLabel, m_pasteMarginRatioCtrl,
                             m_pasteMarginRatioUnits ),
         m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits ),
-        m_thermalGap( aParent, m_thermalGapLabel, m_thermalGapCtrl, m_thermalGapUnits )
+        m_thermalGap( aParent, m_thermalGapLabel, m_thermalGapCtrl, m_thermalGapUnits ),
+        m_pad_orientation( aParent, m_PadOrientText, m_cb_padrotation, m_orientationUnits )
 {
     SetName( PAD_PROPERTIES_DLG_NAME );
     m_isFpEditor = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( aParent ) != nullptr;
@@ -154,10 +154,6 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
 
     m_padNetSelector->SetBoard( m_board );
     m_padNetSelector->SetNetInfo( &m_board->GetNetInfo() );
-
-    m_OrientValidator.SetRange( -360.0, 360.0 );
-    m_orientation->SetValidator( m_OrientValidator );
-    m_OrientValidator.SetWindow( m_orientation );
 
     m_cbShowPadOutline->SetValue( m_sketchPreview );
 
@@ -195,6 +191,8 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_chamferRatio.SetUnits( EDA_UNITS::PERCENT );
     m_mixedCornerRatio.SetUnits( EDA_UNITS::PERCENT );
     m_mixedChamferRatio.SetUnits( EDA_UNITS::PERCENT );
+    m_pad_orientation.SetUnits( EDA_UNITS::DEGREES );
+    m_pad_orientation.SetPrecision( 3 );
 
     m_pasteMargin.SetNegativeZero();
 
@@ -455,7 +453,6 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
 void DIALOG_PAD_PROPERTIES::initValues()
 {
     wxString    msg;
-    double      angle;
 
     // Disable pad net name wxTextCtrl if the caller is the footprint editor
     // because nets are living only in the board managed by the board editor
@@ -482,7 +479,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
         if( footprint )
         {
-            angle = m_dummyPad->GetOrientation();
+            double angle = m_dummyPad->GetOrientation();
             angle -= footprint->GetOrientation();
             m_dummyPad->SetOrientation( angle );
 
@@ -558,6 +555,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_thermalGap.ChangeValue( m_dummyPad->GetThermalGap() );
     m_pasteMargin.ChangeValue( m_dummyPad->GetLocalSolderPasteMargin() );
     m_pasteMarginRatio.ChangeDoubleValue( m_dummyPad->GetLocalSolderPasteMarginRatio() * 100.0 );
+    m_pad_orientation.ChangeDoubleValue( m_dummyPad->GetOrientation() );
 
     switch( m_dummyPad->GetZoneConnection() )
     {
@@ -572,13 +570,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_ZoneCustomPadShape->SetSelection( 1 );
     else
         m_ZoneCustomPadShape->SetSelection( 0 );
-
-    angle = m_dummyPad->GetOrientation();
-    NORMALIZE_ANGLE_180( angle );
-
-    // Pad Orient
-    // Note: use ChangeValue() instead of SetValue() so that we don't generate events
-    m_orientation->ChangeValue( StringFromValue( EDA_UNITS::DEGREES, angle ) );
 
     switch( m_dummyPad->GetShape() )
     {
@@ -1692,8 +1683,6 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     if( !m_spokeWidth.Validate( 0, INT_MAX ) )
         return false;
 
-    m_OrientValidator.TransferFromWindow();
-
     aPad->SetAttribute( code_type[m_padType->GetSelection()] );
     aPad->SetShape( code_shape[m_PadShapeSelector->GetSelection()] );
 
@@ -1712,6 +1701,9 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     aPad->SetLocalSolderPasteMarginRatio( m_pasteMarginRatio.GetDoubleValue() / 100.0 );
     aPad->SetThermalSpokeWidth( m_spokeWidth.GetValue() );
     aPad->SetThermalGap( m_thermalGap.GetValue() );
+
+    // And rotation
+    aPad->SetOrientation( m_pad_orientation.GetDoubleValue() );
 
     switch( m_ZoneConnectionChoice->GetSelection() )
     {
@@ -1791,7 +1783,6 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     else
         aPad->SetPadToDieLength( 0 );
 
-    aPad->SetOrientation( m_OrientValue * 10.0 );
     aPad->SetNumber( m_padNumCtrl->GetValue() );
     aPad->SetNetCode( m_padNetSelector->GetSelectedNetcode() );
 

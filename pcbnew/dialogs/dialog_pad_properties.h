@@ -158,12 +158,12 @@ private:
     UNIT_BINDER m_chamferRatio;
     UNIT_BINDER m_mixedCornerRatio, m_mixedChamferRatio;
     UNIT_BINDER m_holeX, m_holeY;
-    wxFloatingPointValidator<double>    m_OrientValidator;
     double      m_OrientValue;
     UNIT_BINDER m_clearance;
     UNIT_BINDER m_maskMargin;
     UNIT_BINDER m_pasteMargin, m_pasteMarginRatio;
     UNIT_BINDER m_spokeWidth, m_thermalGap;
+    UNIT_BINDER m_pad_orientation;
 };
 
 /**

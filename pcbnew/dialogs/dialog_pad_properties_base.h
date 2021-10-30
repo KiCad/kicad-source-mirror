@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -126,7 +126,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_sizeYCtrl;
 		wxStaticText* m_sizeYUnits;
 		wxStaticText* m_PadOrientText;
-		wxComboBox* m_orientation;
+		wxComboBox* m_cb_padrotation;
 		wxStaticText* m_orientationUnits;
 		wxStaticLine* m_staticline6;
 		wxStaticText* m_holeShapeLabel;
