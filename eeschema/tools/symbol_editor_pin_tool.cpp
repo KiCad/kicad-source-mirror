@@ -142,7 +142,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
         // a pin can have a unit id = 0 (common to all units) to unit count
         // So we need a buffer size = GetUnitCount()+1 to store a value in a vector
         // when using the unit id of a pin as index
-        std::vector<bool> got_unit( aPin->GetParent()->GetUnitCount()+1 );
+        std::vector<bool> got_unit( aPin->GetParent()->GetUnitCount() + 1 );
 
         got_unit[static_cast<size_t>(aPin->GetUnit())] = true;
 

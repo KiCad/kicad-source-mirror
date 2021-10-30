@@ -156,7 +156,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         {
                             LIB_PIN* cur_pin = static_cast<LIB_PIN*>( lib_item );
                             LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
-                            std::vector<bool> got_unit( symbol->GetUnitCount() );
+                            std::vector<bool> got_unit( symbol->GetUnitCount() + 1 );
 
                             got_unit[cur_pin->GetUnit()] = true;
 

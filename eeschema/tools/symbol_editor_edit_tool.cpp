@@ -275,7 +275,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             // in different units are also removed.  But only one pin per unit (matching)
             if( m_frame->SynchronizePins() )
             {
-                std::vector<bool> got_unit( symbol->GetUnitCount() );
+                std::vector<bool> got_unit( symbol->GetUnitCount() + 1 );
 
                 got_unit[pin->GetUnit()] = true;
 
