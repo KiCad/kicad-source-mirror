@@ -37,12 +37,13 @@
 #include <plotters/plotter.h>
 
 
-EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
+EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill, bool eeWinding ) :
     m_endsSwapped( false ),
     m_shape( aType ),
     m_width( aLineWidth ),
     m_fill( aFill ),
-    m_editState( 0 )
+    m_editState( 0 ),
+    m_eeWinding( eeWinding )
 {
 }
 
@@ -691,16 +692,19 @@ bool EDA_SHAPE::hitTest( const wxPoint& aPosition, int aAccuracy ) const
             double endAngle;
             CalcArcAngles( startAngle, endAngle );
 
+            if( m_eeWinding && NormalizeAngleDegrees( startAngle - endAngle, -180.0, 180.0 ) > 0 )
+                std::swap( startAngle, endAngle );
+
             double relPosAngle = 180.0 / M_PI * atan2( relPos.y, relPos.x );
 
-            if( relPosAngle >= startAngle && relPosAngle <= endAngle )
-                return true;
-
+            startAngle = NormalizeAngleDegrees( startAngle, 0.0, 360.0 );
+            endAngle = NormalizeAngleDegrees( endAngle, 0.0, 360.0 );
             relPosAngle = NormalizeAngleDegrees( relPosAngle, 0.0, 360.0 );
 
-            if( relPosAngle >= startAngle && relPosAngle <= endAngle )
-                return true;
-
+            if( endAngle > startAngle )
+                return relPosAngle >= startAngle && relPosAngle <= endAngle;
+            else
+                return relPosAngle >= startAngle || relPosAngle <= endAngle;
         }
 
         return false;
@@ -974,36 +978,52 @@ std::vector<wxPoint> EDA_SHAPE::GetRectCorners() const
 
 void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
 {
-    // Do not include the center, which is not necessarily
-    // inside the BB of a arc with a small angle
-    aBBox.SetOrigin( m_start );
-    aBBox.Merge( m_end );
+    wxPoint start = m_start;
+    wxPoint end = m_end;
+    double  t1, t2;
+
+    CalcArcAngles( t1, t2 );
+
+    if( m_eeWinding && NormalizeAngleDegrees( t1 - t2, -180.0, 180.0 ) > 0 )
+        std::swap( start, end );
+
+    // Do not include the center, which is not necessarily inside the BB of an arc with a small
+    // included angle
+    aBBox.SetOrigin( start );
+    aBBox.Merge( end );
 
     // Determine the starting quarter
     // 0 right-bottom
     // 1 left-bottom
     // 2 left-top
     // 3 right-top
-    unsigned int quarter = 0;       // assume right-bottom
+    unsigned int quarter;
 
-    if( m_start.x < m_arcCenter.x )
+    if( start.x < m_arcCenter.x )
     {
-        if( m_start.y <= m_arcCenter.y )
+        if( start.y <= m_arcCenter.y )
             quarter = 2;
-        else // ( m_start.y > m_arcCenter.y )
+        else
             quarter = 1;
     }
-    else if( m_start.x >= m_arcCenter.x )
+    else if( start.x == m_arcCenter.x )
     {
-        if( m_start.y < m_arcCenter.y )
+        if( start.y < m_arcCenter.y )
             quarter = 3;
-        else if( m_start.x == m_arcCenter.x )
+        else
             quarter = 1;
+    }
+    else
+    {
+        if( start.y < m_arcCenter.y )
+            quarter = 3;
+        else
+            quarter = 0;
     }
 
     int      radius = GetRadius();
-    VECTOR2I startRadial = GetStart() - getCenter();
-    VECTOR2I endRadial = GetEnd() - getCenter();
+    VECTOR2I startRadial = start - m_arcCenter;
+    VECTOR2I endRadial = end - m_arcCenter;
     double   angleStart = ArcTangente( startRadial.y, startRadial.x );
     double   arcAngle = RAD2DECIDEG( endRadial.Angle() - startRadial.Angle() );
     int      angle = (int) NormalizeAnglePos( angleStart ) % 900 + NormalizeAnglePos( arcAngle );
@@ -1012,21 +1032,10 @@ void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
     {
         switch( quarter )
         {
-        case 0:
-            aBBox.Merge( wxPoint( m_arcCenter.x, m_arcCenter.y + radius ) );
-            break;  // down
-
-        case 1:
-            aBBox.Merge( wxPoint( m_arcCenter.x - radius, m_arcCenter.y ) );
-            break;  // left
-
-        case 2:
-            aBBox.Merge( wxPoint( m_arcCenter.x, m_arcCenter.y - radius ) );
-            break;  // up
-
-        case 3:
-            aBBox.Merge( wxPoint( m_arcCenter.x + radius, m_arcCenter.y ) );
-            break;  // right
+        case 0: aBBox.Merge( wxPoint( m_arcCenter.x, m_arcCenter.y + radius ) ); break;  // down
+        case 1: aBBox.Merge( wxPoint( m_arcCenter.x - radius, m_arcCenter.y ) ); break;  // left
+        case 2: aBBox.Merge( wxPoint( m_arcCenter.x, m_arcCenter.y - radius ) ); break;  // up
+        case 3: aBBox.Merge( wxPoint( m_arcCenter.x + radius, m_arcCenter.y ) ); break;  // right
         }
 
         ++quarter %= 4;

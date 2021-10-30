@@ -36,7 +36,7 @@
 LIB_SHAPE::LIB_SHAPE( LIB_SYMBOL* aParent, SHAPE_T aShape, int aDefaultLineWidth,
                       FILL_T aFillType ) :
     LIB_ITEM( LIB_SHAPE_T, aParent ),
-    EDA_SHAPE( aShape, aDefaultLineWidth, aFillType )
+    EDA_SHAPE( aShape, aDefaultLineWidth, aFillType, true )
 {
     m_editState = 0;
 }
@@ -255,8 +255,11 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
 
         CalcArcAngles( t1, t2 );
 
-        if( t1 > t2 )
-            aTransform.MapAngles( &t1, &t2 );
+        if( NormalizeAngle180( t1 - t2 ) > 0 )
+        {
+            std::swap( pt1, pt2 );
+            std::swap( t1, t2 );
+        }
     }
 
     if( forceNoFill || GetFillType() == FILL_T::NO_FILL )
