@@ -94,7 +94,7 @@ static const TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack",
 static const TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute",
         AS_CONTEXT,
         'F', "",
-        _( "Auto-finish Track" ),  _( "Automagically finishes laying the current track." ) );
+        _( "Auto-finish Track" ),  _( "Automatically finishes laying the current track." ) );
 
 static const TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
         AS_CONTEXT,

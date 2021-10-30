@@ -162,7 +162,7 @@ TOOL_ACTION ACTIONS::copy( "common.Interactive.copy",
 TOOL_ACTION ACTIONS::paste( "common.Interactive.paste",
         AS_GLOBAL,
         MD_CTRL + 'V', LEGACY_HK_NAME( "Paste" ),
-        _( "Paste" ), _( "Paste items(s) from clipboard" ),
+        _( "Paste" ), _( "Paste item(s) from clipboard" ),
         BITMAPS::paste );
 
 TOOL_ACTION ACTIONS::selectAll( "common.Interactive.selectAll",
