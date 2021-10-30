@@ -237,7 +237,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
 
         for( SCH_ITEM* item : allItems )
         {
-            item->SetPosition( item->GetPosition() + translation );
+            item->Move( translation );
             item->ClearFlags();
             sheet->GetScreen()->Update( item );
         }
@@ -663,7 +663,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 else
                     netLabel->SetShape( PINSHEETLABEL_SHAPE::PS_UNSPECIFIED );
 
-                m_sheetMap.at( sym.LayerID )->GetScreen()->Append( netLabel );
+                SCH_SCREEN* screen = m_sheetMap.at( sym.LayerID )->GetScreen();
+
+                // autoplace intersheet refs
+                netLabel->AutoplaceFields( screen, false );
+
+                screen->Append( netLabel );
                 m_globalLabelsMap.insert( { sym.ID, netLabel } );
             }
             else
@@ -826,6 +831,16 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             else if( m_globalLabelsMap.find( netTerm.SymbolID ) != m_globalLabelsMap.end() )
             {
                 m_globalLabelsMap.at( netTerm.SymbolID )->SetText( netName );
+
+                LAYER_ID sheet = Schematic.Symbols.at( netTerm.SymbolID ).LayerID;
+
+                if( m_sheetMap.count( sheet ) )
+                {
+                    SCH_SCREEN* screen = m_sheetMap.at( sheet )->GetScreen();
+
+                    // autoplace intersheet refs again since we've changed the name
+                    m_globalLabelsMap.at( netTerm.SymbolID )->AutoplaceFields( screen, false );
+                }
             }
             else if( !net.Name.IsEmpty() && Schematic.Symbols.count( netTerm.SymbolID )
                      && netTerm.HasNetLabel )
