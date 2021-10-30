@@ -685,7 +685,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
             wxString symbolName = sym.ComponentRef.Designator;
 
             if( symbolName.empty() )
-                symbolName = wxString::Format( "ID: %s", sym.ID);
+                symbolName = wxString::Format( "ID: %s", sym.ID );
+            else
+                symbolName += sym.GateID;
 
             m_reporter->Report( wxString::Format( _( "Symbol '%s' is scaled in the original "
                                                      "CADSTAR schematic but this is not supported "
