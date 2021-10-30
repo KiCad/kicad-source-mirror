@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
-"PO-Revision-Date: 2021-10-14 07:35+0000\n"
+"PO-Revision-Date: 2021-11-01 10:42+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -293,14 +293,12 @@ msgid "General"
 msgstr "一般設定"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
-#, fuzzy
 msgid "Realtime Renderer"
-msgstr "ファインダーに表示"
+msgstr "リアルタイム レンダラー"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "レイトレーシング レンダー オプション"
+msgstr "レイトレーシング レンダラー"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:240
@@ -3970,9 +3968,8 @@ msgstr "inch"
 
 #: common/eda_draw_frame.cpp:148 pcbnew/tools/drawing_tool.cpp:266
 #: pcbnew/tools/pcb_actions.cpp:675
-#, fuzzy
 msgid "Constrain to H, V, 45"
-msgstr "外形を水平、垂直、45度に制限"
+msgstr "水平、垂直、45度に制限"
 
 #: common/eda_draw_frame.cpp:318
 msgid "Edit User Grid..."
@@ -4294,14 +4291,12 @@ msgid "Bezier"
 msgstr "ベジェ曲線"
 
 #: common/eda_shape.cpp:1595
-#, fuzzy
 msgid "Start X"
-msgstr "始点 X:"
+msgstr "始点X"
 
 #: common/eda_shape.cpp:1597
-#, fuzzy
 msgid "Start Y"
-msgstr "始点 Y:"
+msgstr "始点Y"
 
 #: common/eda_shape.cpp:1599 pcbnew/pcb_shape.cpp:264 pcbnew/pcb_track.cpp:1159
 #: pcbnew/pcb_track.cpp:1176
@@ -5267,7 +5262,6 @@ msgid "Reference designators"
 msgstr "リファレンス指定子"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text"
 msgstr "フットプリント テキスト"
 
@@ -11803,7 +11797,6 @@ msgid "Constrain buses and wires to H or V"
 msgstr "バス、配線を90度入力に制限 (&R)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Mouse drag performs Drag (G) operation"
 msgstr "マウス ドラッグでドラッグ (G) を実行"
 
@@ -13065,9 +13058,9 @@ msgid "Polyline, %d points"
 msgstr "ポリライン %d ポイント"
 
 #: eeschema/lib_shape.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "ベジェ曲線"
+msgstr "ベジェ曲線, %d 点"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -16615,9 +16608,8 @@ msgid "Align Elements to Grid"
 msgstr "グリッドに揃える"
 
 #: eeschema/tools/ee_actions.cpp:767
-#, fuzzy
 msgid "Save Current Sheet Copy As..."
-msgstr "名前をつけて現在のシートを保存 (&u)..."
+msgstr "名前をつけて現在のシートを保存..."
 
 #: eeschema/tools/ee_actions.cpp:767
 #, fuzzy
@@ -17017,44 +17009,36 @@ msgid "16 Layers"
 msgstr "16 層"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:91
-#, fuzzy
 msgid "18 Layers"
-msgstr "8 層"
+msgstr "18層"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:92
-#, fuzzy
 msgid "20 Layers"
-msgstr "2 層"
+msgstr "20層"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:93
-#, fuzzy
 msgid "22 Layers"
-msgstr "2 層"
+msgstr "22層"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:94
-#, fuzzy
 msgid "24 Layers"
-msgstr "4 層"
+msgstr "24層"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:95
-#, fuzzy
 msgid "26 Layers"
-msgstr "6 層"
+msgstr "26層"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:96
-#, fuzzy
 msgid "28 Layers"
-msgstr "8 層"
+msgstr "28層"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:97
-#, fuzzy
 msgid "30 Layers"
-msgstr "10 層"
+msgstr "30層"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:98
-#, fuzzy
 msgid "32 Layers"
-msgstr "2 層"
+msgstr "32層"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:110
 msgid "Store Choice"
@@ -19747,9 +19731,8 @@ msgid "Parameters"
 msgstr "パラメーター"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:48
-#, fuzzy
 msgid "Attenuation (a):"
-msgstr "減衰量:"
+msgstr "減衰量 (a):"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:55
 msgid "dB"
@@ -20006,9 +19989,8 @@ msgid "E12"
 msgstr "E12"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:84
-#, fuzzy
 msgid "E24"
-msgstr "24"
+msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:94
 msgid "Solutions"
@@ -20158,9 +20140,8 @@ msgid "Temperature rise"
 msgstr "温度上昇:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
-#, fuzzy
 msgid "Current (I):"
-msgstr "電流:"
+msgstr "電流 (I):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
@@ -20192,15 +20173,13 @@ msgstr "外層配線"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:201
-#, fuzzy
 msgid "Trace width (W):"
-msgstr "配線幅:"
+msgstr "配線幅 (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
-#, fuzzy
 msgid "Trace thickness (H):"
-msgstr "配線の銅箔厚:"
+msgstr "配線の銅箔厚 (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:236
@@ -27528,9 +27507,8 @@ msgid "No filename entered"
 msgstr "ファイルが未選択です!"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
-#, fuzzy
 msgid "Illegal filename"
-msgstr "不正なファイル名: %s"
+msgstr "不正なファイル名"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -29416,9 +29394,8 @@ msgid "Footprint type doesn't match footprint pads"
 msgstr "フットプリント エディター - フットプリントの作成/編集"
 
 #: pcbnew/drc/drc_item.cpp:210
-#, fuzzy
 msgid "Through hole pad has no hole"
-msgstr "警告: スルーホール パッドに穴がありません。"
+msgstr "スルーホール パッドに穴がありません。"
 
 #: pcbnew/drc/drc_item.cpp:334
 #, c-format
@@ -30160,9 +30137,9 @@ msgid "Expected \"Other\" type but set to \"%s\""
 msgstr "'その他'のタイプが期待されていますが、\"%s\"に設定されています"
 
 #: pcbnew/footprint.cpp:2125
-#, fuzzy, c-format
+#, c-format
 msgid "(pad \"%s\")"
-msgstr "パッド %s"
+msgstr "(パッド \"%s\")"
 
 #: pcbnew/footprint.cpp:2367 pcbnew/pad.cpp:1663 pcbnew/zone.cpp:1469
 msgid "Clearance Override"
