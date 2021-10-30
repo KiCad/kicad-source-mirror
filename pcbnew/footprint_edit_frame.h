@@ -135,6 +135,7 @@ public:
 
     bool IsSearchTreeShown();
     void ToggleSearchTree();
+    void ToggleLayersManager();
 
     /**
      * Save a library to a new name and/or library type.
@@ -345,8 +346,9 @@ private:
     FOOTPRINT_TREE_PANE*        m_treePane;
     LIB_ID                      m_centerItemOnIdle;
 
-
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
+
+    bool                        m_show_layer_manager_tools;
 
     std::unique_ptr<FOOTPRINT>  m_revertModule;
     wxString                    m_footprintNameWhenLoaded;

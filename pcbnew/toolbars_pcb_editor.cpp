@@ -754,11 +754,12 @@ void PCB_EDIT_FRAME::ToggleLayersManager()
 {
     PCBNEW_SETTINGS* settings      = GetPcbNewSettings();
     wxAuiPaneInfo&   layersManager = m_auimgr.GetPane( "LayersManager" );
+    wxAuiPaneInfo&   selectionFilter = m_auimgr.GetPane( "SelectionFilter" );
 
     // show auxiliary Vertical layers and visibility manager toolbar
     m_show_layer_manager_tools = !m_show_layer_manager_tools;
     layersManager.Show( m_show_layer_manager_tools );
-    m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
+    selectionFilter.Show( m_show_layer_manager_tools );
 
     if( m_show_layer_manager_tools )
     {

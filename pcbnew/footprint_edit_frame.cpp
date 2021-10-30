@@ -79,7 +79,7 @@
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
 #include <wx/treebook.h>
-
+#include <widgets/wx_aui_utils.h>
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_CLOSE, FOOTPRINT_EDIT_FRAME::CloseFootprintEditor )
@@ -112,7 +112,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                             EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend ) :
     PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_FOOTPRINT_EDITOR, wxEmptyString,
                          wxDefaultPosition, wxDefaultSize,
-                         KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() )
+                         KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() ),
+    m_show_layer_manager_tools( true )
 {
     m_showBorderAndTitleBlock = false;   // true to show the frame references
     m_canvasType = aBackend;
@@ -248,6 +249,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
                       .Center() );
 
+    m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
+    m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
+
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
 
@@ -278,6 +282,14 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
     m_appearancePanel->SetUserLayerPresets( cfg->m_LayerPresets );
     m_appearancePanel->ApplyLayerPreset( cfg->m_ActiveLayerPreset );
+
+    if( cfg->m_AuiPanels.right_panel_width > 0 )
+    {
+        wxAuiPaneInfo& layersManager = m_auimgr.GetPane( "LayersManager" );
+        SetAuiPaneSize( m_auimgr, layersManager, cfg->m_AuiPanels.right_panel_width, -1 );
+    }
+
+    m_appearancePanel->SetTabIndex( cfg->m_AuiPanels.appearance_panel_tab );
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
     UpdateTitle();
@@ -357,6 +369,29 @@ void FOOTPRINT_EDIT_FRAME::ToggleSearchTree()
     wxAuiPaneInfo& treePane = m_auimgr.GetPane( m_treePane );
     treePane.Show( !IsSearchTreeShown() );
     m_auimgr.Update();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::ToggleLayersManager()
+{
+    FOOTPRINT_EDITOR_SETTINGS* settings = GetSettings();
+    wxAuiPaneInfo&             layersManager = m_auimgr.GetPane( "LayersManager" );
+    wxAuiPaneInfo&             selectionFilter = m_auimgr.GetPane( "SelectionFilter" );
+
+    // show auxiliary Vertical layers and visibility manager toolbar
+    m_show_layer_manager_tools = !m_show_layer_manager_tools;
+    layersManager.Show( m_show_layer_manager_tools );
+    selectionFilter.Show( m_show_layer_manager_tools );
+
+    if( m_show_layer_manager_tools )
+    {
+        SetAuiPaneSize( m_auimgr, layersManager, settings->m_AuiPanels.right_panel_width, -1 );
+    }
+    else
+    {
+        settings->m_AuiPanels.right_panel_width = m_appearancePanel->GetSize().x;
+        m_auimgr.Update();
+    }
 }
 
 
@@ -531,7 +566,8 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     GetDesignSettings() = cfg->m_DesignSettings;
 
-    m_displayOptions  = cfg->m_Display;
+    m_displayOptions = cfg->m_Display;
+    m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
 
     GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter() = cfg->m_SelectionFilter;
     m_selectionFilterPanel->SetCheckboxesFromFilter( cfg->m_SelectionFilter );
@@ -553,6 +589,10 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     cfg->m_SelectionFilter   = GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter();
     cfg->m_LayerPresets      = m_appearancePanel->GetUserLayerPresets();
     cfg->m_ActiveLayerPreset = m_appearancePanel->GetActiveLayerPreset();
+
+    cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
+    cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
+    cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
 
     GetSettingsManager()->SaveColorSettings( GetColorSettings(), "board" );
 }
@@ -998,7 +1038,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
             };
 
     auto footprintTargettedCond =
-            [this] ( const SELECTION& )
+            [this]( const SELECTION& )
             {
                 return !GetTargetFPID().GetLibItemName().empty();
             };
@@ -1054,7 +1094,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
 
 
     auto highContrastCond =
-            [this] ( const SELECTION& )
+            [this]( const SELECTION& )
             {
                 return GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
             };
@@ -1066,14 +1106,21 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
             };
 
     auto footprintTreeCond =
-            [this] (const SELECTION& )
+            [this](const SELECTION& )
             {
                 return IsSearchTreeShown();
+            };
+
+    auto layerManagerCond =
+            [this]( const SELECTION& )
+            {
+                return m_auimgr.GetPane( "LayersManager" ).IsShown();
             };
 
     mgr->SetConditions( ACTIONS::highContrastMode,          CHECK( highContrastCond ) );
     mgr->SetConditions( PCB_ACTIONS::flipBoard,             CHECK( boardFlippedCond ) );
     mgr->SetConditions( PCB_ACTIONS::showFootprintTree,     CHECK( footprintTreeCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showLayersManager,     CHECK( layerManagerCond ) );
 
     mgr->SetConditions( ACTIONS::print,                     ENABLE( haveFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::exportFootprint,       ENABLE( haveFootprintCond ) );

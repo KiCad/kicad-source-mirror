@@ -65,6 +65,7 @@ public:
     int PinLibrary( const TOOL_EVENT& aEvent );
     int UnpinLibrary( const TOOL_EVENT& aEvent );
     int ToggleFootprintTree( const TOOL_EVENT& aEvent );
+    int ToggleLayersManager( const TOOL_EVENT& aEvent );
     int Properties( const TOOL_EVENT& aEvent );
 
     int CleanupGraphics( const TOOL_EVENT& aEvent );

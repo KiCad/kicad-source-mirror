@@ -169,6 +169,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
     viewMenu->Add( PCB_ACTIONS::showFootprintTree,          ACTION_MENU::CHECK );
+    viewMenu->Add( PCB_ACTIONS::showLayersManager,          ACTION_MENU::CHECK );
 
 
     //-- Place menu -------------------------------------------------------

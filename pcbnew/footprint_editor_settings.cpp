@@ -56,6 +56,15 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "window.lib_width",
             &m_LibWidth, 250 ) );
 
+    m_params.emplace_back( new PARAM<bool>( "aui.show_layer_manager",
+            &m_AuiPanels.show_layer_manager, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "aui.right_panel_width",
+            &m_AuiPanels.right_panel_width, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "aui.appearance_panel_tab",
+            &m_AuiPanels.appearance_panel_tab, 0, 0, 2 ) );
+
     m_params.emplace_back( new PARAM<wxString>( "system.last_import_export_path",
             &m_LastImportExportPath, "" ) );
 

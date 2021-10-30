@@ -30,6 +30,13 @@
 class FOOTPRINT_EDITOR_SETTINGS : public APP_SETTINGS_BASE
 {
 public:
+    struct AUI_PANELS
+    {
+        int  appearance_panel_tab;
+        int  right_panel_width;
+        bool show_layer_manager;
+    };
+
     struct USER_GRID
     {
         double size_x;
@@ -51,6 +58,8 @@ public:
     MAGNETIC_SETTINGS m_MagneticItems;
 
     PCB_DISPLAY_OPTIONS m_Display;
+
+    AUI_PANELS m_AuiPanels;
 
     USER_GRID m_UserGrid;
 
