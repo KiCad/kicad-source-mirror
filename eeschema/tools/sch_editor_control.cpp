@@ -1319,18 +1319,24 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
     // Inform tools that undo command was issued
     m_toolMgr->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
 
-    /* Get the old list */
+    // Get the old list
     PICKED_ITEMS_LIST* List = m_frame->PopCommandFromUndoList();
     size_t num_undos = m_frame->m_undoList.m_CommandsList.size();
 
-    /* Undo the command */
+    // The cleanup routines normally run after an operation and so attempt to append their
+    // undo items onto the operation's list.  However, in this case that's going be the list
+    // under us, which we don't want, so we push a dummy list onto the stack.
+    PICKED_ITEMS_LIST* dummy = new PICKED_ITEMS_LIST();
+    m_frame->PushCommandToUndoList( dummy );
+
     m_frame->PutDataInPreviousState( List );
 
     m_frame->SetSheetNumberAndCount();
     m_frame->TestDanglingEnds();
     m_frame->OnPageSettingsChange();
 
-    // If we modified anything during cleanup we don't want it going on the undolist
+    // The cleanup routines *should* have appended to our dummy list, but just to be doubly
+    // sure pop any other new lists off the stack as well
     while( m_frame->m_undoList.m_CommandsList.size() > num_undos )
         delete m_frame->PopCommandFromUndoList();
 
