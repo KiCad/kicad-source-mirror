@@ -814,7 +814,11 @@ bool EE_POINT_EDITOR::removeCornerCondition( const SELECTION& )
     if( !m_editPoints || !m_editedPoint || m_editPoints->GetParent()->Type() != LIB_SHAPE_T )
         return false;
 
-    LIB_SHAPE*        shape = static_cast<LIB_SHAPE*>( m_editPoints->GetParent() );
+    LIB_SHAPE* shape = static_cast<LIB_SHAPE*>( m_editPoints->GetParent() );
+
+    if( shape->GetPolyShape().IsEmpty() )
+        return false;
+
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
 
     if( poly.GetPointCount() < 3 )
