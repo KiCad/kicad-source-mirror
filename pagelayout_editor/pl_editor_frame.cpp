@@ -131,6 +131,8 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateOptToolbar();
 
     wxWindow* stsbar = GetStatusBar();
+    int       spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x * 2;
+
     int dims[] = {
 
         // balance of status bar on far left is set to a default or whatever is left over.
@@ -140,22 +142,25 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         // as the width of '0' unless the font is fixed width, and it usually won't be.
 
         // zoom:
-        KIUI::GetTextSize( wxT( "Z 762000" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "Z 762000" ), stsbar ).x + spacer,
 
         // cursor coords
-        KIUI::GetTextSize( wxT( "X 0234.567  Y 0234.567" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "X 0234.567  Y 0234.567" ), stsbar ).x + spacer,
 
         // delta distances
-        KIUI::GetTextSize( wxT( "dx 0234.567  dx 0234.567" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "dx 0234.567  dx 0234.567" ), stsbar ).x + spacer,
 
         // grid size
-        KIUI::GetTextSize( wxT( "grid 0234.567" ), stsbar ).x + 10,
+        KIUI::GetTextSize( wxT( "grid 0234.567" ), stsbar ).x + spacer,
 
         // Coord origin (use the bigger message)
-        KIUI::GetTextSize( _( "coord origin: Right Bottom page corner" ), stsbar ).x + 10,
+        KIUI::GetTextSize( _( "coord origin: Right Bottom page corner" ), stsbar ).x + spacer,
 
         // units display, Inches is bigger than mm
-        KIUI::GetTextSize( _( "Inches" ), stsbar ).x + 20
+        KIUI::GetTextSize( _( "Inches" ), stsbar ).x + spacer,
+
+        // constraint mode
+        KIUI::GetTextSize( _( "Constrain to H, V, 45" ), stsbar ).x + spacer
     };
 
     SetStatusWidths( arrayDim( dims ), dims );
