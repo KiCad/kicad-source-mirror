@@ -177,7 +177,7 @@ int GERBVIEW_INSPECTION_TOOL::ShowSource( const TOOL_EVENT& aEvent )
             }
             else
             {
-                ExecuteFile( editorname, QuoteFullPath( fn ) );
+                ExecuteFile( editorname, fn.GetFullPath() );
             }
         }
         else
