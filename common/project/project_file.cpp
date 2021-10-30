@@ -556,6 +556,15 @@ bool PROJECT_FILE::SaveToFile( const wxString& aDirectory, bool aForce )
 }
 
 
+bool PROJECT_FILE::SaveAs( const wxString& aDirectory, const wxString& aFile )
+{
+    Set( "meta.filename", aFile + "." + ProjectFileExtension );
+    SetFilename( aFile );
+
+    return JSON_SETTINGS::SaveToFile( aDirectory, true );
+}
+
+
 wxString PROJECT_FILE::getFileExt() const
 {
     return ProjectFileExtension;

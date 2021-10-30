@@ -24,6 +24,7 @@
 #include <kiway.h>
 #include <kicad_manager_frame.h>
 #include <confirm.h>
+#include <project/project_file.h>
 #include <settings/settings_manager.h>
 #include <tool/selection.h>
 #include <tool/tool_event.h>
@@ -31,12 +32,10 @@
 #include <tools/kicad_manager_control.h>
 #include <dialogs/dialog_template_selector.h>
 #include <gestfich.h>
-#include <string_utils.h>
 #include <paths.h>
 #include <wx/checkbox.h>
 #include <wx/dir.h>
 #include <wx/filedlg.h>
-#include <common.h>
 
 #ifdef PCM
 #include "dialog_pcm.h"
@@ -364,7 +363,7 @@ public:
         wxString   ext = destFile.GetExt();
         bool       atRoot = destFile.GetPath() == m_projectDirPath;
 
-        if( ext == "pro" )
+        if( ext == LegacyProjectFileExtension || ext == ProjectFileExtension )
         {
             wxString destPath = destFile.GetPath();
 
@@ -382,9 +381,16 @@ public:
                     m_newProjectFile = destFile;
             }
 
-            // Currently all paths in the settings file are relative, so we can just do a
-            // straight copy
-            KiCopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
+            if( ext == LegacyProjectFileExtension )
+            {
+                // All paths in the settings file are relative so we can just do a straight copy
+                KiCopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
+            }
+            else
+            {
+                PROJECT_FILE projectFile( aSrcFilePath );
+                projectFile.SaveAs( destFile.GetPath(), destFile.GetName() );
+            }
         }
         else if( ext == KiCadSchematicFileExtension
                || ext == KiCadSchematicFileExtension + BackupFileSuffix
@@ -431,9 +437,9 @@ public:
         else
         {
             // Everything we don't recognize just gets a straight copy.
-            wxString destPath = destFile.GetPathWithSep();
-            wxString destName = destFile.GetName();
-            wxUniChar  pathSep = wxFileName::GetPathSeparator();
+            wxString  destPath = destFile.GetPathWithSep();
+            wxString  destName = destFile.GetName();
+            wxUniChar pathSep = wxFileName::GetPathSeparator();
 
             wxString srcProjectFootprintLib = pathSep + m_projectName + ".pretty" + pathSep;
             wxString newProjectFootprintLib = pathSep + m_newProjectName + ".pretty" + pathSep;
@@ -449,7 +455,6 @@ public:
 
             destPath.Replace( srcProjectFootprintLib, newProjectFootprintLib, true );
             destFile.SetPath( destPath );
-
 
             KiCopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
         }
