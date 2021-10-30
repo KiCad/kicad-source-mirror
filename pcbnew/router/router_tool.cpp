@@ -532,7 +532,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
         m_router->Settings().Mode(),
         m_router->Settings().RemoveLoops() ? 1 : 0,
         m_router->Settings().GetFixAllSegments() ? 1 : 0,
-        m_router->Settings().GetCornerMode()
+        static_cast<int>( m_router->Settings().GetCornerMode() )
      );
 
     const auto& events = logger->GetEvents();
@@ -1203,6 +1203,7 @@ void ROUTER_TOOL::performRouting()
         else if( evt->IsAction( &ACT_SwitchRounding ) )
         {
             m_router->ToggleRounded();
+            updateMessagePanel();
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
@@ -1282,6 +1283,8 @@ int ROUTER_TOOL::SettingsDialog( const TOOL_EVENT& aEvent )
     DIALOG_PNS_SETTINGS settingsDlg( frame(), m_router->Settings() );
 
     settingsDlg.ShowModal();
+
+    updateMessagePanel();
 
     return 0;
 }
@@ -2039,6 +2042,26 @@ void ROUTER_TOOL::updateMessagePanel()
     {
         items.emplace_back( _( "Routing Track" ), _( "(no net)" ) );
     }
+
+    wxString cornerMode;
+
+    if( m_router->Settings().GetFreeAngleMode() )
+    {
+        cornerMode = _( "Free-angle" );
+    }
+    else
+    {
+        switch( m_router->Settings().GetCornerMode() )
+        {
+        case PNS::CORNER_MODE::MITERED_45: cornerMode = _( "45-degree" );         break;
+        case PNS::CORNER_MODE::ROUNDED_45: cornerMode = _( "45-degree rounded" ); break;
+        case PNS::CORNER_MODE::MITERED_90: cornerMode = _( "90-degree" );         break;
+        case PNS::CORNER_MODE::ROUNDED_90: cornerMode = _( "90-degree rounded" ); break;
+        default: break;
+        }
+    }
+
+    items.emplace_back( _( "Corner Style" ), cornerMode );
 
     EDA_UNITS units = frame()->GetUserUnits();
 
