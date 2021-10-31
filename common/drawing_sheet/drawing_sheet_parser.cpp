@@ -857,15 +857,19 @@ void DS_DATA_MODEL::SetPageLayout( const char* aPageLayout, bool Append, const w
     if( ! Append )
         ClearList();
 
-    DRAWING_SHEET_PARSER lp_parser( aPageLayout, wxT( "Sexpr_string" ) );
+    DRAWING_SHEET_PARSER parser( aPageLayout, wxT( "Sexpr_string" ) );
 
     try
     {
-        lp_parser.Parse( this );
+        parser.Parse( this );
     }
     catch( const IO_ERROR& ioe )
     {
         wxLogMessage( ioe.What() );
+    }
+    catch( const std::bad_alloc& )
+    {
+        wxLogMessage( "Memory exhaustion reading drawing sheet" );
     }
 }
 
@@ -920,11 +924,11 @@ bool DS_DATA_MODEL::LoadDrawingSheet( const wxString& aFullFileName, bool Append
         if( ! Append )
             ClearList();
 
-        DRAWING_SHEET_PARSER pl_parser( buffer.get(), fullFileName );
+        DRAWING_SHEET_PARSER parser( buffer.get(), fullFileName );
 
         try
         {
-            pl_parser.Parse( this );
+            parser.Parse( this );
         }
         catch( const IO_ERROR& ioe )
         {

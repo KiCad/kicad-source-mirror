@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Kristoffer Ödmark
  *
  * This program is free software; you can redistribute it and/or
@@ -25,7 +26,6 @@
 #include <wx/clipbrd.h>
 #include <wx/log.h>
 
-#include <build_version.h>
 #include <board.h>
 #include <ignore.h>
 #include <pad.h>
@@ -401,19 +401,17 @@ BOARD* CLIPBOARD_IO::Load( const wxString& aFileName, BOARD* aAppendToMe,
         result = data.GetText().mb_str();
     }
 
-    STRING_LINE_READER    reader(result, wxT( "clipboard" ) );
+    STRING_LINE_READER reader( result, wxT( "clipboard" ) );
+    PCB_PARSER         parser( &reader, aAppendToMe );
 
     init( aProperties );
-
-    m_parser->SetLineReader( &reader );
-    m_parser->SetBoard( aAppendToMe );
 
     BOARD_ITEM* item;
     BOARD* board;
 
     try
     {
-        item =  m_parser->Parse();
+        item =  parser.Parse();
     }
     catch( const FUTURE_FORMAT_ERROR& )
     {
@@ -422,8 +420,8 @@ BOARD* CLIPBOARD_IO::Load( const wxString& aFileName, BOARD* aAppendToMe,
     }
     catch( const PARSE_ERROR& parse_error )
     {
-        if( m_parser->IsTooRecent() )
-            throw FUTURE_FORMAT_ERROR( parse_error, m_parser->GetRequiredVersion() );
+        if( parser.IsTooRecent() )
+            throw FUTURE_FORMAT_ERROR( parse_error, parser.GetRequiredVersion() );
         else
             throw;
     }
@@ -431,9 +429,8 @@ BOARD* CLIPBOARD_IO::Load( const wxString& aFileName, BOARD* aAppendToMe,
     if( item->Type() != PCB_T )
     {
         // The parser loaded something that was valid, but wasn't a board.
-        THROW_PARSE_ERROR( _( "Clipboard content is not KiCad compatible" ),
-                m_parser->CurSource(), m_parser->CurLine(),
-                m_parser->CurLineNumber(), m_parser->CurOffset() );
+        THROW_PARSE_ERROR( _( "Clipboard content is not KiCad compatible" ), parser.CurSource(),
+                           parser.CurLine(), parser.CurLineNumber(), parser.CurOffset() );
     }
     else
     {

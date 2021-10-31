@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN.
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -297,7 +297,6 @@ protected:
     STRING_FORMATTER    m_sf;
     OUTPUTFORMATTER*    m_out;      ///< output any Format()s to this, no ownership
     int                 m_ctl;
-    PCB_PARSER*         m_parser;
     NETINFO_MAPPING*    m_mapping;  ///< mapping for net codes, so only not empty net codes
                                     ///< are stored with consecutive integers as net codes
 };

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,27 +69,13 @@ void DumpBoardToFile( BOARD& board, const std::string& aFilename )
 }
 
 
-std::unique_ptr<BOARD_ITEM> ReadBoardItemFromFile( const std::string& aFilename )
-{
-    FILE_LINE_READER reader( aFilename );
-
-    PCB_PARSER parser;
-    parser.SetLineReader( &reader );
-
-    return std::unique_ptr<BOARD_ITEM>( parser.Parse() );
-}
-
-
 std::unique_ptr<BOARD_ITEM> ReadBoardItemFromStream( std::istream& aStream )
 {
     // Take input from stdin
     STDISTREAM_LINE_READER reader;
     reader.SetStream( aStream );
 
-    PCB_PARSER parser;
-
-    parser.SetLineReader( &reader );
-
+    PCB_PARSER                  parser( &reader );
     std::unique_ptr<BOARD_ITEM> board;
 
     try

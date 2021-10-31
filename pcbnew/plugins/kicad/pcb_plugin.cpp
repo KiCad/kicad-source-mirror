@@ -262,16 +262,10 @@ void FP_CACHE::Load()
             // Queue I/O errors so only files that fail to parse don't get loaded.
             try
             {
-                FILE_LINE_READER    reader( fn.GetFullPath() );
+                FILE_LINE_READER reader( fn.GetFullPath() );
+                PCB_PARSER       parser( &reader );
 
-                m_owner->m_parser->SetLineReader( &reader );
-
-                // For better or worse (mostly worse), the parser is a long-lived object.
-                // Make sure we start with a fresh state.
-                m_owner->m_parser->InitParserState();
-                m_owner->m_parser->SetBoard( nullptr );     // calls PCB_PARSER::init()
-
-                FOOTPRINT* footprint = (FOOTPRINT*) m_owner->m_parser->Parse();
+                FOOTPRINT* footprint = (FOOTPRINT*) parser.Parse();
                 wxString   fpName = fn.GetName();
 
                 footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
@@ -379,18 +373,17 @@ BOARD_ITEM* PCB_PLUGIN::Parse( const wxString& aClipboardSourceInput )
 {
     std::string input = TO_UTF8( aClipboardSourceInput );
 
-    STRING_LINE_READER  reader( input, wxT( "clipboard" ) );
-
-    m_parser->SetLineReader( &reader );
+    STRING_LINE_READER reader( input, wxT( "clipboard" ) );
+    PCB_PARSER         parser( &reader );
 
     try
     {
-        return m_parser->Parse();
+        return parser.Parse();
     }
     catch( const PARSE_ERROR& parse_error )
     {
-        if( m_parser->IsTooRecent() )
-            throw FUTURE_FORMAT_ERROR( parse_error, m_parser->GetRequiredVersion() );
+        if( parser.IsTooRecent() )
+            throw FUTURE_FORMAT_ERROR( parse_error, parser.GetRequiredVersion() );
         else
             throw;
     }
@@ -2285,7 +2278,6 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
 PCB_PLUGIN::PCB_PLUGIN( int aControlFlags ) :
     m_cache( nullptr ),
     m_ctl( aControlFlags ),
-    m_parser( new PCB_PARSER() ),
     m_mapping( new NETINFO_MAPPING() )
 {
     init( nullptr );
@@ -2296,7 +2288,6 @@ PCB_PLUGIN::PCB_PLUGIN( int aControlFlags ) :
 PCB_PLUGIN::~PCB_PLUGIN()
 {
     delete m_cache;
-    delete m_parser;
     delete m_mapping;
 }
 
@@ -2336,15 +2327,12 @@ BOARD* PCB_PLUGIN::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPE
 {
     init( aProperties );
 
-    m_parser->SetLineReader( &aReader );
-    m_parser->SetBoard( aAppendToMe );
-    m_parser->SetProgressReporter( aProgressReporter, aLineCount );
-
-    BOARD* board;
+    PCB_PARSER parser( &aReader, aAppendToMe, aProgressReporter, aLineCount );
+    BOARD*     board;
 
     try
     {
-        board = dynamic_cast<BOARD*>( m_parser->Parse() );
+        board = dynamic_cast<BOARD*>( parser.Parse() );
     }
     catch( const FUTURE_FORMAT_ERROR& )
     {
@@ -2353,8 +2341,8 @@ BOARD* PCB_PLUGIN::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPE
     }
     catch( const PARSE_ERROR& parse_error )
     {
-        if( m_parser->IsTooRecent() )
-            throw FUTURE_FORMAT_ERROR( parse_error, m_parser->GetRequiredVersion() );
+        if( parser.IsTooRecent() )
+            throw FUTURE_FORMAT_ERROR( parse_error, parser.GetRequiredVersion() );
         else
             throw;
     }
@@ -2362,8 +2350,8 @@ BOARD* PCB_PLUGIN::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPE
     if( !board )
     {
         // The parser loaded something that was valid, but wasn't a board.
-        THROW_PARSE_ERROR( _( "This file does not contain a PCB." ), m_parser->CurSource(),
-                           m_parser->CurLine(), m_parser->CurLineNumber(), m_parser->CurOffset() );
+        THROW_PARSE_ERROR( _( "This file does not contain a PCB." ), parser.CurSource(),
+                           parser.CurLine(), parser.CurLineNumber(), parser.CurOffset() );
     }
 
     return board;

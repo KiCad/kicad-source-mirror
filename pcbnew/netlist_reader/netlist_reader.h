@@ -1,10 +1,3 @@
-#ifndef NETLIST_READER_H
-#define NETLIST_READER_H
-
-/**
- * @file netlist_reader.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -29,6 +22,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#ifndef NETLIST_READER_H
+#define NETLIST_READER_H
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -172,11 +168,6 @@ public:
      */
     virtual void LoadNetlist() = 0;
 
-    /**
-     * @return the #LINE_READER associated with the #NETLIST_READER.
-     */
-    LINE_READER* GetLineReader();
-
 protected:
     NETLIST*     m_netlist;               ///< The net list to read the file(s) into.
     bool         m_loadFootprintFilters;  ///< Load the component footprint filters section if true.
@@ -280,10 +271,6 @@ class KICAD_NETLIST_PARSER : public NETLIST_LEXER
 public:
     KICAD_NETLIST_PARSER( LINE_READER* aReader, NETLIST* aNetlist );
 
-    void SetLineReader( LINE_READER* aLineReader );
-
-    void SetNetlist( NETLIST* aNetlist ) { m_netlist = aNetlist; }
-
     /**
      * Function Parse
      * parse the full netlist
@@ -364,20 +351,13 @@ public:
     KICAD_NETLIST_READER( LINE_READER*  aLineReader,
                           NETLIST*      aNetlist,
                           CMP_READER*   aFootprintLinkReader = nullptr ) :
-        NETLIST_READER( aLineReader, aNetlist, aFootprintLinkReader ),
-        m_parser( new KICAD_NETLIST_PARSER( aLineReader, aNetlist ) )
-    {
-    }
+        NETLIST_READER( aLineReader, aNetlist, aFootprintLinkReader )
+    { }
 
     virtual ~KICAD_NETLIST_READER()
-    {
-        delete m_parser;
-    }
+    { }
 
     virtual void LoadNetlist() override;
-
-private:
-    KICAD_NETLIST_PARSER* m_parser;     ///< The s-expression format parser.
 };
 
 

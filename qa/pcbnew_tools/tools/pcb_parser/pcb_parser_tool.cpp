@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@
 
 #include <cstdio>
 #include <string>
-
 #include <common.h>
 #include <profile.h>
 
@@ -35,11 +34,7 @@
 #include <plugins/kicad/pcb_plugin.h>
 #include <plugins/kicad/pcb_parser.h>
 #include <richio.h>
-
-#include <wx/cmdline.h>
-
 #include <qa_utils/stdstream_line_reader.h>
-#include <qa_utils/utility_registry.h>
 
 
 using PARSE_DURATION = std::chrono::microseconds;
@@ -57,10 +52,7 @@ bool parse( std::istream& aStream, bool aVerbose )
     STDISTREAM_LINE_READER reader;
     reader.SetStream( aStream );
 
-    PCB_PARSER parser;
-
-    parser.SetLineReader( &reader );
-
+    PCB_PARSER  parser( &reader );
     BOARD_ITEM* board = nullptr;
 
     PARSE_DURATION duration{};
@@ -110,10 +102,9 @@ int pcb_parser_main_func( int argc, char** argv )
     wxMessageOutput::Set( new wxMessageOutputStderr );
     wxCmdLineParser cl_parser( argc, argv );
     cl_parser.SetDesc( g_cmdLineDesc );
-    cl_parser.AddUsageText(
-            _( "This program parses PCB files, either from the "
-               "stdin stream or from the given filenames. This can be used either for "
-               "standalone testing of the parser or for fuzz testing." ) );
+    cl_parser.AddUsageText( _( "This program parses PCB files, either from the stdin stream or "
+                               "from the given filenames. This can be used either for standalone "
+                               "testing of the parser or for fuzz testing." ) );
 
     int cmd_parsed_ok = cl_parser.Parse();
     if( cmd_parsed_ok != 0 )
@@ -122,11 +113,9 @@ int pcb_parser_main_func( int argc, char** argv )
         return ( cmd_parsed_ok == -1 ) ? KI_TEST::RET_CODES::OK : KI_TEST::RET_CODES::BAD_CMDLINE;
     }
 
-    const bool verbose = cl_parser.Found( "verbose" );
-
-    bool ok = true;
-
-    const auto file_count = cl_parser.GetParamCount();
+    const bool   verbose = cl_parser.Found( "verbose" );
+    bool         ok = true;
+    const size_t file_count = cl_parser.GetParamCount();
 
     if( file_count == 0 )
     {
@@ -163,5 +152,6 @@ int pcb_parser_main_func( int argc, char** argv )
 }
 
 
-static bool registered = UTILITY_REGISTRY::Register(
-        { "pcb_parser", "Parse a KiCad PCB file", pcb_parser_main_func } );
+static bool registered = UTILITY_REGISTRY::Register( { "pcb_parser",
+                                                       "Parse a KiCad PCB file",
+                                                       pcb_parser_main_func } );
