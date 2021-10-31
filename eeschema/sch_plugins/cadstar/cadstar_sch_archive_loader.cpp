@@ -1827,20 +1827,15 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolFieldAttribute(
 
     if( aIsMirrored )
     {
-        // In KiCad, the angle of the symbol instance affects the position of the symbol
-        // fields because there is a distinction on x-axis and y-axis mirroring
-        double angleDeciDeg = NormalizeAnglePos( aComponentOrientationDeciDeg );
-        int    quadrant = KiROUND( angleDeciDeg / 900.0 );
-        quadrant %= 4;
+        // We need to change the aligment when the symbol is mirrored based on the text orientation
+        // To ensure the anchor point is the same in KiCad.
 
-        switch( quadrant )
-        {
-        case 1:
-        case 3: alignment = rotate180( alignment ); KI_FALLTHROUGH;
-        case 0:
-        case 2: alignment = mirrorX( alignment ); break;
-        default: wxFAIL_MSG( "unknown quadrant" ); break;
-        }
+        int textIsVertical = KiROUND( textAngle / 900.0 ) % 2;
+
+        if( textIsVertical )
+            alignment = rotate180( alignment );
+
+        alignment = mirrorX( alignment );
     }
 
     applyTextSettings( aKiCadField,
