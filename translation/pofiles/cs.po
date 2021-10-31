@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
-"PO-Revision-Date: 2021-10-25 13:17+0000\n"
+"PO-Revision-Date: 2021-11-01 10:41+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3978,9 +3978,8 @@ msgstr "Palce"
 
 #: common/eda_draw_frame.cpp:148 pcbnew/tools/drawing_tool.cpp:266
 #: pcbnew/tools/pcb_actions.cpp:675
-#, fuzzy
 msgid "Constrain to H, V, 45"
-msgstr "Omezit obrys na H, V a 45 stupňů"
+msgstr "Omezit na H, V a 45 stupňů"
 
 #: common/eda_draw_frame.cpp:318
 msgid "Edit User Grid..."
@@ -5267,7 +5266,6 @@ msgid "Reference designators"
 msgstr "Označení reference"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text"
 msgstr "Text pouzdra"
 
@@ -6118,9 +6116,8 @@ msgid "Toggle inactive layers between normal and dimmed"
 msgstr "Přepínat neaktivní vrstvy mezi normálními a šedými"
 
 #: common/tool/actions.cpp:540
-#, fuzzy
 msgid "Inactive Layer View Mode (3-state)"
-msgstr "Režim zobrazení jedné vrstvy (3-stavový)"
+msgstr "Režim zobrazení Neaktivní vrstva (3-stavový)"
 
 #: common/tool/actions.cpp:541
 #, fuzzy
@@ -8540,9 +8537,8 @@ msgid "Electrical Rules Checker"
 msgstr "Kontrola pravidel elektrického návrhu"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:131
-#, fuzzy
 msgid "Power symbol value field text cannot be changed."
-msgstr "(Text hodnoty symbolu napájení nelze změnit.)"
+msgstr "Text hodnoty symbolu napájení nelze změnit."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
@@ -11248,9 +11244,8 @@ msgid "Add Field..."
 msgstr "Přidat pole..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:76
-#, fuzzy
 msgid "Symbol Fields Table"
-msgstr "Pole symbolu"
+msgstr "Tabulka polí symbolu"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:139
 msgid "Base Name"
@@ -11840,9 +11835,8 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:178
-#, fuzzy
 msgid "Long Click"
-msgstr "Klik"
+msgstr "Dlouhý klik"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:102
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:150
@@ -13676,19 +13670,19 @@ msgid "Filename's owner (%d) not found."
 msgstr "Vlastník názvu souboru (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2281
-#, fuzzy, c-format
+#, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "Reference '%s' nenalezena."
+msgstr "Majitel označení (%d) nenalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2416
-#, fuzzy, c-format
+#, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "Soubor '%s' nenalezen."
+msgstr "Vlastník implementace (%d) nenalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2426
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "Soubor '%s' nenalezen."
+msgstr "Vlastník (%d) pouzdra nenalezen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:74
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:73
@@ -13784,13 +13778,13 @@ msgstr ""
 "vývodů. Očekávaný počet vývodů je 1, ale %d bylo nalezeno."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:676
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
 msgstr ""
-"ID symbolu '%s' je neznámého typu. Nejedná se ani o komponentu ani síť / "
-"symbol napájení. Symbol nebyl načten."
+"ID symbolu '%s' je neznámého typu. Nejedná se ani o symbol nebo síť napájení "
+"/ symbol. Symbol nebyl načten."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:690
 #, fuzzy, c-format
@@ -13799,8 +13793,8 @@ msgid ""
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
-"Symbol'%s' má ve schématu CADSTAR měřítko, ale KiCad jej nepodporuje. Symbol "
-"byl načten v měřítku 1: 1 a může vyžadovat ruční úpravu."
+"Symbol '%s' má ve schématu CADSTAR měřítko, ale KiCad jej nepodporuje. "
+"Symbol byl načten v měřítku 1: 1 a může vyžadovat ruční úpravu."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1163
 #, c-format
@@ -15808,7 +15802,7 @@ msgstr "Vytvoří soubor SVG z aktuálního symbolu"
 
 #: eeschema/tools/ee_actions.cpp:208
 msgid "Synchronized Pins Edit Mode"
-msgstr ""
+msgstr "Synchronizovaný režim editace vývodu"
 
 #: eeschema/tools/ee_actions.cpp:209
 #, fuzzy
@@ -16134,7 +16128,7 @@ msgstr "Převod DeMorgan"
 
 #: eeschema/tools/ee_actions.cpp:453
 msgid "Switch between DeMorgan representations"
-msgstr ""
+msgstr "Přepínání mezi reprezentacemi DeMorgan"
 
 #: eeschema/tools/ee_actions.cpp:458
 msgid "DeMorgan Standard"
@@ -18311,7 +18305,7 @@ msgstr "Jste si jisti, že chcete smazat vybrané položky?"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:162
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "Správce pluginu a obsahu"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:235
 msgid "Choose package file"
@@ -18366,7 +18360,7 @@ msgstr "Zrušit změny"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:73
 msgid "Plugin And Content Manager"
-msgstr ""
+msgstr "Správce pluginu a obsahu"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
@@ -18613,7 +18607,7 @@ msgstr "Odstranění staženého archivu '%s'."
 #: kicad/pcm/pcm_task_manager.cpp:157
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr ""
+msgstr "Stahování url balíčku: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:170
 #, c-format
@@ -18915,7 +18909,7 @@ msgstr "Upravit okraje listu výkresu a rohové razítko"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
-msgstr ""
+msgstr "Spustí Správce plug-in a obsahu"
 
 #: kicad/tools/kicad_manager_actions.cpp:124
 msgid "Open Text Editor"
@@ -19531,7 +19525,6 @@ msgid "Error writing objects to clipboard"
 msgstr "Chyba zápisu objektů do schránky"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19543,16 +19536,17 @@ msgid ""
 "___R<sub>1</sub> = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
-"### Odporový rozbočovač\n"
-"#### Útlum je 6 dB\n"
+"### Přemostěný T útlumový článek\n"
+"___a___ je útlum v dB<br>\n"
 "___Z<sub>vst</sub>___ požadovaná vstupní impedance v &#x2126;<br>\n"
 "___Z<sub>vyst</sub>___ požadovaná výstupní impedance v &#x2126;<br>\n"
-"___Z<sub>vst</sub>___ = Z<sub>vyst</sub>___\n"
+"___Z<sub>0</sub> = Z<sub>vst</sub> = Z<sub>vyst</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>vyst</sub>/3___\n"
+"___L = 10<sup>a/20</up>___\n"
+"___R<sub>1</sub> = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
+"___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19566,20 +19560,19 @@ msgid ""
 "___R<sub>1</sub> = 1 / (A/Z<sub>in</sub> &minus; 1/R<sub>2</sub>)___<br>\n"
 "___R<sub>3</sub> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
 msgstr ""
-"### T útlumový článek\n"
-"__Zin__ požadovaná vstupní impedance v &#x2126;<br>\n"
-"__Zout__ po__Zin = Zout__<br><br>žadovaná výstupní impedance <br>\n"
-"__Zin = Zout__<br><br>\n"
+"### Pi útlumový článek\n"
+"___a___ je útlum v dB<br>\n"
+"___Z<sub>vst</sub>__ požadovaná vstupní impedance v &#x2126;<br>\n"
+"___Z<sub>vyst</sub>___ požadovaná výstupní impedance v &#x2126;<br>\n"
 "\n"
-"* __a__ útlum v dB\n"
-"* __L = 10<sup>a/20</sup>__ (ztráta)\n"
-"* ___A = (L + 1)/(L - 1)___<br><br>\n"
-"* ___R2 = 2&radic;(L \\* Z<sub>vst</sub> \\* Z<sub>vyst</sub> )/(L - 1)___\n"
-"* ___R1 = Z<sub>vst</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>vyst</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R<sub>2</sub> = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; "
+"Z<sub>out</sub> / L)___<br>\n"
+"___R<sub>1</sub> = 1 / (A/Z<sub>in</sub> &minus; 1/R<sub>2</sub>)___<br>\n"
+"___R<sub>3</sub> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -19590,15 +19583,14 @@ msgid ""
 "___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
 msgstr ""
 "### Odporový rozbočovač\n"
-"#### Útlum je 6 dB\n"
-"___Z<sub>vst</sub>___ požadovaná vstupní impedance v &#x2126;<br>\n"
-"___Z<sub>vyst</sub>___ požadovaná výstupní impedance v &#x2126;<br>\n"
-"___Z<sub>vst</sub>___ = Z<sub>vyst</sub>___\n"
+"Útlum je 6 dB  \n"
+"___Z<sub>vst</sub>___ požadovaná vstupní impedance v &#x2126;  \n"
+"___Z<sub>vyst</sub>___ požadovaná výstupní impedance v &#x2126;  \n"
+"___Z<sub>0</sub> = Z<sub>vst</sub> = Z<sub>vyst</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>vyst</sub>/3___\n"
+"___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19613,16 +19605,16 @@ msgid ""
 "___R<sub>3</sub> = Z<sub>out</sub> &middot; A &minus; R<sub>2</sub>___\n"
 msgstr ""
 "### T útlumový článek\n"
-"__Zin__ požadovaná vstupní impedance v &#x2126;<br>\n"
-"__Zout__ po__Zin = Zout__<br><br>žadovaná výstupní impedance <br>\n"
-"__Zin = Zout__<br><br>\n"
+"___a___ je útlum v dB<br>\n"
+"___Z<sub>vst</sub>___ požadovaná vstupní impedance v &#x2126;<br>\n"
+"___Z<sub>vyst</sub>___ požadovaná výstupní impedance v &#x2126;<br>\n"
 "\n"
-"* __a__ útlum v dB\n"
-"* __L = 10<sup>a/20</sup>__ (ztráta)\n"
-"* ___A = (L + 1)/(L - 1)___<br><br>\n"
-"* ___R2 = 2&radic;(L \\* Z<sub>vst</sub> \\* Z<sub>vyst</sub> )/(L - 1)___\n"
-"* ___R1 = Z<sub>vst</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>vyst</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br>\n"
+"___R<sub>2</sub> = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; "
+"Z<sub>out</sub>) / (L&minus;1)___<br>\n"
+"___R<sub>1</sub> = Z<sub>in</sub> &middot; A &minus; R<sub>2</sub>___<br>\n"
+"___R<sub>3</sub> = Z<sub>out</sub> &middot; A &minus; R<sub>2</sub>___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -19657,9 +19649,8 @@ msgid "Parameters"
 msgstr "Parametry"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:48
-#, fuzzy
 msgid "Attenuation (a):"
-msgstr "Útlum:"
+msgstr "Útlum (a):"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:55
 msgid "dB"
@@ -20062,14 +20053,12 @@ msgid "Remove an item from the current list of available regulators"
 msgstr "Smazat položku z aktuálního seznamu dostupných regulátorů"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
-#, fuzzy
 msgid "Temperature rise"
-msgstr "Zvýšení teploty:"
+msgstr "Zvýšení teploty"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
-#, fuzzy
 msgid "Current (I):"
-msgstr "Proud:"
+msgstr "Proud (I):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
@@ -20101,15 +20090,13 @@ msgstr "Vnější vrstva spojů"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:201
-#, fuzzy
 msgid "Trace width (W):"
-msgstr "Šířka spoje:"
+msgstr "Šířka spoje (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
-#, fuzzy
 msgid "Trace thickness (H):"
-msgstr "Tloušťka spoje:"
+msgstr "Tloušťka spoje (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:236
@@ -20165,7 +20152,6 @@ msgid "Coplanar wave guide"
 msgstr "Koplanární vedení"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
-#, fuzzy
 msgid "Coplanar wave guide w/ ground plane"
 msgstr "Koplanární vlnovod s umělou zemí"
 
@@ -20409,9 +20395,8 @@ msgid "pico-Farad"
 msgstr "piko-Farad"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:302
-#, fuzzy
 msgid "Rise time degradation:"
-msgstr "Časové konstanta náběhu:"
+msgstr "Degradace času vzestupu:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:304
 msgid "Rise time degradation for given Z0 and calculated capacitance"
@@ -20838,12 +20823,12 @@ msgstr "Vnější průměr (izolace)"
 #: pcb_calculator/transline_ident.cpp:302
 #, c-format
 msgid "Effective %s (even):"
-msgstr ""
+msgstr "%s efektivní (párový režim):"
 
 #: pcb_calculator/transline_ident.cpp:303
 #, c-format
 msgid "Effective %s (odd):"
-msgstr ""
+msgstr "%s efektivní (lichý):"
 
 #: pcb_calculator/transline_ident.cpp:304
 msgid "Conductor losses (even):"
@@ -29090,9 +29075,8 @@ msgid "Footprint type doesn't match footprint pads"
 msgstr "Editor pouzder - Vytvoření/úprava pouzder"
 
 #: pcbnew/drc/drc_item.cpp:210
-#, fuzzy
 msgid "Through hole pad has no hole"
-msgstr "Chyba: Ploška s průchozí dírou nemá žádný otvor."
+msgstr "Ploška s průchozí dírou nemá žádný otvor"
 
 #: pcbnew/drc/drc_item.cpp:334
 #, c-format
@@ -31550,12 +31534,13 @@ msgstr ""
 "Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1983
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
+"Oblouk nalezený na vrstvě Altium (%d) nemá ekvivalent KiCadu. Byl přesunut "
+"do KiCad vrstvy Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2063
 msgid "Loading pads..."
@@ -31594,17 +31579,18 @@ msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2290
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
+"Ploška bez mědi %s na vrstvě Altium (%d) nemá ekvivalent KiCadu. Byla "
+"přesunuta do KiCad vrstvy Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2299
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
-msgstr "Oblast mědi náleží síti, která nemá žádné plošky"
+msgstr "Ploška bez mědi %s připojena k síti, která není podporována."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2305
 #, c-format
