@@ -74,10 +74,15 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
     if( m_item->Type() == PCB_FP_TEXT_T )
     {
-        title = _( "Footprint Text Properties" );
-
         m_fpText = (FP_TEXT*) m_item;
         m_edaText = static_cast<EDA_TEXT*>( m_fpText );
+
+        switch( m_fpText->GetType() )
+        {
+        case FP_TEXT::TEXT_is_REFERENCE: title = _( "Footprint Reference Properties" ); break;
+        case FP_TEXT::TEXT_is_VALUE:     title = _( "Footprint Value Properties" );     break;
+        case FP_TEXT::TEXT_is_DIVERS:    title = _( "Footprint Text Properties" );      break;
+        }
 
         switch( m_fpText->GetType() )
         {
@@ -88,6 +93,9 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
         SetInitialFocus( m_SingleLineText );
         m_MultiLineSizer->Show( false );
+
+        // Do not allow locking items in the footprint editor
+        m_cbLocked->Show( false );
     }
     else
     {
@@ -101,7 +109,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
         // This option makes sense only for footprint texts; texts on board are always visible.
         m_Visible->SetValue( true );
-        m_Visible->Enable( false );
+        m_Visible->Show( false );
 
         m_KeepUpright->Show( false );
         m_statusLine->Show( false );

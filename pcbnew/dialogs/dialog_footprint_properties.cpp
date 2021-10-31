@@ -239,18 +239,6 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnOtherOrientation( wxCommandEvent& aEvent )
 }
 
 
-bool allPadsLocked( FOOTPRINT* aFootprint )
-{
-    for( PAD* pad : aFootprint->Pads() )
-    {
-        if( !pad->IsLocked() )
-            return false;
-    }
-
-    return true;
-}
-
-
 bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )

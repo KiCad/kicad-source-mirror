@@ -66,7 +66,9 @@ bool BOARD_ITEM::IsLocked() const
     if( GetParentGroup() )
         return GetParentGroup()->IsLocked();
 
-    return GetState( LOCKED );
+    const BOARD* board = GetBoard();
+
+    return board && board->GetBoardUse() != BOARD_USE::FPHOLDER && GetState( LOCKED );
 }
 
 

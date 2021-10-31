@@ -114,7 +114,7 @@ void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "PCB Text" ), UnescapeString( GetText() ) );
 
-    if( IsLocked() )
+    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
         aList.emplace_back( _( "Status" ), _( "Locked" ) );
 
     aList.emplace_back( _( "Layer" ), GetLayerName() );

@@ -43,7 +43,9 @@ DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
     m_bpRemoveMember->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     m_nameCtrl->SetValue( m_group->GetName() );
+
     m_locked->SetValue( m_group->IsLocked() );
+    m_locked->Show( dynamic_cast<PCB_EDIT_FRAME*>( aParent ) != nullptr );
 
     for( BOARD_ITEM* item : m_group->GetItems() )
         m_membersList->Append( item->GetSelectMenuText( m_brdEditor->GetUserUnits() ), item );

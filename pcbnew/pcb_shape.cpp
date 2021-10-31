@@ -151,7 +151,7 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 {
     aList.emplace_back( _( "Type" ), _( "Drawing" ) );
 
-    if( IsLocked() )
+    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
         aList.emplace_back( _( "Status" ), _( "Locked" ) );
 
     ShapeGetMsgPanelInfo( aFrame, aList );

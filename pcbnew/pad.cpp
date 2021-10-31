@@ -156,7 +156,7 @@ bool PAD::CanHaveNumber() const
 
 bool PAD::IsLocked() const
 {
-    if( GetParent() && static_cast<FOOTPRINT*>( GetParent() )->IsLocked() )
+    if( GetParent() && GetParent()->IsLocked() )
         return true;
 
     return BOARD_ITEM::IsLocked();
@@ -866,8 +866,11 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     wxString   msg;
     FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
 
-    if( parentFootprint )
-        aList.emplace_back( _( "Footprint" ), parentFootprint->GetReference() );
+    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME )
+    {
+        if( parentFootprint )
+            aList.emplace_back( _( "Footprint" ), parentFootprint->GetReference() );
+    }
 
     aList.emplace_back( _( "Pad" ), m_number );
 
@@ -877,12 +880,15 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     if( !GetPinType().IsEmpty() )
         aList.emplace_back( _( "Pin Type" ), GetPinType() );
 
-    aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
+    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME )
+    {
+        aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
 
-    aList.emplace_back( _( "NetClass" ), UnescapeString( GetNetClass()->GetName() ) );
+        aList.emplace_back( _( "Net Class" ), UnescapeString( GetNetClass()->GetName() ) );
 
-    if( IsLocked() )
-        aList.emplace_back( _( "Status" ), _( "Locked" ) );
+        if( IsLocked() )
+            aList.emplace_back( _( "Status" ), _( "Locked" ) );
+    }
 
     if( GetAttribute() == PAD_ATTRIB::SMD || GetAttribute() == PAD_ATTRIB::CONN )
         aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
@@ -895,13 +901,13 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 
     switch( GetProperty() )
     {
-    case PAD_PROP::NONE:                                           break;
-    case PAD_PROP::BGA:            props += _("BGA" );             break;
-    case PAD_PROP::FIDUCIAL_GLBL:  props += _("Fiducial global" ); break;
-    case PAD_PROP::FIDUCIAL_LOCAL: props += _("Fiducial local" );  break;
-    case PAD_PROP::TESTPOINT:      props += _("Test point" );      break;
-    case PAD_PROP::HEATSINK:       props += _("Heat sink" );       break;
-    case PAD_PROP::CASTELLATED:    props += _("Castellated" );     break;
+    case PAD_PROP::NONE:                                            break;
+    case PAD_PROP::BGA:            props += _( "BGA" );             break;
+    case PAD_PROP::FIDUCIAL_GLBL:  props += _( "Fiducial global" ); break;
+    case PAD_PROP::FIDUCIAL_LOCAL: props += _( "Fiducial local" );  break;
+    case PAD_PROP::TESTPOINT:      props += _( "Test point" );      break;
+    case PAD_PROP::HEATSINK:       props += _( "Heat sink" );       break;
+    case PAD_PROP::CASTELLATED:    props += _( "Castellated" );     break;
     }
 
     aList.emplace_back( ShowPadShape(), props );
@@ -954,9 +960,13 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     wxString source;
     int      clearance = GetOwnClearance( GetLayer(), &source );
 
-    aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                          MessageTextFromValue( units, clearance ) ),
-                        wxString::Format( _( "(from %s)" ), source ) );
+    if( !source.IsEmpty() )
+    {
+        aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
+                                              MessageTextFromValue( units, clearance ) ),
+                            wxString::Format( _( "(from %s)" ),
+                                              source ) );
+    }
 #if 0
     // useful for debug only
     aList.emplace_back( "UUID", m_Uuid.AsString() );

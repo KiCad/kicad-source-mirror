@@ -109,9 +109,13 @@ void FP_SHAPE::SetDrawCoord()
 
 void FP_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_parent );
+    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME )
+    {
+        FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_parent );
 
-    aList.emplace_back( _( "Footprint" ), fp ? fp->GetReference() : _( "<invalid>" ) );
+        if( fp )
+            aList.emplace_back( _( "Footprint" ), fp->GetReference() );
+    }
 
     // append the features shared with the base class
     PCB_SHAPE::GetMsgPanelInfo( aFrame, aList );

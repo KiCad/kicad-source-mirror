@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -82,7 +82,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_locked = new wxCheckBox( m_panelGeneral, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_locked->SetToolTip( _("Do not allow position of pad relative to parent footprint to be changed") );
 
-	gbSizerCommon->Add( m_locked, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT, 5 );
+	gbSizerCommon->Add( m_locked, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	gbSizerCommon->AddGrowableCol( 1 );
@@ -1442,9 +1442,9 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE::DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( wxWi
 	m_gridCornersList->SetColSize( 1, 124 );
 	m_gridCornersList->EnableDragColMove( false );
 	m_gridCornersList->EnableDragColSize( true );
+	m_gridCornersList->SetColLabelSize( 22 );
 	m_gridCornersList->SetColLabelValue( 0, _("Pos X") );
 	m_gridCornersList->SetColLabelValue( 1, _("Pos Y") );
-	m_gridCornersList->SetColLabelSize( 22 );
 	m_gridCornersList->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows

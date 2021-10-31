@@ -787,7 +787,7 @@ void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame,
 
     aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
 
-    aList.emplace_back( _( "NetClass" ), UnescapeString( GetNetClass()->GetName() ) );
+    aList.emplace_back( _( "Net Class" ), UnescapeString( GetNetClass()->GetName() ) );
 
 #if 0   // Enable for debugging
     if( GetBoard() )
@@ -803,8 +803,8 @@ void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame,
                                                             m_End.y ) );
 #endif
 
-    // Display the State member
-    aList.emplace_back( _( "Status" ), IsLocked() ? _( "Locked" ) : wxT( "" ) );
+    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
+        aList.emplace_back( _( "Status" ), _( "Locked" ) );
 }
 
 

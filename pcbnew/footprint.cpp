@@ -941,7 +941,7 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     wxString status;
     wxString attrs;
 
-    if( IsLocked() )
+    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
         addToken( &status, _( "Locked" ) );
 
     if( m_fpStatus & FP_is_PLACED )

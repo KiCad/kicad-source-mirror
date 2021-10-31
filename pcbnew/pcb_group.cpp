@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 #include <bitmaps.h>
+#include <eda_draw_frame.h>
 #include <board.h>
 #include <board_item.h>
 #include <pcb_group.h>
@@ -334,7 +335,7 @@ void PCB_GROUP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     aList.emplace_back( _( "Group" ), m_name.empty() ? _( "<unnamed>" ) : m_name );
     aList.emplace_back( _( "Members" ), wxString::Format( "%zu", m_items.size() ) );
 
-    if( IsLocked() )
+    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
         aList.emplace_back( _( "Status" ), _( "Locked" ) );
 }
 

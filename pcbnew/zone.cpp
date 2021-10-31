@@ -590,16 +590,22 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     }
     else if( IsOnCopperLayer() )
     {
-        aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
+        if( aFrame->GetName() == PCB_EDIT_FRAME_NAME )
+        {
+            aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
 
-        aList.emplace_back( _( "NetClass" ), UnescapeString( GetNetClass()->GetName() ) );
+            aList.emplace_back( _( "Net Class" ), UnescapeString( GetNetClass()->GetName() ) );
+        }
 
         // Display priority level
         aList.emplace_back( _( "Priority" ), wxString::Format( "%d", GetPriority() ) );
     }
 
-    if( IsLocked() )
-        aList.emplace_back( _( "Status" ), _( "Locked" ) );
+    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME )
+    {
+        if( IsLocked() )
+            aList.emplace_back( _( "Status" ), _( "Locked" ) );
+    }
 
     wxString layerDesc;
     int count = 0;
@@ -635,9 +641,13 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     wxString source;
     int      clearance = GetOwnClearance( GetLayer(), &source );
 
-    aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
-                                          MessageTextFromValue( units, clearance ) ),
-                        wxString::Format( _( "(from %s)" ), source ) );
+    if( !source.IsEmpty() )
+    {
+        aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
+                                              MessageTextFromValue( units, clearance ) ),
+                            wxString::Format( _( "(from %s)" ),
+                                              source ) );
+    }
 
     // Useful for statistics, especially when zones are complex the number of hatches
     // and filled polygons can explain the display and DRC calculation time:

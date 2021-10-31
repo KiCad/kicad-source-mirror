@@ -264,15 +264,20 @@ double FP_TEXT::GetDrawRotation() const
 
 void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_parent );
-    wxString   msg;
+    wxString msg;
 
     static const wxString text_type_msg[3] =
     {
-        _( "Ref." ), _( "Value" ), _( "Text" )
+        _( "Reference" ), _( "Value" ), _( "Text" )
     };
 
-    aList.emplace_back( _( "Footprint" ), fp ? fp->GetReference() : _( "<invalid>" ) );
+    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME )
+    {
+        FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_parent );
+
+        if( fp )
+            aList.emplace_back( _( "Footprint" ), fp->GetReference() );
+    }
 
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text" ), UnescapeString( GetText() ) );
@@ -280,7 +285,7 @@ void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     wxASSERT( m_Type >= TEXT_is_REFERENCE && m_Type <= TEXT_is_DIVERS );
     aList.emplace_back( _( "Type" ), text_type_msg[m_Type] );
 
-    if( IsLocked() )
+    if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
         aList.emplace_back( _( "Status" ), _( "Locked" ) );
 
     aList.emplace_back( _( "Display" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
