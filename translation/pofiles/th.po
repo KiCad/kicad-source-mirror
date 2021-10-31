@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
-"PO-Revision-Date: 2021-10-25 13:17+0000\n"
+"PO-Revision-Date: 2021-11-01 10:42+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -3909,9 +3909,8 @@ msgstr "นิ้ว"
 
 #: common/eda_draw_frame.cpp:148 pcbnew/tools/drawing_tool.cpp:266
 #: pcbnew/tools/pcb_actions.cpp:675
-#, fuzzy
 msgid "Constrain to H, V, 45"
-msgstr "จำกัดเค้าโครงเป็น H, V และ 45 องศา"
+msgstr "จำกัดเป็น H, V, 45"
 
 #: common/eda_draw_frame.cpp:318
 msgid "Edit User Grid..."
@@ -5188,9 +5187,8 @@ msgid "Reference designators"
 msgstr "อักษรอ้างอิง"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text"
-msgstr "ข้อความบนฟุ้ทพรินท์"
+msgstr "ข้อความของฟุ้ทพรินท์"
 
 #: common/layer_id.cpp:148
 msgid "Hidden text"
@@ -11629,14 +11627,12 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "เน้นสีบนเน็ตเมื่อเน้นบนพีซีบี"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Constrain buses and wires to H or V"
-msgstr "เข้มงวดทิศทางบัสและเส้นลวดไปทิศทาง H และ V เท่านั้น(&R)"
+msgstr "บังคับทิศทางบัสและเส้นลวด H หรือ V"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Mouse drag performs Drag (G) operation"
-msgstr "คลิกเมาส์ลาก จะทำคำสั่งลาก(G)"
+msgstr "ใช้เมาส์กดค้างลาก จะทำคำสั่งลาก(G)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:28
 msgid "If unchecked, mouse drag will perform move (M) operation"
@@ -16069,14 +16065,12 @@ msgid "Edit with Symbol Editor"
 msgstr "แก้ไขด้วยตัวแก้ไขสัญลักษณ์"
 
 #: eeschema/tools/ee_actions.cpp:551
-#, fuzzy
 msgid "Open the selected symbol in the Symbol Editor"
-msgstr "เปิดฟุ้ทพรินท์ที่เลือกภาย ในเครื่องมือแก้ไขฟุ้ทพรินท์"
+msgstr "เปิดสัญลักษณ์ที่เลือก ภายในเครื่องมือแก้ไขสัญลักษณ์"
 
 #: eeschema/tools/ee_actions.cpp:557
-#, fuzzy
 msgid "Open the library symbol in the Symbol Editor"
-msgstr "เปิดตัวแก้ไขสัญลักษณ์เพื่อแก้ไขสัญลักษณ์"
+msgstr "เปิดไลบรารีของสัญลักษณ์ ภายในเครื่องมือแก้ไขสัญลักษณ์"
 
 #: eeschema/tools/ee_actions.cpp:562
 msgid "Edit Symbol Fields..."
@@ -19304,7 +19298,6 @@ msgid "Error writing objects to clipboard"
 msgstr "เกิดข้อผิดพลาดในการเขียนวัตถุไปยังคลิปบอร์ด"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19316,16 +19309,17 @@ msgid ""
 "___R<sub>1</sub> = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
-"### Split Attenuator -- ลดทอนแบบแยก\n"
-"#### Attenuation is 6dB\n"
-"___Z<sub>in</sub>___ desired input impedance in &#x2126;<br>\n"
-"___Z<sub>out</sub>___ desired output impedance in &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"### ลดทอนแบบที-เชื่อมกัน\n"
+"___a___ is attenuation in dB<br>\n"
+"___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
+"___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
+"___L = 10<sup>a/20</up>___\n"
+"___R<sub>1</sub> = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
+"___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19339,21 +19333,19 @@ msgid ""
 "___R<sub>1</sub> = 1 / (A/Z<sub>in</sub> &minus; 1/R<sub>2</sub>)___<br>\n"
 "___R<sub>3</sub> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
 msgstr ""
-"### Tee Attenuator--ลดทอนแบบตัวที\n"
-"__Zin__ desired input impedance in &#x2126;<br>\n"
-"__Zout__ desired output impedance<br>\n"
-"__Zin = Zout__<br><br>\n"
+"### ลดทอนแบบไพ\n"
+"___a___ is attenuation in dB<br>\n"
+"___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
+"___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "\n"
-"* __a__ attenuation in dB\n"
-"* __L = 10<sup>a/20</sup>__ (the loss)\n"
-"* ___A = (L + 1) / (L - 1)___<br><br>\n"
-"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - "
-"1)___\n"
-"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R<sub>2</sub> = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; "
+"Z<sub>out</sub> / L)___<br>\n"
+"___R<sub>1</sub> = 1 / (A/Z<sub>in</sub> &minus; 1/R<sub>2</sub>)___<br>\n"
+"___R<sub>3</sub> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -19363,16 +19355,15 @@ msgid ""
 "\n"
 "___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
 msgstr ""
-"### Split Attenuator -- ลดทอนแบบแยก\n"
-"#### Attenuation is 6dB\n"
-"___Z<sub>in</sub>___ desired input impedance in &#x2126;<br>\n"
-"___Z<sub>out</sub>___ desired output impedance in &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"### ลดทอนแบบแยก\n"
+"ค่าลดทอนคือ 6 dB  \n"
+"___Z<sub>in</sub>___ is desired input impedance in &#x2126;  \n"
+"___Z<sub>out</sub>___ is desired output impedance in &#x2126;  \n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
+"___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19386,18 +19377,17 @@ msgid ""
 "___R<sub>1</sub> = Z<sub>in</sub> &middot; A &minus; R<sub>2</sub>___<br>\n"
 "___R<sub>3</sub> = Z<sub>out</sub> &middot; A &minus; R<sub>2</sub>___\n"
 msgstr ""
-"### Tee Attenuator--ลดทอนแบบตัวที\n"
-"__Zin__ desired input impedance in &#x2126;<br>\n"
-"__Zout__ desired output impedance<br>\n"
-"__Zin = Zout__<br><br>\n"
+"### ลดทอนแบบที\n"
+"___a___ is attenuation in dB<br>\n"
+"___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
+"___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "\n"
-"* __a__ attenuation in dB\n"
-"* __L = 10<sup>a/20</sup>__ (the loss)\n"
-"* ___A = (L + 1) / (L - 1)___<br><br>\n"
-"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - "
-"1)___\n"
-"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br>\n"
+"___R<sub>2</sub> = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; "
+"Z<sub>out</sub>) / (L&minus;1)___<br>\n"
+"___R<sub>1</sub> = Z<sub>in</sub> &middot; A &minus; R<sub>2</sub>___<br>\n"
+"___R<sub>3</sub> = Z<sub>out</sub> &middot; A &minus; R<sub>2</sub>___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -19432,9 +19422,8 @@ msgid "Parameters"
 msgstr "พารามิเตอร์"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:48
-#, fuzzy
 msgid "Attenuation (a):"
-msgstr "การลดทอน:"
+msgstr "การลดทอน(a):"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:55
 msgid "dB"
@@ -19836,14 +19825,12 @@ msgid "Remove an item from the current list of available regulators"
 msgstr "ลบชิ้นส่วน ออกจากรายการเรกูเลเตอร์ปัจจุบันที่มีอยู่"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
-#, fuzzy
 msgid "Temperature rise"
-msgstr "อุณหภูมิสูงขึ้น:"
+msgstr "อุณหภูมิสูงขึ้น"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
-#, fuzzy
 msgid "Current (I):"
-msgstr "กระแส:"
+msgstr "กระแส(I):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
@@ -19875,15 +19862,13 @@ msgstr "เส้นทองแดงบนเลเยอร์ภายนอ
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:201
-#, fuzzy
 msgid "Trace width (W):"
-msgstr "ความกว้างเทรส:"
+msgstr "ความกว้างลายทองแดง(W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
-#, fuzzy
 msgid "Trace thickness (H):"
-msgstr "ความหนาเทรส:"
+msgstr "ความหนาลายทองแดง(H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:236
@@ -20254,7 +20239,6 @@ msgid "Not worth using"
 msgstr "ไม่คุ้มค่าจะใช้"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20282,30 +20266,31 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"ซีรี่ส์อิเล็กทรอนิกส์ถูกกําหนดใน IEC 60063\n"
+"E-series ถูกกำหนดใน IEC 60063.\n"
 "\n"
-"ค่าที่มีอยู่จะเว้นระยะห่างเท่าๆ กันในระดับลอการิทึม\n"
+"ค่าที่มีอยู่จะเว้นระยะห่างเท่าๆ กันในสเกลลอการิทึม\n"
 "\n"
-"E24(5%): 1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 4.7 "
-"5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
 "\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"\tE6(20%): 1.0 - 1.5 - 2.2 - 3.3 - 4.7 - 6.8 -\n"
-"\tE3(50%): 1.0 - - - 2.2 - - - 4.7 - - -\n"
-"\tE1 : 1.0 - - - - - - - - - - -\n"
+"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
+"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
+"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
 "\n"
 "- เครื่องคิดเลขนี้พบการรวมกันของ E-series มาตรฐาน (ระหว่าง 10Ω และ 1MΩ) "
-"เพื่อสร้างค่าโดยพลการ\n"
+"เพื่อสร้างค่าประมาณใดๆ\n"
 "- คุณสามารถป้อนแนวต้านที่ต้องการได้ตั้งแต่ 0.0025 ถึง 4000 kΩ\n"
-"- มีโซลูชันที่ใช้ส่วนประกอบสูงสุด 4 ชิ้น\n"
+"- มีคำตอบที่ใช้ส่วนประกอบสูงสุด 4 ชิ้น\n"
 "\n"
-"ตามค่าเริ่มต้น ค่าการร้องขอจะถูกแยกออกจากชุดโซลูชันเสมอ  นอกจากนี้ยังสามารถระบุได้\n"
-"มีค่าเพิ่มเติมสูงสุดสองค่าที่จะแยกออกจากโซลูชัน\n"
+"ค่าที่ร้องขอ จะถูกแยกออกจากชุดคำตอบเสมอ<br>\n"
+"ทางเลือกเพิ่มเติม สามารถแยกค่าออกได้2ค่า "
+"ในกรณีที่มีปัญหาเรื่องการจัดหาอุปกรณ์\n"
 "\n"
-"โซลูชันจะได้รับในรูปแบบต่อไปนี้:\n"
+"คำตอบจะได้รับในรูปแบบนี้:\n"
 "\n"
-"R1 + R2 +...+ Rn ในซีรีส์\n"
-"| R1 | R2...|\tตัวต้านทาน Rn แบบขนาน\n"
-"R1 + (R2| R3)...\t\tการรวมกันของข้างต้นใด ๆ ข้างต้น\n"
+"\tR1 + R2 +...+ Rn ค่าความตามทานในซีรียส์\n"
+"\tR1 | R2 |...| Rn\tค่าความต้านทานแบบขนาน\n"
+"\tR1 + (R2|R3)...\t\tการรวมแบบใดๆจากข้างต้น\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:49
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
@@ -20362,7 +20347,6 @@ msgstr ""
 "คุณต้องการออกและละทิ้งการเปลี่ยนแปลงหรือไม่?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20390,20 +20374,22 @@ msgstr ""
 "หากคุณระบุกระแสสูงสุด ความกว้างของลายทองแดงจะถูกคำนวณให้เหมาะสม\n"
 "\n"
 "หากคุณระบุความกว้างของลายทองแดง สามารถคำนวณกระแสสูงสุดได้ "
-"ความกว้างลายทองแดงอื่นที่รองรับกระแสปริมาณนี จะถูกคำนวนไปด้วย\n"
+"ความกว้างลายทองแดงอื่นที่รองรับกระแสปริมาณนี้ จะถูกคำนวณไปด้วย\n"
 "\n"
-"ค่าควบคุมจะแสดงเป็นตัวหนา\n"
+"ค่าควบคุมจะแสดงเป็นอักษรตัวหนา\n"
 "\n"
-"การคำนวณใช้ได้กับกระแสสูงสุด 35 A (ภายนอก) หรือ 17.5 A (ภายใน) อุณหภูมิเพิ่มขึ้นสูงสุด 100 "
-"ºC และความกว้างสูงสุด 400 มิล(10 มม.)\n"
+"การคำนวณใช้ได้กับกระแสสูงสุด 35 A (ภายนอก) หรือ 17.5 A (ภายใน) "
+"อุณหภูมิเพิ่มขึ้นสูงสุด 100 ºC และความกว้างลายทองแดงสูงสุด 400 มิล(10 มม.)\n"
 "\n"
-"สูตรจาก IPC 2221 คือ\n"
-"<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
-"โดยที่:\n"
-"__I__ = กระแสสูงสุดใน A\n"
-"__dt__ = อุณหภูมิเพิ่มขึ้นเหนือสภาพแวดล้อมใน ºC\n"
-"__W,H__ = ความกว้างและความหนา หน่วยเป็น มิล (1/1000นิ้ว)\n"
-"__K__ = 0.024 สำหรับลายทองแดงภายในหรือ 0.048 สำหรับลายทองแดงด้านนอก\n"
+"สูตรจาก IPC 2221 คือ \n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
+"โดยที่: \n"
+"___I___คือ กระแสสูงสุดหน่วย A \n"
+"___&Delta;T___คือ อุณหภูมิเพิ่มขึ้นเหนือสภาพแวดล้อมใน &deg;C \n"
+"___W___คือ ความกว้างความหนา หน่วยเป็น มิล (1/1000นิ้ว) \n"
+"___H___คือ ความหนา(สูง) หน่วยเป็น มิล \n"
+"___K___คือ 0.024 สำหรับลายทองแดงภายในหรือ 0.048 สำหรับลายทองแดงด้านนอก  \n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -22616,25 +22602,24 @@ msgid "Circular Array"
 msgstr "อาร์เรย์แบบวงกลม"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
-#, fuzzy
 msgid "Footprint Annotation"
-msgstr "ที่ตั้งฟุ้ทพรินท์"
+msgstr "อักษรอธิบายประกอบฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
-#, fuzzy
 msgid "Keep existing reference designators"
-msgstr "แทนค่าที่ตรงกันในอักษรอ้างอิง"
+msgstr "เก็บอักษรอ้างอิงที่มีอยู่"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
-#, fuzzy
 msgid "Assign unique reference designators"
-msgstr "กำหนดอักษรอ้างอิงที่ไม่ซ้ำกันให้กับวางสำเนาสัญลักษณ์"
+msgstr "กำหนดอักษรอ้างอิงที่มีค่าไม่ซ้ำเดิม"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:357
 msgid ""
 "This can conflict with reference designators in the schematic that have not "
 "yet been synchronized with the board."
 msgstr ""
+"นี่คืออาจจะขัดแย้งกับอักษรอ้างอิงในวงจร "
+"ที่ยังไม่ได้ทำการปรับให้ตรงกับค่าในพีซีบอร์ด"
 
 #: pcbnew/dialogs/dialog_create_array_base.h:127
 msgid "Create Array"
@@ -25716,9 +25701,8 @@ msgid "Plot format:"
 msgstr "รูปแบบพล็อต:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
-#, fuzzy
 msgid "Include Layers"
-msgstr "เลเยอร์ที่รวม"
+msgstr "รวมเลเยอร์"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
@@ -25749,7 +25733,6 @@ msgid "Do not plot the contents of the PCB edge layer on any other layers."
 msgstr "ไม่ต้องพล็อตข้อมูลจากเลเยอร์เอ็ดจ์บนเลเยอร์อื่นๆ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
-#, fuzzy
 msgid "Sketch pads on fabrication layers"
 msgstr "แพ็ดแบบร่างบนเลเยอร์แฟ้บ"
 
@@ -25824,18 +25807,18 @@ msgid "Check zone fills before plotting"
 msgstr "ตรวจสอบการเติมโซนก่อนพล็อต"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
-#, fuzzy
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
-msgstr "ความกว้างและ/หรือระยะขอบต่ำสุดของโซลเดอร์มาส์กส่วนกลาง ไม่ได้ตั้งค่าเป็น 0 "
+msgstr ""
+"ความกว้างและ/หรือระยะขอบต่ำสุดของโซลเดอร์มาส์กจากค่าส่วนกลาง ไม่ได้กำหนดเป็น "
+"0 "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
-#, fuzzy
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
 msgstr ""
-"ผู้ผลิตบอร์ดส่วนใหญ่คาดหวัง 0 และใช้ข้อจำกัดของตนเอง, "
-"โดยเฉพาะอย่างยิงค่าโซลเดอร์มาส์กที่เล็กที่สุด"
+"ผู้ผลิตบอร์ดส่วนใหญ่คาดหวังค่า 0 "
+"และใช้ข้อจำกัดของตนเองสำหรับขนาดโซลเดอร์มาส์กที่น้อยที่สุด"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -25914,7 +25897,6 @@ msgid "Include netlist attributes"
 msgstr "รวมคุณลักษณะของรายชื่อเน็ต"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
-#, fuzzy
 msgid ""
 "Include netlist metadata and aperture attributes in Gerber files.\n"
 "They are comments in the X1 format.\n"
@@ -25925,7 +25907,6 @@ msgstr ""
 "ใช้สำหรับตรวจสอบการเชื่อมต่อในเครื่องมือ CAM และโปรแกรมดูเกอร์เบอร์"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
-#, fuzzy
 msgid "Disable aperture macros (not recommended)"
 msgstr "ปิดใช้งานมาโครรูรับแสง (ไม่แนะนำ)"
 
@@ -25995,9 +25976,8 @@ msgid "Uncheck to plot graphic items using their center lines"
 msgstr "ไม่เลือก เพื่อพล็อตชิ้นส่วนกราฟิกโดยใช้เส้นกึ่งกลาง"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot text"
-msgstr "ใช้ฟอนต์ KiCad เพื่อพล็อตข้อความ"
+msgstr "ใช้ฟอนต์คีแคดเพื่อพล็อตข้อความ"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
 msgid ""
@@ -26922,9 +26902,8 @@ msgid "Graphics Editing"
 msgstr "การแก้ไขกราฟิก"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
-#, fuzzy
 msgid "Constrain to H, V, 45 degrees"
-msgstr "บังคับเค้าโครงเป็น H, V และ 45 องศา"
+msgstr "บังคับเป็น H, V, 45 องศา"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
 msgid "Magnetic Points"
@@ -34405,10 +34384,9 @@ msgid "Lock or unlock selected items"
 msgstr "ล็อกหรือปลดล็อกชิ้นส่วนที่เลือก"
 
 #: pcbnew/tools/pcb_actions.cpp:676
-#, fuzzy
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
-msgstr "จำกัดการกระทำที่ 45 องศาจากจุดเริ่มต้น"
+msgstr "จำกัดการกระทำเป็นแนวแนว, แนวตั้ง หรือ 45 องศาจากจุดเริ่มต้น"
 
 #: pcbnew/tools/pcb_actions.cpp:681
 msgid "Prevent items from being moved and/or resized on the canvas"
