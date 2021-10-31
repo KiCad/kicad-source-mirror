@@ -18,7 +18,7 @@ PANEL_ATTENUATORS_BASE::PANEL_ATTENUATORS_BASE( wxWindow* parent, wxWindowID id,
 	bLeftSizerAtt = new wxBoxSizer( wxVERTICAL );
 
 	bLeftSizerAtt->SetMinSize( wxSize( 260,-1 ) );
-	wxString m_AttenuatorsSelectionChoices[] = { _("PI"), _("Tee"), _("Bridged tee"), _("Resistive splitter") };
+	wxString m_AttenuatorsSelectionChoices[] = { _("Pi"), _("Tee"), _("Bridged tee"), _("Resistive splitter") };
 	int m_AttenuatorsSelectionNChoices = sizeof( m_AttenuatorsSelectionChoices ) / sizeof( wxString );
 	m_AttenuatorsSelection = new wxRadioBox( this, wxID_ANY, _("Attenuators"), wxDefaultPosition, wxDefaultSize, m_AttenuatorsSelectionNChoices, m_AttenuatorsSelectionChoices, 1, wxRA_SPECIFY_COLS );
 	m_AttenuatorsSelection->SetSelection( 2 );
