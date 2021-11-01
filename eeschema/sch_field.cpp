@@ -262,6 +262,46 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 }
 
 
+double SCH_FIELD::GetDrawRotation() const
+{
+    // Calculate the text orientation according to the symbol orientation.
+    int orient = GetTextAngle();
+
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+    {
+        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
+
+        if( parentSymbol && parentSymbol->GetTransform().y1 )  // Rotate symbol 90 degrees.
+        {
+            if( orient == TEXT_ANGLE_HORIZ )
+                orient = TEXT_ANGLE_VERT;
+            else
+                orient = TEXT_ANGLE_HORIZ;
+        }
+    }
+
+    return orient;
+}
+
+
+wxPoint SCH_FIELD::GetDrawPos() const
+{
+    return GetBoundingBox().Centre();
+}
+
+
+EDA_TEXT_HJUSTIFY_T SCH_FIELD::GetDrawHorizJustify() const
+{
+    return GR_TEXT_HJUSTIFY_CENTER;
+}
+
+
+EDA_TEXT_VJUSTIFY_T SCH_FIELD::GetDrawVertJustify() const
+{
+    return GR_TEXT_VJUSTIFY_CENTER;
+}
+
+
 const EDA_RECT SCH_FIELD::GetBoundingBox() const
 {
     // Calculate the text bounding box:

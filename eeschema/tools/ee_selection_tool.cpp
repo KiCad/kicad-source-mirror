@@ -25,6 +25,7 @@
 #include <bitmaps.h>
 #include <core/typeinfo.h>
 #include <core/kicad_algo.h>
+#include <geometry/shape_compound.h>
 #include <ee_actions.h>
 #include <ee_collectors.h>
 #include <ee_selection_tool.h>
@@ -1011,13 +1012,15 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
     }
 
     // Find the closest item.  (Note that at this point all hits are either exact or non-exact.)
+    wxPoint   pos( aPos );
+    SEG       poss( aPos, aPos );
     EDA_ITEM* closest = nullptr;
-    int       closestDist = INT_MAX;
+    int       closestDist = INT_MAX / 2;
 
     for( EDA_ITEM* item : collector )
     {
         EDA_RECT bbox = item->GetBoundingBox();
-        int      dist;
+        int      dist = INT_MAX / 2;
 
         if( exactHits.count( item ) )
         {
@@ -1027,22 +1030,38 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
                 break;
             }
 
-            wxPoint   pos( aPos );
-            SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
+            SCH_LINE*   line = dynamic_cast<SCH_LINE*>( item );
+            EDA_TEXT*   text = dynamic_cast<EDA_TEXT*>( item );
+            SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
             if( line )
+            {
                 dist = DistanceLinePoint( line->GetStartPoint(), line->GetEndPoint(), pos );
+            }
+            else if( text )
+            {
+                text->GetEffectiveTextShape()->Collide( poss, closestDist, &dist );
+            }
+            else if( symbol )
+            {
+                bbox = symbol->GetBodyBoundingBox();
+                SHAPE_RECT rect( bbox.GetPosition(), bbox.GetWidth(), bbox.GetHeight() );
+
+                if( bbox.Contains( pos ) )
+                    dist = EuclideanNorm( bbox.GetCenter() - pos );
+                else
+                    rect.Collide( poss, closestDist, &dist );
+            }
             else
-                dist = EuclideanNorm( bbox.GetCenter() - pos ) * 2;
+            {
+                dist = EuclideanNorm( bbox.GetCenter() - pos );
+            }
         }
         else
         {
             SHAPE_RECT rect( bbox.GetPosition(), bbox.GetWidth(), bbox.GetHeight() );
-            rect.Collide( SEG( aPos, aPos ), collector.m_Threshold, &dist );
+            rect.Collide( poss, collector.m_Threshold, &dist );
         }
-
-        if( item->IsType( EE_COLLECTOR::FieldOwners ) )
-            dist += INT_MAX / 4;
 
         if( dist < closestDist )
         {

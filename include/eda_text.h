@@ -385,7 +385,10 @@ public:
      */
     virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
-    virtual double GetDrawRotation() const;
+    virtual double GetDrawRotation() const                  { return GetTextAngle(); }
+    virtual wxPoint GetDrawPos() const                      { return GetTextPos(); }
+    virtual EDA_TEXT_HJUSTIFY_T GetDrawHorizJustify() const { return GetHorizJustify(); };
+    virtual EDA_TEXT_VJUSTIFY_T GetDrawVertJustify() const  { return GetVertJustify(); };
 
     int Compare( const EDA_TEXT* aOther ) const;
 

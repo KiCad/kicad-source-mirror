@@ -116,6 +116,14 @@ public:
 
     wxString GetShownText( int aDepth = 0 ) const override;
 
+    /**
+     * Adjusters to allow EDA_TEXT to draw/print/etc. text in absolute coords.
+     */
+    double GetDrawRotation() const override;
+    wxPoint GetDrawPos() const override;
+    EDA_TEXT_HJUSTIFY_T GetDrawHorizJustify() const override;
+    EDA_TEXT_VJUSTIFY_T GetDrawVertJustify() const override;
+
     const EDA_RECT GetBoundingBox() const override;
 
     /**
