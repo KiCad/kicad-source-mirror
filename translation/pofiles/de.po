@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
 "PO-Revision-Date: 2021-11-03 12:40+0000\n"
-"Last-Translator: Benedikt Freisen <b.freisen@gmx.net>\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -16539,14 +16539,12 @@ msgid "Edit with Symbol Editor"
 msgstr "Mit Symboleditor bearbeiten"
 
 #: eeschema/tools/ee_actions.cpp:551
-#, fuzzy
 msgid "Open the selected symbol in the Symbol Editor"
-msgstr "Öffnet den ausgewählten Footprint im Footprint Editor"
+msgstr "Öffnet das ausgewählte Symbol im Symboleditor"
 
 #: eeschema/tools/ee_actions.cpp:557
-#, fuzzy
 msgid "Open the library symbol in the Symbol Editor"
-msgstr "Symboleditor öffnen, um das Schaltzeichen zu bearbeiten"
+msgstr "Öffnet das Bibliothekssymbol im Symboleditor"
 
 #: eeschema/tools/ee_actions.cpp:562
 msgid "Edit Symbol Fields..."
@@ -16646,7 +16644,7 @@ msgstr "Aktuelles Blatt als Bild in die Zwischenablage exportieren"
 
 #: eeschema/tools/ee_actions.cpp:621
 msgid "Switch to PCB Editor"
-msgstr "Wechseln zum Platineneditor"
+msgstr "Zum Platineneditor wechseln"
 
 #: eeschema/tools/ee_actions.cpp:621
 msgid "Open PCB in board editor"
@@ -19047,11 +19045,11 @@ msgstr "Neues Verzeichnis erstellen"
 
 #: kicad/project_tree_pane.cpp:693
 msgid "Switch to this Project"
-msgstr "Wechseln zu diesem Projekt"
+msgstr "Zu diesem Projekt wechseln"
 
 #: kicad/project_tree_pane.cpp:694
 msgid "Close all editors, and switch to the selected project"
-msgstr "Schließen aller Editoren und wechseln zum ausgewählten Projekt"
+msgstr "Schließt alle Editoren und wechselt zum ausgewählten Projekt"
 
 #: kicad/project_tree_pane.cpp:701
 msgid "New Directory..."
@@ -23215,19 +23213,16 @@ msgid "Circular Array"
 msgstr "Kreis Array"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
-#, fuzzy
 msgid "Footprint Annotation"
-msgstr "Footprint-Standort"
+msgstr "Footprint-Annotation"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
-#, fuzzy
 msgid "Keep existing reference designators"
-msgstr "Fundstellen in Referenzbezeichnern ersetzen"
+msgstr "Bestehende Referenzbezeichner beibehalten"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
-#, fuzzy
 msgid "Assign unique reference designators"
-msgstr "Eingefügten Symbolen eindeutige Referenzbezeichner zuweisen"
+msgstr "Eindeutige Referenzbezeichner zuweisen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:357
 msgid ""
@@ -26429,9 +26424,8 @@ msgid "Plot format:"
 msgstr "Plotformat:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
-#, fuzzy
 msgid "Include Layers"
-msgstr "Beinhaltende Lagen"
+msgstr "Lagen einbeziehen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
@@ -26464,7 +26458,6 @@ msgstr ""
 "Den Inhalt der Platinenumriss-Lage nicht in alle anderen Lagen plotten."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
-#, fuzzy
 msgid "Sketch pads on fabrication layers"
 msgstr "Pads auf Fabrikationslagen skizzieren"
 
@@ -26547,13 +26540,12 @@ msgstr ""
 "gesetzt. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
-#, fuzzy
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
 msgstr ""
-"Die meisten Platinenfertiger erwarten den Wert 0 und verwenden eigene Werte, "
-"insbesondere für die minimale Breite der Lötmaske."
+"Die meisten Platinenfertiger erwarten den Wert 0 und verwenden eigene Werte "
+"für die Mindestbreite der Lötstoppmaske."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -35569,7 +35561,7 @@ msgstr "Netzlinien des ausgewählten Netzes anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:761
 msgid "Switch to Schematic Editor"
-msgstr "Wechseln zum Schaltplan Editor"
+msgstr "Zum Schaltplaneditor wechseln"
 
 #: pcbnew/tools/pcb_actions.cpp:761
 msgid "Open schematic in Eeschema"
