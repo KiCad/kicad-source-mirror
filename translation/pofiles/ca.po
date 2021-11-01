@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
-"PO-Revision-Date: 2021-10-18 19:17+0000\n"
+"PO-Revision-Date: 2021-11-03 14:44+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -299,12 +299,11 @@ msgstr "General"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
 msgid "Realtime Renderer"
-msgstr ""
+msgstr "Renderitzador en temps real"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "Opcions de Raytracing"
+msgstr "Renderitzador de Raytracing"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:240
@@ -658,9 +657,8 @@ msgid "Show silkscreen layers"
 msgstr "Mostra les capes de serigrafia"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Retalla la serigrafia a l'anell de la via"
+msgstr "Retalla la serigrafia a les vores de la màscara de soldadura"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
@@ -683,7 +681,6 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "Capes de l'usuari (no es mostren en el mode realista)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
 msgstr "Mostra les capes de comentaris i de dibuixos"
 
@@ -736,7 +733,6 @@ msgid "Camera Options"
 msgstr "Opcions de càmera"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
 msgstr "Increment de rotació:"
 
@@ -4014,9 +4010,8 @@ msgstr "Polzades"
 
 #: common/eda_draw_frame.cpp:148 pcbnew/tools/drawing_tool.cpp:266
 #: pcbnew/tools/pcb_actions.cpp:675
-#, fuzzy
 msgid "Constrain to H, V, 45"
-msgstr "L&imita les línies gràfiques a 45 graus"
+msgstr "Restringeix a H, V, 45"
 
 #: common/eda_draw_frame.cpp:318
 msgid "Edit User Grid..."
@@ -4284,9 +4279,8 @@ msgid "Length"
 msgstr "Longitud"
 
 #: common/eda_shape.cpp:559
-#, fuzzy
 msgid "Points"
-msgstr "Punt X"
+msgstr "Punts"
 
 #: common/eda_shape.cpp:566 common/eda_text.cpp:759 eeschema/sch_bitmap.cpp:203
 #: pcbnew/dialogs/dialog_board_statistics.cpp:676
@@ -4321,16 +4315,15 @@ msgstr "Segment"
 
 #: common/eda_shape.cpp:587
 msgid "Unrecognized"
-msgstr ""
+msgstr "No reconegut"
 
 #: common/eda_shape.cpp:591 pcb_calculator/transline_ident.cpp:144
 #: pcb_calculator/transline_ident.cpp:176
 #: pcb_calculator/transline_ident.cpp:210
 #: pcb_calculator/transline_ident.cpp:327
 #: pcb_calculator/transline_ident.cpp:368
-#, fuzzy
 msgid "Line width"
-msgstr "Amplada de les línies"
+msgstr "Amplada de la línia"
 
 #: common/eda_shape.cpp:1583
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:100
@@ -4340,26 +4333,22 @@ msgid "Bezier"
 msgstr "Bezier"
 
 #: common/eda_shape.cpp:1595
-#, fuzzy
 msgid "Start X"
-msgstr "Punt Y inicial:"
+msgstr "Inici X"
 
 #: common/eda_shape.cpp:1597
-#, fuzzy
 msgid "Start Y"
-msgstr "Punt Y inicial:"
+msgstr "Inici Y"
 
 #: common/eda_shape.cpp:1599 pcbnew/pcb_shape.cpp:264 pcbnew/pcb_track.cpp:1159
 #: pcbnew/pcb_track.cpp:1176
-#, fuzzy
 msgid "End X"
-msgstr "Punt X final:"
+msgstr "Final X"
 
 #: common/eda_shape.cpp:1601 pcbnew/pcb_shape.cpp:266 pcbnew/pcb_track.cpp:1161
 #: pcbnew/pcb_track.cpp:1178
-#, fuzzy
 msgid "End Y"
-msgstr "Punt Y final:"
+msgstr "Final Y"
 
 #: common/eda_shape.cpp:1604
 msgid "Line Width"
@@ -5314,7 +5303,6 @@ msgid "Reference designators"
 msgstr "Designadors de referències"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text"
 msgstr "Text de l'empremta"
 
@@ -18551,9 +18539,8 @@ msgid "Failed to output data"
 msgstr "No s'ha pogut carregar «%s»"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html><h1>Selector de plantilles</h1></html>"
+msgstr "<h1>Selector de plantilles</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -21214,9 +21201,8 @@ msgid "Color Code"
 msgstr "Codis dels colors"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "Línia de transmissió"
+msgstr "TransLine "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -28486,9 +28472,8 @@ msgid "No filename entered"
 msgstr "No s'ha seleccionat cap fitxer!"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
-#, fuzzy
 msgid "Illegal filename"
-msgstr "Nom del fitxer no vàlid: "
+msgstr "Nom del fitxer no vàlid"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/microwave/microwave_polygon.cpp:224
