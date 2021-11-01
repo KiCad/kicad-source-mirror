@@ -255,14 +255,9 @@ static const char* getTextTypeToken( KICAD_T aType )
 /**
  * Write stroke definition to \a aFormatter.
  *
- * This only writes the stroke definition if \a aWidth, \a aStyle and \a aColor are
- * not the default setting or are not defined.
- *
  * @param aFormatter A pointer to the #OUTPUTFORMATTER object to write to.
  * @param aNestLevel The nest level to indent the stroke definition.
- * @param aWidth The stroke line width in internal units.
- * @param aStyle The stroke line style.
- * @param aColor The stroke line color.
+ * @param aStroke The stroke width, line-style and color.
  */
 static void formatStroke( OUTPUTFORMATTER* aFormatter, int aNestLevel,
                           const STROKE_PARAMS& aStroke )
@@ -310,11 +305,10 @@ static void formatCircle( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE
                           const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor,
                           KIID aUuid = niluuid )
 {
-    aFormatter->Print( aNestLevel, "(circle (center %s %s) (radius %s) (stroke (width %s)) ",
+    aFormatter->Print( aNestLevel, "(circle (center %s %s) (radius %s) ",
                        FormatInternalUnits( aCircle->GetStart().x ).c_str(),
                        FormatInternalUnits( aCircle->GetStart().y ).c_str(),
-                       FormatInternalUnits( aCircle->GetRadius() ).c_str(),
-                       FormatInternalUnits( aCircle->GetWidth() ).c_str() );
+                       FormatInternalUnits( aCircle->GetRadius() ).c_str() );
 
     formatStroke( aFormatter, aNestLevel + 1, aStroke );
     aFormatter->Print( 0, "\n" );
