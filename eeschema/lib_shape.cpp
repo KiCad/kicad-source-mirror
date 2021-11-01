@@ -215,7 +215,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
                        void* aData, const TRANSFORM& aTransform )
 {
     bool forceNoFill = static_cast<bool>( aData );
-    int  penWidth = GetPenWidth();
+    int  penWidth = GetEffectivePenWidth( aSettings );
 
     if( forceNoFill && IsFilled() && penWidth == 0 )
         return;
