@@ -40,10 +40,10 @@ inline double asinh( double x )
 inline double acosh( double x )
 {
     // must be x>=1, if not return Nan (Not a Number)
-    if( !(x>1.0) ) return sqrt( -1.0 );
+    if( x < 1.0 ) return sqrt( -1.0 );
 
     // return only the positive result (as sqrt does).
-    return log( x+sqrt(x*x-1.0) );
+    return log( x+sqrt( x*x-1.0 ) );
 }
 #endif
 
