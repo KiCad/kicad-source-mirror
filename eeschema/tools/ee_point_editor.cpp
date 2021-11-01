@@ -26,6 +26,7 @@
 using namespace std::placeholders;
 
 #include "ee_point_editor.h"
+#include <ee_grid_helper.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
 #include <geometry/seg.h>
@@ -401,20 +402,11 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
  * @param topRight is the RECT_TOPRIGHT to constraint
  * @param botLeft is the RECT_BOTLEFT to constraint
  * @param botRight is the RECT_BOTRIGHT to constraint
- * @param aGridSize is the a constraint: if > 1 new coordinates are on this grid
  */
 static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
-                             VECTOR2I& topLeft, VECTOR2I& topRight,
-                             VECTOR2I& botLeft, VECTOR2I& botRight,
-                             int aGridSize = 0 )
+                             VECTOR2I& topLeft, VECTOR2I& topRight, VECTOR2I& botLeft,
+                             VECTOR2I& botRight, EE_GRID_HELPER* aGrid )
 {
-    auto alignToGrid =
-            [&]( const VECTOR2I& aPoint ) -> VECTOR2I
-            {
-                return VECTOR2I( KiROUND( aPoint.x / aGridSize ) * aGridSize,
-                                 KiROUND( aPoint.y / aGridSize ) * aGridSize );
-            };
-
     switch( aEditedPointIndex )
     {
     case RECT_TOPLEFT:
@@ -422,8 +414,7 @@ static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
         topLeft.x = std::min( topLeft.x, botRight.x - minWidth );
         topLeft.y = std::min( topLeft.y, botRight.y - minHeight );
 
-        if( aGridSize > 1 )     // Keep point on specified grid size
-            topLeft = alignToGrid( topLeft );
+        topLeft = aGrid->AlignGrid( topLeft );
 
         // push edited point edges to adjacent corners
         topRight.y = topLeft.y;
@@ -436,8 +427,7 @@ static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
         topRight.x = std::max( topRight.x, botLeft.x + minWidth );
         topRight.y = std::min( topRight.y, botLeft.y - minHeight );
 
-        if( aGridSize > 1 )     // Keep point on specified grid size
-            topRight = alignToGrid( topRight );
+        topRight = aGrid->AlignGrid( topRight );
 
         // push edited point edges to adjacent corners
         topLeft.y = topRight.y;
@@ -450,8 +440,7 @@ static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
         botLeft.x = std::min( botLeft.x, topRight.x - minWidth );
         botLeft.y = std::max( botLeft.y, topRight.y + minHeight );
 
-        if( aGridSize > 1 )     // Keep point on specified grid size
-            botLeft = alignToGrid( botLeft );
+        botLeft = aGrid->AlignGrid( botLeft );
 
         // push edited point edges to adjacent corners
         botRight.y = botLeft.y;
@@ -464,8 +453,7 @@ static void pinEditedCorner( int aEditedPointIndex, int minWidth, int minHeight,
         botRight.x = std::max( botRight.x, topLeft.x + minWidth );
         botRight.y = std::max( botRight.y, topLeft.y + minHeight );
 
-        if( aGridSize > 1 )     // Keep point on specified grid size
-            botRight = alignToGrid( botRight );
+        botRight = aGrid->AlignGrid( botRight );
 
         // push edited point edges to adjacent corners
         botLeft.y = botRight.y;
@@ -525,13 +513,14 @@ void EE_POINT_EDITOR::updateParentItem() const
 
         case SHAPE_T::RECT:
         {
-            VECTOR2I topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
-            VECTOR2I topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
-            VECTOR2I botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
-            VECTOR2I botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
+            EE_GRID_HELPER gridHelper( m_toolMgr );
+            VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
+            VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
+            VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
+            VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
             pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ),
-                             topLeft, topRight, botLeft, botRight );
+                             topLeft, topRight, botLeft, botRight, &gridHelper );
 
             shape->SetPosition( mapCoords( topLeft ) );
             shape->SetEnd( mapCoords( botRight ) );
@@ -551,14 +540,15 @@ void EE_POINT_EDITOR::updateParentItem() const
 
     case SCH_BITMAP_T:
     {
-        SCH_BITMAP* bitmap = (SCH_BITMAP*) item;
-        VECTOR2I    topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
-        VECTOR2I    topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
-        VECTOR2I    botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
-        VECTOR2I    botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
+        EE_GRID_HELPER gridHelper( m_toolMgr );
+        SCH_BITMAP*    bitmap = (SCH_BITMAP*) item;
+        VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
+        VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
+        VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
+        VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
 
         pinEditedCorner( getEditedPointIndex(), Mils2iu( 50 ), Mils2iu( 50 ),
-                         topLeft, topRight, botLeft, botRight );
+                         topLeft, topRight, botLeft, botRight, &gridHelper );
 
         double oldWidth = bitmap->GetSize().x;
         double newWidth = topRight.x - topLeft.x;
@@ -574,22 +564,18 @@ void EE_POINT_EDITOR::updateParentItem() const
 
     case SCH_SHEET_T:
     {
-        SCH_SHEET* sheet = (SCH_SHEET*) item;
-        VECTOR2I   topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
-        VECTOR2I   topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
-        VECTOR2I   botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
-        VECTOR2I   botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
-
-        // The grid size used to place connected items. because a sheet contains
-        // connected items (sheet pins), keep corners coordinates on this grid.
-        // Otherwise, some sheet pins can be moved off grid
-        int grid_size = Mils2iu( 50 );
-        int edited = getEditedPointIndex();
+        SCH_SHEET*     sheet = (SCH_SHEET*) item;
+        EE_GRID_HELPER gridHelper( m_toolMgr );
+        VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
+        VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
+        VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
+        VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
+        int            edited = getEditedPointIndex();
 
         pinEditedCorner( getEditedPointIndex(),
                          sheet->GetMinWidth( edited == RECT_TOPRIGHT || edited == RECT_BOTRIGHT ),
                          sheet->GetMinHeight( edited == RECT_BOTLEFT || edited == RECT_BOTRIGHT ),
-                         topLeft, topRight, botLeft, botRight, grid_size );
+                         topLeft, topRight, botLeft, botRight, &gridHelper );
 
         // Pin positions are relative to origin.  Attempt to leave them where they
         // are if the origin moves.
@@ -611,11 +597,11 @@ void EE_POINT_EDITOR::updateParentItem() const
 
             switch( pin->GetEdge() )
             {
-            case SHEET_SIDE::LEFT: pos.x = topLeft.x; break;
-            case SHEET_SIDE::RIGHT: pos.x = topRight.x; break;
-            case SHEET_SIDE::TOP: pos.y = topLeft.y; break;
-            case SHEET_SIDE::BOTTOM: pos.y = botLeft.y; break;
-            case SHEET_SIDE::UNDEFINED: break;
+            case SHEET_SIDE::LEFT:      pos.x = topLeft.x;  break;
+            case SHEET_SIDE::RIGHT:     pos.x = topRight.x; break;
+            case SHEET_SIDE::TOP:       pos.y = topLeft.y;  break;
+            case SHEET_SIDE::BOTTOM:    pos.y = botLeft.y;  break;
+            case SHEET_SIDE::UNDEFINED:                     break;
             }
 
             pin->SetPosition( pos );
