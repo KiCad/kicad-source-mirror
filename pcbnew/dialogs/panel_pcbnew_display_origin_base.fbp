@@ -43,8 +43,8 @@
             <property name="minimum_size"></property>
             <property name="name">PANEL_PCBNEW_DISPLAY_ORIGIN_BASE</property>
             <property name="pos"></property>
-            <property name="size">500,300</property>
-            <property name="subclass">; ; forward_declare</property>
+            <property name="size">-1,-1</property>
+            <property name="subclass">RESETTABLE_PANEL; widgets/resettable_panel.h; forward_declare</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>

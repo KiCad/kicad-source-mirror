@@ -37,21 +37,27 @@ PANEL_3D_OPENGL_OPTIONS::PANEL_3D_OPENGL_OPTIONS( wxWindow* aParent ) :
 }
 
 
+void PANEL_3D_OPENGL_OPTIONS::loadSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
+{
+    m_checkBoxCuThickness->SetValue( aCfg->m_Render.opengl_copper_thickness );
+    m_checkBoxBoundingBoxes->SetValue( aCfg->m_Render.opengl_show_model_bbox );
+    m_checkBoxHighlightOnRollOver->SetValue( aCfg->m_Render.opengl_highlight_on_rollover );
+
+    m_choiceAntiAliasing->SetSelection( aCfg->m_Render.opengl_AA_mode );
+    m_selectionColorSwatch->SetSwatchColor( aCfg->m_Render.opengl_selection_color, false );
+
+    m_checkBoxDisableAAMove->SetValue( aCfg->m_Render.opengl_AA_disableOnMove );
+    m_checkBoxDisableMoveThickness->SetValue( aCfg->m_Render.opengl_thickness_disableOnMove );
+    m_checkBoxDisableMoveVias->SetValue( aCfg->m_Render.opengl_vias_disableOnMove );
+    m_checkBoxDisableMoveHoles->SetValue( aCfg->m_Render.opengl_holes_disableOnMove );
+}
+
+
 bool PANEL_3D_OPENGL_OPTIONS::TransferDataToWindow()
 {
     EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
 
-    m_checkBoxCuThickness->SetValue( cfg->m_Render.opengl_copper_thickness );
-    m_checkBoxBoundingBoxes->SetValue( cfg->m_Render.opengl_show_model_bbox );
-    m_checkBoxHighlightOnRollOver->SetValue( cfg->m_Render.opengl_highlight_on_rollover );
-
-    m_choiceAntiAliasing->SetSelection( cfg->m_Render.opengl_AA_mode );
-    m_selectionColorSwatch->SetSwatchColor( cfg->m_Render.opengl_selection_color, false );
-
-    m_checkBoxDisableAAMove->SetValue( cfg->m_Render.opengl_AA_disableOnMove );
-    m_checkBoxDisableMoveThickness->SetValue( cfg->m_Render.opengl_thickness_disableOnMove );
-    m_checkBoxDisableMoveVias->SetValue( cfg->m_Render.opengl_vias_disableOnMove );
-    m_checkBoxDisableMoveHoles->SetValue( cfg->m_Render.opengl_holes_disableOnMove );
+    loadSettings( cfg );
 
     return true;
 }
@@ -74,4 +80,13 @@ bool PANEL_3D_OPENGL_OPTIONS::TransferDataFromWindow()
     cfg->m_Render.opengl_holes_disableOnMove = m_checkBoxDisableMoveHoles->GetValue();
 
     return true;
+}
+
+
+void PANEL_3D_OPENGL_OPTIONS::ResetPanel()
+{
+    EDA_3D_VIEWER_SETTINGS cfg;
+    cfg.Load();                     // Loading without a file will init to defaults
+
+    loadSettings( &cfg );
 }

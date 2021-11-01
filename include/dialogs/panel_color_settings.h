@@ -45,7 +45,7 @@ public:
 
     virtual void ResetPanel() override;
 
-    virtual wxString GetResetTooltip() override
+    virtual wxString GetResetTooltip() const override
     {
         return _( "Reset all colors in this theme to the KiCad defaults" );
     }

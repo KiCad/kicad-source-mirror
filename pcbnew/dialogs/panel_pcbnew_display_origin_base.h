@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "widgets/resettable_panel.h"
 #include <wx/string.h>
 #include <wx/radiobox.h>
 #include <wx/gdicmn.h>
@@ -24,7 +25,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_PCBNEW_DISPLAY_ORIGIN_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_PCBNEW_DISPLAY_ORIGIN_BASE : public wxPanel
+class PANEL_PCBNEW_DISPLAY_ORIGIN_BASE : public RESETTABLE_PANEL
 {
 	private:
 
@@ -35,7 +36,7 @@ class PANEL_PCBNEW_DISPLAY_ORIGIN_BASE : public wxPanel
 
 	public:
 
-		PANEL_PCBNEW_DISPLAY_ORIGIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_PCBNEW_DISPLAY_ORIGIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_PCBNEW_DISPLAY_ORIGIN_BASE();
 
 };

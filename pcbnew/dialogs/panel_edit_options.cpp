@@ -51,6 +51,41 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, bool isFootprintEdito
 }
 
 
+void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
+{
+    m_rotationAngle->SetValue( AngleToStringDegrees( (double) aCfg->m_RotationAngle ) );
+    m_magneticPadChoice->SetSelection( static_cast<int>( aCfg->m_MagneticItems.pads ) );
+    m_magneticTrackChoice->SetSelection( static_cast<int>( aCfg->m_MagneticItems.tracks ) );
+    m_magneticGraphicsChoice->SetSelection( !aCfg->m_MagneticItems.graphics );
+    m_flipLeftRight->SetValue( aCfg->m_FlipLeftRight );
+    m_cbPcbGraphic45Mode->SetValue( aCfg->m_Use45DegreeLimit );
+
+    /* Set display options */
+    m_OptDisplayCurvedRatsnestLines->SetValue( aCfg->m_Display.m_DisplayRatsnestLinesCurved );
+    m_showSelectedRatsnest->SetValue( aCfg->m_Display.m_ShowModuleRatsnest );
+
+    switch( aCfg->m_TrackDragAction )
+    {
+    case TRACK_DRAG_ACTION::MOVE:            m_rbTrackDragMove->SetValue( true ); break;
+    case TRACK_DRAG_ACTION::DRAG:            m_rbTrackDrag45->SetValue( true );   break;
+    case TRACK_DRAG_ACTION::DRAG_FREE_ANGLE: m_rbTrackDragFree->SetValue( true ); break;
+    }
+
+    m_showPageLimits->SetValue( aCfg->m_ShowPageLimits );
+    m_autoRefillZones->SetValue( aCfg->m_AutoRefillZones );
+    m_allowFreePads->SetValue( aCfg->m_AllowFreePads );
+}
+
+
+void PANEL_EDIT_OPTIONS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
+{
+    m_rotationAngle->SetValue( AngleToStringDegrees( (double) aCfg->m_RotationAngle ) );
+    m_magneticPads->SetValue( aCfg->m_MagneticItems.pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
+    m_magneticGraphics->SetValue( aCfg->m_MagneticItems.graphics );
+    m_cbFpGraphic45Mode->SetValue( aCfg->m_Use45Limit );
+}
+
+
 bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
@@ -59,36 +94,13 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
     {
         FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 
-        m_rotationAngle->SetValue( AngleToStringDegrees( (double) cfg->m_RotationAngle ) );
-        m_magneticPads->SetValue( cfg->m_MagneticItems.pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
-        m_magneticGraphics->SetValue( cfg->m_MagneticItems.graphics );
-        m_cbFpGraphic45Mode->SetValue( cfg->m_Use45Limit );
+        loadFPSettings( cfg );
     }
     else
     {
         PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
-        m_rotationAngle->SetValue( AngleToStringDegrees( (double) cfg->m_RotationAngle ) );
-        m_magneticPadChoice->SetSelection( static_cast<int>( cfg->m_MagneticItems.pads ) );
-        m_magneticTrackChoice->SetSelection( static_cast<int>( cfg->m_MagneticItems.tracks ) );
-        m_magneticGraphicsChoice->SetSelection( !cfg->m_MagneticItems.graphics );
-        m_flipLeftRight->SetValue( cfg->m_FlipLeftRight );
-        m_cbPcbGraphic45Mode->SetValue( cfg->m_Use45DegreeLimit );
-
-        /* Set display options */
-        m_OptDisplayCurvedRatsnestLines->SetValue( cfg->m_Display.m_DisplayRatsnestLinesCurved );
-        m_showSelectedRatsnest->SetValue( cfg->m_Display.m_ShowModuleRatsnest );
-
-        switch( cfg->m_TrackDragAction )
-        {
-        case TRACK_DRAG_ACTION::MOVE:            m_rbTrackDragMove->SetValue( true ); break;
-        case TRACK_DRAG_ACTION::DRAG:            m_rbTrackDrag45->SetValue( true );   break;
-        case TRACK_DRAG_ACTION::DRAG_FREE_ANGLE: m_rbTrackDragFree->SetValue( true ); break;
-        }
-
-        m_showPageLimits->SetValue( cfg->m_ShowPageLimits );
-        m_autoRefillZones->SetValue( cfg->m_AutoRefillZones );
-        m_allowFreePads->SetValue( cfg->m_AllowFreePads );
+        loadPCBSettings( cfg );
     }
 
    return true;
@@ -140,6 +152,25 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
     }
 
     return true;
+}
+
+
+void PANEL_EDIT_OPTIONS::ResetPanel()
+{
+    if( m_isFootprintEditor )
+    {
+        FOOTPRINT_EDITOR_SETTINGS cfg;
+        cfg.Load();                     // Loading without a file will init to defaults
+
+        loadFPSettings( &cfg );
+    }
+    else
+    {
+        PCBNEW_SETTINGS cfg;
+        cfg.Load();           // Loading without a file will init to defaults
+
+        loadPCBSettings( &cfg );
+    }
 }
 
 

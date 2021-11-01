@@ -33,11 +33,13 @@ class PANEL_3D_OPENGL_OPTIONS : public PANEL_3D_OPENGL_OPTIONS_BASE
 public:
     explicit PANEL_3D_OPENGL_OPTIONS( wxWindow* aParent );
 
-    /// Automatically called when clicking on the OK button
     bool TransferDataFromWindow() override;
-
-    /// Automatically called after creating the dialog
     bool TransferDataToWindow() override;
+
+    void ResetPanel() override;
+
+private:
+    void loadSettings( EDA_3D_VIEWER_SETTINGS* aCfg );
 };
 
 

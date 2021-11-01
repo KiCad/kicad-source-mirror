@@ -125,6 +125,7 @@ set( EESCHEMA_DLGS
     dialogs/panel_setup_formatting_base.cpp
     dialogs/panel_setup_pinmap.cpp
     dialogs/panel_setup_pinmap_base.cpp
+    dialogs/panel_sym_display_options.cpp
     dialogs/panel_sym_editing_options.cpp
     dialogs/panel_sym_editing_options_base.cpp
     dialogs/panel_sym_color_settings.cpp

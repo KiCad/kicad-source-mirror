@@ -36,11 +36,13 @@ public:
 
     void OnCheckEnableAnimation( wxCommandEvent& WXUNUSED( event ) ) override;
 
-    /// Automatically called when clicking on the OK button
     bool TransferDataFromWindow() override;
-
-    /// Automatically called after creating the dialog
     bool TransferDataToWindow() override;
+
+    void ResetPanel() override;
+
+private:
+    void loadViewSettings( EDA_3D_VIEWER_SETTINGS* aCfg );
 };
 
 

@@ -34,12 +34,11 @@ PANEL_PCBNEW_DISPLAY_ORIGIN::PANEL_PCBNEW_DISPLAY_ORIGIN( wxWindow* aParent ) :
 }
 
 
-bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataToWindow()
+void PANEL_PCBNEW_DISPLAY_ORIGIN::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
 {
-    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
-    int              origin = 0;
+    int origin = 0;
 
-    switch( cfg->m_Display.m_DisplayOrigin )
+    switch( aCfg->m_Display.m_DisplayOrigin )
     {
     case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_PAGE: origin = 0; break;
     case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_AUX:  origin = 1; break;
@@ -47,8 +46,16 @@ bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataToWindow()
     }
 
     m_DisplayOrigin->SetSelection( origin );
-    m_XAxisDirection->SetSelection( cfg->m_Display.m_DisplayInvertXAxis ? 1 : 0 );
-    m_YAxisDirection->SetSelection( cfg->m_Display.m_DisplayInvertYAxis ? 0 : 1 );
+    m_XAxisDirection->SetSelection( aCfg->m_Display.m_DisplayInvertXAxis ? 1 : 0 );
+    m_YAxisDirection->SetSelection( aCfg->m_Display.m_DisplayInvertYAxis ? 0 : 1 );
+}
+
+
+bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataToWindow()
+{
+    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+
+    loadPCBSettings( cfg );
 
     return true;
 }
@@ -70,3 +77,14 @@ bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataFromWindow()
 
     return true;
 }
+
+
+void PANEL_PCBNEW_DISPLAY_ORIGIN::ResetPanel()
+{
+    PCBNEW_SETTINGS cfg;
+    cfg.Load();           // Loading without a file will init to defaults
+
+    loadPCBSettings( &cfg );
+}
+
+

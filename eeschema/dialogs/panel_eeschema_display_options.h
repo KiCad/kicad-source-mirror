@@ -24,6 +24,7 @@
 
 class APP_SETTINGS_BASE;
 class GAL_OPTIONS_PANEL;
+class EESCHEMA_SETTINGS;
 
 
 class PANEL_EESCHEMA_DISPLAY_OPTIONS : public PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE
@@ -31,10 +32,15 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS : public PANEL_EESCHEMA_DISPLAY_OPTIONS_BAS
 public:
     PANEL_EESCHEMA_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings );
 
-private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void ResetPanel() override;
+
+private:
+    void loadEEschemaSettings( EESCHEMA_SETTINGS* aCfg );
+
+private:
     GAL_OPTIONS_PANEL* m_galOptsPanel;
 };
 

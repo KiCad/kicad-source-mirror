@@ -47,6 +47,22 @@ PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BA
 }
 
 
+void PANEL_DISPLAY_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
+{
+    int i = UTIL::GetConfigForVal( clearanceModeMap, aCfg->m_Display.m_ShowTrackClearanceMode );
+    m_OptDisplayTracksClearance->SetSelection( i );
+
+    m_OptDisplayPadClearence->SetValue( aCfg->m_Display.m_DisplayPadClearance );
+    m_OptDisplayPadNumber->SetValue( aCfg->m_Display.m_DisplayPadNum );
+    m_OptDisplayPadNoConn->SetValue( aCfg->m_Display.m_DisplayPadNoConnects );
+    m_ShowNetNamesOption->SetSelection( aCfg->m_Display.m_DisplayNetNamesMode );
+    m_live3Drefresh->SetValue( aCfg->m_Display.m_Live3DRefresh );
+    m_checkCrossProbeCenter->SetValue( aCfg->m_CrossProbing.center_on_items );
+    m_checkCrossProbeZoom->SetValue( aCfg->m_CrossProbing.zoom_to_fit );
+    m_checkCrossProbeAutoHighlight->SetValue( aCfg->m_CrossProbing.auto_highlight );
+}
+
+
 bool PANEL_DISPLAY_OPTIONS::TransferDataToWindow()
 {
     if( m_isPCBEdit )
@@ -54,17 +70,7 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataToWindow()
         SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
         PCBNEW_SETTINGS*  cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
-        int i = UTIL::GetConfigForVal( clearanceModeMap, cfg->m_Display.m_ShowTrackClearanceMode );
-        m_OptDisplayTracksClearance->SetSelection( i );
-
-        m_OptDisplayPadClearence->SetValue( cfg->m_Display.m_DisplayPadClearance );
-        m_OptDisplayPadNumber->SetValue( cfg->m_Display.m_DisplayPadNum );
-        m_OptDisplayPadNoConn->SetValue( cfg->m_Display.m_DisplayPadNoConnects );
-        m_ShowNetNamesOption->SetSelection( cfg->m_Display.m_DisplayNetNamesMode );
-        m_live3Drefresh->SetValue( cfg->m_Display.m_Live3DRefresh );
-        m_checkCrossProbeCenter->SetValue( cfg->m_CrossProbing.center_on_items );
-        m_checkCrossProbeZoom->SetValue( cfg->m_CrossProbing.zoom_to_fit );
-        m_checkCrossProbeAutoHighlight->SetValue( cfg->m_CrossProbing.auto_highlight );
+        loadPCBSettings( cfg );
     }
 
     m_galOptsPanel->TransferDataToWindow();
@@ -99,6 +105,18 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
     }
 
     return true;
+}
+
+
+void PANEL_DISPLAY_OPTIONS::ResetPanel()
+{
+    PCBNEW_SETTINGS cfg;
+    cfg.Load();             // Loading without a file will init to defaults
+
+    if( m_isPCBEdit )
+        loadPCBSettings( &cfg );
+
+    m_galOptsPanel->ResetPanel( &cfg );
 }
 
 

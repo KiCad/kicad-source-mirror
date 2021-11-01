@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_PCBNEW_DISPLAY_ORIGIN_BASE::PANEL_PCBNEW_DISPLAY_ORIGIN_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_PCBNEW_DISPLAY_ORIGIN_BASE::PANEL_PCBNEW_DISPLAY_ORIGIN_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : RESETTABLE_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bPanelSizer;
 	bPanelSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -62,6 +62,7 @@ PANEL_PCBNEW_DISPLAY_ORIGIN_BASE::PANEL_PCBNEW_DISPLAY_ORIGIN_BASE( wxWindow* pa
 
 	this->SetSizer( bPanelSizer );
 	this->Layout();
+	bPanelSizer->Fit( this );
 }
 
 PANEL_PCBNEW_DISPLAY_ORIGIN_BASE::~PANEL_PCBNEW_DISPLAY_ORIGIN_BASE()

@@ -22,6 +22,7 @@ set( DIALOGS_SRCS
     dialogs/design_inspector.cpp
     dialogs/panel_pl_editor_color_settings.cpp
     dialogs/panel_pl_editor_color_settings_base.cpp
+    dialogs/panel_pl_editor_display_options.cpp
     )
 
 set( PL_EDITOR_SRCS

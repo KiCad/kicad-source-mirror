@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include "widgets/color_swatch.h"
+#include "widgets/resettable_panel.h"
 #include <wx/string.h>
 #include <wx/checkbox.h>
 #include <wx/gdicmn.h>
@@ -31,7 +32,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_EESCHEMA_EDITING_OPTIONS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public wxPanel
+class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 {
 	private:
 

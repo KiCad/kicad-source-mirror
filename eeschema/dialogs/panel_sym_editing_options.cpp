@@ -39,19 +39,25 @@ PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( wxWindow* aWindow,
 {}
 
 
+void PANEL_SYM_EDITING_OPTIONS::loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* aCfg )
+{
+    m_lineWidth.SetValue( Mils2iu( aCfg->m_Defaults.line_width ) );
+    m_textSize.SetValue( Mils2iu( aCfg->m_Defaults.text_size ) );
+    m_pinLength.SetValue( Mils2iu( aCfg->m_Defaults.pin_length ) );
+    m_pinNumberSize.SetValue( Mils2iu( aCfg->m_Defaults.pin_num_size ) );
+    m_pinNameSize.SetValue( Mils2iu( aCfg->m_Defaults.pin_name_size ) );
+    m_choicePinDisplacement->SetSelection( aCfg->m_Repeat.pin_step == 50 ? 1 : 0 );
+    m_spinRepeatLabel->SetValue( aCfg->m_Repeat.label_delta );
+    m_cbShowPinElectricalType->SetValue( aCfg->m_ShowPinElectricalType );
+}
+
+
 bool PANEL_SYM_EDITING_OPTIONS::TransferDataToWindow()
 {
     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
     SYMBOL_EDITOR_SETTINGS* settings = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
-    m_lineWidth.SetValue( Mils2iu( settings->m_Defaults.line_width ) );
-    m_textSize.SetValue( Mils2iu( settings->m_Defaults.text_size ) );
-    m_pinLength.SetValue( Mils2iu( settings->m_Defaults.pin_length ) );
-    m_pinNumberSize.SetValue( Mils2iu( settings->m_Defaults.pin_num_size ) );
-    m_pinNameSize.SetValue( Mils2iu( settings->m_Defaults.pin_name_size ) );
-    m_choicePinDisplacement->SetSelection( settings->m_Repeat.pin_step == 50 ? 1 : 0 );
-    m_spinRepeatLabel->SetValue( settings->m_Repeat.label_delta );
-    m_cbShowPinElectricalType->SetValue( settings->m_ShowPinElectricalType );
+    loadSymEditorSettings( settings );
 
     return true;
 }
@@ -72,6 +78,15 @@ bool PANEL_SYM_EDITING_OPTIONS::TransferDataFromWindow()
     settings->m_ShowPinElectricalType = m_cbShowPinElectricalType->GetValue();
 
     return true;
+}
+
+
+void PANEL_SYM_EDITING_OPTIONS::ResetPanel()
+{
+    SYMBOL_EDITOR_SETTINGS cfg;
+    cfg.Load();                     // Loading without a file will init to defaults
+
+    loadSymEditorSettings( &cfg );
 }
 
 

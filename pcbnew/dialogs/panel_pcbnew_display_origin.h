@@ -33,9 +33,13 @@ class PANEL_PCBNEW_DISPLAY_ORIGIN : public PANEL_PCBNEW_DISPLAY_ORIGIN_BASE
 public:
     PANEL_PCBNEW_DISPLAY_ORIGIN( wxWindow* aParent );
 
-protected:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    void ResetPanel() override;
+
+private:
+    void loadPCBSettings( PCBNEW_SETTINGS* aCfg );
 };
 
 

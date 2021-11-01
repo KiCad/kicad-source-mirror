@@ -50,7 +50,7 @@ public:
 
     void ResetPanel() override;
 
-    wxString GetResetTooltip() override
+    wxString GetResetTooltip() const override
     {
         return _( "Reset all hotkeys to the built-in KiCad defaults" );
     }

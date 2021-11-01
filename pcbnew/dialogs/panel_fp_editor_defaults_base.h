@@ -12,6 +12,7 @@
 #include <wx/intl.h>
 class WX_GRID;
 
+#include "widgets/resettable_panel.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -33,7 +34,7 @@ class WX_GRID;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_FP_EDITOR_DEFAULTS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_FP_EDITOR_DEFAULTS_BASE : public wxPanel
+class PANEL_FP_EDITOR_DEFAULTS_BASE : public RESETTABLE_PANEL
 {
 	private:
 

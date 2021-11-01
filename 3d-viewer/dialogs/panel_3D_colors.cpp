@@ -107,3 +107,21 @@ bool PANEL_3D_COLORS::TransferDataFromWindow()
 
     return true;
 }
+
+
+void PANEL_3D_COLORS::ResetPanel()
+{
+    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
+
+    m_backgroundTop->SetSwatchColor(    colors->GetDefaultColor( LAYER_3D_BACKGROUND_TOP ),    false );
+    m_backgroundBottom->SetSwatchColor( colors->GetDefaultColor( LAYER_3D_BACKGROUND_BOTTOM ), false );
+    m_silkscreenTop->SetSwatchColor(    colors->GetDefaultColor( LAYER_3D_SILKSCREEN_TOP ),    false );
+    m_silkscreenBottom->SetSwatchColor( colors->GetDefaultColor( LAYER_3D_SILKSCREEN_BOTTOM ), false );
+    m_solderMaskTop->SetSwatchColor(    colors->GetDefaultColor( LAYER_3D_SOLDERMASK_TOP ),    false );
+    m_solderMaskBottom->SetSwatchColor( colors->GetDefaultColor( LAYER_3D_SOLDERMASK_BOTTOM ), false );
+    m_solderPaste->SetSwatchColor(      colors->GetDefaultColor( LAYER_3D_SOLDERPASTE ),       false );
+    m_surfaceFinish->SetSwatchColor(    colors->GetDefaultColor( LAYER_3D_COPPER ),            false );
+    m_boardBody->SetSwatchColor(        colors->GetDefaultColor( LAYER_3D_BOARD ),             false );
+
+    m_boardStackupRB->SetValue( true );
+}

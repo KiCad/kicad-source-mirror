@@ -34,39 +34,29 @@ PANEL_3D_RAYTRACING_OPTIONS::PANEL_3D_RAYTRACING_OPTIONS( wxWindow* aParent ) :
 }
 
 
-void PANEL_3D_RAYTRACING_OPTIONS::ResetPanel()
+void PANEL_3D_RAYTRACING_OPTIONS::loadSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
 {
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    m_cbRaytracing_renderShadows->SetValue( aCfg->m_Render.raytrace_shadows );
+    m_cbRaytracing_addFloor->SetValue( aCfg->m_Render.raytrace_backfloor );
+    m_cbRaytracing_showRefractions->SetValue( aCfg->m_Render.raytrace_refractions );
+    m_cbRaytracing_showReflections->SetValue( aCfg->m_Render.raytrace_reflections );
+    m_cbRaytracing_postProcessing->SetValue( aCfg->m_Render.raytrace_post_processing );
+    m_cbRaytracing_antiAliasing->SetValue( aCfg->m_Render.raytrace_anti_aliasing );
+    m_cbRaytracing_proceduralTextures->SetValue( aCfg->m_Render.raytrace_procedural_textures );
 
-    cfg->m_Render.raytrace_lightColorCamera = COLOR4D( 0.2, 0.2, 0.2, 1.0 );
-    cfg->m_Render.raytrace_lightColorTop = COLOR4D( 0.247, 0.247, 0.247, 1.0 );
-    cfg->m_Render.raytrace_lightColorBottom = COLOR4D( 0.247, 0.247, 0.247, 1.0 );
+    m_numSamples_Shadows->SetValue( aCfg->m_Render.raytrace_nrsamples_shadows );
+    m_numSamples_Reflections->SetValue( aCfg->m_Render.raytrace_nrsamples_reflections );
+    m_numSamples_Refractions->SetValue( aCfg->m_Render.raytrace_nrsamples_refractions );
 
-    const std::vector<int> default_elevation =
-    {
-        67,  67,  67,  67, -67, -67, -67, -67,
-    };
+    m_spreadFactor_Shadows->SetValue( StringFromValue( EDA_UNITS::PERCENT,
+                                                       aCfg->m_Render.raytrace_spread_shadows * 100.0f ) );
+    m_spreadFactor_Reflections->SetValue( StringFromValue( EDA_UNITS::PERCENT,
+                                                           aCfg->m_Render.raytrace_spread_reflections * 100.0f ) );
+    m_spreadFactor_Refractions->SetValue( StringFromValue( EDA_UNITS::PERCENT,
+                                                           aCfg->m_Render.raytrace_spread_refractions * 100.0f ) );
 
-    const std::vector<int> default_azimuth =
-    {
-        45, 135, 225, 315, 45, 135, 225, 315,
-    };
-
-    for( size_t i = 0; i < 8; ++i )
-    {
-        cfg->m_Render.raytrace_lightElevation[i] = default_elevation[i];
-        cfg->m_Render.raytrace_lightAzimuth[i] = default_azimuth[i];
-    }
-
-    TransferColorDataToWindow();
-}
-
-
-void PANEL_3D_RAYTRACING_OPTIONS::TransferColorDataToWindow()
-{
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    m_recursiveLevel_Reflections->SetValue( aCfg->m_Render.raytrace_recursivelevel_reflections );
+    m_recursiveLevel_Refractions->SetValue( aCfg->m_Render.raytrace_recursivelevel_refractions );
 
     auto transfer_color =
             []( COLOR4D aColor, COLOR_SWATCH *aTarget )
@@ -82,37 +72,37 @@ void PANEL_3D_RAYTRACING_OPTIONS::TransferColorDataToWindow()
                 aCtrl->SetValue( StringFromValue( EDA_UNITS::UNSCALED, aValue ) );
             };
 
-    transfer_color( cfg->m_Render.raytrace_lightColorCamera, m_colourPickerCameraLight );
-    transfer_color( cfg->m_Render.raytrace_lightColorTop, m_colourPickerTopLight );
-    transfer_color( cfg->m_Render.raytrace_lightColorBottom, m_colourPickerBottomLight );
+    transfer_color( aCfg->m_Render.raytrace_lightColorCamera, m_colourPickerCameraLight );
+    transfer_color( aCfg->m_Render.raytrace_lightColorTop, m_colourPickerTopLight );
+    transfer_color( aCfg->m_Render.raytrace_lightColorBottom, m_colourPickerBottomLight );
 
-    transfer_color( cfg->m_Render.raytrace_lightColor[0], m_colourPickerLight1 );
-    transfer_color( cfg->m_Render.raytrace_lightColor[1], m_colourPickerLight2 );
-    transfer_color( cfg->m_Render.raytrace_lightColor[2], m_colourPickerLight3 );
-    transfer_color( cfg->m_Render.raytrace_lightColor[3], m_colourPickerLight4 );
+    transfer_color( aCfg->m_Render.raytrace_lightColor[0], m_colourPickerLight1 );
+    transfer_color( aCfg->m_Render.raytrace_lightColor[1], m_colourPickerLight2 );
+    transfer_color( aCfg->m_Render.raytrace_lightColor[2], m_colourPickerLight3 );
+    transfer_color( aCfg->m_Render.raytrace_lightColor[3], m_colourPickerLight4 );
 
-    transfer_color( cfg->m_Render.raytrace_lightColor[4], m_colourPickerLight5 );
-    transfer_color( cfg->m_Render.raytrace_lightColor[5], m_colourPickerLight6 );
-    transfer_color( cfg->m_Render.raytrace_lightColor[6], m_colourPickerLight7 );
-    transfer_color( cfg->m_Render.raytrace_lightColor[7], m_colourPickerLight8 );
+    transfer_color( aCfg->m_Render.raytrace_lightColor[4], m_colourPickerLight5 );
+    transfer_color( aCfg->m_Render.raytrace_lightColor[5], m_colourPickerLight6 );
+    transfer_color( aCfg->m_Render.raytrace_lightColor[6], m_colourPickerLight7 );
+    transfer_color( aCfg->m_Render.raytrace_lightColor[7], m_colourPickerLight8 );
 
-    transfer_value( m_lightElevation1, cfg->m_Render.raytrace_lightElevation[0] );
-    transfer_value( m_lightElevation2, cfg->m_Render.raytrace_lightElevation[1] );
-    transfer_value( m_lightElevation3, cfg->m_Render.raytrace_lightElevation[2] );
-    transfer_value( m_lightElevation4, cfg->m_Render.raytrace_lightElevation[3] );
-    transfer_value( m_lightElevation5, cfg->m_Render.raytrace_lightElevation[4] );
-    transfer_value( m_lightElevation6, cfg->m_Render.raytrace_lightElevation[5] );
-    transfer_value( m_lightElevation7, cfg->m_Render.raytrace_lightElevation[6] );
-    transfer_value( m_lightElevation8, cfg->m_Render.raytrace_lightElevation[7] );
+    transfer_value( m_lightElevation1, aCfg->m_Render.raytrace_lightElevation[0] );
+    transfer_value( m_lightElevation2, aCfg->m_Render.raytrace_lightElevation[1] );
+    transfer_value( m_lightElevation3, aCfg->m_Render.raytrace_lightElevation[2] );
+    transfer_value( m_lightElevation4, aCfg->m_Render.raytrace_lightElevation[3] );
+    transfer_value( m_lightElevation5, aCfg->m_Render.raytrace_lightElevation[4] );
+    transfer_value( m_lightElevation6, aCfg->m_Render.raytrace_lightElevation[5] );
+    transfer_value( m_lightElevation7, aCfg->m_Render.raytrace_lightElevation[6] );
+    transfer_value( m_lightElevation8, aCfg->m_Render.raytrace_lightElevation[7] );
 
-    transfer_value( m_lightAzimuth1, cfg->m_Render.raytrace_lightAzimuth[0] );
-    transfer_value( m_lightAzimuth2, cfg->m_Render.raytrace_lightAzimuth[1] );
-    transfer_value( m_lightAzimuth3, cfg->m_Render.raytrace_lightAzimuth[2] );
-    transfer_value( m_lightAzimuth4, cfg->m_Render.raytrace_lightAzimuth[3] );
-    transfer_value( m_lightAzimuth5, cfg->m_Render.raytrace_lightAzimuth[4] );
-    transfer_value( m_lightAzimuth6, cfg->m_Render.raytrace_lightAzimuth[5] );
-    transfer_value( m_lightAzimuth7, cfg->m_Render.raytrace_lightAzimuth[6] );
-    transfer_value( m_lightAzimuth8, cfg->m_Render.raytrace_lightAzimuth[7] );
+    transfer_value( m_lightAzimuth1, aCfg->m_Render.raytrace_lightAzimuth[0] );
+    transfer_value( m_lightAzimuth2, aCfg->m_Render.raytrace_lightAzimuth[1] );
+    transfer_value( m_lightAzimuth3, aCfg->m_Render.raytrace_lightAzimuth[2] );
+    transfer_value( m_lightAzimuth4, aCfg->m_Render.raytrace_lightAzimuth[3] );
+    transfer_value( m_lightAzimuth5, aCfg->m_Render.raytrace_lightAzimuth[4] );
+    transfer_value( m_lightAzimuth6, aCfg->m_Render.raytrace_lightAzimuth[5] );
+    transfer_value( m_lightAzimuth7, aCfg->m_Render.raytrace_lightAzimuth[6] );
+    transfer_value( m_lightAzimuth8, aCfg->m_Render.raytrace_lightAzimuth[7] );
 }
 
 
@@ -121,29 +111,7 @@ bool PANEL_3D_RAYTRACING_OPTIONS::TransferDataToWindow()
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
 
-    m_cbRaytracing_renderShadows->SetValue( cfg->m_Render.raytrace_shadows );
-    m_cbRaytracing_addFloor->SetValue( cfg->m_Render.raytrace_backfloor );
-    m_cbRaytracing_showRefractions->SetValue( cfg->m_Render.raytrace_refractions );
-    m_cbRaytracing_showReflections->SetValue( cfg->m_Render.raytrace_reflections );
-    m_cbRaytracing_postProcessing->SetValue( cfg->m_Render.raytrace_post_processing );
-    m_cbRaytracing_antiAliasing->SetValue( cfg->m_Render.raytrace_anti_aliasing );
-    m_cbRaytracing_proceduralTextures->SetValue( cfg->m_Render.raytrace_procedural_textures );
-
-    m_numSamples_Shadows->SetValue( cfg->m_Render.raytrace_nrsamples_shadows );
-    m_numSamples_Reflections->SetValue( cfg->m_Render.raytrace_nrsamples_reflections );
-    m_numSamples_Refractions->SetValue( cfg->m_Render.raytrace_nrsamples_refractions );
-
-    m_spreadFactor_Shadows->SetValue( StringFromValue( EDA_UNITS::PERCENT,
-                                                       cfg->m_Render.raytrace_spread_shadows * 100.0f ) );
-    m_spreadFactor_Reflections->SetValue( StringFromValue( EDA_UNITS::PERCENT,
-                                                           cfg->m_Render.raytrace_spread_reflections * 100.0f ) );
-    m_spreadFactor_Refractions->SetValue( StringFromValue( EDA_UNITS::PERCENT,
-                                                           cfg->m_Render.raytrace_spread_refractions * 100.0f ) );
-
-    m_recursiveLevel_Reflections->SetValue( cfg->m_Render.raytrace_recursivelevel_reflections );
-    m_recursiveLevel_Refractions->SetValue( cfg->m_Render.raytrace_recursivelevel_refractions );
-
-    TransferColorDataToWindow();
+    loadSettings( cfg );
 
     return true;
 }
@@ -214,4 +182,13 @@ bool PANEL_3D_RAYTRACING_OPTIONS::TransferDataFromWindow()
     cfg->m_Render.raytrace_lightAzimuth[7] = get_value( m_lightAzimuth8 );
 
     return true;
+}
+
+
+void PANEL_3D_RAYTRACING_OPTIONS::ResetPanel()
+{
+    EDA_3D_VIEWER_SETTINGS cfg;
+    cfg.Load();                     // Loading without a file will init to defaults
+
+    loadSettings( &cfg );
 }

@@ -20,6 +20,7 @@
 
 #include "panel_display_options_base.h"
 
+class PCBNEW_SETTINGS;
 class APP_SETTINGS_BASE;
 class GAL_OPTIONS_PANEL;
 
@@ -31,6 +32,11 @@ public:
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
+
+    void ResetPanel() override;
+
+private:
+    void loadPCBSettings( PCBNEW_SETTINGS* aCfg );
 
 private:
     bool               m_isPCBEdit;

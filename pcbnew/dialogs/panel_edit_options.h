@@ -28,14 +28,23 @@
 #include "panel_edit_options_base.h"
 
 
+class FOOTPRINT_EDITOR_SETTINGS;
+class PCBNEW_SETTINGS;
+
+
 class PANEL_EDIT_OPTIONS : public PANEL_EDIT_OPTIONS_BASE
 {
 public:
     PANEL_EDIT_OPTIONS( wxWindow* aParent, bool isFootprintEditor );
 
-protected:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    void ResetPanel() override;
+
+private:
+    void loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg );
+    void loadPCBSettings( PCBNEW_SETTINGS* aCfg );
 
 private:
     bool m_isFootprintEditor;

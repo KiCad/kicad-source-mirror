@@ -31,10 +31,15 @@ class PANEL_EESCHEMA_EDITING_OPTIONS : public PANEL_EESCHEMA_EDITING_OPTIONS_BAS
 public:
     PANEL_EESCHEMA_EDITING_OPTIONS( wxWindow* aWindow, EDA_BASE_FRAME* aUnitsProvider );
 
-private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void ResetPanel() override;
+
+private:
+    void loadEEschemaSettings( EESCHEMA_SETTINGS* aCfg );
+
+private:
     UNIT_BINDER     m_hPitch;
     UNIT_BINDER     m_vPitch;
 };

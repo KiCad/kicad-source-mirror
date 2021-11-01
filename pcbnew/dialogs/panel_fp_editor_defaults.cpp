@@ -215,7 +215,7 @@ PANEL_FP_EDITOR_DEFAULTS::~PANEL_FP_EDITOR_DEFAULTS()
 }
 
 
-bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
+void PANEL_FP_EDITOR_DEFAULTS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
 {
     wxColour disabledColour = wxSystemSettings::GetColour( wxSYS_COLOUR_BACKGROUND );
 
@@ -226,12 +226,9 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
     m_graphicsGrid->SetReadOnly( row, col ); \
     m_graphicsGrid->SetCellBackgroundColour( row, col, disabledColour );
 
-    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
-    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
-
     for( int i = 0; i < ROW_COUNT; ++i )
     {
-        SET_MILS_CELL( i, COL_LINE_THICKNESS, cfg->m_DesignSettings.m_LineThickness[ i ] );
+        SET_MILS_CELL( i, COL_LINE_THICKNESS, aCfg->m_DesignSettings.m_LineThickness[ i ] );
 
         if( i == ROW_EDGES || i == ROW_COURTYARD )
         {
@@ -242,10 +239,10 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
         }
         else
         {
-            SET_MILS_CELL( i, COL_TEXT_WIDTH, cfg->m_DesignSettings.m_TextSize[ i ].x );
-            SET_MILS_CELL( i, COL_TEXT_HEIGHT, cfg->m_DesignSettings.m_TextSize[ i ].y );
-            SET_MILS_CELL( i, COL_TEXT_THICKNESS, cfg->m_DesignSettings.m_TextThickness[ i ] );
-            m_graphicsGrid->SetCellValue( i, COL_TEXT_ITALIC, cfg->m_DesignSettings.m_TextItalic[ i ] ? "1" : "" );
+            SET_MILS_CELL( i, COL_TEXT_WIDTH, aCfg->m_DesignSettings.m_TextSize[ i ].x );
+            SET_MILS_CELL( i, COL_TEXT_HEIGHT, aCfg->m_DesignSettings.m_TextSize[ i ].y );
+            SET_MILS_CELL( i, COL_TEXT_THICKNESS, aCfg->m_DesignSettings.m_TextThickness[ i ] );
+            m_graphicsGrid->SetCellValue( i, COL_TEXT_ITALIC, aCfg->m_DesignSettings.m_TextItalic[ i ] ? "1" : "" );
 
             auto attr = new wxGridCellAttr;
             attr->SetRenderer( new wxGridCellBoolRenderer() );
@@ -256,11 +253,12 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
     }
 
     // Footprint defaults
-    m_textItemsGrid->GetTable()->AppendRows( cfg->m_DesignSettings.m_DefaultFPTextItems.size() );
+    m_textItemsGrid->GetTable()->DeleteRows( 0, m_textItemsGrid->GetNumberRows() );
+    m_textItemsGrid->GetTable()->AppendRows( aCfg->m_DesignSettings.m_DefaultFPTextItems.size() );
 
-    for( size_t i = 0; i < cfg->m_DesignSettings.m_DefaultFPTextItems.size(); ++i )
+    for( size_t i = 0; i < aCfg->m_DesignSettings.m_DefaultFPTextItems.size(); ++i )
     {
-        TEXT_ITEM_INFO item = cfg->m_DesignSettings.m_DefaultFPTextItems[i];
+        TEXT_ITEM_INFO item = aCfg->m_DesignSettings.m_DefaultFPTextItems[i];
 
         m_textItemsGrid->GetTable()->SetValue( i, 0, item.m_Text );
         m_textItemsGrid->GetTable()->SetValueAsBool( i, 1, item.m_Visible );
@@ -280,6 +278,15 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
     m_graphicsGrid->SetRowLabelSize( m_graphicsGrid->GetVisibleWidth( -1, true, true, true ) );
 
     Layout();
+}
+
+
+bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
+{
+    SETTINGS_MANAGER&          mgr = Pgm().GetSettingsManager();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+
+    loadFPSettings( cfg );
 
     return true;
 }
@@ -435,6 +442,15 @@ void PANEL_FP_EDITOR_DEFAULTS::OnDeleteTextItem( wxCommandEvent& event )
                                             m_textItemsGrid->GetGridCursorCol() );
         }
     }
+}
+
+
+void PANEL_FP_EDITOR_DEFAULTS::ResetPanel()
+{
+    FOOTPRINT_EDITOR_SETTINGS cfg;
+    cfg.Load();                     // Loading without a file will init to defaults
+
+    loadFPSettings( &cfg );
 }
 
 

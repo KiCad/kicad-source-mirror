@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "widgets/resettable_panel.h"
 #include <wx/sizer.h>
 #include <wx/gdicmn.h>
 #include <wx/panel.h>
@@ -27,7 +28,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_DISPLAY_OPTIONS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_DISPLAY_OPTIONS_BASE : public wxPanel
+class PANEL_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 {
 	private:
 

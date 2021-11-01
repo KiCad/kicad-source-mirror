@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,19 +17,20 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_SYM_EDITING_OPTIONS_H
-#define PANEL_SYM_EDITING_OPTIONS_H
+#ifndef PANEL_SYM_DISPLAY_OPTIONS_H
+#define PANEL_SYM_DISPLAY_OPTIONS_H
 
-#include <widgets/unit_binder.h>
-#include "panel_sym_editing_options_base.h"
-
-class EDA_BASE_FRAME;
+#include <widgets/resettable_panel.h>
 
 
-class PANEL_SYM_EDITING_OPTIONS : public PANEL_SYM_EDITING_OPTIONS_BASE
+class APP_SETTINGS_BASE;
+class GAL_OPTIONS_PANEL;
+
+
+class PANEL_SYM_DISPLAY_OPTIONS : public RESETTABLE_PANEL
 {
 public:
-    PANEL_SYM_EDITING_OPTIONS( wxWindow* aWindow, EDA_BASE_FRAME* aUnitsProvider );
+    PANEL_SYM_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -37,16 +38,8 @@ public:
     void ResetPanel() override;
 
 private:
-    void loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* aCfg );
-
-private:
-    UNIT_BINDER        m_lineWidth;
-    UNIT_BINDER        m_textSize;
-
-    UNIT_BINDER        m_pinLength;
-    UNIT_BINDER        m_pinNameSize;
-    UNIT_BINDER        m_pinNumberSize;
+    GAL_OPTIONS_PANEL* m_galOptsPanel;
 };
 
 
-#endif //PANEL_SYM_EDITING_OPTIONS_H
+#endif // PANEL_SYM_DISPLAY_OPTIONS_H

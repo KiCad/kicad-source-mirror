@@ -253,3 +253,17 @@ bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
 
     return true;
 }
+
+
+bool GAL_OPTIONS_PANEL::ResetPanel( APP_SETTINGS_BASE* aAppSettings )
+{
+    APP_SETTINGS_BASE* saved = m_cfg;
+
+    m_cfg = aAppSettings;
+    TransferDataToWindow();
+    m_cfg = saved;
+
+    return true;
+}
+
+

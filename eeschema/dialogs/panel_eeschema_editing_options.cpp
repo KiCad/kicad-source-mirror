@@ -47,36 +47,43 @@ PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( wxWindow* aWindo
 }
 
 
+void PANEL_EESCHEMA_EDITING_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aCfg )
+{
+    m_hPitch.SetValue( Mils2iu( aCfg->m_Drawing.default_repeat_offset_x ) );
+    m_vPitch.SetValue( Mils2iu( aCfg->m_Drawing.default_repeat_offset_y ) );
+    m_spinLabelRepeatStep->SetValue( aCfg->m_Drawing.repeat_label_increment );
+
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    COLOR_SETTINGS*   settings = mgr.GetColorSettings();
+    COLOR4D           schematicBackground = settings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+
+    m_borderColorSwatch->SetSwatchBackground( schematicBackground );
+    m_borderColorSwatch->SetSwatchColor( aCfg->m_Drawing.default_sheet_border_color, false );
+
+    m_backgroundColorSwatch->SetSwatchBackground( schematicBackground );
+    m_backgroundColorSwatch->SetSwatchColor( aCfg->m_Drawing.default_sheet_background_color, false );
+
+    m_checkHVOrientation->SetValue( aCfg->m_Drawing.hv_lines_only );
+    m_footprintPreview->SetValue( aCfg->m_Appearance.footprint_preview );
+    m_navigatorStaysOpen->SetValue( aCfg->m_Appearance.navigator_stays_open );
+
+    m_checkAutoplaceFields->SetValue( aCfg->m_AutoplaceFields.enable );
+    m_checkAutoplaceJustify->SetValue( aCfg->m_AutoplaceFields.allow_rejustify );
+    m_checkAutoplaceAlign->SetValue( aCfg->m_AutoplaceFields.align_to_grid );
+
+    m_mouseDragIsDrag->SetValue( !aCfg->m_Input.drag_is_move );
+    m_cbPinSelectionOpt->SetValue( aCfg->m_Selection.select_pin_selects_symbol );
+
+    m_cbAutoStartWires->SetValue( aCfg->m_Drawing.auto_start_wires );
+}
+
+
 bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataToWindow()
 {
     SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
     EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
 
-    m_hPitch.SetValue( Mils2iu( cfg->m_Drawing.default_repeat_offset_x ) );
-    m_vPitch.SetValue( Mils2iu( cfg->m_Drawing.default_repeat_offset_y ) );
-    m_spinLabelRepeatStep->SetValue( cfg->m_Drawing.repeat_label_increment );
-
-    COLOR_SETTINGS* settings = mgr.GetColorSettings();
-    COLOR4D         schematicBackground = settings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
-
-    m_borderColorSwatch->SetSwatchBackground( schematicBackground );
-    m_borderColorSwatch->SetSwatchColor( cfg->m_Drawing.default_sheet_border_color, false );
-
-    m_backgroundColorSwatch->SetSwatchBackground( schematicBackground );
-    m_backgroundColorSwatch->SetSwatchColor( cfg->m_Drawing.default_sheet_background_color, false );
-
-    m_checkHVOrientation->SetValue( cfg->m_Drawing.hv_lines_only );
-    m_footprintPreview->SetValue( cfg->m_Appearance.footprint_preview );
-    m_navigatorStaysOpen->SetValue( cfg->m_Appearance.navigator_stays_open );
-
-    m_checkAutoplaceFields->SetValue( cfg->m_AutoplaceFields.enable );
-    m_checkAutoplaceJustify->SetValue( cfg->m_AutoplaceFields.allow_rejustify );
-    m_checkAutoplaceAlign->SetValue( cfg->m_AutoplaceFields.align_to_grid );
-
-    m_mouseDragIsDrag->SetValue( !cfg->m_Input.drag_is_move );
-    m_cbPinSelectionOpt->SetValue( cfg->m_Selection.select_pin_selects_symbol );
-
-    m_cbAutoStartWires->SetValue( cfg->m_Drawing.auto_start_wires );
+    loadEEschemaSettings( cfg );
 
     return true;
 }
@@ -108,6 +115,15 @@ bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataFromWindow()
     cfg->m_Drawing.auto_start_wires = m_cbAutoStartWires->GetValue();
 
     return true;
+}
+
+
+void PANEL_EESCHEMA_EDITING_OPTIONS::ResetPanel()
+{
+    EESCHEMA_SETTINGS cfg;
+    cfg.Load();             // Loading without a file will init to defaults
+
+    loadEEschemaSettings( &cfg );
 }
 
 

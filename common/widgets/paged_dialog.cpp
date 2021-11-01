@@ -364,11 +364,15 @@ void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
     // Enable the reset button only if the page is re-settable
     if( m_resetButton )
     {
-        if( auto panel = dynamic_cast<RESETTABLE_PANEL*>( m_treebook->GetPage( page ) ) )
+        // NB: dynamic_cast doesn't work over Kiway.
+        wxWindow* panel = m_treebook->GetPage( page );
+
+        if( panel && panel->GetWindowStyle() & wxRESETTABLE )
         {
             m_resetButton->SetLabel( wxString::Format( _( "Reset %s to Defaults" ),
                                                        m_treebook->GetPageText( page ) ) );
-            m_resetButton->SetToolTip( panel->GetResetTooltip() );
+            m_resetButton->SetToolTip( panel->GetHelpTextAtPoint( wxPoint( -INT_MAX, INT_MAX ),
+                                       wxHelpEvent::Origin_Unknown ) );
             m_resetButton->Enable( true );
         }
         else
@@ -378,6 +382,7 @@ void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
             m_resetButton->Enable( false );
         }
 
+        m_resetButton->GetParent()->Layout();
     }
 
     // Work around an OSX bug where the wxGrid children don't get placed correctly until
@@ -403,8 +408,12 @@ void PAGED_DIALOG::OnResetButton( wxCommandEvent& aEvent )
     if( sel == wxNOT_FOUND )
         return;
 
-    RESETTABLE_PANEL* panel = dynamic_cast<RESETTABLE_PANEL*>( m_treebook->GetPage( sel ) );
+    // NB: dynamic_cast doesn't work over Kiway
+    wxWindow* panel = m_treebook->GetPage( sel );
 
     if( panel )
-        panel->ResetPanel();
+    {
+        wxCommandEvent resetCommand( wxEVT_COMMAND_BUTTON_CLICKED, ID_RESET_PANEL );
+        panel->ProcessWindowEvent( resetCommand );
+    }
 }

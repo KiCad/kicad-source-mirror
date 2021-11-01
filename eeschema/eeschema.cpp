@@ -56,6 +56,7 @@
 #include <panel_sym_editing_options.h>
 #include <dialogs/panel_gal_display_options.h>
 #include <panel_eeschema_display_options.h>
+#include <panel_sym_display_options.h>
 
 // The main sheet of the project
 SCH_SHEET*  g_RootSheet = nullptr;
@@ -175,12 +176,12 @@ static struct IFACE : public KIFACE_BASE
             // Dialog has completed; nothing to return.
             return nullptr;
 
-        case PANEL_SYM_DISPLAY_OPTIONS:
+        case PANEL_SYM_DISP_OPTIONS:
         {
             SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
             APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
-            return new PANEL_GAL_DISPLAY_OPTIONS( aParent, cfg );
+            return new PANEL_SYM_DISPLAY_OPTIONS( aParent, cfg );
         }
 
         case PANEL_SYM_EDIT_OPTIONS:
@@ -213,7 +214,7 @@ static struct IFACE : public KIFACE_BASE
         case PANEL_SYM_COLORS:
             return new PANEL_SYM_COLOR_SETTINGS( aParent );
 
-        case PANEL_SCH_DISPLAY_OPTIONS:
+        case PANEL_SCH_DISP_OPTIONS:
         {
             SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
             APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();

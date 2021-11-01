@@ -53,6 +53,8 @@ public:
      */
     bool TransferDataFromWindow() override;
 
+    bool ResetPanel( APP_SETTINGS_BASE* aAppSettings );
+
 private:
     wxBoxSizer*        m_mainSizer;
 

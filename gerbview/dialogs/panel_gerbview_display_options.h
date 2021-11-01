@@ -36,10 +36,15 @@ public:
     PANEL_GERBVIEW_DISPLAY_OPTIONS( wxWindow* aParent );
     ~PANEL_GERBVIEW_DISPLAY_OPTIONS() {};
 
-private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void ResetPanel() override;
+
+private:
+    void loadSettings( GERBVIEW_SETTINGS* aCfg );
+
+private:
     GAL_OPTIONS_PANEL* m_galOptsPanel;
 };
 

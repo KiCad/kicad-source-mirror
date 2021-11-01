@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -50,30 +50,36 @@ PANEL_GERBVIEW_DISPLAY_OPTIONS::PANEL_GERBVIEW_DISPLAY_OPTIONS( wxWindow* aParen
 }
 
 
-bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataToWindow( )
+void PANEL_GERBVIEW_DISPLAY_OPTIONS::loadSettings( GERBVIEW_SETTINGS* aCfg )
 {
-    m_galOptsPanel->TransferDataToWindow();
-
-    GERBVIEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
-
     // Show Option Draw polygons
-    m_OptDisplayPolygons->SetValue( !cfg->m_Display.m_DisplayPolygonsFill );
+    m_OptDisplayPolygons->SetValue( !aCfg->m_Display.m_DisplayPolygonsFill );
 
     // Show Option Draw Lines. We use DisplayPcbTrackFill as Lines draw option
-    m_OptDisplayLines->SetValue( !cfg->m_Display.m_DisplayLinesFill );
-    m_OptDisplayFlashedItems->SetValue( !cfg->m_Display.m_DisplayFlashedItemsFill );
-    m_OptDisplayDCodes->SetValue( cfg->m_Appearance.show_dcodes );
+    m_OptDisplayLines->SetValue( !aCfg->m_Display.m_DisplayLinesFill );
+    m_OptDisplayFlashedItems->SetValue( !aCfg->m_Display.m_DisplayFlashedItemsFill );
+    m_OptDisplayDCodes->SetValue( aCfg->m_Appearance.show_dcodes );
 
     for( unsigned i = 0;  i < arrayDim( gerberPageSizeList );  ++i )
     {
-        if( gerberPageSizeList[i] == cfg->m_Appearance.page_type )
+        if( gerberPageSizeList[i] == aCfg->m_Appearance.page_type )
         {
             m_PageSize->SetSelection( i );
             break;
         }
     }
 
-    m_ShowPageLimitsOpt->SetValue( cfg->m_Display.m_DisplayPageLimits );
+    m_ShowPageLimitsOpt->SetValue( aCfg->m_Display.m_DisplayPageLimits );
+}
+
+
+bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataToWindow()
+{
+    m_galOptsPanel->TransferDataToWindow();
+
+    GERBVIEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<GERBVIEW_SETTINGS>();
+
+    loadSettings( cfg );
 
     return true;
 }
@@ -95,4 +101,16 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataFromWindow()
 
     return true;
 }
+
+
+void PANEL_GERBVIEW_DISPLAY_OPTIONS::ResetPanel()
+{
+    GERBVIEW_SETTINGS cfg;
+    cfg.Load();             // Loading without a file will init to defaults
+
+    loadSettings( &cfg );
+
+    m_galOptsPanel->ResetPanel( &cfg );
+}
+
 

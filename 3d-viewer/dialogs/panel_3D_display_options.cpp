@@ -41,32 +41,38 @@ void PANEL_3D_DISPLAY_OPTIONS::OnCheckEnableAnimation( wxCommandEvent& event )
 }
 
 
+void PANEL_3D_DISPLAY_OPTIONS::loadViewSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
+{
+    // Check/uncheck checkboxes
+    m_checkBoxRealisticMode->SetValue( aCfg->m_Render.realistic );
+    m_checkBoxBoardBody->SetValue( aCfg->m_Render.show_board_body );
+    m_checkBoxAreas->SetValue( aCfg->m_Render.show_zones );
+    m_checkBoxSilkscreen->SetValue( aCfg->m_Render.show_silkscreen );
+    m_checkBoxSolderMask->SetValue( aCfg->m_Render.show_soldermask );
+    m_checkBoxSolderpaste->SetValue( aCfg->m_Render.show_solderpaste );
+    m_checkBoxAdhesive->SetValue( aCfg->m_Render.show_adhesive );
+    m_checkBoxComments->SetValue( aCfg->m_Render.show_comments );
+    m_checkBoxECO->SetValue( aCfg->m_Render.show_eco );
+    m_checkBoxSubtractMaskFromSilk->SetValue( aCfg->m_Render.subtract_mask_from_silk );
+    m_checkBoxClipSilkOnViaAnnulus->SetValue( aCfg->m_Render.clip_silk_on_via_annulus );
+    m_checkBoxRenderPlatedPadsAsPlated->SetValue( aCfg->m_Render.renderPlatedPadsAsPlated );
+
+    m_materialProperties->SetSelection( aCfg->m_Render.material_mode );
+
+    // Camera Options
+    m_checkBoxEnableAnimation->SetValue( aCfg->m_Camera.animation_enabled );
+    m_sliderAnimationSpeed->SetValue( aCfg->m_Camera.moving_speed_multiplier );
+    m_staticAnimationSpeed->Enable( aCfg->m_Camera.animation_enabled );
+    m_sliderAnimationSpeed->Enable( aCfg->m_Camera.animation_enabled );
+    m_spinCtrlRotationAngle->SetValue( aCfg->m_Camera.rotation_increment );
+}
+
+
 bool PANEL_3D_DISPLAY_OPTIONS::TransferDataToWindow()
 {
     EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
 
-    // Check/uncheck checkboxes
-    m_checkBoxRealisticMode->SetValue( cfg->m_Render.realistic );
-    m_checkBoxBoardBody->SetValue( cfg->m_Render.show_board_body );
-    m_checkBoxAreas->SetValue( cfg->m_Render.show_zones );
-    m_checkBoxSilkscreen->SetValue( cfg->m_Render.show_silkscreen );
-    m_checkBoxSolderMask->SetValue( cfg->m_Render.show_soldermask );
-    m_checkBoxSolderpaste->SetValue( cfg->m_Render.show_solderpaste );
-    m_checkBoxAdhesive->SetValue( cfg->m_Render.show_adhesive );
-    m_checkBoxComments->SetValue( cfg->m_Render.show_comments );
-    m_checkBoxECO->SetValue( cfg->m_Render.show_eco );
-    m_checkBoxSubtractMaskFromSilk->SetValue( cfg->m_Render.subtract_mask_from_silk );
-    m_checkBoxClipSilkOnViaAnnulus->SetValue( cfg->m_Render.clip_silk_on_via_annulus );
-    m_checkBoxRenderPlatedPadsAsPlated->SetValue( cfg->m_Render.renderPlatedPadsAsPlated );
-
-    m_materialProperties->SetSelection( cfg->m_Render.material_mode );
-
-    // Camera Options
-    m_checkBoxEnableAnimation->SetValue( cfg->m_Camera.animation_enabled );
-    m_sliderAnimationSpeed->SetValue( cfg->m_Camera.moving_speed_multiplier );
-    m_staticAnimationSpeed->Enable( cfg->m_Camera.animation_enabled );
-    m_sliderAnimationSpeed->Enable( cfg->m_Camera.animation_enabled );
-    m_spinCtrlRotationAngle->SetValue( cfg->m_Camera.rotation_increment );
+    loadViewSettings( cfg );
 
     return true;
 }
@@ -102,4 +108,13 @@ bool PANEL_3D_DISPLAY_OPTIONS::TransferDataFromWindow()
     cfg->m_Camera.rotation_increment = m_spinCtrlRotationAngle->GetValue();
 
     return true;
+}
+
+
+void PANEL_3D_DISPLAY_OPTIONS::ResetPanel()
+{
+    EDA_3D_VIEWER_SETTINGS cfg;
+    cfg.Load();                     // Loading without a file will init to defaults
+
+    loadViewSettings( &cfg );
 }

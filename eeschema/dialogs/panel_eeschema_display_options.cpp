@@ -41,11 +41,8 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( wxWindow* aParen
 }
 
 
-bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
+void PANEL_EESCHEMA_DISPLAY_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* cfg )
 {
-    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
-    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
-
     m_checkShowHiddenPins->SetValue( cfg->m_Appearance.show_hidden_pins );
     m_checkShowHiddenFields->SetValue( cfg->m_Appearance.show_hidden_fields );
     m_checkPageLimits->SetValue( cfg->m_Appearance.show_page_limits );
@@ -59,6 +56,15 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
     m_checkCrossProbeCenter->SetValue( cfg->m_CrossProbing.center_on_items );
     m_checkCrossProbeZoom->SetValue( cfg->m_CrossProbing.zoom_to_fit );
     m_checkCrossProbeAutoHighlight->SetValue( cfg->m_CrossProbing.auto_highlight );
+}
+
+
+bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
+{
+    SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+    EESCHEMA_SETTINGS* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+
+    loadEEschemaSettings( cfg );
 
     m_galOptsPanel->TransferDataToWindow();
 
@@ -88,6 +94,17 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     m_galOptsPanel->TransferDataFromWindow();
 
     return true;
+}
+
+
+void PANEL_EESCHEMA_DISPLAY_OPTIONS::ResetPanel()
+{
+    EESCHEMA_SETTINGS cfg;
+    cfg.Load();             // Loading without a file will init to defaults
+
+    loadEEschemaSettings( &cfg );
+
+    m_galOptsPanel->ResetPanel( &cfg );
 }
 
 
