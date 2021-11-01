@@ -227,6 +227,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
     int      t1;
     int      t2;
     COLOR4D  color = aSettings->GetLayerColor( LAYER_DEVICE );
+    COLOR4D  fillColor = color;
 
     unsigned ptCount = 0;
     wxPoint* buffer = nullptr;
@@ -295,28 +296,29 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
     else
     {
         if( GetFillType() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
-            color = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
+            fillColor = aSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-            GRFilledArc( nullptr, DC, c.x, c.y, -t2, -t1, GetRadius(), penWidth, color, color );
+            GRFilledArc( nullptr, DC, c.x, c.y, -t2, -t1, GetRadius(), penWidth, color,
+                         fillColor );
             break;
 
         case SHAPE_T::CIRCLE:
-            GRFilledCircle( nullptr, DC, pt1.x, pt1.y, GetRadius(), 0, color, color );
+            GRFilledCircle( nullptr, DC, pt1.x, pt1.y, GetRadius(), 0, color, fillColor );
             break;
 
         case SHAPE_T::RECT:
-            GRFilledRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color, color );
+            GRFilledRect( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, penWidth, color, fillColor );
             break;
 
         case SHAPE_T::POLY:
-            GRPoly( nullptr, DC, ptCount, buffer, true, penWidth, color, color );
+            GRPoly( nullptr, DC, ptCount, buffer, true, penWidth, color, fillColor );
             break;
 
         case SHAPE_T::BEZIER:
-            GRPoly( nullptr, DC, ptCount, buffer, true, penWidth, color, color );
+            GRPoly( nullptr, DC, ptCount, buffer, true, penWidth, color, fillColor );
             break;
 
         default:
