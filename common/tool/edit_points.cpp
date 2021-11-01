@@ -254,20 +254,28 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     // Linear darkening doesn't fit well with human color perception, and there's no guarantee
     // that there's enough room for contrast either.
-    KIGFX::COLOR4D bgColor;
+    KIGFX::COLOR4D borderColor;
+    KIGFX::COLOR4D highlightColor;
     double         brightness = drawColor.GetBrightness();
 
     if( brightness > 0.5 )
-        bgColor = drawColor.Darkened( 0.3 ).WithAlpha( 0.8 );
+    {
+        borderColor = drawColor.Darkened( 0.3 ).WithAlpha( 0.8 );
+        highlightColor = drawColor.Brightened( 0.6 ).WithAlpha( 0.8 );
+    }
     else if( brightness > 0.2 )
-        bgColor = drawColor.Darkened( 0.6 ).WithAlpha( 0.8 );
+    {
+        borderColor = drawColor.Darkened( 0.6 ).WithAlpha( 0.8 );
+        highlightColor = drawColor.Brightened( 0.3 ).WithAlpha( 0.8 );
+    }
     else
-        bgColor = drawColor.Brightened( 0.3 ).WithAlpha( 0.8 );
-
-    KIGFX::COLOR4D highlightColor = settings->GetLayerColor( LAYER_SELECT_OVERLAY );
+    {
+        borderColor = drawColor.Brightened( 0.3 ).WithAlpha( 0.8 );
+        highlightColor = drawColor.Brightened( 0.6 ).WithAlpha( 0.8 );
+    }
 
     gal->SetFillColor( drawColor );
-    gal->SetStrokeColor( bgColor );
+    gal->SetStrokeColor( borderColor );
     gal->SetIsFill( true );
     gal->SetIsStroke( true );
     gal->PushDepth();
@@ -287,11 +295,11 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
                 }
                 else
                 {
-                    gal->SetStrokeColor( bgColor );
+                    gal->SetStrokeColor( borderColor );
                     gal->SetLineWidth( borderSize );
                 }
 
-                gal->SetFillColor( aPoint.IsActive() ? highlightColor : drawColor );
+                gal->SetFillColor( drawColor );
 
                 if( aDrawCircle )
                     gal->DrawCircle( aPoint.GetPosition(), size );
