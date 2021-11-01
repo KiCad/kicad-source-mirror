@@ -148,12 +148,6 @@ void PROJECT_TREE_ITEM::Delete()
 }
 
 
-void PROJECT_TREE_ITEM::Print()
-{
-    PrintFile( GetFileName() );
-}
-
-
 void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
 {
     wxString             sep = wxFileName::GetPathSeparator();

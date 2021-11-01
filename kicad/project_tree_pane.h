@@ -119,12 +119,6 @@ private:
     void onDeleteFile( wxCommandEvent& event );
 
     /**
-     * Function onDeleteFile
-     * Print the selected file or directory in the tree project
-     */
-    void onPrintFile( wxCommandEvent& event );
-
-    /**
      * Function onRenameFile
      * Rename the selected file or directory in the tree project
      */

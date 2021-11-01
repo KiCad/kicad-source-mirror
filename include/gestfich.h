@@ -48,9 +48,6 @@ class EDA_LIST_DIALOG;
 bool OpenPDF( const wxString& file );
 void OpenFile( const wxString& file );
 
-void PrintFile( const wxString& file );
-bool CanPrintFile( const wxString& file );
-
 /**
  * @param aSrcPath is the full filename of the source.
  * @param aDestPath is the full filename of the target

@@ -128,7 +128,6 @@ BEGIN_EVENT_TABLE( PROJECT_TREE_PANE, wxSashLayoutWindow )
     EVT_MENU( ID_PROJECT_NEWDIR, PROJECT_TREE_PANE::onCreateNewDirectory )
     EVT_MENU( ID_PROJECT_OPEN_DIR, PROJECT_TREE_PANE::onOpenDirectory )
     EVT_MENU( ID_PROJECT_DELETE, PROJECT_TREE_PANE::onDeleteFile )
-    EVT_MENU( ID_PROJECT_PRINT, PROJECT_TREE_PANE::onPrintFile )
     EVT_MENU( ID_PROJECT_RENAME, PROJECT_TREE_PANE::onRenameFile )
     EVT_IDLE( PROJECT_TREE_PANE::onIdle )
 END_EVENT_TABLE()
@@ -617,7 +616,6 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     bool can_edit = true;
     bool can_rename = true;
     bool can_delete = true;
-    bool can_print = true;
 
     if( selection.size() == 0 )
         return;
@@ -628,7 +626,6 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
         can_switch_to_project = false;
         can_create_new_directory = false;
         can_rename = false;
-        can_print = false;
     }
 
     for( PROJECT_TREE_ITEM* item : selection )
@@ -639,7 +636,6 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
             can_switch_to_project = false;
             can_edit = false;
             can_rename = false;
-            can_print = false;
             continue;
         }
 
@@ -650,7 +646,6 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
         case TREE_FILE_TYPE::LEGACY_PROJECT:
         case TREE_FILE_TYPE::JSON_PROJECT:
             can_rename = false;
-            can_print = false;
 
             if( item->GetId() == m_TreeProject->GetRootItem() )
             {
@@ -668,16 +663,12 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
             can_switch_to_project = false;
             can_edit = false;
             can_rename = false;
-            can_print = false;
             break;
 
         default:
             can_switch_to_project = false;
             can_create_new_directory = false;
             can_open_this_directory = false;
-
-            if( !CanPrintFile( full_file_name ) )
-                can_print = false;
 
             break;
         }
@@ -781,19 +772,6 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
 #endif
     }
 
-    if( can_print )
-    {
-        popup_menu.AppendSeparator();
-        AddMenuItem( &popup_menu, ID_PROJECT_PRINT,
-
-#ifdef __APPLE__
-                     _( "Print..." ),
-#else
-                     _( "Print" ),
-#endif
-                     _( "Print the contents of the file" ), KiBitmap( BITMAPS::print_button ) );
-    }
-
     if( popup_menu.GetMenuItemCount() > 0 )
         PopupMenu( &popup_menu );
 }
@@ -832,15 +810,6 @@ void PROJECT_TREE_PANE::onDeleteFile( wxCommandEvent& event )
 
     for( PROJECT_TREE_ITEM* item_data : tree_data )
         item_data->Delete();
-}
-
-
-void PROJECT_TREE_PANE::onPrintFile( wxCommandEvent& event )
-{
-    std::vector<PROJECT_TREE_ITEM*> tree_data = GetSelectedData();
-
-    for( PROJECT_TREE_ITEM* item_data : tree_data )
-        item_data->Print();
 }
 
 
