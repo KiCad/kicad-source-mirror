@@ -742,12 +742,43 @@ BOOST_AUTO_TEST_CASE( CollideArc )
             SHAPE_ARC arc1( c.m_arc1.GenerateArc() );
             SHAPE_ARC arc2( c.m_arc2.GenerateArc() );
 
+
+            SHAPE_LINE_CHAIN arc1_slc( c.m_arc1.GenerateArc() );
+            arc1_slc.SetWidth( 0 );
+
+            SHAPE_LINE_CHAIN arc2_slc( c.m_arc2.GenerateArc() );
+            arc2_slc.SetWidth( 0 );
+
             int      actual = 0;
             VECTOR2I location;
 
-            bool result = arc1.Collide( &arc2, PcbMm2iu( c.m_clearance ), &actual, &location );
+            SHAPE* arc1_sh = &arc1;
+            SHAPE* arc2_sh = &arc2;
+            SHAPE* arc1_slc_sh = &arc1_slc;
+            SHAPE* arc2_slc_sh = &arc2_slc;
 
-            BOOST_CHECK_EQUAL( result, c.m_exp_result );
+            bool result_arc_to_arc =
+                    arc1_sh->Collide( arc2_sh, PcbMm2iu( c.m_clearance ), &actual, &location );
+
+            // For arc to chain collisions, we need to re-calculate the clearances because the
+            // SHAPE_LINE_CHAIN is zero width
+            int clearance = PcbMm2iu( c.m_clearance ) + ( arc2.GetWidth() / 2 );
+
+            bool result_arc_to_chain =
+                    arc1_sh->Collide( arc2_slc_sh, clearance, &actual, &location );
+
+            clearance = PcbMm2iu( c.m_clearance ) + ( arc1.GetWidth() / 2 );
+            bool result_chain_to_arc =
+                    arc1_slc_sh->Collide( arc2_sh, clearance, &actual, &location );
+
+            clearance = clearance + ( arc2.GetWidth() / 2 );
+            bool result_chain_to_chain =
+                    arc1_slc_sh->Collide( arc2_slc_sh, clearance, &actual, &location );
+
+            BOOST_CHECK_EQUAL( result_arc_to_arc, c.m_exp_result );
+            BOOST_CHECK_EQUAL( result_arc_to_chain, c.m_exp_result );
+            BOOST_CHECK_EQUAL( result_chain_to_arc, c.m_exp_result );
+            BOOST_CHECK_EQUAL( result_chain_to_chain, c.m_exp_result );
         }
     }
 }

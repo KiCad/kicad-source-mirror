@@ -31,6 +31,10 @@
 
 #include "geom_test_utils.h"
 
+/**
+ * NOTE: Collision of SHAPE_LINE_CHAIN with arcs is tested in test_shape_arc.cpp
+ */
+
 BOOST_AUTO_TEST_SUITE( ShapeLineChain )
 
 BOOST_AUTO_TEST_CASE( ArcToPolyline )
