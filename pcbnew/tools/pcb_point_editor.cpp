@@ -474,6 +474,14 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                 setAltConstraint( true );
                 m_editedPoint->SetActive();
+
+                for( size_t ii = 0; ii < m_editPoints->PointsSize(); ++ii )
+                {
+                    EDIT_POINT& point = m_editPoints->Point( ii );
+
+                    if( &point != m_editedPoint )
+                        point.SetActive( false );
+                }
             }
 
             VECTOR2I pos = evt->Position();
@@ -534,6 +542,15 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         else if( m_editedPoint && evt->Action() == TA_MOUSE_DOWN && evt->Buttons() == BUT_LEFT )
         {
             m_editedPoint->SetActive();
+
+            for( size_t ii = 0; ii < m_editPoints->PointsSize(); ++ii )
+            {
+                EDIT_POINT& point = m_editPoints->Point( ii );
+
+                if( &point != m_editedPoint )
+                    point.SetActive( false );
+            }
+
             getView()->Update( m_editPoints.get() );
         }
         else if( inDrag && evt->IsMouseUp( BUT_LEFT ) )
