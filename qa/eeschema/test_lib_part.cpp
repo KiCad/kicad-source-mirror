@@ -382,20 +382,20 @@ BOOST_AUTO_TEST_CASE( Compare )
 BOOST_AUTO_TEST_CASE( GetUnitItems )
 {
     // There are no unit draw items in the empty LIB_SYMBOL object.
-    BOOST_CHECK( m_part_no_data.GetUnitItems( 1, 1 ).size() == 0 );
+    BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 1, 1 ).size() == 0 );
 
     // A single unique unit with 1 pin common to all units and all body styles.
     LIB_PIN* pin1 = new LIB_PIN( &m_part_no_data );
     m_part_no_data.AddDrawItem( pin1 );
-    BOOST_CHECK( m_part_no_data.GetUnitItems( 0, 0 ).size() == 1 );
+    BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 0, 0 ).size() == 1 );
 
     // A single unique unit with 1 pin in unit 1 and common to all body styles.
     pin1->SetUnit( 1 );
-    BOOST_CHECK( m_part_no_data.GetUnitItems( 1, 0 ).size() == 1 );
+    BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 1, 0 ).size() == 1 );
 
     // A single unique unit with 1 pin in unit 1 and body style 1.
     pin1->SetConvert( 1 );
-    BOOST_CHECK( m_part_no_data.GetUnitItems( 1, 1 ).size() == 1 );
+    BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 1, 1 ).size() == 1 );
 
     // Two unique units with pin 1 assigned to unit 1 and body style 1 and pin 2 assigned to
     // unit 2 and body style 1.
@@ -405,12 +405,12 @@ BOOST_AUTO_TEST_CASE( GetUnitItems )
     pin2->SetConvert( 2 );
     pin2->SetNumber( "4" );
     m_part_no_data.AddDrawItem( pin2 );
-    BOOST_CHECK( m_part_no_data.GetUnitItems( 2, 2 ).size() == 1 );
+    BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 2, 2 ).size() == 1 );
 
     // Make pin 1 body style common to all units.
     pin1->SetConvert( 0 );
-    BOOST_CHECK( m_part_no_data.GetUnitItems( 1, 1 ).size() == 0 );
-    BOOST_CHECK( m_part_no_data.GetUnitItems( 2, 1 ).size() == 1 );
+    BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 1, 1 ).size() == 0 );
+    BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 2, 1 ).size() == 1 );
 
     m_part_no_data.RemoveDrawItem( pin2 );
     m_part_no_data.RemoveDrawItem( pin1 );
@@ -430,7 +430,7 @@ BOOST_AUTO_TEST_CASE( GetUnitDrawItems )
     LIB_PIN* pin1 = new LIB_PIN( &m_part_no_data );
     pin1->SetNumber( "1" );
     m_part_no_data.AddDrawItem( pin1 );
-    std::vector<struct LIB_SYMBOL_UNITS> units = m_part_no_data.GetUnitDrawItems();
+    std::vector<struct LIB_SYMBOL_UNIT> units = m_part_no_data.GetUnitDrawItems();
     BOOST_CHECK( units.size() == 1 );
     BOOST_CHECK( units[0].m_unit == 0 );
     BOOST_CHECK( units[0].m_convert == 0 );

@@ -784,9 +784,11 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
             itemType = item->Type();
 
             if( itemType != SCH_SYMBOL_T
-              && itemType != SCH_JUNCTION_T
-              && itemType != SCH_SHEET_T )
+                    && itemType != SCH_JUNCTION_T
+                    && itemType != SCH_SHEET_T )
+            {
                 m_out->Print( 0, "\n" );
+            }
         }
 
         switch( item->Type() )
@@ -1801,9 +1803,9 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& a
         saveDcmInfoAsFields( aSymbol, aFormatter, nextFreeFieldId, aNestLevel );
 
         // Save the draw items grouped by units.
-        std::vector<LIB_SYMBOL_UNITS> units = aSymbol->GetUnitDrawItems();
+        std::vector<LIB_SYMBOL_UNIT> units = aSymbol->GetUnitDrawItems();
         std::sort( units.begin(), units.end(),
-                   []( const LIB_SYMBOL_UNITS& a, const LIB_SYMBOL_UNITS& b )
+                   []( const LIB_SYMBOL_UNIT& a, const LIB_SYMBOL_UNIT& b )
                    {
                         if( a.m_unit == b.m_unit )
                             return a.m_convert < b.m_convert;
@@ -1820,7 +1822,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& a
             aFormatter.Print( aNestLevel + 1, "(symbol %s_%d_%d\"\n",
                               name.c_str(), unit.m_unit, unit.m_convert );
 
-            for( auto item : unit.m_items )
+            for( LIB_ITEM* item : unit.m_items )
                 saveSymbolDrawItem( item, aFormatter, aNestLevel + 2 );
 
             aFormatter.Print( aNestLevel + 1, ")\n" );

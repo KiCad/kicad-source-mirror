@@ -79,7 +79,7 @@ struct LIB_SYMBOL_OPTIONS
 };
 
 
-struct LIB_SYMBOL_UNITS
+struct LIB_SYMBOL_UNIT
 {
     int m_unit;                       ///< The unit number.
     int m_convert;                    ///< The alternate body style of the unit.
@@ -624,7 +624,7 @@ public:
      * @note This does not include LIB_FIELD objects since they are not associated with
      *       unit and/or convert numbers.
      */
-    std::vector<struct LIB_SYMBOL_UNITS> GetUnitDrawItems();
+    std::vector<struct LIB_SYMBOL_UNIT> GetUnitDrawItems();
 
     /**
      * Return a list of unit numbers that are unique to this symbol.
@@ -634,7 +634,7 @@ public:
      *
      * @return a list of unique unit numbers and their associated draw items.
      */
-    std::vector<struct LIB_SYMBOL_UNITS> GetUniqueUnits();
+    std::vector<struct LIB_SYMBOL_UNIT> GetUniqueUnits();
 
     /**
      * Return a list of item pointers for \a aUnit and \a aConvert for this symbol.
@@ -646,7 +646,7 @@ public:
      *
      * @return a list of unit items.
      */
-    std::vector<LIB_ITEM*> GetUnitItems( int aUnit, int aConvert );
+    std::vector<LIB_ITEM*> GetUnitDrawItems( int aUnit, int aConvert );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }

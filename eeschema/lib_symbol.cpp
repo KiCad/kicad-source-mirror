@@ -1258,7 +1258,7 @@ void LIB_SYMBOL::SetSubpartIdNotation( int aSep, int aFirstId )
 }
 
 
-std::vector<LIB_ITEM*> LIB_SYMBOL::GetUnitItems( int aUnit, int aConvert )
+std::vector<LIB_ITEM*> LIB_SYMBOL::GetUnitDrawItems( int aUnit, int aConvert )
 {
     std::vector<LIB_ITEM*> unitItems;
 
@@ -1279,9 +1279,9 @@ std::vector<LIB_ITEM*> LIB_SYMBOL::GetUnitItems( int aUnit, int aConvert )
 }
 
 
-std::vector<struct LIB_SYMBOL_UNITS> LIB_SYMBOL::GetUnitDrawItems()
+std::vector<struct LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUnitDrawItems()
 {
-    std::vector<struct LIB_SYMBOL_UNITS> units;
+    std::vector<struct LIB_SYMBOL_UNIT> units;
 
     for( LIB_ITEM& item : m_drawings )
     {
@@ -1292,14 +1292,14 @@ std::vector<struct LIB_SYMBOL_UNITS> LIB_SYMBOL::GetUnitDrawItems()
         int convert = item.GetConvert();
 
         auto it = std::find_if( units.begin(), units.end(),
-                [unit, convert]( const LIB_SYMBOL_UNITS& a )
+                [unit, convert]( const LIB_SYMBOL_UNIT& a )
                 {
                     return a.m_unit == unit && a.m_convert == convert;
                 } );
 
         if( it == units.end() )
         {
-            struct LIB_SYMBOL_UNITS newUnit;
+            struct LIB_SYMBOL_UNIT newUnit;
             newUnit.m_unit = item.GetUnit();
             newUnit.m_convert = item.GetConvert();
             newUnit.m_items.push_back( &item );
@@ -1315,19 +1315,19 @@ std::vector<struct LIB_SYMBOL_UNITS> LIB_SYMBOL::GetUnitDrawItems()
 }
 
 
-std::vector<struct LIB_SYMBOL_UNITS> LIB_SYMBOL::GetUniqueUnits()
+std::vector<struct LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUniqueUnits()
 {
     int unitNum;
     size_t i;
-    struct LIB_SYMBOL_UNITS unit;
+    struct LIB_SYMBOL_UNIT unit;
     std::vector<LIB_ITEM*> compareDrawItems;
     std::vector<LIB_ITEM*> currentDrawItems;
-    std::vector<struct LIB_SYMBOL_UNITS> uniqueUnits;
+    std::vector<struct LIB_SYMBOL_UNIT> uniqueUnits;
 
     // The first unit is guaranteed to be unique so always include it.
     unit.m_unit = 1;
     unit.m_convert = 1;
-    unit.m_items = GetUnitItems( 1, 1 );
+    unit.m_items = GetUnitDrawItems( 1, 1 );
 
     // There are no unique units if there are no draw items other than fields.
     if( unit.m_items.size() == 0 )
@@ -1342,7 +1342,7 @@ std::vector<struct LIB_SYMBOL_UNITS> LIB_SYMBOL::GetUniqueUnits()
 
     for( unitNum = 2; unitNum <= GetUnitCount(); unitNum++ )
     {
-        compareDrawItems = GetUnitItems( unitNum, 1 );
+        compareDrawItems = GetUnitDrawItems( unitNum, 1 );
 
         wxCHECK2_MSG( compareDrawItems.size() != 0, continue,
                       "Multiple unit symbol defined with empty units." );
@@ -1372,7 +1372,7 @@ std::vector<struct LIB_SYMBOL_UNITS> LIB_SYMBOL::GetUniqueUnits()
 
     if( HasConversion() )
     {
-        currentDrawItems = GetUnitItems( 1, 2 );
+        currentDrawItems = GetUnitDrawItems( 1, 2 );
 
         if( ( GetUnitCount() == 1 || UnitsLocked() ) )
         {
@@ -1386,7 +1386,7 @@ std::vector<struct LIB_SYMBOL_UNITS> LIB_SYMBOL::GetUniqueUnits()
 
         for( unitNum = 2; unitNum <= GetUnitCount(); unitNum++ )
         {
-            compareDrawItems = GetUnitItems( unitNum, 2 );
+            compareDrawItems = GetUnitDrawItems( unitNum, 2 );
 
             wxCHECK2_MSG( compareDrawItems.size() != 0, continue,
                           "Multiple unit symbol defined with empty units." );
