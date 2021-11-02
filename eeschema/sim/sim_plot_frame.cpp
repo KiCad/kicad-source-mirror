@@ -572,6 +572,22 @@ void SIM_PLOT_FRAME::AddTuner( SCH_SYMBOL* aSymbol )
     }
 }
 
+void SIM_PLOT_FRAME::UpdateTunerValue( SCH_SYMBOL* aSymbol, const wxString& aValue )
+{
+    for( auto& item : m_schematicFrame->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        if( item == aSymbol )
+        {
+            aSymbol->SetValue( aValue );
+
+            m_schematicFrame->UpdateItem( aSymbol, false, true );
+            m_schematicFrame->OnModify();
+            break;
+        }
+    }
+
+}
+
 
 void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner, bool aErase )
 {

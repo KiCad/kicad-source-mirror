@@ -185,8 +185,7 @@ void TUNER_SLIDER::onClose( wxCommandEvent& event )
 
 void TUNER_SLIDER::onSave( wxCommandEvent& event )
 {
-    /// @todo it will crash when component is removed; completely remove m_symbol
-    m_symbol->GetField( VALUE_FIELD )->SetText( m_value.ToOrigString() );
+    m_frame->UpdateTunerValue( m_symbol, m_value.ToOrigString() );
 }
 
 
