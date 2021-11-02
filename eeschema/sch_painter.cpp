@@ -590,8 +590,8 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
         {
             std::deque<VECTOR2D> mappedPts;
 
-            for( const VECTOR2I &p : aShape->GetPolyShape().Outline( 0 ).CPoints() )
-                mappedPts.push_back( mapCoords( (wxPoint) p ) );
+            for( const wxPoint& p : aShape->GetBezierPoints() )
+                mappedPts.push_back( mapCoords( p ) );
 
             m_gal->DrawPolygon( mappedPts );
         }

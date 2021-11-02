@@ -1061,7 +1061,10 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseBezier()
         switch( token )
         {
         case T_pts:
-            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+        {
+            int ii = 0;
+
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok(), ++ii )
             {
                 if( token != T_LEFT )
                     Expecting( T_LEFT );
@@ -1071,11 +1074,18 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseBezier()
                 if( token != T_xy )
                     Expecting( "xy" );
 
-                bezier->AddPoint( parseXY() );
+                switch( ii )
+                {
+                case 0: bezier->SetStart( parseXY() );    break;
+                case 1: bezier->SetBezierC1( parseXY() ); break;
+                case 2: bezier->SetBezierC2( parseXY() ); break;
+                case 3: bezier->SetEnd( parseXY() );      break;
+                default: Unexpected( "control point" );   break;
+                }
 
                 NeedRIGHT();
             }
-
+        }
             break;
 
         case T_stroke:
@@ -1092,6 +1102,8 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseBezier()
             Expecting( "pts, stroke, or fill" );
         }
     }
+
+    bezier->RebuildBezierToSegmentsPointsList( bezier->GetWidth() );
 
     return bezier.release();
 }
