@@ -5,17 +5,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
-"PO-Revision-Date: 2021-03-19 16:01+0000\n"
+"PO-Revision-Date: 2021-11-03 14:44+0000\n"
 "Last-Translator: radix <neutrino@gmx.co.uk>\n"
-"Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sl/>\n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
 "%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-Keywords: _\n"
 "X-Poedit-Basepath: c:\\kicad\\kicad-dev\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -41,7 +41,7 @@ msgstr "Ustvari plasti"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:709
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:103
 msgid "No footprint loaded."
-msgstr "Noben odtis ni naložen."
+msgstr "Nobeno podnožje ni naloženo."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:725
 msgid ""
@@ -58,9 +58,8 @@ msgstr ""
 "analizo."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
-#, fuzzy
 msgid "Create tracks and vias"
-msgstr "Ustvarite skladbe in vias"
+msgstr "Ustvari povezave in skoznike"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:683
 msgid "Create zones"
@@ -81,9 +80,9 @@ msgid "Simplifying polygons on B_Cu"
 msgstr "Poenostavitev poligonov bakrenih plasti"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Poenostavitev poligonov bakrenih plasti"
+msgstr "Poenostavitev %d bakrenih slojev"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:841
 msgid "Simplify holes contours"
@@ -100,7 +99,7 @@ msgstr "Zgradite tehnične sloje"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1049
 msgid "Build BVH for holes and vias"
-msgstr "Zgradite BVH za luknje in luknje"
+msgstr "Zgradi BVH za luknje in skoznike"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
 #, fuzzy
@@ -129,16 +128,16 @@ msgstr "Naložite OpenGL: ploščo"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:482
 msgid "Load OpenGL: holes and vias"
-msgstr "Naložite OpenGL: luknje in luknje"
+msgstr "Naloži OpenGL: luknje in skoznike"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:548
 msgid "Load OpenGL: layers"
 msgstr "Naloži OpenGL: sloje"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Naloži OpenGL: sloje"
+msgstr "Naloži OpenGL sloj %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:648
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:790
@@ -208,7 +207,7 @@ msgstr "3D pogled"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:69
 msgid "Copy 3D Image"
-msgstr "Kopirajte 3D sliko"
+msgstr "Kopiraj 3D sliko"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:107
 msgid "Raytracing"
@@ -221,7 +220,7 @@ msgstr "Raytracing"
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:445
 msgid "Preferences..."
-msgstr "&Nastavitve ..."
+msgstr "Nastavitve ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:113 common/tool/actions.cpp:600
 #: cvpcb/menubar.cpp:75 eeschema/menubar.cpp:277
@@ -265,7 +264,7 @@ msgstr "&Uredi"
 #: pcbnew/menubar_footprint_editor.cpp:243 pcbnew/menubar_pcb_editor.cpp:458
 #: pcbnew/toolbars_footprint_viewer.cpp:182
 msgid "&View"
-msgstr "Po&gled"
+msgstr "&Pogled"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:148 cvpcb/menubar.cpp:89
 #: gerbview/menubar.cpp:226 kicad/menubar.cpp:194
@@ -545,11 +544,11 @@ msgstr "Preklopi prikaz območja"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle adhesive display"
-msgstr "Preklopi lepilni zaslon"
+msgstr "Preklopi prikaz lepila"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle display of adhesive layers"
-msgstr "Preklopi prikaz lepilnih slojev"
+msgstr "Preklopi prikaz slojev lepila"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle silkscreen display"
@@ -569,11 +568,11 @@ msgstr "Preklopi prikaz slojev maske za spajkanje"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Toggle solder paste display"
-msgstr "Vklop / izklop zaslona za spajkanje"
+msgstr "Preklopi prikaz spajkalne paste"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Toggle display of solder paste layers"
-msgstr "Preklopi prikaz slojev paste za spajkanje"
+msgstr "Preklopi prikaz slojev spajkalne paste"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle comments display"
@@ -702,7 +701,7 @@ msgstr "Pokaži sloje za spajkanje"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:46
 msgid "Show adhesive layers"
-msgstr "Pokažite lepilne plasti"
+msgstr "Pokaži plasti lepila"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "User Layers (not shown in realistic mode)"
@@ -805,7 +804,7 @@ msgstr "Pokaži omejevalna polja modela"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
 msgid "Show copper thickness"
-msgstr "Pokažit debelino bakra"
+msgstr "Prikaži debelino bakra"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 #, fuzzy
@@ -858,7 +857,7 @@ msgstr "Onemogoči debelino"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:71
 msgid "Disable vias"
-msgstr "Onemogočite vias"
+msgstr "Onemogoči skoznike"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:74
 msgid "Disable holes"
@@ -1320,7 +1319,7 @@ msgstr "Izhodni parametri"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
-msgstr "Razmerje med višino in širino ključavnice"
+msgstr "Zakleni razmerje višina/širina"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:122
 #: common/dialogs/dialog_page_settings_base.cpp:32
@@ -1708,7 +1707,7 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:208
 msgid "Lead Development Team"
-msgstr "Vodite razvojno skupino"
+msgstr "Vodilna razvojna skupina"
 
 #: common/dialog_about/AboutDialog_main.cpp:209
 msgid "Lead Development Alumni"
@@ -1724,7 +1723,7 @@ msgstr "Drugi"
 
 #: common/dialog_about/AboutDialog_main.cpp:715
 msgid "KiCad Librarian Team"
-msgstr "Bibliotekarska ekipa KiCad"
+msgstr "Knjižničarska ekipa KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:730
 msgid "3D models by"
@@ -1760,11 +1759,11 @@ msgstr "Različica"
 
 #: common/dialog_about/dialog_about.cpp:125
 msgid "Developers"
-msgstr "Razvajalci"
+msgstr "Razvijalci"
 
 #: common/dialog_about/dialog_about.cpp:127
 msgid "Doc Writers"
-msgstr "Doktorji"
+msgstr "Pisatelji dokumentacije"
 
 #: common/dialog_about/dialog_about.cpp:130
 msgid "Librarians"
@@ -1812,7 +1811,7 @@ msgstr "Zgradite informacije o različici"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr "Informacije o različici Lib"
+msgstr "Informacije o različici knjižnice"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
@@ -3201,7 +3200,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "days"
-msgstr ""
+msgstr "dni"
 
 #: common/dialogs/panel_common_settings_base.cpp:250
 msgid "Project Backup"
@@ -3565,14 +3564,12 @@ msgid "Minimum track width"
 msgstr "Najmanjša širina proge:"
 
 #: common/dialogs/panel_setup_netclasses.cpp:481
-#, fuzzy
 msgid "Via pad diameter"
-msgstr "Premer blazinice:"
+msgstr "Premer blazinice skoznika"
 
 #: common/dialogs/panel_setup_netclasses.cpp:482
-#, fuzzy
 msgid "Via plated hole diameter"
-msgstr "Premer blazinice:"
+msgstr "Premer metalizirane luknje skoznika"
 
 #: common/dialogs/panel_setup_netclasses.cpp:483
 #, fuzzy
@@ -3643,12 +3640,11 @@ msgstr "Širina povezave"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:202
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:108
 msgid "Via Size"
-msgstr "Preko velikosti"
+msgstr "Velikost skoznika"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
-#, fuzzy
 msgid "Via Hole"
-msgstr "Skozi luknje"
+msgstr "Luknja skoznika"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:204
@@ -4038,11 +4034,9 @@ msgid "Hotkeys"
 msgstr "Bližnjice"
 
 #: common/eda_base_frame.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr ""
-"Za shranjevanje datoteke potrebujete nezadostna dovoljenja\n"
-"%s"
+msgstr "Nezadostna dovoljenja za mapo \"%s\"."
 
 #: common/eda_base_frame.cpp:1086
 #, c-format
@@ -4196,7 +4190,7 @@ msgstr "Povezava"
 #: common/eda_item.cpp:260 pcbnew/dialogs/dialog_board_statistics.cpp:493
 #: pcbnew/pcb_track.cpp:751
 msgid "Via"
-msgstr "Luknje"
+msgstr "Skoznik"
 
 #: common/eda_item.cpp:261 common/eda_item.cpp:272 pcbnew/pcb_marker.cpp:94
 msgid "Marker"
@@ -4688,21 +4682,18 @@ msgid "from %s : %s() line:%d"
 msgstr "od %s: %s () vrstica: %d"
 
 #: common/exceptions.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"KiCad ni mogel odpreti te datoteke, saj je bila ustvarjena z več\n"
-"najnovejšo različico od tiste, ki jo uporabljate.\n"
-"Če ga želite odpreti, boste morali KiCad nadgraditi na novejšo različico.\n"
+"KiCad ni mogel odpreti te datoteke, saj je bila ustvarjena z novejšo "
+"različico od tiste, ki jo uporabljate.\n"
 "\n"
-"Datum zahtevane različice KiCad (ali novejše): %s\n"
-"\n"
-"Celotno besedilo napake:\n"
-"%s"
+"Za odpiranje boste morali KiCad nadgraditi na različico datirano %s ali "
+"pozneje."
 
 #: common/exceptions.cpp:126
 #, fuzzy
@@ -5442,7 +5433,7 @@ msgstr "Skozi vias"
 
 #: common/layer_id.cpp:154
 msgid "Bl/Buried vias"
-msgstr "Bl / zakopane vias"
+msgstr "Slepi/zakopani skozniki"
 
 #: common/layer_id.cpp:155
 msgid "Micro-vias"
@@ -5609,7 +5600,7 @@ msgstr ""
 #: common/plugins/altium/altium_parser.cpp:247
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr ""
+msgstr "Enota \"%s\" se ne konča z \"mil\"."
 
 #: common/plugins/altium/altium_parser.cpp:255
 #, fuzzy, c-format
@@ -5623,9 +5614,8 @@ msgstr "Datoteke '%s' ni mogoče odpreti"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
-#, fuzzy
 msgid "File import cancelled by user."
-msgstr "-------- Uporabnik je preklical ERC. <br> <br>"
+msgstr "Uporabnik je preklical uvoz datoteke."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2370
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2388
@@ -9520,9 +9510,9 @@ msgid "Text:"
 msgstr "Besedilo:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "(%s)"
-msgstr "Offset"
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -9772,7 +9762,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:282
 msgid "This symbol only has one unit. This control has no effect."
-msgstr ""
+msgstr "Ta simbol ima samo eno enoto. Ta nastavitev nima učinka."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:284
 msgid ""
@@ -9965,9 +9955,9 @@ msgid "Schematic"
 msgstr "Shema"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write plot files to folder '%s'."
-msgstr "Datotek ploskve ni bilo mogoče zapisati v mapo \"%s\"."
+msgstr "Datotek z izrisi ni bilo mogoče zapisati v mapo \"%s\"."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:512
 #: eeschema/dialogs/dialog_plot_schematic.cpp:683
@@ -10118,7 +10108,7 @@ msgstr "Položaj X:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr ""
+msgstr "Spodaj levo, enote risalnika"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
@@ -10278,9 +10268,8 @@ msgstr "Ne najdem datoteke"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:22
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:22
-#, fuzzy
 msgid "Import from:"
-msgstr "Uvozi iz"
+msgstr "Uvozi iz:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:27
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:31
@@ -10948,23 +10937,23 @@ msgstr "Konfiguracija luči"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "Spice"
-msgstr ""
+msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "PSpice"
-msgstr ""
+msgstr "PSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "LTSpice"
-msgstr ""
+msgstr "LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "PSpice and LTSpice"
-msgstr ""
+msgstr "PSpice in LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "HSpice"
-msgstr ""
+msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.h:140
 msgid "Simulation settings"
@@ -11527,9 +11516,8 @@ msgid "Not mirrored"
 msgstr "Ni zrcalno"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:156
-#, fuzzy
 msgid "Around X axis"
-msgstr "Okoli osi X."
+msgstr "Okoli osi X"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:156
 msgid "Around Y axis"
@@ -12400,7 +12388,7 @@ msgstr "Datoteka knjižnice simbolov \"%s\" je prazna."
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:537
 msgid "Invalid Row Definition"
-msgstr ""
+msgstr "Neveljavna definicija vrstice"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:539
@@ -13137,21 +13125,23 @@ msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
 
 #: eeschema/files-io.cpp:1422
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "Datoteke za samodejno shranjevanje »%s« ni bilo mogoče odstraniti!"
+msgstr "Sledečih samodejno shranjenih datotek ni bilo mogoče odstraniti\n"
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
 msgstr ""
 
 #: eeschema/files-io.cpp:1438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "Datoteke za samodejno shranjevanje »%s« ni bilo mogoče odstraniti!"
+msgstr ""
+"Glavne datoteke za samodejno shranjevanje\n"
+"\"%s\"\n"
+"ni bilo mogoče izbrisati."
 
 #: eeschema/files-io.cpp:1446
 msgid ""
@@ -13297,9 +13287,9 @@ msgid "Polyline, %d points"
 msgstr "Ločnica, %d točk"
 
 #: eeschema/lib_shape.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Krivulja &Bezier"
+msgstr "Bézierova krivulja, %d točk"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -13934,9 +13924,9 @@ msgstr "Datoteke za obnovitev \"%s\" ni mogoče najti."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2142
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2161
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading image %s."
-msgstr "Končajte risalni list"
+msgstr "Napaka pri branju slike %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2154
 #, fuzzy, c-format
@@ -14890,14 +14880,12 @@ msgid "space"
 msgstr "vesolje"
 
 #: eeschema/sch_validators.cpp:171
-#, fuzzy
 msgid " or "
-msgstr "%s ali %s"
+msgstr " ali "
 
 #: eeschema/sch_validators.cpp:176
-#, fuzzy
 msgid ", or "
-msgstr "%s ali %s"
+msgstr ", ali "
 
 #: eeschema/sch_validators.cpp:189
 msgid "The reference designator cannot contain text variable references"
@@ -15111,7 +15099,7 @@ msgstr "Napaka: vrsta simulacije ne podpira risanja!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:813 eeschema/sim/sim_plot_frame.cpp:1641
 msgid "Signal"
-msgstr ""
+msgstr "Signal"
 
 #: eeschema/sim/sim_plot_frame.cpp:1087
 msgid "noname"
@@ -15692,6 +15680,8 @@ msgid ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
 msgstr ""
+"Simbol \"%s\" je bil spremenjen.\n"
+"Ali ga želite odstraniti iz knjižnice?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:775
 #, fuzzy, c-format
@@ -15984,7 +15974,7 @@ msgstr "Izvoz netlista zahteva popolnoma označeno shemo."
 
 #: eeschema/tools/backannotate.cpp:306
 msgid "Footprint re-linking cancelled by user."
-msgstr ""
+msgstr "Uporabnik je preklical ponovno povezavo podnožij."
 
 #: eeschema/tools/backannotate.cpp:329
 #, c-format
@@ -17256,7 +17246,7 @@ msgstr "Uredi ime simbola"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:618
 msgid "Symbol is not derived from another symbol."
-msgstr ""
+msgstr "Simbol ni izpeljan iz drugega simbola."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
@@ -18464,7 +18454,7 @@ msgstr "Izberite Imenik predlog"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:31
 msgid "Folder:"
-msgstr ""
+msgstr "Mapa:"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:118
 msgid "Project Template Title"
@@ -18718,9 +18708,9 @@ msgid "Plugins (%d)"
 msgstr "Kršitve (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Libraries (%d)"
-msgstr "Knjižnice"
+msgstr "Knjižnice (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, fuzzy, c-format
@@ -18731,18 +18721,18 @@ msgstr "Barvna tema:"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
 #, c-format
 msgid "Repository (%d)"
-msgstr ""
+msgstr "Repozitorij (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:72
 #: kicad/pcm/dialogs/panel_package.cpp:76
 #: kicad/pcm/dialogs/panel_package_base.cpp:65
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:108
 msgid "Install"
-msgstr ""
+msgstr "Namesti"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:105 kicad/pcm/dialogs/panel_package.cpp:80
 msgid "Uninstall"
-msgstr ""
+msgstr "Odstrani"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160
 #, fuzzy
@@ -18771,7 +18761,7 @@ msgstr ""
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:60
 #, c-format
 msgid "Installed (%d)"
-msgstr ""
+msgstr "Nameščeno (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
 #, fuzzy
@@ -18816,12 +18806,12 @@ msgstr "_Zavrzi spremembe"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:73
 msgid "Plugin And Content Manager"
-msgstr ""
+msgstr "Upravitelj vtičnikov in vsebine"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
 msgid "Downloaded %lld/%lld Kb"
-msgstr ""
+msgstr "Preneseno %lld/%lld Kb"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:150
 msgid "All downloads finished"
@@ -18843,7 +18833,7 @@ msgstr "Lastnosti materiala"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
-msgstr ""
+msgstr "Podrobnosti"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying package changes"
@@ -18861,12 +18851,12 @@ msgstr "Čas upodabljanja %.3f s"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:147
 msgid "Metadata"
-msgstr ""
+msgstr "Metapodatki"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:154
 #, c-format
 msgid "Package identifier: %s\n"
-msgstr ""
+msgstr "Identifikator paketa: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
 #, fuzzy, c-format
@@ -18879,9 +18869,8 @@ msgid "Tags: %s\n"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:184
-#, fuzzy
 msgid "Author"
-msgstr "Avtor: "
+msgstr "Avtor"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:187
 msgid "Maintainer"
@@ -19439,11 +19428,9 @@ msgstr "Nova mapa projekta"
 
 #: kicad/tools/kicad_manager_control.cpp:236
 #: kicad/tools/kicad_manager_control.cpp:568
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to write to folder '%s'."
-msgstr ""
-"Za shranjevanje datoteke potrebujete nezadostna dovoljenja\n"
-"%s"
+msgstr "Nezadostna dovoljenja za pisanje v mapo \"%s\"."
 
 #: kicad/tools/kicad_manager_control.cpp:257
 msgid "Overwriting files:"
@@ -19463,7 +19450,7 @@ msgid "Open Existing Project"
 msgstr "Odprite obstoječi projekt"
 
 #: kicad/tools/kicad_manager_control.cpp:496
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy folder '%s'."
 msgstr "Mape \"%s\" ni mogoče kopirati."
 
@@ -20243,7 +20230,7 @@ msgstr "Najmanjša razdalja"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diam - drill)"
-msgstr "Preko: (diam - drill)"
+msgstr "Skoznik: (premer izvrtine)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:76
 msgid "Plated Pad: (diam - drill)"
@@ -20691,7 +20678,7 @@ msgstr "Sledi notranje plasti"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Microstrip Line"
-msgstr "Mikrotrakasta črta"
+msgstr "Mikrotrakasti vod"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Coplanar wave guide"
@@ -20708,19 +20695,19 @@ msgstr "Pravokotni valovod"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Coaxial Line"
-msgstr "Koaksialna črta"
+msgstr "Koaksialni vod"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Coupled Microstrip Line"
-msgstr "Povezana mikrotrakasta linija"
+msgstr "Sklopljen mikrotrakasti vod"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Stripline"
-msgstr "Stripline"
+msgstr "Trakasti vod"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Twisted Pair"
-msgstr "Zvit par"
+msgstr "Sukana parica"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:24
 msgid "Transmission Line Type"
@@ -20836,11 +20823,12 @@ msgstr "Debelina prevleke (T):"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:57
 msgid "Via length:"
-msgstr "Preko dolžine:"
+msgstr "Dolžina skoznika:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
-msgstr "Premer dolžine je debelina plošče za luknje skozi luknje"
+msgstr ""
+"Dolžina skoznika je za skoznike skozi celotno vezje enaka debelini ploščice"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 msgid "Via pad diameter:"
@@ -20986,7 +20974,7 @@ msgstr "Induktivna reaktanca za dani čas vzpona in izračunana induktivnost"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:353
 msgid "Top view of via"
-msgstr "Pogled od zgoraj preko"
+msgstr "Pogled na skoznik od zgoraj"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
@@ -21098,9 +21086,8 @@ msgid "Color Code"
 msgstr "Barvna koda"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "TransLine"
+msgstr "Prenosni vodi "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -21290,7 +21277,7 @@ msgstr "Hrapavost vodnika"
 
 #: pcb_calculator/transline_ident.cpp:135
 msgid "substrate"
-msgstr ""
+msgstr "substrat"
 
 #: pcb_calculator/transline_ident.cpp:136
 #, fuzzy
@@ -21599,7 +21586,7 @@ msgstr "Otoèki"
 #: pcbnew/widgets/appearance_controls.cpp:336
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
-msgstr "Vie"
+msgstr "Skozniki"
 
 #: pcbnew/board.cpp:1175 pcbnew/pcb_draw_panel_gal.cpp:474
 msgid "Track Segments"
@@ -21782,7 +21769,7 @@ msgstr "Posodobite dielektrično debelino glede na debelino plošče"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:208
 #, c-format
 msgid "Value too small (min value %s)."
-msgstr ""
+msgstr "Premajhna vrednost (najmanjša vrednost %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:228
 #, fuzzy
@@ -22071,11 +22058,11 @@ msgstr "Odstranite dve mreži, ki je okrajšala stezo"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove via shorting two nets"
-msgstr "Odstranite prek kratkih dveh mrež"
+msgstr "Odstrani skoznike, ki kratkostičijo povezave"
 
 #: pcbnew/cleanup_item.cpp:49
 msgid "Remove redundant via"
-msgstr "Odvečno odstranite prek"
+msgstr "Odstrani odvečne skoznike"
 
 #: pcbnew/cleanup_item.cpp:50
 msgid "Remove duplicate track"
@@ -22091,7 +22078,7 @@ msgstr "Odstranite skladbo, ki ni povezana na obeh koncih"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove via connected on fewer than two layers"
-msgstr "Odstranite prek povezave na manj kot dveh slojih"
+msgstr "Odstrani skoznike povezane na manj kot dveh slojih"
 
 #: pcbnew/cleanup_item.cpp:54
 msgid "Remove zero-length track"
@@ -22692,9 +22679,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:198 pcbnew/files.cpp:620
 #: pcbnew/tools/pcb_control.cpp:1120
-#, fuzzy
 msgid "Loading PCB"
-msgstr "Nalaganje "
+msgstr "Nalaganje tiskanega vezja"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:220
 #, c-format
@@ -22945,15 +22931,17 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
 msgid "&Delete redundant vias"
-msgstr "& Izbriši odvečne vias"
+msgstr "&Izbriši odvečne skoznike"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:28
 msgid "remove vias on through hole pads and superimposed vias"
-msgstr "odstranite vias na blazinicah skozi luknje in naložene viale"
+msgstr ""
+"odstrani skoznike na očescih elementov za skoznjo montažo in prekrivajoče se "
+"skoznike"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:32
 msgid "Delete vias connected on only one layer"
-msgstr "Izbrišite vias, povezane samo na eni plasti"
+msgstr "Izbriši skoznike povezane samo na enem sloju"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "&Merge co-linear tracks"
@@ -22982,7 +22970,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:57
 msgid "Cleanup Tracks and Vias"
-msgstr "Čiščenje skladb in vias"
+msgstr "Počisti povezave in skoznike"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:45
 msgid "Constraints Resolution Report"
@@ -24373,7 +24361,7 @@ msgstr "Vključi in vstavi orisni sloj"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:40
 msgid "Include &vias"
-msgstr "Vključi & vias"
+msgstr "Vključi &skoznike"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:43
 msgid "Include &zones"
@@ -25057,9 +25045,8 @@ msgid "Save Drill Report File"
 msgstr "Shrani datoteko poročila o vrtanju"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:22
-#, fuzzy
 msgid "Output folder:"
-msgstr "Izhodna mapa"
+msgstr "Izhodna mapa:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
 msgid "Drill File Format"
@@ -25211,7 +25198,7 @@ msgstr "Nepokrite blazinice:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:181
 msgid "Buried vias:"
-msgstr "Pokopane vie:"
+msgstr "Pokopani skozniki:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:91
 msgid "Generate Drill Files"
@@ -25270,9 +25257,8 @@ msgid "Footprints"
 msgstr "Stopinje"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
-#, fuzzy
 msgid "Tracks && vias"
-msgstr "Skladbe in Vias"
+msgstr "Povezave in skozniki"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 msgid "Markers"
@@ -25437,11 +25423,11 @@ msgstr "Nastavi na privzete vrednosti sloja:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:203
 msgid "Via Drill"
-msgstr "Vrtanje luknje"
+msgstr "Izvrtina skoznika"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:205
 msgid "uVia Drill"
-msgstr "uVia vrtalnik"
+msgstr "Izvrtina mikroskoznika"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
@@ -25457,7 +25443,7 @@ msgstr "Nastavi na neto vrednosti razreda:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:77
 msgid "Set Track and Via Properties"
-msgstr "Nastavite lastnosti poti in poti"
+msgstr "Nastavi lastnosti povezav in skoznikov"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
 msgid "footprint"
@@ -25620,7 +25606,7 @@ msgstr "Pravila oblikovanja"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Predefined track and via dimensions"
-msgstr "Vnaprej določena proga in dimenzije"
+msgstr "Vnaprej določene dimenzije povezav in skoznikov"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 msgid "Solder mask/paste defaults"
@@ -25776,11 +25762,11 @@ msgstr "Število padcev"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:79
 msgid "Via Count"
-msgstr "Preko Count"
+msgstr "Število skoznikov"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:80
 msgid "Via Length"
-msgstr "Preko dolžine"
+msgstr "Dolžina skoznikov"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:81
 #, fuzzy
@@ -26720,9 +26706,8 @@ msgid "Force plot invisible footprint values and reference designators"
 msgstr "Prisilno nariši vrednosti nevidnih odtisov in referenčne označevalnike"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
-#, fuzzy
 msgid "Plot Edge.Cuts on all layers"
-msgstr "Print/plot vias on mask layers"
+msgstr "Izriši Edge.Cuts na vseh slojih"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Do not plot the contents of the PCB edge layer on any other layers."
@@ -26739,11 +26724,11 @@ msgstr "Pri načrtovanju vključite obrise blazinic na slojih F.Fab in B.Fab"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Do not tent vias"
-msgstr "Ne šotirajte vias"
+msgstr "Ne pokrij skoznikov"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Remove soldermask on vias"
-msgstr "Odstranite spajkalno masko na viah"
+msgstr "Odstrani spajkalno kritino na skoznikih"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:109
 msgid ""
@@ -27083,11 +27068,11 @@ msgstr "Vrzel v sledovih:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
 msgid "Via gap:"
-msgstr "Preko vrzeli:"
+msgstr "Razmik skoznikov:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
-msgstr "Preko vrzeli enako kot vrzel v sledovih"
+msgstr "Razmik skoznikov enak razmiku povezav"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
@@ -27210,15 +27195,15 @@ msgstr "Način prostega kota (brez potiska / sprehoda)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:31
 msgid "Shove vias"
-msgstr "Potisnite vias"
+msgstr "Odrini skoznike"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:33
 msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
-"Če so viasi onemogočeni, se z njimi ravna kot s premičnimi predmeti in jih "
-"objemamo namesto, da bi jih potisnili."
+"Ko je onemogočeno, so skozniki obravnavani kot nepremični objekti in bodo "
+"objeti namesto odrinjeni."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:37
 msgid "Jump over obstacles"
@@ -27468,7 +27453,7 @@ msgstr "Izogibajte se viasom"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 msgid "Prevent vias from being placed in this area"
-msgstr ""
+msgstr "Prepreči postavitev skoznikov v tem območju"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 msgid "Keep out pads"
@@ -27511,6 +27496,7 @@ msgstr "Omejite oris na H, V in 45 °"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:97
 msgid "Draw the area using horizontal, verical and 45 degree lines only"
 msgstr ""
+"Območje narišite samo z vodoravnimi, navpičnimi in 45-stopinjskimi črtami"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:67
 msgid "Rule Area Properties"
@@ -27610,17 +27596,16 @@ msgid "Leave Nets Unchanged"
 msgstr "Pustite mreže nespremenjene"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:403
-#, fuzzy
 msgid "Via hole size must be smaller than via diameter"
-msgstr "Velikost svedra mora biti manjša kot premer"
+msgstr "Velikost luknje skoznika mora biti manjša od premera skoznika"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:412
 msgid "Via start layer and end layer cannot be the same"
-msgstr "Prek začetne in končne plasti ne moreta biti enaki"
+msgstr "Začetna in končna plast skoznika ne moreta biti isti"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:570
 msgid "Edit track/via properties"
-msgstr "Uredi skladbo / prek lastnosti"
+msgstr "Uredi lastnosti povezav/skoznikov"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:635
 msgid "Updating nets"
@@ -27675,12 +27660,11 @@ msgstr "Vnaprej določene velikosti:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:205
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
 msgid "Via diameter:"
-msgstr "Premer:"
+msgstr "Premer skoznika:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:216
-#, fuzzy
 msgid "Via hole:"
-msgstr "Skozi luknje"
+msgstr "Luknja skoznika:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
 msgid "Use net class sizes"
@@ -27688,7 +27672,7 @@ msgstr "Uporabite neto velikosti razredov"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 msgid "Via type:"
-msgstr "Preko tipa:"
+msgstr "Tip skoznika:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
 #: pcbnew/pcb_track.cpp:1131
@@ -27725,20 +27709,19 @@ msgstr "%s, %s in povezane plasti"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
-msgstr "Track & Via lastnosti"
+msgstr "Lastnosti povezav in skoznikov"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
-#, fuzzy
 msgid "Via drill size must be smaller than via diameter"
-msgstr "Velikost svedra mora biti manjša kot premer"
+msgstr "Premer izvrtine skoznika mora biti manjši od premera skoznika"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via drill:"
-msgstr "Preko svedra:"
+msgstr "Izvrtina skoznika:"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:54
 msgid "Track Width and Via Size"
-msgstr "Širina sledi in velikost poti"
+msgstr "Širina povezav in velikost skoznikov"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:146
 msgid "Set Unused Pad Properties"
@@ -27746,7 +27729,7 @@ msgstr "Nastavite lastnosti neuporabljene blazinice"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Vias"
-msgstr "& Vias"
+msgstr "&Skozniki"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Pads"
@@ -28234,9 +28217,10 @@ msgstr "Dovoljene funkcije"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:37
 msgid "Allow blind/buried vias"
-msgstr "Dovoli slepe / zakopane vias"
+msgstr "Dovoli slepe/pokopane skoznike"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:43
+#, fuzzy
 msgid "Allow micro vias (uVias)"
 msgstr "Dovoli mikro vias (uVias)"
 
@@ -28245,9 +28229,8 @@ msgid "Arc/circle approximated by segments"
 msgstr "Lok / krog, ki se približa segmentom"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:68
-#, fuzzy
 msgid "Max allowed deviation:"
-msgstr "Največje odstopanje:"
+msgstr "Največje dovoljeno odstopanje:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:70
 msgid ""
@@ -28352,7 +28335,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
-msgstr "Najmanjši premer:"
+msgstr "Najmanjši premer skoznika:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:245
 msgid ""
@@ -29098,6 +29081,8 @@ msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
 msgstr ""
+"Najmanjša razdalja med odprtinami v spajkalni kritini. Odprtine bližje od te "
+"razdalje bodo izrisane kot ena sama odprtina."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid ""
@@ -29553,9 +29538,9 @@ msgid "undefined"
 msgstr "nedoločeno"
 
 #: pcbnew/drc/drc_engine.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s %s: %s."
-msgstr "Preverjanje %s."
+msgstr "Preverjanje %s %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:918
 #, fuzzy, c-format
@@ -29811,9 +29796,9 @@ msgid "Through hole pad has no hole"
 msgstr "Napaka: Skozi luknjo blazinica nima luknje."
 
 #: pcbnew/drc/drc_item.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "Rule: %s"
-msgstr "Pravila"
+msgstr "Pravilo: %s"
 
 #: pcbnew/drc/drc_item.cpp:336
 #, fuzzy
@@ -30505,7 +30490,7 @@ msgstr "Zadnja sprememba"
 
 #: pcbnew/footprint.cpp:930
 msgid "Board Side"
-msgstr "Board Board"
+msgstr "Stran ploščice"
 
 #: pcbnew/footprint.cpp:930
 msgid "Back (Flipped)"
@@ -31368,9 +31353,8 @@ msgid "Shape has a null size."
 msgstr "Oblika ima velikost nič!"
 
 #: pcbnew/microwave/microwave_polygon.cpp:320
-#, fuzzy
 msgid "Shape has no points."
-msgstr "Oblika nima točk!"
+msgstr "Oblika nima točk."
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -31862,9 +31846,8 @@ msgid "Size X"
 msgstr "Velikost X"
 
 #: pcbnew/pad.cpp:1625
-#, fuzzy
 msgid "Size Y"
-msgstr "Velikost Y."
+msgstr "Velikost Y"
 
 #: pcbnew/pad.cpp:1628
 msgid "Hole Size X"
@@ -33079,11 +33062,9 @@ msgstr "Žeton elementa vsebuje parametre %d."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:980
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2624
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr ""
-"Za shranjevanje datoteke potrebujete nezadostna dovoljenja\n"
-"%s"
+msgstr "Nezadostna dovoljenja za izbris mape \"%s\"."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2632
@@ -33155,9 +33136,8 @@ msgid "unknown zone corner smoothing type %d"
 msgstr "neznano območje glajenja vogalov %d"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2293
-#, fuzzy
 msgid "Open cancelled by user."
-msgstr "-------- Uporabnik je preklical ERC. <br> <br>"
+msgstr "Uporabnik je preklical odpiranje."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2342
 #, fuzzy
@@ -34463,9 +34443,8 @@ msgid "Copper Layer Count: "
 msgstr "Število bakrenih plasti: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:432
-#, fuzzy
 msgid "Board overall dimensions: "
-msgstr "Nariši dimenzijo"
+msgstr "Dimenzije ploščice "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:442
 #, fuzzy
@@ -34473,9 +34452,8 @@ msgid "Min track/spacing: "
 msgstr "Najmanjši razmik mreže:"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:452
-#, fuzzy
 msgid "Copper Finish: "
-msgstr "Bakren zaključek:"
+msgstr "Površinska obdelava bakra: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:460
 #, fuzzy
@@ -34483,14 +34461,12 @@ msgid "Castellated pads: "
 msgstr "Castellated blazinica"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:468
-#, fuzzy
 msgid "Board Thickness: "
-msgstr "Debelina plošče:"
+msgstr "Debelina ploščice: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:484
-#, fuzzy
 msgid "Min hole diameter: "
-msgstr "Premer luknje:"
+msgstr "Najmanjši premer lukenj: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:494
 #, fuzzy
@@ -34498,9 +34474,8 @@ msgid "Impedance Control: "
 msgstr "Nadzor impedance"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:502
-#, fuzzy
 msgid "Plated Board Edge: "
-msgstr "Rob prevlečene plošče"
+msgstr "Pokovinjen rob ploščice: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:510
 #, fuzzy
@@ -35452,7 +35427,7 @@ msgstr "Povečaj velikost"
 
 #: pcbnew/tools/pcb_actions.cpp:628
 msgid "Change via size to next pre-defined size"
-msgstr ""
+msgstr "Spremeni velikost skoznika na naslednjo vnaprej določeno velikost"
 
 #: pcbnew/tools/pcb_actions.cpp:633
 msgid "Decrease Via Size"
@@ -35460,7 +35435,7 @@ msgstr "Zmanjšaj velikost"
 
 #: pcbnew/tools/pcb_actions.cpp:633
 msgid "Change via size to previous pre-defined size"
-msgstr ""
+msgstr "Spremeni velikost skoznika na prejšnjo vnaprej določeno velikost"
 
 #: pcbnew/tools/pcb_actions.cpp:642
 msgid "Merge Zones"
@@ -35571,7 +35546,7 @@ msgstr "Dodaj ploščo ..."
 
 #: pcbnew/tools/pcb_actions.cpp:716
 msgid "Open another board and append its contents to this board"
-msgstr ""
+msgstr "Odpri drugo ploščico in njeno vsebino dodaj tej ploščici"
 
 #: pcbnew/tools/pcb_actions.cpp:721
 msgid "Highlight the selected net"
@@ -36552,9 +36527,9 @@ msgid "Layer Display Options"
 msgstr "Možnosti prikaza sloja"
 
 #: pcbnew/widgets/appearance_controls.cpp:595
-#, fuzzy, c-format
+#, c-format
 msgid "Inactive layers (%s):"
-msgstr "Neaktivni sloji:"
+msgstr "Neaktivni sloji (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 #, fuzzy
