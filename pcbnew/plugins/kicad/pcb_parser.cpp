@@ -5570,6 +5570,12 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         case T_name:
             NextTok();
             zone->SetZoneName( FromUTF8() );
+
+            // TODO: remove this hack and replace it when a suitable token is added
+            // If a zone name is $teardrop$, set its teardrop property flag
+            if( zone->GetZoneName() == "$teardrop$" )
+                zone->SetIsTeardropArea( true );
+
             NeedRIGHT();
             break;
 

@@ -625,6 +625,9 @@ set( BMAPS_OTHER
     stroke_dashdotdot
     stroke_dot
     stroke_solid
+    teardrop_sizes
+    teardrop_rect_sizes
+    teardrop_track_sizes
     tune_diff_pair_length_legend
     tune_diff_pair_skew_legend
     tune_single_track_length_legend

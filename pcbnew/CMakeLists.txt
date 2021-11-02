@@ -40,6 +40,8 @@ include_directories(
     )
 
 set( PCBNEW_DIALOGS
+    teardrop/dialog_teardrop_base.cpp
+    teardrop/dialog_teardrop.cpp
     dialogs/dialog_filter_selection.cpp
     dialogs/dialog_filter_selection_base.cpp
     dialogs/dialog_board_setup.cpp
@@ -349,6 +351,8 @@ set( PCBNEW_CLASS_SRCS
     tools/tool_event_utils.cpp
     tools/zone_create_helper.cpp
     tools/zone_filler_tool.cpp
+    teardrop/teardrop.cpp
+    teardrop/teardrop_utils.cpp
 
     footprint_preview_panel.cpp
     footprint_tree_pane.cpp

@@ -402,6 +402,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     toolsMenu->Add( ACTIONS::showFootprintEditor );
     toolsMenu->Add( PCB_ACTIONS::updateFootprints );
 
+
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( _( "Add Teardrops" ), "",
+                    ID_RUN_TEARDROP_TOOL, BITMAPS::via );
+    toolsMenu->Add( _( "Remove Teardrops" ), "",
+                    ID_REMOVE_TEARDROP_TOOL, BITMAPS::via );
+
     toolsMenu->AppendSeparator();
     toolsMenu->Add( PCB_ACTIONS::cleanupTracksAndVias );
     toolsMenu->Add( PCB_ACTIONS::removeUnusedPads );
