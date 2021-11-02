@@ -836,7 +836,9 @@ const EDA_RECT LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aConvert ) const
             continue;
 
         if( initialized )
+        {
             bBox.Merge( item.GetBoundingBox() );
+        }
         else
         {
             bBox = item.GetBoundingBox();
@@ -1175,7 +1177,7 @@ void LIB_SYMBOL::SetUnitCount( int aCount, bool aDuplicateDrawItems )
             }
         }
 
-        for( auto item : tmp )
+        for( LIB_ITEM* item : tmp )
             m_drawings.push_back( item );
     }
 
@@ -1266,9 +1268,11 @@ std::vector<LIB_ITEM*> LIB_SYMBOL::GetUnitItems( int aUnit, int aConvert )
             continue;
 
         if( ( aConvert == -1 && item.GetUnit() == aUnit )
-          || ( aUnit == -1 && item.GetConvert() == aConvert )
-          || ( aUnit == item.GetUnit() && aConvert == item.GetConvert() ) )
+                || ( aUnit == -1 && item.GetConvert() == aConvert )
+                || ( aUnit == item.GetUnit() && aConvert == item.GetConvert() ) )
+        {
             unitItems.push_back( &item );
+        }
     }
 
     return unitItems;
@@ -1288,7 +1292,8 @@ std::vector<struct LIB_SYMBOL_UNITS> LIB_SYMBOL::GetUnitDrawItems()
         int convert = item.GetConvert();
 
         auto it = std::find_if( units.begin(), units.end(),
-                [unit, convert] ( const auto& a ) {
+                [unit, convert]( const LIB_SYMBOL_UNITS& a )
+                {
                     return a.m_unit == unit && a.m_convert == convert;
                 } );
 
