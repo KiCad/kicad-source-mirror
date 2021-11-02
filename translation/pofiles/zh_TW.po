@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
-"PO-Revision-Date: 2021-10-01 07:18+0000\n"
+"PO-Revision-Date: 2021-11-03 14:44+0000\n"
 "Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -4455,13 +4455,13 @@ msgstr "本地安裝的系統符號庫存放目錄的路徑。"
 
 #: common/env_vars.cpp:78
 msgid "A directory containing project templates installed with KiCad."
-msgstr "包含與 KiCad 一起安裝的專案模板的目錄。"
+msgstr "包含與 KiCad 一起安裝的專案範本所在目錄。"
 
 #: common/env_vars.cpp:80
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
-msgstr "可選的。如果要建立自己的工程模板資料夾，則可以定義。"
+msgstr "選用的。如果要建立自己的專案範本資料夾，則可以自訂它們。"
 
 #: common/env_vars.cpp:83
 msgid ""
@@ -10017,7 +10017,7 @@ msgstr "格式偏好設定"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
 msgid "Field name templates"
-msgstr "欄位名稱模板"
+msgstr "欄位名稱範本"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Pin conflict map"
@@ -10115,7 +10115,7 @@ msgstr "格式化"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:68
 #: eeschema/eeschema_config.cpp:72
 msgid "Field Name Templates"
-msgstr "欄位名稱模板"
+msgstr "欄位名稱範本"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:70
 msgid "Electrical Rules"
@@ -11827,11 +11827,11 @@ msgstr "保持層次結構導航器開啟"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:41
 msgid "Global field name templates:"
-msgstr "全域性欄位名模板："
+msgstr "全域性欄位名稱範本："
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:42
 msgid "Project field name templates:"
-msgstr "工程欄位名模板："
+msgstr "專案欄位名稱範本："
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:77
 msgid "Untitled Field"
@@ -11839,7 +11839,7 @@ msgstr "無標題欄位"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:23
 msgid "Field name templates:"
-msgstr "欄位名模板："
+msgstr "欄位名稱範本："
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames_base.cpp:45
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:38
@@ -17880,13 +17880,12 @@ msgid "Failed to output data"
 msgstr "輸出資料時發生錯誤。"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html><h1>選擇模板</h1></html>"
+msgstr "<h1>選擇範本</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
-msgstr "選擇模板目錄"
+msgstr "選擇範本目錄"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:31
 msgid "Folder:"
@@ -17894,11 +17893,11 @@ msgstr "資料夾："
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:118
 msgid "Project Template Title"
-msgstr "工程模板標題"
+msgstr "專案範本標題"
 
 #: kicad/dialogs/dialog_template_selector_base.h:67
 msgid "Project Template Selector"
-msgstr "選擇工程模板"
+msgstr "專案範本選擇器"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:112
 msgid "Edit the project schematic"
@@ -18561,15 +18560,15 @@ msgstr ""
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
-msgstr "可以開啟模板路徑！"
+msgstr "可以開啟範本路徑！"
 
 #: kicad/project_template.cpp:57
 msgid "Couldn't open the meta information directory for this template!"
-msgstr "無法開啟此模板的元資訊目錄！"
+msgstr "無法開啟此範本的中繼資料目錄！"
 
 #: kicad/project_template.cpp:63
 msgid "Cound't find the meta HTML information file for this template!"
-msgstr "找不到此模板的元 HTML 資訊檔案！"
+msgstr "找不到此範本的 HTML 中繼資料檔案！"
 
 #: kicad/project_template.cpp:238
 #, c-format
@@ -18729,11 +18728,11 @@ msgstr "新建空工程"
 
 #: kicad/tools/kicad_manager_actions.cpp:47
 msgid "New Project from Template..."
-msgstr "從模板新建工程..."
+msgstr "從範本新增專案..."
 
 #: kicad/tools/kicad_manager_actions.cpp:47
 msgid "Create new project from template"
-msgstr "從模板新建工程"
+msgstr "範本建立新專案"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
 #, fuzzy
@@ -18834,15 +18833,15 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_control.cpp:164
 msgid "System Templates"
-msgstr "系統模板"
+msgstr "系統範本"
 
 #: kicad/tools/kicad_manager_control.cpp:173
 msgid "User Templates"
-msgstr "自定義模板"
+msgstr "自定義範本"
 
 #: kicad/tools/kicad_manager_control.cpp:182
 msgid "No project template was selected.  Cannot generate new project."
-msgstr "尚未選擇專案模板。無法產生新的專案。"
+msgstr "尚未選擇專案範本。無法產生新的專案。"
 
 #: kicad/tools/kicad_manager_control.cpp:190
 msgid "New Project Folder"
@@ -18864,7 +18863,7 @@ msgstr "目標資料夾中已存在類似檔案。"
 
 #: kicad/tools/kicad_manager_control.cpp:280
 msgid "A problem occurred creating new project from template."
-msgstr "從模板建立工程發生一個問題。"
+msgstr "從範本建立專案時發生問題。"
 
 #: kicad/tools/kicad_manager_control.cpp:302
 msgid "Open Existing Project"
@@ -19468,7 +19467,6 @@ msgstr ""
 "* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -19479,12 +19477,12 @@ msgid ""
 "___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
 msgstr ""
 "### 分離式衰減器\n"
-"#### 衰減是 6dB\n"
-"___Z<sub>in</sub>___ 期望的輸入阻抗 &#x2126;<br>\n"
-"___Z<sub>out</sub>___ 期望的輸出阻抗 &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"衰減量是 6dB \n"
+"___Z<sub>in</sub>___ 是期望的輸入阻抗，以 &#x2126; 表示  \n"
+"___Z<sub>out</sub>___ 是期望的輸出阻抗，以 &#x2126; 表示  \n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
+"___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 #, fuzzy
@@ -31834,27 +31832,21 @@ msgstr "無法在庫中尋找文件符號 (符號定義 ID：'%s')"
 msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
-msgstr ""
-"CADSTAR 模板 '%s' 啟用了設定“允許再無佈線區”。此設定沒有 KiCad 等效項，因此已"
-"被忽略。"
+msgstr "CADSTAR 範本 '%s' 啟用了設定“允許再無佈線區”。此設定沒有 KiCad 等效項，因此已被忽略。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1819
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
-msgstr ""
-"這個 CADSTAR 模板 '%s' 啟用了設定“盒式隔離引腳”。此設定沒有 KiCad 等效項，因"
-"此已被忽略。"
+msgstr "這個 CADSTAR 範本 '%s' 啟用了設定“盒式隔離引腳”。此設定沒有 KiCad 等效項，因此已被忽略。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1827
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
-msgstr ""
-"這個 CADSTAR 模板 '%s' 啟用了“自動重灌”設定。此設定沒有 KiCad 等效項，因此已"
-"被忽略。"
+msgstr "這個 CADSTAR 範本 '%s' 啟用了“自動重灌”設定。此設定沒有 KiCad 等效項，因此已被忽略。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1838
 #, c-format
@@ -31862,9 +31854,7 @@ msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
-msgstr ""
-"CADSTAR 模板 '%s' 具有為“條子寬度（兩焊盤之間的間隙）”設定定義的非零值。對此"
-"沒有 KiCad 等效項，因此忽略此設定。"
+msgstr "CADSTAR 範本 '%s' 具有為“條子寬度（兩焊盤之間的間隙）”設定定義的非零值。對此沒有 KiCad 等效項，因此忽略此設定。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1848
 #, c-format
@@ -31874,9 +31864,8 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR 模板 '%s' 具有不同的設定，用於\"保留覆銅 - 不相交\"和\"保留覆銅 - 隔"
-"離\"。KiCad 不區分這兩個設定。不相交覆銅的設定已作為 KiCad 覆銅的最小覆銅面積"
-"應用。"
+"CADSTAR 範本 '%s' 具有不同的設定，用於\"保留覆銅 - 不相交\"和\"保留覆銅 - 隔離\"。KiCad 不區分這兩個設定。"
+"不相交覆銅的設定已作為 KiCad 覆銅的最小覆銅面積應用。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1899
 #, c-format
@@ -31884,9 +31873,7 @@ msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
-msgstr ""
-"CADSTAR 模板 '%s' 在焊盤和過孔中具有不同的防散熱設定。KiCad 僅支援這兩種設定"
-"的單一設定。已應用焊盤的設定。"
+msgstr "CADSTAR 範本 '%s' 在焊盤和過孔中具有不同的防散熱設定。KiCad 僅支援這兩種設定的單一設定。已應用焊盤的設定。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1916
 #, c-format
