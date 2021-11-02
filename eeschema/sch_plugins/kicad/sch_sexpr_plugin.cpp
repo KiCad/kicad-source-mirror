@@ -770,6 +770,9 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
                 if( a->Type() != b->Type() )
                     return a->Type() < b->Type();
 
+                if( a->Type() == SCH_SHEET_T )
+                    return *a < *b;
+
                 return a->m_Uuid < b->m_Uuid;
             };
 
