@@ -27,6 +27,6 @@ class wxString;
  * Launches the given file or folder in the host OS
  * @param aPath is a path to a file or folder
  */
-void LaunchExternal( const wxString& aPath );
+bool LaunchExternal( const wxString& aPath );
 
 #endif

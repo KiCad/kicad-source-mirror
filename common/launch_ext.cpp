@@ -18,18 +18,42 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <gestfich.h>
 #include <launch_ext.h>
+#include <wx/utils.h>
 
 
-void LaunchExternal( const wxString& aPath )
+bool LaunchExternal( const wxString& aPath )
 {
 #ifdef __WXMAC__
-    const wchar_t* args[] = { L"open", aPath.wc_str(), nullptr };
-    wxExecute( const_cast<wchar_t**>( args ) );
-#else
-    wxString path( aPath );
 
-    wxLaunchDefaultApplication( path );
+    const wchar_t* args[] = { L"open", aPath.wc_str(), nullptr };
+    return wxExecute( const_cast<wchar_t**>( args ) ) != -1;
+
+#elif defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 1 )
+    // On Unix systems `wxLaunchDefaultApplication()` before wxWidgets 3.1.1 mistakenly uses
+    // `wxExecute(xdg_open + " " + document)`, thereby failing for filenames with spaces. Below is
+    // a backport of the fixed `wxLaunchDefaultApplication()`, to be used until we switch to a
+    // newer version of wxWidgets.
+
+    wxString PATH, xdg_open;
+
+    if( wxGetEnv( "PATH", &PATH ) && wxFindFileInPath( &xdg_open, PATH, "xdg-open" ) )
+    {
+        const char* argv[3];
+        argv[0] = xdg_open.fn_str();
+        argv[1] = aPath.fn_str();
+        argv[2] = nullptr;
+
+        if( wxExecute( const_cast<char**>( argv ) ) )
+            return true;
+    }
+
+    return false;
+
+#else
+
+    wxString path( aPath );
+    return wxLaunchDefaultApplication( path );
+
 #endif
 }

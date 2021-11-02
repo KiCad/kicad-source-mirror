@@ -37,6 +37,7 @@
 #include <core/arraydim.h>
 #include <gestfich.h>
 #include <string_utils.h>
+#include <launch_ext.h>
 
 void QuoteString( wxString& string )
 {
@@ -164,22 +165,7 @@ bool OpenPDF( const wxString& file )
 
     if( Pgm().UseSystemPdfBrowser() )
     {
-        // wxLaunchDefaultApplication on Unix systems is run as an external process passing
-        // the filename to the appropriate application as a command argument.
-        // depending on wxWidgets version, spaces in the path and/or file name will cause
-        // argument parsing issues so always quote the filename and path.
-        // This is applicable to all Unix platforms with wxWidgets version < 3.1.0.
-        // See https://github.com/wxWidgets/wxWidgets/blob/master/src/unix/utilsx11.cpp#L2654
-#ifdef __WXGTK__
-    #if !wxCHECK_VERSION( 3, 1, 0 )
-        // Quote in case there are spaces in the path.
-        // Not needed on 3.1.4, but needed in 3.0 versions
-        // Moreover, on Linux, 3.1.4 wx version, adding quotes breaks wxLaunchDefaultApplication
-        QuoteString( filename );
-    #endif
-#endif
-
-        if( !wxLaunchDefaultApplication( filename ) )
+        if( !LaunchExternal( filename ) )
         {
             msg.Printf( _( "Unable to find a PDF viewer for '%s'." ), filename );
             DisplayError( nullptr, msg );
@@ -188,7 +174,7 @@ bool OpenPDF( const wxString& file )
     }
     else
     {
-        const wchar_t*  args[3];
+        const wchar_t* args[3];
 
         args[0] = Pgm().GetPdfBrowserName().wc_str();
         args[1] = filename.wc_str();
