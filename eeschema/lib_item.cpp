@@ -82,12 +82,18 @@ int LIB_ITEM::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareF
 
 bool LIB_ITEM::operator==( const LIB_ITEM& aOther ) const
 {
+    if( Type() != aOther.Type() )
+        return false;
+
     return compare( aOther ) == 0;
 }
 
 
 bool LIB_ITEM::operator<( const LIB_ITEM& aOther ) const
 {
+    if( Type() != aOther.Type() )
+        return Type() < aOther.Type();
+
     return ( compare( aOther ) < 0 );
 }
 

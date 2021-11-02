@@ -764,10 +764,14 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
     }
 
     // Enforce item ordering
-    auto cmp = []( const SCH_ITEM* a, const SCH_ITEM* b )
-               {
-                   return *a < *b;
-               };
+    auto cmp =
+            []( const SCH_ITEM* a, const SCH_ITEM* b )
+            {
+                if( a->Type() != b->Type() )
+                    return a->Type() < b->Type();
+
+                return a->m_Uuid < b->m_Uuid;
+            };
 
     std::multiset<SCH_ITEM*, decltype( cmp )> save_map( cmp );
 
@@ -1822,7 +1826,19 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& a
             aFormatter.Print( aNestLevel + 1, "(symbol %s_%d_%d\"\n",
                               name.c_str(), unit.m_unit, unit.m_convert );
 
+            // Enforce item ordering
+            auto cmp =
+                    []( const LIB_ITEM* a, const LIB_ITEM* b )
+                    {
+                        return *a < *b;
+                    };
+
+            std::multiset<LIB_ITEM*, decltype( cmp )> save_map( cmp );
+
             for( LIB_ITEM* item : unit.m_items )
+                save_map.insert( item );
+
+            for( LIB_ITEM* item : save_map )
                 saveSymbolDrawItem( item, aFormatter, aNestLevel + 2 );
 
             aFormatter.Print( aNestLevel + 1, ")\n" );
