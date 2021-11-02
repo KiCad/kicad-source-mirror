@@ -159,10 +159,10 @@ bool BOARD_ITEM::ptr_cmp::operator() ( const BOARD_ITEM* a, const BOARD_ITEM* b 
     if( a->GetLayer() != b->GetLayer() )
         return a->GetLayer() < b->GetLayer();
 
-    if( a->m_Uuid != b->m_Uuid )    // should be always the case for valid boards
+    if( a->m_Uuid != b->m_Uuid )       // UUIDs *should* always be unique (for valid boards anyway)
         return a->m_Uuid < b->m_Uuid;
 
-    return a < b;
+    return a < b;                      // But just in case; ptrs are guaranteed to be different
 }
 
 
