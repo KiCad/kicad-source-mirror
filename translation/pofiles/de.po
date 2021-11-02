@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
-"PO-Revision-Date: 2021-10-28 01:54+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2021-11-03 12:40+0000\n"
+"Last-Translator: Benedikt Freisen <b.freisen@gmx.net>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -635,7 +635,7 @@ msgstr "Platinenfarben"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:66
 msgid "Use board stackup colors"
-msgstr "Farben des Platinen-Lageaufbaus benutzen"
+msgstr "Farben des Platinen-Lagenaufbaus benutzen"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:69
 msgid "Use colors:"
@@ -883,7 +883,7 @@ msgid ""
 "point"
 msgstr ""
 "Anzahl der Strahlen, die in Lichtrichtung geworfen werden, um einen "
-"Schattenpunkt zu bewerten"
+"Schattenpunkt auszuwerten"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:77
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:95
@@ -1247,7 +1247,7 @@ msgstr "Bitmap-Informationen"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:50
 msgid "Bitmap size:"
-msgstr "Größe Bitmap:"
+msgstr "Bitmapgröße:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:54
 #: bitmap2component/bitmap2cmp_gui_base.cpp:58
@@ -10379,8 +10379,8 @@ msgstr "Textvariablen"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:90
 msgid "Project is missing or read-only. Settings will not be editable."
 msgstr ""
-"Projekt fehlt oder ist schreibgeschützt. Einstellungen werden nicht änderbar "
-"sein."
+"Projekt fehlt oder ist schreibgeschützt. Einstellungen können nicht "
+"bearbeitet werden."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:156
 #, c-format
@@ -23234,6 +23234,8 @@ msgid ""
 "This can conflict with reference designators in the schematic that have not "
 "yet been synchronized with the board."
 msgstr ""
+"Dies kann zu Konflikten mit Referenzbezeichnern im Schaltplan führen, die "
+"noch nicht mit der Platine synchronisiert wurden."
 
 #: pcbnew/dialogs/dialog_create_array_base.h:127
 msgid "Create Array"
@@ -26539,11 +26541,10 @@ msgid "Check zone fills before plotting"
 msgstr "Kupferflächen vor dem Plotten prüfen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
-#, fuzzy
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr ""
-"Die Mindestbreite und/oder der Rand der globalen Lötmaske sind nicht auf 0 "
-"eingestellt. "
+"Globale Mindestbreite und/oder Rand der Lötstoppmaske sind nicht auf 0 "
+"gesetzt. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
 #, fuzzy
