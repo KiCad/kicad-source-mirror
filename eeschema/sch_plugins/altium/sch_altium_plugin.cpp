@@ -1088,8 +1088,16 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
 
                 for( size_t j = i; j < elem.points.size() && j < i + 4; j++ )
                 {
-                    bezier->AddPoint( GetRelativePosition( elem.points.at( j ) + m_sheetOffset,
-                                                           symbol ) );
+                    wxPoint pos = GetRelativePosition( elem.points.at( j ) + m_sheetOffset, symbol );
+
+                    switch( j - i )
+                    {
+                    case 0: bezier->SetStart( pos ); break;
+                    case 1: bezier->SetBezierC1( pos ); break;
+                    case 2: bezier->SetBezierC2( pos ); break;
+                    case 3: bezier->SetEnd( pos ); break;
+                    default: break; // Can't get here but silence warnings
+                    }
                 }
 
                 bezier->SetWidth( elem.lineWidth );
