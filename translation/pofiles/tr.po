@@ -4,21 +4,22 @@
 # Oğuz Ersen <oguzersen@protonmail.com>, 2021.
 # Dozimas <ozangunaydin@gmail.com>, 2021.
 # Murat Ursavaş <murat.ursavas@gmail.com>, 2021.
+# Sadıkhan Doğdu <sadikhandogdu@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
-"PO-Revision-Date: 2021-03-21 13:35+0000\n"
-"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2021-11-03 14:44+0000\n"
+"Last-Translator: Sadıkhan Doğdu <sadikhandogdu@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #, fuzzy
@@ -23006,7 +23007,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:1137 pcbnew/pad.cpp:1111
 #: pcbnew/pad.cpp:1579
 msgid "SMD"
-msgstr ""
+msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
