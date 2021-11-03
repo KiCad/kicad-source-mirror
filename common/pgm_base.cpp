@@ -202,7 +202,13 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 
 bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
 {
-    wxString pgm_name = wxFileName( App().argv[0] ).GetName().Lower();
+    wxString pgm_name;
+
+    /// Should never happen but boost unit_test isn't playing nicely in some cases
+    if( App().argc == 0 )
+        pgm_name = wxT( "kicad" );
+    else
+        pgm_name = wxFileName( App().argv[0] ).GetName().Lower();
 
     wxInitAllImageHandlers();
 
