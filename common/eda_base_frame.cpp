@@ -1085,7 +1085,7 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
     wxString msg = wxString::Format( _(
             "Well this is potentially embarrassing!\n"
             "It appears that the last time you were editing the file\n"
-            "\"%s\"\n"
+            "%s\n"
             "it was not saved properly.  Do you wish to restore the last saved edits you made?" ),
             aFileName.GetFullName()
         );
