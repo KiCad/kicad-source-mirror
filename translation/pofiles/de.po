@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
 "PO-Revision-Date: 2021-11-03 12:40+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -26637,7 +26637,6 @@ msgstr ""
 "Gerber-Dateien verwendet."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
-#, fuzzy
 msgid "Disable aperture macros (not recommended)"
 msgstr "Blendenmakros deaktivieren (nicht empfohlen)"
 
@@ -26710,9 +26709,8 @@ msgstr ""
 "Deaktivieren um grafische Elemente anhand ihrer Mittellinien zu zeichnen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot text"
-msgstr "Benutze KiCad-Schriftart zum Plotten von Text"
+msgstr "Benutze KiCad-Schriftart, um Text zu Plotten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
 msgid ""
