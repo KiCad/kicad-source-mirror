@@ -486,6 +486,10 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
 
     m_effectiveHoleShape = std::make_shared<SHAPE_SEGMENT>( m_pos - half_len, m_pos + half_len,
                                                             half_width * 2 );
+    bbox = m_effectiveHoleShape->BBox();
+    m_effectiveBoundingBox.Merge(
+            EDA_RECT( (wxPoint) bbox.GetPosition(),
+                    wxSize( bbox.GetWidth(), bbox.GetHeight() ) ) );
 
     // All done
     m_shapesDirty = false;
