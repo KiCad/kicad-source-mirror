@@ -283,8 +283,6 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
 
 void DIALOG_FIELD_PROPERTIES::updateText( EDA_TEXT* aText )
 {
-    aText->SetTextPos( m_position );
-
     if( aText->GetTextWidth() != m_size )
         aText->SetTextSize( wxSize( m_size, m_size ) );
 
@@ -292,8 +290,6 @@ void DIALOG_FIELD_PROPERTIES::updateText( EDA_TEXT* aText )
     aText->SetTextAngle( m_isVertical ? TEXT_ANGLE_VERT : TEXT_ANGLE_HORIZ );
     aText->SetItalic( m_isItalic );
     aText->SetBold( m_isBold );
-    aText->SetHorizJustify( EDA_TEXT::MapHorizJustify( m_horizontalJustification - 1 ) );
-    aText->SetVertJustify( EDA_TEXT::MapVertJustify( m_verticalJustification - 1 ) );
 }
 
 
@@ -353,6 +349,11 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
     m_isPower = false;
 
     m_textLabel->SetLabel( m_field->GetName() + ":" );
+
+    m_position = m_field->GetPosition();
+
+    m_horizontalJustification = m_field->GetEffectiveHorizJustify() + 1;
+    m_verticalJustification = m_field->GetEffectiveVertJustify() + 1;
 
     // The library symbol may have been removed so using SCH_SYMBOL::GetLibSymbolRef() here
     // could result in a segfault.  If the library symbol is no longer available, the
@@ -488,18 +489,20 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
             symbol->SetFootprint( m_text );
     }
 
+    EDA_TEXT_HJUSTIFY_T hJustify = EDA_TEXT::MapHorizJustify( m_horizontalJustification - 1 );
+    EDA_TEXT_VJUSTIFY_T vJustify = EDA_TEXT::MapVertJustify( m_verticalJustification - 1 );
     bool positioningModified = false;
 
-    if( aField->GetTextPos() != m_position )
+    if( aField->GetPosition() != m_position )
         positioningModified = true;
 
     if( ( aField->GetTextAngle() == TEXT_ANGLE_VERT ) != m_isVertical )
         positioningModified = true;
 
-    if( aField->GetHorizJustify() != EDA_TEXT::MapHorizJustify( m_horizontalJustification - 1 ) )
+    if( aField->GetEffectiveHorizJustify() != hJustify )
         positioningModified = true;
 
-    if( aField->GetVertJustify() != EDA_TEXT::MapVertJustify( m_verticalJustification - 1 ) )
+    if( aField->GetEffectiveVertJustify() != vJustify )
         positioningModified = true;
 
     // convert any text variable cross-references to their UUIDs
@@ -507,6 +510,19 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
 
     aField->SetText( m_text );
     updateText( aField );
+    aField->SetPosition( m_position );
+
+    // Note that we must set justifications before we can ask if they're flipped.  If the old
+    // justification is center then it won't know (whereas if the new justification is center
+    // the we don't care).
+    aField->SetHorizJustify( hJustify );
+    aField->SetVertJustify( vJustify );
+
+    if( aField->IsHorizJustifyFlipped() )
+        aField->SetHorizJustify( EDA_TEXT::MapHorizJustify( -hJustify ) );
+
+    if( aField->IsVertJustifyFlipped() )
+        aField->SetVertJustify( EDA_TEXT::MapVertJustify( -vJustify ) );
 
     // The value, footprint and datasheet fields should be kept in sync in multi-unit parts.
     // Of course the symbol must be annotated to collect other units.

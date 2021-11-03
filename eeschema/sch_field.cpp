@@ -352,11 +352,68 @@ bool SCH_FIELD::IsHorizJustifyFlipped() const
     switch( GetHorizJustify() )
     {
     case GR_TEXT_HJUSTIFY_LEFT:
-        return render_center.x < pos.x;
+        if( GetDrawRotation() == TEXT_ANGLE_VERT )
+            return render_center.y > pos.y;
+        else
+            return render_center.x < pos.x;
     case GR_TEXT_HJUSTIFY_RIGHT:
-        return render_center.x > pos.x;
+        if( GetDrawRotation() == TEXT_ANGLE_VERT )
+            return render_center.y < pos.y;
+        else
+            return render_center.x > pos.x;
     default:
         return false;
+    }
+}
+
+
+EDA_TEXT_HJUSTIFY_T SCH_FIELD::GetEffectiveHorizJustify() const
+{
+    switch( GetHorizJustify() )
+    {
+    case GR_TEXT_HJUSTIFY_LEFT:
+        return IsHorizJustifyFlipped() ? GR_TEXT_HJUSTIFY_RIGHT : GR_TEXT_HJUSTIFY_LEFT;
+    case GR_TEXT_HJUSTIFY_RIGHT:
+        return IsHorizJustifyFlipped() ? GR_TEXT_HJUSTIFY_LEFT : GR_TEXT_HJUSTIFY_RIGHT;
+    default:
+        return GR_TEXT_HJUSTIFY_CENTER;
+    }
+}
+
+
+bool SCH_FIELD::IsVertJustifyFlipped() const
+{
+    wxPoint render_center = GetBoundingBox().Centre();
+    wxPoint pos = GetPosition();
+
+    switch( GetVertJustify() )
+    {
+    case GR_TEXT_VJUSTIFY_TOP:
+        if( GetDrawRotation() == TEXT_ANGLE_VERT )
+            return render_center.x < pos.x;
+        else
+            return render_center.y < pos.y;
+    case GR_TEXT_VJUSTIFY_BOTTOM:
+        if( GetDrawRotation() == TEXT_ANGLE_VERT )
+            return render_center.x > pos.x;
+        else
+            return render_center.y > pos.y;
+    default:
+        return false;
+    }
+}
+
+
+EDA_TEXT_VJUSTIFY_T SCH_FIELD::GetEffectiveVertJustify() const
+{
+    switch( GetVertJustify() )
+    {
+    case GR_TEXT_VJUSTIFY_TOP:
+        return IsVertJustifyFlipped() ? GR_TEXT_VJUSTIFY_BOTTOM : GR_TEXT_VJUSTIFY_TOP;
+    case GR_TEXT_VJUSTIFY_BOTTOM:
+        return IsVertJustifyFlipped() ? GR_TEXT_VJUSTIFY_TOP : GR_TEXT_VJUSTIFY_BOTTOM;
+    default:
+        return GR_TEXT_VJUSTIFY_CENTER;
     }
 }
 

@@ -131,6 +131,10 @@ public:
      * inverted due to rotation or mirroring of the parent.
      */
     bool IsHorizJustifyFlipped() const;
+    bool IsVertJustifyFlipped() const;
+
+    EDA_TEXT_HJUSTIFY_T GetEffectiveHorizJustify() const;
+    EDA_TEXT_VJUSTIFY_T GetEffectiveVertJustify() const;
 
     /**
      * @return true if the field is either empty or holds "~".
