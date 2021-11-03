@@ -27,6 +27,7 @@
 
 #include <eda_rect.h>
 #include <board_item.h>
+#include <pad.h>
 #include <fp_text.h>
 #include <memory>
 #include <unordered_set>
@@ -35,6 +36,7 @@
 
 #include <geometry/rtree.h>
 #include <geometry/shape.h>
+#include <geometry/shape_segment.h>
 #include <math/vector2d.h>
 
 /**
@@ -98,6 +100,17 @@ public:
             shape->GetIndexableSubshapes( subshapes );
         else
             subshapes.push_back( shape.get() );
+
+        if( aItem->Type() == PCB_PAD_T )
+        {
+            PAD* pad = static_cast<PAD*>( aItem );
+
+            if( pad->GetDrillSizeX() )
+            {
+                const SHAPE* hole = pad->GetEffectiveHoleShape();
+                subshapes.push_back( const_cast<SHAPE*>( hole ) );
+            }
+        }
 
         for( SHAPE* subshape : subshapes )
         {
