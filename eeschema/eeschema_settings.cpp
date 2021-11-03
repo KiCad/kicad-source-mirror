@@ -171,7 +171,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_Drawing.junction_size_choice, 3 ) );
 
     m_params.emplace_back( new PARAM<bool>( "input.drag_is_move",
-            &m_Input.drag_is_move, true ) );
+            &m_Input.drag_is_move, false ) );
 
     m_params.emplace_back( new PARAM<int>( "selection.thickness",
             &m_Selection.thickness, 3 ) );
