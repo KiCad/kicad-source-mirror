@@ -238,6 +238,7 @@ void RECTWAVEGUIDE::get_rectwaveguide_phys()
 
 /*
  * analyze - analysis function
+ * source: https://empossible.net/wp-content/uploads/2018/03/Lecture-5c-Rectangular-waveguide.pdf
  */
 void RECTWAVEGUIDE::calcAnalyze()
 {
@@ -252,9 +253,8 @@ void RECTWAVEGUIDE::calcAnalyze()
 
         // Z0 definition using fictive voltages and currents
         m_parameters[Z0_PRM] =
-                2.0 * ZF0 * sqrt( m_parameters[MUR_PRM] / m_parameters[EPSILONR_PRM] )
-                * ( m_parameters[PHYS_B_PRM] / m_parameters[PHYS_A_PRM] )
-                / sqrt( 1.0 - pow( ( fc( 1, 0 ) / m_parameters[FREQUENCY_PRM] ), 2.0 ) );
+            ZF0 * sqrt( m_parameters[MUR_PRM] / m_parameters[EPSILONR_PRM] )
+            / sqrt( 1.0 - pow( ( fc( 1, 0 ) / m_parameters[FREQUENCY_PRM] ), 2.0 ) );
 
         /* calculate electrical angle */
         lambda_g = 2.0 * M_PI / sqrt( k_square - kc_square( 1, 0 ) );
@@ -278,26 +278,23 @@ void RECTWAVEGUIDE::calcAnalyze()
 
 /*
  * synthesize - synthesis function
+ * source: re-arrangment of calcAnalyze equation
+ * TE10 (via fc(1,0) ) results in the b term not influencing the result, as long as 
+ * 1) fc > f
+ * 2) a > b
  */
 void RECTWAVEGUIDE::calcSynthesize()
 {
     double lambda_g, k_square, beta;
-
-    if( isSelected( PHYS_B_PRM ) )
-    {
-        /* solve for b */
-        m_parameters[PHYS_B_PRM] =
-                m_parameters[Z0_PRM] * m_parameters[PHYS_A_PRM]
-                * sqrt( 1.0 - pow( fc( 1, 0 ) / m_parameters[FREQUENCY_PRM], 2.0 ) )
-                / ( 2.0 * ZF0 * sqrt( m_parameters[MUR_PRM] / m_parameters[EPSILONR_PRM] ) );
-    }
-    else if( isSelected( PHYS_A_PRM ) )
-    {
-        /* solve for a */
-        m_parameters[PHYS_A_PRM] =
-                sqrt( pow( 2.0 * ZF0 * m_parameters[PHYS_B_PRM] / m_parameters[Z0_PRM], 2.0 )
-                        + pow( C0 / ( 2.0 * m_parameters[FREQUENCY_PRM] ), 2.0 ) );
-    }
+    /* solve for a */
+    m_parameters[PHYS_A_PRM] =
+        C0
+        / ( sqrt( ( m_parameters[MUR_PRM] * m_parameters[EPSILONR_PRM] ) ) * 2
+        * m_parameters[FREQUENCY_PRM] * sqrt( 1
+            - pow( ( ZF0 * sqrt( m_parameters[MUR_PRM]
+                / m_parameters[EPSILONR_PRM] ) )
+                / m_parameters[Z0_PRM]
+                ,2.0 ) ) );
 
     k_square                   = kval_square();
     beta                       = sqrt( k_square - kc_square( 1, 0 ) );

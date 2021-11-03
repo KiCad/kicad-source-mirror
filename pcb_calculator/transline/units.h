@@ -59,6 +59,9 @@ inline double atanh( double x )
 
 #define MU0  12.566370614e-7          // magnetic constant
 #define C0   299792458.0              // speed of light in vacuum
-#define ZF0  376.73031346958504364963 // wave resistance in vacuum
+#define ZF0  376.730313668           // wave resistance in vacuum
+
+// ZF0 value update:
+// https://physics.nist.gov/cgi-bin/cuu/Value?z0
 
 #endif /* __UNITS_H */
