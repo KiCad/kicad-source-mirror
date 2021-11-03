@@ -1,14 +1,15 @@
 # Triyan W. Nugroho <triyan.wn@gmail.com>, 2021.
 # Jacque Fresco <aidter@use.startmail.com>, 2021.
+# Reza Almanda <rezaalmanda27@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-28 09:09-0700\n"
-"PO-Revision-Date: 2021-09-13 17:58+0000\n"
-"Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
-"source/id/>\n"
+"PO-Revision-Date: 2021-11-03 14:44+0000\n"
+"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
+"master-source/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33818,59 +33819,59 @@ msgstr "Beralih ke Inner layer 12"
 
 #: pcbnew/tools/pcb_actions.cpp:954
 msgid "Switch to Inner layer 13"
-msgstr ""
+msgstr "Beralih ke inner layer 13"
 
 #: pcbnew/tools/pcb_actions.cpp:959
 msgid "Switch to Inner layer 14"
-msgstr ""
+msgstr "Beralih ke inner layer 14"
 
 #: pcbnew/tools/pcb_actions.cpp:964
 msgid "Switch to Inner layer 15"
-msgstr ""
+msgstr "Beralih ke inner layer 15"
 
 #: pcbnew/tools/pcb_actions.cpp:969
 msgid "Switch to Inner layer 16"
-msgstr ""
+msgstr "Beralih ke inner layer 16"
 
 #: pcbnew/tools/pcb_actions.cpp:974
 msgid "Switch to Inner layer 17"
-msgstr ""
+msgstr "Beralih ke inner layer 17"
 
 #: pcbnew/tools/pcb_actions.cpp:979
 msgid "Switch to Inner layer 18"
-msgstr ""
+msgstr "Beralih ke inner layer 18"
 
 #: pcbnew/tools/pcb_actions.cpp:984
 msgid "Switch to Inner layer 19"
-msgstr ""
+msgstr "Beralih ke inner layer 19"
 
 #: pcbnew/tools/pcb_actions.cpp:989
 msgid "Switch to Inner layer 20"
-msgstr ""
+msgstr "Beralih ke inner layer 20"
 
 #: pcbnew/tools/pcb_actions.cpp:994
 msgid "Switch to Inner layer 21"
-msgstr ""
+msgstr "Beralih ke inner layer 21"
 
 #: pcbnew/tools/pcb_actions.cpp:999
 msgid "Switch to Inner layer 22"
-msgstr ""
+msgstr "Beralih ke inner layer 22"
 
 #: pcbnew/tools/pcb_actions.cpp:1004
 msgid "Switch to Inner layer 23"
-msgstr ""
+msgstr "Beralih ke inner layer 23"
 
 #: pcbnew/tools/pcb_actions.cpp:1009
 msgid "Switch to Inner layer 24"
-msgstr ""
+msgstr "Beralih ke inner layer 24"
 
 #: pcbnew/tools/pcb_actions.cpp:1014
 msgid "Switch to Inner layer 25"
-msgstr ""
+msgstr "Beralih ke inner layer 25"
 
 #: pcbnew/tools/pcb_actions.cpp:1019
 msgid "Switch to Inner layer 26"
-msgstr ""
+msgstr "Beralih ke inner layer 26"
 
 #: pcbnew/tools/pcb_actions.cpp:1024
 msgid "Switch to Inner layer 27"
@@ -33878,15 +33879,15 @@ msgstr "Beralih ke Inner layer 27"
 
 #: pcbnew/tools/pcb_actions.cpp:1029
 msgid "Switch to Inner layer 28"
-msgstr ""
+msgstr "Beralih ke inner layer 28"
 
 #: pcbnew/tools/pcb_actions.cpp:1034
 msgid "Switch to Inner layer 29"
-msgstr ""
+msgstr "Beralih ke inner layer 29"
 
 #: pcbnew/tools/pcb_actions.cpp:1039
 msgid "Switch to Inner layer 30"
-msgstr ""
+msgstr "Beralih ke inner layer 30"
 
 #: pcbnew/tools/pcb_actions.cpp:1045
 msgid "Switch to Copper (B.Cu) layer"
@@ -33894,11 +33895,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1051
 msgid "Switch to Next Layer"
-msgstr ""
+msgstr "Beralih ke layer selanjutnya"
 
 #: pcbnew/tools/pcb_actions.cpp:1057
 msgid "Switch to Previous Layer"
-msgstr ""
+msgstr "Beralih ke layer sebelumnya"
 
 #: pcbnew/tools/pcb_actions.cpp:1063
 msgid "Toggle Layer"
@@ -33984,7 +33985,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1129
 msgid "Align to Bottom"
-msgstr ""
+msgstr "Sejajarkan ke Bawah"
 
 #: pcbnew/tools/pcb_actions.cpp:1130
 msgid "Aligns selected items to the bottom edge"
@@ -34252,11 +34253,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:585
 msgid "Item locked."
-msgstr ""
+msgstr "Item terkunci."
 
 #: pcbnew/tools/pcb_control.cpp:859
 msgid "Invalid clipboard contents"
-msgstr ""
+msgstr "Konten papan klip tidak valid"
 
 #: pcbnew/tools/pcb_control.cpp:1127
 #, c-format
@@ -34264,14 +34265,16 @@ msgid ""
 "Error loading board.\n"
 "%s"
 msgstr ""
+"Error saat memuat board.\n"
+"%s"
 
 #: pcbnew/tools/pcb_control.cpp:1204
 msgid "Selected Items"
-msgstr ""
+msgstr "Item yang Dipilih"
 
 #: pcbnew/tools/pcb_control.cpp:1221
 msgid "Footprint Name"
-msgstr ""
+msgstr "Nama Footprint"
 
 #: pcbnew/tools/pcb_point_editor.cpp:123
 msgid "Self-intersecting polygons are not allowed."
@@ -34279,19 +34282,19 @@ msgstr ""
 
 #: pcbnew/tools/pcb_point_editor.cpp:550
 msgid "Drag a corner"
-msgstr ""
+msgstr "Seret sudut"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2036
 msgid "Add a zone corner"
-msgstr ""
+msgstr "Tambahkan sudut zona"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2073
 msgid "Split segment"
-msgstr ""
+msgstr "Bagi segmen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2144
 msgid "Remove a zone/polygon corner"
-msgstr ""
+msgstr "Hapus sudut zona/poligon"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:73
 msgid "Select"
@@ -34303,27 +34306,27 @@ msgstr ""
 
 #: pcbnew/tools/placement_tool.cpp:233
 msgid "Align to top"
-msgstr ""
+msgstr "Sejajarkan ke atas"
 
 #: pcbnew/tools/placement_tool.cpp:278
 msgid "Align to bottom"
-msgstr ""
+msgstr "Sejajarkan ke bawah"
 
 #: pcbnew/tools/placement_tool.cpp:338
 msgid "Align to left"
-msgstr ""
+msgstr "Sejajarkan ke kiri"
 
 #: pcbnew/tools/placement_tool.cpp:398
 msgid "Align to right"
-msgstr ""
+msgstr "Sejajarkan ke kanan"
 
 #: pcbnew/tools/placement_tool.cpp:443
 msgid "Align to middle"
-msgstr ""
+msgstr "Sejajarkan ke tengah"
 
 #: pcbnew/tools/placement_tool.cpp:488
 msgid "Align to center"
-msgstr ""
+msgstr "Sejajarkan ke tengah"
 
 #: pcbnew/tools/placement_tool.cpp:551
 msgid "Distribute horizontally"
@@ -34501,7 +34504,7 @@ msgstr "Semua Layer"
 
 #: pcbnew/widgets/appearance_controls.cpp:380
 msgid "All Copper Layers"
-msgstr ""
+msgstr "Semua layer Tembaga"
 
 #: pcbnew/widgets/appearance_controls.cpp:383
 msgid "Inner Copper Layers"
@@ -34570,13 +34573,13 @@ msgid "Net Display Options"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "Net colors (%s):"
-msgstr "Warna"
+msgstr "Warna net (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Net colors:"
-msgstr ""
+msgstr "Warna net:"
 
 #: pcbnew/widgets/appearance_controls.cpp:677
 msgid "Choose when to show net and netclass colors"
@@ -34625,9 +34628,8 @@ msgid "Hide all ratsnest lines"
 msgstr "Nama berkas tidak valid: %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:881
-#, fuzzy
 msgid "Set Net Color"
-msgstr "Warna Silkscreen"
+msgstr "Atur warna Net"
 
 #: pcbnew/widgets/appearance_controls.cpp:884
 #, c-format
@@ -34851,9 +34853,8 @@ msgid "Highlight Nets in %s"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:2283
-#, fuzzy
 msgid "Show All Netclasses"
-msgstr "Tampilkan pada semua halaman"
+msgstr "Tampilkan semua Netclasses"
 
 #: pcbnew/widgets/appearance_controls.cpp:2286
 msgid "Hide All Other Netclasses"
@@ -34910,9 +34911,8 @@ msgid "Configure net classes"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls_base.cpp:161
-#, fuzzy
 msgid "Presets (Ctrl+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "Preset (Ctrl+Tab):"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "(unsaved)"
@@ -34957,11 +34957,11 @@ msgstr ""
 
 #: pcbnew/zone.cpp:558
 msgid "Copper Zone"
-msgstr ""
+msgstr "Zona Tembaga"
 
 #: pcbnew/zone.cpp:560
 msgid "Non-copper Zone"
-msgstr ""
+msgstr "Zona non-tembaga"
 
 #: pcbnew/zone.cpp:565
 msgid "Cutout"
@@ -35002,19 +35002,19 @@ msgstr "%s dan %d lagi"
 
 #: pcbnew/zone.cpp:630
 msgid "Fill Mode"
-msgstr ""
+msgstr "Mode Isi"
 
 #: pcbnew/zone.cpp:633
 msgid "Filled Area"
-msgstr ""
+msgstr "Area Terisi"
 
 #: pcbnew/zone.cpp:645
 msgid "HatchBorder Lines"
-msgstr ""
+msgstr "Garis HatchBorder"
 
 #: pcbnew/zone.cpp:669
 msgid "Corner Count"
-msgstr ""
+msgstr "Jumlah Sudut"
 
 #: pcbnew/zone.cpp:880
 #, c-format
@@ -35078,33 +35078,31 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
 msgid "KiCad Image Converter"
-msgstr ""
+msgstr "Konverter Gambar KiCad"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr ""
+msgstr "Buat komponen dari bitmap untuk digunakan KiCad"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "bitmap2component"
-msgstr ""
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
-#, fuzzy
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr "Berkas Skematik"
+msgstr "Editor Skematik KiCad (Standalone)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
-#, fuzzy
 msgid "Schematic Capture Tool"
-msgstr "Berkas Skematik"
+msgstr "Alat Tangkap Skematik"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr ""
+msgstr "Editor skematik standalone untuk skematik KiCad"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
-msgstr ""
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -35115,9 +35113,8 @@ msgid "View Gerber files"
 msgstr "Tampilkan berkas Gerber"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-#, fuzzy
 msgid "gerbview"
-msgstr "Pratinjau"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -35133,18 +35130,16 @@ msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
-#, fuzzy
 msgid "KiCad PCB Calculator"
-msgstr "Penyunting Simbol"
+msgstr "Kalkulator PCB KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
-#, fuzzy
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "Penyunting Simbol"
+msgstr "Editor PCB KiCad (Standalone)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "PCB layout editor"
