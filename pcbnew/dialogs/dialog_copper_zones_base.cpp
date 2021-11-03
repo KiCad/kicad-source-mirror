@@ -107,7 +107,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 
 	fgSizer1->Add( m_staticTextPriorityLevel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_PriorityLevelCtrl = new wxSpinCtrl( sbGeneral->GetStaticBox(), ID_M_PRIORITYLEVELCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 0 );
+	m_PriorityLevelCtrl = new wxSpinCtrl( sbGeneral->GetStaticBox(), ID_M_PRIORITYLEVELCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 2147483647, 0 );
 	fgSizer1->Add( m_PriorityLevelCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
