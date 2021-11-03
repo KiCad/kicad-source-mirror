@@ -79,7 +79,8 @@ bool PNS_LOG_FILE::Load( const std::string& logName, const std::string boardName
             m_routerSettings->SetMode( (PNS::PNS_MODE) wxAtoi( tokens.GetNextToken() ) );
             m_routerSettings->SetRemoveLoops( wxAtoi( tokens.GetNextToken() ) );
             m_routerSettings->SetFixAllSegments( wxAtoi( tokens.GetNextToken() ) );
-            m_routerSettings->SetCornerMode( (PNS::CORNER_MODE) wxAtoi( tokens.GetNextToken() ) );
+            m_routerSettings->SetCornerMode(
+                    (DIRECTION_45::CORNER_MODE) wxAtoi( tokens.GetNextToken() ) );
         }
     }
 

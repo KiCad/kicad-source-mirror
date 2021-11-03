@@ -111,7 +111,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
     DEBUG_DECORATOR* dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
     VECTOR2I         p0 = m_trail.CPoint( 0 );
     double refLength = SEG( p0, aP ).Length();
-    SHAPE_LINE_CHAIN straight( DIRECTION_45().BuildInitialTrace( p0, aP, false, false ) );
+    SHAPE_LINE_CHAIN straight( DIRECTION_45().BuildInitialTrace( p0, aP, false ) );
 
     straight.SetClosed( true );
     straight.Append( m_trail.Reverse() );
@@ -121,7 +121,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
 
     double areaS = straight.Area();
 
-    SHAPE_LINE_CHAIN diag( DIRECTION_45().BuildInitialTrace( p0, aP, true, false ) );
+    SHAPE_LINE_CHAIN diag( DIRECTION_45().BuildInitialTrace( p0, aP, true ) );
     diag.Append( m_trail.Reverse() );
     diag.SetClosed( true );
     diag.Simplify();

@@ -586,10 +586,8 @@ bool OPTIMIZER::mergeColinear( LINE* aLine )
         if( s1.SquaredLength() == 0 || s2.SquaredLength() == 0 )
             continue;
 
-        if( s1.Collinear( s2 ) )
+        if( s1.Collinear( s2 ) && !line.IsPtOnArc( segIdx + 1 ) )
         {
-            // We should not see a collinear vertex inside an arc
-            wxASSERT( !line.IsPtOnArc( segIdx + 1 ) );
             line.Remove( segIdx + 1 );
         }
     }

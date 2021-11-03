@@ -26,6 +26,7 @@
 #include <cstdio>
 
 #include <settings/nested_settings.h>
+#include <geometry/direction45.h>
 
 #include "time_limit.h"
 
@@ -49,15 +50,6 @@ enum PNS_OPTIMIZATION_EFFORT
     OE_LOW = 0,
     OE_MEDIUM = 1,
     OE_FULL = 2
-};
-
-///< What kind of corners to create in the line placers.
-enum class CORNER_MODE
-{
-    MITERED_90,     ///< H/V only (90-degree corners) (not yet implemented)
-    MITERED_45,     ///< H/V/45 with mitered corners (default)
-    ROUNDED_90,     ///< H/V with filleted corners (not yet implemented)
-    ROUNDED_45      ///< H/V/45 with filleted corners
 };
 
 /**
@@ -149,8 +141,8 @@ public:
     bool GetSnapToTracks() const { return m_snapToTracks; }
     bool GetSnapToPads() const { return m_snapToPads; }
 
-    CORNER_MODE GetCornerMode() const { return m_cornerMode; }
-    void SetCornerMode( CORNER_MODE aMode ) { m_cornerMode = aMode; }
+    DIRECTION_45::CORNER_MODE GetCornerMode() const { return m_cornerMode; }
+    void SetCornerMode( DIRECTION_45::CORNER_MODE aMode ) { m_cornerMode = aMode; }
 
     bool GetOptimizeEntireDraggedTrack() const { return m_optimizeEntireDraggedTrack; }
     void SetOptimizeEntireDraggedTrack( bool aEnable ) { m_optimizeEntireDraggedTrack = aEnable; }
@@ -180,7 +172,7 @@ private:
     bool m_autoPosture;
     bool m_fixAllSegments;
 
-    CORNER_MODE m_cornerMode;
+    DIRECTION_45::CORNER_MODE m_cornerMode;
 
     PNS_MODE m_routingMode;
     PNS_OPTIMIZATION_EFFORT m_optimizerEffort;

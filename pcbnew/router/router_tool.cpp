@@ -157,11 +157,11 @@ static const TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPost
         _( "Switches posture of the currently routed track." ),
         BITMAPS::change_entry_orient );
 
-static const TOOL_ACTION ACT_SwitchRounding( "pcbnew.InteractiveRouter.SwitchRounding",
+static const TOOL_ACTION ACT_SwitchCornerMode( "pcbnew.InteractiveRouter.SwitchRounding",
         AS_CONTEXT,
         MD_CTRL + '/', "",
         _( "Track Corner Mode" ),
-        _( "Switches between sharp and rounded corners when routing tracks." ),
+        _( "Switches between sharp/rounded and 45°/90° corners when routing tracks." ),
         BITMAPS::switch_corner_rounding_shape );
 
 #undef _
@@ -469,7 +469,7 @@ bool ROUTER_TOOL::Init()
     menu.AddItem( ACT_SelLayerAndPlaceBlindVia,       SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_SelLayerAndPlaceMicroVia,       SELECTION_CONDITIONS::ShowAlways );
     menu.AddItem( ACT_SwitchPosture,                  SELECTION_CONDITIONS::ShowAlways );
-    menu.AddItem( ACT_SwitchRounding,                 SELECTION_CONDITIONS::ShowAlways );
+    menu.AddItem( ACT_SwitchCornerMode,               SELECTION_CONDITIONS::ShowAlways );
 
     menu.AddSeparator();
 
@@ -1202,9 +1202,9 @@ void ROUTER_TOOL::performRouting()
             m_router->Move( m_endSnapPoint, m_endItem );
             m_startItem = nullptr;
         }
-        else if( evt->IsAction( &ACT_SwitchRounding ) )
+        else if( evt->IsAction( &ACT_SwitchCornerMode ) )
         {
-            m_router->ToggleRounded();
+            m_router->ToggleCornerMode();
             updateMessagePanel();
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
@@ -2063,10 +2063,10 @@ void ROUTER_TOOL::updateMessagePanel()
     {
         switch( m_router->Settings().GetCornerMode() )
         {
-        case PNS::CORNER_MODE::MITERED_45: cornerMode = _( "45-degree" );         break;
-        case PNS::CORNER_MODE::ROUNDED_45: cornerMode = _( "45-degree rounded" ); break;
-        case PNS::CORNER_MODE::MITERED_90: cornerMode = _( "90-degree" );         break;
-        case PNS::CORNER_MODE::ROUNDED_90: cornerMode = _( "90-degree rounded" ); break;
+        case DIRECTION_45::CORNER_MODE::MITERED_45: cornerMode = _( "45-degree" );         break;
+        case DIRECTION_45::CORNER_MODE::ROUNDED_45: cornerMode = _( "45-degree rounded" ); break;
+        case DIRECTION_45::CORNER_MODE::MITERED_90: cornerMode = _( "90-degree" );         break;
+        case DIRECTION_45::CORNER_MODE::ROUNDED_90: cornerMode = _( "90-degree rounded" ); break;
         default: break;
         }
     }

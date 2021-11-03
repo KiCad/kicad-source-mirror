@@ -813,21 +813,19 @@ bool ROUTER::IsPlacingVia() const
 }
 
 
-void ROUTER::ToggleRounded()
+void ROUTER::ToggleCornerMode()
 {
-    CORNER_MODE newMode = CORNER_MODE::MITERED_45;
+    DIRECTION_45::CORNER_MODE mode = m_settings->GetCornerMode();
 
     switch( m_settings->GetCornerMode() )
     {
-    case CORNER_MODE::MITERED_45:
-        newMode = CORNER_MODE::ROUNDED_45;
-        break;
-
-    default:
-        break;
+    case DIRECTION_45::CORNER_MODE::MITERED_45: mode = DIRECTION_45::CORNER_MODE::ROUNDED_45; break;
+    case DIRECTION_45::CORNER_MODE::ROUNDED_45: mode = DIRECTION_45::CORNER_MODE::MITERED_90; break;
+    case DIRECTION_45::CORNER_MODE::MITERED_90: mode = DIRECTION_45::CORNER_MODE::ROUNDED_90; break;
+    case DIRECTION_45::CORNER_MODE::ROUNDED_90: mode = DIRECTION_45::CORNER_MODE::MITERED_45; break;
     }
 
-    m_settings->SetCornerMode( newMode );
+    m_settings->SetCornerMode( mode );
 }
 
 

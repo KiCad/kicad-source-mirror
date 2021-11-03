@@ -21,7 +21,9 @@
 
 
 const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, const VECTOR2I& aP1,
-                                                        bool aStartDiagonal, bool aFillet ) const
+                                                        bool        aStartDiagonal,
+                                                        CORNER_MODE aMode ) const
+
 {
     bool startDiagonal;
 
@@ -35,70 +37,94 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
     int sw = sign( aP1.x - aP0.x );
     int sh = sign( aP1.y - aP0.y );
 
-    VECTOR2I mp0, mp1;
-
-    /*
-     * Non-filleted case:
-     *
-     * For width greater than height, we're calculating something like this.
-     * mp0 will be used if we start straight; mp1 if we start diagonal.
-     *
-     * aP0 ----------------- mp0
-     *  .                     \
-     *   .                     \
-     *    .                     \
-     *     mp1 . . . . . . . .  aP1
-     *
-     * Filleted case:
-     *
-     * For a fillet, we need to know the arc start point (A in the diagram below)
-     * A straight segment will be needed between aP0 and A if we are starting straight,
-     * or between the arc end and aP1 if we are starting diagonally.
-     *
-     * aP0 -- A --___        mp0
-     *  .             ---
-     *   .                 --
-     *    .                   --
-     *     mp1 . . . . . . . .  aP1
-     *
-     * For the length of this segment (tangentLength), we subtract the length of the "diagonal"
-     * line from the "straight" line (i.e. dist(aP0, mp0) - dist(mp0, aP1))
-     * In the example above, we will have a straight segment from aP0 to A, and then we can use
-     * the distance from A to aP1 (diagLength) to calculate the radius of the arc.
-     */
-
-    int tangentLength;
-
-    if( w > h )
-    {
-        mp0 = VECTOR2I( ( w - h ) * sw, 0 );    // direction: E
-        mp1 = VECTOR2I( h * sw, h * sh );       // direction: NE
-        tangentLength = ( w - h ) - mp1.EuclideanNorm();
-    }
-    else
-    {
-        mp0 = VECTOR2I( 0, sh * ( h - w ) );    // direction: N
-        mp1 = VECTOR2I( sw * w, sh * w );       // direction: NE
-        tangentLength = ( h - w ) - mp1.EuclideanNorm();
-    }
-
+    bool is90mode = aMode == CORNER_MODE::ROUNDED_90 || aMode == CORNER_MODE::MITERED_90;
     SHAPE_LINE_CHAIN pl;
 
     // Shortcut where we can generate just one segment and quit.  Avoids more complicated handling
     // of precision errors if filleting is enabled
-    // TODO: needs refactoring if we support 90-degree arcs via this function
-    if( w == h || w == 0 || h == 0 )
+    if( w == 0 || h == 0 || ( !is90mode && h == w ) )
     {
         pl.Append( aP0 );
         pl.Append( aP1 );
         return pl;
     }
 
-    // TODO: if tangentLength zero, we could still place a small arc at the start...
-    if( aFillet )
+    VECTOR2I mp0, mp1;
+    int      tangentLength;
+
+    if( is90mode )
     {
-        SHAPE_ARC arc;
-        VECTOR2I  arcEndpoint;
+        if( startDiagonal == ( h >= w ) )
+        {
+            mp0 = VECTOR2I( w * sw, 0 ); // direction: E
+        }
+        else
+        {
+            mp0 = VECTOR2I( 0, sh * h ); // direction: N
+        }
+    }
+    else
+    {
+        if( w > h )
+        {
+            mp0 = VECTOR2I( ( w - h ) * sw, 0 ); // direction: E
+            mp1 = VECTOR2I( h * sw, h * sh );    // direction: NE
+            tangentLength = ( w - h ) - mp1.EuclideanNorm();
+        }
+        else
+        {
+            mp0 = VECTOR2I( 0, sh * ( h - w ) ); // direction: N
+            mp1 = VECTOR2I( sw * w, sh * w );    // direction: NE
+            tangentLength = ( h - w ) - mp1.EuclideanNorm();
+        }
+    }
+
+    SHAPE_ARC arc;
+    VECTOR2I  arcEndpoint;
+
+    switch( aMode )
+    {
+    case CORNER_MODE::MITERED_45:
+        /*
+         * For width greater than height, we're calculating something like this.
+         * mp0 will be used if we start straight; mp1 if we start diagonal.
+         *
+         * aP0 ----------------- mp0
+         *  .                     \
+         *   .                     \
+         *    .                     \
+         *     mp1 . . . . . . . .  aP1
+         *
+         */
+        pl.Append( aP0 );
+        pl.Append( startDiagonal ? ( aP0 + mp1 ) : ( aP0 + mp0 ) );
+        pl.Append( aP1 );
+        break;
+
+    case CORNER_MODE::ROUNDED_45:
+    {
+        /*
+         * For a fillet, we need to know the arc start point (A in the diagram below)
+         * A straight segment will be needed between aP0 and A if we are starting straight,
+         * or between the arc end and aP1 if we are starting diagonally.
+         *
+         * aP0 -- A --___        mp0
+         *  .             ---
+         *   .                 --
+         *    .                   --
+         *     mp1 . . . . . . . .  aP1
+         *
+         * For the length of this segment (tangentLength), we subtract the length of the "diagonal"
+         * line from the "straight" line (i.e. dist(aP0, mp0) - dist(mp0, aP1))
+         * In the example above, we will have a straight segment from aP0 to A, and then we can use
+         * the distance from A to aP1 (diagLength) to calculate the radius of the arc.
+         */
+        if( w == h )
+        {
+            pl.Append( aP0 );
+            pl.Append( aP1 );
+            break;
+        }
 
         double diag2 = tangentLength >= 0 ? mp1.SquaredEuclideanNorm() : mp0.SquaredEuclideanNorm();
         double diagLength = std::sqrt( ( 2 * diag2 ) - ( 2 * diag2 * std::cos( 3 * M_PI_4 ) ) );
@@ -188,12 +214,94 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
                 pl.Append( aP1 );
             }
         }
+        break;
     }
-    else
-    {
+    case CORNER_MODE::MITERED_90:
+        /*
+         * For width greater than height, we're calculating something like this.
+         *
+         *          <-mp0->
+         * aP0 -------------------+
+         *                        |
+         *                        |
+         *                        |
+         *                       aP1
+         */
         pl.Append( aP0 );
-        pl.Append( startDiagonal ? ( aP0 + mp1 ) : ( aP0 + mp0 ) );
+        pl.Append( aP0 + mp0 );
         pl.Append( aP1 );
+        break;
+
+    case CORNER_MODE::ROUNDED_90:
+        /*
+         * For a fillet, we need to know the arc end point
+         * A straight segment will be needed between aP0 and arcEnd in case distance aP0,mp0 is bigger
+         * than the distance mp0,aP1, if the distance is shorter the straigth segment is  between
+         * arcEnd and aP1. If both distances are equal, we don't need a straight segment.
+         *
+         * aP0 ----- arcEnd ---__
+         *                       --
+         *                          \
+         *                           |
+         *          arcCenter       aP1
+         *
+         * For the length of the radius we use the shorter of the horizontal and vertical distance.
+         */
+        SHAPE_ARC arc;
+
+        if( w == h ) // we only need one arc without a straigth line.
+        {
+            arc.ConstructFromStartEndCenter( aP0, aP1, aP1 - mp0, sh == sw != startDiagonal );
+            pl.Append( arc );
+            return pl;
+        }
+
+        VECTOR2I arcEnd; // Arc position that is not at aP0 nor aP1
+        VECTOR2I arcCenter;
+
+        if( startDiagonal ) //Means start with the arc first
+        {
+            if( h > w ) // Arc followed by a vertical line
+            {
+                int y = aP0.y + ( w * sh );
+                arcEnd = VECTOR2I( aP1.x, y );
+                arcCenter = VECTOR2I( aP0.x, y );
+                arc.ConstructFromStartEndCenter( aP0, arcEnd, arcCenter, sh != sw );
+                pl.Append( arc );
+                pl.Append( aP1 );
+            }
+            else        // Arc followed by a horizontal line
+            {
+                int x = aP0.x + ( h * sw );
+                arcEnd = VECTOR2I( x, aP1.y );
+                arcCenter = VECTOR2I( x, aP0.y );
+                arc.ConstructFromStartEndCenter( aP0, arcEnd, arcCenter, sh == sw );
+                pl.Append( arc );
+                pl.Append( aP1 );
+            }
+        }
+        else
+        {
+            if( w > h ) // Horizontal line followed by the arc
+            {
+                int x = aP1.x - ( h * sw );
+                arcEnd = VECTOR2I( x, aP0.y );
+                arcCenter = VECTOR2I( x, aP1.y );
+                pl.Append( aP0 );
+                arc.ConstructFromStartEndCenter( arcEnd, aP1, arcCenter, sh != sw );
+                pl.Append( arc );
+            }
+            else        // Vertical line followed by the arc
+            {
+                int y = aP1.y - ( w * sh );
+                arcEnd = VECTOR2I( aP0.x, y );
+                arcCenter = VECTOR2I( aP1.x, y );
+                pl.Append( aP0 );
+                arc.ConstructFromStartEndCenter( arcEnd, aP1, arcCenter, sh == sw );
+                pl.Append( arc );
+            }
+        }
+        break;
     }
 
     pl.Simplify();

@@ -160,7 +160,7 @@ public:
     void ToggleViaPlacement();
     void SetOrthoMode( bool aEnable );
 
-    void ToggleRounded();
+    void ToggleCornerMode();
 
     int GetCurrentLayer() const;
     const std::vector<int> GetCurrentNets() const;

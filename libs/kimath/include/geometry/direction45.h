@@ -60,6 +60,18 @@ public:
     };
 
     /**
+     * Corner modes.
+     * A corner can either be 45° or 90° and can be fillet/rounded or mitered
+     */
+    enum CORNER_MODE
+    {
+        MITERED_45 = 0, ///< H/V/45 with mitered corners (default)
+        ROUNDED_45 = 1, ///< H/V/45 with filleted corners
+        MITERED_90 = 2, ///< H/V only (90-degree corners)
+        ROUNDED_90 = 3, ///< H/V with filleted corners
+    };
+
+    /**
      * Represent kind of angle formed by vectors heading in two DIRECTION_45s.
      */
     enum AngleType
@@ -215,12 +227,13 @@ public:
      * @param aP0 starting point
      * @param aP1 ending point
      * @param aStartDiagonal whether the first segment has to be diagonal
-     * @param aFillet if true will fillet the 45-degree portion of the line chain
+     * @param aMode How the corner is made. If it is a 90° corner, aStartDiagonal means
+     *  start with the shorter direction first / use arc before the straight segment.
      * @return the trace
      */
     const SHAPE_LINE_CHAIN BuildInitialTrace( const VECTOR2I& aP0, const VECTOR2I& aP1,
-                                              bool aStartDiagonal = false,
-                                              bool aFillet = false ) const;
+                                              bool        aStartDiagonal = false,
+                                              CORNER_MODE aMode = CORNER_MODE::MITERED_45 ) const;
 
     bool operator==( const DIRECTION_45& aOther ) const
     {
@@ -295,7 +308,6 @@ public:
     }
 
 private:
-
     /**
      * Calculate the direction from a vector. If the vector's angle is not a multiple of 45
      * degrees, the direction is rounded to the nearest octant.
