@@ -317,7 +317,7 @@
         "track_width": 0.25,
         "via_diameter": 0.8,
         "via_drill": 0.4,
-        "wire_width": 5.0
+        "wire_width": 6.0
       }
     ],
     "meta": {
