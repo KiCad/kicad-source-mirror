@@ -922,6 +922,11 @@ wxString SCH_COMPONENT::GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME
     {
         if( aFieldName == m_Fields[ii].GetName() )
             return m_Fields[ii].GetText();
+
+        if( ii < MANDATORY_FIELDS && aFieldName == TEMPLATE_FIELDNAME::GetCanonicalFieldName( ii ) )
+        {
+            return m_Fields[ii].GetText();
+        }
     }
 
     return wxEmptyString;

@@ -31,6 +31,36 @@
 using namespace TFIELD_T;
 
 
+const wxString TEMPLATE_FIELDNAME::GetCanonicalFieldName( int aFieldNdx )
+{
+    // Fixed values for the first few default fields used by EESCHEMA
+    // (mandatory fields)
+    switch( aFieldNdx )
+    {
+    case  REFERENCE:
+        return wxT( "Reference" );   // The component reference, R1, C1, etc.
+
+    case  VALUE:
+        return wxT( "Value" );       // The component value + name
+
+    case  FOOTPRINT:
+        return wxT( "Footprint" );     // The footprint for use with Pcbnew
+
+    case  DATASHEET:
+        return wxT( "Datasheet" );   // Link to a datasheet for component
+
+    default:
+        break;
+    }
+
+    // Other fields are use fields, give a default name:
+    wxString fieldName = wxT( "Field" );
+    fieldName << aFieldNdx;
+    return fieldName;
+}
+
+
+
 const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
 {
     static void* locale = nullptr;
@@ -51,6 +81,8 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
         fieldDefault     = _( "Field" );
         locale = Pgm().GetLocale();
     }
+
+    // Fixed values for the first few default fields used by EESCHEMA
 
     // Fixed values for the first few default fields used by EESCHEMA
     // (mandatory fields)
@@ -77,6 +109,7 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
     fieldName << aFieldNdx;
     return fieldName;
 }
+
 
 void TEMPLATE_FIELDNAME::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 {
