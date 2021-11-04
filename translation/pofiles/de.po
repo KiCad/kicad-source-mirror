@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-03 11:35-0700\n"
-"PO-Revision-Date: 2021-11-04 18:33+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"PO-Revision-Date: 2021-11-04 21:27+0000\n"
+"Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -9090,9 +9090,8 @@ msgstr ""
 "Pin-Nummerierung identisch sind."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
-#, fuzzy
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr "Symbol mit alternativer Darstellungsform (De Morgan) erstellen"
+msgstr "Erstelle ein Symbol mit alternativer Darstellungsform (De Morgan)."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
@@ -9152,9 +9151,8 @@ msgstr "Von allen &Einheiten eines Symbols gemeinsam genutzt"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
-#, fuzzy
 msgid "Common to all body &styles (De Morgan)"
-msgstr "Von allen Darstellungs&formen (DeMorgan) für Symbole gemeinsam genutzt"
+msgstr "Von allen Darstellungsformen soll (DeMorgan) gemeinsam genutzt"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:51
 msgid "Drawing Properties"
@@ -9180,9 +9178,9 @@ msgid "Delete extra units from symbol?"
 msgstr "Zusätzliche Einheiten des Symbols ebenfalls entfernen?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:287
-#, fuzzy
 msgid "Delete alternate body style (De Morgan) from symbol?"
-msgstr "Alternative Darstellungsform (De Morgan) von Symbol löschen?"
+msgstr ""
+"Soll die alternative Darstellungsform (De Morgan) von Symbol gelöscht werden?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:315
 #, c-format
@@ -9319,9 +9317,8 @@ msgstr ""
 "als Wurzelsymbole."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
-#, fuzzy
 msgid "Has alternate body style (De Morgan)"
-msgstr "Hat alternative Darstellungsform (De Morgan)"
+msgstr "Es gibt eine alternative Darstellungsform (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
@@ -9722,9 +9719,10 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
-#, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr "Für DeMorgan-Symbole sind keine alternativen Pinbelegungen verfügbar."
+msgstr ""
+"Für die alternativen DeMorgan-Symbole sind keine alternativen Pinbelegungen "
+"verfügbar."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:283
 msgid "This symbol only has one unit. This control has no effect."
@@ -11425,9 +11423,8 @@ msgid "Unit:"
 msgstr "Einheit:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
-#, fuzzy
 msgid "Alternate symbol (De Morgan)"
-msgstr "Alternativsymbol (De Morgan)"
+msgstr "Alternatives Symbol (De Morgan)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:138
 msgid ""
@@ -16399,34 +16396,28 @@ msgid "Assign a netclass to the net of the selected wire"
 msgstr "Eine Netzklasse zum Netz der ausgewählten Verbindung hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "De Morgan Conversion"
-msgstr "\"De Morgan\" Umwandlung"
+msgstr "De Morgan Darstellung"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "Switch between De Morgan representations"
-msgstr "Umschalten zwischen den DeMorgan Darstellungsformen"
+msgstr "Umschalten zwischen den De Morgan Darstellungsformen"
 
 #: eeschema/tools/ee_actions.cpp:458
-#, fuzzy
 msgid "De Morgan Standard"
-msgstr "DeMorgan Standard"
+msgstr "De Morgan Standard"
 
 #: eeschema/tools/ee_actions.cpp:458
-#, fuzzy
 msgid "Switch to standard De Morgan representation"
-msgstr "Umschalten zur DeMorgan Standardarstellung"
+msgstr "Umschalten zur De Morgan Darstellungsform"
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "De Morgan Alternate"
-msgstr "DeMorgan Alternativdarstellung"
+msgstr "De Morgan Alternative"
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "Switch to alternate De Morgan representation"
-msgstr "Umschalten zur alternativen DeMorgan Darstellungsform"
+msgstr "Umschalten zur alternativen De Morgan Darstellungsform"
 
 #: eeschema/tools/ee_actions.cpp:468
 msgid "Change to Label"
@@ -19861,7 +19852,6 @@ msgid "Error writing objects to clipboard"
 msgstr "Fehler beim Schreiben der Objekte in die Zwischenablage"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19874,15 +19864,16 @@ msgid ""
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
 "### Resistives Dämpfungsglied\n"
-"#### Dämpfung beträgt 6dB\n"
+" Dämpfung beträgt 6dB\n"
 "___Z<sub>in</sub>___ gewünschte Eingangsimpedanz in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ gewünschte Ausgangsimpedanz in &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
+"___L = 10<sup>a/20</up>___<br>\n"
+"___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
+"___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19896,20 +19887,18 @@ msgid ""
 "___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 msgstr ""
-"### T-Dämpfungsglied\n"
+"### PiDämpfungsglied\n"
 "__Zin__ gewünschte Eingangsimpedanz in &#x2126;<br>\n"
 "__Zout__ gewünschte Ausgangsimpedanz<br>\n"
-"__Zin = Zout__<br><br>\n"
 "\n"
-"* __a__ Dämpfung in dB\n"
-"* __L = 10<sup>a/20</sup>__ (der Verlust)\n"
-"* ___A = (L + 1)/(L - 1)___<br><br>\n"
-"* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - 1)___\n"
-"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+" __L = 10<sup>a/20</sup>__ <br>\n"
+" ___A = (L + 1)/(L - 1)___<br><br>\n"
+" ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - 1)___<br>"
+"\n"
+" ___R1 = Z<sub>in</sub> \\* A - R2___<br>\n"
+" ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -19920,7 +19909,7 @@ msgid ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
 "### Resistives Dämpfungsglied\n"
-"#### Dämpfung beträgt 6dB\n"
+"Dämpfung beträgt 6dB\n"
 "___Z<sub>in</sub>___ gewünschte Eingangsimpedanz in &#x2126;<br>\n"
 "___Z<sub>out</sub>___ gewünschte Ausgangsimpedanz in &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
@@ -19928,7 +19917,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19945,14 +19933,13 @@ msgstr ""
 "### T-Dämpfungsglied\n"
 "__Zin__ gewünschte Eingangsimpedanz in &#x2126;<br>\n"
 "__Zout__ gewünschte Ausgangsimpedanz<br>\n"
-"__Zin = Zout__<br><br>\n"
 "\n"
-"* __a__ Dämpfung in dB\n"
-"* __L = 10<sup>a/20</sup>__ (der Verlust)\n"
-"* ___A = (L + 1)/(L - 1)___<br><br>\n"
-"* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - 1)___\n"
-"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+" __L = 10<sup>a/20</sup>__ <br>\n"
+" ___A = (L + 1)/(L - 1)___<br><br>\n"
+" ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - 1)___<br>"
+"\n"
+" ___R1 = Z<sub>in</sub> \\* A - R2___<br>\n"
+" ___R3 = Z<sub>out</sub> \\* A - R2___<br>\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -20810,7 +20797,6 @@ msgid "Not worth using"
 msgstr "Nicht erforderlich"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20855,8 +20841,8 @@ msgstr ""
 "\n"
 "- Dieser Rechner findet Kombinationen von Standardkomponenten der gewählten "
 "E-Serie, um beliebige Werte zu erzeugen.\n"
-"- Sie können den benötigten Widerstandswert von 0,0025 bis 4000 kΩ "
-"eingeben.\n"
+"- Sie können den benötigten Widerstandswert von 0,0025 bis 4000 kΩ eingeben."
+"\n"
 "- Es werden Lösungen mit bis zu 4 Komponenten ausgegeben.\n"
 "\n"
 "Standardmäßig wird der angefragte Wert von den Lösungen ausgeschlossen.  Es "
@@ -20867,7 +20853,7 @@ msgstr ""
 "Lösungen werden in folgenden Formaten angegeben:\n"
 "\n"
 "\tR1 + R2 +...+ Rn\tWiderstände in Reihe\n"
-"\tR1 | R2 |...| Rn\tWiderstände parallel\n"
+"\tR1 | R2 |...| Rn\t\tWiderstände parallel\n"
 "\tR1 + (R2|R3)...\t\teine beliebige Kombination der oben genannten\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:49
@@ -20925,7 +20911,6 @@ msgstr ""
 "Möchten Sie beenden und Ihre Änderungen verwerfen?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20960,17 +20945,18 @@ msgstr ""
 "\n"
 "Der erste vorgegebene Wert ist fett dargestellt.\n"
 "\n"
-"Die Berechnungen gelten für Ströme bis zu 35 A (extern) oder 17,5 A "
-"(intern), Temperaturanstiege bis zu 100 °C und Breiten von bis zu 400 mil "
-"(10 mm).\n"
+"Die Berechnungen gelten für Ströme bis zu 35 A (extern) oder 17,5 A (intern)"
+", Temperaturanstiege bis zu 100 °C und Breiten von bis zu 400 mil (10 mm).\n"
 "\n"
 "Die zugehörige Formel aus IPC 2221 ist\n"
-"<center>__I = K * dT<sup>0,44</sup> * (W*H)<sup>0,725</sup>__</center>\n"
+"<center>__I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
 "Wobei:  \n"
 "__I__ = Maximaler Strom in Ampere  \n"
-"__dt__ = Temperaturanstieg über die Umgebungstemperatur in °C  \n"
-"__W,H__ = Breite und Dicke in mils  \n"
-"__K__ = 0,024 für interne Leiterzüge oder 0,048 für externe Leiterzüge\n"
+"__&Delta;__ = Temperaturanstieg über die Umgebungstemperatur in &deg;°C  \n"
+"__W,__ = Breite in mils  \n"
+"__H__ = Dicke in mils  \n"
+"__K__ = 0,024 für interne Leiterzüge oder 0,048 für externe Leiterbahnen  \n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
