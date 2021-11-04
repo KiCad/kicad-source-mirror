@@ -497,7 +497,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         // to denote the state.
         for( const DANGLING_END_ITEM& it : internalPoints )
         {
-            if( m_frame->GetScreen()->IsJunctionNeeded( it.GetPosition(), true ) )
+            if( m_frame->GetScreen()->IsExplicitJunctionNeeded( it.GetPosition()) )
                 m_frame->AddJunction( m_frame->GetScreen(), it.GetPosition(), true, false );
         }
 

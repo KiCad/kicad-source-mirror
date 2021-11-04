@@ -170,7 +170,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
 
     for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
     {
-        if( !aScreen->IsJunctionNeeded( item->GetPosition() ) )
+        if( !aScreen->IsExplicitJunction( item->GetPosition() ) )
             remove_item( item );
         else
             junctions.push_back( static_cast<SCH_JUNCTION*>( item ) );

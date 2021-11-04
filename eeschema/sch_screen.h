@@ -310,19 +310,38 @@ public:
     size_t CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) const;
 
     /**
-     * Test if a junction is required for the items at \a aPosition on the screen.
+     * Test if a junction is required for the items at \a aPosition on the screen.  Note that
+     * this coule be either an implied junction (bus entry) or an explicit junction (dot).
      *
      * A junction is required at \a aPosition if one of the following criteria is satisfied:
      *  - One wire midpoint and one or more wire endpoints.
      *  - Three or more wire endpoints.
      *  - One wire midpoint and a symbol pin.
      *  - Two or more wire endpoints and a symbol pin.
+     *  - One bus midpoint or endpoint and a bus entry.
      *
      * @param[in] aPosition The position to test.
-     * @param aNew Checks if a _new_ junction is needed, i.e. there isn't one already
      * @return True if a junction is required at \a aPosition.
      */
-    bool IsJunctionNeeded( const wxPoint& aPosition, bool aNew = false ) const;
+    bool IsJunction( const wxPoint& aPosition ) const;
+
+    /**
+     * Indicates that a junction dot is necessary at the given location.  See IsJunctionNeeded
+     * for more info.
+     */
+    bool IsExplicitJunction( const wxPoint& aPosition ) const;
+
+    /**
+     * Indicates that a junction dot is necessary at the given location, and does not yet exist.
+     * See IsJunctionNeeded for more info.
+     */
+    bool IsExplicitJunctionNeeded( const wxPoint& aPosition ) const;
+
+    /**
+     * Indicates that a juction dot may be placed at the given location.  See IsJunctionNeeded
+     * for more info.
+     */
+    bool IsExplicitJunctionAllowed( const wxPoint& aPosition ) const;
 
     /**
      * Test if \a aPosition is a connection point on \a aLayer.
@@ -485,6 +504,10 @@ public:
      * sheet to reuse the same zoom level when back to the sheet using this screen
      */
     double m_LastZoomLevel;
+
+private:
+    bool doIsJunction( const wxPoint& aPosition, bool aBreakCrossings,
+                       bool* aHasExplicitJunctionDot, bool* aHasBusEntry ) const;
 
 private:
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.

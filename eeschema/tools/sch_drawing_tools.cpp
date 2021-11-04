@@ -725,7 +725,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             {
                 if( type == SCH_JUNCTION_T )
                 {
-                    if( !m_frame->GetScreen()->IsJunctionNeeded( cursorPos, true ) )
+                    if( !m_frame->GetScreen()->IsExplicitJunctionAllowed( cursorPos ) )
                     {
                         m_frame->ShowInfoBarError( _( "Junction location contains no joinable "
                                                       "wires and/or pins." ) );

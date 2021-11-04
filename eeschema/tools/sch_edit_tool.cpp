@@ -1018,14 +1018,14 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         }
     }
 
-    for( auto point : pts )
+    for( const wxPoint& point : pts )
     {
         SCH_ITEM* junction = screen->GetItem( point, 0, SCH_JUNCTION_T );
 
         if( !junction )
             continue;
 
-        if( junction->HasFlag( STRUCT_DELETED ) || !screen->IsJunctionNeeded( point ) )
+        if( junction->HasFlag( STRUCT_DELETED ) || !screen->IsExplicitJunction( point ) )
             m_frame->DeleteJunction( junction, appendToUndo );
     }
 
@@ -1682,7 +1682,7 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
     if( !lines.empty() )
     {
-        if( m_frame->GetScreen()->IsJunctionNeeded( cursorPos, true ) )
+        if( m_frame->GetScreen()->IsExplicitJunctionNeeded( cursorPos ) )
             m_frame->AddJunction( m_frame->GetScreen(), cursorPos, true, false );
 
         m_frame->TestDanglingEnds();

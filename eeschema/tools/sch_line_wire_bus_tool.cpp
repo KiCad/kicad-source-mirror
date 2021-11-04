@@ -959,7 +959,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
 
     for( const wxPoint& pt : new_ends )
     {
-        if( m_frame->GetScreen()->IsJunctionNeeded( pt, true ) )
+        if( m_frame->GetScreen()->IsExplicitJunctionNeeded( pt ) )
             m_frame->AddJunction( m_frame->GetScreen(), pt, true, false );
     }
 
@@ -1024,7 +1024,7 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
 
     for( const wxPoint& point : pts )
     {
-        if( m_frame->GetScreen()->IsJunctionNeeded( point, true ) )
+        if( m_frame->GetScreen()->IsExplicitJunctionNeeded( point ) )
             m_frame->AddJunction( m_frame->GetScreen(), point, true, false );
     }
 

@@ -1214,7 +1214,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
             for( auto j = i + 1; j != pts.end(); j++ )
                 TrimWire( *i, *j );
 
-            if( aScreen->IsJunctionNeeded( *i, true ) )
+            if( aScreen->IsExplicitJunctionNeeded( *i ) )
                 AddJunction( aScreen, *i, true, false );
         }
 

@@ -564,7 +564,7 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
 
     bool touching = leftmost_end == rightmost_start;
 
-    if( touching && aCheckJunctions && aScreen->IsJunctionNeeded( leftmost_end ) )
+    if( touching && aCheckJunctions && aScreen->IsJunction( leftmost_end ) )
         return nullptr;
 
     // Make a new segment that merges the 2 segments
