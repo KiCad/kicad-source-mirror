@@ -5,7 +5,7 @@ _HKI( "### Bridged Tee Attenuator\n"
 "___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___L = 10<sup>a/20</up>___<br>\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 "" );
