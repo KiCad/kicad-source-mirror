@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-03 11:35-0700\n"
-"PO-Revision-Date: 2021-10-29 11:11+0000\n"
+"PO-Revision-Date: 2021-11-05 13:01+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5800,7 +5800,6 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "Kopiuje zaznaczone elementy i umieszcza je w schowku"
 
 #: common/tool/actions.cpp:165
-#, fuzzy
 msgid "Paste item(s) from clipboard"
 msgstr "Wklej element(y) ze schowka"
 
@@ -9017,9 +9016,8 @@ msgstr ""
 "identyczne za wyjątkiem numerów pinów."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
-#, fuzzy
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr "Twórz symbol z alternatywnym stylem graficznym (DeMorgan)"
+msgstr "Twórz symbol z alternatywnym stylem graficznym (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
@@ -9079,9 +9077,8 @@ msgstr "Wspólne dla wszystkich elementów składowych symbolu"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
-#, fuzzy
 msgid "Common to all body &styles (De Morgan)"
-msgstr "Wspólne dla wszystkich stylów (DeMorgan)"
+msgstr "Wspólne dla wszystkich stylów (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:51
 msgid "Drawing Properties"
@@ -9107,10 +9104,9 @@ msgid "Delete extra units from symbol?"
 msgstr "Usunąć dodatkowe części z symbolu?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:287
-#, fuzzy
 msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr ""
-"Skasować elementy rysunkowe dla stylu alternatywnego (DeMorgan) z tego "
+"Skasować elementy rysunkowe dla stylu alternatywnego (De Morgan) z tego "
 "symbolu?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:315
@@ -9247,9 +9243,8 @@ msgstr ""
 "symbole nadrzędne."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
-#, fuzzy
 msgid "Has alternate body style (De Morgan)"
-msgstr "Posiada alternatywny styl symbolu (DeMorgan)"
+msgstr "Posiada alternatywny styl symbolu (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
@@ -9649,9 +9644,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
-#, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr "Alternatywne definicje pinów nie są dostępne w symbolach DeMorgan."
+msgstr "Alternatywne definicje pinów nie są dostępne w symbolach De Morgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:283
 msgid "This symbol only has one unit. This control has no effect."
@@ -11352,9 +11346,8 @@ msgid "Unit:"
 msgstr "Jednostka:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
-#, fuzzy
 msgid "Alternate symbol (De Morgan)"
-msgstr "Alternatywny styl symbolu (DeMorgan)"
+msgstr "Alternatywny styl symbolu (De Morgan)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:138
 msgid ""
@@ -16280,32 +16273,26 @@ msgid "Assign a netclass to the net of the selected wire"
 msgstr "Przypisz klasę sieci do sieci wybranego połączenia"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "De Morgan Conversion"
-msgstr "Konwersja DeMorgana"
+msgstr "Konwersja De Morgan"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "Switch between De Morgan representations"
 msgstr "Przełącza pomiędzy reprezentacjami symbolu"
 
 #: eeschema/tools/ee_actions.cpp:458
-#, fuzzy
 msgid "De Morgan Standard"
-msgstr "Standard DeMorgan"
+msgstr "Standard De Morgan"
 
 #: eeschema/tools/ee_actions.cpp:458
-#, fuzzy
 msgid "Switch to standard De Morgan representation"
 msgstr "Przełącza na standardową reprezentację symbolu"
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "De Morgan Alternate"
-msgstr "Alternatywny DeMorgan"
+msgstr "Alternatywny De Morgan"
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "Switch to alternate De Morgan representation"
 msgstr "Przełącza na alternatywną reprezentację symbolu"
 
@@ -19714,7 +19701,6 @@ msgid "Error writing objects to clipboard"
 msgstr "Wystąpił błąd przy zapisie obiektów w schowku"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19732,12 +19718,11 @@ msgstr ""
 "___Z<sub>wy</sub>___ to oczekiwana impedancja wyjściowa w &#x2126;<br>\n"
 "___Z<sub>0</sub> = Z<sub>we</sub> = Z<sub>wy</sub>___\n"
 "\n"
-"___L = 10<sup>a/20</up>___\n"
+"___L = 10<sup>a/20</up>___<br>\n"
 "___R<sub>1</sub> = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19758,13 +19743,12 @@ msgstr ""
 "\n"
 "___L = 10<sup>a/20</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R<sub>2</sub> = (L&minus;1) / 2&middot;&radic;(Z<sub>we</sub> &middot; "
-"Z<sub>wy</sub> / L)___<br>\n"
-"___R<sub>1</sub> = 1 / (A/Z<sub>we</sub> &minus; 1/R<sub>2</sub>)___<br>\n"
-"___R<sub>3</sub> = 1 / (A/Z<sub>wy</sub> &minus; 1/R<sub>2</sub>)___\n"
+"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>we</sub> &middot; Z<sub>wy</"
+"sub> / L)___<br>\n"
+"___R1 = 1 / (A/Z<sub>we</sub> &minus; 1/R2)___<br>\n"
+"___R3 = 1 / (A/Z<sub>wy</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -19780,10 +19764,9 @@ msgstr ""
 "___Z<sub>wy</sub>___ żądana impedancja wyjściowa w &#x2126;  \n"
 "___Z<sub>0</sub> = Z<sub>we</sub> = Z<sub>wy</sub>___\n"
 "\n"
-"___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
+"___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19804,10 +19787,10 @@ msgstr ""
 "\n"
 "___L = 10<sup>a/20</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br>\n"
-"___R<sub>2</sub> = 2&middot;&radic;(L &middot; Z<sub>we</sub> &middot; "
-"Z<sub>wy</sub>) / (L&minus;1)___<br>\n"
-"___R<sub>1</sub> = Z<sub>we</sub> &middot; A &minus; R<sub>2</sub>___<br>\n"
-"___R<sub>3</sub> = Z<sub>wy</sub> &middot; A &minus; R<sub>2</sub>___\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>we</sub> &middot; Z<sub>wy</sub>) /"
+" (L&minus;1)___<br>\n"
+"___R1 = Z<sub>we</sub> &middot; A &minus; R2___<br>\n"
+"___R3 = Z<sub>wy</sub> &middot; A &minus; R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -19815,9 +19798,8 @@ msgid "Attenuation more than %f dB"
 msgstr "Ustawiono tłumienie większe niż %f dB"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
-#, fuzzy
 msgid "Pi"
-msgstr "Pin"
+msgstr "Typu Pi"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Tee"
@@ -26987,38 +26969,34 @@ msgid "Real drill"
 msgstr "Rzeczywiste otwory"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:21
-#, fuzzy
 msgid "Select Manufacturer"
-msgstr "Wybierz warstwę"
+msgstr "Wybierz producenta"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:25
-#, fuzzy, c-format
+#, c-format
 msgid "from %s"
-msgstr "[z %s]"
+msgstr "z %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "Szczegóły"
+msgstr "Szczegóły: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
-#, fuzzy
 msgid "Send project directly"
-msgstr ""
-"Bieżący folder projektu:\n"
-"%s"
+msgstr "Wyślij projekt bezpośrednio"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr ""
+msgstr "Wysyła pliki produkcyjne do wykonawcy wprost z programu KiCad"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr ""
+msgstr "Produkcja PCB"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr ""
+msgstr "Wyślij pliki PCB w celu ich wyprodukowania"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
 msgid "Change Pads on Current Footprint"
@@ -27156,14 +27134,12 @@ msgid "Target Properties"
 msgstr "Właściwości znaku pozycjonującego"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:82
-#, fuzzy
 msgid "Footprint Reference Properties"
-msgstr "Właściwości footprintu"
+msgstr "Właściwości oznaczenia footprintu"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:83
-#, fuzzy
 msgid "Footprint Value Properties"
-msgstr "Właściwości footprintu"
+msgstr "Właściwości wartości footprintu"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:84
 msgid "Footprint Text Properties"
@@ -27476,6 +27452,8 @@ msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
 msgstr ""
+"Pokaż obrysy prześwitu wokół ścieżek, oraz opcjonalnie prześwit przelotki "
+"wokół końca ścieżki podczas trasowania."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
@@ -28686,7 +28664,6 @@ msgid "User9"
 msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board manufacturer's recommendations for solder mask clearance and "
 "minimum web width."
@@ -31614,14 +31591,14 @@ msgid "Through hole pad %s of %s"
 msgstr "Pole lutownicze z otworem na wylot %s z %s"
 
 #: pcbnew/pad.cpp:1151
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "Pole lutownicze %s z %s na %s"
+msgstr "Pole lutownicze %s %s z %s na %s"
 
 #: pcbnew/pad.cpp:1159
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "Pole lutownicze z otworem na wylot %s z %s"
+msgstr "Pole lutownicze z otworem na wylot %s %s z %s"
 
 #: pcbnew/pad.cpp:1594
 msgid "Edge connector"
@@ -33496,7 +33473,6 @@ msgid "Auto-finish Track"
 msgstr "Automatyczne kończenie ścieżki"
 
 #: pcbnew/router/router_tool.cpp:97
-#, fuzzy
 msgid "Automatically finishes laying the current track."
 msgstr "Automatycznie kończy trasowanie bieżącej ścieżki."
 
@@ -33583,11 +33559,10 @@ msgid "Track Corner Mode"
 msgstr "Tryb zaokrąglania ścieżek"
 
 #: pcbnew/router/router_tool.cpp:164
-#, fuzzy
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
 msgstr ""
-"Przełącza pomiędzy stosowaniem kątów ostrych a zaokrągleniami przy łamaniu "
-"ścieżek podczas trasowania."
+"Przełącza pomiędzy stosowaniem kątów ostrych a 45°/90° przy łamaniu ścieżek "
+"podczas trasowania."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
@@ -33714,9 +33689,8 @@ msgstr ""
 "projektowe > Ograniczenia."
 
 #: pcbnew/router/router_tool.cpp:981
-#, fuzzy
 msgid "Blind/buried via need 2 different layers."
-msgstr "Nie zmieniaj pól umieszczonych na innych warstwach"
+msgstr "Przelotki ślepe/zagrzebane wymagają 2 różnych warstw."
 
 #: pcbnew/router/router_tool.cpp:1059
 msgid "Tracks on Copper layers only."
@@ -33759,33 +33733,28 @@ msgid "(no net)"
 msgstr "(brak sieci)"
 
 #: pcbnew/router/router_tool.cpp:2060
-#, fuzzy
 msgid "Free-angle"
-msgstr "kąt"
+msgstr "Kąt dowolny"
 
 #: pcbnew/router/router_tool.cpp:2066
-#, fuzzy
 msgid "45-degree"
 msgstr "Kąt 45 stopni"
 
 #: pcbnew/router/router_tool.cpp:2067
-#, fuzzy
 msgid "45-degree rounded"
-msgstr "Przeciągnij (w trybie 45 stopni)"
+msgstr "Kąt 45 stopni z zaokrągleniem"
 
 #: pcbnew/router/router_tool.cpp:2068
-#, fuzzy
 msgid "90-degree"
-msgstr "stopni"
+msgstr "Kąt 90 stopni"
 
 #: pcbnew/router/router_tool.cpp:2069
 msgid "90-degree rounded"
-msgstr ""
+msgstr "Kąt 90 stopni z zaokrągleniem"
 
 #: pcbnew/router/router_tool.cpp:2074
-#, fuzzy
 msgid "Corner Style"
-msgstr "Styl linii"
+msgstr "Styl łamania"
 
 #: pcbnew/router/router_tool.cpp:2079
 #, c-format
@@ -35972,14 +35941,12 @@ msgid "Switch router to walkaround mode"
 msgstr "Przełącza router w tryb omijania przeszkód"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle Router Mode"
-msgstr "Trasowanie w trybie ropychania"
+msgstr "Przełącz tryb trasowania (cylkicznie)"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle router to the next mode"
-msgstr "Przełącza router w tryb rozpychania ścieżek i przelotek"
+msgstr "Przełącza router w kolejny tryb pracy"
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Set Layer Pair..."
