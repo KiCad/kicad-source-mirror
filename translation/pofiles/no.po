@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-03 11:35-0700\n"
-"PO-Revision-Date: 2021-10-27 02:46+0000\n"
+"PO-Revision-Date: 2021-11-05 13:01+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
@@ -20114,7 +20114,6 @@ msgstr ""
 "* ___R3 = Z <sub> ut </sub> \\ * A - R2___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -20126,11 +20125,11 @@ msgid ""
 msgstr ""
 "## Splittet demper\n"
 "### Demping er 6 dB\n"
-"___Z <sub> i </sub> ___ ønsket inngangsimpedans i & # x2126; <br>\n"
-"___Z <sub> ut </sub> ___ ønsket utgangsimpedans i & # x2126; <br>\n"
-"___Z <sub> inn </sub> = Z <sub> ut </sub> ___\n"
+"___Z <sub>inn</sub>___ er ønsket inngangsimpedans i &#x2126;  \n"
+"___Z <sub>ut</sub>___ ønsket utgangsimpedanse i &#x2126;  \n"
+"___Z <sub>0</sub> = Z<sub>inn</sub> = Z<sub>ut</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z <sub> ut </sub> / 3 ___\n"
+"___R1 = R2 = R3 = Z <sub>0</sub>/3 ___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 #, fuzzy
