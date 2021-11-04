@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-03 11:35-0700\n"
-"PO-Revision-Date: 2021-11-03 14:44+0000\n"
+"PO-Revision-Date: 2021-11-05 13:00+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13169,12 +13169,15 @@ msgid "Manual removal will be required for the file(s) above."
 msgstr ""
 
 #: eeschema/files-io.cpp:1438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "¡No es pot eliminar el fitxer de desat automàtic '%s'!"
+msgstr ""
+"El fitxer mestre de desat automàtic\n"
+"'%s'\n"
+"no s'ha pogut esborrar."
 
 #: eeschema/files-io.cpp:1446
 msgid ""
@@ -28518,9 +28521,8 @@ msgid "Path Substitutions"
 msgstr "Suggeriments dels camins"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "No filename entered"
-msgstr "No s'ha seleccionat cap fitxer!"
+msgstr "No s'ha introduït cap nom de fitxer"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
 msgid "Illegal filename"
