@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-03 11:35-0700\n"
-"PO-Revision-Date: 2021-11-03 14:44+0000\n"
+"PO-Revision-Date: 2021-11-05 13:00+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5817,7 +5817,6 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "Copiar los elementos seleccionados al portapapeles"
 
 #: common/tool/actions.cpp:165
-#, fuzzy
 msgid "Paste item(s) from clipboard"
 msgstr "Pegar elementos desde el portapapeles"
 
@@ -6249,7 +6248,7 @@ msgstr "Editar las variables de entorno de configuración rutas"
 
 #: common/tool/actions.cpp:610
 msgid "Manage Symbol Libraries..."
-msgstr "Gestionar librerías de símbolos..."
+msgstr "Administrar librerías de símbolos..."
 
 #: common/tool/actions.cpp:611
 msgid "Edit the global and project symbol library lists"
@@ -7282,7 +7281,7 @@ msgstr "Mostrar la huella seleccionada el visor de huellas"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
 msgid "Manage Footprint Association Files"
-msgstr "Gestionar archivos de asociación de huellas"
+msgstr "Administrar archivos de asociación de huellas"
 
 #: cvpcb/tools/cvpcb_actions.cpp:61
 msgid ""
@@ -9036,9 +9035,8 @@ msgstr ""
 "sean idénticas con la excepción de los números de los pines."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
-#, fuzzy
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr "Crear el símbolo con un estilo de cuerpo alternativo (DeMorgan)"
+msgstr "Crear el símbolo con un estilo de cuerpo alternativo (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
@@ -9098,9 +9096,8 @@ msgstr "Común a todas las &unidades del símbolo"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
-#, fuzzy
 msgid "Common to all body &styles (De Morgan)"
-msgstr "Común a todos los estilos de cuerpo (DeMorgan)"
+msgstr "Común a todos los e&stilos de cuerpo (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:51
 msgid "Drawing Properties"
@@ -9126,10 +9123,9 @@ msgid "Delete extra units from symbol?"
 msgstr "¿Eliminar las unidades extra del componente?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:287
-#, fuzzy
 msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr ""
-"¿Eliminar los elementos dibujados para el estilo alternativo (DeMorgan) del "
+"¿Eliminar el estilo alternativo de cuerpo alternativo (De Morgan) del "
 "símbolo?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:315
@@ -9267,15 +9263,14 @@ msgstr ""
 "como símbolos raíz."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
-#, fuzzy
 msgid "Has alternate body style (De Morgan)"
-msgstr "Tiene símbolo alternativo (DeMorgan)"
+msgstr "Tiene estilo alternativo de cuerpo (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
 msgstr ""
-"Marque esta opción si el símbolo tiene un estilo de cuerpo alternativo "
-"(DeMorgan)"
+"Marque esta opción si el símbolo tiene un estilo de cuerpo alternativo (De "
+"Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:173
 msgid "Define as power symbol"
@@ -9668,11 +9663,10 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
-#, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
 msgstr ""
 "Las asignaciones de pines alternativas no están disponibles para los "
-"símbolos DeMorgan."
+"símbolos De Morgan."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:283
 msgid "This symbol only has one unit. This control has no effect."
@@ -11375,9 +11369,8 @@ msgid "Unit:"
 msgstr "Unidad:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
-#, fuzzy
 msgid "Alternate symbol (De Morgan)"
-msgstr "Símbolo alternativo (DeMorgan)"
+msgstr "Símbolo alternativo (De Morgan)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:138
 msgid ""
@@ -14246,13 +14239,13 @@ msgstr ""
 "Fijando el identificador de librería del símbolo de esquema '%s %s' a '%s'."
 
 #: eeschema/sch_screen.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
-"Referencia '%s' de identificador de librería de símbolo de esquema es "
-"inválida. No se pudo vincular el símbolo de librería."
+"El identificador de biblioteca de la referencia de símbolo de esquema '%s' "
+"es inválido. No se pudo vincular el símbolo de librería."
 
 #: eeschema/sch_screen.cpp:630
 #, c-format
@@ -15237,7 +15230,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:732
 msgid "Manage symbol libraries"
-msgstr "Gestionar bibliotecas de símbolos"
+msgstr "Administrar bibliotecas de símbolos"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:743
 msgid ""
@@ -15320,7 +15313,7 @@ msgid ""
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
 "La configuración actual no incluye la librería de símbolos '%s'.\n"
-"Utilice 'Gestionar librerías de símbolos' para editar la configuración."
+"Utilice 'Administrar librerías de símbolos' para editar la configuración."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1189
 #: eeschema/symbol_viewer_frame.cpp:395
@@ -15335,7 +15328,7 @@ msgid ""
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
 "No se ha activado la librería '%s' en la configuración actual.\n"
-"Utilice 'Gestionar librerías de símbolos' para editar la configuración."
+"Utilice 'Administrar librerías de símbolos' para editar la configuración."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1200
 #: eeschema/symbol_viewer_frame.cpp:402
@@ -16320,34 +16313,28 @@ msgid "Assign a netclass to the net of the selected wire"
 msgstr "Asignar una clase de red a la red del cable seleccionado"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "De Morgan Conversion"
-msgstr "Conversión de DeMorgan"
+msgstr "Conversión de De Morgan"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "Switch between De Morgan representations"
-msgstr "Cambiar entre las representaciones de DeMorgan"
+msgstr "Cambiar entre las representaciones de De Morgan"
 
 #: eeschema/tools/ee_actions.cpp:458
-#, fuzzy
 msgid "De Morgan Standard"
-msgstr "Estándar de DeMorgan"
+msgstr "Estándar de De Morgan"
 
 #: eeschema/tools/ee_actions.cpp:458
-#, fuzzy
 msgid "Switch to standard De Morgan representation"
-msgstr "Cambiar a la representación estándar de DeMorgan"
+msgstr "Cambiar a la representación estándar de De Morgan"
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "De Morgan Alternate"
-msgstr "Alternativo de DeMorgan"
+msgstr "Alternativo de De Morgan"
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "Switch to alternate De Morgan representation"
-msgstr "Cambiar a la representación alternativa de DeMorgan"
+msgstr "Cambiar a la representación alternativa de De Morgan"
 
 #: eeschema/tools/ee_actions.cpp:468
 msgid "Change to Label"
@@ -16557,7 +16544,7 @@ msgstr "Definiciones de bus..."
 
 #: eeschema/tools/ee_actions.cpp:611
 msgid "Manage bus definitions"
-msgstr "Gestionar las definiciones de bus"
+msgstr "Administrar las definiciones de bus"
 
 #: eeschema/tools/ee_actions.cpp:616
 msgid "Export Drawing to Clipboard"
@@ -17338,12 +17325,11 @@ msgstr "(El formato decimal no usa estos ajustes)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "Usually: 3:3 in mm and 2:4 in inches"
-msgstr ""
+msgstr "Normalmente: 3:3 en mm y 2:4 en pulgadas"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:70
-#, fuzzy
 msgid "Format for mm"
-msgstr "Formato"
+msgstr "Formato para mm"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:74
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:84
@@ -17411,9 +17397,8 @@ msgid ":"
 msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:90
-#, fuzzy
 msgid "Format for inches"
-msgstr "Preferencias de formato"
+msgstr "Formato para pulgadas"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:22
 msgid "Full size"
@@ -17528,65 +17513,53 @@ msgid "Gerber files (.g* .lgr .pho)"
 msgstr "Archivos Gerber (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:145
-#, fuzzy
 msgid "Top layer"
-msgstr "A la capa:"
+msgstr "Capa superior"
 
 #: gerbview/files.cpp:146
-#, fuzzy
 msgid "Bottom layer"
-msgstr "Capa Inferior"
+msgstr "Capa inferior"
 
 #: gerbview/files.cpp:147
-#, fuzzy
 msgid "Bottom solder resist"
-msgstr "Pasta de soldadura inferior"
+msgstr "Máscara de soldadura inferior"
 
 #: gerbview/files.cpp:148
-#, fuzzy
 msgid "Top solder resist"
-msgstr "Pasta de soldadura superior"
+msgstr "Máscara de soldadura superior"
 
 #: gerbview/files.cpp:149
-#, fuzzy
 msgid "Bottom overlay"
-msgstr "Capa Inferior"
+msgstr "Serigrafía inferior"
 
 # Pendiente de contexto
 #: gerbview/files.cpp:150
-#, fuzzy
 msgid "Top overlay"
-msgstr "Recubrimiento del trazo"
+msgstr "Serigrafía superior"
 
 #: gerbview/files.cpp:151
-#, fuzzy
 msgid "Bottom paste"
-msgstr "Capa Inferior"
+msgstr "Pasta de soldadura inferior"
 
 #: gerbview/files.cpp:152
-#, fuzzy
 msgid "Top paste"
 msgstr "Pasta de soldadura superior"
 
 #: gerbview/files.cpp:153
-#, fuzzy
 msgid "Keep-out layer"
-msgstr "Mantener capas de z&onas no permitidas"
+msgstr "Capa de área restringida"
 
 #: gerbview/files.cpp:154
-#, fuzzy
 msgid "Mechanical layers"
-msgstr "Capas técnicas:"
+msgstr "Capas mecánicas"
 
 #: gerbview/files.cpp:155
-#, fuzzy
 msgid "Top Pad Master"
-msgstr "Pasta de soldadura superior"
+msgstr "Pads superiores"
 
 #: gerbview/files.cpp:156
-#, fuzzy
 msgid "Bottom Pad Master"
-msgstr "Pasta de soldadura inferior"
+msgstr "Pads inferiores"
 
 #: gerbview/files.cpp:174
 msgid "Open Gerber File(s)"
@@ -17780,9 +17753,8 @@ msgid "GerbView"
 msgstr "GerbView"
 
 #: gerbview/gerbview_frame.cpp:1064
-#, fuzzy
 msgid "Excellon Options"
-msgstr "Opciones de iconos"
+msgstr "Opciones de Excellon"
 
 #: gerbview/job_file_reader.cpp:157
 msgid "This job file uses an outdated format. Please recreate it."
@@ -17815,9 +17787,9 @@ msgid "Open Recent Zip File"
 msgstr "Abrir archivo zip reciente"
 
 #: gerbview/readgerb.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found"
-msgstr "No se ha encontrado el archivo '%s'."
+msgstr "No se ha encontrado el archivo '%s'"
 
 #: gerbview/readgerb.cpp:88
 msgid ""
@@ -18250,9 +18222,8 @@ msgid "Reset all settings on this page to their default"
 msgstr "Restablecer todos los ajustes de esta página a su valor predeterminado"
 
 #: include/wxstream_helper.h:46
-#, fuzzy
 msgid "Failed to output data"
-msgstr "No se pudieron generar datos."
+msgstr "Fallo en la salida de datos"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
 msgid "<h1>Template Selector</h1>"
@@ -18314,7 +18285,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr ""
+msgstr "Administrar paquetes descargables de KiCad y repositorios de terceros"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -18498,83 +18469,80 @@ msgstr "Abrir carpeta de proyecto en el explorador"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
 msgid "Please enter fully qualified repository url"
-msgstr ""
+msgstr "Introduzca la URL completa del repositorio"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:67
-#, fuzzy
 msgid "Add repository"
-msgstr "Archivo de Github"
+msgstr "Añadir repositorio"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-#, fuzzy
 msgid "Manage Repositores"
-msgstr "Gestionar las definiciones de bus"
+msgstr "Administrar repositorios"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
-#, fuzzy, c-format
+#, c-format
 msgid "Plugins (%d)"
-msgstr "Complementos"
+msgstr "Complementos (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Libraries (%d)"
-msgstr "Librerías"
+msgstr "Librerías (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Color themes (%d)"
-msgstr "Tema de color:"
+msgstr "Temas de color (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:315
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
 #, c-format
 msgid "Repository (%d)"
-msgstr ""
+msgstr "Repositorio (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:72
 #: kicad/pcm/dialogs/panel_package.cpp:76
 #: kicad/pcm/dialogs/panel_package_base.cpp:65
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:108
 msgid "Install"
-msgstr ""
+msgstr "Instalar"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:105 kicad/pcm/dialogs/panel_package.cpp:80
 msgid "Uninstall"
-msgstr ""
+msgstr "Desinstalar"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:160
-#, fuzzy
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
-msgstr "¿Está seguro de que quiere eliminar los elementos seleccionados?"
+msgstr ""
+"¿Está seguro de que quiere cerrar el administrador de paquetes y descartar "
+"los cambios pendientes?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:162
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "Administrador de complementos y contenido"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:235
-#, fuzzy
 msgid "Choose package file"
-msgstr "Archivo colocación lado cobre:"
+msgstr "Elija el archivo de paquete"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:330
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:117
 #, c-format
 msgid "Pending (%d)"
-msgstr ""
+msgstr "Pendiente (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:365
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:60
 #, c-format
 msgid "Installed (%d)"
-msgstr ""
+msgstr "Instalado (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage"
-msgstr "Administrador de capas"
+msgstr "Administrar"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:82
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
@@ -18588,84 +18556,74 @@ msgid "Package"
 msgstr "Empaquetado"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
-#, fuzzy
 msgid "Repository"
-msgstr "Archivo de Github"
+msgstr "Repositorio"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:103
-#, fuzzy
 msgid "Discard action"
-msgstr "Descartar cambios"
+msgstr "Descartar acción"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
-#, fuzzy
 msgid "Install from file..."
-msgstr "Imposble mover el archivo"
+msgstr "Instalar desde un archivo..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:136
 msgid "Apply changes"
 msgstr "Aplicar cambios"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:139
-#, fuzzy
 msgid "Discard changes"
 msgstr "Descartar cambios"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:73
 msgid "Plugin And Content Manager"
-msgstr ""
+msgstr "Administrador de complementos y contenido"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
 msgid "Downloaded %lld/%lld Kb"
-msgstr ""
+msgstr "Descargado %lld/%lld Kb"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:150
 msgid "All downloads finished"
-msgstr ""
+msgstr "Todas las descargas terminadas"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download progress"
-msgstr "Descargando librerías"
+msgstr "Progreso de descarga"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
-#, fuzzy
 msgid "Waiting..."
-msgstr "Cargando..."
+msgstr "Esperando..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall progress"
-msgstr "Propiedades del material:"
+msgstr "Progreso general"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
-msgstr ""
+msgstr "Detalles"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
-#, fuzzy
 msgid "Applying package changes"
-msgstr "Aplicar cambios"
+msgstr "Aplicando cambios de paquetes"
 
 #: kicad/pcm/dialogs/panel_package.cpp:84
-#, fuzzy
 msgid "Pending install"
-msgstr "Opciones de representación"
+msgstr "Instalación pendiente"
 
 #: kicad/pcm/dialogs/panel_package.cpp:88
-#, fuzzy
 msgid "Pending uninstall"
-msgstr "Motor de renderizado"
+msgstr "Desinstalación pendiente"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:147
 msgid "Metadata"
-msgstr ""
+msgstr "Metadatos"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:154
 #, c-format
 msgid "Package identifier: %s\n"
-msgstr ""
+msgstr "Identificador de paquete: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
 #, c-format
@@ -18675,70 +18633,67 @@ msgstr "Licencia: %s\n"
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
 msgid "Tags: %s\n"
-msgstr ""
+msgstr "Etiquetas: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:184
 msgid "Author"
-msgstr ""
+msgstr "Autor"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:187
 msgid "Maintainer"
-msgstr ""
+msgstr "Mantenedor"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:191
-#, fuzzy
 msgid "Resources"
-msgstr "Intercambiar fuentes"
+msgstr "Recursos"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:266
 msgid "Pick a package on the left panel to view it's description."
-msgstr ""
+msgstr "Elija un paquete en el panel izquierdo para ver su descripción."
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:342
 msgid "Package download url is not specified"
-msgstr ""
+msgstr "URL de descarga del paquete no especificada"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:343
-#, fuzzy
 msgid "Error downloading package"
-msgstr "Error al cargar el editor."
+msgstr "Error al descargar el paquete"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:352
-#, fuzzy
 msgid "Save package"
-msgstr "Guardar cambios"
+msgstr "Guardar paquete"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:364
-#, fuzzy
 msgid "Downloading package"
-msgstr "Descargando librerías"
+msgstr "Descargando paquete"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:380
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
 msgstr ""
+"No se ha podido verificar la integridad del paquete descargado, el hash no "
+"coincide. ¿Está seguro de que quiere conservar este archivo?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:382
-#, fuzzy
 msgid "Keep downloaded file"
-msgstr "Área restringida para zonas de cobre"
+msgstr "Conservar archivo descargado"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:419
 msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
 msgstr ""
+"La versión de este paquete es incompatible con tu versión de KiCad o "
+"plataforma. ¿Está seguro de que quiere instalarlo de todas formas?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:421
-#, fuzzy
 msgid "Install package"
-msgstr "En empaquetado"
+msgstr "Instalar paquete"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:64
-#, fuzzy
 msgid "Show all versions"
-msgstr "Mostrar todas la vías"
+msgstr "Mostrar todas las versiones"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
 #, fuzzy
