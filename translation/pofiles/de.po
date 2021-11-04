@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-03 11:35-0700\n"
-"PO-Revision-Date: 2021-11-04 21:27+0000\n"
-"Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
+"PO-Revision-Date: 2021-11-05 13:00+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -675,7 +675,7 @@ msgstr "Bestückungsdrucklagen einblenden"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Bestückungsdruck auf Löststoppmasken-Kanten aussparen"
+msgstr "Bestückungsdruck an Lötstoppmasken-Kanten beschneiden"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
@@ -24227,7 +24227,7 @@ msgstr "Textelemente"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
 #: pcbnew/fp_text_grid_table.cpp:97
 msgid "Keep Upright"
-msgstr "Aufrecht"
+msgstr "Aufrecht halten"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
@@ -25059,7 +25059,7 @@ msgstr "Elemente entfernen"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:55
 msgid "Silk Layers"
-msgstr "Bestückungslagen"
+msgstr "Bestückungsdrucklagen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:215
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:134
@@ -25071,7 +25071,7 @@ msgstr "Kupferlagen"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:135
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:57
 msgid "Edge Cuts"
-msgstr "Edge Cuts (Platinenumriss)"
+msgstr "Platinenumriss"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:217
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:136
@@ -25117,7 +25117,7 @@ msgstr "Textstärke"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:253
 msgid "Upright"
-msgstr "Senkrecht"
+msgstr "Aufrecht"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Other footprint text items"
@@ -25152,7 +25152,7 @@ msgstr "Anwenden von spezifischen Werten:"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:202
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:211
 msgid "Keep upright"
-msgstr "Aufrecht"
+msgstr "Aufrecht halten"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:226
 msgid "Set to layer default values:"
@@ -25323,11 +25323,11 @@ msgstr "Alles abwählen"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:49
 msgid "Layers setup"
-msgstr "Einrichtung Lagen"
+msgstr "Lagen-Einrichtung"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:52
 msgid "Text and graphics default properties"
-msgstr "Standardeigenschaften Text und Grafik"
+msgstr "Vorgaben für Text- und Grafikeigenschaften"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:55
 msgid "Design rules"
@@ -25339,7 +25339,7 @@ msgstr "Vordefinierte Leiterbahn- und Via-Größen"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 msgid "Solder mask/paste defaults"
-msgstr "Standards Lötstoppmaske/-paste"
+msgstr "Vorgaben für Lötstoppmaske/-paste"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:243
 #: pcbnew/dialogs/dialog_imported_layers.cpp:251
@@ -25395,7 +25395,7 @@ msgstr "<<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:73
 msgid "Remove all matched layers."
-msgstr "Alle zugeordneten Lagen entfernen."
+msgstr "Entfernt alle zugeordneten Lagen."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:81
 msgid "Matched Layers"
@@ -25409,7 +25409,7 @@ msgstr "Lagen automatisch zuordnen"
 msgid "Automatically match any unmatched layers to their KiCad equivalent."
 msgstr ""
 "Nicht übereinstimmende Lagen automatisch mit ihrem KiCad-Äquivalent "
-"abglichen."
+"abgleichen."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:65
 msgid "Edit Mapping of Imported Layers"
@@ -25433,21 +25433,21 @@ msgstr "Auswahl eines Kupferlagenpaares"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:100
 msgid "Rotate around item anchor"
-msgstr "Rotieren um dem Auswahlmittelpunkt"
+msgstr "Drehen um den Elementanker"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:103
 msgid "Rotate around selection center"
-msgstr "Rotieren um dem Auswahlmittelpunkt"
+msgstr "Drehen um den Auswahlmittelpunkt"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:106
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around local coordinates origin"
-msgstr "Rotieren um den lokal definierten Ursprungspunkt"
+msgstr "Drehen um den lokalen Koordinatenursprung"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:109
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around drill/place origin"
-msgstr "Rotieren um das Bohrloch/Platzierungsmittelpunkt"
+msgstr "Drehen um den Drill/Place-Ursprung"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:203
 #: pcbnew/dialogs/dialog_position_relative.cpp:162
@@ -25474,7 +25474,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around center of selection"
-msgstr "Rotieren um dem Mittelpunkt der Auswahl"
+msgstr "Drehen um den Mittelpunkt der Auswahl"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:84
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:116
@@ -25487,11 +25487,11 @@ msgstr "Element verschieben"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:77 pcbnew/netinfo_item.cpp:74
 msgid "Net Name"
-msgstr "Netz Name"
+msgstr "Netzname"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:78
 msgid "Pad Count"
-msgstr "Pad Anzahl"
+msgstr "Pad-Anzahl"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:79
 msgid "Via Count"
@@ -25668,7 +25668,7 @@ msgstr "Löschen von Leiterbahnen die mehrere Netze kurzschließen"
 
 #: pcbnew/dialogs/dialog_netlist_base.h:67
 msgid "Import Netlist"
-msgstr "Import Netzliste"
+msgstr "Netzliste importieren"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:57
 msgid "Outline style:"
@@ -26416,32 +26416,31 @@ msgstr "Plotformat:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
 msgid "Include Layers"
-msgstr "Lagen einbeziehen"
+msgstr "Lagenauswahl"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
-msgstr "Umrahmung und Schriftfeld plotten"
+msgstr "Blattrahmen und Schriftfeld plotten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
 msgid "Plot footprint values"
-msgstr "Plotte Footprintwerte"
+msgstr "Footprintwerte plotten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:84
 msgid "Plot reference designators"
-msgstr "Plotte Referenzbezeichner"
+msgstr "Referenzbezeichner plotten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Force plotting of invisible values / refs"
-msgstr "Erzwinge das Plotten unsichtbarer Werte/Referenzen"
+msgstr "Plotten unsichtbarer Werte/Referenzen erzwingen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:89
 msgid "Force plot invisible footprint values and reference designators"
-msgstr ""
-"Erzwinge das Plotten unsichtbarer Werte von Footprints und/oder Referenzen"
+msgstr "Plotten unsichtbarer Werte von Footprints und/oder Referenzen erzwingen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Plot Edge.Cuts on all layers"
-msgstr "Plotte Edge.Cuts auf allen Lagen"
+msgstr "Edge.Cuts auf allen Lagen plotten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Do not plot the contents of the PCB edge layer on any other layers."
@@ -26454,7 +26453,8 @@ msgstr "Pads auf Fabrikationslagen skizzieren"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr "Pad-Konturen beim Plotten in F.Fab- und B.Fab-Lagen einschließen"
+msgstr ""
+"Pad-Konturen in F.Fab- und B.Fab-Lagen werden in die Plot-Ausgabe einbezogen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Do not tent vias"
@@ -26462,7 +26462,7 @@ msgstr "Vias nicht abdecken"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Remove soldermask on vias"
-msgstr "Entferne Lötstoppmaske auf Vias"
+msgstr "Entfernt Lötstopplack auf Vias"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:109
 msgid ""
@@ -26548,7 +26548,7 @@ msgstr "Datei > Platinenkonfiguration..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:197
 msgid "Gerber Options"
-msgstr "Gerber Optionen"
+msgstr "Gerber-Optionen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:204
 msgid "Use Protel filename extensions"
@@ -26580,7 +26580,7 @@ msgstr "Lötstoppmaske vom Bestückungsdruck subtrahieren"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "Remove silkscreen from areas without soldermask"
-msgstr "Entferne Bestückungsdruck von Bereichen ohne Lötstoppmaske"
+msgstr "Entfernt Bestückungsdruck aus Bereichen ohne Lötstopplack"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -27132,38 +27132,34 @@ msgid "Real drill"
 msgstr "Realer Bohrdurchmesser"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:21
-#, fuzzy
 msgid "Select Manufacturer"
-msgstr "Lage wählen"
+msgstr "Fertiger wählen"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:25
-#, fuzzy, c-format
+#, c-format
 msgid "from %s"
-msgstr "[aus %s]"
+msgstr "aus %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "Details"
+msgstr "Details: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
-#, fuzzy
 msgid "Send project directly"
-msgstr ""
-"Aktuelles Projektverzeichnis:\n"
-"%s"
+msgstr "Projekt direkt absenden"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr ""
+msgstr "Versendet Produktionsdaten aus KiCad an den Fertiger"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr ""
+msgstr "Platine produzieren"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr ""
+msgstr "Platinen-Produktionsdaten versenden"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
 msgid "Change Pads on Current Footprint"
@@ -28846,7 +28842,6 @@ msgid "User9"
 msgstr "Benutzer9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board manufacturer's recommendations for solder mask clearance and "
 "minimum web width."
