@@ -521,7 +521,7 @@ int ERC_TESTER::TestPinToPin()
 
                 PIN_ERROR erc = settings.GetPinMapValue( refType, testType );
 
-                if( erc != PIN_ERROR::OK )
+                if( erc != PIN_ERROR::OK && settings.IsTestEnabled( ERCE_PIN_TO_PIN_WARNING ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem =
                             ERC_ITEM::Create( erc == PIN_ERROR::WARNING ? ERCE_PIN_TO_PIN_WARNING :
@@ -531,11 +531,11 @@ int ERC_TESTER::TestPinToPin()
 
                     ercItem->SetErrorMessage(
                             wxString::Format( _( "Pins of type %s and %s are connected" ),
-                                    ElectricalPinTypeGetText( refType ),
-                                    ElectricalPinTypeGetText( testType ) ) );
+                                              ElectricalPinTypeGetText( refType ),
+                                              ElectricalPinTypeGetText( testType ) ) );
 
-                    SCH_MARKER* marker =
-                            new SCH_MARKER( ercItem, refPin->GetTransformedPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem,
+                                                         refPin->GetTransformedPosition() );
                     pinToScreenMap[refPin]->Append( marker );
                     errors++;
                 }
@@ -545,13 +545,18 @@ int ERC_TESTER::TestPinToPin()
         if( needsDriver && !hasDriver )
         {
             int err_code = ispowerNet ? ERCE_POWERPIN_NOT_DRIVEN : ERCE_PIN_NOT_DRIVEN;
-            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( err_code );
 
-            ercItem->SetItems( needsDriver );
+            if( settings.IsTestEnabled( err_code ) )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( err_code );
 
-            SCH_MARKER* marker = new SCH_MARKER( ercItem, needsDriver->GetTransformedPosition() );
-            pinToScreenMap[needsDriver]->Append( marker );
-            errors++;
+                ercItem->SetItems( needsDriver );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem,
+                                                     needsDriver->GetTransformedPosition() );
+                pinToScreenMap[needsDriver]->Append( marker );
+                errors++;
+            }
         }
     }
 

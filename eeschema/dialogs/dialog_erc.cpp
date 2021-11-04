@@ -381,8 +381,12 @@ void DIALOG_ERC::testErc()
         tester.TestMultUnitPinConflicts();
 
     // Test pins on each net against the pin connection table
-    if( settings.IsTestEnabled( ERCE_PIN_TO_PIN_ERROR ) )
+    if( settings.IsTestEnabled( ERCE_PIN_TO_PIN_ERROR )
+            || settings.IsTestEnabled( ERCE_POWERPIN_NOT_DRIVEN )
+            || settings.IsTestEnabled( ERCE_PIN_NOT_DRIVEN ) )
+    {
         tester.TestPinToPin();
+    }
 
     // Test similar labels (i;e. labels which are identical when
     // using case insensitive comparisons)

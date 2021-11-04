@@ -2209,11 +2209,13 @@ int CONNECTION_GRAPH::RunERC()
                 error_count++;
         }
 
-        // The following checks are always performed since they don't currently
-        // have an option exposed to the user
-
-        if( !ercCheckNoConnects( subgraph ) )
-            error_count++;
+        if( settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED )
+                || settings.IsTestEnabled( ERCE_NOCONNECT_NOT_CONNECTED )
+                || settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
+        {
+            if( !ercCheckNoConnects( subgraph ) )
+                error_count++;
+        }
 
         if( settings.IsTestEnabled( ERCE_LABEL_NOT_CONNECTED )
                 || settings.IsTestEnabled( ERCE_GLOBLABEL ) )
@@ -2224,8 +2226,11 @@ int CONNECTION_GRAPH::RunERC()
     }
 
     // Hierarchical sheet checking is done at the schematic level
-    if( settings.IsTestEnabled( ERCE_HIERACHICAL_LABEL ) )
+    if( settings.IsTestEnabled( ERCE_HIERACHICAL_LABEL )
+            || settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
+    {
         error_count += ercCheckHierSheets();
+    }
 
     return error_count;
 }
@@ -2545,7 +2550,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         // Any subgraph that contains both a pin and a no-connect should not
         // contain any other driving items.
 
-        for( auto item : aSubgraph->m_items )
+        for( SCH_ITEM* item : aSubgraph->m_items )
         {
             switch( item->Type() )
             {
@@ -2589,7 +2594,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             ok = false;
         }
 
-        if( !has_other_items && settings.IsTestEnabled(ERCE_NOCONNECT_NOT_CONNECTED ) )
+        if( !has_other_items && settings.IsTestEnabled( ERCE_NOCONNECT_NOT_CONNECTED ) )
         {
             std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NOCONNECT_NOT_CONNECTED );
             ercItem->SetItems( aSubgraph->m_no_connect );
@@ -2880,7 +2885,8 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
 
             for( SCH_SHEET_PIN* pin : parentSheet->GetPins() )
             {
-                pins[pin->GetText()] = pin;
+                if( settings.IsTestEnabled( ERCE_HIERACHICAL_LABEL ) )
+                    pins[pin->GetText()] = pin;
 
                 if( pin->IsDangling() && settings.IsTestEnabled( ERCE_PIN_NOT_CONNECTED ) )
                 {
@@ -2894,56 +2900,59 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
                 }
             }
 
-            std::set<wxString> matchedPins;
-
-            for( SCH_ITEM* subItem : parentSheet->GetScreen()->Items() )
+            if( settings.IsTestEnabled( ERCE_HIERACHICAL_LABEL ) )
             {
-                if( subItem->Type() == SCH_HIER_LABEL_T )
+                std::set<wxString> matchedPins;
+
+                for( SCH_ITEM* subItem : parentSheet->GetScreen()->Items() )
                 {
-                    SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( subItem );
+                    if( subItem->Type() == SCH_HIER_LABEL_T )
+                    {
+                        SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( subItem );
 
-                    if( !pins.count( label->GetText() ) )
-                        labels[label->GetText()] = label;
-                    else
-                        matchedPins.insert( label->GetText() );
+                        if( !pins.count( label->GetText() ) )
+                            labels[label->GetText()] = label;
+                        else
+                            matchedPins.insert( label->GetText() );
+                    }
                 }
-            }
 
-            for( const wxString& matched : matchedPins )
-                pins.erase( matched );
+                for( const wxString& matched : matchedPins )
+                    pins.erase( matched );
 
-            for( const std::pair<const wxString, SCH_SHEET_PIN*>& unmatched : pins )
-            {
-                wxString msg = wxString::Format( _( "Sheet pin %s has no matching hierarchical "
-                                                    "label inside the sheet" ),
-                                                 UnescapeString( unmatched.first ) );
+                for( const std::pair<const wxString, SCH_SHEET_PIN*>& unmatched : pins )
+                {
+                    wxString msg = wxString::Format( _( "Sheet pin %s has no matching hierarchical "
+                                                        "label inside the sheet" ),
+                                                     UnescapeString( unmatched.first ) );
 
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_HIERACHICAL_LABEL );
-                ercItem->SetItems( unmatched.second );
-                ercItem->SetErrorMessage( msg );
-                ercItem->SetIsSheetSpecific();
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_HIERACHICAL_LABEL );
+                    ercItem->SetItems( unmatched.second );
+                    ercItem->SetErrorMessage( msg );
+                    ercItem->SetIsSheetSpecific();
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, unmatched.second->GetPosition() );
-                sheet.LastScreen()->Append( marker );
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem, unmatched.second->GetPosition() );
+                    sheet.LastScreen()->Append( marker );
 
-                errors++;
-            }
+                    errors++;
+                }
 
-            for( const std::pair<const wxString, SCH_HIERLABEL*>& unmatched : labels )
-            {
-                wxString msg = wxString::Format( _( "Hierarchical label %s has no matching "
-                                                    "sheet pin in the parent sheet" ),
-                                                 UnescapeString( unmatched.first ) );
+                for( const std::pair<const wxString, SCH_HIERLABEL*>& unmatched : labels )
+                {
+                    wxString msg = wxString::Format( _( "Hierarchical label %s has no matching "
+                                                        "sheet pin in the parent sheet" ),
+                                                     UnescapeString( unmatched.first ) );
 
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_HIERACHICAL_LABEL );
-                ercItem->SetItems( unmatched.second );
-                ercItem->SetErrorMessage( msg );
-                ercItem->SetIsSheetSpecific();
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_HIERACHICAL_LABEL );
+                    ercItem->SetItems( unmatched.second );
+                    ercItem->SetErrorMessage( msg );
+                    ercItem->SetIsSheetSpecific();
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, unmatched.second->GetPosition() );
-                parentSheet->GetScreen()->Append( marker );
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem, unmatched.second->GetPosition() );
+                    parentSheet->GetScreen()->Append( marker );
 
-                errors++;
+                    errors++;
+                }
             }
         }
     }
