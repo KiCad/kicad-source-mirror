@@ -741,7 +741,7 @@ void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
                 if( file.open )
                 {
                     progressReporter.Update( i++,
-                            wxString::Format( _( "Restoring \"%s\"" ), file.fileName ) );
+                            wxString::Format( _( "Restoring '%s'" ), file.fileName ) );
 
                     wxFileName fn( file.fileName );
 

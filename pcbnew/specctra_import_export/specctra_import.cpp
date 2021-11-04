@@ -442,7 +442,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                     'wire'.
 
                 wxString netId = FROM_UTF8( wire->net_id.c_str() );
-                THROW_IO_ERROR( wxString::Format( _("Unsupported wire shape: \"%s\" for net: \"%s\""),
+                THROW_IO_ERROR( wxString::Format( _("Unsupported wire shape: '%s' for net: '%s'"),
                                                     DLEX::GetTokenString(shape).GetData(),
                                                     netId.GetData()
                     ) );

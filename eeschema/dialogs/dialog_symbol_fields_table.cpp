@@ -997,7 +997,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
     {
         if( fieldName == m_dataModel->GetColLabelValue( i ) )
         {
-            DisplayError( this, wxString::Format( _( "Field name \"%s\" already in use." ),
+            DisplayError( this, wxString::Format( _( "Field name '%s' already in use." ),
                                                   fieldName ) );
             return;
         }

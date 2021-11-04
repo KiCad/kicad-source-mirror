@@ -667,7 +667,7 @@ bool FIELDS_GRID_TABLE<T>::BoolFromString( wxString aValue ) const
     }
     else
     {
-        wxFAIL_MSG( wxString::Format( "string \"%s\" can't be converted to boolean "
+        wxFAIL_MSG( wxString::Format( "string '%s' can't be converted to boolean "
                                       "correctly, it will have been perceived as FALSE", aValue ) );
         return false;
     }

@@ -60,7 +60,7 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
     if( extension == "xsl" )
     {
         m_info = readHeader( "-->" );
-        m_cmd = wxString::Format( "xsltproc -o \"%%O%s\" \"%s\" \"%%I\"",
+        m_cmd = wxString::Format( "xsltproc -o '%%O%s' '%s' '%%I'",
                                   getOutputExtension( m_info ), m_file.GetFullPath() );
     }
     else if( extension == "py" )
@@ -76,7 +76,7 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
         if( interpreter.IsEmpty() )
             interpreter = wxT( "python" );
 
-        m_cmd = wxString::Format( "%s \"%s\" \"%%I\" \"%%O%s\"", interpreter, m_file.GetFullPath(),
+        m_cmd = wxString::Format( "%s '%s' '%%I' '%%O%s'", interpreter, m_file.GetFullPath(),
                                   getOutputExtension( m_info ) );
 #endif
     }

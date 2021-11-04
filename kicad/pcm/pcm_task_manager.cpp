@@ -207,7 +207,7 @@ bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPack
             continue;
         }
 
-        // m_reporter->Report( wxString::Format( _( "Extracting file \"%s\"\n" ), entry->GetName() ),
+        // m_reporter->Report( wxString::Format( _( "Extracting file '%s'\n" ), entry->GetName() ),
         //                     RPT_SEVERITY_INFO );
 
         // Transform paths from

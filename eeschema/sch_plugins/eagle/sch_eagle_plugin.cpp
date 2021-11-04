@@ -1095,7 +1095,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
             }
             else // DEFAULT
             {
-                // THROW_IO_ERROR( wxString::Format( _( "XML node \"%s\" unknown" ), nodeName ) );
+                // THROW_IO_ERROR( wxString::Format( _( "XML node '%s' unknown" ), nodeName ) );
             }
 
             // Get next segment attribute

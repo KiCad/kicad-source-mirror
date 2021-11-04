@@ -80,7 +80,7 @@ PyObject* PYTHON_ACTION_PLUGIN::CallMethod( const char* aMethod, PyObject* aArgl
     }
     else
     {
-        wxString msg = wxString::Format( _( "Method \"%s\" not found, or not callable" ), aMethod );
+        wxString msg = wxString::Format( _( "Method '%s' not found, or not callable" ), aMethod );
         wxMessageBox( msg, _( "Unknown Method" ), wxICON_ERROR | wxOK );
     }
 
