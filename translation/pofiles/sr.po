@@ -4,23 +4,22 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-03 11:35-0700\n"
-"PO-Revision-Date: 2021-06-24 04:32+0000\n"
+"PO-Revision-Date: 2021-11-05 13:01+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
-msgstr "Сви фајлови"
+msgstr "Све датотеке"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:357
 #, fuzzy
@@ -75,7 +74,7 @@ msgstr "Сви бакарни слојеви"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:841
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "Поједностави контуре рупа"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:870
 msgid "Build Tech layers"
@@ -92,7 +91,7 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr ""
+msgstr "Ваша OpenGL верзија није подржана. Минимална потребна верзија је 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:538
 #, c-format
@@ -147,9 +146,9 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2290
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "Учитава се %s"
+msgstr "Учитава се %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:561
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:175
@@ -607,7 +606,7 @@ msgstr "Доступне путање:"
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
 msgid "Configure Paths"
-msgstr "Конфигурација путева"
+msgstr "Конфигуриши путање"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:63
 msgid "Select 3D Model"
@@ -644,9 +643,8 @@ msgid "Use board stackup colors"
 msgstr "X:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "Нова библиотека"
+msgstr "Користи боје:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:77
 #, fuzzy
@@ -1842,19 +1840,16 @@ msgid "Report a problem with KiCad"
 msgstr ""
 
 #: common/dialog_about/dialog_about_base.cpp:89
-#, fuzzy
 msgid "&OK"
-msgstr "Уреду"
+msgstr "&ОК"
 
 #: common/dialogs/dialog_HTML_reporter_base.h:48
-#, fuzzy
 msgid "Report"
-msgstr "ERC извјештај"
+msgstr "Извјештај"
 
 #: common/dialogs/dialog_color_picker.cpp:94
-#, fuzzy
 msgid "Clear Color"
-msgstr "Боја бакра"
+msgstr "Очисти боју"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -1907,9 +1902,8 @@ msgid "Opacity:"
 msgstr ""
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
-#, fuzzy
 msgid "Preview (old/new):"
-msgstr "Преглед (стари / нови):"
+msgstr "Преглед (стари/нови):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
@@ -1962,9 +1956,8 @@ msgstr "фајл не постоји"
 
 #: common/dialogs/dialog_configure_paths.cpp:521
 #: common/widgets/grid_text_button_helpers.cpp:411
-#, fuzzy
 msgid "Select Path"
-msgstr "Изабери"
+msgstr "Изабери путању"
 
 #: common/dialogs/dialog_configure_paths.cpp:603
 msgid ""
@@ -5641,12 +5634,12 @@ msgstr "Непознат токен \"%s\""
 #: common/plugins/cadstar/cadstar_archive_parser.h:46
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Недостаје параметар '%s' у '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:49
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Непознат параметар '%s' у '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:52
 #, fuzzy, c-format
@@ -5720,14 +5713,14 @@ msgid "Failed to create file '%s'."
 msgstr "Попуњавање зона"
 
 #: common/project/project_archiver.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Архивирани фајл \"%s\""
+msgstr "Архивирана датотека '%s'."
 
 #: common/project/project_archiver.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Немогуће направити архивиран фајл \"%s\"\n"
+msgstr "Грешка у архивирању датотеке '%s'."
 
 #: common/project/project_archiver.cpp:241
 #, c-format
@@ -8486,14 +8479,12 @@ msgid "Checking for library symbol issues..."
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:487 pcbnew/dialogs/dialog_drc.cpp:443
-#, fuzzy
 msgid "errors"
-msgstr "Грешке"
+msgstr "грешке"
 
 #: eeschema/dialogs/dialog_erc.cpp:488 pcbnew/dialogs/dialog_drc.cpp:444
-#, fuzzy
 msgid "warnings"
-msgstr "Упозорења"
+msgstr "упозорења"
 
 #: eeschema/dialogs/dialog_erc.cpp:489 pcbnew/dialogs/dialog_drc.cpp:445
 msgid "appropriate"
@@ -8506,7 +8497,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc.cpp:495 pcbnew/dialogs/dialog_drc.cpp:451
 #, c-format
 msgid "It will be placed back in the %s list"
-msgstr ""
+msgstr "Биће стављено назад у %s листу"
 
 #: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:455
 msgid "Exclude this violation"
