@@ -55,6 +55,7 @@
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
 #include <geometry/shape_circle.h>
+#include <bezier_curves.h>
 
 using namespace KIGFX;
 
@@ -1510,12 +1511,19 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     case SHAPE_T::BEZIER:
         if( sketch )
         {
-            // Use thickness as filter value to convert the curve to polyline when the curve
-            // is not supported
-            m_gal->DrawCurve( VECTOR2D( aShape->GetStart() ),
-                              VECTOR2D( aShape->GetBezierC1() ),
-                              VECTOR2D( aShape->GetBezierC2() ),
-                              VECTOR2D( aShape->GetEnd() ), thickness );
+            std::vector<VECTOR2D> output;
+            std::vector<VECTOR2D> pointCtrl;
+
+            pointCtrl.push_back( aShape->GetStart() );
+            pointCtrl.push_back( aShape->GetBezierC1() );
+            pointCtrl.push_back( aShape->GetBezierC2() );
+            pointCtrl.push_back( aShape->GetEnd() );
+
+            BEZIER_POLY converter( pointCtrl );
+            converter.GetPoly( output, thickness );
+
+            for( unsigned ii = 0; ii + 1 < output.size(); ++ii )
+                m_gal->DrawSegment( output[ii], output[ii+1], thickness );
         }
         else
         {
