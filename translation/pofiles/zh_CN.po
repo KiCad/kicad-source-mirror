@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-03 11:35-0700\n"
-"PO-Revision-Date: 2021-11-03 14:44+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2021-11-05 13:01+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -5711,7 +5711,6 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "将所选项目复制到剪贴板"
 
 #: common/tool/actions.cpp:165
-#, fuzzy
 msgid "Paste item(s) from clipboard"
 msgstr "从剪贴板粘贴项目"
 
@@ -8837,9 +8836,8 @@ msgstr ""
 "引脚号。"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
-#, fuzzy
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr "创建德摩根等效符号"
+msgstr "用备用主体样式创建符号（德摩根）"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
@@ -8899,9 +8897,8 @@ msgstr "适用于所有单元 (&U)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
-#, fuzzy
 msgid "Common to all body &styles (De Morgan)"
-msgstr "所有主体风格 (德摩根) 共用 (&S)"
+msgstr "所有主体&风格共用 (德摩根)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:51
 msgid "Drawing Properties"
@@ -8927,9 +8924,8 @@ msgid "Delete extra units from symbol?"
 msgstr "是否删除符号多余单元?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:287
-#, fuzzy
 msgid "Delete alternate body style (De Morgan) from symbol?"
-msgstr "确定删除符号所关联的德摩根等效符号？"
+msgstr "从符号删除备用主体样式（德摩根）？"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:315
 #, c-format
@@ -9064,9 +9060,8 @@ msgstr ""
 "作为根符号。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
-#, fuzzy
 msgid "Has alternate body style (De Morgan)"
-msgstr "存在关联的德摩根等效符号"
+msgstr "存在备用主体样式（德摩根）"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
@@ -9450,9 +9445,8 @@ msgstr "相同位置的类似引脚将被编辑。其他引脚的引脚编号将
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
-#, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr "备用引脚分配对德摩根等效符号不可用。"
+msgstr "备用引脚分配对德摩根符号不可用。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:283
 msgid "This symbol only has one unit. This control has no effect."
@@ -11136,9 +11130,8 @@ msgid "Unit:"
 msgstr "单元："
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
-#, fuzzy
 msgid "Alternate symbol (De Morgan)"
-msgstr "德摩根等效符号"
+msgstr "备用符号（德摩根）"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:138
 msgid ""
@@ -15911,34 +15904,28 @@ msgid "Assign a netclass to the net of the selected wire"
 msgstr "将网络类关联给选定导线的网络"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "De Morgan Conversion"
-msgstr "转换为德摩根等效符号"
+msgstr "德摩根转换"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "Switch between De Morgan representations"
 msgstr "在德摩根表示之间切换"
 
 #: eeschema/tools/ee_actions.cpp:458
-#, fuzzy
 msgid "De Morgan Standard"
 msgstr "德摩根标准"
 
 #: eeschema/tools/ee_actions.cpp:458
-#, fuzzy
 msgid "Switch to standard De Morgan representation"
 msgstr "切换到标准的德摩根表示"
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "De Morgan Alternate"
 msgstr "德摩根等效"
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "Switch to alternate De Morgan representation"
-msgstr "改用德摩根等效符号表示"
+msgstr "切换至备用德摩根表示"
 
 #: eeschema/tools/ee_actions.cpp:468
 msgid "Change to Label"
@@ -19384,9 +19371,8 @@ msgid "Attenuation more than %f dB"
 msgstr "衰减大于 %f dB, 请重新设置"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
-#, fuzzy
 msgid "Pi"
-msgstr "引脚"
+msgstr "Pi"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Tee"
@@ -26362,38 +26348,34 @@ msgid "Real drill"
 msgstr "实际钻孔尺寸"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:21
-#, fuzzy
 msgid "Select Manufacturer"
-msgstr "选择层"
+msgstr "选择制造商"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:25
-#, fuzzy, c-format
+#, c-format
 msgid "from %s"
-msgstr "[从 %s]"
+msgstr "从 %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "详情"
+msgstr "详情：%s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
-#, fuzzy
 msgid "Send project directly"
-msgstr ""
-"当前工程目录：\n"
-"%s"
+msgstr "直接发送工程"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr ""
+msgstr "从 KiCad 发送生产文件到制造商"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr ""
+msgstr "生产印刷电路板"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr ""
+msgstr "发送印刷电路板用于生产"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
 msgid "Change Pads on Current Footprint"
@@ -26529,14 +26511,12 @@ msgid "Target Properties"
 msgstr "目标属性"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:82
-#, fuzzy
 msgid "Footprint Reference Properties"
-msgstr "封装属性"
+msgstr "封装位号属性"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:83
-#, fuzzy
 msgid "Footprint Value Properties"
-msgstr "封装属性"
+msgstr "封装值属性"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:84
 msgid "Footprint Text Properties"
@@ -26842,7 +26822,7 @@ msgstr "线路&过孔间隙"
 msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
-msgstr ""
+msgstr "显示导线周围的间隙轮廓，以及在切外形时显示导线末端周围的过孔间隙（可选）。"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
@@ -28012,11 +27992,10 @@ msgid "User9"
 msgstr "用户 9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board manufacturer's recommendations for solder mask clearance and "
 "minimum web width."
-msgstr "使用您的电路板厂推荐的焊膜间隙和最小网宽。"
+msgstr "使用电路板厂推荐的焊膜间隙和最小网宽。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
@@ -30872,14 +30851,14 @@ msgid "Through hole pad %s of %s"
 msgstr "%s 的通孔焊盘 %s"
 
 #: pcbnew/pad.cpp:1151
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "焊盘　%s (%s) - %s"
+msgstr "%s 上 %s 的焊盘 %s %s"
 
 #: pcbnew/pad.cpp:1159
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "%s 的通孔焊盘 %s"
+msgstr "%s 的通孔焊盘 %s %s"
 
 #: pcbnew/pad.cpp:1594
 msgid "Edge connector"
@@ -32656,9 +32635,8 @@ msgid "Auto-finish Track"
 msgstr "自动完成布线"
 
 #: pcbnew/router/router_tool.cpp:97
-#, fuzzy
 msgid "Automatically finishes laying the current track."
-msgstr "自动完成当前布线."
+msgstr "自动完成电线铺设。"
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Place Through Via"
@@ -32734,9 +32712,8 @@ msgid "Track Corner Mode"
 msgstr "导线拐角模式"
 
 #: pcbnew/router/router_tool.cpp:164
-#, fuzzy
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
-msgstr "布线时在尖角和圆角之间切换。"
+msgstr "布线时在尖/圆角及 45°/90° 角之间切换。"
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
@@ -32859,9 +32836,8 @@ msgid ""
 msgstr "必须在“电路板设置”>“设计规则”>“约束”中启用微孔。"
 
 #: pcbnew/router/router_tool.cpp:981
-#, fuzzy
 msgid "Blind/buried via need 2 different layers."
-msgstr "不修改不同层的焊盘"
+msgstr "盲孔/埋孔需要 2 个不同层。"
 
 #: pcbnew/router/router_tool.cpp:1059
 msgid "Tracks on Copper layers only."
@@ -32904,33 +32880,28 @@ msgid "(no net)"
 msgstr "(无网络)"
 
 #: pcbnew/router/router_tool.cpp:2060
-#, fuzzy
 msgid "Free-angle"
-msgstr "角度"
+msgstr "自由角度"
 
 #: pcbnew/router/router_tool.cpp:2066
-#, fuzzy
 msgid "45-degree"
 msgstr "45 度"
 
 #: pcbnew/router/router_tool.cpp:2067
-#, fuzzy
 msgid "45-degree rounded"
-msgstr "拖动 (45 度模式)"
+msgstr "45 度圆角"
 
 #: pcbnew/router/router_tool.cpp:2068
-#, fuzzy
 msgid "90-degree"
-msgstr "程度"
+msgstr "90 度"
 
 #: pcbnew/router/router_tool.cpp:2069
 msgid "90-degree rounded"
-msgstr ""
+msgstr "90 度圆角"
 
 #: pcbnew/router/router_tool.cpp:2074
-#, fuzzy
 msgid "Corner Style"
-msgstr "线型"
+msgstr "角的样式"
 
 #: pcbnew/router/router_tool.cpp:2079
 #, c-format
@@ -35087,14 +35058,12 @@ msgid "Switch router to walkaround mode"
 msgstr "将布线切换到绕走模式"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle Router Mode"
-msgstr "布线推挤模式"
+msgstr "在布线器模式间循环"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle router to the next mode"
-msgstr "将布线切换到推挤模式"
+msgstr "将布线器循环到下一个模式"
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Set Layer Pair..."
