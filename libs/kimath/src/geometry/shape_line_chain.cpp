@@ -300,6 +300,75 @@ bool SHAPE_LINE_CHAIN_BASE::Collide( const VECTOR2I& aP, int aClearance, int* aA
 }
 
 
+bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
+                                VECTOR2I* aLocation ) const
+{
+    if( IsClosed() && PointInside( aP, aClearance ) )
+    {
+        if( aLocation )
+            *aLocation = aP;
+
+        if( aActual )
+            *aActual = 0;
+
+        return true;
+    }
+
+    SEG::ecoord closest_dist_sq = VECTOR2I::ECOORD_MAX;
+    SEG::ecoord clearance_sq = SEG::Square( aClearance );
+    VECTOR2I    nearest;
+
+    // Collide line segments
+    for( size_t i = 0; i < GetSegmentCount(); i++ )
+    {
+        if( IsArcSegment( i ) )
+            continue;
+
+        const SEG&  s = GetSegment( i );
+        VECTOR2I    pn = s.NearestPoint( aP );
+        SEG::ecoord dist_sq = ( pn - aP ).SquaredEuclideanNorm();
+
+        if( dist_sq < closest_dist_sq )
+        {
+            nearest = pn;
+            closest_dist_sq = dist_sq;
+
+            if( closest_dist_sq == 0 )
+                break;
+
+            // If we're not looking for aActual then any collision will do
+            if( closest_dist_sq < clearance_sq && !aActual )
+                break;
+        }
+    }
+
+    if( closest_dist_sq == 0 || closest_dist_sq < clearance_sq )
+    {
+        if( aLocation )
+            *aLocation = nearest;
+
+        if( aActual )
+            *aActual = sqrt( closest_dist_sq );
+
+        return true;
+    }
+
+    // Collide arc segments
+    for( size_t i = 0; i < ArcCount(); i++ )
+    {
+        const SHAPE_ARC& arc = Arc( i );
+
+        // The arcs in the chain should have zero width
+        wxASSERT_MSG( arc.GetWidth() == 0, "Invalid arc width - should be zero" );
+
+        if( arc.Collide( aP, aClearance, aActual, aLocation ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 void SHAPE_LINE_CHAIN::Rotate( double aAngle, const VECTOR2I& aCenter )
 {
     for( auto& pt : m_points )
@@ -362,6 +431,76 @@ bool SHAPE_LINE_CHAIN_BASE::Collide( const SEG& aSeg, int aClearance, int* aActu
             *aActual = sqrt( closest_dist_sq );
 
         return true;
+    }
+
+    return false;
+}
+
+
+bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual,
+                                VECTOR2I* aLocation ) const
+{
+    if( IsClosed() && PointInside( aSeg.A ) )
+    {
+        if( aLocation )
+            *aLocation = aSeg.A;
+
+        if( aActual )
+            *aActual = 0;
+
+        return true;
+    }
+
+    SEG::ecoord closest_dist_sq = VECTOR2I::ECOORD_MAX;
+    SEG::ecoord clearance_sq = SEG::Square( aClearance );
+    VECTOR2I    nearest;
+
+    // Collide line segments
+    for( size_t i = 0; i < GetSegmentCount(); i++ )
+    {
+        if( IsArcSegment( i ) )
+            continue;
+
+        const SEG&  s = GetSegment( i );
+        SEG::ecoord dist_sq = s.SquaredDistance( aSeg );
+
+        if( dist_sq < closest_dist_sq )
+        {
+            if( aLocation )
+                nearest = s.NearestPoint( aSeg );
+
+            closest_dist_sq = dist_sq;
+
+            if( closest_dist_sq == 0 )
+                break;
+
+            // If we're not looking for aActual then any collision will do
+            if( closest_dist_sq < clearance_sq && !aActual )
+                break;
+        }
+    }
+
+    if( closest_dist_sq == 0 || closest_dist_sq < clearance_sq )
+    {
+        if( aLocation )
+            *aLocation = nearest;
+
+        if( aActual )
+            *aActual = sqrt( closest_dist_sq );
+
+        return true;
+    }
+
+    // Collide arc segments
+    for( size_t i = 0; i < ArcCount(); i++ )
+    {
+        const SHAPE_ARC& arc = Arc( i );
+
+        // The arcs in the chain should have zero width
+        wxASSERT_MSG( arc.GetWidth() == 0, "Invalid arc width - should be zero" );
+
+        if( arc.Collide( aSeg, aClearance, aActual, aLocation ) )
+            return true;
     }
 
     return false;
@@ -1066,6 +1205,7 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc )
 
         // @todo should the below 4 LOC be moved to SHAPE_ARC::ConvertToPolyline ?
         chain.m_arcs.push_back( aArc );
+        chain.m_arcs.back().SetWidth( 0 );
 
         for( auto& sh : chain.m_shapes )
             sh.first = 0;
@@ -1130,7 +1270,9 @@ void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const SHAPE_ARC& aArc )
             } );
     }
 
-    m_arcs.insert( m_arcs.begin() + arc_pos, aArc );
+    SHAPE_ARC arcCopy( aArc );
+    arcCopy.SetWidth( 0 );
+    m_arcs.insert( m_arcs.begin() + arc_pos, arcCopy );
 
     /// Step 2: Add the arc polyline points to the chain
     //@todo need to check we aren't creating duplicate points at start or end

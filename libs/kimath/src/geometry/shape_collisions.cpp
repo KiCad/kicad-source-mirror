@@ -308,6 +308,15 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
             int collision_dist = 0;
             VECTOR2I pn;
 
+            if( aB.Type() == SH_LINE_CHAIN )
+            {
+                const SHAPE_LINE_CHAIN* aB_line_chain = static_cast<const SHAPE_LINE_CHAIN*>( &aB );
+
+                // ignore arcs - we will collide these separately
+                if( aB_line_chain->IsArcSegment( i ) )
+                    continue;
+            }
+
             if( aA.Collide( aB.GetSegment( i ), aClearance,
                             aActual || aLocation ? &collision_dist : nullptr,
                             aLocation ? &pn : nullptr ) )
@@ -324,6 +333,22 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
                 // If we're not looking for aActual then any collision will do
                 if( !aActual )
                     break;
+            }
+        }
+
+        if( aB.Type() == SH_LINE_CHAIN )
+        {
+            const SHAPE_LINE_CHAIN* aB_line_chain = static_cast<const SHAPE_LINE_CHAIN*>( &aB );
+
+            for( size_t i = 0; i < aB_line_chain->ArcCount(); i++ )
+            {
+                const SHAPE_ARC& arc = aB_line_chain->Arc( i );
+
+                // The arcs in the chain should have zero width
+                wxASSERT_MSG( arc.GetWidth() == 0, "Invalid arc width - should be zero" );
+
+                if( arc.Collide( &aA, aClearance, aActual, aLocation ) )
+                    return true;
             }
         }
     }
@@ -462,7 +487,7 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_RECT& aB, int aClea
                                            aA.Type(),
                                            aB.Type() ) );
 
-    const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
+    const SHAPE_LINE_CHAIN lc( aA );
 
     bool rv = Collide( lc, aB.Outline(), aClearance + aA.GetWidth() / 2, aActual, aLocation, aMTV );
 
@@ -480,7 +505,7 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_CIRCLE& aB, int aCl
                                            aA.Type(),
                                            aB.Type() ) );
 
-    const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
+    const SHAPE_LINE_CHAIN lc( aA );
 
     bool rv = Collide( aB, lc, aClearance + aA.GetWidth() / 2, aActual, aLocation, aMTV );
 
@@ -498,14 +523,68 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN& aB, int
                                            aA.Type(),
                                            aB.Type() ) );
 
-    const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
+    int      closest_dist = INT_MAX;
+    VECTOR2I nearest;
 
-    bool rv = Collide( lc, aB, aClearance + aA.GetWidth() / 2, aActual, aLocation, aMTV );
+    if( aB.IsClosed() && aB.PointInside( aA.GetP0() ) )
+    {
+        closest_dist = 0;
+        nearest = aA.GetP0();
+    }
+    else
+    {
+        for( size_t i = 0; i < aB.GetSegmentCount(); i++ )
+        {
+            int      collision_dist = 0;
+            VECTOR2I pn;
 
-    if( rv && aActual )
-        *aActual = std::max( 0, *aActual - aA.GetWidth() / 2 );
+            // ignore arcs - we will collide these separately
+            if( aB.IsArcSegment( i ) )
+                continue;
 
-    return rv;
+            if( aA.Collide( aB.GetSegment( i ), aClearance,
+                            aActual || aLocation ? &collision_dist : nullptr,
+                            aLocation ? &pn : nullptr ) )
+            {
+                if( collision_dist < closest_dist )
+                {
+                    nearest = pn;
+                    closest_dist = collision_dist;
+                }
+
+                if( closest_dist == 0 )
+                    break;
+
+                // If we're not looking for aActual then any collision will do
+                if( !aActual )
+                    break;
+            }
+        }
+
+        for( size_t i = 0; i < aB.ArcCount(); i++ )
+        {
+            const SHAPE_ARC& arc = aB.Arc( i );
+
+            // The arcs in the chain should have zero width
+            wxASSERT_MSG( arc.GetWidth() == 0, "Invalid arc width - should be zero" );
+
+            if( arc.Collide( &aA, aClearance, aActual, aLocation ) )
+                return true;
+        }
+    }
+
+    if( closest_dist == 0 || closest_dist < aClearance )
+    {
+        if( aLocation )
+            *aLocation = nearest;
+
+        if( aActual )
+            *aActual = closest_dist;
+
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -516,7 +595,7 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_SEGMENT& aB, int aC
                                            aA.Type(),
                                            aB.Type() ) );
 
-    const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
+    const SHAPE_LINE_CHAIN lc( aA );
 
     bool rv = Collide( lc, aB, aClearance + aA.GetWidth() / 2, aActual, aLocation, aMTV );
 

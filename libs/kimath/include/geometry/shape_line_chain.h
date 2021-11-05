@@ -66,7 +66,11 @@ struct CLIPPER_Z_VALUE
 
 
 /**
- * Represent a polyline (an zero-thickness chain of connected line segments).
+ * Represent a polyline containing arcs as well as line segments: A chain of connected line and/or
+ * arc segments.
+ *
+ * The arc shapes are piecewise approximated for the purpose of boolean operations but are used as
+ * arcs when doing collision checks.
  *
  * It is purposely not named "polyline" to avoid confusion with the existing CPolyLine
  * in Pcbnew.
@@ -187,7 +191,8 @@ public:
     {
         m_points = aArc.ConvertToPolyline().CPoints();
         m_arcs.emplace_back( aArc );
-        m_shapes = std::vector<std::pair<ssize_t, ssize_t>>( m_points.size(), SHAPES_ARE_PT );
+        m_arcs.back().SetWidth( 0 );
+        m_shapes = std::vector<std::pair<ssize_t, ssize_t>>( m_points.size(), { 0, SHAPE_IS_PT } );
     }
 
     SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath,
@@ -196,6 +201,36 @@ public:
 
     virtual ~SHAPE_LINE_CHAIN()
     {}
+
+    /**
+     * Check if point \a aP lies closer to us than \a aClearance.
+     *
+     * Note: This is overridden as we want to ensure we test collisions with the arcs in this chain
+     * as true arcs rather than segment approximations.
+     *
+     * @param aP the point to check for collisions with
+     * @param aClearance minimum distance that does not qualify as a collision.
+     * @param aActual an optional pointer to an int to store the actual distance in the event
+     *                of a collision.
+     * @return true, when a collision has been found
+     */
+    virtual bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
+                          VECTOR2I* aLocation = nullptr ) const override;
+
+    /**
+     * Check if segment \a aSeg lies closer to us than \a aClearance.
+     *
+     * Note: This is overridden as we want to ensure we test collisions with the arcs in this chain
+     * as true arcs rather than segment approximations.
+     *
+     * @param aSeg the segment to check for collisions with
+     * @param aClearance minimum distance that does not qualify as a collision.
+     * @param aActual an optional pointer to an int to store the actual distance in the event
+     *                of a collision.
+     * @return true, when a collision has been found
+     */
+    virtual bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
+                          VECTOR2I* aLocation = nullptr ) const override;
 
     SHAPE_LINE_CHAIN& operator=( const SHAPE_LINE_CHAIN& ) = default;
 
