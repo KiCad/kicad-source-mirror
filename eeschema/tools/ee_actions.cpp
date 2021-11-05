@@ -655,6 +655,19 @@ TOOL_ACTION EE_ACTIONS::toggleHiddenFields( "eeschema.EditorControl.showHiddenFi
         AS_GLOBAL, 0, "",
         _( "Show Hidden Fields" ), _( "Toggle display of hidden text fields" ) );
 
+TOOL_ACTION EE_ACTIONS::toggleERCWarnings( "eeschema.EditorControl.showERCWarnings",
+        AS_GLOBAL, 0, "",
+        _( "Show ERC Warnings" ), _( "Show markers for electrical rules checker warnings" ) );
+
+TOOL_ACTION EE_ACTIONS::toggleERCErrors( "eeschema.EditorControl.showERCErrors",
+        AS_GLOBAL, 0, "",
+        _( "Show ERC Errors" ), _( "Show markers for electrical rules checker errors" ) );
+
+TOOL_ACTION EE_ACTIONS::toggleERCExclusions( "eeschema.EditorControl.showERCExclusions",
+        AS_GLOBAL, 0, "",
+        _( "Show ERC Exclusions" ),
+        _( "Show markers for excluded electrical rules checker violations" ) );
+
 TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
         AS_GLOBAL, 0, "",
         _( "Force H/V Wires and Buses" ), _( "Switch H & V only mode for new wires and buses" ),

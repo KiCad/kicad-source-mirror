@@ -430,41 +430,75 @@ void SCH_EDIT_FRAME::setupUIConditions()
                         CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
 
     if( SCRIPTING::IsWxAvailable() )
+    {
         mgr->SetConditions( EE_ACTIONS::showPythonConsole,
                             CHECK( cond.ScriptingConsoleVisible() ) );
+    }
 
     auto showHiddenPinsCond =
-        [this] ( const SELECTION& )
-        {
-            return GetShowAllPins();
-        };
+            [this]( const SELECTION& )
+            {
+                return GetShowAllPins();
+            };
+
+    auto showHiddenFieldsCond =
+            [this]( const SELECTION& )
+            {
+                EESCHEMA_SETTINGS* cfg = eeconfig();
+                return cfg && cfg->m_Appearance.show_hidden_fields;
+            };
+
+    auto showERCErrorsCond =
+            [this]( const SELECTION& )
+            {
+                EESCHEMA_SETTINGS* cfg = eeconfig();
+                return cfg && cfg->m_Appearance.show_erc_errors;
+            };
+
+    auto showERCWarningsCond =
+            [this]( const SELECTION& )
+            {
+                EESCHEMA_SETTINGS* cfg = eeconfig();
+                return cfg && cfg->m_Appearance.show_erc_warnings;
+            };
+
+    auto showERCExclusionsCond =
+            [this]( const SELECTION& )
+            {
+                EESCHEMA_SETTINGS* cfg = eeconfig();
+                return cfg && cfg->m_Appearance.show_erc_exclusions;
+            };
 
     auto forceHVCond =
-        [this] ( const SELECTION& )
-        {
-            EESCHEMA_SETTINGS* cfg = eeconfig();
-            return cfg && cfg->m_Drawing.hv_lines_only;
-        };
+            [this]( const SELECTION& )
+            {
+                EESCHEMA_SETTINGS* cfg = eeconfig();
+                return cfg && cfg->m_Drawing.hv_lines_only;
+            };
 
     auto remapSymbolsCondition =
-        [&]( const SELECTION& aSel )
-        {
-            SCH_SCREENS schematic( Schematic().Root() );
+            [&]( const SELECTION& aSel )
+            {
+                SCH_SCREENS schematic( Schematic().Root() );
 
-            // The remapping can only be performed on legacy projects.
-            return schematic.HasNoFullyDefinedLibIds();
-        };
+                // The remapping can only be performed on legacy projects.
+                return schematic.HasNoFullyDefinedLibIds();
+            };
 
     auto belowRootSheetCondition =
-        [this]( const SELECTION& aSel )
-        {
-            return GetCurrentSheet().Last() != &Schematic().Root();
-        };
+            [this]( const SELECTION& aSel )
+            {
+                return GetCurrentSheet().Last() != &Schematic().Root();
+            };
 
-    mgr->SetConditions( EE_ACTIONS::leaveSheet,         ENABLE( belowRootSheetCondition ) );
-    mgr->SetConditions( EE_ACTIONS::remapSymbols,       ENABLE( remapSymbolsCondition ) );
-    mgr->SetConditions( EE_ACTIONS::toggleHiddenPins,   CHECK( showHiddenPinsCond ) );
-    mgr->SetConditions( EE_ACTIONS::toggleForceHV,      CHECK( forceHVCond ) );
+    mgr->SetConditions( EE_ACTIONS::leaveSheet,          ENABLE( belowRootSheetCondition ) );
+    mgr->SetConditions( EE_ACTIONS::remapSymbols,        ENABLE( remapSymbolsCondition ) );
+    mgr->SetConditions( EE_ACTIONS::toggleHiddenPins,    CHECK( showHiddenPinsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleHiddenFields,  CHECK( showHiddenFieldsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleERCErrors,     CHECK( showERCErrorsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleERCWarnings,   CHECK( showERCWarningsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleERCExclusions, CHECK( showERCExclusionsCond ) );
+    mgr->SetConditions( EE_ACTIONS::toggleForceHV,       CHECK( forceHVCond ) );
 
 
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
@@ -1467,8 +1501,13 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     ShowAllIntersheetRefs( settings.m_IntersheetRefsShow );
 
-    auto cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
+
+    KIGFX::VIEW* view = GetCanvas()->GetView();
+    view->SetLayerVisible( LAYER_ERC_ERR, cfg->m_Appearance.show_erc_errors );
+    view->SetLayerVisible( LAYER_ERC_WARN, cfg->m_Appearance.show_erc_warnings );
+    view->SetLayerVisible( LAYER_ERC_EXCLUSION, cfg->m_Appearance.show_erc_exclusions );
 
     GetCanvas()->ForceRefresh();
 

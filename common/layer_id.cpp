@@ -130,6 +130,7 @@ wxString LayerName( int aLayer )
     case LAYER_NOCONNECT:               return _( "No-connect symbols" );
     case LAYER_ERC_WARN:                return _( "ERC warnings" );
     case LAYER_ERC_ERR:                 return _( "ERC errors" );
+    case LAYER_ERC_EXCLUSION:           return _( "ERC exclusions" );
     case LAYER_SCHEMATIC_ANCHOR:        return _( "Anchors" );
     case LAYER_SCHEMATIC_AUX_ITEMS:     return _( "Helper items" );
     case LAYER_SCHEMATIC_GRID:          return _( "Grid" );

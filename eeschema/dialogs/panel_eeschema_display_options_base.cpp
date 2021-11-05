@@ -31,6 +31,15 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	m_checkShowHiddenFields = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Show hidden fields"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_checkShowHiddenFields, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
+	m_checkShowERCErrors = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Show ERC errors"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_checkShowERCErrors, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_checkShowERCWarnings = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Show ERC warnings"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_checkShowERCWarnings, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_checkShowERCExclusions = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Show ERC exclusions"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_checkShowERCExclusions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 	m_checkPageLimits = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Show page limi&ts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkPageLimits->SetValue(true);
 	sbSizer1->Add( m_checkPageLimits, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );

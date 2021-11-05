@@ -45,6 +45,9 @@ void PANEL_EESCHEMA_DISPLAY_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* cf
 {
     m_checkShowHiddenPins->SetValue( cfg->m_Appearance.show_hidden_pins );
     m_checkShowHiddenFields->SetValue( cfg->m_Appearance.show_hidden_fields );
+    m_checkShowERCErrors->SetValue( cfg->m_Appearance.show_erc_errors );
+    m_checkShowERCWarnings->SetValue( cfg->m_Appearance.show_erc_warnings );
+    m_checkShowERCExclusions->SetValue( cfg->m_Appearance.show_erc_exclusions );
     m_checkPageLimits->SetValue( cfg->m_Appearance.show_page_limits );
 
     m_checkSelTextBox->SetValue( cfg->m_Selection.text_as_box );
@@ -79,6 +82,9 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
 
     cfg->m_Appearance.show_hidden_pins = m_checkShowHiddenPins->GetValue();
     cfg->m_Appearance.show_hidden_fields = m_checkShowHiddenFields->GetValue();
+    cfg->m_Appearance.show_erc_warnings = m_checkShowERCWarnings->GetValue();
+    cfg->m_Appearance.show_erc_errors = m_checkShowERCErrors->GetValue();
+    cfg->m_Appearance.show_erc_exclusions = m_checkShowERCExclusions->GetValue();
     cfg->m_Appearance.show_page_limits = m_checkPageLimits->GetValue();
 
     cfg->m_Selection.text_as_box = m_checkSelTextBox->GetValue();

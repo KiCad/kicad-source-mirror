@@ -37,6 +37,9 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxBoxSizer* m_galOptionsSizer;
 		wxCheckBox* m_checkShowHiddenPins;
 		wxCheckBox* m_checkShowHiddenFields;
+		wxCheckBox* m_checkShowERCErrors;
+		wxCheckBox* m_checkShowERCWarnings;
+		wxCheckBox* m_checkShowERCExclusions;
 		wxCheckBox* m_checkPageLimits;
 		wxCheckBox* m_checkSelTextBox;
 		wxCheckBox* m_checkSelDrawChildItems;

@@ -108,11 +108,18 @@ void SCH_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
 
     wxCHECK_RET( Schematic(), "No SCHEMATIC set for SCH_MARKER!" );
 
-    switch( Schematic()->ErcSettings().GetSeverity( m_rcItem->GetErrorCode() ) )
+    if( IsExcluded() )
     {
-    default:
-    case SEVERITY::RPT_SEVERITY_ERROR:   aLayers[0] = LAYER_ERC_ERR;  break;
-    case SEVERITY::RPT_SEVERITY_WARNING: aLayers[0] = LAYER_ERC_WARN; break;
+        aLayers[0] = LAYER_ERC_EXCLUSION;
+    }
+    else
+    {
+        switch( Schematic()->ErcSettings().GetSeverity( m_rcItem->GetErrorCode() ) )
+        {
+        default:
+        case SEVERITY::RPT_SEVERITY_ERROR:   aLayers[0] = LAYER_ERC_ERR;  break;
+        case SEVERITY::RPT_SEVERITY_WARNING: aLayers[0] = LAYER_ERC_WARN; break;
+        }
     }
 
     aLayers[1] = LAYER_SELECTION_SHADOWS;
@@ -122,7 +129,7 @@ void SCH_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
 SCH_LAYER_ID SCH_MARKER::GetColorLayer() const
 {
     if( IsExcluded() )
-        return LAYER_HIDDEN;
+        return LAYER_ERC_EXCLUSION;
 
     wxCHECK_MSG( Schematic(), LAYER_ERC_ERR, "No SCHEMATIC set for SCH_MARKER!" );
 

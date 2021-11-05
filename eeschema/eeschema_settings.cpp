@@ -100,6 +100,15 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "appearance.show_hidden_fields",
             &m_Appearance.show_hidden_fields, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_erc_warnings",
+            &m_Appearance.show_erc_warnings, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_erc_errors",
+            &m_Appearance.show_erc_errors, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_erc_exclusions",
+            &m_Appearance.show_erc_exclusions, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "appearance.show_illegal_symbol_lib_dialog",
             &m_Appearance.show_illegal_symbol_lib_dialog, true ) );
 

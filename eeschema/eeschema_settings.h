@@ -44,6 +44,9 @@ public:
         bool print_sheet_reference;
         bool show_hidden_pins;
         bool show_hidden_fields;
+        bool show_erc_warnings;
+        bool show_erc_errors;
+        bool show_erc_exclusions;
         bool show_illegal_symbol_lib_dialog;
         bool show_page_limits;
         bool show_sexpr_file_convert_warning;
