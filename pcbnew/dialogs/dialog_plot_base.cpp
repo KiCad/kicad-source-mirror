@@ -91,7 +91,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	gbSizer1->Add( m_plotInvisibleText, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_includeEdgeLayerOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot Edge.Cuts on all layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_includeEdgeLayerOpt->SetToolTip( _("Do not plot the contents of the PCB edge layer on any other layers.") );
+	m_includeEdgeLayerOpt->SetToolTip( _("Plot the contents of the PCB edge layer on all layers") );
 
 	gbSizer1->Add( m_includeEdgeLayerOpt, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 

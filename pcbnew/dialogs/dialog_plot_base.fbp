@@ -857,7 +857,7 @@
                                                         <property name="style"></property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">Do not plot the contents of the PCB edge layer on any other layers.</property>
+                                                        <property name="tooltip">Plot the contents of the PCB edge layer on all layers</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
