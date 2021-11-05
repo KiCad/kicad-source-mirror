@@ -3,11 +3,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-03 11:35-0700\n"
+"POT-Creation-Date: 2021-11-05 06:01-0700\n"
 "PO-Revision-Date: 2021-11-05 13:01+0000\n"
 "Last-Translator: ___davidpr <david.pribic95@gmail.com>\n"
-"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/"
-"master-source/sr/>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
+"source/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1071,7 +1071,7 @@ msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:726 pcbnew/footprint.cpp:961
-#: pcbnew/pad.cpp:935
+#: pcbnew/pad.cpp:939
 msgid "Rotation"
 msgstr "Ротација"
 
@@ -3397,7 +3397,7 @@ msgstr "Увећати"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:937
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:715
-#: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1607
+#: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1611
 #: pcbnew/widgets/appearance_controls.cpp:699
 #: pcbnew/widgets/appearance_controls.cpp:741 pcbnew/zone.cpp:1465
 msgid "None"
@@ -3569,7 +3569,7 @@ msgid "The default net class is required."
 msgstr ""
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:41
-#: common/dialogs/panel_setup_netclasses_base.cpp:215 pcbnew/pad.cpp:887
+#: common/dialogs/panel_setup_netclasses_base.cpp:215 pcbnew/pad.cpp:891
 #: pcbnew/pcb_track.cpp:790 pcbnew/zone.cpp:597
 msgid "Net Class"
 msgstr ""
@@ -3696,7 +3696,7 @@ msgstr ""
 #: common/dialogs/panel_setup_netclasses_base.cpp:214
 #: pcbnew/board_connected_item.cpp:176
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
-#: pcbnew/dialogs/dialog_net_inspector.cpp:76 pcbnew/pad.cpp:885
+#: pcbnew/dialogs/dialog_net_inspector.cpp:76 pcbnew/pad.cpp:889
 #: pcbnew/pcb_track.cpp:788 pcbnew/zone.cpp:595
 msgid "Net"
 msgstr ""
@@ -3743,7 +3743,7 @@ msgid "Info:"
 msgstr "Информација:"
 
 #: common/dialogs/wx_html_report_panel.cpp:330
-#: eeschema/dialogs/dialog_erc.cpp:736 pcbnew/dialogs/dialog_drc.cpp:647
+#: eeschema/dialogs/dialog_erc.cpp:740 pcbnew/dialogs/dialog_drc.cpp:647
 #, fuzzy
 msgid "Save Report to File"
 msgstr "Сачувај као .csv фајл"
@@ -3851,7 +3851,7 @@ msgstr "Линија"
 #: common/drawing_sheet/ds_data_item.cpp:372
 #: common/drawing_sheet/ds_draw_item.cpp:118 common/eda_shape.cpp:564
 #: common/eda_shape.cpp:1588
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1599
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1603
 msgid "Rectangle"
 msgstr "Правоугаоник"
 
@@ -4013,7 +4013,7 @@ msgstr "Немогуће сачувати фајл %s."
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
-"\"%s\"\n"
+"%s\n"
 "it was not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
@@ -4123,12 +4123,12 @@ msgstr "Зелена:"
 #: eeschema/sch_symbol.cpp:1414
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:117
 #: pcbnew/fp_text.cpp:279 pcbnew/load_select_footprint.cpp:371
-#: pcbnew/pad.cpp:872
+#: pcbnew/pad.cpp:876
 msgid "Footprint"
 msgstr ""
 
 #: common/eda_item.cpp:253 pcbnew/dialogs/dialog_board_statistics.cpp:493
-#: pcbnew/pad.cpp:875
+#: pcbnew/pad.cpp:879
 msgid "Pad"
 msgstr ""
 
@@ -4269,7 +4269,7 @@ msgstr "Gerber"
 msgid "Draw Item"
 msgstr "Нови"
 
-#: common/eda_shape.cpp:61 pcbnew/pad.cpp:1106
+#: common/eda_shape.cpp:61 pcbnew/pad.cpp:1110
 msgid "Rect"
 msgstr ""
 
@@ -4284,8 +4284,8 @@ msgstr "Лук"
 #: common/eda_shape.cpp:63 common/eda_shape.cpp:533 common/eda_shape.cpp:1590
 #: gerbview/gerber_draw_item.cpp:237
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1104
-#: pcbnew/pad.cpp:1598
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:138 pcbnew/pad.cpp:1108
+#: pcbnew/pad.cpp:1602
 msgid "Circle"
 msgstr "Круг"
 
@@ -4303,7 +4303,7 @@ msgstr "Полигон"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
-#: pcbnew/microwave/microwave_polygon.cpp:130 pcbnew/pad.cpp:1623
+#: pcbnew/microwave/microwave_polygon.cpp:130 pcbnew/pad.cpp:1627
 #: pcbnew/pcb_target.cpp:158 pcbnew/pcb_target.cpp:174
 msgid "Shape"
 msgstr "Облик"
@@ -4341,7 +4341,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:42
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:155
-#: pcbnew/fp_text.cpp:305 pcbnew/fp_text_grid_table.cpp:91 pcbnew/pad.cpp:922
+#: pcbnew/fp_text.cpp:305 pcbnew/fp_text_grid_table.cpp:91 pcbnew/pad.cpp:926
 #: pcbnew/pcb_target.cpp:157 pcbnew/pcb_target.cpp:171 pcbnew/pcb_text.cpp:127
 #: pcbnew/pcb_track.cpp:694 pcbnew/pcb_track.cpp:1151 pcbnew/pcb_track.cpp:1168
 #: pcbnew/pcb_track.cpp:1187
@@ -4353,7 +4353,7 @@ msgstr "Дужина"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
-#: pcbnew/fp_text.cpp:308 pcbnew/fp_text_grid_table.cpp:92 pcbnew/pad.cpp:923
+#: pcbnew/fp_text.cpp:308 pcbnew/fp_text_grid_table.cpp:92 pcbnew/pad.cpp:927
 #: pcbnew/pcb_dimension.cpp:719 pcbnew/pcb_text.cpp:128
 msgid "Height"
 msgstr "Висина"
@@ -5570,15 +5570,15 @@ msgstr "Сви фајлови (*.*)|*.*"
 msgid "Select Preferred Editor"
 msgstr "Изабери"
 
-#: common/pgm_base.cpp:212
+#: common/pgm_base.cpp:218
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr ""
 
-#: common/pgm_base.cpp:423
+#: common/pgm_base.cpp:429
 msgid "This language is not supported by the operating system."
 msgstr ""
 
-#: common/pgm_base.cpp:474 common/pgm_base.cpp:512
+#: common/pgm_base.cpp:480 common/pgm_base.cpp:518
 msgid "The KiCad language file for this language is not installed."
 msgstr ""
 
@@ -5682,7 +5682,7 @@ msgstr "фајл не постоји"
 msgid "Error extracting file!"
 msgstr "фајл не постоји"
 
-#: common/project/project_archiver.cpp:159 eeschema/dialogs/dialog_erc.cpp:760
+#: common/project/project_archiver.cpp:159 eeschema/dialogs/dialog_erc.cpp:764
 #: eeschema/dialogs/dialog_plot_schematic.cpp:517
 #: eeschema/dialogs/dialog_plot_schematic.cpp:688
 #: eeschema/dialogs/dialog_plot_schematic.cpp:838
@@ -7612,24 +7612,24 @@ msgstr "Удуплати предмете %s%s\n"
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:2254 eeschema/connection_graph.cpp:2285
+#: eeschema/connection_graph.cpp:2259 eeschema/connection_graph.cpp:2290
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:2509
+#: eeschema/connection_graph.cpp:2514
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:2917
+#: eeschema/connection_graph.cpp:2925
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:2934
+#: eeschema/connection_graph.cpp:2942
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -8460,121 +8460,121 @@ msgstr "Промјена облика курсора"
 msgid "Checking pins..."
 msgstr "Попуњавање зона"
 
-#: eeschema/dialogs/dialog_erc.cpp:391
+#: eeschema/dialogs/dialog_erc.cpp:395
 #, fuzzy
 msgid "Checking labels..."
 msgstr "Попуњавање зона"
 
-#: eeschema/dialogs/dialog_erc.cpp:397
+#: eeschema/dialogs/dialog_erc.cpp:401
 #, fuzzy
 msgid "Checking for unresolved variables..."
 msgstr "Попуњавање зона"
 
-#: eeschema/dialogs/dialog_erc.cpp:403
+#: eeschema/dialogs/dialog_erc.cpp:407
 msgid "Checking no connect pins for connections..."
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:409
+#: eeschema/dialogs/dialog_erc.cpp:413
 msgid "Checking for library symbol issues..."
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:487 pcbnew/dialogs/dialog_drc.cpp:443
+#: eeschema/dialogs/dialog_erc.cpp:491 pcbnew/dialogs/dialog_drc.cpp:443
 msgid "errors"
 msgstr "грешке"
 
-#: eeschema/dialogs/dialog_erc.cpp:488 pcbnew/dialogs/dialog_drc.cpp:444
+#: eeschema/dialogs/dialog_erc.cpp:492 pcbnew/dialogs/dialog_drc.cpp:444
 msgid "warnings"
 msgstr "упозорења"
 
-#: eeschema/dialogs/dialog_erc.cpp:489 pcbnew/dialogs/dialog_drc.cpp:445
+#: eeschema/dialogs/dialog_erc.cpp:493 pcbnew/dialogs/dialog_drc.cpp:445
 msgid "appropriate"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:494 pcbnew/dialogs/dialog_drc.cpp:450
+#: eeschema/dialogs/dialog_erc.cpp:498 pcbnew/dialogs/dialog_drc.cpp:450
 msgid "Remove exclusion for this violation"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:495 pcbnew/dialogs/dialog_drc.cpp:451
+#: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:451
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "Биће стављено назад у %s листу"
 
-#: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:455
+#: eeschema/dialogs/dialog_erc.cpp:503 pcbnew/dialogs/dialog_drc.cpp:455
 msgid "Exclude this violation"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:500 pcbnew/dialogs/dialog_drc.cpp:456
+#: eeschema/dialogs/dialog_erc.cpp:504 pcbnew/dialogs/dialog_drc.cpp:456
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:469
+#: eeschema/dialogs/dialog_erc.cpp:516 pcbnew/dialogs/dialog_drc.cpp:469
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:514 eeschema/dialogs/dialog_erc.cpp:520
+#: eeschema/dialogs/dialog_erc.cpp:518 eeschema/dialogs/dialog_erc.cpp:524
 #: pcbnew/dialogs/dialog_drc.cpp:471 pcbnew/dialogs/dialog_drc.cpp:478
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:518 pcbnew/dialogs/dialog_drc.cpp:476
+#: eeschema/dialogs/dialog_erc.cpp:522 pcbnew/dialogs/dialog_drc.cpp:476
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:523 pcbnew/dialogs/dialog_drc.cpp:482
+#: eeschema/dialogs/dialog_erc.cpp:527 pcbnew/dialogs/dialog_drc.cpp:482
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:484
+#: eeschema/dialogs/dialog_erc.cpp:528 pcbnew/dialogs/dialog_drc.cpp:484
 msgid "Violations will not be checked or reported"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:531
+#: eeschema/dialogs/dialog_erc.cpp:535
 msgid "Edit pin-to-pin conflict map..."
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:535 pcbnew/dialogs/dialog_drc.cpp:489
+#: eeschema/dialogs/dialog_erc.cpp:539 pcbnew/dialogs/dialog_drc.cpp:489
 #, fuzzy
 msgid "Edit violation severities..."
 msgstr "Попуњавање зона"
 
-#: eeschema/dialogs/dialog_erc.cpp:536
+#: eeschema/dialogs/dialog_erc.cpp:540
 #, fuzzy
 msgid "Open the Schematic Setup... dialog"
 msgstr "Отвори"
 
-#: eeschema/dialogs/dialog_erc.cpp:628
+#: eeschema/dialogs/dialog_erc.cpp:632
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
 msgid "Pin Conflicts Map"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:632
+#: eeschema/dialogs/dialog_erc.cpp:636
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: pcbnew/dialogs/dialog_board_setup.cpp:107 pcbnew/dialogs/dialog_drc.cpp:594
 msgid "Violation Severity"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:755 pcbnew/dialogs/dialog_gendrill.cpp:474
+#: eeschema/dialogs/dialog_erc.cpp:759 pcbnew/dialogs/dialog_gendrill.cpp:474
 #, fuzzy, c-format
 msgid "Report file '%s' created."
 msgstr "Report фајлови"
 
-#: eeschema/dialogs/dialog_erc.cpp:773
+#: eeschema/dialogs/dialog_erc.cpp:777
 #, c-format
 msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr ""
 
-#: eeschema/dialogs/dialog_erc.cpp:788
+#: eeschema/dialogs/dialog_erc.cpp:792
 #, fuzzy, c-format
 msgid ""
 "\n"
 "***** Sheet %s\n"
 msgstr "Попуњавање зона"
 
-#: eeschema/dialogs/dialog_erc.cpp:812
+#: eeschema/dialogs/dialog_erc.cpp:816
 #, c-format
 msgid ""
 "\n"
@@ -8898,7 +8898,7 @@ msgstr "Стил"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
 #: pcbnew/footprint.cpp:2364 pcbnew/fp_text_grid_table.cpp:96
-#: pcbnew/pad.cpp:1633
+#: pcbnew/pad.cpp:1637
 msgid "Orientation"
 msgstr "Оријентација"
 
@@ -9500,7 +9500,7 @@ msgstr "Нови"
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:120 pcbnew/fp_text.cpp:289
-#: pcbnew/pad.cpp:890 pcbnew/pcb_dimension.cpp:351 pcbnew/pcb_group.cpp:339
+#: pcbnew/pad.cpp:894 pcbnew/pcb_dimension.cpp:351 pcbnew/pcb_group.cpp:339
 #: pcbnew/pcb_shape.cpp:155 pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:807
 #: pcbnew/zone.cpp:607
 msgid "Status"
@@ -10842,7 +10842,7 @@ msgstr ""
 msgid "Load directives from schematic"
 msgstr ""
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1604
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1608
 msgid "Custom"
 msgstr ""
 
@@ -11384,9 +11384,10 @@ msgid "Field must have a name."
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1000
-#, c-format
-msgid "Field name \"%s\" already in use."
-msgstr ""
+#: eeschema/dialogs/dialog_symbol_properties.cpp:785
+#, fuzzy, c-format
+msgid "Field name '%s' already in use."
+msgstr "Име'%s' је већ у употреби."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:31
 msgid "Group symbols"
@@ -11415,11 +11416,6 @@ msgstr "Име табле"
 #, fuzzy
 msgid "Alternate Assignment"
 msgstr "Додјела шеме"
-
-#: eeschema/dialogs/dialog_symbol_properties.cpp:785
-#, fuzzy, c-format
-msgid "Field name '%s' already in use."
-msgstr "Име'%s' је већ у употреби."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:126
 msgid "Unit:"
@@ -12636,17 +12632,17 @@ msgstr ""
 msgid "Pins of type %s and %s are connected"
 msgstr ""
 
-#: eeschema/erc.cpp:599
+#: eeschema/erc.cpp:604
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
 msgstr ""
 
-#: eeschema/erc.cpp:706
+#: eeschema/erc.cpp:711
 #, c-format
 msgid "The current configuration does not include the library '%s'."
 msgstr ""
 
-#: eeschema/erc.cpp:717
+#: eeschema/erc.cpp:722
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
 msgstr ""
@@ -14221,36 +14217,36 @@ msgstr ""
 msgid "symbol document library file is empty"
 msgstr ""
 
-#: eeschema/sch_screen.cpp:598 eeschema/sch_screen.cpp:690
+#: eeschema/sch_screen.cpp:644 eeschema/sch_screen.cpp:736
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr ""
 
-#: eeschema/sch_screen.cpp:614
+#: eeschema/sch_screen.cpp:660
 #, c-format
 msgid ""
 "Schematic symbol reference '%s' library identifier is not valid. Unable to "
 "link library symbol."
 msgstr ""
 
-#: eeschema/sch_screen.cpp:630
+#: eeschema/sch_screen.cpp:676
 #, c-format
 msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
 
-#: eeschema/sch_screen.cpp:649
+#: eeschema/sch_screen.cpp:695
 #, fuzzy, c-format
 msgid "I/O error %s resolving library symbol %s"
 msgstr "Грешка: "
 
-#: eeschema/sch_screen.cpp:669
+#: eeschema/sch_screen.cpp:715
 #, c-format
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr ""
 
-#: eeschema/sch_screen.cpp:701
+#: eeschema/sch_screen.cpp:747
 #, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr ""
@@ -15408,7 +15404,7 @@ msgstr "Недефинисани слојеви:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1225
 #: eeschema/symbol_viewer_frame.cpp:367 pcbnew/fp_shape.cpp:404
-#: pcbnew/fp_text.cpp:506 pcbnew/pad.cpp:1680
+#: pcbnew/fp_text.cpp:506 pcbnew/pad.cpp:1684
 #, fuzzy
 msgid "Parent"
 msgstr "Струја"
@@ -17185,7 +17181,7 @@ msgstr "Изабери слој: %s"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:53
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47
 #: pcbnew/footprint.cpp:2355 pcbnew/footprint.cpp:2358 pcbnew/fp_text.cpp:294
-#: pcbnew/fp_text_grid_table.cpp:95 pcbnew/pad.cpp:894
+#: pcbnew/fp_text_grid_table.cpp:95 pcbnew/pad.cpp:898
 #: pcbnew/pcb_dimension.cpp:353 pcbnew/pcb_dimension.cpp:1090
 #: pcbnew/pcb_shape.cpp:159 pcbnew/pcb_target.cpp:154 pcbnew/pcb_text.cpp:120
 #: pcbnew/pcb_track.cpp:692 pcbnew/pcb_track.cpp:758 pcbnew/pcb_track.cpp:1192
@@ -18043,19 +18039,19 @@ msgid "Highlight"
 msgstr ""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:70
-#, c-format
-msgid "Highlight Items of Component \"%s\""
-msgstr ""
+#, fuzzy, c-format
+msgid "Highlight Items of Component '%s'"
+msgstr "компонента"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:78
-#, c-format
-msgid "Highlight Items of Net \"%s\""
-msgstr ""
+#, fuzzy, c-format
+msgid "Highlight Items of Net '%s'"
+msgstr "компонента"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:88
-#, c-format
-msgid "Highlight Aperture Type \"%s\""
-msgstr ""
+#, fuzzy, c-format
+msgid "Highlight Aperture Type '%s'"
+msgstr "Нема конекције"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
 #, fuzzy, c-format
@@ -18288,10 +18284,10 @@ msgid "Unzip Project"
 msgstr "Пројект"
 
 #: kicad/files-io.cpp:73
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "\n"
-"Open \"%s\"\n"
+"Open '%s'\n"
 msgstr ""
 "\n"
 "Отвори \"%s\"\n"
@@ -18384,7 +18380,7 @@ msgstr ""
 
 #: kicad/kicad_manager_frame.cpp:744
 #, fuzzy, c-format
-msgid "Restoring \"%s\""
+msgid "Restoring '%s'"
 msgstr "Очекује се \"%s\""
 
 #: kicad/menubar.cpp:56
@@ -19053,7 +19049,7 @@ msgstr "Сачувај као .csv фајл"
 
 #: kicad/project_tree_pane.cpp:857
 #, fuzzy, c-format
-msgid "Change filename: \"%s\""
+msgid "Change filename: '%s'"
 msgstr "Промјена облика курсора"
 
 #: kicad/project_tree_pane.cpp:859
@@ -19826,7 +19822,7 @@ msgid ""
 "___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___L = 10<sup>a/20</up>___<br>\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
@@ -21343,7 +21339,7 @@ msgstr "Y позиција:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:101
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:80
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:46
-#: pcbnew/footprint.cpp:945 pcbnew/fp_text.cpp:289 pcbnew/pad.cpp:890
+#: pcbnew/footprint.cpp:945 pcbnew/fp_text.cpp:289 pcbnew/pad.cpp:894
 #: pcbnew/pcb_dimension.cpp:351 pcbnew/pcb_group.cpp:339
 #: pcbnew/pcb_shape.cpp:155 pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:807
 #: pcbnew/zone.cpp:607
@@ -22472,11 +22468,11 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:491 pcbnew/pad.cpp:1120
+#: pcbnew/dialogs/dialog_board_statistics.cpp:491 pcbnew/pad.cpp:1124
 msgid "PTH"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:491 pcbnew/pad.cpp:1123
+#: pcbnew/dialogs/dialog_board_statistics.cpp:491 pcbnew/pad.cpp:1127
 msgid "NPTH"
 msgstr ""
 
@@ -24320,8 +24316,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/footprint.cpp:686
-#: pcbnew/footprint_libraries_utils.cpp:1137 pcbnew/pad.cpp:1121
-#: pcbnew/pad.cpp:1593
+#: pcbnew/footprint_libraries_utils.cpp:1137 pcbnew/pad.cpp:1125
+#: pcbnew/pad.cpp:1597
 msgid "SMD"
 msgstr "SMD"
 
@@ -25905,7 +25901,7 @@ msgstr "Додај поље"
 msgid "Pad type:"
 msgstr "Тип:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1592
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1596
 msgid "Through-hole"
 msgstr ""
 
@@ -25941,8 +25937,8 @@ msgid "Circular"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:370 pcbnew/pad.cpp:1105
-#: pcbnew/pad.cpp:1600
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:370 pcbnew/pad.cpp:1109
+#: pcbnew/pad.cpp:1604
 msgid "Oval"
 msgstr ""
 
@@ -25954,12 +25950,12 @@ msgstr ""
 msgid "Trapezoidal"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1602
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1606
 #, fuzzy
 msgid "Rounded rectangle"
 msgstr "Квадрат"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1603
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/pad.cpp:1607
 #, fuzzy
 msgid "Chamfered rectangle"
 msgstr "Квадрат"
@@ -26150,25 +26146,25 @@ msgid ""
 "These properties are specified in Gerber X2  files."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1608
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1612
 #, fuzzy
 msgid "BGA pad"
 msgstr "Додај"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1610
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1614
 #, fuzzy
 msgid "Fiducial, local to footprint"
 msgstr "Додај поље"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1609
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1613
 msgid "Fiducial, global to board"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1611
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1615
 msgid "Test point pad"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1612
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1616
 msgid "Heatsink pad"
 msgstr ""
 
@@ -29076,7 +29072,7 @@ msgstr "7"
 msgid "Size"
 msgstr "Величина"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:947
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:951
 #: pcbnew/tools/board_inspection_tool.cpp:564
 msgid "Hole"
 msgstr ""
@@ -30221,27 +30217,27 @@ msgstr ""
 msgid "(pad \"%s\")"
 msgstr ""
 
-#: pcbnew/footprint.cpp:2367 pcbnew/pad.cpp:1677 pcbnew/zone.cpp:1479
+#: pcbnew/footprint.cpp:2367 pcbnew/pad.cpp:1681 pcbnew/zone.cpp:1479
 #, fuzzy
 msgid "Clearance Override"
 msgstr "Направи извјештај..."
 
-#: pcbnew/footprint.cpp:2370 pcbnew/pad.cpp:1654
+#: pcbnew/footprint.cpp:2370 pcbnew/pad.cpp:1658
 #, fuzzy
 msgid "Solderpaste Margin Override"
 msgstr "Залијепи"
 
-#: pcbnew/footprint.cpp:2374 pcbnew/pad.cpp:1657
+#: pcbnew/footprint.cpp:2374 pcbnew/pad.cpp:1661
 #, fuzzy
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Залијепи"
 
-#: pcbnew/footprint.cpp:2377 pcbnew/pad.cpp:1659 pcbnew/zone.cpp:1490
+#: pcbnew/footprint.cpp:2377 pcbnew/pad.cpp:1663 pcbnew/zone.cpp:1490
 #, fuzzy
 msgid "Thermal Relief Width"
 msgstr "Дужина:"
 
-#: pcbnew/footprint.cpp:2381 pcbnew/pad.cpp:1662 pcbnew/zone.cpp:1487
+#: pcbnew/footprint.cpp:2381 pcbnew/pad.cpp:1666 pcbnew/zone.cpp:1487
 #, fuzzy
 msgid "Thermal Relief Gap"
 msgstr "Дужина:"
@@ -31345,72 +31341,72 @@ msgid ""
 "line: %d"
 msgstr ""
 
-#: pcbnew/pad.cpp:703 pcbnew/pad.cpp:818 pcbnew/pad.cpp:838 pcbnew/pad.cpp:857
+#: pcbnew/pad.cpp:707 pcbnew/pad.cpp:822 pcbnew/pad.cpp:842 pcbnew/pad.cpp:861
 #, fuzzy
 msgid "pad"
 msgstr "Додај"
 
-#: pcbnew/pad.cpp:811 pcbnew/pad.cpp:832 pcbnew/pad.cpp:851
+#: pcbnew/pad.cpp:815 pcbnew/pad.cpp:836 pcbnew/pad.cpp:855
 #, fuzzy
 msgid "parent footprint"
 msgstr "Нови"
 
-#: pcbnew/pad.cpp:878 pcbnew/pad.cpp:1629
+#: pcbnew/pad.cpp:882 pcbnew/pad.cpp:1633
 #, fuzzy
 msgid "Pin Name"
 msgstr "Име чиоде"
 
-#: pcbnew/pad.cpp:881 pcbnew/pad.cpp:1631
+#: pcbnew/pad.cpp:885 pcbnew/pad.cpp:1635
 #, fuzzy
 msgid "Pin Type"
 msgstr "Тип:"
 
-#: pcbnew/pad.cpp:905
+#: pcbnew/pad.cpp:909
 msgid "BGA"
 msgstr ""
 
-#: pcbnew/pad.cpp:906
+#: pcbnew/pad.cpp:910
 msgid "Fiducial global"
 msgstr ""
 
-#: pcbnew/pad.cpp:907
+#: pcbnew/pad.cpp:911
 msgid "Fiducial local"
 msgstr ""
 
-#: pcbnew/pad.cpp:908
+#: pcbnew/pad.cpp:912
 #, fuzzy
 msgid "Test point"
 msgstr "(крајња тачка)"
 
-#: pcbnew/pad.cpp:909
+#: pcbnew/pad.cpp:913
 msgid "Heat sink"
 msgstr ""
 
-#: pcbnew/pad.cpp:910
+#: pcbnew/pad.cpp:914
 msgid "Castellated"
 msgstr ""
 
-#: pcbnew/pad.cpp:918 pcbnew/pcb_track.cpp:762 pcbnew/pcb_track.cpp:1188
+#: pcbnew/pad.cpp:922 pcbnew/pcb_track.cpp:762 pcbnew/pcb_track.cpp:1188
 msgid "Diameter"
 msgstr ""
 
-#: pcbnew/pad.cpp:940
+#: pcbnew/pad.cpp:944
 #, fuzzy
 msgid "Length in Package"
 msgstr "Дужина у пакету"
 
-#: pcbnew/pad.cpp:953
+#: pcbnew/pad.cpp:957
 #, fuzzy
 msgid "Hole X / Y"
 msgstr "X позиција"
 
-#: pcbnew/pad.cpp:965 pcbnew/pcb_track.cpp:728 pcbnew/pcb_track.cpp:771
+#: pcbnew/pad.cpp:969 pcbnew/pcb_track.cpp:728 pcbnew/pcb_track.cpp:771
 #: pcbnew/router/router_tool.cpp:2093 pcbnew/zone.cpp:646
 #, c-format
 msgid "Min Clearance: %s"
 msgstr ""
 
-#: pcbnew/pad.cpp:967 pcbnew/pcb_track.cpp:730 pcbnew/pcb_track.cpp:737
+#: pcbnew/pad.cpp:971 pcbnew/pcb_track.cpp:730 pcbnew/pcb_track.cpp:737
 #: pcbnew/pcb_track.cpp:773 pcbnew/pcb_track.cpp:779
 #: pcbnew/router/router_tool.cpp:2081 pcbnew/router/router_tool.cpp:2095
 #: pcbnew/zone.cpp:648
@@ -31418,109 +31414,109 @@ msgstr ""
 msgid "(from %s)"
 msgstr "(од %s)"
 
-#: pcbnew/pad.cpp:1107
+#: pcbnew/pad.cpp:1111
 msgid "Trap"
 msgstr ""
 
-#: pcbnew/pad.cpp:1108
+#: pcbnew/pad.cpp:1112
 msgid "Roundrect"
 msgstr ""
 
-#: pcbnew/pad.cpp:1109
+#: pcbnew/pad.cpp:1113
 msgid "Chamferedrect"
 msgstr ""
 
-#: pcbnew/pad.cpp:1110
+#: pcbnew/pad.cpp:1114
 msgid "CustomShape"
 msgstr ""
 
-#: pcbnew/pad.cpp:1122
+#: pcbnew/pad.cpp:1126
 msgid "Conn"
 msgstr ""
 
-#: pcbnew/pad.cpp:1135
+#: pcbnew/pad.cpp:1139
 #, fuzzy, c-format
 msgid "Pad %s of %s on %s"
 msgstr "Попуњавање зона"
 
-#: pcbnew/pad.cpp:1142
+#: pcbnew/pad.cpp:1146
 #, c-format
 msgid "Through hole pad %s of %s"
 msgstr ""
 
-#: pcbnew/pad.cpp:1151
+#: pcbnew/pad.cpp:1155
 #, fuzzy, c-format
 msgid "Pad %s %s of %s on %s"
 msgstr "Попуњавање зона"
 
-#: pcbnew/pad.cpp:1159
+#: pcbnew/pad.cpp:1163
 #, fuzzy, c-format
 msgid "Through hole pad %s %s of %s"
 msgstr "Прикажи"
 
-#: pcbnew/pad.cpp:1594
+#: pcbnew/pad.cpp:1598
 #, fuzzy
 msgid "Edge connector"
 msgstr "Нема конекције"
 
-#: pcbnew/pad.cpp:1595
+#: pcbnew/pad.cpp:1599
 msgid "NPTH, mechanical"
 msgstr ""
 
-#: pcbnew/pad.cpp:1601
+#: pcbnew/pad.cpp:1605
 msgid "Trapezoid"
 msgstr ""
 
-#: pcbnew/pad.cpp:1613
+#: pcbnew/pad.cpp:1617
 msgid "Castellated pad"
 msgstr ""
 
-#: pcbnew/pad.cpp:1619
+#: pcbnew/pad.cpp:1623
 #, fuzzy
 msgid "Pad Type"
 msgstr "Тип:"
 
-#: pcbnew/pad.cpp:1627
+#: pcbnew/pad.cpp:1631
 #, fuzzy
 msgid "Pad Number"
 msgstr "Број"
 
-#: pcbnew/pad.cpp:1636
+#: pcbnew/pad.cpp:1640
 #, fuzzy
 msgid "Size X"
 msgstr "X:"
 
-#: pcbnew/pad.cpp:1639
+#: pcbnew/pad.cpp:1643
 #, fuzzy
 msgid "Size Y"
 msgstr "Y:"
 
-#: pcbnew/pad.cpp:1642
+#: pcbnew/pad.cpp:1646
 #, fuzzy
 msgid "Hole Size X"
 msgstr "Величина рупе X:"
 
-#: pcbnew/pad.cpp:1645
+#: pcbnew/pad.cpp:1649
 #, fuzzy
 msgid "Hole Size Y"
 msgstr "Величина рупе Y:"
 
-#: pcbnew/pad.cpp:1648 pcbnew/pcb_track.cpp:718
+#: pcbnew/pad.cpp:1652 pcbnew/pcb_track.cpp:718
 #, fuzzy
 msgid "Pad To Die Length"
 msgstr "Дужина"
 
-#: pcbnew/pad.cpp:1651
+#: pcbnew/pad.cpp:1655
 #, fuzzy
 msgid "Soldermask Margin Override"
 msgstr "Залијепи"
 
-#: pcbnew/pad.cpp:1665
+#: pcbnew/pad.cpp:1669
 #, fuzzy
 msgid "Fabrication Property"
 msgstr "Опције цртања"
 
-#: pcbnew/pad.cpp:1668
+#: pcbnew/pad.cpp:1672
 #, fuzzy
 msgid "Round Radius Ratio"
 msgstr "Покрени"
@@ -32928,7 +32924,7 @@ msgstr ""
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
 #, c-format
-msgid "Method \"%s\" not found, or not callable"
+msgid "Method '%s' not found, or not callable"
 msgstr ""
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:84

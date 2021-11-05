@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-03 11:35-0700\n"
+"POT-Creation-Date: 2021-11-05 06:01-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2431,13 +2431,13 @@ msgstr "Insufficient permissions to folder '%s'."
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
-"\"%s\"\n"
+"%s\n"
 "it was not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
-"“%s”\n"
+"%s\n"
 "it was not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 
@@ -7545,8 +7545,8 @@ msgid "Field must have a name."
 msgstr "Field must have a name."
 
 #, c-format
-msgid "Field name \"%s\" already in use."
-msgstr "Field name “%s” already in use."
+msgid "Field name '%s' already in use."
+msgstr "Field name '%s' already in use."
 
 msgid "Group symbols"
 msgstr "Group symbols"
@@ -7565,10 +7565,6 @@ msgstr "Base Name"
 
 msgid "Alternate Assignment"
 msgstr "Alternate Assignment"
-
-#, c-format
-msgid "Field name '%s' already in use."
-msgstr "Field name '%s' already in use."
 
 msgid "Unit:"
 msgstr "Unit:"
@@ -12499,16 +12495,16 @@ msgid "Highlight"
 msgstr "Highlight"
 
 #, c-format
-msgid "Highlight Items of Component \"%s\""
-msgstr "Highlight Items of Component “%s”"
+msgid "Highlight Items of Component '%s'"
+msgstr "Highlight Items of Component '%s'"
 
 #, c-format
-msgid "Highlight Items of Net \"%s\""
-msgstr "Highlight Items of Net “%s”"
+msgid "Highlight Items of Net '%s'"
+msgstr "Highlight Items of Net '%s'"
 
 #, c-format
-msgid "Highlight Aperture Type \"%s\""
-msgstr "Highlight Aperture Type “%s”"
+msgid "Highlight Aperture Type '%s'"
+msgstr "Highlight Aperture Type '%s'"
 
 #, c-format
 msgid "Highlight DCode D%d"
@@ -12667,10 +12663,10 @@ msgstr "Unzip Project"
 #, c-format
 msgid ""
 "\n"
-"Open \"%s\"\n"
+"Open '%s'\n"
 msgstr ""
 "\n"
-"Open “%s”\n"
+"Open '%s'\n"
 
 msgid "Target Directory"
 msgstr "Target Directory"
@@ -12747,8 +12743,8 @@ msgid "Restoring session"
 msgstr "Restoring session"
 
 #, c-format
-msgid "Restoring \"%s\""
-msgstr "Restoring \"%s\""
+msgid "Restoring '%s'"
+msgstr "Restoring '%s'"
 
 msgid "Clear Recent Projects"
 msgstr "Clear Recent Projects"
@@ -13242,8 +13238,8 @@ msgid "Print the contents of the file"
 msgstr "Print the contents of the file"
 
 #, c-format
-msgid "Change filename: \"%s\""
-msgstr "Change filename: “%s”"
+msgid "Change filename: '%s'"
+msgstr "Change filename: '%s'"
 
 msgid "Change filename"
 msgstr "Change filename"
@@ -13766,7 +13762,7 @@ msgid ""
 "___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___L = 10<sup>a/20</up>___<br>\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
@@ -13776,7 +13772,7 @@ msgstr ""
 "___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___L = 10<sup>a/20</up>___<br>\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
@@ -23765,8 +23761,8 @@ msgid "Exception on python action plugin code"
 msgstr "Exception on python action plugin code"
 
 #, c-format
-msgid "Method \"%s\" not found, or not callable"
-msgstr "Method “%s” not found, or not callable"
+msgid "Method '%s' not found, or not callable"
+msgstr "Method '%s' not found, or not callable"
 
 msgid "Unknown Method"
 msgstr "Unknown Method"
@@ -26552,6 +26548,77 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#, c-format
+#~ msgid ""
+#~ "Well this is potentially embarrassing!\n"
+#~ "It appears that the last time you were editing the file\n"
+#~ "\"%s\"\n"
+#~ "it was not saved properly.  Do you wish to restore the last saved edits "
+#~ "you made?"
+#~ msgstr ""
+#~ "Well this is potentially embarrassing!\n"
+#~ "It appears that the last time you were editing the file\n"
+#~ "“%s”\n"
+#~ "it was not saved properly.  Do you wish to restore the last saved edits "
+#~ "you made?"
+
+#, c-format
+#~ msgid "Field name \"%s\" already in use."
+#~ msgstr "Field name “%s” already in use."
+
+#, c-format
+#~ msgid "Highlight Items of Component \"%s\""
+#~ msgstr "Highlight Items of Component “%s”"
+
+#, c-format
+#~ msgid "Highlight Items of Net \"%s\""
+#~ msgstr "Highlight Items of Net “%s”"
+
+#, c-format
+#~ msgid "Highlight Aperture Type \"%s\""
+#~ msgstr "Highlight Aperture Type “%s”"
+
+#, c-format
+#~ msgid ""
+#~ "\n"
+#~ "Open \"%s\"\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Open “%s”\n"
+
+#, c-format
+#~ msgid "Restoring \"%s\""
+#~ msgstr "Restoring \"%s\""
+
+#, c-format
+#~ msgid "Change filename: \"%s\""
+#~ msgstr "Change filename: “%s”"
+
+#~ msgid ""
+#~ "### Bridged Tee Attenuator\n"
+#~ "___a___ is attenuation in dB<br>\n"
+#~ "___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
+#~ "___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
+#~ "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
+#~ "\n"
+#~ "___L = 10<sup>a/20</up>___<br>\n"
+#~ "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
+#~ "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
+#~ msgstr ""
+#~ "### Bridged Tee Attenuator\n"
+#~ "___a___ is attenuation in dB<br>\n"
+#~ "___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
+#~ "___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
+#~ "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
+#~ "\n"
+#~ "___L = 10<sup>a/20</up>___<br>\n"
+#~ "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
+#~ "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
+
+#, c-format
+#~ msgid "Method \"%s\" not found, or not callable"
+#~ msgstr "Method “%s” not found, or not callable"
 
 #~ msgid "Paste items(s) from clipboard"
 #~ msgstr "Paste items(s) from clipboard"
