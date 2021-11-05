@@ -25,6 +25,7 @@
 #define GL_UTILS_H
 
 #include <gal/opengl/kiglew.h>    // Must be included first
+#include <wx/utils.h>
 
 #include <limits>
 
@@ -42,6 +43,12 @@ public:
         /// This routine is written for Linux using X11 only.  The equivalent functions under
         /// Windows would include <wglext.h> and call wglSwapIntervalEXT
 #if defined( __linux__ ) && !defined( KICAD_USE_EGL )
+
+        /// Do not try to set the swapping over remote connections
+        /// Video drivers lie and then crash when they can't handle the adaptive swapping
+        if( wxGetEnv( wxT( "SSH_CONNECTION"), nullptr ) )
+            return 0;
+
         Display *dpy = glXGetCurrentDisplay();
         GLXDrawable drawable = glXGetCurrentDrawable();
 
