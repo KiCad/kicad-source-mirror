@@ -789,7 +789,6 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         {
             rs->SetHighlightFactor( aCfg->m_Graphics.highlight_factor );
             rs->SetSelectFactor( aCfg->m_Graphics.select_factor );
-            rs->SetHighContrastFactor( aCfg->m_Graphics.high_contrast_factor );
         }
     }
 }

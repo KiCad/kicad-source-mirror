@@ -279,6 +279,10 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     commonSettings->m_Appearance.use_icons_in_menus = m_checkBoxIconsInMenus->GetValue();
     commonSettings->m_Appearance.apply_icon_scale_to_fonts = m_scaleFonts->GetValue();
 
+    double dimmingPercent = 80;
+    m_highContrastCtrl->GetValue().ToDouble( &dimmingPercent );
+    commonSettings->m_Appearance.hicontrast_dimming_factor = dimmingPercent / 100.0f;
+
     commonSettings->m_Input.immediate_actions   = !m_NonImmediateActions->GetValue();
     commonSettings->m_Input.warp_mouse_on_move  = m_warpMouseOnMove->GetValue();
 
@@ -366,6 +370,9 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
 
     m_checkBoxIconsInMenus->SetValue( aSettings.m_Appearance.use_icons_in_menus );
     m_scaleFonts->SetValue( aSettings.m_Appearance.apply_icon_scale_to_fonts );
+
+    double dimmingPercent = aSettings.m_Appearance.hicontrast_dimming_factor * 100.0f;
+    m_highContrastCtrl->SetValue( wxString::Format( "%.0f", dimmingPercent ) );
 
     m_warpMouseOnMove->SetValue( aSettings.m_Input.warp_mouse_on_move );
     m_NonImmediateActions->SetValue( !aSettings.m_Input.immediate_actions );

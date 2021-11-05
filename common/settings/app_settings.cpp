@@ -66,14 +66,11 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM<int>( "graphics.canvas_type",
             &m_Graphics.canvas_type, EDA_DRAW_PANEL_GAL::GAL_FALLBACK ) );
 
-    m_params.emplace_back( new PARAM<float>(
-            "graphics.highlight_factor", &m_Graphics.highlight_factor, 0.5f, 0.0, 1.0f ) );
+    m_params.emplace_back( new PARAM<float>( "graphics.highlight_factor",
+            &m_Graphics.highlight_factor, 0.5f, 0.0, 1.0f ) );
 
-    m_params.emplace_back( new PARAM<float>(
-            "graphics.select_factor", &m_Graphics.select_factor, 0.75f, 0.0, 1.0f ) );
-
-    m_params.emplace_back( new PARAM<float>(
-            "graphics.high_contrast_factor", &m_Graphics.high_contrast_factor, 0.35f, 0.0, 1.0f ) );
+    m_params.emplace_back( new PARAM<float>( "graphics.select_factor",
+            &m_Graphics.select_factor, 0.75f, 0.0, 1.0f ) );
 
     m_params.emplace_back( new PARAM<int>( "color_picker.default_tab",
             &m_ColorPicker.default_tab, 0 ) );

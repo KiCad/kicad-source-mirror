@@ -46,6 +46,7 @@
 #include <pcb_display_options.h>
 #include <project/net_settings.h>
 #include <settings/color_settings.h>
+#include <settings/common_settings.h>
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -57,6 +58,7 @@
 #include <geometry/shape_circle.h>
 #include <bezier_curves.h>
 #include <kiface_base.h>
+#include <pgm_base.h>
 #include "pcbnew_settings.h"
 
 using namespace KIGFX;
@@ -126,6 +128,8 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
         else
             m_layerColors[GetNetnameLayer( layer )] = lightLabel;
     }
+
+    m_hiContrastFactor = 1.0f - Pgm().GetCommonSettings()->m_Appearance.hicontrast_dimming_factor;
 
     update();
 }

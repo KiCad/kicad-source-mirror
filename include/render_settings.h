@@ -277,7 +277,6 @@ public:
 
     void SetHighlightFactor( float aFactor ) { m_highlightFactor = aFactor; }
     void SetSelectFactor( float aFactor ) { m_selectFactor = aFactor; }
-    void SetHighContrastFactor( float aFactor ) { m_hiContrastFactor = aFactor; }
 
     // TODO: these can go away once the drawing sheet is moved to Cairo-based printing
     wxDC* GetPrintDC() const { return m_printDC; }

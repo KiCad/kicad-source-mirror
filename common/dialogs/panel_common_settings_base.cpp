@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -163,6 +163,26 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_sbUserInterface->Add( m_fontScalingHelp, 0, wxLEFT, 8 );
 
 
+	m_sbUserInterface->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerHighContrast;
+	bSizerHighContrast = new wxBoxSizer( wxHORIZONTAL );
+
+	m_highContrastLabel = new wxStaticText( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("High-contrast mode dimming factor:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_highContrastLabel->Wrap( -1 );
+	bSizerHighContrast->Add( m_highContrastLabel, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_highContrastCtrl = new wxTextCtrl( m_sbUserInterface->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerHighContrast->Add( m_highContrastCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_highContrastUnits = new wxStaticText( m_sbUserInterface->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_highContrastUnits->Wrap( -1 );
+	bSizerHighContrast->Add( m_highContrastUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	m_sbUserInterface->Add( bSizerHighContrast, 1, wxEXPAND, 5 );
+
+
 	bLeftSizer->Add( m_sbUserInterface, 1, wxEXPAND|wxALL, 5 );
 
 
@@ -317,7 +337,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	rightSizer->Add( sbSizer41, 1, wxALL|wxEXPAND, 5 );
 
 
-	bPanelSizer->Add( rightSizer, 0, wxALL|wxEXPAND, 5 );
+	bPanelSizer->Add( rightSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bPanelSizer );

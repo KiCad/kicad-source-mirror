@@ -115,7 +115,6 @@ public:
         int   canvas_type;
         float highlight_factor;         ///< How much to brighten highlighted objects by
         float select_factor;            ///< How much to brighten selected objects by
-        float high_contrast_factor;     ///< How much to darken inactive layers by
     };
 
     struct COLOR_PICKER

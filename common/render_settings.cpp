@@ -36,7 +36,7 @@ RENDER_SETTINGS::RENDER_SETTINGS() :
     m_selectFactor          = 0.5f;
     m_highlightEnabled      = false;
     m_hiContrastEnabled     = false;
-    m_hiContrastFactor      = 0.2f; //TODO: Make this user-configurable
+    m_hiContrastFactor      = 0.2f;
     m_outlineWidth          = 1;
     m_drawingSheetLineWidth = 100000;
     m_defaultPenWidth       = 0;
