@@ -57,11 +57,14 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
     // python <script_path>/script.py
     // and *not* python <script_path>\script.py
     // Otherwise the script does not find some auxiliary pythons scripts needed by this script
+    int quote = '"';
+
     if( extension == "xsl" )
     {
         m_info = readHeader( "-->" );
-        m_cmd = wxString::Format( "xsltproc -o '%%O%s' '%s' '%%I'",
-                                  getOutputExtension( m_info ), m_file.GetFullPath() );
+        m_cmd = wxString::Format( "xsltproc -o %c%%O%s%c %c%s%c %c%%I%c",
+                                  quote, getOutputExtension( m_info ), quote,
+                                  quote, m_file.GetFullPath(), quote, quote, quote );
     }
     else if( extension == "py" )
     {
@@ -76,8 +79,10 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
         if( interpreter.IsEmpty() )
             interpreter = wxT( "python" );
 
-        m_cmd = wxString::Format( "%s '%s' '%%I' '%%O%s'", interpreter, m_file.GetFullPath(),
-                                  getOutputExtension( m_info ) );
+        m_cmd = wxString::Format( "%s %c%s%c %c%%I%c %c%%O%s%c",
+                                  quote, interpreter, quote,
+                                  quote, m_file.GetFullPath(), quote,
+                                  quote, getOutputExtension( m_info ), quote );
 #endif
     }
 #ifdef __WINDOWS__
