@@ -50,6 +50,21 @@ static const SHAPE* shapeFunctor( T aItem )
 }
 
 /**
+ * Used by #SHAPE_INDEX to get a SHAPE* for a hole from another type.
+ *
+ * By default relies on T::GetHole() method, should be specialized if the T object
+ * doesn't allow that method.
+ *
+ * @param aItem generic T object.
+ * @return a SHAPE* object equivalent to object.
+ */
+template <class T>
+static const SHAPE* holeFunctor( T aItem )
+{
+    return aItem->Hole();
+}
+
+/**
  * Used by #SHAPE_INDEX to get the bounding box of a generic T object.
  *
  * By default relies on T::BBox() method, should be specialized if the T object
@@ -61,7 +76,12 @@ static const SHAPE* shapeFunctor( T aItem )
 template <class T>
 BOX2I boundingBox( T aObject )
 {
-    return shapeFunctor( aObject )->BBox();
+    BOX2I bbox = shapeFunctor( aObject )->BBox();
+
+    if( holeFunctor( aObject ) )
+        bbox.Merge( holeFunctor( aObject )->BBox() );
+
+    return bbox;
 }
 
 /**
