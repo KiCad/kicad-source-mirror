@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-05 06:01-0700\n"
-"PO-Revision-Date: 2021-11-05 13:01+0000\n"
+"PO-Revision-Date: 2021-11-07 10:16+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -3978,7 +3978,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Permissões insuficientes para a pasta '%s'."
 
 #: common/eda_base_frame.cpp:1086
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
@@ -3986,7 +3986,7 @@ msgid ""
 "it was not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"Isso é potencialmente constrangedor!\n"
+"Bom, isto é realmente constrangedor!\n"
 "Parece que da última vez que você editou o arquivo\n"
 "\"%s\"\n"
 "ele não foi salvo corretamente.  Deseja restaurar as últimas edições salvas "
@@ -18083,19 +18083,19 @@ msgid "Highlight"
 msgstr "Realce"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Component '%s'"
-msgstr "Realça os itens do componente \"%s\""
+msgstr "Realça os itens do componente '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Net '%s'"
-msgstr "Realça os itens da rede \"%s\""
+msgstr "Realça os itens da rede '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "Realça o tipo da abertura \"%s\""
+msgstr "Realça o tipo da abertura '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
 #, c-format
@@ -18321,13 +18321,13 @@ msgid "Unzip Project"
 msgstr "Descompacte o projeto"
 
 #: kicad/files-io.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Open '%s'\n"
 msgstr ""
 "\n"
-"Abra \"%s\"\n"
+"Abra '%s'\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
@@ -18420,9 +18420,9 @@ msgid "Restoring session"
 msgstr "Restaurando a sessão"
 
 #: kicad/kicad_manager_frame.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid "Restoring '%s'"
-msgstr "Restaurando \"%s\""
+msgstr "Restaurando '%s'"
 
 #: kicad/menubar.cpp:56
 msgid "Clear Recent Projects"
@@ -19065,9 +19065,9 @@ msgid "Print the contents of the file"
 msgstr "Imprime o conteúdo do arquivo"
 
 #: kicad/project_tree_pane.cpp:857
-#, fuzzy, c-format
+#, c-format
 msgid "Change filename: '%s'"
-msgstr "Altera o nome do arquivo: \"%s\""
+msgstr "Altera o nome do arquivo: '%s'"
 
 #: kicad/project_tree_pane.cpp:859
 msgid "Change filename"
@@ -19784,7 +19784,6 @@ msgid "Error writing objects to clipboard"
 msgstr "Houve um erro ao gravar os objetos na área de transferência"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19796,8 +19795,8 @@ msgid ""
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
-"### Atenuador de ponte T\n"
-"___a___ é atenuado em dB<br>\n"
+"### Atenuador com ponte em T\n"
+"___a___ está atenuado em dB<br>\n"
 "___Z<sub>in</sub>___ é impedância desejada da entrada em &#x2126;<br>\n"
 "___Z<sub>out</sub>___ é impedância desejada da saída em &#x2126;<br>\n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
@@ -33332,9 +33331,9 @@ msgstr "Exceção no código do plugin de ação python"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
-msgstr "Método \"%s\" não foi encontrado, ou não pôde ser chamado"
+msgstr "O método '%s' não foi encontrado ou não pôde ser chamado"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:84
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
