@@ -389,6 +389,10 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     if( GetSubstOption() )
         cmdK2S.Append( " --subst-models" );
 
+    // Note: for some reason, using \" to insert a quote in a format string, under MacOS
+    // wxString::Format does not work. So use a %c format in string
+    int quote = '"';
+
     switch( orgOpt )
     {
         case DIALOG_EXPORT_STEP::STEP_ORG_0:
@@ -415,7 +419,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             }
 
             LOCALE_IO dummy;
-            cmdK2S.Append( wxString::Format( " --user-origin='%.6f x %.6f'", xOrg, yOrg ) );
+            cmdK2S.Append( wxString::Format( " --user-origin=%c%.6f x %.6f%c", quote, xOrg, yOrg, quote ) );
         }
             break;
 
@@ -425,21 +429,20 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             xOrg = Iu2Millimeter( bbox.GetCenter().x );
             yOrg = Iu2Millimeter( bbox.GetCenter().y );
             LOCALE_IO dummy;
-            cmdK2S.Append( wxString::Format( " --user-origin='%.6f x %.6f'", xOrg, yOrg ) );
+            cmdK2S.Append( wxString::Format( " --user-origin=%c%.6f x %.6f%c", quote, xOrg, yOrg, quote ) );
         }
             break;
     }
 
     {
         LOCALE_IO dummy;
-        cmdK2S.Append( wxString::Format( " --min-distance='%.3f mm'", tolerance ) );
+        cmdK2S.Append( wxString::Format( " --min-distance=%c%.3f mm%c", quote, tolerance, quote ) );
     }
 
-    cmdK2S.Append( " -f -o " );
-    cmdK2S.Append( wxString::Format("'%s'", m_filePickerSTEP->GetPath() ) );  // input file path
+    cmdK2S.Append( wxString::Format( " -f -o %c%s%c", quote,
+                                     m_filePickerSTEP->GetPath(), quote ) );  // input file path
 
-    cmdK2S.Append( " " );
-    cmdK2S.Append( wxString::Format("'%s'", m_boardPath ) );                  // output file path
+    cmdK2S.Append( wxString::Format( " %c%s%c",quote,  m_boardPath, quote ) );                  // output file path
 
     wxExecute( cmdK2S, wxEXEC_ASYNC  | wxEXEC_SHOW_CONSOLE );
 
