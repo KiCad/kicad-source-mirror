@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-05 06:01-0700\n"
-"PO-Revision-Date: 2021-11-05 13:00+0000\n"
+"PO-Revision-Date: 2021-11-06 13:25+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3961,7 +3961,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Permisos insuficientes para la carpeta '%s'."
 
 #: common/eda_base_frame.cpp:1086
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
@@ -3971,7 +3971,7 @@ msgid ""
 msgstr ""
 "¡Esto puede ser embarazoso!\n"
 "Parece ser que en la última ocasión que editó el archivo\n"
-"\"%s\"\n"
+"%s\n"
 "no se guardo de forma apropiada. ¿Desea recuperar las últimas ediciones que "
 "realizó?"
 
@@ -14377,7 +14377,6 @@ msgid "Syntax Help"
 msgstr "Ayuda de sintaxis"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14552,15 +14551,15 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{barra superior}</samp><br> &nbsp;"
-"<br><samp>~{CLK}</samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td> &nbsp;<br><samp>~{barra superior}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>barra superior</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp><br> <samp>&nbsp;</samp><br> <samp>~</samp> </td>\n"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td><br></td>\n"
+"        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
@@ -14594,8 +14593,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definición de bus</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Redes resultantes</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14646,9 +14645,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -18053,19 +18052,19 @@ msgid "Highlight"
 msgstr "Resaltar"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Component '%s'"
-msgstr "Remarcar elementos del componente \"%s\""
+msgstr "Resaltar elementos del componente '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Net '%s'"
-msgstr "Remarcar elementos de la red \"%s\""
+msgstr "Resaltar elementos de la red '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "Remarcar aperturas de tipo \"%s\""
+msgstr "Resaltar aperturas de tipo '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
 #, c-format
@@ -18292,13 +18291,13 @@ msgid "Unzip Project"
 msgstr "Descomprimir proyecto"
 
 #: kicad/files-io.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Open '%s'\n"
 msgstr ""
 "\n"
-"Abrir \"%s\"\n"
+"Abrir '%s'\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
@@ -18391,9 +18390,9 @@ msgid "Restoring session"
 msgstr "Restaurando sesión"
 
 #: kicad/kicad_manager_frame.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid "Restoring '%s'"
-msgstr "Restaurando \"%s\""
+msgstr "Restaurando '%s'"
 
 #: kicad/menubar.cpp:56
 msgid "Clear Recent Projects"
@@ -18549,7 +18548,7 @@ msgstr "Acción"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:83 pcbnew/build_BOM_from_board.cpp:112
 msgid "Package"
-msgstr "Empaquetado"
+msgstr "Paquete"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
 msgid "Repository"
@@ -18692,120 +18691,115 @@ msgid "Show all versions"
 msgstr "Mostrar todas las versiones"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
-#, fuzzy
 msgid "Dl Size"
-msgstr "Tamaño X"
+msgstr "Tamaño de descarga"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Inst Size"
-msgstr "Tamaño por defecto"
+msgstr "Tamaño al instalar"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
 #, fuzzy
 msgid "Comp"
-msgstr "Compleja"
+msgstr "Completo"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:105
-#, fuzzy
 msgid "Download"
-msgstr "Abajo"
+msgstr "Descargar"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
-#, fuzzy
 msgid "Versions"
-msgstr "Versión"
+msgstr "Versiones"
 
 #: kicad/pcm/pcm.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "No se ha encontrado el archivo de esquema '%s'."
+msgstr "archivo esquema '%s' no encontrado"
 
 #: kicad/pcm/pcm.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr "Error al cargar el esquema '%s'."
+msgstr "Error al cargar el esquema: '%s'"
 
 #: kicad/pcm/pcm.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading installed packages list: %s"
-msgstr ""
-"Error al cargar la lista de redes.\n"
-"%s"
+msgstr "Error al cargar la lista de paquetes instalados: %s"
 
 #: kicad/pcm/pcm.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading %lld/%lld Kb"
-msgstr "Descargando librerías"
+msgstr "Descargando %lld/%lld Kb"
 
 #: kicad/pcm/pcm.cpp:211
-#, fuzzy
 msgid "Download is too large."
-msgstr "Descargando librerías 3D"
+msgstr "La descarga es muy grande."
 
 #: kicad/pcm/pcm.cpp:225
-#, fuzzy
 msgid "Fetching repository"
-msgstr "Archivo de Github"
+msgstr "Obteniendo repositorio"
 
 #: kicad/pcm/pcm.cpp:227
-#, fuzzy
 msgid "Unable to load repository url"
-msgstr "No se ha podido abrir el archivo %s"
+msgstr "No se pudo cargar la URL del repositorio"
 
 #: kicad/pcm/pcm.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse repository:\n"
 "\n"
 "%s"
 msgstr ""
-"No puede interpretarse la URL:\n"
-"\"%s\""
+"No se pudo analizar el repositorio:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:265
 msgid "Fetching repository packages"
-msgstr ""
+msgstr "Obteniendo paquetes del repositorio"
 
 #: kicad/pcm/pcm.cpp:267
-#, fuzzy
 msgid "Unable to load repository packages url."
-msgstr "No es posible cargar el archivo del proyecto \"%s\""
+msgstr "No se pudo cargar la URL del paquete de repositorio."
 
 #: kicad/pcm/pcm.cpp:275
 msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr ""
+"El hash de los paquetes no coincide. El repositorio puede estar corrupto."
 
 #: kicad/pcm/pcm.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
 msgstr ""
-"No puede interpretarse la URL:\n"
-"\"%s\""
+"No se pudo analizar los metadatos de los paquetes:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:378
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr ""
+"La caché de los paquetes del repositorio actual está corrupta, serán "
+"descargados de nuevo."
 
 #: kicad/pcm/pcm.cpp:428
-#, fuzzy
 msgid "Downloading resources"
-msgstr "Descargando librerías"
+msgstr "Descargando recursos"
 
 #: kicad/pcm/pcm.cpp:442
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
 msgstr ""
+"El hash del archivo de recursos no coincide, no será usado. El repositorio "
+"puede estar corrupto."
 
 #: kicad/pcm/pcm.cpp:587
-#, fuzzy
 msgid "Local file"
-msgstr "Cargar Archivo:"
+msgstr "Archivo local"
 
 #: kicad/pcm/pcm_task_manager.cpp:63
 msgid "Unable to create download directory!"
@@ -18823,9 +18817,9 @@ msgstr ""
 "si el problema persiste, reporte esto a los mantenedores del repositorio."
 
 #: kicad/pcm/pcm_task_manager.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting package '%s'."
-msgstr "Extrayendo el archivo '%s'."
+msgstr "Extrayendo el paquete '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:116
 #, c-format
@@ -18833,30 +18827,33 @@ msgid "Removing downloaded archive '%s'."
 msgstr "Eliminando el fichero archivo descargado '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:157
-#, fuzzy, c-format
+#, c-format
 msgid "Downloading package url: '%s'"
-msgstr "Descargando librerías"
+msgstr "Descargando URL del paquete: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to download url %s\n"
 "%s"
-msgstr "Fallo al cargar '%s'."
+msgstr ""
+"Fallo al descargar la URL %s\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:249
 msgid "Aborting package installation."
-msgstr ""
+msgstr "Cancelando la instalación del paquete."
 
 #: kicad/pcm/pcm_task_manager.cpp:297
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse package metadata:\n"
 "\n"
 "%s"
 msgstr ""
-"No puede interpretarse la URL:\n"
-"\"%s\""
+"No su pudieron interpretar los metadatos del paquete:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:306
 msgid "Archive does not contain a valid metadata.json file"
@@ -18873,25 +18870,27 @@ msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
 "this package."
 msgstr ""
+"El paquete con identificador %s ya está instalado, primero tiene que "
+"desinstalar este paquete."
 
 #: kicad/pcm/pcm_task_manager.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Removing directory %s"
-msgstr "carpeta de configuración"
+msgstr "Eliminando carpeta %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove directory %s"
-msgstr "Imposible crear archivo \"%s\""
+msgstr "Fallo al eliminar la carpeta %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:376
 #, c-format
 msgid "Package %s uninstalled"
-msgstr ""
+msgstr "Paquete %s desinstalado"
 
 #: kicad/pcm/pcm_task_manager.cpp:445
 msgid "Aborting remaining tasks."
-msgstr ""
+msgstr "Cancelando tareas restantes."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -19037,9 +19036,9 @@ msgid "Print the contents of the file"
 msgstr "Imprimir los contenidos del archivo"
 
 #: kicad/project_tree_pane.cpp:857
-#, fuzzy, c-format
+#, c-format
 msgid "Change filename: '%s'"
-msgstr "Cambiar nombre de archivo: \"%s\""
+msgstr "Cambiar nombre de archivo: '%s'"
 
 #: kicad/project_tree_pane.cpp:859
 msgid "Change filename"
@@ -19070,14 +19069,12 @@ msgid "Create new project from template"
 msgstr "Craer nuevo proyecto desde una plantilla"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
-#, fuzzy
 msgid "Open Demo Project..."
-msgstr "Abrir proyecto..."
+msgstr "Abrir proyecto de demostración..."
 
 #: kicad/tools/kicad_manager_actions.cpp:52
-#, fuzzy
 msgid "Open a demo project"
-msgstr "Abrir un proyecto existente"
+msgstr "Abrir un proyecto de demostración"
 
 #: kicad/tools/kicad_manager_actions.cpp:57
 msgid "Open Project..."
@@ -19137,7 +19134,7 @@ msgstr "Editar marco de borde de hoja y bloque de título"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
-msgstr ""
+msgstr "Ejecutar el administrador de complementos y contenido"
 
 #: kicad/tools/kicad_manager_actions.cpp:124
 msgid "Open Text Editor"
@@ -19350,40 +19347,36 @@ msgid "Printing"
 msgstr "Imprimiendo"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:554
-#, fuzzy
 msgid "Predefined Keywords"
-msgstr "Anchos predefinidos:"
+msgstr "Palabras clave predefinidas"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:557
 msgid "Texts can include keywords."
-msgstr ""
+msgstr "Los textos pueden incluir palabras clave."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:558
 msgid "Keyword notation is ${keyword}"
-msgstr ""
+msgstr "La notación de palabras clave es ${palabra_clave}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Each keyword is replaced by its value"
-msgstr ""
+msgstr "Cada palabra clave es reemplazada por su valor"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "These build-in keywords are always available:"
-msgstr ""
+msgstr "Estas palabras claves integradas siempre están disponibles:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:564
-#, fuzzy
 msgid "(sheet number)"
-msgstr "Página número: %d"
+msgstr "(número de hoja)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:565
-#, fuzzy
 msgid "(sheet count)"
-msgstr "Número de repeticiones:"
+msgstr "(cantidad de hojas)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:571
-#, fuzzy
 msgid "(paper size)"
-msgstr "Tamaño de papel personalizado:"
+msgstr "(tamaño de papel)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "Show on all pages"
@@ -19760,7 +19753,6 @@ msgid "Error writing objects to clipboard"
 msgstr "Error al escribir objetos al portapapeles"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19772,16 +19764,17 @@ msgid ""
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
-"### Atenuador Dividido\n"
-"#### La atenuación es de 6dB\n"
-"___Z<sub>in</sub>___ impedancia de entrada deseada en &#x2126;<br>\n"
-"___Z<sub>out</sub>___ impedancia de salida deseada en &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"### Atenuador en T puenteado\n"
+"___a___ es la atenuación en dB<br>\n"
+"___Z<sub>in</sub>___ es la impedancia de entrada deseada en &#x2126;<br>\n"
+"___Z<sub>out</sub>___ es la impedancia de salida deseada en &#x2126;<br>\n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
+"___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19795,21 +19788,19 @@ msgid ""
 "___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 msgstr ""
-"### Atenuador en T:\n"
-"__Zin__ impedancia de entrada deseada en &#x2126;<br>\n"
-"__Zout__ impedancia de salida deseada<br>\n"
-"__Zin = Zout__<br><br>\n"
+"### Atenuador en Pi:\n"
+"___a___ es la atenuación en dB<br>\n"
+"___Z<sub>in</sub>___ es la impedancia de entrada deseada en &#x2126;<br>\n"
+"___Z<sub>out</sub>___ es la impedancia de salida deseada en &#x2126;<br>\n"
 "\n"
-"* __a__atenuación en dB \n"
-"* __L = 10<sup>a/20</sup>__ (la pérdida)\n"
-"* ___A = (L + 1) / (L - 1)___<br><br>\n"
-"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - "
-"1)___\n"
-"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; Z<sub>out</"
+"sub> / L)___<br>\n"
+"___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
+"___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -19825,10 +19816,9 @@ msgstr ""
 "___Z<sub>out</sub>___ es la impedancia de salida deseada en &#x2126;  \n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
+"___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19842,18 +19832,17 @@ msgid ""
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 msgstr ""
-"### Atenuador en T:\n"
-"__Zin__ impedancia de entrada deseada en &#x2126;<br>\n"
-"__Zout__ impedancia de salida deseada<br>\n"
-"__Zin = Zout__<br><br>\n"
+"### Atenuador en T\n"
+"___a___ es la atenuación en dB<br>\n"
+"___Z<sub>in</sub>___ es la impedancia de entrada deseada en &#x2126;<br>\n"
+"___Z<sub>out</sub>___ es la impedancia de salida deseada en &#x2126;<br>\n"
 "\n"
-"* __a__atenuación en dB \n"
-"* __L = 10<sup>a/20</sup>__ (la pérdida)\n"
-"* ___A = (L + 1) / (L - 1)___<br><br>\n"
-"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - "
-"1)___\n"
-"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</sub>) "
+"/ (L&minus;1)___<br>\n"
+"___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
+"___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -19861,13 +19850,12 @@ msgid "Attenuation more than %f dB"
 msgstr "Atenuación mayor de %f dB"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
-#, fuzzy
 msgid "Pi"
-msgstr "Pin"
+msgstr "Pi"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Tee"
-msgstr "Tee"
+msgstr "T"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Bridged tee"
@@ -19889,9 +19877,8 @@ msgid "Parameters"
 msgstr "Parámetros"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:48
-#, fuzzy
 msgid "Attenuation (a):"
-msgstr "Atenuación:"
+msgstr "Atenuación (a):"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:55
 msgid "dB"
@@ -20151,9 +20138,8 @@ msgid "E12"
 msgstr "E12"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:84
-#, fuzzy
 msgid "E24"
-msgstr "24"
+msgstr "E24"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:94
 msgid "Solutions"
@@ -20172,9 +20158,8 @@ msgid "4R solution:"
 msgstr "Solución 4R:"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:158
-#, fuzzy
 msgid "PCB Calculator data file"
-msgstr "Archivo de datos de Calculadora de placas (*.%s)|*.%s"
+msgstr "Archivo de datos de Calculadora de placas"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:161
 msgid "Select PCB Calculator Data File"
@@ -20301,14 +20286,12 @@ msgid "Remove an item from the current list of available regulators"
 msgstr "Eliminar un elemento de la lista de reguladores disponibles"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
-#, fuzzy
 msgid "Temperature rise"
-msgstr "Aumento de temperatura:"
+msgstr "Aumento de temperatura"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
-#, fuzzy
 msgid "Current (I):"
-msgstr "Intensidad:"
+msgstr "Corriente (I):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:42
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:167
@@ -20340,15 +20323,13 @@ msgstr "Pistas de la capa externa"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:201
-#, fuzzy
 msgid "Trace width (W):"
-msgstr "Ancho de pista:"
+msgstr "Ancho de pista (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
-#, fuzzy
 msgid "Trace thickness (H):"
-msgstr "Grosor de pista:"
+msgstr "Grosor de pista (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:236
@@ -20495,6 +20476,8 @@ msgid ""
 "Zdiff =\n"
 "2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 msgstr ""
+"Zdiff =\n"
+"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:231
 msgid "Zcommon = Zeven / 2"
@@ -20724,7 +20707,6 @@ msgid "Not worth using"
 msgstr "No vale la pena usar"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20752,30 +20734,35 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Las series E definidas en IEC 60063 son un sistema ampliamente aceptado de\n"
-"números preferidos para componentes electrónicos. Los valores disponibles\n"
-"están espaciados de manera aproximadamente igual en una escala logarítmica.\n"
+"Las series E están definidas en IEC 60063.\n"
 "\n"
-"E12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"E6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
-"E3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
-"E1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+"Los valores disponibles están espaciados de manera aproximadamente igual en "
+"una escala logarítmica.\n"
 "\n"
-"Esta calculadora encuentra combinaciones de componentes con valores de las\n"
-"series E para crear valores arbitrarios. La resistencia requerida puede ser "
-"entre\n"
-"0,0025 y 4000 kΩ. Se proporcionan soluciones que utilizan hasta 4 "
-"componentes.\n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0  -  1.2  -  1.5  -  1.8  -  2.2  -  2.7  -  3.3 -   3.9  -  "
+"4.7  -  5.6  -  6.8  -  8.2  - \n"
+"\tE6(20%):  1.0  -   -   -  1.5  -   -   -  2.2  -   -   -  3.3 -    -   -  "
+"4.7  -   -   -  6.8  -   -   - \n"
+"\tE3(50%):  1.0  -   -   -   -   -   -   -  2.2  -   -   -   -  -    -   -  "
+"4.7  -   -   -   -   -   -   - \n"
+"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -   -  -    -   -   "
+"-   -   -   -   -   -   -   - \n"
 "\n"
-"Por defecto, el valor pedido es excluido del conjunto de solución. También "
-"es posible\n"
-"especificar hasta dos valores para excluir de la solución si estos valores "
-"no están disponibles\n"
+"- Esta calculadora encuentra combinaciones de las series E estándar (entre "
+"10Ω y 1MΩ) para crear valores arbitrarios.\n"
+"- Puede ingresar la resistencia requerida entre 0,0025 y 4000 kΩ.\n"
+"- Se proporcionan soluciones que utilizan hasta 4 componentes.\n"
+"\n"
+"El valor pedido siempre es excluido del conjunto de solución.<br>\n"
+"Opcionalmente, se pueden especificar hasta dos valores adicionales para "
+"excluir en el caso de problemas de disponibilidad de componentes.\n"
 "\n"
 "Las soluciones se dan en los siguientes formatos:\n"
 "\n"
-"\tR1 + R2 +...+ Rn\t\tresistencias en serie\n"
-"\tR1 | R2 |...| Rn \t\tresistencias en paralelo\n"
+"\tR1 + R2 +...+ Rn\tresistencias en serie\n"
+"\tR1 | R2 |...| Rn\t\tresistencias en paralelo\n"
 "\tR1 + (R2 | R3)...\t\tcualquier combinación de los anteriores\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:49
@@ -20833,7 +20820,6 @@ msgstr ""
 "¿Desea descartar los cambios y salir?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20858,8 +20844,8 @@ msgid ""
 "___H___ is thickness (height) in mils  \n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces  \n"
 msgstr ""
-"Si especifica la corriente máxima, se calculará el grosor de pista "
-"adecuado.\n"
+"Si especifica la corriente máxima, se calculará el grosor de pista adecuado."
+"\n"
 "\n"
 "Si especifica uno de los grosores de pista, se calculará la corriente máxima "
 "que puede manejar. También se calculará el grosor de la otra pista para que "
@@ -20869,16 +20855,18 @@ msgstr ""
 "\n"
 "Los cálculos son válidos para corrientes de hasta 35 A (pistas externas) o "
 "17,5 A (pistas internas), aumentos de temperatura de hasta 100 ºC y grosores "
-"de hasta 400 mil (10 mm).\n"
+"de hasta 400 mils (10 mm).\n"
 "\n"
 "La fórmula, de IPC 2221, es\n"
-"<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
-"dónde:\n"
-"__I__    = corriente máxima en amperios\n"
-"__dt__   = aumento de temperatura por encima de la temperatura ambiente en "
-"ºC\n"
-"__W, H__ = ancho y espesor en mils\n"
-"__K__    = 0,024 para pistas internas o 0,048 para pistas externas\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>  \n"
+"donde:\n"
+"___I___ es la corriente máxima en A\n"
+"___&Delta;t___ es el aumento de temperatura por encima del ambiente en &deg;"
+"C\n"
+"___W___ es el ancho en mils\n"
+"___H___ es el espesor (altura) en mils\n"
+"___K___ es 0,024 para pistas internas o 0,048 para pistas externas  \n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21128,9 +21116,8 @@ msgid "Dielectric losses (odd):"
 msgstr "Pérdidas dieléctricas (inpar):"
 
 #: pcb_calculator/transline_ident.cpp:309
-#, fuzzy
 msgid "Differential Impedance (Zd):"
-msgstr "Espaciado de par diferencial"
+msgstr "Impedancia diferencial (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
@@ -21386,9 +21373,8 @@ msgid "Loss Tg:"
 msgstr "Tg Pérdida:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
-#, fuzzy
 msgid "Common materials:"
-msgstr "Común a las Unidades"
+msgstr "Materiales comunes:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:57
 msgid "Dielectric Material Characteristics"
@@ -21428,24 +21414,23 @@ msgid "PrePreg"
 msgstr "Preimpregnado"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s:"
-msgstr "Ingrese el ancho de la placa en %s"
+msgstr "Ingrese el ancho de la placa en %s:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr "Ingrese el ancho esperado de la placa en %s (valor mínimo %s)"
+msgstr "Ingrese el ancho esperado de la placa (valor mínimo %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
-#, fuzzy
 msgid "Adjust Unlocked Dielectric Layers"
-msgstr "Ajustar los grosores de las capas dieléctricas desbloqueadas"
+msgstr "Ajustar las capas dieléctricas desbloqueadas"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:208
-#, fuzzy, c-format
+#, c-format
 msgid "Value too small (min value %s)."
-msgstr "Valor demasiado pequeño (valor mínimo %s %s). Cancelado"
+msgstr "Valor demasiado pequeño (valor mínimo %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:228
 msgid "All dielectric  thickness layers are locked"
@@ -21503,9 +21488,8 @@ msgid "A layer thickness is < 0. Fix it"
 msgstr "El grosor de una capa es <0. Arréglalo"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1524
-#, fuzzy
 msgid "Custom..."
-msgstr "Personalizado"
+msgstr "Personalizado..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:20
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:49
@@ -21600,7 +21584,6 @@ msgid "Id"
 msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
-#, fuzzy
 msgid "Loss Tan"
 msgstr "Tangente de pérdida"
 
@@ -21675,7 +21658,7 @@ msgstr "Azul"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:67
 msgid "Purple"
-msgstr ""
+msgstr "Púrpura"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:68
 msgid "Black"
@@ -22332,9 +22315,9 @@ msgid "Custom Rules"
 msgstr "Reglas personalizadas"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:123
-#, fuzzy
 msgid "Project is missing or read-only. Some settings will not be editable."
-msgstr "Falta el proyecto o es de solo lectura. Los cambios no se guardarán."
+msgstr ""
+"Falta el proyecto o es de solo lectura. Algunos ajustes no serán editables."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:178
 #, c-format
@@ -23130,25 +23113,24 @@ msgid "Circular Array"
 msgstr "Matriz circular"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
-#, fuzzy
 msgid "Footprint Annotation"
-msgstr "Orientación de huellas"
+msgstr "Anotación de huellas"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
-#, fuzzy
 msgid "Keep existing reference designators"
-msgstr "Reemplazar coincidencias en indicadores de referencia"
+msgstr "Mantener los indicadores de referencia existentes"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
-#, fuzzy
 msgid "Assign unique reference designators"
-msgstr "Asignar referencias únicas a los símbolos pegados"
+msgstr "Asignar indicadores de referencia únicos"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:357
 msgid ""
 "This can conflict with reference designators in the schematic that have not "
 "yet been synchronized with the board."
 msgstr ""
+"Esto puede entrar en conflicto con los indicadores de referencia en el "
+"esquema que aún no se han sincronizado con la placa."
 
 #: pcbnew/dialogs/dialog_create_array_base.h:127
 msgid "Create Array"
@@ -23731,9 +23713,8 @@ msgid "Select a STEP export filename"
 msgstr "Seleccione un nombre para exportar el archivo STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:143
-#, fuzzy
 msgid "STEP files"
-msgstr "Archivos SVG"
+msgstr "Archivos STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:210
 msgid "Non-unity scaled models:"
@@ -24231,9 +24212,8 @@ msgstr "Atributos fabricación"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:272
 #: pcbnew/footprint_libraries_utils.cpp:1136
-#, fuzzy
 msgid "Footprint type:"
-msgstr "Nombre de huella:"
+msgstr "Tipo de huella:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
@@ -24598,9 +24578,8 @@ msgid "CSV"
 msgstr "CSV"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:48
-#, fuzzy
 msgid "Gerber (experimental)"
-msgstr "Gerber (muy experimental)"
+msgstr "Gerber (experimental)"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:50
 msgid "Format"
@@ -24627,9 +24606,8 @@ msgstr ""
 "Cre un único archivo conteniendo todas las huellas a posicionar\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:74
-#, fuzzy
 msgid "Include only SMD footprints"
-msgstr "Incluir &huellas"
+msgstr "Solo incluir huellas SMD"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Exclude all footprints with through hole pads"
@@ -25227,10 +25205,8 @@ msgid "Group name:"
 msgstr "Nombre de grupo:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:39
-#, fuzzy
 msgid "Prevents group from being moved on canvas"
-msgstr ""
-"Previene que los elementos sean movidos y/o redimensionados en el lienzo"
+msgstr "Previene que el grupo sea movido en el lienzo"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:43
 msgid "Group members:"
@@ -25518,9 +25494,8 @@ msgid "Select Netlist"
 msgstr "Seleccionar lista de redes"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:143
-#, fuzzy
 msgid "Please choose a valid netlist file."
-msgstr "Por favor, seleccione una lista de redes válida."
+msgstr "Por favor, seleccione un archivo de lista de redes válido."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:149 pcbnew/dialogs/dialog_netlist.cpp:184
 msgid "The netlist file does not exist."
@@ -25638,9 +25613,8 @@ msgid "Pad Properties"
 msgstr "Propiedades de pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:175
-#, fuzzy
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "Propiedades del pad por defecto..."
+msgstr "Propiedades de pad por defecto para la herramienta de añadir pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:487
 #, c-format
@@ -26334,9 +26308,8 @@ msgid "Plot format:"
 msgstr "Formato de trazado:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
-#, fuzzy
 msgid "Include Layers"
-msgstr "Capas incluidas"
+msgstr "Incluir capas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
@@ -26369,9 +26342,8 @@ msgstr ""
 "demás capas."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
-#, fuzzy
 msgid "Sketch pads on fabrication layers"
-msgstr "Bosquejar pads en las capas fab"
+msgstr "Bosquejar pads en las capas de fabricación"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
@@ -26446,20 +26418,18 @@ msgid "Check zone fills before plotting"
 msgstr "Comprobar relleno de zonas antes de trazar"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
-#, fuzzy
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr ""
 "El ancho y/o margen mínimo global de máscara de soldadura no están fijos a "
 "0. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
-#, fuzzy
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
 msgstr ""
-"La mayoría de fabricantes esperan 0 y usan sus propias constantes, "
-"especialmente para el ancho mínimo de máscara de soldadura."
+"La mayoría de fabricantes esperan 0 y usan sus propias constantes para el "
+"ancho mínimo de máscara de soldadura."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -26540,7 +26510,6 @@ msgid "Include netlist attributes"
 msgstr "Incluir atributos de lista de redes"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
-#, fuzzy
 msgid ""
 "Include netlist metadata and aperture attributes in Gerber files.\n"
 "They are comments in the X1 format.\n"
@@ -26548,11 +26517,10 @@ msgid ""
 msgstr ""
 "Incluir metadatos de lista de redes y atributos de apertura en archivos "
 "Gerber.\n"
-"En el formato X1, son comentarios.\n"
+"Son comentarios en el formato X1.\n"
 "Usado para verificar la conectividad en herramientas CAM y visores Gerber."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
-#, fuzzy
 msgid "Disable aperture macros (not recommended)"
 msgstr "Desactivar las macros de apertura (no recomendado)"
 
@@ -26630,9 +26598,8 @@ msgstr ""
 "Desmarcar para trazar los elementos gráficos usando sus líneas centrales"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot text"
-msgstr "Utilizar el tipo de letra de KiCad para trazar textos"
+msgstr "Usar el tipo de letra de KiCad para trazar texto"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
 msgid ""
@@ -27069,38 +27036,34 @@ msgid "Real drill"
 msgstr "Taladro real"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:21
-#, fuzzy
 msgid "Select Manufacturer"
-msgstr "Seleccione una carpeta"
+msgstr "Seleccione un fabricante"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:25
-#, fuzzy, c-format
+#, c-format
 msgid "from %s"
-msgstr "[desde %s]"
+msgstr "desde %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "Clase de red: %s"
+msgstr "Detalles: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
-#, fuzzy
 msgid "Send project directly"
-msgstr ""
-"Carpeta del proyecto activo:\n"
-"%s"
+msgstr "Enviar el proyecto directamente"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr ""
+msgstr "Envía los archivos de producción a un fabricante desde KiCad"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr ""
+msgstr "Producir placa"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr ""
+msgstr "Enviar placa para producción"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
 msgid "Change Pads on Current Footprint"
@@ -27237,14 +27200,12 @@ msgid "Target Properties"
 msgstr "Propiedades de mira de centrado"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:82
-#, fuzzy
 msgid "Footprint Reference Properties"
-msgstr "Propiedades de las huellas"
+msgstr "Propiedades de referencia de huella"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:83
-#, fuzzy
 msgid "Footprint Value Properties"
-msgstr "Propiedades de las huellas"
+msgstr "Propiedades de valor de huella"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:84
 msgid "Footprint Text Properties"
@@ -27413,9 +27374,8 @@ msgid "Annular rings:"
 msgstr "Ancho de anular:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
-#, fuzzy
 msgid "Start, end, and connected layers"
-msgstr "%s, %s y capas conectadas"
+msgstr "Inicio, final, y capas conectadas"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
@@ -27535,43 +27495,40 @@ msgid "Clearance Outlines"
 msgstr "Perímetros de margen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing"
-msgstr "Mostrar al crear pistas"
+msgstr "Mostrar al enrutar"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing w/ via clearance at end"
-msgstr "Mostrar con margen de vía al final"
+msgstr "Mostrar al enrutar con margen de vía al final"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing and editing"
-msgstr "Mostrar al crear y editar pistas"
+msgstr "Mostrar al enrutar y editar"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show always"
 msgstr "Mostrar siempre"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
-#, fuzzy
 msgid "Track && Via Clearances"
-msgstr "Margen de pista"
+msgstr "Márgenes de pista y vía"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
 msgstr ""
+"Mostrar contornos de margen alrededor de pistas, y opcionalmente, el margen "
+"de vía alrededor del fin de una pista al enrutar."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
 msgstr "Mostrar margen de pad"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Scroll cross-probed items into view"
-msgstr "Centrar la vista en los elementos de sondeo cruzado"
+msgstr "Desplazar los elementos de sondeo cruzado a la vista"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -27640,14 +27597,12 @@ msgstr "Resaltar red (para pads o pistas)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
-#, fuzzy
 msgid "Graphics Editing"
-msgstr "Edición de pistas"
+msgstr "Edición de gráficos"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
-#, fuzzy
 msgid "Constrain to H, V, 45 degrees"
-msgstr "Limitar perímetro a H, V y 45 grados"
+msgstr "Restringir a H, V y 45 grados"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
 msgid "Magnetic Points"
@@ -27738,9 +27693,8 @@ msgid ""
 msgstr "Arrastra la unión más cercana en la pista sin restriciones de ángulos."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
-#, fuzzy
 msgid "Limit actions to 45 degrees from start"
-msgstr "Limitar líneas a 45°"
+msgstr "Limitar acciones a 45° desde el inicio"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:376
 msgid "Draw an outline to show the sheet size."
@@ -27825,14 +27779,12 @@ msgid "Path Substitutions"
 msgstr "Sustituciones de rutas"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "No filename entered"
-msgstr "¡No existe nombre de Archivo! Cancelado"
+msgstr "No se ingresó un nombre de archivo"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
-#, fuzzy
 msgid "Illegal filename"
-msgstr "Nombre de archivo no válido: %s"
+msgstr "Nombre de archivo ilegal"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -27840,14 +27792,12 @@ msgid "File not found"
 msgstr "Archivo no encontrado"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:400
-#, fuzzy
 msgid "Unable to open file"
-msgstr "Imposible reabrir archivo \"<%s>\""
+msgstr "Imposible abrir archivo"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:405
-#, fuzzy
 msgid "Unknown error"
-msgstr "Método desconocido"
+msgstr "Error desconocido"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:38
 msgid "3D Model(s)"
@@ -28073,9 +28023,8 @@ msgstr ""
 "otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
-#, fuzzy
 msgid "Copper to hole clearance:"
-msgstr "Margen de agujeros de cobre:"
+msgstr "Margen de cobre a agujero:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:261
 msgid ""
@@ -28088,9 +28037,8 @@ msgstr ""
 "reglas personalizadas u otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
-#, fuzzy
 msgid "Copper to edge clearance:"
-msgstr "Margen de borde de cobre:"
+msgstr "Margen de cobre a borde:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:277
 msgid ""
@@ -28782,7 +28730,6 @@ msgid "User9"
 msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board manufacturer's recommendations for solder mask clearance and "
 "minimum web width."
@@ -28791,7 +28738,6 @@ msgstr ""
 "soldadura y ancho mínimo de puente."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
-#, fuzzy
 msgid "If none are provided, setting the values to zero is suggested."
 msgstr "Si no se provee ninguno, se recomienda fijar los valores a cero."
 
@@ -28812,7 +28758,6 @@ msgstr ""
 "de la máscara de soldadura)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
-#, fuzzy
 msgid "Solder mask minimum web width:"
 msgstr "Ancho mínimo de puente de máscara de soldadura:"
 
@@ -28906,7 +28851,6 @@ msgid "Check rule syntax"
 msgstr "Verificar reglas de sintaxis"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29137,20 +29081,21 @@ msgstr ""
 "\n"
 "### Tipos de requerimientos\n"
 "\n"
-" * annular_width\n"
+" * annular\\_width\n"
 " * clearance\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
 " * disallow\n"
-" * edge_clearance\n"
+" * edge\\_clearance\n"
 " * length\n"
-" * hole\n"
-" * hole_clearance\n"
-" * silk_clearance\n"
+" * hole\\_clearance\n"
+" * hole\\_size\n"
+" * silk\\_clearance\n"
 " * skew\n"
-" * track_width\n"
-" * via_count\n"
+" * track\\_width\n"
+" * via\\_count\n"
+" * via\\_diameter\n"
 "\n"
 "\n"
 "<br><br>\n"
@@ -29198,14 +29143,14 @@ msgstr ""
 "### Notas\n"
 "\n"
 "La cláusula de versión tiene que ser la primera cláusula.\n"
-"Indica la versión de sintaxis del archivo para que analizadores de\n"
-"reglas futuros puedan realizar actualizaciones automáticas.\n"
-"Debería ser fijado a \"1\".\n"
+"Indica la versión de sintaxis del archivo para que analizadores de reglas\n"
+"futuros puedan realizar actualizaciones automáticas. Debería ser fijado a \"1"
+"\".\n"
 "\n"
 "Las reglas deberían ser ordenadas por especificidad.\n"
 "Las reglas posteriores tienen precedencia sobre las reglas anteriores;\n"
-"una vez que se encuentra una regla coincidente, no se comprobarán más "
-"reglas.\n"
+"una vez que se encuentra una regla coincidente, no se comprobarán más reglas."
+"\n"
 "\n"
 "Use Ctrl+/ para comentar o descomentar la(s) línea(s).\n"
 "<br><br><br>\n"
@@ -29240,8 +29185,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"Verdadero si `A` tiene una red que es parte del par diferencial "
-"especificado.\n"
+"Verdadero si `A` tiene una red que es parte del par diferencial especificado."
+"\n"
 "`<net_name>` es el nombre base del par diferencial. Por ejemplo, "
 "`inDiffPair('CLK')`\n"
 "coincide con los elementos en las redes `CLK_P` y `CLK_N`.\n"
@@ -29256,14 +29201,13 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
-"Verdadero si`A` existe en la capa dada. El nombre de la capa puede ser el "
-"asignado\n"
-"en Configuración de placa > Capas del editor de placas, o el nombre canónico "
-"(ej: `F.Cu`).\n"
+"Verdadero si`A` existe en la capa dada. El nombre de la capa puede ser\n"
+"el asignado en Configuración de placa > Capas del editor de placas,\n"
+"o el nombre canónico (ej: `F.Cu`).\n"
 "\n"
-"Note: esto devuelve verdadero si `A`está en la capa dada, independientemente "
-"de\n"
-"si la regla está siendo evaluada en esa capa o no.\n"
+"Note: esto devuelve verdadero si `A`está en la capa dada, "
+"independientemente\n"
+"de si la regla está siendo evaluada en esa capa o no.\n"
 "Para lo último, use la cláusula `(layer \"layer_name\")` en la regla.\n"
 "<br><br><br>\n"
 "\n"
@@ -29416,24 +29360,20 @@ msgid "board setup constraints"
 msgstr "restricciones de configuración de placa"
 
 #: pcbnew/drc/drc_engine.cpp:175
-#, fuzzy
 msgid "board setup constraints silk"
-msgstr "restricciones de configuración de placa"
+msgstr "restricciones de configuración de placa para serigrafía"
 
 #: pcbnew/drc/drc_engine.cpp:181
-#, fuzzy
 msgid "board setup constraints hole"
-msgstr "restricciones de configuración de placa"
+msgstr "restricciones de configuración de placa para orificios"
 
 #: pcbnew/drc/drc_engine.cpp:186
-#, fuzzy
 msgid "board setup constraints edge"
-msgstr "restricciones de configuración de placa"
+msgstr "restricciones de configuración de placa para bordes"
 
 #: pcbnew/drc/drc_engine.cpp:191
-#, fuzzy
 msgid "board setup constraints courtyard"
-msgstr "restricciones de configuración de placa"
+msgstr "restricciones de configuración de placa para patios"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
@@ -29470,9 +29410,8 @@ msgid "Local override on %s; clearance: %s."
 msgstr "Sustitución local en %s; margen: %s."
 
 #: pcbnew/drc/drc_engine.cpp:831
-#, fuzzy
 msgid "board minimum"
-msgstr "ancho mínimo de placa"
+msgstr "mínimo de placa"
 
 #: pcbnew/drc/drc_engine.cpp:834
 #, c-format
@@ -29480,19 +29419,18 @@ msgid "Board minimum clearance: %s."
 msgstr "Margen mínimo de placa: %s."
 
 #: pcbnew/drc/drc_engine.cpp:843
-#, fuzzy
 msgid "board minimum hole"
-msgstr "ancho mínimo de placa"
+msgstr "orificio mínimo de placa"
 
 #: pcbnew/drc/drc_engine.cpp:846
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Margen mínimo de placa: %s."
+msgstr "Margen de orificio mínimo de placa: %s."
 
 #: pcbnew/drc/drc_engine.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: %s."
-msgstr "Comprobando %s; margen: %s."
+msgstr "Comprobando %s margen: %s."
 
 #: pcbnew/drc/drc_engine.cpp:885 pcbnew/drc/drc_engine.cpp:886
 #: pcbnew/drc/drc_engine.cpp:887 pcbnew/tools/board_inspection_tool.cpp:647
@@ -29503,14 +29441,14 @@ msgid "undefined"
 msgstr "indefinido"
 
 #: pcbnew/drc/drc_engine.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s %s: %s."
-msgstr "Comprobando %s."
+msgstr "Comprobando %s %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:918
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "Reconectar %s pin %s de %s a %s."
+msgstr "Comprobando %s: mín %s; opc %s; máx %s."
 
 #: pcbnew/drc/drc_engine.cpp:929
 #, c-format
@@ -29746,24 +29684,21 @@ msgid "Differential uncoupled length too long"
 msgstr "Longitud diferencial desacoplada demasiado larga"
 
 #: pcbnew/drc/drc_item.cpp:206
-#, fuzzy
 msgid "Footprint type doesn't match footprint pads"
-msgstr "Editor de huellas - Crear/Editar huellas"
+msgstr "El tipo de huella no coincide con los pads de la huella"
 
 #: pcbnew/drc/drc_item.cpp:210
-#, fuzzy
 msgid "Through hole pad has no hole"
-msgstr "Advertencia: un pad de agujero pasante no tiene un agujero."
+msgstr "Pad de orificio pasante sin un orificio"
 
 #: pcbnew/drc/drc_item.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "Rule: %s"
-msgstr "Reglas"
+msgstr "Regla: %s"
 
 #: pcbnew/drc/drc_item.cpp:336
-#, fuzzy
 msgid "Local override"
-msgstr "Valores locales de margen:"
+msgstr "Anulación local"
 
 #: pcbnew/drc/drc_rule.h:137
 #, c-format
@@ -29850,9 +29785,9 @@ msgid "Missing constraint type.|  Expected %s."
 msgstr "Tipo de requerimiento faltante. Se espera %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Rule already has a '%s' constraint."
-msgstr "El área de reglas '%s' no permite pistas."
+msgstr "La regla ya tiene el requerimiento '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:352
 msgid "Missing min value."
@@ -30418,13 +30353,13 @@ msgstr ""
 "Fallo al renombrar el archivo temporal '%s'."
 
 #: pcbnew/files.cpp:1154
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
 msgstr ""
 "Placa copiada a:\n"
-"\"%s\""
+"%s"
 
 #: pcbnew/footprint.cpp:926 pcbnew/tools/pcb_control.cpp:1231
 msgid "Last Change"
@@ -30491,24 +30426,24 @@ msgid "Footprint %s"
 msgstr "Huella %s"
 
 #: pcbnew/footprint.cpp:2091
-#, fuzzy, c-format
+#, c-format
 msgid "Expected \"Through hole\" type but set to \"%s\""
-msgstr "Pad de orificio pasante %s de %s"
+msgstr "Tipo \"Orificio pasante\" esperado, pero es \"%s\""
 
 #: pcbnew/footprint.cpp:2095
 #, c-format
 msgid "Expected \"SMD\" type but set to \"%s\""
-msgstr ""
+msgstr "Tipo \"SMD\" esperado, pero es \"%s\""
 
 #: pcbnew/footprint.cpp:2099
 #, c-format
 msgid "Expected \"Other\" type but set to \"%s\""
-msgstr ""
+msgstr "Tipo \"Otro\" esperado, pero es \"%s\""
 
 #: pcbnew/footprint.cpp:2125
-#, fuzzy, c-format
+#, c-format
 msgid "(pad \"%s\")"
-msgstr "pad %s"
+msgstr "(pad \"%s\")"
 
 #: pcbnew/footprint.cpp:2367 pcbnew/pad.cpp:1681 pcbnew/zone.cpp:1479
 msgid "Clearance Override"
@@ -30720,7 +30655,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:906
 #: pcbnew/footprint_viewer_frame.cpp:720
 msgid "Previous footprint placement still in progress."
-msgstr ""
+msgstr "La colocación de la huella anterior sigue en curso."
 
 #: pcbnew/footprint_libraries_utils.cpp:995
 msgid "Save Footprint As"
@@ -31209,7 +31144,6 @@ msgstr "Valor del radio del arco:"
 # Mejorable
 #: pcbnew/microwave/microwave_footprint.cpp:80
 #: pcbnew/microwave/microwave_footprint.cpp:95
-#, fuzzy
 msgid "Create Microwave Footprint"
 msgstr "Crear huella de microondas"
 
@@ -31250,7 +31184,6 @@ msgid "Component Value:"
 msgstr "Valor del componente:"
 
 #: pcbnew/microwave/microwave_polygon.cpp:111
-#, fuzzy
 msgid "Complex Shape"
 msgstr "Forma compleja"
 
@@ -31263,9 +31196,8 @@ msgid "Read Shape Description File..."
 msgstr "Leer archivo de descripción de forma..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:210
-#, fuzzy
 msgid "Shape Description File"
-msgstr "Leer archivo de descripción de forma..."
+msgstr "Archivo de descripción de forma"
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
 msgid "Shape has a null size."
@@ -31285,7 +31217,7 @@ msgstr "En placa"
 
 #: pcbnew/netinfo_item.cpp:129
 msgid "In Package"
-msgstr "En empaquetado"
+msgstr "En paquete"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:138
 #, c-format
@@ -31691,7 +31623,7 @@ msgstr "Diámetro"
 
 #: pcbnew/pad.cpp:944
 msgid "Length in Package"
-msgstr "Longitud en empaquetado"
+msgstr "Longitud en el paquete"
 
 #: pcbnew/pad.cpp:957
 msgid "Hole X / Y"
@@ -31742,14 +31674,14 @@ msgid "Through hole pad %s of %s"
 msgstr "Pad de orificio pasante %s de %s"
 
 #: pcbnew/pad.cpp:1155
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "Pad %s de %s en %s"
+msgstr "Pad %s %s de %s en %s"
 
 #: pcbnew/pad.cpp:1163
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "Pad de orificio pasante %s de %s"
+msgstr "Pad de orificio pasante %s %s de %s"
 
 #: pcbnew/pad.cpp:1598
 msgid "Edge connector"
@@ -31876,6 +31808,8 @@ msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
+"Se recibió un error al leer la lista de redes. Por favor, informe de este "
+"problema al equipo de KiCad utilizando el menú Ayuda->Informar de un error."
 
 #: pcbnew/pcb_edit_frame.cpp:1500
 #, c-format
@@ -32342,7 +32276,7 @@ msgstr ""
 "equivalente de KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2600
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
@@ -32401,6 +32335,9 @@ msgid ""
 "been made but it is possible that DRC errors exist and that manual editing "
 "of the zone priorities is required."
 msgstr ""
+"No se pudieron determinar las propiedades de zona rellena para la capa '%s'. "
+"Se ha hecho el mejor intento, pero es posible que existan errores de DRC y "
+"que sea necesario editar manualmente las prioridades de zona."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:145
 msgid ""
@@ -32649,6 +32586,11 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
+"La plantilla de CADSTAR '%s' tiene alivios térmicos en el diseño original "
+"pero el ancho del alivio térmico (%.2f mm) es más fino que el ancho mínimo "
+"de la zona (%.2f mm). KiCad requiere que el ancho mínimo de la zona sea "
+"preservado. Se ha aplicado el ancho del alivio térmico como el ancho mínimo, "
+"y será aplicado la próxima vez que se rellenen las zonas."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1963
 #, c-format
@@ -32808,12 +32750,12 @@ msgstr "No se puede leer el archivo '%s'"
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1086
 #, c-format
 msgid "<package> '%s' duplicated in <library> '%s'"
-msgstr "<empaquetado> '%s' duplicado en <librería> '%s'"
+msgstr "<paquete> '%s' duplicado en <librería> '%s'"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1164
 #, c-format
 msgid "No '%s' package in library '%s'."
-msgstr "No se encuentra el empaquetado '%s' en la librería '%s'."
+msgstr "No se encuentra el paquete '%s' en la librería '%s'."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1395
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2181
@@ -33392,9 +33334,9 @@ msgstr "Excepción en el código de un complemento de python"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
-msgstr "No se ha encontrado el método \"%s\", o no puede ejecutarse"
+msgstr "No se ha encontrado el método '%s', o no puede ejecutarse"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:84
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
@@ -33625,9 +33567,8 @@ msgid "Auto-finish Track"
 msgstr "Finalizar pista automáticamente"
 
 #: pcbnew/router/router_tool.cpp:97
-#, fuzzy
 msgid "Automatically finishes laying the current track."
-msgstr "Termina la pista en proceso de enrutado automágicamente."
+msgstr "Termina automáticamente el enrutado de la pista."
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Place Through Via"
@@ -33709,9 +33650,9 @@ msgid "Track Corner Mode"
 msgstr "Modo de esquina de pista"
 
 #: pcbnew/router/router_tool.cpp:164
-#, fuzzy
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
-msgstr "Alterna entre esquinas puntiagudas y redondeadas al enrutar pistas."
+msgstr ""
+"Alterna entre esquinas puntiagudas/redondeadas y 45°/90° al enrutar pistas."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
@@ -33838,9 +33779,8 @@ msgstr ""
 "Reglas de diseño > Requerimientos."
 
 #: pcbnew/router/router_tool.cpp:981
-#, fuzzy
 msgid "Blind/buried via need 2 different layers."
-msgstr "No modificar pads de capas diferentes"
+msgstr "Vía ciega/enterrada requiere dos capas distintas."
 
 #: pcbnew/router/router_tool.cpp:1059
 msgid "Tracks on Copper layers only."
@@ -33885,33 +33825,28 @@ msgid "(no net)"
 msgstr "(sin red)"
 
 #: pcbnew/router/router_tool.cpp:2060
-#, fuzzy
 msgid "Free-angle"
-msgstr "ángulo"
+msgstr "Ángulo libre"
 
 #: pcbnew/router/router_tool.cpp:2066
-#, fuzzy
 msgid "45-degree"
-msgstr "45 grados"
+msgstr "45°"
 
 #: pcbnew/router/router_tool.cpp:2067
-#, fuzzy
 msgid "45-degree rounded"
-msgstr "Arrastrar (modo 45º)"
+msgstr "45° redondeado"
 
 #: pcbnew/router/router_tool.cpp:2068
-#, fuzzy
 msgid "90-degree"
-msgstr "grado"
+msgstr "90°"
 
 #: pcbnew/router/router_tool.cpp:2069
 msgid "90-degree rounded"
-msgstr ""
+msgstr "90° redondeado"
 
 #: pcbnew/router/router_tool.cpp:2074
-#, fuzzy
 msgid "Corner Style"
-msgstr "Estilo de línea"
+msgstr "Estilo de esquina"
 
 #: pcbnew/router/router_tool.cpp:2079
 #, c-format
@@ -34211,9 +34146,8 @@ msgid "Cannot generate clearance report on empty group."
 msgstr "No se puede generar un informe de margen en un grupo vacío."
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
-#, fuzzy
 msgid "Zone connection resolution for:"
-msgstr "Resolución de margen de orificios para:"
+msgstr "Resolución de conexión de zona para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 #, c-format
@@ -34256,9 +34190,8 @@ msgid "Silkscreen clearance resolution for:"
 msgstr "Resolución de margen de serigrafía para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
-#, fuzzy
 msgid "Courtyard clearance resolution for:"
-msgstr "Resolución de margen para:"
+msgstr "Resolución de margen de patio para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:566
 msgid "Hole clearance resolution for:"
@@ -34266,7 +34199,7 @@ msgstr "Resolución de margen de orificios para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
-msgstr ""
+msgstr "Los elementos no comparten capas relevantes:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:678
 msgid "Select an item for a constraints resolution report."
@@ -34281,9 +34214,9 @@ msgid "Track width resolution for:"
 msgstr "Resolución de ancho de pista para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
-#, fuzzy, c-format
+#, c-format
 msgid "Width constraints: min %s; opt %s; max %s."
-msgstr "Restricciones de ancho: mínimo %s máximo %s."
+msgstr "Restricciones de ancho: mín %s; opc %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:749
 msgid "Via Diameter"
@@ -34294,9 +34227,9 @@ msgid "Via diameter resolution for:"
 msgstr "Resolución de diámetro de vía para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Diameter constraints: min %s; opt %s; max %s."
-msgstr "Restricciones de diámetro: mínimo %s máximo %s."
+msgstr "Restricciones de diámetro: mín %s; opc %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Via Annular Width"
@@ -34307,9 +34240,9 @@ msgid "Via annular width resolution for:"
 msgstr "Resolución de ancho de anular de vía para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:782
-#, fuzzy, c-format
+#, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
-msgstr "Restricciones de ancho de anular de vía: mínimo %s máximo %s."
+msgstr "Restricciones de ancho de anular: mín %s; opc %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:793
 msgid "Hole Size"
@@ -34351,9 +34284,8 @@ msgid "Item allowed at current location."
 msgstr "Elemento permitido en la ubicación actual."
 
 #: pcbnew/tools/convert_tool.cpp:76
-#, fuzzy
 msgid "Create from Selection"
-msgstr "Eliminar de la selección"
+msgstr "Crear desde la selección"
 
 #: pcbnew/tools/convert_tool.cpp:210
 msgid "Convert shapes to polygon"
@@ -34380,9 +34312,8 @@ msgid "Thickness (mm)"
 msgstr "Grosor (mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:274
-#, fuzzy
 msgid "Thickness (inches)"
-msgstr "Grosor (mils)"
+msgstr "Grosor (pulgadas)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
 msgid "Thickness (mils)"
@@ -34393,9 +34324,8 @@ msgid "Loss Tangent"
 msgstr "Tangente de pérdida"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:313
-#, fuzzy
 msgid "Dielectric"
-msgstr "Dieléctrico %d"
+msgstr "Dieléctrico"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:365
 msgid "Insert board stackup table"
@@ -34446,7 +34376,6 @@ msgid "Edge card connectors: "
 msgstr "Conectores laterales de tarjeta: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:518
-#, fuzzy
 msgid "Yes, Bevelled"
 msgstr "Sí, biselado"
 
@@ -34596,7 +34525,6 @@ msgid "Selection copied"
 msgstr "La selección fue copiada"
 
 #: pcbnew/tools/edit_tool.cpp:2459
-#, fuzzy
 msgid "Copy canceled"
 msgstr "La copia fue cancelada"
 
@@ -34664,60 +34592,52 @@ msgid "Recombine pads"
 msgstr "Recombinar pads"
 
 #: pcbnew/tools/pcb_actions.cpp:48
-#, fuzzy
 msgid "Create Polygon from Selection"
-msgstr "Crea un nuevo polígono gráfico a partir de la selección"
+msgstr "Crear polígono a partir de selección"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Creates a graphic polygon from the selection"
 msgstr "Crea un nuevo polígono gráfico a partir de la selección"
 
 #: pcbnew/tools/pcb_actions.cpp:53
-#, fuzzy
 msgid "Create Zone from Selection"
-msgstr "Eliminar de la selección"
+msgstr "Crear zona a partir de selección"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Creates a copper zone from the selection"
 msgstr "Crea una zona de cobre a partir de la selección"
 
 #: pcbnew/tools/pcb_actions.cpp:58
-#, fuzzy
 msgid "Create Rule Area from Selection"
-msgstr "Crea un área de reglas a partir de la selección"
+msgstr "Crear área de reglas a partir de selección"
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Creates a rule area from the selection"
 msgstr "Crea un área de reglas a partir de la selección"
 
 #: pcbnew/tools/pcb_actions.cpp:63
-#, fuzzy
 msgid "Create Lines from Selection"
-msgstr "Crea líneas gráficas a partir de la selección"
+msgstr "Crear líneas a partir de selección"
 
 #: pcbnew/tools/pcb_actions.cpp:63
 msgid "Creates graphic lines from the selection"
 msgstr "Crea líneas gráficas a partir de la selección"
 
 #: pcbnew/tools/pcb_actions.cpp:68
-#, fuzzy
 msgid "Create Arc from Selection"
-msgstr "Eliminar de la selección"
+msgstr "Crear arco a partir de selección"
 
 #: pcbnew/tools/pcb_actions.cpp:68
-#, fuzzy
 msgid "Creates an arc from the selected line segment"
-msgstr "Crear un arco a partir de un segmento de línea"
+msgstr "Crea un arco a partir del segmento de línea seleccionado"
 
 #: pcbnew/tools/pcb_actions.cpp:73
-#, fuzzy
 msgid "Create Tracks from Selection"
-msgstr "Crea líneas gráficas a partir de la selección"
+msgstr "Crear pistas a partir de selección"
 
 #: pcbnew/tools/pcb_actions.cpp:73
-#, fuzzy
 msgid "Creates tracks from the selected graphic lines"
-msgstr "Limpiar la capa de gráficos seleccionada"
+msgstr "Crea pistas a partir de las líneas gráficas seleccionadas"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw Line"
@@ -35443,10 +35363,9 @@ msgid "Lock or unlock selected items"
 msgstr "Bloquear o desbloquear los elementos seleccionados"
 
 #: pcbnew/tools/pcb_actions.cpp:676
-#, fuzzy
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
-msgstr "Limitar líneas a 45°"
+msgstr "Limitar acciones a horizontal, vertical, o 45° desde el punto inicial"
 
 #: pcbnew/tools/pcb_actions.cpp:681
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -35595,28 +35514,27 @@ msgid "Curved Ratsnest Lines"
 msgstr "Líneas aéreas curvadas"
 
 #: pcbnew/tools/pcb_actions.cpp:812
-#, fuzzy
 msgid "Ratsnest Mode (3-state)"
-msgstr "Modo de vista de capa única (3 estados)"
+msgstr "Modo de líneas aéreas (3 estados)"
 
 #: pcbnew/tools/pcb_actions.cpp:813
-#, fuzzy
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
-msgstr "Alternar entre mostrar zonas rellenas, alámbicas, y esbozadas"
+msgstr ""
+"Alternar entre mostrar las líneas aéreas para todas las capas, solo las "
+"capas visibles, o ninguna"
 
 #: pcbnew/tools/pcb_actions.cpp:817
-#, fuzzy
 msgid "Net Color Mode (3-state)"
-msgstr "Modo de vista de capa única (3 estados)"
+msgstr "Modo de color de red (3 estados)"
 
 #: pcbnew/tools/pcb_actions.cpp:818
-#, fuzzy
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
 msgstr ""
-"Los colores de red y clases de red se muestran solo en las líneas aéreas"
+"Alternar entre usar los colores de red y clases de redes para todas las "
+"redes, solo las líneas aéreas, o ninguna"
 
 #: pcbnew/tools/pcb_actions.cpp:823
 msgid "Sketch Tracks"
@@ -35659,18 +35577,16 @@ msgid "Show footprint texts in line mode"
 msgstr "Mostrar texto de las huellas en modo línea"
 
 #: pcbnew/tools/pcb_actions.cpp:853
-#, fuzzy
 msgid "Draw Zone Fills"
-msgstr "Mostrar &relleno de zonas"
+msgstr "Dibujar rellenos de zonas"
 
 #: pcbnew/tools/pcb_actions.cpp:853
 msgid "Show filled areas of zones"
 msgstr "Mostrar áreas rellenas en zonas"
 
 #: pcbnew/tools/pcb_actions.cpp:858
-#, fuzzy
 msgid "Draw Zone Outlines"
-msgstr "Contorno de zona"
+msgstr "Dibujar contornos de zonas"
 
 #: pcbnew/tools/pcb_actions.cpp:858
 msgid "Show only zone boundaries"
@@ -35678,21 +35594,19 @@ msgstr "Mostrar solo delimitación de las zonas"
 
 #: pcbnew/tools/pcb_actions.cpp:863
 msgid "Draw Zone Fill Fracture Borders"
-msgstr ""
+msgstr "Dibujar bordes de fractura de relleno de zona"
 
 #: pcbnew/tools/pcb_actions.cpp:868
-#, fuzzy
 msgid "Draw Zone Fill Triangulation"
-msgstr "Mostrar &relleno de zonas"
+msgstr "Dibujar triangulación de relleno de zonas"
 
 #: pcbnew/tools/pcb_actions.cpp:874
 msgid "Toggle Zone Display"
 msgstr "Alternar visualización de zonas"
 
 #: pcbnew/tools/pcb_actions.cpp:875
-#, fuzzy
 msgid "Cycle between showing zone fills and just their outlines"
-msgstr "Alternar entre mostrar zonas rellenas, alámbicas, y esbozadas"
+msgstr "Alternar entre mostrar zonas rellenas, y solo sus contornos"
 
 #: pcbnew/tools/pcb_actions.cpp:883
 msgid "Switch to Component (F.Cu) layer"
@@ -36133,14 +36047,12 @@ msgid "Switch router to walkaround mode"
 msgstr "Cambiar el enrutador al modo de rodeo"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle Router Mode"
-msgstr "Modo de empuje del enrutador"
+msgstr "Alternar modo del enrutador"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle router to the next mode"
-msgstr "Cambiar el enrutador al modo de empuje"
+msgstr "Alternar el enrutador al siguiente modo"
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Set Layer Pair..."
@@ -36185,7 +36097,6 @@ msgid "Sets the length tuning parameters for currently routed item."
 msgstr "Ajusta los parámetros de ajuste de longitud para el elemento."
 
 #: pcbnew/tools/pcb_control.cpp:214
-#, fuzzy
 msgid "Don't show again"
 msgstr "No mostrar de nuevo"
 
@@ -36195,6 +36106,8 @@ msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
 msgstr ""
+"No todas las zonas están rellenas. Use Editar > Rellenar todas las zonas (%s)"
+" si quieres ver todos los rellenos."
 
 #: pcbnew/tools/pcb_control.cpp:585
 msgid "Item locked."
@@ -36485,9 +36398,9 @@ msgid "Layer Display Options"
 msgstr "Opciones de visualización de capas"
 
 #: pcbnew/widgets/appearance_controls.cpp:595
-#, fuzzy, c-format
+#, c-format
 msgid "Inactive layers (%s):"
-msgstr "Capas inactivas:"
+msgstr "Capas inactivas (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Inactive layers:"
@@ -36522,9 +36435,9 @@ msgid "Net Display Options"
 msgstr "Opciones de visualización de redes"
 
 #: pcbnew/widgets/appearance_controls.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "Net colors (%s):"
-msgstr "Colores de redes:"
+msgstr "Colores de redes (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Net colors:"
@@ -36550,37 +36463,33 @@ msgid "Net and netclass colors are not shown"
 msgstr "Los colores de red y clases de red no se muestran"
 
 #: pcbnew/widgets/appearance_controls.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "Ratsnest display (%s):"
-msgstr "Visualización de líneas aéreas:"
+msgstr "Visualización de líneas aéreas (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:714
 msgid "Ratsnest display:"
 msgstr "Visualización de líneas aéreas:"
 
 #: pcbnew/widgets/appearance_controls.cpp:719
-#, fuzzy
 msgid "Choose which ratsnest lines to display"
 msgstr "Elegir que líneas aéreas mostrar"
 
 #: pcbnew/widgets/appearance_controls.cpp:729
-#, fuzzy
 msgid "Show ratsnest lines to items on all layers"
-msgstr "Las líneas aéreas se muestran en los elementos de todas las capas"
+msgstr "Mostrar líneas aéreas a elementos de todas las capas"
 
 #: pcbnew/widgets/appearance_controls.cpp:734
 msgid "Visible layers"
 msgstr "Capas visibles"
 
 #: pcbnew/widgets/appearance_controls.cpp:736
-#, fuzzy
 msgid "Show ratsnest lines to items on visible layers"
-msgstr "Las líneas aéreas se muestran en los elementos de capas visibles"
+msgstr "Mostrar líneas aéreas a elementos de las capas visibles"
 
 #: pcbnew/widgets/appearance_controls.cpp:743
-#, fuzzy
 msgid "Hide all ratsnest lines"
-msgstr "Ocultar conexiones de la placa"
+msgstr "Ocultar todas las líneas aéreas"
 
 #: pcbnew/widgets/appearance_controls.cpp:881
 msgid "Set Net Color"
@@ -36873,9 +36782,8 @@ msgid "Configure net classes"
 msgstr "Configurar clases de redes"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:161
-#, fuzzy
 msgid "Presets (Ctrl+Tab):"
-msgstr "(Ctrl+Tab)"
+msgstr "Ajustes por defecto (Ctrl+Tab):"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "(unsaved)"
