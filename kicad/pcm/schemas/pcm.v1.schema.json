@@ -26,7 +26,7 @@
                 "identifier": {
                     "type": "string",
                     "description": "Package identifier",
-                    "pattern": "[a-zA-Z][-a-zA-Z0-9]{0,48}[a-zA-Z0-9]"
+                    "pattern": "^[a-zA-Z][-a-zA-Z0-9.]{0,48}[a-zA-Z0-9]$"
                 },
                 "type": {
                     "type": "string",
@@ -53,7 +53,7 @@
                     "type": "object",
                     "description": "Additional resource links for the package",
                     "patternProperties": {
-                        "[a-zA-Z][-a-zA-Z0-9 ]{0,48}[a-zA-Z0-9]": {
+                        "^[a-zA-Z][-a-zA-Z0-9 ]{0,48}[a-zA-Z0-9]$": {
                             "type": "string",
                             "maxLength": 500
                         }
@@ -65,7 +65,7 @@
                     "description": "Tags for the package",
                     "items": {
                         "type": "string",
-                        "pattern": "[a-z][-a-z0-9]{0,48}[a-z0-9]"
+                        "pattern": "^[a-z][-a-z0-9]{0,48}[a-z0-9]$"
                     },
                     "minItems": 1,
                     "uniqueItems": true
@@ -104,7 +104,7 @@
                     "type": "object",
                     "description": "Contact information details",
                     "patternProperties": {
-                        "[a-z][-a-z0-9 ]{0,48}[a-z0-9]": {
+                        "^[a-z][-a-z0-9 ]{0,48}[a-z0-9]$": {
                             "type": "string",
                             "maxLength": 500
                         }
@@ -124,7 +124,7 @@
                 "version": {
                     "type": "string",
                     "description": "Package version number major[.minor[.patch]]",
-                    "pattern": "\\d{1,4}(\\.\\d{1,4}(\\.\\d{1,6})?)?"
+                    "pattern": "^\\d{1,4}(\\.\\d{1,4}(\\.\\d{1,6})?)?$"
                 },
                 "version_epoch": {
                     "type": "integer",
@@ -138,7 +138,7 @@
                 "download_sha256": {
                     "type": "string",
                     "description": "SHA-256 hash of the package archive as lower case hex string",
-                    "pattern": "[a-z0-9]{64}"
+                    "pattern": "^[a-f0-9]{64}$"
                 },
                 "download_size": {
                     "description": "Download size in bytes",
@@ -177,12 +177,12 @@
                 "kicad_version": {
                     "type": "string",
                     "description": "Minimum supported KiCad version",
-                    "pattern": "\\d{1,2}(\\.\\d{1,2}(\\.\\d{1,2})?)?"
+                    "pattern": "^\\d{1,2}(\\.\\d{1,2}(\\.\\d{1,2})?)?$"
                 },
                 "kicad_version_max": {
                     "type": "string",
                     "description": "Maximum supported KiCad version",
-                    "pattern": "\\d{1,2}(\\.\\d{1,2}(\\.\\d{1,2})?)?"
+                    "pattern": "^\\d{1,2}(\\.\\d{1,2}(\\.\\d{1,2})?)?$"
                 }
             },
             "required": [
@@ -249,7 +249,7 @@
                 "sha256": {
                     "type": "string",
                     "description": "SHA-256 hash of the resource file as lower case hex string",
-                    "pattern": "[a-z0-9]{64}"
+                    "pattern": "^[a-f0-9]{64}$"
                 },
                 "update_timestamp": {
                     "type": "integer",
@@ -258,7 +258,7 @@
                 "update_time_utc": {
                     "type": "string",
                     "description": "Human readabla update time in UTC YYYY-MM-DD HH:MM:SS format",
-                    "pattern": "2\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d"
+                    "pattern": "^2\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d$"
                 }
             },
             "required": [
@@ -268,7 +268,7 @@
         },
         "URL": {
             "type": "string",
-            "pattern": "(https?:\\/\\/[^\\s\\/$.?#].[^\\s]*)|(file:\\/\\/([a-zA-Z]:|\\/)[^\\x00]+)"
+            "pattern": "^(https?:\\/\\/[^\\s\\/$.?#].[^\\s]*)|(file:\\/\\/([a-zA-Z]:|\\/)[^\\x00]+)$"
         },
         "License": {
             "type": "string",
