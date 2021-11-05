@@ -443,6 +443,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 
             ++stackIndex;
         }
+        else if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SILKSCREEN )
+        {
+            item->SetColor( "White" );
+        }
+        else if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SOLDERMASK )
+        {
+            item->SetColor( "Green" );
+        }
     }
 
     int thickness = stackup.BuildBoardThicknessFromStackup();
