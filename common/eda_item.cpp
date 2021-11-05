@@ -118,53 +118,116 @@ wxString EDA_ITEM::GetSelectMenuText( EDA_UNITS aUnits ) const
 bool EDA_ITEM::Matches( const wxString& aText, const wxFindReplaceData& aSearchData ) const
 {
     wxString text = aText;
+    int      flags = aSearchData.GetFlags();
     wxString searchText = aSearchData.GetFindString();
 
     // Don't match if searching for replaceable item and the item doesn't support text replace.
-    if( (aSearchData.GetFlags() & FR_SEARCH_REPLACE) && !IsReplaceable() )
+    if( ( flags & FR_SEARCH_REPLACE ) && !IsReplaceable() )
         return false;
 
-    if( aSearchData.GetFlags() & wxFR_WHOLEWORD )
-        return aText.IsSameAs( searchText, aSearchData.GetFlags() & wxFR_MATCHCASE );
-
-    if( aSearchData.GetFlags() & FR_MATCH_WILDCARD )
+    if( !( flags & wxFR_MATCHCASE ) )
     {
-        if( aSearchData.GetFlags() & wxFR_MATCHCASE )
-            return text.Matches( searchText );
-
-        return text.MakeUpper().Matches( searchText.MakeUpper() );
+        text.MakeUpper();
+        searchText.MakeUpper();
     }
 
-    if( aSearchData.GetFlags() & wxFR_MATCHCASE )
-        return aText.Find( searchText ) != wxNOT_FOUND;
+    if( flags & wxFR_WHOLEWORD )
+    {
+        int ii = 0;
 
-    return text.MakeUpper().Find( searchText.MakeUpper() ) != wxNOT_FOUND;
+        while( ii < (int) text.length() )
+        {
+            int next = text.find( searchText, ii );
+
+            if( next == wxNOT_FOUND )
+                return false;
+
+            ii = next;
+            next += searchText.length();
+
+            bool startOK = ( ii == 0 || !wxIsalnum( text.GetChar( ii - 1 ) ) );
+            bool endOK = ( next == (int) text.length() || !wxIsalnum( text.GetChar( next ) ) );
+
+            if( startOK && endOK )
+                return true;
+            else
+                ii++;
+        }
+
+        return false;
+    }
+    else if( flags & FR_MATCH_WILDCARD )
+    {
+        return text.Matches( searchText );
+    }
+    else
+    {
+        return text.Find( searchText ) != wxNOT_FOUND;
+    }
 }
 
 
 bool EDA_ITEM::Replace( const wxFindReplaceData& aSearchData, wxString& aText )
 {
-    wxString searchString = (aSearchData.GetFlags() & wxFR_MATCHCASE) ? aText : aText.Upper();
+    wxString text = aText;
+    int      flags = aSearchData.GetFlags();
+    wxString searchText = aSearchData.GetFindString();
+    wxString result;
+    bool     replaced = false;
 
-    int result = searchString.Find( ( aSearchData.GetFlags() & wxFR_MATCHCASE ) ?
-                                    aSearchData.GetFindString() :
-                                    aSearchData.GetFindString().Upper() );
+    if( flags & wxFR_MATCHCASE )
+    {
+        text = text.Upper();
+        searchText = searchText.Upper();
+    }
 
-    if( result == wxNOT_FOUND )
-        return false;
+    int ii = 0;
 
-    wxString prefix = aText.Left( result );
-    wxString suffix;
+    while( ii < (int) text.length() )
+    {
+        int next = text.find( searchText, ii );
 
-    if( aSearchData.GetFindString().length() + result < aText.length() )
-        suffix = aText.Right( aText.length() - ( aSearchData.GetFindString().length() + result ) );
+        if( next == wxNOT_FOUND )
+        {
+            result += aText.Mid( ii, wxString::npos );
+            break;
+        }
 
-    wxLogTrace( traceFindReplace, wxT( "Replacing '%s', prefix '%s', replace '%s', suffix '%s'." ),
-                aText, prefix, aSearchData.GetReplaceString(), suffix );
+        if( next > ii )
+            result += aText.Mid( ii, next - ii );
 
-    aText = prefix + aSearchData.GetReplaceString() + suffix;
+        ii = next;
+        next += searchText.length();
 
-    return true;
+        bool startOK;
+        bool endOK;
+
+        if( flags & wxFR_WHOLEWORD )
+        {
+            startOK = ( ii == 0 || !wxIsalnum( text.GetChar( ii - 1 ) ) );
+            endOK = ( next == (int) text.length() || !wxIsalnum( text.GetChar( next ) ) );
+        }
+        else
+        {
+            startOK = true;
+            endOK = true;
+        }
+
+        if( startOK && endOK )
+        {
+            result += aSearchData.GetReplaceString();
+            replaced = true;
+            ii = next;
+        }
+        else
+        {
+            result += aText.GetChar( ii );
+            ii++;
+        }
+    }
+
+    aText = result;
+    return replaced;
 }
 
 

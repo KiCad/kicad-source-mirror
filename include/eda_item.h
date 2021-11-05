@@ -57,8 +57,7 @@ enum FIND_REPLACE_FLAGS
     FR_MATCH_WILDCARD     = 0x4 << 4,   // Use simple wild card matching (* & ?).
     FR_SEARCH_WRAP        = 0x4 << 5,   // Wrap around the start or end of search.
     FR_SEARCH_REPLACE     = 0x4 << 7,   // Search for a item that has replaceable text.
-    FR_REPLACE_ITEM_FOUND = 0x4 << 8,   // Indicates an item with replaceable text has
-                                                   // been found.
+    FR_REPLACE_ITEM_FOUND = 0x4 << 8,   // Indicates an item with replaceable text has been found.
     FR_REPLACE_REFERENCES = 0x4 << 9    // Don't replace in references.
 };
 
