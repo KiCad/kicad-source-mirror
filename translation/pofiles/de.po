@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-05 06:01-0700\n"
 "PO-Revision-Date: 2021-11-06 17:00+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -3989,7 +3989,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Unzureichende Berechtigungen für Ordner \"%s\"."
 
 #: common/eda_base_frame.cpp:1086
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
@@ -3998,10 +3998,10 @@ msgid ""
 "made?"
 msgstr ""
 "Nun, das ist möglicherweise peinlich!\n"
-"Es scheint, dass nach dem Editieren der Datei\n"
-"\"%s\"\n"
-"diese nicht ordnungsgemäß gespeichert wurde. Möchten Sie die letzten "
-"Änderungen wiederherstellen?"
+"Es scheint, dass die Datei\n"
+"%s\n"
+"nach dem letzten Editieren nicht ordnungsgemäß gespeichert wurde.  Möchten "
+"Sie die letzten Änderungen wiederherstellen?"
 
 #: common/eda_base_frame.cpp:1102
 msgid "The auto save file could not be renamed to the board file name."
@@ -18140,17 +18140,17 @@ msgid "Highlight"
 msgstr "Hervorhebung"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Component '%s'"
-msgstr "Elemente des Symbols \"%s\" hervorheben"
+msgstr "Elemente der Komponente \"%s\" hervorheben"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Net '%s'"
 msgstr "Elemente des Netzes \"%s\" hervorheben"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Aperture Type '%s'"
 msgstr "Öffnungstyp \"%s\" hervorheben"
 
@@ -18382,7 +18382,7 @@ msgid "Unzip Project"
 msgstr "Projektdateien entpacken"
 
 #: kicad/files-io.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Open '%s'\n"
@@ -18481,7 +18481,7 @@ msgid "Restoring session"
 msgstr "Sitzung wiederherstellen"
 
 #: kicad/kicad_manager_frame.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid "Restoring '%s'"
 msgstr "Wiederherstellen von \"%s\""
 
@@ -19124,7 +19124,7 @@ msgid "Print the contents of the file"
 msgstr "Inhalt der Datei ausdrucken"
 
 #: kicad/project_tree_pane.cpp:857
-#, fuzzy, c-format
+#, c-format
 msgid "Change filename: '%s'"
 msgstr "Ändere Dateiname: \"%s\""
 
@@ -20939,16 +20939,15 @@ msgstr ""
 "\n"
 "Der erste vorgegebene Wert ist fett dargestellt.\n"
 "\n"
-"Die Berechnungen gelten für Ströme bis zu 35 A (extern) oder 17,5 A "
-"(intern), Temperaturanstiege bis zu 100 °C und Breiten von bis zu 400 mil "
-"(10 mm).\n"
+"Die Berechnungen gelten für Ströme bis zu 35 A (extern) oder 17,5 A (intern)"
+", Temperaturanstiege bis zu 100 °C und Breiten von bis zu 400 mil (10 mm).\n"
 "\n"
 "Die zugehörige Formel aus IPC 2221 ist\n"
-"<center>__I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>__I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
 "Wobei:  \n"
 "__I__ = Maximaler Strom in Ampere  \n"
-"__&Delta;__ = Temperaturanstieg über die Umgebungstemperatur in &deg;°C  \n"
+"__&Delta;__ = Temperaturanstieg über die Umgebungstemperatur in &deg;C  \n"
 "__W,__ = Breite in mils  \n"
 "__H__ = Dicke in mils  \n"
 "__K__ = 0,024 für interne Leiterzüge oder 0,048 für externe Leiterbahnen  \n"
@@ -26611,15 +26610,13 @@ msgid "Include netlist attributes"
 msgstr "Inklusive Netzlisten Attribute"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
-#, fuzzy
 msgid ""
 "Include netlist metadata and aperture attributes in Gerber files.\n"
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"Enthält die Metadaten der Netzliste und Öffnungsattribute in Gerber-"
-"Dateien.\n"
-"Im X1 Format waren dies Kommentare.\n"
+"Metadaten der Netzliste und Öffnungsattribute in Gerber-Dateien einfügen.\n"
+"Im X1 Format sind dies Kommentare.\n"
 "Wird zum Überprüfen der Konnektivität in CAM-Tools und Betrachtern von "
 "Gerber-Dateien verwendet."
 
