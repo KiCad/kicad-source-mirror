@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-05 06:01-0700\n"
-"PO-Revision-Date: 2021-11-06 17:00+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
+"PO-Revision-Date: 2021-11-07 14:21+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -940,12 +940,12 @@ msgstr "Licht von unten:"
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:187
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:204
 msgid "Elevation (deg)"
-msgstr "Höhe (Grad)"
+msgstr "Höhe (°)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:191
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:208
 msgid "Azimuth (deg)"
-msgstr "Azimut (Grad)"
+msgstr "Azimut (°)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:212
 msgid "Light 1:"
@@ -14034,9 +14034,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
-"Das Symbol '%s' ist im ursprünglichen CADSTAR-Design in einem Winkel von "
-"%.1f Grad gedreht, KiCad unterstützt jedoch nur Drehwinkel-Vielfache von 90 "
-"Grad. Die Verbindungen müssen manuell korrigiert werden."
+"Das Symbol '%s' ist im ursprünglichen CADSTAR-Design in einem Winkel von %."
+"1f° gedreht, KiCad unterstützt jedoch nur Drehwinkel-Vielfache von 90°. Die "
+"Verbindungen müssen manuell korrigiert werden."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1754
 #, c-format
@@ -25720,7 +25720,7 @@ msgstr "Standard-Pad-Eigenschaften für Werkzeug \"Pad hinzufügen\""
 #: pcbnew/dialogs/dialog_pad_properties.cpp:487
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr "Footprint %s (%s), %s, rotiert %g Grad"
+msgstr "Footprint %s (%s), %s, %g° gedreht"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:490
 #: pcbnew/dialogs/dialog_text_properties.cpp:244
@@ -26072,7 +26072,7 @@ msgstr "Abgeschrägte Ecken:"
 msgid ""
 "Chamfered corners. The position is relative to a pad orientation 0 degree."
 msgstr ""
-"Abgeschrägte Ecken. Die Position relativ zur Ausrichtung des Pads bei 0 Grad."
+"Abgeschrägte Ecken. Die Position relativ zur Ausrichtung des Pads bei 0°."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:269
@@ -26356,7 +26356,7 @@ msgstr "Duplizieren:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1546
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
-msgstr "Koordinaten sind relativ zum Ankerpad, rotiert um 0,0 Grad."
+msgstr "Koordinaten sind relativ zum Ankerpad, gedreht um 0,0°."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:354
 msgid "Pad Custom Shape Geometry Transform"
@@ -26868,7 +26868,7 @@ msgstr "Auskehlungsdarstellung:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:148
 msgid "45 degree"
-msgstr "45 Grad"
+msgstr "45°"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:148
 msgid "arc"
@@ -27248,7 +27248,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:96
 msgid "Constrain outline to H, V and 45 deg"
-msgstr "Beschränken der Außenlinien zu H, V und 45 Grad"
+msgstr "Beschränken der Außenlinien zu H, V und 45°"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:97
 msgid "Draw the area using horizontal, verical and 45 degree lines only"
@@ -27293,18 +27293,16 @@ msgid "Target Properties"
 msgstr "Objekt Eigenschaften"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:82
-#, fuzzy
 msgid "Footprint Reference Properties"
-msgstr "Footprint-Eigenschaften"
+msgstr "Footprint-Referenz-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:83
-#, fuzzy
 msgid "Footprint Value Properties"
-msgstr "Footprint-Eigenschaften"
+msgstr "Footprint-Wert-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:84
 msgid "Footprint Text Properties"
-msgstr "Footprint Texteigenschaften"
+msgstr "Footprint-Text-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:89
 msgid "Reference:"
@@ -27313,15 +27311,15 @@ msgstr "Referenz:"
 #: pcbnew/dialogs/dialog_text_properties.cpp:241
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
-msgstr "Footprint %s (%s), %s, rotiert %.1f Grad"
+msgstr "Footprint %s (%s), %s, %.1f° gedreht"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:345
 msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
 msgstr ""
-"Die Textstärke ist für diesen Text zu groß.\n"
-"Text wird eingeklemmt."
+"Die Schriftdicke ist zu groß für die Textgröße.\n"
+"Schriftdicke wird begrenzt."
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:368
 msgid "Change text properties"
@@ -27616,6 +27614,8 @@ msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
 msgstr ""
+"Zeigt den Umriss des Freiraums um Leiterbahnen und wahlweise den Via-"
+"Freiraum um das Ende der Leiterbahn während des Routens."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
@@ -27696,7 +27696,7 @@ msgstr "Grafikbearbeitung"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 msgid "Constrain to H, V, 45 degrees"
-msgstr "Auf H, V und 45 Grad beschränken"
+msgstr "Auf H, V und 45° beschränken"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
 msgid "Magnetic Points"
@@ -27790,7 +27790,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
 msgid "Limit actions to 45 degrees from start"
-msgstr "Aktionen auf 45 Grad vom Startpunkt begrenzen"
+msgstr "Aktionen auf 45° vom Startpunkt begrenzen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:376
 msgid "Draw an outline to show the sheet size."
@@ -31794,14 +31794,14 @@ msgid "Through hole pad %s of %s"
 msgstr "Durchsteckpad %s von %s"
 
 #: pcbnew/pad.cpp:1155
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "Pad %s auf %s von %s"
+msgstr "Pad %s %s von %s auf %s"
 
 #: pcbnew/pad.cpp:1163
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "Durchsteckpad %s von %s"
+msgstr "Durchsteckpad %s %s von %s"
 
 #: pcbnew/pad.cpp:1598
 msgid "Edge connector"
@@ -32322,8 +32322,8 @@ msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"In Footprint %s hat Pad %s eine Lochdrehung von %f Grad. KiCad unterstützt "
-"nur 90°-Winkel."
+"In Footprint %s hat Pad %s eine Lochdrehung von %f°. KiCad unterstützt nur "
+"90°-Winkel."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2179
 #, c-format
@@ -32789,7 +32789,7 @@ msgid ""
 "crosshatched."
 msgstr ""
 "Für den CADSTAR-Gittercode '%s' sind %d Gitter definiert. KiCad unterstützt "
-"nur zwei Gitterarten (Kreuzgitter) im Abstand von 90 Grad. Das importierte "
+"nur zwei Gitterarten (Kreuzgitter) im Abstand von 90°. Das importierte "
 "Gitter ist ein Kreuzgitter."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3515
@@ -32826,7 +32826,7 @@ msgid ""
 msgstr ""
 "Die Gitter im CADSTAR-Gittercode '%s' weisen eine Winkeldifferenz von %.1f° "
 "auf. KiCad unterstützt nur Gitter im Abstand von 90°. Das importierte Gitter "
-"hat zwei Gitter im Abstand von 90 Grad, die %.1f° von der Horizontalen "
+"hat zwei Gitter im Abstand von 90°, die %.1f° von der Horizontalen "
 "ausgerichtet sind."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3613
@@ -33445,7 +33445,7 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
 msgstr "Methode \"%s\" nicht gefunden oder nicht aufrufbar"
 
@@ -33682,9 +33682,8 @@ msgid "Auto-finish Track"
 msgstr "Automatisches beenden Leiterbahn"
 
 #: pcbnew/router/router_tool.cpp:97
-#, fuzzy
 msgid "Automatically finishes laying the current track."
-msgstr "Beendet die aktuell verlegte Leiterbahn automatisch."
+msgstr "Beendet automatisch das Verlegen der aktuellen Leiterbahn."
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Place Through Via"
@@ -33771,11 +33770,10 @@ msgid "Track Corner Mode"
 msgstr "Leiterbahn-Ecken-Modus"
 
 #: pcbnew/router/router_tool.cpp:164
-#, fuzzy
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
 msgstr ""
-"Wechselt beim Routing von Leiterbahnen zwischen scharfen und abgerundeten "
-"Ecken."
+"Wechselt beim Verlegen von Leiterbahnen zwischen scharfen/abgerundeten und "
+"45°/90°-Ecken."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
@@ -33902,9 +33900,8 @@ msgstr ""
 "Einschränkungen' aktiviert werden."
 
 #: pcbnew/router/router_tool.cpp:981
-#, fuzzy
 msgid "Blind/buried via need 2 different layers."
-msgstr "Pads auf unterschiedlichen Lagen nicht modifizieren"
+msgstr "Blindes/vergrabenes Via benötigt zwei verschiedene Lagen"
 
 #: pcbnew/router/router_tool.cpp:1059
 msgid "Tracks on Copper layers only."
@@ -33947,33 +33944,28 @@ msgid "(no net)"
 msgstr "(kein Netz)"
 
 #: pcbnew/router/router_tool.cpp:2060
-#, fuzzy
 msgid "Free-angle"
-msgstr "Winkel"
+msgstr "Beliebiger Winkel"
 
 #: pcbnew/router/router_tool.cpp:2066
-#, fuzzy
 msgid "45-degree"
-msgstr "45 Grad"
+msgstr "45°"
 
 #: pcbnew/router/router_tool.cpp:2067
-#, fuzzy
 msgid "45-degree rounded"
-msgstr "Ziehen (45° Modus)"
+msgstr "45° abgerundet"
 
 #: pcbnew/router/router_tool.cpp:2068
-#, fuzzy
 msgid "90-degree"
-msgstr "Grad"
+msgstr "90°"
 
 #: pcbnew/router/router_tool.cpp:2069
 msgid "90-degree rounded"
-msgstr ""
+msgstr "90° abgerundet"
 
 #: pcbnew/router/router_tool.cpp:2074
-#, fuzzy
 msgid "Corner Style"
-msgstr "Linienstil"
+msgstr "Eckenstil"
 
 #: pcbnew/router/router_tool.cpp:2079
 #, c-format
@@ -34587,7 +34579,7 @@ msgstr "Spezialwerkzeuge"
 #, c-format
 msgid "Unable to resize arc tracks %.1f degrees or greater."
 msgstr ""
-"Leiterbahnbögen mit mindestens %.1f Grad können nicht in der Größe geändert "
+"Leiterbahnbögen mit mindestens %.1f° können nicht in der Größe geändert "
 "werden."
 
 #: pcbnew/tools/edit_tool.cpp:672
@@ -35505,8 +35497,7 @@ msgstr "Ausgewählte Elemente sperren oder entsperren"
 #: pcbnew/tools/pcb_actions.cpp:676
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
-msgstr ""
-"Aktionen auf horizontal, vertikal oder 45 Grad vom Startpunkt begrenzen"
+msgstr "Aktionen auf horizontal, vertikal oder 45° vom Startpunkt begrenzen"
 
 #: pcbnew/tools/pcb_actions.cpp:681
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -36194,14 +36185,12 @@ msgid "Switch router to walkaround mode"
 msgstr "Router in den Umgehen-Modus schalten"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle Router Mode"
-msgstr "Router-Shove-Modus"
+msgstr "Router-Modus umschalten"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle router to the next mode"
-msgstr "Router in den Shove-Modus schalten"
+msgstr "Router in den nächsten Moduls schalten"
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Set Layer Pair..."
