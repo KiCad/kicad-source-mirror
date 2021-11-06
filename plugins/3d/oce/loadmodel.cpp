@@ -887,8 +887,15 @@ bool processSolid( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
 bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
                    std::vector<SGNODE*>* aItems )
 {
-    int labelTag = static_cast<int>( aLabel.Tag() );
-    wxLogTrace( MASK_OCE, "Processing label %d", labelTag );
+    std::string labelTag;
+
+    if( wxLog::IsAllowedTraceMask( MASK_OCE ) )
+    {
+        // can be expensive, guard it if we arent logging
+        getTag( aLabel, labelTag );
+    }
+
+    wxLogTrace( MASK_OCE, "Processing label %s", labelTag );
 
     TopoDS_Shape originalShape;
     TDF_Label shapeLabel = aLabel;
@@ -902,7 +909,7 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
 
     if( aData.m_assy->IsReference( aLabel ) )
     {
-        wxLogTrace( MASK_OCE, "Label %d is ref, trying to pull up referred label", labelTag );
+        wxLogTrace( MASK_OCE, "Label %s is ref, trying to pull up referred label", labelTag );
 
         if( !aData.m_assy->GetReferredShape( aLabel, shapeLabel ) )
         {
@@ -910,7 +917,7 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
         }
 
         labelTag = static_cast<int>( shapeLabel.Tag() );
-        wxLogTrace( MASK_OCE, "Label %d referred", labelTag );
+       // wxLogTrace( MASK_OCE, "Label %s referred", labelTag );
 
         if( !aData.m_assy->GetShape( shapeLabel, shape ) )
         {
@@ -949,8 +956,26 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
     switch( stype )
     {
     case TopAbs_COMPOUND:
-    case TopAbs_COMPSOLID:
-        ret = true;
+        {
+            // assemblies will report a shape type of compound which isn't what we are after
+            // we will still process the children of assemblies but they should just be label references to the actual shapes
+            if( !aData.m_assy->IsAssembly( shapeLabel ) )
+            {
+                TopExp_Explorer xp;
+
+                for( xp.Init( shape, TopAbs_SOLID ); xp.More(); xp.Next() )
+                {
+                    processSolid( xp.Current(), aData, pptr, aItems );
+                    ret = true;
+                }
+
+                for( xp.Init( shape, TopAbs_SHELL, TopAbs_SOLID ); xp.More(); xp.Next() )
+                {
+                    processShell( xp.Current(), aData, pptr, aItems, nullptr );
+                    ret = true;
+                }
+            }
+        }
         break;
 
     case TopAbs_SOLID:
@@ -980,7 +1005,7 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
 
     if( shapeLabel.HasChild() )
     {
-        wxLogTrace( MASK_OCE, "Label %d has children", labelTag );
+        wxLogTrace( MASK_OCE, "Label %s has children", labelTag );
         TDF_ChildIterator it;
         for( it.Initialize( shapeLabel ); it.More(); it.Next() )
         {
