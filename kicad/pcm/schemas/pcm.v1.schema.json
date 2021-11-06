@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://kicad.org/schemas/pcm/v1/schema.json",
+    "$id": "https://go.kicad.org/pcm/schemas/v1",
     "title": "KiCad PCM schema",
     "description": "KiCad Plugin and Content Manager repository and package metadata schema",
     "$ref": "#/definitions/Package",
