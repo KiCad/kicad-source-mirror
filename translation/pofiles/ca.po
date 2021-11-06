@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-05 06:01-0700\n"
-"PO-Revision-Date: 2021-11-05 13:00+0000\n"
+"PO-Revision-Date: 2021-11-07 14:21+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7575,9 +7575,8 @@ msgid "Numbering"
 msgstr "Número"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:96
-#, fuzzy
 msgid "Use first free number after:"
-msgstr "Utilitza el primer número lliure"
+msgstr "Utilitza el primer número lliure després de:"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:102
 msgid "First free after sheet number X 100"
@@ -7600,9 +7599,8 @@ msgid "Generate"
 msgstr "Genera"
 
 #: eeschema/dialogs/dialog_bom.cpp:217
-#, fuzzy
 msgid "(file missing)"
-msgstr "Falta:"
+msgstr "(falta el fitxer)"
 
 #: eeschema/dialogs/dialog_bom.cpp:294
 #, fuzzy, c-format
@@ -7626,9 +7624,8 @@ msgstr ""
 "completament anotat."
 
 #: eeschema/dialogs/dialog_bom.cpp:382 eeschema/dialogs/dialog_bom_base.cpp:43
-#, fuzzy
 msgid "Generator nickname:"
-msgstr "Sobrenom de la biblioteca"
+msgstr "Sobrenom del generador:"
 
 #: eeschema/dialogs/dialog_bom.cpp:382
 #, fuzzy
@@ -8112,9 +8109,8 @@ msgid "Change all symbols in schematic"
 msgstr "Canvia tots els símbols a l'esquema"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:67
-#, fuzzy
 msgid "Change Symbols"
-msgstr "Peça capturada:"
+msgstr "Canvia Símbols"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:76
 #, fuzzy
@@ -8127,9 +8123,8 @@ msgid "Change symbols matching reference designator:"
 msgstr "Designador de referències predeterminat:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:94
-#, fuzzy
 msgid "Change symbols matching value:"
-msgstr "Mostra els valors de l'empremta"
+msgstr "Canvia els símbols amb el valor:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching library identifier:"
@@ -8231,9 +8226,8 @@ msgid "Update symbols matching reference designator:"
 msgstr "Designador de referències predeterminat:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:39
-#, fuzzy
 msgid "Update symbols matching value:"
-msgstr "Mostra els valors de l'empremta"
+msgstr "Actualitza els símbols amb el valor:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:45
 msgid "Update symbols matching library identifier:"
@@ -8241,9 +8235,8 @@ msgstr ""
 "Actualitza els símbols que coincideixin amb un identificador de biblioteca:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:72
-#, fuzzy
 msgid "New library identifier:"
-msgstr "No s'ha especificat cap empremta"
+msgstr "Nou identificador de biblioteca:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
@@ -8724,19 +8717,16 @@ msgstr "Filtra els altres camps dels símbols pel nom:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:94
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
-#, fuzzy
 msgid "Filter items by parent reference designator:"
-msgstr "Ploteja les referències de l'empremta"
+msgstr "Filtra els elements pel designador de referència principal:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:102
-#, fuzzy
 msgid "Filter items by parent symbol library id:"
-msgstr "No s'ha pogut crear el fitxer de la biblioteca de símbols «%s»"
+msgstr "Filtra els elements per l'id de la biblioteca de símbols pare:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
-#, fuzzy
 msgid "Filter items by parent symbol type:"
-msgstr "Ploteja les referències de l'empremta"
+msgstr "Filtra els elements pel tipus de símbol pare:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 #, fuzzy
@@ -8805,14 +8795,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:174
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1246
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1487
-#, fuzzy
 msgid "Line width:"
-msgstr "Amplada de les línies"
+msgstr "Gruix de la línia:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:305
-#, fuzzy
 msgid "Line color:"
-msgstr "Colors"
+msgstr "Color de la línia:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:314
 #, fuzzy
@@ -8820,14 +8808,12 @@ msgid "Line style:"
 msgstr "Estil de la lletra:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:330
-#, fuzzy
 msgid "Sheet background color:"
-msgstr "Color del fons"
+msgstr "Color del fons de la fulla:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:339
-#, fuzzy
 msgid "Junction size:"
-msgstr "Entroncament"
+msgstr "Mida de la unió:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
 msgid "Junction color:"
@@ -8900,9 +8886,8 @@ msgstr "Diàmetre:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:38
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:44
-#, fuzzy
 msgid "Color:"
-msgstr "Color"
+msgstr "Color:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
 msgid "Set diameter to 0 to use schematic junction dot size."
