@@ -264,23 +264,29 @@ std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
 
 void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, bool aFrom )
 {
-    switch ( aItem->Type() )
+    switch( aItem->Type() )
     {
+    case SCH_TEXT_T:
+    case SCH_FIELD_T:
+        addAnchor( aItem->GetPosition(), ORIGIN, aItem );
+        break;
+
     case SCH_SYMBOL_T:
-        case SCH_SHEET_T:
+    case SCH_SHEET_T:
         addAnchor( aItem->GetPosition(), ORIGIN, aItem );
         KI_FALLTHROUGH;
+
     case SCH_JUNCTION_T:
-        case SCH_NO_CONNECT_T:
-        case SCH_LINE_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        case SCH_LABEL_T:
-        case SCH_BUS_WIRE_ENTRY_T:
-        {
+    case SCH_NO_CONNECT_T:
+    case SCH_LINE_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
+    case SCH_LABEL_T:
+    case SCH_BUS_WIRE_ENTRY_T:
+    {
         std::vector<wxPoint> pts = aItem->GetConnectionPoints();
 
-        for( const wxPoint &pt : pts )
+        for( const wxPoint& pt : pts )
             addAnchor( VECTOR2I( pt ), SNAPPABLE | CORNER, aItem );
 
         break;
