@@ -217,7 +217,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
 
     int row = 2;
 
-    for( const auto& netclass : netclasses )
+    for( const std::pair<const wxString, std::shared_ptr<NETCLASS>>& netclass : netclasses )
     {
         m_netclassGrid->SetCellValue( row, GRID_NAME, netclass.first );
         SET_NETCLASS_VALUE( row, GRID_TRACKSIZE, netclass.second->GetTrackWidth() );
@@ -370,20 +370,20 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
     wxBusyCursor      dummy;
 
     // Examine segments
-    for( auto segment : m_brd->Tracks() )
+    for( PCB_TRACK* track : m_brd->Tracks() )
     {
-        if( m_tracks->GetValue() && segment->Type() == PCB_TRACE_T )
-            visitItem( &itemsListPicker, segment );
-        else if (m_vias->GetValue() && segment->Type() == PCB_VIA_T )
-            visitItem( &itemsListPicker, segment );
+        if( m_tracks->GetValue() && track->Type() == PCB_TRACE_T )
+            visitItem( &itemsListPicker, track );
+        else if ( m_vias->GetValue() && track->Type() == PCB_VIA_T )
+            visitItem( &itemsListPicker, track );
     }
 
     if( itemsListPicker.GetCount() > 0 )
     {
         m_parent->SaveCopyInUndoList( itemsListPicker, UNDO_REDO::CHANGED );
 
-        for( auto segment : m_brd->Tracks() )
-            m_parent->GetCanvas()->GetView()->Update( segment );
+        for( PCB_TRACK* track : m_brd->Tracks() )
+            m_parent->GetCanvas()->GetView()->Update( track );
     }
 
     return true;
