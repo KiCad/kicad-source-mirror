@@ -6,21 +6,22 @@
 # Ola Rinta-Koski <weblate@rinta-koski.net>, 2021.
 # Alex Gellen <alex.n.gellen@gmail.com>, 2021.
 # J. Lavoie <j.lavoie@net-c.ca>, 2021.
+# PurkkaKoodari <purkka@purkka.codes>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-05 06:01-0700\n"
-"PO-Revision-Date: 2021-08-20 19:52+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2021-11-07 14:21+0000\n"
+"Last-Translator: PurkkaKoodari <purkka@purkka.codes>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -36,7 +37,6 @@ msgstr ""
 "X-Poedit-SearchPath-6: 3d-viewer\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
 msgstr "Kaikki tiedostot"
 
@@ -54,13 +54,12 @@ msgid "No footprint loaded."
 msgstr "Ei jalanjälkeä ladattu."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:725
-#, fuzzy
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
 "Jalanjäljen ääriviivat ovat epämuodostuneet. Suorita Footprint Checker "
-"täydellistä analyysiä varten."
+"tehdäksesi täydellisen analyysin."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:734
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
@@ -81,19 +80,17 @@ msgid "Simplifying copper layers polygons"
 msgstr "Kuparikerrosten monikulmioiden yksinkertaistaminen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:761
-#, fuzzy
 msgid "Simplifying polygons on F_Cu"
-msgstr "Kuparikerrosten monikulmioiden yksinkertaistaminen"
+msgstr "Yksinkertaistetaan monikulmioita F_Cu-tasolla"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:772
-#, fuzzy
 msgid "Simplifying polygons on B_Cu"
-msgstr "Kuparikerrosten monikulmioiden yksinkertaistaminen"
+msgstr "Yksinkertaistetaan monikulmioita B_Cu-tasolla"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Kuparikerrosten monikulmioiden yksinkertaistaminen"
+msgstr "Yksinkertaistetaan %d kuparikerrosta"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:841
 msgid "Simplify holes contours"
@@ -104,18 +101,17 @@ msgid "Build Tech layers"
 msgstr "Rakenna teknisiä tasoja"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:904
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "Rakenna teknisiä tasoja"
+msgstr "Rakenna tekninen taso %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1049
 msgid "Build BVH for holes and vias"
 msgstr "Rakenna BVH reikiä ja aukkoja varten"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "OpenGL-versiotasi ei tueta. Vähimmäisvaatimus on 1,5"
+msgstr "OpenGL-versiotasi ei tueta. Vähintään versio 1.5 vaaditaan."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:538
 #, c-format
@@ -146,15 +142,14 @@ msgid "Load OpenGL: layers"
 msgstr "Lataa OpenGL: kerrokset"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Lataa OpenGL: kerrokset"
+msgstr "Lataa OpenGL-kerros %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:648
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:790
-#, fuzzy
 msgid "Loading 3D models..."
-msgstr "Ladataan 3D-malleja"
+msgstr "Ladataan 3D-malleja..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:658
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:944
@@ -170,9 +165,9 @@ msgstr "Latausaika %.3f s"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2290
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "Ladataan %s"
+msgstr "Ladataan %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:561
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:175
@@ -507,30 +502,27 @@ msgstr "Käytä CAD-värityyliä, joka perustuu materiaalin hajanaiseen väriin"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
 msgid "Toggle Through Hole 3D models"
-msgstr "Vaihda reiän 3D-mallit"
+msgstr "Näytä tai piilota läpireikä-3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
-#, fuzzy
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "Vaihda 3D-mallit Läpireikä -attribuutilla"
+msgstr "Näytä tai piilota \"Läpireikä\"-tyypin komponenttien 3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle SMD 3D models"
-msgstr "Vaihda SMD 3D -mallit"
+msgstr "Näytä tai piilota pintaliitos-3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
-#, fuzzy
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "Vaihda 3D-mallit, joissa on Surface mount -attribuutti"
+msgstr "Näytä tai piilota \"Pintaliitos\"-tyypin komponenttien 3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
-#, fuzzy
 msgid "Toggle Other 3D models"
-msgstr "Vaihda SMD 3D -mallit"
+msgstr "Näytä tai piilota muut 3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr ""
+msgstr "Näytä tai piilota \"Muu\"-tyypin komponenttien 3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
@@ -1464,11 +1456,11 @@ msgstr "mil"
 
 #: common/base_units.cpp:451
 msgid "sq. mils"
-msgstr "neliömetriä"
+msgstr "mil²"
 
 #: common/base_units.cpp:453
 msgid "cu. mils"
-msgstr "cu. mils"
+msgstr "mil³"
 
 #: common/base_units.cpp:463
 msgid "in"
@@ -1476,11 +1468,11 @@ msgstr "in"
 
 #: common/base_units.cpp:465
 msgid "sq. in"
-msgstr "neliömetriä"
+msgstr "in²"
 
 #: common/base_units.cpp:467
 msgid "cu. in"
-msgstr "cu. sisään"
+msgstr "in³"
 
 #: common/base_units.cpp:471
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
@@ -1509,37 +1501,36 @@ msgstr ""
 "kohdassa %s."
 
 #: common/common.cpp:308
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr ""
-"Polkua \"%s\" ei voida tehdä absoluuttiseksi suhteessa \"%s\" -tietoon."
+"Polkua \"%s\" ei voida muuttaa absoluuttiseksi suhteessa polkuun \"%s\"."
 
 #: common/common.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory '%s' created."
-msgstr "Lähtökansio \"%s\" luotu.\n"
+msgstr "Kohdekansio \"%s\" luotu."
 
 #: common/common.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Lähtökansiota \"%s\" ei voi luoda.\n"
+msgstr "Kohdekansiota \"%s\" ei voi luoda."
 
 #: common/common.cpp:608
-#, fuzzy
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr ""
-"KiCad ja sen riippuvuudet eivät enää tue Windows 7: ää ja sitä vanhempia."
+msgstr "KiCad ja sen riippuvuudet eivät tue tätä käyttöjärjestelmää."
 
 #: common/common.cpp:610
-#, fuzzy
 msgid "Unsupported Operating System"
-msgstr "Tuntematon läpiviennin muoto: %s"
+msgstr "Käyttöjärjestelmää ei tueta"
 
 #: common/common.cpp:613
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
+"Tässä järjestelmässä KiCadissa esiintyvistä ongelmista ei voi ilmoittaa "
+"viralliseen buginseurantaan."
 
 #: common/confirm.cpp:57
 msgid "Do not show again"
@@ -1571,33 +1562,30 @@ msgid "Warning"
 msgstr "Varoitus"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Error"
-msgstr "Tiedoston tallennusvirhe"
+msgstr "Virhe tiedoston avauksessa"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "Lomittaiset tallennukset voivat tuottaa hyvin odottamattomia tuloksia."
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:259
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
 #: pcbnew/router/router_tool.cpp:523
 msgid "OK"
-msgstr "Hyväksy"
+msgstr "OK"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169
-#, fuzzy
 msgid "Open Anyway"
-msgstr "Tallenna joka tapauksessa"
+msgstr "Avaa joka tapauksessa"
 
 #: common/confirm.cpp:180 common/confirm.cpp:217
-#, fuzzy
 msgid "Save Changes?"
 msgstr "Tallenna muutokset?"
 
 #: common/confirm.cpp:182 common/confirm.cpp:219
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr "Jos ei tallenneta, kaikki muutokset häviävät pysyvästi."
+msgstr "Jos et tallenna, kaikki muutoksesi häviävät pysyvästi."
 
 #: common/confirm.cpp:184 common/confirm.cpp:220 common/tool/actions.cpp:67
 #: eeschema/sim/sim_plot_frame_base.cpp:29
@@ -1613,7 +1601,7 @@ msgstr "Hylkää muutokset"
 
 #: common/confirm.cpp:187 common/confirm.cpp:266
 msgid "Apply to all"
-msgstr "Koskee kaikkia"
+msgstr "Käytä kaikille"
 
 #: common/confirm.cpp:232
 msgid "Your current changes will be permanently lost."
@@ -1633,9 +1621,8 @@ msgid "Cancel"
 msgstr "Peru"
 
 #: common/confirm.cpp:312
-#, fuzzy
 msgid "Information"
-msgstr "Vahvistus"
+msgstr "Tietoa"
 
 #: common/confirm.cpp:325 eeschema/symbol_editor/symbol_editor.cpp:447
 #: eeschema/symbol_editor/symbol_editor.cpp:704
@@ -1672,8 +1659,8 @@ msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
 msgstr ""
-"KiCad EDA Suite on joukko avoimen lähdekoodin sovelluksia sähköisten "
-"kaavioiden ja piirilevyjen luomiseen."
+"KiCad EDA Suite on joukko avoimen lähdekoodin sovelluksia piirikaavioiden ja "
+"piirilevyjen luomiseen."
 
 #: common/dialog_about/AboutDialog_main.cpp:134
 msgid "KiCad on the web"
@@ -1693,7 +1680,7 @@ msgstr "KiCadin viralliset kirjastot - "
 
 #: common/dialog_about/AboutDialog_main.cpp:156
 msgid "Bug tracker"
-msgstr "Bug tracker"
+msgstr "Buginseuranta"
 
 #: common/dialog_about/AboutDialog_main.cpp:162
 msgid "Report or examine bugs - "
@@ -2309,6 +2296,8 @@ msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"Poista lukittujen kohteiden valinta ja suorita toiminto lukitsemattomille "
+"kohteille (jos sellaisia on)."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
@@ -2329,6 +2318,8 @@ msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"Muista valinta tämän istunnon ajan.\n"
+"Tätä ikkunaa ei näytetä uudelleen ennen kuin KiCad on käynnistetty uudelleen."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
@@ -2339,6 +2330,8 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
+"Ohita lukitus ja suorita toiminto kaikille valituille kohteille.\n"
+"Lukitut kohteet pysyvät lukittuina toiminnon jälkeen."
 
 #: common/dialogs/dialog_locked_items_query_base.h:56
 msgid "Locked Items"
@@ -2727,6 +2720,7 @@ msgid ""
 "Finds the next available reference designator for any designators that "
 "already exist in the design."
 msgstr ""
+"Etsii seuraavan vapaan viitetunnisteen jo käytössä oleville tunnuksille."
 
 #: common/dialogs/dialog_paste_special.cpp:44
 #, fuzzy, c-format
@@ -3126,11 +3120,13 @@ msgstr "Canvas-asteikko:"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid "Apply icon scaling to fonts"
-msgstr ""
+msgstr "Käytä ikoniskaalausta fontteihin"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
 msgstr ""
+"(Tämä vaihtoehto parantaa joitakin GTK:n fonttiskaalausongelmia korkeilla "
+"DPI:llä.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3205,7 +3201,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "days"
-msgstr ""
+msgstr "päivää"
 
 #: common/dialogs/panel_common_settings_base.cpp:250
 msgid "Project Backup"
@@ -4398,14 +4394,12 @@ msgid "Bezier"
 msgstr "Bézier"
 
 #: common/eda_shape.cpp:1604
-#, fuzzy
 msgid "Start X"
-msgstr "Aloita DRC"
+msgstr "Alku X"
 
 #: common/eda_shape.cpp:1606
-#, fuzzy
 msgid "Start Y"
-msgstr "Aloita DRC"
+msgstr "Alku Y"
 
 #: common/eda_shape.cpp:1608 pcbnew/pcb_shape.cpp:264 pcbnew/pcb_track.cpp:1159
 #: pcbnew/pcb_track.cpp:1176
@@ -4605,6 +4599,8 @@ msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
+"Hakemisto, joka sisältää kolmannen osapuolen lisäosat, kirjastot ja muun "
+"ladattavan sisällön."
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -4629,25 +4625,23 @@ msgstr "Hakemisto, joka sisältää KiCadin kanssa asennetut komentotiedostot"
 msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr ""
 "Hakemisto, joka sisältää KiCadin kanssa asennetut käyttäjäkohtaiset "
-"komentotiedostot."
+"komentotiedostot"
 
 #: common/env_vars.cpp:98
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
-msgstr "KICAD_TEMPLATE_DIR: n vanhentunut versio."
+msgstr "KICAD_TEMPLATE_DIR-muuttujan vanhentunut versio."
 
 #: common/env_vars.cpp:100
 msgid "Deprecated version of KICAD6_3DMODEL_DIR."
-msgstr "KICAD6_3DMODEL_DIR-muuttujan käytöstä poistunut versio."
+msgstr "KICAD6_3DMODEL_DIR-muuttujan vanhentunut versio."
 
 #: common/env_vars.cpp:102
-#, fuzzy
 msgid "Deprecated version of KICAD6_FOOTPRINT_DIR."
-msgstr "KICAD_TEMPLATE_DIR: n vanhentunut versio."
+msgstr "KICAD6_FOOTPRINT_DIR-muuttujan vanhentunut versio."
 
 #: common/env_vars.cpp:104
-#, fuzzy
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
-msgstr "KICAD_TEMPLATE_DIR: n vanhentunut versio."
+msgstr "KICAD_SYMBOL_DIR-muuttujan vanhentunut versio."
 
 #: common/exceptions.cpp:62
 #, fuzzy, c-format
@@ -4665,26 +4659,22 @@ msgid "from %s : %s() line:%d"
 msgstr "riviltä %s: %s () rivi: %d"
 
 #: common/exceptions.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"KiCad ei voinut avata tätä tiedostoa, koska se luotiin enemmän\n"
-"uusin versio kuin käyttämäsi versio.\n"
-"Sen avaamiseksi sinun on päivitettävä KiCad uudempaan versioon.\n"
+"KiCad ei voinut avata tätä tiedostoa, koska se luotiin käyttämääsi versiota "
+"uudemmalla versiolla.\n"
 "\n"
-"Vaaditun (tai uudemman) KiCad-version päivämäärä: %s\n"
-"\n"
-"Koko virheteksti:\n"
-"%s"
+"Avataksesi sen sinun on päivitettävä KiCad versioon, joka on julkaistu %s "
+"tai myöhemmin."
 
 #: common/exceptions.cpp:126
-#, fuzzy
 msgid "Full error text:"
-msgstr "Peilaa teksti"
+msgstr "Koko virheteksti:"
 
 #: common/filehistory.cpp:155
 msgid "No Files"
@@ -5467,14 +5457,12 @@ msgid "No-connects"
 msgstr "Liittämättömät"
 
 #: common/layer_id.cpp:163
-#, fuzzy
 msgid "DRC warnings"
-msgstr "Kongon demokraattisen tasavallan varoitukset"
+msgstr "DRC-varoitukset"
 
 #: common/layer_id.cpp:164
-#, fuzzy
 msgid "DRC errors"
-msgstr "Kongon demokraattisen tasavallan virheet"
+msgstr "DRC-virheet"
 
 #: common/layer_id.cpp:165
 #, fuzzy
@@ -5594,11 +5582,13 @@ msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
 msgstr ""
+"Ominaisuuslistan lopusta puuttuu nollatavu. Tuotu data saattaa olla "
+"virheellistä tai puutteellista."
 
 #: common/plugins/altium/altium_parser.cpp:247
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
-msgstr ""
+msgstr "Yksikkö '%s' ei pääty 'mil'."
 
 #: common/plugins/altium/altium_parser.cpp:255
 #, fuzzy, c-format
@@ -6410,7 +6400,7 @@ msgstr "Avaa Web-selaimessa \"Contribute to KiCad\""
 
 #: common/tool/actions.cpp:647
 msgid "Donate"
-msgstr ""
+msgstr "Lahjoita"
 
 #: common/tool/actions.cpp:648
 #, fuzzy
@@ -9488,7 +9478,7 @@ msgstr "Sijainnin siirtymä:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:242
 msgid "Margin between the pin name position and the symbol body."
-msgstr ""
+msgstr "Marginaali pinnin nimen ja symbolin rungon välissä."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:133
@@ -9786,6 +9776,8 @@ msgid ""
 "Similar pins will be automatically added to other units, if this pin is not "
 "common to all units"
 msgstr ""
+"Vastaavat pinnit lisätään muihin yksiköihin, jos tämä pinni ei ole jaettu "
+"yksikköjen välillä"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:151
 #, fuzzy
@@ -9797,6 +9789,8 @@ msgid ""
 "Similar pins at the same location will be edited. Pin number of other pins "
 "will be not modified"
 msgstr ""
+"Vastaavia pinnejä samassa paikassa muutetaan. Muiden pinnien numeroita ei "
+"muuteta"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
@@ -9808,16 +9802,19 @@ msgstr ""
 #: eeschema/dialogs/dialog_pin_properties.cpp:283
 msgid "This symbol only has one unit. This control has no effect."
 msgstr ""
+"Tällä symbolilla on vain yksi yksikkö. Tällä asetuksella ei ole vaikutusta."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
 msgid ""
 "Synchronized pin edit mode is enabled.\n"
 "Similar pins will be edited, regardless this option."
 msgstr ""
+"Synkronoitu pinnien muokkaustila on käytössä.\n"
+"Vastaavia pinnejä muutetaan riippumatta tästä valinnasta."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:288
 msgid "If checked, this pin will exist in all units."
-msgstr ""
+msgstr "Jos valittu, tämä pinni esiintyy kaikissa yksiköissä."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:309
 msgid "Alternate pin definitions must have a name."
@@ -10551,6 +10548,9 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
+"Suhteellisten tiedostopolkujen käyttö hierarkkisille arkeille parantaa "
+"siirrettävyyttä järjestelmien ja alustojen välillä. Absoluuttisten polkujen "
+"käyttö voi aiheuttaa siirrettävyysongelmia."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:301
 #, fuzzy
@@ -10596,6 +10596,10 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
+"Uuden arkin piirikaaviotiedoston polkua:\n"
+"'%s'\n"
+"ei voitu normalisoida suhteessa ylemmän arkin tiedostopolkuun:\n"
+"'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #: kicad/tools/kicad_manager_control.cpp:557
@@ -10693,13 +10697,15 @@ msgstr "Lähteen 1 ja lähteen 2 on oltava erilaisia"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:281
 msgid "No valid simulation is configured."
-msgstr ""
+msgstr "Simulaatiota ei ole määritetty."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:284
 msgid ""
 "A valid simulation can be configured by selecting a simulation tab, setting "
 "the simulation parameters and clicking the OK button with the tab selected."
 msgstr ""
+"Voit määritellä simulaation valitsemalla simulaatiovälilehden, asettamalla "
+"simulaation parametrit ja klikkaamalla OK, kun välilehti on valittuna."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:288
 #, fuzzy
@@ -10969,7 +10975,7 @@ msgstr "Lisää täydellinen polku .include-kirjastodirektiiveille"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:446
 msgid "Compatibility mode:"
-msgstr ""
+msgstr "Yhteensopivuustila:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 #, fuzzy
@@ -10978,23 +10984,23 @@ msgstr "Valaistusasetukset"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "Spice"
-msgstr ""
+msgstr "Spice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "PSpice"
-msgstr ""
+msgstr "PSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "LTSpice"
-msgstr ""
+msgstr "LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "PSpice and LTSpice"
-msgstr ""
+msgstr "PSpice ja LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "HSpice"
-msgstr ""
+msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.h:140
 msgid "Simulation settings"
@@ -11054,6 +11060,8 @@ msgstr "JFET: n tapausjärjestys on tyhjennys, ruudukko, lähde"
 msgid ""
 "You need to specify at least the first %d parameters for the transient source"
 msgstr ""
+"Sinun täytyy määritellä ainakin %d ensimmäistä parametria "
+"transienttilähteelle"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:805
 msgid ""
@@ -12396,26 +12404,23 @@ msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:350
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:531
-#, fuzzy
 msgid "A library table row nickname and path cells are empty."
-msgstr "Kirjasto lempinimellä \"%s\" on jo olemassa."
+msgstr "Kirjastotaulun rivin lempinimi- ja polkusolut ovat tyhjiä."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:352
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:533
-#, fuzzy
 msgid "A library table row nickname cell is empty."
-msgstr "Kirjasto lempinimellä \"%s\" on jo olemassa."
+msgstr "Kirjastotaulun rivin lempinimisolu on tyhjä."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:354
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:535
-#, fuzzy
 msgid "A library table row path cell is empty."
-msgstr "Symbolikirjastotiedosto \"%s\" on tyhjä."
+msgstr "Kirjastotaulun rivin polkusolu on tyhjä."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:537
 msgid "Invalid Row Definition"
-msgstr ""
+msgstr "Virheellinen rivi"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:539
@@ -12423,6 +12428,7 @@ msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
 msgstr ""
+"Tyhjät solut aiheuttavat kaikkien virheellisten rivien poiston taulusta."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:374
 #, c-format
@@ -13137,6 +13143,8 @@ msgid ""
 "The file '%s` could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
+"Tiedostoa \"%s\" ei voitu avata.\n"
+"Automaattisesti tallennettujen tiedostojen manuaalinen palautus vaaditaan."
 
 #: eeschema/files-io.cpp:1395
 #, fuzzy
@@ -13145,7 +13153,7 @@ msgstr "Automaattitallennustiedostoa \"%s\" ei voitu poistaa!"
 
 #: eeschema/files-io.cpp:1400
 msgid "Manual recovery will be required to restore the file(s) above."
-msgstr ""
+msgstr "Yllä olevat tiedostot vaativat manuaalisen palautuksen."
 
 #: eeschema/files-io.cpp:1422
 #, fuzzy
@@ -13154,7 +13162,7 @@ msgstr "Automaattitallennustiedostoa \"%s\" ei voitu poistaa!"
 
 #: eeschema/files-io.cpp:1427
 msgid "Manual removal will be required for the file(s) above."
-msgstr ""
+msgstr "Yllä olevat tiedostot vaativat manuaalisen poiston."
 
 #: eeschema/files-io.cpp:1438
 #, fuzzy, c-format
@@ -13169,6 +13177,8 @@ msgid ""
 "This file must be manually removed or the auto save feature will be\n"
 "shown every time the schematic editor is launched."
 msgstr ""
+"Tämä tiedosto pitää poistaa manuaalisesti, tai automaattitallennustoiminto\n"
+"näytetään joka kerta piirikaavioeditoria käynnistettäessä."
 
 #: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1397
 msgid "Alias of"
@@ -13431,6 +13441,8 @@ msgid ""
 "Multiple symbols have the same reference designator.\n"
 "Annotation must be corrected before simulating."
 msgstr ""
+"Usealla symbolilla on sama viitetunniste.\n"
+"Merkinnät pitää korjata ennen simulointia."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:125
 #, fuzzy, c-format
@@ -13834,7 +13846,7 @@ msgstr "Tiedostoa %s ei voi avata"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:312
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr ""
+msgstr "Tiedostoa ei jäsennetty kokonaan (%d tavua jäljellä)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:474
 #, fuzzy
