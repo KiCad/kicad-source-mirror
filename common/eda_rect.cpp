@@ -380,7 +380,7 @@ EDA_RECT& EDA_RECT::Inflate( wxCoord dx, wxCoord dy )
     }
     else // size.x < 0:
     {
-        if( m_size.x > -2 * dx )
+        if( m_size.x > 2 * dx )
         {
             // Don't allow deflate to eat more width than we have,
             m_pos.x -= m_size.x / 2;
