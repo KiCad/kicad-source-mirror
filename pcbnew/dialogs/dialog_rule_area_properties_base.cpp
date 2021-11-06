@@ -94,7 +94,7 @@ DIALOG_RULE_AREA_PROPERTIES_BASE::DIALOG_RULE_AREA_PROPERTIES_BASE( wxWindow* pa
 	bSizerRight->Add( bSizer6, 1, wxEXPAND, 5 );
 
 	m_cbConstrainCtrl = new wxCheckBox( this, wxID_ANY, _("Constrain outline to H, V and 45 deg"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbConstrainCtrl->SetToolTip( _("Draw the area using horizontal, verical and 45 degree lines only") );
+	m_cbConstrainCtrl->SetToolTip( _("Draw the area using horizontal, vertical and 45 degree lines only") );
 
 	bSizerRight->Add( m_cbConstrainCtrl, 0, wxALL, 5 );
 
