@@ -1865,11 +1865,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             const_cast<KIID&>( item->m_Uuid ) = KIID();
         }
 
-        item->SetFlags( IS_NEW | IS_PASTED | IS_MOVING );
+        item->SetFlags( IS_NEW | IS_PASTED );
         m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item, i > 0 );
 
         // Reset flags for subsequent move operation
-        item->SetFlags( IS_NEW | IS_PASTED | IS_MOVING );
+        item->SetFlags( IS_NEW | IS_PASTED );
         // Start out hidden so the pasted items aren't "ghosted" in their original location
         // before being moved to the current location.
         getView()->Hide( item, true );
@@ -1930,6 +1930,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         SCH_ITEM* item = (SCH_ITEM*) selection.GetTopLeftItem();
 
         selection.SetReferencePoint( item->GetPosition() );
+        
         m_toolMgr->RunAction( EE_ACTIONS::move, false );
     }
 

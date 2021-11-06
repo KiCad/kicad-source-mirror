@@ -293,6 +293,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( m_anchorPos )
                 {
                     VECTOR2I delta = m_cursor - (*m_anchorPos);
+                    bool     isPasted = false;
 
                     // Drag items to the current cursor position
                     for( EDA_ITEM* item : selection )
@@ -303,7 +304,17 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                         moveItem( item, delta );
                         updateItem( item, false );
+
+                        isPasted |= item->GetFlags() & IS_PASTED;
+                        item->ClearFlags( IS_PASTED );
                     }
+
+                    // The first time pasted items are moved we need to store
+                    // the position of the cursor so that rotate while moving
+                    // works as expected (instead of around the original anchor
+                    // point
+                    if( isPasted )
+                        selection.SetReferencePoint( m_cursor );
 
                     m_anchorPos = m_cursor;
                 }

@@ -1110,7 +1110,7 @@ EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
         for( int i = (int) m_selection.GetSize() - 1; i >= 0; --i )
         {
             EDA_ITEM* item = (EDA_ITEM*) m_selection.GetItem( i );
-            isMoving = static_cast<SCH_ITEM*>( item )->IsMoving();
+            isMoving |= static_cast<SCH_ITEM*>( item )->IsMoving();
 
             if( !item->IsType( aFilterList ) )
             {
