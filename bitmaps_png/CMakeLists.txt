@@ -129,6 +129,7 @@ set( BMAPS_SMALL
     text_valign_bottom
     text_bold
     text_italic
+    text_mirrored
     tree_nosel
     tree_sel
     visibility

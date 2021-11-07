@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <widgets/bitmap_button.h>
 #include <dialog_text_properties.h>
 #include <confirm.h>
 #include <widgets/unit_binder.h>
@@ -115,6 +116,27 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
         m_statusLine->Show( false );
     }
 
+    m_separator0->SetIsSeparator();
+
+    m_italic->SetIsCheckButton();
+    m_italic->SetBitmap( KiBitmap( BITMAPS::text_italic ) );
+
+    m_separator1->SetIsSeparator();
+
+    m_alignLeft->SetIsCheckButton();
+    m_alignLeft->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
+    m_alignCenter->SetIsCheckButton();
+    m_alignCenter->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
+    m_alignRight->SetIsCheckButton();
+    m_alignRight->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
+
+    m_separator2->SetIsSeparator();
+
+    m_mirrored->SetIsCheckButton();
+    m_mirrored->SetBitmap( KiBitmap( BITMAPS::text_mirrored ) );
+
+    m_separator3->SetIsSeparator();
+
     SetTitle( title );
     m_hash_key = title;
 
@@ -142,26 +164,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_statusLine->SetFont( KIUI::GetInfoFont( this ) );
 
     m_sdbSizerOK->SetDefault();
-
-    // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
-    // implementation on MSW
-    m_tabOrder = {
-            m_LayerLabel,
-            m_LayerSelectionCtrl,
-            m_SizeXCtrl,
-            m_SizeYCtrl,
-            m_ThicknessCtrl,
-            m_PositionXCtrl,
-            m_PositionYCtrl,
-            m_Visible,
-            m_Italic,
-            m_JustifyChoice,
-            m_OrientCtrl,
-            m_Mirrored,
-            m_KeepUpright,
-            m_sdbSizerOK,
-            m_sdbSizerCancel
-    };
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
     // so we have to listen to wxEVT_CHAR_HOOK events instead.
@@ -263,17 +265,35 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     m_posY.SetValue( m_edaText->GetTextPos().y );
 
     m_Visible->SetValue( m_edaText->IsVisible() );
-    m_Italic->SetValue( m_edaText->IsItalic() );
-    EDA_TEXT_HJUSTIFY_T hJustify = m_edaText->GetHorizJustify();
-    m_JustifyChoice->SetSelection( (int) hJustify + 1 );
-    m_OrientValue = m_edaText->GetTextAngle();
-    m_orientation.SetDoubleValue( m_OrientValue );
-    m_Mirrored->SetValue( m_edaText->IsMirrored() );
 
     if( m_fpText )
         m_KeepUpright->SetValue( m_fpText->IsKeepUpright() );
 
+    m_italic->Check( m_edaText->IsItalic() );
+
+    switch ( m_edaText->GetHorizJustify() )
+    {
+    case GR_TEXT_HJUSTIFY_LEFT:   m_alignLeft->Check( true );   break;
+    case GR_TEXT_HJUSTIFY_CENTER: m_alignCenter->Check( true ); break;
+    case GR_TEXT_HJUSTIFY_RIGHT:  m_alignRight->Check( true );  break;
+    }
+
+    m_mirrored->Check( m_edaText->IsMirrored() );
+
+    m_OrientValue = m_edaText->GetTextAngle();
+    m_orientation.SetDoubleValue( m_OrientValue );
+
     return DIALOG_TEXT_PROPERTIES_BASE::TransferDataToWindow();
+}
+
+
+void DIALOG_TEXT_PROPERTIES::onAlignButton( wxCommandEvent& aEvent )
+{
+    for( BITMAP_BUTTON* btn : { m_alignLeft, m_alignCenter, m_alignRight } )
+    {
+        if( btn->IsChecked() && btn != aEvent.GetEventObject() )
+            btn->Check( false );
+    }
 }
 
 
@@ -347,22 +367,23 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         m_edaText->SetTextThickness( maxPenWidth );
     }
 
-    m_edaText->SetVisible( m_Visible->GetValue() );
-    m_edaText->SetItalic( m_Italic->GetValue() );
     m_OrientValue = m_orientation.GetDoubleValue();
     m_edaText->SetTextAngle( m_OrientValue );
-    m_edaText->SetMirrored( m_Mirrored->GetValue() );
+
+    m_edaText->SetVisible( m_Visible->GetValue() );
 
     if( m_fpText )
         m_fpText->SetKeepUpright( m_KeepUpright->GetValue() );
 
-    switch( m_JustifyChoice->GetSelection() )
-    {
-    case 0: m_edaText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );   break;
-    case 1: m_edaText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER ); break;
-    case 2: m_edaText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );  break;
-    default: break;
-    }
+    m_edaText->SetItalic( m_italic->IsChecked() );
+    if( m_alignLeft->IsChecked() )
+        m_edaText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+    else if( m_alignCenter->IsChecked() )
+        m_edaText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+    else
+        m_edaText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+
+    m_edaText->SetMirrored( m_mirrored->IsChecked() );
 
     if( pushCommit )
         commit.Push( _( "Change text properties" ) );

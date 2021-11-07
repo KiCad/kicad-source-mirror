@@ -101,6 +101,7 @@ const std::vector<BITMAP_INFO> g_BitmapInfo = {
     { BITMAPS::text_valign_bottom, wxT( "text_valign_bottom_16.png" ), 16, wxT( "light" ) },
     { BITMAPS::text_bold, wxT( "text_bold_16.png" ), 16, wxT( "light" ) },
     { BITMAPS::text_italic, wxT( "text_italic_16.png" ), 16, wxT( "light" ) },
+    { BITMAPS::text_mirrored, wxT( "text_mirrored_16.png" ), 16, wxT( "light" ) },
     { BITMAPS::tree_nosel, wxT( "tree_nosel_16.png" ), 16, wxT( "light" ) },
     { BITMAPS::tree_sel, wxT( "tree_sel_16.png" ), 16, wxT( "light" ) },
     { BITMAPS::visibility, wxT( "visibility_16.png" ), 16, wxT( "light" ) },

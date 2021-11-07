@@ -542,6 +542,7 @@ enum class BITMAPS : unsigned int
     text_vertical,
     text_bold,
     text_italic,
+    text_mirrored,
     text_sketch,
     thermal_spokes,
     three_d,

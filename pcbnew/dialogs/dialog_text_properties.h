@@ -52,6 +52,8 @@ public:
     virtual void OnSetFocusText( wxFocusEvent& event ) override;
 
 private:
+    void onAlignButton( wxCommandEvent &aEvent ) override;
+
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
     void onMultiLineTCLostFocus( wxFocusEvent& event ) override;
