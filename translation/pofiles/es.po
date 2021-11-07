@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-05 06:01-0700\n"
-"PO-Revision-Date: 2021-11-06 13:25+0000\n"
+"PO-Revision-Date: 2021-11-08 19:42+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -5940,7 +5940,7 @@ msgstr "Actualizar"
 
 #: common/tool/actions.cpp:281
 msgid "Zoom to Fit"
-msgstr "Ajustar Zoom"
+msgstr "Zoom a hoja"
 
 #: common/tool/actions.cpp:286
 msgid "Zoom to Objects"
