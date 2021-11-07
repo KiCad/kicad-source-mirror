@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-05 06:01-0700\n"
-"PO-Revision-Date: 2021-11-01 10:41+0000\n"
+"PO-Revision-Date: 2021-11-07 14:21+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -680,7 +680,6 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "Uživatelské vrstvy (nezobrazují se v realistickém režimu)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
 msgstr "Zobrazit vrstvy komentářů a kresby"
 
@@ -1505,7 +1504,7 @@ msgstr "Chyba otevření souboru"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "Prokládané listy mohou vytvářet velmi neočekávané výsledky."
 
 #: common/confirm.cpp:164 common/confirm.cpp:169 common/confirm.cpp:259
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:164
@@ -3051,7 +3050,7 @@ msgstr "Měřítko kreslící plochy:"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid "Apply icon scaling to fonts"
-msgstr ""
+msgstr "Použít ikony měřítka pro písma"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
@@ -3933,7 +3932,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Nedostatečná oprávnění ke složce '%s'."
 
 #: common/eda_base_frame.cpp:1086
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
@@ -3941,11 +3940,11 @@ msgid ""
 "it was not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"To je poněkud rozpačité!\n"
+"To je potenciálně trapné!\n"
 "Zdá se, že když jste naposled upravovali soubor\n"
-"\"%s\"\n"
-"nebyl správně uložen. Přejete si obnovit poslední uložené úpravy, které jste "
-"provedli?"
+"%s\n"
+"nebyl správně uložen.  Přejete si obnovit poslední uložené úpravy, které "
+"jste provedli?"
 
 #: common/eda_base_frame.cpp:1102
 msgid "The auto save file could not be renamed to the board file name."
@@ -5778,9 +5777,8 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "Kopírovat vybrané položky do schránky"
 
 #: common/tool/actions.cpp:165
-#, fuzzy
 msgid "Paste item(s) from clipboard"
-msgstr "Vložit položku(y) zr schránky"
+msgstr "Vložit položku(y) ze schránky"
 
 #: common/tool/actions.cpp:171
 msgid "Select all items on screen"
@@ -8760,14 +8758,13 @@ msgid "Color:"
 msgstr "Barva:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic junction dot size."
-msgstr "Nastavte šířku na 0, chcete-li použít šířky čar editoru schémat."
+msgstr "Nastavte průměr na 0 pro použití velikosti uzlu editoru schémat."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
 msgid "Set color to transparent to use Schematic Editor colors."
-msgstr ""
+msgstr "Nastavit barvu průhlednosti pro použití barev editoru schémat."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
@@ -8960,9 +8957,8 @@ msgstr ""
 "pro čísla PIN."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
-#, fuzzy
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr "Vytvořit symbol s alternativní formou (DeMorgan)"
+msgstr "Vytvořit symbol s s alternativním stylem těla (DeMorgan)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
@@ -9022,9 +9018,8 @@ msgstr "Společné pro všechny &jednotky v symbolu"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
-#, fuzzy
 msgid "Common to all body &styles (De Morgan)"
-msgstr "Společné všechny styly &těla (DeMorgan)"
+msgstr "Společné pro všechny styly &těla (DeMorgan)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:51
 msgid "Drawing Properties"
@@ -9050,9 +9045,8 @@ msgid "Delete extra units from symbol?"
 msgstr "Smazat jednotky navíc ze součástky?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:287
-#, fuzzy
 msgid "Delete alternate body style (De Morgan) from symbol?"
-msgstr "Smazat položky kreslení alternativního stylu (DeMorgan) ze symbolu?"
+msgstr "Smazat alternativní styl těla (DeMorgan) ze symbolu?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:315
 #, c-format
@@ -9187,9 +9181,8 @@ msgstr ""
 "kořenové symboly."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
-#, fuzzy
 msgid "Has alternate body style (De Morgan)"
-msgstr "Má alternativní symbol (DeMorgan)"
+msgstr "Má alternativní styl těla (DeMorgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
@@ -9274,7 +9267,7 @@ msgstr "Posunutí polohy:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:242
 msgid "Margin between the pin name position and the symbol body."
-msgstr ""
+msgstr "Kraj mezi polohou vývodu a tělem symbolu."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:133
@@ -9400,9 +9393,8 @@ msgid "Style:"
 msgstr "Styl:"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Netclass line widths."
-msgstr "Nastavte šířku na 0, chcete-li použít šířky čar editoru schémat."
+msgstr "Nastavte šířku na 0 pro použití šířek čar Třídy spojů."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
 msgid "Line, Wire & Bus Properties"
@@ -9515,14 +9507,12 @@ msgid "This plugin already exists."
 msgstr "Plugin již existuje."
 
 #: eeschema/dialogs/dialog_netlist.cpp:662
-#, fuzzy
 msgid "You must provide a netlist generator command string"
-msgstr "Chyba. Musíte zadat řetězec příkazu"
+msgstr "Musíte poskytnout příkazový řetězec generátoru netlistu"
 
 #: eeschema/dialogs/dialog_netlist.cpp:668
-#, fuzzy
 msgid "You must provide a netlist generator title"
-msgstr "Pro tuto součástku je třeba zvolit název"
+msgstr "Musíte poskytnout název generátoru netlistu"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
 msgid "Add Generator..."
@@ -9569,9 +9559,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:151
-#, fuzzy
 msgid "Synchronized pins edit mode"
-msgstr "Zobrazit pole písma v režimu úprav"
+msgstr "Synchronizovaný režim úprav vývodů"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:152
 msgid ""
@@ -11266,9 +11255,8 @@ msgid "Unit:"
 msgstr "Jednotka:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
-#, fuzzy
 msgid "Alternate symbol (De Morgan)"
-msgstr "Alternativní symbol (DeMorgan)"
+msgstr "Alternativní symbol (De Morgan)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:138
 msgid ""
@@ -18087,13 +18075,13 @@ msgid "Unzip Project"
 msgstr "Rozbalit projekt"
 
 #: kicad/files-io.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Open '%s'\n"
 msgstr ""
 "\n"
-"Otevřít \"%s\"\n"
+"Otevřít '%s'\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
@@ -18186,9 +18174,9 @@ msgid "Restoring session"
 msgstr "Obnovování relace"
 
 #: kicad/kicad_manager_frame.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid "Restoring '%s'"
-msgstr "Obnovení \"%s\""
+msgstr "Obnovení '%s'"
 
 #: kicad/menubar.cpp:56
 msgid "Clear Recent Projects"
@@ -18818,9 +18806,9 @@ msgid "Print the contents of the file"
 msgstr "Vytisknout obsah souboru"
 
 #: kicad/project_tree_pane.cpp:857
-#, fuzzy, c-format
+#, c-format
 msgid "Change filename: '%s'"
-msgstr "Změnit název souboru: \"%s\""
+msgstr "Změnit název souboru: '%s'"
 
 #: kicad/project_tree_pane.cpp:859
 msgid "Change filename"
@@ -19532,7 +19520,6 @@ msgid "Error writing objects to clipboard"
 msgstr "Chyba zápisu objektů do schránky"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19550,12 +19537,11 @@ msgstr ""
 "___Z<sub>vyst</sub>___ požadovaná výstupní impedance v &#x2126;<br>\n"
 "___Z<sub>0</sub> = Z<sub>vst</sub> = Z<sub>vyst</sub>___\n"
 "\n"
-"___L = 10<sup>a/20</up>___\n"
+"___L = 10<sup>a/20</up>___<br>\n"
 "___R<sub>1</sub> = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19576,13 +19562,12 @@ msgstr ""
 "\n"
 "___L = 10<sup>a/20</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R<sub>2</sub> = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; "
-"Z<sub>out</sub> / L)___<br>\n"
-"___R<sub>1</sub> = 1 / (A/Z<sub>in</sub> &minus; 1/R<sub>2</sub>)___<br>\n"
-"___R<sub>3</sub> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
+"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>vst</sub> &middot; Z<sub>vyst</"
+"sub> / L)___<br>\n"
+"___R1 = 1 / (A/Z<sub>vst</sub> &minus; 1/R2)___<br>\n"
+"___R3 = 1 / (A/Z<sub>vyst</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -19598,10 +19583,9 @@ msgstr ""
 "___Z<sub>vyst</sub>___ požadovaná výstupní impedance v &#x2126;  \n"
 "___Z<sub>0</sub> = Z<sub>vst</sub> = Z<sub>vyst</sub>___\n"
 "\n"
-"___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
+"___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19621,11 +19605,11 @@ msgstr ""
 "___Z<sub>vyst</sub>___ požadovaná výstupní impedance v &#x2126;<br>\n"
 "\n"
 "___L = 10<sup>a/20</sup>___<br>\n"
-"___A = (L+1) / (L&minus;1)___<br>\n"
-"___R<sub>2</sub> = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; "
-"Z<sub>out</sub>) / (L&minus;1)___<br>\n"
-"___R<sub>1</sub> = Z<sub>in</sub> &middot; A &minus; R<sub>2</sub>___<br>\n"
-"___R<sub>3</sub> = Z<sub>out</sub> &middot; A &minus; R<sub>2</sub>___\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>vst</sub> &middot; "
+"Z<sub>vyst</sub>) / (L&minus;1)___<br>\n"
+"___R1 = Z<sub>vst</sub> &middot; A &minus; R2___<br>\n"
+"___R3 = Z<sub>vyst</sub> &middot; A &minus; R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -19633,9 +19617,8 @@ msgid "Attenuation more than %f dB"
 msgstr "Ǔtlumu více než %f dB"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
-#, fuzzy
 msgid "Pi"
-msgstr "Vývod"
+msgstr "Pi"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Tee"
@@ -20476,7 +20459,6 @@ msgid "Not worth using"
 msgstr "Nestojí za to použít"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20504,7 +20486,7 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Série E definovaná v  IEC 60063.\n"
+"Série E definovaná v IEC 60063.\n"
 "\n"
 "Dostupné hodnoty jsou přibližně stejně rozmístěny v logaritmickém měřítku.\n"
 "\n"
@@ -20520,10 +20502,9 @@ msgstr ""
 "- Můžete zadat požadovaný odpor od 0,0025 do 4000 kΩ.\n"
 "- Zadaná řešení používají maximálně 4 komponenty.\n"
 "\n"
-"Ve výchozím nastavení je hodnota požadavku vždy vyloučena z sady řešení.  Je "
-"také možné specifikovat\n"
-"až dvě další hodnoty vyloučené z řešení, pokud tyto hodnoty součástek nejsou "
-"k dispozici\n"
+"Požadovaná hodnota je vždy vyloučena ze sady řešení.<br>\n"
+"Volitelně až dvě další hodnoty mohou být vyloučeny v případě problémů s "
+"dostupností součástek.\n"
 "\n"
 "Řešení jsou uvedena v následujících formátech:\n"
 "\n"
@@ -25706,7 +25687,7 @@ msgstr "Velikost otvoru X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:410
 msgid "Offset shape from hole"
-msgstr ""
+msgstr "Posun tvaru a díry"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:460
 #, fuzzy
@@ -26718,11 +26699,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr ""
+msgstr "Výroba DPS"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr ""
+msgstr "Odeslat soubory DPS do výroby"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
 msgid "Change Pads on Current Footprint"
