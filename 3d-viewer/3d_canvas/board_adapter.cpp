@@ -26,6 +26,7 @@
 #include "board_adapter.h"
 #include <board_design_settings.h>
 #include <board_stackup_manager/board_stackup.h>
+#include <board_stackup_manager/stackup_predefined_prms.h>
 #include <3d_rendering/raytracing/shapes2D/polygon_2d.h>
 #include <board.h>
 #include <dialogs/dialog_color_picker.h>
@@ -162,6 +163,7 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 #define ADD_COLOR( list, r, g, b, a, name ) \
     list.push_back( CUSTOM_COLOR_ITEM( r/255.0, g/255.0, b/255.0, a, name ) )
 
+        ADD_COLOR( g_SilkscreenColors, 245, 245, 245, 1.0, NotSpecifiedPrm() ); // White
         ADD_COLOR( g_SilkscreenColors,  20,  51,  36, 1.0, "Green" );
         ADD_COLOR( g_SilkscreenColors, 181,  19,  21, 1.0, "Red" );
         ADD_COLOR( g_SilkscreenColors,   2,  59, 162, 1.0, "Blue" );
@@ -170,6 +172,7 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
         ADD_COLOR( g_SilkscreenColors,  32,   2,  53, 1.0, "Purple" );
         ADD_COLOR( g_SilkscreenColors, 194,  195,  0, 1.0, "Yellow" );
 
+        ADD_COLOR( g_MaskColors,  20,  51,  36, 0.83, NotSpecifiedPrm() ); // Green
         ADD_COLOR( g_MaskColors,  20,  51,  36, 0.83, "Green" );
         ADD_COLOR( g_MaskColors,  91, 168,  12, 0.83, "Light Green" );
         ADD_COLOR( g_MaskColors,  13, 104,  11, 0.83, "Saturated Green" );

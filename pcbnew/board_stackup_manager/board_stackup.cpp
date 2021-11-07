@@ -61,7 +61,7 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
 
     case BS_ITEM_TYPE_SOLDERMASK:
         m_TypeName = "soldermask";
-        m_Color = "Green";
+        m_Color = NotSpecifiedPrm();
         SetMaterial( NotSpecifiedPrm() ); // or other solder mask material name
         SetThickness( GetMaskDefaultThickness() );
         SetEpsilonR( DEFAULT_EPSILON_R_SOLDERMASK );
