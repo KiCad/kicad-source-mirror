@@ -1426,7 +1426,9 @@ void SCH_EDIT_FRAME::ShowAllIntersheetRefs( bool aShow )
 void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
+
     SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+    settings.m_JunctionSize = GetSchematicJunctionSize();
 
     ShowAllIntersheetRefs( settings.m_IntersheetRefsShow );
 
