@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-05 06:01-0700\n"
-"PO-Revision-Date: 2021-11-01 10:42+0000\n"
+"PO-Revision-Date: 2021-11-07 14:22+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -3865,7 +3865,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "มีสิทธิไม่เพียงพอในโฟลเดอร์ '%s'"
 
 #: common/eda_base_frame.cpp:1086
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
@@ -3875,8 +3875,8 @@ msgid ""
 msgstr ""
 "นี่ช่างน่าขายหน้า!\n"
 "ปรากฏว่าครั้งล่าสุดที่คุณแก้ไขไฟล์\n"
-"\"%s\"\n"
-"ไม่ได้บันทึกอย่างถูกต้อง\tคุณต้องการย้อนกลับไปใช้บันทึกครั้งก่อนหน้าหรือไม่?"
+"%s\n"
+"ไม่ได้บันทึกอย่างถูกต้อง  คุณต้องการย้อนกลับไปใช้บันทึกครั้งก่อนหน้าหรือไม่?"
 
 #: common/eda_base_frame.cpp:1102
 msgid "The auto save file could not be renamed to the board file name."
@@ -5697,7 +5697,6 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "สำเนาชิ้นส่วนที่ถูกเลือกเข้าคลิปบอร์ด"
 
 #: common/tool/actions.cpp:165
-#, fuzzy
 msgid "Paste item(s) from clipboard"
 msgstr "วางสำเนาชิ้นส่วนจากคลิปบอร์ด"
 
@@ -8851,9 +8850,8 @@ msgstr ""
 "สำหรับหมายเลขขา"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
-#, fuzzy
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr "สร้างสัญลักษณ์ด้วยรูปร่างตัวจากทางเลือก (เดอมอแกน)"
+msgstr "สร้างสัญลักษณ์ด้วยรูปร่างทางเลือก (เดอมอแกน)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
@@ -8913,9 +8911,8 @@ msgstr "หน่วยร่วมกันทั้งหมดในสัญ
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
-#, fuzzy
 msgid "Common to all body &styles (De Morgan)"
-msgstr "สไตล์ร่วมกันทุกตัว (เดอมอแกน)"
+msgstr "ใช้สไตล์ร่วมกันทุกตัว(&s)(เดอมอแกน)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:51
 msgid "Drawing Properties"
@@ -8941,9 +8938,8 @@ msgid "Delete extra units from symbol?"
 msgstr "ลบหน่วยที่เกินออกจากสัญลักษณ์?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:287
-#, fuzzy
 msgid "Delete alternate body style (De Morgan) from symbol?"
-msgstr "ลบวาดชิ้นส่วนแบบทางเลือก (เดอมอแกน) จากสัญลักษณ์?"
+msgstr "ลบรูปร่างชนิดทางเลือก(เดอมอแกน) จากสัญลักษณ์?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:315
 #, c-format
@@ -9078,9 +9074,8 @@ msgstr ""
 "สัญลักษณ์รูท"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
-#, fuzzy
 msgid "Has alternate body style (De Morgan)"
-msgstr "มีสไตล์แบบอื่น(เดอมอแกน)"
+msgstr "มีสไตล์รูปร่างแบบอื่น(เดอมอแกน)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
@@ -9464,9 +9459,8 @@ msgstr "ขาที่คล้ายคลึงกันที่ตำแห
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
-#, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr "ชื่อเรียกอื่นไม่สามารถใช้ได้กับสัญลักษณ์เดอมอแกน"
+msgstr "การกำหนดชื่อขาทางเลือก ไม่สามารถใช้กับสัญลักษณ์เดอมอแกน"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:283
 msgid "This symbol only has one unit. This control has no effect."
@@ -11144,9 +11138,8 @@ msgid "Unit:"
 msgstr "หน่วย:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
-#, fuzzy
 msgid "Alternate symbol (De Morgan)"
-msgstr "ทางเลือกสัญลักษณ์(เดอมอแกน)"
+msgstr "สัญลักษณ์ทางเลือก (เดอมอแกน)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:138
 msgid ""
@@ -15930,34 +15923,28 @@ msgid "Assign a netclass to the net of the selected wire"
 msgstr "กำหนดเน็ตคลาสให้กับเน็ตของเส้นลวดที่เลือก"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "De Morgan Conversion"
-msgstr "การแปลงเดอมอร์แกน"
+msgstr "การแปลงเป็นเดอมอร์แกน"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "Switch between De Morgan representations"
-msgstr "สลับไปมาระหว่างการแสดงแทนเดอมอร์แกน"
+msgstr "สลับไปมาระหว่างการแสดงแทนด้วยเดอมอร์แกน"
 
 #: eeschema/tools/ee_actions.cpp:458
-#, fuzzy
 msgid "De Morgan Standard"
 msgstr "มาตรฐานเดอมอร์แกน"
 
 #: eeschema/tools/ee_actions.cpp:458
-#, fuzzy
 msgid "Switch to standard De Morgan representation"
-msgstr "สลับไปยังการแสดงเดอร์มอแกนตามมาตรฐาน"
+msgstr "สลับไปทดแทนตามมาตรฐานเดอร์มอแกน"
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "De Morgan Alternate"
 msgstr "ทางเลือกเดอร์มอแกน"
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "Switch to alternate De Morgan representation"
-msgstr "เปลี่ยนไปใช้ตัวแทนเดอร์มอแกนสำรอง"
+msgstr "เปลี่ยนไปใช้ทางเลือกตัวแทนเดอร์มอแกน"
 
 #: eeschema/tools/ee_actions.cpp:468
 msgid "Change to Label"
@@ -17638,19 +17625,19 @@ msgid "Highlight"
 msgstr "เน้นสี"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Component '%s'"
-msgstr "เน้นสีชิ้นส่วนที่เป็นของอุปกรณ์ \"%s\""
+msgstr "เน้นสีชิ้นส่วนของอุปกรณ์ '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Net '%s'"
-msgstr "เน้นสีชิ้นส่วนที่เป็นของเน็ต \"%s\""
+msgstr "เน้นสีชิ้นส่วนของเน็ต '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "เน้นสีประเภทรูรับแสง \"%s\""
+msgstr "เน้นสีที่ชนิดรูรับแสง '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
 #, c-format
@@ -17866,13 +17853,13 @@ msgid "Unzip Project"
 msgstr "คลายบีบอัดโครงการ"
 
 #: kicad/files-io.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Open '%s'\n"
 msgstr ""
 "\n"
-"เปิด \"%s\"\n"
+"เปิด '%s'\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
@@ -17962,9 +17949,9 @@ msgid "Restoring session"
 msgstr "กําลังคืนค่าเซสชั่น"
 
 #: kicad/kicad_manager_frame.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid "Restoring '%s'"
-msgstr "กําลังคืนค่า \"%s\""
+msgstr "กําลังคืนค่า '%s'"
 
 #: kicad/menubar.cpp:56
 msgid "Clear Recent Projects"
@@ -18595,9 +18582,9 @@ msgid "Print the contents of the file"
 msgstr "พิมพ์เนื้อหาของไฟล์"
 
 #: kicad/project_tree_pane.cpp:857
-#, fuzzy, c-format
+#, c-format
 msgid "Change filename: '%s'"
-msgstr "เปลี่ยนชื่อไฟล์: \"%s\""
+msgstr "เปลี่ยนชื่อไฟล์: '%s'"
 
 #: kicad/project_tree_pane.cpp:859
 msgid "Change filename"
@@ -19305,7 +19292,6 @@ msgid "Error writing objects to clipboard"
 msgstr "เกิดข้อผิดพลาดในการเขียนวัตถุไปยังคลิปบอร์ด"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19323,12 +19309,11 @@ msgstr ""
 "___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___L = 10<sup>a/20</up>___\n"
-"___R<sub>1</sub> = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
-"___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
+"___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19349,13 +19334,12 @@ msgstr ""
 "\n"
 "___L = 10<sup>a/20</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R<sub>2</sub> = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; "
-"Z<sub>out</sub> / L)___<br>\n"
-"___R<sub>1</sub> = 1 / (A/Z<sub>in</sub> &minus; 1/R<sub>2</sub>)___<br>\n"
-"___R<sub>3</sub> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
+"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; Z<sub>out</"
+"sub> / L)___<br>\n"
+"___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
+"___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -19371,10 +19355,9 @@ msgstr ""
 "___Z<sub>out</sub>___ is desired output impedance in &#x2126;  \n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
+"___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19394,11 +19377,11 @@ msgstr ""
 "___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
 "\n"
 "___L = 10<sup>a/20</sup>___<br>\n"
-"___A = (L+1) / (L&minus;1)___<br>\n"
-"___R<sub>2</sub> = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; "
-"Z<sub>out</sub>) / (L&minus;1)___<br>\n"
-"___R<sub>1</sub> = Z<sub>in</sub> &middot; A &minus; R<sub>2</sub>___<br>\n"
-"___R<sub>3</sub> = Z<sub>out</sub> &middot; A &minus; R<sub>2</sub>___\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</sub>) "
+"/ (L&minus;1)___<br>\n"
+"___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
+"___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -19406,9 +19389,8 @@ msgid "Attenuation more than %f dB"
 msgstr "การลดทอนมากกว่า %f ดีบี"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
-#, fuzzy
 msgid "Pi"
-msgstr "ขา"
+msgstr "ไพ"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Tee"
@@ -26398,36 +26380,34 @@ msgid "Real drill"
 msgstr "สว่านจริง"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:21
-#, fuzzy
 msgid "Select Manufacturer"
-msgstr "เลือกเลเยอร์"
+msgstr "เลือกผู้ผลิต"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:25
-#, fuzzy, c-format
+#, c-format
 msgid "from %s"
-msgstr "[จาก %s]"
+msgstr "จาก %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "รายละเอียด"
+msgstr "รายละเอียด: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
-#, fuzzy
 msgid "Send project directly"
-msgstr "ไฟล์โครงการ KiCad"
+msgstr "ส่งโปรเจ็กโดยตรง"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr ""
+msgstr "ส่งไฟล์การผลิตไปยังผู้ผลิตจากคีแคด"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr ""
+msgstr "ผลิตพีซีบี"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr ""
+msgstr "ส่งพีซีบีสำหรับการผลิต"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
 msgid "Change Pads on Current Footprint"
@@ -26563,14 +26543,12 @@ msgid "Target Properties"
 msgstr "คุณสมบัติเป้าหมาย"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:82
-#, fuzzy
 msgid "Footprint Reference Properties"
-msgstr "คุณสมบัติฟุ้ทพรินท์"
+msgstr "คุณสมบัติอ้างอิงฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:83
-#, fuzzy
 msgid "Footprint Value Properties"
-msgstr "คุณสมบัติฟุ้ทพรินท์"
+msgstr "คุณสมบัติมูลค่าฟุ้ทพรินท์"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:84
 msgid "Footprint Text Properties"
@@ -26877,6 +26855,8 @@ msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
 msgstr ""
+"แสดงขอบเขตระยะห่างรอบๆแทร็คและเลือกเพิ่มสำหรับเวีย "
+"ที่บริเวณปลายเส้นแทร็คระหว่างเดินลายเส้น"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
@@ -28045,11 +28025,12 @@ msgid "User9"
 msgstr "ผู้ใช้9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board manufacturer's recommendations for solder mask clearance and "
 "minimum web width."
-msgstr "ใช้คำแนะนำตามผู้ผลิตบอร์ดของคุณ สำหรับระยะห่างโซลเดอร์มาส์กและความกว้างเชื่อมต่อ"
+msgstr ""
+"ใช้คำแนะนำตามผู้ผลิตบอร์ดของคุณ "
+"สำหรับระยะห่างโซลเดอร์มาส์กและความกว้างเชื่อมต่อ"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
@@ -30914,14 +30895,14 @@ msgid "Through hole pad %s of %s"
 msgstr "แพ็ดรูเจาะทะลุ %s ของ %s"
 
 #: pcbnew/pad.cpp:1155
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "แพ็ด %s ของ %s บน %s"
+msgstr "แพ็ด %s %s ของ %s บน %s"
 
 #: pcbnew/pad.cpp:1163
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "แพ็ดรูเจาะทะลุ %s ของ %s"
+msgstr "แพ็ดรูเจาะทะลุ %s %s ของ %s"
 
 #: pcbnew/pad.cpp:1598
 msgid "Edge connector"
@@ -32475,9 +32456,9 @@ msgstr "เกิดข้อยกเว้นกับโค้ดไพธอ
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
-msgstr "เมธอด \"%s\" ไม่พบ, หรือไม่สามารถเรียกใช้งาน"
+msgstr "เมธอด '%s' ไม่พบ, หรือไม่สามารถเรียกใช้งาน"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:84
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
@@ -32701,9 +32682,8 @@ msgid "Auto-finish Track"
 msgstr "สิ้นสุดแทร็กอัตโนมัติ"
 
 #: pcbnew/router/router_tool.cpp:97
-#, fuzzy
 msgid "Automatically finishes laying the current track."
-msgstr "เสร็จสิ้นการวางแทร็กปัจจุบันโดยอัตโนมัติ"
+msgstr "สิ้นสุดการวางแทร็กปัจจุบันโดยอัตโนมัติ"
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Place Through Via"
@@ -32779,9 +32759,8 @@ msgid "Track Corner Mode"
 msgstr "โหมดมุมแทร็ก"
 
 #: pcbnew/router/router_tool.cpp:164
-#, fuzzy
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
-msgstr "สลับไปมาระหว่างมุมแหลมและโค้งมน เมื่อกำหนดเดินลายเส้นทองแดง"
+msgstr "สลับไปมาระหว่างมุมแหลม/โค้งมนและมุม 45°/90° ระหว่างเดินลายแทร็ค"
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
@@ -32904,9 +32883,8 @@ msgid ""
 msgstr "ต้องเปิดใช้งานไมโครเวีย ก่อนในการตั้งค่าบอร์ด > กฎการออกแบบ > ข้อจำกัด"
 
 #: pcbnew/router/router_tool.cpp:981
-#, fuzzy
 msgid "Blind/buried via need 2 different layers."
-msgstr "ไม่ดัดแปลงแพ็ดที่มีเลเยอร์ต่างกัน"
+msgstr "เวียชนิด บอด/บรรจุ ต้องการ2เลเยอร์ ที่แตกต่าง"
 
 #: pcbnew/router/router_tool.cpp:1059
 msgid "Tracks on Copper layers only."
@@ -32949,33 +32927,28 @@ msgid "(no net)"
 msgstr "(ไม่มีเน็ต)"
 
 #: pcbnew/router/router_tool.cpp:2060
-#, fuzzy
 msgid "Free-angle"
-msgstr "มุม"
+msgstr "มุมอิสระ"
 
 #: pcbnew/router/router_tool.cpp:2066
-#, fuzzy
 msgid "45-degree"
 msgstr "45 องศา"
 
 #: pcbnew/router/router_tool.cpp:2067
-#, fuzzy
 msgid "45-degree rounded"
-msgstr "ลาก (โหมด 45 องศา)"
+msgstr "45 องศา โค้งมน"
 
 #: pcbnew/router/router_tool.cpp:2068
-#, fuzzy
 msgid "90-degree"
-msgstr "องศา"
+msgstr "90 องศา"
 
 #: pcbnew/router/router_tool.cpp:2069
 msgid "90-degree rounded"
-msgstr ""
+msgstr "90 องศา โค้งมน"
 
 #: pcbnew/router/router_tool.cpp:2074
-#, fuzzy
 msgid "Corner Style"
-msgstr "สไตล์เส้น"
+msgstr "สไตล์การหักมุม"
 
 #: pcbnew/router/router_tool.cpp:2079
 #, c-format
@@ -35128,14 +35101,12 @@ msgid "Switch router to walkaround mode"
 msgstr "เปลี่ยนเร้าท์เตอร์เป็นโหมดเดินรอบๆ"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle Router Mode"
-msgstr "โหมดเร้าเตอร์ดันลายเส้น"
+msgstr "หมุนวนไปตามโหมดเดินเส้น"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle router to the next mode"
-msgstr "เปลี่ยนเร้าท์เตอร์ไปเป็นโหมดผลักดัน"
+msgstr "เลื่อนไปโหมดการเดินเส้นถัดต่อไป"
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Set Layer Pair..."
