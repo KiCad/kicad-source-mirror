@@ -48,6 +48,7 @@
 #include <sch_sheet_path.h>
 #include <schematic.h>
 #include <settings/settings_manager.h>
+#include <sim/sim_plot_frame.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_editor_control.h>
@@ -1247,6 +1248,13 @@ bool SCH_EDIT_FRAME::AskToSaveChanges()
     // Save any currently open and modified project files.
     for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
     {
+        SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, false );
+
+        // Simulator must be closed before loading another schematic, otherwise it may crash.
+        // If there are any changes in the simulator the user will be prompted to save them.
+        if( simFrame && !simFrame->Close() )
+            return false;
+
         if( screen->IsContentModified() )
         {
             if( !HandleUnsavedChanges( this, _( "The current schematic has been modified.  "
