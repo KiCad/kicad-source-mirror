@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-05 06:01-0700\n"
-"PO-Revision-Date: 2021-11-07 14:22+0000\n"
+"PO-Revision-Date: 2021-11-08 19:42+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -35764,12 +35764,11 @@ msgstr "Переключить трассировщик в режим обход
 
 #: pcbnew/tools/pcb_actions.cpp:1347
 msgid "Cycle Router Mode"
-msgstr "Циклическое переключение режима трассировки"
+msgstr "Переключение режима трассировки"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle router to the next mode"
-msgstr "Переключить трассировщик в режим развдигания"
+msgstr "Циклическое переключение режимов трассировки"
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Set Layer Pair..."
