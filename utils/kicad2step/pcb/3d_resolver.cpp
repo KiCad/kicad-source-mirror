@@ -299,9 +299,11 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
 
     if( !path.DirExists() )
     {
+        // Show a message only in debug mode
+#ifdef DEBUG
         if( aPath.m_Pathvar == "${KICAD6_3DMODEL_DIR}"
-                || aPath.m_Pathvar == "${KIPRJMOD}" || aPath.m_Pathvar == "$(KIPRJMOD)"
-                || aPath.m_Pathvar == "${KISYS3DMOD}" || aPath.m_Pathvar == "$(KISYS3DMOD)" )
+                || aPath.m_Pathvar == "${KIPRJMOD}"
+                || aPath.m_Pathvar == "${KISYS3DMOD}" )
         {
             // suppress the message if the missing pathvar is a system variable
         }
@@ -312,6 +314,7 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
             msg.append( tpath.m_Pathvar );
             wxLogMessage( "%s\n", msg.ToUTF8() );
         }
+#endif
 
         tpath.m_Pathexp.clear();
     }
