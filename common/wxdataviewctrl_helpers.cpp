@@ -42,20 +42,29 @@ wxDataViewItem GetPrevItem( wxDataViewCtrl const& aView, wxDataViewItem const& a
 wxDataViewItem GetNextItem( wxDataViewCtrl const& aView, wxDataViewItem const& aItem )
 {
     wxDataViewItem nextItem;
+    wxDataViewItem invalid;
 
     if( !aItem.IsOk() )
     {
         // No selection. Select the first.
         wxDataViewItemArray children;
         aView.GetModel()->GetChildren( aItem, children );
-        return children[0];
+
+        if( children.size() )
+            return children[0];
+
+        return invalid;
     }
 
     if( aView.IsExpanded( aItem ) )
     {
         wxDataViewItemArray children;
         aView.GetModel()->GetChildren( aItem, children );
-        nextItem = children[0];
+
+        if( children.size() )
+            return children[0];
+
+        return invalid;
     }
     else
     {
