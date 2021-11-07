@@ -194,6 +194,10 @@ bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPack
         return false;
     }
 
+    // Namespace delimiter changed on disk to allow flat loading of Python modules
+    wxString clean_package_id = aPackageId;
+    clean_package_id.Replace( '.', '_' );
+
     for( ; entry; entry = zip.GetNextEntry() )
     {
         wxArrayString path_parts =
@@ -214,7 +218,7 @@ bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPack
         // <PackageRoot>/$folder/$contents
         // To
         // $KICAD6_3RD_PARTY/$folder/$package_id/$contents
-        path_parts.Insert( aPackageId, 1 );
+        path_parts.Insert( clean_package_id, 1 );
         path_parts.Insert( m_pcm->Get3rdPartyPath(), 0 );
 
         wxString fullname = wxJoin( path_parts, wxFileName::GetPathSeparator(), (wxChar) NULL );
@@ -343,11 +347,15 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
 
 void PCM_TASK_MANAGER::deletePackageDirectories( const wxString& aPackageId )
 {
+    // Namespace delimiter changed on disk to allow flat loading of Python modules
+    wxString clean_package_id = aPackageId;
+    clean_package_id.Replace( '.', '_' );
+
     for( const wxString& dir : PCM_PACKAGE_DIRECTORIES )
     {
         wxFileName d( m_pcm->Get3rdPartyPath(), "" );
         d.AppendDir( dir );
-        d.AppendDir( aPackageId );
+        d.AppendDir( clean_package_id );
 
         if( d.DirExists() )
         {
