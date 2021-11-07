@@ -65,7 +65,6 @@ enum {
 };
 
 
-// These are conceptually constexpr
 std::vector<BITMAPS> g_lineStyleIcons;
 wxArrayString        g_lineStyleNames;
 
@@ -79,17 +78,18 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
         m_netNames( aNetNames ),
         m_hoveredCol( -1 )
 {
-    if( g_lineStyleIcons.empty() )
-    {
-        g_lineStyleIcons.push_back( BITMAPS::stroke_solid );
-        g_lineStyleNames.push_back( _( "Solid" ) );
-        g_lineStyleIcons.push_back( BITMAPS::stroke_dash );
-        g_lineStyleNames.push_back( _( "Dashed" ) );
-        g_lineStyleIcons.push_back( BITMAPS::stroke_dot );
-        g_lineStyleNames.push_back( _( "Dotted" ) );
-        g_lineStyleIcons.push_back( BITMAPS::stroke_dashdot );
-        g_lineStyleNames.push_back( _( "Dash-Dot" ) );
-    }
+    // Clear and re-load each time.  Language (or darkmode) might have changed.
+    g_lineStyleIcons.clear();
+    g_lineStyleNames.clear();
+
+    g_lineStyleIcons.push_back( BITMAPS::stroke_solid );
+    g_lineStyleNames.push_back( _( "Solid" ) );
+    g_lineStyleIcons.push_back( BITMAPS::stroke_dash );
+    g_lineStyleNames.push_back( _( "Dashed" ) );
+    g_lineStyleIcons.push_back( BITMAPS::stroke_dot );
+    g_lineStyleNames.push_back( _( "Dotted" ) );
+    g_lineStyleIcons.push_back( BITMAPS::stroke_dashdot );
+    g_lineStyleNames.push_back( _( "Dash-Dot" ) );
 
     m_netclassesDirty = true;
 
@@ -229,7 +229,13 @@ static void netclassToGridRow( EDA_UNITS aUnits, wxGrid* aGrid, int aRow, const 
 
     wxString colorAsString = nc->GetSchematicColor().ToWxString( wxC2S_CSS_SYNTAX );
     aGrid->SetCellValue( aRow, GRID_SCHEMATIC_COLOR, colorAsString );
-    aGrid->SetCellValue( aRow, GRID_LINESTYLE, g_lineStyleNames[ nc->GetLineStyle() ] );
+
+    int lineStyleIdx = std::max( 0, nc->GetLineStyle() );
+
+    if( lineStyleIdx >= (int) g_lineStyleNames.size() )
+        lineStyleIdx = 0;
+
+    aGrid->SetCellValue( aRow, GRID_LINESTYLE, g_lineStyleNames[ lineStyleIdx ] );
 }
 
 
@@ -353,7 +359,9 @@ static void gridRowToNetclass( EDA_UNITS aUnits, wxGrid* grid, int row, const NE
     nc->SetBusWidth( MYCELL( GRID_BUSWIDTH ) );
 
     nc->SetSchematicColor( wxColour( grid->GetCellValue( row, GRID_SCHEMATIC_COLOR ) ) );
+
     nc->SetLineStyle( g_lineStyleNames.Index( grid->GetCellValue( row, GRID_LINESTYLE ) ) );
+    wxASSERT_MSG( nc->GetLineStyle() >= 0, "Line style name not found." );
 }
 
 
