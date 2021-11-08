@@ -571,7 +571,7 @@ void SYMBOL_EDIT_FRAME::Save()
 
         if( m_libMgr->IsLibraryReadOnly( libName ) )
         {
-            wxString msg = wxString::Format( _( "Symbol library '%s' is not writeable." ),
+            wxString msg = wxString::Format( _( "Symbol library '%s' is not writable." ),
                                              libName );
             wxString msg2 = _( "You must save to a different location." );
 
@@ -1170,7 +1170,7 @@ bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
                 }
                 else
                 {
-                    msg.Printf( _( "Symbol library '%s' is not writeable." ), libNickname );
+                    msg.Printf( _( "Symbol library '%s' is not writable." ), libNickname );
                     msg2 = _( "You must save to a different location." );
 
                     if( dirtyCount == 1 )

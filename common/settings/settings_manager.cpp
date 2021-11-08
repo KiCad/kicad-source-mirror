@@ -1086,7 +1086,7 @@ bool SETTINGS_MANAGER::BackupProject( REPORTER& aReporter ) const
 
     if( !target.IsDirWritable() )
     {
-        wxLogTrace( traceSettings, "Backup directory %s is not writeable", target.GetPath() );
+        wxLogTrace( traceSettings, "Backup directory %s is not writable", target.GetPath() );
         return false;
     }
 
@@ -1149,7 +1149,7 @@ bool SETTINGS_MANAGER::TriggerBackupIfNeeded( REPORTER& aReporter ) const
 
     wxFileName projectPath( Prj().GetProjectPath() );
 
-    // Skip backup if project path isn't valid or writeable
+    // Skip backup if project path isn't valid or writable
     if( !projectPath.IsOk() || !projectPath.Exists() || !projectPath.IsDirWritable() )
         return true;
 

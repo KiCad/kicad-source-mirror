@@ -167,7 +167,7 @@ int SYMBOL_EDITOR_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
 
         if( editFrame->GetLibManager().IsLibraryReadOnly( libName ) )
         {
-            msg.Printf( _( "Symbol library '%s' is not writeable." ), libName );
+            msg.Printf( _( "Symbol library '%s' is not writable." ), libName );
             m_frame->ShowInfoBarError( msg );
             return 0;
         }
@@ -237,7 +237,7 @@ int SYMBOL_EDITOR_CONTROL::CutCopyDelete( const TOOL_EVENT& aEvt )
 
             if( editFrame->GetLibManager().IsLibraryReadOnly( libName ) )
             {
-                msg.Printf( _( "Symbol library '%s' is not writeable." ), libName );
+                msg.Printf( _( "Symbol library '%s' is not writable." ), libName );
                 m_frame->ShowInfoBarError( msg );
                 return 0;
             }
@@ -262,7 +262,7 @@ int SYMBOL_EDITOR_CONTROL::DuplicateSymbol( const TOOL_EVENT& aEvent )
 
         if( editFrame->GetLibManager().IsLibraryReadOnly( libName ) )
         {
-            msg.Printf( _( "Symbol library '%s' is not writeable." ), libName );
+            msg.Printf( _( "Symbol library '%s' is not writable." ), libName );
             m_frame->ShowInfoBarError( msg );
             return 0;
         }
