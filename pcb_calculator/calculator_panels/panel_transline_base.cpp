@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,7 +22,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	wxString m_TranslineSelectionChoices[] = { _("Microstrip Line"), _("Coplanar wave guide"), _("Coplanar wave guide w/ ground plane"), _("Rectangular Waveguide"), _("Coaxial Line"), _("Coupled Microstrip Line"), _("Stripline"), _("Twisted Pair") };
 	int m_TranslineSelectionNChoices = sizeof( m_TranslineSelectionChoices ) / sizeof( wxString );
 	m_TranslineSelection = new wxRadioBox( this, wxID_ANY, _("Transmission Line Type"), wxDefaultPosition, wxDefaultSize, m_TranslineSelectionNChoices, m_TranslineSelectionChoices, 1, wxRA_SPECIFY_COLS );
-	m_TranslineSelection->SetSelection( 2 );
+	m_TranslineSelection->SetSelection( 0 );
 	bLeftSizer->Add( m_TranslineSelection, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
@@ -215,27 +215,6 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_bmCMicrostripZoddZeven = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerHelpBitmaps->Add( m_bmCMicrostripZoddZeven, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 10 );
-
-	m_fgSizerZcomment = new wxFlexGridSizer( 0, 2, 0, 15 );
-	m_fgSizerZcomment->AddGrowableCol( 0 );
-	m_fgSizerZcomment->AddGrowableCol( 1 );
-	m_fgSizerZcomment->SetFlexibleDirection( wxBOTH );
-	m_fgSizerZcomment->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_staticTextZdiff = new wxStaticText( this, wxID_ANY, _("Zdiff =\n2*Z0( (1 - 0.48exp( -0.96*S/H ) )"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextZdiff->Wrap( -1 );
-	m_staticTextZdiff->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
-	m_fgSizerZcomment->Add( m_staticTextZdiff, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-
-	m_staticTextZcommon = new wxStaticText( this, wxID_ANY, _("Zcommon = Zeven / 2"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL );
-	m_staticTextZcommon->Wrap( -1 );
-	m_staticTextZcommon->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
-	m_fgSizerZcomment->Add( m_staticTextZcommon, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
-
-
-	bSizerHelpBitmaps->Add( m_fgSizerZcomment, 0, wxEXPAND, 5 );
 
 
 	bMiddleSizer->Add( bSizerHelpBitmaps, 1, wxALIGN_CENTER_HORIZONTAL, 5 );

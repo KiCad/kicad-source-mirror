@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -80,9 +80,6 @@ class PANEL_TRANSLINE_BASE : public CALCULATOR_PANEL
 		wxTextCtrl* m_Value_Frequency_Ctrl;
 		UNIT_SELECTOR_FREQUENCY* m_choiceUnit_Frequency;
 		wxStaticBitmap* m_bmCMicrostripZoddZeven;
-		wxFlexGridSizer* m_fgSizerZcomment;
-		wxStaticText* m_staticTextZdiff;
-		wxStaticText* m_staticTextZcommon;
 		wxStaticText* m_phys_prm1_label;
 		wxTextCtrl* m_Phys_prm1_Value;
 		UNIT_SELECTOR_LEN* m_choiceUnit_Param1;

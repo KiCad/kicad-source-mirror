@@ -187,7 +187,6 @@ void PANEL_TRANSLINE::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType )
     // This helper bitmap is shown for coupled microstrip only:
     m_bmCMicrostripZoddZeven->Show( aType == C_MICROSTRIP_TYPE );
     m_bmCMicrostripZoddZeven->SetBitmap( KiBitmap( BITMAPS::microstrip_zodd_zeven ) );
-    m_fgSizerZcomment->Show( aType == C_MICROSTRIP_TYPE );
 
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
     m_currTransLine = tr_ident->m_TLine;

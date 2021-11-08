@@ -583,12 +583,14 @@ void C_MICROSTRIP::line_angle()
 }
 
 
-/*
-* diff_impedance() - calculate differential impedance
-*/
+/**
+ * Note that differential impedance is exactly twice the odd mode impedance.
+ * Odd mode is not the same as single-ended impedance, so avoid approximations found
+ * on websites that use static single ended impedance as the starting point
+ */
 void C_MICROSTRIP::diff_impedance()
 {
-    Zdiff = 2*Z0_o_0*(1 - 0.48*exp(-0.96*(m_parameters[PHYS_S_PRM] /m_parameters[H_PRM])));
+    Zdiff = 2 * Z0_o_0;
 }
 
 
