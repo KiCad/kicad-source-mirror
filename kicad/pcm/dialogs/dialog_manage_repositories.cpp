@@ -51,6 +51,13 @@ DIALOG_MANAGE_REPOSITORIES::DIALOG_MANAGE_REPOSITORIES(
 }
 
 
+DIALOG_MANAGE_REPOSITORIES::~DIALOG_MANAGE_REPOSITORIES()
+{
+    // Delete the GRID_TRICKS.
+    m_grid->PopEventHandler( true );
+}
+
+
 void DIALOG_MANAGE_REPOSITORIES::setColumnWidths()
 {
     for( int col = 0; col < m_grid->GetNumberCols(); col++ )
