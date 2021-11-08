@@ -34,7 +34,7 @@ PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE::PANEL_GERBVIEW_EXCELLON_SETTINGS_BASE( wx
 	int m_rbZeroFormatNChoices = sizeof( m_rbZeroFormatChoices ) / sizeof( wxString );
 	m_rbZeroFormat = new wxRadioBox( sbSizerFileFormat->GetStaticBox(), wxID_ANY, _("Zero format"), wxDefaultPosition, wxDefaultSize, m_rbZeroFormatNChoices, m_rbZeroFormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbZeroFormat->SetSelection( 0 );
-	m_rbZeroFormat->SetToolTip( _("Integers in files can have their zeros stripped.\nNo leading zeros format means the leading zeros are stripped\nNo trailing zeros  format means the trainling zeros are stripped") );
+	m_rbZeroFormat->SetToolTip( _("Integers in files can have their zeros stripped.\nNo leading zeros format means the leading zeros are stripped\nNo trailing zeros  format means the trailing zeros are stripped") );
 
 	bSizer8->Add( m_rbZeroFormat, 1, wxALL, 5 );
 
