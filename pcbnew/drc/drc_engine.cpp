@@ -1056,7 +1056,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     }
                     else
                     {
-                        REPORT( wxString::Format( _( "Checking rule condition '%s'." ),
+                        REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
                                                   EscapeHTML( c->condition->GetExpression() ) ) )
                     }
 
