@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-05 06:01-0700\n"
+"POT-Creation-Date: 2021-11-08 11:42-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -14286,16 +14286,6 @@ msgstr "Conductor mu:"
 msgid "Component Parameters"
 msgstr "Component Parameters"
 
-msgid ""
-"Zdiff =\n"
-"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
-msgstr ""
-"Zdiff =\n"
-"2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
-
-msgid "Zcommon = Zeven / 2"
-msgstr "Zcommon = Zeven / 2"
-
 msgid "Physical Parameters"
 msgstr "Physical Parameters"
 
@@ -18486,8 +18476,8 @@ msgstr "Force plot invisible footprint values and reference designators"
 msgid "Plot Edge.Cuts on all layers"
 msgstr "Plot Edge.Cuts on all layers"
 
-msgid "Do not plot the contents of the PCB edge layer on any other layers."
-msgstr "Do not plot the contents of the PCB edge layer on any other layers."
+msgid "Plot the contents of the PCB edge layer on all layers"
+msgstr "Plot the contents of the PCB edge layer on all layers"
 
 msgid "Sketch pads on fabrication layers"
 msgstr "Sketch pads on fabrication layers"
@@ -19108,8 +19098,8 @@ msgstr "A unique name for this rule area for use in DRC rules"
 msgid "Constrain outline to H, V and 45 deg"
 msgstr "Constrain outline to H, V and 45 deg"
 
-msgid "Draw the area using horizontal, verical and 45 degree lines only"
-msgstr "Draw the area using horizontal, verical and 45 degree lines only"
+msgid "Draw the area using horizontal, vertical and 45 degree lines only"
+msgstr "Draw the area using horizontal, vertical and 45 degree lines only"
 
 msgid "Rule Area Properties"
 msgstr "Rule Area Properties"
@@ -26548,6 +26538,22 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid ""
+#~ "Zdiff =\n"
+#~ "2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
+#~ msgstr ""
+#~ "Zdiff =\n"
+#~ "2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
+
+#~ msgid "Zcommon = Zeven / 2"
+#~ msgstr "Zcommon = Zeven / 2"
+
+#~ msgid "Do not plot the contents of the PCB edge layer on any other layers."
+#~ msgstr "Do not plot the contents of the PCB edge layer on any other layers."
+
+#~ msgid "Draw the area using horizontal, verical and 45 degree lines only"
+#~ msgstr "Draw the area using horizontal, verical and 45 degree lines only"
 
 #, c-format
 #~ msgid ""
