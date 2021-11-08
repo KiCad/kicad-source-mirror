@@ -48,7 +48,7 @@
             <property name="size">500,300</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">; ; forward_declare</property>
-            <property name="title">Manage Repositores</property>
+            <property name="title">Manage Repositories</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
