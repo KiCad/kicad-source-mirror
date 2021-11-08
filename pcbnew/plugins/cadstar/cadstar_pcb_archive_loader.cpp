@@ -3531,7 +3531,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::checkAndLogHatchCode( const HATCHCODE_ID& aCads
             {
                 wxLogWarning( wxString::Format(
                         _( "The CADSTAR Hatching code '%s' has different line widths for each "
-                           "hatch. KiCad only supports one width for the haching. The imported "
+                           "hatch. KiCad only supports one width for the hatching. The imported "
                            "hatching uses the width defined in the first hatch definition, i.e. "
                            "%.2f mm." ),
                         hcode.Name,
@@ -3543,7 +3543,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::checkAndLogHatchCode( const HATCHCODE_ID& aCads
             {
                 wxLogWarning( wxString::Format(
                         _( "The CADSTAR Hatching code '%s' has different step sizes for each "
-                           "hatch. KiCad only supports one step size for the haching. The imported "
+                           "hatch. KiCad only supports one step size for the hatching. The imported "
                            "hatching uses the step size defined in the first hatching definition, "
                            "i.e. %.2f mm." ),
                         hcode.Name,
