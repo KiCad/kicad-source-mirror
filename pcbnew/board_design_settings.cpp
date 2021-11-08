@@ -771,7 +771,7 @@ bool BOARD_DESIGN_SETTINGS::migrateSchema0to1()
      *
      * 0: Inches
      * 1: Mils
-     * 2: Millimetres
+     * 2: Millimeters
      */
     std::string units_ptr( "defaults.dimension_units" );
     std::string precision_ptr( "defaults.dimension_precision" );

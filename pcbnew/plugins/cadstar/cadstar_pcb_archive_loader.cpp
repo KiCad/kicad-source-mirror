@@ -3629,7 +3629,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
     case UNITS::CENTIMETER:
     case UNITS::MICROMETRE:
         wxLogWarning( wxString::Format( _( "Dimension ID %s uses a type of unit that "
-                                           "is not supported in KiCad. Millimetres were "
+                                           "is not supported in KiCad. Millimeters were "
                                            "applied instead." ),
                                         aCadstarDim.ID ) );
         KI_FALLTHROUGH;
