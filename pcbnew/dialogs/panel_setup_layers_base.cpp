@@ -79,7 +79,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_AdhesFrontStaticText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_SoldPFrontCheckBox = new wxCheckBox( m_LayersListPanel, ID_SOLDPFRONTCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SoldPFrontCheckBox->SetToolTip( _("If you want a solder paster layer for front side of the board") );
+	m_SoldPFrontCheckBox->SetToolTip( _("If you want a solder paste layer for front side of the board") );
 
 	m_LayerListFlexGridSizer->Add( m_SoldPFrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
