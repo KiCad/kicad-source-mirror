@@ -147,6 +147,7 @@ enum main_id
     ID_LANGUAGE_VIETNAMESE,
     ID_LANGUAGE_SERBIAN,
     ID_LANGUAGE_THAI,
+    ID_LANGUAGE_SWEDISH,
     ID_LANGUAGE_CHOICE_END,
 
     // Popup Menu (mouse Right button) (id consecutifs)
