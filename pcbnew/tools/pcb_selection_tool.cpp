@@ -2463,8 +2463,8 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         else if( item->Type() == PCB_VIA_T )
         {
             // Vias rarely hide other things, and we don't want them deferring to short track
-            // segments -- so make them artificially small by dropping the π from πr².
-            area = SEG::Square( static_cast<PCB_VIA*>( item )->GetDrill() / 2 );
+            // segments underneath them -- so artificially reduce their size from πr² to 1.5r².
+            area = SEG::Square( static_cast<PCB_VIA*>( item )->GetDrill() / 2 ) * 1.5;
         }
         else
         {
