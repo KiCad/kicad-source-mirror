@@ -2625,17 +2625,19 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                 m_xpath->push( "via" );
                 EVIA    v( netItem );
 
+                if( v.layer_front_most > v.layer_back_most )
+                    std::swap( v.layer_front_most, v.layer_back_most );
+
                 PCB_LAYER_ID  layer_front_most = kicad_layer( v.layer_front_most );
                 PCB_LAYER_ID  layer_back_most  = kicad_layer( v.layer_back_most );
 
-                if( IsCopperLayer( layer_front_most ) && IsCopperLayer( layer_back_most ) )
+                if( IsCopperLayer( layer_front_most ) && IsCopperLayer( layer_back_most )
+                        && layer_front_most != layer_back_most )
                 {
                     int      kidiam;
                     int      drillz = v.drill.ToPcbUnits();
                     PCB_VIA* via = new PCB_VIA( m_board );
                     m_board->Add( via );
-
-                    via->SetLayerPair( layer_front_most, layer_back_most );
 
                     if( v.diam )
                     {
@@ -2680,14 +2682,24 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                         m_min_annulus = ( kidiam - drillz ) / 2;
 
                     if( layer_front_most == F_Cu && layer_back_most == B_Cu )
+                    {
                         via->SetViaType( VIATYPE::THROUGH );
-                    else if( layer_front_most == F_Cu || layer_back_most == B_Cu )
+                    }
+                    /// This is, at best, a guess.  Eagle doesn't seem to differentiate
+                    /// between blind/buried vias that only go one layer and micro vias
+                    /// so the user will need to clean up a bit
+                    else if( v.layer_back_most - v.layer_front_most == 1 )
+                    {
                         via->SetViaType( VIATYPE::MICROVIA );
+                    }
                     else
+                    {
                         via->SetViaType( VIATYPE::BLIND_BURIED );
+                    }
 
                     wxPoint pos( kicad_x( v.x ), kicad_y( v.y ) );
 
+                    via->SetLayerPair( layer_front_most, layer_back_most );
                     via->SetPosition( pos  );
                     via->SetEnd( pos );
 
