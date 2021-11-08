@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-08 11:42-0800\n"
+"POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-10-28 11:02+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
@@ -13809,7 +13809,7 @@ msgstr ""
 "하지만 정의된 형상이 없습니다."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3028
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3040
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "파일 '%s'을(를) 읽을 수 없습니다."
@@ -15232,8 +15232,8 @@ msgstr "현재 열려있는 회로도가 없습니다."
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, c-format
-msgid "Symbol library '%s' is not writeable."
+#, fuzzy, c-format
+msgid "Symbol library '%s' is not writable."
 msgstr "심볼 라이브러리 '%s'은(는) 쓸 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:576
@@ -17063,10 +17063,11 @@ msgid "Zero format"
 msgstr "0 표시 형식"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
+#, fuzzy
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
-"No trailing zeros  format means the trainling zeros are stripped"
+"No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
 "파일 내의 정수는 앞뒤 0을 제거할 수 있습니다.\n"
 "'선행 0 없음' 형식은 선행되는 0이 제거된다는 의미입니다\n"
@@ -18219,7 +18220,8 @@ msgid "Add repository"
 msgstr "레포지토리 추가"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-msgid "Manage Repositores"
+#, fuzzy
+msgid "Manage Repositories"
 msgstr "레포지토리 관리"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
@@ -18642,7 +18644,8 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr "이 템플릿에 대한 메타 정보 폴더를 열 수 없습니다!"
 
 #: kicad/project_template.cpp:63
-msgid "Cound't find the meta HTML information file for this template!"
+#, fuzzy
+msgid "Couldn't find the meta HTML information file for this template!"
 msgstr "이 템플릿에 대한 메타 HTML 정보 파일을 찾을 수 없습니다!"
 
 #: kicad/project_template.cpp:238
@@ -27828,7 +27831,8 @@ msgid "On-board, non-copper"
 msgstr "On-board, 비 구리 레이어"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-msgid "If you want a solder paster layer for front side of the board"
+#, fuzzy
+msgid "If you want a solder paste layer for front side of the board"
 msgstr "기판의 전면에 솔더 페이스트 레이어를 사용하고 싶은 경우"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
@@ -29054,8 +29058,8 @@ msgid "Unconditional rule applied."
 msgstr "조건 없는 규칙이 적용되었습니다."
 
 #: pcbnew/drc/drc_engine.cpp:1059
-#, c-format
-msgid "Checking rule condition '%s'."
+#, fuzzy, c-format
+msgid "Checking rule condition \"%s\"."
 msgstr "규칙 조건 '%s' 확인 중."
 
 #: pcbnew/drc/drc_engine.cpp:1065
@@ -32167,10 +32171,10 @@ msgstr ""
 "치로 변환됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3533
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
-"KiCad only supports one width for the haching. The imported hatching uses "
+"KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
 "CADSTAR 해칭 코드 '%s'은(는) 각 해치별로 다른 선 굵기를 가집니다. KiCad는 해"
@@ -32178,10 +32182,10 @@ msgstr ""
 "사용합니다 (예: %.2fmm)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3545
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
-"KiCad only supports one step size for the haching. The imported hatching "
+"KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
 "CADSTAR 해칭 코드 '%s'은(는) 각 해치별로 다른 스텝 크기를 가집니다. KiCad는 "
@@ -32201,10 +32205,10 @@ msgstr ""
 "으로 90도 떨어져 있는 2개의 해치가 됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3631
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
-"Millimetres were applied instead."
+"Millimeters were applied instead."
 msgstr ""
 "치수 ID %s은(는) KiCad에서 지원하지 않는 단위 유형을 사용합니다. 밀리미터가 "
 "대신 적용됩니다."

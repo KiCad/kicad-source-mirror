@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-08 11:42-0800\n"
+"POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-11-07 14:22+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -13676,7 +13676,7 @@ msgid ""
 msgstr "วงจร CADSTAR อาจเสียหาย: บล็อก %s อ้างอิงไปชีตย่อย แต่ไม่มีการกำหนดตัวเลข"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3028
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3040
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "ไม่สามารถอ่านไฟล์ '%s'"
@@ -15083,8 +15083,8 @@ msgstr "ไม่มีวงจรเปิดอยู่ในขณะนี
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, c-format
-msgid "Symbol library '%s' is not writeable."
+#, fuzzy, c-format
+msgid "Symbol library '%s' is not writable."
 msgstr "ไลบรารีสัญลักษณ์ ' %s' ไม่สามารถบันทึก"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:576
@@ -16881,10 +16881,11 @@ msgid "Zero format"
 msgstr "รูปแบบเลขศูนย์"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
+#, fuzzy
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
-"No trailing zeros  format means the trainling zeros are stripped"
+"No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
 "เลขจำนวนเต็มในไฟล์ สามารถระงับเลขศูนย์ได้\n"
 "รูปแบบไม่มีเลขศูนย์นำหน้า หมายความว่าเลขศูนย์ด้านหน้าถูกตัด\n"
@@ -18030,7 +18031,8 @@ msgid "Add repository"
 msgstr "เพิ่มคลังเก็บ"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-msgid "Manage Repositores"
+#, fuzzy
+msgid "Manage Repositories"
 msgstr "จัดการที่เก็บ"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
@@ -18447,7 +18449,8 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr "เปิดไดเรกทอรีข้อมูลเมตาสำหรับแม่แบบนี้ไม่ได้!"
 
 #: kicad/project_template.cpp:63
-msgid "Cound't find the meta HTML information file for this template!"
+#, fuzzy
+msgid "Couldn't find the meta HTML information file for this template!"
 msgstr "ไม่พบไฟล์ข้อมูลเมต้า HTML สําหรับแม่แบบนี้!"
 
 #: kicad/project_template.cpp:238
@@ -27536,7 +27539,8 @@ msgid "On-board, non-copper"
 msgstr "บนบอร์ด,ไม่ใช่ทองแดง"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-msgid "If you want a solder paster layer for front side of the board"
+#, fuzzy
+msgid "If you want a solder paste layer for front side of the board"
 msgstr "หากคุณต้องการเลเยอร์โซลเดอร์เพสต์สำหรับบอร์ดด้านหน้า"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
@@ -28750,8 +28754,8 @@ msgid "Unconditional rule applied."
 msgstr "ใช้กฎที่ไม่มีเงื่อนไข"
 
 #: pcbnew/drc/drc_engine.cpp:1059
-#, c-format
-msgid "Checking rule condition '%s'."
+#, fuzzy, c-format
+msgid "Checking rule condition \"%s\"."
 msgstr "กําลังตรวจสอบเงื่อนไขกฎ '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:1065
@@ -31818,10 +31822,10 @@ msgstr ""
 "แบบ(แรเงาขีดไขว้) ห่างกัน 90 องศาเท่านั้น การเติมแรเงาที่นําเข้า จะเป็นแรเงาขีดไขว้เท่านั้น"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3533
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
-"KiCad only supports one width for the haching. The imported hatching uses "
+"KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
 "รหัสการแรเงาของ CADSTAR '%s' มีความกว้างของเส้นที่แตกต่างกันสําหรับแต่ละการแรเงา KiCad "
@@ -31829,10 +31833,10 @@ msgstr ""
 "%.2f มม."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3545
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
-"KiCad only supports one step size for the haching. The imported hatching "
+"KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
 "รหัสการแรเงาของ CADSTAR '%s' มีขั้นการเลื่อนที่แตกต่างของแต่ละการแรเงา KiCad "
@@ -31852,10 +31856,10 @@ msgstr ""
 "องศาจากแนวนอน"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3631
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
-"Millimetres were applied instead."
+"Millimeters were applied instead."
 msgstr "รหัสวัดขนาด %s ใช้หน่วยที่ไม่สนับสนุนใน KiCad มิลลิเมตรจะถูกนําไปใช้แทน"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3922

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-08 11:42-0800\n"
+"POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-11-07 14:22+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -13643,7 +13643,7 @@ msgid ""
 msgstr "CADSTAR 原理圖可能已損壞：塊 %s 引用子圖框，但沒有定義圖。"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3028
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3040
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "無法讀取檔案 \"%s\"。"
@@ -15049,8 +15049,8 @@ msgstr "當前沒有開啟原理圖。"
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, c-format
-msgid "Symbol library '%s' is not writeable."
+#, fuzzy, c-format
+msgid "Symbol library '%s' is not writable."
 msgstr "符號庫'%s'不可寫入。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:576
@@ -16849,10 +16849,11 @@ msgid "Zero format"
 msgstr "Zero 格式"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
+#, fuzzy
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
-"No trailing zeros  format means the trainling zeros are stripped"
+"No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
 "可以去掉檔案中的整數的零。\n"
 "無前導零格式意味著前導零被剝離\n"
@@ -17998,7 +17999,8 @@ msgid "Add repository"
 msgstr "新增倉庫"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-msgid "Manage Repositores"
+#, fuzzy
+msgid "Manage Repositories"
 msgstr "管理倉庫"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
@@ -18412,7 +18414,8 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr "無法開啟此模板的元資訊目錄！"
 
 #: kicad/project_template.cpp:63
-msgid "Cound't find the meta HTML information file for this template!"
+#, fuzzy
+msgid "Couldn't find the meta HTML information file for this template!"
 msgstr "找不到此模板的元 HTML 資訊檔案！"
 
 #: kicad/project_template.cpp:238
@@ -27486,7 +27489,8 @@ msgid "On-board, non-copper"
 msgstr "電路板上, 非銅層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-msgid "If you want a solder paster layer for front side of the board"
+#, fuzzy
+msgid "If you want a solder paste layer for front side of the board"
 msgstr "開啟/關閉 頂層錫膏層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
@@ -28698,8 +28702,8 @@ msgid "Unconditional rule applied."
 msgstr "應用無條件規則。"
 
 #: pcbnew/drc/drc_engine.cpp:1059
-#, c-format
-msgid "Checking rule condition '%s'."
+#, fuzzy, c-format
+msgid "Checking rule condition \"%s\"."
 msgstr "檢查規則條件 \"%s\"。"
 
 #: pcbnew/drc/drc_engine.cpp:1065
@@ -31758,20 +31762,20 @@ msgstr ""
 "個圖案填充(剖面線)。匯入的剖面線為交叉線。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3533
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
-"KiCad only supports one width for the haching. The imported hatching uses "
+"KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
 "CADSTAR 圖案填充程式碼 '%s' 的每個圖案填充具有不同的線寬。KiCad 只支援一種寬"
 "度的快取。匯入的圖案填充使用第一個圖案填充定義中定義的寬度，即 %.2f mm。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3545
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
-"KiCad only supports one step size for the haching. The imported hatching "
+"KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
 "CADSTAR 圖案填充程式碼 '%s' 對於每個圖案填充具有不同的步長。KiCad 只支援一個"
@@ -31791,10 +31795,10 @@ msgstr ""
 "成 %.1f 度。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3631
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
-"Millimetres were applied instead."
+"Millimeters were applied instead."
 msgstr "尺寸 ID %s 使用了 KiCad 不支援的一種單位。改為使用毫米。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3922

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-08 11:42-0800\n"
+"POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-09-27 13:40+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
@@ -14051,7 +14051,7 @@ msgstr ""
 "ένα θυγατρικό φύλλο αλλά δεν έχει καθοριστεί Figure."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3028
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3040
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "Αδυναμία δημιουργίας αρχείου '%s'"
@@ -15521,8 +15521,8 @@ msgstr "Δεν υπάρχει ανοιγμένο σχηματικό."
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, c-format
-msgid "Symbol library '%s' is not writeable."
+#, fuzzy, c-format
+msgid "Symbol library '%s' is not writable."
 msgstr "Η βιβλιοθήκη συμβόλων '%s' δεν είναι εγγράψιμη."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:576
@@ -17402,7 +17402,7 @@ msgstr "Μορφή μηδενικών"
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
-"No trailing zeros  format means the trainling zeros are stripped"
+"No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
@@ -18585,7 +18585,7 @@ msgstr "Αποθετήριο GitHub"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
 #, fuzzy
-msgid "Manage Repositores"
+msgid "Manage Repositories"
 msgstr "Διαχείριση ορισμών διαύλου"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
@@ -19030,7 +19030,8 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr "Αδυναμία ανοίγματος φακέλου μεταπληροφοριών για αυτό το πρότυπο!"
 
 #: kicad/project_template.cpp:63
-msgid "Cound't find the meta HTML information file for this template!"
+#, fuzzy
+msgid "Couldn't find the meta HTML information file for this template!"
 msgstr "Αδυναμία εύρεσης HTML αρχείου μεταπληροφοριών για αυτό το πρότυπο!"
 
 #: kicad/project_template.cpp:238
@@ -28393,7 +28394,8 @@ msgid "On-board, non-copper"
 msgstr "Στην πλακέτα, χωρίς χαλκό"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-msgid "If you want a solder paster layer for front side of the board"
+#, fuzzy
+msgid "If you want a solder paste layer for front side of the board"
 msgstr ""
 "Αν θέλετε ένα επίπεδο πάστας συγκόλλησης για την μπροστινή όψη της πλακέτας"
 
@@ -29437,8 +29439,8 @@ msgid "Unconditional rule applied."
 msgstr "Εφαρμόστηκε άνευ όρων κανόνας."
 
 #: pcbnew/drc/drc_engine.cpp:1059
-#, c-format
-msgid "Checking rule condition '%s'."
+#, fuzzy, c-format
+msgid "Checking rule condition \"%s\"."
 msgstr "Έλεγχος συνθήκης κανόνα \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:1065
@@ -32595,7 +32597,7 @@ msgstr ""
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
-"KiCad only supports one width for the haching. The imported hatching uses "
+"KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
 
@@ -32603,7 +32605,7 @@ msgstr ""
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
-"KiCad only supports one step size for the haching. The imported hatching "
+"KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
 
@@ -32620,7 +32622,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
-"Millimetres were applied instead."
+"Millimeters were applied instead."
 msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3922

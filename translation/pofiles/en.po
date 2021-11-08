@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-08 11:42-0800\n"
+"POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -10616,8 +10616,8 @@ msgid "No schematic currently open."
 msgstr "No schematic currently open."
 
 #, c-format
-msgid "Symbol library '%s' is not writeable."
-msgstr "Symbol library '%s' is not writeable."
+msgid "Symbol library '%s' is not writable."
+msgstr "Symbol library '%s' is not writable."
 
 msgid "You must save to a different location."
 msgstr "You must save to a different location."
@@ -11960,11 +11960,11 @@ msgstr "Zero format"
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
-"No trailing zeros  format means the trainling zeros are stripped"
+"No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
-"No trailing zeros  format means the trainling zeros are stripped"
+"No trailing zeros  format means the trailing zeros are stripped"
 
 msgid "Coordinates Format"
 msgstr "Coordinates Format"
@@ -12803,8 +12803,8 @@ msgstr "Please enter fully qualified repository url"
 msgid "Add repository"
 msgstr "Add repository"
 
-msgid "Manage Repositores"
-msgstr "Manage Repositores"
+msgid "Manage Repositories"
+msgstr "Manage Repositories"
 
 #, c-format
 msgid "Plugins (%d)"
@@ -13134,8 +13134,8 @@ msgstr "Could open the template path!"
 msgid "Couldn't open the meta information directory for this template!"
 msgstr "Couldn't open the meta information directory for this template!"
 
-msgid "Cound't find the meta HTML information file for this template!"
-msgstr "Cound't find the meta HTML information file for this template!"
+msgid "Couldn't find the meta HTML information file for this template!"
+msgstr "Couldn't find the meta HTML information file for this template!"
 
 #, c-format
 msgid "Cannot create folder '%s'."
@@ -19915,8 +19915,8 @@ msgstr "Adhes_Front"
 msgid "On-board, non-copper"
 msgstr "On-board, non-copper"
 
-msgid "If you want a solder paster layer for front side of the board"
-msgstr "If you want a solder paster layer for front side of the board"
+msgid "If you want a solder paste layer for front side of the board"
+msgstr "If you want a solder paste layer for front side of the board"
 
 msgid "SoldP_Front"
 msgstr "SoldP_Front"
@@ -20821,8 +20821,8 @@ msgid "Unconditional rule applied."
 msgstr "Unconditional rule applied."
 
 #, c-format
-msgid "Checking rule condition '%s'."
-msgstr "Checking rule condition '%s'."
+msgid "Checking rule condition \"%s\"."
+msgstr "Checking rule condition \"%s\"."
 
 msgid "Constraint applied."
 msgstr "Constraint applied."
@@ -23251,21 +23251,21 @@ msgstr ""
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
-"KiCad only supports one width for the haching. The imported hatching uses "
+"KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
-"KiCad only supports one width for the haching. The imported hatching uses "
+"KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
-"KiCad only supports one step size for the haching. The imported hatching "
+"KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
-"KiCad only supports one step size for the haching. The imported hatching "
+"KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 
 #, c-format
@@ -23283,10 +23283,10 @@ msgstr ""
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
-"Millimetres were applied instead."
+"Millimeters were applied instead."
 msgstr ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
-"Millimetres were applied instead."
+"Millimeters were applied instead."
 
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
@@ -26538,6 +26538,60 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#, c-format
+#~ msgid "Symbol library '%s' is not writeable."
+#~ msgstr "Symbol library '%s' is not writeable."
+
+#~ msgid ""
+#~ "Integers in files can have their zeros stripped.\n"
+#~ "No leading zeros format means the leading zeros are stripped\n"
+#~ "No trailing zeros  format means the trainling zeros are stripped"
+#~ msgstr ""
+#~ "Integers in files can have their zeros stripped.\n"
+#~ "No leading zeros format means the leading zeros are stripped\n"
+#~ "No trailing zeros  format means the trainling zeros are stripped"
+
+#~ msgid "Manage Repositores"
+#~ msgstr "Manage Repositores"
+
+#~ msgid "Cound't find the meta HTML information file for this template!"
+#~ msgstr "Cound't find the meta HTML information file for this template!"
+
+#~ msgid "If you want a solder paster layer for front side of the board"
+#~ msgstr "If you want a solder paster layer for front side of the board"
+
+#, c-format
+#~ msgid "Checking rule condition '%s'."
+#~ msgstr "Checking rule condition '%s'."
+
+#, c-format
+#~ msgid ""
+#~ "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
+#~ "KiCad only supports one width for the haching. The imported hatching uses "
+#~ "the width defined in the first hatch definition, i.e. %.2f mm."
+#~ msgstr ""
+#~ "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
+#~ "KiCad only supports one width for the haching. The imported hatching uses "
+#~ "the width defined in the first hatch definition, i.e. %.2f mm."
+
+#, c-format
+#~ msgid ""
+#~ "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
+#~ "KiCad only supports one step size for the haching. The imported hatching "
+#~ "uses the step size defined in the first hatching definition, i.e. %.2f mm."
+#~ msgstr ""
+#~ "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
+#~ "KiCad only supports one step size for the haching. The imported hatching "
+#~ "uses the step size defined in the first hatching definition, i.e. %.2f mm."
+
+#, c-format
+#~ msgid ""
+#~ "Dimension ID %s uses a type of unit that is not supported in KiCad. "
+#~ "Millimetres were applied instead."
+#~ msgstr ""
+#~ "Dimension ID %s uses a type of unit that is not supported in KiCad. "
+#~ "Millimetres were applied instead."
 
 #~ msgid ""
 #~ "Zdiff =\n"
@@ -31357,10 +31411,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Add User Defined Layer"
 #~ msgstr "Add User Defined Layer"
-
-#, c-format
-#~ msgid "Checking rule condition \"%s\"."
-#~ msgstr "Checking rule condition \"%s\"."
 
 #, c-format
 #~ msgid "Could not create file \"%s\"."

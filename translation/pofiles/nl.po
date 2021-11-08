@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-08 11:42-0800\n"
+"POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-10-22 19:22+0000\n"
 "Last-Translator: CJ van der Hoeven <KeesEnJoa@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
@@ -13990,7 +13990,7 @@ msgstr ""
 "blad maar heeft geen figuur gedefinieerd."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3028
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3040
 #, c-format
 msgid "Unable to read file '%s'."
 msgstr "Kan bestand '%s' niet lezen."
@@ -15429,8 +15429,8 @@ msgstr "Momenteel geen schema geopend."
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, c-format
-msgid "Symbol library '%s' is not writeable."
+#, fuzzy, c-format
+msgid "Symbol library '%s' is not writable."
 msgstr "Symboolbibliotheek '%s' is niet beschrijfbaar."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:576
@@ -17271,10 +17271,11 @@ msgid "Zero format"
 msgstr "Nullen Format"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
+#, fuzzy
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
-"No trailing zeros  format means the trainling zeros are stripped"
+"No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
 "Integers in bestanden kunnen zonder nullen worden weggeschreven.\n"
 "No-leading-zeros format impliceert dat voorloop-nullen zijn verwijderd\n"
@@ -18435,7 +18436,8 @@ msgid "Add repository"
 msgstr "Repository toevoegen"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-msgid "Manage Repositores"
+#, fuzzy
+msgid "Manage Repositories"
 msgstr "Repositories beheren"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
@@ -18859,7 +18861,8 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr "Kan de meta-informatiemap voor deze sjabloon niet openen!"
 
 #: kicad/project_template.cpp:63
-msgid "Cound't find the meta HTML information file for this template!"
+#, fuzzy
+msgid "Couldn't find the meta HTML information file for this template!"
 msgstr "Kan het meta HTML-informatiebestand voor deze sjabloon niet vinden!"
 
 #: kicad/project_template.cpp:238
@@ -28189,7 +28192,8 @@ msgid "On-board, non-copper"
 msgstr "Op de print, niet koper"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-msgid "If you want a solder paster layer for front side of the board"
+#, fuzzy
+msgid "If you want a solder paste layer for front side of the board"
 msgstr "Als u een soldeerpasta laag wilt voor de voorkant van de PCB"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
@@ -29221,8 +29225,8 @@ msgid "Unconditional rule applied."
 msgstr "Onvoorwaardelijke regel toegepast."
 
 #: pcbnew/drc/drc_engine.cpp:1059
-#, c-format
-msgid "Checking rule condition '%s'."
+#, fuzzy, c-format
+msgid "Checking rule condition \"%s\"."
 msgstr "Controleer Regel-voorwaarde '%s'."
 
 #: pcbnew/drc/drc_engine.cpp:1065
@@ -32375,10 +32379,10 @@ msgstr ""
 "geïmporteerde arcering is kruis-gearceerd."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3533
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
-"KiCad only supports one width for the haching. The imported hatching uses "
+"KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
 "De CADSTAR Hatching-code '%s' heeft verschillende lijnbreedtes voor elk "
@@ -32387,10 +32391,10 @@ msgstr ""
 "arcering-definitie, d.w.z. %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3545
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
-"KiCad only supports one step size for the haching. The imported hatching "
+"KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
 "De CADSTAR Hatching-code '%s' heeft verschillende stapgroottes voor elke "
@@ -32412,10 +32416,10 @@ msgstr ""
 "%.1f graden ten opzichte van horizontaal."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3631
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
-"Millimetres were applied instead."
+"Millimeters were applied instead."
 msgstr ""
 "Dimension ID %s gebruikt een eenheid die niet is ondersteund in KiCad. "
 "Millimeters werden toegepast."

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-08 11:42-0800\n"
+"POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-11-05 13:01+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -14178,7 +14178,7 @@ msgstr ""
 "ark, men har ingen figur definert."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3028
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3040
 #, fuzzy, c-format
 msgid "Unable to read file '%s'."
 msgstr "Kan ikke lese filen \"%s\""
@@ -15663,8 +15663,8 @@ msgstr "Ingen skjemaer er åpne for øyeblikket."
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, c-format
-msgid "Symbol library '%s' is not writeable."
+#, fuzzy, c-format
+msgid "Symbol library '%s' is not writable."
 msgstr "Symbolbiblioteket «%s» er skrivebeskyttet."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:576
@@ -17555,7 +17555,7 @@ msgstr "Nullformat"
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
-"No trailing zeros  format means the trainling zeros are stripped"
+"No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
@@ -18738,7 +18738,7 @@ msgstr "Legg ledning til bussoppføring"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
 #, fuzzy
-msgid "Manage Repositores"
+msgid "Manage Repositories"
 msgstr "Administrer bussdefinisjoner"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
@@ -19172,7 +19172,8 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr "Kunne ikke åpne metainformasjonskatalogen for denne malen!"
 
 #: kicad/project_template.cpp:63
-msgid "Cound't find the meta HTML information file for this template!"
+#, fuzzy
+msgid "Couldn't find the meta HTML information file for this template!"
 msgstr "Du finner ikke meta HTML-informasjonsfilen for denne malen!"
 
 #: kicad/project_template.cpp:238
@@ -28622,7 +28623,8 @@ msgid "On-board, non-copper"
 msgstr "Ombord, ikke-kobber"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-msgid "If you want a solder paster layer for front side of the board"
+#, fuzzy
+msgid "If you want a solder paste layer for front side of the board"
 msgstr "Hvis du vil ha et loddeplasterlag på forsiden av brettet"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
@@ -29660,7 +29662,7 @@ msgstr "Ubetinget regel anvendt."
 
 #: pcbnew/drc/drc_engine.cpp:1059
 #, fuzzy, c-format
-msgid "Checking rule condition '%s'."
+msgid "Checking rule condition \"%s\"."
 msgstr "Sjekker regelbetingelsen \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:1065
@@ -32862,10 +32864,10 @@ msgstr ""
 "krysset."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3533
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
-"KiCad only supports one width for the haching. The imported hatching uses "
+"KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
 "CADSTAR klekkekode '%s' har forskjellige linjebredder for hver luke. KiCad "
@@ -32873,10 +32875,10 @@ msgstr ""
 "bredden som er definert i den første klekkedefinisjonen, dvs. %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3545
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
-"KiCad only supports one step size for the haching. The imported hatching "
+"KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
 "CADSTAR klekkekode '%s' har forskjellige trinnstørrelser for hver luke. "
@@ -32901,7 +32903,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
-"Millimetres were applied instead."
+"Millimeters were applied instead."
 msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3922

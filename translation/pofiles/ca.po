@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-08 11:42-0800\n"
+"POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-11-07 14:21+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
@@ -14119,7 +14119,7 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:3028
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:3040
 #, fuzzy, c-format
 msgid "Unable to read file '%s'."
 msgstr "No es pot llegir el fitxer «%s»"
@@ -15554,8 +15554,8 @@ msgstr "No hi ha en aquest moment cap placa editada"
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, c-format
-msgid "Symbol library '%s' is not writeable."
+#, fuzzy, c-format
+msgid "Symbol library '%s' is not writable."
 msgstr "La biblioteca de símbols '%s' no és escrivible."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:576
@@ -17543,7 +17543,7 @@ msgstr "Format dels zeros"
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
-"No trailing zeros  format means the trainling zeros are stripped"
+"No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
@@ -18784,8 +18784,9 @@ msgid "Add repository"
 msgstr "Afegeix dipòsit"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-msgid "Manage Repositores"
-msgstr ""
+#, fuzzy
+msgid "Manage Repositories"
+msgstr "Dipòsit de Github"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
 #, c-format
@@ -19226,7 +19227,7 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr ""
 
 #: kicad/project_template.cpp:63
-msgid "Cound't find the meta HTML information file for this template!"
+msgid "Couldn't find the meta HTML information file for this template!"
 msgstr ""
 
 #: kicad/project_template.cpp:238
@@ -28936,7 +28937,8 @@ msgid "On-board, non-copper"
 msgstr "Part integral, no de coure"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-msgid "If you want a solder paster layer for front side of the board"
+#, fuzzy
+msgid "If you want a solder paste layer for front side of the board"
 msgstr ""
 "Si voleu una capa de pasta de soldadura per a la cara frontal de la placa"
 
@@ -30000,7 +30002,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1059
 #, fuzzy, c-format
-msgid "Checking rule condition '%s'."
+msgid "Checking rule condition \"%s\"."
 msgstr "Combina les zones"
 
 #: pcbnew/drc/drc_engine.cpp:1065
@@ -33216,7 +33218,7 @@ msgstr ""
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
-"KiCad only supports one width for the haching. The imported hatching uses "
+"KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
 
@@ -33224,7 +33226,7 @@ msgstr ""
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
-"KiCad only supports one step size for the haching. The imported hatching "
+"KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
 
@@ -33241,7 +33243,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
-"Millimetres were applied instead."
+"Millimeters were applied instead."
 msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3922
