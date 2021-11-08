@@ -60,7 +60,7 @@ PROJECT_TEMPLATE::PROJECT_TEMPLATE( const wxString& aPath )
     else if( !wxFileName::FileExists( m_metaHtmlFile.GetFullPath() ) )
     {
         // Error, the meta information directory doesn't contain the informational html file!
-        m_title = _( "Cound't find the meta HTML information file for this template!" );
+        m_title = _( "Couldn't find the meta HTML information file for this template!" );
     }
 
     // Try to load an icon
