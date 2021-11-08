@@ -545,6 +545,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         {
             pad->SetLocalRatsnestVisible( pad_model->GetLocalRatsnestVisible() );
             pad->SetPinFunction( pad_model->GetPinFunction() );
+            pad->SetPinType( pad_model->GetPinType() );
         }
 
         pad->SetNetCode( pad_model ? pad_model->GetNetCode() : NETINFO_LIST::UNCONNECTED );
