@@ -116,14 +116,14 @@ bool VALUE::EqualTo( CONTEXT* aCtx, const VALUE* b ) const
 
     if( m_type == VT_NUMERIC && b->m_type == VT_NUMERIC )
     {
-        return m_valueDbl == b->m_valueDbl;
+        return AsDouble() == b->AsDouble();
     }
     else if( m_type == VT_STRING && b->m_type == VT_STRING )
     {
         if( b->m_stringIsWildcard )
-            return WildCompareString( b->m_valueStr, m_valueStr, false );
+            return WildCompareString( b->AsString(), AsString(), false );
         else
-            return !m_valueStr.CmpNoCase( b->m_valueStr );
+            return !AsString().CmpNoCase( b->AsString() );
     }
 
     return false;

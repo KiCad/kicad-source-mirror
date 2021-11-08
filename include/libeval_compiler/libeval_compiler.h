@@ -188,7 +188,8 @@ public:
         m_type( VT_UNDEFINED ),
         m_valueDbl( 0 ),
         m_stringIsWildcard( false ),
-        m_isDeferredDbl( false )
+        m_isDeferredDbl( false ),
+        m_isDeferredStr( false )
     {};
 
     VALUE( const wxString& aStr, bool aIsWildcard = false ) :
@@ -196,14 +197,16 @@ public:
         m_valueDbl( 0 ),
         m_valueStr( aStr ),
         m_stringIsWildcard( aIsWildcard ),
-        m_isDeferredDbl( false )
+        m_isDeferredDbl( false ),
+        m_isDeferredStr( false )
     {};
 
     VALUE( const double aVal ) :
         m_type( VT_NUMERIC ),
         m_valueDbl( aVal ),
         m_stringIsWildcard( false ),
-        m_isDeferredDbl( false )
+        m_isDeferredDbl( false ),
+        m_isDeferredStr( false )
     {};
 
     virtual ~VALUE()
@@ -222,6 +225,12 @@ public:
 
     virtual const wxString& AsString() const
     {
+        if( m_isDeferredStr )
+        {
+            m_valueStr = m_lambdaStr();
+            m_isDeferredStr = false;
+        }
+
         return m_valueStr;
     }
 
@@ -245,6 +254,13 @@ public:
         m_isDeferredDbl = true;
     }
 
+    void SetDeferredEval( std::function<wxString()> aLambda )
+    {
+        m_type = VT_STRING;
+        m_lambdaStr = aLambda;
+        m_isDeferredStr = true;
+    }
+
     void Set( const wxString& aValue )
     {
         m_type = VT_STRING;
@@ -261,13 +277,16 @@ public:
     }
 
 private:
-    VAR_TYPE_T     m_type;
-    mutable double m_valueDbl;
-    wxString       m_valueStr;
-    bool           m_stringIsWildcard;
+    VAR_TYPE_T                m_type;
+    mutable double            m_valueDbl;               // mutable to support deferred evaluation
+    mutable wxString          m_valueStr;               // mutable to support deferred evaluation
+    bool                      m_stringIsWildcard;
 
-    mutable bool            m_isDeferredDbl;
-    std::function<double()> m_lambdaDbl;
+    mutable bool              m_isDeferredDbl;
+    std::function<double()>   m_lambdaDbl;
+
+    mutable bool              m_isDeferredStr;
+    std::function<wxString()> m_lambdaStr;
 };
 
 class VAR_REF

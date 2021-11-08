@@ -91,7 +91,7 @@ static void existsOnLayer( LIBEVAL::CONTEXT* aCtx, void *self )
     {
         if( aCtx->HasErrorCallback() )
         {
-            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+            aCtx->ReportError( wxString::Format( _( "Missing layer name argument to %s." ),
                                                  wxT( "existsOnLayer()" ) ) );
         }
 
@@ -260,7 +260,8 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
     {
         if( aCtx->HasErrorCallback() )
         {
-            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+            aCtx->ReportError( wxString::Format( _( "Missing footprint identifier argument "
+                                                    "(A, B, or reference designator) to %s." ),
                                                  wxT( "insideCourtyard()" ) ) );
         }
 
@@ -326,7 +327,8 @@ static void insideFrontCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
     {
         if( aCtx->HasErrorCallback() )
         {
-            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+            aCtx->ReportError( wxString::Format( _( "Missing footprint identifier argument "
+                                                    "(A, B, or reference designator) to %s." ),
                                                  wxT( "insideFrontCourtyard()" ) ) );
         }
 
@@ -392,7 +394,8 @@ static void insideBackCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
     {
         if( aCtx->HasErrorCallback() )
         {
-            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+            aCtx->ReportError( wxString::Format( _( "Missing footprint identifier argument "
+                                                    "(A, B, or reference designator) to %s." ),
                                                  wxT( "insideBackCourtyard()" ) ) );
         }
         return;
@@ -610,7 +613,8 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
     {
         if( aCtx->HasErrorCallback() )
         {
-            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+            aCtx->ReportError( wxString::Format( _( "Missing rule-area identifier argument "
+                                                    "(A, B, or rule-area name) to %s." ),
                                                  wxT( "insideArea()" ) ) );
         }
 
@@ -712,7 +716,7 @@ static void memberOf( LIBEVAL::CONTEXT* aCtx, void* self )
     {
         if( aCtx->HasErrorCallback() )
         {
-            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+            aCtx->ReportError( wxString::Format( _( "Missing group name argument to %s." ),
                                                  wxT( "memberOf()" ) ) );
         }
         return;
@@ -818,19 +822,19 @@ static void inDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    if( !item || !item->GetBoard() )
-        return;
-
     if( !arg )
     {
         if( aCtx->HasErrorCallback() )
         {
-            aCtx->ReportError( wxString::Format( _( "Missing argument to '%s'" ),
+            aCtx->ReportError( wxString::Format( _( "Missing diff-pair name argument to %s." ),
                                                  wxT( "inDiffPair()" ) ) );
         }
 
         return;
     }
+
+    if( !item || !item->GetBoard() )
+        return;
 
     result->SetDeferredEval(
             [item, arg]() -> double
@@ -856,6 +860,46 @@ static void inDiffPair( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
+static void getField( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    LIBEVAL::VALUE*   arg    = aCtx->Pop();
+    PCB_EXPR_VAR_REF* vref   = static_cast<PCB_EXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item   = vref ? vref->GetObject( aCtx ) : nullptr;
+    LIBEVAL::VALUE*   result = aCtx->AllocValue();
+
+    result->Set( "" );
+    aCtx->Push( result );
+
+    if( !arg )
+    {
+        if( aCtx->HasErrorCallback() )
+        {
+            aCtx->ReportError( wxString::Format( _( "Missing field name argument to %s." ),
+                                                 wxT( "getField()" ) ) );
+        }
+
+        return;
+    }
+
+    if( !item || !item->GetBoard() )
+        return;
+
+    result->SetDeferredEval(
+            [item, arg]() -> wxString
+            {
+                if( item && item->Type() == PCB_FOOTPRINT_T )
+                {
+                    FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
+
+                    if( fp->HasProperty( arg->AsString() ) )
+                        return fp->GetProperty( arg->AsString() );
+                }
+
+                return "";
+            } );
+}
+
+
 PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
 {
     RegisterAllFunctions();
@@ -877,6 +921,7 @@ void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( "fromTo('x','y')", exprFromTo );
     RegisterFunc( "isCoupledDiffPair()", isCoupledDiffPair );
     RegisterFunc( "inDiffPair('x')", inDiffPair );
+    RegisterFunc( "getField('x')", getField );
 }
 
 
