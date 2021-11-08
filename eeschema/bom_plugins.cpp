@@ -57,21 +57,20 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
     // python <script_path>/script.py
     // and *not* python <script_path>\script.py
     // Otherwise the script does not find some auxiliary pythons scripts needed by this script
-    int quote = '"';
-
     if( extension == "xsl" )
     {
         m_info = readHeader( "-->" );
-        m_cmd = wxString::Format( "xsltproc -o %c%%O%s%c %c%s%c %c%%I%c",
-                                  quote, getOutputExtension( m_info ), quote,
-                                  quote, m_file.GetFullPath(), quote, quote, quote );
+        m_cmd = wxString::Format( "xsltproc -o \"%%O%s\" \"%s\" \"%%I\"",
+                                  getOutputExtension( m_info ),
+                                  m_file.GetFullPath() );
     }
     else if( extension == "py" )
     {
         m_info = readHeader( "\"\"\"" );
 #ifdef __WINDOWS__
         m_cmd = wxString::Format( "python \"%s/%s\" \"%%I\" \"%%O%s\"",
-                                  m_file.GetPath(), m_file.GetFullName(),
+                                  m_file.GetPath(),
+                                  m_file.GetFullName(),
                                   getOutputExtension( m_info ) );
 #else
         wxString interpreter = wxString::FromUTF8Unchecked( PYTHON_EXECUTABLE );
@@ -79,10 +78,10 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
         if( interpreter.IsEmpty() )
             interpreter = wxT( "python" );
 
-        m_cmd = wxString::Format( "%s %c%s%c %c%%I%c %c%%O%s%c",
-                                  quote, interpreter, quote,
-                                  quote, m_file.GetFullPath(), quote,
-                                  quote, getOutputExtension( m_info ), quote );
+        m_cmd = wxString::Format( "%s \"%s\" \"%%I\" \"%%O%s\"",
+                                  interpreter,
+                                  m_file.GetFullPath(),
+                                  getOutputExtension( m_info ) );
 #endif
     }
 #ifdef __WINDOWS__
@@ -90,7 +89,8 @@ BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
     {
         m_info = readHeader( "\"\"\"" );
         m_cmd = wxString::Format( "pythonw \"%s/%s\" \"%%I\" \"%%O%s\"",
-                                  m_file.GetPath(), m_file.GetFullName(),
+                                  m_file.GetPath(),
+                                  m_file.GetFullName(),
                                   getOutputExtension( m_info ) );
     }
 #endif /* __WINDOWS__ */
