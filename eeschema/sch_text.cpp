@@ -1253,7 +1253,7 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
             std::sort( pageListCopy.begin(), pageListCopy.end(),
                        []( const wxString& a, const wxString& b ) -> bool
                        {
-                           return StrNumCmp( a, b, true ) <= 0;
+                           return StrNumCmp( a, b, true ) < 0;
                        } );
 
             if( !settings.m_IntersheetRefsListOwnPage )
