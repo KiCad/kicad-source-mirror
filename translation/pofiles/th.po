@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-07 14:22+0000\n"
+"PO-Revision-Date: 2021-11-10 23:49+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -15083,9 +15083,9 @@ msgstr "ไม่มีวงจรเปิดอยู่ในขณะนี
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is not writable."
-msgstr "ไลบรารีสัญลักษณ์ ' %s' ไม่สามารถบันทึก"
+msgstr "ไลบรารีสัญลักษณ์ '%s' ไม่สามารถบันทึก"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:576
 #: eeschema/symbol_editor/symbol_editor.cpp:1174
@@ -16881,13 +16881,12 @@ msgid "Zero format"
 msgstr "รูปแบบเลขศูนย์"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
-#, fuzzy
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
-"เลขจำนวนเต็มในไฟล์ สามารถระงับเลขศูนย์ได้\n"
+"เลขจำนวนเต็มในไฟล์ สามารถระงับเลขศูนย์\n"
 "รูปแบบไม่มีเลขศูนย์นำหน้า หมายความว่าเลขศูนย์ด้านหน้าถูกตัด\n"
 "รูปแบบไม่มีเลขศูนย์ตามท้าย  หมายความว่าเลขศูนย์ด้านท้ายถูกตัด"
 
@@ -18031,9 +18030,8 @@ msgid "Add repository"
 msgstr "เพิ่มคลังเก็บ"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-#, fuzzy
 msgid "Manage Repositories"
-msgstr "จัดการที่เก็บ"
+msgstr "จัดการคลังเก็บไฟล์"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
 #, c-format
@@ -18449,7 +18447,6 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr "เปิดไดเรกทอรีข้อมูลเมตาสำหรับแม่แบบนี้ไม่ได้!"
 
 #: kicad/project_template.cpp:63
-#, fuzzy
 msgid "Couldn't find the meta HTML information file for this template!"
 msgstr "ไม่พบไฟล์ข้อมูลเมต้า HTML สําหรับแม่แบบนี้!"
 
@@ -25713,9 +25710,8 @@ msgid "Plot Edge.Cuts on all layers"
 msgstr "พล็อตเลเยอร์ Edge.Cut บนทุกเลเยอร์"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
-#, fuzzy
 msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr "ไม่ต้องพล็อตข้อมูลจากเลเยอร์เอ็ดจ์บนเลเยอร์อื่นๆ"
+msgstr "พล็อตข้อมูลจากเลเยอร์ขอบบอร์ด บนเลเยอร์อื่นทั้งหมด"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Sketch pads on fabrication layers"
@@ -26495,9 +26491,8 @@ msgid "Constrain outline to H, V and 45 deg"
 msgstr "จำกัดเค้าโครงเป็น H, V และ 45 องศา"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:97
-#, fuzzy
 msgid "Draw the area using horizontal, vertical and 45 degree lines only"
-msgstr "วาดพื้นที่โดยใช้เส้นแนวนอน แนวตั้ง และ 45 องศาเท่านั้น"
+msgstr "วาดพื้นที่โดยใช้เส้นแนวนอน,แนวตั้งและ 45 องศาเท่านั้น"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:67
 msgid "Rule Area Properties"
@@ -27539,9 +27534,8 @@ msgid "On-board, non-copper"
 msgstr "บนบอร์ด,ไม่ใช่ทองแดง"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-#, fuzzy
 msgid "If you want a solder paste layer for front side of the board"
-msgstr "หากคุณต้องการเลเยอร์โซลเดอร์เพสต์สำหรับบอร์ดด้านหน้า"
+msgstr "หากคุณต้องการเลเยอร์โซลเดอร์เพสต์สำหรับด้านหน้าของบอร์ด"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
 msgid "SoldP_Front"
@@ -28754,9 +28748,9 @@ msgid "Unconditional rule applied."
 msgstr "ใช้กฎที่ไม่มีเงื่อนไข"
 
 #: pcbnew/drc/drc_engine.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition \"%s\"."
-msgstr "กําลังตรวจสอบเงื่อนไขกฎ '%s'"
+msgstr "กําลังตรวจสอบเงื่อนไขของกฎ \"%s\""
 
 #: pcbnew/drc/drc_engine.cpp:1065
 msgid "Constraint applied."
@@ -31822,26 +31816,26 @@ msgstr ""
 "แบบ(แรเงาขีดไขว้) ห่างกัน 90 องศาเท่านั้น การเติมแรเงาที่นําเข้า จะเป็นแรเงาขีดไขว้เท่านั้น"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3533
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
 "KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
-"รหัสการแรเงาของ CADSTAR '%s' มีความกว้างของเส้นที่แตกต่างกันสําหรับแต่ละการแรเงา KiCad "
-"รองรับความกว้างเพียงหนึ่งขนาด การแรเงาที่นําเข้าจะใช้ความกว้างที่กําหนดไว้ในคําจํากัดแรกเช่น "
-"%.2f มม."
+"รหัสการแรเงาของ CADSTAR '%s' มีความกว้างของเส้นที่แตกต่างกันสําหรับแต่"
+"ละการแรเงา KiCad รองรับความกว้างเพียงหนึ่งขนาด "
+"การแรเงาที่นําเข้าจะใช้ความกว้างที่กําหนดไว้ในคําจํากัดแรกเช่น %.2f มม."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3545
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
 "KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
 "รหัสการแรเงาของ CADSTAR '%s' มีขั้นการเลื่อนที่แตกต่างของแต่ละการแรเงา KiCad "
-"รองรับการเลื่อนขั้นการแรเงาขนาดเดียว ที่นําเข้าจะใช้ขั้นการเลื่อนตามที่กําหนดไว้ในคําจํากัดแรกเช่น "
-"%.2f มม."
+"รองรับการเลื่อนขั้นแรเงาขนาดเดียว "
+"การนําเข้าจะใช้ขั้นการเลื่อนตามที่กําหนดไว้ในคําจํากัดแรกเช่น %.2f มม."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3558
 #, c-format
@@ -31856,11 +31850,13 @@ msgstr ""
 "องศาจากแนวนอน"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3631
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimeters were applied instead."
-msgstr "รหัสวัดขนาด %s ใช้หน่วยที่ไม่สนับสนุนใน KiCad มิลลิเมตรจะถูกนําไปใช้แทน"
+msgstr ""
+"รหัสวัดขนาด %s ใช้หน่วยวัด ที่ไม่สนับสนุนใน KiCad "
+"หน่วยมิลลิเมตรจะถูกนําไปใช้แทน"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3922
 msgid ""
