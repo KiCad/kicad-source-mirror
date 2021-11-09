@@ -235,8 +235,7 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    // Environment variables
-
+    // Update environment variables
     ENV_VAR_MAP& envVarMap = Pgm().GetLocalEnvVariables();
 
     for( int row = 0; row < m_EnvVars->GetNumberRows(); ++row )
@@ -270,6 +269,28 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
             envVarMap.at( name ).SetValue( path );
         else
             envVarMap[ name ] = ENV_VAR_ITEM( name, path );
+    }
+
+    // Remove deleted env vars
+    for( auto it = envVarMap.begin(); it != envVarMap.end();  )
+    {
+        bool found = false;
+
+        for( int row = 0; row < m_EnvVars->GetNumberRows(); ++row )
+        {
+            wxString name = m_EnvVars->GetCellValue( row, TV_NAME_COL );
+
+            if( it->first == name )
+            {
+                found = true;
+                break;
+            }
+        }
+
+        if( found )
+            ++it;
+        else
+            it = envVarMap.erase( it );
     }
 
     Pgm().SetLocalEnvVariables();
