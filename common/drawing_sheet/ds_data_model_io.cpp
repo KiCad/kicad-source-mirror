@@ -54,6 +54,7 @@ class DS_DATA_MODEL_IO
 public:
     void Format( DS_DATA_MODEL* aSheet ) const;
 
+    void Format( DS_DATA_MODEL* aModel, std::vector<DS_DATA_ITEM*>& aItemsList ) const;
     void Format( DS_DATA_MODEL* aModel, DS_DATA_ITEM* aItem, int aNestLevel ) const;
 
 protected:
@@ -150,11 +151,21 @@ void DS_DATA_MODEL::SaveInString( wxString* aOutputString )
 void DS_DATA_MODEL::SaveInString( std::vector<DS_DATA_ITEM*>& aItemsList, wxString* aOutputString )
 {
     DS_DATA_MODEL_STRINGIO writer( aOutputString );
+    writer.Format( this, aItemsList );
+}
 
+
+void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aModel, std::vector<DS_DATA_ITEM*>& aItemsList ) const
+{
     LOCALE_IO   toggle;     // switch on/off the locale "C" notation
 
+    m_out->Print( 0, "(kicad_wks (version %d) (generator pl_editor)\n",
+                  SEXPR_WORKSHEET_FILE_VERSION );
+
     for( DS_DATA_ITEM* item : aItemsList )
-        writer.Format( this, item, 0 );
+        Format( aModel, item, 1 );
+
+    m_out->Print( 0, ")\n" );
 }
 
 
