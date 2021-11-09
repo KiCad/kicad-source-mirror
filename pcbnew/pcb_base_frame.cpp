@@ -809,24 +809,23 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
     EDA_DRAW_FRAME::ActivateGalCanvas();
 
     EDA_DRAW_PANEL_GAL* canvas = GetCanvas();
+    KIGFX::VIEW*        view = canvas->GetView();
 
     if( m_toolManager )
     {
-        m_toolManager->SetEnvironment( m_pcb, GetCanvas()->GetView(),
-                                       GetCanvas()->GetViewControls(), config(), this );
+        m_toolManager->SetEnvironment( m_pcb, view, canvas->GetViewControls(), config(), this );
+
+        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
     }
 
-    if( m_toolManager )
-        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+    KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
+    const PCB_DISPLAY_OPTIONS&  displ_opts = GetDisplayOptions();
 
-    // Transfer latest current display options from legacy to GAL canvas:
-    auto painter = static_cast<KIGFX::PCB_PAINTER*>( canvas->GetView()->GetPainter() );
-    auto settings = painter->GetSettings();
-    auto displ_opts = GetDisplayOptions();
     settings->LoadDisplayOptions( displ_opts, ShowPageLimits() );
     settings->LoadColors( GetColorSettings() );
 
-    canvas->GetView()->RecacheAllItems();
+    view->RecacheAllItems();
     canvas->SetEventDispatcher( m_toolDispatcher );
     canvas->StartDrawing();
 }
