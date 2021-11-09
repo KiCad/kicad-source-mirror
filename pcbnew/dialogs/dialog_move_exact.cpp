@@ -75,8 +75,8 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, wxPoint& aTransla
 
     // and set up the entries according to the saved options
     m_polarCoords->SetValue( m_options.polarCoords );
-    m_moveX.SetValue( m_options.entry1 );
-    m_moveY.SetValue( m_options.entry2 );
+    m_xEntry->ChangeValue( m_options.entry1 );
+    m_yEntry->ChangeValue( m_options.entry2 );
 
     m_rotate.SetUnits( EDA_UNITS::DEGREES );
     m_rotate.SetValue( m_options.entryRotation );
@@ -247,18 +247,14 @@ bool DIALOG_MOVE_EXACT::TransferDataFromWindow()
     m_rotation = m_rotate.GetDoubleValue();
     m_rotationAnchor = m_menuIDs[ m_anchorOptions->GetSelection() ];
 
-    if( ok )
-    {
-        // save the settings
-        m_options.polarCoords = m_polarCoords->GetValue();
-        m_options.entry1 = m_moveX.GetOriginalText();
-        m_options.entry2 = m_moveY.GetOriginalText();
-        m_options.entryRotation = m_rotate.GetOriginalText();
-        m_options.entryAnchorSelection = (size_t) std::max( m_anchorOptions->GetSelection(), 0 );
-        return true;
-    }
+    // save the settings
+    m_options.polarCoords = m_polarCoords->GetValue();
+    m_options.entry1 = m_xEntry->GetValue();
+    m_options.entry2 = m_yEntry->GetValue();
+    m_options.entryRotation = m_rotEntry->GetValue();
+    m_options.entryAnchorSelection = (size_t) std::max( m_anchorOptions->GetSelection(), 0 );
 
-    return false;
+    return ok;
 }
 
 
