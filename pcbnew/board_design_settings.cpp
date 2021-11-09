@@ -725,8 +725,8 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_DimensionArrowLength     = aOther.m_DimensionArrowLength;
     m_DimensionExtensionOffset = aOther.m_DimensionExtensionOffset;
 
-    m_AuxOrigin              = aOther.m_AuxOrigin;
-    m_GridOrigin             = aOther.m_GridOrigin;
+    m_auxOrigin              = aOther.m_auxOrigin;
+    m_gridOrigin             = aOther.m_gridOrigin;
     m_HasStackup             = aOther.m_HasStackup;
     m_UseHeightForLengthCalcs= aOther.m_UseHeightForLengthCalcs;
 

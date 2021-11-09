@@ -618,8 +618,10 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
 
     wxPoint movementVector( desired_x - bbbox.GetX(), desired_y - bbbox.GetY() );
     m_board->Move( movementVector );
-    m_board->GetDesignSettings().m_AuxOrigin += movementVector;
-    m_board->GetDesignSettings().m_GridOrigin += movementVector;
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    bds.SetAuxOrigin( bds.GetAuxOrigin() + movementVector );
+    bds.SetGridOrigin( bds.GetGridOrigin() + movementVector );
 
     m_board->SetModified();
 }
@@ -710,8 +712,8 @@ void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
         THROW_IO_ERROR( "Board6 stream is not fully parsed" );
     }
 
-    m_board->GetDesignSettings().m_AuxOrigin = elem.sheetpos;
-    m_board->GetDesignSettings().m_GridOrigin = elem.sheetpos;
+    m_board->GetDesignSettings().SetAuxOrigin( elem.sheetpos );
+    m_board->GetDesignSettings().SetGridOrigin( elem.sheetpos );
 
     // read layercount from stackup, because LAYERSETSCOUNT is not always correct?!
     size_t layercount = 0;

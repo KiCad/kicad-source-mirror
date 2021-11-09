@@ -345,7 +345,7 @@ void DIALOG_GENDRILL::UpdateDrillParams()
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
         m_DrillFileOffset = wxPoint( 0, 0 );
     else
-        m_DrillFileOffset = m_board->GetDesignSettings().m_AuxOrigin;
+        m_DrillFileOffset = m_board->GetDesignSettings().GetAuxOrigin();
 
     if( m_UnitDrillIsInch )
         m_Precision = precisionListForInches;

@@ -95,7 +95,7 @@ static int iu_to_d356(int iu, int clamp)
 /* Extract the D356 record from the footprints (pads) */
 static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecords )
 {
-    wxPoint origin = aPcb->GetDesignSettings().m_AuxOrigin;
+    wxPoint origin = aPcb->GetDesignSettings().GetAuxOrigin();
 
     for( FOOTPRINT* footprint : aPcb->Footprints() )
     {
@@ -168,7 +168,7 @@ static int via_access_code( BOARD *aPcb, int top_layer, int bottom_layer )
 /* Extract the D356 record from the vias */
 static void build_via_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecords )
 {
-    wxPoint origin = aPcb->GetDesignSettings().m_AuxOrigin;
+    wxPoint origin = aPcb->GetDesignSettings().GetAuxOrigin();
 
     // Enumerate all the track segments and keep the vias
     for( auto track : aPcb->Tracks() )

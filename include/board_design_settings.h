@@ -664,6 +664,12 @@ public:
 
     int GetLayerClass( PCB_LAYER_ID aLayer ) const;
 
+    void SetAuxOrigin( const wxPoint& aOrigin ) { m_auxOrigin = aOrigin; }
+    const wxPoint& GetAuxOrigin() { return m_auxOrigin; }
+
+    void SetGridOrigin( const wxPoint& aOrigin ) { m_gridOrigin = aOrigin; }
+    const wxPoint& GetGridOrigin() { return m_gridOrigin; }
+
 private:
     void initFromOther( const BOARD_DESIGN_SETTINGS& aOther );
 
@@ -749,9 +755,6 @@ public:
     int               m_DimensionExtensionOffset;
 
     // Miscellaneous
-    wxPoint    m_AuxOrigin;                 ///< origin for plot exports
-    wxPoint    m_GridOrigin;                ///< origin for grid offsets
-
     std::unique_ptr<PAD> m_Pad_Master; // A dummy pad to store all default parameters
                                        // when importing values or creating a new pad
 
@@ -764,6 +767,9 @@ public:
     bool       m_UseHeightForLengthCalcs;
 
 private:
+    wxPoint    m_auxOrigin;                 ///< origin for plot exports
+    wxPoint    m_gridOrigin;                ///< origin for grid offsets
+
     // Indices into the trackWidth, viaSizes and diffPairDimensions lists.
     // The 0 index is always the current netclass value(s)
     unsigned   m_trackWidthIndex;

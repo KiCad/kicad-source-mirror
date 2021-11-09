@@ -2087,7 +2087,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                 item->Rotate( (wxPoint) frame()->GetScreen()->m_LocalOrigin, rotation );
                 break;
             case ROTATE_AROUND_AUX_ORIGIN:
-                item->Rotate( board()->GetDesignSettings().m_AuxOrigin, rotation );
+                item->Rotate( board()->GetDesignSettings().GetAuxOrigin(), rotation );
                 break;
             }
 

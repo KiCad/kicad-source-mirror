@@ -1067,7 +1067,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
     else
     {
         if( aPlotOpts->GetUseAuxOrigin() )
-            offset = aBoard->GetDesignSettings().m_AuxOrigin;
+            offset = aBoard->GetDesignSettings().GetAuxOrigin();
     }
 
     aPlotter->SetPageSettings( *sheet_info );

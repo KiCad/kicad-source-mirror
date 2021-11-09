@@ -878,7 +878,7 @@ void LEGACY_PLUGIN::loadSETUP()
             BIU gx = biuParse( line + SZ( "AuxiliaryAxisOrg" ), &data );
             BIU gy = biuParse( data );
 
-            bds.m_AuxOrigin = wxPoint( gx, gy );
+            bds.SetAuxOrigin( wxPoint( gx, gy ) );
         }
         else if( TESTSUBSTR( "Layer[" ) )
         {
@@ -1071,7 +1071,7 @@ void LEGACY_PLUGIN::loadSETUP()
             BIU x = biuParse( line + SZ( "GridOrigin" ), &data );
             BIU y = biuParse( data );
 
-            bds.m_GridOrigin = wxPoint( x, y );
+            bds.SetGridOrigin( wxPoint( x, y ) );
         }
         else if( TESTLINE( "VisibleElements" ) )
         {

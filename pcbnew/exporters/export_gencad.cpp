@@ -268,7 +268,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     GetBoard()->ComputeBoundingBox();
 
     // Save the auxiliary origin for the rest of the footprint
-    wxPoint auxOrigin = m_pcb->GetDesignSettings().m_AuxOrigin;
+    wxPoint auxOrigin = m_pcb->GetDesignSettings().GetAuxOrigin();
     GencadOffsetX = optionsDialog.GetOption( USE_AUX_ORIGIN ) ? auxOrigin.x : 0;
     GencadOffsetY = optionsDialog.GetOption( USE_AUX_ORIGIN ) ? auxOrigin.y : 0;
 

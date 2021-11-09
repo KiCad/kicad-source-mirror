@@ -380,19 +380,19 @@ const wxSize PCB_BASE_FRAME::GetPageSizeIU() const
 
 const wxPoint& PCB_BASE_FRAME::GetGridOrigin() const
 {
-    return m_pcb->GetDesignSettings().m_GridOrigin;
+    return m_pcb->GetDesignSettings().GetGridOrigin();
 }
 
 
 void PCB_BASE_FRAME::SetGridOrigin( const wxPoint& aPoint )
 {
-    m_pcb->GetDesignSettings().m_GridOrigin = aPoint;
+    m_pcb->GetDesignSettings().SetGridOrigin( aPoint );
 }
 
 
 const wxPoint& PCB_BASE_FRAME::GetAuxOrigin() const
 {
-    return m_pcb->GetDesignSettings().m_AuxOrigin;
+    return m_pcb->GetDesignSettings().GetAuxOrigin();
 }
 
 

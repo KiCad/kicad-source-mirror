@@ -2047,7 +2047,7 @@ void PCB_PARSER::parseSetup()
         {
             int x = parseBoardUnits( "auxiliary origin X" );
             int y = parseBoardUnits( "auxiliary origin Y" );
-            designSettings.m_AuxOrigin = wxPoint( x, y );
+            designSettings.SetAuxOrigin( wxPoint( x, y ) );
 
             // Aux origin still stored in board for the moment
             //m_board->m_LegacyDesignSettingsLoaded = true;
@@ -2059,7 +2059,7 @@ void PCB_PARSER::parseSetup()
         {
             int x = parseBoardUnits( "grid origin X" );
             int y = parseBoardUnits( "grid origin Y" );
-            designSettings.m_GridOrigin = wxPoint( x, y );
+            designSettings.SetGridOrigin( wxPoint( x, y ) );
             // Grid origin still stored in board for the moment
             //m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();

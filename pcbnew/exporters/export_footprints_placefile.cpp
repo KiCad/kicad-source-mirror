@@ -95,7 +95,7 @@ PLACE_FILE_EXPORTER::PLACE_FILE_EXPORTER( BOARD* aBoard, bool aUnitsMM, bool aOn
     m_formatCSV = aFormatCSV;
 
     if( aUseAuxOrigin )
-        m_place_Offset = m_board->GetDesignSettings().m_AuxOrigin;
+        m_place_Offset = m_board->GetDesignSettings().GetAuxOrigin();
     else
         m_place_Offset = wxPoint( 0, 0 );
 }

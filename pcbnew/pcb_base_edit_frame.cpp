@@ -152,7 +152,7 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
     PCB_BASE_FRAME::SetBoard( aBoard );
 
-    GetCanvas()->GetGAL()->SetGridOrigin( VECTOR2D( aBoard->GetDesignSettings().m_GridOrigin ) );
+    GetCanvas()->GetGAL()->SetGridOrigin( VECTOR2D( aBoard->GetDesignSettings().GetGridOrigin() ) );
 
     if( new_board )
     {

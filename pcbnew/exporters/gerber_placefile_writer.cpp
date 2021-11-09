@@ -59,7 +59,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
     PCB_PLOT_PARAMS plotOpts = m_pcb->GetPlotOptions();
 
     if( plotOpts.GetUseAuxOrigin() )
-        m_offset = m_pcb->GetDesignSettings().m_AuxOrigin;
+        m_offset = m_pcb->GetDesignSettings().GetAuxOrigin();
 
     // Collect footprints on the right layer
     std::vector<FOOTPRINT*> fp_list;

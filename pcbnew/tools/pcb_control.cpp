@@ -88,7 +88,7 @@ void PCB_CONTROL::Reset( RESET_REASON aReason )
 
     if( aReason == MODEL_RELOAD || aReason == GAL_SWITCH )
     {
-        m_gridOrigin->SetPosition( board()->GetDesignSettings().m_GridOrigin );
+        m_gridOrigin->SetPosition( board()->GetDesignSettings().GetGridOrigin() );
         m_gridOrigin->SetColor( m_frame->GetGridColor() );
         getView()->Remove( m_gridOrigin.get() );
         getView()->Add( m_gridOrigin.get() );
@@ -500,7 +500,7 @@ int PCB_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 void PCB_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                    EDA_ITEM* originViewItem, const VECTOR2D& aPoint )
 {
-    aFrame->GetDesignSettings().m_GridOrigin = (wxPoint) aPoint;
+    aFrame->GetDesignSettings().SetGridOrigin( wxPoint( aPoint ) );
     aView->GetGAL()->SetGridOrigin( aPoint );
     originViewItem->SetPosition( (wxPoint) aPoint );
     aView->MarkDirty();
