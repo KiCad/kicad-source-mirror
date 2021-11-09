@@ -542,8 +542,8 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
 
     wxString     default_dir = m_frame->GetMruPath();
 
-    Prj().GetProjectFile().SaveToFile();
-    Prj().GetLocalSettings().SaveToFile();
+    Prj().GetProjectFile().SaveToFile( currentProjectDirPath );
+    Prj().GetLocalSettings().SaveToFile( currentProjectDirPath );
 
     if( default_dir == currentProjectDirPath
             || default_dir == currentProjectDirPath + wxFileName::GetPathSeparator() )
