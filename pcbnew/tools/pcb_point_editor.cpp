@@ -1631,10 +1631,8 @@ void PCB_POINT_EDITOR::updatePoints()
             }
             else if( target == 1 )
             {
-                VECTOR2I vec = m_editPoints->Point( 0 ).GetPosition() - shapePos;
-                vec.Resize( halfSize.x );
-
-                m_editPoints->Point( 0 ).SetPosition( vec + shapePos );
+                shapePos.x += halfSize.x;
+                m_editPoints->Point( 0 ).SetPosition( shapePos );
             }
         }
             break;
@@ -2188,12 +2186,12 @@ int PCB_POINT_EDITOR::changeEditMethod( const TOOL_EVENT& aEvent )
 void PCB_POINT_EDITOR::setTransitions()
 {
     Go( &PCB_POINT_EDITOR::OnSelectionChange, ACTIONS::activatePointEditor.MakeEvent() );
-    Go( &PCB_POINT_EDITOR::addCorner, PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
-    Go( &PCB_POINT_EDITOR::removeCorner, PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::addCorner,         PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::removeCorner,      PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
     Go( &PCB_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
     Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::SelectedEvent );
     Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::UnselectedEvent );
-    Go( &PCB_POINT_EDITOR::changeEditMethod, ACTIONS::changeEditMethod.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::changeEditMethod,  ACTIONS::changeEditMethod.MakeEvent() );
     Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::InhibitSelectionEditing );
     Go( &PCB_POINT_EDITOR::OnSelectionChange, EVENTS::UninhibitSelectionEditing );
 }
