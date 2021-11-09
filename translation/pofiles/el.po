@@ -2,15 +2,16 @@
 # fresh <fresh190@protonmail.com>, 2021.
 # Michalis <michalisntovas@yahoo.gr>, 2021.
 # Michael Misirlis <MMISIRLIS@gmail.com>, 2021.
+# Axel Henriksson <axe.henriksson@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-09-27 13:40+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"PO-Revision-Date: 2021-11-10 10:28+0000\n"
+"Last-Translator: Axel Henriksson <axe.henriksson@gmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22881,6 +22882,8 @@ msgstr "Διάκενο:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:188
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
+"Koppar-avstånd för denna zon (sätt till 0 för att använda nätklassens "
+"avstånd)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
