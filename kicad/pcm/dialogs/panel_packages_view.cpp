@@ -398,7 +398,7 @@ void PANEL_PACKAGES_VIEW::OnInstallVersionClicked( wxCommandEvent& event )
 {
     const auto rows = m_gridVersions->GetSelectedRows();
 
-    if( m_currentSelected && rows.size() != 1 )
+    if( !m_currentSelected || rows.size() != 1 )
     {
         wxBell();
         return;
