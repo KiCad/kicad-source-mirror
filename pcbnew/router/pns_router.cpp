@@ -705,15 +705,6 @@ void ROUTER::CommitRouting()
 }
 
 
-void ROUTER::AbortRouting()
-{
-    if( m_state == ROUTE_TRACK )
-        m_placer->AbortPlacement();
-
-    StopRouting();
-}
-
-
 void ROUTER::StopRouting()
 {
     // Update the ratsnest with new changes

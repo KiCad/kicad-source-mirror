@@ -1144,8 +1144,6 @@ void ROUTER_TOOL::performRouting()
     // Set initial cursor
     setCursor();
 
-    bool abortRouting = false;
-
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
@@ -1236,13 +1234,8 @@ void ROUTER_TOOL::performRouting()
                  || evt->IsUndoRedo()
                  || evt->IsAction( &PCB_ACTIONS::routerInlineDrag ) )
         {
-            if( evt->IsCancelInteractive() )
-            {
-                if( m_router->RoutingInProgress() )
-                    abortRouting = true;
-                else
-                    m_cancelled = true;
-            }
+            if( evt->IsCancelInteractive() && !m_router->RoutingInProgress() )
+                m_cancelled = true;
 
             if( evt->IsActivate() && !evt->IsMoveTool() )
                 m_cancelled = true;
@@ -1259,10 +1252,7 @@ void ROUTER_TOOL::performRouting()
         }
     }
 
-    if( abortRouting )
-        m_router->AbortRouting();
-    else
-        m_router->CommitRouting();
+    m_router->CommitRouting();
 
     finishInteractive();
 }

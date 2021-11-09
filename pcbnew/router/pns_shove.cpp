@@ -1838,6 +1838,18 @@ bool SHOVE::RewindSpringbackTo( NODE* aNode )
 }
 
 
+bool SHOVE::RewindToLastLockedNode()
+{
+    if( m_nodeStack.empty() )
+        return false;
+
+    while( !m_nodeStack.back().m_locked && m_nodeStack.size() > 1 )
+        m_nodeStack.pop_back();
+
+    return m_nodeStack.back().m_locked;
+}
+
+
 void SHOVE::UnlockSpringbackNode( NODE* aNode )
 {
     auto iter = m_nodeStack.begin();

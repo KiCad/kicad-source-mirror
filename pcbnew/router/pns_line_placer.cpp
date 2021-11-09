@@ -1468,6 +1468,13 @@ bool LINE_PLACER::HasPlacedAnything() const
 
 bool LINE_PLACER::CommitPlacement()
 {
+    if( Settings().Mode() == PNS::RM_Shove || Settings().Mode() == PNS::RM_Smart )
+    {
+        m_shove->RewindToLastLockedNode();
+        m_lastNode = m_shove->CurrentNode();
+        m_lastNode->KillChildren();
+    }
+
     if( m_lastNode )
         Router()->CommitRouting( m_lastNode );
 

@@ -88,6 +88,7 @@ public:
     bool AddLockedSpringbackNode( NODE* aNode );
     void UnlockSpringbackNode( NODE* aNode );
     bool RewindSpringbackTo( NODE* aNode );
+    bool RewindToLastLockedNode();
 
 private:
     typedef std::vector<SHAPE_LINE_CHAIN> HULL_SET;

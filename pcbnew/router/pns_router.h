@@ -148,7 +148,6 @@ public:
     void UndoLastSegment();
     void CommitRouting();
     void StopRouting();
-    void AbortRouting();
     void ClearViewDecorations();
 
     NODE* GetWorld() const { return m_world.get(); }
