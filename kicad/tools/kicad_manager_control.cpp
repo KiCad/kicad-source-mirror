@@ -392,11 +392,13 @@ public:
             else if( ext == ProjectFileExtension )
             {
                 PROJECT_FILE projectFile( aSrcFilePath );
+                projectFile.LoadFromFile();
                 projectFile.SaveAs( destFile.GetPath(), destFile.GetName() );
             }
             else if( ext == ProjectLocalSettingsFileExtension )
             {
                 PROJECT_LOCAL_SETTINGS projectLocalSettings( nullptr, aSrcFilePath );
+                projectLocalSettings.LoadFromFile();
                 projectLocalSettings.SaveAs( destFile.GetPath(), destFile.GetName() );
             }
         }
@@ -539,6 +541,9 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
     wxString     currentProjectName = Prj().GetProjectName();
 
     wxString     default_dir = m_frame->GetMruPath();
+
+    Prj().GetProjectFile().SaveToFile();
+    Prj().GetLocalSettings().SaveToFile();
 
     if( default_dir == currentProjectDirPath
             || default_dir == currentProjectDirPath + wxFileName::GetPathSeparator() )
