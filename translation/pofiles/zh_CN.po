@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-07 06:30+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-11-09 09:38+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2828,7 +2828,7 @@ msgstr "新主题名称："
 
 #: common/dialogs/panel_color_settings.cpp:131
 msgid "Add Color Theme"
-msgstr "添加颜色主题"
+msgstr "添加配色主题"
 
 #: common/dialogs/panel_color_settings.cpp:143
 msgid "Theme already exists!"
@@ -2876,7 +2876,7 @@ msgstr "打开主题文件夹"
 
 #: common/dialogs/panel_color_settings_base.cpp:42
 msgid "Open the folder containing color themes"
-msgstr "打开包含颜色主题的文件夹"
+msgstr "打开包含配色主题的文件夹"
 
 #: common/dialogs/panel_common_settings.cpp:84
 msgid "Icon scale:"
@@ -3004,7 +3004,7 @@ msgstr "使用专为深色窗户背景设计的图标"
 #: common/dialogs/panel_common_settings_base.cpp:137
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
-msgstr "根据系统颜色主题自动选择浅色或深色图标"
+msgstr "根据系统配色主题自动选择浅色或深色图标"
 
 #: common/dialogs/panel_common_settings_base.cpp:141
 msgid "Canvas scale:"
@@ -9760,11 +9760,11 @@ msgstr "如果输出格式支持，则绘制背景颜色"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:87
 msgid "Color theme:"
-msgstr "颜色主题："
+msgstr "配色主题："
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:94
 msgid "Select the color theme to use for plotting"
-msgstr "选择用于绘制的颜色主题"
+msgstr "选择用于绘制的配色主题"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:98
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:186
@@ -9843,7 +9843,7 @@ msgstr "打印背景色"
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:35
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:216
 msgid "Use a different color theme for printing:"
-msgstr "使用不同的颜色主题进行打印："
+msgstr "使用不同的配色主题进行打印："
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:103
 msgid ""
@@ -10195,7 +10195,7 @@ msgstr "无标题图框"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:359
 msgid "Note: item colors are overridden in the current color theme."
-msgstr "注意：项目颜色在当前颜色主题中被覆盖。"
+msgstr "注意：项目配色在当前配色主题中被覆盖。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:361
 #, c-format
@@ -11936,11 +11936,11 @@ msgstr "引脚与引脚连接"
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:22
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:18
 msgid "Color Theme"
-msgstr "颜色主题"
+msgstr "配色主题"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
 msgid "Use schematic editor color theme"
-msgstr "使用原理图编辑器颜色主题"
+msgstr "使用原理图编辑器配色主题"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:31
 msgid "Use theme:"
@@ -17720,7 +17720,7 @@ msgstr "-- 混合值 --"
 
 #: include/dialogs/panel_color_settings.h:50
 msgid "Reset all colors in this theme to the KiCad defaults"
-msgstr "将此主题中的所有颜色重置为 KiCad 默认值"
+msgstr "将此主题中的所有配色重置为 KiCad 默认值"
 
 #: include/filehistory.h:54
 msgid "Clear Recent Files"
@@ -17822,7 +17822,7 @@ msgstr "编辑用于原理图和 PCB 设计的图纸边框和工程图明细表"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "管理来自 KiCad 和第三方存储库的可下载包"
+msgstr "管理来自 KiCad 和第三方仓库的可下载插件包"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -18003,7 +18003,7 @@ msgstr "在文件资源管理器中打开工程目录"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:74
 msgid "Please enter fully qualified repository url"
-msgstr "请输入完全合格的存储库 url"
+msgstr "请输入合规的仓库 url"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:74
 msgid "Add repository"
@@ -18027,13 +18027,13 @@ msgstr "库 (%d)"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, c-format
 msgid "Color themes (%d)"
-msgstr "颜色主题 (%d)"
+msgstr "配色主题 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:315
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
 #, c-format
 msgid "Repository (%d)"
-msgstr "存储库 (%d)"
+msgstr "仓库 (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:72
 #: kicad/pcm/dialogs/panel_package.cpp:76
@@ -18270,7 +18270,7 @@ msgstr "下载过大。"
 
 #: kicad/pcm/pcm.cpp:228
 msgid "Fetching repository"
-msgstr "获取存储库中"
+msgstr "拉取仓库中"
 
 #: kicad/pcm/pcm.cpp:230
 msgid "Unable to load repository url"
@@ -18289,7 +18289,7 @@ msgstr ""
 
 #: kicad/pcm/pcm.cpp:268
 msgid "Fetching repository packages"
-msgstr "正获取存储库包"
+msgstr "正拉取仓库插件包"
 
 #: kicad/pcm/pcm.cpp:270
 msgid "Unable to load repository packages url."
@@ -18297,7 +18297,7 @@ msgstr "无法加载仓库包 url。"
 
 #: kicad/pcm/pcm.cpp:278
 msgid "Packages hash doesn't match. Repository may be corrupted."
-msgstr "包哈希不匹配。 存储库可能已损坏。"
+msgstr "插件包哈希不匹配。 插件包仓库可能已损坏。"
 
 #: kicad/pcm/pcm.cpp:294
 #, c-format
@@ -18313,7 +18313,7 @@ msgstr ""
 #: kicad/pcm/pcm.cpp:381
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
-msgstr "当前存储库的包缓存已损坏，将重新下载。"
+msgstr "当前仓库的插件包缓存已损坏，将重新下载插件包。"
 
 #: kicad/pcm/pcm.cpp:431
 msgid "Downloading resources"
@@ -18323,7 +18323,7 @@ msgstr "正在下载资源"
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
-msgstr "资源文件哈希不匹配，不会被使用。 存储库可能已损坏。"
+msgstr "资源文件哈希不匹配，将不会被使用。 插件包仓库可能已损坏。"
 
 #: kicad/pcm/pcm.cpp:590
 msgid "Local file"
@@ -18339,9 +18339,7 @@ msgid ""
 "Downloaded archive hash for package %s does not match repository entry. This "
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
-msgstr ""
-"包 %s 的已下载存档哈希与存储库条目不匹配。 这可能表明包有问题，如果问题仍然存"
-"在，请将此报告给存储库维护者。"
+msgstr "插件包 %s 的已下载存档哈希与仓库记录不匹配。 这可能表明插件包有问题，如果问题仍然存在，请将此报告给仓库维护者。"
 
 #: kicad/pcm/pcm_task_manager.cpp:101
 #, c-format
@@ -35752,7 +35750,7 @@ msgstr "打开偏好设置"
 msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
-msgstr "当前颜色主题为只读。在偏好设置中创建新主题以启用颜色编辑。"
+msgstr "当前配色主题为只读。在偏好设置中创建新主题以启用配色编辑。"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:45
 msgid "Objects"
