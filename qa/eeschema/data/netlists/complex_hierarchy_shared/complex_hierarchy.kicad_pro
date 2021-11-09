@@ -243,6 +243,7 @@
     ],
     "rule_severities": {
       "bus_definition_conflict": "error",
+      "bus_entry_needed": "error",
       "bus_label_syntax": "error",
       "bus_to_bus_conflict": "error",
       "bus_to_net_conflict": "error",
@@ -299,7 +300,7 @@
       }
     ],
     "meta": {
-      "version": 0
+      "version": 2
     },
     "net_colors": null
   },
@@ -316,6 +317,7 @@
     "page_layout_descr_file": ""
   },
   "schematic": {
+    "annotate_start_num": 0,
     "drawing": {
       "default_bus_thickness": 12.0,
       "default_junction_size": 40.0,
@@ -329,20 +331,24 @@
       "intersheets_ref_show": false,
       "intersheets_ref_suffix": "",
       "junction_size_choice": 3,
+      "label_size_ratio": 0.3,
       "pin_symbol_size": 25.0,
       "text_offset_ratio": 0.3
     },
     "legacy_lib_dir": "",
     "legacy_lib_list": [],
     "meta": {
-      "version": 0
+      "version": 1
     },
     "net_format_name": "Pcbnew",
     "ngspice": {
+      "fix_include_paths": true,
+      "fix_passive_vals": false,
       "meta": {
         "version": 0
       },
-      "model_mode": 0
+      "model_mode": 0,
+      "workbook_filename": ""
     },
     "page_layout_descr_file": "",
     "plot_directory": "",
@@ -357,20 +363,20 @@
       ""
     ],
     [
-      "c8464be4-ef62-4ac9-9520-fff745be87bf",
-      "ampli_ht_vertical"
+      "03a904b7-35ae-4638-b544-f09fd9dd68be",
+      "ampli_ht_vertical1"
     ],
     [
-      "c8464be4-ef62-4ac9-9520-fff745be87bf",
-      "Filter FC=1000Hz"
+      "94b7d84d-5cf0-4151-be0c-b212c78b99c5",
+      "Filter FC=1000Hz1"
     ],
     [
-      "00000000-0000-0000-0000-00004b3a13a4",
-      "ampli_ht_horizontal"
+      "949a2aff-c8ca-49f8-8dc4-2b01ede0661f",
+      "ampli_ht_horizontal1"
     ],
     [
-      "c8464be4-ef62-4ac9-9520-fff745be87bf",
-      "Filter FC=1000Hz"
+      "94b7d84d-5cf0-4151-be0c-b212c78b99c5",
+      "Filter FC=1000Hz1"
     ]
   ],
   "text_variables": {}
