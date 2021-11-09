@@ -59,6 +59,8 @@ public:
 
     bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
+    bool SaveAs( const wxString& aDirectory, const wxString& aFile );
+
     bool SaveToFile( const wxString& aDirectory = "", bool aForce = false ) override;
 
     void SetProject( PROJECT* aProject )

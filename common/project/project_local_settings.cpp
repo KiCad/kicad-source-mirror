@@ -341,6 +341,15 @@ bool PROJECT_LOCAL_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce
 }
 
 
+bool PROJECT_LOCAL_SETTINGS::SaveAs( const wxString& aDirectory, const wxString& aFile )
+{
+    Set( "meta.filename", aFile + "." + ProjectLocalSettingsFileExtension );
+    SetFilename( aFile );
+
+    return JSON_SETTINGS::SaveToFile( aDirectory, true );
+}
+
+
 const PROJECT_FILE_STATE* PROJECT_LOCAL_SETTINGS::GetFileState( const wxString& aFileName )
 {
     auto it = std::find_if( m_files.begin(), m_files.end(),

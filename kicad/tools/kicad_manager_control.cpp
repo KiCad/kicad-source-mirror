@@ -25,6 +25,7 @@
 #include <kicad_manager_frame.h>
 #include <confirm.h>
 #include <project/project_file.h>
+#include <project/project_local_settings.h>
 #include <settings/settings_manager.h>
 #include <tool/selection.h>
 #include <tool/tool_event.h>
@@ -363,7 +364,9 @@ public:
         wxString   ext = destFile.GetExt();
         bool       atRoot = destFile.GetPath() == m_projectDirPath;
 
-        if( ext == LegacyProjectFileExtension || ext == ProjectFileExtension )
+        if( ext == LegacyProjectFileExtension
+                || ext == ProjectFileExtension
+                || ext == ProjectLocalSettingsFileExtension )
         {
             wxString destPath = destFile.GetPath();
 
@@ -377,7 +380,7 @@ public:
             {
                 destFile.SetName( m_newProjectName );
 
-                if( atRoot )
+                if( atRoot && ext != ProjectLocalSettingsFileExtension )
                     m_newProjectFile = destFile;
             }
 
@@ -386,10 +389,15 @@ public:
                 // All paths in the settings file are relative so we can just do a straight copy
                 KiCopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
             }
-            else
+            else if( ext == ProjectFileExtension )
             {
                 PROJECT_FILE projectFile( aSrcFilePath );
                 projectFile.SaveAs( destFile.GetPath(), destFile.GetName() );
+            }
+            else if( ext == ProjectLocalSettingsFileExtension )
+            {
+                PROJECT_LOCAL_SETTINGS projectLocalSettings( nullptr, aSrcFilePath );
+                projectLocalSettings.SaveAs( destFile.GetPath(), destFile.GetName() );
             }
         }
         else if( ext == KiCadSchematicFileExtension
