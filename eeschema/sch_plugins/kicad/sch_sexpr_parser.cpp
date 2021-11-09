@@ -1928,17 +1928,6 @@ void SCH_SEXPR_PARSER::parseSchSheetInstances( SCH_SHEET* aRootSheet, SCH_SCREEN
             Expecting( "path" );
         }
     }
-
-    // We don't store the root sheet's KIID, so pick it up from any sheet instance paths so
-    // that it doesn't change on every round-trip.
-    for( const SCH_SHEET_INSTANCE& instance : aScreen->m_sheetInstances )
-    {
-        if( instance.m_Path.size() > 0 )
-        {
-            const_cast<KIID&>( aRootSheet->m_Uuid ) = instance.m_Path[0];
-            break;
-        }
-    }
 }
 
 
