@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-07 10:16+0000\n"
+"PO-Revision-Date: 2021-11-10 23:49+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -15483,9 +15483,9 @@ msgstr "Nenhum esquema está aberto."
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is not writable."
-msgstr "Não é possível gravar o símbolo da biblioteca '%s'."
+msgstr "O símbolo da biblioteca '%s' não tem permissão de escrita."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:576
 #: eeschema/symbol_editor/symbol_editor.cpp:1174
@@ -17327,17 +17327,14 @@ msgid "Zero format"
 msgstr "Formato zero"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
-#, fuzzy
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
 "Os números inteiros nos arquivos podem ter os seus zeros removidos.\n"
-"Nenhum formato de zeros à esquerda significa que os zeros à esquerda serão "
-"removidos\n"
-"Nenhum formato de zeros à direita significa que os zeros residuais serão "
-"removidos"
+"Nenhum formato de zeros à esquerda significa que eles serão removidos\n"
+"Nenhum formato de zeros à direita  significa que eles serão removidos"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "Coordinates Format"
@@ -18502,9 +18499,8 @@ msgid "Add repository"
 msgstr "Adicione um repositório"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-#, fuzzy
 msgid "Manage Repositories"
-msgstr "Gerencie os repositórios"
+msgstr "Gerir os repositórios"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
 #, c-format
@@ -18930,7 +18926,6 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr "Não foi possível abrir a pasta com meta informações para este modelo!"
 
 #: kicad/project_template.cpp:63
-#, fuzzy
 msgid "Couldn't find the meta HTML information file for this template!"
 msgstr ""
 "Não foi possível localizar o arquivo de informação meta HTML para este "
@@ -26356,10 +26351,8 @@ msgid "Plot Edge.Cuts on all layers"
 msgstr "Plota o Edge.Cuts em todas as camadas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
-#, fuzzy
 msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr ""
-"Não plote o conteúdo da camada da borda da PCI em nenhuma outra camada."
+msgstr "Plote o conteúdo da camada da borda da PCI em todas as camadas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Sketch pads on fabrication layers"
@@ -27172,10 +27165,9 @@ msgid "Constrain outline to H, V and 45 deg"
 msgstr "Restrinja o contorno em H, V e 45 graus"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:97
-#, fuzzy
 msgid "Draw the area using horizontal, vertical and 45 degree lines only"
 msgstr ""
-"Desenhe a área usando apenas linhas horizontais, verticais e de 45 graus"
+"Desenhe a área usando apenas linhas horizontais, linhas verticais e com 45º"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:67
 msgid "Rule Area Properties"
@@ -28256,9 +28248,8 @@ msgid "On-board, non-copper"
 msgstr "Na placa, sem cobre"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-#, fuzzy
 msgid "If you want a solder paste layer for front side of the board"
-msgstr "Caso queira uma camada com pasta de solta na parte da frente da placa"
+msgstr "Caso queira uma camada de pasta de solta para o lado da frente da placa"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
 msgid "SoldP_Front"
@@ -29504,9 +29495,9 @@ msgid "Unconditional rule applied."
 msgstr "Uma regra incondicional foi aplicada."
 
 #: pcbnew/drc/drc_engine.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition \"%s\"."
-msgstr "Verificando a condição da regra '%s'."
+msgstr "Verificando a condição da regra \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:1065
 msgid "Constraint applied."
@@ -32670,28 +32661,27 @@ msgstr ""
 "A hachura importada é uma hachurada cruzada."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3533
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
 "KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
-"O código da hachura CADSTAR '%s' tem diferentes larguras da linha para cada "
-"hachura. O KiCad suporta apenas uma largura para a hachura. A hachura que "
-"foi importada usa a largura definida na primeira definição da hachura, ou "
-"seja, %.2f mm."
+"O código da hachura CADSTAR '%s' tem diferentes larguras para cada hachura. "
+"O KiCad é compatível apenas com uma largura para a hachura. A hachura que "
+"foi importada usa a largura definida na primeira definição, ou seja, %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3545
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
 "KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
-"O código da hachura CADSTAR '%s' tem passos com diferentes tamanhos para "
-"cada hachura. O KiCad suporta apenas um tamanho de passo para a hachura. A "
-"hachura que foi importada usa o tamanho do passo definido na primeira "
-"definição da hachura, ou seja, %.2f mm."
+"O código da hachura CADSTAR '%s' possui etapas com diferentes tamanhos para "
+"cada hachura. O KiCad é compatível apenas um tamanho da etapa para a "
+"hachura. A hachura que foi importada usa o tamanho da etapa definido na "
+"primeira definição, ou seja, %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3558
 #, c-format
@@ -32707,13 +32697,13 @@ msgstr ""
 "outra orientadas em %.1f graus na horizontal."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3631
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimeters were applied instead."
 msgstr ""
 "A ID da dimensão %s usa um tipo de unidade que não é compatível com o KiCad. "
-"Em vez disso, a unidade de milímetro foi aplicada."
+"Em vez disso, a unidade em milímetro foi aplicada."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3922
 msgid ""
