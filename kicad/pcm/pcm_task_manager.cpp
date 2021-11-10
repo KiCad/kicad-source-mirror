@@ -333,7 +333,7 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
         return;
     }
 
-    m_reporter = new DIALOG_PCM_PROGRESS( aParent, false );
+    m_reporter = std::make_unique<DIALOG_PCM_PROGRESS>( aParent, false );
     m_reporter->Show();
 
     if( extract( aFilePath, package.identifier ) )
@@ -342,6 +342,7 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
     m_reporter->SetFinished();
     m_reporter->ShowModal();
     m_reporter->Destroy();
+    m_reporter.reset();
 }
 
 
@@ -390,7 +391,7 @@ void PCM_TASK_MANAGER::Uninstall( const PCM_PACKAGE& aPackage )
 
 void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
 {
-    m_reporter = new DIALOG_PCM_PROGRESS( aParent );
+    m_reporter = std::make_unique<DIALOG_PCM_PROGRESS>( aParent );
 
     m_reporter->SetOverallProgressPhases( m_download_queue.size() + m_install_queue.size() );
     m_reporter->Show();
@@ -460,6 +461,7 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
 
     m_reporter->ShowModal();
     m_reporter->Destroy();
+    m_reporter.reset();
 
     download_thread.join();
     install_thread.join();

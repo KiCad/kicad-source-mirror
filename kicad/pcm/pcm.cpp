@@ -140,13 +140,15 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
 
                     // wxFileModificationTime bugs out on windows for directories
                     wxStructStat stat;
-                    wxStat( subdir_file.GetFullPath(), &stat );
+                    int          stat_code = wxStat( subdir_file.GetFullPath(), &stat );
 
                     entry.package.name = subdir;
                     entry.package.identifier = actual_package_id;
                     entry.current_version = "0.0";
-                    entry.install_timestamp = stat.st_mtime;
                     entry.repository_name = wxT( "<unknown>" );
+
+                    if( stat_code == 0 )
+                        entry.install_timestamp = stat.st_mtime;
 
                     m_installed.emplace( actual_package_id, entry );
                 }
@@ -649,18 +651,25 @@ PLUGIN_CONTENT_MANAGER::~PLUGIN_CONTENT_MANAGER()
 {
     // Save current installed packages list.
 
-    nlohmann::json js;
-    js["packages"] = nlohmann::json::array();
-
-    for( const auto& entry : m_installed )
+    try
     {
-        js["packages"].emplace_back( entry.second );
+        nlohmann::json js;
+        js["packages"] = nlohmann::json::array();
+
+        for( const auto& entry : m_installed )
+        {
+            js["packages"].emplace_back( entry.second );
+        }
+
+        wxFileName    f( SETTINGS_MANAGER::GetUserSettingsPath(), "installed_packages.json" );
+        std::ofstream stream( f.GetFullPath().ToUTF8() );
+
+        stream << std::setw( 4 ) << js << std::endl;
     }
-
-    wxFileName    f( SETTINGS_MANAGER::GetUserSettingsPath(), "installed_packages.json" );
-    std::ofstream stream( f.GetFullPath().ToUTF8() );
-
-    stream << std::setw( 4 ) << js << std::endl;
+    catch( nlohmann::detail::exception& )
+    {
+        // Ignore
+    }
 }
 
 
@@ -717,8 +726,8 @@ int PLUGIN_CONTENT_MANAGER::GetPackageSearchRank( const PCM_PACKAGE& aPackage,
     rank += 500 * find_term_matches( aPackage.name );
 
     // Match on tags
-    for( const wxString& tag : aPackage.tags )
-        rank += 100 * find_term_matches( tag );
+    for( const std::string& tag : aPackage.tags )
+        rank += 100 * find_term_matches( wxString( tag ) );
 
     // Match on package description
     rank += 10 * find_term_matches( aPackage.description );

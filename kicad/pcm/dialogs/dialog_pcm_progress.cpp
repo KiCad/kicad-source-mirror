@@ -40,7 +40,7 @@ DIALOG_PCM_PROGRESS::DIALOG_PCM_PROGRESS( wxWindow* parent, bool aShowDownloadSe
     m_downloadGauge->SetRange( GAUGE_RANGE );
     m_overallGauge->SetRange( GAUGE_RANGE );
 
-    m_overallPhases = 1;
+    SetOverallProgressPhases( 1 );
 
     if( !aShowDownloadSection )
         m_panelDownload->Hide();

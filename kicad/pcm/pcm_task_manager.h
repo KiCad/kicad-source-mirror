@@ -129,7 +129,7 @@ private:
      */
     void deletePackageDirectories( const wxString& aPackageId );
 
-    DIALOG_PCM_PROGRESS*                    m_reporter;
+    std::unique_ptr<DIALOG_PCM_PROGRESS>    m_reporter;
     SYNC_QUEUE<PCM_TASK>                    m_download_queue;
     SYNC_QUEUE<PCM_TASK>                    m_install_queue;
     std::shared_ptr<PLUGIN_CONTENT_MANAGER> m_pcm;
