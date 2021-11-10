@@ -120,8 +120,6 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
 
     Bind( SYMBOL_PRESELECTED, &LIB_TREE::onPreselect, this );
 
-    // If wxTextCtrl::SetHint() is called before binding wxEVT_TEXT, the event
-    // handler will intermittently fire.
     if( m_query_ctrl )
     {
         m_query_ctrl->SetDescriptiveText( _( "Filter" ) );

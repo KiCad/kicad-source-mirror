@@ -70,7 +70,7 @@ public:
     void OnShowAllVersionsClicked( wxCommandEvent& event ) override;
 
     ///< Ranks packages for entered search term and rearranges/hides panels according to their rank
-    void OnSearchTextChanged( wxCommandEvent& event ) override;
+    void OnSearchTextChanged( wxCommandEvent& event );
 
 private:
     ///< Updates package listing according to search term

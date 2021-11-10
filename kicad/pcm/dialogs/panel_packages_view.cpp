@@ -49,7 +49,16 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
         PANEL_PACKAGES_VIEW_BASE( parent ),
         m_pcm( aPcm )
 {
-    m_searchBitmap->SetBitmap( KiBitmap( BITMAPS::find, 24 ) );
+#ifdef __WXGTK__
+    // wxSearchCtrl vertical height is not calculated correctly on some GTK setups
+    // See https://gitlab.com/kicad/code/kicad/-/issues/9019
+    m_searchCtrl->SetMinSize( wxSize( -1, GetTextExtent( wxT( "qb" ) ).y + 10 ) );
+#endif
+
+    m_searchCtrl->Bind( wxEVT_TEXT, &PANEL_PACKAGES_VIEW::OnSearchTextChanged, this );
+    m_searchCtrl->SetDescriptiveText( _( "Filter" ) );
+
+
     m_gridVersions->PushEventHandler( new GRID_TRICKS( m_gridVersions ) );
 
     for( int col = 0; col < m_gridVersions->GetNumberCols(); col++ )
@@ -59,11 +68,12 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
 
         // Set the minimal width to the column label size.
         m_gridVersions->SetColMinimalWidth( col, headingWidth );
-        m_gridVersions->SetColSize( col,
-                                    m_gridVersions->GetVisibleWidth( col, true, true, false ) );
+        m_gridVersions->SetColSize( col, m_gridVersions->GetVisibleWidth( col, true, true,
+                                                                          false ) );
     }
 
     m_infoText->SetBackgroundColour( wxStaticText::GetClassDefaultAttributes().colBg );
+    m_infoText->EnableVerticalScrollbar( false );
 
     // Try to disable the caret on platforms that show it even in read-only controls
     m_infoText->Bind( wxEVT_SET_FOCUS,
@@ -138,6 +148,11 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
     // Details
     m_infoText->Clear();
 
+    m_infoText->BeginBold();
+    m_infoText->WriteText( package.name );
+    m_infoText->EndBold();
+    m_infoText->Newline();
+
     m_infoText->BeginParagraphSpacing( 0, 30 );
     m_infoText->WriteText( package.description_full );
     m_infoText->Newline();
@@ -150,15 +165,15 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
 
     m_infoText->BeginParagraphSpacing( 0, 10 );
     m_infoText->BeginSymbolBullet( wxString::FromUTF8( u8"\u25CF" ), 30, 40 );
-    m_infoText->WriteText(
-            wxString::Format( _( "Package identifier: %s\n" ), package.identifier ) );
+    m_infoText->WriteText( wxString::Format( _( "Package identifier: %s\n" ),
+                                             package.identifier ) );
     m_infoText->WriteText( wxString::Format( _( "License: %s\n" ), package.license ) );
 
     if( package.tags.size() > 0 )
     {
         wxString tags_str;
 
-        for( const wxString& tag : package.tags )
+        for( const std::string& tag : package.tags )
         {
             if( !tags_str.IsEmpty() )
                 tags_str += ", ";
@@ -193,16 +208,22 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
 
         m_infoText->BeginLeftIndent( 60, 40 );
 
-        for( const auto& entry : package.resources )
-        {
+        for( const std::pair<const std::string, wxString>& entry : package.resources )
             m_infoText->WriteText( wxString::Format( "%s: %s\n", entry.first, entry.second ) );
-        }
 
         m_infoText->EndLeftIndent();
     }
 
     m_infoText->EndSymbolBullet();
     m_infoText->EndParagraphSpacing();
+
+    m_infoText->LayoutContent();
+
+    wxSize minSize = m_infoText->GetSize();
+    minSize.y = m_infoText->GetBuffer().GetCachedSize().y + m_infoText->GetBuffer().GetTopMargin();
+    minSize.y *= m_infoText->GetScale();
+    m_infoText->SetMinSize( minSize );
+    m_infoText->SetSize( minSize );
 
     // Versions table
     m_gridVersions->Freeze();
@@ -258,13 +279,24 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
         m_buttonInstall->Enable();
     else
         m_buttonInstall->Disable();
+
+    m_sizerVersions->Show( true );
+    m_sizerVersions->Layout();
+
+    wxSize size = m_scrolledWindow5->GetTargetWindow()->GetBestVirtualSize();
+    m_scrolledWindow5->SetVirtualSize( size );
 }
 
 
 void PANEL_PACKAGES_VIEW::unsetPackageDetails()
 {
-    m_infoText->ChangeValue( _( "Pick a package on the left panel to view its description." ) );
+    m_infoText->ChangeValue( wxEmptyString );
+    m_sizerVersions->Show( false );
 
+    wxSize size = m_scrolledWindow5->GetTargetWindow()->GetBestVirtualSize();
+    m_scrolledWindow5->SetVirtualSize( size );
+
+    // Clean up grid just so we don't keep stale info around (it's already been hidden).
     m_gridVersions->Freeze();
 
     if( m_gridVersions->GetNumberRows() > 0 )
