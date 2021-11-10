@@ -1413,6 +1413,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     }
     else
     {
+        m_shove->AddLockedSpringbackNode( m_lastNode );
         m_placementCorrect = true;
         m_idle = true;
     }
