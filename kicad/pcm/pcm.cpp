@@ -810,10 +810,13 @@ std::unordered_map<wxString, wxBitmap> PLUGIN_CONTENT_MANAGER::GetInstalledPacka
 
         if( icon.FileExists() )
         {
+            wxString actual_package_id = subdir;
+            actual_package_id.Replace( '_', '.' );
+
             try
             {
                 wxBitmap bitmap( icon.GetFullPath(), wxBITMAP_TYPE_PNG );
-                bitmaps.emplace( subdir, bitmap );
+                bitmaps.emplace( actual_package_id, bitmap );
             }
             catch( ... )
             {
