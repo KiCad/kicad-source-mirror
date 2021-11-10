@@ -23,8 +23,6 @@
 #include "kicad_curl/kicad_curl_easy.h"
 
 #include "pcm_task_manager.h"
-#include "paths.h"
-#include "picosha2.h"
 #include "reporter.h"
 #include "wxstream_helper.h"
 
@@ -33,7 +31,6 @@
 #include <unordered_set>
 #include <wx/dir.h>
 #include <wx/filename.h>
-#include <wx/fs_zip.h>
 #include <wx/msgdlg.h>
 #include <wx/sstream.h>
 #include <wx/wfstream.h>
@@ -87,14 +84,13 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
 
                 if( !hash_match )
                 {
-                    m_reporter->Report(
-                            wxString::Format(
-                                    _( "Downloaded archive hash for package %s does not match "
-                                       "repository entry. This may indicate a problem with the "
-                                       "package, if the issue persists report this to repository "
-                                       "maintainers." ),
-                                    aPackage.identifier ),
-                            RPT_SEVERITY_ERROR );
+                    m_reporter->Report( wxString::Format( _( "Downloaded archive hash for package "
+                                                             "%s does not match repository entry. "
+                                                             "This may indicate a problem with the "
+                                                             "package, if the issue persists "
+                                                             "report this to repository maintainers." ),
+                                                          aPackage.identifier ),
+                                        RPT_SEVERITY_ERROR );
                 }
                 else
                 {
@@ -136,13 +132,10 @@ int PCM_TASK_MANAGER::downloadFile( const wxString& aFilePath, const wxString& u
     TRANSFER_CALLBACK callback = [&]( size_t dltotal, size_t dlnow, size_t ultotal, size_t ulnow )
     {
         if( dltotal > 1024 )
-        {
             m_reporter->SetDownloadProgress( dlnow, dltotal );
-        }
         else
-        {
             m_reporter->SetDownloadProgress( 0.0, 0.0 );
-        }
+
         return m_reporter->IsCancelled();
     };
 
@@ -340,7 +333,7 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
         m_pcm->MarkInstalled( package, package.versions[0].version, "" );
 
     m_reporter->SetFinished();
-    m_reporter->ShowModal();
+    m_reporter->KeepRefreshing( true );
     m_reporter->Destroy();
     m_reporter.reset();
 }
@@ -393,8 +386,10 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
 {
     m_reporter = std::make_unique<DIALOG_PCM_PROGRESS>( aParent );
 
-    m_reporter->SetOverallProgressPhases( m_download_queue.size() + m_install_queue.size() );
+    m_reporter->SetNumPhases( m_download_queue.size() + m_install_queue.size() );
     m_reporter->Show();
+
+    wxSafeYield();
 
     std::mutex              mutex;
     std::condition_variable condvar;
@@ -410,8 +405,6 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
                     task();
                     condvar.notify_all();
                 }
-
-                m_reporter->SetDownloadsFinished();
 
                 std::unique_lock<std::mutex> lock( mutex );
                 download_complete = true;
@@ -439,7 +432,7 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
                         PCM_TASK task;
                         m_install_queue.pop( task );
                         task();
-                        m_reporter->AdvanceOverallProgressPhase();
+                        m_reporter->AdvancePhase();
                     }
 
                     lock.lock();
@@ -447,19 +440,12 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
                 } while( ( !m_install_queue.empty() || !download_complete )
                          && !m_reporter->IsCancelled() );
 
-                if( m_reporter->IsCancelled() )
-                {
-                    m_reporter->SetOverallProgressPhases( 1 );
-                    m_reporter->SetOverallProgress( 1, 1 );
-                    m_reporter->Report( _( "Aborting remaining tasks." ) );
-                }
-
                 m_reporter->Report( _( "Done." ) );
 
                 m_reporter->SetFinished();
             } );
 
-    m_reporter->ShowModal();
+    m_reporter->KeepRefreshing( true );
     m_reporter->Destroy();
     m_reporter.reset();
 

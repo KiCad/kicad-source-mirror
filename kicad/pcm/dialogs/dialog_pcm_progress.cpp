@@ -25,7 +25,9 @@
 #define GAUGE_RANGE 1000
 
 DIALOG_PCM_PROGRESS::DIALOG_PCM_PROGRESS( wxWindow* parent, bool aShowDownloadSection ) :
-        DIALOG_PCM_PROGRESS_BASE( parent )
+        DIALOG_PCM_PROGRESS_BASE( parent ),
+        PROGRESS_REPORTER_BASE( 1 ),
+        m_finished( false )
 #if wxCHECK_VERSION( 3, 1, 0 )
         ,
         m_appProgressIndicator( parent->GetParent(), GAUGE_RANGE )
@@ -34,13 +36,10 @@ DIALOG_PCM_PROGRESS::DIALOG_PCM_PROGRESS( wxWindow* parent, bool aShowDownloadSe
 #if wxCHECK_VERSION( 3, 1, 0 )
     m_appProgressIndicator.Pulse();
 #endif
-    m_cancelled.store( false );
 
     m_reporter->SetImmediateMode();
     m_downloadGauge->SetRange( GAUGE_RANGE );
     m_overallGauge->SetRange( GAUGE_RANGE );
-
-    SetOverallProgressPhases( 1 );
 
     if( !aShowDownloadSection )
         m_panelDownload->Hide();
@@ -49,45 +48,32 @@ DIALOG_PCM_PROGRESS::DIALOG_PCM_PROGRESS( wxWindow* parent, bool aShowDownloadSe
 
 void DIALOG_PCM_PROGRESS::OnCancelClicked( wxCommandEvent& event )
 {
+    SetNumPhases( 1 );
+    SetOverallProgress( 1, 1 );
+    Report( _( "Aborting remaining tasks." ) );
+
     m_cancelled.store( true );
-    m_buttonCancel->Disable();
+    m_finished.store( true );
 }
 
 
 void DIALOG_PCM_PROGRESS::OnCloseClicked( wxCommandEvent& event )
 {
-    EndModal( wxID_OK );
+    m_progress.store( m_maxProgress );
 }
 
 
 void DIALOG_PCM_PROGRESS::Report( const wxString& aText, SEVERITY aSeverity )
 {
-    CallAfter(
-            [=]
-            {
-                m_reporter->Report( aText, aSeverity );
-            } );
+    std::lock_guard<std::mutex> guard( m_mutex );
+    m_reports.push_back( std::make_pair( aText, aSeverity ) );
 }
 
 
 void DIALOG_PCM_PROGRESS::SetDownloadProgress( uint64_t aDownloaded, uint64_t aTotal )
 {
-    if( aDownloaded > aTotal )
-        aDownloaded = aTotal;
-
-    int value = 0;
-
-    if( aTotal > 0 )
-        value = aDownloaded * GAUGE_RANGE / aTotal;
-
-    CallAfter(
-            [=]
-            {
-                m_downloadText->SetLabel( wxString::Format( _( "Downloaded %lld/%lld Kb" ),
-                                                            toKb( aDownloaded ), toKb( aTotal ) ) );
-
-                m_downloadGauge->SetValue( value );
-            } );
+    m_downloaded.store( std::min( aDownloaded, aTotal ) );
+    m_downloadTotal.store( aTotal );
 }
 
 
@@ -99,59 +85,69 @@ uint64_t DIALOG_PCM_PROGRESS::toKb( uint64_t aValue )
 
 void DIALOG_PCM_PROGRESS::SetOverallProgress( uint64_t aProgress, uint64_t aTotal )
 {
-    double current = ( m_currentPhase + aProgress / (double) aTotal ) / m_overallPhases;
-
-    if( current > 1.0 )
-        current = 1.0;
-
-    int value = current * GAUGE_RANGE;
-
-    CallAfter(
-            [=]
-            {
-                m_overallGauge->SetValue( value );
-#if wxCHECK_VERSION( 3, 1, 0 )
-                m_appProgressIndicator.SetValue( value );
-#endif
-            } );
-}
-
-
-void DIALOG_PCM_PROGRESS::SetOverallProgressPhases( int aPhases )
-{
-    m_currentPhase = 0;
-    m_overallPhases = aPhases;
-}
-
-
-void DIALOG_PCM_PROGRESS::AdvanceOverallProgressPhase()
-{
-    m_currentPhase++;
-    SetOverallProgress( 0, 1 );
+    m_overallProgress.store( std::min( aProgress, aTotal ) );
+    m_overallProgressTotal.store( aTotal );
 }
 
 
 void DIALOG_PCM_PROGRESS::SetFinished()
 {
-    CallAfter(
-            [this]
-            {
-                m_buttonCancel->Disable();
-                m_buttonClose->Enable();
-            } );
+    m_finished.store( true );
 }
 
 
-void DIALOG_PCM_PROGRESS::SetDownloadsFinished()
+bool DIALOG_PCM_PROGRESS::updateUI()
 {
-    CallAfter(
-            [this]
-            {
-                m_downloadText->SetLabel( _( "All downloads finished" ) );
-            } );
+    int    phase = m_phase.load();
+    int    phases = m_numPhases.load();
+    double current = m_overallProgress.load() / (double) m_overallProgressTotal.load();
+
+    if( phases > 0 )
+        current = ( phase + current ) / phases;
+
+    if( current > 1.0 )
+        current = 1.0;
+
+    m_overallGauge->SetValue( current * GAUGE_RANGE );
+#if wxCHECK_VERSION( 3, 1, 0 )
+    m_appProgressIndicator.SetValue( current * GAUGE_RANGE );
+#endif
+
+    if( m_downloadTotal.load() == 0 )
+    {
+        m_downloadText->SetLabel( wxEmptyString );
+        m_downloadGauge->SetValue( 0 );
+    }
+    else
+    {
+        m_downloadText->SetLabel( wxString::Format( _( "Downloaded %lld/%lld Kb" ),
+                                                    toKb( m_downloaded ),
+                                                    toKb( m_downloadTotal ) ) );
+
+        current = m_downloaded.load() / (double) m_downloadTotal.load();
+
+        if( current > 1.0 )
+            current = 1.0;
+
+        m_downloadGauge->SetValue( current * GAUGE_RANGE );
+    }
+
+    std::lock_guard<std::mutex> guard( m_mutex );
+
+    for( const std::pair<wxString, SEVERITY>& pair : m_reports )
+        m_reporter->Report( pair.first, pair.second );
+
+    m_reports.clear();
+
+    if( m_finished.load() )
+    {
+        m_buttonCancel->Disable();
+        m_buttonClose->Enable();
+    }
+
+    wxYield();
+
+    return true;
 }
 
-bool DIALOG_PCM_PROGRESS::IsCancelled()
-{
-    return m_cancelled.load();
-}
+
