@@ -62,7 +62,8 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
         m_3rdparty_path = PATHS::GetDefault3rdPartyPath();
 
     // Read and store pcm schema
-    wxFileName schema_file( PATHS::GetStockDataPath(), "pcm.v1.schema.json" );
+    wxFileName schema_file( PATHS::GetStockDataPath( true ), "pcm.v1.schema.json" );
+    schema_file.Normalize();
     schema_file.AppendDir( "schemas" );
 
     std::ifstream  schema_stream( schema_file.GetFullPath().ToUTF8() );
