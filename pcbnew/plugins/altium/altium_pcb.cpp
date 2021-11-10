@@ -1428,16 +1428,19 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
         }
     }
 
-    int idx = 0;
+    int      idx = 0;
+    wxString invalidChars = wxFileName::GetForbiddenChars();
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
         checkpoint();
         AMODEL elem( reader );
 
-        wxString   stepPath = wxString::Format( aRootDir + "%d", idx );
-        wxString   storageName = elem.name.IsEmpty() ? wxString::Format( "%d", idx ) : elem.name;
-        wxFileName storagePath( altiumModelsPath.GetPath(), storageName );
+        wxString       stepPath = wxString::Format( aRootDir + "%d", idx );
+        bool           validName = !elem.name.IsEmpty() && elem.name.IsAscii() &&
+                                   wxString::npos == elem.name.find_first_of( invalidChars );
+        wxString       storageName = !validName ? wxString::Format( "model_%d", idx ) : elem.name;
+        wxFileName     storagePath( altiumModelsPath.GetPath(), storageName );
 
         idx++;
 
@@ -1469,7 +1472,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
         outputStream.Write( zlibInputStream );
         outputStream.Close();
 
-        m_models.insert( { elem.id, kicadModelPrefix + elem.name } );
+        m_models.insert( { elem.id, kicadModelPrefix + storageName } );
     }
 
     if( reader.GetRemainingBytes() != 0 )
