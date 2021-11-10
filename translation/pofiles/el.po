@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-10 11:38+0000\n"
+"PO-Revision-Date: 2021-11-10 23:49+0000\n"
 "Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -83,9 +83,9 @@ msgid "Simplifying polygons on B_Cu"
 msgstr "Απλοποίηση πολυγώνων σε επίπεδα χαλκού"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:802
-#, fuzzy, c-format
+#, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Απλοποίηση πολυγώνων σε επίπεδα χαλκού"
+msgstr "Απλοποίηση %d επιπέδων χαλκού"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:841
 msgid "Simplify holes contours"
@@ -96,9 +96,9 @@ msgid "Build Tech layers"
 msgstr "Κατασκευή Τεχνικών επιπέδων"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:904
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "Κατασκευή Τεχνικών επιπέδων"
+msgstr "Κατασκευή Τεχνικού Επιπέδου %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1049
 msgid "Build BVH for holes and vias"
@@ -137,9 +137,9 @@ msgid "Load OpenGL: layers"
 msgstr "Φόρτωση OpenGL: επίπεδα"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Φόρτωση OpenGL: επίπεδα"
+msgstr "Φόρτωση OpenGL επιπέδου %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:648
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:790
@@ -303,14 +303,12 @@ msgid "General"
 msgstr "Γενικά"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
-#, fuzzy
 msgid "Realtime Renderer"
-msgstr "Εμφάνιση στον Finder"
+msgstr "Απόδοση σε Πραγματικό Χρόνο"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "Επιλογές Απόδοσης Raytracing"
+msgstr "Απόδοση Raytracing"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:240
@@ -328,9 +326,7 @@ msgstr "Όνομα Αρχείου Εικόνας 3Δ"
 #: pcbnew/plugins/altium/altium_pcb.cpp:1453
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
-"Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση αρχείου\n"
-"%s"
+msgstr "Ανεπαρκή δικαιώματα για αποθήκευση του αρχείου '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:682 common/confirm.cpp:130
 #: common/confirm.cpp:296 common/dialogs/panel_setup_severities.cpp:43
@@ -497,19 +493,16 @@ msgid "Toggle Through Hole 3D models"
 msgstr "Εναλλαγή Προβολής 3Δ μοντέλων για διαμπερείς οπές"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
-#, fuzzy
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "Εναλλαγή Προβολής 3Δ μοντέλων με xαρακτηριστικό 'Δια Μέσου Οπής'"
+msgstr "Εναλλαγή τρισδιάστατων μοντέλων για εξαρτήματα τύπου 'Through hole'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle SMD 3D models"
 msgstr "Εναλλαγή 3Δ μοντέλων για SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
-#, fuzzy
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr ""
-"Εναλλαγή Προβολής 3Δ μοντέλων με xαρακτηριστικό 'Επιφανειακής στήριξης'"
+msgstr "Εναλλαγή 3Δ μοντέλων εξαρτήματα 'Surface mount'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle Other 3D models"
@@ -610,33 +603,28 @@ msgid "Environment Colors"
 msgstr "Χρώματα Περιβάλλοντος"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "Έναρξη πίσω αναφοράς:"
+msgstr "Έναρξη βαθμίδας φόντου:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:37
-#, fuzzy
 msgid "Background gradient end:"
-msgstr "Λευκό Φόντο"
+msgstr "Λήξη βαθμίδας φόντου:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:50
 msgid "Solder paste:"
 msgstr "Πάστα συγκόλλησης:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "Χρώμα Σώματος Πλακέτας"
+msgstr "Χρώματα Πλακέτας"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:66
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "περιορισμοί διάταξης πλακέτας"
+msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "Χρώματα Net:"
+msgstr "Χρήση χρωμάτων:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
@@ -699,7 +687,6 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "Στρώματα χρηστών (δεν εμφανίζονται σε ρεαλιστική λειτουργία)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
 msgstr "Εμφάνιση επιπέδων σχολίων και σχεδίων"
 
@@ -754,9 +741,8 @@ msgid "Camera Options"
 msgstr "Επιλογές Κάμερας"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
-msgstr "Επανάληψη Προσαύξησης Θέσης:"
+msgstr "Αύξηση περιστροφής:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:123
 #: common/base_units.cpp:477 pcb_calculator/widgets/unit_selector.cpp:130
@@ -1528,9 +1514,8 @@ msgid "Warning"
 msgstr "Προειδοποίηση"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
-#, fuzzy
 msgid "File Open Error"
-msgstr "Σφάλμα Αποθήκευσης Αρχείου"
+msgstr "Σφάλμα Ανοίγματος Αρχείου"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
@@ -1543,9 +1528,8 @@ msgid "OK"
 msgstr "Εντάξει"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169
-#, fuzzy
 msgid "Open Anyway"
-msgstr "Αποθήκευση ούτως ή άλλως"
+msgstr "Άνοιγμα ούτως ή άλλως"
 
 #: common/confirm.cpp:180 common/confirm.cpp:217
 msgid "Save Changes?"
@@ -1911,9 +1895,9 @@ msgstr ""
 "από το σύστημά σας."
 
 #: common/dialogs/dialog_configure_paths.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "The name %s is reserved, and cannot be used."
-msgstr "Το όνομα %s είναι δεσμευμένο και δεν μπορεί να χρησιμοποιηθεί εδώ"
+msgstr "Το όνομα %s είναι δεσμευμένο και δεν μπορεί να χρησιμοποιηθεί ."
 
 #: common/dialogs/dialog_configure_paths.cpp:517
 msgid "File Browser..."
@@ -2696,9 +2680,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_paste_special.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Αλλαγή προσδιορισμού αναφοράς '%s' σε '%s'."
+msgstr "Αλλαγή προσδιορισμού αναφοράς σε '%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
@@ -3643,10 +3627,10 @@ msgid "Default"
 msgstr "Προεπιλογή"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:84
-#, fuzzy
 msgid "Set color to transparent to use KiCad default color."
 msgstr ""
-"Ορισμός όλων των χρωμάτων του θέματος στις προκαθορισμένες τιμές του KiCad"
+"Ορίστε το χρώμα σε διαφανές για να χρησιμοποιήσετε το προεπιλεγμένο χρώμα "
+"του KiCad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
 msgid "Filter Nets"
@@ -3990,12 +3974,10 @@ msgstr "Συντομεύσεις"
 #: common/eda_base_frame.cpp:1046
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr ""
-"Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση αρχείου\n"
-"%s"
+msgstr "Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση αρχείου %s."
 
 #: common/eda_base_frame.cpp:1086
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
@@ -4005,7 +3987,7 @@ msgid ""
 msgstr ""
 "Αυτό δεν θα έπρεπε να έχει συμβεί!\n"
 "Φαίνεται ότι την τελευταία φορά που επεξεργαστήκατε το αρχείο\n"
-"\"%s\"\n"
+"%s\n"
 "δεν αποθηκεύτηκε σωστά. Θέλετε να επαναφέρετε τις τελευταίες αποθηκευμένες "
 "αλλαγές που κάνατε;"
 
@@ -4016,19 +3998,18 @@ msgstr ""
 "του αρχείου πλακέτας."
 
 #: common/eda_doc.cpp:135
-#, fuzzy
 msgid "Documentation File"
-msgstr "Όνομα Αρχείου Τεκμηρίωσης"
+msgstr "Αρχείο Τεκμηρίωσης"
 
 #: common/eda_doc.cpp:145
-#, fuzzy, c-format
+#, c-format
 msgid "Documentation file '%s' not found."
-msgstr "Δεν βρέθηκε το σχηματικό αρχείο \"%s\"."
+msgstr "Δεν βρέθηκε το αρχείο τεκμηρίωσης '%s'."
 
 #: common/eda_doc.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown MIME type for documentation file '%s'"
-msgstr "Άγνωστος τύπος MIME για το αρχείο τεκμηρίωσης \"%s\""
+msgstr "Άγνωστος τύπος MIME για το αρχείο τεκμηρίωσης '%s'"
 
 #: common/eda_draw_frame.cpp:142 common/tool/actions.cpp:486
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:27
@@ -4044,9 +4025,8 @@ msgstr "Ίντσες"
 
 #: common/eda_draw_frame.cpp:148 pagelayout_editor/pl_editor_frame.cpp:163
 #: pcbnew/tools/drawing_tool.cpp:266 pcbnew/tools/pcb_actions.cpp:675
-#, fuzzy
 msgid "Constrain to H, V, 45"
-msgstr "Περιορισμός περιγράμματος σε Οριζόντιο, Κάθετο και 45 μοίρες"
+msgstr "Περιορισμός σε Οριζ, Κάθ, 45 μοίρες"
 
 #: common/eda_draw_frame.cpp:318
 msgid "Edit User Grid..."
@@ -4132,7 +4112,6 @@ msgid "Pad"
 msgstr "Έδρα"
 
 #: common/eda_item.cpp:317 common/eda_item.cpp:320 common/eda_item.cpp:361
-#, fuzzy
 msgid "Graphic"
 msgstr "Γραφικά"
 
@@ -4168,14 +4147,12 @@ msgid "Target"
 msgstr "Στόχος"
 
 #: common/eda_item.cpp:331
-#, fuzzy
 msgid "ItemList"
 msgstr "Λίστα Αντικειμένων"
 
 #: common/eda_item.cpp:332
-#, fuzzy
 msgid "NetInfo"
-msgstr "Πληροφορίες Net"
+msgstr "Πληροφορίες Δικτύου"
 
 #: common/eda_item.cpp:333 pcbnew/pcb_group.cpp:335
 #: pcbnew/tools/pcb_actions.cpp:691
@@ -4371,14 +4348,12 @@ msgid "Bezier"
 msgstr "Μπεζιέ"
 
 #: common/eda_shape.cpp:1604
-#, fuzzy
 msgid "Start X"
-msgstr "Σημείο Έναρξης Χ:"
+msgstr "Έναρξη Χ"
 
 #: common/eda_shape.cpp:1606
-#, fuzzy
 msgid "Start Y"
-msgstr "Σημείο Έναρξης Ψ:"
+msgstr "Έναρξη Ψ"
 
 #: common/eda_shape.cpp:1608 pcbnew/pcb_shape.cpp:264 pcbnew/pcb_track.cpp:1159
 #: pcbnew/pcb_track.cpp:1176
@@ -4639,27 +4614,22 @@ msgid "from %s : %s() line:%d"
 msgstr "από %s : %s() γραμμή:%d"
 
 #: common/exceptions.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"Το KiCad δεν ήταν σε θέση να ανοίξει αυτό το αρχείο, \n"
-"καθώς δημιουργήθηκε με μια πιο πρόσφατη έκδοση από αυτήν που τρέχει. \n"
-"Για να το ανοίξετε, θα χρειαστεί να αναβαθμίσετε το KiCad σε μια πιο "
-"πρόσφατη έκδοση.\n"
+"Το KiCad δεν ήταν σε θέση να ανοίξει αυτό το αρχείο, καθώς δημιουργήθηκε με "
+"μια πιο πρόσφατη έκδοση από αυτήν που τρέχει. \n"
 "\n"
-"Ημερομηνία απαιτούμενης έκδοσης KiCad (ή νεώτερη): %s\n"
-"\n"
-"Πλήρες κείμενο σφάλματος:\n"
-"%s"
+"Για να το ανοίξετε, θα χρειαστεί να αναβαθμίσετε το KiCad σε έκδοση %s ή "
+"μεταγενέστερη."
 
 #: common/exceptions.cpp:126
-#, fuzzy
 msgid "Full error text:"
-msgstr "Καθρέφτισμα κειμένου"
+msgstr "Πλήρες κείμενο λάθους:"
 
 #: common/filehistory.cpp:155
 msgid "No Files"
@@ -4750,11 +4720,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "Αδυναμία εύρεσης προγράμματος προβολής PDF για \"%s\""
 
 #: common/gestfich.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"Πρόβλημα κατά την εκτέλεση του προγράμματος προβολής PDF\n"
-"Η εντολή είναι \"%s\""
+msgstr "Πρόβλημα κατά την εκτέλεση του προγράμματος προβολής PDF '%s'."
 
 #: common/gestfich.cpp:292
 #, c-format
@@ -4904,14 +4872,14 @@ msgstr ""
 "kiface \"%s\"."
 
 #: common/kiway.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
 "Μοιραίο Σφάλμα Εγκατάστασης. Το αρχείο:\n"
-"\"%s\"\n"
+"'%s'\n"
 "δεν ήταν εφικτό να φορτωθεί\n"
 
 #: common/kiway.cpp:302
@@ -5355,7 +5323,6 @@ msgid "Reference designators"
 msgstr "Προσδιορισμοί αναφοράς"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text"
 msgstr "Κείμενο Αποτυπώματος"
 
@@ -5518,10 +5485,9 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Αναντιστοιχία τύπου μεταξύ %lf και '%s'"
 
 #: common/pgm_base.cpp:167
-#, fuzzy
 msgid "No default editor found, you must choose one."
 msgstr ""
-"Δεν βρέθηκε προκαθορισμένος επεξεργαστής κειμένου, πρέπει να τον επιλέξετε"
+"Δεν βρέθηκε προκαθορισμένος επεξεργαστής κειμένου, πρέπει να επιλέξετε έναν."
 
 #: common/pgm_base.cpp:187 common/pgm_base.cpp:189
 #, fuzzy
@@ -5569,9 +5535,8 @@ msgstr "Αδυναμία ανοίγματος αρχείου '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
-#, fuzzy
 msgid "File import cancelled by user."
-msgstr "Η επανασύνδεση του αποτυπώματος ακυρώθηκε από τον χρήστη."
+msgstr "Η εισαγωγή αρχείου ακυρώθηκε από τον χρήστη."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2370
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2388
@@ -5874,9 +5839,8 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "Αντιγραφή επιλεγμένων αντικειμένων στο πρόχειρο"
 
 #: common/tool/actions.cpp:165
-#, fuzzy
 msgid "Paste item(s) from clipboard"
-msgstr "Επικόλληση περιεχομένου από πρόχειρο"
+msgstr "Επικόλληση αντικειμένου(ων) από πρόχειρο"
 
 #: common/tool/actions.cpp:171
 msgid "Select all items on screen"
@@ -6206,23 +6170,20 @@ msgid "Switch display of full-window crosshairs"
 msgstr "Αλλαγή σε προβολή σταυρού που πιάνει όλο το παράθυρο"
 
 #: common/tool/actions.cpp:533
-#, fuzzy
 msgid "Inactive Layer View Mode"
-msgstr "Τρόπος Προβολής Ενός Επιπέδου"
+msgstr "Τρόπος Προβολής Ανενεργού Επιπέδου"
 
 #: common/tool/actions.cpp:534
 msgid "Toggle inactive layers between normal and dimmed"
 msgstr "Εναλλαγή ανενεργών επιπέδων μεταξύ κανονικών και αμυδρών"
 
 #: common/tool/actions.cpp:540
-#, fuzzy
 msgid "Inactive Layer View Mode (3-state)"
-msgstr "Λειτουργία Προβολής Ενός Επιπέδου (3-κατάσταση)"
+msgstr "Λειτουργία Προβολής Ανενεργού Επιπέδου (3-καταστάσεις)"
 
 #: common/tool/actions.cpp:541
-#, fuzzy
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
-msgstr "Εναλλαγή ανενεργών επιπέδων μεταξύ κανονικών, αμυδρών και κρυφών"
+msgstr "Εναλλαγή ανενεργών επιπέδων μεταξύ κανονικού, αμυδρού και κρυφού"
 
 #: common/tool/actions.cpp:546
 msgid "Select item(s)"
@@ -6633,9 +6594,9 @@ msgid "Reset to Defaults"
 msgstr "Επαναφορά σε Προκαθορισμένες Τιμές"
 
 #: common/widgets/paged_dialog.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "Reset %s to Defaults"
-msgstr "Επαναφορά σε Προκαθορισμένες Τιμές"
+msgstr "Επαναφορά %s Προκαθορισμένες Τιμές"
 
 #: common/widgets/unit_binder.cpp:217
 #, c-format
@@ -6664,9 +6625,9 @@ msgid "Set Hotkey"
 msgstr "Ορισμός Συντόμευσης"
 
 #: common/widgets/widget_hotkey_list.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "Το όνομα %s είναι δεσμευμένο και δεν μπορεί να χρησιμοποιηθεί εδώ"
+msgstr "Το %s είναι δεσμευμένο από το KiCad και δεν μπορεί να χρησιμοποιηθεί."
 
 #: common/widgets/widget_hotkey_list.cpp:392
 msgid "Edit..."
@@ -6928,9 +6889,8 @@ msgid "Specctra DSN file"
 msgstr "Αρχείο Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:521
-#, fuzzy
 msgid "Specctra Session file"
-msgstr "Συγχώνευση αρχείου συνεδρίας Specctra:"
+msgstr "Αρχείο Συνεδρίας Specctra"
 
 #: common/wildcards_and_files_ext.cpp:528
 msgid "IPC-D-356 Test Files"
@@ -6949,9 +6909,8 @@ msgid "Jpeg file"
 msgstr "Αρχείο Jpeg"
 
 #: common/wildcards_and_files_ext.cpp:554
-#, fuzzy
 msgid "Hotkey file"
-msgstr "Λίστα Συντομεύσεων"
+msgstr "Αρχείο Συντομεύσεων"
 
 #: cvpcb/auto_associate.cpp:105
 #, c-format
@@ -7644,9 +7603,9 @@ msgid "(file missing)"
 msgstr "(το αρχείο λείπει)"
 
 #: eeschema/dialogs/dialog_bom.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Το σχηματικό για αυτήν την πλακέτα δεν μπορεί να βρεθεί."
+msgstr ""
 
 #: eeschema/dialogs/dialog_bom.cpp:299
 #, c-format
@@ -7681,9 +7640,8 @@ msgid "Nickname '%s' already in use."
 msgstr "Το ψευδώνυμο \"%s\" χρησιμοποιείται ήδη."
 
 #: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:686
-#, fuzzy
 msgid "Generator File"
-msgstr "Αρχεία δημιουργού:"
+msgstr "Αρχείο Δημιουργού"
 
 #: eeschema/dialogs/dialog_bom.cpp:439
 msgid "Generator file name not found."
@@ -8678,9 +8636,8 @@ msgid "Electrical Rules Checker"
 msgstr "Ελεγκτής Ηλεκτρικών Κανόνων"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:131
-#, fuzzy
 msgid "Power symbol value field text cannot be changed."
-msgstr "(Το πεδίο κειμένου του εξαρτήματος ισχύος δεν μπορεί να αλλαχθεί.)"
+msgstr "Το πεδίο κειμένου του εξαρτήματος ισχύος δεν μπορεί να αλλαχθεί."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
@@ -8691,9 +8648,10 @@ msgid "Value may not be empty."
 msgstr "Η τιμή δεν μπορεί να είναι κενή."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:336
-#, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Εμφάνιση του παραθύρου ιδιοτήτων αντικειμένου"
+msgstr ""
+"Το όνομα αρχείου φύλλου μπορεί να τροποποιηθεί μόνο στο παράθυρο Ιδιότητες "
+"φύλλου."
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
@@ -8793,7 +8751,6 @@ msgid "-- leave unchanged --"
 msgstr "-- να παραμείνει αμετάβλητο --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
-#, fuzzy
 msgid "H Align (fields only):"
 msgstr "Οριζ Ευθυγράμμιση (μόνο πεδία):"
 
@@ -8802,7 +8759,6 @@ msgid "Visible (fields only)"
 msgstr "Ορατό (μόνο πεδία)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:251
-#, fuzzy
 msgid "V Align (fields only):"
 msgstr "Καθ Ευθυγράμμιση (μόνο πεδία):"
 
@@ -8828,14 +8784,12 @@ msgid "Sheet background color:"
 msgstr "Χρώμα παρασκηνίου φύλλου:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:339
-#, fuzzy
 msgid "Junction size:"
 msgstr "Μέγεθος σημείου κόμβου:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
-#, fuzzy
 msgid "Junction color:"
-msgstr "Χρώμα επιλογής:"
+msgstr "Χρώμα κόμβου:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:110
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:95
@@ -8894,6 +8848,7 @@ msgid ""
 "%s"
 msgstr ""
 "Σφάλμα κατά την αποθήκευση του καθολικού καταλόγου βιβλιοθήκης συμβόλων:\n"
+"\n"
 "%s"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
@@ -8906,9 +8861,8 @@ msgid "Color:"
 msgstr "Χρώμα:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic junction dot size."
-msgstr "Μετάβαση σε Επεξεργαστή Σχηματικού"
+msgstr ""
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
@@ -9108,7 +9062,6 @@ msgstr ""
 "από τους αριθμούς των pin."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
-#, fuzzy
 msgid "Create symbol with alternate body style (De Morgan)"
 msgstr "Δημιουργία συμβόλου με εναλλακτικό στυλ σώματος (DeMorgan)"
 
@@ -9170,9 +9123,8 @@ msgstr "Κοινό για όλα τα &μέρη του συμβόλου"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
-#, fuzzy
 msgid "Common to all body &styles (De Morgan)"
-msgstr "Κοινό για όλα τα &στυλ σώματος (DeMorgan)"
+msgstr "Κοινό για όλα τα &στυλ σώματος (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:51
 msgid "Drawing Properties"
@@ -9198,10 +9150,8 @@ msgid "Delete extra units from symbol?"
 msgstr "Διαγραφή των επιπλέον μερών του εξαρτήματος;"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:287
-#, fuzzy
 msgid "Delete alternate body style (De Morgan) from symbol?"
-msgstr ""
-"Διαγραφή στοιχείων εναλλακτικού στυλ σώματος (DeMorgan) από το σύμβολο;"
+msgstr "Διαγραφή εναλλακτικού στυλ σώματος (De Morgan) από το σύμβολο;"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:315
 #, c-format
@@ -9337,9 +9287,8 @@ msgstr ""
 "σύμβολα ρίζας."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
-#, fuzzy
 msgid "Has alternate body style (De Morgan)"
-msgstr "Έχει σώμα αντίστροφης λογικής (DeMorgan)"
+msgstr "Έχει εναλλακτικό στυλ σώματος (DeMorgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
@@ -9493,9 +9442,9 @@ msgid "Text:"
 msgstr "Κείμενο:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "(%s)"
-msgstr "Μετατόπιση (ίντσες)"
+msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:93
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:233
@@ -9555,9 +9504,8 @@ msgid "Style:"
 msgstr "Στυλ:"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Netclass line widths."
-msgstr "Μετάβαση σε Επεξεργαστή Σχηματικού"
+msgstr "Ορίστε το πλάτος σε 0 για να χρησιμοποιήσετε πλάτη Κλάσης Δικτύου."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
 msgid "Line, Wire & Bus Properties"
@@ -9671,14 +9619,12 @@ msgid "This plugin already exists."
 msgstr "Αυτό το πρόσθετο υπάρχει ήδη."
 
 #: eeschema/dialogs/dialog_netlist.cpp:662
-#, fuzzy
 msgid "You must provide a netlist generator command string"
-msgstr "Σφάλμα. Πρέπει να δώσετε μια Εντολή"
+msgstr ""
 
 #: eeschema/dialogs/dialog_netlist.cpp:668
-#, fuzzy
 msgid "You must provide a netlist generator title"
-msgstr "Σφάλμα: Πρέπει να δώσετε έναν Τίτλο"
+msgstr ""
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
 msgid "Add Generator..."
@@ -9715,9 +9661,10 @@ msgid "Alternate Pin Name"
 msgstr "Εναλλακτικό όνομα Pin"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:145
-#, fuzzy
 msgid "Synchronized pins edit mode, and this pin is new"
-msgstr "Κατάσταση συγχρονισμένης επεξεργασίας ακροδεκτών"
+msgstr ""
+"Κατάσταση συγχρονισμένης επεξεργασίας ακροδεκτών, και αυτός ο ακροδέκτης "
+"είναι νέος"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:146
 msgid ""
@@ -9728,7 +9675,6 @@ msgstr ""
 "δεν είναι κοινός σε όλα τα μέρη"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:151
-#, fuzzy
 msgid "Synchronized pins edit mode"
 msgstr "Κατάσταση συγχρονισμένης επεξεργασίας ακροδεκτών"
 
@@ -9742,7 +9688,6 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
-#, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
 msgstr "Εναλλακτικά pin δεν είναι διαθέσιμα για σύμβολα DeMorgan."
 
@@ -9984,9 +9929,9 @@ msgstr "Επιστροφή στη διαδρομή χρήστη '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1270
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1308
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "Αδυναμία ανοίγματος αρχείου '%s'"
+msgstr "Αδυναμία κανονικοποίησης διαδρομής %s'%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1295
 msgid "No project or path defined for the current schematic."
@@ -10402,10 +10347,10 @@ msgid "Text Variables"
 msgstr "Μεταβλητές Κειμένου"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:90
-#, fuzzy
 msgid "Project is missing or read-only. Settings will not be editable."
 msgstr ""
-"Το έργο λείπει ή είναι μόνο για ανάγνωση. Οι αλλαγές δεν θα αποθηκευτούν."
+"Το έργο λείπει ή είναι μόνο για ανάγνωση. Οι ρυθμίσεις δεν θα είναι "
+"επεξεργάσιμες."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:156
 #, c-format
@@ -11439,9 +11384,8 @@ msgid "Unit:"
 msgstr "Μονάδες:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
-#, fuzzy
 msgid "Alternate symbol (De Morgan)"
-msgstr "Εναλλακτικό σύμβολο (DeMorgan)"
+msgstr "Εναλλακτικό σύμβολο (De Morgan)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:138
 msgid ""
@@ -11772,9 +11716,8 @@ msgstr "Στοίχιση επάνω"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:122
 #: eeschema/sch_text.cpp:783
-#, fuzzy
 msgid "Justification"
-msgstr "Στοίχιση:"
+msgstr ""
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:126
 msgid "Bold and italic"
@@ -12385,11 +12328,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Πολλές βιβλιοθήκες δεν μπορούν να μοιραστούν το ίδιο ψευδώνυμο ('%s')."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:459 eeschema/symbol_library.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr ""
-"Αποτυχία φόρτωσης βιβλιοθήκης συμβόλων \"%s\".\n"
-" %s"
+msgstr "Αποτυχία φόρτωσης βιβλιοθήκης συμβόλων '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:462
 msgid "Error Loading Library"
@@ -12851,9 +12792,7 @@ msgstr ""
 #: eeschema/files-io.cpp:1227 eeschema/sheet.cpp:162
 #, c-format
 msgid "Error loading schematic '%s'."
-msgstr ""
-"Σφάλμα κατά τη φόρτωση σχηματικού.\n"
-"%s"
+msgstr "Σφάλμα κατά τη φόρτωση σχηματικού '%s'."
 
 #: eeschema/files-io.cpp:287
 #, c-format
@@ -13053,7 +12992,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "Το τρέχον σχηματικό έχει τροποποιηθεί. Αποθήκευση των αλλαγών;"
 
 #: eeschema/files-io.cpp:1346
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -13062,10 +13000,9 @@ msgid ""
 "made?"
 msgstr ""
 "Αυτό δεν θα έπρεπε να έχει συμβεί!\n"
-"Φαίνεται ότι την τελευταία φορά που επεξεργαστήκατε το αρχείο\n"
-"\"%s\"\n"
-"δεν αποθηκεύτηκε σωστά. Θέλετε να επαναφέρετε τις τελευταίες αποθηκευμένες "
-"αλλαγές που κάνατε;"
+"Φαίνεται ότι την τελευταία φορά που επεξεργαστήκατε αρχεία σχηματικών, δεν "
+"αποθηκεύτηκαν σωστά. \n"
+"Θέλετε να επαναφέρετε τις τελευταίες αποθηκευμένες αλλαγές που κάνατε;"
 
 #: eeschema/files-io.cpp:1357
 #, c-format
@@ -13077,30 +13014,31 @@ msgstr ""
 "Απαιτείται μη αυτόματη ανάκτηση των αυτόματα αποθηκευμένων αρχείων."
 
 #: eeschema/files-io.cpp:1403
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "Αδυναμία διαγραφής αρχείου αυτόματης αποθήκευσης '%s'!"
+msgstr ""
 
 #: eeschema/files-io.cpp:1408
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "Απαιτείται μη αυτόματη ανάκτηση για την επαναφορά των παραπάνω αρχείων."
 
 #: eeschema/files-io.cpp:1430
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "Αδυναμία διαγραφής αρχείου αυτόματης αποθήκευσης '%s'!"
+msgstr ""
 
 #: eeschema/files-io.cpp:1435
 msgid "Manual removal will be required for the file(s) above."
 msgstr "Απαιτείται μη αυτόματη ανάκτηση για τα παραπάνω αρχεία."
 
 #: eeschema/files-io.cpp:1446
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "Αδυναμία διαγραφής αρχείου αυτόματης αποθήκευσης '%s'!"
+msgstr ""
+"Αδυναμία διαγραφής κύριου\n"
+"αρχείου αυτόματης αποθήκευσης\n"
+"'%s'."
 
 #: eeschema/files-io.cpp:1454
 msgid ""
@@ -14127,13 +14065,9 @@ msgid "Invalid parent symbol name"
 msgstr "Μη έγκυρο όνομα σήματος"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s"
-msgstr ""
-"Δεν υπάρχει γονική σύνδεση για το επεκταμένο σύμβολο %s στο\n"
-"αρχείο: «%s»\n"
-"γραμμή: %d\n"
-"θέση: %d"
+msgstr "Δεν υπάρχει γονική σύνδεση για το επεκταμένο σύμβολο %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:271
 msgid "Invalid symbol unit name"
@@ -14145,13 +14079,9 @@ msgid "Invalid symbol unit name prefix %s"
 msgstr "Μη έγκυρο πρόθεμα μονάδας"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name suffix %s"
-msgstr ""
-"Μη έγκυρο επίθημα ονόματος μονάδας συμβόλου %s σε\n"
-"αρχείο: «%s»\n"
-"γραμμή: %d\n"
-"θέση: %d"
+msgstr "Μη έγκυρο επίθημα ονόματος μέρους συμβόλου %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:295
 #, fuzzy, c-format
@@ -14159,29 +14089,17 @@ msgid "Invalid symbol unit number %s"
 msgstr "Άκυρο αναγνωριστικό βιβλιοθήκης συμβόλων"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol convert number %s"
-msgstr ""
-"Μη έγκυρος αριθμός μετατροπής συμβόλου %s σε\n"
-"αρχείο: «%s»\n"
-"γραμμή: %d\n"
-"θέση: %d"
+msgstr "Μη έγκυρος αριθμός μετατροπής συμβόλου %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:424
 msgid "Floating point number with incorrect locale"
-msgstr ""
-"Άκυρος αριθμός κινητής υποδιαστολής σε\n"
-"αρχείο: \"%s\"\n"
-"γραμμή: %d\n"
-"θέση: %d"
+msgstr "Αριθμός κινητής υποδιαστολής με λάθος τοπική ρύθμιση"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:434
 msgid "Invalid floating point number"
-msgstr ""
-"Άκυρος αριθμός κινητής υποδιαστολής σε\n"
-"αρχείο: <%s>\n"
-"γραμμή: %d\n"
-"θέση: %d"
+msgstr "Άκυρος αριθμός κινητής υποδιαστολής"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:440
 msgid "Missing floating point number"
@@ -14325,9 +14243,7 @@ msgstr "Μη αναμενόμενο τέλος αρχείου"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2699
 #, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr ""
-"Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση αρχείου\n"
-"%s"
+msgstr "Ανεπαρκή δικαιώματα για την ανάγνωση βιβλιοθήκης '%s'."
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2708
 msgid "symbol document library file is empty"
@@ -15736,9 +15652,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:174
 #, c-format
 msgid "Insufficient permissions to save library '%s'."
-msgstr ""
-"Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση αρχείου\n"
-"%s"
+msgstr "Ανεπαρκή δικαιώματα για την αποθήκευση βιβλιοθήκης '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:194
 #, c-format
@@ -15752,11 +15666,8 @@ msgstr "Σύμβολο \"%s\" αποθηκεύτηκε στη βιβλιοθήκ
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:106
 #: eeschema/symbol_tree_model_adapter.cpp:104
-#, fuzzy
 msgid "Errors loading symbols:"
-msgstr ""
-"Σφάλμα κατά τη φόρτωση πλακέτας.\n"
-"%s"
+msgstr "Σφάλματα φόρτωσης συμβόλων:"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:176
 #, fuzzy, c-format
@@ -15796,12 +15707,9 @@ msgstr ""
 "της βιβλιοθήκης συμβόλων"
 
 #: eeschema/symbol_library.cpp:572 eeschema/symbol_tree_model_adapter.cpp:152
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol library '%s'."
-msgstr ""
-"Σφάλμα φόρτωσης βιβλιοθήκης συμβόλων %s.\n"
-"\n"
-" %s"
+msgstr "Σφάλμα φόρτωσης βιβλιοθήκης συμβόλων '%s'."
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:259
 msgid "(failed to load)"
@@ -18383,9 +18291,8 @@ msgid "Failed to output data"
 msgstr "Αποτυχία φορτώματος \"%s\""
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html><h1>Επιλογέας Πρότυπυ</h1></html>"
+msgstr "<h1>Επιλογέας Πρότυπυ</h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -18728,9 +18635,8 @@ msgid "Discard action"
 msgstr "Απόρριψη Αλλαγών"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
-#, fuzzy
 msgid "Install from file..."
-msgstr "Αδυναμία μετονομασίας του αρχείου ... "
+msgstr "Εγκατάσταση από αρχείο..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:136
 #, fuzzy
@@ -18799,9 +18705,9 @@ msgid "Package identifier: %s\n"
 msgstr "Αναγνωριστικό πακέτου: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "License: %s\n"
-msgstr "Άδεια"
+msgstr "Άδεια: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
@@ -18860,6 +18766,8 @@ msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
 msgstr ""
+"Αυτή η έκδοση πακέτου δεν είναι συμβατή με την έκδοση kicad ή την πλατφόρμα "
+"σας. Είστε βέβαιοι ότι θέλετε να το εγκαταστήσετε ούτως ή άλλως;"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:421
 #, fuzzy
@@ -18902,23 +18810,19 @@ msgid "schema file '%s' not found"
 msgstr "Δεν βρέθηκε το σχηματικό αρχείο \"%s\"."
 
 #: kicad/pcm/pcm.cpp:82
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schema: %s"
-msgstr ""
-"Σφάλμα κατά τη φόρτωση σχηματικού.\n"
-"%s"
+msgstr "Σφάλμα κατά τη φόρτωση σχηματικού: %s"
 
 #: kicad/pcm/pcm.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading installed packages list: %s"
-msgstr ""
-"Σφάλμα φόρτωσης λίστας δικτύων.\n"
-"%s"
+msgstr "Σφάλμα φόρτωσης λίστας εγκατεστημένων πακέτων %s"
 
 #: kicad/pcm/pcm.cpp:189
 #, c-format
 msgid "Downloading %lld/%lld Kb"
-msgstr ""
+msgstr "Λήψη %lld/%lld Kb"
 
 #: kicad/pcm/pcm.cpp:214
 #, fuzzy
@@ -18936,18 +18840,19 @@ msgid "Unable to load repository url"
 msgstr "Αδυναμία φόρτωσης αρχείου %s"
 
 #: kicad/pcm/pcm.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse repository:\n"
 "\n"
 "%s"
 msgstr ""
-"Αδυναμία ανάλυσης URL:\n"
-"\"%s\""
+"Αδυναμία ανάλυσης αποθετηρίου:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:268
 msgid "Fetching repository packages"
-msgstr ""
+msgstr "Λήψη πακέτων αποθετηρίου"
 
 #: kicad/pcm/pcm.cpp:270
 #, fuzzy
@@ -18957,21 +18862,26 @@ msgstr "Αδυναμία φόρτωσης αρχείου έργου \"%s\""
 #: kicad/pcm/pcm.cpp:278
 msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr ""
+"Ο hash των πακέτων δεν ταιριάζει. Το αποθετήριο ενδέχεται να είναι "
+"κατεστραμμένο."
 
 #: kicad/pcm/pcm.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
 "\n"
 "%s"
 msgstr ""
-"Αδυναμία ανάλυσης URL:\n"
-"\"%s\""
+"Αδυναμία ανάλυσης μεταδεδομένων πακέτων:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm.cpp:381
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr ""
+"Η προσωρινή μνήμη πακέτων για το τρέχον αποθετήριο είναι κατεστραμμένη, θα "
+"γίνει εκ νέου λήψη."
 
 #: kicad/pcm/pcm.cpp:431
 #, fuzzy
@@ -18983,6 +18893,8 @@ msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
 msgstr ""
+"Το hash του αρχείου πόρων δεν ταιριάζει και δεν θα χρησιμοποιηθεί. Το "
+"αποθετήριο ενδέχεται να είναι κατεστραμμένο."
 
 #: kicad/pcm/pcm.cpp:590
 #, fuzzy
@@ -18990,9 +18902,8 @@ msgid "Local file"
 msgstr "Επεξεργασία Τοπικού Αρχείου..."
 
 #: kicad/pcm/pcm_task_manager.cpp:63
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "Αδυναμία δημιουργίας του καταλόγου \"%s\""
+msgstr "Αδυναμία δημιουργίας καταλόγου λήψεων!"
 
 #: kicad/pcm/pcm_task_manager.cpp:92
 #, c-format
@@ -19008,14 +18919,14 @@ msgid "Extracting package '%s'."
 msgstr "Εξαγωγή αρχείου \"%s\""
 
 #: kicad/pcm/pcm_task_manager.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr "Αφαίρεση μη χρησιμοποιούμενου εξαρτήματος \"%s:%s\".\n"
+msgstr "Κατάργηση του ληφθέντος αρχείου '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:157
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr ""
+msgstr "Λήψη url πακέτου: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:170
 #, fuzzy, c-format
@@ -19026,7 +18937,7 @@ msgstr "Αποτυχία φορτώματος \"%s\""
 
 #: kicad/pcm/pcm_task_manager.cpp:253
 msgid "Aborting package installation."
-msgstr ""
+msgstr "Ακύρωση εγκατάστασης πακέτου."
 
 #: kicad/pcm/pcm_task_manager.cpp:301
 #, fuzzy, c-format
@@ -19040,7 +18951,7 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:310
 msgid "Archive does not contain a valid metadata.json file"
-msgstr ""
+msgstr "Το αρχείο δεν περιέχει έγκυρο αρχείο metadata.json"
 
 #: kicad/pcm/pcm_task_manager.cpp:318
 #, fuzzy
@@ -19053,6 +18964,8 @@ msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
 "this package."
 msgstr ""
+"Το πακέτο με το αναγνωριστικό %s είναι ήδη εγκατεστημένο, πρέπει πρώτα να "
+"απεγκαταστήσετε αυτό το πακέτο."
 
 #: kicad/pcm/pcm_task_manager.cpp:362
 #, fuzzy, c-format
@@ -19067,11 +18980,11 @@ msgstr "Αδυναμία δημιουργίας του καταλόγου \"%s\"
 #: kicad/pcm/pcm_task_manager.cpp:384
 #, c-format
 msgid "Package %s uninstalled"
-msgstr ""
+msgstr "Το πακέτο %s απεγκαταστάθηκε"
 
 #: kicad/pcm/pcm_task_manager.cpp:453
 msgid "Aborting remaining tasks."
-msgstr ""
+msgstr "Ακύρωση των υπόλοιπων εργασιών."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -19538,19 +19451,19 @@ msgstr "Προκαθορισμένα πλάτη:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:557
 msgid "Texts can include keywords."
-msgstr ""
+msgstr "Τα κείμενα μπορούν να περιλαμβάνουν λέξεις-κλειδιά."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:558
 msgid "Keyword notation is ${keyword}"
-msgstr ""
+msgstr "Ο συμβολισμός λέξης-κλειδιού είναι ${keyword}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Each keyword is replaced by its value"
-msgstr ""
+msgstr "Κάθε λέξη-κλειδί αντικαθίσταται από την αξία της"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "These build-in keywords are always available:"
-msgstr ""
+msgstr "Αυτές οι ενσωματωμένες λέξεις-κλειδιά είναι πάντα διαθέσιμες:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:564
 #, fuzzy
@@ -19990,7 +19903,6 @@ msgstr ""
 "* ___R3 = Z<sub>out</sub> \\ * A - R2___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -20002,11 +19914,11 @@ msgid ""
 msgstr ""
 "### Διαχωριστής εξασθενητή\n"
 "#### Η εξασθένηση είναι 6dB\n"
-"___Z<sub>in</sub>___ επιθυμητή εμπέδηση εισόδου σε &#x2126;<br>\n"
-"___Z<sub> out </sub> ___ επιθυμητή εμπέδηση εξόδου σε &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"___Z<sub>in</sub>___ επιθυμητή εμπέδηση εισόδου σε &#x2126;\n"
+"___Z<sub>out</sub> ___ επιθυμητή εμπέδηση εξόδου σε &#x2126;\n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
+"___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 #, fuzzy
@@ -20966,9 +20878,8 @@ msgid "Color Code"
 msgstr "Κωδικός Χρώματος"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "ΓραμμήΜετάδ"
+msgstr "ΓραμμήΜετάδ "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -21612,7 +21523,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:208
 #, c-format
 msgid "Value too small (min value %s)."
-msgstr ""
+msgstr "Η τιμή είναι πολύ μικρή (ελάχιστη τιμή %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:228
 msgid "All dielectric  thickness layers are locked"
@@ -22006,6 +21917,8 @@ msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
 msgstr ""
+"Οι αλλαγές στην ονοματοδοσία PCB θα πρέπει να συγχρονίζονται με το σχηματικό "
+"χρησιμοποιώντας το εργαλείο \"Ενημέρωση σχηματικού από το PCB\"."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:313
 #, c-format
@@ -23919,6 +23832,8 @@ msgstr ""
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
+"Εντοπίστηκαν μοντέλα σε κλίμακα. Η κλιμάκωση μοντέλων δεν είναι αξιόπιστη "
+"για μηχανική εξαγωγή."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:214
 msgid "Model Scale Warning"
@@ -23989,7 +23904,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:114
 msgid "Replace VRML models with STEP models of the same name"
-msgstr ""
+msgstr "Αντικαταστήστε τα μοντέλα VRML με μοντέλα STEP με το ίδιο όνομα"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:118
 msgid "Overwrite old file"
@@ -24143,7 +24058,7 @@ msgstr "0,1 ίντσες"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "VRML Units for Output Files"
-msgstr ""
+msgstr "Μονάδες VRML για Αρχεία Εξόδου"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
@@ -24154,6 +24069,8 @@ msgid ""
 "If checked: copy 3D models to the destination folder\n"
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
+"Εάν είναι επιλεγμένο: αντιγράψτε μοντέλα 3D στον φάκελο προορισμού\n"
+"Εάν δεν είναι επιλεγμένο: Ενσωματώστε μοντέλα 3D στο αρχείο πλακέτας VRML"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
@@ -26331,7 +26248,7 @@ msgstr "Pad σημείο ελέγχου"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1616
 msgid "Heatsink pad"
-msgstr "Heatsink pad"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 msgid "Castellated pad (through hole only)"
@@ -27144,6 +27061,10 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
+"Όταν είναι ενεργοποιημένο, ολόκληρο το τμήμα του δρόμου που είναι ορατό στην "
+"οθόνη θα βελτιστοποιηθεί και θα επαναδρομολογηθεί όταν σύρεται ένας δρόμος. "
+"Όταν είναι απενεργοποιημένο, θα βελτιστοποιηθεί μόνο η περιοχή κοντά σον "
+"δρόμο που σύρεται."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid "Use mouse path to set track posture"
@@ -27276,15 +27197,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr ""
+msgstr "Αποστολή αρχείων παραγωγής σε κατασκευαστή, από το KiCad"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr ""
+msgstr "Παραγωγή PCB"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr ""
+msgstr "Στείλτε PCB για παραγωγή"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
 msgid "Change Pads on Current Footprint"
@@ -27358,7 +27279,7 @@ msgstr "Καθαρή περιοχή χαλκού"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:64
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "Οι ζώνες δεν θα γεμίσουν χαλκό σε αυτήν την περιοχή"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:68
 msgid "Keep out footprints"
@@ -27753,6 +27674,8 @@ msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
 msgstr ""
+"Εμφάνιση περιγραμμάτων διάκενουν γύρω από τους δρόμους και προαιρετικά το "
+"διάκενο via γύρω από το τέλος του δρόμου, κατά τη δρομολόγηση."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
@@ -27765,7 +27688,7 @@ msgstr "Μεγέθυνση ώστε να χωράει cross-probed αντικε�
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
-msgstr ""
+msgstr "Επισήμανση δικτύων όταν επισημαίνονται στο επεξεργαστή σχηματικού"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:90
 msgid "Refresh 3D view automatically"
@@ -27776,6 +27699,8 @@ msgid ""
 "When enabled, edits to the board will cause the 3D view to refresh (may be "
 "slow with larger boards)"
 msgstr ""
+"Όταν είναι ενεργοποιημένο, οι αλλαγές στην πλακέτα θα αναγκάσουν την προβολή "
+"3D να ανανεωθεί (μπορεί να καθυστερεί σε μεγαλύτερες πλακέτες)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Magnetic pads"
@@ -27807,6 +27732,8 @@ msgstr "Επιτρεπόμενες δυνατότητες"
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
 msgstr ""
+"Εάν είναι επιλεγμένο, οι έδρες μπορούν να μετακινηθούν σε σχέση με το "
+"υπόλοιπο αποτύπωμα."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:97
 #: pcbnew/dialogs/panel_edit_options_base.cpp:168
@@ -27932,7 +27859,7 @@ msgstr "Περιορισμός γραμμών γραφικών σε 45 μοίρ�
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:376
 msgid "Draw an outline to show the sheet size."
-msgstr ""
+msgstr "Σχεδίαση περιγράμματος για να φανεί το μέγεθος του φύλλου."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:380
 msgid "Refill zones after Zone Properties dialog"
@@ -27943,6 +27870,8 @@ msgid ""
 "If checked, zones will be re-filled after editing the properties of the zone "
 "using the Zone Properties dialog"
 msgstr ""
+"Εάν επιλεγεί, οι ζώνες θα ξαναγεμίζουν μετά την επεξεργασία των ιδιοτήτων "
+"της ζώνης μέσω του παραθύρου Ιδιότητες Ζώνης"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:130
 msgid "Internal Layers"
@@ -28011,9 +27940,8 @@ msgid "Path Substitutions"
 msgstr "Αντικαταστάσεις Διαδρομών"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "No filename entered"
-msgstr "Δεν επιλέχθηκε επίπεδο!"
+msgstr "Δεν δόθηκε όνομα αρχείου"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
 #, fuzzy
@@ -28145,6 +28073,9 @@ msgid ""
 "to approximate it.  Smaller values produce smoother graphics at the expense "
 "of performance."
 msgstr ""
+"Η μέγιστη επιτρεπόμενη απόκλιση μεταξύ ενός πραγματικού τόξου ή κύκλου και "
+"των τμημάτων που χρησιμοποιούνται για την προσέγγισή του. Οι μικρότερες "
+"τιμές παράγουν πιο ομαλά γραφικά σε βάρος της απόδοσης."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:86
 #, c-format
@@ -28191,6 +28122,7 @@ msgstr "Μικρο-ρύθμιση Μήκους Δρόμου"
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:153
 msgid "Include stackup height in track length calculations"
 msgstr ""
+"Συμπεριλάβετε το ύψος στοίβαξης στους υπολογισμούς του μήκους της δρόμων"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:154
 msgid ""
@@ -28198,6 +28130,9 @@ msgid ""
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
 msgstr ""
+"Όταν είναι ενεργοποιημένo, η απόσταση μεταξύ των χάλκινων στρωμάτων θα "
+"περιλαμβάνεται στους υπολογισμούς του μήκους της διαδρομής για δρόμους με "
+"vias. Όταν είναι απενεργοποιημένο, αυτό το ύψος στοίβαξης αγνοείται."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:191
 msgid "Minimum clearance:"
@@ -28209,6 +28144,9 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
+"Το ελάχιστο διάκενο μεταξύ χάλκινων αντικειμένων που δεν ανήκουν στο ίδιο "
+"δίκτυο. Εάν οριστεί, αυτό είναι ένα απόλυτο ελάχιστο που δεν μπορεί να "
+"μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή άλλες ρυθμίσεις."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
@@ -28219,6 +28157,8 @@ msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Το ελάχιστο πλάτος δρόμου. Εάν οριστεί, αυτό είναι ένα απόλυτο ελάχιστο που "
+"δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή άλλες ρυθμίσεις."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
 msgid "Minimum annular width:"
@@ -28239,6 +28179,8 @@ msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Η ελάχιστη διάμετρος via. Εάν οριστεί, αυτό είναι ένα απόλυτο ελάχιστο που "
+"δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή άλλες ρυθμίσεις."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
 #, fuzzy
@@ -28251,6 +28193,9 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
+"Το ελάχιστο διάκενο μεταξύ μιας τρύπας και ενός μη συσχετισμένου χάλκινου "
+"αντικειμένου. Εάν οριστεί, αυτό είναι ένα απόλυτο ελάχιστο που δεν μπορεί να "
+"μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή άλλες ρυθμίσεις."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
 #, fuzzy
@@ -28263,6 +28208,9 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
+"Το ελάχιστο διάκενο μεταξύ της άκρης της πλακέτας και οποιουδήποτε χάλκινου "
+"αντικειμένου. Εάν οριστεί, αυτό είναι ένα απόλυτο ελάχιστο που δεν μπορεί να "
+"μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή άλλες ρυθμίσεις."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
 msgid "Holes"
@@ -28277,6 +28225,9 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
+"Το ελάχιστο μέγεθος διαμπερούς τρύπας. Εάν οριστεί, αυτό είναι ένα απόλυτο "
+"ελάχιστο που δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή "
+"άλλες ρυθμίσεις."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Hole to hole clearance:"
@@ -28302,6 +28253,9 @@ msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Η ελάχιστη διάμετρος για micro-via. Εάν οριστεί, αυτό είναι ένα απόλυτο "
+"ελάχιστο που δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή "
+"άλλες ρυθμίσεις."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 msgid "Minimum uVia hole:"
@@ -28312,6 +28266,9 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Το ελάχιστο μέγεθος τρύπας micro-via. Εάν οριστεί, αυτό είναι ένα απόλυτο "
+"ελάχιστο που δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή "
+"άλλες ρυθμίσεις."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
@@ -28327,6 +28284,9 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
+"Ελάχιστο διάκενο μεταξύ δύο αντικειμένων στο ίδιο επίπεδο μεταξοτυπίας. Εάν "
+"οριστεί, μπορεί να βελτιώσει την αναγνωσιμότητα. (Σημείωση: δεν ισχύει για "
+"πολλά σχήματα σε ένα μόνο αποτύπωμα.)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -28396,7 +28356,7 @@ msgstr "Διαγραφή Εσωτερικών Επιπέδων"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:813
 msgid "All user-defined layers have already been added."
-msgstr ""
+msgstr "Όλα τα επίπεδα που ορίζονται από τον χρήστη έχουν ήδη προστεθεί."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:817
 msgid "Add User-defined Layer"
@@ -28942,7 +28902,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
-msgstr ""
+msgstr "Εάν δεν παρέχεται καμία, προτείνεται η ρύθμιση των τιμών στο μηδέν."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:56
 msgid ""
@@ -29026,7 +28986,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:115
 msgid "Additional clearance as a percentage of the pad size."
-msgstr ""
+msgstr "Πρόσθετο διάκενο ως ποσοστό του μεγέθους έδρας."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:129
 msgid ""
@@ -30121,7 +30081,7 @@ msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:194
 msgid "They have been exported as oval pads."
-msgstr ""
+msgstr "Έχουν εξαχθεί ως οβάλ έδρες."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:307
 #: pcbnew/exporters/export_vrml.cpp:577
@@ -30448,7 +30408,7 @@ msgstr "Διαμπερές οπή pad %s του %s"
 #: pcbnew/footprint.cpp:2095
 #, c-format
 msgid "Expected \"SMD\" type but set to \"%s\""
-msgstr ""
+msgstr "Αναμενόταν τύπος \"SMD\" αλλά ορίστηκε σε \"%s\""
 
 #: pcbnew/footprint.cpp:2099
 #, c-format
@@ -30649,15 +30609,13 @@ msgid "No footprints to export!"
 msgstr "Δεν υπάρχουν αποτυπώματα προς εξαγωγή!"
 
 #: pcbnew/footprint_libraries_utils.cpp:687
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprints on board to refer to %s?"
-msgstr "Ανανέωση αποτυπώματος στην πλακέτα"
+msgstr "Ανανέωση αποτυπωμάτων πλακέτας που αναφέρονται στο %s;"
 
 #: pcbnew/footprint_libraries_utils.cpp:734
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr ""
-"Ενημέρωση αποτυπωμάτων για να συμπεριλάβετε τυχόν αλλαγές από τη βιβλιοθήκη"
+msgstr "Ανανέωση αποτυπωμάτων πλακέτας για να αναφέρονται στη νέα βιβλιοθήκη;"
 
 #: pcbnew/footprint_libraries_utils.cpp:873
 #: pcbnew/footprint_viewer_frame.cpp:712
@@ -30675,7 +30633,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:906
 #: pcbnew/footprint_viewer_frame.cpp:720
 msgid "Previous footprint placement still in progress."
-msgstr ""
+msgstr "Η προηγούμενη τοποθέτηση του αποτυπώματος βρίσκεται ακόμη σε εξέλιξη."
 
 #: pcbnew/footprint_libraries_utils.cpp:995
 msgid "Save Footprint As"
@@ -30948,7 +30906,7 @@ msgstr ""
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1371
 msgid "Invalid Bezier curve created"
-msgstr ""
+msgstr "Δημιουργήθηκε μη έγκυρη καμπύλη Bezier"
 
 #: pcbnew/initpcb.cpp:50
 msgid ""
@@ -31630,7 +31588,7 @@ msgstr "Ψύκτρα"
 
 #: pcbnew/pad.cpp:914
 msgid "Castellated"
-msgstr "Castellated"
+msgstr ""
 
 #: pcbnew/pad.cpp:922 pcbnew/pcb_track.cpp:762 pcbnew/pcb_track.cpp:1188
 msgid "Diameter"
@@ -31712,7 +31670,7 @@ msgstr "Τραπεζοειδές"
 
 #: pcbnew/pad.cpp:1617
 msgid "Castellated pad"
-msgstr "Castellated pad"
+msgstr ""
 
 #: pcbnew/pad.cpp:1623
 msgid "Pad Type"
@@ -31825,6 +31783,9 @@ msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
+"Παρουσιάστηκε σφάλμα κατά την ανάγνωση της λίστας δικτύων. Αναφέρετε αυτό το "
+"ζήτημα στην ομάδα του KiCad χρησιμοποιώντας το μενού Βοήθεια->Αναφορά "
+"σφάλματος."
 
 #: pcbnew/pcb_edit_frame.cpp:1500
 #, c-format
@@ -32058,7 +32019,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
-msgstr ""
+msgstr "Άγνωστη αντιστοίχιση του επιπέδου Altium '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:694
 #, c-format
@@ -32068,6 +32029,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:76
 msgid "Error reading file: cannot determine length."
 msgstr ""
+"Σφάλμα κατά την ανάγνωση του αρχείου: δεν μπορεί να προσδιοριστεί το μήκος."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:87
 msgid "Error reading file."
@@ -32110,7 +32072,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:1376
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr ""
+msgstr "Παράβλεψη διάστασης %d (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1418
 msgid "No 3D-models will be imported."
@@ -32165,7 +32127,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:1796
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr ""
+msgstr "Παράβλεψη σχήματος πολυγώνου %d (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1810
 msgid "Loading zone fills..."
@@ -32201,6 +32163,8 @@ msgstr "Φόρτωση εδρών..."
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
+"Το αποτύπωμα %s έδρα %s δεν έχει επισημανθεί ως πολλαπλών επιπέδων, αλλά "
+"είναι έδρα TH/διαμπερής."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2143
 #, c-format
@@ -32221,7 +32185,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2179
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr ""
+msgstr "Το αποτύπωμα %s έδρα %s χρησιμοποιεί μια τρύπα αγνώστου είδους %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2197
 #, fuzzy, c-format
@@ -32233,7 +32197,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2231
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "Το αποτύπωμα %s έδρα %s χρησιμοποιεί ένα άγνωστο σχήμα έδρας."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2290
 #, c-format
@@ -32264,7 +32228,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2464
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "Η μη χάλκινη έδρα %s χρησιμοποιεί ένα άγνωστο σχήμα έδρας."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2473
 msgid "Loading vias..."
@@ -32840,7 +32804,7 @@ msgstr "Μη έγκυρος αριθμός λεκτικών μονάδων. Αν
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1455
 #, c-format
 msgid "Unhandled graphic item '%s' in row %zu."
-msgstr ""
+msgstr "Στοιχείο γραφικού '%s' χωρίς χειρισμό, στη γραμμή %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1486
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1501
@@ -33607,6 +33571,8 @@ msgstr "Δρόμος κοντά σε έδρα"
 #: pcbnew/router/router_tool.cpp:164
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
 msgstr ""
+"Επιλέγει μεταξύ αιχμηρών/στρογγυλεμένων γωνιών και γωνιών 45°/90° κατά τη "
+"δρομολόγηση."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
@@ -33698,6 +33664,8 @@ msgid ""
 "Event file: %s\n"
 "Board dump: %s"
 msgstr ""
+"Αρχείο συμβάντος: %s\n"
+"Δεδομένα πλακέτας: %s"
 
 #: pcbnew/router/router_tool.cpp:523
 msgid "Save router log"
@@ -33924,6 +33892,10 @@ msgid ""
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
+"Επιλέξτε το προεπιλεγμένο πλάτος για νέους δρόμους. Λάβετε υπόψη ότι αυτό το "
+"πλάτος μπορεί να παρακαμφθεί από το ελάχιστο πλάτος της πλακέτας ή από το "
+"πλάτος ενός υπάρχοντος δρόμου εάν είναι ενεργοποιημένη η δυνατότητα \"Χρήση "
+"Υπάρχοντος Πλάτους Δρόμου\"."
 
 #: pcbnew/toolbars_pcb_editor.cpp:540
 msgid ""
@@ -34000,7 +33972,7 @@ msgstr "Σφάλμα"
 #: pcbnew/tools/board_editor_control.cpp:548
 #, c-format
 msgid "Orphaned net %s re-parented.\n"
-msgstr ""
+msgstr "Το ορφανό δίκτυο %s αποδόθηκε εκ νέου.\n"
 
 #: pcbnew/tools/board_editor_control.cpp:605
 #: pcbnew/tools/footprint_editor_control.cpp:571
@@ -34335,9 +34307,8 @@ msgid "Plated Board Edge: "
 msgstr "Επιμεταλλωμένο όριο πλακέτας "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:510
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "Ακριανοί Σύνδεσμοι Καρτών:"
+msgstr "Ακριανοί Σύνδεσμοι Καρτών: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:518
 #, fuzzy
@@ -34647,7 +34618,7 @@ msgstr "Ρύθμιση προκαθορισμένων χαρακτηριστικ
 
 #: pcbnew/tools/pcb_actions.cpp:111
 msgid "Add a board characteristics table on a graphic layer"
-msgstr ""
+msgstr "Προσθέστε έναν πίνακα χαρακτηριστικών πλακέτας σε ένα επίπεδο γραφικών"
 
 #: pcbnew/tools/pcb_actions.cpp:116
 msgid "Add Stackup Table"
@@ -36090,6 +36061,8 @@ msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
 msgstr ""
+"Δεν είναι γεμάτες όλες οι ζώνες. Χρησιμοποιήστε Επεξεργασία > Γέμισμα Όλων "
+"Των Ζωνών (%s) εάν θέλετε να δείτε όλα τα γεμίσματα."
 
 #: pcbnew/tools/pcb_control.cpp:585
 msgid "Item locked."
@@ -36944,7 +36917,7 @@ msgstr "Χρώμα σύρματος σχηματικού"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr ""
+msgstr "Αυτόνομος επεξεργαστής σχηματικού για σχηματικά KiCad"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
@@ -36973,7 +36946,7 @@ msgstr "Σουίτα EDA"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "Suite of tools for schematic design and circuit board layout"
-msgstr ""
+msgstr "Σουίτα εργαλείων για σχηματικό σχεδιασμό και διάταξη πλακέτας"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
@@ -36994,7 +36967,7 @@ msgstr "Επεξεργαστής Σχεδίασης Σελίδας"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
-msgstr ""
+msgstr "Αυτόνομος επεξεργαστής κυκλωμάτων για πλακέτες KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "pcbnew"
