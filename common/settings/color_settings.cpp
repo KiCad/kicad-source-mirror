@@ -33,11 +33,13 @@
 const int colorsSchemaVersion = 3;
 
 
-COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename ) :
+COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) :
         JSON_SETTINGS( std::move( aFilename ), SETTINGS_LOC::COLORS, colorsSchemaVersion ),
         m_overrideSchItemColors( false ),
         m_useBoardStackupColors( true )
 {
+    if( aAbsolutePath )
+        SetLocation( SETTINGS_LOC::NONE );
 
     m_params.emplace_back( new PARAM<wxString>( "meta.name", &m_displayName, "KiCad Default" ) );
 

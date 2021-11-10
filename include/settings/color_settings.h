@@ -58,7 +58,8 @@ public:
      */
     std::vector<COLOR4D> m_Palette;
 
-    explicit COLOR_SETTINGS( const wxString& aFilename = wxT( "user" ) );
+    explicit COLOR_SETTINGS( const wxString& aFilename = wxT( "user" ),
+                             bool aAbsolutePath = false );
 
     virtual ~COLOR_SETTINGS() {}
 

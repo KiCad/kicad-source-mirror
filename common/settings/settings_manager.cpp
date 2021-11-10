@@ -249,11 +249,12 @@ public:
 };
 
 
-COLOR_SETTINGS* SETTINGS_MANAGER::registerColorSettings( const wxString& aName )
+COLOR_SETTINGS* SETTINGS_MANAGER::registerColorSettings( const wxString& aName, bool aAbsolutePath )
 {
     if( !m_color_settings.count( aName ) )
     {
-        COLOR_SETTINGS* colorSettings = RegisterSettings( new COLOR_SETTINGS( aName ) );
+        COLOR_SETTINGS* colorSettings = RegisterSettings( new COLOR_SETTINGS( aName,
+                                                                              aAbsolutePath ) );
         m_color_settings[aName] = colorSettings;
     }
 
@@ -303,27 +304,25 @@ void SETTINGS_MANAGER::loadAllColorSettings()
     wxDir third_party_colors_dir( third_party_path.GetFullPath() );
     wxString color_settings_path = GetColorSettingsPath();
 
-    JSON_DIR_TRAVERSER copier(
-            [&]( const wxFileName& aFilename )
-            {
-                wxFileName new_file( color_settings_path, aFilename.GetFullName() );
-
-                if( !new_file.Exists() )
-                    wxCopyFile( aFilename.GetFullPath(), new_file.GetFullPath());
-            } );
-
     // Search for and load any other settings
     JSON_DIR_TRAVERSER loader( [&]( const wxFileName& aFilename )
                                {
                                    registerColorSettings( aFilename.GetName() );
                                } );
 
+    JSON_DIR_TRAVERSER thirdPartyLoader(
+            [&]( const wxFileName& aFilename )
+            {
+                COLOR_SETTINGS* settings = registerColorSettings( aFilename.GetFullPath(), true );
+                settings->SetReadOnly( true );
+            } );
+
     wxDir colors_dir( color_settings_path );
 
     if( colors_dir.IsOpened() )
     {
         if( third_party_colors_dir.IsOpened() )
-           third_party_colors_dir.Traverse( copier );
+           third_party_colors_dir.Traverse( thirdPartyLoader );
 
         colors_dir.Traverse( loader );
     }
