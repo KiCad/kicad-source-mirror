@@ -919,21 +919,14 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
     switch( aCadstarPad.Side )
     {
     case PAD_SIDE::MAXIMUM: //Bottom side
-        pad->SetAttribute( PAD_ATTRIB::SMD );
         padLayerSet |= LSET( 3, B_Cu, B_Paste, B_Mask );
         break;
 
     case PAD_SIDE::MINIMUM: //TOP side
-        pad->SetAttribute( PAD_ATTRIB::SMD );
         padLayerSet |= LSET( 3, F_Cu, F_Paste, F_Mask );
         break;
 
     case PAD_SIDE::THROUGH_HOLE:
-        if( csPadcode.Plated )
-            pad->SetAttribute( PAD_ATTRIB::PTH );
-        else
-            pad->SetAttribute( PAD_ATTRIB::NPTH );
-
         padLayerSet = LSET::AllCuMask() | LSET( 4, F_Mask, B_Mask, F_Paste, B_Paste );
         break;
 
@@ -941,6 +934,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         wxFAIL_MSG( "Unknown Pad type" );
     }
 
+    pad->SetAttribute( PAD_ATTRIB::SMD ); // assume SMD pad for now
     pad->SetLocalSolderMaskMargin( 0 );
     pad->SetLocalSolderPasteMargin( 0 );
     pad->SetLocalSolderPasteMarginRatio( 0.0 );
@@ -1144,6 +1138,11 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 
         drillOffset.x = -getKiCadLength( csPadcode.DrillXoffset );
         drillOffset.y = getKiCadLength( csPadcode.DrillYoffset );
+
+        if( csPadcode.Plated )
+            pad->SetAttribute( PAD_ATTRIB::PTH );
+        else
+            pad->SetAttribute( PAD_ATTRIB::NPTH );
     }
     else
     {
