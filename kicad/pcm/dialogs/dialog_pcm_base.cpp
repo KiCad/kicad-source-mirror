@@ -133,7 +133,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_BottomSizer->Add( m_installLocalButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	m_BottomSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_BottomSizer->Add( 0, 0, 1, 0, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -144,7 +144,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	m_BottomSizer->Add( m_sdbSizer1, 1, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_BottomSizer->Add( m_sdbSizer1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_MainSizer->Add( m_BottomSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );

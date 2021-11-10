@@ -865,7 +865,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
+                            <property name="flag"></property>
                             <property name="proportion">1</property>
                             <object class="spacer" expanded="1">
                                 <property name="height">0</property>
@@ -875,8 +875,8 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL</property>
-                            <property name="proportion">1</property>
+                            <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                            <property name="proportion">0</property>
                             <object class="wxStdDialogButtonSizer" expanded="1">
                                 <property name="Apply">1</property>
                                 <property name="Cancel">1</property>
