@@ -25,10 +25,9 @@
 #include "dialog_pcm_progress_base.h"
 #include "reporter.h"
 #include <atomic>
+#include <widgets/progress_reporter_base.h>
 #if wxCHECK_VERSION( 3, 1, 0 )
 #include <wx/appprogress.h>
-#include <widgets/progress_reporter_base.h>
-
 #endif
 
 
