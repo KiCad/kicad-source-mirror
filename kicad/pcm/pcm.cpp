@@ -150,6 +150,13 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
                     if( stat_code == 0 )
                         entry.install_timestamp = stat.st_mtime;
 
+                    PACKAGE_VERSION version;
+                    version.version = "0.0";
+                    version.status = PVS_STABLE;
+                    version.kicad_version = KICAD_MAJOR_MINOR_VERSION;
+
+                    entry.package.versions.emplace_back( version );
+
                     m_installed.emplace( actual_package_id, entry );
                 }
 
