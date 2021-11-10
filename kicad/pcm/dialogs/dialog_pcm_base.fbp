@@ -472,7 +472,7 @@
                                         <property name="aui_position"></property>
                                         <property name="aui_row"></property>
                                         <property name="best_size"></property>
-                                        <property name="bg">wxSYS_COLOUR_WINDOW</property>
+                                        <property name="bg"></property>
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
@@ -520,7 +520,7 @@
                                             <property name="permission">none</property>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALL|wxEXPAND</property>
+                                                <property name="flag">wxEXPAND|wxALL</property>
                                                 <property name="proportion">1</property>
                                                 <object class="wxGrid" expanded="1">
                                                     <property name="BottomDockable">1</property>
@@ -531,7 +531,7 @@
                                                     <property name="aui_name"></property>
                                                     <property name="aui_position"></property>
                                                     <property name="aui_row"></property>
-                                                    <property name="autosize_cols">1</property>
+                                                    <property name="autosize_cols">0</property>
                                                     <property name="autosize_rows">0</property>
                                                     <property name="best_size"></property>
                                                     <property name="bg"></property>
@@ -545,11 +545,11 @@
                                                     <property name="center_pane">0</property>
                                                     <property name="close_button">1</property>
                                                     <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
-                                                    <property name="col_label_size">30</property>
+                                                    <property name="col_label_size">22</property>
                                                     <property name="col_label_values">&quot;Action&quot; &quot;Package&quot; &quot;Version&quot; &quot;Repository&quot;</property>
                                                     <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                                                     <property name="cols">4</property>
-                                                    <property name="column_sizes"></property>
+                                                    <property name="column_sizes">100,200,80,200</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>
                                                     <property name="default_pane">0</property>
@@ -719,7 +719,7 @@
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -792,7 +792,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -875,7 +875,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
+                            <property name="flag">wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">1</property>
                             <object class="wxStdDialogButtonSizer" expanded="1">
                                 <property name="Apply">1</property>

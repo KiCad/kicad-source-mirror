@@ -60,7 +60,6 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_dialogNotebook->AddPage( m_panelInstalledHolder, _("Installed (%d)"), false );
 	m_panelPending = new wxPanel( m_dialogNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panelPending->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-	m_panelPending->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
@@ -75,10 +74,13 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_gridPendingActions->SetMargins( 0, 0 );
 
 	// Columns
-	m_gridPendingActions->AutoSizeColumns();
+	m_gridPendingActions->SetColSize( 0, 100 );
+	m_gridPendingActions->SetColSize( 1, 200 );
+	m_gridPendingActions->SetColSize( 2, 80 );
+	m_gridPendingActions->SetColSize( 3, 200 );
 	m_gridPendingActions->EnableDragColMove( false );
 	m_gridPendingActions->EnableDragColSize( true );
-	m_gridPendingActions->SetColLabelSize( 30 );
+	m_gridPendingActions->SetColLabelSize( 22 );
 	m_gridPendingActions->SetColLabelValue( 0, _("Action") );
 	m_gridPendingActions->SetColLabelValue( 1, _("Package") );
 	m_gridPendingActions->SetColLabelValue( 2, _("Version") );
@@ -94,7 +96,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 
 	// Cell Defaults
 	m_gridPendingActions->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer8->Add( m_gridPendingActions, 1, wxALL|wxEXPAND, 5 );
+	bSizer8->Add( m_gridPendingActions, 1, wxEXPAND|wxALL, 5 );
 
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
@@ -125,10 +127,10 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_BottomSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_refreshButton = new wxButton( this, wxID_ANY, _("Refresh"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BottomSizer->Add( m_refreshButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_BottomSizer->Add( m_refreshButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_installLocalButton = new wxButton( this, wxID_ANY, _("Install from File..."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BottomSizer->Add( m_installLocalButton, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_BottomSizer->Add( m_installLocalButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	m_BottomSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -142,7 +144,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	m_BottomSizer->Add( m_sdbSizer1, 1, wxEXPAND, 5 );
+	m_BottomSizer->Add( m_sdbSizer1, 1, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_MainSizer->Add( m_BottomSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
