@@ -127,6 +127,15 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
 
     m_dialogNotebook->SetSelection( 0 );
 
+    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
+    // that requires us to correct the button labels here.
+    m_sdbSizer1OK->SetLabel( _( "Close" ) );
+    m_sdbSizer1Cancel->SetLabel( _( "Discard Changes" ) );
+    m_sdbSizer1Apply->SetLabel( _( "Apply Changes" ) );
+    m_sdbSizer1->Layout();
+
+    SetDefaultItem( m_sdbSizer1OK );
+
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   app_settings = mgr.GetAppSettings<KICAD_SETTINGS>();
@@ -134,8 +143,6 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
     m_pcm->SetRepositoryList( app_settings->m_PcmRepositories );
 
     setRepositoryListFromPcm();
-
-    SetDefaultItem( m_closeButton );
 
     for( int col = 0; col < m_gridPendingActions->GetNumberCols(); col++ )
     {

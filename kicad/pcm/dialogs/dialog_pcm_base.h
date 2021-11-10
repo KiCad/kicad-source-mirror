@@ -52,9 +52,10 @@ class DIALOG_PCM_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_discardActionButton;
 		wxButton* m_refreshButton;
 		wxButton* m_installLocalButton;
-		wxButton* m_applyButton;
-		wxButton* m_discardButton;
-		wxButton* m_closeButton;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Apply;
+		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnRepositoryChoice( wxCommandEvent& event ) { event.Skip(); }

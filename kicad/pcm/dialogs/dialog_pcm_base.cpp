@@ -102,7 +102,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_discardActionButton = new wxBitmapButton( m_panelPending, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_discardActionButton->SetToolTip( _("Discard action") );
 
-	bSizer9->Add( m_discardActionButton, 0, wxLEFT|wxRIGHT, 5 );
+	bSizer9->Add( m_discardActionButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer9->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -116,7 +116,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer8->Fit( m_panelPending );
 	m_dialogNotebook->AddPage( m_panelPending, _("Pending (%d)"), true );
 
-	m_TopSizer->Add( m_dialogNotebook, 1, wxEXPAND | wxALL, 5 );
+	m_TopSizer->Add( m_dialogNotebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	m_MainSizer->Add( m_TopSizer, 1, wxEXPAND, 5 );
@@ -125,25 +125,27 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_BottomSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_refreshButton = new wxButton( this, wxID_ANY, _("Refresh"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BottomSizer->Add( m_refreshButton, 0, wxALL, 5 );
+	m_BottomSizer->Add( m_refreshButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_installLocalButton = new wxButton( this, wxID_ANY, _("Install from File..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_BottomSizer->Add( m_installLocalButton, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_BottomSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_installLocalButton = new wxButton( this, wxID_ANY, _("Install from file..."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BottomSizer->Add( m_installLocalButton, 0, wxALL, 5 );
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1OK = new wxButton( this, wxID_OK );
+	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Apply = new wxButton( this, wxID_APPLY );
+	m_sdbSizer1->AddButton( m_sdbSizer1Apply );
+	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1->Realize();
 
-	m_applyButton = new wxButton( this, wxID_ANY, _("Apply changes"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BottomSizer->Add( m_applyButton, 0, wxALL, 5 );
-
-	m_discardButton = new wxButton( this, wxID_ANY, _("Discard changes"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BottomSizer->Add( m_discardButton, 0, wxALL, 5 );
-
-	m_closeButton = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BottomSizer->Add( m_closeButton, 0, wxALL, 5 );
+	m_BottomSizer->Add( m_sdbSizer1, 1, wxEXPAND, 5 );
 
 
-	m_MainSizer->Add( m_BottomSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_MainSizer->Add( m_BottomSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( m_MainSizer );
@@ -158,9 +160,9 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_discardActionButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnDiscardActionClicked ), NULL, this );
 	m_refreshButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnRefreshClicked ), NULL, this );
 	m_installLocalButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnInstallFromFileClicked ), NULL, this );
-	m_applyButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnApplyChangesClicked ), NULL, this );
-	m_discardButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnDiscardChangesClicked ), NULL, this );
-	m_closeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnCloseClicked ), NULL, this );
+	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnApplyChangesClicked ), NULL, this );
+	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnDiscardChangesClicked ), NULL, this );
+	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnCloseClicked ), NULL, this );
 }
 
 DIALOG_PCM_BASE::~DIALOG_PCM_BASE()
@@ -172,8 +174,8 @@ DIALOG_PCM_BASE::~DIALOG_PCM_BASE()
 	m_discardActionButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnDiscardActionClicked ), NULL, this );
 	m_refreshButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnRefreshClicked ), NULL, this );
 	m_installLocalButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnInstallFromFileClicked ), NULL, this );
-	m_applyButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnApplyChangesClicked ), NULL, this );
-	m_discardButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnDiscardChangesClicked ), NULL, this );
-	m_closeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnCloseClicked ), NULL, this );
+	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnApplyChangesClicked ), NULL, this );
+	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnDiscardChangesClicked ), NULL, this );
+	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCM_BASE::OnCloseClicked ), NULL, this );
 
 }
