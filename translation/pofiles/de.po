@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-08 19:42+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2021-11-10 23:49+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -15522,7 +15522,7 @@ msgstr "Gegenwärtig ist kein Schaltplan geöffnet."
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is not writable."
 msgstr "Symbolbibliothek '%s' ist nicht beschreibbar."
 
@@ -17385,7 +17385,6 @@ msgid "Zero format"
 msgstr "Nullformat"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
-#, fuzzy
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
@@ -17940,7 +17939,7 @@ msgstr "<Keine Auswahl>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
 msgid "Open Gerber Plot File(s)..."
-msgstr "Öffne Gerber-Plotdatei(en)..."
+msgstr "Gerber-Plotdatei(en) öffnen..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid ""
@@ -17963,7 +17962,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:51
 msgid "Open Gerber Job File..."
-msgstr "Öffne Gerber-Jobdatei..."
+msgstr "Gerber-Jobdatei öffnen..."
 
 #: gerbview/tools/gerbview_actions.cpp:52
 msgid "Open a Gerber job file and its associated gerber plot files"
@@ -18028,11 +18027,11 @@ msgstr "Alle Lagen leeren. Alle Daten werden gelöscht"
 
 #: gerbview/tools/gerbview_actions.cpp:98
 msgid "Reload All Layers"
-msgstr "Neuladen aller Lagen"
+msgstr "Alle Lagen neu laden"
 
 #: gerbview/tools/gerbview_actions.cpp:99
 msgid "Reload all layers. All data will be reloaded"
-msgstr "Neuladen aller Lagen. Sämtliche Daten werden neu geladen"
+msgstr "Erneutes Laden aller Lagen. Sämtliche Daten werden neu geladen"
 
 #: gerbview/tools/gerbview_actions.cpp:108
 msgid "Clear Highlight"
@@ -18100,7 +18099,7 @@ msgstr "DCode-Nummern anzeigen"
 
 #: gerbview/tools/gerbview_actions.cpp:173
 msgid "Show in Differential Mode"
-msgstr "Anzeige im Differenzmodus"
+msgstr "Im Differenzmodus anzeigen"
 
 #: gerbview/tools/gerbview_actions.cpp:173
 msgid "Show layers in diff (compare) mode"
@@ -18563,7 +18562,6 @@ msgid "Add repository"
 msgstr "Repository hinzufügen"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-#, fuzzy
 msgid "Manage Repositories"
 msgstr "Repositorys verwalten"
 
@@ -18991,7 +18989,6 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr "Konnte das Metainformationsverzeichnis für diese Vorlage nicht öffnen!"
 
 #: kicad/project_template.cpp:63
-#, fuzzy
 msgid "Couldn't find the meta HTML information file for this template!"
 msgstr "Konnte keine HTML-Metainformation für diese Vorlage finden!"
 
@@ -19813,7 +19810,7 @@ msgstr "Die Liste der Elemente im Zeichnungsblatt anzeigen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Page Preview Settings..."
-msgstr "Seitenvorschau einrichten..."
+msgstr "Seitenvorschau einstellen..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:87
 msgid "Edit preview data for page size and title block"
@@ -20827,20 +20824,19 @@ msgstr ""
 "\n"
 "- Dieser Rechner findet Kombinationen von Standardkomponenten der gewählten "
 "E-Serie, um beliebige Werte zu erzeugen.\n"
-"- Sie können den benötigten Widerstandswert von 0,0025 bis 4000 kΩ "
-"eingeben.\n"
+"- Sie können den benötigten Widerstandswert von 0,0025 bis 4000 kΩ eingeben."
+"\n"
 "- Es werden Lösungen mit bis zu 4 Komponenten ausgegeben.\n"
 "\n"
-"Standardmäßig wird der angefragte Wert von den Lösungen ausgeschlossen.  Es "
-"ist außerdem möglich,\n"
-"bis zu zwei weitere Werte von den Lösungen auszuschließen, falls diese nicht "
-"verfügbar sind.\n"
+"Der angefragte Wert selbst wird stets von den Lösungen ausgeschlossen.<br>\n"
+"Außerdem können von den Lösungen bis zu zwei weitere Werte ausgeschlossen "
+"werden, falls diese nicht verfügbar sind.\n"
 "\n"
 "Lösungen werden in folgenden Formaten angegeben:\n"
 "\n"
-"\tR1 + R2 +...+ Rn\tWiderstände in Reihe\n"
-"\tR1 | R2 |...| Rn\t\tWiderstände parallel\n"
-"\tR1 + (R2|R3)...\t\teine beliebige Kombination der oben genannten\n"
+"\tR1 + R2 + ... + Rn    Widerstände in Reihe\n"
+"\tR1 | R2 | ... | Rn    Widerstände parallel\n"
+"\tR1 + (R2 | R3) ...    eine beliebige Kombination der oben genannten\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:49
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
@@ -26431,10 +26427,8 @@ msgid "Plot Edge.Cuts on all layers"
 msgstr "Edge.Cuts auf allen Lagen plotten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
-#, fuzzy
 msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr ""
-"Den Inhalt der Platinenumriss-Lage nicht in alle anderen Lagen plotten."
+msgstr "Gibt den Inhalt der Platinenumriss-Lage auf allen Lagen aus"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Sketch pads on fabrication layers"
@@ -27245,11 +27239,10 @@ msgid "Constrain outline to H, V and 45 deg"
 msgstr "Beschränken der Außenlinien zu H, V und 45°"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:97
-#, fuzzy
 msgid "Draw the area using horizontal, vertical and 45 degree lines only"
 msgstr ""
-"Nur horizontale, vertikale oder diagonale Linien zum Zeichnen des Bereich "
-"benutzen"
+"Nur horizontale, vertikale oder 45°-Linien zum Zeichnen des Bereichs "
+"verwenden"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:67
 msgid "Rule Area Properties"
@@ -28348,9 +28341,8 @@ msgid "On-board, non-copper"
 msgstr "On-board, kupferfrei"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-#, fuzzy
 msgid "If you want a solder paste layer for front side of the board"
-msgstr "Wenn ein Lage für Lötpaste auf der Platinenvorderseite benötigt wird"
+msgstr "Wenn ein Lage für Lötpaste auf der Platinenvorderseite gewünscht wird"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
 msgid "SoldP_Front"
@@ -28713,7 +28705,7 @@ msgstr "SilkS_Back"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:598
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr "Wenn eine Lage für Lötpaste auf der Platinenrückseite benötigt wird"
+msgstr "Wenn eine Lage für Lötpaste auf der Platinenrückseite gewünscht wird"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:602
 msgid "SoldP_Back"
@@ -29599,7 +29591,7 @@ msgid "Unconditional rule applied."
 msgstr "Bedingungslose Regel angewandt."
 
 #: pcbnew/drc/drc_engine.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "Prüfe Regelbedingung \"%s\"."
 
@@ -31118,7 +31110,7 @@ msgstr "&Kontrastmodus"
 
 #: pcbnew/menubar_footprint_editor.cpp:209
 msgid "&Load Footprint from PCB..."
-msgstr "&Lade Footprint von Platine..."
+msgstr "Footprint von Platine &laden..."
 
 #: pcbnew/menubar_footprint_editor.cpp:210
 msgid "Load a footprint from the current board into the editor"
@@ -32789,7 +32781,7 @@ msgstr ""
 "Gitter ist ein Kreuzgitter."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3533
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
 "KiCad only supports one width for the hatching. The imported hatching uses "
@@ -32797,11 +32789,11 @@ msgid ""
 msgstr ""
 "Der CADSTAR-Gittercode '%s' hat für jedes Gitter unterschiedliche "
 "Linienbreiten. KiCad unterstützt nur eine Breite für Gitter. Das importierte "
-"Gitter verwendet die in der ersten Gitterdefinition festgelegte Breite %.2f "
-"mm."
+"Gitter verwendet die in der ersten Gitterdefinition festgelegte Breite, d.h. "
+"%.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3545
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
 "KiCad only supports one step size for the hatching. The imported hatching "
@@ -32809,8 +32801,8 @@ msgid ""
 msgstr ""
 "Der CADSTAR-Gittercode '%s' hat verschiedene Schrittgrößen für die Zellen. "
 "KiCad unterstützt nur eine Schrittgröße für Gitter. Das importierte Gitter "
-"verwendet die in der ersten Gitterdefinition festgelegte Schrittgröße %.2f "
-"mm."
+"verwendet die in der ersten Gitterdefinition festgelegte Schrittgröße, d.h. "
+"%.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3558
 #, c-format
@@ -32826,7 +32818,7 @@ msgstr ""
 "ausgerichtet sind."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3631
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimeters were applied instead."
@@ -36140,11 +36132,11 @@ msgstr "Interaktives Verlegen eines differenziellen Paares"
 
 #: pcbnew/tools/pcb_actions.cpp:1322
 msgid "Interactive Router Settings..."
-msgstr "Einstellungen des interaktiven Routers..."
+msgstr "Interaktiven Router einstellen..."
 
 #: pcbnew/tools/pcb_actions.cpp:1322
 msgid "Open Interactive Router settings"
-msgstr "Öffne Einstellungen des interaktiven Routers"
+msgstr "Öffnet Einstellungen des interaktiven Routers"
 
 #: pcbnew/tools/pcb_actions.cpp:1327
 msgid "Differential Pair Dimensions..."
