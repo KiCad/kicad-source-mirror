@@ -294,7 +294,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         cadstarBoardStackup.pop_back();
 
         LAYER_BLOCK dummyLayer;
-        LAYER_ID           lastConstruction = secondToLastLayer.ConstructionLayers.back();
+        LAYER_ID    lastConstruction = secondToLastLayer.ConstructionLayers.back();
 
         if( secondToLastLayer.ConstructionLayers.size() > 1 )
         {
@@ -459,6 +459,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 
     int numElecAndPowerLayers = 0;
 
+    // Map CADSTAR documentation layers to KiCad "User layers"
+    int                       currentDocLayer = 0;
+    std::vector<PCB_LAYER_ID> docLayers = { Dwgs_User, Cmts_User, User_1, User_2, User_3, User_4,
+                                            User_5,    User_6,    User_7, User_8, User_9 };
+
     for( LAYER_ID cadstarLayerID : Assignments.Layerdefs.LayerStack )
     {
         LAYER        curLayer = Assignments.Layerdefs.Layers.at( cadstarLayerID );
@@ -490,7 +495,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
                     break;
 
                 case LOG_LEVEL::WARN:
-                    logBoardStackupMessage( curLayer.Name, kicadLayerID );
+                    logBoardStackupWarning( curLayer.Name, kicadLayerID );
                     break;
                 }
             };
@@ -517,7 +522,12 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
             break;
 
         case LAYER_TYPE::DOC:
-            selectLayerID( PCB_LAYER_ID::Dwgs_User, PCB_LAYER_ID::Cmts_User, LOG_LEVEL::WARN );
+
+            if( currentDocLayer >= docLayers.size() )
+                currentDocLayer = 0;
+
+            kicadLayerID = docLayers.at( currentDocLayer++ );
+            logBoardStackupMessage( curLayer.Name, kicadLayerID );
             break;
 
         case LAYER_TYPE::NONELEC:
