@@ -129,13 +129,13 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
 
             while( more )
             {
-                if( m_installed.find( subdir ) == m_installed.end() )
+                wxString actual_package_id = subdir;
+                actual_package_id.Replace( '_', '.' );
+
+                if( m_installed.find( actual_package_id ) == m_installed.end() )
                 {
                     PCM_INSTALLATION_ENTRY entry;
                     wxFileName             subdir_file( d.GetPath(), subdir );
-
-                    wxString actual_package_id = subdir;
-                    actual_package_id.Replace( '_', '.' );
 
                     // wxFileModificationTime bugs out on windows for directories
                     wxStructStat stat;
@@ -147,7 +147,7 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
                     entry.install_timestamp = stat.st_mtime;
                     entry.repository_name = wxT( "<unknown>" );
 
-                    m_installed.emplace( subdir, entry );
+                    m_installed.emplace( actual_package_id, entry );
                 }
 
                 more = package_dir.GetNext( &subdir );
