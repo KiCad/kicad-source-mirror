@@ -27,6 +27,10 @@
 DIALOG_PCM_PROGRESS::DIALOG_PCM_PROGRESS( wxWindow* parent, bool aShowDownloadSection ) :
         DIALOG_PCM_PROGRESS_BASE( parent ),
         PROGRESS_REPORTER_BASE( 1 ),
+        m_downloaded( 0 ),
+        m_downloadTotal( 0 ),
+        m_overallProgress( 0 ),
+        m_overallProgressTotal( 0 ),
         m_finished( false )
 #if wxCHECK_VERSION( 3, 1, 0 )
         ,
@@ -98,6 +102,7 @@ void DIALOG_PCM_PROGRESS::SetFinished()
 
 bool DIALOG_PCM_PROGRESS::updateUI()
 {
+    bool   finished = m_finished.load();
     int    phase = m_phase.load();
     int    phases = m_numPhases.load();
     double current = m_overallProgress.load() / (double) m_overallProgressTotal.load();
@@ -105,7 +110,7 @@ bool DIALOG_PCM_PROGRESS::updateUI()
     if( phases > 0 )
         current = ( phase + current ) / phases;
 
-    if( current > 1.0 )
+    if( current > 1.0 || finished )
         current = 1.0;
 
     m_overallGauge->SetValue( current * GAUGE_RANGE );
@@ -121,12 +126,12 @@ bool DIALOG_PCM_PROGRESS::updateUI()
     else
     {
         m_downloadText->SetLabel( wxString::Format( _( "Downloaded %lld/%lld Kb" ),
-                                                    toKb( m_downloaded ),
-                                                    toKb( m_downloadTotal ) ) );
+                                                    toKb( m_downloaded.load() ),
+                                                    toKb( m_downloadTotal.load() ) ) );
 
         current = m_downloaded.load() / (double) m_downloadTotal.load();
 
-        if( current > 1.0 )
+        if( current > 1.0 || finished )
             current = 1.0;
 
         m_downloadGauge->SetValue( current * GAUGE_RANGE );
@@ -139,7 +144,7 @@ bool DIALOG_PCM_PROGRESS::updateUI()
 
     m_reports.clear();
 
-    if( m_finished.load() )
+    if( finished )
     {
         m_buttonCancel->Disable();
         m_buttonClose->Enable();
