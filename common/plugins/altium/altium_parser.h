@@ -71,8 +71,8 @@ public:
         uint8_t len = Read<uint8_t>();
         if( GetRemainingBytes() >= len )
         {
-
-            //altium uses LATIN1/ISO 8859-1, convert it
+            // TODO: Identify where the actual code page is stored. For now, this default code page
+            //       has limited impact, because recent Altium files come with a UTF16 string table
             wxString val = wxString( m_pos, wxConvISO8859_1, len );
             m_pos += len;
             return val;
@@ -82,6 +82,36 @@ public:
             m_error = true;
             return wxString( "" );
         }
+    }
+
+    std::map<uint32_t, wxString> ReadWideStringTable()
+    {
+        std::map<uint32_t, wxString> table;
+        size_t                       remaining = GetRemainingBytes();
+
+        while( remaining >= 8 )
+        {
+            uint32_t index = Read<uint32_t>();
+            uint32_t length = Read<uint32_t>();
+            wxString str;
+            remaining -= 8;
+
+            if( length <= 2 )
+                length = 0; // for empty strings, not even the null bytes are present
+            else
+            {
+                if( length > remaining )
+                    break;
+
+                str = wxString( m_pos, wxMBConvUTF16LE(), length - 2 );
+            }
+
+            table.emplace( index, str );
+            m_pos += length;
+            remaining -= length;
+        }
+
+        return table;
     }
 
     std::vector<char> ReadVector( size_t aSize )

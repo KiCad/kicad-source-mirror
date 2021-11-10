@@ -661,7 +661,7 @@ struct ATEXT6
 
     wxString text;
 
-    explicit ATEXT6( ALTIUM_PARSER& aReader );
+    explicit ATEXT6( ALTIUM_PARSER& aReader, std::map<uint32_t, wxString>& aStringTable );
 };
 
 struct AFILL6

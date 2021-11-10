@@ -779,7 +779,7 @@ ATRACK6::ATRACK6( ALTIUM_PARSER& aReader )
         THROW_IO_ERROR( "Tracks6 stream was not parsed correctly" );
 }
 
-ATEXT6::ATEXT6( ALTIUM_PARSER& aReader )
+ATEXT6::ATEXT6( ALTIUM_PARSER& aReader, std::map<uint32_t, wxString>& aStringTable )
 {
     ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( aReader.Read<uint8_t>() );
 
@@ -806,7 +806,9 @@ ATEXT6::ATEXT6( ALTIUM_PARSER& aReader )
     isItalic = aReader.Read<uint8_t>() != 0;
     aReader.Skip( 64 ); // font_name
     isInverted = aReader.Read<uint8_t>() != 0;
-    aReader.Skip( 21 );
+    aReader.Skip( 4 );
+    uint32_t stringIndex = aReader.Read<uint32_t>();
+    aReader.Skip( 13 );
     textposition = static_cast<ALTIUM_TEXT_POSITION>( aReader.Read<uint8_t>() );
     /**
      * In Altium 14 (subrecord1 == 230) only left bottom is valid? I think there is a bit missing.
@@ -820,10 +822,15 @@ ATEXT6::ATEXT6( ALTIUM_PARSER& aReader )
 
     aReader.SkipSubrecord();
 
-    // Subrecord 2 - String
+    // Subrecord 2 - Legacy 8bit string, max 255 chars, unknown codepage
     aReader.ReadAndSetSubrecordLength();
 
-    text = aReader.ReadWxString(); // TODO: what about strings with length > 255?
+    auto entry = aStringTable.find( stringIndex );
+
+    if( entry != aStringTable.end() )
+        text = entry->second;
+    else
+        text = aReader.ReadWxString();
 
     // Normalize Windows line endings
     text.Replace( "\r\n", "\n" );

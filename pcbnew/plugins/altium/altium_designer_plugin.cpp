@@ -95,7 +95,8 @@ BOARD* ALTIUM_DESIGNER_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendTo
             { ALTIUM_PCB_DIR::SHAPEBASEDREGIONS6, "ShapeBasedRegions6\\" },
             { ALTIUM_PCB_DIR::TEXTS6, "Texts6\\" },
             { ALTIUM_PCB_DIR::TRACKS6, "Tracks6\\" },
-            { ALTIUM_PCB_DIR::VIAS6, "Vias6\\" }
+            { ALTIUM_PCB_DIR::VIAS6, "Vias6\\" },
+            { ALTIUM_PCB_DIR::WIDESTRINGS6, "WideStrings6\\" }
     };
     // clang-format on
 

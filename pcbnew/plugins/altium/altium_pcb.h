@@ -173,6 +173,8 @@ private:
             const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseRegions6Data(
             const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseWideStrings6Data(
+            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
 
     // Helper Functions
     void HelperParseDimensions6Linear( const ADIMENSION6& aElem );
@@ -193,6 +195,7 @@ private:
     std::vector<ZONE*>                   m_polygons;
     std::vector<PCB_DIMENSION_BASE*>     m_radialDimensions;
     std::map<wxString, wxString>         m_models;
+    std::map<uint32_t, wxString>         m_unicodeStrings;
     size_t                               m_num_nets;
     std::map<ALTIUM_LAYER, PCB_LAYER_ID> m_layermap; // used to correctly map copper layers
     std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>> m_rules;

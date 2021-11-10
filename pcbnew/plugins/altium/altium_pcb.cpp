@@ -421,6 +421,11 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
                 {
                     this->ParseTracks6Data( aReader, fileHeader );
                 } },
+        { false, ALTIUM_PCB_DIR::WIDESTRINGS6,
+                [this]( auto aReader, auto fileHeader )
+                {
+                    this->ParseWideStrings6Data( aReader, fileHeader );
+                } },
         { true, ALTIUM_PCB_DIR::TEXTS6,
                 [this]( auto aReader, auto fileHeader )
                 {
@@ -2636,6 +2641,20 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
     }
 }
 
+void ALTIUM_PCB::ParseWideStrings6Data( const CFB::CompoundFileReader&  aReader,
+                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
+{
+    if( m_progressReporter )
+        m_progressReporter->Report( _( "Loading unicode strings..." ) );
+
+    ALTIUM_PARSER reader( aReader, aEntry );
+    
+    m_unicodeStrings = reader.ReadWideStringTable();
+
+    if( reader.GetRemainingBytes() != 0 )
+        THROW_IO_ERROR( "WideStrings6 stream is not fully parsed" );
+}
+
 void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
@@ -2647,7 +2666,7 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
         checkpoint();
-        ATEXT6 elem( reader );
+        ATEXT6 elem( reader, m_unicodeStrings );
 
         if( elem.fonttype == ALTIUM_TEXT_TYPE::BARCODE )
         {
