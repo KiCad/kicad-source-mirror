@@ -38,7 +38,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer6->Add( m_buttonManage, 0, wxALL, 5 );
 
 
-	bSizer4->Add( bSizer6, 0, wxEXPAND, 5 );
+	bSizer4->Add( bSizer6, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_contentNotebook = new wxNotebook( m_panelRepository, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
@@ -143,7 +143,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_BottomSizer->Add( m_closeButton, 0, wxALL, 5 );
 
 
-	m_MainSizer->Add( m_BottomSizer, 0, wxEXPAND, 5 );
+	m_MainSizer->Add( m_BottomSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( m_MainSizer );

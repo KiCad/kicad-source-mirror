@@ -55,7 +55,7 @@ class DIALOG_PCM_PROGRESS_BASE : public wxDialog
 
 	public:
 
-		DIALOG_PCM_PROGRESS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Applying package changes"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,500 ), long style = wxCAPTION );
+		DIALOG_PCM_PROGRESS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Applying Package Changes"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,500 ), long style = wxCAPTION );
 		~DIALOG_PCM_PROGRESS_BASE();
 
 };

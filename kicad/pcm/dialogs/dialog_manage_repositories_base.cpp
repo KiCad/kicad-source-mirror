@@ -33,7 +33,7 @@ DIALOG_MANAGE_REPOSITORIES_BASE::DIALOG_MANAGE_REPOSITORIES_BASE( wxWindow* pare
 	// Columns
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
-	m_grid->SetColLabelSize( 30 );
+	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelValue( 0, _("Name") );
 	m_grid->SetColLabelValue( 1, _("URL") );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
@@ -50,7 +50,7 @@ DIALOG_MANAGE_REPOSITORIES_BASE::DIALOG_MANAGE_REPOSITORIES_BASE( wxWindow* pare
 	m_TopSizer->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
 
 
-	m_MainSizer->Add( m_TopSizer, 1, wxEXPAND, 5 );
+	m_MainSizer->Add( m_TopSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* m_BottomSizer;
 	m_BottomSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -80,7 +80,7 @@ DIALOG_MANAGE_REPOSITORIES_BASE::DIALOG_MANAGE_REPOSITORIES_BASE( wxWindow* pare
 	m_BottomSizer->Add( m_sdbSizer1, 1, wxEXPAND, 5 );
 
 
-	m_MainSizer->Add( m_BottomSizer, 0, wxEXPAND, 5 );
+	m_MainSizer->Add( m_BottomSizer, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( m_MainSizer );

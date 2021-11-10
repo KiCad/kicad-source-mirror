@@ -48,7 +48,7 @@
             <property name="size">500,500</property>
             <property name="style">wxCAPTION</property>
             <property name="subclass">; ; forward_declare</property>
-            <property name="title">Applying package changes</property>
+            <property name="title">Applying Package Changes</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -115,7 +115,7 @@
                         <property name="window_style">wxTAB_TRAVERSAL</property>
                         <object class="wxStaticBoxSizer" expanded="1">
                             <property name="id">wxID_ANY</property>
-                            <property name="label">Download progress</property>
+                            <property name="label">Download Progress</property>
                             <property name="minimum_size"></property>
                             <property name="name">sbSizer1</property>
                             <property name="orient">wxVERTICAL</property>
@@ -315,7 +315,7 @@
                                 <property name="proportion">0</property>
                                 <object class="wxStaticBoxSizer" expanded="1">
                                     <property name="id">wxID_ANY</property>
-                                    <property name="label">Overall progress</property>
+                                    <property name="label">Overall Progress</property>
                                     <property name="minimum_size"></property>
                                     <property name="name">sbSizer2</property>
                                     <property name="orient">wxVERTICAL</property>
@@ -389,7 +389,7 @@
                             </object>
                             <object class="sizeritem" expanded="1">
                                 <property name="border">5</property>
-                                <property name="flag">wxEXPAND</property>
+                                <property name="flag">wxEXPAND|wxTOP</property>
                                 <property name="proportion">1</property>
                                 <object class="wxStaticBoxSizer" expanded="1">
                                     <property name="id">wxID_ANY</property>
@@ -401,7 +401,7 @@
                                     <property name="permission">none</property>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALL|wxEXPAND</property>
+                                        <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT</property>
                                         <property name="proportion">1</property>
                                         <object class="wxHtmlWindow" expanded="1">
                                             <property name="BottomDockable">1</property>

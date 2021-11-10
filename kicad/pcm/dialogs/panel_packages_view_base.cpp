@@ -26,7 +26,7 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 
 	bSizer1->Add( bSizer7, 0, wxEXPAND, 5 );
 
-	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
+	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH );
 	m_splitter1->SetSashGravity( 0.55 );
 	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW_BASE::m_splitter1OnIdle ), NULL, this );
 	m_splitter1->SetMinimumPaneSize( 300 );
@@ -77,10 +77,10 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	m_gridVersions->AutoSizeColumns();
 	m_gridVersions->EnableDragColMove( false );
 	m_gridVersions->EnableDragColSize( true );
-	m_gridVersions->SetColLabelSize( 30 );
+	m_gridVersions->SetColLabelSize( 22 );
 	m_gridVersions->SetColLabelValue( 0, _("Version") );
-	m_gridVersions->SetColLabelValue( 1, _("Dl Size") );
-	m_gridVersions->SetColLabelValue( 2, _("Inst Size") );
+	m_gridVersions->SetColLabelValue( 1, _("Download Size") );
+	m_gridVersions->SetColLabelValue( 2, _("Install Size") );
 	m_gridVersions->SetColLabelValue( 3, _("Comp") );
 	m_gridVersions->SetColLabelValue( 4, _("Status") );
 	m_gridVersions->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
@@ -127,7 +127,7 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	m_panelDetails->Layout();
 	bSizer3->Fit( m_panelDetails );
 	m_splitter1->SplitVertically( m_packageListWindow, m_panelDetails, 0 );
-	bSizer1->Add( m_splitter1, 1, wxEXPAND, 5 );
+	bSizer1->Add( m_splitter1, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( bSizer1 );

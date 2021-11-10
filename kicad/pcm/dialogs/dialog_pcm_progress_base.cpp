@@ -18,7 +18,7 @@ DIALOG_PCM_PROGRESS_BASE::DIALOG_PCM_PROGRESS_BASE( wxWindow* parent, wxWindowID
 
 	m_panelDownload = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( m_panelDownload, wxID_ANY, _("Download progress") ), wxVERTICAL );
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( m_panelDownload, wxID_ANY, _("Download Progress") ), wxVERTICAL );
 
 	m_downloadText = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Waiting..."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_downloadText->Wrap( -1 );
@@ -39,7 +39,7 @@ DIALOG_PCM_PROGRESS_BASE::DIALOG_PCM_PROGRESS_BASE( wxWindow* parent, wxWindowID
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_panel2, wxID_ANY, _("Overall progress") ), wxVERTICAL );
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_panel2, wxID_ANY, _("Overall Progress") ), wxVERTICAL );
 
 	m_overallGauge = new wxGauge( sbSizer2->GetStaticBox(), wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL );
 	m_overallGauge->SetValue( 0 );
@@ -52,10 +52,10 @@ DIALOG_PCM_PROGRESS_BASE::DIALOG_PCM_PROGRESS_BASE( wxWindow* parent, wxWindowID
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_panel2, wxID_ANY, _("Details") ), wxVERTICAL );
 
 	m_reporter = new WX_HTML_REPORT_BOX( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,200 ), wxHW_SCROLLBAR_AUTO );
-	sbSizer3->Add( m_reporter, 1, wxALL|wxEXPAND, 5 );
+	sbSizer3->Add( m_reporter, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bSizer3->Add( sbSizer3, 1, wxEXPAND, 5 );
+	bSizer3->Add( sbSizer3, 1, wxEXPAND|wxTOP, 5 );
 
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
