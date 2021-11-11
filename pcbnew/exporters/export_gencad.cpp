@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -463,115 +463,118 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
         case PAD_SHAPE::ROUNDRECT:
         case PAD_SHAPE::OVAL:
+        {
+            const wxSize& size = pad->GetSize();
+            int radius = std::min( size.x, size.y ) / 2;
+
+            if( pad->GetShape() == PAD_SHAPE::ROUNDRECT )
             {
-                const wxSize& size = pad->GetSize();
-                int radius = std::min( size.x, size.y ) / 2;
-
-                if( pad->GetShape() == PAD_SHAPE::ROUNDRECT )
-                {
-                    radius = pad->GetRoundRectCornerRadius();
-                }
-
-                int lineX = size.x / 2 - radius;
-                int lineY = size.y / 2 - radius;
-
-                fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
-
-                // bottom left arc
-                fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                        ( off.x - lineX - radius ) / SCALE_FACTOR,
-                        ( -off.y - lineY ) / SCALE_FACTOR, ( off.x - lineX ) / SCALE_FACTOR,
-                        ( -off.y - lineY - radius ) / SCALE_FACTOR,
-                        ( off.x - lineX ) / SCALE_FACTOR, ( -off.y - lineY ) / SCALE_FACTOR );
-                // bottom line
-                if( lineX > 0 )
-                {
-                    fprintf( aFile, "LINE %g %g %g %g\n",
-                            ( off.x - lineX ) / SCALE_FACTOR,
-                            ( -off.y - lineY - radius ) / SCALE_FACTOR,
-                            ( off.x + lineX ) / SCALE_FACTOR,
-                            ( -off.y - lineY - radius ) / SCALE_FACTOR );
-                }
-
-                // bottom right arc
-                fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                        ( off.x + lineX ) / SCALE_FACTOR,
-                        ( -off.y - lineY - radius ) / SCALE_FACTOR,
-                        ( off.x + lineX + radius ) / SCALE_FACTOR,
-                        ( -off.y - lineY ) / SCALE_FACTOR, ( off.x + lineX ) / SCALE_FACTOR,
-                        ( -off.y - lineY ) / SCALE_FACTOR );
-
-                // right line
-                if( lineY > 0 )
-                {
-                    fprintf( aFile, "LINE %g %g %g %g\n",
-                            ( off.x + lineX + radius ) / SCALE_FACTOR,
-                            ( -off.y + lineY ) / SCALE_FACTOR,
-                            ( off.x + lineX + radius ) / SCALE_FACTOR,
-                            ( -off.y - lineY ) / SCALE_FACTOR );
-                }
-
-                // top right arc
-                fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                        ( off.x + lineX + radius ) / SCALE_FACTOR,
-                        ( -off.y + lineY ) / SCALE_FACTOR, ( off.x + lineX ) / SCALE_FACTOR,
-                        ( -off.y + lineY + radius ) / SCALE_FACTOR,
-                        ( off.x + lineX ) / SCALE_FACTOR, ( -off.y + lineY ) / SCALE_FACTOR );
-
-                // top line
-                if( lineX > 0 )
-                {
-                    fprintf( aFile, "LINE %g %g %g %g\n"
-                            , ( off.x - lineX ) / SCALE_FACTOR,
-                            ( -off.y + lineY + radius ) / SCALE_FACTOR,
-                            ( off.x + lineX ) / SCALE_FACTOR,
-                            ( -off.y + lineY + radius ) / SCALE_FACTOR );
-                }
-
-                // top left arc
-                fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                        ( off.x - lineX ) / SCALE_FACTOR,
-                        ( -off.y + lineY + radius ) / SCALE_FACTOR,
-                        ( off.x - lineX - radius ) / SCALE_FACTOR,
-                        ( -off.y + lineY ) / SCALE_FACTOR, ( off.x - lineX ) / SCALE_FACTOR,
-                        ( -off.y + lineY ) / SCALE_FACTOR );
-
-                // left line
-                if( lineY > 0 )
-                {
-                    fprintf( aFile, "LINE %g %g %g %g\n",
-                            ( off.x - lineX - radius ) / SCALE_FACTOR,
-                            ( -off.y - lineY ) / SCALE_FACTOR,
-                            ( off.x - lineX - radius ) / SCALE_FACTOR,
-                            ( -off.y + lineY ) / SCALE_FACTOR );
-                }
+                radius = pad->GetRoundRectCornerRadius();
             }
+
+            int lineX = size.x / 2 - radius;
+            int lineY = size.y / 2 - radius;
+
+            fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
+
+            // bottom left arc
+            fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                     ( off.x - lineX - radius ) / SCALE_FACTOR,
+                     ( -off.y - lineY ) / SCALE_FACTOR, ( off.x - lineX ) / SCALE_FACTOR,
+                     ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                     ( off.x - lineX ) / SCALE_FACTOR, ( -off.y - lineY ) / SCALE_FACTOR );
+
+            // bottom line
+            if( lineX > 0 )
+            {
+                fprintf( aFile, "LINE %g %g %g %g\n",
+                         ( off.x - lineX ) / SCALE_FACTOR,
+                         ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                         ( off.x + lineX ) / SCALE_FACTOR,
+                         ( -off.y - lineY - radius ) / SCALE_FACTOR );
+            }
+
+            // bottom right arc
+            fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                     ( off.x + lineX ) / SCALE_FACTOR,
+                     ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                     ( off.x + lineX + radius ) / SCALE_FACTOR,
+                     ( -off.y - lineY ) / SCALE_FACTOR, ( off.x + lineX ) / SCALE_FACTOR,
+                     ( -off.y - lineY ) / SCALE_FACTOR );
+
+            // right line
+            if( lineY > 0 )
+            {
+                fprintf( aFile, "LINE %g %g %g %g\n",
+                         ( off.x + lineX + radius ) / SCALE_FACTOR,
+                         ( -off.y + lineY ) / SCALE_FACTOR,
+                         ( off.x + lineX + radius ) / SCALE_FACTOR,
+                         ( -off.y - lineY ) / SCALE_FACTOR );
+            }
+
+            // top right arc
+            fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                     ( off.x + lineX + radius ) / SCALE_FACTOR,
+                     ( -off.y + lineY ) / SCALE_FACTOR, ( off.x + lineX ) / SCALE_FACTOR,
+                     ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                     ( off.x + lineX ) / SCALE_FACTOR, ( -off.y + lineY ) / SCALE_FACTOR );
+
+            // top line
+            if( lineX > 0 )
+            {
+                fprintf( aFile, "LINE %g %g %g %g\n"
+                         , ( off.x - lineX ) / SCALE_FACTOR,
+                         ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                         ( off.x + lineX ) / SCALE_FACTOR,
+                         ( -off.y + lineY + radius ) / SCALE_FACTOR );
+            }
+
+            // top left arc
+            fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                     ( off.x - lineX ) / SCALE_FACTOR,
+                     ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                     ( off.x - lineX - radius ) / SCALE_FACTOR,
+                     ( -off.y + lineY ) / SCALE_FACTOR, ( off.x - lineX ) / SCALE_FACTOR,
+                     ( -off.y + lineY ) / SCALE_FACTOR );
+
+            // left line
+            if( lineY > 0 )
+            {
+                fprintf( aFile, "LINE %g %g %g %g\n",
+                         ( off.x - lineX - radius ) / SCALE_FACTOR,
+                         ( -off.y - lineY ) / SCALE_FACTOR,
+                         ( off.x - lineX - radius ) / SCALE_FACTOR,
+                         ( -off.y + lineY ) / SCALE_FACTOR );
+            }
+
             break;
+        }
 
         case PAD_SHAPE::TRAPEZOID:
+        {
+            fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
+
+            int  ddx = pad->GetDelta().x / 2;
+            int  ddy = pad->GetDelta().y / 2;
+
+            wxPoint poly[4];
+            poly[0] = wxPoint( -dx + ddy,  dy + ddx );
+            poly[1] = wxPoint(  dx - ddy,  dy - ddx );
+            poly[2] = wxPoint(  dx + ddy, -dy + ddx );
+            poly[3] = wxPoint( -dx - ddy, -dy - ddx );
+
+            for( int cur = 0; cur < 4; ++cur )
             {
-                fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
-
-                int  ddx = pad->GetDelta().x / 2;
-                int  ddy = pad->GetDelta().y / 2;
-
-                wxPoint poly[4];
-                poly[0] = wxPoint( -dx + ddy,  dy + ddx );
-                poly[1] = wxPoint(  dx - ddy,  dy - ddx );
-                poly[2] = wxPoint(  dx + ddy, -dy + ddx );
-                poly[3] = wxPoint( -dx - ddy, -dy - ddx );
-
-                for( int cur = 0; cur < 4; ++cur )
-                {
-                    int next = ( cur + 1 ) % 4;
-                    fprintf( aFile, "LINE %g %g %g %g\n",
-                            ( off.x + poly[cur].x ) / SCALE_FACTOR,
-                            ( -off.y - poly[cur].y ) / SCALE_FACTOR,
-                            ( off.x + poly[next].x ) / SCALE_FACTOR,
-                            ( -off.y - poly[next].y ) / SCALE_FACTOR );
-                }
+                int next = ( cur + 1 ) % 4;
+                fprintf( aFile, "LINE %g %g %g %g\n",
+                         ( off.x + poly[cur].x ) / SCALE_FACTOR,
+                         ( -off.y - poly[cur].y ) / SCALE_FACTOR,
+                         ( off.x + poly[next].x ) / SCALE_FACTOR,
+                         ( -off.y - poly[next].y ) / SCALE_FACTOR );
             }
+
             break;
+        }
 
         case PAD_SHAPE::CHAMFERED_RECT:
         {
@@ -585,6 +588,16 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
                     pad->GetChamferRectRatio(), pad->GetChamferPositions(), 0, maxError,
                     ERROR_INSIDE );
 
+            // The chamfered rectangle polygon code calculates the absolute board position so
+            // the footprint position has to be subtracted off polygon points to get the
+            // pad position relative to the footprint.
+            FOOTPRINT* parent = pad->GetParent();
+
+            wxPoint parentPos( 0, 0 );
+
+            if( parent )
+                parentPos = parent->GetPosition();
+
             for( int jj = 0; jj < outline.OutlineCount(); ++jj )
             {
                 const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
@@ -594,10 +607,10 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
                 {
                     int next = ( ii + 1 ) % pointCount;
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                            ( off.x + poly.CPoint( ii ).x ) / SCALE_FACTOR,
-                            ( -off.y - poly.CPoint( ii ).y ) / SCALE_FACTOR,
-                            ( off.x + poly.CPoint( next ).x ) / SCALE_FACTOR,
-                            ( -off.y - poly.CPoint( next ).y ) / SCALE_FACTOR );
+                            ( -parentPos.x + off.x + poly.CPoint( ii ).x ) / SCALE_FACTOR,
+                            ( parentPos.y - off.y - poly.CPoint( ii ).y ) / SCALE_FACTOR,
+                            ( -parentPos.x + off.x + poly.CPoint( next ).x ) / SCALE_FACTOR,
+                            ( parentPos.y - off.y - poly.CPoint( next ).y ) / SCALE_FACTOR );
                 }
             }
 
@@ -605,29 +618,30 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         }
 
         case PAD_SHAPE::CUSTOM:
+        {
+            fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
+
+            SHAPE_POLY_SET outline;
+            pad->MergePrimitivesAsPolygon( &outline );
+
+            for( int jj = 0; jj < outline.OutlineCount(); ++jj )
             {
-                fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
+                const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
+                int pointCount = poly.PointCount();
 
-                SHAPE_POLY_SET outline;
-                pad->MergePrimitivesAsPolygon( &outline );
-
-                for( int jj = 0; jj < outline.OutlineCount(); ++jj )
+                for( int ii = 0; ii < pointCount; ii++ )
                 {
-                    const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
-                    int pointCount = poly.PointCount();
-
-                    for( int ii = 0; ii < pointCount; ii++ )
-                    {
-                        int next = ( ii + 1 ) % pointCount;
-                        fprintf( aFile, "LINE %g %g %g %g\n",
-                                ( off.x + poly.CPoint( ii ).x ) / SCALE_FACTOR,
-                                ( -off.y - poly.CPoint( ii ).y ) / SCALE_FACTOR,
-                                ( off.x + poly.CPoint( next ).x ) / SCALE_FACTOR,
-                                ( -off.y - poly.CPoint( next ).y ) / SCALE_FACTOR );
-                    }
+                    int next = ( ii + 1 ) % pointCount;
+                    fprintf( aFile, "LINE %g %g %g %g\n",
+                             ( off.x + poly.CPoint( ii ).x ) / SCALE_FACTOR,
+                             ( -off.y - poly.CPoint( ii ).y ) / SCALE_FACTOR,
+                             ( off.x + poly.CPoint( next ).x ) / SCALE_FACTOR,
+                             ( -off.y - poly.CPoint( next ).y ) / SCALE_FACTOR );
                 }
             }
+
             break;
+        }
         }
     }
 
@@ -655,8 +669,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
             fprintf( aFile, "PAD V%d.%d.%s %s 0 0\n",
                     via->GetWidth(), via->GetDrillValue(),
                     fmt_mask( mask ).c_str(),
-                    GenCADLayerName( cu_count, layer ).c_str()
-                    );
+                    GenCADLayerName( cu_count, layer ).c_str() );
         }
     }
 
@@ -664,7 +677,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
      *  Older versions of CAM350 don't apply correctly the FLIP semantics for
      *  padstacks, i.e. doesn't swap the top and bottom layers... so I need to
      *  define the shape as MIRRORX and define a separate 'flipped' padstack...
-     *  until it appears yet another noncompliant importer */
+     *  until it appears yet another non-compliant importer */
     for( unsigned i = 1; i < padstacks.size(); i++ )
     {
         PAD* pad = padstacks[i];
@@ -692,7 +705,8 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
             {
                 PCB_LAYER_ID layer = *seq;
 
-                fprintf( aFile, "PAD P%u %s 0 0\n", i, GenCADLayerNameFlipped( cu_count, layer ).c_str() );
+                fprintf( aFile, "PAD P%u %s 0 0\n", i,
+                         GenCADLayerNameFlipped( cu_count, layer ).c_str() );
             }
         }
     }
@@ -881,7 +895,8 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         for( FP_TEXT* textItem : { &footprint->Reference(), &footprint->Value() } )
         {
             double txt_orient = textItem->GetTextAngle();
-            std::string layer = GenCADLayerName( cu_count, footprint->GetFlag() ? B_SilkS : F_SilkS );
+            std::string layer = GenCADLayerName( cu_count,
+                                                 footprint->GetFlag() ? B_SilkS : F_SilkS );
 
             fprintf( aFile, "TEXT %g %g %g %g %s %s \"%s\"",
                      textItem->GetPos0().x / SCALE_FACTOR,
@@ -1206,6 +1221,7 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
 
         case PCB_FP_SHAPE_T:
             shape = (FP_SHAPE*) PtStruct;
+
             if( shape->GetLayer() == F_SilkS || shape->GetLayer() == B_SilkS )
             {
                 switch( shape->GetShape() )
