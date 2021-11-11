@@ -97,7 +97,7 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
                     m_reporter->Report( wxString::Format( _( "Extracting package '%s'." ),
                                                           aPackage.identifier ) );
 
-                    if( extract( file_path.GetFullPath(), aPackage.identifier ) )
+                    if( extract( file_path.GetFullPath(), aPackage.identifier, true ) )
                     {
                         m_pcm->MarkInstalled( aPackage, get_pkgver->version, aRepositoryId );
                         // TODO register libraries.
@@ -169,7 +169,8 @@ int PCM_TASK_MANAGER::downloadFile( const wxString& aFilePath, const wxString& u
 }
 
 
-bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPackageId )
+bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPackageId,
+                                bool isMultiThreaded )
 {
     wxFFileInputStream stream( aFilePath );
     wxZipInputStream   zip( stream );
@@ -235,6 +236,9 @@ bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPack
         extracted++;
         m_reporter->SetOverallProgress( extracted, entries );
 
+        if( !isMultiThreaded )
+            m_reporter->KeepRefreshing( false );
+
         if( m_reporter->IsCancelled() )
             break;
     }
@@ -247,7 +251,7 @@ bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPack
         return false;
     }
 
-    m_reporter->Report( wxT( "Extracted package\n" ), RPT_SEVERITY_INFO );
+    m_reporter->Report( _( "Extracted package\n" ), RPT_SEVERITY_INFO );
     m_reporter->SetOverallProgress( entries, entries );
 
     return true;
@@ -329,7 +333,7 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
     m_reporter = std::make_unique<DIALOG_PCM_PROGRESS>( aParent, false );
     m_reporter->Show();
 
-    if( extract( aFilePath, package.identifier ) )
+    if( extract( aFilePath, package.identifier, false ) )
         m_pcm->MarkInstalled( package, package.versions[0].version, "" );
 
     m_reporter->SetFinished();
@@ -374,8 +378,8 @@ void PCM_TASK_MANAGER::Uninstall( const PCM_PACKAGE& aPackage )
 
         m_pcm->MarkUninstalled( aPackage );
 
-        m_reporter->Report(
-                wxString::Format( _( "Package %s uninstalled" ), aPackage.identifier ) );
+        m_reporter->Report( wxString::Format( _( "Package %s uninstalled" ),
+                                              aPackage.identifier ) );
     };
 
     m_install_queue.push( task );

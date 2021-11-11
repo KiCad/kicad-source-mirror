@@ -118,9 +118,10 @@ private:
      *
      * @param aFilePath path to the archive
      * @param aPackageId id of the package
+     * @param isMultiThreaded MUST be set to true if the caller is not running in the main thread
      * @return true if archive was extracted successfuly
      */
-    bool extract( const wxString& aFilePath, const wxString& aPackageId );
+    bool extract( const wxString& aFilePath, const wxString& aPackageId, bool isMultiThreaded );
 
     /**
      * @brief Delete all package files
