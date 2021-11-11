@@ -519,7 +519,7 @@ bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         {
         case wxID_YES:
             if( schframe && GetCurSymbol() )  // Should be always the case
-                schframe->SaveSymbolToSchematic( *GetCurSymbol());
+                schframe->SaveSymbolToSchematic( *GetCurSymbol(), m_schematicSymbolUUID );
 
             return true;
 
@@ -1310,6 +1310,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
         SetCurSymbol( nullptr, false );
 
     m_isSymbolFromSchematic = true;
+    m_schematicSymbolUUID = aSymbol->m_Uuid;
     m_reference = symbol->GetFieldById( REFERENCE_FIELD )->GetText();
     m_unit = std::max( 1, aSymbol->GetUnit() );
     m_convert = std::max( 1, aSymbol->GetConvert() );

@@ -807,13 +807,14 @@ public:
     void FocusOnItem( SCH_ITEM* aItem );
 
     /**
-     * Update the #LIB_SYMBOL of the currently selected symbol.
+     * Update a schematic symbol from a LIB_SYMBOL.
      *
      * This is typically called from the symbol editor when editing symbols in place.
      *
-     * @param aSymbol is the #LIB_SYMBOL to update.
+     * @param aSymbol is the new symbol data.
+     * @param aSchematicSymbolUUID refers to the schematic symbol to update.
      */
-    void SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol );
+    void SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol, const KIID& aSchematicSymbolUUID );
 
     /**
      * Update the schematic's page reference map for all global labels, and refresh the labels

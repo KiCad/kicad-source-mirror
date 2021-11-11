@@ -547,6 +547,7 @@ private:
 
     ///< Flag if the symbol being edited was loaded directly from a schematic.
     bool        m_isSymbolFromSchematic;
+    KIID        m_schematicSymbolUUID;
 
      ///< RefDes of the symbol (only valid if symbol was loaded from schematic)
     wxString    m_reference;

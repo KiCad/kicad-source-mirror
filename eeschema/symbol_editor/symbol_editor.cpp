@@ -555,7 +555,7 @@ void SYMBOL_EDIT_FRAME::Save()
             }
             else
             {
-                schframe->SaveSymbolToSchematic( *m_symbol );
+                schframe->SaveSymbolToSchematic( *m_symbol, m_schematicSymbolUUID );
                 GetScreen()->SetContentModified( false );
             }
         }
