@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-11-11 23:47+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -12896,9 +12896,9 @@ msgid "Import Schematic"
 msgstr "Εισαγωγή Σχηματικού"
 
 #: eeschema/files-io.cpp:635
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file extension: '%s'."
-msgstr "Χρηση επεκτάσεων ονομάτων αρχείου Protel"
+msgstr "Μη αναμενόμενη επέκταση αρχείου: '%s'."
 
 #: eeschema/files-io.cpp:686
 #, c-format
@@ -13177,9 +13177,9 @@ msgid "Polyline, %d points"
 msgstr "Πολυγραμμή, %d σημεία"
 
 #: eeschema/lib_shape.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Καμπύλη Μπεζιέ"
+msgstr "Καμπύλη Bezier, %d σημεία"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -13713,9 +13713,9 @@ msgid "Unknown Record id: %d."
 msgstr "Άγνωστος κωδικός καταγραφής: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:604
-#, fuzzy, c-format
+#, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "Το αρχείο '%s' δεν βρέθηκε."
+msgstr "Ο κάτοχος του ακροδέκτη (%d) δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:649
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1893
@@ -13737,9 +13737,9 @@ msgid "Pin has unexpected inner edge type."
 msgstr "Ο ακροδέκτης έχει μη αναμενόμενο τύπο εσωτερικού άκρου."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:859
-#, fuzzy, c-format
+#, c-format
 msgid "Label's owner (%d) not found."
-msgstr "Το αρχείο '%s' δεν βρέθηκε."
+msgstr "Ο ιδιοκτήτης της ετικέτας (%d) δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:976
 #, c-format
@@ -13747,48 +13747,48 @@ msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Η καμπύλη Μπεζιέ έχει %d σημεία ελέγχου. Τουλάχιστον 2 αναμένονται."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1033
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier's owner (%d) not found."
-msgstr "Η αναφορά '%s' δεν βρέθηκε."
+msgstr "Ο ιδιοκτήτης της Bezier (%d) δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1146
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "Το αρχείο '%s' δεν βρέθηκε."
+msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1205
-#, fuzzy, c-format
+#, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "Το αρχείο '%s' δεν βρέθηκε."
+msgstr "Ο κάτοχος του πολύγωνου (%d) δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1286
-#, fuzzy, c-format
+#, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "Η αναφορά '%s' δεν βρέθηκε."
+msgstr "Ο ιδιοκτήτης του στρογγυλεμένου ορθογωνίου (%d) δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1322
 msgid "Arcs on schematic not currently supported."
 msgstr "Τόξα στο σχηματικό δεν υποστιρίζονται ακόμη."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1332
-#, fuzzy, c-format
+#, c-format
 msgid "Arc's owner (%d) not found."
-msgstr "Η αναφορά '%s' δεν βρέθηκε."
+msgstr "Ο ιδιοκτήτης του τόξου (%d) δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1400
-#, fuzzy, c-format
+#, c-format
 msgid "Line's owner (%d) not found."
-msgstr "Το αρχείο '%s' δεν βρέθηκε."
+msgstr "Ο κάτοχος της γραμμής (%d) δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "Η αναφορά '%s' δεν βρέθηκε."
+msgstr "Ο ιδιοκτήτης του ορθογωνίου (%d) δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1539
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr "Η αναφορά '%s' δεν βρέθηκε."
+msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1785
 msgid "Power Port has unknown style, use bar instead."
