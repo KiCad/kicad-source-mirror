@@ -67,12 +67,12 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
     m_panelInstalledHolder->GetSizer()->Add( m_installedPanel, 1, wxEXPAND );
     m_panelInstalledHolder->Layout();
 
-    for( const auto& entry : PACKAGE_TYPE_LIST )
+    for( const std::pair<PCM_PACKAGE_TYPE, wxString>& entry : PACKAGE_TYPE_LIST )
     {
         PANEL_PACKAGES_VIEW* panel = new PANEL_PACKAGES_VIEW( m_contentNotebook, m_pcm );
-        wxString msg = wxGetTranslation( std::get<1>( entry ) );
-        m_contentNotebook->AddPage( panel, wxString::Format( msg, 0 ) );
-        m_repositoryContentPanels.insert( { std::get<0>( entry ), panel } );
+        wxString label = wxGetTranslation( entry.second );
+        m_contentNotebook->AddPage( panel, wxString::Format( label, 0 ) );
+        m_repositoryContentPanels.insert( { entry.first, panel } );
     }
 
     m_dialogNotebook->SetPageText( 0, wxString::Format( _( "Repository (%d)" ), 0 ) );
@@ -187,13 +187,11 @@ void DIALOG_PCM::OnManageRepositoriesClicked( wxCommandEvent& event )
 {
     DIALOG_MANAGE_REPOSITORIES* dialog = new DIALOG_MANAGE_REPOSITORIES( this, m_pcm );
 
-    STRING_PAIR_LIST  dialog_data;
-    STRING_TUPLE_LIST repo_list = m_pcm->GetRepositoryList();
+    std::vector<std::pair<wxString, wxString>>            dialog_data;
+    std::vector<std::tuple<wxString, wxString, wxString>> repo_list = m_pcm->GetRepositoryList();
 
-    for( const auto& repo : repo_list )
-    {
+    for( const std::tuple<wxString, wxString, wxString>& repo : repo_list )
         dialog_data.push_back( std::make_pair( std::get<1>( repo ), std::get<2>( repo ) ) );
-    }
 
     dialog->SetData( dialog_data );
 
@@ -216,11 +214,11 @@ void DIALOG_PCM::OnManageRepositoriesClicked( wxCommandEvent& event )
 
 void DIALOG_PCM::setRepositoryListFromPcm()
 {
-    STRING_TUPLE_LIST repositories = m_pcm->GetRepositoryList();
+    std::vector<std::tuple<wxString, wxString, wxString>> repositories = m_pcm->GetRepositoryList();
 
     m_choiceRepository->Clear();
 
-    for( const auto& entry : repositories )
+    for( const std::tuple<wxString, wxString, wxString>& entry : repositories )
     {
         m_choiceRepository->Append( std::get<1>( entry ),
                                     new wxStringClientData( std::get<0>( entry ) ) );
@@ -299,7 +297,7 @@ void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
 
             package_data.state = m_pcm->GetPackageState( aRepositoryId, pkg.identifier );
 
-            for( const auto& action : m_pendingActions )
+            for( const PENDING_ACTION& action : m_pendingActions )
             {
                 if( action.package.identifier != pkg.identifier )
                     continue;
@@ -321,14 +319,14 @@ void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
         for( size_t i = 0; i < PACKAGE_TYPE_LIST.size(); i++ )
         {
             PCM_PACKAGE_TYPE type = PACKAGE_TYPE_LIST[i].first;
+            const wxString&  label = PACKAGE_TYPE_LIST[i].second;
             m_repositoryContentPanels[type]->SetData( data[type], m_callback );
-            m_contentNotebook->SetPageText(
-                    i, wxString::Format( wxGetTranslation( PACKAGE_TYPE_LIST[i].second ),
-                                         (int) data[type].size() ) );
+            m_contentNotebook->SetPageText( i, wxString::Format( wxGetTranslation( label ),
+                                                                 (int) data[type].size() ) );
         }
 
-        m_dialogNotebook->SetPageText(
-                0, wxString::Format( _( "Repository (%d)" ), (int) packages.size() ) );
+        m_dialogNotebook->SetPageText( 0, wxString::Format( _( "Repository (%d)" ),
+                                                            (int) packages.size() ) );
     }
 }
 
@@ -363,7 +361,7 @@ void DIALOG_PCM::setInstalledPackages()
 
     m_installedBitmaps = m_pcm->GetInstalledPackageBitmaps();
 
-    for( const auto& entry : installed )
+    for( const PCM_INSTALLATION_ENTRY& entry : installed )
     {
         PACKAGE_VIEW_DATA package_data( entry );
 
@@ -377,8 +375,8 @@ void DIALOG_PCM::setInstalledPackages()
 
     m_installedPanel->SetData( package_list, m_callback );
 
-    m_dialogNotebook->SetPageText(
-            1, wxString::Format( _( "Installed (%d)" ), (int) package_list.size() ) );
+    m_dialogNotebook->SetPageText( 1, wxString::Format( _( "Installed (%d)" ),
+                                                        (int) package_list.size() ) );
 }
 
 
@@ -389,7 +387,7 @@ void DIALOG_PCM::OnApplyChangesClicked( wxCommandEvent& event )
 
     PCM_TASK_MANAGER task_manager( m_pcm );
 
-    for( const auto& action : m_pendingActions )
+    for( const PENDING_ACTION& action : m_pendingActions )
     {
         if( action.action == PPA_UNINSTALL )
             task_manager.Uninstall( action.package );
@@ -446,8 +444,8 @@ void DIALOG_PCM::discardAction( int aIndex )
 
     PENDING_ACTION action = m_pendingActions[aIndex];
 
-    PCM_PACKAGE_STATE state =
-            m_pcm->GetPackageState( action.repository_id, action.package.identifier );
+    PCM_PACKAGE_STATE state = m_pcm->GetPackageState( action.repository_id,
+                                                      action.package.identifier );
 
     m_installedPanel->SetPackageState( action.package.identifier, state );
 

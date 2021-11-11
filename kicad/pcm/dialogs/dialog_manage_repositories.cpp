@@ -221,7 +221,7 @@ void DIALOG_MANAGE_REPOSITORIES::selectRow( int aRow )
 }
 
 
-void DIALOG_MANAGE_REPOSITORIES::SetData( const STRING_PAIR_LIST& aData )
+void DIALOG_MANAGE_REPOSITORIES::SetData( const std::vector<std::pair<wxString, wxString>>& aData )
 {
     m_grid->Freeze();
 
@@ -240,14 +240,14 @@ void DIALOG_MANAGE_REPOSITORIES::SetData( const STRING_PAIR_LIST& aData )
 }
 
 
-STRING_PAIR_LIST DIALOG_MANAGE_REPOSITORIES::GetData()
+std::vector<std::pair<wxString, wxString>> DIALOG_MANAGE_REPOSITORIES::GetData()
 {
-    STRING_PAIR_LIST result;
+    std::vector<std::pair<wxString, wxString>> result;
 
     for( int i = 0; i < m_grid->GetNumberRows(); i++ )
     {
-        result.push_back(
-                std::make_pair( m_grid->GetCellValue( i, 0 ), m_grid->GetCellValue( i, 1 ) ) );
+        result.push_back( std::make_pair( m_grid->GetCellValue( i, 0 ),
+                                          m_grid->GetCellValue( i, 1 ) ) );
     }
 
     return result;

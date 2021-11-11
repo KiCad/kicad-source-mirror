@@ -19,7 +19,6 @@
  */
 
 #include "panel_packages_view.h"
-#include "bitmaps.h"
 #include "grid_tricks.h"
 #include "kicad_settings.h"
 #include "pgm_base.h"
@@ -72,6 +71,8 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
                                                                           false ) );
     }
 
+    m_packageListWindow->SetBackgroundColour( wxStaticText::GetClassDefaultAttributes().colBg );
+    m_infoScrollWindow->SetBackgroundColour( wxStaticText::GetClassDefaultAttributes().colBg );
     m_infoText->SetBackgroundColour( wxStaticText::GetClassDefaultAttributes().colBg );
     m_infoText->EnableVerticalScrollbar( false );
 
@@ -184,17 +185,22 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
         m_infoText->WriteText( wxString::Format( _( "Tags: %s\n" ), tags_str ) );
     }
 
-    const auto write_contact = [&]( const wxString& type, const PCM_CONTACT& contact )
-    {
-        m_infoText->WriteText( wxString::Format( "%s: %s\n", type, contact.name ) );
+    const auto write_contact =
+            [&]( const wxString& type, const PCM_CONTACT& contact )
+            {
+                m_infoText->WriteText( wxString::Format( "%s: %s\n", type, contact.name ) );
 
-        m_infoText->BeginLeftIndent( 60, 40 );
+                m_infoText->BeginLeftIndent( 60, 40 );
 
-        for( const auto& entry : contact.contact )
-            m_infoText->WriteText( wxString::Format( "%s: %s\n", entry.first, entry.second ) );
+                for( const std::pair<const std::string, wxString>& entry : contact.contact )
+                {
+                    m_infoText->WriteText( wxString::Format( "%s: %s\n",
+                                                             entry.first,
+                                                             entry.second ) );
+                }
 
-        m_infoText->EndLeftIndent();
-    };
+                m_infoText->EndLeftIndent();
+            };
 
     write_contact( _( "Author" ), package.author );
 
@@ -278,8 +284,8 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
     m_sizerVersions->Show( true );
     m_sizerVersions->Layout();
 
-    wxSize size = m_scrolledWindow5->GetTargetWindow()->GetBestVirtualSize();
-    m_scrolledWindow5->SetVirtualSize( size );
+    wxSize size = m_infoScrollWindow->GetTargetWindow()->GetBestVirtualSize();
+    m_infoScrollWindow->SetVirtualSize( size );
 }
 
 
@@ -288,8 +294,8 @@ void PANEL_PACKAGES_VIEW::unsetPackageDetails()
     m_infoText->ChangeValue( wxEmptyString );
     m_sizerVersions->Show( false );
 
-    wxSize size = m_scrolledWindow5->GetTargetWindow()->GetBestVirtualSize();
-    m_scrolledWindow5->SetVirtualSize( size );
+    wxSize size = m_infoScrollWindow->GetTargetWindow()->GetBestVirtualSize();
+    m_infoScrollWindow->SetVirtualSize( size );
 
     // Clean up grid just so we don't keep stale info around (it's already been hidden).
     m_gridVersions->Freeze();
@@ -345,7 +351,7 @@ void PANEL_PACKAGES_VIEW::OnVersionsCellClicked( wxGridEvent& event )
 
 void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
 {
-    const auto rows = m_gridVersions->GetSelectedRows();
+    const wxArrayInt rows = m_gridVersions->GetSelectedRows();
 
     if( !m_currentSelected || rows.size() != 1 )
     {
@@ -423,7 +429,7 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
 
 void PANEL_PACKAGES_VIEW::OnInstallVersionClicked( wxCommandEvent& event )
 {
-    const auto rows = m_gridVersions->GetSelectedRows();
+    const wxArrayInt rows = m_gridVersions->GetSelectedRows();
 
     if( !m_currentSelected || rows.size() != 1 )
     {
@@ -511,7 +517,7 @@ void PANEL_PACKAGES_VIEW::updatePackageList()
     wxSizer* sizer = m_packageListWindow->GetSizer();
     sizer->Clear( false ); // Don't delete panels
 
-    for( const auto& pair : package_ranks )
+    for( const std::pair<int, int>& pair : package_ranks )
     {
         PANEL_PACKAGE* panel = m_packagePanels[m_packageInitialOrder[pair.second]];
 

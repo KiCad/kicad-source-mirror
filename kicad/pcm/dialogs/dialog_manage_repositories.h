@@ -42,9 +42,12 @@ protected:
 public:
     /** Constructor */
     DIALOG_MANAGE_REPOSITORIES( wxWindow* parent, std::shared_ptr<PLUGIN_CONTENT_MANAGER> aPcm );
+
     ~DIALOG_MANAGE_REPOSITORIES();
-    void             SetData( const STRING_PAIR_LIST& aData );
-    STRING_PAIR_LIST GetData();
+
+    void SetData( const std::vector<std::pair<wxString, wxString>>& aData );
+
+    std::vector<std::pair<wxString, wxString>> GetData();
 
 private:
     void swapRows( int aRowA, int aRowB );

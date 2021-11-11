@@ -110,11 +110,13 @@ void PANEL_PACKAGE::OnButtonClicked( wxCommandEvent& event )
 
         // If not found then find any compatible version
         if( ver_it == m_data.package.versions.end() )
+        {
             ver_it = std::find_if( m_data.package.versions.begin(), m_data.package.versions.end(),
                                    []( const PACKAGE_VERSION& ver )
                                    {
                                        return ver.compatible;
                                    } );
+        }
 
         if( ver_it == m_data.package.versions.end() )
             return; // Shouldn't happen

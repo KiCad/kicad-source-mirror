@@ -45,7 +45,7 @@ class PANEL_PACKAGES_VIEW_BASE : public wxPanel
 		wxSearchCtrl* m_searchCtrl;
 		wxScrolledWindow* m_packageListWindow;
 		wxPanel* m_panelDetails;
-		wxScrolledWindow* m_scrolledWindow5;
+		wxScrolledWindow* m_infoScrollWindow;
 		wxRichTextCtrl* m_infoText;
 		wxBoxSizer* m_sizerVersions;
 		WX_GRID* m_gridVersions;
