@@ -54,6 +54,7 @@ class PANEL_PACKAGES_VIEW_BASE : public wxPanel
 		wxButton* m_buttonInstall;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnSizeInfoBox( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnVersionsCellClicked( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnShowAllVersionsClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDownloadVersionClicked( wxCommandEvent& event ) { event.Skip(); }
@@ -62,7 +63,7 @@ class PANEL_PACKAGES_VIEW_BASE : public wxPanel
 
 	public:
 
-		PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 840,400 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_PACKAGES_VIEW_BASE();
 
 		void m_splitter1OnIdle( wxIdleEvent& )

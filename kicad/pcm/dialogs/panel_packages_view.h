@@ -72,6 +72,8 @@ public:
     ///< Ranks packages for entered search term and rearranges/hides panels according to their rank
     void OnSearchTextChanged( wxCommandEvent& event );
 
+    void OnSizeInfoBox( wxSizeEvent& event ) override;
+
 private:
     ///< Updates package listing according to search term
     void updatePackageList();
@@ -85,6 +87,7 @@ private:
     ///< Bytes to Kb/Mb/Gb string or "-" if absent
     wxString toHumanReadableSize( const boost::optional<uint64_t> size ) const;
 
+private:
     ActionCallback                               m_actionCallback;
     std::unordered_map<wxString, PANEL_PACKAGE*> m_packagePanels;
     std::vector<wxString>                        m_packageInitialOrder;

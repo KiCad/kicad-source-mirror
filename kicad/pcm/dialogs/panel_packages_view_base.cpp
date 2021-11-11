@@ -17,7 +17,7 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
 	m_splitter1->SetSashGravity( 0.5 );
 	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW_BASE::m_splitter1OnIdle ), NULL, this );
-	m_splitter1->SetMinimumPaneSize( 380 );
+	m_splitter1->SetMinimumPaneSize( 400 );
 
 	m_panelList = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bPanelListSizer;
@@ -131,8 +131,10 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 
 	this->SetSizer( bSizer1 );
 	this->Layout();
+	bSizer1->Fit( this );
 
 	// Connect Events
+	m_scrolledWindow5->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_PACKAGES_VIEW_BASE::OnSizeInfoBox ), NULL, this );
 	m_gridVersions->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( PANEL_PACKAGES_VIEW_BASE::OnVersionsCellClicked ), NULL, this );
 	m_showAllVersions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnShowAllVersionsClicked ), NULL, this );
 	m_buttonDownload->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnDownloadVersionClicked ), NULL, this );
@@ -142,6 +144,7 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 PANEL_PACKAGES_VIEW_BASE::~PANEL_PACKAGES_VIEW_BASE()
 {
 	// Disconnect Events
+	m_scrolledWindow5->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_PACKAGES_VIEW_BASE::OnSizeInfoBox ), NULL, this );
 	m_gridVersions->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( PANEL_PACKAGES_VIEW_BASE::OnVersionsCellClicked ), NULL, this );
 	m_showAllVersions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnShowAllVersionsClicked ), NULL, this );
 	m_buttonDownload->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnDownloadVersionClicked ), NULL, this );

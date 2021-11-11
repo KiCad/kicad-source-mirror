@@ -164,7 +164,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
     m_infoText->EndFontSize();
 
     m_infoText->BeginParagraphSpacing( 0, 10 );
-    m_infoText->BeginSymbolBullet( wxString::FromUTF8( u8"\u25CF" ), 30, 40 );
+    m_infoText->BeginSymbolBullet( wxString::FromUTF8( u8"\u2022" ), 30, 40 );
     m_infoText->WriteText( wxString::Format( _( "Package identifier: %s\n" ),
                                              package.identifier ) );
     m_infoText->WriteText( wxString::Format( _( "License: %s\n" ), package.license ) );
@@ -217,13 +217,8 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
     m_infoText->EndSymbolBullet();
     m_infoText->EndParagraphSpacing();
 
-    m_infoText->LayoutContent();
-
-    wxSize minSize = m_infoText->GetSize();
-    minSize.y = m_infoText->GetBuffer().GetCachedSize().y + m_infoText->GetBuffer().GetTopMargin();
-    minSize.y *= m_infoText->GetScale();
-    m_infoText->SetMinSize( minSize );
-    m_infoText->SetSize( minSize );
+    wxSizeEvent dummy;
+    OnSizeInfoBox( dummy );
 
     // Versions table
     m_gridVersions->Freeze();
@@ -269,8 +264,8 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
     for( int col = 0; col < m_gridVersions->GetNumberCols(); col++ )
     {
         // Set the width to see the full contents
-        m_gridVersions->SetColSize( col,
-                                    m_gridVersions->GetVisibleWidth( col, true, true, false ) );
+        m_gridVersions->SetColSize( col, m_gridVersions->GetVisibleWidth( col, true, true,
+                                                                          false ) );
     }
 
     m_gridVersions->Thaw();
@@ -534,4 +529,22 @@ void PANEL_PACKAGES_VIEW::updatePackageList()
     sizer->FitInside( m_packageListWindow );
     m_packageListWindow->SetScrollRate( 0, 15 );
     m_packageListWindow->Layout();
+}
+
+
+void PANEL_PACKAGES_VIEW::OnSizeInfoBox( wxSizeEvent& event )
+{
+    wxSize infoSize = m_infoText->GetParent()->GetClientSize();
+    m_infoText->SetMinSize( infoSize );
+    m_infoText->SetMaxSize( infoSize );
+    m_infoText->SetSize( infoSize );
+    m_infoText->LayoutContent();
+
+    infoSize.y = m_infoText->GetBuffer().GetCachedSize().y + m_infoText->GetBuffer().GetTopMargin();
+    infoSize.y *= m_infoText->GetScale();
+    m_infoText->SetMinSize( infoSize );
+    m_infoText->SetMaxSize( infoSize );
+    m_infoText->SetSize( infoSize );
+
+    m_infoText->Layout();
 }

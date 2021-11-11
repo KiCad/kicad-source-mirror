@@ -13,7 +13,7 @@
 
 DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 650,500 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 900,560 ), wxDefaultSize );
 
 	wxBoxSizer* m_MainSizer;
 	m_MainSizer = new wxBoxSizer( wxVERTICAL );
@@ -48,7 +48,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panelRepository->SetSizer( bSizer4 );
 	m_panelRepository->Layout();
 	bSizer4->Fit( m_panelRepository );
-	m_dialogNotebook->AddPage( m_panelRepository, _("Repository (%d)"), false );
+	m_dialogNotebook->AddPage( m_panelRepository, _("Repository (%d)"), true );
 	m_panelInstalledHolder = new wxPanel( m_dialogNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
@@ -116,7 +116,7 @@ DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panelPending->SetSizer( bSizer8 );
 	m_panelPending->Layout();
 	bSizer8->Fit( m_panelPending );
-	m_dialogNotebook->AddPage( m_panelPending, _("Pending (%d)"), true );
+	m_dialogNotebook->AddPage( m_panelPending, _("Pending (%d)"), false );
 
 	m_TopSizer->Add( m_dialogNotebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
