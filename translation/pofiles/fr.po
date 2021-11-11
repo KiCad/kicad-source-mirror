@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-04 18:29+0100\n"
+"POT-Creation-Date: 2021-11-11 09:59+0100\n"
+"PO-Revision-Date: 2021-11-11 10:00+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -158,7 +158,7 @@ msgstr "Temps de rechargement %.3fs"
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:771
 #: eeschema/symbol_library.cpp:507 pcbnew/plugins/eagle/eagle_plugin.cpp:363
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2290
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2298
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:450
 #, c-format
 msgid "Loading %s..."
@@ -323,7 +323,7 @@ msgstr "Nom du fichier Image 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:681
 #: common/eda_base_frame.cpp:1051 common/eda_base_frame.cpp:1056
-#: pcbnew/plugins/altium/altium_pcb.cpp:1453
+#: pcbnew/plugins/altium/altium_pcb.cpp:1455
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "Autorisations requises insuffisantes pour enregistrer le fichier '%s'."
@@ -333,9 +333,9 @@ msgstr "Autorisations requises insuffisantes pour enregistrer le fichier '%s'."
 #: eeschema/files-io.cpp:812 eeschema/files-io.cpp:879
 #: kicad/import_project.cpp:127 kicad/import_project.cpp:154
 #: kicad/import_project.cpp:173 kicad/kicad.cpp:171
-#: kicad/tools/kicad_manager_control.cpp:182
-#: kicad/tools/kicad_manager_control.cpp:236
-#: kicad/tools/kicad_manager_control.cpp:280
+#: kicad/tools/kicad_manager_control.cpp:183
+#: kicad/tools/kicad_manager_control.cpp:237
+#: kicad/tools/kicad_manager_control.cpp:281
 msgid "Error"
 msgstr "Erreur"
 
@@ -1548,6 +1548,7 @@ msgid "Save"
 msgstr "Sauvegarder"
 
 #: common/confirm.cpp:184 common/confirm.cpp:220
+#: kicad/pcm/dialogs/dialog_pcm.cpp:132
 msgid "Discard Changes"
 msgstr "Abandonner Changements"
 
@@ -1581,13 +1582,13 @@ msgstr "Information"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:100
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:163
 #: eeschema/tools/symbol_editor_pin_tool.cpp:239 kicad/import_project.cpp:103
-#: kicad/tools/kicad_manager_control.cpp:262
+#: kicad/tools/kicad_manager_control.cpp:263
 #: pcbnew/dialogs/dialog_export_idf.cpp:162
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:381
 #: pcbnew/footprint_libraries_utils.cpp:470
-#: pcbnew/footprint_libraries_utils.cpp:1069 pcbnew/router/router_tool.cpp:1504
-#: pcbnew/router/router_tool.cpp:1971 pcbnew/zone_filler.cpp:416
+#: pcbnew/footprint_libraries_utils.cpp:1069 pcbnew/router/router_tool.cpp:1494
+#: pcbnew/router/router_tool.cpp:1961 pcbnew/zone_filler.cpp:416
 msgid "Confirmation"
 msgstr "Confirmation"
 
@@ -1598,7 +1599,6 @@ msgstr "Confirmation"
 #: eeschema/symbol_editor/symbol_editor.cpp:629
 #: eeschema/symbol_editor/symbol_editor.cpp:1246
 #: eeschema/symbol_viewer_frame.cpp:368 include/lib_table_grid.h:185
-#: kicad/pcm/dialogs/panel_packages_view_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
 #: pcbnew/footprint_libraries_utils.cpp:985
@@ -1701,8 +1701,8 @@ msgid "About"
 msgstr "Au Sujet de"
 
 #: common/dialog_about/dialog_about.cpp:123
-#: kicad/pcm/dialogs/dialog_pcm_base.cpp:84
-#: kicad/pcm/dialogs/panel_packages_view_base.cpp:81
+#: kicad/pcm/dialogs/dialog_pcm_base.cpp:86
+#: kicad/pcm/dialogs/panel_packages_view_base.cpp:79
 msgid "Version"
 msgstr "Version"
 
@@ -1849,27 +1849,27 @@ msgstr "Prévisualisation (ancien/nouveau):"
 msgid "Reset to Default"
 msgstr "Réinitialiser à Défaut"
 
-#: common/dialogs/dialog_configure_paths.cpp:257
-#: common/dialogs/dialog_configure_paths.cpp:330
+#: common/dialogs/dialog_configure_paths.cpp:256
+#: common/dialogs/dialog_configure_paths.cpp:351
 msgid "Environment variable name cannot be empty."
 msgstr "Le nom de la variable d'environnement ne peut pas être vide."
 
-#: common/dialogs/dialog_configure_paths.cpp:265
-#: common/dialogs/dialog_configure_paths.cpp:332
+#: common/dialogs/dialog_configure_paths.cpp:264
+#: common/dialogs/dialog_configure_paths.cpp:353
 msgid "Environment variable path cannot be empty."
 msgstr "Le nom de la variable d'environnement ne peut pas être vide."
 
-#: common/dialogs/dialog_configure_paths.cpp:295
-#: common/dialogs/dialog_configure_paths.cpp:337
+#: common/dialogs/dialog_configure_paths.cpp:316
+#: common/dialogs/dialog_configure_paths.cpp:358
 msgid "3D search path alias cannot be empty."
 msgstr "L'alias chemain de recherche 3D ne peut être vide."
 
-#: common/dialogs/dialog_configure_paths.cpp:303
-#: common/dialogs/dialog_configure_paths.cpp:339
+#: common/dialogs/dialog_configure_paths.cpp:324
+#: common/dialogs/dialog_configure_paths.cpp:360
 msgid "3D search path cannot be empty."
 msgstr "Le chemin de recherche 3D ne peut être vide."
 
-#: common/dialogs/dialog_configure_paths.cpp:354
+#: common/dialogs/dialog_configure_paths.cpp:375
 msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
@@ -1877,7 +1877,7 @@ msgstr ""
 "Ce chemin a été défini de façon externe à Kicad et\n"
 "sera temporairement seulement remplacé."
 
-#: common/dialogs/dialog_configure_paths.cpp:356
+#: common/dialogs/dialog_configure_paths.cpp:377
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -1894,21 +1894,21 @@ msgstr ""
 "la (les) définition(s) de la (les) variable(s) d'environnement de votre "
 "système."
 
-#: common/dialogs/dialog_configure_paths.cpp:374
+#: common/dialogs/dialog_configure_paths.cpp:395
 #, c-format
 msgid "The name %s is reserved, and cannot be used."
 msgstr "Le nom %s est réservé et ne peut pas être utilisé."
 
-#: common/dialogs/dialog_configure_paths.cpp:517
+#: common/dialogs/dialog_configure_paths.cpp:538
 msgid "File Browser..."
 msgstr "Explorateur de Fichiers..."
 
-#: common/dialogs/dialog_configure_paths.cpp:521
+#: common/dialogs/dialog_configure_paths.cpp:542
 #: common/widgets/grid_text_button_helpers.cpp:411
 msgid "Select Path"
 msgstr "Sélection Chemin"
 
-#: common/dialogs/dialog_configure_paths.cpp:603
+#: common/dialogs/dialog_configure_paths.cpp:624
 msgid ""
 "Enter the name and value for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
@@ -1923,7 +1923,7 @@ msgstr ""
 "présent tableau.  Cela signifie que les valeurs dans ce tableau sont "
 "ignorées."
 
-#: common/dialogs/dialog_configure_paths.cpp:609
+#: common/dialogs/dialog_configure_paths.cpp:630
 msgid ""
 "To ensure environment variable names are valid on all platforms, the name "
 "field will only accept upper case letters, digits, and the underscore "
@@ -1933,7 +1933,7 @@ msgstr ""
 "toutes les plates-formes, le champ nom n'acceptera que les lettres "
 "majuscules, chiffres et le caractère souligné."
 
-#: common/dialogs/dialog_configure_paths.cpp:624
+#: common/dialogs/dialog_configure_paths.cpp:645
 msgid "Environment Variable Help"
 msgstr "Aide sur Variables d'Environnement"
 
@@ -2629,6 +2629,7 @@ msgid "Revision:"
 msgstr "Révision:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:238
+#: eeschema/dialogs/dialog_netlist - new.cpp:385
 #: eeschema/dialogs/dialog_netlist.cpp:388
 msgid "Title:"
 msgstr "Titre:"
@@ -2725,14 +2726,14 @@ msgstr "Prévisualisation"
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:134
 #: eeschema/dialogs/dialog_change_symbols.cpp:156
 #: eeschema/dialogs/dialog_erc.cpp:80 eeschema/dialogs/dialog_erc.cpp:314
+#: eeschema/dialogs/dialog_netlist - new.cpp:269
 #: eeschema/dialogs/dialog_netlist.cpp:269
 #: eeschema/dialogs/dialog_plot_schematic.cpp:113
 #: eeschema/dialogs/dialog_print_using_printer.cpp:148
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:130
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:33
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:67
-#: eeschema/sim/sim_plot_frame_base.cpp:49
-#: kicad/pcm/dialogs/dialog_pcm_base.cpp:142
+#: eeschema/sim/sim_plot_frame_base.cpp:49 kicad/pcm/dialogs/dialog_pcm.cpp:131
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:69
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:115
 #: pcbnew/dialogs/dialog_board_statistics.cpp:135
@@ -2861,7 +2862,8 @@ msgstr "Options Page..."
 msgid "MyLabel"
 msgstr "MyLabel"
 
-#: common/dialogs/eda_list_dialog.cpp:48 common/widgets/lib_tree.cpp:127
+#: common/dialogs/eda_list_dialog.cpp:48 common/widgets/lib_tree.cpp:125
+#: kicad/pcm/dialogs/panel_packages_view.cpp:59
 #: pcbnew/dialogs/dialog_copper_zones.cpp:195
 #: pcbnew/footprint_viewer_frame.cpp:144 pcbnew/footprint_viewer_frame.cpp:159
 msgid "Filter"
@@ -3841,8 +3843,8 @@ msgstr "Forme Importée"
 msgid "Image"
 msgstr "Image"
 
-#: common/drawing_sheet/ds_data_model_io.cpp:91
-#: common/drawing_sheet/ds_data_model_io.cpp:120
+#: common/drawing_sheet/ds_data_model_io.cpp:92
+#: common/drawing_sheet/ds_data_model_io.cpp:121
 msgid "Error writing drawing sheet file"
 msgstr "Erreur lors de l'écriture du fichier de feuille de dessin"
 
@@ -5593,11 +5595,11 @@ msgid "Error loading project footprint library table."
 msgstr ""
 "Erreur lors du chargement de la table des librairies d’empreintes du projet."
 
-#: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:270
+#: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:263
 msgid "Could not open archive file."
 msgstr "Le fichier archive n'a pas pu être ouvert."
 
-#: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:278
+#: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:271
 msgid "Invalid archive file format."
 msgstr "Format de fichier d’archive non valide."
 
@@ -5606,8 +5608,8 @@ msgstr "Format de fichier d’archive non valide."
 msgid "Extracting file '%s'."
 msgstr "Extraction fichier '%s'."
 
-#: common/project/project_archiver.cpp:95 kicad/pcm/pcm_task_manager.cpp:193
-#: kicad/pcm/pcm_task_manager.cpp:238
+#: common/project/project_archiver.cpp:95 kicad/pcm/pcm_task_manager.cpp:186
+#: kicad/pcm/pcm_task_manager.cpp:231
 msgid "Error extracting file!"
 msgstr "Erreur en extrayant le fichier!"
 
@@ -5686,15 +5688,15 @@ msgstr "Longueur de ligne dépassée"
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 
-#: common/settings/color_settings.cpp:333
+#: common/settings/color_settings.cpp:335
 msgid "(Footprints)"
 msgstr "(Empreintes)"
 
-#: common/settings/color_settings.cpp:385
+#: common/settings/color_settings.cpp:387
 msgid "KiCad Default"
 msgstr "KiCad Défaut"
 
-#: common/settings/color_settings.cpp:390
+#: common/settings/color_settings.cpp:392
 msgid "KiCad Classic"
 msgstr "KiCad Classique"
 
@@ -5955,7 +5957,7 @@ msgid "Mark current violation in Checker window as an exclusion"
 msgstr ""
 "Marquer la violation actuelle dans la fenêtre de Contrôle comme une exclusion"
 
-#: common/tool/actions.cpp:270 kicad/pcm/dialogs/dialog_pcm_base.cpp:127
+#: common/tool/actions.cpp:270 kicad/pcm/dialogs/dialog_pcm_base.cpp:129
 msgid "Refresh"
 msgstr "Rafraîchir"
 
@@ -7646,7 +7648,8 @@ msgstr "Ajouter Générateur"
 msgid "Nickname '%s' already in use."
 msgstr "Un nom logique '%s' existe déjà."
 
-#: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist.cpp:686
+#: eeschema/dialogs/dialog_bom.cpp:420 eeschema/dialogs/dialog_netlist -
+#: new.cpp:709 eeschema/dialogs/dialog_netlist.cpp:686
 msgid "Generator File"
 msgstr "Fichier Générateur"
 
@@ -9536,7 +9539,7 @@ msgid "New Label"
 msgstr "Nouveau Label"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
-#: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
+#: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
 #: pcbnew/dialogs/dialog_find_base.cpp:120 pcbnew/fp_text.cpp:289
 #: pcbnew/pad.cpp:894 pcbnew/pcb_dimension.cpp:351 pcbnew/pcb_group.cpp:339
 #: pcbnew/pcb_shape.cpp:155 pcbnew/pcb_text.cpp:118 pcbnew/pcb_track.cpp:807
@@ -9577,27 +9580,33 @@ msgstr "Accepter Nom"
 msgid "Migrate Buses"
 msgstr "Migration des Bus"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:268
 #: eeschema/dialogs/dialog_netlist.cpp:268
 #: eeschema/dialogs/dialog_netlist_base.h:69
 msgid "Export Netlist"
 msgstr "Exporter Netliste"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:300
 #: eeschema/dialogs/dialog_netlist.cpp:300
 msgid "Simulator requires a fully annotated schematic."
 msgstr "La simulation nécessite un schéma complètement numéroté."
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:323
 #: eeschema/dialogs/dialog_netlist.cpp:326
 msgid "Reformat passive symbol values"
 msgstr "Reformater les valeurs des composants passifs"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:324
 #: eeschema/dialogs/dialog_netlist.cpp:327
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
 msgstr "Reformater les valeurs des composants passifs, par exemple 1M-> 1Meg"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:329
 #: eeschema/dialogs/dialog_netlist.cpp:332
 msgid "External simulator command:"
 msgstr "Commande simulateur externe :"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:330
 #: eeschema/dialogs/dialog_netlist.cpp:333
 msgid ""
 "Enter the command line to run spice\n"
@@ -9608,38 +9617,46 @@ msgstr ""
 "Habituellement <path to spice binary> %I\n"
 "%I sera remplacé par le nom réel de la netliste spice</path>"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:344
 #: eeschema/dialogs/dialog_netlist.cpp:347
 msgid "Create Netlist and Run Simulator Command"
 msgstr "Créer la Netlist et Exécuter la commande de simulation"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:395
 #: eeschema/dialogs/dialog_netlist.cpp:398
 msgid "Netlist command:"
 msgstr "Commande netliste:"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:441
 #: eeschema/dialogs/dialog_netlist.cpp:444
 msgid "Save Netlist File"
 msgstr "Sauver Fichier Netliste"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:499
 #: eeschema/dialogs/dialog_netlist.cpp:477
 #, c-format
 msgid "%s Export"
 msgstr "Export %s"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:528
 #: eeschema/dialogs/dialog_netlist.cpp:506
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr ""
 "L'exportation de la net liste nécessite un schéma complètement numéroté."
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:652
 #: eeschema/dialogs/dialog_netlist.cpp:629
 msgid "This plugin already exists."
 msgstr "Ce plugin existe déjà."
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:685
 #: eeschema/dialogs/dialog_netlist.cpp:662
 msgid "You must provide a netlist generator command string"
 msgstr ""
 "Vous devez fournir une ligne de commande pour le générateur de netliste"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:691
 #: eeschema/dialogs/dialog_netlist.cpp:668
 msgid "You must provide a netlist generator title"
 msgstr "Vous devez fournir un titre pour le générateur de netliste"
@@ -9923,7 +9940,7 @@ msgstr "Tracé en '%s'."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:699
 #: eeschema/dialogs/dialog_plot_schematic.cpp:874
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1050
-#: kicad/pcm/pcm_task_manager.cpp:456 pcbnew/dialogs/dialog_plot.cpp:929
+#: kicad/pcm/pcm_task_manager.cpp:443 pcbnew/dialogs/dialog_plot.cpp:929
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:153
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:124
 msgid "Done."
@@ -10505,7 +10522,7 @@ msgstr ""
 "'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
-#: kicad/tools/kicad_manager_control.cpp:557
+#: kicad/tools/kicad_manager_control.cpp:570
 #, c-format
 msgid "'%s' already exists."
 msgstr "'%s' existe déjà."
@@ -12972,8 +12989,8 @@ msgid "File write operation failed."
 msgstr "Erreur sur écriture sur fichier."
 
 #: eeschema/files-io.cpp:808 eeschema/files-io.cpp:875
-#: kicad/tools/kicad_manager_control.cpp:126
-#: kicad/tools/kicad_manager_control.cpp:223
+#: kicad/tools/kicad_manager_control.cpp:127
+#: kicad/tools/kicad_manager_control.cpp:224
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -14190,11 +14207,11 @@ msgstr "Nom de pin de feuille invalide"
 msgid "Empty sheet pin name"
 msgstr "Nom de pin de feuille vide"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2237
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2226
 msgid "Invalid symbol library name"
 msgstr "Nom de librairie de symbole invalide"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2257
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2246
 msgid "Invalid symbol library ID"
 msgstr "ID de librairie de symbole invalide"
 
@@ -15491,7 +15508,7 @@ msgstr "Le symbole '%s' existe déjà  en librairie '%s'."
 #: eeschema/symbol_editor/symbol_editor.cpp:705
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:101
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:164
-#: kicad/tools/kicad_manager_control.cpp:264
+#: kicad/tools/kicad_manager_control.cpp:265
 #: pcbnew/dialogs/dialog_export_idf.cpp:163
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:122
 #: pcbnew/footprint_libraries_utils.cpp:471
@@ -15509,7 +15526,7 @@ msgstr "Aucun schéma n’est actuellement ouvert."
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is not writable."
 msgstr "Librairie de symboles '%s' non inscriptible."
 
@@ -17354,15 +17371,14 @@ msgid "Zero format"
 msgstr "Format des zéros"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
-#, fuzzy
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
 "Les entiers dans les fichiers peuvent avoir leurs zéros supprimés.\n"
-"Pas de zéros en tête signifie que les zéros en tête sont supprimés\n"
-"Pas de zéros en fin signifie que les zéros de fin sont supprimés"
+"Pas de zéro en tête signifie que les zéros en tête sont supprimés\n"
+"Pas de zéro en fin signifie que les zéros de fin sont supprimés"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "Coordinates Format"
@@ -18269,7 +18285,7 @@ msgid "Reset all settings on this page to their default"
 msgstr ""
 "Réinitialiser tous les paramètres de cette page à leur valeur par défaut"
 
-#: include/wxstream_helper.h:46
+#: include/wxstream_helper.h:49
 msgid "Failed to output data"
 msgstr "Impossible de générer les données."
 
@@ -18525,43 +18541,46 @@ msgid "Add repository"
 msgstr "Ajout dépot"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-#, fuzzy
 msgid "Manage Repositories"
-msgstr "Gérer les Dépots"
+msgstr "Gérer les Dépôts"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:50
+#: kicad/pcm/dialogs/dialog_pcm.cpp:49
 #, c-format
 msgid "Plugins (%d)"
 msgstr "Plugins (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:51
+#: kicad/pcm/dialogs/dialog_pcm.cpp:50
 #, c-format
 msgid "Libraries (%d)"
 msgstr "Librairies (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:52
+#: kicad/pcm/dialogs/dialog_pcm.cpp:51
 #, c-format
 msgid "Color themes (%d)"
 msgstr "Thèmes de couleurs (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:79 kicad/pcm/dialogs/dialog_pcm.cpp:315
+#: kicad/pcm/dialogs/dialog_pcm.cpp:78 kicad/pcm/dialogs/dialog_pcm.cpp:331
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:51
 #, c-format
 msgid "Repository (%d)"
 msgstr "Dépôt (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:96 kicad/pcm/dialogs/panel_package.cpp:72
+#: kicad/pcm/dialogs/dialog_pcm.cpp:95 kicad/pcm/dialogs/panel_package.cpp:72
 #: kicad/pcm/dialogs/panel_package.cpp:76
 #: kicad/pcm/dialogs/panel_package_base.cpp:65
-#: kicad/pcm/dialogs/panel_packages_view_base.cpp:108
+#: kicad/pcm/dialogs/panel_packages_view_base.cpp:109
 msgid "Install"
 msgstr "Installer"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:105 kicad/pcm/dialogs/panel_package.cpp:80
+#: kicad/pcm/dialogs/dialog_pcm.cpp:104 kicad/pcm/dialogs/panel_package.cpp:80
 msgid "Uninstall"
 msgstr "Désinstaller"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:160
+#: kicad/pcm/dialogs/dialog_pcm.cpp:133
+msgid "Apply Changes"
+msgstr "Appliquer Changements"
+
+#: kicad/pcm/dialogs/dialog_pcm.cpp:168
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
@@ -18569,22 +18588,22 @@ msgstr ""
 "Voulez-vous vraiment fermer le gestionnaire de paquets et ignorer les "
 "modifications en attente ?"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:162
+#: kicad/pcm/dialogs/dialog_pcm.cpp:170
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Plugin and Content Manager"
 msgstr "Gestionnaire de Plugin et de Contenu"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:235
+#: kicad/pcm/dialogs/dialog_pcm.cpp:251
 msgid "Choose package file"
 msgstr "Choisir fichier paquet"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:330
-#: kicad/pcm/dialogs/dialog_pcm_base.cpp:117
+#: kicad/pcm/dialogs/dialog_pcm.cpp:346
+#: kicad/pcm/dialogs/dialog_pcm_base.cpp:119
 #, c-format
 msgid "Pending (%d)"
 msgstr "En attente (%d)"
 
-#: kicad/pcm/dialogs/dialog_pcm.cpp:365
+#: kicad/pcm/dialogs/dialog_pcm.cpp:381
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:60
 #, c-format
 msgid "Installed (%d)"
@@ -18594,69 +18613,61 @@ msgstr "Installé (%d)"
 msgid "Manage"
 msgstr "Gérer"
 
-#: kicad/pcm/dialogs/dialog_pcm_base.cpp:82
+#: kicad/pcm/dialogs/dialog_pcm_base.cpp:84
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:90
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:34
 msgid "Action"
 msgstr "Action"
 
-#: kicad/pcm/dialogs/dialog_pcm_base.cpp:83 pcbnew/build_BOM_from_board.cpp:112
+#: kicad/pcm/dialogs/dialog_pcm_base.cpp:85 pcbnew/build_BOM_from_board.cpp:112
 msgid "Package"
 msgstr "Boîtier"
 
-#: kicad/pcm/dialogs/dialog_pcm_base.cpp:85
+#: kicad/pcm/dialogs/dialog_pcm_base.cpp:87
 msgid "Repository"
 msgstr "Dépôt"
 
-#: kicad/pcm/dialogs/dialog_pcm_base.cpp:103
+#: kicad/pcm/dialogs/dialog_pcm_base.cpp:105
 msgid "Discard action"
 msgstr "Abandonner action"
 
-#: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
-msgid "Install from file..."
-msgstr "Installer à partir d’un fichier..."
+#: kicad/pcm/dialogs/dialog_pcm_base.cpp:132
+msgid "Install from File..."
+msgstr "Installer à partir d’un Fichier..."
 
-#: kicad/pcm/dialogs/dialog_pcm_base.cpp:136
-msgid "Apply changes"
-msgstr "Appliquer changements"
-
-#: kicad/pcm/dialogs/dialog_pcm_base.cpp:139
-msgid "Discard changes"
-msgstr "Abandonner changements"
-
-#: kicad/pcm/dialogs/dialog_pcm_base.h:73
+#: kicad/pcm/dialogs/dialog_pcm_base.h:74
 msgid "Plugin And Content Manager"
 msgstr "Gestionnaire de Plugin et de Contenu"
 
-#: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
+#: kicad/pcm/dialogs/dialog_pcm_progress.cpp:57
+msgid "Aborting remaining tasks."
+msgstr "Abandon des tâches restantes."
+
+#: kicad/pcm/dialogs/dialog_pcm_progress.cpp:128
 #, c-format
 msgid "Downloaded %lld/%lld Kb"
 msgstr "Téléchargé %lld/%lld Ko"
 
-#: kicad/pcm/dialogs/dialog_pcm_progress.cpp:150
-msgid "All downloads finished"
-msgstr "Tous les téléchargements terminés"
-
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-msgid "Download progress"
-msgstr "Progression du téléchargement"
+msgid "Download Progress"
+msgstr "Progression du Téléchargement"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
 msgid "Waiting..."
 msgstr "Attente..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-msgid "Overall progress"
-msgstr "Progression de l'ensemble"
+msgid "Overall Progress"
+msgstr "Progression de l'Ensemble"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
 msgstr "Détails"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
-msgid "Applying package changes"
-msgstr "Application des modifications apportées aux paquets"
+msgid "Applying Package Changes"
+msgstr "Appliquer Modifications des Paquets"
 
 #: kicad/pcm/dialogs/panel_package.cpp:84
 msgid "Pending install"
@@ -18666,59 +18677,54 @@ msgstr "Installation en suspens"
 msgid "Pending uninstall"
 msgstr "Désinstallation en attente"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:147
+#: kicad/pcm/dialogs/panel_packages_view.cpp:162
 msgid "Metadata"
 msgstr "Metadonnées"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:154
+#: kicad/pcm/dialogs/panel_packages_view.cpp:168
 #, c-format
 msgid "Package identifier: %s\n"
 msgstr "Identificateur de paquet: %s\n"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:155
+#: kicad/pcm/dialogs/panel_packages_view.cpp:170
 #, c-format
 msgid "License: %s\n"
 msgstr "Licence %s\n"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:169
+#: kicad/pcm/dialogs/panel_packages_view.cpp:184
 #, c-format
 msgid "Tags: %s\n"
 msgstr "Tags: %s\n"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:184
+#: kicad/pcm/dialogs/panel_packages_view.cpp:199
 msgid "Author"
 msgstr "Auteur"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:187
+#: kicad/pcm/dialogs/panel_packages_view.cpp:202
 msgid "Maintainer"
 msgstr "Mainteneur"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:191
+#: kicad/pcm/dialogs/panel_packages_view.cpp:206
 msgid "Resources"
 msgstr "Resources"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:266
-msgid "Pick a package on the left panel to view it's description."
-msgstr ""
-"Choisissez un paquet sur le panneau de gauche pour afficher sa description."
-
-#: kicad/pcm/dialogs/panel_packages_view.cpp:342
+#: kicad/pcm/dialogs/panel_packages_view.cpp:374
 msgid "Package download url is not specified"
 msgstr "L’URL de téléchargement du paquet n’est pas spécifiée"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:343
+#: kicad/pcm/dialogs/panel_packages_view.cpp:375
 msgid "Error downloading package"
 msgstr "Erreur lors du téléchargement du paquet"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:352
+#: kicad/pcm/dialogs/panel_packages_view.cpp:384
 msgid "Save package"
 msgstr "Sauve paquet"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:364
+#: kicad/pcm/dialogs/panel_packages_view.cpp:396
 msgid "Downloading package"
 msgstr "Téléchargement du paquet"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:380
+#: kicad/pcm/dialogs/panel_packages_view.cpp:412
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
@@ -18726,11 +18732,11 @@ msgstr ""
 "L’intégrité du paquet téléchargé n’a pas pu être vérifiée, le \"hash\" ne "
 "correspond pas. Êtes-vous sûr de vouloir conserver ce fichier ?"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:382
+#: kicad/pcm/dialogs/panel_packages_view.cpp:414
 msgid "Keep downloaded file"
 msgstr "Conserver le fichier téléchargé"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:419
+#: kicad/pcm/dialogs/panel_packages_view.cpp:451
 msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
@@ -18738,67 +18744,63 @@ msgstr ""
 "Cette version du paquet est incompatible avec votre version KiCad ou plate-"
 "forme. Êtes-vous sûr de vouloir l’installer quand même?"
 
-#: kicad/pcm/dialogs/panel_packages_view.cpp:421
+#: kicad/pcm/dialogs/panel_packages_view.cpp:453
 msgid "Install package"
 msgstr "Installer le paquet"
 
-#: kicad/pcm/dialogs/panel_packages_view_base.cpp:64
-msgid "Show all versions"
-msgstr "Montrer toutes les versions"
+#: kicad/pcm/dialogs/panel_packages_view_base.cpp:80
+msgid "Download Size"
+msgstr "Taille Téléchargement"
+
+#: kicad/pcm/dialogs/panel_packages_view_base.cpp:81
+msgid "Install Size"
+msgstr "Taille Installation"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
-msgid "Dl Size"
-msgstr "Taille Dl"
-
-#: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-msgid "Inst Size"
-msgstr "Taille Inst"
-
-#: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
 msgid "Comp"
 msgstr "Comp"
 
-#: kicad/pcm/dialogs/panel_packages_view_base.cpp:105
+#: kicad/pcm/dialogs/panel_packages_view_base.cpp:100
+msgid "Show all versions"
+msgstr "Montrer toutes les versions"
+
+#: kicad/pcm/dialogs/panel_packages_view_base.cpp:106
 msgid "Download"
 msgstr "Téléchargement"
 
-#: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
-msgid "Versions"
-msgstr "Versions"
-
-#: kicad/pcm/pcm.cpp:79
+#: kicad/pcm/pcm.cpp:80
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "fichier \"schéma\" '%s' non trouvé."
 
-#: kicad/pcm/pcm.cpp:82
+#: kicad/pcm/pcm.cpp:83
 #, c-format
 msgid "Error loading schema: %s"
 msgstr "Erreur lors du chargement du fichier \"schéma\": '%s'"
 
-#: kicad/pcm/pcm.cpp:108
+#: kicad/pcm/pcm.cpp:109
 #, c-format
 msgid "Error loading installed packages list: %s"
 msgstr "Erreur lors du chargement de la liste des paquets installés : %s"
 
-#: kicad/pcm/pcm.cpp:189
+#: kicad/pcm/pcm.cpp:199
 #, c-format
 msgid "Downloading %lld/%lld Kb"
 msgstr "Téléchargement de %lld/%lld Kb"
 
-#: kicad/pcm/pcm.cpp:214
+#: kicad/pcm/pcm.cpp:224
 msgid "Download is too large."
 msgstr "Téléchargement trop grand."
 
-#: kicad/pcm/pcm.cpp:228
+#: kicad/pcm/pcm.cpp:238
 msgid "Fetching repository"
 msgstr "Récupération du dépôt"
 
-#: kicad/pcm/pcm.cpp:230
+#: kicad/pcm/pcm.cpp:240
 msgid "Unable to load repository url"
 msgstr "Impossible de charger l'URL de dépot"
 
-#: kicad/pcm/pcm.cpp:246
+#: kicad/pcm/pcm.cpp:256
 #, c-format
 msgid ""
 "Unable to parse repository:\n"
@@ -18809,20 +18811,20 @@ msgstr ""
 "\n"
 "%s"
 
-#: kicad/pcm/pcm.cpp:268
+#: kicad/pcm/pcm.cpp:278
 msgid "Fetching repository packages"
 msgstr "Récupération de paquet du dépôt"
 
-#: kicad/pcm/pcm.cpp:270
+#: kicad/pcm/pcm.cpp:280
 msgid "Unable to load repository packages url."
 msgstr "Impossible de charger l'URL de dépôt des paquets."
 
-#: kicad/pcm/pcm.cpp:278
+#: kicad/pcm/pcm.cpp:288
 msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr ""
 "Le \"hash\" des paquets ne correspond pas. Le dépot est peut-être endommagé."
 
-#: kicad/pcm/pcm.cpp:294
+#: kicad/pcm/pcm.cpp:304
 #, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
@@ -18833,17 +18835,17 @@ msgstr ""
 "\n"
 "%s"
 
-#: kicad/pcm/pcm.cpp:381
+#: kicad/pcm/pcm.cpp:391
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr ""
 "Le cache des paquets pour le dépot actuel est corrompu, il sera retéléchargé."
 
-#: kicad/pcm/pcm.cpp:431
+#: kicad/pcm/pcm.cpp:441
 msgid "Downloading resources"
 msgstr "Téléchargement des ressources"
 
-#: kicad/pcm/pcm.cpp:445
+#: kicad/pcm/pcm.cpp:455
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
@@ -18851,15 +18853,15 @@ msgstr ""
 "Le \"hash\" du fichier de ressources ne correspond pas et ne sera pas "
 "utilisé. Le dépot est peut-être endommagé."
 
-#: kicad/pcm/pcm.cpp:590
+#: kicad/pcm/pcm.cpp:600
 msgid "Local file"
 msgstr "Fichier local"
 
-#: kicad/pcm/pcm_task_manager.cpp:63
+#: kicad/pcm/pcm_task_manager.cpp:60
 msgid "Unable to create download directory!"
 msgstr "Impossible de créer le répertoire de téléchargement !"
 
-#: kicad/pcm/pcm_task_manager.cpp:92
+#: kicad/pcm/pcm_task_manager.cpp:87
 #, c-format
 msgid ""
 "Downloaded archive hash for package %s does not match repository entry. This "
@@ -18870,22 +18872,22 @@ msgstr ""
 "l’entrée du dépot. Cela peut indiquer un problème avec le paquet, si le "
 "problème persiste, signalez-le aux responsables du dépot."
 
-#: kicad/pcm/pcm_task_manager.cpp:101
+#: kicad/pcm/pcm_task_manager.cpp:97
 #, c-format
 msgid "Extracting package '%s'."
 msgstr "Extraction paquet '%s'."
 
-#: kicad/pcm/pcm_task_manager.cpp:116
+#: kicad/pcm/pcm_task_manager.cpp:112
 #, c-format
 msgid "Removing downloaded archive '%s'."
 msgstr "Suppression de l’archive téléchargée '%s'."
 
-#: kicad/pcm/pcm_task_manager.cpp:157
+#: kicad/pcm/pcm_task_manager.cpp:150
 #, c-format
 msgid "Downloading package url: '%s'"
 msgstr "Téléchargement de l'URL du paquet: '%s'"
 
-#: kicad/pcm/pcm_task_manager.cpp:170
+#: kicad/pcm/pcm_task_manager.cpp:163
 #, c-format
 msgid ""
 "Failed to download url %s\n"
@@ -18894,11 +18896,11 @@ msgstr ""
 "Impossible de charger l'URL '%s'\n"
 "%s"
 
-#: kicad/pcm/pcm_task_manager.cpp:253
+#: kicad/pcm/pcm_task_manager.cpp:246
 msgid "Aborting package installation."
 msgstr "Abandon de l’installation du paquet."
 
-#: kicad/pcm/pcm_task_manager.cpp:301
+#: kicad/pcm/pcm_task_manager.cpp:294
 #, c-format
 msgid ""
 "Unable to parse package metadata:\n"
@@ -18909,15 +18911,15 @@ msgstr ""
 "\n"
 "%s"
 
-#: kicad/pcm/pcm_task_manager.cpp:310
+#: kicad/pcm/pcm_task_manager.cpp:303
 msgid "Archive does not contain a valid metadata.json file"
 msgstr "L’archive ne contient pas de fichier metadata.json valide"
 
-#: kicad/pcm/pcm_task_manager.cpp:318
+#: kicad/pcm/pcm_task_manager.cpp:311
 msgid "Archive metadata must have a single version defined"
 msgstr "Les métadonnées de l'archive doivent avoir une seule version définie"
 
-#: kicad/pcm/pcm_task_manager.cpp:330
+#: kicad/pcm/pcm_task_manager.cpp:323
 #, c-format
 msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
@@ -18926,24 +18928,20 @@ msgstr ""
 "Le paquet avec identificateur %s est déjà installé, vous devez d’abord "
 "désinstaller ce paquet."
 
-#: kicad/pcm/pcm_task_manager.cpp:362
+#: kicad/pcm/pcm_task_manager.cpp:356
 #, c-format
 msgid "Removing directory %s"
 msgstr "Suppression répertoire '%s'."
 
-#: kicad/pcm/pcm_task_manager.cpp:367
+#: kicad/pcm/pcm_task_manager.cpp:361
 #, c-format
 msgid "Failed to remove directory %s"
 msgstr "Impossible de supprimer le répertoire \"%s\""
 
-#: kicad/pcm/pcm_task_manager.cpp:384
+#: kicad/pcm/pcm_task_manager.cpp:378
 #, c-format
 msgid "Package %s uninstalled"
 msgstr "Paquet %s désinstallé"
-
-#: kicad/pcm/pcm_task_manager.cpp:453
-msgid "Aborting remaining tasks."
-msgstr "Abandon des tâches restantes."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -18955,9 +18953,8 @@ msgstr ""
 "Impossible d'ouvrir le répertoire d'informations associées pour ce modèle!"
 
 #: kicad/project_template.cpp:63
-#, fuzzy
 msgid "Couldn't find the meta HTML information file for this template!"
-msgstr "Impossible d'ouvrir le répertoire d'informations HTML  pour ce modèle!"
+msgstr "Impossible de trouver le fichier d'informations HTML  pour ce modèle!"
 
 #: kicad/project_template.cpp:238
 #, c-format
@@ -19200,15 +19197,15 @@ msgstr "Ouvrir l'Éditeur de Texte"
 msgid "Launch preferred text editor"
 msgstr "Lancer l'éditeur de texte préféré"
 
-#: kicad/tools/kicad_manager_control.cpp:53
+#: kicad/tools/kicad_manager_control.cpp:54
 msgid "Create a new folder for the project"
 msgstr "Créer un nouveau répertoire pour le projet"
 
-#: kicad/tools/kicad_manager_control.cpp:93
+#: kicad/tools/kicad_manager_control.cpp:94
 msgid "Create New Project"
 msgstr "Créer un Nouveau Projet"
 
-#: kicad/tools/kicad_manager_control.cpp:135
+#: kicad/tools/kicad_manager_control.cpp:136
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
@@ -19220,56 +19217,56 @@ msgstr ""
 "\n"
 "Voulez vous continuer?"
 
-#: kicad/tools/kicad_manager_control.cpp:163
+#: kicad/tools/kicad_manager_control.cpp:164
 msgid "System Templates"
 msgstr "Modèles Système"
 
-#: kicad/tools/kicad_manager_control.cpp:172
+#: kicad/tools/kicad_manager_control.cpp:173
 msgid "User Templates"
 msgstr "Modèles Utilisateurs"
 
-#: kicad/tools/kicad_manager_control.cpp:181
+#: kicad/tools/kicad_manager_control.cpp:182
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "Aucun projet modèle sélecté. Impossible de générer le nouveau projet."
 
-#: kicad/tools/kicad_manager_control.cpp:189
+#: kicad/tools/kicad_manager_control.cpp:190
 msgid "New Project Folder"
 msgstr "Nouveau Répertoire Projet"
 
-#: kicad/tools/kicad_manager_control.cpp:235
-#: kicad/tools/kicad_manager_control.cpp:573
+#: kicad/tools/kicad_manager_control.cpp:236
+#: kicad/tools/kicad_manager_control.cpp:586
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
 msgstr "Autorisations insuffisantes pour écrire dans le dossier '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:256
+#: kicad/tools/kicad_manager_control.cpp:257
 msgid "Overwriting files:"
 msgstr "Ecrasement des fichiers:"
 
-#: kicad/tools/kicad_manager_control.cpp:261
+#: kicad/tools/kicad_manager_control.cpp:262
 msgid "Similar files already exist in the destination folder."
 msgstr ""
 "Des fichier de nom similaires existent déjà dans le répertoire de "
 "destination."
 
-#: kicad/tools/kicad_manager_control.cpp:279
+#: kicad/tools/kicad_manager_control.cpp:280
 msgid "A problem occurred creating new project from template."
 msgstr "Problème lors de la création du nouveau projet à partir du modèle."
 
-#: kicad/tools/kicad_manager_control.cpp:301
+#: kicad/tools/kicad_manager_control.cpp:302
 msgid "Open Existing Project"
 msgstr "Ouvrir un Projet  Existant"
 
-#: kicad/tools/kicad_manager_control.cpp:501
+#: kicad/tools/kicad_manager_control.cpp:511
 #, c-format
 msgid "Cannot copy folder '%s'."
 msgstr "Impossible de copier le  répertoire '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:544
+#: kicad/tools/kicad_manager_control.cpp:557
 msgid "Save Project To"
 msgstr "Sauver Projet vers"
 
-#: kicad/tools/kicad_manager_control.cpp:564
+#: kicad/tools/kicad_manager_control.cpp:577
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -19280,38 +19277,38 @@ msgstr ""
 "\n"
 "Assurez-vous d'avoir les autorisations d'écriture et réessayez."
 
-#: kicad/tools/kicad_manager_control.cpp:575
+#: kicad/tools/kicad_manager_control.cpp:588
 msgid "Error!"
 msgstr "Erreur!"
 
-#: kicad/tools/kicad_manager_control.cpp:632
+#: kicad/tools/kicad_manager_control.cpp:645
 msgid "Create (or open) a project to edit a schematic."
 msgstr "Créer (ou ouvrir) un projet pour modifier un schéma."
 
-#: kicad/tools/kicad_manager_control.cpp:638
+#: kicad/tools/kicad_manager_control.cpp:651
 msgid "Create (or open) a project to edit a pcb."
 msgstr "Créer (ou ouvrir) un projet pour modifier un pcb."
 
-#: kicad/tools/kicad_manager_control.cpp:655
+#: kicad/tools/kicad_manager_control.cpp:668
 msgid "Application failed to load:\n"
 msgstr "Échec du chargement de l’application:\n"
 
-#: kicad/tools/kicad_manager_control.cpp:655
-#: kicad/tools/kicad_manager_control.cpp:662 pcbnew/pcb_edit_frame.cpp:1501
+#: kicad/tools/kicad_manager_control.cpp:668
+#: kicad/tools/kicad_manager_control.cpp:675 pcbnew/pcb_edit_frame.cpp:1501
 #: pcbnew/pcb_edit_frame.cpp:1531
 msgid "KiCad Error"
 msgstr "KiCad erreur"
 
-#: kicad/tools/kicad_manager_control.cpp:662
+#: kicad/tools/kicad_manager_control.cpp:675
 msgid "Application failed to load."
 msgstr "Échec du chargement de l’application."
 
-#: kicad/tools/kicad_manager_control.cpp:728
+#: kicad/tools/kicad_manager_control.cpp:741
 #, c-format
 msgid "%s closed [pid=%d]\n"
 msgstr "%s fermé [pid=%d]\n"
 
-#: kicad/tools/kicad_manager_control.cpp:794
+#: kicad/tools/kicad_manager_control.cpp:807
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ouvert [pid = %ld]\n"
@@ -23958,7 +23955,7 @@ msgid "Are you sure you want to overwrite the existing file?"
 msgstr "Êtes-vous certain de que vouloir écraser le ficher existant?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:254
-#: pcbnew/plugins/altium/altium_pcb.cpp:1417
+#: pcbnew/plugins/altium/altium_pcb.cpp:1419
 #, c-format
 msgid "Failed to create folder '%s'."
 msgstr "Impossible de créer le répertoire '%s'."
@@ -25413,7 +25410,7 @@ msgstr "Déplacement X:"
 msgid "Move Y:"
 msgstr "Déplacement Y:"
 
-#: pcbnew/dialogs/dialog_move_exact.cpp:287
+#: pcbnew/dialogs/dialog_move_exact.cpp:283
 msgid ""
 "Invalid movement values.  Movement would place selection outside of the "
 "maximum board area."
@@ -26395,9 +26392,8 @@ msgid "Plot Edge.Cuts on all layers"
 msgstr "Tracer les contours du PCB sur toutes les pages"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
-#, fuzzy
 msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr "Exclure les tracés contour PCB des autres couches."
+msgstr "Tracer le contenu de la couche contour du PCB sur toutes les couches"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Sketch pads on fabrication layers"
@@ -27212,11 +27208,10 @@ msgid "Constrain outline to H, V and 45 deg"
 msgstr "Contraindre contour à H, V et 45 deg"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:97
-#, fuzzy
 msgid "Draw the area using horizontal, vertical and 45 degree lines only"
 msgstr ""
-"Tracer la surface en utilisant lignes verticales, horizontales et à 45° "
-"seulement"
+"Dessinez la zone en utilisant uniquement des lignes horizontales, verticales "
+"et à 45 degrés"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:67
 msgid "Rule Area Properties"
@@ -28305,9 +28300,8 @@ msgid "On-board, non-copper"
 msgstr "PCB, non cuivre"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-#, fuzzy
 msgid "If you want a solder paste layer for front side of the board"
-msgstr "Si vous voulez une couche de pâte à braser sur le dessus du PCB"
+msgstr "Si vous voulez une couche de pâte à souder sur le dessus du PCB"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:86
 msgid "SoldP_Front"
@@ -29446,127 +29440,127 @@ msgstr "netclasse '%s'"
 msgid "netclass '%s' (diff pair)"
 msgstr "netclasse '%s' (paire diff)"
 
-#: pcbnew/drc/drc_engine.cpp:428
+#: pcbnew/drc/drc_engine.cpp:427
 msgid "keepout area"
 msgstr "zone interdite"
 
-#: pcbnew/drc/drc_engine.cpp:433
+#: pcbnew/drc/drc_engine.cpp:429
 #, c-format
 msgid "keepout area '%s'"
 msgstr "zone interdite '%s'"
 
-#: pcbnew/drc/drc_engine.cpp:699
+#: pcbnew/drc/drc_engine.cpp:694
 msgid "Tessellating copper zones..."
 msgstr "Découpage des zone de cuivre..."
 
-#: pcbnew/drc/drc_engine.cpp:800 pcbnew/drc/drc_engine.cpp:815
+#: pcbnew/drc/drc_engine.cpp:795 pcbnew/drc/drc_engine.cpp:810
 #, c-format
 msgid "Local override on %s; clearance: %s."
 msgstr "Forçage local sur %s; isolation: %s."
 
-#: pcbnew/drc/drc_engine.cpp:831
+#: pcbnew/drc/drc_engine.cpp:826
 msgid "board minimum"
 msgstr "minimum du PCB"
 
-#: pcbnew/drc/drc_engine.cpp:834
+#: pcbnew/drc/drc_engine.cpp:829
 #, c-format
 msgid "Board minimum clearance: %s."
 msgstr "Isolation minimum du PCB %s."
 
-#: pcbnew/drc/drc_engine.cpp:843
+#: pcbnew/drc/drc_engine.cpp:838
 msgid "board minimum hole"
 msgstr "trou minimum pour le PCB"
 
-#: pcbnew/drc/drc_engine.cpp:846
+#: pcbnew/drc/drc_engine.cpp:841
 #, c-format
 msgid "Board minimum hole clearance: %s."
 msgstr "Isolation minimum des trous du PCB: %s."
 
-#: pcbnew/drc/drc_engine.cpp:873
+#: pcbnew/drc/drc_engine.cpp:868
 #, c-format
 msgid "Checking %s clearance: %s."
 msgstr "Vérification de %s isolation %s."
 
-#: pcbnew/drc/drc_engine.cpp:885 pcbnew/drc/drc_engine.cpp:886
-#: pcbnew/drc/drc_engine.cpp:887 pcbnew/tools/board_inspection_tool.cpp:647
+#: pcbnew/drc/drc_engine.cpp:880 pcbnew/drc/drc_engine.cpp:881
+#: pcbnew/drc/drc_engine.cpp:882 pcbnew/tools/board_inspection_tool.cpp:647
 #: pcbnew/tools/board_inspection_tool.cpp:656
 #: pcbnew/tools/board_inspection_tool.cpp:665
 #: pcbnew/tools/board_inspection_tool.cpp:805
 msgid "undefined"
 msgstr "indéfini"
 
-#: pcbnew/drc/drc_engine.cpp:902
+#: pcbnew/drc/drc_engine.cpp:897
 #, c-format
 msgid "Checking %s %s: %s."
 msgstr "Vérification de %s %s: %s."
 
-#: pcbnew/drc/drc_engine.cpp:918
+#: pcbnew/drc/drc_engine.cpp:913
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "Vérification %s: min %s; opt %s; max %s."
 
-#: pcbnew/drc/drc_engine.cpp:929
+#: pcbnew/drc/drc_engine.cpp:924
 #, c-format
 msgid "Checking %s."
 msgstr "Vérification de %s."
 
-#: pcbnew/drc/drc_engine.cpp:937
+#: pcbnew/drc/drc_engine.cpp:932
 msgid "Board and netclass clearances apply only between copper items."
 msgstr ""
 "Les isolations du CI et des netclasses ne sont applicables qu'aux éléments "
 "connectés."
 
-#: pcbnew/drc/drc_engine.cpp:983
+#: pcbnew/drc/drc_engine.cpp:978
 msgid "Keepout constraint not met."
 msgstr "Contrainte de zone interdite non respectée."
 
-#: pcbnew/drc/drc_engine.cpp:985
+#: pcbnew/drc/drc_engine.cpp:980
 msgid "Disallow constraint not met."
 msgstr "Rejet contrainte non respectée."
 
-#: pcbnew/drc/drc_engine.cpp:1007
+#: pcbnew/drc/drc_engine.cpp:1002
 msgid "Keepout layer(s) not matched."
 msgstr "Couche(s) de zone interdite non appairée(s)"
 
-#: pcbnew/drc/drc_engine.cpp:1011 pcbnew/drc/drc_engine.cpp:1032
+#: pcbnew/drc/drc_engine.cpp:1006 pcbnew/drc/drc_engine.cpp:1027
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "Règle de couche '%s' non appairée, règle ignorée."
 
-#: pcbnew/drc/drc_engine.cpp:1017 pcbnew/drc/drc_engine.cpp:1037
+#: pcbnew/drc/drc_engine.cpp:1012 pcbnew/drc/drc_engine.cpp:1032
 msgid "Rule layer not matched; rule ignored."
 msgstr "Règle de couche non appairée, règle ignorée."
 
-#: pcbnew/drc/drc_engine.cpp:1045
+#: pcbnew/drc/drc_engine.cpp:1040
 msgid "Unconditional constraint applied."
 msgstr "Contrainte inconditionnelle appliquée."
 
-#: pcbnew/drc/drc_engine.cpp:1046
+#: pcbnew/drc/drc_engine.cpp:1041
 msgid "Unconditional rule applied."
 msgstr "Règle inconditionnelle appliquée."
 
-#: pcbnew/drc/drc_engine.cpp:1059
-#, fuzzy, c-format
+#: pcbnew/drc/drc_engine.cpp:1054
+#, c-format
 msgid "Checking rule condition \"%s\"."
-msgstr "Vérification condition de règle '%s'."
+msgstr "Vérification condition de règle \"%s\"."
 
-#: pcbnew/drc/drc_engine.cpp:1065
+#: pcbnew/drc/drc_engine.cpp:1060
 msgid "Constraint applied."
 msgstr "Contrainte appliquée."
 
-#: pcbnew/drc/drc_engine.cpp:1066
+#: pcbnew/drc/drc_engine.cpp:1061
 msgid "Rule applied; overrides previous constraints."
 msgstr "Règle appliquée; remplace les contraintes précédentes."
 
-#: pcbnew/drc/drc_engine.cpp:1088
+#: pcbnew/drc/drc_engine.cpp:1083
 msgid "Membership not satisfied; constraint ignored."
 msgstr "Appartenance non satisfaite; contrainte ignorée."
 
-#: pcbnew/drc/drc_engine.cpp:1089
+#: pcbnew/drc/drc_engine.cpp:1084
 msgid "Condition not satisfied; rule ignored."
 msgstr "Condition non remplie; règle non appliquée."
 
-#: pcbnew/drc/drc_engine.cpp:1120 pcbnew/drc/drc_engine.cpp:1131
+#: pcbnew/drc/drc_engine.cpp:1115 pcbnew/drc/drc_engine.cpp:1126
 #, c-format
 msgid "Local clearance on %s; clearance: %s."
 msgstr "Isolation locale sur: %s; isolation: %s."
@@ -30673,8 +30667,8 @@ msgstr "La librairie '%s' existe déjà."
 
 #: pcbnew/footprint_libraries_utils.cpp:627
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:961
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2504
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2580
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2512
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2588
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "La librairie '%s' est en lecture seule."
@@ -31686,14 +31680,14 @@ msgid "Hole X / Y"
 msgstr "Trou X/Y"
 
 #: pcbnew/pad.cpp:969 pcbnew/pcb_track.cpp:728 pcbnew/pcb_track.cpp:771
-#: pcbnew/router/router_tool.cpp:2093 pcbnew/zone.cpp:646
+#: pcbnew/router/router_tool.cpp:2083 pcbnew/zone.cpp:646
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Isolation Minimum: %s"
 
 #: pcbnew/pad.cpp:971 pcbnew/pcb_track.cpp:730 pcbnew/pcb_track.cpp:737
 #: pcbnew/pcb_track.cpp:773 pcbnew/pcb_track.cpp:779
-#: pcbnew/router/router_tool.cpp:2081 pcbnew/router/router_tool.cpp:2095
+#: pcbnew/router/router_tool.cpp:2071 pcbnew/router/router_tool.cpp:2085
 #: pcbnew/zone.cpp:648
 #, c-format
 msgid "(from %s)"
@@ -32130,16 +32124,16 @@ msgstr "'%s' n'a pas été complètement  lu."
 msgid "File not found: '%s'."
 msgstr "Fichier non trouvé: '%s'."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:929
+#: pcbnew/plugins/altium/altium_pcb.cpp:931
 #, c-format
 msgid "Duplicate netclass name '%s'."
 msgstr "Nom de Netclasse '%s' dupliqué."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1069
-#: pcbnew/plugins/altium/altium_pcb.cpp:1155
-#: pcbnew/plugins/altium/altium_pcb.cpp:1225
-#: pcbnew/plugins/altium/altium_pcb.cpp:1302
-#: pcbnew/plugins/altium/altium_pcb.cpp:1326
+#: pcbnew/plugins/altium/altium_pcb.cpp:1071
+#: pcbnew/plugins/altium/altium_pcb.cpp:1157
+#: pcbnew/plugins/altium/altium_pcb.cpp:1227
+#: pcbnew/plugins/altium/altium_pcb.cpp:1304
+#: pcbnew/plugins/altium/altium_pcb.cpp:1328
 #, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -32148,31 +32142,31 @@ msgstr ""
 "Cote trouvée sur couche Altium (%d) qui n'a pas d'équivalent dans Kicad. "
 "Placée sur couche Eco1_User ."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1369
-#: pcbnew/plugins/altium/altium_pcb.cpp:1376
+#: pcbnew/plugins/altium/altium_pcb.cpp:1371
+#: pcbnew/plugins/altium/altium_pcb.cpp:1378
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr "Dimension du type %d ignorée (non encore prise en charge)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1418
+#: pcbnew/plugins/altium/altium_pcb.cpp:1420
 msgid "No 3D-models will be imported."
 msgstr "Aucun modèle 3D ne sera importé."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1441
+#: pcbnew/plugins/altium/altium_pcb.cpp:1443
 #, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "Fichier non trouvé: '%s'. Modèle 3D non importé."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1477
+#: pcbnew/plugins/altium/altium_pcb.cpp:1479
 msgid "Loading nets..."
 msgstr "Chargement nets..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1498
+#: pcbnew/plugins/altium/altium_pcb.cpp:1500
 msgid "Loading polygons..."
 msgstr "Chargement polygones..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1511
-#: pcbnew/plugins/altium/altium_pcb.cpp:1762
+#: pcbnew/plugins/altium/altium_pcb.cpp:1513
+#: pcbnew/plugins/altium/altium_pcb.cpp:1764
 #, c-format
 msgid ""
 "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -32181,19 +32175,19 @@ msgstr ""
 "Polygone trouvée sur couche Altium (%d) qui n'a pas d'équivalent dans Kicad. "
 "Placé sur couche Eco1_User."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1633
+#: pcbnew/plugins/altium/altium_pcb.cpp:1635
 msgid "Loading rules..."
 msgstr "Chargement règles..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1665
+#: pcbnew/plugins/altium/altium_pcb.cpp:1667
 msgid "Loading board regions..."
 msgstr "Chargement régions..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1687
+#: pcbnew/plugins/altium/altium_pcb.cpp:1689
 msgid "Loading zones..."
 msgstr "Chargement zones..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1743
+#: pcbnew/plugins/altium/altium_pcb.cpp:1745
 #, c-format
 msgid ""
 "Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -32202,20 +32196,20 @@ msgstr ""
 "Zone trouvée sur couche Altium (%d) qui n'a pas d'équivalent dans Kicad. "
 "Placé sur couche Eco1_User."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1796
+#: pcbnew/plugins/altium/altium_pcb.cpp:1798
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Forme de polygone ignorée type %d (non encore prise en charge)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1810
+#: pcbnew/plugins/altium/altium_pcb.cpp:1812
 msgid "Loading zone fills..."
 msgstr "Chargement du remplissage de zones..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1899
+#: pcbnew/plugins/altium/altium_pcb.cpp:1901
 msgid "Loading arcs..."
 msgstr "Chargement arcs..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1964
+#: pcbnew/plugins/altium/altium_pcb.cpp:1966
 #, c-format
 msgid ""
 "Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -32224,7 +32218,7 @@ msgstr ""
 "Arc de zone interdite sur couche Altium (%d) qui n'a pas d'équivalent dans "
 "Kicad. Placé sur couche Eco1_User à la place."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1983
+#: pcbnew/plugins/altium/altium_pcb.cpp:1985
 #, c-format
 msgid ""
 "Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -32233,23 +32227,23 @@ msgstr ""
 "Arc  sur couche Altium (%d) qui n'a pas d'équivalent dans Kicad. Placé sur "
 "couche Eco1_User à la place."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2063
+#: pcbnew/plugins/altium/altium_pcb.cpp:2065
 msgid "Loading pads..."
 msgstr "Chargement des pads..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2123
+#: pcbnew/plugins/altium/altium_pcb.cpp:2125
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "L’empreinte %s pad %s n’est pas marquée comme multicouche, mais est un pad "
 "traversant."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2143
+#: pcbnew/plugins/altium/altium_pcb.cpp:2145
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "P’empreinte %s, pad '%s’a un trou carré. (non supporté)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2165
+#: pcbnew/plugins/altium/altium_pcb.cpp:2167
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -32258,24 +32252,24 @@ msgstr ""
 "Le pad '%s’de l’empreinte %s a un trou avec rotation de %f degrés. KiCad ne "
 "supporte que des rotations de 90 degrés."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2179
+#: pcbnew/plugins/altium/altium_pcb.cpp:2181
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "L’empreinte %s, pad %s, utilise un trou de type %d inconnu."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2197
+#: pcbnew/plugins/altium/altium_pcb.cpp:2199
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "Le pad '%s’de l'empreinte %s utilise une pile de pads complexe, qui n’est "
 "pas encore pris en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2231
+#: pcbnew/plugins/altium/altium_pcb.cpp:2233
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "L’empreinte %s pad %s utilise une forme de pad inconnue."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2290
+#: pcbnew/plugins/altium/altium_pcb.cpp:2292
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -32284,34 +32278,34 @@ msgstr ""
 "Le pad non cuivre %s sur la couche Altium %d n’a pas d’équivalent KiCad. Mis "
 "sur Eco1_User à la place."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2299
+#: pcbnew/plugins/altium/altium_pcb.cpp:2301
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 "Le pad non-cuivre %s est connecté à un net, ce qui n’est pas pris en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2305
+#: pcbnew/plugins/altium/altium_pcb.cpp:2307
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Le pad non en cuivre %s a un trou, qui n’est pas pris en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2310
+#: pcbnew/plugins/altium/altium_pcb.cpp:2312
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Le pad non-cuivre %s utilise une pile de pad complexe (non encore prise en "
 "charge)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2464
+#: pcbnew/plugins/altium/altium_pcb.cpp:2466
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Le pad %s non cuivre utilise une forme de pad inconnue."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2473
+#: pcbnew/plugins/altium/altium_pcb.cpp:2475
 msgid "Loading vias..."
 msgstr "Chargement des vias..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2514
+#: pcbnew/plugins/altium/altium_pcb.cpp:2516
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -32319,11 +32313,11 @@ msgstr ""
 "La via de la couche %d à %d utilise une couche non-cuivre, qui n’est pas "
 "prise en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2535
+#: pcbnew/plugins/altium/altium_pcb.cpp:2537
 msgid "Loading tracks..."
 msgstr "Chargement des pistes..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2582
+#: pcbnew/plugins/altium/altium_pcb.cpp:2584
 #, c-format
 msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -32332,7 +32326,7 @@ msgstr ""
 "Zone interdite pour pistes trouvée sur couche Altium (%d) qui n'a pas "
 "d'équivalent dans Kicad. Placé sur couche Eco1_User à la place."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2600
+#: pcbnew/plugins/altium/altium_pcb.cpp:2602
 #, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -32341,18 +32335,18 @@ msgstr ""
 "Piste trouvée sur une couche Altium (%d) sans équivalent KiCad. Elle a été "
 "déplacée vers la couche KiCad Eco1_User."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2641
+#: pcbnew/plugins/altium/altium_pcb.cpp:2643
 msgid "Loading text..."
 msgstr "Chargement des textes..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2652
+#: pcbnew/plugins/altium/altium_pcb.cpp:2654
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 "Ignore le code-barre sur la couche Altium %d (pas pris en charge "
 "actuellement)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2740
+#: pcbnew/plugins/altium/altium_pcb.cpp:2742
 #, c-format
 msgid ""
 "Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -32361,11 +32355,11 @@ msgstr ""
 "Texte sur couche Altium (%d) qui n'a pas d'équivalent dans Kicad. Placé sur "
 "couche Eco1_User à la place."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2826
+#: pcbnew/plugins/altium/altium_pcb.cpp:2828
 msgid "Loading rectangles..."
 msgstr "Chargement rectangles..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2846
+#: pcbnew/plugins/altium/altium_pcb.cpp:2848
 #, c-format
 msgid ""
 "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
@@ -32433,17 +32427,17 @@ msgstr ""
 "La couche CADSTAR '%s’a été supposée être une couche technique. Tous les "
 "éléments de cette couche ont été placés à la couche KiCad '%s'."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:506
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:511
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
 msgstr "Couche inattendue '%s’dans l'empilement de couches."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:664
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:674
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
 msgstr "La règle de conception %s n’a pas été trouvée. Cela a été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:693
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:703
 msgid ""
 "KiCad design rules are different from CADSTAR ones. Only the compatible "
 "design rules were imported. It is recommended that you review the design "
@@ -32453,7 +32447,7 @@ msgstr ""
 "les règles de conception compatibles ont été importées. Il est recommandé de "
 "revoir les règles de conception qui ont été appliquées."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:890
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:900
 #, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
@@ -32464,7 +32458,7 @@ msgstr ""
 "KiCad. La zone n’est pas une zone interdite pour via ou piste. La zone n’a "
 "pas été importée."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:982
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:986
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' is a complex pad stack, which is not "
@@ -32475,7 +32469,7 @@ msgstr ""
 "pas prise en charge dans KiCad. Examiner les tampons importés car ils "
 "peuvent nécessiter une correction manuelle."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1198
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1207
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
@@ -32484,18 +32478,18 @@ msgstr ""
 "La définition de pad CADSTAR '%s' a la forme du trou en dehors de la forme "
 "du pad. Le trou a été déplacé au le centre du pad."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1231
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1240
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "La définition de pad CADSTAR '%s' a des erreurs d’importation: %s"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1273
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1282
 #, c-format
 msgid "Unable to find group ID %s in the group definitions."
 msgstr ""
 "Impossible de trouver l'ID de groupe %s dans les définitions de groupe."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1279
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1288
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
@@ -32503,7 +32497,7 @@ msgstr ""
 "Impossible de trouver le sous-groupe %s dans la carte de groupe (ID de "
 "groupe parent=%s, Nom=%s)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1354
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1363
 #, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
@@ -32512,7 +32506,7 @@ msgstr ""
 "La cote type %s une dimension d'angle, qui n’a pas d’équivalent KiCad. Une "
 "dimension standard a été chargée à la place."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1365
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1374
 #, c-format
 msgid ""
 "Dimension ID %s has 'External' style in CADSTAR. External dimension styles "
@@ -32523,12 +32517,12 @@ msgstr ""
 "externe ne sont pas encore pris en charge dans KiCad. L’objet dimension a "
 "été importé avec un style de dimension interne à la place."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1421
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1430
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
 msgstr "Cote type (ID %s) inattendue. N'a pas été importée."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1556
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1565
 #, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
@@ -32537,7 +32531,7 @@ msgstr ""
 "La cote type %s est une cote angulaire et n'a pas d'équivalent dans KiCad. "
 "N'a pas été importée."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1596
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1605
 #, c-format
 msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
@@ -32548,7 +32542,7 @@ msgstr ""
 "Les zones de placement ne sont pas prises en charge dans KiCad. Seuls les "
 "éléments pris en charge ont été importés."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1605
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1614
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
@@ -32557,20 +32551,20 @@ msgstr ""
 "La zone CADSTAR '%s’n’a pas d’équivalent KiCad. Les zones de placement pur "
 "ne sont pas prises en charge."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1632
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1641
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
 msgstr ""
 "Impossible de trouver l'élément '%s’dans la librairie (Symdef ID: '%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1750
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1759
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
 msgstr ""
 "Impossible de trouver la documentation du symbole dans la librairie (Symdef "
 "ID: '%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1819
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1828
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
@@ -32579,7 +32573,7 @@ msgstr ""
 "Le modèle CADSTAR '%s’ a le paramètre 'Autorisé dans zones de non routage' "
 "activé . Ce paramètre n’a pas d’équivalent KiCad, il a donc été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1827
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1836
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
@@ -32588,7 +32582,7 @@ msgstr ""
 "Le modèle CADSTAR '%s' a le paramètre 'Box Isolated Pins' activé. Ce "
 "paramètre n’a pas d’équivalent KiCad, il a été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1835
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1844
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
@@ -32597,7 +32591,7 @@ msgstr ""
 "Le modèle CADSTAR '%s' a le paramètre 'Automatic Repour' activé. Ce "
 "paramètre n’a pas d’équivalent KiCad, il a été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1846
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1855
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
@@ -32608,7 +32602,7 @@ msgstr ""
 "'Sliver Width'. Il n’y a pas d’équivalent KiCad pour cela, donc ce paramètre "
 "a été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1856
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1865
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
@@ -32621,7 +32615,7 @@ msgstr ""
 "de distinction entre ces deux paramètres. Le réglage de cuivre non connecté "
 "a été appliqué comme ilot de zone minimal de la zone de KiCad."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1907
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1916
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
@@ -32632,7 +32626,7 @@ msgstr ""
 "pads et les vias. KiCad ne prend en charge qu’un seul paramètre pour les "
 "deux. Le réglage des plaquettes a été appliqué."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1924
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1933
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has thermal reliefs in the original design but the "
@@ -32648,7 +32642,7 @@ msgstr ""
 "comme nouvelle largeur de rayon et sera appliquée la prochaine fois que les "
 "zones seront remplies."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1971
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1980
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
@@ -32659,7 +32653,7 @@ msgstr ""
 "Toutefois, aucun net avec un tel nom n’existe.\n"
 "La couche a été chargée mais aucune zone de cuivre n’a été créée."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2076
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2085
 msgid ""
 "The CADSTAR design contains COPPER elements, which have no direct KiCad "
 "equivalent. These have been imported as a KiCad Zone if solid or hatch "
@@ -32671,7 +32665,7 @@ msgstr ""
 "sont solides ou avec hachures, ou sous forme de piste KiCad si la forme "
 "était un contour non rempli (ouvert ou fermé)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2181
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2190
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
@@ -32680,7 +32674,7 @@ msgstr ""
 "Le net '%s' fait référence à l’ID de composant '%s ' qui n’existe pas. Cela "
 "a été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2187
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2196
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
@@ -32689,13 +32683,13 @@ msgstr ""
 "Le net '%s' fait référence à l’indice de pad inexistant '%d' dans le "
 "composant '%s'. Cela a été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2353
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2362
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr ""
 "Les variables texte n’ont pas pu être définies car il n’y a pas de projet "
 "chargé."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2460
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2469
 #, c-format
 msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
@@ -32706,7 +32700,7 @@ msgstr ""
 "en charge que les vias circulaires de sorte que ce type via a été changé "
 "pour être une via circulaire de %.2f mm de diamètre."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2674
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2683
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
@@ -32715,7 +32709,7 @@ msgstr ""
 "La forme pour '%s' est hachurée dans CADSTAR, et n’a pas d’équivalent KiCad. "
 "Remplissage solide à la place."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3523
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3532
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
@@ -32726,8 +32720,8 @@ msgstr ""
 "que 2 hachures (hachure en croix) à 90 degrés l’une de l’autre. La hachure "
 "importée est en croix."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3533
-#, fuzzy, c-format
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3542
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
 "KiCad only supports one width for the hatching. The imported hatching uses "
@@ -32737,8 +32731,8 @@ msgstr ""
 "hachure. KiCad ne prend en charge qu’une largeur. Les hachures importée "
 "utilise la largeur définie la première, c’est-à-dire %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3545
-#, fuzzy, c-format
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3554
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
 "KiCad only supports one step size for the hatching. The imported hatching "
@@ -32748,7 +32742,7 @@ msgstr ""
 "hachure. KiCad ne prend en charge qu’une taille pour les hachures. Les "
 "hachures importée utilisent la première taille définie, c’est-à-dire %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3558
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3567
 #, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
@@ -32761,8 +32755,8 @@ msgstr ""
 "importée a deux hachures à 90 degrés l’une de l’autre, tournées de %.1f "
 "degrés de l’horizontale."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3631
-#, fuzzy, c-format
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3640
+#, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimeters were applied instead."
@@ -32770,7 +32764,7 @@ msgstr ""
 "La cote type %s utilise un type d’unité qui n’est pas pris en charge dans "
 "KiCad. Des millimètres ont été utilisés à la place."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3922
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3931
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
@@ -32783,7 +32777,7 @@ msgstr ""
 "plus proche du \"Net Route Code\" de CADSTAR (qui a été importé pour tous "
 "les nets)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3932
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3941
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -33002,13 +32996,13 @@ msgid "Element token contains %d parameters."
 msgstr "Element token contains %d parameters."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:980
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2624
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2632
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Autorisations insuffisantes pour effacer le dossier '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2632
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2640
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "Le répertoire librairie '%s' a des sous-répertoires inattendus."
@@ -33019,7 +33013,7 @@ msgid "Unexpected file '%s' found in library '%s'."
 msgstr "Fichier inattendu '%s' trouvé en librairie '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2669
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2677
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3221
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
@@ -33060,30 +33054,30 @@ msgstr "Structure interne de données de groupe corrompue"
 msgid "Save Anyway"
 msgstr "Sauver de Toute Façon"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:1384
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:1392
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "type pad inconnu: %d"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:1883
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:1891
 #, c-format
 msgid "unknown via type %d"
 msgstr "type via inconnu %d"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2072
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2080
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "unknown zone corner smoothing type %d"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2293
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2301
 msgid "Open cancelled by user."
 msgstr "Lecture annulée par l’utilisateur."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2342
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2350
 msgid "This file does not contain a PCB."
 msgstr "Ce fichier ne contient pas de PCB."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2492
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2500
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -33092,26 +33086,26 @@ msgstr ""
 "La librairie '%s' n'existe pas.\n"
 "Voulez vous la créer?"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2496
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2504
 msgid "Library Not Found"
 msgstr "Librairie non trouvée"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2522
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2530
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Nom de fichier d'empreinte '%s' non valide."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2528
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2536
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "Autorisations insuffisantes pour effacer le fichier '%s'."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2599
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2607
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Impossible de remplacer le chemin librairie  '%s'."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2651
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2659
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Fichier inattendu '%s' trouvé dans le chemin de librairie '%s'."
@@ -33831,72 +33825,72 @@ msgstr "Une via aveugle / enterré nécessite 2 couches différentes."
 msgid "Tracks on Copper layers only."
 msgstr "Pistes sur Couches Cuivre seulement."
 
-#: pcbnew/router/router_tool.cpp:1504 pcbnew/router/router_tool.cpp:1971
+#: pcbnew/router/router_tool.cpp:1494 pcbnew/router/router_tool.cpp:1961
 msgid "The selected item is locked."
 msgstr "L'élément sélectionné est verrouillé."
 
-#: pcbnew/router/router_tool.cpp:1506
+#: pcbnew/router/router_tool.cpp:1496
 msgid "Drag Anyway"
 msgstr "Dragger de Toute Façon"
 
-#: pcbnew/router/router_tool.cpp:1973 pcbnew/tools/pcb_actions.cpp:1386
+#: pcbnew/router/router_tool.cpp:1963 pcbnew/tools/pcb_actions.cpp:1386
 #: pcbnew/tools/pcb_actions.cpp:1392
 msgid "Break Track"
 msgstr "Briser Piste"
 
-#: pcbnew/router/router_tool.cpp:2043
+#: pcbnew/router/router_tool.cpp:2033
 #, c-format
 msgid "Routing Diff Pair: %s"
 msgstr "Routage Paire Différentielle: %s"
 
-#: pcbnew/router/router_tool.cpp:2043
+#: pcbnew/router/router_tool.cpp:2033
 #, c-format
 msgid "Routing Track: %s"
 msgstr "Routage Piste: %s"
 
-#: pcbnew/router/router_tool.cpp:2049
+#: pcbnew/router/router_tool.cpp:2039
 #, c-format
 msgid "Net Class: %s"
 msgstr "Netclasse: %s"
 
-#: pcbnew/router/router_tool.cpp:2053
+#: pcbnew/router/router_tool.cpp:2043
 msgid "Routing Track"
 msgstr "Routage Piste"
 
-#: pcbnew/router/router_tool.cpp:2053
+#: pcbnew/router/router_tool.cpp:2043
 msgid "(no net)"
 msgstr "(pas de net)"
 
-#: pcbnew/router/router_tool.cpp:2060
+#: pcbnew/router/router_tool.cpp:2050
 msgid "Free-angle"
 msgstr "Angle libre"
 
-#: pcbnew/router/router_tool.cpp:2066
+#: pcbnew/router/router_tool.cpp:2056
 msgid "45-degree"
 msgstr "45 degrés"
 
-#: pcbnew/router/router_tool.cpp:2067
+#: pcbnew/router/router_tool.cpp:2057
 msgid "45-degree rounded"
 msgstr "Arrondi à 45 degrés"
 
-#: pcbnew/router/router_tool.cpp:2068
+#: pcbnew/router/router_tool.cpp:2058
 msgid "90-degree"
 msgstr "90 degrés"
 
-#: pcbnew/router/router_tool.cpp:2069
+#: pcbnew/router/router_tool.cpp:2059
 msgid "90-degree rounded"
 msgstr "Arrondi à 90 degrés"
 
-#: pcbnew/router/router_tool.cpp:2074
+#: pcbnew/router/router_tool.cpp:2064
 msgid "Corner Style"
 msgstr "Style de coins"
 
-#: pcbnew/router/router_tool.cpp:2079
+#: pcbnew/router/router_tool.cpp:2069
 #, c-format
 msgid "Track Width: %s"
 msgstr "Largeur Piste: '%s'"
 
-#: pcbnew/router/router_tool.cpp:2101
+#: pcbnew/router/router_tool.cpp:2091
 msgid "Diff Pair Gap"
 msgstr "Ecart Paire Différentielle"
 
@@ -36195,15 +36189,15 @@ msgstr "Les polygones auto intersectants ne sont pas autorisés."
 msgid "Drag a corner"
 msgstr "Déplacer un sommet"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2053
+#: pcbnew/tools/pcb_point_editor.cpp:2051
 msgid "Add a zone corner"
 msgstr "Ajouter un sommet à la zone"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2090
+#: pcbnew/tools/pcb_point_editor.cpp:2088
 msgid "Split segment"
 msgstr "Diviser le segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2161
+#: pcbnew/tools/pcb_point_editor.cpp:2159
 msgid "Remove a zone/polygon corner"
 msgstr "Supprimer un sommet de la zone ou polygone"
 
@@ -36993,6 +36987,11 @@ msgstr "Exécution de remplissage des polygones..."
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -37003,9 +37002,10 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
@@ -37019,9 +37019,10 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
@@ -37031,9 +37032,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -37048,6 +37049,10 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -37055,6 +37060,11 @@ msgstr "Calculateur pour PCB KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
 msgid "KiCad PCB Editor (Standalone)"
@@ -37067,10 +37077,6 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -37125,6 +37131,23 @@ msgstr "Schématique KiCad"
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
 
+#~ msgid "Discard changes"
+#~ msgstr "Abandonner changements"
+
+#~ msgid "All downloads finished"
+#~ msgstr "Tous les téléchargements terminés"
+
+#~ msgid "Pick a package on the left panel to view its description."
+#~ msgstr ""
+#~ "Choisissez un paquet sur le panneau de gauche pour afficher sa "
+#~ "description."
+
+#~ msgid "Versions"
+#~ msgstr "Versions"
+
+#~ msgid "Dl Size"
+#~ msgstr "Taille Dl"
+
 #~ msgid ""
 #~ "Zdiff =\n"
 #~ "2*Z0( (1 - 0.48exp( -0.96*S/H ) )"
@@ -37134,12 +37157,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Zcommon = Zeven / 2"
 #~ msgstr "Zcommon = Zeven / 2"
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
 
 #~ msgid "Field name \"%s\" already in use."
 #~ msgstr "Nom de champ \"%s\" déjà existant."
