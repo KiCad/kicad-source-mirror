@@ -601,7 +601,9 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
         SCH_FIELD& field = aSymbol->GetFields()[i];
         LIB_FIELD* libField = nullptr;
 
-        if( !alg::contains( m_updateFields, field.GetName() ) )
+        // Mandatory fields always exist in m_updateFields, but these names can be translated.
+        // so do not try to search them in list: they can be no found by name).
+        if( i >= MANDATORY_FIELDS && !alg::contains( m_updateFields, field.GetName() ) )
             continue;
 
         if( i < MANDATORY_FIELDS )
