@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-10 23:49+0000\n"
+"PO-Revision-Date: 2021-11-11 23:47+0000\n"
 "Last-Translator: Axel Henriksson <axe.henriksson@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -4679,11 +4679,9 @@ msgid "Unable to find a PDF viewer for '%s'."
 msgstr "Det gick inte att hitta en PDF-visare för '%s'."
 
 #: common/gestfich.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"Problem vid körning av PDF-visaren.\n"
-"Kommandot är '%s'."
+msgstr "Problem under körning av PDF-visaren '%s'."
 
 #: common/gestfich.cpp:292
 #, c-format
@@ -4780,9 +4778,8 @@ msgid "Remove from Selection"
 msgstr "Ta Bort från Markering"
 
 #: common/hotkey_store.cpp:49
-#, fuzzy
 msgid "Ignore Grid Snaps"
-msgstr "Ignorera Rutnätsnäpp"
+msgstr "Ignorera Rutnätssnäpp"
 
 #: common/hotkey_store.cpp:50
 msgid "Ignore Other Snaps"
@@ -4831,14 +4828,14 @@ msgstr ""
 "Det gick inte att läsa instansnamn och version från kiface-biblioteket '%s'."
 
 #: common/kiway.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
 "'%s'\n"
 "could not be loaded\n"
 msgstr ""
 "Fatal Installationsbugg. Fil:\n"
-"\"%s\"\n"
+"'%s'\n"
 "kunde inte laddas\n"
 
 #: common/kiway.cpp:302
