@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-10-28 11:02+0000\n"
+"PO-Revision-Date: 2021-11-11 23:47+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -3915,7 +3915,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "폴더 '%s'에 대한 권한이 없습니다."
 
 #: common/eda_base_frame.cpp:1086
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
@@ -3925,9 +3925,8 @@ msgid ""
 msgstr ""
 "이건 정말 난처한 일이네요!\n"
 "마지막으로 파일을 편집한 시간인\n"
-"\"%s\"에\n"
-"파일이 제대로 저장되지 않았습니다. 마지막으로 저장한 편집 내용을 복원하시겠습"
-"니까?"
+"%s에\n"
+"파일이 제대로 저장되지 않았습니다. 마지막으로 저장한 편집 내용을 복원하시겠습니까?"
 
 #: common/eda_base_frame.cpp:1102
 msgid "The auto save file could not be renamed to the board file name."
@@ -5758,9 +5757,8 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "클립보드로 선택한 항목 복사"
 
 #: common/tool/actions.cpp:165
-#, fuzzy
 msgid "Paste item(s) from clipboard"
-msgstr "클립보드로부터 항목 붙여넣기"
+msgstr "클립보드에서 항목 붙여넣기"
 
 #: common/tool/actions.cpp:171
 msgid "Select all items on screen"
@@ -8923,7 +8921,6 @@ msgstr ""
 "이 옵션을 선택 취소하십시오."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
-#, fuzzy
 msgid "Create symbol with alternate body style (De Morgan)"
 msgstr "대체 본문 스타일을 사용하여 심볼 작성 (드 모르간)"
 
@@ -8985,7 +8982,6 @@ msgstr "심볼 내의 모든 유닛에 속성 적용 (&u)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
-#, fuzzy
 msgid "Common to all body &styles (De Morgan)"
 msgstr "심볼 내의 모든 바디 스타일에 속성 적용 (드 모르간) (&s)"
 
@@ -9013,9 +9009,8 @@ msgid "Delete extra units from symbol?"
 msgstr "심볼에서 추가 유닛을 삭제 하겠습니까?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:287
-#, fuzzy
 msgid "Delete alternate body style (De Morgan) from symbol?"
-msgstr "심볼에서 대체 바디 스타일 (드 모르간) 그리기 항목을 삭제하시겠습니까?"
+msgstr "심볼에서 대체 바디 스타일(드모르간)을 삭제하시겠습니까?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:315
 #, c-format
@@ -9150,7 +9145,6 @@ msgstr ""
 "사용됩니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
-#, fuzzy
 msgid "Has alternate body style (De Morgan)"
 msgstr "대체 바디 스타일 (드 모르간) 존재"
 
@@ -22825,7 +22819,7 @@ msgstr "붙여넣은 심볼에 고유 참조 지정자 할당"
 msgid ""
 "This can conflict with reference designators in the schematic that have not "
 "yet been synchronized with the board."
-msgstr ""
+msgstr "이것은 아직 보드와 동기화되지 않은 회로도의 참조 지정자와 충돌할 수 있습니다."
 
 #: pcbnew/dialogs/dialog_create_array_base.h:127
 msgid "Create Array"
@@ -25968,9 +25962,8 @@ msgid "Plot Edge.Cuts on all layers"
 msgstr "Edge.Cuts를 모든 레이어에 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
-#, fuzzy
 msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr "PCB 모서리 레이어의 내용물을 다른 종류의 레이어에 플롯하지 마세요."
+msgstr "PCB 에지 레이어의 내용물을 모든 레이어에 그림으로 표시"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 #, fuzzy
@@ -26646,9 +26639,8 @@ msgid "Real drill"
 msgstr "실제 드릴"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:21
-#, fuzzy
 msgid "Select Manufacturer"
-msgstr "레이어 선택:"
+msgstr "제조업체 선택"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:25
 #, fuzzy, c-format
@@ -26656,9 +26648,9 @@ msgid "from %s"
 msgstr "[%s에서]"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "상세"
+msgstr "세부 정보: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
 #, fuzzy
@@ -26667,15 +26659,15 @@ msgstr "현재 프로젝트 저장"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr ""
+msgstr "KiCad에서 제조업체에 프로덕션 파일 전송"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr ""
+msgstr "PCB 생산"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr ""
+msgstr "생산을 위해 PCB 보내기"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
 msgid "Change Pads on Current Footprint"
@@ -27128,7 +27120,7 @@ msgstr "배선과 비아 클리어런스"
 msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
-msgstr ""
+msgstr "트랙 주변에 클리어런스 아웃라인을 표시하고 선택적으로 라우팅하는 동안 트랙 끝 주위에 비아 클리어런스를 표시합니다."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
@@ -31202,14 +31194,14 @@ msgid "Through hole pad %s of %s"
 msgstr "%s의 %s에 대한 스루홀 패드"
 
 #: pcbnew/pad.cpp:1155
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "%s의 %s에 대한 패드 (%s 위)"
+msgstr "패드 %s %s의 %s 위%s"
 
 #: pcbnew/pad.cpp:1163
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "%s의 %s에 대한 스루홀 패드"
+msgstr "관통 구멍 패드 %s %s의 %s"
 
 #: pcbnew/pad.cpp:1598
 msgid "Edge connector"
@@ -33265,9 +33257,8 @@ msgstr ""
 "기판 설정 > 디자인 규칙 > 제약 에서 마이크로 비아를 먼저 활성화하여야 합니다."
 
 #: pcbnew/router/router_tool.cpp:981
-#, fuzzy
 msgid "Blind/buried via need 2 different layers."
-msgstr "서로 다른 레이어의 패드 수정하지 않기"
+msgstr "블라인드/매몰 비아는 2개의 다른 레이어가 필요합니다."
 
 #: pcbnew/router/router_tool.cpp:1059
 msgid "Tracks on Copper layers only."
@@ -33331,7 +33322,7 @@ msgstr "각도"
 
 #: pcbnew/router/router_tool.cpp:2069
 msgid "90-degree rounded"
-msgstr ""
+msgstr "90도 둥근"
 
 #: pcbnew/router/router_tool.cpp:2074
 #, fuzzy
