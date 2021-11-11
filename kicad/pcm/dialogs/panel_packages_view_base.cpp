@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "html_window.h"
+
 #include "panel_packages_view_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -54,11 +56,10 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizerScrolledWindow;
 	bSizerScrolledWindow = new wxBoxSizer( wxVERTICAL );
 
-	m_infoText = new wxRichTextCtrl( m_infoScrollWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_AUTO_URL );
-	m_infoText->Enable( false );
-	m_infoText->SetMinSize( wxSize( -1,300 ) );
+	m_infoText = new HTML_WINDOW( m_infoScrollWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_NEVER );
+	m_infoText->SetMinSize( wxSize( -1,100 ) );
 
-	bSizerScrolledWindow->Add( m_infoText, 0, wxEXPAND, 5 );
+	bSizerScrolledWindow->Add( m_infoText, 0, wxALL|wxEXPAND, 5 );
 
 	m_sizerVersions = new wxBoxSizer( wxVERTICAL );
 
@@ -135,6 +136,8 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 
 	// Connect Events
 	m_infoScrollWindow->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_PACKAGES_VIEW_BASE::OnSizeInfoBox ), NULL, this );
+	m_infoText->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( PANEL_PACKAGES_VIEW_BASE::OnURLClicked ), NULL, this );
+	m_infoText->Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( PANEL_PACKAGES_VIEW_BASE::OnInfoMouseWheel ), NULL, this );
 	m_gridVersions->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( PANEL_PACKAGES_VIEW_BASE::OnVersionsCellClicked ), NULL, this );
 	m_showAllVersions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnShowAllVersionsClicked ), NULL, this );
 	m_buttonDownload->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnDownloadVersionClicked ), NULL, this );
@@ -145,6 +148,8 @@ PANEL_PACKAGES_VIEW_BASE::~PANEL_PACKAGES_VIEW_BASE()
 {
 	// Disconnect Events
 	m_infoScrollWindow->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_PACKAGES_VIEW_BASE::OnSizeInfoBox ), NULL, this );
+	m_infoText->Disconnect( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler( PANEL_PACKAGES_VIEW_BASE::OnURLClicked ), NULL, this );
+	m_infoText->Disconnect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( PANEL_PACKAGES_VIEW_BASE::OnInfoMouseWheel ), NULL, this );
 	m_gridVersions->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( PANEL_PACKAGES_VIEW_BASE::OnVersionsCellClicked ), NULL, this );
 	m_showAllVersions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnShowAllVersionsClicked ), NULL, this );
 	m_buttonDownload->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PACKAGES_VIEW_BASE::OnDownloadVersionClicked ), NULL, this );

@@ -72,7 +72,12 @@ public:
     ///< Ranks packages for entered search term and rearranges/hides panels according to their rank
     void OnSearchTextChanged( wxCommandEvent& event );
 
-    void OnSizeInfoBox( wxSizeEvent& event ) override;
+    void OnSizeInfoBox( wxSizeEvent& aEvent ) override;
+
+    ///< Respond to a URL in the info window
+    void OnURLClicked( wxHtmlLinkEvent& event ) override;
+
+    void OnInfoMouseWheel( wxMouseEvent& event ) override;
 
 private:
     ///< Updates package listing according to search term
