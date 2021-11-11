@@ -2266,8 +2266,13 @@ void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuff
         if( ( clearance.x < 0 || clearance.x != clearance.y )
                 && pad->GetShape() != PAD_SHAPE::CUSTOM )
         {
+            wxSize dummySize = pad->GetSize() + clearance + clearance;
+
+            if( dummySize.x <= 0 || dummySize.y <= 0 )
+                continue;
+
             PAD dummy( *pad );
-            dummy.SetSize( pad->GetSize() + clearance + clearance );
+            dummy.SetSize( dummySize );
             dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
                                                         aMaxError, aErrorLoc );
         }

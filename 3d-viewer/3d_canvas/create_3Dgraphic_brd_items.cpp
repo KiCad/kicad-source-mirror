@@ -322,8 +322,13 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
     if( ( clearance.x < 0 || clearance.x != clearance.y )
             && aPad->GetShape() != PAD_SHAPE::CUSTOM )
     {
+        wxSize dummySize = aPad->GetSize() + clearance + clearance;
+
+        if( dummySize.x <= 0 || dummySize.y <= 0 )
+            return;
+
         PAD dummy( *aPad );
-        dummy.SetSize( aPad->GetSize() + clearance + clearance );
+        dummy.SetSize( dummySize );
         dummy.TransformShapeWithClearanceToPolygon( poly, aLayer, 0, ARC_HIGH_DEF, ERROR_INSIDE );
         clearance = { 0, 0 };
     }
