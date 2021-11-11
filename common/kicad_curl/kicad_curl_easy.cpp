@@ -209,15 +209,17 @@ bool KICAD_CURL_EASY::SetURL( const std::string& aURL )
         // So we also check and set any proxy config here
         if( KIPLATFORM::ENV::GetSystemProxyConfig( aURL, cfg ) )
         {
-            curl_easy_setopt( m_CURL, CURLOPT_PROXY, cfg.host.c_str() );
+            curl_easy_setopt( m_CURL, CURLOPT_PROXY, static_cast<const char*>( cfg.host.c_str() ) );
             if( cfg.username != "" )
             {
-                curl_easy_setopt( m_CURL, CURLOPT_PROXYUSERNAME, cfg.username.c_str() );
+                curl_easy_setopt( m_CURL, CURLOPT_PROXYUSERNAME,
+                                  static_cast<const char*>( cfg.username.c_str() ) );
             }
 
             if( cfg.password != "" )
             {
-                curl_easy_setopt( m_CURL, CURLOPT_PROXYPASSWORD, cfg.password.c_str() );
+                curl_easy_setopt( m_CURL, CURLOPT_PROXYPASSWORD,
+                                  static_cast<const char*>( cfg.password.c_str() ) );
             }
         }
 
