@@ -335,7 +335,7 @@
                                             </object>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxEXPAND | wxALL</property>
+                                                <property name="flag">wxEXPAND|wxBOTTOM</property>
                                                 <property name="proportion">1</property>
                                                 <object class="wxNotebook" expanded="1">
                                                     <property name="BottomDockable">1</property>

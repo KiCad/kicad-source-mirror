@@ -62,7 +62,7 @@ class PANEL_PACKAGES_VIEW_BASE : public wxPanel
 
 	public:
 
-		PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 700,400 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 840,400 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_PACKAGES_VIEW_BASE();
 
 		void m_splitter1OnIdle( wxIdleEvent& )

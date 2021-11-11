@@ -14,10 +14,10 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 
-	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH );
+	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
 	m_splitter1->SetSashGravity( 0.5 );
 	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW_BASE::m_splitter1OnIdle ), NULL, this );
-	m_splitter1->SetMinimumPaneSize( 300 );
+	m_splitter1->SetMinimumPaneSize( 380 );
 
 	m_panelList = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bPanelListSizer;
@@ -98,22 +98,22 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	bSizerVersionButtons = new wxBoxSizer( wxHORIZONTAL );
 
 	m_showAllVersions = new wxCheckBox( m_scrolledWindow5, wxID_ANY, _("Show all versions"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerVersionButtons->Add( m_showAllVersions, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	bSizerVersionButtons->Add( m_showAllVersions, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 
 
 	bSizerVersionButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_buttonDownload = new wxButton( m_scrolledWindow5, wxID_ANY, _("Download"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerVersionButtons->Add( m_buttonDownload, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerVersionButtons->Add( m_buttonDownload, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_buttonInstall = new wxButton( m_scrolledWindow5, wxID_ANY, _("Install"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerVersionButtons->Add( m_buttonInstall, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+	bSizerVersionButtons->Add( m_buttonInstall, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	m_sizerVersions->Add( bSizerVersionButtons, 0, wxEXPAND|wxRIGHT, 15 );
 
 
-	bSizerScrolledWindow->Add( m_sizerVersions, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerScrolledWindow->Add( m_sizerVersions, 0, wxEXPAND|wxRIGHT|wxLEFT, 3 );
 
 
 	m_scrolledWindow5->SetSizer( bSizerScrolledWindow );

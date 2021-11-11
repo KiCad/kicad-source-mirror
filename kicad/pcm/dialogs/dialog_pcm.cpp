@@ -32,7 +32,6 @@
 #include "pgm_base.h"
 #include "settings/settings_manager.h"
 #include "thread"
-#include "widgets/wx_progress_reporters.h"
 #include "widgets/wx_grid.h"
 
 #include <fstream>
@@ -136,6 +135,8 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
 
     SetDefaultItem( m_sdbSizer1OK );
 
+    Bind( wxEVT_CLOSE_WINDOW, &DIALOG_PCM::OnCloseWindow, this );
+
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   app_settings = mgr.GetAppSettings<KICAD_SETTINGS>();
@@ -171,6 +172,14 @@ void DIALOG_PCM::OnCloseClicked( wxCommandEvent& event )
     {
         EndModal( wxID_OK );
     }
+}
+
+
+void DIALOG_PCM::OnCloseWindow( wxCloseEvent& aEvent )
+{
+    wxCommandEvent dummy;
+
+    OnCloseClicked( dummy );
 }
 
 

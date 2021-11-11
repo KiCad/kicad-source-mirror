@@ -41,6 +41,7 @@ public:
 
     ///< Closes the window, asks user confirmation if there are pending actions
     void OnCloseClicked( wxCommandEvent& event ) override;
+    void OnCloseWindow( wxCloseEvent& aEvent );
 
     ///< Opens repository management dialog, saves changes to PCM
     void OnManageRepositoriesClicked( wxCommandEvent& event ) override;
