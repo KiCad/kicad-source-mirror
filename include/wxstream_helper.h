@@ -20,6 +20,7 @@
 #ifndef WXSTREAM_HELPER_H
 #define WXSTREAM_HELPER_H
 
+#include <vector>
 #include <wx/log.h>
 #include <wx/wfstream.h>
 
@@ -27,19 +28,21 @@
 static bool CopyStreamData( wxInputStream& inputStream, wxOutputStream& outputStream,
                             wxFileOffset size )
 {
-    wxChar buf[128 * 1024];
-    int readSize = 128 * 1024;
+    constexpr size_t bufSize = 128 * 1024;
+    std::vector<wxChar> buf( bufSize );
+
     wxFileOffset copiedData = 0;
+    wxFileOffset readSize   = bufSize;
 
     for( ; ; )
     {
         if(size != -1 && copiedData + readSize > size )
             readSize = size - copiedData;
 
-        inputStream.Read( buf, readSize );
+        inputStream.Read( buf.data(), readSize );
 
         size_t actuallyRead = inputStream.LastRead();
-        outputStream.Write( buf, actuallyRead );
+        outputStream.Write( buf.data(), actuallyRead );
 
         if( outputStream.LastWrite() != actuallyRead )
         {
@@ -55,6 +58,7 @@ static bool CopyStreamData( wxInputStream& inputStream, wxOutputStream& outputSt
         else
         {
             copiedData += actuallyRead;
+
             if( copiedData >= size )
                 break;
         }
