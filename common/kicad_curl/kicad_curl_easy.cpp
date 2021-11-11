@@ -38,6 +38,7 @@
 #include <build_version.h>
 #include <ki_exception.h>   // THROW_IO_ERROR
 #include <kiplatform/app.h>
+#include <kiplatform/environment.h>
 #include <pgm_base.h>
 
 
@@ -202,6 +203,24 @@ bool KICAD_CURL_EASY::SetURL( const std::string& aURL )
 {
     if( setOption<const char*>( CURLOPT_URL, aURL.c_str() ) == CURLE_OK )
     {
+        KIPLATFORM::ENV::PROXY_CONFIG cfg;
+
+        // Unforunately on Windows land, proxies can be configured depending on destination url
+        // So we also check and set any proxy config here
+        if( KIPLATFORM::ENV::GetSystemProxyConfig( aURL, cfg ) )
+        {
+            curl_easy_setopt( m_CURL, CURLOPT_PROXY, cfg.host.c_str() );
+            if( cfg.username != "" )
+            {
+                curl_easy_setopt( m_CURL, CURLOPT_PROXYUSERNAME, cfg.username.c_str() );
+            }
+
+            if( cfg.password != "" )
+            {
+                curl_easy_setopt( m_CURL, CURLOPT_PROXYPASSWORD, cfg.password.c_str() );
+            }
+        }
+
         return true;
     }
 

@@ -105,3 +105,9 @@ wxString KIPLATFORM::ENV::GetUserCachePath()
 {
     return g_get_user_cache_dir();
 }
+
+
+bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& aCfg )
+{
+    return false;
+}

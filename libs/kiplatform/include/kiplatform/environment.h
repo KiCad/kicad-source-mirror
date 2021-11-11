@@ -71,5 +71,22 @@ namespace KIPLATFORM
          * @return User cache path
          */
         wxString GetUserCachePath();
+
+        struct PROXY_CONFIG
+        {
+            wxString host;
+            wxString username;
+            wxString password;
+        };
+
+        /**
+         * Retrieves platform level proxying requirements to reach the given url
+         *
+         * @param aURL The target url we will be requesting over http
+         * @param aCfg The proxy config struct that will be populated
+         *
+         * @return True if successful fetched proxy info
+         */
+        bool GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& aCfg );
     }
 }

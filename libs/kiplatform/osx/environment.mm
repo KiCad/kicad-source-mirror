@@ -94,3 +94,9 @@ wxString KIPLATFORM::ENV::GetUserCachePath()
 
     return wxCFStringRef::AsString( ( CFStringRef) url.path );
 }
+
+
+bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& aCfg )
+{
+    return false;
+}
