@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-10 23:49+0000\n"
+"PO-Revision-Date: 2021-11-11 10:54+0000\n"
 "Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -18780,9 +18780,8 @@ msgid "Show all versions"
 msgstr "Προβολή όλων των via"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
-#, fuzzy
 msgid "Dl Size"
-msgstr "X Μέγεθος"
+msgstr "Μέγεθος Dl"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
 #, fuzzy
@@ -24337,7 +24336,7 @@ msgstr "Διαμπερής τρύπα"
 #: pcbnew/footprint_libraries_utils.cpp:1137 pcbnew/pad.cpp:1125
 #: pcbnew/pad.cpp:1597
 msgid "SMD"
-msgstr "SMD"
+msgstr "SMD, Surface Mounted Device"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
