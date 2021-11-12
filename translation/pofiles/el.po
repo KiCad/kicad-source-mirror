@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-11 23:47+0000\n"
+"PO-Revision-Date: 2021-11-12 13:27+0000\n"
 "Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -9896,9 +9896,9 @@ msgstr "Δεν ήταν δυνατή η εγγραφή αρχείων σχεδι
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1032
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1164
 #: pcbnew/dialogs/dialog_plot.cpp:908
-#, c-format, fuzzy
+#, c-format
 msgid "Plotted to '%s'."
-msgstr "Αποτυχία φορτώματος \"%s\""
+msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:532
 #: eeschema/dialogs/dialog_plot_schematic.cpp:699
@@ -13788,7 +13788,7 @@ msgstr "Ο ιδιοκτήτης του ορθογωνίου (%d) δεν βρέθ
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1539
 #, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr ""
+msgstr "Sheet entry's owner (%d) not found."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1785
 msgid "Power Port has unknown style, use bar instead."
@@ -13821,29 +13821,29 @@ msgid "File not found %s."
 msgstr "Το αρχείο δεν βρέθηκε %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2232
-#, fuzzy, c-format
+#, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "Η αναφορά '%s' δεν βρέθηκε."
+msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2255
-#, fuzzy, c-format
+#, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "Το αρχείο '%s' δεν βρέθηκε."
+msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2289
-#, fuzzy, c-format
+#, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "Η αναφορά '%s' δεν βρέθηκε."
+msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2424
-#, fuzzy, c-format
+#, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "Το αρχείο '%s' δεν βρέθηκε."
+msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2434
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "Το αρχείο '%s' δεν βρέθηκε."
+msgstr "Ο ιδιοκτήτης του αποτυπώματος (%d) δεν βρέθηκε."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:74
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:73
@@ -16810,16 +16810,15 @@ msgstr ""
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
-"<b>Κρυφό pin ισχύος %s</b> %s στη θέση <b>(%.3f, %.3f)</b> της μετατροπής."
+"Πληροφορίες: <b>Ο κρυφός ακροδέκτηςισχύος %s</b> %s στη θέση <b>(%s, %s)</b> "
+"της μετατροπής."
 
 #: eeschema/tools/ee_inspection_tool.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
 msgstr ""
-"<b> Κρυφό pin ισχύος %s</b> %s στη θέση <b>(%.3f, %.3f)</b> στη μονάδα %c "
-"της μετατροπής."
 
 #: eeschema/tools/ee_inspection_tool.cpp:372
 #, fuzzy, c-format
@@ -18098,9 +18097,9 @@ msgid "Highlight Aperture Type '%s'"
 msgstr "Επισήμανση Ανοιγμάτων Τύπου '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight DCode D%d"
-msgstr "Επισήμανση %s"
+msgstr "Επισήμανση DCode D%d"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:77
 #: gerbview/widgets/layer_widget.cpp:540
@@ -18627,9 +18626,8 @@ msgid "Waiting..."
 msgstr "Φόρτωση..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall progress"
-msgstr "Ιδιοτήτες Υλικού:"
+msgstr "Συνολική πρόοδος"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
@@ -18744,9 +18742,8 @@ msgid "Inst Size"
 msgstr "Επαναφορά Μεγέθους"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Comp"
-msgstr "Εταιρεία:"
+msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:105
 #, fuzzy
@@ -18759,9 +18756,9 @@ msgid "Versions"
 msgstr "Έκδοση"
 
 #: kicad/pcm/pcm.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "schema file '%s' not found"
-msgstr "Δεν βρέθηκε το σχηματικό αρχείο \"%s\"."
+msgstr "Δεν βρέθηκε το σχηματικό αρχείο '%s'"
 
 #: kicad/pcm/pcm.cpp:82
 #, c-format
@@ -18779,9 +18776,8 @@ msgid "Downloading %lld/%lld Kb"
 msgstr "Λήψη %lld/%lld Kb"
 
 #: kicad/pcm/pcm.cpp:214
-#, fuzzy
 msgid "Download is too large."
-msgstr "Λήψη βιβλιοθηκών 3Δ"
+msgstr "Η λήψη είναι πολύ μεγάλη."
 
 #: kicad/pcm/pcm.cpp:228
 #, fuzzy
@@ -18809,9 +18805,8 @@ msgid "Fetching repository packages"
 msgstr "Λήψη πακέτων αποθετηρίου"
 
 #: kicad/pcm/pcm.cpp:270
-#, fuzzy
 msgid "Unable to load repository packages url."
-msgstr "Αδυναμία φόρτωσης αρχείου έργου \"%s\""
+msgstr "Δεν είναι δυνατή η φόρτωση url πακέτων αποθετηρίου."
 
 #: kicad/pcm/pcm.cpp:278
 msgid "Packages hash doesn't match. Repository may be corrupted."
@@ -18851,9 +18846,8 @@ msgstr ""
 "αποθετήριο ενδέχεται να είναι κατεστραμμένο."
 
 #: kicad/pcm/pcm.cpp:590
-#, fuzzy
 msgid "Local file"
-msgstr "Επεξεργασία Τοπικού Αρχείου..."
+msgstr "Τοπικό αρχείο"
 
 #: kicad/pcm/pcm_task_manager.cpp:63
 msgid "Unable to create download directory!"
@@ -18868,9 +18862,9 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting package '%s'."
-msgstr "Εξαγωγή αρχείου \"%s\""
+msgstr "Εξαγωγή πακέτου '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:116
 #, c-format
@@ -18894,23 +18888,23 @@ msgid "Aborting package installation."
 msgstr "Ακύρωση εγκατάστασης πακέτου."
 
 #: kicad/pcm/pcm_task_manager.cpp:301
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to parse package metadata:\n"
 "\n"
 "%s"
 msgstr ""
-"Αδυναμία ανάλυσης URL:\n"
-"\"%s\""
+"Δεν είναι δυνατή η ανάλυση μεταδεδομένων του πακέτου:\n"
+"\n"
+"%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:310
 msgid "Archive does not contain a valid metadata.json file"
 msgstr "Το αρχείο δεν περιέχει έγκυρο αρχείο metadata.json"
 
 #: kicad/pcm/pcm_task_manager.cpp:318
-#, fuzzy
 msgid "Archive metadata must have a single version defined"
-msgstr "Ένα φύλλο πρέπει να έχει καθορισμένο αρχείο."
+msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:330
 #, c-format
@@ -18922,9 +18916,9 @@ msgstr ""
 "απεγκαταστήσετε αυτό το πακέτο."
 
 #: kicad/pcm/pcm_task_manager.cpp:362
-#, fuzzy, c-format
+#, c-format
 msgid "Removing directory %s"
-msgstr "φάκελος ρυθμίσεων"
+msgstr "Αφαίρεση καταλόγου %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:367
 #, fuzzy, c-format
@@ -19397,9 +19391,8 @@ msgid "Printing"
 msgstr "Εκτύπωση"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:554
-#, fuzzy
 msgid "Predefined Keywords"
-msgstr "Προκαθορισμένα πλάτη:"
+msgstr "Προκαθορισμένες Λέξεις Κλειδιά"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:557
 msgid "Texts can include keywords."
@@ -19423,9 +19416,8 @@ msgid "(sheet number)"
 msgstr "Αριθμός φύλλου: %d"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:565
-#, fuzzy
 msgid "(sheet count)"
-msgstr "Επανάληψη καταμέτρησης:"
+msgstr "(μέτρηση φύλλων)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:571
 msgid "(paper size)"
