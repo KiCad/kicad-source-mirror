@@ -129,8 +129,8 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
     m_sdbSizer1OK->SetLabel( _( "Close" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Discard Changes" ) );
-    m_sdbSizer1Apply->SetLabel( _( "Apply Changes" ) );
+    m_sdbSizer1Cancel->SetLabel( _( "Discard Pending Changes" ) );
+    m_sdbSizer1Apply->SetLabel( _( "Apply Pending Changes" ) );
     m_sdbSizer1->Layout();
 
     SetDefaultItem( m_sdbSizer1OK );

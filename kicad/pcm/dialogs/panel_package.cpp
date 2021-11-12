@@ -94,11 +94,11 @@ void PANEL_PACKAGE::SetState( PCM_PACKAGE_STATE aState )
         m_button->Enable();
         break;
     case PCM_PACKAGE_STATE::PPS_PENDING_INSTALL:
-        m_button->SetLabel( _( "Pending install" ) );
+        m_button->SetLabel( _( "Install Pending" ) );
         m_button->Disable();
         break;
     case PCM_PACKAGE_STATE::PPS_PENDING_UNINSTALL:
-        m_button->SetLabel( _( "Pending uninstall" ) );
+        m_button->SetLabel( _( "Uninstall Pending" ) );
         m_button->Disable();
         break;
     }
