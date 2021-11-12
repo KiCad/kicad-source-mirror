@@ -210,13 +210,13 @@ bool KICAD_CURL_EASY::SetURL( const std::string& aURL )
         if( KIPLATFORM::ENV::GetSystemProxyConfig( aURL, cfg ) )
         {
             curl_easy_setopt( m_CURL, CURLOPT_PROXY, static_cast<const char*>( cfg.host.c_str() ) );
-            if( cfg.username != "" )
+            if( !cfg.username.empty() )
             {
                 curl_easy_setopt( m_CURL, CURLOPT_PROXYUSERNAME,
                                   static_cast<const char*>( cfg.username.c_str() ) );
             }
 
-            if( cfg.password != "" )
+            if( !cfg.password.empty() )
             {
                 curl_easy_setopt( m_CURL, CURLOPT_PROXYPASSWORD,
                                   static_cast<const char*>( cfg.password.c_str() ) );

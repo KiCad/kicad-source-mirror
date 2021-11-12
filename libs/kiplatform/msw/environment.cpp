@@ -122,11 +122,14 @@ wxString KIPLATFORM::ENV::GetUserCachePath()
 
 bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& aCfg )
 {
-    bool                                 autoProxy = false;
+    // Original source from Microsoft sample (public domain)
+    // https://github.com/microsoft/Windows-classic-samples/blob/main/Samples/WinhttpProxy/cpp/GetProxy.cpp#L844
+    bool                                 autoProxyDetect = false;
     WINHTTP_CURRENT_USER_IE_PROXY_CONFIG ieProxyConfig = { 0 };
     WINHTTP_AUTOPROXY_OPTIONS            autoProxyOptions = { 0 };
     WINHTTP_PROXY_INFO                   autoProxyInfo = { 0 };
-    HINTERNET session = NULL;
+    HINTERNET                            session = NULL;
+    bool                                 success = false;
 
     if( WinHttpGetIEProxyConfigForCurrentUser( &ieProxyConfig ) )
     {
@@ -134,21 +137,21 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
         // we use the ie config simply to handle it off to the other win32 api
         if( ieProxyConfig.fAutoDetect )
         {
-            autoProxy = true;
+            autoProxyDetect = true;
         }
 
         if( ieProxyConfig.lpszAutoConfigUrl != NULL )
         {
-            autoProxy = true;
+            autoProxyDetect = true;
             autoProxyOptions.lpszAutoConfigUrl = ieProxyConfig.lpszAutoConfigUrl;
         }
     }
     else
     {
-        autoProxy = true;
+        autoProxyDetect = true;
     }
 
-    if( autoProxy )
+    if( autoProxyDetect )
     {
         // either we use the ie url or we set the auto detect mode
         if( autoProxyOptions.lpszAutoConfigUrl != NULL )
@@ -164,7 +167,7 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
 
         autoProxyOptions.fAutoLogonIfChallenged = TRUE;
 
-        autoProxy =
+        autoProxyDetect =
                 WinHttpGetProxyForUrl( session, aURL.c_str(), &autoProxyOptions, &autoProxyInfo );
 
         if( session )
@@ -173,7 +176,7 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
         }
     }
 
-    if( autoProxy )
+    if( autoProxyDetect )
     {
         if( autoProxyInfo.dwAccessType == WINHTTP_ACCESS_TYPE_NAMED_PROXY )
         {
@@ -187,10 +190,8 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
                 aCfg.host = tokenizer.GetNextToken();
             }
 
-            return true;
+            success = true;
         }
-
-        return false;
     }
     else
     {
@@ -202,14 +203,41 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
 
             if(aCfg.host != ":" && aCfg.host != "::")
             {
-                return true;
+                success = true;
             }
-        }
-        else
-        {
-            return false;
         }
     }
 
-    return false;
+    // We have to clean up the strings the win32 api returned
+    if( autoProxyInfo.lpszProxy )
+    {
+        GlobalFree( autoProxyInfo.lpszProxy );
+        autoProxyInfo.lpszProxy = NULL;
+    }
+
+    if( autoProxyInfo.lpszProxyBypass )
+    {
+        GlobalFree( autoProxyInfo.lpszProxyBypass );
+        autoProxyInfo.lpszProxyBypass = NULL;
+    }
+
+    if( ieProxyConfig.lpszAutoConfigUrl != NULL )
+    {
+        GlobalFree( ieProxyConfig.lpszAutoConfigUrl );
+        ieProxyConfig.lpszAutoConfigUrl = NULL;
+    }
+
+    if( ieProxyConfig.lpszProxy != NULL )
+    {
+        GlobalFree( ieProxyConfig.lpszProxy );
+        ieProxyConfig.lpszProxy = NULL;
+    }
+
+    if( ieProxyConfig.lpszProxyBypass != NULL )
+    {
+        GlobalFree( ieProxyConfig.lpszProxyBypass );
+        ieProxyConfig.lpszProxyBypass = NULL;
+    }
+
+    return success;
 }
