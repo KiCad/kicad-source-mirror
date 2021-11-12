@@ -706,8 +706,11 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
             {
                 PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
-                for( int candidate : designSettings.m_TrackWidthList )
+                // Note: skip first entry which is the current netclass value
+                for( int i = 1; i < (int) designSettings.m_TrackWidthList.size(); ++i )
                 {
+                    int candidate = designSettings.m_TrackWidthList[ i ];
+
                     if( candidate > track->GetWidth() )
                     {
                         commit.Modify( track );
@@ -772,7 +775,8 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
             {
                 PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
-                for( int i = designSettings.m_TrackWidthList.size() - 1; i >= 0; --i )
+                // Note: skip first entry which is the current netclass value
+                for( int i = designSettings.m_TrackWidthList.size() - 1; i >= 1; --i )
                 {
                     int candidate = designSettings.m_TrackWidthList[ i ];
 
