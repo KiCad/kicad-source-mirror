@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-07 14:21+0000\n"
+"PO-Revision-Date: 2021-11-12 18:47+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -6155,7 +6155,7 @@ msgstr "Mode de vista de capa inactiva"
 
 #: common/tool/actions.cpp:534
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr ""
+msgstr "Commuta les capes inactives entre normals i atenuades"
 
 #: common/tool/actions.cpp:540
 msgid "Inactive Layer View Mode (3-state)"
@@ -6163,7 +6163,7 @@ msgstr "Mode de vista de capa inactiva (3-estats)"
 
 #: common/tool/actions.cpp:541
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
-msgstr ""
+msgstr "Alterna les capes inactives entre normals, atenuades, i amagades"
 
 #: common/tool/actions.cpp:546
 msgid "Select item(s)"
@@ -6175,7 +6175,7 @@ msgstr "Eina de mesura"
 
 #: common/tool/actions.cpp:553
 msgid "Interactively measure distance between points"
-msgstr ""
+msgstr "Mesura interactiva de la distància entre dos punts"
 
 #: common/tool/actions.cpp:564
 msgid "Show 3D viewer window"
@@ -6284,7 +6284,7 @@ msgstr "Llista de les dreceres..."
 
 #: common/tool/actions.cpp:636
 msgid "Displays current hotkeys table and corresponding commands"
-msgstr ""
+msgstr "Mostra la taula de dreceres actual i les ordres corresponents"
 
 #: common/tool/actions.cpp:641
 msgid "Get Involved"
@@ -6336,6 +6336,8 @@ msgid ""
 "Could not launch the default browser.\n"
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
+"No s'ha pogut iniciar l'explorador predeterminat.\n"
+"Per obtenir informació sobre com ajudar al projecte KiCad, visita %s"
 
 #: common/tool/common_control.cpp:272
 msgid "Get involved with KiCad"
@@ -6347,6 +6349,8 @@ msgid ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 msgstr ""
+"No s'ha pogut iniciar l'explorador predeterminat.\n"
+"Per donar al projecte KiCad, visita %s"
 
 #: common/tool/common_control.cpp:287
 msgid "Donate to KiCad"
@@ -13305,9 +13309,9 @@ msgid "Polyline, %d points"
 msgstr ""
 
 #: eeschema/lib_shape.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Corba de Bezier"
+msgstr "Corba Bezier, %d punts"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, fuzzy, c-format
@@ -18367,9 +18371,9 @@ msgid "Highlight Items of Net '%s'"
 msgstr "Remarca elements de la xarxa \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "Ressalta la xarxa"
+msgstr "Realça les obertures de tipus '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
 #, c-format
@@ -25251,10 +25255,10 @@ msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:394
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write drill and/or map files to folder '%s'."
 msgstr ""
-"No teniu permisos d'escriptura per a desar el fitxer <%s> a la carpeta <%s>."
+"No s'han pogut escriure els fitxers de foradat i/o mapa a la carpeta '%s'."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:443
 msgid "Save Drill Report File"
@@ -25693,9 +25697,9 @@ msgid "footprint"
 msgstr "empremta"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred writing empty footprint library table '%s'."
-msgstr "Edita la taula de les biblioteques d'empremtes"
+msgstr "Error al escriure una taula de biblioteca d'empremtes buida '%s'."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 #, fuzzy
@@ -25703,10 +25707,9 @@ msgid "Please select a footprint library table file."
 msgstr "Seleccioneu una biblioteca de components."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint library table."
-msgstr ""
-"Seleccioneu el fitxer de la taula de les biblioteques de símbols globals:"
+msgstr "'%s' no és una taula de biblioteca d'empremtes vàlida."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
 #, fuzzy, c-format
@@ -25714,14 +25717,17 @@ msgid "Cannot create library table path '%s'."
 msgstr "No es pot crear el camí a la biblioteca d'empremtes «%s»"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot copy footprint library table from:\n"
 "%s\n"
 "to:\n"
 "%s."
 msgstr ""
-"Seleccioneu el fitxer de la taula de les biblioteques de símbols globals:"
+"No es pot copiar la taula de biblioteques d'empremtes de:\n"
+"%s\n"
+"a:\n"
+"%s."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:133
 #, fuzzy
@@ -26278,9 +26284,9 @@ msgid "Default Pad Properties for Add Pad Tool"
 msgstr "&Propietats del pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:487
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr "Empremta %s (%s) orientació %.1f"
+msgstr "Empremta %s (%s), %s, rotada %g graus"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:490
 #: pcbnew/dialogs/dialog_text_properties.cpp:244
@@ -27701,9 +27707,9 @@ msgid "from %s"
 msgstr "[des de %s]"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "Detalls"
+msgstr "Detalls: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
 #, fuzzy
@@ -27888,9 +27894,9 @@ msgid "Reference:"
 msgstr "Referència:"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
-msgstr "Empremta %s (%s) orientació %.1f"
+msgstr "Empremta %s (%s), %s, rotada %.1f graus"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:345
 #, fuzzy
@@ -28459,14 +28465,14 @@ msgid "Edit options"
 msgstr "Edita les opcions de la línia"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:555
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "S'ha trobat un caràcter no permès a la revisió"
+msgstr "Caràcter il·legal '%c' al sobrenom: '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:798
-#, fuzzy, c-format
+#, c-format
 msgid "Select %s Library"
-msgstr "Selecciona la biblioteca"
+msgstr "Selecciona la biblioteca de %s"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:856
 msgid "The following directories could not be opened: \n"
@@ -29887,15 +29893,15 @@ msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:244 pcbnew/drc/drc_engine.cpp:325
 #: pcbnew/drc/drc_engine.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s'"
-msgstr "Utilitza els valors de la classe de xarxa"
+msgstr "classe de xarxa '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:271 pcbnew/drc/drc_engine.cpp:288
 #: pcbnew/drc/drc_engine.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "Utilitza els valors de la classe de xarxa"
+msgstr "classe de xarxa '%s' (parell diferencial)"
 
 #: pcbnew/drc/drc_engine.cpp:428
 #, fuzzy
@@ -29903,9 +29909,9 @@ msgid "keepout area"
 msgstr "Afegeix àrees de prohibit el pas"
 
 #: pcbnew/drc/drc_engine.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "keepout area '%s'"
-msgstr "Afegeix àrees de prohibit el pas"
+msgstr "àrea restringida '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:699
 msgid "Tessellating copper zones..."
@@ -29922,9 +29928,9 @@ msgid "board minimum"
 msgstr "Amplada màxima"
 
 #: pcbnew/drc/drc_engine.cpp:834
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Marge de seguretat mín."
+msgstr "Marge mínim de la placa: %s."
 
 #: pcbnew/drc/drc_engine.cpp:843
 #, fuzzy
@@ -29932,9 +29938,9 @@ msgid "board minimum hole"
 msgstr "Amplada màxima"
 
 #: pcbnew/drc/drc_engine.cpp:846
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Marge de seguretat mín."
+msgstr "Marge d'orifici mínim de placa: %s."
 
 #: pcbnew/drc/drc_engine.cpp:873
 #, c-format
@@ -29951,9 +29957,9 @@ msgid "undefined"
 msgstr "No definit"
 
 #: pcbnew/drc/drc_engine.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s %s: %s."
-msgstr "Combina les zones"
+msgstr "S'està comprovant %s %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:918
 #, c-format
@@ -29961,9 +29967,9 @@ msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "S'està verificant %s: min %s; opt %s; max %s."
 
 #: pcbnew/drc/drc_engine.cpp:929
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s."
-msgstr "Combina les zones"
+msgstr "S'està comprovant %s."
 
 #: pcbnew/drc/drc_engine.cpp:937
 msgid "Board and netclass clearances apply only between copper items."
