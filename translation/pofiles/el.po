@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-12 13:27+0000\n"
-"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
+"PO-Revision-Date: 2021-11-12 18:47+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -9898,7 +9898,7 @@ msgstr "Δεν ήταν δυνατή η εγγραφή αρχείων σχεδι
 #: pcbnew/dialogs/dialog_plot.cpp:908
 #, c-format
 msgid "Plotted to '%s'."
-msgstr ""
+msgstr "Σχεδιογραφήθηκε στο '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:532
 #: eeschema/dialogs/dialog_plot_schematic.cpp:699
@@ -12133,11 +12133,10 @@ msgid "Global label size:"
 msgstr "Μέγεθος καθολικής ετικέτας:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
-#, fuzzy
 msgid "Percentage of the text size to use as space around a global label"
 msgstr ""
-"Ποσοστό του μεγέθους κειμένου για την αντιστάθμιση της θέσης πάνω ή κάτω από "
-"το καλώδιο ή το δίαυλο"
+"Ποσοστό του μεγέθους κειμένου προς χρήση διακένου τριγύρω από την καθολική "
+"ετικέτα"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:107
 msgid "Default line thickness:"
@@ -12742,13 +12741,12 @@ msgid "Create a new project for this schematic"
 msgstr "Δημιουργία νέου έργου για αυτό το σχηματικό"
 
 #: eeschema/files-io.cpp:79
-#, fuzzy
 msgid ""
 "Creating a project will enable features such as text variables, net classes, "
 "and ERC exclusions"
 msgstr ""
-"Η δημιουργία ενός έργου θα ενεργοποιήσει λειτουργίες όπως κανόνες σχεδίασης, "
-"net classes και προεπιλογές επιπέδων"
+"Η δημιουργία ενός έργου θα ενεργοποιήσει λειτουργίες όπως μεταβλητές, λίστες "
+"δικτύων, και αποκλεισμούς ΕΗΚ"
 
 #: eeschema/files-io.cpp:126 eeschema/files-io.cpp:1153
 #, c-format
@@ -13719,14 +13717,12 @@ msgstr "Ο κάτοχος του ακροδέκτη (%d) δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:649
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1893
-#, fuzzy
 msgid "Pin has unexpected orientation."
-msgstr "Προσανατολισμός κειμένου"
+msgstr "Ακροδέκτης με μη αναμενόμενο προσανατολισμό."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:688
-#, fuzzy
 msgid "Pin has unexpected electrical type."
-msgstr "Εμφάνιση ηλεκτρικού τύπου ακροδέκτη"
+msgstr "Ακροδέκτης με μη αναμενόμενο ηλεκτρικό τύπο."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:693
 msgid "Pin has unexpected outer edge type."
@@ -16764,9 +16760,8 @@ msgid "Save Current Sheet Copy As..."
 msgstr "Αποθήκευση Αντιγράφου Τρέχοντος Φύλλου Ως..."
 
 #: eeschema/tools/ee_actions.cpp:767
-#, fuzzy
 msgid "Save a copy of the current sheet to another location or name"
-msgstr "Αποθήκευση αντίγραφου του τρέχοντος εγγράφου σε άλλη τοποθεσία"
+msgstr "Αποθήκευση αντίγραφου του τρέχοντος φύλλου σε άλλη τοποθεσία ή όνομα"
 
 #: eeschema/tools/ee_inspection_tool.cpp:266
 #, c-format
@@ -18242,9 +18237,8 @@ msgid "Reset all settings on this page to their default"
 msgstr "Επαναφέρετε όλες τις ρυθμίσεις σε αυτήν τη σελίδα στις προεπιλεγμένες"
 
 #: include/wxstream_helper.h:46
-#, fuzzy
 msgid "Failed to output data"
-msgstr "Αποτυχία φορτώματος \"%s\""
+msgstr "Αποτυχία εξαγωγής δεδομένων"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
 msgid "<h1>Template Selector</h1>"
@@ -18547,26 +18541,24 @@ msgid "Plugin and Content Manager"
 msgstr "Διαχειριστής Πακέτων"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:235
-#, fuzzy
 msgid "Choose package file"
-msgstr "Επιλογή Εικόνας"
+msgstr "Επιλογή αρχείου πακέτου"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:330
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:117
 #, c-format
 msgid "Pending (%d)"
-msgstr ""
+msgstr "Εκκρεμεί (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:365
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:60
 #, c-format
 msgid "Installed (%d)"
-msgstr ""
+msgstr "Εγκατεστημένα (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
-#, fuzzy
 msgid "Manage"
-msgstr "Διαχειριστής Kicad"
+msgstr "Διαχείριση"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:82
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
@@ -18584,27 +18576,24 @@ msgid "Repository"
 msgstr "Αποθετήριο"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:103
-#, fuzzy
 msgid "Discard action"
-msgstr "Απόρριψη Αλλαγών"
+msgstr "Απόρριψη δράσης"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:133
 msgid "Install from file..."
 msgstr "Εγκατάσταση από αρχείο..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:136
-#, fuzzy
 msgid "Apply changes"
-msgstr "Εφαρμογή Αλλαγών"
+msgstr "Εφαρμογή αλλαγών"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:139
-#, fuzzy
 msgid "Discard changes"
-msgstr "Απόρριψη Αλλαγών"
+msgstr "Απόρριψη αλλαγών"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:73
 msgid "Plugin And Content Manager"
-msgstr ""
+msgstr "Διαχειριστής Πρόσθετων και Περιεχομένου"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:86
 #, c-format
@@ -18616,14 +18605,12 @@ msgid "All downloads finished"
 msgstr "Όλες οι λήψεις ολοκληρώθηκαν"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download progress"
-msgstr "Λήψη βιβλιοθηκών 3Δ"
+msgstr "Πρόοδος λήψης"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
-#, fuzzy
 msgid "Waiting..."
-msgstr "Φόρτωση..."
+msgstr "Αναμονή..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
 msgid "Overall progress"
@@ -18634,19 +18621,16 @@ msgid "Details"
 msgstr "Λεπτομέρειες"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
-#, fuzzy
 msgid "Applying package changes"
-msgstr "Εφαρμογή Αλλαγών"
+msgstr "Εφαρμογή αλλαγών πρόσθετου πακέτου"
 
 #: kicad/pcm/dialogs/panel_package.cpp:84
-#, fuzzy
 msgid "Pending install"
-msgstr "Επιλογές Απόδοσης"
+msgstr "Εκκρεμεί εγκατάσταση"
 
 #: kicad/pcm/dialogs/panel_package.cpp:88
-#, fuzzy
 msgid "Pending uninstall"
-msgstr "Μηχανή Απόδοσης"
+msgstr "Εκκρεμεί απεγκατάσταση"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:147
 msgid "Metadata"
@@ -18676,9 +18660,8 @@ msgid "Maintainer"
 msgstr "Συντηρητής"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:191
-#, fuzzy
 msgid "Resources"
-msgstr "Ανταλλαγή πηγών"
+msgstr "Πόροι"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:266
 msgid "Pick a package on the left panel to view it's description."
@@ -18689,30 +18672,29 @@ msgid "Package download url is not specified"
 msgstr "Το url λήψης πακέτου δεν έχει καθοριστεί"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:343
-#, fuzzy
 msgid "Error downloading package"
-msgstr "Σφάλμα φόρτωσης επεξεργαστή"
+msgstr "Σφάλμα λήψης πρόσθετου πακέτου"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:352
-#, fuzzy
 msgid "Save package"
-msgstr "Αποθήκευση αλλαγών"
+msgstr "Αποθήκευση πακέτου"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:364
-#, fuzzy
 msgid "Downloading package"
-msgstr "Λήψη βιβλιοθηκών 3Δ"
+msgstr "Λήψη πακέτου"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:380
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
 msgstr ""
+"Η ακεραιότητα του μεταφορτωμένου πρόσθετου πακέτου δεν μπόρεσε να "
+"ταυτοποιηθεί, το hash δεν ταιριάζει. Είστε σίγουροι ότι θέλετε να κρατήσετε "
+"αυτό το αρχείο?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:382
-#, fuzzy
 msgid "Keep downloaded file"
-msgstr "Καθαρή περιοχή χαλκού"
+msgstr "Διατήρηση του μεταφορτωμένου αρχείου"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:419
 msgid ""
@@ -18723,14 +18705,12 @@ msgstr ""
 "σας. Είστε βέβαιοι ότι θέλετε να το εγκαταστήσετε ούτως ή άλλως;"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:421
-#, fuzzy
 msgid "Install package"
-msgstr "Στο Πακέτο"
+msgstr "Εγκατάσταση πρόσθετου πακέτου"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:64
-#, fuzzy
 msgid "Show all versions"
-msgstr "Προβολή όλων των via"
+msgstr "Προβολή όλων των εκδόσεων"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:82
 msgid "Dl Size"
@@ -18746,12 +18726,10 @@ msgid "Comp"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:105
-#, fuzzy
 msgid "Download"
-msgstr "Κάτω"
+msgstr "Λήψη"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:121
-#, fuzzy
 msgid "Versions"
 msgstr "Έκδοση"
 
@@ -18785,9 +18763,8 @@ msgid "Fetching repository"
 msgstr "Αποθετήριο GitHub"
 
 #: kicad/pcm/pcm.cpp:230
-#, fuzzy
 msgid "Unable to load repository url"
-msgstr "Αδυναμία φόρτωσης αρχείου %s"
+msgstr "Αδυναμία φόρτωσης διεύθυνσης url του αποθετηρίου"
 
 #: kicad/pcm/pcm.cpp:246
 #, c-format
@@ -18833,9 +18810,8 @@ msgstr ""
 "γίνει εκ νέου λήψη."
 
 #: kicad/pcm/pcm.cpp:431
-#, fuzzy
 msgid "Downloading resources"
-msgstr "Λήψη βιβλιοθηκών 3Δ"
+msgstr "Λήψη πηγών"
 
 #: kicad/pcm/pcm.cpp:445
 msgid ""
