@@ -48,16 +48,19 @@ public:
     /** Constructor */
     DIALOG_PCM_PROGRESS( wxWindow* parent, bool aShowDownloadSection = true );
 
-    ///< Thread safe. Adds a message to detailed report window.
+    ///< Safe to call from non-UI thread. Adds a message to detailed report window.
     void Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED );
 
-    ///< Thread safe. Sets current download progress gauge and text.
+    ///< Safe to call from non-UI thread. Sets the download progress of the current zip entry.
     void SetDownloadProgress( uint64_t aDownloaded, uint64_t aTotal );
 
-    ///< Safe to call from non-UI thread. Sets current overall progress gauge.
-    void SetOverallProgress( uint64_t aProgress, uint64_t aTotal );
+    ///< Safe to call from non-UI thread. Sets the download prgress of the current package.
+    void SetPackageProgress( uint64_t aProgress, uint64_t aTotal );
 
-    ///< Thread safe. Disables cancel button, enables close button.
+    ///< Safe to call from non-UI thread. Advances to the next package.
+    void AdvancePhase() override;
+
+    ///< Safe to call from non-UI thread. Disables cancel button, enables close button.
     void SetFinished();
 
 private:
@@ -69,8 +72,8 @@ private:
     std::atomic_int64_t  m_downloaded;
     std::atomic_int64_t  m_downloadTotal;
 
-    std::atomic_int64_t  m_overallProgress;
-    std::atomic_int64_t  m_overallProgressTotal;
+    std::atomic_int64_t  m_currentProgress;
+    std::atomic_int64_t  m_currentProgressTotal;
 
     std::atomic_bool     m_finished;
 

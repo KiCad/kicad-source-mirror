@@ -29,8 +29,8 @@ DIALOG_PCM_PROGRESS::DIALOG_PCM_PROGRESS( wxWindow* parent, bool aShowDownloadSe
         PROGRESS_REPORTER_BASE( 1 ),
         m_downloaded( 0 ),
         m_downloadTotal( 0 ),
-        m_overallProgress( 0 ),
-        m_overallProgressTotal( 0 ),
+        m_currentProgress( 0 ),
+        m_currentProgressTotal( 0 ),
         m_finished( false )
 #if wxCHECK_VERSION( 3, 1, 0 )
         ,
@@ -53,7 +53,7 @@ DIALOG_PCM_PROGRESS::DIALOG_PCM_PROGRESS( wxWindow* parent, bool aShowDownloadSe
 void DIALOG_PCM_PROGRESS::OnCancelClicked( wxCommandEvent& event )
 {
     SetNumPhases( 1 );
-    SetOverallProgress( 1, 1 );
+    SetPackageProgress( 1, 1 );
     m_reporter->Report( _( "Aborting remaining tasks." ) );
 
     m_cancelled.store( true );
@@ -87,10 +87,17 @@ uint64_t DIALOG_PCM_PROGRESS::toKb( uint64_t aValue )
 }
 
 
-void DIALOG_PCM_PROGRESS::SetOverallProgress( uint64_t aProgress, uint64_t aTotal )
+void DIALOG_PCM_PROGRESS::SetPackageProgress( uint64_t aProgress, uint64_t aTotal )
 {
-    m_overallProgress.store( std::min( aProgress, aTotal ) );
-    m_overallProgressTotal.store( aTotal );
+    m_currentProgress.store( std::min( aProgress, aTotal ) );
+    m_currentProgressTotal.store( aTotal );
+}
+
+
+void DIALOG_PCM_PROGRESS::AdvancePhase()
+{
+    PROGRESS_REPORTER_BASE::AdvancePhase();
+    m_currentProgress.store( 0 );
 }
 
 
@@ -105,7 +112,7 @@ bool DIALOG_PCM_PROGRESS::updateUI()
     bool   finished = m_finished.load();
     int    phase = m_phase.load();
     int    phases = m_numPhases.load();
-    double current = m_overallProgress.load() / (double) m_overallProgressTotal.load();
+    double current = m_currentProgress.load() / (double) m_currentProgressTotal.load();
 
     if( phases > 0 )
         current = ( phase + current ) / phases;

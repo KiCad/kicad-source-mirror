@@ -234,7 +234,7 @@ bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPack
         }
 
         extracted++;
-        m_reporter->SetOverallProgress( extracted, entries );
+        m_reporter->SetPackageProgress( extracted, entries );
 
         if( !isMultiThreaded )
             m_reporter->KeepRefreshing( false );
@@ -252,7 +252,7 @@ bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPack
     }
 
     m_reporter->Report( _( "Extracted package\n" ), RPT_SEVERITY_INFO );
-    m_reporter->SetOverallProgress( entries, entries );
+    m_reporter->SetPackageProgress( entries, entries );
 
     return true;
 }
