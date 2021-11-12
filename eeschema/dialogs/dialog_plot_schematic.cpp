@@ -345,7 +345,7 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
     }
 
     aSettings->LoadColors( colors );
-    aSettings->SetDefaultPenWidth( (int) m_defaultLineWidth.GetValue() );
+    aSettings->SetMinPenWidth( (int) m_defaultLineWidth.GetValue() );
 
     if( m_plotBackgroundColor->GetValue() )
         aSettings->SetBackgroundColor( colors->GetColor( LAYER_SCHEMATIC_BACKGROUND ) );

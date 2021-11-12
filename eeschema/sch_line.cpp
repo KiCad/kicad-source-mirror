@@ -833,25 +833,13 @@ bool SCH_LINE::doIsConnected( const wxPoint& aPosition ) const
 void SCH_LINE::Plot( PLOTTER* aPlotter ) const
 {
     auto*   settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
-    int     penWidth;
+    int     penWidth = std::max( GetPenWidth(), settings->GetMinPenWidth() );
     COLOR4D color = GetLineColor();
 
     if( color == COLOR4D::UNSPECIFIED )
         color = settings->GetLayerColor( GetLayer() );
 
     aPlotter->SetColor( color );
-
-    switch( m_layer )
-    {
-    case LAYER_WIRE: penWidth = settings->m_DefaultWireThickness; break;
-    case LAYER_BUS:  penWidth = settings->m_DefaultBusThickness;  break;
-    default:         penWidth = GetPenWidth();                    break;
-    }
-
-    if( m_stroke.GetWidth() != 0 )
-        penWidth = m_stroke.GetWidth();
-
-    penWidth = std::max( penWidth, settings->GetMinPenWidth() );
 
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetDash( GetEffectiveLineStyle() );
