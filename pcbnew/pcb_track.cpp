@@ -132,34 +132,6 @@ int PCB_TRACK::GetLocalClearance( wxString* aSource ) const
 }
 
 
-void PCB_TRACK::GetWidthConstraints( int* aMin, int* aMax, wxString* aSource ) const
-{
-    *aMin = 0;
-    *aMax = INT_MAX;
-
-    DRC_CONSTRAINT constraint;
-
-    if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
-    {
-        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
-
-        constraint = bds.m_DRCEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, this, nullptr, GetLayer() );
-    }
-
-    if( constraint.Value().HasMin() || constraint.Value().HasMax() )
-    {
-        if( constraint.Value().HasMin() )
-            *aMin = constraint.Value().Min();
-
-        if( constraint.Value().HasMax() )
-            *aMax = constraint.Value().Max();
-
-        if( aSource )
-            *aSource = constraint.GetName();
-    }
-}
-
-
 int PCB_VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
 {
     if( !FlashLayer( aLayer ) )
@@ -727,13 +699,6 @@ void PCB_TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
                                           MessageTextFromValue( units, clearance ) ),
-                        wxString::Format( _( "(from %s)" ), source ) );
-
-    int minWidth, maxWidth;
-    GetWidthConstraints( &minWidth, &maxWidth, &source );
-
-    aList.emplace_back( wxString::Format( _( "Min Width: %s" ),
-                                          MessageTextFromValue( units, minWidth ) ),
                         wxString::Format( _( "(from %s)" ), source ) );
 }
 
