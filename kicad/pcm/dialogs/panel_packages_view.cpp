@@ -393,15 +393,18 @@ void PANEL_PACKAGES_VIEW::OnVersionsCellClicked( wxGridEvent& event )
 
 void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
 {
-    const wxArrayInt rows = m_gridVersions->GetSelectedRows();
+    if( m_gridVersions->GetNumberRows() == 1 )
+        m_gridVersions->SelectRow( 0 );
 
-    if( !m_currentSelected || rows.size() != 1 )
+    const wxArrayInt selectedRows = m_gridVersions->GetSelectedRows();
+
+    if( !m_currentSelected || selectedRows.size() != 1 )
     {
         wxBell();
         return;
     }
 
-    wxString           version = m_gridVersions->GetCellValue( rows[0], COL_VERSION );
+    wxString           version = m_gridVersions->GetCellValue( selectedRows[0], COL_VERSION );
     const PCM_PACKAGE& package = m_currentSelected->GetPackageData().package;
 
     auto ver_it = std::find_if( package.versions.begin(), package.versions.end(),
@@ -471,15 +474,18 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
 
 void PANEL_PACKAGES_VIEW::OnInstallVersionClicked( wxCommandEvent& event )
 {
-    const wxArrayInt rows = m_gridVersions->GetSelectedRows();
+    if( m_gridVersions->GetNumberRows() == 1 )
+        m_gridVersions->SelectRow( 0 );
 
-    if( !m_currentSelected || rows.size() != 1 )
+    const wxArrayInt selectedRows = m_gridVersions->GetSelectedRows();
+
+    if( !m_currentSelected || selectedRows.size() != 1 )
     {
         wxBell();
         return;
     }
 
-    wxString           version = m_gridVersions->GetCellValue( rows[0], COL_VERSION );
+    wxString           version = m_gridVersions->GetCellValue( selectedRows[0], COL_VERSION );
     const PCM_PACKAGE& package = m_currentSelected->GetPackageData().package;
 
     auto ver_it = std::find_if( package.versions.begin(), package.versions.end(),

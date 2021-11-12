@@ -39,7 +39,7 @@ public:
     ~PANEL_PACKAGES_VIEW();
 
     /**
-     * @brief Recreates package panels and displays daya
+     * @brief Recreates package panels and displays data
      *
      * @param aPackageData list of package view data
      * @param aCallback (un)install button callback
