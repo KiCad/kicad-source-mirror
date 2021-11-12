@@ -89,7 +89,7 @@
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
                         <property name="maximum_size"></property>
-                        <property name="min_pane_size">400</property>
+                        <property name="min_pane_size">420</property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
                         <property name="minimum_size"></property>
@@ -584,7 +584,7 @@
                                                             </object>
                                                         </object>
                                                         <object class="sizeritem" expanded="1">
-                                                            <property name="border">15</property>
+                                                            <property name="border">5</property>
                                                             <property name="flag">wxEXPAND|wxRIGHT</property>
                                                             <property name="proportion">0</property>
                                                             <object class="wxBoxSizer" expanded="1">

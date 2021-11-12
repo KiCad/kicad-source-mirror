@@ -13,7 +13,7 @@
 
 DIALOG_PCM_BASE::DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 900,560 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 960,560 ), wxDefaultSize );
 
 	wxBoxSizer* m_MainSizer;
 	m_MainSizer = new wxBoxSizer( wxVERTICAL );

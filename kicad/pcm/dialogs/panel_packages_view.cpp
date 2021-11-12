@@ -75,6 +75,7 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
 
     m_packageListWindow->SetBackgroundColour( wxStaticText::GetClassDefaultAttributes().colBg );
     m_infoScrollWindow->SetBackgroundColour( wxStaticText::GetClassDefaultAttributes().colBg );
+    m_infoScrollWindow->EnableScrolling( false, true );
 
     ClearData();
 }
@@ -141,9 +142,51 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
 
     details << "<h5>" + package.name + "</h5>";
 
+    auto format_desc =
+            []( const wxString& text ) -> wxString
+            {
+                wxString result;
+                bool     inURL = false;
+                wxString url;
+
+                for( unsigned i = 0; i < text.length(); ++i )
+                {
+                    wxUniChar c = text[i];
+
+                    if( inURL )
+                    {
+                        if( c == ' ' )
+                        {
+                            result += wxString::Format( "<a href='%s'>%s</a>", url, url );
+                            inURL = false;
+
+                            result += c;
+                        }
+                        else
+                        {
+                            url += c;
+                        }
+                    }
+                    else if( text.Mid( i, 5 ) == "http:" || text.Mid( i, 6 ) == "https:" )
+                    {
+                        url = c;
+                        inURL = true;
+                    }
+                    else if( c == '\n' )
+                    {
+                        result += "</p><p>";
+                    }
+                    else
+                    {
+                        result += c;
+                    }
+                }
+
+                return result;
+            };
+
     wxString desc = package.description_full;
-    desc.Replace( "\n", "</p><p>", true );
-    details << "<p>" + desc + "</p>";
+    details << "<p>" + format_desc( desc ) + "</p>";
 
     details << "<p><b>" + _( "Metadata" ) + "</b></p>";
     details << "<ul>";
@@ -165,15 +208,18 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
         details << "<li>" + _( "Tags: " ) + tags_str + "</li>";
     }
 
-    auto format_url =
+    auto format_entry =
             []( const std::pair<const std::string, wxString>& entry ) -> wxString
             {
-                wxString url = entry.second;
+                wxString name = entry.first;
+                wxString url = EscapeHTML( entry.second );
 
-                if( entry.first == "email" )
-                    url = "mailto:" + url;
-
-                return "<a href='" + EscapeHTML( url ) + "'>" + EscapeHTML( url ) + "</a>";
+                if( name == "email" )
+                    return wxString::Format( "<a href='mailto:%s'>%s</a>", url, url );
+                else if( url.StartsWith( "http:" ) || url.StartsWith( "https:" ) )
+                    return wxString::Format( "<a href='%s'>%s</a>", url, url );
+                else
+                    return entry.second;
             };
 
     auto write_contact =
@@ -182,7 +228,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
                 details << "<li>" + type + ": " + contact.name + "<ul>";
 
                 for( const std::pair<const std::string, wxString>& entry : contact.contact )
-                    details << "<li>" + entry.first + ": " + format_url( entry ) + "</li>";
+                    details << "<li>" + entry.first + ": " + format_entry( entry ) + "</li>";
 
                 details << "</ul>";
             };
@@ -197,7 +243,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
         details << "<li>" + _( "Resources" ) + "<ul>";
 
         for( const std::pair<const std::string, wxString>& entry : package.resources )
-            details << "<li>" + entry.first + wxS( ": " ) + format_url( entry ) + "</li>";
+            details << "<li>" + entry.first + wxS( ": " ) + format_entry( entry ) + "</li>";
 
         details << "</ul>";
     }
@@ -526,13 +572,13 @@ void PANEL_PACKAGES_VIEW::updatePackageList()
 void PANEL_PACKAGES_VIEW::OnSizeInfoBox( wxSizeEvent& aEvent )
 {
     wxSize infoSize = m_infoText->GetParent()->GetClientSize();
-    infoSize.x -= 20;      // approximation of scrollbars should they be needed
+    infoSize.x -= 8;
     m_infoText->SetMinSize( infoSize );
     m_infoText->SetMaxSize( infoSize );
     m_infoText->SetSize( infoSize );
     m_infoText->Layout();
 
-    infoSize.y = m_infoText->GetInternalRepresentation()->GetHeight() + 20;
+    infoSize.y = m_infoText->GetInternalRepresentation()->GetHeight() + 12;
     m_infoText->SetMinSize( infoSize );
     m_infoText->SetMaxSize( infoSize );
     m_infoText->SetSize( infoSize );

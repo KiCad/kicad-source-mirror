@@ -71,7 +71,7 @@ class DIALOG_PCM_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plugin And Content Manager"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 900,560 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PCM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plugin And Content Manager"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 960,560 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PCM_BASE();
 
 };
