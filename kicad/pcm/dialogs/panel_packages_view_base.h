@@ -13,6 +13,7 @@
 class HTML_WINDOW;
 
 #include "widgets/wx_grid.h"
+#include "widgets/wx_splitter_window.h"
 #include <wx/string.h>
 #include <wx/srchctrl.h>
 #include <wx/gdicmn.h>
@@ -42,7 +43,7 @@ class PANEL_PACKAGES_VIEW_BASE : public wxPanel
 	private:
 
 	protected:
-		wxSplitterWindow* m_splitter1;
+		WX_SPLITTER_WINDOW* m_splitter1;
 		wxPanel* m_panelList;
 		wxSearchCtrl* m_searchCtrl;
 		wxScrolledWindow* m_packageListWindow;

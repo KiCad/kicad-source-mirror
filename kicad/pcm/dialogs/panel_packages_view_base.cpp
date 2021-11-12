@@ -16,10 +16,9 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 
-	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
-	m_splitter1->SetSashGravity( 0.5 );
+	m_splitter1 = new WX_SPLITTER_WINDOW( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
+	m_splitter1->SetSashGravity( 0.2 );
 	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW_BASE::m_splitter1OnIdle ), NULL, this );
-	m_splitter1->SetMinimumPaneSize( 420 );
 
 	m_panelList = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bPanelListSizer;
@@ -53,6 +52,8 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 
 	m_infoScrollWindow = new wxScrolledWindow( m_panelDetails, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 	m_infoScrollWindow->SetScrollRate( 5, 5 );
+	m_infoScrollWindow->SetMinSize( wxSize( 480,-1 ) );
+
 	wxBoxSizer* bSizerScrolledWindow;
 	bSizerScrolledWindow = new wxBoxSizer( wxVERTICAL );
 
@@ -93,7 +94,7 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 
 	// Cell Defaults
 	m_gridVersions->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-	m_sizerVersions->Add( m_gridVersions, 0, wxEXPAND|wxRIGHT, 15 );
+	m_sizerVersions->Add( m_gridVersions, 0, wxEXPAND|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizerVersionButtons;
 	bSizerVersionButtons = new wxBoxSizer( wxHORIZONTAL );

@@ -89,7 +89,7 @@
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
                         <property name="maximum_size"></property>
-                        <property name="min_pane_size">420</property>
+                        <property name="min_pane_size"></property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
                         <property name="minimum_size"></property>
@@ -102,14 +102,14 @@
                         <property name="pin_button">1</property>
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
-                        <property name="sashgravity">0.5</property>
+                        <property name="sashgravity">0.2</property>
                         <property name="sashpos">0</property>
                         <property name="sashsize">-1</property>
                         <property name="show">1</property>
                         <property name="size"></property>
                         <property name="splitmode">wxSPLIT_VERTICAL</property>
                         <property name="style">wxSP_3DSASH|wxSP_LIVE_UPDATE</property>
-                        <property name="subclass">; ; forward_declare</property>
+                        <property name="subclass">WX_SPLITTER_WINDOW; widgets/wx_splitter_window.h; Not forward_declare</property>
                         <property name="toolbar_pane">0</property>
                         <property name="tooltip"></property>
                         <property name="window_extra_style"></property>
@@ -274,7 +274,7 @@
                                             <property name="maximum_size"></property>
                                             <property name="min_size"></property>
                                             <property name="minimize_button">0</property>
-                                            <property name="minimum_size"></property>
+                                            <property name="minimum_size">-1,-1</property>
                                             <property name="moveable">1</property>
                                             <property name="name">m_packageListWindow</property>
                                             <property name="pane_border">1</property>
@@ -399,7 +399,7 @@
                                             <property name="maximum_size"></property>
                                             <property name="min_size"></property>
                                             <property name="minimize_button">0</property>
-                                            <property name="minimum_size">-1,-1</property>
+                                            <property name="minimum_size">480,-1</property>
                                             <property name="moveable">1</property>
                                             <property name="name">m_infoScrollWindow</property>
                                             <property name="pane_border">1</property>
@@ -495,7 +495,7 @@
                                                         <property name="orient">wxVERTICAL</property>
                                                         <property name="permission">protected</property>
                                                         <object class="sizeritem" expanded="0">
-                                                            <property name="border">15</property>
+                                                            <property name="border">5</property>
                                                             <property name="flag">wxEXPAND|wxRIGHT</property>
                                                             <property name="proportion">0</property>
                                                             <object class="wxGrid" expanded="0">

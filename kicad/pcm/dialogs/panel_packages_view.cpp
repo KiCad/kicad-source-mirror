@@ -23,6 +23,7 @@
 #include <kicad_settings.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <widgets/wx_splitter_window.h>
 #include <string_utils.h>
 #include <html_window.h>
 
@@ -50,6 +51,16 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
         PANEL_PACKAGES_VIEW_BASE( parent ),
         m_pcm( aPcm )
 {
+    // Replace wxFormBuilder's sash initializer with one which will respect m_initialSashPos.
+    m_splitter1->Disconnect( wxEVT_IDLE,
+                             wxIdleEventHandler( PANEL_PACKAGES_VIEW_BASE::m_splitter1OnIdle ),
+                             NULL, this );
+    m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW::SetSashOnIdle ),
+                          NULL, this );
+
+    m_initSashPos = 380;
+    m_splitter1->SetPaneMinimums( 320, 460 );
+
 #ifdef __WXGTK__
     // wxSearchCtrl vertical height is not calculated correctly on some GTK setups
     // See https://gitlab.com/kicad/code/kicad/-/issues/9019
@@ -597,4 +608,12 @@ void PANEL_PACKAGES_VIEW::OnInfoMouseWheel( wxMouseEvent& event )
 {
     // Transfer scrolling from the info window to its parent scroll window
     m_infoScrollWindow->HandleOnMouseWheel( event );
+}
+
+
+void PANEL_PACKAGES_VIEW::SetSashOnIdle( wxIdleEvent& aEvent )
+{
+	m_splitter1->SetSashPosition( m_initSashPos );
+	m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW::SetSashOnIdle ),
+                             NULL, this );
 }

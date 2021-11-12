@@ -77,7 +77,11 @@ public:
     ///< Respond to a URL in the info window
     void OnURLClicked( wxHtmlLinkEvent& event ) override;
 
+    ///< Respond to scrolling over the window
     void OnInfoMouseWheel( wxMouseEvent& event ) override;
+
+    ///< Replacement of wxFormBuilder's ill-advised m_splitter1OnIdle
+    void SetSashOnIdle( wxIdleEvent& );
 
 private:
     ///< Updates package listing according to search term
@@ -98,6 +102,8 @@ private:
     std::vector<wxString>                        m_packageInitialOrder;
     PANEL_PACKAGE*                               m_currentSelected;
     std::shared_ptr<PLUGIN_CONTENT_MANAGER>      m_pcm;
+
+    int                                          m_initSashPos;
 
     enum PACKAGE_VERSIONS_GRID_COLUMNS
     {
