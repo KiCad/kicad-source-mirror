@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-01 10:42+0000\n"
+"PO-Revision-Date: 2021-11-12 18:47+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -650,9 +650,8 @@ msgid "Show silkscreen layers"
 msgstr "シルクスクリーンレイヤーを表示"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "シルクスクリーンをビアの円環で切り抜く"
+msgstr "シルクスクリーンをハンダマスクの端で切り抜く"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
@@ -675,9 +674,8 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "ユーザー レイヤー (リアル モードでは非表示)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
-msgstr "コメント/線画レイヤーを表示"
+msgstr "コメントと線画のレイヤーを表示"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:61
 msgid "Show ECO layers"
@@ -5777,7 +5775,6 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "選択されたアイテムをクリップボードにコピー"
 
 #: common/tool/actions.cpp:165
-#, fuzzy
 msgid "Paste item(s) from clipboard"
 msgstr "クリップボードからアイテムを貼り付け"
 
@@ -9063,11 +9060,8 @@ msgid "Delete extra units from symbol?"
 msgstr "シンボルから余計なユニットを削除しますか？"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:287
-#, fuzzy
 msgid "Delete alternate body style (De Morgan) from symbol?"
-msgstr ""
-"(ド・モルガン) 代替ボディ スタイル用の図形アイテムをシンボルから削除します"
-"か？"
+msgstr "シンボルから代替ボディスタイル(ド・モルガン)削除しますか？"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:315
 #, c-format
@@ -9203,9 +9197,8 @@ msgstr ""
 "独立させます。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
-#, fuzzy
 msgid "Has alternate body style (De Morgan)"
-msgstr "代替シンボル (ド・モルガン) あり"
+msgstr "代替ボディスタイル (ド・モルガン) あり"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
@@ -11297,7 +11290,6 @@ msgid "Unit:"
 msgstr "ユニット:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
-#, fuzzy
 msgid "Alternate symbol (De Morgan)"
 msgstr "代替シンボル (ド・モルガン)"
 
@@ -33532,9 +33524,8 @@ msgid "90-degree rounded"
 msgstr ""
 
 #: pcbnew/router/router_tool.cpp:2074
-#, fuzzy
 msgid "Corner Style"
-msgstr "線のスタイル"
+msgstr "角のスタイル"
 
 #: pcbnew/router/router_tool.cpp:2079
 #, c-format
@@ -35707,9 +35698,8 @@ msgid "Cycle Router Mode"
 msgstr "ルーター押しのけモード"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle router to the next mode"
-msgstr "ルーターを押しのけモードに切り替え"
+msgstr "ルーターを次のモードに切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Set Layer Pair..."
@@ -36088,9 +36078,9 @@ msgid "Net Display Options"
 msgstr "ネット表示オプション"
 
 #: pcbnew/widgets/appearance_controls.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "Net colors (%s):"
-msgstr "ネットのカラー表示:"
+msgstr "ネットの色(%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Net colors:"
@@ -36122,7 +36112,6 @@ msgid "Ratsnest display:"
 msgstr "ラッツネスト表示:"
 
 #: pcbnew/widgets/appearance_controls.cpp:719
-#, fuzzy
 msgid "Choose which ratsnest lines to display"
 msgstr "どのラッツネストの線を表示するかを選択"
 
