@@ -154,30 +154,31 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
     if( autoProxyDetect )
     {
         proxyResolveSession =
-                WinHttpOpen( L"kicad", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY, WINHTTP_NO_PROXY_NAME,
+                WinHttpOpen( NULL, WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY, WINHTTP_NO_PROXY_NAME,
                              WINHTTP_NO_PROXY_BYPASS, WINHTTP_FLAG_ASYNC );
-
-        // either we use the ie url or we set the auto detect mode
-        if( autoProxyOptions.lpszAutoConfigUrl != NULL )
-        {
-            autoProxyOptions.dwFlags = WINHTTP_AUTOPROXY_CONFIG_URL;
-        }
-        else
-        {
-            autoProxyOptions.dwFlags = WINHTTP_AUTOPROXY_AUTO_DETECT;
-            autoProxyOptions.dwAutoDetectFlags =
-                    WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A;
-        }
-
-        autoProxyOptions.fAutoLogonIfChallenged = TRUE;
-
-        autoProxyDetect = WinHttpGetProxyForUrl( proxyResolveSession, aURL.c_str(),
-                                                 &autoProxyOptions, &autoProxyInfo );
 
         if( proxyResolveSession )
         {
+            // either we use the ie url or we set the auto detect mode
+            if( autoProxyOptions.lpszAutoConfigUrl != NULL )
+            {
+                autoProxyOptions.dwFlags = WINHTTP_AUTOPROXY_CONFIG_URL;
+            }
+            else
+            {
+                autoProxyOptions.dwFlags = WINHTTP_AUTOPROXY_AUTO_DETECT;
+                autoProxyOptions.dwAutoDetectFlags =
+                        WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A;
+            }
+
+            autoProxyOptions.fAutoLogonIfChallenged = TRUE;
+
+            autoProxyDetect = WinHttpGetProxyForUrl( proxyResolveSession, aURL.c_str(),
+                                                     &autoProxyOptions, &autoProxyInfo );
+
             WinHttpCloseHandle( proxyResolveSession );
         }
+
     }
 
     if( autoProxyDetect )
