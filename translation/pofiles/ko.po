@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-12 03:20+0000\n"
+"PO-Revision-Date: 2021-11-12 18:47+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -32157,13 +32157,11 @@ msgstr ""
 "으로 90도 떨어져 있는 2개의 해치가 됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3631
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimeters were applied instead."
-msgstr ""
-"치수 ID %s은(는) KiCad에서 지원하지 않는 단위 유형을 사용합니다. 밀리미터가 "
-"대신 적용됩니다."
+msgstr "치수 ID %s은(는) KiCad에서 지원하지 않는 단위 유형을 사용합니다. 밀리미터가 대신 적용됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3922
 msgid ""
@@ -32779,9 +32777,9 @@ msgstr "python 액션 플러그인 코드에서의 예외 사항"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
-msgstr "메서드 \"%s\"을(를) 찾을 수 없거나, 호출할 수 없습니다"
+msgstr "메서드 '%s'을(를) 찾을 수 없거나, 호출할 수 없음"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:84
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
@@ -33008,9 +33006,8 @@ msgid "Auto-finish Track"
 msgstr "배선 자동 완료"
 
 #: pcbnew/router/router_tool.cpp:97
-#, fuzzy
 msgid "Automatically finishes laying the current track."
-msgstr "현재 배선의 배치를 자동으로 종료합니다."
+msgstr "현재 트랙의 배치를 자동으로 마칩니다."
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Place Through Via"
@@ -33089,9 +33086,8 @@ msgid "Track Corner Mode"
 msgstr "배선 코너 모드"
 
 #: pcbnew/router/router_tool.cpp:164
-#, fuzzy
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
-msgstr "배선을 라우팅하면서 모서리를 날카로운 모양과 둥근 모양 간 전환합니다."
+msgstr "트랙을 라우팅할 때 모서리를 예리/둥근 모양과 45°/90° 사이를 전환합니다."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
@@ -33261,33 +33257,28 @@ msgid "(no net)"
 msgstr "(네트 없음)"
 
 #: pcbnew/router/router_tool.cpp:2060
-#, fuzzy
 msgid "Free-angle"
-msgstr "각도"
+msgstr "자유 각도"
 
 #: pcbnew/router/router_tool.cpp:2066
-#, fuzzy
 msgid "45-degree"
-msgstr "45도"
+msgstr "45 도"
 
 #: pcbnew/router/router_tool.cpp:2067
-#, fuzzy
 msgid "45-degree rounded"
-msgstr "드래그 (45도 모드)"
+msgstr "45도 둥근"
 
 #: pcbnew/router/router_tool.cpp:2068
-#, fuzzy
 msgid "90-degree"
-msgstr "각도"
+msgstr "90 도"
 
 #: pcbnew/router/router_tool.cpp:2069
 msgid "90-degree rounded"
 msgstr "90도 둥근"
 
 #: pcbnew/router/router_tool.cpp:2074
-#, fuzzy
 msgid "Corner Style"
-msgstr "선 스타일"
+msgstr "모서리 스타일"
 
 #: pcbnew/router/router_tool.cpp:2079
 #, c-format
@@ -35446,14 +35437,12 @@ msgid "Switch router to walkaround mode"
 msgstr "라우터를 순회 모드로 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle Router Mode"
-msgstr "라우터 밀어내기 모드"
+msgstr "라우터 모드 사이클"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle router to the next mode"
-msgstr "라우터를 밀어내기 모드로 전환"
+msgstr "라우터를 다음 모드로 순환"
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Set Layer Pair..."
