@@ -54,7 +54,7 @@ void DIALOG_PCM_PROGRESS::OnCancelClicked( wxCommandEvent& event )
 {
     SetNumPhases( 1 );
     SetOverallProgress( 1, 1 );
-    Report( _( "Aborting remaining tasks." ) );
+    m_reporter->Report( _( "Aborting remaining tasks." ) );
 
     m_cancelled.store( true );
     m_finished.store( true );
