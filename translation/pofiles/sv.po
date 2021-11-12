@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-11 23:47+0000\n"
+"PO-Revision-Date: 2021-11-12 18:47+0000\n"
 "Last-Translator: Axel Henriksson <axe.henriksson@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -5162,9 +5162,8 @@ msgid "Symbol body outlines"
 msgstr "Symbolkroppskonturer"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Symbol body fills"
-msgstr "Symbolens kropp fylls"
+msgstr "Symbolkroppsfyllningar"
 
 #: common/layer_id.cpp:119
 msgid "Notes"
@@ -5248,7 +5247,6 @@ msgid "Hidden items"
 msgstr "Dolda föremål"
 
 #: common/layer_id.cpp:138 common/layer_id.cpp:174
-#, fuzzy
 msgid "Selection highlight"
 msgstr "Markering"
 
@@ -5349,9 +5347,8 @@ msgid "Ratsnest"
 msgstr "Råttbo"
 
 #: common/layer_id.cpp:162
-#, fuzzy
 msgid "No-connects"
-msgstr "Inga anslutningar"
+msgstr "Icke-anslutningsbara"
 
 #: common/layer_id.cpp:163
 msgid "DRC warnings"
@@ -5445,9 +5442,8 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Typfel mellan %lf och '%s'"
 
 #: common/pgm_base.cpp:167
-#, fuzzy
 msgid "No default editor found, you must choose one."
-msgstr "Ingen standardredigerare hittades, du måste välja den"
+msgstr "Ingen standardredigerare hittades, du måste välja en."
 
 #: common/pgm_base.cpp:187 common/pgm_base.cpp:189
 msgid "Executable file"
@@ -5494,9 +5490,8 @@ msgstr "Kan inte öppna filen '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
-#, fuzzy
 msgid "File import cancelled by user."
-msgstr "Återlänkning av fotavtryck avbröts av användaren."
+msgstr "Filimport avbröts av användaren."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2370
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2388
@@ -5993,9 +5988,8 @@ msgid "Performs left mouse button double-click"
 msgstr "Utför dubbelklick med vänster musknapp"
 
 #: common/tool/actions.cpp:408
-#, fuzzy
 msgid "Pin Library"
-msgstr "Pin-bibliotek"
+msgstr "Stift-bibliotek"
 
 #: common/tool/actions.cpp:409
 msgid "Keep the library at the top of the list"
@@ -6129,23 +6123,20 @@ msgid "Switch display of full-window crosshairs"
 msgstr "Växla visning av hårkors i hela fönstret"
 
 #: common/tool/actions.cpp:533
-#, fuzzy
 msgid "Inactive Layer View Mode"
-msgstr "Visningsläge för Enskilt Lager"
+msgstr "Visningsläge för inaktiva lager"
 
 #: common/tool/actions.cpp:534
 msgid "Toggle inactive layers between normal and dimmed"
 msgstr "Växla inaktiva lager mellan normalt och nedtonat"
 
 #: common/tool/actions.cpp:540
-#, fuzzy
 msgid "Inactive Layer View Mode (3-state)"
-msgstr "Visningsläge för Enskilt Lager (3-läge)"
+msgstr "Visningsläge för inaktiva lager (3-läge)"
 
 #: common/tool/actions.cpp:541
-#, fuzzy
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
-msgstr "Växla inaktiva lager mellan normalt, nedtonat och dolt"
+msgstr "Växla inaktiva lager mellan normala, nedtonade och dolda"
 
 #: common/tool/actions.cpp:546
 msgid "Select item(s)"
@@ -6405,7 +6396,6 @@ msgid "Accelerated graphics"
 msgstr "Accelererad grafik"
 
 #: common/widgets/gal_options_panel.cpp:86
-#, fuzzy
 msgid "Fallback graphics"
 msgstr "Reserv-grafik"
 
@@ -6586,9 +6576,9 @@ msgid "Set Hotkey"
 msgstr "Ange Snabbtangent"
 
 #: common/widgets/widget_hotkey_list.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr "Namnet %s är reserverat och kan inte användas."
+msgstr "'%s' är en reserverad snabbtangent i KiCad och kan inte tilldelas."
 
 #: common/widgets/widget_hotkey_list.cpp:392
 msgid "Edit..."
@@ -8318,9 +8308,8 @@ msgid "New Library Reference"
 msgstr "Ny biblioteksreferens"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:58
-#, fuzzy
 msgid "Map Orphans"
-msgstr "Kartlägg Föräldralösa/Lösryckta"
+msgstr "Kartlägg föräldralösa/lösryckta"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:59
 msgid ""
@@ -8391,7 +8380,6 @@ msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- ERC avbröts av användaren.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:308
-#, fuzzy
 msgid "ERC completed.<br><br>"
 msgstr "ERC slutförd.<br><br>"
 
@@ -8496,7 +8484,6 @@ msgid "Edit violation severities..."
 msgstr "Redigera allvarlighetsgraden för överträdelser..."
 
 #: eeschema/dialogs/dialog_erc.cpp:540
-#, fuzzy
 msgid "Open the Schematic Setup... dialog"
 msgstr "Öppna dialogrutan Schematisk inställning..."
 
@@ -8512,9 +8499,9 @@ msgid "Violation Severity"
 msgstr "Överträdelsens svårighetsgrad"
 
 #: eeschema/dialogs/dialog_erc.cpp:759 pcbnew/dialogs/dialog_gendrill.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "Rapportfil %s skapad\n"
+msgstr "Rapportfil %s skapad."
 
 #: eeschema/dialogs/dialog_erc.cpp:777
 #, c-format
@@ -8571,9 +8558,8 @@ msgid "Electrical Rules Checker"
 msgstr "Elektriska reglerkontroll"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:131
-#, fuzzy
 msgid "Power symbol value field text cannot be changed."
-msgstr "(Fälttexten för kraftsymbolens värde kan inte ändras.)"
+msgstr "Fälttexten för kraftsymbolens värde kan inte ändras."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
@@ -8584,9 +8570,8 @@ msgid "Value may not be empty."
 msgstr "Värde kanske inte är tomt."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:336
-#, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Visar dialogrutan för objektegenskaper"
+msgstr "Bladets filnamn kan bara modifieras i dialogrutan för bladegenskaper."
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
@@ -8622,9 +8607,8 @@ msgid "Filters"
 msgstr "Filter"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:82
-#, fuzzy
 msgid "Filter other symbol fields by name:"
-msgstr "Filtrera fält efter namn:"
+msgstr "Filtrera andra symbolfält efter namn:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:94
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
@@ -8655,9 +8639,8 @@ msgstr "Filtrera objekt efter nät:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:135
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:77
-#, fuzzy
 msgid "Only include selected items"
-msgstr "Raderar markerade objekt"
+msgstr "Inkludera bara valda objekt"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:154
 msgid "Set To"
@@ -8687,7 +8670,6 @@ msgid "-- leave unchanged --"
 msgstr "- lämna oförändrat -"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:229
-#, fuzzy
 msgid "H Align (fields only):"
 msgstr "H Justering (endast fält):"
 
@@ -8696,9 +8678,8 @@ msgid "Visible (fields only)"
 msgstr "Synlig (endast fält)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:251
-#, fuzzy
 msgid "V Align (fields only):"
-msgstr "V Uppriktning (endast fält):"
+msgstr "V Justering (endast fält):"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:291
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:25
@@ -8722,14 +8703,12 @@ msgid "Sheet background color:"
 msgstr "Ark bakgrundsfärg:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:339
-#, fuzzy
 msgid "Junction size:"
-msgstr "Knutpunktens storlek:"
+msgstr "Knutpunktsstorlek:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:353
-#, fuzzy
 msgid "Junction color:"
-msgstr "Urvalsfärg:"
+msgstr "Knutpunktsfärg:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:110
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:95
@@ -8780,13 +8759,14 @@ msgstr ""
 "Det går inte att kopiera global symbolbibliotekstabellfil '%s' till '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading global symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"Fel vid sparar global bibliotektabell:\n"
+"Fel vid läsning av global bibliotekstabell:\n"
+"\n"
 "%s"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
@@ -8799,15 +8779,13 @@ msgid "Color:"
 msgstr "Färg:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
-#, fuzzy
 msgid "Set diameter to 0 to use schematic junction dot size."
-msgstr "Byt till schematisk redigerare"
+msgstr "Sätt diametern till 0 för att använda schemats knutpunktsstorlek."
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
-#, fuzzy
 msgid "Set color to transparent to use Schematic Editor colors."
-msgstr "Välj transparent färg för att använda schema-redigerarens färger"
+msgstr "Välj transparent färg för att använda schemaredigerarens färger."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
@@ -8943,7 +8921,6 @@ msgid "Symbol name:"
 msgstr "Symbolnamn:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:35
-#, fuzzy
 msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
@@ -9001,9 +8978,8 @@ msgstr ""
 "för pin-nummer."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
-#, fuzzy
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr "Skapa symbol med alternativ kroppsstil (DeMorgan)"
+msgstr "Skapa symbol med alternativ kroppsstil (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
@@ -9063,9 +9039,8 @@ msgstr "Gemensamt för alla & enheter i symbol"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
-#, fuzzy
 msgid "Common to all body &styles (De Morgan)"
-msgstr "Gemensamt för alla kroppar och stilar (DeMorgan)"
+msgstr "Gemensamt för alla kroppar och stilar (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.h:51
 msgid "Drawing Properties"
@@ -9091,9 +9066,8 @@ msgid "Delete extra units from symbol?"
 msgstr "Radera extra enheter från symbolen?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:287
-#, fuzzy
 msgid "Delete alternate body style (De Morgan) from symbol?"
-msgstr "Radera alternativ kroppsstil (DeMorgan) rita objekt från symbol?"
+msgstr "Radera alternativ kroppsstil (De Morgan) från symbol?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:315
 #, c-format
@@ -9228,9 +9202,8 @@ msgstr ""
 "rot symboler."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
-#, fuzzy
 msgid "Has alternate body style (De Morgan)"
-msgstr "Har alternativ kroppsstil (DeMorgan)"
+msgstr "Har alternativ kroppsstil (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:169
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
@@ -9264,9 +9237,8 @@ msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr "Ange antalet enheter för en symbol som innehåller mer än en enhet"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:199
-#, fuzzy
 msgid "All units are interchangeable"
-msgstr "Alla enheter är inte utbytbara"
+msgstr "Alla enheter är utbytbara"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
 msgid ""
@@ -9443,14 +9415,12 @@ msgid "Style:"
 msgstr "Stil:"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
-#, fuzzy
 msgid "Set width to 0 to use Netclass line widths."
-msgstr "Byt till schematisk redigerare"
+msgstr "Sätt bredden till 0 för att använda nätklassens linjebredd."
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.h:67
-#, fuzzy
 msgid "Line, Wire & Bus Properties"
-msgstr "Egenskaper för linjesegment"
+msgstr "Linje-, tråd- och buss-egenskaper"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:102
 msgid "Conflicting Labels"
@@ -9508,9 +9478,8 @@ msgid "Export Netlist"
 msgstr "Exportera Netlist"
 
 #: eeschema/dialogs/dialog_netlist.cpp:300
-#, fuzzy
 msgid "Simulator requires a fully annotated schematic."
-msgstr "För att exportera netlistan krävs ett fullständigt kommenterat schema."
+msgstr "Simulatorn kräver ett fullständigt annoterat schema."
 
 #: eeschema/dialogs/dialog_netlist.cpp:326
 msgid "Reformat passive symbol values"
@@ -9553,23 +9522,20 @@ msgstr "%s Exportera"
 
 #: eeschema/dialogs/dialog_netlist.cpp:506
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
-#, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr "För att exportera netlistan krävs ett fullständigt kommenterat schema."
+msgstr "Export av nätlistan kräver ett fullständigt annoterat schema."
 
 #: eeschema/dialogs/dialog_netlist.cpp:629
 msgid "This plugin already exists."
 msgstr "Det här pluginet finns redan."
 
 #: eeschema/dialogs/dialog_netlist.cpp:662
-#, fuzzy
 msgid "You must provide a netlist generator command string"
-msgstr "Fel. Du måste ange ett kommando String"
+msgstr "Du måste tillhandahålla en kommandosträng för nätliste-generatorn"
 
 #: eeschema/dialogs/dialog_netlist.cpp:668
-#, fuzzy
 msgid "You must provide a netlist generator title"
-msgstr "Fel. Du måste ange en titel"
+msgstr "Du måste tillhandahålla en titel till netläste-generatorn"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
 msgid "Add Generator..."
@@ -9606,9 +9572,8 @@ msgid "Alternate Pin Name"
 msgstr "Alternativt pin-namn"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:145
-#, fuzzy
 msgid "Synchronized pins edit mode, and this pin is new"
-msgstr "Redigeringsläge för synkroniserade stift"
+msgstr "Redigeringsläge för synkroniserade stift, och detta stift är nytt"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:146
 msgid ""
@@ -9619,7 +9584,6 @@ msgstr ""
 "är gemensam för alla enheter"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:151
-#, fuzzy
 msgid "Synchronized pins edit mode"
 msgstr "Redigeringsläge för synkroniserade stift"
 
@@ -9633,10 +9597,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
-#, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
 msgstr ""
-"Alternativa stifttilldelningar är inte tillgängliga för DeMorgan-komponenter."
+"Alternativa stifttilldelningar är inte tillgängliga för De Morgan-symboler."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:283
 msgid "This symbol only has one unit. This control has no effect."
@@ -9753,13 +9716,13 @@ msgstr "Välj Output Directory"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:232
 #: pcbnew/dialogs/dialog_gendrill.cpp:306 pcbnew/dialogs/dialog_plot.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
 msgstr ""
-"Vill du använda en sökväg i förhållande till\n"
-"\"%s\""
+"Vill du använda en sökväg i relativ till\n"
+"'%s'?"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:234
 #: pcbnew/dialogs/dialog_export_svg.cpp:214
@@ -9835,18 +9798,18 @@ msgid "Schematic"
 msgstr "Schema"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write plot files to folder '%s'."
-msgstr "Det gick inte att skriva plotfiler till mappen \"%s\"."
+msgstr "Det gick inte att skriva plot-filer till mappen '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:512
 #: eeschema/dialogs/dialog_plot_schematic.cpp:683
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1032
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1164
 #: pcbnew/dialogs/dialog_plot.cpp:908
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'."
-msgstr "Det gick inte att ladda \"%s\""
+msgstr "Plottad till '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:532
 #: eeschema/dialogs/dialog_plot_schematic.cpp:699
@@ -9855,19 +9818,17 @@ msgstr "Det gick inte att ladda \"%s\""
 #: kicad/pcm/pcm_task_manager.cpp:456 pcbnew/dialogs/dialog_plot.cpp:929
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:153
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:124
-#, fuzzy
 msgid "Done."
-msgstr "Färdigt"
+msgstr "Färdig."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:872
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'.\n"
-msgstr "Det gick inte att ladda \"%s\""
+msgstr "Plottad till '%s'.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1177
-#, fuzzy
 msgid "Done"
-msgstr "Färdigt"
+msgstr "Färdig"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1249
 #, c-format
@@ -9876,14 +9837,13 @@ msgstr "Faller tillbaka till användarväg '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1270
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1308
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "Det går inte att öppna filen '%s'"
+msgstr "Kunde inte normalisera sökväg '%s%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1295
-#, fuzzy
 msgid "No project or path defined for the current schematic."
-msgstr "Skapa en materialförteckning för det aktuella schemat"
+msgstr "Inget projekt eller sökväg definierad för det aktuella schemat."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:24
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:24
@@ -9908,9 +9868,8 @@ msgstr "Postskriptum"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
-#, fuzzy
 msgid "PDF"
-msgstr "Som PDF…"
+msgstr "PDF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
@@ -9935,14 +9894,12 @@ msgid "Page size:"
 msgstr "Sidstorlek:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "Avsluta ritningsarket"
+msgstr "Plotta ritningsbladet"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
-#, fuzzy
 msgid "Plot the drawing sheet border and title block"
-msgstr "Skriv ut ram och titelblock"
+msgstr "Plotta ritningsbladets ram och titelblock"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -9983,9 +9940,8 @@ msgid "HPGL Options"
 msgstr "HPGL-alternativ"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:126
-#, fuzzy
 msgid "Position and units:"
-msgstr "Position X:"
+msgstr "Position och enhet:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
@@ -10297,18 +10253,19 @@ msgid "Text Variables"
 msgstr "Textvariabler"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:90
-#, fuzzy
 msgid "Project is missing or read-only. Settings will not be editable."
-msgstr "Projektet saknas eller är skrivskyddat. Ändringar sparas inte."
+msgstr ""
+"Projektet saknas eller är skrivskyddat. Inställningar kommer inte kunna "
+"ändras."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:156
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 msgstr ""
 "Fel vid import av inställningar från projekt:\n"
-"Projektfilen %s kunde inte laddas"
+"Projektfilen %s kunde inte laddas."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:132
@@ -10350,9 +10307,8 @@ msgstr "Syntaxhjälp"
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:39
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:99
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
-#, fuzzy
 msgid "Show syntax help window"
-msgstr "Visa konsolfönster"
+msgstr "Visa syntaxhjälpsfönster"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -10371,14 +10327,12 @@ msgid "Sheet file must have a '.kicad_sch' extension."
 msgstr "Arkfilen måste ha ett \".kicad_sch\" -tillägg."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:293
-#, fuzzy
 msgid "Use relative path for sheet file?"
-msgstr "Använd en relativ väg?"
+msgstr "Använd relativ sökväg för bladfil?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:294
-#, fuzzy
 msgid "Sheet File Path"
-msgstr "Arkfil"
+msgstr "Bladfilssökväg"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:297
 msgid ""
@@ -10391,14 +10345,12 @@ msgstr ""
 "sökvägar kan orsaka portabilitetsproblem."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:301
-#, fuzzy
 msgid "Use Relative Path"
-msgstr "Använd en relativ väg?"
+msgstr "Använd relativ sökväg"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:302
-#, fuzzy
 msgid "Use Absolute Path"
-msgstr "Absolut"
+msgstr "Använd absolut sökväg"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:333
 msgid "Untitled Sheet"
@@ -10418,9 +10370,9 @@ msgstr ""
 "i Inställningar> Eeschema> Färger."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:407
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' does not appear to be a valid schematic file."
-msgstr "Filen \"%s\" verkar inte vara en giltig schematisk fil."
+msgstr "Filen '%s' verkar inte vara en giltig schematisk fil."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:409
 msgid "Invalid Schematic File"
@@ -10441,19 +10393,19 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #: kicad/tools/kicad_manager_control.cpp:557
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' already exists."
-msgstr "\"%s\" finns redan."
+msgstr "'%s' finns redan."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:472
-#, fuzzy, c-format
+#, c-format
 msgid "Link '%s' to this file?"
-msgstr "Länka \"%s\" till den här filen?"
+msgstr "Länka '%s' till den här filen?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:512
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
-msgstr "Ändra %s -värdet från '%s' till '%s'."
+msgstr "Ändra '%s' länk från '%s' till '%s'?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:517
 #: eeschema/dialogs/dialog_sheet_properties.cpp:533
@@ -10461,19 +10413,19 @@ msgid "This action cannot be undone."
 msgstr "Denna åtgärd kan inte ångras."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Create new file '%s' with contents of '%s'?"
-msgstr "Skapa ny fil \"%s\" med innehållet i \"%s\"?"
+msgstr "Skapa ny fil '%s' med innehållet i '%s'?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "Error occurred saving schematic file '%s'."
-msgstr "Ett fel uppstod när den schematiska filen \"%s\" skulle sparas."
+msgstr "Ett fel uppstod när den schematiska filen '%s' skulle sparas."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save schematic '%s'"
-msgstr "Det gick inte att spara schemat \"%s\""
+msgstr "Det gick inte att spara schemat '%s'"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:649
 msgid "A sheet must have a name."
@@ -10525,9 +10477,8 @@ msgid "Add signal by name:"
 msgstr "Lägg till signal efter namn:"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:113
-#, fuzzy
 msgid "You need to select DC source"
-msgstr "Du måste välja DC-källa (svep 1)"
+msgstr "Du måste välja DC-källa"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:217
 msgid "Source 1 and Source 2 must be different"
@@ -10546,14 +10497,12 @@ msgstr ""
 "ställa in simuleringsparametrar och klicka på OK-knappen med fliken vald."
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:288
-#, fuzzy
 msgid "Exit Without Valid Simulation"
-msgstr "Avsluta utan att spara"
+msgstr "Avsluta utan giltig simulering"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:289
-#, fuzzy
 msgid "Configure Valid Simulation"
-msgstr "Stäng simulering"
+msgstr "Konfigurera giltig simulering"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:587
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:146
@@ -10566,9 +10515,8 @@ msgid "Volts"
 msgstr "Volt"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:588
-#, fuzzy
 msgid "Amperes"
-msgstr "hoppare"
+msgstr "Ampere"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:589
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:66
@@ -10625,9 +10573,8 @@ msgid "AC"
 msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:98
-#, fuzzy
 msgid "Source 2"
-msgstr "Källa"
+msgstr "Källa 2"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
@@ -10641,15 +10588,13 @@ msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
-#, fuzzy
 msgid "I"
-msgstr "PI"
+msgstr "I"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
-#, fuzzy
 msgid "R"
-msgstr "R1"
+msgstr "R"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
@@ -10657,38 +10602,32 @@ msgid "TEMP"
 msgstr "TEMP"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:115
-#, fuzzy
 msgid "Source:"
-msgstr "Källa"
+msgstr "Källa:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:119
-#, fuzzy
 msgid "Sweep type:"
-msgstr "Formtyp:"
+msgstr "Sveptyp:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:123
-#, fuzzy
 msgid "Source 1"
-msgstr "Källa"
+msgstr "Källa 1"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:139
-#, fuzzy
 msgid "Starting value:"
-msgstr "Startspänning:"
+msgstr "Startvärde:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:159
-#, fuzzy
 msgid "Final value:"
-msgstr "Ursprungligt värde:"
+msgstr "Slutvärde:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:179
 msgid "Increment step:"
 msgstr "Ökningssteg:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:199
-#, fuzzy
 msgid "Swap sources"
-msgstr "Källa"
+msgstr "Byt källor"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:212
 msgid "DC Transfer"
@@ -10819,9 +10758,8 @@ msgid "Compatibility mode:"
 msgstr "Kompatibilitetsläge:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
-#, fuzzy
 msgid "User configuration"
-msgstr "Ljus konfiguration"
+msgstr "Användarkonfiguration"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "Spice"
@@ -10886,14 +10824,12 @@ msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
 msgstr "För en BJT är stiftordning samlare, bas, emitter, substrat (valfritt)"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:459
-#, fuzzy
 msgid "For a MOSFET, pin order is drain, gate, source"
-msgstr "För en MOSFET är ordningsföljden dränering, rutnät, källa"
+msgstr "För en MOSFET är stiftens ordning avlopp, grind, källa"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:463
-#, fuzzy
 msgid "For a JFET, pin order is drain, gate, source"
-msgstr "För en JFET är pin-ordningen drain, grid, source"
+msgstr "För en JFET är stiftens ordning avlopp, grind, källa"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:796
 #, c-format
@@ -10975,13 +10911,12 @@ msgid "Spice value in simulation"
 msgstr "Kryddvärde i simulering"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:67
-#, fuzzy
 msgid ""
 "In Spice values, the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
 msgstr ""
-"I kryddvärden är decimalavgränsaren punkten.\n"
-"Värden kan använda kryddsenhetssymboler."
+"I Spice-värden används decimalpunkt.\n"
+"Värden kan använda Spices enhetssymboler."
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
 msgid "Spice unit symbols in values (case insensitive):"
@@ -11323,9 +11258,9 @@ msgstr "Fältet måste ha ett namn."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1000
 #: eeschema/dialogs/dialog_symbol_properties.cpp:785
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already in use."
-msgstr "Fältnamnet \"%s\" används redan."
+msgstr "Fältnamnet '%s' används redan."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:31
 msgid "Group symbols"
@@ -11340,9 +11275,8 @@ msgid "Add Field..."
 msgstr "Lägg till fält ..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:76
-#, fuzzy
 msgid "Symbol Fields Table"
-msgstr "Symbolfält"
+msgstr "Symbolfältstabell"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:139
 msgid "Base Name"
@@ -11358,9 +11292,8 @@ msgid "Unit:"
 msgstr "Enhet:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
-#, fuzzy
 msgid "Alternate symbol (De Morgan)"
-msgstr "Alternativ symbol (DeMorgan)"
+msgstr "Alternativ symbol (De Morgan)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:138
 msgid ""
@@ -11493,13 +11426,13 @@ msgid "Symbol Properties"
 msgstr "Symbolegenskaper"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:58
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Remapping is not possible because you have insufficient privileges to the "
 "project folder '%s'."
 msgstr ""
 "Det är inte möjligt att mappa om eftersom du inte har skrivbehörighet till "
-"projektmappen \"%s\"."
+"projektmappen '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:67
 msgid ""
@@ -11522,11 +11455,10 @@ msgstr ""
 "steget är du ansvarig för att manuellt mappa om symbolerna."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
 msgstr ""
-"Lägga till bibliotek \"%s\", fil \"%s\" till projektsymbolens "
-"bibliotektabell."
+"Lägger till bibliotek '%s', fil '%s' till projektets symbolbibliotekstabell."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:216
 #: eeschema/dialogs/panel_sym_lib_table.cpp:765
@@ -11548,24 +11480,23 @@ msgid "Created project symbol library table.\n"
 msgstr "Skapat projektsymbols biblioteksbord.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:260
-#, fuzzy, c-format
+#, c-format
 msgid "No symbol %s found in symbol library table."
-msgstr "Ingen symbol \"%s\" hittades i symbolbibliotekstabellen."
+msgstr "Ingen symbol '%s' hittades i symbolbibliotekstabellen."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s mapped to symbol library '%s'."
-msgstr "Symbolen \"%s\" mappad till symbolbiblioteket \"%s\"."
+msgstr "Symbolen '%s' mappad till symbolbiblioteket '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:275
 msgid "Symbol library table mapping complete!"
 msgstr "Kartläggning av symbolbibliotekstabell komplett!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create project remap back up folder '%s'."
-msgstr ""
-"Det går inte att skapa säkerhetskopieringsmappen \"%s\" för projektmapp."
+msgstr "Det gick inte att skapa säkerhetskopieringsmappen '%s' för projektmapp."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:348
 #: eeschema/dialogs/dialog_symbol_remap.cpp:496
@@ -11588,9 +11519,9 @@ msgstr "Avbryt räddning"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:449
 #: eeschema/dialogs/dialog_symbol_remap.cpp:465
 #: eeschema/dialogs/dialog_symbol_remap.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Backing up file '%s' to '%s'."
-msgstr "Säkerhetskopiera fil \"%s\" till fil \"%s\"."
+msgstr "Säkerhetskopierar fil '%s' till '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:376
 #: eeschema/dialogs/dialog_symbol_remap.cpp:418
@@ -11598,14 +11529,14 @@ msgstr "Säkerhetskopiera fil \"%s\" till fil \"%s\"."
 #: eeschema/dialogs/dialog_symbol_remap.cpp:457
 #: eeschema/dialogs/dialog_symbol_remap.cpp:473
 #: eeschema/dialogs/dialog_symbol_remap.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to back up file '%s'.\n"
-msgstr "Det gick inte att säkerhetskopiera filen \"%s\".\n"
+msgstr "Det gick inte att säkerhetskopiera filen '%s'.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create backup folder '%s'.\n"
-msgstr "Det gick inte att skapa säkerhetskopieringsmappen \"%s\"\n"
+msgstr "Det gick inte att skapa säkerhetskopieringsmappen '%s'.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:495
 msgid "Some of the project files could not be backed up."
@@ -11666,33 +11597,28 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
 #: eeschema/sch_text.cpp:776
-#, fuzzy
 msgid "Align right"
-msgstr "Rikta in åt höger"
+msgstr "Justera åt höger"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
 #: eeschema/sch_text.cpp:777
-#, fuzzy
 msgid "Align bottom"
-msgstr "Rikta in mot botten"
+msgstr "Justera nedåt"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
 #: eeschema/sch_text.cpp:778
-#, fuzzy
 msgid "Align left"
-msgstr "Rikta in till vänster"
+msgstr "Justera åt vänster"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
 #: eeschema/sch_text.cpp:779
-#, fuzzy
 msgid "Align top"
-msgstr "Rikta in överst"
+msgstr "Justera uppåt"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:122
 #: eeschema/sch_text.cpp:783
-#, fuzzy
 msgid "Justification"
-msgstr "Motivering:"
+msgstr "Justering"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:126
 msgid "Bold and italic"
@@ -11755,24 +11681,20 @@ msgid "Update Schematic from PCB"
 msgstr "Uppdatera Schematisk från PCB"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
-#, fuzzy
 msgid "Parent symbol:"
-msgstr "Spara nuvarande aktiva kretskort"
+msgstr "Överordnad symbol:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
-#, fuzzy
 msgid "Remove fields if not in parent symbol"
-msgstr "Ta bort fält om inte i ny symbol"
+msgstr "Ta bort fält som inte finns i överordnad symbol"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
-#, fuzzy
 msgid "Reset fields if empty in parent symbol"
-msgstr "Återställ fält om de är tomma i ny symbol"
+msgstr "Återställ fält som är tomma i överordnad symbol"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.h:68
-#, fuzzy
 msgid "Update Symbol Fields"
-msgstr "Symbolfält"
+msgstr "Uppdatera symbolfält"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:153
 msgid ""
@@ -11865,9 +11787,8 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Markera nät när de är markerade i PCB-redigeraren"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Constrain buses and wires to H or V"
-msgstr "& Begränsa bussar och ledningar till H- och V-orientering"
+msgstr "Begränsa bussar och ledningar till H- och V-orientering"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
 #, fuzzy
@@ -11926,21 +11847,19 @@ msgstr "Vänsterklicka muskommandon"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:86
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl."
 msgstr ""
-"Vänsterklicka (och dra) åtgärder beror på tre modifieringsnycklar:\n"
-"Alt, Skift och Ctrl."
+"Vänsterklicka (och dra) åtgärder beror på två modifieringstangenter:\n"
+"Skift och Ctrl."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:98
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: pcbnew/dialogs/panel_edit_options_base.cpp:107
 #: pcbnew/dialogs/panel_edit_options_base.cpp:178
-#, fuzzy
 msgid "Long Click"
-msgstr "Klicka"
+msgstr "Långklick"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:102
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:150
@@ -11972,12 +11891,11 @@ msgstr "Ta bort objekt från markeringen."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:134
 #: pcbnew/dialogs/panel_edit_options_base.cpp:154
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Option, Shift and Cmd."
 msgstr ""
-"Vänsterklicka (och dra) åtgärder beror på tre modifieringsnycklar:\n"
+"Vänsterklicka (och dra) åtgärder beror på tre modifieringstangenter:\n"
 "Alt, Skift och Cmd."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
@@ -12104,16 +12022,14 @@ msgstr ""
 "eller buss"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:79
-#, fuzzy
 msgid "Global label size:"
-msgstr "Globala etiketter"
+msgstr "Storlek för globala etiketter:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:81
-#, fuzzy
 msgid "Percentage of the text size to use as space around a global label"
 msgstr ""
-"Procent av textstorleken för att kompensera texten ovanför eller under tråd "
-"eller buss"
+"Procentsats av textstorleken för användning som utrymme runt en global "
+"etikett"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:107
 msgid "Default line thickness:"
@@ -12158,9 +12074,8 @@ msgid "Show inter-sheet references"
 msgstr "Visa referenser mellan ark"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:172
-#, fuzzy
 msgid "Show own page reference"
-msgstr "Visa referenser för fotavtryck"
+msgstr "Visa egen sidreferens"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:176
 msgid "Standard (1,2,3)"
@@ -12210,14 +12125,12 @@ msgid "Color Theme"
 msgstr "Färgtema"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
-#, fuzzy
 msgid "Use schematic editor color theme"
-msgstr "Använd Eeschema-färgtema"
+msgstr "Använd schemaredigerarens färgtema"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:31
-#, fuzzy
 msgid "Use theme:"
-msgstr "Stigtid:"
+msgstr "Använd tema:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:29
 msgid "&Default line width:"
@@ -12254,21 +12167,18 @@ msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:350
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:531
-#, fuzzy
 msgid "A library table row nickname and path cells are empty."
-msgstr "Ett bibliotek med smeknamnet \"%s\" finns redan."
+msgstr "Smeknamn- och sökvägsceller är tomma i en bibliotekstabellsrad."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:352
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:533
-#, fuzzy
 msgid "A library table row nickname cell is empty."
-msgstr "Ett bibliotek med smeknamnet \"%s\" finns redan."
+msgstr "Smeknamnscellen är tom i en bibliotekstabellsrad."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:354
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:535
-#, fuzzy
 msgid "A library table row path cell is empty."
-msgstr "Symbolbiblioteksfilen \"%s\" är tom."
+msgstr "Sökvägscellen är tom i en bibliotekstabellsrad."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:537
@@ -12303,11 +12213,9 @@ msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Flera bibliotek kan inte dela samma smeknamn ('%s')."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:459 eeschema/symbol_library.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr ""
-"Symbolbiblioteket \"%s\" kunde inte laddas.\n"
-" %s"
+msgstr "Symbolbiblioteket '%s' kunde inte laddas."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:462
 msgid "Error Loading Library"
@@ -12373,9 +12281,8 @@ msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Filen %s finns redan. Vill du skriva över den här filen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:778
-#, fuzzy
 msgid "Migrate Library"
-msgstr "Migrera bibliotek ..."
+msgstr "Migrera enskilt bibliotek"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:802 eeschema/libarch.cpp:153
 #: eeschema/libarch.cpp:159
@@ -12461,9 +12368,8 @@ msgid "Remove library from table"
 msgstr "Ta bort biblioteket från bordet"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:135
-#, fuzzy
 msgid "Migrate Libraries"
-msgstr "Migrera bibliotek ..."
+msgstr "Migrera flera bibliotek"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:145
 msgid "Path Substitutions:"
@@ -12497,14 +12403,13 @@ msgid "Editing Options"
 msgstr "Redigeringsalternativ"
 
 #: eeschema/eeschema_config.cpp:101 pcbnew/pcbnew_config.cpp:81
-#, fuzzy
 msgid "Error loading drawing sheet."
-msgstr "Fel vid inläsning av redigeraren"
+msgstr "Fel vid inläsning av ritningsblad."
 
 #: eeschema/eeschema_config.cpp:284 eeschema/sheet.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading the symbol library table '%s'."
-msgstr "Ett fel inträffade vid inläsning av symbolbibliotekstabellen \"%s\"."
+msgstr "Fel vid inläsning av symbolbibliotekstabellen '%s'."
 
 #: eeschema/erc.cpp:59 eeschema/erc.cpp:76
 msgid "Input Pin"
@@ -12527,9 +12432,8 @@ msgid "Passive Pin"
 msgstr "Passiv stift"
 
 #: eeschema/erc.cpp:64 eeschema/erc.cpp:81
-#, fuzzy
 msgid "Free Pin"
-msgstr "Skapa &fil"
+msgstr "Fritt sitft"
 
 #: eeschema/erc.cpp:65 eeschema/erc.cpp:82
 msgid "Unspecified Pin"
@@ -12556,9 +12460,8 @@ msgid "No Connection"
 msgstr "Ingen förbindelse"
 
 #: eeschema/erc.cpp:269
-#, fuzzy
 msgid "Unresolved text variable in drawing sheet."
-msgstr "Oupplöst textvariabel i kalkylbladet."
+msgstr "Oupplöst textvariabel i ritningsbladet."
 
 #: eeschema/erc.cpp:300
 #, c-format
@@ -12692,24 +12595,20 @@ msgid "Library symbol issue"
 msgstr "Bibliotekssymbolproblem"
 
 #: eeschema/erc_item.cpp:138
-#, fuzzy
 msgid "Symbol is not annotated"
-msgstr "Symbolenhet notation:"
+msgstr "Symbolen är inte annoterad"
 
 #: eeschema/erc_item.cpp:142
-#, fuzzy
 msgid "Symbol has more units than are defined"
-msgstr "Ändringar av symbol till fotavtryck är inte sparade"
+msgstr "Symbolen har fler enheter än som är definierade"
 
 #: eeschema/erc_item.cpp:146
-#, fuzzy
 msgid "Units of same symbol have different values"
-msgstr "Ändra inte dynor med olika lager"
+msgstr "Enheter av samma symbol har olika värden"
 
 #: eeschema/erc_item.cpp:150
-#, fuzzy
 msgid "Duplicate reference designators"
-msgstr "Plotreferensbeteckning"
+msgstr "Dubbla referensbeteckningar"
 
 #: eeschema/erc_item.cpp:154
 msgid "Bus Entry needed"
@@ -12721,69 +12620,62 @@ msgid "Schematic Files"
 msgstr "Schematiska filer"
 
 #: eeschema/files-io.cpp:77
-#, fuzzy
 msgid "Create a new project for this schematic"
-msgstr "Skapa ett nytt projekt för denna styrelse"
+msgstr "Skapa ett nytt projekt för detta schema"
 
 #: eeschema/files-io.cpp:79
-#, fuzzy
 msgid ""
 "Creating a project will enable features such as text variables, net classes, "
 "and ERC exclusions"
 msgstr ""
-"Genom att skapa ett projekt kommer funktioner som designregler, nätklasser "
-"och lagerförinställningar att aktiveras"
+"Skapandet av ett projekt aktiveras funktioner såsom textvariabler, "
+"nätklasser och ERC-undantag"
 
 #: eeschema/files-io.cpp:126 eeschema/files-io.cpp:1153
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open."
-msgstr "Schematisk fil \"%s\" är redan öppen."
+msgstr "Schema '%s' är redan öppen."
 
 #: eeschema/files-io.cpp:148
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
-msgstr "Schematisk %s finns inte. Vill du skapa det?"
+msgstr "Schema '%s' finns inte. Vill du skapa den?"
 
 #: eeschema/files-io.cpp:166
-#, fuzzy
 msgid "Creating Schematic"
-msgstr "Skriv ut schematisk"
+msgstr "Skapar schema"
 
 #: eeschema/files-io.cpp:167
-#, fuzzy
 msgid "Loading Schematic"
-msgstr "Skriv ut schematisk"
+msgstr "Laddar schema"
 
 #: eeschema/files-io.cpp:227
 msgid "Schematic file changes are unsaved"
 msgstr "Schematiska filändringar sparas inte"
 
 #: eeschema/files-io.cpp:264
-#, fuzzy
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
 msgstr ""
-"Hela schemat kunde inte laddas. Fel uppstod när du försökte läsa in "
-"hierarkiska arkscheman."
+"Hela schemat kunde inte laddas. Fel uppstod vid inläsning av hierarkiska "
+"blad."
 
 #: eeschema/files-io.cpp:271 eeschema/files-io.cpp:279
 #: eeschema/files-io.cpp:1227 eeschema/sheet.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s'."
-msgstr ""
-"Fel vid inläsning av schematisk.\n"
-"%s"
+msgstr "Fel vid inläsning av schema '%s'."
 
 #: eeschema/files-io.cpp:287
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading schematic '%s'."
-msgstr "Fel inträffade vid inläsning av schematisk fil \"%s\"."
+msgstr "Slut på minne vid inläsning av schema '%s'."
 
 #: eeschema/files-io.cpp:306 eeschema/files-io.cpp:1230 eeschema/sheet.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load '%s'."
-msgstr "Det gick inte att ladda \"%s\""
+msgstr "Det gick inte att ladda '%s'."
 
 #: eeschema/files-io.cpp:319
 msgid ""
@@ -12820,9 +12712,9 @@ msgid "Do not show this dialog again."
 msgstr "Visa inte denna dialog igen."
 
 #: eeschema/files-io.cpp:394
-#, fuzzy, c-format
+#, c-format
 msgid "The project symbol library cache file '%s' was not found."
-msgstr "Det gick inte att skapa symbolbiblioteksfil '%s'."
+msgstr "Projektets symbolbibliotekscache '%s' kunde inte hittas."
 
 #: eeschema/files-io.cpp:396
 msgid ""
@@ -12856,14 +12748,12 @@ msgstr ""
 "konverteras till det nya formatet när den sparas."
 
 #: eeschema/files-io.cpp:499
-#, fuzzy
 msgid "Schematic is read only."
-msgstr "Schematisk fil \"%s\" är redan öppen."
+msgstr "Schemat är skrivskyddat."
 
 #: eeschema/files-io.cpp:524
-#, fuzzy
 msgid "Insert Schematic"
-msgstr "Importera schemat"
+msgstr "Importera schema"
 
 #: eeschema/files-io.cpp:552
 msgid ""
@@ -12885,43 +12775,43 @@ msgid "Import Schematic"
 msgstr "Importera schemat"
 
 #: eeschema/files-io.cpp:635
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file extension: '%s'."
-msgstr "Använd Protel-filnamnstillägg"
+msgstr "Oväntat filnamnstillägg: '%s'."
 
 #: eeschema/files-io.cpp:686
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
 msgstr ""
-"Fel vid sparar schematisk fil \"%s\".\n"
+"Kunde inte spara schemafil '%s'.\n"
 "%s"
 
 #: eeschema/files-io.cpp:691 pcbnew/files.cpp:1028
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create temporary file '%s'."
-msgstr "Det gick inte att skapa temporär fil \"%s\""
+msgstr "Det gick inte att skapa temporär fil '%s'."
 
 #: eeschema/files-io.cpp:708
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
 "Failed to rename temporary file '%s'."
 msgstr ""
-"Fel vid sparar schematisk fil \"%s\".\n"
-"Det gick inte att byta namn på tillfällig fil %s"
+"Fel vid sparning av schemafil '%s'.\n"
+"Det gick inte att byta namn på tillfällig fil '%s'."
 
 #: eeschema/files-io.cpp:714 pcbnew/files.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to rename temporary file '%s'."
-msgstr "Det gick inte att skapa temporär fil \"%s\""
+msgstr "Det gick inte att byta namn på temporär fil '%s'."
 
 #: eeschema/files-io.cpp:737 pagelayout_editor/files.cpp:183
 #: pcbnew/files.cpp:1079
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' saved."
-msgstr "Filen %s sparades."
+msgstr "Filen '%s' sparades."
 
 #: eeschema/files-io.cpp:742
 msgid "File write operation failed."
@@ -12930,13 +12820,13 @@ msgstr "Filskrivningen misslyckades."
 #: eeschema/files-io.cpp:808 eeschema/files-io.cpp:875
 #: kicad/tools/kicad_manager_control.cpp:126
 #: kicad/tools/kicad_manager_control.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
 "\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Katalogen \"%s\" kunde inte skapas.\n"
+"Katalogen '%s' kunde inte skapas.\n"
 "\n"
 "Se till att du har skrivbehörighet och försök igen."
 
@@ -12947,19 +12837,16 @@ msgstr ""
 "Om du sparar projektet i det nya filformatet skrivs befintliga filer över."
 
 #: eeschema/files-io.cpp:945
-#, fuzzy
 msgid "Save Warning"
-msgstr "Project Save Warning"
+msgstr "Sparningsvarning"
 
 #: eeschema/files-io.cpp:948
-#, fuzzy
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 msgstr ""
-"Följande filer skrivs över:\n"
+"Följande filer kommer skrivas över:\n"
 "\n"
-"%s"
 
 #: eeschema/files-io.cpp:949
 msgid "Overwrite Files"
@@ -12970,16 +12857,14 @@ msgid "Abort Project Save"
 msgstr "Avbryt projekt Spara"
 
 #: eeschema/files-io.cpp:1163
-#, fuzzy
 msgid "Importing Schematic"
-msgstr "Importera schemat"
+msgstr "Importerar schema"
 
 #: eeschema/files-io.cpp:1260
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "Den aktuella schemat har modifierats. Spara ändringar?"
 
 #: eeschema/files-io.cpp:1346
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -12987,11 +12872,10 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"Hoppsan, det här är potentiellt pinsamt!\n"
-"Det verkar som att du senast redigerade filen\n"
-"\"%s\"\n"
-"den sparades inte ordentligt. Vill du återställa de senast sparade "
-"ändringarna du gjorde?"
+"Hoppsan, det här är pinsamt!\n"
+"Det verkar som att schemafile(n/rna) inte sparades korrekt senaste gången du "
+"ändrade den/dem.\n"
+"Vill du återställa de senast sparade ändringarna du gjort?"
 
 #: eeschema/files-io.cpp:1357
 #, c-format
@@ -13003,18 +12887,16 @@ msgstr ""
 "Manuell återhämtning av automatiskt sparade filer krävs."
 
 #: eeschema/files-io.cpp:1403
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "Det gick inte att ta bort den automatiska sparfilen \"%s\"!"
+msgstr "Följande automatiskt sparad(e) fil(er) kunde inte återställas.\n"
 
 #: eeschema/files-io.cpp:1408
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "Manuell återhämtning krävs för att återställa ovanstående fil(er)."
 
 #: eeschema/files-io.cpp:1430
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "Det gick inte att ta bort den automatiska sparfilen \"%s\"!"
+msgstr "Följande automatiskt sparad(e) fil(er) kunde inte tas bort\n"
 
 #: eeschema/files-io.cpp:1435
 msgid "Manual removal will be required for the file(s) above."
@@ -13026,7 +12908,10 @@ msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "Det gick inte att ta bort den automatiska sparfilen \"%s\"!"
+msgstr ""
+"Huvudfilen för automatisk sparning\n"
+"'%s'\n"
+"kunde inte tas bort."
 
 #: eeschema/files-io.cpp:1454
 msgid ""
@@ -13061,11 +12946,10 @@ msgid "Choose Symbol (%d items loaded)"
 msgstr "Välj symbol (%d föremål laddade)"
 
 #: eeschema/getpart.cpp:253
-#, fuzzy, c-format
+#, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr ""
-"Ingen alternativ kroppsstil hittades för symbolen \"%s\" i biblioteket \"%s"
-"\"."
+"Ingen alternativ kroppsstil hittades för symbolen '%s' i biblioteket '%s'."
 
 #: eeschema/hierarch.cpp:88
 msgid "Navigator"
@@ -13105,15 +12989,13 @@ msgstr "Nej"
 
 #: eeschema/lib_field.cpp:445 eeschema/lib_text.cpp:363
 #: eeschema/sch_field.cpp:599
-#, fuzzy
 msgid "H Justification"
-msgstr "Motivering:"
+msgstr "Horisontell justering"
 
 #: eeschema/lib_field.cpp:454 eeschema/lib_text.cpp:372
 #: eeschema/sch_field.cpp:608
-#, fuzzy
 msgid "V Justification"
-msgstr "Motivering:"
+msgstr "Vertikal justering"
 
 #: eeschema/lib_item.cpp:47 eeschema/lib_pin.cpp:1041 eeschema/sch_pin.cpp:184
 #: eeschema/sch_pin.cpp:204 eeschema/sch_text.cpp:758
@@ -13174,9 +13056,9 @@ msgid "Polyline, %d points"
 msgstr "Polyline, %d poäng"
 
 #: eeschema/lib_shape.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve, %d points"
-msgstr "Bezier Curve"
+msgstr "Bezierkurva, %d punkter"
 
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
@@ -13184,10 +13066,9 @@ msgid "Graphic Text '%s'"
 msgstr "Grafisk text '%s'"
 
 #: eeschema/libarch.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add symbol %s to library file '%s'."
-msgstr ""
-"Det gick inte att lägga till symbolen \"%s\" till biblioteksfilen \"%s\"."
+msgstr "Det gick inte att lägga till symbolen '%s' till biblioteksfilen '%s'."
 
 #: eeschema/libarch.cpp:110
 msgid "Unexpected exception occurred."
@@ -13209,9 +13090,8 @@ msgid "Open Recent"
 msgstr "Öppna de senaste"
 
 #: eeschema/menubar.cpp:92
-#, fuzzy
 msgid "Insert Schematic Sheet Content..."
-msgstr "Lägg till schematiskt arkinnehåll ..."
+msgstr "Lägg till schematiskt bladinnehåll..."
 
 #: eeschema/menubar.cpp:93
 msgid ""
@@ -13226,9 +13106,8 @@ msgid "Import"
 msgstr "Importera"
 
 #: eeschema/menubar.cpp:103
-#, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "Importera icke-KiCad-schemat ..."
+msgstr "Icke-KiCad-schema..."
 
 #: eeschema/menubar.cpp:104
 msgid ""
@@ -13238,9 +13117,8 @@ msgstr ""
 "program"
 
 #: eeschema/menubar.cpp:108
-#, fuzzy
 msgid "Footprint Assignments..."
-msgstr "Fotavtrycksuppdrag"
+msgstr "Fotavtryckstilldelninar..."
 
 #: eeschema/menubar.cpp:114 eeschema/symbol_editor/menubar_symbol_editor.cpp:68
 #: pcbnew/dialogs/dialog_export_step.cpp:122
@@ -13250,9 +13128,8 @@ msgid "Export"
 msgstr "Exportera"
 
 #: eeschema/menubar.cpp:116
-#, fuzzy
 msgid "Drawing to Clipboard"
-msgstr "Exportera ritning till Urklipp"
+msgstr "Ritning till urklipp"
 
 #: eeschema/menubar.cpp:117 pcbnew/menubar_pcb_editor.cpp:110
 #: pcbnew/pcb_edit_frame.cpp:197
@@ -13293,9 +13170,9 @@ msgid "P&references"
 msgstr "&Inställningar"
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file %s."
-msgstr "Kunde inte hitta biblioteksfilen %s"
+msgstr "Kunde inte hitta biblioteksfilen %s."
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:313
 msgid ""
@@ -13306,14 +13183,13 @@ msgstr ""
 "Annoteringen måste korrigeras innan simulering."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "Command error. Return code %d."
-msgstr "Kommandofel. Returkod %d"
+msgstr "Kommandofel. Returkod %d."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:130
-#, fuzzy
 msgid "Success."
-msgstr "Slutförd"
+msgstr "Slutförd."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:177
 msgid "Error: duplicate sheet names. Continue?"
@@ -13344,9 +13220,8 @@ msgid "Open emitter"
 msgstr "Öppna sändaren"
 
 #: eeschema/pin_type.cpp:62
-#, fuzzy
 msgid "Unconnected"
-msgstr "Oanslutna föremål"
+msgstr "Oanslutna"
 
 #: eeschema/pin_type.cpp:77
 msgid "Inverted"
@@ -13413,9 +13288,9 @@ msgstr "Inga symboler räddades."
 
 #: eeschema/project_rescue.cpp:691
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create symbol library file '%s'."
-msgstr "Det gick inte att skapa symbolbiblioteksfil \"%s\""
+msgstr "Det gick inte att skapa symbolbiblioteksfil '%s'."
 
 #: eeschema/project_rescue.cpp:815
 #, c-format
@@ -13493,9 +13368,8 @@ msgstr "Följande bibliotek hittades inte:"
 
 #: eeschema/sch_edit_frame.cpp:223
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
-#, fuzzy
 msgid "KiCad Schematic Editor"
-msgstr "Byt till schematisk redigerare"
+msgstr "KiCads schemaredigerare"
 
 #: eeschema/sch_edit_frame.cpp:301
 msgid "New schematic file is unsaved"
@@ -13510,33 +13384,31 @@ msgid "Save changes to '%s' before closing?"
 msgstr "Spara ändringar i '%s' innan stängning?"
 
 #: eeschema/sch_edit_frame.cpp:815
-#, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
-"Det går inte att uppdatera kretskortet eftersom schematisk redigerare öppnas "
-"i fristående läge. För att skapa / uppdatera PCB från scheman, starta Kicad-"
-"skalet och skapa ett projekt."
+"Det går inte att uppdatera kretskortet eftersom shcemaredigeraren är öppnad "
+"i fristående läge. För att skapa/uppdatera kretskort från scheman, starta "
+"Kicad-skalet och skapa ett projekt."
 
 #: eeschema/sch_edit_frame.cpp:934
 msgid "New Schematic"
 msgstr "Nytt schema"
 
 #: eeschema/sch_edit_frame.cpp:946
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' already exists."
-msgstr "Schematisk fil \"%s\" finns redan."
+msgstr "Schemafil '%s' finns redan."
 
 #: eeschema/sch_edit_frame.cpp:967
 msgid "Open Schematic"
 msgstr "Öppna schema"
 
 #: eeschema/sch_edit_frame.cpp:1030
-#, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr "För att exportera netlistan krävs ett fullständigt kommenterat schema."
+msgstr "Tilldelning av fotavtryck kräver ett fullständigt annoterat schema."
 
 #: eeschema/sch_edit_frame.cpp:1049
 msgid "Could not open CvPcb"
@@ -13554,9 +13426,8 @@ msgid "[Unsaved]"
 msgstr "[Osparat]"
 
 #: eeschema/sch_edit_frame.cpp:1265
-#, fuzzy
 msgid "[no schematic loaded]"
-msgstr "Schematisk sparad"
+msgstr "[inget schema laddat]"
 
 #: eeschema/sch_edit_frame.cpp:1476
 #, c-format
@@ -13701,9 +13572,9 @@ msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:248
 #: pcbnew/plugins/altium/altium_pcb.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file '%s'."
-msgstr "Det går inte att öppna filen '%s'"
+msgstr "Det går inte att öppna filen '%s'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:312
 #, c-format
@@ -13711,30 +13582,27 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Lagringsfilen ofullständigt inläst (%d bytes återstår)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:474
-#, fuzzy
 msgid "Compile mask not currently supported."
-msgstr "Inget schema är för närvarande öppet."
+msgstr "Kompilering av mask stöds för närvarande inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:487
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Record id: %d."
-msgstr "okänd typ av dyna: %d"
+msgstr "Okänt Record-id: %d."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:604
-#, fuzzy, c-format
+#, c-format
 msgid "Pin's owner (%d) not found."
-msgstr "Filen %s fanns ej."
+msgstr "Stiftets ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:649
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1893
-#, fuzzy
 msgid "Pin has unexpected orientation."
-msgstr "Textriktning"
+msgstr "Stift har en oväntad orientering."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:688
-#, fuzzy
 msgid "Pin has unexpected electrical type."
-msgstr "Visa stift & elektrisk typ"
+msgstr "Stift har en oväntad elektrisk typ."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:693
 msgid "Pin has unexpected outer edge type."
@@ -13745,9 +13613,9 @@ msgid "Pin has unexpected inner edge type."
 msgstr "Stift har oväntad inre-kant-typ."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:859
-#, fuzzy, c-format
+#, c-format
 msgid "Label's owner (%d) not found."
-msgstr "Filen %s fanns ej."
+msgstr "Etikettens ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:976
 #, c-format
@@ -13755,49 +13623,48 @@ msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Bezier har %d kontrollpunkter. Åtminstone 2 förväntas."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1033
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier's owner (%d) not found."
-msgstr "Referens '%s' hittades inte."
+msgstr "Bezierkurvans sägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1146
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr "Filen %s fanns ej."
+msgstr "Polygonlinjens ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1205
-#, fuzzy, c-format
+#, c-format
 msgid "Polygon's owner (%d) not found."
-msgstr "Filen %s fanns ej."
+msgstr "Polygonens ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1286
-#, fuzzy, c-format
+#, c-format
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "Referens '%s' hittades inte."
+msgstr "Avrundade rektangelns ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1322
-#, fuzzy
 msgid "Arcs on schematic not currently supported."
-msgstr "Inget schema är för närvarande öppet."
+msgstr "Bågar i schema stöds för närvarande inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1332
-#, fuzzy, c-format
+#, c-format
 msgid "Arc's owner (%d) not found."
-msgstr "Referens '%s' hittades inte."
+msgstr "Bågens ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1400
-#, fuzzy, c-format
+#, c-format
 msgid "Line's owner (%d) not found."
-msgstr "Filen %s fanns ej."
+msgstr "Linjens ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle's owner (%d) not found."
-msgstr "Referens '%s' hittades inte."
+msgstr "Rektangelns ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1539
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr "Referens '%s' hittades inte."
+msgstr "Bladfältets ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1785
 msgid "Power Port has unknown style, use bar instead."
@@ -13809,50 +13676,50 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr "Power-symbolen skapar en global etikett med namnet '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1942
-#, fuzzy, c-format
+#, c-format
 msgid "Port %s has no connections."
-msgstr "Pad anslutning:"
+msgstr "Port %s har inga anslutningar."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2133
-#, fuzzy, c-format
+#, c-format
 msgid "Embedded file %s not found in storage."
-msgstr "Återställningsfilen \"%s\" hittades inte."
+msgstr "Inbäddad fil %s hittades inte i lagring."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2150
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2169
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading image %s."
-msgstr "Avsluta ritningsarket"
+msgstr "Fel vid inläsning av bild %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2162
-#, fuzzy, c-format
+#, c-format
 msgid "File not found %s."
-msgstr "Filen hittades inte."
+msgstr "Fil hittades inte %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2232
-#, fuzzy, c-format
+#, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr "Referens '%s' hittades inte."
+msgstr "Bladnamnets ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2255
-#, fuzzy, c-format
+#, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "Filen %s fanns ej."
+msgstr "Filnamnsägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2289
-#, fuzzy, c-format
+#, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "Referens '%s' hittades inte."
+msgstr "Beteckningens ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2424
-#, fuzzy, c-format
+#, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr "Filen %s fanns ej."
+msgstr "Implementeringens ägare (%d) hittades inte"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2434
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint's owner (%d) not found."
-msgstr "Filen %s fanns ej."
+msgstr "Fotavtryckets ägare (%d) hittades inte."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:74
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:73
@@ -13948,24 +13815,24 @@ msgstr ""
 "många stift. Det förväntade antalet stift är 1 men %d hittades."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
 msgstr ""
-"Symbol-ID '%s' är av okänd typ. Det är varken en komponent eller en "
-"nettoeffekt / symbol. Symbolen laddades inte."
+"Symbol-ID '%s' är av okänd typ. Det är varken en symbol eller en nät-/"
+"spänningssymbol. Symbolen laddades inte."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:707
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
 "Symbolen '%s' skalas i det ursprungliga CADSTAR-schemat, men detta stöds "
-"inte i KiCad. Symbolen laddades med 1: 1-skala och kan kräva manuell "
-"fixering."
+"inte i KiCad. När symbolen laddas om från biblioteket kommer den återgå till "
+"den ursprungliga 1:1 storleken."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1190
 #, c-format
@@ -14033,181 +13900,141 @@ msgstr ""
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:439
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3040
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'."
-msgstr "Kunde inte läsa fil: \"%s\""
+msgstr "Kunde inte läsa fil '%s'"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1273
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
 "in the schematic."
 msgstr ""
-"Fel vid analys av Eagle-filen. Det gick inte att hitta \"%s\" -instans men "
-"det hänvisas till i schemat."
+"Fel vid inläsning av Eagle-fil. Kunde inte hitta '%s'-instans som refereras "
+"i schemat."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:1304
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find '%s' in the imported library."
-msgstr "Kunde inte hitta %s i det importerade biblioteket"
+msgstr "Kunde inte hitta '%s' i det importerade biblioteket."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:165
-#, fuzzy
 msgid "Invalid symbol name"
-msgstr "Ogiltigt signalnamn"
+msgstr "Ogiltigt symbolnamn"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:175
-#, fuzzy
 msgid "Invalid library identifier"
-msgstr "Ogiltig symbolbiblioteksidentifierare"
+msgstr "Ogiltig biblioteksidentifierare"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:247
-#, fuzzy
 msgid "Invalid parent symbol name"
-msgstr "Ogiltigt signalnamn"
+msgstr "Ogiltigt namn på överordnad symbol"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s"
-msgstr ""
-"Ingen förälder för utökad symbol %s i\n"
-"fil: \"%s\"\n"
-"rad: %d\n"
-"förskjutning: %d"
+msgstr "Ingen förälder för utökad symbol %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:271
-#, fuzzy
 msgid "Invalid symbol unit name"
-msgstr "Ogiltigt signalnamn"
+msgstr "Ogiltigt symbolenhetsnamn"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name prefix %s"
-msgstr "Ogiltigt enhetsprefix"
+msgstr "Ogiltigt prefix '%s' för symbolenhetsnamn"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit name suffix %s"
-msgstr ""
-"Ogiltigt suffix för symbolenhetsnamn %s i\n"
-"fil: \"%s\"\n"
-"rad: %d\n"
-"offset: %d"
+msgstr "Ogiltigt suffix '%s' för symbolenhetsnamn"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:295
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol unit number %s"
-msgstr "Ogiltig symbolbiblioteksidentifierare"
+msgstr "Ogiltigt symbolenhetsnummer %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid symbol convert number %s"
-msgstr ""
-"Ogiltigt symbolkonverteringsnummer %s in\n"
-"fil: \"%s\"\n"
-"rad: %d\n"
-"förskjutning: %d"
+msgstr "Ogiltigt symbolkonverteringsnummer %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:424
-#, fuzzy
 msgid "Floating point number with incorrect locale"
-msgstr ""
-"Ogiltigt flytnummer i\n"
-"fil: \"%s\"\n"
-"rad: %d\n"
-"förskjutning: %d"
+msgstr "Flyttalsnummer med inkorrekt lokalisering"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:434
-#, fuzzy
 msgid "Invalid floating point number"
-msgstr ""
-"Ogiltigt flytnummer i\n"
-"fil: \"%s\"\n"
-"rad: %d\n"
-"förskjutning: %d"
+msgstr "Ogiltigt flyttalsnummer"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:440
-#, fuzzy
 msgid "Missing floating point number"
-msgstr "Versionsnummer saknas."
+msgstr "Flyttalsnummer saknas"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:745
-#, fuzzy
 msgid "Invalid pin names definition"
-msgstr "Ogiltig raddefinition"
+msgstr "Ogiltig definition på stiftnamn"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:767
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1705
-#, fuzzy
 msgid "Invalid property name"
-msgstr "Ogiltigt signalnamn"
+msgstr "Ogiltigt namn på egenskap"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:775
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1713
-#, fuzzy
 msgid "Empty property name"
-msgstr "Ange fotavtrycksnamn:"
+msgstr "Tomt namn på egenskap"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:784
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1721
-#, fuzzy
 msgid "Invalid property value"
-msgstr "Ogiltig kryddvärdesträng"
+msgstr "Ogiltigt värde på egenskap"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1277
-#, fuzzy
 msgid "Invalid pin name"
-msgstr "Ogiltigt signalnamn"
+msgstr "Ogiltigt stiftnamn"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1315
-#, fuzzy
 msgid "Invalid pin number"
-msgstr "Ogiltigt signalnamn"
+msgstr "Ogiltigt stiftnummer"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1352
-#, fuzzy
 msgid "Invalid alternate pin name"
-msgstr "Alternativt pin-namn"
+msgstr "Ogiltigt namn på alternativt stift"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1504
-#, fuzzy
 msgid "Invalid text string"
-msgstr "Ogiltig kryddvärdesträng"
+msgstr "Ogiltig textsträng"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1551
-#, fuzzy
 msgid "Invalid page type"
-msgstr "Ogiltigt signalnamn"
+msgstr "Ogiltig sidtyp"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1679
 msgid "Invalid title block comment number"
 msgstr "Ogiltigt kommentarsnummer på titelblock"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1778
-#, fuzzy
 msgid "Invalid sheet pin name"
-msgstr "Ogiltigt signalnamn"
+msgstr "Ogiltigt namn på bladstift"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1786
-#, fuzzy
 msgid "Empty sheet pin name"
-msgstr "Namn på arkfiler"
+msgstr "Tomt namn på bladstift"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2237
-#, fuzzy
 msgid "Invalid symbol library name"
-msgstr "Ogiltig symbolbiblioteksidentifierare"
+msgstr "Ogiltigt namn på symbolbibliotek"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2257
-#, fuzzy
 msgid "Invalid symbol library ID"
-msgstr "Ogiltig symbolbiblioteksidentifierare"
+msgstr "Ogiltigt ID på symbolbibliotek"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:1654
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2599
-#, fuzzy, c-format
+#, c-format
 msgid "Library file '%s' not found."
-msgstr "Biblioteksfilen \"%s\" hittades inte."
+msgstr "Biblioteksfilen '%s' hittades inte."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_plugin.cpp:2074
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:4272
