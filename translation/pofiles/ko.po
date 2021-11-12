@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-11 23:47+0000\n"
+"PO-Revision-Date: 2021-11-12 03:20+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -9535,9 +9535,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
-#, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr "드 모르간 심볼에 대해서 대체 핀 할당은 사용할 수 없습니다."
+msgstr "드 모르간 기호에는 대체 핀 할당을 사용할 수 없습니다."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:283
 msgid "This symbol only has one unit. This control has no effect."
@@ -11226,9 +11225,8 @@ msgid "Unit:"
 msgstr "유닛:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
-#, fuzzy
 msgid "Alternate symbol (De Morgan)"
-msgstr "대체 심볼 (드 모르간)"
+msgstr "대체 기호 (드 모르간)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:138
 msgid ""
@@ -15226,9 +15224,9 @@ msgstr "현재 열려있는 회로도가 없습니다."
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is not writable."
-msgstr "심볼 라이브러리 '%s'은(는) 쓸 수 없습니다."
+msgstr "심볼 라이브러리 '%s'에 쓸 수 없습니다."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:576
 #: eeschema/symbol_editor/symbol_editor.cpp:1174
@@ -16074,32 +16072,26 @@ msgid "Assign a netclass to the net of the selected wire"
 msgstr "선택한 와이어의 네트에 네트클래스 할당"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "De Morgan Conversion"
 msgstr "드 모르간 변환"
 
 #: eeschema/tools/ee_actions.cpp:453
-#, fuzzy
 msgid "Switch between De Morgan representations"
 msgstr "드 모르간 표현 간 전환"
 
 #: eeschema/tools/ee_actions.cpp:458
-#, fuzzy
 msgid "De Morgan Standard"
 msgstr "드 모르간 표준"
 
 #: eeschema/tools/ee_actions.cpp:458
-#, fuzzy
 msgid "Switch to standard De Morgan representation"
 msgstr "표준 드 모르간 표현으로 전환"
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "De Morgan Alternate"
 msgstr "드 모르간 대체"
 
 #: eeschema/tools/ee_actions.cpp:463
-#, fuzzy
 msgid "Switch to alternate De Morgan representation"
 msgstr "대체 드 모르간 표현으로 전환"
 
@@ -16216,14 +16208,12 @@ msgid "Edit with Symbol Editor"
 msgstr "심볼 편집기로 편집"
 
 #: eeschema/tools/ee_actions.cpp:551
-#, fuzzy
 msgid "Open the selected symbol in the Symbol Editor"
-msgstr "선택한 풋프린트를 풋프린트 편집기에서 열기"
+msgstr "심볼 편집기에서 선택한 심볼 열기"
 
 #: eeschema/tools/ee_actions.cpp:557
-#, fuzzy
 msgid "Open the library symbol in the Symbol Editor"
-msgstr "심볼 편집을 위해 심볼 편집기를 엽니다"
+msgstr "심볼 편집기에서 심볼 라이브러리 열기"
 
 #: eeschema/tools/ee_actions.cpp:562
 msgid "Edit Symbol Fields..."
@@ -17057,15 +17047,14 @@ msgid "Zero format"
 msgstr "0 표시 형식"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
-#, fuzzy
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
-"파일 내의 정수는 앞뒤 0을 제거할 수 있습니다.\n"
-"'선행 0 없음' 형식은 선행되는 0이 제거된다는 의미입니다\n"
-"'후행 0 없음' 형식은 후행되는 0이 제거된다는 의미입니다"
+"파일내의 정수는 0이 제거될 수 있습니다.\n"
+"선행 0 형식이 없으면 선행 0이 제거됨을 의미함\n"
+"후행 0 형식이 없으면 후행 0이 제거됨을 의미함"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "Coordinates Format"
@@ -17804,19 +17793,19 @@ msgid "Highlight"
 msgstr "강조"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Component '%s'"
-msgstr "컴포넌트 \"%s\" 의 개체 강조"
+msgstr "컴포넌트 '%s' 의 개체 강조"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Net '%s'"
-msgstr "네트 \"%s\"의 개체 강조"
+msgstr "네트 '%s'의 개체 강조"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "조리개 유형 \"%s\" 강조"
+msgstr "조리개 유형 '%s' 강조"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
 #, c-format
@@ -18034,13 +18023,13 @@ msgid "Unzip Project"
 msgstr "프로젝트 압축 풀기"
 
 #: kicad/files-io.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Open '%s'\n"
 msgstr ""
 "\n"
-"열기 \"%s\"\n"
+"열기 '%s'\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
@@ -18133,9 +18122,9 @@ msgid "Restoring session"
 msgstr "세션 복원 중"
 
 #: kicad/kicad_manager_frame.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid "Restoring '%s'"
-msgstr "\"%s\" 복원 중"
+msgstr "'%s' 복원 중"
 
 #: kicad/menubar.cpp:56
 msgid "Clear Recent Projects"
@@ -18214,9 +18203,8 @@ msgid "Add repository"
 msgstr "레포지토리 추가"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-#, fuzzy
 msgid "Manage Repositories"
-msgstr "레포지토리 관리"
+msgstr "저장소 관리"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
 #, c-format
@@ -18638,9 +18626,8 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr "이 템플릿에 대한 메타 정보 폴더를 열 수 없습니다!"
 
 #: kicad/project_template.cpp:63
-#, fuzzy
 msgid "Couldn't find the meta HTML information file for this template!"
-msgstr "이 템플릿에 대한 메타 HTML 정보 파일을 찾을 수 없습니다!"
+msgstr "이 템플릿의 메타 HTML 정보 파일을 찾을 수 없습니다!"
 
 #: kicad/project_template.cpp:238
 #, c-format
@@ -18774,9 +18761,9 @@ msgid "Print the contents of the file"
 msgstr "파일 내용 인쇄"
 
 #: kicad/project_tree_pane.cpp:857
-#, fuzzy, c-format
+#, c-format
 msgid "Change filename: '%s'"
-msgstr "파일 이름 변경: \"%s\""
+msgstr "파일 이름 변경: '%s'"
 
 #: kicad/project_tree_pane.cpp:859
 msgid "Change filename"
@@ -19487,7 +19474,6 @@ msgid "Error writing objects to clipboard"
 msgstr "클립보드에 객체 쓰는 중에 오류 발생"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19500,9 +19486,9 @@ msgid ""
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
 "### 브리지 티형 감쇠기\n"
-"___a___ is attenuation in dB<br>\n"
-"___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
-"___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
+"___a___ 는 dB 단위의 감쇠이다<br>\n"
+"___Z<sub>in</sub>___ &#x2126 에서 원하는 입력 임피던스;<br>\n"
+"___Z<sub>out</sub>___ &#x2126 에서 원하는 출력 임피던스;<br>\n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
 "___L = 10<sup>a/20</up>___\n"
@@ -19510,7 +19496,6 @@ msgstr ""
 "___R<sub>2</sub> = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19525,9 +19510,9 @@ msgid ""
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 msgstr ""
 "### 파이형 감쇠기\n"
-"___a___ is attenuation in dB<br>\n"
-"___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
-"___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
+"___a___ 는 dB 단위의 감쇠이다<br>\n"
+"___Z<sub>in</sub>___ &#x2126 에서 원하는 입력 임피던스;<br>\n"
+"___Z<sub>out</sub>___ &#x2126 에서 원하는 출력 임피던스;<br>\n"
 "\n"
 "___L = 10<sup>a/20</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
@@ -19537,7 +19522,6 @@ msgstr ""
 "___R<sub>3</sub> = 1 / (A/Z<sub>out</sub> &minus; 1/R<sub>2</sub>)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -19548,15 +19532,14 @@ msgid ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
 "### 분할 감쇠기\n"
-"Attenuation is 6 dB  \n"
-"___Z<sub>in</sub>___ is desired input impedance in &#x2126;  \n"
-"___Z<sub>out</sub>___ is desired output impedance in &#x2126;  \n"
+"감쇠는 6dB입니다  \n"
+"___Z<sub>in</sub>___ &#x2126 에서 원하는 입력 임피던스;  \n"
+"___Z<sub>out</sub>___ &#x2126 에서 원하는 출력 임피던스;  \n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
 "___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19571,9 +19554,9 @@ msgid ""
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 msgstr ""
 "### 티형 감쇠기\n"
-"___a___ is attenuation in dB<br>\n"
-"___Z<sub>in</sub>___ is desired input impedance in &#x2126;<br>\n"
-"___Z<sub>out</sub>___ is desired output impedance in &#x2126;<br>\n"
+"___a___는 dB 단위의 감쇠이다<br>\n"
+"___Z<sub>in</sub>___ &#x2126 에서 원하는 입력 임피던스;<br>\n"
+"___Z<sub>out</sub>___ &#x2126 에서 원하는 출력 임피던스;<br>\n"
 "\n"
 "___L = 10<sup>a/20</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br>\n"
@@ -19588,9 +19571,8 @@ msgid "Attenuation more than %f dB"
 msgstr "감쇠량은 %f dB보다 크게 설정하세요"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
-#, fuzzy
 msgid "Pi"
-msgstr "핀"
+msgstr "파이"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Tee"
@@ -22801,19 +22783,16 @@ msgid "Circular Array"
 msgstr "원형 배열"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
-#, fuzzy
 msgid "Footprint Annotation"
-msgstr "풋프린트 문서"
+msgstr "풋프린트 주석"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
-#, fuzzy
 msgid "Keep existing reference designators"
-msgstr "참조 지정자의 일치 항목 바꾸기"
+msgstr "기존 참조 지정자 유지"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
-#, fuzzy
 msgid "Assign unique reference designators"
-msgstr "붙여넣은 심볼에 고유 참조 지정자 할당"
+msgstr "고유 참조 지정자 할당"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:357
 msgid ""
@@ -25933,7 +25912,6 @@ msgid "Plot format:"
 msgstr "플롯 유형:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
-#, fuzzy
 msgid "Include Layers"
 msgstr "레이어 포함"
 
@@ -25966,9 +25944,8 @@ msgid "Plot the contents of the PCB edge layer on all layers"
 msgstr "PCB 에지 레이어의 내용물을 모든 레이어에 그림으로 표시"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
-#, fuzzy
 msgid "Sketch pads on fabrication layers"
-msgstr "Fab 레이어 위에 패드 스케치"
+msgstr "Fab 제작 레이어에 패드 그리기"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
@@ -26041,18 +26018,14 @@ msgid "Check zone fills before plotting"
 msgstr "플로팅 전에 채워진 영역을 체크"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
-#, fuzzy
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
-msgstr "전역 솔더 마스크 최소 폭과 (또는) 간격이 0으로 설정되지 않았습니다. "
+msgstr "전역 솔더 마스크 최소 폭 또는 간격이 0으로 설정되지 않았습니다. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
-#, fuzzy
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
-msgstr ""
-"특히 솔더 마스크의 최소 폭에서, 대부분의 기판 제조 업체는 값을 0으로 생각하"
-"고 업체마다의 제약을 사용합니다."
+msgstr "솔더 마스크의 최소 폭에서 대부분의 기판 제조 업체는 값을 0으로 생각하고 자체 제약 조건을 사용합니다."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -26131,20 +26104,18 @@ msgid "Include netlist attributes"
 msgstr "네트리스트 속성 포함"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
-#, fuzzy
 msgid ""
 "Include netlist metadata and aperture attributes in Gerber files.\n"
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
 "거버 파일에 네트리스트 메타데이터와 조리개 속성을 포함합니다.\n"
-"X1 형식이라면 이들은 주석 처리됩니다.\n"
-"CAM 도구와 거버 뷰어의 연결을 확인하기 위해 사용됩니다."
+"X1 형식의 주석입니다.\n"
+"CAM 도구와 거버 뷰어의 연결을 확인하는 데 사용됩니다."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
-#, fuzzy
 msgid "Disable aperture macros (not recommended)"
-msgstr "조리개 매크로 비활성화 (권장되지 않음)"
+msgstr "조리개 매크로 비활성화 (권장하지 않음)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:242
 msgid ""
@@ -26212,9 +26183,8 @@ msgid "Uncheck to plot graphic items using their center lines"
 msgstr "체크를 풀면 그래픽 개체의 중앙선을 이용하여 플롯합니다"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot text"
-msgstr "KiCad 서체를 사용하여 텍스트 플롯"
+msgstr "KiCad 글꼴을 사용하여 텍스트 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
 msgid ""
@@ -26643,9 +26613,9 @@ msgid "Select Manufacturer"
 msgstr "제조업체 선택"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:25
-#, fuzzy, c-format
+#, c-format
 msgid "from %s"
-msgstr "[%s에서]"
+msgstr "%s 에서"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
 #, c-format
@@ -26653,9 +26623,8 @@ msgid "Details: %s"
 msgstr "세부 정보: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
-#, fuzzy
 msgid "Send project directly"
-msgstr "현재 프로젝트 저장"
+msgstr "프로젝트 직접 보내기"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
@@ -26763,7 +26732,6 @@ msgid "Constrain outline to H, V and 45 deg"
 msgstr "외곽선을 수평, 수직 또는 45도 각도로 제한"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:97
-#, fuzzy
 msgid "Draw the area using horizontal, vertical and 45 degree lines only"
 msgstr "이 영역에서는 수평, 수직, 45도 각도 선으로만 그리기"
 
@@ -26804,14 +26772,12 @@ msgid "Target Properties"
 msgstr "타겟 속성"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:82
-#, fuzzy
 msgid "Footprint Reference Properties"
-msgstr "풋프린트 속성"
+msgstr "풋프린트 참조 속성"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:83
-#, fuzzy
 msgid "Footprint Value Properties"
-msgstr "풋프린트 속성"
+msgstr "풋프린트 값 속성"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:84
 msgid "Footprint Text Properties"
@@ -27823,7 +27789,6 @@ msgid "On-board, non-copper"
 msgstr "On-board, 비 구리 레이어"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-#, fuzzy
 msgid "If you want a solder paste layer for front side of the board"
 msgstr "기판의 전면에 솔더 페이스트 레이어를 사용하고 싶은 경우"
 
@@ -28302,13 +28267,10 @@ msgid "User9"
 msgstr "사용자9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board manufacturer's recommendations for solder mask clearance and "
 "minimum web width."
-msgstr ""
-"솔더 마스크 클리어런스와 브릿지 최소 폭은 기판 제조 업체의 권장사항을 사용하"
-"세요."
+msgstr "솔더 마스크 간격 및 최소 웹 너비에 대한 기판 제조업체의 권장 사항을 사용하십시오."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
@@ -29050,9 +29012,9 @@ msgid "Unconditional rule applied."
 msgstr "조건 없는 규칙이 적용되었습니다."
 
 #: pcbnew/drc/drc_engine.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition \"%s\"."
-msgstr "규칙 조건 '%s' 확인 중."
+msgstr "규칙 조건 \"%s\" 확인 중."
 
 #: pcbnew/drc/drc_engine.cpp:1065
 msgid "Constraint applied."
@@ -32163,26 +32125,24 @@ msgstr ""
 "치로 변환됩니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3533
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
 "KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
-"CADSTAR 해칭 코드 '%s'은(는) 각 해치별로 다른 선 굵기를 가집니다. KiCad는 해"
-"칭에 대해 하나의 폭만을 지원합니다. 불러온 해칭은 첫 번째 해치에 정의된 폭을 "
-"사용합니다 (예: %.2fmm)."
+"CADSTAR 해칭 코드 '%s'은(는) 각 해치별로 다른 선 굵기를 가집니다. KiCad는 해칭에 대해 하나의 폭만을 지원합니다. "
+"불러온 해칭은 첫 번째 해치에 정의된 폭을 사용합니다 (예: %.2fmm)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3545
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
 "KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
-"CADSTAR 해칭 코드 '%s'은(는) 각 해치별로 다른 스텝 크기를 가집니다. KiCad는 "
-"해칭에 대해 하나의 스텝 크기를 지원합니다. 불러와진 해칭은 첫 번째 해치에 정"
-"의된 스텝 크기를 사용합니다 (예: %.2fmm)."
+"CADSTAR 해칭 코드 '%s'은(는) 각 해치별로 다른 스텝 크기를 가집니다. KiCad는 해칭에 대해 하나의 스텝 크기를 "
+"지원합니다. 불러와진 해칭은 첫 번째 해치에 정의된 스텝 크기를 사용합니다 (예: %.2fmm)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3558
 #, c-format
