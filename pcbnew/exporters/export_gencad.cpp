@@ -1271,13 +1271,21 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
                 }
 
                 case SHAPE_T::ARC:
+                {
+                    wxPoint start = shape->GetStart0();
+                    wxPoint end = shape->GetEnd0();
+
+                    if( shape->GetArcAngle() > 0 )
+                        std::swap( start, end );
+
                     fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                             shape->GetStart0().x / SCALE_FACTOR,
-                             -shape->GetStart0().y / SCALE_FACTOR,
-                             shape->GetEnd0().x / SCALE_FACTOR,
-                             -shape->GetEnd0().y / SCALE_FACTOR,
+                             start.x / SCALE_FACTOR,
+                             -start.y / SCALE_FACTOR,
+                             end.x / SCALE_FACTOR,
+                             -end.y / SCALE_FACTOR,
                              shape->GetCenter0().x / SCALE_FACTOR,
                              -shape->GetCenter0().y / SCALE_FACTOR );
+                }
                     break;
 
                 case SHAPE_T::POLY:
