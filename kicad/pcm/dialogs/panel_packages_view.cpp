@@ -59,7 +59,7 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
                           NULL, this );
 
     m_initSashPos = 380;
-    m_splitter1->SetPaneMinimums( 320, 460 );
+    m_splitter1->SetPaneMinimums( 350, 450 );
 
 #ifdef __WXGTK__
     // wxSearchCtrl vertical height is not calculated correctly on some GTK setups

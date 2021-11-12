@@ -11,6 +11,8 @@
 
 PANEL_PACKAGE_BASE::PANEL_PACKAGE_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
+	this->SetMinSize( wxSize( -1,84 ) );
+
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxHORIZONTAL );
 
@@ -45,16 +47,16 @@ PANEL_PACKAGE_BASE::PANEL_PACKAGE_BASE( wxWindow* parent, wxWindowID id, const w
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 
-	m_name = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_END );
+	m_name = new wxStaticText( this, wxID_ANY, _("Name"), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_END );
 	m_name->Wrap( -1 );
 	bSizer2->Add( m_name, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_desc = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_END|wxST_NO_AUTORESIZE );
+	m_desc = new wxStaticText( this, wxID_ANY, _("Description"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE );
 	m_desc->Wrap( -1 );
-	bSizer3->Add( m_desc, 1, wxALL|wxEXPAND, 5 );
+	bSizer3->Add( m_desc, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -63,7 +65,7 @@ PANEL_PACKAGE_BASE::PANEL_PACKAGE_BASE( wxWindow* parent, wxWindowID id, const w
 	bSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_button = new wxButton( this, wxID_ANY, _("Install"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_button, 0, wxALL, 5 );
+	bSizer4->Add( m_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	bSizer3->Add( bSizer4, 0, wxEXPAND, 5 );
@@ -77,6 +79,7 @@ PANEL_PACKAGE_BASE::PANEL_PACKAGE_BASE( wxWindow* parent, wxWindowID id, const w
 
 	this->SetSizer( bSizer1 );
 	this->Layout();
+	bSizer1->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PANEL_PACKAGE_BASE::OnClick ) );

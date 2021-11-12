@@ -83,6 +83,7 @@ private:
     bool                  m_selected = false;
     const ActionCallback& m_actionCallback;
     PACKAGE_VIEW_DATA     m_data;
+    int                   m_minHeight;
 };
 
 

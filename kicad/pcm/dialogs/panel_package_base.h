@@ -49,7 +49,7 @@ class PANEL_PACKAGE_BASE : public wxPanel
 
 	public:
 
-		PANEL_PACKAGE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,84 ), long style = wxBORDER_NONE|wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_PACKAGE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxBORDER_NONE|wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_PACKAGE_BASE();
 
 };

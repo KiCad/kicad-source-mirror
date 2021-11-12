@@ -19,13 +19,15 @@
  */
 
 #include <wx/dcclient.h>
+#include <math/util.h>
 
 #include "panel_package.h"
 
 PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
                               const PACKAGE_VIEW_DATA& aData ) :
         PANEL_PACKAGE_BASE( parent ),
-        m_actionCallback( aCallback ), m_data( aData )
+        m_actionCallback( aCallback ),
+        m_data( aData )
 {
     // Propagate clicks on static elements to the panel handler.
     m_name->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( PANEL_PACKAGE::OnClick ), NULL, this );
@@ -45,10 +47,10 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
     // Set min width to 0 otherwise wxStaticLabel really doesn't want to shrink on resize
     m_desc->SetMinSize( wxSize( 0, -1 ) );
 
-    Layout();
+    m_minHeight = GetMinHeight();
 
-    m_desc->SetLabel( m_data.package.description );
-    m_desc->Wrap( m_desc->GetClientSize().GetWidth() );
+    wxSizeEvent dummy;
+    OnSize( dummy );
 
     SetState( m_data.state );
 }
@@ -57,8 +59,19 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
 void PANEL_PACKAGE::OnSize( wxSizeEvent& event )
 {
     Layout();
+
+    int    nameLineHeight = m_name->GetTextExtent( "X" ).GetHeight();
+    double descLineHeight = m_desc->GetTextExtent( "X" ).GetHeight() * 1.2 /* leading */;
+
     m_desc->SetLabel( m_data.package.description );
-    m_desc->Wrap( m_desc->GetClientSize().GetWidth() );
+    m_desc->Wrap( m_desc->GetClientSize().GetWidth() - 10 );
+    descLineHeight = wxSplit( m_desc->GetLabel(), '\n' ).size() * descLineHeight;
+
+    wxSize minSize = GetMinSize();
+    minSize.y = std::max( nameLineHeight + KiROUND( descLineHeight ) + 15, m_minHeight );
+    SetMinSize( minSize );
+
+    Layout();
 }
 
 
