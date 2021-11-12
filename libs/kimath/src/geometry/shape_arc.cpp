@@ -231,67 +231,24 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I
     if( aSeg.A == aSeg.B )
         return Collide( aSeg.A, aClearance, aActual, aLocation );
 
-    int minDist = aClearance + m_width / 2;
     VECTOR2I center = GetCenter();
-    ecoord dist_sq;
-    ecoord closest_dist_sq = VECTOR2I::ECOORD_MAX;
-    VECTOR2I nearest;
+    CIRCLE   circle( center, GetRadius() );
 
-    VECTOR2I ab = ( aSeg.B - aSeg.A );
-    VECTOR2I ac = ( center - aSeg.A );
+    // Possible points of the collision are:
+    // 1. Intersetion of the segment with the full circle
+    // 2. Closest point on the segment to the center of the circle
+    // 3. End points of the segment
 
-    ecoord lenAbSq = ab.SquaredEuclideanNorm();
-    double lambda = (double) ac.Dot( ab ) / (double) lenAbSq;
+    std::vector<VECTOR2I> candidatePts = circle.Intersect( aSeg );
 
-    if( lambda >= 0.0 && lambda <= 1.0 )
+    candidatePts.push_back( aSeg.NearestPoint( center ) );
+    candidatePts.push_back( aSeg.A );
+    candidatePts.push_back( aSeg.B );
+
+    for( const VECTOR2I& candidate : candidatePts )
     {
-        VECTOR2I p;
-
-        p.x = (double) aSeg.A.x * lambda + (double) aSeg.B.x * (1.0 - lambda);
-        p.y = (double) aSeg.A.y * lambda + (double) aSeg.B.y * (1.0 - lambda);
-
-        dist_sq = ( m_start - p ).SquaredEuclideanNorm();
-
-        if( dist_sq < closest_dist_sq )
-        {
-            closest_dist_sq = dist_sq;
-            nearest = p;
-        }
-
-        dist_sq = ( m_end - p ).SquaredEuclideanNorm();
-
-        if( dist_sq < closest_dist_sq )
-        {
-            closest_dist_sq = dist_sq;
-            nearest = p;
-        }
-    }
-
-    dist_sq = aSeg.SquaredDistance( m_start );
-
-    if( dist_sq < closest_dist_sq )
-    {
-        closest_dist_sq = dist_sq;
-        nearest = m_start;
-    }
-
-    dist_sq = aSeg.SquaredDistance( m_end );
-
-    if( dist_sq < closest_dist_sq )
-    {
-        closest_dist_sq = dist_sq;
-        nearest = m_end;
-    }
-
-    if( closest_dist_sq == 0 || closest_dist_sq < SEG::Square( minDist ) )
-    {
-        if( aLocation )
-            *aLocation = nearest;
-
-        if( aActual )
-            *aActual = std::max( 0, (int) sqrt( closest_dist_sq ) - m_width / 2 );
-
-        return true;
+        if( Collide( candidate, aClearance, aActual, aLocation ) )
+            return true;
     }
 
     return false;

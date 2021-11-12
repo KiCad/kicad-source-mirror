@@ -225,8 +225,70 @@ int playground_main_func( int argc, char* argv[] )
     return 0;
 }
 
+
+
+int drawShapes( int argc, char* argv[] )
+{
+    SHAPE_ARC arc( VECTOR2I( 206000000, 140110000 ), VECTOR2I( 201574617, 139229737 ),
+                   VECTOR2I( 197822958, 136722959 ), 250000 );
+
+    SHAPE_LINE_CHAIN lc( { /* VECTOR2I( 159600000, 142500000 ), VECTOR2I( 159600000, 142600000 ),
+                           VECTOR2I( 166400000, 135800000 ), VECTOR2I( 166400000, 111600000 ),
+                           VECTOR2I( 190576804, 111600000 ), VECTOR2I( 192242284, 113265480 ),
+                           VECTOR2I( 192255720, 113265480 ),*/
+                           VECTOR2I( 203682188, 124691948 ), VECTOR2I( 203682188, 140332188 ),
+                           /* VECTOR2I( 206000000, 142650000 ) */ },
+                         false );
+
+    auto frame = new PNS_LOG_VIEWER_FRAME( nullptr );
+    Pgm().App().SetTopWindow( frame ); // wxApp gets a face.
+    frame->Show();
+
+    overlay = frame->GetOverlay();
+
+
+    overlay->SetIsFill( false );
+    overlay->SetLineWidth( arc.GetWidth() );
+    overlay->SetStrokeColor( RED );
+    overlay->Arc( arc );
+    overlay->SetLineWidth( arc.GetWidth() / 20 );
+    overlay->SetStrokeColor( GREEN );
+    overlay->Polyline( lc );
+
+    overlay->SetLineWidth( 80000.0 );
+    overlay->SetStrokeColor( CYAN );
+
+    for( int i = 0; i < lc.PointCount(); ++i )
+    {
+        int mult = ( i % 2 ) ? 1 : -1;
+        overlay->AnnotatedPoint( lc.GetPoint( i ), arc.GetWidth() * 2 );
+        overlay->SetGlyphSize( { 800000.0, 800000.0 } );
+        overlay->BitmapText( wxString::Format( "x=%d, y=%d", lc.GetPoint( i ).x, lc.GetPoint( i ).y ),
+                lc.GetPoint( i ) + VECTOR2I( 0, mult*arc.GetWidth() * 4 ), 0 );
+    }
+
+    arc.Collide( &lc, 100000 );
+
+    BOX2I vp = arc.BBox();
+    vp.Merge( lc.BBox() );
+    vp.Inflate( (800000 + arc.GetWidth() * 4 )*2);
+    frame->GetPanel()->GetView()->SetViewport( BOX2D( vp.GetOrigin(), vp.GetSize() ) );
+
+    overlay = nullptr;
+
+    return 0;
+}
+
+
 static bool registered = UTILITY_REGISTRY::Register( {
         "playground",
         "Geometry/drawing playground",
         playground_main_func,
+} );
+
+
+static bool registered1 = UTILITY_REGISTRY::Register( {
+        "drawShapes",
+        "drawing shapes",
+        drawShapes,
 } );

@@ -844,6 +844,31 @@ BOOST_AUTO_TEST_CASE( CollideArc )
 }
 
 
+BOOST_AUTO_TEST_CASE( CollideArcToShapeLineChain )
+{
+    SHAPE_ARC arc( VECTOR2I( 206000000, 140110000 ), VECTOR2I( 201574617, 139229737 ),
+                   VECTOR2I( 197822958, 136722959 ), 250000 );
+
+    SHAPE_LINE_CHAIN lc( { VECTOR2I( 159600000, 142500000 ), VECTOR2I( 159600000, 142600000 ),
+                           VECTOR2I( 166400000, 135800000 ), VECTOR2I( 166400000, 111600000 ),
+                           VECTOR2I( 190576804, 111600000 ), VECTOR2I( 192242284, 113265480 ),
+                           VECTOR2I( 192255720, 113265480 ), VECTOR2I( 203682188, 124691948 ),
+                           VECTOR2I( 203682188, 140332188 ), VECTOR2I( 206000000, 142650000 ) },
+                         false );
+
+
+
+    SHAPE* arc_sh = &arc;
+    SHAPE* lc_sh = &lc;
+
+    BOOST_CHECK_EQUAL( arc_sh->Collide( &lc, 100000 ), true );
+    BOOST_CHECK_EQUAL( lc_sh->Collide( &arc, 100000 ), true );
+
+    SEG seg( VECTOR2I( 203682188, 124691948 ), VECTOR2I( 203682188, 140332188 ) );
+    BOOST_CHECK_EQUAL( arc.Collide( seg, 0 ), true );
+}
+
+
 BOOST_AUTO_TEST_CASE( CollideArcToPolygonApproximation )
 {
     SHAPE_ARC arc( VECTOR2I( 73843527, 74355869 ), VECTOR2I( 71713528, 72965869 ), -76.36664803,
