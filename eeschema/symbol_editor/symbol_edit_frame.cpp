@@ -349,43 +349,43 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
     auto haveSymbolCond =
-        [this] ( const SELECTION& )
-        {
-            return m_symbol;
-        };
+            [this]( const SELECTION& )
+            {
+                return m_symbol;
+            };
 
     auto isEditableCond =
-        [this] ( const SELECTION& )
-        {
-            // Only root symbols from the new s-expression libraries or the schematic
-            // are editable.
-            return IsSymbolEditable() && !IsSymbolAlias();
-        };
+            [this]( const SELECTION& )
+            {
+                // Only root symbols from the new s-expression libraries or the schematic
+                // are editable.
+                return IsSymbolEditable() && !IsSymbolAlias();
+            };
 
     auto libModifiedCondition =
-        [this] ( const SELECTION& sel )
-        {
-            return m_libMgr->HasModifications();
-        };
+            [this]( const SELECTION& sel )
+            {
+                return m_libMgr->HasModifications();
+            };
 
     auto libSelectedCondition =
-        [this] ( const SELECTION& sel )
-        {
-            return !GetTargetLibId().GetLibNickname().empty();
-        };
+            [this]( const SELECTION& sel )
+            {
+                return !GetTargetLibId().GetLibNickname().empty();
+            };
 
     auto canEditProperties =
-        [this] ( const SELECTION& sel )
-        {
-            return m_symbol && ( !IsSymbolFromLegacyLibrary() || IsSymbolFromSchematic() );
-        };
+            [this]( const SELECTION& sel )
+            {
+                return m_symbol && ( !IsSymbolFromLegacyLibrary() || IsSymbolFromSchematic() );
+            };
 
     auto saveSymbolAsCondition =
-        [ this ]( const SELECTION& aSel )
-        {
-            LIB_ID sel = GetTargetLibId();
-            return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
-        };
+            [this]( const SELECTION& aSel )
+            {
+                LIB_ID sel = GetTargetLibId();
+                return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
+            };
 
     mgr->SetConditions( ACTIONS::saveAll,           ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
     mgr->SetConditions( ACTIONS::save,              ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
@@ -419,56 +419,56 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::zoomTool,          CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
     mgr->SetConditions( ACTIONS::selectionTool,     CHECK( cond.CurrentTool( ACTIONS::selectionTool ) ) );
 
-     auto pinTypeCond =
-        [this] ( const SELECTION& )
-        {
-            return GetRenderSettings()->m_ShowPinsElectricalType;
-        };
+    auto pinTypeCond =
+            [this]( const SELECTION& )
+            {
+                return GetRenderSettings()->m_ShowPinsElectricalType;
+            };
 
     auto showCompTreeCond =
-        [this] ( const SELECTION& )
-        {
-            return IsSymbolTreeShown();
-        };
+            [this]( const SELECTION& )
+            {
+                return IsSymbolTreeShown();
+            };
 
     mgr->SetConditions( EE_ACTIONS::showElectricalTypes, CHECK( pinTypeCond ) );
     mgr->SetConditions( EE_ACTIONS::showSymbolTree, CHECK( showCompTreeCond ) );
 
     auto demorganCond =
-        [this] ( const SELECTION& )
-        {
-            return GetShowDeMorgan();
-        };
+            [this]( const SELECTION& )
+            {
+                return GetShowDeMorgan();
+            };
 
     auto demorganStandardCond =
-        [this] ( const SELECTION& )
-        {
-            return m_convert == LIB_ITEM::LIB_CONVERT::BASE;
-        };
+            [this]( const SELECTION& )
+            {
+                return m_convert == LIB_ITEM::LIB_CONVERT::BASE;
+            };
 
     auto demorganAlternateCond =
-        [this] ( const SELECTION& )
-        {
-            return m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN;
-        };
+            [this]( const SELECTION& )
+            {
+                return m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN;
+            };
 
     auto multiUnitModeCond =
-        [this] ( const SELECTION& )
-        {
-            return m_symbol && m_symbol->IsMulti() && !m_symbol->UnitsLocked();
-        };
+            [this]( const SELECTION& )
+            {
+                return m_symbol && m_symbol->IsMulti() && !m_symbol->UnitsLocked();
+            };
 
     auto syncedPinsModeCond =
-        [this] ( const SELECTION& )
-        {
-            return m_SyncPinEdit;
-        };
+            [this]( const SELECTION& )
+            {
+                return m_SyncPinEdit;
+            };
 
     auto haveDatasheetCond =
-        [this] ( const SELECTION& )
-        {
-            return m_symbol && !m_symbol->GetDatasheetField().GetText().IsEmpty();
-        };
+            [this]( const SELECTION& )
+            {
+                return m_symbol && !m_symbol->GetDatasheetField().GetText().IsEmpty();
+            };
 
     mgr->SetConditions( EE_ACTIONS::showDatasheet,    ENABLE( haveDatasheetCond ) );
     mgr->SetConditions( EE_ACTIONS::symbolProperties, ENABLE( canEditProperties && haveSymbolCond ) );
