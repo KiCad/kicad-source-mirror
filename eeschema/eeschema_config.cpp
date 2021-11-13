@@ -116,6 +116,15 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
         SaveProjectSettings();
 
         Kiway().CommonSettingsChanged( false, true );
+
+        GetRenderSettings()->SetDefaultPenWidth( Schematic().Settings().m_DefaultLineWidth );
+        GetRenderSettings()->m_LabelSizeRatio  = Schematic().Settings().m_LabelSizeRatio;
+        GetRenderSettings()->m_TextOffsetRatio = Schematic().Settings().m_TextOffsetRatio;
+        GetRenderSettings()->m_PinSymbolSize   = Schematic().Settings().m_PinSymbolSize;
+        GetRenderSettings()->m_JunctionSize    = Schematic().Settings().m_JunctionSize;
+
+        GetCanvas()->GetView()->MarkDirty();
+        GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
         GetCanvas()->Refresh();
     }
 }

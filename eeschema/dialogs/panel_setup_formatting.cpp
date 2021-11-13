@@ -136,8 +136,6 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     if( m_choiceJunctionDotSize->GetSelection() != wxNOT_FOUND )
         settings.m_JunctionSizeChoice = m_choiceJunctionDotSize->GetSelection();
 
-    settings.m_JunctionSize = m_frame->GetSchematicJunctionSize();
-
     settings.m_IntersheetRefsShow        = m_showIntersheetsReferences->GetValue();
     settings.m_IntersheetRefsFormatShort = !m_radioFormatStandard->GetValue();
     settings.m_IntersheetRefsPrefix      = m_prefixCtrl->GetValue();
@@ -151,16 +149,6 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
     dtmp = DEFAULT_LABEL_SIZE_RATIO;
     m_labelSizeRatioCtrl->GetValue().ToDouble( &dtmp );
     settings.m_LabelSizeRatio = dtmp / 100.0;
-
-    m_frame->GetRenderSettings()->SetDefaultPenWidth( settings.m_DefaultLineWidth );
-    m_frame->GetRenderSettings()->m_LabelSizeRatio  = settings.m_LabelSizeRatio;
-    m_frame->GetRenderSettings()->m_TextOffsetRatio = settings.m_TextOffsetRatio;
-    m_frame->GetRenderSettings()->m_PinSymbolSize   = settings.m_PinSymbolSize;
-    m_frame->GetRenderSettings()->m_JunctionSize    = settings.m_JunctionSize;
-
-    m_frame->GetCanvas()->GetView()->MarkDirty();
-    m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
-    m_frame->GetCanvas()->Refresh();
 
     return true;
 }
