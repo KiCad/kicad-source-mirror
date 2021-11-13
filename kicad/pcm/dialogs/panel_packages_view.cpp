@@ -84,6 +84,9 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
                                                                           false ) );
     }
 
+    // Most likely should be changed to wxGridSelectNone once WxWidgets>=3.1.5 is mandatory.
+    m_gridVersions->SetSelectionMode( WX_GRID::wxGridSelectRows );
+
     m_packageListWindow->SetBackgroundColour( wxStaticText::GetClassDefaultAttributes().colBg );
     m_infoScrollWindow->SetBackgroundColour( wxStaticText::GetClassDefaultAttributes().colBg );
     m_infoScrollWindow->EnableScrolling( false, true );
@@ -313,6 +316,9 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
         m_gridVersions->SetColSize( col, m_gridVersions->GetVisibleWidth( col, true, true,
                                                                           false ) );
     }
+
+    if( m_gridVersions->GetNumberRows() >= 1 )
+        m_gridVersions->SelectRow( 0 );
 
     m_gridVersions->Thaw();
 
