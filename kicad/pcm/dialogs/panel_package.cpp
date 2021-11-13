@@ -111,30 +111,14 @@ void PANEL_PACKAGE::SetState( PCM_PACKAGE_STATE aState )
 
 void PANEL_PACKAGE::OnButtonClicked( wxCommandEvent& event )
 {
-    // Versions are already presorted in descending order
     if( m_data.state == PPS_AVAILABLE )
     {
-        // Find last stable compatible version
-        auto ver_it = std::find_if( m_data.package.versions.begin(), m_data.package.versions.end(),
-                                    []( const PACKAGE_VERSION& ver )
-                                    {
-                                        return ver.compatible && ver.status == PVS_STABLE;
-                                    } );
+        wxString version = GetPreferredVersion();
 
-        // If not found then find any compatible version
-        if( ver_it == m_data.package.versions.end() )
-        {
-            ver_it = std::find_if( m_data.package.versions.begin(), m_data.package.versions.end(),
-                                   []( const PACKAGE_VERSION& ver )
-                                   {
-                                       return ver.compatible;
-                                   } );
-        }
+        if( version.IsEmpty() )
+            return;
 
-        if( ver_it == m_data.package.versions.end() )
-            return; // Shouldn't happen
-
-        m_actionCallback( m_data, PPA_INSTALL, ver_it->version );
+        m_actionCallback( m_data, PPA_INSTALL, version );
     }
     else
     {
@@ -176,4 +160,32 @@ void PANEL_PACKAGE::SetSelected( bool aSelected )
 {
     m_selected = aSelected;
     Refresh();
+}
+
+
+wxString PANEL_PACKAGE::GetPreferredVersion() const
+{
+    // Versions are already presorted in descending order
+
+    // Find last stable compatible version
+    auto ver_it = std::find_if( m_data.package.versions.begin(), m_data.package.versions.end(),
+                                []( const PACKAGE_VERSION& ver )
+                                {
+                                    return ver.compatible && ver.status == PVS_STABLE;
+                                } );
+
+    // If not found then find any compatible version
+    if( ver_it == m_data.package.versions.end() )
+    {
+        ver_it = std::find_if( m_data.package.versions.begin(), m_data.package.versions.end(),
+                               []( const PACKAGE_VERSION& ver )
+                               {
+                                   return ver.compatible;
+                               } );
+    }
+
+    if( ver_it == m_data.package.versions.end() )
+        return wxEmptyString; // Shouldn't happen
+
+    return ver_it->version;
 }

@@ -75,6 +75,9 @@ public:
 
     void OnSize( wxSizeEvent& event ) override;
 
+    ///< Get preferred version. If criteria are not met, return wxEmptyString
+    wxString GetPreferredVersion() const;
+
     const PACKAGE_VIEW_DATA& GetPackageData() const { return m_data; };
 
 private:
