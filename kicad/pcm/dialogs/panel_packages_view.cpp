@@ -316,10 +316,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
 
     m_gridVersions->Thaw();
 
-    if( aPackageData.state == PPS_AVAILABLE || aPackageData.state == PPS_UNAVAILABLE )
-        m_buttonInstall->Enable();
-    else
-        m_buttonInstall->Disable();
+    updateDetailsButtons();
 
     m_infoText->Show( true );
     m_sizerVersions->Show( true );
@@ -366,6 +363,29 @@ wxString PANEL_PACKAGES_VIEW::toHumanReadableSize( const boost::optional<uint64_
 }
 
 
+bool PANEL_PACKAGES_VIEW::canDownload() const
+{
+    if( !m_currentSelected )
+        return false;
+
+    return m_gridVersions->GetNumberRows() == 1 || m_gridVersions->GetSelectedRows().size() == 1;
+}
+
+
+bool PANEL_PACKAGES_VIEW::canInstall() const
+{
+    if( !m_currentSelected )
+        return false;
+
+    const PACKAGE_VIEW_DATA& packageData = m_currentSelected->GetPackageData();
+
+    if( packageData.state != PPS_AVAILABLE && packageData.state != PPS_UNAVAILABLE )
+        return false;
+
+    return m_gridVersions->GetNumberRows() == 1 || m_gridVersions->GetSelectedRows().size() == 1;
+}
+
+
 void PANEL_PACKAGES_VIEW::SetPackageState( const wxString&         aPackageId,
                                            const PCM_PACKAGE_STATE aState ) const
 {
@@ -388,21 +408,23 @@ void PANEL_PACKAGES_VIEW::OnVersionsCellClicked( wxGridEvent& event )
 {
     m_gridVersions->ClearSelection();
     m_gridVersions->SelectRow( event.GetRow() );
+
+    updateDetailsButtons();
 }
 
 
 void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
 {
-    if( m_gridVersions->GetNumberRows() == 1 )
-        m_gridVersions->SelectRow( 0 );
-
-    const wxArrayInt selectedRows = m_gridVersions->GetSelectedRows();
-
-    if( !m_currentSelected || selectedRows.size() != 1 )
+    if( !canDownload() )
     {
         wxBell();
         return;
     }
+
+    if( m_gridVersions->GetNumberRows() == 1 )
+        m_gridVersions->SelectRow( 0 );
+
+    const wxArrayInt selectedRows = m_gridVersions->GetSelectedRows();
 
     wxString           version = m_gridVersions->GetCellValue( selectedRows[0], COL_VERSION );
     const PCM_PACKAGE& package = m_currentSelected->GetPackageData().package;
@@ -474,16 +496,16 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
 
 void PANEL_PACKAGES_VIEW::OnInstallVersionClicked( wxCommandEvent& event )
 {
-    if( m_gridVersions->GetNumberRows() == 1 )
-        m_gridVersions->SelectRow( 0 );
-
-    const wxArrayInt selectedRows = m_gridVersions->GetSelectedRows();
-
-    if( !m_currentSelected || selectedRows.size() != 1 )
+    if( !canInstall() )
     {
         wxBell();
         return;
     }
+
+    if( m_gridVersions->GetNumberRows() == 1 )
+        m_gridVersions->SelectRow( 0 );
+
+    const wxArrayInt selectedRows = m_gridVersions->GetSelectedRows();
 
     wxString           version = m_gridVersions->GetCellValue( selectedRows[0], COL_VERSION );
     const PCM_PACKAGE& package = m_currentSelected->GetPackageData().package;
@@ -516,6 +538,8 @@ void PANEL_PACKAGES_VIEW::OnShowAllVersionsClicked( wxCommandEvent& event )
         wxMouseEvent dummy;
         m_currentSelected->OnClick( dummy );
     }
+
+    updateDetailsButtons();
 }
 
 
@@ -583,6 +607,13 @@ void PANEL_PACKAGES_VIEW::updatePackageList()
     m_packageListWindow->FitInside();
     m_packageListWindow->SetScrollRate( 0, 15 );
     m_packageListWindow->Layout();
+}
+
+
+void PANEL_PACKAGES_VIEW::updateDetailsButtons()
+{
+    m_buttonDownload->Enable( canDownload() );
+    m_buttonInstall->Enable( canInstall() );
 }
 
 

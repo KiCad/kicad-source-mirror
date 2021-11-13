@@ -87,6 +87,9 @@ private:
     ///< Updates package listing according to search term
     void updatePackageList();
 
+    ///< Updates buttons below the package details: Download and Install
+    void updateDetailsButtons();
+
     ///< Updates details panel
     void setPackageDetails( const PACKAGE_VIEW_DATA& aPackageData );
 
@@ -95,6 +98,12 @@ private:
 
     ///< Bytes to Kb/Mb/Gb string or "-" if absent
     wxString toHumanReadableSize( const boost::optional<uint64_t> size ) const;
+
+    ///< Returns true if it the download operation can be performed
+    bool canDownload() const;
+
+    ///< Returns true if the install operation can be performed
+    bool canInstall() const;
 
 private:
     ActionCallback                               m_actionCallback;
