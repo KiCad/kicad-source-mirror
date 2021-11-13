@@ -327,7 +327,18 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 
     // Close the project if we are standalone, so it gets cleaned up properly
     if( Kiface().IsSingle() )
-        GetSettingsManager()->UnloadProject( &Prj(), false );
+    {
+        try
+        {
+            GetSettingsManager()->UnloadProject( &Prj(), false );
+        }
+        catch( const nlohmann::detail::type_error& exc )
+        {
+            // This may be overkill and could be an assertion but we are more likely to
+            // find any settings manager errors this way.
+            wxLogError( wxT( "Settings exception '%s' occurred." ), exc.what() );
+        }
+    }
 }
 
 

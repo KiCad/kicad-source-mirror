@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -52,6 +52,10 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
     m_MagneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
     m_MagneticItems.tracks   = MAGNETIC_OPTIONS::NO_EFFECT;
     m_MagneticItems.graphics = true;
+
+    m_AuiPanels.appearance_panel_tab = 0;
+    m_AuiPanels.right_panel_width = -1;
+    m_AuiPanels.show_layer_manager = true;
 
     m_params.emplace_back( new PARAM<int>( "window.lib_width",
             &m_LibWidth, 250 ) );

@@ -1749,6 +1749,9 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
 bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool aImmediateMode )
 {
     PCB_SHAPE*&  graphic = *aGraphic;
+
+    wxCHECK( graphic, 0 );
+
     PCB_LAYER_ID drawingLayer = m_frame->GetActiveLayer();
 
     m_lineWidth = getSegmentWidth( drawingLayer );

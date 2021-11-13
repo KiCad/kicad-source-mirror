@@ -2327,7 +2327,16 @@ int PCB_SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aIte
         FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aItem );
         EDA_RECT   bbox = footprint->GetBoundingBox( false, false );
 
-        footprint->GetBoundingHull().Collide( loc, aMaxDistance, &distance );
+        try
+        {
+            footprint->GetBoundingHull().Collide( loc, aMaxDistance, &distance );
+        }
+        catch( const ClipperLib::clipperException& exc )
+        {
+            // This may be overkill and could be an assertion but we are more likely to find
+            // any clipper errors this way.
+            wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
+        }
 
         // Consider footprints larger than the viewport only as a last resort
         if( bbox.GetHeight() > viewport.GetHeight() || bbox.GetWidth() > viewport.GetWidth() )

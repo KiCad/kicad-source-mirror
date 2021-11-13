@@ -284,7 +284,16 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
             SHAPE_POLY_SET dialogPoly( BOX2D( view->ToWorld( dialogPos, true ),
                                               view->ToWorld( dialog->GetSize(), false ) ) );
 
-            viewportPoly.BooleanSubtract( dialogPoly, SHAPE_POLY_SET::PM_FAST );
+            try
+            {
+                viewportPoly.BooleanSubtract( dialogPoly, SHAPE_POLY_SET::PM_FAST );
+            }
+            catch( const ClipperLib::clipperException& exc )
+            {
+                // This may be overkill and could be an assertion but we are more likely to find
+                // any clipper errors this way.
+                wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
+            }
         }
 
         SHAPE_POLY_SET itemPoly, clippedPoly;
@@ -324,7 +333,8 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
             itemPoly.Append( item_bbox.GetOrigin() );
             itemPoly.Append( item_bbox.GetOrigin() + VECTOR2I( item_bbox.GetWidth(), 0 ) );
             itemPoly.Append( item_bbox.GetOrigin() + VECTOR2I( 0, item_bbox.GetHeight() ) );
-            itemPoly.Append( item_bbox.GetOrigin() + VECTOR2I( item_bbox.GetWidth(), item_bbox.GetHeight() ) );
+            itemPoly.Append( item_bbox.GetOrigin() + VECTOR2I( item_bbox.GetWidth(),
+                                                               item_bbox.GetHeight() ) );
             break;
         }
         }

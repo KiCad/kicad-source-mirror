@@ -56,6 +56,8 @@
 #include <trigo.h>
 #include <view/view.h>
 #include <view/view_controls.h>
+#include <wx/log.h>
+
 
 SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = []( const SELECTION& aSel )
 {
@@ -1044,7 +1046,17 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             }
             else if( symbol )
             {
-                bbox = symbol->GetBodyBoundingBox();
+                try
+                {
+                    bbox = symbol->GetBodyBoundingBox();
+                }
+                catch( const boost::bad_pointer& exc )
+                {
+                    // This may be overkill and could be an assertion but we are more likely to
+                    // find any boost pointer container errors this way.
+                    wxLogError( wxT( "Boost bad pointer exception '%s' occurred." ), exc.what() );
+                }
+
                 SHAPE_RECT rect( bbox.GetPosition(), bbox.GetWidth(), bbox.GetHeight() );
 
                 if( bbox.Contains( pos ) )

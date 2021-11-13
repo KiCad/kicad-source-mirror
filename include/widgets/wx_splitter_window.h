@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018, 2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,9 @@ public:
     WX_SPLITTER_WINDOW( wxWindow *parent, wxWindowID id = wxID_ANY,
                         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                         long style = wxSP_3D, const wxString& name = wxT( "splitter" ) ) :
-        wxSplitterWindow( parent, id, pos, size, style, name )
+        wxSplitterWindow( parent, id, pos, size, style, name ),
+        m_minFirstPane( -1 ),
+        m_minSecondPane( -1 )
     {
         this->Connect( wxEVT_SIZE, wxSizeEventHandler( WX_SPLITTER_WINDOW::OnSize ) );
     }

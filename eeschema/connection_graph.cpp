@@ -2155,6 +2155,9 @@ int CONNECTION_GRAPH::RunERC()
 
     for( CONNECTION_SUBGRAPH* subgraph : m_subgraphs )
     {
+        // There shouldn't be any null sub-graph pointers.
+        wxCHECK2( subgraph, continue );
+
         // Graph is supposed to be up-to-date before calling RunERC()
         wxASSERT( !subgraph->m_dirty );
 
@@ -2238,13 +2241,14 @@ int CONNECTION_GRAPH::RunERC()
 
 bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubgraph )
 {
+    wxCHECK( aSubgraph, false );
     /*
      * This was changed late in 6.0 to fix https://gitlab.com/kicad/code/kicad/-/issues/9367
      * so I'm going to leave the original code in for just a little while.  If anyone comes
      * across this in 7.0 development (or later), feel free to delete.
      */
 #if 0
-    if( aSubgraph && aSubgraph->m_second_driver )
+    if( aSubgraph->m_second_driver )
     {
         SCH_ITEM* primary   = aSubgraph->m_first_driver;
         SCH_ITEM* secondary = aSubgraph->m_second_driver;
@@ -2270,7 +2274,7 @@ bool CONNECTION_GRAPH::ercCheckMultipleDrivers( const CONNECTION_SUBGRAPH* aSubg
         return false;
     }
 #else
-    if( aSubgraph && aSubgraph->m_multiple_drivers )
+    if( aSubgraph->m_multiple_drivers )
     {
         for( SCH_ITEM* driver : aSubgraph->m_drivers )
         {
