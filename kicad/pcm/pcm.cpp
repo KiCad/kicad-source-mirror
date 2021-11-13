@@ -20,13 +20,13 @@
 
 // kicad_curl.h *must be* included before any wxWidgets header to avoid conflicts
 // at least on Windows/msys2
-#include <kicad_curl/kicad_curl.h>
 #include "kicad_curl/kicad_curl_easy.h"
+#include <kicad_curl/kicad_curl.h>
 
-#include "pcm.h"
 #include "core/wx_stl_compat.h"
 #include "kicad_build_version.h"
 #include "paths.h"
+#include "pcm.h"
 #include "pgm_base.h"
 #include "picosha2.h"
 #include "settings/settings_manager.h"
@@ -48,6 +48,17 @@
 
 const std::tuple<int, int> PLUGIN_CONTENT_MANAGER::m_kicad_version =
         KICAD_MAJOR_MINOR_VERSION_TUPLE;
+
+
+class THROWING_ERROR_HANDLER : public nlohmann::json_schema::error_handler
+{
+    void error( const json::json_pointer& ptr, const json& instance,
+                const std::string& message ) override
+    {
+        throw std::invalid_argument( std::string( "At " ) + ptr.to_string() + ", value:\n"
+                                     + instance.dump() + "\n" + message + "\n" );
+    }
+};
 
 
 PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( aParent )
@@ -264,7 +275,7 @@ bool PLUGIN_CONTENT_MANAGER::FetchRepository( const wxString& aUrl, PCM_REPOSITO
 void PLUGIN_CONTENT_MANAGER::ValidateJson( const nlohmann::json&     aJson,
                                            const nlohmann::json_uri& aUri ) const
 {
-    nlohmann::json_schema::basic_error_handler error_handler;
+    THROWING_ERROR_HANDLER error_handler;
     m_schema_validator.validate( aJson, error_handler, aUri );
 }
 
