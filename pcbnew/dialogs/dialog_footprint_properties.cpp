@@ -665,6 +665,17 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
 
 void DIALOG_FOOTPRINT_PROPERTIES::OnGridSize( wxSizeEvent& aEvent )
 {
+    // A trick to fix a cosmetic issue: when, in m_itemsGrid, a layer selector widget
+    // has the focus (is activated in column 6) when resizing the grid, the widget
+    // is not moved. So just change the widget having the focus in this case
+    if( m_NoteBook->GetSelection() == 0 && !m_itemsGrid->HasFocus() )
+    {
+        int col = m_itemsGrid->GetGridCursorCol();
+
+        if( col == 6 )  // a layer selector widget can be activated
+             m_itemsGrid->SetFocus();
+    }
+
     adjustGridColumns( aEvent.GetSize().GetX() );
 
     aEvent.Skip();
