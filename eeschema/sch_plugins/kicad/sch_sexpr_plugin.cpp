@@ -305,7 +305,7 @@ static void formatCircle( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE
                           const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor,
                           KIID aUuid = niluuid )
 {
-    aFormatter->Print( aNestLevel, "(circle (center %s %s) (radius %s) ",
+    aFormatter->Print( aNestLevel, "(circle (center %s %s) (radius %s)\n",
                        FormatInternalUnits( aCircle->GetStart().x ).c_str(),
                        FormatInternalUnits( aCircle->GetStart().y ).c_str(),
                        FormatInternalUnits( aCircle->GetRadius() ).c_str() );
@@ -1738,7 +1738,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& a
 
     int nextFreeFieldId = MANDATORY_FIELDS;
     std::vector<LIB_FIELD*> fields;
-    std::string name = aFormatter.Quotew( aSymbol->GetLibId().Format().wx_str() );
+    std::string name = aFormatter.Quotew( aSymbol->GetLibId().GetLibItemName().wx_str() );
     std::string unitName = aSymbol->GetLibId().GetLibItemName();
 
     if( !aLibName.IsEmpty() )

@@ -1111,7 +1111,7 @@ void PCB_IO::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
                       m_out->Quotes( aFootprint->GetFPID().Format() ).c_str() );
 
     if( !( m_ctl & CTL_OMIT_FOOTPRINT_VERSION ) )
-        m_out->Print( 0, " (version %d) (generator pcbnew)", SEXPR_BOARD_FILE_VERSION );
+        m_out->Print( 0, " (version %d) (generator pcbnew)\n ", SEXPR_BOARD_FILE_VERSION );
 
     if( aFootprint->IsLocked() )
         m_out->Print( 0, " locked" );
