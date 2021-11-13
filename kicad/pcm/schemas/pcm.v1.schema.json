@@ -26,7 +26,7 @@
                 "identifier": {
                     "type": "string",
                     "description": "Package identifier",
-                    "pattern": "^[a-zA-Z][-a-zA-Z0-9.]{0,48}[a-zA-Z0-9]$"
+                    "pattern": "^[a-zA-Z][-a-zA-Z0-9.]{0,98}[a-zA-Z0-9]$"
                 },
                 "type": {
                     "type": "string",
