@@ -348,6 +348,12 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
+    auto searchHasFocus =
+            [this]( const SELECTION& )
+            {
+                return m_treePane->GetLibTree()->GetFocusTarget()->HasFocus();
+            };
+
     auto haveSymbolCond =
             [this]( const SELECTION& )
             {
@@ -404,9 +410,10 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::inchesUnits,       CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
     mgr->SetConditions( ACTIONS::milsUnits,         CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
-    mgr->SetConditions( ACTIONS::cut,               ENABLE( isEditableCond ) );
-    mgr->SetConditions( ACTIONS::copy,              ENABLE( haveSymbolCond ) );
-    mgr->SetConditions( ACTIONS::paste,             ENABLE( isEditableCond && SELECTION_CONDITIONS::Idle ) );
+    mgr->SetConditions( ACTIONS::cut,               ENABLE( isEditableCond || searchHasFocus ) );
+    mgr->SetConditions( ACTIONS::copy,              ENABLE( haveSymbolCond || searchHasFocus ) );
+    mgr->SetConditions( ACTIONS::paste,             ENABLE( ( isEditableCond && SELECTION_CONDITIONS::Idle )
+                                                           || searchHasFocus ) );
     mgr->SetConditions( ACTIONS::doDelete,          ENABLE( isEditableCond ) );
     mgr->SetConditions( ACTIONS::duplicate,         ENABLE( isEditableCond ) );
     mgr->SetConditions( ACTIONS::selectAll,         ENABLE( haveSymbolCond ) );
