@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-11-15 13:56+0000\n"
-"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -10930,11 +10930,15 @@ msgstr "Για ένα JFET, η σειρά των pin είναι απαγωγός
 msgid ""
 "You need to specify at least the first %d parameters for the transient source"
 msgstr ""
+"Χρειάζεται να προσδιοριστούν τουλάχιστον οι πρώτες %d παράμετροι για τη "
+"μεταβατική πηγή"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:805
 msgid ""
 "You cannot leave interleaved empty fields when defining a transient source"
 msgstr ""
+"Δεν είναι εφικτό να μείνουν κενά τα διαπλεκόμενα πεδία κατα τον ορισμό μιας "
+"μεταβατικής πηγής"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1022
 msgid "Select library"
@@ -11890,7 +11894,6 @@ msgid "Constrain buses and wires to H or V"
 msgstr "Περιορισμός δίαυλων και συρμάτων μόνο σε Οριζ ή Καθ προσανατολισμό"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Mouse drag performs Drag (G) operation"
 msgstr "Το σύρσιμο του ποντικιού πραγματοποιεί τη λειτουργία συρσίματος (G)"
 
@@ -11950,14 +11953,13 @@ msgstr "Εντολές Αριστερού Κλικ Ποντικιού"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:86
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl."
 msgstr ""
-"Οι ενέργειες αριστερού κλικ (και συρσίματος) εξαρτώνται από 3 πλήκτρα "
+"Οι ενέργειες αριστερού κλικ (και συρσίματος) εξαρτώνται από 2 πλήκτρα "
 "τροποποίησης:\n"
-"Το Alt, το Shift και το Ctrl."
+"Το Shift και το Ctrl."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:98
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
@@ -19009,7 +19011,7 @@ msgstr "Επεξεργασία περιγραμμάτων φύλλου σχεδ�
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
-msgstr ""
+msgstr "Εκτέλεση Διαχειριστή Πρόσθετων και Περιεχομένου"
 
 #: kicad/tools/kicad_manager_actions.cpp:124
 msgid "Open Text Editor"
