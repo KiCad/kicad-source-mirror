@@ -121,7 +121,7 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() : m_headers( nullptr )
     wxPlatformInfo platformInfo;
     wxString application( Pgm().App().GetAppName() );
     wxString version( GetBuildVersion() );
-    wxString platform = "(" + wxGetOsDescription() + ";" + platformInfo.GetArchName();
+    wxString platform = "(" + wxGetOsDescription() + ";" + GetPlatformGetBitnessName();
 
 #if defined( KICAD_BUILD_ARCH_X64 )
     platform << ";64-bit";

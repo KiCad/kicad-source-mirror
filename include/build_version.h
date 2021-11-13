@@ -39,6 +39,11 @@ class wxString;
 wxString GetBuildVersion();
 
 /**
+ * @return the bitness name string (like "Little endian")
+ */
+wxString GetPlatformGetBitnessName();
+
+/**
  * Get the semantic version string for KiCad defined inside the KiCadVersion.cmake file in
  * the variable KICAD_SEMANTIC_VERSION.
  *

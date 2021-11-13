@@ -50,6 +50,18 @@ extern std::string GetCurlLibVersion();
 #include <kicad_build_version.h>
 
 
+wxString GetPlatformGetBitnessName()
+{
+    wxPlatformInfo platform;
+// TODO (ISM): Read conditional once our wx fork and flatpaks are running released 3.1.5
+#if 0 && wxCHECK_VERSION( 3, 1, 5 )
+    return platform.GetBitnessName();
+#else
+    return platform.GetArchName();
+#endif
+}
+
+
 wxString GetBuildVersion()
 {
     wxString msg = wxString::Format( wxT( "%s" ), wxT( KICAD_VERSION_FULL ) );
@@ -128,12 +140,7 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << eol;
 
     aMsg << "Platform: " << wxGetOsDescription() << ", "
-// TODO (ISM): Readd conditional once our wx fork and flatpaks are running released 3.1.5
-#if 0 && wxCHECK_VERSION( 3, 1, 5 )
-         << platform.GetBitnessName() << ", "
-#else
-         << platform.GetArchName() << ", "
-#endif
+         << GetPlatformGetBitnessName() << ", "
          << platform.GetEndiannessName() << ", "
          << platform.GetPortIdName();
 
