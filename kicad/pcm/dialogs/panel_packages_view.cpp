@@ -580,7 +580,7 @@ void PANEL_PACKAGES_VIEW::updatePackageList()
         }
     }
 
-    sizer->FitInside( m_packageListWindow );
+    m_packageListWindow->FitInside();
     m_packageListWindow->SetScrollRate( 0, 15 );
     m_packageListWindow->Layout();
 }

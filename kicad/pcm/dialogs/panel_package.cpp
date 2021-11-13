@@ -157,17 +157,18 @@ void PANEL_PACKAGE::OnClick( wxMouseEvent& event )
 
 void PANEL_PACKAGE::OnPaint( wxPaintEvent& event )
 {
+    wxRect    rect( wxPoint( 1, 1 ), GetClientSize() - wxSize( 1, 1 ) );
     wxPaintDC dc( this );
     dc.SetBrush( wxSystemSettings::GetColour( wxSYS_COLOUR_FRAMEBK ) );
     dc.SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER ), 1 ) );
 
     if( m_selected )
-        dc.SetPen( wxPen( *wxBLACK, 3 ) );
+    {
+        rect.Deflate( 1 );
+        dc.SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ), 4 ) );
+    }
 
-    dc.DrawRectangle( wxPoint( 0, 0 ), GetClientSize() );
-
-    if( !m_selected )
-        dc.DrawLine( 0, 0, GetClientSize().GetX(), 0 );
+    dc.DrawRectangle( rect );
 }
 
 

@@ -22,6 +22,7 @@ class HTML_WINDOW;
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/scrolwin.h>
+#include <wx/statline.h>
 #include <wx/panel.h>
 #include <wx/html/htmlwin.h>
 #include <wx/grid.h>
@@ -47,7 +48,9 @@ class PANEL_PACKAGES_VIEW_BASE : public wxPanel
 		wxPanel* m_panelList;
 		wxSearchCtrl* m_searchCtrl;
 		wxScrolledWindow* m_packageListWindow;
+		wxStaticLine* m_staticline2;
 		wxPanel* m_panelDetails;
+		wxStaticLine* m_staticline1;
 		wxScrolledWindow* m_infoScrollWindow;
 		HTML_WINDOW* m_infoText;
 		wxBoxSizer* m_sizerVersions;
