@@ -153,6 +153,9 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
         // Set the minimal width to the column label size.
         m_gridPendingActions->SetColMinimalWidth( col, headingWidth );
     }
+
+    // fix sizers now widgets are set.
+    finishDialogSettings();
 }
 
 

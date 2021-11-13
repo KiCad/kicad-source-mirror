@@ -48,6 +48,9 @@ DIALOG_MANAGE_REPOSITORIES::DIALOG_MANAGE_REPOSITORIES(
         // Set the minimal width to the column label size.
         m_grid->SetColMinimalWidth( col, headingWidth );
     }
+
+    // fix sizers now widgets are set.
+    finishDialogSettings();
 }
 
 
