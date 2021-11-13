@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-08 19:42+0000\n"
+"PO-Revision-Date: 2021-11-15 18:08+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -15451,7 +15451,7 @@ msgstr "No hay un esquema actualmente abierto."
 #: eeschema/tools/symbol_editor_control.cpp:170
 #: eeschema/tools/symbol_editor_control.cpp:240
 #: eeschema/tools/symbol_editor_control.cpp:265
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is not writable."
 msgstr "La librería de símbolos '%s' no es escribible."
 
@@ -17294,7 +17294,6 @@ msgid "Zero format"
 msgstr "Formato de los ceros"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
-#, fuzzy
 msgid ""
 "Integers in files can have their zeros stripped.\n"
 "No leading zeros format means the leading zeros are stripped\n"
@@ -18472,7 +18471,6 @@ msgid "Add repository"
 msgstr "Añadir repositorio"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:60
-#, fuzzy
 msgid "Manage Repositories"
 msgstr "Administrar repositorios"
 
@@ -18903,9 +18901,10 @@ msgid "Couldn't open the meta information directory for this template!"
 msgstr "¡No puede abrirse la carpeta con la información de esta plantilla!"
 
 #: kicad/project_template.cpp:63
-#, fuzzy
 msgid "Couldn't find the meta HTML information file for this template!"
-msgstr "¡No puede encontrarse la información HTML de esta plantilla!"
+msgstr ""
+"¡No puede encontrarse el archivo de meta-información HTML para esta "
+"plantilla!"
 
 #: kicad/project_template.cpp:238
 #, c-format
@@ -26327,11 +26326,8 @@ msgid "Plot Edge.Cuts on all layers"
 msgstr "Trazar Edge.Cuts en todas las capas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
-#, fuzzy
 msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr ""
-"No trazar el contenido de la capa de contorno de placa en ninguna de las "
-"demás capas."
+msgstr "Trazar el contenido de la capa de contorno de placa en todas las capas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Sketch pads on fabrication layers"
@@ -27152,7 +27148,6 @@ msgid "Constrain outline to H, V and 45 deg"
 msgstr "Trazar solo líneas H, V y 45 grad"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:97
-#, fuzzy
 msgid "Draw the area using horizontal, vertical and 45 degree lines only"
 msgstr "Dibujar el área usando solo líneas horizontales, verticales, y a 45°"
 
@@ -28240,7 +28235,6 @@ msgid "On-board, non-copper"
 msgstr "En placa, sin cobre"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-#, fuzzy
 msgid "If you want a solder paste layer for front side of the board"
 msgstr ""
 "Si desea una capa de pasta de soldadura para la parte frontal de la placa"
@@ -29484,9 +29478,9 @@ msgid "Unconditional rule applied."
 msgstr "Regla incondicional aplicada."
 
 #: pcbnew/drc/drc_engine.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition \"%s\"."
-msgstr "Comprobando la condición de regla '%s'."
+msgstr "Comprobando la condición de regla \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:1065
 msgid "Constraint applied."
@@ -32665,7 +32659,7 @@ msgstr ""
 "es cruzado."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3533
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
 "KiCad only supports one width for the hatching. The imported hatching uses "
@@ -32677,7 +32671,7 @@ msgstr ""
 "decir: %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3545
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
 "KiCad only supports one step size for the hatching. The imported hatching "
@@ -32702,7 +32696,7 @@ msgstr ""
 "la horizontal."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3631
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimeters were applied instead."
