@@ -385,13 +385,22 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
     m_messagePanel->Clear();
     m_messagePanel->Flush( false );
 
-    // Create the set of fields to be updated
+    // Create the set of fields to be updated. Use non translated (canonical) names
+    // for mandatory fields
     m_updateFields.clear();
 
     for( unsigned i = 0; i < m_fieldsBox->GetCount(); ++i )
     {
         if( m_fieldsBox->IsChecked( i ) )
-            m_updateFields.insert( m_fieldsBox->GetString( i ) );
+        {
+            if( i < MANDATORY_FIELDS )
+            {
+                LIB_FIELD dummy_field( i );
+                m_updateFields.insert( dummy_field.GetCanonicalName() );
+            }
+            else
+                m_updateFields.insert( m_fieldsBox->GetString( i ) );
+        }
     }
 
     if( processMatchingSymbols() )
@@ -602,8 +611,8 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
         LIB_FIELD* libField = nullptr;
 
         // Mandatory fields always exist in m_updateFields, but these names can be translated.
-        // so do not try to search them in list: they can be no found by name).
-        if( i >= MANDATORY_FIELDS && !alg::contains( m_updateFields, field.GetName() ) )
+        // so use GetCanonicalName().
+        if( !alg::contains( m_updateFields, field.GetCanonicalName() ) )
             continue;
 
         if( i < MANDATORY_FIELDS )
@@ -660,7 +669,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
     {
         const LIB_FIELD& libField = *libFields[i];
 
-        if( !alg::contains( m_updateFields, libField.GetName() ) )
+        if( !alg::contains( m_updateFields, libField.GetCanonicalName() ) )
             continue;
 
         if( !aSymbol->FindField( libField.GetName(), false ) )
