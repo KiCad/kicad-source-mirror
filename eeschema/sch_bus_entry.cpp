@@ -178,11 +178,11 @@ int SCH_BUS_WIRE_ENTRY::GetPenWidth() const
 
     NETCLASSPTR netclass = NetClass();
 
+    if( !netclass && Schematic() )
+        netclass = Schematic()->Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
+
     if( netclass )
         return netclass->GetWireWidth();
-
-    if( Schematic() )
-        return std::max( Schematic()->Settings().m_DefaultWireThickness, 1 );
 
     return Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
 }
@@ -195,11 +195,11 @@ int SCH_BUS_BUS_ENTRY::GetPenWidth() const
 
     NETCLASSPTR netclass = NetClass();
 
+    if( !netclass && Schematic() )
+        netclass = Schematic()->Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
+
     if( netclass )
         return netclass->GetBusWidth();
-
-    if( Schematic() )
-        return std::max( Schematic()->Settings().m_DefaultBusThickness, 1 );
 
     return Mils2iu( DEFAULT_BUS_WIDTH_MILS );
 }

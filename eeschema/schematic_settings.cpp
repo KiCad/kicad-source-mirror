@@ -38,8 +38,6 @@ const int schSettingsSchemaVersion = 1;
 SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
         NESTED_SETTINGS( "schematic", schSettingsSchemaVersion, aParent, aPath ),
         m_DefaultLineWidth( DEFAULT_LINE_WIDTH_MILS * IU_PER_MILS ),
-        m_DefaultWireThickness( DEFAULT_WIRE_WIDTH_MILS * IU_PER_MILS ),
-        m_DefaultBusThickness( DEFAULT_BUS_WIDTH_MILS * IU_PER_MILS ),
         m_DefaultTextSize( DEFAULT_TEXT_SIZE * IU_PER_MILS ),
         m_LabelSizeRatio( DEFAULT_LABEL_SIZE_RATIO ),
         m_TextOffsetRatio( DEFAULT_TEXT_OFFSET_RATIO ),
@@ -98,14 +96,6 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_line_thickness",
             &m_DefaultLineWidth, Mils2iu( defaultLineThickness ), Mils2iu( 5 ), Mils2iu( 1000 ),
             1 / IU_PER_MILS ) );
-
-    m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_wire_thickness",
-            &m_DefaultWireThickness, Mils2iu( defaultWireThickness ), Mils2iu( 5 ), Mils2iu( 1000 ),
-            1 / IU_PER_MILS ) );
-
-    m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_bus_thickness",
-            &m_DefaultBusThickness, Mils2iu( defaultBusThickness ),
-            Mils2iu( 5 ), Mils2iu( 1000 ), 1 / IU_PER_MILS ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_text_size",
             &m_DefaultTextSize, Mils2iu( defaultTextSize ), Mils2iu( 5 ), Mils2iu( 1000 ),

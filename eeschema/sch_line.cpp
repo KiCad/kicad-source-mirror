@@ -280,7 +280,7 @@ void SCH_LINE::SetLineWidth( const int aSize )
 
 int SCH_LINE::GetPenWidth() const
 {
-    NETCLASSPTR netclass = NetClass();
+    NETCLASSPTR netclass;
 
     switch ( m_layer )
     {
@@ -297,11 +297,13 @@ int SCH_LINE::GetPenWidth() const
         if( m_stroke.GetWidth() > 0 )
             return m_stroke.GetWidth();
 
+        netclass = NetClass();
+
+        if( !netclass && Schematic() )
+            netclass = Schematic()->Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
+
         if( netclass )
             return netclass->GetWireWidth();
-
-        if( Schematic() )
-            return Schematic()->Settings().m_DefaultWireThickness;
 
         return Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
 
@@ -309,11 +311,13 @@ int SCH_LINE::GetPenWidth() const
         if( m_stroke.GetWidth() > 0 )
             return m_stroke.GetWidth();
 
+        netclass = NetClass();
+
+        if( !netclass && Schematic() )
+            netclass = Schematic()->Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
+
         if( netclass )
             return netclass->GetBusWidth();
-
-        if( Schematic() )
-            return Schematic()->Settings().m_DefaultBusThickness;
 
         return Mils2iu( DEFAULT_BUS_WIDTH_MILS );
     }

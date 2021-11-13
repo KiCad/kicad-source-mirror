@@ -2379,7 +2379,7 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getLineThickness( const LINECODE_ID& aCadstarLin
 {
     wxCHECK( Assignments.Codedefs.LineCodes.find( aCadstarLineCodeID )
                      != Assignments.Codedefs.LineCodes.end(),
-            m_schematic->Settings().m_DefaultWireThickness );
+             Mils2iu( DEFAULT_WIRE_WIDTH_MILS ) );
 
     return getKiCadLength( Assignments.Codedefs.LineCodes.at( aCadstarLineCodeID ).Width );
 }

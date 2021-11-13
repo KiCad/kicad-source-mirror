@@ -78,8 +78,6 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_OverrideItemColors( false ),
         m_LabelSizeRatio( DEFAULT_LABEL_SIZE_RATIO ),
         m_TextOffsetRatio( DEFAULT_TEXT_OFFSET_RATIO ),
-        m_DefaultWireThickness( DEFAULT_WIRE_WIDTH_MILS * IU_PER_MILS ),
-        m_DefaultBusThickness( DEFAULT_BUS_WIDTH_MILS * IU_PER_MILS ),
         m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS )
 {
@@ -345,7 +343,7 @@ float SCH_PAINTER::getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows ) c
 
 float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows ) const
 {
-    wxCHECK( aItem, static_cast<float>( m_schSettings.m_DefaultWireThickness ) );
+    wxCHECK( aItem, static_cast<float>( Mils2iu( DEFAULT_WIRE_WIDTH_MILS ) ) );
 
     float width = (float) aItem->GetPenWidth();
 

@@ -45,8 +45,6 @@ public:
     // Default sizes are all stored in IU here, and in mils in the JSON file
 
     int       m_DefaultLineWidth;
-    int       m_DefaultWireThickness;
-    int       m_DefaultBusThickness;
     int       m_DefaultTextSize;
     double    m_LabelSizeRatio;
     double    m_TextOffsetRatio;

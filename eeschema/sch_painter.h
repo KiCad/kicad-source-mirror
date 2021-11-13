@@ -119,8 +119,6 @@ public:
     double m_TextOffsetRatio;        // Proportion of font size to offset text above/below
                                      // wires, buses, etc.
 
-    int    m_DefaultWireThickness;
-    int    m_DefaultBusThickness;
     int    m_PinSymbolSize;
     int    m_JunctionSize;
 };

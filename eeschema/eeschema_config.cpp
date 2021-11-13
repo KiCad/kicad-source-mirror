@@ -81,12 +81,10 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
     settings.m_JunctionSize = GetSchematicJunctionSize();
 
     GetRenderSettings()->SetDefaultPenWidth( settings.m_DefaultLineWidth );
-    GetRenderSettings()->m_DefaultWireThickness = settings.m_DefaultWireThickness;
-    GetRenderSettings()->m_DefaultBusThickness  = settings.m_DefaultBusThickness;
-    GetRenderSettings()->m_LabelSizeRatio       = settings.m_LabelSizeRatio;
-    GetRenderSettings()->m_TextOffsetRatio      = settings.m_TextOffsetRatio;
-    GetRenderSettings()->m_PinSymbolSize        = settings.m_PinSymbolSize;
-    GetRenderSettings()->m_JunctionSize         = settings.m_JunctionSize;
+    GetRenderSettings()->m_LabelSizeRatio  = settings.m_LabelSizeRatio;
+    GetRenderSettings()->m_TextOffsetRatio = settings.m_TextOffsetRatio;
+    GetRenderSettings()->m_PinSymbolSize   = settings.m_PinSymbolSize;
+    GetRenderSettings()->m_JunctionSize    = settings.m_JunctionSize;
 
     // Verify some values, because the config file can be edited by hand, and have bad values:
     LIB_SYMBOL::SetSubpartIdNotation( LIB_SYMBOL::GetSubpartIdSeparator(),
