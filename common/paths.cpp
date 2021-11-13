@@ -340,7 +340,8 @@ wxString PATHS::GetOSXKicadUserDataDir()
 
 wxString PATHS::GetOSXKicadMachineDataDir()
 {
-    return wxT( "/Library/Application Support/kicad" );
+    // 6.0 forward:  Same as the main data dir
+    return GetOSXKicadDataDir();
 }
 
 
