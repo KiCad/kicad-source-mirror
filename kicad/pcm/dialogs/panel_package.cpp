@@ -149,7 +149,7 @@ void PANEL_PACKAGE::OnPaint( wxPaintEvent& event )
     if( m_selected )
     {
         rect.Deflate( 1 );
-        dc.SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ), 4 ) );
+        dc.SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_HOTLIGHT ), 3 ) );
     }
 
     dc.DrawRectangle( rect );
