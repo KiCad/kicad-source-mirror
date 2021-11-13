@@ -213,7 +213,8 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
 
         if( wxTheClipboard->Open() )
         {
-            if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
+            if( wxTheClipboard->IsSupported( wxDF_TEXT ) ||
+                wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
             {
                 wxTextDataObject data;
                 wxString         str;
