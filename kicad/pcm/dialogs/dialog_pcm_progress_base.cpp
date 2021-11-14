@@ -51,7 +51,7 @@ DIALOG_PCM_PROGRESS_BASE::DIALOG_PCM_PROGRESS_BASE( wxWindow* parent, wxWindowID
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_panel2, wxID_ANY, _("Details") ), wxVERTICAL );
 
-	m_reporter = new WX_HTML_REPORT_BOX( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxHW_SCROLLBAR_AUTO );
+	m_reporter = new WX_HTML_REPORT_BOX( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxHW_SCROLLBAR_AUTO|wxHSCROLL|wxVSCROLL );
 	sbSizer3->Add( m_reporter, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
