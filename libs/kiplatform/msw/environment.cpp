@@ -146,8 +146,9 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
             autoProxyOptions.lpszAutoConfigUrl = ieProxyConfig.lpszAutoConfigUrl;
         }
     }
-    else
+    else if( GetLastError() == ERROR_FILE_NOT_FOUND )
     {
+        // this is the only error code where we want to continue attempting to find a proxy
         autoProxyDetect = true;
     }
 
@@ -171,10 +172,21 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
                         WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A;
             }
 
-            autoProxyOptions.fAutoLogonIfChallenged = TRUE;
+            // dont do auto logon at first, this allows windows to use an cache
+            // per https://docs.microsoft.com/en-us/windows/win32/winhttp/autoproxy-cache
+            autoProxyOptions.fAutoLogonIfChallenged = FALSE;
 
             autoProxyDetect = WinHttpGetProxyForUrl( proxyResolveSession, aURL.c_str(),
                                                      &autoProxyOptions, &autoProxyInfo );
+
+            if( !autoProxyDetect && GetLastError() == ERROR_WINHTTP_LOGIN_FAILURE )
+            {
+                autoProxyOptions.fAutoLogonIfChallenged = TRUE;
+
+                // try again with auto login now
+                autoProxyDetect = WinHttpGetProxyForUrl( proxyResolveSession, aURL.c_str(),
+                                                         &autoProxyOptions, &autoProxyInfo );
+            }
 
             WinHttpCloseHandle( proxyResolveSession );
         }
