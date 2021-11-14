@@ -627,6 +627,66 @@ BOOST_AUTO_TEST_CASE( CollidePt )
 }
 
 
+
+
+
+struct ARC_SEG_COLLIDE_CASE
+{
+    std::string         m_ctx_name;
+    ARC_CENTRE_PT_ANGLE m_geom;
+    int                 m_arc_clearance;
+    SEG                 m_seg;
+    bool                m_exp_result;
+    int                 m_exp_distance;
+};
+
+
+static const std::vector<ARC_SEG_COLLIDE_CASE> arc_seg_collide_cases = {
+    { "0   deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 100, 0 }, { 50, 0 } }, true, 0 },
+    { "90  deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 0, 100 }, { 0, 50 } }, true, 0 },
+    { "180 deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { -100, 0 }, { -50, 0 } }, true, 0 },
+    { "270 deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 0, -100 }, { 0, -50 } }, true, 0 },
+    { "45  deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 71, 71 }, { 35, 35 } }, true, 0 },
+    { "-45 deg    ", { { 0, 0 }, { 100, 0 }, 270.0 }, 0, { { 71, -71 }, { 35, -35 } }, false, -1 },
+};
+
+
+BOOST_AUTO_TEST_CASE( CollideSeg )
+{
+    for( const auto& c : arc_seg_collide_cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_ctx_name )
+        {
+            SHAPE_ARC arc( c.m_geom.m_center_point, c.m_geom.m_start_point,
+                           c.m_geom.m_center_angle );
+
+            // Test a zero width arc (distance should equal the clearance)
+            BOOST_TEST_CONTEXT( "Test Clearance" )
+            {
+                int dist = -1;
+                BOOST_CHECK_EQUAL( arc.Collide( c.m_seg, c.m_arc_clearance, &dist ),
+                                   c.m_exp_result );
+                BOOST_CHECK_EQUAL( dist, c.m_exp_distance );
+            }
+
+            // Test by changing the width of the arc (distance should equal zero)
+            BOOST_TEST_CONTEXT( "Test Width" )
+            {
+                int dist = -1;
+                arc.SetWidth( c.m_arc_clearance * 2 );
+                BOOST_CHECK_EQUAL( arc.Collide( c.m_seg, 0, &dist ), c.m_exp_result );
+
+                if( c.m_exp_result )
+                    BOOST_CHECK_EQUAL( dist, 0 );
+                else
+                    BOOST_CHECK_EQUAL( dist, -1 );
+            }
+        }
+    }
+}
+
+
+
 struct ARC_DATA_MM
 {
     // Coordinates and dimensions in millimeters
