@@ -876,7 +876,7 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
 
                 shape->SetCenter( cur->center );
                 shape->SetStart( arcStart );
-                shape->SetArcAngleAndEnd( -NormalizeAngleDegreesPos( includedAngle ) * 10.0 );
+                shape->SetArcAngleAndEnd( -NormalizeAngleDegreesPos( includedAngle ) * 10.0, true );
 
                 if( !last->isRound )
                 {
@@ -918,7 +918,6 @@ void ALTIUM_PCB::ParseClasses6Data( const CFB::CompoundFileReader& aReader,
     {
         checkpoint();
         ACLASS6 elem( reader );
-
         if( elem.kind == ALTIUM_CLASS_KIND::NET_CLASS )
         {
             NETCLASSPTR nc = std::make_shared<NETCLASS>( elem.name );
@@ -1946,7 +1945,7 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
 
                 shape.SetCenter( elem.center );
                 shape.SetStart( elem.center + arcStartOffset );
-                shape.SetArcAngleAndEnd( -NormalizeAngleDegreesPos( includedAngle ) * 10.0 );
+                shape.SetArcAngleAndEnd( -NormalizeAngleDegreesPos( includedAngle ) * 10.0, true );
             }
 
             ZONE* zone = new ZONE( m_board );
@@ -2052,7 +2051,7 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
 
                 shape->SetCenter( elem.center );
                 shape->SetStart( elem.center + arcStartOffset );
-                shape->SetArcAngleAndEnd( -NormalizeAngleDegreesPos( includedAngle ) * 10.0 );
+                shape->SetArcAngleAndEnd( -NormalizeAngleDegreesPos( includedAngle ) * 10.0, true );
             }
 
             HelperShapeSetLocalCoord( shape, elem.component );
