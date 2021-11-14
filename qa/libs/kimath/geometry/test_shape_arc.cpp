@@ -904,9 +904,9 @@ BOOST_AUTO_TEST_CASE( CollideArcToPolygonApproximation )
     int      actual = 0;
     VECTOR2I location;
 
-    int tol = SHAPE_ARC::MIN_PRECISION_IU;
+    int clearanceReduced = clearance - polygonApproximationError;
 
-    BOOST_CHECK_EQUAL( zoneFill.Collide( &arc, clearance - tol, &actual, &location ), false );
+    BOOST_CHECK_EQUAL( zoneFill.Collide( &arc, clearanceReduced, &actual, &location ), false );
 
     BOOST_CHECK_EQUAL( zoneFill.Collide( &arc, clearance * 2, &actual, &location ), true );
 
