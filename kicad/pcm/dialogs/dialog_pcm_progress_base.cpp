@@ -22,11 +22,11 @@ DIALOG_PCM_PROGRESS_BASE::DIALOG_PCM_PROGRESS_BASE( wxWindow* parent, wxWindowID
 
 	m_downloadText = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Waiting..."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_downloadText->Wrap( -1 );
-	sbSizer1->Add( m_downloadText, 0, wxALL, 5 );
+	sbSizer1->Add( m_downloadText, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_downloadGauge = new wxGauge( sbSizer1->GetStaticBox(), wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL|wxGA_SMOOTH );
 	m_downloadGauge->SetValue( 0 );
-	sbSizer1->Add( m_downloadGauge, 1, wxALL|wxEXPAND, 5 );
+	sbSizer1->Add( m_downloadGauge, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_panelDownload->SetSizer( sbSizer1 );
@@ -43,7 +43,7 @@ DIALOG_PCM_PROGRESS_BASE::DIALOG_PCM_PROGRESS_BASE( wxWindow* parent, wxWindowID
 
 	m_overallGauge = new wxGauge( sbSizer2->GetStaticBox(), wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL );
 	m_overallGauge->SetValue( 0 );
-	sbSizer2->Add( m_overallGauge, 1, wxALL|wxEXPAND, 5 );
+	sbSizer2->Add( m_overallGauge, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer3->Add( sbSizer2, 0, wxEXPAND, 5 );
@@ -51,7 +51,7 @@ DIALOG_PCM_PROGRESS_BASE::DIALOG_PCM_PROGRESS_BASE( wxWindow* parent, wxWindowID
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_panel2, wxID_ANY, _("Details") ), wxVERTICAL );
 
-	m_reporter = new WX_HTML_REPORT_BOX( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,200 ), wxHW_SCROLLBAR_AUTO );
+	m_reporter = new WX_HTML_REPORT_BOX( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxHW_SCROLLBAR_AUTO );
 	sbSizer3->Add( m_reporter, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
@@ -65,6 +65,9 @@ DIALOG_PCM_PROGRESS_BASE::DIALOG_PCM_PROGRESS_BASE( wxWindow* parent, wxWindowID
 
 	m_buttonCancel = new wxButton( m_panel2, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_buttonCancel, 0, wxALL, 5 );
+
+
+	bSizer2->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_buttonClose = new wxButton( m_panel2, wxID_OK, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 
