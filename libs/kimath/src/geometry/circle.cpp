@@ -308,29 +308,29 @@ std::vector<VECTOR2I> CIRCLE::IntersectLine( const SEG& aLine ) const
     //
     // The distance M1 = M2 can be computed by pythagoras since O1 = O2 = Radius
     //
-    // O1= O2 = sqrt( Radius^2 - OM^2)
+    // M1= M2 = sqrt( Radius^2 - OM^2)
     //
 
-    VECTOR2I m = aLine.LineProject( Center );
-    int64_t  om = ( m - Center ).EuclideanNorm();
+    VECTOR2I m = aLine.LineProject( Center );    // O projected perpendicularly to the line
+    int64_t  omDist = ( m - Center ).EuclideanNorm();
 
-    if( om > ( (int64_t) Radius + SHAPE::MIN_PRECISION_IU ) )
+    if( omDist > ( (int64_t) Radius + SHAPE::MIN_PRECISION_IU ) )
     {
         return retval; // does not intersect
     }
-    else if( om <= ( (int64_t) Radius + SHAPE::MIN_PRECISION_IU )
-             && om >= ( (int64_t) Radius - SHAPE::MIN_PRECISION_IU ) )
+    else if( omDist <= ( (int64_t) Radius + SHAPE::MIN_PRECISION_IU )
+             && omDist >= ( (int64_t) Radius - SHAPE::MIN_PRECISION_IU ) )
     {
         retval.push_back( m );
         return retval; //tangent
     }
 
     int64_t radiusSquared = (int64_t) Radius * (int64_t) Radius;
-    int64_t omSquared = om * om;
+    int64_t omDistSquared = omDist * omDist;
 
-    int     mTo1 = sqrt( radiusSquared - omSquared );
+    int mTo1dist = sqrt( radiusSquared - omDistSquared );
 
-    VECTOR2I mTo1vec = ( aLine.B - aLine.A ).Resize( mTo1 );
+    VECTOR2I mTo1vec = ( aLine.B - aLine.A ).Resize( mTo1dist );
     VECTOR2I mTo2vec = -mTo1vec;
 
     retval.push_back( mTo1vec + m );
