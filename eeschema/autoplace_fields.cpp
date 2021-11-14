@@ -145,10 +145,11 @@ public:
      */
     void DoAutoplace( bool aManual )
     {
-        bool     force_wire_spacing = false;
-        SIDE     field_side = chooseSideForFields( aManual );
-        wxPoint  fbox_pos = fieldBoxPlacement( field_side );
-        EDA_RECT field_box( fbox_pos, m_fbox_size );
+        bool            force_wire_spacing = false;
+        SIDE_AND_NPINS  sideandpins = chooseSideForFields( aManual );
+        SIDE            field_side = sideandpins.side;
+        wxPoint         fbox_pos = fieldBoxPlacement( sideandpins );
+        EDA_RECT        field_box( fbox_pos, m_fbox_size );
 
         if( aManual )
             force_wire_spacing = fitFieldsBetweenWires( &field_box, field_side );
@@ -384,7 +385,9 @@ protected:
         // Iterate over all sides and find the ones that collide
         for( SIDE side : sides )
         {
-            EDA_RECT box( fieldBoxPlacement( side ), m_fbox_size );
+            SIDE_AND_NPINS sideandpins;
+            sideandpins.side = side;
+            EDA_RECT box( fieldBoxPlacement( sideandpins ), m_fbox_size );
 
             COLLISION collision = COLLIDE_NONE;
 
@@ -461,7 +464,7 @@ protected:
      * @param aAvoidCollisions - if true, pick last the sides where the label will collide
      *      with other items.
      */
-    SIDE chooseSideForFields( bool aAvoidCollisions )
+    SIDE_AND_NPINS chooseSideForFields( bool aAvoidCollisions )
     {
         std::vector<SIDE_AND_NPINS> sides = getPreferredSides();
 
@@ -477,7 +480,7 @@ protected:
 
         for( SIDE_AND_NPINS& each_side : sides | boost::adaptors::reversed )
         {
-            if( !each_side.pins ) return each_side.side;
+            if( !each_side.pins ) return each_side;
         }
 
         for( SIDE_AND_NPINS& each_side : sides )
@@ -489,7 +492,7 @@ protected:
             }
         }
 
-        return side.side;
+        return side;
     }
 
     /**
@@ -509,11 +512,12 @@ protected:
     /**
      * Return the position of the field bounding box.
      */
-    wxPoint fieldBoxPlacement( SIDE aFieldSide )
+    wxPoint fieldBoxPlacement( SIDE_AND_NPINS aFieldSideAndPins )
     {
+        SIDE aFieldSide = aFieldSideAndPins.side;
         wxPoint fbox_center = m_symbol_bbox.Centre();
-        int     offs_x = ( m_symbol_bbox.GetWidth() + m_fbox_size.GetWidth() ) / 2;
-        int     offs_y = ( m_symbol_bbox.GetHeight() + m_fbox_size.GetHeight() ) / 2;
+        int     offs_x = ( m_symbol_bbox.GetWidth() + ( m_fbox_size.GetWidth() ) / 2 );
+        int     offs_y = ( m_symbol_bbox.GetHeight() + ( m_fbox_size.GetHeight() ) / 2 );
 
         if( aFieldSide.x != 0 )
             offs_x += HPADDING;
@@ -523,9 +527,46 @@ protected:
         fbox_center.x += aFieldSide.x * offs_x;
         fbox_center.y += aFieldSide.y * offs_y;
 
-        wxPoint fbox_pos( fbox_center.x - m_fbox_size.GetWidth() / 2,
-                          fbox_center.y - m_fbox_size.GetHeight() / 2 );
+        int     x = fbox_center.x - ( m_fbox_size.GetWidth() / 2 );
+        int     y = fbox_center.y - ( m_fbox_size.GetHeight() / 2 );
 
+        if( aFieldSideAndPins.pins > 0 )
+        {     
+            if( aFieldSide == SIDE_TOP )
+            {
+                x = fbox_center.x - m_fbox_size.GetWidth() - ( HPADDING * 8 );
+                y = fbox_center.y - ( m_fbox_size.GetHeight() / 2 ) + ( VPADDING * 4 );
+            }   
+            if( aFieldSide == SIDE_RIGHT )
+            {
+                x = fbox_center.x - ( m_fbox_size.GetWidth() / 2 ) - ( HPADDING * 4 ) ;
+                y = fbox_center.y - m_fbox_size.GetHeight() - ( VPADDING * 4 );
+            }    
+            if( aFieldSide == SIDE_LEFT )
+            {
+                x = fbox_center.x - ( m_fbox_size.GetWidth() / 2) + ( HPADDING * 4 ) ;
+                y = fbox_center.y - m_fbox_size.GetHeight() - ( VPADDING * 4 );
+            }
+            if( aFieldSide == SIDE_BOTTOM )
+            {
+                x = fbox_center.x - m_fbox_size.GetWidth() - ( HPADDING * 8);
+                y = fbox_center.y - ( m_fbox_size.GetHeight() / 2 ) - ( VPADDING * 8 ) ;
+            } 
+        }
+        else
+        {     
+            if( aFieldSide == SIDE_TOP )
+            {
+                x = fbox_center.x - ( m_fbox_size.GetWidth() / 2 ) - ( HPADDING * 8 );
+            }  
+            if( aFieldSide == SIDE_BOTTOM )
+            {
+                x = fbox_center.x - m_fbox_size.GetWidth() - ( HPADDING * 8 );
+            } 
+        }
+        
+
+        wxPoint fbox_pos( x, y);
         return fbox_pos;
     }
 
@@ -537,7 +578,6 @@ protected:
     {
         if( aSide != SIDE_TOP && aSide != SIDE_BOTTOM )
             return false;
-
         std::vector<SCH_ITEM*> colliders = filterCollisions( *aBox );
 
         if( colliders.empty() )
