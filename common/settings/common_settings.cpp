@@ -321,6 +321,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "netclass_panel.sash_pos",
             &m_NetclassPanel.sash_pos, 160 ) );
 
+    m_params.emplace_back( new PARAM<int>( "package_manager.sash_pos",
+            &m_PackageManager.sash_pos, 380 ) );
+
     registerMigration( 0, 1, std::bind( &COMMON_SETTINGS::migrateSchema0to1, this ) );
     registerMigration( 1, 2, std::bind( &COMMON_SETTINGS::migrateSchema1to2, this ) );
 }

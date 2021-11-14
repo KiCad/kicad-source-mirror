@@ -23,6 +23,7 @@
 #include <kicad_settings.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <settings/common_settings.h>
 #include <widgets/wx_splitter_window.h>
 #include <string_utils.h>
 #include <html_window.h>
@@ -58,7 +59,6 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
     m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW::SetSashOnIdle ),
                           NULL, this );
 
-    m_initSashPos = 380;
     m_splitter1->SetPaneMinimums( 350, 450 );
 
 #ifdef __WXGTK__
@@ -87,8 +87,10 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
     // Most likely should be changed to wxGridSelectNone once WxWidgets>=3.1.5 is mandatory.
     m_gridVersions->SetSelectionMode( WX_GRID::wxGridSelectRows );
 
-    m_packageListWindow->SetBackgroundColour( wxStaticText::GetClassDefaultAttributes().colBg );
-    m_infoScrollWindow->SetBackgroundColour( wxStaticText::GetClassDefaultAttributes().colBg );
+    wxColor background = wxStaticText::GetClassDefaultAttributes().colBg;
+    m_panelList->SetBackgroundColour( background );
+    m_packageListWindow->SetBackgroundColour( background );
+    m_infoScrollWindow->SetBackgroundColour( background );
     m_infoScrollWindow->EnableScrolling( false, true );
 
     ClearData();
@@ -97,6 +99,9 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
 
 PANEL_PACKAGES_VIEW::~PANEL_PACKAGES_VIEW()
 {
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+    cfg->m_PackageManager.sash_pos = m_splitter1->GetSashPosition();
+
     m_gridVersions->PopEventHandler( true );
 }
 
@@ -676,7 +681,11 @@ void PANEL_PACKAGES_VIEW::OnInfoMouseWheel( wxMouseEvent& event )
 
 void PANEL_PACKAGES_VIEW::SetSashOnIdle( wxIdleEvent& aEvent )
 {
-	m_splitter1->SetSashPosition( m_initSashPos );
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+    m_splitter1->SetSashPosition( cfg->m_PackageManager.sash_pos );
+
+    m_packageListWindow->FitInside();
+
 	m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW::SetSashOnIdle ),
                              NULL, this );
 }

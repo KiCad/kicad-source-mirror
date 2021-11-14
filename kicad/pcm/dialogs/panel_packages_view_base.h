@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class HTML_WINDOW;
+class RIGHT_BORDERED_PANEL;
 
 #include "widgets/wx_grid.h"
 #include "widgets/wx_splitter_window.h"
@@ -22,7 +23,6 @@ class HTML_WINDOW;
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/scrolwin.h>
-#include <wx/statline.h>
 #include <wx/panel.h>
 #include <wx/html/htmlwin.h>
 #include <wx/grid.h>
@@ -45,12 +45,10 @@ class PANEL_PACKAGES_VIEW_BASE : public wxPanel
 
 	protected:
 		WX_SPLITTER_WINDOW* m_splitter1;
-		wxPanel* m_panelList;
+		RIGHT_BORDERED_PANEL* m_panelList;
 		wxSearchCtrl* m_searchCtrl;
 		wxScrolledWindow* m_packageListWindow;
-		wxStaticLine* m_staticline2;
 		wxPanel* m_panelDetails;
-		wxStaticLine* m_staticline1;
 		wxScrolledWindow* m_infoScrollWindow;
 		HTML_WINDOW* m_infoText;
 		wxBoxSizer* m_sizerVersions;

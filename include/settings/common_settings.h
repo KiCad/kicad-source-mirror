@@ -130,6 +130,11 @@ public:
         int sash_pos;
     };
 
+    struct PACKAGE_MANAGER
+    {
+        int sash_pos;
+    };
+
     COMMON_SETTINGS();
 
     virtual ~COMMON_SETTINGS() {}
@@ -163,6 +168,8 @@ public:
     DO_NOT_SHOW_AGAIN m_DoNotShowAgain;
 
     NETCLASS_PANEL m_NetclassPanel;
+
+    PACKAGE_MANAGER m_PackageManager;
 };
 
 #endif

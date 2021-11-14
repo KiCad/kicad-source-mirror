@@ -6,6 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "html_window.h"
+#include "panel_package.h"
 
 #include "panel_packages_view_base.h"
 
@@ -17,22 +18,19 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 
 	m_splitter1 = new WX_SPLITTER_WINDOW( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
-	m_splitter1->SetSashGravity( 0.2 );
+	m_splitter1->SetSashGravity( 0.25 );
 	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW_BASE::m_splitter1OnIdle ), NULL, this );
 
-	m_panelList = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panelList = new RIGHT_BORDERED_PANEL( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE|wxTAB_TRAVERSAL );
 	wxBoxSizer* bPanelListSizer;
-	bPanelListSizer = new wxBoxSizer( wxHORIZONTAL );
-
-	wxBoxSizer* bColumnSizer;
-	bColumnSizer = new wxBoxSizer( wxVERTICAL );
+	bPanelListSizer = new wxBoxSizer( wxVERTICAL );
 
 	m_searchCtrl = new wxSearchCtrl( m_panelList, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifndef __WXMAC__
 	m_searchCtrl->ShowSearchButton( true );
 	#endif
 	m_searchCtrl->ShowCancelButton( false );
-	bColumnSizer->Add( m_searchCtrl, 0, wxEXPAND|wxBOTTOM, 5 );
+	bPanelListSizer->Add( m_searchCtrl, 0, wxEXPAND|wxALL, 5 );
 
 	m_packageListWindow = new wxScrolledWindow( m_panelList, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE|wxFULL_REPAINT_ON_RESIZE|wxVSCROLL );
 	m_packageListWindow->SetScrollRate( 5, 5 );
@@ -43,13 +41,7 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	m_packageListWindow->SetSizer( bSizer2 );
 	m_packageListWindow->Layout();
 	bSizer2->Fit( m_packageListWindow );
-	bColumnSizer->Add( m_packageListWindow, 1, wxEXPAND, 5 );
-
-
-	bPanelListSizer->Add( bColumnSizer, 1, wxEXPAND|wxALL, 5 );
-
-	m_staticline2 = new wxStaticLine( m_panelList, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bPanelListSizer->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
+	bPanelListSizer->Add( m_packageListWindow, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_panelList->SetSizer( bPanelListSizer );
@@ -58,9 +50,6 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	m_panelDetails = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bPanelDetailsSizer;
 	bPanelDetailsSizer = new wxBoxSizer( wxHORIZONTAL );
-
-	m_staticline1 = new wxStaticLine( m_panelDetails, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	bPanelDetailsSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	m_infoScrollWindow = new wxScrolledWindow( m_panelDetails, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 	m_infoScrollWindow->SetScrollRate( 5, 5 );
