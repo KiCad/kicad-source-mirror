@@ -37,7 +37,7 @@
 const std::unordered_set<wxString> PCM_PACKAGE_DIRECTORIES( {
         "plugins",
         "footprints",
-        "models",
+        "3dmodels",
         "symbols",
         "resources",
         "colors",
