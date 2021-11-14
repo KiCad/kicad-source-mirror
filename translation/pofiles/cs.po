@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-11-14 11:11+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -12870,7 +12870,8 @@ msgstr "Následující automaticky uložené soubor(y) nelze obnovit\n"
 
 #: eeschema/files-io.cpp:1408
 msgid "Manual recovery will be required to restore the file(s) above."
-msgstr "Ruční obnovení bude vyžadováno pro obnovení výše uvedených souborů."
+msgstr ""
+"K obnovení výše uvedeného souboru/souborů bude vyžadováno ruční obnovení."
 
 #: eeschema/files-io.cpp:1430
 msgid "The following automatically saved file(s) could not be removed\n"
