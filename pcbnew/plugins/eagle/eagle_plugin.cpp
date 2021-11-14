@@ -2077,6 +2077,7 @@ void EAGLE_PLUGIN::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
 
         dwg->SetLayer( layer );
         dwg->SetWidth( 0 );
+        dwg->SetFilled( true );
 
         std::vector<wxPoint> pts;
 
@@ -2189,6 +2190,7 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
         aFootprint->Add( dwg );
 
         dwg->SetWidth( 0 ); // it's filled, no need for boundary width
+        dwg->SetFilled( true );
         dwg->SetLayer( layer );
 
         dwg->SetPolyPoints( pts );
@@ -2258,11 +2260,12 @@ void EAGLE_PLUGIN::packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) cons
 
         FP_SHAPE* gr = new FP_SHAPE( aFootprint, SHAPE_T::CIRCLE );
 
-        // with == 0 means filled circle
+        // width == 0 means filled circle
         if( width <= 0 )
         {
             width  = radius;
             radius = radius / 2;
+            gr->SetFilled( true );
         }
 
         aFootprint->Add( gr );
