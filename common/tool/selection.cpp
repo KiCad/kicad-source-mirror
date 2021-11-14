@@ -139,3 +139,24 @@ bool SELECTION::AreAllItemsIdentical() const
                         return r->Type() == m_items.front()->Type();
                     } ) );
 }
+
+
+bool SELECTION::OnlyContains( std::vector<KICAD_T> aList ) const
+{
+    return ( std::all_of( m_items.begin(), m_items.end(),
+            [&]( const EDA_ITEM* r )
+            {
+                bool ok = false;
+
+                for( const KICAD_T& type : aList )
+                {
+                    if( r->Type() == type )
+                    {
+                        ok = true;
+                        break;
+                    }
+                }
+
+                return ok;
+            } ) );
+}

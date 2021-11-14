@@ -201,6 +201,12 @@ public:
      */
     bool AreAllItemsIdentical() const;
 
+    /**
+     * Checks if all items in the selection have a type in aList
+     * @return False if any item in the selection has a type not included in aList
+     */
+    bool OnlyContains( std::vector<KICAD_T> aList ) const;
+
 protected:
     OPT<VECTOR2I>         m_referencePoint;
     std::deque<EDA_ITEM*> m_items;

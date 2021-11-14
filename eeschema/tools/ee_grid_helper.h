@@ -74,8 +74,10 @@ private:
      * @param aItem The schematic item for which to compute the anchors
      * @param aRefPos The point for which to compute the anchors (if used by the symbol)
      * @param aFrom Is this for an anchor that is designating a source point (aFrom=true) or not
+     * @param aIncludeText if true will compute anchors for text items
      */
-    void computeAnchors( SCH_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom = false );
+    void computeAnchors( SCH_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom = false,
+                         bool aIncludeText = false );
 };
 
 #endif

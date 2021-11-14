@@ -60,13 +60,19 @@ EE_GRID_HELPER::EE_GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
 }
 
 
-VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, int aLayer,
+VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I& aMousePos, int aLayer,
                                          const EE_SELECTION& aItems )
 {
     clearAnchors();
 
+    // Text anchors are often off the connectivity grid.  For now, this means
+    // we can only consider anchors from text objects if they are the only thing
+    // selected.
+    bool includeText = ( aItems.Size() == 1
+                         || aItems.OnlyContains( { SCH_TEXT_T, SCH_FIELD_T } ) );
+
     for( EDA_ITEM* item : aItems )
-        computeAnchors( static_cast<SCH_ITEM*>( item ), aMousePos, true );
+        computeAnchors( static_cast<SCH_ITEM*>( item ), aMousePos, true, includeText );
 
     double worldScale = m_toolMgr->GetView()->GetGAL()->GetWorldScale();
     double lineSnapMinCornerDistance = 50.0 / worldScale;
@@ -262,14 +268,19 @@ std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
 }
 
 
-void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, bool aFrom )
+void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, bool aFrom,
+                                     bool aIncludeText )
 {
     switch( aItem->Type() )
     {
     case SCH_TEXT_T:
     case SCH_FIELD_T:
-        addAnchor( aItem->GetPosition(), ORIGIN, aItem );
+    {
+        if( aIncludeText )
+            addAnchor( aItem->GetPosition(), ORIGIN, aItem );
+
         break;
+    }
 
     case SCH_SYMBOL_T:
     case SCH_SHEET_T:
