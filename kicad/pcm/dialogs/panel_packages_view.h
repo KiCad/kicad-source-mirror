@@ -112,8 +112,6 @@ private:
     PANEL_PACKAGE*                               m_currentSelected;
     std::shared_ptr<PLUGIN_CONTENT_MANAGER>      m_pcm;
 
-    int                                          m_initSashPos;
-
     enum PACKAGE_VERSIONS_GRID_COLUMNS
     {
         COL_VERSION = 0,

@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "widgets/wx_panel.h"
 #include <wx/string.h>
 #include <wx/checkbox.h>
 #include <wx/gdicmn.h>
@@ -25,7 +26,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SELECTION_FILTER_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_SELECTION_FILTER_BASE : public wxPanel
+class PANEL_SELECTION_FILTER_BASE : public WX_PANEL
 {
 	private:
 

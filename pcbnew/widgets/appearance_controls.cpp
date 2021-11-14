@@ -413,6 +413,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     int screenHeight  = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
 
     m_layerPanelColour = m_panelLayers->GetBackgroundColour().ChangeLightness( 110 );
+    SetBorders( true, false, false, false );
 
     m_layersOuterSizer = new wxBoxSizer( wxVERTICAL );
     m_windowLayers->SetSizer( m_layersOuterSizer );

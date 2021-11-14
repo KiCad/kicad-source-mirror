@@ -11,7 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class HTML_WINDOW;
-class RIGHT_BORDERED_PANEL;
+class WX_PANEL;
 
 #include "widgets/wx_grid.h"
 #include "widgets/wx_splitter_window.h"
@@ -45,7 +45,7 @@ class PANEL_PACKAGES_VIEW_BASE : public wxPanel
 
 	protected:
 		WX_SPLITTER_WINDOW* m_splitter1;
-		RIGHT_BORDERED_PANEL* m_panelList;
+		WX_PANEL* m_panelList;
 		wxSearchCtrl* m_searchCtrl;
 		wxScrolledWindow* m_packageListWindow;
 		wxPanel* m_panelDetails;

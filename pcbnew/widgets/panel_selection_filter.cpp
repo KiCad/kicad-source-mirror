@@ -43,6 +43,8 @@ PANEL_SELECTION_FILTER::PANEL_SELECTION_FILTER( wxWindow* aParent ) :
     m_cbOtherItems->SetFont( font );
     m_cbAllItems->SetFont( font );
 
+    SetBorders( true, false, false, false );
+
     wxASSERT( m_frame );
     m_tool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     wxASSERT( m_tool );

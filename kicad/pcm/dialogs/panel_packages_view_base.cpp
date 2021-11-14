@@ -6,7 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "html_window.h"
-#include "panel_package.h"
+#include "widgets/wx_panel.h"
 
 #include "panel_packages_view_base.h"
 
@@ -21,7 +21,7 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	m_splitter1->SetSashGravity( 0.25 );
 	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW_BASE::m_splitter1OnIdle ), NULL, this );
 
-	m_panelList = new RIGHT_BORDERED_PANEL( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE|wxTAB_TRAVERSAL );
+	m_panelList = new WX_PANEL( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE|wxTAB_TRAVERSAL );
 	wxBoxSizer* bPanelListSizer;
 	bPanelListSizer = new wxBoxSizer( wxVERTICAL );
 

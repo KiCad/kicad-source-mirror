@@ -191,29 +191,3 @@ wxString PANEL_PACKAGE::GetPreferredVersion() const
 }
 
 
-RIGHT_BORDERED_PANEL::RIGHT_BORDERED_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos,
-                                            const wxSize& size, long style, const wxString& name ) :
-        wxPanel( parent, id, pos, size, style, name )
-{
-    this->Connect( wxEVT_PAINT, wxPaintEventHandler( RIGHT_BORDERED_PANEL::OnPaint ) );
-}
-
-
-RIGHT_BORDERED_PANEL::~RIGHT_BORDERED_PANEL()
-{
-	this->Disconnect( wxEVT_PAINT, wxPaintEventHandler( RIGHT_BORDERED_PANEL::OnPaint ) );
-}
-
-
-void RIGHT_BORDERED_PANEL::OnPaint( wxPaintEvent& event )
-{
-    wxRect    rect( wxPoint( 0, 0 ), GetClientSize() );
-    wxPaintDC dc( this );
-
-    dc.SetBrush( wxSystemSettings::GetColour( wxSYS_COLOUR_FRAMEBK ) );
-    dc.SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER ), 1 ) );
-
-    dc.DrawLine( rect.GetRight(), rect.GetTop(), rect.GetRight(), rect.GetBottom() );
-}
-
-

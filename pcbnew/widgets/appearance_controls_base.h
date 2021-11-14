@@ -13,6 +13,7 @@
 class BITMAP_BUTTON;
 class WX_GRID;
 
+#include "widgets/wx_panel.h"
 #include <wx/scrolwin.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
@@ -37,7 +38,7 @@ class WX_GRID;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class APPEARANCE_CONTROLS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class APPEARANCE_CONTROLS_BASE : public wxPanel
+class APPEARANCE_CONTROLS_BASE : public WX_PANEL
 {
 	private:
 

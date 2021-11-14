@@ -44,7 +44,7 @@
             <property name="name">APPEARANCE_CONTROLS_BASE</property>
             <property name="pos"></property>
             <property name="size">215,400</property>
-            <property name="subclass">; ; forward_declare</property>
+            <property name="subclass">WX_PANEL; widgets/wx_panel.h; forward_declare</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>

@@ -92,18 +92,4 @@ private:
 };
 
 
-class RIGHT_BORDERED_PANEL : public wxPanel
-{
-public:
-    RIGHT_BORDERED_PANEL( wxWindow* parent, wxWindowID id = wxID_ANY,
-                          const wxPoint& pos = wxDefaultPosition,
-                          const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL,
-                          const wxString& name = wxEmptyString );
-
-    ~RIGHT_BORDERED_PANEL();
-
-private:
-    void OnPaint( wxPaintEvent& event );
-};
-
 #endif // PANEL_PACKAGE_H_

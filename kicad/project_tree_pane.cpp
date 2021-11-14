@@ -42,6 +42,8 @@
 #include <core/kicad_algo.h>
 #include <paths.h>
 #include <launch_ext.h>
+#include <wx/dcclient.h>
+#include <wx/settings.h>
 
 #include "project_tree_item.h"
 #include "project_tree.h"
@@ -130,6 +132,7 @@ BEGIN_EVENT_TABLE( PROJECT_TREE_PANE, wxSashLayoutWindow )
     EVT_MENU( ID_PROJECT_DELETE, PROJECT_TREE_PANE::onDeleteFile )
     EVT_MENU( ID_PROJECT_RENAME, PROJECT_TREE_PANE::onRenameFile )
     EVT_IDLE( PROJECT_TREE_PANE::onIdle )
+    EVT_PAINT( PROJECT_TREE_PANE::onPaint )
 END_EVENT_TABLE()
 
 
@@ -1262,6 +1265,19 @@ void PROJECT_TREE_PANE::onThemeChanged( wxSysColourChangedEvent &aEvent )
     m_TreeProject->Refresh();
 
     aEvent.Skip();
+}
+
+
+void PROJECT_TREE_PANE::onPaint( wxPaintEvent& event )
+{
+    wxRect    rect( wxPoint( 0, 0 ), GetClientSize() );
+    wxPaintDC dc( this );
+
+    dc.SetBrush( wxSystemSettings::GetColour( wxSYS_COLOUR_FRAMEBK ) );
+    dc.SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER ), 1 ) );
+
+    dc.DrawLine( rect.GetLeft(), rect.GetTop(), rect.GetLeft(), rect.GetBottom() );
+    dc.DrawLine( rect.GetRight(), rect.GetTop(), rect.GetRight(), rect.GetBottom() );
 }
 
 

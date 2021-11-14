@@ -25,6 +25,7 @@
 #include <settings/settings_manager.h>
 #include <settings/common_settings.h>
 #include <widgets/wx_splitter_window.h>
+#include <widgets/wx_panel.h>
 #include <string_utils.h>
 #include <html_window.h>
 
@@ -70,6 +71,7 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
     m_searchCtrl->Bind( wxEVT_TEXT, &PANEL_PACKAGES_VIEW::OnSearchTextChanged, this );
     m_searchCtrl->SetDescriptiveText( _( "Filter" ) );
 
+    m_panelList->SetBorders( false, true, false, false );
 
     m_gridVersions->PushEventHandler( new GRID_TRICKS( m_gridVersions ) );
 
