@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-14 11:08+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2021-11-14 11:09+0000\n"
+"Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -9579,7 +9579,7 @@ msgstr "Pro symboly DeMorgan nejsou k dispozici alternativní přiřazení vývo
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:283
 msgid "This symbol only has one unit. This control has no effect."
-msgstr "Tento symbol má pouze jednu jednotku. Tato kontrola nemá žádný účinek."
+msgstr "Symbol má pouze jednu jednotku. Tato kontrola nemá vliv."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:285
 msgid ""
