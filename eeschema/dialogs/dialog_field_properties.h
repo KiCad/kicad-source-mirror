@@ -129,6 +129,10 @@ public:
             aField->GetParent()->SetName( value );
 
         updateText( aField );
+
+        aField->SetHorizJustify( EDA_TEXT::MapHorizJustify( m_horizontalJustification - 1 ) );
+        aField->SetVertJustify( EDA_TEXT::MapVertJustify( m_verticalJustification - 1 ) );
+        aField->SetTextPos( m_position );
     }
 };
 
