@@ -285,8 +285,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         m_DesignRuleViasCtrl->SetSelection( viaSelection );
 
-        SetInitialFocus( m_ViaDiameterCtrl );
-
         m_ViaTypeChoice->Enable();
 
         switch( viaType )
@@ -324,8 +322,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         }
 
         m_DesignRuleWidthsCtrl->SetSelection( widthSelection );
-
-        SetInitialFocus( m_TrackWidthCtrl );
     }
     else
     {
@@ -339,7 +335,12 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     else
         m_lockedCbox->Set3StateValue( wxCHK_UNCHECKED );
 
-    SetInitialFocus( m_tracks ? m_TrackWidthCtrl : m_ViaDiameterCtrl );
+    if( m_tracks )
+        SetInitialFocus( m_TrackWidthCtrl );
+    else if( m_netSelector->IsEnabled() )
+        SetInitialFocus( m_netSelector );
+    else
+        SetInitialFocus( m_ViaDiameterCtrl );
 
     m_StdButtonsOK->SetDefault();
 
