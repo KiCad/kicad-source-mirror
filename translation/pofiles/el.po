@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-15 18:08+0000\n"
+"PO-Revision-Date: 2021-11-15 21:10+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -23688,7 +23688,7 @@ msgstr "Αρχεία STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:210
 msgid "Non-unity scaled models:"
-msgstr ""
+msgstr "Μοντέλα υπό κλίμακα διαφορετική της μονάδος:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:212
 msgid ""
@@ -23762,7 +23762,7 @@ msgstr "Αγνόηση εικονικών εξαρτημάτων"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:113
 msgid "Substitute similarly named models"
-msgstr ""
+msgstr "Αντικατάσταση παρόμοιων ονομάτων μοντέλων"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:114
 msgid "Replace VRML models with STEP models of the same name"
@@ -28850,6 +28850,7 @@ msgid "Check rule syntax"
 msgstr "Ελέγξτε τη σύνταξη κανόνων"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
+#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29058,6 +29059,214 @@ msgid ""
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 msgstr ""
+"### Κανόνες ανώτατου επιπέδου \n"
+"\n"
+"    (version <number>)\n"
+"\n"
+"    (rule <rule_name> <rule_clause> ...)\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Κανόνες\n"
+"\n"
+"    (constraint <constraint_type> ...)\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"    (layer \"<layer_name>\")\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Τύποι περιορισμών\n"
+"\n"
+" * annular\\_width\n"
+" * clearance\n"
+" * courtyard_clearance\n"
+" * diff\\_pair\\_gap\n"
+" * diff\\_pair\\_uncoupled\n"
+" * disallow\n"
+" * edge\\_clearance\n"
+" * length\n"
+" * hole\\_clearance\n"
+" * hole\\_size\n"
+" * silk\\_clearance\n"
+" * skew\n"
+" * track\\_width\n"
+" * via\\_count\n"
+" * via\\_diameter\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Τύποι αντικειμένων\n"
+"\n"
+" * buried_via\n"
+" * graphic\n"
+" * hole\n"
+" * micro_via\n"
+" * pad\n"
+" * text\n"
+" * track\n"
+" * via\n"
+" * zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### Παραδείγματα\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # wider clearance between HV tracks\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"<br><br>\n"
+"\n"
+"### Σημειώσεις\n"
+"\n"
+"Ο κανόνας για την έκδοση πρέπει να είναι ο πρώτος κανόνας.  Υποδεικνύει την "
+"έκδοση του συντακτικού του αρχείου ώστε \n"
+"μελλοντικοί αναγνώστες κανόνων να μπορούν να το αναβαθμίσουν αυτόματα.  "
+"Πρέπει να έχει την\n"
+"τιμή \"1\".\n"
+"\n"
+"Οι κανόνες θα πρέπει να ταξινομούνται κατά ειδικότητα.  Μεταγενέστεροι "
+"κανόνες υπερισχύουν των προγενέστερων, όταν εντοπιστεί κανόνας που "
+"ικανοποιείται δεν ελέγχονται άλλοι κανόνες.\n"
+"\n"
+"Χρήση Ctrl+/για μετατροπή γραμμής σε σχόλιο.\n"
+"<br><br><br>\n"
+"\n"
+"### Εκφράσεις συναρτήσεων\n"
+"\n"
+"Όλες οι παράμετροι των συναρτήσεων υποστηρίζουν τα απλά wildcards (`*` and "
+"`?`).\n"
+"<br><br>\n"
+"\n"
+"    A.insideCourtyard('<footprint_refdes>')\n"
+"True if any part of `A` lies within the given footprint's principal "
+"courtyard.\n"
+"<br><br>\n"
+"\n"
+"    A.insideFrontCourtyard('<footprint_refdes>')\n"
+"True if any part of `A` lies within the given footprint's front courtyard.\n"
+"<br><br>\n"
+"\n"
+"    A.insideBackCourtyard('<footprint_refdes>')\n"
+"True if any part of `A` lies within the given footprint's back courtyard.\n"
+"<br><br>\n"
+"\n"
+"    A.insideArea('<zone_name>')\n"
+"True if any part of `A` lies within the given zone's outline.\n"
+"<br><br>\n"
+"\n"
+"    A.isPlated()\n"
+"True if `A` has a hole which is plated.\n"
+"<br><br>\n"
+"\n"
+"    A.inDiffPair('<net_name>')\n"
+"True if `A` has net that is part of the specified differential pair.\n"
+"`<net_name>` is the base name of the differential pair.  For example, "
+"`inDiffPair('CLK')`\n"
+"matches items in the `CLK_P` and `CLK_N` nets.\n"
+"<br><br>\n"
+"\n"
+"    AB.isCoupledDiffPair()\n"
+"True if `A` and `B` are members of the same diff pair.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOf('<group_name>')\n"
+"True if `A` is a member of the given group. Includes nested membership.\n"
+"<br><br>\n"
+"\n"
+"    A.existsOnLayer('<layer_name>')\n"
+"True if `A` exists on the given layer.  The layer name can be\n"
+"either the name assigned in Board Setup > Board Editor Layers or\n"
+"the canonical name (ie: `F.Cu`).\n"
+"\n"
+"NB: this returns true if `A` is on the given layer, independently\n"
+"of whether or not the rule is being evaluated for that layer.\n"
+"For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
+"<br><br><br>\n"
+"\n"
+"### Περισσότερα παραδείγματα\n"
+"\n"
+"    (rule \"copper keepout\"\n"
+"       (constraint disallow track via zone)\n"
+"       (condition \"A.insideArea('zone3')\"))\n"
+"\n"
+"\n"
+"    (rule \"BGA neckdown\"\n"
+"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"       (condition \"A.insideCourtyard('U3')\"))\n"
+"\n"
+"\n"
+"    # prevent silk over tented vias\n"
+"    (rule silk_over_via\n"
+"       (constraint silk_clearance (min 0.2mm))\n"
+"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"\n"
+"\n"
+"    (rule \"Distance between Vias of Different Nets\"  \n"
+"        (constraint hole_to_hole (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
+"\n"
+"    (rule \"Clearance between Pads of Different Nets\"  \n"
+"        (constraint clearance (min 3.0mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
+"\n"
+"\n"
+"    (rule \"Via Hole to Track Clearance\"  \n"
+"        (constraint hole_clearance (min 0.254mm))\n"
+"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
+"    \n"
+"    (rule \"Pad to Track Clearance\"  \n"
+"        (constraint clearance (min 0.2mm))\n"
+"        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+"\n"
+"\n"
+"    (rule \"clearance-to-1mm-cutout\"\n"
+"        (constraint clearance (min 0.8mm))\n"
+"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"\n"
+"\n"
+"    (rule \"Max Drill Hole Size Mechanical\"  \n"
+"        (constraint hole_size (max 6.3mm))\n"
+"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+"    \n"
+"    (rule \"Max Drill Hole Size PTH\"  \n"
+"        (constraint hole_size (max 6.35mm))\n"
+"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
+"\n"
+"\n"
+"    # Specify an optimal gap for a particular diff-pair\n"
+"    (rule \"dp clock gap\"\n"
+"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
+"\n"
+"    # Specify a larger clearance around any diff-pair\n"
+"    (rule \"dp clearance\"\n"
+"        (constraint clearance (min \"1.5mm\"))\n"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -29216,7 +29425,7 @@ msgstr "Ελάχιστο διάκενο τρύπας για πλακέτα: %s."
 #: pcbnew/drc/drc_engine.cpp:873
 #, c-format
 msgid "Checking %s clearance: %s."
-msgstr ""
+msgstr "Έλεγχος %s διάκενο: %s."
 
 #: pcbnew/drc/drc_engine.cpp:885 pcbnew/drc/drc_engine.cpp:886
 #: pcbnew/drc/drc_engine.cpp:887 pcbnew/tools/board_inspection_tool.cpp:647
@@ -29234,7 +29443,7 @@ msgstr "Έλεγχος %s %s: %s."
 #: pcbnew/drc/drc_engine.cpp:918
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr ""
+msgstr "Έλεγχος %s: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
 
 #: pcbnew/drc/drc_engine.cpp:929
 #, c-format
@@ -29706,7 +29915,7 @@ msgstr "πραγματικό: %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:70
 msgid "Checking keepouts & disallow constraints..."
-msgstr ""
+msgstr "Έλεγχος καθαρών περιοχών & αποκλεισμός περιορισμών..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:123
 msgid "Checking copper to board edge clearances..."
@@ -32661,7 +32870,7 @@ msgstr "Στοιχείο γραφικού '%s' χωρίς χειρισμό, στ
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1501
 #, c-format
 msgid "Duplicate item for ID %d and sequence %d in row %zu."
-msgstr ""
+msgstr "Διπλότυπο αντικείμενο με ID %d και ακολουθία %d στη σειρά %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2306
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2335
@@ -33763,11 +33972,11 @@ msgstr "Κλείδωμα"
 
 #: pcbnew/tools/board_editor_control.cpp:135
 msgid "Omit extra information"
-msgstr "Πληροφορίες Bitmap"
+msgstr "Παράλειψη πρόσθετων πληροφοριών"
 
 #: pcbnew/tools/board_editor_control.cpp:136
 msgid "Omit nets"
-msgstr "Φιλτράρισμα δικτύων"
+msgstr "Παράλειψη δικτύων"
 
 #: pcbnew/tools/board_editor_control.cpp:138
 msgid "Do not prefix path with footprint UUID."
@@ -33792,11 +34001,11 @@ msgstr "Αρχεία KiCad λίστας δικτύων"
 #: pcbnew/tools/board_editor_control.cpp:459
 #, c-format
 msgid "Path `%s` is read only."
-msgstr "Η βιβλιοθήκη \"%s\" είναι μόνο για ανάγνωση."
+msgstr "Η διαδρομή τοποθεσίας `%s`είναι μόνο για ανάγνωση."
 
 #: pcbnew/tools/board_editor_control.cpp:460
 msgid "I/O Error"
-msgstr "Σφάλμα"
+msgstr "Σφάλμα Ι/Ο"
 
 #: pcbnew/tools/board_editor_control.cpp:548
 #, c-format
@@ -33852,7 +34061,7 @@ msgstr "Αναπαραγωγή ζώνης"
 
 #: pcbnew/tools/board_inspection_tool.cpp:59
 msgid "Net Tools"
-msgstr "Διαγραφή Όλων"
+msgstr "Εργαλεία Δικτύων"
 
 #: pcbnew/tools/board_inspection_tool.cpp:121
 #, c-format
@@ -33900,7 +34109,7 @@ msgstr "Δεν είναι δυνατή η δημιουργία αναφοράς 
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
 msgid "Zone connection resolution for:"
-msgstr ""
+msgstr "Ανάλυση σύνδεσης ζώνης για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 #, c-format
@@ -33940,15 +34149,15 @@ msgstr "Τα αντικείμενα ανήκουν στο ίδιο net. Το δ�
 
 #: pcbnew/tools/board_inspection_tool.cpp:498
 msgid "Silkscreen clearance resolution for:"
-msgstr ""
+msgstr "Ανάλυση διακένου μεταξοτυπίας για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
 msgid "Courtyard clearance resolution for:"
-msgstr ""
+msgstr "Ανάλυση διακένου περιοχής αποτυπώματος για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:566
 msgid "Hole clearance resolution for:"
-msgstr ""
+msgstr "Ανάλυση διακένου οπής για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
@@ -35329,7 +35538,7 @@ msgstr "Εμφάνιση κειμένων αποτυπώματος σε λειτ
 
 #: pcbnew/tools/pcb_actions.cpp:853
 msgid "Draw Zone Fills"
-msgstr ""
+msgstr "Σχεδίαση Γεμίσματος Ζώνης"
 
 #: pcbnew/tools/pcb_actions.cpp:853
 msgid "Show filled areas of zones"
@@ -35337,7 +35546,7 @@ msgstr "Εμφάνιση γεμισμένων περιοχών σε ζώνες"
 
 #: pcbnew/tools/pcb_actions.cpp:858
 msgid "Draw Zone Outlines"
-msgstr ""
+msgstr "Σχεδίαση Περιγράμματος Ζώνης"
 
 #: pcbnew/tools/pcb_actions.cpp:858
 msgid "Show only zone boundaries"
@@ -35345,11 +35554,11 @@ msgstr "Προβολή μόνο των ορίων ζωνών"
 
 #: pcbnew/tools/pcb_actions.cpp:863
 msgid "Draw Zone Fill Fracture Borders"
-msgstr ""
+msgstr "Σχεδίαση Κατακερματισμένων Περιγραμμάτων Γεμίσματος Ζώνης"
 
 #: pcbnew/tools/pcb_actions.cpp:868
 msgid "Draw Zone Fill Triangulation"
-msgstr ""
+msgstr "Σχεδίαση Τριγωνοποιημένου Γεμίσματος Ζώνης"
 
 #: pcbnew/tools/pcb_actions.cpp:874
 msgid "Toggle Zone Display"
