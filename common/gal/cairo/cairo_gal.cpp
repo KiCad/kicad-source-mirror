@@ -262,13 +262,10 @@ void CAIRO_GAL_BASE::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& a
         double sa = sin( lineAngle + M_PI / 2.0 );
         double ca = cos( lineAngle + M_PI / 2.0 );
 
-        auto pa0 = xform( aStartPoint + VECTOR2D( aWidth * ca, aWidth * sa ) );
-        auto pa1 = xform( aStartPoint - VECTOR2D( aWidth * ca, aWidth * sa ) );
-        auto pb0 = xform( aEndPoint + VECTOR2D( aWidth * ca, aWidth * sa ) );
-        auto pb1 = xform( aEndPoint - VECTOR2D( aWidth * ca, aWidth * sa ) );
-        auto pa = xform( aStartPoint );
-        auto pb = xform( aEndPoint );
-        auto rb = ( pa0 - pa ).EuclideanNorm();
+        VECTOR2D pa0 = xform( aStartPoint + VECTOR2D( aWidth * ca, aWidth * sa ) );
+        VECTOR2D pa1 = xform( aStartPoint - VECTOR2D( aWidth * ca, aWidth * sa ) );
+        VECTOR2D pb0 = xform( aEndPoint + VECTOR2D( aWidth * ca, aWidth * sa ) );
+        VECTOR2D pb1 = xform( aEndPoint - VECTOR2D( aWidth * ca, aWidth * sa ) );
 
         cairo_set_source_rgba( m_currentContext, m_strokeColor.r, m_strokeColor.g, m_strokeColor.b,
                                m_strokeColor.a );
@@ -278,11 +275,22 @@ void CAIRO_GAL_BASE::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& a
 
         cairo_move_to( m_currentContext, pa1.x, pa1.y );
         cairo_line_to( m_currentContext, pb1.x, pb1.y );
+        flushPath();
 
-        cairo_arc( m_currentContext, pb.x, pb.y, rb, lineAngle - M_PI / 2.0,
-                   lineAngle + M_PI / 2.0 );
-        cairo_arc( m_currentContext, pa.x, pa.y, rb, lineAngle + M_PI / 2.0,
-                   lineAngle + 3.0 * M_PI / 2.0 );
+        // Calculate the segment angle and arc center in normal/mirrored transform for rounded ends.
+        VECTOR2D center_a = xform( aStartPoint );
+        VECTOR2D center_b = xform( aEndPoint );
+        startEndVector = center_b - center_a;
+        lineAngle = atan2( startEndVector.y, startEndVector.x );
+        double radius = ( pa0 - center_a ).EuclideanNorm();
+
+        // Draw the rounded end point of the segment
+        double arcStartAngle = lineAngle - M_PI / 2.0;
+        cairo_arc( m_currentContext, center_b.x, center_b.y, radius, arcStartAngle, arcStartAngle + M_PI );
+
+        // Draw the rounded start point of the segment
+        arcStartAngle = lineAngle + M_PI / 2.0;
+        cairo_arc( m_currentContext, center_a.x, center_a.y, radius, arcStartAngle, arcStartAngle + M_PI );
 
         flushPath();
     }
