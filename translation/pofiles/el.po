@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-15 13:56+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"PO-Revision-Date: 2021-11-15 17:34+0000\n"
+"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -1886,8 +1886,8 @@ msgstr ""
 "που έχουν ήδη οριστεί θα ισχύουν και θα αγνοηθούν οι ρυθμίσεις\n"
 "από το παράθυρο ρύθμισης διαδρομών. Αν δεν επιθυμείτε αυτή τη\n"
 "συμπεριφορά, μετονομάστε τις προβληματικές καταχωρίσεις ή\n"
-"αφαιρέστε τους εξωτερικούς ορισμούς μεταβλητών περιβάλλοντος \n"
-"από το σύστημά σας."
+"αφαιρέστε τους εξωτερικούς ορισμούς μεταβλητών περιβάλλοντος από το σύστημά "
+"σας."
 
 #: common/dialogs/dialog_configure_paths.cpp:374
 #, c-format
@@ -13702,9 +13702,8 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Το αρχείο αποθήκευσης δεν έχει αναλυθεί πλήρως (απομένουν %d byte)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:474
-#, fuzzy
 msgid "Compile mask not currently supported."
-msgstr "Δεν υπάρχει ανοιγμένο σχηματικό."
+msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:487
 #, c-format
@@ -13751,7 +13750,7 @@ msgstr "Ο ιδιοκτήτης της Bezier (%d) δεν βρέθηκε."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1146
 #, c-format
 msgid "Polyline's owner (%d) not found."
-msgstr ""
+msgstr "Δεν βρέθηκε ο ιδιοκτήτης της πολυγραμμής (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1205
 #, c-format
@@ -13785,7 +13784,7 @@ msgstr "Ο ιδιοκτήτης του ορθογωνίου (%d) δεν βρέθ
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1539
 #, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr "Sheet entry's owner (%d) not found."
+msgstr ""
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1785
 msgid "Power Port has unknown style, use bar instead."
@@ -13825,7 +13824,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2255
 #, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "Δεν βρέθηκε ο ιδιοκτήτης του αρχείου (%d)"
+msgstr "Δεν βρέθηκε ο ιδιοκτήτης του αρχείου (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2289
 #, c-format
@@ -18503,7 +18502,7 @@ msgstr "Άδεια: %s\n"
 #: kicad/pcm/dialogs/panel_packages_view.cpp:169
 #, c-format
 msgid "Tags: %s\n"
-msgstr ""
+msgstr "Ετικέτες: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:184
 msgid "Author"
@@ -19628,7 +19627,6 @@ msgid "Error writing objects to clipboard"
 msgstr "Σφάλμα κατά την εγγραφή αντικειμένων στο πρόχειρο"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19640,16 +19638,8 @@ msgid ""
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
-"### Διαχωριστής εξασθενητή\n"
-"#### Η εξασθένηση είναι 6dB\n"
-"___Z<sub>in</sub>___ επιθυμητή εμπέδηση εισόδου σε &#x2126;<br>\n"
-"___Z<sub> out </sub> ___ επιθυμητή εμπέδηση εξόδου σε &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
-"\n"
-"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19663,17 +19653,6 @@ msgid ""
 "___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 msgstr ""
-"### Εξασθενητής Τ\n"
-"__Zin__ επιθυμητή εμπέδηση εισόδου σε &#x2126;<br>\n"
-"__Zout__ επιθυμητή εμπέδηση εξόδου σε &#x2126;<br>\n"
-"__Zin = Zout__<br><br>\n"
-"\n"
-"* __a__ εξασθένηση σε dB\n"
-"* __L = 10<sup>a/20</sup>__ (η απώλεια)\n"
-"* ___A = (L + 1) / (L - 1)___<br><br>\n"
-"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub>) / (L - 1)___\n"
-"* ___R1 = Z<sub>in</sub> \\ * A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\ * A - R2___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
 msgid ""
@@ -19694,7 +19673,6 @@ msgstr ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19708,17 +19686,6 @@ msgid ""
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 msgstr ""
-"### Εξασθενητής Τ\n"
-"__Zin__ επιθυμητή εμπέδηση εισόδου σε &#x2126;<br>\n"
-"__Zout__ επιθυμητή εμπέδηση εξόδου σε &#x2126;<br>\n"
-"__Zin = Zout__<br><br>\n"
-"\n"
-"* __a__ εξασθένηση σε dB\n"
-"* __L = 10<sup>a/20</sup>__ (η απώλεια)\n"
-"* ___A = (L + 1) / (L - 1)___<br><br>\n"
-"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub>) / (L - 1)___\n"
-"* ___R1 = Z<sub>in</sub> \\ * A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\ * A - R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -19727,7 +19694,7 @@ msgstr "Εξασθένιση μεγαλύτερη από %f dB"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Pi"
-msgstr ""
+msgstr "π"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Tee"
@@ -20567,7 +20534,6 @@ msgid "Not worth using"
 msgstr "Δεν απαιτείται"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20595,25 +20561,27 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Οι σειρές Ε που ορίζονται στο IEC 60063 είναι ένα ευρέως αποδεκτό σύστημα\n"
-"αρίθμησης για ηλεκτρονικά εξαρτήματα. Οι διαθέσιμες τιμές είναι περίπου\n"
-"ισομερώς κατανεμημένες σε λογαριθμική κλίμακα.\n"
+"Οι σειρές Ε ορίζονται στο IEC 60063.\n"
 "\n"
-"\tE12: 1,0  1,2  1,5  1,8  2,2  2,7  3,3  3,9  4,7  5,6  6,8  8,2\n"
-"\tE6:  1,0   -   1,5   -   2,2   -   3,3   -   4,7   -   6,8   -\n"
-"\tE3:  1,0   -    -    -   2,2   -    -    -   4,7   -    -    -\n"
-"\tE1:  1,0   -    -    -    -    -    -    -    -    -    -    -\n"
+"Οι διαθέσιμες τιμές είναι περίπου ισομερώς κατανεμημένες σε λογαριθμική "
+"κλίμακα.\n"
 "\n"
-"Αυτή η αριθμομηχανή εντοπίζει συνδυασμούς τυπικών στοιχείων της σειράς Ε\n"
-"για τη δημιουργία αυθαίρετων τιμών. Μπορείτε να εισαγάγετε την απαιτούμενη "
-"αντίσταση\n"
-"από 0,0025 έως 4000 kOhm. Δίνονται λύσεις που χρησιμοποιούν έως και 4 "
-"εξαρτήματα.\n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
+"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
+"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
 "\n"
-"Από προεπιλογή, η αιτούμενη τιμή εξαιρείται πάντα από το σύνολο λύσεων. "
-"Είναι επίσης δυνατό να καθοριστούν\n"
-"έως και δύο επιπλέον τιμές που θα εξαιρεθούν από τη λύση, εάν αυτές οι τιμές "
-"εξαρτημάτων δεν είναι διαθέσιμες\n"
+"- Αυτή η αριθμομηχανή εντοπίζει συνδυασμούς τυπικών στοιχείων της σειράς Ε ("
+"ανάμεσα σε 10Ω και 1MΩ) για τη δημιουργία αυθαίρετων τιμών. \n"
+"- Μπορείτε να εισαγάγετε την απαιτούμενη αντίσταση από 0,0025 έως 4000 kΩ. \n"
+"- Δίνονται λύσεις που χρησιμοποιούν έως και 4 εξαρτήματα.\n"
+"\n"
+"Η αιτούμενη τιμή εξαιρείται πάντα από το σύνολο λύσεων. <br>\n"
+"Είναι επίσης δυνατό να καθοριστούν έως και δύο επιπλέον τιμές που θα "
+"εξαιρεθούν από τη λύση, σε περίπτωση προβλημάτων διαθεσιμότητας εξαρτημάτων."
+"\n"
 "\n"
 "Οι λύσεις παρέχονται στις ακόλουθες μορφές:\n"
 "\n"
@@ -20677,7 +20645,6 @@ msgstr ""
 "Έξοδος και εγκατάλειψη αλλαγών;"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20705,24 +20672,24 @@ msgstr ""
 "Εάν καθοριστεί το μέγιστο ρεύμα, τότε τα πλάτη θα υπολογιστούν ώστε να "
 "ταιριάζουν.\n"
 "\n"
-"Εάν καθοριστεί ένα από τα πλάτη, θα υπολογιστεί το μέγιστο ρεύμα που μπορεί "
-"να χειριστεί. Στη συνέχεια θα υπολογιστεί το πλάτος για τον άλλο διάδρομο "
-"που θα χειρίζεται αυτό το ρεύμα.\n"
+"Εάν καθοριστεί ένα από τα πλάτη δρόμων, θα υπολογιστεί το μέγιστο ρεύμα που "
+"μπορεί να χειριστεί. Στη συνέχεια θα υπολογιστεί το πλάτος για τον άλλο "
+"δρόμο που θα χειρίζεται αυτό το ρεύμα.\n"
 "\n"
 "Η τιμή ελέγχου εμφανίζεται με έντονη γραφή.\n"
 "\n"
-"Οι υπολογισμοί ισχύουν για ρεύματα έως 35 A (εξωτερικά) ή 17,5 A "
-"(εσωτερικά), η θερμοκρασία αυξάνεται έως 100 ºC και πλάτη έως 400 mil (10 "
-"mm).\n"
+"Οι υπολογισμοί ισχύουν για ρεύματα έως 35 A (εξωτερικά) ή 17,5 A (εσωτερικά)"
+", θερμοκρασίες έως 100 ºC και πλάτη έως 400 mil (10 mm).\n"
 "\n"
 "Ο τύπος, από το IPC 2221, είναι\n"
-"<center> __ I = K * dT <sup> 0,44 </sup> * (W * H) <sup> 0,725 </sup> __ </"
-"center>\n"
-"που:\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>  \n"
+"όπου:\n"
 "__I__ = μέγιστο ρεύμα σε Α\n"
-"__dt__ = αύξηση θερμοκρασίας πάνω από το περιβάλλον σε ºC\n"
-"__W, H__ = πλάτος και πάχος σε mils\n"
-"__K__ = 0,024 για εσωτερικά ίχνη ή 0,048 για εξωτερικά ίχνη\n"
+"___&Delta;T___  = αύξηση θερμοκρασίας πάνω από το περιβάλλον σε &deg;C  \n"
+"__W__ = πλάτος και πάχος σε mil\n"
+"__H__ = πάχος (ύψος) σε mil\n"
+"__K__ = 0,024 για εσωτερικά ίχνη ή 0,048 για εξωτερικά ίχνη  \n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -23318,7 +23285,7 @@ msgstr "Ανάλυση Διάκενου..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:489
 msgid "Open the Board Setup... dialog"
-msgstr "Άνοιγμα διαλόγου Διάταξης Πλακέτας..."
+msgstr "Άνοιγμα διαλόγου Διάταξης Πλακέτας"
 
 #: pcbnew/dialogs/dialog_drc.cpp:666
 #, c-format
@@ -25986,7 +25953,7 @@ msgstr "Pad σημείο ελέγχου"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1616
 msgid "Heatsink pad"
-msgstr ""
+msgstr "Έδρα απαγωγής θερμότητας"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 msgid "Castellated pad (through hole only)"
@@ -26646,6 +26613,8 @@ msgid ""
 "Minimum spacing between adjacent meander segments. The resulting spacing may "
 "be greater based on design rules."
 msgstr ""
+"Ελάχιστη απόσταση μεταξύ γειτονικών τμημάτων μαιάνδρου. Η προκύπτουσα "
+"απόσταση μπορεί να είναι μεγαλύτερη με βάση τους κανόνες σχεδιασμού."
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:144
 msgid "Miter style:"
@@ -27078,7 +27047,7 @@ msgstr "Ιδιότητες Στόχου"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:82
 msgid "Footprint Reference Properties"
-msgstr ""
+msgstr "Ιδιότητες Αναφοράς Αποτυπώματος"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:83
 msgid "Footprint Value Properties"
@@ -29043,14 +29012,12 @@ msgid "board setup constraints hole"
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:186
-#, fuzzy
 msgid "board setup constraints edge"
-msgstr "περιορισμοί διάταξης πλακέτας"
+msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:191
-#, fuzzy
 msgid "board setup constraints courtyard"
-msgstr "περιορισμοί διάταξης πλακέτας"
+msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
@@ -29087,29 +29054,27 @@ msgid "Local override on %s; clearance: %s."
 msgstr "Τοπική παράκαμψη σε %s; διάκενο: %s."
 
 #: pcbnew/drc/drc_engine.cpp:831
-#, fuzzy
 msgid "board minimum"
-msgstr "Ελάχιστο πλάτος:"
+msgstr "ελάχιστο πλακέτας"
 
 #: pcbnew/drc/drc_engine.cpp:834
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Ελάχιστο διάκενο:"
+msgstr "Ελάχιστο διάκενο πλακέτας: %s."
 
 #: pcbnew/drc/drc_engine.cpp:843
-#, fuzzy
 msgid "board minimum hole"
-msgstr "Ελάχιστο πλάτος:"
+msgstr "ελάχιστη τρύπα πλακέτας"
 
 #: pcbnew/drc/drc_engine.cpp:846
-#, fuzzy, c-format
+#, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Ελάχιστο διάκενο:"
+msgstr "Ελάχιστο διάκενο τρύπας για πλακέτα: %s."
 
 #: pcbnew/drc/drc_engine.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: %s."
-msgstr "Έλεγχος %s; διάκενο: %s."
+msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:885 pcbnew/drc/drc_engine.cpp:886
 #: pcbnew/drc/drc_engine.cpp:887 pcbnew/tools/board_inspection_tool.cpp:647
@@ -29120,14 +29085,14 @@ msgid "undefined"
 msgstr "Μη καθορισμένο"
 
 #: pcbnew/drc/drc_engine.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s %s: %s."
-msgstr "Έλεγχος %s."
+msgstr "Έλεγχος %s %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:918
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "Επανασύνδεση %s pin %s από %s σε %s."
+msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:929
 #, c-format
@@ -29168,7 +29133,7 @@ msgid "Unconditional rule applied."
 msgstr "Εφαρμόστηκε άνευ όρων κανόνας."
 
 #: pcbnew/drc/drc_engine.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition \"%s\"."
 msgstr "Έλεγχος συνθήκης κανόνα \"%s\"."
 
@@ -29362,24 +29327,21 @@ msgid "Differential uncoupled length too long"
 msgstr "Υπερβολικά μεγάλο αποδιαζευγμένο μήκος διαφορικού ζεύγους"
 
 #: pcbnew/drc/drc_item.cpp:206
-#, fuzzy
 msgid "Footprint type doesn't match footprint pads"
-msgstr "Επεξεργαστής Αποτυπώματος - Δημιουργήστε/επεξεργαστείτε αποτυπώματα"
+msgstr "Ο τύπος αποτυπώματος δεν ταιριάζει με τις έδρες του αποτυπώματος"
 
 #: pcbnew/drc/drc_item.cpp:210
-#, fuzzy
 msgid "Through hole pad has no hole"
-msgstr "Σφάλμα: Η διαμπερής έδρα δεν έχει τρύπα."
+msgstr "Η διαμπερής έδρα δεν έχει τρύπα"
 
 #: pcbnew/drc/drc_item.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "Rule: %s"
-msgstr "Κανόνες"
+msgstr "Κανόνας: %s"
 
 #: pcbnew/drc/drc_item.cpp:336
-#, fuzzy
 msgid "Local override"
-msgstr "Τοπικές Τιμές Διάκενου"
+msgstr "Τοπική παράκαμψη"
 
 #: pcbnew/drc/drc_rule.h:137
 #, c-format
@@ -29466,9 +29428,9 @@ msgid "Missing constraint type.|  Expected %s."
 msgstr "Λείπει τύπος περιορισμού. | Αναμένεται %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Rule already has a '%s' constraint."
-msgstr "Η περιοχή κανόνων '%s' απαγορεύει τους διαδρόμους."
+msgstr "Ο κανόνας έχει ήδη έναν περιορισμό '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:352
 msgid "Missing min value."
@@ -29878,9 +29840,9 @@ msgstr "Δημιουργία αρχείου %s"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:354
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:111
-#, c-format, fuzzy
+#, c-format
 msgid "Created file '%s'."
-msgstr "Δημιουργία αρχείου '%s'."
+msgstr "Δημιουργήθηκε αρχείο '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:159
 #, c-format
@@ -29987,9 +29949,7 @@ msgstr "Σφάλμα κατά τη φόρτωση του PCB '%s'."
 #: pcbnew/files.cpp:730
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr ""
-"Σφάλμα κατά τη φόρτωση αρχείου πλακέτας:\n"
-"%s"
+msgstr "Η μνήμη εξαντλήθηκε κατά τη φόρτωση του PCB '%s'"
 
 #: pcbnew/files.cpp:844
 #, c-format
@@ -30032,13 +29992,13 @@ msgstr ""
 "Αποτυχία μετονομασίας προσωρινού αρχείου '%s'."
 
 #: pcbnew/files.cpp:1154
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
 msgstr ""
 "Η πλακέτα αντιγράφτηκε στο:\n"
-"\"%s\""
+"%s"
 
 #: pcbnew/footprint.cpp:926 pcbnew/tools/pcb_control.cpp:1231
 msgid "Last Change"
@@ -30105,9 +30065,9 @@ msgid "Footprint %s"
 msgstr "Αποτύπωμα %s"
 
 #: pcbnew/footprint.cpp:2091
-#, fuzzy, c-format
+#, c-format
 msgid "Expected \"Through hole\" type but set to \"%s\""
-msgstr "Διαμπερές οπή pad %s του %s"
+msgstr "Αναμενόταν τύπος \"Διαμπερές τρύπα\" αλλά ορίστηκε \"%s\""
 
 #: pcbnew/footprint.cpp:2095
 #, c-format
@@ -30129,9 +30089,8 @@ msgid "Clearance Override"
 msgstr "Περιγράμματα Διάκενου"
 
 #: pcbnew/footprint.cpp:2370 pcbnew/pad.cpp:1658
-#, fuzzy
 msgid "Solderpaste Margin Override"
-msgstr "Διάκενο πάστας συγκόλλησης:"
+msgstr ""
 
 #: pcbnew/footprint.cpp:2374 pcbnew/pad.cpp:1661
 msgid "Solderpaste Margin Ratio Override"
@@ -31286,7 +31245,7 @@ msgstr "Ψύκτρα"
 
 #: pcbnew/pad.cpp:914
 msgid "Castellated"
-msgstr ""
+msgstr "Οδοντωτό"
 
 #: pcbnew/pad.cpp:922 pcbnew/pcb_track.cpp:762 pcbnew/pcb_track.cpp:1188
 msgid "Diameter"
@@ -31350,9 +31309,9 @@ msgid "Pad %s %s of %s on %s"
 msgstr "Έδρα %s %s από %s στο %s"
 
 #: pcbnew/pad.cpp:1163
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "Διαμπερές οπή pad %s του %s"
+msgstr "Έδρα διαμπερούς τρύπας %s %s του %s"
 
 #: pcbnew/pad.cpp:1598
 msgid "Edge connector"
@@ -31399,9 +31358,8 @@ msgid "Pad To Die Length"
 msgstr "Μήκος από Έδρα σε Πλακίδιο"
 
 #: pcbnew/pad.cpp:1655
-#, fuzzy
 msgid "Soldermask Margin Override"
-msgstr "Διάκενο μάσκας συγκόλλησης:"
+msgstr ""
 
 #: pcbnew/pad.cpp:1669
 msgid "Fabrication Property"
@@ -31522,15 +31480,15 @@ msgstr "Μη αναγνωρισμένο επίπεδο '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:497
 msgid "Footprint's courtyard is not a single, closed shape."
-msgstr "Η περιοχή αποτυπώματος είναι λάθος (δεν είναι κλειστό σχήμα)"
+msgstr "Η περιοχή αποτυπώματος δεν είναι ένα ενιαίο, κλειστό σχήμα."
 
 #: pcbnew/pcb_expr_evaluator.cpp:510
 msgid "Footprint has no front courtyard."
-msgstr "το αποτύπωμα '%s' έχει κακοσχηματισμένο χώρο αποτυπώματος"
+msgstr "Το αποτύπωμα δεν έχει μπροστινό χώρο αποτυπώματος."
 
 #: pcbnew/pcb_expr_evaluator.cpp:527
 msgid "Footprint has no back courtyard."
-msgstr "Το αποτύπωμα δεν έχει ορισμένο χώρο αποτυπώματος"
+msgstr "Το αποτύπωμα δεν έχει πίσω χώρο αποτυπώματος."
 
 #: pcbnew/pcb_expr_evaluator.cpp:1151
 msgid "must be mm, in, or mil"
@@ -31799,7 +31757,7 @@ msgid ""
 "moved to KiCad layer Eco1_User."
 msgstr ""
 "Το πολύγωνο στο επίπεδο του Altium %d δεν έχει ισοδύναμο στο KiCad. "
-"Τοποθέτηση στο Eco1_User"
+"Τοποθέτηση στο Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1633
 msgid "Loading rules..."
@@ -31819,8 +31777,8 @@ msgid ""
 "Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Το zone στο επίπεδο του Altium %d δεν έχει ισοδύναμο στο KiCad. Τοποθέτηση "
-"στο Eco1_User"
+"Η ζώνη στο επίπεδο του Altium (%d) δεν έχει ισοδύναμο στο KiCad. Μεταφέρθηκε "
+"επίπεδο στο Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1796
 #, c-format
@@ -31841,8 +31799,8 @@ msgid ""
 "Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Το Arc Keepout στο επίπεδο του Altium %d δεν έχει ισοδύναμο στο KiCad. "
-"Τοποθέτηση στο Eco1_User"
+"Η καθαρή περιοχή τόξου στο επίπεδο του Altium (%d) δεν έχει ισοδύναμο στο "
+"KiCad. Τοποθέτηση στο Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1983
 #, c-format
@@ -31850,8 +31808,8 @@ msgid ""
 "Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Το Arc Keepout στο επίπεδο του Altium %d δεν έχει ισοδύναμο στο KiCad. "
-"Τοποθέτηση στο Eco1_User"
+"Το τόξο στο επίπεδο του Altium (%d) δεν έχει ισοδύναμο στο KiCad. Τοποθέτηση "
+"στο Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2063
 msgid "Loading pads..."
@@ -31868,8 +31826,7 @@ msgstr ""
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
-"Το pad '%s' του αποτυπώματος %s έχει τετράγωνη οπή. Το KiCad δεν το "
-"υποστηρίζει ακόμη"
+"Η έδρα '%s' του αποτυπώματος %s έχει τετράγωνη οπή (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2165
 #, c-format
@@ -31877,8 +31834,8 @@ msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"Το pad '%s' του αποτυπώματος %s έχει περιστραμένες οπές κατα %f μοίρες. Το "
-"KiCad υποστηρίζει μόνο γωνίες 90 μοιρών"
+"Στο αποτύπωμα %s, έδρα %s, υπάρχει περιστραμμένη τρύπα κατά %f μοίρες. Το "
+"KiCad υποστηρίζει μόνο περιστροφές 90 μοιρών."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2179
 #, c-format
@@ -31907,21 +31864,23 @@ msgstr ""
 "Τοποθέτηση στο επίπεδο Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2299
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
-msgstr "Η περιοχή χαλκού ανήκει σε δίκτυο το οποίο δεν έχει έδρες"
+msgstr ""
+"Η μη χάλκινη έδρα %s είναι συνδεδεμένη σε ένα δίκτυο, κάτι το οποίο δεν "
+"υποστηρίζεται."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2305
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr "Το μη χάλκινο Pad '%s' έχει οπή. Αυτό δεν πρέπει να συμβαίνει"
+msgstr "Η μη χάλκινη έδρα '%s' έχει τρύπα, αυτό δεν υποστηρίζεται."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2310
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
-"Το μη χάλκινο Pad '%s' χρησιμοποιεί μια σύνθετη στοίβαξη στα pad (είδος %d). "
-"Αυτό δεν πρέπει να συμβαίνει"
+"Η μη χάλκινη έδρα '%s' χρησιμοποιεί μια σύνθετη στοίβαξη έδρας (δεν "
+"υποστηρίζεται ακόμα)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2464
 #, c-format
@@ -31950,17 +31909,17 @@ msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Το Track Keepout στο επίπεδο του Altium %d δεν έχει ισοδύναμο στο KiCad. "
-"Τοποθέτηση στο Eco1_User"
+"Η καθαρή περιοχή δρόμου στο επίπεδο του Altium (%d) δεν έχει ισοδύναμο στο "
+"KiCad. Μεταφέρθηκε στο Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2600
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Το Track Keepout στο επίπεδο του Altium %d δεν έχει ισοδύναμο στο KiCad. "
-"Τοποθέτηση στο Eco1_User"
+"Βρέθηκε δρόμος στο επίπεδο του Altium (%d) που δεν έχει ισοδύναμο στο KiCad. "
+"Τοποθετήθηκε στο Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2641
 msgid "Loading text..."
@@ -31980,12 +31939,11 @@ msgid ""
 "moved to KiCad layer Eco1_User."
 msgstr ""
 "Το κείμενο στο επίπεδο του Altium %d δεν έχει ισοδύναμο στο KiCad. "
-"Τοποθέτηση στο Eco1_User"
+"Τοποθέτηση στο Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2826
-#, fuzzy
 msgid "Loading rectangles..."
-msgstr "Φόρτωση Αρχείων Gerber..."
+msgstr "Φόρτωση ορθογώνιων..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2846
 #, c-format
@@ -31993,8 +31951,8 @@ msgid ""
 "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Γέμισμα στο επίπεδο του Altium %d δεν έχει ισοδύναμο στο KiCad. Τοποθέτηση "
-"στο Eco1_User"
+"Γέμισμα στο επίπεδο του Altium (%d) δεν έχει ισοδύναμο στο KiCad. Τοποθέτηση "
+"στο Eco1_User."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:91
 msgid ""
@@ -32076,14 +32034,15 @@ msgstr ""
 "σχεδιασμού που έχουν εφαρμοστεί."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"Η περιοχή '%s' του CADSTAR δεν έχει ισοδύναμο στο KiCad. Δεν υποστηρίζονται "
-"περιοχές καθαρής τοποθέτησης."
+"Η περιοχή '%s' του CADSTAR στο αντικείμενο βιβλιοθήκης '%s' δεν έχει "
+"ισοδύναμο στο KiCad. Η περιοχή δεν είναι ούτε via ούτε καθαρή περιοχή "
+"δρομολόγησης. Η περιοχή δεν εισάχθηκε."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:982
 #, c-format
@@ -32149,7 +32108,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1421
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr "Μη αναμενόμενος τύπος διάστασης (ID %s). Δεν έγινε εισαγωγή"
+msgstr "Μη αναμενόμενος τύπος Διάστασης (ID %s). Δεν έγινε εισαγωγή."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1556
 #, c-format
@@ -32412,7 +32371,7 @@ msgstr "όνομα <πακέτου>: \"%s\" υπάρχει και στη <βιβ
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1164
 #, c-format
 msgid "No '%s' package in library '%s'."
-msgstr "Δεν υπάρχει πακέτο \"%s\" στη βιβλιοθήκη \"%s\""
+msgstr "Δεν υπάρχει πακέτο '%s' στη βιβλιοθήκη '%s'."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1395
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2181
@@ -32457,9 +32416,11 @@ msgid "Unknown FABMASTER section %s:%s at row %zu."
 msgstr "Άγνωστο τμήμα FABMASTER %s:%s στη σειρά %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:268
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
-msgstr "Μη έγκυρος αριθμός λεκτικών μονάδων. Αναμένονταν 8 αλλά βρέθηκαν %zu"
+msgstr ""
+"Μη έγκυρο μέγεθος γραμμής J στη γραμμή %zu. Αναμένονταν 12 στοιχεία αλλά "
+"βρέθηκαν %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:291
 msgid "Could not find units value, defaulting to mils."
@@ -32468,7 +32429,7 @@ msgstr "Δεν ήταν δυνατή η εύρεση μονάδας, επιλέ�
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:315
 #, c-format
 msgid "Could not find column label %s."
-msgstr "Αδυναμία εύρεσης αρχείου βιβλιοθήκης %s"
+msgstr "Αδυναμία εύρεσης ετικέτας στήλης %s."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:359
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:442
@@ -32480,34 +32441,38 @@ msgstr "Αδυναμία εύρεσης αρχείου βιβλιοθήκης %s
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1585
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1664
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1731
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
-msgstr "Μη έγκυρος αριθμός λεκτικών μονάδων. Αναμένονταν 8 αλλά βρέθηκαν %zu"
+msgstr ""
+"Μη έγκυρο μέγεθος γραμμής στη γραμμή %zu. Αναμένονταν %zu στοιχεία αλλά "
+"βρέθηκαν %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:494
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting drill size value but found %s!%s!%s in row %zu."
-msgstr "Αναμένονται τιμές μεγέθους pad αλλά βρέθηκαν %s : %s στη γραμμή %zu"
+msgstr ""
+"Αναμένονται τιμές μεγέθους διάτρησης, αλλά βρέθηκαν %s!%s!%s στη γραμμή %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:542
 #, c-format
 msgid "Expecting pad size values but found %s : %s in row %zu."
-msgstr "Αναμένονται τιμές μεγέθους pad αλλά βρέθηκαν %s : %s στη γραμμή %zu"
+msgstr "Αναμένονται τιμές μεγέθους έδρας αλλά βρέθηκαν %s : %s στη γραμμή %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:564
 #, c-format
 msgid "Invalid pad size in row %zu."
-msgstr "Άκυρο μέγεθος έδρας στη γραμμή %zu"
+msgstr "Άκυρο μέγεθος έδρας στη γραμμή %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:599
 #, c-format
 msgid "Expecting pad offset values but found %s:%s in row %zu."
-msgstr "Αναμένονται τιμές μετατόπισης pad αλλά βρέθηκαν %s : %s στη γραμμή %zu"
+msgstr ""
+"Αναμένονται τιμές μετατόπισης έδρας αλλά βρέθηκαν %s : %s στη γραμμή %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:644
 #, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
-msgstr "Άγνωστο όνομα σχήματος έδρας '%s' στο επίπεδο '%s' στη γραμμή %zu"
+msgstr "Άγνωστο όνομα σχήματος έδρας '%s' στο επίπεδο '%s' στη γραμμή %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:966
 #, c-format
@@ -32520,7 +32485,7 @@ msgstr ""
 #, c-format
 msgid "Could not insert graphical item %d into padstack '%s'."
 msgstr ""
-"Δεν ήταν δυνατή η εισαγωγή του γραφικού στοιχείου %d στη στοίβα pad «%s»"
+"Δεν ήταν δυνατή η εισαγωγή του γραφικού στοιχείου %d στη στοίβα έδρας '%s'."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1014
 #, c-format
@@ -32530,7 +32495,7 @@ msgstr "Μη αναγνωρίσιμο αρχέγονο σχήματος pad «%s
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1121
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
-msgstr "Μη έγκυρος αριθμός λεκτικών μονάδων. Αναμένονταν 8 αλλά βρέθηκαν %zu"
+msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1256
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1445
@@ -32539,9 +32504,11 @@ msgid "Invalid format for record_tag string '%s' in row %zu."
 msgstr "Μη έγκυρη μορφή για το αλφαριθμητικό record_tag '%s' στη γραμμή %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1416
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
-msgstr "Μη έγκυρος αριθμός λεκτικών μονάδων. Αναμένονταν 8 αλλά βρέθηκαν %zu"
+msgstr ""
+"Μη έγκυρο μέγεθος γραμμής στη γραμμή %zu. Αναμένονταν %zu στοιχεία αλλά "
+"βρέθηκαν %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1455
 #, c-format
@@ -32565,7 +32532,7 @@ msgstr ""
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2343
 #, c-format
 msgid "Could not find custom pad '%s'."
-msgstr "Αδυναμία εύρεσης αρχείου βιβλιοθήκης %s"
+msgstr "Αδυναμία εύρεσης προσαρμοσμένης έδρας '%s'."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2543
 #, c-format
@@ -32575,20 +32542,20 @@ msgstr ""
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:91
 #, c-format
 msgid "Cannot convert '%s' to an integer."
-msgstr "Αδυναμία μετατροπής \"%s\" σε ακέραιο"
+msgstr "Αδυναμία μετατροπής \"%s\" σε ακέραιο."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:228
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:875
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' not found."
-msgstr "Δεν βρέθηκε η βιβλιοθήκη αποτυπωμάτων."
+msgstr "Δεν βρέθηκε η βιβλιοθήκη αποτυπωμάτων '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:282
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:303
 #, c-format
 msgid "Library '%s' has no footprint '%s'."
-msgstr "η βιβλιοθήκη '%s' δεν έχει αποτύπωμα '%s' για διαγραφή"
+msgstr "Η βιβλιοθήκη '%s' δεν έχει αποτύπωμα '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:347
 #: pcbnew/plugins/kicad/pcb_parser.cpp:666
@@ -32606,9 +32573,7 @@ msgstr "Στοιχείο περιέχει %d παραμέτρους."
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2624
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr ""
-"Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση αρχείου\n"
-"%s"
+msgstr "Ανεπαρκή δικαιώματα για τη διαγραφή του φακέλου '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2632
@@ -32631,12 +32596,12 @@ msgstr "Αδυναμία διαγραφής βιβλιοθήκης αποτυπ�
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:172
 #, c-format
 msgid "Cannot create footprint library '%s'."
-msgstr "Αδυναμία δημιουργίας βιβλιοθήκης αποτυπωμάτων '%s'"
+msgstr "Αδυναμία δημιουργίας βιβλιοθήκης αποτυπωμάτων '%s'."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:178
 #, c-format
 msgid "Footprint library '%s' is read only."
-msgstr "Η διαδρομή βιβλιοθήκης αποτυπωμάτων \"%s\" είναι μόνο για ανάγνωση"
+msgstr "Η βιβλιοθήκη αποτυπωμάτων '%s' είναι μόνο για ανάγνωση."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:216
 #, c-format
@@ -32686,7 +32651,7 @@ msgstr "Η επανασύνδεση του αποτυπώματος ακυρώθ
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2342
 msgid "This file does not contain a PCB."
-msgstr "αυτό το αρχείο δεν περιέχει PCB"
+msgstr "Αυτό το αρχείο δεν περιέχει PCB."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2492
 #, c-format
@@ -32709,9 +32674,7 @@ msgstr "Μη έγκυρο όνομα αρχείου αποτυπώματος \"%
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2528
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
-msgstr ""
-"Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση αρχείου\n"
-"%s"
+msgstr "Ανεπαρκή δικαιώματα για τη διαγραφή του '%s'."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2599
 #, c-format
@@ -32769,14 +32732,12 @@ msgstr "Μη ορισμένα επίπεδα:"
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1107
 #, c-format
 msgid "Page type '%s' is not valid."
-msgstr "Ο τύπος σελίδας \"%s\" δεν είναι έγκυρος"
+msgstr "Ο τύπος σελίδας '%s' δεν είναι έγκυρος."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1664
 #, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 msgstr ""
-"Το επίπεδο \"%s\" στο αρχείο \"%s\" στη γραμμή %d, δεν βρέθηκε ανάμεσα στα "
-"σταθερά επίπεδα"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1701
 #, c-format
@@ -32786,7 +32747,7 @@ msgstr "Το %d δεν είναι έγκυρη αρίθμηση επιπέδων
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2353
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr "Διπλό όνομα NETCLASS \"%s\" στο αρχείο \"%s\" στη γραμμή %d, θέση %d"
+msgstr "Διπλό όνομα NETCLASS '%s' στο αρχείο '%s' στη γραμμή %d, θέση %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3249
 #, c-format
@@ -32799,7 +32760,7 @@ msgstr ""
 "Μη έγκυρος αριθμός ταυτότητας αποτυπώματος στο\n"
 "αρχείο: <%s>\n"
 "γραμμή: %d\n"
-"θέση: %d"
+"θέση: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3567
 #, c-format
@@ -32813,10 +32774,9 @@ msgid ""
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
-"Μη έγκυρο net ID στο\n"
-"αρχείο: '%s'\n"
-"γραμμή: %d\n"
-"θέση: %d"
+"Μη έγκυρη ταυτότητα δικτύου στο\n"
+"αρχείο: %s\n"
+"γραμμή: %d θέση: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4222
 #, c-format
@@ -32825,10 +32785,9 @@ msgid ""
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
-"Το όνομα του Net δεν ταιριάζει με το net ID στο\n"
+"Το όνομα του δικτύου δεν ταιριάζει με το ID στο\n"
 "αρχείο: '%s'\n"
-"γραμμή: %d\n"
-"θέση: %d"
+"γραμμή: %d θέση: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4675
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4753
@@ -32842,7 +32801,7 @@ msgstr ""
 "Μη έγκυρο net ID στο\n"
 "αρχείο: '%s'\n"
 "γραμμή: %d\n"
-"θέση: %d"
+"θέση: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4847
 #, c-format
@@ -32865,10 +32824,10 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"Μη έγκυρο net ID στο\n"
+"Μη έγκυρο ID δικτύου στο\n"
 "αρχείο: '%s'\n"
 "γραμμή: %d\n"
-"θέση: %d"
+"θέση: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5076
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2484
@@ -32892,7 +32851,7 @@ msgstr "Το αρχείο '%s' έχει μία μη αναγνωρίσιμη ε�
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:742
 #, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "Άγνωστος τύπος φύλλου \"%s\" στη γραμμή:%d"
+msgstr "Άγνωστος τύπος φύλλου '%s' στη γραμμή:%d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1327
 #, c-format
@@ -32902,19 +32861,18 @@ msgstr "Δεν υπάρχει το '$EndMODULE' για το MODULE '%s'."
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1377
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
-msgstr ""
-"Άγνωστο σχήμα έδρας '%c=0x%02x' στη γραμμή: %d του αποτυπώματος: \"%s\""
+msgstr "Άγνωστο σχήμα έδρας '%c=0x%02x' στη γραμμή: %d του αποτυπώματος: '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1567
 #, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr ""
-"Άγνωστο FP_SHAPE τύπος:'%c=0x%02x' στη γραμμή:%d του αποτυπώματος:\"%s\""
+"Άγνωστος τύπος FP_SHAPE:'%c=0x%02x' στη γραμμή:%d του αποτυπώματος: '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2326
 #, c-format
 msgid "Duplicate NETCLASS name '%s'."
-msgstr "διπλό όνομα ΚΛΑΣΗΣ ΔΙΚΤΥΟΥ \"%s\""
+msgstr "Διπλό όνομα NETCLASS '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2403
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2414
@@ -32939,10 +32897,8 @@ msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Άκυρος αριθμός κινητής υποδιαστολής σε\n"
-"αρχείο: <%s>\n"
-"γραμμή: %d\n"
-"θέση: %d"
+"Άκυρος αριθμός κινητής υποδιαστολής στο αρχείο: '%s'\n"
+"γραμμή: %d, θέση: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2815
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2854
@@ -32951,10 +32907,8 @@ msgid ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Έλλειψη αριθμού κινητής υποδιαστολής σε\n"
-"αρχείο: \"%s\"\n"
-"γραμμή: %d\n"
-"θέση: %d"
+"Έλλειψη αριθμού κινητής υποδιαστολής στο αρχείο: '%s'\n"
+"γραμμή: %d, θέση: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2996
 #, c-format
@@ -32974,16 +32928,16 @@ msgstr "Άγνωστο επίπεδο PCad %u"
 
 #: pcbnew/plugins/pcad/pcb.cpp:764
 msgid "KiCad only supports 32 signal layers."
-msgstr "Το KiCad υποστηρίζει μόνο 32 επίπεδα σημάτων"
+msgstr "Το KiCad υποστηρίζει μόνο 32 επίπεδα σημάτων."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:93
 msgid "Unable to find library section."
-msgstr "Αδυναμία εύρεσης αρχείου βιβλιοθήκης %s"
+msgstr "Αδυναμία εύρεσης τμήματος βιβλιοθήκης."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:108
 #, c-format
 msgid "Unable to find viaStyleDef %s."
-msgstr "Αδυναμία εύρεσης προγράμματος προβολής PDF για \"%s\""
+msgstr "Αδυναμία εύρεσης viaStyleDef %s."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:71
 msgid "Exception on python action plugin code"
@@ -32991,9 +32945,9 @@ msgstr "Εξαίρεση στον κώδικα πρόσθετου python"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
-msgstr "Μέθοδος \"%s\" δεν βρέθηκε ή δεν μπορεί να κληθεί"
+msgstr "Μέθοδος '%s' δεν βρέθηκε ή δεν μπορεί να κληθεί"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:84
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
@@ -33002,7 +32956,7 @@ msgstr "Άγνωστη Μέθοδος"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:370
 msgid "Apply action script"
-msgstr ""
+msgstr "Εφαρμογή σεναρίου εντολών"
 
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:70
 msgid "Exception on python footprint wizard code"
@@ -33124,9 +33078,8 @@ msgid "existing track"
 msgstr "Όταν δημιουργούνται διάδρομοι"
 
 #: pcbnew/router/pns_kicad_iface.cpp:480 pcbnew/router/pns_kicad_iface.cpp:493
-#, fuzzy
 msgid "board minimum width"
-msgstr "Ελάχιστο πλάτος:"
+msgstr "ελάχιστο πλάτος πλακέτας"
 
 #: pcbnew/router/pns_kicad_iface.cpp:489
 msgid "netclass 'Default'"
@@ -33225,9 +33178,8 @@ msgid "Auto-finish Track"
 msgstr "Αυτόματος τερματισμός Διαδρόμου"
 
 #: pcbnew/router/router_tool.cpp:97
-#, fuzzy
 msgid "Automatically finishes laying the current track."
-msgstr "Αυτόματη ολοκλήρωση του διαδρόμου που δρομολογείται."
+msgstr "Αυτόματη ολοκλήρωση του τρέχοντος δρόμου."
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Place Through Via"
@@ -33441,9 +33393,8 @@ msgstr ""
 "Σχεδίασης > Περιορισμοί."
 
 #: pcbnew/router/router_tool.cpp:981
-#, fuzzy
 msgid "Blind/buried via need 2 different layers."
-msgstr "Να μην τροποποιηθούν οι έδρες που έχουν διαφορετικά επίπεδα"
+msgstr "Τα τυφλά/θαμμένα via απαιτούν 2 διαφορετικά επίπεδα."
 
 #: pcbnew/router/router_tool.cpp:1059
 msgid "Tracks on Copper layers only."
@@ -33463,14 +33414,14 @@ msgid "Break Track"
 msgstr "Διάσπαση Διαδρόμου"
 
 #: pcbnew/router/router_tool.cpp:2043
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Diff Pair: %s"
-msgstr "Μικρο-ρύθμιση Απόκλισης Διαφορικού Ζεύγους"
+msgstr "Δρομολόγηση Διαφορικού Ζεύγους: %s"
 
 #: pcbnew/router/router_tool.cpp:2043
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Track: %s"
-msgstr "Δρομολόγηση Ενός Διαδρόμου"
+msgstr "Δρομολόγηση Δρόμου: %s"
 
 #: pcbnew/router/router_tool.cpp:2049
 #, c-format
@@ -33486,38 +33437,33 @@ msgid "(no net)"
 msgstr "(κανένα δίκτυο)"
 
 #: pcbnew/router/router_tool.cpp:2060
-#, fuzzy
 msgid "Free-angle"
-msgstr "γωνία"
+msgstr "Ελεύθερη-γωνία"
 
 #: pcbnew/router/router_tool.cpp:2066
-#, fuzzy
 msgid "45-degree"
-msgstr "45 μοίρες"
+msgstr "45-μοίρες"
 
 #: pcbnew/router/router_tool.cpp:2067
-#, fuzzy
 msgid "45-degree rounded"
-msgstr "Σύρσιμο (45 μοίρες)"
+msgstr "Στρογγυλεμένο 45-μοιρών"
 
 #: pcbnew/router/router_tool.cpp:2068
-#, fuzzy
 msgid "90-degree"
-msgstr "μοίρα"
+msgstr "90-μοίρες"
 
 #: pcbnew/router/router_tool.cpp:2069
 msgid "90-degree rounded"
 msgstr "Στρογγυλεμένο 90-μοιρών"
 
 #: pcbnew/router/router_tool.cpp:2074
-#, fuzzy
 msgid "Corner Style"
-msgstr "Στυλ Γραμμής"
+msgstr "Στυλ Γωνίας"
 
 #: pcbnew/router/router_tool.cpp:2079
-#, fuzzy, c-format
+#, c-format
 msgid "Track Width: %s"
-msgstr "Πλάτος διαδρόμου"
+msgstr "Πλάτος Δρόμου: %s"
 
 #: pcbnew/router/router_tool.cpp:2101
 msgid "Diff Pair Gap"
@@ -33560,7 +33506,7 @@ msgstr "Το αρχείο συνεδρίας εισήχθη και συγχων�
 #: pcbnew/specctra_import_export/specctra_import.cpp:166
 #, c-format
 msgid "Session file uses invalid layer id '%s'."
-msgstr "Το αρχείο συνεδρίας χρησιμοποιεί μή έγκυρη ταυτότητα επιπέδου \"%s\""
+msgstr "Το αρχείο συνεδρίας χρησιμοποιεί μη έγκυρη ταυτότητα επιπέδου '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:217
 msgid "Session via padstack has no shapes"
@@ -33569,7 +33515,7 @@ msgstr "Ή σχηματική στοίβα συνεδρίας via δεν έχε�
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
 #, c-format
 msgid "Unsupported via shape: %s."
-msgstr "Μη υποστηριζόμενο σχήμα via: %s"
+msgstr "Μη υποστηριζόμενο σχήμα via: %s."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:246
 #: pcbnew/specctra_import_export/specctra_import.cpp:271
@@ -33602,7 +33548,7 @@ msgstr "Η αναφορά '%s' δεν βρέθηκε."
 #: pcbnew/specctra_import_export/specctra_import.cpp:501
 #, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "Ένα wire_via παραπέμπει σε μη υπάρχουσα στοίβα έδρας \"%s\""
+msgstr "Ένα wire_via παραπέμπει σε μη υπάρχουσα στοίβα έδρας '%s'."
 
 #: pcbnew/toolbars_footprint_editor.cpp:92
 msgid "Load footprint from current board"
@@ -33782,9 +33728,9 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:542
 #: pcbnew/tools/board_inspection_tool.cpp:580
 #: pcbnew/tools/board_inspection_tool.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved clearance: %s."
-msgstr "Διάκενο έδρας:"
+msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:186
 #: pcbnew/tools/board_inspection_tool.cpp:305
@@ -33793,15 +33739,13 @@ msgstr "Διάκενο"
 
 #: pcbnew/tools/board_inspection_tool.cpp:198
 #: pcbnew/tools/board_inspection_tool.cpp:605
-#, fuzzy
 msgid "Edge clearance resolution for:"
-msgstr "Περιγράμματα Διάκενου"
+msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:235
 #: pcbnew/tools/board_inspection_tool.cpp:459
-#, fuzzy
 msgid "Clearance resolution for:"
-msgstr "Περιγράμματα Διάκενου"
+msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:264
 msgid "Select two items for a clearance resolution report."
@@ -33813,9 +33757,8 @@ msgid "Cannot generate clearance report on empty group."
 msgstr "Δεν είναι δυνατή η δημιουργία αναφοράς εκκαθάρισης σε κενή ομάδα."
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
-#, fuzzy
 msgid "Zone connection resolution for:"
-msgstr "Περιγράμματα Διάκενου"
+msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 #, c-format
@@ -33854,19 +33797,16 @@ msgid "Items belong to the same net. Clearance is 0."
 msgstr "Τα αντικείμενα ανήκουν στο ίδιο net. Το διάκενο είναι 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:498
-#, fuzzy
 msgid "Silkscreen clearance resolution for:"
-msgstr "Τοπικό Διάκενο και Ρυθμίσεις"
+msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
-#, fuzzy
 msgid "Courtyard clearance resolution for:"
-msgstr "Περιγράμματα Διάκενου"
+msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:566
-#, fuzzy
 msgid "Hole clearance resolution for:"
-msgstr "Περιγράμματα Διάκενου"
+msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
@@ -33903,9 +33843,8 @@ msgid "Diameter constraints: min %s; opt %s; max %s."
 msgstr "Περιορισμοί διαμέτρου: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
-#, fuzzy
 msgid "Via Annular Width"
-msgstr "Πλάτος παλμού:"
+msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:771
 msgid "Via annular width resolution for:"
@@ -33935,9 +33874,8 @@ msgid "Keepouts"
 msgstr "Καθαρή Περιοχή"
 
 #: pcbnew/tools/board_inspection_tool.cpp:818
-#, fuzzy
 msgid "Keepout resolution for:"
-msgstr "Καθαρή περιοχή via"
+msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:830
 msgid "Report may be incomplete: some footprint courtyards are malformed."
@@ -34087,7 +34025,7 @@ msgstr "Σχεδίαση διάστασης"
 
 #: pcbnew/tools/drawing_tool.cpp:1174
 msgid "No graphic items found in file."
-msgstr "Εμφάνιση αντικειμένων γραφικών σε λειτουργία περιγράμματος"
+msgstr "Δεν βρέθηκαν αντικείμενα γραφικών στο αρχείο."
 
 #: pcbnew/tools/drawing_tool.cpp:1224 pcbnew/tools/drawing_tool.cpp:1295
 msgid "Place a DXF_SVG drawing"
@@ -34103,7 +34041,7 @@ msgstr "Δεν επιτρέπονται πολύγωνα που τέμνουν �
 
 #: pcbnew/tools/drawing_tool.cpp:2582
 msgid "Via location violates DRC."
-msgstr "Η θέση του via παραβιάζει τον ΕΚΣ"
+msgstr "Η θέση του via παραβιάζει τον ΕΚΣ."
 
 #: pcbnew/tools/drawing_tool.cpp:2686
 msgid "Place via"
@@ -34884,7 +34822,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:569
 msgid "Import Netlist..."
-msgstr "Εισαγωγή Λίστας Δικτύου"
+msgstr "Εισαγωγή Λίστας Δικτύου..."
 
 #: pcbnew/tools/pcb_actions.cpp:569
 msgid "Read netlist and update board connectivity"
@@ -35188,29 +35126,25 @@ msgid "Curved Ratsnest Lines"
 msgstr "Καμπύλες Γραμμές Φωλιάς Συνδέσμων"
 
 #: pcbnew/tools/pcb_actions.cpp:812
-#, fuzzy
 msgid "Ratsnest Mode (3-state)"
-msgstr "Λειτουργία Προβολής Ενός Επιπέδου (3-κατάσταση)"
+msgstr "Κατάσταση Φωλιάς Συνδέσεων (3-κατάσταση)"
 
 #: pcbnew/tools/pcb_actions.cpp:813
-#, fuzzy
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
 msgstr ""
-"Μετάβαση ανάμεσα σε προβολή γεμισμένων ζωνών, περιγράμματος ζωνών, και ζωνών "
-"συρματοπλέγματος"
+"Μετάβαση ανάμεσα σε προβολή φωλιών συνδέσεων για όλα τα επίπεδα, μόνο για τα "
+"ορατά επίπεδα, και για κανένα"
 
 #: pcbnew/tools/pcb_actions.cpp:817
-#, fuzzy
 msgid "Net Color Mode (3-state)"
-msgstr "Λειτουργία Προβολής Ενός Επιπέδου (3-κατάσταση)"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:818
-#, fuzzy
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
-msgstr "Τα χρώματα net και netclass εμφανίζονται μόνο στο ratsnest"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:823
 msgid "Sketch Tracks"
@@ -35253,18 +35187,16 @@ msgid "Show footprint texts in line mode"
 msgstr "Εμφάνιση κειμένων αποτυπώματος σε λειτουργία γραμμής"
 
 #: pcbnew/tools/pcb_actions.cpp:853
-#, fuzzy
 msgid "Draw Zone Fills"
-msgstr "Εμφάνιση &Γεμίσματος Ζώνης"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:853
 msgid "Show filled areas of zones"
 msgstr "Εμφάνιση γεμισμένων περιοχών σε ζώνες"
 
 #: pcbnew/tools/pcb_actions.cpp:858
-#, fuzzy
 msgid "Draw Zone Outlines"
-msgstr "Περίγραμμα ζώνης"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:858
 msgid "Show only zone boundaries"
@@ -35275,20 +35207,17 @@ msgid "Draw Zone Fill Fracture Borders"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:868
-#, fuzzy
 msgid "Draw Zone Fill Triangulation"
-msgstr "Εμφάνιση &Γεμίσματος Ζώνης"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:874
 msgid "Toggle Zone Display"
 msgstr "Αλλαγή Προβολής Ζωνών"
 
 #: pcbnew/tools/pcb_actions.cpp:875
-#, fuzzy
 msgid "Cycle between showing zone fills and just their outlines"
 msgstr ""
-"Μετάβαση ανάμεσα σε προβολή γεμισμένων ζωνών, περιγράμματος ζωνών, και ζωνών "
-"συρματοπλέγματος"
+"Εναλλαγή ανάμεσα σε προβολή γεμίσματος ζωνών ή μόνο των περιγραμμάτων τους"
 
 #: pcbnew/tools/pcb_actions.cpp:883
 msgid "Switch to Component (F.Cu) layer"
@@ -35646,7 +35575,7 @@ msgstr "Άδειασμα Ζώνης"
 
 #: pcbnew/tools/pcb_actions.cpp:1281
 msgid "Remove copper fill from selected zone(s)"
-msgstr "Αφαίρεση αντικειμένου/ων από την επιλογή."
+msgstr "Αφαίρεση γεμίσματος χαλκού από επιλεγμένες ζώνες"
 
 #: pcbnew/tools/pcb_actions.cpp:1287 pcbnew/tools/zone_filler_tool.cpp:267
 msgid "Unfill All Zones"
@@ -35729,14 +35658,12 @@ msgid "Switch router to walkaround mode"
 msgstr "Εναλλαγή δρομολογητή σε λειτουργία περιήγησης"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle Router Mode"
-msgstr "Λειτουργία μετακίνησης δρομολογητή"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle router to the next mode"
-msgstr "Εναλλαγή δρομολογητή σε λειτουργία μετακίνησης"
+msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Set Layer Pair..."
@@ -35764,7 +35691,7 @@ msgstr "Αναίρεση τελευταίας επεξεργασίας"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
 msgid "Walks the current track back one segment."
-msgstr "Το τρέχον επίπεδο γίνεται πιο διάφανο"
+msgstr "Πάει τον τρέχοντα δρόμο πίσω, κατά ένα τμήμα."
 
 #: pcbnew/tools/pcb_actions.cpp:1387 pcbnew/tools/pcb_actions.cpp:1393
 msgid ""
@@ -35783,9 +35710,8 @@ msgstr ""
 "Ορισμός επιλογών μικρο-ρύθμισης μήκους για το αντικείμενο που δρομολογείται."
 
 #: pcbnew/tools/pcb_control.cpp:214
-#, fuzzy
 msgid "Don't show again"
-msgstr "Να μην προβάλλονται πλέον"
+msgstr "Να μην εμφανιστεί ξανά"
 
 #: pcbnew/tools/pcb_control.cpp:228
 #, c-format
@@ -36085,9 +36011,9 @@ msgid "Layer Display Options"
 msgstr "Επιλογές Εμφάνισης Επιπέδου"
 
 #: pcbnew/widgets/appearance_controls.cpp:595
-#, fuzzy, c-format
+#, c-format
 msgid "Inactive layers (%s):"
-msgstr "Μη ενεργά επίπεδα:"
+msgstr "Ανενεργά επίπεδα (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:597
 msgid "Inactive layers:"
@@ -36122,9 +36048,9 @@ msgid "Net Display Options"
 msgstr "Επιλογές Εμφάνισης Net"
 
 #: pcbnew/widgets/appearance_controls.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "Net colors (%s):"
-msgstr "Χρώματα Net:"
+msgstr "Χρώματα δικτύου (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:672
 msgid "Net colors:"
@@ -36147,37 +36073,35 @@ msgid "Net and netclass colors are not shown"
 msgstr "Δεν εμφανίζονται τα χρώματα net και netclass"
 
 #: pcbnew/widgets/appearance_controls.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "Ratsnest display (%s):"
-msgstr "Προβολή ratsnest:"
+msgstr "Προβολή φωλιάς συνδέσεων (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:714
 msgid "Ratsnest display:"
 msgstr "Προβολή ratsnest:"
 
 #: pcbnew/widgets/appearance_controls.cpp:719
-#, fuzzy
 msgid "Choose which ratsnest lines to display"
-msgstr "Επιλέξτε ποιες γραμμές ratsnest θα εμφανίζονται"
+msgstr "Επιλέξτε ποιες γραμμές θα εμφανίζονται από τη φωλιά συνδέσεων"
 
 #: pcbnew/widgets/appearance_controls.cpp:729
-#, fuzzy
 msgid "Show ratsnest lines to items on all layers"
-msgstr "Οι γραμμές ratsnest εμφανίζονται σε αντικείμενα σε όλα τα επίπεδα"
+msgstr ""
+"Οι γραμμές της φωλιάς συνδέσεων εμφανίζονται σε αντικείμενα σε όλα τα επίπεδα"
 
 #: pcbnew/widgets/appearance_controls.cpp:734
 msgid "Visible layers"
 msgstr "Ορατά επίπεδα"
 
 #: pcbnew/widgets/appearance_controls.cpp:736
-#, fuzzy
 msgid "Show ratsnest lines to items on visible layers"
-msgstr "Γραμμές ratsnest εμφανιζονται σε αντικέιμενα στα ορατά επίπεδα"
+msgstr ""
+"Οι γραμμές της φωλιάς συνδέσεων εμφανίζονται σε αντικείμενα στα ορατά επίπεδα"
 
 #: pcbnew/widgets/appearance_controls.cpp:743
-#, fuzzy
 msgid "Hide all ratsnest lines"
-msgstr "Απόκρυψη φωλιάς συνδέσεων πλακέτας"
+msgstr "Απόκρυψη όλων των γραμμών της φωλιάς συνδέσεων"
 
 #: pcbnew/widgets/appearance_controls.cpp:881
 msgid "Set Net Color"
