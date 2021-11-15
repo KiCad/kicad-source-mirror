@@ -304,7 +304,17 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
         switch( aItem->Type() )
         {
         case     PCB_FOOTPRINT_T:
-            itemPoly = static_cast<FOOTPRINT*>( aItem )->GetBoundingHull();
+            try
+            {
+                itemPoly = static_cast<FOOTPRINT*>( aItem )->GetBoundingHull();
+            }
+            catch( const ClipperLib::clipperException& exc )
+            {
+                // This may be overkill and could be an assertion but we are more likely to find
+                // any clipper errors this way.
+                wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
+            }
+
             break;
 
         case     PCB_PAD_T:
