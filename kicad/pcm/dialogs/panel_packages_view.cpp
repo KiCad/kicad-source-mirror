@@ -639,7 +639,7 @@ void PANEL_PACKAGES_VIEW::updatePackageList()
 
     m_packageListWindow->FitInside();
     m_packageListWindow->SetScrollRate( 0, 15 );
-    m_packageListWindow->Layout();
+    m_packageListWindow->SendSizeEvent( wxSEND_EVENT_POST );
 }
 
 
