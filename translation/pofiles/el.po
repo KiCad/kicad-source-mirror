@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-15 17:34+0000\n"
+"PO-Revision-Date: 2021-11-15 18:08+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -33990,17 +33990,16 @@ msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:771
 msgid "Via annular width resolution for:"
-msgstr "Διόρθωση πλάτους δρόμου:"
+msgstr "Ανάλυση πλάτους δακτυλίου διέλευσης για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:782
 #, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
-msgstr ""
-"Περιορισμοί δακτυλιοειδούς πλάτους: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
+msgstr "Περιορισμοί πλάτους δακτυλίου: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:793
 msgid "Hole Size"
-msgstr "Μέγεθος οπής"
+msgstr "Μέγεθος Οπής"
 
 #: pcbnew/tools/board_inspection_tool.cpp:795
 msgid "Hole diameter resolution for:"
@@ -34017,7 +34016,7 @@ msgstr "Καθαρή Περιοχή"
 
 #: pcbnew/tools/board_inspection_tool.cpp:818
 msgid "Keepout resolution for:"
-msgstr ""
+msgstr "Ανάλυση καθαρής περιοχής για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:830
 msgid "Report may be incomplete: some footprint courtyards are malformed."
@@ -35269,7 +35268,7 @@ msgstr "Καμπύλες Γραμμές Φωλιάς Συνδέσμων"
 
 #: pcbnew/tools/pcb_actions.cpp:812
 msgid "Ratsnest Mode (3-state)"
-msgstr "Κατάσταση Φωλιάς Συνδέσεων (3-κατάσταση)"
+msgstr "Κατάσταση Φωλιάς Συνδέσεων (3-καταστάσεις)"
 
 #: pcbnew/tools/pcb_actions.cpp:813
 msgid ""
@@ -35280,7 +35279,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:817
 msgid "Net Color Mode (3-state)"
-msgstr ""
+msgstr "Συμπεριφορά Χρωματισμού Δικτύου (3-καταστάσεις)"
 
 #: pcbnew/tools/pcb_actions.cpp:818
 msgid ""
@@ -35769,7 +35768,7 @@ msgstr "Άνοιγμα ρυθμίσεων Διαδραστικού Δρομολ�
 
 #: pcbnew/tools/pcb_actions.cpp:1327
 msgid "Differential Pair Dimensions..."
-msgstr "Διαστάσεις Διαφορικού Ζευγαριού..."
+msgstr "Διαστάσεις Διαφορικού Ζεύγους..."
 
 #: pcbnew/tools/pcb_actions.cpp:1327
 msgid "Open Differential Pair Dimension settings"
@@ -35793,7 +35792,7 @@ msgstr "Εναλλαγή δρομολογητή σε λειτουργία μετ
 
 #: pcbnew/tools/pcb_actions.cpp:1342
 msgid "Router Walkaround Mode"
-msgstr "Δρομολογητής σε λειτουργία Walkaround"
+msgstr "Δρομολογητής σε λειτουργία περιήγησης"
 
 #: pcbnew/tools/pcb_actions.cpp:1342
 msgid "Switch router to walkaround mode"
@@ -35801,11 +35800,11 @@ msgstr "Εναλλαγή δρομολογητή σε λειτουργία περ
 
 #: pcbnew/tools/pcb_actions.cpp:1347
 msgid "Cycle Router Mode"
-msgstr ""
+msgstr "Εναλλαγή συμπεριφοράς δρομολογητή"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
 msgid "Cycle router to the next mode"
-msgstr ""
+msgstr "Εναλλαγή συμπεριφοράς δρομολογητή στην επόμενη"
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Set Layer Pair..."
