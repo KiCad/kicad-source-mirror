@@ -273,6 +273,9 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
     if( !wxFrame::ProcessEvent( aEvent ) )
         return false;
 
+    if( Pgm().m_Quitting )
+        return true;
+
     if( !m_isClosing && m_hasAutoSave && IsShown() && IsActive()
         && m_autoSaveState != isAutoSaveRequired()
         && m_autoSaveInterval > 0 )

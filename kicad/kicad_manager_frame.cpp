@@ -435,6 +435,8 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
 
     m_leftWin->EmptyTreePrj();
 
+    Pgm().m_Quitting = true;
+
     return true;
 }
 

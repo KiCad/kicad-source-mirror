@@ -108,6 +108,7 @@ PGM_BASE::PGM_BASE()
 {
     m_locale = nullptr;
     m_Printing = false;
+    m_Quitting = false;
     m_ModalDialogCount = 0;
 
     setLanguageId( wxLANGUAGE_DEFAULT );

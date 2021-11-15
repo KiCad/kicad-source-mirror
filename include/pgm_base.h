@@ -292,6 +292,8 @@ public:
 
     int  m_ModalDialogCount;
 
+    bool m_Quitting;
+
 protected:
     /// Loads internal settings from COMMON_SETTINGS
     void loadCommonSettings();
