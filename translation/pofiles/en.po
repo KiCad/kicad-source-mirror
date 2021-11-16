@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-08 15:58-0800\n"
+"POT-Creation-Date: 2021-11-16 10:40-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2868,16 +2868,6 @@ msgid "Problem while running the PDF viewer '%s'."
 msgstr "Problem while running the PDF viewer '%s'."
 
 #, c-format
-msgid ""
-"Cannot print '%s'.\n"
-"\n"
-"Unknown file type."
-msgstr ""
-"Cannot print '%s'.\n"
-"\n"
-"Unknown file type."
-
-#, c-format
 msgid "Cannot copy file '%s'."
 msgstr "Cannot copy file '%s'."
 
@@ -4030,10 +4020,6 @@ msgstr ""
 
 msgid "Donate to KiCad"
 msgstr "Donate to KiCad"
-
-#, c-format
-msgid "Grid: %s (%s)"
-msgstr "Grid: %s (%s)"
 
 #, c-format
 msgid "User grid: %s (%s)"
@@ -12828,6 +12814,9 @@ msgstr "Install"
 msgid "Uninstall"
 msgstr "Uninstall"
 
+msgid "Apply Changes"
+msgstr "Apply Changes"
+
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
@@ -12864,39 +12853,33 @@ msgstr "Repository"
 msgid "Discard action"
 msgstr "Discard action"
 
-msgid "Install from file..."
-msgstr "Install from file..."
-
-msgid "Apply changes"
-msgstr "Apply changes"
-
-msgid "Discard changes"
-msgstr "Discard changes"
+msgid "Install from File..."
+msgstr "Install from File..."
 
 msgid "Plugin And Content Manager"
 msgstr "Plugin And Content Manager"
+
+msgid "Aborting remaining tasks."
+msgstr "Aborting remaining tasks."
 
 #, c-format
 msgid "Downloaded %lld/%lld Kb"
 msgstr "Downloaded %lld/%lld Kb"
 
-msgid "All downloads finished"
-msgstr "All downloads finished"
-
-msgid "Download progress"
-msgstr "Download progress"
+msgid "Download Progress"
+msgstr "Download Progress"
 
 msgid "Waiting..."
 msgstr "Waiting..."
 
-msgid "Overall progress"
-msgstr "Overall progress"
+msgid "Overall Progress"
+msgstr "Overall Progress"
 
 msgid "Details"
 msgstr "Details"
 
-msgid "Applying package changes"
-msgstr "Applying package changes"
+msgid "Applying Package Changes"
+msgstr "Applying Package Changes"
 
 msgid "Pending install"
 msgstr "Pending install"
@@ -12907,17 +12890,14 @@ msgstr "Pending uninstall"
 msgid "Metadata"
 msgstr "Metadata"
 
-#, c-format
-msgid "Package identifier: %s\n"
-msgstr "Package identifier: %s\n"
+msgid "Package identifier: "
+msgstr "Package identifier: "
 
-#, c-format
-msgid "License: %s\n"
-msgstr "License: %s\n"
+msgid "License: "
+msgstr "License: "
 
-#, c-format
-msgid "Tags: %s\n"
-msgstr "Tags: %s\n"
+msgid "Tags: "
+msgstr "Tags: "
 
 msgid "Author"
 msgstr "Author"
@@ -12927,9 +12907,6 @@ msgstr "Maintainer"
 
 msgid "Resources"
 msgstr "Resources"
-
-msgid "Pick a package on the left panel to view it's description."
-msgstr "Pick a package on the left panel to view it's description."
 
 msgid "Package download url is not specified"
 msgstr "Package download url is not specified"
@@ -12963,23 +12940,20 @@ msgstr ""
 msgid "Install package"
 msgstr "Install package"
 
+msgid "Download Size"
+msgstr "Download Size"
+
+msgid "Install Size"
+msgstr "Install Size"
+
+msgid "Compatible"
+msgstr "Compatible"
+
 msgid "Show all versions"
 msgstr "Show all versions"
 
-msgid "Dl Size"
-msgstr "Dl Size"
-
-msgid "Inst Size"
-msgstr "Inst Size"
-
-msgid "Comp"
-msgstr "Comp"
-
 msgid "Download"
 msgstr "Download"
-
-msgid "Versions"
-msgstr "Versions"
 
 #, c-format
 msgid "schema file '%s' not found"
@@ -13089,6 +13063,9 @@ msgstr ""
 msgid "Aborting package installation."
 msgstr "Aborting package installation."
 
+msgid "Extracted package\n"
+msgstr "Extracted package\n"
+
 #, c-format
 msgid ""
 "Unable to parse package metadata:\n"
@@ -13124,9 +13101,6 @@ msgstr "Failed to remove directory %s"
 #, c-format
 msgid "Package %s uninstalled"
 msgstr "Package %s uninstalled"
-
-msgid "Aborting remaining tasks."
-msgstr "Aborting remaining tasks."
 
 msgid "Could open the template path!"
 msgstr "Could open the template path!"
@@ -13233,9 +13207,6 @@ msgstr "Delete the files and their contents"
 
 msgid "Move to Trash"
 msgstr "Move to Trash"
-
-msgid "Print the contents of the file"
-msgstr "Print the contents of the file"
 
 #, c-format
 msgid "Change filename: '%s'"
@@ -15380,11 +15351,13 @@ msgstr ""
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
-"Recommend running DRC with 'Test footprints against schematic' checked.\n"
+"Recommend running DRC with 'Test for parity between PCB and schematic' "
+"checked.\n"
 msgstr ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
-"Recommend running DRC with 'Test footprints against schematic' checked.\n"
+"Recommend running DRC with 'Test for parity between PCB and schematic' "
+"checked.\n"
 
 #, c-format
 msgid ""
@@ -22655,10 +22628,6 @@ msgstr "Routed Length"
 msgid "Full Length"
 msgstr "Full Length"
 
-#, c-format
-msgid "Min Width: %s"
-msgstr "Min Width: %s"
-
 msgid "Micro Via"
 msgstr "Micro Via"
 
@@ -22916,6 +22885,9 @@ msgid ""
 msgstr ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
+
+msgid "Loading unicode strings..."
+msgstr "Loading unicode strings..."
 
 msgid "Loading text..."
 msgstr "Loading text..."
@@ -26538,6 +26510,85 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#, c-format
+#~ msgid ""
+#~ "Cannot print '%s'.\n"
+#~ "\n"
+#~ "Unknown file type."
+#~ msgstr ""
+#~ "Cannot print '%s'.\n"
+#~ "\n"
+#~ "Unknown file type."
+
+#, c-format
+#~ msgid "Grid: %s (%s)"
+#~ msgstr "Grid: %s (%s)"
+
+#~ msgid "Install from file..."
+#~ msgstr "Install from file..."
+
+#~ msgid "Apply changes"
+#~ msgstr "Apply changes"
+
+#~ msgid "Discard changes"
+#~ msgstr "Discard changes"
+
+#~ msgid "All downloads finished"
+#~ msgstr "All downloads finished"
+
+#~ msgid "Download progress"
+#~ msgstr "Download progress"
+
+#~ msgid "Overall progress"
+#~ msgstr "Overall progress"
+
+#~ msgid "Applying package changes"
+#~ msgstr "Applying package changes"
+
+#, c-format
+#~ msgid "Package identifier: %s\n"
+#~ msgstr "Package identifier: %s\n"
+
+#, c-format
+#~ msgid "License: %s\n"
+#~ msgstr "License: %s\n"
+
+#, c-format
+#~ msgid "Tags: %s\n"
+#~ msgstr "Tags: %s\n"
+
+#~ msgid "Pick a package on the left panel to view it's description."
+#~ msgstr "Pick a package on the left panel to view it's description."
+
+#~ msgid "Dl Size"
+#~ msgstr "Dl Size"
+
+#~ msgid "Inst Size"
+#~ msgstr "Inst Size"
+
+#~ msgid "Comp"
+#~ msgstr "Comp"
+
+#~ msgid "Versions"
+#~ msgstr "Versions"
+
+#~ msgid "Print the contents of the file"
+#~ msgstr "Print the contents of the file"
+
+#, c-format
+#~ msgid ""
+#~ "\n"
+#~ "PCB has %d empty or invalid reference designations.\n"
+#~ "Recommend running DRC with 'Test footprints against schematic' checked.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "PCB has %d empty or invalid reference designations.\n"
+#~ "Recommend running DRC with 'Test footprints against schematic' checked.\n"
+
+#, c-format
+#~ msgid "Min Width: %s"
+#~ msgstr "Min Width: %s"
 
 #, c-format
 #~ msgid "Symbol library '%s' is not writeable."
