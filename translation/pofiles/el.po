@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-16 13:57+0000\n"
+"PO-Revision-Date: 2021-11-16 15:10+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -59,7 +59,7 @@ msgstr ""
 #: 3d-viewer/3d_canvas/board_adapter.cpp:737
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Το περίγραμμα της πλακέτας έχει λανθασμένη μορφή ή λείπει. Εκτελέστε το DRC "
+"Το περίγραμμα της πλακέτας έχει λανθασμένη μορφή ή λείπει. Εκτελέστε τον ΕΚΣ "
 "για πλήρη ανάλυση."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
@@ -5393,19 +5393,19 @@ msgstr "Χωρίς-Συνδέσεις"
 
 #: common/layer_id.cpp:163
 msgid "DRC warnings"
-msgstr "DRC προειδοποιήσεις"
+msgstr "Προειδοποιήσεις ΕΚΣ"
 
 #: common/layer_id.cpp:164
 msgid "DRC errors"
-msgstr "DRC σφάλματα"
+msgstr "Σφάλματα ΕΚΣ"
 
 #: common/layer_id.cpp:165
 msgid "DRC exclusions"
-msgstr "Εξαιρέσεις DRC"
+msgstr "Εξαιρέσεις ΕΚΣ"
 
 #: common/layer_id.cpp:166
 msgid "DRC marker shadows"
-msgstr "Σκιές δεικτών DRC"
+msgstr "Σκιές δεικτών ΕΚΣ"
 
 #: common/layer_id.cpp:172
 msgid "Grid axes"
@@ -22006,7 +22006,7 @@ msgstr ""
 "%d %s Uuid: [%s], X, Y: %s, Στρογγυλεμένο X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:602
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
@@ -22014,7 +22014,7 @@ msgid ""
 msgstr ""
 "\n"
 "Το PCB έχει %d κενούς ή μη έγκυρους προσδιορισμούς αναφοράς.\n"
-"Προτείνουμε να εκτελέσετε το DRC με το 'Test footprints against schematic' "
+"Προτείνουμε να εκτελέσετε το ΕΚΣ με το 'Test footprints against schematic' "
 "επιλεγμένο.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
@@ -22620,7 +22620,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:57
 msgid "Cleanup Tracks and Vias"
-msgstr "Εκκαθάριση Διαδρόμων και Vias"
+msgstr "Εκκαθάριση Διαδρόμων και Διελεύσεων"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:45
 msgid "Constraints Resolution Report"
@@ -22664,8 +22664,9 @@ msgstr ""
 "Εμφανίζονται μόνο τα ονόματα δικτύου που ταιριάζουν σε αυτό το μοτίβο."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
+#, fuzzy
 msgid "Hide auto-generated net names"
-msgstr "Εναλλακτικό όνομα Pin"
+msgstr "Απόκρυψη αυτόματων ονομάτων δικτύων"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:62
 msgid "Sort nets by pad count"
@@ -22677,7 +22678,7 @@ msgstr "Όνομα ζώνης:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:97
 msgid "A unique name for this zone to identify it for DRC"
-msgstr "Ένα μοναδικό όνομα για αυτό το zone για την αναγνώρισή του στο DRC"
+msgstr "Ένα μοναδικό όνομα για αυτό το zone για την αναγνώρισή του στον ΕΚΣ"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:104
 msgid "Zone priority level:"
@@ -22696,7 +22697,7 @@ msgstr ""
 "Εάν μία ζώνη είναι μέσα σε μία άλλη ζώνη:\n"
 "* Εάν η προτεραιότητά της είναι υψηλότερη, τα περιγράμματά της αφαιρούνται "
 "από την άλλη ζώνη.\n"
-"* Εάν η προτεραιότητά της είναι ίδια, ορίζεται σφάλμα ΕΗΚ."
+"* Εάν η προτεραιότητά της είναι ίδια, ορίζεται σφάλμα ΕΚΣ."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:51
@@ -23439,12 +23440,12 @@ msgstr "Ιδιότητες Διαστάσεων"
 
 #: pcbnew/dialogs/dialog_drc.cpp:86
 msgid "Run DRC"
-msgstr "Εκτέλεση DRC"
+msgstr "Εκτέλεση ΕΚΣ"
 
 #: pcbnew/dialogs/dialog_drc.cpp:226
 msgid "DRC incomplete: could not compile custom design rules.  "
 msgstr ""
-"Ημιτελές DRC: δεν ήταν δυνατή η μεταγλώττιση προσαρμοσμένων κανόνων "
+"Ημιτελής ΕΚΣ: δεν ήταν δυνατή η μεταγλώττιση προσαρμοσμένων κανόνων "
 "σχεδίασης.  "
 
 #: pcbnew/dialogs/dialog_drc.cpp:228 pcbnew/tools/board_inspection_tool.cpp:133
@@ -23453,7 +23454,7 @@ msgstr "Εμφάνιση κανόνων σχεδίασης."
 
 #: pcbnew/dialogs/dialog_drc.cpp:261
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- Το DRC ακυρώθηκε από τον χρήστη.<br><br>"
+msgstr "-------- Ο ΕΚΣ ακυρώθηκε από τον χρήστη.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:263
 msgid "Done.<br><br>"
@@ -23486,7 +23487,7 @@ msgstr "δεν εκτελέστηκε"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr "Επαναγέμισμα όλων των ζωνών πριν τον Έλεγχο Κανόνων Σχεδίασης"
+msgstr "Επαναγέμισμα όλων των ζωνών πριν τον ΕΚΣ"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
@@ -23500,12 +23501,11 @@ msgid ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 msgstr ""
-"Εάν επιλεγεί, θα αναφέρονται όλες οι παραβιάσεις του Ελέγχου Κανόνων "
-"Σχεδίασης DRC των διαδρόμων. Αυτό μπορεί να είναι αργό για πολύπλοκα "
-"σχέδια.\n"
+"Εάν επιλεγεί, θα αναφέρονται όλες οι παραβιάσεις του ΕΚΣ των διαδρόμων. Αυτό "
+"μπορεί να είναι αργό για πολύπλοκα σχέδια.\n"
 "\n"
-"Εάν δεν επιλεγεί, θα αναφερθεί μόνο η πρώτη παραβίαση του Ελέγχου Κανόνων "
-"Σχεδίασης DRC για κάθε σύνδεση διαδρόμου."
+"Εάν δεν επιλεγεί, θα αναφερθεί μόνο η πρώτη παραβίαση του ΕΚΣ για κάθε "
+"σύνδεση διαδρόμου."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
@@ -23751,7 +23751,7 @@ msgid ""
 msgstr ""
 "Το περίγραμμα της πλακέτας λείπει ή δεν κλείνει χρησιμοποιώντας %.3f mm "
 "ανοχή.\n"
-"Εκτελέστε το DRC για πλήρη ανάλυση."
+"Εκτελέστε τον ΕΚΣ για πλήρη ανάλυση."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:353
 msgid "STEP Export"
@@ -24068,7 +24068,7 @@ msgstr "Αναδίπλωση"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference designators"
-msgstr "Εύρεση προσδιορισμού αναφοράς αποτυπώματος"
+msgstr "Αναζήτηση προσδιορισμών αναφοράς αποτυπώματος"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
 msgid "Search footprint values"
@@ -24080,7 +24080,7 @@ msgstr "Αναζήτηση άλλων αντικειμένων κειμένου"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
 msgid "Search DRC markers"
-msgstr "Αναζήτηση σημάνσεων DRC"
+msgstr "Αναζήτηση σημάνσεων ΕΚΣ"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:98
 msgid "Find Previous"
@@ -24102,13 +24102,13 @@ msgstr "Ελεγκτής Αποτυπώματος"
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:75
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:75
 msgid "3D Models"
-msgstr "3D Μοντέλα"
+msgstr "3Δ Μοντέλα"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:294
 msgid "Footprint can be freely moved and oriented on the canvas."
 msgstr ""
-"Το εξάρτημα μπορεί να μετακινηθεί ελεύθερα και να τοποθετηθεί αυτόματα, αλλά "
-"ο χρήστης δεν μπορεί να επιλέξει και να επεξεργαστεί τις έδρες του."
+"Το αποτύπωμα μπορεί να μετακινηθεί και να προσανατολιστεί ελεύθερα στον "
+"καμβά."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:296
 msgid ""
@@ -26684,7 +26684,7 @@ msgstr "Εκτέλεση ΕΚΣ..."
 #: pcbnew/dialogs/dialog_plot_base.cpp:423
 #, c-format
 msgid "(%d known DRC violations; %d exclusions)"
-msgstr "(%d γνωστές παραβιάσεις DRC; %d εξαιρέσεις)"
+msgstr "(%d γνωστές παραβιάσεις ΕΚΣ; %d εξαιρέσεις)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:447
 msgid "Select Fab Layers"
@@ -26818,11 +26818,12 @@ msgstr "Μικρο-ρύθμιση Μήκους Δρόμου"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:34
 msgid "DRC violation: highlight obstacles"
-msgstr "Παραβίαση ΕΚΣ: φωτισμός εμποδίων"
+msgstr "Παραβίαση ΕΚΣ: επισήμανση εμποδίων"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
+#, fuzzy
 msgid "DRC violation: shove tracks and vias"
-msgstr "Παραβίαση ΕΚΣ/DRC: σπρώξιμο διαδρόμων και via"
+msgstr "Παραβίαση ΕΚΣ: σπρώξιμο διαδρόμων και διελεύσεων"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
@@ -26923,8 +26924,8 @@ msgid ""
 "(Highlight collisions mode only) - allows one to establish a track even if "
 "is violating the DRC rules."
 msgstr ""
-"(Μόνο σε κατάσταση φωτισμού συγκρούσεων) - επιτρέπει την τοποθέτηση ενός "
-"διαδρόμου ακόμα και αν παραβιάζει τους κανόνες DRC."
+"(Μόνο σε κατάσταση επισήμανσης συγκρούσεων) - επιτρέπει την τοποθέτηση ενός "
+"διαδρόμου ακόμα και αν παραβιάζει τους κανόνες ΕΚΣ."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:62
 msgid "Suggest track finish"
@@ -27179,7 +27180,7 @@ msgstr "Όνομα περιοχής:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "A unique name for this rule area for use in DRC rules"
 msgstr ""
-"Ένα μοναδικό όνομα για αυτήν την περιοχή κανόνων για χρήση στους κανόνες DRC"
+"Ένα μοναδικό όνομα για αυτήν την περιοχή κανόνων προς χρήση στους κανόνες ΕΚΣ"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:96
 msgid "Constrain outline to H, V and 45 deg"
@@ -28868,7 +28869,7 @@ msgstr "Ακύρωση αλλαγών;"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:422
 msgid "DRC rules"
-msgstr "Κανόνες DRC"
+msgstr "Κανόνες ΕΚΣ"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:429
 #: pcbnew/drc/drc_rule_condition.cpp:64
@@ -28877,11 +28878,11 @@ msgstr "ΣΦΑΛΜΑ:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:490
 msgid "Design rules cannot be added without a project"
-msgstr "Οι κανόνες σχεδίασης DRC δεν μπορούν να προστεθούν χωρίς έργο"
+msgstr "Κανόνες σχεδίασης δεν μπορούν να προστεθούν χωρίς έργο"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:26
 msgid "DRC rules:"
-msgstr "Κανόνες DRC:"
+msgstr "Κανόνες ΕΚΣ:"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:77
 msgid "Check rule syntax"
@@ -30152,8 +30153,8 @@ msgstr "Έχουν εξαχθεί ως οβάλ έδρες."
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
-"Το περίγραμμα της πλακέτας έχει λανθασμένη μορφή. Εκτελέστε το DRC για πλήρη "
-"ανάλυση."
+"Το περίγραμμα της πλακέτας έχει λανθασμένη μορφή. Εκτελέστε τον ΕΚΣ για "
+"πλήρη ανάλυση."
 
 #: pcbnew/exporters/export_idf.cpp:640 pcbnew/exporters/export_idf.cpp:649
 #: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/export_vrml.cpp:1040
@@ -33563,8 +33564,9 @@ msgid "Cannot start routing from a graphic."
 msgstr "Αδυναμία δρομολόγησης μέσα σε καθαρή περιοχή ή σε περίγραμμα πλακέτας."
 
 #: pcbnew/router/pns_router.cpp:305 pcbnew/router/pns_router.cpp:361
+#, fuzzy
 msgid "The routing start point violates DRC."
-msgstr "Το σημείο εκκίνησης του δρομολογητή παραβιάζει το DRC."
+msgstr "Το σημείο εκκίνησης της δρομολόγησης παραβιάζει τον ΕΚΣ."
 
 #: pcbnew/router/pns_router.cpp:313
 msgid "Cannot start a differential pair in the middle of nowhere."
@@ -34289,7 +34291,7 @@ msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:831
 msgid "Run DRC for a full analysis."
-msgstr "Εκτέλεση DRC για πλήρη ανάλυση."
+msgstr "Εκτέλεση του ΕΚΣ για πλήρη ανάλυση."
 
 #: pcbnew/tools/board_inspection_tool.cpp:837
 msgid "Item <b>disallowed</b> at current location."
@@ -34445,7 +34447,7 @@ msgstr "Δεν επιτρέπονται πολύγωνα που τέμνουν �
 
 #: pcbnew/tools/drawing_tool.cpp:2582
 msgid "Via location violates DRC."
-msgstr "Η θέση του via παραβιάζει τον ΕΚΣ."
+msgstr "Η θέση της διέλευσης παραβιάζει τον ΕΚΣ."
 
 #: pcbnew/tools/drawing_tool.cpp:2686
 msgid "Place via"
@@ -34461,7 +34463,7 @@ msgstr "Η εξαγωγή λίστας δικτύων απαιτεί ένα πλ
 
 #: pcbnew/tools/drc_tool.cpp:208
 msgid "DRC"
-msgstr "DRC"
+msgstr "ΕΚΣ"
 
 #: pcbnew/tools/edit_tool.cpp:91
 msgid "Special Tools"
@@ -34831,11 +34833,11 @@ msgstr "Κλείσιμο το υπο επεξεργασία περίγραμμα
 
 #: pcbnew/tools/pcb_actions.cpp:224
 msgid "Design Rules Checker"
-msgstr "Ελεγκτής Κανόνων Σχεδίασης DRC"
+msgstr "Ελεγκτής Κανόνων Σχεδίασης"
 
 #: pcbnew/tools/pcb_actions.cpp:224
 msgid "Show the design rules checker window"
-msgstr "Εμφάνιση του παραθύρου DRC"
+msgstr "Εμφάνιση του παραθύρου ΕΚΣ"
 
 #: pcbnew/tools/pcb_actions.cpp:233
 msgid "Open in Footprint Editor"
@@ -36244,7 +36246,7 @@ msgstr "Γέμισμα Zωνών"
 
 #: pcbnew/tools/zone_filler_tool.cpp:131
 msgid "Show DRC rules"
-msgstr "Εμφάνιση κανόνων ελέγχου σχεδίασης(DRC)"
+msgstr "Εμφάνιση κανόνων ελέγχου σχεδίασης(ΕΚΣ)"
 
 #: pcbnew/tools/zone_filler_tool.cpp:138
 msgid "Rules"
@@ -36253,7 +36255,7 @@ msgstr "Κανόνες"
 #: pcbnew/tools/zone_filler_tool.cpp:144
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
 msgstr ""
-"Οι συμπληρώσεις ζώνης μπορεί να είναι ανακριβείς. Οι κανόνες DRC περιέχουν "
+"Οι πληρώσεις ζώνης μπορεί να είναι ανακριβείς. Οι κανόνες ΕΚΣ περιέχουν "
 "σφάλματα."
 
 #: pcbnew/undo_redo.cpp:537
@@ -36345,27 +36347,27 @@ msgstr "Εμφάνιση σημαδιού σε pads που δεν έχουν σ�
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC Warnings"
-msgstr "DRC Προειδοποιήσεις"
+msgstr "Προειδοποιήσεις ΕΚΣ"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC violations with a Warning severity"
-msgstr "Παραβίαση DRC με βαρύτητα Προειδοποίησης"
+msgstr "Παραβιάσεις ΕΚΣ με βαρύτητα Προειδοποίησης"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "DRC Errors"
-msgstr "DRC Σφάλματα"
+msgstr "Σφάλματα ΕΚΣ"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "DRC violations with an Error severity"
-msgstr "Παραβίαση DRC με βαρύτητα Σφάλματος"
+msgstr "Παραβιάσεις ΕΚΣ με βαρύτητα Σφάλματος"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "DRC Exclusions"
-msgstr "Εξαιρέσεις DRC"
+msgstr "Εξαιρέσεις ΕΚΣ"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "DRC violations which have been individually excluded"
-msgstr "Παραβιάσεις DRC που έχουν αποκλειστεί μεμονωμένα"
+msgstr "Παραβιάσεις ΕΚΣ που έχουν αποκλειστεί μεμονωμένα"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Show footprint and text origins as a cross"
