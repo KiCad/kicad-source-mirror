@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-15 21:10+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"PO-Revision-Date: 2021-11-16 10:25+0000\n"
+"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -10482,6 +10482,11 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
+"Δεν είναι δυνατή η κανονικοποίηση της νέας διαδρομής αρχείου σχηματικού "
+"φύλλου:\n"
+"'%s'\n"
+"έναντι της διαδρομής γονικού αρχείου σχηματικού φύλλου:\n"
+"'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #: kicad/tools/kicad_manager_control.cpp:557
@@ -11874,6 +11879,7 @@ msgid "Cross-probing"
 msgstr "Cross-probing"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:80
+#, fuzzy
 msgid "Center view on cross-probed items"
 msgstr "Κεντρική προβολή cross-probed αντικειμένων"
 
@@ -11884,8 +11890,9 @@ msgstr "Μεγέθυνση ώστε να χωράει cross-probed αντικε�
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:88
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
+#, fuzzy
 msgid "Highlight cross-probed nets"
-msgstr "Επισήμανση cross-probed nets"
+msgstr "Επισήμανση cross-probed δικτύων"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
@@ -13786,7 +13793,7 @@ msgstr "Ο ιδιοκτήτης του ορθογωνίου (%d) δεν βρέθ
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1539
 #, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr ""
+msgstr "Sheet entry's owner (%d). Δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1785
 msgid "Power Port has unknown style, use bar instead."
@@ -13821,7 +13828,7 @@ msgstr "Το αρχείο δεν βρέθηκε %s."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2232
 #, c-format
 msgid "Sheetname's owner (%d) not found."
-msgstr ""
+msgstr "Sheetname's owner (%d). Δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2255
 #, c-format
@@ -13829,14 +13836,14 @@ msgid "Filename's owner (%d) not found."
 msgstr "Δεν βρέθηκε ο ιδιοκτήτης του αρχείου (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2289
-#, c-format
+#, c-format, fuzzy
 msgid "Designator's owner (%d) not found."
-msgstr ""
+msgstr "Δεν βρέθηκε ο ιδιοκτήτης του προσδιοριστή (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2424
 #, c-format
 msgid "Implementation's owner (%d) not found."
-msgstr ""
+msgstr "Implementation's owner (%d). Δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2434
 #, c-format
@@ -16811,11 +16818,13 @@ msgstr ""
 "b> της μετατροπής."
 
 #: eeschema/tools/ee_inspection_tool.cpp:359
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
 msgstr ""
+"Πληροφορία: <b>Κρυφός ακροδέκτης ισχύος %s</b> %s στη θέση <b>(%s, %s)</b> "
+"στο μέρος %c της μετατροπής."
 
 #: eeschema/tools/ee_inspection_tool.cpp:372
 #, c-format
@@ -17571,11 +17580,11 @@ msgstr "Μηχανολογικά επίπεδα"
 
 #: gerbview/files.cpp:155
 msgid "Top Pad Master"
-msgstr ""
+msgstr "Πάνω Κύριο Εδρών"
 
 #: gerbview/files.cpp:156
 msgid "Bottom Pad Master"
-msgstr ""
+msgstr "Κάτω Κύριο Εδρών"
 
 #: gerbview/files.cpp:174
 msgid "Open Gerber File(s)"
@@ -19780,6 +19789,15 @@ msgid ""
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
+"### Εξασθενητής Γεφυρωμένου Τ\n"
+"___a___ είναι η εξασθένηση σε dB<br>\n"
+"___Z<sub>in</sub>___ επιθυμητή εμπέδηση εισόδου &#x2126;<br>\n"
+"___Z<sub>out</sub>___ επιθυμητή εμπέδηση εξόδου σε in &#x2126;<br>\n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
+"___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
 msgid ""
@@ -19795,6 +19813,17 @@ msgid ""
 "___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 msgstr ""
+"### Εξασθενητής Π\n"
+"___a___ είναι η εξασθένηση σε dB<br>\n"
+"___Z<sub>in</sub>___ επιθυμητή εμπέδηση εισόδου σε &#x2126;<br>\n"
+"___Z<sub>out</sub>___ επιθυμητή εμπέδηση εισόδου σε &#x2126;<br>\n"
+"\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; Z<sub>out</"
+"sub> / L)___<br>\n"
+"___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
+"___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
 msgid ""
@@ -19828,6 +19857,17 @@ msgid ""
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 msgstr ""
+"### Εξασθενητής Τ\n"
+"___a___ είναι η εξασθένηση σε dB<br>\n"
+"___Z<sub>in</sub>___ επιθυμητή εμπέδηση εισόδου σε &#x2126;<br>\n"
+"___Z<sub>out</sub>___ επιθυμητή εμπέδηση εξόδου σε &#x2126;<br>\n"
+"\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</sub>) "
+"/ (L&minus;1)___<br>\n"
+"___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
+"___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -20868,7 +20908,7 @@ msgstr "Συχνότητα του σήματος εισόδου"
 #: pcb_calculator/transline_ident.cpp:384
 #, c-format
 msgid "Effective %s:"
-msgstr ""
+msgstr "Απόδοση %s:"
 
 #: pcb_calculator/transline_ident.cpp:119
 #: pcb_calculator/transline_ident.cpp:161
@@ -27517,8 +27557,9 @@ msgid "Show pad clearance"
 msgstr "Προβολή διάκενου έδρας"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
+#, fuzzy
 msgid "Scroll cross-probed items into view"
-msgstr ""
+msgstr "Κύλιση cross-probed αντικειμένων σε θέα"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -27940,7 +27981,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:134
 msgid "Allow fillets outside zone outline"
-msgstr ""
+msgstr "Να επιτρέπονται φιλέτα έξω από το περίγραμμα της ζώνης"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:149
 msgid "Length tuning"
@@ -29355,20 +29396,24 @@ msgid "board setup constraints"
 msgstr "περιορισμοί διάταξης πλακέτας"
 
 #: pcbnew/drc/drc_engine.cpp:175
+#, fuzzy
 msgid "board setup constraints silk"
-msgstr ""
+msgstr "περιορισμοί διάταξης πλακέτας μεταξ"
 
 #: pcbnew/drc/drc_engine.cpp:181
+#, fuzzy
 msgid "board setup constraints hole"
-msgstr ""
+msgstr "περιορισμοί διάταξης πλακέτας τρύπα"
 
 #: pcbnew/drc/drc_engine.cpp:186
+#, fuzzy
 msgid "board setup constraints edge"
-msgstr ""
+msgstr "περιορισμοί διάταξης πλακέτας περίγραμμα"
 
 #: pcbnew/drc/drc_engine.cpp:191
+#, fuzzy
 msgid "board setup constraints courtyard"
-msgstr ""
+msgstr "περιορισμοί διάταξης πλακέτας περιοχή αποτυπώματος"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
@@ -29663,7 +29708,7 @@ msgstr "Μήκος ίσχνους εκτός έυρους"
 
 #: pcbnew/drc/drc_item.cpp:190
 msgid "Skew between traces out of range"
-msgstr ""
+msgstr "Απόκλιση ανάμεσα σε δρόμους εκτός εμβέλειας"
 
 #: pcbnew/drc/drc_item.cpp:194
 msgid "Too many vias on a connection"
@@ -30440,8 +30485,9 @@ msgid "Clearance Override"
 msgstr "Περιγράμματα Διάκενου"
 
 #: pcbnew/footprint.cpp:2370 pcbnew/pad.cpp:1658
+#, fuzzy
 msgid "Solderpaste Margin Override"
-msgstr ""
+msgstr "Παράκαμψη Περιθωρίου Πάστας Συγκόλλησης"
 
 #: pcbnew/footprint.cpp:2374 pcbnew/pad.cpp:1661
 msgid "Solderpaste Margin Ratio Override"
@@ -31710,7 +31756,7 @@ msgstr "Μήκος από Έδρα σε Πλακίδιο"
 
 #: pcbnew/pad.cpp:1655
 msgid "Soldermask Margin Override"
-msgstr ""
+msgstr "Παράκαμψη Περιθωρίου Μάσκας Συγκόλλησης"
 
 #: pcbnew/pad.cpp:1669
 msgid "Fabrication Property"
@@ -32031,7 +32077,7 @@ msgstr "Άγνωστη αντιστοίχιση του επιπέδου Altium '
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:694
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr ""
+msgstr "Η ροή Pads6 έχει απροσδόκητο μήκος για την υποεγγραφή 6: %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:76
 msgid "Error reading file: cannot determine length."
