@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-12 18:47+0000\n"
+"PO-Revision-Date: 2021-11-16 18:39+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -3963,7 +3963,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Permisos insuficients a la carpeta '%s'."
 
 #: common/eda_base_frame.cpp:1086
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
@@ -3972,8 +3972,8 @@ msgid ""
 "made?"
 msgstr ""
 "Pot ser que hi hagi un problema!\n"
-"Sembla que l'última vegada que vas editar el fitxer\n"
-"\"%s\"\n"
+"Sembla que la darrera vegada que vas editar el fitxer\n"
+"%s\n"
 "no es va desar de forma correcta. Vols recuperar les darreres edicions que "
 "vas realitzar?"
 
@@ -5817,9 +5817,8 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "Copia els elements seleccionats al porta-retalls"
 
 #: common/tool/actions.cpp:165
-#, fuzzy
 msgid "Paste item(s) from clipboard"
-msgstr "Enganxa els elements del porta-retalls"
+msgstr "Enganxa el(s) element(s) des del porta-retalls"
 
 #: common/tool/actions.cpp:171
 msgid "Select all items on screen"
@@ -6509,7 +6508,7 @@ msgstr "Retícula petita"
 
 #: common/widgets/gal_options_panel.cpp:196
 msgid "Full window crosshair"
-msgstr ""
+msgstr "Retícula en finestra sencera"
 
 #: common/widgets/gal_options_panel.cpp:201
 msgid "Cursor Shape"
@@ -6517,11 +6516,11 @@ msgstr "Forma del cursor"
 
 #: common/widgets/gal_options_panel.cpp:206
 msgid "Cursor shape for drawing, placement and movement tools"
-msgstr ""
+msgstr "Forma del punter de les eines de dibuix, localització i moviment"
 
 #: common/widgets/gal_options_panel.cpp:209
 msgid "Always show crosshairs"
-msgstr ""
+msgstr "Mostra sempre la retícula"
 
 #: common/widgets/grid_text_button_helpers.cpp:379
 msgid "Select a File"
@@ -6549,7 +6548,7 @@ msgstr "Redueix el zoom a la vista del ploteig."
 
 #: common/widgets/net_selector.cpp:58
 msgid "<no net>"
-msgstr ""
+msgstr "<sense xarxa>"
 
 #: common/widgets/net_selector.cpp:59
 msgid "<create net>"
@@ -6578,12 +6577,12 @@ msgstr "Restableix %s al valor predeterminat"
 #: common/widgets/unit_binder.cpp:217
 #, c-format
 msgid "%s must be at least %s."
-msgstr ""
+msgstr "%s ha de ser almenys %s."
 
 #: common/widgets/unit_binder.cpp:232
 #, c-format
 msgid "%s must be less than %s."
-msgstr ""
+msgstr "%s ha de ser més petit que %s."
 
 #: common/widgets/widget_hotkey_list.cpp:98
 msgid "Press a new hotkey, or press Esc to cancel..."
@@ -6734,19 +6733,19 @@ msgstr "Fitxers de PCB's en ASCII de P-Cad 200x"
 
 #: common/wildcards_and_files_ext.cpp:312
 msgid "Altium Designer PCB files"
-msgstr ""
+msgstr "Fitxers de PCB d'Altium Designer"
 
 #: common/wildcards_and_files_ext.cpp:317
 msgid "Altium Circuit Studio PCB files"
-msgstr ""
+msgstr "Fitxers de PCB d'Altium Circuit Studio"
 
 #: common/wildcards_and_files_ext.cpp:322
 msgid "Altium Circuit Maker PCB files"
-msgstr ""
+msgstr "Fitxers de PCB d'Altium Circuit Maker"
 
 #: common/wildcards_and_files_ext.cpp:327
 msgid "Fabmaster PCB files"
-msgstr ""
+msgstr "Fitxers de PCB de Fabmaster"
 
 #: common/wildcards_and_files_ext.cpp:339
 msgid "KiCad footprint files"
@@ -6797,131 +6796,109 @@ msgid "Portable document format files"
 msgstr "Fitxers PDF"
 
 #: common/wildcards_and_files_ext.cpp:418
-#, fuzzy
 msgid "PostScript files"
-msgstr "Fitxers PostScript (.ps)|*.ps"
+msgstr "Fitxers PostScript"
 
 #: common/wildcards_and_files_ext.cpp:424
-#, fuzzy
 msgid "Report files"
 msgstr "Fitxer d'informe"
 
 #: common/wildcards_and_files_ext.cpp:430
-#, fuzzy
 msgid "Component placement files"
-msgstr "Fitxers de biblioteques de components"
+msgstr "Fitxers de posicionament de components"
 
 #: common/wildcards_and_files_ext.cpp:436
-#, fuzzy
 msgid "VRML and X3D files"
-msgstr "Fitxers vrml i x3d (*.wrl *.x3d)|*.wrl;*.x3d"
+msgstr "Fitxers VRML i X3D"
 
 #: common/wildcards_and_files_ext.cpp:442
-#, fuzzy
 msgid "IDFv3 footprint files"
-msgstr "Fitxers de components IDFv3 (*.idf)|*.idf"
+msgstr "Fitxers d'empremtes IDFv3"
 
 #: common/wildcards_and_files_ext.cpp:448
-#, fuzzy
 msgid "Text files"
-msgstr "Fitxer de text ("
+msgstr "Fitxers de text"
 
 #: common/wildcards_and_files_ext.cpp:454
-#, fuzzy
 msgid "Legacy footprint export files"
-msgstr "Fitxer de biblioteca d'empremtes PCB de Geda (*.fp)|*.fp"
+msgstr "Fitxers d'exportació d'empremtes obsoletes"
 
 #: common/wildcards_and_files_ext.cpp:460
-#, fuzzy
 msgid "Electrical rule check file"
-msgstr "Fitxer de comprovació de regles elèctriques (.erc)|*.erc"
+msgstr "Fitxer de comprovació de normes elèctriques"
 
 #: common/wildcards_and_files_ext.cpp:466
-#, fuzzy
 msgid "Spice library file"
-msgstr "Fitxers de biblioteques de components de KiCad (*.lib)|*.lib"
+msgstr "Fitxer de biblioteca Spice"
 
 #: common/wildcards_and_files_ext.cpp:472
-#, fuzzy
 msgid "SPICE netlist file"
-msgstr "Fitxer netlist de SPICE (.cir)|*.cir"
+msgstr "Fitxer de llista de xarxes d'SPICE"
 
 #: common/wildcards_and_files_ext.cpp:478
-#, fuzzy
 msgid "CadStar netlist file"
-msgstr "Fitxer netlist de CadStar (.frp)|*.frp"
+msgstr "Fitxer llista de xarxes de CadStar"
 
 #: common/wildcards_and_files_ext.cpp:484
-#, fuzzy
 msgid "Symbol footprint association files"
-msgstr "Importa el fitxer d'associació d'empremtes"
+msgstr "Fitxers d'associació d'empremtes de símbols"
 
 #: common/wildcards_and_files_ext.cpp:490
-#, fuzzy
 msgid "Zip file"
-msgstr "Fitxers zip"
+msgstr "Fitxer Zip"
 
 #: common/wildcards_and_files_ext.cpp:496
-#, fuzzy
 msgid "GenCAD 1.4 board files"
-msgstr "Fitxers de plaques de GenCAD 1.4 (.cad)|*.cad"
+msgstr "Fitxers de plaques de GenCAD 1.4"
 
 #: common/wildcards_and_files_ext.cpp:502
-#, fuzzy
 msgid "DXF Files"
-msgstr "Fitxers de documentació"
+msgstr "Fitxers DXF"
 
 #: common/wildcards_and_files_ext.cpp:508
 #: resources/linux/mime/kicad-gerbers.xml.in:21
-#, fuzzy
 msgid "Gerber job file"
-msgstr "Fitxers Gerber"
+msgstr "Fitxer de treball Gerber"
 
 #: common/wildcards_and_files_ext.cpp:514
 msgid "Specctra DSN file"
 msgstr "Fitxer Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:521
-#, fuzzy
 msgid "Specctra Session file"
-msgstr "&Specctra Session"
+msgstr "Fitxer de sessió Specctra"
 
 #: common/wildcards_and_files_ext.cpp:528
-#, fuzzy
 msgid "IPC-D-356 Test Files"
-msgstr "Fitxer netlist IPC-D-356"
+msgstr "Fitxers de proba IPC-D-356"
 
 #: common/wildcards_and_files_ext.cpp:535
-#, fuzzy
 msgid "Workbook file"
-msgstr "Fitxer de llibre de treball (*.wbk)|*.wbk"
+msgstr "Fitxer de llibre de treball"
 
 #: common/wildcards_and_files_ext.cpp:542
-#, fuzzy
 msgid "PNG file"
-msgstr "Fitxers Gerber"
+msgstr "Fitxer PNG"
 
 #: common/wildcards_and_files_ext.cpp:548
-#, fuzzy
 msgid "Jpeg file"
-msgstr "Fitxers zip"
+msgstr "Fitxer Jpeg"
 
 #: common/wildcards_and_files_ext.cpp:554
-#, fuzzy
 msgid "Hotkey file"
-msgstr "Llista de les dreceres de teclat"
+msgstr "Fitxer de dreceres de teclat"
 
 #: cvpcb/auto_associate.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found in the default search paths."
 msgstr ""
-"No s'ha pogut trobar el fitxer d'equivalències «%s» als camins "
+"No s'ha pogut trobar el fitxer d'equivalències '%s' als camins "
 "predeterminats de cerca."
 
 #: cvpcb/auto_associate.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening equivalence file '%s'."
-msgstr "Error en obrir el fitxer d'equivalència «%s»."
+msgstr "Error en obrir el fitxer d'equivalència '%s'."
 
 #: cvpcb/auto_associate.cpp:178
 msgid "Equivalence File Load Error"
@@ -29989,9 +29966,9 @@ msgid "Keepout layer(s) not matched."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1011 pcbnew/drc/drc_engine.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
-msgstr "Elimina totes les capes"
+msgstr "La capa de normes '%s' no coincideix; norma ignorada."
 
 #: pcbnew/drc/drc_engine.cpp:1017 pcbnew/drc/drc_engine.cpp:1037
 #, fuzzy
@@ -30007,9 +29984,9 @@ msgid "Unconditional rule applied."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule condition \"%s\"."
-msgstr "Combina les zones"
+msgstr "S'està comprovant la condició de la norma \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:1065
 #, fuzzy
