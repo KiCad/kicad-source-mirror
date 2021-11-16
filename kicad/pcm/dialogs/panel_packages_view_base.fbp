@@ -522,7 +522,7 @@
                                                                 <property name="close_button">1</property>
                                                                 <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
                                                                 <property name="col_label_size">22</property>
-                                                                <property name="col_label_values">&quot;Version&quot; &quot;Download Size&quot; &quot;Install Size&quot; &quot;Comp&quot; &quot;Status&quot;</property>
+                                                                <property name="col_label_values">&quot;Version&quot; &quot;Download Size&quot; &quot;Install Size&quot; &quot;Compatible&quot; &quot;Status&quot;</property>
                                                                 <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                                                                 <property name="cols">5</property>
                                                                 <property name="column_sizes"></property>

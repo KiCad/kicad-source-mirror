@@ -82,7 +82,7 @@ PANEL_PACKAGES_VIEW_BASE::PANEL_PACKAGES_VIEW_BASE( wxWindow* parent, wxWindowID
 	m_gridVersions->SetColLabelValue( 0, _("Version") );
 	m_gridVersions->SetColLabelValue( 1, _("Download Size") );
 	m_gridVersions->SetColLabelValue( 2, _("Install Size") );
-	m_gridVersions->SetColLabelValue( 3, _("Comp") );
+	m_gridVersions->SetColLabelValue( 3, _("Compatible") );
 	m_gridVersions->SetColLabelValue( 4, _("Status") );
 	m_gridVersions->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 

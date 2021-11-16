@@ -600,7 +600,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
     {
         message.Printf(
                 _( "\nPCB has %d empty or invalid reference designations."
-                   "\nRecommend running DRC with 'Test footprints against schematic' checked.\n" ),
+                   "\nRecommend running DRC with 'Test for parity between PCB and schematic' checked.\n" ),
                 (int) BadRefDes.size() );
 
         for( const RefDesInfo& mod : BadRefDes )
