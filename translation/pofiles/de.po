@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-16 19:50+0000\n"
+"PO-Revision-Date: 2021-11-17 19:42+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -1994,7 +1994,7 @@ msgstr "Alias"
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr "Konfiguriere globale %s Bibliothekstabelle"
+msgstr "Globale %s-Bibliothekstabelle konfigurieren"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
 #, c-format
@@ -2005,18 +2005,19 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad wurde das erste Mal unter Verwendung der neuen %s Bibliothekstabelle\n"
-"zum Zugriff auf die einzelnen Bibliotheken gestartet. Damit KiCad auf die %s "
+"KiCad wurde zum ersten Mal unter Verwendung der neuen %s-Bibliothekstabelle\n"
+"zum Zugriff auf die einzelnen Bibliotheken gestartet. Damit KiCad auf die %s-"
 "Bibliotheken\n"
-"zugreifen kann müssen Sie die globale %s Bibliothekstabelle konfigurieren.\n"
-"Bitte wählen Sie eine der nachstehenden Optionen. Wenn Sie unsicher sind "
+"zugreifen kann, müssen Sie Ihre globale %s-Bibliothekstabelle konfigurieren."
+"\n"
+"Bitte wählen Sie eine der nachstehenden Optionen. Wenn Sie unsicher sind, "
 "welche\n"
-"Option Sie benutzen sollen benutzen Sie die Standardauswahl."
+"Option Sie benutzen sollen, verwenden Sie die Standardauswahl."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "Globale Standard %s Bibliothekstabelle kopieren (empfohlen)"
+msgstr "Globale Standard-%s-Bibliothekstabelle kopieren (empfohlen)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
@@ -2024,33 +2025,33 @@ msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
 msgstr ""
-"Wählen Sie diese Option, wenn Sie sich unsicher sind, wie die globale %s "
+"Wählen Sie diese Option, wenn Sie sich unsicher sind, wie die globale %s-"
 "Bibliothekstabelle konfiguriert werden soll"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr "Benutzerspezifische globale %s Bibliothekstabelle kopieren"
+msgstr "Benutzerspezifische globale %s-Bibliothekstabelle kopieren"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
-"Wählen Sie diese Option, um eine andere %s Bibliothekstabellendatei als die "
+"Wählen Sie diese Option, um eine andere %s-Bibliothekstabellendatei als die "
 "standardmäßige zu kopieren"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr "Leere globale %s Bibliothekstabelle erstellen"
+msgstr "Leere globale %s-Bibliothekstabelle erstellen"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
 msgstr ""
-"Benutzen Sie diese Option zum Definieren von %s Bibliotheken in "
+"Benutzen Sie diese Option zum Definieren von %s-Bibliotheken in "
 "projektspezifischen Bibliothekstabellen"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
@@ -4085,14 +4086,14 @@ msgid ""
 "If you'd like to choose later, select Accelerated Graphics in the "
 "Preferences menu."
 msgstr ""
-"KiCad kann ihre Grafikkarte benutzen um ein flüssigeres und schnelleres "
-"Arbeiten zu ermöglichen. Diese Option ist standardmäßig deaktiviert und mit "
-"mancher PC-Hardware nicht kompatibel.\n"
+"KiCad kann ihre Grafikkarte verwenden, um ein flüssigeres und schnelleres "
+"Arbeiten zu ermöglichen. Diese Option ist standardmäßig deaktiviert, da sie "
+"nicht mit allen Computern kompatibel ist.\n"
 "\n"
-"Möchten Sie versuchen diese Option zu nutzen?\n"
+"Möchten Sie versuchen, die Grafikbeschleunigung zu nutzen?\n"
 "\n"
-"Wenn Sie diese Option später aktivieren wollen wählen Sie den Grafikmodus "
-"'Modern (Beschleunigt)' im Menü Ansicht."
+"Wenn Sie sich später dafür entscheiden möchten, wählen Sie \"Beschleunigte "
+"Grafik\" in den Anzeigeoptionen des Einstellungsmenüs."
 
 #: common/eda_draw_frame.cpp:1117
 msgid "Enable Graphics Acceleration"
@@ -4104,7 +4105,7 @@ msgstr "Grafikbeschleunigung &einschalten"
 
 #: common/eda_draw_frame.cpp:1119
 msgid "&No Thanks"
-msgstr "&Nein Danke"
+msgstr "&Nein danke"
 
 #: common/eda_item.cpp:313
 msgid "Screen"
@@ -6276,7 +6277,8 @@ msgstr "Symbolbibliotheken verwalten..."
 #: common/tool/actions.cpp:611
 msgid "Edit the global and project symbol library lists"
 msgstr ""
-"Bearbeiten der globalen und der projektspezifischen Bibliothekstabellen"
+"Bearbeiten der globalen und der projektspezifischen Symbol-"
+"Bibliothekstabellen"
 
 #: common/tool/actions.cpp:616
 msgid "Manage Footprint Libraries..."
@@ -6285,7 +6287,8 @@ msgstr "Footprintbibliotheken verwalten..."
 #: common/tool/actions.cpp:617
 msgid "Edit the global and project footprint library lists"
 msgstr ""
-"Bearbeiten der globalen und der projektspezifischen Bibliothekstabellen"
+"Bearbeiten der globalen und der projektspezifischen Footprint-"
+"Bibliothekstabellen"
 
 #: common/tool/actions.cpp:622
 msgid "Getting Started with KiCad"
@@ -6783,7 +6786,7 @@ msgstr "KiCad Footprintbibliotheken Verzeichnisse"
 
 #: common/wildcards_and_files_ext.cpp:353
 msgid "Legacy footprint library files"
-msgstr "Alte Footprint Bibliotheksdateien"
+msgstr "Alte Footprint-Bibliotheksdateien"
 
 #: common/wildcards_and_files_ext.cpp:359
 msgid "Eagle ver. 6.x XML library files"
@@ -6791,7 +6794,7 @@ msgstr "Eagle Version 6.x XML Bibliotheksdateien"
 
 #: common/wildcards_and_files_ext.cpp:365
 msgid "Geda PCB footprint library files"
-msgstr "Geda PCB Footprint Bibliotheksdateien"
+msgstr "Geda PCB Footprint-Bibliotheksdateien"
 
 #: common/wildcards_and_files_ext.cpp:371
 msgid "Drawing sheet files"
@@ -6959,15 +6962,14 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
-"Sie haben CvPcb mit der Footprint Bibliothekstabelle Methode zum Auffinden "
-"der Footprints das erste Mal gestartet.\n"
+"Sie haben CvPcb mit der neuen Footprint-Bibliothekstabelle-Methode zum "
+"Auffinden von Footprints das erste Mal gestartet.\n"
 "CvPcb hat entweder die Standardtabelle kopiert oder eine leere Tabelle in "
 "Ihrem Heimatverzeichnis erstellt.\n"
-"Sie müssen zuerst die Bibliothekstabelle konfigurieren um alle "
-"Footprintbibliotheken, die noch nicht eingebunden sind, in KiCad zur "
-"Verfügung zu stellen.\n"
-"Siehe auch den Abschnitt \"Footprint Bibliothekstabelle\" der CvPcb "
-"Dokumentation für mehr Informationen."
+"Sie müssen zuerst die Bibliothekstabelle konfigurieren, um alle noch nicht "
+"eingebundenen Footprintbibliotheken in KiCad verwenden zu können.\n"
+"Weitere Informationen finden Sie im Abschnitt \"Footprint "
+"Bibliothekstabelle\" der CvPcb Dokumentation."
 
 #: cvpcb/cvpcb.cpp:187
 msgid ""
@@ -7060,8 +7062,8 @@ msgstr "Ort der Bibliothek: unbekannt"
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
-"Es sind keine PCB-Footprintbibliotheken in der aktuellen "
-"Footprintbibliothekstabelle aufgeführt."
+"Es sind keine PCB-Footprintbibliotheken in der aktuellen Footprint-"
+"Bibliothekstabelle aufgeführt."
 
 #: cvpcb/cvpcb_mainframe.cpp:812
 msgid "Configuration Error"
@@ -7215,7 +7217,7 @@ msgstr "Footprint-ID \"%s\" ist nicht zulässig."
 #: cvpcb/display_footprints_frame.cpp:411
 #, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "Bibliothek \"%s\" ist nicht in der Footprintbibliothekstabelle."
+msgstr "Bibliothek \"%s\" ist nicht in der Footprint-Bibliothekstabelle."
 
 #: cvpcb/display_footprints_frame.cpp:420
 #: cvpcb/display_footprints_frame.cpp:445
@@ -7261,11 +7263,11 @@ msgstr ""
 
 #: cvpcb/readwrite_dlgs.cpp:168
 msgid "First check your footprint library table entries."
-msgstr "Überprüfen Sie zuerst die Einträge der Footprintbibliothekstabellen."
+msgstr "Überprüfen Sie zuerst die Einträge der Footprint-Bibliothekstabellen."
 
 #: cvpcb/readwrite_dlgs.cpp:170
 msgid "Problematic Footprint Library Tables"
-msgstr "Problematische Footprintbibliothekstabellen"
+msgstr "Problematische Footprint-Bibliothekstabellen"
 
 #: cvpcb/readwrite_dlgs.cpp:178
 msgid ""
@@ -8818,7 +8820,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Fehler beim Versuch eine leere Symbolbibliothekstabelle zu schreiben.\n"
+"Fehler beim Schreiben einer leeren Symbol-Bibliothekstabelle.\n"
 "\n"
 "%s"
 
@@ -8858,7 +8860,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Fehler beim Laden der globalen Symbolbibliothekstabelle.\n"
+"Fehler beim Laden der globalen Symbol-Bibliothekstabelle.\n"
 "\n"
 "%s"
 
@@ -11567,7 +11569,7 @@ msgstr ""
 #, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
 msgstr ""
-"Bibliothek \"%s\", Datei \"%s\" wird der Symbolbibliothekstabelle des "
+"Bibliothek \"%s\", Datei \"%s\" wird der Symbol-Bibliothekstabelle des "
 "Projektes hinzugefügt."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:216
@@ -11587,12 +11589,12 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
-msgstr "Erstellt eine leere projektspezifische Symbolbibliothekstabelle.\n"
+msgstr "Projektspezifische Symbol-Bibliothekstabelle erstellt.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:260
 #, c-format
 msgid "No symbol %s found in symbol library table."
-msgstr "Symbol \"%s\" in der Symbolbibliothekstabelle nicht gefunden."
+msgstr "Kein Symbol \"%s\" in der Symbol-Bibliothekstabelle gefunden."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:266
 #, c-format
@@ -11601,7 +11603,7 @@ msgstr "Symbol \"%s\" wurde der Symbolbibliothek \"%s\" zugeordnet."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:275
 msgid "Symbol library table mapping complete!"
-msgstr "Kartierung der Symbolbibliothekstabelle ist fertig gestellt!"
+msgstr "Zuordnen der Symbol-Bibliothekstabelle abgeschlossen!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:345
 #, c-format
@@ -12290,13 +12292,12 @@ msgstr "50"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:531
 msgid "A library table row nickname and path cells are empty."
 msgstr ""
-"Die Zellen für den Name und Pfad in einer Bibliothekstabellen-Zeile sind "
-"leer."
+"Die Zellen für Name und Pfad in einer Bibliothekstabellen-Zeile sind leer."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:352
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:533
 msgid "A library table row nickname cell is empty."
-msgstr "Die Zelle für den Name in einer Bibliothekstabellen-Zeile ist leer."
+msgstr "Die Zelle für den Namen in einer Bibliothekstabellen-Zeile ist leer."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:354
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:535
@@ -12436,8 +12437,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Bei dem Versuch die globale Symbolbibliothekstabelle zu speichern ist ein "
-"Fehler aufgetreten:\n"
+"Fehler beim Speichern der globalen Bibliothekstabelle:\n"
 "\n"
 "%s"
 
@@ -12459,8 +12459,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Bei dem Versuch die projektspezifische Symbolbibliothekstabelle zu speichern "
-"ist ein Fehler aufgetreten:\n"
+"Fehler beim Speichern der projektspezifischen Bibliothekstabelle:\n"
 "\n"
 "%s"
 
@@ -12513,9 +12512,9 @@ msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
 msgstr ""
-"Bei dem Versuch die globale Symbolbibliothekstabelle zu laden ist ein Fehler "
-"aufgetreten.\n"
-"Bitte die globale Symbolbibliothekstabelle im Menü 'Einstellungen' anpassen."
+"Beim Laden der globalen Symbol-Bibliothekstabelle ist ein Fehler aufgetreten."
+"\n"
+"Bitte die globale Symbol-Bibliothekstabelle im Menü 'Einstellungen' anpassen."
 
 #: eeschema/eeschema_config.cpp:68 eeschema/eeschema_config.cpp:245
 #: gerbview/gerbview_frame.cpp:1061 pagelayout_editor/pl_editor_frame.cpp:487
@@ -12829,7 +12828,7 @@ msgstr ""
 #: eeschema/files-io.cpp:357
 msgid "Illegal entry found in project file symbol library list."
 msgstr ""
-"Ungültige Einträge in der projektspezifischen Symbolbibliothekstabelle."
+"Ungültiger Eintrag in der projektspezifischen Symbol-Bibliothekstabelle."
 
 #: eeschema/files-io.cpp:358
 msgid "Project Load Warning"
@@ -12842,7 +12841,7 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
-"Symbolbibliotheken die in der projektspezifischen Symbolbibliothekstabelle "
+"Symbolbibliotheken, die in der projektspezifischen Symbolbibliothekstabelle "
 "definiert sind, werden nicht mehr unterstützt und daher entfernt.\n"
 "\n"
 "Dies kann unter bestimmten Umständen zu fehlerhaften "
@@ -13452,8 +13451,7 @@ msgstr "Konnte die Sicherungsbibliothek '%s' nicht laden."
 #: eeschema/project_rescue.cpp:839
 msgid "Error occurred saving project specific symbol library table."
 msgstr ""
-"Bei dem Versuch die projektspezifische Symbolbibliothekstabelle zu speichern "
-"ist ein Fehler aufgetreten."
+"Fehler beim Speichern der projektspezifischen Symbol-Bibliothekstabelle."
 
 #: eeschema/sch_base_frame.cpp:217
 #, c-format
@@ -13461,8 +13459,7 @@ msgid ""
 "Error saving global symbol library table:\n"
 "%s"
 msgstr ""
-"Bei dem Versuch die globale Symbolbibliothekstabelle zu speichern ist ein "
-"Fehler aufgetreten:\n"
+"Fehler beim Speichern der globalen Symbol-Bibliothekstabelle:\n"
 "%s"
 
 #: eeschema/sch_base_frame.cpp:233
@@ -13471,8 +13468,7 @@ msgid ""
 "Error saving project-specific symbol library table:\n"
 "%s"
 msgstr ""
-"Bei dem Versuch die projektspezifische Symbolbibliothekstabelle zu speichern "
-"ist ein Fehler aufgetreten:\n"
+"Fehler beim Speichern der projektspezifischen Symbol-Bibliothekstabelle:\n"
 "%s"
 
 #: eeschema/sch_bus_entry.cpp:418
@@ -14807,7 +14803,7 @@ msgid ""
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
-"Die Symbolbibliothekstabelle des Schaltplans \"%s\" ist noch nicht neu "
+"Die Symbol-Bibliothekstabelle des Schaltplans \"%s\" ist noch nicht neu "
 "zugeordnet worden. Das Projekt, zu dem der Schaltplan gehört, muss zuerst "
 "neu zugeordnet werden bevor er ins aktuelle Projekt importiert werden kann."
 
@@ -14841,8 +14837,8 @@ msgid ""
 "project library table.  This may result in broken symbol library links for "
 "the loaded schematic.  Do you wish to continue?"
 msgstr ""
-"Der geladenen Schaltplan enthält Bibliotheksnamen die in der "
-"Projektbibliothekstabelle nicht enthalten sind. Dies kann zu fehlerhaften "
+"Der geladene Schaltplan enthält Bibliotheksnamen, die in der Projekt-"
+"Bibliothekstabelle nicht enthalten sind. Dies kann zu fehlerhaften "
 "Symbolbibliotheksverknüpfungen im geladenen Schaltplan führen. Möchten Sie "
 "fortfahren?"
 
@@ -14857,8 +14853,8 @@ msgid ""
 "The project library table '%s' does not exist or cannot be read.  This may "
 "result in broken symbol links for the schematic.  Do you wish to continue?"
 msgstr ""
-"Die Projektbibliothekstabelle \"%s\" existiert nicht oder kann nicht gelesen "
-"werden. Dies kann zu fehlerhaften Symbolbibliotheksverknüpfungen im "
+"Die Projekt-Bibliothekstabelle \"%s\" existiert nicht oder kann nicht "
+"gelesen werden. Dies kann zu fehlerhaften Symbolbibliotheksverknüpfungen im "
 "Schaltplan führen. Möchten Sie fortfahren?"
 
 #: eeschema/sheet.cpp:313
@@ -14867,8 +14863,8 @@ msgid ""
 "loaded schematic project library table.  This may result in broken symbol "
 "library links for the schematic.  Do you wish to continue?"
 msgstr ""
-"Im geladenen Schaltplan sind Bibliotheksnamen enthalten die nicht in der "
-"Projektbibliothekstabelle enthalten sind. Dies kann zu fehlerhaften "
+"Im geladenen Schaltplan sind Bibliotheksnamen enthalten, die nicht in der "
+"Projekt-Bibliothekstabelle enthalten sind. Dies kann zu fehlerhaften "
 "Symbolbibliotheksverknüpfungen im Schaltplan führen. Möchten Sie fortfahren?"
 
 #: eeschema/sheet.cpp:374
@@ -14878,9 +14874,9 @@ msgid ""
 "broken symbol library links for the schematic.  Do you wish to continue?"
 msgstr ""
 "In der aktuellen Bibliothekstabelle ist ein doppelter Bibliotheksname "
-"vorhanden, der auf eine andere Bibliothek verweist. Dies Konflikt kann nicht "
-"behoben werden und kann zu fehlerhaften Symbolbibliotheksverknüpfungen im "
-"Schaltplan führen. Möchten Sie fortfahren?"
+"vorhanden, der auf eine andere Bibliothek verweist. Dieser Konflikt kann "
+"nicht behoben werden und kann zu fehlerhaften Symbolbibliotheksverknüpfungen "
+"im Schaltplan führen. Möchten Sie fortfahren?"
 
 #: eeschema/sheet.cpp:561
 #, c-format
@@ -15340,12 +15336,13 @@ msgstr "Global"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1007
 #: pcbnew/footprint_libraries_utils.cpp:519
 msgid "Choose the Library Table to add the library to:"
-msgstr "Auswahl der Bibliothekstabelle um eine Bibliothek hinzuzufügen zu:"
+msgstr ""
+"Bibliothekstabelle wählen, zu der die Bibliothek hinzugefügt werden soll:"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1008
 #: pcbnew/footprint_libraries_utils.cpp:520
 msgid "Add To Library Table"
-msgstr "Hinzufügen zu Symbolbibliothekstabelle"
+msgstr "Zu Symbol-Bibliothekstabelle hinzufügen"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1040
 #, c-format
@@ -15366,7 +15363,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1189
 #: eeschema/symbol_viewer_frame.cpp:395
 msgid "Library not found in symbol library table."
-msgstr "Bibliothek wurde nicht in der Symbolbibliothekstabelle gefunden."
+msgstr "Bibliothek wurde nicht in der Symbol-Bibliothekstabelle gefunden."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1197
 #: eeschema/symbol_viewer_frame.cpp:399
@@ -15392,7 +15389,7 @@ msgstr "Fehler beim Speichern der globalen Bibliothekstabelle."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1388
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1440
 msgid "Error saving project library table."
-msgstr "Fehler beim Speichern der Projektbibliothekstabelle."
+msgstr "Fehler beim Speichern der projektspezifischen Bibliothekstabelle."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:58
 msgid "Normal save as operation"
@@ -15427,11 +15424,11 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
-"Fügt der globalen Symbolbibliothekstabelle einen neuen Eintrag hinzu.\n"
+"Fügt der globalen Symbol-Bibliothekstabelle einen neuen Eintrag hinzu.\n"
 "\n"
-"Das Kürzel der Symbolbibliothekstabelle wird mit einem Ganzzahl-Suffix "
-"versehen\n"
-"um sicherzustellen, dass es keine doppelten Tabelleneinträge geben wird."
+"Das Kürzel der Symbol-Bibliothekstabelle wird mit einem Ganzzahl-Suffix "
+"versehen,\n"
+"um sicherzustellen, dass keine doppelten Tabelleneinträge vorhanden sind."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:74
 msgid "Add new project library table entry"
@@ -15444,9 +15441,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
-"Fügt der Projekt-Symbolbibliothekstabelle einen neuen Eintrag hinzu.\n"
+"Fügt der projektspezifischen Symbol-Bibliothekstabelle einen neuen Eintrag "
+"hinzu.\n"
 "\n"
-"Das Kürzel der Symbolbibliothekstabelle wird mit einem Ganzzahl-Suffix "
+"Das Kürzel der Symbol-Bibliothekstabelle wird mit einem Ganzzahl-Suffix "
 "versehen,\n"
 "um sicherzustellen, dass keine doppelten Tabelleneinträge vorhanden sind."
 
@@ -15696,8 +15694,7 @@ msgstr "Fehler beim Einlesen der Symbole:"
 #: eeschema/symbol_editor/symbol_library_manager.cpp:176
 #, c-format
 msgid "Library '%s' not found in the Symbol Library Table."
-msgstr ""
-"Bibliothek \"%s\" wurde nicht in der Symbolbibliothekstabelle gefunden."
+msgstr "Bibliothek \"%s\" nicht in der Symbol-Bibliothekstabelle gefunden."
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:402
 msgid "Symbol not found."
@@ -16598,8 +16595,8 @@ msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
-"Bibliothekssymbol-Verweise in alten Schaltplänen der "
-"Symbolbibliothekstabelle neu zuordnen"
+"Bibliothekssymbol-Verweise in alten Schaltplänen der Symbol-"
+"Bibliothekstabelle neu zuordnen"
 
 #: eeschema/tools/ee_actions.cpp:611
 msgid "Bus Definitions..."
@@ -25144,7 +25141,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:73
 msgid "Please select a footprint library table file."
-msgstr "Bitte eine Datei für die Footprint Bibliothekstabelle auswählen."
+msgstr "Bitte eine Datei für die Footprint-Bibliothekstabelle auswählen."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:95
 #, c-format
@@ -30389,7 +30386,7 @@ msgstr ""
 #: pcbnew/files.cpp:873
 msgid "Error saving project specific footprint library table."
 msgstr ""
-"Fehler beim Speichern der projektspezifischen Footprintbibliothekstabelle."
+"Fehler beim Speichern der projektspezifischen Footprint-Bibliothekstabelle."
 
 #: pcbnew/files.cpp:965 pcbnew/files.cpp:1105
 #: pcbnew/footprint_libraries_utils.cpp:360
@@ -30599,7 +30596,7 @@ msgstr ""
 
 #: pcbnew/footprint_editor_utils.cpp:297
 msgid "Library not found in footprint library table."
-msgstr "Bibliothek nicht in der Footprintbibliothekstabelle gefunden."
+msgstr "Bibliothek nicht in der Footprint-Bibliothekstabelle gefunden."
 
 #: pcbnew/footprint_editor_utils.cpp:306
 #, c-format
@@ -30630,11 +30627,11 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
-"Schreiben/Verändern der im alten Format vorliegenden Bibliotheken (.mod "
+"Schreiben/Verändern der im alten Format vorliegenden Bibliotheken (.mod-"
 "Dateien) ist nicht möglich\n"
-"Bitte speichern Sie die aktuelle Bibliothek im neuen .pretty Format \n"
-"und aktualisieren Sie die Footprintbibliothekstabelle \n"
-"um den Footprint (die .kicad_mod Datei) im Bibliotheksordner speichern zu "
+"Bitte speichern Sie die aktuelle Bibliothek im neuen .pretty-Format\n"
+"und aktualisieren Sie die Footprint-Bibliothekstabelle,\n"
+"um den Footprint (eine .kicad_mod-Datei) im Bibliotheksordner speichern zu "
 "können"
 
 #: pcbnew/footprint_libraries_utils.cpp:65
@@ -30644,10 +30641,10 @@ msgid ""
 "and update your footprint lib table\n"
 "before deleting a footprint"
 msgstr ""
-"Verändern der im alten Format vorliegenden Bibliotheken (.mod Dateien) ist "
+"Verändern der im alten Format vorliegenden Bibliotheken (.mod-Dateien) ist "
 "nicht möglich.\n"
-"Bitte speichern Sie die aktuelle Bibliothek im neuen .pretty Format\n"
-"und aktualisieren Sie die Footprintbibliothekstabelle \n"
+"Bitte speichern Sie die aktuelle Bibliothek im neuen .pretty-Format\n"
+"und aktualisieren Sie die Footprint-Bibliothekstabelle,\n"
 "um den Footprint löschen zu können"
 
 #: pcbnew/footprint_libraries_utils.cpp:86
@@ -31637,8 +31634,8 @@ msgstr "%s Footprint ID \"%s\" ist ungültig."
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
-"%s Footprint \"%s\" konnte in keiner Bibliothek der "
-"Footprintbibliothekstabelle gefunden werden."
+"%s Footprint \"%s\" konnte in keiner Bibliothek der Footprint-"
+"Bibliothekstabelle gefunden werden."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:184
 #, c-format
@@ -32078,8 +32075,7 @@ msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
 msgstr ""
-"Bei dem Versuch die globale Footprintbibliothekstabelle für Footprints zu "
-"laden ist ein Fehler aufgetreten:\n"
+"Fehler beim Versuch, die globale Footprint-Bibliothekstabelle zu laden.\n"
 "Bitte die globale Bibliothekstabelle für Footprints im Menü 'Einstellungen' "
 "anpassen."
 
