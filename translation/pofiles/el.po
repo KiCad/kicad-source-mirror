@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-16 11:20+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"PO-Revision-Date: 2021-11-16 13:57+0000\n"
+"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -13710,7 +13710,7 @@ msgstr "Το αρχείο αποθήκευσης δεν έχει αναλυθε�
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:474
 msgid "Compile mask not currently supported."
-msgstr ""
+msgstr "Δεν υποστηρίζεται το compile mask."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:487
 #, c-format
@@ -17554,11 +17554,11 @@ msgstr "Πάνω αντικολλητική μάσκα"
 
 #: gerbview/files.cpp:149
 msgid "Bottom overlay"
-msgstr ""
+msgstr "Κάτω μεταξοτυπία"
 
 #: gerbview/files.cpp:150
 msgid "Top overlay"
-msgstr ""
+msgstr "Πάνω μεταξοτυπία"
 
 #: gerbview/files.cpp:151
 msgid "Bottom paste"
@@ -18724,7 +18724,7 @@ msgstr "Μέγεθος Inst"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
 msgid "Comp"
-msgstr ""
+msgstr "Συμβατότητα"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:105
 msgid "Download"
@@ -29700,7 +29700,6 @@ msgid "Trace length out of range"
 msgstr "Μήκος ίσχνους εκτός έυρους"
 
 #: pcbnew/drc/drc_item.cpp:190
-#, fuzzy
 msgid "Skew between traces out of range"
 msgstr "Απόκλιση ανάμεσα σε δρόμους εκτός εμβέλειας"
 
@@ -29850,12 +29849,12 @@ msgstr "Έλεγχος κυκλικών δακτυλίων via..."
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:128
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
-msgstr "(%s ελάχιστο δακτυλιοειδές πλάτος %s· πραγματικό %s)"
+msgstr "(%s ελάχιστο πλάτος δακτυλίου %s· πραγματικό %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:134
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
-msgstr "(%s μέγιστο δακτυλιοειδές πλάτος %s· πραγματικό %s)"
+msgstr "(%s μέγιστο πλάτος δακτυλίου %s· πραγματικό %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:75
 msgid "Checking pad, via and zone connections..."
@@ -32697,6 +32696,9 @@ msgid ""
 "KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
+"Ο CADSTAR Hatching code '%s' έχει διαφορετικά πλάτη γραμμής για κάθε "
+"σκιαγράφηση. Το KiCad υποστηρίζει μόνο ένα μοναδικό πλάτος. Η σκιαγράφηση "
+"που εισάχθηκε χρησιμοποιεί το πλάτος της πρώτης σκιαγράφησης πχ %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3545
 #, c-format
@@ -32705,6 +32707,10 @@ msgid ""
 "KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
+"Ο CADSTAR Hatching code '%s' έχει διαφορετικά μεγέθη βήματος για κάθε "
+"σκιαγράφηση. Το KiCad υποστηρίζει μόνο ένα μοναδικό μέγεθος βήματος. Η "
+"σκιαγράφηση που εισάχθηκε χρησιμοποιεί το μέγεθος βήματος της πρώτης "
+"ορισμένης σκιαγράφησης, πχ %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3558
 #, c-format
@@ -32714,6 +32720,10 @@ msgid ""
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
 msgstr ""
+"Η σκιαγράφηση στο CADSTAR Hatching code '%s' έχει διαφορά γωνίας %.1f "
+"μοιρών. Το KiCad υποστηρίζει μόνο διαφορά 90 μοιρών. Η σκιαγράφηση που "
+"εισάχθηκε έχει δύο σκιαγραφήσεις, με διαφορά 90 μοιρών και προσανατολισμό "
+"%.1f μοίρες από την οριζόντιο."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3631
 #, c-format
@@ -32885,7 +32895,7 @@ msgstr "Μη αναγνωρίσιμο αρχέγονο σχήματος pad «%s
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1121
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
-msgstr ""
+msgstr "Μη έγκυρος αριθμός token. Αναμένονταν 8 αλλά βρέθηκαν %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1256
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1445
@@ -32928,6 +32938,8 @@ msgstr "Αδυναμία εύρεσης προσαρμοσμένης έδρας 
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
 msgstr ""
+"Αναμένεται ότι τα δεδομένα etch θα βρίσκονται σε στρώμα χαλκού. Βρέθηκε "
+"γραμμή στο επίπεδο '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:91
 #, c-format
@@ -33127,7 +33139,7 @@ msgstr "Ο τύπος σελίδας '%s' δεν είναι έγκυρος."
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1664
 #, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
-msgstr ""
+msgstr "Το επίπεδο '%s' στο αρχείο '%s' στη γραμμή %d, δεν βρέθηκε."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1701
 #, c-format
@@ -34096,7 +34108,7 @@ msgstr "Ξεκλείδωμα"
 
 #: pcbnew/tools/board_editor_control.cpp:1453
 msgid "Duplicate zone"
-msgstr "Αναπαραγωγή ζώνης"
+msgstr "Πολλαπλή ζώνη"
 
 #: pcbnew/tools/board_inspection_tool.cpp:59
 msgid "Net Tools"
@@ -34130,12 +34142,12 @@ msgstr "Διάκενο"
 #: pcbnew/tools/board_inspection_tool.cpp:198
 #: pcbnew/tools/board_inspection_tool.cpp:605
 msgid "Edge clearance resolution for:"
-msgstr ""
+msgstr "Εντοπισμένο διάκενο περιγράμματος:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:235
 #: pcbnew/tools/board_inspection_tool.cpp:459
 msgid "Clearance resolution for:"
-msgstr ""
+msgstr "Εντοπισμένο διάκενο:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:264
 msgid "Select two items for a clearance resolution report."
@@ -34234,7 +34246,7 @@ msgstr "Περιορισμοί διαμέτρου: ελάχιστο %s; ιδαν
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Via Annular Width"
-msgstr ""
+msgstr "Πλάτος Δακτυλίου Via"
 
 #: pcbnew/tools/board_inspection_tool.cpp:771
 msgid "Via annular width resolution for:"
@@ -35534,6 +35546,8 @@ msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
 msgstr ""
+"Εναλλαγή ανάμεσα στη χρήση χρωμάτων δικτύου και κλάσης δικτύου για όλα τα "
+"δίκτυα, μόνο για τη φωλιά συνδέσεων, και για κανένα"
 
 #: pcbnew/tools/pcb_actions.cpp:823
 msgid "Sketch Tracks"
