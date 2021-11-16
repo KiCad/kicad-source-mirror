@@ -32699,9 +32699,9 @@ msgid ""
 "KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
-"Ο CADSTAR Hatching code '%s' έχει διαφορετικά πλάτη γραμμής για κάθε "
-"σκιαγράφηση. Το KiCad υποστηρίζει μόνο ένα μοναδικό πλάτος. Η σκιαγράφηση "
-"που εισάχθηκε χρησιμοποιεί το πλάτος της πρώτης σκιαγράφησης πχ %.2f mm."
+"Ο '%s ' κωδικός διασταύρωσης του CADSTAR έχει διαφορετικό έκαστο πάχος "
+"γραμμής. Το KiCad υποστηρίζει μόνο ένα πάχος για τις γραμμές. Η εφαρμογή της "
+"διασταύρωσης έγινε κάνοντας χρήση το πάχος του πρώτου ορισμού, πχ. %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3545
 #, c-format
