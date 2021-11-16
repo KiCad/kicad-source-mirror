@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-16 18:39+0000\n"
+"PO-Revision-Date: 2021-11-17 18:50+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8440,7 +8440,7 @@ msgstr "-------- Το ERC ακυρώθηκε από τον χρήστη.<br><br>
 
 #: eeschema/dialogs/dialog_erc.cpp:308
 msgid "ERC completed.<br><br>"
-msgstr "Ολοκληρώθηκε το ERC. <br><br>"
+msgstr "Ολοκληρώθηκε ο ΕΗΚ. <br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:356
 msgid "Checking sheet names..."
@@ -17839,7 +17839,7 @@ msgstr "RS274X: Το GerbView αγνόησε την εντολή KNOCKOUT"
 
 #: gerbview/toolbars_gerber.cpp:127
 msgid "Highlight items belonging to this component"
-msgstr "Φωτισμός αντικειμένων που ανήκουν στο εξάρτημα"
+msgstr "Επισήμανση αντικειμένων που ανήκουν στο εξάρτημα"
 
 #: gerbview/toolbars_gerber.cpp:141
 msgid "Highlight items belonging to this net"
@@ -18515,9 +18515,8 @@ msgid "Uninstall"
 msgstr "Απεγκατάσταση"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:133
-#, fuzzy
 msgid "Apply Changes"
-msgstr "Εφαρμογή αλλαγών"
+msgstr "Εφαρμογή Αλλαγών"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:171
 msgid ""
@@ -18572,9 +18571,8 @@ msgid "Discard action"
 msgstr "Απόρριψη δράσης"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
-#, fuzzy
 msgid "Install from File..."
-msgstr "Εγκατάσταση από αρχείο..."
+msgstr "Εγκατάσταση από Αρχείο..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:74
 msgid "Plugin And Content Manager"
@@ -18590,27 +18588,24 @@ msgid "Downloaded %lld/%lld Kb"
 msgstr "Έγινε λήψη %lld/%lld Kb"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download Progress"
-msgstr "Πρόοδος λήψης"
+msgstr "Πρόοδος Λήψης"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
 msgid "Waiting..."
 msgstr "Αναμονή..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall Progress"
-msgstr "Συνολική πρόοδος"
+msgstr "Συνολική Πρόοδος"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
 msgstr "Λεπτομέρειες"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
-#, fuzzy
 msgid "Applying Package Changes"
-msgstr "Εφαρμογή αλλαγών πρόσθετου πακέτου"
+msgstr "Εφαρμογή Αλλαγών Πρόσθετου Πακέτου"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
 msgid "Pending install"
@@ -18625,19 +18620,16 @@ msgid "Metadata"
 msgstr "Μεταδεδομένα"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
-#, fuzzy
 msgid "Package identifier: "
-msgstr "Αναγνωριστικό πακέτου: %s\n"
+msgstr "Αναγνωριστικό πακέτου: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "Άδεια"
+msgstr "Άδεια "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
-#, fuzzy
 msgid "Tags: "
-msgstr "Ετικέτες: %s\n"
+msgstr "Ετικέτες: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:257
 msgid "Author"
@@ -18693,19 +18685,16 @@ msgid "Install package"
 msgstr "Εγκατάσταση πρόσθετου πακέτου"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Download Size"
-msgstr "Λήψη"
+msgstr "Μέγεθος Λήψης"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Install Size"
-msgstr "Μέγεθος Inst"
+msgstr "Μέγεθος Εγκατάστασης"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
-#, fuzzy
 msgid "Compatible"
-msgstr "Λειτουργία συμβατότητας:"
+msgstr "Συμβατό"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 msgid "Show all versions"
@@ -18850,9 +18839,8 @@ msgid "Aborting package installation."
 msgstr "Ακύρωση εγκατάστασης πακέτου."
 
 #: kicad/pcm/pcm_task_manager.cpp:254
-#, fuzzy
 msgid "Extracted package\n"
-msgstr "Εξαγωγή πακέτου '%s'."
+msgstr "Εξαγωγή πακέτου\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:298
 #, c-format
@@ -21985,7 +21973,7 @@ msgstr ""
 "%d %s Uuid: [%s], X, Y: %s, Στρογγυλεμένο X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:602
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
