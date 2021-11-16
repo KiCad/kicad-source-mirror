@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-10 23:49+0000\n"
+"PO-Revision-Date: 2021-11-16 19:20+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18582,7 +18582,6 @@ msgid "Uninstall"
 msgstr "Deinstallieren"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:133
-#, fuzzy
 msgid "Apply Changes"
 msgstr "Änderungen anwenden"
 
@@ -18639,9 +18638,8 @@ msgid "Discard action"
 msgstr "Aktion verwerfen"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
-#, fuzzy
 msgid "Install from File..."
-msgstr "Installation aus Datei..."
+msgstr "Von Datei installieren..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:74
 msgid "Plugin And Content Manager"
@@ -18657,7 +18655,6 @@ msgid "Downloaded %lld/%lld Kb"
 msgstr "%lld/%lld Kb heruntergeladen"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download Progress"
 msgstr "Download-Fortschritt"
 
@@ -18666,7 +18663,6 @@ msgid "Waiting..."
 msgstr "Warte ..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall Progress"
 msgstr "Gesamtfortschritt"
 
@@ -18675,7 +18671,6 @@ msgid "Details"
 msgstr "Details"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
-#, fuzzy
 msgid "Applying Package Changes"
 msgstr "Paketänderungen werden angewandt"
 
@@ -18692,19 +18687,16 @@ msgid "Metadata"
 msgstr "Metadaten"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
-#, fuzzy
 msgid "Package identifier: "
-msgstr "Paketkennung: %s\n"
+msgstr "Paketkennung: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "Lizenz"
+msgstr "Lizenz: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
-#, fuzzy
 msgid "Tags: "
-msgstr "Tags: %s\n"
+msgstr "Tags: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:257
 msgid "Author"
@@ -18760,19 +18752,16 @@ msgid "Install package"
 msgstr "Paket installieren"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Download Size"
-msgstr "Herunterladen"
+msgstr "Download-Größe"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Install Size"
-msgstr "Inst-Größe"
+msgstr "Installierte Größe"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
-#, fuzzy
 msgid "Compatible"
-msgstr "Kompatibilitätsmodus:"
+msgstr "Kompatibel"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 msgid "Show all versions"
@@ -18915,9 +18904,8 @@ msgid "Aborting package installation."
 msgstr "Paketinstallation wird abgebrochen."
 
 #: kicad/pcm/pcm_task_manager.cpp:254
-#, fuzzy
 msgid "Extracted package\n"
-msgstr "Paket \"%s\" wird entpackt."
+msgstr "Entpacktes Paket\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:298
 #, c-format
@@ -22061,7 +22049,7 @@ msgstr ""
 "%d %s UUID: [%s], X, Y: %s, gerundet X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:602
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
@@ -22069,9 +22057,9 @@ msgid ""
 "checked.\n"
 msgstr ""
 "\n"
-"Die Leiterplatte hat %d leere oder ungültige Referenzbezeichnungen.\n"
-"Es wird empfohlen, DRC mit aktiviertem Kontrollkästchen \"Footprints gegen "
-"Schaltplan testen\" auszuführen.\n"
+"Die Platine hat %d leere oder ungültige Referenzbezeichner.\n"
+"Es wird empfohlen, DRC mit aktivierter Option \"Platine und Schaltplan auf "
+"Parität prüfen\" auszuführen.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
 #, c-format
@@ -32369,9 +32357,8 @@ msgstr ""
 "KiCad-Lage Eco1_User verschoben."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2650
-#, fuzzy
 msgid "Loading unicode strings..."
-msgstr "Lade Netze..."
+msgstr "Lade Unicode-Strings..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2664
 msgid "Loading text..."
