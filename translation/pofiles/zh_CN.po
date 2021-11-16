@@ -9,13 +9,14 @@
 # Deleted User <noreply+33206@weblate.org>, 2021.
 # David Chen <d0123456789g@yahoo.com.tw>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
+# Dingzhong Chen <wsxy162@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-15 18:08+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2021-11-17 19:42+0000\n"
+"Last-Translator: Dingzhong Chen <wsxy162@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -18029,7 +18030,6 @@ msgid "Uninstall"
 msgstr "卸载"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:133
-#, fuzzy
 msgid "Apply Changes"
 msgstr "应用更改"
 
@@ -18084,7 +18084,6 @@ msgid "Discard action"
 msgstr "放弃操作"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
-#, fuzzy
 msgid "Install from File..."
 msgstr "从文件安装…"
 
@@ -18102,7 +18101,6 @@ msgid "Downloaded %lld/%lld Kb"
 msgstr "已下载 %lld/%lld Kb"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download Progress"
 msgstr "下载进度"
 
@@ -18111,7 +18109,6 @@ msgid "Waiting..."
 msgstr "等待中..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall Progress"
 msgstr "总体进度"
 
@@ -18120,7 +18117,6 @@ msgid "Details"
 msgstr "详情"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
-#, fuzzy
 msgid "Applying Package Changes"
 msgstr "应用包更改"
 
@@ -18137,19 +18133,16 @@ msgid "Metadata"
 msgstr "元数据"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
-#, fuzzy
 msgid "Package identifier: "
-msgstr "包标识符：%s\n"
+msgstr "包标识符：%s "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "许可证"
+msgstr "许可证： "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
-#, fuzzy
 msgid "Tags: "
-msgstr "标签：%s\n"
+msgstr "标签： "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:257
 msgid "Author"
@@ -18200,19 +18193,16 @@ msgid "Install package"
 msgstr "安装包"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Download Size"
-msgstr "下载"
+msgstr "下载大小"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Install Size"
 msgstr "安装大小"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
-#, fuzzy
 msgid "Compatible"
-msgstr "兼容模式："
+msgstr "兼容"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 msgid "Show all versions"
@@ -18350,9 +18340,8 @@ msgid "Aborting package installation."
 msgstr "正中止软件包安装。"
 
 #: kicad/pcm/pcm_task_manager.cpp:254
-#, fuzzy
 msgid "Extracted package\n"
-msgstr "正在提取包 \"%s\"。"
+msgstr "已提取包\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:298
 #, c-format
@@ -31398,9 +31387,8 @@ msgstr ""
 "Altium 层 (%d) 上找到布线没有 KiCad 等效项。它已被移动至 KiCad Eco1_User 层。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2650
-#, fuzzy
 msgid "Loading unicode strings..."
-msgstr "载入网中..."
+msgstr "正在加载 unicode 字符串……"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2664
 msgid "Loading text..."
