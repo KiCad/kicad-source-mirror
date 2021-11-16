@@ -954,21 +954,21 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     }
     else
     {
-        // Fixme (but not urgent). For complex pad shapes, we pass a single simple polygon to the
-        // router, otherwise it won't know how to correctly build walkaround 'hulls' for the pad
-        // primitives - it can recognize only simple shapes, but not COMPOUNDs made of multiple
-        // shapes.
-        // The proper way to fix this would be to implement
-        // SHAPE_COMPOUND::ConvertToSimplePolygon(), but the complexity of pad polygonization code
-        // (see PAD::GetEffectivePolygon), including approximation error handling makes me
-        // slightly scared to do it right now.
+        // TODO: Support PNS hull generation for compound shapes and use the actual shape here
 
-        // NOTE: PAD::GetEffectivePolygon puts the error on the inside, but we want the error on
-        // the outside so that the collision hull is larger than the pad
+        // NOTE: Because PNS hulls can't handle compound shapes yet, there will always be a
+        // discrepancy between the PNS and the DRC engine in some cases (such as custom shape pads
+        // that use polygons with nonzero width).  No matter where you put the error, this causes
+        // issues, but the "lesser evil" is to allow routing in more cases (and have DRC errors that
+        // need to be cleaned up) vs. having situations that are valid to DRC but can't be routed
+        // because the extra error outside the pad is a clearance violation to the router.
+        //
+        // See https://gitlab.com/kicad/code/kicad/-/issues/9544
+        // and https://gitlab.com/kicad/code/kicad/-/issues/7672
 
         SHAPE_POLY_SET outline;
         aPad->TransformShapeWithClearanceToPolygon( outline, UNDEFINED_LAYER, 0, ARC_HIGH_DEF,
-                                                    ERROR_OUTSIDE );
+                                                    ERROR_INSIDE );
 
         SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
 
