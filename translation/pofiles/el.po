@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-11-16 13:57+0000\n"
-"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -32688,6 +32688,9 @@ msgid ""
 "hatches (crosshatching) 90 degrees apart. The imported hatching is "
 "crosshatched."
 msgstr ""
+"Ο '%s' κωδικός διασταύρωσης του CADSTAR έχει %d διασταυρώσεις ορισμένες. Το "
+"KiCad υποστηρίζει 2 (κάθετα) διασταυρωμένες γραμμές στις 90 μοίρες. Η "
+"εφαρμογή της διασταύρωσης τροποποιήθηκε."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3533
 #, c-format
