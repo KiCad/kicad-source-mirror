@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-16 17:35+0000\n"
-"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
+"PO-Revision-Date: 2021-11-16 18:39+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -22007,7 +22007,7 @@ msgstr ""
 "%d %s Uuid: [%s], X, Y: %s, Στρογγυλεμένο X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:602
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
@@ -22015,8 +22015,8 @@ msgid ""
 msgstr ""
 "\n"
 "Το PCB έχει %d κενούς ή μη έγκυρους προσδιορισμούς αναφοράς.\n"
-"Προτείνουμε να εκτελέσετε το ΕΚΣ με το 'Test footprints against schematic' "
-"επιλεγμένο.\n"
+"Προτείνουμε να εκτελέσετε το ΕΚΣ με το 'Έλεγχος πιστότητας PCB σε σχέση με "
+"το σχηματικό' επιλεγμένο.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
 #, c-format
