@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-16 10:25+0000\n"
+"PO-Revision-Date: 2021-11-16 11:20+0000\n"
 "Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -37,7 +37,7 @@ msgstr "Όλα τα αρχεία"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:360
 msgid "Build board outline"
-msgstr "Περίγραμμα πλακέτας"
+msgstr "Δημιουργία περιγράμματος πλακέτας"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:538
 msgid "Create layers"
@@ -11879,9 +11879,8 @@ msgid "Cross-probing"
 msgstr "Cross-probing"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:80
-#, fuzzy
 msgid "Center view on cross-probed items"
-msgstr "Κεντρική προβολή cross-probed αντικειμένων"
+msgstr "Κεντρική προβολή διασταυρούμενων αντικειμένων"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:84
 #: pcbnew/dialogs/panel_display_options_base.cpp:80
@@ -11890,9 +11889,8 @@ msgstr "Μεγέθυνση ώστε να χωράει cross-probed αντικε�
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:88
 #: pcbnew/dialogs/panel_display_options_base.cpp:84
-#, fuzzy
 msgid "Highlight cross-probed nets"
-msgstr "Επισήμανση cross-probed δικτύων"
+msgstr "Επισήμανση διασταυρούμενων δικτύων"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
@@ -16818,7 +16816,7 @@ msgstr ""
 "b> της μετατροπής."
 
 #: eeschema/tools/ee_inspection_tool.cpp:359
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
@@ -27557,9 +27555,8 @@ msgid "Show pad clearance"
 msgstr "Προβολή διάκενου έδρας"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
-#, fuzzy
 msgid "Scroll cross-probed items into view"
-msgstr "Κύλιση cross-probed αντικειμένων σε θέα"
+msgstr "Κύλιση διασταυρούμενων αντικειμένων σε θέα"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:86
 msgid "Highlight nets when they are highlighted in the schematic editor"
@@ -29396,22 +29393,18 @@ msgid "board setup constraints"
 msgstr "περιορισμοί διάταξης πλακέτας"
 
 #: pcbnew/drc/drc_engine.cpp:175
-#, fuzzy
 msgid "board setup constraints silk"
 msgstr "περιορισμοί διάταξης πλακέτας μεταξ"
 
 #: pcbnew/drc/drc_engine.cpp:181
-#, fuzzy
 msgid "board setup constraints hole"
 msgstr "περιορισμοί διάταξης πλακέτας τρύπα"
 
 #: pcbnew/drc/drc_engine.cpp:186
-#, fuzzy
 msgid "board setup constraints edge"
 msgstr "περιορισμοί διάταξης πλακέτας περίγραμμα"
 
 #: pcbnew/drc/drc_engine.cpp:191
-#, fuzzy
 msgid "board setup constraints courtyard"
 msgstr "περιορισμοί διάταξης πλακέτας περιοχή αποτυπώματος"
 
@@ -30485,7 +30478,6 @@ msgid "Clearance Override"
 msgstr "Περιγράμματα Διάκενου"
 
 #: pcbnew/footprint.cpp:2370 pcbnew/pad.cpp:1658
-#, fuzzy
 msgid "Solderpaste Margin Override"
 msgstr "Παράκαμψη Περιθωρίου Πάστας Συγκόλλησης"
 
