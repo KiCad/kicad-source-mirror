@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-11-16 13:57+0000\n"
-"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -32898,7 +32898,7 @@ msgstr "Μη αναγνωρίσιμο αρχέγονο σχήματος pad «%s
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1121
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
-msgstr "Μη έγκυρος αριθμός token. Αναμένονταν 8 αλλά βρέθηκαν %zu."
+msgstr "Μη έγκυρο πλήθος διακριτικών. Αναμενόμενα 8 όμως βρέθηκαν %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1256
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1445
