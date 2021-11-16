@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
-"PO-Revision-Date: 2021-11-16 15:10+0000\n"
-"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
+"PO-Revision-Date: 2021-11-16 17:35+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -102,7 +102,7 @@ msgstr "Κατασκευή Τεχνικού επιπέδου %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1049
 msgid "Build BVH for holes and vias"
-msgstr "Κατασκευή BVH για τρύπες και via"
+msgstr "Κατασκευή BVH για τρύπες και διελεύσεις"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -130,7 +130,7 @@ msgstr "Φόρτωση OpenGL: πλακέτα"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:482
 msgid "Load OpenGL: holes and vias"
-msgstr "Φόρτωση OpenGL: οπές και via"
+msgstr "Φόρτωση OpenGL: οπές και διελεύσεις"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:548
 msgid "Load OpenGL: layers"
@@ -664,7 +664,7 @@ msgstr "Ψαλίδισμα μεταξοτυπίας στις άκρες της �
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
-msgstr "Συγκράτιση μεταξοτυπίας στο δακτύλιο του via"
+msgstr "Συγκράτιση μεταξοτυπίας στο δακτύλιο της διέλευσης"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:40
 msgid "Show solder mask layers"
@@ -819,7 +819,7 @@ msgstr "Απενεργοποίηση πάχους"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:71
 msgid "Disable vias"
-msgstr "Απενεργοποίηση vias"
+msgstr "Απενεργοποίηση διελεύσεων"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:74
 msgid "Disable holes"
@@ -3510,19 +3510,19 @@ msgstr "Ελάχιστο πλάτος διαδρόμου"
 
 #: common/dialogs/panel_setup_netclasses.cpp:489
 msgid "Via pad diameter"
-msgstr "Διάμετρος pad via"
+msgstr "Διάμετρος έδρας διέλευσης"
 
 #: common/dialogs/panel_setup_netclasses.cpp:490
 msgid "Via plated hole diameter"
-msgstr "Διάμετρος επιμετaλλωμένης οπής via"
+msgstr "Διάμετρος επιμεταλλωμένης οπής διέλευσης"
 
 #: common/dialogs/panel_setup_netclasses.cpp:491
 msgid "Microvia pad diameter"
-msgstr "Διάμετρος pad των microvia"
+msgstr "Διάμετρος έδρας μίκρο-διέλευσης"
 
 #: common/dialogs/panel_setup_netclasses.cpp:492
 msgid "Microvia plated hole diameter"
-msgstr "Διάμετρος επιμεταλλωμένης οπής microvia"
+msgstr "Διάμετρος επιμεταλλωμένης οπής μίκρο-διέλευσης"
 
 #: common/dialogs/panel_setup_netclasses.cpp:493
 msgid "Differential pair track width"
@@ -3578,20 +3578,20 @@ msgstr "Πλάτος διαδρόμου"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:202
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:108
 msgid "Via Size"
-msgstr "Μέγεθος Via"
+msgstr "Μέγεθος Διέλευσης"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
 msgid "Via Hole"
-msgstr "Οπή Via"
+msgstr "Οπή Διέλευσης"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:204
 msgid "uVia Size"
-msgstr "Μέγεθος μVia"
+msgstr "Μέγεθος μίκρο-Διέλευσης"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 msgid "uVia Hole"
-msgstr "Οπή μVia"
+msgstr "Οπή μίκρο-Διέλευσης"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
 msgid "DP Width"
@@ -4125,7 +4125,7 @@ msgstr "Διάδρομος"
 #: common/eda_item.cpp:323 pcbnew/dialogs/dialog_board_statistics.cpp:493
 #: pcbnew/pcb_track.cpp:751
 msgid "Via"
-msgstr "Via"
+msgstr "Διέλευση"
 
 #: common/eda_item.cpp:324 common/eda_item.cpp:335 pcbnew/pcb_marker.cpp:94
 msgid "Marker"
@@ -5351,23 +5351,23 @@ msgstr "Διάδρομοι"
 
 #: common/layer_id.cpp:153
 msgid "Through vias"
-msgstr "Through vias"
+msgstr "Διαμπερές διελεύσεις"
 
 #: common/layer_id.cpp:154
 msgid "Bl/Buried vias"
-msgstr "Τυφλά/Ενταφιασμένα vias"
+msgstr "Τυφλές/Ενταφιασμένες διελεύσεις"
 
 #: common/layer_id.cpp:155
 msgid "Micro-vias"
-msgstr "Micro-vias"
+msgstr "Μίκρο-διελεύσεις"
 
 #: common/layer_id.cpp:156
 msgid "Via holes"
-msgstr "Οπές Via"
+msgstr "Οπές διελεύσεων"
 
 #: common/layer_id.cpp:157
 msgid "Via hole walls"
-msgstr "Τοίχωμα οπής Via"
+msgstr "Τοίχωμα οπής διέλευσης"
 
 #: common/layer_id.cpp:158
 msgid "Plated holes"
@@ -13831,7 +13831,7 @@ msgstr "Sheetname's owner (%d). Δεν βρέθηκε."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2255
 #, c-format
 msgid "Filename's owner (%d) not found."
-msgstr "Δεν βρέθηκε ο ιδιοκτήτης του αρχείου (%d)."
+msgstr "Filename's owner (%d) Δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2289
 #, c-format
@@ -19978,7 +19978,7 @@ msgstr "Ελάχιστο διάκενο"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diam - drill)"
-msgstr "Via: (διαμ - διατρ)"
+msgstr "Διέλευση: (διαμ - διατρ)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:76
 msgid "Plated Pad: (diam - drill)"
@@ -20527,7 +20527,7 @@ msgstr "Ειδική Ηλεκτρική Αντίσταση σε Ohm*m"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:31
 msgid "Finished hole diameter (D):"
-msgstr "Διάμετρος τελειωμένης τρύπας (D):"
+msgstr "Διάμετρος ολοκληρωμένης τρύπας (D):"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:45
 msgid "Plating thickness (T):"
@@ -20535,19 +20535,20 @@ msgstr "Πλάτος επιμετάλλωσης (T):"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:57
 msgid "Via length:"
-msgstr "Μήκος via:"
+msgstr "Μήκος διέλευσης:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
-msgstr "Το μήκος via είναι το πάχος πλακέτας για διαμπερή via"
+msgstr ""
+"Το μήκος της διέλευσης είναι το πάχος της πλακέτας για διαμπερείς διελεύσεις"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 msgid "Via pad diameter:"
-msgstr "Διάμετρος έδρας via:"
+msgstr "Διάμετρος έδρας διέλευσης:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "Διάμετρος έδρας γύρω από το via (δακτύλιος)"
+msgstr "Διάμετρος έδρας γύρω από τη διέλευση (δακτύλιος)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
@@ -20608,9 +20609,9 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Προειδοποίηση:\n"
-"Διάμετρος pad του via >= Διάμετρος διάκενου οπής.\n"
-"Ορισμένες παράμετροι δεν μπορούν να υπολογιστούν για ένα via μέσα σε μια "
-"ζώνη χαλκού."
+"Διάμετρος έδρας διέλευσης >= Διάμετρος διάκενου οπής.\n"
+"Ορισμένες παράμετροι δεν μπορούν να υπολογιστούν για μια διέλευση μέσα σε "
+"μια ζώνη χαλκού."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:260
 msgid "Thermal resistance:"
@@ -20682,7 +20683,7 @@ msgstr "Επαγωγική αντίδραση για δεδομένο χρόνο
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:353
 msgid "Top view of via"
-msgstr "Επάνω όψη του via"
+msgstr "Επάνω όψη διέλευσης"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
@@ -21250,7 +21251,7 @@ msgstr "Έδρες"
 #: pcbnew/widgets/appearance_controls.cpp:336
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
-msgstr "Via"
+msgstr "Διελεύσεις"
 
 #: pcbnew/board.cpp:1175 pcbnew/pcb_draw_panel_gal.cpp:474
 msgid "Track Segments"
@@ -21708,11 +21709,11 @@ msgstr "Αφαίρεση διαδρόμου που συνδέει δύο nets"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove via shorting two nets"
-msgstr "Αφαίρεση via που συνδέουν δύο nets"
+msgstr "Αφαίρεση διέλευσης που συνδέει δύο δίκτυα"
 
 #: pcbnew/cleanup_item.cpp:49
 msgid "Remove redundant via"
-msgstr "Διαγραφή πλεονάζοντος via"
+msgstr "Διαγραφή πλεονάζουσας διέλευσης"
 
 #: pcbnew/cleanup_item.cpp:50
 msgid "Remove duplicate track"
@@ -21728,7 +21729,7 @@ msgstr "Διαγραφή ασύνδετου στα δυο άκρα διαδρό�
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove via connected on fewer than two layers"
-msgstr "Αφαίρεση συνδεδεμένων via σε λιγότερα από δύο επίπεδα"
+msgstr "Αφαίρεση συνδεδεμένων διελεύσεων σε λιγότερα από δύο επίπεδα"
 
 #: pcbnew/cleanup_item.cpp:54
 msgid "Remove zero-length track"
@@ -22383,7 +22384,7 @@ msgstr "NPTH:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:155
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:165
 msgid "Through vias:"
-msgstr "Διαμπερή via:"
+msgstr "Διαμπερείς διελεύσεις:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:156
 msgid "Blind/buried:"
@@ -22392,7 +22393,7 @@ msgstr "Τυφλά/ενταφιασμένα:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:157
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:173
 msgid "Micro vias:"
-msgstr "Μικρο-via:"
+msgstr "Μίκρο-διελεύσεις:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:374
 #: pcbnew/dialogs/dialog_board_statistics.cpp:388
@@ -22503,7 +22504,7 @@ msgstr "Με Επιμετάλλωση"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:235
 msgid "Via/Pad"
-msgstr "Via/Pad"
+msgstr "Διέλευση/Έδρα"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:236
 msgid "Start Layer"
@@ -22579,15 +22580,17 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
 msgid "&Delete redundant vias"
-msgstr "&Διαγραφή περιττών via"
+msgstr "&Διαγραφή περιττών διελεύσεων"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:28
+#, fuzzy
 msgid "remove vias on through hole pads and superimposed vias"
-msgstr "αφαίρεση via από διαμπερείς έδρες και από via επάνω σε άλλα via"
+msgstr ""
+"αφαίρεση διελεύσεων από διαμπερείς έδρες/οπές και από επάλληλες διελεύσεις"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:32
 msgid "Delete vias connected on only one layer"
-msgstr "Διαγραφή συνδεδεμένων vias σε ένα μόνο επίπεδο"
+msgstr "Διαγραφή συνδεδεμένων μόνο σε ένα επίπεδο διελεύσεων"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "&Merge co-linear tracks"
@@ -23421,7 +23424,7 @@ msgstr "Πάχος των γραμμών διαστάσεων"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:367
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:139
 msgid "Arrow length:"
-msgstr "Μήκος via:"
+msgstr "Μήκος βέλους:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:378
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:155
@@ -23462,7 +23465,7 @@ msgstr "Έγινε.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:462
 msgid "Run clearance resolution tool..."
-msgstr "Ανάλυση Διάκενου..."
+msgstr "Εκτέλεση εργαλείου ανάλυσης διακένου..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:489
 msgid "Open the Board Setup... dialog"
@@ -24017,7 +24020,7 @@ msgstr "Συμπερίληψη επιπέδου περιγράμματος &πλ
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:48
 msgid "Include &vias"
-msgstr "Συμπερίληψη &via"
+msgstr "Συμπερίληψη &διελεύσεων"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:51
 msgid "Include &zones"
@@ -24856,7 +24859,7 @@ msgstr "Μη-επιμεταλλωμένες έδρες:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:181
 msgid "Buried vias:"
-msgstr "Ενταφιασμένα vias:"
+msgstr "Ενταφιασμένες διελεύσεις:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:91
 msgid "Generate Drill Files"
@@ -25080,11 +25083,11 @@ msgstr "Ορισμός στις προκαθορισμένες τιμές επι
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:203
 msgid "Via Drill"
-msgstr "Διάτρηση Via"
+msgstr "Διάτρηση Διέλευσης"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:205
 msgid "uVia Drill"
-msgstr "Διάτρηση μ/Via"
+msgstr "Διάτρηση μίκρο-Διέλευσης"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
@@ -25416,11 +25419,11 @@ msgstr "Πλήθος Εδρών"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:79
 msgid "Via Count"
-msgstr "Πλήθος Via"
+msgstr "Πλήθος Διελεύσεων"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:80
 msgid "Via Length"
-msgstr "Μήκος Via"
+msgstr "Μήκος Διέλευσης"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:81
 msgid "Track Length"
@@ -26386,11 +26389,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Do not tent vias"
-msgstr "Να μη γίνει κάλυψη των via"
+msgstr "Να μη γίνει επικάλυψη των διελεύσεων"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Remove soldermask on vias"
-msgstr "Αφαίρεση μάσκας συγκόλλησης στα via"
+msgstr "Αφαίρεση μάσκας συγκόλλησης στις διελεύσεις"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:109
 msgid ""
@@ -26722,11 +26725,11 @@ msgstr "Κενό ιχνών:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
 msgid "Via gap:"
-msgstr "Κενό via:"
+msgstr "Κενό διέλευσης:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
-msgstr "Κενό via ίδιο με κενό γραμμής"
+msgstr "Κενό διέλευσης ίδιο με κενό διαδρόμου"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
@@ -26851,14 +26854,14 @@ msgstr "Λειτουργία ελεύθερης γωνίας (χωρίς σπρ�
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:31
 msgid "Shove vias"
-msgstr "Σπρώξιμο των via"
+msgstr "Σπρώξιμο των διελεύσεων"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:33
 msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
-"Όταν απενεργοποιείται, τα via αντιμετωπίζονται ως μη-μετακινούμενα "
+"Όταν απενεργοποιείται, οι διελεύσεις αντιμετωπίζονται ως μη-μετακινούμενα "
 "αντικείμενα και αγκαλιάζονται αντί να σπρώχνονται."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:37
@@ -26900,8 +26903,8 @@ msgid ""
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
 "Όταν ενεργοποιείται, ο δρομολογητής προσπαθεί να συνδέσει καθαρά τις έδρες "
-"και τα via, αποφεύγοντας οξείες γωνίες και οδοντωτά σπασίματα κατά τη "
-"σύνδεση με δρόμους."
+"και τις διελεύσεις, αποφεύγοντας οξείες γωνίες και οδοντωτά σπασίματα κατά "
+"τη σύνδεση με τους διαδρόμους."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid "Smooth dragged segments"
@@ -27139,12 +27142,11 @@ msgstr "Αποτροπή διαδρόμων να δρομολογηθούν σε
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Keep out vias"
-msgstr "Καθαρή περιοχή via"
+msgstr "Καθαρή περιοχή διελεύσεων"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 msgid "Prevent vias from being placed in this area"
-msgstr ""
-"Αποτροπή κλεισίματος του CvPcb μετά την αποθήκευση του αρχείου λίστας δικτύων"
+msgstr "Αποτροπή τοποθέτησης διελεύσεων σε αυτήν την περιοχή"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:58
 msgid "Keep out pads"
@@ -27298,12 +27300,14 @@ msgstr "Τα Net να μείνουν ίδια"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:403
 msgid "Via hole size must be smaller than via diameter"
-msgstr "Το μέγεθος διάτρησης via πρέπει να είναι μικρότερο από τη διάμετρο via"
+msgstr ""
+"Το μέγεθος διάτρησης των διελεύσεων πρέπει να είναι μικρότερο από τη "
+"διάμετρο τους"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:412
 msgid "Via start layer and end layer cannot be the same"
 msgstr ""
-"Τα επίπεδα έναρξης και τερματισμού του via δεν μπορούν να είναι τα ίδια"
+"Τα επίπεδα έναρξης και τερματισμού της διέλευσης δεν μπορούν να είναι τα ίδια"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:570
 msgid "Edit track/via properties"
@@ -27315,15 +27319,15 @@ msgstr "Ανανέωση δικτύων"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
 msgid "Automatically update via nets"
-msgstr "Αυτόματη Δρομολόγηση Έδρας"
+msgstr "Αυτόματη ενημέρωση δικτύων διέλευσης"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:36
 msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
 msgstr ""
-"Αυτόματη αλλαγή του net αυτού του via όταν τα pad ή οι ζώνες που αγγίζει "
-"αλλάζουν"
+"Αυτόματη αλλαγή του δικτύου αυτής της διέλευσης όταν οι έδρες ή οι ζώνες που "
+"αγγίζει αλλάζουν"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:60
 msgid "Start point X:"
@@ -27361,11 +27365,11 @@ msgstr "Προκαθορισμένα μεγέθη:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:205
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
 msgid "Via diameter:"
-msgstr "Διάμετρος via:"
+msgstr "Διάμετρος διέλευσης:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:216
 msgid "Via hole:"
-msgstr "Οπές Via:"
+msgstr "Οπή διέλευσης:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:230
 msgid "Use net class sizes"
@@ -27373,7 +27377,7 @@ msgstr "Χρήση μεγεθών κλάσης δικτύου"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 msgid "Via type:"
-msgstr "Τύπος via:"
+msgstr "Τύπος διέλευσης:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
 #: pcbnew/pcb_track.cpp:1131
@@ -27412,11 +27416,13 @@ msgstr "Ιδιότητες Διαδρόμων και Via"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
 msgid "Via drill size must be smaller than via diameter"
-msgstr "Το μέγεθος διάτρησης via πρέπει να είναι μικρότερο από τη διάμετρο via"
+msgstr ""
+"Το μέγεθος διάτρησης της διέλευσης πρέπει να είναι μικρότερο από τη διάμετρο "
+"της"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via drill:"
-msgstr "Διάτρηση via:"
+msgstr "Διάτρηση διέλευσης:"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:54
 msgid "Track Width and Via Size"
@@ -27428,7 +27434,7 @@ msgstr "Καθορισμός Ιδιότητων Αχρησιμοποίητων P
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Vias"
-msgstr "&Vias"
+msgstr "&Διελεύσεις"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Pads"
@@ -27447,6 +27453,7 @@ msgid "&Selection only"
 msgstr "&Επιλογή Μόνο"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
+#, fuzzy
 msgid "Keep &outside layers"
 msgstr "Καθαρή περιοχή via"
 
@@ -27909,11 +27916,11 @@ msgstr "Επιτρεπόμενες δυνατότητες"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:37
 msgid "Allow blind/buried vias"
-msgstr "Να επιτρέπονται τυφλά/ενταφιασμένα vias"
+msgstr "Να επιτρέπονται τυφλές/ενταφιασμένες διελεύσεις"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:43
 msgid "Allow micro vias (uVias)"
-msgstr "Να επιτρέπονται μικρο-via (μVia)"
+msgstr "Να επιτρέπονται μίκρο-διελεύσεις (μVia)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:55
 msgid "Arc/circle approximated by segments"
@@ -27997,8 +28004,9 @@ msgid ""
 "is ignored."
 msgstr ""
 "Όταν είναι ενεργοποιημένo, η απόσταση μεταξύ των χάλκινων στρωμάτων θα "
-"περιλαμβάνεται στους υπολογισμούς του μήκους της διαδρομής για δρόμους με "
-"vias. Όταν είναι απενεργοποιημένο, αυτό το ύψος στοίβαξης αγνοείται."
+"περιλαμβάνεται στους υπολογισμούς του μήκους της διαδρομής για διαδρόμους με "
+"διελεύσεις. Όταν είναι απενεργοποιημένο, το ύψος στοίβαξης των διελεύσεων "
+"αγνοείται."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:191
 msgid "Minimum clearance:"
@@ -28041,15 +28049,16 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
-msgstr "Ελάχιστη διάμετρος via:"
+msgstr "Ελάχιστη διάμετρος διέλευσης:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:245
 msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Η ελάχιστη διάμετρος via. Εάν οριστεί, αυτό είναι ένα απόλυτο ελάχιστο που "
-"δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή άλλες ρυθμίσεις."
+"Η ελάχιστη διάμετρος διέλευσης. Εάν οριστεί, αυτό είναι ένα απόλυτο ελάχιστο "
+"που δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή άλλες "
+"ρυθμίσεις."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
 msgid "Copper to hole clearance:"
@@ -28112,33 +28121,33 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 msgid "uVias"
-msgstr "uVias"
+msgstr "μΔιελεύσεις"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:370
 msgid "Minimum uVia diameter:"
-msgstr "Ελάχιστη διάμετρος μ/Via:"
+msgstr "Ελάχιστη διάμετρος μΔιέλευσης:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:375
 msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Η ελάχιστη διάμετρος για micro-via. Εάν οριστεί, αυτό είναι ένα απόλυτο "
-"ελάχιστο που δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή "
-"άλλες ρυθμίσεις."
+"Η ελάχιστη διάμετρος για μίκρο-διελεύσεις. Εάν οριστεί, αυτό είναι ένα "
+"απόλυτο ελάχιστο που δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς "
+"κανόνες ή άλλες ρυθμίσεις."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 msgid "Minimum uVia hole:"
-msgstr "Ελάχιστο μέγεθος μ/Via:"
+msgstr "Ελάχιστο μέγεθος οπής μΔιέλευσης:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:391
 msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Το ελάχιστο μέγεθος τρύπας micro-via. Εάν οριστεί, αυτό είναι ένα απόλυτο "
-"ελάχιστο που δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς κανόνες ή "
-"άλλες ρυθμίσεις."
+"Το ελάχιστο μέγεθος τρύπας μίκρο-διέλευσης. Εάν οριστεί, αυτό είναι ένα "
+"απόλυτο ελάχιστο που δεν μπορεί να μειωθεί με κλάσεις δικτύου, ειδικούς "
+"κανόνες ή άλλες ρυθμίσεις."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
@@ -29350,7 +29359,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:253
 msgid "No via hole size defined."
-msgstr "Δεν έχει οριστεί το μέγεθος τρύπας via."
+msgstr "Δεν έχει οριστεί το μέγεθος τρύπας διέλευσης."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:268
 msgid "No differential pair gap defined."
@@ -29358,7 +29367,7 @@ msgstr "Δεν έχει οριστεί κενό διαφορικού ζεύγο�
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr "Προκαθορισμένες διαστάσεις για διάδρομο και via:"
+msgstr "Προκαθορισμένες διαστάσεις για διάδρομο και διέλευση:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
@@ -29387,7 +29396,7 @@ msgstr "Κενό"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:157
 msgid "Via Gap"
-msgstr "Κενό Via"
+msgstr "Κενό Διέλευσης"
 
 #: pcbnew/drc/drc_engine.cpp:145 pcbnew/drc/drc_engine.cpp:219
 msgid "board setup constraints"
@@ -29411,7 +29420,7 @@ msgstr "περιορισμοί διάταξης πλακέτας περιοχή 
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
-msgstr "περιορισμοί micro-via στη διάταξη της πλακέτας"
+msgstr "περιορισμοί μίκρο-διελεύσεων στη διάταξη της πλακέτας"
 
 #: pcbnew/drc/drc_engine.cpp:244 pcbnew/drc/drc_engine.cpp:325
 #: pcbnew/drc/drc_engine.cpp:353
@@ -29602,7 +29611,7 @@ msgstr "Zone net χαλκού δεν έχει pads"
 
 #: pcbnew/drc/drc_item.cpp:86
 msgid "Via is not connected or connected on only one layer"
-msgstr "Via είναι συνδεδεμένο ή μη σε μόνο ένα επίπεδο"
+msgstr "Η διέλευση είναι συνδεδεμένη ή μη σε μόνο ένα επίπεδο"
 
 #: pcbnew/drc/drc_item.cpp:90
 msgid "Track has unconnected end"
@@ -29634,7 +29643,7 @@ msgstr "Μήκος ίσχνους εκτός έυρους"
 
 #: pcbnew/drc/drc_item.cpp:118
 msgid "Via diameter"
-msgstr "Διάμετρος Via"
+msgstr "Διάμετρος διέλευσης"
 
 #: pcbnew/drc/drc_item.cpp:122
 msgid "Padstack is not valid"
@@ -29642,7 +29651,7 @@ msgstr "Το Padstack δεν είναι έγκυρο"
 
 #: pcbnew/drc/drc_item.cpp:126
 msgid "Micro via drill out of range"
-msgstr "Πολύ μικρή διάτρηση μικρο-via"
+msgstr "Διάτρηση μίκρο-διέλευσης εκτός εύρους"
 
 #: pcbnew/drc/drc_item.cpp:130
 msgid "Courtyards overlap"
@@ -29706,7 +29715,7 @@ msgstr "Απόκλιση ανάμεσα σε δρόμους εκτός εμβέ�
 
 #: pcbnew/drc/drc_item.cpp:194
 msgid "Too many vias on a connection"
-msgstr "Πολλά via σε σύνδεση"
+msgstr "Πολλαπλές διελεύσεις σε μια σύνδεση"
 
 #: pcbnew/drc/drc_item.cpp:198
 msgid "Differential pair gap out of range"
@@ -29845,7 +29854,7 @@ msgstr "Μη αναγνωρισμένο επίπεδο '%s'."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:87
 msgid "Checking via annular rings..."
-msgstr "Έλεγχος κυκλικών δακτυλίων via..."
+msgstr "Έλεγχος κυκλικών δακτυλίων διέλευσης..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:128
 #, c-format
@@ -29859,7 +29868,7 @@ msgstr "(%s μέγιστο πλάτος δακτυλίου %s· πραγματι
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:75
 msgid "Checking pad, via and zone connections..."
-msgstr "Έλεγχος συνδέσεων pad, via και zone..."
+msgstr "Έλεγχος συνδέσεων εδρών, διελεύσεων και ζωνών..."
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:149
 msgid "Checking net connections..."
@@ -29871,7 +29880,7 @@ msgstr "Συλλογή αντικειμένων χαλκού..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:210
 msgid "Checking track & via clearances..."
-msgstr "Έλεγχος διακένων διαδρόμων και via..."
+msgstr "Έλεγχος διακένων διαδρόμου και διέλευσης..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:217
 msgid "Checking hole clearances..."
@@ -29970,11 +29979,11 @@ msgstr "Έλεγχος οπών pad..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:100
 msgid "Checking via holes..."
-msgstr "Έλεγχος οπών via..."
+msgstr "Έλεγχος οπών διελεύσεων..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:105
 msgid "Checking micro-via holes..."
-msgstr "Έλεγχος οπών via..."
+msgstr "Έλεγχος οπών μίκρο-διελεύσεων..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:167
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:232
@@ -30107,7 +30116,7 @@ msgstr "Έλεγχος πλάτους διαδρόμων..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:82
 msgid "Checking via diameters..."
-msgstr "Έλεγχος διαμέτρων via..."
+msgstr "Έλεγχος διαμέτρων διελεύσεων..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:119
 #, c-format
@@ -31396,17 +31405,17 @@ msgstr "Σύνδεση %s pin %s σε %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:633
 #, c-format
 msgid "Reconnect via from %s to %s."
-msgstr "Επανασύνδεση via από %s σε %s."
+msgstr "Επανασύνδεση διέλευσης από %s σε %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:651
 #, c-format
 msgid "Reconnected via from %s to %s."
-msgstr "Επανασύνδεση via από %s σε %s."
+msgstr "Επανασύνδεση διέλευσης από %s σε %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:661
 #, c-format
 msgid "Via connected to unknown net (%s)."
-msgstr "Via συνδεδεμένο σε άγνωστο net (%s)."
+msgstr "Συνδεδεμένη διέλευση σε άγνωστο δίκτυο (%s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:704
 #, c-format
@@ -31935,17 +31944,17 @@ msgstr "Κείμενο PCB '%s' στο %s"
 #: pcbnew/pcb_track.cpp:103
 #, c-format
 msgid "Blind/Buried Via %s on %s"
-msgstr "Τυφλό/Ενταφιασμένο Via %s στο %s"
+msgstr "Τυφλή/Ενταφιασμένη Διέλευση %s στο %s"
 
 #: pcbnew/pcb_track.cpp:104
 #, c-format
 msgid "Micro Via %s on %s"
-msgstr "Μικρο-Via %s στο %s"
+msgstr "Μίκρο-διέλευση %s στο %s"
 
 #: pcbnew/pcb_track.cpp:105
 #, c-format
 msgid "Via %s on %s"
-msgstr "Via %s σε %s"
+msgstr "Διέλευση %s σε %s"
 
 #: pcbnew/pcb_track.cpp:168
 msgid "removed annular ring"
@@ -31970,15 +31979,15 @@ msgstr "Ελάχιστο Πλάτος: %s"
 
 #: pcbnew/pcb_track.cpp:748
 msgid "Micro Via"
-msgstr "Μικρο-via"
+msgstr "Μίκρο-Διέλευση"
 
 #: pcbnew/pcb_track.cpp:749
 msgid "Blind/Buried Via"
-msgstr "Τυφλό/Ενταφιασμένο via"
+msgstr "Τυφλή/Ενταφιασμένη Διέλευση"
 
 #: pcbnew/pcb_track.cpp:750
 msgid "Through Via"
-msgstr "Διαμπερές Via"
+msgstr "Διαμπερή Διέλευση"
 
 #: pcbnew/pcb_track.cpp:766 pcbnew/pcb_track.cpp:1190
 msgid "Drill"
@@ -32021,7 +32030,7 @@ msgstr "Κάτω"
 
 #: pcbnew/pcb_track.cpp:1197
 msgid "Via Type"
-msgstr "Τύπος Via"
+msgstr "Τύπος Διέλευσης"
 
 #: pcbnew/pcbnew.cpp:265
 msgid ""
@@ -32279,14 +32288,14 @@ msgstr "Η μη χάλκινη έδρα %s χρησιμοποιεί ένα άγ�
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2473
 msgid "Loading vias..."
-msgstr "Φόρτωση via..."
+msgstr "Φόρτωση διελεύσεων..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2514
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr ""
-"Το Via από το επίπεδο %d στο %d χρησιμοποιεί ένα μη χάλκινο επίπεδο, το "
+"Η διέλευση από το επίπεδο %d στο %d χρησιμοποιεί ένα μη χάλκινο επίπεδο, το "
 "οποίο δεν υποστηρίζεται."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2535
@@ -32431,7 +32440,7 @@ msgid ""
 "not imported."
 msgstr ""
 "Η περιοχή '%s' του CADSTAR στο αντικείμενο βιβλιοθήκης '%s' δεν έχει "
-"ισοδύναμο στο KiCad. Η περιοχή δεν είναι ούτε via ούτε καθαρή περιοχή "
+"ισοδύναμο στο KiCad. Η περιοχή δεν είναι ούτε διέλευση ούτε καθαρή περιοχή "
 "δρομολόγησης. Η περιοχή δεν εισάχθηκε."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:982
@@ -32598,8 +32607,8 @@ msgid ""
 "pads has been applied."
 msgstr ""
 "Το πρότυπο CADSTAR '%s' έχει διαφορετικές ρυθμίσεις για θερμική ανακούφιση "
-"σε pads και vias. Το KiCad υποστηρίζει μόνο μία ρύθμιση και για τα δύο. Έχει "
-"εφαρμοστεί η ρύθμιση για τα pads."
+"σε έδρες και διελεύσεις. Το KiCad υποστηρίζει μόνο μία ρύθμιση και για τα "
+"δύο. Έχει εφαρμοστεί η ρύθμιση των εδρών."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1924
 #, c-format
@@ -32669,9 +32678,9 @@ msgid ""
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
 msgstr ""
-"Ο CADSTAR κωδικός via '%s' έχει διαφορετικό σχήμα από έναν καθορισμένο "
-"κύκλο. Το KiCad υποστηρίζει μόνο κυκλικά via, επομένως αυτός ο τύπος via "
-"έχει αλλάξει σε via με κυκλικό σχήμα, διαμέτρου %.2f mm."
+"Ο CADSTAR κωδικός διέλευσης '%s' έχει διαφορετικό σχήμα από έναν καθορισμένο "
+"κύκλο. Το KiCad υποστηρίζει μόνο κυκλικές διελεύσεις, επομένως αυτός ο τύπος "
+"έχει αλλάξει σε διέλευση με κυκλικό σχήμα, διαμέτρου %.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2674
 #, c-format
@@ -33044,7 +33053,7 @@ msgstr "άγνωστος τύπος έδρας: %d"
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:1883
 #, c-format
 msgid "unknown via type %d"
-msgstr "άγνωστος τύπος via %d"
+msgstr "άγνωστος τύπος διέλευσης %d"
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2072
 #, c-format
@@ -33590,72 +33599,75 @@ msgstr "Αυτόματη ολοκλήρωση του τρέχοντος δρόμ
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Place Through Via"
-msgstr "Τοποθέτηση Διαμπερούς Via"
+msgstr "Τοποθέτηση Διαμπερής Διέλευσης"
 
 #: pcbnew/router/router_tool.cpp:103
 msgid "Adds a through-hole via at the end of currently routed track."
-msgstr "Προσθέτει ένα διαμπερές via στο τέλος του διαδρόμου που δρομολογείται."
+msgstr ""
+"Προσθέτει μια διαμπερή διέλευση στο τέλος του διαδρόμου που δρομολογείται."
 
 #: pcbnew/router/router_tool.cpp:109
 msgid "Place Blind/Buried Via"
-msgstr "Τοποθέτηση Τυφλού/Ενταφιασμένου Via"
+msgstr "Τοποθέτηση Τυφλής/Ενταφιασμένης Διέλευσης"
 
 #: pcbnew/router/router_tool.cpp:110
 msgid "Adds a blind or buried via at the end of currently routed track."
 msgstr ""
-"Προσθέτει ένα blind ή buried via στο τέλος του διαδρόμου που δρομολογείται."
+"Προσθέτει μια τυφλή ή ενταφιασμένη διέλευση στο τέλος του διαδρόμου που "
+"δρομολογείται."
 
 #: pcbnew/router/router_tool.cpp:116
 msgid "Place Microvia"
-msgstr "Τοποθέτηση Μικρο-via"
+msgstr "Τοποθέτηση Μίκρο-διέλευσης"
 
 #: pcbnew/router/router_tool.cpp:116
 msgid "Adds a microvia at the end of currently routed track."
-msgstr "Προσθέτει ένα microvia στο τέλος του δρόμου που δρομολογείται."
+msgstr "Προσθέτει μια μίκρο-διέλευση στο τέλος του διαδρόμου που δρομολογείται."
 
 #: pcbnew/router/router_tool.cpp:123
 msgid "Select Layer and Place Through Via..."
-msgstr "Επιλογή Επιπέδου και Τοποθέτηση Διαμπερούς Via..."
+msgstr "Επιλογή Επιπέδου και Τοποθέτηση Διαμπερούς Διέλευσης..."
 
 #: pcbnew/router/router_tool.cpp:124
 msgid ""
 "Select a layer, then add a through-hole via at the end of currently routed "
 "track."
 msgstr ""
-"Επιλογή επιπέδου, και προσθήκη διαμπερούς via στο τέλος του διαδρόμου που "
-"δρομολογείται."
+"Επιλογή επιπέδου, και προσθήκη διαμπερούς διέλευσης στο τέλος του διαδρόμου "
+"που δρομολογείται."
 
 #: pcbnew/router/router_tool.cpp:132
 msgid "Select Layer and Place Blind/Buried Via..."
-msgstr "Επιλογή Επιπέδου και Τοποθέτηση Τυφλού/Ενταφιασμένου Via..."
+msgstr "Επιλογή Επιπέδου και Τοποθέτηση Τυφλής/Ενταφιασμένης Διέλευσης..."
 
 #: pcbnew/router/router_tool.cpp:133
 msgid ""
 "Select a layer, then add a blind or buried via at the end of currently "
 "routed track."
 msgstr ""
-"Επιλογή επιπέδου, και προσθήκη blind ή buried via στο τέλος του διαδρόμου "
-"που δρομολογείται."
+"Επιλογή επιπέδου, και προσθήκη τυφλής ή ενταφιασμένης διέλευσης στο τέλος "
+"του διαδρόμου που δρομολογείται."
 
 #: pcbnew/router/router_tool.cpp:141
 msgid "Select Layer and Place Micro Via..."
-msgstr "Επιλογή Επιπέδου και Τοποθέτηση Διαμπερούς Via..."
+msgstr "Επιλογή Επιπέδου και Τοποθέτηση Διαμπερούς Διέλευσης..."
 
 #: pcbnew/router/router_tool.cpp:142
 msgid ""
 "Select a layer, then add a micro via at the end of currently routed track."
 msgstr ""
-"Επιλογή επιπέδου, και προσθήκη διαμπερούς via στο τέλος του διαδρόμου που "
-"δρομολογείται."
+"Επιλογή επιπέδου, και προσθήκη διαμπερούς διέλευσης στο τέλος του διαδρόμου "
+"που δρομολογείται."
 
 #: pcbnew/router/router_tool.cpp:149
 msgid "Custom Track/Via Size..."
-msgstr "Προσαρμοσμένο Μέγεθος Διαδρόμου/Via..."
+msgstr "Προσαρμοσμένο Μέγεθος Διαδρόμου/Διέλευσης..."
 
 #: pcbnew/router/router_tool.cpp:150
 msgid "Shows a dialog for changing the track width and via size."
 msgstr ""
-"Εμφανίζει παράθυρο για αλλαγή του πλάτους διαδρόμου και του μεγέθους via."
+"Εμφανίζει παράθυρο για αλλαγή του πλάτους διαδρόμου και του μεγέθους της "
+"διέλευσης."
 
 #: pcbnew/router/router_tool.cpp:156
 msgid "Switch Track Posture"
@@ -33677,7 +33689,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
-msgstr "Επιλογή Πλάτους Διαδρόμου/Via"
+msgstr "Επιλογή Πλάτους Διαδρόμου/Διέλευσης"
 
 #: pcbnew/router/router_tool.cpp:205
 msgid "Use Starting Track Width"
@@ -33693,7 +33705,7 @@ msgstr "Χρήση Τιμών Κλάσης Δικτύου"
 
 #: pcbnew/router/router_tool.cpp:211
 msgid "Use track and via sizes from the net class"
-msgstr "Χρήση μεγεθών για διαδρόμους και via από το netclass"
+msgstr "Χρήση μεγεθών για διαδρόμο και διέλευση από την κλάση δικτύου"
 
 #: pcbnew/router/router_tool.cpp:215 pcbnew/router/router_tool.cpp:336
 #: pcbnew/tools/drawing_tool.cpp:101
@@ -33702,7 +33714,7 @@ msgstr "Χρήση Προσαρμοσμένων Τιμών..."
 
 #: pcbnew/router/router_tool.cpp:216 pcbnew/tools/drawing_tool.cpp:102
 msgid "Specify custom track and via sizes"
-msgstr "Ορισμός προσαρμοσμένων μεγεθών διαδρόμων και via"
+msgstr "Ορισμός προσαρμοσμένων μεγεθών διαδρόμου και διέλευσης"
 
 #: pcbnew/router/router_tool.cpp:227
 msgid "Track netclass width"
@@ -33715,17 +33727,17 @@ msgstr "Διάδρομος %s"
 
 #: pcbnew/router/router_tool.cpp:243
 msgid "Via netclass values"
-msgstr "Τιμές Κλάσης Δικτύου για Via"
+msgstr "Τιμές κλάσης δικτύου για διέλευση"
 
 #: pcbnew/router/router_tool.cpp:247 pcbnew/tools/drawing_tool.cpp:113
 #, c-format
 msgid "Via %s, drill %s"
-msgstr "Via %s, διάτρηση %s"
+msgstr "Διέλευση %s, διάτρηση %s"
 
 #: pcbnew/router/router_tool.cpp:251 pcbnew/tools/drawing_tool.cpp:119
 #, c-format
 msgid "Via %s"
-msgstr "Via %s"
+msgstr "Διέλευση %s"
 
 #: pcbnew/router/router_tool.cpp:315
 msgid "Select Differential Pair Dimensions"
@@ -33747,7 +33759,7 @@ msgstr "Πλάτος %s"
 #: pcbnew/router/router_tool.cpp:359
 #, c-format
 msgid "Width %s, via gap %s"
-msgstr "Πλάτος %s, κενό via %s"
+msgstr "Πλάτος %s, κενό διέλευσης %s"
 
 #: pcbnew/router/router_tool.cpp:368
 #, c-format
@@ -33757,7 +33769,7 @@ msgstr "Πλάτος %s, κενό %s"
 #: pcbnew/router/router_tool.cpp:374
 #, c-format
 msgid "Width %s, gap %s, via gap %s"
-msgstr "Πλάτος %s, κενό %s, κενό via %s"
+msgstr "Πλάτος %s, κενό %s, κενό διέλευσης %s"
 
 #: pcbnew/router/router_tool.cpp:521
 #, c-format
@@ -33789,19 +33801,19 @@ msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
 msgstr ""
-"Τα τυφλά/ενταφιασμένα via πρέπει να είναι ενεργοποιημένα στη Ρύθμιση "
-"Πλακέτας > Κανόνες Σχεδίασης > Περιορισμοί."
+"Οι τυφλές/ενταφιασμένες διελεύσεις πρέπει να είναι ενεργοποιημένες στο "
+"Ρύθμιση Πλακέτας > Κανόνες Σχεδίασης > Περιορισμοί."
 
 #: pcbnew/router/router_tool.cpp:897
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
 msgstr ""
-"Τα μικρο-via πρέπει να είναι ενεργοποιημένα στη Ρύθμιση Πλακέτας > Κανόνες "
-"Σχεδίασης > Περιορισμοί."
+"Οι μίκρο-διελεύσεις πρέπει να είναι ενεργοποιημένα στη Ρύθμιση Πλακέτας > "
+"Κανόνες Σχεδίασης > Περιορισμοί."
 
 #: pcbnew/router/router_tool.cpp:981
 msgid "Blind/buried via need 2 different layers."
-msgstr "Τα τυφλά/θαμμένα via απαιτούν 2 διαφορετικά επίπεδα."
+msgstr "Οι τυφλές/ενταφιασμένες διελεύσεις απαιτούν 2 διαφορετικά επίπεδα."
 
 #: pcbnew/router/router_tool.cpp:1059
 msgid "Tracks on Copper layers only."
@@ -33917,18 +33929,18 @@ msgstr "Το αρχείο συνεδρίας χρησιμοποιεί μη έγ�
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:217
 msgid "Session via padstack has no shapes"
-msgstr "Ή σχηματική στοίβα συνεδρίας via δεν έχει σχήματα"
+msgstr "Ή σχηματική στοίβα συνεδρίας διελεύσεων δεν έχει σχήματα"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
 #, c-format
 msgid "Unsupported via shape: %s."
-msgstr "Μη υποστηριζόμενο σχήμα via: %s."
+msgstr "Μη υποστηριζόμενο σχήμα διέλευσης: %s."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:246
 #: pcbnew/specctra_import_export/specctra_import.cpp:271
 #, c-format
 msgid "Unsupported via shape: %s"
-msgstr "Μη υποστηριζόμενο σχήμα via: %s"
+msgstr "Μη υποστηριζόμενο σχήμα διέλευσης: %s"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:280
 #, c-format
@@ -33953,7 +33965,7 @@ msgid "Reference '%s' not found."
 msgstr "Η αναφορά '%s' δεν βρέθηκε."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:501
-#, c-format
+#, c-format, fuzzy
 msgid "A wire_via refers to missing padstack '%s'."
 msgstr "Ένα wire_via παραπέμπει σε μη υπάρχουσα στοίβα έδρας '%s'."
 
@@ -34015,12 +34027,12 @@ msgstr "Επεξεργασία Προ-Καθορισμένων Μεγεθών...
 
 #: pcbnew/toolbars_pcb_editor.cpp:699
 msgid "Via: use netclass sizes"
-msgstr "Via: xρήση μεγεθών netclass"
+msgstr "Διέλευση: xρήση μεγεθών κλάσης δικτύου"
 
 #: pcbnew/toolbars_pcb_editor.cpp:722
 #, c-format
 msgid "Via: %s (%s)"
-msgstr "Via: %s (%s)"
+msgstr "Διέλευση: %s (%s)"
 
 #: pcbnew/tools/board_editor_control.cpp:112
 msgid "Locking"
@@ -34238,11 +34250,11 @@ msgstr "Περιορισμοί πλάτους: ελάχιστο %s; ιδανικ
 
 #: pcbnew/tools/board_inspection_tool.cpp:749
 msgid "Via Diameter"
-msgstr "Διάμετρος Via"
+msgstr "Διάμετρος Διέλευσης"
 
 #: pcbnew/tools/board_inspection_tool.cpp:751
 msgid "Via diameter resolution for:"
-msgstr "Διάμετρος via:"
+msgstr "Ανάλυση διαμέτρου διέλευσης για:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:762
 #, c-format
@@ -34251,7 +34263,7 @@ msgstr "Περιορισμοί διαμέτρου: ελάχιστο %s; ιδαν
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Via Annular Width"
-msgstr "Πλάτος Δακτυλίου Via"
+msgstr "Πλάτος Δακτυλίου Διέλευσης"
 
 #: pcbnew/tools/board_inspection_tool.cpp:771
 msgid "Via annular width resolution for:"
@@ -34399,7 +34411,7 @@ msgstr "Ναι, Λοξοτομημένο"
 
 #: pcbnew/tools/drawing_tool.cpp:81
 msgid "Select Via Size"
-msgstr "Επιλογή Μεγέθους Via"
+msgstr "Επιλογή Μεγέθους Διέλευσης"
 
 #: pcbnew/tools/drawing_tool.cpp:305 pcbnew/tools/drawing_tool.cpp:1640
 msgid "Draw a line segment"
@@ -34451,7 +34463,7 @@ msgstr "Η θέση της διέλευσης παραβιάζει τον ΕΚΣ
 
 #: pcbnew/tools/drawing_tool.cpp:2686
 msgid "Place via"
-msgstr "Τοποθέτηση via"
+msgstr "Τοποθέτηση διέλευσης"
 
 #: pcbnew/tools/drc_tool.cpp:151
 msgid "Refilling all zones..."
@@ -34486,7 +34498,7 @@ msgstr "Επιλογή σημείου αναφοράς για μετακίνησ
 
 #: pcbnew/tools/edit_tool.cpp:1193
 msgid "Edit track width/via size"
-msgstr "Επεξεργασία πλάτους διαδρόμων/μέγεθους via"
+msgstr "Επεξεργασία πλάτους διαδρόμων/μέγεθους διέλευσης"
 
 #: pcbnew/tools/edit_tool.cpp:1228
 msgid "At least two straight track segments must be selected."
@@ -34524,8 +34536,9 @@ msgid "Rotate"
 msgstr "Περιστροφή"
 
 #: pcbnew/tools/edit_tool.cpp:1743 pcbnew/tools/pcb_actions.cpp:303
+#, fuzzy
 msgid "Change Side / Flip"
-msgstr "Αλλαγή μεγέθους Via και διάτρησης"
+msgstr "Αλλαγή Πλευράς / Αναποδογύρισμα"
 
 #: pcbnew/tools/edit_tool.cpp:2098
 msgid "Move exact"
@@ -34745,11 +34758,11 @@ msgstr "Προσθήκη ενός γεμισμένου Zone"
 
 #: pcbnew/tools/pcb_actions.cpp:161
 msgid "Add Vias"
-msgstr "Προσθήκη Via"
+msgstr "Προσθήκη Διελεύσεων"
 
 #: pcbnew/tools/pcb_actions.cpp:161
 msgid "Add free-standing vias"
-msgstr "Προσθήκη ελεύθερων via"
+msgstr "Προσθήκη ελεύθερων διελεύσεων"
 
 #: pcbnew/tools/pcb_actions.cpp:167
 msgid "Add Rule Area"
@@ -34913,7 +34926,7 @@ msgstr "Αλλαγή Πλάτους Διαδρόμου"
 
 #: pcbnew/tools/pcb_actions.cpp:313
 msgid "Updates selected track & via sizes"
-msgstr "Ενημέρωση μεγεθών των επιλεγμένων διαδρόμων & via"
+msgstr "Ενημέρωση μεγεθών του επιλεγμένου διαδρόμου & διέλευσης"
 
 #: pcbnew/tools/pcb_actions.cpp:317
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -35029,7 +35042,7 @@ msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
 "Αφαίρεση ή ανάκτηση των ασύνδετων εσωτερικών επιπέδων σε διαμπερείς οπές "
-"pads και via"
+"έδρες και διελεύσεις"
 
 #: pcbnew/tools/pcb_actions.cpp:422
 msgid "Assign a different footprint from the library"
@@ -35053,11 +35066,12 @@ msgstr "Μεταφορά διαδρόμων ή σχεδίων από ένα επ
 
 #: pcbnew/tools/pcb_actions.cpp:437
 msgid "Edit Track & Via Properties..."
-msgstr "Επεξεργασία Ιδιοτήτων Διαδρόμων & Via..."
+msgstr "Επεξεργασία Ιδιοτήτων Διαδρόμου & Διέλευσης..."
 
 #: pcbnew/tools/pcb_actions.cpp:438
 msgid "Edit track and via properties globally across board"
-msgstr "Επεξεργασία ιδιοτήτων διαδρόμου και via, καθολικά για όλη την πλακέτα"
+msgstr ""
+"Επεξεργασία ιδιοτήτων διαδρόμου και διέλευσης, καθολικά για όλη την πλακέτα"
 
 #: pcbnew/tools/pcb_actions.cpp:444
 msgid "Edit Text and graphics properties globally across board"
@@ -35075,7 +35089,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:455
 msgid "Cleanup Tracks & Vias..."
-msgstr "Εκκαθάριση Διαδρόμων και Vias..."
+msgstr "Εκκαθάριση Διαδρόμων και Διελεύσεων..."
 
 #: pcbnew/tools/pcb_actions.cpp:456
 msgid "Cleanup redundant items, shorting items, etc."
@@ -35320,19 +35334,19 @@ msgstr "Αλλαγή πλάτους διαδρόμου σε προηγούμεν
 
 #: pcbnew/tools/pcb_actions.cpp:628
 msgid "Increase Via Size"
-msgstr "Αύξηση Μεγέθους Via"
+msgstr "Αύξηση Μεγέθους Διέλευσης"
 
 #: pcbnew/tools/pcb_actions.cpp:628
 msgid "Change via size to next pre-defined size"
-msgstr "Αλλαγή μεγέθους via σε επόμενο προκαθορισμένο μέγεθος"
+msgstr "Αλλαγή μεγέθους διέλευσης σε επόμενο προκαθορισμένο μέγεθος"
 
 #: pcbnew/tools/pcb_actions.cpp:633
 msgid "Decrease Via Size"
-msgstr "Μείωση Μεγέθους Via"
+msgstr "Μείωση Μεγέθους Διέλευσης"
 
 #: pcbnew/tools/pcb_actions.cpp:633
 msgid "Change via size to previous pre-defined size"
-msgstr "Αλλαγή μεγέθους via σε προηγούμενο προκαθορισμένο μέγεθος"
+msgstr "Αλλαγή μεγέθους διέλευσης σε προηγούμενο προκαθορισμένο μέγεθος"
 
 #: pcbnew/tools/pcb_actions.cpp:642
 msgid "Merge Zones"
@@ -35572,11 +35586,11 @@ msgstr "Εμφάνιση εδρών σε λειτουργία περιγράμμ
 
 #: pcbnew/tools/pcb_actions.cpp:833
 msgid "Sketch Vias"
-msgstr "Περίγραμμα Via"
+msgstr "Περίγραμμα Διελεύσεων"
 
 #: pcbnew/tools/pcb_actions.cpp:833
 msgid "Show vias in outline mode"
-msgstr "Εμφάνιση περιγραμμάτων via"
+msgstr "Εμφάνιση περιγραμμάτων διελεύσεων"
 
 #: pcbnew/tools/pcb_actions.cpp:838
 msgid "Sketch Graphic Items"
@@ -35930,7 +35944,7 @@ msgstr "Επιλογή Όλων Των Διαδρόμων στο Net"
 
 #: pcbnew/tools/pcb_actions.cpp:1241
 msgid "Selects all tracks & vias belonging to the same net."
-msgstr "Επιλογή όλων των διαδρόμων και via που ανήκουν στο ίδιο net."
+msgstr "Επιλογή όλων των διαδρόμων και διελεύσεων που ανήκουν στο ίδιο δίκτυο."
 
 #: pcbnew/tools/pcb_actions.cpp:1245
 msgid "Deselect All Tracks in Net"
@@ -35938,7 +35952,8 @@ msgstr "Αποεπιλογή Όλων Των Διαδρόμων στο Net"
 
 #: pcbnew/tools/pcb_actions.cpp:1246
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "Αποεπιλογή όλων των διαδρόμων και via που ανήκουν στο ίδιο net."
+msgstr ""
+"Αποεπιλογή όλων των διαδρόμων και διελεύσεων που ανήκουν στο ίδιο δίκτυο."
 
 #: pcbnew/tools/pcb_actions.cpp:1251
 msgid "Selects all footprints and tracks in the schematic sheet"
@@ -36270,7 +36285,7 @@ msgstr "Προβολή διαδρόμων"
 
 #: pcbnew/widgets/appearance_controls.cpp:336
 msgid "Show all vias"
-msgstr "Προβολή όλων των via"
+msgstr "Προβολή όλων των διελεύσεων"
 
 #: pcbnew/widgets/appearance_controls.cpp:337
 msgid "Show all pads"
@@ -36524,13 +36539,13 @@ msgstr "Επισήμανση %s"
 #: pcbnew/widgets/appearance_controls.cpp:2272
 #, c-format
 msgid "Select Tracks and Vias in %s"
-msgstr "Επιλογή διαδρόμων και vias σε %s"
+msgstr "Επιλογή Διαδρόμων και Διελεύσεων σε %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:890
 #: pcbnew/widgets/appearance_controls.cpp:2276
 #, c-format
 msgid "Unselect Tracks and Vias in %s"
-msgstr "Αποεπιλογή διαδρόμων και vias σε %s"
+msgstr "Αποεπιλογή Διαδρόμων και Διελεύσεων σε %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:897
 msgid "Hide All Other Nets"
@@ -36851,7 +36866,7 @@ msgstr "Αποκοπή"
 
 #: pcbnew/zone.cpp:574
 msgid "No vias"
-msgstr "Όχι via"
+msgstr "Όχι διελεύσεις"
 
 #: pcbnew/zone.cpp:577
 msgid "No tracks"
