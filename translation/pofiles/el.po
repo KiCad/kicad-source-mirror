@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-11-16 17:35+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -3303,7 +3303,7 @@ msgid ""
 "display."
 msgstr ""
 "Κατά τη σχεδίαση διαδρόμου ή τη μετακίνηση αντικειμένου, μετακίνηση της "
-"προβολής όταν πλησιάζεi την άκρη της προβολής."
+"προβολής όταν πλησιάζει την άκρη της προβολής."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:38
 msgid "Use zoom acceleration"
@@ -3526,7 +3526,7 @@ msgstr "Διάμετρος επιμεταλλωμένης οπής μίκρο-δ
 
 #: common/dialogs/panel_setup_netclasses.cpp:493
 msgid "Differential pair track width"
-msgstr "Πλάτος δρόμου διαφορικού ζεύγους"
+msgstr "Πλάτος διαδρόμου διαφορικού ζεύγους"
 
 #: common/dialogs/panel_setup_netclasses.cpp:494
 msgid "Differential pair gap"
@@ -3571,7 +3571,7 @@ msgstr "Διάκενο"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:104
 #: pcbnew/tools/board_inspection_tool.cpp:727
 msgid "Track Width"
-msgstr "Πλάτος διαδρόμου"
+msgstr "Πλάτος Διαδρόμου"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:44
 #: pcb_calculator/pcb_calculator_frame.cpp:87
@@ -21705,7 +21705,7 @@ msgstr "Έλεγχος γεμίσματος ζωνών..."
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove track shorting two nets"
-msgstr "Αφαίρεση διαδρόμου που συνδέει δύο nets"
+msgstr "Αφαίρεση διαδρόμου που συνδέει δύο δίκτυα"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove via shorting two nets"
@@ -21737,7 +21737,7 @@ msgstr "Αφαίρεση διαδρόμου μηδενικού μήκους"
 
 #: pcbnew/cleanup_item.cpp:55
 msgid "Remove track inside pad"
-msgstr "Αφαίρεση διαδρόμου μέσα από το pad"
+msgstr "Αφαίρεση διαδρόμου μέσα από την έδρα"
 
 #: pcbnew/cleanup_item.cpp:58
 msgid "Remove zero-size graphic"
@@ -22007,7 +22007,7 @@ msgstr ""
 "%d %s Uuid: [%s], X, Y: %s, Στρογγυλεμένο X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:602
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
@@ -22568,7 +22568,7 @@ msgstr "Καθάρισμα πλακέτας"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:22
 msgid "Delete &tracks connecting different nets"
-msgstr "Διαγραφή δρόμων που συνδέουν διαφορετικά δίκ&τυα"
+msgstr "Διαγραφή διαδρόμων που συνδέουν διαφορετικά δίκτυα"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:23
 msgid ""
@@ -22576,7 +22576,7 @@ msgid ""
 "circuit)"
 msgstr ""
 "αφαίρεση των τμημάτων διαδρόμων που ενώνουν κόμβους που ανήκουν σε "
-"διαφορετικά nets (βραχυκύκλωμα)"
+"διαφορετικά δίκτυα (βραχυκύκλωμα)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
 msgid "&Delete redundant vias"
@@ -22594,7 +22594,7 @@ msgstr "Διαγραφή συνδεδεμένων μόνο σε ένα επίπ�
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "&Merge co-linear tracks"
-msgstr "Ένωση συγγρα&μικών δρόμων"
+msgstr "Ένωση συγγρα&μικών διαδρόμων"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:36
 msgid "merge aligned track segments, and remove null segments"
@@ -22604,7 +22604,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:40
 msgid "Delete tracks unconnected at one end"
-msgstr "Διαγραφή ασύνδετων από το ένα άκρο διαδρόμων"
+msgstr "Διαγραφή ασύνδετων στο ένα άκρο διαδρόμων"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
 msgid "delete tracks having at least one dangling end"
@@ -22613,7 +22613,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:45
 msgid "Delete tracks fully inside pads"
-msgstr "Διαγραφή διαδρόμων πλήρως εντός των pads"
+msgstr "Διαγραφή διαδρόμων πλήρως εντός των εδρών"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:46
 msgid "Delete tracks that have both start and end positions inside of a pad"
@@ -22667,7 +22667,6 @@ msgstr ""
 "Εμφανίζονται μόνο τα ονόματα δικτύου που ταιριάζουν σε αυτό το μοτίβο."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
-#, fuzzy
 msgid "Hide auto-generated net names"
 msgstr "Απόκρυψη αυτόματων ονομάτων δικτύων"
 
@@ -23494,7 +23493,7 @@ msgstr "Επαναγέμισμα όλων των ζωνών πριν τον ΕΚ
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr "Αναφορά όλων των σφαλμάτων των διαδρόμων (αργό)"
+msgstr "Αναφορά όλων των σφαλμάτων των διαδρόμων"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -24012,7 +24011,7 @@ msgstr "Συμπερίληψη &σχεδίων"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:42
 msgid "Include &tracks"
-msgstr "Συμπερίληψη &διαδρόμων"
+msgstr "Συμπερίληψη διαδρόμων"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:45
 msgid "Include &board outline layer"
@@ -24919,7 +24918,7 @@ msgstr "Αποτυπώματα"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
 msgid "Tracks && vias"
-msgstr "Διάδρομοι && vias"
+msgstr "Διάδρομοι && διελεύσεις"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 msgid "Markers"
@@ -25103,7 +25102,7 @@ msgstr "Χρήση τιμών κλάσης δικτύου:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:77
 msgid "Set Track and Via Properties"
-msgstr "Ορισμός Ιδιοτήτων Διαδρόμου και Via"
+msgstr "Ορισμός Ιδιοτήτων Διαδρόμου και Διέλευσης"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
 msgid "footprint"
@@ -25260,7 +25259,7 @@ msgstr "Κανόνες σχεδίασης"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Predefined track and via dimensions"
-msgstr "Προκαθορισμένες διαστάσεις για διάδρομο και via"
+msgstr "Προκαθορισμένες διαστάσεις για διάδρομο και διέλευση"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 msgid "Solder mask/paste defaults"
@@ -25581,7 +25580,7 @@ msgstr "Διαγραφή των αποτυπωμάτων χωρίς συνδεδ
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
 msgid "Delete tracks shorting multiple nets"
-msgstr "Διαγραφή διαδρόμων που συνδέουν πολλαπλά nets"
+msgstr "Διαγραφή διαδρόμων που συνδέουν πολλαπλά δίκτυα"
 
 #: pcbnew/dialogs/dialog_netlist_base.h:67
 msgid "Import Netlist"
@@ -26608,9 +26607,9 @@ msgid ""
 msgstr ""
 "Ορισμός καθολικής διόρθωσης πλάτους για ακριβή έξοδο πλάτους PostScript.\n"
 "Αυτή η διόρθωση πλάτους έχει στόχο να αντισταθμίσει λάθη στο πλάτος "
-"διαδρόμων, και τα μεγέθη των pads και vias.\n"
-"Μία λογική τιμή διόρθωσης πλάτους πρέπει να είναι στο εύρος [-"
-"(ΕλαχΠλάτοςΔιαδρόμου-1), +(ΕλαχΤιμήΔιακένου-1)] σε decimil."
+"διαδρόμων, και τα μεγέθη των εδρών και των διελεύσεων.\n"
+"Μία λογική τιμή διόρθωσης πλάτους πρέπει να είναι στο εύρος "
+"[-(ΕλαχΠλάτοςΔιαδρόμου-1), +(ΕλαχΤιμήΔιακένου-1)] σε decimil."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Force A4 output"
@@ -26824,7 +26823,6 @@ msgid "DRC violation: highlight obstacles"
 msgstr "Παραβίαση ΕΚΣ: επισήμανση εμποδίων"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
-#, fuzzy
 msgid "DRC violation: shove tracks and vias"
 msgstr "Παραβίαση ΕΚΣ: σπρώξιμο διαδρόμων και διελεύσεων"
 
@@ -26889,9 +26887,9 @@ msgid ""
 "routed trace)."
 msgstr ""
 "Αφαιρεί βρόχους κατά τη δρομολόγηση (πχ αν ένας νέος διάδρομος προσφέρει την "
-"ίδια σύνδεση με έναν υπάρχοντα δρόμο, ο παλιός διάδρομος αφαιρείται).\n"
+"ίδια σύνδεση με έναν υπάρχοντα, ο παλιός διάδρομος αφαιρείται).\n"
 "Η αφαίρεση διαδρόμων λειτουργεί τοπικά (μόνο ανάμεσα στην αρχή και το τέλος "
-"του δρόμου που δρομολογείται)."
+"του διαδρόμου που δρομολογείται)."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Optimize pad connections"
@@ -26944,22 +26942,22 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
-"Όταν είναι ενεργοποιημένο, ολόκληρο το τμήμα του δρόμου που είναι ορατό στην "
-"οθόνη θα βελτιστοποιηθεί και θα επαναδρομολογηθεί όταν σύρεται ένας δρόμος. "
-"Όταν είναι απενεργοποιημένο, θα βελτιστοποιηθεί μόνο η περιοχή κοντά σον "
-"δρόμο που σύρεται."
+"Όταν είναι ενεργοποιημένο, ολόκληρο το τμήμα του διαδρόμου που είναι ορατό "
+"στην οθόνη θα βελτιστοποιηθεί και θα επαναδρομολογηθεί όταν σύρεται ένας "
+"διάδρομος. Όταν είναι απενεργοποιημένο, θα βελτιστοποιηθεί μόνο η περιοχή "
+"κοντά σον δρόμο που σύρεται."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid "Use mouse path to set track posture"
-msgstr "Χρησιμοποιήστε τη διαδρομή ποντικιού για ορισμό στάσης δρόμου"
+msgstr "Χρησιμοποιήστε τη διαδρομή ποντικιού για ορισμό στάσης διαδρόμου"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:73
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
-"Όταν ενεργοποιηθεί, η στάση των δρόμων θα καθοδηγείται από τον τρόπο με τον "
-"οποίο μετακινείται το ποντίκι από την αρχική θέση του"
+"Όταν ενεργοποιηθεί, η στάση των διαδρόμων θα καθοδηγείται από τον τρόπο με "
+"τον οποίο μετακινείται το ποντίκι από την αρχική θέση του"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:77
 msgid "Fix all segments on click"
@@ -26971,10 +26969,10 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
-"Όταν είναι ενεργοποιημένο, όλα τα τμήματα δρόμου θα σταθεροποιηθούν στη θέση "
-"τους μέχρι και τη θέση του δρομέα. Όταν είναι απενεργοποιημένο, το τελευταίο "
-"τμήμα (που βρίσκεται πιο κοντά στον κέρσορα) θα παραμείνει ελεύθερο και θα "
-"ακολουθεί τον κέρσορα."
+"Όταν είναι ενεργοποιημένο, όλα τα τμήματα διαδρόμου θα σταθεροποιηθούν στη "
+"θέση τους μέχρι και τη θέση του δρομέα. Όταν είναι απενεργοποιημένο, το "
+"τελευταίο τμήμα (που βρίσκεται πιο κοντά στον κέρσορα) θα παραμείνει "
+"ελεύθερο και θα ακολουθεί τον κέρσορα."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:61
 msgid "Interactive Router Settings"
@@ -27311,7 +27309,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:570
 msgid "Edit track/via properties"
-msgstr "Επεξεργασία ιδιοτήτων διαδρόμου/via"
+msgstr "Επεξεργασία ιδιοτήτων διαδρόμου/διέλευσης"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:635
 msgid "Updating nets"
@@ -27412,7 +27410,7 @@ msgstr "Αρχικά, τελικά και συνδεδεμένα επίπεδα"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
-msgstr "Ιδιότητες Διαδρόμων και Via"
+msgstr "Ιδιότητες Διαδρόμων και Διελεύσεων"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
 msgid "Via drill size must be smaller than via diameter"
@@ -27426,7 +27424,7 @@ msgstr "Διάτρηση διέλευσης:"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:54
 msgid "Track Width and Via Size"
-msgstr "Πλάτος Διαδρόμων και Μέγεθος Via"
+msgstr "Πλάτος Διαδρόμων και Μέγεθος Διέλευσης"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:146
 msgid "Set Unused Pad Properties"
@@ -27507,7 +27505,7 @@ msgstr "Εμφάνιση στους διαδρόμους"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on pads and tracks"
-msgstr "Εμφάνιση σε pads και διαδρόμους"
+msgstr "Εμφάνιση σε έδρες και διαδρόμους"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:39
 msgid "Net Names"
@@ -27515,7 +27513,8 @@ msgstr "Ονόματα Δικτύου"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Show or hide net names on pads and/or tracks."
-msgstr "Εμφάνιση ή μη των ονομάτων των net στα pad ή/και στους διαδρόμους."
+msgstr ""
+"Εμφάνιση ή μη των ονομάτων των δικτύων στις έδρες ή/και στους διαδρόμους."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
 #: pcbnew/tools/pcb_actions.cpp:848
@@ -27555,8 +27554,8 @@ msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
 msgstr ""
-"Εμφάνιση περιγραμμάτων διάκενουν γύρω από τους δρόμους και προαιρετικά το "
-"διάκενο via γύρω από το τέλος του δρόμου, κατά τη δρομολόγηση."
+"Εμφάνιση περιγραμμάτων διάκενου γύρω από τους διαδρόμους και προαιρετικά το "
+"διάκενο διέλευσης γύρω από το τέλος του δρόμου, κατά τη δρομολόγηση."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
@@ -33573,7 +33572,6 @@ msgid "Cannot start routing from a graphic."
 msgstr "Αδυναμία δρομολόγησης μέσα σε καθαρή περιοχή ή σε περίγραμμα πλακέτας."
 
 #: pcbnew/router/pns_router.cpp:305 pcbnew/router/pns_router.cpp:361
-#, fuzzy
 msgid "The routing start point violates DRC."
 msgstr "Το σημείο εκκίνησης της δρομολόγησης παραβιάζει τον ΕΚΣ."
 
