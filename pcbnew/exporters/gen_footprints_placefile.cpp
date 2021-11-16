@@ -62,13 +62,8 @@ public:
         m_reporter = &m_messagesPanel->Reporter();
         initDialog();
 
-        // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-        // that requires us to correct the button labels here.
-        m_sdbSizerOK->SetLabel( _( "Generate Position File" ) );
-        m_sdbSizerCancel->SetLabel( _( "Close" ) );
-        m_sdbSizer->Layout();
-
-        m_sdbSizerOK->SetDefault();
+        SetupStandardButtons( { { wxID_OK,     _( "Generate Position File" ) },
+                                { wxID_CANCEL, _( "Close" )                  } } );
 
         GetSizer()->SetSizeHints(this);
         Centre();

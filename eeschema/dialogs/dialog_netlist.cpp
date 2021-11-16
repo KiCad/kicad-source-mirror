@@ -264,12 +264,8 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     InstallPageSpice();
     InstallCustomPages();
 
-    // We use a sdbSizer here to get the order right, which is platform-dependent
-    m_sdbSizer2OK->SetLabel( _( "Export Netlist" ) );
-    m_sdbSizer2Cancel->SetLabel( _( "Close" ) );
-    m_buttonSizer->Layout();
-
-    m_sdbSizer2OK->SetDefault();
+    SetupStandardButtons( { { wxID_OK,     _( "Export Netlist" ) },
+                            { wxID_CANCEL, _( "Close" )          } } );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -647,7 +643,7 @@ NETLIST_DIALOG_ADD_GENERATOR::NETLIST_DIALOG_ADD_GENERATOR( NETLIST_DIALOG* pare
     NETLIST_DIALOG_ADD_GENERATOR_BASE( parent )
 {
     m_Parent = parent;
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
     GetSizer()->SetSizeHints( this );
 }
 

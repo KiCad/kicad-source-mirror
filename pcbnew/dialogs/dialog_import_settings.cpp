@@ -42,12 +42,6 @@ DIALOG_IMPORT_SETTINGS::DIALOG_IMPORT_SETTINGS( wxWindow* aParent, PCB_EDIT_FRAM
 
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
-    // Button created in wxFormBuilder is an "OK" button. Change label here
-    m_sdbSizer1OK->SetLabel( _( "Import Settings" ) );
-
-    // Disable "Import Settings" button until user selects at least one import option
-    m_sdbSizer1OK->Enable( false );
-
     // Make sure "Select All" button is big enough to hold "Deselect All"
     m_selectAllButton->SetLabel( _( "Deselect All" ) ); // Change the text temporarily
     sizeNeeded = m_selectAllButton->GetBestSize();      // Get control to tell us the width required
@@ -55,9 +49,12 @@ DIALOG_IMPORT_SETTINGS::DIALOG_IMPORT_SETTINGS( wxWindow* aParent, PCB_EDIT_FRAM
     sizeNeeded.y = m_selectAllButton->GetSize().y;      // Keep the height unchanged
     m_selectAllButton->SetMinSize( sizeNeeded );        // Set control to the required size
 
-    m_buttonsSizer->Layout();
+    SetupStandardButtons( { { wxID_OK, _( "Import Settings" ) } } );
 
-    m_sdbSizer1OK->SetDefault();
+    // Disable "Import Settings" button until user selects at least one import option
+    m_sdbSizer1OK->Enable( false );
+
+    m_buttonsSizer->Layout();
 
     m_showSelectAllOnBtn = true; // Store state to toggle message/usage of "Select All" button
 }

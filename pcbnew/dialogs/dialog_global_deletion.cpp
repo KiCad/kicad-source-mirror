@@ -49,7 +49,9 @@ DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent ) :
     m_footprintFilterUnlocked->Enable( m_delFootprints->GetValue() );
     m_drawingFilterLocked->Enable( m_delDrawings->GetValue() );
     m_drawingFilterUnlocked->Enable( m_delDrawings->GetValue() );
-    m_sdbSizer1OK->SetDefault();
+
+    SetupStandardButtons();
+
     SetFocus();
     GetSizer()->SetSizeHints( this );
     Centre();

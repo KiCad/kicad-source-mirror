@@ -155,16 +155,10 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     // because the update and change versions of this dialog have different controls.
     m_hash_key = TO_UTF8( GetTitle() );
 
-    // Ensure m_closeButton (with id = wxID_CANCEL) has the right label
-    // (to fix automatic renaming of button label )
-    m_sdbSizerCancel->SetLabel( _( "Close" ) );
+    wxString okLabel = m_updateMode ? _( "Update" ) : _( "Change" );
 
-    if( m_updateMode )
-        m_sdbSizerOK->SetLabel( _( "Update" ) );
-    else
-        m_sdbSizerOK->SetLabel( _( "Change" ) );
-
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons( { { wxID_OK,     okLabel      },
+                            { wxID_CANCEL, _( "Close" ) } } );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

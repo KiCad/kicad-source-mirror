@@ -96,8 +96,6 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
     m_previewNewWidget = new SYMBOL_PREVIEW_WIDGET( m_previewNewPanel,  Kiway(), aGalBackEndType );
 	m_SizerNewPanel->Add( m_previewNewWidget, 1, wxEXPAND | wxALL, 5 );
 
-    m_stdButtonsOK->SetDefault();
-
     // Set the info message, customized to include the proper suffix.
     wxString info =
         _( "This schematic was made using older symbol libraries which may break the "
@@ -145,11 +143,14 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
 
     // Make sure the HTML window is large enough. Some fun size juggling and
     // fudge factors here but it does seem to work pretty reliably.
-    auto info_size = m_htmlPrompt->GetTextExtent( info );
-    auto prompt_size = m_htmlPrompt->GetSize();
-    auto font_size = m_htmlPrompt->GetTextExtent( "X" );
-    auto approx_info_height = ( 2 * info_size.x / prompt_size.x ) * font_size.y;
+    wxSize info_size = m_htmlPrompt->GetTextExtent( info );
+    wxSize prompt_size = m_htmlPrompt->GetSize();
+    wxSize font_size = m_htmlPrompt->GetTextExtent( "X" );
+    int    approx_info_height = ( 2 * info_size.x / prompt_size.x ) * font_size.y;
     m_htmlPrompt->SetSizeHints( 2 * prompt_size.x / 3, approx_info_height );
+
+    SetupStandardButtons();
+
     Layout();
     GetSizer()->SetSizeHints( this );
     setSizeInDU( 480, 360 );

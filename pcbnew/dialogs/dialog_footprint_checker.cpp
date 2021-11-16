@@ -45,13 +45,8 @@ DIALOG_FOOTPRINT_CHECKER::DIALOG_FOOTPRINT_CHECKER( FOOTPRINT_EDIT_FRAME* aParen
 
     m_markersTreeModel->SetSeverities( -1 );
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizerOK->SetLabel( _( "Run Checks" ) );
-    m_sdbSizerCancel->SetLabel( _( "Close" ) );
-
-    m_sdbSizerOK->SetDefault();
-    m_sdbSizer->Layout();
+    SetupStandardButtons( { { wxID_OK,     _( "Run Checks" ) },
+                            { wxID_CANCEL, _( "Close" )      } } );
 
     syncCheckboxes();
 

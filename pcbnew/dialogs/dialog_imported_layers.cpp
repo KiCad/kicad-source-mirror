@@ -299,7 +299,7 @@ DIALOG_IMPORTED_LAYERS::DIALOG_IMPORTED_LAYERS( wxWindow* aParent,
     // Auto select the first item to improve ease-of-use
     m_kicad_layers_list->SetItemState( 0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     Fit();
     finishDialogSettings();

@@ -107,7 +107,7 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent, FILENAME_RESO
         m_sb3DSearchPaths->Show( false );
 
     SetInitialFocus( m_EnvVars );
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     // wxFormBuilder doesn't include this event...
     m_EnvVars->Connect( wxEVT_GRID_CELL_CHANGING,

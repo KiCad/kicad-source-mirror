@@ -68,7 +68,7 @@ DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, wxP
     m_xOffset.SetDoubleValue( m_options.entry1 );
     m_yOffset.SetDoubleValue( m_options.entry2 );
 
-    m_stdButtonsOK->SetDefault();
+    SetupStandardButtons();
 
     finishDialogSettings();
 }

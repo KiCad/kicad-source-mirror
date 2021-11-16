@@ -42,14 +42,9 @@ DIALOG_PRINT_GENERIC::DIALOG_PRINT_GENERIC( EDA_DRAW_FRAME* aParent, PRINTOUT_SE
     m_scaleValidator.SetRange( 0.0, MAX_SCALE );
     m_scaleCustomText->SetValidator( m_scaleValidator );
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Print" ) );
-    m_sdbSizer1Apply->SetLabel( _( "Print Preview" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
-    m_sdbSizer1->Layout();
-
-    m_sdbSizer1OK->SetDefault();
+    SetupStandardButtons( { { wxID_OK,     _( "Print" )         },
+                            { wxID_APPLY,  _( "Print Preview" ) },
+                            { wxID_CANCEL, _( "Close" )         } } );
 
 #if defined(__WXMAC__) or defined(__WXGTK__)
     // Preview does not work well on GTK or Mac,

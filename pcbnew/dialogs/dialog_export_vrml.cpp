@@ -83,7 +83,8 @@ public:
         tmpStr = wxT( "" );
         tmpStr << m_YRef;
         m_VRML_Yref->SetValue( tmpStr );
-        m_sdbSizerOK->SetDefault();
+
+        SetupStandardButtons();
 
         // Now all widgets have the size fixed, call FinishDialogSettings
         finishDialogSettings();

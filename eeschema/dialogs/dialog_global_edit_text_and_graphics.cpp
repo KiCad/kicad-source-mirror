@@ -123,7 +123,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
     m_dotColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
     m_dotColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
-    m_sdbSizerButtonsOK->SetDefault();
+    SetupStandardButtons();
 
     finishDialogSettings();
 }

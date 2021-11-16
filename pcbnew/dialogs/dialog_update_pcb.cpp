@@ -56,13 +56,9 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
     m_messagePanel->GetSizer()->SetSizeHints( this );
     m_messagePanel->Layout();
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Update PCB" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
-    m_sdbSizer1->Layout();
+    SetupStandardButtons( { { wxID_OK,     _( "Update PCB" ) },
+                            { wxID_CANCEL, _( "Close" )      } } );
 
-    m_sdbSizer1OK->SetDefault();
     finishDialogSettings();
 
     m_initialized = true;

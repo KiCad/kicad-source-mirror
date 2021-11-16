@@ -93,7 +93,7 @@ DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, const COLOR4D& aCur
     if( aDefaultColor == COLOR4D::UNSPECIFIED )
         m_resetToDefault->SetLabel( _( "Clear Color" ) );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 }
 
 

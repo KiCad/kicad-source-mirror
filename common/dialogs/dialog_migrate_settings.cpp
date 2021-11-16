@@ -35,7 +35,8 @@ DIALOG_MIGRATE_SETTINGS::DIALOG_MIGRATE_SETTINGS( SETTINGS_MANAGER* aManager ) :
     // Disabled for now.  See https://gitlab.com/kicad/code/kicad/-/issues/9826
     m_cbCopyLibraryTables->Hide();
 
-    m_standardButtonsOK->SetDefault();
+    SetupStandardButtons();
+
     GetSizer()->SetSizeHints( this );
     Centre();
 }

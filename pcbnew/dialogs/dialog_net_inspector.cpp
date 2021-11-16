@@ -881,7 +881,8 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
     m_renameNet->SetBitmap( KiBitmap( BITMAPS::small_edit ) );
     m_deleteNet->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
+
     m_renameNet->Disable();
     m_deleteNet->Disable();
 

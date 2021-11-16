@@ -60,7 +60,7 @@ DIALOG_UPDATE_SYMBOL_FIELDS::DIALOG_UPDATE_SYMBOL_FIELDS( SYMBOL_EDIT_FRAME* aPa
     m_resetFieldEffects->SetValue( g_resetLibFieldEffects );
     m_resetFieldPositions->SetValue( g_resetLibFieldPositions );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

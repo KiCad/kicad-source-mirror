@@ -130,12 +130,10 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
     m_checkBoxShowConsole->Show( false );
 #endif
 
-    m_sdbSizerOK->SetLabel( _( "Generate" ) );
-    m_sdbSizerCancel->SetLabel( _( "Close" ) );
-    m_sdbSizer->Layout();
+    SetupStandardButtons( { { wxID_OK,     _( "Generate" ) },
+                            { wxID_CANCEL, _( "Close" )    } } );
 
     SetInitialFocus( m_lbGenerators );
-    m_sdbSizerOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

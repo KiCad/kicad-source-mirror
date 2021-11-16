@@ -35,7 +35,7 @@ DIALOG_REGULATOR_FORM::DIALOG_REGULATOR_FORM( PANEL_REGULATOR* parent, const wxS
     m_textCtrlName->Enable( aRegName.IsEmpty() );
     UpdateDialog();
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

@@ -141,20 +141,15 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent 
 {
     wxASSERT( aParent );
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Print" ) );
-    m_sdbSizer1Apply->SetLabel( _( "Preview" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
-    m_sdbSizer1->Layout();
+    SetupStandardButtons( { { wxID_OK,     _( "Print" )         },
+                            { wxID_APPLY,  _( "Print Preview" ) },
+                            { wxID_CANCEL, _( "Close" )         } } );
 
 #ifdef __WXMAC__
     // Problems with modal on wx-2.9 - Anyway preview is standard for OSX
     m_sdbSizer1Apply->Hide();
 #endif
 
-    m_sdbSizer1OK->SetDefault();    // on linux, this is inadequate to determine
-                                    // what ENTER does.  Must also SetFocus().
     m_sdbSizer1OK->SetFocus();
 
     finishDialogSettings();

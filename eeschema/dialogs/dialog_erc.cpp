@@ -73,13 +73,8 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     syncCheckboxes();
     updateDisplayedCounts();
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Run ERC" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
-    m_sdbSizer1->Layout();
-
-    m_sdbSizer1OK->SetDefault();
+    SetupStandardButtons( { { wxID_OK,     _( "Run ERC" ) },
+                            { wxID_CANCEL, _( "Close" )   } } );
 
     m_errorsBadge->SetMaximumNumber( 999 );
     m_warningsBadge->SetMaximumNumber( 999 );

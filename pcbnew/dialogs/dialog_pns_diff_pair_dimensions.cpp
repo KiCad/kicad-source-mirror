@@ -37,11 +37,11 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS::DIALOG_PNS_DIFF_PAIR_DIMENSIONS( EDA_DRAW_FRAME
     m_viaGap( aParent, m_viaGapLabel, m_viaGapText, m_viaGapUnit ),
     m_sizes( aSizes )
 {
+    SetupStandardButtons();
+
     Layout();
     GetSizer()->SetSizeHints( this );
     Centre();
-
-    m_stdButtonsOK->SetDefault();
 }
 
 

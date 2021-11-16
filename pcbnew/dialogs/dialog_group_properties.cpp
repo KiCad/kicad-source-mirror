@@ -50,7 +50,7 @@ DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
     for( BOARD_ITEM* item : m_group->GetItems() )
         m_membersList->Append( item->GetSelectMenuText( m_brdEditor->GetUserUnits() ), item );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     SetInitialFocus( m_nameCtrl );
 

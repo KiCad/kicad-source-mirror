@@ -43,13 +43,14 @@ public:
     DIALOG_GET_FOOTPRINT_BY_NAME( PCB_BASE_FRAME* aParent, wxArrayString& aFpList ) :
         DIALOG_GET_FOOTPRINT_BY_NAME_BASE( aParent )
     {
-        m_sdbSizerOK->SetDefault();
         m_choiceFpList->Append( aFpList );
 
         m_multipleHint->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
         // Hide help string until someone implements successive placement (#2227)
         m_multipleHint->Show( false );
+
+        SetupStandardButtons();
 
         // Dialog should not shrink beyond it's minimal size.
         GetSizer()->SetSizeHints( this );

@@ -58,17 +58,6 @@ DIALOG_LIB_TEXT_PROPERTIES::DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aPare
     SetInitialFocus( m_TextCtrl );
     m_StyledTextCtrl->Show( false );
 
-    if( !aParent->IsSymbolEditable() || aParent->IsSymbolAlias() )
-    {
-        m_sdbSizerButtonsCancel->SetDefault();
-        m_sdbSizerButtonsOK->SetLabel( _( "Read Only" ) );
-        m_sdbSizerButtonsOK->Enable( false );
-    }
-    else
-    {
-        m_sdbSizerButtonsOK->SetDefault();
-    }
-
     m_separator1->SetIsSeparator();
 
     m_horizontal->SetIsCheckButton();
@@ -113,6 +102,15 @@ DIALOG_LIB_TEXT_PROPERTIES::DIALOG_LIB_TEXT_PROPERTIES( SYMBOL_EDIT_FRAME* aPare
     m_vAlignTop->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXT_PROPERTIES::onVAlignButton, this );
     m_vAlignCenter->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXT_PROPERTIES::onVAlignButton, this );
     m_vAlignBottom->Bind( wxEVT_BUTTON, &DIALOG_LIB_TEXT_PROPERTIES::onVAlignButton, this );
+
+    SetupStandardButtons();
+
+    if( !aParent->IsSymbolEditable() || aParent->IsSymbolAlias() )
+    {
+        m_sdbSizerButtonsCancel->SetDefault();
+        m_sdbSizerButtonsOK->SetLabel( _( "Read Only" ) );
+        m_sdbSizerButtonsOK->Enable( false );
+    }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

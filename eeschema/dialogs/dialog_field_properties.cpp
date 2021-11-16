@@ -183,8 +183,6 @@ void DIALOG_FIELD_PROPERTIES::init()
         m_TextCtrl->Enable( true );
     }
 
-    m_sdbSizerButtonsOK->SetDefault();
-
     GetSizer()->SetSizeHints( this );
 
     // Adjust the height of the scintilla text editor after the first layout
@@ -199,6 +197,8 @@ void DIALOG_FIELD_PROPERTIES::init()
         m_StyledTextCtrl->SetUseVerticalScrollBar( false );
         m_StyledTextCtrl->SetUseHorizontalScrollBar( false );
     }
+
+    SetupStandardButtons();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

@@ -55,7 +55,7 @@ void DIALOG_EDIT_LIBRARY_TABLES::InstallPanel( wxPanel* aPanel )
 
     mainSizer->Add( sdbSizer, 0, wxALL|wxEXPAND, 5 );
 
-    sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     finishDialogSettings();
 

@@ -42,7 +42,7 @@ HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* aParent, const wxString& aTitle,
 
     Center();
 
-    m_sdbSizer1OK->SetDefault();
+    SetupStandardButtons();
 
     reload();
 

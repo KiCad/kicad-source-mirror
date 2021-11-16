@@ -34,7 +34,8 @@ WX_UNIT_ENTRY_DIALOG::WX_UNIT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxStr
 {
     m_label->SetLabel( aLabel );
     m_unit_binder.SetValue( aDefaultValue );
-    m_sdbSizer1OK->SetDefault();
+
+    SetupStandardButtons();
 }
 
 

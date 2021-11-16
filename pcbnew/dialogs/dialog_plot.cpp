@@ -63,14 +63,9 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 
     init_Dialog();
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Plot" ) );
-    m_sdbSizer1Apply->SetLabel( _( "Generate Drill Files..." ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
-    m_sizerButtons->Layout();
-
-    m_sdbSizer1OK->SetDefault();
+    SetupStandardButtons( { { wxID_OK,     _( "Plot" )                    },
+                            { wxID_APPLY,  _( "Generate Drill Files..." ) },
+                            { wxID_CANCEL, _( "Close" )                   } } );
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );

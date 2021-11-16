@@ -98,7 +98,7 @@ DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent,
     if( !dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( aSettings.get() ) )
         m_compatibilityMode->Show( false );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
     updateNetlistOpts();
 }
 

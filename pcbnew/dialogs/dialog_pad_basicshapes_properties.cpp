@@ -62,7 +62,7 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES::DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aP
 
     TransferDataToWindow();
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     finishDialogSettings();
 }
@@ -248,7 +248,8 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
 
     TransferDataToWindow();
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
+
     GetSizer()->SetSizeHints( this );
 
 	m_gridCornersList->Connect( wxEVT_GRID_CELL_CHANGING,
@@ -570,7 +571,8 @@ DIALOG_PAD_PRIMITIVES_TRANSFORM::DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aPar
 		m_spinCtrlDuplicateCount->Show( false );
     }
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
+
     GetSizer()->SetSizeHints( this );
 }
 

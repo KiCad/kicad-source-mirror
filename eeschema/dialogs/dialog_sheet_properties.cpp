@@ -73,7 +73,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     }
 
     wxToolTip::Enable( true );
-    m_stdDialogButtonSizerOK->SetDefault();
+    SetupStandardButtons();
 
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );

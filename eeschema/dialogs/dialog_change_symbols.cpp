@@ -151,16 +151,10 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
     // because the update and change versions of this dialog have different controls.
     m_hash_key = TO_UTF8( GetTitle() );
 
-    // Ensure m_closeButton (with id = wxID_CANCEL) has the right label
-    // (to fix automatic renaming of button label )
-    m_sdbSizerCancel->SetLabel( _( "Close" ) );
+    wxString okLabel = m_mode == MODE::CHANGE ? _( "Change" ) : _( "Update" );
 
-    if( m_mode == MODE::CHANGE )
-        m_sdbSizerOK->SetLabel( _( "Change" ) );
-    else
-        m_sdbSizerOK->SetLabel( _( "Update" ) );
-
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons( { { wxID_OK,     okLabel      },
+                            { wxID_CANCEL, _( "Close" ) } } );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

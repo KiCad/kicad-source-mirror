@@ -91,7 +91,7 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
     m_buttonsSizer->Add( sdbSizer, 1, 0, 5 );
     mainSizer->Add( m_buttonsSizer, 0, wxALL|wxEXPAND, 5 );
 
-    sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     // We normally save the dialog size and position based on its class-name.  This class
     // substitutes the title so that each distinctly-titled dialog can have its own saved

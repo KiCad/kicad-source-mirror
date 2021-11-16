@@ -191,7 +191,6 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
 
     m_netSortingByPadCount = true;      // false = alphabetic sort, true = pad count sort
 
-    m_sdbSizerOK->SetDefault();
     m_ShowNetNameFilter->SetHint( _( "Filter" ) );
 
     m_cbRemoveIslands->Bind( wxEVT_CHOICE,
@@ -204,6 +203,8 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
                 m_islandThresholdLabel->Enable( val );
                 m_islandThresholdUnits->Enable( val );
             } );
+
+    SetupStandardButtons();
 
     finishDialogSettings();
 }

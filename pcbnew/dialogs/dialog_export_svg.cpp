@@ -91,11 +91,8 @@ DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
 
     initDialog();
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Export" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
-    m_sdbSizer1->Layout();
+    SetupStandardButtons( { { wxID_OK,     _( "Export" ) },
+                            { wxID_CANCEL, _( "Close" )  } } );
 
     finishDialogSettings();
 }

@@ -65,7 +65,7 @@ DIALOG_TARGET_PROPERTIES::DIALOG_TARGET_PROPERTIES( PCB_EDIT_FRAME* aParent, PCB
         m_Size( aParent, m_sizeLabel, m_sizeCtrl, m_sizeUnits ),
         m_Thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits )
 {
-    m_sdbSizerButtsOK->SetDefault();
+    SetupStandardButtons();
 
     SetInitialFocus( m_sizeCtrl );
 

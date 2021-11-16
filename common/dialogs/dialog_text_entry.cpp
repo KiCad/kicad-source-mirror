@@ -33,8 +33,9 @@ WX_TEXT_ENTRY_DIALOG::WX_TEXT_ENTRY_DIALOG( wxWindow* aParent,
     m_label->SetLabel( aFieldLabel );
     m_textCtrl->SetValue( aDefaultValue );
 
+    SetupStandardButtons();
+
     SetInitialFocus( m_textCtrl );
-    m_sdbSizer1OK->SetDefault();
 }
 
 

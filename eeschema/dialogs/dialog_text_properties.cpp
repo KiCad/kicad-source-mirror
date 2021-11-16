@@ -81,7 +81,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_TEX
 
     m_separator3->SetIsSeparator();
 
-    m_sdbSizer1OK->SetDefault();
+    SetupStandardButtons();
     Layout();
 
     m_textCtrl->Bind( wxEVT_STC_CHARADDED, &DIALOG_TEXT_PROPERTIES::onScintillaCharAdded, this );

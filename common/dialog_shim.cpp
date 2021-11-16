@@ -637,3 +637,69 @@ void DIALOG_SHIM::OnGridEditorHidden( wxGridEvent& event )
     SetEscapeId( wxID_ANY );
     event.Skip();
 }
+
+
+static void recursiveDescent( wxSizer* aSizer, std::map<int, wxString>& aLabels )
+{
+    wxStdDialogButtonSizer* sdbSizer = dynamic_cast<wxStdDialogButtonSizer*>( aSizer );
+
+    auto setupButton =
+            [&]( wxButton* aButton )
+            {
+                if( aLabels.count( aButton->GetId() ) > 0 )
+                {
+                    aButton->SetLabel( aLabels[ aButton->GetId() ] );
+                }
+                else
+                {
+                    // wxWidgets has an uneven track record when the language is changed on
+                    // the fly so we set them even when they don't appear in the label map
+                    switch( aButton->GetId() )
+                    {
+                    case wxID_OK:           aButton->SetLabel( _( "&OK" ) );     break;
+                    case wxID_CANCEL:       aButton->SetLabel( _( "&Cancel" ) ); break;
+                    case wxID_YES:          aButton->SetLabel( _( "&Yes" ) );    break;
+                    case wxID_NO:           aButton->SetLabel( _( "&No" ) );     break;
+                    case wxID_APPLY:        aButton->SetLabel( _( "&Apply" ) );  break;
+                    case wxID_SAVE:         aButton->SetLabel( _( "&Save" ) );   break;
+                    case wxID_HELP:         aButton->SetLabel( _( "&Help" ) );   break;
+                    case wxID_CONTEXT_HELP: aButton->SetLabel( _( "&Help" ) );   break;
+                    }
+                }
+            };
+
+    if( sdbSizer )
+    {
+        if( sdbSizer->GetAffirmativeButton() )
+            setupButton( sdbSizer->GetAffirmativeButton() );
+
+        if( sdbSizer->GetApplyButton() )
+            setupButton( sdbSizer->GetApplyButton() );
+
+        if( sdbSizer->GetNegativeButton() )
+            setupButton( sdbSizer->GetNegativeButton() );
+
+        if( sdbSizer->GetCancelButton() )
+            setupButton( sdbSizer->GetCancelButton() );
+
+        if( sdbSizer->GetHelpButton() )
+            setupButton( sdbSizer->GetHelpButton() );
+
+        sdbSizer->Layout();
+
+        if( sdbSizer->GetAffirmativeButton() )
+            sdbSizer->GetAffirmativeButton()->SetDefault();
+    }
+
+    for( wxSizerItem* item : aSizer->GetChildren() )
+    {
+        if( item->GetSizer() )
+            recursiveDescent( item->GetSizer(), aLabels );
+    }
+}
+
+
+void DIALOG_SHIM::SetupStandardButtons( std::map<int, wxString> aLabels )
+{
+    recursiveDescent( GetSizer(), aLabels );
+}

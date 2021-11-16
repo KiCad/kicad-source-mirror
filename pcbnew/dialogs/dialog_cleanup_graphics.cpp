@@ -41,11 +41,11 @@ DIALOG_CLEANUP_GRAPHICS::DIALOG_CLEANUP_GRAPHICS( PCB_BASE_FRAME* aParent,
 
     m_changesTreeModel->SetSeverities( RPT_SEVERITY_ACTION );
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizerOK->SetLabel( aIsFootprintEditor ? _( "Update Footprint" ) : _( "Update PCB" ) );
+    if( aIsFootprintEditor )
+        SetupStandardButtons( { { wxID_OK, _( "Update Footprint" ) } } );
+    else
+        SetupStandardButtons( { { wxID_OK, _( "Update PCB" ) } } );
 
-    m_sdbSizerOK->SetDefault();
     GetSizer()->SetSizeHints(this);
     Centre();
 }

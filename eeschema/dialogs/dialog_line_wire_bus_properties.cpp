@@ -38,8 +38,6 @@ DIALOG_LINE_WIRE_BUS_PROPERTIES::DIALOG_LINE_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME
         m_strokeItems( aItems ),
         m_width( aParent, m_staticTextWidth, m_lineWidth, m_staticWidthUnits, true )
 {
-    m_sdbSizerApply->SetLabel( _( "Default" ) );
-
     m_colorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
     m_helpLabel1->SetFont( KIUI::GetInfoFont( this ).Italic() );
@@ -52,7 +50,7 @@ DIALOG_LINE_WIRE_BUS_PROPERTIES::DIALOG_LINE_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME
 
     m_typeCombo->Append( DEFAULT_STYLE );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons( { { wxID_APPLY, _( "Default" ) } } );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

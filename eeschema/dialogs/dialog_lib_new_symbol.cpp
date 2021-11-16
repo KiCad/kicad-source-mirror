@@ -52,8 +52,7 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
     // initial focus should be on first editable field.
     m_textName->SetFocus();
 
-    // What happens when user presses "Enter"? OK button!  OK?
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

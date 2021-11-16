@@ -131,11 +131,11 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_solderPasteRatio.SetUnits( EDA_UNITS::PERCENT );
     m_solderPasteRatio.SetNegativeZero();
 
-    m_sdbSizerStdButtonsOK->SetDefault();
-
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
     m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+
+    SetupStandardButtons();
 
     // wxFormBuilder doesn't include this event...
     m_itemsGrid->Connect( wxEVT_GRID_CELL_CHANGING,

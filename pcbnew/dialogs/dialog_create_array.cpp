@@ -237,7 +237,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
     setControlEnablement();
     calculateCircularArrayProperties();
 
-    m_stdButtonsOK->SetDefault();
+    SetupStandardButtons();
     Fit();
     SetMinSize( GetSize() );
 }

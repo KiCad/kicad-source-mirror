@@ -82,7 +82,7 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, wxPoint& aTransla
     m_rotate.SetValue( m_options.entryRotation );
     m_anchorOptions->SetSelection( std::min( m_options.entryAnchorSelection, m_menuIDs.size() ) );
 
-    m_stdButtonsOK->SetDefault();
+    SetupStandardButtons();
 
     finishDialogSettings();
 }

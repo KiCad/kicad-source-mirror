@@ -71,10 +71,7 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParen
                             wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker ),
                             nullptr, this );
 
-    wxButton* okButton = (wxButton *) FindWindowById( wxID_OK );
-
-    if( okButton )
-        okButton->SetDefault();
+    SetupStandardButtons();
 
     finishDialogSettings();
 }

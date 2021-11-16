@@ -163,7 +163,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     // Set font sizes
     m_statusLine->SetFont( KIUI::GetInfoFont( this ) );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
     // so we have to listen to wxEVT_CHAR_HOOK events instead.

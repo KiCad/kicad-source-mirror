@@ -179,7 +179,7 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
         m_spin3->SetBitmap( KiBitmap( BITMAPS::text_align_top ) );
     }
 
-    m_sdbSizer1OK->SetDefault();
+    SetupStandardButtons();
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient because the
     // various versions have different controls so we want to store sizes for each version.

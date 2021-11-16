@@ -109,6 +109,8 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
 
     aAdapter->FinishTreeInitialization();
 
+    SetupStandardButtons();
+
     Bind( wxEVT_TIMER, &DIALOG_CHOOSE_FOOTPRINT::OnCloseTimer, this, m_dbl_click_timer->GetId() );
     Bind( SYMBOL_PRESELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentPreselected, this );
     Bind( SYMBOL_SELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentSelected, this );
@@ -139,7 +141,6 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
     SetSize( wxSize( w, h ) );
 
     SetInitialFocus( m_tree->GetFocusTarget() );
-    okButton->SetDefault();
 }
 
 

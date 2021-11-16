@@ -194,7 +194,7 @@ void DIALOG_SPICE_MODEL::Init()
     m_pwlTimeCol = m_pwlValList->AppendColumn( "Time [s]", wxLIST_FORMAT_LEFT, 100 );
     m_pwlValueCol = m_pwlValList->AppendColumn( "Value [V/A]", wxLIST_FORMAT_LEFT, 100 );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     m_staticTextF1->SetLabel( wxS( "f" ) );
     m_staticTextP1->SetLabel( wxS( "p" ) );

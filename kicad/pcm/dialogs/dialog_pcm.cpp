@@ -126,14 +126,9 @@ DIALOG_PCM::DIALOG_PCM( wxWindow* parent ) : DIALOG_PCM_BASE( parent )
 
     m_dialogNotebook->SetSelection( 0 );
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Close" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Discard Pending Changes" ) );
-    m_sdbSizer1Apply->SetLabel( _( "Apply Pending Changes" ) );
-    m_sdbSizer1->Layout();
-
-    SetDefaultItem( m_sdbSizer1OK );
+    SetupStandardButtons( { { wxID_OK,     _( "Close" )                   },
+                            { wxID_APPLY,  _( "Apply Pending Changes" )   },
+                            { wxID_CANCEL, _( "Discard Pending Changes" ) } } );
 
     Bind( wxEVT_CLOSE_WINDOW, &DIALOG_PCM::OnCloseWindow, this );
 

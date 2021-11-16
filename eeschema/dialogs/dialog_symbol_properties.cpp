@@ -353,7 +353,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     m_pinGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     wxToolTip::Enable( true );
-    m_stdDialogButtonSizerOK->SetDefault();
+    SetupStandardButtons();
 
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );

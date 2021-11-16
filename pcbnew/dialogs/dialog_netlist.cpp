@@ -78,13 +78,9 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullF
     m_MessageWindow->SetVisibleSeverities( cfg->m_NetlistDialog.report_filter );
     m_MessageWindow->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Update PCB" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
-    m_buttonsSizer->Layout();
+    SetupStandardButtons( { { wxID_OK,     _( "Update PCB" ) },
+                            { wxID_CANCEL, _( "Close" )      } } );
 
-    m_sdbSizer1OK->SetDefault();
     finishDialogSettings();
 
     m_initialized = true;

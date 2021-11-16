@@ -54,7 +54,7 @@ DIALOG_SHEET_PIN_PROPERTIES::DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent
 
     m_choiceConnectionType->SetSelection( 0 );
     SetInitialFocus( m_comboName );
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     // Set invalid label characters list:
     SCH_NETNAME_VALIDATOR validator( true );

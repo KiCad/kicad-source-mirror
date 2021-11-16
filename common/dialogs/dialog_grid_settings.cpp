@@ -59,7 +59,7 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
         m_book->SetSelection( 0 );
     }
 
-    m_sdbSizerOK->SetDefault();         // set OK button as default response to 'Enter' key
+    SetupStandardButtons();
     SetInitialFocus( m_GridOriginXCtrl );
 
     Layout();

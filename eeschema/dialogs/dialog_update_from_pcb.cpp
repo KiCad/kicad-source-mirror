@@ -61,13 +61,9 @@ DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
     m_cbUpdateValues->SetValue( s_savedDialogState.UpdateValues );
     m_cbUpdateNetNames->SetValue( s_savedDialogState.UpdateNetNames );
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizerOK->SetLabel( _( "Update Schematic" ) );
-    m_sdbSizerCancel->SetLabel( _( "Close" ) );
-    m_sdbSizer->Layout();
+    SetupStandardButtons( { { wxID_OK,     _( "Update Schematic" ) },
+                            { wxID_CANCEL, _( "Close" )            } } );
 
-    m_sdbSizerOK->SetDefault();
     finishDialogSettings();
 }
 

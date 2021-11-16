@@ -87,13 +87,8 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& messag
     m_MessageWindow->SetLabel( _( "Annotation Messages:" ) );
     m_MessageWindow->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Annotate" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
-    m_sdbSizer1->Layout();
-
-    m_sdbSizer1OK->SetDefault();
+    SetupStandardButtons( { { wxID_OK,     _( "Annotate" ) },
+                            { wxID_CANCEL, _( "Close" )    } } );
 
     InitValues();
     Layout();
@@ -215,6 +210,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     m_Parent->GetCanvas()->Refresh();
 
     m_btnClear->Enable();
+
     m_sdbSizer1Cancel->SetDefault();
 
     // Don't close dialog if there are things the user needs to address

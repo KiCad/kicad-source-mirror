@@ -146,7 +146,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
 
     SetInitialFocus( m_startXCtrl );
 
-    m_StandardButtonsSizerOK->SetDefault();
+    SetupStandardButtons();
 }
 
 

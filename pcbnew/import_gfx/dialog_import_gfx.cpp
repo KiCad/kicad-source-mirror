@@ -133,7 +133,8 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
     SetInitialFocus( m_textCtrlFileName );
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
+
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Centre();

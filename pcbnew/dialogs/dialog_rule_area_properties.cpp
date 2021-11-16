@@ -78,7 +78,7 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParen
     bool fpEditorMode = m_parent->IsType( FRAME_FOOTPRINT_EDITOR );
     m_zonesettings.SetupLayersList( m_layers, m_parent, true, fpEditorMode );
 
-    m_sdbSizerButtonsOK->SetDefault();
+    SetupStandardButtons();
 
     finishDialogSettings();
 }

@@ -83,7 +83,7 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
     m_settings = *aSettings;
     m_settings.SetupLayersList( m_layers, m_parent, false );
 
-    m_sdbSizerButtonsOK->SetDefault();
+    SetupStandardButtons();
 
     finishDialogSettings();
 }

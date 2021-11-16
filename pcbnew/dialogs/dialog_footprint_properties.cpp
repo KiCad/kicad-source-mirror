@@ -140,13 +140,13 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_solderPasteRatio.SetUnits( EDA_UNITS::PERCENT );
     m_solderPasteRatio.SetNegativeZero();
 
-    m_sdbSizerStdButtonsOK->SetDefault();
-
     m_orientValue = 0;
 
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
     m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+
+    SetupStandardButtons();
 
     finishDialogSettings();
     m_initialized = true;

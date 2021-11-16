@@ -123,6 +123,8 @@ public:
         return m_units;
     }
 
+    void SetupStandardButtons( std::map<int, wxString> aLabels = {} );
+
     static bool IsCtrl( int aChar, const wxKeyEvent& e )
     {
         return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() &&

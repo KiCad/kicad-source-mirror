@@ -59,7 +59,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
     size.y = cfg->m_FootprintWizardList.height;
     SetSize( size );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
     finishDialogSettings();
 
     Center();

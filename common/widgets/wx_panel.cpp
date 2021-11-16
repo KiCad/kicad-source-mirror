@@ -25,8 +25,8 @@
 #include <wx/dcclient.h>
 #include <wx/settings.h>
 
-WX_PANEL::WX_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos,
-                                            const wxSize& size, long style, const wxString& name ) :
+WX_PANEL::WX_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+                    long style, const wxString& name ) :
         wxPanel( parent, id, pos, size, style, name ),
         m_leftBorder( false ),
         m_rightBorder( false ),

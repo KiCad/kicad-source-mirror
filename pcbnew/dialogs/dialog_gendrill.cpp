@@ -72,14 +72,12 @@ DIALOG_GENDRILL::DIALOG_GENDRILL(  PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aPar
     m_board  = m_pcbEditFrame->GetBoard();
     m_plotOpts = m_pcbEditFrame->GetPlotSettings();
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizerOK->SetLabel( _( "Generate Drill File" ) );
-    m_sdbSizerApply->SetLabel( _( "Generate Map File" ) );
-    m_sdbSizerCancel->SetLabel( _( "Close" ) );
+    SetupStandardButtons( { { wxID_OK,     _( "Generate Drill File" ) },
+                            { wxID_APPLY,  _( "Generate Map File" )   },
+                            { wxID_CANCEL, _( "Close" )               } } );
+
     m_buttonsSizer->Layout();
 
-    m_sdbSizerOK->SetDefault();
     SetReturnCode( 1 );
     initDialog();
     GetSizer()->SetSizeHints( this );

@@ -117,8 +117,6 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_cbTextOrientation->SetString( i, item );
     }
 
-    m_sdbSizerOK->SetDefault();
-
     m_cbOverrideValue->Bind( wxEVT_CHECKBOX,
             [&]( wxCommandEvent& evt )
             {
@@ -162,6 +160,8 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
             {
                 m_cbTextOrientation->Enable( !m_cbKeepAligned->GetValue() );
             } );
+
+    SetupStandardButtons();
 
     finishDialogSettings();
 }

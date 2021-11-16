@@ -33,8 +33,6 @@ DIALOG_JUNCTION_PROPS::DIALOG_JUNCTION_PROPS( SCH_EDIT_FRAME* aParent,
           m_diameter( aParent, m_staticTextDiameter, m_textCtrlDiameter,
                       m_staticTextDiameterUnits, true )
 {
-    m_sdbSizerApply->SetLabel( _( "Default" ) );
-
     m_colorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
     m_helpLabel1->SetFont( KIUI::GetInfoFont( this ).Italic() );
@@ -42,7 +40,7 @@ DIALOG_JUNCTION_PROPS::DIALOG_JUNCTION_PROPS( SCH_EDIT_FRAME* aParent,
 
     SetInitialFocus( m_textCtrlDiameter );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons( { { wxID_APPLY, _( "Default" ) } } );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

@@ -225,7 +225,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     prepareCanvas();
 
     SetInitialFocus( m_padNumCtrl );
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
     m_canUpdate = true;
 
     m_padNetSelector->Connect( NET_SELECTED,

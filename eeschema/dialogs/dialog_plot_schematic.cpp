@@ -106,14 +106,10 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent )
 
     m_MessagesBox->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Plot All Pages" ) );
-    m_sdbSizer1Apply->SetLabel( _( "Plot Current Page" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
-    m_sdbSizer1->Layout();
+    SetupStandardButtons( { { wxID_OK,     _( "Plot All Pages" )    },
+                            { wxID_APPLY,  _( "Plot Current Page" ) },
+                            { wxID_CANCEL, _( "Close" )             } } );
 
-    m_sdbSizer1OK->SetDefault();
     initDlg();
 
     // Now all widgets have the size fixed, call FinishDialogSettings

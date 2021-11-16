@@ -197,7 +197,7 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
     }
 
     SetInitialFocus( m_tree->GetFocusTarget() );
-    okButton->SetDefault();
+    SetupStandardButtons();
 
     Bind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_SYMBOL::OnInitDialog, this );
     Bind( wxEVT_TIMER, &DIALOG_CHOOSE_SYMBOL::OnCloseTimer, this, m_dbl_click_timer->GetId() );

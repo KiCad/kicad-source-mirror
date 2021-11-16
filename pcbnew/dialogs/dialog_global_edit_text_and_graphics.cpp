@@ -141,7 +141,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
     m_grid->SetCellHighlightPenWidth( 0 );
     m_grid->SetDefaultCellFont( KIUI::GetInfoFont( this ) );
 
-    m_sdbSizerButtonsOK->SetDefault();
+    SetupStandardButtons();
 
     finishDialogSettings();
 }

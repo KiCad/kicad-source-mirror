@@ -810,7 +810,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_grid->SetGridCursor( 0, 1 );
     SetInitialFocus( m_grid );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     finishDialogSettings();
     SetSize( defaultDlgSize );

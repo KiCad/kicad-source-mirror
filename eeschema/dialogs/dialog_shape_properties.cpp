@@ -51,7 +51,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
 
     // Required under wxGTK if we want to dismiss the dialog with the ESC key
     SetFocus();
-    m_sdbSizerOK->SetDefault();
+
+    SetupStandardButtons();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

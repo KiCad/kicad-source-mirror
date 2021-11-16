@@ -96,7 +96,7 @@ public:
         // initial focus on the grid please.
         SetInitialFocus( m_grid );
 
-        m_sdbSizer1OK->SetDefault();
+        SetupStandardButtons();
     }
 
     ~DIALOG_FP_PLUGIN_OPTIONS() override

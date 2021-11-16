@@ -54,7 +54,7 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
     // columns, different column names, and column widths.
     m_hash_key = TO_UTF8( aTitle );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     // this line fixes an issue on Linux Ubuntu using Unity (dialog not shown),
     // and works fine on all systems

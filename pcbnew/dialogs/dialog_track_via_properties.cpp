@@ -377,7 +377,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     else
         SetInitialFocus( m_ViaDiameterCtrl );
 
-    m_StdButtonsOK->SetDefault();
+    SetupStandardButtons();
 
     m_frame->Bind( UNITS_CHANGED, &DIALOG_TRACK_VIA_PROPERTIES::onUnitsChanged, this );
 

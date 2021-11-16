@@ -34,7 +34,8 @@ DIALOG_FILTER_SELECTION::DIALOG_FILTER_SELECTION( PCB_BASE_FRAME* aParent, OPTIO
     // Update "All Items" checkbox based on how many items are currently checked
     m_All_Items->Set3StateValue( GetSuggestedAllItemsState() );
 
-    m_sdbSizer1OK->SetDefault();
+    SetupStandardButtons();
+
     SetFocus();
     GetSizer()->SetSizeHints( this );
     Centre();

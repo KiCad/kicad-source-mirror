@@ -39,8 +39,9 @@ DIALOG_IMAGE_EDITOR::DIALOG_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem 
     msg.Printf( wxT( "%f" ), m_workingImage->GetScale() );
     m_textCtrlScale->SetValue( msg );
 
+    SetupStandardButtons();
+
     finishDialogSettings();
-    m_sdbSizerOK->SetDefault();
 }
 
 

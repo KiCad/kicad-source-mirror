@@ -50,11 +50,8 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
 
     m_changesTreeModel->SetSeverities( RPT_SEVERITY_ACTION );
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizerOK->SetLabel( _( "Update PCB" ) );
+    SetupStandardButtons( { { wxID_OK, _( "Update PCB" ) } } );
 
-    m_sdbSizerOK->SetDefault();
     m_sdbSizer->SetSizeHints( this );
 
     finishDialogSettings();

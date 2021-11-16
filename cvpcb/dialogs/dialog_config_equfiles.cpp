@@ -52,6 +52,8 @@ DIALOG_CONFIG_EQUFILES::DIALOG_CONFIG_EQUFILES( CVPCB_MAINFRAME* aParent ) :
 
     Init( );
 
+    SetupStandardButtons();
+
     GetSizer()->SetSizeHints( this );
     Center();
 }
@@ -59,7 +61,6 @@ DIALOG_CONFIG_EQUFILES::DIALOG_CONFIG_EQUFILES( CVPCB_MAINFRAME* aParent ) :
 
 void DIALOG_CONFIG_EQUFILES::Init()
 {
-    m_sdbSizerOK->SetDefault();
     m_ListChanged = false;
 
     PROJECT_FILE& project = Prj().GetProjectFile();
@@ -90,7 +91,6 @@ void DIALOG_CONFIG_EQUFILES::Init()
     }
 
     m_gridEnvVars->AutoSizeColumns();
-
 }
 
 

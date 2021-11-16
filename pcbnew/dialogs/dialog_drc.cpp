@@ -92,12 +92,8 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     if( Kiface().IsSingle() )
         m_cbTestFootprints->Hide();
 
-    // We use a sdbSizer here to get the order right, which is platform-dependent
-    m_sdbSizerOK->SetLabel( _( "Run DRC" ) );
-    m_sdbSizerCancel->SetLabel( _( "Close" ) );
-    m_sizerButtons->Layout();
-
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons( { { wxID_OK,     _( "Run DRC" ) },
+                            { wxID_CANCEL, _( "Close" )   } } );
 
     initValues();
     syncCheckboxes();

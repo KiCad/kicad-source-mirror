@@ -46,18 +46,11 @@ DIALOG_PUSH_PAD_PROPERTIES::DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent 
     m_Pad_Orient_Filter_CB->SetValue( m_Pad_Orient_Filter );
     m_Pad_Type_Filter_CB->SetValue( m_Pad_Type_Filter );
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Change Pads on Current Footprint" ) );
+    SetupStandardButtons( { { wxID_OK,     _( "Change Pads on Current Footprint" )    },
+                            { wxID_APPLY,  _( "Change Pads on Identical Footprints" ) } } );
 
     if( aParent->IsType( FRAME_FOOTPRINT_EDITOR ) )
         m_sdbSizer1Apply->Show( false );
-    else
-        m_sdbSizer1Apply->SetLabel( _( "Change Pads on Identical Footprints" ) );
-
-    m_sdbSizer1->Layout();
-
-    m_sdbSizer1OK->SetDefault();
 
     finishDialogSettings();
 }

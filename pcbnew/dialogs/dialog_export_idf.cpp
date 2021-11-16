@@ -81,7 +81,7 @@ public:
             m_IDF_Yref->Enable( true );
         }
 
-        m_sdbSizerOK->SetDefault();
+        SetupStandardButtons();
 
         // Now all widgets have the size fixed, call FinishDialogSettings
         finishDialogSettings();

@@ -76,7 +76,7 @@ DIALOG_SWAP_LAYERS::DIALOG_SWAP_LAYERS( PCB_BASE_EDIT_FRAME* aParent, PCB_LAYER_
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
     m_grid->SetCellHighlightROPenWidth( 0 );
 
-    m_sdbSizerOK->SetDefault();
+    SetupStandardButtons();
 
     finishDialogSettings();
 }
