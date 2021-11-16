@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-11-16 11:20+0000\n"
-"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -53,8 +53,8 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Το περίγραμμα του αποτυπώματος έχει λανθασμένη μορφή ή λείπει. Εκτελέστε το "
-"Footprint Checker για πλήρη ανάλυση."
+"Το περίγραμμα του αποτυπώματος έχει λανθασμένη μορφή ή λείπει. Εκτελέστε τον "
+"Ελεγκτή Αποτυπώματος για πλήρη ανάλυση."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:737
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
@@ -64,7 +64,7 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
-msgstr "Δημιουργία διαδρόμων και vias"
+msgstr "Δημιουργία διαδρόμων και διελεύσεων"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:683
 msgid "Create zones"
@@ -76,11 +76,11 @@ msgstr "Απλοποίηση πολυγώνων σε επίπεδα χαλκού
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:761
 msgid "Simplifying polygons on F_Cu"
-msgstr "Απλοποίηση πολυγώνων σε επίπεδα χαλκού"
+msgstr "Απλοποίηση πολυγώνων στο επάνω επίπεδο χαλκού"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:772
 msgid "Simplifying polygons on B_Cu"
-msgstr "Απλοποίηση πολυγώνων σε επίπεδα χαλκού"
+msgstr "Απλοποίηση πολυγώνων στο κάτω επίπεδο χαλκού"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:802
 #, c-format
@@ -13834,9 +13834,9 @@ msgid "Filename's owner (%d) not found."
 msgstr "Δεν βρέθηκε ο ιδιοκτήτης του αρχείου (%d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2289
-#, c-format, fuzzy
+#, c-format
 msgid "Designator's owner (%d) not found."
-msgstr "Δεν βρέθηκε ο ιδιοκτήτης του προσδιοριστή (%d)."
+msgstr "Designator's owner (%d) Δεν βρέθηκε."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2424
 #, c-format
@@ -24097,7 +24097,7 @@ msgstr "Εκτέλεση Ελέγχων"
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:71
 #: pcbnew/tools/pcb_actions.cpp:397
 msgid "Footprint Checker"
-msgstr "Έλεγχος Αποτυπώματος"
+msgstr "Ελεγκτής Αποτυπώματος"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:75
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:75
@@ -29700,6 +29700,7 @@ msgid "Trace length out of range"
 msgstr "Μήκος ίσχνους εκτός έυρους"
 
 #: pcbnew/drc/drc_item.cpp:190
+#, fuzzy
 msgid "Skew between traces out of range"
 msgstr "Απόκλιση ανάμεσα σε δρόμους εκτός εμβέλειας"
 
@@ -34983,7 +34984,7 @@ msgstr "Επεξεργασία ιδιοτήτων αποτυπώματος"
 
 #: pcbnew/tools/pcb_actions.cpp:397
 msgid "Show the footprint checker window"
-msgstr "Εμφάνιση παραθύρου του ελεγκτή αποτυπωμάτων"
+msgstr "Εμφάνιση παραθύρου του ελεγκτή αποτυπώματος"
 
 #: pcbnew/tools/pcb_actions.cpp:404
 msgid "Update Footprint..."
