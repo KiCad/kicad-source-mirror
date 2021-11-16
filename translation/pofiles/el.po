@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-08 15:58-0800\n"
 "PO-Revision-Date: 2021-11-16 15:10+0000\n"
-"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -98,7 +98,7 @@ msgstr "Κατασκευή Τεχνικών επιπέδων"
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:904
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "Κατασκευή Τεχνικού Επιπέδου %d"
+msgstr "Κατασκευή Τεχνικού επιπέδου %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1049
 msgid "Build BVH for holes and vias"
@@ -534,11 +534,11 @@ msgstr "Αλλαγή προβολής ζωνών"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle adhesive display"
-msgstr "Αλλαγή προβολής adhesive"
+msgstr "Αλλαγή προβολής επικόλλησης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle display of adhesive layers"
-msgstr "Αλλαγή προβολής επιπέδων adhesive"
+msgstr "Αλλαγή προβολής επιπέδων επικόλλησης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle silkscreen display"
@@ -554,7 +554,7 @@ msgstr "Αλλαγή προβολής μάσκας κόλλησης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle display of solder mask layers"
-msgstr "Αλλαγή προβολής επιπέδων solder mask"
+msgstr "Αλλαγή προβολής επιπέδων μάσκας συγκόλλησης"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Toggle solder paste display"
@@ -676,7 +676,7 @@ msgstr "Εμφάνιση επιπέδων πάστας συγκόλλησης"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:46
 msgid "Show adhesive layers"
-msgstr "Εμφάνιση όλων των επιπέδων επικόλλησης"
+msgstr "Εμφάνιση επιπέδων επικόλλησης"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "User Layers (not shown in realistic mode)"
@@ -1343,7 +1343,7 @@ msgstr "Μπροστινό Μεταξοτυπία"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:533
 msgid "Front solder mask"
-msgstr "Μπροστινό μάσκα συγκόλλησης"
+msgstr "Μπροστινή μάσκα συγκόλλησης"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 msgid "User layer Eco1"
@@ -1623,7 +1623,7 @@ msgstr "Η επίσημη ιστοσελίδα του KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:144
 msgid "Developer website - "
-msgstr "Ιστοσελίδα για την ανάπτυξη του Kicad - "
+msgstr "Ιστοσελίδα προγραμματιστών - "
 
 #: common/dialog_about/AboutDialog_main.cpp:149
 msgid "Official KiCad library repositories - "
@@ -28800,11 +28800,11 @@ msgid ""
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
-"Ελάχιστη απόσταση ανάμεσα σε δύο περιοχές pad.\n"
-"Δύο περιοχές pad που απέχουν λιγότερο από αυτή την τιμή θα συγχωνευθούν κατά "
-"τη σχεδιογράφηση.\n"
-"Αυτή η παράμετρος χρησιμοποιείται μόνο κατά τη σχεδιογράφηση επιπέδων solder "
-"mask.\n"
+"Ελάχιστη απόσταση ανάμεσα σε δύο περιοχές έδρας.\n"
+"Δύο περιοχές εδρών που απέχουν λιγότερο από αυτή την τιμή θα συγχωνευθούν "
+"κατά τη σχεδιογράφηση.\n"
+"Αυτή η παράμετρος χρησιμοποιείται μόνο κατά τη σχεδιογράφηση επιπέδων μάσκας "
+"συγκόλλησης.\n"
 "Αφήστε το 0 εκτός αν ξέρετε τι κάνετε."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:76
@@ -32899,7 +32899,7 @@ msgstr "Μη αναγνωρίσιμο αρχέγονο σχήματος pad «%s
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1121
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
-msgstr "Μη έγκυρο πλήθος διακριτικών. Αναμενόμενα 8 όμως βρέθηκαν %zu."
+msgstr "Μη έγκυρος αριθμός token. Αναμένονταν 8 αλλά βρέθηκαν %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1256
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1445
@@ -34137,7 +34137,7 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:619
 #, c-format
 msgid "Resolved clearance: %s."
-msgstr ""
+msgstr "Εντοπισμένο διάκενο: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:186
 #: pcbnew/tools/board_inspection_tool.cpp:305
@@ -36561,11 +36561,11 @@ msgstr "Προβολή ή απόκρυψη αυτού του επιπέδου"
 
 #: pcbnew/widgets/appearance_controls.cpp:1522
 msgid "Adhesive on board's front"
-msgstr "Επίθεμα στην μπροστινή όψη της πλακέτας"
+msgstr "Επίκόλληση στην μπροστινή όψη της πλακέτας"
 
 #: pcbnew/widgets/appearance_controls.cpp:1523
 msgid "Adhesive on board's back"
-msgstr "Επίθεμα στην πίσω όψη της πλακέτας"
+msgstr "Επικόλληση στην πίσω όψη της πλακέτας"
 
 #: pcbnew/widgets/appearance_controls.cpp:1524
 msgid "Solder paste on board's front"
