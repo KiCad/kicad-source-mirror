@@ -54,14 +54,11 @@ bool DIALOG_MIGRATE_SETTINGS::TransferDataToWindow()
 
     std::vector<wxString> paths;
 
-    // SetValue does not fire the "OnRadioButton" event, so have to fabricate this
-    wxCommandEvent dummy;
-
+    m_btnUseDefaults->SetValue( true );
+    
     if( !m_manager->GetPreviousVersionPaths( &paths ) )
     {
         m_btnPrevVer->SetLabelText( _( "Import settings from a previous version (none found)" ) );
-        m_btnUseDefaults->SetValue( true );
-        OnDefaultSelected( dummy );
     }
     else
     {
@@ -71,9 +68,11 @@ bool DIALOG_MIGRATE_SETTINGS::TransferDataToWindow()
             m_cbPath->Append( path );
 
         m_cbPath->SetSelection( 0 );
-        m_btnPrevVer->SetValue( true );
-        OnPrevVerSelected( dummy );
     }
+
+    // SetValue does not fire the "OnRadioButton" event, so have to fabricate this
+    wxCommandEvent dummy;
+    OnDefaultSelected( dummy );
 
     Fit();
 
@@ -87,11 +86,17 @@ bool DIALOG_MIGRATE_SETTINGS::TransferDataFromWindow()
         return false;
 
     if( m_btnPrevVer->GetValue() )
+    {
+        m_manager->SetMigrateLibraryTables( m_cbCopyLibraryTables->GetValue() );
         m_manager->SetMigrationSource( m_cbPath->GetValue() );
+    }
     else
+    {
+        m_manager->SetMigrateLibraryTables( false );
         m_manager->SetMigrationSource( wxEmptyString );
+    }
 
-    m_manager->SetMigrateLibraryTables( m_cbCopyLibraryTables->GetValue() );
+    
 
     return true;
 }
