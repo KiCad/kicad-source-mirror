@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
 "PO-Revision-Date: 2021-11-17 19:42+0000\n"
-"Last-Translator: Dingzhong Chen <wsxy162@gmail.com>\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -10585,7 +10585,7 @@ msgstr "用户配置"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "Spice"
-msgstr "Spice"
+msgstr "仿真电路模拟器"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "PSpice"
@@ -21443,7 +21443,7 @@ msgstr ""
 "%d %s UUID: [%s], X, Y: %s, 四舍五入的 X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:602
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
@@ -21452,7 +21452,7 @@ msgid ""
 msgstr ""
 "\n"
 "PCB 上有 %d 个空白或无效的位号。\n"
-"建议选中'测试原理图封装' 选项，然后运行 DRC。\n"
+"建议选中'测试 PCB 和原理图之间的奇偶性' 选项，然后运行 DRC。\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
 #, c-format
