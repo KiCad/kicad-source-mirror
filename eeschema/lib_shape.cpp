@@ -304,7 +304,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
             // If we stroke in GRFilledArc it will stroke the two radials too, so we have to
             // fill and stroke separately
 
-            GRFilledArc1( nullptr, DC, pt1, pt2, c, penWidth, fillColor, fillColor );
+            GRFilledArc1( nullptr, DC, pt1, pt2, c, 0, fillColor, fillColor );
 
             GRArc1( nullptr, DC, pt1, pt2, c, penWidth, color );
             break;
@@ -318,11 +318,17 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
             break;
 
         case SHAPE_T::POLY:
-            GRPoly( nullptr, DC, ptCount, buffer, true, penWidth, color, fillColor );
+            if( penWidth > 0 )
+                GRPoly( nullptr, DC, ptCount, buffer, true, penWidth, color, fillColor );
+            else
+                GRPoly( nullptr, DC, ptCount, buffer, true, 0, fillColor, fillColor );
             break;
 
         case SHAPE_T::BEZIER:
-            GRPoly( nullptr, DC, ptCount, buffer, true, penWidth, color, fillColor );
+            if( penWidth > 0 )
+                GRPoly( nullptr, DC, ptCount, buffer, true, penWidth, color, fillColor );
+            else
+                GRPoly( nullptr, DC, ptCount, buffer, true, 0, fillColor, fillColor );
             break;
 
         default:
