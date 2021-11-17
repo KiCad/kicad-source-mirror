@@ -74,6 +74,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
 #else
         m_query_ctrl->Bind( wxEVT_TEXT_ENTER, &LIB_TREE::onQueryEnter, this );
 #endif
+        m_query_ctrl->Bind( wxEVT_SEARCH_CANCEL, &LIB_TREE::onQueryText, this );
 
         m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onQueryCharHook, this );
 
