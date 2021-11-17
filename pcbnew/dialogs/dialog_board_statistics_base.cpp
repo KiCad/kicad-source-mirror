@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/wx_grid.h"
+
 #include "dialog_board_statistics_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -17,7 +19,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	bMainBoxSizer = new wxBoxSizer( wxVERTICAL );
 
 	topNotebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	generalPanel = new wxPanel( topNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_generalPanel = new wxPanel( topNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bGeneralPanelSizer;
 	bGeneralPanelSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -34,11 +36,11 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	bSizerComponents = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticText* componentsLabel;
-	componentsLabel = new wxStaticText( generalPanel, wxID_ANY, _("Components"), wxDefaultPosition, wxDefaultSize, 0 );
+	componentsLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Components"), wxDefaultPosition, wxDefaultSize, 0 );
 	componentsLabel->Wrap( -1 );
 	bSizerComponents->Add( componentsLabel, 0, wxALL, 5 );
 
-	m_gridComponents = new wxGrid( generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_gridComponents = new wxGrid( m_generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
 	// Grid
 	m_gridComponents->CreateGrid( 5, 4 );
@@ -74,11 +76,11 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	bSizerPads = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticText* padsLabel;
-	padsLabel = new wxStaticText( generalPanel, wxID_ANY, _("Pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	padsLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Pads"), wxDefaultPosition, wxDefaultSize, 0 );
 	padsLabel->Wrap( -1 );
 	bSizerPads->Add( padsLabel, 0, wxALL, 5 );
 
-	m_gridPads = new wxGrid( generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_gridPads = new wxGrid( m_generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
 	// Grid
 	m_gridPads->CreateGrid( 5, 2 );
@@ -114,11 +116,11 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	bSizerBrdSize = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticText* boardLabel;
-	boardLabel = new wxStaticText( generalPanel, wxID_ANY, _("Board Size"), wxDefaultPosition, wxDefaultSize, 0 );
+	boardLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Board Size"), wxDefaultPosition, wxDefaultSize, 0 );
 	boardLabel->Wrap( -1 );
 	bSizerBrdSize->Add( boardLabel, 0, wxALL, 5 );
 
-	m_gridBoard = new wxGrid( generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_gridBoard = new wxGrid( m_generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
 	// Grid
 	m_gridBoard->CreateGrid( 3, 2 );
@@ -153,11 +155,11 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizerVias;
 	bSizerVias = new wxBoxSizer( wxVERTICAL );
 
-	viasLabel = new wxStaticText( generalPanel, wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	viasLabel = new wxStaticText( m_generalPanel, wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	viasLabel->Wrap( -1 );
 	bSizerVias->Add( viasLabel, 0, wxALL, 5 );
 
-	m_gridVias = new wxGrid( generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_gridVias = new wxGrid( m_generalPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 
 	// Grid
 	m_gridVias->CreateGrid( 4, 2 );
@@ -195,38 +197,38 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	wxGridSizer* gOptionsSizer;
 	gOptionsSizer = new wxGridSizer( 0, 2, 0, 0 );
 
-	m_checkBoxSubtractHoles = new wxCheckBox( generalPanel, wxID_ANY, _("Subtract holes from board area"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxSubtractHoles = new wxCheckBox( m_generalPanel, wxID_ANY, _("Subtract holes from board area"), wxDefaultPosition, wxDefaultSize, 0 );
 	gOptionsSizer->Add( m_checkBoxSubtractHoles, 0, wxALL|wxEXPAND, 5 );
 
-	m_checkBoxExcludeComponentsNoPins = new wxCheckBox( generalPanel, wxID_ANY, _("Exclude components with no pins"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxExcludeComponentsNoPins = new wxCheckBox( m_generalPanel, wxID_ANY, _("Exclude components with no pins"), wxDefaultPosition, wxDefaultSize, 0 );
 	gOptionsSizer->Add( m_checkBoxExcludeComponentsNoPins, 0, wxALL|wxEXPAND, 5 );
 
 
 	bGeneralPanelSizer->Add( gOptionsSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
-	generalPanel->SetSizer( bGeneralPanelSizer );
-	generalPanel->Layout();
-	bGeneralPanelSizer->Fit( generalPanel );
-	topNotebook->AddPage( generalPanel, _("General"), true );
-	drillsPanel = new wxPanel( topNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_generalPanel->SetSizer( bGeneralPanelSizer );
+	m_generalPanel->Layout();
+	bGeneralPanelSizer->Fit( m_generalPanel );
+	topNotebook->AddPage( m_generalPanel, _("General"), true );
+	m_drillsPanel = new wxPanel( topNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bDrillsSizer;
 	bDrillsSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_gridDrills = new wxGrid( drillsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_gridDrills = new WX_GRID( m_drillsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
 
 	// Grid
 	m_gridDrills->CreateGrid( 0, 8 );
 	m_gridDrills->EnableEditing( false );
 	m_gridDrills->EnableGridLines( true );
-	m_gridDrills->EnableDragGridSize( true );
+	m_gridDrills->EnableDragGridSize( false );
 	m_gridDrills->SetMargins( 0, 0 );
 
 	// Columns
 	m_gridDrills->AutoSizeColumns();
 	m_gridDrills->EnableDragColMove( true );
 	m_gridDrills->EnableDragColSize( true );
-	m_gridDrills->SetColLabelSize( 20 );
+	m_gridDrills->SetColLabelSize( 22 );
 	m_gridDrills->SetColLabelValue( 0, _("Count") );
 	m_gridDrills->SetColLabelValue( 1, _("Shape") );
 	m_gridDrills->SetColLabelValue( 2, _("X Size") );
@@ -238,7 +240,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	m_gridDrills->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
-	m_gridDrills->EnableDragRowSize( true );
+	m_gridDrills->EnableDragRowSize( false );
 	m_gridDrills->SetRowLabelSize( 0 );
 	m_gridDrills->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
@@ -247,17 +249,15 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 
 	// Cell Defaults
 	m_gridDrills->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );
-	m_gridDrills->SetMaxSize( wxSize( -1,300 ) );
-
 	bDrillsSizer->Add( m_gridDrills, 1, wxALL|wxEXPAND, 5 );
 
 
-	drillsPanel->SetSizer( bDrillsSizer );
-	drillsPanel->Layout();
-	bDrillsSizer->Fit( drillsPanel );
-	topNotebook->AddPage( drillsPanel, _("Drill Holes"), false );
+	m_drillsPanel->SetSizer( bDrillsSizer );
+	m_drillsPanel->Layout();
+	bDrillsSizer->Fit( m_drillsPanel );
+	topNotebook->AddPage( m_drillsPanel, _("Drill Holes"), false );
 
-	bMainBoxSizer->Add( topNotebook, 1, wxEXPAND | wxALL, 5 );
+	bMainBoxSizer->Add( topNotebook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );

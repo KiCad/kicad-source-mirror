@@ -29,6 +29,7 @@
 #include <pad.h>
 #include <macros.h>
 #include <wildcards_and_files_ext.h>
+#include <widgets/wx_grid.h>
 #include <wx/filedlg.h>
 
 #define COL_LABEL 0
@@ -82,7 +83,6 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
 {
     m_parentFrame = aParentFrame;
 
-    m_gridDrills->UseNativeColHeader();
     m_gridDrills->Connect( wxEVT_GRID_COL_SORT,
                            wxGridEventHandler( DIALOG_BOARD_STATISTICS::drillGridSort ),
                            nullptr, this );
@@ -180,7 +180,7 @@ bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
     getDataFromPCB();
     updateWidets();
     Layout();
-    drillsPanel->Layout();
+    m_drillsPanel->Layout();
     finishDialogSettings();
     return true;
 }
@@ -441,6 +441,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     m_gridBoard->AutoSize();
     m_gridVias->AutoSize();
     m_gridDrills->AutoSize();
+    m_gridDrills->EnsureColLabelsVisible();
 
     adjustDrillGridColumns();
 }
@@ -630,7 +631,7 @@ void DIALOG_BOARD_STATISTICS::checkboxClicked( wxCommandEvent& aEvent )
     getDataFromPCB();
     updateWidets();
     Layout();
-    drillsPanel->Layout();
+    m_drillsPanel->Layout();
 }
 
 

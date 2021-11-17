@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class WX_GRID;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -40,7 +42,7 @@ class DIALOG_BOARD_STATISTICS_BASE : public DIALOG_SHIM
 
 	protected:
 		wxNotebook* topNotebook;
-		wxPanel* generalPanel;
+		wxPanel* m_generalPanel;
 		wxGrid* m_gridComponents;
 		wxGrid* m_gridPads;
 		wxGrid* m_gridBoard;
@@ -48,8 +50,8 @@ class DIALOG_BOARD_STATISTICS_BASE : public DIALOG_SHIM
 		wxGrid* m_gridVias;
 		wxCheckBox* m_checkBoxSubtractHoles;
 		wxCheckBox* m_checkBoxExcludeComponentsNoPins;
-		wxPanel* drillsPanel;
-		wxGrid* m_gridDrills;
+		wxPanel* m_drillsPanel;
+		WX_GRID* m_gridDrills;
 		wxButton* m_buttonSaveReport;
 		wxStdDialogButtonSizer* m_sdbControlSizer;
 		wxButton* m_sdbControlSizerCancel;
