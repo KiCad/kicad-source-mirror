@@ -527,6 +527,31 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
     if( !traverser.GetErrors().empty() )
         DisplayErrorMessage( nullptr, traverser.GetErrors() );
 
+    // Remove any library configuration if we didn't choose to import
+    if( !m_migrateLibraryTables )
+    {
+        COMMON_SETTINGS common;
+        wxString        path = GetPathForSettingsFile( &common );
+        common.LoadFromFile( path );
+
+        const std::vector<wxString> libKeys = {
+            wxT( "KICAD6_SYMBOL_DIR" ),
+            wxT( "KICAD6_3DMODEL_DIR" ),
+            wxT( "KICAD6_FOOTPRINT_DIR" ),
+
+            // Deprecated keys
+            wxT( "KICAD_PTEMPLATES" ),
+            wxT( "KISYS3DMOD" ),
+            wxT( "KISYSMOD" ),
+            wxT( "KICAD_SYMBOL_DIR" ),
+        };
+        
+        for( const wxString& key : libKeys )
+            common.m_Env.vars.erase( key );
+
+        common.SaveToFile( path  );
+    }
+
     return true;
 }
 
