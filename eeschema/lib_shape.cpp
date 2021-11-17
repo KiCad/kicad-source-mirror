@@ -224,8 +224,6 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
     wxPoint  pt1 = aTransform.TransformCoordinate( m_start ) + aOffset;
     wxPoint  pt2 = aTransform.TransformCoordinate( m_end ) + aOffset;
     wxPoint  c;
-    int      t1;
-    int      t2;
     COLOR4D  color = aSettings->GetLayerColor( LAYER_DEVICE );
     COLOR4D  fillColor = color;
 
@@ -254,13 +252,12 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
     {
         c = aTransform.TransformCoordinate( getCenter() ) + aOffset;
 
+        int t1, t2;
+
         CalcArcAngles( t1, t2 );
 
         if( NormalizeAngle180( t1 - t2 ) > 0 )
-        {
             std::swap( pt1, pt2 );
-            std::swap( t1, t2 );
-        }
     }
 
     if( forceNoFill || GetFillType() == FILL_T::NO_FILL )

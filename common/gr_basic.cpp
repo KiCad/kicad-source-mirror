@@ -22,8 +22,6 @@
 #include <gr_basic.h>
 #include <trigo.h>
 #include <eda_item.h>
-#include <base_screen.h>
-#include <bezier_curves.h>
 #include <math_for_graphics.h>
 #include <wx/graphics.h>
 #include <geometry/geometry_utils.h>
@@ -72,23 +70,21 @@ static void ClipAndDrawPoly( EDA_RECT* ClipBox, wxDC* DC, const wxPoint* Points,
  * from user units to screen units(pixels coordinates)
  */
 static void GRSRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1,
-                     int x2, int y2, int aWidth, const COLOR4D& aColor,
-                     wxPenStyle aStyle = wxPENSTYLE_SOLID );
+                     int x2, int y2, int aWidth, const COLOR4D& aColor );
 
 /**/
 
-static int          GRLastMoveToX, GRLastMoveToY;
-static bool         s_ForceBlackPen;   /* if true: draws in black instead of
+static int     GRLastMoveToX, GRLastMoveToY;
+static bool    s_ForceBlackPen;   /* if true: draws in black instead of
                                         * color for printing. */
-static int          xcliplo = 0,
-                    ycliplo = 0,
-                    xcliphi = 2000,
-                    ycliphi = 2000;
+static int     xcliplo = 0,
+               ycliplo = 0,
+               xcliphi = 2000,
+               ycliphi = 2000;
 
-static COLOR4D   s_DC_lastcolor( 0, 0, 0, 0 );
-static COLOR4D   s_DC_lastbrushcolor( 0, 0, 0, 0 );
-static bool  s_DC_lastbrushfill  = false;
-static wxDC* s_DC_lastDC = nullptr;
+static COLOR4D s_DC_lastbrushcolor( 0, 0, 0, 0 );
+static bool    s_DC_lastbrushfill  = false;
+static wxDC*   s_DC_lastDC = nullptr;
 
 static void WinClipAndDrawLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
                                 int width )
@@ -112,7 +108,6 @@ void GRResetPenAndBrush( wxDC* DC )
 {
     GRSetBrush( DC, BLACK );  // Force no fill
     s_DC_lastbrushcolor = COLOR4D::UNSPECIFIED;
-    s_DC_lastcolor =  COLOR4D::UNSPECIFIED;
     s_DC_lastDC    = nullptr;
 }
 
@@ -199,16 +194,6 @@ bool GetGRForceBlackPenState( void )
 }
 
 
-void GRPutPixel( EDA_RECT* ClipBox, wxDC* DC, int x, int y, const COLOR4D& Color )
-{
-    if( ClipBox && !ClipBox->Contains( x, y ) )
-        return;
-
-    GRSetColorPen( DC, Color );
-    DC->DrawPoint( x, y );
-}
-
-
 void GRLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int width,
              const COLOR4D& Color, wxPenStyle aStyle)
 {
@@ -236,35 +221,6 @@ void GRMoveTo( int x, int y )
 void GRLineTo( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int width, const COLOR4D& Color )
 {
     GRLine( ClipBox, DC, GRLastMoveToX, GRLastMoveToY, x, y, width, Color );
-}
-
-
-void GRLineArray( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aLines,
-                  int aWidth, const COLOR4D& aColor )
-{
-    if( aLines.empty() )
-        return;
-
-    GRSetColorPen( aDC, aColor, aWidth );
-
-    if( aClipBox )
-        aClipBox->Inflate( aWidth / 2 );
-
-    for( unsigned i = 0; i < aLines.size(); i += 2 )
-    {
-        int x1 = aLines[i].x;
-        int y1 = aLines[i].y;
-        int x2 = aLines[i + 1].x;
-        int y2 = aLines[i + 1].y;
-
-        if( ( aClipBox == nullptr ) || !ClipLine( aClipBox, x1, y1, x2, y2 ) )
-            aDC->DrawLine( x1, y1, x2, y2 );
-    }
-
-    GRMoveTo( aLines[aLines.size() - 1].x, aLines[aLines.size() - 1].y );
-
-    if( aClipBox )
-        aClipBox->Inflate( -aWidth / 2 );
 }
 
 
@@ -366,8 +322,8 @@ void GRCSegm( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aStart, const wxPoin
 }
 
 
-void GRFillCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
-                  int width, const COLOR4D& Color )
+void GRFillCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int width,
+                  const COLOR4D& Color )
 {
     GRSetColorPen( DC, Color, width );
     WinClipAndDrawLine( ClipBox, DC, x1, y1, x2, y2, width );
@@ -559,12 +515,6 @@ void GRCircle( EDA_RECT* ClipBox, wxDC* DC, int xc, int yc, int r, int width, co
 }
 
 
-void GRCircle( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int r, const COLOR4D& Color )
-{
-    GRCircle( ClipBox, DC, x, y, r, 0, Color );
-}
-
-
 void GRCircle( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aPos, int aRadius, int aWidth,
                const COLOR4D& aColor )
 {
@@ -588,13 +538,6 @@ void GRFilledCircle( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aPos, int aRa
                      const COLOR4D& aColor )
 {
     GRFilledCircle( aClipBox, aDC, aPos.x, aPos.y, aRadius, 0, aColor, aColor );
-}
-
-
-void GRArc1( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int xc, int yc,
-             const COLOR4D& Color )
-{
-    GRArc1( ClipBox, DC, x1, y1, x2, y2, xc, yc, 0, Color );
 }
 
 
@@ -670,54 +613,6 @@ void GRFilledArc1( EDA_RECT* ClipBox, wxDC* DC, const wxPoint& aStart, const wxP
 }
 
 
-void GRFilledArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle, double EndAngle,
-                  int r, int width, const COLOR4D& Color, const COLOR4D& BgColor )
-{
-    int x1, y1, x2, y2;
-
-    /* Clip arcs off screen */
-    if( ClipBox )
-    {
-        int x0, y0, xm, ym;
-        x0 = ClipBox->GetX();
-        y0 = ClipBox->GetY();
-        xm = ClipBox->GetRight();
-        ym = ClipBox->GetBottom();
-
-        if( x < ( x0 - r - 1 ) )
-            return;
-
-        if( y < ( y0 - r - 1 ) )
-            return;
-
-        if( x > ( r + xm + 1 ) )
-            return;
-
-        if( y > ( r + ym + 1 ) )
-            return;
-    }
-
-    x1 = r;
-    y1 = 0;
-    RotatePoint( &x1, &y1, EndAngle );
-
-    x2 = r;
-    y2 = 0;
-    RotatePoint( &x2, &y2, StAngle );
-
-    GRSetBrush( DC, BgColor, FILLED );
-    GRSetColorPen( DC, Color, width );
-    DC->DrawArc( x + x1, y - y1, x + x2, y - y2, x, y );
-}
-
-
-void GRFilledArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle, double EndAngle,
-                  int r, const COLOR4D& Color, const COLOR4D& BgColor )
-{
-    GRFilledArc( ClipBox, DC, x, y, StAngle, EndAngle, r, 0, Color, BgColor );
-}
-
-
 void GRArc( EDA_RECT* ClipBox, wxDC* DC, int xc, int yc, double StAngle, double EndAngle, int r,
             const COLOR4D& Color )
 {
@@ -762,8 +657,8 @@ void GRArc( EDA_RECT* ClipBox, wxDC* DC, int xc, int yc, double StAngle, double 
 }
 
 
-void GRArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle, double EndAngle,
-            int r, int width, const COLOR4D& Color )
+void GRArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle, double EndAngle, int r,
+            int width, const COLOR4D& Color )
 {
     int x1, y1, x2, y2;
 
@@ -803,40 +698,10 @@ void GRArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle, double En
 }
 
 
-void GRRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2, const COLOR4D& aColor )
-{
-    GRSRect( aClipBox, aDC, x1, y1, x2, y2, 0, aColor );
-}
-
-
-void GRRectPs( EDA_RECT* aClipBox, wxDC* aDC, const EDA_RECT& aRect, const COLOR4D& aColor,
-               wxPenStyle aStyle )
-{
-    int x1 = aRect.GetX();
-    int y1 = aRect.GetY();
-    int x2 = aRect.GetRight();
-    int y2 = aRect.GetBottom();
-
-    GRSRect( aClipBox, aDC, x1, y1, x2, y2, 0, aColor, aStyle );
-}
-
-
 void GRRect( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int width,
              const COLOR4D& Color )
 {
     GRSRect( ClipBox, DC, x1, y1, x2, y2, width, Color );
-}
-
-
-void GRRect( EDA_RECT* aClipBox, wxDC* aDC, const EDA_RECT& aRect, int aWidth,
-             const COLOR4D& aColor )
-{
-    int x1 = aRect.GetX();
-    int y1 = aRect.GetY();
-    int x2 = aRect.GetRight();
-    int y2 = aRect.GetBottom();
-
-    GRSRect( aClipBox, aDC, x1, y1, x2, y2, aWidth, aColor );
 }
 
 
@@ -847,15 +712,15 @@ void GRFilledRect( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
 }
 
 
-void GRFilledRect( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
-                   int width, const COLOR4D& Color, const COLOR4D& BgColor )
+void GRFilledRect( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int width,
+                   const COLOR4D& Color, const COLOR4D& BgColor )
 {
     GRSFilledRect( ClipBox, DC, x1, y1, x2, y2, width, Color, BgColor );
 }
 
 
-void GRSRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2,
-              int aWidth, const COLOR4D& aColor, wxPenStyle aStyle )
+void GRSRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2, int aWidth,
+              const COLOR4D& aColor )
 {
     wxPoint points[5];
     points[0] = wxPoint( x1, y1 );
@@ -867,8 +732,8 @@ void GRSRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2,
 }
 
 
-void GRSFilledRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2,
-                    int aWidth, const COLOR4D& aColor, const COLOR4D& aBgColor )
+void GRSFilledRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2, int aWidth,
+                    const COLOR4D& aColor, const COLOR4D& aBgColor )
 {
     wxPoint points[5];
     points[0] = wxPoint( x1, y1 );
@@ -938,71 +803,3 @@ void ClipAndDrawPoly( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint* Points, int 
 }
 
 
-void GRBezier( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aPoint,
-               int aWidth, const COLOR4D& aColor )
-{
-    std::vector<wxPoint> output;
-
-    BEZIER_POLY converter( aPoint );
-    converter.GetPoly( output, aWidth );
-
-    GRPoly( aClipBox, aDC, output.size(), &output[0], false, aWidth, aColor, aColor );
-}
-
-
-void GRDrawAnchor( EDA_RECT *aClipBox, wxDC *aDC, int x, int y, int aSize, const COLOR4D& aColor )
-{
-        int anchor_size = aDC->DeviceToLogicalXRel( aSize );
-
-        GRLine( aClipBox, aDC, x - anchor_size, y, x + anchor_size, y, 0, aColor );
-        GRLine( aClipBox, aDC, x, y - anchor_size, x, y + anchor_size, 0, aColor );
-}
-
-
-void GRDrawWrappedText( wxDC& aDC, wxString const& aText )
-{
-    wxStringTokenizer tokenizer( aText, " " );
-    wxSize const dc_size = aDC.GetSize();
-    wxSize const margin = aDC.GetTextExtent( " " );
-    std::vector<wxString> lines;
-    wxString line_accumulator;
-    int total_height = 0;
-
-    while( tokenizer.HasMoreTokens() )
-    {
-        wxString word = tokenizer.GetNextToken();
-        wxSize linesize = aDC.GetTextExtent( line_accumulator + " " + word );
-
-        if( linesize.x >= dc_size.x - margin.x && !line_accumulator.IsEmpty() )
-        {
-            lines.push_back( line_accumulator );
-            line_accumulator = word;
-        }
-        else
-        {
-            line_accumulator += " ";
-            line_accumulator += word;
-        }
-    }
-
-    if( !line_accumulator.IsEmpty() )
-    {
-        lines.push_back( line_accumulator );
-    }
-
-    for( auto const& line: lines )
-    {
-        wxSize linesize = aDC.GetTextExtent( line );
-        total_height += linesize.y;
-    }
-
-    int top = ( dc_size.y - total_height ) / 2;
-    int pos = top;
-
-    for( auto const& line: lines )
-    {
-        wxSize linesize = aDC.GetTextExtent( line );
-        aDC.DrawText( line, ( dc_size.x - linesize.x ) / 2, pos );
-        pos += linesize.y;
-    }
-}
