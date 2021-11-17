@@ -256,6 +256,7 @@ public:
     void SetClosed( bool aClosed )
     {
         m_closed = aClosed;
+        mergeFirstLastPointIfNeeded();
     }
 
     /**
@@ -806,7 +807,7 @@ public:
     */
     bool IsSharedPt( size_t aIndex ) const
     {
-        return aIndex < m_shapes.size() - 1
+        return aIndex < m_shapes.size()
                && m_shapes[aIndex].first != SHAPE_IS_PT
                && m_shapes[aIndex].second != SHAPE_IS_PT;
     }
@@ -828,7 +829,12 @@ public:
         size_t nextIdx = aSegment + 1;
 
         if( nextIdx > m_shapes.size() - 1 )
-            return false; // Always false, even if the shape is closed
+        {
+            if( nextIdx == m_shapes.size() && m_closed )
+                nextIdx = 0; // segment between end point and first point
+            else
+                return false;
+        }
 
         return ( IsPtOnArc( aSegment )
                  && ( IsSharedPt( aSegment )
@@ -847,9 +853,6 @@ public:
 
     bool IsArcEnd( size_t aIndex ) const
     {
-        if( aIndex == static_cast<size_t>( PointCount() ) - 1 )
-            return IsPtOnArc( aIndex );
-
         return ( IsSharedPt( aIndex ) || ( IsPtOnArc( aIndex ) && !IsArcSegment( aIndex ) ) );
     }
 
@@ -911,6 +914,16 @@ protected:
     ClipperLib::Path convertToClipper( bool aRequiredOrientation,
                                        std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
                                        std::vector<SHAPE_ARC>&       aArcBuffer ) const;
+
+    /**
+     * Fix indices of this chain to ensure arcs are not split between the end and start indices
+     */
+    void fixIndicesRotation();
+
+    /**
+     * Merge the first and last point if they are the same and this chain is closed.
+     */
+    void mergeFirstLastPointIfNeeded();
 
 private:
 

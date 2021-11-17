@@ -77,7 +77,7 @@ SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const ClipperLib::Path&             aPath,
                 m_arcs.push_back( aArcBuffer.at( aArcIndex ) );
             }
 
-            return loadedArcs.at(aArcIndex);
+            return loadedArcs.at( aArcIndex );
         };
 
     for( size_t ii = 0; ii < aPath.size(); ++ii )
@@ -87,6 +87,14 @@ SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const ClipperLib::Path&             aPath,
         m_shapes[ii].first = loadArc( aZValueBuffer[aPath[ii].Z].m_FirstArcIdx );
         m_shapes[ii].second = loadArc( aZValueBuffer[aPath[ii].Z].m_SecondArcIdx );
     }
+
+    // Clipper shouldn't return duplicate contiguous points. if it did, these would be
+    // removed during Append() and we would have different number of shapes to points
+    wxASSERT( m_shapes.size() == m_points.size() );
+
+    // Clipper might mess up the rotation of the indices such that an arc can be split between
+    // the end point and wrap around to the start point. Lets fix the indices up now
+    fixIndicesRotation();
 }
 
 ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation,
@@ -117,6 +125,45 @@ ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation,
     aArcBuffer.insert( aArcBuffer.end(), input.m_arcs.begin(), input.m_arcs.end() );
 
     return c_path;
+}
+
+
+void SHAPE_LINE_CHAIN::fixIndicesRotation()
+{
+    wxCHECK( m_shapes.size() == m_points.size(), /*void*/ );
+
+    if( m_shapes.size() <= 1 || m_arcs.size() <= 1 )
+        return;
+
+    size_t rotations = 0;
+    size_t numPoints = m_points.size();
+
+    while( ArcIndex( 0 ) != SHAPE_IS_PT
+        && ArcIndex( 0 ) == ArcIndex( numPoints - 1 ) )
+    {
+        // Rotate right
+        std::rotate( m_points.rbegin(), m_points.rbegin() + 1, m_points.rend() );
+        std::rotate( m_shapes.rbegin(), m_shapes.rbegin() + 1, m_shapes.rend() );
+
+        // Sanity check - avoid infinite loops
+        wxCHECK( rotations++ <= m_shapes.size(), /* void */ );
+    }
+}
+
+
+void SHAPE_LINE_CHAIN::mergeFirstLastPointIfNeeded()
+{
+    if( m_closed )
+    {
+        if( m_points.size() > 1 && m_points.front() == m_points.back() )
+        {
+            m_shapes.front().second = m_shapes.front().first;
+            m_shapes.front().first = m_shapes.back().first;
+
+            m_points.pop_back();
+            m_shapes.pop_back();
+        }
+    }
 }
 
 
@@ -1184,6 +1231,8 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_LINE_CHAIN& aOtherLine )
 
         m_bbox.Merge( p );
     }
+
+    mergeFirstLastPointIfNeeded();
 
     assert( m_shapes.size() == m_points.size() );
 }
