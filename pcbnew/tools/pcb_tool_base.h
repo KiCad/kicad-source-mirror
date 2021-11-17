@@ -107,7 +107,7 @@ public:
      * Should the tool use its 45° mode option?
      * @return True if set to use 45°
      */
-    bool Is45Limited() const;
+    virtual bool Is45Limited() const;
 
 protected:
     /**

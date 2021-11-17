@@ -429,6 +429,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     updateEditedPoint( aEvent );
     m_refill = false;
     bool inDrag = false;
+    bool lock45 = false;
 
     BOARD_COMMIT commit( editFrame );
     LSET snapLayers = item->GetLayerSet();
@@ -524,7 +525,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
 
             // The alternative constraint limits to 45 degrees
-            if( Is45Limited() )
+            if( lock45 )
                 m_altConstraint->Apply();
             else
                 m_editedPoint->ApplyConstraint();
@@ -569,6 +570,11 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             frame()->UndoRedoBlock( false );
 
             m_refill = true;
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::toggle45 ) )
+        {
+            lock45 = !lock45;
+            evt->SetPassEvent( false );
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
