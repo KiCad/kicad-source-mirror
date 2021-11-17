@@ -43,7 +43,8 @@ BOOST_AUTO_TEST_CASE( TestSimplify )
     std::map<std::string, SHAPE_POLY_SET> polysToTest =
     {
         { "Case 1: Single polygon", testData.holeyCurvedPolySingle },
-        //{ "Case 2: Multi polygon", testData.holeyCurvedPolyMulti } // This test fails right now:
+        { "Case 2: Wraparound polygon", testData.curvedPolyWrapRound },
+        //{ "Case 3: Multi polygon", testData.holeyCurvedPolyMulti } // This test fails right now:
                                                                      // clipper seems to not handle
                                                                      // multiple outlines correctly
     };
@@ -68,6 +69,7 @@ BOOST_AUTO_TEST_CASE( TestSimplify )
                     std::vector<SHAPE_ARC> foundArcs;
                     testPoly.GetArcs( foundArcs );
 
+                    BOOST_CHECK( GEOM_TEST::IsPolySetValid( testPoly ) );
                     BOOST_CHECK_EQUAL( testPoly.Area(), originalArea );
                     BOOST_CHECK_EQUAL( originalArcs.size(), foundArcs.size() );
                     KI_TEST::CheckUnorderedMatches( originalArcs, foundArcs,

@@ -46,6 +46,8 @@ struct CommonTestData
     SHAPE_POLY_SET uniqueVertexPolySet;
     SHAPE_POLY_SET solidPolySet;
     SHAPE_POLY_SET holeyPolySet;
+    SHAPE_POLY_SET curvedPolyWrapRound;   ///< Causes arc wraparound when reloading from Clipper
+                                          ///< see https://gitlab.com/kicad/code/kicad/-/issues/9670
     SHAPE_POLY_SET holeyCurvedPolySingle; ///< Polygon with a single outline + multiple holes.
                                           ///< Holes and outline contain arcs
     SHAPE_POLY_SET holeyCurvedPolyMulti;  ///< Polygon with a multiple outlines + multiple holes.
@@ -146,6 +148,12 @@ struct CommonTestData
         hole.SetClosed( true );
         holeyPolySet.AddHole( hole );
 
+        //GENERATE CURVED POLYGON THAT CAUSES WRAPAROUND
+        SHAPE_LINE_CHAIN wrapLine;
+        wrapLine.Append( SHAPE_ARC( { -4300000, -6950000 }, { 2000000, 0 }, { -4300000, 6950000 }, 0 ) );
+        wrapLine.Append( SHAPE_ARC( { -4300000, 2200000 }, { -2700000, 0 }, { -4300000, -2200000 }, 0 ) );
+        wrapLine.SetClosed( true );
+        curvedPolyWrapRound.AddOutline( wrapLine );
 
         // GENERATE CURVED POLYGON WITH HOLES
         // For visualisation, launch test_pns with the arguments "viewcurvedpoly -[single|multi]"
