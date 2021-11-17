@@ -57,7 +57,6 @@
 #include <sch_symbol.h>
 #include <sch_line.h>
 #include <lib_pin.h>
-#include <sch_draw_panel.h>
 #include <kiface_base.h>
 #include <vector>
 #include <algorithm>
@@ -101,13 +100,13 @@ public:
 
     struct SIDE_AND_NPINS
     {
-        SIDE side;
+        SIDE     side;
         unsigned pins;
     };
 
     struct SIDE_AND_COLL
     {
-        SIDE side;
+        SIDE      side;
         COLLISION collision;
     };
 
@@ -129,7 +128,7 @@ public:
             m_align_to_grid = cfg->m_AutoplaceFields.align_to_grid;
         }
 
-        m_symbol_bbox = m_symbol->GetBodyAndPinsBoundingBox();
+        m_symbol_bbox = m_symbol->GetBodyBoundingBox();
         m_fbox_size = computeFBoxSize( /* aDynamic */ true );
 
         m_is_power_symbol = !m_symbol->IsInNetlist();
@@ -162,7 +161,19 @@ public:
             SCH_FIELD* field = m_fields[field_idx];
 
             if( m_allow_rejustify )
-                justifyField( field, field_side );
+            {
+                if( sideandpins.pins > 0 )
+                {
+                    if( field_side == SIDE_TOP || field_side == SIDE_BOTTOM )
+                        justifyField( field, SIDE_RIGHT );
+                    else
+                        justifyField( field, SIDE_TOP );
+                }
+                else
+                {
+                    justifyField( field, field_side );
+                }
+            }
 
             wxPoint pos( fieldHorizPlacement( field, field_box ),
                          fieldVertPlacement( field, field_box, &last_y_coord, !force_wire_spacing ) );
@@ -264,7 +275,7 @@ protected:
     {
         wxCHECK_RET( m_screen, "getPossibleCollisions() with null m_screen" );
 
-        for( SCH_ITEM* item : m_screen->Items().Overlapping( m_symbol->GetBoundingBox() ) )
+        for( SCH_ITEM* item : m_screen->Items().Overlapping( m_symbol->GetBodyAndPinsBoundingBox() ) )
         {
             if( SCH_SYMBOL* candidate = dynamic_cast<SCH_SYMBOL*>( item ) )
             {
@@ -387,6 +398,8 @@ protected:
         {
             SIDE_AND_NPINS sideandpins;
             sideandpins.side = side;
+            sideandpins.pins = pinsOnSide( side );
+
             EDA_RECT box( fieldBoxPlacement( sideandpins ), m_fbox_size );
 
             COLLISION collision = COLLIDE_NONE;
@@ -514,60 +527,53 @@ protected:
      */
     wxPoint fieldBoxPlacement( SIDE_AND_NPINS aFieldSideAndPins )
     {
-        SIDE aFieldSide = aFieldSideAndPins.side;
         wxPoint fbox_center = m_symbol_bbox.Centre();
-        int     offs_x = ( m_symbol_bbox.GetWidth() + ( m_fbox_size.GetWidth() ) / 2 );
-        int     offs_y = ( m_symbol_bbox.GetHeight() + ( m_fbox_size.GetHeight() ) / 2 );
+        int     offs_x = ( m_symbol_bbox.GetWidth() + m_fbox_size.GetWidth() ) / 2;
+        int     offs_y = ( m_symbol_bbox.GetHeight() + m_fbox_size.GetHeight() ) / 2;
 
-        if( aFieldSide.x != 0 )
+        if( aFieldSideAndPins.side.x != 0 )
             offs_x += HPADDING;
-        else if( aFieldSide.y != 0 )
+        else if( aFieldSideAndPins.side.y != 0 )
             offs_y += VPADDING;
 
-        fbox_center.x += aFieldSide.x * offs_x;
-        fbox_center.y += aFieldSide.y * offs_y;
+        fbox_center.x += aFieldSideAndPins.side.x * offs_x;
+        fbox_center.y += aFieldSideAndPins.side.y * offs_y;
 
         int     x = fbox_center.x - ( m_fbox_size.GetWidth() / 2 );
         int     y = fbox_center.y - ( m_fbox_size.GetHeight() / 2 );
 
-        if( aFieldSideAndPins.pins > 0 )
-        {     
-            if( aFieldSide == SIDE_TOP )
-            {
-                x = fbox_center.x - m_fbox_size.GetWidth() - ( HPADDING * 8 );
-                y = fbox_center.y - ( m_fbox_size.GetHeight() / 2 ) + ( VPADDING * 4 );
-            }   
-            if( aFieldSide == SIDE_RIGHT )
-            {
-                x = fbox_center.x - ( m_fbox_size.GetWidth() / 2 ) - ( HPADDING * 4 ) ;
-                y = fbox_center.y - m_fbox_size.GetHeight() - ( VPADDING * 4 );
-            }    
-            if( aFieldSide == SIDE_LEFT )
-            {
-                x = fbox_center.x - ( m_fbox_size.GetWidth() / 2) + ( HPADDING * 4 ) ;
-                y = fbox_center.y - m_fbox_size.GetHeight() - ( VPADDING * 4 );
-            }
-            if( aFieldSide == SIDE_BOTTOM )
-            {
-                x = fbox_center.x - m_fbox_size.GetWidth() - ( HPADDING * 8);
-                y = fbox_center.y - ( m_fbox_size.GetHeight() / 2 ) - ( VPADDING * 8 ) ;
-            } 
-        }
-        else
-        {     
-            if( aFieldSide == SIDE_TOP )
-            {
-                x = fbox_center.x - ( m_fbox_size.GetWidth() / 2 ) - ( HPADDING * 8 );
-            }  
-            if( aFieldSide == SIDE_BOTTOM )
-            {
-                x = fbox_center.x - m_fbox_size.GetWidth() - ( HPADDING * 8 );
-            } 
-        }
-        
+        auto getPinsBox =
+                [&]( const wxPoint& aSide )
+                {
+                    EDA_RECT pinsBox;
 
-        wxPoint fbox_pos( x, y);
-        return fbox_pos;
+                    for( SCH_PIN* each_pin : m_symbol->GetPins() )
+                    {
+                        if( !each_pin->IsVisible() && !m_is_power_symbol )
+                            continue;
+
+                        if( getPinSide( each_pin ) == aSide )
+                            pinsBox.Merge( each_pin->GetBoundingBox() );
+                    }
+
+                    return pinsBox;
+                };
+
+        if( aFieldSideAndPins.pins > 0 )
+        {
+            EDA_RECT pinsBox = getPinsBox( aFieldSideAndPins.side );
+
+            if( aFieldSideAndPins.side == SIDE_TOP || aFieldSideAndPins.side == SIDE_BOTTOM )
+            {
+                x = pinsBox.GetRight() + ( HPADDING * 2 );
+            }
+            else if( aFieldSideAndPins.side == SIDE_RIGHT || aFieldSideAndPins.side == SIDE_LEFT )
+            {
+                y = pinsBox.GetTop() - ( m_fbox_size.GetHeight() + ( VPADDING * 2 ) );
+            }
+        }
+
+        return wxPoint( x, y );
     }
 
     /**
@@ -578,6 +584,7 @@ protected:
     {
         if( aSide != SIDE_TOP && aSide != SIDE_BOTTOM )
             return false;
+
         std::vector<SCH_ITEM*> colliders = filterCollisions( *aBox );
 
         if( colliders.empty() )
