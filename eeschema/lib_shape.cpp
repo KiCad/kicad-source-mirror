@@ -304,7 +304,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
             // If we stroke in GRFilledArc it will stroke the two radials too, so we have to
             // fill and stroke separately
 
-            GRFilledArc( nullptr, DC, c.x, c.y, t2, t1, GetRadius(), 0, fillColor, fillColor );
+            GRFilledArc( nullptr, DC, c.x, c.y, -t2, -t1, GetRadius(), 0, fillColor, fillColor );
 
             GRArc1( nullptr, DC, pt1.x, pt1.y, pt2.x, pt2.y, c.x, c.y, penWidth, color );
             break;
