@@ -349,7 +349,16 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
         }
         }
 
-        clippedPoly.BooleanIntersection( itemPoly, viewportPoly, SHAPE_POLY_SET::PM_FAST );
+        try
+        {
+            clippedPoly.BooleanIntersection( itemPoly, viewportPoly, SHAPE_POLY_SET::PM_FAST );
+        }
+        catch( const ClipperLib::clipperException& exc )
+        {
+            // This may be overkill and could be an assertion but we are more likely to find
+            // any clipper errors this way.
+            wxLogError( wxT( "Clipper library exception '%s' occurred." ), exc.what() );
+        }
 
         if( !clippedPoly.IsEmpty() )
             itemPoly = clippedPoly;
