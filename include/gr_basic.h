@@ -190,6 +190,8 @@ void GRFilledArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle, dou
                   int r, const COLOR4D& Color, const COLOR4D& BgColor );
 void GRFilledArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle,
                   double EndAngle, int r, int width, const COLOR4D& Color, const COLOR4D& BgColor );
+void GRFilledArc1( EDA_RECT* ClipBox, wxDC* DC, const wxPoint& aStart, const wxPoint& aEnd,
+                   const wxPoint& aCenter, int width, const COLOR4D& Color, const COLOR4D& BgColor );
 void GRCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int width,
               const COLOR4D& Color );
 

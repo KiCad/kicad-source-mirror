@@ -638,6 +638,38 @@ void GRArc1( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aStart, const wxPoint
 }
 
 
+void GRFilledArc1( EDA_RECT* ClipBox, wxDC* DC, const wxPoint& aStart, const wxPoint& aEnd,
+                   const wxPoint& aCenter, int width, const COLOR4D& Color, const COLOR4D& BgColor )
+{
+    /* Clip arcs off screen. */
+    if( ClipBox )
+    {
+        int x0, y0, xm, ym, r;
+        x0 = ClipBox->GetX();
+        y0 = ClipBox->GetY();
+        xm = ClipBox->GetRight();
+        ym = ClipBox->GetBottom();
+        r  = KiROUND( Distance( aStart.x, aStart.y, aCenter.x, aCenter.y ) );
+
+        if( aCenter.x < ( x0 - r ) )
+            return;
+
+        if( aCenter.y < ( y0 - r ) )
+            return;
+
+        if( aCenter.x > ( r + xm ) )
+            return;
+
+        if( aCenter.y > ( r + ym ) )
+            return;
+    }
+
+    GRSetBrush( DC, BgColor, FILLED );
+    GRSetColorPen( DC, Color, width );
+    DC->DrawArc( aStart.x, aStart.y, aEnd.x, aEnd.y, aCenter.x, aCenter.y );
+}
+
+
 void GRFilledArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle, double EndAngle,
                   int r, int width, const COLOR4D& Color, const COLOR4D& BgColor )
 {
