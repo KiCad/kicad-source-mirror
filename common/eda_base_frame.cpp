@@ -1042,7 +1042,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 }
 
 
-bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName )
+bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName, bool aVerbose )
 {
     wxString msg;
     wxFileName fn = aFileName;
@@ -1078,7 +1078,9 @@ bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName )
 
     if( !msg.IsEmpty() )
     {
-        wxMessageBox( msg );
+        if( aVerbose )
+            wxMessageBox( msg );
+
         return false;
     }
 

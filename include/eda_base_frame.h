@@ -462,9 +462,10 @@ public:
      * @note The file name path must be set or an assertion will be raised on debug builds and
      *       return false on release builds.
      * @param aFileName The full path and/or file name of the file to test.
+     * @param aVerbose If true will show an error dialog if the file is not writable
      * @return False if \a aFileName cannot be written.
      */
-    bool IsWritable( const wxFileName& aFileName );
+    bool IsWritable( const wxFileName& aFileName, bool aVerbose = true );
 
     /**
      * Check if an auto save file exists for \a aFileName and takes the appropriate action

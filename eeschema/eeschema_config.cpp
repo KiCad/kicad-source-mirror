@@ -148,7 +148,7 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
 
     fn.SetExt( ProjectFileExtension );
 
-    if( !fn.HasName() || !IsWritable( fn ) )
+    if( !fn.HasName() || !IsWritable( fn, false ) )
         return;
 
     RecordERCExclusions();
