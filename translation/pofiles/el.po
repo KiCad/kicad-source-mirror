@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-17 18:50+0000\n"
-"Last-Translator: Michael Misirlis <MMISIRLIS@gmail.com>\n"
+"PO-Revision-Date: 2021-11-17 19:42+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
 "Language: el\n"
@@ -8517,8 +8517,8 @@ msgstr "Αλλαγή σοβαρότητας σε Σφάλμα για όλες τ
 #: pcbnew/dialogs/dialog_drc.cpp:471 pcbnew/dialogs/dialog_drc.cpp:478
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
-"Μπορείτε επίσης να επεξεργαστείτε τις σοβαρές παραβιάσεις στο διάλογο Board "
-"Setup ..."
+"Μπορείτε επίσης να επεξεργαστείτε τις σοβαρές παραβιάσεις στο διάλογο "
+"Ρύθμιση Πλακέτας ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:522 pcbnew/dialogs/dialog_drc.cpp:476
 #, c-format
@@ -22237,7 +22237,7 @@ msgstr "Στοίβαξη Πλακέτας"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:88
 msgid "Board Editor Layers"
-msgstr "Επίπεδα Επεξεργαστή Επιπέδων"
+msgstr "Επίπεδα Επεξεργαστή Πλακέτας"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:91
 msgid "Physical Stackup"
@@ -22510,7 +22510,7 @@ msgstr "Ενημέρωση PCB"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:116
 msgid "Graphics cleanup"
-msgstr "Καθαρισμός γραφικών"
+msgstr "Εκκαθάριση γραφικών"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:22
 msgid "Merge lines into rectangles"
@@ -22527,7 +22527,7 @@ msgstr "Αλλαγές Για Εφαρμογή:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:53
 msgid "Cleanup Graphics"
-msgstr "Καθαρισμός Γραφικών"
+msgstr "Εκκαθάριση Γραφικών"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:150
 msgid "Board cleanup"
@@ -23435,7 +23435,7 @@ msgstr "Εκτέλεση εργαλείου ανάλυσης διακένου...
 
 #: pcbnew/dialogs/dialog_drc.cpp:489
 msgid "Open the Board Setup... dialog"
-msgstr "Άνοιγμα διαλόγου Διάταξης Πλακέτας"
+msgstr "Άνοιγμα διαλόγου Ρύθμιση Πλακέτας"
 
 #: pcbnew/dialogs/dialog_drc.cpp:666
 #, c-format
@@ -27419,7 +27419,7 @@ msgstr "&Επιλογή Μόνο"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:41
 msgid "Keep &outside layers"
-msgstr ""
+msgstr "Διατήρηση &εξωτερικών επιπέδων"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
 msgid "Remove Unused Pads"
@@ -28863,7 +28863,6 @@ msgid "Check rule syntax"
 msgstr "Ελέγξτε τη σύνταξη κανόνων"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29170,54 +29169,61 @@ msgstr ""
 "\n"
 "### Εκφράσεις συναρτήσεων\n"
 "\n"
-"Όλες οι παράμετροι των συναρτήσεων υποστηρίζουν τα απλά wildcards (`*` and `?"
-"`).\n"
+"Όλες οι παράμετροι των συναρτήσεων υποστηρίζουν τα απλά wildcards (`*` και "
+"`?`).\n"
 "<br><br>\n"
 "\n"
 "    A.insideCourtyard('<footprint_refdes>')\n"
-"True if any part of `A` lies within the given footprint's principal "
-"courtyard.\n"
+"Αληθές εαν κάποιο μέρος του `A` βρεθεί εντός της περιοχής του επιλεγμένου "
+"αποτυπώματος.\n"
 "<br><br>\n"
 "\n"
 "    A.insideFrontCourtyard('<footprint_refdes>')\n"
-"True if any part of `A` lies within the given footprint's front courtyard.\n"
+"Αληθές εαν κάποιο μέρος του `A` βρεθεί εντός της εμπρόσθιας περιοχής του "
+"επιλεγμένου αποτυπώματος.\n"
 "<br><br>\n"
 "\n"
 "    A.insideBackCourtyard('<footprint_refdes>')\n"
-"True if any part of `A` lies within the given footprint's back courtyard.\n"
+"Αληθές εαν κάποιο μέρος του  `A` βρεθεί εντός της πίσω περιοχής του "
+"επιλεγμένου αποτυπώματος.\n"
 "<br><br>\n"
 "\n"
 "    A.insideArea('<zone_name>')\n"
-"True if any part of `A` lies within the given zone's outline.\n"
+"Αληθές εαν κάποιο μέρος του  `A` βρεθεί εντός του περιγράμματος της "
+"επιλεγμένης ζώνης.\n"
 "<br><br>\n"
 "\n"
 "    A.isPlated()\n"
-"True if `A` has a hole which is plated.\n"
+"Αληθές εαν το`A` περιέχει επιμεταλλωμένη οπή.\n"
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"True if `A` has net that is part of the specified differential pair.\n"
-"`<net_name>` is the base name of the differential pair.  For example, "
+"Αληθές εαν το `A` περιέχει δίκτυο που αποτελεί μέρος του επιλεγμένου "
+"διαφορικού ζεύγους.\n"
+"`<net_name>` είναι το βασικό όνομα του διαφορικού ζεύγους.  Για παράδειγμα, "
 "`inDiffPair('CLK')`\n"
-"matches items in the `CLK_P` and `CLK_N` nets.\n"
+"ταιριάζει με τα δίκτυα `CLK_P` και `CLK_N`.\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
-"True if `A` and `B` are members of the same diff pair.\n"
+"Αληθές εαν το `A` και το `B` αποτελούν μέλη του ίδιου διαφορικού ζεύγους.\n"
 "<br><br>\n"
 "\n"
 "    A.memberOf('<group_name>')\n"
-"True if `A` is a member of the given group. Includes nested membership.\n"
+"Αληθές εαν το `A` αποτελεί μέλος της επιλεγμένης ομάδας. Εμπεριέχει "
+"εμφωλευμένη ομαδοποίηση.\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
-"True if `A` exists on the given layer.  The layer name can be\n"
-"either the name assigned in Board Setup > Board Editor Layers or\n"
-"the canonical name (ie: `F.Cu`).\n"
+"Αληθές εαν το `A` υπάρχει στο επιλεγμένο επίπεδο.  Το όνομα του επιπέδου "
+"μπορεί να είναι\n"
+"είτε εκείνο που αποδώθηκε στο Ρύθμιση Πλακέτας > Επίπεδα Επεξεργαστή "
+"Πλακέτας ή\n"
+"το κανονικό όνομα (πχ: `F.Cu`).\n"
 "\n"
-"NB: this returns true if `A` is on the given layer, independently\n"
-"of whether or not the rule is being evaluated for that layer.\n"
-"For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
+"NB: επιστρέφει αληθές εαν το `A` υπάρχει στο επιλεγμένο επίπεδο, ανεξάρτητα\n"
+"από το εαν ο κανόνας αξιολογείται για εκείνο το επίπεδο ή όχι.\n"
+"Για αυτή τη χρήση `(layer \"layer_name\")` είναι η ρήτρα στον κανόνα.\n"
 "<br><br><br>\n"
 "\n"
 "### Περισσότερα παραδείγματα\n"
@@ -29365,27 +29371,27 @@ msgstr "Κενό Διέλευσης"
 
 #: pcbnew/drc/drc_engine.cpp:145 pcbnew/drc/drc_engine.cpp:219
 msgid "board setup constraints"
-msgstr "περιορισμοί διάταξης πλακέτας"
+msgstr "περιορισμοί ρύθμισης πλακέτας"
 
 #: pcbnew/drc/drc_engine.cpp:175
 msgid "board setup constraints silk"
-msgstr "περιορισμοί διάταξης πλακέτας μεταξ"
+msgstr "περιορισμοί ρύθμισης πλακέτας μεταξ"
 
 #: pcbnew/drc/drc_engine.cpp:181
 msgid "board setup constraints hole"
-msgstr "περιορισμοί διάταξης πλακέτας τρύπα"
+msgstr "περιορισμοί ρύθμισης πλακέτας τρύπα"
 
 #: pcbnew/drc/drc_engine.cpp:186
 msgid "board setup constraints edge"
-msgstr "περιορισμοί διάταξης πλακέτας περίγραμμα"
+msgstr "περιορισμοί ρύθμισης πλακέτας περίγραμμα"
 
 #: pcbnew/drc/drc_engine.cpp:191
 msgid "board setup constraints courtyard"
-msgstr "περιορισμοί διάταξης πλακέτας περιοχή αποτυπώματος"
+msgstr "περιορισμοί ρύθμισης πλακέτας περιοχή αποτυπώματος"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
-msgstr "περιορισμοί μίκρο-διελεύσεων στη διάταξη της πλακέτας"
+msgstr "περιορισμοί μίκρο-διελεύσεων στη ρύθμιση πλακέτας"
 
 #: pcbnew/drc/drc_engine.cpp:244 pcbnew/drc/drc_engine.cpp:325
 #: pcbnew/drc/drc_engine.cpp:353
@@ -32280,9 +32286,8 @@ msgstr ""
 "Τοποθετήθηκε στο Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2650
-#, fuzzy
 msgid "Loading unicode strings..."
-msgstr "Φόρτωση δικτύων..."
+msgstr "Φόρτωση unicode αλφαριθμητικών..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2664
 msgid "Loading text..."
@@ -35061,7 +35066,7 @@ msgstr "Καθαρισμός περιττών αντικειμένων, αντι
 
 #: pcbnew/tools/pcb_actions.cpp:461
 msgid "Cleanup Graphics..."
-msgstr "Γραφικά..."
+msgstr "Εκκαθάριση Γραφικών..."
 
 #: pcbnew/tools/pcb_actions.cpp:462
 msgid "Cleanup redundant items, etc."
