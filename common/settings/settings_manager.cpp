@@ -538,6 +538,7 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
             wxT( "KICAD6_SYMBOL_DIR" ),
             wxT( "KICAD6_3DMODEL_DIR" ),
             wxT( "KICAD6_FOOTPRINT_DIR" ),
+            wxT( "KICAD6_TEMPLATE_DIR" ), // Stores the default library table to be copied
 
             // Deprecated keys
             wxT( "KICAD_PTEMPLATES" ),
@@ -545,7 +546,7 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
             wxT( "KISYSMOD" ),
             wxT( "KICAD_SYMBOL_DIR" ),
         };
-        
+
         for( const wxString& key : libKeys )
             common.m_Env.vars.erase( key );
 
