@@ -664,6 +664,8 @@ void PANEL_PACKAGES_VIEW::OnSizeInfoBox( wxSizeEvent& aEvent )
     m_infoText->SetMaxSize( infoSize );
     m_infoText->SetSize( infoSize );
     m_infoText->Layout();
+
+    Refresh();
 }
 
 
