@@ -608,6 +608,12 @@ void PCB_TOOL_BASE::setTransitions()
 }
 
 
+bool PCB_TOOL_BASE::Is45Limited() const
+{
+    return false;
+}
+
+
 const PCB_DISPLAY_OPTIONS& PCB_TOOL_BASE::displayOptions() const
 {
     static PCB_DISPLAY_OPTIONS disp;
