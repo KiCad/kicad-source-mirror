@@ -10,13 +10,14 @@
 # David Chen <d0123456789g@yahoo.com.tw>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
 # Dingzhong Chen <wsxy162@gmail.com>, 2021.
+# Tian Yunhao <t123yh@outlook.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-17 19:42+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-11-19 12:55+0000\n"
+"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -21452,7 +21453,7 @@ msgid ""
 msgstr ""
 "\n"
 "PCB 上有 %d 个空白或无效的位号。\n"
-"建议选中'测试 PCB 和原理图之间的奇偶性' 选项，然后运行 DRC。\n"
+"建议选中“检查 PCB 和原理图是否一致”选项，然后运行 DRC。\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
 #, c-format
@@ -22895,7 +22896,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr "PCB 和原理图之间的奇偶校验测试"
+msgstr "检查 PCB 和原理图是否一致"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
