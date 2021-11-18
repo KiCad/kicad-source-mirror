@@ -161,6 +161,7 @@ protected:
     void onQueryText( wxCommandEvent& aEvent );
     void onQueryEnter( wxCommandEvent& aEvent );
     void onQueryCharHook( wxKeyEvent& aEvent );
+    void onQueryMouseMoved( wxMouseEvent& aEvent );
 
     void onTreeSelect( wxDataViewEvent& aEvent );
     void onTreeActivate( wxDataViewEvent& aEvent );
