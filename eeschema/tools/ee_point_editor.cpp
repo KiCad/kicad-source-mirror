@@ -284,6 +284,14 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     if( !m_selectionTool )
         return 0;
 
+    if( m_isSymbolEditor )
+    {
+        SYMBOL_EDIT_FRAME* editor = getEditFrame<SYMBOL_EDIT_FRAME>();
+
+        if( !editor->IsSymbolEditable() || editor->IsSymbolAlias() )
+            return 0;
+    }
+
     const EE_SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() != 1 || !selection.Front()->IsType( supportedTypes ) )
