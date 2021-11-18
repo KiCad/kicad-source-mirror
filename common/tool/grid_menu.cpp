@@ -90,7 +90,7 @@ void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* a
     {
         int val = (int) ValueFromString( EDA_UNITS::MILLIMETRES, gridSize );
 
-        msg.Printf( wxT( "Grid: %s (%s)" ),
+        msg.Printf( _( "Grid: %s (%s)" ),
                     MessageTextFromValue( primaryUnit, val ),
                     MessageTextFromValue( secondaryUnit, val ) );
 
