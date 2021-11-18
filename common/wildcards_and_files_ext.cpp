@@ -230,6 +230,13 @@ wxString AllProjectFilesWildcard()
 }
 
 
+wxString AllSchematicFilesWildcard()
+{
+    return _( "All KiCad schematic files" )
+            + AddFileExtListToFilter( { KiCadSchematicFileExtension, LegacySchematicFileExtension } );
+}
+
+
 wxString LegacySchematicFileWildcard()
 {
     return _( "KiCad legacy schematic files" )

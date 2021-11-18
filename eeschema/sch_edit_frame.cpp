@@ -971,9 +971,9 @@ void SCH_EDIT_FRAME::NewProject()
 void SCH_EDIT_FRAME::LoadProject()
 {
     wxString pro_dir = m_mruPath;
-    wxString wildcards = KiCadSchematicFileWildcard();
-
-    wildcards += "|" + LegacySchematicFileWildcard();
+    wxString wildcards = AllSchematicFilesWildcard()
+                            + "|" + KiCadSchematicFileWildcard()
+                            + "|" + LegacySchematicFileWildcard();
 
     wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir, wxEmptyString,
                       wildcards, wxFD_OPEN | wxFD_FILE_MUST_EXIST );

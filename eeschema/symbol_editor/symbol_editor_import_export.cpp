@@ -47,9 +47,9 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
             return;
     }
 
-    wxString wildcards = KiCadSymbolLibFileWildcard();
-
-    wildcards += "|" + LegacySymbolLibFileWildcard();
+    wxString wildcards = AllSymbolLibFilesWildcard()
+                         + "|" + KiCadSymbolLibFileWildcard()
+                         + "|" + LegacySymbolLibFileWildcard();
 
     wxFileDialog dlg( this, _( "Import Symbol" ), m_mruPath, wxEmptyString,
                       wildcards, wxFD_OPEN | wxFD_FILE_MUST_EXIST );

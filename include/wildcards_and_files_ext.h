@@ -188,6 +188,7 @@ extern wxString AllSymbolLibFilesWildcard();
 extern wxString ProjectFileWildcard();
 extern wxString LegacyProjectFileWildcard();
 extern wxString AllProjectFilesWildcard();
+extern wxString AllSchematicFilesWildcard();
 extern wxString KiCadSchematicFileWildcard();
 extern wxString LegacySchematicFileWildcard();
 extern wxString BoardFileWildcard();

@@ -141,8 +141,8 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, int* aCtl, wxString* aFileNa
             fileExtensions.push_back( plugin->GetFileExtension().ToStdString() );
         }
 
-        fileFilters = _( "All KiCad Board Files" ) + AddFileExtListToFilter( fileExtensions ) + "|"
-                      + fileFilters;
+        fileFilters = _( "All KiCad Board Files" ) + AddFileExtListToFilter( fileExtensions )
+                        + "|" + fileFilters;
     }
     else
     {
@@ -160,7 +160,8 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, int* aCtl, wxString* aFileNa
             allWildcards += "*." + formatWildcardExt( plugin->GetFileExtension() ) + ";";
         }
 
-        fileFilters = _( "All supported formats|" ) + allWildcards + "|" + fileFilters;
+        fileFilters = _( "All supported formats|" ) + allWildcards
+                        + "|" + fileFilters;
     }
 
 
@@ -183,8 +184,7 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, int* aCtl, wxString* aFileNa
 
     wxFileDialog dlg( aParent,
                       aKicadFilesOnly ? _( "Open Board File" ) : _( "Import Non KiCad Board File" ),
-                      path, name, fileFilters,
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                      path, name, fileFilters, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_OK )
     {
