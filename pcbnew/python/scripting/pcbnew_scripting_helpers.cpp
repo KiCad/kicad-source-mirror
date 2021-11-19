@@ -191,6 +191,34 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 }
 
 
+BOARD* NewBoard( wxString& aFileName )
+{
+    wxFileName boardFn = aFileName;
+    wxFileName proFn   = aFileName;
+    proFn.SetExt( ProjectFileExtension );
+    proFn.MakeAbsolute();
+
+    wxString projectPath = proFn.GetFullPath();
+
+    // Ensure the "C" locale is temporary set, before reading any file
+    // It also avoids wxWidgets alerts about locale issues, later, when using Python 3
+    LOCALE_IO dummy;
+
+    GetSettingsManager()->LoadProject( projectPath, false );
+    PROJECT* project = GetSettingsManager()->GetProject( projectPath );
+
+    BOARD* brd = new BOARD();
+
+    brd->SetProject( project );
+    BOARD_DESIGN_SETTINGS& bds = brd->GetDesignSettings();
+    bds.m_DRCEngine            = std::make_shared<DRC_ENGINE>( brd, &bds );
+
+    SaveBoard( aFileName, brd );
+
+    return brd;
+}
+
+
 BOARD* CreateEmptyBoard()
 {
     // Creating a new board is not possible if running inside KiCad
