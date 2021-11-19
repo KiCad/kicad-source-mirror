@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
 "PO-Revision-Date: 2021-11-21 21:16+0000\n"
-"Last-Translator: Radek K <radek.kzn@gmail.com>\n"
+"Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -13139,7 +13139,7 @@ msgid ""
 "Annotation must be corrected before simulating."
 msgstr ""
 "Vícenásobné symboly mají stejné referenční označení.\n"
-"Očíslování musí být přes simulací opraveno."
+"Očíslování musí být před simulací opraveno."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:125
 #, c-format
