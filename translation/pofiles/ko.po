@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-12 18:47+0000\n"
+"PO-Revision-Date: 2021-11-21 21:17+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -4971,7 +4971,7 @@ msgstr "B.Silkscreen"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
-msgstr "F.실크스크린"
+msgstr "F.Silkscreen"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
@@ -5003,7 +5003,7 @@ msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
-msgstr "여백"
+msgstr "Margin"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
@@ -11633,7 +11633,7 @@ msgstr "/경로/대상/시트"
 #: pcbnew/footprint_edit_frame.cpp:241 pcbnew/footprint_edit_frame.cpp:770
 #: pcbnew/pcb_edit_frame.cpp:272 pcbnew/pcb_edit_frame.cpp:1181
 msgid "Appearance"
-msgstr "외형"
+msgstr "형상"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:28
 msgid "S&how hidden pins"
@@ -17479,7 +17479,7 @@ msgstr "X2 속성"
 
 #: gerbview/gerbview_frame.cpp:1059
 msgid "GerbView"
-msgstr "GerbView"
+msgstr "거버뷰"
 
 #: gerbview/gerbview_frame.cpp:1064
 msgid "Excellon Options"
@@ -18224,7 +18224,6 @@ msgid "Uninstall"
 msgstr "제거"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:133
-#, fuzzy
 msgid "Apply Changes"
 msgstr "변경 사항 적용"
 
@@ -18279,7 +18278,6 @@ msgid "Discard action"
 msgstr "작업 취소"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
-#, fuzzy
 msgid "Install from File..."
 msgstr "파일에서 설치..."
 
@@ -18297,27 +18295,24 @@ msgid "Downloaded %lld/%lld Kb"
 msgstr "%lld/%lld Kb 다운로드됨"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download Progress"
-msgstr "다운로드 진행도"
+msgstr "다운로드 진행률"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
 msgid "Waiting..."
 msgstr "대기 중..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall Progress"
-msgstr "전체 진행도"
+msgstr "전체 진행 상황"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
 msgstr "상세"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
-#, fuzzy
 msgid "Applying Package Changes"
-msgstr "패키지 변경점을 적용"
+msgstr "패키지 변경 적용"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
 msgid "Pending install"
@@ -18332,19 +18327,16 @@ msgid "Metadata"
 msgstr "메타데이터"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
-#, fuzzy
 msgid "Package identifier: "
-msgstr "패키지 식별자: %s\n"
+msgstr "패키지 식별자: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "라이센스"
+msgstr "라이센스: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
-#, fuzzy
 msgid "Tags: "
-msgstr "태그: %s\n"
+msgstr "태그: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:257
 msgid "Author"
@@ -18399,19 +18391,16 @@ msgid "Install package"
 msgstr "패키지 설치"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Download Size"
-msgstr "다운로드"
+msgstr "다운로드 크기"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Install Size"
-msgstr "인스턴스 크기"
+msgstr "설치 크기"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
-#, fuzzy
 msgid "Compatible"
-msgstr "호환 모드:"
+msgstr "호환 가능"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 msgid "Show all versions"
@@ -18552,9 +18541,8 @@ msgid "Aborting package installation."
 msgstr "패키지 설치를 중단합니다."
 
 #: kicad/pcm/pcm_task_manager.cpp:254
-#, fuzzy
 msgid "Extracted package\n"
-msgstr "'%s' 패키지를 추출하는 중입니다."
+msgstr "추출된 패키지\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:298
 #, c-format
@@ -19141,7 +19129,7 @@ msgstr "위치"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:224
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:277
 msgid "From:"
-msgstr "From:"
+msgstr "시작:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:247
 msgid "End Position"
@@ -19510,12 +19498,12 @@ msgid ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
 "### 분할 감쇠기\n"
-"감쇠는 6dB입니다  \n"
+"감쇠는 6 dB입니다  \n"
 "___Z<sub>in</sub>___ &#x2126 에서 원하는 입력 임피던스;  \n"
 "___Z<sub>out</sub>___ &#x2126 에서 원하는 출력 임피던스;  \n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R<sub>1</sub> = R<sub>2</sub> = R<sub>3</sub> = Z<sub>0</sub>/3___\n"
+"___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 msgid ""
@@ -21071,7 +21059,7 @@ msgstr "코어"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:129
 msgid "PrePreg"
-msgstr "PrePreg"
+msgstr "프리프레그"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:188
 #, c-format
@@ -21273,7 +21261,7 @@ msgstr "HAL 무연납"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:43
 msgid "Hard gold"
-msgstr "Hard gold"
+msgstr "하드 골드"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:44
 msgid "Immersion tin"
@@ -21667,7 +21655,7 @@ msgstr ""
 "%d %s UUID: [%s], X, Y: %s, 반올림된 X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:602
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
@@ -21675,7 +21663,7 @@ msgid ""
 "checked.\n"
 msgstr ""
 "\n"
-"PCB에 %d개의 비어 있거나 잘못된 참조 지정이 있습니다.\n"
+"PCB에 %d가 비어 있거나 잘못된 참조 지정이 있습니다.\n"
 "'회로도에 대한 풋프린트 테스트'를 선택하고 DRC를 실행하는 것을 권장합니다.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
@@ -26576,7 +26564,7 @@ msgstr "참조 항목의 상대 위치"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
 msgid "Print according to objects tab of appearance manager"
-msgstr "외형 매니저의 객체 탭에 따라 출력"
+msgstr "형상 관리자의 객체 탭에 따라 출력"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:235
 msgid "No drill mark"
@@ -31739,9 +31727,8 @@ msgstr ""
 "Eco1_User로 이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2650
-#, fuzzy
 msgid "Loading unicode strings..."
-msgstr "네트 불러오는 중..."
+msgstr "유니코드 문자열 로드 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2664
 msgid "Loading text..."
@@ -34877,11 +34864,11 @@ msgstr "네트 검사기 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:791
 msgid "Show Appearance Manager"
-msgstr "외형 매니저 표시"
+msgstr "형상 관리자 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:791
 msgid "Show/hide the appearance manager"
-msgstr "외형 매니저 표시/숨기기"
+msgstr "형상 관리자 표시/숨기기"
 
 #: pcbnew/tools/pcb_actions.cpp:796
 msgid "Flip Board View"
