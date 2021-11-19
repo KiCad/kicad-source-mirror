@@ -1307,6 +1307,11 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const
             aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, ARC_HIGH_DEF );
         else
             aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, ARC_LOW_DEF );
+
+        // In some cases the resulting polygon is strange... due to some bug in Fillet()
+        // that happens in (rare) polygon shapes. So clip it with the
+        // initial polygon (in all cases aSmoothedPoly must be contained by m_Poly)
+        aSmoothedPoly.BooleanIntersection( *m_Poly, SHAPE_POLY_SET::PM_FAST );
         break;
 
     default:
