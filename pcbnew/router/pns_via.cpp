@@ -96,6 +96,7 @@ VIA* VIA::Clone() const
     v->m_diameter = m_diameter;
     v->m_drill = m_drill;
     v->m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
+    v->m_hole = SHAPE_CIRCLE( m_pos, m_drill / 2 );
     v->m_rank = m_rank;
     v->m_marker = m_marker;
     v->m_viaType = m_viaType;

@@ -117,7 +117,12 @@ public:
     }
 
     int Drill() const { return m_drill; }
-    void SetDrill( int aDrill ) { m_drill = aDrill; m_hole.SetRadius( aDrill / 2 ); }
+
+    void SetDrill( int aDrill )
+    {
+        m_drill = aDrill;
+        m_hole.SetRadius( m_drill / 2 );
+    }
 
     bool IsFree() const { return m_isFree; }
     void SetIsFree( bool aIsFree ) { m_isFree = aIsFree; }

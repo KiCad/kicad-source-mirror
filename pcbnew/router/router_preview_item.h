@@ -114,31 +114,33 @@ private:
     const KIGFX::COLOR4D assignColor( int aStyle ) const;
     const KIGFX::COLOR4D getLayerColor( int aLayer ) const;
 
+private:
     KIGFX::VIEW* m_view;
 
     PNS::ROUTER* m_router;
-    SHAPE* m_shape;
+    SHAPE*       m_shape;
+    SHAPE*       m_hole;
 
-    ITEM_TYPE m_type;
+    ITEM_TYPE    m_type;
 
-    int m_style;
-    int m_width;
-    int m_layer;
-    int m_originLayer;
-    int m_clearance;
+    int          m_style;
+    int          m_width;
+    int          m_layer;
+    int          m_originLayer;
+    int          m_clearance;
 
-    bool m_showTrackClearance;
-    bool m_showViaClearance;
+    bool         m_showTrackClearance;
+    bool         m_showViaClearance;
 
     // fixme: shouldn't this go to VIEW?
     static const int ClearanceOverlayDepth;
     static const int BaseOverlayDepth;
     static const int ViaOverlayDepth;
 
-    double m_depth;
+    double         m_depth;
 
     KIGFX::COLOR4D m_color;
-    VECTOR2I m_pos;
+    VECTOR2I       m_pos;
 };
 
 #endif

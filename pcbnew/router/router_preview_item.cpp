@@ -43,6 +43,7 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* a
     m_view = aView;
 
     m_shape = aItem ? aItem->Shape()->Clone() : nullptr;
+    m_hole = aItem && aItem->Hole() ? aItem->Hole()->Clone() : nullptr;
 
     m_clearance = -1;
     m_originLayer = m_layer = LAYER_SELECT_OVERLAY ;
@@ -65,6 +66,7 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* a
 ROUTER_PREVIEW_ITEM::~ROUTER_PREVIEW_ITEM()
 {
     delete m_shape;
+    delete m_hole;
 }
 
 
@@ -72,12 +74,12 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
 {
     m_originLayer = aItem->Layers().Start();
 
-    if( const auto l = dyn_cast<const PNS::LINE*>( aItem ) )
+    if( const PNS::LINE* l = dyn_cast<const PNS::LINE*>( aItem ) )
     {
         if( !l->SegmentCount() )
             return;
     }
-    else if( const auto v = dyn_cast<const PNS::VIA*>( aItem ) )
+    else if( const PNS::VIA* v = dyn_cast<const PNS::VIA*>( aItem ) )
     {
         if( v->IsVirtual() )
             return;
@@ -113,6 +115,19 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
         m_width = 0;
         m_color = COLOR4D( 0.7, 0.7, 0.7, 0.8 );
         m_depth = ViaOverlayDepth;
+
+        delete m_shape;
+        m_shape = nullptr;
+
+        if( aItem->Shape() )
+            m_shape = aItem->Shape()->Clone();
+
+        delete m_hole;
+        m_hole = nullptr;
+
+        if( aItem->Hole() )
+            m_hole = aItem->Hole()->Clone();
+
         break;
 
     case PNS::ITEM::SOLID_T:
@@ -141,6 +156,10 @@ const BOX2I ROUTER_PREVIEW_ITEM::ViewBBox() const
             bbox = m_shape->BBox();
             bbox.Inflate( m_width / 2 );
         }
+
+        if( m_hole )
+            bbox.Merge( m_hole->BBox() );
+
         return bbox;
 
     case PR_POINT:
@@ -241,7 +260,7 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
 
     case SH_CIRCLE:
     {
-        const SHAPE_CIRCLE* c = (const SHAPE_CIRCLE*) aShape;
+        const SHAPE_CIRCLE* c = static_cast<const SHAPE_CIRCLE*>( aShape );
         gal->SetStrokeColor( m_color );
 
         if( m_showViaClearance && m_clearance > 0 )
@@ -251,10 +270,24 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
         }
 
         gal->SetLayerDepth( m_depth );
-        gal->SetIsStroke( m_width ? true : false );
-        gal->SetLineWidth( m_width );
-        gal->SetFillColor( m_color );
-        gal->DrawCircle( c->GetCenter(), c->GetRadius() );
+
+        if( m_hole )
+        {
+            const SHAPE_CIRCLE* h = static_cast<const SHAPE_CIRCLE*>( m_hole );
+            int                 halfWidth = m_width / 2;
+
+            gal->SetIsStroke( true );
+            gal->SetIsFill( false );
+            gal->SetLineWidth( halfWidth + c->GetRadius() - h->GetRadius() );
+            gal->DrawCircle( c->GetCenter(), ( halfWidth + c->GetRadius() + h->GetRadius() ) / 2 );
+        }
+        else
+        {
+            gal->SetIsStroke( m_width ? true : false );
+            gal->SetLineWidth( m_width );
+            gal->SetFillColor( m_color );
+            gal->DrawCircle( c->GetCenter(), c->GetRadius() );
+        }
 
         break;
     }
@@ -395,9 +428,7 @@ void ROUTER_PREVIEW_ITEM::Line( const SHAPE_LINE_CHAIN& aLine, int aWidth, int a
     m_width = aWidth;
 
     if( aStyle >= 0 )
-    {
         m_color = assignColor( aStyle );
-    }
 
     m_type = PR_SHAPE;
     m_depth = -1024;        // TODO gal->GetMinDepth()
@@ -432,32 +463,15 @@ const COLOR4D ROUTER_PREVIEW_ITEM::assignColor( int aStyle ) const
 
     switch( aStyle )
     {
-    case 0:
-        color = COLOR4D( 0, 1, 0, 1 ); break;
-
-    case 1:
-        color = COLOR4D( 1, 0, 0, 1 ); break;
-
-    case 2:
-        color = COLOR4D( 1, 1, 0, 1 ); break;
-
-    case 3:
-        color = COLOR4D( 0, 0, 1, 1 ); break;
-
-    case 4:
-        color = COLOR4D( 1, 1, 1, 1 ); break;
-
-    case 5:
-        color = COLOR4D( 1, 1, 0, 1 ); break;
-
-    case 6:
-        color = COLOR4D( 0, 1, 1, 1 ); break;
-
-    case 32:
-        color = COLOR4D( 0, 0, 1, 1 ); break;
-
-    default:
-        color = COLOR4D( 0.4, 0.4, 0.4, 1 ); break;
+    case 0:  color = COLOR4D( 0, 1, 0, 1 );       break;
+    case 1:  color = COLOR4D( 1, 0, 0, 1 );       break;
+    case 2:  color = COLOR4D( 1, 1, 0, 1 );       break;
+    case 3:  color = COLOR4D( 0, 0, 1, 1 );       break;
+    case 4:  color = COLOR4D( 1, 1, 1, 1 );       break;
+    case 5:  color = COLOR4D( 1, 1, 0, 1 );       break;
+    case 6:  color = COLOR4D( 0, 1, 1, 1 );       break;
+    case 32: color = COLOR4D( 0, 0, 1, 1 );       break;
+    default: color = COLOR4D( 0.4, 0.4, 0.4, 1 ); break;
     }
 
     return color;
