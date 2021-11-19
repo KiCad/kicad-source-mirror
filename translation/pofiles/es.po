@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-15 18:08+0000\n"
+"PO-Revision-Date: 2021-11-21 21:17+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -18547,7 +18547,6 @@ msgid "Discard action"
 msgstr "Descartar acción"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
-#, fuzzy
 msgid "Install from File..."
 msgstr "Instalar desde un archivo..."
 
@@ -18565,7 +18564,6 @@ msgid "Downloaded %lld/%lld Kb"
 msgstr "Descargado %lld/%lld Kb"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download Progress"
 msgstr "Progreso de descarga"
 
@@ -18574,7 +18572,6 @@ msgid "Waiting..."
 msgstr "Esperando..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall Progress"
 msgstr "Progreso general"
 
@@ -18583,7 +18580,6 @@ msgid "Details"
 msgstr "Detalles"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
-#, fuzzy
 msgid "Applying Package Changes"
 msgstr "Aplicando cambios de paquetes"
 
@@ -18600,19 +18596,16 @@ msgid "Metadata"
 msgstr "Metadatos"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
-#, fuzzy
 msgid "Package identifier: "
-msgstr "Identificador de paquete: %s\n"
+msgstr "Identificador de paquete: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "Licencia"
+msgstr "Licencia: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
-#, fuzzy
 msgid "Tags: "
-msgstr "Etiquetas: %s\n"
+msgstr "Etiquetas: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:257
 msgid "Author"
@@ -18667,19 +18660,16 @@ msgid "Install package"
 msgstr "Instalar paquete"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Download Size"
-msgstr "Descargar"
+msgstr "Tamaño de descarga"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Install Size"
 msgstr "Tamaño al instalar"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
-#, fuzzy
 msgid "Compatible"
-msgstr "Modo de compatibilidad:"
+msgstr "Compatible"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 msgid "Show all versions"
@@ -18823,9 +18813,8 @@ msgid "Aborting package installation."
 msgstr "Cancelando la instalación del paquete."
 
 #: kicad/pcm/pcm_task_manager.cpp:254
-#, fuzzy
 msgid "Extracted package\n"
-msgstr "Extrayendo el paquete '%s'."
+msgstr "Paquete extraído\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:298
 #, c-format
@@ -21975,7 +21964,7 @@ msgstr ""
 "%d %s UUID: [%s], X, Y: %s, Redondeado X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:602
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
@@ -22234,7 +22223,7 @@ msgstr "Importar configuración de otra placa..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:80
 msgid "Board Stackup"
-msgstr "Apilato de la placa"
+msgstr "Apilado de la placa"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:88
 msgid "Board Editor Layers"
@@ -22258,7 +22247,7 @@ msgstr "Texto y gráficos"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:99
 msgid "Defaults"
-msgstr "Defecto"
+msgstr "Valores por defecto"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:102
 msgid "Design Rules"
@@ -32243,9 +32232,8 @@ msgstr ""
 "KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2650
-#, fuzzy
 msgid "Loading unicode strings..."
-msgstr "Cargando redes..."
+msgstr "Cargando cadenas unicode..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2664
 msgid "Loading text..."
