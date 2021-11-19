@@ -1,3 +1,4 @@
+%ignore EDA_SHAPE::getCenter;
 
 %{
 #include <eda_shape.h>
@@ -5,6 +6,7 @@
 %}
 %include eda_shape.h
 %include pcb_shape.h
+
 %extend PCB_SHAPE
 {
     double GetArcAngleStart()
