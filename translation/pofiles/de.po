@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-17 19:42+0000\n"
+"PO-Revision-Date: 2021-11-21 21:16+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -459,7 +459,7 @@ msgstr "Ansicht unten"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:161
 msgid "No 3D Grid"
-msgstr "3D-Raster ausblenden"
+msgstr "Kein 3D-Raster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "3D Grid 10mm"
@@ -635,7 +635,7 @@ msgstr "Platinenfarben"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:66
 msgid "Use board stackup colors"
-msgstr "Farben des Platinen-Lageaufbaus verwenden"
+msgstr "Farben des Platinen-Lagenaufbaus verwenden"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:69
 msgid "Use colors:"
@@ -753,7 +753,7 @@ msgstr "Kameraoptionen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
 msgid "Rotation increment:"
-msgstr "Rotationsinkrement:"
+msgstr "Schrittweite bei Drehung:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:123
 #: common/base_units.cpp:477 pcb_calculator/widgets/unit_selector.cpp:130
@@ -816,7 +816,7 @@ msgstr "8×"
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:45
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
-"3D-Anzeige muss geschlossen und wieder geöffnet werden um diese Änderung "
+"3D-Betrachter muss geschlossen und wieder geöffnet werden, um diese Änderung "
 "anzuwenden"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:49
@@ -825,7 +825,7 @@ msgstr "Auswahlfarbe:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:63
 msgid "While Moving"
-msgstr "Während des Bewegens"
+msgstr "Während des Verschiebens"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:65
 msgid "Disable anti-aliasing"
@@ -893,7 +893,7 @@ msgstr "Zufällige Streuung der Lichtstrahlen"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:84
 msgid "Reflections:"
-msgstr "Reflektionen:"
+msgstr "Reflexionen:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:89
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -1217,7 +1217,7 @@ msgstr "Footprintbibliothek erstellen"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:900
 msgid "Error allocating memory for potrace bitmap"
-msgstr "Fehler beim Allozieren von Speicher für Potrace-Bitmap"
+msgstr "Fehler bei der Allokation von Speicher für Potrace-Bitmap"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:927
 #: common/dialogs/wx_html_report_panel_base.cpp:41
@@ -1231,7 +1231,7 @@ msgstr "Fehler"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:24
 msgid "Original Picture"
-msgstr "Originaldatei"
+msgstr "Originalbild"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:29
 msgid "Greyscale Picture"
@@ -1343,8 +1343,8 @@ msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
 msgstr ""
-"Verändert den Schwellwert um eine Grauskalierte Datei in ein Schwarz/Weiß "
-"Datei umzuwandeln."
+"Verändert den Schwellwert für die Umwandlung eines Graustufenbilds in ein "
+"Schwarz/Weiß-Bild."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:176
 #: gerbview/gerber_file_image.cpp:352
@@ -1460,8 +1460,8 @@ msgstr "%"
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
-"Das Auflösen der Umgebungsvariablen schlägt fehl: kein '%c' an Position %u "
-"in '%s'."
+"Auflösung der Umgebungsvariablen fehlgeschlagen: kein \"%c\" an Position %u "
+"in \"'%s\"."
 
 #: common/common.cpp:308
 #, c-format
@@ -1476,7 +1476,7 @@ msgstr "Ausgabeverzeichnis \"%s\" wurde erstellt."
 #: common/common.cpp:336
 #, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Konnte das Ausgabeverzeichnis \"%s\" nicht erstellen."
+msgstr "Kann das Ausgabeverzeichnis \"%s\" nicht erstellen."
 
 #: common/common.cpp:608
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -1527,7 +1527,7 @@ msgstr "Warnung"
 
 #: common/confirm.cpp:160 common/confirm.cpp:166
 msgid "File Open Error"
-msgstr "Fehler beim Dateilesevorgang"
+msgstr "Fehler beim Dateizugriff"
 
 #: common/confirm.cpp:162 common/confirm.cpp:168
 msgid "Interleaved saves may produce very unexpected results."
@@ -1646,7 +1646,7 @@ msgstr "Offizielle KiCad-Repositorys für Bibliotheken - "
 
 #: common/dialog_about/AboutDialog_main.cpp:156
 msgid "Bug tracker"
-msgstr "Bug Tracker"
+msgstr "Bugtracker"
 
 #: common/dialog_about/AboutDialog_main.cpp:162
 msgid "Report or examine bugs - "
@@ -1877,12 +1877,12 @@ msgstr "Der Pfad der Umgebungsvariable darf nicht leer sein."
 #: common/dialogs/dialog_configure_paths.cpp:316
 #: common/dialogs/dialog_configure_paths.cpp:358
 msgid "3D search path alias cannot be empty."
-msgstr "Der 3D-Modell Suchpfad Alias darf nicht leer sein."
+msgstr "Suchpfad-Alias für 3D-Modelle darf nicht leer sein."
 
 #: common/dialogs/dialog_configure_paths.cpp:324
 #: common/dialogs/dialog_configure_paths.cpp:360
 msgid "3D search path cannot be empty."
-msgstr "Der 3D-Modell Suchpfad darf nicht leer sein."
+msgstr "Suchpfad für 3D-Modelle darf nicht leer sein."
 
 #: common/dialogs/dialog_configure_paths.cpp:375
 msgid ""
@@ -2215,7 +2215,7 @@ msgstr "Rasterweiten zurücksetzen"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
 msgid "Resets the list of grid sizes to default values"
-msgstr "Liste von Rasterabständen auf die Standardwerte zurücksetzen"
+msgstr "Liste von Rasterweiten auf die Standardwerte zurücksetzen"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
@@ -2294,15 +2294,14 @@ msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
-msgstr "Sperrung ignorieren"
+msgstr "Sperren ignorieren"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:56
 msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
-"Ignoriert die Sperrung und wendet die Operation auf alle markierten Elemente "
-"an.\n"
+"Ignoriert Sperren und wendet die Operation auf alle markierten Elemente an.\n"
 "Alle gesperrten Elemente bleiben gesperrt, nachdem die Operation "
 "abgeschlossen ist."
 
@@ -2322,7 +2321,7 @@ msgstr "Willkommen zu KiCad %s!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:62
 msgid "Import settings from a previous version (none found)"
-msgstr "Importiere Einstellungen aus einer vorherigen Version (keine gefunden)"
+msgstr "Einstellungen importieren aus einer vorherigen Version (keine gefunden)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:124
 msgid "Select Settings Path"
@@ -2491,7 +2490,7 @@ msgstr "Ausrichtung:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:55
 msgid "Custom paper size:"
-msgstr "Benutzerdefinierte Papierbreite:"
+msgstr "Benutzerdefiniertes Format:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:67
 #: pcbnew/dialogs/dialog_board_statistics.cpp:104
@@ -2623,12 +2622,12 @@ msgstr "Schriftfeld-Parameter"
 #: common/dialogs/dialog_page_settings_base.cpp:182
 #, c-format
 msgid "Number of sheets: %d"
-msgstr "Anzahl der Schaltpläne: %d"
+msgstr "Anzahl der Blätter: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:189
 #, c-format
 msgid "Sheet number: %d"
-msgstr "Schaltplannummer: %d"
+msgstr "Blattnummer: %d"
 
 #: common/dialogs/dialog_page_settings_base.cpp:202
 msgid "Issue Date:"
@@ -2786,7 +2785,7 @@ msgstr ""
 #: common/dialogs/dialog_print_generic.cpp:197
 #: common/dialogs/dialog_print_generic.cpp:244
 msgid "Nothing to print"
-msgstr "Nichts zu Drucken"
+msgstr "Nichts zu drucken"
 
 #: common/dialogs/dialog_print_generic.cpp:235
 #: eeschema/dialogs/dialog_print_using_printer.cpp:311
@@ -2834,7 +2833,7 @@ msgstr "Farbe"
 #: common/dialogs/dialog_print_generic_base.cpp:35
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:80
 msgid "Black and white"
-msgstr "Schwarz-Weiß"
+msgstr "Schwarz/Weiß"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 msgid "Print border and title block"
@@ -2859,7 +2858,7 @@ msgstr "Benutzerdefiniert:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:77
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "Setze X-Skalierung für exaktes Plotten"
+msgstr "Setze X-Skalierung für exakt skaliertes Plotten"
 
 #: common/dialogs/dialog_print_generic_base.cpp:99
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -2949,7 +2948,7 @@ msgstr "Ordner mit Themen öffnen"
 
 #: common/dialogs/panel_color_settings_base.cpp:42
 msgid "Open the folder containing color themes"
-msgstr "Öffnet den Ordner der die Farbthemen enthält"
+msgstr "Öffnet den Ordner, der die Farbthemen enthält"
 
 #: common/dialogs/panel_common_settings.cpp:84
 msgid "Icon scale:"
@@ -2977,14 +2976,14 @@ msgid ""
 msgstr ""
 "Skalierung für Zeichenfläche setzen.\n"
 "\n"
-"Die Erkennung von Anzeigen mit hoher Auflösung funktioniert auf manchen "
-"Plattformen nicht zuverlässig. Dadurch kann es nötig sein diesen Wert auf "
-"den Systemweiten Faktor für die Anzeigeskalierung zu setzen, typischerweise "
-"2.0.\n"
+"Die Erkennung des Skalierungsfaktors bei Anzeigen mit hoher Auflösung "
+"funktioniert auf manchen Plattformen nicht zuverlässig. Daher kann es nötig "
+"sein, diesen Wert auf den systemweiten Faktor für die Anzeigeskalierung zu "
+"setzen, typischerweise 2.0.\n"
 "\n"
 "Wenn dieser Wert nicht mit der Systemeinstellung übereinstimmt, wird die "
-"Zeichenfläche die falsche Größe haben und die Mauszeigerposition an der "
-"falschen Stelle gezeigt."
+"Zeichenfläche nicht mit der Fenstergröße übereinstimmen und der Cursor an "
+"der falschen Stelle dargestellt."
 
 #: common/dialogs/panel_common_settings.cpp:122
 msgid ""
@@ -2993,7 +2992,7 @@ msgid ""
 "On some platforms, the automatic value is incorrect and should be set "
 "manually."
 msgstr ""
-"Automatischen Wertes für die Zeichenflächen-Skalierung benutzen.\n"
+"Automatischen Wert für die Zeichenflächen-Skalierung verwenden.\n"
 "\n"
 "Auf manchen Plattformen ist der automatische Wert nicht korrekt und sollte "
 "manuell gesetzt werden."
@@ -3027,7 +3026,7 @@ msgstr "Schnelles Anti-Aliasing"
 #: common/dialogs/panel_common_settings_base.cpp:34
 #: common/dialogs/panel_common_settings_base.cpp:44
 msgid "High Quality Antialiasing"
-msgstr "High Quality Anti-Aliasing"
+msgstr "Hochwertiges Anti-Aliasing"
 
 #: common/dialogs/panel_common_settings_base.cpp:40
 msgid "Fallback graphics:"
@@ -3056,7 +3055,7 @@ msgstr "Benutzeroberfläche"
 
 #: common/dialogs/panel_common_settings_base.cpp:118
 msgid "Show icons in menus"
-msgstr "Zeige Icons in Menüs"
+msgstr "Symbole in Menüs anzeigen"
 
 #: common/dialogs/panel_common_settings_base.cpp:121
 msgid "Icon theme:"
@@ -3095,7 +3094,8 @@ msgstr "Symbolskalierung auf Schriftarten anwenden"
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
 msgstr ""
-"(Dieser Workaround verbessert einige GTK HiDPI-Schriftskalierungsprobleme.)"
+"(Diese Abhilfe verbessert einige GTK-Schriftskalierungsprobleme bei Anzeigen "
+"mit hoher Auflösung.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3137,16 +3137,16 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:207
 msgid "&Auto save:"
-msgstr "&Autom. Speichern:"
+msgstr "&Automatisch speichern:"
 
 #: common/dialogs/panel_common_settings_base.cpp:212
 msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
-"Verzögerung nach der ersten Änderung, bevor ein Backup des Platinenentwurfs "
-"erstellt wird.\n"
-"Wenn Wert auf 0 gesetzt ist, wird kein Backup erstellt"
+"Verzögerung nach der ersten Änderung, bevor ein Sicherungskopie des "
+"Platinenentwurfs erstellt wird.\n"
+"Wenn Wert auf 0 gesetzt ist, wird keine Sicherungskopie erstellt"
 
 #: common/dialogs/panel_common_settings_base.cpp:217
 #: common/dialogs/panel_common_settings_base.cpp:294
@@ -3159,15 +3159,15 @@ msgstr "Größe des Dateiverlaufs:"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
 msgid "3D cache file duration:"
-msgstr "Dauer der 3D-Cache-Datei:"
+msgstr "Verweildauer von 3D-Cache-Dateien:"
 
 #: common/dialogs/panel_common_settings_base.cpp:233
 msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
-"Ältere 3D-Cache-Dateien werden gelöscht.\n"
-"Bei der Einstellung 0 ist das Löschen des Caches deaktiviert"
+"3D-Cache-Dateien, die älter als diese Verweildauer sind, werden gelöscht.\n"
+"Wenn dieser Wert auf 0 gesetzt ist, wird der Cache nicht geleert"
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "days"
@@ -3175,11 +3175,11 @@ msgstr "Tage"
 
 #: common/dialogs/panel_common_settings_base.cpp:250
 msgid "Project Backup"
-msgstr "Projekt Sicherungskopien"
+msgstr "Projekt-Sicherungskopien"
 
 #: common/dialogs/panel_common_settings_base.cpp:257
 msgid "Automatically backup projects"
-msgstr "Projekt-Sicherungskopien automatisch speichern"
+msgstr "Sicherungskopien von Projekten automatisch erstellen"
 
 #: common/dialogs/panel_common_settings_base.cpp:258
 msgid ""
@@ -3190,36 +3190,36 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:262
 msgid "Create backups when auto save occurs"
-msgstr "Backups erstellen, wenn das automatische Speichern erfolgt"
+msgstr "Sicherungskopien erstellen wenn das automatische Speichern erfolgt"
 
 #: common/dialogs/panel_common_settings_base.cpp:263
 msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
 msgstr ""
-"Backups erstellen, wenn die automatische Speicherfunktion aktiviert ist. "
-"Wenn diese Option nicht aktiviert ist, werden Sicherungen nur erstellt, wenn "
+"Backups erstellen, wenn die automatische Speicherfunktion aktiviert ist.  "
+"Wenn diese Option nicht aktiviert ist, werden Sicherungen nur erstellt wenn "
 "Sie eine Datei manuell speichern."
 
 #: common/dialogs/panel_common_settings_base.cpp:267
 msgid "Maximum backups to keep:"
-msgstr "Maximal zu speichernde Backups:"
+msgstr "Maximal vorzuhaltende Sicherungskopien:"
 
 #: common/dialogs/panel_common_settings_base.cpp:269
 msgid "How many backup files total to keep (set to 0 for no limit)"
 msgstr ""
-"Wie viele Sicherungsdateien müssen insgesamt aufbewahrt werden (ohne "
-"Begrenzung auf 0 gesetzt)"
+"Gibt an, wie viele Sicherungsdateien insgesamt höchstens aufbewahrt werden "
+"sollen (auf 0 setzen, um keine Begrenzung zu verwenden)"
 
 #: common/dialogs/panel_common_settings_base.cpp:276
 msgid "Maximum backups per day:"
-msgstr "Maximale Backups pro Tag:"
+msgstr "Maximale Sicherungskopien pro Tag:"
 
 #: common/dialogs/panel_common_settings_base.cpp:278
 msgid "How many backup files to keep each day (set to 0 for no limit)"
 msgstr ""
-"Wie viele Sicherungsdateien pro Tag aufbewahrt werden sollen (ohne "
-"Begrenzung auf 0 gesetzt)"
+"Gibt an, wie viele Sicherungsdateien pro Tag höchstens aufbewahrt werden "
+"sollen (auf 0 setzen, um keine Begrenzung zu verwenden)"
 
 #: common/dialogs/panel_common_settings_base.cpp:285
 msgid "Minimum time between backups:"
@@ -3230,8 +3230,9 @@ msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
 msgstr ""
-"Anzahl der Minuten seit der letzten Sicherung vor einer anderen wird beim "
-"nächsten Speichern erstellt (für mindestens kein Wert auf 0 gesetzt)"
+"Anzahl der Minuten seit der letzten Sicherung bevor eine weitere Sicherung "
+"beim nächsten Speichern erstellt wird (auf 0 setzen, um kein Minimum zu "
+"verwenden)"
 
 #: common/dialogs/panel_common_settings_base.cpp:298
 msgid "Maximum total backup size:"
@@ -3243,7 +3244,8 @@ msgid ""
 "be deleted (set to 0 for no limit)"
 msgstr ""
 "Wenn die Gesamtgröße der Sicherungsdateien diese Grenze überschreitet, "
-"werden alte Sicherungen gelöscht (auf 0 setzen für keine Begrenzung)"
+"werden alte Sicherungen gelöscht (auf 0 setzen, um keine Begrenzung zu "
+"verwenden)"
 
 #: common/dialogs/panel_common_settings_base.cpp:307
 msgid "MB"
@@ -3251,7 +3253,7 @@ msgstr "MB"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:84
 msgid "Type filter text"
-msgstr "Eingabe Filtertext"
+msgstr "Text zum Filtern eingeben"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:126
 msgid "Undo All Changes"
@@ -3311,7 +3313,7 @@ msgstr "Hält beim Zoomen den Cursor an seiner aktuellen Position."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:33
 msgid "Automatically pan while moving object"
-msgstr "Autoverschieben während ein Objekt bewegt wird"
+msgstr "Zeichenfläche mitziehen während ein Objekt bewegt wird"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:34
 msgid ""
@@ -4832,7 +4834,7 @@ msgstr "Rasterfang ignorieren"
 
 #: common/hotkey_store.cpp:50
 msgid "Ignore Other Snaps"
-msgstr "Andere Raster ignorieren"
+msgstr "Andere Fänge ignorieren"
 
 #: common/hotkey_store.cpp:57 common/tool/action_menu.cpp:227
 #: common/tool/actions.cpp:114
@@ -6499,11 +6501,11 @@ msgstr "px"
 
 #: common/widgets/gal_options_panel.cpp:143
 msgid "Min grid spacing:"
-msgstr "Minimale Rasterweite:"
+msgstr "Mindestrasterweite:"
 
 #: common/widgets/gal_options_panel.cpp:159
 msgid "Snap to Grid:"
-msgstr "Am Raster ausrichten:"
+msgstr "Am Raster fangen:"
 
 #: common/widgets/gal_options_panel.cpp:163
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:343
@@ -8655,7 +8657,7 @@ msgstr "Das Wert-Feld von Spannungssymbolen kann nicht geändert werden."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
-msgstr "Unzulässiger Referenzbezeichnungswert!"
+msgstr "Unzulässiger Wert für Referenzbezeichner!"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:254
 msgid "Value may not be empty."
@@ -9735,8 +9737,8 @@ msgid ""
 "difficult to connect to in the schematic.\n"
 "Do you want to continue?"
 msgstr ""
-"Dieser Pin liegt nicht auf Raster %d mils was es\n"
-"später nicht einfach macht diesen im Schaltplan zu verbinden.\n"
+"Dieser Pin liegt nicht auf einem %d mil-Raster, wodurch es\n"
+"erschwert wird, diesen im Schaltplan zu verbinden.\n"
 "Möchten Sie fortfahren?"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:32
@@ -10010,7 +10012,7 @@ msgstr "Rahmen und Schriftfeld des Zeichnungsblattes plotten"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
-msgstr "Schwarz-Weiß"
+msgstr "Schwarz/Weiß"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
 msgid "Plot background color"
@@ -10097,7 +10099,7 @@ msgstr "Drucke die Seitenreferenzen (oder drucke diese nicht)."
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:28
 msgid "Print in &black and white only"
-msgstr "Drucke &Schwarz-Weiß"
+msgstr "Drucke &Schwarz/Weiß"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:32
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:211
@@ -11763,15 +11765,15 @@ msgid ""
 "their reference designators."
 msgstr ""
 "Normalerweise werden Footprints über ihre eindeutigen IDs mit den "
-"Schaltplansymbolen verknüpft. Wählen Sie diese Option nur aus, wenn Sie die "
+"Schaltplansymbolen verknüpft.  Wählen Sie diese Option nur aus, wenn Sie die "
 "Footprintverknüpfungen basierend auf ihren Referenzbezeichnern zurücksetzen "
 "möchten."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
 msgstr ""
-"Aktualisiert die Referenzen von Schaltplansymbolen welche im PCB-Editor "
-"geändert worden sind."
+"Aktualisiert die Referenzen von Schaltplansymbolen, welche im PCB-Editor "
+"geändert wurden."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
 msgid "Footprint assignments"
@@ -16258,19 +16260,19 @@ msgstr "Zuletzt gewählte(s) Element(e) duplizieren"
 
 #: eeschema/tools/ee_actions.cpp:372 pcbnew/tools/pcb_actions.cpp:291
 msgid "Rotate Clockwise"
-msgstr "Rotieren im Uhrzeigersinn"
+msgstr "Im Uhrzeigersinn drehen"
 
 #: eeschema/tools/ee_actions.cpp:372 pcbnew/tools/pcb_actions.cpp:291
 msgid "Rotates selected item(s) clockwise"
-msgstr "Gewählte(s) Element(e) im Uhrzeigersinn rotieren"
+msgstr "Gewählte(s) Element(e) im Uhrzeigersinn drehen"
 
 #: eeschema/tools/ee_actions.cpp:378 pcbnew/tools/pcb_actions.cpp:297
 msgid "Rotate Counterclockwise"
-msgstr "Rotieren gegen den Uhrzeigersinn"
+msgstr "Gegen Uhrzeigersinn drehen"
 
 #: eeschema/tools/ee_actions.cpp:378
 msgid "Rotates selected item(s) counter-clockwise"
-msgstr "Gewählte(s) Element(e) gegen den Uhrzeigersinn rotieren"
+msgstr "Gewählte(s) Element(e) gegen den Uhrzeigersinn drehen"
 
 #: eeschema/tools/ee_actions.cpp:384
 msgid "Mirror Vertically"
@@ -16799,7 +16801,7 @@ msgstr "Symbol verschieben aktivieren"
 
 #: eeschema/tools/ee_actions.cpp:761
 msgid "Align Elements to Grid"
-msgstr "Am Raster ausrichten"
+msgstr "Elemente am Raster ausrichten"
 
 #: eeschema/tools/ee_actions.cpp:767
 msgid "Save Current Sheet Copy As..."
@@ -16911,7 +16913,7 @@ msgstr "<b>Pin %s</b> %s außerhalb des Rasters an Position <b>(%s, %s)</b>."
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b>Pin %s</b> %s außerhalb des Rasters an Position <b>(%s, %s)</b> im "
+"<b>Pin %s</b> %s außerhalb des Rasters an Position <b>(%s, %s)</b> in "
 "Einheit %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:451
@@ -21877,7 +21879,7 @@ msgid ""
 "Any reference types %s will not be annotated."
 msgstr ""
 "\n"
-"Referenztypen %s werden nicht mit Anmerkungen versehen."
+"Referenztypen %s werden nicht annotiert."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:323
 msgid ""
@@ -22154,7 +22156,7 @@ msgid ""
 "to this grid before sorting.\n"
 "This helps with misaligned parts."
 msgstr ""
-"Die Komponentenposition wird vor dem\n"
+"Die Bauteilposition wird vor dem\n"
 "Sortieren auf dieses Raster gerundet.\n"
 "Dies hilft bei falsch ausgerichteten Teilen."
 
@@ -22214,16 +22216,17 @@ msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
 msgstr ""
-"Leer wird von vorne fortgesetzt oder geben Sie eine Zahl ein, die größer als "
-"die höchste Referenzbezeichnung auf der Vorderseite ist."
+"Ohne Angabe wird die Zählung von der Vorderseite fortgesetzt, oder geben Sie "
+"eine Zahl ein, die größer als der höchste Referenzbezeichner auf der "
+"Vorderseite ist."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:227
 msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
 msgstr ""
-"Lassen Sie das Feld leer oder null oder geben Sie eine Zahl ein, die größer "
-"als die höchste Referenzbezeichnung auf der Vorderseite ist."
+"Lassen Sie das Feld leer oder auf dem Wert Null, oder geben Sie eine Zahl "
+"ein, die größer als der höchste Referenzbezeichner auf der Vorderseite ist."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:232
 msgid "Remove front prefix"
@@ -22257,7 +22260,7 @@ msgstr "Vorderseiten-Präfix:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:249
 msgid "Optional prefix for component side reference designations (e.g. F_)"
 msgstr ""
-"Optionales Präfix für komponentenseitige Referenzbezeichnungen (z. B. F_)"
+"Optionales Präfix für Referenzbezeichner auf der Bestückungsseite (z. B. F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
 msgid "Back prefix:"
@@ -22266,7 +22269,7 @@ msgstr "Rückseiten-Präfix:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:255
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:260
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr "Optionales Präfix für lötseitige Referenzbezeichnungen (z. B. B_)"
+msgstr "Optionales Präfix für Referenzbezeichner auf der Lötseite (z. B. B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
 msgid "Exclude locked footprints"
@@ -22285,8 +22288,8 @@ msgid ""
 "Do not re-annotate this type \n"
 "of reference (R means R*)"
 msgstr ""
-"Kommentieren Sie diesen Typ nicht erneut\n"
-"Referenz (R bedeutet R *)"
+"Diese Art von Referenz nicht neu\n"
+"annotieren (R bedeutet R*)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:290
 msgid "Reference Designators"
@@ -23115,8 +23118,8 @@ msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into \"Count\" portions."
 msgstr ""
-"Positive Winkel repräsentieren ein Rotation entgegen dem Uhrzeigersinn. Ein "
-"Winkel von 0 erstellt einen vollen Kreis geteilt in \"Teil\" Anteile."
+"Positive Winkel repräsentieren eine Drehung entgegen dem Uhrzeigersinn. Ein "
+"Winkel von 0 erstellt einen vollen Kreis geteilt in \"Anzahl\" Anteile."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:268
 msgid "How many items in the array."
@@ -23125,15 +23128,15 @@ msgstr "Wie viele Elemente sind im Array."
 #: pcbnew/dialogs/dialog_create_array_base.cpp:272
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:52
 msgid "Rotate:"
-msgstr "Rotieren:"
+msgstr "Drehen:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:278
 msgid ""
 "Rotate the item as well as move it - multi-selections will be rotated "
 "together"
 msgstr ""
-"Rotiere das Element auch beim Bewegen, Multi-Selektionen werden gemeinsam "
-"rotiert"
+"Element sowohl drehen als auch verschieben - Mehrfachauswahlen werden "
+"gemeinsam gedreht"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:291
 msgid "Numbering Options"
@@ -23717,7 +23720,7 @@ msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 msgid "Grid reference point:"
-msgstr "Raster-Referenzpunkt:"
+msgstr "Raster-Bezugspunkt:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:38
 msgid "Adjust automatically"
@@ -24698,7 +24701,7 @@ msgstr "Ursprung der Drill/Place-Datei als Ursprung verwenden"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:140
 msgid "Save the origin coordinates in the file"
-msgstr "Raster-Ursprungspunkt in der Datei speichern"
+msgstr "Ursprungskoordinaten in der Datei speichern"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:77
 msgid "Generate Drill File"
@@ -25088,7 +25091,7 @@ msgstr "Gefilterte Elemente nach Lagen:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:78
 msgid "Filter items by parent footprint library id:"
-msgstr "Filtern Werte nach Eltern Footprint Referenz:"
+msgstr "Elemente nach Eltern-Footprintbibliothek-ID filtern:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:105
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:92
@@ -25582,7 +25585,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43
 msgid "Link footprints using reference designators"
-msgstr "Verknüpfen von Footprints mit Referenzbezeichnern"
+msgstr "Footprints anhand der Referenzbezeichner verknüpfen"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:45
 msgid "Link Method"
@@ -27611,8 +27614,8 @@ msgstr "Schrittweite für &Drehbefehle:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:58
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr ""
-"Einstellung der Winkelschrittweite (in °) bei Rotation per Kontextmenü oder "
-"Hotkey."
+"Einstellung der Winkelschrittweite (in °) bei Drehung über das Kontextmenü "
+"oder Hotkey."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
 msgid "Allow free pads"
@@ -34492,7 +34495,7 @@ msgstr "Einfügen einer DXF_SVG Grafik"
 
 #: pcbnew/tools/drawing_tool.cpp:1369
 msgid "Move the footprint reference anchor"
-msgstr "Referenzpunkt für Footprintanker verschieben"
+msgstr "Bezugspunkt für Footprintanker verschieben"
 
 #: pcbnew/tools/drawing_tool.cpp:2081
 msgid "Self-intersecting polygons are not allowed"
@@ -34536,7 +34539,7 @@ msgstr "Leiterbahn-Bogen ziehen"
 
 #: pcbnew/tools/edit_tool.cpp:810
 msgid "Select reference point for move..."
-msgstr "Referenzpunkt für Verschieben auswählen ..."
+msgstr "Bezugspunkt für Verschieben auswählen ..."
 
 #: pcbnew/tools/edit_tool.cpp:1193
 msgid "Edit track width/via size"
@@ -34573,7 +34576,7 @@ msgstr "Manche Leiterbahnsegmente konnten nicht abgerundet werden."
 
 #: pcbnew/tools/edit_tool.cpp:1523
 msgid "Rotate"
-msgstr "Rotieren"
+msgstr "Drehen"
 
 #: pcbnew/tools/edit_tool.cpp:1743 pcbnew/tools/pcb_actions.cpp:303
 msgid "Change Side / Flip"
@@ -34590,7 +34593,7 @@ msgstr "%d doppelte(s) Element(e)"
 
 #: pcbnew/tools/edit_tool.cpp:2457
 msgid "Select reference point for the copy..."
-msgstr "Referenzpunkt für das Kopieren setzen ..."
+msgstr "Bezugspunkt für das Kopieren setzen ..."
 
 #: pcbnew/tools/edit_tool.cpp:2458 pcbnew/tools/edit_tool.cpp:2475
 msgid "Selection copied"
@@ -34910,8 +34913,8 @@ msgid ""
 "Selects a footprint by reference designator and places it under the cursor "
 "for moving"
 msgstr ""
-"Auswahl eines Footprints über den Referenzbezeichner und platziert diesen "
-"unter dem Cursor zum Bewegen"
+"Wählt einen Footprint anhand des Referenzbezeichners und platziert diesen "
+"zum Verschieben unter dem Cursor"
 
 #: pcbnew/tools/pcb_actions.cpp:259
 msgid "Move with Reference"
@@ -34957,7 +34960,7 @@ msgstr "Array erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:297
 msgid "Rotates selected item(s) counterclockwise"
-msgstr "Gewählte(s) Element(e) gegen den Uhrzeigersinn rotieren"
+msgstr "Gewählte(s) Element(e) gegen den Uhrzeigersinn drehen"
 
 #: pcbnew/tools/pcb_actions.cpp:303
 msgid "Flips selected item(s) to opposite side of board"
@@ -35436,7 +35439,7 @@ msgstr "Ursprungspunkt für Bohrdateien und Bauteilplatzierungsdateien setzen"
 
 #: pcbnew/tools/pcb_actions.cpp:669
 msgid "Toggle Lock"
-msgstr "Sperrung umschalten"
+msgstr "Sperre umschalten"
 
 #: pcbnew/tools/pcb_actions.cpp:669
 msgid "Lock or unlock selected items"
@@ -36287,7 +36290,7 @@ msgstr "Relative Position"
 
 #: pcbnew/tools/position_relative_tool.cpp:172
 msgid "Click on reference item..."
-msgstr "Referenzelement anklicken ..."
+msgstr "Bezugselement anklicken ..."
 
 #: pcbnew/tools/zone_create_helper.cpp:176
 msgid "Add a zone cutout"
