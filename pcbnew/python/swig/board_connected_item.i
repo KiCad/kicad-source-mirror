@@ -29,9 +29,9 @@
 #include <board_connected_item.h>
 %}
 
-%typemap(out) std::list<BOARD_CONNECTED_ITEM*> {
-    std::list<BOARD_CONNECTED_ITEM*> list = $1;
-    std::list<BOARD_CONNECTED_ITEM*>::const_iterator iter;
+%typemap(out) std::vector<BOARD_CONNECTED_ITEM*> {
+    std::vector<BOARD_CONNECTED_ITEM*> list = $1;
+    std::vector<BOARD_CONNECTED_ITEM*>::const_iterator iter;
 
     PyObject * retval = $result = PyList_New(0);
 
@@ -50,7 +50,7 @@
         case PCB_ARC_T:
         case PCB_VIA_T:
             obj = SWIG_NewPointerObj( SWIG_as_voidptr(aItem),
-                                      SWIGTYPE_p_TRACK,
+                                      SWIGTYPE_p_PCB_TRACK,
                                       0 | 0 );
             break;
 
