@@ -25,7 +25,7 @@
 #include <widgets/number_badge.h>
 
 #include <algorithm>
-
+#include <kiplatform/ui.h>
 
 NUMBER_BADGE::NUMBER_BADGE( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos,
                             const wxSize& aSize, int aStyles ) :
@@ -67,7 +67,7 @@ void NUMBER_BADGE::UpdateNumber( int aNumber, SEVERITY aSeverity )
         switch( aSeverity )
         {
         case RPT_SEVERITY_ERROR:
-            m_badgeColour = *wxRED;
+            m_badgeColour = KIPLATFORM::UI::IsDarkTheme() ? wxColour( 240, 64, 64 ) : *wxRED;
             m_textColour  = *wxWHITE;
             break;
 

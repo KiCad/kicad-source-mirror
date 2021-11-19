@@ -33,6 +33,7 @@
 #include <wx/msgdlg.h>
 #include <wx/menu.h>
 #include <wx/textctrl.h>
+#include <kiplatform/ui.h>
 
 WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                                             const wxSize& size, long style ) :
@@ -181,23 +182,47 @@ wxString WX_HTML_REPORT_PANEL::generateHtml( const REPORT_LINE& aLine )
     if( !( m_severities & aLine.severity ) )
         return retv;
 
-    switch( aLine.severity )
+    if( KIPLATFORM::UI::IsDarkTheme() )
     {
-    case RPT_SEVERITY_ERROR:
-        retv = "<font color=\"red\" size=3>" + _( "Error:" ) + " </font>"
-               "<font size=3>" + aLine.message + "</font><br>";
-        break;
-    case RPT_SEVERITY_WARNING:
-        retv = "<font size=3>" + _( "Warning:" ) + wxS( " " ) + aLine.message + "</font><br>";
-        break;
-    case RPT_SEVERITY_INFO:
-        retv = "<font color=\"dark gray\" size=3>" + aLine.message + "</font><br>";
-        break;
-    case RPT_SEVERITY_ACTION:
-        retv = "<font color=\"dark green\" size=3>" + aLine.message + "</font><br>";
-        break;
-    default:
-        retv = "<font size=3>" + aLine.message + "</font><br>";
+        switch( aLine.severity )
+        {
+        case RPT_SEVERITY_ERROR:
+            retv = "<font color=#F04040 size=3>" + _( "Error:" ) + " </font>"
+                   "<font size=3>" + aLine.message + "</font><br>";
+            break;
+        case RPT_SEVERITY_WARNING:
+            retv = "<font size=3>" + _( "Warning:" ) + wxS( " " ) + aLine.message + "</font><br>";
+            break;
+        case RPT_SEVERITY_INFO:
+            retv = "<font color=#909090 size=3>" + aLine.message + "</font><br>";
+            break;
+        case RPT_SEVERITY_ACTION:
+            retv = "<font color=#60D060 size=3>" + aLine.message + "</font><br>";
+            break;
+        default:
+            retv = "<font size=3>" + aLine.message + "</font><br>";
+        }
+    }
+    else
+    {
+        switch( aLine.severity )
+        {
+        case RPT_SEVERITY_ERROR:
+            retv = "<font color=#D00000 size=3>" + _( "Error:" ) + " </font>"
+                   "<font size=3>" + aLine.message + "</font><br>";
+            break;
+        case RPT_SEVERITY_WARNING:
+            retv = "<font size=3>" + _( "Warning:" ) + wxS( " " ) + aLine.message + "</font><br>";
+            break;
+        case RPT_SEVERITY_INFO:
+            retv = "<font color=#808080 size=3>" + aLine.message + "</font><br>";
+            break;
+        case RPT_SEVERITY_ACTION:
+            retv = "<font color=#008000 size=3>" + aLine.message + "</font><br>";
+            break;
+        default:
+            retv = "<font size=3>" + aLine.message + "</font><br>";
+        }
     }
 
     return retv;
