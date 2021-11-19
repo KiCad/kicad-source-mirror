@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-16 20:27+0100\n"
-"PO-Revision-Date: 2021-11-13 15:27+0100\n"
+"POT-Creation-Date: 2021-11-19 10:00+0100\n"
+"PO-Revision-Date: 2021-11-19 10:00+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -202,7 +202,7 @@ msgstr "Exporter la Vue en Cours en JPEG..."
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
 #: common/tool/actions.cpp:564 pcbnew/footprint_viewer_frame.cpp:942
-#: pcbnew/pcb_base_frame.cpp:538
+#: pcbnew/pcb_base_frame.cpp:547
 msgid "3D Viewer"
 msgstr "Visu 3D"
 
@@ -294,7 +294,7 @@ msgstr "Visionneuse 3D KiCad"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:66
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:118
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:238
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:211
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:213
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:87
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:307
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:207
@@ -2308,11 +2308,11 @@ msgstr "Quitter KiCad"
 msgid "Welcome to KiCad %s!"
 msgstr "Bienvenue à KiCad %s!"
 
-#: common/dialogs/dialog_migrate_settings.cpp:62
+#: common/dialogs/dialog_migrate_settings.cpp:61
 msgid "Import settings from a previous version (none found)"
 msgstr "Importater paramètres  d’une version précédente (aucun trouvé)"
 
-#: common/dialogs/dialog_migrate_settings.cpp:124
+#: common/dialogs/dialog_migrate_settings.cpp:129
 msgid "Select Settings Path"
 msgstr "Sélectionnez Le Chemin des Paramètres"
 
@@ -2862,7 +2862,7 @@ msgstr "Options Page..."
 msgid "MyLabel"
 msgstr "MyLabel"
 
-#: common/dialogs/eda_list_dialog.cpp:48 common/widgets/lib_tree.cpp:125
+#: common/dialogs/eda_list_dialog.cpp:48 common/widgets/lib_tree.cpp:127
 #: kicad/pcm/dialogs/panel_packages_view.cpp:72
 #: pcbnew/dialogs/dialog_copper_zones.cpp:195
 #: pcbnew/footprint_viewer_frame.cpp:144 pcbnew/footprint_viewer_frame.cpp:159
@@ -3886,7 +3886,7 @@ msgstr "Commentaire"
 msgid "Text '%s'"
 msgstr "Texte '%s'"
 
-#: common/drawing_sheet/ds_draw_item.cpp:395 eeschema/lib_shape.cpp:364
+#: common/drawing_sheet/ds_draw_item.cpp:395 eeschema/lib_shape.cpp:371
 #, c-format
 msgid "Rectangle, width %s height %s"
 msgstr "Rectangle, largeur %s hauteur %s"
@@ -3979,7 +3979,7 @@ msgstr "Raccourcis"
 msgid "Insufficient permissions to folder '%s'."
 msgstr "Autorisations insuffisantes pour le dossier '%s'."
 
-#: common/eda_base_frame.cpp:1105
+#: common/eda_base_frame.cpp:1107
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -3994,7 +3994,7 @@ msgstr ""
 "il n'a pas été sauvé correctement. Voulez vous restaurer la dernière édition "
 "que vous avez faite?"
 
-#: common/eda_base_frame.cpp:1121
+#: common/eda_base_frame.cpp:1123
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Le fichier de sauvegarde automatique n'a pas pu être renommé comme le "
@@ -4109,7 +4109,7 @@ msgstr "Ecran"
 msgid "Footprint"
 msgstr "Empreinte"
 
-#: common/eda_item.cpp:316 pcbnew/dialogs/dialog_board_statistics.cpp:493
+#: common/eda_item.cpp:316 pcbnew/dialogs/dialog_board_statistics.cpp:494
 #: pcbnew/pad.cpp:879
 msgid "Pad"
 msgstr "Pad"
@@ -4127,7 +4127,7 @@ msgstr "Zone"
 msgid "Track"
 msgstr "Piste"
 
-#: common/eda_item.cpp:323 pcbnew/dialogs/dialog_board_statistics.cpp:493
+#: common/eda_item.cpp:323 pcbnew/dialogs/dialog_board_statistics.cpp:494
 #: pcbnew/pcb_track.cpp:716
 msgid "Via"
 msgstr "Via"
@@ -4266,7 +4266,7 @@ msgstr "Polygone"
 
 #: common/eda_shape.cpp:528 common/eda_shape.cpp:1602
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:134
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:120
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
 #: pcbnew/microwave/microwave_polygon.cpp:130 pcbnew/pad.cpp:1627
@@ -4301,8 +4301,8 @@ msgid "Points"
 msgstr "Points"
 
 #: common/eda_shape.cpp:567 common/eda_text.cpp:753 eeschema/sch_bitmap.cpp:203
-#: pcbnew/dialogs/dialog_board_statistics.cpp:676
-#: pcbnew/dialogs/dialog_board_statistics.cpp:686
+#: pcbnew/dialogs/dialog_board_statistics.cpp:677
+#: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:54
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:42
@@ -4315,8 +4315,8 @@ msgid "Width"
 msgstr "Largeur"
 
 #: common/eda_shape.cpp:570 common/eda_text.cpp:757 eeschema/sch_bitmap.cpp:204
-#: pcbnew/dialogs/dialog_board_statistics.cpp:678
-#: pcbnew/dialogs/dialog_board_statistics.cpp:687
+#: pcbnew/dialogs/dialog_board_statistics.cpp:679
+#: pcbnew/dialogs/dialog_board_statistics.cpp:688
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:55
 #: pcbnew/fp_text.cpp:308 pcbnew/fp_text_grid_table.cpp:92 pcbnew/pad.cpp:927
@@ -4736,7 +4736,7 @@ msgid "Cannot copy file '%s'."
 msgstr "Impossible de copier le  fichier '%s'."
 
 #: common/grid_tricks.cpp:277 common/tool/actions.cpp:153
-#: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1992
+#: eeschema/tools/ee_actions.cpp:148 pcbnew/tools/edit_tool.cpp:1998
 msgid "Cut"
 msgstr "Couper"
 
@@ -4766,7 +4766,7 @@ msgstr ""
 
 #: common/grid_tricks.cpp:283 common/tool/actions.cpp:191
 #: kicad/project_tree_pane.cpp:770 pcbnew/plugins/kicad/pcb_parser.cpp:856
-#: pcbnew/tools/edit_tool.cpp:1994
+#: pcbnew/tools/edit_tool.cpp:2000
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -5259,7 +5259,7 @@ msgid "Helper items"
 msgstr "Eléments d'aide"
 
 #: common/layer_id.cpp:132 common/layer_id.cpp:171 common/tool/grid_menu.cpp:40
-#: common/tool/grid_menu.cpp:93 gerbview/widgets/gerbview_layer_widget.cpp:98
+#: gerbview/widgets/gerbview_layer_widget.cpp:98
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Grid"
 msgstr "Grille"
@@ -5495,11 +5495,11 @@ msgstr "Sélection Éditeur Préféré"
 msgid "Environment variable HOME is empty.  Unable to continue."
 msgstr "La variable d'environnement HOME est vide.  Impossible de continuer."
 
-#: common/pgm_base.cpp:431
+#: common/pgm_base.cpp:433
 msgid "This language is not supported by the operating system."
 msgstr "Ce langage n’est pas pris en charge par le système d’exploitation."
 
-#: common/pgm_base.cpp:482 common/pgm_base.cpp:520
+#: common/pgm_base.cpp:484 common/pgm_base.cpp:522
 msgid "The KiCad language file for this language is not installed."
 msgstr "Le fichier dictionnaire KiCad pour cette langue n’est pas installé."
 
@@ -5612,7 +5612,7 @@ msgstr "Erreur en extrayant le fichier!"
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:52
 #: gerbview/export_to_pcbnew.cpp:68 pagelayout_editor/files.cpp:210
 #: pcbnew/build_BOM_from_board.cpp:103
-#: pcbnew/dialogs/dialog_board_statistics.cpp:661
+#: pcbnew/dialogs/dialog_board_statistics.cpp:662
 #: pcbnew/dialogs/dialog_drc.cpp:671 pcbnew/dialogs/dialog_export_idf.cpp:223
 #: pcbnew/dialogs/dialog_export_svg.cpp:296
 #: pcbnew/dialogs/dialog_export_vrml.cpp:264
@@ -6374,6 +6374,11 @@ msgstr ""
 #: common/tool/common_control.cpp:287
 msgid "Donate to KiCad"
 msgstr "Faire un don à KiCad"
+
+#: common/tool/grid_menu.cpp:93
+#, c-format
+msgid "Grid: %s (%s)"
+msgstr "Grille: %s (%s)"
 
 #: common/tool/grid_menu.cpp:104
 #, c-format
@@ -10346,7 +10351,7 @@ msgstr "Règles Electriques"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:74
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1005
-#: pcbnew/dialogs/dialog_board_statistics.cpp:668
+#: pcbnew/dialogs/dialog_board_statistics.cpp:669
 #: pcbnew/footprint_libraries_utils.cpp:517
 msgid "Project"
 msgstr "Projet"
@@ -13199,22 +13204,22 @@ msgstr "Pin %s [%s, %s, %s]"
 msgid "Pin %s [%s, %s]"
 msgstr "Pin %s [%s, %s]"
 
-#: eeschema/lib_shape.cpp:356
+#: eeschema/lib_shape.cpp:363
 #, c-format
 msgid "Arc, radius %s"
 msgstr "Arc, rayon %s"
 
-#: eeschema/lib_shape.cpp:360
+#: eeschema/lib_shape.cpp:367
 #, c-format
 msgid "Circle, radius %s"
 msgstr "Cercle, rayon %s"
 
-#: eeschema/lib_shape.cpp:369
+#: eeschema/lib_shape.cpp:376
 #, c-format
 msgid "Polyline, %d points"
 msgstr "Poly-ligne, %d points"
 
-#: eeschema/lib_shape.cpp:373
+#: eeschema/lib_shape.cpp:380
 #, c-format
 msgid "Bezier Curve, %d points"
 msgstr "Courbe de Bézier, %d points"
@@ -16775,7 +16780,7 @@ msgstr "Déplacer"
 msgid "Moves the selected item(s)"
 msgstr "Déplace l'élément sélectionné"
 
-#: eeschema/tools/ee_actions.cpp:749 pcbnew/tools/edit_tool.cpp:1119
+#: eeschema/tools/ee_actions.cpp:749 pcbnew/tools/edit_tool.cpp:1125
 msgid "Drag"
 msgstr "Drag"
 
@@ -17697,7 +17702,7 @@ msgid "Polarity"
 msgstr "Polarité"
 
 #: gerbview/gerber_draw_item.cpp:735 pcbnew/fp_text.cpp:296
-#: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1668
+#: pcbnew/pcb_text.cpp:122 pcbnew/tools/edit_tool.cpp:1674
 #: pcbnew/tools/pcb_actions.cpp:308
 msgid "Mirror"
 msgstr "Miroir"
@@ -18293,37 +18298,37 @@ msgstr "Titre du Modèle de Projet"
 msgid "Project Template Selector"
 msgstr "Sélection de Modèle de Projet"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:112
+#: kicad/dialogs/panel_kicad_launcher.cpp:115
 msgid "Edit the project schematic"
 msgstr "Editer la schématique du projet"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:116
+#: kicad/dialogs/panel_kicad_launcher.cpp:119
 msgid "Edit global and/or project schematic symbol libraries"
 msgstr "Éditer  librairies de symboles schématiques globales et/ou du projet."
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:120
+#: kicad/dialogs/panel_kicad_launcher.cpp:123
 msgid "Edit the project PCB design"
 msgstr "Éditer le circuit imprimé du projet"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:124
+#: kicad/dialogs/panel_kicad_launcher.cpp:127
 msgid "Edit global and/or project PCB footprint libraries"
 msgstr "Éditer  librairies d'empreintes globales et/ou du projet."
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:128
+#: kicad/dialogs/panel_kicad_launcher.cpp:131
 msgid "Preview Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:132
+#: kicad/dialogs/panel_kicad_launcher.cpp:135
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
 msgstr ""
 "Convertir des images bitmap en composants schématiques ou empreintes de PCB"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:136
+#: kicad/dialogs/panel_kicad_launcher.cpp:139
 msgid "Show tools for calculating resistance, current capacity, etc."
 msgstr ""
 "Afficher les outils de calcul de résistance, de la capacité de courant, etc."
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:140
+#: kicad/dialogs/panel_kicad_launcher.cpp:143
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
@@ -18331,7 +18336,7 @@ msgstr ""
 "Editer les bordures et les titres des feuilles de dessin pour les schémas et "
 "les PCB"
 
-#: kicad/dialogs/panel_kicad_launcher.cpp:146
+#: kicad/dialogs/panel_kicad_launcher.cpp:149
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
 msgstr ""
 "Gérer les paquets téléchargeables à partir de KiCad et des dépots tiers"
@@ -18738,9 +18743,8 @@ msgid "Install Size"
 msgstr "Taille Installation"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
-#, fuzzy
 msgid "Compatible"
-msgstr "Mode compatibilité :"
+msgstr "Compatible"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 msgid "Show all versions"
@@ -19310,7 +19314,7 @@ msgid "Size: %.1fx%.1fmm"
 msgstr "Taille: %.1fx%.1fmm"
 
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:230
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
 msgid "Count"
 msgstr "Nombre"
 
@@ -21257,16 +21261,16 @@ msgstr "Ceci est la Netclass par défaut."
 msgid "PCB"
 msgstr "PCB"
 
-#: pcbnew/board.cpp:1173 pcbnew/dialogs/dialog_board_statistics.cpp:692
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:77
+#: pcbnew/board.cpp:1173 pcbnew/dialogs/dialog_board_statistics.cpp:693
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:79
 #: pcbnew/netinfo_item.cpp:95 pcbnew/pcb_draw_panel_gal.cpp:472
 #: pcbnew/tools/pcb_control.cpp:1234 pcbnew/widgets/appearance_controls.cpp:337
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
 msgstr "Pads"
 
-#: pcbnew/board.cpp:1174 pcbnew/dialogs/dialog_board_statistics.cpp:698
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:156
+#: pcbnew/board.cpp:1174 pcbnew/dialogs/dialog_board_statistics.cpp:699
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:158
 #: pcbnew/dialogs/dialog_find_base.cpp:78
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:77
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:31
@@ -22034,7 +22038,7 @@ msgstr ""
 "%d %s Uuid: [%s], X, Y: %s, Arrondi X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:602
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
@@ -22043,8 +22047,8 @@ msgid ""
 msgstr ""
 "\n"
 "Le PCB a %d références schématiques vides ou non valides.\n"
-"Il est recommandé d’exécuter le contrôle DRC avec \"Test des empreintes par "
-"rapport à la schématique\" activé.\n"
+"Il est recommandé d’exécuter le contrôle DRC avec 'Test des empreintes par "
+"rapport à la schématique' activé.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
 #, c-format
@@ -22372,17 +22376,17 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:95
-#: pcbnew/dialogs/dialog_board_statistics.cpp:706
+#: pcbnew/dialogs/dialog_board_statistics.cpp:707
 msgid "Front Side"
 msgstr "Dessus"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:97
-#: pcbnew/dialogs/dialog_board_statistics.cpp:706
+#: pcbnew/dialogs/dialog_board_statistics.cpp:707
 msgid "Back Side"
 msgstr "Dessous"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:99
-#: pcbnew/dialogs/dialog_board_statistics.cpp:706
+#: pcbnew/dialogs/dialog_board_statistics.cpp:707
 msgid "Total"
 msgstr "Total"
 
@@ -22434,42 +22438,42 @@ msgstr "Total:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:432
 #: pcbnew/dialogs/dialog_board_statistics.cpp:433
 #: pcbnew/dialogs/dialog_board_statistics.cpp:434
-#: pcbnew/dialogs/dialog_board_statistics.cpp:686
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_board_statistics.cpp:688
+#: pcbnew/dialogs/dialog_board_statistics.cpp:689
 msgid "unknown"
 msgstr "inconnu"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:463
+#: pcbnew/dialogs/dialog_board_statistics.cpp:464
 msgid "Round"
 msgstr "Rond"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:466
+#: pcbnew/dialogs/dialog_board_statistics.cpp:467
 msgid "Slot"
 msgstr "Ovale"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:469
+#: pcbnew/dialogs/dialog_board_statistics.cpp:470
 msgid "???"
 msgstr "???"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:474
-#: pcbnew/dialogs/dialog_board_statistics.cpp:479
+#: pcbnew/dialogs/dialog_board_statistics.cpp:475
+#: pcbnew/dialogs/dialog_board_statistics.cpp:480
 msgid "N/A"
 msgstr "N/A"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:491 pcbnew/pad.cpp:1124
+#: pcbnew/dialogs/dialog_board_statistics.cpp:492 pcbnew/pad.cpp:1124
 msgid "PTH"
 msgstr "Trous métallisés"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:491 pcbnew/pad.cpp:1127
+#: pcbnew/dialogs/dialog_board_statistics.cpp:492 pcbnew/pad.cpp:1127
 msgid "NPTH"
 msgstr "NPTH"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:645
+#: pcbnew/dialogs/dialog_board_statistics.cpp:646
 msgid "Save Report File"
 msgstr "Sauver Fichier Rapport"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:666
+#: pcbnew/dialogs/dialog_board_statistics.cpp:667
 msgid ""
 "PCB statistics report\n"
 "====================="
@@ -22477,70 +22481,70 @@ msgstr ""
 "Statistiques du PCB\n"
 "====================="
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:667
+#: pcbnew/dialogs/dialog_board_statistics.cpp:668
 msgid "Date"
 msgstr "Date"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:669
+#: pcbnew/dialogs/dialog_board_statistics.cpp:670
 msgid "Board name"
 msgstr "Nom du CI"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:672
+#: pcbnew/dialogs/dialog_board_statistics.cpp:673
 msgid "Board"
 msgstr "Circuit Imprimé"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:680
-#: pcbnew/dialogs/dialog_board_statistics.cpp:688
+#: pcbnew/dialogs/dialog_board_statistics.cpp:681
+#: pcbnew/dialogs/dialog_board_statistics.cpp:689
 msgid "Area"
 msgstr "Surface"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:735
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:37
+#: pcbnew/dialogs/dialog_board_statistics.cpp:736
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:39
 msgid "Components"
 msgstr "Composants"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:741
+#: pcbnew/dialogs/dialog_board_statistics.cpp:742
 msgid "Drill holes"
 msgstr "Perçages"
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:748
+#: pcbnew/dialogs/dialog_board_statistics.cpp:749
 #, c-format
 msgid "Error writing file '%s'."
 msgstr "Erreur lors de l'écriture du fichier '%s'."
 
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:117
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:119
 msgid "Board Size"
 msgstr "Taille du CI"
 
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:198
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:200
 msgid "Subtract holes from board area"
 msgstr "Soustraire les trous de la surface du CI"
 
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:201
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:203
 msgid "Exclude components with no pins"
 msgstr "Exclure les composants sans pads"
 
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:234
 msgid "X Size"
 msgstr "Taille X"
 
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:233
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:235
 msgid "Y Size"
 msgstr "Taille Y"
 
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:234
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:236
 msgid "Plated"
 msgstr "Métallisé"
 
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:235
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:237
 msgid "Via/Pad"
 msgstr "Via/Pad"
 
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:236
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:238
 msgid "Start Layer"
 msgstr "Premiere couche"
 
-#: pcbnew/dialogs/dialog_board_statistics_base.cpp:237
+#: pcbnew/dialogs/dialog_board_statistics_base.cpp:239
 msgid "Stop Layer"
 msgstr "Dernière couche"
 
@@ -22553,7 +22557,7 @@ msgstr "Perçage"
 msgid "Generate Report File..."
 msgstr "Créer Fichier Rapport..."
 
-#: pcbnew/dialogs/dialog_board_statistics_base.h:66
+#: pcbnew/dialogs/dialog_board_statistics_base.h:68
 msgid "Board Statistics"
 msgstr "Statistiques du CI"
 
@@ -34481,25 +34485,25 @@ msgstr "Drag Arc de Piste"
 msgid "Select reference point for move..."
 msgstr "Sélectionnez le point de référence pour le déplacement..."
 
-#: pcbnew/tools/edit_tool.cpp:1193
+#: pcbnew/tools/edit_tool.cpp:1199
 msgid "Edit track width/via size"
 msgstr "Editer la taille des pistes ou/et vias"
 
-#: pcbnew/tools/edit_tool.cpp:1228
+#: pcbnew/tools/edit_tool.cpp:1234
 msgid "At least two straight track segments must be selected."
 msgstr ""
 "Au moins deux segments rectilignes de pistes doivent être sélectionnés."
 
-#: pcbnew/tools/edit_tool.cpp:1232
+#: pcbnew/tools/edit_tool.cpp:1238
 msgid "Enter fillet radius:"
 msgstr "Entrer rayon de l'arrondi:"
 
-#: pcbnew/tools/edit_tool.cpp:1232 pcbnew/tools/edit_tool.cpp:1394
+#: pcbnew/tools/edit_tool.cpp:1238 pcbnew/tools/edit_tool.cpp:1400
 #: pcbnew/tools/pcb_actions.cpp:317
 msgid "Fillet Tracks"
 msgstr "Arrondir Pistes"
 
-#: pcbnew/tools/edit_tool.cpp:1242
+#: pcbnew/tools/edit_tool.cpp:1248
 msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
@@ -34507,40 +34511,40 @@ msgstr ""
 "Un rayon nul a été entré.\n"
 "L’opération d'arrondi n’a pas été effectuée."
 
-#: pcbnew/tools/edit_tool.cpp:1401
+#: pcbnew/tools/edit_tool.cpp:1407
 msgid "Unable to fillet the selected track segments."
 msgstr "Impossible d'arrondir les segments de piste sélectionnés."
 
-#: pcbnew/tools/edit_tool.cpp:1403
+#: pcbnew/tools/edit_tool.cpp:1409
 msgid "Some of the track segments could not be filleted."
 msgstr "Certains segments de piste n’ont pas pu être arrondis."
 
-#: pcbnew/tools/edit_tool.cpp:1523
+#: pcbnew/tools/edit_tool.cpp:1529
 msgid "Rotate"
 msgstr "Rotation"
 
-#: pcbnew/tools/edit_tool.cpp:1743 pcbnew/tools/pcb_actions.cpp:303
+#: pcbnew/tools/edit_tool.cpp:1749 pcbnew/tools/pcb_actions.cpp:303
 msgid "Change Side / Flip"
 msgstr "Changer Côté / Retourner"
 
-#: pcbnew/tools/edit_tool.cpp:2098
+#: pcbnew/tools/edit_tool.cpp:2104
 msgid "Move exact"
 msgstr "Déplacer exactement"
 
-#: pcbnew/tools/edit_tool.cpp:2239
+#: pcbnew/tools/edit_tool.cpp:2245
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "%d élément(s) dupliqué(s)"
 
-#: pcbnew/tools/edit_tool.cpp:2457
+#: pcbnew/tools/edit_tool.cpp:2463
 msgid "Select reference point for the copy..."
 msgstr "Sélectionnez le point de référence pour la copie..."
 
-#: pcbnew/tools/edit_tool.cpp:2458 pcbnew/tools/edit_tool.cpp:2475
+#: pcbnew/tools/edit_tool.cpp:2464 pcbnew/tools/edit_tool.cpp:2481
 msgid "Selection copied"
 msgstr "Sélection copiée."
 
-#: pcbnew/tools/edit_tool.cpp:2459
+#: pcbnew/tools/edit_tool.cpp:2465
 msgid "Copy canceled"
 msgstr "Copie annulée"
 
@@ -36166,19 +36170,19 @@ msgstr "Nom Empreinte"
 msgid "Self-intersecting polygons are not allowed."
 msgstr "Les polygones auto intersectants ne sont pas autorisés."
 
-#: pcbnew/tools/pcb_point_editor.cpp:567
+#: pcbnew/tools/pcb_point_editor.cpp:568
 msgid "Drag a corner"
 msgstr "Déplacer un sommet"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2051
+#: pcbnew/tools/pcb_point_editor.cpp:2057
 msgid "Add a zone corner"
 msgstr "Ajouter un sommet à la zone"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2088
+#: pcbnew/tools/pcb_point_editor.cpp:2094
 msgid "Split segment"
 msgstr "Diviser le segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2159
+#: pcbnew/tools/pcb_point_editor.cpp:2165
 msgid "Remove a zone/polygon corner"
 msgstr "Supprimer un sommet de la zone ou polygone"
 
@@ -37114,9 +37118,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Comp"
 #~ msgstr "Comp"
-
-#~ msgid "Grid: %s (%s)"
-#~ msgstr "Grille: %s (%s)"
 
 #~ msgid ""
 #~ "Cannot print '%s'.\n"
