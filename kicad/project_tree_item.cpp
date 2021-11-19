@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,6 +72,26 @@ void PROJECT_TREE_ITEM::SetState( int state )
 }
 
 
+bool PROJECT_TREE_ITEM::CanDelete() const
+{
+    if( m_type == TREE_FILE_TYPE::DIRECTORY
+        || m_type == TREE_FILE_TYPE::LEGACY_PROJECT
+        || m_type == TREE_FILE_TYPE::JSON_PROJECT
+        || m_type == TREE_FILE_TYPE::LEGACY_SCHEMATIC
+        || m_type == TREE_FILE_TYPE::SEXPR_SCHEMATIC
+        || m_type == TREE_FILE_TYPE::LEGACY_PCB
+        || m_type == TREE_FILE_TYPE::SEXPR_PCB
+        || m_type == TREE_FILE_TYPE::DRAWING_SHEET
+        || m_type == TREE_FILE_TYPE::FOOTPRINT_FILE
+        || m_type == TREE_FILE_TYPE::SCHEMATIC_LIBFILE
+        || m_type == TREE_FILE_TYPE::SEXPR_SYMBOL_LIB_FILE
+        || m_type == TREE_FILE_TYPE::DESIGN_RULES )
+        return false;
+
+    return true;
+}
+
+
 const wxString PROJECT_TREE_ITEM::GetDir() const
 {
     if( TREE_FILE_TYPE::DIRECTORY == m_type )
@@ -84,7 +104,7 @@ const wxString PROJECT_TREE_ITEM::GetDir() const
 bool PROJECT_TREE_ITEM::Rename( const wxString& name, bool check )
 {
     // this is broken & unsafe to use on linux.
-    if( m_type == TREE_FILE_TYPE::DIRECTORY )
+    if( !CanRename() )
         return false;
 
     if( name.IsEmpty() )
@@ -128,6 +148,9 @@ bool PROJECT_TREE_ITEM::Rename( const wxString& name, bool check )
 
 void PROJECT_TREE_ITEM::Delete()
 {
+    if( !CanDelete() )
+        return;
+
     wxString errMsg;
 
     if( !KIPLATFORM::ENV::MoveToTrash( GetFileName(), errMsg ) )

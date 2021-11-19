@@ -642,6 +642,9 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
             continue;
         }
 
+        can_delete = item->CanDelete();
+        can_rename = item->CanRename();
+
         wxString full_file_name = item->GetFileName();
 
         switch( item->GetType() )
@@ -653,7 +656,6 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
             if( item->GetId() == m_TreeProject->GetRootItem() )
             {
                 can_switch_to_project = false;
-                can_delete = false;
             }
             else
             {
@@ -665,7 +667,6 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
         case TREE_FILE_TYPE::DIRECTORY:
             can_switch_to_project = false;
             can_edit = false;
-            can_rename = false;
             break;
 
         default:

@@ -80,6 +80,16 @@ public:
     void Activate( PROJECT_TREE_PANE* aTreePrjFrame );
     void SetState( int state );
 
+    /**
+     * Determine if a file can be deleted via the project tree pane.
+     *
+     * @note Any of the files that could potentially break a project are flagged as cannot delete
+     *       or rename.
+     *
+     * @return false if the file managed by this item cannot be deleted or true if it can.
+     */
+    bool CanDelete() const;
+    bool CanRename() const { return CanDelete(); }
 
 private:
     TREE_FILE_TYPE  m_type;         // = TREE_PROJECT, TREE_DIRECTORY ...
