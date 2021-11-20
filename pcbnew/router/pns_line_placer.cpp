@@ -1290,7 +1290,10 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         ///< @todo Determine what to do if m_lastNode is a null pointer.  I'm guessing return
         ///<       false but someone with more knowledge of the code will need to determine that..
         if( m_lastNode )
+        {
             m_lastNode->Add( Clone( pl.Via() ) );
+            m_shove->AddLockedSpringbackNode( m_lastNode );
+        }
 
         m_currentNode = nullptr;
 
