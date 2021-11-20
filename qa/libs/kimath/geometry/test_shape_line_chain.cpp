@@ -112,6 +112,64 @@ BOOST_AUTO_TEST_CASE( ArcToPolylineLargeCoords )
 }
 
 
+// Test special case where the last arc in the chain has a shared point with the first arc
+BOOST_AUTO_TEST_CASE( ArcWrappingToStart )
+{
+    // represent a circle with two semicircular arcs
+    SHAPE_ARC arc1( VECTOR2I( 100000, 0 ), VECTOR2I( 0, 100000 ), VECTOR2I( -100000, 0 ), 0 );
+    SHAPE_ARC arc2( VECTOR2I( -100000, 0 ), VECTOR2I( 0, -100000 ), VECTOR2I( 100000, 0 ), 0 );
+
+    // Start a chain with the two arcs
+    SHAPE_LINE_CHAIN chain;
+    chain.Append( arc1 );
+    chain.Append( arc2 );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 13 );
+    //BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+
+    // OPEN CHAIN
+    // Start of the chain is not yet a shared point, so can't be an arc end either
+    BOOST_CHECK_EQUAL( chain.IsSharedPt( 0 ), false );
+    BOOST_CHECK_EQUAL( chain.IsArcEnd( 0 ), false );
+    BOOST_CHECK_EQUAL( chain.IsArcStart( 0 ), true );
+
+    // Index 6 is the shared point between the two arcs in the middle of the chain
+    BOOST_CHECK_EQUAL( chain.IsSharedPt( 6 ), true );
+    BOOST_CHECK_EQUAL( chain.IsArcEnd( 6 ), true );
+    BOOST_CHECK_EQUAL( chain.IsArcStart( 6 ), true );
+
+    // End index is not yet a shared point
+    int endIndex = chain.PointCount() - 1;
+    BOOST_CHECK_EQUAL( chain.IsSharedPt( endIndex ), false );
+    BOOST_CHECK_EQUAL( chain.IsArcEnd( endIndex ), true );
+    BOOST_CHECK_EQUAL( chain.IsArcStart( endIndex ), false );
+
+    for( int i = 0; i < chain.PointCount(); i++ )
+    {
+        BOOST_CHECK_EQUAL( chain.IsPtOnArc( i ), true ); // all points in the chain are arcs
+    }
+
+    // CLOSED CHAIN
+    chain.SetClosed( true );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 12 ); // (-1) should have removed coincident points
+    //BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+
+    // Start of the chain should be a shared point now, so can't be an arc end either
+    BOOST_CHECK_EQUAL( chain.IsSharedPt( 0 ), true );
+    BOOST_CHECK_EQUAL( chain.IsArcEnd( 0 ), true );
+    BOOST_CHECK_EQUAL( chain.IsArcStart( 0 ), true );
+
+    // Index 6 is the shared point between the two arcs in the middle of the chain
+    BOOST_CHECK_EQUAL( chain.IsSharedPt( 6 ), true );
+    BOOST_CHECK_EQUAL( chain.IsArcEnd( 6 ), true );
+    BOOST_CHECK_EQUAL( chain.IsArcStart( 6 ), true );
+
+    // End index is in the middle of an arc, so not an end point or shared point
+    endIndex = chain.PointCount() - 1;
+    BOOST_CHECK_EQUAL( chain.IsSharedPt( endIndex ), false );
+    BOOST_CHECK_EQUAL( chain.IsArcEnd( endIndex ), false );
+    BOOST_CHECK_EQUAL( chain.IsArcStart( endIndex ), false );
+}
+
 // Test SHAPE_LINE_CHAIN::Split()
 BOOST_AUTO_TEST_CASE( Split )
 {
