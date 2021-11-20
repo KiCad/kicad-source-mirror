@@ -56,6 +56,9 @@ public:
 
     KICAD2MCAD_PRMS m_params;
 
+    bool m_error;
+    bool m_fail;
+
 private:
     wxTextCtrl* m_tcMessages;
 };

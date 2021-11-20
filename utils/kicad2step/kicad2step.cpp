@@ -28,6 +28,7 @@
 #include <wx/msgdlg.h>
 #include <wx/string.h>
 #include <wx/filename.h>
+#include <algorithm>
 #include <sstream>
 #include <iostream>
 #include <sstream>
@@ -36,7 +37,9 @@
 #include "pcb/kicadpcb.h"
 #include "kicad2step_frame_base.h"
 #include "panel_kicad2step.h"
-#include <Standard_Failure.hxx>     // In open cascade
+#include <Message.hxx>                  // OpenCascade messenger
+#include <Message_PrinterOStream.hxx>   // OpenCascade output messenger
+#include <Standard_Failure.hxx>         // In open cascade
 
 class KICAD2STEP_FRAME : public KICAD2STEP_FRAME_BASE
 {
@@ -55,6 +58,24 @@ void ReportMessage( const wxString& aMessage )
         openPanel->AppendMessage( aMessage );
 }
 
+
+class KiCadPrinter : public Message_Printer
+{
+protected:
+  virtual void send (const TCollection_AsciiString& theString, const Message_Gravity theGravity) const override
+  {
+      if( theGravity >= Message_Info )
+      {
+          ReportMessage( theString.ToCString() );
+          ReportMessage( "\n" );
+      }
+      if( theGravity >= Message_Alarm )
+          openPanel->m_error = true;
+
+      if( theGravity == Message_Fail )
+          openPanel->m_fail = true;
+  }
+};
 
 KICAD2MCAD_PRMS::KICAD2MCAD_PRMS()
 {
@@ -87,7 +108,7 @@ void KICAD2STEP_FRAME::OnOKButtonClick( wxCommandEvent& aEvent )
 
 PANEL_KICAD2STEP::PANEL_KICAD2STEP( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                                     const wxSize& size, long style ) :
-        wxPanel( parent, id, pos, size, style )
+        wxPanel( parent, id, pos, size, style ), m_error( false ), m_fail( false )
 {
 	wxBoxSizer* bSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -106,32 +127,6 @@ void PANEL_KICAD2STEP::AppendMessage( const wxString& aMessage )
     m_tcMessages->AppendText( aMessage );
     wxSafeYield();
 }
-
-
-// Smart class that will swap streambufs and replace them when object goes out of scope.
-// ( ensure the initial stream buffer is restored )
-// see:
-// https://groups.google.com/forum/#!topic/borland.public.cppbuilder.language/Uua6t3VhELA
-// It is useful here to redirect for instance cout or cerr to a string stream
-class STREAMBUF_SWAPPER
-{
-public:
-    STREAMBUF_SWAPPER( std::ostream& orig, std::ostream& replacement ) :
-            m_buf( orig.rdbuf() ),
-            m_str( orig )
-    {
-        orig.rdbuf( replacement.rdbuf() );
-    }
-
-    ~STREAMBUF_SWAPPER()
-    {
-        m_str.rdbuf( m_buf );
-    }
-
-private:
-    std::streambuf* m_buf;
-    std::ostream& m_str;
-};
 
 
 int PANEL_KICAD2STEP::RunConverter()
@@ -176,12 +171,9 @@ int PANEL_KICAD2STEP::RunConverter()
     pcb.SetMinDistance( m_params.m_minDistance );
     ReportMessage( wxString::Format( _( "Read file: '%s'\n" ), m_params.m_filename ) );
 
-    // create the new streams to "redirect" cout and cerr output to
-    // msgs_from_opencascade and errors_from_opencascade
-    std::ostringstream msgs_from_opencascade;
-    std::ostringstream errors_from_opencascade;
-    STREAMBUF_SWAPPER  swapper_cout( std::cout, msgs_from_opencascade );
-    STREAMBUF_SWAPPER  swapper_cerr( std::cerr, errors_from_opencascade );
+
+    Message::DefaultMessenger()->RemovePrinters( STANDARD_TYPE( Message_PrinterOStream ) );
+    Message::DefaultMessenger()->AddPrinter( new KiCadPrinter );
 
     if( pcb.ReadFile( m_params.m_filename ) )
     {
@@ -242,29 +234,18 @@ int PANEL_KICAD2STEP::RunConverter()
         return -1;
     }
 
-    wxString msgs, errs;
-    msgs << msgs_from_opencascade.str();
-    ReportMessage( msgs );
-
-    errs << errors_from_opencascade.str();
-    ReportMessage( errs );
-
-    // Check the output log for an indication of success
-    bool success =  msgs.Contains( "Done" );
     wxString msg;
 
-    if( !errs.IsEmpty() )    // Any troubles?
+    if( m_fail )
     {
-        if( !success )
-        {
-            msg = _( "Unable to create STEP file.\n"
-                     "Check that the board has a valid outline and models." );
-        }
-        else
-        {
-            msg = _( "STEP file has been created, but there are warnings." );
-        }
+        msg = _( "Unable to create STEP file.\n"
+                 "Check that the board has a valid outline and models." );
     }
+    else if( m_error )
+    {
+        msg = _( "STEP file has been created, but there are warnings." );
+    }
+
 
     ReportMessage( msg );
 
