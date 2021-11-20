@@ -5,17 +5,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-03 14:44+0000\n"
+"PO-Revision-Date: 2021-11-21 21:17+0000\n"
 "Last-Translator: radix <neutrino@gmx.co.uk>\n"
-"Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sl/>\n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
 "%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Poedit-Keywords: _\n"
 "X-Poedit-Basepath: c:\\kicad\\kicad-dev\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -26,7 +26,6 @@ msgstr ""
 "X-Poedit-SearchPath-5: common\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
 msgstr "Vse datoteke"
 
@@ -18845,9 +18844,8 @@ msgid "Package identifier: "
 msgstr "Identifikator paketa: %s\n"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "Licenca"
+msgstr "Licenca: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
 msgid "Tags: "
@@ -32191,9 +32189,8 @@ msgid "Error reading file: cannot determine length."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:87
-#, fuzzy
 msgid "Error reading file."
-msgstr "Napaka pri pridobivanju datoteke!\n"
+msgstr "Napaka pri branju datoteke."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:490
 #, fuzzy, c-format
