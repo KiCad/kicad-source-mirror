@@ -143,7 +143,7 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
                     }
                 }
 
-                // For all other driver types, sort by name
+                // For all other driver types, sort by quality of name
                 std::sort( candidates.begin(), candidates.end(),
                            [&]( SCH_ITEM* a, SCH_ITEM* b ) -> bool
                            {
@@ -160,10 +160,21 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
 
                                if( a == previousDriver )
                                    return true;
-                               else if( b == previousDriver )
+
+                               if( b == previousDriver )
                                    return false;
+
+                               wxString a_name = GetNameForDriver( a );
+                               wxString b_name = GetNameForDriver( b );
+                               bool     a_lowQualityName = a_name.Contains( "-Pad" );
+                               bool     b_lowQualityName = b_name.Contains( "-Pad" );
+
+                               if( a_lowQualityName && !b_lowQualityName )
+                                   return false;
+                               else if( b_lowQualityName && !a_lowQualityName )
+                                   return true;
                                else
-                                   return GetNameForDriver( a ) < GetNameForDriver( b );
+                                   return a_name < b_name;
                            } );
             }
         }

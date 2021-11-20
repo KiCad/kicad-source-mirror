@@ -271,18 +271,29 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     if( aForceNoConnect || GetType() == ELECTRICAL_PINTYPE::PT_NC )
         name = ( "unconnected-(" );
 
-    name << GetParentSymbol()->GetRef( &aPath );
-
     bool annotated = true;
 
-    // Add timestamp for uninitialized symbols
-    if( name.Last() == '?' )
+    // Use timestamp for unannotated symbols
+    if( GetParentSymbol()->GetRef( &aPath, false ).Last() == '?' )
     {
         name << GetParentSymbol()->m_Uuid.AsString();
+        name << "-Pad" << m_libPin->GetNumber() << ")";
         annotated = false;
     }
-
-    name << "-Pad" << m_libPin->GetNumber() << ")";
+    else if( !m_libPin->GetShownName().IsEmpty()
+            && m_libPin->GetShownName() != m_libPin->GetShownNumber() )
+    {
+        // Pin names might not be unique between different units so we must have the
+        // unit token in the reference designator
+        name << GetParentSymbol()->GetRef( &aPath, true );
+        name << "-" << m_libPin->GetShownName() << ")";
+    }
+    else
+    {
+        // Pin number are unique, so we skip the unit token
+        name << GetParentSymbol()->GetRef( &aPath, false );
+        name << "-Pad" << m_libPin->GetShownNumber() << ")";
+    }
 
     if( annotated )
         m_net_name_map[ aPath ] = std::make_pair( name, aForceNoConnect );
