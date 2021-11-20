@@ -231,42 +231,61 @@ inline SHAPE_POLY_SET FilletPolySet( SHAPE_POLY_SET& aPolySet, int aRadius, int 
 */
 inline bool IsOutlineValid( const SHAPE_LINE_CHAIN& aChain )
 {
-    bool      areWeOnArc = false;
-    SHAPE_ARC currentArc;
+    ssize_t           prevArcIdx = -1;
+    std::set<size_t> testedArcs;
 
     for( int i = 0; i < aChain.PointCount(); i++ )
     {
-        if( !aChain.IsSharedPt( i ) && aChain.IsArcStart( i ) )
-        {
-            currentArc = aChain.Arc( aChain.ArcIndex( i ) );
-            areWeOnArc = true;
+        ssize_t arcIdx = aChain.ArcIndex( i );
 
-            if( currentArc.GetP0() != aChain.CPoint( i ) )
+        if( arcIdx >= 0 )
+        {
+            // Point on arc, lets make sure it collides with the arc shape and we haven't
+            // previously seen the same arc index
+
+            if( prevArcIdx != arcIdx && testedArcs.count( arcIdx ) )
+                return false; // we've already seen this arc before, not contiguous
+
+            if( !aChain.Arc( arcIdx ).Collide( aChain.CPoint( i ),
+                                               SHAPE_ARC::DefaultAccuracyForPCB() ) )
+            {
                 return false;
+            }
+
+            testedArcs.insert( arcIdx );
         }
 
-        if( areWeOnArc )
+        if( prevArcIdx != arcIdx )
         {
-            if( !currentArc.Collide( aChain.CPoint( i ), 5000 ) )
-                return false;
+            // we have changed arc shapes, run a few extra tests
+
+            if( prevArcIdx >= 0 )
+            {
+                // prev point on arc, test that the last arc point on the chain
+                // matches the end point of the arc
+                VECTOR2I pointToTest = aChain.CPoint( i );
+
+                if( !aChain.IsSharedPt( i ) )
+                    pointToTest = aChain.CPoint( i - 1 );
+
+                SHAPE_ARC lastArc = aChain.Arc( prevArcIdx );
+
+                if( lastArc.GetP1() != pointToTest )
+                    return false;
+            }
+
+            if( arcIdx >= 0 )
+            {
+                // new arc, test that the start point of the arc matches the point on the chain
+                VECTOR2I pointToTest = aChain.CPoint( i );
+                SHAPE_ARC currentArc = aChain.Arc( arcIdx );
+
+                if( currentArc.GetP0() != pointToTest )
+                    return false;
+            }
         }
 
-        if( aChain.IsArcEnd( i ) )
-        {
-            areWeOnArc = false;
-
-            if( currentArc.GetP1() != aChain.CPoint( i ) )
-                return false;
-        }
-
-        if( aChain.IsSharedPt( i ) )
-        {
-            currentArc = aChain.Arc( aChain.ArcIndex( i ) );
-            areWeOnArc = true;
-
-            if( currentArc.GetP0() != aChain.CPoint( i ) )
-                return false;
-        }
+        prevArcIdx = arcIdx;
     }
 
     return true;
