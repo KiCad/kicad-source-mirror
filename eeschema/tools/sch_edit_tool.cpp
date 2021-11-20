@@ -280,17 +280,23 @@ bool SCH_EDIT_TOOL::Init()
                 return false;
             };
 
+    static KICAD_T allLabelTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
+
     static KICAD_T toLabelTypes[] = { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
-    auto toLabelCondition = E_C::Count( 1 ) && E_C::OnlyTypes( toLabelTypes );
+    auto toLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toLabelTypes ) )
+            || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
 
     static KICAD_T toHLableTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_TEXT_T, EOT };
-    auto toHLabelCondition = E_C::Count( 1 ) && E_C::OnlyTypes( toHLableTypes );
+    auto toHLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toHLableTypes ) )
+                    || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
 
     static KICAD_T toGLableTypes[] = { SCH_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
-    auto toGLabelCondition = E_C::Count( 1 ) && E_C::OnlyTypes( toGLableTypes );
+    auto toGLabelCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toGLableTypes ) )
+                    || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
 
     static KICAD_T toTextTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, EOT };
-    auto toTextlCondition = E_C::Count( 1 ) && E_C::OnlyTypes( toTextTypes );
+    auto toTextlCondition = ( E_C::Count( 1 ) && E_C::OnlyTypes( toTextTypes ) )
+                    || ( E_C::MoreThan( 1 ) && E_C::OnlyTypes( allLabelTypes ) );
 
     static KICAD_T entryTypes[] = { SCH_BUS_WIRE_ENTRY_T, SCH_BUS_BUS_ENTRY_T, EOT };
     auto entryCondition = E_C::MoreThan( 0 ) && E_C::OnlyTypes( entryTypes );
@@ -1559,7 +1565,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 {
     KICAD_T       convertTo = aEvent.Parameter<KICAD_T>();
     KICAD_T       allTextTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( allTextTypes );
+    EE_SELECTION  selection = m_selectionTool->RequestSelection( allTextTypes );
 
     for( unsigned int i = 0; i < selection.GetSize(); ++i )
     {
@@ -1617,7 +1623,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
             if( !text->IsNew() )
             {
-                saveCopyInUndoList( text, UNDO_REDO::DELETED );
+                saveCopyInUndoList( text, UNDO_REDO::DELETED, i != 0 );
                 saveCopyInUndoList( newtext, UNDO_REDO::NEWITEM, true );
 
                 m_frame->RemoveFromScreen( text, m_frame->GetScreen() );
