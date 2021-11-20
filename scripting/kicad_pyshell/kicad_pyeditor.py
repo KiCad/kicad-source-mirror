@@ -187,26 +187,26 @@ class KiCadPyFrame():
         m.Append(ID_TOGGLE_MAXIMIZE, '&Toggle Maximize\tF11',
                  'Maximize/Restore Application')
 
-        # Options
-        m = self.optionsMenu = wx.Menu()
-
-        self.historyMenu = wx.Menu()
-        self.historyMenu.Append(ID_SAVEHISTORY, '&Autosave History',
-                 'Automatically save history on close', wx.ITEM_CHECK)
-        self.historyMenu.Append(ID_SAVEHISTORYNOW, '&Save History Now',
-                 'Save history')
-        self.historyMenu.Append(ID_CLEARHISTORY, '&Clear History ',
-                 'Clear history')
-        m.AppendSubMenu(self.historyMenu, "&History", "History Options")
-
-        self.startupMenu = wx.Menu()
-        self.startupMenu.Append(ID_EXECSTARTUPSCRIPT,
-                                'E&xecute Startup Script',
-                                'Execute Startup Script', wx.ITEM_CHECK)
-        self.startupMenu.Append(ID_EDITSTARTUPSCRIPT,
-                                '&Edit Startup Script...',
-                                'Edit Startup Script')
-        m.AppendSubMenu(self.startupMenu, '&Startup', 'Startup Options')
+        # # Options
+        # m = self.optionsMenu = wx.Menu()
+        #
+        # self.historyMenu = wx.Menu()
+        # self.historyMenu.Append(ID_SAVEHISTORY, '&Autosave History',
+        #          'Automatically save history on close', wx.ITEM_CHECK)
+        # self.historyMenu.Append(ID_SAVEHISTORYNOW, '&Save History Now',
+        #          'Save history')
+        # self.historyMenu.Append(ID_CLEARHISTORY, '&Clear History ',
+        #          'Clear history')
+        # m.AppendSubMenu(self.historyMenu, "&History", "History Options")
+        #
+        # self.startupMenu = wx.Menu()
+        # self.startupMenu.Append(ID_EXECSTARTUPSCRIPT,
+        #                         'E&xecute Startup Script',
+        #                         'Execute Startup Script', wx.ITEM_CHECK)
+        # self.startupMenu.Append(ID_EDITSTARTUPSCRIPT,
+        #                         '&Edit Startup Script...',
+        #                         'Edit Startup Script')
+        # m.AppendSubMenu(self.startupMenu, '&Startup', 'Startup Options')
 
         self.settingsMenu = wx.Menu()
         self.settingsMenu.Append(ID_AUTO_SAVESETTINGS,
@@ -229,7 +229,7 @@ class KiCadPyFrame():
         b.Append(self.fileMenu, '&File')
         b.Append(self.editMenu, '&Edit')
         b.Append(self.viewMenu, '&View')
-        b.Append(self.optionsMenu, '&Options')
+        # b.Append(self.optionsMenu, '&Options')
         b.Append(self.helpMenu, '&Help')
         self.parent.SetMenuBar(b)
 
@@ -627,31 +627,31 @@ class KiCadPyFrame():
             elif id == ID_ENABLEAUTOSYMPY:
                 event.Check(self.enableAutoSympy)
                 event.Enable(self.config is not None)
-            elif id == ID_AUTO_SAVESETTINGS:
-                event.Check(self.autoSaveSettings)
-                event.Enable(self.config is not None)
-            elif id == ID_SAVESETTINGS:
-                event.Enable(self.config is not None and
-                             hasattr(self, 'DoSaveSettings'))
-            elif id == ID_DELSETTINGSFILE:
-                event.Enable(self.config is not None)
-
-            elif id == ID_EXECSTARTUPSCRIPT:
-                event.Check(self.execStartupScript)
-                event.Enable(self.config is not None)
-
-            elif id == ID_SAVEHISTORY:
-                event.Check(self.autoSaveHistory)
-                event.Enable(self.dataDir is not None)
-            elif id == ID_SAVEHISTORYNOW:
-                event.Enable(self.dataDir is not None and
-                             hasattr(self, 'SaveHistory'))
-            elif id == ID_CLEARHISTORY:
-                event.Enable(self.dataDir is not None)
-
-            elif id == ID_EDITSTARTUPSCRIPT:
-                event.Enable(hasattr(self, 'EditStartupScript'))
-                event.Enable(self.dataDir is not None)
+            # elif id == ID_AUTO_SAVESETTINGS:
+            #     event.Check(self.autoSaveSettings)
+            #     event.Enable(self.config is not None)
+            # elif id == ID_SAVESETTINGS:
+            #     event.Enable(self.config is not None and
+            #                  hasattr(self, 'DoSaveSettings'))
+            # elif id == ID_DELSETTINGSFILE:
+            #     event.Enable(self.config is not None)
+            #
+            # elif id == ID_EXECSTARTUPSCRIPT:
+            #     event.Check(self.execStartupScript)
+            #     event.Enable(self.config is not None)
+            #
+            # elif id == ID_SAVEHISTORY:
+            #     event.Check(self.autoSaveHistory)
+            #     event.Enable(self.dataDir is not None)
+            # elif id == ID_SAVEHISTORYNOW:
+            #     event.Enable(self.dataDir is not None and
+            #                  hasattr(self, 'SaveHistory'))
+            # elif id == ID_CLEARHISTORY:
+            #     event.Enable(self.dataDir is not None)
+            #
+            # elif id == ID_EDITSTARTUPSCRIPT:
+            #     event.Enable(hasattr(self, 'EditStartupScript'))
+            #     event.Enable(self.dataDir is not None)
 
             elif id == ID_FIND:
                 event.Enable(hasattr(win, 'DoFindNext'))

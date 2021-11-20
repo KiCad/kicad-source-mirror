@@ -102,10 +102,11 @@ class KiCadPyShell(KiCadEditorNotebookFrame):
         self.history_file = os.path.join(self.config_dir,
                                          "PyShell_pcbnew.history")
 
-        self.config_file = os.path.join(self.config_dir,
-                                        "PyShell_pcbnew.cfg")
-        self.config = wx.FileConfig(localFilename=self.config_file)
-        self.config.SetRecordDefaults(True)
+        self.config = None
+        # self.config_file = os.path.join(self.config_dir,
+        #                                 "PyShell_pcbnew.cfg")
+        # self.config = wx.FileConfig(localFilename=self.config_file)
+        # self.config.SetRecordDefaults(True)
 
         self.autoSaveSettings = False
         self.autoSaveHistory = False
