@@ -73,6 +73,9 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->Add( submenuExport );
 
     fileMenu->AppendSeparator();
+    fileMenu->Add( EE_ACTIONS::symbolProperties );
+
+    fileMenu->AppendSeparator();
     fileMenu->AddClose( _( "Library Editor" ) );
 
 
@@ -94,7 +97,6 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
     editMenu->Add( ACTIONS::selectAll );
 
     editMenu->AppendSeparator();
-    editMenu->Add( EE_ACTIONS::symbolProperties );
     editMenu->Add( EE_ACTIONS::pinTable );
     editMenu->Add( EE_ACTIONS::updateSymbolFields );
 

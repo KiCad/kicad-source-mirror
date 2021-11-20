@@ -83,6 +83,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->Add( submenuExport );
 
     fileMenu->AppendSeparator();
+    fileMenu->Add( PCB_ACTIONS::footprintProperties );
+
+    fileMenu->AppendSeparator();
     fileMenu->Add( ACTIONS::print );
 
     fileMenu->AppendSeparator();
@@ -107,11 +110,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     editMenu->Add( ACTIONS::selectAll );
 
     editMenu->AppendSeparator();
-    editMenu->Add( PCB_ACTIONS::footprintProperties );
     editMenu->Add( PCB_ACTIONS::defaultPadProperties );
-
-    editMenu->AppendSeparator();
-    editMenu->Add( PCB_ACTIONS::cleanupGraphics );
 
 
     //-- View menu -------------------------------------------------------
@@ -217,6 +216,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                     BITMAPS::insert_module_board );
 
     toolsMenu->AppendSeparator();
+    toolsMenu->Add( PCB_ACTIONS::cleanupGraphics );
     toolsMenu->Add( PCB_ACTIONS::repairFootprint );
 
 
