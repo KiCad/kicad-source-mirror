@@ -414,7 +414,10 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
 
         if( sch_item && sch_item->IsConnectable() )
+        {
+            sch_item->AutoplaceFields( nullptr, false );
             sch_item->GetEndPoints( endPoints );
+        }
     }
 
     for( EDA_ITEM* item : m_previewItems )

@@ -57,7 +57,9 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
     auto* renderSettings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( m_painter->GetSettings() );
     renderSettings->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
     renderSettings->m_ShowPinsElectricalType = false;
-    renderSettings->m_TextOffsetRatio = 0.30;
+    renderSettings->m_ShowHiddenText = false;
+    renderSettings->m_ShowHiddenPins = false;
+    renderSettings->m_TextOffsetRatio = 0.35;
 
     m_view->SetPainter( m_painter.get() );
     // This fixes the zoom in and zoom out limits:
