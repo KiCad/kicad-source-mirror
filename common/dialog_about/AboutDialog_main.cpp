@@ -219,6 +219,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Orson (Maciej Sumiński)" ), LEAD_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Mark Roszko", LEAD_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Thomas Pointhuber", LEAD_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Mikolaj Wielgus", LEAD_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Tomasz Wlostowski", LEAD_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Jeff Young", LEAD_DEV, nullptr ) );
 
