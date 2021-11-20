@@ -922,8 +922,6 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     // have time and patience).
     if( m_objectContainer.GetList().size() > 0 )
     {
-        /*float ratio = std::max( 1.0f, m_objectContainer.GetBBox().GetMaxDimension()
-            / m_boardAdapter.GetBBox().GetMaxDimension() );*/
         float ratio =
                 std::max( 1.0f, m_objectContainer.GetBBox().GetMaxDimension() / RANGE_SCALE_3D );
         m_camera.SetMaxZoom( m_camera.GetMaxZoom() * ratio );
