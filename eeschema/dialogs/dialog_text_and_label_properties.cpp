@@ -394,6 +394,13 @@ bool DIALOG_TEXT_AND_LABEL_PROPERTIES::TransferDataFromWindow()
 }
 
 
+void DIALOG_TEXT_AND_LABEL_PROPERTIES::onLostFocus( wxFocusEvent& event )
+{
+    if( m_scintillaTricks )
+        m_scintillaTricks->CancelAutocomplete();
+}
+
+
 void DIALOG_TEXT_AND_LABEL_PROPERTIES::OnFormattingHelp( wxHyperlinkEvent& aEvent )
 {
     m_helpWindow = SCH_TEXT::ShowSyntaxHelp( this );

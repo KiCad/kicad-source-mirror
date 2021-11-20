@@ -402,3 +402,8 @@ void SCINTILLA_TRICKS::DoAutocomplete( const wxString& aPartial, const wxArraySt
 }
 
 
+void SCINTILLA_TRICKS::CancelAutocomplete()
+{
+    m_te->AutoCompCancel();
+}
+

@@ -54,6 +54,7 @@ public:
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+    void onLostFocus( wxFocusEvent& event ) override;
 
 private:
     PCB_BASE_EDIT_FRAME* m_Parent;

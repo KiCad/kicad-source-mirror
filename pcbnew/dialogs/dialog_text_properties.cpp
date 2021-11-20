@@ -369,3 +369,10 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     return true;
 }
+
+
+void DIALOG_TEXT_PROPERTIES::onLostFocus( wxFocusEvent& event )
+{
+    if( m_scintillaTricks )
+        m_scintillaTricks->CancelAutocomplete();
+}

@@ -40,6 +40,8 @@ public:
 
     void DoAutocomplete( const wxString& aPartial, const wxArrayString& aTokens );
 
+    void CancelAutocomplete();
+
 protected:
     void setupStyles();
 

@@ -52,6 +52,7 @@ private:
 
     void OnEnterKey( wxCommandEvent& aEvent ) override;
     void OnFormattingHelp( wxHyperlinkEvent& aEvent ) override;
+    void onLostFocus( wxFocusEvent& event ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
