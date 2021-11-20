@@ -25,6 +25,7 @@
 #include <string_utils.h>
 #include <board_commit.h>
 #include <pcb_edit_frame.h>
+#include <footprint_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <pcbnew.h>
 #include <board.h>
@@ -37,6 +38,7 @@
 #include <widgets/unit_binder.h>
 #include <tool/tool_manager.h>
 #include <tools/global_edit_tool.h>
+#include <tools/footprint_editor_control.h>
 #include <dialog_global_edit_text_and_graphics_base.h>
 
 
@@ -81,9 +83,10 @@ static bool       g_filterSelected = false;
 
 class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS : public DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE
 {
-    PCB_EDIT_FRAME*        m_parent;
+    PCB_BASE_EDIT_FRAME*   m_parent;
     BOARD_DESIGN_SETTINGS* m_brdSettings;
     PCB_SELECTION          m_selection;
+    bool                   m_isBoardEditor;
 
     UNIT_BINDER            m_lineWidth;
     UNIT_BINDER            m_textWidth;
@@ -91,7 +94,7 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS : public DIALOG_GLOBAL_EDIT_TEXT_AND_
     UNIT_BINDER            m_thickness;
 
 public:
-    DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_EDIT_FRAME* parent );
+    DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_BASE_EDIT_FRAME* parent );
     ~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS() override;
 
 protected:
@@ -119,7 +122,7 @@ protected:
 };
 
 
-DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_EDIT_FRAME* parent ) :
+DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_BASE_EDIT_FRAME* parent ) :
         DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE( parent ),
         m_lineWidth( parent, m_lineWidthLabel, m_LineWidthCtrl, m_lineWidthUnits ),
         m_textWidth( parent, m_SizeXlabel, m_SizeXCtrl, m_SizeXunit ),
@@ -128,6 +131,21 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
 {
     m_parent = parent;
     m_brdSettings = &m_parent->GetDesignSettings();
+    m_isBoardEditor = dynamic_cast<PCB_EDIT_FRAME*>( m_parent ) != nullptr;
+
+    if( !m_isBoardEditor )
+    {
+        m_otherFields->SetLabel( _( "Other text items" ) );
+        m_footprintGraphics->SetLabel( _( "Graphic items" ) );
+
+        m_boardText->Show( false );
+        m_boardGraphics->Show( false );
+
+        m_referenceFilterOpt->Show( false );
+        m_referenceFilter->Show( false );
+        m_footprintFilterOpt->Show( false );
+        m_footprintFilter->Show( false );
+    }
 
     m_layerFilter->SetBoardFrame( m_parent );
     m_layerFilter->SetLayersHotkeys( false );
@@ -153,15 +171,24 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS()
     g_modifyValues = m_values->GetValue();
     g_modifyOtherFields = m_otherFields->GetValue();
     g_modifyFootprintGraphics = m_footprintGraphics->GetValue();
-    g_modifyBoardText = m_boardText->GetValue();
-    g_modifyBoardGraphics = m_boardGraphics->GetValue();
+
+    if( m_isBoardEditor )
+    {
+        g_modifyBoardText = m_boardText->GetValue();
+        g_modifyBoardGraphics = m_boardGraphics->GetValue();
+    }
 
     g_filterByLayer = m_layerFilterOpt->GetValue();
     g_layerFilter = m_layerFilter->GetLayerSelection();
-    g_filterByReference = m_referenceFilterOpt->GetValue();
-    g_referenceFilter = m_referenceFilter->GetValue();
-    g_filterByFootprint = m_footprintFilterOpt->GetValue();
-    g_footprintFilter = m_footprintFilter->GetValue();
+
+    if( m_isBoardEditor )
+    {
+        g_filterByReference = m_referenceFilterOpt->GetValue();
+        g_referenceFilter = m_referenceFilter->GetValue();
+        g_filterByFootprint = m_footprintFilterOpt->GetValue();
+        g_footprintFilter = m_footprintFilter->GetValue();
+    }
+
     g_filterSelected = m_selectedItemsFilter->GetValue();
 }
 
@@ -175,17 +202,25 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_values->SetValue( g_modifyValues );
     m_otherFields->SetValue( g_modifyOtherFields );
     m_footprintGraphics->SetValue( g_modifyFootprintGraphics );
-    m_boardText->SetValue( g_modifyBoardText );
-    m_boardGraphics->SetValue( g_modifyBoardGraphics );
+
+    if( m_isBoardEditor )
+    {
+        m_boardText->SetValue( g_modifyBoardText );
+        m_boardGraphics->SetValue( g_modifyBoardGraphics );
+    }
 
     if( m_layerFilter->SetLayerSelection( g_layerFilter ) != wxNOT_FOUND )
         m_layerFilterOpt->SetValue( g_filterByLayer );
 
-    // SetValue() generates events, ChangeValue() does not
-    m_referenceFilter->ChangeValue( g_referenceFilter );
-    m_referenceFilterOpt->SetValue( g_filterByReference );
-    m_footprintFilter->ChangeValue( g_footprintFilter );
-    m_footprintFilterOpt->SetValue( g_filterByFootprint );
+    if( m_isBoardEditor )
+    {
+        // SetValue() generates events, ChangeValue() does not
+        m_referenceFilter->ChangeValue( g_referenceFilter );
+        m_referenceFilterOpt->SetValue( g_filterByReference );
+        m_footprintFilter->ChangeValue( g_footprintFilter );
+        m_footprintFilterOpt->SetValue( g_filterByFootprint );
+    }
+
     m_selectedItemsFilter->SetValue( g_filterSelected );
 
     m_lineWidth.SetValue( INDETERMINATE_ACTION );
@@ -387,26 +422,29 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
             return;
     }
 
-    if( m_referenceFilterOpt->GetValue() && !m_referenceFilter->GetValue().IsEmpty() )
+    if( m_isBoardEditor )
     {
-        FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem->GetParent() );
-
-        if( fp )
+        if( m_referenceFilterOpt->GetValue() && !m_referenceFilter->GetValue().IsEmpty() )
         {
-            if( !WildCompareString( m_referenceFilter->GetValue(), fp->GetReference(), false ) )
-                return;
+            FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem->GetParent() );
+
+            if( fp )
+            {
+                if( !WildCompareString( m_referenceFilter->GetValue(), fp->GetReference(), false ) )
+                    return;
+            }
         }
+
+        if( m_footprintFilterOpt->GetValue() && !m_footprintFilter->GetValue().IsEmpty() )
+        {
+            FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem->GetParent() );
+
+            if( fp )
+            {
+                if( !WildCompareString( m_footprintFilter->GetValue(), fp->GetFPID().Format(), false ) )
+                    return;
+            }
     }
-
-    if( m_footprintFilterOpt->GetValue() && !m_footprintFilter->GetValue().IsEmpty() )
-    {
-        FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem->GetParent() );
-
-        if( fp )
-        {
-            if( !WildCompareString( m_footprintFilter->GetValue(), fp->GetFPID().Format(), false ) )
-                return;
-        }
     }
 
     processItem( aCommit, aItem );
@@ -456,20 +494,23 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         }
     }
 
-    // Go through the PCB text & graphic items
-    for( BOARD_ITEM* boardItem : m_parent->GetBoard()->Drawings() )
+    if( m_isBoardEditor )
     {
-        KICAD_T itemType = boardItem->Type();
+        // Go through the PCB text & graphic items
+        for( BOARD_ITEM* boardItem : m_parent->GetBoard()->Drawings() )
+        {
+            KICAD_T itemType = boardItem->Type();
 
-        if( itemType == PCB_TEXT_T )
-        {
-            if( m_boardText->GetValue() )
-                visitItem( commit, boardItem );
-        }
-        else if( itemType == PCB_SHAPE_T || BaseType( itemType ) == PCB_DIMENSION_T )
-        {
-            if( m_boardGraphics->GetValue() )
-                visitItem( commit, boardItem );
+            if( itemType == PCB_TEXT_T )
+            {
+                if( m_boardText->GetValue() )
+                    visitItem( commit, boardItem );
+            }
+            else if( itemType == PCB_SHAPE_T || BaseType( itemType ) == PCB_DIMENSION_T )
+            {
+                if( m_boardGraphics->GetValue() )
+                    visitItem( commit, boardItem );
+            }
         }
     }
 
@@ -483,6 +524,16 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 int GLOBAL_EDIT_TOOL::EditTextAndGraphics( const TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS dlg( editFrame );
+
+    dlg.ShowModal();
+    return 0;
+}
+
+
+int FOOTPRINT_EDITOR_CONTROL::EditTextAndGraphics( const TOOL_EVENT& aEvent )
+{
+    FOOTPRINT_EDIT_FRAME* editFrame = getEditFrame<FOOTPRINT_EDIT_FRAME>();
     DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS dlg( editFrame );
 
     dlg.ShowModal();

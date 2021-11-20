@@ -68,11 +68,12 @@ public:
     int ToggleLayersManager( const TOOL_EVENT& aEvent );
     int Properties( const TOOL_EVENT& aEvent );
 
-    int CleanupGraphics( const TOOL_EVENT& aEvent );
+    int EditTextAndGraphics( const TOOL_EVENT& aEvent );
 
     int CheckFootprint( const TOOL_EVENT& aEvent );
     void DestroyCheckerDialog();
 
+    int CleanupGraphics( const TOOL_EVENT& aEvent );
     int RepairFootprint( const TOOL_EVENT& aEvent );
 
     /**

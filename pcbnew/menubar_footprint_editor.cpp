@@ -110,6 +110,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     editMenu->Add( ACTIONS::selectAll );
 
     editMenu->AppendSeparator();
+    editMenu->Add( PCB_ACTIONS::editTextAndGraphics );
     editMenu->Add( PCB_ACTIONS::defaultPadProperties );
 
 
