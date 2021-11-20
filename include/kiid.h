@@ -64,6 +64,17 @@ public:
     static void CreateNilUuids( bool aNil = true );
 
     /**
+     * Re-initialize the UUID generator with a given seed (for testing or QA purposes)
+     *
+     * WARNING: Do not call this function from within KiCad or via a Python action plugin.  It is
+     * only to be used inside QA tests or in external Python scripts.  Resetting the UUID generator
+     * in the middle of a KiCad GUI run will potentially have harmful effects on file integrity.
+     *
+     * @param aSeed is a seed to pass to the boost::mt19937 pseudo-random number generator
+     */
+    static void SeedGenerator( unsigned int aSeed );
+
+    /**
      * Change an existing time stamp based UUID into a true UUID.
      *
      * If this is not a time stamp based UUID, then no change is made.

@@ -37,6 +37,7 @@ set( common_srcs
     test_eda_rect.cpp
     test_lib_table.cpp
     test_kicad_string.cpp
+    test_kiid.cpp
     test_property.cpp
     test_refdes_utils.cpp
     test_title_block.cpp
