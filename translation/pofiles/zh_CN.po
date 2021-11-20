@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-19 12:55+0000\n"
-"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
+"PO-Revision-Date: 2021-11-21 21:17+0000\n"
+"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -17382,7 +17382,7 @@ msgstr "属性："
 
 #: gerbview/toolbars_gerber.cpp:155
 msgid "Highlight items with this aperture attribute"
-msgstr "高亮显示此光圈属性"
+msgstr "高亮显示含此光圈（Aperture）属性的项目"
 
 #: gerbview/toolbars_gerber.cpp:167 gerbview/toolbars_gerber.cpp:169
 msgid "DCode:"
@@ -17602,7 +17602,7 @@ msgstr "高亮网络 \"%s\" 的项目"
 #: gerbview/tools/gerbview_selection_tool.cpp:88
 #, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "高亮光圈类型 \"%s\""
+msgstr "高亮光圈（Aperture）类型 \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
 #, c-format
@@ -21177,7 +21177,7 @@ msgstr "删除零长度布线"
 
 #: pcbnew/cleanup_item.cpp:55
 msgid "Remove track inside pad"
-msgstr "删除焊盘内的轨道"
+msgstr "删除焊盘内的布线"
 
 #: pcbnew/cleanup_item.cpp:58
 msgid "Remove zero-size graphic"
@@ -24024,7 +24024,7 @@ msgstr "生成钻孔文件"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:78
 msgid "Generate Map File"
-msgstr "生成图文件"
+msgstr "生成映射文件"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:315
 msgid "Cannot make path relative (target volume different from file volume)!"
@@ -24090,11 +24090,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use route command (recommended)"
-msgstr "使用布线命令（推荐）"
+msgstr "使用铣孔命令（推荐）"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use alternate drill mode"
-msgstr "使用备用钻取模式"
+msgstr "使用备用钻孔模式"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:67
 msgid "Oval Holes Drill Mode"
@@ -24108,9 +24108,9 @@ msgid ""
 "(Use it only if the recommended command does not work)"
 msgstr ""
 "椭圆形孔经常给电路板厂造成问题。\n"
-"“使用路径命令”使用通常的 G00 路径命令（推荐）\n"
-"  “使用备用模式”使用另一个钻孔/路径命令（G85）\n"
-"（仅在推荐的命令不起作用时使用它）"
+"“使用铣孔命令”使用通常的 G00 铣刀命令（推荐）\n"
+"  “使用备用模式”使用另一个钻孔/铣刀命令（G85）\n"
+"（在推荐项不起作用时再使用备用模式）"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:76
 msgid "Gerber X2"
@@ -25772,7 +25772,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
-msgstr "从丝印中减去阻焊"
+msgstr "剔除开窗区域中的丝印"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "Remove silkscreen from areas without soldermask"
@@ -25803,7 +25803,7 @@ msgid ""
 msgstr ""
 "使用 X2 Gerber 文件格式。\n"
 "主要包括 Gerber 标头中的 X2 属性。\n"
-"如果未选中，请使用 X1 格式。\n"
+"如果未选中，则使用 X1 格式。\n"
 "在 X1 格式中，这些属性作为注释包含在文件中。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:236
@@ -25817,20 +25817,20 @@ msgid ""
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
 "在 Gerber 文件中包含网表元数据和孔径属性。\n"
-"它们是 X1 格式的注释。\n"
-"用于检查 CAM 工具和 Gerber 查看器中的连接性。"
+"在 X1 格式中它们是注释。\n"
+"用于在 CAM 工具和 Gerber 查看器中检查连接性。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
 msgid "Disable aperture macros (not recommended)"
-msgstr "禁用光圈宏 (不推荐)"
+msgstr "禁用光圈（Aperture）宏 (不推荐)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:242
 msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
-"禁用 Gerber 文件中的光圈宏\n"
-"*仅*用于损坏的 Gerber 查看器。"
+"禁用 Gerber 文件中的 Aperture 宏\n"
+"仅对有问题的 Gerber 查看器使用。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:256
 msgid "Default pen size:"
@@ -29241,7 +29241,7 @@ msgstr "正在检查重叠项目的丝印..."
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:160
 #, c-format
 msgid "Testing %d silkscreen features against %d board items."
-msgstr "正在测试 %d 丝印功能针对 %d 个电路板项目。"
+msgstr "正在将 %d 个丝印与 %d 个电路板项目测试相交..."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:100
 msgid "Checking silkscreen for potential soldermask clipping..."
@@ -29250,7 +29250,7 @@ msgstr "正在检查丝印是否可能与开窗区相交..."
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:182
 #, c-format
 msgid "Testing %d mask apertures against %d silkscreen features."
-msgstr "正在测试 %d 个掩膜孔径 %d 个丝印功能。"
+msgstr "正在将 %d 个阻焊区域与 %d 个丝印测试相交..."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:83
 msgid "Checking track widths..."
@@ -32974,15 +32974,13 @@ msgid ""
 "Select the default width for new tracks. Note that this width can be "
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
-msgstr ""
-"选择新线路的默认宽度。请注意，这个宽度可以被板的最小宽度，或者被现有轨道的宽"
-"度覆盖，前提是启用了 '使用现有线路宽度' 功能。"
+msgstr "选择新布线的默认宽度。请注意，这个宽度可以被电路板的最小布线宽度覆盖；如果启用了“使用现有线路宽度”功能，还会被现有布线的宽度覆盖。"
 
 #: pcbnew/toolbars_pcb_editor.cpp:540
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
-msgstr "从现有的线路发送时，使用它的宽度而不是当前的宽度设置"
+msgstr "从现有的线路开始布线时，使用它的宽度而不是当前的宽度设置"
 
 #: pcbnew/toolbars_pcb_editor.cpp:647
 msgid "Track: use netclass width"
@@ -34223,7 +34221,7 @@ msgstr "钻孔文件 (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:589
 msgid "Generate Excellon drill file(s)"
-msgstr "生成出色的钻取文件"
+msgstr "生成 Excellon 钻孔文件"
 
 #: pcbnew/tools/pcb_actions.cpp:594
 msgid "Component Placement (.pos)..."
@@ -35041,7 +35039,7 @@ msgstr "撤消上一段"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
 msgid "Walks the current track back one segment."
-msgstr "将当前轨道往回走一段。"
+msgstr "将当前布线往回走一段。"
 
 #: pcbnew/tools/pcb_actions.cpp:1387 pcbnew/tools/pcb_actions.cpp:1393
 msgid ""
@@ -36001,7 +35999,7 @@ msgstr "Gerber 文件"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:26
 msgid "Excellon drill file"
-msgstr "出色的钻头文件"
+msgstr "Excellon 钻孔文件"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 msgid "KiCad Project"
