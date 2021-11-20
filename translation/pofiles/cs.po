@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-15 18:08+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"PO-Revision-Date: 2021-11-21 21:16+0000\n"
+"Last-Translator: Radek K <radek.kzn@gmail.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -18261,7 +18261,6 @@ msgid "Add repository"
 msgstr "Přidat repositář"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:61
-#, fuzzy
 msgid "Manage Repositories"
 msgstr "Správa repozitářů"
 
@@ -18298,7 +18297,6 @@ msgid "Uninstall"
 msgstr "Odinstalovat"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:133
-#, fuzzy
 msgid "Apply Changes"
 msgstr "Použít změny"
 
@@ -18354,7 +18352,6 @@ msgid "Discard action"
 msgstr "Vyřadit akci"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
-#, fuzzy
 msgid "Install from File..."
 msgstr "Instalovat ze souboru..."
 
@@ -18409,19 +18406,16 @@ msgid "Metadata"
 msgstr "Metadata"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
-#, fuzzy
 msgid "Package identifier: "
-msgstr "Identifikátor balíčku: %s\n"
+msgstr "Identifikátor balíčku: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "Licence"
+msgstr "Licence: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
-#, fuzzy
 msgid "Tags: "
-msgstr "Tagy: %s\n"
+msgstr "Tagy: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:257
 msgid "Author"
@@ -18483,9 +18477,8 @@ msgid "Install Size"
 msgstr "Velikost instalace"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
-#, fuzzy
 msgid "Compatible"
-msgstr "Režim kompatibility:"
+msgstr "Kompatibilní"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 msgid "Show all versions"
@@ -18624,9 +18617,8 @@ msgid "Aborting package installation."
 msgstr "Přerušení instalace balíčku."
 
 #: kicad/pcm/pcm_task_manager.cpp:254
-#, fuzzy
 msgid "Extracted package\n"
-msgstr "Rozbalování balíčku '%s'."
+msgstr "Rozbalené balíčky\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:298
 #, c-format
@@ -31542,12 +31534,13 @@ msgid "Loading arcs..."
 msgstr "Načítání oblouků..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1973
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
+"Polygon na Altium vrstvě (%d) nemá KiCad ekvivalent. Byl přesunut do KiCad "
+"vrstvy Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1992
 #, c-format
@@ -31638,20 +31631,22 @@ msgid "Loading tracks..."
 msgstr "Načítání spojů..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2591
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
+"Spoj na Altium vrstvě (%d) nemá KiCad ekvivalent. Byl přesunut do KiCad "
+"vrstvy Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2609
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
+"Spoj na Altium vrstvě (%d) nemá KiCad ekvivalent. Byl přesunut do KiCad "
+"vrstvy Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2650
 #, fuzzy
@@ -31668,24 +31663,26 @@ msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2763
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
+"Text na Altium vrstvě (%d) nemá KiCad ekvivalent. Byl přesunut do KiCad "
+"vrstvy Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2849
 msgid "Loading rectangles..."
 msgstr "Načítání obdélníků..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2869
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
+"Vyplněná zóna na Altium vrstvě (%d) nemá KiCad ekvivalent. Byl přesunut do "
+"KiCad vrstvy Eco1_User."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:91
 msgid ""
@@ -32017,9 +32014,9 @@ msgid "<package> '%s' duplicated in <library> '%s'"
 msgstr "<pouzdro> jména: \"%s\" je duplicitní v eagle <knihovně>: \"%s\""
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1164
-#, fuzzy, c-format
+#, c-format
 msgid "No '%s' package in library '%s'."
-msgstr "Pouzdro \"%s\" neexistuje v knihovně \"%s\""
+msgstr "Pouzdro \"%s\" neexistuje v knihovně \"%s\"."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1395
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2182
@@ -32067,9 +32064,9 @@ msgid "Could not find units value, defaulting to mils."
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find column label %s."
-msgstr "Nelze najít soubor knihovny %s"
+msgstr "Nelze najít sloupec %s."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:359
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:442
