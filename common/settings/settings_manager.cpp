@@ -531,8 +531,8 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
     if( !m_migrateLibraryTables )
     {
         COMMON_SETTINGS common;
-        wxString        path = GetPathForSettingsFile( &common );
-        common.LoadFromFile( path );
+        wxString        commonPath = GetPathForSettingsFile( &common );
+        common.LoadFromFile( commonPath );
 
         const std::vector<wxString> libKeys = {
             wxT( "KICAD6_SYMBOL_DIR" ),
@@ -550,7 +550,7 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
         for( const wxString& key : libKeys )
             common.m_Env.vars.erase( key );
 
-        common.SaveToFile( path  );
+        common.SaveToFile( commonPath  );
     }
 
     return true;
