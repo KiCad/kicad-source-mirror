@@ -1,21 +1,22 @@
 # Triyan W. Nugroho <triyan.wn@gmail.com>, 2021.
 # Jacque Fresco <aidter@use.startmail.com>, 2021.
 # Reza Almanda <rezaalmanda27@gmail.com>, 2021.
+# whenwesober <naomi16i_1298q@cikuh.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-03 14:44+0000\n"
-"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
-"source/id/>\n"
+"PO-Revision-Date: 2021-11-22 17:30+0000\n"
+"Last-Translator: whenwesober <naomi16i_1298q@cikuh.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
+"master-source/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -17526,11 +17527,13 @@ msgid "Unzip Project"
 msgstr ""
 
 #: kicad/files-io.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Open '%s'\n"
-msgstr "Buka %s"
+msgstr ""
+"\n"
+"Buka %s\n"
 
 #: kicad/files-io.cpp:76
 msgid "Target Directory"
@@ -17795,9 +17798,8 @@ msgid "Discard action"
 msgstr "Opsi Tampilan"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
-#, fuzzy
 msgid "Install from File..."
-msgstr "Tidak dapat mengganti nama berkas ... "
+msgstr "Tidak dapat mengganti nama berkas ..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:74
 msgid "Plugin And Content Manager"
@@ -17854,9 +17856,8 @@ msgid "Package identifier: "
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "Lisensi"
+msgstr "Lisensi: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
 msgid "Tags: "
@@ -20516,14 +20517,14 @@ msgid "PrePreg"
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s:"
-msgstr "Ketebalan garis: "
+msgstr "Ketebalan garis dalam %s:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr "Ketebalan garis: "
+msgstr "Ketebalan garis yang diperkirakan (nilai minimum %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
 #, fuzzy
