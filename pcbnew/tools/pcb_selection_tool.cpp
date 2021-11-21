@@ -1164,7 +1164,7 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
             break;
         }
 
-        item->SetState( TEMP_SELECTED, false );
+        item->ClearFlags( TEMP_SELECTED );
     }
 
     std::vector< std::pair<wxPoint, PCB_LAYER_ID> > activePts;
