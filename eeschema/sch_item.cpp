@@ -62,6 +62,16 @@ SCH_ITEM::SCH_ITEM( const SCH_ITEM& aItem ) :
 }
 
 
+SCH_ITEM& SCH_ITEM::operator=( const SCH_ITEM& aItem )
+{
+    m_layer              = aItem.m_layer;
+    m_fieldsAutoplaced   = aItem.m_fieldsAutoplaced;
+    m_connectivity_dirty = true;
+
+    return *this;
+}
+
+
 SCH_ITEM::~SCH_ITEM()
 {
     // Do not let the connections container go out of scope with any objects or they

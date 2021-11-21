@@ -186,6 +186,8 @@ public:
 
     SCH_ITEM( const SCH_ITEM& aItem );
 
+    SCH_ITEM& operator=( const SCH_ITEM& aPin );
+
     virtual ~SCH_ITEM();
 
     virtual wxString GetClass() const override
