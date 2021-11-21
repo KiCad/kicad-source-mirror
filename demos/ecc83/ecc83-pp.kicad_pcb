@@ -1,4 +1,4 @@
-(kicad_pcb (version 20210424) (generator pcbnew)
+(kicad_pcb (version 20211014) (generator pcbnew)
 
   (general
     (thickness 1.6)
@@ -367,7 +367,7 @@
     (tags "mounting hole 3.2mm m3 din965")
     (path "/00000000-0000-0000-0000-000054a5890a")
     (attr exclude_from_pos_files exclude_from_bom)
-    (fp_text reference "P5" (at 0 -3.8) (layer "F.SilkS")
+    (fp_text reference "P5" (at 4.305 -0.58) (layer "F.SilkS")
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 6e3bebac-4f31-4c30-8373-1ef103aa45c4)
     )
@@ -883,10 +883,10 @@
     (pad "1" thru_hole circle locked (at 0 0) (size 5.6 5.6) (drill 3.2) (layers *.Cu *.Mask) (tstamp c1d529e4-8439-470c-b813-055832ea88e8))
   )
 
-  (gr_line (start 173.355 90.17) (end 173.355 136.525) (angle 90) (layer "Edge.Cuts") (width 0.127) (tstamp 00000000-0000-0000-0000-00005a3345b3))
-  (gr_line (start 121.285 90.17) (end 121.285 136.525) (angle 90) (layer "Edge.Cuts") (width 0.127) (tstamp 00000000-0000-0000-0000-00005d88943e))
-  (gr_line (start 173.355 90.17) (end 121.285 90.17) (angle 90) (layer "Edge.Cuts") (width 0.127) (tstamp 258201f7-c476-442a-b854-de67eac27cf4))
-  (gr_line (start 121.285 136.525) (end 173.355 136.525) (angle 90) (layer "Edge.Cuts") (width 0.127) (tstamp 9b19456e-3ad1-4dde-92c4-23451559e1ba))
+  (gr_line (start 173.355 90.17) (end 173.355 136.525) (layer "Edge.Cuts") (width 0.127) (tstamp 00000000-0000-0000-0000-00005a3345b3))
+  (gr_line (start 121.285 90.17) (end 121.285 136.525) (layer "Edge.Cuts") (width 0.127) (tstamp 00000000-0000-0000-0000-00005d88943e))
+  (gr_line (start 173.355 90.17) (end 121.285 90.17) (layer "Edge.Cuts") (width 0.127) (tstamp 258201f7-c476-442a-b854-de67eac27cf4))
+  (gr_line (start 121.285 136.525) (end 173.355 136.525) (layer "Edge.Cuts") (width 0.127) (tstamp 9b19456e-3ad1-4dde-92c4-23451559e1ba))
 
   (segment (start 139.573 99.695) (end 141.605 99.695) (width 0.8) (layer "B.Cu") (net 2) (tstamp 1d6285fd-2d49-4956-932f-458079ff628a))
   (segment (start 139.446 99.822) (end 139.573 99.695) (width 0.8) (layer "B.Cu") (net 2) (tstamp 32199045-7b83-44fa-a0ee-e9986ff68da8))
@@ -932,7 +932,6 @@
   (segment (start 133.985 109.22) (end 133.985 116.205) (width 0.8) (layer "B.Cu") (net 8) (tstamp 0a72f525-0d1b-4f34-ba8b-901e6ea242fc))
   (segment (start 152.250834 134.055312) (end 154.94 131.366146) (width 0.8) (layer "B.Cu") (net 8) (tstamp 10bd612f-b54f-41dc-aced-b8515b59a488))
   (segment (start 135.89 107.95) (end 135.255 107.95) (width 0.8) (layer "B.Cu") (net 8) (tstamp 4e5e9938-57c9-4bb2-970b-cc43e5bd53e9))
-  (segment (start 154.94 121.31548) (end 154.94 121.31548) (width 0.8) (layer "B.Cu") (net 8) (tstamp 573e7a8a-227f-4a44-bae6-df4affa7ceb8))
   (segment (start 135.509 117.729) (end 135.509 121.031) (width 0.8) (layer "B.Cu") (net 8) (tstamp 5c81feef-8ec5-4bc1-ae1b-5599c38f7110))
   (segment (start 154.94 120.68048) (end 152.6794 118.41988) (width 0.8) (layer "B.Cu") (net 8) (tstamp 5d1258a4-1077-4c6c-9ccf-40f02d473dcf))
   (segment (start 136.398 121.92) (end 136.525 121.92) (width 0.8) (layer "B.Cu") (net 8) (tstamp 681e3661-1a5f-4900-8a55-ef1da47f12da))

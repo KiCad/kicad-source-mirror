@@ -1,4 +1,4 @@
-(kicad_pcb (version 20210925) (generator pcbnew)
+(kicad_pcb (version 20211014) (generator pcbnew)
 
   (general
     (thickness 1.6)
@@ -307,7 +307,7 @@
         (gr_line (start 6 1.9) (end 6 13.9) (width 2))
         (gr_line (start -6 1.9) (end -6 13.9) (width 2))
         (gr_line (start 0 -0.1) (end 0 18) (width 2))
-        (gr_arc (start 0 9.9) (end -9.9 7.9) (angle 156.7) (width 2))
+    (gr_arc (start -9.9 7.9) (mid -0.049149 -0.19988) (end 9.880067 7.803745) (width 2))
       ) (tstamp 9dfd1559-092f-422f-8584-fa1222c0bee4))
     (pad "2" connect custom locked (at 10.509 -0.025 270) (size 3 3) (layers "F.Cu" "F.Mask")
       (net 1 "/PAD2") (pinfunction "2") (pintype "passive") (zone_connect 0)
@@ -315,8 +315,8 @@
       (primitives
         (gr_line (start 3 0.5) (end 3 17) (width 2))
         (gr_line (start -3 0.5) (end -3 17) (width 2))
-        (gr_arc (start 0 9.9) (end -9.9 7.9) (angle 140) (width 2))
-        (gr_arc (start 0 9.9) (end -15 7.9) (angle 165) (width 2))
+    (gr_arc (start -9.9 7.9) (mid -1.506614 -0.086997) (end 8.869415 5.068492) (width 2))
+    (gr_arc (start -15 7.9) (mid 0.011791 -5.232741) (end 15.003098 7.923378) (width 2))
         (gr_line (start 0 0) (end 0 -5) (width 2))
       ) (tstamp 31428916-6fae-4042-b09c-498b9cbc46b9))
     (model "discret/capa_2pas_5x5mm.wrl"
@@ -326,10 +326,10 @@
     )
   )
 
-  (gr_line (start 179 48) (end 179 138) (angle 90) (layer "Edge.Cuts") (width 0.15) (tstamp 120fbcea-b755-47f8-b771-a07ce53071ec))
-  (gr_line (start 179 138) (end 61 138) (angle 90) (layer "Edge.Cuts") (width 0.15) (tstamp a79cc7bd-9944-45e3-8f39-80b9620848be))
-  (gr_line (start 61 48) (end 179 48) (angle 90) (layer "Edge.Cuts") (width 0.15) (tstamp b831241d-7d86-4fcf-8746-26e8254bb2fd))
-  (gr_line (start 61 138) (end 61 48) (angle 90) (layer "Edge.Cuts") (width 0.15) (tstamp fe9dd4af-9c39-4231-b588-395a35cc7f25))
+  (gr_line (start 179 48) (end 179 138) (layer "Edge.Cuts") (width 0.15) (tstamp 120fbcea-b755-47f8-b771-a07ce53071ec))
+  (gr_line (start 179 138) (end 61 138) (layer "Edge.Cuts") (width 0.15) (tstamp a79cc7bd-9944-45e3-8f39-80b9620848be))
+  (gr_line (start 61 48) (end 179 48) (layer "Edge.Cuts") (width 0.15) (tstamp b831241d-7d86-4fcf-8746-26e8254bb2fd))
+  (gr_line (start 61 138) (end 61 48) (layer "Edge.Cuts") (width 0.15) (tstamp fe9dd4af-9c39-4231-b588-395a35cc7f25))
   (gr_text "Test" (at 159.3 91.4) (layer "F.Cu") (tstamp e2ecccdd-5374-4255-9fc5-749bd4111d55)
     (effects (font (size 1.524 1.524) (thickness 0.381)))
   )

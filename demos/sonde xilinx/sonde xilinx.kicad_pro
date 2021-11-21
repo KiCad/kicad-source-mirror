@@ -69,6 +69,7 @@
         "drill_out_of_range": "error",
         "duplicate_footprints": "warning",
         "extra_footprint": "warning",
+        "footprint_type_mismatch": "error",
         "hole_clearance": "error",
         "hole_near_hole": "error",
         "invalid_outline": "error",
@@ -87,6 +88,7 @@
         "silk_over_copper": "error",
         "silk_overlap": "error",
         "skew_out_of_range": "error",
+        "through_hole_pad_without_hole": "error",
         "too_many_vias": "error",
         "track_dangling": "warning",
         "track_width": "error",
@@ -113,7 +115,8 @@
         "min_through_hole_diameter": 0.508,
         "min_track_width": 0.2032,
         "min_via_annular_width": 0.049999999999999996,
-        "min_via_diameter": 0.889
+        "min_via_diameter": 0.889,
+        "use_height_for_length_calcs": true
       },
       "track_widths": [
         0.0,
@@ -368,7 +371,7 @@
       }
     ],
     "meta": {
-      "version": 0
+      "version": 2
     },
     "net_colors": null
   },

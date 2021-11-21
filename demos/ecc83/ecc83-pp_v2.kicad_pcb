@@ -1,4 +1,4 @@
-(kicad_pcb (version 20210424) (generator pcbnew)
+(kicad_pcb (version 20211014) (generator pcbnew)
 
   (general
     (thickness 1.6)
@@ -938,10 +938,10 @@
     )
   )
 
-  (gr_line (start 168.275 90.805) (end 168.275 132.715) (angle 90) (layer "Edge.Cuts") (width 0.1) (tstamp 10427b83-629f-4b51-9d69-00c8aed1c764))
-  (gr_line (start 120.015 90.805) (end 120.015 132.715) (angle 90) (layer "Edge.Cuts") (width 0.1) (tstamp 34316d74-64d8-45b4-8cb7-31cf6a4e8427))
-  (gr_line (start 168.275 90.805) (end 120.015 90.805) (angle 90) (layer "Edge.Cuts") (width 0.1) (tstamp 9d903977-89b9-400d-a957-c285b8f528cd))
-  (gr_line (start 168.275 132.715) (end 120.015 132.715) (angle 90) (layer "Edge.Cuts") (width 0.1) (tstamp e346801c-20fd-4959-91c0-3d3bf6dbcd08))
+  (gr_line (start 168.275 90.805) (end 168.275 132.715) (layer "Edge.Cuts") (width 0.1) (tstamp 10427b83-629f-4b51-9d69-00c8aed1c764))
+  (gr_line (start 120.015 90.805) (end 120.015 132.715) (layer "Edge.Cuts") (width 0.1) (tstamp 34316d74-64d8-45b4-8cb7-31cf6a4e8427))
+  (gr_line (start 168.275 90.805) (end 120.015 90.805) (layer "Edge.Cuts") (width 0.1) (tstamp 9d903977-89b9-400d-a957-c285b8f528cd))
+  (gr_line (start 168.275 132.715) (end 120.015 132.715) (layer "Edge.Cuts") (width 0.1) (tstamp e346801c-20fd-4959-91c0-3d3bf6dbcd08))
 
   (segment (start 165.1 123.825) (end 165.354 123.825) (width 0.8636) (layer "B.Cu") (net 1) (tstamp ca2dfff9-02dc-4d1f-8653-c83bf83998d0))
   (segment (start 142.7 101.35) (end 137.6 101.35) (width 0.8636) (layer "B.Cu") (net 2) (tstamp 3b469e6c-e6df-48c1-9c51-a3141276528b))
