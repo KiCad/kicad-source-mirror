@@ -38,7 +38,7 @@
 
 // Create only once, as seeding is *very* expensive
 static boost::mt19937 rng;
-static boost::uuids::basic_random_generator<boost::mt19937> randomGenerator( &rng );
+static boost::uuids::basic_random_generator<boost::mt19937> randomGenerator( rng );
 
 // These don't have the same performance penalty, but might as well be consistent
 static boost::uuids::string_generator stringGenerator;
