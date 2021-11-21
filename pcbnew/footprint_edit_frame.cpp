@@ -108,15 +108,13 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 END_EVENT_TABLE()
 
 
-FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
-                                            EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend ) :
+FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_FOOTPRINT_EDITOR, wxEmptyString,
                          wxDefaultPosition, wxDefaultSize,
                          KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() ),
     m_show_layer_manager_tools( true )
 {
     m_showBorderAndTitleBlock = false;   // true to show the frame references
-    m_canvasType = aBackend;
     m_aboutTitle = _( "KiCad Footprint Editor" );
     m_selLayerBox = nullptr;
     m_editorSettings = nullptr;
@@ -135,16 +133,12 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     SetIcons( icon_bundle );
 
     // Create GAL canvas
-    if( aBackend == EDA_DRAW_PANEL_GAL::GAL_TYPE_UNKNOWN )
-        m_canvasType = loadCanvasTypeSetting();
-    else
-        m_canvasType = aBackend;
+    m_canvasType = loadCanvasTypeSetting();
 
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
                                                             GetGalDisplayOptions(), m_canvasType );
     SetCanvas( drawPanel );
     SetBoard( new BOARD() );
-
 
     // This board will only be used to hold a footprint for editing
     GetBoard()->SetBoardUse( BOARD_USE::FPHOLDER );
@@ -190,6 +184,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
     m_appearancePanel = new APPEARANCE_CONTROLS( this, GetCanvas(), true );
+
+    resolveCanvasType();
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings() initialize
     // parameters in m_LayersManager

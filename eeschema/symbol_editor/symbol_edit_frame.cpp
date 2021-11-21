@@ -126,6 +126,19 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
     LoadSettings( m_settings );
 
+    m_libMgr = new SYMBOL_LIBRARY_MANAGER( *this );
+
+    // Preload libraries before using SyncLibraries the first time, as the preload is threaded
+    WX_PROGRESS_REPORTER reporter( this, _( "Loading Symbol Libraries" ),
+                                   m_libMgr->GetLibraryCount(), true );
+    m_libMgr->Preload( reporter );
+
+    SyncLibraries( false );
+    m_treePane = new SYMBOL_TREE_PANE( this, m_libMgr );
+
+    resolveCanvasType();
+    SwitchCanvas( m_canvasType );
+
     // Ensure axis are always drawn
     KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = GetGalDisplayOptions();
     gal_opts.m_axesEnabled = true;
@@ -142,16 +155,6 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     setupTools();
     setupUIConditions();
-
-    m_libMgr = new SYMBOL_LIBRARY_MANAGER( *this );
-
-    // Preload libraries before using SyncLibraries the first time, as the preload is threaded
-    WX_PROGRESS_REPORTER reporter( this, _( "Loading Symbol Libraries" ),
-                                   m_libMgr->GetLibraryCount(), true );
-    m_libMgr->Preload( reporter );
-
-    SyncLibraries( false );
-    m_treePane = new SYMBOL_TREE_PANE( this, m_libMgr );
 
     ReCreateMenuBar();
     ReCreateHToolbar();

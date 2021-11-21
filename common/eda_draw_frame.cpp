@@ -747,10 +747,9 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::loadCanvasTypeSetting()
         canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     }
 
-    // Legacy canvas no longer supported.  Switch to Cairo, and on the first instantiation
-    // the user will be prompted to switch to OpenGL
+    // Legacy canvas no longer supported.  Switch to OpenGL, falls back to Cairo on failure
     if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
-        canvasType = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
+        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
 
     return canvasType;
 }
@@ -763,7 +762,7 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
     // a parent frame)
     FRAME_T allowed_frames[] =
     {
-        FRAME_SCH,
+        FRAME_SCH, FRAME_SCH_SYMBOL_EDITOR,
         FRAME_PCB_EDITOR, FRAME_FOOTPRINT_EDITOR,
         FRAME_GERBER,
         FRAME_PL_EDITOR
@@ -1106,38 +1105,17 @@ void EDA_DRAW_FRAME::resolveCanvasType()
     {
         if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
         {
-            wxString msg =
-                    _( "KiCad can use your graphics card to give you a smoother "
-                       "and faster experience. This option is turned off by "
-                       "default since it is not compatible with all computers.\n\n"
-                       "Would you like to try enabling graphics acceleration?\n\n"
-                       "If you'd like to choose later, select Accelerated Graphics "
-                       "in the Preferences menu." );
+            // Save Cairo as default in case OpenGL crashes
+            saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
 
-            wxMessageDialog dlg( this, msg, _( "Enable Graphics Acceleration" ), wxYES_NO );
+            // Switch to OpenGL, which will save the new setting if successful
+            SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
 
-            dlg.SetYesNoLabels( _( "&Enable Acceleration" ), _( "&No Thanks" ) );
-
-            if( dlg.ShowModal() == wxID_YES )
-            {
-                // Save Cairo as default in case OpenGL crashes
-                saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
-
-                // Switch to OpenGL, which will save the new setting if successful
-                SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-
-                // Switch back to Cairo if OpenGL is not supported
-                if( GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
-                    SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
-
-                HardRedraw();
-            }
-            else
-            {
-                // If they were on legacy, switch to Cairo
+            // Switch back to Cairo if OpenGL is not supported
+            if( GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
                 SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
-                HardRedraw();
-            }
+
+            HardRedraw();
         }
 
         m_firstRunDialogSetting = 1;

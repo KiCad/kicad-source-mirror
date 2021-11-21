@@ -96,8 +96,7 @@ static struct IFACE : public KIFACE_BASE
         }
 
         case FRAME_FOOTPRINT_EDITOR:
-            return new FOOTPRINT_EDIT_FRAME( aKiway, aParent,
-                                             EDA_DRAW_PANEL_GAL::GAL_TYPE_UNKNOWN );
+            return new FOOTPRINT_EDIT_FRAME( aKiway, aParent );
 
         case FRAME_FOOTPRINT_VIEWER:
         case FRAME_FOOTPRINT_VIEWER_MODAL:
