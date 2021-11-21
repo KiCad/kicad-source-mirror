@@ -33,8 +33,12 @@
 #include <boost/uuid/entropy_error.hpp>
 #endif
 
+#include <mutex>
+
 #include <wx/log.h>
 
+// boost:mt19937 is not thread-safe
+static std::mutex rng_mutex;
 
 // Create only once, as seeding is *very* expensive
 static boost::mt19937 rng;
@@ -69,9 +73,14 @@ KIID::KIID()
 #endif
 
         if( createNilUuids )
+        {
             m_uuid = nilGenerator();
+        }
         else
+        {
+            std::lock_guard<std::mutex> lock( rng_mutex );
             m_uuid = randomGenerator();
+        }
 
 #if BOOST_VERSION >= 106700
     }
