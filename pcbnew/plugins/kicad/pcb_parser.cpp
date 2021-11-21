@@ -111,13 +111,13 @@ void PCB_PARSER::init()
 
 void PCB_PARSER::checkpoint()
 {
-    const unsigned PROGRESS_DELTA = 250;
-
     if( m_progressReporter )
     {
+        TIME_PT curTime = CLOCK::now();
         unsigned curLine = m_lineReader->LineNumber();
+        auto delta = std::chrono::duration_cast<TIMEOUT>( curTime - m_lastProgressTime );
 
-        if( curLine > m_lastProgressLine + PROGRESS_DELTA )
+        if( delta > std::chrono::milliseconds( 100 ) )
         {
             m_progressReporter->SetCurrentProgress( ( (double) curLine )
                                                             / std::max( 1U, m_lineCount ) );
@@ -125,7 +125,7 @@ void PCB_PARSER::checkpoint()
             if( !m_progressReporter->KeepRefreshing() )
                 THROW_IO_ERROR( ( "Open cancelled by user." ) );
 
-            m_lastProgressLine = curLine;
+            m_lastProgressTime = curTime;
         }
     }
 }

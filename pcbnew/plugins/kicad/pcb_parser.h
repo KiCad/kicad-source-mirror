@@ -37,6 +37,7 @@
 #include <pcb_lexer.h>
 #include <kiid.h>
 
+#include <chrono>
 #include <unordered_map>
 
 
@@ -77,7 +78,7 @@ public:
         m_resetKIIDs( false ),
         m_progressReporter( nullptr ),
         m_lineReader( nullptr ),
-        m_lastProgressLine( 0 ),
+        m_lastProgressTime( std::chrono::steady_clock::now() ),
         m_lineCount( 0 )
     {
         init();
@@ -112,7 +113,7 @@ public:
     {
         m_progressReporter = aProgressReporter;
         m_lineReader = aLineReader;
-        m_lastProgressLine = 0;
+        m_lastProgressTime = std::chrono::steady_clock::now();
         m_lineCount = aLineCount;
     }
 
@@ -364,6 +365,15 @@ private:
     typedef std::unordered_map< std::string, LSET >         LSET_MAP;
     typedef std::unordered_map< wxString, KIID >            KIID_MAP;
 
+    ///< The type of progress bar timeout
+    using TIMEOUT = std::chrono::milliseconds;
+
+    ///< The clock used for the timestamp (guaranteed to be monotonic).
+    using CLOCK = std::chrono::steady_clock;
+
+    ///< The type of the time stamps.
+    using TIME_PT = std::chrono::time_point<CLOCK>;
+
     BOARD*              m_board;
     LAYER_ID_MAP        m_layerIndices;     ///< map layer name to it's index
     LSET_MAP            m_layerMasks;       ///< map layer names to their masks
@@ -380,7 +390,7 @@ private:
 
     PROGRESS_REPORTER*  m_progressReporter;  ///< optional; may be nullptr
     const LINE_READER*  m_lineReader;        ///< for progress reporting
-    unsigned            m_lastProgressLine;
+    TIME_PT             m_lastProgressTime;  ///< for progress reporting
     unsigned            m_lineCount;         ///< for progress reporting
 
     // Group membership info refers to other Uuids in the file.
