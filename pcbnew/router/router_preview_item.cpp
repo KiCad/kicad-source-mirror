@@ -244,6 +244,8 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
         const SHAPE_SEGMENT* s = (const SHAPE_SEGMENT*) aShape;
         const int            w = s->GetWidth();
 
+        gal->SetIsStroke( false );
+
         if( m_showTrackClearance && m_clearance > 0 )
         {
             gal->SetLineWidth( w + 2 * m_clearance );
@@ -252,7 +254,6 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
 
         gal->SetLayerDepth( m_depth );
         gal->SetLineWidth( w );
-        gal->SetStrokeColor( m_color );
         gal->SetFillColor( m_color );
         gal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() );
         break;
