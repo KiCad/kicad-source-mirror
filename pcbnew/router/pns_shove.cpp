@@ -436,7 +436,14 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& 
         for( int i = 0; i < currentLineSegmentCount; i++ )
         {
             SEGMENT seg( aCurLine, aCurLine.CSegment( i ) );
-            SHAPE_LINE_CHAIN hull = seg.Hull( clearance, obstacleLineWidth, aObstacleLine.Layer() );
+            int     extra = 0;
+
+            // Arcs need additional clearance to ensure the hulls are always bigger than the arc
+            if( aCurLine.CLine().IsArcSegment( i ) )
+                extra = SHAPE_ARC::DefaultAccuracyForPCB();
+
+            SHAPE_LINE_CHAIN hull =
+                    seg.Hull( clearance + extra, obstacleLineWidth, aObstacleLine.Layer() );
 
             hulls.push_back( hull );
         }
