@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-21 21:16+0000\n"
+"PO-Revision-Date: 2021-11-22 17:30+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -3094,8 +3094,8 @@ msgstr "Symbolskalierung auf Schriftarten anwenden"
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
 msgstr ""
-"(Diese Abhilfe verbessert einige GTK-Schriftskalierungsprobleme bei Anzeigen "
-"mit hoher Auflösung.)"
+"(Dies verbessert einige GTK-Schriftskalierungsprobleme bei Anzeigen mit "
+"hoher Auflösung.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3190,7 +3190,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:262
 msgid "Create backups when auto save occurs"
-msgstr "Sicherungskopien erstellen wenn das automatische Speichern erfolgt"
+msgstr "Sicherungskopien erstellen, wenn das automatische Speichern erfolgt"
 
 #: common/dialogs/panel_common_settings_base.cpp:263
 msgid ""
@@ -3198,7 +3198,7 @@ msgid ""
 "backups will only be created when you manually save a file."
 msgstr ""
 "Backups erstellen, wenn die automatische Speicherfunktion aktiviert ist.  "
-"Wenn diese Option nicht aktiviert ist, werden Sicherungen nur erstellt wenn "
+"Wenn diese Option nicht aktiviert ist, werden Sicherungen nur erstellt, wenn "
 "Sie eine Datei manuell speichern."
 
 #: common/dialogs/panel_common_settings_base.cpp:267
@@ -3305,7 +3305,7 @@ msgstr "Bildschwenk und Zoom"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:25
 msgid "Center and warp cursor on zoom"
-msgstr "Zentriere und positioniere den Cursor neu beim Zoomen"
+msgstr "Cursor beim Zoomen zentrieren und positionieren"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:26
 msgid "Center the cursor on screen when zooming."
@@ -3313,16 +3313,15 @@ msgstr "Hält beim Zoomen den Cursor an seiner aktuellen Position."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:33
 msgid "Automatically pan while moving object"
-msgstr "Zeichenfläche mitziehen während ein Objekt bewegt wird"
+msgstr "Zeichenfläche mitziehen beim Verschieben von Objekten"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:34
 msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
 msgstr ""
-"Wenn Sie eine Leiterbahn zeichnen oder ein Objekt verschieben, wird der "
-"Bildausschnitt automatisch verschoben wenn Sie sich dem Rand des Displays "
-"nähern."
+"Beim Zeichnen einer Leiterbahn oder Verschieben eines Objekts wird der "
+"Bildausschnitt bei Annäherung an den Bildrand automatisch verschoben."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:38
 msgid "Use zoom acceleration"
@@ -3330,7 +3329,7 @@ msgstr "Zoom-Beschleunigung verwenden"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:39
 msgid "Zoom faster when scrolling quickly"
-msgstr "Schneller zoomen, wenn Sie schnell scrollen"
+msgstr "Schneller zoomen, wenn schnell gescrollt wird"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:45
 msgid "Zoom speed:"
@@ -3351,7 +3350,7 @@ msgstr "Automatische Schwenkgeschwindigkeit:"
 #: common/dialogs/panel_mouse_settings_base.cpp:72
 msgid "How fast to pan when moving an object off the edge of the screen"
 msgstr ""
-"Wie schnell der Bildausschnitt verschoben wird wenn ein Objekt über den "
+"Wie schnell der Bildausschnitt verschoben wird, wenn ein Objekt über den "
 "Bildrand geschoben wird"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:91
@@ -3454,22 +3453,22 @@ msgstr "Zoom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:207
 msgid "Pan up/down:"
-msgstr "Oben/Unten schwenken:"
+msgstr "Hoch/runter schwenken:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:223
 msgid "Pan left/right:"
-msgstr "Links/Rechts schwenken:"
+msgstr "Links/rechts schwenken:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:257
 msgid "Pan left/right with horizontal movement"
-msgstr "Links/Rechts mit Horizontalbewegung schwenken"
+msgstr "Links/rechts mit Horizontalbewegung schwenken"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:258
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
 msgstr ""
-"Zeichenfläche nach links und rechts verschieben, wenn Sie auf dem Touchpad "
-"von links nach rechts scrollen"
+"Zeichenfläche nach links und rechts verschieben, wenn auf dem Touchpad von "
+"links nach rechts gescrollt wird"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
 msgid "Reset to Mouse Defaults"
@@ -3647,7 +3646,7 @@ msgstr ""
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:103
 msgid "Filter Nets"
-msgstr "Filter Netze"
+msgstr "Netze filtern"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:108
 msgid "Net class filter:"
@@ -3661,7 +3660,7 @@ msgstr "Filter Netzname:"
 #: common/dialogs/panel_setup_netclasses_base.cpp:140
 #: pcbnew/widgets/appearance_controls.cpp:896
 msgid "Show All Nets"
-msgstr "Zeige alle Netze"
+msgstr "Alle Netze anzeigen"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:146
 msgid "Apply Filters"
@@ -3733,7 +3732,7 @@ msgstr "Hinweis:"
 #: common/dialogs/wx_html_report_panel.cpp:330
 #: eeschema/dialogs/dialog_erc.cpp:740 pcbnew/dialogs/dialog_drc.cpp:647
 msgid "Save Report to File"
-msgstr "Speichere Protokoll in Datei"
+msgstr "Protokoll in Datei speichern"
 
 #: common/dialogs/wx_html_report_panel.cpp:347
 #, c-format
@@ -3742,11 +3741,11 @@ msgstr "Kann Protokoll nicht in Datei \"%s\" schreiben."
 
 #: common/dialogs/wx_html_report_panel.cpp:349
 msgid "File save error"
-msgstr "Fehler beim Dateischreibvorgang"
+msgstr "Fehler beim Speichern der Datei"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:16
 msgid "Output Messages"
-msgstr "Infomeldungen"
+msgstr "Ausgabemeldungen"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:30
 #: eeschema/dialogs/dialog_erc_base.cpp:64
@@ -3790,8 +3789,7 @@ msgstr "Speichern..."
 #: common/draw_panel_gal.cpp:251 common/draw_panel_gal.cpp:413
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr ""
-"OpenGL Modus kann nicht verwendet werden, alternativ wird Software-Rendering "
-"verwendet"
+"OpenGL Modus kann nicht verwendet werden; Software-Rendering wird verwendet"
 
 #: common/draw_panel_gal.cpp:257 common/draw_panel_gal.cpp:420
 msgid "Could not use OpenGL"
@@ -3910,7 +3908,7 @@ msgstr "Linie, Länge %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:482
 msgid "Page Limits"
-msgstr "Seitenlimit"
+msgstr "Seitenbegrenzungen"
 
 #: common/dsnlexer.cpp:35
 msgid "clipboard"
@@ -3952,9 +3950,7 @@ msgstr "Getrennte Zeichenkette ist nicht abgeschlossen"
 
 #: common/dsnlexer.cpp:725
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr ""
-"Das Zeichenketten Trennsymbol muss eines der folgenden Zeichen sein, ', \", "
-"oder $"
+msgstr "Das Trennsymbol für Zeichenketten muss ', \", oder $ lauten"
 
 #: common/eda_base_frame.cpp:473
 msgid "&About KiCad"
@@ -3967,7 +3963,7 @@ msgstr "&Hilfe"
 #: common/eda_base_frame.cpp:960
 #, c-format
 msgid "File '%s' was not found."
-msgstr "Datei '%s' nicht gefunden."
+msgstr "Datei '%s' wurde nicht gefunden."
 
 #: common/eda_base_frame.cpp:1003
 msgid "Preferences"
@@ -4000,11 +3996,11 @@ msgid ""
 "it was not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"Nun, das ist möglicherweise peinlich!\n"
+"Huch, das tut uns leid!\n"
 "Es scheint, dass die Datei\n"
 "%s\n"
-"nach dem letzten Editieren nicht ordnungsgemäß gespeichert wurde.  Möchten "
-"Sie die letzten Änderungen wiederherstellen?"
+"nach der letzten Bearbeitung nicht ordnungsgemäß gespeichert wurde.  Möchten "
+"Sie die letzten gespeicherten Änderungen wiederherstellen?"
 
 #: common/eda_base_frame.cpp:1121
 msgid "The auto save file could not be renamed to the board file name."
@@ -4071,7 +4067,7 @@ msgstr "Einheiten"
 #: common/eda_draw_frame.cpp:976 eeschema/dialogs/panel_sym_lib_table.cpp:494
 #: pcbnew/footprint_libraries_utils.cpp:1262
 msgid "Select Library"
-msgstr "Wähle Bibliothek"
+msgstr "Bibliothek wählen"
 
 #: common/eda_draw_frame.cpp:976
 msgid "New Library"
@@ -4090,12 +4086,12 @@ msgid ""
 msgstr ""
 "KiCad kann ihre Grafikkarte verwenden, um ein flüssigeres und schnelleres "
 "Arbeiten zu ermöglichen. Diese Option ist standardmäßig deaktiviert, da sie "
-"nicht mit allen Computern kompatibel ist.\n"
+"nicht mit allen Systemen kompatibel ist.\n"
 "\n"
 "Möchten Sie versuchen, die Grafikbeschleunigung zu nutzen?\n"
 "\n"
-"Wenn Sie sich später dafür entscheiden möchten, wählen Sie \"Beschleunigte "
-"Grafik\" in den Anzeigeoptionen des Einstellungsmenüs."
+"Wenn Sie sich später dafür entscheiden möchten, wählen Sie bitte "
+"\"Beschleunigte Grafik\" in den Anzeigeoptionen des Einstellungsmenüs."
 
 #: common/eda_draw_frame.cpp:1117
 msgid "Enable Graphics Acceleration"
@@ -4382,7 +4378,7 @@ msgstr "Ende Y"
 
 #: common/eda_shape.cpp:1613
 msgid "Line Width"
-msgstr "Leiterbreite"
+msgstr "Linienbreite"
 
 #: common/eda_text.cpp:512
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:126
@@ -4541,12 +4537,12 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Der Basispfad von lokal installierten System-Footprintbibliotheken (.pretty "
+"Der Basispfad von lokal installierten System-Footprintbibliotheken (.pretty-"
 "Ordner)."
 
 #: common/env_vars.cpp:74
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
-msgstr "Der Basispfad der System-Footprint-3D-Formen (.3Dshapes Ordner)."
+msgstr "Der Basispfad von System-Footprint-3D-Formen (.3Dshapes-Ordner)."
 
 #: common/env_vars.cpp:76
 msgid "The base path of the locally installed symbol libraries."
@@ -4555,16 +4551,16 @@ msgstr "Der Basispfad von lokal installierten Symbolbibliotheken."
 #: common/env_vars.cpp:78
 msgid "A directory containing project templates installed with KiCad."
 msgstr ""
-"Der Pfad zu den Projekt Vorlagen die zusammen mit KiCad installiert worden "
-"sind."
+"Ein Verzeichnis, das Projektvorlagen enthält, die zusammen mit KiCad "
+"installiert worden sind."
 
 #: common/env_vars.cpp:80
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
 msgstr ""
-"Optional. Kann definiert werden, wenn Sie ihren eigenen "
-"Projektvorlagenordner erstellen wollen."
+"Optional. Kann definiert werden, wenn Sie Ihren eigenen "
+"Projektvorlagenordner erstellen möchten."
 
 #: common/env_vars.cpp:83
 msgid ""
@@ -4583,22 +4579,23 @@ msgid ""
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
 "Intern durch KiCad definiert (kann nicht verändert werden) und auf den "
-"absoluten Pfad vom aktuell geladenen Projekt gesetzt. Diese "
-"Umgebungsvariable kann benutzt werden um Dateien und Pfade zu definieren die "
-"sich relativ auf das aktuelle Projekt beziehen. Zum Beispiel, ${KIPRJMOD}/"
-"libs/footprints.pretty kann als eine Projekt spezifische Footprintbibliothek "
-"definiert werden die footprints.pretty benannt ist."
+"absoluten Pfad des aktuell geladenen Projekts gesetzt.  Diese "
+"Umgebungsvariable kann verwendet werden, um Dateien und Pfade relativ zum "
+"aktuellen Projekt zu definieren. Z.B. kann ${KIPRJMOD}/libs/"
+"footprints.pretty als ein Ordner definiert werden, welcher die "
+"projektspezifische Footprintbibliothek footprints.pretty enthält."
 
 #: common/env_vars.cpp:92
 msgid "A directory containing system-wide scripts installed with KiCad"
 msgstr ""
-"Ein Verzeichnis mit systemweiten Skripten, die mit KiCad installiert sind"
+"Ein Verzeichnis mit systemweiten Skripten, die mit KiCad installiert worden "
+"sind"
 
 #: common/env_vars.cpp:94
 msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr ""
 "Ein Verzeichnis mit benutzerspezifischen Skripten, die mit KiCad installiert "
-"sind"
+"worden sind"
 
 #: common/env_vars.cpp:98
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
@@ -4639,11 +4636,11 @@ msgid ""
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"KiCad konnte diese Datei nicht öffnen, da sie mit einer neueren Version "
-"erstellt wurde als die, die Sie verwenden.\n"
+"KiCad konnte diese Datei nicht öffnen, da sie mit einer Version erstellt "
+"wurde, die neuer ist als die aktuell laufende.\n"
 "\n"
-"Um sie zu öffnen, müssen Sie KiCad auf eine Version mit dem Datum %s oder "
-"höher aktualisieren."
+"Um die Datei zu öffnen, müssen Sie KiCad auf eine Version mit dem Datum %s "
+"oder neuer aktualisieren."
 
 #: common/exceptions.cpp:126
 msgid "Full error text:"
@@ -4684,7 +4681,7 @@ msgstr "3D-Konfigurationsverzeichnis ist unbekannt"
 #: common/filename_resolver.cpp:604 common/filename_resolver.cpp:635
 #: common/filename_resolver.cpp:667
 msgid "Write 3D search path list"
-msgstr "3D-Suchpfad schreiben"
+msgstr "3D-Suchpfadliste schreiben"
 
 #: common/filename_resolver.cpp:632
 msgid "Could not open configuration file"
@@ -4692,7 +4689,7 @@ msgstr "Die Konfigurationsdatei konnte nicht geöffnet werden"
 
 #: common/filename_resolver.cpp:666
 msgid "Problems writing configuration file"
-msgstr "Es traten Probleme beim Schreiben der Konfiguration auf"
+msgstr "Es traten Probleme beim Schreiben der Konfigurationsdatei auf"
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:881
 #: eeschema/symbol_editor/symbol_library_manager.cpp:104
@@ -4767,7 +4764,7 @@ msgstr "Kopieren"
 
 #: common/grid_tricks.cpp:280
 msgid "Copy selected cells to clipboard"
-msgstr "Den Inhalt selektierter Zellen in die Zwischenablage kopieren"
+msgstr "Ausgewählte Zellen in die Zwischenablage kopieren"
 
 #: common/grid_tricks.cpp:281 common/tool/actions.cpp:165
 msgid "Paste"
@@ -4804,11 +4801,11 @@ msgstr "Alle Zellen auswählen"
 
 #: common/hotkey_store.cpp:43
 msgid "Pan Left/Right"
-msgstr "Links/Rechts schwenken"
+msgstr "Links/rechts schwenken"
 
 #: common/hotkey_store.cpp:44
 msgid "Pan Up/Down"
-msgstr "Oben/Unten schwenken"
+msgstr "Hoch/runter schwenken"
 
 #: common/hotkey_store.cpp:45 eeschema/tools/ee_actions.cpp:255
 msgid "Finish Drawing"
@@ -4876,8 +4873,7 @@ msgstr "Konnte die kiface-Bibliothek \"%s\" nicht laden."
 #, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
 msgstr ""
-"Konnte Instanznamen- und Version nicht von der kiface-Bibliothek \"%s\" "
-"lesen."
+"Konnte Instanznamen und Version nicht von der kiface-Bibliothek \"%s\" lesen."
 
 #: common/kiway.cpp:298
 #, c-format
@@ -4896,7 +4892,7 @@ msgstr "Datei ist nicht vorhanden.\n"
 
 #: common/kiway.cpp:304
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr "Eventuell fehlt eine Bibliothek (.dll oder .so).\n"
+msgstr "Eventuell fehlt eine dynamische Bibliothek (.dll oder .so).\n"
 
 #: common/kiway.cpp:306
 msgid ""
@@ -5365,7 +5361,7 @@ msgstr "Vias (Durchkontaktierungen)"
 
 #: common/layer_id.cpp:154
 msgid "Bl/Buried vias"
-msgstr "Blinde/Vergrabene Vias"
+msgstr "Blinde/vergrabene Vias"
 
 #: common/layer_id.cpp:155
 msgid "Micro-vias"
@@ -5452,11 +5448,11 @@ msgstr "Nicht erkanntes Zeichen '%c'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:827
 msgid "Unknown parent of function parameters"
-msgstr "Unbekanntes übergeordnetes Element von Funktionsparametern"
+msgstr "Unbekanntes Elternelement von Funktionsparametern"
 
 #: common/libeval_compiler/libeval_compiler.cpp:846
 msgid "Unknown parent of property"
-msgstr "Unbekannter Elternteil des Eigentums"
+msgstr "Unbekanntes Elternelement von Eigenschaft"
 
 #: common/libeval_compiler/libeval_compiler.cpp:869
 #: common/libeval_compiler/libeval_compiler.cpp:899
@@ -5470,7 +5466,7 @@ msgstr "Nicht erkanntes Element '%s'"
 #: common/libeval_compiler/libeval_compiler.cpp:978
 #, c-format
 msgid "Unrecognized property '%s'"
-msgstr "Nicht erkanntes Eigentum '%s'"
+msgstr "Nicht erkannte Eigenschaft '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:912
 #, c-format
@@ -5494,7 +5490,7 @@ msgstr "Typkonflikt zwischen %lf und '%s'"
 
 #: common/pgm_base.cpp:168
 msgid "No default editor found, you must choose one."
-msgstr "Kein Standardeditor gefunden, bitte auswählen."
+msgstr "Kein Standardeditor gefunden, bitte einen auswählen."
 
 #: common/pgm_base.cpp:188 common/pgm_base.cpp:190
 msgid "Executable file"
@@ -5502,11 +5498,11 @@ msgstr "Ausführbare Datei"
 
 #: common/pgm_base.cpp:200
 msgid "Select Preferred Editor"
-msgstr "Auswahl des bevorzugten Editors"
+msgstr "Bevorzugten Editor wählen"
 
 #: common/pgm_base.cpp:220
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr "Umgebungsvariable HOME ist leer. Kann nicht fortfahren."
+msgstr "Umgebungsvariable HOME ist leer.  Kann nicht fortfahren."
 
 #: common/pgm_base.cpp:431
 msgid "This language is not supported by the operating system."
@@ -5532,12 +5528,12 @@ msgstr "Einheit '%s' endet nicht auf 'mil'."
 #: common/plugins/altium/altium_parser.cpp:255
 #, c-format
 msgid "Cannot convert '%s' to double."
-msgstr "\"%s\" kann nicht in eine Double konvertiert werden."
+msgstr "\"%s\" kann nicht in einen Double-Wert konvertiert werden."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2334
 #, c-format
 msgid "Cannot open file '%s'"
-msgstr "Konnte Datei '%s' nicht öffnen"
+msgstr "Kann Datei '%s' nicht öffnen"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
@@ -5555,7 +5551,7 @@ msgstr "Die ausgewählte Datei ist ungültig oder möglicherweise beschädigt!"
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2515
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr "Unerwartete Anzahl von Punkten in '%s'. Gefunden %d aber erwartet %d."
+msgstr "Unerwartete Anzahl von Punkten in '%s'. %d gefunden, aber %d erwartet."
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:40
 #, c-format
@@ -10020,7 +10016,7 @@ msgstr "Plot Hintergrundfarbe"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
-msgstr "Plotten der Hintergrundfarbe wenn durch das Ausgabenformat unterstützt"
+msgstr "Plotten der Hintergrundfarbe, wenn durch das Ausgabenformat unterstützt"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:87
 msgid "Color theme:"
@@ -11905,7 +11901,7 @@ msgstr "Kreuzreferenzierte Netze hervorheben"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "Netze hervorheben wenn sie im Platinen-Editor hervorgehoben sind"
+msgstr "Netze hervorheben, wenn sie im Platinen-Editor hervorgehoben sind"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "Constrain buses and wires to H or V"
@@ -16712,7 +16708,7 @@ msgstr "Zu Seite navigieren"
 
 #: eeschema/tools/ee_actions.cpp:686
 msgid "Add Junctions to Selection where needed"
-msgstr "Fügt Knotenpunkte zur Auswahl hinzu wenn nötig"
+msgstr "Fügt Knotenpunkte zur Auswahl hinzu, wenn nötig"
 
 #: eeschema/tools/ee_actions.cpp:694
 msgid "Add Wire"
@@ -23896,7 +23892,7 @@ msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
 msgstr ""
-"Vergebe einen Dateinamen wenn nicht der voreingestellte Dateiname verwendet "
+"Vergebe einen Dateinamen, wenn nicht der voreingestellte Dateiname verwendet "
 "werden soll\n"
 "Kann nur angewandt werden, wenn der aktuelle Schaltplan gedruckt wird"
 
@@ -26279,7 +26275,7 @@ msgstr "Individuelle Grundformen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:961
 msgid "Preview pad in sketch mode"
-msgstr "Pad-Vorschau in Skizzenmodus"
+msgstr "Pad-Vorschau im Skizzenmodus"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1119
 msgid "Start point"
@@ -26692,10 +26688,10 @@ msgid ""
 "Choose 6 if you are not sure."
 msgstr ""
 "Wie groß eine SVG-Benutzereinheit ist.\n"
-"Die Zahl definiert, wie viele Ziffern exportiert werden, die unter 1 mm oder "
+"Die Zahl bestimmt, wie viele Ziffern exportiert werden, die unter 1 mm oder "
 "1 Zoll liegen.\n"
-"Die Benutzereinheit ist 10 ^ - <N> mm oder 10 ^ - <N> Zoll.\n"
-"Wählen Sie 6, wenn Sie sich nicht sicher sind."
+"Die Benutzereinheit ist 10^-<N> mm oder 10^-<N> Zoll.\n"
+"Verwenden Sie 6, wenn Sie sich nicht sicher sind."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:420
 msgid "Run DRC..."
@@ -27954,7 +27950,7 @@ msgid ""
 "approximate it.\n"
 "The error max defines the number of segments of this polygon."
 msgstr ""
-"Dies ist der maximale Abstand zwischen einem Kreis und der Polygonform wenn "
+"Dies ist der maximale Abstand zwischen einem Kreis und der Polygonform, wenn "
 "diese Formen angeglichen werden.\n"
 "Die maximale Fehleranzahl definiert die Anzahl der Segmente dieses Polygons."
 
@@ -28833,7 +28829,7 @@ msgstr ""
 "Zwei Padflächen, welche sich näher sind als dieser Wert, werden beim Plotten "
 "zusammengefasst.\n"
 "Dieser Parameter wird nur fürs Plotten der Lötstoppmaskenlage genutzt.\n"
-"Belassen Sie den Wert bei 0 wenn Sie unschlüssig sind."
+"Belassen Sie den Wert bei 0, wenn Sie unschlüssig sind."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:76
 msgid ""
