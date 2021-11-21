@@ -57,13 +57,15 @@ bool IncrementLabelMember( wxString& name, int aIncrement )
     if( name.IsEmpty() )
         return true;
 
-    int  ii = name.Len() - 1;
-
-    // Ignore formatting constructs
-    if( name.GetChar( ii ) == '}' )
-        ii--;
-
+    wxString suffix;
     wxString digits;
+    int      ii = name.Len() - 1;
+
+    while( ii >= 0 && !wxIsdigit( name.GetChar( ii ) ) )
+    {
+        suffix = name.GetChar( ii ) + suffix;
+        ii--;
+    }
 
     while( ii >= 0 && wxIsdigit( name.GetChar( ii ) ) )
     {
@@ -85,7 +87,7 @@ bool IncrementLabelMember( wxString& name, int aIncrement )
         if( number > -1 )
         {
             name.Remove( ii + 1 );
-            name << number;
+            name << number << suffix;
             return true;
         }
     }
