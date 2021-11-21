@@ -266,4 +266,225 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
     }
 }
 
+constexpr bool IsNullType( const KICAD_T aType )
+{
+    return aType <= 0;
+}
+
+constexpr bool IsInstatiableType( const KICAD_T aType )
+{
+    if( IsNullType( aType ) )
+        return false;
+
+    if( BaseType( aType ) != aType )
+        return false;
+
+    switch( aType )
+    {
+    case SCH_SCREEN_T:
+        return false;
+
+    default:
+        break;
+    }
+
+    return true;
+
+}
+
+constexpr bool IsEeschemaType( const KICAD_T aType )
+{
+    switch( aType )
+    {
+    case SCH_MARKER_T:
+    case SCH_JUNCTION_T:
+    case SCH_NO_CONNECT_T:
+    case SCH_BUS_WIRE_ENTRY_T:
+    case SCH_BUS_BUS_ENTRY_T:
+    case SCH_LINE_T:
+    case SCH_BITMAP_T:
+    case SCH_TEXT_T:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
+    case SCH_FIELD_T:
+    case SCH_SYMBOL_T:
+    case SCH_SHEET_PIN_T:
+    case SCH_SHEET_T:
+    case SCH_PIN_T:
+
+    case SCH_FIELD_LOCATE_REFERENCE_T:
+    case SCH_FIELD_LOCATE_VALUE_T:
+    case SCH_FIELD_LOCATE_FOOTPRINT_T:
+    case SCH_FIELD_LOCATE_DATASHEET_T:
+
+    case SCH_LINE_LOCATE_WIRE_T:
+    case SCH_LINE_LOCATE_BUS_T:
+    case SCH_LINE_LOCATE_GRAPHIC_LINE_T:
+
+    case SCH_LABEL_LOCATE_WIRE_T:
+    case SCH_LABEL_LOCATE_BUS_T:
+
+    case SCH_SYMBOL_LOCATE_POWER_T:
+    case SCH_LOCATE_ANY_T:
+
+    case SCH_SCREEN_T:
+    case SCHEMATIC_T:
+
+    case LIB_SYMBOL_T:
+    case LIB_ALIAS_T:
+    case LIB_SHAPE_T:
+    case LIB_TEXT_T:
+    case LIB_PIN_T:
+
+    case LIB_FIELD_T:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+constexpr bool IsPcbnewType( const KICAD_T aType )
+{
+    switch( aType )
+    {
+    case PCB_T:
+
+    case PCB_FOOTPRINT_T:
+    case PCB_PAD_T:
+    case PCB_SHAPE_T:
+    case PCB_TEXT_T:
+    case PCB_FP_TEXT_T:
+    case PCB_FP_SHAPE_T:
+    case PCB_FP_ZONE_T:
+    case PCB_TRACE_T:
+    case PCB_VIA_T:
+    case PCB_ARC_T:
+    case PCB_MARKER_T:
+    case PCB_DIMENSION_T:
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    case PCB_TARGET_T:
+    case PCB_ZONE_T:
+    case PCB_ITEM_LIST_T:
+    case PCB_NETINFO_T:
+    case PCB_GROUP_T:
+
+    case PCB_LOCATE_STDVIA_T:
+    case PCB_LOCATE_UVIA_T:
+    case PCB_LOCATE_BBVIA_T:
+    case PCB_LOCATE_TEXT_T:
+    case PCB_LOCATE_GRAPHIC_T:
+    case PCB_LOCATE_HOLE_T:
+    case PCB_LOCATE_PTH_T:
+    case PCB_LOCATE_NPTH_T:
+    case PCB_LOCATE_BOARD_EDGE_T:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+constexpr bool IsGerbviewType( const KICAD_T aType )
+{
+    switch( aType )
+    {
+    case GERBER_LAYOUT_T:
+    case GERBER_DRAW_ITEM_T:
+    case GERBER_IMAGE_T:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+constexpr bool IsPageLayoutEditorType( const KICAD_T aType )
+{
+    switch( aType )
+    {
+    case WSG_LINE_T:
+    case WSG_RECT_T:
+    case WSG_POLY_T:
+    case WSG_TEXT_T:
+    case WSG_BITMAP_T:
+    case WSG_PAGE_T:
+
+    case WS_PROXY_UNDO_ITEM_T:
+    case WS_PROXY_UNDO_ITEM_PLUS_T:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+constexpr bool IsMiscType( const KICAD_T aType )
+{
+    switch( aType )
+    {
+    case SCREEN_T:
+
+    case SYMBOL_LIB_TABLE_T:
+    case FP_LIB_TABLE_T:
+    case SYMBOL_LIBS_T:
+    case SEARCH_STACK_T:
+    case S3D_CACHE_T:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+constexpr bool IsTypeCorrect( KICAD_T aType )
+{
+    return IsNullType( aType )
+        || IsEeschemaType( aType )
+        || IsPcbnewType( aType )
+        || IsGerbviewType( aType )
+        || IsPageLayoutEditorType( aType )
+        || IsMiscType( aType );
+}
+
+constexpr bool IsTypeAvailable( KICAD_T aType )
+{
+    if( !IsInstatiableType( aType ) )
+        return false;
+
+    if( IsEeschemaType( aType ) )
+    {
+#ifdef EESCHEMA
+        return true;
+#endif // EESCHEMA
+    }
+
+    if( IsPcbnewType( aType ) )
+    {
+#ifdef PCBNEW
+        return true;
+#endif // PCBNEW
+    }
+
+    if( IsGerbviewType( aType ) )
+    {
+#ifdef GERBVIEW
+        return true;
+#endif // GERBVIEW
+    }
+
+    if( IsPageLayoutEditorType( aType ) )
+    {
+#ifdef PL_EDITOR
+        return true;
+#endif // PL_EDITOR
+    }
+
+    return false;
+}
+
 #endif // __KICAD_TYPEINFO_H
