@@ -41,6 +41,7 @@ set( common_srcs
     test_property.cpp
     test_refdes_utils.cpp
     test_title_block.cpp
+    test_types.cpp
     test_utf8.cpp
     test_wildcards_and_files_ext.cpp
     test_wx_filename.cpp
