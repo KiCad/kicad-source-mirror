@@ -41,6 +41,14 @@
 #include <Message_PrinterOStream.hxx>   // OpenCascade output messenger
 #include <Standard_Failure.hxx>         // In open cascade
 
+#include <Standard_Version.hxx>
+
+#define OCC_VERSION_MIN 0x070500
+
+#if OCC_VERSION_HEX < OCC_VERSION_MIN
+#include <Message_Messenger.hxx>
+#endif
+
 class KICAD2STEP_FRAME : public KICAD2STEP_FRAME_BASE
 {
 public:
@@ -62,12 +70,31 @@ void ReportMessage( const wxString& aMessage )
 class KiCadPrinter : public Message_Printer
 {
 protected:
-  virtual void send (const TCollection_AsciiString& theString, const Message_Gravity theGravity) const override
+#if OCC_VERSION_HEX < OCC_VERSION_MIN
+    virtual void Send( const TCollection_ExtendedString& theString,
+                       const Message_Gravity theGravity,
+                       const Standard_Boolean theToPutEol ) const override
+    {
+        Send (TCollection_AsciiString (theString), theGravity, theToPutEol);
+    }
+
+  virtual void Send( const TCollection_AsciiString& theString,
+                     const Message_Gravity theGravity,
+                     const Standard_Boolean theToPutEol) const override
+#else
+  virtual void send( const TCollection_AsciiString& theString,
+                     const Message_Gravity theGravity ) const override
+#endif
   {
       if( theGravity >= Message_Info )
       {
-          ReportMessage( theString.ToCString() );
+            ReportMessage( theString.ToCString() );
+#if OCC_VERSION_HEX < OCC_VERSION_MIN
+          if( theToPutEol )
+            ReportMessage( "\n" );
+#else
           ReportMessage( "\n" );
+#endif
       }
       if( theGravity >= Message_Alarm )
           openPanel->m_error = true;
