@@ -1405,17 +1405,61 @@ void VIEW::RecacheAllItems()
 
 void VIEW::UpdateItems()
 {
-    if( m_gal->IsVisible() )
-    {
-        GAL_UPDATE_CONTEXT ctx( m_gal );
+    if( !m_gal->IsVisible() )
+        return;
 
-        for( VIEW_ITEM* item : *m_allItems )
+    GAL_UPDATE_CONTEXT ctx( m_gal );
+    int                cntTotal = 0, cntToUpdate = 0;
+
+    for( VIEW_ITEM* item : *m_allItems )
+    {
+        cntTotal++;
+        if( item->viewPrivData() && item->viewPrivData()->m_requiredUpdate & ( GEOMETRY | LAYERS ) )
         {
-            if( item->viewPrivData() && item->viewPrivData()->m_requiredUpdate != NONE )
+            cntToUpdate++;
+        }
+    }
+
+    double ratio = (double) cntToUpdate / (double) cntTotal;
+
+    // Optimization to improve view update time. If a lot of items (say, 30%) have their
+    // bboxes/geometry changed it's way faster (around 10 times) to rebuild the R-Trees
+    // from scratch rather than update the bbox of each changed item. Pcbnew does multiple
+    // full geometry updates during file load, this can save a solid 30 seconds on load time
+    // for larger designs...
+
+    if( ratio > 0.3 )
+    {
+        auto allItems = *m_allItems;
+        int  layers[VIEW_MAX_LAYERS], layers_count;
+
+        // kill all Rtrees
+        for( VIEW_LAYER& layer : m_layers )
+            layer.items->RemoveAll();
+
+        // and re-insert items from scratch
+        for( VIEW_ITEM* item : allItems )
+        {
+            item->ViewGetLayers( layers, layers_count );
+            item->viewPrivData()->saveLayers( layers, layers_count );
+
+            for( int i = 0; i < layers_count; ++i )
             {
-                invalidateItem( item, item->viewPrivData()->m_requiredUpdate );
-                item->viewPrivData()->m_requiredUpdate = NONE;
+                VIEW_LAYER& l = m_layers[layers[i]];
+                l.items->Insert( item );
+                MarkTargetDirty( l.target );
             }
+
+            item->viewPrivData()->m_requiredUpdate &= ~( LAYERS | GEOMETRY );
+        }
+    }
+
+    for( VIEW_ITEM* item : *m_allItems )
+    {
+        if( item->viewPrivData() && item->viewPrivData()->m_requiredUpdate != NONE )
+        {
+            invalidateItem( item, item->viewPrivData()->m_requiredUpdate );
+            item->viewPrivData()->m_requiredUpdate = NONE;
         }
     }
 }
