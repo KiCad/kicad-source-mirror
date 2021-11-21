@@ -1121,43 +1121,43 @@ TOOL_ACTION PCB_ACTIONS::repairFootprint( "pcbnew.ModuleEditor.repairFootprint",
 //
 TOOL_ACTION PCB_ACTIONS::alignTop( "pcbnew.AlignAndDistribute.alignTop",
         AS_GLOBAL, 0, "",
-        _( "Align to Top" ),
-        _( "Aligns selected items to the top edge" ), BITMAPS::align_items_top );
+        _( "Align to Top" ), _( "Aligns selected items to the top edge" ),
+        BITMAPS::align_items_top );
 
 TOOL_ACTION PCB_ACTIONS::alignBottom( "pcbnew.AlignAndDistribute.alignBottom",
         AS_GLOBAL, 0, "",
-        _( "Align to Bottom" ),
-        _( "Aligns selected items to the bottom edge" ), BITMAPS::align_items_bottom );
+        _( "Align to Bottom" ), _( "Aligns selected items to the bottom edge" ),
+        BITMAPS::align_items_bottom );
 
 TOOL_ACTION PCB_ACTIONS::alignLeft( "pcbnew.AlignAndDistribute.alignLeft",
         AS_GLOBAL, 0, "",
-        _( "Align to Left" ),
-        _( "Aligns selected items to the left edge" ), BITMAPS::align_items_left );
+        _( "Align to Left" ), _( "Aligns selected items to the left edge" ),
+        BITMAPS::align_items_left );
 
 TOOL_ACTION PCB_ACTIONS::alignRight( "pcbnew.AlignAndDistribute.alignRight",
         AS_GLOBAL, 0, "",
-        _( "Align to Right" ),
-        _( "Aligns selected items to the right edge" ), BITMAPS::align_items_right );
+        _( "Align to Right" ), _( "Aligns selected items to the right edge" ),
+        BITMAPS::align_items_right );
 
-TOOL_ACTION PCB_ACTIONS::alignCenterY( "pcbnew.AlignAndDistribute.alignCenterY", AS_GLOBAL, 0, "",
-                                       _( "Align to Vertical Center" ),
-                                       _( "Aligns selected items to the vertical center" ),
-                                       BITMAPS::align_items_center );
+TOOL_ACTION PCB_ACTIONS::alignCenterY( "pcbnew.AlignAndDistribute.alignCenterY",
+        AS_GLOBAL, 0, "",
+        _( "Align to Vertical Center" ), _( "Aligns selected items to the vertical center" ),
+        BITMAPS::align_items_center );
 
-TOOL_ACTION PCB_ACTIONS::alignCenterX( "pcbnew.AlignAndDistribute.alignCenterX", AS_GLOBAL, 0, "",
-                                       _( "Align to Horizontal Center" ),
-                                       _( "Aligns selected items to the horizontal center" ),
-                                       BITMAPS::align_items_middle );
+TOOL_ACTION PCB_ACTIONS::alignCenterX( "pcbnew.AlignAndDistribute.alignCenterX",
+        AS_GLOBAL, 0, "",
+        _( "Align to Horizontal Center" ), _( "Aligns selected items to the horizontal center" ),
+        BITMAPS::align_items_middle );
 
 TOOL_ACTION PCB_ACTIONS::distributeHorizontally( "pcbnew.AlignAndDistribute.distributeHorizontally",
         AS_GLOBAL, 0, "",
-        _( "Distribute Horizontally" ),
-        _( "Distributes selected items along the horizontal axis" ), BITMAPS::distribute_horizontal );
+        _( "Distribute Horizontally" ), _( "Distributes selected items along the horizontal axis" ),
+        BITMAPS::distribute_horizontal );
 
 TOOL_ACTION PCB_ACTIONS::distributeVertically( "pcbnew.AlignAndDistribute.distributeVertically",
         AS_GLOBAL, 0, "",
-        _( "Distribute Vertically" ),
-        _( "Distributes selected items along the vertical axis" ), BITMAPS::distribute_vertical );
+        _( "Distribute Vertically" ), _( "Distributes selected items along the vertical axis" ),
+        BITMAPS::distribute_vertical );
 
 
 // PCB_POINT_EDITOR
