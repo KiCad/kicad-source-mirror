@@ -1079,12 +1079,11 @@ void LINE::ClipVertexRange( int aStart, int aEnd )
      */
     int firstLink = 0;
     int lastLink  = std::max( 0, static_cast<int>( m_links.size() ) - 1 );
-    int arcIdx    = -1;
     int linkIdx   = 0;
 
     int numPoints = static_cast<int>( m_line.PointCount() );
 
-    for( int i = 0; i < m_line.PointCount(); i = m_line.NextShape( i ) )
+    for( int i = 0; i >= 0 && i < m_line.PointCount(); i = m_line.NextShape( i ) )
     {
         if( i <= aStart )
             firstLink = linkIdx;
