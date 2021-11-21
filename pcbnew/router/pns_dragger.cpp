@@ -650,6 +650,9 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
     {
         VIA_HANDLE newVia;
 
+        // corner count limiter intended to avoid excessive optimization produces mediocre results for via shoving.
+        // this is a hack that disables it, before I figure out a more reliable solution
+        m_shove->DisablePostShoveOptimizations( OPTIMIZER::LIMIT_CORNER_COUNT );
         SHOVE::SHOVE_STATUS st = m_shove->ShoveDraggingVia( m_draggedVia, aP, newVia );
 
         if( st == SHOVE::SH_OK || st == SHOVE::SH_HEAD_MODIFIED )

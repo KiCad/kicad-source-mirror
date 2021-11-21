@@ -89,6 +89,7 @@ public:
     void UnlockSpringbackNode( NODE* aNode );
     bool RewindSpringbackTo( NODE* aNode );
     bool RewindToLastLockedNode();
+    void DisablePostShoveOptimizations( int aMask );
 
 private:
     typedef std::vector<SHAPE_LINE_CHAIN> HULL_SET;
@@ -180,6 +181,8 @@ private:
     int                         m_iter;
     int m_forceClearance;
     bool m_multiLineMode;
+
+    int m_optFlagDisableMask;
 };
 
 }

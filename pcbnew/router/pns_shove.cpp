@@ -159,6 +159,7 @@ void SHOVE::sanityCheck( LINE* aOld, LINE* aNew )
 SHOVE::SHOVE( NODE* aWorld, ROUTER* aRouter ) :
     ALGO_BASE( aRouter )
 {
+    m_optFlagDisableMask = 0;
     m_forceClearance = -1;
     m_root = aWorld;
     m_currentNode = aWorld;
@@ -1759,7 +1760,8 @@ void SHOVE::runOptimizer( NODE* aNode )
     if( Settings().SmartPads() )
         optFlags |= OPTIMIZER::SMART_PADS;
 
-    optimizer.SetEffortLevel( optFlags );
+
+    optimizer.SetEffortLevel( optFlags & ~m_optFlagDisableMask );
     optimizer.SetCollisionMask( ITEM::ANY_T );
 
     for( int pass = 0; pass < n_passes; pass++ )
@@ -1871,6 +1873,12 @@ void SHOVE::UnlockSpringbackNode( NODE* aNode )
 
         iter++;
     }
+}
+
+
+void SHOVE::DisablePostShoveOptimizations( int aMask )
+{
+    m_optFlagDisableMask = aMask;
 }
 
 }

@@ -271,6 +271,7 @@ bool CORNER_COUNT_LIMIT_CONSTRAINT::Check( int aVertex1, int aVertex2, const LIN
 {
     LINE newPath( *aOriginLine, aCurrentPath );
     newPath.Line().Replace( aVertex1, aVertex2, aReplacement );
+    newPath.Line().Simplify();
     int cc = newPath.CountCorners( m_angleMask );
 
     if( cc >= m_minCorners && cc <= m_maxCorners )
