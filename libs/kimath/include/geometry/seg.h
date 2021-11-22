@@ -287,7 +287,7 @@ public:
         return std::abs( dist1 ) <= 1 && std::abs( dist2 ) <= 1;
     }
 
-    bool ApproxParallel ( const SEG& aSeg ) const
+    bool ApproxParallel ( const SEG& aSeg, int aDistanceThreshold = 1 ) const
     {
         ecoord p, q, r;
         CanonicalCoefs( p, q, r );
@@ -295,7 +295,7 @@ public:
         ecoord dist1 = ( p * aSeg.A.x + q * aSeg.A.y + r ) / sqrt( p * p + q * q );
         ecoord dist2 = ( p * aSeg.B.x + q * aSeg.B.y + r ) / sqrt( p * p + q * q );
 
-        return std::abs( dist1 - dist2 ) <= 1;
+        return std::abs( dist1 - dist2 ) <= aDistanceThreshold;
     }
 
     bool ApproxPerpendicular( const SEG& aSeg ) const
