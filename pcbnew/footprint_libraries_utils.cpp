@@ -115,6 +115,11 @@ static IO_MGR::PCB_FILE_T detect_file_type( FILE* aFile, const wxFileName& aFile
     reader.ReadLine();
     char* line = reader.Line();
 
+    if( !line )
+    {
+        return IO_MGR::FILE_TYPE_NONE;
+    }
+
     // first .kicad_mod file versions starts by "(module"
     // recent .kicad_mod file versions starts by "(footprint"
     if( strncasecmp( line, "(module", strlen( "(module" ) ) == 0
