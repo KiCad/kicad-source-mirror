@@ -225,6 +225,10 @@ wxString WX_HTML_REPORT_PANEL::generateHtml( const REPORT_LINE& aLine )
         }
     }
 
+    // wxHtmlWindow fails to do correct baseline alignment between Japanese/Chinese cells and
+    // Roman cells.  This keeps the line in a single cell.
+    retv.Replace( " ", "&nbsp;" );
+
     return retv;
 }
 
