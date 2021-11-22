@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
 "PO-Revision-Date: 2021-11-22 17:30+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -7989,19 +7989,19 @@ msgstr "更新原理图中的所有符号"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
 msgid "Update selected symbol(s)"
-msgstr "更新已选符号 (s)"
+msgstr "更新已选中的符号"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
-msgstr "更新符号匹配的位号："
+msgstr "更新这些位号对应的符号："
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:39
 msgid "Update symbols matching value:"
-msgstr "更新符号匹配值："
+msgstr "更新具有这些值的符号："
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:45
 msgid "Update symbols matching library identifier:"
-msgstr "更新符号匹配的库标识："
+msgstr "更新这些库标识对应的符号："
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:72
 msgid "New library identifier:"
