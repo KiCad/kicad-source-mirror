@@ -143,7 +143,7 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
             button = BUT_RIGHT;
 
         TOOL_EVENT evt( TC_MOUSE, action, button | modifiers );
-        evt.SetParameter( type );
+        evt.SetParameter( static_cast<intptr_t>( type ) );
         evt.SetMousePosition( getViewControls()->GetCursorPosition() );
         m_toolMgr->ProcessEvent( evt );
 
