@@ -990,7 +990,8 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_ShowPageLimits                 = m_showPageLimits;
     }
 
-    GetSettingsManager()->SaveColorSettings( GetColorSettings(), "board" );
+    if( GetSettingsManager() )
+        GetSettingsManager()->SaveColorSettings( GetColorSettings(), "board" );
 }
 
 

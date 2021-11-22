@@ -722,7 +722,9 @@ void SYMBOL_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
 
     cfg->m_LibViewPanel.lib_list_width = m_libListWidth;
     cfg->m_LibViewPanel.cmp_list_width = m_symbolListWidth;
-    cfg->m_LibViewPanel.show_pin_electrical_type = GetRenderSettings()->m_ShowPinsElectricalType;
+
+    if( GetRenderSettings() )
+        cfg->m_LibViewPanel.show_pin_electrical_type = GetRenderSettings()->m_ShowPinsElectricalType;
 }
 
 

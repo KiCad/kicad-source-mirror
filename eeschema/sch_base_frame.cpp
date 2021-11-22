@@ -264,8 +264,11 @@ void SCH_BASE_FRAME::CenterScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 
 void SCH_BASE_FRAME::HardRedraw()
 {
-    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
-    GetCanvas()->ForceRefresh();
+    if( GetCanvas() && GetCanvas()->GetView() )
+    {
+        GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+        GetCanvas()->ForceRefresh();
+    }
 }
 
 
@@ -277,8 +280,13 @@ SCH_DRAW_PANEL* SCH_BASE_FRAME::GetCanvas() const
 
 KIGFX::SCH_RENDER_SETTINGS* SCH_BASE_FRAME::GetRenderSettings()
 {
-    KIGFX::PAINTER* painter = GetCanvas()->GetView()->GetPainter();
-    return static_cast<KIGFX::SCH_RENDER_SETTINGS*>( painter->GetSettings() );
+    if( GetCanvas() && GetCanvas()->GetView() )
+    {
+        if( KIGFX::PAINTER* painter = GetCanvas()->GetView()->GetPainter() )
+            return static_cast<KIGFX::SCH_RENDER_SETTINGS*>( painter->GetSettings() );
+    }
+
+    return nullptr;
 }
 
 
