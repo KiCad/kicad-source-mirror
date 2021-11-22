@@ -463,7 +463,7 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
                     s->Width() == refSeg->Width() )
                 {
                     int dist = s->Seg().Distance( refSeg->Seg() );
-                    bool isParallel = refSeg->Seg().ApproxParallel( refSeg->Seg(), DP_PARALLELITY_THRESHOLD );
+                    bool isParallel = refSeg->Seg().ApproxParallel( s->Seg(), DP_PARALLELITY_THRESHOLD );
                     SEG p_clip, n_clip;
 
                     bool isCoupled = commonParallelProjection( refSeg->Seg(), s->Seg(), p_clip,
