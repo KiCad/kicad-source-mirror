@@ -88,6 +88,8 @@ public:
     const std::set<ITEM*> AssembleCluster( ITEM* aStart, int aLayer );
 
 private:
+    const int DP_PARALLELITY_THRESHOLD = 5;
+
     bool followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet, std::set<ITEM*>& aVisited,
                             JOINT** aTerminalJoint = nullptr );
 

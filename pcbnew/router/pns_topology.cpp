@@ -463,7 +463,7 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
                     s->Width() == refSeg->Width() )
                 {
                     int dist = s->Seg().Distance( refSeg->Seg() );
-                    bool isParallel = refSeg->Seg().ApproxParallel( s->Seg() );
+                    bool isParallel = refSeg->Seg().ApproxParallel( refSeg->Seg(), DP_PARALLELITY_THRESHOLD );
                     SEG p_clip, n_clip;
 
                     bool isCoupled = commonParallelProjection( refSeg->Seg(), s->Seg(), p_clip,
@@ -496,7 +496,7 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
 
     int gap = -1;
 
-    if( refSeg->Seg().ApproxParallel( coupledSeg->Seg() ) )
+    if( refSeg->Seg().ApproxParallel( coupledSeg->Seg(), DP_PARALLELITY_THRESHOLD ) )
     {
         // Segments are parallel -> compute pair gap
         const VECTOR2I refDir       = refSeg->Anchor( 1 ) - refSeg->Anchor( 0 );
