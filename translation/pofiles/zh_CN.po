@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-21 21:17+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2021-11-22 17:30+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1507,11 +1507,11 @@ msgstr "仍要打开"
 
 #: common/confirm.cpp:180 common/confirm.cpp:217
 msgid "Save Changes?"
-msgstr "保存更改吗？"
+msgstr "保存变更吗？"
 
 #: common/confirm.cpp:182 common/confirm.cpp:219
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr "如果不保存，所有更改将永久丢失。"
+msgstr "如果不保存，所有变更将永久丢失。"
 
 #: common/confirm.cpp:184 common/confirm.cpp:220 common/tool/actions.cpp:67
 #: eeschema/sim/sim_plot_frame_base.cpp:29
@@ -1524,7 +1524,7 @@ msgstr "保存"
 #: common/confirm.cpp:184 common/confirm.cpp:220
 #: kicad/pcm/dialogs/dialog_pcm.cpp:132
 msgid "Discard Changes"
-msgstr "放弃更改"
+msgstr "放弃变更"
 
 #: common/confirm.cpp:187 common/confirm.cpp:266
 msgid "Apply to all"
@@ -1532,7 +1532,7 @@ msgstr "应用于全部"
 
 #: common/confirm.cpp:232
 msgid "Your current changes will be permanently lost."
-msgstr "你当前的更改将永久丢失。"
+msgstr "你当前的变更将永久丢失。"
 
 #: common/confirm.cpp:233 common/tool/actions.cpp:91
 msgid "Revert"
@@ -3163,11 +3163,11 @@ msgstr "输入筛选文字"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:126
 msgid "Undo All Changes"
-msgstr "撤销所有更改"
+msgstr "撤销所有变更"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:127
 msgid "Undo all changes made so far in this dialog"
-msgstr "在此对话框中撤消到目前为止所做的所有更改"
+msgstr "在此对话框中撤消到目前为止所做的所有变更"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:135
 msgid "Import Hotkeys..."
@@ -5609,7 +5609,7 @@ msgstr "打开现有文档"
 
 #: common/tool/actions.cpp:67
 msgid "Save changes"
-msgstr "保存更改"
+msgstr "保存变更"
 
 #: common/tool/actions.cpp:73 eeschema/sim/sim_plot_frame_base.cpp:33
 #: eeschema/tools/ee_actions.cpp:138
@@ -5634,11 +5634,11 @@ msgstr "保存所有"
 
 #: common/tool/actions.cpp:85
 msgid "Save all changes"
-msgstr "保存所有更改"
+msgstr "保存所有变更"
 
 #: common/tool/actions.cpp:91
 msgid "Throw away changes"
-msgstr "放弃更改"
+msgstr "放弃变更"
 
 #: common/tool/actions.cpp:96
 msgid "Page Settings..."
@@ -6488,7 +6488,7 @@ msgstr "编辑..."
 
 #: common/widgets/widget_hotkey_list.cpp:393
 msgid "Undo Changes"
-msgstr "撤销更改"
+msgstr "撤销变更"
 
 #: common/widgets/widget_hotkey_list.cpp:394
 msgid "Clear Assigned Hotkey"
@@ -6837,11 +6837,11 @@ msgstr "应用，保存原理图并继续"
 
 #: cvpcb/cvpcb_mainframe.cpp:212
 msgid "Symbol to footprint changes are unsaved"
-msgstr "封装更改的符号未保存"
+msgstr "封装变更的符号未保存"
 
 #: cvpcb/cvpcb_mainframe.cpp:386
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr "符号和封装关联已经更改。保存更改吗?"
+msgstr "符号和封装关联已经变更。保存变更吗?"
 
 #: cvpcb/cvpcb_mainframe.cpp:548 cvpcb/tools/cvpcb_association_tool.cpp:207
 #, c-format
@@ -8715,7 +8715,7 @@ msgstr "只读"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:756
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1204
 msgid "Save changes?"
-msgstr "保存更改吗？"
+msgstr "保存变更吗？"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:86
 msgid "Group by name"
@@ -9840,11 +9840,10 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"这个原理图是使用旧的符号库完成的，这可能会破坏原理图。一些符号可能需要重新链"
-"接到一个不同的符号名称，一些符号可能需要被“恢复”（复制或重命名）到一个新的"
-"库。\n"
+"这个原理图是使用旧的符号库完成的，这可能会破坏原理图。一些符号可能需要重新链接到一个不同的符号名称，一些符号可能需要被“恢复”（复制或重命名）到一个新的库"
+"。\n"
 "\n"
-"建议进行以下更改以更新工程。"
+"建议进行以下变更以更新工程。"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:110
 msgid "Accept"
@@ -9879,9 +9878,9 @@ msgid ""
 "and the tool can be activated manually from the \"Tools\" menu."
 msgstr ""
 "确定不再显示恢复助手工具吗?\n"
-"不会做任何更改。\n"
+"不会做任何变更。\n"
 "\n"
-"该设置可以从“符号库”对话框进行更改，\n"
+"该设置可以从“符号库”对话框进行变更，\n"
 "并且可以从 “工具” 菜单手动激活该工具。"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
@@ -11261,10 +11260,9 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"此原理图当前使用工程符号库表查找加载库符号的方法。 KiCad 将尝试映射现有符号以"
-"使用新的符号库表。 重新映射将更改某些工程文件, 原理图可能与旧版本的 KiCad 不"
-"兼容。 如果需要还原任何更改, 则所有更改的文件都将备份到项目文件夹中的  "
-"\"remap_backup \" 文件夹中。 如果选择跳过此步骤, 你将负责手动重新映射符号。"
+"此原理图当前使用工程符号库表查找加载库符号的方法。 KiCad 将尝试映射现有符号以使用新的符号库表。 重新映射将变更某些工程文件, "
+"原理图可能与旧版本的 KiCad 不兼容。 如果需要还原任何变更, 则所有变更的文件都将备份到项目文件夹中的  \"remap_backup \" "
+"文件夹中。 如果选择跳过此步骤, 你将负责手动重新映射符号。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:206
 #, c-format
@@ -12091,7 +12089,7 @@ msgid ""
 "modified."
 msgstr ""
 "已对一个或多个符号库进行了修改。\n"
-"必须先保存或丢弃更改,然后才能修改符号库表。"
+"必须先保存或丢弃变更,然后才能修改符号库表。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1052
 msgid "Symbol Libraries"
@@ -12441,7 +12439,7 @@ msgstr "加载原理图"
 
 #: eeschema/files-io.cpp:227
 msgid "Schematic file changes are unsaved"
-msgstr "原理图文件更改未保存"
+msgstr "原理图文件变更未保存"
 
 #: eeschema/files-io.cpp:264
 msgid ""
@@ -12510,9 +12508,8 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
-"在某些情况下，这可能会导致原理图损坏。 如果原理图在打开时没有丢失的符号，请在"
-"进行任何更改之前立即保存它，以防止数据丢失。 如果缺少符号，则需要手动恢复原理"
-"图或恢复符号缓存库文件并重新加载原理图。"
+"在某些情况下，这可能会导致原理图损坏。 如果原理图在打开时没有丢失的符号，请在进行任何变更之前立即保存它，以防止数据丢失。 "
+"如果缺少符号，则需要手动恢复原理图或恢复符号缓存库文件并重新加载原理图。"
 
 #: eeschema/files-io.cpp:407
 msgid "Load Without Cache File"
@@ -12642,7 +12639,7 @@ msgstr "导入原理图"
 
 #: eeschema/files-io.cpp:1260
 msgid "The current schematic has been modified.  Save changes?"
-msgstr "当前原理图已被修改。是否保存更改？"
+msgstr "当前原理图已被修改。是否保存变更？"
 
 #: eeschema/files-io.cpp:1346
 msgid ""
@@ -13153,7 +13150,7 @@ msgstr "新原理图文件未保存"
 #: pcbnew/footprint_edit_frame.cpp:666 pcbnew/pcb_edit_frame.cpp:819
 #, c-format
 msgid "Save changes to '%s' before closing?"
-msgstr "是否在关闭前将更改保存到 '%s'？"
+msgstr "是否在关闭前将变更保存到 '%s'？"
 
 #: eeschema/sch_edit_frame.cpp:826
 msgid ""
@@ -14366,9 +14363,7 @@ msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
-msgstr ""
-"该图页无法被更改，因为目标图页已经将图页 \"%s\" 或其中一个子图页作为层次结构"
-"中某处的父级图页。"
+msgstr "该图页无法被变更，因为目标图页已经将图页 \"%s\" 或其中一个子图页作为层次结构中某处的父级图页。"
 
 #: eeschema/sheet.cpp:84
 #, c-format
@@ -14805,11 +14800,11 @@ msgstr "库"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:226
 msgid "Library changes are unsaved"
-msgstr "库更改未保存"
+msgstr "库变更未保存"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:517
 msgid "Save changes to schematic before closing?"
-msgstr "是否在关闭前保存对原理图的更改？"
+msgstr "是否在关闭前保存对原理图的变更？"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:566
 #: eeschema/tools/sch_edit_tool.cpp:117
@@ -15013,7 +15008,7 @@ msgstr "选择符号库"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:263
 msgid "The current symbol has been modified.  Save changes?"
-msgstr "当前符号已被修改。是否保存更改？"
+msgstr "当前符号已被修改。是否保存变更？"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:431
 msgid "This new symbol has no name and cannot be created."
@@ -15143,7 +15138,7 @@ msgstr "将库 \"%s\" 另存为…"
 #: eeschema/symbol_editor/symbol_editor.cpp:1079
 #, c-format
 msgid "Failed to save changes to symbol library file '%s'."
-msgstr "无法将更改保存到符号库文件 '%s'。"
+msgstr "无法将变更保存到符号库文件 '%s'。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1081
 msgid "Error Saving Library"
@@ -15530,7 +15525,7 @@ msgstr "更新符号字段..."
 
 #: eeschema/tools/ee_actions.cpp:173
 msgid "Update symbol to match changes made in parent symbol"
-msgstr "更新符号以匹配父符号中所做的任何更改"
+msgstr "更新符号以匹配父符号中所做的任何变更"
 
 #: eeschema/tools/ee_actions.cpp:178
 msgid "Add Symbol to Schematic"
@@ -15579,7 +15574,7 @@ msgid ""
 "Enabled by default for multiunit parts with interchangeable units."
 msgstr ""
 "同步引脚编辑模式\n"
-"启用后将所有更改（引脚编号除外）传播到其他单元。\n"
+"启用后将所有变更（引脚编号除外）传播到其他单元。\n"
 "默认情况下启用具有可互换单元的多单元元件。"
 
 #: eeschema/tools/ee_actions.cpp:220
@@ -15863,7 +15858,7 @@ msgstr "从库更新符号..."
 
 #: eeschema/tools/ee_actions.cpp:432
 msgid "Update symbols to include any changes from the library"
-msgstr "更新符号以包含库中的任何更改"
+msgstr "更新符号以包含库中的任何变更"
 
 #: eeschema/tools/ee_actions.cpp:438
 msgid "Assign a different symbol from the library"
@@ -15875,7 +15870,7 @@ msgstr "更新符号..."
 
 #: eeschema/tools/ee_actions.cpp:444
 msgid "Update symbol to include any changes from the library"
-msgstr "更新符号以包含库中的任何更改"
+msgstr "更新符号以包含库中的任何变更"
 
 #: eeschema/tools/ee_actions.cpp:449
 msgid "Assign Netclass..."
@@ -18032,13 +18027,13 @@ msgstr "卸载"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:133
 msgid "Apply Changes"
-msgstr "应用更改"
+msgstr "应用变更"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:171
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
-msgstr "您确定要关闭包管理器并放弃挂起的更改吗？"
+msgstr "您确定要关闭包管理器并放弃挂起的变更吗？"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:173
 #: kicad/tools/kicad_manager_actions.cpp:117
@@ -18119,7 +18114,7 @@ msgstr "详情"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying Package Changes"
-msgstr "应用包更改"
+msgstr "应用插件包变更"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
 msgid "Pending install"
@@ -18535,11 +18530,11 @@ msgstr "修改文件名称"
 
 #: kicad/project_tree_pane.cpp:1151
 msgid "Network path: not monitoring folder changes"
-msgstr "网络路径：不监视文件夹更改"
+msgstr "网络路径：不监视文件夹变更"
 
 #: kicad/project_tree_pane.cpp:1156
 msgid "Local path: monitoring folder changes"
-msgstr "本地路径：监视文件夹更改"
+msgstr "本地路径：监视文件夹变更"
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "New Project..."
@@ -19033,7 +19028,7 @@ msgstr "图纸文件"
 
 #: pagelayout_editor/files.cpp:61 pagelayout_editor/files.cpp:105
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "当前图纸已被修改。保存更改？"
+msgstr "当前图纸已被修改。保存变更？"
 
 #: pagelayout_editor/files.cpp:77
 #, c-format
@@ -19116,7 +19111,7 @@ msgstr "新图纸文件未保存"
 
 #: pagelayout_editor/pl_editor_frame.cpp:913
 msgid "Drawing sheet changes are unsaved"
-msgstr "图纸更改未保存"
+msgstr "图纸变更未保存"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
 msgid "Page Width"
@@ -20259,7 +20254,7 @@ msgid ""
 "Do you want to exit and abandon your changes?"
 msgstr ""
 "没有要保存修改的数据文件名。\n"
-"是否要退出并放弃更改？"
+"是否要退出并放弃变更？"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:256
 #, c-format
@@ -20268,7 +20263,7 @@ msgid ""
 "Do you want to exit and abandon your changes?"
 msgstr ""
 "无法写入文件 \"%s\"\n"
-"是否要退出并放弃修改？"
+"是否要退出并放弃变更？"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 #, fuzzy
@@ -21258,7 +21253,7 @@ msgstr "PCB 已重新批注成功"
 msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
-msgstr "应使用\"从 PCB 更新原理图\"工具对 PCB 注释和原理图进行同步。"
+msgstr "应使用\"从 PCB 更新原理图\"工具对 PCB 注释和原理图进行同步变更。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:313
 #, c-format
@@ -22989,8 +22984,7 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
-"更新/重置字符串：在两种情况下，这些描述需要涉及：用户对PCB的封装进行覆盖，并"
-"希望将其删除；或者用户对库的封装进行了更改，并希望将其传播回PCB。"
+"更新/重置字符串：在两种情况下，这些描述需要涉及：用户对 PCB 的封装进行覆盖，并希望将其删除；或者用户对库的封装进行了变更，并希望将其传播回PCB。"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:375
 #, c-format
@@ -24848,7 +24842,7 @@ msgstr "网表文件不存在。"
 #: pcbnew/dialogs/dialog_netlist.cpp:153
 #: pcbnew/dialogs/dialog_update_pcb.cpp:138
 msgid "Changes Applied to PCB"
-msgstr "更改已应用于 PCB"
+msgstr "变更已应用于 PCB"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:219
 #, c-format
@@ -26703,9 +26697,7 @@ msgid ""
 "Normally footprints on the board should be changed to match footprint "
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
-msgstr ""
-"通常应更改线路板上的封装，以匹配原理图中所做的封装关联更改。仅当您不想更改线"
-"路板上的现有封装时，才取消选中此选项。"
+msgstr "通常应变更线路板上的封装，以匹配原理图中所做的封装关联变更。仅当您不想变更线路板上的现有封装时，才取消选中此选项。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:53
 msgid "Update PCB from Schematic"
@@ -28030,7 +28022,7 @@ msgstr "注意：添加锡膏间隙（绝对和相对）以确定最终间隙。
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:86
 msgid "Cancel Changes?"
-msgstr "取消更改吗？"
+msgstr "取消变更吗？"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:422
 msgid "DRC rules"
@@ -29434,7 +29426,7 @@ msgstr "确定加载恢复文件 \"%s\" 吗？"
 #: pcbnew/files.cpp:376
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
-msgstr "当前电路板将被关闭，是否在继续之前保存对 \"%s\" 的更改？"
+msgstr "当前电路板将被关闭，是否在继续之前保存对 \"%s\" 的变更？"
 
 #: pcbnew/files.cpp:390
 msgid "Current Board will be closed. Continue?"
@@ -29463,7 +29455,7 @@ msgstr "PCB \"%s\" 已经打开。"
 
 #: pcbnew/files.cpp:588
 msgid "The current PCB has been modified.  Save changes?"
-msgstr "当前 PCB 已被修改。是否保存更改？"
+msgstr "当前 PCB 已被修改。是否保存变更？"
 
 #: pcbnew/files.cpp:610
 #, c-format
@@ -29654,7 +29646,7 @@ msgstr "选择筛选器"
 
 #: pcbnew/footprint_edit_frame.cpp:299
 msgid "Footprint changes are unsaved"
-msgstr "封装更改未保存"
+msgstr "封装变更未保存"
 
 #: pcbnew/footprint_edit_frame.cpp:506
 #, c-format
@@ -30090,7 +30082,7 @@ msgstr "当前电路板将丢失，此操作无法撤消。继续吗？"
 
 #: pcbnew/initpcb.cpp:109 pcbnew/tools/footprint_editor_control.cpp:189
 msgid "The current footprint has been modified.  Save changes?"
-msgstr "当前封装已被修改。是否保存更改？"
+msgstr "当前封装已被修改。是否保存变更？"
 
 #: pcbnew/io_mgr.cpp:89
 #, c-format
@@ -30912,7 +30904,7 @@ msgstr "电路板文件是只读的。"
 
 #: pcbnew/pcb_edit_frame.cpp:1147
 msgid "PCB file changes are unsaved"
-msgstr "PCB 文件更改未保存"
+msgstr "PCB 文件变更未保存"
 
 #: pcbnew/pcb_edit_frame.cpp:1416
 msgid "The schematic for this board cannot be found."
@@ -33980,7 +33972,7 @@ msgstr "更新封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:405
 msgid "Update footprint to include any changes from the library"
-msgstr "更新封装以包含来自库的任何更改"
+msgstr "更新封装以包含来自库的任何变更"
 
 #: pcbnew/tools/pcb_actions.cpp:410
 msgid "Update Footprints from Library..."
@@ -33988,7 +33980,7 @@ msgstr "从库中更新封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:411
 msgid "Update footprints to include any changes from the library"
-msgstr "更新封装以包含来自库的任何更改"
+msgstr "更新封装以包含来自库的任何变更"
 
 #: pcbnew/tools/pcb_actions.cpp:416
 msgid "Remove Unused Pads..."
