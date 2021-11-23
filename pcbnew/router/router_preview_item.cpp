@@ -272,7 +272,7 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
 
         gal->SetLayerDepth( m_depth );
 
-        if( m_hole )
+        if( m_hole && dynamic_cast<SHAPE_CIRCLE*>( m_hole ) )
         {
             const SHAPE_CIRCLE* h = static_cast<const SHAPE_CIRCLE*>( m_hole );
             int                 halfWidth = m_width / 2;
