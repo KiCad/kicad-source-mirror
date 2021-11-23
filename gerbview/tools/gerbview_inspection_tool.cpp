@@ -205,7 +205,7 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     bool                       originSet = false;
     TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
     EDA_UNITS                  units = m_frame->GetUserUnits();
-    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, units );
+    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, units, false, false );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );

@@ -167,6 +167,7 @@ public:
     static TOOL_ACTION updateMenu;
     static TOOL_ACTION activatePointEditor;
     static TOOL_ACTION changeEditMethod;
+    static TOOL_ACTION updatePreferences;
 
     // Suite
     static TOOL_ACTION openPreferences;

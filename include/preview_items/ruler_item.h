@@ -41,7 +41,8 @@ class TWO_POINT_GEOMETRY_MANAGER;
 class RULER_ITEM : public EDA_ITEM
 {
 public:
-    RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr, EDA_UNITS userUnits );
+    RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr, EDA_UNITS userUnits, bool aFlipX,
+            bool aFlipY );
 
     ///< @copydoc EDA_ITEM::ViewBBox()
     const BOX2I ViewBBox() const override;
@@ -75,9 +76,17 @@ public:
      */
     void SwitchUnits( EDA_UNITS aUnits ) { m_userUnits = aUnits; }
 
+    void UpdateDir( bool aFlipX, bool aFlipY )
+    {
+        m_flipX = aFlipX;
+        m_flipY = aFlipY;
+    }
+
 private:
     const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr;
     EDA_UNITS                         m_userUnits;
+    bool                              m_flipX;
+    bool                              m_flipY;
 };
 
 } // PREVIEW

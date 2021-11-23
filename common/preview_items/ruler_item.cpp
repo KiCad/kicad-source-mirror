@@ -54,13 +54,21 @@ static int getShadowLayer( KIGFX::GAL* aGal )
 
 static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
                                const VECTOR2D& aRulerVec, EDA_UNITS aUnits,
-                               bool aDrawingDropShadows )
+                               bool aDrawingDropShadows, bool aFlipX, bool aFlipY )
 {
     // draw the cursor labels
     std::vector<wxString> cursorStrings;
 
-    cursorStrings.push_back( DimensionLabel( "x", aRulerVec.x, aUnits ) );
-    cursorStrings.push_back( DimensionLabel( "y", aRulerVec.y, aUnits ) );
+    VECTOR2D temp = aRulerVec;
+
+    if( aFlipX )
+        temp.x = -temp.x;
+
+    if( aFlipY )
+        temp.y = -temp.y;
+
+    cursorStrings.push_back( DimensionLabel( "x", temp.x, aUnits ) );
+    cursorStrings.push_back( DimensionLabel( "y", temp.y, aUnits ) );
 
     cursorStrings.push_back( DimensionLabel( "r", aRulerVec.EuclideanNorm(), aUnits ) );
 
@@ -68,7 +76,7 @@ static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
     cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs,
                                              EDA_UNITS::DEGREES ) );
 
-    auto temp = aRulerVec;
+    temp = aRulerVec;
     DrawTextNextToCursor( aView, aCursor, -temp, cursorStrings, aDrawingDropShadows );
 }
 
@@ -258,10 +266,13 @@ void drawBacksideTicks( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTO
 }
 
 
-RULER_ITEM::RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr, EDA_UNITS userUnits )
+RULER_ITEM::RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr, EDA_UNITS userUnits,
+        bool aFlipX, bool aFlipY )
         : EDA_ITEM( NOT_USED ), // Never added to anything - just a preview
           m_geomMgr( aGeomMgr ),
-          m_userUnits( userUnits )
+          m_userUnits( userUnits ),
+          m_flipX( aFlipX ),
+          m_flipY( aFlipY )
 {
 }
 
@@ -318,7 +329,7 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     VECTOR2D rulerVec( end - origin );
 
-    drawCursorStrings( aView, end, rulerVec, m_userUnits, drawingDropShadows );
+    drawCursorStrings( aView, end, rulerVec, m_userUnits, drawingDropShadows, m_flipX, m_flipY );
 
     // basic tick size
     const double minorTickLen = 5.0 / gal->GetWorldScale();

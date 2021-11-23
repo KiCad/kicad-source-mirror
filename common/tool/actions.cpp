@@ -499,6 +499,9 @@ TOOL_ACTION ACTIONS::millimetersUnits( "common.Control.metricUnits",
 TOOL_ACTION ACTIONS::updateUnits( "common.Control.updateUnits",
         AS_GLOBAL );
 
+TOOL_ACTION ACTIONS::updatePreferences( "common.Control.updatePreferences",
+        AS_GLOBAL );
+
 TOOL_ACTION ACTIONS::toggleUnits( "common.Control.toggleUnits",
         AS_GLOBAL,
         MD_CTRL + 'U', LEGACY_HK_NAME( "Switch Units" ),
@@ -652,7 +655,6 @@ TOOL_ACTION ACTIONS::reportBug( "common.SuiteControl.reportBug",
         _( "Report Bug" ),
         _( "Report a problem with KiCad" ),
         BITMAPS::bug );
-
 
 // System-wide selection Events
 

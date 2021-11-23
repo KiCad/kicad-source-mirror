@@ -207,7 +207,9 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     PCB_GRID_HELPER            grid( m_toolMgr, frame()->GetMagneticItemsSettings() );
     bool                       originSet = false;
     EDA_UNITS                  units = frame()->GetUserUnits();
-    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, units );
+    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, units,
+            frame()->GetDisplayOptions().m_DisplayInvertXAxis,
+            frame()->GetDisplayOptions().m_DisplayInvertYAxis );
 
     view.Add( &ruler );
     view.SetVisible( &ruler, false );
@@ -313,6 +315,16 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
                 view.Update( &ruler, KIGFX::GEOMETRY );
                 canvas()->Refresh();
             }
+
+            evt->SetPassEvent();
+        }
+        else if( evt->IsAction( &ACTIONS::updatePreferences ) )
+        {
+            ruler.UpdateDir( frame()->GetDisplayOptions().m_DisplayInvertXAxis,
+                    frame()->GetDisplayOptions().m_DisplayInvertYAxis );
+
+            view.Update( &ruler, KIGFX::GEOMETRY );
+            canvas()->Refresh();
             evt->SetPassEvent();
         }
         else if( evt->IsClick( BUT_RIGHT ) )

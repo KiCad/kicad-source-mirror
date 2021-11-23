@@ -287,6 +287,10 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     viewControls->LoadSettings();
 
     m_galDisplayOptions.ReadCommonConfig( *settings, this );
+
+    // Notify all tools the preferences have changed
+    if( m_toolManager )
+        m_toolManager->RunAction( ACTIONS::updatePreferences, true );
 }
 
 
