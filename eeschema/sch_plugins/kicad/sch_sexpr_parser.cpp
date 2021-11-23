@@ -2650,8 +2650,14 @@ SCH_JUNCTION* SCH_SEXPR_PARSER::parseJunction()
             break;
         }
 
+        case T_uuid:
+            NeedSYMBOL();
+            const_cast<KIID&>( junction->m_Uuid ) = KIID( FromUTF8() );
+            NeedRIGHT();
+            break;
+
         default:
-            Expecting( "at" );
+            Expecting( "at, diameter, color or uuid" );
         }
     }
 

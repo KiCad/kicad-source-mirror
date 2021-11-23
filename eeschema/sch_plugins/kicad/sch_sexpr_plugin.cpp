@@ -1296,7 +1296,7 @@ void SCH_SEXPR_PLUGIN::saveJunction( SCH_JUNCTION* aJunction, int aNestLevel )
 {
     wxCHECK_RET( aJunction != nullptr && m_out != nullptr, "" );
 
-    m_out->Print( aNestLevel, "(junction (at %s %s) (diameter %s) (color %d %d %d %s))\n",
+    m_out->Print( aNestLevel, "(junction (at %s %s) (diameter %s) (color %d %d %d %s)\n",
                   FormatInternalUnits( aJunction->GetPosition().x ).c_str(),
                   FormatInternalUnits( aJunction->GetPosition().y ).c_str(),
                   FormatInternalUnits( aJunction->GetDiameter() ).c_str(),
@@ -1304,6 +1304,10 @@ void SCH_SEXPR_PLUGIN::saveJunction( SCH_JUNCTION* aJunction, int aNestLevel )
                   KiROUND( aJunction->GetColor().g * 255.0 ),
                   KiROUND( aJunction->GetColor().b * 255.0 ),
                   Double2Str( aJunction->GetColor().a ).c_str() );
+
+    m_out->Print( aNestLevel + 1, "(uuid %s)\n", TO_UTF8( aJunction->m_Uuid.AsString() ) );
+
+    m_out->Print( aNestLevel, ")\n" );
 }
 
 
