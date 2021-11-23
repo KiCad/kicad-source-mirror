@@ -445,6 +445,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     bool restoreSheet = false;
     bool isExistingSheet = false;
     SCH_SCREEN* useScreen = nullptr;
+    SCH_SCREEN* oldScreen = nullptr;
 
     // Search for a schematic file having the same filename already in use in the hierarchy
     // or on disk, in order to reuse it.
@@ -575,6 +576,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
             // the screen reference counting in complex hierarchies.
             if( m_sheet->GetScreenCount() > 1 )
             {
+                oldScreen = m_sheet->GetScreen();
                 m_sheet->SetScreen( nullptr );
                 loadFromFile = true;
             }
@@ -617,7 +619,13 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
           || m_frame->CheckSheetForRecursion( m_sheet, &currentSheet ) )
         {
             if( restoreSheet )
+            {
+                // If we cleared the previous screen, restore it before returning to the user
+                if( oldScreen )
+                    m_sheet->SetScreen( oldScreen );
+
                 currentSheet.LastScreen()->Append( m_sheet );
+            }
 
             return false;
         }
