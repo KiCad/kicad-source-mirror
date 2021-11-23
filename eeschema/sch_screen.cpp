@@ -218,7 +218,7 @@ void SCH_SCREEN::Append( SCH_SCREEN* aScreen )
 
     // No need to descend the hierarchy.  Once the top level screen is copied, all of its
     // children are copied as well.
-    for( auto aItem : aScreen->m_rtree )
+    for( SCH_ITEM* aItem : aScreen->m_rtree )
         Append( aItem );
 
     aScreen->Clear( false );
@@ -258,7 +258,7 @@ void SCH_SCREEN::FreeDrawList()
 
     m_rtree.clear();
 
-    for( auto item : delete_list )
+    for( SCH_ITEM* item : delete_list )
         delete item;
 }
 
@@ -619,11 +619,11 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
     // This will be a nullptr if an s-expression schematic is loaded.
     SYMBOL_LIBS* legacyLibs = Schematic()->Prj().SchLibs();
 
-    for( auto item : Items().OfType( SCH_SYMBOL_T ) )
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
         symbols.push_back( static_cast<SCH_SYMBOL*>( item ) );
 
     // Remove them from the R tree.  There bounding box size may change.
-    for( auto symbol : symbols )
+    for( SCH_SYMBOL* symbol : symbols )
         Remove( symbol );
 
     // Clear all existing symbol links.
@@ -756,7 +756,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
 
     // Changing the symbol may adjust the bbox of the symbol.  This re-inserts the
     // item with the new bbox
-    for( auto symbol : symbols )
+    for( SCH_SYMBOL* symbol : symbols )
         Append( symbol );
 }
 
@@ -835,7 +835,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter ) const
     std::vector< SCH_ITEM* > bitmaps;
     std::vector< SCH_ITEM* > other;
 
-    for( auto item : Items() )
+    for( SCH_ITEM* item : Items() )
     {
         if( item->IsMoving() || item->IsResized() )
             continue;
@@ -948,7 +948,7 @@ SCH_SHEET_PIN* SCH_SCREEN::GetSheetPin( const wxPoint& aPosition ) const
 
     for( SCH_ITEM* item : Items().Overlapping( SCH_SHEET_T, aPosition ) )
     {
-        auto sheet = static_cast<SCH_SHEET*>( item );
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
         sheetPin = sheet->GetPin( aPosition );
 
@@ -1427,7 +1427,7 @@ size_t SCH_SCREENS::GetLibNicknames( wxArrayString& aLibNicknames )
 {
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
     {
-        for( auto item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol   = static_cast<SCH_SYMBOL*>( item );
             const UTF8& nickname = symbol->GetLibId().GetLibNickname();
@@ -1448,9 +1448,9 @@ int SCH_SCREENS::ChangeSymbolLibNickname( const wxString& aFrom, const wxString&
 
     for( screen = GetFirst(); screen; screen = GetNext() )
     {
-        for( auto item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            auto symbol = static_cast<SCH_SYMBOL*>( item );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             if( symbol->GetLibId().GetLibNickname() != aFrom )
                 continue;
