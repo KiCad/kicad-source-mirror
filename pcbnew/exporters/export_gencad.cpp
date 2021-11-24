@@ -63,8 +63,8 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb );
 static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb );
 static void FootprintWriteShape( FILE* File, FOOTPRINT* aFootprint, const wxString& aShapeName );
 
-// layer names for Gencad export
 
+// layer names for Gencad export
 static std::string GenCADLayerName( int aCuCount, PCB_LAYER_ID aId )
 {
     if( IsCopperLayer( aId ) )
@@ -179,6 +179,7 @@ static std::string fmt_mask( LSET aSet )
     return StrPrintf( "%08x", (unsigned) ( aSet & LSET::AllCuMask() ).to_ulong() );
 }
 
+
 // Export options
 static bool flipBottomPads;
 static bool uniquePins;
@@ -191,6 +192,7 @@ static int GencadOffsetX, GencadOffsetY;
 // Association between shape names (using shapeName index) and components
 static std::map<FOOTPRINT*, int> componentShapes;
 static std::map<int, wxString> shapeNames;
+
 
 static const wxString getShapeName( FOOTPRINT* aFootprint )
 {
@@ -208,8 +210,10 @@ static const wxString getShapeName( FOOTPRINT* aFootprint )
     return itName->second;
 }
 
+
 // GerbTool chokes on units different than INCH so this is the conversion factor
 const static double SCALE_FACTOR = 1000.0 * IU_PER_MILS;
+
 
 /* Two helper functions to calculate coordinates of footprints in gencad values
  * (GenCAD Y axis from bottom to top)
@@ -398,7 +402,6 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
             vias.end() );
 
     // Emit vias pads
-
     for( PCB_VIA* via : vias )
     {
         viastacks.push_back( via );
@@ -420,8 +423,10 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
         pad->SetSubRatsnest( pad_name_number );
 
+        // @warning: This code is not 100% correct.  The #PAD::Compare function does not test
+        //           custom pad primitives so there may be duplicate custom pads in the export.
         if( old_pad && 0 == PAD::Compare( old_pad, pad ) )
-            continue;  // already created
+            continue;
 
         old_pad = pad;
 
@@ -443,6 +448,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         case PAD_SHAPE::CIRCLE:
             fprintf( aFile, " ROUND %g\n",
                      pad->GetDrillSize().x / SCALE_FACTOR );
+
             /* Circle is center, radius */
             fprintf( aFile, "CIRCLE %g %g %g\n",
                      off.x / SCALE_FACTOR,
@@ -582,21 +588,14 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
             SHAPE_POLY_SET outline;
             int            maxError = aPcb->GetDesignSettings().m_MaxError;
+            wxPoint        padOffset( 0, 0 );
 
-            TransformRoundChamferedRectToPolygon( outline, pad->GetPosition(), pad->GetSize(),
-                    pad->GetOrientation(), pad->GetRoundRectCornerRadius(),
-                    pad->GetChamferRectRatio(), pad->GetChamferPositions(), 0, maxError,
-                    ERROR_INSIDE );
-
-            // The chamfered rectangle polygon code calculates the absolute board position so
-            // the footprint position has to be subtracted off polygon points to get the
-            // pad position relative to the footprint.
-            FOOTPRINT* parent = pad->GetParent();
-
-            wxPoint parentPos( 0, 0 );
-
-            if( parent )
-                parentPos = parent->GetPosition();
+            TransformRoundChamferedRectToPolygon( outline, padOffset, pad->GetSize(),
+                                                  pad->GetOrientation(),
+                                                  pad->GetRoundRectCornerRadius(),
+                                                  pad->GetChamferRectRatio(),
+                                                  pad->GetChamferPositions(), 0, maxError,
+                                                  ERROR_INSIDE );
 
             for( int jj = 0; jj < outline.OutlineCount(); ++jj )
             {
@@ -607,10 +606,10 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
                 {
                     int next = ( ii + 1 ) % pointCount;
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                            ( -parentPos.x + off.x + poly.CPoint( ii ).x ) / SCALE_FACTOR,
-                            ( parentPos.y - off.y - poly.CPoint( ii ).y ) / SCALE_FACTOR,
-                            ( -parentPos.x + off.x + poly.CPoint( next ).x ) / SCALE_FACTOR,
-                            ( parentPos.y - off.y - poly.CPoint( next ).y ) / SCALE_FACTOR );
+                             poly.CPoint( ii ).x / SCALE_FACTOR,
+                             -poly.CPoint( ii ).y / SCALE_FACTOR,
+                             poly.CPoint( next ).x / SCALE_FACTOR,
+                             -poly.CPoint( next ).y / SCALE_FACTOR );
                 }
             }
 

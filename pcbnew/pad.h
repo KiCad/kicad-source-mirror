@@ -612,7 +612,7 @@ public:
      * @return less than 0 if left less than right, 0 if equal, or greater than 0 if left
      *         greater than right.
      */
-    static int Compare( const PAD* padref, const PAD* padcmp );
+    static int Compare( const PAD* aPadRef, const PAD* aPadCmp );
 
     void Move( const wxPoint& aMoveVector ) override
     {
