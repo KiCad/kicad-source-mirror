@@ -234,8 +234,13 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 
-    wxUpdateUIEvent dummy;
-    OnUpdateUI( dummy );
+    // Update widgets
+    wxUpdateUIEvent dummyUI;
+    OnUpdateUI( dummyUI );
+
+    // Post a dummy size event to force the pad preview panel to update the
+    // view: actual size, best zoom ... after the frame is shown
+    PostSizeEvent();
 }
 
 
@@ -345,6 +350,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
 void DIALOG_PAD_PROPERTIES::updateRoundRectCornerValues()
 {
     // Note: use ChangeValue() to avoid generating a wxEVT_TEXT event
+    m_cornerRadius.ChangeValue( m_dummyPad->GetRoundRectCornerRadius() );
 
     m_cornerRatio.ChangeDoubleValue( m_dummyPad->GetRoundRectRadiusRatio() * 100.0 );
     m_mixedCornerRatio.ChangeDoubleValue( m_dummyPad->GetRoundRectRadiusRatio() * 100.0 );
