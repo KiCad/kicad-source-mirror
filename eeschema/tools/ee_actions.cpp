@@ -650,6 +650,12 @@ TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
         _( "Force H/V Wires and Buses" ), _( "Switch H & V only mode for new wires and buses" ),
         BITMAPS::lines90 );
 
+TOOL_ACTION EE_ACTIONS::repairSchematic( "eeschema.EditorControl.repairSchematic",
+        AS_GLOBAL, 0, "",
+        _( "Repair Schematic" ),
+        _( "Run various diagnostics and attempt to repair schematic" ),
+        BITMAPS::rescue );
+
 // Python Console
 TOOL_ACTION EE_ACTIONS::showPythonConsole( "eeschema.EditorControl.showPythonConsole",
         AS_GLOBAL, 0, "",

@@ -2151,6 +2151,94 @@ int SCH_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
+{
+    int      errors = 0;
+    wxString details;
+    bool     quiet = aEvent.Parameter<bool>();
+
+    // Repair duplicate IDs.
+    std::map<KIID, EDA_ITEM*> ids;
+    int                       duplicates = 0;
+
+    auto processItem =
+            [&]( EDA_ITEM* aItem )
+            {
+                auto it = ids.find( aItem->m_Uuid );
+
+                if( it != ids.end() && it->second != aItem )
+                {
+                    duplicates++;
+                    const_cast<KIID&>( aItem->m_Uuid ) = KIID();
+                }
+
+                ids[ aItem->m_Uuid ] = aItem;
+            };
+
+    // Symbol IDs are the most important, so give them the first crack at "claiming" a
+    // particular KIID.
+
+    for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetSheets() )
+    {
+        SCH_SCREEN* screen = sheet.LastScreen();
+
+        for( SCH_ITEM* aItem : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            processItem( aItem );
+
+            for( SCH_PIN* pin : static_cast<SCH_SYMBOL*>( aItem )->GetPins( &sheet ) )
+                processItem( pin );
+        }
+    }
+
+    for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetSheets() )
+    {
+        SCH_SCREEN* screen = sheet.LastScreen();
+
+        for( SCH_ITEM* aItem : screen->Items() )
+        {
+            processItem( aItem );
+
+            aItem->RunOnChildren(
+                    [&]( SCH_ITEM* aChild )
+                    {
+                        processItem( aItem );
+                    } );
+        }
+    }
+
+    /*******************************
+     * Your test here
+     */
+
+    /*******************************
+     * Inform the user
+     */
+
+    if( duplicates )
+    {
+        errors += duplicates;
+        details += wxString::Format( _( "%d duplicate IDs replaced.\n" ), duplicates );
+    }
+
+    if( errors )
+    {
+        m_frame->OnModify();
+
+        wxString msg = wxString::Format( _( "%d potential problems repaired." ), errors );
+
+        if( !quiet )
+            DisplayInfoMessage( m_frame, msg, details );
+    }
+    else if( !quiet )
+    {
+        DisplayInfoMessage( m_frame, _( "No errors found." ) );
+    }
+
+    return 0;
+}
+
+
 void SCH_EDITOR_CONTROL::setTransitions()
 {
     Go( &SCH_EDITOR_CONTROL::New,                   ACTIONS::doNew.MakeEvent() );
@@ -2158,7 +2246,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );
     //Go( &SCH_EDITOR_CONTROL::SaveAs,                ACTIONS::saveCopyAs.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::SaveCurrSheetCopyAs,  EE_ACTIONS::saveCurrSheetCopyAs.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::SaveCurrSheetCopyAs,   EE_ACTIONS::saveCurrSheetCopyAs.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowSchematicSetup,    EE_ACTIONS::schematicSetup.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::PageSetup,             ACTIONS::pageSettings.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Print,                 ACTIONS::print.MakeEvent() );
@@ -2227,5 +2315,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ToggleHiddenFields,    EE_ACTIONS::toggleHiddenFields.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleForceHV,         EE_ACTIONS::toggleForceHV.MakeEvent() );
 
-    Go( &SCH_EDITOR_CONTROL::TogglePythonConsole,     EE_ACTIONS::showPythonConsole.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::TogglePythonConsole,   EE_ACTIONS::showPythonConsole.MakeEvent() );
+
+    Go( &SCH_EDITOR_CONTROL::RepairSchematic,       EE_ACTIONS::repairSchematic.MakeEvent() );
 }

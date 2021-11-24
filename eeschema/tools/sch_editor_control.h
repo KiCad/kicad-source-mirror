@@ -140,6 +140,8 @@ public:
     int ToggleForceHV( const TOOL_EVENT& aEvent );
     int TogglePythonConsole( const TOOL_EVENT& aEvent );
 
+    int RepairSchematic( const TOOL_EVENT& aEvent );
+
     void AssignFootprints( const std::string& aChangedSetOfReferences );
 
     /**

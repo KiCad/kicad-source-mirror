@@ -248,8 +248,11 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::showSymbolEditor );
     toolsMenu->Add( EE_ACTIONS::updateSymbols );
+
+    toolsMenu->AppendSeparator();
     toolsMenu->Add( EE_ACTIONS::rescueSymbols );
     toolsMenu->Add( EE_ACTIONS::remapSymbols );
+    toolsMenu->Add( EE_ACTIONS::repairSchematic );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( EE_ACTIONS::editSymbolFields );

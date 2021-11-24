@@ -208,6 +208,7 @@ public:
     static TOOL_ACTION exportSymbolView;
     static TOOL_ACTION exportSymbolAsSVG;
     static TOOL_ACTION showPythonConsole;
+    static TOOL_ACTION repairSchematic;
 
     // SPICE
     static TOOL_ACTION runSimulation;
