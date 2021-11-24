@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-10 23:49+0000\n"
+"PO-Revision-Date: 2021-11-25 08:26+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -3566,7 +3566,7 @@ msgstr "กำหนดเข้ากับเน็ตที่เลือก
 #: pcbnew/dialogs/dialog_net_inspector.cpp:76 pcbnew/pad.cpp:889
 #: pcbnew/pcb_track.cpp:753 pcbnew/zone.cpp:595
 msgid "Net"
-msgstr "เน็ต"
+msgstr "เน็ท"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:114
@@ -4005,7 +4005,7 @@ msgstr "โซน"
 
 #: common/eda_item.cpp:322 pcbnew/pcb_track.cpp:659
 msgid "Track"
-msgstr "แทร็ก"
+msgstr "แทร็ค"
 
 #: common/eda_item.cpp:323 pcbnew/dialogs/dialog_board_statistics.cpp:493
 #: pcbnew/pcb_track.cpp:716
@@ -18050,9 +18050,8 @@ msgid "Uninstall"
 msgstr "ถอนการติดตั้ง"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:133
-#, fuzzy
 msgid "Apply Changes"
-msgstr "ประยุกต์การเปลี่ยนแปลง"
+msgstr "นำการเปลี่ยนแปลงไปใช้"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:171
 msgid ""
@@ -18105,7 +18104,6 @@ msgid "Discard action"
 msgstr "ละทิ้งการกระทํา"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
-#, fuzzy
 msgid "Install from File..."
 msgstr "ติดตั้งจากไฟล์..."
 
@@ -18123,27 +18121,24 @@ msgid "Downloaded %lld/%lld Kb"
 msgstr "ดาวน์โหลดแล้ว %lld/%lld Kb"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download Progress"
-msgstr "ความคืบหน้าในการดาวน์โหลด"
+msgstr "คืบหน้าการดาวน์โหลด"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
 msgid "Waiting..."
 msgstr "กำลังรอ…"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall Progress"
-msgstr "ภาพรวมคืบหน้า"
+msgstr "ภาพรวมความคืบหน้า"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
 msgstr "รายละเอียด"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
-#, fuzzy
 msgid "Applying Package Changes"
-msgstr "กําลังนําการเปลี่ยนแปลงแพคเกจไปใช้"
+msgstr "กําลังนําการเปลี่ยนแพคเกจไปใช้"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
 msgid "Pending install"
@@ -18158,19 +18153,16 @@ msgid "Metadata"
 msgstr "ข้อมูลเมตา"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
-#, fuzzy
 msgid "Package identifier: "
-msgstr "ตัวระบุแพ็คเกจ:%s\n"
+msgstr "ตัวระบุแพ็คเกจ: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "ไลเซ็นส์"
+msgstr "ไลเซ็นส์: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
-#, fuzzy
 msgid "Tags: "
-msgstr "แท็ก: %s\n"
+msgstr "แท็ก: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:257
 msgid "Author"
@@ -18224,19 +18216,16 @@ msgid "Install package"
 msgstr "ติดตั้งแพ็คเกจ"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Download Size"
-msgstr "ดาวน์โหลด"
+msgstr "ขนาดดาวน์โหลด"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Install Size"
-msgstr "ขนาด Inst"
+msgstr "ขนาดติดตั้ง"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
-#, fuzzy
 msgid "Compatible"
-msgstr "โหมดเข้ากันได้:"
+msgstr "เข้ากันได้"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 msgid "Show all versions"
@@ -18374,9 +18363,8 @@ msgid "Aborting package installation."
 msgstr "กําลังยกเลิกการติดตั้งแพ็คเกจ"
 
 #: kicad/pcm/pcm_task_manager.cpp:254
-#, fuzzy
 msgid "Extracted package\n"
-msgstr "กำลังแตกแพ็คเกจ '%s'"
+msgstr "กำลังแตกแพ็คเกจ\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:298
 #, c-format
@@ -20749,7 +20737,7 @@ msgstr "ชื่อเน็ต"
 
 #: pcbnew/board_connected_item.cpp:180
 msgid "NetClass"
-msgstr "เน็ตคลาส"
+msgstr "เน็ทคลาส"
 
 #: pcbnew/board_item.cpp:94
 msgid "all copper layers"
@@ -21479,7 +21467,7 @@ msgstr ""
 "%d %s UUID: [%s], X, Y: %s, X โค้งมน, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:602
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
@@ -21487,7 +21475,7 @@ msgid ""
 "checked.\n"
 msgstr ""
 "\n"
-"พีซีบีมีอักษรอ้างอิงไม่ถูกต้อง หรือว่างเปล่า จำนวน %d\n"
+"พีซีบีมีอักษรอ้างอิงว่างเปล่า %d ตัว หรือมีค่ากำหนดไม่ถูกต้อง\n"
 "แนะนำให้เรียกใช้ DRC โดยเลือก 'ทดสอบฟุ้ทพรินท์กับวงจร' อีกครั้ง\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
@@ -31442,9 +31430,8 @@ msgstr ""
 "Eco1_Userของคีแคดแทน"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2650
-#, fuzzy
 msgid "Loading unicode strings..."
-msgstr "กําลังโหลดเน็ต..."
+msgstr "กําลังอ่านข้อความ..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2664
 msgid "Loading text..."
