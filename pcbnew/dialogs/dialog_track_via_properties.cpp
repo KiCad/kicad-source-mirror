@@ -37,6 +37,8 @@
 #include <board_commit.h>
 #include <macros.h>
 
+#include <wx/log.h>
+
 DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent,
                                                           const PCB_SELECTION& aItems,
                                                           COMMIT& aCommit ) :
@@ -90,6 +92,15 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     bool hasLocked = false;
     bool hasUnlocked = false;
 
+    // Start and end layers of vias
+    // if at least 2 vias do not have the same start or the same end layer
+    // the layers will be set as undefined
+    int selection_first_layer = -1;
+    int selection_last_layer = -1;
+
+    // The selection layer for tracks
+    int track_selection_layer = -1;
+
     auto getAnnularRingSelection =
             []( const PCB_VIA* via ) -> int
             {
@@ -128,7 +139,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     m_trackEndX.SetValue( t->GetEnd().x );
                     m_trackEndY.SetValue( t->GetEnd().y );
                     m_trackWidth.SetValue( t->GetWidth() );
-                    m_TrackLayerCtrl->SetLayerSelection( t->GetLayer() );
+                    track_selection_layer = t->GetLayer();
                     m_tracks = true;
                 }
                 else        // check if values are the same for every selected track
@@ -148,11 +159,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     if( m_trackWidth.GetValue() != t->GetWidth() )
                         m_trackWidth.SetValue( INDETERMINATE_STATE );
 
-                    if( m_TrackLayerCtrl->GetLayerSelection() != t->GetLayer() )
+                    if( track_selection_layer != t->GetLayer() )
                     {
-                        m_TrackLayerCtrl->SetUndefinedLayerName( INDETERMINATE_STATE );
-                        m_TrackLayerCtrl->Resync();
-                        m_TrackLayerCtrl->SetLayerSelection( UNDEFINED_LAYER );
+                        track_selection_layer = UNDEFINED_LAYER;
                     }
                 }
 
@@ -176,10 +185,10 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     m_viaDrill.SetValue( v->GetDrillValue() );
                     m_vias = true;
                     viaType = v->GetViaType();
-                    m_ViaStartLayer->SetLayerSelection( v->TopLayer() );
-                    m_ViaEndLayer->SetLayerSelection( v->BottomLayer() );
                     m_viaNotFree->SetValue( !v->GetIsFree() );
                     m_annularRingsCtrl->SetSelection( getAnnularRingSelection( v ) );
+                    selection_first_layer = v->TopLayer();
+                    selection_last_layer = v->BottomLayer();
                 }
                 else        // check if values are the same for every selected via
                 {
@@ -201,18 +210,14 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     if( v->GetIsFree() != !m_viaNotFree->GetValue() )
                         m_viaNotFree->Set3StateValue( wxCHK_UNDETERMINED );
 
-                    if( m_ViaStartLayer->GetLayerSelection() != v->TopLayer() )
+                    if( selection_first_layer != v->TopLayer() )
                     {
-                        m_ViaStartLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
-                        m_ViaStartLayer->Resync();
-                        m_ViaStartLayer->SetLayerSelection( UNDEFINED_LAYER );
+                        selection_first_layer = UNDEFINED_LAYER;
                     }
 
-                    if( m_ViaEndLayer->GetLayerSelection() != v->BottomLayer() )
+                    if( selection_last_layer != v->BottomLayer() )
                     {
-                        m_ViaEndLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
-                        m_ViaEndLayer->Resync();
-                        m_ViaEndLayer->SetLayerSelection( UNDEFINED_LAYER );
+                        selection_last_layer = UNDEFINED_LAYER;
                     }
 
                     if( m_annularRingsCtrl->GetSelection() != getAnnularRingSelection( v ) )
@@ -238,6 +243,36 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                 break;
             }
         }
+    }
+
+    if( m_tracks )
+    {
+        // Set the track layer selection state:
+        if( track_selection_layer == UNDEFINED_LAYER )
+        {
+            m_TrackLayerCtrl->SetUndefinedLayerName( INDETERMINATE_STATE );
+            m_TrackLayerCtrl->Resync();
+        }
+
+        m_TrackLayerCtrl->SetLayerSelection( track_selection_layer );
+    }
+
+    // Set the vias layers selections state:
+    if( m_vias )
+    {
+        if( selection_first_layer == UNDEFINED_LAYER )
+        {
+            m_ViaStartLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
+            m_ViaStartLayer->Resync();
+        }
+        m_ViaStartLayer->SetLayerSelection( selection_first_layer );
+
+        if( selection_last_layer == UNDEFINED_LAYER )
+        {
+            m_ViaEndLayer->SetUndefinedLayerName( INDETERMINATE_STATE );
+            m_ViaEndLayer->Resync();
+        }
+        m_ViaEndLayer->SetLayerSelection( selection_last_layer );
     }
 
     m_netSelector->SetBoard( aParent->GetBoard() );
