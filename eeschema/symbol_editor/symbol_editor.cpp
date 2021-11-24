@@ -602,8 +602,6 @@ void SYMBOL_EDIT_FRAME::SaveLibraryAs()
 
 void SYMBOL_EDIT_FRAME::SaveSymbolAs()
 {
-    wxCHECK( GetTargetLibId().IsValid(), /* void */ );
-
     saveSymbolAs();
 
     m_treePane->GetLibTree()->RefreshLibTree();

@@ -386,8 +386,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     auto saveSymbolAsCondition =
             [this]( const SELECTION& aSel )
             {
-                LIB_ID sel = GetTargetLibId();
-                return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
+                return getTargetSymbol() != nullptr;
             };
 
     mgr->SetConditions( ACTIONS::saveAll,           ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
