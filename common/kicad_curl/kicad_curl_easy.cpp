@@ -278,7 +278,7 @@ bool KICAD_CURL_EASY::SetTransferCallback( const TRANSFER_CALLBACK& aCallback, s
 bool KICAD_CURL_EASY::SetOutputStream( const std::ostream* aOutput )
 {
     curl_easy_setopt( m_CURL, CURLOPT_WRITEFUNCTION, stream_write_callback );
-    curl_easy_setopt( m_CURL, CURLOPT_WRITEDATA, reinterpret_cast<void*>( aOutput ) );
+    curl_easy_setopt( m_CURL, CURLOPT_WRITEDATA, reinterpret_cast<const void*>( aOutput ) );
     return true;
 }
 
