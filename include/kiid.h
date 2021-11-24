@@ -59,8 +59,16 @@ public:
     wxString AsString() const;
     wxString AsLegacyTimestampString() const;
 
+    /**
+     * Returns true if a string has the correct formatting to be a KIID.
+     */
     static bool SniffTest( const wxString& aCandidate );
 
+    /**
+     * A performance optimization which disables/enables the generation of pseudo-random UUIDs.
+     *
+     * NB: uses a global.  Not thread safe!
+     */
     static void CreateNilUuids( bool aNil = true );
 
     /**
@@ -80,6 +88,14 @@ public:
      * If this is not a time stamp based UUID, then no change is made.
      */
     void ConvertTimestampToUuid();
+
+    /**
+     * Generates a deterministic replacement for a given ID.
+     *
+     * NB: destroys uniform distribution!  But it's the only thing we have when a deterministic
+     * replacement for a duplicate ID is required.
+     */
+    void Increment();
 
     bool operator==( KIID const& rhs ) const
     {

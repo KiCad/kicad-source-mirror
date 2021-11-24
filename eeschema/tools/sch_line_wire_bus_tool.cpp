@@ -651,7 +651,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                     segment->SetEndPoint( cursorPos );
 
                     // Create a new segment, and chain it after the current segment.
-                    segment = new SCH_LINE( *segment );
+                    segment = static_cast<SCH_LINE*>( segment->Duplicate() );
                     segment->SetFlags( IS_NEW | IS_MOVING );
                     segment->SetStartPoint( cursorPos );
                     m_wires.push_back( segment );
@@ -813,7 +813,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos
     // horizontal and vertical lines only switch is on.
     if( m_frame->eeconfig()->m_Drawing.hv_lines_only )
     {
-        segment = new SCH_LINE( *segment );
+        segment = static_cast<SCH_LINE*>( segment->Duplicate() );
         segment->SetFlags( IS_NEW | IS_MOVING );
         m_wires.push_back( segment );
 

@@ -94,6 +94,19 @@ void SCH_SEXPR_PARSER::checkpoint()
 }
 
 
+KIID SCH_SEXPR_PARSER::parseKIID()
+{
+    KIID id( FromUTF8() );
+
+    while( m_uuids.count( id ) )
+        id.Increment();
+
+    m_uuids.insert( id );
+
+    return id;
+}
+
+
 bool SCH_SEXPR_PARSER::parseBool()
 {
     T token = NextTok();
@@ -1838,7 +1851,7 @@ SCH_SHEET_PIN* SCH_SEXPR_PARSER::parseSchSheetPin( SCH_SHEET* aSheet )
 
         case T_uuid:
             NeedSYMBOL();
-            const_cast<KIID&>( sheetPin->m_Uuid ) = KIID( FromUTF8() );
+            const_cast<KIID&>( sheetPin->m_Uuid ) = parseKIID();
             NeedRIGHT();
             break;
 
@@ -2050,7 +2063,7 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
         {
         case T_uuid:
             NeedSYMBOL();
-            screen->m_uuid = KIID( FromUTF8() );
+            screen->m_uuid = parseKIID();
             NeedRIGHT();
             break;
 
@@ -2308,7 +2321,7 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
         case T_uuid:
             NeedSYMBOL();
-            const_cast<KIID&>( symbol->m_Uuid ) = KIID( FromUTF8() );
+            const_cast<KIID&>( symbol->m_Uuid ) = parseKIID();
             NeedRIGHT();
             break;
 
@@ -2395,7 +2408,7 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
                     // First version to write out pin uuids accidentally wrote out the symbol's
                     // uuid for each pin, so ignore uuids coming from that version.
                     if( m_requiredVersion >= 20210126 )
-                        uuid = KIID( FromUTF8() );
+                        uuid = parseKIID();
 
                     NeedRIGHT();
                     break;
@@ -2460,7 +2473,7 @@ SCH_BITMAP* SCH_SEXPR_PARSER::parseImage()
 
         case T_uuid:
             NeedSYMBOL();
-            const_cast<KIID&>( bitmap->m_Uuid ) = KIID( FromUTF8() );
+            const_cast<KIID&>( bitmap->m_Uuid ) = parseKIID();
             NeedRIGHT();
             break;
 
@@ -2560,7 +2573,7 @@ SCH_SHEET* SCH_SEXPR_PARSER::parseSheet()
 
         case T_uuid:
             NeedSYMBOL();
-            const_cast<KIID&>( sheet->m_Uuid ) = KIID( FromUTF8() );
+            const_cast<KIID&>( sheet->m_Uuid ) = parseKIID();
             NeedRIGHT();
             break;
 
@@ -2652,7 +2665,7 @@ SCH_JUNCTION* SCH_SEXPR_PARSER::parseJunction()
 
         case T_uuid:
             NeedSYMBOL();
-            const_cast<KIID&>( junction->m_Uuid ) = KIID( FromUTF8() );
+            const_cast<KIID&>( junction->m_Uuid ) = parseKIID();
             NeedRIGHT();
             break;
 
@@ -2689,7 +2702,7 @@ SCH_NO_CONNECT* SCH_SEXPR_PARSER::parseNoConnect()
 
         case T_uuid:
             NeedSYMBOL();
-            const_cast<KIID&>( no_connect->m_Uuid ) = KIID( FromUTF8() );
+            const_cast<KIID&>( no_connect->m_Uuid ) = parseKIID();
             NeedRIGHT();
             break;
 
@@ -2743,7 +2756,7 @@ SCH_BUS_WIRE_ENTRY* SCH_SEXPR_PARSER::parseBusEntry()
 
         case T_uuid:
             NeedSYMBOL();
-            const_cast<KIID&>( busEntry->m_Uuid ) = KIID( FromUTF8() );
+            const_cast<KIID&>( busEntry->m_Uuid ) = parseKIID();
             NeedRIGHT();
             break;
 
@@ -2808,7 +2821,7 @@ SCH_LINE* SCH_SEXPR_PARSER::parseLine()
 
         case T_uuid:
             NeedSYMBOL();
-            const_cast<KIID&>( line->m_Uuid ) = KIID( FromUTF8() );
+            const_cast<KIID&>( line->m_Uuid ) = parseKIID();
             NeedRIGHT();
             break;
 
@@ -2934,7 +2947,7 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
         case T_uuid:
             NeedSYMBOL();
-            const_cast<KIID&>( text->m_Uuid ) = KIID( FromUTF8() );
+            const_cast<KIID&>( text->m_Uuid ) = parseKIID();
             NeedRIGHT();
             break;
 

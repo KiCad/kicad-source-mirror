@@ -38,21 +38,23 @@
 #include <wx/log.h>
 
 // boost:mt19937 is not thread-safe
-static std::mutex rng_mutex;
+static std::mutex                                           rng_mutex;
 
 // Create only once, as seeding is *very* expensive
-static boost::mt19937 rng;
+static boost::mt19937                                       rng;
 static boost::uuids::basic_random_generator<boost::mt19937> randomGenerator( rng );
 
-// These don't have the same performance penalty, but might as well be consistent
-static boost::uuids::string_generator stringGenerator;
-static boost::uuids::nil_generator    nilGenerator;
+// These don't have the same performance penalty, but we might as well be consistent
+static boost::uuids::string_generator                       stringGenerator;
+static boost::uuids::nil_generator                          nilGenerator;
+
 
 // Global nil reference
 KIID niluuid( 0 );
 
+
 // When true, always create nil uuids for performance, when valid ones aren't needed
-static bool createNilUuids = false;
+static bool g_createNilUuids = false;
 
 
 // For static initialization
@@ -72,7 +74,7 @@ KIID::KIID()
     {
 #endif
 
-        if( createNilUuids )
+        if( g_createNilUuids )
         {
             m_uuid = nilGenerator();
         }
@@ -247,9 +249,24 @@ void KIID::ConvertTimestampToUuid()
 }
 
 
+void KIID::Increment()
+{
+    // This obviously destroys uniform distribution, but it can be useful when a
+    // deterministic replacement for a duplicate ID is required.
+
+    for( int i = 15; i >= 0; --i )
+    {
+        m_uuid.data[i]++;
+
+        if( m_uuid.data[i] != 0 )
+            break;
+    }
+}
+
+
 void KIID::CreateNilUuids( bool aNil )
 {
-    createNilUuids = aNil;
+    g_createNilUuids = aNil;
 }
 
 

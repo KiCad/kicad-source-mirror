@@ -81,12 +81,16 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     int m_convert;          ///< The current body style being parsed.
     wxString m_symbolName;  ///< The current symbol name.
 
+    std::set<KIID>     m_uuids;
+
     PROGRESS_REPORTER* m_progressReporter;  // optional; may be nullptr
     const LINE_READER* m_lineReader;        // for progress reporting
     unsigned           m_lastProgressLine;
     unsigned           m_lineCount;         // for progress reporting
 
     void checkpoint();
+
+    KIID parseKIID();
 
     void parseHeader( TSCHEMATIC_T::T aHeaderType, int aFileVersion );
 
