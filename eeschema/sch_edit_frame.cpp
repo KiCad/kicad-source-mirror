@@ -810,6 +810,8 @@ void SCH_EDIT_FRAME::OnModify()
 
     if( ADVANCED_CFG::GetCfg().m_RealTimeConnectivity && CONNECTION_GRAPH::m_allowRealTime )
         RecalculateConnections( NO_CLEANUP );
+    else
+        GetScreen()->SetConnectivityDirty();
 
     GetCanvas()->Refresh();
     UpdateHierarchyNavigator();

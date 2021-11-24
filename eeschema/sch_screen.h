@@ -161,6 +161,8 @@ public:
     void IncRefCount();
     int GetRefCount() const                                 { return m_refCount; }
 
+    void SetConnectivityDirty();
+
     /**
      * Return the number of times this screen is used.
      *

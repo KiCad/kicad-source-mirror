@@ -37,6 +37,8 @@
 #include <netclass.h>
 #include <trigo.h>
 #include <board_item.h>
+#include <advanced_config.h>
+#include <connection_graph.h>
 #include "sch_painter.h"
 
 
@@ -63,6 +65,10 @@ SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, bool aFlipY ) :
 {
     m_layer  = LAYER_WIRE;
     m_connected_bus_item = nullptr;
+
+    m_lastResolvedWidth = Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
+    m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
+    m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
 
 
@@ -80,6 +86,10 @@ SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, int aQuadrant ) :
 
     m_layer  = LAYER_WIRE;
     m_connected_bus_item = nullptr;
+
+    m_lastResolvedWidth = Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
+    m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
+    m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
 
 
@@ -89,6 +99,10 @@ SCH_BUS_BUS_ENTRY::SCH_BUS_BUS_ENTRY( const wxPoint& pos, bool aFlipY ) :
     m_layer = LAYER_BUS;
     m_connected_bus_items[0] = nullptr;
     m_connected_bus_items[1] = nullptr;
+
+    m_lastResolvedWidth = Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
+    m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
+    m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
 
 
@@ -124,6 +138,10 @@ void SCH_BUS_ENTRY_BASE::SwapData( SCH_ITEM* aItem )
     std::swap( m_pos, item->m_pos );
     std::swap( m_size, item->m_size );
     std::swap( m_stroke, item->m_stroke );
+
+    std::swap( m_lastResolvedWidth, item->m_lastResolvedWidth );
+    std::swap( m_lastResolvedLineStyle, item->m_lastResolvedLineStyle );
+    std::swap( m_lastResolvedColor, item->m_lastResolvedColor );
 }
 
 
@@ -151,57 +169,87 @@ const EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
 
 COLOR4D SCH_BUS_ENTRY_BASE::GetStrokeColor() const
 {
-    NETCLASSPTR netclass = NetClass();
+    if( m_stroke.GetColor() != COLOR4D::UNSPECIFIED )
+    {
+        m_lastResolvedColor = m_stroke.GetColor();
+    }
+    else if( IsConnectable() && !IsConnectivityDirty() )
+    {
+        NETCLASSPTR netclass = NetClass();
 
-    if( netclass && netclass->GetSchematicColor() != COLOR4D::UNSPECIFIED )
-        return netclass->GetSchematicColor();
+        if( netclass )
+            m_lastResolvedColor = netclass->GetSchematicColor();
+    }
+    else
+    {
+        wxASSERT_MSG( !IsConnectable()
+                        || !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity
+                        || !Schematic() || !Schematic()->ConnectionGraph()->m_allowRealTime,
+                      "Connectivity shouldn't be dirty if realtime connectivity is on!" );
+    }
 
-    return m_stroke.GetColor();
+    return m_lastResolvedColor;
 }
 
 
 PLOT_DASH_TYPE SCH_BUS_ENTRY_BASE::GetStrokeStyle() const
 {
-    NETCLASSPTR netclass = NetClass();
+    if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
+    {
+        m_lastResolvedLineStyle = m_stroke.GetPlotStyle();
+    }
+    else if( IsConnectable() && !IsConnectivityDirty() )
+    {
+        NETCLASSPTR netclass = NetClass();
 
-    if( netclass )
-        return (PLOT_DASH_TYPE) netclass->GetLineStyle();
+        if( netclass )
+            m_lastResolvedLineStyle = static_cast<PLOT_DASH_TYPE>( netclass->GetLineStyle() );
+    }
+    else
+    {
+        wxASSERT_MSG( !IsConnectable()
+                        || !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity
+                        || !Schematic() || !Schematic()->ConnectionGraph()->m_allowRealTime,
+                      "Connectivity shouldn't be dirty if realtime connectivity is on!" );
+    }
 
-    return m_stroke.GetPlotStyle();
+    return m_lastResolvedLineStyle;
 }
 
 
 int SCH_BUS_WIRE_ENTRY::GetPenWidth() const
 {
     if( m_stroke.GetWidth() > 0 )
-        return m_stroke.GetWidth();
+    {
+        m_lastResolvedWidth = m_stroke.GetWidth();
+    }
+    else if( IsConnectable() && !IsConnectivityDirty() )
+    {
+        NETCLASSPTR netclass = NetClass();
 
-    NETCLASSPTR netclass = NetClass();
+        if( netclass )
+            m_lastResolvedWidth = netclass->GetWireWidth();
+    }
 
-    if( !netclass && Schematic() )
-        netclass = Schematic()->Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
-
-    if( netclass )
-        return netclass->GetWireWidth();
-
-    return Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
+    return m_lastResolvedWidth;
 }
 
 
 int SCH_BUS_BUS_ENTRY::GetPenWidth() const
 {
     if( m_stroke.GetWidth() > 0 )
-        return m_stroke.GetWidth();
+    {
+        m_lastResolvedWidth = m_stroke.GetWidth();
+    }
+    else if( IsConnectable() && !IsConnectivityDirty() )
+    {
+        NETCLASSPTR netclass = NetClass();
 
-    NETCLASSPTR netclass = NetClass();
+        if( netclass )
+            m_lastResolvedWidth = netclass->GetBusWidth();
+    }
 
-    if( !netclass && Schematic() )
-        netclass = Schematic()->Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
-
-    if( netclass )
-        return netclass->GetBusWidth();
-
-    return Mils2iu( DEFAULT_BUS_WIDTH_MILS );
+    return m_lastResolvedWidth;
 }
 
 
@@ -492,7 +540,10 @@ void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     aList.emplace_back( _( "Bus Entry Type" ), msg );
 
-    SCH_CONNECTION* conn = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) ? Connection() : nullptr;
+    SCH_CONNECTION* conn = nullptr;
+
+    if( !IsConnectivityDirty() && dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )
+        conn = Connection();
 
     if( conn )
     {

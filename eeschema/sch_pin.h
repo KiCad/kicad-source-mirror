@@ -82,6 +82,8 @@ public:
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
+    bool IsConnectable() const override { return true; }
+
     bool IsDangling() const override { return m_isDangling; }
     void SetIsDangling( bool isDangling ) { m_isDangling = isDangling; }
 

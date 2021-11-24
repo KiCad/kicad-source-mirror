@@ -46,7 +46,7 @@
 #include <string_utils.h>
 #include <wx/log.h>
 
-#include <advanced_config.h> // for realtime connectivity switch
+#include <advanced_config.h> // for realtime connectivity switch in release builds
 
 
 /*
@@ -364,10 +364,7 @@ void CONNECTION_SUBGRAPH::UpdateItemConnections()
 
     for( SCH_ITEM* item : m_items )
     {
-        SCH_CONNECTION* item_conn = item->Connection( &m_sheet );
-
-        if( !item_conn )
-            item_conn = item->InitializeConnection( m_sheet, m_graph );
+        SCH_CONNECTION* item_conn = item->GetOrInitConnection( m_sheet, m_graph );
 
         if( ( m_driver_connection->IsBus() && item_conn->IsNet() ) ||
             ( m_driver_connection->IsNet() && item_conn->IsBus() ) )
@@ -397,7 +394,7 @@ CONNECTION_SUBGRAPH::PRIORITY CONNECTION_SUBGRAPH::GetDriverPriority( SCH_ITEM* 
     case SCH_GLOBAL_LABEL_T:  return PRIORITY::GLOBAL;
     case SCH_PIN_T:
     {
-        auto sch_pin = static_cast<SCH_PIN*>( aDriver );
+        SCH_PIN* sch_pin = static_cast<SCH_PIN*>( aDriver );
 
         if( sch_pin->IsPowerConnection() )
             return PRIORITY::POWER_PIN;
@@ -543,7 +540,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
         else
         {
             m_items.emplace_back( item );
-            auto conn = item->InitializeConnection( aSheet, this );
+            SCH_CONNECTION* conn = item->InitializeConnection( aSheet, this );
 
             // Set bus/net property here so that the propagation code uses it
             switch( item->Type() )
@@ -648,7 +645,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
 
             for( auto test_it = primary_it + 1; test_it != connection_vec.end(); test_it++ )
             {
-                auto test_item = *test_it;
+                SCH_ITEM* test_item = *test_it;
 
                 if( connected_item != test_item &&
                     connected_item->ConnectionPropagatesTo( test_item ) &&
@@ -678,8 +675,8 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
 
                 if( !bus_entry->m_connected_bus_item )
                 {
-                    auto screen = aSheet.LastScreen();
-                    auto bus = screen->GetBus( it.first );
+                    SCH_SCREEN* screen = aSheet.LastScreen();
+                    SCH_LINE*   bus = screen->GetBus( it.first );
 
                     if( bus )
                         bus_entry->m_connected_bus_item = bus;
@@ -721,8 +718,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     {
         for( const auto& it : item->m_connection_map )
         {
-            const auto sheet = it.first;
-            auto connection = it.second;
+            const SCH_SHEET_PATH& sheet = it.first;
+            SCH_CONNECTION*       connection = it.second;
 
             if( connection->SubgraphCode() == 0 )
             {
@@ -741,10 +738,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 auto get_items =
                         [&]( SCH_ITEM* aItem ) -> bool
                         {
-                            SCH_CONNECTION* conn = aItem->Connection( &sheet );
-
-                            if( !conn )
-                                conn = aItem->InitializeConnection( sheet, this );
+                            SCH_CONNECTION* conn = aItem->GetOrInitConnection( sheet, this );
 
                             return ( conn->SubgraphCode() == 0 );
                         };
@@ -907,7 +901,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             }
             case SCH_PIN_T:
             {
-                auto pin = static_cast<SCH_PIN*>( driver );
+                SCH_PIN* pin = static_cast<SCH_PIN*>( driver );
                 wxASSERT( pin->IsPowerConnection() );
                 m_global_label_cache[name].push_back( subgraph );
                 break;
@@ -936,10 +930,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             continue;
         }
 
-        SCH_CONNECTION* connection = pin->Connection( &sheet );
-
-        if( !connection )
-            connection = pin->InitializeConnection( sheet, this );
+        SCH_CONNECTION* connection = pin->GetOrInitConnection( sheet, this );
 
         // If this pin already has a subgraph, don't need to process
         if( connection->SubgraphCode() > 0 )
@@ -984,7 +975,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     // codes, merging subgraphs together that use label connections, etc.
 
     // Cache remaining valid subgraphs by sheet path
-    for( auto subgraph : m_driver_subgraphs )
+    for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
         m_sheet_to_subgraphs_map[ subgraph->m_sheet ].emplace_back( subgraph );
 
     std::unordered_set<CONNECTION_SUBGRAPH*> invalidated_subgraphs;
@@ -2059,8 +2050,7 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
         if( !subgraph->m_driver )
             continue;
 
-        auto sheet = subgraph->m_sheet;
-        auto connection = subgraph->m_driver->Connection( &sheet );
+        SCH_CONNECTION* connection = subgraph->m_driver->Connection( &subgraph->m_sheet );
 
         if( !connection->IsBus() )
             continue;

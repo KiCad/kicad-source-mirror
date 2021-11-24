@@ -787,6 +787,13 @@ void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 }
 
 
+void SCH_SCREEN::SetConnectivityDirty()
+{
+    for( SCH_ITEM* item : Items() )
+        item->SetConnectivityDirty( true );
+}
+
+
 void SCH_SCREEN::Print( const RENDER_SETTINGS* aSettings )
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:

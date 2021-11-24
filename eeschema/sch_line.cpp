@@ -30,10 +30,12 @@
 #include <sch_edit_frame.h>
 #include <settings/color_settings.h>
 #include <schematic.h>
+#include <connection_graph.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <trigo.h>
 #include <board_item.h>
+#include <advanced_config.h>
 
 SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     SCH_ITEM( nullptr, SCH_LINE_T )
@@ -55,6 +57,16 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
         m_startIsDangling = m_endIsDangling = true;
     else
         m_startIsDangling = m_endIsDangling = false;
+
+    if( layer == LAYER_WIRE )
+        m_lastResolvedWidth = Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
+    else if( layer == LAYER_BUS )
+        m_lastResolvedWidth = Mils2iu( DEFAULT_BUS_WIDTH_MILS );
+    else
+        m_lastResolvedWidth = Mils2iu( DEFAULT_LINE_WIDTH_MILS );
+
+    m_lastResolvedLineStyle = GetDefaultStyle();
+    m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
 
 
@@ -66,6 +78,10 @@ SCH_LINE::SCH_LINE( const SCH_LINE& aLine ) :
     m_stroke = aLine.m_stroke;
     m_startIsDangling = aLine.m_startIsDangling;
     m_endIsDangling = aLine.m_endIsDangling;
+
+    m_lastResolvedLineStyle = aLine.m_lastResolvedLineStyle;
+    m_lastResolvedWidth = aLine.m_lastResolvedWidth;
+    m_lastResolvedColor = aLine.m_lastResolvedColor;
 }
 
 
@@ -201,7 +217,9 @@ void SCH_LINE::SetLineColor( const double r, const double g, const double b, con
     COLOR4D newColor(r, g, b, a);
 
     if( newColor == COLOR4D::UNSPECIFIED )
+    {
         m_stroke.SetColor( COLOR4D::UNSPECIFIED );
+    }
     else
     {
         // Eeschema does not allow alpha channel in colors
@@ -214,14 +232,25 @@ void SCH_LINE::SetLineColor( const double r, const double g, const double b, con
 COLOR4D SCH_LINE::GetLineColor() const
 {
     if( m_stroke.GetColor() != COLOR4D::UNSPECIFIED )
-        return m_stroke.GetColor();
+    {
+        m_lastResolvedColor = m_stroke.GetColor();
+    }
+    else if( IsConnectable() && !IsConnectivityDirty() )
+    {
+        NETCLASSPTR netclass = NetClass();
 
-    NETCLASSPTR netclass = NetClass();
+        if( netclass )
+            m_lastResolvedColor = netclass->GetSchematicColor();
+    }
+    else
+    {
+        wxASSERT_MSG( !IsConnectable()
+                        || !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity
+                        || !Schematic() || !Schematic()->ConnectionGraph()->m_allowRealTime,
+                      "Connectivity shouldn't be dirty if realtime connectivity is on!" );
+    }
 
-    if( netclass )
-        return netclass->GetSchematicColor();
-
-    return m_stroke.GetColor();
+    return m_lastResolvedColor;
 }
 
 
@@ -261,14 +290,25 @@ PLOT_DASH_TYPE SCH_LINE::GetLineStyle() const
 PLOT_DASH_TYPE SCH_LINE::GetEffectiveLineStyle() const
 {
     if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
-        return m_stroke.GetPlotStyle();
+    {
+        m_lastResolvedLineStyle = m_stroke.GetPlotStyle();
+    }
+    else if( IsConnectable() && !IsConnectivityDirty() )
+    {
+        NETCLASSPTR netclass = NetClass();
 
-    NETCLASSPTR netclass = NetClass();
+        if( netclass )
+            m_lastResolvedLineStyle = static_cast<PLOT_DASH_TYPE>( netclass->GetLineStyle() );
+    }
+    else
+    {
+        wxASSERT_MSG( !IsConnectable()
+                        || !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity
+                        || !Schematic() || !Schematic()->ConnectionGraph()->m_allowRealTime,
+                      "Connectivity shouldn't be dirty if realtime connectivity is on!" );
+    }
 
-    if( netclass )
-        return (PLOT_DASH_TYPE) netclass->GetLineStyle();
-
-    return GetLineStyle();
+    return m_lastResolvedLineStyle;
 }
 
 
@@ -280,6 +320,7 @@ void SCH_LINE::SetLineWidth( const int aSize )
 
 int SCH_LINE::GetPenWidth() const
 {
+    SCHEMATIC*  schematic = Schematic();
     NETCLASSPTR netclass;
 
     switch ( m_layer )
@@ -288,38 +329,46 @@ int SCH_LINE::GetPenWidth() const
         if( m_stroke.GetWidth() > 0 )
             return m_stroke.GetWidth();
 
-        if( Schematic() )
-            return Schematic()->Settings().m_DefaultLineWidth;
+        if( schematic )
+            return schematic->Settings().m_DefaultLineWidth;
 
         return Mils2iu( DEFAULT_LINE_WIDTH_MILS );
 
     case LAYER_WIRE:
         if( m_stroke.GetWidth() > 0 )
-            return m_stroke.GetWidth();
+        {
+            m_lastResolvedWidth = m_stroke.GetWidth();
+        }
+        else if( !IsConnectivityDirty() )
+        {
+            netclass = NetClass();
 
-        netclass = NetClass();
+            if( !netclass && schematic  )
+                netclass = schematic->Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
 
-        if( !netclass && Schematic() )
-            netclass = Schematic()->Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
+            if( netclass )
+                m_lastResolvedWidth = netclass->GetWireWidth();
+        }
 
-        if( netclass )
-            return netclass->GetWireWidth();
-
-        return Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
+        return m_lastResolvedWidth;
 
     case LAYER_BUS:
         if( m_stroke.GetWidth() > 0 )
-            return m_stroke.GetWidth();
+        {
+            m_lastResolvedWidth = m_stroke.GetWidth();
+        }
+        else if( !IsConnectivityDirty() )
+        {
+            netclass = NetClass();
 
-        netclass = NetClass();
+            if( !netclass && schematic )
+                netclass = schematic->Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
 
-        if( !netclass && Schematic() )
-            netclass = Schematic()->Prj().GetProjectFile().NetSettings().m_NetClasses.GetDefault();
+            if( netclass )
+                m_lastResolvedWidth = netclass->GetBusWidth();
+        }
 
-        if( netclass )
-            return netclass->GetBusWidth();
-
-        return Mils2iu( DEFAULT_BUS_WIDTH_MILS );
+        return m_lastResolvedWidth;
     }
 }
 
@@ -882,7 +931,10 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     aList.emplace_back( _( "Line Style" ), msg );
 
-    SCH_CONNECTION* conn = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) ? Connection() : nullptr;
+    SCH_CONNECTION* conn = nullptr;
+
+    if( !IsConnectivityDirty() && dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )
+        conn = Connection();
 
     if( conn )
     {

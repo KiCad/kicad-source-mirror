@@ -29,9 +29,6 @@
 #include <sch_sheet_path.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
-#include <sch_symbol.h>
-#include <sch_sheet.h>
-#include <sch_pin.h>
 #include <schematic.h>
 #include <general.h>
 #include <netclass.h>
@@ -47,9 +44,9 @@
 SCH_ITEM::SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType ) :
     EDA_ITEM( aParent, aType )
 {
-    m_layer              = LAYER_WIRE; // It's only a default, in fact
+    m_layer              = LAYER_WIRE;   // It's only a default, in fact
     m_fieldsAutoplaced   = FIELDS_AUTOPLACED_NO;
-    m_connectivity_dirty = true;
+    m_connectivity_dirty = false;        // Item is unconnected until it is placed, so it's clean
 }
 
 
@@ -58,7 +55,7 @@ SCH_ITEM::SCH_ITEM( const SCH_ITEM& aItem ) :
 {
     m_layer              = aItem.m_layer;
     m_fieldsAutoplaced   = aItem.m_fieldsAutoplaced;
-    m_connectivity_dirty = true;
+    m_connectivity_dirty = false;        // Item is unconnected until it is placed, so it's clean
 }
 
 
@@ -66,7 +63,7 @@ SCH_ITEM& SCH_ITEM::operator=( const SCH_ITEM& aItem )
 {
     m_layer              = aItem.m_layer;
     m_fieldsAutoplaced   = aItem.m_fieldsAutoplaced;
-    m_connectivity_dirty = true;
+    m_connectivity_dirty = false;        // Item is unconnected until it is placed, so it's clean
 
     return *this;
 }
@@ -140,6 +137,12 @@ bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
 
 SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH* aSheet ) const
 {
+    if( !IsConnectable() )
+        return nullptr;
+
+    wxASSERT_MSG( !IsConnectivityDirty(),
+                  "Shouldn't be asking for connection if connectivity is dirty!" );
+
     if( !aSheet )
         aSheet = &Schematic()->CurrentSheet();
 
@@ -186,6 +189,8 @@ void SCH_ITEM::AddConnectionTo( const SCH_SHEET_PATH& aSheet, SCH_ITEM* aItem )
 SCH_CONNECTION* SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet,
                                                 CONNECTION_GRAPH* aGraph )
 {
+    SetConnectivityDirty( false );
+
     SCH_CONNECTION* connection = Connection( &aSheet );
 
     if( connection )
@@ -201,6 +206,20 @@ SCH_CONNECTION* SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet,
     connection->SetGraph( aGraph );
     connection->SetSheet( aSheet );
     return connection;
+}
+
+
+SCH_CONNECTION* SCH_ITEM::GetOrInitConnection( const SCH_SHEET_PATH& aSheet,
+                                               CONNECTION_GRAPH* aGraph )
+{
+    SetConnectivityDirty( false );
+
+    SCH_CONNECTION* connection = Connection( &aSheet );
+
+    if( connection )
+        return connection;
+    else
+        return InitializeConnection( aSheet, aGraph );
 }
 
 

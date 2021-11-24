@@ -123,6 +123,13 @@ protected:
     bool          m_isDanglingStart;
     bool          m_isDanglingEnd;
     STROKE_PARAMS m_stroke;
+
+    // If real-time connectivity gets disabled (due to being too slow on a particular
+    // design), we can no longer rely on getting the NetClass to find netclass-specific
+    // linestyles, linewidths and colors.
+    mutable PLOT_DASH_TYPE   m_lastResolvedLineStyle;
+    mutable int              m_lastResolvedWidth;
+    mutable COLOR4D          m_lastResolvedColor;
 };
 
 /**

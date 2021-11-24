@@ -267,6 +267,13 @@ private:
     wxPoint m_start;            ///< Line start point
     wxPoint m_end;              ///< Line end point
     STROKE_PARAMS m_stroke;     ///< Line stroke properties.
+
+    // If real-time connectivity gets disabled (due to being too slow on a particular
+    // design), we can no longer rely on getting the NetClass to find netclass-specific
+    // linestyles, linewidths and colors.
+    mutable PLOT_DASH_TYPE   m_lastResolvedLineStyle;
+    mutable int              m_lastResolvedWidth;
+    mutable COLOR4D          m_lastResolvedColor;
 };
 
 

@@ -403,12 +403,14 @@ public:
      */
     SCH_CONNECTION* InitializeConnection( const SCH_SHEET_PATH& aPath, CONNECTION_GRAPH* aGraph );
 
+    SCH_CONNECTION* GetOrInitConnection( const SCH_SHEET_PATH& aPath, CONNECTION_GRAPH* aGraph );
+
     /**
      * Return true if this item should propagate connection info to \a aItem.
      */
     virtual bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const { return true; }
 
-    bool IsConnectivityDirty() { return m_connectivity_dirty; }
+    bool IsConnectivityDirty() const { return m_connectivity_dirty; }
 
     void SetConnectivityDirty( bool aDirty = true ) { m_connectivity_dirty = aDirty; }
 

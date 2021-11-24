@@ -215,6 +215,9 @@ int SCH_EDITOR_CONTROL::RemapSymbols( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Print( const TOOL_EVENT& aEvent )
 {
+    if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
+        m_frame->RecalculateConnections( NO_CLEANUP );
+
     InvokeDialogPrintUsingPrinter( m_frame );
 
     wxFileName fn = m_frame->Prj().AbsolutePath( m_frame->Schematic().RootScreen()->GetFileName() );
@@ -228,6 +231,9 @@ int SCH_EDITOR_CONTROL::Print( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 {
+    if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
+        m_frame->RecalculateConnections( NO_CLEANUP );
+
     DIALOG_PLOT_SCHEMATIC dlg( m_frame );
 
     dlg.ShowModal();
@@ -2052,6 +2058,9 @@ int SCH_EDITOR_CONTROL::GenerateBOM( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::DrawSheetOnClipboard( const TOOL_EVENT& aEvent )
 {
+    if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
+        m_frame->RecalculateConnections( LOCAL_CLEANUP );
+
     m_frame->DrawCurrentSheetToClipboard();
     return 0;
 }
