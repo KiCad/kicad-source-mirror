@@ -125,6 +125,12 @@ private:
     wxPoint m_pos;              ///< Position of the junction.
     int m_diameter;             ///< Diameter of the junction.  Zero is user default.
     COLOR4D m_color;            ///< Color of the junction.  #COLOR4D::UNSPECIFIED is user default.
+
+    // If real-time connectivity gets disabled (due to being too slow on a particular
+    // design), we can no longer rely on getting the NetClass to find netclass-specific
+    // linestyles, linewidths and colors.
+    mutable int              m_lastResolvedDiameter;
+    mutable COLOR4D          m_lastResolvedColor;
 };
 
 

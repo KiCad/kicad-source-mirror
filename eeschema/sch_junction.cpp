@@ -38,6 +38,9 @@
 #include <sch_connection.h>
 #include <schematic.h>
 #include <settings/color_settings.h>
+#include <advanced_config.h>
+#include <connection_graph.h>
+
 
 SCH_JUNCTION::SCH_JUNCTION( const wxPoint& aPosition, int aDiameter, SCH_LAYER_ID aLayer ) :
     SCH_ITEM( nullptr, SCH_JUNCTION_T )
@@ -46,6 +49,9 @@ SCH_JUNCTION::SCH_JUNCTION( const wxPoint& aPosition, int aDiameter, SCH_LAYER_I
     m_color = COLOR4D::UNSPECIFIED;
     m_diameter = aDiameter;
     m_layer = aLayer;
+
+    m_lastResolvedDiameter = KiROUND( Mils2iu( DEFAULT_WIRE_WIDTH_MILS ) * 1.7 );
+    m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
 
 
@@ -77,24 +83,25 @@ void SCH_JUNCTION::ViewGetLayers( int aLayers[], int& aCount ) const
 
 SHAPE_CIRCLE SCH_JUNCTION::getEffectiveShape() const
 {
-    int diameter;
-
     if( m_diameter != 0 )
-        diameter = m_diameter;
+        m_lastResolvedDiameter = m_diameter;
     else if( Schematic() )
-        diameter = Schematic()->Settings().m_JunctionSize;
+        m_lastResolvedDiameter = Schematic()->Settings().m_JunctionSize;
     else
-        diameter = Mils2iu( DEFAULT_JUNCTION_DIAM );
+        m_lastResolvedDiameter = Mils2iu( DEFAULT_JUNCTION_DIAM );
 
-    if( diameter != 1 )  // Diameter 1 means users doesn't want to draw junction dots
+    if( m_lastResolvedDiameter != 1 )  // Diameter 1 means users doesn't want to draw junction dots
     {
-        NETCLASSPTR netclass = NetClass();
+        if( !IsConnectivityDirty() )
+        {
+            NETCLASSPTR netclass = NetClass();
 
-        if( netclass )
-            diameter = std::max( diameter, KiROUND( netclass->GetWireWidth() * 1.7 ) );
+            if( netclass )
+                m_lastResolvedDiameter = std::max( m_lastResolvedDiameter, KiROUND( netclass->GetWireWidth() * 1.7 ) );
+        }
     }
 
-    return SHAPE_CIRCLE( m_pos, std::max( diameter / 2, 1 ) );
+    return SHAPE_CIRCLE( m_pos, std::max( m_lastResolvedDiameter / 2, 1 ) );
 }
 
 
@@ -170,14 +177,25 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os ) const
 COLOR4D SCH_JUNCTION::GetJunctionColor() const
 {
     if( m_color != COLOR4D::UNSPECIFIED )
-        return m_color;
+    {
+        m_lastResolvedColor = m_color;
+    }
+    else if( !IsConnectivityDirty() )
+    {
+        NETCLASSPTR netclass = NetClass();
 
-    NETCLASSPTR netclass = NetClass();
+        if( netclass )
+            m_lastResolvedColor = netclass->GetSchematicColor();
+    }
+    else
+    {
+        wxASSERT_MSG( !IsConnectable()
+                        || !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity
+                        || !Schematic() || !Schematic()->ConnectionGraph()->m_allowRealTime,
+                      "Connectivity shouldn't be dirty if realtime connectivity is on!" );
+    }
 
-    if( netclass )
-        return netclass->GetSchematicColor();
-
-    return COLOR4D::UNSPECIFIED;
+    return m_lastResolvedColor;
 }
 
 
