@@ -276,15 +276,6 @@ public:
     virtual void SetCrossHairCursorPosition( const VECTOR2D& aPosition, bool aWarpView = true ) = 0;
 
     /**
-     * Return true if the current cursor position is forced to a specific location, ignoring
-     * the mouse cursor position.
-     */
-    bool ForcedCursorPosition() const
-    {
-        return m_settings.m_forceCursorPosition;
-    }
-
-    /**
      * Enable or disables display of cursor.
      *
      * @param aEnabled decides if the cursor should be shown.
@@ -306,16 +297,6 @@ public:
     virtual void CaptureCursor( bool aEnabled )
     {
         m_settings.m_cursorCaptured = aEnabled;
-    }
-
-    /**
-     * Return true if the cursor position is set by one of the tools.
-     *
-     * A forced cursor position means it does not react to mouse movement.
-     */
-    inline bool IsCursorPositionForced() const
-    {
-        return m_settings.m_forceCursorPosition;
     }
 
     /**
