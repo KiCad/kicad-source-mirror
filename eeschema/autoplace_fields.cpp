@@ -275,21 +275,30 @@ protected:
     {
         wxCHECK_RET( m_screen, "getPossibleCollisions() with null m_screen" );
 
-        for( SCH_ITEM* item : m_screen->Items().Overlapping( m_symbol->GetBodyAndPinsBoundingBox() ) )
+        EDA_RECT symbolBox = m_symbol->GetBodyAndPinsBoundingBox();
+        std::vector<SIDE_AND_NPINS> sides = getPreferredSides();
+
+        for( SIDE_AND_NPINS& side : sides )
         {
-            if( SCH_SYMBOL* candidate = dynamic_cast<SCH_SYMBOL*>( item ) )
+            EDA_RECT box( fieldBoxPlacement( side ), m_fbox_size );
+            box.Merge( symbolBox );
+
+            for( SCH_ITEM* item : m_screen->Items().Overlapping( box ) )
             {
-                if( candidate == m_symbol )
-                    continue;
+                if( SCH_SYMBOL* candidate = dynamic_cast<SCH_SYMBOL*>( item ) )
+                {
+                    if( candidate == m_symbol )
+                        continue;
 
-                std::vector<SCH_FIELD*> fields;
-                candidate->GetFields( fields, /* aVisibleOnly */ true );
+                    std::vector<SCH_FIELD*> fields;
+                    candidate->GetFields( fields, /* aVisibleOnly */ true );
 
-                for( SCH_FIELD* field : fields )
-                    aItems.push_back( field );
+                    for( SCH_FIELD* field : fields )
+                        aItems.push_back( field );
+                }
+
+                aItems.push_back( item );
             }
-
-            aItems.push_back( item );
         }
     }
 
