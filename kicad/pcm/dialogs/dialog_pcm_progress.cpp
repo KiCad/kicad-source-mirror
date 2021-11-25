@@ -110,9 +110,11 @@ void DIALOG_PCM_PROGRESS::SetFinished()
 bool DIALOG_PCM_PROGRESS::updateUI()
 {
     bool   finished = m_finished.load();
-    int    phase = m_phase.load();
-    int    phases = m_numPhases.load();
-    double current = m_currentProgress.load() / (double) m_currentProgressTotal.load();
+    int    phase    = m_phase.load();
+    int    phases   = m_numPhases.load();
+    long   cp       = m_currentProgress.load();
+    long   total    = m_currentProgressTotal.load();
+    double current  = ( total > 0 ) ? ( double( cp ) / double( total ) ) : 0;
 
     if( phases > 0 )
         current = ( phase + current ) / phases;
