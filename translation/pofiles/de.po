@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-22 17:30+0000\n"
+"PO-Revision-Date: 2021-11-26 21:26+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -5576,7 +5576,7 @@ msgstr "Unbekannter Parameter '%s' in '%s'"
 #: common/plugins/cadstar/cadstar_archive_parser.h:52
 #, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr "'%s' in '%s' kann nicht analysiert werden"
+msgstr "Kann '%s' in '%s' nicht parsen"
 
 #: common/plugins/eagle/eagle_parser.cpp:120
 #, c-format
@@ -5590,9 +5590,7 @@ msgstr "Ungültiger Bogen mit Radius %f und Winkel %f"
 
 #: common/project.cpp:310 common/project.cpp:315 pcbnew/pcb_base_frame.cpp:155
 msgid "Error loading project footprint library table."
-msgstr ""
-"Bei dem Versuch die Tabelle mit den Bibliotheken der Footprints des "
-"Projektes zu laden ist ein Fehler aufgetreten."
+msgstr "Fehler beim Laden der Footprint-Bibliothekstabelle des Projekts."
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:267
 msgid "Could not open archive file."
@@ -5727,7 +5725,7 @@ msgstr "Neue Bibliothek..."
 
 #: common/tool/actions.cpp:49
 msgid "Create a new library folder"
-msgstr "Erstellt einen neuen leeren Ordner für Bibliothek(en)"
+msgstr "Erstellt einen neuen leeren Ordner für Bibliotheken"
 
 #: common/tool/actions.cpp:55
 msgid "Add Library..."
@@ -5743,7 +5741,7 @@ msgstr "Öffnen..."
 
 #: common/tool/actions.cpp:61
 msgid "Open existing document"
-msgstr "Ein vorhandenes Dokument öffnen"
+msgstr "Öffnet ein vorhandenes Dokument"
 
 #: common/tool/actions.cpp:67
 msgid "Save changes"
@@ -5834,19 +5832,19 @@ msgstr "Letzte Bearbeitung wiederholen"
 #: common/tool/actions.cpp:153
 msgid "Cut selected item(s) to clipboard"
 msgstr ""
-"Ausschneiden des ausgewählten Element(s) und in die Zwischenablage kopieren"
+"Schneidet die ausgewählten Elemente aus und kopiert sie in die Zwischenablage"
 
 #: common/tool/actions.cpp:159
 msgid "Copy selected item(s) to clipboard"
-msgstr "Ausgewählte(s) Element(e) und in die Zwischenablage kopieren"
+msgstr "Kopiert die ausgewählten Elemente in die Zwischenablage"
 
 #: common/tool/actions.cpp:165
 msgid "Paste item(s) from clipboard"
-msgstr "Element(e) aus Zwischenablage einfügen"
+msgstr "Fügt Elemente aus der Zwischenablage ein"
 
 #: common/tool/actions.cpp:171
 msgid "Select all items on screen"
-msgstr "Alle Elemente auf dem Bildschirm auswählen"
+msgstr "Wählt alle auf dem Bildschirm aus"
 
 #: common/tool/actions.cpp:175
 msgid "Paste Special..."
@@ -5854,7 +5852,7 @@ msgstr "Spezielles Einfügen..."
 
 #: common/tool/actions.cpp:175
 msgid "Paste item(s) from clipboard with options"
-msgstr "Einfügen von Element(en) aus Zwischenablage mit Optionen"
+msgstr "Fügt Elemente aus Zwischenablage mit Auswahl von Optionen ein"
 
 #: common/tool/actions.cpp:180
 msgid "Duplicate"
@@ -5862,11 +5860,11 @@ msgstr "Duplizieren"
 
 #: common/tool/actions.cpp:180
 msgid "Duplicates the selected item(s)"
-msgstr "Gewählte(s) Element(e) duplizieren"
+msgstr "Dupliziert gewählte Elemente"
 
 #: common/tool/actions.cpp:191
 msgid "Deletes selected item(s)"
-msgstr "Gewählte(s) Element(e) abwählen"
+msgstr "Entfernt gewählte Elemente"
 
 #: common/tool/actions.cpp:196
 msgid "Interactive Delete Tool"
@@ -5874,7 +5872,7 @@ msgstr "Interaktives Löschwerkzeug"
 
 #: common/tool/actions.cpp:196
 msgid "Delete clicked items"
-msgstr "Löschen des selektierten Elements"
+msgstr "Entfernt Elemente, die angeklickt werden"
 
 #: common/tool/actions.cpp:203
 msgid "Change Edit Method"
@@ -5960,7 +5958,7 @@ msgstr "Ansicht erneuern"
 
 #: common/tool/actions.cpp:281
 msgid "Zoom to Fit"
-msgstr "Darstellung an den Bildschirm anpassen"
+msgstr "In Fenster einpassen"
 
 #: common/tool/actions.cpp:286
 msgid "Zoom to Objects"
@@ -5990,35 +5988,35 @@ msgstr "Auswahl vergrößern"
 
 #: common/tool/actions.cpp:345
 msgid "Cursor Up"
-msgstr "Cursor Hoch"
+msgstr "Cursor hoch"
 
 #: common/tool/actions.cpp:351
 msgid "Cursor Down"
-msgstr "Cursor Runter"
+msgstr "Cursor runter"
 
 #: common/tool/actions.cpp:357
 msgid "Cursor Left"
-msgstr "Cursor Links"
+msgstr "Cursor links"
 
 #: common/tool/actions.cpp:363
 msgid "Cursor Right"
-msgstr "Cursor Rechts"
+msgstr "Cursor rechts"
 
 #: common/tool/actions.cpp:370
 msgid "Cursor Up Fast"
-msgstr "Cursor schnell Hoch"
+msgstr "Cursor schnell hoch"
 
 #: common/tool/actions.cpp:376
 msgid "Cursor Down Fast"
-msgstr "Cursor schnell Runter"
+msgstr "Cursor schnell runter"
 
 #: common/tool/actions.cpp:382
 msgid "Cursor Left Fast"
-msgstr "Cursor schnell Links"
+msgstr "Cursor schnell links"
 
 #: common/tool/actions.cpp:388
 msgid "Cursor Right Fast"
-msgstr "Cursor schnell Rechts"
+msgstr "Cursor schnell rechts"
 
 #: common/tool/actions.cpp:394
 msgid "Click"
@@ -6026,7 +6024,7 @@ msgstr "Klick"
 
 #: common/tool/actions.cpp:394
 msgid "Performs left mouse button click"
-msgstr "Führt linken Maustasten Klick aus"
+msgstr "Führt Klick der linken Maustaste aus"
 
 #: common/tool/actions.cpp:400
 msgid "Double-click"
@@ -6034,7 +6032,7 @@ msgstr "Doppelklicken"
 
 #: common/tool/actions.cpp:400
 msgid "Performs left mouse button double-click"
-msgstr "Führt linken Maustasten Doppelklick aus"
+msgstr "Führt Doppelklick der linken Maustaste aus"
 
 #: common/tool/actions.cpp:408
 msgid "Pin Library"
@@ -6078,11 +6076,11 @@ msgstr "Raster auf Schnellauswahl 2 umschalten"
 
 #: common/tool/actions.cpp:454
 msgid "Switch to Next Grid"
-msgstr "Springe zur nächsten Schnellauswahl"
+msgstr "Springe zur nächsten Rasterweite"
 
 #: common/tool/actions.cpp:458
 msgid "Switch to Previous Grid"
-msgstr "Springe zur vorherigen Schnellauswahl"
+msgstr "Springe zur vorherigen Rasterweite"
 
 #: common/tool/actions.cpp:463
 msgid "Set the grid origin point"
@@ -6102,11 +6100,11 @@ msgstr "Raster-Eigenschaften..."
 
 #: common/tool/actions.cpp:481
 msgid "Set grid dimensions"
-msgstr "Rasterweite setzen"
+msgstr "Raster einstellen"
 
 #: common/tool/actions.cpp:486
 msgid "Use inches"
-msgstr "Zoll benutzen"
+msgstr "Zoll verwenden"
 
 #: common/tool/actions.cpp:491
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -6118,7 +6116,7 @@ msgstr "Mil"
 
 #: common/tool/actions.cpp:491
 msgid "Use mils"
-msgstr "Mils benutzen"
+msgstr "Mils verwenden"
 
 #: common/tool/actions.cpp:496
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -6133,11 +6131,11 @@ msgstr "Millimeter"
 
 #: common/tool/actions.cpp:496
 msgid "Use millimeters"
-msgstr "Millimeter benutzen"
+msgstr "Millimeter verwenden"
 
 #: common/tool/actions.cpp:505
 msgid "Switch units"
-msgstr "Umschalten mil/mm"
+msgstr "Einheiten umschalten"
 
 #: common/tool/actions.cpp:505
 msgid "Switch between imperial and metric units"
@@ -6149,11 +6147,11 @@ msgstr "Polarkoordinaten"
 
 #: common/tool/actions.cpp:510
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr "Umschalten zwischen polaren und kartesischen Koordinatensystemen"
+msgstr "Zwischen polaren und kartesischen Koordinatensystemen umschalten"
 
 #: common/tool/actions.cpp:516
 msgid "Reset Local Coordinates"
-msgstr "Rücksetzen der lokalen Koordinaten"
+msgstr "Lokale Koordinaten zurücksetzen"
 
 #: common/tool/actions.cpp:522
 msgid "Always Show Cursor"
@@ -6181,7 +6179,7 @@ msgstr "Anzeige inaktiver Lagen zwischen normal und abgeblendet umschalten"
 
 #: common/tool/actions.cpp:540
 msgid "Inactive Layer View Mode (3-state)"
-msgstr "Inaktive Lagen ab-/ausblenden (3 Modi)"
+msgstr "Inaktive Lagen ein-/ab-/ausblenden (3 Modi)"
 
 #: common/tool/actions.cpp:541
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
@@ -6370,7 +6368,7 @@ msgstr ""
 
 #: common/tool/common_control.cpp:272
 msgid "Get involved with KiCad"
-msgstr "Beteilige Dich an KiCad"
+msgstr "An KiCad beteiligen"
 
 #: common/tool/common_control.cpp:284
 #, c-format
@@ -6557,7 +6555,7 @@ msgstr "Plot-Ansicht auf diese Position zentrieren"
 
 #: common/widgets/mathplot.cpp:1666 eeschema/sim/sim_plot_frame_base.cpp:95
 msgid "Fit on Screen"
-msgstr "An Bildschirm anpassen"
+msgstr "Auf Bildschirm einpassen"
 
 #: common/widgets/mathplot.cpp:1666
 msgid "Set plot view to show all items"
@@ -6623,14 +6621,14 @@ msgstr "Aktuelle Taste:"
 
 #: common/widgets/widget_hotkey_list.cpp:145
 msgid "Set Hotkey"
-msgstr "Tastaturbefehl zuweisen"
+msgstr "Tastenkombination zuweisen"
 
 #: common/widgets/widget_hotkey_list.cpp:341
 #, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
 msgstr ""
-"Der Tastaturbefehl \"%s\" ist in KiCad reserviert und kann nicht zugewiesen "
-"werden."
+"Die Tastenkombination \"%s\" ist in KiCad reserviert und kann nicht "
+"zugewiesen werden."
 
 #: common/widgets/widget_hotkey_list.cpp:392
 msgid "Edit..."
@@ -6638,11 +6636,11 @@ msgstr "Bearbeiten..."
 
 #: common/widgets/widget_hotkey_list.cpp:393
 msgid "Undo Changes"
-msgstr "Keine Änderung"
+msgstr "Änderungen rückgängig machen"
 
 #: common/widgets/widget_hotkey_list.cpp:394
 msgid "Clear Assigned Hotkey"
-msgstr "Löschen zugeordneter Tastaturbefehle"
+msgstr "Zugewiesene Tastenkombination löschen"
 
 #: common/widgets/widget_hotkey_list.cpp:395
 msgid "Restore Default"
@@ -6934,7 +6932,7 @@ msgstr "Fehler beim Einlesen der Äquivalenzdatei"
 #: cvpcb/auto_associate.cpp:185
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "%lu Footprint/Symbol Äquivalenz gefunden."
+msgstr "%lu Footprint/Symbol-Äquivalenzen gefunden."
 
 #: cvpcb/auto_associate.cpp:261
 #, c-format
@@ -7045,7 +7043,7 @@ msgstr "Gefiltert nach %s"
 #: cvpcb/cvpcb_mainframe.cpp:764
 #, c-format
 msgid "Description: %s;  Keywords: %s"
-msgstr "Beschreibung:%s;  Schlüsselwörter: %s"
+msgstr "Beschreibung: %s;  Schlüsselwörter: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:796
 #, c-format
