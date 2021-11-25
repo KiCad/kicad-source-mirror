@@ -988,7 +988,7 @@ int SHAPE_LINE_CHAIN::NextShape( int aPointIndex, bool aForwards ) const
 
     if( aPointIndex == lastIndex )
     {
-        if( !m_closed )
+        if( !m_closed && arcIndex( aPointIndex ) == currentArcIdx )
             return -1;
         else
             return lastIndex; // Segment between last point and the start

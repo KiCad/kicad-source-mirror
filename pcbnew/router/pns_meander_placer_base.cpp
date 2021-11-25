@@ -95,11 +95,11 @@ void MEANDER_PLACER_BASE::cutTunedLine( const SHAPE_LINE_CHAIN& aOrigin, const V
         if( idx >= 0 )
         {
             const SEG& s = aOrigin.CSegment( idx );
-            cp += (s.B - s.A).Resize(2);
+            cp += ( s.B - s.A ).Resize( 2 );
         }
         else
         {
-            cp += VECTOR2I (2, 5); // some arbitrary value that is not 45 degrees oriented
+            cp += VECTOR2I( 2, 5 ); // some arbitrary value that is not 45 degrees oriented
         }
     }
 

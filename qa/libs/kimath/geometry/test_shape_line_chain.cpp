@@ -393,6 +393,15 @@ BOOST_AUTO_TEST_CASE( Slice )
         BOOST_CHECK_EQUAL( sliceResult.GetPoint( 8 ), targetSegment.B );
         BOOST_CHECK_EQUAL( sliceResult.GetPoint( 9 ), secondArc.GetP0() );
     }
+
+    BOOST_TEST_CONTEXT( "Case 5: Chain ends in arc and point" )
+    {
+        SHAPE_LINE_CHAIN chainCopy = chain;
+        chainCopy.Append( VECTOR2I( 400000, 400000 ) );
+
+        SHAPE_LINE_CHAIN sliceResult = chainCopy.Slice( 11, -1 );
+        BOOST_CHECK_EQUAL( sliceResult.GetPoint( -1 ), VECTOR2I( 400000, 400000 ) );
+    }
 }
 
 
