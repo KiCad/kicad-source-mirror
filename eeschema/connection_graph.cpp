@@ -580,7 +580,10 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
 
     for( const auto& it : connection_map )
     {
-        auto connection_vec = it.second;
+        const std::vector<SCH_ITEM*>& connection_vec = it.second;
+
+        // Pre-scan to see if we have a bus at this location
+        SCH_LINE* busLine = aSheet.LastScreen()->GetBus( it.first );
 
         for( auto primary_it = connection_vec.begin(); primary_it != connection_vec.end(); primary_it++ )
         {
@@ -600,13 +603,10 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                 // a segment at some point other than at one of the endpoints.
                 if( connection_vec.size() == 1 )
                 {
-                    SCH_SCREEN* screen = aSheet.LastScreen();
-                    SCH_LINE*   bus = screen->GetBus( it.first );
-
-                    if( bus )
+                    if( busLine )
                     {
                         auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
-                        bus_entry->m_connected_bus_item = bus;
+                        bus_entry->m_connected_bus_item = busLine;
                     }
                 }
             }
@@ -616,20 +616,17 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
             {
                 if( connection_vec.size() < 2 )
                 {
-                    SCH_SCREEN* screen = aSheet.LastScreen();
-                    SCH_LINE*   bus = screen->GetBus( it.first );
-
-                    if( bus )
+                    if( busLine )
                     {
                         auto bus_entry = static_cast<SCH_BUS_BUS_ENTRY*>( connected_item );
 
                         if( it.first == bus_entry->GetPosition() )
-                            bus_entry->m_connected_bus_items[0] = bus;
+                            bus_entry->m_connected_bus_items[0] = busLine;
                         else
-                            bus_entry->m_connected_bus_items[1] = bus;
+                            bus_entry->m_connected_bus_items[1] = busLine;
 
-                        bus_entry->ConnectedItems( aSheet ).insert( bus );
-                        bus->ConnectedItems( aSheet ).insert( bus_entry );
+                        bus_entry->ConnectedItems( aSheet ).insert( busLine );
+                        busLine->ConnectedItems( aSheet ).insert( bus_entry );
                     }
                 }
             }
@@ -637,32 +634,44 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
             // Change junctions to be on bus junction layer if they are touching a bus
             else if( connected_item->Type() == SCH_JUNCTION_T )
             {
-                SCH_SCREEN* screen = aSheet.LastScreen();
-                SCH_LINE*   bus    = screen->GetBus( it.first );
-
-                connected_item->SetLayer( bus ? LAYER_BUS_JUNCTION : LAYER_JUNCTION );
+                connected_item->SetLayer( busLine ? LAYER_BUS_JUNCTION : LAYER_JUNCTION );
             }
 
             for( auto test_it = primary_it + 1; test_it != connection_vec.end(); test_it++ )
             {
-                SCH_ITEM* test_item = *test_it;
+                bool      bus_connection_ok = true;
+                SCH_ITEM* test_item         = *test_it;
 
-                if( connected_item != test_item &&
-                    connected_item->ConnectionPropagatesTo( test_item ) &&
-                    test_item->ConnectionPropagatesTo( connected_item ) )
-                {
-                    connected_item->ConnectedItems( aSheet ).insert( test_item );
-                    test_item->ConnectedItems( aSheet ).insert( connected_item );
-                }
+                wxASSERT( test_item != connected_item );
 
                 // Set up the link between the bus entry net and the bus
                 if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
                 {
-                    if( test_item->Connection( &aSheet )->IsBus() )
+                    if( test_item->GetLayer() == LAYER_BUS )
                     {
                         auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
                         bus_entry->m_connected_bus_item = test_item;
                     }
+                }
+
+                // Bus entries only connect to bus lines on the end that is touching a bus line.
+                // If the user has overlapped another net line with the endpoint of the bus entry
+                // where the entry connects to a bus, we don't want to short-circuit it.
+                if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
+                {
+                    bus_connection_ok = !busLine || test_item->GetLayer() == LAYER_BUS;
+                }
+                else if( test_item->Type() == SCH_BUS_WIRE_ENTRY_T )
+                {
+                    bus_connection_ok = !busLine || connected_item->GetLayer() == LAYER_BUS;
+                }
+
+                if( connected_item->ConnectionPropagatesTo( test_item ) &&
+                    test_item->ConnectionPropagatesTo( connected_item ) &&
+                    bus_connection_ok )
+                {
+                    connected_item->ConnectedItems( aSheet ).insert( test_item );
+                    test_item->ConnectedItems( aSheet ).insert( connected_item );
                 }
             }
 

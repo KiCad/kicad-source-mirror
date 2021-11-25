@@ -747,6 +747,19 @@ std::vector<wxPoint> SCH_LINE::GetConnectionPoints() const
 }
 
 
+bool SCH_LINE::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
+{
+    switch( aItem->Type() )
+    {
+    case SCH_LINE_T:
+        return IsBus() == static_cast<const SCH_LINE*>( aItem )->IsBus();
+
+    default:
+        return true;
+    }
+}
+
+
 void SCH_LINE::GetSelectedPoints( std::vector< wxPoint >& aPoints ) const
 {
     if( m_flags & STARTPOINT )

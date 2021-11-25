@@ -296,4 +296,9 @@ BOOST_AUTO_TEST_CASE( TopLevelHierPins )
 }
 
 
+BOOST_AUTO_TEST_CASE( BusEntries )
+{
+    doNetlistTest( "bus_entries" );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -204,6 +204,8 @@ public:
 
     std::vector<wxPoint> GetConnectionPoints() const override;
 
+    bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const override;
+
     void GetSelectedPoints( std::vector< wxPoint >& aPoints ) const;
 
     bool CanConnect( const SCH_ITEM* aItem ) const override;
