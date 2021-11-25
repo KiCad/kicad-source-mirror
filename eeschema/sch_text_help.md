@@ -117,7 +117,7 @@
         <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>
     </tr>
     <tr>
-        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>
+        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>
         <td></td>
         <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>
     </tr>
