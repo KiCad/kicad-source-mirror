@@ -631,6 +631,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
                             && pt_tool && !pt_tool->HasPoint()
+                            && !collector[0]->IsConnectivityDirty()
                             && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
                     {
                         SCH_CONNECTION* connection = collector[0]->Connection();
