@@ -2,7 +2,7 @@
 # Martin Kratoška <martin@ok1rr.com>, 2008, 2020.
 # Milan Horák <stranger@tiscali.cz>, 2008.
 # Chronos <robie@centrum.cz>, 2011.
-# Roman Ondráček <ondracek.roman@centrum.cz>, 2017.
+# Roman Ondráček <ondracek.roman@centrum.cz>, 2017, 2021.
 # Michal Jahelka <michal.jahelka@pavelek.cz>, 2019
 # translation of kicad.po to
 # Radovan Blažek <blazra@gmail.com>, 2020.
@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-21 21:16+0000\n"
-"Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
+"PO-Revision-Date: 2021-11-26 21:26+0000\n"
+"Last-Translator: Roman Ondráček <ondracek.roman@centrum.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -1512,9 +1512,8 @@ msgid "OK"
 msgstr "OK"
 
 #: common/confirm.cpp:164 common/confirm.cpp:169
-#, fuzzy
 msgid "Open Anyway"
-msgstr "Uložit každopádně"
+msgstr "Přesto otevřít"
 
 #: common/confirm.cpp:180 common/confirm.cpp:217
 msgid "Save Changes?"
@@ -10213,9 +10212,9 @@ msgid "Text Variables"
 msgstr "Textové proměnné"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:90
-#, fuzzy
 msgid "Project is missing or read-only. Settings will not be editable."
-msgstr "Projekt chybí nebo je jen pro čtení. Změny nebudou uloženy."
+msgstr ""
+"Projekt chybí nebo je pouze pro čtení. Nastavení nebude možné upravovat."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:156
 #, c-format
@@ -11808,13 +11807,13 @@ msgstr "Příkazy myši levým tlačítkem myši"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:86
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl."
 msgstr ""
-"Akce levého kliknutí (a tažení) závisí na 3 modifikačních klávesách:\n"
-"Alt, Shift a Ctrl."
+"Kliknutí (a tažení) levého tlačítka myši závisí na 2 modifikačních klávesách:"
+"\n"
+"Shift a Ctrl."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:98
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
