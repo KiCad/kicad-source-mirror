@@ -298,9 +298,10 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
     if( aScreen == nullptr )
         aScreen = GetScreen();
 
-    SCH_LINE* newSegment = new SCH_LINE( *aSegment );
+    SCH_LINE* newSegment = static_cast<SCH_LINE*>( aSegment->Duplicate() );
 
     newSegment->SetStartPoint( aPoint );
+    newSegment->SetConnectivityDirty( true );
     AddToScreen( newSegment, aScreen );
 
     SaveCopyInUndoList( aScreen, newSegment, UNDO_REDO::NEWITEM, true );

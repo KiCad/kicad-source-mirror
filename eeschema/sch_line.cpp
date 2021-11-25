@@ -118,7 +118,10 @@ PLOT_DASH_TYPE SCH_LINE::GetLineStyleByName( const wxString& aStyleName )
 
     //find the name by value
     auto resultIt = std::find_if( lineStyleNames.begin(), lineStyleNames.end(),
-            [aStyleName]( const auto& it ) { return it.second == aStyleName; } );
+                                  [aStyleName]( const auto& it )
+                                  {
+                                      return it.second == aStyleName;
+                                  } );
 
     if( resultIt != lineStyleNames.end() )
         id = resultIt->first;
@@ -518,13 +521,14 @@ bool SCH_LINE::IsParallel( const SCH_LINE* aLine ) const
 
 SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCheckJunctions )
 {
-    auto less = []( const wxPoint& lhs, const wxPoint& rhs ) -> bool
-    {
-        if( lhs.x == rhs.x )
-            return lhs.y < rhs.y;
+    auto less =
+            []( const wxPoint& lhs, const wxPoint& rhs ) -> bool
+            {
+                if( lhs.x == rhs.x )
+                    return lhs.y < rhs.y;
 
-        return lhs.x < rhs.x;
-    };
+                return lhs.x < rhs.x;
+            };
 
     wxCHECK_MSG( aLine != nullptr && aLine->Type() == SCH_LINE_T, nullptr,
                  wxT( "Cannot test line segment for overlap." ) );
@@ -532,11 +536,11 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
     if( this == aLine || GetLayer() != aLine->GetLayer() )
         return nullptr;
 
-    auto leftmost_start = aLine->m_start;
-    auto leftmost_end = aLine->m_end;
+    wxPoint leftmost_start = aLine->m_start;
+    wxPoint leftmost_end = aLine->m_end;
 
-    auto rightmost_start = m_start;
-    auto rightmost_end = m_end;
+    wxPoint rightmost_start = m_start;
+    wxPoint rightmost_end = m_end;
 
     // We place the start to the left and below the end of both lines
     if( leftmost_start != std::min( { leftmost_start, leftmost_end }, less ) )
@@ -572,9 +576,10 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
     // Search for a common end:
     if( ( leftmost_start == other_start ) && ( leftmost_end == other_end ) )  // Trivial case
     {
-        auto ret = new SCH_LINE( *aLine );
+        SCH_LINE* ret = new SCH_LINE( *aLine );
         ret->SetStartPoint( leftmost_start );
         ret->SetEndPoint( leftmost_end );
+        ret->SetConnectivityDirty( true );
 
         if( IsSelected() || aLine->IsSelected() )
             ret->SetSelected();
@@ -623,9 +628,10 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
     // Make a new segment that merges the 2 segments
     leftmost_end = rightmost_end;
 
-    auto ret = new SCH_LINE( *aLine );
+    SCH_LINE* ret = new SCH_LINE( *aLine );
     ret->SetStartPoint( leftmost_start );
     ret->SetEndPoint( leftmost_end );
+    ret->SetConnectivityDirty( true );
 
     if( IsSelected() || aLine->IsSelected() )
         ret->SetSelected();
@@ -804,7 +810,7 @@ bool SCH_LINE::operator <( const SCH_ITEM& aItem ) const
     if( Type() != aItem.Type() )
         return Type() < aItem.Type();
 
-    auto line = static_cast<const SCH_LINE*>( &aItem );
+    const SCH_LINE* line = static_cast<const SCH_LINE*>( &aItem );
 
     if( GetLayer() != line->GetLayer() )
         return GetLayer() < line->GetLayer();

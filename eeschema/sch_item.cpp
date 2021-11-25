@@ -55,7 +55,7 @@ SCH_ITEM::SCH_ITEM( const SCH_ITEM& aItem ) :
 {
     m_layer              = aItem.m_layer;
     m_fieldsAutoplaced   = aItem.m_fieldsAutoplaced;
-    m_connectivity_dirty = false;        // Item is unconnected until it is placed, so it's clean
+    m_connectivity_dirty = aItem.m_connectivity_dirty;
 }
 
 
@@ -63,7 +63,7 @@ SCH_ITEM& SCH_ITEM::operator=( const SCH_ITEM& aItem )
 {
     m_layer              = aItem.m_layer;
     m_fieldsAutoplaced   = aItem.m_fieldsAutoplaced;
-    m_connectivity_dirty = false;        // Item is unconnected until it is placed, so it's clean
+    m_connectivity_dirty = aItem.m_connectivity_dirty;
 
     return *this;
 }
