@@ -309,11 +309,11 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     UpdateTitle();
 
+    HardRedraw();   // Ensure all items are redrawn (especially the drawing-sheet items)
+
     SCH_EDITOR_CONTROL* editTool = m_toolManager->GetTool<SCH_EDITOR_CONTROL>();
     TOOL_EVENT dummy;
     editTool->UpdateNetHighlighting( dummy );
-
-    HardRedraw();   // Ensure all items are redrawn (especially the drawing-sheet items)
 
     UpdateHierarchyNavigator();
 }
