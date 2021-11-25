@@ -62,6 +62,7 @@ class FP_LIB_TABLE;
 class PCBNEW_SETTINGS;
 class FOOTPRINT_EDITOR_SETTINGS;
 struct MAGNETIC_SETTINGS;
+class PROGRESS_REPORTER;
 
 
 wxDECLARE_EVENT( BOARD_CHANGED, wxCommandEvent );
@@ -201,7 +202,7 @@ public:
      *
      * @param aBoard is the #BOARD to put into the frame.
      */
-    virtual void SetBoard( BOARD* aBoard );
+    virtual void SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
 
     BOARD* GetBoard() const
     {

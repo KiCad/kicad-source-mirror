@@ -137,7 +137,7 @@ void PCB_BASE_EDIT_FRAME::ActivateGalCanvas()
 }
 
 
-void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
+void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 {
     bool new_board = ( aBoard != m_pcb );
 
@@ -150,7 +150,7 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
         GetCanvas()->GetView()->InitPreview();
     }
 
-    PCB_BASE_FRAME::SetBoard( aBoard );
+    PCB_BASE_FRAME::SetBoard( aBoard, aReporter );
 
     GetCanvas()->GetGAL()->SetGridOrigin( VECTOR2D( aBoard->GetDesignSettings().GetGridOrigin() ) );
 
@@ -163,7 +163,7 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
     // update the tool manager with the new board and its view.
     if( m_toolManager )
     {
-        GetCanvas()->DisplayBoard( aBoard );
+        GetCanvas()->DisplayBoard( aBoard, aReporter );
 
         GetCanvas()->UpdateColors();
         m_toolManager->SetEnvironment( aBoard, GetCanvas()->GetView(),

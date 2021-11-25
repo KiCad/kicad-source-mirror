@@ -43,6 +43,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <confirm.h>
+#include <progress_reporter.h>
 
 #include <gal/graphics_abstraction_layer.h>
 #include <zoom_defines.h>
@@ -177,15 +178,14 @@ PCB_DRAW_PANEL_GAL::~PCB_DRAW_PANEL_GAL()
 }
 
 
-void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
+void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 {
-
     m_view->Clear();
 
     auto zones = aBoard->Zones();
     std::atomic<size_t> next( 0 );
     std::atomic<size_t> count_done( 0 );
-    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency() - 1, 2 );
 
     for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
@@ -221,7 +221,12 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
 
     // Finalize the triangulation threads
     while( count_done < parallelThreadCount )
-        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+    {
+        if( aReporter )
+            aReporter->KeepRefreshing();
+
+        std::this_thread::sleep_for( std::chrono::milliseconds( 30 ) );
+    }
 
     // Load zones
     for( ZONE* zone : aBoard->Zones() )

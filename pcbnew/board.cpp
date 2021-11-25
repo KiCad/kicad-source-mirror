@@ -134,9 +134,9 @@ BOARD::~BOARD()
 }
 
 
-void BOARD::BuildConnectivity()
+void BOARD::BuildConnectivity( PROGRESS_REPORTER* aReporter )
 {
-    GetConnectivity()->Build( this );
+    GetConnectivity()->Build( this, aReporter );
 }
 
 

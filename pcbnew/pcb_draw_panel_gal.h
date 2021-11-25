@@ -33,6 +33,7 @@
 
 class DS_PROXY_VIEW_ITEM;
 class RATSNEST_VIEW_ITEM;
+class PROGRESS_REPORTER;
 
 class PCB_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL
 {
@@ -48,7 +49,7 @@ public:
      *
      * @param aBoard is the PCB to be loaded.
      */
-    void DisplayBoard( BOARD* aBoard );
+    void DisplayBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
 
     /**
      * Sets (or updates) drawing-sheet used by the draw panel.

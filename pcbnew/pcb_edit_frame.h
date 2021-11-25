@@ -398,12 +398,12 @@ public:
     bool Clear_Pcb( bool aQuery, bool aFinal = false );
 
     ///< @copydoc PCB_BASE_FRAME::SetBoard()
-    void SetBoard( BOARD* aBoard ) override
+    void SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr ) override
     {
-        SetBoard( aBoard, true );
+        SetBoard( aBoard, true, aReporter );
     }
 
-    void SetBoard( BOARD* aBoard, bool aBuildConnectivity );
+    void SetBoard( BOARD* aBoard, bool aBuildConnectivity, PROGRESS_REPORTER* aReporter = nullptr );
 
     ///< @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;

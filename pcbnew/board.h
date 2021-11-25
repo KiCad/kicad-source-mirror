@@ -58,6 +58,7 @@ class SHAPE_POLY_SET;
 class CONNECTIVITY_DATA;
 class COMPONENT;
 class PROJECT;
+class PROGRESS_REPORTER;
 
 // Forward declare endpoint from class_track.h
 enum ENDPOINT_T : int;
@@ -348,7 +349,7 @@ public:
      * especially the list of connected items, list of nets and rastnest data
      * Needed after loading a board to have the connectivity database updated.
      */
-    void BuildConnectivity();
+    void BuildConnectivity( PROGRESS_REPORTER* aReporter = nullptr );
 
     /**
      * Delete all MARKERS from the board.

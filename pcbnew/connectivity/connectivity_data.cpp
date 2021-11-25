@@ -129,7 +129,7 @@ void CONNECTIVITY_DATA::updateRatsnest()
             [] ( RN_NET* aNet ) { return aNet->IsDirty() && aNet->GetNodeCount() > 0; } );
 
     // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
-    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
+    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency() - 1,
             ( dirty_nets.size() + 7 ) / 8 );
 
     std::atomic<size_t> nextNet( 0 );

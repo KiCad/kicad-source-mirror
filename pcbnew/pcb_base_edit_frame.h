@@ -173,7 +173,7 @@ public:
     void ActivateGalCanvas() override;
 
     ///< @copydoc PCB_BASE_FRAME::SetBoard()
-    virtual void SetBoard( BOARD* aBoard ) override;
+    virtual void SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr ) override;
 
     COLOR_SETTINGS* GetColorSettings() const override;
 

@@ -387,12 +387,13 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 }
 
 
-void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard, bool aBuildConnectivity )
+void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard, bool aBuildConnectivity,
+                               PROGRESS_REPORTER* aReporter )
 {
     if( m_pcb )
         m_pcb->ClearProject();
 
-    PCB_BASE_EDIT_FRAME::SetBoard( aBoard );
+    PCB_BASE_EDIT_FRAME::SetBoard( aBoard, aReporter );
 
     aBoard->SetProject( &Prj() );
 

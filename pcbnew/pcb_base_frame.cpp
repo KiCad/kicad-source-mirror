@@ -160,7 +160,7 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs()
 }
 
 
-void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
+void PCB_BASE_FRAME::SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 {
     if( m_pcb != aBoard )
     {

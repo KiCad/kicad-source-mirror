@@ -418,7 +418,7 @@ void reportProgress( PROGRESS_REPORTER* aReporter, int aCount, int aSize, int aD
 
 void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 {
-    const int delta = 100;  // Number of additions between 2 calls to the progress bar
+    int delta = 100;  // Number of additions between 2 calls to the progress bar
     int ii = 0;
     int size = 0;
 
@@ -429,6 +429,8 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         size += footprint->Pads().size();
 
     size *= 2;      // Our caller us gets the other half of the progress bar
+
+    delta = std::max( delta, size / 50 );
 
     for( ZONE* zone : aBoard->Zones() )
     {

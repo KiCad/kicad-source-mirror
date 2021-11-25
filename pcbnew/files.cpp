@@ -748,7 +748,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         Raise();
 
         // Skip (possibly expensive) connectivity build here; we build it below after load
-        SetBoard( loadedBoard, false );
+        SetBoard( loadedBoard, false, &progressReporter );
 
         if( GFootprintList.GetCount() == 0 )
             GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + "fp-info-cache" );
@@ -911,7 +911,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         UpdateFileHistory( GetBoard()->GetFileName() );
 
     // Rebuild list of nets (full ratsnest rebuild)
-    GetBoard()->BuildConnectivity();
+    progressReporter.Report( _( "Updating nets" ) );
+    GetBoard()->BuildConnectivity( &progressReporter );
 
     // Load project settings after setting up board; some of them depend on the nets list
     LoadProjectSettings();
