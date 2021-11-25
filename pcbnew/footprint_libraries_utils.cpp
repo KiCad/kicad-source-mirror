@@ -41,7 +41,7 @@
 #include <board_commit.h>
 #include <footprint_edit_frame.h>
 #include <wildcards_and_files_ext.h>
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 #include <plugins/legacy/legacy_plugin.h>
 #include <env_paths.h>
 #include <paths.h>
@@ -186,9 +186,9 @@ static FOOTPRINT* parse_footprint_with_plugin( const wxFileName& aFileName,
  */
 static FOOTPRINT* parse_footprint_kicad( const wxFileName& aFileName )
 {
-    wxString fcontents;
-    PCB_IO   pcb_io;
-    wxFFile  f( aFileName.GetFullPath() );
+    wxString   fcontents;
+    PCB_PLUGIN pcb_io;
+    wxFFile    f( aFileName.GetFullPath() );
 
     if( !f.IsOpened() )
         return nullptr;
@@ -347,7 +347,7 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
         // Export as *.kicad_pcb format, using a strategy which is specifically chosen
         // as an example on how it could also be used to send it to the system clipboard.
 
-        PCB_IO  pcb_io( CTL_FOR_LIBRARY );
+        PCB_PLUGIN  pcb_io(CTL_FOR_LIBRARY );
 
         /*  This footprint should *already* be "normalized" in a way such that
             orientation is zero, etc., since it came from the Footprint Editor.

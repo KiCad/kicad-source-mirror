@@ -46,7 +46,7 @@
 #include <footprint_info_impl.h>
 #include <footprint_tree_pane.h>
 #include <fp_lib_table.h>
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
 #include <kiway.h>

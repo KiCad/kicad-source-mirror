@@ -54,7 +54,7 @@
 #include <project/project_local_settings.h>
 #include <project/net_settings.h>
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 #include <dialogs/dialog_imported_layers.h>
 #include <tools/pcb_actions.h>
 #include "footprint_info_impl.h"

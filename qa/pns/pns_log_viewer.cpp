@@ -432,7 +432,7 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
 
 static BOARD* loadBoard( const std::string& filename )
 {
-    PLUGIN::RELEASER pi( new PCB_IO );
+    PLUGIN::RELEASER pi( new PCB_PLUGIN );
     BOARD*           brd = nullptr;
 
     try

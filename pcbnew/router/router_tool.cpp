@@ -58,7 +58,7 @@ using namespace std::placeholders;
 
 #include "pns_kicad_iface.h"
 
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 
 using namespace KIGFX;
 
@@ -548,7 +548,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
     // Export as *.kicad_pcb format, using a strategy which is specifically chosen
     // as an example on how it could also be used to send it to the system clipboard.
 
-    PCB_IO  pcb_io;
+    PCB_PLUGIN  pcb_io;
 
     pcb_io.Save( fname_dump.GetFullPath(), m_iface->GetBoard(), nullptr );
 }

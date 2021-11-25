@@ -29,7 +29,7 @@
 #include <plugins/eagle/eagle_plugin.h>
 #include <plugins/geda/gpcb_plugin.h>
 #include <io_mgr.h>
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 #include <plugins/legacy/legacy_plugin.h>
 #include <plugins/pcad/pcad_plugin.h>
 #include <plugins/altium/altium_circuit_maker_plugin.h>
@@ -191,7 +191,7 @@ void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoar
 static IO_MGR::REGISTER_PLUGIN registerEaglePlugin( IO_MGR::EAGLE, wxT("Eagle"),
                                                     []() -> PLUGIN* { return new EAGLE_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerKicadPlugin( IO_MGR::KICAD_SEXP,
-                                                    wxT("KiCad"), []() -> PLUGIN* { return new PCB_IO; } );
+                                                    wxT("KiCad"), []() -> PLUGIN* { return new PCB_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerPcadPlugin( IO_MGR::PCAD, wxT("P-Cad"),
                                                    []() -> PLUGIN* { return new PCAD_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerFabmasterPlugin( IO_MGR::FABMASTER, wxT( "Fabmaster" ),

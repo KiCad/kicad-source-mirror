@@ -88,7 +88,7 @@ bool PNS_LOG_FILE::Load( const std::string& logName, const std::string boardName
 
     try
     {
-        PCB_IO io;
+        PCB_PLUGIN io;
         m_board.reset( io.Load( boardName.c_str(), nullptr, nullptr ) );
 
         std::shared_ptr<DRC_ENGINE> drcEngine( new DRC_ENGINE );

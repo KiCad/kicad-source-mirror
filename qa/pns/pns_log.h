@@ -52,7 +52,7 @@
 
 #include <pcbnew/board.h>
 
-#include <pcbnew/plugins/kicad/kicad_plugin.h>
+#include <pcbnew/plugins/kicad/pcb_plugin.h>
 #include <pcbnew/plugins/kicad/pcb_parser.h>
 
 #include <wx/treelist.h>

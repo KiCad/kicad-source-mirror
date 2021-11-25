@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef KICAD_PLUGIN_H_
-#define KICAD_PLUGIN_H_
+#ifndef PCB_PLUGIN_H
+#define PCB_PLUGIN_H
 
 #include <io_mgr.h>
 #include <string>
@@ -128,7 +128,7 @@ class PCB_TEXT;
 #define CTL_FOR_LIBRARY                                                                    \
     ( CTL_OMIT_PAD_NETS | CTL_OMIT_TSTAMPS | CTL_OMIT_PATH | CTL_OMIT_AT | CTL_OMIT_LIBNAME )
 
-/// The zero arg constructor when PCB_IO is used for PLUGIN::Load() and PLUGIN::Save()ing
+/// The zero arg constructor when PCB_PLUGIN is used for PLUGIN::Load() and PLUGIN::Save()ing
 /// a BOARD file underneath IO_MGR.
 #define CTL_FOR_BOARD               (CTL_OMIT_INITIAL_COMMENTS|CTL_OMIT_FOOTPRINT_VERSION)
 
@@ -138,7 +138,7 @@ class PCB_TEXT;
  *
  * @note This class is not thread safe, but it is re-entrant multiple times in sequence.
  */
-class PCB_IO : public PLUGIN
+class PCB_PLUGIN : public PLUGIN
 {
 public:
     const wxString PluginName() const override
@@ -195,9 +195,9 @@ public:
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
 
-    PCB_IO( int aControlFlags = CTL_FOR_BOARD );
+    PCB_PLUGIN( int aControlFlags = CTL_FOR_BOARD );
 
-    virtual ~PCB_IO();
+    virtual ~PCB_PLUGIN();
 
     /**
      * Output \a aItem to \a aFormatter in s-expression format.
@@ -298,4 +298,4 @@ protected:
                                     ///< are stored with consecutive integers as net codes
 };
 
-#endif  // KICAD_PLUGIN_H_
+#endif  // PCB_PLUGIN_H

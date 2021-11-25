@@ -102,7 +102,7 @@ static inline long parseInt( const wxString& aValue, double aScalar )
  *
  * The new footprint library design is a file path of individual footprint files
  * that contain a single footprint per file.  This class is a helper only for the
- * footprint portion of the PLUGIN API, and only for the #PCB_IO plugin.  It is
+ * footprint portion of the PLUGIN API, and only for the #PCB_PLUGIN plugin.  It is
  * private to this implementation file so it is not placed into a header.
  */
 class GPCB_FPL_CACHE_ITEM

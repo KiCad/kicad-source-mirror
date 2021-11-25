@@ -56,7 +56,7 @@
 #include <atomic>
 
 
-#include <../pcbnew/plugins/kicad/kicad_plugin.h>   // for SEXPR_BOARD_FILE_VERSION def
+#include <../pcbnew/plugins/kicad/pcb_plugin.h>   // for SEXPR_BOARD_FILE_VERSION def
 
 
 #ifdef __WXMAC__

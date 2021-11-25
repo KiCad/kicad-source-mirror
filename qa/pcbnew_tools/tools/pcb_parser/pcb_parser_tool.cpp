@@ -32,7 +32,7 @@
 #include <wx/cmdline.h>
 
 #include <board_item.h>
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 #include <plugins/kicad/pcb_parser.h>
 #include <richio.h>
 

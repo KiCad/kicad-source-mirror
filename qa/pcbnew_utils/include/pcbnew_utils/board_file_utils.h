@@ -47,9 +47,9 @@ std::string GetPcbnewTestDataDir();
  * Utility function to simply write a Board out to a file.
  *
  * Helps debug tests and utility programs by making it easy to quickly
- * write to disk without directly using the PCB_IO API.
+ * write to disk without directly using the PCB_PLUGIN API.
  *
- * Note: The aBoard param is non-const because PCB_IO::Save demands it
+ * Note: The aBoard param is non-const because PCB_PLUGIN::Save demands it
  * and I am not confident a const_cast will be a true assurance.
  *
  * @param aBoard    the board to write out

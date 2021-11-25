@@ -38,12 +38,12 @@
 #include <netinfo.h>
 #include <plugins/kicad/pcb_parser.h>
 
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 #include <kicad_clipboard.h>
 
 CLIPBOARD_IO::CLIPBOARD_IO():
-    PCB_IO( CTL_FOR_CLIPBOARD ),
-    m_formatter()
+        PCB_PLUGIN(CTL_FOR_CLIPBOARD ),
+        m_formatter()
 {
     m_out = &m_formatter;
 }
@@ -323,7 +323,7 @@ BOARD_ITEM* CLIPBOARD_IO::Parse()
 
     try
     {
-        item = PCB_IO::Parse( result );
+        item = PCB_PLUGIN::Parse( result );
     }
     catch (...)
     {

@@ -48,7 +48,7 @@
 #include <pad.h>
 #include <pcb_track.h>
 #include <zone.h>
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 #include <pcb_plot_params_parser.h>
 #include <pcb_plot_params.h>
 #include <locale_io.h>

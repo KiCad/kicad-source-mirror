@@ -30,7 +30,7 @@
 #ifndef KICAD_CLIPBOARD_H
 #define KICAD_CLIPBOARD_H
 
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 #include <board_item.h>
 #include <footprint.h>
 #include <plugins/kicad/pcb_parser.h>
@@ -38,21 +38,21 @@
 #include <tools/pcb_selection.h>
 
 
-class CLIPBOARD_IO : public PCB_IO
+class CLIPBOARD_IO : public PCB_PLUGIN
 {
 public:
     CLIPBOARD_IO();
     ~CLIPBOARD_IO();
 
     /*
-     * Saves the entire board to the clipboard formatted using the PCB_IO formatting
+     * Saves the entire board to the clipboard formatted using the PCB_PLUGIN formatting
      */
     void Save( const wxString& aFileName, BOARD* aBoard,
                const PROPERTIES* aProperties = nullptr ) override;
 
     /*
      * Write all the settings of the BOARD* set by setBoard() and then adds all the
-     * BOARD_ITEMs found in selection formatted by PCB_IO to clipboard as sexpr text
+     * BOARD_ITEMs found in selection formatted by PCB_PLUGIN to clipboard as sexpr text
      */
     void SaveSelection( const PCB_SELECTION& selected, bool isFootprintEditor );
 

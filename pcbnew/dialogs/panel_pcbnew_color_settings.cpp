@@ -31,7 +31,7 @@
 #include <widgets/appearance_controls.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <pcb_painter.h>
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 #include <wx/treebook.h>
 
 
@@ -499,7 +499,7 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createPreviewItems()
     m_page->SetWidthMils( 6000 );
 
     STRING_LINE_READER reader( g_previewBoard, "preview" );
-    PCB_IO             pi;
+    PCB_PLUGIN             pi;
 
     try
     {

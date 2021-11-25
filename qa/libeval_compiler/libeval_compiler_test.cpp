@@ -7,7 +7,7 @@
 #include <pcb_expr_evaluator.h>
 
 #include <io_mgr.h>
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 
 #include <unordered_set>
 

@@ -24,7 +24,7 @@
 #include <pcbnew_utils/board_file_utils.h>
 
 // For PCB parsing
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 #include <plugins/kicad/pcb_parser.h>
 #include <richio.h>
 
@@ -64,7 +64,7 @@ std::string GetPcbnewTestDataDir()
 
 void DumpBoardToFile( BOARD& board, const std::string& aFilename )
 {
-    PCB_IO io;
+    PCB_PLUGIN io;
     io.Save( aFilename, &board );
 }
 

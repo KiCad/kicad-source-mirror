@@ -106,9 +106,9 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintEnumerate)
 HANDLE_EXCEPTIONS(PLUGIN::FootprintLoad)
 HANDLE_EXCEPTIONS(PLUGIN::FootprintSave)
 HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
-%include <plugins/kicad/kicad_plugin.h>
+%include <plugins/kicad/pcb_plugin.h>
 %{
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 %}
 
 

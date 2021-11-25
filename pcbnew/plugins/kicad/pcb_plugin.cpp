@@ -43,7 +43,7 @@
 #include <pcb_target.h>
 #include <pcb_text.h>
 #include <pcbnew_settings.h>
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 #include <plugins/kicad/pcb_parser.h>
 #include <trace_helpers.h>
 #include <pcb_track.h>
@@ -63,7 +63,7 @@ using namespace PCB_KEYS_T;
  *
  * The new footprint library design is a file path of individual footprint files that contain
  * a single footprint per file.  This class is a helper only for the footprint portion of the
- * PLUGIN API, and only for the #PCB_IO plugin.  It is private to this implementation file so
+ * PLUGIN API, and only for the #PCB_PLUGIN plugin.  It is private to this implementation file so
  * it is not placed into a header.
  */
 class FP_CACHE_ITEM
@@ -90,7 +90,7 @@ typedef boost::ptr_map< wxString, FP_CACHE_ITEM >   FOOTPRINT_MAP;
 
 class FP_CACHE
 {
-    PCB_IO*         m_owner;            // Plugin object that owns the cache.
+    PCB_PLUGIN*         m_owner;            // Plugin object that owns the cache.
     wxFileName      m_lib_path;         // The path of the library.
     wxString        m_lib_raw_path;     // For quick comparisons.
     FOOTPRINT_MAP   m_footprints;       // Map of footprint filename to FOOTPRINT*.
@@ -101,7 +101,7 @@ class FP_CACHE
                                         // files.
 
 public:
-    FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath );
+    FP_CACHE( PCB_PLUGIN* aOwner, const wxString& aLibraryPath );
 
     wxString GetPath() const { return m_lib_raw_path; }
 
@@ -153,7 +153,7 @@ public:
 };
 
 
-FP_CACHE::FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath )
+FP_CACHE::FP_CACHE( PCB_PLUGIN* aOwner, const wxString& aLibraryPath )
 {
     m_owner = aOwner;
     m_lib_raw_path = aLibraryPath;
@@ -335,7 +335,7 @@ long long FP_CACHE::GetTimestamp( const wxString& aLibPath )
 }
 
 
-void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
+void PCB_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -375,7 +375,7 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* a
 }
 
 
-BOARD_ITEM* PCB_IO::Parse( const wxString& aClipboardSourceInput )
+BOARD_ITEM* PCB_PLUGIN::Parse( const wxString& aClipboardSourceInput )
 {
     std::string input = TO_UTF8( aClipboardSourceInput );
 
@@ -397,7 +397,7 @@ BOARD_ITEM* PCB_IO::Parse( const wxString& aClipboardSourceInput )
 }
 
 
-void PCB_IO::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
+void PCB_PLUGIN::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
 {
     LOCALE_IO   toggle;     // public API function, perform anything convenient for caller
 
@@ -463,7 +463,7 @@ void PCB_IO::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
 }
 
 
-void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
+void PCB_PLUGIN::formatLayer( const BOARD_ITEM* aItem ) const
 {
     PCB_LAYER_ID layer = aItem->GetLayer();
 
@@ -471,7 +471,7 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 }
 
 
-void PCB_IO::formatSetup( const BOARD* aBoard, int aNestLevel ) const
+void PCB_PLUGIN::formatSetup( const BOARD* aBoard, int aNestLevel ) const
 {
     // Setup
     m_out->Print( aNestLevel, "(setup\n" );
@@ -523,7 +523,7 @@ void PCB_IO::formatSetup( const BOARD* aBoard, int aNestLevel ) const
 }
 
 
-void PCB_IO::formatGeneral( const BOARD* aBoard, int aNestLevel ) const
+void PCB_PLUGIN::formatGeneral( const BOARD* aBoard, int aNestLevel ) const
 {
     const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
 
@@ -539,7 +539,7 @@ void PCB_IO::formatGeneral( const BOARD* aBoard, int aNestLevel ) const
 }
 
 
-void PCB_IO::formatBoardLayers( const BOARD* aBoard, int aNestLevel ) const
+void PCB_PLUGIN::formatBoardLayers( const BOARD* aBoard, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(layers\n" );
 
@@ -609,7 +609,7 @@ void PCB_IO::formatBoardLayers( const BOARD* aBoard, int aNestLevel ) const
 }
 
 
-void PCB_IO::formatNetInformation( const BOARD* aBoard, int aNestLevel ) const
+void PCB_PLUGIN::formatNetInformation( const BOARD* aBoard, int aNestLevel ) const
 {
     for( NETINFO_ITEM* net : *m_mapping )
     {
@@ -625,7 +625,7 @@ void PCB_IO::formatNetInformation( const BOARD* aBoard, int aNestLevel ) const
 }
 
 
-void PCB_IO::formatProperties( const BOARD* aBoard, int aNestLevel ) const
+void PCB_PLUGIN::formatProperties( const BOARD* aBoard, int aNestLevel ) const
 {
     for( const std::pair<const wxString, wxString>& prop : aBoard->GetProperties() )
     {
@@ -639,7 +639,7 @@ void PCB_IO::formatProperties( const BOARD* aBoard, int aNestLevel ) const
 }
 
 
-void PCB_IO::formatHeader( const BOARD* aBoard, int aNestLevel ) const
+void PCB_PLUGIN::formatHeader( const BOARD* aBoard, int aNestLevel ) const
 {
     formatGeneral( aBoard, aNestLevel );
 
@@ -657,7 +657,7 @@ void PCB_IO::formatHeader( const BOARD* aBoard, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( const BOARD* aBoard, int aNestLevel ) const
+void PCB_PLUGIN::format( const BOARD* aBoard, int aNestLevel ) const
 {
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_footprints( aBoard->Footprints().begin(),
                                                                   aBoard->Footprints().end() );
@@ -704,7 +704,7 @@ void PCB_IO::format( const BOARD* aBoard, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) const
+void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) const
 {
     const PCB_DIM_ALIGNED*    aligned = dynamic_cast<const PCB_DIM_ALIGNED*>( aDimension );
     const PCB_DIM_ORTHOGONAL* ortho   = dynamic_cast<const PCB_DIM_ORTHOGONAL*>( aDimension );
@@ -803,7 +803,7 @@ void PCB_IO::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) cons
 }
 
 
-void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
+void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
 {
     std::string locked = aShape->IsLocked() ? " locked" : "";
 
@@ -937,7 +937,7 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
+void PCB_PLUGIN::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
 {
     std::string locked = aFPShape->IsLocked() ? " locked" : "";
 
@@ -1045,7 +1045,7 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
         break;
 
     default:
-        wxFAIL_MSG( "PCB_IO::format not implemented for " + aFPShape->SHAPE_T_asString() );
+        wxFAIL_MSG( "PCB_PLUGIN::format not implemented for " + aFPShape->SHAPE_T_asString() );
         return;
     };
 
@@ -1070,7 +1070,7 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( const PCB_TARGET* aTarget, int aNestLevel ) const
+void PCB_PLUGIN::format( const PCB_TARGET* aTarget, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(target %s (at %s) (size %s)",
                   ( aTarget->GetShape() ) ? "x" : "plus",
@@ -1088,7 +1088,7 @@ void PCB_IO::format( const PCB_TARGET* aTarget, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
+void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
 {
     if( !( m_ctl & CTL_OMIT_INITIAL_COMMENTS ) )
     {
@@ -1288,7 +1288,7 @@ void PCB_IO::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
 }
 
 
-void PCB_IO::formatLayers( LSET aLayerMask, int aNestLevel ) const
+void PCB_PLUGIN::formatLayers( LSET aLayerMask, int aNestLevel ) const
 {
     std::string output;
 
@@ -1374,7 +1374,7 @@ void PCB_IO::formatLayers( LSET aLayerMask, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
+void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
 {
     const char* shape;
 
@@ -1741,7 +1741,7 @@ void PCB_IO::format( const PAD* aPad, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( const PCB_TEXT* aText, int aNestLevel ) const
+void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(gr_text %s (at %s",
                   m_out->Quotew( aText->GetText() ).c_str(),
@@ -1765,7 +1765,7 @@ void PCB_IO::format( const PCB_TEXT* aText, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( const PCB_GROUP* aGroup, int aNestLevel ) const
+void PCB_PLUGIN::format( const PCB_GROUP* aGroup, int aNestLevel ) const
 {
     // Don't write empty groups
     if( aGroup->GetItems().empty() )
@@ -1793,7 +1793,7 @@ void PCB_IO::format( const PCB_GROUP* aGroup, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( const FP_TEXT* aText, int aNestLevel ) const
+void PCB_PLUGIN::format( const FP_TEXT* aText, int aNestLevel ) const
 {
     std::string type;
 
@@ -1858,7 +1858,7 @@ void PCB_IO::format( const FP_TEXT* aText, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( const PCB_TRACK* aTrack, int aNestLevel ) const
+void PCB_PLUGIN::format( const PCB_TRACK* aTrack, int aNestLevel ) const
 {
     if( aTrack->Type() == PCB_VIA_T )
     {
@@ -1958,7 +1958,7 @@ void PCB_IO::format( const PCB_TRACK* aTrack, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
+void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
 {
     std::string locked = aZone->IsLocked() ? " locked" : "";
 
@@ -2267,7 +2267,7 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
 }
 
 
-PCB_IO::PCB_IO( int aControlFlags ) :
+PCB_PLUGIN::PCB_PLUGIN( int aControlFlags ) :
     m_cache( nullptr ),
     m_ctl( aControlFlags ),
     m_parser( new PCB_PARSER() ),
@@ -2278,7 +2278,7 @@ PCB_IO::PCB_IO( int aControlFlags ) :
 }
 
 
-PCB_IO::~PCB_IO()
+PCB_PLUGIN::~PCB_PLUGIN()
 {
     delete m_cache;
     delete m_parser;
@@ -2286,8 +2286,8 @@ PCB_IO::~PCB_IO()
 }
 
 
-BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties,
-                     PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter )
+BOARD* PCB_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties,
+                         PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter )
 {
     FILE_LINE_READER reader( aFileName );
 
@@ -2316,8 +2316,8 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPER
 }
 
 
-BOARD* PCB_IO::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIES* aProperties,
-                       PROGRESS_REPORTER* aProgressReporter, unsigned aLineCount)
+BOARD* PCB_PLUGIN::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIES* aProperties,
+                           PROGRESS_REPORTER* aProgressReporter, unsigned aLineCount)
 {
     init( aProperties );
 
@@ -2355,7 +2355,7 @@ BOARD* PCB_IO::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIE
 }
 
 
-void PCB_IO::init( const PROPERTIES* aProperties )
+void PCB_PLUGIN::init( const PROPERTIES* aProperties )
 {
     m_board = nullptr;
     m_reader = nullptr;
@@ -2363,7 +2363,7 @@ void PCB_IO::init( const PROPERTIES* aProperties )
 }
 
 
-void PCB_IO::validateCache( const wxString& aLibraryPath, bool checkModified )
+void PCB_PLUGIN::validateCache( const wxString& aLibraryPath, bool checkModified )
 {
     if( !m_cache || !m_cache->IsPath( aLibraryPath ) || ( checkModified && m_cache->IsModified() ) )
     {
@@ -2375,8 +2375,8 @@ void PCB_IO::validateCache( const wxString& aLibraryPath, bool checkModified )
 }
 
 
-void PCB_IO::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibPath,
-                                 bool aBestEfforts, const PROPERTIES* aProperties )
+void PCB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibPath,
+                                     bool aBestEfforts, const PROPERTIES* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
     wxDir     dir( aLibPath );
@@ -2404,10 +2404,10 @@ void PCB_IO::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString&
 }
 
 
-const FOOTPRINT* PCB_IO::getFootprint( const wxString& aLibraryPath,
-                                       const wxString& aFootprintName,
-                                       const PROPERTIES* aProperties,
-                                       bool checkModified )
+const FOOTPRINT* PCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
+                                           const wxString& aFootprintName,
+                                           const PROPERTIES* aProperties,
+                                           bool checkModified )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2432,16 +2432,16 @@ const FOOTPRINT* PCB_IO::getFootprint( const wxString& aLibraryPath,
 }
 
 
-const FOOTPRINT* PCB_IO::GetEnumeratedFootprint( const wxString& aLibraryPath,
-                                                 const wxString& aFootprintName,
-                                                 const PROPERTIES* aProperties )
+const FOOTPRINT* PCB_PLUGIN::GetEnumeratedFootprint( const wxString& aLibraryPath,
+                                                     const wxString& aFootprintName,
+                                                     const PROPERTIES* aProperties )
 {
     return getFootprint( aLibraryPath, aFootprintName, aProperties, false );
 }
 
 
-bool PCB_IO::FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
-                              const PROPERTIES* aProperties )
+bool PCB_PLUGIN::FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                  const PROPERTIES* aProperties )
 {
     // Note: checking the cache sounds like a good idea, but won't catch files which differ
     // only in case.
@@ -2456,10 +2456,10 @@ bool PCB_IO::FootprintExists( const wxString& aLibraryPath, const wxString& aFoo
 }
 
 
-FOOTPRINT* PCB_IO::FootprintLoad( const wxString& aLibraryPath,
-                                  const wxString& aFootprintName,
-                                  bool  aKeepUUID,
-                                  const PROPERTIES* aProperties )
+FOOTPRINT* PCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
+                                      const wxString& aFootprintName,
+                                      bool  aKeepUUID,
+                                      const PROPERTIES* aProperties )
 {
     const FOOTPRINT* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
 
@@ -2480,8 +2480,8 @@ FOOTPRINT* PCB_IO::FootprintLoad( const wxString& aLibraryPath,
 }
 
 
-void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
-                            const PROPERTIES* aProperties )
+void PCB_PLUGIN::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
+                                const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2574,8 +2574,8 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
 }
 
 
-void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
-                              const PROPERTIES* aProperties )
+void PCB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                  const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2594,13 +2594,13 @@ void PCB_IO::FootprintDelete( const wxString& aLibraryPath, const wxString& aFoo
 
 
 
-long long PCB_IO::GetLibraryTimestamp( const wxString& aLibraryPath ) const
+long long PCB_PLUGIN::GetLibraryTimestamp( const wxString& aLibraryPath ) const
 {
     return FP_CACHE::GetTimestamp( aLibraryPath );
 }
 
 
-void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+void PCB_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     if( wxDir::Exists( aLibraryPath ) )
     {
@@ -2618,7 +2618,7 @@ void PCB_IO::FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES*
 }
 
 
-bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+bool PCB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     wxFileName fn;
     fn.SetPath( aLibraryPath );
@@ -2695,7 +2695,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES*
 }
 
 
-bool PCB_IO::IsFootprintLibWritable( const wxString& aLibraryPath )
+bool PCB_PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 {
     LOCALE_IO   toggle;
 
