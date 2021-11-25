@@ -88,6 +88,8 @@ public:
 
     int ClearanceEpsilon() const { return m_clearanceEpsilon; }
 
+    void ClearCacheForItem( const PNS::ITEM* aItem ) override;
+
 private:
     int holeRadius( const PNS::ITEM* aItem ) const;
 
@@ -291,6 +293,12 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         default:
             return false;
     }
+}
+
+
+void PNS_PCBNEW_RULE_RESOLVER::ClearCacheForItem( const PNS::ITEM* aItem )
+{
+    m_clearanceCache.erase( std::make_pair( aItem, nullptr ) );
 }
 
 

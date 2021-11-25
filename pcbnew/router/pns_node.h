@@ -94,6 +94,8 @@ public:
                                   PNS::CONSTRAINT* aConstraint ) = 0;
 
     virtual wxString NetName( int aNet ) = 0;
+
+    virtual void ClearCacheForItem( const ITEM* aItem ) {}
 };
 
 /**

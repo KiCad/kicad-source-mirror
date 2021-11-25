@@ -548,6 +548,7 @@ void ROUTER::updateView( NODE* aNode, ITEM_SET& aCurrent, bool aDragging )
 
     for( ITEM* item : added )
     {
+        GetRuleResolver()->ClearCacheForItem( item );
         int clearance = GetRuleResolver()->Clearance( item, nullptr );
         m_iface->DisplayItem( item, clearance, aDragging );
     }
