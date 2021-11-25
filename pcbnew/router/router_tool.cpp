@@ -1856,7 +1856,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 // Update ratsnest
                 dynamicData->Move( offset - lastOffset );
                 lastOffset = offset;
-                connectivityData->ComputeDynamicRatsnest( dynamicItems, dynamicData.get() );
+                connectivityData->ComputeDynamicRatsnest( dynamicItems, dynamicData.get(), offset );
             }
         }
         else if( hasMouseMoved && ( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )

@@ -246,7 +246,8 @@ public:
      * for the set of items aItems.
      */
     void ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems,
-                                 const CONNECTIVITY_DATA* aDynamicData );
+                                 const CONNECTIVITY_DATA* aDynamicData,
+                                 VECTOR2I aInternalOffset = { 0, 0 } );
 
     const std::vector<RN_DYNAMIC_LINE>& GetDynamicRatsnest() const
     {

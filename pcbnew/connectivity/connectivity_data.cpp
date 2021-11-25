@@ -276,7 +276,8 @@ void CONNECTIVITY_DATA::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_
 
 
 void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems,
-                                                const CONNECTIVITY_DATA* aDynamicData )
+                                                const CONNECTIVITY_DATA* aDynamicData,
+                                                VECTOR2I aInternalOffset )
 {
     if( !aDynamicData )
         return;
@@ -291,7 +292,7 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
 
         if( dynNet->GetNodeCount() != 0 )
         {
-            auto ourNet = m_nets[nc];
+            RN_NET*       ourNet = m_nets[nc];
             CN_ANCHOR_PTR nodeA, nodeB;
 
             if( ourNet->NearestBicoloredPair( *dynNet, nodeA, nodeB ) )
@@ -307,17 +308,17 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
     }
 
     // This gets the ratsnest for internal connections in the moving set
-    const auto& edges = GetRatsnestForItems( aItems );
+    const std::vector<CN_EDGE>& edges = GetRatsnestForItems( aItems );
 
-    for( const auto& edge : edges )
+    for( const CN_EDGE& edge : edges )
     {
-        const auto& nodeA   = edge.GetSourceNode();
-        const auto& nodeB   = edge.GetTargetNode();
-        RN_DYNAMIC_LINE l;
+        const CN_ANCHOR_PTR& nodeA = edge.GetSourceNode();
+        const CN_ANCHOR_PTR& nodeB = edge.GetTargetNode();
+        RN_DYNAMIC_LINE      l;
 
         // Use the parents' positions
-        l.a = nodeA->Parent()->GetPosition();
-        l.b = nodeB->Parent()->GetPosition();
+        l.a = nodeA->Parent()->GetPosition() + (wxPoint) aInternalOffset;
+        l.b = nodeB->Parent()->GetPosition() + (wxPoint) aInternalOffset;
         l.netCode = 0;
         m_dynamicRatsnest.push_back( l );
     }
@@ -351,13 +352,14 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
 {
     CN_CONNECTIVITY_ALGO::ITEM_MAP_ENTRY &entry = m_connAlgo->ItemEntry( aItem );
 
-    auto matchType = [&]( KICAD_T aItemType )
-    {
-        if( aTypes.empty() )
-            return true;
+    auto matchType =
+            [&]( KICAD_T aItemType )
+            {
+                if( aTypes.empty() )
+                    return true;
 
-        return std::count( aTypes.begin(), aTypes.end(), aItemType ) > 0;
-    };
+                return std::count( aTypes.begin(), aTypes.end(), aItemType ) > 0;
+            };
 
     for( CN_ITEM* citem : entry.GetItems() )
     {
@@ -381,12 +383,12 @@ unsigned int CONNECTIVITY_DATA::GetUnconnectedCount() const
 {
     unsigned int unconnected = 0;
 
-    for( auto net : m_nets )
+    for( RN_NET* net : m_nets )
     {
         if( !net )
             continue;
 
-        const auto& edges = net->GetUnconnected();
+        const std::vector<CN_EDGE>& edges = net->GetUnconnected();
 
         if( edges.empty() )
             continue;
@@ -400,7 +402,7 @@ unsigned int CONNECTIVITY_DATA::GetUnconnectedCount() const
 
 void CONNECTIVITY_DATA::Clear()
 {
-    for( auto net : m_nets )
+    for( RN_NET* net : m_nets )
         delete net;
 
     m_nets.clear();
