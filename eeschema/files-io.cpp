@@ -41,9 +41,11 @@
 #include <dialog_HTML_reporter_base.h>
 #include <reporter.h>
 #include <richio.h>
+#include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <sch_file_versions.h>
+#include <sch_line.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <schematic.h>
@@ -332,6 +334,32 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // LIB_ID checks and symbol rescue only apply to the legacy file formats.
         if( schFileType == SCH_IO_MGR::SCH_LEGACY )
         {
+            // Convert any legacy bus-bus entries to just be bus wires
+            for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
+            {
+                std::vector<SCH_ITEM*> deleted;
+
+                for( SCH_ITEM* item : screen->Items() )
+                {
+                    if( item->Type() == SCH_BUS_BUS_ENTRY_T )
+                    {
+                        SCH_BUS_BUS_ENTRY* entry = static_cast<SCH_BUS_BUS_ENTRY*>( item );
+                        std::unique_ptr<SCH_LINE> wire = std::make_unique<SCH_LINE>();
+
+                        wire->SetLayer( LAYER_BUS );
+                        wire->SetStartPoint( entry->GetPosition() );
+                        wire->SetEndPoint( entry->GetEnd() );
+
+                        screen->Append( wire.release() );
+                        deleted.push_back( item );
+                    }
+                }
+
+                for( SCH_ITEM* item : deleted )
+                    screen->Remove( item );
+            }
+
+
             // Convert old projects over to use symbol library table.
             if( schematic.HasNoFullyDefinedLibIds() )
             {
