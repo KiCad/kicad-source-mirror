@@ -195,6 +195,8 @@ public:
      */
     bool m_HideVersionFromTitle;
 
+    bool m_ShowRepairSchematic;
+
 private:
     ADVANCED_CFG();
 

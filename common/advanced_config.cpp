@@ -177,6 +177,8 @@ static const wxChar HideVersionFromTitle[] = wxT( "HideVersionFromTitle" );
 
 static const wxChar TraceMasks[] = wxT( "TraceMasks" );
 
+static const wxChar ShowRepairSchematic[] = wxT( "ShowRepairSchematic" );
+
 } // namespace KEYS
 
 
@@ -394,6 +396,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::HideVersionFromTitle,
                                                 &m_HideVersionFromTitle, false ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRepairSchematic,
+                                                &m_ShowRepairSchematic, false ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

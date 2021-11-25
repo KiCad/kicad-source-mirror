@@ -2191,11 +2191,11 @@ int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
     {
         SCH_SCREEN* screen = sheet.LastScreen();
 
-        for( SCH_ITEM* aItem : screen->Items().OfType( SCH_SYMBOL_T ) )
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
         {
-            processItem( aItem );
+            processItem( item );
 
-            for( SCH_PIN* pin : static_cast<SCH_SYMBOL*>( aItem )->GetPins( &sheet ) )
+            for( SCH_PIN* pin : static_cast<SCH_SYMBOL*>( item )->GetPins( &sheet ) )
                 processItem( pin );
         }
     }
@@ -2204,14 +2204,14 @@ int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
     {
         SCH_SCREEN* screen = sheet.LastScreen();
 
-        for( SCH_ITEM* aItem : screen->Items() )
+        for( SCH_ITEM* item : screen->Items() )
         {
-            processItem( aItem );
+            processItem( item );
 
-            aItem->RunOnChildren(
+            item->RunOnChildren(
                     [&]( SCH_ITEM* aChild )
                     {
-                        processItem( aItem );
+                        processItem( item );
                     } );
         }
     }

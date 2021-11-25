@@ -37,6 +37,7 @@
 #include "eeschema_id.h"
 #include "sch_edit_frame.h"
 #include <widgets/wx_menubar.h>
+#include <advanced_config.h>
 
 
 void SCH_EDIT_FRAME::ReCreateMenuBar()
@@ -252,7 +253,9 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     toolsMenu->AppendSeparator();
     toolsMenu->Add( EE_ACTIONS::rescueSymbols );
     toolsMenu->Add( EE_ACTIONS::remapSymbols );
-    toolsMenu->Add( EE_ACTIONS::repairSchematic );
+
+    if( ADVANCED_CFG::GetCfg().m_ShowRepairSchematic )
+        toolsMenu->Add( EE_ACTIONS::repairSchematic );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( EE_ACTIONS::editSymbolFields );
