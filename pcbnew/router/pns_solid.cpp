@@ -165,6 +165,9 @@ void SOLID::SetPos( const VECTOR2I& aCenter )
     if( m_shape )
         m_shape->Move( delta );
 
+    if( m_hole )
+        m_hole->Move( delta );
+
     m_pos = aCenter;
 }
 

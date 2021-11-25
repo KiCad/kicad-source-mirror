@@ -117,13 +117,14 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
         if( item.item->Kind() != ITEM::SOLID_T )
             continue;
 
-        auto solid = static_cast<SOLID*>( item.item );
-        auto jt    = m_world->FindJoint( solid->Pos(), solid );
+        SOLID* solid = static_cast<SOLID*>( item.item );
 
         m_solids.insert( solid );
 
-        if( ! item.item->IsRoutable() )
+        if( !item.item->IsRoutable() )
             continue;
+
+        JOINT* jt = m_world->FindJoint( solid->Pos(), solid );
 
         for( auto link : jt->LinkList() )
         {
@@ -173,6 +174,9 @@ bool COMPONENT_DRAGGER::Drag( const VECTOR2I& aP )
 
         m_draggedItems.Add( snew.get() );
         m_currentNode->Add( std::move( snew ) );
+
+        if( !s->IsRoutable() )
+            continue;
 
         for( auto& l : m_conns )
         {
