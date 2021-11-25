@@ -1647,7 +1647,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 
 void PNS_KICAD_IFACE::Commit()
 {
-    std::set<FOOTPRINT*> processedMods;
+    std::set<FOOTPRINT*> processedFootprints;
 
     EraseView();
 
@@ -1659,10 +1659,10 @@ void PNS_KICAD_IFACE::Commit()
         VECTOR2I p_orig = footprint->GetPosition();
         VECTOR2I p_new = p_orig + offset;
 
-        if( processedMods.find( footprint ) != processedMods.end() )
+        if( processedFootprints.find( footprint ) != processedFootprints.end() )
             continue;
 
-        processedMods.insert( footprint );
+        processedFootprints.insert( footprint );
         m_commit->Modify( footprint );
         footprint->SetPosition( wxPoint( p_new.x, p_new.y ) );
     }
