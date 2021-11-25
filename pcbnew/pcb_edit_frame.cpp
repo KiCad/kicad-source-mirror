@@ -387,7 +387,7 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 }
 
 
-void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
+void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard, bool aBuildConnectivity )
 {
     if( m_pcb )
         m_pcb->ClearProject();
@@ -395,7 +395,9 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
     PCB_BASE_EDIT_FRAME::SetBoard( aBoard );
 
     aBoard->SetProject( &Prj() );
-    aBoard->GetConnectivity()->Build( aBoard );
+
+    if( aBuildConnectivity )
+        aBoard->GetConnectivity()->Build( aBoard );
 
     // reload the drawing-sheet
     SetPageSettings( aBoard->GetPageSettings() );
