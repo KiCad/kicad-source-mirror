@@ -23,6 +23,7 @@
 
 #include "core/wx_stl_compat.h"
 #include "pcm_data.h"
+#include "widgets/wx_progress_reporters.h"
 #include <iostream>
 #include <map>
 #include <nlohmann/json-schema.hpp>
@@ -98,12 +99,14 @@ public:
     /**
      * @brief Fetches repository metadata from given url
      *
-     * @param url URL of the repository
-     * @param repository fetched repository metadata
+     * @param aUrl URL of the repository
+     * @param aRepository fetched repository metadata
+     * @param aReporter progress reporter dialog to use for download
      * @return true if successful
      * @return false if URL could not be downloaded or result could not be parsed
      */
-    bool FetchRepository( const wxString& aUrl, PCM_REPOSITORY& aRepository );
+    bool FetchRepository( const wxString& aUrl, PCM_REPOSITORY& aRepository,
+                          WX_PROGRESS_REPORTER* aReporter );
 
     /**
      * @brief Validates json against a specific definition in the PCM schema
@@ -226,14 +229,14 @@ public:
      *
      * @param aUrl URL to download
      * @param aOutput output stream
-     * @param aDialogTitle title of the spawned WX_PROGRESS_REPORTER dialog
+     * @param aReporter progress dialog to use
      * @param aSizeLimit maximum download size, 0 for unlimited
      * @return true if download was successful
      * @return false if download failed or was too large
      */
     bool DownloadToStream( const wxString& aUrl, std::ostream* aOutput,
-                           const wxString& aDialogTitle,
-                           const size_t    aSizeLimit = DEFAULT_DOWNLOAD_MEM_LIMIT );
+                           WX_PROGRESS_REPORTER* aReporter,
+                           const size_t          aSizeLimit = DEFAULT_DOWNLOAD_MEM_LIMIT );
 
     /**
      * @brief Get the approximate measure of how much given package matches the search term
@@ -275,10 +278,11 @@ private:
      * @param aUrl URL of the packages metadata
      * @param aHash optional sha256 hash
      * @param aPackages resulting packages metadata list
+     * @param aReporter progress dialog to use for download
      * @return true if packages were successfully downloaded, verified and parsed
      */
     bool fetchPackages( const wxString& aUrl, const boost::optional<wxString>& aHash,
-                        std::vector<PCM_PACKAGE>& aPackages );
+                        std::vector<PCM_PACKAGE>& aPackages, WX_PROGRESS_REPORTER* aReporter );
 
     /**
      * @brief Get the cached repository metadata

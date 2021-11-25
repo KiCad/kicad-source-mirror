@@ -100,7 +100,10 @@ void DIALOG_MANAGE_REPOSITORIES::OnAddButtonClicked( wxCommandEvent& event )
         }
         else
         {
-            if( m_pcm->FetchRepository( url, repository ) )
+            std::unique_ptr<WX_PROGRESS_REPORTER> reporter(
+                    new WX_PROGRESS_REPORTER( this, wxT( "" ), 1 ) );
+
+            if( m_pcm->FetchRepository( url, repository, reporter.get() ) )
             {
                 wxString name = repository.name;
                 int      increment = 1;

@@ -30,7 +30,6 @@
 #include "pgm_base.h"
 #include "picosha2.h"
 #include "settings/settings_manager.h"
-#include "widgets/wx_progress_reporters.h"
 
 #include <fstream>
 #include <iomanip>
@@ -186,13 +185,10 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER( wxWindow* aParent ) : m_dialog( 
 
 
 bool PLUGIN_CONTENT_MANAGER::DownloadToStream( const wxString& aUrl, std::ostream* aOutput,
-                                               const wxString& aDialogTitle,
-                                               const size_t    aSizeLimit )
+                                               WX_PROGRESS_REPORTER* aReporter,
+                                               const size_t          aSizeLimit )
 {
     bool size_exceeded = false;
-
-    std::unique_ptr<WX_PROGRESS_REPORTER> reporter(
-            new WX_PROGRESS_REPORTER( m_dialog, aDialogTitle, 1 ) );
 
     TRANSFER_CALLBACK callback = [&]( size_t dltotal, size_t dlnow, size_t ultotal, size_t ulnow )
     {
@@ -206,16 +202,16 @@ bool PLUGIN_CONTENT_MANAGER::DownloadToStream( const wxString& aUrl, std::ostrea
 
         if( dltotal > 1024 )
         {
-            reporter->SetCurrentProgress( dlnow / (double) dltotal );
-            reporter->Report( wxString::Format( _( "Downloading %lld/%lld Kb" ), dlnow / 1024,
-                                                dltotal / 1024 ) );
+            aReporter->SetCurrentProgress( dlnow / (double) dltotal );
+            aReporter->Report( wxString::Format( _( "Downloading %lld/%lld Kb" ), dlnow / 1024,
+                                                 dltotal / 1024 ) );
         }
         else
         {
-            reporter->SetCurrentProgress( 0.0 );
+            aReporter->SetCurrentProgress( 0.0 );
         }
 
-        return !reporter->KeepRefreshing();
+        return !aReporter->KeepRefreshing();
     };
 
     KICAD_CURL_EASY curl;
@@ -226,8 +222,8 @@ bool PLUGIN_CONTENT_MANAGER::DownloadToStream( const wxString& aUrl, std::ostrea
 
     int code = curl.Perform();
 
-    if( !reporter->IsCancelled() )
-        reporter->SetCurrentProgress( 1.0 );
+    if( !aReporter->IsCancelled() )
+        aReporter->SetCurrentProgress( 1.0 );
 
     if( code != CURLE_OK )
     {
@@ -243,10 +239,14 @@ bool PLUGIN_CONTENT_MANAGER::DownloadToStream( const wxString& aUrl, std::ostrea
 }
 
 
-bool PLUGIN_CONTENT_MANAGER::FetchRepository( const wxString& aUrl, PCM_REPOSITORY& aRepository )
+bool PLUGIN_CONTENT_MANAGER::FetchRepository( const wxString& aUrl, PCM_REPOSITORY& aRepository,
+                                              WX_PROGRESS_REPORTER* aReporter )
 {
     std::stringstream repository_stream;
-    if( !DownloadToStream( aUrl, &repository_stream, _( "Fetching repository" ), 20480 ) )
+
+    aReporter->SetTitle( _( "Fetching repository" ) );
+
+    if( !DownloadToStream( aUrl, &repository_stream, aReporter, 20480 ) )
     {
         wxLogError( _( "Unable to load repository url" ) );
         return false;
@@ -282,11 +282,14 @@ void PLUGIN_CONTENT_MANAGER::ValidateJson( const nlohmann::json&     aJson,
 
 bool PLUGIN_CONTENT_MANAGER::fetchPackages( const wxString&                  aUrl,
                                             const boost::optional<wxString>& aHash,
-                                            std::vector<PCM_PACKAGE>&        aPackages )
+                                            std::vector<PCM_PACKAGE>&        aPackages,
+                                            WX_PROGRESS_REPORTER*            aReporter )
 {
     std::stringstream packages_stream;
 
-    if( !DownloadToStream( aUrl, &packages_stream, _( "Fetching repository packages" ) ) )
+    aReporter->SetTitle( _( "Fetching repository packages" ) );
+
+    if( !DownloadToStream( aUrl, &packages_stream, aReporter ) )
     {
         wxLogError( _( "Unable to load repository packages url." ) );
         return false;
@@ -305,10 +308,7 @@ bool PLUGIN_CONTENT_MANAGER::fetchPackages( const wxString&                  aUr
         nlohmann::json packages_json = nlohmann::json::parse( packages_stream.str() );
         ValidateJson( packages_json, nlohmann::json_uri( "#/definitions/PackageArray" ) );
 
-        for( nlohmann::json& package : packages_json["packages"] )
-        {
-            aPackages.push_back( package.get<PCM_PACKAGE>() );
-        }
+        aPackages = packages_json["packages"].get<std::vector<PCM_PACKAGE>>();
     }
     catch( std::exception& e )
     {
@@ -362,7 +362,10 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
     nlohmann::json js;
     PCM_REPOSITORY current_repo;
 
-    if( !FetchRepository( url, current_repo ) )
+    std::unique_ptr<WX_PROGRESS_REPORTER> reporter(
+            new WX_PROGRESS_REPORTER( m_dialog, wxT( "" ), 1 ) );
+
+    if( !FetchRepository( url, current_repo, reporter.get() ) )
         return false;
 
     bool packages_cache_exists = false;
@@ -409,7 +412,7 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
     {
         // Cache doesn't exist or is out of date
         if( !fetchPackages( current_repo.packages.url, current_repo.packages.sha256,
-                            current_repo.package_list ) )
+                            current_repo.package_list, reporter.get() ) )
         {
             return false;
         }
@@ -447,9 +450,11 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
             std::ofstream resources_stream( resource_file.GetFullPath().ToUTF8(),
                                             std::ios_base::binary );
 
+            reporter->SetTitle( _( "Downloading resources" ) );
+
             // 100 Mb resource file limit
-            bool success = DownloadToStream( resources.url, &resources_stream,
-                                             _( "Downloading resources" ), 100 * 1024 * 1024 );
+            bool success = DownloadToStream( resources.url, &resources_stream, reporter.get(),
+                                             100 * 1024 * 1024 );
 
             resources_stream.close();
 
