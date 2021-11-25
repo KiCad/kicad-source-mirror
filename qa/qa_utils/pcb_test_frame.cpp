@@ -64,7 +64,7 @@
 #include <tools/pcb_tool_base.h>
 #include <tools/pcb_actions.h>
 #include <pcbnew/tools/pcb_selection_tool.h>
-#include <plugins/kicad/kicad_plugin.h>
+#include <plugins/kicad/pcb_plugin.h>
 
 #include "pcb_test_frame.h"
 
