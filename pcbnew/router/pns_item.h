@@ -81,6 +81,7 @@ public:
         m_rank = -1;
         m_routable = true;
         m_isVirtual = false;
+        m_isCompoundShapePrimitive = false;
     }
 
     ITEM( const ITEM& aOther )
@@ -95,6 +96,7 @@ public:
         m_rank = aOther.m_rank;
         m_routable = aOther.m_routable;
         m_isVirtual = aOther.m_isVirtual;
+        m_isCompoundShapePrimitive = aOther.m_isCompoundShapePrimitive;
     }
 
     virtual ~ITEM();
@@ -235,6 +237,9 @@ public:
         return m_isVirtual;
     }
 
+    void SetIsCompoundShapePrimitive() { m_isCompoundShapePrimitive = true; }
+    bool IsCompoundShapePrimitive() const { return m_isCompoundShapePrimitive; }
+
 private:
     bool collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly ) const;
 
@@ -251,6 +256,7 @@ protected:
     int           m_rank;
     bool          m_routable;
     bool          m_isVirtual;
+    bool          m_isCompoundShapePrimitive;
 };
 
 template<typename T, typename S>

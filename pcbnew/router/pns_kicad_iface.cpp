@@ -1109,6 +1109,7 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
                 solid->SetNet( -1 );
                 solid->SetParent( aZone );
                 solid->SetShape( triShape );
+                solid->SetIsCompoundShapePrimitive();
                 solid->SetRoutable( false );
 
                 aWorld->Add( std::move( solid ) );
@@ -1141,6 +1142,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
         solid->SetNet( -1 );
         solid->SetParent( dynamic_cast<BOARD_ITEM*>( aText ) );
         solid->SetShape( new SHAPE_SEGMENT( start, end, textWidth ) );
+        solid->SetIsCompoundShapePrimitive();
         solid->SetRoutable( false );
 
         aWorld->Add( std::move( solid ) );
@@ -1180,7 +1182,9 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
         if( aItem->GetShape() == SHAPE_T::POLY && aItem->IsFilled() )
             return false;
 
-        for( SHAPE* shape : aItem->MakeEffectiveShapes() )
+        std::vector<SHAPE*> shapes = aItem->MakeEffectiveShapes();
+
+        for( SHAPE* shape : shapes )
         {
             std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
 
@@ -1202,7 +1206,11 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
 
             solid->SetNet( -1 );
             solid->SetParent( aItem );
-            solid->SetShape( shape );
+            solid->SetShape( shape );       // takes ownership
+
+            if( shapes.size() > 1 )
+                solid->SetIsCompoundShapePrimitive();
+
             solid->SetRoutable( false );
 
             aWorld->Add( std::move( solid ) );
