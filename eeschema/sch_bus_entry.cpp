@@ -57,6 +57,10 @@ SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, bool 
         m_size.y *= -1;
 
     m_isDanglingStart = m_isDanglingEnd = true;
+
+    m_lastResolvedWidth = Mils2iu( DEFAULT_WIRE_WIDTH_MILS );
+    m_lastResolvedLineStyle = PLOT_DASH_TYPE::SOLID;
+    m_lastResolvedColor = COLOR4D::UNSPECIFIED;
 }
 
 
