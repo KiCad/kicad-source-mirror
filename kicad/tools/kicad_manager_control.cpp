@@ -780,14 +780,6 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
         execFile = EESCHEMA_EXE;
     else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editOtherPCB ) )
         execFile = PCBNEW_EXE;
-#ifdef PCM
-    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::showPluginManager ) )
-    {
-        DIALOG_PCM* pcm = new DIALOG_PCM( m_frame );
-        pcm->ShowModal();
-        pcm->Destroy();
-    }
-#endif
     else
         wxFAIL_MSG( "Execute(): unexpected request" );
 
@@ -823,6 +815,22 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 }
 
 
+int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
+{
+#ifdef PCM
+    DIALOG_PCM pcm( m_frame );
+    pcm.ShowModal();
+
+    // For some reason, after a double click the bitmap button calling
+    // PCM keeps the focus althougt the focus was not set to this button.
+    // This hack force removing the focus from this button
+    m_frame->SetFocus();
+#endif
+
+    return 0;
+}
+
+
 void KICAD_MANAGER_CONTROL::setTransitions()
 {
     Go( &KICAD_MANAGER_CONTROL::NewProject,      KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
@@ -849,6 +857,6 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::editOtherPCB.MakeEvent() );
 
 #ifdef PCM
-    Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::showPluginManager.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ShowPluginManager, KICAD_MANAGER_ACTIONS::showPluginManager.MakeEvent() );
 #endif
 }

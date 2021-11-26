@@ -23,6 +23,7 @@
 #include "panel_kicad_launcher_base.h"
 
 class TOOL_MANAGER;
+class KICAD_MANAGER_FRAME;
 
 class PANEL_KICAD_LAUNCHER : public PANEL_KICAD_LAUNCHER_BASE
 {
@@ -38,6 +39,7 @@ private:
 
 private:
     TOOL_MANAGER* m_toolManager;
+    KICAD_MANAGER_FRAME* m_frame;
 };
 
 

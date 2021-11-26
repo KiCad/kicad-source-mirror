@@ -31,7 +31,8 @@
 PANEL_KICAD_LAUNCHER::PANEL_KICAD_LAUNCHER( wxWindow* aParent ) :
         PANEL_KICAD_LAUNCHER_BASE( aParent )
 {
-    m_toolManager = static_cast<KICAD_MANAGER_FRAME*>( aParent )->GetToolManager();
+    m_frame = static_cast<KICAD_MANAGER_FRAME*>( aParent );
+    m_toolManager = m_frame->GetToolManager();
     CreateLaunchers();
 
     Bind( wxEVT_SYS_COLOUR_CHANGED,
@@ -69,7 +70,7 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
                     {
                         // Defocus the button because leaving the large buttons
                         // focused after a click looks out of place in the launcher
-                        GetParent()->SetFocus();
+                        m_frame->SetFocus();
                         // Gives a slice of time to update the button state (mandatory on GTK,
                         // useful on MSW to avoid some cosmetic issues).
                         wxSafeYield();
