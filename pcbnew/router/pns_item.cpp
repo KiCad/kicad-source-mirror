@@ -19,6 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <zone.h>
 #include "pns_node.h"
 #include "pns_item.h"
 #include "pns_line.h"
@@ -52,6 +53,39 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
 
     // check if we are not on completely different layers first
     if( !m_layers.Overlaps( aOther->m_layers ) )
+        return false;
+
+    auto checkKeepout =
+            []( const ZONE* aKeepout, const BOARD_ITEM* aOther )
+            {
+                constexpr KICAD_T TRACK_TYPES[] = { PCB_ARC_T, PCB_TRACE_T, EOT };
+
+                if( aKeepout->GetDoNotAllowTracks() && aOther->IsType( TRACK_TYPES ) )
+                    return true;
+
+                if( aKeepout->GetDoNotAllowVias() && aOther->Type() == PCB_VIA_T )
+                    return true;
+
+                if( aKeepout->GetDoNotAllowPads() && aOther->Type() == PCB_PAD_T )
+                    return true;
+
+                // Incomplete test, but better than nothing:
+                if( aKeepout->GetDoNotAllowFootprints() && aOther->Type() == PCB_PAD_T )
+                {
+                    return !aKeepout->GetParentFootprint()
+                            || aKeepout->GetParentFootprint() != aOther->GetParentFootprint();
+                }
+
+                return false;
+            };
+
+    const ZONE* zoneA = dynamic_cast<ZONE*>( Parent() );
+    const ZONE* zoneB = dynamic_cast<ZONE*>( aOther->Parent() );
+
+    if( zoneA && aOther->Parent() && !checkKeepout( zoneA, aOther->Parent() ) )
+        return false;
+
+    if( zoneB && Parent() && !checkKeepout( zoneB, Parent() ) )
         return false;
 
     if( holeA || holeB )

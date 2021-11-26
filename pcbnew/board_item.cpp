@@ -176,6 +176,17 @@ std::shared_ptr<SHAPE> BOARD_ITEM::GetEffectiveShape( PCB_LAYER_ID aLayer ) cons
 }
 
 
+BOARD_ITEM_CONTAINER* BOARD_ITEM::GetParentFootprint() const
+{
+    BOARD_ITEM_CONTAINER* ancestor = GetParent();
+
+    while( ancestor && ancestor->Type() == PCB_GROUP_T )
+        ancestor = ancestor->GetParent();
+
+    return ( ancestor && ancestor->Type() == PCB_FOOTPRINT_T ) ? ancestor : nullptr;
+}
+
+
 void BOARD_ITEM::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     wxMessageBox( wxT( "virtual BOARD_ITEM::Rotate used, should not occur" ), GetClass() );

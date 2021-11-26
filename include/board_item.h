@@ -134,6 +134,8 @@ public:
 
     BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_parent; }
 
+    BOARD_ITEM_CONTAINER* GetParentFootprint() const;
+
     /**
      * Return the primary layer this item is on.
      */
