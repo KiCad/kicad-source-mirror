@@ -91,7 +91,7 @@ void LoadBoard( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath,
         m_DRCEngine->InitEngine( wxFileName() );
 
     aBoard->GetDesignSettings().m_DRCEngine = m_DRCEngine;
-
+    aBoard->BuildListOfNets();
     aBoard->BuildConnectivity();
 }
 
