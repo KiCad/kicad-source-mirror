@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-25 08:26+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2021-11-26 03:21+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -65,7 +65,7 @@ msgstr "创建导线和过孔"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:683
 msgid "Create zones"
-msgstr "创建覆铜"
+msgstr "创建敷铜"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:752
 msgid "Simplifying copper layers polygons"
@@ -527,7 +527,7 @@ msgstr "显示 3D 轴线"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:250
 msgid "Toggle zone display"
-msgstr "切换覆铜显示"
+msgstr "切换敷铜显示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle adhesive display"
@@ -701,7 +701,7 @@ msgstr "显示电路板"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:82
 msgid "Show filled areas in zones"
-msgstr "显示覆铜中的填充区域"
+msgstr "显示敷铜中的填充区域"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:85
 msgid "Use bare copper color for unplated copper"
@@ -4019,7 +4019,7 @@ msgstr "图形"
 #: common/eda_item.cpp:321 common/eda_item.cpp:330
 #: pcbnew/tools/board_inspection_tool.cpp:381
 msgid "Zone"
-msgstr "覆铜"
+msgstr "敷铜"
 
 #: common/eda_item.cpp:322 pcbnew/pcb_track.cpp:659
 msgid "Track"
@@ -20055,7 +20055,7 @@ msgid ""
 msgstr ""
 "警告：\n"
 "过孔焊盘直径 >= 间隙过孔直径。\n"
-"无法计算一些参数，因覆铜区内有一个过孔。"
+"无法计算一些参数，因敷铜区内有一个过孔。"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:260
 msgid "Thermal resistance:"
@@ -21135,7 +21135,7 @@ msgstr "供应商和参考"
 
 #: pcbnew/cleanup_item.cpp:46 pcbnew/zone_filler.cpp:95
 msgid "Checking zone fills..."
-msgstr "检查覆铜填充..."
+msgstr "检查敷铜填充..."
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove track shorting two nets"
@@ -22087,15 +22087,15 @@ msgstr "通过焊盘数进行网络分类"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:95
 msgid "Zone name:"
-msgstr "覆铜名称："
+msgstr "敷铜名称："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:97
 msgid "A unique name for this zone to identify it for DRC"
-msgstr "此覆铜的唯一名称，用于在 DRC 中对其进行标识"
+msgstr "此敷铜的唯一名称，用于在 DRC 中对其进行标识"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:104
 msgid "Zone priority level:"
-msgstr "覆铜优先级："
+msgstr "敷铜优先级："
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:106
 msgid ""
@@ -22105,9 +22105,9 @@ msgid ""
 "* If its priority is higher, its outlines are removed from the other zone.\n"
 "* If its priority is equal, a DRC error is set."
 msgstr ""
-"覆铜按优先级填充，级别 3 优先级高于级别 2。\n"
-"当覆铜位于另一个覆铜内时：\n"
-"* 如果优先级较高，则其轮廓将从其他覆铜中删除。\n"
+"敷铜按优先级填充，级别 3 优先级高于级别 2。\n"
+"当敷铜位于另一个敷铜内时：\n"
+"* 如果优先级较高，则其轮廓将从其他敷铜中删除。\n"
 "* 如果其优先级相等，则设置 DRC 错误。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:127
@@ -22299,17 +22299,17 @@ msgstr "小于此的孤铜将被移除"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:381
 msgid "Export Settings to Other Zones"
-msgstr "导出设置到其他覆铜"
+msgstr "导出设置到其他敷铜"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:382
 msgid ""
 "Export this zone setup (excluding layer and net selection) to all other "
 "copper zones."
-msgstr "导出该覆铜设置 (除层和网络选择) 到所有其它覆铜区。"
+msgstr "导出该敷铜设置 (除层和网络选择) 到所有其它敷铜区。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:139
 msgid "Copper Zone Properties"
-msgstr "覆铜区属性"
+msgstr "敷铜区属性"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:134
 msgid "Numerals (0,1,2,...,9,10)"
