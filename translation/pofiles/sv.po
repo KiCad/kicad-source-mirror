@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-21 21:17+0000\n"
+"PO-Revision-Date: 2021-11-26 21:26+0000\n"
 "Last-Translator: Axel Henriksson <axe.henriksson@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -17367,7 +17367,6 @@ msgid "Top paste"
 msgstr "Lödpasta topp"
 
 #: gerbview/files.cpp:153
-#, fuzzy
 msgid "Keep-out layer"
 msgstr "Keep-out-lager"
 
@@ -18320,7 +18319,6 @@ msgid "Uninstall"
 msgstr "Avinstallera"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:133
-#, fuzzy
 msgid "Apply Changes"
 msgstr "Tillämpa ändringar"
 
@@ -18377,7 +18375,6 @@ msgid "Discard action"
 msgstr "Förkasta handling"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
-#, fuzzy
 msgid "Install from File..."
 msgstr "Installera från fil..."
 
@@ -18395,7 +18392,6 @@ msgid "Downloaded %lld/%lld Kb"
 msgstr "Nedladdat %lld/%lld Kb"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download Progress"
 msgstr "Nedladdningsframsteg"
 
@@ -18404,16 +18400,14 @@ msgid "Waiting..."
 msgstr "Väntar..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall Progress"
-msgstr "Övergripande framsteg"
+msgstr "Totalt framsteg"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
 msgstr "Detaljer"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
-#, fuzzy
 msgid "Applying Package Changes"
 msgstr "Tillämpar paketändringar"
 
@@ -18430,19 +18424,16 @@ msgid "Metadata"
 msgstr "Metadata"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
-#, fuzzy
 msgid "Package identifier: "
-msgstr "Paketidentifierare: %s\n"
+msgstr "Paketidentifierare: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "Licens"
+msgstr "Licens: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
-#, fuzzy
 msgid "Tags: "
-msgstr "Taggar: %s\n"
+msgstr "Taggar: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:257
 msgid "Author"
@@ -18497,19 +18488,16 @@ msgid "Install package"
 msgstr "Installera paket"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Download Size"
-msgstr "Ladda ned"
+msgstr "Nedladdningsstorlek"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Install Size"
-msgstr "Inst-storlek"
+msgstr "Installationsstorlek"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
-#, fuzzy
 msgid "Compatible"
-msgstr "Kompatibilitetsläge:"
+msgstr "Kompatibel"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 msgid "Show all versions"
@@ -18652,9 +18640,8 @@ msgid "Aborting package installation."
 msgstr "Avbryter paketinstallation."
 
 #: kicad/pcm/pcm_task_manager.cpp:254
-#, fuzzy
 msgid "Extracted package\n"
-msgstr "Extraherar paket '%s'."
+msgstr "Extraherat paket\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:298
 #, c-format
@@ -20719,9 +20706,8 @@ msgstr "Substratets höjd"
 
 #: pcb_calculator/transline_ident.cpp:126
 #: pcb_calculator/transline_ident.cpp:314
-#, fuzzy
 msgid "Height of box top"
-msgstr "Lådans höjd"
+msgstr "Lådtoppens höjd"
 
 #: pcb_calculator/transline_ident.cpp:129
 #: pcb_calculator/transline_ident.cpp:168
@@ -21781,7 +21767,7 @@ msgstr ""
 "%d %s UUID: [%s], X, Y: %s, Rundad X, Y, %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:602
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "PCB has %d empty or invalid reference designations.\n"
@@ -21790,7 +21776,8 @@ msgid ""
 msgstr ""
 "\n"
 "PCB har %d tomma eller ogiltiga referensbeteckningar.\n"
-"Rekommenderar körning av DRC med 'Testa fotavtryck mot schema' ikryssad.\n"
+"Rekommenderar körning av DRC med 'Testa paritet mellan mönsterkort och "
+"schema' ikryssad.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
 #, c-format
@@ -22001,7 +21988,7 @@ msgstr "Tillbaka prefix:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:260
 #, fuzzy
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr "Valfritt prefix för referensbeteckningar för lödsidan (ex. B_)"
+msgstr "Valfritt prefix för lödsidans referensbeteckningar (ex. B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
 msgid "Exclude locked footprints"
@@ -22554,7 +22541,7 @@ msgid ""
 "a pad connected by thermal relief spokes."
 msgstr ""
 "Avståndet som hålls fritt mellan zonens fyllda yta och en lödyta som kopplas "
-"samman med värmebromsande ledare."
+"samman med ."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:234
 msgid "Clearance between pads in the same net and filled areas."
@@ -23262,7 +23249,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr "Testa paritet mellan PCB och schematisk"
+msgstr "Testa paritet mellan mönsterkort och schema"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
@@ -23561,9 +23548,8 @@ msgid "Overwrite old file"
 msgstr "Skriv över gammal fil"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:121
-#, fuzzy
 msgid "Board outline chaining tolerance:"
-msgstr "Board skiss byggare:"
+msgstr "Kortkonturens sammanfogningstolerans:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:125
 msgid "Tight (0.001 mm)"
@@ -25354,9 +25340,9 @@ msgid "Pad Properties"
 msgstr "Pad Egenskaper"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:175
-#, fuzzy
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "Standardkuddegenskaper ..."
+msgstr ""
+"Standardegenskaper för lödytor skapade med \"Lägg till lödyta\"-verktyget"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:487
 #, c-format
@@ -25450,16 +25436,16 @@ msgstr ""
 "överlappar inte varandra."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1264
-#, fuzzy
 msgid "Warning: Negative local clearance values will have no effect."
-msgstr "Fel: Negativa lokala avståndsvärden har ingen effekt."
+msgstr "Varning: Negativa lokala avståndsvärden har ingen verkan."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1281
-#, fuzzy
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
-msgstr "Fel: Negativa lödmaskavstånd stöds inte för anpassade padformer."
+msgstr ""
+"Varning: Negativa lödmaskavstånd är större än vissa primitiva former. "
+"Resultaten kan bli oförutsägbara."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1290
 msgid ""
@@ -25494,46 +25480,40 @@ msgid "Too large value for pad delta size."
 msgstr "För stort värde för paddeltastorlek."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1337
-#, fuzzy
 msgid "Warning: Through hole pad has no hole."
-msgstr "Fel: Genomgående hålplatta har inget hål."
+msgstr "Varning: Genomgående hål-element har inget hål."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1344
-#, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use an SMD pad "
 "instead."
 msgstr ""
-"Fel: Anslutningskuddarna har ingen lödpasta. Använd istället en SMD-pad."
+"Varning: Lödytor för kontakter har vanligtvis ingen lödpasta. Använd "
+"istället en lödyta för ytmontering."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1354
 msgid "Warning: SMD pad has no outer layers."
 msgstr "Varning: SMD-dynan har inga yttre lager."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1363
-#, fuzzy
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
-msgstr "Varning: Fiducial egendom kan inte ställas in på NPTH-dynor."
+msgstr "Varning: Fiducial-egenskapen är meningslös för NPTH-hål."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1369
-#, fuzzy
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
-msgstr "Varning: Testpunktsegenskapen kan inte ställas in på NPTH-dynor."
+msgstr "Varning: Testpunktsegenskapen är meningslös för NPTH-hål."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1375
-#, fuzzy
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
-msgstr "Varning: Egenskapen kylfläns kan inte ställas in på NPTH-dynor."
+msgstr "Varning: Kylfläns-egenskapen är meningslös för NPTH-hål."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1381
-#, fuzzy
 msgid "Warning: Castellated property is for PTH pads."
-msgstr "Varning: Castellated-egendom kan endast ställas in på PTH-dynor."
+msgstr "Varning: Castellated-egenskapen kan endast användas på PTH-hål."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1387
-#, fuzzy
 msgid "Warning: BGA property is for SMD pads."
-msgstr "Varning: BGA-egendom kan bara ställas in på SMD-dynor."
+msgstr "Varning: BGA-egenskapen kan bara användas på lödytor för ytmontering."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1396
 msgid "Error: Negative corner size."
@@ -26046,9 +26026,8 @@ msgid "Plot format:"
 msgstr "Tomtformat:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
-#, fuzzy
 msgid "Include Layers"
-msgstr "Inkluderade lager"
+msgstr "Inkludera lager"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
@@ -26071,19 +26050,16 @@ msgid "Force plot invisible footprint values and reference designators"
 msgstr "Tvinga fram osynliga fotavtrycksvärden och referensbeteckningar"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
-#, fuzzy
 msgid "Plot Edge.Cuts on all layers"
-msgstr "Skisskuddar på fantastiska lager"
+msgstr "Plotta kortkonturer på alla lager"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
-#, fuzzy
 msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr "Plotta inte innehållet i PCB-kantlagret på några andra lager."
+msgstr "Plotta innehållet i kortkonturslagret på alla andra lager"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
-#, fuzzy
 msgid "Sketch pads on fabrication layers"
-msgstr "Skisskuddar på fantastiska lager"
+msgstr "Rita lödytor på tillverkningslager"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
