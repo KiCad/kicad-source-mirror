@@ -354,8 +354,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
     }
     else
     {
-        // Polygon start point. Arbitrarily chosen end of the
-        // segment and build the poly from here.
+        // Polygon start point. Arbitrarily choose an end of the segment and build the polygon
+        // from there.
 
         wxPoint startPt = graphic->GetEnd();
 
@@ -363,8 +363,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         aPolygons.NewOutline();
         aPolygons.Append( prevPt );
 
-        // Do not append the other end point yet of this 'graphic', this first
-        // 'graphic' might be an arc or a curve.
+        // Do not append the other end point yet of this 'graphic', this first 'graphic' might
+        // be an arc or a curve.
 
         for(;;)
         {
@@ -391,8 +391,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
             {
                 wxPoint  nextPt;
 
-                // Use the line segment end point furthest away from prevPt as we assume
-                // the other end to be ON prevPt or very close to it.
+                // Use the line segment end point furthest away from prevPt as we assume the
+                // other end to be ON prevPt or very close to it.
 
                 if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd()) )
                     nextPt = graphic->GetEnd();
@@ -557,8 +557,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         graphic->SetFlags( SKIP_STRUCT );
         startCandidates.erase( startCandidates.begin() );
 
-        // Both circles and polygons on the edge cuts layer are closed items that
-        // do not connect to other elements, so we process them independently
+        // Both circles and polygons on the edge cuts layer are closed items that do not
+        // connect to other elements, so we process them independently
         if( graphic->GetShape() == SHAPE_T::POLY )
         {
             double   orientation = 0.0;
@@ -647,9 +647,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     {
                         wxPoint nextPt;
 
-                        // Use the line segment end point furthest away from
-                        // prevPt as we assume the other end to be ON prevPt or
-                        // very close to it.
+                        // Use the line segment end point furthest away from prevPt as we assume
+                        // the other end to be ON prevPt or very close to it.
 
                         if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd()) )
                             nextPt = graphic->GetEnd();
@@ -671,7 +670,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         wxPoint pcenter = graphic->GetCenter();
                         double  angle   = -graphic->GetArcAngle();
                         int     radius  = graphic->GetRadius();
-                        int     steps = GetArcToSegmentCount( radius, aErrorMax, angle / 10.0 );
+                        int     steps   = GetArcToSegmentCount( radius, aErrorMax, angle / 10.0 );
 
                         if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
                         {
@@ -682,10 +681,11 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         }
 
                         // Create intermediate points between start and end:
-                         for( int step = 1; step < steps; ++step )
+                        for( int step = 1; step < steps; ++step )
                         {
-                            double rotation = ( angle * step ) / steps;
+                            double  rotation = ( angle * step ) / steps;
                             wxPoint pt = pstart;
+
                             RotatePoint( &pt, pcenter, rotation );
 
                             aPolygons.Append( pt, -1, hole );
@@ -707,9 +707,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         wxPoint nextPt;
                         bool    reverse = false;
 
-                        // Use the end point furthest away from
-                        // prevPt as we assume the other end to be ON prevPt or
-                        // very close to it.
+                        // Use the end point furthest away from  prevPt as we assume the other
+                        // end to be ON prevPt or very close to it.
 
                         if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd()) )
                         {
