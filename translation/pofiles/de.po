@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-27 14:00+0000\n"
+"PO-Revision-Date: 2021-11-27 22:30+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -9366,7 +9366,7 @@ msgstr "Pinnamen ein-/ausblenden"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:231
 msgid "Place pin names inside"
-msgstr "Pinnamen innenseitig platzieren"
+msgstr "Pinnamen innen platzieren"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:233
 msgid ""
@@ -9383,7 +9383,7 @@ msgstr "Positionsversatz:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:242
 msgid "Margin between the pin name position and the symbol body."
-msgstr "Abstand zwischen Pin-Name und Symbolkörper."
+msgstr "Abstand zwischen Pinname und Symbolkörper."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:249
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:133
@@ -9422,11 +9422,11 @@ msgstr "Footprintfilter hinzufügen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:298
 msgid "Edit footprint filter"
-msgstr "Footprintdatei bearbeiten"
+msgstr "Footprintfilter bearbeiten"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:306
 msgid "Delete footprint filter"
-msgstr "Footprintfilter entfernen"
+msgstr "Footprintfilter löschen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:320
 msgid "Footprint Filters"
@@ -9438,7 +9438,7 @@ msgstr "Spice-Modell bearbeiten..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:115
 msgid "Library Symbol Properties"
-msgstr "Bibliotheks-Symbol-Eigenschaften"
+msgstr "Bibliothekssymbol-Eigenschaften"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:28
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:37
@@ -9495,15 +9495,15 @@ msgstr "Von allen Einheiten gemeinsam genutzt"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:192
 msgid "Common to all body styles"
-msgstr "Von allen Symboleformen gemeinsam genutzt"
+msgstr "Von allen Symbolformen gemeinsam genutzt"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.h:81
 msgid "Text Item Properties"
-msgstr "Eigenschaften Textelement"
+msgstr "Textelement-Eigenschaften"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:53
 msgid "Leave unchanged"
-msgstr "Änderungen nicht speichern"
+msgstr "Unverändert lassen"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:64
 msgid "Style:"
@@ -9543,10 +9543,10 @@ msgid ""
 "This schematic has one or more buses with more than one label.\n"
 "This was allowed in previous KiCad versions but is no longer permitted."
 msgstr ""
-"Dieser Schaltplan hat einen oder mehrere Busse mit mehr als einem "
-"Bezeichner.\n"
+"Dieser Schaltplan hat einen oder mehrere Busse mit mehr als einem Bezeichner."
+"\n"
 "In vorherigen KiCad Versionen war dies zulässig, ist nun jedoch nicht mehr "
-"möglich."
+"erlaubt."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:23
 msgid ""
@@ -9573,7 +9573,7 @@ msgstr "Busse migrieren"
 #: eeschema/dialogs/dialog_netlist.cpp:268
 #: eeschema/dialogs/dialog_netlist_base.h:69
 msgid "Export Netlist"
-msgstr "Export Netzliste"
+msgstr "Netzliste exportieren"
 
 #: eeschema/dialogs/dialog_netlist.cpp:300
 msgid "Simulator requires a fully annotated schematic."
@@ -9586,7 +9586,8 @@ msgstr "Werte von passiven Symbolen umformatieren"
 #: eeschema/dialogs/dialog_netlist.cpp:327
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
 msgstr ""
-"Werte von passiven Symbolen umformatieren (z.B. M -> Meg; 100 nF -> 100n)"
+"Werte von Symbolen passiver Bauteile umformatieren (z.B. M -> Meg; 100 nF -> "
+"100n)"
 
 #: eeschema/dialogs/dialog_netlist.cpp:332
 msgid "External simulator command:"
@@ -9599,16 +9600,16 @@ msgid ""
 "%I will be replaced by the actual spice netlist name"
 msgstr ""
 "Geben Sie die Befehlszeile ein, um Spice auszuführen\n"
-"Normalerweise <Pfad zur Gewürzbinärdatei>% I.\n"
-"% Ich werde durch den tatsächlichen Namen der Gewürznetzliste ersetzt"
+"Normalerweise <Pfad-zum-Spice-Binärprogramm> %I\n"
+"%I wird durch den Namen der Spice-Netzliste ersetzt"
 
 #: eeschema/dialogs/dialog_netlist.cpp:347
 msgid "Create Netlist and Run Simulator Command"
-msgstr "Erstellen Sie eine Netzliste und führen Sie den Simulator-Befehl aus"
+msgstr "Netzliste erstellen und Simulator-Befehl ausführen"
 
 #: eeschema/dialogs/dialog_netlist.cpp:398
 msgid "Netlist command:"
-msgstr "Netzliste Befehl:"
+msgstr "Netzlisten-Befehl:"
 
 #: eeschema/dialogs/dialog_netlist.cpp:444
 msgid "Save Netlist File"
@@ -9631,7 +9632,7 @@ msgstr "Dieses Plugin existiert bereits."
 
 #: eeschema/dialogs/dialog_netlist.cpp:662
 msgid "You must provide a netlist generator command string"
-msgstr "Sie müssen einen Netzlistengenerator-Kommando angeben"
+msgstr "Sie müssen einen Netzlistengenerator-Befehl angeben"
 
 #: eeschema/dialogs/dialog_netlist.cpp:668
 msgid "You must provide a netlist generator title"
@@ -9664,12 +9665,12 @@ msgstr "Generatoren durchsuchen..."
 
 #: eeschema/dialogs/dialog_netlist_base.h:107
 msgid "Script Generator Properties"
-msgstr "Eigenschaften Generator-Skript"
+msgstr "Generatorskript-Eigenschaften"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:50
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:226
 msgid "Alternate Pin Name"
-msgstr "Alternativer Pin-Name"
+msgstr "Alternativer Pinname"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:145
 msgid "Synchronized pins edit mode, and this pin is new"
@@ -9692,8 +9693,8 @@ msgid ""
 "Similar pins at the same location will be edited. Pin number of other pins "
 "will be not modified"
 msgstr ""
-"Ähnliche Pins an der gleichen Position werden bearbeitet. Die Pin-Nummern "
-"der anderen Pins werden nicht geändert"
+"Ähnliche Pins an der gleichen Position werden bearbeitet. Die Pinnummern der "
+"anderen Pins werden nicht geändert"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
@@ -9743,7 +9744,7 @@ msgstr "Pin&name:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:64
 msgid "Pin num&ber:"
-msgstr "Pin&nummern:"
+msgstr "Pinnu&mmer:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:66
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
@@ -9763,11 +9764,11 @@ msgstr "&Pinlänge:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:96
 msgid "N&ame text size:"
-msgstr "Größe der &Beschriftung:"
+msgstr "Textgröße N&ame:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:103
 msgid "Number text si&ze:"
-msgstr "Angabe Textgröße:"
+msgstr "Textgröße Nu&mmer:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:110
 msgid "Electrical type:"
@@ -9779,7 +9780,7 @@ msgstr "Wird vom ERC verwendet."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:119
 msgid "Graphic style:"
-msgstr "Grafische Darstellung:"
+msgstr "Grafikstil:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:176
 msgid "&Visible"
@@ -9812,7 +9813,7 @@ msgstr "Aktuelle Seite plotten"
 #: pcbnew/exporters/gen_footprints_placefile.cpp:209
 #: pcbnew/exporters/gen_footprints_placefile.cpp:546
 msgid "Select Output Directory"
-msgstr "Wähle das Ausgabeverzeichnis"
+msgstr "Ausgabeverzeichnis wählen"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:232
 #: pcbnew/dialogs/dialog_gendrill.cpp:306 pcbnew/dialogs/dialog_plot.cpp:396
@@ -9832,7 +9833,7 @@ msgstr ""
 #: pcbnew/exporters/gen_footprints_placefile.cpp:217
 #: pcbnew/exporters/gen_footprints_placefile.cpp:227
 msgid "Plot Output Directory"
-msgstr "Ausgabeverzeichnis für Plot"
+msgstr "Plot-Ausgabeverzeichnis"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:277
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
@@ -9939,7 +9940,7 @@ msgstr "Ausweichen auf Benutzerpfad \"%s\"."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1308
 #, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "Dateiname \"%s%s\" kann nicht normalisiert werden."
+msgstr "Pfad \"%s%s\" kann nicht normalisiert werden."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1295
 msgid "No project or path defined for the current schematic."
@@ -9958,7 +9959,7 @@ msgid ""
 "schematic main file location."
 msgstr ""
 "Zielverzeichnis für Plotdateien. Dieses kann sich absolut oder relativ zur "
-"Platinendatei befinden."
+"Platinen-Hauptdatei befinden."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
@@ -10007,7 +10008,7 @@ msgstr "Schwarz/Weiß"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
 msgid "Plot background color"
-msgstr "Plot Hintergrundfarbe"
+msgstr "Hintergrundfarbe plotten"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
@@ -10037,7 +10038,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:119
 #: pcbnew/dialogs/dialog_plot_base.cpp:254
 msgid "HPGL Options"
-msgstr "HPGL Optionen"
+msgstr "HPGL-Optionen"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:126
 msgid "Position and units:"
@@ -10065,11 +10066,11 @@ msgstr "Stiftbreite:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:86
 msgid "Plot Schematic Options"
-msgstr "Optionen Schaltplan Plotten"
+msgstr "Optionen zum Schaltplan-Plotten"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:326
 msgid "Print Schematic"
-msgstr "Drucke Schaltplan"
+msgstr "Schaltplan drucken"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:333
 msgid "An error occurred attempting to print the schematic."
@@ -10086,21 +10087,21 @@ msgstr "Drucke Schaltplan&referenz und Schriftfeld"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
-msgstr "Drucke die Seitenreferenzen (oder drucke diese nicht)."
+msgstr "Drucke die Seitenreferenzen (oder nicht)."
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:28
 msgid "Print in &black and white only"
-msgstr "Drucke &Schwarz/Weiß"
+msgstr "Nur &schwarz/weiß drucken"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:32
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:211
 msgid "Print background color"
-msgstr "Druck Hintergrundfarbe"
+msgstr "Hintergrundfarbe drucken"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:35
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:216
 msgid "Use a different color theme for printing:"
-msgstr "Benutze anderes Farbthema fürs Drucken:"
+msgstr "Anderes Farbthema zum Drucken verwenden:"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:103
 msgid ""
@@ -10112,9 +10113,9 @@ msgid ""
 "The following changes are recommended to update the project."
 msgstr ""
 "Dieser Schaltplan wurde mit älteren Symbolbibliotheken erstellt, welche den "
-"Schaltplan unbenutzbar machen können. Manche Symbole müssen eventuell mit "
-"anderen Symbolnamen verlinkt werden. Eventuell müssen Symbole \"gerettet"
-"\" (in eine neue Bibliothek kopiert und umbenannt) werden.\n"
+"Schaltplan unbenutzbar machen können.  Manche Symbole müssen eventuell mit "
+"einem anderen Symbolnamen verknüpft werden.  Eventuell müssen Symbole "
+"\"gerettet\" (in eine neue Bibliothek kopiert und umbenannt) werden.\n"
 "\n"
 "Die folgenden Änderungen werden empfohlen, um das Projekt zu aktualisieren."
 
@@ -10153,7 +10154,7 @@ msgstr ""
 "Soll dieses Werkzeug nicht mehr angezeigt werden?\n"
 "Keine Veränderungen werden durchgeführt.\n"
 "\n"
-"Diese Einstellung kann im Dialog \"Symbolbibliotheken\" verändert werden\n"
+"Diese Einstellung kann im Dialog \"Symbolbibliotheken\" verändert werden,\n"
 "und das Werkzeug kann manuell im \"Werkzeug\"-Menü wieder aktiviert werden."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
@@ -10162,11 +10163,11 @@ msgstr "Symbole wiederherstellen"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
 msgid "Symbols to update:"
-msgstr "Symbole zum Aktualisieren:"
+msgstr "Zu aktualisierende Symbole:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:37
 msgid "Instances of this symbol:"
-msgstr "Instanzen von diesem Symbol:"
+msgstr "Instanzen dieses Symbols:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:55
 msgid "Cached Symbol:"
@@ -10178,12 +10179,12 @@ msgstr "Symbol in Bibliothek:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:100
 msgid "Never Show Again"
-msgstr "Nicht nochmal anzeigen"
+msgstr "Nicht wieder anzeigen"
 
 #: eeschema/dialogs/dialog_rescue_each_base.h:67
 #: eeschema/project_rescue.cpp:569 eeschema/project_rescue.cpp:584
 msgid "Project Rescue Helper"
-msgstr "Projektwiederherstellungshelfer"
+msgstr "Projekt-Wiederherstellungsassistent"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:43
 #: eeschema/dialogs/dialog_sch_import_settings_base.h:61
@@ -10229,7 +10230,7 @@ msgstr "Formatierungseinstellungen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
 msgid "Field name templates"
-msgstr "Vorlagen Feldnamen"
+msgstr "Feldnamen-Vorlagen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Pin conflict map"
@@ -10252,7 +10253,7 @@ msgstr "&Suchen nach:"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:36
 #: pcbnew/dialogs/dialog_find_base.cpp:33
 msgid "Text with optional wildcards"
-msgstr "Text mit optionalen Wildcards"
+msgstr "Text mit optionalen Platzhaltern"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:41
 msgid "Replace &with:"
@@ -10327,7 +10328,7 @@ msgstr "Formatierung"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:68
 #: eeschema/eeschema_config.cpp:72
 msgid "Field Name Templates"
-msgstr "Vorlagen Feldnamen"
+msgstr "Feldnamen-Vorlagen"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:70
 msgid "Electrical Rules"
@@ -10408,7 +10409,7 @@ msgstr "Syntaxhilfe"
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:99
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:34
 msgid "Show syntax help window"
-msgstr "Zeige Syntaxhilfe-Fenster"
+msgstr "Syntaxhilfe-Fenster anzeigen"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -10416,7 +10417,7 @@ msgstr "Verbindungstyp:"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:62
 msgid "Sheet Pin Properties"
-msgstr "Schaltplanpin Eigenschaften"
+msgstr "Schaltplanpin-Eigenschaften"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:249
 msgid "A sheet must have a valid file name."
@@ -10446,11 +10447,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:301
 msgid "Use Relative Path"
-msgstr "Einen relativen Pfad verwenden"
+msgstr "Relativen Pfad verwenden"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:302
 msgid "Use Absolute Path"
-msgstr "Absoluten Pfad benutzen"
+msgstr "Absoluten Pfad verwenden"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:333
 msgid "Untitled Sheet"
@@ -10466,8 +10467,8 @@ msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Eeschema > Colors."
 msgstr ""
-"Um einzelne Artikelfarben anzuzeigen, deaktivieren Sie '%s'\n"
-"in Einstellungen> Eeschema> Farben."
+"Um einzelne Elementfarben anzuzeigen, deaktivieren Sie '%s'\n"
+"in Einstellungen > Schaltplaneditor > Farben."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:407
 #, c-format
@@ -10476,7 +10477,7 @@ msgstr "Die Datei \"%s\" scheint keine gültige Schaltplandatei zu sein."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:409
 msgid "Invalid Schematic File"
-msgstr "Ungültige Schema-Datei"
+msgstr "Ungültige Schaltplandatei"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:427
 #, c-format
@@ -10488,7 +10489,8 @@ msgid ""
 msgstr ""
 "Neuer Dateipfad für Schaltplanblatt:\n"
 "\"%s\"\n"
-"kann nicht gegen Dateipfad des Eltern-Schaltplanblattes normiert werden:\n"
+"kann nicht normiert werden gegen den Dateipfad des übergeordneten "
+"Schaltplanblatts:\n"
 "\"%s\"."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
@@ -10505,7 +10507,7 @@ msgstr "\"%s\" mit dieser Datei verknüpfen?"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:512
 #, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
-msgstr "Wert \"%s\" von \"%s\" zu \"%s\" ändern?"
+msgstr "\"%s\" Verknüpfung von \"%s\" zu \"%s\" ändern?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:517
 #: eeschema/dialogs/dialog_sheet_properties.cpp:533
@@ -10520,7 +10522,7 @@ msgstr "Neue Datei \"%s\" mit dem Inhalt von \"%s\" erstellen?"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:563
 #, c-format
 msgid "Error occurred saving schematic file '%s'."
-msgstr "Beim Speichern der Schaltplandatei \"%s\" ist ein Fehler aufgetreten."
+msgstr "Fehler beim Speichern der Schaltplandatei \"%s\"."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:567
 #, c-format
@@ -10529,11 +10531,11 @@ msgstr "Konnte Schaltplan \"%s\" nicht speichern"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:649
 msgid "A sheet must have a name."
-msgstr "Ein Schaltplan muss einen Namen haben."
+msgstr "Ein Schaltplanblatt muss einen Namen haben."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:657
 msgid "A sheet must have a file specified."
-msgstr "Für ein Schaltplan muss eine Datei angegeben sein."
+msgstr "Für ein Schaltplanblatt muss eine Datei angegeben sein."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:804
 msgid "Hierarchical path: "
@@ -10570,11 +10572,11 @@ msgstr "Hierarchischer Pfad:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:79
 msgid "Sheet Properties"
-msgstr "Blatt Eigenschaften"
+msgstr "Blatt-Eigenschaften"
 
 #: eeschema/dialogs/dialog_signal_list_base.cpp:27
 msgid "Add signal by name:"
-msgstr "Hinzufügen Signal nach Name:"
+msgstr "Signal nach Name hinzufügen:"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:113
 msgid "You need to select DC source"
@@ -10646,11 +10648,11 @@ msgstr "Linear"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:29
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:268
 msgid "Frequency scale"
-msgstr "Frequenzskalierung"
+msgstr "Frequenzskala"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:43
 msgid "Number of points:"
-msgstr "Anzahl Punkte:"
+msgstr "Anzahl der Punkte:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:53
 msgid "Start frequency:"
@@ -10749,7 +10751,7 @@ msgstr "Referenzknoten"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:246
 msgid "(optional; default GND)"
-msgstr "(Optional; GND voreingestellt)"
+msgstr "(optional; GND voreingestellt)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:250
 msgid "Noise source"
@@ -10757,7 +10759,7 @@ msgstr "Rauschquelle"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:280
 msgid "Number of points"
-msgstr "Anzahl Punkte"
+msgstr "Anzahl der Punkte"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:287
 msgid "Start frequency [Hz]"
@@ -10774,7 +10776,7 @@ msgstr "Rauschen"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:319
 msgid "This tab has no settings"
-msgstr "Dieses Tab hat keine Einstellungen"
+msgstr "Diese Registerkarte hat keine Einstellungen"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:330
 #: eeschema/sim/spice_simulator.cpp:55
@@ -10792,7 +10794,7 @@ msgstr "Sensitivität"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:342
 msgid "Transfer Function"
-msgstr "Transfer Funktion"
+msgstr "Übertragungsfunktion"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:355
 msgid "Time step:"
@@ -10827,20 +10829,20 @@ msgstr "Initialzeit:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:394
 msgid "(optional; default 0)"
-msgstr "(Optional; 0 voreingestellt)"
+msgstr "(optional; 0 voreingestellt)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:408
 #: eeschema/sim/spice_simulator.cpp:64
 msgid "Transient"
-msgstr "Transient"
+msgstr "Transiente"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:413
 msgid "Spice directives:"
-msgstr "Spice Anweisungen:"
+msgstr "Spice-Anweisungen:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:422
 msgid "Load directives from schematic"
-msgstr "Lade Regeln aus dem Schaltplan"
+msgstr "Anweisungen aus Schaltplan laden"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1608
 msgid "Custom"
@@ -10848,11 +10850,12 @@ msgstr "Benutzerdefiniert"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:436
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
-msgstr "Passive Symbolwerte anpassen (z.B. M -> Meg; 100 nF -> 100n)"
+msgstr "Symbolwerte passiver Bauteile anpassen (z.B. M -> Meg; 100 nF -> 100n)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:439
 msgid "Add full path for .include library directives"
-msgstr "Kompletten Pfad in die .include Bibliothek Anweisungen hinzufügen"
+msgstr ""
+"Vollständigen Pfad in den .include-Anweisungen für Bibliotheken hinzufügen"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:446
 msgid "Compatibility mode:"
@@ -10940,7 +10943,8 @@ msgstr "Bei einem JFET ist die Pin-Reihenfolge Drain, Gate, Source"
 msgid ""
 "You need to specify at least the first %d parameters for the transient source"
 msgstr ""
-"Sie müssen mindestens die ersten %d Parameter der Transientenquelle angeben"
+"Sie müssen mindestens die ersten %d Parameter für die Transientenquelle "
+"angeben"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:805
 msgid ""
@@ -10974,7 +10978,7 @@ msgstr "Standardabweichung:"
 #: eeschema/dialogs/dialog_spice_model.cpp:1097
 #: eeschema/dialogs/dialog_spice_model.cpp:1102
 msgid "Mean:"
-msgstr "Bedeutung:"
+msgstr "Mittelwert:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1108
 msgid "Lambda:"
@@ -11011,19 +11015,19 @@ msgstr "Passiver Typ"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:54
 msgid "Spice value in simulation"
-msgstr "Spice Wert in der Simulation"
+msgstr "Spice-Wert in Simulation"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:67
 msgid ""
 "In Spice values, the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
 msgstr ""
-"Der Dezimaltrenner in Spicewerten ist der Punkt.\n"
-"Werte können Einheiten aus den Spice-Symbolen benutzen."
+"In Spice-Werten ist der Dezimaltrenner der Punkt.\n"
+"Werte können Spice-Einheitensymbole verwenden."
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
 msgid "Spice unit symbols in values (case insensitive):"
-msgstr "Spice-Einheit-Symbole in Werten (groß-/kleinschreibungsunabhängig):"
+msgstr "Spice-Einheitensymbole in Werten (groß-/kleinschreibungsunabhängig):"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:210
 msgid "Library:"
@@ -11084,7 +11088,7 @@ msgstr "AC-Phase:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:355
 msgid "radians"
-msgstr "Winkel"
+msgstr "rad"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:366
 msgid "Transient Analysis"
@@ -11248,7 +11252,7 @@ msgstr "AM"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:842
 msgid "Transient noise"
-msgstr "Störspannungsschutz"
+msgstr "Störspannung"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:854
 msgid "Uniform"
@@ -11302,7 +11306,7 @@ msgstr "Symbol in der Simulation deaktivieren"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:943
 msgid "Alternate node sequence:"
-msgstr "Alternative Knotensequenz:"
+msgstr "Alternative Knotenfolge:"
 
 #: eeschema/dialogs/dialog_spice_model_base.h:254
 msgid "Spice Model Editor"
@@ -11321,7 +11325,7 @@ msgstr "Footprints durchsuchen"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:90
 #: eeschema/fields_grid_table.cpp:613 eeschema/tools/ee_actions.cpp:61
 msgid "Show Datasheet"
-msgstr "Datenblatt"
+msgstr "Datenblatt anzeigen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:91
 #: eeschema/fields_grid_table.cpp:614
@@ -11331,7 +11335,7 @@ msgstr "Datenblatt im Browser anzeigen"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:128
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1042
 msgid "The Reference column cannot be hidden."
-msgstr "Die Referenzspalte kann nicht ausgeblendet werden."
+msgstr "Die Referenz-Spalte kann nicht ausgeblendet werden."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:224
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:234
@@ -11357,13 +11361,13 @@ msgstr "Feld hinzufügen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:992
 msgid "Field must have a name."
-msgstr "Das Feld muss einen Namen haben."
+msgstr "Feld muss einen Namen haben."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1000
 #: eeschema/dialogs/dialog_symbol_properties.cpp:785
 #, c-format
 msgid "Field name '%s' already in use."
-msgstr "Feldname \"%s\" existiert bereits."
+msgstr "Feldname \"%s\" wird bereits verwendet."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:31
 msgid "Group symbols"
