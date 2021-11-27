@@ -517,13 +517,19 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     {
         PAD* pad_model = nullptr;
 
-        // Skip pad not on a copper layer, because we only want to transfer the net info
+        // Pads with no copper are never connected to a net
         if( !pad->IsOnCopperLayer() )
+        {
+            pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
             continue;
+        }
 
         // Pads with no numbers are never connected to a net
         if( pad->GetNumber().IsEmpty() )
+        {
+            pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
             continue;
+        }
 
         // Search for a similar pad on a copper layer, to reuse net info
         PAD* last_pad = nullptr;
