@@ -28,17 +28,24 @@ BOOST_AUTO_TEST_CASE( Seeding )
 {
     KIID::SeedGenerator( 0l );
 
+    KIID a0;
+    KIID b0;
+    KIID c0;
+    KIID d0;
+
+    KIID::SeedGenerator( 0l );
+
     KIID a;
-    BOOST_CHECK_EQUAL( a.Hash(), 15552532309556242017ul );
+    BOOST_CHECK_EQUAL( a.Hash(), a0.Hash() );
 
     KIID b;
-    BOOST_CHECK_EQUAL( b.Hash(), 13842873335846156666ul );
+    BOOST_CHECK_EQUAL( b.Hash(), b0.Hash() );
 
     KIID c;
-    BOOST_CHECK_EQUAL( c.Hash(), 15995408467689523943ul );
+    BOOST_CHECK_EQUAL( c.Hash(), c0.Hash() );
 
     KIID d;
-    BOOST_CHECK_EQUAL( d.Hash(), 4943106325342180035ul );
+    BOOST_CHECK_EQUAL( d.Hash(), d0.Hash() );
 }
 
 
