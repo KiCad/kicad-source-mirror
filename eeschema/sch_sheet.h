@@ -430,7 +430,7 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
-    static const wxString GetDefaultFieldName( int aFieldNdx );
+    static const wxString GetDefaultFieldName( int aFieldNdx, bool aTranslated = true );
 
 protected:
     /**

@@ -42,21 +42,35 @@
 #include <pgm_base.h>
 #include <wx/log.h>
 
+#define SHEET_NAME_CANONICAL "Sheet name"
+#define SHEET_FILE_CANONICAL "Sheet file"
+#define USER_FIELD_CANONICAL "Field%d"
 
-const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx )
+
+const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx, bool aTranslated )
 {
     static void* locale = nullptr;
     static wxString sheetnameDefault;
     static wxString sheetfilenameDefault;
     static wxString userFieldDefault;
 
+    if( !aTranslated )
+    {
+        switch( aFieldNdx )
+        {
+        case  SHEETNAME:     return SHEET_NAME_CANONICAL;
+        case  SHEETFILENAME: return SHEET_FILE_CANONICAL;
+        default:             return wxString::Format( USER_FIELD_CANONICAL, aFieldNdx );
+        }
+    }
+
     // Fetching translations can take a surprising amount of time when loading libraries,
     // so only do it when necessary.
     if( Pgm().GetLocale() != locale )
     {
-        sheetnameDefault     = _( "Sheet name" );
-        sheetfilenameDefault = _( "Sheet file" );
-        userFieldDefault     = _( "Field%d" );
+        sheetnameDefault     = _( SHEET_NAME_CANONICAL );
+        sheetfilenameDefault = _( SHEET_FILE_CANONICAL );
+        userFieldDefault     = _( USER_FIELD_CANONICAL );
         locale = Pgm().GetLocale();
     }
 
