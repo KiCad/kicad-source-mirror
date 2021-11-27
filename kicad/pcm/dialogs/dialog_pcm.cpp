@@ -388,6 +388,10 @@ void DIALOG_PCM::OnApplyChangesClicked( wxCommandEvent& event )
     if( m_pendingActions.size() == 0 )
         return;
 
+    m_sdbSizer1OK->Disable();
+    m_sdbSizer1Apply->Disable();
+    m_sdbSizer1Cancel->Disable();
+
     PCM_TASK_MANAGER task_manager( m_pcm );
 
     for( const PENDING_ACTION& action : m_pendingActions )
@@ -399,6 +403,10 @@ void DIALOG_PCM::OnApplyChangesClicked( wxCommandEvent& event )
     }
 
     task_manager.RunQueue( this );
+
+    m_sdbSizer1OK->Enable();
+    m_sdbSizer1Apply->Enable();
+    m_sdbSizer1Cancel->Enable();
 
     setInstalledPackages();
     wxCommandEvent dummy;
