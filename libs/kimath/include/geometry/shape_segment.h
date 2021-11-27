@@ -78,6 +78,9 @@ public:
     bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
                   VECTOR2I* aLocation = nullptr ) const override
     {
+        if( aSeg.A == aSeg.B )
+            return Collide( aSeg.A, aClearance, aActual, aLocation );
+
         int min_dist = ( m_width + 1 ) / 2 + aClearance;
         ecoord dist_sq = m_seg.SquaredDistance( aSeg );
 
