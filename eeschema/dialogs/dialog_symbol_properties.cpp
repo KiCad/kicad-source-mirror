@@ -997,7 +997,10 @@ void DIALOG_SYMBOL_PROPERTIES::AdjustGridColumns( int aWidth )
     for( int i = 2; i < m_fieldsGrid->GetNumberCols(); i++ )
         fixedColsWidth += m_fieldsGrid->GetColSize( i );
 
-    m_fieldsGrid->SetColSize( 1, fieldsWidth - fixedColsWidth );
+    int colSize = std::max( fieldsWidth - fixedColsWidth, -1 );
+    colSize = ( colSize == 0 ) ? -1 : colSize; // don't hide the column!
+
+    m_fieldsGrid->SetColSize( 1, colSize );
 
     // Stretch the Base Name and Alternate Assignment columns to fit.
     for( int i = 0; i < COL_COUNT; ++i )

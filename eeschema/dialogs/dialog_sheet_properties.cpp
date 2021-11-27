@@ -792,7 +792,10 @@ void DIALOG_SHEET_PROPERTIES::AdjustGridColumns( int aWidth )
     for( int i = 2; i < m_grid->GetNumberCols(); i++ )
         fixedColsWidth += m_grid->GetColSize( i );
 
-    m_grid->SetColSize( 1, aWidth - fixedColsWidth );
+    int colSize = std::max( aWidth - fixedColsWidth, -1 );
+    colSize = ( colSize == 0 ) ? -1 : colSize; // don't hide the column!
+
+    m_grid->SetColSize( 1, colSize );
 }
 
 
