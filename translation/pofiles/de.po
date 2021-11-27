@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-27 22:30+0000\n"
+"PO-Revision-Date: 2021-11-28 23:29+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -11383,7 +11383,7 @@ msgstr "Feld hinzufügen..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:76
 msgid "Symbol Fields Table"
-msgstr "Symbolfeldertabelle"
+msgstr "Symbolfelder-Tabelle"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:139
 msgid "Base Name"
@@ -11477,7 +11477,7 @@ msgid ""
 msgstr ""
 "Dies ist nützlich, um Symbole für Platinen-Footprints wie Passermarken "
 "hinzuzufügen\n"
-"und Logos, die nicht in der Bauteilliste enthalten sein sollen"
+"und für Logos, die nicht in der Bauteilliste enthalten sein sollen"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:200
 msgid ""
@@ -11514,7 +11514,7 @@ msgstr "Pinnummer"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:265
 msgid "Base Pin Name"
-msgstr "Basis-Pin-Name"
+msgstr "Basis-Pinname"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:291
 msgid "Alternate Pin Assignments"
@@ -11539,8 +11539,8 @@ msgid ""
 "Remapping is not possible because you have insufficient privileges to the "
 "project folder '%s'."
 msgstr ""
-"Ein Remapping ist wegen fehlender Schreibberechtigungen auf den "
-"Projektordner \"%s\" nicht möglich."
+"Neuzuordnung nicht möglich aufgrund unzureichender Berechtigungen für "
+"Projektordner \"%s\"."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:67
 msgid ""
@@ -11582,7 +11582,7 @@ msgid ""
 "  %s"
 msgstr ""
 "Konnte die Symbolbibliothekstabelle des Projektes nicht erstellen. Fehler:\n"
-"%s"
+"  %s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
@@ -11606,22 +11606,23 @@ msgstr "Zuordnen der Symbol-Bibliothekstabelle abgeschlossen!"
 #, c-format
 msgid "Cannot create project remap back up folder '%s'."
 msgstr ""
-"Konnte den Projekt-Remap-Sicherungskopie-Ordner \"%s\" nicht erstellen."
+"Kann den Projekt-Sicherungsordner \"%s\" für die Neuzuordnung nicht "
+"erstellen."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:348
 #: eeschema/dialogs/dialog_symbol_remap.cpp:496
 msgid "Backup Error"
-msgstr "Backup Fehler"
+msgstr "Backup-Fehler"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:350
 #: eeschema/dialogs/dialog_symbol_remap.cpp:500
 msgid "Continue with Rescue"
-msgstr "Fortfahren mit der Wiederherstellung"
+msgstr "Mit Wiederherstellung fortfahren"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:351
 #: eeschema/dialogs/dialog_symbol_remap.cpp:501
 msgid "Abort Rescue"
-msgstr "Abbrechen Wiederherstellen"
+msgstr "Wiederherstellung abbrechen"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:368
 #: eeschema/dialogs/dialog_symbol_remap.cpp:403
@@ -11651,7 +11652,8 @@ msgstr "Konnte den Sicherungsordner \"%s\" nicht erstellen.\n"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:495
 msgid "Some of the project files could not be backed up."
 msgstr ""
-"Für einige der Dateien des Projektes konnte kein Backup angelegt werden."
+"Für einige der Dateien des Projektes konnte keine Sicherungskopie angelegt "
+"werden."
 
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:30
 #: eeschema/dialogs/dialog_symbol_remap_base.h:54
@@ -11704,7 +11706,7 @@ msgid ""
 "in Schematic Setup > General > Formatting."
 msgstr ""
 "Die Ränder um den Text werden durch das Textversatzverhältnis gesteuert\n"
-"in Schaltplaneinrichtung> Allgemein> Formatierung."
+"unter Schaltplan einrichten... > Allgemein > Formatierung."
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:120
 #: eeschema/sch_text.cpp:776
@@ -11738,7 +11740,7 @@ msgstr "Fett und kursiv"
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:42
 #: pcbnew/dialogs/dialog_netlist.cpp:77 pcbnew/dialogs/dialog_update_pcb.cpp:49
 msgid "Changes To Be Applied"
-msgstr "Anstehende Änderungen"
+msgstr "Ausstehende Änderungen"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:66
 msgid "Update Schematic"
@@ -11767,8 +11769,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
 msgstr ""
-"Aktualisiert die Referenzen von Schaltplansymbolen, welche im PCB-Editor "
-"geändert wurden."
+"Aktualisiert die Referenzen von Schaltplansymbolen, welche im "
+"Leiterplatteneditor geändert wurden."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
 msgid "Footprint assignments"
@@ -11779,8 +11781,8 @@ msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
 msgstr ""
-"Footprintzuordnungen von Symbolen aktualisieren, bei denen die Footprints "
-"auf der Platine ersetzt worden sind."
+"Footprintzuordnungen von Symbolen aktualisieren, deren Footprints auf der "
+"Platine mit anderen Footprints ersetzt worden sind."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
@@ -11818,7 +11820,7 @@ msgid ""
 msgstr ""
 "Einige Elemente haben dieselbe Farbe wie der Hintergrund,\n"
 "sodass diese auf dem Bildschirm nicht sichtbar sein werden.\n"
-"Sind Sie sicher das Sie diese Farbe benutzen wollen?"
+"Sind Sie sicher, dass Sie diese Farben verwenden möchten?"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:207
 msgid "(symbol editor only)"
@@ -11831,7 +11833,7 @@ msgstr "Farbvorschau"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:405
 msgid "/path/to/sheet"
-msgstr "/pfad/zu/schaltplan"
+msgstr "/pfad/zu/schaltplanblatt"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:26
 #: pcbnew/footprint_edit_frame.cpp:241 pcbnew/footprint_edit_frame.cpp:770
@@ -11859,11 +11861,11 @@ msgstr "Auswahl"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:44
 msgid "Draw selected text items as box"
-msgstr "Zeichne selektierte Textelemente als Box"
+msgstr "Zeichne ausgewählte Textelemente als Box"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:47
 msgid "Draw selected child items"
-msgstr "Zeichne selektierte untergeordnete Elemente"
+msgstr "Zeichne ausgewählte untergeordnete Elemente"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:50
 msgid "Fill selected shapes"
@@ -11875,9 +11877,7 @@ msgstr "Breite der &Hervorhebung:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:70
 msgid "(highlight color can be edited in the \"Colors\" page)"
-msgstr ""
-"(Farbe der Hervorhebung kann auf der Unterseite \"Farben\" eingestellt "
-"werden)"
+msgstr "(Farbe der Hervorhebung kann unter \"Farben\" eingestellt werden)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
@@ -11900,7 +11900,7 @@ msgstr "Kreuzreferenzierte Netze hervorheben"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr "Netze hervorheben, wenn sie im Platinen-Editor hervorgehoben sind"
+msgstr "Netze hervorheben, wenn sie im Leiterplatteneditor hervorgehoben sind"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "Constrain buses and wires to H or V"
@@ -11925,9 +11925,8 @@ msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
-"Wenn diese Option aktiviert ist, können Sie die Verkabelung starten, indem "
-"Sie auf nicht verbundene Stifte klicken, auch wenn das Kabelwerkzeug nicht "
-"aktiv ist"
+"Wenn aktiviert, können Sie durch Anklicken nicht-verbundener Pins eine "
+"Verbindung starten, selbst wenn das Verbindungswerkzeug nicht aktiv ist"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:41
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -11944,7 +11943,7 @@ msgstr "Blatthintergrund:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:73
 msgid "Clicking on a pin selects the symbol"
-msgstr "Klick auf Pin wählt Symbol"
+msgstr "Anklicken eines Pins wählt das Symbol"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:74
 msgid ""
@@ -11953,9 +11952,9 @@ msgid ""
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
 "Im Schaltplaneditor:\n"
-"Wenn aktiviert bewirkt das Klicken auf einen Pin die Auswahl des "
+"Wenn aktiviert, bewirkt das Klicken auf einen Pin die Auswahl des "
 "übergeordneten Symbols.\n"
-"Wenn deaktiviert bewirkt das Klicken auf einen Pin nur die Auswahl dieses "
+"Wenn deaktiviert, bewirkt das Klicken auf einen Pin nur die Auswahl dieses "
 "Pins."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:84
@@ -11963,7 +11962,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 #: pcbnew/dialogs/panel_edit_options_base.cpp:152
 msgid "Left Click Mouse Commands"
-msgstr "Klicken Sie mit der linken Maustaste auf Mausbefehle"
+msgstr "Linksklick-Mausbefehle"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:86
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
@@ -12033,7 +12032,7 @@ msgstr "Textfelder a&utomatisch platzieren"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:201
 msgid "A&llow field autoplace to change justification"
-msgstr "Er&laube Autoplatzierung von Feldern die Ausrichtung zu ändern"
+msgstr "Autop&latzierung darf Ausrichtung von Feldern ändern"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
@@ -12061,7 +12060,7 @@ msgstr "Bezeichner-Schrittweite:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:260
 msgid "Dialog Preferences"
-msgstr "Dialog Einstellungen"
+msgstr "Dialog-Einstellungen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:262
 msgid "Show footprint previews in Symbol Chooser"
@@ -12077,7 +12076,7 @@ msgstr "Globale Feldnamenvorlagen:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:42
 msgid "Project field name templates:"
-msgstr "Projektfeldnamenvorlagen:"
+msgstr "Projektspezifische Feldnamenvorlagen:"
 
 #: eeschema/dialogs/panel_eeschema_template_fieldnames.cpp:77
 msgid "Untitled Field"
@@ -12096,11 +12095,11 @@ msgstr "URL"
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_display_options_base.cpp:35
 msgid "Annotations"
-msgstr "Annotatierungen"
+msgstr "Annotationen"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "Symbol unit notation:"
-msgstr "Symbol-Einheits-Notation:"
+msgstr "Symboleinheit-Notation:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".A"
@@ -12246,7 +12245,7 @@ msgstr "Farbthema"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:25
 msgid "Use schematic editor color theme"
-msgstr "Farbthema des Schaltplaneditors benutzen"
+msgstr "Farbthema des Schaltplaneditors verwenden"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:31
 msgid "Use theme:"
@@ -12258,7 +12257,7 @@ msgstr "&Voreinstellung für &Linienbreite:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:60
 msgid "D&efault pin length:"
-msgstr "V&oreinstellung für Pin-Länge:"
+msgstr "V&oreinstellung für Pinlänge:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:71
 msgid "De&fault pin number size:"
@@ -12331,12 +12330,12 @@ msgstr "Bibliothek-Aliasnamen-Fehler"
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr ""
-"Mehrere Bibliotheken können nicht denselben Spitznamen ('%s') verwenden."
+"Mehrere Bibliotheken können nicht denselben Aliasnamen ('%s') verwenden."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:459 eeschema/symbol_library.cpp:550
 #, c-format
 msgid "Symbol library '%s' failed to load."
-msgstr "Symbolbibliothek \"%s\" wurde nicht geladen."
+msgstr "Symbolbibliothek \"%s\" konnte nicht geladen werden."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:462
 msgid "Error Loading Library"
@@ -12350,7 +12349,7 @@ msgstr "Warnung: Doppelt vergebener Aliasname"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:890
 #, c-format
 msgid "A library nicknamed '%s' already exists."
-msgstr "Eine Bibliothek mit dem Namen \"%s\" existiert bereits."
+msgstr "Eine Bibliothek mit dem Aliasnamen \"%s\" existiert bereits."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:510
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:891
@@ -12383,8 +12382,8 @@ msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"'%s' als aktuelles Format (*.kicad_sym) speichern und alten Eintrag in "
-"Tabelle ersetzen?"
+"'%s' im aktuellen KiCad-Format (*.kicad_sym) speichern und alten Eintrag in "
+"der Tabelle ersetzen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:747
 #, c-format
@@ -12392,8 +12391,8 @@ msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
 msgstr ""
-"%d Legacy-Bibliotheken im aktuellen Format (*.kicad_sym) speichern und "
-"Legacy-Einträge in der Tabelle ersetzen?"
+"%d alte Bibliotheken im aktuellen KiCad-Format (*.kicad_sym) speichern und "
+"alte Einträge in der Tabelle ersetzen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
 #: pcbnew/dialogs/dialog_export_step.cpp:350
