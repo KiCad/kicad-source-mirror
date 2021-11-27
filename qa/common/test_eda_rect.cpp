@@ -21,9 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "math/util.h"
-#include <boost/test/tools/old/interface.hpp>
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <math/util.h>
 
 // Code under test
 #include <eda_rect.h>
