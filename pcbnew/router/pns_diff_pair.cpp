@@ -496,19 +496,13 @@ void DP_GATEWAYS::BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool a
             VECTOR2I dir, dp, dv;
 
             if( k == 0 )
-            {
                 dir = makeGapVector( majorDirection, orthoFanDistance );
-                int d = ( padDist - m_gap );
-                dp = makeGapVector( dir, d );
-                dv = makeGapVector( p0_n - p0_p, d );
-            }
             else
-            {
                 dir = makeGapVector( majorDirection, diagFanDistance );
-                int d = ( padDist - m_gap );
-                dp = makeGapVector( dir, d );
-                dv = makeGapVector( p0_n - p0_p, d );
-            }
+
+            int d = std::max( 0, padDist - m_gap );
+            dp = makeGapVector( dir, d );
+            dv = makeGapVector( p0_n - p0_p, d );
 
             for( int i = 0; i < 2; i++ )
             {
