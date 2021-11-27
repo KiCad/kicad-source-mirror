@@ -1381,12 +1381,6 @@ TOOL_ACTION PCB_ACTIONS::routerUndoLastSegment( "pcbnew.InteractiveRouter.UndoLa
         WXK_BACK, "",
         _( "Undo Last Segment" ),  _( "Walks the current track back one segment." ) );
 
-TOOL_ACTION PCB_ACTIONS::inlineBreakTrack( "pcbnew.InteractiveRouter.InlineBreakTrack",
-        AS_GLOBAL, 0, "",
-        _( "Break Track" ),
-        _( "Splits the track segment into two segments connected at the cursor position." ),
-        BITMAPS::break_line );
-
 TOOL_ACTION PCB_ACTIONS::breakTrack( "pcbnew.InteractiveRouter.BreakTrack",
         AS_GLOBAL, 0, "",
         _( "Break Track" ),

@@ -1428,6 +1428,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         {
             updateStartItem( *evt, true );
             breakTrack( );
+            evt->SetPassEvent( false );
         }
         else if( evt->IsClick( BUT_LEFT )
               || evt->IsAction( &PCB_ACTIONS::routeSingleTrack )
@@ -2109,7 +2110,7 @@ void ROUTER_TOOL::setTransitions()
     Go( &ROUTER_TOOL::ChangeRouterMode,       PCB_ACTIONS::routerWalkaroundMode.MakeEvent() );
     Go( &ROUTER_TOOL::CycleRouterMode,        PCB_ACTIONS::cycleRouterMode.MakeEvent() );
     Go( &ROUTER_TOOL::InlineDrag,             PCB_ACTIONS::routerInlineDrag.MakeEvent() );
-    Go( &ROUTER_TOOL::InlineBreakTrack,       PCB_ACTIONS::inlineBreakTrack.MakeEvent() );
+    Go( &ROUTER_TOOL::InlineBreakTrack,       PCB_ACTIONS::breakTrack.MakeEvent() );
 
     Go( &ROUTER_TOOL::onViaCommand,           ACT_PlaceThroughVia.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand,           ACT_PlaceBlindVia.MakeEvent() );
