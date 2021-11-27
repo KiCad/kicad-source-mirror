@@ -1222,7 +1222,7 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
     if( reachesEnd
             && eiDepth >= 0
-            && aEndItem && latestNode->Depth() > eiDepth
+            && aEndItem && latestNode->Depth() >= eiDepth
             && current.SegmentCount() )
     {
         SplitAdjacentSegments( m_lastNode, aEndItem, current.CPoint( -1 ) );
@@ -1563,8 +1563,18 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, LINKED_ITEM* aLatest )
 
                 for( ITEM* neighbor : aJoint->Links() )
                 {
-                    if( neighbor == aItem || !neighbor->LayersOverlap( aItem ) )
+                    if( neighbor == aItem
+                        || !neighbor->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T )
+                        || !neighbor->LayersOverlap( aItem ) )
+                    {
                         continue;
+                    }
+
+                    if( static_cast<SEGMENT*>( neighbor )->Width()
+                            != static_cast<SEGMENT*>( aItem )->Width() )
+                    {
+                        continue;
+                    }
 
                     const SEG& testSeg = static_cast<SEGMENT*>( neighbor )->Seg();
 
