@@ -200,6 +200,8 @@ void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX:
 
 void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) const
 {
+    bool holeDrawn = false;
+
     switch( aShape->Type() )
     {
     case SH_POLY_SET_TRIANGLE:
@@ -281,6 +283,8 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
             gal->SetIsFill( false );
             gal->SetLineWidth( halfWidth + c->GetRadius() - h->GetRadius() );
             gal->DrawCircle( c->GetCenter(), ( halfWidth + c->GetRadius() + h->GetRadius() ) / 2 );
+
+            holeDrawn = true;
         }
         else
         {
@@ -383,6 +387,23 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
 
     case SH_NULL:
         break;
+    }
+
+    if( m_hole && !holeDrawn )
+    {
+        gal->SetLayerDepth( m_depth );
+        gal->SetIsStroke( true );
+        gal->SetIsFill( false );
+        gal->SetStrokeColor( m_color );
+        gal->SetLineWidth( 1 );
+
+        SHAPE_CIRCLE*  circle = dynamic_cast<SHAPE_CIRCLE*>( m_hole );
+        SHAPE_SEGMENT* slot = dynamic_cast<SHAPE_SEGMENT*>( m_hole );
+
+        if( circle )
+            gal->DrawCircle( circle->GetCenter(), circle->GetRadius() );
+        else if( slot )
+            gal->DrawSegment( slot->GetSeg().A, slot->GetSeg().B, slot->GetWidth() );
     }
 }
 

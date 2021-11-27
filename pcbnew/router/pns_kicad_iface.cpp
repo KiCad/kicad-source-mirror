@@ -921,19 +921,6 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
 
     std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
 
-    if( aPad->GetDrillSize().x > 0 )
-    {
-        SHAPE_SEGMENT* slot = (SHAPE_SEGMENT*) aPad->GetEffectiveHoleShape()->Clone();
-
-        if( aPad->GetAttribute() != PAD_ATTRIB::NPTH )
-        {
-            BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-            slot->SetWidth( slot->GetWidth() + bds.GetHolePlatingThickness() * 2 );
-        }
-
-        solid->SetHole( slot );
-    }
-
     if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
         solid->SetRoutable( false );
 
@@ -953,6 +940,18 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     solid->SetPos( VECTOR2I( c.x - offset.x, c.y - offset.y ) );
     solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
 
+    if( aPad->GetDrillSize().x > 0 )
+    {
+        SHAPE_SEGMENT* slot = (SHAPE_SEGMENT*) aPad->GetEffectiveHoleShape()->Clone();
+
+        if( aPad->GetAttribute() != PAD_ATTRIB::NPTH )
+        {
+            BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+            slot->SetWidth( slot->GetWidth() + bds.GetHolePlatingThickness() * 2 );
+        }
+
+        solid->SetHole( slot );
+    }
 
     auto shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
 
