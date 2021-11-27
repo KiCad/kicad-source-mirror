@@ -209,12 +209,12 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
         EDA_TEXT( text ),
         m_shape( PINSHEETLABEL_SHAPE::PS_INPUT ),
         m_isDangling( false ),
-        m_connectionType( CONNECTION_TYPE::NONE ),
-        m_spin_style( LABEL_SPIN_STYLE::LEFT )
+        m_connectionType( CONNECTION_TYPE::NONE )
 {
     m_layer = LAYER_NOTES;
 
     SetTextPos( pos );
+    SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
     SetMultilineAllowed( true );
 }
 
