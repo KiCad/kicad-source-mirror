@@ -394,10 +394,12 @@ bool DIALOG_TEXT_AND_LABEL_PROPERTIES::TransferDataFromWindow()
 }
 
 
-void DIALOG_TEXT_AND_LABEL_PROPERTIES::onLostFocus( wxFocusEvent& event )
+void DIALOG_TEXT_AND_LABEL_PROPERTIES::onMultiLineTCLostFocus( wxFocusEvent& event )
 {
     if( m_scintillaTricks )
         m_scintillaTricks->CancelAutocomplete();
+
+    event.Skip();
 }
 
 

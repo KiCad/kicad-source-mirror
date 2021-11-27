@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -161,7 +161,7 @@ DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE( wx
 
 	// Connect Events
 	m_valueSingleLine->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
-	m_valueMultiLine->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::onLostFocus ), NULL, this );
+	m_valueMultiLine->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::onMultiLineTCLostFocus ), NULL, this );
 	m_valueCombo->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
 	m_formattingHelp->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
 }
@@ -170,7 +170,7 @@ DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::~DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE()
 {
 	// Disconnect Events
 	m_valueSingleLine->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
-	m_valueMultiLine->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::onLostFocus ), NULL, this );
+	m_valueMultiLine->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::onMultiLineTCLostFocus ), NULL, this );
 	m_valueCombo->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::OnEnterKey ), NULL, this );
 	m_formattingHelp->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_TEXT_AND_LABEL_PROPERTIES_BASE::OnFormattingHelp ), NULL, this );
 
