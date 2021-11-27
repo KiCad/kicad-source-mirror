@@ -281,6 +281,7 @@ constexpr bool IsInstatiableType( const KICAD_T aType )
 
     switch( aType )
     {
+    case SCH_LOCATE_ANY_T:
     case SCH_SCREEN_T:
         return false;
 
