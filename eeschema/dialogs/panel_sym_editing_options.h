@@ -43,9 +43,6 @@ private:
     UNIT_BINDER        m_pinLength;
     UNIT_BINDER        m_pinNameSize;
     UNIT_BINDER        m_pinNumberSize;
-
-    UNIT_BINDER        m_hPitch;
-    UNIT_BINDER        m_vPitch;
 };
 
 

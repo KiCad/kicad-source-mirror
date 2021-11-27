@@ -51,12 +51,6 @@ class PANEL_SYM_EDITING_OPTIONS_BASE : public wxPanel
 		wxTextCtrl* m_pinNameSizeCtrl;
 		wxStaticText* m_pinNameSizeUnits;
 		wxCheckBox* m_cbShowPinElectricalType;
-		wxStaticText* m_hPitchLabel;
-		wxTextCtrl* m_hPitchCtrl;
-		wxStaticText* m_hPitchUnits;
-		wxStaticText* m_vPitchLabel;
-		wxTextCtrl* m_vPitchCtrl;
-		wxStaticText* m_vPitchUnits;
 		wxStaticText* m_pinPitchLabel;
 		wxChoice* m_choicePinDisplacement;
 		wxStaticText* m_pinPitchUnits;

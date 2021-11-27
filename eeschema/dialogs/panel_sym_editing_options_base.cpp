@@ -108,28 +108,6 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_hPitchLabel = new wxStaticText( repeats->GetStaticBox(), wxID_ANY, _("&Horizontal pitch:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_hPitchLabel->Wrap( -1 );
-	fgSizer1->Add( m_hPitchLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	m_hPitchCtrl = new wxTextCtrl( repeats->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
-	fgSizer1->Add( m_hPitchCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_hPitchUnits = new wxStaticText( repeats->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_hPitchUnits->Wrap( -1 );
-	fgSizer1->Add( m_hPitchUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
-
-	m_vPitchLabel = new wxStaticText( repeats->GetStaticBox(), wxID_ANY, _("&Vertical pitch:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_vPitchLabel->Wrap( -1 );
-	fgSizer1->Add( m_vPitchLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-	m_vPitchCtrl = new wxTextCtrl( repeats->GetStaticBox(), wxID_ANY, _("100"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
-	fgSizer1->Add( m_vPitchCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
-	m_vPitchUnits = new wxStaticText( repeats->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_vPitchUnits->Wrap( -1 );
-	fgSizer1->Add( m_vPitchUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-
 	m_pinPitchLabel = new wxStaticText( repeats->GetStaticBox(), wxID_ANY, _("&Pitch of repeated pins:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pinPitchLabel->Wrap( -1 );
 	fgSizer1->Add( m_pinPitchLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );

@@ -875,36 +875,20 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     }
     else
     {
-        if( m_isSymbolEditor )
+        EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+
+        if( dynamic_cast<SCH_TEXT*>( newItem ) )
         {
-            auto* cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+            SCH_TEXT* text = static_cast<SCH_TEXT*>( newItem );
 
-            if( dynamic_cast<SCH_TEXT*>( newItem ) )
-            {
-                SCH_TEXT* text = static_cast<SCH_TEXT*>( newItem );
-                text->IncrementLabel( cfg->m_Repeat.label_delta );
-            }
+            // If incrementing tries to go below zero, tell user why the value is repeated
 
-            newItem->Move( wxPoint( Mils2iu( cfg->m_Repeat.x_step ),
-                                    Mils2iu( cfg->m_Repeat.y_step ) ) );
+            if( !text->IncrementLabel( cfg->m_Drawing.repeat_label_increment ) )
+                m_frame->ShowInfoBarWarning( _( "Label value cannot go below zero" ), true );
         }
-        else
-        {
-            EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
-            if( dynamic_cast<SCH_TEXT*>( newItem ) )
-            {
-                SCH_TEXT* text = static_cast<SCH_TEXT*>( newItem );
-
-                // If incrementing tries to go below zero, tell user why the value is repeated
-
-                if( !text->IncrementLabel( cfg->m_Drawing.repeat_label_increment ) )
-                    m_frame->ShowInfoBarWarning( _( "Label value cannot go below zero" ), true );
-            }
-
-            newItem->Move( wxPoint( Mils2iu( cfg->m_Drawing.default_repeat_offset_x ),
-                                    Mils2iu( cfg->m_Drawing.default_repeat_offset_y ) ) );
-        }
+        newItem->Move( wxPoint( Mils2iu( cfg->m_Drawing.default_repeat_offset_x ),
+                                Mils2iu( cfg->m_Drawing.default_repeat_offset_y ) ) );
     }
 
     newItem->SetFlags( IS_NEW );

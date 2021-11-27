@@ -44,8 +44,6 @@ public:
     {
         int label_delta;
         int pin_step;
-        int x_step;
-        int y_step;
     };
 
     SYMBOL_EDITOR_SETTINGS();
