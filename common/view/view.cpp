@@ -40,9 +40,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <painter.h>
 
-#ifdef KICAD_GAL_PROFILE
 #include <profile.h>
-#endif /* KICAD_GAL_PROFILE  */
 
 namespace KIGFX {
 
@@ -1408,19 +1406,29 @@ void VIEW::UpdateItems()
     if( !m_gal->IsVisible() )
         return;
 
-    GAL_UPDATE_CONTEXT ctx( m_gal );
-    int                cntTotal = 0, cntToUpdate = 0;
+    unsigned int cntGeomUpdate = 0;
+    unsigned int cntAnyUpdate = 0;
 
     for( VIEW_ITEM* item : *m_allItems )
     {
-        cntTotal++;
-        if( item->viewPrivData() && item->viewPrivData()->m_requiredUpdate & ( GEOMETRY | LAYERS ) )
+        auto vpd = item->viewPrivData();
+
+        if( !vpd )
+            continue;
+
+        if( vpd->m_requiredUpdate & ( GEOMETRY | LAYERS ) )
         {
-            cntToUpdate++;
+            cntGeomUpdate++;
+        }
+        if( vpd->m_requiredUpdate != NONE )
+        {
+            cntAnyUpdate++;
         }
     }
 
-    double ratio = (double) cntToUpdate / (double) cntTotal;
+    unsigned int cntTotal = m_allItems->size();
+
+    double ratio = (double) cntGeomUpdate / (double) cntTotal;
 
     // Optimization to improve view update time. If a lot of items (say, 30%) have their
     // bboxes/geometry changed it's way faster (around 10 times) to rebuild the R-Trees
@@ -1454,14 +1462,22 @@ void VIEW::UpdateItems()
         }
     }
 
-    for( VIEW_ITEM* item : *m_allItems )
+    if( cntAnyUpdate )
     {
-        if( item->viewPrivData() && item->viewPrivData()->m_requiredUpdate != NONE )
+        GAL_UPDATE_CONTEXT ctx( m_gal );
+
+        for( VIEW_ITEM* item : *m_allItems.get() )
         {
-            invalidateItem( item, item->viewPrivData()->m_requiredUpdate );
-            item->viewPrivData()->m_requiredUpdate = NONE;
+            if( item->viewPrivData() && item->viewPrivData()->m_requiredUpdate != NONE )
+            {
+                invalidateItem( item, item->viewPrivData()->m_requiredUpdate );
+                item->viewPrivData()->m_requiredUpdate = NONE;
+            }
         }
     }
+
+    KI_TRACE( traceGalProfile, "View update: total items %u, geom %u updates %u\n", cntTotal,
+              cntGeomUpdate, cntAnyUpdate );
 }
 
 
