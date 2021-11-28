@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-26 21:26+0000\n"
-"Last-Translator: Roman Ondráček <ondracek.roman@centrum.cz>\n"
+"PO-Revision-Date: 2021-11-28 23:29+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -616,7 +616,7 @@ msgstr "Barva desky"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:66
 msgid "Use board stackup colors"
-msgstr "Použít barvy ze zásobníku vrstev"
+msgstr "Použít barvy ze struktury vrstev"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:69
 msgid "Use colors:"
@@ -10565,9 +10565,8 @@ msgid "Source:"
 msgstr "Zdroj:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:119
-#, fuzzy
 msgid "Sweep type:"
-msgstr "Typ tvaru:"
+msgstr "Typ rozmítání:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:123
 msgid "Source 1"
@@ -15879,7 +15878,7 @@ msgstr "Zadejte nové umístění pro kotvu symbolu"
 
 #: eeschema/tools/ee_actions.cpp:255
 msgid "Finish drawing shape"
-msgstr ""
+msgstr "Dokončit kreslení tvaru"
 
 #: eeschema/tools/ee_actions.cpp:262
 msgid "Push Pin Length"
@@ -16005,7 +16004,7 @@ msgstr "Dokončit list"
 
 #: eeschema/tools/ee_actions.cpp:355
 msgid "Finish drawing sheet"
-msgstr ""
+msgstr "Dokončit kreslení listu"
 
 #: eeschema/tools/ee_actions.cpp:368
 msgid "Repeat Last Item"
@@ -16765,7 +16764,7 @@ msgstr "Chyba: duplicitní názvy sub-listů nalezené v aktuálním listu."
 
 #: eeschema/tools/sch_editor_control.cpp:1054
 msgid "Net must be labeled to assign a netclass."
-msgstr ""
+msgstr "Síť musí být označena k přiřazení třídy sítě."
 
 #: eeschema/tools/sch_editor_control.cpp:1060
 msgid "Bus has no members to assign netclass to."
@@ -16843,7 +16842,7 @@ msgstr "Upravit název symbolu"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:618
 msgid "Symbol is not derived from another symbol."
-msgstr ""
+msgstr "Symbol není odvozen z jiného symbolu."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:236
 #, c-format
@@ -17076,7 +17075,7 @@ msgstr "Formát souboru"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:20
 msgid "These parameters are usually specified in files, but not always."
-msgstr ""
+msgstr "Tyto parametry jsou obvykle specifikovány v souborech, ale ne vždy."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:29
 msgid "File units"
@@ -17084,11 +17083,11 @@ msgstr "Jednotky souborů"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
-msgstr ""
+msgstr "Žádné přední nuly (TZ formát)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No trailing zeros (LZ format)"
-msgstr ""
+msgstr "Žádné koncové nuly (LZ formát)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:35
 msgid "Zero format"
@@ -19115,7 +19114,7 @@ msgstr "Definované klíčová slova"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:557
 msgid "Texts can include keywords."
-msgstr ""
+msgstr "Texty mohou zahrnovat klíčová slova."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:558
 msgid "Keyword notation is ${keyword}"
@@ -21291,7 +21290,7 @@ msgstr "Loss Tan"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:132
 msgid "Board thickness from stackup:"
-msgstr "Tloušťka desky ze zásobníku vrstev:"
+msgstr "Tloušťka desky ze struktury vrstev:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:139
 msgid "Adjust Dielectric Thickness"
@@ -21935,7 +21934,7 @@ msgstr "Import nastavení z jiné desky..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:80
 msgid "Board Stackup"
-msgstr "Struktura DPS"
+msgstr "Struktura desky"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:88
 msgid "Board Editor Layers"
@@ -21943,7 +21942,7 @@ msgstr "Vrstvy editoru desky"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:91
 msgid "Physical Stackup"
-msgstr "Fyzická struktura DPS"
+msgstr "Fyzická struktura"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:95
 msgid "Board Finish"
@@ -26670,9 +26669,9 @@ msgid "from %s"
 msgstr "[z %s]"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "Podrobnosti"
+msgstr "Detaily: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
 msgid "Send project directly"
@@ -28824,9 +28823,9 @@ msgid "undefined"
 msgstr "nedefinováno"
 
 #: pcbnew/drc/drc_engine.cpp:897
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s %s: %s."
-msgstr "Kontrola %s."
+msgstr "Kontrola %s %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:913
 #, fuzzy, c-format
@@ -29621,7 +29620,7 @@ msgstr "Vytvořen Gerber job soubor '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:579
 msgid "Board stackup settings not up to date."
-msgstr "Nastavení vrstvení desky není aktuální."
+msgstr "Nastavení struktury desky není aktuální."
 
 #: pcbnew/files.cpp:144
 msgid "All KiCad Board Files"
@@ -31049,14 +31048,14 @@ msgid "Through hole pad %s of %s"
 msgstr "Průchozí díra plošek %s na %s"
 
 #: pcbnew/pad.cpp:1155
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "Ploška %s na %s z %s"
+msgstr "Ploška %s %s z %s na %s"
 
 #: pcbnew/pad.cpp:1163
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "Průchozí díra plošek %s na %s"
+msgstr "Průchozí díra plošek %s %s na %s"
 
 #: pcbnew/pad.cpp:1598
 msgid "Edge connector"
@@ -31704,6 +31703,8 @@ msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
 msgstr ""
+"Projekt CADSTAR obsahuje směrovací prvky Trunk, které nemají žádný "
+"ekvivalent v KiCadu. Tyto prvky nebyly načteny."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:152
 #, c-format
@@ -31711,6 +31712,8 @@ msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
 msgstr ""
+"Schéma CADSTAR obsahuje varianty, které nemají žádný ekvivalent v KiCadu. "
+"Byla načtena pouze varianta '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:189
 #, c-format
@@ -31718,6 +31721,8 @@ msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
 msgstr ""
+"Vrstva CADSTAR '%s' nemá žádný ekvivalent v KiCadu. Všechny prvky na této "
+"vrstvě byly namísto toho mapovány do vrstvy '%s' KiCadu."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:202
 #, c-format
@@ -31725,11 +31730,13 @@ msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
 msgstr ""
+"Vrstva CADSTAR '%s' je považována za technickou vrstvu. Všechny prvky na "
+"této vrstvě byly mapovány na vrstvu '%s' KiCadu."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:511
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr ""
+msgstr "Neočekávaná vrstva '%s' v zásobníku vrstev."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:674
 #, c-format
@@ -32172,9 +32179,9 @@ msgstr "Nelze převézt '%s' na integer."
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:228
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:875
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' not found."
-msgstr "Knihovna pouzdra nenalezena."
+msgstr "Knihovna pouzder '%s' nenalezena."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:282
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:303
@@ -33043,14 +33050,14 @@ msgid "Break Track"
 msgstr "Přerušit spoj"
 
 #: pcbnew/router/router_tool.cpp:2033
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Diff Pair: %s"
-msgstr "Ladit sklon diferenciálního páru"
+msgstr "Propojení dif. páru: %s"
 
 #: pcbnew/router/router_tool.cpp:2033
-#, fuzzy, c-format
+#, c-format
 msgid "Routing Track: %s"
-msgstr "Propojit jednotlivý spoj"
+msgstr "Propojit spoj: %s"
 
 #: pcbnew/router/router_tool.cpp:2039
 #, c-format
@@ -33465,9 +33472,9 @@ msgid "Track width resolution for:"
 msgstr "Rozlišení šířky spoje pro:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
-#, fuzzy, c-format
+#, c-format
 msgid "Width constraints: min %s; opt %s; max %s."
-msgstr "Omezení šířky: min %s max %s."
+msgstr "Omezení šířky: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:749
 msgid "Via Diameter"
@@ -33478,9 +33485,9 @@ msgid "Via diameter resolution for:"
 msgstr "Rozlišení průměru prokovu pro:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Diameter constraints: min %s; opt %s; max %s."
-msgstr "Omezení průměru: min %s max %s."
+msgstr "Omezení průměru: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:769
 msgid "Via Annular Width"
@@ -33491,9 +33498,9 @@ msgid "Via annular width resolution for:"
 msgstr "Rozlišení šířky prstence prokovu pro:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:782
-#, fuzzy, c-format
+#, c-format
 msgid "Annular width constraints: min %s; opt %s; max %s."
-msgstr "Omezení šířky prstence: min %s max %s."
+msgstr "Omezení šířky prstence: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:793
 msgid "Hole Size"
@@ -33585,7 +33592,7 @@ msgstr "Dielektrikum %d"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:365
 msgid "Insert board stackup table"
-msgstr ""
+msgstr "Vložit tabulku se strukturou desky"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:407
 msgid "BOARD CHARACTERISTICS"
@@ -33957,9 +33964,8 @@ msgid "Add a board characteristics table on a graphic layer"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:116
-#, fuzzy
 msgid "Add Stackup Table"
-msgstr "Přidat pahýl"
+msgstr "Přidat tabulku struktury"
 
 #: pcbnew/tools/pcb_actions.cpp:117
 msgid "Add a board stackup table on a graphic layer"
