@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-09-11 21:54+0000\n"
+"PO-Revision-Date: 2021-11-28 23:29+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -292,11 +292,11 @@ msgstr "Trình xem 3D"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:207
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:573
 msgid "General"
-msgstr ""
+msgstr "Tổng quan"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
 msgid "Realtime Renderer"
-msgstr ""
+msgstr "Renderer thời gian thực"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
 #, fuzzy
@@ -2642,12 +2642,12 @@ msgstr "Xuất sang các trang khác"
 #: gerbview/widgets/gerbview_layer_widget.cpp:100
 #: pcbnew/widgets/appearance_controls.cpp:355
 msgid "Drawing Sheet"
-msgstr ""
+msgstr "Bản vẽ"
 
 #: common/dialogs/dialog_page_settings_base.cpp:153 eeschema/sch_field.cpp:189
 #: pcbnew/dialogs/dialog_export_step_base.cpp:22
 msgid "File:"
-msgstr ""
+msgstr "Tập tin:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:172
 #, fuzzy
@@ -3167,11 +3167,13 @@ msgstr "Tỉ lệ canvas:"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid "Apply icon scaling to fonts"
-msgstr ""
+msgstr "Áp dụng tỷ lệ biểu tượng cho phông chữ"
 
 #: common/dialogs/panel_common_settings_base.cpp:161
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
 msgstr ""
+"(Cách giải quyết này sẽ cải thiện một số vấn đề về tỷ lệ phông chữ GTK "
+"HiDPI.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
@@ -3249,7 +3251,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "days"
-msgstr ""
+msgstr "ngày"
 
 #: common/dialogs/panel_common_settings_base.cpp:250
 msgid "Project Backup"
@@ -3366,7 +3368,7 @@ msgstr "Cmd"
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:42
 #: pcbnew/dialogs/panel_edit_options_base.cpp:218
 msgid "Option"
-msgstr ""
+msgstr "Tùy chọn"
 
 #: common/dialogs/panel_mouse_settings.cpp:85
 msgid "Only one action can be assigned to each vertical scroll setting"
@@ -4151,7 +4153,7 @@ msgstr "Inch"
 #: common/eda_draw_frame.cpp:148 pagelayout_editor/pl_editor_frame.cpp:163
 #: pcbnew/tools/drawing_tool.cpp:266 pcbnew/tools/pcb_actions.cpp:675
 msgid "Constrain to H, V, 45"
-msgstr ""
+msgstr "Ràng buộc ở H, V, 45"
 
 #: common/eda_draw_frame.cpp:318
 msgid "Edit User Grid..."
@@ -4260,12 +4262,12 @@ msgstr "Via"
 
 #: common/eda_item.cpp:324 common/eda_item.cpp:335 pcbnew/pcb_marker.cpp:94
 msgid "Marker"
-msgstr ""
+msgstr "Đánh dấu"
 
 #: common/eda_item.cpp:325 common/eda_item.cpp:326 common/eda_item.cpp:327
 #: pcbnew/pcb_dimension.cpp:301
 msgid "Dimension"
-msgstr ""
+msgstr "Kích thước"
 
 #: common/eda_item.cpp:328 pcbnew/pcb_dimension.cpp:1078
 #, fuzzy
@@ -4381,8 +4383,9 @@ msgid "Draw Item"
 msgstr "Draw Item"
 
 #: common/eda_shape.cpp:61 pcbnew/pad.cpp:1110
+#, fuzzy
 msgid "Rect"
-msgstr ""
+msgstr "Rect"
 
 #: common/eda_shape.cpp:62 common/eda_shape.cpp:540 common/eda_shape.cpp:1589
 #: gerbview/gerber_draw_item.cpp:234
@@ -4404,12 +4407,12 @@ msgstr "Circle"
 
 #: common/eda_shape.cpp:64
 msgid "Bezier Curve"
-msgstr ""
+msgstr "Đường cong Bezier"
 
 #: common/eda_shape.cpp:65 common/eda_shape.cpp:557 common/eda_shape.cpp:1591
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2124
 msgid "Polygon"
-msgstr ""
+msgstr "Đa giác"
 
 #: common/eda_shape.cpp:528 common/eda_shape.cpp:1602
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:134
@@ -4425,16 +4428,16 @@ msgstr "Hình dạng"
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:181
 #: pcbnew/pcb_track.cpp:671
 msgid "Radius"
-msgstr ""
+msgstr "Bán kính"
 
 #: common/eda_shape.cpp:543 common/eda_shape.cpp:583 pcbnew/fp_text.cpp:299
 #: pcbnew/pcb_text.cpp:124
 msgid "Angle"
-msgstr ""
+msgstr "Góc"
 
 #: common/eda_shape.cpp:550
 msgid "Curve"
-msgstr ""
+msgstr "Đường cong"
 
 #: common/eda_shape.cpp:553 common/eda_shape.cpp:578
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:58
@@ -4445,7 +4448,7 @@ msgstr "Độ dài"
 
 #: common/eda_shape.cpp:560
 msgid "Points"
-msgstr ""
+msgstr "Điểm"
 
 #: common/eda_shape.cpp:567 common/eda_text.cpp:753 eeschema/sch_bitmap.cpp:203
 #: pcbnew/dialogs/dialog_board_statistics.cpp:676
@@ -4478,11 +4481,11 @@ msgstr "Chiều cao"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:697
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2120
 msgid "Segment"
-msgstr ""
+msgstr "Phân đoạn"
 
 #: common/eda_shape.cpp:588
 msgid "Unrecognized"
-msgstr ""
+msgstr "Không được công nhận"
 
 #: common/eda_shape.cpp:592 pcb_calculator/transline_ident.cpp:144
 #: pcb_calculator/transline_ident.cpp:176
@@ -4503,25 +4506,25 @@ msgstr "Bezier"
 
 #: common/eda_shape.cpp:1604
 msgid "Start X"
-msgstr ""
+msgstr "Bắt đầu X"
 
 #: common/eda_shape.cpp:1606
 msgid "Start Y"
-msgstr ""
+msgstr "Bắt đầu Y"
 
 #: common/eda_shape.cpp:1608 pcbnew/pcb_shape.cpp:264 pcbnew/pcb_track.cpp:1124
 #: pcbnew/pcb_track.cpp:1141
 msgid "End X"
-msgstr ""
+msgstr "Kết thúc X"
 
 #: common/eda_shape.cpp:1610 pcbnew/pcb_shape.cpp:266 pcbnew/pcb_track.cpp:1126
 #: pcbnew/pcb_track.cpp:1143
 msgid "End Y"
-msgstr ""
+msgstr "Kết thúc Y"
 
 #: common/eda_shape.cpp:1613
 msgid "Line Width"
-msgstr ""
+msgstr "Chiều rộng đường nét"
 
 #: common/eda_text.cpp:512
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:126
@@ -8945,8 +8948,9 @@ msgid "Electrical Rules Checker"
 msgstr "Trình kiểm tra các luật điện tử"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:131
+#, fuzzy
 msgid "Power symbol value field text cannot be changed."
-msgstr ""
+msgstr "Văn bản trường giá trị biểu tượng nguồn không thể thay đổi."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:246
 msgid "Illegal reference designator value!"
@@ -8959,6 +8963,7 @@ msgstr "Giá trị không được để trống."
 #: eeschema/dialogs/dialog_field_properties.cpp:336
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr ""
+"Tên tệp trang vẽ chỉ có thể được sửa đổi trong hộp thoại Thuộc tính Trang vẽ."
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 msgid "Other symbol fields"
@@ -8969,8 +8974,9 @@ msgid "Wires && wire labels"
 msgstr "Nhãn dây &&dây"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
+#, fuzzy
 msgid "Buses && bus labels"
-msgstr ""
+msgstr "Bus và nhãn bus"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
 msgid "Sheet titles"
@@ -9295,22 +9301,25 @@ msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:70
 msgid "Pin Table"
-msgstr ""
+msgstr "Bảng pin"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:33
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:123
 msgid "Symbol name:"
-msgstr ""
+msgstr "Tên ký hiệu:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:35
+#, fuzzy
 msgid ""
 "The symbol name in library and also the default\n"
 "symbol value when loaded in the schematic."
 msgstr ""
+"Tên ký hiệu trong thư viện và cả mặc định\n"
+"giá trị biểu tượng khi được tải trong sơ đồ."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:42
 msgid "Derive from existing symbol:"
-msgstr ""
+msgstr "Bắt nguồn từ biểu tượng hiện tại:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:46
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:68
@@ -9318,95 +9327,111 @@ msgid "Combo!"
 msgstr "Kết hợp!"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:47
+#, fuzzy
 msgid ""
 "Select symbol in the current library as parent symbol.\n"
 "\n"
 "This was previously known as an alias.  Do not select\n"
 "an existing symbol to create a new root symbol."
 msgstr ""
+"Chọn biểu tượng trong thư viện hiện tại làm biểu tượng chính.\n"
+"\n"
+"Điều này trước đây được gọi là bí danh. Không chọn\n"
+"một biểu tượng hiện có để tạo một biểu tượng gốc mới."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:51
+#, fuzzy
 msgid "Default reference designator:"
-msgstr ""
+msgstr "Thiết kế tham chiếu mặc định:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:55
 msgid "U"
-msgstr ""
+msgstr "U"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:58
 msgid "Number of units per package:"
-msgstr ""
+msgstr "Số lượng đơn vị mỗi gói:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:71
 msgid "Units are not interchangeable"
-msgstr ""
+msgstr "Các đơn vị không thể hoán đổi cho nhau"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:72
+#, fuzzy
 msgid ""
 "Check this option to allow symbols with multiple units to have different\n"
 "elements.  Uncheck this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
+"Đánh dấu vào tùy chọn này để cho phép các biểu tượng có nhiều đơn vị khác "
+"nhau\n"
+"các yếu tố. Bỏ chọn tùy chọn này khi tất cả các đơn vị ký hiệu giống hệt "
+"nhau ngoại trừ\n"
+"cho số pin."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:76
+#, fuzzy
 msgid "Create symbol with alternate body style (De Morgan)"
-msgstr ""
+msgstr "Tạo biểu tượng với kiểu cơ thể thay thế (De Morgan)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:79
 msgid "Create symbol as power symbol"
-msgstr ""
+msgstr "Tạo biểu tượng làm biểu tượng nguồn"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
 msgid "Exclude from schematic bill of materials"
-msgstr ""
+msgstr "Loại trừ khỏi BOM sơ đồ mạch"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:181
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 msgid "Exclude from board"
-msgstr ""
+msgstr "Loại trừ khỏi bo mạch"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:103
+#, fuzzy
 msgid "Pin name position offset:"
-msgstr ""
+msgstr "Bù vị trí tên pin:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
+#, fuzzy
 msgid "Show pin number text"
-msgstr ""
+msgstr "Hiển thị văn bản số pin"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:124
 msgid "Show pin name text"
-msgstr ""
+msgstr "Hiển thị văn bản tên pin"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:128
+#, fuzzy
 msgid "Pin name inside"
-msgstr ""
+msgstr "Tên Pin bên trong"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.h:74
 msgid "New Symbol"
-msgstr ""
+msgstr "Biểu tượng Mới"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:39
 msgid "Do not fill"
-msgstr ""
+msgstr "Không điền đầy"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:39
 msgid "Fill with body outline color"
-msgstr ""
+msgstr "Lấp đầy với màu viền cơ thể"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:39
 msgid "Fill with body background color"
-msgstr ""
+msgstr "Lấp đầy với màu nền cơ thể"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:41
 msgid "Fill Style"
-msgstr ""
+msgstr "Kiểu Tô"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:45
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:167
 msgid "Common to all &units in symbol"
-msgstr ""
+msgstr "Chung cho tất cả & các đơn vị trong biểu tượng"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:170
