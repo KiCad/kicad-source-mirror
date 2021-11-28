@@ -977,10 +977,17 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 wxString netname = UnescapeString( aPad->GetShortNetname() );
                 wxString pinType = aPad->GetPinType();
 
-                if( pinType == wxT( "no_connect" ) || pinType.EndsWith( wxT( "+no_connect" ) ) )
-                    netname = "x";
-                else if( pinType == wxT( "free" ) && netname.StartsWith( wxT( "unconnected-(" ) ) )
-                    netname = "*";
+                // If the pad is actually not connected (unique pad in the net),
+                // shorten the displayed netname (actual name not useful)
+                // Can happen if the pad netname is edited inside the board editor, therefore
+                // having a netname not coming from schematic
+                if( netname.StartsWith( "unconnected-(" ) )
+                {
+                    if( pinType == wxT( "no_connect" ) || pinType.EndsWith( wxT( "+no_connect" ) ) )
+                        netname = "x";
+                    else if( pinType == wxT( "free" ) )
+                        netname = "*";
+                }
 
                 // approximate the size of net name text:
                 double tsize = 1.5 * padsize.x / std::max( PrintableCharCount( netname ), 1 );
