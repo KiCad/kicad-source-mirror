@@ -43,17 +43,19 @@
 class TEST_SCH_ITEM_FIXTURE
 {
 public:
-    TEST_SCH_ITEM_FIXTURE() : m_sheet()
+    TEST_SCH_ITEM_FIXTURE() : m_sheet(), m_symbol( "test symbol" ), m_pin( &m_symbol )
     {
         m_sheet.SetPosition( wxPoint( Millimeter2iu( 5 ), Millimeter2iu( 10 ) ) );
         m_sheet.SetSize( wxSize( Millimeter2iu( 50 ), Millimeter2iu( 100 ) ) );
     }
 
-    SCH_SHEET m_sheet;
+    SCH_SHEET  m_sheet;
+    LIB_SYMBOL m_symbol;
+    LIB_PIN    m_pin;
 };
 
 
-static SCH_ITEM* Instatiate( KICAD_T aType, SCH_SHEET* sheet )
+static SCH_ITEM* Instatiate( KICAD_T aType, SCH_SHEET* sheet, LIB_PIN* pin )
 {
     if( !IsEeschemaType( aType ) )
         return nullptr;
@@ -86,6 +88,10 @@ static SCH_ITEM* Instatiate( KICAD_T aType, SCH_SHEET* sheet )
 
     case SCH_SHEET_T:          return new SCH_SHEET();
     case SCH_PIN_T:
+    {
+        static SCH_SYMBOL symbol;
+        return new SCH_PIN( pin, &symbol );
+    }
 
     case SCHEMATIC_T: // You can't rotate or mirror a schematic object.
 
@@ -99,7 +105,10 @@ static SCH_ITEM* Instatiate( KICAD_T aType, SCH_SHEET* sheet )
         return nullptr;
 
     default:
-        BOOST_FAIL( wxString::Format( "Unhandled type: %d", aType ) );
+        BOOST_FAIL( wxString::Format(
+            "Unhandled type: %d "
+            "(if you have created a new type you need to handle it in this switch statement)",
+            aType ) );
         return nullptr;
     }
 }
@@ -131,7 +140,7 @@ BOOST_AUTO_TEST_CASE( Move )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet ) );
+        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet, &m_pin ) );
 
         if( item == nullptr )
             continue;
@@ -160,7 +169,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet ) );
+        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet, &m_pin ) );
 
         if( item == nullptr )
             continue;
@@ -207,7 +216,7 @@ BOOST_AUTO_TEST_CASE( MirrorHorizontally )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet ) );
+        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet, &m_pin ) );
 
         if( item == nullptr )
             continue;
@@ -237,8 +246,7 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet ) );
-        auto originalItem = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet ) );
+        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet, &m_pin ) );
 
         if( item == nullptr )
             continue;

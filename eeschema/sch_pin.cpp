@@ -314,6 +314,12 @@ bool SCH_PIN::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
+EDA_ITEM* SCH_PIN::Clone() const
+{
+    return new SCH_PIN( *this );
+}
+
+
 bool SCH_PIN::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
 {
     // Reciprocal checking is done in CONNECTION_GRAPH anyway
