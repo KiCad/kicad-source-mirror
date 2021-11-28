@@ -415,7 +415,7 @@ VECTOR2D OPENGL_GAL::getScreenPixelSize() const
 }
 
 
-void OPENGL_GAL::beginDrawing()
+void OPENGL_GAL::BeginDrawing()
 {
 #ifdef KICAD_GAL_PROFILE
     PROF_COUNTER totalRealTime( "OPENGL_GAL::beginDrawing()", true );
@@ -573,7 +573,7 @@ void OPENGL_GAL::beginDrawing()
 }
 
 
-void OPENGL_GAL::endDrawing()
+void OPENGL_GAL::EndDrawing()
 {
     wxASSERT_MSG( m_isContextLocked, "What happened to the context lock?" );
 
@@ -614,7 +614,7 @@ void OPENGL_GAL::endDrawing()
 }
 
 
-void OPENGL_GAL::lockContext( int aClientCookie )
+void OPENGL_GAL::LockContext( int aClientCookie )
 {
     wxASSERT_MSG( !m_isContextLocked, "Context already locked." );
     m_isContextLocked = true;
@@ -624,7 +624,7 @@ void OPENGL_GAL::lockContext( int aClientCookie )
 }
 
 
-void OPENGL_GAL::unlockContext( int aClientCookie )
+void OPENGL_GAL::UnlockContext( int aClientCookie )
 {
     wxASSERT_MSG( m_isContextLocked, "Context not locked.  A GAL_CONTEXT_LOCKER RAII object must "
                                      "be stacked rather than making separate lock/unlock calls." );

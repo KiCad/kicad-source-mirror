@@ -1086,12 +1086,26 @@ public:
         return false;
     }
 
+
+    /// Use GAL_CONTEXT_LOCKER RAII object unless you know what you're doing.
+    virtual void LockContext( int aClientCookie ) {}
+
+    virtual void UnlockContext( int aClientCookie ) {}
+
+    /// Start/end drawing functions, draw calls can be only made in between the calls
+    /// to BeginDrawing()/EndDrawing(). Normally you should create a GAL_DRAWING_CONTEXT RAII
+    /// object, but I'm leaving these functions public for more precise (i.e. timing/profiling)
+    /// control of the drawing process - Tom
+
+    /// Begin the drawing, needs to be called for every new frame.
+    /// Use GAL_DRAWING_CONTEXT RAII object unless you know what you're doing.
+    virtual void BeginDrawing() {};
+
+    /// End the drawing, needs to be called for every new frame.
+    /// Use GAL_DRAWING_CONTEXT RAII object unless you know what you're doing.
+    virtual void EndDrawing() {};
 protected:
-    /// Use GAL_CONTEXT_LOCKER RAII object
-    virtual void lockContext( int aClientCookie ) {}
-
-    virtual void unlockContext( int aClientCookie ) {}
-
+  
     /// Enable item update mode.
     /// Private: use GAL_UPDATE_CONTEXT RAII object
     virtual void beginUpdate() {}
@@ -1099,13 +1113,7 @@ protected:
     /// Disable item update mode.
     virtual void endUpdate() {}
 
-    /// Begin the drawing, needs to be called for every new frame.
-    /// Private: use GAL_DRAWING_CONTEXT RAII object
-    virtual void beginDrawing() {};
-
-    /// End the drawing, needs to be called for every new frame.
-    /// Private: use GAL_DRAWING_CONTEXT RAII object
-    virtual void endDrawing() {};
+   
 
     /// Compute the scaling factor for the world->screen matrix
     inline void computeWorldScale()
@@ -1228,12 +1236,12 @@ public:
         m_gal( aGal )
     {
         m_cookie = rand();
-        m_gal->lockContext( m_cookie );
+        m_gal->LockContext( m_cookie );
     }
 
     ~GAL_CONTEXT_LOCKER()
     {
-        m_gal->unlockContext( m_cookie );
+        m_gal->UnlockContext( m_cookie );
     }
 
 protected:
@@ -1264,12 +1272,12 @@ public:
     GAL_DRAWING_CONTEXT( GAL* aGal ) :
             GAL_CONTEXT_LOCKER( aGal )
     {
-        m_gal->beginDrawing();
+        m_gal->BeginDrawing();
     }
 
     ~GAL_DRAWING_CONTEXT()
     {
-        m_gal->endDrawing();
+        m_gal->EndDrawing();
     }
 };
 

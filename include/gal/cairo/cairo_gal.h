@@ -218,6 +218,12 @@ public:
     ///< @copydoc GAL::DrawGrid()
     void DrawGrid() override;
 
+    /// @copydoc GAL::BeginDrawing()
+    void BeginDrawing() override;
+
+    /// @copydoc GAL::EndDrawing()
+    void EndDrawing() override;
+
 
 protected:
     // Geometric transforms according to the m_currentWorld2Screen transform matrix:
@@ -241,12 +247,6 @@ protected:
      * @param aEndAngle is the arc ending point in radians to transform
      */
     void arc_angles_xform_and_normalize( double& aStartAngle, double& aEndAngle );
-
-    /// @copydoc GAL::BeginDrawing()
-    void beginDrawing() override;
-
-    /// @copydoc GAL::EndDrawing()
-    void endDrawing() override;
 
     void resetContext();
 
@@ -425,10 +425,10 @@ public:
     bool SetNativeCursorStyle( KICURSOR aCursor ) override;
 
     /// @copydoc GAL::BeginDrawing()
-    void beginDrawing() override;
+    void BeginDrawing() override;
 
     /// @copydoc GAL::EndDrawing()
-    void endDrawing() override;
+    void EndDrawing() override;
 
     /// Prepare Cairo surfaces for drawing
     void initSurface();

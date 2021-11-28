@@ -289,6 +289,16 @@ public:
         return m_isContextLocked;
     }
 
+    void LockContext( int aClientCookie ) override;
+
+    void UnlockContext( int aClientCookie ) override;
+
+    /// @copydoc GAL::BeginDrawing()
+    void BeginDrawing() override;
+
+    /// @copydoc GAL::EndDrawing()
+    void EndDrawing() override;
+
     ///< Parameters passed to the GLU tesselator
     struct TessParams
     {
@@ -354,21 +364,11 @@ private:
     GLUtesselator*                              m_tesselator;
     std::deque< boost::shared_array<GLdouble> > m_tessIntersects;
 
-    void lockContext( int aClientCookie ) override;
-
-    void unlockContext( int aClientCookie ) override;
-
     /// @copydoc GAL::BeginUpdate()
     void beginUpdate() override;
 
     /// @copydoc GAL::EndUpdate()
     void endUpdate() override;
-
-    /// @copydoc GAL::BeginDrawing()
-    void beginDrawing() override;
-
-    /// @copydoc GAL::EndDrawing()
-    void endDrawing() override;
 
     ///< Update handler for OpenGL settings
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;

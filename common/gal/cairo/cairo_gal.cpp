@@ -89,13 +89,13 @@ CAIRO_GAL_BASE::~CAIRO_GAL_BASE()
 }
 
 
-void CAIRO_GAL_BASE::beginDrawing()
+void CAIRO_GAL_BASE::BeginDrawing()
 {
     resetContext();
 }
 
 
-void CAIRO_GAL_BASE::endDrawing()
+void CAIRO_GAL_BASE::EndDrawing()
 {
     // Force remaining objects to be drawn
     Flush();
@@ -1317,11 +1317,11 @@ CAIRO_GAL::~CAIRO_GAL()
 }
 
 
-void CAIRO_GAL::beginDrawing()
+void CAIRO_GAL::BeginDrawing()
 {
     initSurface();
 
-    CAIRO_GAL_BASE::beginDrawing();
+    CAIRO_GAL_BASE::BeginDrawing();
 
     if( !m_validCompositor )
         setCompositor();
@@ -1331,9 +1331,9 @@ void CAIRO_GAL::beginDrawing()
 }
 
 
-void CAIRO_GAL::endDrawing()
+void CAIRO_GAL::EndDrawing()
 {
-    CAIRO_GAL_BASE::endDrawing();
+    CAIRO_GAL_BASE::EndDrawing();
 
     // Merge buffers on the screen
     m_compositor->DrawBuffer( m_mainBuffer );
