@@ -1,4 +1,4 @@
-(kicad_sch (version 20210621) (generator eeschema)
+(kicad_sch (version 20211123) (generator eeschema)
 
   (uuid 3bb135b1-15ed-43fe-a7bd-da79c3cfcb8b)
 
@@ -17,10 +17,10 @@
     (stroke (width 0) (type solid) (color 0 0 0 0))
     (fill (color 0 0 0 0.0000))
     (uuid 00000000-0000-0000-0000-000048553e53)
-    (property "Nom feuille" "pic_programmer" (id 0) (at 81.28 65.2775 0)
+    (property "Sheet name" "pic_programmer" (id 0) (at 81.28 65.2775 0)
       (effects (font (size 1.524 1.524)) (justify left bottom))
     )
-    (property "Fichier de feuille" "pic_programmer.kicad_sch" (id 1) (at 81.28 109.8301 0)
+    (property "Sheet file" "pic_programmer.kicad_sch" (id 1) (at 81.28 109.8301 0)
       (effects (font (size 1.524 1.524)) (justify left top))
     )
   )
@@ -29,10 +29,10 @@
     (stroke (width 0) (type solid) (color 0 0 0 0))
     (fill (color 0 0 0 0.0000))
     (uuid 00000000-0000-0000-0000-000048553e7c)
-    (property "Nom feuille" "sockets" (id 0) (at 142.24 65.2775 0)
+    (property "Sheet name" "sockets" (id 0) (at 142.24 65.2775 0)
       (effects (font (size 1.524 1.524)) (justify left bottom))
     )
-    (property "Fichier de feuille" "pic_sockets.kicad_sch" (id 1) (at 142.24 109.8301 0)
+    (property "Sheet file" "pic_sockets.kicad_sch" (id 1) (at 142.24 109.8301 0)
       (effects (font (size 1.524 1.524)) (justify left top))
     )
   )
@@ -216,31 +216,31 @@
       (reference "#PWR0104") (unit 1) (value "VCC") (footprint "")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a5056"
-      (reference "C1") (unit 1) (value "100uF") (footprint "discret:CP10")
+      (reference "C1") (unit 1) (value "100uF") (footprint "Capacitor_THT:CP_Axial_L18.0mm_D6.5mm_P25.00mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a501d"
-      (reference "C2") (unit 1) (value "220uF") (footprint "discret:CP10")
+      (reference "C2") (unit 1) (value "220uF") (footprint "Capacitor_THT:CP_Axial_L18.0mm_D6.5mm_P25.00mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a584c"
-      (reference "C3") (unit 1) (value "22uF/25V") (footprint "discret:CP8")
+      (reference "C3") (unit 1) (value "22uF/25V") (footprint "Capacitor_THT:CP_Axial_L11.0mm_D6.0mm_P18.00mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a5f61"
-      (reference "C4") (unit 1) (value "0") (footprint "discret:C1-1")
+      (reference "C4") (unit 1) (value "0") (footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a58b1"
-      (reference "C5") (unit 1) (value "10nF") (footprint "discret:C1-1")
+      (reference "C5") (unit 1) (value "10nF") (footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm")
     )
     (path "/00000000-0000-0000-0000-000048553e7c/00000000-0000-0000-0000-0000442aa12b"
-      (reference "C6") (unit 1) (value "100nF") (footprint "discret:C1-1")
+      (reference "C6") (unit 1) (value "100nF") (footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm")
     )
     (path "/00000000-0000-0000-0000-000048553e7c/00000000-0000-0000-0000-0000442aa145"
-      (reference "C7") (unit 1) (value "100nF") (footprint "discret:C1-1")
+      (reference "C7") (unit 1) (value "100nF") (footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm")
     )
     (path "/00000000-0000-0000-0000-000048553e7c/00000000-0000-0000-0000-00004639be2c"
-      (reference "C8") (unit 1) (value "100nF") (footprint "discret:C1-1")
+      (reference "C8") (unit 1) (value "100nF") (footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000464ad280"
-      (reference "C9") (unit 1) (value "22OnF") (footprint "discret:C1-1")
+      (reference "C9") (unit 1) (value "22OnF") (footprint "Capacitor_THT:C_Disc_D5.1mm_W3.2mm_P5.00mm")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a500b"
       (reference "D1") (unit 1) (value "1N4004") (footprint "Diode_THT:D_DO-35_SOD27_P12.70mm_Horizontal")
@@ -264,10 +264,10 @@
       (reference "D7") (unit 1) (value "BAT43") (footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4f5d"
-      (reference "D8") (unit 1) (value "RED-LED") (footprint "discret:LEDV")
+      (reference "D8") (unit 1) (value "RED-LED") (footprint "LED_THT:LED_D5.0mm")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a5084"
-      (reference "D9") (unit 1) (value "GREEN-LED") (footprint "discret:LEDV")
+      (reference "D9") (unit 1) (value "GREEN-LED") (footprint "LED_THT:LED_D5.0mm")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a6026"
       (reference "D10") (unit 1) (value "SCHOTTKY") (footprint "Diode_THT:D_DO-35_SOD27_P12.70mm_Horizontal")
@@ -276,7 +276,7 @@
       (reference "D11") (unit 1) (value "BAT43") (footprint "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-00004639b9ea"
-      (reference "D12") (unit 1) (value "YELLOW-LED") (footprint "discret:LEDV")
+      (reference "D12") (unit 1) (value "YELLOW-LED") (footprint "LED_THT:LED_D5.0mm")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4c93"
       (reference "J1") (unit 1) (value "DB9-FEMAL") (footprint "Connector_Dsub:DSUB-9_Female_Horizontal_P2.77x2.84mm_EdgePinOffset7.70mm_Housed_MountingHolesOffset9.12mm")
@@ -288,7 +288,7 @@
       (reference "L1") (unit 1) (value "22uH") (footprint "inductors:INDUCTOR_V")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000442a4fe7"
-      (reference "P1") (unit 1) (value "CONN_2") (footprint "connect:bornier2")
+      (reference "P1") (unit 1) (value "CONN_2") (footprint "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree")
     )
     (path "/00000000-0000-0000-0000-000048553e7c/00000000-0000-0000-0000-00004436967e"
       (reference "P2") (unit 1) (value "SUPP28") (footprint "Package_DIP:DIP-28_W7.62mm_Socket_LongPads")
@@ -369,7 +369,7 @@
       (reference "R21") (unit 1) (value "470") (footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
     )
     (path "/00000000-0000-0000-0000-000048553e53/00000000-0000-0000-0000-0000443d0101"
-      (reference "RV1") (unit 1) (value "1K") (footprint "discret:RV2X4")
+      (reference "RV1") (unit 1) (value "1K") (footprint "pic_programmer_fp:RV2X4")
     )
     (path "/00000000-0000-0000-0000-000048553e7c/00000000-0000-0000-0000-0000442a87f7"
       (reference "U1") (unit 1) (value "24Cxx") (footprint "Package_DIP:DIP-8_W7.62mm_LongPads")

@@ -2,19 +2,10 @@
 
 # Convert a footprint library from one format to another, e.g. legacy to pretty.
 
-# 1) Build target _pcbnew after enabling scripting in cmake.
-# $ make _pcbnew
-
-# 2) Changed dir to pcbnew
-# $ cd pcbnew
-# $ pwd
-# build/pcbnew
-
-# 3) Entered following command line, script takes to arguments: oldLibPath & newLibPath
+# 1) Entered following command line, script takes to arguments: oldLibPath & newLibPath
 # $ PYTHONPATH=. <path_to>/lib_convert.py /usr/local/share/kicad/modules/smd_dil.mod /tmp/smd_dil.pretty
 
-# 4) inspect one footprint found in new librarypath /tmp/smd_dil.pretty
-# $ less /tmp/smd_dil.pretty/msoic-10.kicad_mod
+# inspect one footprint found in new librarypath /tmp/smd_dil.pretty
 
 
 from __future__ import print_function
@@ -45,7 +36,10 @@ dst_plugin.FootprintLibCreate( dst_libpath )
 
 list_of_parts = src_plugin.FootprintEnumerate( src_libpath )
 
+ii = 0;
 for part_id in list_of_parts:
-    module = src_plugin.FootprintLoad( src_libpath, part_id )
-    dst_plugin.FootprintSave( dst_libpath, module )
+    footprint = src_plugin.FootprintLoad( src_libpath, part_id )
+    dst_plugin.FootprintSave( dst_libpath, footprint )
+    ii = ii+1
+    print( ii, footprint.GetFPID().GetUniStringLibId(), "->", dst_libpath )
 
