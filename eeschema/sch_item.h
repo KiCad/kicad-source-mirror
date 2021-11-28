@@ -414,6 +414,8 @@ public:
 
     void SetConnectivityDirty( bool aDirty = true ) { m_connectivity_dirty = aDirty; }
 
+    virtual void SetLastResolvedState( const SCH_ITEM* aItem ) { }
+
     NETCLASSPTR NetClass( const SCH_SHEET_PATH* aSheet = nullptr ) const;
 
     /**

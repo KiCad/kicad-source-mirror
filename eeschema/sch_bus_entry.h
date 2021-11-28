@@ -51,6 +51,18 @@ public:
 
     ~SCH_BUS_ENTRY_BASE() { }
 
+    void SetLastResolvedState( const SCH_ITEM* aItem ) override
+    {
+        const SCH_BUS_ENTRY_BASE* aEntry = dynamic_cast<const SCH_BUS_ENTRY_BASE*>( aItem );
+
+        if( aEntry )
+        {
+            m_lastResolvedWidth = aEntry->m_lastResolvedWidth;
+            m_lastResolvedLineStyle = aEntry->m_lastResolvedLineStyle;
+            m_lastResolvedColor = aEntry->m_lastResolvedColor;
+        }
+    }
+
     /**
      * Return true for items which are moved with the anchor point at mouse cursor
      *  and false for items moved with no reference to anchor

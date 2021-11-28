@@ -1683,10 +1683,13 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
 
     // Build symbol list for reannotation of duplicates
-    SCH_SHEET_LIST     sheets = m_frame->Schematic().GetSheets();
     SCH_REFERENCE_LIST existingRefs;
-    sheets.GetSymbols( existingRefs );
+    hierarchy.GetSymbols( existingRefs );
     existingRefs.SortByReferenceOnly();
+
+    // Build UUID map for fetching last-resolved-properties
+    std::map<KIID, EDA_ITEM*> itemMap;
+    hierarchy.FillItemMap( itemMap );
 
     // Keep track of pasted sheets and symbols for the different
     // paths to the hierarchy
@@ -1864,8 +1867,17 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         }
         else
         {
+            SCH_ITEM* srcItem = dynamic_cast<SCH_ITEM*>( itemMap[ item->m_Uuid ] );
+            SCH_ITEM* destItem = dynamic_cast<SCH_ITEM*>( item );
+
             // Everything gets a new KIID
             const_cast<KIID&>( item->m_Uuid ) = KIID();
+
+            if( srcItem && destItem )
+            {
+                destItem->SetConnectivityDirty( true );
+                destItem->SetLastResolvedState( srcItem );
+            }
         }
 
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVING );

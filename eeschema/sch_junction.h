@@ -54,6 +54,17 @@ public:
 
     void SwapData( SCH_ITEM* aItem ) override;
 
+    void SetLastResolvedState( const SCH_ITEM* aItem ) override
+    {
+        const SCH_JUNCTION* aJunction = dynamic_cast<const SCH_JUNCTION*>( aItem );
+
+        if( aJunction )
+        {
+            m_lastResolvedDiameter = aJunction->m_lastResolvedDiameter;
+            m_lastResolvedColor = aJunction->m_lastResolvedColor;
+        }
+    }
+
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     const EDA_RECT GetBoundingBox() const override;

@@ -184,13 +184,6 @@ COLOR4D SCH_BUS_ENTRY_BASE::GetStrokeColor() const
         if( netclass )
             m_lastResolvedColor = netclass->GetSchematicColor();
     }
-    else
-    {
-        wxASSERT_MSG( !IsConnectable()
-                        || !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity
-                        || !Schematic() || !Schematic()->ConnectionGraph()->m_allowRealTime,
-                      "Connectivity shouldn't be dirty if realtime connectivity is on!" );
-    }
 
     return m_lastResolvedColor;
 }
@@ -208,13 +201,6 @@ PLOT_DASH_TYPE SCH_BUS_ENTRY_BASE::GetStrokeStyle() const
 
         if( netclass )
             m_lastResolvedLineStyle = static_cast<PLOT_DASH_TYPE>( netclass->GetLineStyle() );
-    }
-    else
-    {
-        wxASSERT_MSG( !IsConnectable()
-                        || !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity
-                        || !Schematic() || !Schematic()->ConnectionGraph()->m_allowRealTime,
-                      "Connectivity shouldn't be dirty if realtime connectivity is on!" );
     }
 
     return m_lastResolvedLineStyle;

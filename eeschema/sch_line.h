@@ -93,6 +93,18 @@ public:
     wxPoint GetEndPoint() const { return m_end; }
     void SetEndPoint( const wxPoint& aPosition ) { m_end = aPosition; }
 
+    void SetLastResolvedState( const SCH_ITEM* aItem ) override
+    {
+        const SCH_LINE* aLine = dynamic_cast<const SCH_LINE*>( aItem );
+
+        if( aLine )
+        {
+            m_lastResolvedLineStyle = aLine->m_lastResolvedLineStyle;
+            m_lastResolvedWidth = aLine->m_lastResolvedWidth;
+            m_lastResolvedColor = aLine->m_lastResolvedColor;
+        }
+    }
+
     PLOT_DASH_TYPE GetDefaultStyle() const;
 
     void           SetLineStyle( const PLOT_DASH_TYPE aStyle );
