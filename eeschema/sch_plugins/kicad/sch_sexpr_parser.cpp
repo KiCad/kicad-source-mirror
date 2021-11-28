@@ -549,8 +549,7 @@ void SCH_SEXPR_PARSER::parseStroke( STROKE_PARAMS& aStroke )
 
 void SCH_SEXPR_PARSER::parseFill( FILL_PARAMS& aFill )
 {
-    wxCHECK_RET( CurTok() == T_fill,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as fill." ) );
+    wxCHECK_RET( CurTok() == T_fill, "Cannot parse " + GetTokenString( CurTok() ) + " as a fill." );
 
     aFill.m_FillType = FILL_T::NO_FILL;
     aFill.m_Color = COLOR4D::UNSPECIFIED;
@@ -605,7 +604,7 @@ void SCH_SEXPR_PARSER::parseFill( FILL_PARAMS& aFill )
 void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSyntax )
 {
     wxCHECK_RET( aText && CurTok() == T_effects,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as EDA_TEXT." ) );
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as an EDA_TEXT." );
 
     // In version 20210606 the notation for overbars was changed from `~...~` to `~{...}`.
     // We need to convert the old syntax to the new one.
@@ -729,8 +728,7 @@ void SCH_SEXPR_PARSER::parseHeader( TSCHEMATIC_T::T aHeaderType, int aFileVersio
 void SCH_SEXPR_PARSER::parsePinNames( std::unique_ptr<LIB_SYMBOL>& aSymbol )
 {
     wxCHECK_RET( CurTok() == T_pin_names,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
-                 wxT( " as a pin_name token." ) );
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as a pin_name token." );
 
     wxString error;
 
@@ -1603,8 +1601,7 @@ void SCH_SEXPR_PARSER::parsePAGE_INFO( PAGE_INFO& aPageInfo )
 void SCH_SEXPR_PARSER::parseTITLE_BLOCK( TITLE_BLOCK& aTitleBlock )
 {
     wxCHECK_RET( CurTok() == T_title_block,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
-                 wxT( " as TITLE_BLOCK." ) );
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as a TITLE_BLOCK." );
 
     T token;
 
@@ -1708,8 +1705,7 @@ void SCH_SEXPR_PARSER::parseTITLE_BLOCK( TITLE_BLOCK& aTitleBlock )
 SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
 {
     wxCHECK_MSG( CurTok() == T_property, nullptr,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
-                 wxT( " as a property token." ) );
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as a property token." );
 
     T token = NextTok();
 
@@ -1781,8 +1777,7 @@ SCH_SHEET_PIN* SCH_SEXPR_PARSER::parseSchSheetPin( SCH_SHEET* aSheet )
 {
     wxCHECK_MSG( aSheet != nullptr, nullptr, "" );
     wxCHECK_MSG( CurTok() == T_pin, nullptr,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
-                 wxT( " as a sheet pin token." ) );
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as a sheet pin token." );
 
     T token = NextTok();
 
@@ -1867,8 +1862,7 @@ SCH_SHEET_PIN* SCH_SEXPR_PARSER::parseSchSheetPin( SCH_SHEET* aSheet )
 void SCH_SEXPR_PARSER::parseSchSheetInstances( SCH_SHEET* aRootSheet, SCH_SCREEN* aScreen )
 {
     wxCHECK_RET( CurTok() == T_sheet_instances,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
-                 wxT( " as a instances token." ) );
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as an instances token." );
     wxCHECK( aScreen, /* void */ );
 
     T token;
@@ -1947,8 +1941,7 @@ void SCH_SEXPR_PARSER::parseSchSheetInstances( SCH_SHEET* aRootSheet, SCH_SCREEN
 void SCH_SEXPR_PARSER::parseSchSymbolInstances( SCH_SCREEN* aScreen )
 {
     wxCHECK_RET( CurTok() == T_symbol_instances,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
-                 wxT( " as a instances token." ) );
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as an instances token." );
     wxCHECK( aScreen, /* void */ );
 
     T token;
@@ -2771,19 +2764,20 @@ SCH_BUS_WIRE_ENTRY* SCH_SEXPR_PARSER::parseBusEntry()
 
 SCH_LINE* SCH_SEXPR_PARSER::parseLine()
 {
-    T token;
+    T             token;
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
-    std::unique_ptr<SCH_LINE> line = std::make_unique<SCH_LINE>();
+    int           layer;
 
     switch( CurTok() )
     {
-    case T_polyline:   line->SetLayer( LAYER_NOTES );   break;
-    case T_wire:       line->SetLayer( LAYER_WIRE );    break;
-    case T_bus:        line->SetLayer( LAYER_BUS );     break;
+    case T_polyline: layer = LAYER_NOTES; break;
+    case T_wire:     layer = LAYER_WIRE;  break;
+    case T_bus:      layer = LAYER_BUS;   break;
     default:
-        wxCHECK_MSG( false, nullptr,
-                     wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a line." ) );
+        wxCHECK_MSG( false, nullptr, "Cannot parse " + GetTokenString( CurTok() ) + " as a line." );
     }
+
+    std::unique_ptr<SCH_LINE> line = std::make_unique<SCH_LINE>( wxPoint(), layer );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
