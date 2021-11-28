@@ -580,7 +580,7 @@ void OPENGL_GAL::EndDrawing()
     PROF_COUNTER cntEndNoncached("gl-end-noncached");
     PROF_COUNTER cntEndOverlay("gl-end-overlay");
     PROF_COUNTER cntComposite("gl-composite");
-    PROF_COUNTER cntSwap("gl-composite");
+    PROF_COUNTER cntSwap("gl-swap");
 
     cntTotal.Start();
     // Cached & non-cached containers are rendered to the same buffer
@@ -614,6 +614,8 @@ void OPENGL_GAL::EndDrawing()
 
     m_compositor->Present();
     blitCursor();
+
+    cntComposite.Stop();
 
     cntSwap.Start();
     SwapBuffers();
