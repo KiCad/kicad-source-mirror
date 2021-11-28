@@ -314,9 +314,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PythonSyncEnvironmentVariables();
     PythonSyncProjectName();
 
-    // Sync action plugins in case they changed since the last time the frame opened
-    GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload, true );
-
     GetCanvas()->SwitchBackend( m_canvasType );
     ActivateGalCanvas();
 
