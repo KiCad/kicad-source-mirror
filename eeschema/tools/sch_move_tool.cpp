@@ -431,12 +431,10 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             chain_commands = true;
             break;
         }
-        else if( evt->IsAction( &EE_ACTIONS::rotateCW )
-                || evt->IsAction( &EE_ACTIONS::rotateCCW )
-                || evt->IsAction( &EE_ACTIONS::mirrorH )
-                || evt->IsAction( &EE_ACTIONS::mirrorV ) )
+        else if( evt->IsAction( &EE_ACTIONS::autoplaceFields ) )
         {
-            evt->SetPassEvent();
+            // Currently this makes a mess when done while moving/dragging, so disable it.
+            wxBell();
         }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
