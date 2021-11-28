@@ -50,10 +50,8 @@
 #include <macros.h>
 #include <geometry/geometry_utils.h>
 
-#ifdef KICAD_GAL_PROFILE
 #include <profile.h>
-#include <wx/log.h>
-#endif /* KICAD_GAL_PROFILE */
+#include <trace_helpers.h>
 
 #include <functional>
 #include <limits>
@@ -577,21 +575,34 @@ void OPENGL_GAL::EndDrawing()
 {
     wxASSERT_MSG( m_isContextLocked, "What happened to the context lock?" );
 
-#ifdef KICAD_GAL_PROFILE
-    PROF_COUNTER totalRealTime( "OPENGL_GAL::endDrawing()", true );
-#endif /* KICAD_GAL_PROFILE */
+    PROF_COUNTER cntTotal("gl-end-total");
+    PROF_COUNTER cntEndCached("gl-end-cached");
+    PROF_COUNTER cntEndNoncached("gl-end-noncached");
+    PROF_COUNTER cntEndOverlay("gl-end-overlay");
+    PROF_COUNTER cntComposite("gl-composite");
+    PROF_COUNTER cntSwap("gl-composite");
 
+    cntTotal.Start();
     // Cached & non-cached containers are rendered to the same buffer
     m_compositor->SetBuffer( m_mainBuffer );
-    m_nonCachedManager->EndDrawing();
-    m_cachedManager->EndDrawing();
 
+    cntEndNoncached.Start();
+    m_nonCachedManager->EndDrawing();
+    cntEndNoncached.Stop();
+
+    cntEndCached.Start();
+    m_cachedManager->EndDrawing();
+    cntEndCached.Stop();
+
+    cntEndOverlay.Start();
     // Overlay container is rendered to a different buffer
     if( m_overlayBuffer )
         m_compositor->SetBuffer( m_overlayBuffer );
 
     m_overlayManager->EndDrawing();
+    cntEndOverlay.Stop();
 
+    cntComposite.Start();
     // Be sure that the framebuffer is not colorized (happens on specific GPU&drivers combinations)
     glColor4d( 1.0, 1.0, 1.0, 1.0 );
 
@@ -604,13 +615,15 @@ void OPENGL_GAL::EndDrawing()
     m_compositor->Present();
     blitCursor();
 
+    cntSwap.Start();
     SwapBuffers();
+    cntSwap.Stop();
 
-#ifdef KICAD_GAL_PROFILE
-    totalRealTime.Stop();
-    wxLogTrace( traceGalProfile, wxT( "OPENGL_GAL::endDrawing(): %.1f ms" ),
-                totalRealTime.msecs() );
-#endif /* KICAD_GAL_PROFILE */
+    cntTotal.Stop();
+
+    KI_TRACE( traceGalProfile, "Timing: %s %s %s %s %s %s\n", cntTotal.to_string(),
+              cntEndCached.to_string(), cntEndNoncached.to_string(), cntEndOverlay.to_string(),
+              cntComposite.to_string(), cntSwap.to_string() );
 }
 
 
