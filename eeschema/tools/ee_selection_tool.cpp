@@ -785,7 +785,7 @@ bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& a
                                      const KICAD_T* aFilterList )
 {
     int pixelThreshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-    int gridThreshold = KiROUND( getView()->GetGAL()->GetGridSize().EuclideanNorm() );
+    int gridThreshold = KiROUND( getView()->GetGAL()->GetGridSize().EuclideanNorm() / 2 );
     aCollector.m_Threshold = std::max( pixelThreshold, gridThreshold );
 
     if( m_isSymbolEditor )

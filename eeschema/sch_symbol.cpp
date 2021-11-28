@@ -1783,8 +1783,8 @@ SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_ITEM& aItem )
 
 bool SCH_SYMBOL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    EDA_RECT bBox = GetBoundingBox();
-    bBox.Inflate( aAccuracy );
+    EDA_RECT bBox = GetBodyBoundingBox();
+    bBox.Inflate( aAccuracy / 2 );
 
     if( bBox.Contains( aPosition ) )
         return true;
@@ -1800,7 +1800,7 @@ bool SCH_SYMBOL::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy 
 
     EDA_RECT rect = aRect;
 
-    rect.Inflate( aAccuracy );
+    rect.Inflate( aAccuracy / 2 );
 
     if( aContained )
         return rect.Contains( GetBodyBoundingBox() );
