@@ -31,6 +31,7 @@
 #include <pgm_base.h>
 
 #include <profile.h>
+#include <trace_helpers.h>
 
 #include <view/view_overlay.h>
 
@@ -290,7 +291,7 @@ PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) : PNS_LOG_VIEWER_FR
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
             m_galPanel->GetView()->GetPainter()->GetSettings() );
 
-    settings->SetZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE );
+    settings->SetZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED );
 
     m_listPopupMenu = new wxMenu( wxT( "" ) );
     m_listPopupMenu->Append( ID_LIST_COPY, wxT( "Copy selected geometry" ), wxT( "" ),
@@ -480,6 +481,22 @@ void PNS_LOG_VIEWER_FRAME::SetLogFile( PNS_LOG_FILE* aLog )
     updateDumpPanel( m_rewindIter );
 }
 
+
+
+void PNS_LOG_VIEWER_FRAME::SetBoard2( std::shared_ptr<BOARD> aBoard )
+{
+    SetBoard( aBoard );
+
+    auto extents = m_board->GetBoundingBox();
+
+    BOX2D bbd;
+    bbd.SetOrigin( extents.GetOrigin() );
+    bbd.SetWidth( extents.GetWidth() );
+    bbd.SetHeight( extents.GetHeight() );
+    bbd.Inflate( std::min( bbd.GetWidth(), bbd.GetHeight() ) / 5 );
+
+    m_galPanel->GetView()->SetViewport( bbd );
+}
 
 void PNS_LOG_VIEWER_FRAME::onReload( wxCommandEvent& event )
 {
@@ -774,4 +791,43 @@ static bool registered2 = UTILITY_REGISTRY::Register( {
         "replay",
         "PNS Log Player",
         replay_main_func,
+} );
+
+
+
+int render_perftest_main_func( int argc, char* argv[] )
+{
+    auto frame = new PNS_LOG_VIEWER_FRAME( nullptr );
+
+    //  drcCreateTestsProviderClearance();
+    //  drcCreateTestsProviderEdgeClearance();
+
+    if( argc >= 2 && std::string( argv[1] ) == "-h" )
+    {
+        printf( "PCB render performance test. Just renders a board without UI update overhead.\n" );
+        return 0;
+    }
+
+    if( argc < 2 )
+    {
+        printf( "Expected parameters: board_file\n" );
+        return 0;
+    }
+
+    PROF_COUNTER cnt("load-board");
+    std::shared_ptr<BOARD> brd ( loadBoard( argv[1] ) );
+    cnt.Stop();
+
+    KI_TRACE( traceGalProfile, "%s\n", cnt.to_string() );
+
+    frame->SetBoard2( brd );
+
+    return 0;
+}
+
+
+static bool registered3 = UTILITY_REGISTRY::Register( {
+        "render_perftest",
+        "Renderer performance test",
+        render_perftest_main_func,
 } );

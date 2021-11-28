@@ -30,7 +30,7 @@
 #include <wx/log.h>
 #include <wx/popupwin.h>
 #include <wx/cmdline.h>
-
+#include <profile.h>
 
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -68,6 +68,7 @@
 
 #include "pcb_test_frame.h"
 
+#include <trace_helpers.h>
 
 using namespace KIGFX;
 
@@ -76,9 +77,18 @@ void PCB_TEST_FRAME_BASE::SetBoard( std::shared_ptr<BOARD> b )
 {
     m_board = b;
 
+    PROF_COUNTER cntConnectivity( "connectivity-build" );
     m_board->GetConnectivity()->Build( m_board.get() );
+    cntConnectivity.Stop();
+
+    PROF_COUNTER cntView("view-build");
     m_galPanel->DisplayBoard( m_board.get() );
+    cntView.Stop();
+
     m_galPanel->UpdateColors();
+
+    KI_TRACE( traceGalProfile, "%s\n", cntConnectivity.to_string() );
+    KI_TRACE( traceGalProfile, "%s\n", cntView.to_string() );
 
 #ifdef USE_TOOL_MANAGER
     m_toolManager->SetEnvironment( m_board.get(), m_galPanel->GetView(),

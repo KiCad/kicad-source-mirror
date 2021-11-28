@@ -47,6 +47,8 @@ public:
     virtual ~PNS_LOG_VIEWER_FRAME();
 
     void SetLogFile( PNS_LOG_FILE* aLog );
+    void SetBoard2( std::shared_ptr<BOARD> aBoard );
+
     std::shared_ptr<PNS_LOG_VIEWER_OVERLAY> GetOverlay() const { return m_overlay; }
 
 private:
