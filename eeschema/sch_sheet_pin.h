@@ -133,9 +133,9 @@ public:
      */
     void SetNumber( int aNumber );
 
-    void SetEdge( SHEET_SIDE aEdge );
+    void SetSide( SHEET_SIDE aEdge );
 
-    SHEET_SIDE GetEdge() const;
+    SHEET_SIDE GetSide() const;
 
     /**
      * Adjust label position to edge based on proximity to vertical or horizontal edge

@@ -49,9 +49,9 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxStr
     SetTextPos( pos );
 
     if( parent->IsVerticalOrientation() )
-        SetEdge( SHEET_SIDE::TOP );
+        SetSide( SHEET_SIDE::TOP );
     else
-        SetEdge( SHEET_SIDE::LEFT );
+        SetSide( SHEET_SIDE::LEFT );
 
     m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
     m_isDangling = true;
@@ -83,9 +83,9 @@ void SCH_SHEET_PIN::SwapData( SCH_ITEM* aItem )
     int tmp = pin->GetNumber();
     pin->SetNumber( GetNumber() );
     SetNumber( tmp );
-    SHEET_SIDE stmp = pin->GetEdge();
-    pin->SetEdge( GetEdge() );
-    SetEdge( stmp );
+    SHEET_SIDE stmp = pin->GetSide();
+    pin->SetSide( GetSide() );
+    SetSide( stmp );
 }
 
 
@@ -112,7 +112,7 @@ void SCH_SHEET_PIN::SetNumber( int aNumber )
 }
 
 
-void SCH_SHEET_PIN::SetEdge( SHEET_SIDE aEdge )
+void SCH_SHEET_PIN::SetSide( SHEET_SIDE aEdge )
 {
     SCH_SHEET* Sheet = GetParent();
 
@@ -150,7 +150,7 @@ void SCH_SHEET_PIN::SetEdge( SHEET_SIDE aEdge )
 }
 
 
-enum SHEET_SIDE SCH_SHEET_PIN::GetEdge() const
+enum SHEET_SIDE SCH_SHEET_PIN::GetSide() const
 {
     return m_edge;
 }
@@ -178,14 +178,14 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 
     switch( sheetEdge.NearestSegment( Pos ) )
     {
-    case 0: SetEdge( SHEET_SIDE::TOP ); break;
-    case 1: SetEdge( SHEET_SIDE::RIGHT ); break;
-    case 2: SetEdge( SHEET_SIDE::BOTTOM ); break;
-    case 3: SetEdge( SHEET_SIDE::LEFT ); break;
+    case 0: SetSide( SHEET_SIDE::TOP ); break;
+    case 1: SetSide( SHEET_SIDE::RIGHT ); break;
+    case 2: SetSide( SHEET_SIDE::BOTTOM ); break;
+    case 3: SetSide( SHEET_SIDE::LEFT ); break;
     default: wxASSERT( "Invalid segment number" );
     }
 
-    switch( GetEdge() )
+    switch( GetSide() )
     {
     case SHEET_SIDE::RIGHT:
     case SHEET_SIDE::LEFT:
@@ -225,8 +225,8 @@ void SCH_SHEET_PIN::MirrorVertically( int aCenter )
 
     switch( m_edge )
     {
-    case SHEET_SIDE::TOP: SetEdge( SHEET_SIDE::BOTTOM ); break;
-    case SHEET_SIDE::BOTTOM: SetEdge( SHEET_SIDE::TOP ); break;
+    case SHEET_SIDE::TOP: SetSide( SHEET_SIDE::BOTTOM ); break;
+    case SHEET_SIDE::BOTTOM: SetSide( SHEET_SIDE::TOP ); break;
     default: break;
     }
 }
@@ -240,8 +240,8 @@ void SCH_SHEET_PIN::MirrorHorizontally( int aCenter )
 
     switch( m_edge )
     {
-    case SHEET_SIDE::LEFT: SetEdge( SHEET_SIDE::RIGHT ); break;
-    case SHEET_SIDE::RIGHT: SetEdge( SHEET_SIDE::LEFT ); break;
+    case SHEET_SIDE::LEFT: SetSide( SHEET_SIDE::RIGHT ); break;
+    case SHEET_SIDE::RIGHT: SetSide( SHEET_SIDE::LEFT ); break;
     default: break;
     }
 }
@@ -254,13 +254,13 @@ void SCH_SHEET_PIN::Rotate( const wxPoint& aCenter )
 
     RotatePoint( &pt, aCenter, 900 );
 
-    SHEET_SIDE oldSide = GetEdge();
+    SHEET_SIDE oldSide = GetSide();
     ConstrainOnEdge( pt );
 
     // If the new side is the same as the old side, instead mirror across the center of that side.
-    if( GetEdge() == oldSide )
+    if( GetSide() == oldSide )
     {
-        switch( GetEdge() )
+        switch( GetSide() )
         {
         case SHEET_SIDE::TOP:
         case SHEET_SIDE::BOTTOM:
@@ -278,9 +278,9 @@ void SCH_SHEET_PIN::Rotate( const wxPoint& aCenter )
     }
     // If the new side is opposite to the old side, instead mirror across the center of an adjacent
     // side.
-    else if( GetEdge() == GetOppositeSide( oldSide ) )
+    else if( GetSide() == GetOppositeSide( oldSide ) )
     {
-        switch( GetEdge() )
+        switch( GetSide() )
         {
         case SHEET_SIDE::TOP:
         case SHEET_SIDE::BOTTOM:

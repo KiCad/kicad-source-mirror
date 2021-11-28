@@ -422,7 +422,7 @@ void SCH_LINE_WIRE_BUS_TOOL::computeBreakPoint( const std::pair<SCH_LINE*, SCH_L
     int iDy = segment->GetEndPoint().y - segment->GetStartPoint().y;
 
     const SCH_SHEET_PIN* connectedPin = getSheetPin( segment->GetStartPoint() );
-    SHEET_SIDE force = connectedPin ? connectedPin->GetEdge() : SHEET_SIDE::UNDEFINED;
+    SHEET_SIDE           force = connectedPin ? connectedPin->GetSide() : SHEET_SIDE::UNDEFINED;
 
     if( force == SHEET_SIDE::LEFT || force == SHEET_SIDE::RIGHT )
     {

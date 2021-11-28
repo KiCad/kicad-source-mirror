@@ -371,7 +371,7 @@ bool SCH_SHEET::IsVerticalOrientation() const
 
     for( SCH_SHEET_PIN* pin : m_pins )
     {
-        switch( pin->GetEdge() )
+        switch( pin->GetSide() )
         {
         case SHEET_SIDE::LEFT:   leftRight++; break;
         case SHEET_SIDE::RIGHT:  leftRight++; break;
@@ -424,7 +424,7 @@ int SCH_SHEET::GetMinWidth( bool aFromLeft ) const
 
     for( size_t i = 0; i < m_pins.size();  i++ )
     {
-        SHEET_SIDE edge = m_pins[i]->GetEdge();
+        SHEET_SIDE edge = m_pins[i]->GetSide();
 
         if( edge == SHEET_SIDE::TOP || edge == SHEET_SIDE::BOTTOM )
         {
@@ -458,7 +458,7 @@ int SCH_SHEET::GetMinHeight( bool aFromTop ) const
 
     for( size_t i = 0; i < m_pins.size();  i++ )
     {
-        SHEET_SIDE edge = m_pins[i]->GetEdge();
+        SHEET_SIDE edge = m_pins[i]->GetSide();
 
         if( edge == SHEET_SIDE::RIGHT || edge == SHEET_SIDE::LEFT )
         {

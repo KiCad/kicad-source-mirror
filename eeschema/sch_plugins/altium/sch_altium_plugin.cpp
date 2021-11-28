@@ -1559,22 +1559,22 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
     case ASCH_SHEET_ENTRY_SIDE::LEFT:
         sheetPin->SetPosition( { pos.x, pos.y + elem.distanceFromTop } );
         sheetPin->SetLabelSpinStyle( LABEL_SPIN_STYLE::LEFT );
-        sheetPin->SetEdge( SHEET_SIDE::LEFT );
+        sheetPin->SetSide( SHEET_SIDE::LEFT );
         break;
     case ASCH_SHEET_ENTRY_SIDE::RIGHT:
         sheetPin->SetPosition( { pos.x + size.x, pos.y + elem.distanceFromTop } );
         sheetPin->SetLabelSpinStyle( LABEL_SPIN_STYLE::RIGHT );
-        sheetPin->SetEdge( SHEET_SIDE::RIGHT );
+        sheetPin->SetSide( SHEET_SIDE::RIGHT );
         break;
     case ASCH_SHEET_ENTRY_SIDE::TOP:
         sheetPin->SetPosition( { pos.x + elem.distanceFromTop, pos.y } );
         sheetPin->SetLabelSpinStyle( LABEL_SPIN_STYLE::UP );
-        sheetPin->SetEdge( SHEET_SIDE::TOP );
+        sheetPin->SetSide( SHEET_SIDE::TOP );
         break;
     case ASCH_SHEET_ENTRY_SIDE::BOTTOM:
         sheetPin->SetPosition( { pos.x + elem.distanceFromTop, pos.y + size.y } );
         sheetPin->SetLabelSpinStyle( LABEL_SPIN_STYLE::BOTTOM );
-        sheetPin->SetEdge( SHEET_SIDE::BOTTOM );
+        sheetPin->SetSide( SHEET_SIDE::BOTTOM );
         break;
     }
 

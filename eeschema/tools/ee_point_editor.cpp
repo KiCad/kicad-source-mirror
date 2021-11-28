@@ -603,7 +603,7 @@ void EE_POINT_EDITOR::updateParentItem() const
 
             pos += originDelta;
 
-            switch( pin->GetEdge() )
+            switch( pin->GetSide() )
             {
             case SHEET_SIDE::LEFT:      pos.x = topLeft.x;  break;
             case SHEET_SIDE::RIGHT:     pos.x = topRight.x; break;

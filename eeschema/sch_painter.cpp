@@ -1695,7 +1695,7 @@ void SCH_PAINTER::draw( const SCH_SHEET *aSheet, int aLayer )
             wxPoint offset_pos = initial_pos;
 
             // For aesthetic reasons, the SHEET_PIN is drawn with a small offset of width / 2
-            switch( sheetPin->GetEdge() )
+            switch( sheetPin->GetSide() )
             {
             case SHEET_SIDE::TOP: offset_pos.y += KiROUND( width / 2.0 ); break;
             case SHEET_SIDE::BOTTOM: offset_pos.y -= KiROUND( width / 2.0 ); break;

@@ -1279,7 +1279,7 @@ void SCH_SEXPR_PLUGIN::saveSheet( SCH_SHEET* aSheet, int aNestLevel )
                       getSheetPinShapeToken( pin->GetShape() ),
                       FormatInternalUnits( pin->GetPosition().x ).c_str(),
                       FormatInternalUnits( pin->GetPosition().y ).c_str(),
-                      FormatAngle( getSheetPinAngle( pin->GetEdge() ) * 10.0 ).c_str() );
+                      FormatAngle( getSheetPinAngle( pin->GetSide() ) * 10.0 ).c_str() );
 
         pin->Format( m_out, aNestLevel + 1, 0 );
 
