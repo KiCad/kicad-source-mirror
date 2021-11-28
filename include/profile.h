@@ -149,6 +149,13 @@ public:
         return SinceStart<DUR_MS>( aSinceLast ).count();
     }
 
+    std::string to_string()
+    {
+        char tmp[1024];
+        snprintf( tmp, sizeof( tmp ), "%s: %-6.1fms", m_name.c_str(), msecs() );
+        return tmp;
+    }
+
 private:
     std::string m_name;     // a string printed in message
     bool m_running;
