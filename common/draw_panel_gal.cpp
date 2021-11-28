@@ -198,7 +198,6 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
 
     PROF_COUNTER cntUpd("view-upd-items");
     PROF_COUNTER cntTotal("view-total");
-    PROF_COUNTER cntDraw("view-draw");
     PROF_COUNTER cntCtx("view-context-create");
     PROF_COUNTER cntCtxDestroy("view-context-destroy");
     PROF_COUNTER cntRedraw("view-redraw-rects");
@@ -279,13 +278,12 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
 
     if( isDirty )
     {
-        KI_TRACE( traceGalProfile, "View timing: %s %s %s %s %s %s\n",
+        KI_TRACE( traceGalProfile, "View timing: %s %s %s %s %s\n",
             cntTotal.to_string(),
             cntUpd.to_string(),
-            cntDraw.to_string(),
+            cntRedraw.to_string(),
             cntCtx.to_string(),
-            cntCtxDestroy.to_string(),
-            cntRedraw.to_string()
+            cntCtxDestroy.to_string()
         );
     }
 
