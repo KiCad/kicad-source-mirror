@@ -256,9 +256,9 @@ int main( int argc, char** argv )
     wxInitialize( argc, argv );
 
 #ifdef TEST_APP_GUI
-    Pgm().InitPgm( false );
+    Pgm().InitPgm( false, true );
 #else
-    Pgm().InitPgm( true );
+    Pgm().InitPgm( true, true );
 #endif
 
     auto ret = wxEntry( argc, argv );
