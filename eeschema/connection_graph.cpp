@@ -2769,6 +2769,24 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     bool          hasOtherConnections = false;
     int           pinCount            = 0;
 
+    auto hasPins =
+            []( const CONNECTION_SUBGRAPH* aSubgraph )
+            {
+                for( const SCH_ITEM* item : aSubgraph->m_items )
+                {
+                    switch( item->Type() )
+                    {
+                    case SCH_PIN_T:
+                    case SCH_SHEET_PIN_T:
+                        return true;
+
+                    default: break;
+                    }
+                }
+
+                return false;
+            };
+
     for( auto item : aSubgraph->m_items )
     {
         switch( item->Type() )
@@ -2850,7 +2868,19 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         auto it = m_local_label_cache.find( pair );
 
         if( it != m_local_label_cache.end() && it->second.size() > 1 )
-            hasOtherConnections = true;
+        {
+            for( const CONNECTION_SUBGRAPH* neighbor : it->second )
+            {
+                if( neighbor == aSubgraph )
+                    continue;
+
+                if( hasPins( neighbor ) )
+                {
+                    hasOtherConnections = true;
+                    break;
+                }
+            }
+        }
     }
 
     if( !hasOtherConnections && settings.IsTestEnabled( errCode ) )
