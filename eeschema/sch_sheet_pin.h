@@ -84,6 +84,18 @@ public:
 
     bool operator ==( const SCH_SHEET_PIN* aPin ) const;
 
+    static SHEET_SIDE GetOppositeSide( SHEET_SIDE aSide )
+    {
+        switch( aSide )
+        {
+        case SHEET_SIDE::TOP:    return SHEET_SIDE::BOTTOM;
+        case SHEET_SIDE::BOTTOM: return SHEET_SIDE::TOP;
+        case SHEET_SIDE::LEFT:   return SHEET_SIDE::RIGHT;
+        case SHEET_SIDE::RIGHT:  return SHEET_SIDE::LEFT;
+        default:                 return SHEET_SIDE::UNDEFINED;
+        }
+    }
+
     /**
      * Return true for items which are moved with the anchor point at mouse cursor
      * and false for items moved with no reference to anchor (usually large items).

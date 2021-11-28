@@ -505,7 +505,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             SCH_SHEET*     sheet = pin->GetParent();
 
             for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
-                pin->Rotate( sheet->GetBoundingBox().GetCenter() );
+                pin->Rotate( sheet->GetBodyBoundingBox().GetCenter() );
 
             break;
         }
@@ -606,7 +606,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                     SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
                     SCH_SHEET*     sheet = pin->GetParent();
 
-                    pin->Rotate( sheet->GetBoundingBox().GetCenter() );
+                    pin->Rotate( sheet->GetBodyBoundingBox().GetCenter() );
                 }
             }
             else if( item->Type() == SCH_FIELD_T )

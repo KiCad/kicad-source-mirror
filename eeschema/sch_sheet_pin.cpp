@@ -250,8 +250,52 @@ void SCH_SHEET_PIN::MirrorHorizontally( int aCenter )
 void SCH_SHEET_PIN::Rotate( const wxPoint& aCenter )
 {
     wxPoint pt = GetTextPos();
+    wxPoint delta = pt - aCenter;
+
     RotatePoint( &pt, aCenter, 900 );
+
+    SHEET_SIDE oldSide = GetEdge();
     ConstrainOnEdge( pt );
+
+    // If the new side is the same as the old side, instead mirror across the center of that side.
+    if( GetEdge() == oldSide )
+    {
+        switch( GetEdge() )
+        {
+        case SHEET_SIDE::TOP:
+        case SHEET_SIDE::BOTTOM:
+            SetTextPos( wxPoint( aCenter.x - delta.x, GetTextPos().y ) );
+            break;
+
+        case SHEET_SIDE::LEFT:
+        case SHEET_SIDE::RIGHT:
+            SetTextPos( wxPoint( GetTextPos().x, aCenter.y - delta.y ) );
+            break;
+
+        default:
+            break;
+        }
+    }
+    // If the new side is opposite to the old side, instead mirror across the center of an adjacent
+    // side.
+    else if( GetEdge() == GetOppositeSide( oldSide ) )
+    {
+        switch( GetEdge() )
+        {
+        case SHEET_SIDE::TOP:
+        case SHEET_SIDE::BOTTOM:
+            SetTextPos( wxPoint( aCenter.x + delta.x, GetTextPos().y ) );
+            break;
+
+        case SHEET_SIDE::LEFT:
+        case SHEET_SIDE::RIGHT:
+            SetTextPos( wxPoint( GetTextPos().x, aCenter.y + delta.y ) );
+            break;
+
+        default:
+            break;
+        }
+    }
 }
 
 

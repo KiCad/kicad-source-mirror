@@ -78,15 +78,11 @@ static SCH_ITEM* Instatiate( KICAD_T aType, SCH_SHEET* sheet )
     case SCH_SYMBOL_T: return new SCH_SYMBOL();
 
     case SCH_SHEET_PIN_T:
-    {
         // XXX: Sheet pins need to be manually placed on sheet item side.
-        SCH_SHEET_PIN* pin = new SCH_SHEET_PIN(
+        return new SCH_SHEET_PIN(
                 sheet,
                 wxPoint( sheet->GetPosition().x, sheet->GetPosition().y + Millimeter2iu( 40 ) ),
                 "test pin" );
-
-        return pin;
-    }
 
     case SCH_SHEET_T:
     case SCH_PIN_T:
