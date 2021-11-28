@@ -34,6 +34,9 @@
 #include <wx/event.h>
 #include <wx/string.h>
 
+#include <stdarg.h>
+#include <map>
+
 /**
  * @defgroup trace_env_vars Trace Environment Variables
  *
@@ -212,5 +215,45 @@ extern wxString dump( const wxKeyEvent& aEvent );
  * @return the wxArrayString contents in a formatted string for debugging output.
  */
 extern wxString dump( const wxArrayString& aArray );
+
+class TRACE_MANAGER
+{
+public:
+    TRACE_MANAGER(){};
+    ~TRACE_MANAGER(){};
+
+    static TRACE_MANAGER& Instance();
+
+    WX_DEFINE_VARARG_FUNC_VOID( Trace, 2, (const wxString, const wxFormatString&), DoTrace,
+                                DoTraceUtf8 )
+
+    void DoTrace( const wxString aWhat, const wxChar* aFmt, ... )
+    {
+        va_list argptr;
+        va_start( argptr, aFmt );
+        traceV( aWhat, aFmt, argptr );
+        va_end( argptr );
+    }
+
+#if wxUSE_UNICODE_UTF8
+    void DoTraceUtf8( const wxString aWhat, const wxChar* aFmt, ... )
+    {
+        va_list argptr;
+        va_start( argptr, format );
+        traceV( aWhat, aFmt, argptr );
+        va_end( argptr );
+    }
+#endif
+
+private:
+    void traceV( const wxString& aWhat, const wxString& aFmt, va_list vargs );
+    void init();
+
+    std::map<wxString, bool> m_enabledTraces;
+    bool                     m_globalTraceEnabled;
+    bool                     m_printAllTraces;
+};
+
+#define KI_TRACE( ... ) TRACE_MANAGER::Instance().Trace( __VA_ARGS__ )
 
 #endif    // _TRACE_HELPERS_H_

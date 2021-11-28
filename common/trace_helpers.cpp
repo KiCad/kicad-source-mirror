@@ -29,6 +29,7 @@
 
 #include <trace_helpers.h>
 
+#include <wx/tokenzr.h>
 
 const wxChar* const traceFindReplace = wxT( "KICAD_FIND_REPLACE" );
 const wxChar* const kicadTraceCoords = wxT( "KICAD_COORDS" );
@@ -274,4 +275,56 @@ wxString dump( const wxKeyEvent& aEvent )
         );
 
     return msg;
+}
+
+
+TRACE_MANAGER& TRACE_MANAGER::Instance()
+{
+    static TRACE_MANAGER* self = nullptr;
+
+    if( !self )
+    {
+        self = new TRACE_MANAGER;
+        self->init();
+    }
+
+    return *self;
+}
+
+void TRACE_MANAGER::traceV( const wxString& aWhat, const wxString& aFmt, va_list vargs )
+{
+    if( !m_printAllTraces )
+    {
+        if( !m_globalTraceEnabled )
+            return;
+
+        if( m_enabledTraces.find( aWhat ) == m_enabledTraces.end() )
+            return;
+    }
+
+    wxString str;
+    str.PrintfV( aFmt, vargs );
+
+#ifdef __unix__
+    fprintf( stderr, " %-30s | %s", aWhat.c_str().AsChar(), str.c_str().AsChar() );
+#endif
+}
+
+void TRACE_MANAGER::init()
+{
+    wxString traceVars;
+    m_globalTraceEnabled = wxGetEnv( wxT( "KICAD_TRACE" ), &traceVars );
+    m_printAllTraces = false;
+
+    if( !m_globalTraceEnabled )
+        return;
+
+    wxStringTokenizer tokenizer( traceVars, wxT( "," ) );
+    while( tokenizer.HasMoreTokens() )
+    {
+        wxString token = tokenizer.GetNextToken();
+        m_enabledTraces[token] = true;
+        if( token == wxT( "all" ) )
+            m_printAllTraces = true;
+    }
 }
