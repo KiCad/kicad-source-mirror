@@ -105,18 +105,8 @@ PAD::PAD( FOOTPRINT* parent ) :
 PAD::PAD( const PAD& aOther ) :
     BOARD_CONNECTED_ITEM( aOther.GetParent(), PCB_PAD_T )
 {
-    BOARD_CONNECTED_ITEM::operator=( aOther );
+    PAD::operator=( aOther );
 
-    ImportSettingsFrom( aOther );
-    SetPadToDieLength( aOther.GetPadToDieLength() );
-    SetPosition( aOther.GetPosition() );
-    SetPos0( aOther.GetPos0() );
-    SetNumber( aOther.GetNumber() );
-    SetPinFunction( aOther.GetPinFunction() );
-    SetSubRatsnest( aOther.GetSubRatsnest() );
-    m_effectiveBoundingRadius = aOther.m_effectiveBoundingRadius;
-    m_removeUnconnectedLayer = aOther.m_removeUnconnectedLayer;
-    m_keepTopBottomLayer = aOther.m_keepTopBottomLayer;
     const_cast<KIID&>( m_Uuid ) = aOther.m_Uuid;
 }
 
@@ -130,6 +120,7 @@ PAD& PAD::operator=( const PAD &aOther )
     SetPosition( aOther.GetPosition() );
     SetPos0( aOther.GetPos0() );
     SetNumber( aOther.GetNumber() );
+    SetPinType( aOther.GetPinType() );
     SetPinFunction( aOther.GetPinFunction() );
     SetSubRatsnest( aOther.GetSubRatsnest() );
     m_effectiveBoundingRadius = aOther.m_effectiveBoundingRadius;
@@ -1479,7 +1470,7 @@ void PAD::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_PAD_T );
 
-    std::swap( *((FOOTPRINT*) this), *((FOOTPRINT*) aImage) );
+    std::swap( *((PAD*) this), *((PAD*) aImage) );
 }
 
 
