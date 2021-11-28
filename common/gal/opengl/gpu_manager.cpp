@@ -30,6 +30,9 @@
 #include <gal/opengl/noncached_container.h>
 #include <gal/opengl/shader.h>
 #include <gal/opengl/utils.h>
+#include <gal/opengl/vertex_item.h>
+
+#include <profile.h>
 
 #include <typeinfo>
 #include <confirm.h>
@@ -82,26 +85,13 @@ void GPU_MANAGER::SetShader( SHADER& aShader )
 GPU_CACHED_MANAGER::GPU_CACHED_MANAGER( VERTEX_CONTAINER* aContainer ) :
         GPU_MANAGER( aContainer ),
         m_buffersInitialized( false ),
-        m_indicesPtr( nullptr ),
-        m_indicesBuffer( 0 ),
-        m_indicesSize( 0 ),
         m_indicesCapacity( 0 )
 {
-    // Allocate the biggest possible buffer for indices
-    resizeIndices( aContainer->GetSize() );
 }
 
 
 GPU_CACHED_MANAGER::~GPU_CACHED_MANAGER()
 {
-    if( m_buffersInitialized )
-    {
-        if( glBindBuffer )
-            glBindBuffer( GL_ARRAY_BUFFER, 0 );
-
-        if( glDeleteBuffers )
-            glDeleteBuffers( 1, &m_indicesBuffer );
-    }
 }
 
 
@@ -109,54 +99,40 @@ void GPU_CACHED_MANAGER::BeginDrawing()
 {
     wxASSERT( !m_isDrawing );
 
-    if( !m_buffersInitialized )
-    {
-        glGenBuffers( 1, &m_indicesBuffer );
-        checkGlError( "generating vertices buffer", __FILE__, __LINE__ );
-        m_buffersInitialized = true;
-    }
-
-    if( m_container->IsDirty() )
-        resizeIndices( m_container->GetSize() );
-
-    // Number of vertices to be drawn in the EndDrawing()
-    m_indicesSize = 0;
-    // Set the indices pointer to the beginning of the indices-to-draw buffer
-    m_indicesPtr = m_indices.get();
+    m_curVrangeSize = 0;
+    m_indexBufMaxSize = 0;
+    m_indexBufSize = 0;
+    m_vranges.clear();
 
     m_isDrawing = true;
 }
 
 
-void GPU_CACHED_MANAGER::DrawIndices( unsigned int aOffset, unsigned int aSize )
+void GPU_CACHED_MANAGER::DrawIndices( const VERTEX_ITEM *aItem )
 {
     wxASSERT( m_isDrawing );
 
-    // Copy indices of items that should be drawn to GPU memory
-    for( unsigned int i = aOffset; i < aOffset + aSize; *m_indicesPtr++ = i++ )
-        ;
+    unsigned int offset = aItem->GetOffset();
+    unsigned int size = aItem->GetSize();
 
-    m_indicesSize += aSize;
-}
-
-
-void GPU_CACHED_MANAGER::DrawAll()
-{
-    wxASSERT( m_isDrawing );
-
-    for( unsigned int i = 0; i < m_indicesSize; *m_indicesPtr++ = i++ )
-        ;
-
-    m_indicesSize = m_container->GetSize();
+    if( size > 1000 )
+    {
+        m_totalHuge += size;
+        m_vranges.emplace_back( offset, offset + size - 1, true );
+        m_indexBufSize = std::max( m_curVrangeSize, m_indexBufSize );
+        m_curVrangeSize = 0;
+    }
+    else if ( size > 0 )
+    {
+        m_totalNormal += size;
+        m_vranges.emplace_back( offset, offset + size - 1, false );
+        m_curVrangeSize += size;
+    }
 }
 
 
 void GPU_CACHED_MANAGER::EndDrawing()
 {
-#ifdef KICAD_GAL_PROFILE
-    PROF_COUNTER totalRealTime;
-#endif /* KICAD_GAL_PROFILE */
-
     wxASSERT( m_isDrawing );
 
     CACHED_CONTAINER* cached = static_cast<CACHED_CONTAINER*>( m_container );
@@ -164,11 +140,10 @@ void GPU_CACHED_MANAGER::EndDrawing()
     if( cached->IsMapped() )
         cached->Unmap();
 
-    if( m_indicesSize == 0 )
-    {
-        m_isDrawing = false;
-        return;
-    }
+    m_indexBufSize = std::max( m_curVrangeSize, m_indexBufSize );
+    m_indexBufMaxSize = std::max( 2*m_indexBufSize, m_indexBufMaxSize );
+
+    resizeIndices( m_indexBufMaxSize );
 
     if( m_enableDepthTest )
         glEnable( GL_DEPTH_TEST );
@@ -192,18 +167,58 @@ void GPU_CACHED_MANAGER::EndDrawing()
                                (GLvoid*) SHADER_OFFSET );
     }
 
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_indicesBuffer );
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, m_indicesSize * sizeof( int ), (GLvoid*) m_indices.get(),
-                  GL_DYNAMIC_DRAW );
+    PROF_COUNTER cntDraw( "gl-draw-elements" );
 
-    glDrawElements( GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, nullptr );
+    int     n_ranges = m_vranges.size();
+    int     n = 0;
+    GLuint* iptr = m_indices.get();
+    GLuint  icnt = 0;
 
-#ifdef KICAD_GAL_PROFILE
-    wxLogTrace( traceGalProfile, wxT( "Cached manager size: %d" ), m_indicesSize );
-#endif /* KICAD_GAL_PROFILE */
+    int drawCalls = 0;
+
+    while( n < n_ranges )
+    {
+        VRANGE* cur = &m_vranges[n];
+
+        if( cur->m_isContinuous )
+        {
+            if( icnt > 0 )
+            {
+                glDrawElements( GL_TRIANGLES, icnt, GL_UNSIGNED_INT, m_indices.get() );
+                drawCalls++;
+            }
+
+            icnt = 0;
+            iptr = m_indices.get();
+
+            glDrawArrays( GL_TRIANGLES, cur->m_start, cur->m_end - cur->m_start + 1 );
+            drawCalls++;
+        }
+        else
+        {
+            for( GLuint i = cur->m_start; i <= cur->m_end; i++ )
+            {
+                *iptr++ = i;
+                icnt++;
+            }
+        }
+        n++;
+    }
+
+    if( icnt > 0 )
+    {
+        glDrawElements( GL_TRIANGLES, icnt, GL_UNSIGNED_INT, m_indices.get() );
+        drawCalls++;
+    }
+
+    cntDraw.Stop();
+
+    KI_TRACE( traceGalProfile,
+              "Cached manager size: VBO size %u iranges %llu max elt size %u drawcalls %u\n",
+              cached->AllItemsSize(), m_vranges.size(), m_indexBufMaxSize, drawCalls );
+    KI_TRACE( traceGalProfile, "Timing: %s\n", cntDraw.to_string() );
 
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
-    glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
     cached->ClearDirty();
 
     // Deactivate vertex array
@@ -217,12 +232,6 @@ void GPU_CACHED_MANAGER::EndDrawing()
     }
 
     m_isDrawing = false;
-
-#ifdef KICAD_GAL_PROFILE
-    totalRealTime.Stop();
-    wxLogTrace( traceGalProfile, wxT( "GPU_CACHED_MANAGER::EndDrawing(): %.1f ms" ),
-                totalRealTime.msecs() );
-#endif /* KICAD_GAL_PROFILE */
 }
 
 
@@ -249,16 +258,9 @@ void GPU_NONCACHED_MANAGER::BeginDrawing()
 }
 
 
-void GPU_NONCACHED_MANAGER::DrawIndices( unsigned int aOffset, unsigned int aSize )
+void GPU_NONCACHED_MANAGER::DrawIndices( const VERTEX_ITEM* aItem )
 {
     wxASSERT_MSG( false, wxT( "Not implemented yet" ) );
-}
-
-
-void GPU_NONCACHED_MANAGER::DrawAll()
-{
-    // This is the default use case, nothing has to be done
-    // The real rendering takes place in the EndDrawing() function
 }
 
 

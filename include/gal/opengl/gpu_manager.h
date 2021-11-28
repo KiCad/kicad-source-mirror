@@ -27,6 +27,7 @@
 #ifndef GPU_MANAGER_H_
 #define GPU_MANAGER_H_
 
+#include <vector>
 #include <gal/opengl/vertex_common.h>
 #include <boost/scoped_array.hpp>
 
@@ -34,6 +35,7 @@ namespace KIGFX
 {
 class SHADER;
 class VERTEX_CONTAINER;
+class VERTEX_ITEM;
 class CACHED_CONTAINER;
 class NONCACHED_CONTAINER;
 
@@ -58,12 +60,7 @@ public:
      * @param aOffset is the beginning of the range.
      * @param aSize is the number of vertices to be drawn.
      */
-    virtual void DrawIndices( unsigned int aOffset, unsigned int aSize ) = 0;
-
-    /**
-     * Make the GPU draw all the vertices stored in the container.
-     */
-    virtual void DrawAll() = 0;
+    virtual void DrawIndices( const VERTEX_ITEM* aItem ) = 0;
 
     /**
      * Clear the container after drawing routines.
@@ -105,6 +102,19 @@ protected:
 class GPU_CACHED_MANAGER : public GPU_MANAGER
 {
 public:
+
+    struct VRANGE
+    {
+        VRANGE( int aStart, int aEnd, bool aContinuous ) :
+        m_start( aStart ),
+        m_end( aEnd ),
+        m_isContinuous ( aContinuous )
+        {}
+        unsigned int m_start, m_end;
+        bool m_isContinuous;
+    };
+
+
     GPU_CACHED_MANAGER( VERTEX_CONTAINER* aContainer );
     ~GPU_CACHED_MANAGER();
 
@@ -112,10 +122,7 @@ public:
     virtual void BeginDrawing() override;
 
     ///< @copydoc GPU_MANAGER::DrawIndices()
-    virtual void DrawIndices( unsigned int aOffset, unsigned int aSize ) override;
-
-    ///< @copydoc GPU_MANAGER::DrawAll()
-    virtual void DrawAll() override;
+    virtual void DrawIndices( const VERTEX_ITEM* aItem ) override;
 
     ///< @copydoc GPU_MANAGER::EndDrawing()
     virtual void EndDrawing() override;
@@ -136,17 +143,26 @@ protected:
     ///< Pointer to the current indices buffer
     boost::scoped_array<GLuint> m_indices;
 
-    ///< Pointer to the first free cell in the indices buffer
-    GLuint* m_indicesPtr;
-
-    ///< Handle to indices buffer
-    GLuint  m_indicesBuffer;
-
-    ///< Number of indices stored in the indices buffer
-    unsigned int m_indicesSize;
-
     ///< Current indices buffer size
     unsigned int m_indicesCapacity;
+
+    ///< Ranges of visible vertex indices to render
+    std::vector<VRANGE> m_vranges;
+
+    ///< Number of huge VRANGEs (i.e. large zones) with separate draw calls
+    int m_totalHuge;
+
+    ///< Number of regular VRANGEs (small items) pooled into single draw call
+    int m_totalNormal;
+
+    ///< Current size of index buffer
+    unsigned int m_indexBufSize;
+
+    ///< Maximum size taken by the index buffer for all frames rendered so far
+    unsigned int m_indexBufMaxSize;
+
+    ///< Size of the current VRANGE
+    unsigned int m_curVrangeSize;
 };
 
 
@@ -159,10 +175,7 @@ public:
     virtual void BeginDrawing() override;
 
     ///< @copydoc GPU_MANAGER::DrawIndices()
-    virtual void DrawIndices( unsigned int aOffset, unsigned int aSize ) override;
-
-    ///< @copydoc GPU_MANAGER::DrawAll()
-    virtual void DrawAll() override;
+    virtual void DrawIndices( const VERTEX_ITEM* aItem ) override;
 
     ///< @copydoc GPU_MANAGER::EndDrawing()
     virtual void EndDrawing() override;
