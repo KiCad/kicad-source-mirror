@@ -40,7 +40,20 @@
 #include <sch_sheet.h>
 
 
-static SCH_ITEM* Instatiate( KICAD_T aType )
+class TEST_SCH_ITEM_FIXTURE
+{
+public:
+    TEST_SCH_ITEM_FIXTURE() : m_sheet()
+    {
+        m_sheet.SetPosition( wxPoint( Millimeter2iu( 5 ), Millimeter2iu( 10 ) ) );
+        m_sheet.SetSize( wxSize( Millimeter2iu( 50 ), Millimeter2iu( 100 ) ) );
+    }
+
+    SCH_SHEET m_sheet;
+};
+
+
+static SCH_ITEM* Instatiate( KICAD_T aType, SCH_SHEET* sheet )
 {
     if( !IsEeschemaType( aType ) )
         return nullptr;
@@ -57,14 +70,24 @@ static SCH_ITEM* Instatiate( KICAD_T aType )
     case SCH_BUS_BUS_ENTRY_T: return new SCH_BUS_BUS_ENTRY();
     case SCH_LINE_T: return new SCH_LINE();
     case SCH_BITMAP_T: return new SCH_BITMAP();
-    case SCH_TEXT_T: return new SCH_TEXT( wxPoint( 0, 0 ), "test" );
-    case SCH_LABEL_T: return new SCH_LABEL( wxPoint( 0, 0 ), "test" );
+    case SCH_TEXT_T: return new SCH_TEXT( wxPoint( 0, 0 ), "test text" );
+    case SCH_LABEL_T: return new SCH_LABEL( wxPoint( 0, 0 ), "test label" );
     case SCH_GLOBAL_LABEL_T: return new SCH_GLOBALLABEL();
     case SCH_HIER_LABEL_T: return new SCH_HIERLABEL();
     case SCH_FIELD_T: return new SCH_FIELD( wxPoint( 0, 0 ), 0, nullptr );
     case SCH_SYMBOL_T: return new SCH_SYMBOL();
 
     case SCH_SHEET_PIN_T:
+    {
+        // XXX: Sheet pins need to be manually placed on sheet item side.
+        SCH_SHEET_PIN* pin = new SCH_SHEET_PIN(
+                sheet,
+                wxPoint( sheet->GetPosition().x, sheet->GetPosition().y + Millimeter2iu( 40 ) ),
+                "test pin" );
+
+        return pin;
+    }
+
     case SCH_SHEET_T:
     case SCH_PIN_T:
     case SCHEMATIC_T:
@@ -90,17 +113,21 @@ static SCH_ITEM* Instatiate( KICAD_T aType )
 static void CompareItems( SCH_ITEM* aItem, SCH_ITEM* aOriginalItem )
 {
     BOOST_CHECK_EQUAL( aItem->GetPosition(), aOriginalItem->GetPosition() );
-    BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetOrigin(),
-                       aOriginalItem->GetBoundingBox().GetOrigin() );
-    BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetSize(),
-                       aOriginalItem->GetBoundingBox().GetSize() );
+    BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetTop(),
+                       aOriginalItem->GetBoundingBox().GetTop() );
+    BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetLeft(),
+                       aOriginalItem->GetBoundingBox().GetLeft() );
+    BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetBottom(),
+                       aOriginalItem->GetBoundingBox().GetBottom() );
+    BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetRight(),
+                       aOriginalItem->GetBoundingBox().GetRight() );
 }
 
 
 /**
  * Declare the test suite
  */
-BOOST_AUTO_TEST_SUITE( SchItem )
+BOOST_FIXTURE_TEST_SUITE( SchItem, TEST_SCH_ITEM_FIXTURE )
 
 
 BOOST_AUTO_TEST_CASE( Move )
@@ -109,10 +136,9 @@ BOOST_AUTO_TEST_CASE( Move )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type ) );
-        auto originalItem = std::unique_ptr<SCH_ITEM>( Instatiate( type ) );
+        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet ) );
 
-        if( item == nullptr || originalItem == nullptr )
+        if( item == nullptr )
             continue;
 
         BOOST_TEST_CONTEXT( "Class: " << item->GetClass() )
@@ -121,12 +147,12 @@ BOOST_AUTO_TEST_CASE( Move )
                     item.get(),
                     []( SCH_ITEM* aOriginalItem, wxPoint aOffset )
                     {
-                        SCH_ITEM* aItem = aOriginalItem->Duplicate();
+                        auto item = std::unique_ptr<SCH_ITEM>( aOriginalItem->Duplicate() );
 
-                        aItem->Move( aOffset );
-                        aItem->Move( -aOffset );
+                        item->Move( aOffset );
+                        item->Move( -aOffset );
 
-                        CompareItems( aItem, aOriginalItem );
+                        CompareItems( item.get(), aOriginalItem );
                     } );
         }
     }
@@ -139,28 +165,42 @@ BOOST_AUTO_TEST_CASE( Rotate )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type ) );
-        auto originalItem = std::unique_ptr<SCH_ITEM>( Instatiate( type ) );
+        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet ) );
 
-        if( item == nullptr || originalItem == nullptr )
+        if( item == nullptr )
             continue;
 
         BOOST_TEST_CONTEXT( "Class: " << item->GetClass() )
         {
-            IterateOverPositionsAndReferences<SCH_ITEM>(
-                    item.get(),
-                    []( SCH_ITEM* aOriginalItem, wxPoint aRef )
-                    {
-                        SCH_ITEM* aItem = aOriginalItem->Duplicate();
+            if( item->GetClass() == "SCH_SHEET_PIN" )
+            {
+                auto newItem = std::unique_ptr<SCH_ITEM>( item->Duplicate() );
 
-                        // Four rotations are an identity.
-                        aItem->Rotate( aRef );
-                        aItem->Rotate( aRef );
-                        aItem->Rotate( aRef );
-                        aItem->Rotate( aRef );
+                // Only rotating pins around the center of parent sheet works.
+                item->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                item->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                item->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                item->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
 
-                        CompareItems( aItem, aOriginalItem );
-                    } );
+                CompareItems( newItem.get(), item.get() );
+            }
+            else
+            {
+                IterateOverPositionsAndReferences<SCH_ITEM>(
+                        item.get(),
+                        []( SCH_ITEM* aOriginalItem, wxPoint aRef )
+                        {
+                            auto item = std::unique_ptr<SCH_ITEM>( aOriginalItem->Duplicate() );
+
+                            // Four rotations are an identity.
+                            item->Rotate( aRef );
+                            item->Rotate( aRef );
+                            item->Rotate( aRef );
+                            item->Rotate( aRef );
+
+                            CompareItems( item.get(), aOriginalItem );
+                        } );
+            }
         }
     }
 }
@@ -172,25 +212,24 @@ BOOST_AUTO_TEST_CASE( MirrorHorizontally )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type ) );
-        auto originalItem = std::unique_ptr<SCH_ITEM>( Instatiate( type ) );
+        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet ) );
 
-        if( item == nullptr || originalItem == nullptr )
+        if( item == nullptr )
             continue;
 
         BOOST_TEST_CONTEXT( "Class: " << item->GetClass() )
         {
             IterateOverPositionsAndReferences<SCH_ITEM>(
                     item.get(),
-                    []( SCH_ITEM* aOriginalItem,  wxPoint aRef )
+                    []( SCH_ITEM* aOriginalItem, wxPoint aRef )
                     {
-                        SCH_ITEM* aItem = aOriginalItem->Duplicate();
+                        auto item = std::unique_ptr<SCH_ITEM>( aOriginalItem->Duplicate() );
 
                         // Two mirrorings are an identity.
-                        aItem->MirrorHorizontally( aRef.x );
-                        aItem->MirrorHorizontally( aRef.x );
+                        item->MirrorHorizontally( aRef.x );
+                        item->MirrorHorizontally( aRef.x );
 
-                        CompareItems( aItem, aOriginalItem );
+                        CompareItems( item.get(), aOriginalItem );
                     } );
         }
     }
@@ -203,10 +242,10 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type ) );
-        auto originalItem = std::unique_ptr<SCH_ITEM>( Instatiate( type ) );
+        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet ) );
+        auto originalItem = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet ) );
 
-        if( item == nullptr || originalItem == nullptr )
+        if( item == nullptr )
             continue;
 
         BOOST_TEST_CONTEXT( "Class: " << item->GetClass() )
@@ -215,13 +254,13 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
                     item.get(),
                     []( SCH_ITEM* aOriginalItem, wxPoint aRef )
                     {
-                        SCH_ITEM* aItem = aOriginalItem->Duplicate();
+                        auto item = std::unique_ptr<SCH_ITEM>( aOriginalItem->Duplicate() );
 
                         // Two mirrorings are an identity.
-                        aItem->MirrorVertically( aRef.x );
-                        aItem->MirrorVertically( aRef.x );
+                        item->MirrorVertically( aRef.x );
+                        item->MirrorVertically( aRef.x );
 
-                        CompareItems( aItem, aOriginalItem );
+                        CompareItems( item.get(), aOriginalItem );
                     } );
         }
     }
