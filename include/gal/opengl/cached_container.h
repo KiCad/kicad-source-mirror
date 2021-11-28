@@ -94,6 +94,8 @@ public:
     ///< @copydoc VERTEX_CONTAINER::Unmap()
     virtual void Unmap() override = 0;
 
+    virtual unsigned int AllItemsSize() const { return 0; }
+
 protected:
     ///< Maps size of free memory chunks to their offsets
     typedef std::pair<unsigned int, unsigned int> CHUNK;

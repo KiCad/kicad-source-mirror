@@ -34,9 +34,8 @@
 
 #include <list>
 
-#ifdef KICAD_GAL_PROFILE
 #include <profile.h>
-#endif /* KICAD_GAL_PROFILE */
+#include <trace_helpers.h>
 
 using namespace KIGFX;
 
@@ -68,6 +67,7 @@ CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
         m_useCopyBuffer = false;
     }
 
+    KI_TRACE( traceGalProfile, "VBO initial size: %d\n", m_currentSize );
 
     glGenBuffers( 1, &m_glBufferHandle );
     glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
@@ -220,6 +220,8 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     m_freeSpace += ( aNewSize - m_currentSize );
     m_currentSize = aNewSize;
 
+    KI_TRACE( traceGalProfile, "VBO size %d used %d\n", m_currentSize, AllItemsSize() );
+
     // Now there is only one big chunk of free memory
     m_freeChunks.clear();
     m_freeChunks.insert( std::make_pair( m_freeSpace, m_currentSize - m_freeSpace ) );
@@ -285,9 +287,25 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
     m_freeSpace += ( aNewSize - m_currentSize );
     m_currentSize = aNewSize;
 
+    KI_TRACE( traceGalProfile, "VBO size %d used: %d \n", m_currentSize, AllItemsSize() );
+
     // Now there is only one big chunk of free memory
     m_freeChunks.clear();
     m_freeChunks.insert( std::make_pair( m_freeSpace, m_currentSize - m_freeSpace ) );
 
     return true;
 }
+
+
+unsigned int CACHED_CONTAINER_GPU::AllItemsSize() const
+{
+    unsigned int size = 0;
+
+    for( const auto& item : m_items )
+    {
+        size += item->GetSize();
+    }
+
+    return size;
+}
+

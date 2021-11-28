@@ -57,6 +57,9 @@ public:
     ///< @copydoc VERTEX_CONTAINER::Unmap()
     void Unmap() override;
 
+    virtual unsigned int AllItemsSize() const override;
+
+
 protected:
     /**
      * Remove empty spaces between chunks and optionally resizes the container.
