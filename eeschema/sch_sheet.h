@@ -54,7 +54,9 @@ enum  SHEET_FIELD_TYPE
 class SCH_SHEET : public SCH_ITEM
 {
 public:
-    SCH_SHEET( EDA_ITEM* aParent = nullptr, const wxPoint& pos = wxPoint( 0, 0 ) );
+    SCH_SHEET( EDA_ITEM* aParent = nullptr, const wxPoint& aPos = wxPoint( 0, 0 ),
+               wxSize aSize = wxSize( Mils2iu( MIN_SHEET_WIDTH ), Mils2iu( MIN_SHEET_HEIGHT ) ),
+               FIELDS_AUTOPLACED aAutoplaceFields = FIELDS_AUTOPLACED_AUTO );
 
     /**
      * Copy \a aSheet into a new object.  All sheet pins are copied as is except and

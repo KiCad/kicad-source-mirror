@@ -63,19 +63,19 @@ static SCH_ITEM* Instatiate( KICAD_T aType, SCH_SHEET* sheet )
 
     switch( aType )
     {
-    case SCH_MARKER_T: return nullptr;
-    case SCH_JUNCTION_T: return new SCH_JUNCTION();
-    case SCH_NO_CONNECT_T: return new SCH_NO_CONNECT();
+    case SCH_MARKER_T:         return nullptr;
+    case SCH_JUNCTION_T:       return new SCH_JUNCTION();
+    case SCH_NO_CONNECT_T:     return new SCH_NO_CONNECT();
     case SCH_BUS_WIRE_ENTRY_T: return new SCH_BUS_WIRE_ENTRY();
-    case SCH_BUS_BUS_ENTRY_T: return new SCH_BUS_BUS_ENTRY();
-    case SCH_LINE_T: return new SCH_LINE();
-    case SCH_BITMAP_T: return new SCH_BITMAP();
-    case SCH_TEXT_T: return new SCH_TEXT( wxPoint( 0, 0 ), "test text" );
-    case SCH_LABEL_T: return new SCH_LABEL( wxPoint( 0, 0 ), "test label" );
-    case SCH_GLOBAL_LABEL_T: return new SCH_GLOBALLABEL();
-    case SCH_HIER_LABEL_T: return new SCH_HIERLABEL();
-    case SCH_FIELD_T: return new SCH_FIELD( wxPoint( 0, 0 ), 0, nullptr );
-    case SCH_SYMBOL_T: return new SCH_SYMBOL();
+    case SCH_BUS_BUS_ENTRY_T:  return new SCH_BUS_BUS_ENTRY();
+    case SCH_LINE_T:           return new SCH_LINE();
+    case SCH_BITMAP_T:         return new SCH_BITMAP();
+    case SCH_TEXT_T:           return new SCH_TEXT( wxPoint( 0, 0 ), "test text" );
+    case SCH_LABEL_T:          return new SCH_LABEL( wxPoint( 0, 0 ), "test label" );
+    case SCH_GLOBAL_LABEL_T:   return new SCH_GLOBALLABEL();
+    case SCH_HIER_LABEL_T:     return new SCH_HIERLABEL();
+    case SCH_FIELD_T:          return new SCH_FIELD( wxPoint( 0, 0 ), 0, nullptr );
+    case SCH_SYMBOL_T:         return new SCH_SYMBOL();
 
     case SCH_SHEET_PIN_T:
         // XXX (?): Sheet pins currently have to have their initial positions calculated manually.
@@ -84,20 +84,10 @@ static SCH_ITEM* Instatiate( KICAD_T aType, SCH_SHEET* sheet )
                 wxPoint( sheet->GetPosition().x, sheet->GetPosition().y + Millimeter2iu( 40 ) ),
                 "test pin" );
 
-    case SCH_SHEET_T:
-    {
-        SCH_SHEET* sheet = new SCH_SHEET();
-        sheet->SetSize( wxSize( Millimeter2iu( 100 ), Millimeter2iu( 50 ) ) );
-
-        // XXX (?): Sheet fields currently have to be positioned with an additional method call.
-        sheet->AutoplaceFields( nullptr, false );
-        return sheet;
-    }
-
+    case SCH_SHEET_T:          return new SCH_SHEET();
     case SCH_PIN_T:
-    case SCHEMATIC_T:
-        // TODO
-        return nullptr;
+
+    case SCHEMATIC_T: // You can't rotate or mirror a schematic object.
 
     // `LIB_ITEM`s aren't handled in this module.
     case LIB_SYMBOL_T:

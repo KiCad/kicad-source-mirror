@@ -84,17 +84,18 @@ const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx, bool aTranslated )
 }
 
 
-SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const wxPoint& pos ) :
-    SCH_ITEM( aParent, SCH_SHEET_T )
+SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const wxPoint& aPos, wxSize aSize,
+                      FIELDS_AUTOPLACED aAutoplaceFields ) :
+        SCH_ITEM( aParent, SCH_SHEET_T )
 {
     m_layer = LAYER_SHEET;
-    m_pos = pos;
-    m_size = wxSize( Mils2iu( MIN_SHEET_WIDTH ), Mils2iu( MIN_SHEET_HEIGHT ) );
+    m_pos = aPos;
+    m_size = aSize;
     m_screen = nullptr;
 
     for( int i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
     {
-        m_fields.emplace_back( pos, i, this, GetDefaultFieldName( i ) );
+        m_fields.emplace_back( aPos, i, this, GetDefaultFieldName( i ) );
         m_fields.back().SetVisible( true );
 
         if( i == SHEETNAME )
@@ -105,7 +106,8 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const wxPoint& pos ) :
             m_fields.back().SetLayer( LAYER_SHEETFIELDS );
     }
 
-    m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
+    m_fieldsAutoplaced = aAutoplaceFields;
+    AutoAutoplaceFields( nullptr );
 
     m_borderWidth = 0;
     m_borderColor = COLOR4D::UNSPECIFIED;
