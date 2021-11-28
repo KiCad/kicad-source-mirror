@@ -50,9 +50,7 @@
 
 #include <kiplatform/ui.h>
 
-#ifdef PROFILE
 #include <profile.h>
-#endif /* PROFILE */
 
 
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
@@ -192,21 +190,33 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
     if( m_drawing )
         return;
 
-#ifdef PROFILE
-    PROF_COUNTER totalRealTime;
-#endif /* PROFILE */
-
     wxASSERT( m_painter );
 
     m_drawing = true;
     KIGFX::RENDER_SETTINGS* settings =
             static_cast<KIGFX::RENDER_SETTINGS*>( m_painter->GetSettings() );
 
+    PROF_COUNTER cntUpd("view-upd-items");
+    PROF_COUNTER cntTotal("view-total");
+    PROF_COUNTER cntDraw("view-draw");
+    PROF_COUNTER cntCtx("view-context-create");
+    PROF_COUNTER cntCtxDestroy("view-context-destroy");
+    PROF_COUNTER cntRedraw("view-redraw-rects");
+
+    bool isDirty = false;
+
+    cntTotal.Start();
     try
     {
+        cntUpd.Start();
         m_view->UpdateItems();
+        cntUpd.Stop();
 
-        KIGFX::GAL_DRAWING_CONTEXT ctx( m_gal );
+        cntCtx.Start();
+        int cookie = rand();
+        m_gal->LockContext( cookie );
+        m_gal->BeginDrawing();
+        cntCtx.Stop();
 
         if( m_view->IsTargetDirty( KIGFX::TARGET_OVERLAY )
             && !m_gal->HasTarget( KIGFX::TARGET_OVERLAY ) )
@@ -236,10 +246,18 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
             if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
                 m_gal->DrawGrid();
 
+            cntRedraw.Start();
             m_view->Redraw();
+            cntRedraw.Stop();
+            isDirty = true;
         }
 
         m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
+
+        cntCtxDestroy.Start();
+        m_gal->EndDrawing();
+        m_gal->UnlockContext( cookie );
+        cntCtxDestroy.Stop();
     }
     catch( std::exception& err )
     {
@@ -258,11 +276,18 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
         }
     }
 
-#ifdef PROFILE
-    totalRealTime.Stop();
-    wxLogTrace( traceGalProfile, "EDA_DRAW_PANEL_GAL::DoRePaint(): %.1f ms",
-                totalRealTime.msecs() );
-#endif /* PROFILE */
+
+    if( isDirty )
+    {
+        KI_TRACE( traceGalProfile, "View timing: %s %s %s %s %s %s\n",
+            cntTotal.to_string(),
+            cntUpd.to_string(),
+            cntDraw.to_string(),
+            cntCtx.to_string(),
+            cntCtxDestroy.to_string(),
+            cntRedraw.to_string()
+        );
+    }
 
     m_lastRefresh = wxGetLocalTimeMillis();
     m_drawing = false;
