@@ -35,6 +35,7 @@ DIALOG_LIB_SHAPE_PROPERTIES::DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* aPa
     m_lineWidth( aParent, m_widthLabel, m_widthCtrl, m_widthUnits, true )
 {
     SetTitle( aItem->GetTypeName() + wxT( " " ) + GetTitle() );
+    m_helpLabel->SetFont( KIUI::GetInfoFont( this ) );
 
     SetInitialFocus( m_widthCtrl );
 

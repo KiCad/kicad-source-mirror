@@ -38,6 +38,7 @@ class DIALOG_LIB_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_widthLabel;
 		wxTextCtrl* m_widthCtrl;
 		wxStaticText* m_widthUnits;
+		wxStaticText* m_helpLabel;
 		wxRadioBox* m_fillCtrl;
 		wxCheckBox* m_checkApplyToAllUnits;
 		wxCheckBox* m_checkApplyToAllConversions;

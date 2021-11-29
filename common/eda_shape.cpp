@@ -647,7 +647,7 @@ const EDA_RECT EDA_SHAPE::getBoundingBox() const
         break;
     }
 
-    bbox.Inflate( m_width / 2 );
+    bbox.Inflate( std::max( 0, m_width / 2 ) );
     bbox.Normalize();
 
     return bbox;

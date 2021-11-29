@@ -104,7 +104,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	fgSizer321->SetFlexibleDirection( wxBOTH );
 	fgSizer321->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_lineWidthLabel = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, _("Default line thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lineWidthLabel = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, _("Default line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineWidthLabel->Wrap( -1 );
 	fgSizer321->Add( m_lineWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 

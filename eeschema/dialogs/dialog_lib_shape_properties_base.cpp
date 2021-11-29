@@ -36,6 +36,10 @@ DIALOG_LIB_SHAPE_PROPERTIES_BASE::DIALOG_LIB_SHAPE_PROPERTIES_BASE( wxWindow* pa
 
 	dlgBorderSizer->Add( bSizerLineWidth, 0, wxEXPAND, 5 );
 
+	m_helpLabel = new wxStaticText( this, wxID_ANY, _("Set width to 0 to use Schematic default symbol line width."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_helpLabel->Wrap( 333 );
+	dlgBorderSizer->Add( m_helpLabel, 0, wxALL, 5 );
+
 	wxString m_fillCtrlChoices[] = { _("Do not fill"), _("Fill with body outline color"), _("Fill with body background color") };
 	int m_fillCtrlNChoices = sizeof( m_fillCtrlChoices ) / sizeof( wxString );
 	m_fillCtrl = new wxRadioBox( this, wxID_ANY, _("Fill Style"), wxDefaultPosition, wxDefaultSize, m_fillCtrlNChoices, m_fillCtrlChoices, 1, wxRA_SPECIFY_COLS );
