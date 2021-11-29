@@ -41,6 +41,9 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
         m_singleLine( aSingleLine ),
         m_returnCallback( aReturnCallback )
 {
+    // Always use LF as eol char, regardless the platform
+    m_te->SetEOLMode( wxSTC_EOL_LF );
+
     // A hack which causes Scintilla to auto-size the text editor canvas
     // See: https://github.com/jacobslusser/ScintillaNET/issues/216
     m_te->SetScrollWidth( 1 );
