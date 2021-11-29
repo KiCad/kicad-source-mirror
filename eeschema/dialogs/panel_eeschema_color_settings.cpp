@@ -271,6 +271,20 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     {
         SCH_LINE* wire = new SCH_LINE;
         wire->SetLayer( line.first );
+        STROKE_PARAMS stroke = wire->GetStroke();
+        stroke.SetWidth( Mils2iu( 6 ) );
+
+        if( line.first != LAYER_NOTES )
+        {
+            stroke.SetPlotStyle( PLOT_DASH_TYPE::SOLID );
+
+            if( line.first == LAYER_BUS )
+                stroke.SetWidth( Mils2iu( 12 ) );
+
+        }
+
+        wire->SetStroke( stroke );
+
         wire->SetStartPoint( wxPoint( Mils2iu( line.second.first.x ),
                                       Mils2iu( line.second.first.y ) ) );
         wire->SetEndPoint( wxPoint( Mils2iu( line.second.second.x ),
