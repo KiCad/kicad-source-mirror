@@ -298,11 +298,6 @@ constexpr bool IsInstatiableType( const KICAD_T aType )
     case PCB_LOCATE_PTH_T:
     case PCB_LOCATE_NPTH_T:
 
-    case PCB_DIM_ALIGNED_T:
-    case PCB_DIM_CENTER_T:
-    case PCB_DIM_ORTHOGONAL_T:
-    case PCB_DIM_LEADER_T:
-
     case PCB_DIMENSION_T:
 
     case SCH_SCREEN_T:
