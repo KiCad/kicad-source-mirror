@@ -498,9 +498,9 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         return;
 
     if( m_cur_grid == m_global_grid )
-        cfg->m_lastSymbolLibDir = dlg.GetPath();
+        cfg->m_lastSymbolLibDir = dlg.GetDirectory();
     else
-        m_lastProjectLibDir = dlg.GetPath();
+        m_lastProjectLibDir = dlg.GetDirectory();
 
     const ENV_VAR_MAP& envVars       = Pgm().GetLocalEnvVariables();
     bool               addDuplicates = false;
