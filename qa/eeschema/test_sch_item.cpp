@@ -26,7 +26,10 @@
 #include <core/typeinfo.h>
 
 // Code under test
+#include <eda_item.h>
 #include <sch_item.h>
+#include <lib_item.h>
+
 //#include <sch_marker.h>
 #include <sch_junction.h>
 #include <sch_no_connect.h>
@@ -39,11 +42,16 @@
 #include <sch_sheet_pin.h>
 #include <sch_sheet.h>
 
+#include <lib_shape.h>
+#include <lib_text.h>
+#include <lib_pin.h>
+#include <lib_field.h>
 
-class TEST_SCH_ITEM_FIXTURE
+
+class TEST_EE_ITEM_FIXTURE
 {
 public:
-    TEST_SCH_ITEM_FIXTURE() : m_sheet(), m_symbol( "test symbol" ), m_pin( &m_symbol )
+    TEST_EE_ITEM_FIXTURE() : m_sheet(), m_symbol( "test symbol" ), m_pin( &m_symbol )
     {
         m_sheet.SetPosition( wxPoint( Millimeter2iu( 5 ), Millimeter2iu( 10 ) ) );
         m_sheet.SetSize( wxSize( Millimeter2iu( 50 ), Millimeter2iu( 100 ) ) );
@@ -55,7 +63,7 @@ public:
 };
 
 
-static SCH_ITEM* Instatiate( KICAD_T aType, SCH_SHEET* sheet, LIB_PIN* pin )
+static EDA_ITEM* Instatiate( KICAD_T aType, SCH_SHEET* aSheet, LIB_SYMBOL* aSymbol, LIB_PIN* aPin )
 {
     if( !IsEeschemaType( aType ) )
         return nullptr;
@@ -80,28 +88,28 @@ static SCH_ITEM* Instatiate( KICAD_T aType, SCH_SHEET* sheet, LIB_PIN* pin )
     case SCH_SYMBOL_T:         return new SCH_SYMBOL();
 
     case SCH_SHEET_PIN_T:
-        // XXX (?): Sheet pins currently have to have their initial positions calculated manually.
+        // XXX (?): aSheet pins currently have to have their initial positions calculated manually.
         return new SCH_SHEET_PIN(
-                sheet,
-                wxPoint( sheet->GetPosition().x, sheet->GetPosition().y + Millimeter2iu( 40 ) ),
-                "test pin" );
+                aSheet,
+                wxPoint( aSheet->GetPosition().x, aSheet->GetPosition().y + Millimeter2iu( 40 ) ),
+                "test aPin" );
 
     case SCH_SHEET_T:          return new SCH_SHEET();
     case SCH_PIN_T:
     {
         static SCH_SYMBOL symbol;
-        return new SCH_PIN( pin, &symbol );
+        return new SCH_PIN( aPin, &symbol );
     }
 
-    case SCHEMATIC_T: // You can't rotate or mirror a schematic object.
 
-    // `LIB_ITEM`s aren't handled in this module.
+    case LIB_SHAPE_T:          return new LIB_SHAPE( aSymbol, SHAPE_T::ARC );
+    case LIB_TEXT_T:           return new LIB_TEXT( aSymbol );
+    case LIB_PIN_T:            return new LIB_PIN( aSymbol );
+    case LIB_FIELD_T:          return new LIB_FIELD( aSymbol );
+
+    case SCHEMATIC_T:
     case LIB_SYMBOL_T:
     case LIB_ALIAS_T:
-    case LIB_SHAPE_T:
-    case LIB_TEXT_T:
-    case LIB_PIN_T:
-    case LIB_FIELD_T:
         return nullptr;
 
     default:
@@ -114,7 +122,7 @@ static SCH_ITEM* Instatiate( KICAD_T aType, SCH_SHEET* sheet, LIB_PIN* pin )
 }
 
 
-static void CompareItems( SCH_ITEM* aItem, SCH_ITEM* aOriginalItem )
+static void CompareItems( EDA_ITEM* aItem, EDA_ITEM* aOriginalItem )
 {
     BOOST_CHECK_EQUAL( aItem->GetPosition(), aOriginalItem->GetPosition() );
     BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetTop(),
@@ -131,7 +139,7 @@ static void CompareItems( SCH_ITEM* aItem, SCH_ITEM* aOriginalItem )
 /**
  * Declare the test suite
  */
-BOOST_FIXTURE_TEST_SUITE( SchItem, TEST_SCH_ITEM_FIXTURE )
+BOOST_FIXTURE_TEST_SUITE( EeItem, TEST_EE_ITEM_FIXTURE )
 
 
 BOOST_AUTO_TEST_CASE( Move )
@@ -140,21 +148,33 @@ BOOST_AUTO_TEST_CASE( Move )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet, &m_pin ) );
+        auto item = std::unique_ptr<EDA_ITEM>( Instatiate( type, &m_sheet, &m_symbol, &m_pin ) );
 
         if( item == nullptr )
             continue;
 
         BOOST_TEST_CONTEXT( "Class: " << item->GetClass() )
         {
-            IterateOverPositionsAndReferences<SCH_ITEM>(
+            IterateOverPositionsAndReferences<EDA_ITEM>(
                     item.get(),
-                    []( SCH_ITEM* aOriginalItem, wxPoint aOffset )
+                    []( EDA_ITEM* aOriginalItem, wxPoint aOffset )
                     {
-                        auto item = std::unique_ptr<SCH_ITEM>( aOriginalItem->Duplicate() );
+                        auto item = std::unique_ptr<EDA_ITEM>( aOriginalItem->Clone() );
 
-                        item->Move( aOffset );
-                        item->Move( -aOffset );
+                        SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item.get() );
+                        LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( item.get() );
+
+                        if( schItem )
+                        {
+                            schItem->Move( aOffset );
+                            schItem->Move( -aOffset );
+                        }
+
+                        if( libItem )
+                        {
+                            libItem->MoveTo( libItem->GetPosition() + aOffset );
+                            libItem->MoveTo( libItem->GetPosition() - aOffset );
+                        }
 
                         CompareItems( item.get(), aOriginalItem );
                     } );
@@ -169,38 +189,67 @@ BOOST_AUTO_TEST_CASE( Rotate )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet, &m_pin ) );
+        auto item = std::unique_ptr<EDA_ITEM>( Instatiate( type, &m_sheet, &m_symbol, &m_pin ) );
 
         if( item == nullptr )
             continue;
 
         BOOST_TEST_CONTEXT( "Class: " << item->GetClass() )
         {
+            // Four rotations are an identity.
+
             if( item->GetClass() == "SCH_SHEET_PIN" )
             {
-                auto newItem = std::unique_ptr<SCH_ITEM>( item->Duplicate() );
+                auto newItem = std::unique_ptr<EDA_ITEM>( item->Clone() );
 
-                // Only rotating pins around the center of parent sheet works.
-                item->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
-                item->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
-                item->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
-                item->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( newItem.get() );
+                LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( newItem.get() );
+
+                if( schItem )
+                {
+                    // Only rotating pins around the center of parent sheet works.
+                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                }
+
+                if( libItem )
+                {
+                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                }
 
                 CompareItems( newItem.get(), item.get() );
             }
             else
             {
-                IterateOverPositionsAndReferences<SCH_ITEM>(
+                IterateOverPositionsAndReferences<EDA_ITEM>(
                         item.get(),
-                        []( SCH_ITEM* aOriginalItem, wxPoint aRef )
+                        []( EDA_ITEM* aOriginalItem, wxPoint aRef )
                         {
-                            auto item = std::unique_ptr<SCH_ITEM>( aOriginalItem->Duplicate() );
+                            auto item = std::unique_ptr<EDA_ITEM>( aOriginalItem->Clone() );
 
-                            // Four rotations are an identity.
-                            item->Rotate( aRef );
-                            item->Rotate( aRef );
-                            item->Rotate( aRef );
-                            item->Rotate( aRef );
+                            SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item.get() );
+                            LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( item.get() );
+
+                            if( schItem )
+                            {
+                                schItem->Rotate( aRef );
+                                schItem->Rotate( aRef );
+                                schItem->Rotate( aRef );
+                                schItem->Rotate( aRef );
+                            }
+
+                            if( libItem )
+                            {
+                                libItem->Rotate( aRef );
+                                libItem->Rotate( aRef );
+                                libItem->Rotate( aRef );
+                                libItem->Rotate( aRef );
+                            }
 
                             CompareItems( item.get(), aOriginalItem );
                         } );
@@ -216,22 +265,35 @@ BOOST_AUTO_TEST_CASE( MirrorHorizontally )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet, &m_pin ) );
+        auto item = std::unique_ptr<EDA_ITEM>( Instatiate( type, &m_sheet, &m_symbol, &m_pin ) );
 
         if( item == nullptr )
             continue;
 
         BOOST_TEST_CONTEXT( "Class: " << item->GetClass() )
         {
-            IterateOverPositionsAndReferences<SCH_ITEM>(
+            IterateOverPositionsAndReferences<EDA_ITEM>(
                     item.get(),
-                    []( SCH_ITEM* aOriginalItem, wxPoint aRef )
+                    []( EDA_ITEM* aOriginalItem, wxPoint aRef )
                     {
-                        auto item = std::unique_ptr<SCH_ITEM>( aOriginalItem->Duplicate() );
+                        auto item = std::unique_ptr<EDA_ITEM>( aOriginalItem->Clone() );
+
+                        SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item.get() );
+                        LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( item.get() );
 
                         // Two mirrorings are an identity.
-                        item->MirrorHorizontally( aRef.x );
-                        item->MirrorHorizontally( aRef.x );
+
+                        if( schItem )
+                        {
+                            schItem->MirrorHorizontally( aRef.x );
+                            schItem->MirrorHorizontally( aRef.x );
+                        }
+
+                        if( libItem )
+                        {
+                            libItem->MirrorHorizontal( aRef );
+                            libItem->MirrorHorizontal( aRef );
+                        }
 
                         CompareItems( item.get(), aOriginalItem );
                     } );
@@ -246,22 +308,35 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<SCH_ITEM>( Instatiate( type, &m_sheet, &m_pin ) );
+        auto item = std::unique_ptr<EDA_ITEM>( Instatiate( type, &m_sheet, &m_symbol, &m_pin ) );
 
         if( item == nullptr )
             continue;
 
         BOOST_TEST_CONTEXT( "Class: " << item->GetClass() )
         {
-            IterateOverPositionsAndReferences<SCH_ITEM>(
+            IterateOverPositionsAndReferences<EDA_ITEM>(
                     item.get(),
-                    []( SCH_ITEM* aOriginalItem, wxPoint aRef )
+                    []( EDA_ITEM* aOriginalItem, wxPoint aRef )
                     {
-                        auto item = std::unique_ptr<SCH_ITEM>( aOriginalItem->Duplicate() );
+                        auto item = std::unique_ptr<EDA_ITEM>( aOriginalItem->Clone() );
+
+                        SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item.get() );
+                        LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( item.get() );
 
                         // Two mirrorings are an identity.
-                        item->MirrorVertically( aRef.x );
-                        item->MirrorVertically( aRef.x );
+
+                        if( schItem )
+                        {
+                            schItem->MirrorVertically( aRef.y );
+                            schItem->MirrorVertically( aRef.y );
+                        }
+
+                        if( libItem )
+                        {
+                            libItem->MirrorVertical( aRef );
+                            libItem->MirrorVertical( aRef );
+                        }
 
                         CompareItems( item.get(), aOriginalItem );
                     } );
