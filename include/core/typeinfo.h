@@ -276,12 +276,35 @@ constexpr bool IsInstatiableType( const KICAD_T aType )
     if( IsNullType( aType ) )
         return false;
 
-    if( BaseType( aType ) != aType )
-        return false;
-
     switch( aType )
     {
     case SCH_LOCATE_ANY_T:
+
+    case SCH_FIELD_LOCATE_REFERENCE_T:
+    case SCH_FIELD_LOCATE_VALUE_T:
+    case SCH_FIELD_LOCATE_FOOTPRINT_T:
+    case SCH_FIELD_LOCATE_DATASHEET_T:
+
+    case SCH_LINE_LOCATE_WIRE_T:
+    case SCH_LINE_LOCATE_BUS_T:
+    case SCH_LINE_LOCATE_GRAPHIC_LINE_T:
+
+    case SCH_LABEL_LOCATE_WIRE_T:
+    case SCH_LABEL_LOCATE_BUS_T:
+
+    case SCH_SYMBOL_LOCATE_POWER_T:
+
+    case PCB_LOCATE_HOLE_T:
+    case PCB_LOCATE_PTH_T:
+    case PCB_LOCATE_NPTH_T:
+
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    case PCB_DIM_LEADER_T:
+
+    case PCB_DIMENSION_T:
+
     case SCH_SCREEN_T:
         return false;
 
