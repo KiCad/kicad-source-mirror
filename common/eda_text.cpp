@@ -655,7 +655,9 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
 
 int EDA_TEXT::Compare( const EDA_TEXT* aOther ) const
 {
-#define TEST( a, b ) { if( a != b ) return a - b; }
+#define EPSILON 2       // Should be enough for rounding errors on calculated items
+
+#define TEST( a, b ) { if( abs( a - b ) > EPSILON ) return a - b; }
 #define TEST_PT( a, b ) { TEST( a.x, b.x ); TEST( a.y, b.y ); }
 
     TEST_PT( m_e.pos, aOther->m_e.pos );
