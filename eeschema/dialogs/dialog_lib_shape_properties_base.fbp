@@ -296,7 +296,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Set to 0 to use default values</property>
+                                <property name="label">Set width to 0 to use Schematic default symbol line width.</property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
