@@ -431,11 +431,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             chain_commands = true;
             break;
         }
-        else if( evt->IsAction( &EE_ACTIONS::autoplaceFields ) )
-        {
-            // Currently this makes a mess when done while moving/dragging, so disable it.
-            wxBell();
-        }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
             if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP

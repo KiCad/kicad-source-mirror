@@ -1190,26 +1190,40 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::FieldOwners );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( rotatableItems );
 
     if( selection.Empty() )
         return 0;
 
-    for( EDA_ITEM* item : selection )
+    SCH_ITEM* head = static_cast<SCH_ITEM*>( selection.Front() );
+    bool      moving = head && head->IsMoving();
+
+    for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
     {
-        SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( item );
+        SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
 
-        if( !sch_item->IsNew() )
-            saveCopyInUndoList( sch_item, UNDO_REDO::CHANGED );
+        if( !moving && !sch_item->IsNew() )
+            saveCopyInUndoList( sch_item, UNDO_REDO::CHANGED, ii > 0 );
 
-        sch_item->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
+        if( sch_item->IsType( EE_COLLECTOR::FieldOwners ) )
+            sch_item->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
+
         updateItem( sch_item, true );
     }
 
-    m_frame->OnModify();
+    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
-    if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    if( moving )
+    {
+        m_toolMgr->RunAction( ACTIONS::refreshPreview );
+    }
+    else
+    {
+        if( selection.IsHover() )
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+        m_frame->OnModify();
+    }
 
     return 0;
 }
