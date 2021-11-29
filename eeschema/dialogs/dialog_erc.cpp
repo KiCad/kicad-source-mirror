@@ -32,17 +32,14 @@
 #include <bitmaps.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
-#include <sch_view.h>
 #include <sch_marker.h>
 #include <connection_graph.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_inspection_tool.h>
-#include <tool/tool_manager.h>
 #include <dialog_erc.h>
 #include <erc.h>
 #include <id.h>
 #include <confirm.h>
-#include <widgets/infobar.h>
 #include <dialogs/wx_html_report_box.h>
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
@@ -60,6 +57,8 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         m_ercRun( false ),
         m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
 {
+    SetName( DIALOG_ERC_WINDOW_NAME ); // Set a window name to be able to find it
+
     EESCHEMA_SETTINGS* settings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
     m_severities = settings->m_Appearance.erc_severities;
 
@@ -86,26 +85,7 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     m_warningsBadge->SetMaximumNumber( 999 );
     m_exclusionsBadge->SetMaximumNumber( 999 );
 
-    if( m_parent->CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*,
-                                     SCH_REFERENCE* ) {} ) )
-    {
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY,
-                                                       _("Show Annotation dialog"),
-                                                       wxEmptyString );
-
-        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
-                      [&]( wxHyperlinkEvent& aEvent )
-                      {
-                          wxHtmlLinkEvent htmlEvent( aEvent.GetId(),
-                                                     wxHtmlLinkInfo( aEvent.GetURL() ) );
-                          OnLinkClicked( htmlEvent );
-                      } ) );
-
-        m_infoBar->RemoveAllButtons();
-        m_infoBar->AddButton( button );
-        m_infoBar->ShowMessage( _( "Schematic is not fully annotated. "
-                                   "ERC results will be incomplete." ) );
-    }
+    UpdateAnnotationWarning();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -121,6 +101,42 @@ DIALOG_ERC::~DIALOG_ERC()
         settings->m_Appearance.erc_severities = m_severities;
 
     m_markerTreeModel->DecRef();
+}
+
+
+void DIALOG_ERC::UpdateAnnotationWarning()
+{
+    if( m_parent->CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
+                                 { } ) )
+    {
+        if( !m_infoBar->IsShown() )
+        {
+            wxHyperlinkCtrl* button = new wxHyperlinkCtrl( m_infoBar, wxID_ANY,
+                                                           _("Show Annotation dialog"),
+                                                           wxEmptyString );
+
+            button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                          [&]( wxHyperlinkEvent& aEvent )
+                          {
+                              wxHtmlLinkEvent htmlEvent( aEvent.GetId(),
+                                                         wxHtmlLinkInfo( aEvent.GetURL() ) );
+                              OnLinkClicked( htmlEvent );
+                          } ) );
+
+            m_infoBar->RemoveAllButtons();
+            m_infoBar->AddButton( button );
+            m_infoBar->ShowMessage( _( "Schematic is not fully annotated. "
+                                       "ERC results will be incomplete." ) );
+        }
+    }
+    else
+    {
+        if( m_infoBar->IsShown() )
+        {
+            m_infoBar->RemoveAllButtons();
+            m_infoBar->Hide();
+        }
+    }
 }
 
 
@@ -250,11 +266,6 @@ void DIALOG_ERC::OnLinkClicked( wxHtmlLinkEvent& event )
 {
     wxCommandEvent dummy;
     m_parent->OnAnnotate( dummy );
-
-    // We don't actually get notified when the annotation error is resolved, but we can assume
-    // that the user will take corrective action.  If they don't, we can just show the infobar
-    // again.
-    m_infoBar->Hide();
 }
 
 
@@ -264,7 +275,7 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
 
     SCHEMATIC* sch = &m_parent->Schematic();
 
-    m_infoBar->Hide();
+    UpdateAnnotationWarning();
 
     m_parent->RecordERCExclusions();
     deleteAllMarkers( true );

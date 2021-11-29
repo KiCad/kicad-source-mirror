@@ -46,6 +46,7 @@
 #include <project.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
+#include <dialog_erc.h>
 #include <python_scripting.h>
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
@@ -309,6 +310,12 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
     // Ensure m_canvasType is up to date, to save it in config
     m_canvasType = GetCanvas()->GetBackend();
+
+    // Close modeless dialogs
+    wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_ERC_WINDOW_NAME );
+
+    if( open_dlg )
+        open_dlg->Close( true );
 
     // Shutdown all running tools
     if( m_toolManager )
@@ -675,6 +682,13 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         }
     }
 
+    // Close modeless dialogs.  They're trouble when they get destroyed after the frame and/or
+    // board.
+    wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_ERC_WINDOW_NAME );
+
+    if( open_dlg )
+        open_dlg->Close( true );
+
     return true;
 }
 
@@ -780,6 +794,12 @@ void SCH_EDIT_FRAME::ResolveERCExclusions()
         else
             Schematic().RootScreen()->Append( marker );
     }
+}
+
+
+SEVERITY SCH_EDIT_FRAME::GetSeverity( int aErrorCode ) const
+{
+    return Schematic().ErcSettings().GetSeverity( aErrorCode );
 }
 
 

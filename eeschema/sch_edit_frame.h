@@ -192,6 +192,8 @@ public:
      */
     void ResolveERCExclusions();
 
+    SEVERITY GetSeverity( int aErrorCode ) const override;
+
     /**
      * Return a human-readable description of the current screen.
      */

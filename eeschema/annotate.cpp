@@ -33,7 +33,7 @@
 #include <tools/ee_selection.h>
 #include <tools/ee_selection_tool.h>
 #include <tool/tool_manager.h>
-
+#include <dialog_erc.h>
 
 void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 {
@@ -113,6 +113,11 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool* aA
 
     // Update the references for the sheet that is currently being displayed.
     GetCurrentSheet().UpdateAllScreenReferences();
+
+    wxWindow* erc_dlg = wxWindow::FindWindowByName( DIALOG_ERC_WINDOW_NAME );
+
+    if( erc_dlg )
+        static_cast<DIALOG_ERC*>( erc_dlg )->UpdateAnnotationWarning();
 
     SyncView();
     GetCanvas()->Refresh();
@@ -329,6 +334,11 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
     // Update on screen references, that can be modified by previous calculations:
     GetCurrentSheet().UpdateAllScreenReferences();
     SetSheetNumberAndCount();
+
+    wxWindow* erc_dlg = wxWindow::FindWindowByName( DIALOG_ERC_WINDOW_NAME );
+
+    if( erc_dlg )
+        static_cast<DIALOG_ERC*>( erc_dlg )->UpdateAnnotationWarning();
 
     SyncView();
     GetCanvas()->Refresh();

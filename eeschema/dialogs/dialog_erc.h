@@ -34,6 +34,9 @@
 #include <erc_settings.h>
 
 
+#define DIALOG_ERC_WINDOW_NAME "DialogErcWindowName"
+
+
 class DIALOG_ERC : public DIALOG_ERC_BASE, PROGRESS_REPORTER_BASE
 {
 public:
@@ -48,6 +51,8 @@ public:
     void PrevMarker();
     void NextMarker();
     void ExcludeMarker();
+
+    void UpdateAnnotationWarning();
 
 private:
     // from DIALOG_ERC_BASE:
