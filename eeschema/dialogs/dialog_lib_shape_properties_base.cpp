@@ -36,7 +36,7 @@ DIALOG_LIB_SHAPE_PROPERTIES_BASE::DIALOG_LIB_SHAPE_PROPERTIES_BASE( wxWindow* pa
 
 	dlgBorderSizer->Add( bSizerLineWidth, 0, wxEXPAND, 5 );
 
-	m_helpLabel = new wxStaticText( this, wxID_ANY, _("Set width to 0 to use Schematic default symbol line width."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_helpLabel = new wxStaticText( this, wxID_ANY, _("Set to 0 to use default values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_helpLabel->Wrap( 333 );
 	dlgBorderSizer->Add( m_helpLabel, 0, wxALL, 5 );
 
