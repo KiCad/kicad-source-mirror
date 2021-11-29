@@ -63,12 +63,12 @@ public:
 };
 
 
-static EDA_ITEM* Instatiate( KICAD_T aType, SCH_SHEET* aSheet, LIB_SYMBOL* aSymbol, LIB_PIN* aPin )
+static EDA_ITEM* Instantiate( KICAD_T aType, SCH_SHEET* aSheet, LIB_SYMBOL* aSymbol, LIB_PIN* aPin )
 {
     if( !IsEeschemaType( aType ) )
         return nullptr;
 
-    if( !IsInstatiableType( aType ) )
+    if( !IsInstantiableType( aType ) )
         return nullptr;
 
     switch( aType )
@@ -148,7 +148,7 @@ BOOST_AUTO_TEST_CASE( Move )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<EDA_ITEM>( Instatiate( type, &m_sheet, &m_symbol, &m_pin ) );
+        auto item = std::unique_ptr<EDA_ITEM>( Instantiate( type, &m_sheet, &m_symbol, &m_pin ) );
 
         if( item == nullptr )
             continue;
@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<EDA_ITEM>( Instatiate( type, &m_sheet, &m_symbol, &m_pin ) );
+        auto item = std::unique_ptr<EDA_ITEM>( Instantiate( type, &m_sheet, &m_symbol, &m_pin ) );
 
         if( item == nullptr )
             continue;
@@ -265,7 +265,7 @@ BOOST_AUTO_TEST_CASE( MirrorHorizontally )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<EDA_ITEM>( Instatiate( type, &m_sheet, &m_symbol, &m_pin ) );
+        auto item = std::unique_ptr<EDA_ITEM>( Instantiate( type, &m_sheet, &m_symbol, &m_pin ) );
 
         if( item == nullptr )
             continue;
@@ -308,7 +308,7 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<EDA_ITEM>( Instatiate( type, &m_sheet, &m_symbol, &m_pin ) );
+        auto item = std::unique_ptr<EDA_ITEM>( Instantiate( type, &m_sheet, &m_symbol, &m_pin ) );
 
         if( item == nullptr )
             continue;

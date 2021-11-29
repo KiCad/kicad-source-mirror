@@ -271,7 +271,7 @@ constexpr bool IsNullType( const KICAD_T aType )
     return aType <= 0;
 }
 
-constexpr bool IsInstatiableType( const KICAD_T aType )
+constexpr bool IsInstantiableType( const KICAD_T aType )
 {
     if( IsNullType( aType ) )
         return false;
@@ -472,7 +472,7 @@ constexpr bool IsTypeCorrect( KICAD_T aType )
 
 constexpr bool IsTypeAvailable( KICAD_T aType )
 {
-    if( !IsInstatiableType( aType ) )
+    if( !IsInstantiableType( aType ) )
         return false;
 
     if( IsEeschemaType( aType ) )
