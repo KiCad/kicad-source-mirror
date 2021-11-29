@@ -96,6 +96,8 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     FOOTPRINT* footprint = board->GetFirstFootprint();
     wxString   msg;
 
+    SetMarkersProvider( new BOARD_DRC_ITEMS_PROVIDER( board ) );
+
     deleteAllMarkers();
 
     if( !footprint )
@@ -150,7 +152,7 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     footprint->CheckFootprintTHPadNoHoles( &tstHoleInTHPad );
     m_checksRun = true;
 
-    SetMarkersProvider( new BOARD_DRC_ITEMS_PROVIDER( m_frame->GetBoard() ) );
+    SetMarkersProvider( new BOARD_DRC_ITEMS_PROVIDER( board ) );
 
     refreshEditor();
 }

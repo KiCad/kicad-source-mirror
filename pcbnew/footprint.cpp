@@ -657,14 +657,32 @@ int FOOTPRINT::GetLikelyAttribute() const
 
     for( PAD* pad : m_pads )
     {
+        switch( pad->GetProperty() )
+        {
+        case PAD_PROP::FIDUCIAL_GLBL:
+        case PAD_PROP::FIDUCIAL_LOCAL:
+            continue;
+
+        case PAD_PROP::HEATSINK:
+        case PAD_PROP::CASTELLATED:
+            continue;
+
+        case PAD_PROP::NONE:
+        case PAD_PROP::BGA:
+        case PAD_PROP::TESTPOINT:
+            break;
+        }
+
         switch( pad->GetAttribute() )
         {
         case PAD_ATTRIB::PTH:
             tht_count++;
             break;
+
         case PAD_ATTRIB::SMD:
             smd_count++;
             break;
+
         default:
             break;
         }
