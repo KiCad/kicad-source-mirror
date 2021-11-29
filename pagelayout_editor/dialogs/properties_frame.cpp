@@ -79,6 +79,7 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
 
     m_stcText->SetUseVerticalScrollBar( false );
     m_stcText->SetUseHorizontalScrollBar( false );
+    m_stcText->SetEOLMode( wxSTC_EOL_LF );  // Always use LF as eol char, regardless the platform
     m_scintillaTricks = new SCINTILLA_TRICKS( m_stcText, wxT( "{}" ), false );
 
     m_staticTextSizeInfo->SetFont( KIUI::GetInfoFont( this ).Italic() );
