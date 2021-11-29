@@ -27,6 +27,7 @@
 #include <wx/xml/xml.h>
 
 #include <dsnlexer.h>
+#include <geometry/shape_poly_set.h>
 #include <plugins/cadstar/cadstar_archive_parser.h>
 #include <eda_item.h>
 #include <eda_text.h>
@@ -481,6 +482,45 @@ void CADSTAR_ARCHIVE_PARSER::VERTEX::Parse( XNODE* aNode, PARSER_CONTEXT* aConte
 }
 
 
+void CADSTAR_ARCHIVE_PARSER::VERTEX::AppendToChain( SHAPE_LINE_CHAIN* aChainToAppendTo,
+        const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback ) const
+{
+    VECTOR2I endPoint = aCadstarToKicadPointCallback( End );
+
+    if( Type == VERTEX_TYPE::POINT )
+    {
+        aChainToAppendTo->Append( endPoint );
+        return;
+    }
+
+    wxCHECK_MSG( aChainToAppendTo->PointCount() > 0, /*void*/,
+                 "Can't append an arc to vertex to an empty chain" );
+
+    VECTOR2I startPoint = aChainToAppendTo->GetPoint( -1 );
+    VECTOR2I centerPoint;
+
+    if( Type == VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE || Type == VERTEX_TYPE::CLOCKWISE_SEMICIRCLE )
+        centerPoint = ( startPoint / 2 ) + ( endPoint / 2 );
+    else
+        centerPoint = aCadstarToKicadPointCallback( Center );
+
+    bool clockwise = Type == VERTEX_TYPE::CLOCKWISE_ARC
+                  || Type == VERTEX_TYPE::CLOCKWISE_SEMICIRCLE;
+
+    // A bit of a hack to figure out if we need to invert clockwise due to the transform
+    VECTOR2I transform = aCadstarToKicadPointCallback( { 500, 500 } )
+                       - aCadstarToKicadPointCallback( { 0, 0 } );
+
+    if( ( transform.x > 0 && transform.y < 0 ) || ( transform.x < 0 && transform.y > 0 ) )
+        clockwise = !clockwise;
+
+    SHAPE_ARC arc;
+    arc.ConstructFromStartEndCenter( startPoint, endPoint, centerPoint, clockwise );
+
+    aChainToAppendTo->Append( arc );
+}
+
+
 void CADSTAR_ARCHIVE_PARSER::CUTOUT::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "CUTOUT" ) );
@@ -543,6 +583,45 @@ void CADSTAR_ARCHIVE_PARSER::SHAPE::Parse( XNODE* aNode, PARSER_CONTEXT* aContex
     {
         wxASSERT_MSG( true, wxT( "Unknown SHAPE type" ) );
     }
+}
+
+SHAPE_LINE_CHAIN CADSTAR_ARCHIVE_PARSER::SHAPE::OutlineAsChain(
+        const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback ) const
+{
+    SHAPE_LINE_CHAIN outline;
+
+    for( const auto& vertex : Vertices )
+        vertex.AppendToChain( &outline, aCadstarToKicadPointCallback );
+
+    if( Type != SHAPE_TYPE::OPENSHAPE )
+        outline.SetClosed( true );
+
+    return outline;
+}
+
+
+SHAPE_POLY_SET CADSTAR_ARCHIVE_PARSER::SHAPE::ConvertToPolySet(
+        const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback ) const
+{
+    SHAPE_POLY_SET polyset;
+
+    wxCHECK( Type != SHAPE_TYPE::OPENSHAPE, polyset ); // We shouldn't convert openshapes to polyset!
+
+    polyset.AddOutline( OutlineAsChain( aCadstarToKicadPointCallback) );
+
+    for( const auto& cutout : Cutouts )
+    {
+        SHAPE_LINE_CHAIN hole;
+
+        for( const auto& cutoutVertex : cutout.Vertices )
+            cutoutVertex.AppendToChain( &hole, aCadstarToKicadPointCallback );
+
+        hole.SetClosed( true );
+
+        polyset.AddHole( hole );
+    }
+
+    return polyset;
 }
 
 

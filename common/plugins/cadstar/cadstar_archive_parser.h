@@ -34,6 +34,8 @@
 #include <vector>
 #include <xnode.h>
 
+#include <math/vector2d.h>
+
 // THROW_IO_ERROR definitions to ensure consistent wording is used in the error messages
 
 #define THROW_MISSING_NODE_IO_ERROR( nodename, location ) \
@@ -79,6 +81,8 @@
 class EDA_TEXT;
 class wxXmlAttribute;
 class PROGRESS_REPORTER;
+class SHAPE_LINE_CHAIN;
+class SHAPE_POLY_SET;
 
 /**
  * @brief Helper functions and common structures for CADSTAR PCB and Schematic archive files.
@@ -396,9 +400,8 @@ public:
      */
     struct POINT : wxPoint, PARSER
     {
-        POINT() : wxPoint( UNDEFINED_VALUE, UNDEFINED_VALUE )
-        {
-        }
+        POINT() : wxPoint( UNDEFINED_VALUE, UNDEFINED_VALUE ) {}
+        POINT( int aX, int aY ) : wxPoint( aX, aY ) {}
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -410,6 +413,12 @@ public:
         long y = UNDEFINED_VALUE;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
+    };
+
+
+    struct TRANSFORM
+    {
+        virtual wxPoint Apply( POINT aCadstarPoint ) = 0;
     };
 
 
@@ -428,12 +437,19 @@ public:
      */
     struct VERTEX : PARSER
     {
+        VERTEX( VERTEX_TYPE aType = VERTEX_TYPE::POINT, POINT aEnd = POINT(), POINT aCenter = POINT() ) :
+                Type( aType ), End( aEnd ), Center( aCenter )
+        {}
+
         VERTEX_TYPE Type;
-        POINT       Center;
         POINT       End;
+        POINT       Center;
 
         static bool IsVertex( XNODE* aNode );
         void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
+
+        void AppendToChain( SHAPE_LINE_CHAIN* aChainToAppendTo,
+                const std::function<VECTOR2I( const VECTOR2I& )> aCadstarToKicadPointCallback ) const;
     };
 
     /**
@@ -465,6 +481,12 @@ public:
 
         static bool IsShape( XNODE* aNode );
         void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
+
+        SHAPE_LINE_CHAIN OutlineAsChain( const std::function<VECTOR2I( const VECTOR2I& )>
+                                                 aCadstarToKicadPointCallback ) const;
+
+        SHAPE_POLY_SET ConvertToPolySet( const std::function<VECTOR2I( const VECTOR2I& )>
+                                                 aCadstarToKicadPointCallback ) const;
     };
 
 
