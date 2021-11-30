@@ -33,6 +33,7 @@ set( QA_PCBNEW_SRCS
 
     # test compilation units (start test_)
     test_array_pad_name_provider.cpp
+    test_board_item.cpp
     test_graphics_import_mgr.cpp
     test_lset.cpp
     test_pad_numbering.cpp
