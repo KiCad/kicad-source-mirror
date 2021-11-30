@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-Checks:          '-clang-diagnostic-*,clang-analyzer-*, bugprone-*, modernize-deprecated-headers, modernize-loop-convert, modernize-use-override, modernize-redundant-void-arg, modernize-use-emplace, modernize-use-noexcept, modernize-use-bool-literals, modernize-pass-by-value, modernize-use-equals-default, modernize-use-equals-default, modernize-use-equals-delete'
+Checks:          '-clang-diagnostic-*,clang-analyzer-*, bugprone-*, modernize-deprecated-headers, modernize-loop-convert, modernize-use-override, modernize-redundant-void-arg, modernize-use-emplace, modernize-use-noexcept, modernize-use-bool-literals, modernize-pass-by-value, modernize-use-equals-default, modernize-use-equals-delete, modernize-use-default-member-init, cppcoreguidelines-prefer-member-initializer, cppcoreguidelines-init-variables, cppcoreguidelines-pro-type-member-init'
 WarningsAsErrors: ''
 HeaderFilterRegex: '.*'
 FormatStyle:     'file'
