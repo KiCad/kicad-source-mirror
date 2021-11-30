@@ -121,7 +121,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         gal->SetStrokeColor( color.Brightened( 0.5 ) );
 
-        if ( l.a == l.b )
+        if( l.a == l.b )
         {
             gal->DrawLine( VECTOR2I( l.a.x - CROSS_SIZE, l.a.y - CROSS_SIZE ),
                            VECTOR2I( l.b.x + CROSS_SIZE, l.b.y + CROSS_SIZE ) );
@@ -168,19 +168,19 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         // Draw the "static" ratsnest
         if( highlightedNets.count( i ) )
-            gal->SetStrokeColor( color.Brightened(0.8) );
+            gal->SetStrokeColor( color.Brightened( 0.8 ) );
         else
             gal->SetStrokeColor( color );  // using the default ratsnest color for not highlighted
 
-        for( const auto& edge : net->GetUnconnected() )
+        for( const CN_EDGE& edge : net->GetUnconnected() )
         {
             //if ( !edge.IsVisible() )
             //    continue;
 
-            const auto& sourceNode = edge.GetSourceNode();
-            const auto& targetNode = edge.GetTargetNode();
-            const VECTOR2I source( sourceNode->Pos() );
-            const VECTOR2I target( targetNode->Pos() );
+            const CN_ANCHOR_PTR& sourceNode = edge.GetSourceNode();
+            const CN_ANCHOR_PTR& targetNode = edge.GetTargetNode();
+            const VECTOR2I       source( sourceNode->Pos() );
+            const VECTOR2I       target( targetNode->Pos() );
 
             if( !sourceNode->Valid() || !targetNode->Valid() )
                 continue;

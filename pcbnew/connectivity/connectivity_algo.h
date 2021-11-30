@@ -57,6 +57,11 @@ class BOARD_ITEM;
 class ZONE;
 class PROGRESS_REPORTER;
 
+
+/**
+ * CN_EDGE represents a point-to-point connection, whether realized or unrealized (ie: tracks etc.
+ * or a ratsnest line).
+ */
 class CN_EDGE
 {
 public:
@@ -110,9 +115,10 @@ public:
 private:
     CN_ANCHOR_PTR m_source;
     CN_ANCHOR_PTR m_target;
-    unsigned m_weight;
-    bool m_visible;
+    unsigned      m_weight;
+    bool          m_visible;
 };
+
 
 class CN_CONNECTIVITY_ALGO
 {
@@ -274,16 +280,17 @@ private:
 
     void markItemNetAsDirty( const BOARD_ITEM* aItem );
 
-    CN_LIST m_itemList;
-
+private:
+    CN_LIST                                               m_itemList;
     std::unordered_map<const BOARD_ITEM*, ITEM_MAP_ENTRY> m_itemMap;
 
-    CLUSTERS m_connClusters;
-    CLUSTERS m_ratsnestClusters;
-    std::vector<bool> m_dirtyNets;
-    PROGRESS_REPORTER* m_progressReporter = nullptr;
+    CLUSTERS           m_connClusters;
+    CLUSTERS           m_ratsnestClusters;
+    std::vector<bool>  m_dirtyNets;
 
+    PROGRESS_REPORTER* m_progressReporter = nullptr;
 };
+
 
 class CN_VISITOR
 {
@@ -299,8 +306,8 @@ protected:
 
     void checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LAYER* aZoneLayerB );
 
-    ///< The item we are looking for connections to.
-    CN_ITEM* m_item;
+protected:
+    CN_ITEM* m_item;        ///< The item we are looking for connections to.
 };
 
 #endif

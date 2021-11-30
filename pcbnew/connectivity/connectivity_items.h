@@ -51,6 +51,11 @@
 class CN_ITEM;
 class CN_CLUSTER;
 
+
+/**
+ * CN_ANCHOR represents a physical location that can be connected: a pad or a track/arc/via
+ * endpoint.
+ */
 class CN_ANCHOR
 {
 public:
@@ -142,20 +147,12 @@ public:
     static const int TAG_UNCONNECTED = -1;
 
 private:
-    ///< Position of the anchor.
-    VECTOR2I m_pos;
+    VECTOR2I m_pos;              ///< Position of the anchor.
+    CN_ITEM* m_item = nullptr;   ///< Pad or track/arc/via owning the anchor.
+    int      m_tag = -1;         ///< Tag for quick connection resolution.
+    bool     m_noline = false;   ///< Whether it the node can be a target for ratsnest lines.
 
-    ///< Item owning the anchor.
-    CN_ITEM* m_item = nullptr;
-
-    ///< Tag for quick connection resolution.
-    int m_tag = -1;
-
-    ///< Whether it the node can be a target for ratsnest lines.
-    bool m_noline = false;
-
-    ///< Cluster to which the anchor belongs.
-    std::shared_ptr<CN_CLUSTER> m_cluster;
+    std::shared_ptr<CN_CLUSTER> m_cluster;     ///< Cluster to which the anchor belongs.
 };
 
 
@@ -163,7 +160,10 @@ typedef std::shared_ptr<CN_ANCHOR>  CN_ANCHOR_PTR;
 typedef std::vector<CN_ANCHOR_PTR>  CN_ANCHORS;
 
 
-// basic connectivity item
+/**
+ * CN_ITEM represents a BOARD_CONNETED_ITEM in the connectivity system (ie: a pad, track/arc/via,
+ * or zone).
+ */
 class CN_ITEM
 {
 public:
@@ -201,26 +201,17 @@ public:
     /**
      * Set the layers spanned by the item to aLayers.
      */
-    void SetLayers( const LAYER_RANGE& aLayers )
-    {
-        m_layers = aLayers;
-    }
+    void SetLayers( const LAYER_RANGE& aLayers ) { m_layers = aLayers;  }
 
     /**
      * Set the layers spanned by the item to a single layer aLayer.
      */
-    void SetLayer( int aLayer )
-    {
-        m_layers = LAYER_RANGE( aLayer, aLayer );
-    }
+    void SetLayer( int aLayer ) { m_layers = LAYER_RANGE( aLayer, aLayer ); }
 
     /**
      * Return the contiguous set of layers spanned by the item.
      */
-    const LAYER_RANGE& Layers() const
-    {
-        return m_layers;
-    }
+    const LAYER_RANGE& Layers() const { return m_layers; }
 
     /**
      * Return the item's layer, for single-layered items only.
@@ -237,13 +228,11 @@ public:
             EDA_RECT box = m_parent->GetBoundingBox();
             m_bbox = BOX2I( box.GetPosition(), box.GetSize() );
         }
+
         return m_bbox;
     }
 
-    BOARD_CONNECTED_ITEM* Parent() const
-    {
-        return m_parent;
-    }
+    BOARD_CONNECTED_ITEM* Parent() const { return m_parent; }
 
     const CONNECTED_ITEMS& ConnectedItems() const { return m_connected; }
     void ClearConnections() { m_connected.clear(); }
@@ -295,7 +284,9 @@ private:
     std::mutex      m_listLock;      ///< mutex protecting this item's connected_items set to
 };
 
+
 typedef std::shared_ptr<CN_ITEM> CN_ITEM_PTR;
+
 
 class CN_ZONE_LAYER : public CN_ITEM
 {
@@ -352,6 +343,7 @@ private:
     PCB_LAYER_ID                         m_layer;
 };
 
+
 class CN_LIST
 {
 protected:
@@ -371,7 +363,7 @@ public:
 
     void Clear()
     {
-        for( auto item : m_items )
+        for( CN_ITEM* item : m_items )
             delete item;
 
         m_items.clear();
@@ -446,6 +438,7 @@ private:
 
     CN_RTREE<CN_ITEM*>    m_index;
 };
+
 
 class CN_CLUSTER
 {

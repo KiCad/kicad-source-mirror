@@ -55,12 +55,14 @@ class PAD;
 class FOOTPRINT;
 class PROGRESS_REPORTER;
 
+
 struct CN_DISJOINT_NET_ENTRY
 {
     int net;
     BOARD_CONNECTED_ITEM *a, *b;
     VECTOR2I anchorA, anchorB;
 };
+
 
 /**
  * A structure used for calculating isolated islands on a given zone across all its layers
@@ -76,11 +78,13 @@ struct CN_ZONE_ISOLATED_ISLAND_LIST
     std::map<PCB_LAYER_ID, std::vector<int>> m_islands;
 };
 
+
 struct RN_DYNAMIC_LINE
 {
     int netCode;
     VECTOR2I a, b;
 };
+
 
 /**
  * Controls how nets are propagated through clusters
@@ -90,6 +94,7 @@ enum class PROPAGATE_MODE
     SKIP_CONFLICTS,     /// Clusters with conflicting drivers are not updated (default)
     RESOLVE_CONFLICTS   /// Clusters with conflicting drivers are updated to the most popular net
 };
+
 
 // a wrapper class encompassing the connectivity computation algorithm and the
 class CONNECTIVITY_DATA
@@ -307,30 +312,26 @@ public:
     }
 
 private:
-
     void    updateRatsnest();
 
-    /**
-     * Updates the item positions without modifying the dirtyNet flag.  This is valid only when the
-     * item list contains all elements in the connectivity database
-     * @param aItems List of items with new positions
-     */
-    void    updateItemPositions( const std::vector<BOARD_ITEM*>& aItems );
     void    addRatsnestCluster( const std::shared_ptr<CN_CLUSTER>& aCluster );
 
+private:
     std::shared_ptr<CN_CONNECTIVITY_ALGO> m_connAlgo;
-    std::shared_ptr<FROM_TO_CACHE> m_fromToCache;
-    std::vector<RN_DYNAMIC_LINE> m_dynamicRatsnest;
-    std::vector<RN_NET*> m_nets;
 
-    PROGRESS_REPORTER* m_progressReporter;
+    std::shared_ptr<FROM_TO_CACHE>  m_fromToCache;
+    std::vector<RN_DYNAMIC_LINE>    m_dynamicRatsnest;
+    std::vector<RN_NET*>            m_nets;
 
-    bool m_skipRatsnest = false;
+    /// Used to suppress ratsnest calculations on dynamic ratsnests
+    bool                            m_skipRatsnest = false;
 
-    KISPINLOCK m_lock;
+    KISPINLOCK                      m_lock;
 
     /// Map of netcode -> netclass the net is a member of; used for ratsnest painting
-    std::map<int, wxString> m_netclassMap;
+    std::map<int, wxString>         m_netclassMap;
+
+    PROGRESS_REPORTER*              m_progressReporter;
 };
 
 #endif

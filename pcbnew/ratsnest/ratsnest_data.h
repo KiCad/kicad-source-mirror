@@ -74,10 +74,7 @@ public:
     /**
      * Mark ratsnest for given net as 'dirty', i.e. requiring recomputation.
      */
-    void MarkDirty()
-    {
-        m_dirty = true;
-    }
+    void MarkDirty() { m_dirty = true; }
 
     /**
      * Return state of the 'dirty' flag, indicating that ratsnest for a given net is invalid
@@ -85,20 +82,12 @@ public:
      *
      * @return True if ratsnest requires recomputation, false otherwise.
      */
-    bool IsDirty() const
-    {
-        return m_dirty;
-    }
+    bool IsDirty() const { return m_dirty; }
 
     /**
      * Return pointer to a vector of edges that makes ratsnest for a given net.
-     *
-     * @return Pointer to a vector of edges that makes ratsnest for a given net.
      */
-    const std::vector<CN_EDGE> GetUnconnected() const
-    {
-        return m_rnEdges;
-    }
+    const std::vector<CN_EDGE> GetUnconnected() const { return m_rnEdges; }
 
     /**
      * Recompute ratsnest for a net.
@@ -108,38 +97,9 @@ public:
 
     void AddCluster( std::shared_ptr<CN_CLUSTER> aCluster );
 
-    unsigned int GetNodeCount() const
-    {
-        return m_nodes.size();
-    }
+    unsigned int GetNodeCount() const { return m_nodes.size(); }
 
-    /**
-     * Return list of nodes that are associated with a given item.
-     *
-     * @param aItem is an item for which the list is generated.
-     * @return List of associated nodes.
-     */
-    std::list<CN_ANCHOR_PTR> GetNodes( const BOARD_CONNECTED_ITEM* aItem ) const;
-
-    const std::vector<CN_EDGE>& GetEdges() const
-    {
-        return m_rnEdges;
-    }
-
-    /**
-     * Add all stored items to a list.
-     *
-     * @param aOutput is the list that will have items added.
-     * @param aTypes determines the type of added items.
-     */
-    void GetAllItems( std::list<BOARD_CONNECTED_ITEM*>& aOutput, const KICAD_T aTypes[] ) const;
-
-    /**
-     * Return a single node that lies in the shortest distance from a specific node.
-     *
-     * @param aNode is the node for which the closest node is searched.
-     */
-    const CN_ANCHOR_PTR GetClosestNode( const CN_ANCHOR_PTR& aNode ) const;
+    const std::vector<CN_EDGE>& GetEdges() const { return m_rnEdges; }
 
     bool NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode1,
                                CN_ANCHOR_PTR& aNode2 ) const;

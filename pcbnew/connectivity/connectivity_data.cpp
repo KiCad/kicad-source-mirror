@@ -118,33 +118,40 @@ void CONNECTIVITY_DATA::Move( const VECTOR2I& aDelta )
 
 void CONNECTIVITY_DATA::updateRatsnest()
 {
-    #ifdef PROFILE
+#ifdef PROFILE
     PROF_COUNTER rnUpdate( "update-ratsnest" );
-    #endif
+#endif
+
     std::vector<RN_NET*> dirty_nets;
 
     // Start with net 1 as net 0 is reserved for not-connected
     // Nets without nodes are also ignored
     std::copy_if( m_nets.begin() + 1, m_nets.end(), std::back_inserter( dirty_nets ),
-            [] ( RN_NET* aNet ) { return aNet->IsDirty() && aNet->GetNodeCount() > 0; } );
+            [] ( RN_NET* aNet )
+            {
+                return aNet->IsDirty() && aNet->GetNodeCount() > 0;
+            } );
 
     // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
     size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency() - 1,
-            ( dirty_nets.size() + 7 ) / 8 );
+                                                   ( dirty_nets.size() + 7 ) / 8 );
 
     std::atomic<size_t> nextNet( 0 );
     std::vector<std::future<size_t>> returns( parallelThreadCount );
 
-    auto update_lambda = [&nextNet, &dirty_nets]() -> size_t
-    {
-        for( size_t i = nextNet++; i < dirty_nets.size(); i = nextNet++ )
-            dirty_nets[i]->Update();
+    auto update_lambda =
+            [&nextNet, &dirty_nets]() -> size_t
+            {
+                for( size_t i = nextNet++; i < dirty_nets.size(); i = nextNet++ )
+                    dirty_nets[i]->Update();
 
-        return 1;
-    };
+                return 1;
+            };
 
     if( parallelThreadCount == 1 )
+    {
         update_lambda();
+    }
     else
     {
         for( size_t ii = 0; ii < parallelThreadCount; ++ii )
@@ -155,15 +162,15 @@ void CONNECTIVITY_DATA::updateRatsnest()
             returns[ii].wait();
     }
 
-    #ifdef PROFILE
+#ifdef PROFILE
     rnUpdate.Show();
-    #endif /* PROFILE */
+#endif
 }
 
 
 void CONNECTIVITY_DATA::addRatsnestCluster( const std::shared_ptr<CN_CLUSTER>& aCluster )
 {
-    auto rnNet = m_nets[ aCluster->OriginNet() ];
+    RN_NET* rnNet = m_nets[ aCluster->OriginNet() ];
 
     rnNet->AddCluster( aCluster );
 }
@@ -184,7 +191,7 @@ void CONNECTIVITY_DATA::RecalculateRatsnest( BOARD_COMMIT* aCommit  )
             m_nets[i] = new RN_NET;
     }
 
-    auto clusters = m_connAlgo->GetClusters();
+    const std::vector<CN_CLUSTER_PTR>& clusters = m_connAlgo->GetClusters();
 
     int dirtyNets = 0;
 
@@ -197,7 +204,7 @@ void CONNECTIVITY_DATA::RecalculateRatsnest( BOARD_COMMIT* aCommit  )
         }
     }
 
-    for( const auto& c : clusters )
+    for( const CN_CLUSTER_PTR& c : clusters )
     {
         int net = c->OriginNet();
 
@@ -225,7 +232,7 @@ void CONNECTIVITY_DATA::BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aIte
 {
     std::vector<BOARD_CONNECTED_ITEM*> citems;
 
-    for( auto item : aItems )
+    for( BOARD_ITEM* item : aItems )
     {
         if( item->Type() == PCB_FOOTPRINT_T )
         {
@@ -234,20 +241,20 @@ void CONNECTIVITY_DATA::BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aIte
         }
         else
         {
-            if( auto citem = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+            if( BOARD_CONNECTED_ITEM* citem = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
                 citems.push_back( citem );
         }
     }
 
-    for( const auto& item : citems )
+    for( const BOARD_CONNECTED_ITEM* item : citems )
     {
         if ( m_connAlgo->ItemExists( item ) )
         {
-            auto& entry = m_connAlgo->ItemEntry( item );
+            CN_CONNECTIVITY_ALGO::ITEM_MAP_ENTRY& entry = m_connAlgo->ItemEntry( item );
 
-            for( const auto& cnItem : entry.GetItems() )
+            for( CN_ITEM* cnItem : entry.GetItems() )
             {
-                for( auto anchor : cnItem->Anchors() )
+                for( const std::shared_ptr<CN_ANCHOR>& anchor : cnItem->Anchors() )
                     anchor->SetNoLine( true );
             }
         }
@@ -809,7 +816,7 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
         }
     }
 
-    for( const auto& netcode : nets )
+    for( int netcode : nets )
     {
         RN_NET* net = GetRatsnestForNet( netcode );
 

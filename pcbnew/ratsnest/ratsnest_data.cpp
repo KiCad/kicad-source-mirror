@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -106,6 +106,7 @@ private:
     std::vector<int> m_depth;
 };
 
+
 void RN_NET::kruskalMST( const std::vector<CN_EDGE> &aEdges )
 {
     disjoint_set dset( m_nodes.size() );
@@ -114,10 +115,10 @@ void RN_NET::kruskalMST( const std::vector<CN_EDGE> &aEdges )
 
     int i = 0;
 
-    for( auto& node : m_nodes )
+    for( const CN_ANCHOR_PTR& node : m_nodes )
         node->SetTag( i++ );
 
-    for( auto& tmp : aEdges )
+    for( const CN_EDGE& tmp : aEdges )
     {
         int u = tmp.GetSourceNode()->GetTag();
         int v = tmp.GetTargetNode()->GetTag();
@@ -172,19 +173,16 @@ public:
 
     void Triangulate( std::vector<CN_EDGE>& mstEdges)
     {
-        std::vector<double>          node_pts;
-
-        using ANCHOR_LIST = std::vector<CN_ANCHOR_PTR>;
-
-        ANCHOR_LIST              anchors;
-        std::vector<ANCHOR_LIST> anchorChains( m_allNodes.size() );
+        std::vector<double>                       node_pts;
+        std::vector<CN_ANCHOR_PTR>                anchors;
+        std::vector< std::vector<CN_ANCHOR_PTR> > anchorChains( m_allNodes.size() );
 
         node_pts.reserve( 2 * m_allNodes.size() );
         anchors.reserve( m_allNodes.size() );
 
         CN_ANCHOR_PTR prev = nullptr;
 
-        for( const auto& n : m_allNodes )
+        for( const CN_ANCHOR_PTR& n : m_allNodes )
         {
             if( !prev || prev->Pos() != n->Pos() )
             {
@@ -208,8 +206,8 @@ public:
             // and chain the nodes together.
             for( size_t i = 0; i < anchors.size() - 1; i++ )
             {
-                auto src = anchors[i];
-                auto dst = anchors[i + 1];
+                const CN_ANCHOR_PTR& src = anchors[i];
+                const CN_ANCHOR_PTR& dst = anchors[i + 1];
                 mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
             }
         }
@@ -220,8 +218,8 @@ public:
 
             for( size_t i = 0; i < triangles.size(); i += 3 )
             {
-                auto src = anchors[triangles[i]];
-                auto dst = anchors[triangles[i + 1]];
+                CN_ANCHOR_PTR& src = anchors[triangles[i]];
+                CN_ANCHOR_PTR& dst = anchors[triangles[i + 1]];
                 mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
 
                 src = anchors[triangles[i + 1]];
@@ -238,28 +236,29 @@ public:
                 if( delaunator.halfedges[i] == delaunator::INVALID_INDEX )
                     continue;
 
-                auto src = anchors[triangles[i]];
-                auto dst = anchors[triangles[delaunator.halfedges[i]]];
+                const CN_ANCHOR_PTR& src = anchors[triangles[i]];
+                const CN_ANCHOR_PTR& dst = anchors[triangles[delaunator.halfedges[i]]];
                 mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
             }
         }
 
         for( size_t i = 0; i < anchorChains.size(); i++ )
         {
-            auto& chain = anchorChains[i];
+            std::vector<CN_ANCHOR_PTR>& chain = anchorChains[i];
 
             if( chain.size() < 2 )
                 continue;
 
             std::sort( chain.begin(), chain.end(),
-                    [] ( const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b ) {
-                return a->GetCluster().get() < b->GetCluster().get();
-            } );
+                    [] ( const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b )
+                    {
+                        return a->GetCluster().get() < b->GetCluster().get();
+                    } );
 
             for( unsigned int j = 1; j < chain.size(); j++ )
             {
-                const auto& prevNode    = chain[j - 1];
-                const auto& curNode     = chain[j];
+                const CN_ANCHOR_PTR& prevNode = chain[j - 1];
+                const CN_ANCHOR_PTR& curNode  = chain[j];
                 int weight = prevNode->GetCluster() != curNode->GetCluster() ? 1 : 0;
                 mstEdges.emplace_back( prevNode, curNode, weight );
             }
@@ -297,7 +296,7 @@ void RN_NET::compute()
         else
         {
             // Set tags to m_nodes as connected
-            for( const auto& node : m_nodes )
+            for( const CN_ANCHOR_PTR& node : m_nodes )
                 node->SetTag( 0 );
         }
 
@@ -307,23 +306,21 @@ void RN_NET::compute()
 
     m_triangulator->Clear();
 
-    for( const auto& n : m_nodes )
-    {
+    for( const CN_ANCHOR_PTR& n : m_nodes )
         m_triangulator->AddNode( n );
-    }
 
     std::vector<CN_EDGE> triangEdges;
     triangEdges.reserve( m_nodes.size() + m_boardEdges.size() );
 
-    #ifdef PROFILE
+#ifdef PROFILE
     PROF_COUNTER cnt("triangulate");
-    #endif
+#endif
     m_triangulator->Triangulate( triangEdges );
-    #ifdef PROFILE
+#ifdef PROFILE
     cnt.Show();
-    #endif
+#endif
 
-    for( const auto& e : m_boardEdges )
+    for( const CN_EDGE& e : m_boardEdges )
         triangEdges.emplace_back( e );
 
     std::sort( triangEdges.begin(), triangEdges.end() );
@@ -362,11 +359,11 @@ void RN_NET::AddCluster( CN_CLUSTER_PTR aCluster )
 {
     CN_ANCHOR_PTR firstAnchor;
 
-    for( auto item : *aCluster )
+    for( CN_ITEM* item : *aCluster )
     {
-        bool isZone = dynamic_cast<CN_ZONE_LAYER*>(item) != nullptr;
-        auto& anchors = item->Anchors();
-        unsigned int nAnchors = isZone ? 1 : anchors.size();
+        bool                        isZone = dynamic_cast<CN_ZONE_LAYER*>( item );
+        std::vector<CN_ANCHOR_PTR>& anchors = item->Anchors();
+        unsigned int                nAnchors = isZone ? 1 : anchors.size();
 
         if( nAnchors > anchors.size() )
             nAnchors = anchors.size();
@@ -379,9 +376,7 @@ void RN_NET::AddCluster( CN_CLUSTER_PTR aCluster )
             if( firstAnchor )
             {
                 if( firstAnchor != anchors[i] )
-                {
                     m_boardEdges.emplace_back( firstAnchor, anchors[i], 0 );
-                }
             }
             else
             {
@@ -393,29 +388,32 @@ void RN_NET::AddCluster( CN_CLUSTER_PTR aCluster )
 
 
 bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode1,
-        CN_ANCHOR_PTR& aNode2 ) const
+                                   CN_ANCHOR_PTR& aNode2 ) const
 {
     bool rv = false;
 
-    VECTOR2I::extended_type distMax = VECTOR2I::ECOORD_MAX;
+    SEG::ecoord distMax_sq = VECTOR2I::ECOORD_MAX;
 
-    auto verify = [&]( auto& aTestNode1, auto& aTestNode2 )
-        {
-            auto squaredDist = ( aTestNode1->Pos() - aTestNode2->Pos() ).SquaredEuclideanNorm();
-
-            if( squaredDist < distMax )
+    auto verify =
+            [&]( const std::shared_ptr<CN_ANCHOR>& aTestNode1,
+                 const std::shared_ptr<CN_ANCHOR>& aTestNode2 )
             {
-                rv      = true;
-                distMax = squaredDist;
-                aNode1  = aTestNode1;
-                aNode2  = aTestNode2;
-            }
-        };
+                VECTOR2I    diff = aTestNode1->Pos() - aTestNode2->Pos();
+                SEG::ecoord dist_sq = diff.SquaredEuclideanNorm();
+
+                if( dist_sq < distMax_sq )
+                {
+                    rv      = true;
+                    distMax_sq = dist_sq;
+                    aNode1  = aTestNode1;
+                    aNode2  = aTestNode2;
+                }
+            };
 
     /// Sweep-line algorithm to cut the number of comparisons to find the closest point
     ///
     /// Step 1: The outer loop needs to be the subset (selected nodes) as it is a linear search
-    for( const auto& nodeA : aOtherNet.m_nodes )
+    for( const std::shared_ptr<CN_ANCHOR>& nodeA : aOtherNet.m_nodes )
     {
         if( nodeA->GetNoLine() )
             continue;
@@ -433,11 +431,11 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
             if( nodeB->GetNoLine() )
                 continue;
 
-            VECTOR2I::extended_type distX = nodeA->Pos().x - nodeB->Pos().x;
+            SEG::ecoord distX_sq = SEG::Square( nodeA->Pos().x - nodeB->Pos().x );
 
             /// As soon as the x distance (primary sort) is larger than the smallest distance,
             /// stop checking further elements
-            if( distX * distX > distMax )
+            if( distX_sq > distMax_sq )
                 break;
 
             verify( nodeA, nodeB );
@@ -451,9 +449,9 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
             if( nodeB->GetNoLine() )
                 continue;
 
-            VECTOR2I::extended_type distX = nodeA->Pos().x - nodeB->Pos().x;
+            SEG::ecoord distX_sq = SEG::Square( nodeA->Pos().x - nodeB->Pos().x );
 
-            if( distX * distX > distMax )
+            if( distX_sq > distMax_sq )
                 break;
 
             verify( nodeA, nodeB );
@@ -466,6 +464,6 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
 
 void RN_NET::SetVisible( bool aEnabled )
 {
-    for( auto& edge : m_rnEdges )
+    for( CN_EDGE& edge : m_rnEdges )
         edge.SetVisible( aEnabled );
 }
