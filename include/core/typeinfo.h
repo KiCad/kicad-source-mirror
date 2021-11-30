@@ -294,13 +294,20 @@ constexpr bool IsInstantiableType( const KICAD_T aType )
 
     case SCH_SYMBOL_LOCATE_POWER_T:
 
+    case PCB_LOCATE_STDVIA_T:
+    case PCB_LOCATE_UVIA_T:
+    case PCB_LOCATE_BBVIA_T:
+    case PCB_LOCATE_TEXT_T:
+    case PCB_LOCATE_GRAPHIC_T:
     case PCB_LOCATE_HOLE_T:
     case PCB_LOCATE_PTH_T:
     case PCB_LOCATE_NPTH_T:
+    case PCB_LOCATE_BOARD_EDGE_T:
 
     case PCB_DIMENSION_T:
 
     case SCH_SCREEN_T:
+    case PCB_ITEM_LIST_T:
         return false;
 
     default:
