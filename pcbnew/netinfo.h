@@ -96,6 +96,11 @@ public:
     {
     }
 
+    EDA_ITEM* Clone() const override
+    {
+        return new NETINFO_ITEM( *this );
+    }
+
     void SetNetClass( const NETCLASSPTR& aNetClass );
 
     /**

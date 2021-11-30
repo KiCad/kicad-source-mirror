@@ -77,6 +77,11 @@ public:
         return HitTestMarker( aPosition, aAccuracy );
     }
 
+    EDA_ITEM* Clone() const override
+    {
+        return new PCB_MARKER( *this );
+    }
+
     GAL_LAYER_ID GetColorLayer() const;
 
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer ) const override;
