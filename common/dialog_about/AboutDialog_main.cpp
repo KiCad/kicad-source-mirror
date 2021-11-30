@@ -256,6 +256,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Brian F. G. Bidulock" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Anton Blanchard" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Blair Bonnett" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Carlo Bramini" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Stefan Brüns" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andreas Buhr" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ryan Bunch" ), CONTRIB_DEV, nullptr ) );
@@ -279,6 +280,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrew D'Addesio" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin d'Allens" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Camille Delbegue" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Albin Dennevi" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ruben De Smet" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ben Dooks" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrew Downing" ), CONTRIB_DEV, nullptr ) );
@@ -304,18 +306,24 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alessandro Gatti" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hal Gentz" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michael Geselbracht" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Giulio Girardi" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jeff Glass" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Golubev" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Angus Gratton" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Element Green" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mathias Grimmberger" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Johan Grip" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hildo Guillardi Júnior" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Niki Guldbrand" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Guy" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Zoltan Gyarmati" ), CONTRIB_DEV, nullptr ) );
 
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jonathan Haas" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mark Hämmerling" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Stefan Hamminga" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ben Harris" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Lukas F. Hartmann" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jakob Haufe" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Aylons Hazzud" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Stefan Helmert" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hartmut Henkel" ), CONTRIB_DEV, nullptr ) );
@@ -334,6 +342,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Fabián Inostroza" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Vlad Ivanov" ), CONTRIB_DEV, nullptr ) );
 
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "James Jackson" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jerry Jacobs" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christian Jacobsen" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michal Jahelka" ), CONTRIB_DEV, nullptr ) );
@@ -355,13 +364,19 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ingo Kletti" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Sylwester Kocjan" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Clemens Koller" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Asuki Kono" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jakub Kozdon" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hajo Nils Krabbenhöft" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Simon Kueppers" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martijn Kuipers" ), CONTRIB_DEV, nullptr ) );
 
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Robbert Lagerweij" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dimitris Lampridis" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kevin Lannen" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mika Laitio" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Floris Lambrechts" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "lê văn lập" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Anton Lazarev" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ludovic Léau-mercier" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Paul LeoNerd Evens" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jonatan Liljedahl" ), CONTRIB_DEV, nullptr ) );
@@ -372,6 +387,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Johannes Maibaum" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mateusz Majchrzycki" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Daniel Majewski" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Rachel Mant" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Lorenzo Marcantonio" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Mattila" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Maui" ), CONTRIB_DEV, nullptr ) );
@@ -380,8 +396,10 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Charles McDowell" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Moses McKnight" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin McNamara" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Cameron McQuinn" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ievgenii Meshcheriakov" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ashley Mills" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christoph Moench-Tegeder" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Peter Montgomery" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alejandro García Montoro" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Felix Morgner" ), CONTRIB_DEV, nullptr ) );
@@ -391,17 +409,21 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jon Neal" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Bastian Neumann" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kristian Nielsen" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Érico Nogueira" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Allan Nordhøy" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Henrik Nyberg" ), CONTRIB_DEV, nullptr ) );
 
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kristoffer Ödmark" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Russell Oliver" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jason Oster" ), CONTRIB_DEV, nullptr ) );
 
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "luz paz" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Miguel Angel Ajo Pelayo" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Patrick Pereira" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jacobo Aragunde Perez" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Matthew Petroff" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Johannes Pfister" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christian Pfluger" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Brian Piccioni" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nicolas Planel" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Carl Poirier" ), CONTRIB_DEV, nullptr ) );
@@ -413,6 +435,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Morgan Quigley" ), CONTRIB_DEV, nullptr ) );
 
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Barabas Raffai" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Urja Rannikko" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Joshua Redstone" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michele Renda" ), CONTRIB_DEV, nullptr ) );
@@ -422,27 +445,35 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christoph Riehl" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Thiadmer Riemersma" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Gregor Riepl" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "RigoLigoRLC" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ola Rinta-Koski" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Lubomir Rintel" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Érico Rolim" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marcus A. Romer" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Heiko Rosemann" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Fabio Rossi" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ian Roth" ), CONTRIB_DEV, nullptr ) );
 
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "J. Morio Sakaguchi" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Simon Schaak" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ross Schlaikjer" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Julius Schmidt" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marvin Schmidt" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Carsten Schoenert" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Simon Schubert" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michal Schulz" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Adrian Scripca" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Pradeepa Senanayake" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Serantoni" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Frank Severinsen" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Cheng Sheng" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Shuklin" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Slawomir Siudym" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Serantoni" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Guillaume Simard" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin Sivak" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mateusz Skowroński" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dominik Sliwa" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Blake Smith" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Rafael Sokolowski" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Vesa Solonen" ), CONTRIB_DEV, nullptr ) );
@@ -458,6 +489,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hiroki Suenaga" ), CONTRIB_DEV, nullptr ) );
 
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Karl Thorén" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hiroshi Tokita" ), CONTRIB_DEV, nullptr ) );
 
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Vladimir Ur" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Matthias Urlichs" ), CONTRIB_DEV, nullptr ) );
@@ -480,7 +512,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Stefan Weber" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Simon Wells" ), CONTRIB_DEV, nullptr ) );    
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dominik Wernberger" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mikołaj Wielgus" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mike Williams" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nick Winters" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Adam Wolf" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrzej Wolski" ), CONTRIB_DEV, nullptr ) );
@@ -515,16 +547,36 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Martin Kratoška" ),
                                           wxEmptyString,
                                           wxEmptyString,
-                                          "Czech (CZ)" ) );
+                                          "Czech (CS)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Radek Kuznik" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Czech (CS)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Roman Ondráček" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Czech (CS)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Jan Straka" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Czech (CS)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Jan Vykydal" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Czech (CS)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Jonathan Haas",
                                           wxEmptyString,
                                           wxEmptyString,
                                           "German (DE)" ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( "Rafael Sokolowski",
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mark Hämmerling" ),
                                           wxEmptyString,
                                           wxEmptyString,
                                           "German (DE)" ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mark Hämmerling" ),
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mathias Neumann" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "German (DE)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Dominik Wernberger" ),
                                           wxEmptyString,
                                           wxEmptyString,
                                           "German (DE)" ) );
@@ -544,11 +596,19 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Greek (el_GR)" ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( "Pedro Martin del Valle",
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Adolfo Jayme Barrientos" ),
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Spanish (ES)" ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ),
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Roberto Fernandez Bautista" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Spanish (ES)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Augusto Fraga Giachero" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Spanish (ES)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Pedro Martin del Valle",
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Spanish (ES)" ) );
@@ -556,7 +616,31 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Spanish (ES)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ),
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Spanish (ES)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Vesa Solonen",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Finnish (FI)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Alex Gellen",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Finnish (FI)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "J. Lavoie",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Finnish (FI)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Purkka Koodari",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Finnish (FI)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Ola Rinta-Koski",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Finnish (FI)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Riku Viitanen",
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Finnish (FI)" ) );
@@ -564,10 +648,6 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           "French (FR)" ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( "Massimo Cioce",
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          "Italian (IT)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Marco Ciampa",
                                           wxEmptyString,
                                           wxEmptyString,
@@ -577,6 +657,10 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           "Japanese (JA)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Kenta Yonekura",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Japanese (JA)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Ji Yoon Choi",
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Japanese (JA)" ) );
@@ -648,10 +732,22 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Korean (KO)" ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( "Jerry Jacobs",
+    aInfo.AddTranslator( new CONTRIBUTOR( "Arend-Jan van Hilten",
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Dutch (NL)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "CJ van der Hoeven",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Dutch (NL)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Pim Jansen",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Dutch (NL)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Allan Nordhøy",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Norwegian (NO)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mateusz Skowroński" ),
                                           wxEmptyString,
                                           wxEmptyString,
@@ -668,11 +764,27 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Polish (PL)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Augusto Fraga Giachero",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Brazilian Portuguese (PT_BR)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Wellington Terumi Uemura",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Brazilian Portuguese (PT_BR)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Augusto Fraga Giachero",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Portuguese (PT)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Renie Marquet",
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Portuguese (PT)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Igor Plyatov",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Russian (RU)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Дмитрий Дёмин" ),
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Russian (RU)" ) );
@@ -688,6 +800,18 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Russian (RU)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Axel Henriksson",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Swedish (SV)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Richard Jonsson",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Swedish (SV)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Allan Nordhøy",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Swedish (SV)" ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Boonchai Kingrungped",
                                           wxEmptyString,
                                           wxEmptyString,
@@ -700,25 +824,34 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Simplified Chinese (zh_CN)" ) );
-
-    // Maintainer who helper in translations, but not in a specific translation
-    #define OTHERS_IN_TRANSLATION _( "Others" )
-    aInfo.AddTranslator( new CONTRIBUTOR( "Remy Halvick",
+    aInfo.AddTranslator( new CONTRIBUTOR( "Dingzhong Chen",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          OTHERS_IN_TRANSLATION ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( "David J S Briscoe",
+                                          "Simplified Chinese (zh_CN)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "David Chen",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          OTHERS_IN_TRANSLATION ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( "Dominique Laigle",
+                                          "Simplified Chinese (zh_CN)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Rigo Ligo",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          OTHERS_IN_TRANSLATION ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( "Paul Burke",
+                                          "Simplified Chinese (zh_CN)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Tian Yunhao",
                                           wxEmptyString,
                                           wxEmptyString,
-                                          OTHERS_IN_TRANSLATION ) );
+                                          "Simplified Chinese (zh_CN)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "David Chen",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Traditional Chinese (zh_TW)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "kai chiao chuang",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Traditional Chinese (zh_TW)" ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Taotieren",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Traditional Chinese (zh_TW)" ) );
 
 
     // Program credits for 3d models
