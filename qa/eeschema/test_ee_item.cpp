@@ -25,12 +25,11 @@
 #include <eda_item_test_utils.h>
 #include <core/typeinfo.h>
 
-// Code under test
 #include <eda_item.h>
 #include <sch_item.h>
 #include <lib_item.h>
 
-//#include <sch_marker.h>
+#include <sch_marker.h>
 #include <sch_junction.h>
 #include <sch_no_connect.h>
 #include <sch_bus_entry.h>
@@ -47,98 +46,93 @@
 #include <lib_pin.h>
 #include <lib_field.h>
 
+#include <erc_settings.h>
 
 class TEST_EE_ITEM_FIXTURE
 {
 public:
-    TEST_EE_ITEM_FIXTURE() : m_sheet(), m_symbol( "test symbol" ), m_pin( &m_symbol )
+    SCH_SHEET                 m_sheet;
+    LIB_SYMBOL                m_symbol;
+    LIB_PIN                   m_pin;
+    std::shared_ptr<ERC_ITEM> m_ercItem;
+
+    TEST_EE_ITEM_FIXTURE() :
+            m_sheet(),
+            m_symbol( "test symbol" ),
+            m_pin( &m_symbol ),
+            m_ercItem( ERC_ITEM::Create( ERCE_DRIVER_CONFLICT ) )
     {
         m_sheet.SetPosition( wxPoint( Millimeter2iu( 5 ), Millimeter2iu( 10 ) ) );
         m_sheet.SetSize( wxSize( Millimeter2iu( 50 ), Millimeter2iu( 100 ) ) );
     }
 
-    SCH_SHEET  m_sheet;
-    LIB_SYMBOL m_symbol;
-    LIB_PIN    m_pin;
+    EDA_ITEM* Instantiate( KICAD_T aType )
+    {
+        if( !IsEeschemaType( aType ) )
+            return nullptr;
+
+        if( !IsInstantiableType( aType ) )
+            return nullptr;
+
+        switch( aType )
+        {
+        case SCH_MARKER_T:         return new SCH_MARKER( m_ercItem, wxPoint( 0, 0 ) );
+        case SCH_JUNCTION_T:       return new SCH_JUNCTION();
+        case SCH_NO_CONNECT_T:     return new SCH_NO_CONNECT();
+        case SCH_BUS_WIRE_ENTRY_T: return new SCH_BUS_WIRE_ENTRY();
+        case SCH_BUS_BUS_ENTRY_T:  return new SCH_BUS_BUS_ENTRY();
+        case SCH_LINE_T:           return new SCH_LINE();
+        case SCH_BITMAP_T:         return new SCH_BITMAP();
+        case SCH_TEXT_T:           return new SCH_TEXT( wxPoint( 0, 0 ), "test text" );
+        case SCH_LABEL_T:          return new SCH_LABEL( wxPoint( 0, 0 ), "test label" );
+        case SCH_GLOBAL_LABEL_T:   return new SCH_GLOBALLABEL();
+        case SCH_HIER_LABEL_T:     return new SCH_HIERLABEL();
+        case SCH_FIELD_T:          return new SCH_FIELD( wxPoint( 0, 0 ), 0, nullptr );
+        case SCH_SYMBOL_T:         return new SCH_SYMBOL();
+
+        case SCH_SHEET_PIN_T:
+            // XXX: m_sheet pins currently have to have their initial positions calculated manually.
+            return new SCH_SHEET_PIN( &m_sheet,
+                                      wxPoint( m_sheet.GetPosition().x,
+                                               m_sheet.GetPosition().y + Millimeter2iu( 40 ) ),
+                                      "test aPin" );
+
+        case SCH_SHEET_T:          return new SCH_SHEET();
+        case LIB_SHAPE_T:          return new LIB_SHAPE( &m_symbol, SHAPE_T::ARC );
+        case LIB_TEXT_T:           return new LIB_TEXT( &m_symbol );
+        case LIB_PIN_T:            return new LIB_PIN( &m_symbol );
+        case LIB_FIELD_T:          return new LIB_FIELD( &m_symbol );
+
+        case SCHEMATIC_T:
+        case SCH_PIN_T:
+        case LIB_SYMBOL_T:
+        case LIB_ALIAS_T:
+            return nullptr;
+
+        default:
+            BOOST_FAIL( wxString::Format(
+                    "Unhandled type: %d "
+                    "(if you created a new type you need to handle it in this switch statement)",
+                    aType ) );
+            return nullptr;
+        }
+    }
+
+    static void CompareItems( EDA_ITEM* aItem, EDA_ITEM* aOriginalItem )
+    {
+        BOOST_CHECK_EQUAL( aItem->GetPosition(), aOriginalItem->GetPosition() );
+        BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetTop(),
+                           aOriginalItem->GetBoundingBox().GetTop() );
+        BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetLeft(),
+                           aOriginalItem->GetBoundingBox().GetLeft() );
+        BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetBottom(),
+                           aOriginalItem->GetBoundingBox().GetBottom() );
+        BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetRight(),
+                           aOriginalItem->GetBoundingBox().GetRight() );
+    }
 };
 
 
-static EDA_ITEM* Instantiate( KICAD_T aType, SCH_SHEET* aSheet, LIB_SYMBOL* aSymbol, LIB_PIN* aPin )
-{
-    if( !IsEeschemaType( aType ) )
-        return nullptr;
-
-    if( !IsInstantiableType( aType ) )
-        return nullptr;
-
-    switch( aType )
-    {
-    case SCH_MARKER_T:         return nullptr;
-    case SCH_JUNCTION_T:       return new SCH_JUNCTION();
-    case SCH_NO_CONNECT_T:     return new SCH_NO_CONNECT();
-    case SCH_BUS_WIRE_ENTRY_T: return new SCH_BUS_WIRE_ENTRY();
-    case SCH_BUS_BUS_ENTRY_T:  return new SCH_BUS_BUS_ENTRY();
-    case SCH_LINE_T:           return new SCH_LINE();
-    case SCH_BITMAP_T:         return new SCH_BITMAP();
-    case SCH_TEXT_T:           return new SCH_TEXT( wxPoint( 0, 0 ), "test text" );
-    case SCH_LABEL_T:          return new SCH_LABEL( wxPoint( 0, 0 ), "test label" );
-    case SCH_GLOBAL_LABEL_T:   return new SCH_GLOBALLABEL();
-    case SCH_HIER_LABEL_T:     return new SCH_HIERLABEL();
-    case SCH_FIELD_T:          return new SCH_FIELD( wxPoint( 0, 0 ), 0, nullptr );
-    case SCH_SYMBOL_T:         return new SCH_SYMBOL();
-
-    case SCH_SHEET_PIN_T:
-        // XXX (?): aSheet pins currently have to have their initial positions calculated manually.
-        return new SCH_SHEET_PIN(
-                aSheet,
-                wxPoint( aSheet->GetPosition().x, aSheet->GetPosition().y + Millimeter2iu( 40 ) ),
-                "test aPin" );
-
-    case SCH_SHEET_T:          return new SCH_SHEET();
-    case SCH_PIN_T:
-    {
-        static SCH_SYMBOL symbol;
-        return new SCH_PIN( aPin, &symbol );
-    }
-
-
-    case LIB_SHAPE_T:          return new LIB_SHAPE( aSymbol, SHAPE_T::ARC );
-    case LIB_TEXT_T:           return new LIB_TEXT( aSymbol );
-    case LIB_PIN_T:            return new LIB_PIN( aSymbol );
-    case LIB_FIELD_T:          return new LIB_FIELD( aSymbol );
-
-    case SCHEMATIC_T:
-    case LIB_SYMBOL_T:
-    case LIB_ALIAS_T:
-        return nullptr;
-
-    default:
-        BOOST_FAIL( wxString::Format(
-            "Unhandled type: %d "
-            "(if you have created a new type you need to handle it in this switch statement)",
-            aType ) );
-        return nullptr;
-    }
-}
-
-
-static void CompareItems( EDA_ITEM* aItem, EDA_ITEM* aOriginalItem )
-{
-    BOOST_CHECK_EQUAL( aItem->GetPosition(), aOriginalItem->GetPosition() );
-    BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetTop(),
-                       aOriginalItem->GetBoundingBox().GetTop() );
-    BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetLeft(),
-                       aOriginalItem->GetBoundingBox().GetLeft() );
-    BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetBottom(),
-                       aOriginalItem->GetBoundingBox().GetBottom() );
-    BOOST_CHECK_EQUAL( aItem->GetBoundingBox().GetRight(),
-                       aOriginalItem->GetBoundingBox().GetRight() );
-}
-
-
-/**
- * Declare the test suite
- */
 BOOST_FIXTURE_TEST_SUITE( EeItem, TEST_EE_ITEM_FIXTURE )
 
 
@@ -148,7 +142,7 @@ BOOST_AUTO_TEST_CASE( Move )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<EDA_ITEM>( Instantiate( type, &m_sheet, &m_symbol, &m_pin ) );
+        auto item = std::unique_ptr<EDA_ITEM>( Instantiate( type ) );
 
         if( item == nullptr )
             continue;
@@ -157,23 +151,31 @@ BOOST_AUTO_TEST_CASE( Move )
         {
             IterateOverPositionsAndReferences<EDA_ITEM>(
                     item.get(),
-                    []( EDA_ITEM* aOriginalItem, wxPoint aOffset )
+                    []( EDA_ITEM* aOriginalItem, wxPoint aRef )
                     {
                         auto item = std::unique_ptr<EDA_ITEM>( aOriginalItem->Clone() );
+                        wxPoint originalPos = item->GetPosition();
 
                         SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item.get() );
                         LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( item.get() );
 
-                        if( schItem )
+                        // Move to a point, then go back.
+                        // This has to be an identity transformation.
+
+                        if( schItem != nullptr )
                         {
-                            schItem->Move( aOffset );
-                            schItem->Move( -aOffset );
+                            schItem->Move( aRef );
+                            BOOST_CHECK_EQUAL( schItem->GetPosition(), originalPos + aRef );
+
+                            schItem->Move( -aRef );
                         }
 
-                        if( libItem )
+                        if( libItem != nullptr )
                         {
-                            libItem->MoveTo( libItem->GetPosition() + aOffset );
-                            libItem->MoveTo( libItem->GetPosition() - aOffset );
+                            libItem->MoveTo( libItem->GetPosition() + aRef );
+                            BOOST_CHECK_EQUAL( libItem->GetPosition(), originalPos + aRef );
+
+                            libItem->MoveTo( libItem->GetPosition() - aRef );
                         }
 
                         CompareItems( item.get(), aOriginalItem );
@@ -189,14 +191,14 @@ BOOST_AUTO_TEST_CASE( Rotate )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<EDA_ITEM>( Instantiate( type, &m_sheet, &m_symbol, &m_pin ) );
+        auto item = std::unique_ptr<EDA_ITEM>( Instantiate( type ) );
 
         if( item == nullptr )
             continue;
 
         BOOST_TEST_CONTEXT( "Class: " << item->GetClass() )
         {
-            // Four rotations are an identity.
+            // Four equivalent 90 degree rotations are an identity.
 
             if( item->GetClass() == "SCH_SHEET_PIN" )
             {
@@ -205,7 +207,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
                 SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( newItem.get() );
                 LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( newItem.get() );
 
-                if( schItem )
+                if( schItem != nullptr )
                 {
                     // Only rotating pins around the center of parent sheet works.
                     schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
@@ -214,7 +216,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
                     schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
                 }
 
-                if( libItem )
+                if( libItem != nullptr )
                 {
                     libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
                     libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
@@ -235,7 +237,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
                             SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item.get() );
                             LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( item.get() );
 
-                            if( schItem )
+                            if( schItem != nullptr )
                             {
                                 schItem->Rotate( aRef );
                                 schItem->Rotate( aRef );
@@ -243,7 +245,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
                                 schItem->Rotate( aRef );
                             }
 
-                            if( libItem )
+                            if( libItem != nullptr )
                             {
                                 libItem->Rotate( aRef );
                                 libItem->Rotate( aRef );
@@ -265,7 +267,7 @@ BOOST_AUTO_TEST_CASE( MirrorHorizontally )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<EDA_ITEM>( Instantiate( type, &m_sheet, &m_symbol, &m_pin ) );
+        auto item = std::unique_ptr<EDA_ITEM>( Instantiate( type ) );
 
         if( item == nullptr )
             continue;
@@ -283,13 +285,13 @@ BOOST_AUTO_TEST_CASE( MirrorHorizontally )
 
                         // Two mirrorings are an identity.
 
-                        if( schItem )
+                        if( schItem != nullptr )
                         {
                             schItem->MirrorHorizontally( aRef.x );
                             schItem->MirrorHorizontally( aRef.x );
                         }
 
-                        if( libItem )
+                        if( libItem != nullptr )
                         {
                             libItem->MirrorHorizontal( aRef );
                             libItem->MirrorHorizontal( aRef );
@@ -308,7 +310,7 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        auto item = std::unique_ptr<EDA_ITEM>( Instantiate( type, &m_sheet, &m_symbol, &m_pin ) );
+        auto item = std::unique_ptr<EDA_ITEM>( Instantiate( type ) );
 
         if( item == nullptr )
             continue;
@@ -326,13 +328,13 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
 
                         // Two mirrorings are an identity.
 
-                        if( schItem )
+                        if( schItem != nullptr )
                         {
                             schItem->MirrorVertically( aRef.y );
                             schItem->MirrorVertically( aRef.y );
                         }
 
-                        if( libItem )
+                        if( libItem != nullptr )
                         {
                             libItem->MirrorVertical( aRef );
                             libItem->MirrorVertical( aRef );

@@ -28,6 +28,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/pcbnew
+    ${CMAKE_SOURCE_DIR}/qa/qa_utils
     ${INC_AFTER}
     )
 
