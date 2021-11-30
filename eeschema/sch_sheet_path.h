@@ -183,15 +183,6 @@ public:
 
     int GetVirtualPageNumber() const { return m_virtualPageNumber; }
 
-    /**
-     * Set the sheet instance user definable page number.
-     *
-     * @note User definable page numbers can be any string devoid of white space characters.
-     */
-    void SetPageNumber( const wxString& aPageNumber );
-
-    wxString GetPageNumber() const;
-
     const SCH_SHEET* GetSheet( unsigned aIndex ) const
     {
         SCH_SHEET* retv = nullptr;

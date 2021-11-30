@@ -265,8 +265,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheets()
     const std::vector<LAYER_ID>& orphanSheets = findOrphanSheets();
     SCH_SHEET_PATH               rootPath;
     rootPath.push_back( m_rootSheet );
-    m_rootSheet->AddInstance( rootPath.Path() );
-    m_rootSheet->SetPageNumber( rootPath, wxT( "1" ) );
+    m_rootSheet->SetPageNumber( wxT( "1" ) );
 
     if( orphanSheets.size() > 1 )
     {
@@ -2149,10 +2148,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets(
     sheet->GetScreen()->SetFileName( fn.GetFullPath() );
     aParentSheet.Last()->GetScreen()->Append( sheet );
     instance.push_back( sheet );
-    sheet->AddInstance( instance.Path() );
 
     wxString pageNumStr = wxString::Format( "%d", getSheetNumber( aCadstarSheetID ) );
-    sheet->SetPageNumber( instance, pageNumStr );
+    sheet->SetPageNumber( pageNumStr );
 
     sheet->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 

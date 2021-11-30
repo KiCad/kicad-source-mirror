@@ -138,7 +138,7 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
     m_borderWidth = aSheet.m_borderWidth;
     m_borderColor = aSheet.m_borderColor;
     m_backgroundColor = aSheet.m_backgroundColor;
-    m_instances = aSheet.m_instances;
+    m_pageNumber = aSheet.m_pageNumber;
 
     if( m_screen )
         m_screen->IncRefCount();
@@ -256,7 +256,7 @@ bool SCH_SHEET::ResolveTextVar( wxString* token, int aDepth ) const
         {
             if( sheet.Last() == this )   // Current sheet path found
             {
-                *token = wxString::Format( "%s", sheet.GetPageNumber() );
+                *token = wxString::Format( "%s", sheet.Last()->GetPageNumber() );
                 return true;
             }
         }
@@ -308,7 +308,7 @@ void SCH_SHEET::SwapData( SCH_ITEM* aItem )
     std::swap( m_borderWidth, sheet->m_borderWidth );
     std::swap( m_borderColor, sheet->m_borderColor );
     std::swap( m_backgroundColor, sheet->m_backgroundColor );
-    std::swap( m_instances, sheet->m_instances );
+    std::swap( m_pageNumber, sheet->m_pageNumber );
 }
 
 
@@ -1096,8 +1096,7 @@ SCH_SHEET& SCH_SHEET::operator=( const SCH_ITEM& aItem )
             m_pins.back()->SetParent( this );
         }
 
-        for( const SCH_SHEET_INSTANCE& instance : sheet->m_instances )
-            m_instances.emplace_back( instance );
+        m_pageNumber = m_pageNumber;
     }
 
     return *this;
@@ -1121,60 +1120,15 @@ bool SCH_SHEET::operator <( const SCH_ITEM& aItem ) const
 }
 
 
-bool SCH_SHEET::AddInstance( const KIID_PATH& aSheetPath )
+wxString SCH_SHEET::GetPageNumber() const
 {
-    // a empty sheet path is illegal:
-    wxCHECK( aSheetPath.size() > 0, false );
-
-    wxString path;
-
-    for( const SCH_SHEET_INSTANCE& instance : m_instances )
-    {
-        // if aSheetPath is found, nothing to do:
-        if( instance.m_Path == aSheetPath )
-            return false;
-    }
-
-    SCH_SHEET_INSTANCE instance;
-
-    instance.m_Path = aSheetPath;
-
-    // This entry does not exist: add it with an empty page number.
-    m_instances.emplace_back( instance );
-    return true;
+    return m_pageNumber;
 }
 
 
-wxString SCH_SHEET::GetPageNumber( const SCH_SHEET_PATH& aInstance ) const
+void SCH_SHEET::SetPageNumber( const wxString& aPageNumber )
 {
-    wxString pageNumber;
-    KIID_PATH path = aInstance.Path();
-
-    for( const SCH_SHEET_INSTANCE& instance : m_instances )
-    {
-        if( instance.m_Path == path )
-        {
-            pageNumber = instance.m_PageNumber;
-            break;
-        }
-    }
-
-    return pageNumber;
-}
-
-
-void SCH_SHEET::SetPageNumber( const SCH_SHEET_PATH& aInstance, const wxString& aPageNumber )
-{
-    KIID_PATH path = aInstance.Path();
-
-    for( SCH_SHEET_INSTANCE& instance : m_instances )
-    {
-        if( instance.m_Path == path )
-        {
-            instance.m_PageNumber = aPageNumber;
-            break;
-        }
-    }
+    m_pageNumber = aPageNumber;
 }
 
 

@@ -1767,7 +1767,7 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
 
     wxString msg;
     wxString sheetPath = instance.PathHumanReadable( false );
-    wxString pageNumber = instance.GetPageNumber();
+    wxString pageNumber = instance.Last()->GetPageNumber();
 
     msg.Printf( _( "Enter page number for sheet path%s" ),
                 ( sheetPath.Length() > 20 ) ? "\n" + sheetPath : " " + sheetPath );
@@ -1776,12 +1776,12 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
 
     dlg.SetTextValidator( wxFILTER_ALPHANUMERIC );  // No white space.
 
-    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetValue() == instance.GetPageNumber() )
+    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetValue() == instance.Last()->GetPageNumber() )
         return 0;
 
     m_frame->SaveCopyInUndoList( screen, sheet, UNDO_REDO::CHANGED, false );
 
-    instance.SetPageNumber( dlg.GetValue() );
+    instance.Last()->SetPageNumber( dlg.GetValue() );
 
     if( instance == m_frame->GetCurrentSheet() )
     {

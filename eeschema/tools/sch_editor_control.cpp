@@ -481,7 +481,7 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
         {
             if( afterSheet )
             {
-                if( afterSheet->GetPageNumber() == sheet->GetPageNumber() )
+                if( afterSheet->Last()->GetPageNumber() == sheet->Last()->GetPageNumber() )
                     afterSheet = nullptr;
 
                 continue;
@@ -1541,8 +1541,6 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
     SCH_SHEET_PATH sheetPath = aPastePath;
     sheetPath.push_back( aSheet );
 
-    aSheet->AddInstance( sheetPath.Path() );
-
     wxString pageNum;
 
     if( m_clipboardSheetInstances.count( aClipPath ) > 0 )
@@ -1550,7 +1548,7 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
     else
         pageNum = wxString::Format( "%d", static_cast<int>( aPastedSheetsSoFar->size() ) );
 
-    aSheet->SetPageNumber( sheetPath, pageNum );
+    sheetPath.Last()->SetPageNumber( pageNum );
     aPastedSheetsSoFar->push_back( sheetPath );
 
     if( aSheet->GetScreen() == nullptr )
@@ -1923,7 +1921,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 while( hierarchy.PageNumberExists( pageNum ) )
                     pageNum = wxString::Format( "%d", ++page );
 
-                pastedSheet.SetPageNumber( pageNum );
+                pastedSheet.Last()->SetPageNumber( pageNum );
                 hierarchy.push_back( pastedSheet );
             }
         }

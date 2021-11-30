@@ -179,10 +179,13 @@ void HIERARCHY_NAVIG_DLG::buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemI
     for( SCH_ITEM* aItem : sheetChildren )
     {
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
+
+        wxCHECK2( sheet, continue );
+
         aList->push_back( sheet );
 
         wxString sheetName = formatPageString( sheet->GetFields()[SHEETNAME].GetShownText(),
-                                               sheet->GetPageNumber( *aList ) );
+                                               sheet->GetPageNumber() );
         m_nbsheets++;
         wxTreeItemId menu;
         menu = m_Tree->AppendItem( *aPreviousmenu, sheetName, 0, 1 );
@@ -266,7 +269,7 @@ wxString HIERARCHY_NAVIG_DLG::getRootString()
     SCH_SHEET_PATH rootPath;
     rootPath.push_back( rootSheet );
 
-    return formatPageString ( _( "Root" ), rootSheet->GetPageNumber( rootPath ) );
+    return formatPageString ( _( "Root" ), rootSheet->GetPageNumber() );
 }
 
 

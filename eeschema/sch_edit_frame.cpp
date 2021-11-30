@@ -542,7 +542,7 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 
     GetCurrentSheet().SetVirtualPageNumber( sheet_number );
     GetScreen()->SetVirtualPageNumber( sheet_number );
-    GetScreen()->SetPageNumber( GetCurrentSheet().GetPageNumber() );
+    GetScreen()->SetPageNumber( Schematic().CurrentSheet().Last()->GetPageNumber() );
 }
 
 
@@ -583,8 +583,7 @@ void SCH_EDIT_FRAME::CreateScreens()
     SCH_SHEET_PATH rootSheetPath;
     rootSheetPath.push_back( &m_schematic->Root() );
     m_schematic->RootScreen()->SetPageNumber( wxT( "1" ) );
-    m_schematic->Root().AddInstance( rootSheetPath.Path() );
-    m_schematic->Root().SetPageNumber( rootSheetPath, wxT( "1" ) );
+    m_schematic->Root().SetPageNumber( wxT( "1" ) );
 
     if( GetScreen() == nullptr )
     {
@@ -1396,7 +1395,7 @@ void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
         for( const SCH_SHEET_PATH& sheet : Schematic().GetSheets() )
         {
             if( sheet.LastScreen() == screen )
-                pageNumbers.push_back( sheet.GetPageNumber() );
+                pageNumbers.push_back( sheet.Last()->GetPageNumber() );
         }
 
         for( SCH_ITEM* item : screen->Items() )

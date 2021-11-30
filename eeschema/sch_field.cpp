@@ -627,9 +627,10 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
             std::vector<wxString>        pageListCopy;
 
             pageListCopy.insert( pageListCopy.end(), it->second.begin(), it->second.end() );
+
             if( !Schematic()->Settings().m_IntersheetRefsListOwnPage )
             {
-                wxString currentPage = Schematic()->CurrentSheet().GetPageNumber();
+                wxString currentPage = Schematic()->CurrentSheet().Last()->GetPageNumber();
                 alg::delete_matching( pageListCopy, currentPage );
 
                 if( pageListCopy.empty() )
@@ -645,9 +646,9 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
             for( const SCH_SHEET_PATH& sheet : Schematic()->GetSheets() )
             {
                 if( sheet.size() == 1 )
-                    sheetNames[ sheet.GetPageNumber() ] = _( "<root sheet>" );
+                    sheetNames[ sheet.Last()->GetPageNumber() ] = _( "<root sheet>" );
                 else
-                    sheetNames[ sheet.GetPageNumber() ] = sheet.Last()->GetName();
+                    sheetNames[ sheet.Last()->GetPageNumber() ] = sheet.Last()->GetName();
             }
 
             for( int i = 0; i < (int) pageListCopy.size(); ++i )
