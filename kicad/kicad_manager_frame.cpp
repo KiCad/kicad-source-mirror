@@ -188,7 +188,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     if( ADVANCED_CFG::GetCfg().m_HideVersionFromTitle )
         SetTitle( wxT( "KiCad" ) );
     else
-        SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
+        SetTitle( wxString( "KiCad " ) + GetMajorMinorVersion() );
 
     // Do not let the messages window have initial focus
     m_leftWin->SetFocus();
