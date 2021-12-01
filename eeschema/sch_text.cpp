@@ -59,7 +59,10 @@ bool IncrementLabelMember( wxString& name, int aIncrement )
 
     wxString suffix;
     wxString digits;
-    int      ii = name.Len() - 1;
+    wxString outputFormat;
+    wxString outputNumber;
+    int      ii     = name.Len() - 1;
+    int      dCount = 0;
 
     while( ii >= 0 && !wxIsdigit( name.GetChar( ii ) ) )
     {
@@ -71,6 +74,7 @@ bool IncrementLabelMember( wxString& name, int aIncrement )
     {
         digits = name.GetChar( ii ) + digits;
         ii--;
+        dCount++;
     }
 
     if( digits.IsEmpty() )
@@ -87,7 +91,11 @@ bool IncrementLabelMember( wxString& name, int aIncrement )
         if( number > -1 )
         {
             name.Remove( ii + 1 );
-            name << number << suffix;
+            //write out a format string with correct number of leading zeroes
+            outputFormat.Printf( "%%0%dd", dCount );
+            //write out the number using the format string
+            outputNumber.Printf( outputFormat, number );
+            name << outputNumber << suffix;
             return true;
         }
     }
