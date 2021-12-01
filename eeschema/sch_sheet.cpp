@@ -1096,7 +1096,7 @@ SCH_SHEET& SCH_SHEET::operator=( const SCH_ITEM& aItem )
             m_pins.back()->SetParent( this );
         }
 
-        m_pageNumber = m_pageNumber;
+        m_pageNumber = sheet->m_pageNumber;
     }
 
     return *this;
