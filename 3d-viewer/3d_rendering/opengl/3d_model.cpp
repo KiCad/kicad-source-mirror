@@ -94,6 +94,20 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
                 static_cast<unsigned int>( a3DModel.m_MaterialsSize ) );
 
     auto start_time = std::chrono::high_resolution_clock::now();
+    GLuint buffers[8];
+
+    /**
+     * WARNING: Horrible hack here!
+     * Somehow, buffer values are being shared between pcbnew and the 3d viewer, which then frees
+     * the buffer, resulting in errors in pcbnew.  To resolve this temporarily, we generate
+     * extra buffers in 3dviewer and use the higher numbers.  These are freed on close.
+     * todo: Correctly separate the OpenGL contexts to prevent overlapping buffer vals
+     */
+    glGenBuffers( 6, buffers );
+    m_bbox_vertex_buffer = buffers[2];
+    m_bbox_index_buffer = buffers[3];
+    m_vertex_buffer = buffers[4];
+    m_index_buffer = buffers[5];
 
     // Validate a3DModel pointers
     wxASSERT( a3DModel.m_Materials != nullptr );
@@ -260,7 +274,6 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
     glBufferData( GL_ARRAY_BUFFER, sizeof( VERTEX ) * bbox_tmp_vertices.size(),
                   bbox_tmp_vertices.data(), GL_STATIC_DRAW );
 
-    glGenBuffers( 1, &m_bbox_index_buffer );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_bbox_index_buffer );
 
     if( bbox_tmp_vertices.size() <= std::numeric_limits<GLushort>::max() )
@@ -295,7 +308,6 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
     wxLogTrace( m_logTrace, wxT( "  total %u vertices, %u indices" ),
                 total_vertex_count, total_index_count );
 
-    glGenBuffers( 1, &m_vertex_buffer );
     glBindBuffer( GL_ARRAY_BUFFER, m_vertex_buffer );
     glBufferData( GL_ARRAY_BUFFER, sizeof( VERTEX ) * total_vertex_count,
                   nullptr, GL_STATIC_DRAW );
@@ -355,7 +367,6 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
         vtx_offset += mg.m_vertices.size() * sizeof( VERTEX );
     }
 
-    glGenBuffers( 1, &m_index_buffer );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_index_buffer );
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, idx_size * total_index_count, tmp_idx.get(),
                   GL_STATIC_DRAW );
