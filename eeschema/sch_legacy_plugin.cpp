@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -1112,9 +1112,13 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( FILE_LINE_READER& aReader )
                 // Read PNG data, stored in hexadecimal,
                 // each byte = 2 hexadecimal digits and a space between 2 bytes
                 // and put it in memory stream buffer
+                // Note:
+                // Some old files created by the V4 schematic versions have a extra
+                // "$EndBitmap" at the end of the hexadecimal data. (Probably due to
+                // a bug). So discard it
                 int len = strlen( line );
 
-                for( ; len > 0 && !isspace( *line ); len -= 3, line += 3 )
+                for( ; len > 0 && !isspace( *line ) && '$' != *line; len -= 3, line += 3 )
                 {
                     int value = 0;
 
