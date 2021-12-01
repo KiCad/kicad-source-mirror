@@ -303,7 +303,7 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 
         switch( aItem->Type() )
         {
-        case     PCB_FOOTPRINT_T:
+        case PCB_FOOTPRINT_T:
             try
             {
                 itemPoly = static_cast<FOOTPRINT*>( aItem )->GetBoundingHull();
@@ -317,21 +317,26 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 
             break;
 
-        case     PCB_PAD_T:
-        case     PCB_SHAPE_T:
-        case     PCB_TEXT_T:
-        case     PCB_FP_TEXT_T:
-        case     PCB_FP_SHAPE_T:
-        case     PCB_FP_ZONE_T:
-        case     PCB_TRACE_T:
-        case     PCB_VIA_T:
-        case     PCB_ARC_T:
-        case     PCB_DIMENSION_T:
-        case     PCB_DIM_ALIGNED_T:
-        case     PCB_DIM_LEADER_T:
-        case     PCB_DIM_CENTER_T:
-        case     PCB_DIM_ORTHOGONAL_T:
-        case     PCB_ZONE_T:
+        case PCB_PAD_T:
+        case PCB_MARKER_T:
+        case PCB_VIA_T:
+            FocusOnLocation( focusPt );
+            GetCanvas()->Refresh();
+            return;
+
+        case PCB_SHAPE_T:
+        case PCB_TEXT_T:
+        case PCB_FP_TEXT_T:
+        case PCB_FP_SHAPE_T:
+        case PCB_FP_ZONE_T:
+        case PCB_TRACE_T:
+        case PCB_ARC_T:
+        case PCB_DIMENSION_T:
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_LEADER_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_ORTHOGONAL_T:
+        case PCB_ZONE_T:
             aItem->TransformShapeWithClearanceToPolygon( itemPoly, aLayer, 0, Millimeter2iu( 0.1 ),
                                                          ERROR_INSIDE );
             break;
