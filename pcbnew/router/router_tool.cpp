@@ -1836,6 +1836,24 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                     view()->Hide( drawing, true );
                 }
 
+                for( PAD* pad : footprint->Pads() )
+                {
+                    if( ( pad->GetLayerSet() & LSET::AllCuMask() ).none()
+                            && pad->GetDrillSize().x == 0 )
+                    {
+                        previewItem = static_cast<BOARD_ITEM*>( pad->Clone() );
+                        previewItem->Move( offset );
+
+                        view()->AddToPreview( previewItem );
+                    }
+                    else
+                    {
+                        // Pads with copper or holes are handled by the router
+                    }
+
+                    view()->Hide( pad, true );
+                }
+
                 previewItem = static_cast<BOARD_ITEM*>( footprint->Reference().Clone() );
                 previewItem->Move( offset );
                 view()->AddToPreview( previewItem );
@@ -1899,6 +1917,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
         for( ZONE* zone : footprint->Zones() )
             view()->Hide( zone, false );
+
+        for( PAD* pad : footprint->Pads() )
+            view()->Hide( pad, false );
 
         view()->ClearPreview();
         view()->ShowPreview( false );
