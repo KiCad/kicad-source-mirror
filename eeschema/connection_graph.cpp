@@ -2770,9 +2770,9 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     int           pinCount            = 0;
 
     auto hasPins =
-            []( const CONNECTION_SUBGRAPH* aSubgraph )
+            []( const CONNECTION_SUBGRAPH* aLocSubgraph )
             {
-                for( const SCH_ITEM* item : aSubgraph->m_items )
+                for( const SCH_ITEM* item : aLocSubgraph->m_items )
                 {
                     switch( item->Type() )
                     {

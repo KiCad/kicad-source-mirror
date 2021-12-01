@@ -1186,6 +1186,10 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
                 // Read PNG data, stored in hexadecimal,
                 // each byte = 2 hexadecimal digits and a space between 2 bytes
                 // and put it in memory stream buffer
+                // Note:
+                // Some old files created bu the V4 schematic versions have a extra
+                // "$EndBitmap" at the end of the hexadecimal data. (Probably due to
+                // a bug). So discard it
                 int len = strlen( line );
 
                 for( ; len > 0 && !isspace( *line ) && '$' != *line; len -= 3, line += 3 )
