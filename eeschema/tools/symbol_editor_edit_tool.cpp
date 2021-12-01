@@ -161,7 +161,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 1 )
         rotPoint = item->GetPosition();
     else
-        rotPoint = m_frame->GetNearestGridPosition( mapCoords( selection.GetCenter() ) );
+        rotPoint = m_frame->GetNearestHalfGridPosition( mapCoords( selection.GetCenter() ) );
 
     for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
     {
