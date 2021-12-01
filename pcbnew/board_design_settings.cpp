@@ -1116,9 +1116,7 @@ int BOARD_DESIGN_SETTINGS::GetLayerClass( PCB_LAYER_ID aLayer ) const
 
 int BOARD_DESIGN_SETTINGS::GetDRCEpsilon() const
 {
-    // You can loosen the max epsilon manually but we cap it at the board's inherent
-    // accuracy given by the maximum error when approximating curves
-    return std::max( m_MaxError, Millimeter2iu( ADVANCED_CFG::GetCfg().m_DRCEpsilon ) );
+    return Millimeter2iu( ADVANCED_CFG::GetCfg().m_DRCEpsilon );
 }
 
 

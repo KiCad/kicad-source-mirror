@@ -953,36 +953,18 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
         solid->SetHole( slot );
     }
 
-    auto shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
+    std::shared_ptr<SHAPE> shape = aPad->GetEffectiveShape();
 
-    if( shapes && shapes->Size() == 1 )
+    if( shape->HasIndexableSubshapes() && shape->GetIndexableSubshapeCount() == 1 )
     {
-        solid->SetShape( shapes->Shapes()[0]->Clone() );
+        std::vector<SHAPE*> subshapes;
+        shape->GetIndexableSubshapes( subshapes );
+
+        solid->SetShape( subshapes[0]->Clone() );
     }
     else
     {
-        // TODO: Support PNS hull generation for compound shapes and use the actual shape here
-
-        // NOTE: Because PNS hulls can't handle compound shapes yet, there will always be a
-        // discrepancy between the PNS and the DRC engine in some cases (such as custom shape pads
-        // that use polygons with nonzero width).  No matter where you put the error, this causes
-        // issues, but the "lesser evil" is to allow routing in more cases (and have DRC errors that
-        // need to be cleaned up) vs. having situations that are valid to DRC but can't be routed
-        // because the extra error outside the pad is a clearance violation to the router.
-        //
-        // See https://gitlab.com/kicad/code/kicad/-/issues/9544
-        // and https://gitlab.com/kicad/code/kicad/-/issues/7672
-
-        SHAPE_POLY_SET outline;
-        aPad->TransformShapeWithClearanceToPolygon( outline, UNDEFINED_LAYER, 0, ARC_HIGH_DEF,
-                                                    ERROR_INSIDE );
-
-        SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
-
-        for( auto iter = outline.CIterate( 0 ); iter; iter++ )
-            shape->Append( *iter );
-
-        solid->SetShape( shape );
+        solid->SetShape( shape->Clone() );
     }
 
     return solid;
@@ -1434,30 +1416,30 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
 
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_view );
 
+    static KICAD_T tracksOrVias[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, EOT };
+    static KICAD_T tracks[] = { PCB_TRACE_T, PCB_ARC_T, EOT };
+
     if( aClearance >= 0 )
     {
         pitem->SetClearance( aClearance );
 
         switch( m_dispOptions->m_ShowTrackClearanceMode )
         {
-        case PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE:
-            pitem->ShowTrackClearance( false );
-            pitem->ShowViaClearance( false );
-            break;
         case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS:
         case PCB_DISPLAY_OPTIONS::SHOW_WHILE_ROUTING_OR_DRAGGING:
-            pitem->ShowTrackClearance( true );
-            pitem->ShowViaClearance( true );
+            pitem->ShowClearance( pitem->GetParent()->IsType( tracksOrVias ) );
             break;
 
         case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING:
-            pitem->ShowTrackClearance( !aEdit );
-            pitem->ShowViaClearance( !aEdit );
+            pitem->ShowClearance( pitem->GetParent()->IsType( tracksOrVias ) && !aEdit );
             break;
 
         case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WHILE_ROUTING:
-            pitem->ShowTrackClearance( !aEdit );
-            pitem->ShowViaClearance( false );
+            pitem->ShowClearance( pitem->GetParent()->IsType( tracks ) && !aEdit );
+            break;
+
+        default:
+            pitem->ShowClearance( false );
             break;
         }
     }

@@ -27,6 +27,7 @@
 #include <geometry/shape_circle.h>
 #include <geometry/shape_simple.h>
 #include <geometry/shape_compound.h>
+#include <geometry/shape_poly_set.h>
 
 #include <wx/log.h>
 
@@ -112,9 +113,16 @@ const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, in
         }
         else
         {
-            // fixme - shouldn't happen but one day we should move
-            // TransformShapeWithClearanceToPolygon() to the Geometry Library
-            return SHAPE_LINE_CHAIN();
+            SHAPE_POLY_SET hullSet;
+
+            for( SHAPE* shape : cmpnd->Shapes() )
+            {
+                hullSet.AddOutline( buildHullForPrimitiveShape( shape, aClearance,
+                                                                aWalkaroundThickness ) );
+            }
+
+            hullSet.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            return hullSet.Outline( 0 );
         }
     }
     else
@@ -140,9 +148,16 @@ const SHAPE_LINE_CHAIN SOLID::HoleHull( int aClearance, int aWalkaroundThickness
         }
         else
         {
-            // fixme - shouldn't happen but one day we should move
-            // TransformShapeWithClearanceToPolygon() to the Geometry Library
-            return SHAPE_LINE_CHAIN();
+            SHAPE_POLY_SET hullSet;
+
+            for( SHAPE* shape : cmpnd->Shapes() )
+            {
+                hullSet.AddOutline( buildHullForPrimitiveShape( shape, aClearance,
+                                                                aWalkaroundThickness ) );
+            }
+
+            hullSet.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            return hullSet.Outline( 0 );
         }
     }
     else
