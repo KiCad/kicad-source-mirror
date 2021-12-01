@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-21 21:17+0000\n"
+"PO-Revision-Date: 2021-12-02 21:49+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -6038,7 +6038,7 @@ msgstr "Ustawia punkt bazowy siatki"
 
 #: common/tool/actions.cpp:476
 msgid "Show Grid"
-msgstr "Pokazuje siatkę"
+msgstr "Pokaż siatkę"
 
 #: common/tool/actions.cpp:476
 msgid "Display grid dots or lines in the edit window"
@@ -35906,15 +35906,15 @@ msgstr "Ustawia aktywną w danej chwili parę warstw do umieszczania przelotek"
 
 #: pcbnew/tools/pcb_actions.cpp:1359
 msgid "Tune length of a single track"
-msgstr "Dostraja długość pojedynczej ścieżki"
+msgstr "Dostrój długość pojedynczej ścieżki"
 
 #: pcbnew/tools/pcb_actions.cpp:1366
 msgid "Tune length of a differential pair"
-msgstr "Dostraja długości ścieżek pary różnicowej by pasowały do siebie"
+msgstr "Dostrój długość pary różnicowej"
 
 #: pcbnew/tools/pcb_actions.cpp:1373
 msgid "Tune skew of a differential pair"
-msgstr "Dostrajanie długości ścieżek pary różnicowej"
+msgstr "Wyrównaj długości ścieżek pary różnicowej"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
 msgid "Undo Last Segment"
