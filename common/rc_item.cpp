@@ -419,11 +419,17 @@ bool RC_TREE_MODEL::GetAttr( wxDataViewItem const&   aItem,
     if( node->m_RcItem->GetParent() && node->m_RcItem->GetParent()->IsExcluded() )
     {
         wxColour textColour = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXTEXT );
+        double   brightness = KIGFX::COLOR4D( textColour ).GetBrightness();
 
-        if( KIGFX::COLOR4D( textColour ).GetBrightness() > 0.5 )
-            aAttr.SetColour( textColour.ChangeLightness( heading ? 30 : 35 ) );
+        if( brightness > 0.5 )
+        {
+            int lightness = static_cast<int>( brightness * ( heading ? 50 : 60 ) );
+            aAttr.SetColour( textColour.ChangeLightness( lightness ) );
+        }
         else
+        {
             aAttr.SetColour( textColour.ChangeLightness( heading ? 170 : 165 ) );
+        }
 
         aAttr.SetItalic( true );   // Strikethrough would be better, if wxWidgets supported it
         ret = true;
