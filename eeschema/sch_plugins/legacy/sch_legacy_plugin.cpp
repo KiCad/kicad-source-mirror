@@ -1188,7 +1188,7 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
                 // and put it in memory stream buffer
                 int len = strlen( line );
 
-                for( ; len > 0 && !isspace( *line ); len -= 3, line += 3 )
+                for( ; len > 0 && !isspace( *line ) && '$' != *line; len -= 3, line += 3 )
                 {
                     int value = 0;
 
