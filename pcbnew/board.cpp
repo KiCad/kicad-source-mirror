@@ -221,13 +221,27 @@ void BOARD::IncrementTimeStamp()
 
 std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions()
 {
+    std::shared_ptr<CONNECTIVITY_DATA> conn = GetConnectivity();
+
+    auto setExcluded =
+            [&conn]( PCB_MARKER* aMarker )
+            {
+                if( aMarker->GetMarkerType() == MARKER_BASE::MARKER_RATSNEST )
+                {
+                    const std::shared_ptr<RC_ITEM>& rcItem = aMarker->GetRCItem();
+                    conn->AddExclusion( rcItem->GetMainItemID(), rcItem->GetAuxItemID() );
+                }
+
+                aMarker->SetExcluded( true );
+            };
+
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
         auto i = m_designSettings->m_DrcExclusions.find( marker->Serialize() );
 
         if( i != m_designSettings->m_DrcExclusions.end() )
         {
-            marker->SetExcluded( true );
+            setExcluded( marker );
             m_designSettings->m_DrcExclusions.erase( i );
         }
     }
@@ -240,7 +254,7 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions()
 
         if( marker )
         {
-            marker->SetExcluded( true );
+            setExcluded( marker );
             newMarkers.push_back( marker );
         }
     }

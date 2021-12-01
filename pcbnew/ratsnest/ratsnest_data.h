@@ -64,14 +64,6 @@ public:
     RN_NET();
 
     /**
-     * Set state of the visibility flag.
-     *
-     * @param aEnabled is new state. True if ratsnest for a given net is meant to be displayed,
-     *                 false otherwise.
-     */
-    void SetVisible( bool aEnabled );
-
-    /**
      * Mark ratsnest for given net as 'dirty', i.e. requiring recomputation.
      */
     void MarkDirty() { m_dirty = true; }
@@ -85,14 +77,9 @@ public:
     bool IsDirty() const { return m_dirty; }
 
     /**
-     * Return pointer to a vector of edges that makes ratsnest for a given net.
-     */
-    const std::vector<CN_EDGE> GetUnconnected() const { return m_rnEdges; }
-
-    /**
      * Recompute ratsnest for a net.
      */
-    void Update();
+    void Update( const std::set< std::pair<KIID, KIID> >& aExclusions );
     void Clear();
 
     void AddCluster( std::shared_ptr<CN_CLUSTER> aCluster );
@@ -100,16 +87,18 @@ public:
     unsigned int GetNodeCount() const { return m_nodes.size(); }
 
     const std::vector<CN_EDGE>& GetEdges() const { return m_rnEdges; }
+    std::vector<CN_EDGE>& GetEdges() { return m_rnEdges; }
 
     bool NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode1,
                                CN_ANCHOR_PTR& aNode2 ) const;
 
 protected:
     ///< Recompute ratsnest from scratch.
-    void compute();
+    void compute( const std::set< std::pair<KIID, KIID> >& aExclusions );
 
     ///< Compute the minimum spanning tree using Kruskal's algorithm
-    void kruskalMST( const std::vector<CN_EDGE> &aEdges );
+    void kruskalMST( std::vector<CN_EDGE>& aEdges,
+                     const std::set< std::pair<KIID, KIID> >& aExclusions );
 
     ///< Vector of nodes
     std::multiset<CN_ANCHOR_PTR, CN_PTR_CMP> m_nodes;

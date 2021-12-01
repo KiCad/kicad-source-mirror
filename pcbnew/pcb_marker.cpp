@@ -49,7 +49,27 @@ PCB_MARKER::PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const wxPoint& aPosition
     MARKER_BASE( SCALING_FACTOR, aItem )
 {
     if( m_rcItem )
+    {
         m_rcItem->SetParent( this );
+
+        switch( m_rcItem->GetErrorCode() )
+        {
+        case DRCE_UNCONNECTED_ITEMS:
+            SetMarkerType( MARKER_BASE::MARKER_RATSNEST );
+            break;
+
+        case DRCE_MISSING_FOOTPRINT:
+        case DRCE_DUPLICATE_FOOTPRINT:
+        case DRCE_EXTRA_FOOTPRINT:
+        case DRCE_NET_CONFLICT:
+            SetMarkerType( MARKER_BASE::MARKER_PARITY );
+            break;
+
+        default:
+            SetMarkerType( MARKER_BASE::MARKER_DRC );
+            break;
+        }
+    }
 
     m_Pos = aPosition;
 }
@@ -168,6 +188,12 @@ SEVERITY PCB_MARKER::GetSeverity() const
 
 void PCB_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
 {
+    if( GetMarkerType() == MARKER_RATSNEST )
+    {
+        aCount = 0;
+        return;
+    }
+
     aCount = 2;
 
     aLayers[1] = LAYER_MARKER_SHADOWS;

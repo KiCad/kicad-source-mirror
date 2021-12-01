@@ -31,6 +31,7 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
 #include <drc/drc_rule.h>
+#include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
 
 

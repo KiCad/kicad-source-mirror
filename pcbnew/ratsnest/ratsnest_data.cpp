@@ -107,7 +107,8 @@ private:
 };
 
 
-void RN_NET::kruskalMST( const std::vector<CN_EDGE> &aEdges )
+void RN_NET::kruskalMST( std::vector<CN_EDGE>& aEdges,
+                         const std::set< std::pair<KIID, KIID> >& aExclusions )
 {
     disjoint_set dset( m_nodes.size() );
 
@@ -118,15 +119,20 @@ void RN_NET::kruskalMST( const std::vector<CN_EDGE> &aEdges )
     for( const CN_ANCHOR_PTR& node : m_nodes )
         node->SetTag( i++ );
 
-    for( const CN_EDGE& tmp : aEdges )
+    for( CN_EDGE& tmp : aEdges )
     {
-        int u = tmp.GetSourceNode()->GetTag();
-        int v = tmp.GetTargetNode()->GetTag();
+        const CN_ANCHOR_PTR&  source = tmp.GetSourceNode();
+        const CN_ANCHOR_PTR&  target = tmp.GetTargetNode();
 
-        if( dset.unite( u, v ) )
+        if( dset.unite( source->GetTag(), target->GetTag() ) )
         {
             if( tmp.GetWeight() > 0 )
+            {
+                std::pair<KIID, KIID> ids = { source->Parent()->m_Uuid, target->Parent()->m_Uuid };
+                tmp.SetVisible( aExclusions.count( ids ) == 0 );
+
                 m_rnEdges.push_back( tmp );
+            }
         }
     }
 }
@@ -171,7 +177,7 @@ public:
         m_allNodes.insert( aNode );
     }
 
-    void Triangulate( std::vector<CN_EDGE>& mstEdges)
+    void Triangulate( std::vector<CN_EDGE>& mstEdges )
     {
         std::vector<double>                       node_pts;
         std::vector<CN_ANCHOR_PTR>                anchors;
@@ -273,7 +279,7 @@ RN_NET::RN_NET() : m_dirty( true )
 }
 
 
-void RN_NET::compute()
+void RN_NET::compute( const std::set< std::pair<KIID, KIID> >& aExclusions )
 {
     // Special cases do not need complicated algorithms (actually, it does not work well with
     // the Delaunay triangulator)
@@ -287,9 +293,14 @@ void RN_NET::compute()
             auto last = ++m_nodes.begin();
 
             // There can be only one possible connection, but it is missing
-            CN_EDGE edge ( *m_nodes.begin(), *last );
-            edge.GetSourceNode()->SetTag( 0 );
-            edge.GetTargetNode()->SetTag( 1 );
+            CN_EDGE               edge( *m_nodes.begin(), *last );
+            const CN_ANCHOR_PTR&  source = edge.GetSourceNode();
+            const CN_ANCHOR_PTR&  target = edge.GetTargetNode();
+            std::pair<KIID, KIID> ids = { source->Parent()->m_Uuid, target->Parent()->m_Uuid };
+
+            source->SetTag( 0 );
+            target->SetTag( 1 );
+            edge.SetVisible( aExclusions.count( ids ) == 0 );
 
             m_rnEdges.push_back( edge );
         }
@@ -329,7 +340,7 @@ void RN_NET::compute()
 #ifdef PROFILE
     PROF_COUNTER cnt2("mst");
 #endif
-    kruskalMST( triangEdges );
+    kruskalMST( triangEdges, aExclusions );
 #ifdef PROFILE
     cnt2.Show();
 #endif
@@ -337,9 +348,9 @@ void RN_NET::compute()
 
 
 
-void RN_NET::Update()
+void RN_NET::Update( const std::set< std::pair<KIID, KIID> >& aExclusions )
 {
-    compute();
+    compute( aExclusions );
 
     m_dirty = false;
 }
@@ -462,8 +473,3 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
 }
 
 
-void RN_NET::SetVisible( bool aEnabled )
-{
-    for( CN_EDGE& edge : m_rnEdges )
-        edge.SetVisible( aEnabled );
-}

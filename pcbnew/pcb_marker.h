@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2018 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
 
 
 #include <board_item.h>
-#include <drc/drc_item.h>
+#include <rc_item.h>
 #include <marker_base.h>
 
 class DRC_ITEM;
@@ -74,7 +74,10 @@ public:
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override
     {
-        return HitTestMarker( aPosition, aAccuracy );
+        if( GetMarkerType() == MARKER_RATSNEST )
+            return false;
+        else
+            return HitTestMarker( aPosition, aAccuracy );
     }
 
     EDA_ITEM* Clone() const override

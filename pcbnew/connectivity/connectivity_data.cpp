@@ -150,10 +150,10 @@ void CONNECTIVITY_DATA::updateRatsnest()
     std::vector<std::future<size_t>> returns( parallelThreadCount );
 
     auto update_lambda =
-            [&nextNet, &dirty_nets]() -> size_t
+            [this, &nextNet, &dirty_nets]() -> size_t
             {
                 for( size_t i = nextNet++; i < dirty_nets.size(); i = nextNet++ )
-                    dirty_nets[i]->Update();
+                    dirty_nets[i]->Update( m_exclusions );
 
                 return 1;
             };
@@ -405,12 +405,11 @@ unsigned int CONNECTIVITY_DATA::GetUnconnectedCount() const
         if( !net )
             continue;
 
-        const std::vector<CN_EDGE>& edges = net->GetUnconnected();
-
-        if( edges.empty() )
-            continue;
-
-        unconnected += edges.size();
+        for( const CN_EDGE& edge : net->GetEdges() )
+        {
+            if( edge.IsVisible() )
+                ++unconnected;
+        }
     }
 
     return unconnected;
@@ -801,6 +800,48 @@ void CONNECTIVITY_DATA::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 }
 
 
+void CONNECTIVITY_DATA::AddExclusion( const KIID& aBoardItemId1, const KIID& aBoardItemId2 )
+{
+    m_exclusions.insert( std::pair<KIID, KIID>( aBoardItemId1, aBoardItemId2 ) );
+    m_exclusions.insert( std::pair<KIID, KIID>( aBoardItemId2, aBoardItemId1 ) );
+
+    for( RN_NET* rnNet : m_nets )
+    {
+        for( CN_EDGE& edge : rnNet->GetEdges() )
+        {
+            if( ( edge.GetSourceNode()->Parent()->m_Uuid == aBoardItemId1
+                    && edge.GetTargetNode()->Parent()->m_Uuid == aBoardItemId2 )
+             || ( edge.GetSourceNode()->Parent()->m_Uuid == aBoardItemId2
+                    && edge.GetTargetNode()->Parent()->m_Uuid == aBoardItemId1 ) )
+            {
+                edge.SetVisible( false );
+            }
+        }
+    }
+}
+
+
+void CONNECTIVITY_DATA::RemoveExclusion( const KIID& aBoardItemId1, const KIID& aBoardItemId2 )
+{
+    m_exclusions.erase( std::pair<KIID, KIID>( aBoardItemId1, aBoardItemId2 ) );
+    m_exclusions.erase( std::pair<KIID, KIID>( aBoardItemId2, aBoardItemId1 ) );
+
+    for( RN_NET* rnNet : m_nets )
+    {
+        for( CN_EDGE& edge : rnNet->GetEdges() )
+        {
+            if( ( edge.GetSourceNode()->Parent()->m_Uuid == aBoardItemId1
+                    && edge.GetTargetNode()->Parent()->m_Uuid == aBoardItemId2 )
+             || ( edge.GetSourceNode()->Parent()->m_Uuid == aBoardItemId2
+                    && edge.GetTargetNode()->Parent()->m_Uuid == aBoardItemId1 ) )
+            {
+                edge.SetVisible( true );
+            }
+        }
+    }
+}
+
+
 const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<BOARD_ITEM*> aItems )
 {
     std::set<int> nets;
@@ -879,9 +920,9 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( FOOTPRINT
 
     for( const auto& netcode : nets )
     {
-        const auto& net = GetRatsnestForNet( netcode );
+        RN_NET* net = GetRatsnestForNet( netcode );
 
-        for( const auto& edge : net->GetEdges() )
+        for( const CN_EDGE& edge : net->GetEdges() )
         {
             auto srcNode = edge.GetSourceNode();
             auto dstNode = edge.GetTargetNode();

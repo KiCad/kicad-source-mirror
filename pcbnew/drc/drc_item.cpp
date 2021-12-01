@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2015-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2021 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <board.h>
+#include <pcb_marker.h>
 
 
 // These, being statically-defined, require specialized I18N handling.  We continue to
@@ -380,3 +381,66 @@ wxString DRC_ITEM::GetViolatingRuleDesc() const
         return _( "Local override" );
 }
 
+
+void DRC_ITEMS_PROVIDER::SetSeverities( int aSeverities )
+{
+    m_severities = aSeverities;
+
+    m_filteredMarkers.clear();
+
+    for( PCB_MARKER* marker : m_board->Markers() )
+    {
+        if( marker->GetMarkerType() != m_markerType )
+            continue;
+
+        if( marker->GetSeverity() & m_severities )
+            m_filteredMarkers.push_back( marker );
+    }
+}
+
+
+int DRC_ITEMS_PROVIDER::GetCount( int aSeverity ) const
+{
+    if( aSeverity < 0 )
+        return m_filteredMarkers.size();
+
+    int count = 0;
+
+    for( PCB_MARKER* marker : m_board->Markers() )
+    {
+        if( marker->GetMarkerType() != m_markerType )
+            continue;
+
+        if( marker->GetSeverity() == aSeverity )
+            count++;
+    }
+
+    return count;
+}
+
+
+std::shared_ptr<RC_ITEM> DRC_ITEMS_PROVIDER::GetItem( int aIndex ) const
+{
+    PCB_MARKER* marker = m_filteredMarkers[ aIndex ];
+
+    return marker ? marker->GetRCItem() : nullptr;
+}
+
+
+void DRC_ITEMS_PROVIDER::DeleteItem( int aIndex, bool aDeep )
+{
+    PCB_MARKER* marker = m_filteredMarkers[ aIndex ];
+    m_filteredMarkers.erase( m_filteredMarkers.begin() + aIndex );
+
+    if( aDeep )
+        m_board->Delete( marker );
+}
+
+
+void DRC_ITEMS_PROVIDER::DeleteAllItems( bool aIncludeExclusions, bool aDeep )
+{
+    // Filtered list was already handled through DeleteItem() by the tree control
+
+    if( aDeep )
+        m_board->DeleteMARKERs( true, aIncludeExclusions );
+}

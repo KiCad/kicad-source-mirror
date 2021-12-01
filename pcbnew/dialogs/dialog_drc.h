@@ -52,7 +52,7 @@ public:
     void SetFootprintTestsRun() { m_footprintTestsRun = true; }
 
     void SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider );
-    void SetUnconnectedProvider( RC_ITEMS_PROVIDER* aProvider );
+    void SetRatsnestProvider( RC_ITEMS_PROVIDER* aProvider );
     void SetFootprintsProvider( RC_ITEMS_PROVIDER* aProvider );
 
     void PrevMarker();

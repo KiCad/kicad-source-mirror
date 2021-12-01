@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,10 +26,13 @@
 #define DRC_ITEM_H
 
 #include <rc_item.h>
+#include <marker_base.h>
 
 class PCB_BASE_FRAME;
 class DRC_RULE;
 class DRC_TEST_PROVIDER;
+class PCB_MARKER;
+class BOARD;
 
 enum PCB_DRC_CODE {
     DRCE_FIRST = 1,
@@ -197,5 +200,35 @@ private:
     DRC_RULE*          m_violatingRule = nullptr;
     DRC_TEST_PROVIDER* m_violatingTest = nullptr;
 };
+
+
+class DRC_ITEMS_PROVIDER : public RC_ITEMS_PROVIDER
+{
+public:
+    DRC_ITEMS_PROVIDER( BOARD* aBoard, MARKER_BASE::TYPEMARKER aMarkerType ) :
+            m_board( aBoard ),
+            m_markerType( aMarkerType ),
+            m_severities( 0 )
+    {
+    }
+
+    void SetSeverities( int aSeverities ) override;
+
+    int GetCount( int aSeverity = -1 ) const override;
+
+    std::shared_ptr<RC_ITEM> GetItem( int aIndex ) const override;
+
+    void DeleteItem( int aIndex, bool aDeep ) override;
+
+    void DeleteAllItems( bool aIncludeExclusions, bool aDeep ) override;
+
+private:
+    BOARD*                   m_board;
+    MARKER_BASE::TYPEMARKER  m_markerType;
+
+    int                      m_severities;
+    std::vector<PCB_MARKER*> m_filteredMarkers;
+};
+
 
 #endif      // DRC_ITEM_H

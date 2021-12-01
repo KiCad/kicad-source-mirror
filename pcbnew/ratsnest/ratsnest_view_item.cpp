@@ -172,10 +172,10 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         else
             gal->SetStrokeColor( color );  // using the default ratsnest color for not highlighted
 
-        for( const CN_EDGE& edge : net->GetUnconnected() )
+        for( const CN_EDGE& edge : net->GetEdges() )
         {
-            //if ( !edge.IsVisible() )
-            //    continue;
+            if( !edge.IsVisible() )
+                continue;
 
             const CN_ANCHOR_PTR& sourceNode = edge.GetSourceNode();
             const CN_ANCHOR_PTR& targetNode = edge.GetTargetNode();

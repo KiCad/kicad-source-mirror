@@ -297,6 +297,9 @@ public:
         return m_netclassMap;
     }
 
+    void AddExclusion( const KIID& aBoardItemId1, const KIID& aBoardItemId2 );
+    void RemoveExclusion( const KIID& aBoardItemId1, const KIID& aBoardItemId2 );
+
 #ifndef SWIG
     const std::vector<CN_EDGE> GetRatsnestForItems( const std::vector<BOARD_ITEM*> aItems );
 
@@ -325,6 +328,9 @@ private:
 
     /// Used to suppress ratsnest calculations on dynamic ratsnests
     bool                            m_skipRatsnest = false;
+
+    /// Ratsnest lines that have been excluded in DRC
+    std::set<std::pair<KIID, KIID>> m_exclusions;
 
     KISPINLOCK                      m_lock;
 

@@ -24,6 +24,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <eda_item_test_utils.h>
 #include <core/typeinfo.h>
+#include <drc/drc_item.h>
 
 // Code under test
 #include <board.h>

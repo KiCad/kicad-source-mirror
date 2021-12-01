@@ -52,7 +52,9 @@ public:
     enum TYPEMARKER {
         MARKER_UNSPEC,
         MARKER_ERC,
-        MARKER_PCB,
+        MARKER_DRC,
+        MARKER_RATSNEST,
+        MARKER_PARITY,
         MARKER_SIMUL
     };
 

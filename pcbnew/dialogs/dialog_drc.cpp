@@ -29,6 +29,8 @@
 #include <kiface_base.h>
 #include <macros.h>
 #include <pad.h>
+#include <drc/drc_item.h>
+#include <connectivity/connectivity_data.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
@@ -309,7 +311,7 @@ void DIALOG_DRC::SetMarkersProvider( RC_ITEMS_PROVIDER* aProvider )
 }
 
 
-void DIALOG_DRC::SetUnconnectedProvider( class RC_ITEMS_PROVIDER * aProvider )
+void DIALOG_DRC::SetRatsnestProvider( class RC_ITEMS_PROVIDER * aProvider )
 {
     m_unconnectedItemsProvider = aProvider;
     m_unconnectedTreeModel->SetProvider( m_unconnectedItemsProvider );
@@ -451,11 +453,12 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     if( !node )
         return;
 
-    std::shared_ptr<RC_ITEM>  rcItem = node->m_RcItem;
-    DRC_ITEM*                 drcItem = static_cast<DRC_ITEM*>( rcItem.get() );
-    wxString  listName;
-    wxMenu    menu;
-    wxString  msg;
+    std::shared_ptr<RC_ITEM>           rcItem = node->m_RcItem;
+    DRC_ITEM*                          drcItem = static_cast<DRC_ITEM*>( rcItem.get() );
+    std::shared_ptr<CONNECTIVITY_DATA> conn = m_currentBoard->GetConnectivity();
+    wxString                           listName;
+    wxMenu                             menu;
+    wxString                           msg;
 
     switch( bds().m_DRCSeverities[ rcItem->GetErrorCode() ] )
     {
@@ -527,12 +530,19 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     {
     case 1:
     {
-        PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( node->m_RcItem->GetParent() );
+        PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( rcItem->GetParent() );
 
         if( marker )
         {
             marker->SetExcluded( false );
-            m_frame->GetCanvas()->GetView()->Update( marker );
+
+            if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
+                conn->RemoveExclusion( drcItem->GetMainItemID(), drcItem->GetAuxItemID() );
+
+            if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
+                m_frame->GetCanvas()->RedrawRatsnest();
+            else
+                m_frame->GetCanvas()->GetView()->Update( marker );
 
             // Update view
             static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
@@ -544,12 +554,19 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     case 2:
     {
-        PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( node->m_RcItem->GetParent() );
+        PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( rcItem->GetParent() );
 
         if( marker )
         {
             marker->SetExcluded( true );
-            m_frame->GetCanvas()->GetView()->Update( marker );
+
+            if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
+                conn->AddExclusion( drcItem->GetMainItemID(), drcItem->GetAuxItemID() );
+
+            if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
+                m_frame->GetCanvas()->RedrawRatsnest();
+            else
+                m_frame->GetCanvas()->GetView()->Update( marker );
 
             // Update view
             if( m_severities & RPT_SEVERITY_EXCLUSION )
@@ -646,8 +663,13 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
                 markers.erase( markers.begin() + i );
             }
             else
+            {
                 ++i;
+            }
         }
+
+        if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
+            m_frame->GetCanvas()->RedrawRatsnest();
 
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markersProvider );

@@ -27,7 +27,7 @@
 #include <tools/pcb_actions.h>
 #include <footprint.h>
 #include <pcb_marker.h>
-#include <drc/drc_results_provider.h>
+#include <drc/drc_item.h>
 #include <footprint_edit_frame.h>
 #include <convert_shape_list_to_polygon.h>
 #include <tools/footprint_editor_control.h>
@@ -91,7 +91,7 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     FOOTPRINT* footprint = board->GetFirstFootprint();
     wxString   msg;
 
-    SetMarkersProvider( new BOARD_DRC_ITEMS_PROVIDER( board ) );
+    SetMarkersProvider( new DRC_ITEMS_PROVIDER( board, MARKER_BASE::MARKER_DRC ) );
 
     deleteAllMarkers();
 
@@ -147,7 +147,7 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     footprint->CheckFootprintTHPadNoHoles( &tstHoleInTHPad );
     m_checksRun = true;
 
-    SetMarkersProvider( new BOARD_DRC_ITEMS_PROVIDER( board ) );
+    SetMarkersProvider( new DRC_ITEMS_PROVIDER( board, MARKER_BASE::MARKER_DRC ) );
 
     refreshEditor();
 }
