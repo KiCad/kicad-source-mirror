@@ -41,7 +41,6 @@ enum PNS_MODE
     RM_MarkObstacles = 0,   ///< Ignore collisions, mark obstacles
     RM_Shove,               ///< Only shove
     RM_Walkaround,          ///< Only walk around
-    RM_Smart                ///< Guess what's better, try to make least mess on the PCB
 };
 
 ///< Optimization effort.

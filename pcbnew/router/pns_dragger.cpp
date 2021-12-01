@@ -717,21 +717,10 @@ bool DRAGGER::Drag( const VECTOR2I& aP )
     {
         switch( m_currentMode )
         {
-        case RM_MarkObstacles:
-            ret = dragMarkObstacles( aP );
-            break;
-
-        case RM_Shove:
-        case RM_Smart:
-            ret = dragShove( aP );
-            break;
-
-        case RM_Walkaround:
-            ret = dragWalkaround( aP );
-            break;
-
-        default:
-            break;
+        case RM_MarkObstacles:   ret = dragMarkObstacles( aP );   break;
+        case RM_Shove:           ret = dragShove( aP );           break;
+        case RM_Walkaround:      ret = dragWalkaround( aP );      break;
+        default:                                                  break;
         }
     }
 

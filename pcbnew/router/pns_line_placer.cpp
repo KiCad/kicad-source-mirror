@@ -1143,7 +1143,7 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
     NODE *n;
 
-    if ( Settings().Mode() == PNS::RM_Shove || Settings().Mode() == PNS::RM_Smart )
+    if ( Settings().Mode() == PNS::RM_Shove )
         n = m_shove->CurrentNode();
     else
         n = m_currentNode;
@@ -1452,7 +1452,7 @@ bool LINE_PLACER::UnfixRoute()
     m_shove->RewindSpringbackTo( m_currentNode );
     m_shove->UnlockSpringbackNode( m_currentNode );
 
-    if( Settings().Mode() == PNS::RM_Shove || Settings().Mode() == PNS::RM_Smart )
+    if( Settings().Mode() == PNS::RM_Shove )
     {
         m_currentNode = m_shove->CurrentNode();
         m_currentNode->KillChildren();
@@ -1472,7 +1472,7 @@ bool LINE_PLACER::HasPlacedAnything() const
 
 bool LINE_PLACER::CommitPlacement()
 {
-    if( Settings().Mode() == PNS::RM_Shove || Settings().Mode() == PNS::RM_Smart )
+    if( Settings().Mode() == PNS::RM_Shove )
     {
         m_shove->RewindToLastLockedNode();
         m_lastNode = m_shove->CurrentNode();
