@@ -834,6 +834,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
             {
                 EDA_ITEMS drag_items{ item };
                 line->ClearFlags();
+                line->SetFlags( SELECTED );
                 line->SetFlags( flags[ii] );
                 getConnectedDragItems( line, pts[ii], drag_items );
                 std::set<EDA_ITEM*> unique_items( drag_items.begin(), drag_items.end() );
