@@ -74,14 +74,9 @@ public:
         m_clearance = aClearance;
     }
 
-    void ShowTrackClearance( bool aEnabled )
+    void ShowClearance( bool aEnabled )
     {
-        m_showTrackClearance = aEnabled;
-    }
-
-    void ShowViaClearance( bool aEnabled )
-    {
-        m_showViaClearance = aEnabled;
+        m_showClearance = aEnabled;
     }
 
 #if defined(DEBUG)
@@ -128,9 +123,7 @@ private:
     int          m_layer;
     int          m_originLayer;
     int          m_clearance;
-
-    bool         m_showTrackClearance;
-    bool         m_showViaClearance;
+    bool         m_showClearance;
 
     // fixme: shouldn't this go to VIEW?
     static const int ClearanceOverlayDepth;
