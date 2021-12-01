@@ -48,11 +48,13 @@ public:
     BOARD                     m_board;
     FOOTPRINT                 m_footprint;
     std::shared_ptr<DRC_ITEM> m_drcItem;
+    PCB_TEXT                  m_text;
 
     TEST_BOARD_ITEM_FIXTURE() :
             m_board(),
             m_footprint( &m_board ),
-            m_drcItem( DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD ) )
+            m_drcItem( DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD ) ),
+            m_text( &m_board )
     {
     }
 
@@ -72,28 +74,44 @@ public:
         case PCB_TEXT_T:           return new PCB_TEXT( &m_board );
         case PCB_FP_TEXT_T:        return new FP_TEXT( &m_footprint );
         case PCB_FP_SHAPE_T:       return new FP_SHAPE( &m_footprint );
-        //case PCB_FP_ZONE_T:      return new FP_ZONE( &m_footprint ); // FIXME: Fatal error
-        case PCB_FP_ZONE_T:        return nullptr;
+        case PCB_FP_ZONE_T:
+        {
+            FP_ZONE* fpZone = new FP_ZONE( &m_footprint );
+
+            fpZone->AppendCorner( wxPoint( Millimeter2iu( -100 ), Millimeter2iu( -50 ) ), -1 );
+            fpZone->AppendCorner( wxPoint( Millimeter2iu( -100 ), Millimeter2iu( 50 ) ), -1 );
+            fpZone->AppendCorner( wxPoint( Millimeter2iu( 100 ), Millimeter2iu( 50 ) ), -1 );
+            fpZone->AppendCorner( wxPoint( Millimeter2iu( 100 ), Millimeter2iu( -50 ) ), -1 );
+
+            return fpZone;
+        }
+
         case PCB_TRACE_T:          return new PCB_TRACK( &m_board );
         case PCB_VIA_T:            return new PCB_VIA( &m_board );
         case PCB_ARC_T:            return new PCB_ARC( &m_board );
-        //case PCB_MARKER_T:       return new PCB_MARKER( m_drcItem, wxPoint( 0, 0 ) );
-        case PCB_MARKER_T:         return nullptr; // FIXME: Segfault
+        case PCB_MARKER_T:         return new PCB_MARKER( m_drcItem, wxPoint( 0, 0 ) );
         case PCB_DIM_ALIGNED_T:    return new PCB_DIM_ALIGNED( &m_board );
         case PCB_DIM_LEADER_T:     return new PCB_DIM_LEADER( &m_board );
         case PCB_DIM_CENTER_T:     return new PCB_DIM_CENTER( &m_board );
         case PCB_DIM_ORTHOGONAL_T: return new PCB_DIM_ORTHOGONAL( &m_board );
         case PCB_TARGET_T:         return new PCB_TARGET( &m_board );
-        //case PCB_ZONE_T:         return new ZONE( &m_board ); // FIXME: Fatal error
-        case PCB_ZONE_T:           return nullptr;
+        case PCB_ZONE_T:
+        {
+            ZONE* zone = new ZONE( &m_board );
+
+            zone->AppendCorner( wxPoint( Millimeter2iu( -100 ), Millimeter2iu( -50 ) ), -1 );
+            zone->AppendCorner( wxPoint( Millimeter2iu( -100 ), Millimeter2iu( 50 ) ), -1 );
+            zone->AppendCorner( wxPoint( Millimeter2iu( 100 ), Millimeter2iu( 50 ) ), -1 );
+            zone->AppendCorner( wxPoint( Millimeter2iu( 100 ), Millimeter2iu( -50 ) ), -1 );
+
+            return zone;
+        }
         case PCB_GROUP_T:
         {
-            static PCB_TEXT text( &m_board );
-
             PCB_GROUP* group = new PCB_GROUP( &m_board );
 
             // Group position only makes sense if there's at least one item in the group.
-            group->AddItem( &text );
+            group->AddItem( &m_text );
 
             return group;
         }
