@@ -37,11 +37,6 @@
           "type": "STRING"
         },
         {
-          "name": "KICAD_USE_OCE",
-          "value": "OFF",
-          "type": "STRING"
-        },
-        {
           "name": "KICAD_USE_OCC",
           "value": "ON",
           "type": "BOOL"
@@ -73,11 +68,6 @@
         {
           "name": "KICAD_SPICE",
           "value": "ON",
-          "type": "STRING"
-        },
-        {
-          "name": "KICAD_USE_OCE",
-          "value": "OFF",
           "type": "STRING"
         },
         {
@@ -115,11 +105,6 @@
           "type": "STRING"
         },
         {
-          "name": "KICAD_USE_OCE",
-          "value": "OFF",
-          "type": "STRING"
-        },
-        {
           "name": "KICAD_USE_OCC",
           "value": "ON",
           "type": "BOOL"
@@ -151,11 +136,6 @@
         {
           "name": "KICAD_SPICE",
           "value": "ON",
-          "type": "STRING"
-        },
-        {
-          "name": "KICAD_USE_OCE",
-          "value": "OFF",
           "type": "STRING"
         },
         {
@@ -199,11 +179,6 @@
         },
         {
           "name": "KICAD_SPICE",
-          "value": "ON",
-          "type": "STRING"
-        },
-        {
-          "name": "KICAD_USE_OCE",
           "value": "ON",
           "type": "STRING"
         },

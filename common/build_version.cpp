@@ -36,7 +36,7 @@
 extern std::string GetKicadCurlVersion();
 extern std::string GetCurlLibVersion();
 
-#if defined( KICAD_USE_OCC ) | defined( KICAD_USE_OCE )
+#if defined( KICAD_USE_OCC )
 #include <Standard_Version.hxx>
 #endif
 
@@ -179,10 +179,6 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << indent4 << "OCC: " << OCC_VERSION_COMPLETE << eol;
 #endif
 
-#ifdef KICAD_USE_OCE
-    aMsg << indent4 << "OCE: " << OCC_VERSION_COMPLETE << eol;
-#endif
-
     aMsg << indent4 << "Curl: " << GetCurlLibVersion() << eol;
 
 #if defined( KICAD_SPICE )
@@ -222,10 +218,6 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 
     // Add build settings config (build options):
     aMsg << "Build settings:" << eol;
-
-#ifdef KICAD_USE_OCE
-    aMsg << indent4 << "KICAD_USE_OCE=" << ON;
-#endif
 
 #ifdef KICAD_USE_OCC
     aMsg << indent4 << "KICAD_USE_OCC=" << ON;

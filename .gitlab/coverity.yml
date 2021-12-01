@@ -65,7 +65,6 @@ Coverity:
       -DKICAD_SCRIPTING_WXPYTHON=ON
       -DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON
       -DKICAD_SCRIPTING_ACTION_MENU=ON
-      -DKICAD_USE_OCE=OFF
       -DKICAD_USE_OCC=ON
       -DKICAD_SPICE=ON
     - coverity/bin/cov-build --dir cov-int make -j8
