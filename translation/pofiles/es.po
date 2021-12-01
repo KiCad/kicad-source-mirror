@@ -8,13 +8,14 @@
 # VicSanRoPe <vicsanrope@protonmail.com>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
 # Augusto Fraga Giachero <afg@augustofg.net>, 2021.
+# ferdymercury <fernando.hueso@uv.es>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
 "PO-Revision-Date: 2021-12-02 21:49+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Last-Translator: ferdymercury <fernando.hueso@uv.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -1030,7 +1031,7 @@ msgstr "Rotación"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:111
 msgid "Offset"
-msgstr "Desfase"
+msgstr "Desplazamiento"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:156
 msgid "Opacity"
