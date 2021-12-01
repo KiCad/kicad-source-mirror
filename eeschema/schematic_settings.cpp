@@ -57,10 +57,6 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     int defaultLineThickness =
             appSettings ? appSettings->m_Drawing.default_line_thickness : DEFAULT_LINE_WIDTH_MILS;
-    int defaultWireThickness =
-            appSettings ? appSettings->m_Drawing.default_wire_thickness : DEFAULT_WIRE_WIDTH_MILS;
-    int defaultBusThickness =
-            appSettings ? appSettings->m_Drawing.default_bus_thickness : DEFAULT_BUS_WIDTH_MILS;
     int defaultTextSize =
             appSettings ? appSettings->m_Drawing.default_text_size : DEFAULT_TEXT_SIZE;
     int defaultPinSymbolSize =
