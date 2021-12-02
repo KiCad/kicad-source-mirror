@@ -32,6 +32,7 @@
 #include <symbol_editor/symbol_editor_settings.h>
 #include <trigo.h>
 #include <string_utils.h>
+#include <basic_gal.h>
 #include "sch_painter.h"
 
 // small margin in internal units between the pin text and the pin line
@@ -1063,10 +1064,16 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
 const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly ) const
 {
+    const KIGFX::STROKE_FONT& font = basic_gal.GetStrokeFont();
+
     EDA_RECT       bbox;
     wxPoint        begin;
     wxPoint        end;
     int            nameTextOffset = 0;
+    int            nameTextLength = 0;
+    int            nameTextHeight = 0;
+    int            numberTextLength = 0;
+    int            numberTextHeight = 0;
     wxString       name = GetShownName();
     wxString       number = GetShownNumber();
     bool           showName = !name.IsEmpty();
@@ -1094,10 +1101,14 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     }
 
     // First, calculate boundary box corners position
-    int numberTextLength = showNum ? m_numTextSize * number.Len() : 0;
+    if( showNum )
+    {
+        VECTOR2D fontSize( m_numTextSize, m_numTextSize );
+        VECTOR2D numSize = font.ComputeStringBoundaryLimits( number, fontSize, GetPenWidth() );
 
-    // Actual text height is bigger than text size
-    int numberTextHeight  = showNum ? KiROUND( m_numTextSize * 1.1 ) : 0;
+        numberTextLength = KiROUND( numSize.x );
+        numberTextHeight = KiROUND( numSize.y );
+    }
 
     if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
         minsizeV = std::max( TARGET_PIN_RADIUS, externalPinDecoSize( nullptr, *this ) );
@@ -1105,21 +1116,16 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     // calculate top left corner position
     // for the default pin orientation (PIN_RIGHT)
     begin.y = std::max( minsizeV, numberTextHeight + Mils2iu( PIN_TEXT_MARGIN ) );
-    begin.x = std::min( 0, m_length - (numberTextLength / 2) );
+    begin.x = std::min( 0, m_length - ( numberTextLength / 2) );
 
     // calculate bottom right corner position and adjust top left corner position
-    int nameTextLength = 0;
-    int nameTextHeight = 0;
-
     if( showName )
     {
-        int length = name.Len();
+        VECTOR2D fontSize( m_nameTextSize, m_nameTextSize );
+        VECTOR2D nameSize = font.ComputeStringBoundaryLimits( name, fontSize, GetPenWidth() );
 
-        // TODO: exclude markup characters!
-        nameTextLength = ( m_nameTextSize * length ) + nameTextOffset;
-
-        // Actual text height are bigger than text size
-        nameTextHeight = KiROUND( m_nameTextSize * 1.1 ) + Mils2iu( PIN_TEXT_MARGIN );
+        nameTextLength = KiROUND( nameSize.x ) + nameTextOffset;
+        nameTextHeight = KiROUND( nameSize.y ) + Mils2iu( PIN_TEXT_MARGIN );
     }
 
     if( nameTextOffset )        // for values > 0, pin name is inside the body
