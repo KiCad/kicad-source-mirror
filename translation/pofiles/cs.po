@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-28 23:29+0000\n"
+"PO-Revision-Date: 2021-12-02 21:48+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -17849,14 +17849,14 @@ msgid "Highlight"
 msgstr "Zvýraznění"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Component '%s'"
-msgstr "Zvýraznit položky komponenty \"%s\""
+msgstr "Zvýraznit položky komponenty '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:78
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Items of Net '%s'"
-msgstr "Zvýraznit položky sítě \"%s\""
+msgstr "Zvýraznit položky sítě '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:88
 #, fuzzy, c-format
@@ -18367,7 +18367,6 @@ msgid "Downloaded %lld/%lld Kb"
 msgstr "Staženo %lld/%lld Kb"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
-#, fuzzy
 msgid "Download Progress"
 msgstr "Postup stahování"
 
@@ -18376,7 +18375,6 @@ msgid "Waiting..."
 msgstr "Čekání..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
-#, fuzzy
 msgid "Overall Progress"
 msgstr "Celkový postup"
 
@@ -18385,9 +18383,8 @@ msgid "Details"
 msgstr "Podrobnosti"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
-#, fuzzy
 msgid "Applying Package Changes"
-msgstr "Použití změn v balíčku"
+msgstr "Použít změny balíčku"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
 #, fuzzy
@@ -18465,14 +18462,12 @@ msgid "Install package"
 msgstr "Instalovat balíček"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
-#, fuzzy
 msgid "Download Size"
-msgstr "Stáhnout"
+msgstr "Velikost stahování"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:84
-#, fuzzy
 msgid "Install Size"
-msgstr "Velikost instalace"
+msgstr "Instalovaná velikost"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
 msgid "Compatible"
@@ -22767,9 +22762,8 @@ msgid "Circular Array"
 msgstr "Kruhová sestava"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:350
-#, fuzzy
 msgid "Footprint Annotation"
-msgstr "Dokumentace pouzdra"
+msgstr "Očíslování pouzdra"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:352
 #, fuzzy
@@ -23327,7 +23321,6 @@ msgid "*.emn"
 msgstr "*. emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
-#, fuzzy
 msgid "Grid reference point:"
 msgstr "Referenční bod mřížky:"
 
@@ -24029,7 +24022,6 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:400
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:300
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:703
-#, fuzzy
 msgid "Connection to Copper Zones"
 msgstr "Připojení k zónám mědi"
 
@@ -24072,9 +24064,9 @@ msgid "Footprint must have a name."
 msgstr "Pouzdro musí mít název."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint name may not contain '%s'."
-msgstr "Název pouzdra nesmí obsahovat \"%s\"."
+msgstr "Název pouzdra nesmí obsahovat '%s'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 msgid "Unconstrained"
@@ -24752,9 +24744,9 @@ msgid "'%s' is not a valid footprint library table."
 msgstr "'%s' není platná tabulka knihoven pouzder."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create library table path '%s'."
-msgstr "Nelze vytvořit globální tabulku knihoven cesta '%s'."
+msgstr "Nelze vytvořit cestu tabulky knihoven '%s'."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:114
 #, c-format
@@ -24807,12 +24799,10 @@ msgid "The arc angle cannot be zero."
 msgstr "Úhel oblouku nemůže být nulový."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:378
-#, fuzzy
 msgid "The radius cannot be zero."
-msgstr "Úhel oblouku nemůže být nulový."
+msgstr "Poloměr nemůže být nulový."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:384
-#, fuzzy
 msgid "The rectangle cannot be empty."
 msgstr "Obdélník nemůže být prázdný."
 
@@ -25304,9 +25294,8 @@ msgstr "z"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:699
 #: pcbnew/dialogs/dialog_pad_properties.cpp:705
-#, fuzzy
 msgid "to"
-msgstr "t"
+msgstr "do"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:710
 msgid "center"
@@ -29839,9 +29828,9 @@ msgid "Expected \"Other\" type but set to \"%s\""
 msgstr "Očekávaný typ \"Ostatní\", ale definován jako \"%s\""
 
 #: pcbnew/footprint.cpp:2125
-#, fuzzy, c-format
+#, c-format
 msgid "(pad \"%s\")"
-msgstr "ploška %s"
+msgstr "(ploška \"%s\")"
 
 #: pcbnew/footprint.cpp:2372 pcbnew/pad.cpp:1681 pcbnew/zone.cpp:1479
 #, fuzzy
@@ -31760,6 +31749,9 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
+"CADSTAR zóna '%s' v knihovně součástek '%s' nemá ekvivalent v KiCadu. Tato "
+"oblast není zakázaná oblast pro prokovy nebo spoje.Tato oblast nebyla "
+"importována."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:986
 #, c-format
@@ -31768,6 +31760,9 @@ msgid ""
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
 msgstr ""
+"CADSTAR definice plošky '%s' je komplexní struktura plošky, která není "
+"podporována v KiCadu. Zkontrolujte prosím importované plošky, protože mohou "
+"vyžadovat ruční korekci."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1207
 #, c-format
@@ -32999,6 +32994,8 @@ msgid ""
 "Event file: %s\n"
 "Board dump: %s"
 msgstr ""
+"Soubor události: %s\n"
+"Výpis DPS: %s"
 
 #: pcbnew/router/router_tool.cpp:523
 #, fuzzy
@@ -33095,7 +33092,7 @@ msgstr "stupeň"
 
 #: pcbnew/router/router_tool.cpp:2059
 msgid "90-degree rounded"
-msgstr ""
+msgstr "zaokrouhleno na 90 stupňů"
 
 #: pcbnew/router/router_tool.cpp:2064
 #, fuzzy
