@@ -116,7 +116,7 @@ wxString LayerName( int aLayer )
     case LAYER_FIELDS:                  return _( "Symbol fields" );
     case LAYER_DEVICE:                  return _( "Symbol body outlines" );
     case LAYER_DEVICE_BACKGROUND:       return _( "Symbol body fills" );
-    case LAYER_NOTES:                   return _( "Notes" );
+    case LAYER_NOTES:                   return _( "Schematic text && graphics" );
     case LAYER_PIN:                     return _( "Pins" );
     case LAYER_SHEET:                   return _( "Sheet borders" );
     case LAYER_SHEET_BACKGROUND:        return _( "Sheet backgrounds" );
