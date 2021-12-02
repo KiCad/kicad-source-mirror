@@ -206,11 +206,6 @@ public:
 
     APPEARANCE_CONTROLS* GetAppearancePanel() { return m_appearancePanel; }
 
-    /**
-     * Notify the frame that the layer Alpha is being changed
-     */
-    virtual void OnLayerAlphaChanged();
-
 protected:
     /**
      * Prompts a user to select global or project library tables

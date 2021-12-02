@@ -1245,46 +1245,6 @@ GAL_SET APPEARANCE_CONTROLS::getVisibleObjects()
 }
 
 
-void APPEARANCE_CONTROLS::OnLayerAlphaChanged()
-{
-    // TODO(JE) Is this even needed if the layer alphas are getting directly updated?
-    // Maybe we just need the "down" arrow to indicate if the alpha is below 1
-
-#if 0
-    static constexpr double alphaEpsilon = 0.04;
-
-    PCB_LAYER_ID        current = m_frame->GetActiveLayer();
-    COLOR_SETTINGS*     theme   = m_frame->GetColorSettings();
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* rs = painter->GetSettings();
-
-    for( APPEARANCE_SETTING& setting : m_layerSettings )
-    {
-        if( !setting.ctl_indicator )
-            continue;
-
-        COLOR4D layerColor  = theme->GetColor( setting.id );
-        COLOR4D screenColor = rs->GetLayerColor( setting.id );
-
-        if( std::abs( screenColor.a - layerColor.a ) > alphaEpsilon )
-        {
-            if( screenColor.a < layerColor.a )
-                setting.ctl_indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::DOWN );
-            else
-                setting.ctl_indicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::UP );
-        }
-        else
-        {
-            setting.ctl_indicator->SetIndicatorState( setting.id == current ?
-                                                      ROW_ICON_PROVIDER::STATE::ON :
-                                                      ROW_ICON_PROVIDER::STATE::OFF );
-        }
-    }
-#endif
-}
-
-
 void APPEARANCE_CONTROLS::UpdateDisplayOptions()
 {
     const PCB_DISPLAY_OPTIONS& options = m_frame->GetDisplayOptions();

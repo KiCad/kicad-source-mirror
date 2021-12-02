@@ -455,8 +455,6 @@ int PCB_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 
         if( IsCopperLayer( currentLayer ) )
             view->UpdateLayerColor( ZONE_LAYER_FOR( currentLayer ) );
-
-        static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->OnLayerAlphaChanged();
     }
     else
     {
@@ -485,8 +483,6 @@ int PCB_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 
         if( IsCopperLayer( currentLayer ) )
             view->UpdateLayerColor( ZONE_LAYER_FOR( currentLayer ) );
-
-        static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->OnLayerAlphaChanged();
     }
     else
     {

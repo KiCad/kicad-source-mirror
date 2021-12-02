@@ -270,8 +270,3 @@ void PCB_BASE_EDIT_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
 }
 
 
-void PCB_BASE_EDIT_FRAME::OnLayerAlphaChanged()
-{
-    if( m_appearancePanel )
-        m_appearancePanel->OnLayerAlphaChanged();
-}

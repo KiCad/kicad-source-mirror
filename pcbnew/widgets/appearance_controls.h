@@ -232,9 +232,6 @@ public:
 
     void SetObjectVisible( GAL_LAYER_ID aLayer, bool isVisible = true );
 
-    ///< Update the manual layer alpha overrides.
-    void OnLayerAlphaChanged();
-
     void UpdateDisplayOptions();
 
     ///< Return a list of the layer presets created by the user.
