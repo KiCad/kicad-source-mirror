@@ -1416,8 +1416,8 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
 
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_view );
 
-    static KICAD_T tracksOrVias[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, EOT };
-    static KICAD_T tracks[] = { PCB_TRACE_T, PCB_ARC_T, EOT };
+    static int tracks = PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T;
+    static int tracksOrVias = tracks | PNS::ITEM::VIA_T;
 
     if( aClearance >= 0 )
     {
@@ -1427,15 +1427,15 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
         {
         case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS:
         case PCB_DISPLAY_OPTIONS::SHOW_WHILE_ROUTING_OR_DRAGGING:
-            pitem->ShowClearance( pitem->GetParent()->IsType( tracksOrVias ) );
+            pitem->ShowClearance( aItem->OfKind( tracksOrVias ) );
             break;
 
         case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING:
-            pitem->ShowClearance( pitem->GetParent()->IsType( tracksOrVias ) && !aEdit );
+            pitem->ShowClearance( aItem->OfKind( tracksOrVias ) && !aEdit );
             break;
 
         case PCB_DISPLAY_OPTIONS::SHOW_TRACK_CLEARANCE_WHILE_ROUTING:
-            pitem->ShowClearance( pitem->GetParent()->IsType( tracks ) && !aEdit );
+            pitem->ShowClearance( aItem->OfKind( tracks ) && !aEdit );
             break;
 
         default:
