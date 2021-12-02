@@ -38,9 +38,6 @@
     - DRCE_MALFORMED_COURTYARD
     - DRCE_PTH_IN_COURTYARD,
     - DRCE_NPTH_IN_COURTYARD,
-
-    TODO: do an actual clearance check instead of polygon intersection. Treat closed outlines
-    as filled and allow open curves in the courtyard.
 */
 
 class DRC_TEST_PROVIDER_COURTYARD_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE

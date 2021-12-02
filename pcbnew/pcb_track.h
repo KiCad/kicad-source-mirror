@@ -295,8 +295,6 @@ public:
     // @copydoc BOARD_ITEM::GetEffectiveShape
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
-    //TODO(snh): Add GetSelectMenuText() and GetMsgPanelInfoBase()
-
     /**
      * Function GetLength
      * returns the length of the arc track

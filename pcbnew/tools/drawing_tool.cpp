@@ -611,8 +611,6 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 else
                 {
                     PCB_TEXT* pcbText = new PCB_TEXT( m_frame->GetModel() );
-                    // TODO we have to set IS_NEW, otherwise InstallTextPCB.. creates an
-                    // undo entry :| LEGACY_CLEANUP
                     pcbText->SetFlags( IS_NEW );
 
                     pcbText->SetLayer( layer );

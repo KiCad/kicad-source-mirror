@@ -626,15 +626,8 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 
     PCB_LAYER_ID layer = m_layer;
 
-    // NOTE: This brings in dependence on PCB_EDIT_FRAME to the qa tests, which isn't ideal.
-    // TODO: Figure out a way for items to know the active layer without the whole edit frame?
-#if 0
-    if( PCB_EDIT_FRAME* pcbframe = dynamic_cast<PCB_EDIT_FRAME*>( aFrame ) )
-    {
-        if( m_FilledPolysList.count( pcbframe->GetActiveLayer() ) )
-            layer = pcbframe->GetActiveLayer();
-    }
-#endif
+    if( dynamic_cast<PCB_SCREEN*>( aFrame->GetScreen() ) )
+        layer = dynamic_cast<PCB_SCREEN*>( aFrame->GetScreen() )->m_Active_Layer;
 
     if( !GetIsRuleArea() )
     {

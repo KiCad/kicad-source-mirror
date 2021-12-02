@@ -74,15 +74,11 @@ public:
 
     void SetStartLayer( int aLayer ) { m_startLayer = aLayer; }
 
-    virtual PNS::NODE* GetWorld() const override
-    {
-        return m_world;
-    };
+    virtual PNS::NODE* GetWorld() const override { return m_world; };
 
-    BOARD* GetBoard() const
-    {
-        return m_board;
-    }
+    BOARD* GetBoard() const { return m_board; }
+
+    virtual EDA_UNITS GetUnits() const { return EDA_UNITS::MILLIMETRES; };
 
     PNS::RULE_RESOLVER* GetRuleResolver() override;
     PNS::DEBUG_DECORATOR* GetDebugDecorator() override;
@@ -130,6 +126,7 @@ public:
 
     void UpdateNet( int aNetCode ) override;
 
+    EDA_UNITS GetUnits() const override;
 
 private:
     struct OFFSET

@@ -33,6 +33,9 @@
 #include <layer_ids.h>
 #include <geometry/convex_hull.h>
 #include <confirm.h>
+#include <tools/pcb_tool_base.h>
+#include <tool/tool_manager.h>
+#include <settings/app_settings.h>
 
 #include <pcb_painter.h>
 
@@ -1046,7 +1049,6 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
         return false;
 
     LSET      layers = aZone->GetLayerSet();
-    EDA_UNITS units = EDA_UNITS::MILLIMETRES;       // TODO: get real units
 
     poly = aZone->Outline();
     poly->CacheTriangulation( false );
@@ -1054,7 +1056,7 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
     if( !poly->IsTriangulationUpToDate() )
     {
         KIDIALOG dlg( nullptr, wxString::Format( _( "%s is malformed." ),
-                                                 aZone->GetSelectMenuText( units ) ),
+                                                 aZone->GetSelectMenuText( GetUnits() ) ),
                       KIDIALOG::KD_WARNING );
         dlg.ShowDetailedText( wxString::Format( _( "This zone cannot be handled by the router.\n"
                                                    "Please verify it is not a self-intersecting "
@@ -1672,6 +1674,12 @@ void PNS_KICAD_IFACE::Commit()
 }
 
 
+EDA_UNITS PNS_KICAD_IFACE::GetUnits() const
+{
+    return static_cast<EDA_UNITS>( m_tool->GetManager()->GetSettings()->m_System.units );
+}
+
+
 void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
 {
     wxLogTrace( "PNS", "SetView %p", aView );
@@ -1704,7 +1712,6 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
 void PNS_KICAD_IFACE::UpdateNet( int aNetCode )
 {
     wxLogTrace( "PNS", "Update-net %d", aNetCode );
-
 }
 
 

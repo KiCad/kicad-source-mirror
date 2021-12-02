@@ -39,8 +39,6 @@
     Generated errors:
     - DRCE_DRILLED_HOLES_TOO_CLOSE
     - DRCE_DRILLED_HOLES_COLOCATED
-
-    TODO: vias-in-smd-pads check
 */
 
 class DRC_TEST_PROVIDER_HOLE_TO_HOLE : public DRC_TEST_PROVIDER_CLEARANCE_BASE

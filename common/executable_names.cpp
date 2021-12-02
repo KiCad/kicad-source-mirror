@@ -26,7 +26,6 @@
 
 #include <executable_names.h>
 
-// TODO Executable names TODO
 #ifdef __WINDOWS__
 const wxString CVPCB_EXE           ( "cvpcb.exe" );
 const wxString PCBNEW_EXE          ( "pcbnew.exe" );
