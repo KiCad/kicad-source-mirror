@@ -290,7 +290,18 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     COMMON_SETTINGS*      settings = Pgm().GetCommonSettings();
     KIGFX::VIEW_CONTROLS* viewControls = GetCanvas()->GetViewControls();
 
-    SetAutoSaveInterval( settings->m_System.autosave_interval );
+    if( m_supportsAutoSave && m_autoSaveTimer->IsRunning() )
+    {
+        if( GetAutoSaveInterval() > 0 )
+        {
+            m_autoSaveTimer->Start( GetAutoSaveInterval() * 1000, wxTIMER_ONE_SHOT );
+        }
+        else
+        {
+            m_autoSaveTimer->Stop();
+            m_autoSaveState = false;
+        }
+    }
 
     viewControls->LoadSettings();
 

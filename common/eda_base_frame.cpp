@@ -117,9 +117,8 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
     m_infoBar           = nullptr;
     m_settingsManager   = nullptr;
     m_fileHistory       = nullptr;
-    m_hasAutoSave       = false;
+    m_supportsAutoSave  = false;
     m_autoSaveState     = false;
-    m_autoSaveInterval  = -1;
     m_undoRedoCountMax  = DEFAULT_MAX_UNDO_ITEMS;
     m_userUnits         = EDA_UNITS::MILLIMETRES;
     m_isClosing         = false;
@@ -277,14 +276,14 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
     if( Pgm().m_Quitting )
         return true;
 
-    if( !m_isClosing && m_hasAutoSave && IsShown() && IsActive()
+    if( !m_isClosing && m_supportsAutoSave && IsShown() && IsActive()
         && m_autoSaveState != isAutoSaveRequired()
-        && m_autoSaveInterval > 0 )
+        && GetAutoSaveInterval() > 0 )
     {
         if( !m_autoSaveState )
         {
             wxLogTrace( traceAutoSave, wxT( "Starting auto save timer." ) );
-            m_autoSaveTimer->Start( m_autoSaveInterval * 1000, wxTIMER_ONE_SHOT );
+            m_autoSaveTimer->Start( GetAutoSaveInterval() * 1000, wxTIMER_ONE_SHOT );
             m_autoSaveState = true;
         }
         else if( m_autoSaveTimer->IsRunning() )
@@ -299,29 +298,16 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
 }
 
 
-void EDA_BASE_FRAME::SetAutoSaveInterval( int aInterval )
+int EDA_BASE_FRAME::GetAutoSaveInterval() const
 {
-    m_autoSaveInterval = aInterval;
-
-    if( m_autoSaveTimer->IsRunning() )
-    {
-        if( m_autoSaveInterval > 0 )
-        {
-            m_autoSaveTimer->Start( m_autoSaveInterval * 1000, wxTIMER_ONE_SHOT );
-        }
-        else
-        {
-            m_autoSaveTimer->Stop();
-            m_autoSaveState = false;
-        }
-    }
+    return Pgm().GetCommonSettings()->m_System.autosave_interval;
 }
 
 
 void EDA_BASE_FRAME::onAutoSaveTimer( wxTimerEvent& aEvent )
 {
     if( !doAutoSave() )
-        m_autoSaveTimer->Start( m_autoSaveInterval * 1000, wxTIMER_ONE_SHOT );
+        m_autoSaveTimer->Start( GetAutoSaveInterval() * 1000, wxTIMER_ONE_SHOT );
 }
 
 
@@ -711,9 +697,6 @@ void EDA_BASE_FRAME::LoadWindowSettings( const WINDOW_SETTINGS* aCfg )
 {
     LoadWindowState( aCfg->state );
 
-    if( m_hasAutoSave )
-        m_autoSaveInterval = Pgm().GetCommonSettings()->m_System.autosave_interval;
-
     m_perspective = aCfg->perspective;
     m_mruPath = aCfg->mru_path;
 
@@ -753,10 +736,6 @@ void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
                 IsMaximized() ? "true" : "false" );
     wxLogTrace( traceDisplayLocation, "Saving config position (%d, %d) with size (%d, %d)",
                 m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
-
-    // TODO(JE) should auto-save in common settings be overwritten by every app?
-    if( m_hasAutoSave )
-        Pgm().GetCommonSettings()->m_System.autosave_interval = m_autoSaveInterval;
 
     // Once this is fully implemented, wxAuiManager will be used to maintain
     // the persistence of the main frame and all it's managed windows and

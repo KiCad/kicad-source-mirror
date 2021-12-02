@@ -206,9 +206,7 @@ public:
 
     void OnMaximize( wxMaximizeEvent& aEvent );
 
-    void SetAutoSaveInterval( int aInterval );
-
-    int GetAutoSaveInterval() const { return m_autoSaveInterval; }
+    int GetAutoSaveInterval() const;
 
     bool IsType( FRAME_T aType ) const { return m_ident == aType; }
     FRAME_T GetFrameType() const { return m_ident; }
@@ -714,9 +712,8 @@ private:
 
     FILE_HISTORY*   m_fileHistory;          // The frame's recently opened file list
 
-    bool            m_hasAutoSave;
+    bool            m_supportsAutoSave;
     bool            m_autoSaveState;
-    int             m_autoSaveInterval;     // The auto save interval time in seconds.
     wxTimer*        m_autoSaveTimer;
 
     int                 m_undoRedoCountMax; // undo/Redo command Max depth

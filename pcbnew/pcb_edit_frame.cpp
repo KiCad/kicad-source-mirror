@@ -186,7 +186,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_SelViaSizeBox = nullptr;
     m_SelLayerBox = nullptr;
     m_show_layer_manager_tools = true;
-    m_hasAutoSave = true;
+    m_supportsAutoSave = true;
 
     // We don't know what state board was in when it was last saved, so we have to
     // assume dirty

@@ -220,7 +220,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_schematic = new SCHEMATIC( nullptr );
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references
-    m_hasAutoSave = true;
+    m_supportsAutoSave = true;
     m_aboutTitle = _( "KiCad Schematic Editor" );
 
     m_findReplaceDialog = nullptr;
