@@ -149,11 +149,12 @@ def LoadPluginModule(Dirname, ModuleName, FileName):
                 mod = __import__( ModuleName, locals(), globals() )
 
         mods_after = set( sys.modules ).difference( mods_before )
+        dependencies = [m for m in mods_after if m.startswith(ModuleName)]
 
         KICAD_PLUGINS[ModuleName]={ "filename":module_filename,
                                     "modification_time":mtime,
                                     "ModuleName":mod,
-                                    "dependencies": mods_after }
+                                    "dependencies": dependencies }
 
     except:
         if ModuleName in KICAD_PLUGINS:
