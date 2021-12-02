@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-12-02 22:19+0000\n"
+"PO-Revision-Date: 2021-12-03 00:43+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -12798,7 +12798,7 @@ msgstr ""
 #: eeschema/files-io.cpp:1227 eeschema/sheet.cpp:162
 #, c-format
 msgid "Error loading schematic '%s'."
-msgstr "Fehler beim Laden des Schaltplanes \"%s\"."
+msgstr "Fehler beim Laden des Schaltplans \"%s\"."
 
 #: eeschema/files-io.cpp:287
 #, c-format
@@ -12816,19 +12816,18 @@ msgid ""
 "fixed.  Please save the schematic to repair the broken file or it may not be "
 "usable with other versions of KiCad."
 msgstr ""
-"Es ist ein Fehler während des Ladens vom Schaltplan gefunden worden, dieser "
-"wurde automatisch korrigiert. Bitte speichern Sie den Schaltplan um die "
-"defekte Datei zu reparieren. Andernfalls kann passieren, dass die Datei in "
-"anderen Versionen von KiCad nicht benutzbar ist."
+"Beim Laden des Schaltplans wurde ein Fehler gefunden, der automatisch "
+"korrigiert wurde. Bitte speichern Sie den Schaltplan, um die defekte Datei "
+"zu reparieren. Andernfalls ist es möglich, dass die Datei in anderen KiCad-"
+"Versionen nicht nutzbar ist."
 
 #: eeschema/files-io.cpp:357
 msgid "Illegal entry found in project file symbol library list."
-msgstr ""
-"Ungültiger Eintrag in der projektspezifischen Symbol-Bibliothekstabelle."
+msgstr "Ungültiger Eintrag in der Symbol-Bibliotheksliste der Projektdatei."
 
 #: eeschema/files-io.cpp:358
 msgid "Project Load Warning"
-msgstr "Fehler aufgetreten beim Laden des Projektes"
+msgstr "Fehler beim Laden des Projekts"
 
 #: eeschema/files-io.cpp:361
 msgid ""
@@ -12837,7 +12836,7 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
-"Symbolbibliotheken, die in der projektspezifischen Symbolbibliothekstabelle "
+"Symbolbibliotheken, die in der Symbol-Bibliotheksliste der Projektdatei "
 "definiert sind, werden nicht mehr unterstützt und daher entfernt.\n"
 "\n"
 "Dies kann unter bestimmten Umständen zu fehlerhaften "
@@ -12851,8 +12850,8 @@ msgstr "Diesen Dialog nicht erneut anzeigen."
 #, c-format
 msgid "The project symbol library cache file '%s' was not found."
 msgstr ""
-"Die Projekt-Symbolbibliotheks-Cache-Datei \"%s\" konnte nicht gefunden "
-"werden."
+"Die projektbezogene Symbolbibliotheks-Cache-Datei \"%s\" konnte nicht "
+"gefunden werden."
 
 #: eeschema/files-io.cpp:396
 msgid ""
@@ -12862,12 +12861,12 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
-"Dies kann unter bestimmten Bedingungen zu einem defekten Schaltplan führen. "
+"Dies kann unter bestimmten Bedingungen zu einem defekten Schaltplan führen.  "
 "Wenn der Schaltplan beim Öffnen keine fehlenden Symbole aufweist, speichern "
 "Sie ihn sofort, bevor Sie Änderungen vornehmen, um Datenverlust zu "
-"vermeiden. Wenn Symbole fehlen, ist entweder eine manuelle Wiederherstellung "
-"des Schaltplans oder eine Wiederherstellung der Symbol-Cache-"
-"Bibliotheksdatei und ein erneutes Laden des Schaltplans erforderlich."
+"vermeiden.  Wenn Symbole fehlen, ist entweder eine manuelle "
+"Wiederherstellung des Schaltplans oder eine Wiederherstellung der Symbol-"
+"Cache-Bibliotheksdatei und ein erneutes Laden des Schaltplans erforderlich."
 
 #: eeschema/files-io.cpp:407
 msgid "Load Without Cache File"
@@ -12883,12 +12882,12 @@ msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
 msgstr ""
-"Diese Datei wurde von einer älteren Version von KiCad erstellt. Wenn Sie die "
-"Datei erneut speichern wird diese im neuen Dateiformat angelegt."
+"Diese Datei wurde mit einer älteren KiCad-Version erstellt. Beim Speichern "
+"wird sie automatisch in das neue Format gewandelt."
 
 #: eeschema/files-io.cpp:499
 msgid "Schematic is read only."
-msgstr "Schaltplandatei ist schreibgeschützt."
+msgstr "Schaltplan ist schreibgeschützt."
 
 #: eeschema/files-io.cpp:524
 msgid "Insert Schematic"
@@ -12939,12 +12938,12 @@ msgid ""
 "Failed to rename temporary file '%s'."
 msgstr ""
 "Fehler beim Schreiben der Schaltplandatei \"%s\".\n"
-"Konnte Temporärdatei \"%s\" nicht umbenennen."
+"Temporäre Datei \"%s\" konnte nicht umbenannt werden."
 
 #: eeschema/files-io.cpp:714 pcbnew/files.cpp:1046
 #, c-format
 msgid "Failed to rename temporary file '%s'."
-msgstr "Konnte Temporärdatei \"%s\" nicht umbenennen."
+msgstr "Temporäre Datei \"%s\" konnte nicht umbenannt werden."
 
 #: eeschema/files-io.cpp:737 pagelayout_editor/files.cpp:183
 #: pcbnew/files.cpp:1079
@@ -12954,7 +12953,7 @@ msgstr "Datei \"%s\" gespeichert."
 
 #: eeschema/files-io.cpp:742
 msgid "File write operation failed."
-msgstr "Konnte Datei nicht schreiben."
+msgstr "Datei konnte nicht geschrieben werden."
 
 #: eeschema/files-io.cpp:808 eeschema/files-io.cpp:875
 #: kicad/tools/kicad_manager_control.cpp:127
@@ -12971,11 +12970,11 @@ msgstr ""
 
 #: eeschema/files-io.cpp:944
 msgid "Saving will overwrite existing files."
-msgstr "Speichern wird vorhandene Dateien überschreiben."
+msgstr "Vorhandene Dateien werden beim Speichern überschrieben."
 
 #: eeschema/files-io.cpp:945
 msgid "Save Warning"
-msgstr "Speicherwarnung"
+msgstr "Speicher-Warnung"
 
 #: eeschema/files-io.cpp:948
 msgid ""
@@ -13054,7 +13053,7 @@ msgid ""
 "'%s'\n"
 "could not be deleted."
 msgstr ""
-"Die Masterdatei für automatisches Speichern\n"
+"Die Hauptdatei für automatisches Speichern\n"
 "\"%s\"\n"
 "konnte nicht gelöscht werden."
 
