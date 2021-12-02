@@ -369,7 +369,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             m_disambiguateTimer.Stop();
 
-
             if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
@@ -377,7 +376,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             bool continueSelect = true;
 
             // Collect items at the clicked location (doesn't select them yet)
-            if( CollectHits( collector, evt->Position()) )
+            if( CollectHits( collector, evt->Position() ) )
             {
                 narrowSelection( collector, evt->Position(), false, false );
 
@@ -440,6 +439,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 // items we previously collected
                 selectPoint( collector, nullptr, nullptr, m_additive, m_subtractive,
                              m_exclusive_or );
+
+                m_selection.SetIsHover( false );
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
