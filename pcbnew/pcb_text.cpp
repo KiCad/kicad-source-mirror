@@ -133,7 +133,7 @@ const EDA_RECT PCB_TEXT::GetBoundingBox() const
 {
     EDA_RECT rect = GetTextBox();
 
-    if( GetTextAngle() )
+    if( GetTextAngle() != 0 )
         rect = rect.GetBoundingBoxRotated( GetTextPos(), GetTextAngle() );
 
     return rect;
