@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-28 23:29+0000\n"
+"PO-Revision-Date: 2021-12-02 22:19+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -1928,11 +1928,11 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"Geben Sie den Namen und den Pfad für jede Umgebungsvariable ein. Graue "
+"Geben Sie den Namen und den Pfad für jede Umgebungsvariable ein.  Graue "
 "Einträge sind Namen die extern durch das System oder durch den Benutzer "
-"definiert worden sind. Extern definierte oder durch den Benutzer definierte "
-"Umgebungsvariablen haben Vorrang vor den hier in der Tabelle definierten "
-"Werten. Eingetragene Werte in dieser Tabelle werden ignoriert."
+"definiert wurden.  Extern oder durch den Benutzer definierte "
+"Umgebungsvariablen haben Vorrang vor den in dieser Tabelle definierten "
+"Werten.  D.h., die Werte in dieser Tabelle werden ignoriert."
 
 #: common/dialogs/dialog_configure_paths.cpp:630
 msgid ""
@@ -12303,7 +12303,7 @@ msgstr "Die Zelle für den Pfad in einer Bibliothekstabellen-Zeile ist leer."
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:537
 msgid "Invalid Row Definition"
-msgstr "Ungültige Zeilendefinition gefunden"
+msgstr "Ungültige Zeilendefinition"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:539
@@ -12354,7 +12354,9 @@ msgstr "Eine Bibliothek mit dem Aliasnamen \"%s\" existiert bereits."
 #: eeschema/dialogs/panel_sym_lib_table.cpp:510
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:891
 msgid "One of the nicknames will need to be changed after adding this library."
-msgstr "Bitte ändern Sie den Aliasnamen der Bibliothek nach dem Hinzuzufügen."
+msgstr ""
+"Bitte ändern Sie einen der Aliasnamen, nachdem diese Bibliothek hinzugefügt "
+"wurde."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:529
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1012
@@ -12373,7 +12375,7 @@ msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
 "save as current KiCad format (*.kicad_sym)."
 msgstr ""
-"Wählen Sie eine oder mehrere Tabellenzeilen mit Legacy-Bibliotheken (*.lib) "
+"Wählen Sie eine oder mehrere Zeilen mit Bibliotheken im alten Format (*.lib) "
 "aus, die im aktuellen Format (*.kicad_sym) gespeichert werden sollen."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:741
@@ -12416,10 +12418,9 @@ msgid ""
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
-"An einer oder mehrerer Symbolbibliotheken wurden Veränderungen durchgeführt. "
-"Diese Änderungen\n"
-"müssen gespeichert oder verworfen werden bevor Änderungen an der Tabelle der "
-"Symbolbibliotheken durchgeführt werden können."
+"Eine oder mehrere Symbolbibliotheken wurden geändert. Diese Änderungen\n"
+"müssen gespeichert oder verworfen werden, bevor die Symbol-"
+"Bibliothekstabelle geändert werden kann."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1052
 msgid "Symbol Libraries"
@@ -12445,7 +12446,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1102
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1115
 msgid "File Save Error"
-msgstr "Fehler beim Dateischreibvorgang"
+msgstr "Fehler beim Speichern"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1087
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1114
@@ -12527,12 +12528,12 @@ msgstr "Bearbeitungsoptionen"
 
 #: eeschema/eeschema_config.cpp:99 pcbnew/pcbnew_config.cpp:81
 msgid "Error loading drawing sheet."
-msgstr "Fehler beim Laden des Editors."
+msgstr "Fehler beim Laden des Zeichenblatts."
 
 #: eeschema/eeschema_config.cpp:291 eeschema/sheet.cpp:284
 #, c-format
 msgid "Error loading the symbol library table '%s'."
-msgstr "Fehler beim Laden der Symbolbibliothekstabelle \"%s\"."
+msgstr "Fehler beim Laden der Symbol-Bibliothekstabelle \"%s\"."
 
 #: eeschema/erc.cpp:59 eeschema/erc.cpp:76
 msgid "Input Pin"
@@ -12589,12 +12590,12 @@ msgstr "Nicht aufgelöste Textvariable in Zeichnungsblatt."
 #: eeschema/erc.cpp:300
 #, c-format
 msgid "Bus alias %s has conflicting definitions on %s and %s"
-msgstr "Bus Alias %s hat widersprüchliche Definitionen bei %s und %s"
+msgstr "Bus-Alias %s hat widersprüchliche Definitionen bei %s und %s"
 
 #: eeschema/erc.cpp:370
 #, c-format
 msgid "Different footprints assigned to %s and %s"
-msgstr "Unterschiedlicher Footprints, die %s und %s zugewiesen ist"
+msgstr "Unterschiedliche Footprints zugewiesen zu %s und %s"
 
 #: eeschema/erc.cpp:419
 msgid "Pins with \"no connection\" type are connected"
@@ -12608,7 +12609,7 @@ msgstr "Pins vom Typ %s und %s sind verbunden"
 #: eeschema/erc.cpp:604
 #, c-format
 msgid "Pin %s is connected to both %s and %s"
-msgstr "Pin %s ist sowohl mit %s als auch mit %s verbunden"
+msgstr "Pin %s ist sowohl mit %s, als auch mit %s verbunden"
 
 #: eeschema/erc.cpp:711
 #, c-format
@@ -12632,7 +12633,7 @@ msgstr "Sonstiges"
 
 #: eeschema/erc_item.cpp:46
 msgid "Duplicate sheet names within a given sheet"
-msgstr "Doppelter Schaltplanname innerhalb eines Schaltplans"
+msgstr "Doppelte Schaltplannamen innerhalb eines Schaltplans"
 
 #: eeschema/erc_item.cpp:50
 msgid "Pin not connected"
@@ -12653,16 +12654,15 @@ msgstr "Konfliktproblem zwischen Pins"
 #: eeschema/erc_item.cpp:70
 msgid "Mismatch between hierarchical labels and sheet pins"
 msgstr ""
-"Keine Übereinstimmung zwischen hierarchischen Bezeichnern und Pins des "
-"Schaltplans"
+"Keine Übereinstimmung zwischen hierarchischen Bezeichnern und Schaltplanpins"
 
 #: eeschema/erc_item.cpp:74
 msgid "A pin with a \"no connection\" flag is connected"
-msgstr "Ein Pin mit einer \"keine Verbindung\" Markierung ist verbunden"
+msgstr "Ein Pin mit einer \"Keine Verbindung\"-Markierung ist verbunden"
 
 #: eeschema/erc_item.cpp:78
 msgid "Unconnected \"no connection\" flag"
-msgstr "Nicht verbundene Markierung \"Keine-Verbindung\""
+msgstr "Nicht verbundene Markierung \"Keine Verbindung\""
 
 #: eeschema/erc_item.cpp:82
 msgid "Label not connected to anything"
@@ -12670,7 +12670,7 @@ msgstr "Bezeichner ist mit nichts verbunden"
 
 #: eeschema/erc_item.cpp:86
 msgid "Global label not connected anywhere else in the schematic"
-msgstr "Ein globaler Bezeichner ist nirgendwo sonst im Schaltplan verbunde"
+msgstr "Ein globaler Bezeichner ist nirgendwo sonst im Schaltplan verbunden"
 
 #: eeschema/erc_item.cpp:90
 msgid "Labels are similar (lower/upper case difference only)"
@@ -12691,11 +12691,11 @@ msgstr ""
 #: eeschema/erc_item.cpp:102
 msgid "Conflict between bus alias definitions across schematic sheets"
 msgstr ""
-"Konflikt zwischen Bus-Alias-Definitionen innerhalb der Schaltplanblätter"
+"Konflikt zwischen Bus-Alias-Definitionen in verschiedenen Schaltplanblättern"
 
 #: eeschema/erc_item.cpp:106
 msgid "More than one name given to this bus or net"
-msgstr "Mehr als einen Namen für diesen Bus oder Netz gegeben"
+msgstr "Mehr als ein Name für diesen Bus oder dieses Netz zugewiesen"
 
 #: eeschema/erc_item.cpp:110
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -12762,12 +12762,12 @@ msgid ""
 "and ERC exclusions"
 msgstr ""
 "Durch das Erstellen eines Projekts werden Funktionen wie Textvariablen, "
-"Netzklassen und ERC-Ausnahmen aktiviert"
+"Netzklassen und ERC-Ausnahmen ermöglicht"
 
 #: eeschema/files-io.cpp:126 eeschema/files-io.cpp:1153
 #, c-format
 msgid "Schematic '%s' is already open."
-msgstr "Der Schaltplan \"%s\" ist bereits geöffnet."
+msgstr "Schaltplan \"%s\" ist bereits geöffnet."
 
 #: eeschema/files-io.cpp:148
 #, c-format
@@ -14171,11 +14171,11 @@ msgstr "Ungültige Kommentarnummer für Schriftfeld"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1778
 msgid "Invalid sheet pin name"
-msgstr "Ungültiger Pin-Name auf Schaltplanblatt"
+msgstr "Ungültiger Schaltplanpin-Name"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1786
 msgid "Empty sheet pin name"
-msgstr "Leerer Pin-Name"
+msgstr "Leerer Schaltplanpin-Name"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2226
 msgid "Invalid symbol library name"
