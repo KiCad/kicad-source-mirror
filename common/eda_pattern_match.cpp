@@ -239,7 +239,7 @@ bool EDA_PATTERN_MATCH_RELATIONAL::SetPattern( const wxString& aPattern )
         // Matching on empty values keeps the match list from going empty when
         // the user types the relational operator character, which helps prevent
         // confusion.
-        m_relation = NONE;
+        m_relation = ANY;
     }
     else if( !val.ToCDouble( &m_value ) )
         return false;
@@ -317,13 +317,13 @@ int EDA_PATTERN_MATCH_RELATIONAL::FindOne( const wxString& aCandidate ) const
 
     switch( m_relation )
     {
-    case LT: return val_parsed <  m_value    ? istart : EDA_PATTERN_NOT_FOUND;
-    case LE: return val_parsed <= m_value    ? istart : EDA_PATTERN_NOT_FOUND;
-    case EQ: return val_parsed == m_value    ? istart : EDA_PATTERN_NOT_FOUND;
-    case GE: return val_parsed >= m_value    ? istart : EDA_PATTERN_NOT_FOUND;
-    case GT: return val_parsed >  m_value    ? istart : EDA_PATTERN_NOT_FOUND;
-    case NONE: return istart;
-    default: return EDA_PATTERN_NOT_FOUND;
+    case LT:  return val_parsed <  m_value    ? istart : EDA_PATTERN_NOT_FOUND;
+    case LE:  return val_parsed <= m_value    ? istart : EDA_PATTERN_NOT_FOUND;
+    case EQ:  return val_parsed == m_value    ? istart : EDA_PATTERN_NOT_FOUND;
+    case GE:  return val_parsed >= m_value    ? istart : EDA_PATTERN_NOT_FOUND;
+    case GT:  return val_parsed >  m_value    ? istart : EDA_PATTERN_NOT_FOUND;
+    case ANY: return istart;
+    default:  return EDA_PATTERN_NOT_FOUND;
     }
 }
 

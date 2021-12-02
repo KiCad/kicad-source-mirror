@@ -154,7 +154,7 @@ public:
 
 protected:
 
-    enum RELATION { LT, LE, EQ, GE, GT, NONE };
+    enum RELATION { LT, LE, EQ, GE, GT, ANY };
 
     wxString m_pattern;
     wxString m_key;
