@@ -199,6 +199,36 @@ wxString PATHS::GetStockEDALibraryPath()
 }
 
 
+wxString PATHS::GetStockSymbolsPath()
+{
+    wxString path;
+
+    path = GetStockDataPath() + wxT( "/symbols" );
+
+    return path;
+}
+
+
+wxString PATHS::GetStockFootprintsPath()
+{
+    wxString path;
+
+    path = GetStockDataPath() + wxT( "/footprints" );
+
+    return path;
+}
+
+
+wxString PATHS::GetStock3dmodelsPath()
+{
+    wxString path;
+
+    path = GetStockDataPath() + wxT( "/3dmodels" );
+
+    return path;
+}
+
+
 wxString PATHS::GetStockScriptingPath()
 {
     wxString path;

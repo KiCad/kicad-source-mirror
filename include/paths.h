@@ -87,6 +87,21 @@ public:
     static wxString GetDefault3rdPartyPath();
 
     /**
+     * Gets the stock (install) symbols  path
+     */
+    static wxString GetStockSymbolsPath();
+
+    /**
+     * Gets the stock (install) footprints path
+     */
+    static wxString GetStockFootprintsPath();
+
+    /**
+     * Gets the stock (install) 3dmodels path
+     */
+    static wxString GetStock3dmodelsPath();
+
+    /**
      * Gets the stock (install) scripting path
      */
     static wxString GetStockScriptingPath();

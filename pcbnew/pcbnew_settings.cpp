@@ -28,6 +28,7 @@
 #include <layer_ids.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
+#include <paths.h>
 #include <router/pns_routing_settings.h>
 #include <settings/common_settings.h>
 #include <settings/nested_settings.h>
@@ -511,10 +512,10 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     addParamsForWindow( &m_FootprintWizard, "footprint_wizard" );
 
     m_params.emplace_back( new PARAM<wxString>( "system.last_footprint_lib_dir",
-            &m_lastFootprintLibDir, "" ) );
+            &m_lastFootprintLibDir, PATHS::GetStockFootprintsPath() ) );
 
     m_params.emplace_back( new PARAM<wxString>( "system.last_footprint3d_dir",
-            &m_lastFootprint3dDir, "" ) );
+            &m_lastFootprint3dDir, PATHS::GetStock3dmodelsPath() ) );
 
     registerMigration( 0, 1,
             [&]()

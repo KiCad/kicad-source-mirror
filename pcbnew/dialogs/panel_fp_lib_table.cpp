@@ -377,9 +377,6 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     */
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
-    if( cfg->m_lastFootprintLibDir.IsEmpty() )
-        cfg->m_lastFootprintLibDir = PATHS::GetDefaultUserFootprintsPath();
-
     m_lastProjectLibDir = m_projectBasePath;
 
     auto setupGrid =
