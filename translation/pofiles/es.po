@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-21 21:17+0000\n"
-"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
+"PO-Revision-Date: 2021-12-02 21:49+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -18669,7 +18669,7 @@ msgstr "Tamaño al instalar"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
 msgid "Compatible"
-msgstr "Compatible"
+msgstr "Compatibilidad"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 msgid "Show all versions"
@@ -23707,7 +23707,7 @@ msgstr "Exportar STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "temp"
-msgstr ""
+msgstr "temp"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:36
 msgid "Coordinates"
