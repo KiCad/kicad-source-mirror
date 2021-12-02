@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -258,7 +258,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	sbSizer5->Add( gbSizerSettings, 0, wxEXPAND, 5 );
 
 
-	bSizerMiddle->Add( sbSizer5, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxTOP, 10 );
+	bSizerMiddle->Add( sbSizer5, 0, wxEXPAND|wxRIGHT|wxTOP, 10 );
 
 	wxStaticBoxSizer* sbSizerZoneStyle;
 	sbSizerZoneStyle = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fill") ), wxVERTICAL );
