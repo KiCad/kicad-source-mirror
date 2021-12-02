@@ -67,9 +67,9 @@ bool SCRIPTING_TOOL::Init()
         PyObject* sys_mod = PyImport_GetModuleDict();
         PyDict_SetItemString( sys_mod, "_pcbnew", mod );
         Py_DECREF( mod );
-    }
 
-    callLoadPlugins();
+        callLoadPlugins();
+    }
 
     return true;
 }
