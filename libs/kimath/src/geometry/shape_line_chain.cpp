@@ -157,8 +157,11 @@ void SHAPE_LINE_CHAIN::mergeFirstLastPointIfNeeded()
     {
         if( m_points.size() > 1 && m_points.front() == m_points.back() )
         {
-            m_shapes.front().second = m_shapes.front().first;
-            m_shapes.front().first = m_shapes.back().first;
+            if( m_shapes.back() != SHAPES_ARE_PT )
+            {
+                m_shapes.front().second = m_shapes.front().first;
+                m_shapes.front().first = m_shapes.back().first;
+            }
 
             m_points.pop_back();
             m_shapes.pop_back();

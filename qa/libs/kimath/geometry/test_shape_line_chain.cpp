@@ -111,9 +111,32 @@ BOOST_AUTO_TEST_CASE( ArcToPolylineLargeCoords )
     BOOST_CHECK_EQUAL( base_chain.Area(), areaPriorToArcRemoval ); // Area should not have changed
 }
 
+// Test that duplicate point gets removed when line is set to be closed
+BOOST_AUTO_TEST_CASE( SetClosedDuplicatePoint )
+{
+    // Test from issue #9843
+    SHAPE_LINE_CHAIN chain;
+
+    chain.Append(
+            SHAPE_ARC( { -859598, 2559876 }, { -1632771, 1022403 }, { -3170244, 249230 }, 0 ) );
+
+    chain.Append(
+            SHAPE_ARC( { -3170244, -1657832 }, { -292804, -317564 }, { 1047464, 2559876 }, 0 ) );
+
+    chain.Append( VECTOR2I( -859598, 2559876 ) ); // add point that is equal to first arc start
+
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 31 );
+
+    // CLOSED CHAIN
+    chain.SetClosed( true );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 30 ); // (-1) should have removed coincident points
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+}
+
 
 // Test special case where the last arc in the chain has a shared point with the first arc
-BOOST_AUTO_TEST_CASE( ArcWrappingToStart )
+BOOST_AUTO_TEST_CASE( ArcWrappingToStartSharedPoints )
 {
     // represent a circle with two semicircular arcs
     SHAPE_ARC arc1( VECTOR2I( 100000, 0 ), VECTOR2I( 0, 100000 ), VECTOR2I( -100000, 0 ), 0 );
