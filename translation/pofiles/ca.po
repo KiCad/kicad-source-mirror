@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-16 18:39+0000\n"
+"PO-Revision-Date: 2021-12-04 19:50+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -6889,9 +6889,9 @@ msgid "Equivalence File Load Error"
 msgstr "Error en carregar el fitxer d'equivalència"
 
 #: cvpcb/auto_associate.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "%lu equivalències empremta/cmp trobades."
+msgstr "S'han trobat %lu equivalències d'empremta/símbol."
 
 #: cvpcb/auto_associate.cpp:261
 #, c-format
@@ -6926,24 +6926,20 @@ msgstr ""
 "d'empremtes."
 
 #: cvpcb/cvpcb_mainframe.cpp:63 cvpcb/menubar.cpp:51
-#, fuzzy
 msgid "Assign Footprints"
-msgstr "A&ssigna les empremtes"
+msgstr "Assigna les empremtes"
 
 #: cvpcb/cvpcb_mainframe.cpp:103 pcbnew/dialogs/panel_fp_lib_table.cpp:1080
-#, fuzzy
 msgid "Footprint Libraries"
-msgstr "Assistent per afegir biblioteques d'empremtes"
+msgstr "Biblioteques d'empremtes"
 
 #: cvpcb/cvpcb_mainframe.cpp:107
-#, fuzzy
 msgid "Symbol : Footprint Assignments"
-msgstr "Desa el fitxer de l'associació de l'empremta"
+msgstr "Símbol: Assignació d'empremtes"
 
 #: cvpcb/cvpcb_mainframe.cpp:110
-#, fuzzy
 msgid "Filtered Footprints"
-msgstr "Llista de les empremtes"
+msgstr "Empremtes filtrades"
 
 #: cvpcb/cvpcb_mainframe.cpp:144
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:105
@@ -18902,14 +18898,12 @@ msgid "Metadata"
 msgstr ""
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
-#, fuzzy
 msgid "Package identifier: "
-msgstr "Nou identificador de biblioteca:"
+msgstr "Identificador del paquet: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "Llicència"
+msgstr "Llicència: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
 msgid "Tags: "
@@ -19127,9 +19121,8 @@ msgid "Aborting package installation."
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:254
-#, fuzzy
 msgid "Extracted package\n"
-msgstr "Extreu el fitxer «%s»"
+msgstr "Paquet extret\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:298
 #, fuzzy, c-format
@@ -29974,9 +29967,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:1115 pcbnew/drc/drc_engine.cpp:1126
-#, fuzzy, c-format
+#, c-format
 msgid "Local clearance on %s; clearance: %s."
-msgstr "Marge de seguretat local i ajusts"
+msgstr "Marge local en %s; marge: %s."
 
 #: pcbnew/drc/drc_item.cpp:43
 #, fuzzy
@@ -30187,85 +30180,82 @@ msgid "Through hole pad has no hole"
 msgstr "Error: el pad no té cap capa"
 
 #: pcbnew/drc/drc_item.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "Rule: %s"
-msgstr "Propietats de l'àrea de prohibit el pas"
+msgstr "Regla: %s"
 
 #: pcbnew/drc/drc_item.cpp:336
-#, fuzzy
 msgid "Local override"
-msgstr "Valors dels marges de seguretat locals"
+msgstr "Anul·lació local"
 
 #: pcbnew/drc/drc_rule.h:137
-#, fuzzy, c-format
+#, c-format
 msgid "rule %s"
-msgstr "angle %s"
+msgstr "regla %s"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
-msgstr ""
+msgstr "ERROR en la expressió."
 
 #: pcbnew/drc/drc_rule_condition.cpp:100 pcbnew/drc/drc_rule_parser.cpp:60
 #: pcbnew/drc/drc_rule_parser.cpp:436
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr ""
+msgstr "ERROR: <a href='%d:%d'>%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:67 pcbnew/drc/drc_rule_parser.cpp:443
 #, c-format
 msgid "ERROR: %s%s"
-msgstr ""
+msgstr "ERROR: %s%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:102 pcbnew/drc/drc_rule_parser.cpp:184
 #: pcbnew/drc/drc_rule_parser.cpp:341
-#, fuzzy
 msgid "Missing '('."
-msgstr "Falta:"
+msgstr "Falta '('."
 
 #: pcbnew/drc/drc_rule_parser.cpp:108
 msgid "Missing version statement."
-msgstr ""
+msgstr "Falta la declaració de la versió."
 
 #: pcbnew/drc/drc_rule_parser.cpp:120
 msgid "Missing version number."
-msgstr ""
+msgstr "Falta el número de versió."
 
 #: pcbnew/drc/drc_rule_parser.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'.| Expected version number."
-msgstr "Ítems sense connectar"
+msgstr "Element '%s' no reconegut.| Número de versió previst."
 
 #: pcbnew/drc/drc_rule_parser.cpp:139 pcbnew/drc/drc_rule_parser.cpp:217
 #: pcbnew/drc/drc_rule_parser.cpp:361 pcbnew/drc/drc_rule_parser.cpp:381
 #: pcbnew/drc/drc_rule_parser.cpp:401 pcbnew/drc/drc_rule_parser.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'."
-msgstr "Ítems sense connectar"
+msgstr "Element '%s' desconegut."
 
 #: pcbnew/drc/drc_rule_parser.cpp:152 pcbnew/drc/drc_rule_parser.cpp:229
 #: pcbnew/drc/drc_rule_parser.cpp:408
 msgid "Incomplete statement."
-msgstr ""
+msgstr "Declaració incompleta."
 
 #: pcbnew/drc/drc_rule_parser.cpp:156 pcbnew/drc/drc_rule_parser.cpp:233
 #: pcbnew/drc/drc_rule_parser.cpp:285 pcbnew/drc/drc_rule_parser.cpp:323
 #: pcbnew/drc/drc_rule_parser.cpp:412
 #, c-format
 msgid "Unrecognized item '%s'.| Expected %s."
-msgstr ""
+msgstr "Element '%s' desconegut. S'esperava %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:164
-#, fuzzy
 msgid "No errors found."
-msgstr "Cap marcador trobat"
+msgstr "No s'han trobat errors."
 
 #: pcbnew/drc/drc_rule_parser.cpp:177
 msgid "Missing rule name."
-msgstr ""
+msgstr "Falta el nom de la regla."
 
 #: pcbnew/drc/drc_rule_parser.cpp:199
 msgid "Missing condition expression."
-msgstr ""
+msgstr "Falta l'expressió de la condició."
 
 #: pcbnew/drc/drc_rule_parser.cpp:210
 #, c-format
@@ -30274,9 +30264,8 @@ msgstr ""
 
 #: pcbnew/drc/drc_rule_parser.cpp:241 pcbnew/drc/drc_rule_parser.cpp:319
 #: pcbnew/drc/drc_rule_parser.cpp:332 pcbnew/drc/drc_rule_parser.cpp:421
-#, fuzzy
 msgid "Missing ')'."
-msgstr "Falta:"
+msgstr "Falta ')'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:257
 #, c-format
