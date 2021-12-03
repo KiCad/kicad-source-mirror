@@ -1147,8 +1147,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
         {
             SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
 
-            editor->FindSymbolAndItem( refs[ 0 ].GetRef() + refs[ 0 ].GetRefNumber(), true,
-                                       HIGHLIGHT_SYMBOL, wxEmptyString );
+            wxString path = refs[0].GetPath();
+            wxString reference = refs[0].GetRef() + refs[0].GetRefNumber();
+
+            editor->FindSymbolAndItem( &path, &reference, true, HIGHLIGHT_SYMBOL, wxEmptyString );
         }
     }
     else

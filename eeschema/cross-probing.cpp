@@ -40,9 +40,8 @@
 #include <netclass.h>
 #include <wx/log.h>
 
-SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
-                                                 bool            aSearchHierarchy,
-                                                 SCH_SEARCH_T    aSearchType,
+SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wxString* aReference,
+                                                 bool aSearchHierarchy, SCH_SEARCH_T aSearchType,
                                                  const wxString& aSearchText )
 {
     SCH_SHEET_PATH* sheetWithSymbolFound = nullptr;
@@ -65,7 +64,20 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
         {
             SCH_SYMBOL* candidate = static_cast<SCH_SYMBOL*>( item );
 
-            if( aReference.CmpNoCase( candidate->GetRef( &sheet ) ) == 0 )
+            // Search by path if specified, otherwise search by reference
+            bool found = false;
+
+            if( aPath )
+            {
+                wxString path = sheet.PathAsString() + candidate->m_Uuid.AsString();
+                found = ( *aPath == path );
+            }
+            else
+            {
+                found = ( aReference && aReference->CmpNoCase( candidate->GetRef( &sheet ) ) == 0 );
+            }
+
+            if( found )
             {
                 symbol = candidate;
                 sheetWithSymbolFound = &sheet;
@@ -233,24 +245,30 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString& aReference,
 
     /* Print diag */
     wxString msg;
+    wxString displayRef;
+
+    if( aReference )
+        displayRef = *aReference;
+    else if( aPath )
+        displayRef = *aPath;
 
     if( symbol )
     {
         if( aSearchType == HIGHLIGHT_PIN )
         {
             if( foundItem )
-                msg.Printf( _( "%s pin %s found" ), aReference, aSearchText );
+                msg.Printf( _( "%s pin %s found" ), displayRef, aSearchText );
             else
-                msg.Printf( _( "%s found but pin %s not found" ), aReference, aSearchText );
+                msg.Printf( _( "%s found but pin %s not found" ), displayRef, aSearchText );
         }
         else
         {
-            msg.Printf( _( "%s found" ), aReference );
+            msg.Printf( _( "%s found" ), displayRef );
         }
     }
     else
     {
-        msg.Printf( _( "%s not found" ), aReference );
+        msg.Printf( _( "%s not found" ), displayRef );
     }
 
     m_frame->SetStatusText( msg );
@@ -327,7 +345,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( idcmd == nullptr )    // Highlight symbol only (from CvPcb or Pcbnew)
     {
         // Highlight symbol part_ref, or clear Highlight, if part_ref is not existing
-        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_SYMBOL, wxEmptyString );
+        editor->FindSymbolAndItem( nullptr, &part_ref, true, HIGHLIGHT_SYMBOL, wxEmptyString );
         return;
     }
 
@@ -342,21 +360,21 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     {
         // Highlighting the reference itself isn't actually that useful, and it's harder to
         // see.  Highlight the parent and display the message.
-        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_SYMBOL, msg );
+        editor->FindSymbolAndItem( nullptr, &part_ref, true, HIGHLIGHT_SYMBOL, msg );
     }
     else if( strcmp( idcmd, "$VAL:" ) == 0 )
     {
         // Highlighting the value itself isn't actually that useful, and it's harder to see.
         // Highlight the parent and display the message.
-        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_SYMBOL, msg );
+        editor->FindSymbolAndItem( nullptr, &part_ref, true, HIGHLIGHT_SYMBOL, msg );
     }
     else if( strcmp( idcmd, "$PAD:" ) == 0 )
     {
-        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_PIN, msg );
+        editor->FindSymbolAndItem( nullptr, &part_ref, true, HIGHLIGHT_PIN, msg );
     }
     else
     {
-        editor->FindSymbolAndItem( part_ref, true, HIGHLIGHT_SYMBOL, wxEmptyString );
+        editor->FindSymbolAndItem( nullptr, &part_ref, true, HIGHLIGHT_SYMBOL, wxEmptyString );
     }
 }
 

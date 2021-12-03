@@ -42,6 +42,10 @@
 
 #include <profile.h>
 
+#ifdef KICAD_GAL_PROFILE
+#include <wx/log.h>
+#endif
+
 namespace KIGFX {
 
 class VIEW;

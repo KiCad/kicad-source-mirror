@@ -147,14 +147,17 @@ public:
     /**
      * Find a symbol in the schematic and an item in this symbol.
      *
-     * @param aReference The symbol reference designator to find.
+     * @param aPath The symbol path to find. Pass nullptr to search by aReference.
+     * @param aReference The symbol reference designator to find, or to display in 
+     *                   status bar if aPath is specified
      * @param aSearchHierarchy If false, search the current sheet only.  Otherwise,
      *                         the entire hierarchy
      * @param aSearchType A #SCH_SEARCH_T value used to determine what to search for.
      * @param aSearchText The text to search for, either in value, reference or elsewhere.
      */
-    SCH_ITEM* FindSymbolAndItem( const wxString& aReference, bool aSearchHierarchy,
-                                 SCH_SEARCH_T aSearchType, const wxString& aSearchText );
+    SCH_ITEM* FindSymbolAndItem( const wxString* aPath, const wxString* aReference,
+                                 bool aSearchHierarchy, SCH_SEARCH_T aSearchType,
+                                 const wxString& aSearchText );
 
 private:
     ///< copy selection to clipboard or to m_localClipboard if aUseLocalClipboard is true
