@@ -71,29 +71,41 @@ bool SELECTION::Contains( EDA_ITEM* aItem ) const
 VECTOR2I SELECTION::GetCenter() const
 {
     KICAD_T labelTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, EOT };
-    bool    includeLabels = true;
+    bool    hasOnlyLabels = true;
 
-    // If the selection contains at least one non-label then don't include labels when
-    // calculating the centerpoint.
+    // If the selection contains only labels calculate the center as the mean of all positions
+    // instead of using the center of the total bounding box. Otherwise rotating the selection will
+    // also translate it.
 
     for( EDA_ITEM* item : m_items )
     {
         if( !item->IsType( labelTypes ) )
         {
-            includeLabels = false;
+            hasOnlyLabels = false;
             break;
         }
     }
 
     EDA_RECT bbox;
 
+    if( hasOnlyLabels )
+    {
+        wxPoint center( 0, 0 );
+
+        for( EDA_ITEM* item : m_items )
+            center += item->GetPosition();
+
+        center = center / m_items.size();
+        return static_cast<VECTOR2I>( center );
+    }
+
     for( EDA_ITEM* item : m_items )
     {
-        if( !item->IsType( labelTypes ) || includeLabels )
+        if( !item->IsType( labelTypes ) )
             bbox.Merge( item->GetBoundingBox() );
     }
 
-    return static_cast<VECTOR2I>( bbox.Centre() );
+    return static_cast<VECTOR2I>( bbox.GetCenter() );
 }
 
 
