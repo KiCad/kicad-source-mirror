@@ -113,16 +113,9 @@ def LoadPluginModule(Dirname, ModuleName, FileName):
     import sys
     import traceback
 
-    try:
-        from importlib import reload # Python 3.4 or above
-    except ImportError:
-        from imp import reload # Python <3.4; harmless alias on 2.7
-
     global NOT_LOADED_WIZARDS
     global FULL_BACK_TRACE
     global KICAD_PLUGINS
-
-    top_level_modules = KICAD_PLUGINS.keys()
 
     try:  # If there is an error loading the script, skip it
 
@@ -134,19 +127,16 @@ def LoadPluginModule(Dirname, ModuleName, FileName):
             plugin = KICAD_PLUGINS[ModuleName]
 
             for dependency in plugin["dependencies"]:
-                if dependency in sys.modules and dependency not in top_level_modules:
+                if dependency in sys.modules:
                     del sys.modules[dependency]
 
             mods_before = set( sys.modules )
 
-            mod = reload( plugin["ModuleName"] )
-
+        if sys.version_info >= (3,0,0):
+            import importlib
+            mod = importlib.import_module( ModuleName )
         else:
-            if sys.version_info >= (3,0,0):
-                import importlib
-                mod = importlib.import_module( ModuleName )
-            else:
-                mod = __import__( ModuleName, locals(), globals() )
+            mod = __import__( ModuleName, locals(), globals() )
 
         mods_after = set( sys.modules ).difference( mods_before )
         dependencies = [m for m in mods_after if m.startswith(ModuleName)]
