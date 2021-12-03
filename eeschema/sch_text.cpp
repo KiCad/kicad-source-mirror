@@ -927,6 +927,18 @@ const EDA_RECT SCH_LABEL::GetBoundingBox() const
 }
 
 
+void SCH_LABEL::Rotate( const wxPoint& aCenter )
+{
+    wxPoint pt = GetTextPos();
+    RotatePoint( &pt, aCenter, 900 );
+    wxPoint offset = pt - GetTextPos();
+
+    Rotate90( false );
+
+    SetTextPos( GetTextPos() + offset );
+}
+
+
 wxString SCH_LABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Label '%s'" ), ShortenedShownText() );
