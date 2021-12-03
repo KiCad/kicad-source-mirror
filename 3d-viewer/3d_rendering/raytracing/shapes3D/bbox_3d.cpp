@@ -254,47 +254,6 @@ SFVEC3F BBOX_3D::Offset( const SFVEC3F& p ) const
 }
 
 
-/// @todo Why are we keeping both implementations of Intersect()?
-// Intersection code based on the book:
-// "Physical Based Ray Tracing" (by Matt Pharr and Greg Humphrey)
-// https://github.com/mmp/pbrt-v2/blob/master/src/core/geometry.cpp#L68
-#if 0
-bool BBOX_3D::Intersect( const RAY& aRay, float* aOutHitt0, float* aOutHitt1 ) const
-{
-    float t0 = 0.0f;
-    float t1 = FLT_MAX;
-
-    for( unsigned int i = 0; i < 3; ++i )
-    {
-        // Update interval for _i_th bounding box slab
-        float tNear = ( m_min[i] - aRay.m_Origin[i] ) * aRay.m_InvDir[i];
-        float tFar  = ( m_max[i] - aRay.m_Origin[i] ) * aRay.m_InvDir[i];
-
-        // Update parametric interval from slab intersection
-        if( tNear > tFar )
-        {
-            // Swap
-            float ftemp = tNear;
-            tNear = tFar;
-            tFar = ftemp;
-        }
-
-        t0 = tNear > t0 ? tNear : t0;
-        t1 = tFar  < t1 ? tFar  : t1;
-
-        if( t0 > t1 )
-            return false;
-    }
-
-    if( aOutHitt0 )
-        *aOutHitt0 = t0;
-
-    if( aOutHitt1 )
-        *aOutHitt1 = t1;
-
-    return true;
-}
-#else
 // https://github.com/mmp/pbrt-v2/blob/master/src/accelerators/bvh.cpp#L126
 bool BBOX_3D::Intersect( const RAY& aRay, float* aOutHitt0, float* aOutHitt1 ) const
 {
@@ -332,7 +291,6 @@ bool BBOX_3D::Intersect( const RAY& aRay, float* aOutHitt0, float* aOutHitt1 ) c
 
     return true;
 }
-#endif
 
 
 void BBOX_3D::ApplyTransformation( glm::mat4 aTransformMatrix )
@@ -349,22 +307,3 @@ void BBOX_3D::ApplyTransformation( glm::mat4 aTransformMatrix )
 }
 
 
-void BBOX_3D::ApplyTransformationAA( glm::mat4 aTransformMatrix )
-{
-    wxASSERT( IsInitialized() );
-
-    // apply the transformation matrix for each of vertices of the bounding box
-    // and make a union with all vertices
-    BBOX_3D tmpBBox = BBOX_3D(
-                   SFVEC3F( aTransformMatrix * glm::vec4( m_min.x, m_min.y, m_min.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_max.x, m_min.y, m_min.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_min.x, m_max.y, m_min.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_min.x, m_min.y, m_max.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_min.x, m_max.y, m_max.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_max.x, m_max.y, m_min.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_max.x, m_min.y, m_max.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_max.x, m_max.y, m_max.z, 1.0f ) ) );
-
-    m_min = tmpBBox.m_min;
-    m_max = tmpBBox.m_max;
-}

@@ -133,14 +133,6 @@ public:
     void ApplyTransformation( glm::mat4 aTransformMatrix );
 
     /**
-     * Apply a transformation matrix to the box points and recalculate it
-     * to fit an axis aligned bounding box.
-     *
-     * @param aTransformMatrix matrix to apply to the points of the bounding box.
-     */
-    void ApplyTransformationAA( glm::mat4 aTransformMatrix );
-
-    /**
      * Calculate the volume of a bounding box.
      *
      * @return float - volume of this bounding box.

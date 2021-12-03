@@ -1080,27 +1080,6 @@ EDEVICE_SET::EDEVICE_SET( wxXmlNode* aDeviceSet )
     name = parseRequiredAttribute<wxString>( aDeviceSet, "name" );
     prefix = parseOptionalAttribute<wxString>( aDeviceSet, "prefix" );
     uservalue = parseOptionalAttribute<bool>( aDeviceSet, "uservalue" );
-
-    /* Russell: Parsing of devices and gates moved to sch_eagle_plugin.cpp
-    *
-    //TODO: description
-
-    NODE_MAP aDeviceSetChildren = MapChildren(aDeviceSet);
-    wxXmlNode* deviceNode = getChildrenNodes(aDeviceSetChildren, "device");
-
-    while(deviceNode){
-        devices.push_back(EDEVICE(deviceNode));
-        deviceNode->GetNext();
-    }
-
-    wxXmlNode* gateNode = getChildrenNodes(aDeviceSetChildren, "gate");
-
-    while(gateNode){
-        gates.push_back(EGATE(gateNode));
-        gateNode->GetNext();
-    }
-    */
-
 }
 
 

@@ -811,9 +811,6 @@ void DXF_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos, int aRadius, in
 /**
  * Check if a given string contains non-ASCII characters.
  *
- * @fixme The performance of this code is really poor, but in this case it can be
- *        acceptable because the plot operation is not called very often.
- *
  * @param string String to check.
  * @return true if it contains some non-ASCII character, false if all characters are
  *         inside ASCII range (<=255).
@@ -823,6 +820,7 @@ bool containsNonAsciiChars( const wxString& string )
     for( unsigned i = 0; i < string.length(); i++ )
     {
         wchar_t ch = string[i];
+
         if( ch > 255 )
             return true;
     }
