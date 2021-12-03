@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "settings/json_settings.h"
 #include <regex>
 #include <wx/debug.h>
 #include <wx/dir.h>
@@ -522,6 +523,8 @@ bool SETTINGS_MANAGER::MigrateIfNeeded()
         wxLogTrace( traceSettings, "No migration source given; starting with defaults" );
         return true;
     }
+
+    wxLogTrace( traceSettings, "Migrating from path %s", m_migration_source );
 
     MIGRATION_TRAVERSER traverser( m_migration_source, path.GetFullPath(), m_migrateLibraryTables );
     wxDir source_dir( m_migration_source );

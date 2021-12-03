@@ -88,7 +88,10 @@ bool DIALOG_MIGRATE_SETTINGS::TransferDataFromWindow()
     if( m_btnPrevVer->GetValue() )
     {
         m_manager->SetMigrateLibraryTables( m_cbCopyLibraryTables->GetValue() );
-        m_manager->SetMigrationSource( m_cbPath->GetValue() );
+
+        // Round-trip through a wxFileName object to remove any trailing separators
+        wxFileName path( m_cbPath->GetValue(), wxEmptyString );
+        m_manager->SetMigrationSource( path.GetPath() );
     }
     else
     {
