@@ -845,40 +845,30 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
             const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
 
             m_out->Print( aNestLevel, "(gr_poly%s\n", locked.c_str() );
-            m_out->Print( aNestLevel+1, "(pts\n" );
+            m_out->Print( aNestLevel + 1, "(pts\n" );
 
-            bool need_newline = false;
+            bool needNewline = false;
+            int  nestLevel = aNestLevel + 2;
+            int  shapesAdded = 0;
 
             for( int ii = 0; ii < outline.PointCount();  ++ii )
             {
-                int nestLevel = 0;
-
-                if( !( ii % 4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave )
-                {
-                    // newline every 4 pts.
-                    nestLevel = aNestLevel + 2;
-                    m_out->Print( 0, "\n" );
-                    need_newline = false;
-                }
-
                 int ind = outline.ArcIndex( ii );
 
                 if( ind < 0 )
                 {
-                    m_out->Print( nestLevel, "%s(xy %s)",
-                                  nestLevel ? "" : " ",
+                    m_out->Print( nestLevel, "(xy %s)",
                                   FormatInternalUnits( outline.CPoint( ii ) ).c_str() );
-                    need_newline = true;
+                    needNewline = true;
                 }
                 else
                 {
                     const SHAPE_ARC& arc = outline.Arc( ind );
-                    m_out->Print( nestLevel, "%s(arc (start %s) (mid %s) (end %s))",
-                                  nestLevel ? "" : " ",
+                    m_out->Print( nestLevel, "(arc (start %s) (mid %s) (end %s))",
                                   FormatInternalUnits( arc.GetP0() ).c_str(),
                                   FormatInternalUnits( arc.GetArcMid() ).c_str(),
                                   FormatInternalUnits( arc.GetP1() ).c_str() );
-                    need_newline = true;
+                    needNewline = true;
 
                     do
                     {
@@ -887,12 +877,21 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
 
                     --ii;
                 }
+
+                ++shapesAdded;
+
+                if( !( shapesAdded % 4 ) || !ADVANCED_CFG::GetCfg().m_CompactSave )
+                {
+                    // newline every 4 shapes if compact save
+                    m_out->Print( 0, "\n" );
+                    needNewline = false;
+                }
             }
 
-            if( need_newline )
+            if( needNewline )
                 m_out->Print( 0, "\n" );
 
-            m_out->Print( aNestLevel+1, ")" );
+            m_out->Print( aNestLevel + 1, ")" );
         }
         else
         {
