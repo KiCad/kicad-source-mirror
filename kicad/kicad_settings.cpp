@@ -86,5 +86,10 @@ bool KICAD_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     ret &= fromLegacy<int>( aCfg, "LeftWinWidth", "appearance.left_frame_width" );
 
+    // Override the size parameters to ensure the new PCM button is always shown.
+    // This will make the window take the default size instead of the migrated one.
+    Set( "window.size_x", 0 );
+    Set( "window.size_y", 0 );
+
     return ret;
 }
