@@ -603,6 +603,10 @@ public:
      */
     void SetCopperLayerCount( int aNewLayerCount );
 
+    /**
+     * The full thickness of the board including copper and masks.
+     * @return
+     */
     inline int GetBoardThickness() const { return m_boardThickness; }
     inline void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }
 

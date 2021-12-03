@@ -157,39 +157,23 @@ public:
     }
 
     /**
-     * Get the current epoxy thickness.
-     *
-     * @return epoxy thickness in 3D units.
+     * Get the board body thickness, including internal copper layers (in 3D units).
      */
-    float GetEpoxyThickness() const noexcept
-    {
-        return m_epoxyThickness3DU;
-    }
+    float GetBoardBodyThickness() const noexcept { return m_boardBodyThickness3DU; }
 
     /**
-     * Get the current non copper layers thickness.
-     *
-     * @return thickness in 3D units of non copper layers.
+     * Get the non copper layers thickness (in 3D units).
      */
-    float GetNonCopperLayerThickness() const noexcept
-    {
-        return m_nonCopperLayerThickness3DU;
-    }
+    float GetNonCopperLayerThickness() const noexcept { return m_nonCopperLayerThickness3DU; }
 
     /**
-     * Get the current copper layer thickness.
-     *
-     * @return thickness in 3D units of copper layers.
+     * Get the copper layer thicknesses (in 3D units).
      */
-    float GetCopperThickness() const noexcept
-    {
-        return m_copperThickness3DU;
-    }
+    float GetFrontCopperThickness() const noexcept { return m_frontCopperThickness3DU; }
+    float GetBackCopperThickness() const noexcept { return m_backCopperThickness3DU; }
 
     /**
-     * Get the current copper layer thickness.
-     *
-     * @return thickness in board units.
+     * Get the hole plating thickness (NB: in BOARD UNITS!).
      */
     int GetHolePlatingThickness() const noexcept;
 
@@ -604,8 +588,9 @@ private:
     std::array<float, PCB_LAYER_ID_COUNT> m_layerZcoordBottom; ///< Bottom (Start) Z position of
                                                                ///< each layer in 3D units.
 
-    float             m_copperThickness3DU;
-    float             m_epoxyThickness3DU;
+    float             m_frontCopperThickness3DU;
+    float             m_backCopperThickness3DU;
+    float             m_boardBodyThickness3DU;
     float             m_nonCopperLayerThickness3DU;
     float             m_solderPasteLayerThickness3DU;
 

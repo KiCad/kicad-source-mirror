@@ -39,6 +39,15 @@
 #include <wx/log.h>
 
 
+#define DEFAULT_BOARD_THICKNESS Millimeter2iu( 1.6 )
+#define DEFAULT_COPPER_THICKNESS Millimeter2iu( 0.035 )   // for 35 um
+// The solder mask layer (and silkscreen) thickness
+#define DEFAULT_TECH_LAYER_THICKNESS Millimeter2iu( 0.025 )
+// The solder paste thickness is chosen bigger than the solder mask layer
+// to be sure is covers the mask when overlapping.
+#define SOLDERPASTE_LAYER_THICKNESS Millimeter2iu( 0.04 )
+
+
 CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_SilkscreenColors;
 CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_MaskColors;
 CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_PasteColors;
@@ -91,12 +100,14 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_throughHoleOds.Clear();
     m_throughHoleAnnularRings.Clear();
 
-    m_copperLayersCount = -1;
-    m_epoxyThickness3DU = 0.0f;
-    m_copperThickness3DU  = 0.0f;
-    m_nonCopperLayerThickness3DU = 0.0f;
-    m_solderPasteLayerThickness3DU = 0.0f;
+    m_copperLayersCount = 2;
+
     m_biuTo3Dunits = 1.0;
+    m_boardBodyThickness3DU        = DEFAULT_BOARD_THICKNESS      * m_biuTo3Dunits;
+    m_frontCopperThickness3DU      = DEFAULT_COPPER_THICKNESS     * m_biuTo3Dunits;
+    m_backCopperThickness3DU       = DEFAULT_COPPER_THICKNESS     * m_biuTo3Dunits;
+    m_nonCopperLayerThickness3DU   = DEFAULT_TECH_LAYER_THICKNESS * m_biuTo3Dunits;
+    m_solderPasteLayerThickness3DU = SOLDERPASTE_LAYER_THICKNESS  * m_biuTo3Dunits;
 
     m_trackCount = 0;
     m_viaCount = 0;
@@ -255,18 +266,10 @@ bool BOARD_ADAPTER::IsFootprintShown( FOOTPRINT_ATTR_T aFPAttributes ) const
 }
 
 
-// !TODO: define the actual copper thickness by user from board stackup
-#define COPPER_THICKNESS Millimeter2iu( 0.035 )   // for 35 um
-// The solder mask layer (and silkscreen) thickness
-#define TECH_LAYER_THICKNESS Millimeter2iu( 0.025 )
-// The solder paste thickness is chosen bigger than the solder mask layer
-// to be sure is covers the mask when overlapping.
-#define SOLDERPASTE_LAYER_THICKNESS Millimeter2iu( 0.04 )
-
 int BOARD_ADAPTER::GetHolePlatingThickness() const noexcept
 {
     return m_board ? m_board->GetDesignSettings().GetHolePlatingThickness()
-                   : 0.035 * PCB_IU_PER_MM;
+                   : DEFAULT_COPPER_THICKNESS;
 }
 
 
@@ -335,20 +338,51 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     // Calculate the conversion to apply to all positions.
     m_biuTo3Dunits = RANGE_SCALE_3D / std::max( m_boardSize.x, m_boardSize.y );
 
-    m_epoxyThickness3DU = m_board
-                            ? m_board->GetDesignSettings().GetBoardThickness() * m_biuTo3Dunits
-                            : 1.6 * PCB_IU_PER_MM * m_biuTo3Dunits;
+    m_boardBodyThickness3DU        = DEFAULT_BOARD_THICKNESS      * m_biuTo3Dunits;
+    m_frontCopperThickness3DU      = DEFAULT_COPPER_THICKNESS     * m_biuTo3Dunits;
+    m_backCopperThickness3DU       = DEFAULT_COPPER_THICKNESS     * m_biuTo3Dunits;
+    m_nonCopperLayerThickness3DU   = DEFAULT_TECH_LAYER_THICKNESS * m_biuTo3Dunits;
+    m_solderPasteLayerThickness3DU = SOLDERPASTE_LAYER_THICKNESS  * m_biuTo3Dunits;
 
-    // !TODO: use value defined by user (currently use default values by ctor
-    m_copperThickness3DU         = COPPER_THICKNESS     * m_biuTo3Dunits;
-    m_nonCopperLayerThickness3DU = TECH_LAYER_THICKNESS * m_biuTo3Dunits;
-    m_solderPasteLayerThickness3DU = SOLDERPASTE_LAYER_THICKNESS * m_biuTo3Dunits;
+    if( m_board )
+    {
+        const BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+        if( bds.GetStackupDescriptor().GetCount() )
+        {
+            int thickness = 0;
+
+            for( BOARD_STACKUP_ITEM* item : bds.GetStackupDescriptor().GetList() )
+            {
+                switch( item->GetType() )
+                {
+                case BS_ITEM_TYPE_DIELECTRIC:
+                    thickness += item->GetThickness();
+                    break;
+
+                case BS_ITEM_TYPE_COPPER:
+                    if( item->GetBrdLayerId() == F_Cu )
+                        m_frontCopperThickness3DU = item->GetThickness() * m_biuTo3Dunits;
+                    else if( item->GetBrdLayerId() == B_Cu )
+                        m_backCopperThickness3DU = item->GetThickness() * m_biuTo3Dunits;
+                    else if( item->IsEnabled() )
+                        thickness += item->GetThickness();
+
+                    break;
+
+                default:
+                    break;
+                }
+            }
+
+            m_boardBodyThickness3DU = thickness * m_biuTo3Dunits;
+        }
+    }
 
     // Init  Z position of each layer
     // calculate z position for each copper layer
     // Zstart = -m_epoxyThickness / 2.0 is the z position of the back (bottom layer) (layer id = 31)
     // Zstart = +m_epoxyThickness / 2.0 is the z position of the front (top layer) (layer id = 0)
-    // all unused copper layer z position are set to 0
 
     //  ____==__________==________==______ <- Bottom = +m_epoxyThickness / 2.0,
     // |                                  |   Top = Bottom + m_copperThickness
@@ -360,24 +394,26 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
     for( layer = 0; layer < m_copperLayersCount; ++layer )
     {
-        m_layerZcoordBottom[layer] = m_epoxyThickness3DU / 2.0f -
-                                     (m_epoxyThickness3DU * layer / (m_copperLayersCount - 1) );
+        // This approximates internal layer positions (because we're treating all the dielectric
+        // layers as having the same thickness).  But we don't render them anyway so it doesn't
+        // really matter.
+        m_layerZcoordBottom[layer] = m_boardBodyThickness3DU / 2.0f -
+                                     (m_boardBodyThickness3DU * layer / (m_copperLayersCount - 1) );
 
         if( layer < (m_copperLayersCount / 2) )
-            m_layerZcoordTop[layer] = m_layerZcoordBottom[layer] + m_copperThickness3DU;
+            m_layerZcoordTop[layer] = m_layerZcoordBottom[layer] + m_frontCopperThickness3DU;
         else
-            m_layerZcoordTop[layer] = m_layerZcoordBottom[layer] - m_copperThickness3DU;
+            m_layerZcoordTop[layer] = m_layerZcoordBottom[layer] - m_backCopperThickness3DU;
     }
 
     #define layerThicknessMargin 1.1
     const float zpos_offset = m_nonCopperLayerThickness3DU * layerThicknessMargin;
 
-    // Fill remaining unused copper layers and back layer zpos
-    // with -m_epoxyThickness / 2.0
+    // Fill remaining unused copper layers and back layer zpos with -m_boardBodyThickness / 2.0
     for( ; layer < MAX_CU_LAYERS; layer++ )
     {
-        m_layerZcoordBottom[layer] = -(m_epoxyThickness3DU / 2.0f);
-        m_layerZcoordTop[layer]    = -(m_epoxyThickness3DU / 2.0f) - m_copperThickness3DU;
+        m_layerZcoordBottom[layer] = -( m_boardBodyThickness3DU / 2.0f );
+        m_layerZcoordTop[layer]    = -( m_boardBodyThickness3DU / 2.0f ) - m_backCopperThickness3DU;
     }
 
     // This is the top of the copper layer thickness.

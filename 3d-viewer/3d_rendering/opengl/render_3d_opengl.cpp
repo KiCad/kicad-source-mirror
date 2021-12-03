@@ -533,8 +533,8 @@ void RENDER_3D_OPENGL::renderBoardBody( bool aSkipRenderHoles )
 
     if( ogl_disp_list )
     {
-        ogl_disp_list->ApplyScalePosition( -m_boardAdapter.GetEpoxyThickness() / 2.0f,
-                                            m_boardAdapter.GetEpoxyThickness() );
+        ogl_disp_list->ApplyScalePosition( -m_boardAdapter.GetBoardBodyThickness() / 2.0f,
+                                           m_boardAdapter.GetBoardBodyThickness() );
 
         ogl_disp_list->SetItIsTransparent( true );
 
@@ -1049,40 +1049,28 @@ void RENDER_3D_OPENGL::freeAllLists()
     delete m_platedPadsBack;
     m_platedPadsBack = nullptr;
 
-    for( MAP_OGL_DISP_LISTS::const_iterator ii = m_outerLayerHoles.begin();
-         ii != m_outerLayerHoles.end();
-         ++ii )
-    {
-        OPENGL_RENDER_LIST* pLayerDispList = static_cast<OPENGL_RENDER_LIST*>( ii->second );
-        delete pLayerDispList;
-    }
+
+    for( const std::pair<const PCB_LAYER_ID, OPENGL_RENDER_LIST*> entry : m_outerLayerHoles )
+        delete entry.second;
 
     m_outerLayerHoles.clear();
 
-    for( MAP_OGL_DISP_LISTS::const_iterator ii = m_innerLayerHoles.begin();
-         ii != m_innerLayerHoles.end();
-         ++ii )
-    {
-        OPENGL_RENDER_LIST* pLayerDispList = static_cast<OPENGL_RENDER_LIST*>( ii->second );
-        delete pLayerDispList;
-    }
+    for( const std::pair<const PCB_LAYER_ID, OPENGL_RENDER_LIST*> entry : m_innerLayerHoles )
+        delete entry.second;
 
     m_innerLayerHoles.clear();
 
     for( LIST_TRIANGLES::const_iterator ii = m_triangles.begin(); ii != m_triangles.end(); ++ii )
-    {
         delete *ii;
-    }
 
     m_triangles.clear();
 
-    for( MAP_3DMODEL::const_iterator ii = m_3dModelMap.begin(); ii != m_3dModelMap.end(); ++ii )
-    {
-        MODEL_3D* pointer = static_cast<MODEL_3D*>(ii->second);
-        delete pointer;
-    }
+    for( const std::pair<const wxString&, MODEL_3D*>& entry : m_3dModelMap )
+        delete entry.second;
 
     m_3dModelMap.clear();
+
+    m_3dModelMatrixMap.clear();
 
     delete m_board;
     m_board = nullptr;
@@ -1267,18 +1255,29 @@ void RENDER_3D_OPENGL::renderFootprint( const FOOTPRINT* aFootprint, bool aRende
                 {
                     glPushMatrix();
 
-                    // FIXME: don't do this over and over again unless the
-                    // values have changed.  cache the matrix somewhere.
-                    glm::mat4 mtx( 1 );
-                    mtx = glm::translate( mtx, { sM.m_Offset.x, sM.m_Offset.y, sM.m_Offset.z } );
-                    mtx = glm::rotate( mtx, glm::radians( (float) -sM.m_Rotation.z ),
-                                       { 0.0f, 0.0f, 1.0f } );
-                    mtx = glm::rotate( mtx, glm::radians( (float) -sM.m_Rotation.y ),
-                                       { 0.0f, 1.0f, 0.0f } );
-                    mtx = glm::rotate( mtx, glm::radians( (float) -sM.m_Rotation.x ),
-                                       { 1.0f, 0.0f, 0.0f } );
-                    mtx = glm::scale( mtx, { sM.m_Scale.x, sM.m_Scale.y, sM.m_Scale.z } );
-                    glMultMatrixf( glm::value_ptr( mtx ) );
+                    std::vector<double> key = { sM.m_Offset.x, sM.m_Offset.y, sM.m_Offset.z,
+                                                sM.m_Rotation.x, sM.m_Rotation.y, sM.m_Rotation.z,
+                                                sM.m_Scale.x, sM.m_Scale.y, sM.m_Scale.z };
+
+                    auto it = m_3dModelMatrixMap.find( key );
+
+                    if( it != m_3dModelMatrixMap.end() )
+                    {
+                        glMultMatrixf( glm::value_ptr( it->second ) );
+                    }
+                    else
+                    {
+                        glm::mat4 mtx( 1 );
+                        mtx = glm::translate( mtx, { sM.m_Offset.x, sM.m_Offset.y, sM.m_Offset.z } );
+                        mtx = glm::rotate( mtx, glm::radians( (float) -sM.m_Rotation.z ), { 0.0f, 0.0f, 1.0f } );
+                        mtx = glm::rotate( mtx, glm::radians( (float) -sM.m_Rotation.y ), { 0.0f, 1.0f, 0.0f } );
+                        mtx = glm::rotate( mtx, glm::radians( (float) -sM.m_Rotation.x ), { 1.0f, 0.0f, 0.0f } );
+                        mtx = glm::scale( mtx, { sM.m_Scale.x, sM.m_Scale.y, sM.m_Scale.z } );
+                        m_3dModelMatrixMap[ key ] = mtx;
+
+                        glMultMatrixf( glm::value_ptr( mtx ) );
+                    }
+
 
                     if( aRenderTransparentOnly )
                     {

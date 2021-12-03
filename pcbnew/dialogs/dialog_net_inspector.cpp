@@ -1386,6 +1386,7 @@ unsigned int DIALOG_NET_INSPECTOR::calculateViaLength( const PCB_TRACK* aTrack )
     else
     {
         int dielectricLayers = bds.GetCopperLayerCount() - 1;
+        // FIXME: not all dielectric layers are the same thickness!
         int layerThickness = bds.GetBoardThickness() / dielectricLayers;
         int effectiveBottomLayer;
 

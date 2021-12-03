@@ -654,11 +654,11 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     {
         createItemsFromContainer( m_boardAdapter.GetPlatedPadsFront(), F_Cu, &m_materials.m_Copper,
                                   m_boardAdapter.m_CopperColor,
-                                  m_boardAdapter.GetCopperThickness() * 0.1f );
+                                  m_boardAdapter.GetFrontCopperThickness() * 0.1f );
 
         createItemsFromContainer( m_boardAdapter.GetPlatedPadsBack(), B_Cu, &m_materials.m_Copper,
                                   m_boardAdapter.m_CopperColor,
-                                  -m_boardAdapter.GetCopperThickness() * 0.1f );
+                                  -m_boardAdapter.GetBackCopperThickness() * 0.1f );
     }
 
     if( !aOnlyLoadCopperAndShapes )
@@ -952,10 +952,10 @@ void RENDER_3D_RAYTRACE::insertHole( const PCB_VIA* aVia )
     aVia->LayerPair( &top_layer, &bottom_layer );
 
     float topZ = m_boardAdapter.GetLayerBottomZPos( top_layer )
-                 + m_boardAdapter.GetCopperThickness();
+                 + m_boardAdapter.GetFrontCopperThickness();
 
     float botZ = m_boardAdapter.GetLayerBottomZPos( bottom_layer )
-                 - m_boardAdapter.GetCopperThickness();
+                 - m_boardAdapter.GetBackCopperThickness();
 
     const SFVEC2F center = SFVEC2F( aVia->GetStart().x * m_boardAdapter.BiuTo3dUnits(),
                                     -aVia->GetStart().y * m_boardAdapter.BiuTo3dUnits() );
@@ -1003,10 +1003,10 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
     CONST_LIST_OBJECT2D antiOutlineIntersectionList;
 
     const float topZ = m_boardAdapter.GetLayerBottomZPos( F_Cu )
-                       + m_boardAdapter.GetCopperThickness() * 0.99f;
+                       + m_boardAdapter.GetFrontCopperThickness() * 0.99f;
 
     const float botZ = m_boardAdapter.GetLayerBottomZPos( B_Cu )
-                       - m_boardAdapter.GetCopperThickness() * 0.99f;
+                       - m_boardAdapter.GetBackCopperThickness() * 0.99f;
 
     if( drillsize.x == drillsize.y ) // usual round hole
     {

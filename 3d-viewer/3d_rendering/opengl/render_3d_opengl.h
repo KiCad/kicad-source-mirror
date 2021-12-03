@@ -41,10 +41,8 @@
 
 #include <map>
 
-
 typedef std::map< PCB_LAYER_ID, OPENGL_RENDER_LIST* > MAP_OGL_DISP_LISTS;
 typedef std::list<TRIANGLE_DISPLAY_LIST* > LIST_TRIANGLES;
-typedef std::map< wxString, MODEL_3D* > MAP_3DMODEL;
 
 #define SIZE_OF_CIRCLE_TEXTURE 1024
 
@@ -208,7 +206,9 @@ private:
     OPENGL_RENDER_LIST* m_vias;
     OPENGL_RENDER_LIST* m_padHoles;
 
-    MAP_3DMODEL         m_3dModelMap;
+    // Caches
+    std::map< wxString, MODEL_3D* >            m_3dModelMap;
+    std::map< std::vector<double>, glm::mat4 > m_3dModelMatrixMap;
 
     BOARD_ITEM*         m_currentRollOverItem;
 
