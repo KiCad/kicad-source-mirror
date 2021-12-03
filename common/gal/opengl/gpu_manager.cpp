@@ -85,7 +85,12 @@ void GPU_MANAGER::SetShader( SHADER& aShader )
 GPU_CACHED_MANAGER::GPU_CACHED_MANAGER( VERTEX_CONTAINER* aContainer ) :
         GPU_MANAGER( aContainer ),
         m_buffersInitialized( false ),
-        m_indicesCapacity( 0 )
+        m_indicesCapacity( 0 ),
+        m_totalHuge( 0 ),
+        m_totalNormal( 0 ),
+        m_indexBufSize( 0 ),
+        m_indexBufMaxSize( 0 ),
+        m_curVrangeSize( 0 )
 {
 }
 

@@ -219,7 +219,10 @@ extern wxString dump( const wxArrayString& aArray );
 class TRACE_MANAGER
 {
 public:
-    TRACE_MANAGER(){};
+    TRACE_MANAGER() :
+        m_globalTraceEnabled( false ),
+        m_printAllTraces (false )
+    {};
     ~TRACE_MANAGER(){};
 
     static TRACE_MANAGER& Instance();
