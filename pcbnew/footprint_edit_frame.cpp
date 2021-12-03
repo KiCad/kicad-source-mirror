@@ -185,8 +185,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
     m_appearancePanel = new APPEARANCE_CONTROLS( this, GetCanvas(), true );
 
-    resolveCanvasType();
-
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings() initialize
     // parameters in m_LayersManager
     // NOTE: KifaceSettings() will return PCBNEW_SETTINGS if we started from pcbnew
@@ -290,6 +288,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
     UpdateTitle();
     setupUnits( GetSettings() );
+
+    resolveCanvasType();
 
     // Default shutdown reason until a file is loaded
     KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Footprint changes are unsaved" ) );
