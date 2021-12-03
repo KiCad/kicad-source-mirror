@@ -27,8 +27,9 @@
 #ifndef DIALOG_SPICE_MODEL_H
 #define DIALOG_SPICE_MODEL_H
 
-#include "dialog_spice_model_base.h"
-#include "netlist_exporter_pspice.h"
+#include <dialog_spice_model_base.h>
+#include <netlist_exporter_pspice.h>
+#include <scintilla_tricks.h>
 
 #include <sim/spice_value.h>
 #include <sch_symbol.h>
@@ -167,6 +168,8 @@ private:
     SPICE_VALIDATOR m_spiceValidator;
     SPICE_VALIDATOR m_spiceEmptyValidator;
     wxTextValidator m_notEmptyValidator;
+
+    std::unique_ptr<SCINTILLA_TRICKS> m_scintillaTricks;
 };
 
 #endif /* DIALOG_SPICE_MODEL_H */

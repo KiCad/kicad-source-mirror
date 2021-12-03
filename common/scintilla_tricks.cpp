@@ -81,7 +81,7 @@ void SCINTILLA_TRICKS::setupStyles()
     wxColour   foreground    = dummy.GetForegroundColour();
     wxColour   background    = dummy.GetBackgroundColour();
     wxColour   highlight     = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
-   	wxColour   highlightText = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
+    wxColour   highlightText = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
 
     m_te->StyleSetForeground( wxSTC_STYLE_DEFAULT, foreground );
     m_te->StyleSetBackground( wxSTC_STYLE_DEFAULT, background );
@@ -104,11 +104,11 @@ void SCINTILLA_TRICKS::setupStyles()
     }
 
     // Set up the brace highlighting
-   	unsigned char r = highlight.Red();
+    unsigned char r = highlight.Red();
     unsigned char g = highlight.Green();
     unsigned char b = highlight.Blue();
-   	wxColour::MakeGrey( &r, &g, &b );
-   	highlight.Set( r, g, b );
+    wxColour::MakeGrey( &r, &g, &b );
+    highlight.Set( r, g, b );
     m_te->StyleSetForeground( wxSTC_STYLE_BRACELIGHT, highlightText );
     m_te->StyleSetBackground( wxSTC_STYLE_BRACELIGHT, highlight );
     m_te->StyleSetForeground( wxSTC_STYLE_BRACEBAD, *wxRED );

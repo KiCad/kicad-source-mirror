@@ -29,7 +29,8 @@
 #include <functional>
 
 /**
- * Add cut/copy/paste, autocomplete and brace highlighting to a wxStyleTextCtrl instance.
+ * Add cut/copy/paste, dark theme, autocomplete and brace highlighting to a wxStyleTextCtrl
+ * instance.
  */
 class SCINTILLA_TRICKS : public wxEvtHandler
 {

@@ -230,6 +230,8 @@ void DIALOG_SPICE_MODEL::Init()
     // wxPanel::Hide() isn't enough on some platforms
     m_powerNotebook->RemovePage( m_powerNotebook->FindPage( m_pwrTransNoise ) );
     m_powerNotebook->RemovePage( m_powerNotebook->FindPage( m_pwrExtData ) );
+
+    m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( m_libraryContents, wxT( "{}" ), false );
 }
 
 
