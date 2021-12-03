@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-12-02 21:48+0000\n"
+"PO-Revision-Date: 2021-12-04 19:50+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -6107,9 +6107,8 @@ msgid "Inactive Layer View Mode (3-state)"
 msgstr "Režim zobrazení Neaktivní vrstva (3-stavový)"
 
 #: common/tool/actions.cpp:541
-#, fuzzy
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
-msgstr "Přepínat neaktivní vrstvy mezi normálními, šedými a skrytými"
+msgstr "Cyklus neaktivní vrstvy mezi normálními, stmívanými a skrytými"
 
 #: common/tool/actions.cpp:546
 msgid "Select item(s)"
@@ -8276,16 +8275,15 @@ msgid "Map Orphans"
 msgstr "Mapujte osiřelé symboly"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:59
-#, fuzzy
 msgid ""
 "If some symbols are orphaned (the linked symbol is not found anywhere),\n"
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Pokud jsou některé ze součástek sirotci (připojená součástka nebyla nikde "
-"nalezena),\n"
+"Pokud jsou některé symboly osamocené (připojený symbol nebyl nikde nalezen),"
+"\n"
 "zkuste najít kandidáta majícího stejné jméno v jedné z načtených knihoven "
-"součástek."
+"symbolů."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
 msgid "Update symbol fields from new library"
@@ -9556,9 +9554,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties.cpp:334
-#, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr "Pro symboly DeMorgan nejsou k dispozici alternativní přiřazení vývodů."
+msgstr "Pro symboly De Morgan nejsou k dispozici alternativní přiřazení vývodů."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:283
 msgid "This symbol only has one unit. This control has no effect."
@@ -11745,14 +11742,12 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Zvýrazněte sítě, když jsou zvýrazněny v editoru PCB"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
-#, fuzzy
 msgid "Constrain buses and wires to H or V"
-msgstr "&Omezit sběrnice a vodiče na H a V orientaci"
+msgstr "Omezit sběrnice a vodiče na H nebo V"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:27
-#, fuzzy
 msgid "Mouse drag performs Drag (G) operation"
-msgstr "Přetažení myší provede operaci přetažení (G)"
+msgstr "Tažení myší provede operaci přetažení (G)"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:28
 msgid "If unchecked, mouse drag will perform move (M) operation"
@@ -11851,12 +11846,11 @@ msgstr "Odebrat položku(y) z výběru."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:134
 #: pcbnew/dialogs/panel_edit_options_base.cpp:154
-#, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Option, Shift and Cmd."
 msgstr ""
-"Akce levého kliknutí (a tažení) závisí na 3 modifikačních klávesách:\n"
+"Levé kliknutí (a tažení) závisí na 3 modifikačních klávesách:\n"
 "Alt, Shift a Cmd."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
