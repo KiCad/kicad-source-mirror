@@ -93,6 +93,8 @@ int SCRIPTING_TOOL::reloadPlugins( const TOOL_EVENT& aEvent )
         frame()->ReCreateMenuBar();
         // Recreate top toolbar to add action plugin buttons
         frame()->ReCreateHToolbar();
+        // Post a size event to force resizing toolbar by the AUI manager:
+        frame()->PostSizeEvent();
     }
 
     return 0;
