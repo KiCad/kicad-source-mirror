@@ -299,21 +299,13 @@ void SCH_TEXT::MirrorVertically( int aCenter )
 
 void SCH_TEXT::Rotate( const wxPoint& aCenter )
 {
-    wxPoint pt = GetBoundingBox().GetCenter();
+    wxPoint pt = GetTextPos();
+    RotatePoint( &pt, aCenter, 900 );
     wxPoint offset = pt - GetTextPos();
 
-    RotatePoint( &pt, aCenter, 900 );
-
-    // `offset` compensates for `GetTextPos()` not being the item center.
-    SetTextPos( pt - offset );
-
-
-    pt = GetBoundingBox().GetCenter();
     Rotate90( false );
 
-    // Compensate for `Rotate90()` shifting the item center.
-    offset = GetBoundingBox().GetCenter() - pt;
-    SetTextPos( GetTextPos() - offset );
+    SetTextPos( GetTextPos() + offset );
 }
 
 
@@ -924,18 +916,6 @@ const EDA_RECT SCH_LABEL::GetBoundingBox() const
     rect.Merge( GetPosition() );
 
     return rect;
-}
-
-
-void SCH_LABEL::Rotate( const wxPoint& aCenter )
-{
-    wxPoint pt = GetTextPos();
-    RotatePoint( &pt, aCenter, 900 );
-    wxPoint offset = pt - GetTextPos();
-
-    Rotate90( false );
-
-    SetTextPos( GetTextPos() + offset );
 }
 
 

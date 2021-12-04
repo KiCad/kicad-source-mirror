@@ -300,8 +300,6 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    void Rotate( const wxPoint& aCenter ) override;
-
     bool IsConnectable() const override { return true; }
 
     bool CanConnect( const SCH_ITEM* aItem ) const override

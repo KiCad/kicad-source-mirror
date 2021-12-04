@@ -70,25 +70,25 @@ bool SELECTION::Contains( EDA_ITEM* aItem ) const
 /// Returns the center point of the selection area bounding box.
 VECTOR2I SELECTION::GetCenter() const
 {
-    KICAD_T labelTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, EOT };
-    bool    hasOnlyLabels = true;
+    KICAD_T textTypes[] = { SCH_TEXT_T, SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, EOT };
+    bool    hasOnlyText = true;
 
-    // If the selection contains only labels calculate the center as the mean of all positions
+    // If the selection contains only texts calculate the center as the mean of all positions
     // instead of using the center of the total bounding box. Otherwise rotating the selection will
     // also translate it.
 
     for( EDA_ITEM* item : m_items )
     {
-        if( !item->IsType( labelTypes ) )
+        if( !item->IsType( textTypes ) )
         {
-            hasOnlyLabels = false;
+            hasOnlyText = false;
             break;
         }
     }
 
     EDA_RECT bbox;
 
-    if( hasOnlyLabels )
+    if( hasOnlyText )
     {
         wxPoint center( 0, 0 );
 
@@ -101,7 +101,7 @@ VECTOR2I SELECTION::GetCenter() const
 
     for( EDA_ITEM* item : m_items )
     {
-        if( !item->IsType( labelTypes ) )
+        if( !item->IsType( textTypes ) )
             bbox.Merge( item->GetBoundingBox() );
     }
 
