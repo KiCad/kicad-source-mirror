@@ -405,6 +405,11 @@ void PCB_PLUGIN::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
     case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
+    case PCB_FP_DIM_ALIGNED_T:
+    case PCB_FP_DIM_CENTER_T:
+    case PCB_FP_DIM_RADIAL_T:
+    case PCB_FP_DIM_ORTHOGONAL_T:
+    case PCB_FP_DIM_LEADER_T:
         format( static_cast<const PCB_DIMENSION_BASE*>( aItem ), aNestLevel );
         break;
 
@@ -711,15 +716,15 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
     if( aDimension->IsLocked() )
         m_out->Print( 0, " locked" );
 
-    if( aDimension->Type() == PCB_DIM_ALIGNED_T )
+    if( aligned )
         m_out->Print( 0, " (type aligned)" );
-    else if( aDimension->Type() == PCB_DIM_LEADER_T )
+    else if( leader )
         m_out->Print( 0, " (type leader)" );
-    else if( aDimension->Type() == PCB_DIM_CENTER_T )
+    else if( center )
         m_out->Print( 0, " (type center)" );
-    else if (aDimension->Type() == PCB_DIM_RADIAL_T )
+    else if( radial )
         m_out->Print( 0, " (type radial)" );
-    else if( aDimension->Type() == PCB_DIM_ORTHOGONAL_T )
+    else if( ortho )
         m_out->Print( 0, " (type orthogonal)" );
     else
         wxFAIL_MSG( wxT( "Cannot format unknown dimension type!" ) );

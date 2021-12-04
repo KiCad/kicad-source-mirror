@@ -531,10 +531,20 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 {
     for( const BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        const FP_SHAPE* shape = dynamic_cast<const FP_SHAPE*>( item );
+        if( item->Type() == PCB_FP_SHAPE_T )
+        {
+            const FP_SHAPE* shape = static_cast<const FP_SHAPE*>( item );
 
-        if( shape && m_layerMask[ shape->GetLayer() ] )
-            PlotFootprintGraphicItem( shape );
+            if( m_layerMask[ shape->GetLayer() ] )
+                PlotFootprintGraphicItem( shape );
+        }
+        else if( BaseType( item->Type() ) == PCB_DIMENSION_T )
+        {
+            const PCB_DIMENSION_BASE* dimension = static_cast<const PCB_DIMENSION_BASE*>( item );
+
+            if( m_layerMask[ dimension->GetLayer() ] )
+                PlotDimension( dimension );
+        }
     }
 }
 

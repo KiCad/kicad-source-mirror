@@ -36,10 +36,10 @@
 #include <fp_shape.h>
 #include <macros.h>
 #include <pad.h>
-#include <pcb_text.h>
 #include <pcb_marker.h>
 #include <pcb_group.h>
 #include <pcb_track.h>
+#include <pcb_dimension.h>
 #include <footprint.h>
 #include <zone.h>
 #include <view/view.h>
@@ -511,6 +511,11 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
         wxASSERT( static_cast<FP_TEXT*>( aBoardItem )->GetType() == FP_TEXT::TEXT_is_DIVERS );
         KI_FALLTHROUGH;
 
+    case PCB_FP_DIM_ALIGNED_T:
+    case PCB_FP_DIM_LEADER_T:
+    case PCB_FP_DIM_CENTER_T:
+    case PCB_FP_DIM_RADIAL_T:
+    case PCB_FP_DIM_ORTHOGONAL_T:
     case PCB_FP_SHAPE_T:
         if( aMode == ADD_MODE::APPEND )
             m_drawings.push_back( aBoardItem );
@@ -566,6 +571,11 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
                 "Please report this bug: Invalid remove operation on required text" );
         KI_FALLTHROUGH;
 
+    case PCB_FP_DIM_ALIGNED_T:
+    case PCB_FP_DIM_CENTER_T:
+    case PCB_FP_DIM_ORTHOGONAL_T:
+    case PCB_FP_DIM_RADIAL_T:
+    case PCB_FP_DIM_LEADER_T:
     case PCB_FP_SHAPE_T:
         for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
         {
@@ -762,7 +772,7 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
 
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( item->Type() == PCB_FP_SHAPE_T )
+        if( item->Type() == PCB_FP_SHAPE_T || BaseType( item->Type() ) == PCB_DIMENSION_T )
             area.Merge( item->GetBoundingBox() );
     }
 
@@ -805,12 +815,18 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
 
 
         if( ( m_value->IsVisible() && valueLayerIsVisible )
-          || aIncludeInvisibleText || noDrawItems )
+                || aIncludeInvisibleText
+                || noDrawItems )
+        {
             area.Merge( m_value->GetBoundingBox() );
+        }
 
         if( ( m_reference->IsVisible() && refLayerIsVisible )
-          || aIncludeInvisibleText || noDrawItems )
+                || aIncludeInvisibleText
+                || noDrawItems )
+        {
             area.Merge( m_reference->GetBoundingBox() );
+        }
     }
 
     if( board )
@@ -851,7 +867,7 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
 
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( item->Type() == PCB_FP_SHAPE_T )
+        if( item->Type() == PCB_FP_SHAPE_T || BaseType( item->Type() ) == PCB_DIMENSION_T )
         {
             item->TransformShapeWithClearanceToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
                                                         ERROR_OUTSIDE );
@@ -1225,6 +1241,11 @@ SEARCH_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData, const KICAD
             // Intentionally fall through since m_Drawings can hold PCB_FP_SHAPE_T also
             KI_FALLTHROUGH;
 
+        case PCB_FP_DIM_ALIGNED_T:
+        case PCB_FP_DIM_LEADER_T:
+        case PCB_FP_DIM_CENTER_T:
+        case PCB_FP_DIM_RADIAL_T:
+        case PCB_FP_DIM_ORTHOGONAL_T:
         case PCB_FP_SHAPE_T:
             result = IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, p );
 
@@ -1235,6 +1256,11 @@ SEARCH_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData, const KICAD
                 {
                 case PCB_FP_TEXT_T:
                 case PCB_FP_SHAPE_T:
+                case PCB_FP_DIM_ALIGNED_T:
+                case PCB_FP_DIM_LEADER_T:
+                case PCB_FP_DIM_CENTER_T:
+                case PCB_FP_DIM_RADIAL_T:
+                case PCB_FP_DIM_ORTHOGONAL_T:
                     continue;
 
                 default:
@@ -1583,6 +1609,14 @@ void FOOTPRINT::SetPosition( const wxPoint& aPos )
             break;
         }
 
+        case PCB_FP_DIM_ALIGNED_T:
+        case PCB_FP_DIM_CENTER_T:
+        case PCB_FP_DIM_ORTHOGONAL_T:
+        case PCB_FP_DIM_RADIAL_T:
+        case PCB_FP_DIM_LEADER_T:
+            item->Move( delta );
+            break;
+
         default:
             wxMessageBox( wxT( "Draw type undefined." ) );
             break;
@@ -1791,6 +1825,21 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
             Add( new_shape );
 
         new_item = new_shape;
+        break;
+    }
+
+    case PCB_FP_DIM_ALIGNED_T:
+    case PCB_FP_DIM_LEADER_T:
+    case PCB_FP_DIM_CENTER_T:
+    case PCB_FP_DIM_RADIAL_T:
+    case PCB_FP_DIM_ORTHOGONAL_T:
+    {
+        PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( aItem->Duplicate() );
+
+        if( aAddToFootprint )
+            Add( dimension );
+
+        new_item = dimension;
         break;
     }
 

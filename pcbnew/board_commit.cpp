@@ -175,6 +175,11 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 else if( boardItem->Type() == PCB_PAD_T ||
                          boardItem->Type() == PCB_FP_TEXT_T ||
                          boardItem->Type() == PCB_FP_SHAPE_T ||
+                         boardItem->Type() == PCB_FP_DIM_ALIGNED_T ||
+                         boardItem->Type() == PCB_FP_DIM_LEADER_T ||
+                         boardItem->Type() == PCB_FP_DIM_CENTER_T ||
+                         boardItem->Type() == PCB_FP_DIM_RADIAL_T ||
+                         boardItem->Type() == PCB_FP_DIM_ORTHOGONAL_T ||
                          boardItem->Type() == PCB_FP_ZONE_T )
                 {
                     wxASSERT( boardItem->GetParent() &&
@@ -217,6 +222,11 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_PAD_T:
                 case PCB_FP_SHAPE_T:
                 case PCB_FP_TEXT_T:
+                case PCB_FP_DIM_ALIGNED_T:
+                case PCB_FP_DIM_LEADER_T:
+                case PCB_FP_DIM_CENTER_T:
+                case PCB_FP_DIM_RADIAL_T:
+                case PCB_FP_DIM_ORTHOGONAL_T:
                 case PCB_FP_ZONE_T:
                     // This level can only handle footprint children in the footprint editor as
                     // only in that case has the entire footprint (and all its children) already
@@ -447,6 +457,11 @@ EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
         case PCB_PAD_T:
         case PCB_FP_SHAPE_T:
         case PCB_FP_TEXT_T:
+        case PCB_FP_DIM_ALIGNED_T:
+        case PCB_FP_DIM_LEADER_T:
+        case PCB_FP_DIM_CENTER_T:
+        case PCB_FP_DIM_RADIAL_T:
+        case PCB_FP_DIM_ORTHOGONAL_T:
         case PCB_FP_ZONE_T:
             return aItem->GetParent();
 

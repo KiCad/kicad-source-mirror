@@ -988,7 +988,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             if( layer != UNDEFINED_LAYER )
             {
                 const BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
-                PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board );
+                PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board, PCB_DIM_ALIGNED_T );
                 m_board->Add( dimension, ADD_MODE::APPEND );
 
                 if( d.dimensionType )

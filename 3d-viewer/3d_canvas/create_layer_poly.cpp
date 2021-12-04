@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,12 +66,22 @@ void BOARD_ADAPTER::transformFPShapesToPolygon( const FOOTPRINT* aFootprint, PCB
     {
         if( item->Type() == PCB_FP_SHAPE_T )
         {
-            FP_SHAPE* outline = (FP_SHAPE*) item;
+            FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
 
-            if( outline->GetLayer() == aLayer )
+            if( shape->GetLayer() == aLayer )
             {
-                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
-                                                               ARC_HIGH_DEF, ERROR_INSIDE );
+                shape->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
+                                                             ARC_HIGH_DEF, ERROR_INSIDE );
+            }
+        }
+        else if( BaseType( item->Type() ) == PCB_DIMENSION_T )
+        {
+            PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( item );
+
+            if( dimension->GetLayer() == aLayer )
+            {
+                dimension->TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
+                                                                 ARC_HIGH_DEF, ERROR_INSIDE );
             }
         }
     }

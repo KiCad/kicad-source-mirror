@@ -54,6 +54,7 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     switch( m_dimension->Type() )
     {
     case PCB_DIM_LEADER_T:
+    case PCB_FP_DIM_LEADER_T:
         // Hide the main format controls and keep the leader controls shown
         m_sizerFormat->GetStaticBox()->Hide();
         m_sizerCenter->GetStaticBox()->Hide();
@@ -66,7 +67,8 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_cbTextPositionMode->Hide();
         break;
 
-    case PCB_DIM_CENTER_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_FP_DIM_CENTER_T:
         m_sizerLeader->GetStaticBox()->Hide();
         m_sizerFormat->GetStaticBox()->Hide();
         m_sizerText->GetStaticBox()->Hide();

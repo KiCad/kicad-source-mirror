@@ -577,7 +577,6 @@ public:
 
     // Properties dialogs
     void ShowTargetOptionsDialog( PCB_TARGET* aTarget );
-    void ShowDimensionPropertiesDialog( PCB_DIMENSION_BASE* aDimension );
     void InstallNetlistFrame();
 
     /**

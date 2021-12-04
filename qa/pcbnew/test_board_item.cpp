@@ -69,12 +69,17 @@ public:
 
         switch( aType )
         {
-        case PCB_FOOTPRINT_T:      return new FOOTPRINT( &m_board );
-        case PCB_PAD_T:            return new PAD( &m_footprint );
-        case PCB_SHAPE_T:          return new PCB_SHAPE( &m_board );
-        case PCB_TEXT_T:           return new PCB_TEXT( &m_board );
-        case PCB_FP_TEXT_T:        return new FP_TEXT( &m_footprint );
-        case PCB_FP_SHAPE_T:       return new FP_SHAPE( &m_footprint );
+        case PCB_FOOTPRINT_T:         return new FOOTPRINT( &m_board );
+        case PCB_PAD_T:               return new PAD( &m_footprint );
+        case PCB_SHAPE_T:             return new PCB_SHAPE( &m_board );
+        case PCB_TEXT_T:              return new PCB_TEXT( &m_board );
+        case PCB_FP_TEXT_T:           return new FP_TEXT( &m_footprint );
+        case PCB_FP_SHAPE_T:          return new FP_SHAPE( &m_footprint );
+        case PCB_FP_DIM_ALIGNED_T:    return new PCB_DIM_ALIGNED( &m_footprint, PCB_FP_DIM_ALIGNED_T );
+        case PCB_FP_DIM_LEADER_T:     return new PCB_DIM_LEADER( &m_footprint, true );
+        case PCB_FP_DIM_CENTER_T:     return new PCB_DIM_CENTER( &m_footprint, true );
+        case PCB_FP_DIM_RADIAL_T:     return new PCB_DIM_RADIAL( &m_footprint, true );
+        case PCB_FP_DIM_ORTHOGONAL_T: return new PCB_DIM_ORTHOGONAL( &m_footprint, true );
         case PCB_FP_ZONE_T:
         {
             FP_ZONE* fpZone = new FP_ZONE( &m_footprint );
@@ -87,16 +92,16 @@ public:
             return fpZone;
         }
 
-        case PCB_TRACE_T:          return new PCB_TRACK( &m_board );
-        case PCB_VIA_T:            return new PCB_VIA( &m_board );
-        case PCB_ARC_T:            return new PCB_ARC( &m_board );
-        case PCB_MARKER_T:         return new PCB_MARKER( m_drcItem, wxPoint( 0, 0 ) );
-        case PCB_DIM_ALIGNED_T:    return new PCB_DIM_ALIGNED( &m_board );
-        case PCB_DIM_LEADER_T:     return new PCB_DIM_LEADER( &m_board );
-        case PCB_DIM_CENTER_T:     return new PCB_DIM_CENTER( &m_board );
-        case PCB_DIM_RADIAL_T:     return new PCB_DIM_RADIAL( &m_board );
-        case PCB_DIM_ORTHOGONAL_T: return new PCB_DIM_ORTHOGONAL( &m_board );
-        case PCB_TARGET_T:         return new PCB_TARGET( &m_board );
+        case PCB_TRACE_T:             return new PCB_TRACK( &m_board );
+        case PCB_VIA_T:               return new PCB_VIA( &m_board );
+        case PCB_ARC_T:               return new PCB_ARC( &m_board );
+        case PCB_MARKER_T:            return new PCB_MARKER( m_drcItem, wxPoint( 0, 0 ) );
+        case PCB_DIM_ALIGNED_T:       return new PCB_DIM_ALIGNED( &m_board, PCB_DIM_ALIGNED_T );
+        case PCB_DIM_LEADER_T:        return new PCB_DIM_LEADER( &m_board );
+        case PCB_DIM_CENTER_T:        return new PCB_DIM_CENTER( &m_board );
+        case PCB_DIM_RADIAL_T:        return new PCB_DIM_RADIAL( &m_board );
+        case PCB_DIM_ORTHOGONAL_T:    return new PCB_DIM_ORTHOGONAL( &m_board );
+        case PCB_TARGET_T:            return new PCB_TARGET( &m_board );
         case PCB_ZONE_T:
         {
             ZONE* zone = new ZONE( &m_board );

@@ -197,16 +197,16 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     BRDITEMS_PLOTTER itemplotter( plotter, m_pcb, plot_opts );
     itemplotter.SetLayerSet( Edge_Cuts );
 
-    for( auto PtStruct : m_pcb->Drawings() )
+    for( BOARD_ITEM* item : m_pcb->Drawings() )
     {
-        switch( PtStruct->Type() )
+        switch( item->Type() )
         {
         case PCB_SHAPE_T:
-            itemplotter.PlotPcbShape( (PCB_SHAPE*) PtStruct );
+            itemplotter.PlotPcbShape( (PCB_SHAPE*) item );
             break;
 
         case PCB_TEXT_T:
-            itemplotter.PlotPcbText( (PCB_TEXT*) PtStruct );
+            itemplotter.PlotPcbText( (PCB_TEXT*) item );
             break;
 
         case PCB_DIM_ALIGNED_T:

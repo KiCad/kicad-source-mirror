@@ -473,7 +473,9 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         // Go through all other footprint items
         for( BOARD_ITEM* boardItem : fp->GraphicalItems() )
         {
-            if( boardItem->Type() == PCB_FP_TEXT_T )
+            KICAD_T itemType = boardItem->Type();
+
+            if( itemType == PCB_FP_TEXT_T )
             {
                 // We are guaranteed to always get an EDA_TEXT in this statement, but we must
                 // use the dynamic_cast to move through the type tree anyway.
@@ -486,7 +488,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 else if( m_otherFields->GetValue() )
                     visitItem( commit, boardItem );
             }
-            else if( boardItem->Type() == PCB_FP_SHAPE_T )
+            else if( itemType == PCB_FP_SHAPE_T || BaseType( itemType ) == PCB_DIMENSION_T )
             {
                 if( m_footprintGraphics->GetValue() )
                     visitItem( commit, boardItem );

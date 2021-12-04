@@ -977,6 +977,14 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
     std::vector<BOARD_ITEM*> itemsToSel;
     itemsToSel.reserve( aItems.size() );
 
+    auto updateDimensionUnits =
+            [this]( PCB_DIMENSION_BASE* dimension )
+            {
+                // Dimensions need to have their units updated if they are automatic
+                if( dimension->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
+                    dimension->SetUnits( frame()->GetUserUnits() );
+            };
+
     for( BOARD_ITEM* item : aItems )
     {
         if( aIsNew )
@@ -988,33 +996,23 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
         }
 
         // Update item attributes if needed
-        switch( item->Type() )
+        if( BaseType( item->Type() ) == PCB_DIMENSION_T )
         {
-        case PCB_DIMENSION_T:
-        case PCB_DIM_ALIGNED_T:
-        case PCB_DIM_CENTER_T:
-        case PCB_DIM_RADIAL_T:
-        case PCB_DIM_ORTHOGONAL_T:
-        case PCB_DIM_LEADER_T:
-        {
-            // Dimensions need to have their units updated if they are automatic
-            PCB_DIMENSION_BASE* dim = static_cast<PCB_DIMENSION_BASE*>( item );
-
-            if( dim->GetUnitsMode() == DIM_UNITS_MODE::AUTOMATIC )
-                dim->SetUnits( frame()->GetUserUnits() );
-
-            break;
+            updateDimensionUnits( static_cast<PCB_DIMENSION_BASE*>( item ) );
         }
+        else if( item->Type() == PCB_FOOTPRINT_T )
+        {
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
 
-        case PCB_FOOTPRINT_T:
             // Update the footprint path with the new KIID path if the footprint is new
             if( aIsNew )
-                static_cast<FOOTPRINT*>( item )->SetPath( KIID_PATH() );
+                footprint->SetPath( KIID_PATH() );
 
-            break;
-
-        default:
-            break;
+            for( BOARD_ITEM* dwg : footprint->GraphicalItems() )
+            {
+                if( BaseType( dwg->Type() ) == PCB_DIMENSION_T )
+                    updateDimensionUnits( static_cast<PCB_DIMENSION_BASE*>( item ) );
+            }
         }
 
         // We only need to add the items that aren't inside a group currently selected

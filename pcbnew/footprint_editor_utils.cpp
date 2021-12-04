@@ -37,6 +37,8 @@
 #include <widgets/appearance_controls.h>
 #include <widgets/lib_tree.h>
 #include <pcb_layer_box_selector.h>
+#include <pcb_dimension.h>
+#include <dialogs/dialog_dimension_properties.h>
 
 using namespace std::placeholders;
 
@@ -191,6 +193,17 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     case PCB_FP_SHAPE_T :
         ShowGraphicItemPropertiesDialog( aItem );
         break;
+
+    case PCB_FP_DIM_ALIGNED_T:
+    case PCB_FP_DIM_CENTER_T:
+    case PCB_FP_DIM_RADIAL_T:
+    case PCB_FP_DIM_ORTHOGONAL_T:
+    case PCB_FP_DIM_LEADER_T:
+    {
+        DIALOG_DIMENSION_PROPERTIES dlg( this, static_cast<PCB_DIMENSION_BASE*>( aItem ) );
+        dlg.ShowQuasiModal();
+        break;
+    }
 
     case PCB_FP_ZONE_T:
     {

@@ -174,7 +174,7 @@ private:
 
     PCB_SHAPE*          parsePCB_SHAPE();
     PCB_TEXT*           parsePCB_TEXT();
-    PCB_DIMENSION_BASE* parseDIMENSION();
+    PCB_DIMENSION_BASE* parseDIMENSION( BOARD_ITEM* aParent, bool aInFP );
 
     // Parse a footprint, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
     FOOTPRINT*          parseFOOTPRINT_unchecked( wxArrayString* aInitialComments = nullptr );

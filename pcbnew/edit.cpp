@@ -140,8 +140,11 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-        ShowDimensionPropertiesDialog( static_cast<PCB_DIMENSION_BASE*>( aItem ) );
+    {
+        DIALOG_DIMENSION_PROPERTIES dlg( this, static_cast<PCB_DIMENSION_BASE*>( aItem ) );
+        dlg.ShowQuasiModal();
         break;
+    }
 
     case PCB_FP_TEXT_T:
         ShowTextPropertiesDialog( aItem );
@@ -166,15 +169,5 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     default:
         break;
     }
-}
-
-
-void PCB_EDIT_FRAME::ShowDimensionPropertiesDialog( PCB_DIMENSION_BASE* aDimension )
-{
-    if( aDimension == nullptr )
-        return;
-
-    DIALOG_DIMENSION_PROPERTIES dlg( this, aDimension );
-    dlg.ShowQuasiModal();
 }
 

@@ -746,6 +746,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     PCB_SELECTION          preview;   // A VIEW_GROUP that serves as a preview for the new item(s)
     SCOPED_DRAW_MODE       scopedDrawMode( m_mode, MODE::DIMENSION );
     int                    step = SET_ORIGIN;
+    KICAD_T                t = PCB_DIMENSION_T;
 
     m_view->Add( &preview );
 
@@ -884,32 +885,36 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                 if( originalEvent.IsAction( &PCB_ACTIONS::drawAlignedDimension ) )
                 {
-                    dimension = new PCB_DIM_ALIGNED( m_board );
+                    dimension = new PCB_DIM_ALIGNED( m_frame->GetModel(),
+                                                     m_isFootprintEditor ? PCB_FP_DIM_ALIGNED_T
+                                                                         : PCB_DIM_ALIGNED_T );
                     setMeasurementAttributes( dimension );
                 }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawOrthogonalDimension ) )
                 {
-                    dimension = new PCB_DIM_ORTHOGONAL( m_board );
+                    dimension = new PCB_DIM_ORTHOGONAL( m_frame->GetModel(), m_isFootprintEditor );
                     setMeasurementAttributes( dimension );
                 }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawCenterDimension ) )
                 {
-                    dimension = new PCB_DIM_CENTER( m_board );
+                    dimension = new PCB_DIM_CENTER( m_frame->GetModel(), m_isFootprintEditor );
                 }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawRadialDimension ) )
                 {
-                    dimension = new PCB_DIM_RADIAL( m_board );
+                    dimension = new PCB_DIM_RADIAL( m_frame->GetModel(), m_isFootprintEditor );
                     setMeasurementAttributes( dimension );
                 }
                 else if( originalEvent.IsAction( &PCB_ACTIONS::drawLeader ) )
                 {
-                    dimension = new PCB_DIM_LEADER( m_board );
+                    dimension = new PCB_DIM_LEADER( m_frame->GetModel(), m_isFootprintEditor );
                     dimension->Text().SetPosition( wxPoint( cursorPos ) );
                 }
                 else
                 {
                     wxFAIL_MSG( "Unhandled action in DRAWING_TOOL::DrawDimension" );
                 }
+
+                t = dimension->Type();
 
                 dimension->SetLayer( layer );
                 dimension->Text().SetTextSize( boardSettings.GetTextSize( layer ) );
@@ -944,9 +949,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     break;
                 }
 
-                if( dimension->Type() == PCB_DIM_CENTER_T
-                        || dimension->Type() == PCB_DIM_RADIAL_T
-                        || dimension->Type() == PCB_DIM_LEADER_T )
+                if( t == PCB_DIM_CENTER_T    || t == PCB_DIM_RADIAL_T    || t == PCB_DIM_LEADER_T
+                 || t == PCB_FP_DIM_CENTER_T || t == PCB_FP_DIM_RADIAL_T || t == PCB_FP_DIM_LEADER_T )
                 {
                     // No separate height step
                     ++step;
@@ -966,7 +970,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 commit.Add( dimension );
                 commit.Push( _( "Draw a dimension" ) );
 
-                if( dimension->Type() == PCB_DIM_LEADER_T )
+                if( t == PCB_DIM_LEADER_T || t == PCB_FP_DIM_LEADER_T )
                 {
                     // Run the edit immediately to set the leader text
                     m_toolMgr->RunAction( PCB_ACTIONS::properties, true, dimension );
@@ -991,10 +995,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             case SET_END:
                 dimension->SetEnd( (wxPoint) cursorPos );
 
-                if( Is45Limited() || dimension->Type() == PCB_DIM_CENTER_T )
+                if( Is45Limited() || t == PCB_DIM_CENTER_T || t == PCB_FP_DIM_CENTER_T )
                     constrainDimension( dimension );
 
-                if( dimension->Type() == PCB_DIM_ORTHOGONAL_T )
+                if( t == PCB_DIM_ORTHOGONAL_T || t == PCB_FP_DIM_ORTHOGONAL_T )
                 {
                     PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dimension );
 
@@ -1007,7 +1011,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     ortho->SetOrientation( vert ? PCB_DIM_ORTHOGONAL::DIR::VERTICAL
                                                 : PCB_DIM_ORTHOGONAL::DIR::HORIZONTAL );
                 }
-                else if( dimension->Type() == PCB_DIM_RADIAL_T )
+                else if( t == PCB_DIM_RADIAL_T || t == PCB_FP_DIM_RADIAL_T )
                 {
                     PCB_DIM_RADIAL* radialDim = static_cast<PCB_DIM_RADIAL*>( dimension );
                     wxPoint         textOffset( radialDim->GetArrowLength() * 10, 0 );
@@ -1018,7 +1022,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     radialDim->Text().SetPosition( radialDim->GetKnee() + textOffset );
                     radialDim->Update();
                 }
-                else if( dimension->Type() == PCB_DIM_LEADER_T )
+                else if( t == PCB_DIM_LEADER_T || t == PCB_FP_DIM_LEADER_T )
                 {
                     wxPoint textOffset( dimension->GetArrowLength() * 10, 0 );
 
@@ -1032,7 +1036,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 break;
 
             case SET_HEIGHT:
-                if( dimension->Type() == PCB_DIM_ALIGNED_T )
+                if( t == PCB_DIM_ALIGNED_T || t == PCB_FP_DIM_ALIGNED_T )
                 {
                     PCB_DIM_ALIGNED* aligned = static_cast<PCB_DIM_ALIGNED*>( dimension );
 
@@ -1044,7 +1048,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                     aligned->SetHeight( height );
                     aligned->Update();
                 }
-                else if( dimension->Type() == PCB_DIM_ORTHOGONAL_T )
+                else if( t == PCB_DIM_ORTHOGONAL_T || t == PCB_FP_DIM_ORTHOGONAL_T )
                 {
                     PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dimension );
 

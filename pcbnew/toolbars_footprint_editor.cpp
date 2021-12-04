@@ -30,7 +30,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <pcb_layer_box_selector.h>
 #include <wx/choice.h>
-
+#include <wx/wupdlock.h>
 
 void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 {
@@ -146,6 +146,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 
 void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
 {
+    wxWindowUpdateLocker dummy( this );
+
     if( m_drawToolBar )
     {
         m_drawToolBar->ClearToolbar();
@@ -157,17 +159,33 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
         m_drawToolBar->SetAuiManager( &m_auimgr );
     }
 
+    // Groups contained on this toolbar
+    static ACTION_GROUP* dimensionGroup = nullptr;
+
+    if( !dimensionGroup )
+    {
+        dimensionGroup = new ACTION_GROUP( "group.pcbDimensions",
+                                           { &PCB_ACTIONS::drawAlignedDimension,
+                                             &PCB_ACTIONS::drawOrthogonalDimension,
+                                             &PCB_ACTIONS::drawCenterDimension,
+                                             &PCB_ACTIONS::drawRadialDimension,
+                                             &PCB_ACTIONS::drawLeader } );
+    }
+
     m_drawToolBar->Add( ACTIONS::selectionTool,       ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( PCB_ACTIONS::placePad,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawRuleArea,    ACTION_TOOLBAR::TOGGLE );
+
+    m_drawToolBar->AddScaledSeparator( this );
     m_drawToolBar->Add( PCB_ACTIONS::drawLine,        ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawArc,         ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawRectangle,   ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawCircle,      ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawPolygon,     ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::drawRuleArea,    ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::placeText,       ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->AddGroup( dimensionGroup,          ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( ACTIONS::deleteTool,          ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->AddScaledSeparator( this );

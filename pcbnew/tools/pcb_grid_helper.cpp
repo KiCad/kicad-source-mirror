@@ -652,6 +652,8 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_ORTHOGONAL_T:
+        case PCB_FP_DIM_ALIGNED_T:
+        case PCB_FP_DIM_ORTHOGONAL_T:
         {
             const PCB_DIM_ALIGNED* dim = static_cast<const PCB_DIM_ALIGNED*>( aItem );
             addAnchor( dim->GetCrossbarStart(), CORNER | SNAPPABLE, aItem );
@@ -662,6 +664,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         }
 
         case PCB_DIM_CENTER_T:
+        case PCB_FP_DIM_CENTER_T:
         {
             const PCB_DIM_CENTER* dim = static_cast<const PCB_DIM_CENTER*>( aItem );
             addAnchor( dim->GetStart(), CORNER | SNAPPABLE, aItem );
@@ -680,6 +683,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         }
 
         case PCB_DIM_RADIAL_T:
+        case PCB_FP_DIM_RADIAL_T:
         {
             const PCB_DIM_RADIAL* radialDim = static_cast<const PCB_DIM_RADIAL*>( aItem );
             addAnchor( radialDim->GetStart(), CORNER | SNAPPABLE, aItem );
@@ -690,6 +694,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         }
 
         case PCB_DIM_LEADER_T:
+        case PCB_FP_DIM_LEADER_T:
         {
             const PCB_DIM_LEADER* leader = static_cast<const PCB_DIM_LEADER*>( aItem );
             addAnchor( leader->GetStart(), CORNER | SNAPPABLE, aItem );

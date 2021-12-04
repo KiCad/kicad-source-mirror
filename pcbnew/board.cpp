@@ -309,10 +309,6 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
         PCB_VIA_T,
         PCB_TRACE_T,
         PCB_ARC_T,
-        //        PCB_PAD_T,            Can't be at board level
-        //        PCB_FP_TEXT_T,        Can't be at board level
-        //        PCB_FP_SHAPE_T,       Can't be at board level
-        //        PCB_FP_ZONE_T,        Can't be at board level
         PCB_FOOTPRINT_T,
         PCB_ZONE_T,
         EOT
@@ -1230,6 +1226,11 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
         case PCB_PAD_T:
         case PCB_FP_TEXT_T:
         case PCB_FP_SHAPE_T:
+        case PCB_FP_DIM_ALIGNED_T:
+        case PCB_FP_DIM_LEADER_T:
+        case PCB_FP_DIM_CENTER_T:
+        case PCB_FP_DIM_RADIAL_T:
+        case PCB_FP_DIM_ORTHOGONAL_T:
         case PCB_FP_ZONE_T:
 
             // this calls FOOTPRINT::Visit() on each footprint.
@@ -1244,6 +1245,11 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
                 case PCB_PAD_T:
                 case PCB_FP_TEXT_T:
                 case PCB_FP_SHAPE_T:
+                case PCB_FP_DIM_ALIGNED_T:
+                case PCB_FP_DIM_LEADER_T:
+                case PCB_FP_DIM_CENTER_T:
+                case PCB_FP_DIM_RADIAL_T:
+                case PCB_FP_DIM_ORTHOGONAL_T:
                 case PCB_FP_ZONE_T:
                     continue;
 

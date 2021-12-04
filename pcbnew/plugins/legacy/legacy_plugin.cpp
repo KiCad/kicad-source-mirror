@@ -2615,9 +2615,10 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
 void LEGACY_PLUGIN::loadDIMENSION()
 {
-    std::unique_ptr<PCB_DIM_ALIGNED> dim = std::make_unique<PCB_DIM_ALIGNED>( m_board );
-    wxPoint                          crossBarO;
-    wxPoint                          crossBarF;
+    std::unique_ptr<PCB_DIM_ALIGNED> dim = std::make_unique<PCB_DIM_ALIGNED>( m_board,
+                                                                              PCB_DIM_ALIGNED_T );
+    wxPoint crossBarO;
+    wxPoint crossBarF;
 
     char*   line;
 

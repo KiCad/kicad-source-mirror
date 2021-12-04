@@ -1083,7 +1083,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     wxPoint referencePoint0 = aElem.referencePoint.at( 0 );
     wxPoint referencePoint1 = aElem.referencePoint.at( 1 );
 
-    PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board );
+    PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board, PCB_DIM_ALIGNED_T );
     m_board->Add( dimension, ADD_MODE::APPEND );
 
     dimension->SetPrecision( aElem.textprecision );

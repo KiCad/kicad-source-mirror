@@ -106,6 +106,11 @@ const KICAD_T GENERAL_COLLECTOR::PadsOrTracks[] = {
 const KICAD_T GENERAL_COLLECTOR::FootprintItems[] = {
     PCB_FP_TEXT_T,
     PCB_FP_SHAPE_T,
+    PCB_FP_DIM_ALIGNED_T,
+    PCB_FP_DIM_ORTHOGONAL_T,
+    PCB_FP_DIM_CENTER_T,
+    PCB_FP_DIM_RADIAL_T,
+    PCB_FP_DIM_LEADER_T,
     PCB_PAD_T,
     PCB_FP_ZONE_T,
     PCB_GROUP_T,
@@ -144,6 +149,11 @@ const KICAD_T GENERAL_COLLECTOR::Dimensions[] = {
     PCB_DIM_ORTHOGONAL_T,
     PCB_DIM_CENTER_T,
     PCB_DIM_RADIAL_T,
+    PCB_FP_DIM_ALIGNED_T,
+    PCB_FP_DIM_LEADER_T,
+    PCB_FP_DIM_ORTHOGONAL_T,
+    PCB_FP_DIM_CENTER_T,
+    PCB_FP_DIM_RADIAL_T,
     EOT
 };
 
@@ -286,6 +296,16 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     case PCB_SHAPE_T:
         shape = static_cast<PCB_SHAPE*>( item );
         break;
+
+    case PCB_FP_DIM_ALIGNED_T:
+    case PCB_FP_DIM_CENTER_T:
+    case PCB_FP_DIM_RADIAL_T:
+    case PCB_FP_DIM_ORTHOGONAL_T:
+    case PCB_FP_DIM_LEADER_T:
+        footprint = static_cast<FOOTPRINT*>( item->GetParent() );
+
+        // Fallthrough to get the zone as well
+        KI_FALLTHROUGH;
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_CENTER_T:

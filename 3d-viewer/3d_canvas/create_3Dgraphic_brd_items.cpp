@@ -55,27 +55,36 @@
 #include <wx/log.h>
 #include <macros.h>
 
-// These variables are parameters used in addTextSegmToContainer.
-// But addTextSegmToContainer is a call-back function,
-// so we cannot send them as arguments.
-static int s_textWidth;
-static CONTAINER_2D_BASE* s_dstcontainer = nullptr;
-static float s_biuTo3Dunits;
-static const BOARD_ITEM* s_boardItem = nullptr;
+
+struct CALLBACK_DATA
+{
+    const BOARD_ITEM*  m_BoardItem;
+    CONTAINER_2D_BASE* m_Container;
+    int                m_TextWidth;
+    float              m_BiuTo3Dunits;
+};
 
 
 // This is a call back function, used by GRText to draw the 3D text shape:
 void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
 {
-    const SFVEC2F start3DU( x0 * s_biuTo3Dunits, -y0 * s_biuTo3Dunits );
-    const SFVEC2F end3DU  ( xf * s_biuTo3Dunits, -yf * s_biuTo3Dunits );
+    CALLBACK_DATA* data = static_cast<CALLBACK_DATA*>( aData );
+
+    const SFVEC2F start3DU( x0 * data->m_BiuTo3Dunits, -y0 * data->m_BiuTo3Dunits );
+    const SFVEC2F end3DU  ( xf * data->m_BiuTo3Dunits, -yf * data->m_BiuTo3Dunits );
 
     if( Is_segment_a_circle( start3DU, end3DU ) )
-        s_dstcontainer->Add( new FILLED_CIRCLE_2D( start3DU, ( s_textWidth / 2 ) * s_biuTo3Dunits,
-                                                   *s_boardItem) );
+    {
+        data->m_Container->Add( new FILLED_CIRCLE_2D( start3DU,
+                                                      data->m_TextWidth * data->m_BiuTo3Dunits / 2,
+                                                      *data->m_BoardItem ) );
+    }
     else
-        s_dstcontainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU, s_textWidth * s_biuTo3Dunits,
-                                                   *s_boardItem ) );
+    {
+        data->m_Container->Add( new ROUND_SEGMENT_2D( start3DU, end3DU,
+                                                      data->m_TextWidth * data->m_BiuTo3Dunits,
+                                                      *data->m_BoardItem ) );
+    }
 }
 
 
@@ -90,10 +99,11 @@ void BOARD_ADAPTER::addShapeWithClearance( const PCB_TEXT* aText, CONTAINER_2D_B
     if( aText->IsMirrored() )
         size.x = -size.x;
 
-    s_boardItem    = (const BOARD_ITEM *) &aText;
-    s_dstcontainer = aDstContainer;
-    s_textWidth    = aText->GetEffectiveTextPenWidth() + ( 2 * aClearanceValue );
-    s_biuTo3Dunits = m_biuTo3Dunits;
+    CALLBACK_DATA callbackData;
+    callbackData.m_BoardItem = aText;
+    callbackData.m_Container = aDstContainer;
+    callbackData.m_TextWidth = aText->GetEffectiveTextPenWidth() + ( 2 * aClearanceValue );
+    callbackData.m_BiuTo3Dunits = m_biuTo3Dunits;
 
     // not actually used, but needed by GRText
     const COLOR4D dummy_color;
@@ -105,7 +115,7 @@ void BOARD_ADAPTER::addShapeWithClearance( const PCB_TEXT* aText, CONTAINER_2D_B
 
     GRText( nullptr, aText->GetTextPos(), dummy_color, aText->GetShownText(),
             aText->GetTextAngle(), size, aText->GetHorizJustify(), aText->GetVertJustify(),
-            penWidth, aText->IsItalic(), isBold, addTextSegmToContainer );
+            penWidth, aText->IsItalic(), isBold, addTextSegmToContainer, &callbackData );
 }
 
 
@@ -165,7 +175,6 @@ void BOARD_ADAPTER::addFootprintShapesWithClearance( const FOOTPRINT* aFootprint
                                                      PCB_LAYER_ID aLayerId, int aInflateValue )
 {
     std::vector<FP_TEXT*> texts;  // List of FP_TEXT to convert
-    FP_SHAPE* outline;
 
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
@@ -177,20 +186,33 @@ void BOARD_ADAPTER::addFootprintShapesWithClearance( const FOOTPRINT* aFootprint
 
             if( text->GetLayer() == aLayerId && text->IsVisible() )
                 texts.push_back( text );
-        }
-        break;
 
+            break;
+        }
+
+        case PCB_FP_DIM_ALIGNED_T:
+        case PCB_FP_DIM_CENTER_T:
+        case PCB_FP_DIM_ORTHOGONAL_T:
+        case PCB_FP_DIM_RADIAL_T:
+        case PCB_FP_DIM_LEADER_T:
+        {
+            PCB_DIMENSION_BASE* dimension = static_cast<PCB_DIMENSION_BASE*>( item );
+
+            if( dimension->GetLayer() == aLayerId )
+                addShapeWithClearance( dimension, aDstContainer, aLayerId, 0 );
+
+            break;
+        }
 
         case PCB_FP_SHAPE_T:
         {
-            outline = (FP_SHAPE*) item;
+            FP_SHAPE* shape = static_cast<FP_SHAPE*>( item );
 
-            if( outline->GetLayer() != aLayerId )
-                break;
+            if( shape->GetLayer() == aLayerId )
+                addShapeWithClearance( (const PCB_SHAPE*) shape, aDstContainer, aLayerId, 0 );
 
-            addShapeWithClearance( (const PCB_SHAPE*) outline, aDstContainer, aLayerId, 0 );
+            break;
         }
-        break;
 
         default:
             break;
@@ -204,13 +226,14 @@ void BOARD_ADAPTER::addFootprintShapesWithClearance( const FOOTPRINT* aFootprint
     if( aFootprint->Value().GetLayer() == aLayerId && aFootprint->Value().IsVisible() )
         texts.push_back( &aFootprint->Value() );
 
-    s_boardItem    = (const BOARD_ITEM *)&aFootprint->Value();
-    s_dstcontainer = aDstContainer;
-    s_biuTo3Dunits = m_biuTo3Dunits;
-
     for( FP_TEXT* text : texts )
     {
-        s_textWidth = text->GetEffectiveTextPenWidth() + ( 2 * aInflateValue );
+        CALLBACK_DATA callbackData;
+        callbackData.m_BoardItem = &aFootprint->Value();
+        callbackData.m_Container = aDstContainer;
+        callbackData.m_BiuTo3Dunits = m_biuTo3Dunits;
+        callbackData.m_TextWidth = text->GetEffectiveTextPenWidth() + ( 2 * aInflateValue );
+
         wxSize size = text->GetTextSize();
         bool   isBold = text->IsBold();
         int    penWidth = text->GetEffectiveTextPenWidth();
@@ -220,7 +243,7 @@ void BOARD_ADAPTER::addFootprintShapesWithClearance( const FOOTPRINT* aFootprint
 
         GRText( nullptr, text->GetTextPos(), BLACK, text->GetShownText(), text->GetDrawRotation(),
                 size, text->GetHorizJustify(), text->GetVertJustify(), penWidth, text->IsItalic(),
-                isBold, addTextSegmToContainer );
+                isBold, addTextSegmToContainer, &callbackData );
     }
 }
 

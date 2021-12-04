@@ -344,11 +344,16 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
         case PCB_FP_ZONE_T:
         case PCB_TRACE_T:
         case PCB_ARC_T:
-        case PCB_DIMENSION_T:
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_LEADER_T:
         case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
         case PCB_DIM_ORTHOGONAL_T:
+        case PCB_FP_DIM_ALIGNED_T:
+        case PCB_FP_DIM_LEADER_T:
+        case PCB_FP_DIM_CENTER_T:
+        case PCB_FP_DIM_RADIAL_T:
+        case PCB_FP_DIM_ORTHOGONAL_T:
         case PCB_ZONE_T:
             aItem->TransformShapeWithClearanceToPolygon( itemPoly, aLayer, 0, Millimeter2iu( 0.1 ),
                                                          ERROR_INSIDE );

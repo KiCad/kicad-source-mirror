@@ -1391,7 +1391,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
                 }
                 else
                 {
-                    dimension = new PCB_DIM_ALIGNED( m_board );
+                    dimension = new PCB_DIM_ALIGNED( m_board, PCB_DIM_ALIGNED_T );
                 }
 
                 m_board->Add( dimension, ADD_MODE::APPEND );
@@ -1439,7 +1439,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
             if( csDim.Line.Style == DIMENSION::LINE::STYLE::INTERNAL )
             {
                 // "internal" is a simple double sided arrow from start to end (no extension lines)
-                PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board );
+                PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board, PCB_DIM_ALIGNED_T );
                 m_board->Add( dimension, ADD_MODE::APPEND );
                 applyDimensionSettings( csDim, dimension );
 

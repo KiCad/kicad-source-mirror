@@ -299,6 +299,8 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_ORTHOGONAL_T:
+    case PCB_FP_DIM_ALIGNED_T:
+    case PCB_FP_DIM_ORTHOGONAL_T:
     {
         const PCB_DIM_ALIGNED* dimension = static_cast<const PCB_DIM_ALIGNED*>( aItem );
 
@@ -323,6 +325,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     }
 
     case PCB_DIM_CENTER_T:
+    case PCB_FP_DIM_CENTER_T:
     {
         const PCB_DIM_CENTER* dimension = static_cast<const PCB_DIM_CENTER*>( aItem );
 
@@ -336,6 +339,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     }
 
     case PCB_DIM_RADIAL_T:
+    case PCB_FP_DIM_RADIAL_T:
     {
         const PCB_DIM_RADIAL* dimension = static_cast<const PCB_DIM_RADIAL*>( aItem );
 
@@ -355,6 +359,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     }
 
     case PCB_DIM_LEADER_T:
+    case PCB_FP_DIM_LEADER_T:
     {
         const PCB_DIM_LEADER* dimension = static_cast<const PCB_DIM_LEADER*>( aItem );
 
@@ -1340,6 +1345,7 @@ void PCB_POINT_EDITOR::updateItem() const
     }
 
     case PCB_DIM_ALIGNED_T:
+    case PCB_FP_DIM_ALIGNED_T:
     {
         PCB_DIM_ALIGNED* dimension = static_cast<PCB_DIM_ALIGNED*>( item );
 
@@ -1404,6 +1410,7 @@ void PCB_POINT_EDITOR::updateItem() const
     }
 
     case PCB_DIM_ORTHOGONAL_T:
+    case PCB_FP_DIM_ORTHOGONAL_T:
     {
         PCB_DIM_ORTHOGONAL* dimension = static_cast<PCB_DIM_ORTHOGONAL*>( item );
 
@@ -1469,6 +1476,7 @@ void PCB_POINT_EDITOR::updateItem() const
     }
 
     case PCB_DIM_CENTER_T:
+    case PCB_FP_DIM_CENTER_T:
     {
         PCB_DIM_CENTER* dimension = static_cast<PCB_DIM_CENTER*>( item );
 
@@ -1483,6 +1491,7 @@ void PCB_POINT_EDITOR::updateItem() const
     }
 
     case PCB_DIM_RADIAL_T:
+    case PCB_FP_DIM_RADIAL_T:
     {
         PCB_DIM_RADIAL* dimension = static_cast<PCB_DIM_RADIAL*>( item );
 
@@ -1531,6 +1540,7 @@ void PCB_POINT_EDITOR::updateItem() const
     }
 
     case PCB_DIM_LEADER_T:
+    case PCB_FP_DIM_LEADER_T:
     {
         PCB_DIM_LEADER* dimension = static_cast<PCB_DIM_LEADER*>( item );
 
@@ -1780,6 +1790,8 @@ void PCB_POINT_EDITOR::updatePoints()
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_ORTHOGONAL_T:
+    case PCB_FP_DIM_ALIGNED_T:
+    case PCB_FP_DIM_ORTHOGONAL_T:
     {
         const PCB_DIM_ALIGNED* dimension = static_cast<const PCB_DIM_ALIGNED*>( item );
 
@@ -1792,6 +1804,7 @@ void PCB_POINT_EDITOR::updatePoints()
     }
 
     case PCB_DIM_CENTER_T:
+    case PCB_FP_DIM_CENTER_T:
     {
         const PCB_DIM_CENTER* dimension = static_cast<const PCB_DIM_CENTER*>( item );
 
@@ -1801,6 +1814,7 @@ void PCB_POINT_EDITOR::updatePoints()
     }
 
     case PCB_DIM_RADIAL_T:
+    case PCB_FP_DIM_RADIAL_T:
     {
         const PCB_DIM_RADIAL* dimension = static_cast<const PCB_DIM_RADIAL*>( item );
 
@@ -1812,6 +1826,7 @@ void PCB_POINT_EDITOR::updatePoints()
     }
 
     case PCB_DIM_LEADER_T:
+    case PCB_FP_DIM_LEADER_T:
     {
         const PCB_DIM_LEADER* dimension = static_cast<const PCB_DIM_LEADER*>( item );
 
@@ -1919,6 +1934,7 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
         break;
 
     case PCB_DIM_ALIGNED_T:
+    case PCB_FP_DIM_ALIGNED_T:
     {
         // Constraint for crossbar
         if( isModified( m_editPoints->Point( DIM_START ) ) )
@@ -1934,6 +1950,7 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
     }
 
     case PCB_DIM_CENTER_T:
+    case PCB_FP_DIM_CENTER_T:
     {
         if( isModified( m_editPoints->Point( DIM_END ) ) )
             return m_editPoints->Point( DIM_START );
@@ -1942,6 +1959,7 @@ EDIT_POINT PCB_POINT_EDITOR::get45DegConstrainer() const
     }
 
     case PCB_DIM_RADIAL_T:
+    case PCB_FP_DIM_RADIAL_T:
     {
         if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
             return m_editPoints->Point( DIM_KNEE );

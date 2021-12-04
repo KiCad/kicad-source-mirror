@@ -106,7 +106,8 @@ class PCB_TEXT;
 //#define SEXPR_BOARD_FILE_VERSION    20211226  // Add radial dimension
 //#define SEXPR_BOARD_FILE_VERSION    20211227  // Add thermal relief spoke angle overrides
 //#define SEXPR_BOARD_FILE_VERSION    20211228  // Add allow_soldermask_bridges footprint attribute
-#define SEXPR_BOARD_FILE_VERSION      20211229  // Stroke formatting
+//#define SEXPR_BOARD_FILE_VERSION    20211229  // Stroke formatting
+#define SEXPR_BOARD_FILE_VERSION      20211230  // Dimensions in footprints
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

@@ -99,23 +99,11 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 if( !m_drcEngine->IsErrorLimitExceeded( DRCE_TEXT_ON_EDGECUTS )
                         && item->GetLayer() == Edge_Cuts )
                 {
-                    switch( item->Type() )
-                    {
-                    case PCB_TEXT_T:
-                    case PCB_DIM_ALIGNED_T:
-                    case PCB_DIM_CENTER_T:
-                    case PCB_DIM_RADIAL_T:
-                    case PCB_DIM_ORTHOGONAL_T:
-                    case PCB_DIM_LEADER_T:
+                    if( item->Type() == PCB_TEXT_T || BaseType( item->Type() ) == PCB_DIMENSION_T )
                     {
                         std::shared_ptr<DRC_ITEM> drc = DRC_ITEM::Create( DRCE_TEXT_ON_EDGECUTS );
                         drc->SetItems( item );
                         reportViolation( drc, item->GetPosition() );
-                    }
-                        break;
-
-                    default:
-                        break;
                     }
                 }
 
