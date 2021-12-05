@@ -71,6 +71,8 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_parent = aParentWindow;
     m_MouseCapturedLost = false;
 
+    m_PaintEventCounter = std::make_unique<PROF_COUNTER>( "Draw panel paint events" );
+
     SetLayoutDirection( wxLayout_LeftToRight );
 
     m_edaFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_parent );
@@ -189,6 +191,8 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
 
     if( m_drawing )
         return;
+
+    ( *m_PaintEventCounter )++;
 
     wxASSERT( m_painter );
 

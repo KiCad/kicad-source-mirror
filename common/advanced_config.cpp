@@ -179,6 +179,8 @@ static const wxChar TraceMasks[] = wxT( "TraceMasks" );
 
 static const wxChar ShowRepairSchematic[] = wxT( "ShowRepairSchematic" );
 
+static const wxChar ShowEventCounters[] = wxT( "ShowEventCounters" );
+
 } // namespace KEYS
 
 
@@ -285,6 +287,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_Skip3DModelFileCache      = false;
     m_Skip3DModelMemoryCache    = false;
     m_HideVersionFromTitle      = false;
+    m_ShowEventCounters         = false;
 
     loadFromConfigFile();
 }
@@ -399,6 +402,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRepairSchematic,
                                                 &m_ShowRepairSchematic, false ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowEventCounters,
+                                                &m_ShowEventCounters, false ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

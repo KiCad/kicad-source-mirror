@@ -785,6 +785,8 @@ private:
     TOOL_ACTION* m_exportNetlistAction;
 
     DIALOG_FIND* m_findDialog;
+
+    wxTimer* m_eventCounterTimer;
 };
 
 #endif  // __PCB_EDIT_FRAME_H__

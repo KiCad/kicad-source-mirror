@@ -102,6 +102,8 @@
 #include <widgets/panel_selection_filter.h>
 #include <widgets/wx_aui_utils.h>
 #include <kiplatform/app.h>
+#include <profile.h>
+#include <view/wx_view_controls.h>
 
 #include <action_plugin.h>
 #include "../scripting/python_scripting.h"
@@ -363,6 +365,27 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                    // Ensure the controls on the toolbars all are correctly sized
                     UpdateToolbarControlSizes();
                } );
+
+    if( ADVANCED_CFG::GetCfg().m_ShowEventCounters )
+    {
+        m_eventCounterTimer = new wxTimer( this );
+
+        Bind( wxEVT_TIMER,
+                [&]( wxTimerEvent& aEvent )
+                {
+                    GetCanvas()->m_PaintEventCounter->Show();
+                    GetCanvas()->m_PaintEventCounter->Reset();
+
+                    KIGFX::WX_VIEW_CONTROLS* vc =
+                            static_cast<KIGFX::WX_VIEW_CONTROLS*>( GetCanvas()->GetViewControls() );
+                    vc->m_MotionEventCounter->Show();
+                    vc->m_MotionEventCounter->Reset();
+
+                },
+                m_eventCounterTimer->GetId() );
+
+        m_eventCounterTimer->Start( 1000 );
+    }
 }
 
 

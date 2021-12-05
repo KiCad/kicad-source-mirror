@@ -27,6 +27,7 @@
  */
 
 #include <pgm_base.h>
+#include <profile.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <view/zoom_controller.h>
@@ -82,6 +83,8 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPane
         m_updateCursor( true )
 {
     LoadSettings();
+
+    m_MotionEventCounter = std::make_unique<PROF_COUNTER>( "Mouse motion events" );
 
     m_parentPanel->Connect( wxEVT_MOTION,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), nullptr, this );
@@ -192,6 +195,8 @@ void WX_VIEW_CONTROLS::LoadSettings()
 
 void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
+    ( *m_MotionEventCounter )++;
+
     bool isAutoPanning = false;
     int x = aEvent.GetX();
     int y = aEvent.GetY();

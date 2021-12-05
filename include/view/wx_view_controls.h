@@ -38,6 +38,7 @@
 #include <memory>
 
 class EDA_DRAW_PANEL_GAL;
+class PROF_COUNTER;
 
 namespace KIGFX
 {
@@ -114,6 +115,8 @@ public:
     ///< Event that forces mouse move event in the dispatcher (eg. used in autopanning, when
     ///< mouse cursor does not move in screen coordinates, but does in world coordinates)
     static const wxEventType EVT_REFRESH_MOUSE;
+
+    std::unique_ptr<PROF_COUNTER> m_MotionEventCounter;
 
 private:
     ///< Possible states for WX_VIEW_CONTROLS.

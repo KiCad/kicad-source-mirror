@@ -31,6 +31,7 @@
 #ifndef TPROFILE_H
 #define TPROFILE_H
 
+#include <atomic>
 #include <chrono>
 #include <string>
 #include <iostream>
@@ -216,5 +217,47 @@ private:
  * @author Dick Hollenbeck
  */
 unsigned GetRunningMicroSecs();
+
+
+/**
+ * A thread-safe event counter
+ */
+class PROF_COUNTER
+{
+public:
+    PROF_COUNTER( const std::string& aName ) :
+            m_name( aName ),
+            m_count( 0 )
+    {
+    }
+
+    unsigned long long Count() const
+    {
+        return m_count.load();
+    }
+
+    void Reset()
+    {
+        m_count.store( 0 );
+    }
+
+    unsigned long long operator++( int )
+    {
+        return m_count++;
+    }
+
+    void Show( std::ostream& aStream = std::cerr )
+    {
+        if( m_name.size() )
+            aStream << m_name << ": ";
+
+        aStream << m_count.load();
+        aStream << std::endl;
+    }
+
+private:
+    std::string        m_name;
+    std::atomic_ullong m_count;
+};
 
 #endif  // TPROFILE_H

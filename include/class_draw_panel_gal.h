@@ -41,6 +41,7 @@
 class BOARD;
 class EDA_DRAW_FRAME;
 class TOOL_DISPATCHER;
+class PROF_COUNTER;
 
 namespace KIGFX
 {
@@ -232,6 +233,8 @@ public:
      * Used to avoid calling twice a CaptureMouse(), not accepted by wxMSW
      */
     bool m_MouseCapturedLost;
+
+    std::unique_ptr<PROF_COUNTER> m_PaintEventCounter;
 
 protected:
     virtual void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );

@@ -197,6 +197,11 @@ public:
 
     bool m_ShowRepairSchematic;
 
+    /**
+     * Shows debugging event counters in various places.
+     */
+    bool m_ShowEventCounters;
+
 private:
     ADVANCED_CFG();
 
