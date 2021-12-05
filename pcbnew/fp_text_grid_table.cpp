@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <kiway.h>
 #include <kiway_player.h>
 #include <fp_text_grid_table.h>
 #include <widgets/grid_icon_text_helpers.h>
@@ -192,7 +191,7 @@ wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr:
 
 wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
 {
-    const FP_TEXT& text = this->at((size_t) aRow );
+    const FP_TEXT& text = this->at( (size_t) aRow );
 
     switch( aCol )
     {
@@ -231,13 +230,14 @@ wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
 
 bool FP_TEXT_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 {
-    FP_TEXT& text = this->at((size_t) aRow );
+    FP_TEXT& text = this->at( (size_t) aRow );
 
     switch( aCol )
     {
     case FPT_SHOWN:    return text.IsVisible();
     case FPT_ITALIC:   return text.IsItalic();
     case FPT_UPRIGHT:  return text.IsKeepUpright();
+
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a bool value" ), aCol ) );
         return false;
@@ -247,11 +247,12 @@ bool FP_TEXT_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 
 long FP_TEXT_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
 {
-    FP_TEXT& text = this->at((size_t) aRow );
+    FP_TEXT& text = this->at( (size_t) aRow );
 
     switch( aCol )
     {
     case FPT_LAYER:    return text.GetLayer();
+
     default:
         wxFAIL_MSG( wxString::Format( wxT( "column %d doesn't hold a long value" ), aCol ) );
         return 0;
@@ -261,7 +262,7 @@ long FP_TEXT_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
 
 void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 {
-    FP_TEXT& text = this->at((size_t) aRow );
+    FP_TEXT& text = this->at( (size_t) aRow );
     wxPoint  pos;
 
     switch( aCol )
@@ -310,7 +311,7 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 
 void FP_TEXT_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 {
-    FP_TEXT& text = this->at((size_t) aRow );
+    FP_TEXT& text = this->at( (size_t) aRow );
 
     switch( aCol )
     {
@@ -334,7 +335,7 @@ void FP_TEXT_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 
 void FP_TEXT_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue )
 {
-    FP_TEXT& text = this->at((size_t) aRow );
+    FP_TEXT& text = this->at( (size_t) aRow );
 
     switch( aCol )
     {

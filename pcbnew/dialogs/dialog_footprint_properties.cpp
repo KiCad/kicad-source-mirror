@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
         m_footprint( aFootprint ),
         m_posX( aParent, m_XPosLabel, m_ModPositionX, m_XPosUnit ),
         m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit ),
-        m_orientValidator( 3, &m_orientValue ),
+        m_orientation( aParent, m_orientationLabel, m_orientationCtrl, nullptr ),
         m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits ),
         m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl,
                       m_SolderMaskMarginUnits ),
@@ -105,16 +105,18 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     // Show/hide text item columns according to the user's preference
     m_itemsGrid->ShowHideColumns( cfg->m_FootprintTextShownColumns );
 
-    m_orientValidator.SetRange( -360.0, 360.0 );
-    m_OrientValueCtrl->SetValidator( m_orientValidator );
-    m_orientValidator.SetWindow( m_OrientValueCtrl );
+    m_orientation.SetUnits( EDA_UNITS::DEGREES );
+    m_orientation.SetPrecision( 3 );
+
+    // Set predefined rotations in combo dropdown, according to the locale floating point
+    // separator notation
+    double rot_list[] = { 0.0, 90.0, -90.0, 180.0 };
+
+    for( size_t ii = 0; ii < m_orientationCtrl->GetCount() && ii < 4; ++ii )
+        m_orientationCtrl->SetString( ii, wxString::Format( "%.1f", rot_list[ii] ) );
 
     // Set font size for items showing long strings:
     wxFont infoFont = KIUI::GetInfoFont( this );
-#if __WXMAC__
-    m_allow90Label->SetFont( infoFont );
-    m_allow180Label->SetFont( infoFont );
-#endif
     m_libraryIDLabel->SetFont( infoFont );
     m_tcLibraryID->SetFont( infoFont );
 
@@ -140,8 +142,6 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_solderPasteRatio.SetUnits( EDA_UNITS::PERCENT );
     m_solderPasteRatio.SetNegativeZero();
 
-    m_orientValue = 0;
-
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
     m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
@@ -156,7 +156,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
 DIALOG_FOOTPRINT_PROPERTIES::~DIALOG_FOOTPRINT_PROPERTIES()
 {
     m_frame->GetPcbNewSettings()->m_FootprintTextShownColumns =
-            m_itemsGrid->GetShownColumns().ToStdString();
+                                                    m_itemsGrid->GetShownColumns().ToStdString();
 
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_texts );
@@ -214,29 +214,6 @@ void DIALOG_FOOTPRINT_PROPERTIES::ChangeFootprint( wxCommandEvent&  )
 }
 
 
-void DIALOG_FOOTPRINT_PROPERTIES::FootprintOrientEvent( wxCommandEvent&  )
-{
-    if( m_Orient0->GetValue() )
-        m_orientValue = 0.0;
-    else if( m_Orient90->GetValue() )
-        m_orientValue = 90.0;
-    else if( m_Orient270->GetValue() )
-        m_orientValue = 270.0;
-    else if( m_Orient180->GetValue() )
-        m_orientValue = 180.0;
-
-    updateOrientationControl();
-}
-
-
-void DIALOG_FOOTPRINT_PROPERTIES::OnOtherOrientation( wxCommandEvent& aEvent )
-{
-    m_OrientOther->SetValue( true );
-
-    aEvent.Skip();
-}
-
-
 bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
@@ -272,32 +249,12 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     m_BoardSideCtrl->SetSelection( (m_footprint->GetLayer() == B_Cu) ? 1 : 0 );
 
-    m_orientValue = m_footprint->GetOrientation() / 10.0;
+    m_orientation.SetDoubleValue( m_footprint->GetOrientation() / 10.0 );
 
-    if( m_orientValue == 0.0 )
-        m_Orient0->SetValue( true );
-    else if( m_orientValue == 90.0 || m_orientValue == -270.0 )
-        m_Orient90->SetValue( true );
-    else if( m_orientValue == 270.0 || m_orientValue == -90.0 )
-        m_Orient270->SetValue( true );
-    else if( m_orientValue == 180.0 || m_orientValue == -180.0 )
-        m_Orient180->SetValue( true );
-    else
-        m_OrientOther->SetValue( true );
-
-    updateOrientationControl();
-
-    m_AutoPlaceCtrl->SetSelection( m_footprint->IsLocked() ? 1 : 0 );
-
-    m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Footprint can be freely moved and oriented on the "
-                                           "canvas." ) );
-    m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Footprint is locked: it cannot be freely moved and "
-                                           "oriented on the canvas and can only be selected when "
-                                           "the 'Locked items' checkbox is enabled in the "
-                                           "selection filter." ) );
-
-    m_CostRot90Ctrl->SetValue( m_footprint->GetPlacementCost90() );
-    m_CostRot180Ctrl->SetValue( m_footprint->GetPlacementCost180() );
+    m_cbLocked->SetValue( m_footprint->IsLocked() );
+    m_cbLocked->SetToolTip( _( "Locked footprints cannot be freely moved and oriented on the "
+                               "canvas and can only be selected when the 'Locked items' checkbox "
+                               "is enabled in the selection filter." ) );
 
     if( m_footprint->GetAttributes() & FP_THROUGH_HOLE )
         m_componentType->SetSelection( 0 );
@@ -458,7 +415,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     // Set Footprint Position
     wxPoint pos( m_posX.GetValue(), m_posY.GetValue() );
     m_footprint->SetPosition( pos );
-    m_footprint->SetLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
+    m_footprint->SetLocked( m_cbLocked->GetValue() );
 
     int attributes = 0;
 
@@ -483,14 +440,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
     m_footprint->SetAttributes( attributes );
 
-    m_footprint->SetPlacementCost90( m_CostRot90Ctrl->GetValue() );
-    m_footprint->SetPlacementCost180( m_CostRot180Ctrl->GetValue() );
-
-    // Now, set orientation.  Must be done after other changes because rotation changes field
-    // positions on board (so that relative positions are held constant)
-    m_orientValidator.TransferFromWindow();
-
-    double orient = m_orientValue * 10;
+    double orient = m_orientation.GetDoubleValue() * 10.0;
 
     if( m_footprint->GetOrientation() != orient )
         m_footprint->Rotate( m_footprint->GetPosition(), orient - m_footprint->GetOrientation() );
@@ -721,7 +671,3 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnPageChange( wxNotebookEvent& aEvent )
 }
 
 
-void DIALOG_FOOTPRINT_PROPERTIES::updateOrientationControl()
-{
-    KIUI::ValidatorTransferToWindowWithoutEvents( m_orientValidator );
-}

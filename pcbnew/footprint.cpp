@@ -61,7 +61,6 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     m_orient       = 0;
     m_fpStatus     = FP_PADS_are_LOCKED;
     m_arflag       = 0;
-    m_rot90Cost    = m_rot180Cost = 0;
     m_link         = 0;
     m_lastEditTime = 0;
     m_localClearance              = 0;
@@ -86,8 +85,6 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_attributes   = aFootprint.m_attributes;
     m_fpStatus     = aFootprint.m_fpStatus;
     m_orient       = aFootprint.m_orient;
-    m_rot90Cost    = aFootprint.m_rot90Cost;
-    m_rot180Cost   = aFootprint.m_rot180Cost;
     m_lastEditTime = aFootprint.m_lastEditTime;
     m_link         = aFootprint.m_link;
     m_path         = aFootprint.m_path;
@@ -170,14 +167,14 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
         }
     }
 
-    // Copy auxiliary data: 3D_Drawings info
-    m_3D_Drawings = aFootprint.m_3D_Drawings;
+    // Copy auxiliary data
+    m_3D_Drawings   = aFootprint.m_3D_Drawings;
+    m_doc           = aFootprint.m_doc;
+    m_keywords      = aFootprint.m_keywords;
+    m_properties    = aFootprint.m_properties;
+    m_privateLayers = aFootprint.m_privateLayers;
 
-    m_doc         = aFootprint.m_doc;
-    m_keywords    = aFootprint.m_keywords;
-    m_properties  = aFootprint.m_properties;
-
-    m_arflag = 0;
+    m_arflag        = 0;
 
     m_initial_comments = aFootprint.m_initial_comments ?
                          new wxArrayString( *aFootprint.m_initial_comments ) : nullptr;
@@ -267,8 +264,6 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
     m_attributes    = aOther.m_attributes;
     m_fpStatus      = aOther.m_fpStatus;
     m_orient        = aOther.m_orient;
-    m_rot90Cost     = aOther.m_rot90Cost;
-    m_rot180Cost    = aOther.m_rot180Cost;
     m_lastEditTime  = aOther.m_lastEditTime;
     m_link          = aOther.m_link;
     m_path          = aOther.m_path;
@@ -335,12 +330,12 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 
     aOther.Groups().clear();
 
-    // Copy auxiliary data: 3D_Drawings info
-    m_3D_Drawings.clear();
-    m_3D_Drawings = aOther.m_3D_Drawings;
-    m_doc         = aOther.m_doc;
-    m_keywords    = aOther.m_keywords;
-    m_properties  = aOther.m_properties;
+    // Copy auxiliary data
+    m_3D_Drawings      = aOther.m_3D_Drawings;
+    m_doc              = aOther.m_doc;
+    m_keywords         = aOther.m_keywords;
+    m_properties       = aOther.m_properties;
+    m_privateLayers    = aOther.m_privateLayers;
 
     m_initial_comments = aOther.m_initial_comments;
 
@@ -365,8 +360,6 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     m_attributes    = aOther.m_attributes;
     m_fpStatus      = aOther.m_fpStatus;
     m_orient        = aOther.m_orient;
-    m_rot90Cost     = aOther.m_rot90Cost;
-    m_rot180Cost    = aOther.m_rot180Cost;
     m_lastEditTime  = aOther.m_lastEditTime;
     m_link          = aOther.m_link;
     m_path          = aOther.m_path;
@@ -444,12 +437,12 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
         Add( newGroup );
     }
 
-    // Copy auxiliary data: 3D_Drawings info
-    m_3D_Drawings.clear();
-    m_3D_Drawings = aOther.m_3D_Drawings;
-    m_doc         = aOther.m_doc;
-    m_keywords    = aOther.m_keywords;
-    m_properties  = aOther.m_properties;
+    // Copy auxiliary data
+    m_3D_Drawings   = aOther.m_3D_Drawings;
+    m_doc           = aOther.m_doc;
+    m_keywords      = aOther.m_keywords;
+    m_properties    = aOther.m_properties;
+    m_privateLayers = aOther.m_privateLayers;
 
     m_initial_comments = aOther.m_initial_comments ?
                             new wxArrayString( *aOther.m_initial_comments ) : nullptr;
@@ -744,6 +737,7 @@ const EDA_RECT FOOTPRINT::GetBoundingBox() const
 const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const
 {
     const BOARD* board = GetBoard();
+    bool         isFPEdit = board && board->IsFootprintHolder();
 
     if( board )
     {
@@ -772,6 +766,9 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
 
     for( BOARD_ITEM* item : m_drawings )
     {
+        if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
+            continue;
+
         if( item->Type() == PCB_FP_SHAPE_T || BaseType( item->Type() ) == PCB_DIMENSION_T )
             area.Merge( item->GetBoundingBox() );
     }
@@ -789,6 +786,9 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
     {
         for( BOARD_ITEM* item : m_drawings )
         {
+            if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
+                continue;
+
             if( item->Type() == PCB_FP_TEXT_T )
                 area.Merge( item->GetBoundingBox() );
         }
@@ -855,6 +855,7 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisi
 SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
 {
     const BOARD* board = GetBoard();
+    bool         isFPEdit = board && board->IsFootprintHolder();
 
     if( board )
     {
@@ -867,6 +868,9 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
 
     for( BOARD_ITEM* item : m_drawings )
     {
+        if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
+            continue;
+
         if( item->Type() == PCB_FP_SHAPE_T || BaseType( item->Type() ) == PCB_DIMENSION_T )
         {
             item->TransformShapeWithClearanceToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,

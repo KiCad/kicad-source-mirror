@@ -1172,12 +1172,6 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(path %s)\n",
                       m_out->Quotew( aFootprint->GetPath().AsString() ).c_str() );
 
-    if( aFootprint->GetPlacementCost90() != 0 )
-        m_out->Print( aNestLevel+1, "(autoplace_cost90 %d)\n", aFootprint->GetPlacementCost90() );
-
-    if( aFootprint->GetPlacementCost180() != 0 )
-        m_out->Print( aNestLevel+1, "(autoplace_cost180 %d)\n", aFootprint->GetPlacementCost180() );
-
     if( aFootprint->GetLocalSolderMaskMargin() != 0 )
         m_out->Print( aNestLevel+1, "(solder_mask_margin %s)\n",
                       FormatInternalUnits( aFootprint->GetLocalSolderMaskMargin() ).c_str() );
@@ -1220,6 +1214,19 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
 
         if( aFootprint->GetAttributes() & FP_ALLOW_SOLDERMASK_BRIDGES )
             m_out->Print( 0, " allow_soldermask_bridges" );
+
+        m_out->Print( 0, ")\n" );
+    }
+
+    if( aFootprint->GetPrivateLayers().any() )
+    {
+        m_out->Print( aNestLevel+1, "(private_layers" );
+
+        for( PCB_LAYER_ID layer : aFootprint->GetPrivateLayers().Seq() )
+        {
+            wxString canonicalName( LSET::Name( layer ) );
+            m_out->Print( 0, " \"%s\"", canonicalName.ToStdString().c_str() );
+        }
 
         m_out->Print( 0, ")\n" );
     }

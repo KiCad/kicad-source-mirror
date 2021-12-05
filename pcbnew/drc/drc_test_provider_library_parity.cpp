@@ -325,9 +325,6 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
     TEST( GetKeywords(), aLibFootprint->GetKeywords() );
     TEST( GetAttributes(), aLibFootprint->GetAttributes() );
 
-    TEST( GetPlacementCost90(), aLibFootprint->GetPlacementCost90() );
-    TEST( GetPlacementCost180(), aLibFootprint->GetPlacementCost180() );
-
     TEST( GetLocalClearance(), aLibFootprint->GetLocalClearance() );
     TEST( GetLocalSolderMaskMargin(), aLibFootprint->GetLocalSolderMaskMargin() );
     TEST( GetLocalSolderPasteMargin(), aLibFootprint->GetLocalSolderPasteMargin() );

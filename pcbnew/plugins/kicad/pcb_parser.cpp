@@ -3380,14 +3380,28 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             break;
 
         case T_autoplace_cost90:
-            footprint->SetPlacementCost90( parseInt( "auto place cost at 90 degrees" ) );
+        case T_autoplace_cost180:
+            parseInt( "legacy auto-place cost" );
             NeedRIGHT();
             break;
 
-        case T_autoplace_cost180:
-            footprint->SetPlacementCost180( parseInt( "auto place cost at 180 degrees" ) );
-            NeedRIGHT();
+        case T_private_layers:
+        {
+            LSET privateLayers;
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                auto it = m_layerIndices.find( CurStr() );
+
+                if( it != m_layerIndices.end() )
+                    privateLayers.set( it->second );
+                else
+                    Expecting( "layer name" );
+            }
+
+            footprint->SetPrivateLayers( privateLayers );
             break;
+        }
 
         case T_solder_mask_margin:
             footprint->SetLocalSolderMaskMargin( parseBoardUnits( "local solder mask margin "
@@ -3396,14 +3410,14 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             break;
 
         case T_solder_paste_margin:
-            footprint->SetLocalSolderPasteMargin(
-                    parseBoardUnits( "local solder paste margin value" ) );
+            footprint->SetLocalSolderPasteMargin( parseBoardUnits( "local solder paste margin "
+                                                                   "value" ) );
             NeedRIGHT();
             break;
 
         case T_solder_paste_ratio:
-            footprint->SetLocalSolderPasteMarginRatio(
-                    parseDouble( "local solder paste margin ratio value" ) );
+            footprint->SetLocalSolderPasteMarginRatio( parseDouble( "local solder paste margin "
+                                                                    "ratio value" ) );
             NeedRIGHT();
             break;
 

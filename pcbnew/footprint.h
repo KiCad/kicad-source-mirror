@@ -121,6 +121,9 @@ public:
         return aItem && aItem->Type() == PCB_FOOTPRINT_T;
     }
 
+    LSET GetPrivateLayers() const { return m_privateLayers; }
+    void SetPrivateLayers( LSET aLayers ) { m_privateLayers = aLayers; }
+
     ///< @copydoc BOARD_ITEM_CONTAINER::Add()
     void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT ) override;
 
@@ -571,12 +574,6 @@ public:
     KIID GetLink() const { return m_link; }
     void SetLink( const KIID& aLink ) { m_link = aLink; }
 
-    int GetPlacementCost180() const { return m_rot180Cost; }
-    void SetPlacementCost180( int aCost )   { m_rot180Cost = aCost; }
-
-    int GetPlacementCost90() const { return m_rot90Cost; }
-    void SetPlacementCost90( int aCost )    { m_rot90Cost = aCost; }
-
     BOARD_ITEM* Duplicate() const override;
 
     /**
@@ -778,8 +775,7 @@ private:
     timestamp_t     m_lastEditTime;
     int             m_arflag;            // Use to trace ratsnest and auto routing.
     KIID            m_link;              // Temporary logical link used during editing
-    int             m_rot90Cost;         // Horizontal automatic placement cost ( 0..10 ).
-    int             m_rot180Cost;        // Vertical automatic placement cost ( 0..10 ).
+    LSET            m_privateLayers;     // Layers visible only in the footprint editor
 
     std::vector<FP_3DMODEL>       m_3D_Drawings;       // 3D models.
     std::map<wxString, wxString>  m_properties;

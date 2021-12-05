@@ -326,7 +326,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
         if( textLayer == Edge_Cuts || textLayer >= PCB_LAYER_ID_COUNT )
             continue;
 
-        if( !m_layerMask[textLayer] )
+        if( !m_layerMask[textLayer] || aFootprint->GetPrivateLayers().test( textLayer ) )
             continue;
 
         if( textItem->GetText() == wxT( "${REFERENCE}" ) && !GetPlotReference() )
@@ -531,6 +531,9 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 {
     for( const BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
+        if( aFootprint->GetPrivateLayers().test( item->GetLayer() ) )
+            continue;
+
         if( item->Type() == PCB_FP_SHAPE_T )
         {
             const FP_SHAPE* shape = static_cast<const FP_SHAPE*>( item );

@@ -68,23 +68,13 @@ private:
     void EditLibraryFootprint( wxCommandEvent&  ) override;
     void UpdateFootprint( wxCommandEvent&  ) override;
     void ChangeFootprint( wxCommandEvent&  ) override;
-    void FootprintOrientEvent( wxCommandEvent&  ) override;
-    void OnOtherOrientation( wxCommandEvent& aEvent ) override;
     void OnGridSize( wxSizeEvent& aEvent ) override;
     void OnAddField( wxCommandEvent&  ) override;
     void OnDeleteField( wxCommandEvent&  ) override;
     void OnUpdateUI( wxUpdateUIEvent&  ) override;
     void OnPageChange( wxNotebookEvent& event ) override;
 
-    void select3DModel( int aModelIdx );
-
     void adjustGridColumns( int aWidth );
-
-    /**
-     * Update the orientation validated control, without triggering a change
-     * event on the control (which would update the radio buttons)
-     */
-    void updateOrientationControl();
 
 private:
     PCB_EDIT_FRAME*                  m_frame;
@@ -95,8 +85,7 @@ private:
     FP_TEXT_GRID_TABLE*              m_texts;
     UNIT_BINDER                      m_posX;
     UNIT_BINDER                      m_posY;
-    wxFloatingPointValidator<double> m_orientValidator;
-    double                           m_orientValue;
+    UNIT_BINDER                      m_orientation;
 
     UNIT_BINDER                      m_netClearance;
     UNIT_BINDER                      m_solderMask;

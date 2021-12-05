@@ -1203,29 +1203,10 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
             char* uuid = strtok_r( (char*) line + SZ( "Sc" ), delims, (char**) &data );
             const_cast<KIID&>( aFootprint->m_Uuid ) = KIID( uuid );
         }
-        else if( TESTLINE( "Op" ) )         // (Op)tions for auto placement
+        else if( TESTLINE( "Op" ) )         // (Op)tions for auto placement (no longer supported)
         {
-            int itmp1 = hexParse( line + SZ( "Op" ), &data );
-            int itmp2 = hexParse( data );
-
-            int cntRot180 = itmp2 & 0x0F;
-
-            if( cntRot180 > 10 )
-                cntRot180 = 10;
-
-            aFootprint->SetPlacementCost180( cntRot180 );
-
-            int cntRot90  = itmp1 & 0x0F;
-
-            if( cntRot90 > 10 )
-                cntRot90 = 0;
-
-            itmp1 = (itmp1 >> 4) & 0x0F;
-
-            if( itmp1 > 10 )
-                itmp1 = 0;
-
-            aFootprint->SetPlacementCost90((itmp1 << 4) | cntRot90 );
+            hexParse( line + SZ( "Op" ), &data );
+            hexParse( data );
         }
         else if( TESTLINE( "At" ) )         // (At)tributes of footprint
         {

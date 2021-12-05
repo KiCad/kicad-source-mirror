@@ -209,6 +209,7 @@ pad_prop_fiducial_glob
 pad_prop_castellated
 pad_prop_testpoint
 pad_prop_heatsink
+private_layers
 property
 page
 paper

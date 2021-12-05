@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,6 +49,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_itemsGrid->SetColSize( 10, 110 );
 	m_itemsGrid->EnableDragColMove( false );
 	m_itemsGrid->EnableDragColSize( true );
+	m_itemsGrid->SetColLabelSize( 24 );
 	m_itemsGrid->SetColLabelValue( 0, _("Text Items") );
 	m_itemsGrid->SetColLabelValue( 1, _("Show") );
 	m_itemsGrid->SetColLabelValue( 2, _("Width") );
@@ -60,14 +61,13 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_itemsGrid->SetColLabelValue( 8, _("Unconstrained") );
 	m_itemsGrid->SetColLabelValue( 9, _("X Offset") );
 	m_itemsGrid->SetColLabelValue( 10, _("Y Offset") );
-	m_itemsGrid->SetColLabelSize( 24 );
 	m_itemsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
 	m_itemsGrid->EnableDragRowSize( false );
+	m_itemsGrid->SetRowLabelSize( 160 );
 	m_itemsGrid->SetRowLabelValue( 0, _("Reference designator") );
 	m_itemsGrid->SetRowLabelValue( 1, _("Value") );
-	m_itemsGrid->SetRowLabelSize( 160 );
 	m_itemsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Label Appearance
@@ -105,10 +105,10 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	wxStaticText* staticFPNameLabel;
 	staticFPNameLabel = new wxStaticText( m_PanelGeneral, wxID_ANY, _("Footprint name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticFPNameLabel->Wrap( -1 );
-	fgSizerFPID->Add( staticFPNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgSizerFPID->Add( staticFPNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_FootprintNameCtrl = new wxTextCtrl( m_PanelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_FootprintNameCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID->Add( m_FootprintNameCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticText* staticDescriptionLabel;
 	staticDescriptionLabel = new wxStaticText( m_PanelGeneral, wxID_ANY, _("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -126,45 +126,58 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	fgSizerFPID->Add( m_KeywordCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	m_PanelPropertiesBoxSizer->Add( fgSizerFPID, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	m_PanelPropertiesBoxSizer->Add( fgSizerFPID, 0, wxEXPAND|wxBOTTOM, 10 );
 
 	wxBoxSizer* bSizerProperties;
 	bSizerProperties = new wxBoxSizer( wxHORIZONTAL );
 
-	m_sizerAP = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Auto-placement Rules") ), wxVERTICAL );
+	wxStaticBoxSizer* bSizerPrivateLayers;
+	bSizerPrivateLayers = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Private Layers") ), wxVERTICAL );
 
-	m_sizerAllow90 = new wxBoxSizer( wxVERTICAL );
+	m_privateLayersGrid = new WX_GRID( bSizerPrivateLayers->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 
-	m_allow90Label = new wxStaticText( m_sizerAP->GetStaticBox(), wxID_ANY, _("Allow 90 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_allow90Label->Wrap( -1 );
-	m_sizerAllow90->Add( m_allow90Label, 0, wxLEFT, 5 );
+	// Grid
+	m_privateLayersGrid->CreateGrid( 2, 1 );
+	m_privateLayersGrid->EnableEditing( true );
+	m_privateLayersGrid->EnableGridLines( true );
+	m_privateLayersGrid->EnableDragGridSize( false );
+	m_privateLayersGrid->SetMargins( 0, 0 );
 
-	m_CostRot90Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
-	m_sizerAllow90->Add( m_CostRot90Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	// Columns
+	m_privateLayersGrid->SetColSize( 0, 180 );
+	m_privateLayersGrid->EnableDragColMove( false );
+	m_privateLayersGrid->EnableDragColSize( true );
+	m_privateLayersGrid->SetColLabelSize( 0 );
+	m_privateLayersGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
+	// Rows
+	m_privateLayersGrid->EnableDragRowSize( false );
+	m_privateLayersGrid->SetRowLabelSize( 0 );
+	m_privateLayersGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
+
+	// Label Appearance
+
+	// Cell Defaults
+	m_privateLayersGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	bSizerPrivateLayers->Add( m_privateLayersGrid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bButtonSize1;
+	bButtonSize1 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_bpAddLayer = new wxBitmapButton( bSizerPrivateLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bButtonSize1->Add( m_bpAddLayer, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	m_sizerAP->Add( m_sizerAllow90, 0, wxEXPAND, 5 );
+	bButtonSize1->Add( 20, 0, 0, wxEXPAND, 5 );
+
+	m_bpDeleteLayer = new wxBitmapButton( bSizerPrivateLayers->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bButtonSize1->Add( m_bpDeleteLayer, 0, wxRIGHT, 5 );
 
 
-	m_sizerAP->Add( 0, 8, 1, wxEXPAND, 5 );
-
-	m_sizerAllow180 = new wxBoxSizer( wxVERTICAL );
-
-	m_allow180Label = new wxStaticText( m_sizerAP->GetStaticBox(), wxID_ANY, _("Allow 180 degree rotated placement:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_allow180Label->Wrap( -1 );
-	m_sizerAllow180->Add( m_allow180Label, 0, wxLEFT, 5 );
-
-	m_CostRot180Ctrl = new wxSlider( m_sizerAP->GetStaticBox(), wxID_ANY, 0, 0, 10, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
-	m_sizerAllow180->Add( m_CostRot180Ctrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bSizerPrivateLayers->Add( bButtonSize1, 0, wxEXPAND, 5 );
 
 
-	m_sizerAP->Add( m_sizerAllow180, 0, wxEXPAND|wxBOTTOM, 5 );
-
-
-	bSizerProperties->Add( m_sizerAP, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-
-	bSizerProperties->Add( 10, 0, 0, wxEXPAND, 5 );
+	bSizerProperties->Add( bSizerPrivateLayers, 1, wxEXPAND|wxRIGHT, 15 );
 
 	wxStaticBoxSizer* sbFabSizer;
 	sbFabSizer = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Fabrication Attributes") ), wxVERTICAL );
@@ -195,16 +208,16 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	sbFabSizer->Add( m_excludeFromBOM, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerProperties->Add( sbFabSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerProperties->Add( sbFabSizer, 1, wxEXPAND|wxRIGHT, 5 );
 
 
-	m_PanelPropertiesBoxSizer->Add( bSizerProperties, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_PanelPropertiesBoxSizer->Add( bSizerProperties, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	m_PanelGeneral->SetSizer( m_PanelPropertiesBoxSizer );
 	m_PanelGeneral->Layout();
 	m_PanelPropertiesBoxSizer->Fit( m_PanelGeneral );
-	m_NoteBook->AddPage( m_PanelGeneral, _("General"), false );
+	m_NoteBook->AddPage( m_PanelGeneral, _("General"), true );
 	m_PanelClearances = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelClearances;
 	bSizerPanelClearances = new wxBoxSizer( wxVERTICAL );
@@ -320,7 +333,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_PanelClearances->SetSizer( bSizerPanelClearances );
 	m_PanelClearances->Layout();
 	bSizerPanelClearances->Fit( m_PanelClearances );
-	m_NoteBook->AddPage( m_PanelClearances, _("Clearance Overrides and Settings"), true );
+	m_NoteBook->AddPage( m_PanelClearances, _("Clearance Overrides and Settings"), false );
 
 	m_GeneralBoxSizer->Add( m_NoteBook, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
@@ -351,6 +364,9 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddField ), NULL, this );
 	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnDeleteField ), NULL, this );
 	m_FootprintNameCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnFootprintNameText ), NULL, this );
+	m_privateLayersGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGridSize ), NULL, this );
+	m_bpAddLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddLayer ), NULL, this );
+	m_bpDeleteLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnDeleteLayer ), NULL, this );
 }
 
 DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE()
@@ -362,5 +378,8 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDIT
 	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddField ), NULL, this );
 	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnDeleteField ), NULL, this );
 	m_FootprintNameCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnFootprintNameText ), NULL, this );
+	m_privateLayersGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnGridSize ), NULL, this );
+	m_bpAddLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnAddLayer ), NULL, this );
+	m_bpDeleteLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::OnDeleteLayer ), NULL, this );
 
 }

@@ -422,6 +422,25 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
         m_maxError = bds.m_MaxError;
         m_holePlatingThickness = bds.GetHolePlatingThickness();
+
+        if( item->GetParentFootprint() && !board->IsFootprintHolder() )
+        {
+            FOOTPRINT* parentFP = static_cast<FOOTPRINT*>( item->GetParentFootprint() );
+
+            if( item->GetLayerSet().count() > 1 )
+            {
+                // For multi-layer objects, exclude only those layers that are private
+                if( IsPcbLayer( aLayer ) && parentFP->GetPrivateLayers().test( aLayer ) )
+                    return false;
+            }
+            else
+            {
+                // For single-layer objects, exclude all layers including ancillary layers
+                // such as holes, netnames, etc.
+                if( parentFP->GetPrivateLayers().test( item->GetLayer() ) )
+                    return false;
+            }
+        }
     }
     else
     {

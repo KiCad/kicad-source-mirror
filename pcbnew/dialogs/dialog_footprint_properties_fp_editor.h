@@ -36,6 +36,31 @@ class FOOTPRINT_EDIT_FRAME;
 class PANEL_FP_PROPERTIES_3D_MODEL;
 
 
+class PRIVATE_LAYERS_GRID_TABLE : public wxGridTableBase, public std::vector<PCB_LAYER_ID>
+{
+public:
+    PRIVATE_LAYERS_GRID_TABLE( PCB_BASE_FRAME* aFrame );
+    ~PRIVATE_LAYERS_GRID_TABLE();
+
+    int GetNumberRows() override { return (int) size(); }
+    int GetNumberCols() override { return 1; }
+
+    bool CanGetValueAs( int aRow, int aCol, const wxString& aTypeName ) override;
+    bool CanSetValueAs( int aRow, int aCol, const wxString& aTypeName ) override;
+    wxGridCellAttr* GetAttr( int row, int col, wxGridCellAttr::wxAttrKind kind ) override;
+
+    wxString GetValue( int aRow, int aCol ) override;
+    long GetValueAsLong( int aRow, int aCol ) override;
+
+    void SetValue( int aRow, int aCol, const wxString& aValue ) override;
+    void SetValueAsLong( int aRow, int aCol, long aValue ) override;
+
+private:
+    PCB_BASE_FRAME* m_frame;
+    wxGridCellAttr* m_layerColAttr;
+};
+
+
 enum class NOTEBOOK_PAGES
 {
     PAGE_UNKNOWN = -1,
@@ -59,9 +84,10 @@ private:
     // virtual event functions
     void OnGridSize( wxSizeEvent& event ) override;
     void OnFootprintNameText( wxCommandEvent& event ) override;
-    void OnGridCellChanging( wxGridEvent& event );
     void OnAddField( wxCommandEvent& event ) override;
     void OnDeleteField( wxCommandEvent& event ) override;
+    void OnAddLayer( wxCommandEvent& event ) override;
+    void OnDeleteLayer( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
     bool checkFootprintName( const wxString& aFootprintName );
@@ -69,25 +95,26 @@ private:
     void adjustGridColumns( int aWidth );
 
 private:
-    FOOTPRINT_EDIT_FRAME*    m_frame;
-    FOOTPRINT*               m_footprint;
+    FOOTPRINT_EDIT_FRAME*      m_frame;
+    FOOTPRINT*                 m_footprint;
 
-    static NOTEBOOK_PAGES    m_page;       // remember the last open page during session
+    static NOTEBOOK_PAGES      m_page;       // remember the last open page during session
 
-    FP_TEXT_GRID_TABLE*      m_texts;
+    FP_TEXT_GRID_TABLE*        m_texts;
+    PRIVATE_LAYERS_GRID_TABLE* m_privateLayers;
 
-    UNIT_BINDER              m_netClearance;
-    UNIT_BINDER              m_solderMask;
-    UNIT_BINDER              m_solderPaste;
-    UNIT_BINDER              m_solderPasteRatio;
+    UNIT_BINDER                m_netClearance;
+    UNIT_BINDER                m_solderMask;
+    UNIT_BINDER                m_solderPaste;
+    UNIT_BINDER                m_solderPasteRatio;
 
-    wxControl*               m_delayedFocusCtrl;
-    NOTEBOOK_PAGES           m_delayedFocusPage;
+    wxControl*                 m_delayedFocusCtrl;
+    NOTEBOOK_PAGES             m_delayedFocusPage;
 
-    WX_GRID*                 m_delayedFocusGrid;
-    int                      m_delayedFocusRow;
-    int                      m_delayedFocusColumn;
-    wxString                 m_delayedErrorMessage;
+    WX_GRID*                   m_delayedFocusGrid;
+    int                        m_delayedFocusRow;
+    int                        m_delayedFocusColumn;
+    wxString                   m_delayedErrorMessage;
 
     PANEL_FP_PROPERTIES_3D_MODEL* m_3dPanel;
 };

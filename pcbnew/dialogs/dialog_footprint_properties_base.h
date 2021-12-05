@@ -29,13 +29,11 @@ class WX_GRID;
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/combobox.h>
 #include <wx/choice.h>
-#include <wx/radiobut.h>
-#include <wx/gbsizer.h>
-#include <wx/radiobox.h>
-#include <wx/slider.h>
 #include <wx/checkbox.h>
 #include <wx/panel.h>
+#include <wx/gbsizer.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 
@@ -64,31 +62,20 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_YPosLabel;
 		wxTextCtrl* m_ModPositionY;
 		wxStaticText* m_YPosUnit;
+		wxStaticText* m_orientationLabel;
+		wxComboBox* m_orientationCtrl;
 		wxStaticText* m_BoardSideLabel;
 		wxChoice* m_BoardSideCtrl;
-		wxRadioButton* m_Orient0;
-		wxRadioButton* m_Orient90;
-		wxRadioButton* m_Orient270;
-		wxRadioButton* m_Orient180;
-		wxRadioButton* m_OrientOther;
-		wxTextCtrl* m_OrientValueCtrl;
-		wxRadioBox* m_AutoPlaceCtrl;
-		wxStaticBoxSizer* m_sizerAP;
-		wxBoxSizer* m_sizerAllow90;
-		wxStaticText* m_allow90Label;
-		wxSlider* m_CostRot90Ctrl;
-		wxBoxSizer* m_sizerAllow180;
-		wxStaticText* m_allow180Label;
-		wxSlider* m_CostRot180Ctrl;
-		wxButton* m_buttonUpdate;
-		wxButton* m_buttonExchange;
-		wxButton* m_buttonModuleEditor;
-		wxButton* m_button5;
+		wxCheckBox* m_cbLocked;
 		wxStaticText* m_componentTypeLabel;
 		wxChoice* m_componentType;
 		wxCheckBox* m_boardOnly;
 		wxCheckBox* m_excludeFromPosFiles;
 		wxCheckBox* m_excludeFromBOM;
+		wxButton* m_buttonUpdate;
+		wxButton* m_buttonExchange;
+		wxButton* m_buttonModuleEditor;
+		wxButton* m_button5;
 		wxPanel* m_PanelClearances;
 		wxStaticText* m_staticTextInfo;
 		wxStaticText* m_NetClearanceLabel;
@@ -121,8 +108,6 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
-		virtual void FootprintOrientEvent( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOtherOrientation( wxCommandEvent& event ) { event.Skip(); }
 		virtual void UpdateFootprint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ChangeFootprint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EditFootprint( wxCommandEvent& event ) { event.Skip(); }

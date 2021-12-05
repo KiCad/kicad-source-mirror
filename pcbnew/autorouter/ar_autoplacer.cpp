@@ -940,94 +940,10 @@ AR_RESULT AR_AUTOPLACER::AutoplaceFootprints( std::vector<FOOTPRINT*>& aFootprin
             m_progressReporter->SetTitle( wxString::Format( _( "Autoplacing %s" ),
                                                             footprint->GetReference() ) );
 
-        double initialOrient = footprint->GetOrientation();
-
         error = getOptimalFPPlacement( footprint );
-        double bestScore = m_minCost;
-        double bestRotation = 0.0;
-        int rotAllowed;
-
-        if( error == AR_ABORT_PLACEMENT )
-            goto end_of_tst;
-
-        // Try orientations 90, 180, 270 degrees from initial orientation
-        rotAllowed = footprint->GetPlacementCost180();
-
-        if( rotAllowed != 0 )
-        {
-            rotateFootprint( footprint, 1800.0, true );
-            error   = getOptimalFPPlacement( footprint );
-            m_minCost *= OrientationPenalty[rotAllowed];
-
-            if( bestScore > m_minCost )    // This orientation is better.
-            {
-                bestScore   = m_minCost;
-                bestRotation = 1800.0;
-            }
-            else
-            {
-                rotateFootprint( footprint, initialOrient, false );
-            }
-
-            if( error == AR_ABORT_PLACEMENT )
-                goto end_of_tst;
-        }
-
-        // Determine if the best orientation of a footprint is 90.
-        rotAllowed = footprint->GetPlacementCost90();
-
-        if( rotAllowed != 0 )
-        {
-            rotateFootprint( footprint, 900.0, true );
-            error   = getOptimalFPPlacement( footprint );
-            m_minCost *= OrientationPenalty[rotAllowed];
-
-            if( bestScore > m_minCost )    // This orientation is better.
-            {
-                bestScore   = m_minCost;
-                bestRotation = 900.0;
-            }
-            else
-            {
-                rotateFootprint( footprint, initialOrient, false );
-            }
-
-            if( error == AR_ABORT_PLACEMENT )
-                goto end_of_tst;
-        }
-
-        // Determine if the best orientation of a footprint is -90.
-        if( rotAllowed != 0 )
-        {
-            rotateFootprint( footprint, 2700.0, true );
-            error = getOptimalFPPlacement( footprint );
-            m_minCost *= OrientationPenalty[rotAllowed];
-
-            if( bestScore > m_minCost )    // This orientation is better.
-            {
-                bestScore   = m_minCost;
-                bestRotation = 2700.0;
-            }
-            else
-            {
-                rotateFootprint( footprint, initialOrient, false );
-            }
-
-            if( error == AR_ABORT_PLACEMENT )
-                goto end_of_tst;
-        }
-
-end_of_tst:
 
         if( error == AR_ABORT_PLACEMENT )
             break;
-
-        bestRotation += initialOrient;
-
-        if( bestRotation != footprint->GetOrientation() )
-        {
-            rotateFootprint( footprint, bestRotation, false );
-        }
 
         // Place footprint.
         placeFootprint( footprint, true, m_curPosition );
