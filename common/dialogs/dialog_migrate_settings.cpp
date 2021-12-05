@@ -32,6 +32,9 @@ DIALOG_MIGRATE_SETTINGS::DIALOG_MIGRATE_SETTINGS( SETTINGS_MANAGER* aManager ) :
 
     m_btnCustomPath->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
+    // Disabled for now.  See https://gitlab.com/kicad/code/kicad/-/issues/9826
+    m_cbCopyLibraryTables->Hide();
+
     m_standardButtonsOK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -87,7 +90,7 @@ bool DIALOG_MIGRATE_SETTINGS::TransferDataFromWindow()
 
     if( m_btnPrevVer->GetValue() )
     {
-        m_manager->SetMigrateLibraryTables( m_cbCopyLibraryTables->GetValue() );
+        m_manager->SetMigrateLibraryTables( false );
 
         // Round-trip through a wxFileName object to remove any trailing separators
         wxFileName path( m_cbPath->GetValue(), wxEmptyString );
