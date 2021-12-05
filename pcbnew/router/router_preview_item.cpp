@@ -224,7 +224,7 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
     case SH_LINE_CHAIN:
     {
         const SHAPE_LINE_CHAIN* l = (const SHAPE_LINE_CHAIN*) aShape;
-        const int               w = l->Width();
+        const int               w = m_width;
 
         if( m_showClearance && m_clearance > 0 )
         {
