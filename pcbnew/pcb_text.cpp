@@ -154,8 +154,8 @@ bool PCB_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy
 
     if( aContains )
         return rect.Contains( GetBoundingBox() );
-    else
-        return rect.Intersects( GetTextBox(), GetDrawRotation() );
+
+    return rect.Intersects( GetBoundingBox(), GetDrawRotation() );
 }
 
 
