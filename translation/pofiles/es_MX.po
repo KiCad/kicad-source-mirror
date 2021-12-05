@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-12-02 22:19+0000\n"
-"Last-Translator: uLe <uestrada@mafu-robotics.de>\n"
+"PO-Revision-Date: 2021-12-06 19:31+0000\n"
+"Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
 "Language: es_MX\n"
@@ -301,14 +301,12 @@ msgid "General"
 msgstr "General"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
-#, fuzzy
 msgid "Realtime Renderer"
-msgstr "Revelar en Finder"
+msgstr "Renderizador en tiempo real"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "Opciones de renderizado de Raytracing"
+msgstr "Renderizador de trazado de rayos"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:247
@@ -622,9 +620,8 @@ msgid "Board Colors"
 msgstr "Colores de la Placa"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:66
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "Inserte la tabla de apilado de placa"
+msgstr "Usar colores del apilado de placa"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:69
 msgid "Use colors:"
@@ -663,9 +660,8 @@ msgid "Show silkscreen layers"
 msgstr "Mostrar capas de serigrafía"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Recortar serigrafía en el anillo de la vía"
+msgstr "Recortar serigrafía en los bordes de la máscara para soldar"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
@@ -688,7 +684,6 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "Capas de usuario (no se muestra en modo realista)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
 msgstr "Mostrar capas de comentarios y dibujos"
 
@@ -741,7 +736,6 @@ msgid "Camera Options"
 msgstr "Opciones de cámara"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
 msgstr "Incremento de rotación:"
 
@@ -3969,7 +3963,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Permisos insuficientes para la carpeta '%s'."
 
 #: common/eda_base_frame.cpp:1105
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
@@ -3980,7 +3974,7 @@ msgstr ""
 "¡Esto puede ser embarazoso!\n"
 "Parece ser que en la última ocasión que editó el archivo\n"
 "\"%s\"\n"
-"no se guardo de forma apropiada. ¿Desea recuperar las últimas ediciones que "
+"no se guardó de forma apropiada.  ¿Desea recuperar las últimas ediciones que "
 "realizó?"
 
 #: common/eda_base_frame.cpp:1121
@@ -4017,9 +4011,8 @@ msgstr "Pulgadas"
 
 #: common/eda_draw_frame.cpp:148 pagelayout_editor/pl_editor_frame.cpp:163
 #: pcbnew/tools/drawing_tool.cpp:266 pcbnew/tools/pcb_actions.cpp:675
-#, fuzzy
 msgid "Constrain to H, V, 45"
-msgstr "Trazar solo líneas H, V y 45 grad"
+msgstr "Restringir a líneas H, V y 45"
 
 #: common/eda_draw_frame.cpp:318
 msgid "Edit User Grid..."
@@ -4341,14 +4334,12 @@ msgid "Bezier"
 msgstr "Bezier"
 
 #: common/eda_shape.cpp:1604
-#, fuzzy
 msgid "Start X"
-msgstr "Inicio X:"
+msgstr "Inicio X"
 
 #: common/eda_shape.cpp:1606
-#, fuzzy
 msgid "Start Y"
-msgstr "Inicio Y:"
+msgstr "Inicio Y"
 
 #: common/eda_shape.cpp:1608 pcbnew/pcb_shape.cpp:264 pcbnew/pcb_track.cpp:1124
 #: pcbnew/pcb_track.cpp:1141
@@ -5303,7 +5294,6 @@ msgid "Reference designators"
 msgstr "Indicadores de referencia"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text"
 msgstr "Texto de la huella"
 
@@ -5818,9 +5808,8 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "Copiar los elementos seleccionados al portapapeles"
 
 #: common/tool/actions.cpp:165
-#, fuzzy
 msgid "Paste item(s) from clipboard"
-msgstr "Pegar elementos desde el portapapeles"
+msgstr "Pegar elemento(s) desde el portapapeles"
 
 #: common/tool/actions.cpp:171
 msgid "Select all items on screen"
@@ -6154,9 +6143,8 @@ msgid "Switch display of full-window crosshairs"
 msgstr "Cambia a cruceta de ventana completa"
 
 #: common/tool/actions.cpp:533
-#, fuzzy
 msgid "Inactive Layer View Mode"
-msgstr "Modo de vista de una capa"
+msgstr "Modo de vista de capa inactiva"
 
 #: common/tool/actions.cpp:534
 msgid "Toggle inactive layers between normal and dimmed"
@@ -12988,7 +12976,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "Se ha modificado el esquema. ¿Quiere guardar los cambios?"
 
 #: eeschema/files-io.cpp:1346
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -12997,10 +12984,9 @@ msgid ""
 "made?"
 msgstr ""
 "¡Esto puede ser embarazoso!\n"
-"Parece ser que en la última ocasión que editó el archivo\n"
-"\"%s\"\n"
-"no se guardo de forma apropiada. ¿Desea recuperar las últimas ediciones que "
-"realizó?"
+"Parece ser que la última vez que editó uno o más archivos esquemáticos\n"
+"no se guardaron de forma apropiada. ¿Desea recuperar las últimas ediciones "
+"que realizó?"
 
 #: eeschema/files-io.cpp:1357
 #, c-format
@@ -18694,19 +18680,16 @@ msgid "Metadata"
 msgstr "Metadatos"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
-#, fuzzy
 msgid "Package identifier: "
-msgstr "Identificador de paquete: %s\n"
+msgstr "Identificador de paquete: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "Licencia"
+msgstr "Licencia: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
-#, fuzzy
 msgid "Tags: "
-msgstr "Etiquetas: %s\n"
+msgstr "Etiquetas: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:257
 msgid "Author"
@@ -18776,9 +18759,8 @@ msgid "Install Size"
 msgstr "Tamaño por defecto"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:85
-#, fuzzy
 msgid "Compatible"
-msgstr "Modo de compatibilidad:"
+msgstr "Modo de compatibilidad"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
 #, fuzzy
@@ -18927,9 +18909,8 @@ msgid "Aborting package installation."
 msgstr "Abortando instalación del paquete."
 
 #: kicad/pcm/pcm_task_manager.cpp:254
-#, fuzzy
 msgid "Extracted package\n"
-msgstr "Extrayendo el archivo '%s'."
+msgstr "Paquete extraído\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:298
 #, c-format
@@ -19835,7 +19816,6 @@ msgid "Error writing objects to clipboard"
 msgstr "Error al escribir objetos al portapapeles"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19847,16 +19827,17 @@ msgid ""
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
-"### Atenuador Dividido\n"
-"#### La atenuación es de 6dB\n"
-"___Z<sub>in</sub>___ impedancia de entrada deseada en &#x2126;<br>\n"
-"___Z<sub>out</sub>___ impedancia de salida deseada en &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"### Atenuador en T puenteado\n"
+"___a___ es la atenuación en dB<br>\n"
+"___Z<sub>in</sub>___ es la impedancia de entrada deseada en &#x2126;<br>\n"
+"___Z<sub>out</sub>___ es la impedancia de salida deseada en &#x2126;<br>\n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___R1 = Z<sub>0</sub>&middot; (L&minus;1)___<br>\n"
+"___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19870,21 +19851,19 @@ msgid ""
 "___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 msgstr ""
-"### Atenuador en T:\n"
-"__Zin__ impedancia de entrada deseada en &#x2126;<br>\n"
-"__Zout__ impedancia de salida deseada<br>\n"
-"__Zin = Zout__<br><br>\n"
+"### Atenuador en Pi\n"
+"___a___ es la atenuación en dB<br>\n"
+"___Z<sub>in</sub>___ es la impedancia de entrada deseada en &#x2126;<br>\n"
+"___Z<sub>out</sub>___ es la impedancia de salida deseada en &#x2126;<br>\n"
 "\n"
-"* __a__atenuación en dB \n"
-"* __L = 10<sup>a/20</sup>__ (la pérdida)\n"
-"* ___A = (L + 1) / (L - 1)___<br><br>\n"
-"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - "
-"1)___\n"
-"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; Z<sub>out</"
+"sub> / L)___<br>\n"
+"___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
+"___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -19895,15 +19874,14 @@ msgid ""
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
 "### Atenuador Dividido\n"
-"#### La atenuación es de 6dB\n"
-"___Z<sub>in</sub>___ impedancia de entrada deseada en &#x2126;<br>\n"
-"___Z<sub>out</sub>___ impedancia de salida deseada en &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"La atenuación es de 6dB  \n"
+"___Z<sub>in</sub>___ es la impedancia de entrada deseada en &#x2126;  \n"
+"___Z<sub>out</sub>___ es la impedancia de salida deseada en &#x2126;  \n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
+"___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19917,18 +19895,17 @@ msgid ""
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 msgstr ""
-"### Atenuador en T:\n"
-"__Zin__ impedancia de entrada deseada en &#x2126;<br>\n"
-"__Zout__ impedancia de salida deseada<br>\n"
-"__Zin = Zout__<br><br>\n"
+"### Atenuador en T\n"
+"___a___ es la atenuación en dB<br>\n"
+"___Z<sub>in</sub>___ es la impedancia de entrada deseada en &#x2126;<br>\n"
+"___Z<sub>out</sub>___ es la impedancia de salida deseada &#x2126;<br>\n"
 "\n"
-"* __a__atenuación en dB \n"
-"* __L = 10<sup>a/20</sup>__ (la pérdida)\n"
-"* ___A = (L + 1) / (L - 1)___<br><br>\n"
-"* ___R2 = 2 &radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> ) / (L - "
-"1)___\n"
-"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</sub>) "
+"/ (L&minus;1)___<br>\n"
+"___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
+"___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -20376,9 +20353,8 @@ msgid "Remove an item from the current list of available regulators"
 msgstr "Eliminar un elemento de la lista de reguladores disponibles"
 
 #: pcb_calculator/calculator_panels/panel_track_width.cpp:61
-#, fuzzy
 msgid "Temperature rise"
-msgstr "Aumento de temperatura:"
+msgstr "Aumento de temperatura"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:31
 #, fuzzy
@@ -20789,7 +20765,6 @@ msgid "Not worth using"
 msgstr "No vale la pena usar"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20817,31 +20792,32 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Las series E definidas en IEC 60063 son un sistema ampliamente aceptado de\n"
-"números preferidos para componentes electrónicos. Los valores disponibles\n"
-"están espaciados de manera aproximadamente igual en una escala logarítmica.\n"
+"Las series E están definidas en IEC 60063.\n"
 "\n"
-"E12: 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"E6:  1,0  -  1,5  -  2,2  -  3,3  -  4,7  -  6,8  -\n"
-"E3:  1,0  -   -   -  2,2  -   -   -  4,7  -   -   -\n"
-"E1:  1,0  -   -   -   -   -   -   -   -   -   -   -\n"
+"Los valores disponibles están espaciados de manera aproximadamente igual en "
+"una escala logarítmica.\n"
 "\n"
-"Esta calculadora encuentra combinaciones de componentes con valores de las\n"
-"series E para crear valores arbitrarios. La resistencia requerida puede ser "
-"entre\n"
-"0,0025 y 4000 kΩ. Se proporcionan soluciones que utilizan hasta 4 "
-"componentes.\n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
+"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
+"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
 "\n"
-"Por defecto, el valor pedido es excluido del conjunto de solución. También "
-"es posible\n"
-"especificar hasta dos valores para excluir de la solución si estos valores "
-"no están disponibles\n"
+"- Esta calculadora encuentra combinaciones de componentes con valores de las "
+"series E para crear valores arbitrarios.\n"
+"- Puedes ingresar la resistencia requerida desde 0,0025 a 4000 kΩ.\n"
+"- Se proporcionan soluciones que utilizan hasta 4 componentes.\n"
 "\n"
-"Las soluciones se dan en los siguientes formatos:\n"
+"El valor pedido es siempre excluido del conjunto de solución.\n"
+"Opcionalmente hasta dos valores pueden ser excluidos en caso de problemas de "
+"disponibilidad.\n"
 "\n"
-"\tR1 + R2 +...+ Rn\t\tresistencias en serie\n"
-"\tR1 | R2 |...| Rn \t\tresistencias en paralelo\n"
-"\tR1 + (R2 | R3)...\t\tcualquier combinación de los anteriores\n"
+"Las soluciones se presentan en los siguientes formatos:\n"
+"\n"
+"\tR1 + R2 +...+ Rn\tresistores en serie\n"
+"\tR1 | R2 |...| Rn\tresistores in paralelo\n"
+"\tR1 + (R2|R3)...\t\tcualquier combinación de las anteriores\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:49
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
@@ -20898,7 +20874,6 @@ msgstr ""
 "¿Desea descartar los cambios y salir?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20923,12 +20898,12 @@ msgid ""
 "___H___ is thickness (height) in mils  \n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces  \n"
 msgstr ""
-"Si especifica la corriente máxima, se calculará el grosor de pista "
-"adecuado.\n"
+"Si especifica la corriente máxima, se calculará el grosor de pista adecuado."
+"\n"
 "\n"
 "Si especifica uno de los grosores de pista, se calculará la corriente máxima "
-"que puede manejar. También se calculará el grosor de la otra pista para que "
-"pueda manejar esa corriente.\n"
+"que puede soportar. También se calculará el grosor de la otra pista para que "
+"pueda soportar esa corriente.\n"
 "\n"
 "El valor de control se muestra en negrita.\n"
 "\n"
@@ -20936,14 +20911,16 @@ msgstr ""
 "17,5 A (pistas internas), aumentos de temperatura de hasta 100 ºC y grosores "
 "de hasta 400 mil (10 mm).\n"
 "\n"
-"La fórmula, de IPC 2221, es\n"
-"<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
-"dónde:\n"
-"__I__    = corriente máxima en amperios\n"
-"__dt__   = aumento de temperatura por encima de la temperatura ambiente en "
-"ºC\n"
-"__W, H__ = ancho y espesor en mils\n"
-"__K__    = 0,024 para pistas internas o 0,048 para pistas externas\n"
+"La fórmula, de IPC 2221, es  \n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>  \n"
+"dónde:  \n"
+"___I___ es la corriente máxima en A  \n"
+"___&Delta;T___ es el aumento de temperatura por encima de la temperatura "
+"ambiente en &deg;C  \n"
+"___W___ es el ancho en mils  \n"
+"___H___ es el espesor (altura ) en mils  \n"
+"___K___ es 0.024 para pistas internas ó 0,048 para pistas externas  \n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21256,7 +21233,7 @@ msgstr "mil"
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:67
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:99
 msgid "inch"
-msgstr "inch"
+msgstr "pulgada"
 
 #: pcb_calculator/widgets/unit_selector.cpp:100
 msgid "GHz"
@@ -26428,11 +26405,8 @@ msgid "Plot Edge.Cuts on all layers"
 msgstr "Trazar Edge.Cuts en todas las capas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
-#, fuzzy
 msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr ""
-"No trazar el contenido de la capa de contorno de placa en ninguna de las "
-"demás capas."
+msgstr "Trazar el contenido de la capa de contorno de placa en todas las capas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 #, fuzzy
@@ -27145,16 +27119,13 @@ msgid "from %s"
 msgstr "[desde %s]"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "Detalles"
+msgstr "Detalles: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
-#, fuzzy
 msgid "Send project directly"
-msgstr ""
-"Carpeta del proyecto activo:\n"
-"%s"
+msgstr "Enviar proyecto directamente"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
@@ -27166,9 +27137,8 @@ msgid "Produce PCB"
 msgstr "Fabricar PCB"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
-#, fuzzy
 msgid "Send PCB for production"
-msgstr "Enviar PCB para su fabricación."
+msgstr "Enviar PCB para su fabricación"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
 msgid "Change Pads on Current Footprint"
@@ -31811,14 +31781,14 @@ msgid "Through hole pad %s of %s"
 msgstr "Pad de orificio pasante %s de %s"
 
 #: pcbnew/pad.cpp:1155
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "Pad %s de %s en %s"
+msgstr "Pad %s %s de %s en %s"
 
 #: pcbnew/pad.cpp:1163
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "Pad de orificio pasante %s de %s"
+msgstr "Pad de orificio pasante %s %s de %s"
 
 #: pcbnew/pad.cpp:1598
 msgid "Edge connector"
