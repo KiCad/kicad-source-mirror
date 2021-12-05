@@ -165,6 +165,8 @@ void SHAPE_LINE_CHAIN::mergeFirstLastPointIfNeeded()
 
             m_points.pop_back();
             m_shapes.pop_back();
+
+            fixIndicesRotation();
         }
     }
 }
