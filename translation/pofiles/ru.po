@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-21 21:17+0000\n"
+"PO-Revision-Date: 2021-12-06 19:31+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -16315,7 +16315,7 @@ msgstr "Обновить символ библиотеки в редакторе
 
 #: eeschema/tools/ee_actions.cpp:562
 msgid "Edit Symbol Fields..."
-msgstr "Править поля символа..."
+msgstr "Править поля символов..."
 
 #: eeschema/tools/ee_actions.cpp:562
 msgid "Bulk-edit fields of all symbols in schematic"
