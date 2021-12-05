@@ -247,7 +247,8 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet,
 
 
 const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
-                                              std::pair<JOINT*, JOINT*>* aTerminalJoints )
+                                              std::pair<JOINT*, JOINT*>* aTerminalJoints,
+                                              bool aFollowLockedSegments )
 {
     ITEM_SET        path;
     std::set<ITEM*> visited;
@@ -278,7 +279,9 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
     if( !seg )
         return ITEM_SET();
 
-    LINE l = m_world->AssembleLine( seg );
+    // Assemble a line following through locked segments
+    // TODO: consider if we want to allow tuning lines with different widths in the future
+    LINE l = m_world->AssembleLine( seg, nullptr, false, true );
 
     path.Add( l );
 
@@ -301,7 +304,7 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart,
 const ITEM_SET TOPOLOGY::AssembleTuningPath( ITEM* aStart, SOLID** aStartPad, SOLID** aEndPad )
 {
     std::pair<JOINT*, JOINT*> joints;
-    ITEM_SET initialPath = AssembleTrivialPath( aStart, &joints );
+    ITEM_SET initialPath = AssembleTrivialPath( aStart, &joints, true );
 
     PAD* padA = nullptr;
     PAD* padB = nullptr;

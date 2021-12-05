@@ -61,10 +61,12 @@ public:
      *
      * @param aStart is the item to assemble from.
      * @param aTerminalJoints will be filled with the start and end points of the assembled path.
+     * @param aFollowLockedSegments if true will assemble a path including locked segments
      * @return a set of items in the path.
      */
     const ITEM_SET AssembleTrivialPath( ITEM* aStart,
-                                        std::pair<JOINT*, JOINT*>* aTerminalJoints = nullptr );
+                                        std::pair<JOINT*, JOINT*>* aTerminalJoints = nullptr,
+                                        bool aFollowLockedSegments = false );
 
     /**
      * Like AssembleTrivialPath, but follows the track length algorithm, which discards segments

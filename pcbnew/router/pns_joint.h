@@ -95,12 +95,35 @@ public:
         return nullptr;
     }
 
-    ///< Return true if the joint is a trivial line corner, connecting two
-    ///< segments of the same net, on the same layer.
-    bool IsLineCorner() const
+    /**
+     * Checks if a joint connects two segments of the same net, layer, and width.
+     * @param aAllowLockedSegs will consider joints between locked and unlocked segments as trivial
+     * @return true if the joint is a trivial line corner
+     */
+    bool IsLineCorner( bool aAllowLockedSegs = false ) const
     {
         if( m_linkedItems.Size() != 2 || m_linkedItems.Count( SEGMENT_T | ARC_T ) != 2 )
-            return false;
+        {
+            if( !aAllowLockedSegs )
+            {
+                return false;
+            }
+            else if( m_linkedItems.Size() == 3
+                        && m_linkedItems.Count( SEGMENT_T | ARC_T ) == 2
+                        && m_linkedItems.Count( VIA_T ) == 1 )
+            {
+                assert( static_cast<const ITEM*>( m_linkedItems[2] )->Kind() == VIA_T );
+
+                const VIA* via = static_cast<const VIA*>( m_linkedItems[2] );
+
+                if( !via->IsVirtual() )
+                    return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         auto seg1 = static_cast<LINKED_ITEM*>( m_linkedItems[0] );
         auto seg2 = static_cast<LINKED_ITEM*>( m_linkedItems[1] );
@@ -156,9 +179,9 @@ public:
 
     ///< For trivial joints, return the segment adjacent to (aCurrent). For non-trival ones,
     ///< return NULL, indicating the end of line.
-    LINKED_ITEM* NextSegment( ITEM* aCurrent ) const
+    LINKED_ITEM* NextSegment( ITEM* aCurrent, bool aAllowLockedSegs = false ) const
     {
-        if( !IsLineCorner() )
+        if( !IsLineCorner( aAllowLockedSegs ) )
             return nullptr;
 
         return static_cast<LINKED_ITEM*>( m_linkedItems[m_linkedItems[0] == aCurrent ? 1 : 0] );

@@ -33,6 +33,7 @@
 
 #include "pns_arc.h"
 #include "pns_item.h"
+#include "pns_itemset.h"
 #include "pns_line.h"
 #include "pns_node.h"
 #include "pns_via.h"
@@ -896,7 +897,7 @@ void NODE::Remove( LINE& aLine )
 
 void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, int aLimit,
                        VECTOR2I* aCorners, LINKED_ITEM** aSegments, bool* aArcReversed,
-                       bool& aGuardHit, bool aStopAtLockedJoints )
+                       bool& aGuardHit, bool aStopAtLockedJoints, bool aFollowLockedSegments )
 {
     bool prevReversed = false;
 
@@ -904,19 +905,19 @@ void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, in
 
     for( int count = 0 ; ; ++count )
     {
-        const VECTOR2I p = aCurrent->Anchor( aScanDirection ^ prevReversed );
-        const JOINT* jt = FindJoint( p, aCurrent );
+        const VECTOR2I p  = aCurrent->Anchor( aScanDirection ^ prevReversed );
+        const JOINT*   jt = FindJoint( p, aCurrent );
 
         assert( jt );
 
-        aCorners[aPos] = jt->Pos();
-        aSegments[aPos] = aCurrent;
+        aCorners[aPos]     = jt->Pos();
+        aSegments[aPos]    = aCurrent;
         aArcReversed[aPos] = false;
 
         if( aCurrent->Kind() == ITEM::ARC_T )
         {
-            if( ( aScanDirection && jt->Pos() == aCurrent->Anchor( 0 ) ) ||
-                ( !aScanDirection && jt->Pos() == aCurrent->Anchor( 1 ) ) )
+            if( ( aScanDirection && jt->Pos() == aCurrent->Anchor( 0 ) )
+                    || ( !aScanDirection && jt->Pos() == aCurrent->Anchor( 1 ) ) )
                 aArcReversed[aPos] = true;
         }
 
@@ -933,10 +934,10 @@ void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, in
 
         bool locked = aStopAtLockedJoints ? jt->IsLocked() : false;
 
-        if( locked || !jt->IsLineCorner() || aPos < 0 || aPos == aLimit )
+        if( locked || !jt->IsLineCorner( aFollowLockedSegments ) || aPos < 0 || aPos == aLimit )
             break;
 
-        aCurrent = jt->NextSegment( aCurrent );
+        aCurrent = jt->NextSegment( aCurrent, aFollowLockedSegments );
 
         prevReversed = ( aCurrent && jt->Pos() == aCurrent->Anchor( aScanDirection ) );
     }
@@ -944,7 +945,7 @@ void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, in
 
 
 const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
-                               bool aStopAtLockedJoints )
+                               bool aStopAtLockedJoints, bool aFollowLockedSegments )
 {
     const int MaxVerts = 1024 * 16;
 
@@ -964,12 +965,12 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
     pl.SetOwner( this );
 
     followLine( aSeg, false, i_start, MaxVerts, corners.data(), segs.data(), arcReversed.data(),
-                guardHit, aStopAtLockedJoints );
+                guardHit, aStopAtLockedJoints, aFollowLockedSegments );
 
     if( !guardHit )
     {
         followLine( aSeg, true, i_end, MaxVerts, corners.data(), segs.data(), arcReversed.data(),
-                    guardHit, aStopAtLockedJoints );
+                    guardHit, aStopAtLockedJoints, aFollowLockedSegments );
     }
 
     int n = 0;

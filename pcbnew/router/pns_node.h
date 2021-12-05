@@ -304,10 +304,14 @@ public:
      *
      * @param aSeg the initial segment.
      * @param aOriginSegmentIndex index of aSeg in the resulting line.
+     * @param aStopAtLockedJoints will terminate the line at the first locked joint encountered
+     * @param aFollowLockedSegments will consider a joint between a locked segment and an unlocked
+     *                              segment of the same width as a trivial joint.
      * @return the line
      */
     const LINE AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex = nullptr,
-                             bool aStopAtLockedJoints = false );
+                             bool aStopAtLockedJoints = false,
+                             bool aFollowLockedSegments = false );
 
     ///< Print the contents and joints structure.
     void Dump( bool aLong = false );
@@ -432,7 +436,7 @@ private:
     ///< Scan the joint map, forming a line starting from segment (current).
     void followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, int aLimit,
                      VECTOR2I* aCorners, LINKED_ITEM** aSegments, bool* aArcReversed,
-                     bool& aGuardHit, bool aStopAtLockedJoints );
+                     bool& aGuardHit, bool aStopAtLockedJoints, bool aFollowLockedSegments );
 
 private:
     struct DEFAULT_OBSTACLE_VISITOR;
