@@ -67,7 +67,7 @@ bool parse( std::istream& aStream, bool aVerbose )
 
     try
     {
-        PROF_COUNTER timer;
+        PROF_TIMER timer;
         board = parser.Parse();
 
         duration = timer.SinceStart<PARSE_DURATION>();

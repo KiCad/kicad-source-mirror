@@ -54,7 +54,7 @@ public:
         // biggest files will fit in)
         const std::string sexpr_str( std::istreambuf_iterator<char>( aStream ), {} );
 
-        PROF_COUNTER timer;
+        PROF_TIMER timer;
         // Perform the parse
         std::unique_ptr<SEXPR::SEXPR> sexpr( m_parser.Parse( sexpr_str ) );
 

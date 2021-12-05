@@ -172,7 +172,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
                                (GLvoid*) SHADER_OFFSET );
     }
 
-    PROF_COUNTER cntDraw( "gl-draw-elements" );
+    PROF_TIMER cntDraw( "gl-draw-elements" );
 
     int     n_ranges = m_vranges.size();
     int     n = 0;

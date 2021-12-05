@@ -437,12 +437,12 @@ void CONNECTION_GRAPH::Reset()
 void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnconditional,
                                     std::function<void( SCH_ITEM* )>* aChangedItemHandler )
 {
-    PROF_COUNTER recalc_time( "CONNECTION_GRAPH::Recalculate" );
+    PROF_TIMER recalc_time( "CONNECTION_GRAPH::Recalculate" );
 
     if( aUnconditional )
         Reset();
 
-    PROF_COUNTER update_items( "updateItemConnectivity" );
+    PROF_TIMER update_items( "updateItemConnectivity" );
 
     m_sheetList = aSheetList;
 
@@ -467,7 +467,7 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
     if( wxLog::IsAllowedTraceMask( ConnProfileMask ) )
         update_items.Show();
 
-    PROF_COUNTER build_graph( "buildConnectionGraph" );
+    PROF_TIMER build_graph( "buildConnectionGraph" );
 
     buildConnectionGraph();
 

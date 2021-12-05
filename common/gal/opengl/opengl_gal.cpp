@@ -575,12 +575,12 @@ void OPENGL_GAL::EndDrawing()
 {
     wxASSERT_MSG( m_isContextLocked, "What happened to the context lock?" );
 
-    PROF_COUNTER cntTotal("gl-end-total");
-    PROF_COUNTER cntEndCached("gl-end-cached");
-    PROF_COUNTER cntEndNoncached("gl-end-noncached");
-    PROF_COUNTER cntEndOverlay("gl-end-overlay");
-    PROF_COUNTER cntComposite("gl-composite");
-    PROF_COUNTER cntSwap("gl-swap");
+    PROF_TIMER cntTotal("gl-end-total");
+    PROF_TIMER cntEndCached("gl-end-cached");
+    PROF_TIMER cntEndNoncached("gl-end-noncached");
+    PROF_TIMER cntEndOverlay("gl-end-overlay");
+    PROF_TIMER cntComposite("gl-composite");
+    PROF_TIMER cntSwap("gl-swap");
 
     cntTotal.Start();
     // Cached & non-cached containers are rendered to the same buffer

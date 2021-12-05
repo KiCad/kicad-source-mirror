@@ -320,11 +320,13 @@ void TRACE_MANAGER::init()
         return;
 
     wxStringTokenizer tokenizer( traceVars, wxT( "," ) );
+
     while( tokenizer.HasMoreTokens() )
     {
         wxString token = tokenizer.GetNextToken();
         m_enabledTraces[token] = true;
-        if( token == wxT( "all" ) )
+
+        if( token.Lower() == wxT( "all" ) )
             m_printAllTraces = true;
     }
 }

@@ -77,11 +77,11 @@ void PCB_TEST_FRAME_BASE::SetBoard( std::shared_ptr<BOARD> b )
 {
     m_board = b;
 
-    PROF_COUNTER cntConnectivity( "connectivity-build" );
+    PROF_TIMER cntConnectivity( "connectivity-build" );
     m_board->GetConnectivity()->Build( m_board.get() );
     cntConnectivity.Stop();
 
-    PROF_COUNTER cntView("view-build");
+    PROF_TIMER cntView("view-build");
     m_galPanel->DisplayBoard( m_board.get() );
     cntView.Stop();
 

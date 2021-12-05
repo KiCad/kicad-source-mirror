@@ -814,7 +814,7 @@ int render_perftest_main_func( int argc, char* argv[] )
         return 0;
     }
 
-    PROF_COUNTER cnt("load-board");
+    PROF_TIMER             cnt("load-board");
     std::shared_ptr<BOARD> brd ( loadBoard( argv[1] ) );
     cnt.Stop();
 

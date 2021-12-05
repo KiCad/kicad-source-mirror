@@ -218,7 +218,7 @@ int polygon_triangulation_main( int argc, char *argv[] )
         return POLY_TRI_RET_CODES::LOAD_FAILED;
 
 
-    PROF_COUNTER cnt( "allBoard" );
+    PROF_TIMER cnt( "allBoard" );
 
 
     std::atomic<size_t> zonesToTriangulate( 0 );

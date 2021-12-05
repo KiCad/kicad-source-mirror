@@ -196,11 +196,11 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
     KIGFX::RENDER_SETTINGS* settings =
             static_cast<KIGFX::RENDER_SETTINGS*>( m_painter->GetSettings() );
 
-    PROF_COUNTER cntUpd("view-upd-items");
-    PROF_COUNTER cntTotal("view-total");
-    PROF_COUNTER cntCtx("view-context-create");
-    PROF_COUNTER cntCtxDestroy("view-context-destroy");
-    PROF_COUNTER cntRedraw("view-redraw-rects");
+    PROF_TIMER cntUpd("view-upd-items");
+    PROF_TIMER cntTotal("view-total");
+    PROF_TIMER cntCtx("view-context-create");
+    PROF_TIMER cntCtxDestroy("view-context-destroy");
+    PROF_TIMER cntRedraw("view-redraw-rects");
 
     bool isDirty = false;
 
