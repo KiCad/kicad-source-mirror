@@ -68,6 +68,14 @@ public:
      */
     void FindNext() { search( true ); }
 
+    /**
+     * The Show method is overridden to make the search combobox
+     * focused by default.
+     * wxShowEvent is not suitable here because it supports MSW
+     * and GTK only.
+     */
+    bool Show( bool show = true ) override;
+
 protected:
     void OnClose( wxCloseEvent& event ) override;
     void OnCloseButtonClick( wxCommandEvent& aEvent ) override;

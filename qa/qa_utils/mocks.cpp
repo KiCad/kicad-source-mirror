@@ -168,6 +168,10 @@ void DIALOG_FIND::OnCloseButtonClick( wxCommandEvent& aEvent )
 {
 }
 
+bool DIALOG_FIND::Show( bool show )
+{
+}
+
 void DIALOG_FIND::OnClose( wxCloseEvent& aEvent )
 {
 }
