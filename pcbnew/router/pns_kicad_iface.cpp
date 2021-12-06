@@ -1416,7 +1416,8 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
 
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_view );
 
-    static int tracks = PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T;
+    // Note: SEGMENT_T is used for placed tracks; LINE_T is used for the routing head
+    static int tracks = PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T | PNS::ITEM::LINE_T;
     static int tracksOrVias = tracks | PNS::ITEM::VIA_T;
 
     if( aClearance >= 0 )
