@@ -215,7 +215,7 @@ public:
     }
 
     /**
-     * Test if \a aPosition is contained within or on the bounding box of an item.
+     * Test if \a aPosition is inside or on the boundary of this item.
      *
      * @param aPosition A reference to a wxPoint object containing the coordinates to test.
      * @param aAccuracy Increase the item bounding box by this amount.
@@ -227,7 +227,7 @@ public:
     }
 
     /**
-     * Test if \a aRect intersects or is contained within the bounding box of an item.
+     * Test if \a aRect intersects this item.
      *
      * @param aRect A reference to a #EDA_RECT object containing the rectangle to test.
      * @param aContained Set to true to test for containment instead of an intersection.
