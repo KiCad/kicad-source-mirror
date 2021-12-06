@@ -720,7 +720,10 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                     if( item->Type() == PCB_MARKER_T )
                         aCollector.Remove( item );
                 }
-            } );
+            },
+            // Prompt user regarding locked items if in board editor and in free-pad-mode (if
+            // we're not in free-pad mode we delay this until the second RequestSelection()).
+            frame()->Settings().m_AllowFreePads && !m_isFootprintEditor );
 
     if( m_dragging || selection.Empty() )
         return 0;
@@ -730,9 +733,9 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                                                 // below
     VECTOR2I pickedReferencePoint;
 
-    // Now filter out locked and grouped items.  We cannot do this in the first RequestSelection()
-    // as we need the item_layers when a pad is the selection front.
-    if( frame()->Settings().m_AllowFreePads )
+    // Now filter out pads if not in free pads mode.  We cannot do this in the first
+    // RequestSelection() as we need the item_layers when a pad is the selection front.
+    if( !m_isFootprintEditor && !frame()->Settings().m_AllowFreePads )
     {
         selection = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -747,9 +750,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                         if( item->Type() == PCB_MARKER_T )
                             aCollector.Remove( item );
 
-                        // Locked pads do not get moved independently of the footprint
-                        if( !sTool->IsFootprintEditor() && item->Type() == PCB_PAD_T
-                            && item->IsLocked() )
+                        if( item->Type() == PCB_PAD_T )
                         {
                             if( !aCollector.HasItem( item->GetParent() ) )
                                 to_add.insert( item->GetParent() );
@@ -761,39 +762,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                     for( BOARD_ITEM* item : to_add )
                         aCollector.Append( item );
                 },
-                !m_isFootprintEditor /* prompt user regarding locked items only in pcb editor*/ );
-    }
-    else
-    {
-        // Unlocked pads are treated as locked if the setting m_AllowFreePads is false
-        selection = m_selectionTool->RequestSelection(
-                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
-                    PCB_SELECTION_TOOL* sTool )
-                {
-                    std::set<BOARD_ITEM*> to_add;
-
-                    // Iterate from the back so we don't have to worry about removals.
-                    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                    {
-                        BOARD_ITEM* item = aCollector[i];
-
-                        if( item->Type() == PCB_MARKER_T )
-                            aCollector.Remove( item );
-
-                        // Treat all pads as locked (i.e. cannot be moved independently of parent)
-                        if( !sTool->IsFootprintEditor() && item->Type() == PCB_PAD_T )
-                        {
-                            if( !aCollector.HasItem( item->GetParent() ) )
-                                to_add.insert( item->GetParent() );
-
-                            aCollector.Remove( item );
-                        }
-                    }
-
-                    for( BOARD_ITEM* item : to_add )
-                        aCollector.Append( item );
-                },
-                !m_isFootprintEditor /* prompt user regarding locked items only in pcb editor*/ );
+                true /* prompt user regarding locked items */ );
     }
 
     if( selection.Empty() )
@@ -1481,12 +1450,23 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
+    // Be sure that there is at least one item that we can modify. If nothing was selected before,
+    // try looking for the stuff under mouse cursor (i.e. KiCad old-style hover selection)
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
-                sTool->FilterCollectorForHierarchy( aCollector, true );
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    if( item->Type() == PCB_MARKER_T )
+                        aCollector.Remove( item );
+                }
             },
-            !m_dragging /* prompt user regarding locked items */ );
+            // Prompt user regarding locked items if in board editor and in free-pad-mode (if
+            // we're not in free-pad mode we delay this until the second RequestSelection()).
+            frame()->Settings().m_AllowFreePads && !m_isFootprintEditor );
 
     if( selection.Empty() )
         return 0;
@@ -1495,6 +1475,38 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     if( selection.HasReferencePoint() )
         oldRefPt = selection.GetReferencePoint();
+
+    // Now filter out pads if not in free pads mode.  We cannot do this in the first
+    // RequestSelection() as we need the reference point when a pad is the selection front.
+    if( !m_isFootprintEditor && !frame()->Settings().m_AllowFreePads )
+    {
+        selection = m_selectionTool->RequestSelection(
+                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+                {
+                    std::set<BOARD_ITEM*> to_add;
+
+                    // Iterate from the back so we don't have to worry about removals.
+                    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                    {
+                        BOARD_ITEM* item = aCollector[i];
+
+                        if( item->Type() == PCB_MARKER_T )
+                            aCollector.Remove( item );
+
+                        if( item->Type() == PCB_PAD_T )
+                        {
+                            if( !aCollector.HasItem( item->GetParent() ) )
+                                to_add.insert( item->GetParent() );
+
+                            aCollector.Remove( item );
+                        }
+                    }
+
+                    for( BOARD_ITEM* item : to_add )
+                        aCollector.Append( item );
+                },
+                true /* prompt user regarding locked items */ );
+    }
 
     updateModificationPoint( selection );
 
