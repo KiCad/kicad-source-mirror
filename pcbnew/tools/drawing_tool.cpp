@@ -2555,6 +2555,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             PCB_VIA*   via = static_cast<PCB_VIA*>( aItem );
             wxPoint    position = via->GetPosition();
             PCB_TRACK* track = findTrack( via );
+            PAD*       pad = findPad( via );
 
             if( track )
             {
@@ -2562,6 +2563,12 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 VECTOR2I snap = m_gridHelper.AlignToSegment( position, trackSeg );
 
                 aItem->SetPosition( (wxPoint) snap );
+            }
+            else if( pad && m_gridHelper.GetSnap()
+                     && m_frame->GetMagneticItemsSettings()->pads
+                                == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
+            {
+                aItem->SetPosition( pad->GetPosition() );
             }
         }
 
