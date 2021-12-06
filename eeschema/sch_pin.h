@@ -64,6 +64,8 @@ public:
     wxString GetAlt() const { return m_alt; }
     void SetAlt( const wxString& aAlt ) { m_alt = aAlt; }
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

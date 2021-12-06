@@ -140,6 +140,15 @@ int SCH_PIN::GetLength() const
 }
 
 
+void SCH_PIN::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount     = 3;
+    aLayers[0] = LAYER_DANGLING;
+    aLayers[1] = LAYER_DEVICE;
+    aLayers[2] = LAYER_SELECTION_SHADOWS;
+}
+
+
 bool SCH_PIN::Matches( const wxFindReplaceData& aSearchData, void* aAuxDat ) const
 {
     if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_PINS ) )

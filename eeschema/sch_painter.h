@@ -166,8 +166,10 @@ private:
     void draw( const SCH_LINE* aLine, int aLayer );
     void draw( const SCH_BUS_ENTRY_BASE* aEntry, int aLayer );
 
-    void drawPinDanglingSymbol( const VECTOR2I& aPos, bool aDrawingShadows );
-    void drawDanglingSymbol( const wxPoint& aPos, int aWidth, bool aDrawingShadows );
+    void drawPinDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColor,
+                                bool aDrawingShadows );
+    void drawDanglingSymbol( const wxPoint& aPos, const COLOR4D& aColor, int aWidth,
+                             bool aDrawingShadows );
 
     int internalPinDecoSize( const LIB_PIN &aPin );
     int externalPinDecoSize( const LIB_PIN &aPin );

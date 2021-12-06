@@ -180,9 +180,10 @@ void SCH_LINE::Show( int nestLevel, std::ostream& os ) const
 
 void SCH_LINE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount     = 2;
-    aLayers[0] = m_layer;
-    aLayers[1] = LAYER_SELECTION_SHADOWS;
+    aCount     = 3;
+    aLayers[0] = LAYER_DANGLING;
+    aLayers[1] = m_layer;
+    aLayers[2] = LAYER_SELECTION_SHADOWS;
 }
 
 

@@ -919,6 +919,15 @@ const EDA_RECT SCH_LABEL::GetBoundingBox() const
 }
 
 
+void SCH_LABEL::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount     = 3;
+    aLayers[0] = LAYER_DANGLING;
+    aLayers[1] = m_layer;
+    aLayers[2] = LAYER_SELECTION_SHADOWS;
+}
+
+
 wxString SCH_LABEL::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Label '%s'" ), ShortenedShownText() );

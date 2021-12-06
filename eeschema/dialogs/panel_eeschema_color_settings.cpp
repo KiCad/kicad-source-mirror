@@ -47,6 +47,12 @@
 #include <wx/msgdlg.h>
 
 
+std::set<int> g_excludedLayers =
+        {
+            LAYER_DANGLING
+        };
+
+
 PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aFrame,
                                                               wxWindow* aParent ) :
         PANEL_COLOR_SETTINGS( aParent ),
@@ -78,7 +84,12 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aF
     m_currentSettings = new COLOR_SETTINGS( *current );
 
     for( int id = SCH_LAYER_ID_START; id < SCH_LAYER_ID_END; id++ )
+    {
+        if( g_excludedLayers.count( id ) )
+            continue;
+
         m_validLayers.push_back( id );
+    }
 
     m_backgroundLayer = LAYER_SCHEMATIC_BACKGROUND;
 
@@ -167,7 +178,7 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::validateSave( bool aQuiet )
 
 bool PANEL_EESCHEMA_COLOR_SETTINGS::saveCurrentTheme( bool aValidate)
 {
-    for( auto layer : m_validLayers )
+    for( int layer : m_validLayers )
     {
         COLOR4D color = m_currentSettings->GetColor( layer );
 

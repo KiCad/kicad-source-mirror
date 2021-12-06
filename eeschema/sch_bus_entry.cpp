@@ -151,9 +151,10 @@ void SCH_BUS_ENTRY_BASE::SwapData( SCH_ITEM* aItem )
 
 void SCH_BUS_ENTRY_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount     = 2;
-    aLayers[0] = Type() == SCH_BUS_BUS_ENTRY_T ? LAYER_BUS : LAYER_WIRE;
-    aLayers[1] = LAYER_SELECTION_SHADOWS;
+    aCount     = 3;
+    aLayers[0] = LAYER_DANGLING;
+    aLayers[1] = Type() == SCH_BUS_BUS_ENTRY_T ? LAYER_BUS : LAYER_WIRE;
+    aLayers[2] = LAYER_SELECTION_SHADOWS;
 }
 
 
