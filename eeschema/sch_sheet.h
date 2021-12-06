@@ -390,18 +390,36 @@ public:
     EDA_ITEM* Clone() const override;
 
     /**
-     * Return the sheet page number.
-     *
-     * @return the page number for the sheet.
+     * @return the list of #SCH_SHEET_INSTANCE objects for this sheet.
      */
-    wxString GetPageNumber() const;
+    const std::vector<SCH_SHEET_INSTANCE> GetInstances() const;
 
     /**
-     * Set the page number for the sheet.
+     * Add a new instance \a aSheetPath to the instance list.
      *
-     * @param[in] aPageNumber is the new page number for the sheet.
+     * If \a aSheetPath  does not already exist, it is added to the list.  If already exists
+     * in the list, do nothing.  Sheet instances allow for the sharing in complex hierarchies
+     * which allows for per instance data such as page number for sheets to stored.
+     *
+     * @param[in] aInstance is the #KIID_PATH of the sheet instance to the instance list.
+     * @return false if the instance already exists, true if the instance was added.
      */
-    void SetPageNumber( const wxString& aPageNumber );
+    bool AddInstance( const KIID_PATH& aInstance );
+
+    /**
+     * Return the sheet page number for \a aInstance.
+     *
+     * @return the page number for the requested sheet instance.
+     */
+    wxString GetPageNumber( const SCH_SHEET_PATH& aInstance ) const;
+
+    /**
+     * Set the page number for the sheet instance \a aInstance.
+     *
+     * @param[in] aInstance is the hierarchical path of the sheet.
+     * @param[in] aReference is the new page number for the sheet.
+     */
+    void SetPageNumber( const SCH_SHEET_PATH& aInstance, const wxString& aPageNumber );
 
     /**
      * Compares page numbers of schematic sheets.
@@ -443,7 +461,7 @@ private:
     KIGFX::COLOR4D              m_borderColor;
     KIGFX::COLOR4D              m_backgroundColor;
 
-    wxString                    m_pageNumber;
+    std::vector<SCH_SHEET_INSTANCE> m_instances;
 };
 
 

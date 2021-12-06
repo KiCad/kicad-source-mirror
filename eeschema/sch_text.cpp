@@ -1271,7 +1271,7 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
 
             if( !settings.m_IntersheetRefsListOwnPage )
             {
-                wxString currentPage = Schematic()->CurrentSheet().Last()->GetPageNumber();
+                wxString currentPage = Schematic()->CurrentSheet().GetPageNumber();
                 alg::delete_matching( pageListCopy, currentPage );
             }
 

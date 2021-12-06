@@ -159,8 +159,8 @@ int SCH_SHEET_PATH::Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const
 
 int SCH_SHEET_PATH::ComparePageNumAndName( const SCH_SHEET_PATH& aSheetPathToTest ) const
 {
-    wxString pageA = Last()->GetPageNumber();
-    wxString pageB = aSheetPathToTest.Last()->GetPageNumber();
+    wxString pageA = GetPageNumber();
+    wxString pageB = aSheetPathToTest.GetPageNumber();
 
     int pageNumComp = SCH_SHEET::ComparePageNum( pageA, pageB );
 
@@ -454,6 +454,26 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName, const wxStr
 }
 
 
+wxString SCH_SHEET_PATH::GetPageNumber() const
+{
+    SCH_SHEET* sheet = Last();
+
+    wxCHECK( sheet, wxEmptyString );
+
+    return sheet->GetPageNumber( *this );
+}
+
+
+void SCH_SHEET_PATH::SetPageNumber( const wxString& aPageNumber )
+{
+    SCH_SHEET* sheet = Last();
+
+    wxCHECK( sheet, /* void */ );
+
+    sheet->SetPageNumber( *this, aPageNumber );
+}
+
+
 void SCH_SHEET_PATH::MakeFilePathRelativeToParentSheet()
 {
     wxCHECK( m_sheets.size() > 1, /* void */  );
@@ -560,7 +580,7 @@ void SCH_SHEET_LIST::SortByPageNumbers( bool aUpdateVirtualPageNums )
     std::sort( begin(), end(),
         []( SCH_SHEET_PATH a, SCH_SHEET_PATH b ) -> bool
         {
-             return a.ComparePageNumAndName( b ) < 0;
+             return a.ComparePageNumAndName(b) < 0;
         } );
 
     if( aUpdateVirtualPageNums )
@@ -591,7 +611,7 @@ bool SCH_SHEET_LIST::PageNumberExists( const wxString& aPageNumber ) const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
     {
-        if( sheet.Last()->GetPageNumber() == aPageNumber )
+        if( sheet.GetPageNumber() == aPageNumber )
             return true;
     }
 
@@ -943,7 +963,8 @@ void SCH_SHEET_LIST::UpdateSheetInstances( const std::vector<SCH_SHEET_INSTANCE>
 
         wxCHECK2( sheet, continue );
 
-        sheet->SetPageNumber( it->m_PageNumber );
+        sheet->AddInstance( instance.Path() );
+        sheet->SetPageNumber( instance, it->m_PageNumber );
     }
 }
 
@@ -971,7 +992,7 @@ std::vector<SCH_SHEET_INSTANCE> SCH_SHEET_LIST::GetSheetInstances() const
         wxCHECK2( sheet, continue );
 
         instance.m_Path = path.PathWithoutRootUuid();
-        instance.m_PageNumber = sheet->GetPageNumber();
+        instance.m_PageNumber = sheet->GetPageNumber( path );
 
         retval.push_back( instance );
     }
@@ -988,7 +1009,7 @@ bool SCH_SHEET_LIST::AllSheetPageNumbersEmpty() const
 
         wxCHECK2( sheet, continue );
 
-        if( !sheet->GetPageNumber().IsEmpty() )
+        if( !sheet->GetPageNumber( instance ).IsEmpty() )
             return false;
     }
 
@@ -1010,8 +1031,9 @@ void SCH_SHEET_LIST::SetInitialPageNumbers()
 
         wxCHECK2( sheet, continue );
 
+        sheet->AddInstance( instance.Path() );
         tmp.Printf( "%d", pageNumber );
-        sheet->SetPageNumber( tmp );
+        sheet->SetPageNumber( instance, tmp );
         pageNumber += 1;
     }
 }

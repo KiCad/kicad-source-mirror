@@ -126,7 +126,7 @@ bool SCHEMATIC::ResolveTextVar( wxString* token, int aDepth ) const
     {
         if( token->IsSameAs( wxT( "#" ) ) )
         {
-            *token = CurrentSheet().Last()->GetPageNumber();
+            *token = CurrentSheet().GetPageNumber();
             return true;
         }
         else if( token->IsSameAs( wxT( "##" ) ) )

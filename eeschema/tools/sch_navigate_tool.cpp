@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ int SCH_NAVIGATE_TOOL::HypertextCommand( const TOOL_EVENT& aEvent )
             {
                 for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetSheets() )
                 {
-                    if( sheet.Last()->GetPageNumber() == *aPage )
+                    if( sheet.GetPageNumber() == *aPage )
                     {
                         m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
                         m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
@@ -69,7 +69,7 @@ int SCH_NAVIGATE_TOOL::HypertextCommand( const TOOL_EVENT& aEvent )
     }
     else
     {
-        m_hypertextStack.push( m_frame->GetCurrentSheet().Last()->GetPageNumber() );
+        m_hypertextStack.push( m_frame->GetCurrentSheet().GetPageNumber() );
         goToPage( page );
     }
 

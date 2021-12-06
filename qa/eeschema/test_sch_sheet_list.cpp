@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -126,9 +126,9 @@ BOOST_AUTO_TEST_CASE( TestSheetListPageProperties )
     sheets.SetInitialPageNumbers();
 
     // The root sheet should now be page 1.
-    BOOST_CHECK_EQUAL( sheets.at( 0 ).Last()->GetPageNumber(), "1" );
-    BOOST_CHECK_EQUAL( sheets.at( 1 ).Last()->GetPageNumber(), "2" );
-    BOOST_CHECK_EQUAL( sheets.at( 2 ).Last()->GetPageNumber(), "3" );
+    BOOST_CHECK_EQUAL( sheets.at( 0 ).GetPageNumber(), "1" );
+    BOOST_CHECK_EQUAL( sheets.at( 1 ).GetPageNumber(), "2" );
+    BOOST_CHECK_EQUAL( sheets.at( 2 ).GetPageNumber(), "3" );
 }
 
 
@@ -142,8 +142,8 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 
         BOOST_CHECK_EQUAL( sheets.size(), 2 );
-        BOOST_CHECK_EQUAL( sheets.at( 0 ).Last()->GetPageNumber(), "i" );
-        BOOST_CHECK_EQUAL( sheets.at( 1 ).Last()->GetPageNumber(), "ii" );
+        BOOST_CHECK_EQUAL( sheets.at( 0 ).GetPageNumber(), "i" );
+        BOOST_CHECK_EQUAL( sheets.at( 1 ).GetPageNumber(), "ii" );
     }
 
     BOOST_TEST_CONTEXT( "Read Root Sheet, prior to modification" )
@@ -154,11 +154,11 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 
         BOOST_CHECK_EQUAL( sheets.size(), 5 );
-        BOOST_CHECK_EQUAL( sheets.at( 0 ).Last()->GetPageNumber(), "1" );
-        BOOST_CHECK_EQUAL( sheets.at( 1 ).Last()->GetPageNumber(), "2" );
-        // BOOST_CHECK_EQUAL( sheets.at( 2 ).Last()->GetPageNumber(), "3" );
-        // BOOST_CHECK_EQUAL( sheets.at( 3 ).Last()->GetPageNumber(), "4" );
-        BOOST_CHECK_EQUAL( sheets.at( 4 ).Last()->GetPageNumber(), "5" );
+        BOOST_CHECK_EQUAL( sheets.at( 0 ).GetPageNumber(), "1" );
+        BOOST_CHECK_EQUAL( sheets.at( 1 ).GetPageNumber(), "2" );
+        BOOST_CHECK_EQUAL( sheets.at( 2 ).GetPageNumber(), "3" );
+        BOOST_CHECK_EQUAL( sheets.at( 3 ).GetPageNumber(), "4" );
+        BOOST_CHECK_EQUAL( sheets.at( 4 ).GetPageNumber(), "5" );
     }
 
     BOOST_TEST_CONTEXT( "Modify page numbers in root sheet" )
@@ -166,11 +166,11 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 
         // Amend Page numbers
-        sheets.at( 0 ).Last()->SetPageNumber( "A" );
-        sheets.at( 1 ).Last()->SetPageNumber( "B" );
-        sheets.at( 2 ).Last()->SetPageNumber( "C" );
-        sheets.at( 3 ).Last()->SetPageNumber( "D" );
-        sheets.at( 4 ).Last()->SetPageNumber( "E" );
+        sheets.at( 0 ).SetPageNumber( "A" );
+        sheets.at( 1 ).SetPageNumber( "B" );
+        sheets.at( 2 ).SetPageNumber( "C" );
+        sheets.at( 3 ).SetPageNumber( "D" );
+        sheets.at( 4 ).SetPageNumber( "E" );
 
         // Save and reload
         wxString   tempName = "complex_hierarchy_shared/complex_hierarchy_modified";
@@ -181,11 +181,11 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         sheets = m_schematic.GetSheets();
 
         BOOST_CHECK_EQUAL( sheets.size(), 5 );
-        BOOST_CHECK_EQUAL( sheets.at( 0 ).Last()->GetPageNumber(), "A" );
-        BOOST_CHECK_EQUAL( sheets.at( 1 ).Last()->GetPageNumber(), "B" );
-        BOOST_CHECK_EQUAL( sheets.at( 2 ).Last()->GetPageNumber(), "C" );
-        // BOOST_CHECK_EQUAL( sheets.at( 3 ).Last()->GetPageNumber(), "D" );
-        BOOST_CHECK_EQUAL( sheets.at( 4 ).Last()->GetPageNumber(), "E" );
+        BOOST_CHECK_EQUAL( sheets.at( 0 ).GetPageNumber(), "A" );
+        BOOST_CHECK_EQUAL( sheets.at( 1 ).GetPageNumber(), "B" );
+        BOOST_CHECK_EQUAL( sheets.at( 2 ).GetPageNumber(), "C" );
+        BOOST_CHECK_EQUAL( sheets.at( 3 ).GetPageNumber(), "D" );
+        BOOST_CHECK_EQUAL( sheets.at( 4 ).GetPageNumber(), "E" );
 
         // Cleanup
         wxRemoveFile( tempFn.GetFullPath() );
@@ -200,8 +200,8 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         SCH_SHEET_LIST sheets = m_schematic.GetSheets();
 
         BOOST_CHECK_EQUAL( sheets.size(), 2 );
-        BOOST_CHECK_EQUAL( sheets.at( 0 ).Last()->GetPageNumber(), "i" );
-        BOOST_CHECK_EQUAL( sheets.at( 1 ).Last()->GetPageNumber(), "ii" );
+        BOOST_CHECK_EQUAL( sheets.at( 0 ).GetPageNumber(), "i" );
+        BOOST_CHECK_EQUAL( sheets.at( 1 ).GetPageNumber(), "ii" );
     }
 }
 

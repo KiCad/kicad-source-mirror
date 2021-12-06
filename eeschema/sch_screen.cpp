@@ -92,7 +92,7 @@ SCH_SCREEN::~SCH_SCREEN()
 SCHEMATIC* SCH_SCREEN::Schematic() const
 {
     wxCHECK_MSG( GetParent() && GetParent()->Type() == SCHEMATIC_T, nullptr,
-                 "SCH_SCREEN must have a SCHEMATIC parent!" );
+            "SCH_SCREEN must have a SCHEMATIC parent!" );
 
     return static_cast<SCHEMATIC*>( GetParent() );
 }

@@ -165,7 +165,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
 
     instance.push_back( m_sheet );
 
-    wxString nextPageNumber = m_sheet->GetPageNumber();
+    wxString nextPageNumber = m_sheet->GetPageNumber( instance );
 
     m_pageNumberTextCtrl->ChangeValue( nextPageNumber );
 
@@ -373,7 +373,10 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
     instance.push_back( m_sheet );
 
-    m_sheet->SetPageNumber( m_pageNumberTextCtrl->GetValue() );
+    if( m_sheet->IsNew() )
+        m_sheet->AddInstance( instance.Path() );
+
+    m_sheet->SetPageNumber( instance, m_pageNumberTextCtrl->GetValue() );
 
     m_frame->TestDanglingEnds();
 
