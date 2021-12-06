@@ -1697,6 +1697,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 sTool->FilterCollectorForHierarchy( aCollector, true );
+                sTool->FilterCollectorForFreePads( aCollector, true );
             },
             !m_dragging /* prompt user regarding locked items */ );
 

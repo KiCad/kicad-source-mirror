@@ -2656,6 +2656,31 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
 }
 
 
+void PCB_SELECTION_TOOL::FilterCollectorForFreePads( GENERAL_COLLECTOR& aCollector,
+                                                     bool aMultiselect ) const
+{
+    std::set<BOARD_ITEM*> to_add;
+
+    // Iterate from the back so we don't have to worry about removals.
+    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+    {
+        BOARD_ITEM* item = aCollector[i];
+
+        if( !IsFootprintEditor() && item->Type() == PCB_PAD_T
+            && !frame()->Settings().m_AllowFreePads )
+        {
+            if( !aCollector.HasItem( item->GetParent() ) )
+                to_add.insert( item->GetParent() );
+
+            aCollector.Remove( item );
+        }
+    }
+
+    for( BOARD_ITEM* item : to_add )
+        aCollector.Append( item );
+}
+
+
 int PCB_SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
 {
     getView()->Update( &m_selection );
