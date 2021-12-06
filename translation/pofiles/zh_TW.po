@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-11-26 21:26+0000\n"
+"PO-Revision-Date: 2021-12-06 19:31+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -4439,7 +4439,7 @@ msgstr "可選的。如果要建立自己的工程模板資料夾，則可以定
 msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
-msgstr "包含第三方外掛、庫和其他可下載內容的目錄。"
+msgstr "包含第三方外掛、庫和其他可下載工具的目錄。"
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -17962,7 +17962,7 @@ msgstr "在檔案資源管理器中開啟工程目錄"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:77
 msgid "Please enter fully qualified repository url"
-msgstr "請輸入合規的倉庫 url"
+msgstr "請輸入合規的倉庫 URL"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:77
 msgid "Add repository"
@@ -18012,16 +18012,16 @@ msgstr "應用變更"
 msgid ""
 "Are you sure you want to close the package manager and discard pending "
 "changes?"
-msgstr "您確定要關閉包管理器並放棄掛起的變更嗎？"
+msgstr "您確定要關閉軟體包管理器並放棄掛起的變更嗎？"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:173
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Plugin and Content Manager"
-msgstr "外掛和內容管理器"
+msgstr "外掛和工具管理器"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:252
 msgid "Choose package file"
-msgstr "選擇包檔案"
+msgstr "選擇軟體包檔案"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:347
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
@@ -18048,7 +18048,7 @@ msgstr "操作"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:87 pcbnew/build_BOM_from_board.cpp:112
 msgid "Package"
-msgstr "包"
+msgstr "軟體包"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:89
 msgid "Repository"
@@ -18064,11 +18064,11 @@ msgstr "從檔案安裝…"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:74
 msgid "Plugin And Content Manager"
-msgstr "外掛和內容管理器"
+msgstr "外掛和工具管理器"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:57
 msgid "Aborting remaining tasks."
-msgstr "正中止剩餘任務。"
+msgstr "正在中止剩餘任務。"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:135
 #, c-format
@@ -18093,7 +18093,7 @@ msgstr "詳情"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying Package Changes"
-msgstr "應用外掛包變更"
+msgstr "應用軟體包變更"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
 msgid "Pending install"
@@ -18109,7 +18109,7 @@ msgstr "元資料"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
 msgid "Package identifier: "
-msgstr "包識別符號：%s "
+msgstr "軟體包識別符號：%s "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
 msgid "License: "
@@ -18125,7 +18125,7 @@ msgstr "作者"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:260
 msgid "Maintainer"
-msgstr "維護者"
+msgstr "維護人員"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:264
 msgid "Resources"
@@ -18137,21 +18137,21 @@ msgstr "未指定包下載地址"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:476
 msgid "Error downloading package"
-msgstr "下載包時出錯"
+msgstr "下載軟體包時出錯"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:485
 msgid "Save package"
-msgstr "儲存包"
+msgstr "儲存軟體包"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:497
 msgid "Downloading package"
-msgstr "正在下載包"
+msgstr "正在下載軟體包"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:513
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
-msgstr "無法驗證下載的包的完整性，雜湊不匹配。 您確定要保留此檔案嗎？"
+msgstr "無法驗證下載的軟體包的完整性，HASH 不匹配。 您確定要保留此檔案嗎？"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:515
 msgid "Keep downloaded file"
@@ -18161,11 +18161,11 @@ msgstr "保留已下載檔案"
 msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
-msgstr "此軟體包版本與您的 kicad 版本或平臺不相容。 您確定要安裝它嗎？"
+msgstr "這個軟體包版本與您的 kicad 版本或平臺不相容。 您確定要安裝它嗎？"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:557
 msgid "Install package"
-msgstr "安裝包"
+msgstr "安裝軟體包"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:83
 msgid "Download Size"
@@ -18200,7 +18200,7 @@ msgstr "載入原理圖時出錯：%s"
 #: kicad/pcm/pcm.cpp:120
 #, c-format
 msgid "Error loading installed packages list: %s"
-msgstr "載入已安裝包列表時出錯：%s"
+msgstr "載入已安裝軟體包列表時出錯：%s"
 
 #: kicad/pcm/pcm.cpp:210
 #, c-format
@@ -18217,7 +18217,7 @@ msgstr "拉取倉庫中"
 
 #: kicad/pcm/pcm.cpp:251
 msgid "Unable to load repository url"
-msgstr "無法載入倉庫 url"
+msgstr "無法載入倉庫 URL"
 
 #: kicad/pcm/pcm.cpp:267
 #, c-format
@@ -18232,15 +18232,15 @@ msgstr ""
 
 #: kicad/pcm/pcm.cpp:289
 msgid "Fetching repository packages"
-msgstr "正拉取倉庫外掛包"
+msgstr "正拉取倉庫軟體包"
 
 #: kicad/pcm/pcm.cpp:291
 msgid "Unable to load repository packages url."
-msgstr "無法載入倉庫包 url。"
+msgstr "無法載入倉庫軟體包 URL。"
 
 #: kicad/pcm/pcm.cpp:299
 msgid "Packages hash doesn't match. Repository may be corrupted."
-msgstr "外掛包雜湊不匹配。 外掛包倉庫可能已損壞。"
+msgstr "軟體包 HASH 不匹配。 倉庫可能已損壞。"
 
 #: kicad/pcm/pcm.cpp:315
 #, c-format
@@ -18249,14 +18249,14 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"無法解析包元資料：\n"
+"無法解析軟體包元資料：\n"
 "\n"
 "%s"
 
 #: kicad/pcm/pcm.cpp:402
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
-msgstr "當前倉庫的外掛包快取已損壞，將重新下載外掛包。"
+msgstr "當前倉庫的軟體包快取已損壞，將重新下載軟體包。"
 
 #: kicad/pcm/pcm.cpp:452
 msgid "Downloading resources"
@@ -18266,7 +18266,7 @@ msgstr "正在下載資源"
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
-msgstr "資原始檔雜湊不匹配，將不會被使用。 外掛包倉庫可能已損壞。"
+msgstr "資原始檔 HASH 不匹配，將不會被使用。 倉庫可能已損壞。"
 
 #: kicad/pcm/pcm.cpp:611
 msgid "Local file"
@@ -18282,22 +18282,22 @@ msgid ""
 "Downloaded archive hash for package %s does not match repository entry. This "
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
-msgstr "外掛包 %s 的已下載存檔雜湊與倉庫記錄不匹配。 這可能表明外掛包有問題，如果問題仍然存在，請將此報告給倉庫維護者。"
+msgstr "軟體包 %s 的已下載壓縮包 HASH 與倉庫記錄不匹配。 這可能表明軟體包有問題，如果問題仍然存在，請將此報告給倉庫維護者。"
 
 #: kicad/pcm/pcm_task_manager.cpp:97
 #, c-format
 msgid "Extracting package '%s'."
-msgstr "正在提取包 \"%s\"。"
+msgstr "正在提取軟體包 \"%s\"。"
 
 #: kicad/pcm/pcm_task_manager.cpp:112
 #, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr "正移除下載的存檔 '%s'。"
+msgstr "正在移除下載的壓縮包 '%s'。"
 
 #: kicad/pcm/pcm_task_manager.cpp:150
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr "下載包地址： '%s'"
+msgstr "下載軟體包地址： '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:163
 #, c-format
@@ -18305,16 +18305,16 @@ msgid ""
 "Failed to download url %s\n"
 "%s"
 msgstr ""
-"未能下載 url %s\n"
+"未能下載 URL %s\n"
 "%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:250
 msgid "Aborting package installation."
-msgstr "正中止軟體包安裝。"
+msgstr "正在中止軟體包安裝。"
 
 #: kicad/pcm/pcm_task_manager.cpp:254
 msgid "Extracted package\n"
-msgstr "已提取包\n"
+msgstr "已提取軟體包\n"
 
 #: kicad/pcm/pcm_task_manager.cpp:298
 #, c-format
@@ -18323,24 +18323,24 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"無法解析包元資料：\n"
+"無法解析軟體包元資料：\n"
 "\n"
 "%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:307
 msgid "Archive does not contain a valid metadata.json file"
-msgstr "存檔不包含有效的 metadata.json 檔案"
+msgstr "壓縮包不包含有效的 metadata.json 檔案"
 
 #: kicad/pcm/pcm_task_manager.cpp:315
 msgid "Archive metadata must have a single version defined"
-msgstr "存檔元資料必須定義一個版本"
+msgstr "壓縮包元資料必須定義一個版本"
 
 #: kicad/pcm/pcm_task_manager.cpp:327
 #, c-format
 msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
 "this package."
-msgstr "已安裝識別符號為 %s 的程式包，您必須先解除安裝此程式包。"
+msgstr "已安裝識別符號為 %s 的軟體包，您必須先解除安裝此軟體包。"
 
 #: kicad/pcm/pcm_task_manager.cpp:360
 #, c-format
@@ -18355,7 +18355,7 @@ msgstr "未能刪除目錄 %s"
 #: kicad/pcm/pcm_task_manager.cpp:381
 #, c-format
 msgid "Package %s uninstalled"
-msgstr "已解除安裝包 %s"
+msgstr "已解除安裝軟體包 %s"
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -18595,7 +18595,7 @@ msgstr "編輯圖紙邊框和工程圖明細表"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
-msgstr "執行外掛和內容管理器"
+msgstr "執行外掛和工具管理器"
 
 #: kicad/tools/kicad_manager_actions.cpp:124
 msgid "Open Text Editor"
