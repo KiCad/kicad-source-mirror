@@ -100,6 +100,7 @@ int PL_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
     }
     else
     {
+        m_frame->OnModify();
         m_frame->HardRedraw();
     }
     return 0;

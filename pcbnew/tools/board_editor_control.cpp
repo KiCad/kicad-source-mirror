@@ -338,7 +338,9 @@ int BOARD_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
                                                              MAX_PAGE_SIZE_PCBNEW_MILS ) );
     dlg.SetWksFileName( BASE_SCREEN::m_DrawingSheetFileName );
 
-    if( dlg.ShowModal() != wxID_OK )
+    if( dlg.ShowModal() == wxID_OK )
+        m_frame->OnModify();
+    else
         m_frame->RollbackFromUndo();
 
     return 0;

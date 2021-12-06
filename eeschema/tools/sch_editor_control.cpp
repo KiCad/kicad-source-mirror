@@ -132,7 +132,9 @@ int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
     DIALOG_EESCHEMA_PAGE_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_MILS, MAX_PAGE_SIZE_MILS ) );
     dlg.SetWksFileName( BASE_SCREEN::m_DrawingSheetFileName );
 
-    if( dlg.ShowModal() != wxID_OK )
+    if( dlg.ShowModal() )
+        m_frame->OnModify();
+    else
         m_frame->RollbackSchematicFromUndo();
 
     return 0;
