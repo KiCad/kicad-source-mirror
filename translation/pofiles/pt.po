@@ -5,21 +5,22 @@
 # Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
 # ssantos <ssantos@web.de>, 2020, 2021.
 # Augusto Fraga Giachero <afg@augustofg.net>, 2021.
+# Rafael Silva <perigoso@riseup.net>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-10-16 13:26+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"PO-Revision-Date: 2021-12-07 23:53+0000\n"
+"Last-Translator: Rafael Silva <perigoso@riseup.net>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -61,18 +62,18 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"O contorno do footprint do componente está ausente ou malformado. Execute o "
-"Verificador do footprint do componente para uma análise completa."
+"O contorno do footprint está ausente ou malformado. Execute o Verificador de "
+"footprint para uma análise completa."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:737
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"O contorno da placa está faltando ou malformado. Execute o DRC para realizar "
+"O contorno da placa está em falta ou malformado. Execute o DRC para realizar "
 "uma análise completa."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
-msgstr "Criar trilhas e vias"
+msgstr "Criar pistas e vias"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:683
 msgid "Create zones"
@@ -80,33 +81,33 @@ msgstr "Criar zonas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:752
 msgid "Simplifying copper layers polygons"
-msgstr "Simplificando os polígonos das camadas de cobre"
+msgstr "A simplificar polígonos de camadas de cobre"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:761
 msgid "Simplifying polygons on F_Cu"
-msgstr "Simplificando os polígonos em F_Cu"
+msgstr "A simplificar polígonos em F_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:772
 msgid "Simplifying polygons on B_Cu"
-msgstr "Simplificando os polígonos em B_Cu"
+msgstr "A simplificar polígonos em B_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:802
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Simplificando os %d das camadas com cobre"
+msgstr "A simplificar %d camadas de cobre"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:841
 msgid "Simplify holes contours"
-msgstr "Simplificar os contornos dos furos"
+msgstr "A simplificar contornos de furos"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:870
 msgid "Build Tech layers"
-msgstr "Montar as camadas técnicas"
+msgstr "Montar camadas técnicas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:904
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "Monte a camada técnica %d"
+msgstr "Montar camada técnica %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1049
 msgid "Build BVH for holes and vias"
@@ -115,7 +116,7 @@ msgstr "Montar BVH para furos e vias"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
 msgstr ""
-"A sua versão do OpenGL não é compatível. O mínimo necessário é a versão 1.5."
+"A sua versão de OpenGL não é compatível. O mínimo necessário é a versão 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:538
 #, c-format
@@ -148,12 +149,12 @@ msgstr "Carregar OpenGL: camadas"
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
 #, c-format
 msgid "Load OpenGL layer %d"
-msgstr "Carregue a camada OpenGL %d"
+msgstr "Carregar camada OpenGL %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:648
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:790
 msgid "Loading 3D models..."
-msgstr "Carregando os modelos 3D..."
+msgstr "A carregar modelos 3D..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:658
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:944
@@ -171,20 +172,20 @@ msgstr "Tempo de carregamento %.3f s"
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:450
 #, c-format
 msgid "Loading %s..."
-msgstr "Carregando %s..."
+msgstr "A carregar %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:561
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:175
 msgid "Loading..."
-msgstr "Carregando…"
+msgstr "A carregar…"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:392
 msgid "Load Raytracing: board"
-msgstr "Carregando o raytracing: placa"
+msgstr "Carregar raytracing: placa"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:563
 msgid "Load Raytracing: layers"
-msgstr "Carregando o raytracing: camadas"
+msgstr "Carregar raytracing: camadas"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:340
 #, c-format
@@ -194,19 +195,19 @@ msgstr "Tempo de renderização %.3f s"
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:394
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr "Renderizando: %.0f %%"
+msgstr "A renderizar: %.0f %%"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:843
 msgid "Rendering: Post processing shader"
-msgstr "Renderizando: Pós processando shader"
+msgstr "A renderizar: Pós processamento de shader"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:50
 msgid "Export Current View as PNG..."
-msgstr "Exportar Visualização Atual como PNG…"
+msgstr "Exportar Vista Atual como PNG…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:55
 msgid "Export Current View as JPEG..."
-msgstr "Exportar Visualização Atual como JPG…"
+msgstr "Exportar Vista Atual como JPEG…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:61
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:236 common/hotkey_store.cpp:76
@@ -247,7 +248,7 @@ msgstr "Voltar Ajustes Padrão"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 msgid "3D Grid"
-msgstr "Grade 3D"
+msgstr "Grelha 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:145 cvpcb/menubar.cpp:87
 #: eeschema/menubar.cpp:287
@@ -291,7 +292,7 @@ msgstr "Copiar imagem 3D para a área de transferência"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 msgid "Render current view using Raytracing"
-msgstr "Renderizar a tela atual utilizando iluminação (Raytracing)"
+msgstr "Renderizar a vista atual utilizando Raytracing"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:98
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:73
@@ -3155,8 +3156,8 @@ msgid ""
 "3D cache files older than this are deleted.\n"
 "If set to 0, cache clearing is disabled"
 msgstr ""
-"Ficheiros de cache 3D mais antigos do que isso são apagados.\n"
-"Se for definido como 0, a deleção de cache será desativada."
+"Ficheiros de cache 3D mais antigos do que isto são apagados.\n"
+"Se for definido como 0, a limpeza de cache é desativada"
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "days"
@@ -3392,7 +3393,7 @@ msgstr "Nenhum"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:125
 msgid "Right button drag:"
-msgstr "Botão direito para arrastar"
+msgstr "Botão direito para arrastar:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:145
 msgid "Scroll Gestures"
@@ -4865,9 +4866,7 @@ msgstr "Está faltando.\n"
 
 #: common/kiway.cpp:304
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr ""
-"Talvez uma biblioteca compartilhada (.dll ou .so) esteja faltando.\n"
-"\n"
+msgstr "Talvez uma biblioteca partilhada (.dll ou .so) esteja em falta.\n"
 
 #: common/kiway.cpp:306
 msgid ""
@@ -4892,7 +4891,7 @@ msgstr "Selecionar Idioma"
 
 #: common/layer_id.cpp:32
 msgid "F.Cu"
-msgstr "F.Cu"
+msgstr "cobre frontal"
 
 #: common/layer_id.cpp:33
 msgid "In1.Cu"
@@ -5016,23 +5015,23 @@ msgstr "In30.Cu"
 
 #: common/layer_id.cpp:63
 msgid "B.Cu"
-msgstr "B.Cu"
+msgstr "Cobre traseira"
 
 #: common/layer_id.cpp:66
 msgid "B.Adhesive"
-msgstr "B.Adhesive"
+msgstr "Adesivo traseira"
 
 #: common/layer_id.cpp:67
 msgid "F.Adhesive"
-msgstr "F.Adhesive"
+msgstr "Adesivo frontal"
 
 #: common/layer_id.cpp:68
 msgid "B.Paste"
-msgstr "B.Paste"
+msgstr "Pasta traseira"
 
 #: common/layer_id.cpp:69
 msgid "F.Paste"
-msgstr "F.Paste"
+msgstr "Pasta frontal"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
@@ -5052,7 +5051,7 @@ msgstr "Máscara frontal"
 
 #: common/layer_id.cpp:76
 msgid "User.Drawings"
-msgstr "User.Drawings"
+msgstr "Desenhos utilizador"
 
 #: common/layer_id.cpp:77
 msgid "User.Comments"
@@ -5068,7 +5067,7 @@ msgstr "User.Eco2"
 
 #: common/layer_id.cpp:80
 msgid "Edge.Cuts"
-msgstr "Edge.Cuts"
+msgstr "Cortes contorno"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
@@ -5076,11 +5075,11 @@ msgstr "Margem"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
-msgstr "F.Courtyard"
+msgstr "Pátio frontal"
 
 #: common/layer_id.cpp:85
 msgid "B.Courtyard"
-msgstr "B.Courtyard"
+msgstr "Pátio traseira"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
@@ -5508,7 +5507,7 @@ msgstr "Não é possível converter '%s' para double."
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2334
 #, c-format
 msgid "Cannot open file '%s'"
-msgstr "Não é possível abrir o ficheiro \"%s\"."
+msgstr "Não é possível abrir o ficheiro '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2354
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2652
@@ -7444,7 +7443,7 @@ msgstr "Valores diferentes para %s%d%s (%s) e %s%d%s (%s)"
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
-"%s e %s estão ambos ligados aos mesmos fios. %s foi escolhido como o rótulo."
+"%s e %s estão ambos ligados aos mesmos itens. %s foi escolhido como rótulo"
 
 #: eeschema/connection_graph.cpp:2518
 #, c-format
@@ -10949,11 +10948,11 @@ msgstr "Tipo:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:34
 #: eeschema/dialogs/dialog_spice_model_base.cpp:35
 msgid "Resistor"
-msgstr "Resistor"
+msgstr "Resistência"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:36
 msgid "Capacitor"
-msgstr "Capacitor"
+msgstr "Condensador"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:37
 msgid "Inductor"
@@ -10977,7 +10976,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
 msgid "Spice unit symbols in values (case insensitive):"
-msgstr "Símbolos de unidades Spice em valores (insensível a maiúscula)"
+msgstr "Símbolos de unidades Spice em valores (insensível a maiúscula):"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:210
 msgid "Library:"
@@ -11026,7 +11025,7 @@ msgstr "DC:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:775
 #: eeschema/dialogs/dialog_spice_model_base.cpp:786
 msgid "Volts/Amps"
-msgstr "Volts/Amps"
+msgstr "Volts/Amperes"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:333
 msgid "AC magnitude:"
@@ -11536,9 +11535,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:238
 msgid "Created project symbol library table.\n"
-msgstr ""
-"Criada tabela de bibliotecas de símbolo do projeto\n"
-"\n"
+msgstr "Tabela de bibliotecas de símbolo do projeto criada.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:260
 #, c-format
@@ -14330,7 +14327,7 @@ msgstr "Símbolo %s [%s]"
 
 #: eeschema/sch_text.cpp:573
 msgid "Tri-State"
-msgstr "Tri-State"
+msgstr "Tri-Estado"
 
 #: eeschema/sch_text.cpp:745
 msgid "Graphic Text"
@@ -17675,7 +17672,7 @@ msgstr "Camada gráfica"
 
 #: gerbview/gerber_file_image.cpp:349
 msgid "Img Rot."
-msgstr "Img Rot."
+msgstr "Rodar Img."
 
 #: gerbview/gerber_file_image.cpp:357
 msgid "X Justify"
@@ -33824,7 +33821,7 @@ msgstr "Forma de via não suportada: %s"
 #: pcbnew/specctra_import_export/specctra_import.cpp:280
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
-msgstr "Ficheiro Session usa identificador de camada inválido:  \"%s\""
+msgstr "Ficheiro de sessão usa identificador de camada inválido: \"%s\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:326
 msgid "Session file is missing the \"session\" section"
@@ -36469,7 +36466,7 @@ msgstr "Pasta de solda na camada superior das placas"
 
 #: pcbnew/widgets/appearance_controls.cpp:1526
 msgid "Solder paste on board's back"
-msgstr "Pasta de solda  na camada inferior das placas"
+msgstr "Pasta de solda na camada inferior das placas"
 
 #: pcbnew/widgets/appearance_controls.cpp:1527
 msgid "Silkscreen on board's front"
@@ -36930,6 +36927,7 @@ msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Editor de placa de circuito independente para placas KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#, fuzzy
 msgid "pcbnew"
 msgstr "pcbnew"
 
