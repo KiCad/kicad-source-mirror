@@ -1159,6 +1159,19 @@ void EE_SELECTION_TOOL::updateReferencePoint()
 }
 
 
+// Some navigation actions are allowed in selectMultiple
+const TOOL_ACTION* allowedActions[] = { &ACTIONS::panUp,          &ACTIONS::panDown,
+                                        &ACTIONS::panLeft,        &ACTIONS::panRight,
+                                        &ACTIONS::cursorUp,       &ACTIONS::cursorDown,
+                                        &ACTIONS::cursorLeft,     &ACTIONS::cursorRight,
+                                        &ACTIONS::cursorUpFast,   &ACTIONS::cursorDownFast,
+                                        &ACTIONS::cursorLeftFast, &ACTIONS::cursorRightFast,
+                                        &ACTIONS::zoomIn,         &ACTIONS::zoomOut,
+                                        &ACTIONS::zoomInCenter,   &ACTIONS::zoomOutCenter,
+                                        &ACTIONS::zoomCenter,     &ACTIONS::zoomFitScreen,
+                                        &ACTIONS::zoomFitObjects, nullptr };
+
+
 bool EE_SELECTION_TOOL::selectMultiple()
 {
     bool cancelled = false;     // Was the tool canceled while it was running?
@@ -1300,6 +1313,16 @@ bool EE_SELECTION_TOOL::selectMultiple()
                 m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 
             break;  // Stop waiting for events
+        }
+
+        // Allow some actions for navigation
+        for( int i = 0; allowedActions[i]; ++i )
+        {
+            if( evt->IsAction( allowedActions[i] ) )
+            {
+                evt->SetPassEvent();
+                break;
+            }
         }
     }
 
