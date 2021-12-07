@@ -919,12 +919,15 @@ const EDA_RECT SCH_LABEL::GetBoundingBox() const
 }
 
 
-void SCH_LABEL::ViewGetLayers( int aLayers[], int& aCount ) const
+void SCH_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount     = 3;
-    aLayers[0] = LAYER_DANGLING;
-    aLayers[1] = m_layer;
-    aLayers[2] = LAYER_SELECTION_SHADOWS;
+    aCount = 0;
+
+    if( m_layer != LAYER_NOTES )
+        aLayers[ aCount++ ] = LAYER_DANGLING;
+
+    aLayers[ aCount++ ] = m_layer;
+    aLayers[ aCount++ ] = LAYER_SELECTION_SHADOWS;
 }
 
 

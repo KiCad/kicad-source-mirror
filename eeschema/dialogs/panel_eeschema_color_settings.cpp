@@ -202,7 +202,13 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createSwatches()
     std::vector<SCH_LAYER_ID> layers;
 
     for( SCH_LAYER_ID i = SCH_LAYER_ID_START; i < SCH_LAYER_ID_END; ++i )
+    {
+        if( g_excludedLayers.count( i ) )
+            continue;
+
         layers.push_back( i );
+    }
+
 
     std::sort( layers.begin(), layers.end(),
                []( SCH_LAYER_ID a, SCH_LAYER_ID b )

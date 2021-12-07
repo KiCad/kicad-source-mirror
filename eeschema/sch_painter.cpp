@@ -759,7 +759,8 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         return;
 
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-    bool dangling = m_schSettings.m_IsSymbolEditor || aPin->HasFlag( IS_DANGLING );
+    bool drawingDangling = aLayer == LAYER_DANGLING;
+    bool isDangling = m_schSettings.m_IsSymbolEditor || aPin->HasFlag( IS_DANGLING );
 
     if( drawingShadows && !aPin->IsSelected() )
         return;
@@ -775,16 +776,16 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         }
         else
         {
-            if( aLayer == LAYER_DANGLING && dangling && aPin->IsPowerConnection() )
+            if( drawingDangling && isDangling && aPin->IsPowerConnection() )
                 drawPinDanglingSymbol( pos, color, drawingShadows );
 
             return;
         }
     }
 
-    if( aLayer == LAYER_DANGLING )
+    if( drawingDangling )
     {
-        if( dangling )
+        if( isDangling )
             drawPinDanglingSymbol( pos, color, drawingShadows );
 
         return;
@@ -1019,7 +1020,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     float aboveOffset   = Mils2iu( PIN_TEXT_MARGIN )     + ( thickness[ABOVE] + penWidth ) / 2.0;
     float belowOffset   = Mils2iu( PIN_TEXT_MARGIN )     + ( thickness[BELOW] + penWidth ) / 2.0;
 
-    if( dangling )
+    if( isDangling )
         outsideOffset += TARGET_PIN_RADIUS / 2.0;
 
     if( drawingShadows )
@@ -1243,6 +1244,7 @@ void SCH_PAINTER::draw( const SCH_JUNCTION *aJct, int aLayer )
 void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    bool drawingDangling = aLayer == LAYER_DANGLING;
 
     if( drawingShadows && !aLine->IsSelected() )
         return;
@@ -1251,7 +1253,7 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
     float          width = getLineWidth( aLine, drawingShadows );
     PLOT_DASH_TYPE lineStyle = aLine->GetEffectiveLineStyle();
 
-    if( aLayer == LAYER_DANGLING )
+    if( drawingDangling )
     {
         if( aLine->IsStartDangling() && aLine->IsWire() )
         {
@@ -1327,6 +1329,7 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
 void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    bool drawingDangling = aLayer == LAYER_DANGLING;
 
     if( drawingShadows && !aText->IsSelected() )
         return;
@@ -1361,7 +1364,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
             return;
     }
 
-    if( aLayer == LAYER_DANGLING )
+    if( drawingDangling )
     {
         if( aText->IsDangling() )
         {
@@ -1789,6 +1792,7 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
     SCH_LAYER_ID layer = aEntry->Type() == SCH_BUS_WIRE_ENTRY_T ? LAYER_WIRE : LAYER_BUS;
     SCH_LINE     line( wxPoint(), layer );
     bool         drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    bool         drawingDangling = aLayer == LAYER_DANGLING;
 
     if( drawingShadows && !aEntry->IsSelected() )
         return;
@@ -1808,12 +1812,12 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
     if( aEntry->Type() == SCH_BUS_BUS_ENTRY_T )
         color = getRenderColor( aEntry, LAYER_BUS, drawingShadows );
 
-    if( aLayer == LAYER_DANGLING )
+    if( drawingDangling )
     {
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color.Brightened( 0.3 ) );
-        m_gal->SetLineWidth( drawingShadows ? getShadowWidth() : 1.0F );
+        m_gal->SetLineWidth( m_schSettings.GetDanglineSymbolThickness() );
 
         if( aEntry->IsDanglingStart() )
         {
