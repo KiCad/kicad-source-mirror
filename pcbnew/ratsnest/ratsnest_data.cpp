@@ -218,8 +218,8 @@ public:
 
             for( size_t i = 0; i < triangles.size(); i += 3 )
             {
-                CN_ANCHOR_PTR& src = anchors[triangles[i]];
-                CN_ANCHOR_PTR& dst = anchors[triangles[i + 1]];
+                CN_ANCHOR_PTR src = anchors[triangles[i]];
+                CN_ANCHOR_PTR dst = anchors[triangles[i + 1]];
                 mstEdges.emplace_back( src, dst, src->Dist( *dst ) );
 
                 src = anchors[triangles[i + 1]];
