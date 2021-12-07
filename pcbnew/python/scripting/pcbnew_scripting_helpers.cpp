@@ -47,6 +47,8 @@
 #include <macros.h>
 #include <pcbnew_scripting_helpers.h>
 #include <project.h>
+#include <project/net_settings.h>
+#include <project/project_file.h>
 #include <settings/settings_manager.h>
 #include <specctra.h>
 #include <project/project_local_settings.h>
@@ -157,6 +159,9 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
     if( brd )
     {
         brd->SetProject( project );
+
+        if( brd->m_LegacyDesignSettingsLoaded )
+            project->GetProjectFile().NetSettings().RebuildNetClassAssignments();
 
         // Move legacy view settings to local project settings
         if( !brd->m_LegacyVisibleLayers.test( Rescue ) )
