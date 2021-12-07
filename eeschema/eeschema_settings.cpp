@@ -29,7 +29,6 @@
 #include <symbol_editor_settings.h>
 #include <macros.h>
 #include <pgm_base.h>
-#include <paths.h>
 #include <settings/common_settings.h>
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
@@ -399,7 +398,7 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_LibViewPanel.show_pin_electrical_type, true ) );
 
     m_params.emplace_back( new PARAM<wxString>( "system.last_symbol_lib_dir",
-            &m_lastSymbolLibDir, PATHS::GetStockSymbolsPath() ) );
+            &m_lastSymbolLibDir, "" ) );
 
 
     // Migrations

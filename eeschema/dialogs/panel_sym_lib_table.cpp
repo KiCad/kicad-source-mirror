@@ -218,6 +218,9 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
+    if( cfg->m_lastSymbolLibDir.IsEmpty() )
+        cfg->m_lastSymbolLibDir = PATHS::GetDefaultUserSymbolsPath();
+
     m_lastProjectLibDir = m_project->GetProjectPath();
 
     auto setupGrid =
