@@ -968,6 +968,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     VECTOR2I cursorPos = controls->GetCursorPosition();
     bool     reselect = false;
     bool     fromOtherCommand = fp != nullptr;
+    bool     resetCursor = aEvent.HasPosition(); // Detect if activated from a hotkey.
 
     // Prime the pump
     if( fp )
@@ -1078,7 +1079,15 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 
                 commit.Add( fp );
                 m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
-                controls->SetCursorPosition( cursorPos, false );
+
+                // Reset cursor to the position before the dialog opened if activated from hotkey
+                if( resetCursor )
+                    controls->SetCursorPosition( cursorPos, false );
+
+                // Other events must be from hotkeys or mouse clicks, so always reset cursor
+                resetCursor = true;
+
+                m_toolMgr->RunAction( ACTIONS::refreshPreview );
             }
             else
             {
