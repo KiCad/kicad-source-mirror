@@ -98,11 +98,20 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
     std::unique_ptr<PCB_SHAPE> arc( createDrawing() );
     arc->SetShape( SHAPE_T::ARC );
     arc->SetLayer( GetLayer() );
+
+    /**
+     * We need to perform the rotation/conversion here while still using floating point values
+     * to avoid rounding errors when operating in integer space in pcbnew
+     */
+    VECTOR2D end = aStart - aCenter;
+    VECTOR2D mid = aStart - aCenter;
+
+    end = aCenter + end.Rotate( DEG2RAD( aAngle ) );
+    mid = aCenter + mid.Rotate( DEG2RAD( aAngle / 2.0 ) );
+
+    arc->SetArcGeometry( MapCoordinate( aStart ), MapCoordinate( mid ), MapCoordinate( end ) );
+
     arc->SetWidth( MapLineWidth( aWidth ) );
-    arc->SetCenter( MapCoordinate( aCenter ));
-    arc->SetStart( MapCoordinate( aStart ) );
-    arc->SetArcAngleAndEnd( aAngle * 10.0, /* pcbnew uses the decidegree */
-                            true /* infer winding direction from the sign of aAngle */);
 
     if( arc->Type() == PCB_FP_SHAPE_T )
         static_cast<FP_SHAPE*>( arc.get() )->SetLocalCoord();
