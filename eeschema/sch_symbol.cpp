@@ -228,10 +228,12 @@ EDA_ITEM* SCH_SYMBOL::Clone() const
 
 void SCH_SYMBOL::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 3;
-    aLayers[0]  = LAYER_DEVICE;
-    aLayers[1]  = LAYER_DEVICE_BACKGROUND;
-    aLayers[2]  = LAYER_SELECTION_SHADOWS;
+    aCount      = 4;
+    aLayers[0]  = LAYER_DANGLING;       // Pins are drawn by their parent symbol, so the parent
+                                        // symbol needs to draw to LAYER_DANGLING
+    aLayers[1]  = LAYER_DEVICE;
+    aLayers[2]  = LAYER_DEVICE_BACKGROUND;
+    aLayers[3]  = LAYER_SELECTION_SHADOWS;
 }
 
 
