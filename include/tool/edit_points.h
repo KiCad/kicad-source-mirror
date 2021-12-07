@@ -220,9 +220,9 @@ public:
      * @param aEnd is the end of EDIT_LINE.
      */
     EDIT_LINE( EDIT_POINT& aOrigin, EDIT_POINT& aEnd ) :
-        EDIT_POINT( aOrigin.GetPosition() + ( aEnd.GetPosition() - aOrigin.GetPosition() ) / 2 ),
-        m_origin( aOrigin ),
-        m_end( aEnd )
+            EDIT_POINT( aOrigin.GetPosition()
+                        + ( aEnd.GetPosition() / 2 - aOrigin.GetPosition() / 2 ) ),
+            m_origin( aOrigin ), m_end( aEnd )
     {
         SetGridConstraint( SNAP_BY_GRID );
     }
@@ -230,7 +230,7 @@ public:
     ///< @copydoc EDIT_POINT::GetPosition()
     virtual VECTOR2I GetPosition() const override
     {
-        return ( m_origin.GetPosition() + m_end.GetPosition() ) / 2;
+        return m_origin.GetPosition() / 2 + m_end.GetPosition() / 2;
     }
 
     ///< @copydoc EDIT_POINT::GetPosition()
