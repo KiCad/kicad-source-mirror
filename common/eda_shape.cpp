@@ -492,6 +492,22 @@ void EDA_SHAPE::SetArcGeometry( const wxPoint& aStart, const wxPoint& aMid, cons
     m_end = aEnd;
     m_arcCenter = CalcArcCenter( aStart, aMid, aEnd );
     m_endsSwapped = false;
+
+    /**
+     * If the input winding doesn't match our internal winding, the calculated midpoint will end up
+     * on the other side of the arc.  In this case, we need to flip the start/end points and flag this
+     * change for the system
+     */
+    wxPoint new_mid = GetArcMid();
+    VECTOR2D dist( new_mid - aMid );
+    VECTOR2D dist2( new_mid - m_arcCenter );
+
+    if( dist.SquaredEuclideanNorm() > dist2.SquaredEuclideanNorm() )
+    {
+        std::swap( m_start, m_end );
+        m_endsSwapped = true;
+    }
+
 }
 
 
