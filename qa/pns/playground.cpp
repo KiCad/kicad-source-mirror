@@ -175,7 +175,7 @@ int playground_main_func( int argc, char* argv[] )
             vp.Merge( arc.BBox() );
     }
 
-    printf("Read %lu arcs\n", arcs.size() );
+    printf("Read %zu arcs\n", arcs.size() );
 
     LABEL_MANAGER labelMgr( frame->GetPanel()->GetGAL() );
     frame->GetPanel()->GetView()->SetViewport( BOX2D( vp.GetOrigin(), vp.GetSize() ) );

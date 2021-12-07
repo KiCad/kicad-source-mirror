@@ -440,7 +440,7 @@ static BOARD* loadBoard( const std::string& filename )
     {
         brd = pi->Load( wxString( filename.c_str() ), nullptr, nullptr );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
         return nullptr;
     }
