@@ -72,6 +72,7 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_boardOnly;
 		wxCheckBox* m_excludeFromPosFiles;
 		wxCheckBox* m_excludeFromBOM;
+		wxCheckBox* m_noCourtyards;
 		wxButton* m_buttonUpdate;
 		wxButton* m_buttonExchange;
 		wxButton* m_buttonModuleEditor;

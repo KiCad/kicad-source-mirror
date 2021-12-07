@@ -266,6 +266,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     m_boardOnly->SetValue( m_footprint->GetAttributes() & FP_BOARD_ONLY );
     m_excludeFromPosFiles->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES );
     m_excludeFromBOM->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM );
+    m_noCourtyards->SetValue( m_footprint->GetAttributes() & FP_ALLOW_MISSING_COURTYARD );
 
     // Local Clearances
 
@@ -434,6 +435,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
     if( m_excludeFromBOM->GetValue() )
         attributes |= FP_EXCLUDE_FROM_BOM;
+
+    if( m_noCourtyards->GetValue() )
+        attributes |= FP_ALLOW_MISSING_COURTYARD;
 
     if( m_allowSolderMaskBridges->GetValue() )
         attributes |= FP_ALLOW_SOLDERMASK_BRIDGES;

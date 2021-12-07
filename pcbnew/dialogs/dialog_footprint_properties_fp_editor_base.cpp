@@ -207,6 +207,11 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITO
 	m_excludeFromBOM = new wxCheckBox( sbFabSizer->GetStaticBox(), wxID_ANY, _("Exclude from BOM"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbFabSizer->Add( m_excludeFromBOM, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_noCourtyards = new wxCheckBox( sbFabSizer->GetStaticBox(), wxID_ANY, _("Exempt from courtyard requirement"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_noCourtyards->SetToolTip( _("Will not generate \"missing courtyard\" DRC violations") );
+
+	sbFabSizer->Add( m_noCourtyards, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
 
 	bSizerProperties->Add( sbFabSizer, 1, wxEXPAND|wxRIGHT, 5 );
 

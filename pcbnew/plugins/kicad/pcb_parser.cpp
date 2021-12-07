@@ -3467,6 +3467,9 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
                     attributes |= FP_EXCLUDE_FROM_BOM;
                     break;
 
+                case T_allow_missing_courtyard:
+                    attributes |= FP_ALLOW_MISSING_COURTYARD;
+
                 case T_allow_soldermask_bridges:
                     attributes |= FP_ALLOW_SOLDERMASK_BRIDGES;
                     break;

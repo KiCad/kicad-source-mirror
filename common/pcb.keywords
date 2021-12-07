@@ -28,6 +28,7 @@ add_net
 addsublayer
 aligned
 allowed
+allow_missing_courtyard
 allow_soldermask_bridges
 anchor
 angle
