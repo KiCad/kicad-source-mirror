@@ -122,29 +122,36 @@ namespace SEXPR
             }
             else if( *it == '"' )
             {
-                size_t startPos = std::distance(aString.begin(), it) + 1;
-                size_t closingPos = startPos > 0 ? startPos - 1 : startPos;
+                ++it;
 
-                // find the closing quote character, be sure it is not escaped
-                do
+                auto starting_it = it;
+
+                for( ; it != aString.end(); ++it )
                 {
-                    closingPos = aString.find_first_of( '"', closingPos + 1 );
+                    auto ch = *it;
+
+                    if( ch == '\\' )
+                    {
+                        // Skip the next escaped character
+                        if( ++it == aString.end() )
+                            break;
+
+                        continue;
+                    }
+
+                    if( ch == '"' )
+                        break;
                 }
-                while( closingPos != std::string::npos
-                        && ( closingPos > 0 && aString[closingPos - 1] == '\\' ) );
 
-                if( closingPos != std::string::npos )
-                {
-                    auto str = std::make_unique<SEXPR_STRING>(
-                            aString.substr( startPos, closingPos - startPos ), m_lineNumber );
-                    std::advance( it, closingPos - startPos + 2 );
-
-                    return str;
-                }
-                else
-                {
+                if( it == aString.end() )
                     throw PARSE_EXCEPTION("missing closing quote");
-                }
+
+                auto str = std::make_unique<SEXPR_STRING>( std::string( starting_it, it ),
+                        m_lineNumber );
+
+                ++it;
+                return str;
+
             }
             else
             {

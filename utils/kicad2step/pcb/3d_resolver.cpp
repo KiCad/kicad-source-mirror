@@ -184,7 +184,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName,
     // been checked. This case accounts for partial paths which do not contain ${KIPRJMOD}.
     // This check is performed before checking the path relative to ${KICAD6_3DMODEL_DIR} so that
     // users can potentially override a model within ${KICAD6_3DMODEL_DIR}.
-    if( !m_Paths.begin()->m_Pathexp.empty() && !tname.StartsWith( ":" ) )
+    if( !m_Paths.empty() && !m_Paths.begin()->m_Pathexp.empty() && !tname.StartsWith( ":" ) )
     {
         tmpFN.Assign( m_Paths.begin()->m_Pathexp, "" );
         wxString fullPath = tmpFN.GetPathWithSep() + tname;
