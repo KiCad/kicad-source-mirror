@@ -151,6 +151,12 @@ bool POLY_GRID_PARTITION::checkClearance( const VECTOR2I& aP, int aClearance )
 int POLY_GRID_PARTITION::rescale_trunc( int aNumerator, int aValue, int aDenominator ) const
 {
     int64_t numerator = (int64_t) aNumerator * (int64_t) aValue;
+
+    wxASSERT( aDenominator != 0 );
+
+    if( aDenominator == 0 )     // Avoid crash when divide by 0
+        aDenominator = 1;
+
     return numerator / aDenominator;
 }
 
