@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-12-06 19:31+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-12-08 21:51+0000\n"
+"Last-Translator: David Chen <d0123456789g@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -533,11 +533,11 @@ msgstr "切換膠粘層的顯示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle silkscreen display"
-msgstr "切換絲印層顯示"
+msgstr "切換網版印刷層顯示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle display of silkscreen layers"
-msgstr "切換絲印層的顯示"
+msgstr "切換網版印刷層的顯示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle solder mask display"
@@ -619,11 +619,11 @@ msgstr "使用顏色："
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
-msgstr "絲印層頂部："
+msgstr "網版印刷層頂部："
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:84
 msgid "Silkscreen bottom:"
-msgstr "絲印層底部："
+msgstr "網版印刷層底部："
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:97
 msgid "Solder mask top:"
@@ -647,15 +647,15 @@ msgstr "電路板層"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:31
 msgid "Show silkscreen layers"
-msgstr "顯示絲印層"
+msgstr "顯示網版印刷層"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
 msgid "Clip silkscreen at solder mask edges"
-msgstr "將絲印夾在阻焊層邊緣"
+msgstr "將網版印刷夾在阻焊層邊緣"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
-msgstr "剪去過孔環的絲印"
+msgstr "剪去過孔環的網版印刷"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:40
 msgid "Show solder mask layers"
@@ -1317,7 +1317,7 @@ msgstr "負片"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:527
 msgid "Front silk screen"
-msgstr "頂層絲印"
+msgstr "頂層網版印刷"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:533
@@ -1343,7 +1343,7 @@ msgid ""
 "layer (but will be marked invisible)."
 msgstr ""
 "選擇要放置輪廓的電路板圖層。\n"
-"位號和值始終放置在絲印層上（但會被標記為不可見）。"
+"位號和值始終放置在網版印刷層上（但會被標記為不可見）。"
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
@@ -17048,11 +17048,11 @@ msgstr "頂部阻焊劑"
 
 #: gerbview/files.cpp:149
 msgid "Bottom overlay"
-msgstr "底層絲印字元"
+msgstr "底層網版印刷字元"
 
 #: gerbview/files.cpp:150
 msgid "Top overlay"
-msgstr "頂層絲印字元"
+msgstr "頂層網版印刷字元"
 
 #: gerbview/files.cpp:151
 msgid "Bottom paste"
@@ -20730,7 +20730,7 @@ msgstr "電介質層 %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:529
 msgid "Top Silk Screen"
-msgstr "頂層絲印"
+msgstr "頂層網版印刷"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:537
 msgid "Top Solder Paste"
@@ -20750,7 +20750,7 @@ msgstr "底部焊膏"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:605
 msgid "Bottom Silk Screen"
-msgstr "底層絲印"
+msgstr "底層網版印刷"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:45
 msgid "Incorrect value for Epsilon R"
@@ -24278,7 +24278,7 @@ msgstr "刪除專案"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:55
 msgid "Silk Layers"
-msgstr "絲印層"
+msgstr "網版印刷層"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:215
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:134
@@ -25334,7 +25334,7 @@ msgstr "底層錫膏"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:530
 msgid "Back silk screen"
-msgstr "底層絲印"
+msgstr "底層網版印刷"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:536
 msgid "Back solder mask"
@@ -25738,11 +25738,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
-msgstr "剔除開窗區域中的絲印"
+msgstr "減去開窗區域中的網版印刷"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "Remove silkscreen from areas without soldermask"
-msgstr "在沒有阻焊的區域移除絲印"
+msgstr "在沒有阻焊的區域移除網版印刷"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -27300,7 +27300,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
-msgstr "絲印層"
+msgstr "網版印刷層"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:427
 msgid "Minimum item clearance:"
@@ -27311,9 +27311,7 @@ msgid ""
 "Minimum clearance between two items on the same silkscreen layer.  If set "
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
-msgstr ""
-"同一絲印層上兩個專案間的最小間隙。設定此值可提高辯認度。(注：不適用於單個封裝"
-"中的多個形狀。)"
+msgstr "同一網版印刷層上兩個專案間的最小間隙。設定此值可提高辯認度。(注：不適用於單個封裝中的多個形狀。)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -27439,11 +27437,11 @@ msgstr "頂層錫膏層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:94
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr "開啟/關閉 頂層絲印層"
+msgstr "開啟/關閉 頂層網版印刷層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:98
 msgid "SilkS_Front"
-msgstr "頂層絲印層"
+msgstr "頂層網版印刷層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:106
 msgid "If you want a solder mask layer for the front of the board"
@@ -27782,11 +27780,11 @@ msgstr "底層阻焊層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:586
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr "開啟/關閉 底層絲印層"
+msgstr "開啟/關閉 底層網版印刷層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:590
 msgid "SilkS_Back"
-msgstr "底層絲印層"
+msgstr "底層網版印刷層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:598
 msgid "If you want a solder paste layer for the back side of the board"
@@ -28277,7 +28275,7 @@ msgstr ""
 " * hole\\_clearance\n"
 "# （與通孔的間隙）\n"
 " * silk\\_clearance\n"
-"# （與絲印的間隙）\n"
+"# （與網印的間隙）\n"
 " * skew\n"
 "# （總偏差）\n"
 " * track\\_width\n"
@@ -28567,7 +28565,7 @@ msgstr "電路板設定約束"
 
 #: pcbnew/drc/drc_engine.cpp:175
 msgid "board setup constraints silk"
-msgstr "電路板設定約束絲印"
+msgstr "電路板設定約束網版印刷"
 
 #: pcbnew/drc/drc_engine.cpp:181
 msgid "board setup constraints hole"
@@ -28862,11 +28860,11 @@ msgstr "焊盤網路與原理圖不匹配"
 
 #: pcbnew/drc/drc_item.cpp:178
 msgid "Silkscreen clipped by solder mask"
-msgstr "與開窗區域相交的絲印"
+msgstr "與開窗區域相交的網版印刷"
 
 #: pcbnew/drc/drc_item.cpp:182
 msgid "Silkscreen overlap"
-msgstr "絲印重疊"
+msgstr "網版印刷重疊"
 
 #: pcbnew/drc/drc_item.cpp:186
 msgid "Trace length out of range"
@@ -29254,21 +29252,21 @@ msgstr "正在檢查文字變數..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:106
 msgid "Checking silkscreen for overlapping items..."
-msgstr "正在檢查重疊專案的絲印..."
+msgstr "正在檢查重疊專案的網版印刷..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:160
 #, c-format
 msgid "Testing %d silkscreen features against %d board items."
-msgstr "正在將 %d 個絲印與 %d 個電路板專案測試相交..."
+msgstr "正在將 %d 個網版印刷與 %d 個電路板專案測試相交..."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:100
 msgid "Checking silkscreen for potential soldermask clipping..."
-msgstr "正在檢查絲印是否可能與開窗區相交..."
+msgstr "正在檢查網版印刷是否可能與開窗區相交..."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:182
 #, c-format
 msgid "Testing %d mask apertures against %d silkscreen features."
-msgstr "正在將 %d 個阻焊區域與 %d 個絲印測試相交..."
+msgstr "正在將 %d 個阻焊區域與 %d 個網版印刷測試相交..."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:83
 msgid "Checking track widths..."
@@ -33191,7 +33189,7 @@ msgstr "專案屬於同一網路。間隙為 0。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:498
 msgid "Silkscreen clearance resolution for:"
-msgstr "絲印層間隙解析適用於:"
+msgstr "網版印刷層間隙解析適用於:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
 msgid "Courtyard clearance resolution for:"
@@ -35514,11 +35512,11 @@ msgstr "底層錫膏"
 
 #: pcbnew/widgets/appearance_controls.cpp:1527
 msgid "Silkscreen on board's front"
-msgstr "頂層絲印"
+msgstr "頂層網版印刷"
 
 #: pcbnew/widgets/appearance_controls.cpp:1528
 msgid "Silkscreen on board's back"
-msgstr "底層絲印"
+msgstr "底層網版印刷"
 
 #: pcbnew/widgets/appearance_controls.cpp:1529
 msgid "Solder mask on board's front"
