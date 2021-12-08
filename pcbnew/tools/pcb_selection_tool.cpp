@@ -1229,7 +1229,7 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
         {
             wxPoint      pt = activePts[i].first;
             PCB_LAYER_ID layer = activePts[i].second;
-            size_t       pt_count = padMap.count( pt ) * 2 + viaMap.count( pt );
+            size_t       pt_count = 0;
 
             for( PCB_TRACK* track : trackMap[pt] )
             {
@@ -1237,15 +1237,23 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
                     pt_count++;
             }
 
-            if( pt_count > 2 && aStopCondition == STOP_AT_JUNCTION )
+            if( aStopCondition == STOP_AT_JUNCTION )
             {
-                activePts.erase( activePts.begin() + i );
-                continue;
+                if( pt_count > 2
+                        || ( viaMap.count( pt ) && layer != ALL_LAYERS )
+                        || ( padMap.count( pt ) && layer != ALL_LAYERS ) )
+                {
+                    activePts.erase( activePts.begin() + i );
+                    continue;
+                }
             }
-            else if( padMap.count( pt ) && aStopCondition == STOP_AT_PAD )
+            else if( aStopCondition == STOP_AT_PAD )
             {
-                activePts.erase( activePts.begin() + i );
-                continue;
+                if( padMap.count( pt ) )
+                {
+                    activePts.erase( activePts.begin() + i );
+                    continue;
+                }
             }
 
             if( padMap.count( pt ) )
