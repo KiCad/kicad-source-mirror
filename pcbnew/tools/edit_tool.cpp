@@ -287,21 +287,7 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
-                // Iterate from the back so we don't have to worry about removals.
-                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                {
-                    BOARD_ITEM* item = aCollector[ i ];
-
-                    // We don't operate on pads; convert them to footprint selections
-                    if( !sTool->IsFootprintEditor() && item->Type() == PCB_PAD_T )
-                    {
-                        aCollector.Remove( item );
-
-                        if( item->GetParent() && !aCollector.HasItem( item->GetParent() ) )
-                            aCollector.Append( item->GetParent() );
-                    }
-                }
-
+                sTool->FilterCollectorForFreePads( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
             },
             true /* prompt user regarding locked items */ );
@@ -712,14 +698,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
-                // Iterate from the back so we don't have to worry about removals.
-                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                {
-                    BOARD_ITEM* item = aCollector[ i ];
-
-                    if( item->Type() == PCB_MARKER_T )
-                        aCollector.Remove( item );
-                }
+                sTool->FilterCollectorForMarkers( aCollector );
             },
             // Prompt user regarding locked items if in board editor and in free-pad-mode (if
             // we're not in free-pad mode we delay this until the second RequestSelection()).
@@ -729,8 +708,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         return 0;
 
     LSET     item_layers = selection.GetSelectionLayers();
-    bool     is_hover    = selection.IsHover(); // N.B. This must be saved before the re-selection
-                                                // below
+    bool     is_hover    = selection.IsHover(); // N.B. This must be saved before the second call
+                                                // to RequestSelection() below
     VECTOR2I pickedReferencePoint;
 
     // Now filter out pads if not in free pads mode.  We cannot do this in the first
@@ -740,27 +719,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         selection = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
-                    std::set<BOARD_ITEM*> to_add;
-
-                    // Iterate from the back so we don't have to worry about removals.
-                    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                    {
-                        BOARD_ITEM* item = aCollector[i];
-
-                        if( item->Type() == PCB_MARKER_T )
-                            aCollector.Remove( item );
-
-                        if( item->Type() == PCB_PAD_T )
-                        {
-                            if( !aCollector.HasItem( item->GetParent() ) )
-                                to_add.insert( item->GetParent() );
-
-                            aCollector.Remove( item );
-                        }
-                    }
-
-                    for( BOARD_ITEM* item : to_add )
-                        aCollector.Append( item );
+                    sTool->FilterCollectorForMarkers( aCollector );
+                    sTool->FilterCollectorForFreePads( aCollector );
                 },
                 true /* prompt user regarding locked items */ );
     }
@@ -1455,14 +1415,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
-                // Iterate from the back so we don't have to worry about removals.
-                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                {
-                    BOARD_ITEM* item = aCollector[i];
-
-                    if( item->Type() == PCB_MARKER_T )
-                        aCollector.Remove( item );
-                }
+                sTool->FilterCollectorForMarkers( aCollector );
             },
             // Prompt user regarding locked items if in board editor and in free-pad-mode (if
             // we're not in free-pad mode we delay this until the second RequestSelection()).
@@ -1483,27 +1436,9 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         selection = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
-                    std::set<BOARD_ITEM*> to_add;
-
-                    // Iterate from the back so we don't have to worry about removals.
-                    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                    {
-                        BOARD_ITEM* item = aCollector[i];
-
-                        if( item->Type() == PCB_MARKER_T )
-                            aCollector.Remove( item );
-
-                        if( item->Type() == PCB_PAD_T )
-                        {
-                            if( !aCollector.HasItem( item->GetParent() ) )
-                                to_add.insert( item->GetParent() );
-
-                            aCollector.Remove( item );
-                        }
-                    }
-
-                    for( BOARD_ITEM* item : to_add )
-                        aCollector.Append( item );
+                    sTool->FilterCollectorForMarkers( aCollector );
+                    sTool->FilterCollectorForHierarchy( aCollector, true );
+                    sTool->FilterCollectorForFreePads( aCollector );
                 },
                 true /* prompt user regarding locked items */ );
     }
@@ -1610,7 +1545,9 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
+                sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
+                sTool->FilterCollectorForFreePads( aCollector );
             },
             !m_dragging /* prompt user regarding locked items */ );
 
@@ -1708,8 +1645,9 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
+                sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
-                sTool->FilterCollectorForFreePads( aCollector, true );
+                sTool->FilterCollectorForFreePads( aCollector );
             },
             !m_dragging /* prompt user regarding locked items */ );
 
@@ -1807,7 +1745,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     PCB_SELECTION selectionCopy;
     bool isCut = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::CUT;
     bool isAlt = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::ALT;
-    std::vector<BOARD_ITEM*> disallowedPads;
 
     // If we are in a "Cut" operation, then the copied selection exists already and we want to
     // delete exactly that; no more, no fewer.  Any filtering for locked items must be done in
@@ -1818,45 +1755,43 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     }
     else
     {
+        // When not in free-pad mode we normally auto-promote selected pads to their parent
+        // footprints.  But this is probably a little too dangerous for a destructive operation,
+        // so we just do the promotion but not the deletion (allowing for a second delete to do
+        // it if that's what the user wanted).
         selectionCopy = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
-                },
-                false /* ignore locked items until after we filter out non-free pads */ );
+                } );
 
-        if( !IsFootprintEditor() && !frame()->Settings().m_AllowFreePads )
-        {
-            for( EDA_ITEM* item : m_selectionTool->GetSelection() )
-            {
-                PAD* pad = dynamic_cast<PAD*>( item );
+        size_t beforeFPCount = selectionCopy.CountType( PCB_FOOTPRINT_T );
 
-                if( pad && !isSelectedForDelete( pad->GetParent() ) )
+        m_selectionTool->RequestSelection(
+                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
-                    disallowedPads.push_back( pad );
-                    m_selectionTool->RemoveItemFromSel( pad, true /* quiet mode */ );
-                }
-            }
+                    sTool->FilterCollectorForFreePads( aCollector );
+                } );
 
-            if( m_selectionTool->GetSelection().Empty() )
-            {
-                wxBell();
-                m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &disallowedPads );
-                canvas()->Refresh();
-                return 0;
-            }
+        if( !selectionCopy.IsHover()
+                && m_selectionTool->GetSelection().CountType( PCB_FOOTPRINT_T ) > beforeFPCount )
+        {
+            wxBell();
+            canvas()->Refresh();
+            return 0;
         }
 
-        // in "alternative" mode, deletion is not just a simple list of selected items,
-        // it removes whole tracks, not just segments
+        // In "alternative" mode, we expand selected track items to their full connection.
         if( isAlt && ( selectionCopy.HasType( PCB_TRACE_T ) || selectionCopy.HasType( PCB_VIA_T ) ) )
         {
             m_toolMgr->RunAction( PCB_ACTIONS::selectConnection, true );
-
         }
 
+        // Finally run RequestSelection() one more time to find out what user wants to do about
+        // locked objects.
         selectionCopy = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
+                    sTool->FilterCollectorForFreePads( aCollector );
                 },
                 true /* prompt user regarding locked items */ );
     }
@@ -2012,9 +1947,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     else
         m_commit->Push( _( "Delete" ) );
 
-    if( !disallowedPads.empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &disallowedPads );
-
     return 0;
 }
 
@@ -2030,15 +1962,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
     const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
-                // Iterate from the back so we don't have to worry about removals.
-                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                {
-                    BOARD_ITEM* item = aCollector[i];
-
-                    if( item->Type() == PCB_MARKER_T )
-                        aCollector.Remove( item );
-                }
-
+                sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
             },
             true /* prompt user regarding locked items */ );
@@ -2143,15 +2067,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
                 []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
-                    // Iterate from the back so we don't have to worry about removals.
-                    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                    {
-                        BOARD_ITEM* item = aCollector[i];
-
-                        if( item->Type() == PCB_MARKER_T )
-                            aCollector.Remove( item );
-                    }
-
+                    sTool->FilterCollectorForMarkers( aCollector );
                     sTool->FilterCollectorForHierarchy( aCollector, true );
                 } );
 
@@ -2290,6 +2206,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
     const auto& selection = m_selectionTool->RequestSelection(
                 []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
+                    sTool->FilterCollectorForMarkers( aCollector );
                     sTool->FilterCollectorForHierarchy( aCollector, true );
                 } );
 

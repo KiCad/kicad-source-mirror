@@ -172,6 +172,8 @@ public:
      */
     bool HasType( KICAD_T aType ) const;
 
+    size_t CountType( KICAD_T aType ) const;
+
     virtual const std::vector<KIGFX::VIEW_ITEM*> updateDrawList() const override;
 
     bool HasReferencePoint() const

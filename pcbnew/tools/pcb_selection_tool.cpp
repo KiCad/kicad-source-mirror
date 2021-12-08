@@ -2679,8 +2679,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
 }
 
 
-void PCB_SELECTION_TOOL::FilterCollectorForFreePads( GENERAL_COLLECTOR& aCollector,
-                                                     bool aMultiselect ) const
+void PCB_SELECTION_TOOL::FilterCollectorForFreePads( GENERAL_COLLECTOR& aCollector ) const
 {
     std::set<BOARD_ITEM*> to_add;
 
@@ -2701,6 +2700,19 @@ void PCB_SELECTION_TOOL::FilterCollectorForFreePads( GENERAL_COLLECTOR& aCollect
 
     for( BOARD_ITEM* item : to_add )
         aCollector.Append( item );
+}
+
+
+void PCB_SELECTION_TOOL::FilterCollectorForMarkers( GENERAL_COLLECTOR& aCollector ) const
+{
+    // Iterate from the back so we don't have to worry about removals.
+    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+    {
+        BOARD_ITEM* item = aCollector[i];
+
+        if( item->Type() == PCB_MARKER_T )
+            aCollector.Remove( item );
+    }
 }
 
 

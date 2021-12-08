@@ -132,6 +132,20 @@ bool SELECTION::HasType( KICAD_T aType ) const
 }
 
 
+size_t SELECTION::CountType( KICAD_T aType ) const
+{
+    size_t count = 0;
+
+    for( EDA_ITEM* item : m_items )
+    {
+        if( item->Type() == aType )
+            count++;
+    }
+
+    return count;
+}
+
+
 const std::vector<KIGFX::VIEW_ITEM*> SELECTION::updateDrawList() const
 {
     std::vector<VIEW_ITEM*> items;

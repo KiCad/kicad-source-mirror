@@ -207,7 +207,9 @@ public:
      * Check the "allow free pads" setting and if disabled, upgrade any pad selection to the
      * selection of its parent footprint.
      */
-    void FilterCollectorForFreePads( GENERAL_COLLECTOR& aCollector, bool aMultiselect ) const;
+    void FilterCollectorForFreePads( GENERAL_COLLECTOR& aCollector ) const;
+
+    void FilterCollectorForMarkers( GENERAL_COLLECTOR& aCollector ) const;
 
     ///< Apply the SELECTION_FILTER_OPTIONS to a collection of items
     void FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bool aMultiSelect );
