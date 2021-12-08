@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-12-03 00:43+0000\n"
+"PO-Revision-Date: 2021-12-08 21:51+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -4809,7 +4809,7 @@ msgstr "Hoch/runter schwenken"
 
 #: common/hotkey_store.cpp:45 eeschema/tools/ee_actions.cpp:255
 msgid "Finish Drawing"
-msgstr "Zeichnung beenden"
+msgstr "Zeichnen abschließen"
 
 #: common/hotkey_store.cpp:46
 msgid "Add to Selection"
@@ -12986,11 +12986,11 @@ msgstr ""
 
 #: eeschema/files-io.cpp:949
 msgid "Overwrite Files"
-msgstr "Überschreibe Dateien"
+msgstr "Dateien überschreiben"
 
 #: eeschema/files-io.cpp:950
 msgid "Abort Project Save"
-msgstr "Projekt speichern abbrechen"
+msgstr "Speichern des Projekts abbrechen"
 
 #: eeschema/files-io.cpp:1163
 msgid "Importing Schematic"
@@ -13033,13 +13033,13 @@ msgstr ""
 #: eeschema/files-io.cpp:1408
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr ""
-"Zur Wiederherstellung der oben genannten Datei(en) ist eine manuelle "
-"Wiederherstellung erforderlich."
+"Für die oben genannte(n) Datei(en) ist eine manuelle Wiederherstellung "
+"erforderlich."
 
 #: eeschema/files-io.cpp:1430
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr ""
-"Die folgenden automatisch gespeicherten Dateien konnten nicht gelöscht "
+"Die folgenden automatisch gespeicherten Dateien konnten nicht entfernt "
 "werden\n"
 
 #: eeschema/files-io.cpp:1435
@@ -13088,13 +13088,13 @@ msgstr "Spannungssymbol wählen (%d Elemente geladen)"
 #: eeschema/getpart.cpp:161 eeschema/symbol_viewer_frame.cpp:853
 #, c-format
 msgid "Choose Symbol (%d items loaded)"
-msgstr "Symbolauswahl (%d Elemente geladen)"
+msgstr "Symbol wählen (%d Elemente geladen)"
 
 #: eeschema/getpart.cpp:253
 #, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr ""
-"Keine alternative Körperform für Symbol \"%s\" in der Bibliothek \"%s\" "
+"Keine alternative Dastellungsform für Symbol \"%s\" in der Bibliothek \"%s\" "
 "gefunden."
 
 #: eeschema/hierarch.cpp:88
@@ -13199,7 +13199,7 @@ msgstr "Kreis, Radius %s"
 #: eeschema/lib_shape.cpp:369
 #, c-format
 msgid "Polyline, %d points"
-msgstr "Linienzug mit %d Punkten"
+msgstr "Linienzug, %d Punkte"
 
 #: eeschema/lib_shape.cpp:373
 #, c-format
@@ -13209,16 +13209,16 @@ msgstr "Bezierkurve, %d Punkte"
 #: eeschema/lib_text.cpp:403 eeschema/sch_text.cpp:663
 #, c-format
 msgid "Graphic Text '%s'"
-msgstr "Grafischer Text '%s'"
+msgstr "Grafischer Text \"%s\""
 
 #: eeschema/libarch.cpp:101
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
-msgstr "Konnte das Symbol \"%s\" nicht zur Symbolbibliothek \"%s\" hinzufügen."
+msgstr "Konnte das Symbol \"%s\" nicht zur Bibliotheksdatei \"%s\" hinzufügen."
 
 #: eeschema/libarch.cpp:110
 msgid "Unexpected exception occurred."
-msgstr "Ein nicht erwarteter Fehler ist aufgetreten."
+msgstr "Ein unerwarteter Fehler ist aufgetreten."
 
 #: eeschema/libarch.cpp:125
 #, c-format
@@ -13229,7 +13229,7 @@ msgstr ""
 #: eeschema/libarch.cpp:141
 #, c-format
 msgid "Errors occurred creating symbol library %s."
-msgstr "Ein Fehler ist aufgetreten beim Erstellen der Symbolbibliothek '%s'."
+msgstr "Beim Erstellen der Symbolbibliothek %s sind Fehler aufgetreten."
 
 #: eeschema/menubar.cpp:64 kicad/menubar.cpp:65
 #: pagelayout_editor/menubar.cpp:57 pcbnew/menubar_pcb_editor.cpp:67
@@ -13294,7 +13294,7 @@ msgstr "&Einheiten"
 #: pagelayout_editor/menubar.cpp:169 pcbnew/menubar_footprint_editor.cpp:245
 #: pcbnew/menubar_pcb_editor.cpp:459
 msgid "&Place"
-msgstr "E&infügen"
+msgstr "Ein&fügen"
 
 #: eeschema/menubar.cpp:291
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:180
@@ -13411,8 +13411,8 @@ msgstr "Umbenennen von %s in %s"
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
 msgstr ""
-"Das Symbol %s kann nicht wiederhergestellt werden, es ist nicht in einer "
-"Bibliothek oder dem Cache vorhanden."
+"Das Symbol %s kann nicht wiederhergestellt werden, da es in keiner "
+"Bibliothek oder dem Cache vorhanden ist."
 
 #: eeschema/project_rescue.cpp:305 eeschema/project_rescue.cpp:468
 #, c-format
@@ -13441,7 +13441,7 @@ msgstr "Konnte Symbolbibliotheksdatei \"%s\" nicht erstellen."
 #: eeschema/project_rescue.cpp:815
 #, c-format
 msgid "Failed to save rescue library %s."
-msgstr "Konnte die Sicherungsbibliothek '%s' nicht laden."
+msgstr "Konnte die Sicherungsbibliothek %s nicht speichern."
 
 #: eeschema/project_rescue.cpp:839
 msgid "Error occurred saving project specific symbol library table."
@@ -13468,7 +13468,7 @@ msgstr ""
 
 #: eeschema/sch_bus_entry.cpp:418
 msgid "Bus to Wire Entry"
-msgstr "Bus an eine elektr. Verbindung führen"
+msgstr "Bus an elektrische Verbindung führen"
 
 #: eeschema/sch_bus_entry.cpp:424
 msgid "Bus to Bus Entry"
@@ -16117,7 +16117,7 @@ msgstr "Spezifizieren Sie eine neue Position für den Anker des Bausteils"
 
 #: eeschema/tools/ee_actions.cpp:255
 msgid "Finish drawing shape"
-msgstr "Zeichnungsform beenden"
+msgstr "Zeichnen einer Form beenden"
 
 #: eeschema/tools/ee_actions.cpp:262
 msgid "Push Pin Length"
@@ -16237,11 +16237,11 @@ msgstr "Bitmap Grafik hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:355
 msgid "Finish Sheet"
-msgstr "Zeichnung beenden"
+msgstr "Zeichnungsblatt abschließen"
 
 #: eeschema/tools/ee_actions.cpp:355
 msgid "Finish drawing sheet"
-msgstr "Die Zeichnung beenden"
+msgstr "Zeichnungsblatt beenden"
 
 #: eeschema/tools/ee_actions.cpp:368
 msgid "Repeat Last Item"
@@ -16735,7 +16735,7 @@ msgstr "Herausführen einer Verbindung aus dem Bus"
 
 #: eeschema/tools/ee_actions.cpp:720
 msgid "Finish Wire or Bus"
-msgstr "Beende Verbindung oder Bus"
+msgstr "Verbindung oder Bus abschließen"
 
 #: eeschema/tools/ee_actions.cpp:720
 msgid "Complete drawing at current segment"
@@ -16743,7 +16743,7 @@ msgstr "Beenden des Zeichnens am aktuellen Segment"
 
 #: eeschema/tools/ee_actions.cpp:725
 msgid "Finish Wire"
-msgstr "Beende Verbindung"
+msgstr "Verbindung abschließen"
 
 #: eeschema/tools/ee_actions.cpp:725
 msgid "Complete wire with current segment"
@@ -16751,7 +16751,7 @@ msgstr "Verbindung am aktuellen Segment vervollständigen"
 
 #: eeschema/tools/ee_actions.cpp:730
 msgid "Finish Bus"
-msgstr "Beenden Bus"
+msgstr "Bus abschließen"
 
 #: eeschema/tools/ee_actions.cpp:730
 msgid "Complete bus with current segment"
@@ -16759,7 +16759,7 @@ msgstr "Beenden Verlegen des Busses am aktuellen Segement"
 
 #: eeschema/tools/ee_actions.cpp:735
 msgid "Finish Lines"
-msgstr "Beenden Linien"
+msgstr "Linien abschließen"
 
 #: eeschema/tools/ee_actions.cpp:735
 msgid "Complete connected lines with current segment"
@@ -26942,7 +26942,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:62
 msgid "Suggest track finish"
-msgstr "Vorschlag Beendigung Leiterbahn"
+msgstr "Leiterbahn-Abschluss vorschlagen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 msgid "Optimize entire track being dragged"
@@ -31024,7 +31024,7 @@ msgstr "Inhalt der Zwischenablage ist nicht kompatibel mit KiCad"
 #: pcbnew/load_select_footprint.cpp:265
 #, c-format
 msgid "Choose Footprint (%d items loaded)"
-msgstr "Auswahl Footprint (%d Elemente geladen)"
+msgstr "Footprint wählen (%d Elemente geladen)"
 
 #: pcbnew/load_select_footprint.cpp:367
 #, c-format
@@ -33622,7 +33622,7 @@ msgstr "Beendet die Verlegung der aktuellen Leiterbahn."
 
 #: pcbnew/router/router_tool.cpp:97
 msgid "Auto-finish Track"
-msgstr "Automatisches beenden Leiterbahn"
+msgstr "Leiterbahn automatisch abschließen"
 
 #: pcbnew/router/router_tool.cpp:97
 msgid "Automatically finishes laying the current track."
@@ -35243,7 +35243,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:533
 msgid "Finish Pad Edit"
-msgstr "Pad-Bearbeitung beenden"
+msgstr "Pad-Bearbeitung abschließen"
 
 #: pcbnew/tools/pcb_actions.cpp:534
 msgid "Regroups all touching graphic shapes into the edited pad"
