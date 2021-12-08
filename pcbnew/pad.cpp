@@ -50,6 +50,7 @@
 #include <wx/log.h>
 
 #include <memory>
+#include <macros.h>
 
 using KIGFX::PCB_PAINTER;
 using KIGFX::PCB_RENDER_SETTINGS;
@@ -214,32 +215,55 @@ bool PAD::FlashLayer( int aLayer ) const
     std::vector<KICAD_T> types
     { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_ZONE_T, PCB_FP_ZONE_T };
 
-    // Return the "normal" shape if the caller doesn't specify a particular layer
-    if( aLayer == UNDEFINED_LAYER )
-        return true;
-
     const BOARD* board = GetBoard();
 
-    if( !board )
-        return false;
+    switch( GetAttribute() )
+    {
+    case PAD_ATTRIB::PTH:
+        if( aLayer == UNDEFINED_LAYER )
+            return true;
 
-    /// We don't remove the copper from non-PTH pads
-    if( GetAttribute() != PAD_ATTRIB::PTH )
+        /// Heat sink pads always get copper
+        if( GetProperty() == PAD_PROP::HEATSINK )
+            return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
+
+        if( !m_removeUnconnectedLayer )
+            return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
+
+        // Plated through hole pads need copper on the top/bottom layers for proper soldering
+        // Unless the user has removed them in the pad dialog
+        if( m_keepTopBottomLayer && ( aLayer == F_Cu || aLayer == B_Cu ) )
+            return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
+
+        return board && board->GetConnectivity()->IsConnectedOnLayer( this,
+                                                                      static_cast<int>( aLayer ),
+                                                                      types );
+
+    case PAD_ATTRIB::NPTH:
+        if( GetShape() == PAD_SHAPE::CIRCLE && GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
+        {
+            if( GetOffset() == wxPoint( 0, 0 ) && GetDrillSize().x >= GetSize().x )
+                return false;
+        }
+        else if( GetShape() == PAD_SHAPE::OVAL && GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )
+        {
+            if( GetOffset() == wxPoint( 0, 0 )
+                    && GetDrillSize().x >= GetSize().x && GetDrillSize().y >= GetSize().y )
+            {
+                return false;
+            }
+        }
+
+        KI_FALLTHROUGH;
+
+    case PAD_ATTRIB::SMD:
+    case PAD_ATTRIB::CONN:
+    default:
+        if( aLayer == UNDEFINED_LAYER )
+            return true;
+
         return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
-
-    /// Heat sink pads always get copper
-    if( GetProperty() == PAD_PROP::HEATSINK )
-        return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
-
-    if( !m_removeUnconnectedLayer )
-        return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
-
-    // Plated through hole pads need copper on the top/bottom layers for proper soldering
-    // Unless the user has removed them in the pad dialog
-    if( m_keepTopBottomLayer && ( aLayer == F_Cu || aLayer == B_Cu ) )
-        return IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
-
-    return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<int>( aLayer ), types );
+    }
 }
 
 
@@ -1150,6 +1174,12 @@ wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
                                      GetParent()->GetReference(),
                                      layerMaskDescribe() );
         }
+        else if( GetAttribute() == PAD_ATTRIB::NPTH && !FlashLayer( UNDEFINED_LAYER ) )
+        {
+            return wxString::Format( _( "Through hole pad %s of %s" ),
+                                     wxT( "(" ) + _( "NPTH, Mechanical" ) + wxT( ")" ),
+                                     GetParent()->GetReference() );
+        }
         else
         {
             return wxString::Format( _( "Through hole pad %s of %s" ),
@@ -1166,6 +1196,12 @@ wxString PAD::GetSelectMenuText( EDA_UNITS aUnits ) const
                                      GetNetnameMsg(),
                                      GetParent()->GetReference(),
                                      layerMaskDescribe() );
+        }
+        else if( GetAttribute() == PAD_ATTRIB::NPTH && !FlashLayer( UNDEFINED_LAYER ) )
+        {
+            return wxString::Format( _( "Through hole pad %s of %s" ),
+                                     wxT( "(" ) + _( "NPTH, Mechanical" ) + wxT( ")" ),
+                                     GetParent()->GetReference() );
         }
         else
         {
