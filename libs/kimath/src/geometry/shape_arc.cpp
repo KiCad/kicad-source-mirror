@@ -242,6 +242,8 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I
     std::vector<VECTOR2I> candidatePts = circle.Intersect( aSeg );
 
     candidatePts.push_back( aSeg.NearestPoint( center ) );
+    candidatePts.push_back( aSeg.NearestPoint( m_start ) );
+    candidatePts.push_back( aSeg.NearestPoint( m_end ) );
     candidatePts.push_back( aSeg.A );
     candidatePts.push_back( aSeg.B );
 
