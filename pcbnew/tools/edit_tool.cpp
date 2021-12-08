@@ -1726,18 +1726,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    auto isSelectedForDelete =
-            []( BOARD_ITEM* aItem )
-            {
-                for( BOARD_ITEM* item = aItem; item; item = item->GetParentGroup() )
-                {
-                    if( item->IsSelected() )
-                        return true;
-                }
-
-                return false;
-            };
-
     std::vector<BOARD_ITEM*> lockedItems;
     Activate();
 
