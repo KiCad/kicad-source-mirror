@@ -392,7 +392,12 @@ public:
     /**
      * @return the list of #SCH_SHEET_INSTANCE objects for this sheet.
      */
-    const std::vector<SCH_SHEET_INSTANCE> GetInstances() const;
+    const std::vector<SCH_SHEET_INSTANCE>& GetInstances() const { return m_instances; }
+
+    void SetInstances( const std::vector<SCH_SHEET_INSTANCE>& aInstances )
+    {
+        m_instances = aInstances;
+    }
 
     /**
      * Add a new instance \a aSheetPath to the instance list.
@@ -401,13 +406,23 @@ public:
      * in the list, do nothing.  Sheet instances allow for the sharing in complex hierarchies
      * which allows for per instance data such as page number for sheets to stored.
      *
-     * @param[in] aInstance is the #KIID_PATH of the sheet instance to the instance list.
+     * @warning The #SCH_SHEET_PATH object must be a full hierarchical path which means the
+     *          #SCH_SHEET object at index 0 must be the root sheet.  A partial sheet path
+     *          will raise an assertion on debug builds and silently fail and return false
+     *          on release builds.
+     *
+     * @param[in] aInstance is the #SCH_SHEET_PATH of the sheet instance to the instance list.
      * @return false if the instance already exists, true if the instance was added.
      */
-    bool AddInstance( const KIID_PATH& aInstance );
+    bool AddInstance( const SCH_SHEET_PATH& aInstance );
 
     /**
      * Return the sheet page number for \a aInstance.
+     *
+     * @warning The #SCH_SHEET_PATH object must be a full hierarchical path which means the
+     *          #SCH_SHEET object at index 0 must be the root sheet.  A partial sheet path
+     *          will raise an assertion on debug builds and silently fail and return an empty
+     *          page number on release builds.
      *
      * @return the page number for the requested sheet instance.
      */
@@ -415,6 +430,11 @@ public:
 
     /**
      * Set the page number for the sheet instance \a aInstance.
+     *
+     * @warning The #SCH_SHEET_PATH object must be a full hierarchical path which means the
+     *          #SCH_SHEET object at index 0 must be the root sheet.  A partial sheet path
+     *          will raise an assertion on debug builds and silently fail and return on release
+     *          builds.
      *
      * @param[in] aInstance is the hierarchical path of the sheet.
      * @param[in] aReference is the new page number for the sheet.

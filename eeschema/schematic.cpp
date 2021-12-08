@@ -398,7 +398,6 @@ SCH_SHEET_LIST& SCHEMATIC::GetFullHierarchy() const
 
     hierarchy.clear();
     hierarchy.BuildSheetList( m_rootSheet, false );
-    hierarchy.SortByPageNumbers();
 
     return hierarchy;
 }

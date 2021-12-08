@@ -1543,7 +1543,7 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
     SCH_SHEET_PATH sheetPath = aPastePath;
     sheetPath.push_back( aSheet );
 
-    aSheet->AddInstance( sheetPath.Path() );
+    aSheet->AddInstance( sheetPath );
 
     wxString pageNum;
 

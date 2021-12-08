@@ -126,6 +126,12 @@ void SCH_SHEET_PATH::initFromOther( const SCH_SHEET_PATH& aOther )
 }
 
 
+bool SCH_SHEET_PATH::IsFullPath() const
+{
+    return GetSheet( 0 ) && GetSheet( 0 )->IsRootSheet();
+}
+
+
 void SCH_SHEET_PATH::Rehash()
 {
     m_current_hash = 0;
@@ -523,7 +529,9 @@ SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet, bool aCheckIntegrity )
     if( aSheet != nullptr )
     {
         BuildSheetList( aSheet, aCheckIntegrity );
-        SortByPageNumbers();
+
+        if( aSheet->IsRootSheet() )
+            SortByPageNumbers();
     }
 }
 
@@ -580,7 +588,7 @@ void SCH_SHEET_LIST::SortByPageNumbers( bool aUpdateVirtualPageNums )
     std::sort( begin(), end(),
         []( SCH_SHEET_PATH a, SCH_SHEET_PATH b ) -> bool
         {
-             return a.ComparePageNumAndName(b) < 0;
+             return a.ComparePageNumAndName( b ) < 0;
         } );
 
     if( aUpdateVirtualPageNums )
@@ -944,27 +952,30 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
 void SCH_SHEET_LIST::UpdateSheetInstances( const std::vector<SCH_SHEET_INSTANCE>& aSheetInstances )
 {
 
-    for( const SCH_SHEET_PATH& instance : *this )
+    for( const SCH_SHEET_PATH& path : *this )
     {
+        SCH_SHEET* sheet = path.Last();
+
+        wxCHECK2( sheet, continue );
+
         auto it = std::find_if( aSheetInstances.begin(), aSheetInstances.end(),
-                                [ instance ]( const SCH_SHEET_INSTANCE& r ) -> bool
+                                [ path ]( const SCH_SHEET_INSTANCE& r ) -> bool
                                 {
-                                    return instance.PathWithoutRootUuid() == r.m_Path;
+                                    return path.PathWithoutRootUuid() == r.m_Path;
                                 } );
 
         if( it == aSheetInstances.end() )
         {
             wxLogTrace( traceSchSheetPaths, "No sheet instance found for path '%s'",
-                        instance.PathWithoutRootUuid().AsString() );
+                        path.PathWithoutRootUuid().AsString() );
             continue;
         }
 
-        SCH_SHEET* sheet = instance.Last();
-
-        wxCHECK2( sheet, continue );
-
-        sheet->AddInstance( instance.Path() );
-        sheet->SetPageNumber( instance, it->m_PageNumber );
+        wxLogTrace( traceSchSheetPaths, "Setting sheet '%s' instance '%s' page number '%s'",
+                    ( sheet->GetName().IsEmpty() ) ? wxT( "root" ) : sheet->GetName(),
+                    path.PathWithoutRootUuid().AsString(), it->m_PageNumber );
+        sheet->AddInstance( path );
+        sheet->SetPageNumber( path, it->m_PageNumber );
     }
 }
 
@@ -986,11 +997,11 @@ std::vector<SCH_SHEET_INSTANCE> SCH_SHEET_LIST::GetSheetInstances() const
 
     for( const SCH_SHEET_PATH& path : *this )
     {
-        SCH_SHEET_INSTANCE instance;
         const SCH_SHEET* sheet = path.Last();
 
         wxCHECK2( sheet, continue );
 
+        SCH_SHEET_INSTANCE instance;
         instance.m_Path = path.PathWithoutRootUuid();
         instance.m_PageNumber = sheet->GetPageNumber( path );
 
@@ -1031,7 +1042,7 @@ void SCH_SHEET_LIST::SetInitialPageNumbers()
 
         wxCHECK2( sheet, continue );
 
-        sheet->AddInstance( instance.Path() );
+        sheet->AddInstance( instance );
         tmp.Printf( "%d", pageNumber );
         sheet->SetPageNumber( instance, tmp );
         pageNumber += 1;

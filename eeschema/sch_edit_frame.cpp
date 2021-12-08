@@ -583,7 +583,7 @@ void SCH_EDIT_FRAME::CreateScreens()
     SCH_SHEET_PATH rootSheetPath;
     rootSheetPath.push_back( &m_schematic->Root() );
     m_schematic->RootScreen()->SetPageNumber( wxT( "1" ) );
-    m_schematic->Root().AddInstance( rootSheetPath.Path() );
+    m_schematic->Root().AddInstance( rootSheetPath );
     m_schematic->Root().SetPageNumber( rootSheetPath, wxT( "1" ) );
 
     if( GetScreen() == nullptr )

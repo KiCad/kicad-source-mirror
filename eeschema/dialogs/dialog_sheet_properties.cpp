@@ -374,7 +374,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     instance.push_back( m_sheet );
 
     if( m_sheet->IsNew() )
-        m_sheet->AddInstance( instance.Path() );
+        m_sheet->AddInstance( instance );
 
     m_sheet->SetPageNumber( instance, m_pageNumberTextCtrl->GetValue() );
 
@@ -412,6 +412,8 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
         return false;
     }
 
+    SCH_SHEET_LIST fullHierarchy = m_frame->Schematic().GetFullHierarchy();
+    std::vector<SCH_SHEET_INSTANCE> sheetInstances = fullHierarchy.GetSheetInstances();
     wxFileName screenFileName( sheetFileName );
     wxFileName tmp( sheetFileName );
 
@@ -632,6 +634,11 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
         if( restoreSheet )
             currentSheet.LastScreen()->Append( m_sheet );
+
+        // The full hiearchy needs to be reloaded because any sub-sheet that occurred on
+        // file load will have new SCH_SHEET object pointers.
+        fullHierarchy = m_frame->Schematic().GetFullHierarchy();
+        fullHierarchy.UpdateSheetInstances( sheetInstances );
     }
 
     if( m_clearAnnotationNewItems )

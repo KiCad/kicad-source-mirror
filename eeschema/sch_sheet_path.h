@@ -202,6 +202,8 @@ public:
         return retv;
     }
 
+    bool IsFullPath() const;
+
     /**
      * Compare if this is the same sheet path as \a aSheetPathToTest.
      *
@@ -563,6 +565,11 @@ public:
 
     std::vector<KIID_PATH> GetPaths() const;
 
+    /**
+     * Fetch the instance information for all of the sheets in the hiearchy.
+     *
+     * @return all of the sheet instance data for the hierarchy.
+     */
     std::vector<SCH_SHEET_INSTANCE> GetSheetInstances() const;
 
     /**

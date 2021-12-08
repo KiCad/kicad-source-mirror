@@ -180,7 +180,7 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
         SCH_SHEET_PATH sheetpath;
         sheetpath.push_back( m_rootSheet );
 
-        m_rootSheet->AddInstance( sheetpath.Path() );
+        m_rootSheet->AddInstance( sheetpath );
         m_rootSheet->SetPageNumber( sheetpath, "#" );   // We'll update later if we find a
                                                         // pageNumber record for it
     }
@@ -1520,7 +1520,7 @@ void SCH_ALTIUM_PLUGIN::ParseSheetSymbol( int aIndex,
     m_rootSheet->LocatePathOfScreen( m_currentSheet->GetScreen(), &sheetpath );
     sheetpath.push_back( sheet );
 
-    sheet->AddInstance( sheetpath.Path() );
+    sheet->AddInstance( sheetpath );
     sheet->SetPageNumber( sheetpath, "#" );   // We'll update later if we find a pageNumber
                                               // record for it
 
