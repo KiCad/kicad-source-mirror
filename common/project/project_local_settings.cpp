@@ -44,6 +44,9 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
         m_SelectionFilter(),
         m_project( aProject )
 {
+    // Keep old files around
+    m_deleteLegacyAfterMigration = false;
+
     m_params.emplace_back( new PARAM_LAMBDA<std::string>( "board.visible_layers",
             [&]() -> std::string
             {
