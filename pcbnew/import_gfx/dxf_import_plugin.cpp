@@ -272,6 +272,7 @@ double DXF_IMPORT_PLUGIN::lineWeightToWidth( int lw, DXF_IMPORT_LAYER* aLayer )
 
     // All lineweights >= 0 are always in 100ths of mm
     double mm = m_defaultThickness;
+
     if( lw >= 0 )
     {
         mm = lw / 100.0;
@@ -382,10 +383,11 @@ void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
     double lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
 
     /* support for per-vertex-encoded linewidth (Cadence uses it) */
+    /* linewidths are scaled by 100 in DXF */
     if( aData.startWidth > 0.0 )
-        lineWidth = aData.startWidth;
+        lineWidth = aData.startWidth / 100.0;
     else if ( aData.endWidth > 0.0 )
-        lineWidth = aData.endWidth;
+        lineWidth = aData.endWidth / 100.0;
 
     const DL_VertexData* vertex = &aData;
 
