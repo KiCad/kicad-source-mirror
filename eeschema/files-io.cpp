@@ -1230,8 +1230,9 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             if( fileType == SCH_IO_MGR::SCH_CADSTAR_ARCHIVE )
             {
                 FixupJunctions();
-                RecalculateConnections( GLOBAL_CLEANUP );
             }
+
+            RecalculateConnections( GLOBAL_CLEANUP );
 
             // Only perform the dangling end test on root sheet.
             GetScreen()->TestDanglingEnds();
