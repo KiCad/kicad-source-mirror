@@ -764,6 +764,10 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         {
             for( PAD* pad : footprint->Pads() )
                 sel_items.push_back( pad );
+
+            // Clear this flag here; it will be set by the netlist updater if the footprint is new
+            // so that it was skipped in the initial connectivity update in OnNetlistChanged
+            footprint->SetAttributes( footprint->GetAttributes() & ~FP_JUST_ADDED );
         }
     }
 
