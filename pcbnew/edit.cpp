@@ -75,7 +75,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
+void PCB_EDIT_FRAME::SwitchLayer( PCB_LAYER_ID layer )
 {
     PCB_LAYER_ID curLayer = GetActiveLayer();
     auto displ_opts = GetDisplayOptions();

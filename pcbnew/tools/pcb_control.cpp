@@ -354,7 +354,7 @@ int PCB_CONTROL::RatsnestModeCycle( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::LayerSwitch( const TOOL_EVENT& aEvent )
 {
-    m_frame->SwitchLayer( nullptr, aEvent.Parameter<PCB_LAYER_ID>() );
+    m_frame->SwitchLayer( aEvent.Parameter<PCB_LAYER_ID>() );
 
     return 0;
 }
@@ -380,7 +380,7 @@ int PCB_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
     }
 
     wxCHECK( IsCopperLayer( layer ), 0 );
-    editFrame->SwitchLayer( nullptr, ToLAYER_ID( layer ) );
+    editFrame->SwitchLayer( ToLAYER_ID( layer ) );
 
     return 0;
 }
@@ -410,7 +410,7 @@ int PCB_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 
 
     wxCHECK( IsCopperLayer( layer ), 0 );
-    editFrame->SwitchLayer( nullptr, ToLAYER_ID( layer ) );
+    editFrame->SwitchLayer( ToLAYER_ID( layer ) );
 
     return 0;
 }
@@ -422,9 +422,9 @@ int PCB_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
     PCB_SCREEN* screen = m_frame->GetScreen();
 
     if( currentLayer == screen->m_Route_Layer_TOP )
-        m_frame->SwitchLayer( nullptr, screen->m_Route_Layer_BOTTOM );
+        m_frame->SwitchLayer( screen->m_Route_Layer_BOTTOM );
     else
-        m_frame->SwitchLayer( nullptr, screen->m_Route_Layer_TOP );
+        m_frame->SwitchLayer( screen->m_Route_Layer_TOP );
 
     return 0;
 }

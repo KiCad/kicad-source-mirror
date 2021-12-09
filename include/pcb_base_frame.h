@@ -351,7 +351,12 @@ public:
     PCB_LAYER_ID SelectOneLayer( PCB_LAYER_ID aDefaultLayer, LSET aNotAllowedLayersMask = LSET(),
                               wxPoint aDlgPosition = wxDefaultPosition );
 
-    virtual void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer );
+    /**
+     * Change the active layer in the frame
+     *
+     * @param aLayer New layer to make active
+     */
+    virtual void SwitchLayer( PCB_LAYER_ID aLayer );
 
     virtual void SetActiveLayer( PCB_LAYER_ID aLayer ) { GetScreen()->m_Active_Layer = aLayer; }
     virtual PCB_LAYER_ID GetActiveLayer() const { return GetScreen()->m_Active_Layer; }

@@ -576,7 +576,7 @@ EDA_3D_VIEWER_FRAME* PCB_BASE_FRAME::CreateAndShow3D_Frame()
 }
 
 
-void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
+void PCB_BASE_FRAME::SwitchLayer( PCB_LAYER_ID layer )
 {
     PCB_LAYER_ID preslayer = GetActiveLayer();
     auto& displ_opts = GetDisplayOptions();

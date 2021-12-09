@@ -548,7 +548,12 @@ public:
      */
     void OnEditItemRequest( BOARD_ITEM* aItem ) override;
 
-    void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer ) override;
+    /**
+     * Change the active layer in the editor
+     *
+     * @param layer New layer to make active
+     */
+    void SwitchLayer( PCB_LAYER_ID layer ) override;
 
     /**
      * Modify one track segment width or one via diameter (using DRC control).
