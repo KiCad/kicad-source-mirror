@@ -1731,6 +1731,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     {
         p = snapToItem( startItem, p0 );
         m_startItem = startItem;
+
+        if( m_startItem && m_startItem->Net() > 0 )
+            highlightNet( true, m_startItem->Net() );
     }
     else if( footprint )
     {
@@ -1934,6 +1937,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
     frame()->UndoRedoBlock( false );
+    highlightNet( false );
 
     return 0;
 }
