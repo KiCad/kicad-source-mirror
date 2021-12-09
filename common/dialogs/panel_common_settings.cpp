@@ -95,40 +95,42 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
 #endif
 
    	/*
-   	 * Automatic canvas scaling works fine on Mac and MSW, and on GTK under wxWidgets 3.1 or
-   	 * better.
+   	 * Automatic canvas scaling works fine on all supported platforms, so manual scaling is disabled
    	 */
-#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
-   	static constexpr int dpi_scaling_precision = 1;
-   	static constexpr double dpi_scaling_increment = 0.5;
+    if( ADVANCED_CFG::GetCfg().m_AllowManualCanvasScale )
+    {
+        static constexpr int    dpi_scaling_precision = 1;
+        static constexpr double dpi_scaling_increment = 0.5;
 
-    m_canvasScaleCtrl->SetRange( DPI_SCALING::GetMinScaleFactor(),
-                                 DPI_SCALING::GetMaxScaleFactor() );
-    m_canvasScaleCtrl->SetDigits( dpi_scaling_precision );
-    m_canvasScaleCtrl->SetIncrement( dpi_scaling_increment );
-    m_canvasScaleCtrl->SetValue( DPI_SCALING::GetDefaultScaleFactor() );
+        m_canvasScaleCtrl->SetRange( DPI_SCALING::GetMinScaleFactor(),
+                                     DPI_SCALING::GetMaxScaleFactor() );
+        m_canvasScaleCtrl->SetDigits( dpi_scaling_precision );
+        m_canvasScaleCtrl->SetIncrement( dpi_scaling_increment );
+        m_canvasScaleCtrl->SetValue( DPI_SCALING::GetDefaultScaleFactor() );
 
-    m_canvasScaleCtrl->SetToolTip(
-            _( "Set the scale for the canvas."
-               "\n\n"
-               "On high-DPI displays on some platforms, KiCad cannot determine the "
-               "scaling factor. In this case you may need to set this to a value to "
-               "match your system's DPI scaling. 2.0 is a common value. "
-               "\n\n"
-               "If this does not match the system DPI scaling, the canvas will "
-               "not match the window size and cursor position." ) );
+        m_canvasScaleCtrl->SetToolTip(
+                _( "Set the scale for the canvas."
+                   "\n\n"
+                   "On high-DPI displays on some platforms, KiCad cannot determine the "
+                   "scaling factor. In this case you may need to set this to a value to "
+                   "match your system's DPI scaling. 2.0 is a common value. "
+                   "\n\n"
+                   "If this does not match the system DPI scaling, the canvas will "
+                   "not match the window size and cursor position." ) );
 
-    m_canvasScaleAuto->SetToolTip(
-            _( "Use an automatic value for the canvas scale."
-               "\n\n"
-               "On some platforms, the automatic value is incorrect and should be "
-               "set manually." ) );
-#else
-    m_staticTextCanvasScale->Show( false );
-    m_canvasScaleCtrl->Show( false );
-    m_canvasScaleCtrl = nullptr;
-    m_canvasScaleAuto->Show( false );
-#endif
+        m_canvasScaleAuto->SetToolTip(
+                _( "Use an automatic value for the canvas scale."
+                   "\n\n"
+                   "On some platforms, the automatic value is incorrect and should be "
+                   "set manually." ) );
+    }
+    else
+    {
+        m_staticTextCanvasScale->Show( false );
+        m_canvasScaleCtrl->Show( false );
+        m_canvasScaleCtrl = nullptr;
+        m_canvasScaleAuto->Show( false );
+    }
 
     /*
      * Font scaling hacks are only needed on GTK under wxWidgets 3.0.

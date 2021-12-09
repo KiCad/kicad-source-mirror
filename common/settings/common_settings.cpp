@@ -77,15 +77,10 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 #endif
 
     /*
-   	 * Automatic canvas scaling works fine on Mac and MSW, and on GTK under wxWidgets 3.1 or
-     * better.
+   	 * Automatic canvas scaling works fine on all supported platforms, so it's no longer exposed as
+     * a configuration option.
      */
-#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
-    m_params.emplace_back( new PARAM<double>( "appearance.canvas_scale",
-            &m_Appearance.canvas_scale, 1.0 ) );
-#else
     m_Appearance.canvas_scale = 0.0;
-#endif
 
     /*
      * Menu icons are off by default on OSX and on for all other platforms.

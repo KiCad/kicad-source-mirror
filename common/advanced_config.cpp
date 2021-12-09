@@ -181,6 +181,8 @@ static const wxChar ShowRepairSchematic[] = wxT( "ShowRepairSchematic" );
 
 static const wxChar ShowEventCounters[] = wxT( "ShowEventCounters" );
 
+static const wxChar AllowManualCanvasScale[] = wxT( "AllowManualCanvasScale" );
+
 } // namespace KEYS
 
 
@@ -288,6 +290,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_Skip3DModelMemoryCache    = false;
     m_HideVersionFromTitle      = false;
     m_ShowEventCounters         = false;
+    m_AllowManualCanvasScale    = false;
 
     loadFromConfigFile();
 }
@@ -406,6 +409,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowEventCounters,
                                                 &m_ShowEventCounters, false ) );
 
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::AllowManualCanvasScale,
+                                                &m_AllowManualCanvasScale, false ) );
+
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
     wxString traceMasks = "";
@@ -416,6 +422,7 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     // Now actually set the trace masks
     wxStringTokenizer traceMaskTokenizer( traceMasks, "," );
+
     while( traceMaskTokenizer.HasMoreTokens() )
     {
         wxString mask = traceMaskTokenizer.GetNextToken();

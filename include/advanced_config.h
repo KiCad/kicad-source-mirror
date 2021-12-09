@@ -202,6 +202,8 @@ public:
      */
     bool m_ShowEventCounters;
 
+    bool m_AllowManualCanvasScale;
+
 private:
     ADVANCED_CFG();
 
