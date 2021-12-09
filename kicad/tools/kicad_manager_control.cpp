@@ -358,7 +358,7 @@ public:
     virtual wxDirTraverseResult OnFile( const wxString& aSrcFilePath ) override
     {
         // Recursion guard for a Save As to a location inside the source project.
-        if( aSrcFilePath.StartsWith( m_newProjectDirPath ) )
+        if( aSrcFilePath.StartsWith( m_newProjectDirPath + wxFileName::GetPathSeparator() ) )
             return wxDIR_CONTINUE;
 
         wxFileName destFile( aSrcFilePath );
