@@ -185,10 +185,9 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
     LIB_TABLE_ROW* row = nullptr;
     LIB_TABLE* cur = (LIB_TABLE*) this;
 
-    std::lock_guard<std::recursive_mutex> lock( m_nickIndexMutex );
-
     do
     {
+        std::lock_guard<std::recursive_mutex> lock( cur->m_nickIndexMutex );
         cur->ensureIndex();
 
         for( const std::pair<const wxString, int>& entry : cur->nickIndex )
