@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-08 21:51+0000\n"
-"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
+"PO-Revision-Date: 2021-12-10 00:39+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -6526,9 +6526,8 @@ msgid "All KiCad project files"
 msgstr "所有 KiCad 工程文件"
 
 #: common/wildcards_and_files_ext.cpp:235
-#, fuzzy
 msgid "All KiCad schematic files"
-msgstr "Altium 原理图文件"
+msgstr "所有 KiCad 原理图文件"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad legacy schematic files"
@@ -16141,14 +16140,12 @@ msgid "Switch H & V only mode for new wires and buses"
 msgstr "切换连线和总线正交模式"
 
 #: eeschema/tools/ee_actions.cpp:655
-#, fuzzy
 msgid "Repair Schematic"
-msgstr "创建原理图"
+msgstr "修复原理图"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr "运行各种诊断程序并尝试修复电路板"
+msgstr "运行各种诊断程序并尝试修复原理图"
 
 #: eeschema/tools/ee_actions.cpp:662 pcbnew/tools/pcb_actions.cpp:786
 msgid "Scripting Console"
