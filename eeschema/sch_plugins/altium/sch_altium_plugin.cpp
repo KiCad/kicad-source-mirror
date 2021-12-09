@@ -177,6 +177,8 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
         m_rootSheet = new SCH_SHEET( aSchematic );
         m_rootSheet->SetFileName( fileName.GetFullPath() );
 
+        aSchematic->SetRoot( m_rootSheet );
+
         SCH_SHEET_PATH sheetpath;
         sheetpath.push_back( m_rootSheet );
 

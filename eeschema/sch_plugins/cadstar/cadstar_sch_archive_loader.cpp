@@ -103,25 +103,25 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
 
     loadTextVariables(); // Load text variables right at the start to ensure bounding box
                          // calculations work correctly for text items
-        checkPoint(); // Step 1
+    checkPoint(); // Step 1
     loadSheets();
-        checkPoint(); // Step 2
+    checkPoint(); // Step 2
     loadHierarchicalSheetPins();
-        checkPoint(); // Step 3
+    checkPoint(); // Step 3
     loadPartsLibrary();
-        checkPoint(); // Step 4, Subdivided into extra steps
+    checkPoint(); // Step 4, Subdivided into extra steps
     loadSchematicSymbolInstances();
-        checkPoint(); // Step 5
+    checkPoint(); // Step 5
     loadBusses();
-        checkPoint(); // Step 6
+    checkPoint(); // Step 6
     loadNets();
-        checkPoint(); // Step 7
+    checkPoint(); // Step 7
     loadFigures();
-        checkPoint(); // Step 8
+    checkPoint(); // Step 8
     loadTexts();
-        checkPoint(); // Step 9
+    checkPoint(); // Step 9
     loadDocumentationSymbols();
-        checkPoint(); // Step 10
+    checkPoint(); // Step 10
 
     if( Schematic.VariantHierarchy.Variants.size() > 0 )
     {
