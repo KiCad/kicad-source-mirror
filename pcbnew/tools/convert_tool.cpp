@@ -255,7 +255,9 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
     // TODO: This code has a somewhat-similar purpose to ConvertOutlineToPolygon but is slightly
     // different, so this remains a separate algorithm.  It might be nice to analyze the dfiferences
     // in requirements and refactor this.
-    const int chainingEpsilon = Millimeter2iu( 0.02 );
+
+    // Very tight epsilon used here to account for rounding errors in import, not sloppy drawing
+    const int chainingEpsilonSquared = SEG::Square( 100 );
 
     SHAPE_POLY_SET poly;
 
@@ -267,15 +269,18 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromSegs( const std::deque<EDA_ITEM*>& aIt
     auto closeEnough =
             []( VECTOR2I aLeft, VECTOR2I aRight, unsigned aLimit )
             {
-                return ( aLeft - aRight ).SquaredEuclideanNorm() <= SEG::Square( aLimit );
+                return ( aLeft - aRight ).SquaredEuclideanNorm() <= aLimit;
             };
 
     auto findInsertionPoint =
             [&]( VECTOR2I aPoint ) -> VECTOR2I
             {
+                if( connections.count( aPoint ) )
+                    return aPoint;
+
                 for( const auto& candidatePair : connections )
                 {
-                    if( closeEnough( aPoint, candidatePair.first, chainingEpsilon ) )
+                    if( closeEnough( aPoint, candidatePair.first, chainingEpsilonSquared ) )
                         return candidatePair.first;
                 }
 
