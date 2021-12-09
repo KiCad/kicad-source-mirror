@@ -178,6 +178,12 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent )
         footprint->SetParent( m_board );
         footprint->SetPosition( estimateFootprintInsertionPosition() );
 
+        // This flag is used to prevent connectivity from considering the footprint during its
+        // initial build after the footprint is committed, because we're going to immediately start
+        // a move operation on the footprint and don't want its pads to drive nets onto vias/tracks
+        // it happens to land on at the initial position.
+        footprint->SetAttributes( footprint->GetAttributes() | FP_JUST_ADDED );
+
         m_addedFootprints.push_back( footprint );
         m_commit.Add( footprint );
 

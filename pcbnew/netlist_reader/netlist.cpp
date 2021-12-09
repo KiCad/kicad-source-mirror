@@ -114,7 +114,10 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
     if( !newFootprints.empty() )
     {
         for( FOOTPRINT* footprint : newFootprints )
+        {
+            footprint->SetAttributes( footprint->GetAttributes() & ~FP_JUST_ADDED );
             GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, footprint );
+        }
 
         *aRunDragCommand = true;
 

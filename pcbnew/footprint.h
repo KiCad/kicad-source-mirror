@@ -69,7 +69,8 @@ enum FOOTPRINT_ATTR_T
     FP_SMD                    = 0x0002,
     FP_EXCLUDE_FROM_POS_FILES = 0x0004,
     FP_EXCLUDE_FROM_BOM       = 0x0008,
-    FP_BOARD_ONLY             = 0x0010    // Footprint has no corresponding symbol
+    FP_BOARD_ONLY             = 0x0010,   // Footprint has no corresponding symbol
+    FP_JUST_ADDED             = 0x0020    // Footprint just added by netlist update
 };
 
 class FP_3DMODEL

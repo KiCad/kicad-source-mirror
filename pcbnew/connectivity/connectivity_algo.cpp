@@ -118,8 +118,6 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
     if( !aItem->IsOnCopperLayer() )
         return false;
 
-    markItemNetAsDirty ( aItem );
-
     switch( aItem->Type() )
     {
     case PCB_NETINFO_T:
@@ -127,6 +125,10 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         break;
 
     case PCB_FOOTPRINT_T:
+    {
+        if( static_cast<FOOTPRINT*>( aItem )->GetAttributes() & FP_JUST_ADDED )
+            return false;
+
         for( PAD* pad : static_cast<FOOTPRINT*>( aItem )->Pads() )
         {
             if( m_itemMap.find( pad ) != m_itemMap.end() )
@@ -136,13 +138,22 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         }
 
         break;
+    }
 
     case PCB_PAD_T:
-        if( m_itemMap.find ( aItem ) != m_itemMap.end() )
+    {
+        if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem->GetParentFootprint() ) )
+        {
+            if( fp->GetAttributes() & FP_JUST_ADDED )
+                return false;
+        }
+
+        if( m_itemMap.find( aItem ) != m_itemMap.end() )
             return false;
 
         add( m_itemList, static_cast<PAD*>( aItem ) );
         break;
+    }
 
     case PCB_TRACE_T:
         if( m_itemMap.find( aItem ) != m_itemMap.end() )
@@ -185,6 +196,8 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
     default:
         return false;
     }
+
+    markItemNetAsDirty( aItem );
 
     return true;
 }
