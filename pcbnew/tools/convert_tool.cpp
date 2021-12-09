@@ -218,15 +218,25 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
         bool nonCopper = IsNonCopperLayer( destLayer );
         zoneInfo.m_Layers.reset().set( destLayer );
+        zoneInfo.m_Name.Empty();
 
         int ret;
 
         if( aEvent.IsAction( &PCB_ACTIONS::convertToKeepout ) )
+        {
+            zoneInfo.SetIsRuleArea( true );
             ret = InvokeRuleAreaEditor( frame, &zoneInfo );
+        }
         else if( nonCopper )
+        {
+            zoneInfo.SetIsRuleArea( false );
             ret = InvokeNonCopperZonesEditor( frame, &zoneInfo );
+        }
         else
+        {
+            zoneInfo.SetIsRuleArea( false );
             ret = InvokeCopperZonesEditor( frame, &zoneInfo );
+        }
 
         if( ret == wxID_CANCEL )
             return 0;
