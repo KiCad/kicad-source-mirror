@@ -1,20 +1,21 @@
 # Alex Gellen <alex.n.gellen@gmail.com>, 2021.
+# Adrian Scripcă <benishor@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-07-17 23:10+0000\n"
-"Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
-"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ro/>\n"
+"PO-Revision-Date: 2021-12-09 16:57+0000\n"
+"Last-Translator: Adrian Scripcă <benishor@gmail.com>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #, fuzzy
@@ -210,7 +211,7 @@ msgstr "Raytracing"
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:232
 #: pcbnew/menubar_pcb_editor.cpp:445
 msgid "Preferences..."
-msgstr "Preferinte..."
+msgstr "Preferinţe..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:113 common/tool/actions.cpp:600
 #: cvpcb/menubar.cpp:75 eeschema/menubar.cpp:277
@@ -237,7 +238,7 @@ msgstr "Grilă 3D"
 #: pcbnew/menubar_footprint_editor.cpp:242 pcbnew/menubar_pcb_editor.cpp:456
 #: pcbnew/toolbars_footprint_viewer.cpp:181
 msgid "&File"
-msgstr "&Fisier"
+msgstr "&Fişier"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:146 cvpcb/menubar.cpp:88
 #: eeschema/menubar.cpp:288
@@ -267,7 +268,7 @@ msgstr "Reîncarcă placa"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:60
 msgid "Copy 3D image to clipboard"
-msgstr "Copiați imaginea 3D în mapă"
+msgstr "Copiați imaginea 3D în clipboard"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 msgid "Render current view using Raytracing"
@@ -293,12 +294,11 @@ msgstr "General"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
 msgid "Realtime Renderer"
-msgstr ""
+msgstr "Randare în timp real"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "Opțiuni de randare Raytracing"
+msgstr "Randare Raytracing"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:247
@@ -331,7 +331,7 @@ msgstr "Eroare"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:715
 msgid "Failed to copy image to clipboard"
-msgstr "Nu s-a reușit copierea imaginii în mapă"
+msgstr "Nu s-a reușit copierea imaginii în clipboard"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "Can't save file"
