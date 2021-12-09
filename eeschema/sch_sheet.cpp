@@ -413,7 +413,21 @@ int bumpToNextGrid( const int aVal, const int aDirection )
 {
     constexpr int gridSize = Mils2iu( 50 );
 
-    return ( KiROUND( aVal / gridSize ) * gridSize ) + ( aDirection * gridSize );
+    int base = aVal / gridSize;
+    int excess = abs( aVal % gridSize );
+
+    if( aDirection > 0 )
+    {
+        return ( base + 1 ) * gridSize;
+    }
+    else if( excess > 0 )
+    {
+        return ( base ) * gridSize;
+    }
+    else
+    {
+        return ( base - 1 ) * gridSize;
+    }
 }
 
 
