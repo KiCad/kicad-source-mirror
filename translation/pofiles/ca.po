@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-16 10:40-0800\n"
-"PO-Revision-Date: 2021-12-04 19:50+0000\n"
+"PO-Revision-Date: 2021-12-09 16:57+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -6917,6 +6917,14 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
+"És la primera vegada que s'executa CvPcb utilitzant el nou mètode basat en "
+"la taula de biblioteques per trobar empremtes.\n"
+"CvPcb ha copiat la taula per defecte o ha creat una taula buida a la teva "
+"carpeta d'usuari.\n"
+"Has de configurar primer la taula de biblioteques per incloure aquelles no "
+"incloses amb KiCad.\n"
+"Mira la secció \"Taula de biblioteques d'empremtes\" de la documentació de "
+"CvPcb per a més informació."
 
 #: cvpcb/cvpcb.cpp:187
 msgid ""
@@ -6943,19 +6951,17 @@ msgstr "Empremtes filtrades"
 
 #: cvpcb/cvpcb_mainframe.cpp:144
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:105
-#, fuzzy
 msgid "Apply, Save Schematic && Continue"
-msgstr "De&sa el projecte de l'esquemàtic"
+msgstr "Aplica, Desa l'esquema && Continua"
 
 #: cvpcb/cvpcb_mainframe.cpp:212
-#, fuzzy
 msgid "Symbol to footprint changes are unsaved"
-msgstr "Importa el fitxer d'associació d'empremtes"
+msgstr "No s'han desat els canvis de símbol a l'empremta"
 
 #: cvpcb/cvpcb_mainframe.cpp:386
-#, fuzzy
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr "La placa actual ha estat modificada. Voleu desar els canvis?"
+msgstr ""
+"S'han modificat els vincles entre símbols i empremtes. Vols desar els canvis?"
 
 #: cvpcb/cvpcb_mainframe.cpp:548 cvpcb/tools/cvpcb_association_tool.cpp:207
 #, c-format
@@ -6984,7 +6990,6 @@ msgid "Search Text"
 msgstr "Cerca un text"
 
 #: cvpcb/cvpcb_mainframe.cpp:748
-#, fuzzy
 msgid "No Filtering"
 msgstr "Sense filtratge"
 
@@ -7004,14 +7009,15 @@ msgid "Library location: %s"
 msgstr "Localització de la biblioteca: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:798
-#, fuzzy
 msgid "Library location: unknown"
-msgstr "Fitxer %s no trobat"
+msgstr "Ubicació de la biblioteca: desconeguda"
 
 #: cvpcb/cvpcb_mainframe.cpp:811
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
+"No hi ha biblioteques d'empremtes de PCB llistades a la taula de "
+"biblioteques d'empremtes actual."
 
 #: cvpcb/cvpcb_mainframe.cpp:812
 msgid "Configuration Error"
@@ -7019,9 +7025,8 @@ msgstr "Erros de configuració"
 
 #: cvpcb/cvpcb_mainframe.cpp:816 pcbnew/footprint_edit_frame.cpp:869
 #: pcbnew/load_select_footprint.cpp:224
-#, fuzzy
 msgid "Loading Footprint Libraries"
-msgstr "Càrrega de biblioteques de símbols"
+msgstr "S'estan carregant les biblioteques d'empremtes"
 
 #: cvpcb/cvpcb_mainframe.cpp:879
 #, c-format
@@ -7033,9 +7038,9 @@ msgstr ""
 "%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:51
-#, fuzzy, c-format
+#, c-format
 msgid "Project file: '%s'"
-msgstr "Fitxer del projecte: «%s»"
+msgstr "Fitxer de projecte: '%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:103
 #: eeschema/dialogs/dialog_bom.cpp:448
@@ -7046,9 +7051,8 @@ msgstr ""
 "No hi ha cap editor de text seleccionat a KiCad. Si us plau, tria'n un."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:244
-#, fuzzy
 msgid "Footprint Association File"
-msgstr "Desa el fitxer de l'associació de l'empremta"
+msgstr "Fitxer d'associació d'empremtes"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:288
 #, c-format
@@ -7056,9 +7060,8 @@ msgid "File '%s' already exists in list."
 msgstr "El fitxer '%s' ja existeix a la llista."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
-#, fuzzy
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr "Importa el fitxer d'associació d'empremtes"
+msgstr "Fitxers d'associació d'empremtes de símbols (.equ)"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:74
@@ -7087,9 +7090,8 @@ msgid "Move Down"
 msgstr "Mou avall"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:48
-#, fuzzy
 msgid "Edit File"
-msgstr "Edita el camp"
+msgstr "Edita el fitxer"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:63
 msgid "Available environment variables for relative paths:"
@@ -7121,12 +7123,10 @@ msgid "Absolute"
 msgstr "Absolut"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
-#, fuzzy
 msgid "Relative"
-msgstr "Camí relatiu"
+msgstr "Relatiu"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
-#, fuzzy
 msgid "Path Type"
 msgstr "Tipus de camí"
 
@@ -7149,11 +7149,14 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
+"L'assignació d'empremtes des del llistat de xarxes de l'esquemàtic i la del "
+"fitxer d'assignació d'empremtes de símbols (.cmp) estan en conflicte.\n"
+"\n"
+"Si us plau, selecciona l'assignació."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
-#, fuzzy
 msgid "Footprint Assignment Conflicts"
-msgstr "Desa el fitxer de l'associació de l'empremta"
+msgstr "Conflicte d'associació d'empremtes"
 
 #: cvpcb/display_footprints_frame.cpp:69
 #: pcbnew/toolbars_footprint_viewer.cpp:164
@@ -7210,7 +7213,7 @@ msgstr ""
 
 #: cvpcb/readwrite_dlgs.cpp:168
 msgid "First check your footprint library table entries."
-msgstr ""
+msgstr "Verifica primer les entrades de la taula de biblioteques d'empremtes."
 
 #: cvpcb/readwrite_dlgs.cpp:170
 msgid "Problematic Footprint Library Tables"
@@ -7231,9 +7234,8 @@ msgid ""
 msgstr ""
 
 #: cvpcb/readwrite_dlgs.cpp:299
-#, fuzzy
 msgid "Schematic saved"
-msgstr "Mida de l'esquemàtic"
+msgstr "S'ha desat l'esquemàtic"
 
 #: cvpcb/toolbars_cvpcb.cpp:75
 msgid "Footprint Filters:"
@@ -7260,9 +7262,8 @@ msgid ""
 msgstr ""
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
-#, fuzzy
 msgid "Save to Schematic"
-msgstr "Nou esquemàtic"
+msgstr "Desa a l'esquemàtic"
 
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save footprint associations in schematic symbol footprint fields"
@@ -8564,7 +8565,7 @@ msgstr "S'ha creat el fitxer de l'informe '%s'."
 #: eeschema/dialogs/dialog_erc.cpp:777
 #, c-format
 msgid "ERC report (%s, Encoding UTF8)\n"
-msgstr ""
+msgstr "Informe de ERC (%s, codificació UTF8)\n"
 
 #: eeschema/dialogs/dialog_erc.cpp:792
 #, c-format
@@ -8625,9 +8626,8 @@ msgid "Illegal reference designator value!"
 msgstr "Valor del designador de referències il·legal!"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:254
-#, fuzzy
 msgid "Value may not be empty."
-msgstr "El camp %s no pot estar buit."
+msgstr "El valor no pot estar buit."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:336
 #, fuzzy
@@ -8690,14 +8690,12 @@ msgid "Filter items by parent symbol type:"
 msgstr "Filtra els elements pel tipus de símbol pare:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
-#, fuzzy
 msgid "Non-power symbols"
-msgstr "Símbol d'alimentació"
+msgstr "Símbols no d'alimentació"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
-#, fuzzy
 msgid "Power symbols"
-msgstr "Símbol d'alimentació"
+msgstr "Símbols d'alimentació"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:123
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:51
@@ -8707,9 +8705,8 @@ msgstr "Filtra els elements per la xarxa:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:135
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:77
-#, fuzzy
 msgid "Only include selected items"
-msgstr "Retalla l'element seleccionat"
+msgstr "Inclou només els elements seleccionats"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:154
 msgid "Set To"
@@ -8764,9 +8761,8 @@ msgid "Line color:"
 msgstr "Color de la línia:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:314
-#, fuzzy
 msgid "Line style:"
-msgstr "Estil de la lletra:"
+msgstr "Estil de línia:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:330
 msgid "Sheet background color:"
@@ -13073,7 +13069,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "L'esquemàtic actual ha estat modificat. Voleu desar els canvis?"
 
 #: eeschema/files-io.cpp:1346
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -13082,10 +13077,9 @@ msgid ""
 "made?"
 msgstr ""
 "Pot ser que hi hagi un problema!\n"
-"Sembla que l'última vegada que vas editar el fitxer\n"
-"\"%s\"\n"
-"no es va desar de forma correcta. Vols recuperar les darreres edicions que "
-"vas realitzar?"
+"Sembla que l'última vegada que vas editar un o més fitxers d'esquemàtics\n"
+"no es van desar correctament. Vols recuperar les darreres edicions que vas "
+"realitzar?"
 
 #: eeschema/files-io.cpp:1357
 #, c-format
@@ -15315,11 +15309,13 @@ msgid "Library '%s' already exists."
 msgstr "El fitxer «%s» ja existeix a la llista"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:836
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
 "Make sure you have write permissions and try again."
-msgstr "No s'ha pogut trobar el fitxer de biblioteca %s"
+msgstr ""
+"No s'ha pogut crear el fitxer de biblioteca '%s'.\n"
+"Comprova que tens permisos d'escriptura i torna-ho a intentar."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:846
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:213
@@ -15699,11 +15695,8 @@ msgstr "S'ha desat la peça «%s» a la biblioteca «%s»"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:106
 #: eeschema/symbol_tree_model_adapter.cpp:104
-#, fuzzy
 msgid "Errors loading symbols:"
-msgstr ""
-"Error en carregar la placa.\n"
-"%s"
+msgstr "Error en carregar els símbols:"
 
 #: eeschema/symbol_editor/symbol_library_manager.cpp:176
 #, c-format
@@ -15848,11 +15841,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:303
-#, fuzzy
 msgid "Re-linking footprints requires a fully annotated schematic."
 msgstr ""
-"L'exportació del netlist requereix\n"
-"un esquemàtic completament anotat."
+"Per re-enllaçar empremtes es requereix un esquemàtic completament anotat."
 
 #: eeschema/tools/backannotate.cpp:306
 msgid "Footprint re-linking cancelled by user."
@@ -30294,9 +30285,9 @@ msgid "Missing layer name or type."
 msgstr ""
 
 #: pcbnew/drc/drc_rule_parser.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized layer '%s'."
-msgstr "Capa final:"
+msgstr "Capa '%s' desconeguda."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:87
 msgid "Checking via annular rings..."
@@ -30366,9 +30357,9 @@ msgstr "Combina les zones"
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:100
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:231
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr "Marge de seguretat local i ajusts"
+msgstr "(%s marge %s; actual %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:654
 #, fuzzy, c-format
@@ -30395,9 +30386,9 @@ msgid "DPs evaluated:"
 msgstr "Valor d'impuls [V/A]"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:460
-#, fuzzy, c-format
+#, c-format
 msgid "(%s maximum uncoupled length: %s; actual: %s)"
-msgstr "Marge de seguretat local i ajusts"
+msgstr "(llargada de %s desacoblada màxima: %s; actual: %s)"
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:494
 #, c-format
@@ -30410,9 +30401,9 @@ msgid "maximum gap: %s; "
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "actual: %s)"
-msgstr "Mida real"
+msgstr "actual: %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:70
 msgid "Checking keepouts & disallow constraints..."
@@ -30461,9 +30452,9 @@ msgid "Checking hole to hole clearances..."
 msgstr "S'estan verificant els marges entre forat i forat..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:313
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min %s; actual %s)"
-msgstr "Mida real"
+msgstr "(%s mínim %s; actual %s)"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:119
 #, fuzzy, c-format
@@ -30499,24 +30490,26 @@ msgid "No netlist provided, skipping LVS."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length: %s; actual: %s)"
-msgstr "Marge de seguretat local i ajusts"
+msgstr "(llargada de %s mínima: %s; actual %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length: %s; actual: %s)"
-msgstr "Marge de seguretat local i ajusts"
+msgstr "(llargada de %s màxima: %s; actual %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
-msgstr "Marge de seguretat local i ajusts"
+msgstr ""
+"(desviació màxima de %s: %s; actual %s; longitud mitjana de les xarxes: %s; "
+"actual: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count: %d; actual: %d)"
-msgstr "Marge de seguretat local i ajusts"
+msgstr "(quantitat màxima de %s: %d; actual %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:228
 msgid "Gathering length-constrained connections..."
@@ -30532,9 +30525,9 @@ msgid "(no edges found on Edge.Cuts layer)"
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s)"
-msgstr "Sense capes"
+msgstr "(capa %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:261
 #, fuzzy
@@ -30593,9 +30586,9 @@ msgid "Modify zone properties"
 msgstr "Modifica les propietats de la zona"
 
 #: pcbnew/edit_zone_helpers.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Refill %d Zones"
-msgstr "Omple totes les zones"
+msgstr "Omple %d zones"
 
 #: pcbnew/exporters/export_d356.cpp:376
 msgid "Export D-356 Test File"
@@ -30799,18 +30792,14 @@ msgid "Creating PCB"
 msgstr ""
 
 #: pcbnew/files.cpp:711 pcbnew/files.cpp:721
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading PCB '%s'."
-msgstr ""
-"S'ha produït un error en carregar el fitxer de l'esquemàtic «%s».\n"
-"%s"
+msgstr "Error en carregar la PCB '%s'."
 
 #: pcbnew/files.cpp:730
-#, fuzzy, c-format
+#, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr ""
-"Error en desar el fitxer de la placa «%s».\n"
-"%s"
+msgstr "S'ha exhaurit la memòria en carregar la '%s'"
 
 #: pcbnew/files.cpp:844
 #, fuzzy, c-format
@@ -37749,9 +37738,8 @@ msgstr "Tanca GerbView"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
-#, fuzzy
 msgid "KiCad"
-msgstr "Quant a KiCad"
+msgstr "KiCad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 msgid "EDA Suite"
@@ -37785,9 +37773,8 @@ msgid "Standalone circuit board editor for KiCad boards"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-#, fuzzy
 msgid "pcbnew"
-msgstr "Executa Pcbnew"
+msgstr "novapcb"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
