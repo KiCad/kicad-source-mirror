@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-09 18:21+0000\n"
+"PO-Revision-Date: 2021-12-10 00:39+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -4145,11 +4145,11 @@ msgstr "\"Keine-Verbindung\"-Markierung"
 
 #: common/eda_item.cpp:338
 msgid "Wire Entry"
-msgstr "Verbindungseingang"
+msgstr "Verbindungseintritt"
 
 #: common/eda_item.cpp:339
 msgid "Bus Entry"
-msgstr "Buseingang"
+msgstr "Buseintritt"
 
 #: common/eda_item.cpp:341 eeschema/sch_bitmap.cpp:201
 msgid "Bitmap"
@@ -12716,7 +12716,7 @@ msgstr "Doppelte Referenzbezeichner"
 
 #: eeschema/erc_item.cpp:154
 msgid "Bus Entry needed"
-msgstr "Buseingang erforderlich"
+msgstr "Buseintritt erforderlich"
 
 #: eeschema/fields_grid_table.cpp:137 eeschema/files-io.cpp:817
 #: eeschema/tools/sch_editor_control.cpp:101
@@ -13439,15 +13439,15 @@ msgstr ""
 
 #: eeschema/sch_bus_entry.cpp:457
 msgid "Bus to Wire Entry"
-msgstr "Bus an elektrische Verbindung führen"
+msgstr "Buseintritt für Verbindung"
 
 #: eeschema/sch_bus_entry.cpp:463
 msgid "Bus to Bus Entry"
-msgstr "Bus zu Buseingang"
+msgstr "Buseintritt für Bus"
 
 #: eeschema/sch_bus_entry.cpp:528 eeschema/sch_line.cpp:926
 msgid "Wire"
-msgstr "Elektr. Verbindung"
+msgstr "Elektrische Verbindung"
 
 #: eeschema/sch_bus_entry.cpp:529 eeschema/sch_line.cpp:927
 msgid "Bus"
@@ -13455,7 +13455,7 @@ msgstr "Bus"
 
 #: eeschema/sch_bus_entry.cpp:532
 msgid "Bus Entry Type"
-msgstr "Typ Buseingang"
+msgstr "Buseintritt-Typ"
 
 #: eeschema/sch_bus_entry.cpp:552 eeschema/sch_line.cpp:958
 #: eeschema/sch_text.cpp:812
@@ -13783,7 +13783,7 @@ msgstr "Eigentümer (%d) des Rechtecks nicht gefunden."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1541
 #, c-format
 msgid "Sheet entry's owner (%d) not found."
-msgstr "Eigentümer (%d) des Schaltplanblatteintrages nicht gefunden."
+msgstr "Eigentümer (%d) des Schaltplanblatteintrags nicht gefunden."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1787
 msgid "Power Port has unknown style, use bar instead."
@@ -16141,11 +16141,11 @@ msgstr "Knotenpunkt hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:305
 msgid "Add Wire to Bus Entry"
-msgstr "Elektr. Verbindung an Buseingang führen"
+msgstr "Buseintritt für Verbindung hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:305
 msgid "Add a wire entry to a bus"
-msgstr "Elektr. Verbindung an Buseingang führen"
+msgstr "Führt eine elektrische Verbindung an einen Bus"
 
 #: eeschema/tools/ee_actions.cpp:311
 msgid "Add Label"
