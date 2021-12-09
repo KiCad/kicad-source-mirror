@@ -109,10 +109,20 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     switch( id )
     {
     case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
-        GetDesignSettings().m_UseConnectedTrackWidth =
-                not GetDesignSettings().m_UseConnectedTrackWidth;
-        GetDesignSettings().UseCustomTrackViaSize( false );
+    {
+        if( GetDesignSettings().UseCustomTrackViaSize() )
+        {
+            GetDesignSettings().UseCustomTrackViaSize( false );
+            GetDesignSettings().m_UseConnectedTrackWidth = true;
+        }
+        else
+        {
+            GetDesignSettings().m_UseConnectedTrackWidth =
+                    not GetDesignSettings().m_UseConnectedTrackWidth;
+        }
+
         break;
+    }
 
     case ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES:
         GetDesignSettings().m_UseConnectedTrackWidth = false;
