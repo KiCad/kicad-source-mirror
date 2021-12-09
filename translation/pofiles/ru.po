@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-06 19:31+0000\n"
+"PO-Revision-Date: 2021-12-10 00:39+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6640,9 +6640,8 @@ msgid "All KiCad project files"
 msgstr "Файлы проекта KiCad (все версии)"
 
 #: common/wildcards_and_files_ext.cpp:235
-#, fuzzy
 msgid "All KiCad schematic files"
-msgstr "Файлы схемы Altium"
+msgstr "Все файлы схем KiCad"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad legacy schematic files"
@@ -14221,7 +14220,6 @@ msgid "Syntax Help"
 msgstr "Справка по синтаксису"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14396,8 +14394,8 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
-"samp></td>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
@@ -14422,8 +14420,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
+"<i>refdes</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14438,8 +14436,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Определения шин</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Результирующие цепи</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14482,7 +14480,7 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] {LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
@@ -14490,9 +14488,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14500,7 +14498,7 @@ msgstr ""
 "</table>\n"
 "<p></p>\n"
 "<p></p>\n"
-"<i>Note that markup has precedence over bus definitions.</i>\n"
+"<i>Примечание: разметка имеет приоритет над определениями шин.</i>\n"
 "\n"
 
 #: eeschema/sch_validators.cpp:102
@@ -16430,14 +16428,12 @@ msgstr ""
 "вертикально"
 
 #: eeschema/tools/ee_actions.cpp:655
-#, fuzzy
 msgid "Repair Schematic"
-msgstr "Создание схемы"
+msgstr "Восстановить схему"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr "Провести диагностику и применить восстановление платы"
+msgstr "Провести диагностику и попытаться восстановить схему"
 
 #: eeschema/tools/ee_actions.cpp:662 pcbnew/tools/pcb_actions.cpp:786
 msgid "Scripting Console"
@@ -35451,7 +35447,7 @@ msgstr "Спасти плату"
 
 #: pcbnew/tools/pcb_actions.cpp:1111
 msgid "Run various diagnostics and attempt to repair board"
-msgstr "Провести диагностику и применить восстановление платы"
+msgstr "Провести диагностику и попытаться восстановить плату"
 
 #: pcbnew/tools/pcb_actions.cpp:1116
 msgid "Repair Footprint"
@@ -35459,7 +35455,7 @@ msgstr "Восстановить посад.место"
 
 #: pcbnew/tools/pcb_actions.cpp:1117
 msgid "Run various diagnostics and attempt to repair footprint"
-msgstr "Провести диагностику и применить восстановление посад.места"
+msgstr "Провести диагностику и попытаться восстановить посад.место"
 
 #: pcbnew/tools/pcb_actions.cpp:1124
 msgid "Align to Top"
