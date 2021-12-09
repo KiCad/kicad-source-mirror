@@ -561,6 +561,9 @@ bool PROJECT_FILE::SaveAs( const wxString& aDirectory, const wxString& aFile )
     Set( "meta.filename", aFile + "." + ProjectFileExtension );
     SetFilename( aFile );
 
+    // While performing Save As, we have already checked that we can write to the directory
+    // so don't carry the previous flag
+    SetReadOnly( false );
     return JSON_SETTINGS::SaveToFile( aDirectory, true );
 }
 
