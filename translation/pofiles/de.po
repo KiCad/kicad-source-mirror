@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-08 21:51+0000\n"
+"PO-Revision-Date: 2021-12-09 18:21+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6675,9 +6675,8 @@ msgid "All KiCad project files"
 msgstr "Alle KiCad Projektdateien"
 
 #: common/wildcards_and_files_ext.cpp:235
-#, fuzzy
 msgid "All KiCad schematic files"
-msgstr "Altium Schaltplandateien"
+msgstr "Alle KiCad Schaltplandateien"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad legacy schematic files"
@@ -16633,15 +16632,14 @@ msgid "Switch H & V only mode for new wires and buses"
 msgstr "Schalten Sie den H & V-Modus nur für neue Kabel und Busse um"
 
 #: eeschema/tools/ee_actions.cpp:655
-#, fuzzy
 msgid "Repair Schematic"
-msgstr "Schaltplan wird erzeugt"
+msgstr "Schaltplan reparieren"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Run various diagnostics and attempt to repair schematic"
 msgstr ""
-"Verschiedene Diagnosen durchführen und versuchen, die Platine zu reparieren"
+"Verschiedene Diagnosen durchführen und versuchen, den Schaltplan zu "
+"reparieren"
 
 #: eeschema/tools/ee_actions.cpp:662 pcbnew/tools/pcb_actions.cpp:786
 msgid "Scripting Console"
