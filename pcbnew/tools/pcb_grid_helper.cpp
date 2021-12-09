@@ -263,9 +263,12 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
     int    snapDist = snapRange;
 
     //Respect limits of coordinates representation
+    VECTOR2D origin = GetClampedCoords( VECTOR2D( aOrigin ) - snapRange / 2 );
+    VECTOR2D end = GetClampedCoords( VECTOR2D( aOrigin ) + snapRange / 2 );
+
     BOX2I bb;
-    bb.SetOrigin( GetClampedCoords<double, int>( VECTOR2D( aOrigin ) - snapRange / 2 ) );
-    bb.SetEnd( GetClampedCoords<double, int>( VECTOR2D( aOrigin ) + snapRange / 2 ) );
+    bb.SetOrigin( KiROUND( origin.x ), KiROUND( origin.y ) );
+    bb.SetEnd( KiROUND( end.x ), KiROUND( end.y ) );
 
     clearAnchors();
 
