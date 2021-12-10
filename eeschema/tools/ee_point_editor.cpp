@@ -870,6 +870,7 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         }
     }
 
+    saveItemsToUndo();
     poly.Insert( closestLineStart, pos );
 
     updateItem( shape, true );
@@ -890,6 +891,7 @@ int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     if( poly.GetPointCount() < 3 )
         return 0;
 
+    saveItemsToUndo();
     poly.Remove( getEditedPointIndex() );
 
     updateItem( shape, true );
