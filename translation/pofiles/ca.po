@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-09 16:57+0000\n"
+"PO-Revision-Date: 2021-12-10 22:05+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5145,9 +5145,8 @@ msgstr "Emplenaments del cos del símbol"
 
 #: common/layer_id.cpp:119
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
-#, fuzzy
 msgid "Schematic text && graphics"
-msgstr "Propietats del full de l'esquemàtic"
+msgstr "Text de l'esquemàtic i gràfics"
 
 #: common/layer_id.cpp:120
 msgid "Pins"
@@ -6634,9 +6633,8 @@ msgid "All KiCad project files"
 msgstr "Tots els fitxers de projectes de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:235
-#, fuzzy
 msgid "All KiCad schematic files"
-msgstr "Fitxers d'esquemàtics d'Altium"
+msgstr "Tots els fitxers d'esquemàtics de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad legacy schematic files"
@@ -8606,9 +8604,10 @@ msgid "Value may not be empty."
 msgstr "El valor no pot estar buit."
 
 #: eeschema/dialogs/dialog_field_properties.cpp:336
-#, fuzzy
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "Mostra el diàleg de propietats de l'element"
+msgstr ""
+"El nom del fitxer de la fulla només es pot modificar al diàleg de propietats "
+"de la fulla."
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 #, fuzzy
@@ -8875,9 +8874,8 @@ msgstr "Orientació"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:56
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:50
-#, fuzzy
 msgid "Number Text Size"
-msgstr "Mida del te&xt del número:"
+msgstr "Mida del text del número"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:57
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:51
@@ -9291,9 +9289,8 @@ msgstr ""
 "els números dels pins."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:214
-#, fuzzy
 msgid "Pin Text Options"
-msgstr "Opcions del connector:"
+msgstr "Opcions del text del pin"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:216
 msgid "Show pin number"
@@ -9613,9 +9610,8 @@ msgstr "Propietats del full de l'esquemàtic"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:50
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:226
-#, fuzzy
 msgid "Alternate Pin Name"
-msgstr "Seqüència de nodes alternatius:"
+msgstr "Nom de pin alternatiu"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:145
 msgid "Synchronized pins edit mode, and this pin is new"
@@ -9658,9 +9654,8 @@ msgid "If checked, this pin will exist in all units."
 msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:309
-#, fuzzy
 msgid "Alternate pin definitions must have a name."
-msgstr "S'ha desat l'empremta «%s»"
+msgstr "Les definicions de pin alternatives han de tenir un nom."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:329
 #, c-format
@@ -9699,9 +9694,8 @@ msgid "&Y position:"
 msgstr "Posició Y:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:89
-#, fuzzy
 msgid "&Pin length:"
-msgstr "Longitud de la línia"
+msgstr "Longitud de &pin:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:96
 msgid "N&ame text size:"
@@ -9732,9 +9726,8 @@ msgstr "&Visible"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:183
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:190
-#, fuzzy
 msgid "Preview:"
-msgstr "Previsualitza"
+msgstr "Previsualitza:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:201
 #, fuzzy
@@ -9825,19 +9818,19 @@ msgstr "A"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:290
 msgid "B"
-msgstr ""
+msgstr "B"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:291
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:292
 msgid "D"
-msgstr ""
+msgstr "D"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:293
 msgid "E"
-msgstr ""
+msgstr "E"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:432
 #: eeschema/sch_edit_frame.cpp:950
@@ -9854,9 +9847,9 @@ msgstr "No es pot escriure a la carpeta «%s»."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1032
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1164
 #: pcbnew/dialogs/dialog_plot.cpp:908
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'."
-msgstr "No s'ha pogut carregar «%s»"
+msgstr "Plotejat a '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:532
 #: eeschema/dialogs/dialog_plot_schematic.cpp:699
@@ -9874,9 +9867,8 @@ msgid "Plotted to '%s'.\n"
 msgstr "Traçat a '%s'.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1177
-#, fuzzy
 msgid "Done"
-msgstr "Fet."
+msgstr "Fet"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1249
 #, c-format
@@ -9951,9 +9943,8 @@ msgid "Plot the drawing sheet border and title block"
 msgstr "Ploteja la vora i el títol del bloc"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
-#, fuzzy
 msgid "Black and White"
-msgstr "Blanc i negre"
+msgstr "Negre i Blanc"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
 #, fuzzy
@@ -9965,9 +9956,8 @@ msgid "Plot the background color if the output format supports it"
 msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:87
-#, fuzzy
 msgid "Color theme:"
-msgstr "Color"
+msgstr "Tema de color:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:94
 msgid "Select the color theme to use for plotting"
@@ -9988,7 +9978,6 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:119
 #: pcbnew/dialogs/dialog_plot_base.cpp:254
-#, fuzzy
 msgid "HPGL Options"
 msgstr "Opcions d'HPGL"
 
@@ -10014,9 +10003,8 @@ msgid "Content fit, user units"
 msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:136
-#, fuzzy
 msgid "Pen width:"
-msgstr "Amplada del traç"
+msgstr "Amplada del traç:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:86
 msgid "Plot Schematic Options"
@@ -10049,9 +10037,8 @@ msgstr "Imprimeix únicament en &blanc i negre"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:32
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:211
-#, fuzzy
 msgid "Print background color"
-msgstr "Color del fons"
+msgstr "Imprimeix el color del fons"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:35
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:216
@@ -10079,14 +10066,12 @@ msgid "Accept"
 msgstr "Accepta"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:124
-#, fuzzy
 msgid "Symbol Name"
-msgstr "Símbol"
+msgstr "Nom del símbol"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:128
-#, fuzzy
 msgid "Action Taken"
-msgstr "Acció"
+msgstr "Acció presa"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:132
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:958
@@ -10110,9 +10095,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
-#, fuzzy
 msgid "Rescue Symbols"
-msgstr "Rescata components"
+msgstr "Recupera símbols"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
 msgid "Symbols to update:"
@@ -10123,14 +10107,12 @@ msgid "Instances of this symbol:"
 msgstr "Instàncies d'aquest símbol:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:55
-#, fuzzy
 msgid "Cached Symbol:"
-msgstr "Peça capturada:"
+msgstr "Símbol en memòria cau:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:76
-#, fuzzy
 msgid "Library Symbol:"
-msgstr "Fitxers de biblioteques:"
+msgstr "Símbol de la biblioteca:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:100
 msgid "Never Show Again"
@@ -10145,27 +10127,23 @@ msgstr "Ajudant de rescat de projectes"
 #: eeschema/dialogs/dialog_sch_import_settings_base.h:61
 #: pcbnew/dialogs/dialog_import_settings.cpp:46
 #: pcbnew/dialogs/dialog_import_settings_base.h:66
-#, fuzzy
 msgid "Import Settings"
-msgstr "Importa els pins del full"
+msgstr "Importa ajustaments"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:62
 #: pcbnew/dialogs/dialog_import_settings.cpp:116
-#, fuzzy
 msgid "Import Settings From"
-msgstr "Importa els pins del full"
+msgstr "Importa ajustaments des de"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:74
 #: pcbnew/dialogs/dialog_import_settings.cpp:128
-#, fuzzy
 msgid "File not found."
-msgstr "Fitxer no trobat"
+msgstr "Fitxer no trobat."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:22
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:22
-#, fuzzy
 msgid "Import from:"
-msgstr "Obre un projecte"
+msgstr "Importa des de:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:27
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:31
@@ -10178,23 +10156,20 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:45
-#, fuzzy
 msgid "Import:"
-msgstr "Importa"
+msgstr "Importa:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
-#, fuzzy
 msgid "Formatting preferences"
-msgstr "Ploteja les referències de l'empremta"
+msgstr "Preferències de format"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
-#, fuzzy
 msgid "Field name templates"
-msgstr "Plantilles del sistema"
+msgstr "Plantilles de noms de camps"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Pin conflict map"
-msgstr ""
+msgstr "Mapa de conflictes de pins"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
@@ -10204,9 +10179,8 @@ msgstr "Ajusts de la simulació"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:67
-#, fuzzy
 msgid "Net classes"
-msgstr "Classes de xarxes"
+msgstr "Classes de xarxa"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
@@ -10239,9 +10213,8 @@ msgstr "Coincidència amb &majúscules i minúscules"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
-#, fuzzy
 msgid "Words"
-msgstr "Paraules clau"
+msgstr "Paraules"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
@@ -10254,9 +10227,8 @@ msgid "Search pin &names and numbers"
 msgstr "Cerca en tots els &noms i números dels pins"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
-#, fuzzy
 msgid "Search hidden fields"
-msgstr "Cerca en tots els camps del com&ponent"
+msgstr "Cerca en camps amagats"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
 msgid "Search the current &sheet only"
