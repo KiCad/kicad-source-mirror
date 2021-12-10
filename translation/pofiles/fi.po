@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-10 22:05+0000\n"
+"PO-Revision-Date: 2021-12-10 23:04+0000\n"
 "Last-Translator: Simo Mattila <simo.mattila@kapsi.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -5414,14 +5414,12 @@ msgid "DRC errors"
 msgstr "DRC-virheet"
 
 #: common/layer_id.cpp:165
-#, fuzzy
 msgid "DRC exclusions"
-msgstr "Kongon demokraattisen tasavallan poissulkemiset"
+msgstr "DRC poissulkemiset"
 
 #: common/layer_id.cpp:166
-#, fuzzy
 msgid "DRC marker shadows"
-msgstr "Kongon demokraattisen tasavallan markkerivarjot"
+msgstr "DRC merkkivarjot"
 
 #: common/layer_id.cpp:172
 #, fuzzy
@@ -5966,9 +5964,8 @@ msgid "Go to next marker in Checker window"
 msgstr "Näytä jalanjälkitarkistusikkuna"
 
 #: common/tool/actions.cpp:259
-#, fuzzy
 msgid "Exclude Marker"
-msgstr "Ulkopuolelle "
+msgstr "Jätä merkki huomioitta"
 
 #: common/tool/actions.cpp:259
 msgid "Mark current violation in Checker window as an exclusion"
@@ -12623,9 +12620,8 @@ msgid "Passive Pin"
 msgstr "Passiivinen nasta"
 
 #: eeschema/erc.cpp:64 eeschema/erc.cpp:81
-#, fuzzy
 msgid "Free Pin"
-msgstr "Luo tiedosto "
+msgstr "Vapaa nasta"
 
 #: eeschema/erc.cpp:65 eeschema/erc.cpp:82
 msgid "Unspecified Pin"
@@ -14857,9 +14853,8 @@ msgid " or "
 msgstr " tai "
 
 #: eeschema/sch_validators.cpp:176
-#, fuzzy
 msgid ", or "
-msgstr "%s tai %s"
+msgstr ", tai "
 
 #: eeschema/sch_validators.cpp:189
 msgid "The reference designator cannot contain text variable references"
@@ -18828,14 +18823,12 @@ msgid "Metadata"
 msgstr "Metadata"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
-#, fuzzy
 msgid "Package identifier: "
-msgstr "Uusi kirjastotunniste:"
+msgstr "Pakettitunniste: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:215
-#, fuzzy
 msgid "License: "
-msgstr "Lisenssitiedot"
+msgstr "Lisenssi: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
 msgid "Tags: "
@@ -21020,9 +21013,8 @@ msgid "Color Code"
 msgstr "Värikoodi"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:85
-#, fuzzy
 msgid "TransLine "
-msgstr "TransLine"
+msgstr "TransLine "
 
 #: pcb_calculator/pcb_calculator_frame.cpp:91
 msgid "Electrical Spacing"
@@ -21679,14 +21671,14 @@ msgid "PrePreg"
 msgstr "PrePreg"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Enter board thickness in %s:"
-msgstr "Piirilevyn paksuus: "
+msgstr "Piirilevyn paksuus (%s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Enter expected board thickness (min value %s):"
-msgstr "Piirilevyn paksuus: "
+msgstr "Piirilevyn odotettu paksuus (vähintään %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:197
 #, fuzzy
@@ -22607,9 +22599,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:198 pcbnew/files.cpp:620
 #: pcbnew/tools/pcb_control.cpp:1120
-#, fuzzy
 msgid "Loading PCB"
-msgstr "Ladataan "
+msgstr "Ladataan piirikorttia"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:220
 #, c-format
@@ -22953,9 +22944,7 @@ msgstr "Vyöhykkeen nimi:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:97
 msgid "A unique name for this zone to identify it for DRC"
-msgstr ""
-"Tämän vyöhykkeen yksilöllinen nimi sen tunnistamiseksi Kongon "
-"demokraattiselle tasavallalle"
+msgstr "Tämän vyöhykkeen yksilöllinen nimi sen tunnistamiseksi DRC:ssä"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:104
 msgid "Zone priority level:"
@@ -23722,7 +23711,7 @@ msgstr "Näytä suunnittelusäännöt."
 
 #: pcbnew/dialogs/dialog_drc.cpp:261
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- Käyttäjä peruutti Kongon demokraattisen tasavallan. <br> <br>"
+msgstr "-------- Käyttäjä keskeytti DRC:n.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:263
 msgid "Done.<br><br>"
@@ -26725,11 +26714,10 @@ msgid "Check zone fills before plotting"
 msgstr "Tarkista vyöhykkeen täyttyminen ennen piirtämistä"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
-#, fuzzy
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr ""
 "Globaalia juotosmaskin vähimmäisleveyttä ja / tai marginaalia ei ole "
-"asetettu arvoon 0. Useimmat lautarakennukset"
+"asetettu arvoon 0. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
 #, fuzzy
@@ -26957,8 +26945,7 @@ msgstr "Suorita DRC ..."
 #: pcbnew/dialogs/dialog_plot_base.cpp:423
 #, c-format
 msgid "(%d known DRC violations; %d exclusions)"
-msgstr ""
-"(%d tunnetut Kongon demokraattisen tasavallan rikkomukset; %d poissulkemiset)"
+msgstr "(%d tunnettua DRC-rikkomusta; %d jätetty huomiotta)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:447
 msgid "Select Fab Layers"
@@ -27091,16 +27078,15 @@ msgstr "Jäljen pituuden säätö"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:34
 msgid "DRC violation: highlight obstacles"
-msgstr "Kongon demokraattisen tasavallan rikkomus: korosta esteitä"
+msgstr "DRC-rikkomus: korosta esteitä"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr ""
-"Kongon demokraattisen tasavallan rikkomus: työnnä raitoja ja läpivientiä"
+msgstr "DRC-rikkomus: työnnä vetoja ja läpivientejä"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
-msgstr "Kongon demokraattisen tasavallan rikkomus: kävele esteiden ympäri"
+msgstr "DRC-rikkomus: kierrä esteet"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Highlight collisions"
@@ -27189,15 +27175,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
 msgid "Allow DRC violations"
-msgstr "Salli Kongon demokraattisen tasavallan rikkomukset"
+msgstr "Salli DRC-rikkomukset"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:58
 msgid ""
 "(Highlight collisions mode only) - allows one to establish a track even if "
 "is violating the DRC rules."
 msgstr ""
-"(Korosta vain törmäystila) - sallii radan muodostamisen, vaikka se rikkoo "
-"Kongon demokraattisen tasavallan sääntöjä."
+"(Korosta vain törmäys -tila) - sallii vedon muodostamisen, vaikka se rikkoo "
+"DRC-sääntöjä."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:62
 msgid "Suggest track finish"
@@ -27338,9 +27324,9 @@ msgid "from %s"
 msgstr "(alkaen %s)"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
-#, fuzzy, c-format
+#, c-format
 msgid "Details: %s"
-msgstr "Kytkentäverkkoluokka: "
+msgstr "Yksityiskohdat: %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
 #, fuzzy
@@ -27449,9 +27435,7 @@ msgstr "Alueen nimi:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr ""
-"Tämän säännösalueen yksilöllinen nimi käytettäväksi Kongon demokraattisessa "
-"tasavallassa"
+msgstr "Tämän sääntöalueen yksilöllinen nimi käytettäväksi DRC-säännöissä"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:96
 msgid "Constrain outline to H, V and 45 deg"
@@ -29138,7 +29122,7 @@ msgstr "Perutaanko muutokset?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:422
 msgid "DRC rules"
-msgstr "Kongon demokraattisen tasavallan säännöt"
+msgstr "DRC-säännöt"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:429
 #: pcbnew/drc/drc_rule_condition.cpp:64
@@ -29151,7 +29135,7 @@ msgstr "Suunnittelusääntöjä ei voi lisätä ilman projektia"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:26
 msgid "DRC rules:"
-msgstr "Kongon demokraattisen tasavallan säännöt:"
+msgstr "DRC-säännöt:"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:77
 msgid "Check rule syntax"
@@ -32982,10 +32966,10 @@ msgstr "Käsittelemätön graafinen kohde %s Traces-määritysrivillä %zu"
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1486
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1501
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate item for ID %d and sequence %d in row %zu."
 msgstr ""
-"Kopioi kohde tunnukselle %d ja sekvenssille %d Traces-määritysriville %zu \n"
+"Kopioi kohde tunnukselle %d ja sekvenssille %d Traces-määritysrivillä %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2306
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2335
@@ -33104,9 +33088,9 @@ msgid "Undefined layers:"
 msgstr "Määrittelemättömät tasot:"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1107
-#, fuzzy, c-format
+#, c-format
 msgid "Page type '%s' is not valid."
-msgstr "Sivutyyppi \"%s\" ei kelpaa "
+msgstr "Sivutyyppi '%s' ei kelpaa."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1664
 #, fuzzy, c-format
@@ -33907,9 +33891,9 @@ msgid "Routing Track: %s"
 msgstr "Reitin yksittäinen raita"
 
 #: pcbnew/router/router_tool.cpp:2061
-#, fuzzy, c-format
+#, c-format
 msgid "Net Class: %s"
-msgstr "Kytkentäverkkoluokka: "
+msgstr "Kytkentäverkkoluokka: %s"
 
 #: pcbnew/router/router_tool.cpp:2065
 #, fuzzy
@@ -34434,9 +34418,8 @@ msgid "BOARD CHARACTERISTICS"
 msgstr "Piirilevyn ominaisuudet"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:423
-#, fuzzy
 msgid "Copper Layer Count: "
-msgstr "Kuparikerrosten lukumäärä:"
+msgstr "Kuparikerrosten lukumäärä: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:432
 msgid "Board overall dimensions: "
@@ -34447,14 +34430,12 @@ msgid "Min track/spacing: "
 msgstr "Johtimien vähimmäisväli: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:452
-#, fuzzy
 msgid "Copper Finish: "
-msgstr "Kuparin viimeistely:"
+msgstr "Kuparin pinnoite: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:460
-#, fuzzy
 msgid "Castellated pads: "
-msgstr "Valettu tyyny"
+msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:468
 msgid "Board Thickness: "
@@ -34465,19 +34446,16 @@ msgid "Min hole diameter: "
 msgstr "Reiän pienin halkaisija: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:494
-#, fuzzy
 msgid "Impedance Control: "
-msgstr "Impedanssin säätö"
+msgstr "Impedanssin hallinta: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:502
-#, fuzzy
 msgid "Plated Board Edge: "
-msgstr "Pinnoitettu laudan reuna"
+msgstr "Metallisoitu kortin reuna: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:510
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "Edge-kortin liittimet:"
+msgstr "Kortinreunaliittimet: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:518
 #, fuzzy
@@ -36100,9 +36078,8 @@ msgid "Unfill All Zones"
 msgstr "Täytä kaikki vyöhykkeet"
 
 #: pcbnew/tools/pcb_actions.cpp:1287
-#, fuzzy
 msgid "Remove copper fill from all zones"
-msgstr "Tyhjennä kaikki täytöt "
+msgstr "Tyhjennä kaikki täytöt"
 
 #: pcbnew/tools/pcb_actions.cpp:1295
 msgid "Place Selected Footprints"
@@ -36358,7 +36335,7 @@ msgstr "Täytä alue (t)"
 
 #: pcbnew/tools/zone_filler_tool.cpp:131
 msgid "Show DRC rules"
-msgstr "Näytä Kongon demokraattisen tasavallan säännöt"
+msgstr "Näytä DRC-säännöt"
 
 #: pcbnew/tools/zone_filler_tool.cpp:138
 msgid "Rules"
@@ -36367,8 +36344,7 @@ msgstr "Säännöt"
 #: pcbnew/tools/zone_filler_tool.cpp:144
 msgid "Zone fills may be inaccurate.  DRC rules contain errors."
 msgstr ""
-"Vyöhykkeen täyttäminen voi olla epätarkka. Kongon demokraattisen tasavallan "
-"säännöt sisältävät virheitä."
+"Vyöhykkeen täyttäminen voi olla epätarkka. DRC-säännöt sisältävät virheitä."
 
 #: pcbnew/undo_redo.cpp:537
 msgid "Incomplete undo/redo operation: some items not found"
@@ -36456,29 +36432,27 @@ msgstr "Näytä tuntomerkki kytkemättömillä anturoilla"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC Warnings"
-msgstr "Kongon demokraattisen tasavallan varoitukset"
+msgstr "DRC-varoitukset"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC violations with a Warning severity"
-msgstr "Kongon demokraattisen tasavallan rikkomukset vakavalla varoituksella"
+msgstr "DRC-rikkomukset vakavalla varoituksella"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "DRC Errors"
-msgstr "Kongon demokraattisen tasavallan virheet"
+msgstr "DRC-virheet"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "DRC violations with an Error severity"
-msgstr ""
-"Kongon demokraattisen tasavallan rikkomukset, joiden vakavuus on vakava"
+msgstr "DRC-rikkomukset, joiden vakavuus on vakava"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "DRC Exclusions"
-msgstr "Kongon demokraattisen tasavallan poissulkemiset"
+msgstr "DRC-poissulkemiset"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "DRC violations which have been individually excluded"
-msgstr ""
-"Kongon demokraattisen tasavallan rikkomukset, jotka on erikseen suljettu pois"
+msgstr "DRC-rikkomukset, jotka on erikseen suljettu pois"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Show footprint and text origins as a cross"
