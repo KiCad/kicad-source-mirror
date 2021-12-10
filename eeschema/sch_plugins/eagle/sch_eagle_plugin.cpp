@@ -455,6 +455,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     {
         m_rootSheet = new SCH_SHEET( aSchematic );
         m_rootSheet->SetFileName( newFilename.GetFullPath() );
+        aSchematic->SetRoot( m_rootSheet );
     }
 
     if( !m_rootSheet->GetScreen() )
@@ -708,6 +709,13 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             loadSheet( sheetNode, i );
             m_rootSheet->GetScreen()->Append( sheet.release() );
 
+            SCH_SHEET_PATH sheetpath;
+            m_rootSheet->LocatePathOfScreen( m_currentSheet->GetScreen(), &sheetpath );
+            sheetpath.push_back( m_currentSheet );
+
+            m_rootSheet->AddInstance( sheetpath );
+            m_rootSheet->SetPageNumber( sheetpath, wxString::Format( "%d", i ) );
+
             sheetNode = sheetNode->GetNext();
             x += 2;
 
@@ -727,6 +735,11 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             m_currentSheet = m_rootSheet;
             loadSheet( sheetNode, 0 );
             sheetNode = sheetNode->GetNext();
+
+            SCH_SHEET_PATH rootPath;
+            rootPath.push_back( m_rootSheet );
+            m_rootSheet->AddInstance( rootPath );
+            m_rootSheet->SetPageNumber( rootPath, wxT( "1" ) );
         }
     }
 
@@ -1817,9 +1830,6 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
         {
             arc->SetWidth( ewire.width.ToSchUnits() );
         }
-
-        if( *ewire.curve <= 0 )
-            std::swap( begin, end );
 
         arc->SetArcGeometry( begin, (wxPoint) CalcArcMid( begin, end, center ), end );
         arc->SetUnit( aGateNumber );
