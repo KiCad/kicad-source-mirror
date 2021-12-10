@@ -1642,7 +1642,8 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
         // On Cairo the graphic shape is filled by the background before drawing the text.
         // However if the text is selected, it is draw twice: first on LAYER_SELECTION_SHADOWS
         // and second on the text layer.  The second must not erase the first drawing.
-        bool fillBg = ( aLayer == LAYER_SELECTION_SHADOWS ) || !aLabel->IsSelected();
+        bool fillBg = ( ( aLayer == LAYER_SELECTION_SHADOWS ) || !aLabel->IsSelected() )
+                       && aLayer != LAYER_DANGLING;
         m_gal->SetIsFill( fillBg );
         m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
         m_gal->SetIsStroke( true );
