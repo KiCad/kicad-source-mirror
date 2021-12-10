@@ -11,10 +11,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-07 23:53+0000\n"
+"PO-Revision-Date: 2021-12-10 22:05+0000\n"
 "Last-Translator: Rafael Silva <perigoso@riseup.net>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,11 +42,11 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
-msgstr "Todos os arquivos"
+msgstr "Todos os ficheiros"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:360
 msgid "Build board outline"
-msgstr "Crie o contorno da placa"
+msgstr "Criar o contorno da placa"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:538
 msgid "Create layers"
@@ -102,16 +102,16 @@ msgstr "A simplificar contornos de furos"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:870
 msgid "Build Tech layers"
-msgstr "Montar camadas técnicas"
+msgstr "Criar camadas técnicas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:904
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "Montar camada técnica %d"
+msgstr "Criar camada técnica %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1049
 msgid "Build BVH for holes and vias"
-msgstr "Montar BVH para furos e vias"
+msgstr "Criar BVH para furos e vias"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -222,7 +222,7 @@ msgstr "Copiar imagem 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:107
 msgid "Raytracing"
-msgstr "Calcular iluminação"
+msgstr "Rastreamento de raios (Raytracing)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:112 common/tool/actions.cpp:603
 #: cvpcb/menubar.cpp:74 eeschema/menubar.cpp:282
@@ -240,11 +240,11 @@ msgstr "Preferências…"
 #: pagelayout_editor/menubar.cpp:157 pcbnew/menubar_footprint_editor.cpp:233
 #: pcbnew/menubar_pcb_editor.cpp:446
 msgid "Show preferences for all open tools"
-msgstr "Exibir preferências para todas as ferramentas abertas"
+msgstr "Mostrar preferências para todas as ferramentas abertas"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 msgid "Reset to Default Settings"
-msgstr "Voltar Ajustes Padrão"
+msgstr "Restaurar Configurações Padrão"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 msgid "3D Grid"
@@ -336,7 +336,7 @@ msgstr "Nome do ficheiro de Imagem 3D"
 #: pcbnew/plugins/altium/altium_pcb.cpp:1462
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr "Permissões insuficientes para gravar o ficheiro '%s'."
+msgstr "Permissões insuficientes para guardar o ficheiro '%s'."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:682 common/confirm.cpp:130
 #: common/confirm.cpp:296 common/dialogs/panel_setup_severities.cpp:43
@@ -355,7 +355,7 @@ msgstr "Falha ao copiar imagem para a área de transferência"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "Can't save file"
-msgstr "Não foi possível salvar o ficheiro"
+msgstr "Não foi possível guardar o ficheiro"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:43
 msgid "Center pivot rotation"
@@ -363,7 +363,7 @@ msgstr "Rotação do pivô central"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:43
 msgid "Center pivot rotation (middle mouse click)"
-msgstr "Rotação do pivô central (clique na roda central do mouse)"
+msgstr "Rotação do pivô central (clique na roda central do rato)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Rotate X Clockwise"
@@ -456,43 +456,43 @@ msgstr "Vista por baixo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:161
 msgid "No 3D Grid"
-msgstr "Sem Grade 3D"
+msgstr "Sem Grelha 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "3D Grid 10mm"
-msgstr "Grade 3D de 10mm"
+msgstr "Grelha 3D de 10mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:171
 msgid "3D Grid 5mm"
-msgstr "Grade 3D de 5mm"
+msgstr "Grelha 3D de 5mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
-msgstr "Grade 3D de 2,5mm"
+msgstr "Grelha 3D de 2,5mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:181
 msgid "3D Grid 1mm"
-msgstr "Grade 3D de 1mm"
+msgstr "Grelha 3D de 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
 msgid "Render Realistic Materials"
-msgstr "Renderização real dos materiais"
+msgstr "Renderização realista dos materiais"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
-msgstr "Usar todas as propriedades de materiais de cada ficheiro de modelo 3D"
+msgstr "Usar todas as propriedades de materiais de cada modelo 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
 msgid "Render Solid Colors"
-msgstr "Renderize cores sólidas"
+msgstr "Renderizar cores sólidas"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Utilizar apenas a propriedade difusa da cor do modelo do ficheiro 3D"
+msgstr "Utilizar apenas a propriedade difusa da cor do modelo 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
-msgstr "Renderize cores CAD"
+msgstr "Renderizar cores CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
@@ -525,7 +525,7 @@ msgstr "Exibir/Ocultar modelos 3D para componentes do tipo 'Outros'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
-msgstr "Exibir Caixas Delimitadoras do Modelo"
+msgstr "Mostrar Caixas Delimitadoras do Modelo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:235
 msgid "Toggle realistic mode"
@@ -615,11 +615,11 @@ msgstr "Cores do ambiente"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:30
 msgid "Background gradient start:"
-msgstr "Início do gradiente do fundo:"
+msgstr "Início do gradiente de fundo:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:37
 msgid "Background gradient end:"
-msgstr "Fim do gradiente do fundo:"
+msgstr "Fim do gradiente de fundo:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:50
 msgid "Solder paste:"
@@ -627,7 +627,7 @@ msgstr "Pasta de Solda:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:64
 msgid "Board Colors"
-msgstr "Cor do corpo da placa"
+msgstr "Cores da placa"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:66
 msgid "Use board stackup colors"
@@ -635,7 +635,7 @@ msgstr "Usar as cores do empilhamento da placa"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:69
 msgid "Use colors:"
-msgstr "Use cores:"
+msgstr "Usar cores:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
@@ -667,7 +667,7 @@ msgstr "Camadas da placa"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:31
 msgid "Show silkscreen layers"
-msgstr "Exibir camadas de serigrafia"
+msgstr "Mostrar camadas de serigrafia"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
 msgid "Clip silkscreen at solder mask edges"
@@ -679,27 +679,27 @@ msgstr "Corte a serigrafia na via anelar"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:40
 msgid "Show solder mask layers"
-msgstr "Exibir camadas de máscara de solda"
+msgstr "Mostrar camadas de máscara de solda"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:43
 msgid "Show solder paste layers"
-msgstr "Exibir camadas de pasta de solda"
+msgstr "Mostrar camadas de pasta de solda"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:46
 msgid "Show adhesive layers"
-msgstr "Exibir camadas de adesivo"
+msgstr "Mostrar camadas de adesivo"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "User Layers (not shown in realistic mode)"
-msgstr "Camadas do utilizador (não exibido no modo realístico)"
+msgstr "Camadas do utilizador (não é mostrado em modo realístico)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
 msgid "Show comment and drawing layers"
-msgstr "Mostre as camadas com os comentários e com os desenhos"
+msgstr "Mostrar camadas de comentários e desenhos"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:61
 msgid "Show ECO layers"
-msgstr "Exibir camadas ECO"
+msgstr "Mostrar camadas ECO"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Render Options"
@@ -711,11 +711,11 @@ msgstr "Modo realístico"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:79
 msgid "Show board body"
-msgstr "Exibir corpo da placa"
+msgstr "Mostrar corpo da placa"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:82
 msgid "Show filled areas in zones"
-msgstr "Exibir áreas preenchidas dentro de zonas"
+msgstr "Mostrar áreas preenchidas dentro de zonas"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:85
 msgid "Use bare copper color for unplated copper"
@@ -747,7 +747,7 @@ msgstr "Opções da câmera"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
 msgid "Rotation increment:"
-msgstr "Incremento da rotação:"
+msgstr "Incremento de rotação:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:123
 #: common/base_units.cpp:477 pcb_calculator/widgets/unit_selector.cpp:130
@@ -759,7 +759,7 @@ msgstr "Incremento da rotação:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1343
 #: pcbnew/dialogs/panel_edit_options_base.cpp:63
 msgid "deg"
-msgstr "°"
+msgstr "graus"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:133
 msgid "Enable animation"
@@ -776,11 +776,11 @@ msgstr "Opções da renderização"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:25
 msgid "Show model bounding boxes"
-msgstr "Exibir caixas delimitadoras do modelo"
+msgstr "Mostrar caixas delimitadoras do modelo"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
 msgid "Show copper thickness"
-msgstr "Exibir espessura do cobre"
+msgstr "Mostrar espessura do cobre"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
@@ -1207,7 +1207,7 @@ msgstr "Criar Biblioteca de Footprint"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:900
 msgid "Error allocating memory for potrace bitmap"
-msgstr "Erro ao alocar memória para o bitmap pirrace"
+msgstr "Erro ao alocar memória para o bitmap potrace"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:927
 #: common/dialogs/wx_html_report_panel_base.cpp:41
@@ -2127,7 +2127,7 @@ msgstr "Configurar Tabela de Biblioteca Global"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:26 common/tool/actions.cpp:463
 msgid "Grid Origin"
-msgstr "Origem da Grade"
+msgstr "Origem da Grelha"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:63
 #: common/dialogs/dialog_grid_settings_base.cpp:78
@@ -2158,11 +2158,11 @@ msgstr "uma página"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:67
 msgid "Current Grid"
-msgstr "Grade atual"
+msgstr "Grelha atual"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
-msgstr "Grade Definida pelo utilizador"
+msgstr "Grelha Definida pelo utilizador"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:91
 msgid "Size X:"
@@ -2178,7 +2178,7 @@ msgstr "Troca Rápida"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:131
 msgid "Grid 1:"
-msgstr "Grade 1:"
+msgstr "Grelha 1:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:142
 #: common/dialogs/dialog_grid_settings_base.cpp:157
@@ -2187,23 +2187,23 @@ msgstr "(tecla de atalho)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:146
 msgid "Grid 2:"
-msgstr "Grade 2:"
+msgstr "Grelha 2:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:173 common/tool/actions.cpp:469
 msgid "Reset Grid Origin"
-msgstr "Redefinir Origem da Grade"
+msgstr "Redefinir Origem da Grelha"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:176
 msgid "Reset Grid Sizes"
-msgstr "Redefina os tamanhos da grade"
+msgstr "Redefina os tamanhos da Grelha"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:178
 msgid "Resets the list of grid sizes to default values"
-msgstr "Redefina a lista dos tamanhos da grade para os valores iniciais"
+msgstr "Restaurar lista de tamanhos da Grelha para os valores padrão"
 
 #: common/dialogs/dialog_grid_settings_base.h:80
 msgid "Grid Settings"
-msgstr "Configurações da Grade"
+msgstr "Configurações da Grelha"
 
 #: common/dialogs/dialog_hotkey_list.cpp:34
 msgid "Hotkey List"
@@ -3038,7 +3038,7 @@ msgstr "Interface do utilizador"
 
 #: common/dialogs/panel_common_settings_base.cpp:118
 msgid "Show icons in menus"
-msgstr "Exibir ícones nos menus"
+msgstr "Mostrar ícones nos menus"
 
 #: common/dialogs/panel_common_settings_base.cpp:121
 msgid "Icon theme:"
@@ -3295,8 +3295,8 @@ msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
 msgstr ""
-"Quando estiver desenhando uma trilha ou movendo um item, deslizar tela ao "
-"aproximar os cantos."
+"Quando a desenhar uma pista ou a mover um item, deslizar a tela ao aproximar "
+"das arestas."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:38
 msgid "Use zoom acceleration"
@@ -3449,7 +3449,7 @@ msgstr "Redefina para os padrões do mouse"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:271
 msgid "Reset to Trackpad Defaults"
-msgstr "Redefina para os padrões do trackpad"
+msgstr "Restaurar para os padrões do trackpad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:86 common/eda_shape.cpp:1614
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
@@ -3494,7 +3494,7 @@ msgstr "Folga mínima do cobre"
 
 #: common/dialogs/panel_setup_netclasses.cpp:488
 msgid "Minimum track width"
-msgstr "Largura mínima da trilha"
+msgstr "Largura mínima da pista"
 
 #: common/dialogs/panel_setup_netclasses.cpp:489
 msgid "Via pad diameter"
@@ -3514,7 +3514,7 @@ msgstr "Diâmetro da microvia do furo metalizado"
 
 #: common/dialogs/panel_setup_netclasses.cpp:493
 msgid "Differential pair track width"
-msgstr "Largura do par diferencial"
+msgstr "Largura de pista do par diferencial"
 
 #: common/dialogs/panel_setup_netclasses.cpp:494
 msgid "Differential pair gap"
@@ -3559,7 +3559,7 @@ msgstr "Isolamento"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:104
 #: pcbnew/tools/board_inspection_tool.cpp:727
 msgid "Track Width"
-msgstr "Largura de Trilha"
+msgstr "Largura de pista"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:44
 #: pcb_calculator/pcb_calculator_frame.cpp:87
@@ -3632,7 +3632,7 @@ msgstr "Filtro de nome de rede:"
 #: common/dialogs/panel_setup_netclasses_base.cpp:140
 #: pcbnew/widgets/appearance_controls.cpp:896
 msgid "Show All Nets"
-msgstr "Exibir Todas as Camadas"
+msgstr "Mostrar Todas as Redes"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:146
 msgid "Apply Filters"
@@ -3726,7 +3726,7 @@ msgstr "Mensagens de Saída"
 #: pcbnew/dialogs/dialog_drc_base.cpp:147
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:32
 msgid "Show:"
-msgstr "Exibir:"
+msgstr "Mostrar:"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:34
 #: eeschema/dialogs/dialog_erc_base.cpp:68 eeschema/lib_item.cpp:50
@@ -4015,7 +4015,7 @@ msgstr "Restrinja para H, V, 45"
 
 #: common/eda_draw_frame.cpp:322
 msgid "Edit User Grid..."
-msgstr "Edite a grade do usuário ..."
+msgstr "Edite a Grelha do Utilizador ..."
 
 #: common/eda_draw_frame.cpp:431
 msgid "Zoom Auto"
@@ -4075,7 +4075,7 @@ msgstr "Zona"
 
 #: common/eda_item.cpp:322 pcbnew/pcb_track.cpp:659
 msgid "Track"
-msgstr "Trilha"
+msgstr "Pista"
 
 #: common/eda_item.cpp:323 pcbnew/dialogs/dialog_board_statistics.cpp:494
 #: pcbnew/pcb_track.cpp:716
@@ -4534,8 +4534,7 @@ msgstr ""
 #: common/env_vars.cpp:94
 msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr ""
-"Um diretório contendo os scripts específicos do usuário instalados com o "
-"KiCad"
+"Uma diretoria com scripts específicos do utilizador instalados com KiCad"
 
 #: common/env_vars.cpp:98
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
@@ -4764,7 +4763,7 @@ msgstr "Remover da Seleção"
 
 #: common/hotkey_store.cpp:49
 msgid "Ignore Grid Snaps"
-msgstr "Ignorar Alinhamento à Grade"
+msgstr "Ignorar Alinhamento à Grelha"
 
 #: common/hotkey_store.cpp:50
 msgid "Ignore Other Snaps"
@@ -5210,7 +5209,7 @@ msgstr "Itens auxiliares"
 #: gerbview/widgets/gerbview_layer_widget.cpp:98
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Grid"
-msgstr "Grade"
+msgstr "Grelha"
 
 #: common/layer_id.cpp:133
 msgid "Axes"
@@ -5292,7 +5291,7 @@ msgstr "Ilhas com furo passante"
 #: pcbnew/widgets/appearance_controls.cpp:335
 #: pcbnew/widgets/panel_selection_filter_base.cpp:37
 msgid "Tracks"
-msgstr "Trilhas"
+msgstr "Pistas"
 
 #: common/layer_id.cpp:153
 msgid "Through vias"
@@ -5354,7 +5353,7 @@ msgstr "Sombras do marcador RDC"
 
 #: common/layer_id.cpp:172
 msgid "Grid axes"
-msgstr "Eixos das grades"
+msgstr "Eixos da Grelha"
 
 #: common/lib_id.cpp:143
 msgid "Illegal character found in logical library name"
@@ -5749,7 +5748,7 @@ msgstr "Cancelar ferramenta atual"
 
 #: common/tool/actions.cpp:127
 msgid "Show Context Menu"
-msgstr "Exibir Menu de Contexto"
+msgstr "Mostrar Menu de Contexto"
 
 #: common/tool/actions.cpp:127
 msgid "Perform the right-mouse-button action"
@@ -6009,39 +6008,39 @@ msgstr "Deslocar a Direita"
 
 #: common/tool/actions.cpp:444
 msgid "Switch to Fast Grid 1"
-msgstr "Alternar para Grade Rápida 1"
+msgstr "Alternar para Grelha Rápida 1"
 
 #: common/tool/actions.cpp:449
 msgid "Switch to Fast Grid 2"
-msgstr "Alternar para Grade Rápida 2"
+msgstr "Alternar para Grelha Rápida 2"
 
 #: common/tool/actions.cpp:454
 msgid "Switch to Next Grid"
-msgstr "Alternar a para Próxima Grade"
+msgstr "Alternar a para Próxima Grelha"
 
 #: common/tool/actions.cpp:458
 msgid "Switch to Previous Grid"
-msgstr "Alternar para a Grade Anterior"
+msgstr "Alternar para a Grelha Anterior"
 
 #: common/tool/actions.cpp:463
 msgid "Set the grid origin point"
-msgstr "Definir ponto de origem da grade"
+msgstr "Definir ponto de origem da Grelha"
 
 #: common/tool/actions.cpp:476
 msgid "Show Grid"
-msgstr "Mostrar Grade"
+msgstr "Mostrar Grelha"
 
 #: common/tool/actions.cpp:476
 msgid "Display grid dots or lines in the edit window"
-msgstr "Exibir pontos ou linhas da grade na janela de edição"
+msgstr "Mostrar pontos ou linhas da grelha na janela de edição"
 
 #: common/tool/actions.cpp:481
 msgid "Grid Properties..."
-msgstr "Propriedades da Grade..."
+msgstr "Propriedades da Grelha..."
 
 #: common/tool/actions.cpp:481
 msgid "Set grid dimensions"
-msgstr "Definir dimensões da grade"
+msgstr "Definir dimensões da grelha"
 
 #: common/tool/actions.cpp:486
 msgid "Use inches"
@@ -6100,7 +6099,7 @@ msgstr "Sempre Mostrar o Cursor"
 
 #: common/tool/actions.cpp:525
 msgid "Display crosshairs even in selection tool"
-msgstr "Exibir cursor até mesmo na ferramenta de seleção"
+msgstr "Mostrar cursor até mesmo na ferramenta de seleção"
 
 #: common/tool/actions.cpp:530
 msgid "Full-Window Crosshairs"
@@ -6320,12 +6319,12 @@ msgstr "Doe para o KiCad"
 #: common/tool/grid_menu.cpp:93
 #, c-format
 msgid "Grid: %s (%s)"
-msgstr "Grade: %s (%s)"
+msgstr "Grelha: %s (%s)"
 
 #: common/tool/grid_menu.cpp:104
 #, c-format
 msgid "User grid: %s (%s)"
-msgstr "Grade do usuário: %s (%s)"
+msgstr "Grelha do utilizador: %s (%s)"
 
 #: common/tool/zoom_menu.cpp:49
 #, c-format
@@ -6404,7 +6403,7 @@ msgstr ""
 
 #: common/widgets/gal_options_panel.cpp:104
 msgid "Grid Options"
-msgstr "Opções da Grade"
+msgstr "Opções da Grelha"
 
 #: common/widgets/gal_options_panel.cpp:109
 msgid "Dots"
@@ -6420,11 +6419,11 @@ msgstr "Pequenas cruzes"
 
 #: common/widgets/gal_options_panel.cpp:115
 msgid "Grid Style"
-msgstr "Estilo da Grade"
+msgstr "Estilo da Grelha"
 
 #: common/widgets/gal_options_panel.cpp:127
 msgid "Grid thickness:"
-msgstr "Espessura da grade:"
+msgstr "Espessura da grelha:"
 
 #: common/widgets/gal_options_panel.cpp:138
 #: common/widgets/gal_options_panel.cpp:154
@@ -6434,11 +6433,11 @@ msgstr "px"
 
 #: common/widgets/gal_options_panel.cpp:143
 msgid "Min grid spacing:"
-msgstr "Espaçamento mínimo de grade:"
+msgstr "Espaçamento mínimo da grelha:"
 
 #: common/widgets/gal_options_panel.cpp:159
 msgid "Snap to Grid:"
-msgstr "Ajuste à grade:"
+msgstr "Ajuste à grelha:"
 
 #: common/widgets/gal_options_panel.cpp:163
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:343
@@ -6450,7 +6449,7 @@ msgstr "Sempre"
 
 #: common/widgets/gal_options_panel.cpp:163
 msgid "When grid shown"
-msgstr "Quando grade aparente"
+msgstr "Quando a grelha é mostrada"
 
 #: common/widgets/gal_options_panel.cpp:163
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:343
@@ -6483,7 +6482,7 @@ msgstr ""
 
 #: common/widgets/gal_options_panel.cpp:209
 msgid "Always show crosshairs"
-msgstr "Sempre exibir o alvo"
+msgstr "Mostrar sempre o cursor"
 
 #: common/widgets/grid_text_button_helpers.cpp:379
 msgid "Select a File"
@@ -6499,7 +6498,7 @@ msgstr "Ajustar ao ecrã"
 
 #: common/widgets/mathplot.cpp:1666
 msgid "Set plot view to show all items"
-msgstr "Ajustar visão de plotagem para exibir todos os itens"
+msgstr "Ajustar visão de traçar para mostrar todos os itens"
 
 #: common/widgets/mathplot.cpp:1667
 msgid "Zoom in plot view."
@@ -6643,9 +6642,8 @@ msgid "All KiCad project files"
 msgstr "Todos os arquivos do projeto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:235
-#, fuzzy
 msgid "All KiCad schematic files"
-msgstr "Arquivos do esquemático do Altium"
+msgstr "Todos os ficheiros esquemáticos KiCad"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad legacy schematic files"
@@ -7628,9 +7626,9 @@ msgid ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
-"Por padrão, a linha de comando é executada em uma janela de console oculta e "
-"sua saída é redirecionada para a tela de informações.\n"
-"Marque esta opção para exibir a janela de console em execução."
+"Por padrão, a linha de comandos é executada numa janela de consola oculta e "
+"a sua saída é redirecionada para a janela de informações.\n"
+"Marque esta opção para mostrar a janela de consola em execução."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:116
 msgid "Reset the list of BOM generator scripts to the default settings"
@@ -9021,11 +9019,11 @@ msgstr "Offset da posição do nome do pino:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
 msgid "Show pin number text"
-msgstr "Exibir números dos pinos"
+msgstr "Mostrar números dos pinos"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:124
 msgid "Show pin name text"
-msgstr "Exibir nomes dos pinos"
+msgstr "Mostrar nomes dos pinos"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:128
 msgid "Pin name inside"
@@ -9282,21 +9280,21 @@ msgstr "Opções de texto do pino"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:216
 msgid "Show pin number"
-msgstr "Exibir números dos pinos"
+msgstr "Mostrar números dos pinos"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:218
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:178
 msgid "Show or hide pin numbers"
-msgstr "Exibir ou ocultar números dos pinos"
+msgstr "Mostrar ou ocultar números dos pinos"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:222
 msgid "Show pin name"
-msgstr "Exibir nomes dos pinos"
+msgstr "Mostrar nome do pino"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:224
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:184
 msgid "Show or hide pin names"
-msgstr "Exibir ou ocultar nomes dos pinos"
+msgstr "Mostrar ou ocultar nomes dos pinos"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:231
 msgid "Place pin names inside"
@@ -9657,8 +9655,8 @@ msgid ""
 "difficult to connect to in the schematic.\n"
 "Do you want to continue?"
 msgstr ""
-"Este pino não está em uma grade de %d mils, isto irá\n"
-"dificultar a conexão com ele no esquema.\n"
+"Este pino não está alinhado a uma grelha de %d mils, isto vai\n"
+"dificultar conexões no esquema.\n"
 "Quer continuar?"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:32
@@ -10791,7 +10789,7 @@ msgstr "Modo de compatibilidade:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "User configuration"
-msgstr "Configuração do usuário"
+msgstr "Configuração do utilizador"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "Spice"
@@ -11251,7 +11249,7 @@ msgstr "Procurar footprint"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:90
 #: eeschema/fields_grid_table.cpp:613 eeschema/tools/ee_actions.cpp:61
 msgid "Show Datasheet"
-msgstr "Exibir Ficha Técnica"
+msgstr "Mostrar Ficha Técnica"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:91
 #: eeschema/fields_grid_table.cpp:614
@@ -11775,7 +11773,7 @@ msgstr "Mostre os campos ocultos"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:34
 msgid "Show page limi&ts"
-msgstr "Exibir limi&tes da folha"
+msgstr "Mostrar limi&tes da folha"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:42
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:71
@@ -11958,7 +11956,7 @@ msgstr "&Permitir que a disposição automática de campos altere a justificaç�
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr "&Sempre alinhar campos dispostos automaticamente à grade de 50 mil"
+msgstr "Alinhar &sempre campos posicionados automaticamente à grelha de 50 mil"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:211
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:103
@@ -12185,7 +12183,7 @@ msgstr "T&amanho padrão do nome do pino:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:96
 msgid "Show pin &electrical type"
-msgstr "Exibir tipo &elétrico de pino"
+msgstr "Mostrar tipo &elétrico de pino"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:111
 msgid "&Pitch of repeated pins:"
@@ -14327,7 +14325,6 @@ msgid "Syntax Help"
 msgstr "Ajuda de sintaxe"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14471,9 +14468,9 @@ msgid ""
 msgstr ""
 "<table>\n"
 "    <tr>\n"
-"        <th>Marcação</th>\n"
+"        <th>Markup</th>\n"
 "        <th></th>\n"
-"        <th>Resultado</th>\n"
+"        <th>Result</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
@@ -14502,8 +14499,8 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
-"samp></td>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
@@ -14528,8 +14525,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
+"<i>refdes</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14543,10 +14540,10 @@ msgstr ""
 "        <td><br></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <th>Definição do barramento</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
-"        <th>Redes resultantes</th>\n"
+"        <th>Bus Definition</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
+"        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
@@ -14593,12 +14590,12 @@ msgstr ""
 "        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14606,8 +14603,7 @@ msgstr ""
 "</table>\n"
 "<p></p>\n"
 "<p></p>\n"
-"<i>Observe que a marcação tem precedência sobre as definições do barramento."
-"</i>\n"
+"<i>Note that markup has precedence over bus definitions.</i>\n"
 "\n"
 
 #: eeschema/sch_validators.cpp:102
@@ -14880,7 +14876,7 @@ msgstr "Houveram erros durante a exportação da netlist, abortado."
 #: eeschema/sim/sim_plot_frame.cpp:515
 #, c-format
 msgid "Plot%u - "
-msgstr "Plot%u - "
+msgstr "Traçar%u - "
 
 #: eeschema/sim/sim_plot_frame.cpp:632
 msgid "Error: simulation type not defined!\n"
@@ -14944,7 +14940,7 @@ msgstr "Esconder Cursor"
 
 #: eeschema/sim/sim_plot_frame.cpp:1834
 msgid "Show Cursor"
-msgstr "Exibir Cursor"
+msgstr "Mostrar Cursor"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:19
 msgid "New Plot"
@@ -14977,7 +14973,7 @@ msgstr "Ajustar Valor do Componente"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:75
 msgid "Show SPICE Netlist..."
-msgstr "Exibir Netlist SPICE..."
+msgstr "Mostrar Netlist SPICE..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:75
 msgid "Shows current simulation's netlist. Useful for debugging SPICE errors."
@@ -14993,11 +14989,11 @@ msgstr "Simulação"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:101
 msgid "Show &Grid"
-msgstr "Mostrar &Grade"
+msgstr "Mostrar &Grelha"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:105
 msgid "Show &Legend"
-msgstr "Exibir &Legenda"
+msgstr "Mostrar &Legenda"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:111
 msgid "Dotted Current/Phase"
@@ -15658,11 +15654,11 @@ msgstr "Escolha um símbolo"
 
 #: eeschema/toolbars_symbol_viewer.cpp:55
 msgid "Display previous symbol"
-msgstr "Exibir símbolo anterior"
+msgstr "Mostrar símbolo anterior"
 
 #: eeschema/toolbars_symbol_viewer.cpp:59
 msgid "Display next symbol"
-msgstr "Exibir próximo símbolo"
+msgstr "Mostrar próximo símbolo"
 
 #: eeschema/toolbars_symbol_viewer.cpp:108
 msgid "Symbol Viewer"
@@ -15678,7 +15674,7 @@ msgstr "Manter a visibilidade atual dos campos de footprint"
 
 #: eeschema/tools/assign_footprints.cpp:219
 msgid "Show all footprint fields"
-msgstr "Exibir todos os campos de footprint"
+msgstr "Mostrar todos os campos de footprint"
 
 #: eeschema/tools/assign_footprints.cpp:220
 msgid "Hide all footprint fields"
@@ -15912,7 +15908,7 @@ msgstr "Adicionar Símbolo ao Esquema"
 
 #: eeschema/tools/ee_actions.cpp:183
 msgid "Show Pin Electrical Types"
-msgstr "Exibir Tipos Elétricos de Pinos"
+msgstr "Mostrar Tipos Elétricos de Pinos"
 
 #: eeschema/tools/ee_actions.cpp:183
 msgid "Annotate pins with their electrical types"
@@ -16564,14 +16560,12 @@ msgid "Switch H & V only mode for new wires and buses"
 msgstr "Alterne o modo H & V somente para os novos fios e os novos barramentos"
 
 #: eeschema/tools/ee_actions.cpp:655
-#, fuzzy
 msgid "Repair Schematic"
-msgstr "Criando um esquema"
+msgstr "Reparação de esquema"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr "Execute vários diagnósticos e tente reparar a placa"
+msgstr "Executa vários diagnósticos e tenta reparar o esquema"
 
 #: eeschema/tools/ee_actions.cpp:662 pcbnew/tools/pcb_actions.cpp:786
 msgid "Scripting Console"
@@ -16700,7 +16694,7 @@ msgstr "Ativa o movimento do símbolo"
 
 #: eeschema/tools/ee_actions.cpp:767
 msgid "Align Elements to Grid"
-msgstr "Alinha os elementos à grade"
+msgstr "Alinhar elementos à grelha"
 
 #: eeschema/tools/ee_actions.cpp:773
 msgid "Save Current Sheet Copy As..."
@@ -16788,8 +16782,7 @@ msgstr ""
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
-"<b>Pino %s fora da grade</b> %s na região <b> ( %s, %s)</b> dos que foram "
-"convertidos."
+"<b>Pino %s fora da grelha</b> %s na posição <b> ( %s, %s)</b> do convertido."
 
 #: eeschema/tools/ee_inspection_tool.cpp:413
 #, c-format
@@ -16797,19 +16790,19 @@ msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b>Pino %s fora da grade</b> %s na região <b> (%.3s, %.3s)</b> na unidade "
+"<b>Pino %s fora da grelha</b> %s na posição <b> (%.3s, %.3s)</b> na unidade "
 "convertida %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:426
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>Pino %s fora da grade</b> %s na região <b>(%s, %s)</b>."
+msgstr "<b>Pino %s fora da grelha</b> %s na posição <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:434
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b>Pino %s fora da grade</b> %s na região <b> (%s, %s)</b> na unidade %c."
+"<b>Pino %s fora da grelha</b> %s na posição <b> (%s, %s)</b> na unidade %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:451
 msgid "No symbol issues found."
@@ -17233,7 +17226,7 @@ msgstr "Camada"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:30
 msgid "Show D codes"
-msgstr "Exibir D-Codes"
+msgstr "Mostrar D-Codes"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:38
 msgid "Drawing Mode"
@@ -17410,7 +17403,7 @@ msgstr "Tamanho da Página"
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:28
 #: pcbnew/dialogs/panel_edit_options_base.cpp:374
 msgid "Show page limits"
-msgstr "Exibir limites da folha"
+msgstr "Mostrar limites da folha"
 
 #: gerbview/events_called_functions.cpp:178 gerbview/gerbview_frame.cpp:165
 msgid "Layers Manager"
@@ -17870,11 +17863,11 @@ msgstr "Abra um arquivo compactado (Gerber e Drill)"
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Show Layers Manager"
-msgstr "Exibir gestor de camadas"
+msgstr "Mostrar gestor de camadas"
 
 #: gerbview/tools/gerbview_actions.cpp:64
 msgid "Show or hide the layer manager"
-msgstr "Exibir ou ocultar o gestor de camadas"
+msgstr "Mostrar ou ocultar o gestor de camadas"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "List DCodes..."
@@ -17890,7 +17883,7 @@ msgstr "Mostra a origem..."
 
 #: gerbview/tools/gerbview_actions.cpp:76
 msgid "Show source file for the current layer"
-msgstr "Exibir código-fonte da camada atual"
+msgstr "Mostrar código-fonte da camada atual"
 
 #: gerbview/tools/gerbview_actions.cpp:81
 msgid "Export to PCB Editor..."
@@ -17954,7 +17947,7 @@ msgstr "Delinear Linhas"
 
 #: gerbview/tools/gerbview_actions.cpp:144
 msgid "Show lines in outline mode"
-msgstr "Exibir linhas em modo contorno"
+msgstr "Mostrar linhas em modo contorno"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 msgid "Sketch Flashed Items"
@@ -17962,7 +17955,7 @@ msgstr "Delinear Itens Marcados"
 
 #: gerbview/tools/gerbview_actions.cpp:150
 msgid "Show flashed items in outline mode"
-msgstr "Exibir itens marcados em modo contorno"
+msgstr "Mostrar itens marcados em modo contorno"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 msgid "Sketch Polygons"
@@ -17970,7 +17963,7 @@ msgstr "Delinear Polígonos"
 
 #: gerbview/tools/gerbview_actions.cpp:156
 msgid "Show polygons in outline mode"
-msgstr "Exibir polígonos em modo contorno"
+msgstr "Mostrar polígonos em modo contorno"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Ghost Negative Objects"
@@ -17978,23 +17971,23 @@ msgstr "Esmaecer Objetos Negativos"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Show negative objects in ghost color"
-msgstr "Exibir objetos negativos na cor fantasma"
+msgstr "Mostrar objetos negativos na cor fantasma"
 
 #: gerbview/tools/gerbview_actions.cpp:168
 msgid "Show DCodes"
-msgstr "Exibir DCodes"
+msgstr "Mostrar DCodes"
 
 #: gerbview/tools/gerbview_actions.cpp:168
 msgid "Show dcode number"
-msgstr "Exibir número D-Code"
+msgstr "Mostrar número D-Code"
 
 #: gerbview/tools/gerbview_actions.cpp:173
 msgid "Show in Differential Mode"
-msgstr "Exibir em Modo Diferencial"
+msgstr "Mostrar em Modo Diferencial"
 
 #: gerbview/tools/gerbview_actions.cpp:173
 msgid "Show layers in diff (compare) mode"
-msgstr "Exibir camadas em modo diferencial (comparativo)"
+msgstr "Mostrar camadas em modo diferencial (comparativo)"
 
 #: gerbview/tools/gerbview_actions.cpp:178
 msgid "Flip Gerber View"
@@ -18079,12 +18072,12 @@ msgstr "Objetos Negativos"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:96
 msgid "Show negative objects in this color"
-msgstr "Exibir objetos negativos nesta cor"
+msgstr "Mostrar objetos negativos nesta cor"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:99
 #: pcbnew/widgets/appearance_controls.cpp:356
 msgid "Show the (x,y) grid dots"
-msgstr "Mostrar os pontos da grade (x,y)"
+msgstr "Mostrar os pontos da grelha (x,y)"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:101
 msgid "Show drawing sheet border and title block"
@@ -18097,7 +18090,7 @@ msgstr "Fundo da PCI"
 #: gerbview/widgets/gerbview_layer_widget.cpp:122
 #: pcbnew/widgets/appearance_controls.cpp:1685
 msgid "Show All Layers"
-msgstr "Exibir Todas as Camadas"
+msgstr "Mostrar Todas as Camadas"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:126
 #: pcbnew/widgets/appearance_controls.cpp:1672
@@ -19083,7 +19076,7 @@ msgstr "Ferramentas de Cálculo"
 
 #: kicad/tools/kicad_manager_actions.cpp:104
 msgid "Run component calculations, track width calculations, etc."
-msgstr "Executa cálculos de componentes, cálculos de largura de trilha, etc."
+msgstr "Executa cálculos de componentes, cálculos de largura de pista, etc."
 
 #: kicad/tools/kicad_manager_actions.cpp:110
 msgid "Edit drawing sheet borders and title block"
@@ -20273,17 +20266,17 @@ msgstr "ohmímetro"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:95
 msgid "External Layer Traces"
-msgstr "Traços da camada externa"
+msgstr "Pistas de camada externa"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:201
 msgid "Trace width (W):"
-msgstr "Largura da trilha (W):"
+msgstr "Largura da Pista (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:117
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:215
 msgid "Trace thickness (H):"
-msgstr "Espessura da trilha (H):"
+msgstr "Espessura da pista (H):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:138
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:236
@@ -20328,7 +20321,7 @@ msgstr "W"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:193
 msgid "Internal Layer Traces"
-msgstr "Traços da camada interna"
+msgstr "Pistas de camada interna"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Microstrip Line"
@@ -20779,28 +20772,27 @@ msgid ""
 "___H___ is thickness (height) in mils  \n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces  \n"
 msgstr ""
-"Caso especifique a corrente máxima, então a largura da trilha será calculada "
+"Caso especifique a corrente máxima, então a largura da pista será calculada "
 "automaticamente.\n"
 "\n"
-"Caso especifique uma das larguras da trilha, então a corrente máxima que ela "
-"suportará será calculada automaticamente. A largura para que a outra trilha "
-"também possa lidar com esta corrente também será calculada.\n"
+"Caso especifique uma das larguras da pista, então a corrente máxima que ela "
+"suporta será calculada automaticamente. A largura para que a outra pista "
+"possa também lidar com esta corrente também será calculada.\n"
 "\n"
-"O valor de controle é mostrado em negrito.\n"
+"O valor de controlo é mostrado a negrito.\n"
 "\n"
-"Os cálculos são válidos para correntes de até 35 A (externo) ou 17,5 A "
-"(interno), aumentos de temperatura até 100 ºC e larguras de até 400 mil (10 "
-"mm).\n"
+"Os cálculos são válidos para correntes até 35 A (externo) ou 17,5 A (interno)"
+", aumentos de temperatura até 100 ºC e larguras até 400 mil (10 mm).\n"
 "\n"
 "A fórmula do IPC 2221 é  \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>  \n"
 "onde:  \n"
 "___I___ = a corrente máxima em A  \n"
-"___&Delta;T___ = aumento da temperatura acima do ambiente em ºC  \n"
+"___&Delta;T___ = aumento de temperatura acima da ambiente em ºC  \n"
 "___W___ é a largura em mils  \n"
 "___H___ é a espessura (altura) em mils  \n"
-"___K___ 0.024 para trilhas internas ou 0.048 para trilhas externas  \n"
+"___K___ 0.024 para pistas internas ou 0.048 para pistas externas  \n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21188,7 +21180,7 @@ msgstr "Vias"
 
 #: pcbnew/board.cpp:1175 pcbnew/pcb_draw_panel_gal.cpp:479
 msgid "Track Segments"
-msgstr "Segmentos de Trilha"
+msgstr "Segmentos de pista"
 
 #: pcbnew/board.cpp:1176 pcbnew/pcb_draw_panel_gal.cpp:480
 #: pcbnew/widgets/appearance_controls_base.cpp:61
@@ -21344,7 +21336,7 @@ msgstr "Núcleo"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:129
 msgid "PrePreg"
-msgstr "PrePreg"
+msgstr "PreImpregnado"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:188
 #, c-format
@@ -21639,7 +21631,7 @@ msgstr "Verificando preenchimentos da zona..."
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove track shorting two nets"
-msgstr "Remover trilha curto-circuitando duas redes"
+msgstr "Remover pista em curto-circuito de duas redes"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove via shorting two nets"
@@ -21651,15 +21643,15 @@ msgstr "Remover via redundante"
 
 #: pcbnew/cleanup_item.cpp:50
 msgid "Remove duplicate track"
-msgstr "Remover trilha duplicada"
+msgstr "Remover pista duplicada"
 
 #: pcbnew/cleanup_item.cpp:51
 msgid "Merge co-linear tracks"
-msgstr "Mesclar trilhas colineares"
+msgstr "Juntar pista colineares"
 
 #: pcbnew/cleanup_item.cpp:52
 msgid "Remove track not connected at both ends"
-msgstr "Remove a trilha não conectada em ambas as extremidades"
+msgstr "Remover pista não conectada em ambas as extremidades"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove via connected on fewer than two layers"
@@ -21667,11 +21659,11 @@ msgstr "Remove a via conectada em menos de duas camadas"
 
 #: pcbnew/cleanup_item.cpp:54
 msgid "Remove zero-length track"
-msgstr "Remover trilha de comprimento zero"
+msgstr "Remover pista de comprimento zero"
 
 #: pcbnew/cleanup_item.cpp:55
 msgid "Remove track inside pad"
-msgstr "Remover trilha dentro de ilha"
+msgstr "Remover pista dentro de ilha"
 
 #: pcbnew/cleanup_item.cpp:58
 msgid "Remove zero-size graphic"
@@ -21850,7 +21842,7 @@ msgid ""
 msgstr ""
 "\n"
 "Antes de classificar por %s cujas coordenadas serão arredondadas para uma "
-"grade com %s, %s."
+"grelha com %s, %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:377
 msgid "footprint location"
@@ -22051,8 +22043,8 @@ msgid ""
 "This helps with misaligned parts."
 msgstr ""
 "A posição do componente será arredondado\n"
-"nesta grade antes da classificação.\n"
-"Isso ajuda nas peças desalinhadas."
+"nesta grelha antes da classificação.\n"
+"Isto ajuda com peças desalinhadas."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
 msgid "Reannotation Scope"
@@ -22507,14 +22499,14 @@ msgstr "Limpeza da placa"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:22
 msgid "Delete &tracks connecting different nets"
-msgstr "Apagar &trilhas que conectem redes distintas"
+msgstr "Apagar &pista que conectem redes distintas"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:23
 msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
 msgstr ""
-"remover segmentos de trilha que conectam nós pertencentes a redes diferentes "
+"remover segmentos de pista que conectam nós pertencentes a redes diferentes "
 "(curto-circuito)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
@@ -22531,31 +22523,31 @@ msgstr "Exclua as vias conectadas em apenas uma camada"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "&Merge co-linear tracks"
-msgstr "&Mesclar trilhas colineares"
+msgstr "&Juntar pistas colineares"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:36
 msgid "merge aligned track segments, and remove null segments"
-msgstr "anexar segmentos de trilhas alinhados, e remover segmentos nulos"
+msgstr "anexar segmentos de pista alinhados, e remover segmentos nulos"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:40
 msgid "Delete tracks unconnected at one end"
-msgstr "Exclua as trilhas desconectadas numa extremidade"
+msgstr "Apagar pistas desconectadas numa extremidade"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
 msgid "delete tracks having at least one dangling end"
-msgstr "apagar trilhas com pelo menos uma ponta pendida"
+msgstr "apagar pistas com pelo menos uma ponta pendida"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:45
 msgid "Delete tracks fully inside pads"
-msgstr "Exclua as faixas que estiverem dentro das ilhas"
+msgstr "Apagar pistas completamente dentro de ilhas"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:46
 msgid "Delete tracks that have both start and end positions inside of a pad"
-msgstr "Apaga as trilhas que têm posições de início e fim dentro de uma ilha"
+msgstr "Apagar pistas que têm posições de início e fim dentro de uma ilha"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:57
 msgid "Cleanup Tracks and Vias"
-msgstr "Limpar Trilhas e Vias"
+msgstr "Limpar Pistas e Vias"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:45
 msgid "Constraints Resolution Report"
@@ -22992,7 +22984,7 @@ msgstr "Pular numeração de ilha:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:206
 msgid "Grid Array"
-msgstr "Matriz de Grade"
+msgstr "Matriz de Grelha"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:216
 msgid "Horizontal center:"
@@ -23158,7 +23150,7 @@ msgstr "Formato das unidades:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:141
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:149
 msgid "Choose how to display the units"
-msgstr "Escolha como exibir as unidades"
+msgstr "Escolha como mostrar as unidades"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:145
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:116
@@ -23190,7 +23182,7 @@ msgstr "Precisão:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:174
 msgid "Choose how many digits of precision to display"
-msgstr "Escolha quantos dígitos de precisão deseja exibir"
+msgstr "Escolha quantos dígitos de precisão deseja mostrar"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:292
@@ -23414,7 +23406,7 @@ msgstr "Preencher todas as zonas antes de executar a DRC"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr "Reporta todos os erros para cada faixa"
+msgstr "Reporta todos os erros para cada pista"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -23424,11 +23416,11 @@ msgid ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 msgstr ""
-"Caso selecionada, todas as violações de DRC das trilhas serão relatadas.  "
+"Caso selecionada, todas as violações de DRC das pistas serão reportadas.  "
 "Isto pode ser lento em projetos complexos.\n"
 "\n"
 "Caso não selecionada, somente a primeira violação da DRC será reportada para "
-"cada conexão de trilha."
+"cada conexão de pista."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
@@ -23613,7 +23605,7 @@ msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 msgid "Grid reference point:"
-msgstr "Ponto de referência da grade:"
+msgstr "Ponto de referência da grelha:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:38
 msgid "Adjust automatically"
@@ -23695,7 +23687,7 @@ msgstr "Perfure/posicione o arquivo de origem"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:41
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Grid origin"
-msgstr "Origem da grade"
+msgstr "Origem da grelha"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:44
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:44
@@ -23709,7 +23701,7 @@ msgstr "Origem do centro da placa"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:54
 msgid "User Defined Origin"
-msgstr "Origem definida pelo usuário"
+msgstr "Origem definida pelo utilizador"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:108
 msgid "Other Options"
@@ -23931,7 +23923,7 @@ msgstr "Incluir &desenhos"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:42
 msgid "Include &tracks"
-msgstr "Incluir &trilhas"
+msgstr "Incluir &pistas"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:45
 msgid "Include &board outline layer"
@@ -24156,7 +24148,7 @@ msgstr "Furo passante"
 #: pcbnew/footprint_libraries_utils.cpp:1142 pcbnew/pad.cpp:1158
 #: pcbnew/pad.cpp:1642
 msgid "SMD"
-msgstr "SMD"
+msgstr "SMD (Dispositivo de Montagem em Superfície)"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:179
@@ -24453,7 +24445,7 @@ msgstr "Scripts python não carregáveis:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:84
 msgid "Show Trace"
-msgstr "Exibir Traço"
+msgstr "Mostrar Pista"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:98
 msgid "Update Python Modules"
@@ -24822,7 +24814,7 @@ msgstr "Footprints"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
 msgid "Tracks && vias"
-msgstr "Trilhas && vias"
+msgstr "pistas && vias"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 msgid "Markers"
@@ -24854,11 +24846,11 @@ msgstr "Footprints desbloqueados"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:70
 msgid "Locked tracks"
-msgstr "Trilhas bloqueadas"
+msgstr "Pistas bloqueadas"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:73
 msgid "Unlocked tracks"
-msgstr "Trilhas desbloqueadas"
+msgstr "Pistas desbloqueadas"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
 msgid "All layers"
@@ -25005,7 +24997,7 @@ msgstr "Ajustar para valores da classe de rede:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:77
 msgid "Set Track and Via Properties"
-msgstr "Definir Propriedades de Trilha e Via"
+msgstr "Definir Propriedades de Pista e Via"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
 msgid "footprint"
@@ -25160,7 +25152,7 @@ msgstr "Regras do design"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Predefined track and via dimensions"
-msgstr "Trilha predefinida e as dimensões da via"
+msgstr "Dimensões de pista e via pré-definidas"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 msgid "Solder mask/paste defaults"
@@ -25327,7 +25319,7 @@ msgstr "Comprimento da via"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:81
 msgid "Track Length"
-msgstr "Comprimento da trilha"
+msgstr "Comprimento da pista"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:82
 msgid "Die Length"
@@ -25382,7 +25374,7 @@ msgstr "Ficheiro de relatório"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:44
 msgid "Show zero pad nets"
-msgstr "Exibir redes sem ilhas"
+msgstr "Mostrar redes sem ilhas"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
 msgid "Group by:"
@@ -25483,7 +25475,7 @@ msgstr "Exclua os footprints sem componentes na netlist"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
 msgid "Delete tracks shorting multiple nets"
-msgstr "Apagar trilhas em curto com diversas redes"
+msgstr "Apagar pistas em curto-circuito com várias redes"
 
 #: pcbnew/dialogs/dialog_netlist_base.h:67
 msgid "Import Netlist"
@@ -26487,9 +26479,10 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:307
 msgid "Track width correction:"
-msgstr "Correção da largura da trilha:"
+msgstr "Correção da largura da pista:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:312
+#, fuzzy
 msgid ""
 "Set global width correction for exact width PostScript output.\n"
 "These width correction is intended to compensate tracks width and also pads "
@@ -26499,10 +26492,10 @@ msgid ""
 msgstr ""
 "Define a correção da largura global para os arquivo gerados pelo PostScript "
 "com largura exata.\n"
-"Essa correção da largura tem como objetivo compensar a largura das trilhas e "
+"Essa correção da largura tem como objetivo compensar a largura das pistas e "
 "também os erros de tamanho das ilhas e das vias.\n"
-"O valor de correção da largura razoável deve estar num intervalo com [-"
-"(MinTrackWidth-1), +(MinClearanceValue-1)]."
+"O valor de correção da largura razoável deve estar num intervalo com "
+"[-(MinTrackWidth-1), +(MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Force A4 output"
@@ -26602,7 +26595,7 @@ msgstr "Desmarcar Todas as Camadas"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
 msgid "Trace gap must be greater than 0."
-msgstr "O intervalo do traço deve ser maior que 0."
+msgstr "O espaçamento da pista deve ser maior que 0."
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:32
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:43
@@ -26612,7 +26605,7 @@ msgstr "u"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
 msgid "Trace gap:"
-msgstr "Espaçamento do traço:"
+msgstr "Espaçamento da pista:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
 msgid "Via gap:"
@@ -26620,7 +26613,7 @@ msgstr "Espaçamento de Via:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
-msgstr "Espaçamento da via igual ao espaçamento do traço"
+msgstr "Espaçamento da via igual ao espaçamento da pista"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
@@ -26628,7 +26621,7 @@ msgstr "Dimensões do Par Diferencial"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:79
 msgid "Single Track Length Tuning"
-msgstr "Ajuste do Comprimento de Trilha Única"
+msgstr "Ajuste do Comprimento de Pista Única"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:85
 msgid "Differential Pair Length Tuning"
@@ -26708,7 +26701,7 @@ msgstr "Raio da esquadria (r):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.h:74
 msgid "Trace Length Tuning"
-msgstr "Ajuste do Comprimento do Traço"
+msgstr "Ajuste do Comprimento da Pista"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:34
 msgid "DRC violation: highlight obstacles"
@@ -26716,7 +26709,7 @@ msgstr "Violação DRC: destacar obstáculos"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr "Violação DRC: empurrar trilhas e vias"
+msgstr "Violação DRC: empurrar pistas e vias"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
@@ -26763,12 +26756,12 @@ msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
-"Quando ativado, o roteador tenta mover os traços em colisão para trás de "
+"Quando ativado, o router tenta mover as pista em colisão para trás de "
 "obstáculos sólidos (ex. ilhas) ao invés de \"refletir\" de volta a colisão"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:42
 msgid "Remove redundant tracks"
-msgstr "Remover trilhas redundantes"
+msgstr "Remover pistas redundantes"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:43
 msgid ""
@@ -26777,10 +26770,10 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
-"Remove loops durante o roteamento (Ex. se a nova trilha assegura a mesma "
+"Remove loops durante o roteamento (Ex. se a nova pista assegura a mesma "
 "conectividade que uma já existente, a antiga é removida).\n"
-"A remoção de loop funciona localmente (somente entre o início e o término da "
-"trilha roteada no momento)."
+"A remoção de loop funciona localmente (somente entre o início e o fim da "
+"pista)."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Optimize pad connections"
@@ -26792,7 +26785,7 @@ msgid ""
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
 "Quando ativado, o roteador tenta quebrar ilhas/vias de forma limpa, evitando "
-"ângulos agudos e traços de saída irregulares."
+"ângulos agudos e pistas de saída irregulares."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid "Smooth dragged segments"
@@ -26815,16 +26808,16 @@ msgid ""
 "(Highlight collisions mode only) - allows one to establish a track even if "
 "is violating the DRC rules."
 msgstr ""
-"(Somente modo de destaque das colisões) - permite estabelecer uma trilha "
-"mesmo que viole a DRC."
+"(Somente modo de destaque das colisões) - permite estabelecer uma pista "
+"mesmo que viole as regras de DRC."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:62
 msgid "Suggest track finish"
-msgstr "Sugerir acabamento da trilha"
+msgstr "Sugerir fim de pista"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 msgid "Optimize entire track being dragged"
-msgstr "Otimize toda a trilha que está sendo arrastada"
+msgstr "Otimize toda a pista que está a ser arrastada"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:68
 msgid ""
@@ -26832,22 +26825,22 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
-"Quando ativado, toda a parte da trilha que está visível no ecrã será "
+"Quando ativado, toda a parte da pista que está visível no ecrã será "
 "otimizada e redirecionada quando um segmento for arrastado.  Quando "
-"desativado, apenas a área próxima ao segmento que está sendo arrastado será "
+"desativado, apenas a área próxima ao segmento que está a ser arrastado será "
 "otimizado."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid "Use mouse path to set track posture"
-msgstr "Use o caminho do mouse para definir a postura da trilha"
+msgstr "Use o caminho do rato para definir a postura da pista"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:73
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
-"Quando ativado, a postura das trilhas será guiada da mesma maneira que o "
-"mouse é movido a partir do local inicial"
+"Quando ativado, a postura das pistas será guiada da mesma maneira que o rato "
+"é movido a partir do local inicial"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:77
 msgid "Fix all segments on click"
@@ -26859,7 +26852,7 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
-"Quando ativado, todos os segmentos da trilha serão fixados no local até a "
+"Quando ativado, todos os segmentos da pista serão fixos no local até a "
 "localização do cursor.  Quando desativado, o último segmento (mais próximo "
 "do cursor) permanecerá livre e seguirá o cursor."
 
@@ -26895,7 +26888,7 @@ msgstr "Redefina para o deslocamento Y atual da posição de referência."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:240
 msgid "Reference location: grid origin"
-msgstr "Local de referência: origem da grade"
+msgstr "Local de referência: origem da grelha"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:249
 msgid "Reference location: local coordinates origin"
@@ -26915,7 +26908,7 @@ msgstr "Utilizar Origem Local"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:38
 msgid "Use Grid Origin"
-msgstr "Utilizar Origem da Grade"
+msgstr "Utilizar Origem da Grelha"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:41
 msgid "Select Item..."
@@ -27021,11 +27014,11 @@ msgstr "Regras básicas:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
 msgid "Keep out tracks"
-msgstr "Afastar trilhas"
+msgstr "Afastar pistas"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:49
 msgid "Prevent tracks from routing into this area"
-msgstr "Impeça que as trilhas sejam direcionadas nesta região"
+msgstr "Impedir que pistas passem por esta região"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Keep out vias"
@@ -27193,7 +27186,7 @@ msgstr "A camada inicial e final da via não podem ser a mesma"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:606
 msgid "Edit track/via properties"
-msgstr "Editar propriedades da trilha/via"
+msgstr "Editar propriedades da pista/via"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:671 pcbnew/files.cpp:914
 msgid "Updating nets"
@@ -27234,7 +27227,7 @@ msgstr "Larguras pré-definidas:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:117
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:25
 msgid "Track width:"
-msgstr "Largura da trilha:"
+msgstr "Largura da pista:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:131
 msgid "Use net class widths"
@@ -27294,7 +27287,7 @@ msgstr "Camadas iniciais, finais e conectadas"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
-msgstr "Propriedades de Trilha & Via"
+msgstr "Propriedades de Pista & Via"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
 msgid "Via drill size must be smaller than via diameter"
@@ -27306,7 +27299,7 @@ msgstr "Furo da via:"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:54
 msgid "Track Width and Via Size"
-msgstr "Largura da Trilha e Tamanho da Via"
+msgstr "Largura da Pista e Tamanho da Via"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:146
 msgid "Set Unused Pad Properties"
@@ -27374,19 +27367,19 @@ msgstr "Atualizar PCI a partir do Esquema"
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Do not show"
-msgstr "Não exibir"
+msgstr "Não mostrar"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on pads"
-msgstr "Exibir em ilhas"
+msgstr "Mostrar em ilhas"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on tracks"
-msgstr "Exibir em trilhas"
+msgstr "Mostrar em pistas"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:37
 msgid "Show on pads and tracks"
-msgstr "Exibir em ilhas e trilhas"
+msgstr "Mostrar em ilhas e pistas"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:39
 msgid "Net Names"
@@ -27394,12 +27387,12 @@ msgstr "Nomes de Rede"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Show or hide net names on pads and/or tracks."
-msgstr "Mostrar ou ocultar nomes de rede em ilhas e/ou trilhas."
+msgstr "Mostrar ou ocultar nomes de rede em ilhas e/ou pistas."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
 #: pcbnew/tools/pcb_actions.cpp:848
 msgid "Show pad numbers"
-msgstr "Exibir números de Ilha"
+msgstr "Mostrar números de Ilha"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:49
 msgid "Show pad <no net> indicator"
@@ -27423,24 +27416,23 @@ msgstr "Mostra durante o roteamento e ao editar"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show always"
-msgstr "Sempre exibir"
+msgstr "Mostrar sempre"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
 msgid "Track && Via Clearances"
-msgstr "Os isolamentos das trilhas && e das vias"
+msgstr "Os isolamentos das pistas && e das vias"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
 msgstr ""
-"Mostra os contornos do isolamento livre em torno das trilhas e, "
-"opcionalmente, o isolamento da via ao redor do final da trilha durante o "
-"roteamento."
+"Mostra os contornos do isolamento em torno das pistas e, opcionalmente, o "
+"isolamento da via ao redor do fim da pista durante o roteamento."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
-msgstr "Exibir isolamento de Ilha"
+msgstr "Mostrar isolamento de Ilha"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
 msgid "Scroll cross-probed items into view"
@@ -27508,7 +27500,7 @@ msgstr "Seleciona item(ns)."
 #: pcbnew/dialogs/panel_edit_options_base.cpp:142
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
 msgid "Highlight net (for pads or tracks)."
-msgstr "Realce a rede (para as trilhas e as ilhas)."
+msgstr "Realce a rede (para pistas e ilhas)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
@@ -27535,16 +27527,16 @@ msgstr "Captura o cursor quando o rato entrar numa área de ilha"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:275
 #: pcbnew/dialogs/panel_edit_options_base.cpp:289
 msgid "When creating tracks"
-msgstr "Ao criar trilhas"
+msgstr "Ao criar pistas"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:283
 msgid "Snap to tracks:"
-msgstr "Alinhar em trilhas:"
+msgstr "Alinhar a pistas:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:285
 #: pcbnew/dialogs/panel_edit_options_base.cpp:293
 msgid "Capture cursor when the mouse approaches a track"
-msgstr "Captura o cursor quando o rato aproximar-se de uma trilha"
+msgstr "Captura o cursor quando o rato se aproxima de uma pista"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:297
 msgid "Snap to graphics:"
@@ -27567,22 +27559,21 @@ msgstr "Mostrar emaranhado com linhas curvas"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:330
 msgid "Track Editing"
-msgstr "Edição da trilha"
+msgstr "Edição de pista"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:332
 msgid "Mouse drag track behavior:"
-msgstr "Comportamento da trilha ao arrastar o mouse:"
+msgstr "Comportamento da pista ao arrastar o rato:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:334
 msgid ""
 "Choose the action to perform when dragging a track segment with the mouse"
 msgstr ""
-"Escolha a ação que será executada ao arrastar um segmento da trilha com o "
-"mouse"
+"Escolha a ação que será executada ao arrastar um segmento de pista com o rato"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:342
 msgid "Moves the track segment without moving connected tracks"
-msgstr "Move o segmento da trilha sem mover as trilhas que estão conectadas"
+msgstr "Move o segmento de pista sem mover as pistas que estão conectadas"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:346
 #: pcbnew/tools/pcb_actions.cpp:1393
@@ -27592,7 +27583,7 @@ msgstr "Arrastar (modo de 45 graus)"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:347
 #: pcbnew/tools/pcb_actions.cpp:1394
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
-msgstr "Arrasta o segmento de trilha, mantendo trilhas conectadas em 45 graus."
+msgstr "Arrasta o segmento de pista, mantendo pistas conectadas em 45 graus."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:351
 #: pcbnew/tools/pcb_actions.cpp:1400
@@ -27603,7 +27594,7 @@ msgstr "Arrastar (ângulo livre)"
 #: pcbnew/tools/pcb_actions.cpp:1401
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
-msgstr "Arrasta a junção mais próxima na trilha sem restringir seu ângulo."
+msgstr "Arrasta a junção mais próxima na pista sem restringir o seu ângulo."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
 msgid "Limit actions to 45 degrees from start"
@@ -27869,7 +27860,7 @@ msgstr "Ajuste do comprimento"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:153
 msgid "Include stackup height in track length calculations"
-msgstr "Inclua a altura do empilhamento nos cálculos do comprimento da trilha"
+msgstr "Inclua a altura do empilhamento nos cálculos do comprimento da pista"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:154
 msgid ""
@@ -27878,7 +27869,7 @@ msgid ""
 "is ignored."
 msgstr ""
 "Quando ativado, a distância entre as camadas com cobre será incluída nos "
-"cálculos do comprimento da trilha para as trilhas com vias.  Quando "
+"cálculos do comprimento da pista para as pistas com vias.  Quando "
 "desativado, a altura do empilhamento é ignorada."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:191
@@ -27897,15 +27888,15 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
-msgstr "Largura mínima de trilha:"
+msgstr "Largura mínima de pista:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:212
 msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"A largura mínima da trilha.  Caso seja definido, este é um mínimo absoluto e "
-"não pode ser reduzido pleas classes da rede, pelas regras personalizadas ou "
+"A largura mínima da pista.  Caso seja definido, este é um mínimo absoluto e "
+"não pode ser reduzido pelas classes da rede, pelas regras personalizadas ou "
 "por outras configurações."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
@@ -28111,11 +28102,11 @@ msgstr "Todas as camadas definidas pelo utilizador já foram adicionadas."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:817
 msgid "Add User-defined Layer"
-msgstr "Adiciona uma camada definida pelo usuário"
+msgstr "Adiciona uma camada definida pelo utilizador"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:26
 msgid "Add User Defined Layer..."
-msgstr "Adiciona camada definida pelo usuário..."
+msgstr "Adiciona camada definida pelo utilizador..."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:46
 msgid "CrtYd_Front"
@@ -28334,7 +28325,7 @@ msgstr "misturado"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:547
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 msgid "jumper"
-msgstr "jumper"
+msgstr "ponte"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:131
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:145
@@ -28606,7 +28597,7 @@ msgstr "Utilizador1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:783
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:793
 msgid "User defined layer"
-msgstr "Camada definida pelo usuário"
+msgstr "Camada definida pelo utilizador"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:720
 msgid "User2"
@@ -28768,6 +28759,7 @@ msgid "Check rule syntax"
 msgstr "Verifique a sintaxe da regra"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
+#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29242,7 +29234,7 @@ msgstr "Nenhum espaçamento do par diferencial definido."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr "Dimensões de trilha e via pré-definidas:"
+msgstr "Dimensões de pista e via pré-definidas:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
@@ -29472,7 +29464,7 @@ msgstr "Violação do isolamento"
 
 #: pcbnew/drc/drc_item.cpp:70
 msgid "Tracks crossing"
-msgstr "Cruzamento de trilhas"
+msgstr "Cruzamento de pistas"
 
 #: pcbnew/drc/drc_item.cpp:74
 msgid "Board edge clearance violation"
@@ -29492,7 +29484,7 @@ msgstr "A via não está conectada ou está conectada em apenas uma camada"
 
 #: pcbnew/drc/drc_item.cpp:90
 msgid "Track has unconnected end"
-msgstr "A trilha tem uma extremidade desconectada"
+msgstr "A pista tem uma extremidade desconectada"
 
 #: pcbnew/drc/drc_item.cpp:94
 msgid "Hole clearance violation"
@@ -29508,7 +29500,7 @@ msgstr "Os furos perfurados co-localizados"
 
 #: pcbnew/drc/drc_item.cpp:106
 msgid "Track width"
-msgstr "Largura da trilha"
+msgstr "Largura da pista"
 
 #: pcbnew/drc/drc_item.cpp:110
 msgid "Annular width"
@@ -29584,11 +29576,11 @@ msgstr "Sobreposição da serigrafia"
 
 #: pcbnew/drc/drc_item.cpp:186
 msgid "Trace length out of range"
-msgstr "Comprimento do traço fora do alcance"
+msgstr "Comprimento da pista fora de alcance"
 
 #: pcbnew/drc/drc_item.cpp:190
 msgid "Skew between traces out of range"
-msgstr "Inclinação entre os traços fora do alcance"
+msgstr "Enviesamento entre pistas fora de alcance"
 
 #: pcbnew/drc/drc_item.cpp:194
 msgid "Too many vias on a connection"
@@ -29753,7 +29745,7 @@ msgstr "Coletando itens com cobre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:210
 msgid "Checking track & via clearances..."
-msgstr "Verificando o isolamento das trilhas e das vias..."
+msgstr "A verificar o isolamento de pistas e vias..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:217
 msgid "Checking hole clearances..."
@@ -29986,7 +29978,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:83
 msgid "Checking track widths..."
-msgstr "Verificando as larguras das trilhas..."
+msgstr "A verificar larguras de pista..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:82
 msgid "Checking via diameters..."
@@ -30788,15 +30780,15 @@ msgstr "Em"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:74
 msgid "DXF origin on PCB Grid, X Coordinate"
-msgstr "Origem do DXF na grade da PCI, coordenada X"
+msgstr "Origem do DXF na grelha da PCI, coordenada X"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:91
 msgid "DXF origin on PCB Grid, Y Coordinate"
-msgstr "Origem do DXF na grade da PCI, coordenada Y"
+msgstr "Origem do DXF na grelha da PCI, coordenada Y"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:103
 msgid "Select PCB grid units"
-msgstr "Selecione as unidades da grade da PCI"
+msgstr "Selecione as unidades da grelha da PCI"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:120
 msgid "Import Parameters"
@@ -30930,7 +30922,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:111
 msgid "Specctra Session..."
-msgstr "Specctra Session..."
+msgstr "Sessão Specctra..."
 
 #: pcbnew/menubar_pcb_editor.cpp:116
 msgid "Non-KiCad Board File..."
@@ -31075,7 +31067,7 @@ msgstr "Adicionar indutor de microondas"
 
 #: pcbnew/microwave/microwave_inductor.cpp:372
 msgid "Length of Trace:"
-msgstr "Comprimento do Traço:"
+msgstr "Comprimento da pista:"
 
 #: pcbnew/microwave/microwave_inductor.cpp:383
 msgid "Requested length < minimum length"
@@ -31874,12 +31866,12 @@ msgstr "Código da Rede"
 #: pcbnew/pcb_track.cpp:890
 #, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr "Trilha (arc) %s no %s, comprimento %s"
+msgstr "Pista (arc) %s no %s, comprimento %s"
 
 #: pcbnew/pcb_track.cpp:891
 #, c-format
 msgid "Track %s on %s, length %s"
-msgstr "Trilha %s no %s, comprimento %s"
+msgstr "Pista %s no %s, comprimento %s"
 
 #: pcbnew/pcb_track.cpp:1119 pcbnew/pcb_track.cpp:1136
 msgid "Origin X"
@@ -32159,7 +32151,7 @@ msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2544
 msgid "Loading tracks..."
-msgstr "Carregando as trilhas..."
+msgstr "A carregar pistas..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2591
 #, c-format
@@ -32167,8 +32159,8 @@ msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"A região de exclusão da trilha foi encontrada numa camada Altium (%d) sem um "
-"equivalente no KiCad Ele foi movido para a camada Eco1_User do KiCad."
+"A região de exclusão da pista foi encontrada numa camada Altium (%d) sem um "
+"equivalente no KiCad. Esta foi movida para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2609
 #, c-format
@@ -32176,8 +32168,8 @@ msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Uma trilha foi encontrada numa camada Altium (%d) sem um equivalente no "
-"KiCad. Ela foi movida para a camada Eco1_User do KiCad."
+"Uma pista foi encontrada numa camada Altium (%d) sem um equivalente no "
+"KiCad. Esta foi movida para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2650
 msgid "Loading unicode strings..."
@@ -32508,7 +32500,7 @@ msgid ""
 msgstr ""
 "O projeto CADSTAR contém elementos com COBRE que não possuem um equivalente "
 "direto no KiCad. Estes foram importados como uma Zona KiCad se sólidos ou "
-"preenchidos, ou como uma Trilha KiCad caso a forma seja um contorno não "
+"preenchidos, ou como uma Pista KiCad caso a forma seja um contorno não "
 "preenchido (aberto ou fechado)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2190
@@ -33240,15 +33232,15 @@ msgstr "Exceção no código do assistente de footprint python"
 
 #: pcbnew/router/length_tuner_tool.cpp:46
 msgid "New Track"
-msgstr "Nova Trilha"
+msgstr "Nova Pista"
 
 #: pcbnew/router/length_tuner_tool.cpp:46
 msgid "Starts laying a new track."
-msgstr "Começa a colocar uma nova trilha."
+msgstr "Começa a colocar uma nova pista."
 
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "End Track"
-msgstr "Encerrar Trilha"
+msgstr "Finalizar pista"
 
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "Stops laying the current meander."
@@ -33317,7 +33309,7 @@ msgstr ""
 #: pcbnew/router/pns_dp_meander_placer.cpp:76
 #: pcbnew/router/pns_meander_placer.cpp:64
 msgid "Please select a track whose length you want to tune."
-msgstr "Por favor, selecione uma trilha cujo comprimento você deseja ajustar."
+msgstr "Por favor, selecione uma pista cujo comprimento deseja afinar."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:90
 msgid ""
@@ -33364,7 +33356,7 @@ msgstr "classe da rede 'Default'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:499
 msgid "user choice"
-msgstr "escolha do usuário"
+msgstr "escolha do utilizador"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1056
 #, c-format
@@ -33385,7 +33377,7 @@ msgstr "Roteador Interativo"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:54
 msgid "Please select a differential pair trace you want to tune."
-msgstr "Selecione o traço de par diferencial que deseja configurar."
+msgstr "Selecione o par de pistas diferencial que deseja afinar."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:70
 msgid ""
@@ -33421,11 +33413,11 @@ msgstr "Não é possível iniciar o roteamento de um furo sem revestimento."
 #: pcbnew/router/pns_router.cpp:242
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr "A região da área'%s' que não permite trilhas."
+msgstr "Área regra '%s' não permite pistas."
 
 #: pcbnew/router/pns_router.cpp:247
 msgid "Rule area disallows tracks."
-msgstr "A região da área que não permite trilhas."
+msgstr "Área regra não permite pistas."
 
 #: pcbnew/router/pns_router.cpp:254
 msgid "Cannot start routing from a text item."
@@ -33445,19 +33437,19 @@ msgstr "Não é possível iniciar um par diferencial no meio do nada."
 
 #: pcbnew/router/router_tool.cpp:91
 msgid "Finish Track"
-msgstr "Finalizar Trilha"
+msgstr "Finalizar Pista"
 
 #: pcbnew/router/router_tool.cpp:91
 msgid "Stops laying the current track."
-msgstr "Parar de depositar a trilha atual."
+msgstr "Parar de dispor a pista atual."
 
 #: pcbnew/router/router_tool.cpp:97
 msgid "Auto-finish Track"
-msgstr "Auto-finalizar Trilha"
+msgstr "Auto-finalizar Pista"
 
 #: pcbnew/router/router_tool.cpp:97
 msgid "Automatically finishes laying the current track."
-msgstr "Finaliza automaticamente a disposição da trilha atual."
+msgstr "Finaliza automaticamente a disposição da pista atual."
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Place Through Via"
@@ -33465,8 +33457,7 @@ msgstr "Colocar Via Passante"
 
 #: pcbnew/router/router_tool.cpp:103
 msgid "Adds a through-hole via at the end of currently routed track."
-msgstr ""
-"Adiciona uma via de furo passante ao final da trilha atualmente roteada."
+msgstr "Adiciona uma via de furo passante ao final da pista atual."
 
 #: pcbnew/router/router_tool.cpp:109
 msgid "Place Blind/Buried Via"
@@ -33474,8 +33465,7 @@ msgstr "Colocar Via Cega/Encoberta"
 
 #: pcbnew/router/router_tool.cpp:110
 msgid "Adds a blind or buried via at the end of currently routed track."
-msgstr ""
-"Adiciona uma via cega ou encoberta ao final da trilha atualmente roteada."
+msgstr "Adiciona uma via cega ou encoberta ao final da pista atual."
 
 #: pcbnew/router/router_tool.cpp:116
 msgid "Place Microvia"
@@ -33483,7 +33473,7 @@ msgstr "Inserir Microvia"
 
 #: pcbnew/router/router_tool.cpp:116
 msgid "Adds a microvia at the end of currently routed track."
-msgstr "Adiciona uma microvia ao final da trilha atualmente roteada."
+msgstr "Adiciona uma micro via ao final da pista atual."
 
 #: pcbnew/router/router_tool.cpp:123
 msgid "Select Layer and Place Through Via..."
@@ -33495,7 +33485,7 @@ msgid ""
 "track."
 msgstr ""
 "Selecione uma camada e, em seguida, adicione uma via de furo passante ao "
-"final da trilha atualmente roteada."
+"final da pista atual."
 
 #: pcbnew/router/router_tool.cpp:132
 msgid "Select Layer and Place Blind/Buried Via..."
@@ -33507,7 +33497,7 @@ msgid ""
 "routed track."
 msgstr ""
 "Selecione uma camada e, em seguida, adicione uma via cega ou encoberta ao "
-"final da trilha atualmente roteada."
+"final da pista atual."
 
 #: pcbnew/router/router_tool.cpp:141
 msgid "Select Layer and Place Micro Via..."
@@ -33517,48 +33507,47 @@ msgstr "Seleciona camada e coloca micro via..."
 msgid ""
 "Select a layer, then add a micro via at the end of currently routed track."
 msgstr ""
-"Selecione uma camada e em seguida, adicione uma micro via no final da trilha "
-"roteada atualmente."
+"Selecione uma camada e em seguida, adicione uma micro via no final da pista "
+"atual."
 
 #: pcbnew/router/router_tool.cpp:149
 msgid "Custom Track/Via Size..."
-msgstr "Tamanho de Trilha/Via Customizado…"
+msgstr "Tamanho de Pista/Via Personalizado…"
 
 #: pcbnew/router/router_tool.cpp:150
 msgid "Shows a dialog for changing the track width and via size."
 msgstr ""
-"Mostra uma caixa de diálogo para alterar a largura da trilha e tamanho da "
-"via."
+"Mostra uma caixa de diálogo para alterar a largura da pista e tamanho da via."
 
 #: pcbnew/router/router_tool.cpp:156
 msgid "Switch Track Posture"
-msgstr "Alternar Postura da Trilha"
+msgstr "Alternar Postura da Pista"
 
 #: pcbnew/router/router_tool.cpp:157
 msgid "Switches posture of the currently routed track."
-msgstr "Alterna a postura da trilha atualmente roteada."
+msgstr "Alterna a postura da pista atual."
 
 #: pcbnew/router/router_tool.cpp:163
 msgid "Track Corner Mode"
-msgstr "Modo canto da trilha"
+msgstr "Modo de canto da pista"
 
 #: pcbnew/router/router_tool.cpp:164
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
 msgstr ""
 "Alterna entre os cantos agudos/arredondados e os cantos com 45º/90º durante "
-"o roteamento das trilhas."
+"o roteamento das pistas."
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
-msgstr "Selecione a Largura da Trilha/Via"
+msgstr "Selecione a Largura da Pista/Via"
 
 #: pcbnew/router/router_tool.cpp:205
 msgid "Use Starting Track Width"
-msgstr "Utilizar Largura da Trilha Inicial"
+msgstr "Utilizar Largura da Pista Inicial"
 
 #: pcbnew/router/router_tool.cpp:206
 msgid "Route using the width of the starting track."
-msgstr "Rotear utilizando a largura da trilha inicial."
+msgstr "Rotear com a largura da pista inicial."
 
 #: pcbnew/router/router_tool.cpp:210 pcbnew/router/router_tool.cpp:331
 msgid "Use Net Class Values"
@@ -33566,7 +33555,7 @@ msgstr "Utilizar Valores da Classe de Rede"
 
 #: pcbnew/router/router_tool.cpp:211
 msgid "Use track and via sizes from the net class"
-msgstr "Usar tamanhos de via e trilha a partir dos valores da classe de rede"
+msgstr "Usar tamanhos de via e pista a partir dos valores da classe de rede"
 
 #: pcbnew/router/router_tool.cpp:215 pcbnew/router/router_tool.cpp:336
 #: pcbnew/tools/drawing_tool.cpp:101
@@ -33575,16 +33564,16 @@ msgstr "Utilizar Valores Personalizados..."
 
 #: pcbnew/router/router_tool.cpp:216 pcbnew/tools/drawing_tool.cpp:102
 msgid "Specify custom track and via sizes"
-msgstr "Especificar tamanhos personalizados de trilha e via"
+msgstr "Especificar tamanhos personalizados de pista e via"
 
 #: pcbnew/router/router_tool.cpp:227
 msgid "Track netclass width"
-msgstr "Largura da classe de rede da trilha"
+msgstr "Largura da classe de rede da pista"
 
 #: pcbnew/router/router_tool.cpp:229
 #, c-format
 msgid "Track %s"
-msgstr "Trilha %s"
+msgstr "Pista %s"
 
 #: pcbnew/router/router_tool.cpp:243
 msgid "Via netclass values"
@@ -33678,7 +33667,7 @@ msgstr "Via Cega/enterrada, é preciso 2 camadas diferentes."
 
 #: pcbnew/router/router_tool.cpp:1059
 msgid "Tracks on Copper layers only."
-msgstr "Trilhas apenas nas camadas com cobre."
+msgstr "Pistas apenas nas camadas de cobre."
 
 #: pcbnew/router/router_tool.cpp:1495 pcbnew/router/router_tool.cpp:1983
 msgid "The selected item is locked."
@@ -33690,7 +33679,7 @@ msgstr "Arrastar de Qualquer Modo"
 
 #: pcbnew/router/router_tool.cpp:1985 pcbnew/tools/pcb_actions.cpp:1386
 msgid "Break Track"
-msgstr "Interromper Trilha"
+msgstr "Interromper Pista"
 
 #: pcbnew/router/router_tool.cpp:2055
 #, c-format
@@ -33700,7 +33689,7 @@ msgstr "Par Dif do Roteamento: %s"
 #: pcbnew/router/router_tool.cpp:2055
 #, c-format
 msgid "Routing Track: %s"
-msgstr "Roteamento da trilha : %s"
+msgstr "Roteamento da Pista : %s"
 
 #: pcbnew/router/router_tool.cpp:2061
 #, c-format
@@ -33709,7 +33698,7 @@ msgstr "Classe da rede: %s"
 
 #: pcbnew/router/router_tool.cpp:2065
 msgid "Routing Track"
-msgstr "Roteamento da trilha"
+msgstr "Roteamento da Pista"
 
 #: pcbnew/router/router_tool.cpp:2065
 msgid "(no net)"
@@ -33742,7 +33731,7 @@ msgstr "Estilo do canto"
 #: pcbnew/router/router_tool.cpp:2091
 #, c-format
 msgid "Track Width: %s"
-msgstr "Largura da trilha: %s"
+msgstr "Largura da Pista: %s"
 
 #: pcbnew/router/router_tool.cpp:2113
 msgid "Diff Pair Gap"
@@ -33843,11 +33832,11 @@ msgstr "+/- para chavear"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:61
 msgid "Display previous footprint"
-msgstr "Exibir footprint anterior"
+msgstr "Mostrar footprint anterior"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:64
 msgid "Display next footprint"
-msgstr "Exibir próximo footprint"
+msgstr "Mostrar próximo footprint"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:77
 msgid "Insert footprint in board"
@@ -33859,27 +33848,26 @@ msgid ""
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
 msgstr ""
-"Selecione a largura padrão para as novas trilhas. Observe que essa largura "
-"pode ser substituída pela largura mínima da placa ou pela largura de uma "
-"trilha já existente caso o recurso 'Use a largura da trilha existente' "
-"estiver ativado."
+"Selecione a largura padrão para novas pistas. Observe que essa largura pode "
+"ser substituída pela largura mínima da placa ou pela largura de uma pista já "
+"existente caso a opção 'Use a largura da pista existente' estiver ativo."
 
 #: pcbnew/toolbars_pcb_editor.cpp:540
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
 msgstr ""
-"Ao rotear de uma trilha já existente use a sua largura em vez da "
-"configuração da largura atual"
+"Ao rotear uma pista já existente use a sua largura em vez da configuração da "
+"largura atual"
 
 #: pcbnew/toolbars_pcb_editor.cpp:647
 msgid "Track: use netclass width"
-msgstr "Trilha: use a largura netclass"
+msgstr "Pista: use a largura netclass"
 
 #: pcbnew/toolbars_pcb_editor.cpp:653
 #, c-format
 msgid "Track: %s (%s)"
-msgstr "Trilha: %s (%s)"
+msgstr "Pista: %s (%s)"
 
 #: pcbnew/toolbars_pcb_editor.cpp:662 pcbnew/toolbars_pcb_editor.cpp:730
 msgid "Edit Pre-defined Sizes..."
@@ -34090,7 +34078,7 @@ msgstr "Relatório das restrições"
 
 #: pcbnew/tools/board_inspection_tool.cpp:729
 msgid "Track width resolution for:"
-msgstr "Resolução da largura da trilha para:"
+msgstr "Resolução da largura da pista para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:739
 #, c-format
@@ -34223,7 +34211,7 @@ msgstr "Dimensões gerais da placa: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:442
 msgid "Min track/spacing: "
-msgstr "Trilha/espaçamento mínimo: "
+msgstr "Pista/espaçamento mínimo: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:452
 msgid "Copper Finish: "
@@ -34333,11 +34321,11 @@ msgstr "Ferramentas especiais"
 #: pcbnew/tools/edit_tool.cpp:326
 #, c-format
 msgid "Unable to resize arc tracks %.1f degrees or greater."
-msgstr "Não é possível redimensionar as trilhas do arco em %.1f graus ou mais."
+msgstr "Não é possível redimensionar as pistas do arco em %.1f graus ou mais."
 
 #: pcbnew/tools/edit_tool.cpp:658
 msgid "Drag Arc Track"
-msgstr "Arraste a trilha do arco"
+msgstr "Arraste a pista do arco"
 
 #: pcbnew/tools/edit_tool.cpp:739
 msgid "Select reference point for move..."
@@ -34345,11 +34333,11 @@ msgstr "Para mover, selecione o ponto de referência..."
 
 #: pcbnew/tools/edit_tool.cpp:1132
 msgid "Edit track width/via size"
-msgstr "Editar largura da trilha / tamanho da via"
+msgstr "Editar largura da pista/tamanho da via"
 
 #: pcbnew/tools/edit_tool.cpp:1167
 msgid "At least two straight track segments must be selected."
-msgstr "Devem ser selecionados pelo menos dois segmentos de trilha retos."
+msgstr "Devem ser selecionados pelo menos dois segmentos de pista retos."
 
 #: pcbnew/tools/edit_tool.cpp:1171
 msgid "Enter fillet radius:"
@@ -34358,7 +34346,7 @@ msgstr "Insira o raio do filete:"
 #: pcbnew/tools/edit_tool.cpp:1171 pcbnew/tools/edit_tool.cpp:1333
 #: pcbnew/tools/pcb_actions.cpp:317
 msgid "Fillet Tracks"
-msgstr "Trilhas do filé"
+msgstr "Aplicar Fillet nas pistas"
 
 #: pcbnew/tools/edit_tool.cpp:1181
 msgid ""
@@ -34370,11 +34358,11 @@ msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:1340
 msgid "Unable to fillet the selected track segments."
-msgstr "Não é possível ajustar os segmentos selecionados da trilha."
+msgstr "Não é possível ajustar os segmentos selecionados da pista."
 
 #: pcbnew/tools/edit_tool.cpp:1342
 msgid "Some of the track segments could not be filleted."
-msgstr "Alguns dos segmentos da trilha não puderam ser filetados."
+msgstr "Em alguns dos segmentos da pista não foi possível aplicar fillet."
 
 #: pcbnew/tools/edit_tool.cpp:1480
 msgid "Rotate"
@@ -34407,7 +34395,7 @@ msgstr "Cópia cancelada"
 
 #: pcbnew/tools/footprint_editor_control.cpp:344
 msgid "_copy"
-msgstr "_copy"
+msgstr "_copia"
 
 #: pcbnew/tools/footprint_editor_control.cpp:591
 msgid "No footprint problems found."
@@ -34510,11 +34498,11 @@ msgstr "Cria um arco a partir do segmento da linha que foi selecionado"
 
 #: pcbnew/tools/pcb_actions.cpp:73
 msgid "Create Tracks from Selection"
-msgstr "Cria trilhas a partir da seleção"
+msgstr "Cria pistas a partir da seleção"
 
 #: pcbnew/tools/pcb_actions.cpp:73
 msgid "Creates tracks from the selected graphic lines"
-msgstr "Cria trilhas a partir das linhas gráficas que forem selecionadas"
+msgstr "Cria pistas a partir das linhas gráficas selecionadas"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw Line"
@@ -34770,20 +34758,20 @@ msgstr "Espelha item selecionado"
 
 #: pcbnew/tools/pcb_actions.cpp:313
 msgid "Change Track Width"
-msgstr "Alterar Largura da Trilha"
+msgstr "Alterar Largura da Pista"
 
 #: pcbnew/tools/pcb_actions.cpp:313
 msgid "Updates selected track & via sizes"
-msgstr "Atualiza a trilha selecionada e os tamanhos de via"
+msgstr "Atualiza a pista selecionada e os tamanhos de via"
 
 #: pcbnew/tools/pcb_actions.cpp:317
 msgid "Adds arcs tangent to the selected straight track segments"
 msgstr ""
-"Adiciona arcos tangentes aos segmentos retos da trilha que foi selecionada"
+"Adiciona arcos tangentes aos segmentos retos da pista que foi selecionada"
 
 #: pcbnew/tools/pcb_actions.cpp:322
 msgid "Delete Full Track"
-msgstr "Apagar Trilha Inteira"
+msgstr "Apagar Pista Inteira"
 
 #: pcbnew/tools/pcb_actions.cpp:322
 msgid "Deletes selected item(s) and copper connections"
@@ -34910,15 +34898,15 @@ msgstr "Trocar Camadas..."
 
 #: pcbnew/tools/pcb_actions.cpp:432
 msgid "Move tracks or drawings from one layer to another"
-msgstr "Mover trilhas ou desenhos de uma camada para outra"
+msgstr "Mover pistas ou desenhos de uma camada para outra"
 
 #: pcbnew/tools/pcb_actions.cpp:437
 msgid "Edit Track & Via Properties..."
-msgstr "Editar Propriedades da Trilha & Via..."
+msgstr "Editar Propriedades da Pista e Via..."
 
 #: pcbnew/tools/pcb_actions.cpp:438
 msgid "Edit track and via properties globally across board"
-msgstr "Edite as propriedades globais da trilha e da via"
+msgstr "Edite as propriedades globais de pista e via"
 
 #: pcbnew/tools/pcb_actions.cpp:444
 msgid "Edit Text and graphics properties globally across board"
@@ -34930,11 +34918,11 @@ msgstr "Exclusões Globais…"
 
 #: pcbnew/tools/pcb_actions.cpp:450
 msgid "Delete tracks, footprints and graphic items from board"
-msgstr "Apagar trilhas, footprints e itens gráficos da placa"
+msgstr "Apagar pistas, footprints e itens gráficos da placa"
 
 #: pcbnew/tools/pcb_actions.cpp:455
 msgid "Cleanup Tracks & Vias..."
-msgstr "Limpar Trilhas & Vias…"
+msgstr "Limpar Pistas e Vias…"
 
 #: pcbnew/tools/pcb_actions.cpp:456
 msgid "Cleanup redundant items, shorting items, etc."
@@ -35161,19 +35149,19 @@ msgstr "Cria uma lista de materiais a partir da placa"
 
 #: pcbnew/tools/pcb_actions.cpp:618
 msgid "Switch Track Width to Next"
-msgstr "Alternar Largura da Trilha Para a Próxima"
+msgstr "Alternar Largura de Pista Para a Próxima"
 
 #: pcbnew/tools/pcb_actions.cpp:618
 msgid "Change track width to next pre-defined size"
-msgstr "Altera a largura da trilha para o próximo tamanho predefinido"
+msgstr "Altera a largura da pista para o próximo tamanho pré-definido"
 
 #: pcbnew/tools/pcb_actions.cpp:623
 msgid "Switch Track Width to Previous"
-msgstr "Alternar Largura da Trilha Para a Anterior"
+msgstr "Alternar Largura da Pista Para a Anterior"
 
 #: pcbnew/tools/pcb_actions.cpp:623
 msgid "Change track width to previous pre-defined size"
-msgstr "Alterna a largura da trilha para o tamanho predefinido anteriormente"
+msgstr "Alterna a largura da pista para o tamanho pré-definido anteriormente"
 
 #: pcbnew/tools/pcb_actions.cpp:628
 msgid "Increase Via Size"
@@ -35380,11 +35368,11 @@ msgstr "Veja a placa do lado oposto"
 
 #: pcbnew/tools/pcb_actions.cpp:802
 msgid "Show Ratsnest"
-msgstr "Exibir Emaranhado"
+msgstr "Mostrar Emaranhado"
 
 #: pcbnew/tools/pcb_actions.cpp:802
 msgid "Show board ratsnest"
-msgstr "Exibir emaranhado da placa"
+msgstr "Mostrar emaranhado da placa"
 
 #: pcbnew/tools/pcb_actions.cpp:807
 msgid "Curved Ratsnest Lines"
@@ -35415,11 +35403,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:823
 msgid "Sketch Tracks"
-msgstr "Delinear Trilhas"
+msgstr "Delinear Pistas"
 
 #: pcbnew/tools/pcb_actions.cpp:823
 msgid "Show tracks in outline mode"
-msgstr "Exibir trilhas em modo contorno"
+msgstr "Mostrar pistas em modo contorno"
 
 #: pcbnew/tools/pcb_actions.cpp:828
 msgid "Sketch Pads"
@@ -35427,7 +35415,7 @@ msgstr "Delinear Ilhas"
 
 #: pcbnew/tools/pcb_actions.cpp:828
 msgid "Show pads in outline mode"
-msgstr "Exibir ilhas em modo contorno"
+msgstr "Mostrar ilhas em modo contorno"
 
 #: pcbnew/tools/pcb_actions.cpp:833
 msgid "Sketch Vias"
@@ -35435,7 +35423,7 @@ msgstr "Delinear Vias"
 
 #: pcbnew/tools/pcb_actions.cpp:833
 msgid "Show vias in outline mode"
-msgstr "Exibir vias em modo contorno"
+msgstr "Mostrar vias em modo contorno"
 
 #: pcbnew/tools/pcb_actions.cpp:838
 msgid "Sketch Graphic Items"
@@ -35649,7 +35637,7 @@ msgstr "Tornar a camada atual mais transparente"
 
 #: pcbnew/tools/pcb_actions.cpp:1088
 msgid "Show Board Statistics"
-msgstr "Exibir Estatísticas da Placa"
+msgstr "Mostrar Estatísticas da Placa"
 
 #: pcbnew/tools/pcb_actions.cpp:1088
 msgid "Shows board statistics"
@@ -35787,23 +35775,23 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1240
 msgid "Select All Tracks in Net"
-msgstr "Selecionar Todas as Trilhas na Rede"
+msgstr "Selecionar Todas as Pista na Rede"
 
 #: pcbnew/tools/pcb_actions.cpp:1241
 msgid "Selects all tracks & vias belonging to the same net."
-msgstr "Seleciona todas as trilhas e vias pertencentes à mesma rede."
+msgstr "Seleciona todas as pistas e vias pertencentes à mesma rede."
 
 #: pcbnew/tools/pcb_actions.cpp:1245
 msgid "Deselect All Tracks in Net"
-msgstr "Desmarque todas as trilhas na rede"
+msgstr "Desmarca todas as pistas na rede"
 
 #: pcbnew/tools/pcb_actions.cpp:1246
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "Desmarca todas as trilhas e as vias pertencentes à mesma rede."
+msgstr "Desmarca todas as pistas e vias pertencentes à mesma rede."
 
 #: pcbnew/tools/pcb_actions.cpp:1251
 msgid "Selects all footprints and tracks in the schematic sheet"
-msgstr "Seleciona todos footprints e as trilhas na página do esquema"
+msgstr "Seleciona todos footprints e pista na página do esquema"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
 msgid "Items in Same Hierarchical Sheet"
@@ -35811,7 +35799,7 @@ msgstr "Itens na Mesma Folha Hierárquica"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Selects all footprints and tracks in the same schematic sheet"
-msgstr "Seleciona todas os footprints e as trilhas na mesma página do esquema"
+msgstr "Seleciona todas os footprints e pistas na mesma página do esquema"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
 msgid "Filter Selected Items..."
@@ -35874,11 +35862,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1309
 msgid "Route Single Track"
-msgstr "Rotear uma Única Trilha"
+msgstr "Rotear uma Única Pista"
 
 #: pcbnew/tools/pcb_actions.cpp:1309
 msgid "Route tracks"
-msgstr "Rotear trilhas"
+msgstr "Rotear pistas"
 
 #: pcbnew/tools/pcb_actions.cpp:1316
 msgid "Route Differential Pair"
@@ -35946,7 +35934,7 @@ msgstr "Alterar par de camadas ativa para roteamento"
 
 #: pcbnew/tools/pcb_actions.cpp:1359
 msgid "Tune length of a single track"
-msgstr "Ajustar o comprimento de uma única trilha"
+msgstr "Ajustar o comprimento de uma única pista"
 
 #: pcbnew/tools/pcb_actions.cpp:1366
 msgid "Tune length of a differential pair"
@@ -35962,14 +35950,13 @@ msgstr "Desfaz o último segmento"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
 msgid "Walks the current track back one segment."
-msgstr "Retorna a trilha atual para um segmento anterior."
+msgstr "Retorna a pista atual para um segmento anterior."
 
 #: pcbnew/tools/pcb_actions.cpp:1387
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr ""
-"Divide o segmento de trilha em dois segmentos conectados na posição do "
-"cursor."
+"Divide o segmento de pista em dois segmentos conectados na posição do cursor."
 
 #: pcbnew/tools/pcb_actions.cpp:1411
 msgid "Length Tuning Settings..."
@@ -36128,7 +36115,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Show tracks"
-msgstr "Exibir trilhas"
+msgstr "Mostrar pistas"
 
 #: pcbnew/widgets/appearance_controls.cpp:336
 msgid "Show all vias"
@@ -36148,7 +36135,7 @@ msgstr "Footprints - Frente"
 
 #: pcbnew/widgets/appearance_controls.cpp:340
 msgid "Show footprints that are on board's front"
-msgstr "Exibir footprints que estão na camada superior da placa"
+msgstr "Mostrar footprints que estão na camada superior da placa"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Footprints Back"
@@ -36156,7 +36143,7 @@ msgstr "Footprints - Verso"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Show footprints that are on board's back"
-msgstr "Exibir footprints que estão na camada inferior da placa"
+msgstr "Mostrar footprints que estão na camada inferior da placa"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Through-hole Pads"
@@ -36168,7 +36155,7 @@ msgstr "Mostra as ilhas com furo passante"
 
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "Show footprint values"
-msgstr "Exibir valores dos footprints"
+msgstr "Mostrar valores dos footprints"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "References"
@@ -36176,7 +36163,7 @@ msgstr "Referências"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Show footprint references"
-msgstr "Exibir referências dos footprints"
+msgstr "Mostrar referências dos footprints"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "Footprint Text"
@@ -36192,11 +36179,11 @@ msgstr "Texto Oculto"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Show footprint text marked as invisible"
-msgstr "Exibir texto dos footpirnts marcados como invisíveis"
+msgstr "Mostrar texto dos footpirnts marcados como invisíveis"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Show unconnected nets as a ratsnest"
-msgstr "Exibir redes desconectadas na forma de um emaranhado"
+msgstr "Mostrar redes desconectadas na forma de um emaranhado"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "No-Connects"
@@ -36204,7 +36191,7 @@ msgstr "Não Conectados"
 
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Show a marker on pads which have no net connected"
-msgstr "Exibir uma marca nas ilhas que não tem uma rede conectada"
+msgstr "Mostrar uma marca nas ilhas que não tem uma rede conectada"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC Warnings"
@@ -36354,7 +36341,7 @@ msgstr "Mostra o ratnest:"
 
 #: pcbnew/widgets/appearance_controls.cpp:720
 msgid "Choose which ratsnest lines to display"
-msgstr "Escolha quais as linhas ratsnest deseja exibir"
+msgstr "Escolha quais as linhas de emaranhado deseja mostrar"
 
 #: pcbnew/widgets/appearance_controls.cpp:730
 msgid "Show ratsnest lines to items on all layers"
@@ -36385,13 +36372,13 @@ msgstr "Destaque %s"
 #: pcbnew/widgets/appearance_controls.cpp:2273
 #, c-format
 msgid "Select Tracks and Vias in %s"
-msgstr "Selecione as faixas e as vias em %s"
+msgstr "Selecione as pistas e vias em %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:891
 #: pcbnew/widgets/appearance_controls.cpp:2277
 #, c-format
 msgid "Unselect Tracks and Vias in %s"
-msgstr "Desmarque as faixas e as vias em %s"
+msgstr "Desmarca as pistas e vias em %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:898
 msgid "Hide All Other Nets"
@@ -36495,39 +36482,39 @@ msgstr "Montagem de footprints a trás da placa"
 
 #: pcbnew/widgets/appearance_controls.cpp:1541
 msgid "User defined layer 1"
-msgstr "Camada 1 definida pelo usuário"
+msgstr "Camada 1 definida pelo utilizador"
 
 #: pcbnew/widgets/appearance_controls.cpp:1542
 msgid "User defined layer 2"
-msgstr "Camada 2 definida pelo usuário"
+msgstr "Camada 2 definida pelo utilizador"
 
 #: pcbnew/widgets/appearance_controls.cpp:1543
 msgid "User defined layer 3"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 3 definida pelo utilizador"
 
 #: pcbnew/widgets/appearance_controls.cpp:1544
 msgid "User defined layer 4"
-msgstr "Camada 3 definida pelo usuário"
+msgstr "Camada 3 definida pelo utilizador"
 
 #: pcbnew/widgets/appearance_controls.cpp:1545
 msgid "User defined layer 5"
-msgstr "Camada 5 definida pelo usuário"
+msgstr "Camada 5 definida pelo utilizador"
 
 #: pcbnew/widgets/appearance_controls.cpp:1546
 msgid "User defined layer 6"
-msgstr "Camada 6 definida pelo usuário"
+msgstr "Camada 6 definida pelo utilizador"
 
 #: pcbnew/widgets/appearance_controls.cpp:1547
 msgid "User defined layer 7"
-msgstr "Camada 7 definida pelo usuário"
+msgstr "Camada 7 definida pelo utilizador"
 
 #: pcbnew/widgets/appearance_controls.cpp:1548
 msgid "User defined layer 8"
-msgstr "Camada 8 definida pelo usuário"
+msgstr "Camada 8 definida pelo utilizador"
 
 #: pcbnew/widgets/appearance_controls.cpp:1549
 msgid "User defined layer 9"
-msgstr "Camada 9 definida pelo usuário"
+msgstr "Camada 9 definida pelo utilizador"
 
 #: pcbnew/widgets/appearance_controls.cpp:1597
 msgid "Front copper layer"
@@ -36543,7 +36530,7 @@ msgstr "Camada de cobre interna"
 
 #: pcbnew/widgets/appearance_controls.cpp:1663
 msgid "Show All Copper Layers"
-msgstr "Exibir Todas as Camadas de Cobre"
+msgstr "Mostrar Todas as Camadas de Cobre"
 
 #: pcbnew/widgets/appearance_controls.cpp:1666
 msgid "Hide All Copper Layers"
@@ -36551,7 +36538,7 @@ msgstr "Ocultar Todas as Camadas de Cobre"
 
 #: pcbnew/widgets/appearance_controls.cpp:1677
 msgid "Show All Non Copper Layers"
-msgstr "Exibir Todas as Camadas Não de Cobre"
+msgstr "Mostrar Todas as Camadas Não de Cobre"
 
 #: pcbnew/widgets/appearance_controls.cpp:1680
 msgid "Hide All Non Copper Layers"
@@ -36720,7 +36707,7 @@ msgstr "Sem vias"
 
 #: pcbnew/zone.cpp:577
 msgid "No tracks"
-msgstr "Sem trilhas"
+msgstr "Sem pistas"
 
 #: pcbnew/zone.cpp:580
 msgid "No pads"
@@ -36899,7 +36886,6 @@ msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Editor de placa de circuito independente para placas KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
-#, fuzzy
 msgid "pcbnew"
 msgstr "pcbnew"
 
