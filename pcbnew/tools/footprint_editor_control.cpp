@@ -302,7 +302,10 @@ int FOOTPRINT_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
         FOOTPRINT* footprint = m_frame->LoadFootprint( m_frame->GetTargetFPID() );
 
         if( footprint && m_frame->SaveFootprintAs( footprint ) )
+        {
             m_frame->SyncLibraryTree( true );
+            m_frame->FocusOnLibID( footprint->GetFPID() );
+        }
     }
 
     m_frame->RefreshLibraryTree();
