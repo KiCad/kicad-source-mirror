@@ -191,7 +191,7 @@ void SCH_EDIT_FRAME::sendNetlistToCvpcb()
         STRING_FORMATTER       formatter;
 
         // @todo : trim GNL_ALL down to minimum for CVPCB
-        exporter.Format( &formatter, GNL_ALL );
+        exporter.Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
 
         packet = formatter.GetString();  // an abbreviated "kicad" (s-expr) netlist
 

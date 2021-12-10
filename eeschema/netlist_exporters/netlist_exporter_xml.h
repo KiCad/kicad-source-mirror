@@ -44,7 +44,7 @@ class XNODE;
 enum GNL_T
 {
     GNL_LIBRARIES   = 1 << 0,
-    GNL_SYMBOLS  = 1 << 1,
+    GNL_SYMBOLS     = 1 << 1,
     GNL_PARTS       = 1 << 2,
     GNL_HEADER      = 1 << 3,
     GNL_NETS        = 1 << 4,

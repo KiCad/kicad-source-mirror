@@ -865,14 +865,14 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA( bool aClearHighligntOnly )
 
 int CVPCB_MAINFRAME::ReadSchematicNetlist( const std::string& aNetlist )
 {
-    STRING_LINE_READER*     strrdr = new STRING_LINE_READER( aNetlist, "Eeschema via Kiway" );
-    KICAD_NETLIST_READER    netrdr( strrdr, &m_netlist );
+    STRING_LINE_READER*  stringReader = new STRING_LINE_READER( aNetlist, "Eeschema via Kiway" );
+    KICAD_NETLIST_READER netlistReader( stringReader, &m_netlist );
 
     m_netlist.Clear();
 
     try
     {
-        netrdr.LoadNetlist();
+        netlistReader.LoadNetlist();
     }
     catch( const IO_ERROR& ioe )
     {
