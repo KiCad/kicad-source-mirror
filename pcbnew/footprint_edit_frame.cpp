@@ -391,9 +391,9 @@ void FOOTPRINT_EDIT_FRAME::ToggleLayersManager()
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::IsSearchTreeShown()
+bool FOOTPRINT_EDIT_FRAME::IsSearchTreeShown() const
 {
-    return m_auimgr.GetPane( m_treePane ).IsShown();
+    return const_cast<wxAuiManager&>( m_auimgr ).GetPane( m_treePane ).IsShown();
 }
 
 
@@ -417,10 +417,13 @@ LIB_TREE_NODE* FOOTPRINT_EDIT_FRAME::GetCurrentTreeNode() const
 
 LIB_ID FOOTPRINT_EDIT_FRAME::GetTargetFPID() const
 {
-    LIB_ID id = GetTreeFPID();
+    LIB_ID id;
+
+    if( IsSearchTreeShown() )
+        id = GetTreeFPID();
 
     if( id.GetLibNickname().empty() )
-        return GetLoadedFPID();
+        id = GetLoadedFPID();
 
     return id;
 }

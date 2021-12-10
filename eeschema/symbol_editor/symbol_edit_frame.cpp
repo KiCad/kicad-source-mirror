@@ -586,9 +586,9 @@ void SYMBOL_EDIT_FRAME::OnToggleSymbolTree( wxCommandEvent& event )
 }
 
 
-bool SYMBOL_EDIT_FRAME::IsSymbolTreeShown()
+bool SYMBOL_EDIT_FRAME::IsSymbolTreeShown() const
 {
-    return m_auimgr.GetPane( m_treePane ).IsShown();
+    return const_cast<wxAuiManager&>( m_auimgr ).GetPane( m_treePane ).IsShown();
 }
 
 
@@ -882,7 +882,10 @@ LIB_SYMBOL* SYMBOL_EDIT_FRAME::getTargetSymbol() const
 
 LIB_ID SYMBOL_EDIT_FRAME::GetTargetLibId() const
 {
-    LIB_ID id = GetTreeLIBID();
+    LIB_ID id;
+
+    if( IsSymbolTreeShown() )
+        id = GetTreeLIBID();
 
     if( id.GetLibNickname().empty() && m_symbol )
         id = m_symbol->GetLibId();

@@ -133,7 +133,7 @@ public:
 
     void OnSaveFootprintAsPng( wxCommandEvent& event );
 
-    bool IsSearchTreeShown();
+    bool IsSearchTreeShown() const;
     void ToggleSearchTree();
     void ToggleLayersManager();
 
