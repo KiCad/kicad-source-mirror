@@ -7,21 +7,22 @@
 # Alex Gellen <alex.n.gellen@gmail.com>, 2021.
 # J. Lavoie <j.lavoie@net-c.ca>, 2021.
 # PurkkaKoodari <purkka@purkka.codes>, 2021.
+# Simo Mattila <simo.mattila@kapsi.fi>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-11-07 14:21+0000\n"
-"Last-Translator: PurkkaKoodari <purkka@purkka.codes>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2021-12-10 22:05+0000\n"
+"Last-Translator: Simo Mattila <simo.mattila@kapsi.fi>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -811,9 +812,8 @@ msgid "Highlight items on rollover"
 msgstr "Korostetut kohteet"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:37
-#, fuzzy
 msgid "Anti-aliasing:"
-msgstr "Antialiasointi"
+msgstr "Antialiasointi:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:41
 msgid "Disabled"
@@ -915,9 +915,8 @@ msgid "Random direction factor of the cast rays"
 msgstr "Valettujen säteiden satunnaissuuntakerroin"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:84
-#, fuzzy
 msgid "Reflections:"
-msgstr "Heijastukset"
+msgstr "Heijastukset:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:89
 msgid "Number of rays that will be cast to evaluate a reflection point"
@@ -960,9 +959,8 @@ msgid "Top light:"
 msgstr "Ylävalo"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:163
-#, fuzzy
 msgid "Bottom light:"
-msgstr "Alavalo"
+msgstr "Alavalo:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:187
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:204
@@ -2356,9 +2354,8 @@ msgid "How would you like to configure KiCad?"
 msgstr "Kuinka haluat määrittää KiCadin?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:34
-#, fuzzy
 msgid "Import settings from a previous version at:"
-msgstr "Tuo asetukset aiemmasta versiosta"
+msgstr "Tuo asetukset aiemmasta versiosta polussa:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
 msgid "Choose a different path"
@@ -2719,24 +2716,22 @@ msgstr ""
 "Etsii seuraavan vapaan viitetunnisteen jo käytössä oleville tunnuksille."
 
 #: common/dialogs/dialog_paste_special.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Vaihda viitetunnisteeksi %s arvoksi %s."
+msgstr "Korvaa viitetunnisteet tunnisteella '%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Komponenttien ja jalanjälkien sovittaminen viitetunnusten avulla\n"
+msgstr "Anna uniikki viitetunniste jokaiselle liitetylle symbolille"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr "Säilytä olemassa olevat merkinnät, vaikka ne olisivat päällekkäisiä"
+msgstr ""
+"Säilytä olemassa olevat viitetunnisteet, vaikka ne olisivat päällekkäisiä"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Laiton viitetunnusarvo!"
+msgstr "Tyhjennä kaikkien liitettyjen symbolien viitetunnisteet"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -3538,7 +3533,7 @@ msgstr "Netclass-nimi on jo käytössä."
 
 #: common/dialogs/panel_setup_netclasses.cpp:487
 msgid "Minimum copper clearance"
-msgstr "Pienin etäisyys kupariin"
+msgstr "Pienin kuparivälys"
 
 #: common/dialogs/panel_setup_netclasses.cpp:488
 msgid "Minimum track width"
@@ -3600,7 +3595,7 @@ msgstr "Nettoluokka"
 #: pcbnew/tools/board_inspection_tool.cpp:603
 #: pcbnew/tools/board_inspection_tool.cpp:628
 msgid "Clearance"
-msgstr "Eristysväli"
+msgstr "Välys"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:43
 #: pcb_calculator/pcb_calculator_frame.cpp:89
@@ -5497,12 +5492,12 @@ msgstr "Puuttuvat yksiköt: %s | (%s)"
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr ""
+msgstr "Tyyppiepäyhteensopivuus '%s' ja %lf välillä"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1132
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr ""
+msgstr "Tyyppiepäyhteensopivuus %lf ja '%s' välillä"
 
 #: common/pgm_base.cpp:168
 #, fuzzy
@@ -5616,25 +5611,22 @@ msgid "Error loading project footprint library table."
 msgstr "Virhe projektin jalanjälkikirjastotaulukon lataamisessa"
 
 #: common/project/project_archiver.cpp:52 kicad/pcm/pcm_task_manager.cpp:267
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "Arkistotiedostoa ei voitu avata\n"
+msgstr "Arkistotiedostoa ei voitu avata."
 
 #: common/project/project_archiver.cpp:61 kicad/pcm/pcm_task_manager.cpp:275
-#, fuzzy
 msgid "Invalid archive file format."
-msgstr "Virheellinen arkistotiedostomuoto\n"
+msgstr "Virheellinen arkistotiedostomuoto."
 
 #: common/project/project_archiver.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file '%s'."
-msgstr "Puretaan tiedostoa \"%s\"\n"
+msgstr "Puretaan tiedostoa '%s'."
 
 #: common/project/project_archiver.cpp:95 kicad/pcm/pcm_task_manager.cpp:187
 #: kicad/pcm/pcm_task_manager.cpp:232
-#, fuzzy
 msgid "Error extracting file!"
-msgstr "Virhe purettaessa tiedostoa!\n"
+msgstr "Virhe purettaessa tiedostoa!"
 
 #: common/project/project_archiver.cpp:159 eeschema/dialogs/dialog_erc.cpp:775
 #: eeschema/dialogs/dialog_plot_schematic.cpp:517
@@ -5667,19 +5659,19 @@ msgid "Failed to create file '%s'."
 msgstr "Tiedoston \"%s\" luominen epäonnistui"
 
 #: common/project/project_archiver.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Arkistotiedosto \"%s\"\n"
+msgstr "Arkistoitiin tiedosto '%s'."
 
 #: common/project/project_archiver.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Tiedoston \"%s\" varmuuskopiointi epäonnistui.\n"
+msgstr "Tiedoston '%s' arkistointi epäonnistui."
 
 #: common/project/project_archiver.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "Zip-arkisto \"%s\" luotu (%s pakkaamaton, %s pakattu)\n"
+msgstr "Zip-arkisto '%s' luotu (%s pakkaamaton, %s pakattu)."
 
 #: common/rc_item.cpp:353
 msgid "Excluded "
@@ -5816,7 +5808,7 @@ msgstr "Tulosta…"
 
 #: common/tool/actions.cpp:108
 msgid "Plot..."
-msgstr "Juoni ..."
+msgstr "Piirrä..."
 
 #: common/tool/actions.cpp:108 pcbnew/dialogs/dialog_plot.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.h:153
@@ -5864,7 +5856,6 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "Kopioi valitut kohteet leikepöydälle"
 
 #: common/tool/actions.cpp:165
-#, fuzzy
 msgid "Paste item(s) from clipboard"
 msgstr "Liitä kohteet leikepöydältä"
 
@@ -5874,7 +5865,7 @@ msgstr "Valitse kaikki näytöllä olevat kohteet"
 
 #: common/tool/actions.cpp:175
 msgid "Paste Special..."
-msgstr "Liitä määräten"
+msgstr "Liitä määräten..."
 
 #: common/tool/actions.cpp:175
 msgid "Paste item(s) from clipboard with options"
@@ -6366,12 +6357,15 @@ msgid "Report Bug"
 msgstr "Ilmoita virheestä"
 
 #: common/tool/common_control.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' or\n"
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "Ohjetiedostoa \"%s\" ei löytynyt."
+msgstr ""
+"Ohjetiedostoa '%s' tai\n"
+"'%s' ei löytynyt.\n"
+"Haluatko käyttää KiCadin online-ohjetta?"
 
 #: common/tool/common_control.cpp:222 common/tool/common_control.cpp:242
 #, fuzzy
@@ -6379,11 +6373,13 @@ msgid "File Not Found"
 msgstr "Tiedostoa ei löytynyt"
 
 #: common/tool/common_control.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "Ohjetiedostoa \"%s\" ei löytynyt."
+msgstr ""
+"Ohjetiedostoa '%s' ei löytynyt.\n"
+"Haluatko käyttää KiCadin online-ohjetta?"
 
 #: common/tool/common_control.cpp:269
 #, c-format
@@ -6408,9 +6404,8 @@ msgstr ""
 "Lisätietoja KiCad-projektin avustamisesta on osoitteessa %s"
 
 #: common/tool/common_control.cpp:287
-#, fuzzy
 msgid "Donate to KiCad"
-msgstr "Tervetuloa KiCadiin %s!"
+msgstr "Lahjoita KiCadille"
 
 #: common/tool/grid_menu.cpp:93
 #, c-format
@@ -7646,9 +7641,8 @@ msgid "Generate"
 msgstr "Luo"
 
 #: eeschema/dialogs/dialog_bom.cpp:217
-#, fuzzy
 msgid "(file missing)"
-msgstr "Se puuttuu.\n"
+msgstr "(tiedosto puuttuu)"
 
 #: eeschema/dialogs/dialog_bom.cpp:294
 #, fuzzy, c-format
@@ -8628,9 +8622,9 @@ msgid "Violation Severity"
 msgstr "Rikkomisen vakavuus"
 
 #: eeschema/dialogs/dialog_erc.cpp:770 pcbnew/dialogs/dialog_gendrill.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "Raporttitiedosto %s luotu\n"
+msgstr "Raporttitiedosto '%s' luotu."
 
 #: eeschema/dialogs/dialog_erc.cpp:788
 #, c-format
@@ -8919,7 +8913,7 @@ msgstr "Vaihda Kaavioeditoriin"
 #: eeschema/dialogs/dialog_junction_props_base.cpp:65
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:80
 msgid "Set color to transparent to use Schematic Editor colors."
-msgstr ""
+msgstr "Aseta väri läpinäkyväksi käyttääksesi kytkentäkaavioeditorin värejä."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:59
 msgid "Junction Properties"
@@ -9794,7 +9788,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:32
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:36
 msgid "info"
-msgstr ""
+msgstr "info"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:57
 msgid "Pin &name:"
@@ -9875,13 +9869,13 @@ msgstr "Valitse tulostushakemisto"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:232
 #: pcbnew/dialogs/dialog_gendrill.cpp:306 pcbnew/dialogs/dialog_plot.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Do you want to use a path relative to\n"
 "'%s'?"
 msgstr ""
 "Haluatko käyttää polkua suhteessa\n"
-"\"%s\""
+"'%s'?"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:234
 #: pcbnew/dialogs/dialog_export_svg.cpp:214
@@ -9982,9 +9976,9 @@ msgid "Done."
 msgstr "Valmis"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:872
-#, fuzzy, c-format
+#, c-format
 msgid "Plotted to '%s'.\n"
-msgstr "\"%s\" lataaminen epäonnistui"
+msgstr "Piirrettiin '%s'.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1177
 #, fuzzy
@@ -9994,7 +9988,7 @@ msgstr "Valmis"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1249
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr ""
+msgstr "Palataan käyttämään käyttäjäpolkua '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1270
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1308
@@ -10514,9 +10508,8 @@ msgstr ""
 "käyttö voi aiheuttaa siirrettävyysongelmia."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:301
-#, fuzzy
 msgid "Use Relative Path"
-msgstr "Käytetäänkö suhteellista polkua?"
+msgstr "Käytä suhteellista polkua"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:302
 #, fuzzy
@@ -10574,9 +10567,9 @@ msgid "Link '%s' to this file?"
 msgstr "Linkitetäänkö tiedosto %s tähän tiedostoon?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:515
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
-msgstr "Muuta %s -arvo arvosta %s arvoksi %s."
+msgstr "Muuta '%s' linkki täältä: '%s' tänne: '%s'?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:520
 #: eeschema/dialogs/dialog_sheet_properties.cpp:536
@@ -11028,6 +11021,8 @@ msgstr ""
 msgid ""
 "You cannot leave interleaved empty fields when defining a transient source"
 msgstr ""
+"Et voi jättää tyhjäksi limittäisiä kenttiä määritellessäsi "
+"transienttilähdettä"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1024
 msgid "Select library"
@@ -13101,30 +13096,31 @@ msgstr ""
 "Automaattisesti tallennettujen tiedostojen manuaalinen palautus vaaditaan."
 
 #: eeschema/files-io.cpp:1432
-#, fuzzy
 msgid "The following automatically saved file(s) could not be restored\n"
-msgstr "Automaattitallennustiedostoa \"%s\" ei voitu poistaa!"
+msgstr "Seuraavia automaattisesti tallennettuja tiedostoja ei voitu palauttaa\n"
 
 #: eeschema/files-io.cpp:1437
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "Yllä olevat tiedostot vaativat manuaalisen palautuksen."
 
 #: eeschema/files-io.cpp:1459
-#, fuzzy
 msgid "The following automatically saved file(s) could not be removed\n"
-msgstr "Automaattitallennustiedostoa \"%s\" ei voitu poistaa!"
+msgstr "Seuraavia automaattisesti tallennettuja tiedostoja ei voitu poistaa\n"
 
 #: eeschema/files-io.cpp:1464
 msgid "Manual removal will be required for the file(s) above."
 msgstr "Yllä olevat tiedostot vaativat manuaalisen poiston."
 
 #: eeschema/files-io.cpp:1475
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The automatic save master file\n"
 "'%s'\n"
 "could not be deleted."
-msgstr "Automaattitallennustiedostoa \"%s\" ei voitu poistaa!"
+msgstr ""
+"Automaattitallennuksen päätiedostoa\n"
+"'%s'\n"
+"ei voitu poistaa."
 
 #: eeschema/files-io.cpp:1483
 msgid ""
@@ -13830,11 +13826,11 @@ msgstr "Näytä tappi ja sähkötyyppi"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:695
 msgid "Pin has unexpected outer edge type."
-msgstr ""
+msgstr "Pinnillä on odottamaton ulkoreunan tyyppi."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:698
 msgid "Pin has unexpected inner edge type."
-msgstr ""
+msgstr "Pinnillä on odottamaton sisäreunan tyyppi."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:861
 #, fuzzy, c-format
@@ -13844,7 +13840,7 @@ msgstr "Tiedostoa %s ei löydy."
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:978
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr ""
+msgstr "Bezier-käyrällä on %d ohjauspistettä. Vähintään 2 tarvitaan."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1035
 #, fuzzy, c-format
@@ -13893,7 +13889,7 @@ msgstr "Viitettä \"%s\" ei löydy."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1787
 msgid "Power Port has unknown style, use bar instead."
-msgstr ""
+msgstr "Virtaportilla on tuntematon tyyli, käytetään palkkia sen sijaan."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1828
 #, c-format
@@ -14857,9 +14853,8 @@ msgid "space"
 msgstr "Space"
 
 #: eeschema/sch_validators.cpp:171
-#, fuzzy
 msgid " or "
-msgstr "%s tai %s"
+msgstr " tai "
 
 #: eeschema/sch_validators.cpp:176
 #, fuzzy
@@ -15286,7 +15281,7 @@ msgid "'%s' is not a valid Spice value."
 msgstr "\"%s\" ei ole kelvollinen Spice-arvo"
 
 #: eeschema/symbol_async_loader.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
@@ -15294,7 +15289,7 @@ msgid ""
 msgstr ""
 "Virhe ladattaessa symbolikirjastoa %s.\n"
 "\n"
-"%s"
+"%s\n"
 
 #: eeschema/symbol_async_loader.cpp:134
 #, fuzzy, c-format
@@ -15645,6 +15640,8 @@ msgid ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
 msgstr ""
+"Symbolia '%s' on muokattu.\n"
+"Haluatko poistaa sen kirjastosta?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:773
 #, fuzzy, c-format
@@ -16944,35 +16941,33 @@ msgstr ""
 "yksikköinä %c ja %c"
 
 #: eeschema/tools/ee_inspection_tool.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
-"<b> Pois ruudukon tappi %s </b> \"%s\" sijainnista <b> (%.3f, %.3f) </b> "
-"muunnetusta. <br>"
+"Info: <b>Piilotettu virtapinni %s</b> %s sijainnista <b>(%s, %s)</b> "
+"muunnetusta."
 
 #: eeschema/tools/ee_inspection_tool.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
 msgstr ""
-"<b> Pois ruudukon tappi %s </b> \"%s\" paikassa <b> (%.3f, %.3f) </b> "
-"muunnetun symbolissa %c. <br>"
+"<b>Piilotettu virtapinni %s</b> %s sijainnissa <b>(%s, %s)</b> muunnetun "
+"yksikössä %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr ""
-"<b> Pois ruudukon tappi %s </b> \"%s\" paikassa <b> (%.3f, %.3f) </b>. <br>"
+msgstr "<b>Piilotettu virtapinni %s </b> %s sijainnissa <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b> Pois ruudukon tappi %s </b> \"%s\" paikassa <b> (%.3f, %.3f) </b> "
-"symbolissa %c. <br>"
+"<b>Piilotettu virtapinni %s</b> %s sijainnissa <b>(%s, %s)</b> yksikössä %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:391
 msgid ""
@@ -16982,33 +16977,33 @@ msgstr ""
 "verkkoihin.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:404
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
-"<b> Pois ruudukon tappi %s </b> \"%s\" sijainnista <b> (%.3f, %.3f) </b> "
-"muunnetusta. <br>"
+"<b>Pinni %s</b> %s ei sovi ruudukon rasteriin sijainnissa <b>(%s, %s)</b> "
+"muunnetusta."
 
 #: eeschema/tools/ee_inspection_tool.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 "converted."
 msgstr ""
-"<b> Pois ruudukon tappi %s </b> \"%s\" paikassa <b> (%.3f, %.3f) </b> "
-"muunnetun symbolissa %c. <br>"
+"<b>Pinni %s</b> %s ei sovi ruudukon rasteriin sijainnissa <b>(%.3s, %.3s)</"
+"b> muunnetun yksikössä %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr ""
-"<b> Pois ruudukon tappi %s </b> \"%s\" paikassa <b> (%.3f, %.3f) </b>. <br>"
+"<b>Pinni %s</b> %s ei sovi ruudukon rasteriin sijainnissa <b>(%s, %s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b> Pois ruudukon tappi %s </b> \"%s\" paikassa <b> (%.3f, %.3f) </b> "
-"symbolissa %c. <br>"
+"<b>Pinni %s</b> %s ei sovi ruudukon rasteriin sijainnissa <b>(%s, %s)</b> "
+"yksikössä %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:451
 msgid "No symbol issues found."
@@ -17036,11 +17031,11 @@ msgstr "& Laajenna valinta E"
 
 #: eeschema/tools/sch_drawing_tools.cpp:215
 msgid "Press <ESC> to cancel symbol creation."
-msgstr ""
+msgstr "Paina <ESC> keskeyttääksesi symbolin luonnin."
 
 #: eeschema/tools/sch_drawing_tools.cpp:457
 msgid "Press <ESC> to cancel image creation."
-msgstr ""
+msgstr "Paina <ESC> keskeyttääksesi kuvan luonnin."
 
 #: eeschema/tools/sch_drawing_tools.cpp:517
 #: pagelayout_editor/pl_editor_frame.cpp:863
@@ -17060,7 +17055,7 @@ msgstr "Risteyksen sijainti ei sisällä liitettäviä johtoja ja / tai nastoja.
 
 #: eeschema/tools/sch_drawing_tools.cpp:1083
 msgid "Press <ESC> to cancel item creation."
-msgstr ""
+msgstr "Paina <ESC> keskeyttääksesi kohteen luonnin."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1139
 msgid "Click over a sheet."
@@ -17068,7 +17063,7 @@ msgstr "Napsauta arkin päällä."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1310
 msgid "Press <ESC> to cancel sheet creation."
-msgstr ""
+msgstr "Paina <ESC> keskeyttääksesi lehden luonnin."
 
 #: eeschema/tools/sch_edit_tool.cpp:80
 msgid "Symbol Unit"
@@ -17189,16 +17184,16 @@ msgstr "Busilla ei ole jäseniä"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:578
 msgid "Press <ESC> to cancel drawing."
-msgstr ""
+msgstr "Paina <ESC> keskeyttääksesi piirtämisen."
 
 #: eeschema/tools/sch_move_tool.cpp:391
 msgid "Press <ESC> to cancel drag."
-msgstr ""
+msgstr "Paina <ESC> keskeyttääksesi raahaamisen."
 
 #: eeschema/tools/sch_move_tool.cpp:393
 #: pagelayout_editor/tools/pl_edit_tool.cpp:214
 msgid "Press <ESC> to cancel move."
-msgstr ""
+msgstr "Paina <ESC> keskeyttääksesi siirtämisen."
 
 #: eeschema/tools/symbol_editor_control.cpp:163
 #, fuzzy
@@ -17470,7 +17465,7 @@ msgstr "Karttatiedoston muoto"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:20
 msgid "These parameters are usually specified in files, but not always."
-msgstr ""
+msgstr "Nämä parametrit määritellään yleensä tiedostoissa, mutta ei aina."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:29
 #, fuzzy
@@ -17479,11 +17474,11 @@ msgstr "yksiköt"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No leading zeros (TZ format)"
-msgstr ""
+msgstr "Ei edeltäviä nollia (TZ-muoto)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "No trailing zeros (LZ format)"
-msgstr ""
+msgstr "Ei perässä olevia nollia (LZ-muoto)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:35
 #, fuzzy
@@ -17496,6 +17491,11 @@ msgid ""
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
+"Kokonaisluvuista tiedostoissa voi olla poistettua nollia.\n"
+"Ei edeltäviä nollia -muodossa kaikki luvun alussa olevat nollat on "
+"poistettu\n"
+"Ei perässä olevia nollia -muodossa kaikki luvun lopussa olevat nollat on "
+"poistettu"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 #, fuzzy
@@ -17504,15 +17504,15 @@ msgstr "Koordinaattimuoto"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:53
 msgid "The coordinates format is not specified in Excellon format."
-msgstr ""
+msgstr "Koordinaattimuotoa ei ole määritelty Excellon-formaatissa."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:57
 msgid "(The decimal format does not use these settings)"
-msgstr ""
+msgstr "(Desimaalimuoto ei käytä näitä asetuksia)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "Usually: 3:3 in mm and 2:4 in inches"
-msgstr ""
+msgstr "Yleensä: 3:3 millimetreissä ja 2:4 tuumissa"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:70
 #, fuzzy
@@ -18421,9 +18421,8 @@ msgid "Failed to output data"
 msgstr "\"%s\" lataaminen epäonnistui"
 
 #: kicad/dialogs/dialog_template_selector.cpp:143
-#, fuzzy
 msgid "<h1>Template Selector</h1>"
-msgstr "<html> <h1> Mallivalitsin </h1> </html>"
+msgstr "<h1> Mallivalitsin </h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:245
 msgid "Select Templates Directory"
@@ -18431,7 +18430,7 @@ msgstr "Valitse Mallihakemisto"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:31
 msgid "Folder:"
-msgstr ""
+msgstr "Kansio:"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:118
 msgid "Project Template Title"
@@ -18481,7 +18480,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr ""
+msgstr "Hallitse ladattavia paketteja KiCadin ja kolmannen osapuolen lähteistä"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -18668,7 +18667,7 @@ msgstr "Avaa projektihakemisto File Explorerissa"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:77
 msgid "Please enter fully qualified repository url"
-msgstr ""
+msgstr "Anna täydellinen lähteen osoite"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:77
 #, fuzzy
@@ -18699,18 +18698,18 @@ msgstr "Väriteema:"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
 #, c-format
 msgid "Repository (%d)"
-msgstr ""
+msgstr "Lähde (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:95 kicad/pcm/dialogs/panel_package.cpp:85
 #: kicad/pcm/dialogs/panel_package.cpp:89
 #: kicad/pcm/dialogs/panel_package_base.cpp:67
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:112
 msgid "Install"
-msgstr ""
+msgstr "Asenna"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:104 kicad/pcm/dialogs/panel_package.cpp:93
 msgid "Uninstall"
-msgstr ""
+msgstr "Poista asennus"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:133
 #, fuzzy
@@ -18738,13 +18737,13 @@ msgstr "Valitse kuva"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
 #, c-format
 msgid "Pending (%d)"
-msgstr ""
+msgstr "Odottavat (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:381
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:62
 #, c-format
 msgid "Installed (%d)"
-msgstr ""
+msgstr "Asennetut (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
 #, fuzzy
@@ -18783,12 +18782,12 @@ msgstr ""
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:57
 msgid "Aborting remaining tasks."
-msgstr ""
+msgstr "Keskeytetään jäljellä olevat työt."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:137
 #, c-format
 msgid "Downloaded %lld/%lld Kb"
-msgstr ""
+msgstr "Ladattu %lld/%lld Kb"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 #, fuzzy
@@ -18807,7 +18806,7 @@ msgstr "Materiaalin ominaisuudet"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
-msgstr ""
+msgstr "Yksityiskohdat"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 #, fuzzy
@@ -18826,7 +18825,7 @@ msgstr "Näytä"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:212
 msgid "Metadata"
-msgstr ""
+msgstr "Metadata"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
 #, fuzzy
@@ -18840,15 +18839,15 @@ msgstr "Lisenssitiedot"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:229
 msgid "Tags: "
-msgstr ""
+msgstr "Tagit: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:257
 msgid "Author"
-msgstr ""
+msgstr "Tekijä"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:260
 msgid "Maintainer"
-msgstr ""
+msgstr "Ylläpitäjä"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:264
 #, fuzzy
@@ -18857,7 +18856,7 @@ msgstr "Vaihda lähteet keskenään"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:475
 msgid "Package download url is not specified"
-msgstr ""
+msgstr "Paketin latausosoitetta ei ole määritelty"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:476
 #, fuzzy
@@ -18871,13 +18870,15 @@ msgstr "Tallenna muutokset"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:498
 msgid "Downloading package"
-msgstr ""
+msgstr "Ladataan pakettia"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:516
 msgid ""
 "Integrity of the downloaded package could not be verified, hash does not "
 "match. Are you sure you want to keep this file?"
 msgstr ""
+"Ladatun paketin eheyttä ei voitu varmentaa, hash ei täsmää. Oletko varma "
+"että haluat säilyttää tämän tiedoston?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:518
 #, fuzzy
@@ -18889,6 +18890,8 @@ msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
 msgstr ""
+"Tämä pakettiversio ei ole yhteensopiva kicad-versiosi tai -alustan kanssa. "
+"Oletko varma että haluat asentaa sen silti?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:560
 #, fuzzy
@@ -18942,7 +18945,7 @@ msgstr ""
 #: kicad/pcm/pcm.cpp:206
 #, c-format
 msgid "Downloading %lld/%lld Kb"
-msgstr ""
+msgstr "Ladataan %lld/%lld Kb"
 
 #: kicad/pcm/pcm.cpp:231
 #, fuzzy
@@ -18951,7 +18954,7 @@ msgstr "Virheellinen koko %ll d: liian suuri"
 
 #: kicad/pcm/pcm.cpp:247
 msgid "Fetching repository"
-msgstr ""
+msgstr "Noudetaan lähdettä"
 
 #: kicad/pcm/pcm.cpp:251
 #, fuzzy
@@ -18968,7 +18971,7 @@ msgstr "Tiedostoa %s ei saatu avattua"
 
 #: kicad/pcm/pcm.cpp:290
 msgid "Fetching repository packages"
-msgstr ""
+msgstr "Noudetaan lähteen paketteja"
 
 #: kicad/pcm/pcm.cpp:294
 #, fuzzy
@@ -18977,7 +18980,7 @@ msgstr "Liitostiedoston luominen ei onnistunut"
 
 #: kicad/pcm/pcm.cpp:302
 msgid "Packages hash doesn't match. Repository may be corrupted."
-msgstr ""
+msgstr "Pakettien hashit eivät täsmää. Lähde voi olla vioittunut."
 
 #: kicad/pcm/pcm.cpp:315
 #, fuzzy, c-format
@@ -18991,6 +18994,7 @@ msgstr "Tiedostoa %s ei saatu avattua"
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr ""
+"Nykyisen lähteen pakettivälimuisti on vioittunut. Se ladataan uudelleen."
 
 #: kicad/pcm/pcm.cpp:453
 #, fuzzy
@@ -19002,6 +19006,8 @@ msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
 msgstr ""
+"Resurssitiedoston hash ei täsmää eikä sitä käytetä. Lähde voi olla "
+"vioittunut."
 
 #: kicad/pcm/pcm.cpp:616
 #, fuzzy
@@ -19009,9 +19015,8 @@ msgid "Local file"
 msgstr "Muokkaa paikallista tiedostoa ..."
 
 #: kicad/pcm/pcm_task_manager.cpp:60
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "Hakemistoa \"%s\" ei voitu luoda"
+msgstr "Ei voida luoda latauskansiota!"
 
 #: kicad/pcm/pcm_task_manager.cpp:87
 #, c-format
@@ -19022,9 +19027,9 @@ msgid ""
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:97
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting package '%s'."
-msgstr "Puretaan tiedostoa \"%s\"\n"
+msgstr "Puretaan pakettia '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:112
 #, fuzzy, c-format
@@ -19034,7 +19039,7 @@ msgstr "Liitoskuvaa ei löytynyt"
 #: kicad/pcm/pcm_task_manager.cpp:150
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr ""
+msgstr "Ladataan pakettia osoitteesta: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:163
 #, fuzzy, c-format
@@ -19045,7 +19050,7 @@ msgstr "\"%s\" lataaminen epäonnistui"
 
 #: kicad/pcm/pcm_task_manager.cpp:250
 msgid "Aborting package installation."
-msgstr ""
+msgstr "Keskeytetään paketin asennus."
 
 #: kicad/pcm/pcm_task_manager.cpp:254
 #, fuzzy
@@ -19062,7 +19067,7 @@ msgstr "Tiedostoa %s ei saatu avattua"
 
 #: kicad/pcm/pcm_task_manager.cpp:307
 msgid "Archive does not contain a valid metadata.json file"
-msgstr ""
+msgstr "Paketti ei sisällä kunnollista metadata.json -tiedostoa"
 
 #: kicad/pcm/pcm_task_manager.cpp:315
 #, fuzzy
@@ -19075,6 +19080,7 @@ msgid ""
 "Package with identifier %s is already installed, you must first uninstall "
 "this package."
 msgstr ""
+"Paketti tunnisteella %s on jo asennettu, sinun tarvitsee ensin poistaa se."
 
 #: kicad/pcm/pcm_task_manager.cpp:360
 #, fuzzy, c-format
@@ -19089,7 +19095,7 @@ msgstr "Hakemistoa \"%s\" ei voitu luoda"
 #: kicad/pcm/pcm_task_manager.cpp:381
 #, c-format
 msgid "Package %s uninstalled"
-msgstr ""
+msgstr "Paketti %s on poistettu"
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -19398,9 +19404,8 @@ msgid "Similar files already exist in the destination folder."
 msgstr "Samankaltaiset tiedostot ovat jo kohdekansiossa."
 
 #: kicad/tools/kicad_manager_control.cpp:280
-#, fuzzy
 msgid "A problem occurred creating new project from template."
-msgstr "Uuden projektin luomisessa mallista tapahtui ongelma!"
+msgstr "Uuden projektin luomisessa mallista tapahtui ongelma."
 
 #: kicad/tools/kicad_manager_control.cpp:303
 msgid "Open Existing Project"
@@ -19558,19 +19563,19 @@ msgstr "Ennalta määritetyt leveydet:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:558
 msgid "Texts can include keywords."
-msgstr ""
+msgstr "Tekstit voivat sisältää avainsanoja."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Keyword notation is ${keyword}"
-msgstr ""
+msgstr "Avainsanan merkintätapa on ${avainsana}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "Each keyword is replaced by its value"
-msgstr ""
+msgstr "Jokainen avainsana korvataan arvollaan"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:561
 msgid "These build-in keywords are always available:"
-msgstr ""
+msgstr "Seuraavat sisäänrakennetut avainsanat ovat olemassa:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:565
 #, fuzzy
@@ -20014,7 +20019,6 @@ msgstr ""
 "* ___R3 = Z <sub> ulos </sub> \\ * A - R2___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB  \n"
@@ -20024,15 +20028,13 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
-"## Jaettu vaimennin\n"
-"### Vaimennus on 6dB\n"
-"___Z <sub> sisään </sub> ___ haluttu tuloimpedanssi kategoriassa & # x2126; "
-"<br>\n"
-"___Z <sub> out </sub> ___ haluttu lähtöimpedanssi & # x2126; <br> -"
-"ohjelmassa\n"
-"___Z <sub> sisään </sub> = Z <sub> ulos </sub> ___\n"
+"### Split Attenuator\n"
+"Vaimennus on 6 dB\n"
+"___Z<sub>in</sub>___ on haluttu sisääntuloimpedanssi &#x2126;  \n"
+"___Z<sub>out</sub>___ on haluttu ulostuloimpedanssi &#x2126;  \n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z <sub> ulos </sub> / 3 ___\n"
+"___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 #, fuzzy
@@ -21694,7 +21696,7 @@ msgstr "Päivitä dielektrisen paksuus levyn paksuudesta"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:208
 #, c-format
 msgid "Value too small (min value %s)."
-msgstr ""
+msgstr "Arvo liian pieni (pienin arvo %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:228
 #, fuzzy
@@ -21931,7 +21933,7 @@ msgstr "Sininen"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:67
 msgid "Purple"
-msgstr ""
+msgstr "Purppura"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:68
 msgid "Black"
@@ -22082,18 +22084,19 @@ msgstr "Merkitse PCB uudelleen"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:285
 msgid "No PCB to reannotate!"
-msgstr "Ei PCB: tä uudelleen!"
+msgstr "Ei piirikorttia selitteiden uudelleenmerkitsemiseksi!"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:297
-#, fuzzy
 msgid "PCB successfully reannotated"
-msgstr "Piirilevy ja kaavamerkinnät onnistuneesti"
+msgstr "Piirilevyn selitteet onnistuneesti merkitty uudelleen"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:298
 msgid ""
 "PCB annotation changes should be synchronized with schematic using the "
 "\"Update Schematic from PCB\" tool."
 msgstr ""
+"Piirikortin selitemuutokset tulisi synkronisoida kytkentäkaavion kanssa "
+"käyttäen \"Päivitä kytkentäkaavio piirikortilta\" työkalua."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:313
 #, c-format
@@ -22232,9 +22235,8 @@ msgstr ""
 "***********************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:544
-#, fuzzy
 msgid " will be ignored"
-msgstr "ohitetaan"
+msgstr " ohitetaan"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:557
 msgid ""
@@ -23017,11 +23019,12 @@ msgstr "Sähköiset ominaisuudet"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:186
 msgid "Clearance:"
-msgstr "Eristysväli"
+msgstr "Välys:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:188
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
+"Kuparivälys tälle alueelle (aseta nollaksi käyttääksesi netclass:in välystä)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:67
@@ -23063,6 +23066,8 @@ msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
 msgstr ""
+"Väli joka pidetään tyhjänä täytetyn alueen ja lämpöhelpotuksella kytketyn "
+"anturan välillä."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:234
 msgid "Clearance between pads in the same net and filled areas."
@@ -23400,9 +23405,8 @@ msgid "Keep existing reference designators"
 msgstr "Korvaa osumat viitenimikkeissä"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
-#, fuzzy
 msgid "Assign unique reference designators"
-msgstr "Komponenttien ja jalanjälkien sovittaminen viitetunnusten avulla\n"
+msgstr "Aseta uniikit viitetunnisteet"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:357
 msgid ""
@@ -24066,11 +24070,11 @@ msgstr "Ohita virtuaalikomponentit"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:113
 msgid "Substitute similarly named models"
-msgstr ""
+msgstr "Korvaa samalla tavalla nimetyt mallit"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:114
 msgid "Replace VRML models with STEP models of the same name"
-msgstr ""
+msgstr "Korvaa VRML-mallit saman nimisillä STEP-malleilla"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:118
 msgid "Overwrite old file"
@@ -24238,6 +24242,8 @@ msgid ""
 "If checked: copy 3D models to the destination folder\n"
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
+"Jos valittu: Kopioi 3D-mallit kohdekansioon\n"
+"Jos ei valittu: Upota 3D-mallit kortin VRML-tiedostoon"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
@@ -27345,7 +27351,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr ""
+msgstr "Lähettää valmistustiedostot valmistajalle KiCadista"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
@@ -27353,7 +27359,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr ""
+msgstr "Lähetä piirikortti tuotantoon"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:51
 msgid "Change Pads on Current Footprint"
@@ -27827,6 +27833,8 @@ msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
 msgstr ""
+"Näytä välysviivat vetojen ympärillä, ja valinnaisesti via:n välys vedon "
+"päässä reitityksen aikana."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
 msgid "Show pad clearance"
@@ -27851,6 +27859,8 @@ msgid ""
 "When enabled, edits to the board will cause the 3D view to refresh (may be "
 "slow with larger boards)"
 msgstr ""
+"Kun päällä, muutokset korttiin päivittävät myös 3D-näkymän (voi olla hidasta "
+"isommilla korteilla)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Magnetic pads"
@@ -27881,9 +27891,10 @@ msgid "Allow free pads"
 msgstr "Sallitut ominaisuudet"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:71
+#, fuzzy
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
-msgstr ""
+msgstr "Jos päällä, anturoita voi siirtää suhteessa muuhun footprint:iin."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:97
 #: pcbnew/dialogs/panel_edit_options_base.cpp:168
@@ -28002,7 +28013,7 @@ msgstr "L & jäljitä graafisia viivoja H-, V- ja 45 astetta"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:376
 msgid "Draw an outline to show the sheet size."
-msgstr ""
+msgstr "Piirtää ulkoviivan joka näyttää lehden koon."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:380
 #, fuzzy
@@ -28014,6 +28025,8 @@ msgid ""
 "If checked, zones will be re-filled after editing the properties of the zone "
 "using the Zone Properties dialog"
 msgstr ""
+"Jos valittu, alueet täytetään uudelleen sen jälkeen kun niiden ominaisuuksia "
+"on muokattu käyttäen alueen ominaisuus-dialogia"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:130
 msgid "Internal Layers"
@@ -28080,9 +28093,8 @@ msgid "Path Substitutions"
 msgstr "Polun korvaaminen"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:385
-#, fuzzy
 msgid "No filename entered"
-msgstr "Tiedostoa ei ole valittu!"
+msgstr "Tiedostonimeä ei ole annettu"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
 #, fuzzy
@@ -28280,6 +28292,9 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
+"Minimivälys kuparikohteiden välillä jotka eivät kuulu samaan net:iin. Jos "
+"asetettu, tämä on absoluuttiminimi jota ei voi alittaa netclass:eilla, "
+"kustomisäännöillä tai muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:207
 msgid "Minimum track width:"
@@ -28290,6 +28305,8 @@ msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Pienin vedon leveys. Jos asetettu, tämä on absoluuttinen minimi jota ei voi "
+"alittaa netclass:eilla, kustomisäännöillä tai muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:224
 msgid "Minimum annular width:"
@@ -28300,6 +28317,8 @@ msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Pienin kauluksen leveys. Jos asetettu, tämä on absoluuttinen minimi jota ei "
+"voi alittaa netclass:eilla, kustomisäännöillä tai muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
@@ -28310,6 +28329,8 @@ msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Pienin via:n halkaisija. Jos asetettu, tämä on absoluuttinen minimi jota ei "
+"voi alittaa netclass:eilla, kustomisäännöillä tai muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
 #, fuzzy
@@ -28322,6 +28343,9 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
+"Pienin välys reiän ja liittymättömän kuparin välillä. Jos asetettu, tämä on "
+"absoluuttinen minimi jota ei voi alittaa netclass:eilla, kustomisäännöillä "
+"tai muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:272
 #, fuzzy
@@ -28334,6 +28358,9 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
+"Pienin välys kortin reunan ja minkä tahansa kuparin välillä. Jos asetettu, "
+"tämä on absoluuttinen minimi jota ei voi alittaa netclass:eilla, "
+"kustomisäännöillä tai muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:297
 msgid "Holes"
@@ -28348,6 +28375,8 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
+"Pienin läpireiän koko. Jos asetettu, tämä on absoluuttinen minimi jota ei "
+"voi alittaa netclass:eilla, kustomisäännöillä tai muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:329
 msgid "Hole to hole clearance:"
@@ -28359,6 +28388,9 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
+"Pienin välys kahden poratun reiän välillä. Jos asetettu, tämä on "
+"absoluuttinen minimi jota ei voi alittaa kustomisäännöillä tai muilla "
+"asetuksilla. (Huomioi: ei koske jyrsittyjä reikiä.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 msgid "uVias"
@@ -28373,6 +28405,8 @@ msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Pienin mikro-via:n halkaisija. Jos asetettu, tämä on absoluuttinen minimi "
+"jota ei voi alittaa netclass:eilla, kustomisäännöillä tai muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 #, fuzzy
@@ -28384,6 +28418,8 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Pienin mikro-via:n reiän koko. Jos asetettu, tämä on absoluuttinen minimi "
+"jota ei voi alittaa netclass:eilla, kustomisäännöillä tai muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
@@ -30228,9 +30264,9 @@ msgstr "Takapuolen (alapuolen) paikkatiedosto: \"%s\"."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:337
 #: pcbnew/exporters/gen_footprints_placefile.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "Full component count: %d."
-msgstr "Komponenttien kokonaismäärä: %d\n"
+msgstr "Komponenttien kokonaismäärä: %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:340
 #: pcbnew/exporters/gen_footprints_placefile.cpp:438
@@ -30261,15 +30297,15 @@ msgid "Footprint Report"
 msgstr "Jalanjälki-raportti"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'"
-msgstr "Luo tiedosto %s\n"
+msgstr "Luotiin tiedosto '%s'"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:354
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Created file '%s'."
-msgstr "Luo tiedosto %s\n"
+msgstr "Luotiin tiedosto '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:159
 #, fuzzy, c-format
@@ -30321,9 +30357,9 @@ msgid "Recovery file '%s' not found."
 msgstr "Palautustiedostoa \"%s\" ei löydy."
 
 #: pcbnew/files.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "OK ladata palautustiedosto \"%s\""
+msgstr "OK ladata palautustiedosto '%s'?"
 
 #: pcbnew/files.cpp:376
 #, c-format
@@ -30718,14 +30754,13 @@ msgid "No footprints to export!"
 msgstr "Ei jalanjälkiä vietäväksi!"
 
 #: pcbnew/footprint_libraries_utils.cpp:692
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprints on board to refer to %s?"
-msgstr "Päivitä aluksella oleva jalanjälki"
+msgstr "Päivitä kortin footprint:it osoittamaan tänne: %s?"
 
 #: pcbnew/footprint_libraries_utils.cpp:739
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "Päivitä jalanjäljet sisällyttämään kirjastoon tehdyt muutokset"
+msgstr "Päivitä kortin footprint:it osoittamaan uuteen kirjastoon?"
 
 #: pcbnew/footprint_libraries_utils.cpp:878
 #: pcbnew/footprint_viewer_frame.cpp:715
@@ -31616,9 +31651,9 @@ msgid "Netlist Load Error"
 msgstr "Netlist-latausvirhe"
 
 #: pcbnew/netlist_reader/netlist.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol %s."
-msgstr "Symbolille \"%s\" ei ole määritelty jalanjälkeä.\n"
+msgstr "Symbolille \"%s\" ei ole määritelty jalanjälkeä."
 
 #: pcbnew/netlist_reader/netlist.cpp:182
 #, fuzzy, c-format
@@ -31632,12 +31667,12 @@ msgid "%s footprint ID '%s' is not valid."
 msgstr "%s jalanjälkitunnus \"%s\" ei kelpaa."
 
 #: pcbnew/netlist_reader/netlist.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
 "%s jalanjälkeä \"%s\" ei löydy mistään kirjastosta "
-"jalanjälkikirjastotaulukossa.\n"
+"jalanjälkikirjastotaulukossa."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:184
 #, fuzzy, c-format
@@ -31891,18 +31926,16 @@ msgid "Schematic file '%s' not found."
 msgstr "Kaaviotiedostoa \"%s\" ei löydy."
 
 #: pcbnew/pcb_edit_frame.cpp:1560
-#, fuzzy
 msgid "Eeschema failed to load."
-msgstr "Eescheman lataaminen epäonnistui:\n"
+msgstr "Eescheman lataaminen epäonnistui."
 
 #: pcbnew/pcb_edit_frame.cpp:1711
 msgid "Edit design rules"
 msgstr "Muokkaa suunnittelusääntöjä"
 
 #: pcbnew/pcb_edit_frame.cpp:1723
-#, fuzzy
 msgid "Could not compile custom design rules."
-msgstr "DRC epätäydellinen: suunnittelusääntöjä ei voitu koota.  "
+msgstr "Ei voitu kääntää mukautettuja suunnittelusääntöjä."
 
 #: pcbnew/pcb_edit_frame.cpp:1758
 msgid "Export Hyperlynx Layout"
@@ -32124,9 +32157,8 @@ msgid "Error reading file: cannot determine length."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:87
-#, fuzzy
 msgid "Error reading file."
-msgstr "Virhe purettaessa tiedostoa!\n"
+msgstr "Virhe luettaessa tiedostoa."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:490
 #, fuzzy, c-format
@@ -34521,9 +34553,8 @@ msgstr ""
 "numeroidun kytkentäkaavion."
 
 #: pcbnew/tools/drc_tool.cpp:208
-#, fuzzy
 msgid "DRC"
-msgstr "Kongon demokraattinen tasavalta"
+msgstr "DRC"
 
 #: pcbnew/tools/edit_tool.cpp:91
 msgid "Special Tools"
