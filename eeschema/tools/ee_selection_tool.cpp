@@ -1184,18 +1184,19 @@ bool EE_SELECTION_TOOL::selectMultiple()
     while( TOOL_EVENT* evt = Wait() )
     {
         int width = area.GetEnd().x - area.GetOrigin().x;
+        int height = area.GetEnd().y - area.GetOrigin().y;
 
         /* Selection mode depends on direction of drag-selection:
          * Left > Right : Select objects that are fully enclosed by selection
          * Right > Left : Select objects that are crossed by selection
          */
-        bool windowSelection = width >= 0;
+        bool isWindowSelection = width >= 0;
 
         if( view->IsMirroredX() )
-            windowSelection = !windowSelection;
+            isWindowSelection = !isWindowSelection;
 
-        m_frame->GetCanvas()->SetCurrentCursor( windowSelection ? KICURSOR::SELECT_WINDOW
-                                                                : KICURSOR::SELECT_LASSO );
+        m_frame->GetCanvas()->SetCurrentCursor( isWindowSelection ? KICURSOR::SELECT_WINDOW
+                                                                  : KICURSOR::SELECT_LASSO );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -1227,79 +1228,68 @@ bool EE_SELECTION_TOOL::selectMultiple()
             // End drawing the selection box
             view->SetVisible( &area, false );
 
-            // Mark items within the selection box as selected
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> children;
+            // Fetch items from the RTree that are in our area of interest
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> nearbyViewItems;
+            view->Query( area.ViewBBox(), nearbyViewItems );
 
-            // Filter the view items based on the selection box
-            BOX2I selectionBox = area.ViewBBox();
-            view->Query( selectionBox, selectedItems );         // Get the list of selected items
+            // Build lists of nearby items and their children
+            std::vector<SCH_ITEM*> nearbyItems;
+            std::vector<SCH_ITEM*> nearbyChildren;
 
-            // Some children aren't in the view; add them by hand.
-            // DO NOT add them directly to selectedItems.  If we add enough to cause the vector
-            // to grow it will re-allocate and invalidate the top-level for-loop iterator.
-            for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : selectedItems )
+            for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : nearbyViewItems )
             {
-                SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( pair.first );
+                SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( pair.first );
 
-                if( sheet )
+                if( item )
                 {
-                    int layer = pair.second;
+                    item->ClearFlags( TEMP_SELECTED | STARTPOINT | ENDPOINT );
+                    nearbyItems.push_back( item );
 
-                    for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-                        children.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( pin, layer ) );
-                }
-
-                SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( pair.first );
-
-                if( symbol )
-                {
-                    int layer = pair.second;
-
-                    for( SCH_FIELD& field : symbol->GetFields() )
-                        children.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( &field, layer ) );
-                }
-
-                SCH_GLOBALLABEL* gLabel = dynamic_cast<SCH_GLOBALLABEL*>( pair.first );
-
-                if( gLabel )
-                {
-                    int        layer = pair.second;
-                    SCH_FIELD* intersheetRef = gLabel->GetIntersheetRefs();
-
-                    children.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( intersheetRef, layer ) );
+                    item->RunOnChildren(
+                            [&]( SCH_ITEM* aChild )
+                            {
+                                nearbyChildren.push_back( aChild );
+                            } );
                 }
             }
 
-            selectedItems.insert( selectedItems.end(), children.begin(), children.end() );
-
-            int height = area.GetEnd().y - area.GetOrigin().y;
+            EDA_RECT selectionRect( (wxPoint) area.GetOrigin(), wxSize( width, height ) );
+            selectionRect.Normalize();
 
             bool anyAdded = false;
             bool anySubtracted = false;
+            auto selectItem =
+                    [&]( SCH_ITEM* aItem )
+                    {
+                        if( m_subtractive || ( m_exclusive_or && aItem->IsSelected() ) )
+                        {
+                            unselect( aItem );
+                            anySubtracted = true;
+                        }
+                        else
+                        {
+                            select( aItem );
+                            aItem->SetFlags( STARTPOINT | ENDPOINT );
+                            anyAdded = true;
+                        }
+                    };
 
-            // Construct an EDA_RECT to determine EDA_ITEM selection
-            EDA_RECT selectionRect( (wxPoint) area.GetOrigin(), wxSize( width, height ) );
-
-            selectionRect.Normalize();
-
-            for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : selectedItems )
+            for( SCH_ITEM* item : nearbyItems )
             {
-                EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( pair.first );
-
-                if( item && Selectable( item ) && item->HitTest( selectionRect, windowSelection ) )
+                if( Selectable( item ) && item->HitTest( selectionRect, isWindowSelection ) )
                 {
-                    if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
-                    {
-                        unselect( item );
-                        anySubtracted = true;
-                    }
-                    else
-                    {
-                        select( item );
-                        item->SetFlags( STARTPOINT | ENDPOINT );
-                        anyAdded = true;
-                    }
+                    item->SetFlags( TEMP_SELECTED );
+                    selectItem( item );
+                }
+            }
+
+            for( SCH_ITEM* item : nearbyChildren )
+            {
+                if( Selectable( item )
+                        && !item->GetParent()->HasFlag( TEMP_SELECTED )
+                        && item->HitTest( selectionRect, isWindowSelection ) )
+                {
+                    selectItem( item );
                 }
             }
 
