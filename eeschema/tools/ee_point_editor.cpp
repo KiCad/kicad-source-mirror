@@ -876,6 +876,8 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     updateItem( shape, true );
     updatePoints();
 
+    m_frame->OnModify();
+
     return 0;
 }
 
@@ -896,6 +898,8 @@ int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
     updateItem( shape, true );
     updatePoints();
+
+    m_frame->OnModify();
 
     return 0;
 }
