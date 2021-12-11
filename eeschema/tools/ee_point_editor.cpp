@@ -854,13 +854,14 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
 
     VECTOR2I cursor = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
+    wxPoint  pos = mapCoords( cursor );
     int      currentMinDistance = INT_MAX;
     int      closestLineStart = 0;
 
     for( unsigned i = 0; i < poly.GetPointCount() - 1; ++i )
     {
         int distance = (int) DistanceLinePoint( (wxPoint) poly.CPoint( i ),
-                                                (wxPoint) poly.CPoint( i + 1 ), (wxPoint) cursor );
+                                                (wxPoint) poly.CPoint( i + 1 ), pos );
 
         if( distance < currentMinDistance )
         {
@@ -870,7 +871,7 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     }
 
     saveItemsToUndo();
-    poly.Insert( closestLineStart, (wxPoint) cursor );
+    poly.Insert( closestLineStart + 1, pos );
 
     updateItem( shape, true );
     updatePoints();
