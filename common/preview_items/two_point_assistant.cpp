@@ -62,9 +62,9 @@ void TWO_POINT_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     if( m_constructMan.IsReset() )
         return;
 
-    const VECTOR2I  origin = m_constructMan.GetOrigin();
-    const VECTOR2I  end    = m_constructMan.GetEnd();
-    const VECTOR2I  radVec = end - origin;
+    const VECTOR2I origin = m_constructMan.GetOrigin();
+    const VECTOR2I end    = m_constructMan.GetEnd();
+    const VECTOR2D radVec = end - origin;
 
     // Ensures that +90° is up and -90° is down in pcbnew
     const EDA_ANGLE deltaAngle( VECTOR2I( radVec.x, -radVec.y ) );
