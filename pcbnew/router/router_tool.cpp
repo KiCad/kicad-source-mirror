@@ -732,6 +732,9 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
     if( aEvent.IsAction( &PCB_ACTIONS::layerNext ) )
     {
+        if( m_lastTargetLayer == UNDEFINED_LAYER )
+            m_lastTargetLayer = currentLayer;
+
         size_t idx = 0;
 
         for( size_t i = 0; i < layers.size(); i++ )
@@ -748,6 +751,9 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::layerPrev ) )
     {
+        if( m_lastTargetLayer == UNDEFINED_LAYER )
+            m_lastTargetLayer = currentLayer;
+
         size_t idx = 0;
 
         for( size_t i = 0; i < layers.size(); i++ )
