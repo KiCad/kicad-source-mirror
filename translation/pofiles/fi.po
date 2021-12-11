@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-10 23:04+0000\n"
+"PO-Revision-Date: 2021-12-11 06:57+0000\n"
 "Last-Translator: Simo Mattila <simo.mattila@kapsi.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -1705,11 +1705,11 @@ msgstr "Johtava kehitystiimi"
 
 #: common/dialog_about/AboutDialog_main.cpp:209
 msgid "Lead Development Alumni"
-msgstr "Lead Lead Alumni"
+msgstr "Johtavan kehitystiimin Alumni"
 
 #: common/dialog_about/AboutDialog_main.cpp:210
 msgid "Additional Contributions By"
-msgstr "Lisäpanokset kirjoittanut"
+msgstr "Muut työpanoksia antaneet"
 
 #: common/dialog_about/AboutDialog_main.cpp:858
 msgid "KiCad Librarian Team"
@@ -14263,7 +14263,7 @@ msgstr "Läpiviennin minimihalkaisija"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1689
 msgid "Invalid title block comment number"
-msgstr ""
+msgstr "Virheellinen otsikkolohkon kommenttinumero"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1786
 #, fuzzy
@@ -18721,7 +18721,7 @@ msgstr "Oletko varma että haluat poistaa valitut luvut?"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:173
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "Liitännäisten ja sisällön hallinta"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:252
 #, fuzzy
@@ -18773,7 +18773,7 @@ msgstr "Tiedostoa ei voitu siirtää..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:74
 msgid "Plugin And Content Manager"
-msgstr ""
+msgstr "Liitännäisten ja sisällön hallinta"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:57
 msgid "Aborting remaining tasks."
@@ -19018,6 +19018,9 @@ msgid ""
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
 msgstr ""
+"Ladattu hash paketille %s ei täsmää lähteen tietoihin. Tämä saattaa kertoa "
+"ongelmasta paketin kanssa, ilmoita tästä lähteen ylläpitäjälle jos ongelma "
+"ei poistu."
 
 #: kicad/pcm/pcm_task_manager.cpp:97
 #, c-format
@@ -19332,7 +19335,7 @@ msgstr "Muokkaa sivun reunusta ja otsikkolohkoa"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
-msgstr ""
+msgstr "Avaa liitännäisten ja sisällön hallinta"
 
 #: kicad/tools/kicad_manager_actions.cpp:124
 msgid "Open Text Editor"
@@ -23402,6 +23405,8 @@ msgid ""
 "This can conflict with reference designators in the schematic that have not "
 "yet been synchronized with the board."
 msgstr ""
+"Tämä voi johtaa ristiriitaan kytkentäkaavion viitetunnisteiden kanssa joita "
+"ei vielä ole synkronisoitu kortille."
 
 #: pcbnew/dialogs/dialog_create_array_base.h:127
 msgid "Create Array"
@@ -23985,17 +23990,18 @@ msgstr "SVG-tiedostot"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:210
 msgid "Non-unity scaled models:"
-msgstr ""
+msgstr "Ykkösestä poikkeavan skaalauksen malleja:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:212
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
+"Skaalattuja malleja havaittu. Mallien skaalaaminen ei ole luotettavaa "
+"mekaanisiin vienteihin."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:214
-#, fuzzy
 msgid "Model Scale Warning"
-msgstr "Tallennusvaroitus"
+msgstr "Mallin skaalavaroitus"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:276
 msgid "STEP export failed!  Please save the PCB and try again"
@@ -24220,7 +24226,7 @@ msgstr "0,1 tuumaa"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "VRML Units for Output Files"
-msgstr ""
+msgstr "VRML yksiköt vietyihin tiedostoihin"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
@@ -27055,6 +27061,8 @@ msgid ""
 "Minimum spacing between adjacent meander segments. The resulting spacing may "
 "be greater based on design rules."
 msgstr ""
+"Pienin välys vierekkäisten kaaren segmenttien välillä. Muodostuva välys voi "
+"olla myös suurempi suunnittelusääntöjen pohjalta."
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:144
 msgid "Miter style:"
@@ -27200,6 +27208,9 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
+"Kun päällä, koko vedon näkyvä osa optimoidaan ja uudelleenreititetään "
+"segmenttiä raahatessa. Kun pois päältä, vain raahauskohdan lähellä oleva "
+"alue optimoidaan."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid "Use mouse path to set track posture"
@@ -27341,7 +27352,7 @@ msgstr "Lähettää valmistustiedostot valmistajalle KiCadista"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr ""
+msgstr "Tuota piirikortti"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
@@ -28210,6 +28221,9 @@ msgid ""
 "to approximate it.  Smaller values produce smoother graphics at the expense "
 "of performance."
 msgstr ""
+"Suurin sallittu poikkeama todellisen kaaren ja sen approksimointiin "
+"käytettyjen segmenttien välillä. Pienemmät arvot tuottavat sulavampaa "
+"grafiikkaa suorituskyvyn kustannuksella."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:86
 #, c-format
@@ -28257,7 +28271,7 @@ msgstr "Jäljen pituuden säätö"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:153
 msgid "Include stackup height in track length calculations"
-msgstr ""
+msgstr "Huomioi kerrospinon paksuus vedon pituuden laskennassa"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:154
 msgid ""
@@ -28265,6 +28279,9 @@ msgid ""
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
 msgstr ""
+"Kun päällä, kuparikerrosten välinen etäisyys huomioidaan vedon pituuden "
+"laskennassa vedoille joissa on läpivientejä. Kun pois päältä, läpiviennin "
+"korkeus jätetään pois."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:191
 msgid "Minimum clearance:"
@@ -28419,6 +28436,9 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
+"Pienin välys kahden samalla silkkipainokerroksella olevan kohteen välillä. "
+"Tämä saattaa parantaa luettavuutta. (Huomioi: ei päde saman jalanjäljen "
+"sisällä olevien useiden muotojen välillä.)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 #, fuzzy
@@ -28486,7 +28506,7 @@ msgstr "Sisäiset kerrokset poistetaan"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:813
 msgid "All user-defined layers have already been added."
-msgstr ""
+msgstr "Kaikki käyttäjän määrittämät kerrokset on jo lisätty."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:817
 #, fuzzy
@@ -37169,7 +37189,7 @@ msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
 msgid "KiCad Main Window"
-msgstr ""
+msgstr "KiCad-pääikkuna"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
 #, fuzzy
