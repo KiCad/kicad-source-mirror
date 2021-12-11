@@ -22,7 +22,7 @@ endif( MINGW )
 
 # Break the library out for re-use by both kicad2step and any qa that needs it
 # In future, this could move for re-use by other programs needing s-expr support (?)
-add_library( kicad2step_lib STATIC
+add_library( kicad2step_lib OBJECT
     ${KS2_LIB_FILES}
 )
 
