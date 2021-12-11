@@ -73,6 +73,7 @@
 #include <string_utils.h>
 #include <zone.h>
 
+const unsigned int DRAWING_TOOL::COORDS_PADDING = Millimeter2iu( 20 );
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
@@ -1115,8 +1116,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         }
 
         VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : m_controls->GetMousePosition();
+        cursorPos = GetClampedCoords( grid.BestSnapAnchor( cursorPos, nullptr ), COORDS_PADDING );
 
-        cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
@@ -1844,7 +1845,9 @@ bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), m_layer );
+        cursorPos = GetClampedCoords(
+                grid.BestSnapAnchor( m_controls->GetMousePosition(), m_layer ),
+                COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
@@ -2029,14 +2032,27 @@ bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
                 break;
             }
 
-            twoPointManager.SetEnd( cursorPos );
+            twoPointManager.SetEnd( GetClampedCoords( cursorPos ) );
         }
         else if( evt->IsMotion() )
         {
+            VECTOR2I clampedCursorPos = cursorPos;
+
+            if( shape == SHAPE_T::CIRCLE || shape == SHAPE_T::ARC )
+            {
+                clampedCursorPos = getClampedRadiusEnd( twoPointManager.GetOrigin(), cursorPos );
+            }
+            else
+            {
+                clampedCursorPos =
+                        getClampedDifferenceEnd( twoPointManager.GetOrigin(), cursorPos );
+            }
+
             // 45 degree lines
             if( started && Is45Limited() )
             {
-                const VECTOR2I lineVector( cursorPos - VECTOR2I( twoPointManager.GetOrigin() ) );
+                const VECTOR2I lineVector( clampedCursorPos
+                                           - VECTOR2I( twoPointManager.GetOrigin() ) );
 
                 // get a restricted 45/H/V line from the last fixed point to the cursor
                 VECTOR2I newEnd = GetVectorSnapped45( lineVector, ( shape == SHAPE_T::RECT ) );
@@ -2046,7 +2062,7 @@ bool DRAWING_TOOL::drawShape( const std::string& aTool, PCB_SHAPE** aGraphic,
             }
             else
             {
-                twoPointManager.SetEnd( cursorPos );
+                twoPointManager.SetEnd( clampedCursorPos );
                 twoPointManager.SetAngleSnap( false );
             }
 
@@ -2191,7 +2207,8 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic,
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic );
+        VECTOR2I cursorPos = GetClampedCoords(
+                grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic ), COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
@@ -2511,7 +2528,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : m_controls->GetMousePosition();
-        cursorPos          = grid.BestSnapAnchor( cursorPos, layers );
+        cursorPos = GetClampedCoords( grid.BestSnapAnchor( cursorPos, layers ), COORDS_PADDING );
 
         m_controls->ForceCursorPosition( true, cursorPos );
 

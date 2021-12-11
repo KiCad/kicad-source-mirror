@@ -294,6 +294,41 @@ int EDIT_TOOL::MoveWithReference( const TOOL_EVENT& aEvent )
 }
 
 
+VECTOR2I EDIT_TOOL::getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSourceBBox,
+                                     const VECTOR2D& aBBoxOffset )
+{
+    typedef std::numeric_limits<int> coord_limits;
+
+    long max = coord_limits::max();
+    long min = -max;
+
+    double left = aBBoxOffset.x + aSourceBBox.GetPosition().x;
+    double top = aBBoxOffset.y + aSourceBBox.GetPosition().y;
+
+    double right = left + aSourceBBox.GetSize().x;
+    double bottom = top + aSourceBBox.GetSize().y;
+
+    // Do not restrict movement if bounding box is already out of bounds
+    if( left < min || top < min || right > max || bottom > max )
+        return aMovement;
+
+    // Constrain moving bounding box to coordinates limits
+    VECTOR2D tryMovement( aMovement );
+
+    VECTOR2D clampedBBoxOrigin = GetClampedCoords(
+            VECTOR2D( aSourceBBox.GetPosition() ) + aBBoxOffset + tryMovement, COORDS_PADDING );
+
+    tryMovement = clampedBBoxOrigin - aBBoxOffset - aSourceBBox.GetPosition();
+
+    VECTOR2D clampedBBoxEnd = GetClampedCoords(
+            VECTOR2D( aSourceBBox.GetEnd() ) + aBBoxOffset + tryMovement, COORDS_PADDING );
+
+    tryMovement = clampedBBoxEnd - aBBoxOffset - aSourceBBox.GetEnd();
+
+    return GetClampedCoords<double, int>( tryMovement );
+}
+
+
 // Note: aEvent MUST NOT be const&; the source will get de-allocated if we go into the picker's
 // event loop.
 int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
@@ -397,6 +432,9 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     bool            restore_state = false;
     VECTOR2I        originalPos;
     VECTOR2I        totalMovement;
+    VECTOR2D        bboxMovement;
+    BOX2I           originalBBox;
+    bool            updateBBox = true;
     PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
     TOOL_EVENT*     evt = &aEvent;
     VECTOR2I        prevPos;
@@ -467,12 +505,36 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                     m_cursor = originalPos + GetVectorSnapped45( moveVector );
                 }
 
+                if( updateBBox )
+                {
+                    originalBBox = BOX2I();
+                    bboxMovement = VECTOR2D();
+
+                    for( EDA_ITEM* item : sel_items )
+                    {
+                        BOX2I viewBBOX = item->ViewBBox();
+
+                        if( originalBBox.GetWidth() == 0 && originalBBox.GetHeight() == 0 )
+                            originalBBox = viewBBOX;
+                        else
+                            originalBBox.Merge( viewBBOX );
+                    }
+
+                    updateBBox = false;
+                }
+
+                // Constrain selection bounding box to coordinates limits
+                movement = getSafeMovement( m_cursor - prevPos, originalBBox, bboxMovement );
+
+                // Apply constrained movement
+                m_cursor = prevPos + movement;
+
                 controls->ForceCursorPosition( true, m_cursor );
                 selection.SetReferencePoint( m_cursor );
 
-                movement = m_cursor - prevPos;
                 prevPos = m_cursor;
                 totalMovement += movement;
+                bboxMovement += movement;
 
                 // Drag items to the current cursor position
                 for( EDA_ITEM* item : sel_items )
@@ -637,6 +699,9 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                     originalPos = m_cursor;
                 }
 
+                // Update variables for bounding box collision calculations
+                updateBBox = true;
+
                 controls->SetCursorPosition( m_cursor, false );
 
                 prevPos = m_cursor;
@@ -675,6 +740,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                 || evt->IsAction( &PCB_ACTIONS::flip )
                 || evt->IsAction( &PCB_ACTIONS::mirror ) )
         {
+            updateBBox = true;
             eatFirstMouseUp = false;
             evt->SetPassEvent();
         }

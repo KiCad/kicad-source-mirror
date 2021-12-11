@@ -32,6 +32,7 @@
 #include <fp_shape.h>
 #include <fp_textbox.h>
 #include <collectors.h>
+#include <convert_to_biu.h>
 #include <pcb_edit_frame.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <kiway.h>
@@ -64,6 +65,7 @@ using namespace std::placeholders;
 #include <pcb_target.h>
 #include <zone_filler.h>
 
+const unsigned int EDIT_TOOL::COORDS_PADDING = Millimeter2iu( 20 );
 
 EDIT_TOOL::EDIT_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InteractiveEdit" ),
@@ -1061,39 +1063,63 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     VECTOR2I  refPt = selection.GetReferencePoint();
     EDA_ANGLE rotateAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *editFrame, aEvent );
 
-    // When editing footprints, all items have the same parent
-    if( IsFootprintEditor() )
-        m_commit->Modify( selection.Front() );
+    // Calculate view bounding box
+    BOX2I viewBBox = selection.Front()->ViewBBox();
 
     for( EDA_ITEM* item : selection )
-    {
-        if( !item->IsNew() && !IsFootprintEditor() )
-        {
-            m_commit->Modify( item );
+        viewBBox.Merge( item->ViewBBox() );
 
-            // If rotating a group, record position of all the descendants for undo
-            if( item->Type() == PCB_GROUP_T )
+    // Check if the view bounding box will go out of bounds
+    VECTOR2D rotPos = viewBBox.GetPosition();
+    VECTOR2D rotEnd = viewBBox.GetEnd();
+
+    RotatePoint( &rotPos.x, &rotPos.y, refPt.x, refPt.y, rotateAngle );
+    RotatePoint( &rotEnd.x, &rotEnd.y, refPt.x, refPt.y, rotateAngle );
+
+    typedef std::numeric_limits<int> coord_limits;
+
+    long max = coord_limits::max() - COORDS_PADDING;
+    long min = -max;
+
+    bool outOfBounds = rotPos.x < min || rotPos.x > max || rotPos.y < min || rotPos.y > max
+                       || rotEnd.x < min || rotEnd.x > max || rotEnd.y < min || rotEnd.y > max;
+
+    if( !outOfBounds )
+    {
+        // When editing footprints, all items have the same parent
+        if( IsFootprintEditor() )
+            m_commit->Modify( selection.Front() );
+
+        for( EDA_ITEM* item : selection )
+        {
+            if( !item->IsNew() && !IsFootprintEditor() )
             {
-                static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
-                                                                   {
-                                                                       m_commit->Modify( bItem );
-                                                                   });
+                m_commit->Modify( item );
+
+                // If rotating a group, record position of all the descendants for undo
+                if( item->Type() == PCB_GROUP_T )
+                {
+                    static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                                                                    {
+                                                                        m_commit->Modify( bItem );
+                                                                    });
+                }
             }
+
+            static_cast<BOARD_ITEM*>( item )->Rotate( refPt, rotateAngle );
         }
 
-        static_cast<BOARD_ITEM*>( item )->Rotate( refPt, rotateAngle );
+        if( !m_dragging )
+            m_commit->Push( _( "Rotate" ) );
+
+        if( is_hover && !m_dragging )
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+        m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+
+        if( m_dragging )
+            m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
     }
-
-    if( !m_dragging )
-        m_commit->Push( _( "Rotate" ) );
-
-    if( is_hover && !m_dragging )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
-
-    if( m_dragging )
-        m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
 
     // Restore the old reference so any mouse dragging that occurs doesn't make the selection jump
     // to this now invalid reference

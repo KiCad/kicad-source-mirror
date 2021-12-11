@@ -272,6 +272,65 @@ private:
      */
     void constrainDimension( PCB_DIMENSION_BASE* aDim );
 
+    /**
+     * Clamps the end vector to respect numeric limits of difference representation
+     * 
+     * @param aOrigin - the origin vector.
+     * @param aEnd - the end vector.
+     * @return clamped end vector.
+     */
+    VECTOR2I getClampedDifferenceEnd( const VECTOR2I& aOrigin, const VECTOR2I& aEnd )
+    {
+        typedef std::numeric_limits<int> coord_limits;
+        const int                        guardValue = 1;
+
+        long maxDiff = coord_limits::max() - guardValue;
+
+        long xDiff = long( aEnd.x ) - aOrigin.x;
+        long yDiff = long( aEnd.y ) - aOrigin.y;
+
+        if( xDiff > maxDiff )
+            xDiff = maxDiff;
+        if( yDiff > maxDiff )
+            yDiff = maxDiff;
+
+        if( xDiff < -maxDiff )
+            xDiff = -maxDiff;
+        if( yDiff < -maxDiff )
+            yDiff = -maxDiff;
+
+        return aOrigin + VECTOR2I( int( xDiff ), int( yDiff ) );
+    }
+
+    /**
+     * Clamps the end vector to respect numeric limits of radius representation
+     * 
+     * @param aOrigin - the origin vector.
+     * @param aEnd - the end vector.
+     * @return clamped end vector.
+     */
+    VECTOR2I getClampedRadiusEnd( const VECTOR2I& aOrigin, const VECTOR2I& aEnd )
+    {
+        typedef std::numeric_limits<int> coord_limits;
+        const int                        guardValue = 10;
+
+        long xDiff = long( aEnd.x ) - aOrigin.x;
+        long yDiff = long( aEnd.y ) - aOrigin.y;
+
+        double maxRadius = coord_limits::max() / 2 - guardValue;
+        double radius = std::hypot( xDiff, yDiff );
+
+        if( radius > maxRadius )
+        {
+            double scaleFactor = maxRadius / radius;
+
+            xDiff = KiROUND<double, int>( xDiff * scaleFactor );
+            yDiff = KiROUND<double, int>( yDiff * scaleFactor );
+        }
+
+        return aOrigin + VECTOR2I( int( xDiff ), int( yDiff ) );
+    }
+
     ///< Return the appropriate width for a segment depending on the settings.
     int getSegmentWidth( PCB_LAYER_ID aLayer ) const;
 
@@ -287,6 +346,8 @@ private:
     TEXT_ATTRIBUTES           m_textAttrs;
 
     static const unsigned int WIDTH_STEP;          // Amount of width change for one -/+ key press
+    static const unsigned int COORDS_PADDING;      // Padding from coordinates limits for this tool
+
 
     friend class              ZONE_CREATE_HELPER;  // give internal access to helper classes
 };

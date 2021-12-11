@@ -182,6 +182,9 @@ private:
 
     int doMoveSelection( TOOL_EVENT aEvent, bool aPickReference = false );
 
+    VECTOR2I getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSourceBBox,
+                              const VECTOR2D& aBBoxOffset );
+
     bool pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
                              const wxString& aCanceledMessage, VECTOR2I& aReferencePoint );
 
@@ -192,6 +195,8 @@ private:
     VECTOR2I                      m_cursor;     // Last cursor position (so getModificationPoint()
                                                 // can avoid changes of edit reference point).
     std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
+
+    static const unsigned int COORDS_PADDING; // Padding from coordinates limits for this tool
 };
 
 #endif

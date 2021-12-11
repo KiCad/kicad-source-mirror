@@ -177,6 +177,8 @@ private:
     // Alternative constraint, enabled while a modifier key is held
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT>> m_altConstraint;
     EDIT_POINT                                   m_altConstrainer;
+
+    static const unsigned int COORDS_PADDING; // Padding from coordinates limits for this tool
 };
 
 #endif

@@ -49,6 +49,7 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_data.h>
 #include <progress_reporter.h>
 
+const unsigned int PCB_POINT_EDITOR::COORDS_PADDING = Millimeter2iu( 20 );
 
 // Few constants to avoid using bare numbers for point indices
 enum SEG_POINTS
@@ -543,7 +544,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 }
             }
 
-            VECTOR2I pos = evt->Position();
+            // Keep point inside of limits with some padding
+            VECTOR2I pos = GetClampedCoords<double, int>( evt->Position(), COORDS_PADDING );
             LSET     snapLayers;
 
             switch( m_editedPoint->GetSnapConstraint() )
