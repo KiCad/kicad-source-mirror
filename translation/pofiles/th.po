@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-11-25 08:26+0000\n"
+"PO-Revision-Date: 2021-12-12 21:48+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -1938,10 +1938,10 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad ได้รับการเรียกใช้เป็นครั้งแรกโดยใช้ตารางไลบรารี %s ใหม่สำหรับ\n"
-"การเข้าถึงไลบรารี เพื่อให้ KiCad เข้าถึงไลบรารี  %s\n"
-"คุณต้องปรับแต่งค่าตารางไลบรารีส่วนกลาง %s ของคุณ กรุณาเลือกจากหนึ่ง\n"
-"ของตัวเลือกด้านล่าง หากคุณไม่แน่ใจว่าจะเลือกตัวเลือกใด โปรด\n"
+"คีแคดถูกเรียกใช้ครั้งแรก โดยใช้ตารางไลบรารี %s ใหม่สำหรับ\n"
+"การเข้าถึงไลบรารี เพื่อให้คีแคดสามารถเข้าถึงไลบรารี %s\n"
+"คุณต้องปรับแต่งตารางไลบรารี %s ส่วนกลางของคุณ กรุณาเลือกเพียงหนึ่งจาก\n"
+"ตัวเลือกด้านล่าง หากคุณไม่แน่ใจว่าจะเลือกตัวเลือกใด โปรด\n"
 "ใช้การเลือกค่าปริยาย"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
@@ -6512,9 +6512,8 @@ msgid "All KiCad project files"
 msgstr "ไฟล์โครงการ KiCad ทั้งหมด"
 
 #: common/wildcards_and_files_ext.cpp:235
-#, fuzzy
 msgid "All KiCad schematic files"
-msgstr "ไฟล์วงจรไฟฟ้า Altium"
+msgstr "ไฟล์วงจรไฟฟ้าคีแคดทั้งหมด"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad legacy schematic files"
@@ -13979,7 +13978,6 @@ msgid "Syntax Help"
 msgstr "ช่วยเหลือไวยากรณ์"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14154,8 +14152,8 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
-"samp></td>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
@@ -14180,8 +14178,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
+"<i>refdes</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14196,8 +14194,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14245,12 +14243,12 @@ msgstr ""
 "        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -16162,14 +16160,12 @@ msgid "Switch H & V only mode for new wires and buses"
 msgstr "สลับโหมด H & V เท่านั้นสำหรับเส้นลวดและบัสใหม่"
 
 #: eeschema/tools/ee_actions.cpp:655
-#, fuzzy
 msgid "Repair Schematic"
-msgstr "การสร้างวงจร"
+msgstr "การซ่อมวงจร"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr "เรียกใช้การวินิจฉัยต่างๆและพยายามซ่อมแซมบอร์ด"
+msgstr "เรียกใช้การวินิจฉัยต่างๆและพยายามซ่อมแซมวงจร"
 
 #: eeschema/tools/ee_actions.cpp:662 pcbnew/tools/pcb_actions.cpp:786
 msgid "Scripting Console"
@@ -23022,7 +23018,7 @@ msgstr "*** ไม่พบฟุ้ทพรินท์ ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 msgid "Update all footprints on board"
-msgstr "ปรับปรุงฟุ้ทพรินท์ทั้งหมดบนบอร์ด"
+msgstr "ปรับปรุงฟุ้ทพรินท์ทั้งหมดบนบอร์ด"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:27
 msgid "Update selected footprint(s)"
@@ -23597,7 +23593,7 @@ msgstr "เปลี่ยนฟุ้ทพรินท์..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:257
 #: pcbnew/tools/pcb_actions.cpp:240
 msgid "Edit Library Footprint..."
-msgstr "แก้ไขไลนรารีฟุ้ทพรินท์..."
+msgstr "แก้ไขไลบรารีฟุ้ทพรินท์..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:267
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:170
