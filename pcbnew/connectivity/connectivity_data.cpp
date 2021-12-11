@@ -85,6 +85,8 @@ bool CONNECTIVITY_DATA::Update( BOARD_ITEM* aItem )
 
 void CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 {
+    std::unique_lock<KISPINLOCK> lock( m_lock );
+
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
     m_connAlgo->Build( aBoard, aReporter );
 
@@ -100,6 +102,8 @@ void CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 
 void CONNECTIVITY_DATA::Build( const std::vector<BOARD_ITEM*>& aItems )
 {
+    std::unique_lock<KISPINLOCK> lock( m_lock );
+
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
     m_connAlgo->Build( aItems );
 
