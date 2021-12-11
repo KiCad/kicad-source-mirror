@@ -676,7 +676,8 @@ protected:
 
         if( aCol == COLUMN_NET && i1.GetNetCode() != i2.GetNetCode() )
         {
-            return aAsc ? ( i2.GetNetCode() - i1.GetNetCode() ) : ( i1.GetNetCode() - i2.GetNetCode() );
+            return aAsc ? ( i1.GetNetCode() - i2.GetNetCode() )
+                        : ( i2.GetNetCode() - i1.GetNetCode() );
         }
         else if( aCol == COLUMN_NAME )
         {
