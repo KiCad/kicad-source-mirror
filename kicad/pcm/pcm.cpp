@@ -798,7 +798,7 @@ PLUGIN_CONTENT_MANAGER::GetRepositoryPackageBitmaps( const wxString& aRepository
     for( wxArchiveEntry* entry = zip.GetNextEntry(); entry; entry = zip.GetNextEntry() )
     {
         wxArrayString path_parts =
-                wxSplit( entry->GetName(), wxFileName::GetPathSeparator(), (wxChar) NULL );
+                wxSplit( entry->GetName(), wxFileName::GetPathSeparator(), (wxChar) 0 );
 
         if( path_parts.size() != 2 || path_parts[1] != "icon.png" )
             continue;
