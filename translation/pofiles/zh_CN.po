@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-10 22:05+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2021-12-12 21:48+0000\n"
+"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -6817,7 +6817,7 @@ msgstr "封装变更的符号未保存"
 
 #: cvpcb/cvpcb_mainframe.cpp:386
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr "符号和封装关联已经变更。保存变更吗?"
+msgstr "符号和封装关联已经被修改。要保存变更吗？"
 
 #: cvpcb/cvpcb_mainframe.cpp:548 cvpcb/tools/cvpcb_association_tool.cpp:207
 #, c-format
@@ -7866,27 +7866,27 @@ msgstr "网络或总线名称"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
-msgstr "更改原理图中的所有符号"
+msgstr "替换原理图中的所有符号"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:67
 msgid "Change Symbols"
-msgstr "更改符号"
+msgstr "替换符号"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:76
 msgid "Change selected symbol(s)"
-msgstr "更改已选定符号 (s)"
+msgstr "替换已选中的符号"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching reference designator:"
-msgstr "更改符号匹配的位号："
+msgstr "替换此位号对应的符号："
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:94
 msgid "Change symbols matching value:"
-msgstr "更改符号匹配值："
+msgstr "替换具有这些值的符号："
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching library identifier:"
-msgstr "更改符号匹配的库标识："
+msgstr "替换具有以下库标识的符号："
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
 msgid "Update Fields"
@@ -7944,12 +7944,12 @@ msgstr "将符号 %s 从 '%s' 更新到 '%s'"
 #: eeschema/dialogs/dialog_change_symbols.cpp:555
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "将符号 %s 的值从 '%s' 更改为 '%s'"
+msgstr "将符号 %s 从 '%s' 替换为 '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:562
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "将符号 %s 的值从 '%s' 更改为 '%s'"
+msgstr "将符号 %s 从 '%s' 替换为 '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:573
 msgid "*** symbol not found ***"
@@ -7969,19 +7969,19 @@ msgstr "更新已选中的符号"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
-msgstr "更新这些位号对应的符号："
+msgstr "更新此位号对应的符号："
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:39
 msgid "Update symbols matching value:"
-msgstr "更新具有这些值的符号："
+msgstr "更新具有此值的符号："
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:45
 msgid "Update symbols matching library identifier:"
-msgstr "更新这些库标识对应的符号："
+msgstr "更新以下库标识对应的符号："
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:72
 msgid "New library identifier:"
-msgstr "新库标识符："
+msgstr "新符号的库 ID："
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
@@ -8277,7 +8277,7 @@ msgstr "它将从 %s 列表中排除"
 #: eeschema/dialogs/dialog_erc.cpp:527 pcbnew/dialogs/dialog_drc.cpp:469
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr "将所有 \"%s\" 违规的严重性更改为错误"
+msgstr "将所有“%s”违规的严重性等级修改为“错误”"
 
 #: eeschema/dialogs/dialog_erc.cpp:529 eeschema/dialogs/dialog_erc.cpp:535
 #: pcbnew/dialogs/dialog_drc.cpp:471 pcbnew/dialogs/dialog_drc.cpp:478
@@ -8287,7 +8287,7 @@ msgstr "违规严重程度也可以在“电路板设置...”对话框中进行
 #: eeschema/dialogs/dialog_erc.cpp:533 pcbnew/dialogs/dialog_drc.cpp:476
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "将所有 \"%s\" 违规的严重程度更改为警告"
+msgstr "将所有“%s”违规的严重性等级修改为“警告”"
 
 #: eeschema/dialogs/dialog_erc.cpp:538 pcbnew/dialogs/dialog_drc.cpp:482
 #, c-format
@@ -10206,7 +10206,7 @@ msgstr "链接 '%s' 到这个文件？"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:515
 #, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
-msgstr "要将 '%s' 链接从 '%s' 更改为 '%s' 吗？"
+msgstr "要将“%s”的链接从“%s”更换为“%s”吗？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:520
 #: eeschema/dialogs/dialog_sheet_properties.cpp:536
@@ -11185,7 +11185,7 @@ msgstr "从库中更新符号..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:216
 #: eeschema/tools/ee_actions.cpp:437
 msgid "Change Symbol..."
-msgstr "更改符号..."
+msgstr "替换符号..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:219
 msgid "Edit Symbol..."
@@ -12062,7 +12062,7 @@ msgid ""
 "modified."
 msgstr ""
 "已对一个或多个符号库进行了修改。\n"
-"必须先保存或丢弃变更,然后才能修改符号库表。"
+"必须先保存或丢弃变更，然后才能修改符号库表。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1052
 msgid "Symbol Libraries"
@@ -15338,17 +15338,17 @@ msgstr "用户取消了封装重新链接。"
 #: eeschema/tools/backannotate.cpp:329
 #, c-format
 msgid "Change '%s' reference designator to '%s'."
-msgstr "更改 '%s' 的位号为 '%s'。"
+msgstr "修改“%s”的引用位号为“%s”。"
 
 #: eeschema/tools/backannotate.cpp:346
 #, c-format
 msgid "Change %s footprint assignment from '%s' to '%s'."
-msgstr "将 %s 的元件封装任务调度从 '%s' 更改为 '%s'。"
+msgstr "将 %s 的封装分配从“%s”替换为“%s”。"
 
 #: eeschema/tools/backannotate.cpp:364
 #, c-format
 msgid "Change %s value from '%s' to '%s'."
-msgstr "将 %s 的值从 '%s' 更改为 '%s'。"
+msgstr "将 %s 的值从“%s”更改为“%s”。"
 
 #: eeschema/tools/backannotate.cpp:389
 #, c-format
@@ -15358,7 +15358,7 @@ msgstr "找不到 %s 引脚 '%s'。"
 #: eeschema/tools/backannotate.cpp:532
 #, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "将引脚%s 网%s的标签从 '%s' 更改为 '%s'。"
+msgstr "将引脚 %s 网络 %s 的标签从“%s”更改为“%s”。"
 
 #: eeschema/tools/backannotate.cpp:557
 #, c-format
@@ -15813,7 +15813,7 @@ msgstr "在符号或图框的字段上运行自动放置算法"
 
 #: eeschema/tools/ee_actions.cpp:425
 msgid "Change Symbols..."
-msgstr "更改符号..."
+msgstr "替换符号..."
 
 #: eeschema/tools/ee_actions.cpp:426
 msgid "Assign different symbols from the library"
@@ -18396,8 +18396,8 @@ msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
 msgstr ""
-"更改文件扩展名可能会导致文件不可用。\n"
-"你确定要更改吗?"
+"修改文件扩展名可能会导致文件不可用。\n"
+"你确定要修改吗?"
 
 #: kicad/project_tree_item.cpp:132
 msgid "Rename File"
@@ -22930,27 +22930,27 @@ msgstr "焊盘枚举设置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
 msgid "Change Footprints"
-msgstr "修改封装"
+msgstr "替换封装"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
 msgid "Change all footprints on board"
-msgstr "更改电路板上的所有封装"
+msgstr "替换 PCB 上的所有封装"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Change selected footprint(s)"
-msgstr "更改选定的封装"
+msgstr "替换选定的封装"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
 msgid "Change footprints matching reference designator:"
-msgstr "更改封装匹配的位号："
+msgstr "替换这个位号对应的封装："
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
 msgid "Change footprints matching value:"
-msgstr "更改封装匹配值："
+msgstr "替换具有这个值的封装："
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
 msgid "Change footprints with library id:"
-msgstr "使用库 ID 更改封装："
+msgstr "替换具有这个库 ID 的封装："
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
 msgid "Update text layers and visibilities"
@@ -22986,7 +22986,7 @@ msgstr "将封装%s从' %s'更新到 '%s'"
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:382
 #, c-format
 msgid "Change footprint %s from '%s' to '%s'"
-msgstr "将封装 %s从 '%s' 更改为 '%s'"
+msgstr "将封装 %s 从“%s”替换为“%s”"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:392
 msgid "*** footprint not found ***"
@@ -23014,7 +23014,7 @@ msgstr "使用库 ID 更新封装："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 msgid "New footprint library id:"
-msgstr "新的封装库 ID："
+msgstr "新封装的库 ID："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:96
 msgid "Remove text items which are not in library footprint"
@@ -23466,7 +23466,7 @@ msgstr "3D 模型"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:294
 msgid "Footprint can be freely moved and oriented on the canvas."
-msgstr "封装可以在画布上被自由移动和更改方向。"
+msgstr "在画布上可以自由移动和旋转封装。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:296
 msgid ""
@@ -23564,7 +23564,7 @@ msgstr "从库中更新封装..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:248
 #: pcbnew/tools/pcb_actions.cpp:422
 msgid "Change Footprint..."
-msgstr "修改封装..."
+msgstr "替换封装..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:257
 #: pcbnew/tools/pcb_actions.cpp:240
@@ -23766,7 +23766,7 @@ msgstr "间隙覆盖和设置"
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
-msgstr "当前分配的库 ID 和封装 ID。使用“更改封装…”来分配不同的封装。"
+msgstr "当前已经分配了库 ID 和封装 ID。使用“替换封装…”来分配不同的封装。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:135
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:108
@@ -26479,7 +26479,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:368
 msgid "Change text properties"
-msgstr "更改文本属性"
+msgstr "修改文本属性"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:58
 msgid "Enter the text placed on selected layer."
@@ -26496,21 +26496,21 @@ msgstr "父级封装描述"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:394
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr "更改网络还会将%s的%s焊盘的网络更新为%s。"
+msgstr "修改网络还会将 %s 的 %s 号焊盘的网络更新为 %s。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:403
 #, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
-msgstr "更改网络还会将%s的%s焊盘和%s的%s焊盘的网络更新为%s。"
+msgstr "修改网络还会将 %s 的 %s 号焊盘和 %s 的 %s 号焊盘的网络更新为 %s。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:412
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr "更改网络还会将%lu个所连接的焊盘的网络更新为%s。"
+msgstr "修改网络还会将 %lu 个所连接的焊盘的网络更新为 %s。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:418
 msgid "Change Nets"
-msgstr "更改网络"
+msgstr "修改网络"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:418
 msgid "Leave Nets Unchanged"
@@ -26540,7 +26540,7 @@ msgstr "通过网自动更新"
 msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
-msgstr "当它接触的焊盘或敷铜更改时自动更改这个过孔的网络"
+msgstr "将当前过孔的网络绑定到其接触的焊盘或敷铜的网络"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:60
 msgid "Start point X:"
@@ -26690,9 +26690,7 @@ msgid ""
 "Normally footprints on the board should be changed to match footprint "
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
-msgstr ""
-"通常应变更线路板上的封装，以匹配原理图中所做的封装关联变更。仅当您不想变更线"
-"路板上的现有封装时，才取消选中此选项。"
+msgstr "通常应替换 PCB 上的封装，以匹配原理图中所做的封装关联变更。仅当您不想替换线路板上的现有封装时，才取消选中此选项。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:53
 msgid "Update PCB from Schematic"
@@ -30443,12 +30441,12 @@ msgstr "无法更新 %s (封装 '%s' 未找到)."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:230
 #, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "将封装 %s从 '%s' 更改为 '%s'。"
+msgstr "将 %s 的封装从“%s”替换为“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:242
 #, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "将封装 %s 从 '%s' 更改为 '%s'。"
+msgstr "已将 %s 的封装从“%s”替换为“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:269
 #, c-format
@@ -30458,17 +30456,17 @@ msgstr "更改 %s 的位号为 %s。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:275
 #, c-format
 msgid "Changed %s reference designator to %s."
-msgstr "更改 %s 的位号为 %s。"
+msgstr "已将 %s 的位号更改为 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:291
 #, c-format
 msgid "Change %s value from %s to %s."
-msgstr "\"%s\" 的值从 \"%s\" 更改为 \"%s\"。"
+msgstr "将 %s 的值从“%s”修改为“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:298
 #, c-format
 msgid "Changed %s value from %s to %s."
-msgstr "将 %s 的值从 %s 更改为了 %s。"
+msgstr "已将 %s 的值从“%s”修改为“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:320
 #, c-format
@@ -30721,7 +30719,7 @@ msgstr "没有为符号 %s 定义封装。"
 #: pcbnew/netlist_reader/netlist.cpp:182
 #, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
-msgstr "\"%s\" 的封装发生了变化：电路板封装 \"%s\"，网表封装 \"%s\"。"
+msgstr "“%s”的封装发生了变化：PCB 封装“%s”，网表封装“%s”。"
 
 #: pcbnew/netlist_reader/netlist.cpp:205
 #, c-format
@@ -33526,7 +33524,7 @@ msgstr "旋转"
 
 #: pcbnew/tools/edit_tool.cpp:1704 pcbnew/tools/pcb_actions.cpp:303
 msgid "Change Side / Flip"
-msgstr "更改侧面/翻转"
+msgstr "更改所在面 / 翻转"
 
 #: pcbnew/tools/edit_tool.cpp:2033
 msgid "Move exact"
@@ -34008,7 +34006,7 @@ msgstr "更新封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:405
 msgid "Update footprint to include any changes from the library"
-msgstr "更新封装以包含来自库的任何变更"
+msgstr "更新封装以包含来自库的修改"
 
 #: pcbnew/tools/pcb_actions.cpp:410
 msgid "Update Footprints from Library..."
@@ -34016,7 +34014,7 @@ msgstr "从库中更新封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:411
 msgid "Update footprints to include any changes from the library"
-msgstr "更新封装以包含来自库的任何变更"
+msgstr "更新封装以包含来自库的修改"
 
 #: pcbnew/tools/pcb_actions.cpp:416
 msgid "Remove Unused Pads..."
@@ -34033,7 +34031,7 @@ msgstr "从库中关联不同的封装"
 
 #: pcbnew/tools/pcb_actions.cpp:427
 msgid "Change Footprints..."
-msgstr "保存封装..."
+msgstr "修改封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:427
 msgid "Assign different footprints from the library"
@@ -35507,11 +35505,11 @@ msgstr "单击以显示 %s 的飞线"
 #: pcbnew/widgets/appearance_controls.cpp:940
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
-msgstr "双击(或中键单击)更改颜色，右键单击查看更多操作"
+msgstr "双击或中键更改颜色，右键单击查看更多操作"
 
 #: pcbnew/widgets/appearance_controls.cpp:1433
 msgid "Double click or middle click for color change, right click for menu"
-msgstr "双击或中键更改颜色，右键单击菜单"
+msgstr "双击或中键单击可更改颜色，右键单击可打开菜单"
 
 #: pcbnew/widgets/appearance_controls.cpp:1440
 msgid "Show or hide this layer"
