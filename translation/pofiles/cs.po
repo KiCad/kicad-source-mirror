@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-11 06:57+0000\n"
-"Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
+"PO-Revision-Date: 2021-12-12 11:28+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -6590,9 +6590,8 @@ msgid "All KiCad project files"
 msgstr "Všechny soubory projektů KiCadu"
 
 #: common/wildcards_and_files_ext.cpp:235
-#, fuzzy
 msgid "All KiCad schematic files"
-msgstr "Soubory schématu Altium"
+msgstr "Všechny soubory schématu KiCadu"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad legacy schematic files"
@@ -6641,7 +6640,7 @@ msgstr "Soubory desek plošných spojů Eagle ver. 6.x XML"
 
 #: common/wildcards_and_files_ext.cpp:309
 msgid "CADSTAR PCB Archive files"
-msgstr "Soubory archívu CADSTAR PCB"
+msgstr "Soubory archívu CADSTAR DPS"
 
 #: common/wildcards_and_files_ext.cpp:314
 msgid "P-Cad 200x ASCII PCB files"
@@ -13559,9 +13558,9 @@ msgid "Polygon's owner (%d) not found."
 msgstr "Vlastník polygonu (%d) nebyl nalezen."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1288
-#, c-format
+#, c-format, fuzzy
 msgid "Rounded rectangle's owner (%d) not found."
-msgstr "Vlastník zaobleného obdélníku (%d) nebyl nalezen."
+msgstr "Reference '%s' nenalezena."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1324
 #, fuzzy
@@ -16231,7 +16230,7 @@ msgstr "Upravit pole symbolu..."
 
 #: eeschema/tools/ee_actions.cpp:562
 msgid "Bulk-edit fields of all symbols in schematic"
-msgstr "Hromadná úprava polí všech symbolů ve schématu"
+msgstr "Masové zpracování polí všech symbolů v schématu zapojení"
 
 #: eeschema/tools/ee_actions.cpp:567
 msgid "Edit Symbol Library Links..."
@@ -19099,7 +19098,7 @@ msgstr "Texty mohou zahrnovat klíčová slova."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Keyword notation is ${keyword}"
-msgstr ""
+msgstr "Způsob psaní klíčového slova je ${klíčovéslovo}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:560
 msgid "Each keyword is replaced by its value"
@@ -31709,7 +31708,7 @@ msgstr "Neočekávaná vrstva '%s' v zásobníku vrstev."
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:674
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
-msgstr ""
+msgstr "Návrhové pravidlo %s nebylo nalezeno.Bylo ignorováno."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:703
 msgid ""
@@ -31749,22 +31748,26 @@ msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
+"Definice plošky CADSTAR '%s' má tvar otvoru mimo tvar plošku. Otvor byl "
+"přesunut do středu plošky."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1240
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
-msgstr ""
+msgstr "Definice plošky CADSTAR '%s' vrátila chyby importu: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1282
 #, c-format
 msgid "Unable to find group ID %s in the group definitions."
-msgstr ""
+msgstr "Nelze najít ID skupiny %s v definicích skupin."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1288
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
 msgstr ""
+"Nelze najít podskupinu %s na kartě skupiny (ID nadřazené skupiny =%s, název "
+"=%s)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1363
 #, c-format
@@ -31782,6 +31785,9 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
+"ID rozměru %s má 'Externí' styl v CADSTAR. Externí styly rozměru nejsou "
+"dosud podporovány v KiCadu. Objekt rozměrů byl importován s vnitřním stylem "
+"rozměru."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1430
 #, c-format
@@ -31804,6 +31810,9 @@ msgid ""
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
 msgstr ""
+"Oblast CADSTAR '%s' je označena jako oblast umístění v CADSTAR. Umístění "
+"oblastí nejsou v KiCadu podporovány. Byly importovány pouze podporované "
+"prvky pro tuto oblast."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1614
 #, c-format
