@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-12 11:28+0000\n"
+"PO-Revision-Date: 2021-12-12 21:47+0000\n"
 "Last-Translator: Jan Vykydal <vvykys@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -35787,9 +35787,9 @@ msgid "Net and netclass colors are not shown"
 msgstr "Nastavit barvu třídy spojů"
 
 #: pcbnew/widgets/appearance_controls.cpp:713
-#, fuzzy, c-format
+#, c-format
 msgid "Ratsnest display (%s):"
-msgstr "Obrys zešikmení:"
+msgstr "Zobrazení naznačených spojů (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:715
 #, fuzzy
