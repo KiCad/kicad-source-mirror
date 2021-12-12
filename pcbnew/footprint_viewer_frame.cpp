@@ -184,8 +184,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
                                                             GetGalDisplayOptions(), m_canvasType );
     SetCanvas( drawPanel );
 
-    resolveCanvasType();
-
     SetBoard( new BOARD() );
 
     // This board will only be used to hold a footprint for viewing
@@ -207,6 +205,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
     LoadSettings( config() );
     GetGalDisplayOptions().m_axesEnabled = true;
+
+    // Call resolveCanvasType after loading settings:
+    resolveCanvasType();
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
