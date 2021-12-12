@@ -32,7 +32,7 @@
 #include <wx/menu.h>
 #include <widgets/wx_grid.h>
 
-#define GRIDTRICKS_MAX_COL 20
+#define GRIDTRICKS_MAX_COL 50
 
 enum
 {
@@ -43,7 +43,7 @@ enum
     GRIDTRICKS_ID_PASTE,
     GRIDTRICKS_ID_SELECT,
 
-    GRIDTRICKS_FIRST_SHOWHIDE = 979,    // reserve IDs for show/hide-column-n
+    GRIDTRICKS_FIRST_SHOWHIDE = 949, // reserve IDs for show/hide-column-n
 
     GRIDTRICKS_LAST_ID = GRIDTRICKS_FIRST_SHOWHIDE + GRIDTRICKS_MAX_COL
 };

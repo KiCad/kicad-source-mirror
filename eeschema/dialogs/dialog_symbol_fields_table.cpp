@@ -61,7 +61,7 @@
 
 enum
 {
-    MYID_SELECT_FOOTPRINT = 991,         // must be within GRID_TRICKS' enum range
+    MYID_SELECT_FOOTPRINT = GRIDTRICKS_FIRST_SHOWHIDE - 2, // must be within GRID_TRICKS' enum range
     MYID_SHOW_DATASHEET
 };
 
