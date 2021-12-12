@@ -209,7 +209,7 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
 }
 
 
-int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs ) const
+int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, LIB_ITEM::COMPARE_FLAGS aCompareFlags ) const
 {
     if( m_me == aRhs.m_me )
         return 0;
@@ -252,13 +252,47 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs ) const
         if( lhsItem->Type() != rhsItem->Type() )
             return lhsItem->Type() - rhsItem->Type();
 
-        retv = lhsItem->compare( *rhsItem );
+        // Non-mandatory fields are a special case.  They can have different ordinal numbers
+        // and are compared separately below.
+        if( lhsItem->Type() == LIB_FIELD_T )
+        {
+            const LIB_FIELD* lhsField = static_cast<const LIB_FIELD*>( lhsItem );
+
+            if( lhsField->IsMandatory() )
+                retv = lhsItem->compare( *rhsItem, aCompareFlags );
+        }
+        else
+        {
+            retv = lhsItem->compare( *rhsItem, aCompareFlags );
+        }
 
         if( retv )
             return retv;
 
         ++lhsItemIt;
         ++rhsItemIt;
+    }
+
+    // Compare the optional fields.
+    for( const LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    {
+        const LIB_FIELD* field = dynamic_cast<const LIB_FIELD*>( &item );
+
+        wxCHECK2( field, continue );
+
+        // Mandatory fields were already compared above.
+        if( field->IsMandatory() )
+            continue;
+
+        const LIB_FIELD* foundField = aRhs.FindField( field->GetName() );
+
+        if( foundField == nullptr )
+            return 1;
+
+        retv = item.compare( static_cast<const LIB_ITEM&>( *foundField ), aCompareFlags );
+
+        if( retv )
+            return retv;
     }
 
     if( m_fpFilters.GetCount() != aRhs.m_fpFilters.GetCount() )
@@ -342,7 +376,8 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         // Copy the parent.
         retv.reset( new LIB_SYMBOL( *parent.get() ) );
 
-        retv->SetName( m_name );
+        retv->m_name = m_name;
+        retv->SetLibId( m_libId );
 
         // Now add the inherited part mandatory field (this) information.
         for( int i = 0; i < MANDATORY_FIELDS; i++ )
@@ -386,6 +421,7 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         retv->SetKeyWords( m_keyWords.IsEmpty() ? parent->GetKeyWords() : m_keyWords );
         retv->SetDescription( m_description.IsEmpty() ? parent->GetDescription() : m_description );
         retv->SetFPFilters( m_fpFilters.IsEmpty() ? parent->GetFPFilters() : m_fpFilters );
+        retv->UpdateFieldOrdinals();
     }
     else
     {
@@ -1029,6 +1065,45 @@ LIB_FIELD& LIB_SYMBOL::GetDatasheetField()
     LIB_FIELD* field = GetFieldById( DATASHEET_FIELD );
     wxASSERT( field != nullptr );
     return *field;
+}
+
+
+int LIB_SYMBOL::UpdateFieldOrdinals()
+{
+    int retv = 0;
+    int lastOrdinal = MANDATORY_FIELDS;
+
+    for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    {
+        LIB_FIELD* field = dynamic_cast<LIB_FIELD*>( &item );
+
+        wxCHECK2( field, continue );
+
+        // Mandatory fields were already resolved always have the same ordinal values.
+        if( field->IsMandatory() )
+            continue;
+
+        if( field->GetId() != lastOrdinal )
+        {
+            field->SetId( lastOrdinal );
+            retv += 1;
+        }
+
+        lastOrdinal += 1;
+    }
+
+    return retv;
+}
+
+
+int LIB_SYMBOL::GetNextAvailableFieldId() const
+{
+    int retv = MANDATORY_FIELDS;
+
+    while( GetFieldById( retv ) )
+        retv += 1;
+
+    return retv;
 }
 
 

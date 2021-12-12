@@ -445,8 +445,7 @@ class SCH_SEXPR_PLUGIN_CACHE
 
     static void saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTER& aFormatter,
                                     int aNestLevel );
-    static void saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter, int& aNextFreeFieldId,
-                           int aNestLevel );
+    static void saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter, int aNestLevel );
     static void savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter, int aNestLevel = 0 );
     static void saveText( LIB_TEXT* aText, OUTPUTFORMATTER& aFormatter, int aNestLevel = 0 );
 
@@ -1797,15 +1796,18 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& a
         aSymbol->GetFields( fields );
 
         for( LIB_FIELD* field : fields )
-            saveField( field, aFormatter, nextFreeFieldId, aNestLevel + 1 );
+            saveField( field, aFormatter, aNestLevel + 1 );
+
+        nextFreeFieldId = aSymbol->GetNextAvailableFieldId();
 
         // @todo At some point in the future the lock status (all units interchangeable) should
         // be set deterministically.  For now a custom lock property is used to preserve the
         // locked flag state.
         if( aSymbol->UnitsLocked() )
         {
-            LIB_FIELD locked( -1, "ki_locked" );
-            saveField( &locked, aFormatter, nextFreeFieldId, aNestLevel + 1 );
+            LIB_FIELD locked( nextFreeFieldId, "ki_locked" );
+            saveField( &locked, aFormatter, aNestLevel + 1 );
+            nextFreeFieldId += 1;
         }
 
         saveDcmInfoAsFields( aSymbol, aFormatter, nextFreeFieldId, aNestLevel );
@@ -1861,7 +1863,9 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& a
         aSymbol->GetFields( fields );
 
         for( LIB_FIELD* field : fields )
-            saveField( field, aFormatter, nextFreeFieldId, aNestLevel + 1 );
+            saveField( field, aFormatter, aNestLevel + 1 );
+
+        nextFreeFieldId = aSymbol->GetNextAvailableFieldId();
 
         saveDcmInfoAsFields( aSymbol, aFormatter, nextFreeFieldId, aNestLevel );
     }
@@ -1877,18 +1881,20 @@ void SCH_SEXPR_PLUGIN_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFOR
 
     if( !aSymbol->GetKeyWords().IsEmpty() )
     {
-        LIB_FIELD keywords( -1, wxString( "ki_keywords" ) );
+        LIB_FIELD keywords( aNextFreeFieldId, wxString( "ki_keywords" ) );
         keywords.SetVisible( false );
         keywords.SetText( aSymbol->GetKeyWords() );
-        saveField( &keywords, aFormatter, aNextFreeFieldId, aNestLevel + 1 );
+        saveField( &keywords, aFormatter, aNestLevel + 1 );
+        aNextFreeFieldId += 1;
     }
 
     if( !aSymbol->GetDescription().IsEmpty() )
     {
-        LIB_FIELD description( -1, wxString( "ki_description" ) );
+        LIB_FIELD description( aNextFreeFieldId, wxString( "ki_description" ) );
         description.SetVisible( false );
         description.SetText( aSymbol->GetDescription() );
-        saveField( &description, aFormatter, aNextFreeFieldId, aNestLevel + 1 );
+        saveField( &description, aFormatter, aNestLevel + 1 );
+        aNextFreeFieldId += 1;
     }
 
     wxArrayString fpFilters = aSymbol->GetFPFilters();
@@ -1908,10 +1914,11 @@ void SCH_SEXPR_PLUGIN_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFOR
                 tmp += " " + curr_filter;
         }
 
-        LIB_FIELD description( -1, wxString( "ki_fp_filters" ) );
+        LIB_FIELD description( aNextFreeFieldId, wxString( "ki_fp_filters" ) );
         description.SetVisible( false );
         description.SetText( tmp );
-        saveField( &description, aFormatter, aNextFreeFieldId, aNestLevel + 1 );
+        saveField( &description, aFormatter, aNestLevel + 1 );
+        aNextFreeFieldId += 1;
     }
 }
 
@@ -1980,21 +1987,11 @@ void SCH_SEXPR_PLUGIN_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTE
 
 
 void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter,
-                                        int& aNextFreeFieldId, int aNestLevel  )
+                                        int aNestLevel )
 {
     wxCHECK_RET( aField && aField->Type() == LIB_FIELD_T, "Invalid LIB_FIELD object." );
 
     wxString fieldName = aField->GetName();
-
-    if( aField->GetId() == -1 /* undefined ID */ )
-    {
-        aField->SetId( aNextFreeFieldId );
-        aNextFreeFieldId += 1;
-    }
-    else if( aField->GetId() >= aNextFreeFieldId )
-    {
-        aNextFreeFieldId = aField->GetId() + 1;
-    }
 
     if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
         fieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId(), false );

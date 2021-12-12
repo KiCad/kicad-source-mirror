@@ -236,17 +236,23 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aF
 
             if( field )
             {
-                // It would appear that at some point we allowed duplicate ids to slip through
-                // when writing files.  The easiest (and most complete) solution is to disallow
-                // multiple instances of the same id (for all files since the source of the error
-                // *might* in fact be hand-edited files).
-                //
-                // While no longer used, -1 is still a valid id for user field.  It gets converted
-                // to the next unused number on save.
+                // Due to an bug when in #LIB_SYMBOL::Flatten, duplicate ids slipped through
+                // when writing files.  This section replaces duplicate #LIB_FIELD indices on
+                // load.
                 if( fieldIDsRead.count( field->GetId() ) )
-                    field->SetId( -1 );
+                {
+                    int nextAvailableId = field->GetId() + 1;
+
+                    while( fieldIDsRead.count( nextAvailableId ) )
+                        nextAvailableId += 1;
+
+                    fieldIDsRead.insert( nextAvailableId );
+                    field->SetId( nextAvailableId );
+                }
                 else if( field )
+                {
                     fieldIDsRead.insert( field->GetId() );
+                }
             }
 
             break;
@@ -2099,6 +2105,7 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
         {
             // Dummy map.  No derived symbols are allowed in the library cache.
             LIB_SYMBOL_MAP symbolLibMap;
+            LIB_SYMBOL* symbol;
 
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
@@ -2110,7 +2117,9 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
                 switch( token )
                 {
                 case T_symbol:
-                    screen->AddLibSymbol( ParseSymbol( symbolLibMap, m_requiredVersion ) );
+                    symbol = ParseSymbol( symbolLibMap, m_requiredVersion );
+                    symbol->UpdateFieldOrdinals();
+                    screen->AddLibSymbol( symbol );
                     break;
 
                 default:

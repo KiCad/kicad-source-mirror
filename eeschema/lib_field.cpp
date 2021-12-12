@@ -39,24 +39,24 @@
 #include <settings/color_settings.h>
 
 
-LIB_FIELD::LIB_FIELD( LIB_SYMBOL* aParent, int idfield ) :
+LIB_FIELD::LIB_FIELD( LIB_SYMBOL* aParent, int aId ) :
     LIB_ITEM( LIB_FIELD_T, aParent )
 {
-    Init( idfield );
+    Init( aId );
 }
 
 
-LIB_FIELD::LIB_FIELD( int idfield ) :
+LIB_FIELD::LIB_FIELD( int aId ) :
     LIB_ITEM( LIB_FIELD_T, nullptr )
 {
-    Init( idfield );
+    Init( aId );
 }
 
 
-LIB_FIELD::LIB_FIELD( int aID, const wxString& aName ) :
+LIB_FIELD::LIB_FIELD( int aId, const wxString& aName ) :
     LIB_ITEM( LIB_FIELD_T, nullptr )
 {
-    Init( aID );
+    Init( aId );
     m_name = aName;
 }
 
@@ -79,20 +79,29 @@ LIB_FIELD& LIB_FIELD::operator=( const LIB_FIELD& field )
 }
 
 
-void LIB_FIELD::Init( int id )
+void LIB_FIELD::Init( int aId )
 {
-    m_id = id;
+    wxCHECK2( aId >= 0, aId = MANDATORY_FIELDS );
+
+    m_id = aId;
 
     SetTextAngle( TEXT_ANGLE_HORIZ );    // constructor already did this.
 
     // Fields in RAM must always have names, because we are trying to get less dependent on
     // field ids and more dependent on names. Plus assumptions are made in the field editors.
-    m_name = TEMPLATE_FIELDNAME::GetDefaultFieldName( id );
+    m_name = TEMPLATE_FIELDNAME::GetDefaultFieldName( aId );
 
     // By contrast, VALUE and REFERENCE are are always constructed as initially visible, and
     // template fieldsnames' initial visibility is controlled by the template fieldname config.
-    if( id == DATASHEET_FIELD || id == FOOTPRINT_FIELD )
+    if( aId == DATASHEET_FIELD || aId == FOOTPRINT_FIELD )
         SetVisible( false );
+}
+
+
+void LIB_FIELD::SetId( int aId )
+{
+    wxCHECK2( aId >= 0, aId = MANDATORY_FIELDS );
+    m_id = aId;
 }
 
 
@@ -181,13 +190,35 @@ int LIB_FIELD::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompare
 
     const LIB_FIELD* tmp = ( LIB_FIELD* ) &aOther;
 
-    if( m_id != tmp->m_id )
-        return m_id - tmp->m_id;
+    // Equality test will vary depending whether or not the field is mandatory.  Otherwise,
+    // sorting is done by ordinal.
+    if( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::EQUALITY )
+    {
+        // Mandatory fields have fixed ordinals and their names can vary due to translated field
+        // names.  Optional fields have fixed names and their ordinals can vary.
+        if( IsMandatory() )
+        {
+            if( m_id != tmp->m_id )
+                return m_id - tmp->m_id;
+        }
+        else
+        {
+            retv = m_name.Cmp( tmp->m_name );
 
-    int result = GetText().CmpNoCase( tmp->GetText() );
+            if( retv )
+                return retv;
+        }
+    }
+    else
+    {
+        if( m_id != tmp->m_id )
+            return m_id - tmp->m_id;
+    }
 
-    if( result != 0 )
-        return result;
+    retv = GetText().CmpNoCase( tmp->GetText() );
+
+    if( retv != 0 )
+        return retv;
 
     if( GetTextPos().x != tmp->GetTextPos().x )
         return GetTextPos().x - tmp->GetTextPos().x;

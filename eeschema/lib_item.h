@@ -77,7 +77,7 @@ public:
      * - UNIT This compare flag ignores unit and convert and pin number information when
      *        comparing #LIB_ITEM objects for unit comparison.
      */
-    enum COMPARE_FLAGS : int { NORMAL = 0x00, UNIT = 0x01 };
+    enum COMPARE_FLAGS : int { NORMAL = 0x00, UNIT = 0x01, EQUALITY = 0x02 };
 
     /**
      * Provide a user-consumable name of the object type.  Perform localization when

@@ -293,6 +293,17 @@ public:
     LIB_FIELD& GetDatasheetField();
 
     /**
+     * Order optional field indices.
+     *
+     * It's possible when calling #LIB_SYMBOL::Flatten that there can be gaps and/or duplicate
+     * optional field indices.  This method correctly orders the indices so there are no gaps
+     * and/or duplicate indices.
+     */
+    int UpdateFieldOrdinals();
+
+    int GetNextAvailableFieldId() const;
+
+    /**
      * Print symbol.
      *
      * @param aOffset - Position of symbol.
@@ -601,11 +612,19 @@ public:
      *         1 if this symbol is greater than \a aRhs
      *         0 if this symbol is the same as \a aRhs
      */
-    int Compare( const LIB_SYMBOL& aRhs ) const;
+    int Compare( const LIB_SYMBOL& aRhs,
+                 LIB_ITEM::COMPARE_FLAGS aCompareFlags = LIB_ITEM::COMPARE_FLAGS::NORMAL ) const;
 
     bool operator==( const LIB_SYMBOL* aSymbol ) const { return this == aSymbol; }
-    bool operator==( const LIB_SYMBOL& aSymbol ) const { return Compare( aSymbol ) == 0; }
-    bool operator!=( const LIB_SYMBOL& aSymbol ) const { return Compare( aSymbol ) != 0; }
+    bool operator==( const LIB_SYMBOL& aSymbol ) const
+    {
+        return Compare( aSymbol, LIB_ITEM::COMPARE_FLAGS::EQUALITY ) == 0;
+    }
+
+    bool operator!=( const LIB_SYMBOL& aSymbol ) const
+    {
+        return Compare( aSymbol, LIB_ITEM::COMPARE_FLAGS::EQUALITY ) != 0;
+    }
 
     const LIB_SYMBOL& operator=( const LIB_SYMBOL& aSymbol );
 
