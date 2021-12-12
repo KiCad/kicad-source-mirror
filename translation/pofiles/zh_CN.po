@@ -11,13 +11,14 @@
 # ZbeeGin <zbeegin@op.pl>, 2021.
 # Dingzhong Chen <wsxy162@gmail.com>, 2021.
 # Tian Yunhao <t123yh@outlook.com>, 2021.
+# obit <szpttboy@163.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
 "PO-Revision-Date: 2021-12-12 21:48+0000\n"
-"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
+"Last-Translator: obit <szpttboy@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1618,8 +1619,9 @@ msgid "KiCad forum - "
 msgstr "KiCad 用户论坛 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:187
+#, fuzzy
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "完整的 KiCad EDA 工具箱在"
+msgstr "完整的 KiCad EDA 工具箱发布遵循"
 
 #: common/dialog_about/AboutDialog_main.cpp:189
 msgid "GNU General Public License (GPL) version 3 or any later version"
