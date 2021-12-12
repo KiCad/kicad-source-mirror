@@ -837,7 +837,7 @@ void DIFF_PAIR::CoupledSegmentPairs( COUPLED_SEGMENTS_VEC& aPairs ) const
 
             int64_t dist = std::abs( sp.Distance( sn ) - m_width );
 
-            if( sp.ApproxParallel( sn ) && m_gapConstraint.Matches( dist ) &&
+            if( sp.ApproxParallel( sn, 2 ) && m_gapConstraint.Matches( dist ) &&
                 commonParallelProjection( sp, sn, p_clip, n_clip ) )
             {
                 const COUPLED_SEGMENTS spair( p_clip, sp, i, n_clip, sn, j );

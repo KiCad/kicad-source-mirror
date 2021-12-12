@@ -278,7 +278,7 @@ bool DIFF_PAIR_PLACER::tryWalkDp( NODE* aNode, DIFF_PAIR &aPair, bool aSolidsOnl
         if( attemptWalk( tmp, &aPair, p, pfirst, wind_cw, aSolidsOnly ) )
         {
         //    double len = p.TotalLength();
-            double cl = p.CoupledLength();
+            double cl   = 1 + p.CoupledLength();
             double skew = p.Skew();
 
             double score = cl + fabs( skew ) * 3.0;
