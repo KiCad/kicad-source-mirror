@@ -309,13 +309,17 @@ SFVEC3F SILK_SCREEN_NORMAL::Generate( const RAY& aRay, const HITINFO& aHitInfo )
 {
     const SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
 
-    const float noise1 = s_perlinNoise.noise( hitPos.x * 2.7f, hitPos.y * 2.6f, hitPos.z );
+    const float noise1 = s_perlinNoise.noise( hitPos.x * 2.0f, hitPos.y * 2.0f, hitPos.z );
 
-    const float noise2 = s_perlinNoise.noise( hitPos.x * 1.1f, hitPos.y * 1.2f, hitPos.z );
+    const float noise2 = s_perlinNoise.noise( hitPos.x * 0.6f, hitPos.y * 0.6f, hitPos.z );
 
-    SFVEC3F t =
-            glm::abs( ( 1.8f / ( SFVEC3F( noise1, noise2, hitPos.z ) + 0.4f ) ) - 1.5f ) - 0.25f;
-    t = t * t * t * 0.1f;
+    SFVEC3F t = SFVEC3F( noise1, noise2, 0.0f ) - 0.5f;
+
+    SFVEC3F tt = t * t;
+
+    t = t * tt * tt * 100.0f; // this factor controls the intensity of the effect
+
+    t.z = 0.0f; // this will keep untouch the original z component of the normal
 
     return t;
 }
