@@ -1233,19 +1233,22 @@ bool EE_SELECTION_TOOL::selectMultiple()
             view->Query( area.ViewBBox(), nearbyViewItems );
 
             // Build lists of nearby items and their children
-            std::vector<SCH_ITEM*> nearbyItems;
-            std::vector<SCH_ITEM*> nearbyChildren;
+            std::vector<EDA_ITEM*> nearbyItems;
+            std::vector<EDA_ITEM*> nearbyChildren;
 
             for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : nearbyViewItems )
             {
-                SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( pair.first );
+                EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( pair.first );
 
                 if( item )
                 {
                     item->ClearFlags( TEMP_SELECTED | STARTPOINT | ENDPOINT );
                     nearbyItems.push_back( item );
+                }
 
-                    item->RunOnChildren(
+                if( SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item ) )
+                {
+                    sch_item->RunOnChildren(
                             [&]( SCH_ITEM* aChild )
                             {
                                 nearbyChildren.push_back( aChild );
@@ -1259,7 +1262,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
             bool anyAdded = false;
             bool anySubtracted = false;
             auto selectItem =
-                    [&]( SCH_ITEM* aItem )
+                    [&]( EDA_ITEM* aItem )
                     {
                         if( m_subtractive || ( m_exclusive_or && aItem->IsSelected() ) )
                         {
@@ -1274,7 +1277,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
                         }
                     };
 
-            for( SCH_ITEM* item : nearbyItems )
+            for( EDA_ITEM* item : nearbyItems )
             {
                 if( Selectable( item ) && item->HitTest( selectionRect, isWindowSelection ) )
                 {
@@ -1283,7 +1286,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
                 }
             }
 
-            for( SCH_ITEM* item : nearbyChildren )
+            for( EDA_ITEM* item : nearbyChildren )
             {
                 if( Selectable( item )
                         && !item->GetParent()->HasFlag( TEMP_SELECTED )
