@@ -47,6 +47,7 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT
     m_checkboxColWidth = m_grid->GetColSize( 1 );
 
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+    m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 }
 
 
@@ -90,16 +91,25 @@ void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnDeleteButtonClick( wxCommandEvent& ev
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    int curRow = m_grid->GetGridCursorRow();
+    wxArrayInt selectedRows = m_grid->GetSelectedRows();
 
-    if( curRow >= 0 && curRow < (int)m_fields.size() )
+    if( selectedRows.empty() && m_grid->GetGridCursorRow() >= 0 )
+        selectedRows.push_back( m_grid->GetGridCursorRow() );
+
+    if( selectedRows.empty() )
+        return;
+
+    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
+    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
+
+    for( int row : selectedRows )
     {
-        m_fields.erase( m_fields.begin() + curRow );
-        m_grid->DeleteRows( curRow );
-    }
+        m_fields.erase( m_fields.begin() + row );
+        m_grid->DeleteRows( row );
 
-    m_grid->MakeCellVisible( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
-    m_grid->SetGridCursor( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
+        m_grid->MakeCellVisible( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
+        m_grid->SetGridCursor( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
+    }
 }
 
 

@@ -60,6 +60,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
 
     m_grid->SetTable( m_fields );
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this ) );
+    m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Show/hide columns according to user's preference
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
@@ -715,29 +716,42 @@ void DIALOG_SHEET_PROPERTIES::OnAddField( wxCommandEvent& event )
 
 void DIALOG_SHEET_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 {
-    int curRow = m_grid->GetGridCursorRow();
+    wxArrayInt selectedRows = m_grid->GetSelectedRows();
 
-    if( curRow < 0 )
+    if( selectedRows.empty() && m_grid->GetGridCursorRow() >= 0 )
+        selectedRows.push_back( m_grid->GetGridCursorRow() );
+
+    if( selectedRows.empty() )
         return;
-    else if( curRow < SHEET_MANDATORY_FIELDS )
+
+    for( int row : selectedRows )
     {
-        DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                              SHEET_MANDATORY_FIELDS ) );
-        return;
+        if( row < SHEET_MANDATORY_FIELDS )
+        {
+            DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
+                                                  SHEET_MANDATORY_FIELDS ) );
+            return;
+        }
     }
 
     m_grid->CommitPendingChanges( true /* quiet mode */ );
 
-    m_fields->erase( m_fields->begin() + curRow );
+    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
+    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
 
-    // notify the grid
-    wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, curRow, 1 );
-    m_grid->ProcessTableMessage( msg );
-
-    if( m_grid->GetNumberRows() > 0 )
+    for( int row : selectedRows )
     {
-        m_grid->MakeCellVisible( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
-        m_grid->SetGridCursor( std::max( 0, curRow-1 ), m_grid->GetGridCursorCol() );
+        m_fields->erase( m_fields->begin() + row );
+
+        // notify the grid
+        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
+        m_grid->ProcessTableMessage( msg );
+
+        if( m_grid->GetNumberRows() > 0 )
+        {
+            m_grid->MakeCellVisible( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
+            m_grid->SetGridCursor( std::max( 0, row-1 ), m_grid->GetGridCursorCol() );
+        }
     }
 }
 

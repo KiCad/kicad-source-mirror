@@ -93,6 +93,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
 
     m_itemsGrid->SetTable( m_texts );
     m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
+    m_itemsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Show/hide columns according to the user's preference
     m_itemsGrid->ShowHideColumns( m_frame->GetSettings()->m_FootprintTextShownColumns );
@@ -511,28 +512,39 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteField( wxCommandEvent& event
     if( !m_itemsGrid->CommitPendingChanges() )
         return;
 
-    int curRow = m_itemsGrid->GetGridCursorRow();
+    wxArrayInt selectedRows = m_itemsGrid->GetSelectedRows();
 
-    if( curRow < 0 )
-    {
+    if( selectedRows.empty() && m_itemsGrid->GetGridCursorRow() >= 0 )
+        selectedRows.push_back( m_itemsGrid->GetGridCursorRow() );
+
+    if( selectedRows.empty() )
         return;
-    }
-    else if( curRow < 2 )
+
+    for( int row : selectedRows )
     {
-        DisplayError( nullptr, _( "Reference and value are mandatory." ) );
-        return;
+        if( row < 2 )
+        {
+            DisplayError( nullptr, _( "Reference and value are mandatory." ) );
+            return;
+        }
     }
 
-    m_texts->erase( m_texts->begin() + curRow );
+    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
+    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
 
-    // notify the grid
-    wxGridTableMessage msg( m_texts, wxGRIDTABLE_NOTIFY_ROWS_DELETED, curRow, 1 );
-    m_itemsGrid->ProcessTableMessage( msg );
-
-    if( m_itemsGrid->GetNumberRows() > 0 )
+    for( int row : selectedRows )
     {
-        m_itemsGrid->MakeCellVisible( std::max( 0, curRow-1 ), m_itemsGrid->GetGridCursorCol() );
-        m_itemsGrid->SetGridCursor( std::max( 0, curRow-1 ), m_itemsGrid->GetGridCursorCol() );
+        m_texts->erase( m_texts->begin() + row );
+
+        // notify the grid
+        wxGridTableMessage msg( m_texts, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
+        m_itemsGrid->ProcessTableMessage( msg );
+
+        if( m_itemsGrid->GetNumberRows() > 0 )
+        {
+            m_itemsGrid->MakeCellVisible( std::max( 0, row-1 ), m_itemsGrid->GetGridCursorCol() );
+            m_itemsGrid->SetGridCursor( std::max( 0, row-1 ), m_itemsGrid->GetGridCursorCol() );
+        }
     }
 }
 

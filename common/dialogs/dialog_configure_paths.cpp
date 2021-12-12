@@ -440,7 +440,9 @@ void DIALOG_CONFIGURE_PATHS::OnRemoveEnvVar( wxCommandEvent& event )
     int curRow = m_EnvVars->GetGridCursorRow();
 
     if( curRow < 0 || m_EnvVars->GetNumberRows() <= curRow )
+    {
         return;
+    }
     else if( ENV_VAR::IsEnvVarImmutable( m_EnvVars->GetCellValue( curRow, TV_NAME_COL ) ) )
     {
         wxBell();
@@ -457,20 +459,31 @@ void DIALOG_CONFIGURE_PATHS::OnRemoveEnvVar( wxCommandEvent& event )
 
 void DIALOG_CONFIGURE_PATHS::OnDeleteSearchPath( wxCommandEvent& event )
 {
-    int curRow = m_SearchPaths->GetGridCursorRow();
+    wxArrayInt selectedRows = m_SearchPaths->GetSelectedRows();
 
-    if( curRow < 0 || m_SearchPaths->GetNumberRows() <= curRow )
+    if( selectedRows.empty() && m_SearchPaths->GetGridCursorRow() >= 0 )
+        selectedRows.push_back( m_SearchPaths->GetGridCursorRow() );
+
+    if( selectedRows.empty() )
         return;
 
     m_SearchPaths->CommitPendingChanges( true /* silent mode; we don't care if it's valid */ );
-    m_SearchPaths->DeleteRows( curRow, 1 );
 
-    // if there are still rows in grid, make previous row visible
-    if( m_SearchPaths->GetNumberRows() )
+    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
+    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
+
+    for( int row : selectedRows )
     {
-        m_SearchPaths->MakeCellVisible( std::max( 0, curRow-1 ),
-                                        m_SearchPaths->GetGridCursorCol() );
-        m_SearchPaths->SetGridCursor( std::max( 0, curRow-1 ), m_SearchPaths->GetGridCursorCol() );
+        m_SearchPaths->DeleteRows( row, 1 );
+
+        // if there are still rows in grid, make previous row visible
+        if( m_SearchPaths->GetNumberRows() )
+        {
+            m_SearchPaths->MakeCellVisible( std::max( 0, row-1 ),
+                                            m_SearchPaths->GetGridCursorCol() );
+            m_SearchPaths->SetGridCursor( std::max( 0, row-1 ),
+                                          m_SearchPaths->GetGridCursorCol() );
+        }
     }
 }
 

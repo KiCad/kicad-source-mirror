@@ -32,6 +32,7 @@
 #include <bitmaps.h>
 
 #include <wx/treebook.h>
+#include <confirm.h>
 
 class TEXT_ITEMS_GRID_TABLE : public wxGridTableBase
 {
@@ -181,6 +182,7 @@ PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame
 
     m_textItemsGrid->SetTable( new TEXT_ITEMS_GRID_TABLE(), true );
     m_textItemsGrid->PushEventHandler( new GRID_TRICKS( m_textItemsGrid ) );
+    m_textItemsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetRenderer( new wxGridCellBoolRenderer() );
@@ -397,19 +399,41 @@ void PANEL_FP_EDITOR_DEFAULTS::OnAddTextItem( wxCommandEvent& event )
 
 void PANEL_FP_EDITOR_DEFAULTS::OnDeleteTextItem( wxCommandEvent& event )
 {
+    wxArrayInt selectedRows = m_textItemsGrid->GetSelectedRows();
+
+    if( selectedRows.empty() && m_textItemsGrid->GetGridCursorRow() >= 0 )
+        selectedRows.push_back( m_textItemsGrid->GetGridCursorRow() );
+
+    if( selectedRows.empty() )
+        return;
+
+    for( int row : selectedRows )
+    {
+        if( row < 2 )
+        {
+            DisplayError( nullptr, _( "Reference and value are mandatory." ) );
+            return;
+        }
+    }
+
     if( !m_textItemsGrid->CommitPendingChanges() || !m_graphicsGrid->CommitPendingChanges() )
         return;
 
-    int curRow = m_textItemsGrid->GetGridCursorRow();
+    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
+    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
 
-    if( curRow < 2 )    // First two rows are required
-        return;
+    for( int row : selectedRows )
+    {
+        m_textItemsGrid->GetTable()->DeleteRows( row, 1 );
 
-    m_textItemsGrid->GetTable()->DeleteRows( curRow, 1 );
-
-    curRow = std::max( 0, curRow - 1 );
-    m_textItemsGrid->MakeCellVisible( curRow, m_textItemsGrid->GetGridCursorCol() );
-    m_textItemsGrid->SetGridCursor( curRow, m_textItemsGrid->GetGridCursorCol() );
+        if( m_textItemsGrid->GetNumberRows() > 0 )
+        {
+            m_textItemsGrid->MakeCellVisible( std::max( 0, row-1 ),
+                                              m_textItemsGrid->GetGridCursorCol() );
+            m_textItemsGrid->SetGridCursor( std::max( 0, row-1 ),
+                                            m_textItemsGrid->GetGridCursorCol() );
+        }
+    }
 }
 
 

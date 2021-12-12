@@ -315,6 +315,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
 
     m_fieldsGrid->SetTable( m_fields );
     m_fieldsGrid->PushEventHandler( new FIELDS_GRID_TRICKS( m_fieldsGrid, this ) );
+    m_fieldsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     // Show/hide columns according to user's preference
     EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
@@ -349,6 +350,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     }
 
     m_pinGrid->PushEventHandler( new GRID_TRICKS( m_pinGrid ) );
+    m_pinGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     wxToolTip::Enable( true );
     m_stdDialogButtonSizerOK->SetDefault();
@@ -834,31 +836,42 @@ void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
 {
-    int curRow = m_fieldsGrid->GetGridCursorRow();
+    wxArrayInt selectedRows = m_fieldsGrid->GetSelectedRows();
 
-    if( curRow < 0 )
-    {
+    if( selectedRows.empty() && m_fieldsGrid->GetGridCursorRow() >= 0 )
+        selectedRows.push_back( m_fieldsGrid->GetGridCursorRow() );
+
+    if( selectedRows.empty() )
         return;
-    }
-    else if( curRow < MANDATORY_FIELDS )
+
+    for( int row : selectedRows )
     {
-        DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
-                                              MANDATORY_FIELDS ) );
-        return;
+        if( row < MANDATORY_FIELDS )
+        {
+            DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
+                                                  MANDATORY_FIELDS ) );
+            return;
+        }
     }
 
     m_fieldsGrid->CommitPendingChanges( true /* quiet mode */ );
 
-    m_fields->erase( m_fields->begin() + curRow );
+    // Reverse sort so deleting a row doesn't change the indexes of the other rows.
+    selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
 
-    // notify the grid
-    wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, curRow, 1 );
-    m_fieldsGrid->ProcessTableMessage( msg );
-
-    if( m_fieldsGrid->GetNumberRows() > 0 )
+    for( int row : selectedRows )
     {
-        m_fieldsGrid->MakeCellVisible( std::max( 0, curRow-1 ), m_fieldsGrid->GetGridCursorCol() );
-        m_fieldsGrid->SetGridCursor( std::max( 0, curRow-1 ), m_fieldsGrid->GetGridCursorCol() );
+        m_fields->erase( m_fields->begin() + row );
+
+        // notify the grid
+        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
+        m_fieldsGrid->ProcessTableMessage( msg );
+
+        if( m_fieldsGrid->GetNumberRows() > 0 )
+        {
+            m_fieldsGrid->MakeCellVisible( std::max( 0, row-1 ), m_fieldsGrid->GetGridCursorCol() );
+            m_fieldsGrid->SetGridCursor( std::max( 0, row-1 ), m_fieldsGrid->GetGridCursorCol() );
+        }
     }
 
     OnModify();

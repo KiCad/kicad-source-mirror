@@ -631,6 +631,8 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
 {
+    // TODO: handle delete of multiple rows....
+
     if( !m_grid->CommitPendingChanges() )
         return;
 
@@ -651,7 +653,6 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
     m_grid->GoToCell( curRow, m_grid->GetGridCursorCol() );
     m_grid->SetGridCursor( curRow, m_grid->GetGridCursorCol() );
     m_grid->SelectRow( curRow );
-
 
     updateSummary();
 }
