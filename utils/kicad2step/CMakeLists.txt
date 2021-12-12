@@ -16,9 +16,6 @@ set( KS2_LIB_FILES
     pcb/oce_utils.cpp
 )
 
-if( MINGW )
-    list( APPEND KS2_LIB_FILES ${CMAKE_SOURCE_DIR}/common/streamwrapper.cpp )
-endif( MINGW )
 
 # Break the library out for re-use by both kicad2step and any qa that needs it
 # In future, this could move for re-use by other programs needing s-expr support (?)
