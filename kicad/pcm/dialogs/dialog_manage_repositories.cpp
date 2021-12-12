@@ -73,13 +73,14 @@ void DIALOG_MANAGE_REPOSITORIES::setColumnWidths()
 
 void DIALOG_MANAGE_REPOSITORIES::OnAddButtonClicked( wxCommandEvent& event )
 {
-    wxTextEntryDialog* entry_dialog = new wxTextEntryDialog(
-            this, _( "Please enter fully qualified repository url" ), _( "Add repository" ) );
+    wxTextEntryDialog entry_dialog( this,
+                                    _( "Please enter fully qualified repository url" ),
+                                    _( "Add repository" ) );
 
-    if( entry_dialog->ShowModal() == wxID_OK )
+    if( entry_dialog.ShowModal() == wxID_OK )
     {
         PCM_REPOSITORY repository;
-        wxString       url = entry_dialog->GetValue();
+        wxString       url = entry_dialog.GetValue();
 
         const auto find_row = [&]( const int col, const wxString& val )
         {
@@ -100,10 +101,9 @@ void DIALOG_MANAGE_REPOSITORIES::OnAddButtonClicked( wxCommandEvent& event )
         }
         else
         {
-            std::unique_ptr<WX_PROGRESS_REPORTER> reporter(
-                    new WX_PROGRESS_REPORTER( this, wxT( "" ), 1 ) );
+            WX_PROGRESS_REPORTER reporter( GetParent(), wxT( "" ), 1 );
 
-            if( m_pcm->FetchRepository( url, repository, reporter.get() ) )
+            if( m_pcm->FetchRepository( url, repository, &reporter ) )
             {
                 wxString name = repository.name;
                 int      increment = 1;
@@ -126,8 +126,6 @@ void DIALOG_MANAGE_REPOSITORIES::OnAddButtonClicked( wxCommandEvent& event )
             }
         }
     }
-
-    entry_dialog->Destroy();
 }
 
 
