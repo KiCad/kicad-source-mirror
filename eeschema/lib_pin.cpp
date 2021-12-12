@@ -195,9 +195,9 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
                      const TRANSFORM& aTransform )
 {
     LIB_SYMBOL_OPTIONS* opts = (LIB_SYMBOL_OPTIONS*) aData;
-    bool               drawHiddenFields = opts ? opts->draw_hidden_fields : false;
-    bool               showPinType = opts ? opts->show_elec_type : false;
-    bool               show_connect_point = opts ? opts->show_connect_point : false;
+    bool                drawHiddenFields   = opts ? opts->draw_hidden_fields : false;
+    bool                showPinType        = opts ? opts->show_elec_type     : false;
+    bool                show_connect_point = opts ? opts->show_connect_point : false;
 
     LIB_SYMBOL* part = GetParent();
 
@@ -217,7 +217,9 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
         if( showPinType )
             printPinElectricalTypeName( aSettings, pos1, orient );
 
-        if( show_connect_point )
+        if( show_connect_point
+                && m_type != ELECTRICAL_PINTYPE::PT_NC
+                && m_type != ELECTRICAL_PINTYPE::PT_NIC )
         {
             wxDC* DC = aSettings->GetPrintDC();
             COLOR4D color = aSettings->GetLayerColor( IsVisible() ? LAYER_PIN : LAYER_HIDDEN );

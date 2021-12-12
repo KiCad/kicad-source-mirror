@@ -377,8 +377,8 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     double   yscale = (double) dc_size.y / bBox.GetHeight();
     double   scale = std::min( xscale, yscale );
 
-    // Give a 10% margin and limit to no more than 100% zoom
-    scale = std::min( scale * 0.9, 1.0 );
+    // Give a 7% margin (each side) and limit to no more than 100% zoom
+    scale = std::min( scale * 0.85, 1.0 );
     dc.SetUserScale( scale, scale );
     GRResetPenAndBrush( &dc );
 

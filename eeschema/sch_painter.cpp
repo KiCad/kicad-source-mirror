@@ -842,8 +842,6 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
                          pos + VECTOR2D(  1,  1 ) * TARGET_PIN_RADIUS );
         m_gal->DrawLine( pos + VECTOR2D(  1, -1 ) * TARGET_PIN_RADIUS ,
                          pos + VECTOR2D( -1,  1 ) * TARGET_PIN_RADIUS );
-
-        aPin->ClearFlags( IS_DANGLING ); // PIN_NC pin type is always not connected and dangling.
     }
     else
     {

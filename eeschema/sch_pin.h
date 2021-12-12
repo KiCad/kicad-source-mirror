@@ -88,7 +88,14 @@ public:
 
     bool IsConnectable() const override { return true; }
 
-    bool IsDangling() const override { return m_isDangling; }
+    bool IsDangling() const override
+    {
+        if( GetType() == ELECTRICAL_PINTYPE::PT_NC || GetType() == ELECTRICAL_PINTYPE::PT_NIC )
+            return false;
+
+        return m_isDangling;
+    }
+
     void SetIsDangling( bool isDangling ) { m_isDangling = isDangling; }
 
     bool IsPointClickableAnchor( const wxPoint& aPos ) const override
