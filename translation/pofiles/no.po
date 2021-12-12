@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-11-05 13:01+0000\n"
+"PO-Revision-Date: 2021-12-12 21:48+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #, fuzzy
@@ -24,16 +24,16 @@ msgstr "Alle filer"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:360
 msgid "Build board outline"
-msgstr "Bygg oversikt over brettet"
+msgstr "Bygg omriss av kortet"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:538
 msgid "Create layers"
-msgstr "Lag lag"
+msgstr "Opprett lag"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:712
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:105
 msgid "No footprint loaded."
-msgstr "Ingen fotavtrykk lastet."
+msgstr "Ingen fotavtrykk innlastet."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:728
 #, fuzzy
@@ -41,13 +41,12 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Fotavtrykkens disposisjon er feil. Kjør Footprint Checker for en fullstendig "
-"analyse."
+"Fotavtrykkets omriss er feil. Kjør omriss-sjekk for en fullstendig analyse."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:737
 #, fuzzy
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr "Styrets disposisjon er misdannet. Kjør DRC for en full analyse."
+msgstr "Kortets omriss mangler eller er deformert. Kjør DRC for full analyse."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
@@ -64,7 +63,7 @@ msgstr "Forenkling av polygoner av kobberlag"
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:761
 #, fuzzy
 msgid "Simplifying polygons on F_Cu"
-msgstr "Forenkling av polygoner av kobberlag"
+msgstr "Forenkling av polygoner på F_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:772
 #, fuzzy
@@ -727,11 +726,11 @@ msgstr "Vis fylte områder i soner"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:85
 msgid "Use bare copper color for unplated copper"
-msgstr ""
+msgstr "Bruk kobberfarge kun for uplettert kobber"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:86
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "Bruk forskjellige farger for plettert og uplettert kobber. (Tregt)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:93
 #, fuzzy
@@ -3092,7 +3091,7 @@ msgstr "Høyre"
 
 #: common/dialogs/panel_common_settings_base.cpp:126
 msgid "Use icons designed for light window backgrounds"
-msgstr ""
+msgstr "Bruk ikoner designet for lyse vindusbakgrunner"
 
 #: common/dialogs/panel_common_settings_base.cpp:130
 #: gerbview/gerber_draw_item.cpp:729
@@ -3101,7 +3100,7 @@ msgstr "Mørk"
 
 #: common/dialogs/panel_common_settings_base.cpp:131
 msgid "Use icons designed for dark window backgrounds"
-msgstr ""
+msgstr "Bruk ikoner designet for mørke vindusbakgrunner"
 
 #: common/dialogs/panel_common_settings_base.cpp:137
 msgid ""
@@ -3193,7 +3192,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "days"
-msgstr ""
+msgstr "dager"
 
 #: common/dialogs/panel_common_settings_base.cpp:250
 msgid "Project Backup"
@@ -9813,7 +9812,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:32
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:36
 msgid "info"
-msgstr ""
+msgstr "info"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:57
 msgid "Pin &name:"
@@ -9997,7 +9996,7 @@ msgstr "Kunne ikke laste inn \"%s\""
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:153
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:124
 msgid "Done."
-msgstr ""
+msgstr "Ferdig."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:872
 #, fuzzy, c-format
@@ -10006,7 +10005,7 @@ msgstr "Kunne ikke laste inn \"%s\""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1177
 msgid "Done"
-msgstr ""
+msgstr "Ferdig"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1249
 #, c-format
@@ -10966,7 +10965,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "PSpice and LTSpice"
-msgstr ""
+msgstr "PSpice og LTSpice"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:450
 msgid "HSpice"
@@ -12962,7 +12961,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:436
 msgid "Abort"
-msgstr ""
+msgstr "Avbryt"
 
 #: eeschema/files-io.cpp:451 eeschema/files-io.cpp:468
 #: pagelayout_editor/files.cpp:256 pcbnew/files.cpp:805
@@ -18471,7 +18470,7 @@ msgstr "Velg Malekatalog"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:31
 msgid "Folder:"
-msgstr ""
+msgstr "Mappe:"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:118
 msgid "Project Template Title"
@@ -18492,8 +18491,9 @@ msgid "Edit global and/or project schematic symbol libraries"
 msgstr "Rediger globale biblioteklister og prosjektsymbollister"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:124
+#, fuzzy
 msgid "Edit the project PCB design"
-msgstr ""
+msgstr "Rediger prosjektets PCB-design"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:128
 #, fuzzy
@@ -18843,7 +18843,7 @@ msgstr "Materielle egenskaper"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:52
 msgid "Details"
-msgstr ""
+msgstr "Detaljer"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 #, fuzzy
@@ -18862,7 +18862,7 @@ msgstr "Gjengivelsestid %.3f s"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:212
 msgid "Metadata"
-msgstr ""
+msgstr "Metadata"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:214
 #, fuzzy
@@ -18906,8 +18906,9 @@ msgid "Save package"
 msgstr "Lagre endringer"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:498
+#, fuzzy
 msgid "Downloading package"
-msgstr ""
+msgstr "Laster ned pakke …"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:516
 msgid ""
@@ -18977,7 +18978,7 @@ msgstr ""
 #: kicad/pcm/pcm.cpp:206
 #, c-format
 msgid "Downloading %lld/%lld Kb"
-msgstr ""
+msgstr "Laster ned %lld/%lld Kb"
 
 #: kicad/pcm/pcm.cpp:231
 #, fuzzy
@@ -19600,7 +19601,7 @@ msgstr "Forhåndsdefinerte bredder:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:558
 msgid "Texts can include keywords."
-msgstr ""
+msgstr "Tekster kan inneholde nøkkelord"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:559
 msgid "Keyword notation is ${keyword}"
@@ -19612,7 +19613,7 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:561
 msgid "These build-in keywords are always available:"
-msgstr ""
+msgstr "Disse innebygde nøkkelordene er alltid tilgjengelige:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:565
 #, fuzzy
@@ -20990,7 +20991,7 @@ msgstr ""
 
 #: pcb_calculator/eserie.cpp:469 pcb_calculator/eserie.cpp:492
 msgid "Not worth using"
-msgstr ""
+msgstr "Ikke verd å bruke"
 
 #: pcb_calculator/eserie_help.h:2
 #, fuzzy
@@ -24080,7 +24081,7 @@ msgstr "STEP Eksport"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "temp"
-msgstr ""
+msgstr "temp"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:36
 #, fuzzy
@@ -24207,7 +24208,7 @@ msgstr "Utskriftsmodus"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:84
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "Eksporter som svarte elementer på hvit bakgrunn"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Page with frame and title block"
@@ -24285,7 +24286,7 @@ msgstr "0,1 tommer"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "VRML Units for Output Files"
-msgstr ""
+msgstr "VRML-enheter for utdatafiler"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
