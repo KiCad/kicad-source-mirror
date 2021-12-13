@@ -1,4 +1,4 @@
 (sym_lib_table
-  (lib (name "tux")(type "Legacy")(uri "${KIPRJMOD}/tux.lib")(options "Legacy")(descr ""))
+  (lib (name "tux")(type "KiCad")(uri "${KIPRJMOD}/tux.kicad_sym")(options "Legacy")(descr ""))
   (lib (name "interf_u_schlib")(type "KiCad")(uri "${KIPRJMOD}/interf_u_schlib.kicad_sym")(options "")(descr ""))
 )
