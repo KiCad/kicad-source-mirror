@@ -15,6 +15,7 @@ set( XSL_SCRIPTS_LIST
 
 set( PYTHON_SCRIPTS_LIST
     python_scripts/README-bom.txt
+    python_scripts/kicad_utils.py
     python_scripts/kicad_netlist_reader.py
     python_scripts/bom_csv_grouped_by_value.py
     python_scripts/bom_csv_grouped_by_value_with_fp.py
