@@ -1077,7 +1077,7 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     case SMD_DLG_TYPE:
     case CONN_DLG_TYPE:
     case APERTURE_DLG_TYPE:
-        m_stackupImagesBook->SetSelection( 3 );
+        m_stackupImagesBook->ChangeSelection( 3 );
         break;
     }
 }
