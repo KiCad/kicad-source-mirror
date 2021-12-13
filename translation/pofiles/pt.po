@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-10 22:05+0000\n"
+"PO-Revision-Date: 2021-12-13 18:56+0000\n"
 "Last-Translator: Rafael Silva <perigoso@riseup.net>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
 "master-source/pt/>\n"
@@ -292,7 +292,7 @@ msgstr "Copiar imagem 3D para a área de transferência"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 msgid "Render current view using Raytracing"
-msgstr "Renderizar a vista atual utilizando Raytracing"
+msgstr "Renderizar a vista atual com Raytracing"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:98
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:73
@@ -817,7 +817,7 @@ msgstr "Seleção da cor:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:63
 msgid "While Moving"
-msgstr "Enquanto movendo"
+msgstr "Durante movimento"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:65
 msgid "Disable anti-aliasing"
@@ -864,7 +864,7 @@ msgstr "Fator de espalhamento %"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:62
 msgid "Recursion Level"
-msgstr "Nível da recursão"
+msgstr "Nível de recursão"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:66
 msgid "Shadows:"
@@ -3085,7 +3085,7 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
 msgid "Editing"
-msgstr "Editando"
+msgstr "A Editar"
 
 #: common/dialogs/panel_common_settings_base.cpp:177
 msgid "Warp mouse to origin of moved object"
@@ -3320,7 +3320,7 @@ msgstr "Selecionar velocidade do zoom automaticamente"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:67
 msgid "Auto pan speed:"
-msgstr "Velocidade do Auto-posicionando:"
+msgstr "Velocidade de ajuste de vista automático:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:72
 msgid "How fast to pan when moving an object off the edge of the screen"
@@ -3762,8 +3762,7 @@ msgstr "Salvar…"
 
 #: common/draw_panel_gal.cpp:272 common/draw_panel_gal.cpp:440
 msgid "Could not use OpenGL, falling back to software rendering"
-msgstr ""
-"Não foi possível utilizar OpenGL, retornando para renderização via software"
+msgstr "Não foi possível utilizar OpenGL, a utilizar renderização via software"
 
 #: common/draw_panel_gal.cpp:278 common/draw_panel_gal.cpp:447
 msgid "Could not use OpenGL"
@@ -3891,12 +3890,12 @@ msgstr "área de transferência"
 #: common/dsnlexer.cpp:336
 #, c-format
 msgid "Expecting %s"
-msgstr "Aguardando '%s'"
+msgstr "À espera '%s'"
 
 #: common/dsnlexer.cpp:344
 #, c-format
 msgid "Expecting '%s'"
-msgstr "Aguardando '%s'"
+msgstr "À espera '%s'"
 
 #: common/dsnlexer.cpp:352
 #, c-format
@@ -4493,7 +4492,7 @@ msgstr "Caminho base da instalação local das bibliotecas de símbolos."
 
 #: common/env_vars.cpp:78
 msgid "A directory containing project templates installed with KiCad."
-msgstr "Local contendo os modelos de projeto instalados junto com o KICAD."
+msgstr "Uma diretoria com modelos de projeto instalados com o KiCad."
 
 #: common/env_vars.cpp:80
 msgid ""
@@ -4508,8 +4507,8 @@ msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
-"Um diretório contendo os plug-ins de terceiros, as bibliotecas e outro "
-"conteúdo para download."
+"Uma diretoria com plug-ins, bibliotecas e outro conteúdo transferível de "
+"terceiros."
 
 #: common/env_vars.cpp:86
 msgid ""
@@ -4523,13 +4522,11 @@ msgstr ""
 "caminho absoluto do ficheiro de projeto atual.  Esta variável de ambiente "
 "pode ser utilizada para definir ficheiros e pastas relativos ao projeto "
 "atual.  Por exemplo, ${KIPRJMOD}/libs/footprints.pretty pode ser definido "
-"como uma pasta contendo uma biblioteca de footprint chamada de footprints."
-"pretty."
+"como uma pasta com uma biblioteca de footprint chamada de footprints.pretty."
 
 #: common/env_vars.cpp:92
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr ""
-"Um diretório contendo os scripts de todo o sistema instalados com o KiCad"
+msgstr "Uma diretoria com scripts instalados com o KiCad"
 
 #: common/env_vars.cpp:94
 msgid "A directory containing user-specific scripts installed with KiCad"
@@ -4575,11 +4572,11 @@ msgid ""
 "\n"
 "To open it you will need to upgrade KiCad to a version dated %s or later."
 msgstr ""
-"O KiCad não conseguiu abrir este arquivo porque ele foi criado com uma "
-"versão mais recente do que a que você está executando.\n"
+"O KiCad não conseguiu abrir este ficheiro porque foi criado com uma versão "
+"mais recente do que a que você está a correr.\n"
 "\n"
-"Para abri-lo, você precisará atualizar o KiCad para uma versão com data de "
-"%s ou posterior."
+"Para o abrir, terá de atualizar o KiCad para uma versão com data de %s ou "
+"posterior."
 
 #: common/exceptions.cpp:126
 msgid "Full error text:"
@@ -5414,7 +5411,7 @@ msgstr "Função '%s' desconhecida"
 #: common/libeval_compiler/libeval_compiler.cpp:1009
 #, c-format
 msgid "Missing units for '%s'| (%s)"
-msgstr "Faltando unidades para '%s'| (%s)"
+msgstr "Unidades em faltas para '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1126
 #, c-format
@@ -5456,7 +5453,7 @@ msgid ""
 "or missing."
 msgstr ""
 "Falta um byte nulo no final da lista de propriedades. Os dados que foram "
-"importados podem estar malformados ou estão faltando."
+"importados podem estar malformados ou em falta."
 
 #: common/plugins/altium/altium_parser.cpp:247
 #, c-format
@@ -5495,7 +5492,7 @@ msgstr ""
 #: common/plugins/cadstar/cadstar_archive_parser.h:40
 #, c-format
 msgid "Missing node '%s' in '%s'"
-msgstr "Faltando nó '%s' em '%s'"
+msgstr "Nó em falta '%s' em '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:43
 #, c-format
@@ -5505,7 +5502,7 @@ msgstr "Nó desconhecido '%s' em '%s'"
 #: common/plugins/cadstar/cadstar_archive_parser.h:46
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr "Faltando parâmetro '%s' em '%s'"
+msgstr "Parâmetro em falta '%s' em '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:49
 #, c-format
@@ -5544,7 +5541,7 @@ msgstr "Formato do arquivo inválido."
 #: common/project/project_archiver.cpp:72
 #, c-format
 msgid "Extracting file '%s'."
-msgstr "Extraindo os arquivos '%s'."
+msgstr "A Extrair ficheiro '%s'."
 
 #: common/project/project_archiver.cpp:95 kicad/pcm/pcm_task_manager.cpp:187
 #: kicad/pcm/pcm_task_manager.cpp:232
@@ -5760,7 +5757,7 @@ msgstr "Desfazer"
 
 #: common/tool/actions.cpp:136
 msgid "Undo last edit"
-msgstr "Desfazer"
+msgstr "Desfazer última edição"
 
 #: common/tool/actions.cpp:147
 msgid "Redo"
@@ -8418,23 +8415,23 @@ msgstr "Verificando os footprints..."
 
 #: eeschema/dialogs/dialog_erc.cpp:389
 msgid "Checking pins..."
-msgstr "Verificando os pinos..."
+msgstr "A verificar os pinos..."
 
 #: eeschema/dialogs/dialog_erc.cpp:406
 msgid "Checking labels..."
-msgstr "Verificando os rótulos..."
+msgstr "A verificar os rótulos..."
 
 #: eeschema/dialogs/dialog_erc.cpp:412
 msgid "Checking for unresolved variables..."
-msgstr "Verificando as variáveis que não foram resolvidas..."
+msgstr "A verificar as variáveis que não foram resolvidas..."
 
 #: eeschema/dialogs/dialog_erc.cpp:418
 msgid "Checking no connect pins for connections..."
-msgstr "Verificando os pinos sem conexão para as conexões..."
+msgstr "A verificar os pinos sem conexão para as conexões..."
 
 #: eeschema/dialogs/dialog_erc.cpp:424
 msgid "Checking for library symbol issues..."
-msgstr "Verificando os problemas dos símbolos da biblioteca..."
+msgstr "A verificar os problemas dos símbolos da biblioteca..."
 
 #: eeschema/dialogs/dialog_erc.cpp:502 pcbnew/dialogs/dialog_drc.cpp:443
 msgid "errors"
@@ -12797,8 +12794,8 @@ msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
 msgstr ""
-"Este arquivo foi criado por uma versão anterior do KiCad. Ele será "
-"convertido para o novo formato quando for salvo."
+"Este ficheiro foi criado com uma versão anterior do KiCad. Será convertido "
+"para o novo formato quando for guardado."
 
 #: eeschema/files-io.cpp:527
 msgid "Schematic is read only."
@@ -12816,7 +12813,7 @@ msgid ""
 msgstr ""
 "Esta operação não pode ser desfeita.\n"
 "\n"
-"Gostaria de salvar o documento atual antes de continuar?"
+"Gostaria de guardar o documento atual antes de continuar?"
 
 #: eeschema/files-io.cpp:626 pcbnew/files.cpp:163
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:250
@@ -12909,7 +12906,7 @@ msgstr "Aborte o salvamento do projeto"
 
 #: eeschema/files-io.cpp:1191
 msgid "Importing Schematic"
-msgstr "Importando o esquema"
+msgstr "A importar esquema"
 
 #: eeschema/files-io.cpp:1289
 msgid "The current schematic has been modified.  Save changes?"
@@ -12923,11 +12920,11 @@ msgid ""
 "were not saved properly.  Do you wish to restore the last saved edits you "
 "made?"
 msgstr ""
-"Bom, isso é bem constrangedor!\n"
-"Parece que a última vez que você estava editando um ou mais dos arquivos do "
+"Bem, isto é constrangedor!\n"
+"Parece que a última vez que você estava a editar um ou mais dos ficheiros de "
 "esquema\n"
-"eles não foram salvos corretamente.  Deseja restaurar as últimas edições "
-"salvas anteriormente?"
+"não foram guardados corretamente.  Deseja restaurar as últimas edições "
+"feitas?"
 
 #: eeschema/files-io.cpp:1386
 #, c-format
@@ -18276,7 +18273,7 @@ msgstr "Pasta de destino"
 #: kicad/files-io.cpp:82
 #, c-format
 msgid "Unzipping project in '%s'.\n"
-msgstr "Descompactando o projeto em '%s'.\n"
+msgstr "A descompactar o projeto em '%s'.\n"
 
 #: kicad/files-io.cpp:117
 msgid "Archive Project Files"
@@ -18357,12 +18354,12 @@ msgstr "Projeto: %s"
 
 #: kicad/kicad_manager_frame.cpp:739
 msgid "Restoring session"
-msgstr "Restaurando a sessão"
+msgstr "A restaurar a sessão"
 
 #: kicad/kicad_manager_frame.cpp:749
 #, c-format
 msgid "Restoring '%s'"
-msgstr "Restaurando '%s'"
+msgstr "A restaurar '%s'"
 
 #: kicad/menubar.cpp:56
 msgid "Clear Recent Projects"
@@ -18542,7 +18539,7 @@ msgstr "Plug-in e o gestor de conteúdo"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:57
 msgid "Aborting remaining tasks."
-msgstr "Abortando as tarefas restantes."
+msgstr "A abortar as tarefas restantes."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:137
 #, c-format
@@ -18555,7 +18552,7 @@ msgstr "Progresso do download"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:23
 msgid "Waiting..."
-msgstr "Esperando..."
+msgstr "Em espera..."
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:42
 msgid "Overall Progress"
@@ -18567,7 +18564,7 @@ msgstr "Detalhes"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying Package Changes"
-msgstr "Aplicando as alterações do pacote"
+msgstr "A Aplicar Alterações"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
 msgid "Pending install"
@@ -18619,7 +18616,7 @@ msgstr "Salve o pacote"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:498
 msgid "Downloading package"
-msgstr "Baixando o pacote"
+msgstr "A Descarregar o Pacote"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:516
 msgid ""
@@ -18691,7 +18688,7 @@ msgstr "O download é muito grande."
 
 #: kicad/pcm/pcm.cpp:247
 msgid "Fetching repository"
-msgstr "Buscando o repositório"
+msgstr "A obter o repositório"
 
 #: kicad/pcm/pcm.cpp:251
 msgid "Unable to load repository url"
@@ -18710,7 +18707,7 @@ msgstr ""
 
 #: kicad/pcm/pcm.cpp:290
 msgid "Fetching repository packages"
-msgstr "Buscando os pacotes do repositório"
+msgstr "A obter os pacotes do repositório"
 
 #: kicad/pcm/pcm.cpp:294
 msgid "Unable to load repository packages url."
@@ -18740,7 +18737,7 @@ msgstr ""
 
 #: kicad/pcm/pcm.cpp:453
 msgid "Downloading resources"
-msgstr "Baixando os recursos"
+msgstr "A descarregar recursos"
 
 #: kicad/pcm/pcm.cpp:471
 msgid ""
@@ -18772,12 +18769,12 @@ msgstr ""
 #: kicad/pcm/pcm_task_manager.cpp:97
 #, c-format
 msgid "Extracting package '%s'."
-msgstr "Extraindo o pacote '%s'."
+msgstr "A extrair o pacote '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:112
 #, c-format
 msgid "Removing downloaded archive '%s'."
-msgstr "Removendo o arquivo baixado '%s'."
+msgstr "A remover o arquivo descarregado '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:150
 #, c-format
@@ -18795,7 +18792,7 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:250
 msgid "Aborting package installation."
-msgstr "Abortando a instalação do pacote."
+msgstr "A abortar a instalação do pacote."
 
 #: kicad/pcm/pcm_task_manager.cpp:254
 msgid "Extracted package\n"
@@ -18832,7 +18829,7 @@ msgstr ""
 #: kicad/pcm/pcm_task_manager.cpp:360
 #, c-format
 msgid "Removing directory %s"
-msgstr "Removendo diretório %s"
+msgstr "A remover diretoria %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:365
 #, c-format
@@ -18935,7 +18932,7 @@ msgstr "Abre o diretório no gestor de ficheiros padrão do sistema"
 
 #: kicad/project_tree_pane.cpp:716
 msgid "Reveals the directories in a Finder window"
-msgstr "Revela os diretórios numa janela do Finder"
+msgstr "Revela as diretorias numa janela do Finder"
 
 #: kicad/project_tree_pane.cpp:718
 msgid "Open Directories in File Explorer"
@@ -18996,11 +18993,11 @@ msgstr "Alterar nome de ficheiro"
 
 #: kicad/project_tree_pane.cpp:1152
 msgid "Network path: not monitoring folder changes"
-msgstr "Caminho da rede: as alterações da pasta não estão sendo monitoradas"
+msgstr "Caminho da rede: as alterações da pasta não estão a ser monitorizadas"
 
 #: kicad/project_tree_pane.cpp:1157
 msgid "Local path: monitoring folder changes"
-msgstr "Caminho local: monitorando das alterações na pasta"
+msgstr "Caminho local: a monitorizar as alterações na pasta"
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "New Project..."
@@ -19140,7 +19137,7 @@ msgstr "Permissões insuficientes para gravar na pasta '%s'."
 
 #: kicad/tools/kicad_manager_control.cpp:257
 msgid "Overwriting files:"
-msgstr "Sobrescrevendo ficheiros:"
+msgstr "A sobrescrever ficheiros:"
 
 #: kicad/tools/kicad_manager_control.cpp:262
 msgid "Similar files already exist in the destination folder."
@@ -19294,7 +19291,7 @@ msgstr "Ocorreu um erro ao tentar imprimir a folha do desenho."
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:239
 msgid "Printing"
-msgstr "Imprimiindo"
+msgstr "A imprimir"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:555
 msgid "Predefined Keywords"
@@ -20469,7 +20466,7 @@ msgstr "Diâmetro da ilha da via:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "Diâmetro da ilha circundando a via (anel anular)"
+msgstr "Diâmetro da ilha circundante à via (anel anular)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
@@ -20540,7 +20537,7 @@ msgstr "Resistência térmica:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
-msgstr "Utilizando o valor de condutividade térmica 401 Watts/(metro-Kelvin)"
+msgstr "A utilizar o valor de condutividade térmica 401 Watts/(metro-Kelvin)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:270
 msgid "deg C/W"
@@ -21803,7 +21800,7 @@ msgid ""
 "Front footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"O footprint frontal do componente começando com '%s' terá o prefixo removido."
+"Footprints frontais a começar com '%s' terão o prefixo removido."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:351
 #, c-format
@@ -21821,8 +21818,7 @@ msgid ""
 "Back footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"O footprint traseiro do componente começando com '%s' terá o prefixo "
-"removido."
+"Footprints traseiros a começar com '%s' terão o prefixo removido."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:367
 #, c-format
@@ -22261,7 +22257,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_setup.cpp:198 pcbnew/files.cpp:620
 #: pcbnew/tools/pcb_control.cpp:1120
 msgid "Loading PCB"
-msgstr "Carregando a PCI"
+msgstr "A carregar PCI"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:220
 #, c-format
@@ -23943,7 +23939,7 @@ msgstr "Filtra os itens selecionados"
 
 #: pcbnew/dialogs/dialog_find.cpp:228
 msgid "Searching..."
-msgstr "Procurando..."
+msgstr "À procura..."
 
 #: pcbnew/dialogs/dialog_find.cpp:346
 #, c-format
@@ -26482,7 +26478,6 @@ msgid "Track width correction:"
 msgstr "Correção da largura da pista:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:312
-#, fuzzy
 msgid ""
 "Set global width correction for exact width PostScript output.\n"
 "These width correction is intended to compensate tracks width and also pads "
@@ -26490,12 +26485,12 @@ msgid ""
 "The reasonable width correction value must be in a range of [-"
 "(MinTrackWidth-1), +(MinClearanceValue-1)]."
 msgstr ""
-"Define a correção da largura global para os arquivo gerados pelo PostScript "
+"Define a correção de largura global para os ficheiros gerados por PostScript "
 "com largura exata.\n"
-"Essa correção da largura tem como objetivo compensar a largura das pistas e "
-"também os erros de tamanho das ilhas e das vias.\n"
-"O valor de correção da largura razoável deve estar num intervalo com "
-"[-(MinTrackWidth-1), +(MinClearanceValue-1)]."
+"Estas correções de largura têm como objetivo compensar a largura das pistas "
+"e também os erros de tamanho das ilhas e vias.\n"
+"O valor razoável de correção da largura deve estar entre [-(MinTrackWidth-1) "
+"e +(MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Force A4 output"
@@ -28759,7 +28754,6 @@ msgid "Check rule syntax"
 msgstr "Verifique a sintaxe da regra"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -28968,40 +28962,40 @@ msgid ""
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 msgstr ""
-"### Cláusulas de nível superior\n"
+"### Top-level Clauses\n"
 "\n"
-"    (versão <número>)\n"
+"    (version <number>)\n"
 "\n"
-"    (rule <nome_da_regra> <classe_da_regra> ...)\n"
-"\n"
-"\n"
-"<br><br>\n"
-"\n"
-"### Cláusulas da regra\n"
-"\n"
-"    (constraint <tipo_da_restrição> ...)\n"
-"\n"
-"    (condition \"<expressão>\")\n"
-"\n"
-"    (layer \"<nome_da_camada>\")\n"
+"    (rule <rule_name> <rule_clause> ...)\n"
 "\n"
 "\n"
 "<br><br>\n"
 "\n"
-"### Tipos de restrição\n"
+"### Rule Clauses\n"
+"\n"
+"    (constraint <constraint_type> ...)\n"
+"\n"
+"    (condition \"<expression>\")\n"
+"\n"
+"    (layer \"<layer_name>\")\n"
+"\n"
+"\n"
+"<br><br>\n"
+"\n"
+"### Constraint Types\n"
 "\n"
 " * annular\\_width\n"
-" * clearance (isolamento)\n"
+" * clearance\n"
 " * courtyard_clearance\n"
 " * diff\\_pair\\_gap\n"
 " * diff\\_pair\\_uncoupled\n"
-" * disallow (desaprovar)\n"
+" * disallow\n"
 " * edge\\_clearance\n"
-" * length (comprimento)\n"
+" * length\n"
 " * hole\\_clearance\n"
 " * hole\\_size\n"
 " * silk\\_clearance\n"
-" * skew (inclunação)\n"
+" * skew\n"
 " * track\\_width\n"
 " * via\\_count\n"
 " * via\\_diameter\n"
@@ -29009,23 +29003,23 @@ msgstr ""
 "\n"
 "<br><br>\n"
 "\n"
-"### Tipos dos itens\n"
+"### Item Types\n"
 "\n"
 " * buried_via\n"
-" * graphic (gráfico)\n"
-" * hole (furo)\n"
+" * graphic\n"
+" * hole\n"
 " * micro_via\n"
-" * pad (ilha)\n"
-" * text (texto)\n"
-" * track (trilha)\n"
+" * pad\n"
+" * text\n"
+" * track\n"
 " * via\n"
-" * zone (zona)\n"
+" * zone\n"
 "\n"
 "<br>\n"
 "\n"
-"### Examplos\n"
+"### Examples\n"
 "\n"
-"    (versão 1)\n"
+"    (version 1)\n"
 "\n"
 "    (rule HV\n"
 "       (constraint clearance (min 1.5mm))\n"
@@ -29049,80 +29043,72 @@ msgstr ""
 "       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
 "<br><br>\n"
 "\n"
-"### Notas\n"
+"### Notes\n"
 "\n"
-"A versão da cláusula deve ser a primeira cláusula.  Indica a versão da "
-"sintaxe do ficheiro para que\n"
-"os futuros analisadores das regras possam realizar atualizações "
-"automáticas.  Deveria ser\n"
-"definido como \"1\".\n"
+"Version clause must be the first clause.  It indicates the syntax version of "
+"the file so that \n"
+"future rules parsers can perform automatic updates.  It should be\n"
+"set to \"1\".\n"
 "\n"
-"As regras devem ser ordenadas por especificidade.  Regras posteriores tomam\n"
-"precedência sobre as regras anteriores; assim que uma regra correspondente "
-"for encontrada\n"
-"nenhuma regra adicional será verificada.\n"
+"Rules should be ordered by specificity.  Later rules take\n"
+"precedence over earlier rules; once a matching rule is found\n"
+"no further rules will be checked.\n"
 "\n"
-"Use Ctrl+/ para comentar ou remover o comantário da(s) linha(s).\n"
+"Use Ctrl+/ to comment or uncomment line(s).\n"
 "<br><br><br>\n"
 "\n"
-"### Funções da expressão\n"
+"### Expression functions\n"
 "\n"
-"Todos os parâmetros de função suportam curingas simples (`*` e `?`).\n"
+"All function parameters support simple wildcards (`*` and `?`).\n"
 "<br><br>\n"
 "\n"
 "    A.insideCourtyard('<footprint_refdes>')\n"
-"Verdadeiro caso qualquer parte de `A` esteja dentro do pedaço principal do "
-"footprint do componente informado.\n"
+"True if any part of `A` lies within the given footprint's principal "
+"courtyard.\n"
 "<br><br>\n"
 "\n"
 "    A.insideFrontCourtyard('<footprint_refdes>')\n"
-"Verdadeiro caso qualquer parte de `A` esteja dentro do pedaço frontal do "
-"footprint do componente informado.\n"
+"True if any part of `A` lies within the given footprint's front courtyard.\n"
 "<br><br>\n"
 "\n"
 "    A.insideBackCourtyard('<footprint_refdes>')\n"
-"Verdadeiro caso qualquer parte de `A` esteja dentro do pedaço traseiro do "
-"footprint do componente informado.\n"
+"True if any part of `A` lies within the given footprint's back courtyard.\n"
 "<br><br>\n"
 "\n"
 "    A.insideArea('<zone_name>')\n"
-"Verdadeiro caso qualquer parte de `A` esteja dentro do contorno da zona "
-"informada.\n"
+"True if any part of `A` lies within the given zone's outline.\n"
 "<br><br>\n"
 "\n"
 "    A.isPlated()\n"
-"Verdadeiro caso `A` tenha um furo que seja metalizado.\n"
+"True if `A` has a hole which is plated.\n"
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"Verdadeiro caso `A` tenha uma rede que faça parte do par diferencial "
-"informado.\n"
-"`<net_name>` é a base do nome do par diferencial.  Por exemplo, "
+"True if `A` has net that is part of the specified differential pair.\n"
+"`<net_name>` is the base name of the differential pair.  For example, "
 "`inDiffPair('CLK')`\n"
-"corresponde aos itens dentro do `CLK_P` e nas redes `CLK_N`.\n"
+"matches items in the `CLK_P` and `CLK_N` nets.\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
-"Verdadeiro caso `A` e `B` sejam membros do mesmo par de diferencial.\n"
+"True if `A` and `B` are members of the same diff pair.\n"
 "<br><br>\n"
 "\n"
 "    A.memberOf('<group_name>')\n"
-"Verdadeiro caso `A` seja um membro de um determinado grupo. Inclui "
-"associações aninhadas.\n"
+"True if `A` is a member of the given group. Includes nested membership.\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
-"Verdadeiro caso `A` exista na camada informada.  O nome da camada pode ser\n"
-"o nome atribuído na Configuração da placa > Camadas do editor da placa ou\n"
-"o nome canônico (ou seja: `F.Cu`).\n"
+"True if `A` exists on the given layer.  The layer name can be\n"
+"either the name assigned in Board Setup > Board Editor Layers or\n"
+"the canonical name (ie: `F.Cu`).\n"
 "\n"
-"Nota: isto retorna verdadeiro caso `A` esteja em determinada camada, "
-"independentemente\n"
-"da avaliação ou não da regra para essa camada.\n"
-"Para o último, use uma cláusula `(layer \"nome_da_camada\")` na regra.\n"
+"NB: this returns true if `A` is on the given layer, independently\n"
+"of whether or not the rule is being evaluated for that layer.\n"
+"For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
 "<br><br><br>\n"
 "\n"
-"### Mais exemplos\n"
+"### More Examples\n"
 "\n"
 "    (rule \"copper keepout\"\n"
 "       (constraint disallow track via zone)\n"
@@ -29135,7 +29121,7 @@ msgstr ""
 "       (condition \"A.insideCourtyard('U3')\"))\n"
 "\n"
 "\n"
-"    # previne a serigrafia nas vias cobertas\n"
+"    # prevent silk over tented vias\n"
 "    (rule silk_over_via\n"
 "       (constraint silk_clearance (min 0.2mm))\n"
 "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
@@ -29145,41 +29131,41 @@ msgstr ""
 "        (constraint hole_to_hole (min 0.254mm))\n"
 "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
 "\n"
-"    (rule \"Espaço entre as ilhas nas diferentes redes\"  \n"
+"    (rule \"Clearance between Pads of Different Nets\"  \n"
 "        (constraint clearance (min 3.0mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
 "\n"
 "\n"
-"    (regra \"Através do furo para rastrear o isolamento\"  \n"
+"    (rule \"Via Hole to Track Clearance\"  \n"
 "        (constraint hole_clearance (min 0.254mm))\n"
 "        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
 "    \n"
-"    (regra \"Ilha para rastrear o isolamento\"  \n"
+"    (rule \"Pad to Track Clearance\"  \n"
 "        (constraint clearance (min 0.2mm))\n"
 "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
 "\n"
 "\n"
-"    (regra \"isolamento para o recorte de 1 mm\"\n"
+"    (rule \"clearance-to-1mm-cutout\"\n"
 "        (constraint clearance (min 0.8mm))\n"
 "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Tamanho máximo do furo com perfuração mecânica\"  \n"
+"    (rule \"Max Drill Hole Size Mechanical\"  \n"
 "        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
 "    \n"
-"    (regra \"Tamanho máximo da perfuração do furo PTH\"  \n"
+"    (rule \"Max Drill Hole Size PTH\"  \n"
 "        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
-"    # Especifica uma lacuna ideal para um par diferencial particular\n"
-"    (rule \"lacuna do relógio dp\"\n"
+"    # Specify an optimal gap for a particular diff-pair\n"
+"    (rule \"dp clock gap\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
 "        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
 "\n"
-"    # Especifica um isolamento maior em torno de qualquer par de diferenças\n"
-"    (regra \"isolamento dp\"\n"
+"    # Specify a larger clearance around any diff-pair\n"
+"    (rule \"dp clearance\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 
@@ -29283,7 +29269,7 @@ msgstr "configuração das restrições da borda"
 
 #: pcbnew/drc/drc_engine.cpp:191
 msgid "board setup constraints courtyard"
-msgstr "configuração das restrições do pedaço"
+msgstr "configuração das restrições de pátio"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
@@ -29353,17 +29339,17 @@ msgstr "indefinido"
 #: pcbnew/drc/drc_engine.cpp:897
 #, c-format
 msgid "Checking %s %s: %s."
-msgstr "Verificando %s %s: %s."
+msgstr "A verificar %s %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:913
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "Verificando %s: mín %s; opc %s; máx %s."
+msgstr "A verificar %s: mín %s; opc %s; máx %s."
 
 #: pcbnew/drc/drc_engine.cpp:924
 #, c-format
 msgid "Checking %s."
-msgstr "Verificando %s."
+msgstr "A verificar %s."
 
 #: pcbnew/drc/drc_engine.cpp:932
 msgid "Board and netclass clearances apply only between copper items."
@@ -29403,7 +29389,7 @@ msgstr "Uma regra incondicional foi aplicada."
 #: pcbnew/drc/drc_engine.cpp:1054
 #, c-format
 msgid "Checking rule condition \"%s\"."
-msgstr "Verificando a condição da regra \"%s\"."
+msgstr "A verificar a condição da regra \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:1060
 msgid "Constraint applied."
@@ -29448,7 +29434,7 @@ msgstr "Conexão ausente entre os itens"
 
 #: pcbnew/drc/drc_item.cpp:54
 msgid "Items shorting two nets"
-msgstr "Itens encurtando duas redes"
+msgstr "Itens em curto-circuito de duas redes"
 
 #: pcbnew/drc/drc_item.cpp:58
 msgid "Items not allowed"
@@ -29532,15 +29518,15 @@ msgstr "Footprint não tem pátio definido"
 
 #: pcbnew/drc/drc_item.cpp:138
 msgid "Footprint has malformed courtyard"
-msgstr "Footprint com pedaço malformado"
+msgstr "Footprint com pátio malformado"
 
 #: pcbnew/drc/drc_item.cpp:142
 msgid "PTH inside courtyard"
-msgstr "PTH dentro do pedaço"
+msgstr "PTH dentro do pátio"
 
 #: pcbnew/drc/drc_item.cpp:146
 msgid "NPTH inside courtyard"
-msgstr "NPTH dentro do pedaço"
+msgstr "NPTH dentro do pátio"
 
 #: pcbnew/drc/drc_item.cpp:150
 msgid "Item on a disabled layer"
@@ -29556,7 +29542,7 @@ msgstr "Duplicar footprints"
 
 #: pcbnew/drc/drc_item.cpp:162
 msgid "Missing footprint"
-msgstr "Footprint faltando"
+msgstr "Footprint em falta"
 
 #: pcbnew/drc/drc_item.cpp:166
 msgid "Extra footprint"
@@ -29634,7 +29620,7 @@ msgstr "ERRO: %s%s"
 #: pcbnew/drc/drc_rule_parser.cpp:102 pcbnew/drc/drc_rule_parser.cpp:184
 #: pcbnew/drc/drc_rule_parser.cpp:341
 msgid "Missing '('."
-msgstr "Faltando '('."
+msgstr "A faltar '('."
 
 #: pcbnew/drc/drc_rule_parser.cpp:108
 msgid "Missing version statement."
@@ -29684,7 +29670,7 @@ msgstr "Item não reconhecido '%s'.| Era esperada uma expressão entre aspas."
 #: pcbnew/drc/drc_rule_parser.cpp:241 pcbnew/drc/drc_rule_parser.cpp:319
 #: pcbnew/drc/drc_rule_parser.cpp:332 pcbnew/drc/drc_rule_parser.cpp:421
 msgid "Missing ')'."
-msgstr "Faltando '('."
+msgstr "A faltar '('."
 
 #: pcbnew/drc/drc_rule_parser.cpp:257
 #, c-format
@@ -29719,7 +29705,7 @@ msgstr "Camada desconhecida '%s'."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:87
 msgid "Checking via annular rings..."
-msgstr "Verificando através dos anéis anulares..."
+msgstr "A verificar através dos anéis anulares..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:128
 #, c-format
@@ -29733,15 +29719,15 @@ msgstr "(%s largura anular máx %s; atual %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:75
 msgid "Checking pad, via and zone connections..."
-msgstr "Verificando a ilha, a via e as conexões da zona..."
+msgstr "A verificar conexões de ilha, via e zona..."
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:149
 msgid "Checking net connections..."
-msgstr "Verificando conexões da rede..."
+msgstr "A verificar conexões da rede..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:194
 msgid "Gathering copper items..."
-msgstr "Coletando itens com cobre..."
+msgstr "A reunir itens com cobre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:210
 msgid "Checking track & via clearances..."
@@ -29749,23 +29735,23 @@ msgstr "A verificar o isolamento de pistas e vias..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:217
 msgid "Checking hole clearances..."
-msgstr "Verificando o isolamento dos furos..."
+msgstr "A verificar o isolamento dos furos..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:225
 msgid "Checking pad clearances..."
-msgstr "Verificando o isolamento das ilhas..."
+msgstr "A verificar o isolamento das ilhas..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:233
 msgid "Checking pads..."
-msgstr "Verificando as ilhas..."
+msgstr "A verificar as ilhas..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:241
 msgid "Checking copper zone clearances..."
-msgstr "Verificando o isolamento das zonas com cobre..."
+msgstr "A verificar o isolamento das zonas com cobre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:248
 msgid "Checking zones..."
-msgstr "Verificando as zonas..."
+msgstr "A verificar as zonas..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:311
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:358
@@ -29792,15 +29778,15 @@ msgstr "(redes %s e %s)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:89
 msgid "Checking footprint courtyard definitions..."
-msgstr "Verificando as definições do pedaço da ilha..."
+msgstr "A verificar as definições de pátio da ilha..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:94
 msgid "Gathering footprint courtyards..."
-msgstr "Coletando os pedaços do footprint..."
+msgstr "A reunir os pátios de footprint..."
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:152
 msgid "Checking footprints for overlapping courtyards..."
-msgstr "Verificando os footprints para os pedaços sobrepostos..."
+msgstr "A verificar footprints contra pátios sobrepostos..."
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:348
 msgid "DPs evaluated:"
@@ -31745,15 +31731,15 @@ msgstr "Camada '%s' não foi reconhecida"
 
 #: pcbnew/pcb_expr_evaluator.cpp:497
 msgid "Footprint's courtyard is not a single, closed shape."
-msgstr "O pedaço do footprint não é uma forma única e fechada."
+msgstr "O pátio do footprint não é uma forma única e fechada."
 
 #: pcbnew/pcb_expr_evaluator.cpp:510
 msgid "Footprint has no front courtyard."
-msgstr "O footprint não tem pedaço frontal."
+msgstr "O footprint não tem pátio frontal."
 
 #: pcbnew/pcb_expr_evaluator.cpp:527
 msgid "Footprint has no back courtyard."
-msgstr "O footprint não tem pedaço atrás."
+msgstr "O footprint não tem pátio atrás."
 
 #: pcbnew/pcb_expr_evaluator.cpp:1151
 msgid "must be mm, in, or mil"
@@ -34058,7 +34044,7 @@ msgstr "A Resolução do isolamento da serigrafia para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
 msgid "Courtyard clearance resolution for:"
-msgstr "A resolução do isolamento do pedaço para:"
+msgstr "A resolução do isolamento do pátio para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:566
 msgid "Hole clearance resolution for:"
@@ -34135,7 +34121,8 @@ msgstr "Resolução das exclusões para:"
 #: pcbnew/tools/board_inspection_tool.cpp:830
 msgid "Report may be incomplete: some footprint courtyards are malformed."
 msgstr ""
-"O relatório pode estar incompleto: alguns footprints estão malformados."
+"O relatório pode estar incompleto: alguns pátios de footprints estão "
+"malformados."
 
 #: pcbnew/tools/board_inspection_tool.cpp:831
 msgid "Run DRC for a full analysis."
@@ -36470,7 +36457,7 @@ msgstr "Pátios de footprints na frente da placa"
 
 #: pcbnew/widgets/appearance_controls.cpp:1538
 msgid "Footprint courtyards on board's back"
-msgstr "Pátios de footprints a trás da placa"
+msgstr "Pátios de footprints na traseira da placa"
 
 #: pcbnew/widgets/appearance_controls.cpp:1539
 msgid "Footprint assembly on board's front"
