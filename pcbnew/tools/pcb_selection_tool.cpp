@@ -2460,7 +2460,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
     std::set<BOARD_ITEM*> rejected;
     wxPoint               where( aWhere.x, aWhere.y );
 
-    PCB_LAYER_ID activeLayer = (PCB_LAYER_ID) view()->GetTopLayer();
+    PCB_LAYER_ID activeLayer = m_frame->GetActiveLayer();
     LSET         silkLayers( 2, B_SilkS, F_SilkS );
 
     if( silkLayers[activeLayer] )
