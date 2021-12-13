@@ -1,14 +1,15 @@
 # Tokita, Hiroshi <tokita.hiroshi@gmail.com>, 2021.
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
+# Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-06 19:31+0000\n"
-"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2021-12-13 18:56+0000\n"
+"Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6589,9 +6590,8 @@ msgid "All KiCad project files"
 msgstr "すべての KiCad プロジェクト ファイル"
 
 #: common/wildcards_and_files_ext.cpp:235
-#, fuzzy
 msgid "All KiCad schematic files"
-msgstr "Altium 回路図ファイル"
+msgstr "すべてのKiCad回路図ファイル"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad legacy schematic files"
@@ -16411,14 +16411,12 @@ msgid "Switch H & V only mode for new wires and buses"
 msgstr "配線、バスに90度入力制限を適用"
 
 #: eeschema/tools/ee_actions.cpp:655
-#, fuzzy
 msgid "Repair Schematic"
-msgstr "回路図を作成"
+msgstr "回路図を修復"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr "さまざまな診断を実行し、ボードの修復を試みます"
+msgstr "各種診断を実行し、回路図の修復を試みます"
 
 #: eeschema/tools/ee_actions.cpp:662 pcbnew/tools/pcb_actions.cpp:786
 msgid "Scripting Console"
@@ -19541,7 +19539,6 @@ msgid "Error writing objects to clipboard"
 msgstr "クリップボードへのオブジェクト書き出しエラー"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19553,16 +19550,17 @@ msgid ""
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
-"### 分割 (固定) 減衰器\n"
-"#### 減衰量 (= 6dB)\n"
-"___Z<sub>in</sub>___ 要求される入力インピーダンス in &#x2126;<br>\n"
-"___Z<sub>out</sub>___ 要求される出力インピーダンス in &#x2126;<br>\n"
-"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"### ブリッジT型減衰器\n"
+"___a___ 減衰量 (dB)<br>\n"
+"___Z<sub>in</sub>___ 要求される入力インピーダンス (&#x2126;)<br>\n"
+"___Z<sub>out</sub>___ 要求される出力インピーダンス (&#x2126;)<br>\n"
+"___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
+"___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19576,17 +19574,17 @@ msgid ""
 "___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 msgstr ""
-"### T型減衰器\n"
-"__Zin__ 要求される入力インピーダンス in &#x2126;<br>\n"
-"__Zout__ 要求される出力インピーダンス<br>\n"
-"__Zin = Zout__<br><br>\n"
+"### &#x03c0;型減衰器\n"
+"___a___ 減衰量 (dB)<br>\n"
+"__Zin__ 要求される入力インピーダンス (&#x2126;)<br>\n"
+"__Zout__ 要求される出力インピーダンス (&#x2126;)<br>\n"
 "\n"
-"* __a__ 減衰量 (dB)\n"
-"* __L = 10<sup>a/20</sup>__ (損失)\n"
-"* ___A = (L + 1)/(L - 1)___<br><br>\n"
-"* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
-"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>in</sub> &middot; Z<sub>out</"
+"sub> / L)___<br>\n"
+"___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
+"___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
 msgid ""
@@ -19600,14 +19598,13 @@ msgid ""
 msgstr ""
 "### 分割減衰器\n"
 "減衰量は6dB\n"
-"___Z<sub>in</sub>___ 要求される入力インピーダンス in &#x2126;  \n"
-"___Z<sub>out</sub>___ 要求される出力インピーダンス in &#x2126;  \n"
+"___Z<sub>in</sub>___ 要求される入力インピーダンス (&#x2126;)  \n"
+"___Z<sub>out</sub>___ 要求される出力インピーダンス in (&#x2126;)  \n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub> / 3___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -19622,16 +19619,16 @@ msgid ""
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 msgstr ""
 "### T型減衰器\n"
-"__Zin__ 要求される入力インピーダンス in &#x2126;<br>\n"
-"__Zout__ 要求される出力インピーダンス<br>\n"
-"__Zin = Zout__<br><br>\n"
+"__a__ 減衰量 (dB)\n"
+"__Zin__ 要求される入力インピーダンス (&#x2126;)<br>\n"
+"__Zout__ 要求される出力インピーダンス (&#x2126;)<br>\n"
 "\n"
-"* __a__ 減衰量 (dB)\n"
-"* __L = 10<sup>a/20</sup>__ (損失)\n"
-"* ___A = (L + 1)/(L - 1)___<br><br>\n"
-"* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
-"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
-"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
+"___L = 10<sup>a/20</sup>___<br>\n"
+"___A = (L+1) / (L&minus;1)___<br><br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</sub>) "
+"/ (L&minus;1)___<br>\n"
+"___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
+"___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_attenuators.cpp:215
 #, c-format
@@ -20473,7 +20470,6 @@ msgid "Not worth using"
 msgstr "使用する価値はありません"
 
 #: pcb_calculator/eserie_help.h:2
-#, fuzzy
 msgid ""
 "E-series are defined in IEC 60063.\n"
 "\n"
@@ -20501,23 +20497,23 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"IEC 60063で定義されているE系列は、電子部品の標準数として広く受け入れられてい"
-"るシステムです。\n"
-"利用可能な値は、対数スケールでほぼ等間隔に配置されています。\n"
+"E系列はIEC 60063で定義されています。\n"
 "\n"
-"\tE12: 1.0  1.2  1.5  1.8  2.2  2.7  3.3  3.9  4.7  5.6  6.8  8.2\n"
-"\tE6:  1.0   -   1.5   -   2.2   -   3.3   -   4.7   -   6.8   -\n"
-"\tE3:  1.0   -    -    -   2.2   -    -    -   4.7   -    -    -\n"
-"\tE1:  1.0   -    -    -    -    -    -    -    -    -    -    -\n"
+"使用可能な値は、対数スケールでほぼ等間隔に配置されています。\n"
 "\n"
-"この電卓は、任意の値を作成できる標準的なE系列の部品の組み合わせを見つけま"
-"す。\n"
-"0,0025Ωから4000 kΩまで求める抵抗値を入力できます。\n"
+"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
+"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
+"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
 "\n"
-"最大4つまでの部品を使用する解が提供されます。\n"
-"デフォルトでは、求める抵抗値は常に解答のセットから除外されます。\n"
-"また、これらの部品の値が利用できない場合は、\n"
-"2つまで解から除外する値を追加で指定することも可能です。\n"
+"- この電卓は、標準的なE系列の部品(10Ω から1MΩ )から任意の値を作成する組み合わせを見つけます。\n"
+"- 求める抵抗値には0.0025Ωから4000 kΩまで入力できます。\n"
+"- 最大で4つの部品を使用する解が求められます。\n"
+"\n"
+"求める抵抗値の値は常に解の組み合わせから除外されます。\n"
+"部品が利用できない場合は、解から除外する値を追加で2つまで指定することができます。\n"
 "\n"
 "解は以下のフォーマットで与えられます。\n"
 "\n"
@@ -29342,9 +29338,8 @@ msgid "Differential uncoupled length too long"
 msgstr "差動の非結合長が長すぎる"
 
 #: pcbnew/drc/drc_item.cpp:206
-#, fuzzy
 msgid "Footprint type doesn't match footprint pads"
-msgstr "フットプリント エディター - フットプリントの作成/編集"
+msgstr "フットプリントのタイプとフットプリントのパッドが一致しない"
 
 #: pcbnew/drc/drc_item.cpp:210
 msgid "Through hole pad has no hole"
@@ -31302,14 +31297,14 @@ msgid "Through hole pad %s of %s"
 msgstr "スルーホール パッド %s (%s)"
 
 #: pcbnew/pad.cpp:1194
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "パッド %s - %s ( %s 上)"
+msgstr "パッド %s %s - %s ( %s 上)"
 
 #: pcbnew/pad.cpp:1208
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "スルーホール パッド %s (%s)"
+msgstr "スルーホール パッド %s %s - %s"
 
 #: pcbnew/pad.cpp:1643
 msgid "Edge connector"
@@ -31896,13 +31891,11 @@ msgstr ""
 "KiCadの Eco1_User レイヤーに移動しました。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2609
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
-msgstr ""
-"Altium レイヤー (%d) にある配線は KiCadに同等のものがありません。KiCadの "
-"Eco1_User レイヤーに移動しました。"
+msgstr "Altium レイヤー (%d) にある配線は KiCadに同等のものがありません。KiCadの Eco1_User レイヤーに移動しました。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2650
 msgid "Loading unicode strings..."
@@ -32284,27 +32277,25 @@ msgstr ""
 "インポートされたハッチングはクロスハッチングになります。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3542
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
 "KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
-"CADSTAR のハッチングコード '%s' は、ハッチングごとに異なる線幅を持っていま"
-"す。KiCad は1 つの幅のみのハッチングに対応します。インポートされたハッチング"
-"は、最初のハッチング定義で定義された幅、すなわち%.2fmm を使用します。"
+"CADSTAR のハッチングコード '%s' は、ハッチングごとに異なる線幅を持っています。KiCad は1 "
+"つの幅のみのハッチングに対応します。インポートされたハッチングは、最初のハッチング定義で定義された幅、すなわち %.2f mm を使用します。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3554
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
 "KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
-"CADSTAR のハッチングコード '%s' は、ハッチングごとに異なるステップサイズを"
-"持っています。KiCad は1 つステップサイズのみのハッチングに対応します。イン"
-"ポートされたハッチングは、最初のハッチング定義で定義されたステップサイズ、す"
-"なわち%.2fmm を使用します。"
+"CADSTAR のハッチングコード '%s' は、ハッチングごとに異なるステップサイズを持っています。KiCad は1 "
+"つステップサイズのみのハッチングに対応します。インポートされたハッチングは、最初のハッチング定義で定義されたステップサイズ、例つまり %.2f mm "
+"を使用します。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3567
 #, c-format
@@ -35066,21 +35057,19 @@ msgid "Ratsnest Mode (3-state)"
 msgstr "ラッツネストモード (3 状態)"
 
 #: pcbnew/tools/pcb_actions.cpp:813
-#, fuzzy
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
-msgstr "ゾーンの塗りつぶし表示とアウトライン表示を切り替えます"
+msgstr "ラッツネスト表示をすべてのレイヤー、表示レイヤー、なしで切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:817
 msgid "Net Color Mode (3-state)"
-msgstr "ネットカラーモード (3 状態)"
+msgstr "ネットの色モード (3 状態)"
 
 #: pcbnew/tools/pcb_actions.cpp:818
-#, fuzzy
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
-msgstr "ラッツネストのみネットとネットクラスをカラー表示"
+msgstr "ネットとネットクラスの色を表示、すべて、ラッツネスト、なしで切り替えます"
 
 #: pcbnew/tools/pcb_actions.cpp:823
 msgid "Sketch Tracks"
@@ -35354,7 +35343,7 @@ msgstr "基板を修復"
 
 #: pcbnew/tools/pcb_actions.cpp:1111
 msgid "Run various diagnostics and attempt to repair board"
-msgstr "さまざまな診断を実行し、ボードの修復を試みます"
+msgstr "各種診断を実行し、基板の修復を試みます"
 
 #: pcbnew/tools/pcb_actions.cpp:1116
 msgid "Repair Footprint"
@@ -35362,7 +35351,7 @@ msgstr "フットプリントの修復"
 
 #: pcbnew/tools/pcb_actions.cpp:1117
 msgid "Run various diagnostics and attempt to repair footprint"
-msgstr "さまざまな診断を実行し、フットプリントの修復を試みます"
+msgstr "各種診断を実行し、フットプリントの修復を試みます"
 
 #: pcbnew/tools/pcb_actions.cpp:1124
 msgid "Align to Top"
@@ -35979,7 +35968,7 @@ msgstr "ネットの色(%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:673
 msgid "Net colors:"
-msgstr "ネットのカラー表示:"
+msgstr "ネットの色:"
 
 #: pcbnew/widgets/appearance_controls.cpp:678
 msgid "Choose when to show net and netclass colors"
