@@ -74,7 +74,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     // Second is always the value
     m_DefaultFPTextItems.emplace_back( wxT( "" ), true, F_Fab );
     // Any following ones are freebies
-    m_DefaultFPTextItems.emplace_back( wxT( "${REF}" ), true, F_Fab );
+    m_DefaultFPTextItems.emplace_back( wxT( "${REFERENCE}" ), true, F_Fab );
 
     m_LineThickness[ LAYER_CLASS_SILK ] = Millimeter2iu( DEFAULT_SILK_LINE_WIDTH );
     m_TextSize[ LAYER_CLASS_SILK ] = wxSize( Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ),
