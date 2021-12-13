@@ -750,7 +750,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
     if( m_delayedFocusPage >= 0 && m_NoteBook->GetSelection() != m_delayedFocusPage )
     {
-        m_NoteBook->SetSelection( (unsigned) m_delayedFocusPage );
+        m_NoteBook->ChangeSelection( (unsigned) m_delayedFocusPage );
         m_delayedFocusPage = -1;
     }
 

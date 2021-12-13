@@ -583,7 +583,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
     if( static_cast<int>( m_delayedFocusPage ) >= 0 )
     {
         if( m_NoteBook->GetSelection() != static_cast<int>( m_delayedFocusPage ) )
-            m_NoteBook->SetSelection( static_cast<int>( m_delayedFocusPage ) );
+            m_NoteBook->ChangeSelection( static_cast<int>( m_delayedFocusPage ) );
 
         m_delayedFocusPage = NOTEBOOK_PAGES::PAGE_UNKNOWN;
     }

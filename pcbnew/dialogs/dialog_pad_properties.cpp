@@ -1086,7 +1086,7 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 void DIALOG_PAD_PROPERTIES::OnUpdateUINonCopperWarning( wxUpdateUIEvent& event )
 {
     bool isOnCopperLayer = ( m_dummyPad->GetLayerSet() & LSET::AllCuMask() ).any();
-    m_nonCopperWarningBook->SetSelection( isOnCopperLayer ? 0 : 1 );
+    m_nonCopperWarningBook->ChangeSelection( isOnCopperLayer ? 0 : 1 );
 }
 
 
