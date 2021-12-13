@@ -137,6 +137,8 @@ void PAGED_DIALOG::finishInitialization()
     m_treebook->Layout();
 
     finishDialogSettings();
+
+	Centre( wxBOTH );
 }
 
 
