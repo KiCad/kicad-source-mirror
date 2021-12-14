@@ -133,12 +133,12 @@ void PAGED_DIALOG::finishInitialization()
         m_treebook->GetPage( i )->Layout();
     }
 
-    m_treebook->Fit();
     m_treebook->Layout();
+    m_treebook->Fit();
 
     finishDialogSettings();
 
-	Centre( wxBOTH );
+    Centre( wxBOTH );
 }
 
 
@@ -396,8 +396,6 @@ void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
         m_macHack[ page ] = false;
     }
 #endif
-
-    Layout();
 }
 
 
