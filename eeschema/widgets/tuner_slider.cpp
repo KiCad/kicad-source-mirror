@@ -31,15 +31,23 @@
 #include <template_fieldnames.h>
 #include <sim/netlist_exporter_pspice_sim.h>
 
-TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBOL* aSymbol )
-    : TUNER_SLIDER_BASE( aParent ), m_symbol( aSymbol ),
-    m_min( 0.0 ), m_max( 0.0 ), m_value( 0.0 ), m_frame ( aFrame )
+TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBOL* aSymbol ) :
+    TUNER_SLIDER_BASE( aParent ),
+    m_symbol( aSymbol ),
+    m_min( 0.0 ),
+    m_max( 0.0 ),
+    m_changed( false ),
+    m_frame ( aFrame )
 {
     const wxString compName = aSymbol->GetField( REFERENCE_FIELD )->GetText();
     m_name->SetLabel( compName );
-    m_value = SPICE_VALUE( aSymbol->GetField( VALUE_FIELD )->GetText() );
 
-    m_changed = false;
+    if( aSymbol->FindField( NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( SF_MODEL ) ) )
+        m_fieldId = aSymbol->FindField( NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( SF_MODEL ) )->GetId();
+    else
+        m_fieldId = aSymbol->GetField( VALUE_FIELD )->GetId();
+
+    m_value = SPICE_VALUE( aSymbol->GetFieldById( m_fieldId )->GetText() );
     m_spiceName = aFrame->GetExporter()->GetSpiceDevice( compName ).Lower();
 
     // Call Set*() methods to update fields and slider
@@ -185,7 +193,7 @@ void TUNER_SLIDER::onClose( wxCommandEvent& event )
 
 void TUNER_SLIDER::onSave( wxCommandEvent& event )
 {
-    m_frame->UpdateTunerValue( m_symbol, m_value.ToOrigString() );
+    m_frame->UpdateTunerValue( m_symbol, m_fieldId, m_value.ToOrigString() );
 }
 
 

@@ -110,13 +110,14 @@ public:
     void RemoveTuner( TUNER_SLIDER* aTuner, bool aErase = true );
 
     /**
-     * Safely update the value of the associated symbol without dereferencing
+     * Safely update a field of the associated symbol without dereferencing
      * the symbol.
      *
      * @param aSymbol pointer to the symbol needing updating
-     * @param aValue new value of the symbol
+     * @param aId id of the symbol field
+     * @param aValue new value of the symbol field
      */
-    void UpdateTunerValue( SCH_SYMBOL* aSymbol, const wxString& aValue );
+    void UpdateTunerValue( SCH_SYMBOL* aSymbol, int aId, const wxString& aValue );
 
     /**
      * Return the currently opened plot panel (or NULL if there is none).

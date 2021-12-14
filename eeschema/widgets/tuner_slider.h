@@ -103,6 +103,7 @@ private:
 
     SCH_SYMBOL* m_symbol;
 
+    int m_fieldId;
     SPICE_VALUE m_min, m_max, m_value;
     bool m_changed;
 
