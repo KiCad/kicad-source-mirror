@@ -1239,7 +1239,7 @@ void PANEL_SETUP_BOARD_STACKUP::OnLayersOptionsChanged( LSET aNewLayerSet )
     {
         m_enabledLayers = layersList;
 
-        synchronizeWithBoard( false );
+        synchronizeWithBoard( true );
 
         Layout();
         Refresh();
