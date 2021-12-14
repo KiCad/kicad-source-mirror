@@ -199,8 +199,12 @@ protected:
 
     void OnKeyUp( wxKeyEvent& aEvent )
     {
-        /// This needs to occur in KeyUp, so that we don't pass the event back to pcbnew
-        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+        // If dialog opened using Enter key, prevent closing when releasing Enter.
+        if( m_event.GetEventType() != wxEVT_NULL )
+        {
+            /// This needs to occur in KeyUp, so that we don't pass the event back to pcbnew
+            wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+        }
     }
 
 private:
