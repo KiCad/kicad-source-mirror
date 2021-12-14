@@ -561,9 +561,6 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
                 {
                     if( aColorName.StartsWith( "#" ) )
                     {
-                        /// Keep only the non-alpha channels of the color string,
-                        /// i.e. first 6 hex digits and the '#'
-
                         return KIGFX::COLOR4D( aColorName );
                     }
                     else
