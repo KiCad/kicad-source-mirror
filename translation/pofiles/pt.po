@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-13 18:56+0000\n"
+"PO-Revision-Date: 2021-12-14 20:53+0000\n"
 "Last-Translator: Rafael Silva <perigoso@riseup.net>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
 "master-source/pt/>\n"
@@ -423,7 +423,7 @@ msgstr "Espelhar visualização da placa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 msgid "Toggle orthographic projection"
-msgstr "Ativar/Desativar a projeção ortogonal"
+msgstr "Alternar projeção ortogonal"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:192
@@ -500,28 +500,28 @@ msgstr "Utilizar o estilo de cor do CAD baseado na cor difusa do material"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
 msgid "Toggle Through Hole 3D models"
-msgstr "Exibir/Ocultar modelos 3D dos furos"
+msgstr "Alternar modelos 3D de furo passante"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "Alterne os modelos 3D para os componentes do tipo 'pin through-hole'"
+msgstr "Alternar modelos 3D para os componentes do tipo 'furo passante'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle SMD 3D models"
-msgstr "Exibir/Ocultar modelos 3D de componentes SMD"
+msgstr "Alternar modelos 3D de componentes SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle 3D models for 'Surface mount' type components"
 msgstr ""
-"Alterne o modelos 3D para os componentes do tipo 'montagem na superfície'"
+"Alternar modelos 3D para os componentes do tipo 'montagem de superfície'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle Other 3D models"
-msgstr "Alterne os outros modelos 3D"
+msgstr "Alternar outros modelos 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr "Exibir/Ocultar modelos 3D para componentes do tipo 'Outros'"
+msgstr "Alternar modelos 3D para componentes do tipo 'Outros'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
@@ -529,11 +529,11 @@ msgstr "Mostrar Caixas Delimitadoras do Modelo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:235
 msgid "Toggle realistic mode"
-msgstr "Alterne para o modo realista"
+msgstr "Alternar modo realista"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:240
 msgid "Toggle board body display"
-msgstr "Alterne a exibição do corpo da placa"
+msgstr "Alternar exibição do corpo da placa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:245
 msgid "Show 3D Axis"
@@ -541,55 +541,55 @@ msgstr "Mostrar eixos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:250
 msgid "Toggle zone display"
-msgstr "Exibir/Ocultar Zona"
+msgstr "Alternar exibição de zona"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle adhesive display"
-msgstr "Alterne a exibição do adesivo"
+msgstr "Alternar a exibição de adesivo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle display of adhesive layers"
-msgstr "Alterne a exibição das camadas adesivas"
+msgstr "Alternar a exibição de camadas de adesivo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle silkscreen display"
-msgstr "Exibir/Ocultar serigrafia"
+msgstr "Alternar serigrafia"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle display of silkscreen layers"
-msgstr "Exibir/Ocultar camadas de serigrafia"
+msgstr "Alternar camadas de serigrafia"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle solder mask display"
-msgstr "Exibir/Ocultar máscara de solda"
+msgstr "Alternar máscara de solda"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle display of solder mask layers"
-msgstr "Alterne a exibição das camadas da máscara de solda"
+msgstr "Alternar a exibição de camadas de máscara de solda"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Toggle solder paste display"
-msgstr "Exibir/Ocultar pasta de solda"
+msgstr "Alternar exibição de pasta de solda"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Toggle display of solder paste layers"
-msgstr "Alterne a exibição das camadas da pasta de solda"
+msgstr "Alternar a exibição de camadas de pasta de solda"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle comments display"
-msgstr "Exibir/Ocultar comentários"
+msgstr "Alternar exibição de comentários"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle display of comments and drawings layers"
-msgstr "Exibir/Ocultar camadas de comentários e desenhos"
+msgstr "Alternar camadas de comentários e desenhos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Toggle ECO display"
-msgstr "Exibir/Ocultar ECO"
+msgstr "Alternar ECO"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Toggle display of ECO layers"
-msgstr "Exibir/Ocultar camadas de ECO"
+msgstr "Alternar camadas de ECO"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -2842,7 +2842,7 @@ msgstr "Personalizado:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:77
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "Definir ajuste de escala X para escala exata de plotagem"
+msgstr "Definir ajuste de escala X para escala exata de traçagem"
 
 #: common/dialogs/dialog_print_generic_base.cpp:99
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -5728,12 +5728,12 @@ msgstr "Imprimir…"
 
 #: common/tool/actions.cpp:108
 msgid "Plot..."
-msgstr "Plotar…"
+msgstr "Traçar…"
 
 #: common/tool/actions.cpp:108 pcbnew/dialogs/dialog_plot.cpp:68
 #: pcbnew/dialogs/dialog_plot_base.h:153
 msgid "Plot"
-msgstr "Plotar"
+msgstr "Traçar"
 
 #: common/tool/actions.cpp:114
 msgid "Close the current editor"
@@ -6112,7 +6112,7 @@ msgstr "Modo de visualização da camada inativa"
 
 #: common/tool/actions.cpp:537
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr "Alterar camadas inativas entre normal e opaco"
+msgstr "Alternar camadas inativas entre normal e opaco"
 
 #: common/tool/actions.cpp:543
 msgid "Inactive Layer View Mode (3-state)"
@@ -6487,7 +6487,7 @@ msgstr "Selecione um arquivo"
 
 #: common/widgets/mathplot.cpp:1665
 msgid "Center plot view to this position"
-msgstr "Centralizar visão de plotagem para esta posição"
+msgstr "Centralizar vista de traçar para esta posição"
 
 #: common/widgets/mathplot.cpp:1666 eeschema/sim/sim_plot_frame_base.cpp:95
 msgid "Fit on Screen"
@@ -6495,15 +6495,15 @@ msgstr "Ajustar ao ecrã"
 
 #: common/widgets/mathplot.cpp:1666
 msgid "Set plot view to show all items"
-msgstr "Ajustar visão de traçar para mostrar todos os itens"
+msgstr "Ajustar vista de traçar para mostrar todos os itens"
 
 #: common/widgets/mathplot.cpp:1667
 msgid "Zoom in plot view."
-msgstr "Ampliar visão de plotagem."
+msgstr "Ampliar vista de traçar."
 
 #: common/widgets/mathplot.cpp:1668
 msgid "Zoom out plot view."
-msgstr "Reduzir visão de plotagem."
+msgstr "Reduzir vista de traçar."
 
 #: common/widgets/net_selector.cpp:58
 msgid "<no net>"
@@ -9724,11 +9724,11 @@ msgstr "Propriedades do pino"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:111
 msgid "Plot All Pages"
-msgstr "Plotar Todas as Páginas"
+msgstr "Traçar Todas as Páginas"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:112
 msgid "Plot Current Page"
-msgstr "Plotar Página Atual"
+msgstr "Traçar Página Atual"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:215
 #: pcbnew/dialogs/dialog_export_svg.cpp:207
@@ -9756,7 +9756,7 @@ msgstr ""
 #: pcbnew/exporters/gen_footprints_placefile.cpp:217
 #: pcbnew/exporters/gen_footprints_placefile.cpp:227
 msgid "Plot Output Directory"
-msgstr "Pasta de Saída da Plotagem"
+msgstr "Diretoria de Saída de Traçagem"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:277
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
@@ -9824,7 +9824,7 @@ msgstr "Esquema"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:438
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
-msgstr "Houve uma falha ao gravar os arquivos de plotagem na pasta '%s'."
+msgstr "Houve uma falha ao guardar os ficheiros de traçar na pasta '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:512
 #: eeschema/dialogs/dialog_plot_schematic.cpp:683
@@ -9833,7 +9833,7 @@ msgstr "Houve uma falha ao gravar os arquivos de plotagem na pasta '%s'."
 #: pcbnew/dialogs/dialog_plot.cpp:908
 #, c-format
 msgid "Plotted to '%s'."
-msgstr "Foi plotado para '%s'."
+msgstr "Traçado para '%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:532
 #: eeschema/dialogs/dialog_plot_schematic.cpp:699
@@ -9848,7 +9848,7 @@ msgstr "Feito."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:872
 #, c-format
 msgid "Plotted to '%s'.\n"
-msgstr "Foi plotado para '%s'.\n"
+msgstr "Traçado para '%s'.\n"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:1177
 msgid "Done"
@@ -9881,8 +9881,8 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
 msgstr ""
-"Diretório de destino para ficheiros de plotagem. Pode ser absoluto ou "
-"relativo ao local do ficheiro principal do esquema."
+"Diretoria de destino para ficheiros de traçar. Pode ser absoluto ou relativo "
+"ao local do ficheiro principal de esquema."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
@@ -9911,7 +9911,7 @@ msgstr "DXF"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "HPGL"
-msgstr "Plotar HPGL"
+msgstr "HPGL"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:55
 msgid "Page size:"
@@ -9919,11 +9919,11 @@ msgstr "Tamanho da página:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:65
 msgid "Plot drawing sheet"
-msgstr "Folha de plotagem do desenho"
+msgstr "Traçar folha de desenho"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:67
 msgid "Plot the drawing sheet border and title block"
-msgstr "Plote a borda da folha do desenho e o bloco de título"
+msgstr "Traçar a borda da folha de desenho e o bloco de título"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:76
 msgid "Black and White"
@@ -9931,11 +9931,11 @@ msgstr "Branco e Preto"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
 msgid "Plot background color"
-msgstr "Plote a cor de fundo do gráfico"
+msgstr "Traçar a cor de fundo"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
-msgstr "Plote a cor de fundo caso o formato gerado seja compatível"
+msgstr "Traçar a cor de fundo caso o formato gerado seja compatível"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:87
 msgid "Color theme:"
@@ -9943,7 +9943,7 @@ msgstr "O tema das cores:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:94
 msgid "Select the color theme to use for plotting"
-msgstr "Selecione o tema das cores que serão utilizadas na plotagem"
+msgstr "Selecione o tema das cores que serão utilizadas ao traçar"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:98
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:107
@@ -9970,11 +9970,11 @@ msgstr "Posição e as unidades:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Bottom left, plotter units"
-msgstr "Inferior esquerdo, unidades da plotagem"
+msgstr "Inferior esquerdo, unidades de traçar"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Centered, plotter units"
-msgstr "Centralizado, unidades da plotagem"
+msgstr "Centralizado, unidades de traçar"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:130
 msgid "Page fit, user units"
@@ -9990,7 +9990,7 @@ msgstr "Espessura da caneta:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:86
 msgid "Plot Schematic Options"
-msgstr "Opções de Plotagem do Esquema"
+msgstr "Opções de Traçar do Esquema"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:326
 msgid "Print Schematic"
@@ -10141,8 +10141,8 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
 msgstr ""
-"Diretório de destino para ficheiros de plotagem. Pode ser absoluto ou "
-"relativo ao local do ficheiro da placa."
+"Diretoria de destino para ficheiros de traçar. Pode ser absoluto ou relativo "
+"ao local do ficheiro da placa."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:45
@@ -14836,7 +14836,7 @@ msgstr "Adicionar Sinais"
 
 #: eeschema/sim/sim_plot_frame.cpp:172
 msgid "Add signals to plot"
-msgstr "Adicionar sinais à plotagem"
+msgstr "Adicionar sinais ao traçado"
 
 #: eeschema/sim/sim_plot_frame.cpp:173
 msgid "Probe"
@@ -14881,7 +14881,7 @@ msgstr "Erro: tipo de simulação não definido!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:638
 msgid "Error: simulation type doesn't support plotting!\n"
-msgstr "Erro: o tipo de simulação não suporta plotagem!\n"
+msgstr "Erro: o tipo de simulação não suporta traçar!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:829 eeschema/sim/sim_plot_frame.cpp:1657
 msgid "Signal"
@@ -14901,15 +14901,15 @@ msgstr "Salve a pasta de trabalho da simulação como"
 
 #: eeschema/sim/sim_plot_frame.cpp:1197
 msgid "Save Plot as Image"
-msgstr "Salvar Plotagem como Imagem"
+msgstr "Guardar Traçado como Imagem"
 
 #: eeschema/sim/sim_plot_frame.cpp:1214
 msgid "Save Plot Data"
-msgstr "Salvar Dados de Plotagem"
+msgstr "Guardar Dados de Traçar"
 
 #: eeschema/sim/sim_plot_frame.cpp:1510
 msgid "You need to run plot-providing simulation first."
-msgstr "Você precisa executar a simulação de plotagem primeiro."
+msgstr "Você precisa de executar a simulação de traçar primeiro."
 
 #: eeschema/sim/sim_plot_frame.cpp:1755
 msgid ""
@@ -14929,7 +14929,7 @@ msgstr "Ocultar Sinal"
 
 #: eeschema/sim/sim_plot_frame.cpp:1826
 msgid "Erase the signal from plot screen"
-msgstr "Apagar o sinal do ecrã de plotagem"
+msgstr "Apagar o sinal do ecrã de traçar"
 
 #: eeschema/sim/sim_plot_frame.cpp:1832
 msgid "Hide Cursor"
@@ -14941,7 +14941,7 @@ msgstr "Mostrar Cursor"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:19
 msgid "New Plot"
-msgstr "Nova Plotagem"
+msgstr "Novo Traçado"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:39
 msgid "Save as Image"
@@ -16538,7 +16538,7 @@ msgstr "Mostrar Pinos Ocultos"
 
 #: eeschema/tools/ee_actions.cpp:641
 msgid "Toggle display of hidden pins"
-msgstr "Alterne a exibição do pinos ocultos"
+msgstr "Alternar a exibição de pinos ocultos"
 
 #: eeschema/tools/ee_actions.cpp:646
 msgid "Show Hidden Fields"
@@ -16546,7 +16546,7 @@ msgstr "Mostra os campos ocultos"
 
 #: eeschema/tools/ee_actions.cpp:646
 msgid "Toggle display of hidden text fields"
-msgstr "Alterna exibição dos campos de texto que estão ocultos"
+msgstr "Alternar exibição de campos de texto ocultos"
 
 #: eeschema/tools/ee_actions.cpp:650
 msgid "Force H/V Wires and Buses"
@@ -17547,8 +17547,8 @@ msgstr "Carregando %u/%zu %s..."
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
 msgstr ""
-"<b>Um ficheiro de trabalho gerber não pode ser carregado como um ficheiro de "
-"plotagem</b> <i>%s</i>"
+"<b>Um ficheiro de trabalho gerber não pôde ser carregado como um ficheiro de "
+"traçado</b> <i>%s</i>"
 
 #: gerbview/files.cpp:386
 msgid "Open NC (Excellon) Drill File(s)"
@@ -17819,14 +17819,14 @@ msgstr "<Nada selecionado>"
 
 #: gerbview/tools/gerbview_actions.cpp:39
 msgid "Open Gerber Plot File(s)..."
-msgstr "Abra os arquivo(s) de plotagem do Gerber..."
+msgstr "Abra os ficheiros(s) de traçado do Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:40
 msgid ""
 "Open Gerber plot file(s) on the current layer. Previous data will be deleted"
 msgstr ""
-"Abra o(s) arquivo(s) de plotagem Gerber na camada atual. Os dados anteriores "
-"serão excluídos"
+"Abra o(s) ficheiros(s) de traçado Gerber na camada atual. Os dados "
+"anteriores serão excluídos"
 
 #: gerbview/tools/gerbview_actions.cpp:45
 msgid "Open Excellon Drill File(s)..."
@@ -17847,8 +17847,7 @@ msgstr "Abra o arquivo de trabalho Gerber..."
 #: gerbview/tools/gerbview_actions.cpp:52
 msgid "Open a Gerber job file and its associated gerber plot files"
 msgstr ""
-"Abra um arquivo de trabalho Gerber e os seus arquivos de plotagem associados "
-"ao gerber"
+"Abra um ficheiro de trabalho Gerber e os seus ficheiros de traçado associados"
 
 #: gerbview/tools/gerbview_actions.cpp:57
 msgid "Open Zip Archive File..."
@@ -23763,7 +23762,7 @@ msgstr ""
 #: pcbnew/exporters/gen_footprints_placefile.cpp:382
 #, c-format
 msgid "Could not write plot files to folder '%s'."
-msgstr "Não foi possível gravar os arquivos de plotagem na pasta '%s'."
+msgstr "Não foi possível guardar os ficheiros de traçado na pasta '%s'."
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:291
 #, c-format
@@ -26204,7 +26203,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot.cpp:802
 msgid "No layer selected, Nothing to plot"
-msgstr "Nenhuma camada selecionada, nada para plotar"
+msgstr "Nenhuma camada selecionada, nada para traçar"
 
 #: pcbnew/dialogs/dialog_plot.cpp:857
 msgid "Warning: Scale option set to a very small value"
@@ -26216,7 +26215,7 @@ msgstr "Atenção: Opção de escala definida para um valor muito grande"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:23
 msgid "Plot format:"
-msgstr "Formato de plotagem:"
+msgstr "Formato de traçado:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
 msgid "Include Layers"
@@ -26224,33 +26223,32 @@ msgstr "Inclua camadas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
-msgstr "Plotar borda e legenda"
+msgstr "Traçar borda e legenda"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:80
 msgid "Plot footprint values"
-msgstr "Plotar valores dos footprints"
+msgstr "Traçar valores dos footprints"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:84
 msgid "Plot reference designators"
-msgstr "PLota os designadores de referência"
+msgstr "Traçar os designadores de referência"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Force plotting of invisible values / refs"
-msgstr "Forçar plotagem de valores/referências invisíveis"
+msgstr "Forçar traçar de valores/referências invisíveis"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:89
 msgid "Force plot invisible footprint values and reference designators"
 msgstr ""
-"Impõem o valor dos traçados invisíveis do footprint e dos designadores de "
-"referência"
+"Forca Traçar valores e designadores de referência invisíveis do footprint"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Plot Edge.Cuts on all layers"
-msgstr "Plota o Edge.Cuts em todas as camadas"
+msgstr "Traçar o Edge.Cuts em todas as camadas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Plot the contents of the PCB edge layer on all layers"
-msgstr "Plote o conteúdo da camada da borda da PCI em todas as camadas"
+msgstr "Traçar o conteúdo da camada da borda da PCI em todas as camadas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Sketch pads on fabrication layers"
@@ -26260,7 +26258,7 @@ msgstr "Esboço das ilhas nas camadas de fabricação"
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
 msgstr ""
 "Inclua os contornos do preenchimento da ilha nas camadas F.Fab e B.Fab ao "
-"plotar"
+"traçar"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:103
 msgid "Do not tent vias"
@@ -26274,8 +26272,8 @@ msgstr "Remover máscara de solda em vias"
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
 msgstr ""
-"Use a origem do arquivo de perfuração/local como a origem da coordenada para "
-"os arquivos que foram plotados"
+"Use a origem do ficheiro de perfuração/motagem como a origem da coordenada "
+"para os arquivos que foram traçados"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:113
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
@@ -26308,7 +26306,7 @@ msgstr "3:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:133
 msgid "Plot mode:"
-msgstr "Modo de plotagem:"
+msgstr "Modo de Traçar:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Filled"
@@ -26320,15 +26318,15 @@ msgstr "Delineado"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:143
 msgid "Mirrored plot"
-msgstr "Plotagem espelhada"
+msgstr "Traçar espelhado"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:146
 msgid "Negative plot"
-msgstr "Plotagem negativa"
+msgstr "Traçar negativo"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:149
 msgid "Check zone fills before plotting"
-msgstr "Verificar preenchimento das zonas antes de plotar"
+msgstr "Verificar preenchimento das zonas antes de traçar"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
@@ -26377,9 +26375,9 @@ msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
-"Criar um ficheiro de trabalho Gerber que contenha informações sobre a "
-"placa,\n"
-"e a lista de ficheiros de plotagem Gerber gerados"
+"Criar um ficheiro de trabalho Gerber que contenha informações sobre a placa,"
+"\n"
+"e a lista de ficheiros de traçado Gerber gerados"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
@@ -26502,11 +26500,11 @@ msgstr "Opções DXF"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:334
 msgid "Plot graphic items using their contours"
-msgstr "Plotar itens gráficos utilizando seus contornos"
+msgstr "Traçar itens gráficos utilizando os seus contornos"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:336
 msgid "Uncheck to plot graphic items using their center lines"
-msgstr "Desmarque para graficar itens usando suas linhas de centro"
+msgstr "Desmarque para traçar itens usando suas linhas de centro"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
 msgid "Use KiCad font to plot text"
@@ -26518,8 +26516,8 @@ msgid ""
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
 "Marque para usar a fonte de traço do KiCad\n"
-"Desmarque para plotar os textos ASCII de uma linha como um texto editável "
-"(usando a fonte DXF)"
+"Desmarque para traçar os textos ASCII de uma linha como um texto editável ("
+"usando a fonte DXF)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:354
 msgid "Export units:"
@@ -28666,11 +28664,11 @@ msgid ""
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
-"Min. dist entre as 2 áreas da ilha.\n"
-"Duas áreas das ilhas mais próximas do que este valor serão mescladas durante "
-"a plotagem.\n"
-"Este parâmetro é usado apenas para plotar as camadas da máscara de solda.\n"
-"Deixe em 0 a menos que você saiba o que está fazendo."
+"Dist. mín. entre as 2 áreas da ilha.\n"
+"Duas áreas das ilhas mais próximas do que este valor serão juntas durante o "
+"traçar.\n"
+"Este parâmetro é usado apenas para traçar as camadas de máscara de solda.\n"
+"Deixe a 0 a menos que saiba o que está a fazer."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:76
 msgid ""
@@ -28678,7 +28676,7 @@ msgid ""
 "than this distance will be plotted as a single opening."
 msgstr ""
 "A distância mínima entre as aberturas na máscara de solda.  As aberturas das "
-"ilhas mais próximas do que essa distância serão plotadas como uma abertura "
+"ilhas mais próximas do que esta distância serão traçadas como uma abertura "
 "única."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
@@ -35290,11 +35288,11 @@ msgstr "Alternar entre as duas últimas redes destacadas"
 
 #: pcbnew/tools/pcb_actions.cpp:736
 msgid "Toggle Net Highlight"
-msgstr "Alterna destaque da rede"
+msgstr "Alternar Destaque de Rede"
 
 #: pcbnew/tools/pcb_actions.cpp:736
 msgid "Toggle net highlighting"
-msgstr "Alterna o destaque de rede"
+msgstr "Alternar destaque de rede"
 
 #: pcbnew/tools/pcb_actions.cpp:743
 msgid "Highlight all copper items on the selected net(s)"
@@ -35331,7 +35329,7 @@ msgstr "Ratnest local"
 
 #: pcbnew/tools/pcb_actions.cpp:770
 msgid "Toggle ratsnest display of selected item(s)"
-msgstr "Alterna a exibição do(s) item(ns) do ratnest que foram selecionado(s)"
+msgstr "Alternar a exibição de itens do Emaranhado que foram selecionados"
 
 #: pcbnew/tools/pcb_actions.cpp:781
 msgid "Show the net inspector"
@@ -35600,7 +35598,7 @@ msgstr "Alternar para a Camada Anterior"
 
 #: pcbnew/tools/pcb_actions.cpp:1063
 msgid "Toggle Layer"
-msgstr "Alterna a camada"
+msgstr "Alternar camada"
 
 #: pcbnew/tools/pcb_actions.cpp:1063
 msgid "Switch between layers in active layer pair"
@@ -36891,14 +36889,13 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
-"O KiCad é um pacote de automação de projeto eletrônico (EDA) gratuito e de "
-"código aberto. Possui captura de esquema eletrônico, simulação de circuito "
-"integrado, layout da placa de circuito impresso (PCB), renderização 3D e "
-"plotagem assim como a exportação dos dados para diferentes formatos. O KiCad "
-"inclui também uma biblioteca de componentes de alta qualidade com milhares "
-"de símbolos, representação real do componente e dos modelos 3D. O KiCad "
-"precisa de poucos recursos do sistema e funciona no Linux, no Windows e no "
-"macOS."
+"KiCad é uma suite de automação de design eletrónico (EDA) gratuita e de "
+"código aberto (open-source). Possui captura esquemática, simulação integrada "
+"de circuito, layout de placa de circuito impresso (PCI), renderização 3D e "
+"traçar/exportação de dados para vários formatos. KiCad também inclui uma "
+"biblioteca de componentes de alta qualidade com milhares de símbolos, "
+"footprints e modelos 3D. KiCad tem requisitos mínimos e corre em Linux, "
+"Windows e macOS."
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
 msgid "KiCad Main Window"
