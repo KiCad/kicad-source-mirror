@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-14 20:53+0000\n"
+"PO-Revision-Date: 2021-12-14 22:19+0000\n"
 "Last-Translator: Rafael Silva <perigoso@riseup.net>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
 "master-source/pt/>\n"
@@ -2842,7 +2842,7 @@ msgstr "Personalizado:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:77
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "Definir ajuste de escala X para escala exata de traçagem"
+msgstr "Definir ajuste de escala X para traçar com escala exata"
 
 #: common/dialogs/dialog_print_generic_base.cpp:99
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
@@ -9756,7 +9756,7 @@ msgstr ""
 #: pcbnew/exporters/gen_footprints_placefile.cpp:217
 #: pcbnew/exporters/gen_footprints_placefile.cpp:227
 msgid "Plot Output Directory"
-msgstr "Diretoria de Saída de Traçagem"
+msgstr "Diretoria de Saída do Traçado"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:277
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
