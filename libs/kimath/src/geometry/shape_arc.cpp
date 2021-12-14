@@ -238,12 +238,15 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I
     // 1. Intersetion of the segment with the full circle
     // 2. Closest point on the segment to the center of the circle
     // 3. Closest point on the segment to the end points of the arc
+    // 4. End points of the segment
 
     std::vector<VECTOR2I> candidatePts = circle.Intersect( aSeg );
 
     candidatePts.push_back( aSeg.NearestPoint( center ) );
     candidatePts.push_back( aSeg.NearestPoint( m_start ) );
     candidatePts.push_back( aSeg.NearestPoint( m_end ) );
+    candidatePts.push_back( aSeg.A );
+    candidatePts.push_back( aSeg.B );
 
     for( const VECTOR2I& candidate : candidatePts )
     {
