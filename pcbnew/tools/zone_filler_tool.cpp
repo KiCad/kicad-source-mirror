@@ -82,10 +82,9 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
         filler.SetProgressReporter( reporter.get() );
     }
 
-    std::lock_guard<KISPINLOCK> lock( board()->GetConnectivity()->GetLock() );
-
     if( filler.Fill( toFill, true, aCaller ) )
     {
+        board()->GetConnectivity()->Build( board() );
         commit.Push( _( "Fill Zone(s)" ), false );
         getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
     }
@@ -155,20 +154,21 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
         filler.SetProgressReporter( reporter.get() );
     }
 
-    std::lock_guard<KISPINLOCK> lock( board()->GetConnectivity()->GetLock() );
-
-    if( filler.Fill( toFill ) )
     {
-        commit.Push( _( "Fill Zone(s)" ), true ); // Allow undoing zone fill
-        frame->m_ZoneFillsDirty = false;
-    }
-    else
-    {
-        commit.Revert();
-    }
+        if( filler.Fill( toFill ) )
+        {
+            board()->GetConnectivity()->Build( board() );
+            commit.Push( _( "Fill Zone(s)" ), true ); // Allow undoing zone fill
+            frame->m_ZoneFillsDirty = false;
+        }
+        else
+        {
+            commit.Revert();
+        }
 
-    if( filler.IsDebug() )
-        frame->UpdateUserInterface();
+        if( filler.IsDebug() )
+            frame->UpdateUserInterface();
+    }
 
     canvas()->Refresh();
     m_fillInProgress = false;
@@ -211,10 +211,11 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
     reporter = std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Fill Zone" ), 4 );
     filler.SetProgressReporter( reporter.get() );
 
-    std::lock_guard<KISPINLOCK> lock( board()->GetConnectivity()->GetLock() );
-
     if( filler.Fill( toFill ) )
+    {
+        board()->GetConnectivity()->Build( board() );
         commit.Push( _( "Fill Zone(s)" ), true );  // Allow undoing zone fill
+    }
     else
         commit.Revert();
 

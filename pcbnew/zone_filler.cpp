@@ -77,6 +77,8 @@ void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 
 bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aParent )
 {
+    std::lock_guard<KISPINLOCK> lock( m_board->GetConnectivity()->GetLock() );
+
     std::vector<std::pair<ZONE*, PCB_LAYER_ID>> toFill;
     std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> islandsList;
 

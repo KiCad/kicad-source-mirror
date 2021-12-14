@@ -129,8 +129,6 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
     // Only auto-refill zones here if in user preferences
     if( Settings().m_AutoRefillZones )
     {
-        std::lock_guard<KISPINLOCK> lock( GetBoard()->GetConnectivity()->GetLock() );
-
         if( zones_to_refill.size() )
         {
             ZONE_FILLER filler( GetBoard(), &commit );
@@ -143,6 +141,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
             if( !filler.Fill( zones_to_refill ) )
             {
+                GetBoard()->GetConnectivity()->Build( GetBoard() );
                 // User has already OK'ed dialog so we're going to go ahead and commit even if the
                 // fill was cancelled.
             }
