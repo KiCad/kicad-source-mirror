@@ -81,7 +81,7 @@ public:
      *
      * @param aMatcher  an EDA_COMBINED_MATCHER initialized with the search term
      */
-    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher ) = 0;
+    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib ) = 0;
 
     /**
      * Initialize score to kLowestDefaultScore, recursively.
@@ -170,7 +170,7 @@ public:
     /**
      * Do nothing, units just take the parent's score
      */
-    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher ) override {}
+    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib ) override {}
 };
 
 
@@ -209,7 +209,7 @@ public:
     /**
      * Perform the actual search.
      */
-    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher ) override;
+    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib ) override;
 
 protected:
     /**
@@ -250,7 +250,7 @@ public:
      */
     LIB_TREE_NODE_LIB_ID& AddItem( LIB_TREE_ITEM* aItem );
 
-    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher ) override;
+    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib ) override;
 };
 
 
@@ -277,7 +277,7 @@ public:
      */
     LIB_TREE_NODE_LIB& AddLib( wxString const& aName, wxString const& aDesc );
 
-    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher ) override;
+    virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib ) override;
 };
 
 

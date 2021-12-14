@@ -224,10 +224,18 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
 
         while( tokenizer.HasMoreTokens() )
         {
-            const wxString term = tokenizer.GetNextToken().Lower();
+            wxString lib;
+            wxString term = tokenizer.GetNextToken().Lower();
+
+            if( term.Contains( ":" ) )
+            {
+                lib = term.BeforeFirst( ':' );
+                term = term.AfterFirst( ':' );
+            }
+
             EDA_COMBINED_MATCHER matcher( term );
 
-            m_tree.UpdateScore( matcher );
+            m_tree.UpdateScore( matcher, lib );
         }
 
         m_tree.SortNodes();

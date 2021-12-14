@@ -206,7 +206,7 @@ void LIB_TREE_NODE_LIB_ID::Update( LIB_TREE_ITEM* aItem )
 }
 
 
-void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
+void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib )
 {
     if( m_Score <= 0 )
         return; // Leaf nodes without scores are out of the game.
@@ -216,6 +216,12 @@ void LIB_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
         m_MatchName = UnescapeString( m_MatchName ).Lower();
         m_SearchText = m_SearchText.Lower();
         m_Normalized = true;
+    }
+
+    if( !aLib.IsEmpty() && m_Parent->m_MatchName != aLib )
+    {
+        m_Score = 0;
+        return;
     }
 
     // Keywords and description we only count if the match string is at
@@ -281,7 +287,7 @@ LIB_TREE_NODE_LIB_ID& LIB_TREE_NODE_LIB::AddItem( LIB_TREE_ITEM* aItem )
 }
 
 
-void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
+void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib )
 {
     m_Score = 0;
 
@@ -291,13 +297,20 @@ void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
     {
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
         {
-            child->UpdateScore( aMatcher );
+            child->UpdateScore( aMatcher, aLib );
             m_Score = std::max( m_Score, child->m_Score );
         }
     }
     else
     {
         // No children; we are a leaf.
+
+        if( !aLib.IsEmpty() )
+        {
+            m_Score = m_MatchName == aLib ? 1000 : 0;
+            return;
+        }
+
         int found_pos = EDA_PATTERN_NOT_FOUND;
         int matchers_fired = 0;
 
@@ -331,9 +344,9 @@ LIB_TREE_NODE_LIB& LIB_TREE_NODE_ROOT::AddLib( wxString const& aName, wxString c
 }
 
 
-void LIB_TREE_NODE_ROOT::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
+void LIB_TREE_NODE_ROOT::UpdateScore( EDA_COMBINED_MATCHER& aMatcher, const wxString& aLib )
 {
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
-        child->UpdateScore( aMatcher );
+        child->UpdateScore( aMatcher, aLib );
 }
 
