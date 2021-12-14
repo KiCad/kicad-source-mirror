@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-12 21:48+0000\n"
+"PO-Revision-Date: 2021-12-14 20:53+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -2613,7 +2613,7 @@ msgstr "แทนที่อักษรอ้างอิงด้วย '%s'"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "กำหนดอักษรอ้างอิงที่ไม่ซ้ำกันให้กับวางสำเนาสัญลักษณ์"
+msgstr "กำหนดอักษรอ้างอิง ที่ไม่ซ้ำกัน ให้กับวางสำเนาสัญลักษณ์"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
@@ -2621,7 +2621,7 @@ msgstr "เก็บอักษรอ้างอิงที่มี แม�
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
-msgstr "ล้างอักษรอ้างอิงบนวางสำเนาสัญลักษณ์ทั้งหมด"
+msgstr "ล้างอักษรอ้างอิง จากการวางสำเนาสัญลักษณ์ทั้งหมด"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
@@ -23436,7 +23436,7 @@ msgstr "'%s' พบ"
 #: pcbnew/dialogs/dialog_find.cpp:366
 #, c-format
 msgid "Hit(s): %ld / %lu"
-msgstr "เจาะ: %ld / %lu"
+msgstr "พบ: %ld / %lu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
@@ -29787,7 +29787,7 @@ msgstr "ส่งออกฟุ้ทพรินท์"
 #: pcbnew/footprint_libraries_utils.cpp:379
 #, c-format
 msgid "Footprint exported to file '%s'."
-msgstr "ส่งออกฟุ้ทพรินท์ไปยังไฟล์ %s"
+msgstr "ส่งออกฟุ้ทพรินท์ไปที่ไฟล์ %s"
 
 #: pcbnew/footprint_libraries_utils.cpp:468
 #, c-format
@@ -29965,7 +29965,7 @@ msgstr "เลือกหน้าพารามิเตอร์ถัดไ
 
 #: pcbnew/footprint_wizard_frame.cpp:622
 msgid "Export footprint to editor"
-msgstr "ส่งออกฟุ้ทพรินท์ไปยังเครื่องมือแก้ไข"
+msgstr "ส่งออกฟุ้ทพรินท์ไปที่เครื่องมือแก้ไข"
 
 #: pcbnew/footprint_wizard_frame_functions.cpp:88
 msgid "no wizard selected"
@@ -30266,7 +30266,7 @@ msgstr "ไฮเปอร์ลินซ์..."
 
 #: pcbnew/menubar_pcb_editor.cpp:150
 msgid "Footprints to Library..."
-msgstr "ฟุ้ทพรินท์ไปยังไลบรารี่…"
+msgstr "ส่งฟุ้ทพรินท์ไปที่ไลบรารี่…"
 
 #: pcbnew/menubar_pcb_editor.cpp:151
 msgid ""
@@ -30278,7 +30278,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcb_editor.cpp:155
 msgid "Footprints to New Library..."
-msgstr "ฟุ้ทพรินท์ไปยังห้องสมุดใหม่..."
+msgstr "ส่งฟุ้ทพรินท์ไปที่ไลบรารีใหม่..."
 
 #: pcbnew/menubar_pcb_editor.cpp:156
 msgid ""
@@ -33977,7 +33977,7 @@ msgstr "ส่งออกฟุ้ทพรินท์..."
 
 #: pcbnew/tools/pcb_actions.cpp:387
 msgid "Export footprint to file"
-msgstr "ส่งออกฟุ้ทพรินท์ไปยังไฟล์"
+msgstr "ส่งออกฟุ้ทพรินท์ไปที่ไฟล์"
 
 #: pcbnew/tools/pcb_actions.cpp:392
 msgid "Footprint Properties..."
