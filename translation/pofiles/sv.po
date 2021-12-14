@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-14 20:53+0000\n"
+"PO-Revision-Date: 2021-12-14 22:19+0000\n"
 "Last-Translator: Axel Henriksson <axe.henriksson@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -29966,14 +29966,12 @@ msgid "Solderpaste Margin Ratio Override"
 msgstr "Lokalt marginalförhållande för lödpasta"
 
 #: pcbnew/footprint.cpp:2400 pcbnew/pad.cpp:1708 pcbnew/zone.cpp:1490
-#, fuzzy
 msgid "Thermal Relief Width"
-msgstr "Termisk avlastningsbredd"
+msgstr "Bredd på thermal relief"
 
 #: pcbnew/footprint.cpp:2404 pcbnew/pad.cpp:1711 pcbnew/zone.cpp:1487
-#, fuzzy
 msgid "Thermal Relief Gap"
-msgstr "Termisk lättnad"
+msgstr "Mellanrum på thermal relief"
 
 #: pcbnew/footprint.h:216
 #, c-format
@@ -29981,9 +29979,8 @@ msgid "footprint %s"
 msgstr "fotavtryck %s"
 
 #: pcbnew/footprint_edit_frame.cpp:118
-#, fuzzy
 msgid "KiCad Footprint Editor"
-msgstr "Footprint Editor"
+msgstr "KiCad fotavtrycksredigerare"
 
 #: pcbnew/footprint_edit_frame.cpp:200 pcbnew/zone_settings.cpp:219
 msgid "Inner layers"
@@ -30003,14 +30000,13 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "Redigering %s från tavlan. Om du sparar uppdateras endast styrelsen."
 
 #: pcbnew/footprint_edit_frame.cpp:803
-#, fuzzy, c-format
+#, c-format
 msgid "[from %s]"
-msgstr "(från %s)"
+msgstr "[från %s]"
 
 #: pcbnew/footprint_edit_frame.cpp:837
-#, fuzzy
 msgid "[no footprint loaded]"
-msgstr "Inget fotavtryck laddat."
+msgstr "[Inget fotavtryck laddat]"
 
 #: pcbnew/footprint_edit_frame.cpp:893
 msgid "Updating Footprint Libraries"
@@ -30055,14 +30051,12 @@ msgid "Footprint library not enabled."
 msgstr "Fotavtrycksbiblioteket är inte aktiverat."
 
 #: pcbnew/footprint_info_impl.cpp:131
-#, fuzzy
 msgid "Fetching footprint libraries..."
-msgstr "Hämtar fotavtrycksbibliotek"
+msgstr "Hämtar fotavtrycksbibliotek..."
 
 #: pcbnew/footprint_info_impl.cpp:159
-#, fuzzy
 msgid "Loading footprints..."
-msgstr "Laddar fotavtryck"
+msgstr "Laddar fotavtryck..."
 
 #: pcbnew/footprint_libraries_utils.cpp:59
 msgid ""
@@ -30093,9 +30087,8 @@ msgid "Import Footprint"
 msgstr "Importera fotavtryck"
 
 #: pcbnew/footprint_libraries_utils.cpp:267
-#, fuzzy
 msgid "Not a footprint file."
-msgstr "Inte en fotavtryckfil"
+msgstr "Inte en fotavtrycksfil."
 
 #: pcbnew/footprint_libraries_utils.cpp:279
 #, c-format
@@ -30107,14 +30100,14 @@ msgid "Export Footprint"
 msgstr "Exportera fotavtryck"
 
 #: pcbnew/footprint_libraries_utils.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint exported to file '%s'."
-msgstr "Fotavtryck exporterat till filen \"%s\""
+msgstr "Fotavtryck exporterat till fil '%s'."
 
 #: pcbnew/footprint_libraries_utils.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s is read only."
-msgstr "Biblioteket \"%s\" är skrivskyddat."
+msgstr "Biblioteket '%s' är skrivskyddat."
 
 #: pcbnew/footprint_libraries_utils.cpp:474
 #, c-format
@@ -30149,9 +30142,8 @@ msgid "Update footprints on board to refer to %s?"
 msgstr "Uppdatera fotavtryck på kortet så de refererar till %s?"
 
 #: pcbnew/footprint_libraries_utils.cpp:739
-#, fuzzy
 msgid "Update footprints on board to refer to new library?"
-msgstr "Uppdatera fotavtryck så att alla ändringar från biblioteket inkluderas"
+msgstr "Uppdatera fotavtrycken på kortet så de refererar till nytt bibliotek?"
 
 #: pcbnew/footprint_libraries_utils.cpp:878
 #: pcbnew/footprint_viewer_frame.cpp:715
@@ -30172,9 +30164,8 @@ msgid "Previous footprint placement still in progress."
 msgstr "Föregående fotavtrycksplacering pågår fortfarande."
 
 #: pcbnew/footprint_libraries_utils.cpp:1000
-#, fuzzy
 msgid "Save Footprint As"
-msgstr "Spara fotavtryck"
+msgstr "Spara fotavtryck som"
 
 #: pcbnew/footprint_libraries_utils.cpp:1037
 msgid "No library specified.  Footprint could not be saved."
@@ -30212,9 +30203,8 @@ msgid "No footprint name defined."
 msgstr "Inget namn på fotavtryck definierat."
 
 #: pcbnew/footprint_viewer_frame.cpp:122
-#, fuzzy
 msgid "KiCad Footprint Library Viewer"
-msgstr "Footprint Library Browser"
+msgstr "KiCad fotavtryckbiblioteksvisare"
 
 #: pcbnew/footprint_viewer_frame.cpp:161
 msgid ""
@@ -30335,7 +30325,6 @@ msgid "Error loading footprint %s from library '%s'."
 msgstr "Fel vid inläsning av fotavtryck %s från bibliotek '%s'."
 
 #: pcbnew/generate_footprint_info.cpp:121
-#, fuzzy
 msgid "doc url"
 msgstr "doc url"
 
@@ -30467,29 +30456,27 @@ msgid "Footprints [%u items]"
 msgstr "Fotavtryck [%u föremål]"
 
 #: pcbnew/load_select_footprint.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' saved."
-msgstr "Fotavtryck \"%s\" sparat"
+msgstr "Fotavtryck '%s' sparat."
 
 #: pcbnew/load_select_footprint.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' saved as '%s'."
-msgstr "Fotavtrycksbibliotek \"%s\" sparat som \"%s\"."
+msgstr "Fotavtrycksbibliotek '%s' sparat som '%s'."
 
 #: pcbnew/menubar_footprint_editor.cpp:68
 #: pcbnew/menubar_footprint_editor.cpp:77
-#, fuzzy
 msgid "Footprint..."
-msgstr "Nytt fotavtryck ..."
+msgstr "Fotavtryck..."
 
 #: pcbnew/menubar_footprint_editor.cpp:69 pcbnew/menubar_pcb_editor.cpp:112
 msgid "Graphics..."
 msgstr "&Grafik..."
 
 #: pcbnew/menubar_footprint_editor.cpp:78
-#, fuzzy
 msgid "View as &PNG..."
-msgstr "Exportera vy som & PNG ..."
+msgstr "Visa som &PNG..."
 
 #: pcbnew/menubar_footprint_editor.cpp:79
 msgid "Create a PNG file from the current view"
@@ -30524,10 +30511,10 @@ msgid "Resc&ue"
 msgstr "Rädda"
 
 #: pcbnew/menubar_pcb_editor.cpp:101
-#, fuzzy
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
-"Rensa tavlan och få den senaste räddningsfilen automatiskt sparad av Pcbnew"
+"Rensa mönsterkort och hämta senaste återhämtningsfil automatiskt sparad av "
+"mönsterkortsredigeraren"
 
 #: pcbnew/menubar_pcb_editor.cpp:111
 msgid "Specctra Session..."
@@ -30599,9 +30586,8 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx ..."
 
 #: pcbnew/menubar_pcb_editor.cpp:150
-#, fuzzy
 msgid "Footprints to Library..."
-msgstr "Exportera fotavtryck till biblioteket ..."
+msgstr "Fotavtryck till bibliotek..."
 
 #: pcbnew/menubar_pcb_editor.cpp:151
 msgid ""
@@ -30613,9 +30599,8 @@ msgstr ""
 "(tar inte bort andra fotavtryck från detta bibliotek)"
 
 #: pcbnew/menubar_pcb_editor.cpp:155
-#, fuzzy
 msgid "Footprints to New Library..."
-msgstr "Exportera fotavtryck till nytt bibliotek ..."
+msgstr "Fotavtryck till nytt bibliotek..."
 
 #: pcbnew/menubar_pcb_editor.cpp:156
 msgid ""
@@ -30631,9 +30616,8 @@ msgid "Fabrication Outputs"
 msgstr "Tillverkningsutgångar"
 
 #: pcbnew/menubar_pcb_editor.cpp:309
-#, fuzzy
 msgid "Add Microwave Shape"
-msgstr "Tillsätt mikrovågsgap"
+msgstr "Lägg till mikrovågsform"
 
 #: pcbnew/menubar_pcb_editor.cpp:344
 msgid "Auto-Place Footprints"
@@ -30661,9 +30645,8 @@ msgstr "Arc Stub Radius Värde:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:80
 #: pcbnew/microwave/microwave_footprint.cpp:95
-#, fuzzy
 msgid "Create Microwave Footprint"
-msgstr "Skapa mikrovågsavtryck"
+msgstr "Skapa mikrovågsfotavtryck"
 
 #: pcbnew/microwave/microwave_footprint.cpp:94
 msgid "Angle in degrees:"
@@ -30702,7 +30685,6 @@ msgid "Component Value:"
 msgstr "Komponentvärde:"
 
 #: pcbnew/microwave/microwave_polygon.cpp:111
-#, fuzzy
 msgid "Complex Shape"
 msgstr "Komplex form"
 
@@ -30715,19 +30697,16 @@ msgid "Read Shape Description File..."
 msgstr "Läs formbeskrivningsfil ..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:210
-#, fuzzy
 msgid "Shape Description File"
-msgstr "Läs formbeskrivningsfil ..."
+msgstr "Formbeskrivningsfil"
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
-#, fuzzy
 msgid "Shape has a null size."
-msgstr "Form har en null storlek!"
+msgstr "Formen har en null storlek."
 
 #: pcbnew/microwave/microwave_polygon.cpp:320
-#, fuzzy
 msgid "Shape has no points."
-msgstr "Form har inga poäng!"
+msgstr "Form har inga punkter."
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -30747,19 +30726,19 @@ msgid "Cannot add %s (no footprint assigned)."
 msgstr "Kan inte lägga till %s (inget fotavtryck tilldelat)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "Kan inte lägga till %s (fotavtryck \"%s\" hittades inte)."
+msgstr "Kunde inte lägga till %s (fotavtryck '%s' hittades inte)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s (footprint '%s')."
-msgstr "Lägg till %s (fotavtryck \"%s\")."
+msgstr "Lägg till %s (fotavtryck '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:190
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s (footprint '%s')."
-msgstr "Lägg till %s (fotavtryck \"%s\")."
+msgstr "Lade till %s (fotavtryck '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:208
 #, c-format
@@ -30767,19 +30746,19 @@ msgid "Cannot update %s (no footprint assigned)."
 msgstr "Kan inte uppdatera %s (inget fotavtryck tilldelat)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:220
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "Kan inte uppdatera %s (fotavtryck \"%s\" hittades inte)."
+msgstr "Kunde inte uppdatera %s (fotavtryck '%s' hittades inte)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "Ändra fotavtryck %s från '%s' till '%s'"
+msgstr "Ändra fotavtryck %s från '%s' till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "Ändra fotavtryck %s från '%s' till '%s'"
+msgstr "Ändrade fotavtryck %s från '%s' till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:269
 #, c-format
@@ -30787,9 +30766,9 @@ msgid "Change %s reference designator to %s."
 msgstr "Ändra %s referensbeteckning till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s reference designator to %s."
-msgstr "Ändra %s referensbeteckning till %s."
+msgstr "Ändrade %s referensbeteckning till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:291
 #, c-format
@@ -30797,9 +30776,9 @@ msgid "Change %s value from %s to %s."
 msgstr "Ändra %s -värdet från %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s value from %s to %s."
-msgstr "Ändra %s -värdet från %s till %s."
+msgstr "Ändrade %s värde från %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:320
 #, c-format
@@ -30807,9 +30786,9 @@ msgid "Update %s symbol association from %s to %s."
 msgstr "Uppdatera %s symbolassociation från %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "Uppdatera %s symbolassociation från %s till %s."
+msgstr "Uppdaterade %s symbolassociation från %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:343
 #, c-format
@@ -30817,29 +30796,29 @@ msgid "Update %s properties."
 msgstr "Uppdatera %s egenskaper."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s properties."
-msgstr "Uppdatera %s egenskaper."
+msgstr "Uppdaterade %s egenskaper."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "Inställning %s \"exkludera från BOM\" tillverkningsattribut."
+msgstr "Lägg till %s 'exkludera från BOM' tillverkningsattribut."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "Tar bort %s \"exkludera från BOM\" tillverkningsattribut."
+msgstr "Ta bort %s 'exkludera från BOM' tillverkningsattribut."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "Inställning %s \"exkludera från BOM\" tillverkningsattribut."
+msgstr "Lade till %s 'exkludera från BOM' tillverkningsattribut."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "Tar bort %s \"exkludera från BOM\" tillverkningsattribut."
+msgstr "Tog bort %s 'exkludera från BOM' tillverkningsattribut."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:456
 #, c-format
@@ -30847,14 +30826,14 @@ msgid "Disconnect %s pin %s."
 msgstr "Koppla bort %s stift %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "Disconnected %s pin %s."
-msgstr "Koppla bort %s stift %s."
+msgstr "Kopplade bort %s stift %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:472
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for symbol %s pin %s."
-msgstr "Inget nät för symbol %s stift %s."
+msgstr "Inget nät hittat för symbol %s stift %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:524
 #, c-format
@@ -30867,9 +30846,9 @@ msgid "Reconnect %s pin %s from %s to %s."
 msgstr "Återanslut %s stift %s från %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:542
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected %s pin %s from %s to %s."
-msgstr "Återanslut %s stift %s från %s till %s."
+msgstr "Återanslöt %s stift %s från %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:553
 #, c-format
@@ -30877,9 +30856,9 @@ msgid "Connect %s pin %s to %s."
 msgstr "Anslut %s stift %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:560
-#, fuzzy, c-format
+#, c-format
 msgid "Connected %s pin %s to %s."
-msgstr "Anslut %s stift %s till %s."
+msgstr "Anslöt %s stift %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:639
 #, c-format
@@ -30887,9 +30866,9 @@ msgid "Reconnect via from %s to %s."
 msgstr "Återanslut via från %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:657
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected via from %s to %s."
-msgstr "Återanslut via från %s till %s."
+msgstr "Återanslöt via från %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:667
 #, c-format
@@ -30912,14 +30891,14 @@ msgid "Reconnected copper zone '%s' from %s to %s."
 msgstr "Återanslöt kopparzon '%s' från %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:745
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone from %s to %s."
-msgstr "Anslut kopparzon igen från %s till %s."
+msgstr "Återanslöt kopparzon från %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone '%s' has no pads connected."
-msgstr "Kopparzon (%s) har inga dynor anslutna."
+msgstr "Kopparzon '%s' har inga lödytor anslutna."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:766
 #, c-format
@@ -30937,9 +30916,9 @@ msgid "Processing symbol '%s:%s'."
 msgstr "Bearbetningssymbol '%s: %s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:928
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for '%s'."
-msgstr "Flera fotavtryck hittades för \"%s\"."
+msgstr "Flera fotavtryck hittades för '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:958
 #, c-format
@@ -30947,9 +30926,9 @@ msgid "Cannot remove unused footprint %s (locked)."
 msgstr "Det går inte att ta bort oanvänt fotavtryck %s (låst)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:963
-#, fuzzy, c-format
+#, c-format
 msgid "Could not remove unused footprint %s (locked)."
-msgstr "Det går inte att ta bort oanvänt fotavtryck %s (låst)."
+msgstr "Kunde inte ta bort oanvänt fotavtryck %s (låst)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:975
 #, c-format
@@ -30957,14 +30936,14 @@ msgid "Remove unused footprint %s."
 msgstr "Ta bort oanvänt fotavtryck %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:980
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused footprint %s."
-msgstr "Ta bort oanvänt fotavtryck %s."
+msgstr "Tog bort oanvänt fotavtryck %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1007
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused net %s."
-msgstr "Ta bort oanvänt nät \"%s\"."
+msgstr "Tog bort oanvänt nät %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1015
 msgid "Update netlist"
@@ -30981,7 +30960,7 @@ msgid "Cannot find component with ref '%s' in netlist."
 msgstr "Det går inte att hitta komponenten med ref '%s' i netlist."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -30989,7 +30968,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Ogiltigt fotavtryck-ID i\n"
-"fil: \"%s\"\n"
+"fil: '%s'\n"
 "rad: %d\n"
 "förskjutning: %d"
 
@@ -31022,16 +31001,15 @@ msgstr ""
 "Det går inte att analysera nätnamnet i symbolnettavsnittet i netlistan."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
 msgstr ""
-"Det går inte att hitta symbolen \"%s\" i avsnittet om fotavtrycksfilter i "
-"netlistan."
+"Kunde inte hitta symbol %s i avsnittet om fotavtrycksfilter i nätlistan."
 
 #: pcbnew/netlist_reader/netlist.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open netlist file '%s'."
-msgstr "Det går inte att öppna netlistfilen \"%s\"."
+msgstr "Kunde inte öppna nätlistefilen '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:68
 msgid "Netlist Load Error."
@@ -31051,38 +31029,37 @@ msgid "Netlist Load Error"
 msgstr "Fel på Netlist Load"
 
 #: pcbnew/netlist_reader/netlist.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "No footprint defined for symbol %s."
-msgstr "Inget fotavtryck definierat för symbolen \"%s\".\n"
+msgstr "Inget fotavtryck definierat för symbol %s."
 
 #: pcbnew/netlist_reader/netlist.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
-msgstr ""
-"Fotavtryck av %s har ändrats: kortavtryck \"%s\", nätlistavtryck \"%s\"."
+msgstr "Fotavtryck av %s har ändrats: kortavtryck '%s', nätlistavtryck '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint ID '%s' is not valid."
-msgstr "%s fotavtryck-ID \"%s\" är inte giltigt."
+msgstr "%s fotavtryck-ID '%s' är inte giltigt."
 
 #: pcbnew/netlist_reader/netlist.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
 msgstr ""
-"%s fotavtryck \"%s\" hittades inte i några bibliotek i tabellen för "
-"fotavtrycksbibliotek.\n"
+"%s fotavtryck '%s' hittades inte i några bibliotek i tabellen för "
+"fotavtrycksbibliotek."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d"
 msgstr ""
-"Ogiltigt fotavtryck-ID i\n"
-"fil: \"%s\"\n"
+"Ogiltigt fotavtrycks-ID i\n"
+"fil: '%s'\n"
 "rad: %d"
 
 #: pcbnew/pad.cpp:721 pcbnew/pad.cpp:836 pcbnew/pad.cpp:856 pcbnew/pad.cpp:875
@@ -31098,9 +31075,8 @@ msgid "Pin Name"
 msgstr "Pin-namn"
 
 #: pcbnew/pad.cpp:899 pcbnew/pad.cpp:1680
-#, fuzzy
 msgid "Pin Type"
-msgstr "Plugin-typ"
+msgstr "Stifttyp"
 
 #: pcbnew/pad.cpp:923
 msgid "BGA"
@@ -31135,9 +31111,8 @@ msgid "Length in Package"
 msgstr "Längd i paketet"
 
 #: pcbnew/pad.cpp:971
-#, fuzzy
 msgid "Hole X / Y"
-msgstr "Borra X / Y"
+msgstr "Hål X / Y"
 
 #: pcbnew/pad.cpp:983 pcbnew/pcb_track.cpp:700 pcbnew/pcb_track.cpp:736
 #: pcbnew/router/router_tool.cpp:2105 pcbnew/zone.cpp:646
@@ -31250,9 +31225,8 @@ msgid "Round Radius Ratio"
 msgstr "Runt radieförhållande"
 
 #: pcbnew/pcb_base_frame.cpp:150
-#, fuzzy
 msgid "Error loading project footprint libraries."
-msgstr "Fel vid inläsning av projektets fotavtrycksbibliotek"
+msgstr "Fel vid inläsning av projektets fotavtrycksbibliotek."
 
 #: pcbnew/pcb_dimension.cpp:303
 msgid "Prefix"
@@ -31272,28 +31246,25 @@ msgid "Dimension '%s' on %s"
 msgstr "Dimension '%s' på %s"
 
 #: pcbnew/pcb_edit_frame.cpp:194
-#, fuzzy
 msgid "KiCad PCB Editor"
-msgstr "Byt till PCB Editor"
+msgstr "KiCad mönsterkortsredigerare"
 
 #: pcbnew/pcb_edit_frame.cpp:200
-#, fuzzy
 msgid "Export netlist used to update schematics"
-msgstr "För att exportera netlistan krävs ett fullständigt kommenterat schema."
+msgstr "Exportera nätlista använd för att uppdatera scheman."
 
 #: pcbnew/pcb_edit_frame.cpp:326
 msgid "New PCB file is unsaved"
 msgstr "Ny PCB-fil sparas inte"
 
 #: pcbnew/pcb_edit_frame.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "The auto save file '%s' could not be removed!"
-msgstr "Det gick inte att ta bort den automatiska sparfilen \"%s\"!"
+msgstr "Det gick inte att ta bort autospar-filen '%s'!"
 
 #: pcbnew/pcb_edit_frame.cpp:1143
-#, fuzzy
 msgid "Board file is read only."
-msgstr "Endast styrelseområde"
+msgstr "Mönsterkortsfilen är skrivskyddad."
 
 #: pcbnew/pcb_edit_frame.cpp:1177
 msgid "PCB file changes are unsaved"
@@ -31304,15 +31275,14 @@ msgid "The schematic for this board cannot be found."
 msgstr "Schemat för denna styrelse kan inte hittas."
 
 #: pcbnew/pcb_edit_frame.cpp:1470
-#, fuzzy
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
-"Det går inte att uppdatera kretskortet eftersom Pcbnew öppnas i fristående "
-"läge. För att skapa eller uppdatera PCB från scheman måste du starta "
-"projektledaren för KiCad och skapa ett projekt."
+"Kunde inte uppdatera kretskortet eftersom kortredigeraren är öppnad i "
+"fristående läge. För att skapa eller uppdatera mönsterkort från scheman "
+"måste du starta KiCads projekthanterare och skapa ett projekt."
 
 #: pcbnew/pcb_edit_frame.cpp:1492
 msgid "Eeschema netlist"
@@ -31327,24 +31297,21 @@ msgstr ""
 "problem till KiCad-teamet genom menyn Hjälp -> Rapportera Fel."
 
 #: pcbnew/pcb_edit_frame.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' not found."
-msgstr "Schematisk fil \"%s\" hittades inte."
+msgstr "Schematisk fil '%s' hittades inte."
 
 #: pcbnew/pcb_edit_frame.cpp:1560
-#, fuzzy
 msgid "Eeschema failed to load."
-msgstr "Eeschema gick inte att ladda:\n"
+msgstr "Eeschema kunde inte ladda."
 
 #: pcbnew/pcb_edit_frame.cpp:1711
-#, fuzzy
 msgid "Edit design rules"
-msgstr "Designregler"
+msgstr "Ändra designregler"
 
 #: pcbnew/pcb_edit_frame.cpp:1723
-#, fuzzy
 msgid "Could not compile custom design rules."
-msgstr "DRC ofullständig: kunde inte sammanställa designregler.  "
+msgstr "Kunde inte kompilera anpassade designregler."
 
 #: pcbnew/pcb_edit_frame.cpp:1758
 msgid "Export Hyperlynx Layout"
@@ -31385,9 +31352,9 @@ msgid "Unnamed Group, %zu members"
 msgstr "Namnlösa Group, %zu medlemmar"
 
 #: pcbnew/pcb_group.cpp:321
-#, fuzzy, c-format
+#, c-format
 msgid "Group '%s', %zu members"
-msgstr "Grupp \"%s\", %zu-medlemmar"
+msgstr "Grupp '%s', %zu-medlemmar"
 
 #: pcbnew/pcb_group.cpp:335
 msgid "<unnamed>"
@@ -31447,14 +31414,12 @@ msgid "removed annular ring"
 msgstr "borttagen ringring"
 
 #: pcbnew/pcb_track.cpp:674
-#, fuzzy
 msgid "Segment Length"
-msgstr "Nettolängd"
+msgstr "Segmentlängd"
 
 #: pcbnew/pcb_track.cpp:685
-#, fuzzy
 msgid "Routed Length"
-msgstr "Brädans längd"
+msgstr "Dragen längd"
 
 #: pcbnew/pcb_track.cpp:693
 msgid "Full Length"
@@ -31486,9 +31451,9 @@ msgid "NetCode"
 msgstr "NetCode"
 
 #: pcbnew/pcb_track.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr "Spår %s på %s, längd %s"
+msgstr "Spår (båge) %s på %s, längd %s"
 
 #: pcbnew/pcb_track.cpp:891
 #, c-format
@@ -31567,42 +31532,41 @@ msgid "Error reading file: cannot determine length."
 msgstr "Fel vid inläsning av fil: kunde inte bestämma längd."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:87
-#, fuzzy
 msgid "Error reading file."
-msgstr "Fel vid extrahering av fil!\n"
+msgstr "Fel vid läsning av fil."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not parsed correctly."
-msgstr "Kopparzon (%s) har inga dynor anslutna."
+msgstr "'%s' lästes inte korrekt."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not fully parsed."
-msgstr "Filen \"%s\" lästes inte helt"
+msgstr "'%s' lästes inte helt."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'."
-msgstr "Filen hittades inte: '%s'"
+msgstr "Filen hittades inte: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:935
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate netclass name '%s'."
-msgstr "Duplicerat nätklassnamn \"%s\""
+msgstr "Dublett av nätklassnamn '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1075
 #: pcbnew/plugins/altium/altium_pcb.cpp:1161
 #: pcbnew/plugins/altium/altium_pcb.cpp:1231
 #: pcbnew/plugins/altium/altium_pcb.cpp:1308
 #: pcbnew/plugins/altium/altium_pcb.cpp:1332
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Dimension på Altium-lagret %d har ingen KiCad-motsvarighet. Sätt det "
-"istället på Eco1_User"
+"Dimension hittad på ett Altium-lager (%d) som saknar motsvarighet i KiCad. "
+"Den har flyttats till KiCad-lager Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1375
 #: pcbnew/plugins/altium/altium_pcb.cpp:1382
@@ -31611,58 +31575,52 @@ msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr "Ignorerade dimension av typ %d (inte stödd ännu)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1424
-#, fuzzy
 msgid "No 3D-models will be imported."
-msgstr "Det går inte att skapa katalog \"%s\" -> inga 3D-modeller importeras."
+msgstr "Inga 3D-modeller kommer importeras."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1450
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'. 3D-model not imported."
-msgstr "Filen hittades inte: '%s'"
+msgstr "Filen hittades inte: '%s'. 3D-modell inte importerad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1486
-#, fuzzy
 msgid "Loading nets..."
-msgstr "Läser in..."
+msgstr "Läser in nät..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1507
-#, fuzzy
 msgid "Loading polygons..."
-msgstr "Utföra polygonfyllningar ..."
+msgstr "Läser in polygoner..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1520
 #: pcbnew/plugins/altium/altium_pcb.cpp:1771
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Polygon found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Polygon på Altium-lagret %d har ingen KiCad-motsvarighet. Sätt det istället "
-"på Eco1_User"
+"Polygon hittad på ett Altium-lager (%d) som saknar motsvarighet i KiCad. Den "
+"har flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1642
-#, fuzzy
 msgid "Loading rules..."
-msgstr "Läser in Gerber-filer ..."
+msgstr "Läser in regler..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1674
-#, fuzzy
 msgid "Loading board regions..."
-msgstr "Läser in Gerber-filer ..."
+msgstr "Läser in kortregioner..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1696
-#, fuzzy
 msgid "Loading zones..."
-msgstr "Läser in..."
+msgstr "Läser in zoner..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1752
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Zone found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Zon på Altium-lager %d har ingen KiCad-motsvarighet. Sätt det istället på "
-"Eco1_User"
+"Zon hittad på ett Altium-lager (%d) som saknar motsvarighet i KiCad. Den har "
+"flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1805
 #, c-format
@@ -31670,37 +31628,34 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Ignorerade polygon-form av typ %d (inte stödd ännu)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1819
-#, fuzzy
 msgid "Loading zone fills..."
-msgstr "Byggzon fyller ..."
+msgstr "Läser in zonfyllningar..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1908
-#, fuzzy
 msgid "Loading arcs..."
-msgstr "Läser in..."
+msgstr "Läser in bågar..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1973
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Arc keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Arc Keepout på Altium-lagret %d har ingen KiCad-motsvarighet. Sätt det "
-"istället på Eco1_User"
+"Båg-keepout hittad på ett Altium-lager (%d) som saknar motsvarighet i KiCad. "
+"Den har flyttats till KiCad-lager Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1992
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Arc found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Arc Keepout på Altium-lagret %d har ingen KiCad-motsvarighet. Sätt det "
-"istället på Eco1_User"
+"Båge hittad på ett Altium-lager (%d) som saknar motsvarighet i KiCad. Den "
+"har flyttats till KiCad-lager Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2072
-#, fuzzy
 msgid "Loading pads..."
-msgstr "Läser in..."
+msgstr "Läser in lödytor..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2132
 #, c-format
@@ -31710,19 +31665,18 @@ msgstr ""
 "genomgående hål."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2152
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr ""
-"Pad '%s' på Footprint %s har ett fyrkantigt hål. KiCad stöder inte detta ännu"
+msgstr "Fotavtryck %s lödyta %s har ett fyrkantigt hål (stöds inte ännu)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2174
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"Pad '%s' på Footprint %s har en hålrotation på %f grad. KiCad stöder bara 90 "
-"graders vinklar"
+"Fotavtryck %s lödyta %s har en hålrotation på %f grader. KiCad stöder bara "
+"rotationer på 90 grader."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2188
 #, c-format
@@ -31756,9 +31710,9 @@ msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "Koppar-fria lödytan %s är kopplad till ett nät, vilket inte stöds."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2314
-#, fuzzy, c-format
+#, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr "Icke-kopparplatta '%s' har ett hål. Detta borde inte hända"
+msgstr "Kopparfri lödyta '%s' har ett hål, vilket inte stöds."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2319
 #, c-format
@@ -31771,9 +31725,8 @@ msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Koppar-fria lödytan %s använder en okänd lödyte-form."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2482
-#, fuzzy
 msgid "Loading vias..."
-msgstr "Läser in..."
+msgstr "Läser in vior..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2523
 #, c-format
@@ -31783,65 +31736,61 @@ msgstr ""
 "Via från lager %d till %d använder ett koppar-fritt lager, vilket inte stöds."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2544
-#, fuzzy
 msgid "Loading tracks..."
-msgstr "Läser in..."
+msgstr "Läser in spår..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2591
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track keepout found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Track Keepout på Altium-lagret %d har ingen KiCad-motsvarighet. Sätt det "
-"istället på Eco1_User"
+"Spår-keepout hittad på ett Altium-lager (%d) som inte har någon motsvarighet "
+"i KiCad. Den har flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2609
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Track found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Track Keepout på Altium-lagret %d har ingen KiCad-motsvarighet. Sätt det "
-"istället på Eco1_User"
+"Spår hittat på ett Altium-lager (%d) som inte har någon motsvarighet i "
+"KiCad. Det har flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2650
-#, fuzzy
 msgid "Loading unicode strings..."
-msgstr "Läser in..."
+msgstr "Läser in Unicode-strängar..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2664
-#, fuzzy
 msgid "Loading text..."
-msgstr "Läser in..."
+msgstr "Läser in text..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2675
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
-msgstr "Ignorera streckkod i Altium-lagret %d eftersom det inte stöds just nu."
+msgstr "Ignorerade streckkod på Altium-lagret %d (stöds inte ännu)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2763
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Text found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Text på Altium-lager %d har ingen KiCad-motsvarighet. Sätt det istället på "
-"Eco1_User"
+"Text hittad på ett Altium-lager (%d) som inte har någon motsvarighet i "
+"KiCad. Den har flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2849
-#, fuzzy
 msgid "Loading rectangles..."
-msgstr "Läser in Gerber-filer ..."
+msgstr "Läser in rektanglar..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2869
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Fill found on an Altium layer (%d) with no KiCad equivalent. It has been "
 "moved to KiCad layer Eco1_User."
 msgstr ""
-"Fyll på Altium-lagret %d har ingen KiCad-motsvarighet. Sätt det istället på "
-"Eco1_User"
+"Fyllning hittad på ett Altium-lager (%d) som inte har någon motsvarighet i "
+"KiCad. Den har flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:91
 msgid ""
@@ -31922,14 +31871,14 @@ msgstr ""
 "som har tillämpats."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:900
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
 "CADSTAR-området '%s' i bibliotekskomponenten '%s' har inte en KiCad-"
-"ekvivalent. Området är varken ett via orroute Keepout-område. Området "
+"motsvarighet. Området är varken en via eller ett keepout-område. Området "
 "importerades inte."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:986
@@ -31958,19 +31907,17 @@ msgid "The CADSTAR pad definition '%s' has import errors: %s"
 msgstr "CADSTAR:s lödyte-definition '%s' har importeringsfel: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1282
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find group ID %s in the group definitions."
-msgstr ""
-"Filen verkar vara skadad. Det gick inte att hitta grupp-ID %s i "
-"gruppdefinitionerna."
+msgstr "Kunde inte hitta grupp-ID %s bland gruppdefinitionerna."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1288
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
 msgstr ""
-"Filen verkar vara skadad. Det gick inte att hitta undergrupp %s i "
-"gruppkartan (föräldergrupp ID = %s, Namn = %s)."
+"Kunde inte hitta undergrupp %s i grupp-mappen (överordnad grupp-ID=%s, "
+"namn=%s)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1363
 #, c-format
@@ -31993,17 +31940,17 @@ msgstr ""
 "format."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1430
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr "Oväntad dimensionstyp (ID %s). Detta importerades inte"
+msgstr "Oväntad dimensionstyp (ID %s). Denna importerades inte"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1565
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
 msgstr ""
-"Dimension ID %s är en vinkeldimension som inte har någon KiCad-ekvivalent. "
+"Dimension %s är en vinkeldimension som inte har någon motsvarighet i KiCad. "
 "Objektet importerades inte."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1605
@@ -32110,6 +32057,11 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
+"CADSTAR-mallen '%s' har thermal reliefs i den ursprungliga designen men "
+"ekerbredden (%.2f mm) är tunnare än zonens minimitjocklek (%.2f mm). KiCad "
+"kräver att zonens minimitjocklek bevaras. Zonens minsta tjocklek har därför "
+"angetts som den nya ekerbredden och kommer tillämpas nästa gång zonerna "
+"fylls."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1980
 #, c-format
@@ -32187,26 +32139,27 @@ msgstr ""
 "är korsad."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3542
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
 "KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
-"CADSTAR Hatching-kod '%s' har olika linjebredder för varje lucka. KiCad "
-"stöder bara en bredd för kläckning. Den importerade kläckningen använder den "
-"bredd som definierats i den första kläddefinitionen, dvs. %.2f mm."
+"CADSTAR skrafferingskod '%s' har olika linjebredder för varje skraffering. "
+"KiCad stöder bara en bredd för skraffering. Den importerade skrafferingen "
+"använder bredden definierad i den första skrafferingsdefinitionen, d.v.s. "
+"%.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3554
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
 "KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
-"CADSTAR Hatching-kod '%s' har olika stegstorlekar för varje lucka. KiCad "
-"stöder bara en stegstorlek för kläckningen. Den importerade kläckningen "
-"använder stegstorleken definierad i den första kläckningsdefinitionen, dvs. "
+"CADSTAR skrafferingskod '%s' har olika avstånd för varje skraffering. KiCad "
+"stöder bara ett avstånd för skrafferingen. Den importerade skrafferingen "
+"använder avståndet definierat i den första skrafferingsdefinitionen, dvs. "
 "%.2f mm."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3567
@@ -32223,12 +32176,12 @@ msgstr ""
 "från horisontella."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3640
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimeters were applied instead."
 msgstr ""
-"Dimensions-ID %s använder en typ av enhet som inte stöds i KiCad. Milimeter "
+"Dimensions-ID %s använder en typ av enhet som inte stöds i KiCad. Millimeter "
 "användes istället."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3931
@@ -32256,19 +32209,19 @@ msgstr ""
 "detta."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'"
-msgstr "Kunde inte läsa fil: \"%s\""
+msgstr "Kunde inte läsa fil: '%s'"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1086
-#, fuzzy, c-format
+#, c-format
 msgid "<package> '%s' duplicated in <library> '%s'"
-msgstr "<paket> namn: \"%s\" duplicerad i örn <bibliotek>: \"%s\""
+msgstr "<package> '%s' duplicerad i <library> '%s'"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1164
-#, fuzzy, c-format
+#, c-format
 msgid "No '%s' package in library '%s'."
-msgstr "Inget \"%s\" paket i biblioteket \"%s\""
+msgstr "Inget '%s' paket i bibliotek '%s'."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1395
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2182
@@ -32287,10 +32240,9 @@ msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerar en text eftersom Eagle-lagret '%s' (%d) inte har kartlagts"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2068
-#, fuzzy, c-format
+#, c-format
 msgid "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
-"Ignorerar en rektangé eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
+msgstr "Ignorerar en rektangel eftersom Eagle-lagret '%s' (%d) inte mappats"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2255
 #, c-format
@@ -32298,9 +32250,8 @@ msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorerar en cirkel eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:85
-#, fuzzy
 msgid "Could not read file "
-msgstr "Det gick inte att skapa filen \"%s\"."
+msgstr "Kunde inte läsa fil "
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:251
 #, c-format
@@ -32317,9 +32268,9 @@ msgid "Could not find units value, defaulting to mils."
 msgstr "Kunde inte hitta värdet för enhet, väljer mils."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find column label %s."
-msgstr "Kunde inte hitta biblioteksfilen %s"
+msgstr "Kunde inte hitta kolumnetikett %s."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:359
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:442
@@ -32376,7 +32327,7 @@ msgid "Unrecognized pad shape primitive '%s' in row %zu."
 msgstr "Okänd lödyteformsprimitiv '%s' på rad %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1121
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
 msgstr "Ogiltigt antal polletter. Väntade 8 men fann %zu."
 
@@ -32409,9 +32360,9 @@ msgid "Invalid custom pad '%s'. Replacing with circular pad."
 msgstr "Ogiltig användardefinierad lödyta '%s'. Ersätter med cirkulär lödyta."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2343
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find custom pad '%s'."
-msgstr "Kunde inte hitta biblioteksfilen %s"
+msgstr "Kunde inte hitta användardefinierad lödyta '%s'."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2543
 #, c-format
@@ -32421,9 +32372,9 @@ msgstr ""
 "lager '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert '%s' to an integer."
-msgstr "Det går inte att konvertera \"%s\" till ett heltal"
+msgstr "Kan inte konvertera '%s' till ett heltal."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:228
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:875
@@ -32434,16 +32385,16 @@ msgstr "Fotavtrycksbiblioteket '%s' hittades inte."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:282
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:303
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' has no footprint '%s'."
-msgstr "biblioteket \"%s\" har inget fotavtryck \"%s\" att radera"
+msgstr "Biblioteket '%s' har inget fotavtryck '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:347
 #: pcbnew/plugins/kicad/pcb_parser.cpp:666
 #: pcbnew/plugins/kicad/pcb_parser.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown token '%s'"
-msgstr "Okänd token \"%s\""
+msgstr "Okänd token '%s'"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:354
 #, c-format
@@ -32452,53 +32403,51 @@ msgstr "Elementtoken innehåller %d parametrar."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:980
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2631
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr ""
-"Otillräckliga behörigheter krävs för att spara filen\n"
-"%s"
+msgstr "Otillräckliga behörigheter för att radera filen '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2639
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
-msgstr "Bibliotekets katalog \"%s\" har oväntade underkataloger."
+msgstr "Biblioteksmappen '%s' har oväntade undermappar."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1007
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr "oväntad fil \"%s\" hittades i bibliotekssökvägen \"%s\"."
+msgstr "Oväntad fil '%s' hittad i bibliotek '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2676
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3221
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' cannot be deleted."
-msgstr "Fotavtrycksbiblioteket \"%s\" kan inte tas bort."
+msgstr "Fotavtrycksbibliotek '%s' kan inte tas bort."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:178
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Ogiltigt flytnummer i\n"
-"fil: \"%s\"\n"
+"Ogiltigt flyttal i\n"
+"fil: '%s'\n"
 "rad: %d\n"
 "förskjutning: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Flyttpunktsnummer saknas i\n"
-"fil: \"%s\"\n"
+"Flyttal saknas i\n"
+"fil: '%s'\n"
 "rad: %d\n"
 "förskjutning: %d"
 
@@ -32520,15 +32469,14 @@ msgid "Undefined layers:"
 msgstr "Odefinierade lager:"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1107
-#, fuzzy, c-format
+#, c-format
 msgid "Page type '%s' is not valid."
-msgstr "Sidtyp \"%s\" är inte giltig "
+msgstr "Sidtyp '%s' är inte giltig."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1664
 #, fuzzy, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
-msgstr ""
-"Skiktet \"%s\" i filen \"%s\" på rad %d finns inte i hash med fast lager"
+msgstr "Lager '%s' i fil '%s' på rad %d finns inte i hash med fast lager."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1701
 #, c-format
@@ -32536,23 +32484,22 @@ msgid "%d is not a valid layer count"
 msgstr "%d är inte ett giltigt lagerantal"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2353
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr ""
-"Kopiera NETCLASS-namnet \"%s\" i filen \"%s\" på rad %d, förskjutning %d"
+msgstr "Dublett NETCLASS-namn '%s' i fil '%s' på rad %d, förskjutning %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3249
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"Ogiltigt fotavtryck-ID i\n"
-"fil: \"%s\"\n"
+"Ogiltigt fotavtrycks-ID i\n"
+"fil: '%s'\n"
 "rad: %d\n"
-"förskjutning: %d"
+"förskjutning: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:3567
 #, c-format
@@ -32560,32 +32507,30 @@ msgid "Cannot handle footprint text type %s"
 msgstr "Kan inte hantera textavtryck för fotavtryck %s"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4203
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
 "Ogiltigt nät-ID i\n"
-"fil: '%s'\n"
-"rad: %d\n"
-"förskjutning: %d"
+"fil: %s\n"
+"rad: %d förskjutning: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net name doesn't match ID in\n"
 "file: %s\n"
 "line: %d offset: %d"
 msgstr ""
-"Nätnamnet matchar inte nät-ID i\n"
-"fil: '%s'\n"
-"rad: %d\n"
-"förskjutning: %d"
+"Nätnamnet matchar inte ID i\n"
+"fil: %s\n"
+"rad: %d förskjutning: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4675
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4753
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 "file: '%s'\n"
@@ -32595,7 +32540,7 @@ msgstr ""
 "Ogiltigt nät-ID i\n"
 "fil: '%s'\n"
 "rad: %d\n"
-"förskjutning: %d"
+"förskjutning: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4847
 #, c-format
@@ -32611,7 +32556,7 @@ msgstr ""
 "förskjutning: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4957
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid net ID in\n"
 " file: '%s;\n"
@@ -32621,7 +32566,7 @@ msgstr ""
 "Ogiltigt nät-ID i\n"
 "fil: '%s'\n"
 "rad: %d\n"
-"förskjutning: %d"
+"förskjutning: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5076
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2484
@@ -32638,21 +32583,19 @@ msgid "Legacy Zone Warning"
 msgstr "Legacy Zone Warning"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create footprint library '%s'."
-msgstr "Det går inte att skapa fotavtryck biblioteksökväg \"%s\""
+msgstr "Kan inte skapa fotavtrycksbibliotek '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:178
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library '%s' is read only."
-msgstr "Sökvägen för fotavtryck \"%s\" är skrivskyddad"
+msgstr "Fotavtrycksbiblioteket '%s' är skrivskyddat."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'"
-msgstr ""
-"Det går inte att byta namn på tillfällig fil \"%s\" till filavtrycksfil \"%s"
-"\""
+msgstr "Kunde inte döpa om temporär fil '%s' till '%s'"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:347
 #, c-format
@@ -32689,22 +32632,20 @@ msgid "unknown zone corner smoothing type %d"
 msgstr "okänd zonhörnutjämningstyp %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2300
-#, fuzzy
 msgid "Open cancelled by user."
-msgstr "Återlänkning av fotavtryck avbröts av användaren."
+msgstr "Öppning avbruten av användare."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2349
-#, fuzzy
 msgid "This file does not contain a PCB."
-msgstr "den här filen innehåller inte ett kretskort"
+msgstr "Denna fil innehåller inget kretskort."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2499
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' does not exist.\n"
 "Would you like to create it?"
 msgstr ""
-"Biblioteket \"%s\" finns inte.\n"
+"Biblioteket '%s' finns inte.\n"
 "Vill du skapa det?"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2503
@@ -32712,21 +32653,19 @@ msgid "Library Not Found"
 msgstr "Biblioteket hittades inte"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2529
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint file name '%s' is not valid."
-msgstr "Fotavtryck-ID \"%s\" är inte giltigt."
+msgstr "Fotavtrycksfilnamn '%s' är inte giltigt."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2535
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to delete '%s'."
-msgstr ""
-"Otillräckliga behörigheter krävs för att spara filen\n"
-"%s"
+msgstr "Otillräckliga behörigheter för att radera '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2606
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr "Det går inte att skriva över biblioteksökvägen \"%s\"."
+msgstr "Kunde inte skriva över biblioteksökvägen '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2658
 #, fuzzy, c-format
