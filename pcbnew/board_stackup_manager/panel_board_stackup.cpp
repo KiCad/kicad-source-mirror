@@ -545,7 +545,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 
             if( item->GetColor().StartsWith( "#" ) )  // User defined color
             {
-                ui_row_item.m_UserColor = wxColour( item->GetColor() );
+                ui_row_item.m_UserColor = COLOR4D( item->GetColor() ).ToColour();
 
                 if( bm_combo )      // Update user color shown in the wxBitmapComboBox
                 {
@@ -799,7 +799,9 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
     if( item->IsColorEditable() )
     {
         if( item->GetColor().StartsWith( "#" ) )  // User defined color
-            ui_row_item.m_UserColor = wxColour( item->GetColor() );
+        {
+            ui_row_item.m_UserColor = COLOR4D( item->GetColor() ).ToColour();
+        }
         else
             ui_row_item.m_UserColor = GetDefaultUserColor( item->GetType() );
 
@@ -1478,7 +1480,7 @@ wxBitmapComboBox* PANEL_SETUP_BOARD_STACKUP::createColorBox( BOARD_STACKUP_ITEM*
         if( ii == GetColorUserDefinedListIdx()
                 && aStackupItem && aStackupItem->GetColor().StartsWith( "#" ) )
         {
-            curr_color = wxColour( aStackupItem->GetColor() );
+            curr_color = wxColour( COLOR4D( aStackupItem->GetColor() ).ToColour() );
 
             // NB: wxWidgets 3.0's color.GetAsString( wxC2S_HTML_SYNTAX ) pukes on alpha
             label = getColourAsHexString( curr_color );

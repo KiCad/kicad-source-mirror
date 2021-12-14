@@ -110,6 +110,13 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
 
 
 #ifdef WX_COMPATIBILITY
+COLOR4D::COLOR4D( const wxString& aColorStr )
+{
+    if( !SetFromHexString( aColorStr ) )
+        SetFromWxString( aColorStr );
+}
+
+
 COLOR4D::COLOR4D( const wxColour& aColor )
 {
     r = aColor.Red() / 255.0;

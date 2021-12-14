@@ -146,6 +146,13 @@ public:
     COLOR4D& FromCSSRGBA( int aRed, int aGreen, int aBlue, double aAlpha = 1.0 );
 
 #ifdef WX_COMPATIBILITY
+
+    /**
+     * Defines a color from a CSS or HTML-type string
+     * @param aColorStr input string
+     */
+    COLOR4D( const wxString& aColorStr );
+
     /**
      * @param aColor is the color type used by wxWidgets.
      */

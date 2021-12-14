@@ -650,7 +650,7 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                     if( colorName.StartsWith( "#" ) ) // This is a user defined color.
                     {
                         // In job file a color can be given by its RGB values (0...255)
-                        wxColor color( colorName );
+                        wxColor color( COLOR4D( colorName ).ToColour() );
                         colorName.Printf( "R%dG%dB%d", color.Red(), color.Green(), color.Blue() );
                     }
 
