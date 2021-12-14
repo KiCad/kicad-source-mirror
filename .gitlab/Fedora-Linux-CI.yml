@@ -18,16 +18,11 @@ fedora_build_linux:
     - mkdir -p build/linux
     - cd build/linux
     - cmake
-      -DCMAKE_C_COMPILER_LAUNCHER=ccache
-      -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+      # Commenting out ccache to see if Fedora failures are related
+      # -DCMAKE_C_COMPILER_LAUNCHER=ccache
+      # -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
       -DCMAKE_BUILD_TYPE=Debug
       -DKICAD_STDLIB_LIGHT_DEBUG=ON
-      -DKICAD_SCRIPTING=ON
-      -DKICAD_SCRIPTING_MODULES=ON
-      -DKICAD_SCRIPTING_PYTHON3=ON
-      -DKICAD_SCRIPTING_WXPYTHON=ON
-      -DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON
-      -DKICAD_SCRIPTING_ACTION_MENU=ON
       -DKICAD_USE_OCC=ON
       -DKICAD_SPICE=ON
       -DKICAD_BUILD_I18N=ON
