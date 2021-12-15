@@ -221,7 +221,7 @@ void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, ERROR_LOC aE
     default:
     case PAD_SHAPE::CIRCLE:
         TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0, 0 ), GetSize().x / 2, maxError,
-                                  ERROR_INSIDE );
+                                  aErrorLoc );
         break;
     }
 
