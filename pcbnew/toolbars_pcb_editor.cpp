@@ -813,7 +813,7 @@ void PCB_EDIT_FRAME::OnUpdateSelectAutoWidth( wxUpdateUIEvent& aEvent )
 {
     BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
 
-    aEvent.Check( bds.m_UseConnectedTrackWidth && !bds.UseCustomTrackViaSize() );
+    aEvent.Check( bds.m_UseConnectedTrackWidth );
 }
 
 

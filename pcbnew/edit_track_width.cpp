@@ -191,6 +191,7 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         else
         {
             GetDesignSettings().SetTrackWidthIndex( ii );
+            GetDesignSettings().m_TempOverrideTrackWidth = true;
         }
 
         break;

@@ -268,13 +268,14 @@ protected:
         if( id == ID_POPUP_PCB_SELECT_CUSTOM_WIDTH )
         {
             bds.UseCustomTrackViaSize( true );
-            bds.m_UseConnectedTrackWidth = false;
+            bds.m_TempOverrideTrackWidth = true;
             m_frame.GetToolManager()->RunAction( ACT_CustomTrackWidth, true );
         }
         else if( id == ID_POPUP_PCB_SELECT_AUTO_WIDTH )
         {
             bds.UseCustomTrackViaSize( false );
             bds.m_UseConnectedTrackWidth = true;
+            bds.m_TempOverrideTrackWidth = false;
         }
         else if( id == ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES )
         {
@@ -286,13 +287,12 @@ protected:
         else if( id >= ID_POPUP_PCB_SELECT_VIASIZE1 && id <= ID_POPUP_PCB_SELECT_VIASIZE16 )
         {
             bds.UseCustomTrackViaSize( false );
-            bds.m_UseConnectedTrackWidth = false;
             bds.SetViaSizeIndex( id - ID_POPUP_PCB_SELECT_VIASIZE1 );
         }
         else if( id >= ID_POPUP_PCB_SELECT_WIDTH1 && id <= ID_POPUP_PCB_SELECT_WIDTH16 )
         {
             bds.UseCustomTrackViaSize( false );
-            bds.m_UseConnectedTrackWidth = false;
+            bds.m_TempOverrideTrackWidth = true;
             bds.SetTrackWidthIndex( id - ID_POPUP_PCB_SELECT_WIDTH1 );
         }
 
@@ -1082,6 +1082,8 @@ bool ROUTER_TOOL::prepareInteractive()
     PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
 
     m_iface->SetStartLayer( routingLayer );
+
+    frame()->GetBoard()->GetDesignSettings().m_TempOverrideTrackWidth = false;
     m_iface->ImportSizes( sizes, m_startItem, -1 );
     sizes.AddLayerPair( frame()->GetScreen()->m_Route_Layer_TOP,
                         frame()->GetScreen()->m_Route_Layer_BOTTOM );
@@ -2018,6 +2020,7 @@ int ROUTER_TOOL::CustomTrackWidthDialog( const TOOL_EVENT& aEvent )
 
     if( sizeDlg.ShowModal() == wxID_OK )
     {
+        bds.m_TempOverrideTrackWidth = true;
         bds.UseCustomTrackViaSize( true );
 
         TOOL_EVENT dummy;

@@ -745,7 +745,18 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
     }
     else
     {
-        int widthIndex = designSettings.GetTrackWidthIndex() + 1;
+        int widthIndex = designSettings.GetTrackWidthIndex();
+
+        if( routerTool && routerTool->IsToolActive()
+            && routerTool->Router()->GetState() == PNS::ROUTER::RouterState::ROUTE_TRACK
+            && designSettings.m_UseConnectedTrackWidth && !designSettings.m_TempOverrideTrackWidth )
+        {
+            designSettings.m_TempOverrideTrackWidth = true;
+        }
+        else
+        {
+            widthIndex++;
+        }
 
         // If we go past the last track width entry in the list, start over at the beginning
         if( widthIndex >= (int) designSettings.m_TrackWidthList.size() )
@@ -814,7 +825,18 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
     }
     else
     {
-        int widthIndex = designSettings.GetTrackWidthIndex() - 1;
+        int widthIndex = designSettings.GetTrackWidthIndex();
+
+        if( routerTool && routerTool->IsToolActive()
+            && routerTool->Router()->GetState() == PNS::ROUTER::RouterState::ROUTE_TRACK
+            && designSettings.m_UseConnectedTrackWidth && !designSettings.m_TempOverrideTrackWidth )
+        {
+            designSettings.m_TempOverrideTrackWidth = true;
+        }
+        else
+        {
+            widthIndex--;
+        }
 
         // If we get to the lowest entry start over at the highest
         if( widthIndex < 0 )

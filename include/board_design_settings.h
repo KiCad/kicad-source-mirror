@@ -687,6 +687,8 @@ public:
 
     bool       m_UseConnectedTrackWidth;    // use width of existing track when creating a new,
                                             // connected track
+    bool       m_TempOverrideTrackWidth;    // use selected track width temporarily even when
+                                            // using connected track width
     int        m_MinClearance;              // overall min clearance
     int        m_TrackMinWidth;             // overall min track width
     int        m_ViasMinAnnularWidth;       // overall minimum width of the via copper ring

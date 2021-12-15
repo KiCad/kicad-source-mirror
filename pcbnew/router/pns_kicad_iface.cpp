@@ -466,7 +466,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     int  trackWidth = bds.m_TrackMinWidth;
     bool found = false;
 
-    if( bds.m_UseConnectedTrackWidth && aStartItem != nullptr )
+    if( bds.m_UseConnectedTrackWidth && !bds.m_TempOverrideTrackWidth && aStartItem != nullptr )
     {
         found = inheritTrackWidth( aStartItem, &trackWidth );
 
@@ -502,7 +502,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     }
 
     aSizes.SetTrackWidth( trackWidth );
-    aSizes.SetTrackWidthIsExplicit( !bds.m_UseConnectedTrackWidth );
+    aSizes.SetTrackWidthIsExplicit( !bds.m_UseConnectedTrackWidth || bds.m_TempOverrideTrackWidth );
 
     int viaDiameter = bds.m_ViasMinSize;
     int viaDrill = bds.m_MinThroughDrill;
