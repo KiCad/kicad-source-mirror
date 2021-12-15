@@ -143,7 +143,7 @@ void CONNECTIVITY_DATA::updateRatsnest()
             } );
 
     // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
-    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency() - 1,
+    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
                                                    ( dirty_nets.size() + 7 ) / 8 );
 
     std::atomic<size_t> nextNet( 0 );
@@ -158,7 +158,7 @@ void CONNECTIVITY_DATA::updateRatsnest()
                 return 1;
             };
 
-    if( parallelThreadCount == 1 )
+    if( parallelThreadCount <= 1 )
     {
         update_lambda();
     }

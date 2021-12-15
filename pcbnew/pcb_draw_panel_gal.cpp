@@ -185,7 +185,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard, PROGRESS_REPORTER* aReport
     auto zones = aBoard->Zones();
     std::atomic<size_t> next( 0 );
     std::atomic<size_t> count_done( 0 );
-    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency() - 1, 2 );
+    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
 
     for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {

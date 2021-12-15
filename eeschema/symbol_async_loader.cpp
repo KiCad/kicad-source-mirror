@@ -39,7 +39,7 @@ SYMBOL_ASYNC_LOADER::SYMBOL_ASYNC_LOADER( const std::vector<wxString>& aNickname
         m_canceled( false )
 {
     wxASSERT( m_table );
-    m_threadCount = std::max<size_t>( 1, std::thread::hardware_concurrency() - 1 );
+    m_threadCount = std::max<size_t>( 1, std::thread::hardware_concurrency() );
 
     m_returns.resize( m_threadCount );
 }
