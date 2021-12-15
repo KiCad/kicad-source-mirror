@@ -225,6 +225,12 @@ unsigned GetRunningMicroSecs();
 class PROF_COUNTER
 {
 public:
+    PROF_COUNTER() :
+            m_name( "Anonymous" ),
+            m_count( 0 )
+    {
+    }
+
     PROF_COUNTER( const std::string& aName ) :
             m_name( aName ),
             m_count( 0 )
