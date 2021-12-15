@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-14 20:53+0000\n"
+"PO-Revision-Date: 2021-12-17 00:56+0000\n"
 "Last-Translator: boonchai k. <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
 "th/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -5772,19 +5772,19 @@ msgstr "รีเฟรช"
 
 #: common/tool/actions.cpp:281
 msgid "Zoom to Fit"
-msgstr "ซูมให้เต็ม"
+msgstr "ซูมให้เต็มจอภาพ"
 
 #: common/tool/actions.cpp:286
 msgid "Zoom to Objects"
-msgstr "ซูมครอบคลุมวัตถุ"
+msgstr "ซูมให้คลุมวัตถุ"
 
 #: common/tool/actions.cpp:297
 msgid "Zoom In at Cursor"
-msgstr "ซูมที่ตำแหน่งเคอร์เซอร์"
+msgstr "ซูมเข้าที่เคอร์เซอร์"
 
 #: common/tool/actions.cpp:308
 msgid "Zoom Out at Cursor"
-msgstr "ซูมที่ตำแหน่งเคอร์เซอร์"
+msgstr "ซูมออกที่เคอร์เซอร์"
 
 #: common/tool/actions.cpp:314 common/widgets/mathplot.cpp:1667
 #: eeschema/sim/sim_plot_frame_base.cpp:87
@@ -5798,7 +5798,7 @@ msgstr "ย่อออก"
 
 #: common/tool/actions.cpp:332
 msgid "Zoom to Selection"
-msgstr "ซูมไปที่เลือก"
+msgstr "ซูมที่การเลือก"
 
 #: common/tool/actions.cpp:345
 msgid "Cursor Up"
@@ -5985,7 +5985,7 @@ msgstr "สลับการแสดงกากบาทเต็มหน้
 
 #: common/tool/actions.cpp:536
 msgid "Inactive Layer View Mode"
-msgstr "โหมดมุมมองเลเยอร์ไม่ทำงาน"
+msgstr "โหมดเลเยอร์ไม่แอ็คทีฟ"
 
 #: common/tool/actions.cpp:537
 msgid "Toggle inactive layers between normal and dimmed"
@@ -5993,7 +5993,7 @@ msgstr "สลับเปิดปิดเลเยอร์ไม่ใช้
 
 #: common/tool/actions.cpp:543
 msgid "Inactive Layer View Mode (3-state)"
-msgstr "โหมดมุมมองเลเยอร์ไม่ทำงาน (3 สถานะ)"
+msgstr "โหมดเลเยอร์ไม่แอ็คทีฟ (3 สถานะ)"
 
 #: common/tool/actions.cpp:544
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
@@ -30166,11 +30166,11 @@ msgstr "สร้างไฟล์ PNG จากมุมมองปัจจ�
 
 #: pcbnew/menubar_footprint_editor.cpp:149 pcbnew/menubar_pcb_editor.cpp:260
 msgid "&Drawing Mode"
-msgstr "โหมดเขียนแบบ(&D)"
+msgstr "รูปแบบการวาดวัตถุ(&D)"
 
 #: pcbnew/menubar_footprint_editor.cpp:159 pcbnew/menubar_pcb_editor.cpp:285
 msgid "&Contrast Mode"
-msgstr "โหมดการตัดกัน(&C)"
+msgstr "รูปแบบแสดงสีเน้น(&C)"
 
 #: pcbnew/menubar_footprint_editor.cpp:208
 msgid "&Load Footprint from PCB..."
@@ -34471,7 +34471,7 @@ msgstr "แสดงตัวตรวจสอบเน็ต"
 
 #: pcbnew/tools/pcb_actions.cpp:791
 msgid "Show Appearance Manager"
-msgstr "แสดงลักษณะผู้จัดการ"
+msgstr "แสดงผู้จัดการภาพลักษณ์"
 
 #: pcbnew/tools/pcb_actions.cpp:791
 msgid "Show/hide the appearance manager"
@@ -34518,7 +34518,7 @@ msgstr "วนวงกลมระหว่างใช้สีของเน
 
 #: pcbnew/tools/pcb_actions.cpp:823
 msgid "Sketch Tracks"
-msgstr "ภาพร่างแทร็ก"
+msgstr "แทร็กร่าง"
 
 #: pcbnew/tools/pcb_actions.cpp:823
 msgid "Show tracks in outline mode"
@@ -34550,7 +34550,7 @@ msgstr "แสดงชิ้นส่วนกราฟิกในโหมด
 
 #: pcbnew/tools/pcb_actions.cpp:843
 msgid "Sketch Text Items"
-msgstr "ชิ้นส่วนข้อความร่าง"
+msgstr "ชิ้นส่วนข้อความแบบร่าง"
 
 #: pcbnew/tools/pcb_actions.cpp:843
 msgid "Show footprint texts in line mode"
@@ -34734,7 +34734,7 @@ msgstr "สลับระหว่างเลเยอร์ในคู่เ
 
 #: pcbnew/tools/pcb_actions.cpp:1070
 msgid "Increase Layer Opacity"
-msgstr "เพิ่มความทึบของเลเยอร์"
+msgstr "เพิ่มความทึบแสงเลเยอร์"
 
 #: pcbnew/tools/pcb_actions.cpp:1070
 msgid "Make the current layer less transparent"
@@ -34742,7 +34742,7 @@ msgstr "ทําให้เลเยอร์ปัจจุบันโปร
 
 #: pcbnew/tools/pcb_actions.cpp:1077
 msgid "Decrease Layer Opacity"
-msgstr "ลดความทึบของเลเยอร์"
+msgstr "ลดความทึบแสงเลเยอร์"
 
 #: pcbnew/tools/pcb_actions.cpp:1077
 msgid "Make the current layer more transparent"
