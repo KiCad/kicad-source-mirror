@@ -1976,6 +1976,8 @@ void SCH_SEXPR_PLUGIN_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTE
 
         stroke.SetWidth( shape->GetWidth() );
 
+        COLOR4D fillColor = shape->GetFillColor();
+
         switch( shape->GetShape() )
         {
         case SHAPE_T::ARC:
@@ -1984,23 +1986,23 @@ void SCH_SEXPR_PLUGIN_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTE
 
             shape->CalcArcAngles( x1, x2 );
 
-            formatArc( &aFormatter, aNestLevel, shape, x1, x2, stroke, fillMode, COLOR4D()  );
+            formatArc( &aFormatter, aNestLevel, shape, x1, x2, stroke, fillMode, fillColor );
             break;
 
         case SHAPE_T::CIRCLE:
-            formatCircle( &aFormatter, aNestLevel, shape, stroke, fillMode, COLOR4D() );
+            formatCircle( &aFormatter, aNestLevel, shape, stroke, fillMode, fillColor );
             break;
 
         case SHAPE_T::RECT:
-            formatRect( &aFormatter, aNestLevel, shape, stroke, fillMode, COLOR4D() );
+            formatRect( &aFormatter, aNestLevel, shape, stroke, fillMode, fillColor );
             break;
 
         case SHAPE_T::BEZIER:
-            formatBezier(&aFormatter, aNestLevel, shape, stroke, fillMode, COLOR4D() );
+            formatBezier(&aFormatter, aNestLevel, shape, stroke, fillMode, fillColor );
             break;
 
         case SHAPE_T::POLY:
-            formatPoly( &aFormatter, aNestLevel, shape, stroke, fillMode, COLOR4D() );
+            formatPoly( &aFormatter, aNestLevel, shape, stroke, fillMode, fillColor );
             break;
 
         default:

@@ -959,6 +959,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
         case T_fill:
             parseFill( fill );
             arc->SetFillMode( fill.m_FillType );
+            arc->SetFillColor( fill.m_Color );
             break;
 
         default:
@@ -1058,6 +1059,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseBezier()
         case T_fill:
             parseFill( fill );
             bezier->SetFillMode( fill.m_FillType );
+            bezier->SetFillColor( fill.m_Color );
             break;
 
         default:
@@ -1114,6 +1116,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseCircle()
         case T_fill:
             parseFill( fill );
             circle->SetFillMode( fill.m_FillType );
+            circle->SetFillColor( fill.m_Color );
             break;
 
         default:
@@ -1386,6 +1389,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parsePolyLine()
         case T_fill:
             parseFill( fill );
             poly->SetFillMode( fill.m_FillType );
+            poly->SetFillColor( fill.m_Color );
             break;
 
         default:
@@ -1437,6 +1441,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseRectangle()
         case T_fill:
             parseFill( fill );
             rectangle->SetFillMode( fill.m_FillType );
+            rectangle->SetFillColor( fill.m_Color );
             break;
 
         default:
