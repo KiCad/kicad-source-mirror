@@ -1085,6 +1085,9 @@ bool LINE_PLACER::SetLayer( int aLayer )
             || ( m_startItem->OfKind( ITEM::SOLID_T ) && m_startItem->Layers().Overlaps( aLayer ) ) )
     {
         m_currentLayer = aLayer;
+        m_p_start = m_currentStart;
+        m_direction = m_initial_direction;
+        m_mouseTrailTracer.Clear();
         m_head.Line().Clear();
         m_tail.Line().Clear();
         m_last_head.Line().Clear();
