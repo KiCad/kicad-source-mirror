@@ -170,6 +170,7 @@ SHOVE::SHOVE( NODE* aWorld, ROUTER* aRouter ) :
     m_iter = 0;
     m_multiLineMode = false;
     m_restrictSpringbackTagId = 0;
+    m_springbackDoNotTouchNode = nullptr;
 }
 
 
@@ -787,6 +788,11 @@ NODE* SHOVE::reduceSpringback( const ITEM_SET& aHeadSet, VIA_HANDLE& aDraggedVia
     while( !m_nodeStack.empty() )
     {
         SPRINGBACK_TAG& spTag = m_nodeStack.back();
+
+        // Prevent the springback algo from erasing NODEs that might contain items used by the ROUTER_TOOL/LINE_PLACER.
+        // I noticed this can happen for the endItem provided to LINE_PLACER::Move() and cause a nasty crash.
+        if( spTag.m_node == m_springbackDoNotTouchNode )
+            break;
 
         OPT<OBSTACLE> obs = spTag.m_node->CheckColliding( aHeadSet );
 
@@ -1879,6 +1885,12 @@ void SHOVE::UnlockSpringbackNode( NODE* aNode )
 void SHOVE::DisablePostShoveOptimizations( int aMask )
 {
     m_optFlagDisableMask = aMask;
+}
+
+
+void SHOVE::SetSpringbackDoNotTouchNode( NODE *aNode )
+{
+    m_springbackDoNotTouchNode = aNode;
 }
 
 }

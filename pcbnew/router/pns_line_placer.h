@@ -353,6 +353,7 @@ private:
     LINE           m_currentTrace;
 
     ITEM*          m_startItem;
+    ITEM*          m_endItem;
 
     bool           m_idle;
     bool           m_chainedPlacement;

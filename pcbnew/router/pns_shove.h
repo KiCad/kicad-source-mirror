@@ -90,6 +90,7 @@ public:
     bool RewindSpringbackTo( NODE* aNode );
     bool RewindToLastLockedNode();
     void DisablePostShoveOptimizations( int aMask );
+    void SetSpringbackDoNotTouchNode( NODE *aNode );
 
 private:
     typedef std::vector<SHAPE_LINE_CHAIN> HULL_SET;
@@ -171,6 +172,7 @@ private:
 
     NODE*                       m_root;
     NODE*                       m_currentNode;
+    NODE*                       m_springbackDoNotTouchNode;
     int                         m_restrictSpringbackTagId;
 
     OPT_LINE                    m_newHead;
