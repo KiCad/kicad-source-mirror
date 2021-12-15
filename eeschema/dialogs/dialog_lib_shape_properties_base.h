@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,6 +20,8 @@
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
+#include <wx/clrpicker.h>
+#include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/statline.h>
 #include <wx/button.h>
@@ -40,6 +42,8 @@ class DIALOG_LIB_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_widthUnits;
 		wxStaticText* m_helpLabel;
 		wxRadioBox* m_fillCtrl;
+		wxStaticBoxSizer* m_fillColorSizer;
+		wxColourPickerCtrl* m_fillColorPicker;
 		wxCheckBox* m_checkApplyToAllUnits;
 		wxCheckBox* m_checkApplyToAllConversions;
 		wxStaticLine* m_staticline;
@@ -50,6 +54,7 @@ class DIALOG_LIB_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_LIB_SHAPE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drawing Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_LIB_SHAPE_PROPERTIES_BASE();
 
 };

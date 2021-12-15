@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,11 +40,25 @@ DIALOG_LIB_SHAPE_PROPERTIES_BASE::DIALOG_LIB_SHAPE_PROPERTIES_BASE( wxWindow* pa
 	m_helpLabel->Wrap( 333 );
 	dlgBorderSizer->Add( m_helpLabel, 0, wxALL, 5 );
 
-	wxString m_fillCtrlChoices[] = { _("Do not fill"), _("Fill with body outline color"), _("Fill with body background color") };
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxString m_fillCtrlChoices[] = { _("Do not fill"), _("Fill with body outline color"), _("Fill with body background color"), _("Fill with custom color") };
 	int m_fillCtrlNChoices = sizeof( m_fillCtrlChoices ) / sizeof( wxString );
 	m_fillCtrl = new wxRadioBox( this, wxID_ANY, _("Fill Style"), wxDefaultPosition, wxDefaultSize, m_fillCtrlNChoices, m_fillCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_fillCtrl->SetSelection( 0 );
-	dlgBorderSizer->Add( m_fillCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
+	bSizer4->Add( m_fillCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
+
+	m_fillColorSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fill Color") ), wxVERTICAL );
+
+	m_fillColorPicker = new wxColourPickerCtrl( m_fillColorSizer->GetStaticBox(), wxID_ANY, *wxBLACK, wxDefaultPosition, wxDefaultSize, wxCLRP_DEFAULT_STYLE );
+	m_fillColorSizer->Add( m_fillColorPicker, 0, wxALL|wxEXPAND, 5 );
+
+
+	bSizer4->Add( m_fillColorSizer, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 10 );
+
+
+	dlgBorderSizer->Add( bSizer4, 1, wxEXPAND, 5 );
 
 	m_checkApplyToAllUnits = new wxCheckBox( this, wxID_ANY, _("Common to all &units in symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	dlgBorderSizer->Add( m_checkApplyToAllUnits, 0, wxALL, 3 );

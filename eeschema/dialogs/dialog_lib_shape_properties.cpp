@@ -51,6 +51,12 @@ DIALOG_LIB_SHAPE_PROPERTIES::DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* aPa
         m_sdbSizerOK->Enable( false );
     }
 
+    m_fillCtrl->Bind( wxEVT_RADIOBOX,
+                      [this]( wxEvent& )
+                      {
+                          m_fillColorSizer->Show( m_fillCtrl->GetSelection() == 3 );
+                      } );
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
@@ -83,7 +89,11 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
     m_checkApplyToAllConversions->Enable( enblConvOptStyle );
 
     if( shape )
+    {
         m_fillCtrl->SetSelection( static_cast<int>( shape->GetFillMode() ) - 1 );
+        m_fillColorPicker->SetColour( shape->GetFillColor().ToColour() );
+        m_fillColorSizer->Show( shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR );
+    }
 
     m_fillCtrl->Enable( shape != nullptr );
 
@@ -100,7 +110,9 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataFromWindow()
 
     if( shape )
     {
-        shape->SetFillMode( static_cast<FILL_T>( std::max( m_fillCtrl->GetSelection() + 1, 1 ) ) );
+        FILL_T fill = static_cast<FILL_T>( std::max( m_fillCtrl->GetSelection() + 1, 1 ) );
+        shape->SetFillMode( fill );
+        shape->SetFillColor( static_cast<COLOR4D>(m_fillColorPicker->GetColour() ) );
 
         STROKE_PARAMS stroke = shape->GetStroke();
         stroke.SetWidth( m_lineWidth.GetValue() );
