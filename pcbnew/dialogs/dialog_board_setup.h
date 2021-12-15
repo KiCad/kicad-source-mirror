@@ -66,6 +66,7 @@ protected:
     void OnPageChange( wxBookCtrlEvent& event );
 
 private:
+    int m_currentPage;              // the current page index
     int m_physicalStackupPage;      // the page index of the PANEL_SETUP_BOARD_STACKUP page
     int m_layerSetupPage;           // the page index of the PANEL_SETUP_LAYERS page
 };

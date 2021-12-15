@@ -79,6 +79,8 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 
     m_treebook->AddPage( new wxPanel( this ),  _( "Board Stackup" ) );
 
+    m_currentPage = -1;
+
     /*
      * WARNING: Code currently relies on the layers setup coming before the physical stackup panel,
      * and thus transferring data to the board first.  See comment in
@@ -138,12 +140,16 @@ void DIALOG_BOARD_SETUP::OnPageChange( wxBookCtrlEvent& event )
 {
     int page = event.GetSelection();
 
+    // Ensure layer page always gets updated even if we aren't moving towards it
+    if( m_currentPage == m_physicalStackupPage )
+        m_layers->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
+
     if( page == m_physicalStackupPage )
         m_physicalStackup->OnLayersOptionsChanged( m_layers->GetUILayerMask() );
-    else if( page == m_layerSetupPage )
-        m_layers->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
     else if( Prj().IsReadOnly() )
         KIUI::Disable( m_treebook->GetPage( page ) );
+
+    m_currentPage = page;
 
 #ifdef __WXMAC__
     // Work around an OSX bug where the wxGrid children don't get placed correctly until
