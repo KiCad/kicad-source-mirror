@@ -28,9 +28,12 @@ endif()
 
 set( K2S_TEST_SRCS
     test_module.cpp
-
     pcb/test_base.cpp
 )
+
+if( MINGW )
+    list( APPEND K2S_TEST_SRCS ${CMAKE_SOURCE_DIR}/common/streamwrapper.cpp )
+endif( MINGW )
 
 add_executable( qa_kicad2step ${K2S_TEST_SRCS} )
 
