@@ -726,7 +726,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth );
 
     // This is used for data only.  Don't show it to the user.
-    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetWidth( 0 );
+    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetHidden( true );
 
     m_splitterMainWindow->SetMinimumPaneSize( fieldsMinWidth );
     m_splitterMainWindow->SetSashPosition( fieldsMinWidth + 40 );
@@ -1170,13 +1170,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableItemContextMenu( wxGridEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeFieldList( wxSizeEvent& event )
 {
-    int nameColWidth = event.GetSize().GetX() - m_showColWidth - m_groupByColWidth - 8;
+    int nameColWidth = event.GetSize().GetX() - m_showColWidth - m_groupByColWidth
+                                                - wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
 
     // GTK loses its head and messes these up when resizing the splitter bar:
     m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN )->SetWidth( m_showColWidth );
     m_fieldsCtrl->GetColumn( GROUP_BY_COLUMN )->SetWidth( m_groupByColWidth );
 
-    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetWidth( 0 );
+    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetHidden( true );
     m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth );
 
     event.Skip();
