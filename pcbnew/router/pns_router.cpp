@@ -161,6 +161,7 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
     {
         m_dragger = std::make_unique<COMPONENT_DRAGGER>( this );
         m_forceMarkObstaclesMode = true;
+        m_state = DRAG_COMPONENT;
     }
     else
     {
@@ -170,6 +171,7 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
             m_forceMarkObstaclesMode = false;
 
         m_dragger = std::make_unique<DRAGGER>( this );
+        m_state = DRAG_SEGMENT;
     }
 
     m_dragger->SetMode( aDragMode );
@@ -187,7 +189,6 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
 
     if( m_dragger->Start( aP, aStartItems ) )
     {
-        m_state = DRAG_SEGMENT;
         return true;
     }
     else

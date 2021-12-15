@@ -119,6 +119,7 @@ public:
     {
         IDLE,
         DRAG_SEGMENT,
+        DRAG_COMPONENT,
         ROUTE_TRACK
     };
 
