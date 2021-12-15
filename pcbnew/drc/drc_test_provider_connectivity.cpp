@@ -79,8 +79,6 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
 
-    std::lock_guard<KISPINLOCK> lock( connectivity->GetLock() );
-
     // Rebuild just in case. This really needs to be reliable.
     connectivity->Clear();
     connectivity->Build( board, m_drcEngine->GetProgressReporter() );
