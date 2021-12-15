@@ -437,6 +437,7 @@ void ROUTER::Move( const VECTOR2I& aP, ITEM* endItem )
         break;
 
     case DRAG_SEGMENT:
+    case DRAG_COMPONENT:
         moveDragging( aP, endItem );
         break;
 
@@ -685,6 +686,7 @@ bool ROUTER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish )
         break;
 
     case DRAG_SEGMENT:
+    case DRAG_COMPONENT:
         rv = m_dragger->FixRoute();
         break;
 
