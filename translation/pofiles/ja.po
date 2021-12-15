@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-13 18:56+0000\n"
+"PO-Revision-Date: 2021-12-17 00:56+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3917,7 +3917,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "フォルダー %s に対する権限がありません。"
 
 #: common/eda_base_frame.cpp:1107
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing the file\n"
@@ -3926,10 +3926,9 @@ msgid ""
 "made?"
 msgstr ""
 "これはもしかすると厄介です！\n"
-"最後のファイル\n"
-"\"%s\"\n"
-"を修正した際に正しく保存されなかったようです。最後に行った編集内容を復元した"
-"いですか？"
+"前回編集したファイル\n"
+"%s\n"
+"が正しく保存されていなかったようです。最後に保存した編集内容を復元しますか？"
 
 #: common/eda_base_frame.cpp:1123
 msgid "The auto save file could not be renamed to the board file name."
@@ -12806,7 +12805,6 @@ msgid "The current schematic has been modified.  Save changes?"
 msgstr "現在の回路図は変更されています。  保存しますか?"
 
 #: eeschema/files-io.cpp:1375
-#, fuzzy
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -12815,10 +12813,8 @@ msgid ""
 "made?"
 msgstr ""
 "これはもしかすると厄介です！\n"
-"最後のファイル\n"
-"\"%s\"\n"
-"を修正した際に正しく保存されなかったようです。最後に行った編集内容を復元した"
-"いですか？"
+"前回の編集時にいくつかの回路図が正しく保存されていなかったようです。\n"
+"最後に保存した編集内容を復元しますか？"
 
 #: eeschema/files-io.cpp:1386
 #, c-format
@@ -14187,7 +14183,6 @@ msgid "Syntax Help"
 msgstr "構文ヘルプ"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14362,15 +14357,15 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{上線}</samp><br> &nbsp;<br><samp>~{CLK}</"
-"samp> </td>\n"
+"        <td> &nbsp;<br><samp>~{上線}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>上線</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp> </td>\n"
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td><br></td>\n"
+"        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${変数}</samp></td>\n"
@@ -14388,8 +14383,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${リファレンス指定子:フィールド名}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>リファレンス指定子</i> のシンボルの <i>フィー"
-"ルドの値</i></samp></td>\n"
+"        <td>&nbsp;<br><samp><i>リファレンス指定子</i> のシンボルの "
+"<i>フィールドの値</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14404,8 +14399,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>バスの定義</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>生成されるネット</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -14456,9 +14451,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -24130,13 +24125,12 @@ msgid "Clearance Overrides and Settings"
 msgstr "クリアランスのオーバーライドと設定"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:438
-#, fuzzy
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
-"現在、ライブラリー ID とフットプリント ID が割り当てられています。  別のフッ"
-"トプリントを割り当てるには “フットプリントの変更…” を使用して下さい。"
+"現在、ライブラリー ID とフットプリント ID が割り当てられています。  別のフットプリントを割り当てるには \"フットプリントの変更…\" "
+"を使用して下さい。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:135
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:108
@@ -25322,9 +25316,8 @@ msgid "Pad Properties"
 msgstr "パッドのプロパティ"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:175
-#, fuzzy
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr "デフォルトのパッド プロパティをパッドにコピー"
+msgstr "追加するパッドのデフォルトのプロパティ"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:493
 #, c-format
@@ -26112,11 +26105,8 @@ msgid "Check zone fills before plotting"
 msgstr "プロット前にゾーンの塗りつぶしをチェック"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
-#, fuzzy
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
-msgstr ""
-"グローバルなハンダ マスクの最小幅および/またはマージンは 0 に設定されていませ"
-"ん。 "
+msgstr "グローバルなハンダ マスクの最小幅および/またはマージンは 0 に設定されていません。 "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
 msgid ""
@@ -27176,9 +27166,8 @@ msgid "Show when routing"
 msgstr "配線時に表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
-#, fuzzy
 msgid "Show when routing w/ via clearance at end"
-msgstr "最後にビアのクリアランスを表示"
+msgstr "配線時に最後にビアのクリアランスもあわせて表示"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Show when routing and editing"
@@ -27908,7 +27897,6 @@ msgid "On-board, non-copper"
 msgstr "On-board、非導体層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:82
-#, fuzzy
 msgid "If you want a solder paste layer for front side of the board"
 msgstr "基板表面にハンダ ペースト レイヤーを使用したい場合"
 
@@ -28387,13 +28375,10 @@ msgid "User9"
 msgstr "User9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board manufacturer's recommendations for solder mask clearance and "
 "minimum web width."
-msgstr ""
-"ハンダ マスクのクリアランスと最小ウェブ幅については、ボードハウスの推奨値を使"
-"用してください。"
+msgstr "ハンダ マスクのクリアランスと最小ウェブ幅については、基板メーカーの推奨値を使用してください。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
@@ -33233,9 +33218,8 @@ msgid "Track Corner Mode"
 msgstr "直線/曲線を切り替え"
 
 #: pcbnew/router/router_tool.cpp:164
-#, fuzzy
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
-msgstr "配線を引くときに、角を直線的にするか丸めるかを切り替えます。"
+msgstr "配線のときに、配線の直線/曲線と角の45°/90°を切り替えます。"
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Select Track/Via Width"
