@@ -72,6 +72,8 @@ private:
 
     void onReportBug( wxCommandEvent& event ) override;
 
+    void onDonateClick( wxCommandEvent& event ) override;
+
     // Notebook pages
     wxFlexGridSizer* createFlexGridSizer();
     void             createNotebooks();

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -42,18 +42,21 @@ class DIALOG_ABOUT_BASE : public wxDialog
 		wxStaticText* m_staticTextLibVersion;
 		wxButton* m_btCopyVersionInfo;
 		wxButton* m_btReportBug;
+		wxButton* m_btDonate;
 		wxNotebook* m_notebook;
 		wxButton* m_btOk;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onCopyVersionInfo( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onReportBug( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDonateClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNotebookPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 
 
 	public:
 
 		DIALOG_ABOUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("About"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 570,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_ABOUT_BASE();
 
 };
