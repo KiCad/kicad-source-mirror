@@ -222,7 +222,7 @@ void COLOR_SWATCH::rePostEvent( wxEvent& aEvent )
 
 static void sendSwatchChangeEvent( COLOR_SWATCH& aSender )
 {
-    wxCommandEvent changeEvt( COLOR_SWATCH_CHANGED );
+    wxCommandEvent changeEvt( COLOR_SWATCH_CHANGED, aSender.GetId() );
 
     // use this class as the object (alternative might be to
     // set a custom event class but that's more work)

@@ -26,6 +26,8 @@
 #include <symbol_edit_frame.h>
 #include <confirm.h>
 #include <lib_shape.h>
+#include <widgets/color_swatch.h>
+#include <sch_painter.h>
 
 DIALOG_LIB_SHAPE_PROPERTIES::DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* aParent,
                                                           LIB_ITEM* aItem ) :
@@ -36,6 +38,8 @@ DIALOG_LIB_SHAPE_PROPERTIES::DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* aPa
 {
     SetTitle( aItem->GetTypeName() + wxT( " " ) + GetTitle() );
     m_helpLabel->SetFont( KIUI::GetInfoFont( this ).Italic() );
+
+    m_colorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
     SetInitialFocus( m_widthCtrl );
 
@@ -51,11 +55,7 @@ DIALOG_LIB_SHAPE_PROPERTIES::DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* aPa
         m_sdbSizerOK->Enable( false );
     }
 
-    m_fillCtrl->Bind( wxEVT_RADIOBOX,
-                      [this]( wxEvent& )
-                      {
-                          m_fillColorSizer->Show( m_fillCtrl->GetSelection() == 3 );
-                      } );
+    m_colorSwatch->Bind( COLOR_SWATCH_CHANGED, &DIALOG_LIB_SHAPE_PROPERTIES::onSwatch, this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -88,16 +88,73 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
 
     m_checkApplyToAllConversions->Enable( enblConvOptStyle );
 
-    if( shape )
+    m_rbFillNone->Enable( shape != nullptr );
+    m_rbFillOutline->Enable( shape != nullptr );
+    m_rbFillBackground->Enable( shape != nullptr );
+    m_rbFillCustom->Enable( shape != nullptr );
+    m_colorSwatch->Enable( shape != nullptr );
+
+    if( shape && shape->GetFillMode() == FILL_T::FILLED_SHAPE )
     {
-        m_fillCtrl->SetSelection( static_cast<int>( shape->GetFillMode() ) - 1 );
-        m_fillColorPicker->SetColour( shape->GetFillColor().ToColour() );
-        m_fillColorSizer->Show( shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR );
+        m_rbFillOutline->SetValue( true );
+
+        COLOR4D color = m_frame->GetRenderSettings()->GetLayerColor( LAYER_DEVICE );
+        m_colorSwatch->SetSwatchColor( color, false );
+    }
+    else if( shape && shape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+    {
+        m_rbFillBackground->SetValue( true );
+
+        COLOR4D color = m_frame->GetRenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND );
+        m_colorSwatch->SetSwatchColor( color, false );
+    }
+    else if( shape && shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
+    {
+        m_rbFillCustom->SetValue( true );
+        m_colorSwatch->SetSwatchColor( shape->GetFillColor(), false );
+    }
+    else
+    {
+        m_rbFillNone->SetValue( true );
+        m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
     }
 
-    m_fillCtrl->Enable( shape != nullptr );
-
     return true;
+}
+
+
+void DIALOG_LIB_SHAPE_PROPERTIES::onFill( wxCommandEvent& event )
+{
+    if( event.GetId() == NO_FILL )
+    {
+        m_rbFillNone->SetValue( true );
+        m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+    }
+    else if( event.GetId() == FILLED_SHAPE )
+    {
+        m_rbFillOutline->SetValue( true );
+
+        COLOR4D color = m_frame->GetRenderSettings()->GetLayerColor( LAYER_DEVICE );
+        m_colorSwatch->SetSwatchColor( color, false );
+    }
+    else if( event.GetId() == FILLED_WITH_BG_BODYCOLOR )
+    {
+        m_rbFillBackground->SetValue( true );
+
+        COLOR4D color = m_frame->GetRenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND );
+        m_colorSwatch->SetSwatchColor( color, false );
+    }
+    else if( event.GetId() == FILLED_WITH_COLOR )
+    {
+        m_rbFillCustom->SetValue( true );
+        m_colorSwatch->GetNewSwatchColor();
+    }
+}
+
+
+void DIALOG_LIB_SHAPE_PROPERTIES::onSwatch( wxCommandEvent& aEvent )
+{
+    m_rbFillCustom->SetValue( true );
 }
 
 
@@ -110,9 +167,16 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataFromWindow()
 
     if( shape )
     {
-        FILL_T fill = static_cast<FILL_T>( std::max( m_fillCtrl->GetSelection() + 1, 1 ) );
-        shape->SetFillMode( fill );
-        shape->SetFillColor( static_cast<COLOR4D>(m_fillColorPicker->GetColour() ) );
+        if( m_rbFillOutline->GetValue() )
+            shape->SetFillMode( FILL_T::FILLED_SHAPE );
+        else if( m_rbFillBackground->GetValue() )
+            shape->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
+        else if( m_rbFillCustom->GetValue() )
+            shape->SetFillMode( FILL_T::FILLED_WITH_COLOR );
+        else
+            shape->SetFillMode( FILL_T::NO_FILL );
+
+        shape->SetFillColor( m_colorSwatch->GetSwatchColor() );
 
         STROKE_PARAMS stroke = shape->GetStroke();
         stroke.SetWidth( m_lineWidth.GetValue() );

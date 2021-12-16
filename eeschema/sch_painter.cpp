@@ -528,7 +528,10 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
         if( shape )
         {
             COLOR4D fillColor;
-            if( shape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+
+            if( shape->GetFillMode() == FILL_T::FILLED_SHAPE )
+                fillColor = getRenderColor( aItem, LAYER_DEVICE, false );
+            else if( shape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
                 fillColor = getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, false );
             else if( shape->GetFillMode() == FILL_T::FILLED_WITH_COLOR )
                 fillColor = shape->GetFillColor();

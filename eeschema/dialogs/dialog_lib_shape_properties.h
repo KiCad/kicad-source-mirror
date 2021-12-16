@@ -49,6 +49,10 @@ public:
     bool GetApplyToAllUnits();
 
 private:
+    void onFill(wxCommandEvent &event) override;
+    void onSwatch( wxCommandEvent& aEvent );
+
+private:
     SYMBOL_EDIT_FRAME* m_frame;
     LIB_ITEM*          m_item;
     UNIT_BINDER        m_lineWidth;
