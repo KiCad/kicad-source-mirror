@@ -37,6 +37,7 @@
 #include <sch_reference_list.h>
 #include <schematic.h>
 #include <tools/sch_editor_control.h>
+#include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
 #include <wx/grid.h>
@@ -1170,14 +1171,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableItemContextMenu( wxGridEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeFieldList( wxSizeEvent& event )
 {
-    // GetClientSize subtracts scrollbars width on Windows.
-    // On other platforms, the visible area must be computed manually.
-#ifdef __WINDOWS__
-    int nameColWidth = m_fieldsCtrl->GetClientSize().x - m_showColWidth - m_groupByColWidth;
-#else
-    int nameColWidth = event.GetSize().GetX() - m_showColWidth - m_groupByColWidth
-                       - wxSystemSettings::GetMetric( wxSYS_VSCROLL_X );
-#endif
+    int nameColWidth = KIPLATFORM::UI::GetUnobscuredSize( m_fieldsCtrl ).x - m_showColWidth
+                       - m_groupByColWidth;
 
     // GTK loses its head and messes these up when resizing the splitter bar:
     m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN )->SetWidth( m_showColWidth );

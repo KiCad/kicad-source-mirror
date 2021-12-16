@@ -120,3 +120,9 @@ double KIPLATFORM::UI::GetSystemScaleFactor( const wxWindow* aWindow )
 {
     return aWindow->GetContentScaleFactor();
 }
+
+
+wxSize KIPLATFORM::UI::GetUnobscuredSize( const wxWindow* aWindow )
+{
+    return aWindow->GetClientSize();
+}
