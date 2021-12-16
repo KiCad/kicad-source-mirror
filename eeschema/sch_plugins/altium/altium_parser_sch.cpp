@@ -346,8 +346,8 @@ ASCH_ROUND_RECTANGLE::ASCH_ROUND_RECTANGLE( const std::map<wxString, wxString>& 
     topRight   = wxPoint( ReadKiCadUnitFrac( aProps, "CORNER.X" ),
                           -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) );
 
-    topRight = wxPoint( ReadKiCadUnitFrac( aProps, "CORNERXRADIUS" ),
-                        -ReadKiCadUnitFrac( aProps, "CORNERYRADIUS" ) );
+    cornerradius = wxSize( ReadKiCadUnitFrac( aProps, "CORNERXRADIUS" ),
+                           -ReadKiCadUnitFrac( aProps, "CORNERYRADIUS" ) );
 
     lineWidth     = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
     isSolid       = ALTIUM_PARSER::ReadBool( aProps, "ISSOLID", false );
