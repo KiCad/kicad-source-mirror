@@ -1718,7 +1718,7 @@ void DIALOG_NET_INSPECTOR::adjustListColumns()
     int w0, w1, w2, w3, w4, w5, w6, w7;
 
     dc.GetTextExtent( COLUMN_NET.display_name, &w0, &h );
-    dc.GetTextExtent( "MMMMMMMMMMMMMMMM", &minw_col1, &h );
+    dc.GetTextExtent( "MMMMMMMMMMMMM", &minw_col1, &h );
     dc.GetTextExtent( COLUMN_PAD_COUNT.display_name, &w2, &h );
     dc.GetTextExtent( COLUMN_VIA_COUNT.display_name, &w3, &h );
     dc.GetTextExtent( COLUMN_VIA_LENGTH.display_name, &w4, &h );
