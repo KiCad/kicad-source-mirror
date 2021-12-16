@@ -246,7 +246,7 @@ const char* const newstroke_font[] =
     "KYVcUcSbR`RVQTOSQRRPRFSDUCVC",
     "H\\RbRD",
     "KYNcOcQbR`RVSTUSSRRPRFQDOCNC",
-    "KZMHNGPFTHVGWF",
+    "KZMSNRPQTSVRWQ",
     "F^K[KFYFY[K[",
     /* // LATIN-1 SUPPLEMENT (0080-00FF) */
     "F^K[KFYFY[K[", /* U+80 */
