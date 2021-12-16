@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-16 23:37+0000\n"
+"PO-Revision-Date: 2021-12-16 23:44+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -16284,8 +16284,8 @@ msgstr "Felder autoplatzieren"
 #: eeschema/tools/ee_actions.cpp:420
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
 msgstr ""
-"Den automatischen Platzierungsalgorithmus auf den Feldern von Schaltplan-"
-"Symbolen und -Blättern anwenden"
+"Führt den automatischen Platzierungsalgorithmus für Symbol- oder "
+"Schaltplanfelder aus"
 
 #: eeschema/tools/ee_actions.cpp:425
 msgid "Change Symbols..."
@@ -18297,8 +18297,7 @@ msgstr "Projektschaltplan bearbeiten"
 #: kicad/dialogs/panel_kicad_launcher.cpp:120
 msgid "Edit global and/or project schematic symbol libraries"
 msgstr ""
-"Globale oder projektspezifische Bibliotheken der Schaltplan-Symbole "
-"bearbeiten"
+"Globale oder projektspezifische Bibliotheken der Schaltzeichen bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:124
 msgid "Edit the project PCB design"
@@ -18307,7 +18306,7 @@ msgstr "Leiterplatten-Entwurf des Projekts bearbeiten"
 #: kicad/dialogs/panel_kicad_launcher.cpp:128
 msgid "Edit global and/or project PCB footprint libraries"
 msgstr ""
-"Globale oder projektspezifische Bibliotheken der Leiterplatten-Footprints "
+"Globale oder projektspezifische Bibliotheken der Bauteil-Footprints "
 "bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:132
@@ -18316,7 +18315,7 @@ msgstr "Gerber-Dateien betrachten und prüfen"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:136
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "Bilder in Schaltplan-Symbole oder Leiterplatten-Footprints umwandeln"
+msgstr "Bilder in Schaltzeichen oder Bauteil-Footprints umwandeln"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:140
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -19131,7 +19130,7 @@ msgstr "Schaltplan bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:75
 msgid "Edit schematic symbols"
-msgstr "Schaltplan-Symbole bearbeiten"
+msgstr "Schaltplansymbole bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:81
 msgid "Edit PCB"
@@ -19139,7 +19138,7 @@ msgstr "Leiterplatte bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:87
 msgid "Edit PCB footprints"
-msgstr "Leiterplatten-Footprints bearbeiten"
+msgstr "Bauteil-Footprints bearbeiten"
 
 #: kicad/tools/kicad_manager_actions.cpp:93
 msgid "Preview Gerber output files"
@@ -19151,7 +19150,7 @@ msgstr "Bildumwandler"
 
 #: kicad/tools/kicad_manager_actions.cpp:99
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr "Bilder in Schaltplan-Symbole oder Leiterplatten-Footprints umwandeln"
+msgstr "Bilder in Schaltzeichen oder Bauteil-Footprints umwandeln"
 
 #: kicad/tools/kicad_manager_actions.cpp:104
 msgid "Calculator Tools"
