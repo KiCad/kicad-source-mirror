@@ -394,6 +394,7 @@ void KICAD_MANAGER_FRAME::doCloseWindow()
 #endif
 
     m_leftWin->Show( false );
+    Pgm().m_Quitting = true;
 
     Destroy();
 
@@ -434,8 +435,6 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
     SetStatusText( "" );
 
     m_leftWin->EmptyTreePrj();
-
-    Pgm().m_Quitting = true;
 
     return true;
 }
