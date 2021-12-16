@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-16 23:05+0000\n"
+"PO-Revision-Date: 2021-12-16 23:17+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -2045,7 +2045,7 @@ msgstr "Leere globale %s-Bibliothekstabelle erstellen"
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
 msgstr ""
-"Benutzen Sie diese Option zum Definieren von %s-Bibliotheken in "
+"Verwenden Sie diese Option zum Definieren von %s-Bibliotheken in "
 "projektspezifischen Bibliothekstabellen"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
@@ -15173,7 +15173,7 @@ msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
-"Es konnten nicht alle Symbolbibliotheken geladen werden. Benutzen Sie die "
+"Es konnten nicht alle Symbolbibliotheken geladen werden. Verwenden Sie die "
 "Verwaltung\n"
 "von Symbolbibliotheken, um den Pfad zu korrigieren oder die Bibliothek(en) "
 "zu entfernen."
@@ -15320,7 +15320,7 @@ msgid ""
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
 "Die aktuelle Konfiguration beinhaltet keine Symbolbibliothek \"%s\".\n"
-"Benutzen Sie die Verwaltung von Symbolbibliotheken, um die Konfiguration zu "
+"Verwenden Sie die Verwaltung von Symbolbibliotheken, um die Konfiguration zu "
 "bearbeiten."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1191
@@ -15336,7 +15336,7 @@ msgid ""
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
 "Die Bibliothek \"%s\" ist in der aktuellen Konfiguration nicht aktiviert.\n"
-"Benutzen Sie die Verwaltung von Symbolbibliotheken, um die Konfiguration zu "
+"Verwenden Sie die Verwaltung von Symbolbibliotheken, um die Konfiguration zu "
 "bearbeiten."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1202
@@ -17771,12 +17771,12 @@ msgstr "Zuletzt verwendete Jobdatei löschen"
 #: gerbview/gerbview_frame.cpp:95
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
 msgid "KiCad Gerber Viewer"
-msgstr "KiCad Gerberanzeige"
+msgstr "KiCad Gerber-Betrachter"
 
 #: gerbview/gerbview_frame.cpp:649 gerbview/gerbview_frame.cpp:673
 #: gerbview/menubar.cpp:146 kicad/tools/kicad_manager_actions.cpp:93
 msgid "Gerber Viewer"
-msgstr "Gerberanzeige"
+msgstr "Gerber-Betrachter"
 
 #: gerbview/gerbview_frame.cpp:654
 #, c-format
@@ -18072,7 +18072,7 @@ msgstr "Lagen im Deltamodus (Vergleichsmodus) anzeigen"
 
 #: gerbview/tools/gerbview_actions.cpp:178
 msgid "Flip Gerber View"
-msgstr "Gerberansicht umdrehen"
+msgstr "Gerber-Ansicht wenden"
 
 #: gerbview/tools/gerbview_actions.cpp:178
 msgid "Show as mirror image"
@@ -18301,7 +18301,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:124
 msgid "Edit the project PCB design"
-msgstr "Das Leiterplatten-Design des Projekts bearbeiten"
+msgstr "Leiterplatten-Entwurf des Projekts bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:128
 msgid "Edit global and/or project PCB footprint libraries"
@@ -24738,7 +24738,7 @@ msgid ""
 "Only use it for board houses which do not accept fully featured headers."
 msgstr ""
 "Nicht empfohlen.\n"
-"Benutzen Sie dies nur für Fabrikanten die voll gekennzeichnete Header nicht "
+"Verwenden Sie dies nur für Fertiger, die voll gekennzeichnete Header nicht "
 "akzeptieren."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:60
@@ -24752,8 +24752,8 @@ msgid ""
 "file."
 msgstr ""
 "Nicht empfohlen.\n"
-"Benutzen Sie dies nur bei Fabrikanten die PTH und NPTH Daten in einer Datei "
-"erwarten."
+"Verwenden Sie dies nur bei Fertigern, die PTH- und NPTH-Daten in einer "
+"gemeinsamen Datei erwarten."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use route command (recommended)"
@@ -28166,7 +28166,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr ""
-"Benutzen Sie die Seite \"Technischer Lagenaufbau\" um die Anzahl der "
+"Verwenden Sie die Seite \"Technischer Lagenaufbau\", um die Anzahl der "
 "Kupferlagen zu ändern."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:464
@@ -30564,9 +30564,9 @@ msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Die aktuelle Konfiguration beinhaltet keine Bibliothek mit dem Namen \"%s"
-"\".\n"
-"Benutzen Sie die Verwaltung von Footprintbibliotheken, um die Konfiguration "
+"Die aktuelle Konfiguration beinhaltet keine Bibliothek mit dem Namen \"%s\"."
+"\n"
+"Verwenden Sie die Verwaltung von Footprintbibliotheken, um die Konfiguration "
 "zu bearbeiten."
 
 #: pcbnew/footprint_editor_utils.cpp:297
@@ -30580,7 +30580,7 @@ msgid ""
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
 "Die Bibliothek \"%s\" ist in der aktuellen Konfiguration nicht aktiviert.\n"
-"Benutzen Sie die Verwaltung von Footprintbibliotheken, um die Konfiguration "
+"Verwenden Sie die Verwaltung von Footprintbibliotheken, um die Konfiguration "
 "zu bearbeiten."
 
 #: pcbnew/footprint_editor_utils.cpp:309 pcbnew/footprint_viewer_frame.cpp:920
@@ -30778,8 +30778,9 @@ msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Die aktuelle Konfiguration beinhaltet keine Bibliothek \"%s\".  Benutzen Sie "
-"die Verwaltung von Footprintbibliotheken, um die Konfiguration zu bearbeiten."
+"Die aktuelle Konfiguration beinhaltet keine Bibliothek \"%s\".  Verwenden "
+"Sie die Verwaltung von Footprintbibliotheken, um die Konfiguration zu "
+"bearbeiten."
 
 #: pcbnew/footprint_viewer_frame.cpp:913
 msgid "Footprint library not found."
@@ -30792,7 +30793,7 @@ msgid ""
 "Footprint Libraries to edit the configuration."
 msgstr ""
 "Bibliothek \"%s\" ist in der aktuellen Konfiguration nicht aktiviert.  "
-"Benutzen Sie die Verwaltung von Footprintbibliotheken, um die Konfiguration "
+"Verwenden Sie die Verwaltung von Footprintbibliotheken, um die Konfiguration "
 "zu bearbeiten."
 
 #: pcbnew/footprint_wizard_frame.cpp:81
@@ -36155,7 +36156,7 @@ msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
 msgstr ""
-"Nicht alle Zonen sind gefüllt. Benutzen Sie Bearbeiten > Alle Zonen füllen "
+"Nicht alle Zonen sind gefüllt. Verwenden Sie Bearbeiten > Alle Zonen füllen "
 "(%s), wenn Sie alle Füllflächen sehen möchten."
 
 #: pcbnew/tools/pcb_control.cpp:585
