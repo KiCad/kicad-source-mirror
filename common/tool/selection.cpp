@@ -95,7 +95,7 @@ VECTOR2I SELECTION::GetCenter() const
         for( EDA_ITEM* item : m_items )
             center += item->GetPosition();
 
-        center = center / static_cast<unsigned>( m_items.size() );
+        center = center / static_cast<int>( m_items.size() );
         return static_cast<VECTOR2I>( center );
     }
 
