@@ -65,6 +65,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     // if true, when creating a new track starting on an existing track, use this track width
     m_UseConnectedTrackWidth = false;
+    m_TempOverrideTrackWidth = false;
 
     m_BlindBuriedViaAllowed = false;
     m_MicroViasAllowed  = false;
