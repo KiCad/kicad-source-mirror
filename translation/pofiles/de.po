@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-16 23:44+0000\n"
+"PO-Revision-Date: 2021-12-17 00:56+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -15780,12 +15780,12 @@ msgstr "Footprint \"%s\" hat kein zugeordnetes Symbol."
 #: eeschema/tools/backannotate.cpp:196
 #, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr "Footprints \"%s\" und \"%s\" sind mit dem gleichen Symbol verknüpft."
+msgstr "Footprints \"%s\" und \"%s\" sind mit dem selben Symbol verknüpft."
 
 #: eeschema/tools/backannotate.cpp:261
 #, c-format
 msgid "Cannot find symbol for footprint '%s'."
-msgstr "Konnte das Symbol für den Footprint \"%s\" nicht finden."
+msgstr "Kann das Symbol für den Footprint \"%s\" nicht finden."
 
 #: eeschema/tools/backannotate.cpp:290
 #, c-format
@@ -15793,7 +15793,7 @@ msgid ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
 "must be manually deleted (if desired)."
 msgstr ""
-"Der Footprint '%s' ist auf der Leiterplatte nicht vorhanden. Entsprechende "
+"Footprint '%s' ist auf der Leiterplatte nicht vorhanden. Entsprechende "
 "Symbole im Schaltplan müssen manuell gelöscht werden (falls gewünscht)."
 
 #: eeschema/tools/backannotate.cpp:303
@@ -15843,7 +15843,7 @@ msgstr "Füge den Bezeichner \"%s\" zu %s Pin %s Netz hinzu."
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
-msgstr "Electrical Rules Check ausführen"
+msgstr "Elektrische Regeln überprüfen (ERC)"
 
 #: eeschema/tools/ee_actions.cpp:50
 msgid "Symbol Checker"
@@ -15863,7 +15863,7 @@ msgstr "Schaltung in SPICE simulieren"
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Opens the datasheet in a browser"
-msgstr "Das Datenblatt im Webbrowser öffnen"
+msgstr "Datenblatt in einem Webbrowser öffnen"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1172
 msgid "Create Corner"
@@ -15871,15 +15871,15 @@ msgstr "Ecke erstellen"
 
 #: eeschema/tools/ee_actions.cpp:69 pcbnew/tools/pcb_actions.cpp:1172
 msgid "Create a corner"
-msgstr "Rundung erstellen"
+msgstr "Erstellt eine Ecke"
 
 #: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1177
 msgid "Remove Corner"
-msgstr "Rundung entfernen"
+msgstr "Ecke entfernen"
 
 #: eeschema/tools/ee_actions.cpp:74 pcbnew/tools/pcb_actions.cpp:1177
 msgid "Remove corner"
-msgstr "Rundung entfernen"
+msgstr "Entfernt eine Ecke"
 
 #: eeschema/tools/ee_actions.cpp:87
 msgid "Select Node"
@@ -15887,7 +15887,7 @@ msgstr "Knoten auswählen"
 
 #: eeschema/tools/ee_actions.cpp:87
 msgid "Select a connection item under the cursor"
-msgstr "Auswahl des Verbindungselement unter dem Cursor"
+msgstr "Wählt ein Verbindungselement unter dem Cursor"
 
 #: eeschema/tools/ee_actions.cpp:92
 msgid "Select Connection"
@@ -15923,7 +15923,7 @@ msgstr "Ausgewähltes Symbol auf Editor-Zeichenfläche anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:133
 msgid "Duplicate Symbol"
-msgstr "Dupliziere Symbol"
+msgstr "Symbol duplizieren"
 
 #: eeschema/tools/ee_actions.cpp:133
 msgid "Make a copy of the selected symbol"
