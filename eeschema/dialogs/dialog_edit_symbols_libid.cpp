@@ -43,6 +43,7 @@
 #include <wx/dcclient.h>
 #include <grid_tricks.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <kiplatform/ui.h>
 #include <string_utils.h>
 
 
@@ -332,7 +333,7 @@ private:
     // Automatically called when click on OK button
     bool TransferDataFromWindow() override;
 
-    void AdjustGridColumns( int aWidth );
+    void AdjustGridColumns();
 
     void OnSizeGrid( wxSizeEvent& event ) override;
 
@@ -784,15 +785,15 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
 }
 
 
-void DIALOG_EDIT_SYMBOLS_LIBID::AdjustGridColumns( int aWidth )
+void DIALOG_EDIT_SYMBOLS_LIBID::AdjustGridColumns()
 {
     // Account for scroll bars
-    aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
+    int width = KIPLATFORM::UI::GetUnobscuredSize( m_grid ).x;
 
-    int colWidth = aWidth / 3;
+    int colWidth = width / 3;
 
     m_grid->SetColSize( COL_REFS, colWidth );
-    aWidth -= colWidth;
+    width -= colWidth;
 
     colWidth = 0;
 
@@ -804,7 +805,7 @@ void DIALOG_EDIT_SYMBOLS_LIBID::AdjustGridColumns( int aWidth )
 
     colWidth += 20;
     m_grid->SetColSize( COL_CURR_LIBID, colWidth );
-    aWidth -= colWidth;
+    width -= colWidth;
 
     colWidth = 0;
 
@@ -815,13 +816,13 @@ void DIALOG_EDIT_SYMBOLS_LIBID::AdjustGridColumns( int aWidth )
     }
 
     colWidth += 20;
-    m_grid->SetColSize( COL_NEW_LIBID, std::max( colWidth, aWidth ) );
+    m_grid->SetColSize( COL_NEW_LIBID, std::max( colWidth, width ) );
 }
 
 
 void DIALOG_EDIT_SYMBOLS_LIBID::OnSizeGrid( wxSizeEvent& event )
 {
-    AdjustGridColumns( event.GetSize().GetX() );
+    AdjustGridColumns();
 
     wxClientDC dc( this );
 

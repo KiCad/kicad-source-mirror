@@ -92,7 +92,7 @@ private:
 
     bool checkFootprintName( const wxString& aFootprintName );
 
-    void adjustGridColumns( int aWidth );
+    void adjustGridColumns();
 
 private:
     FOOTPRINT_EDIT_FRAME*      m_frame;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -33,10 +33,10 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 	m_modelsGrid->SetColSize( 2, 65 );
 	m_modelsGrid->EnableDragColMove( false );
 	m_modelsGrid->EnableDragColSize( false );
-	m_modelsGrid->SetColLabelSize( 22 );
 	m_modelsGrid->SetColLabelValue( 0, wxEmptyString );
 	m_modelsGrid->SetColLabelValue( 1, _("3D Model(s)") );
 	m_modelsGrid->SetColLabelValue( 2, _("Show") );
+	m_modelsGrid->SetColLabelSize( 22 );
 	m_modelsGrid->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 
 	// Rows
@@ -91,6 +91,7 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnUpdateUI ) );
 	m_modelsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::On3DModelCellChanged ), NULL, this );
 	m_modelsGrid->Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::On3DModelSelected ), NULL, this );
+	m_modelsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnGridSize ), NULL, this );
 	m_button3DShapeAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnAdd3DRow ), NULL, this );
 	m_button3DShapeBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnAdd3DModel ), NULL, this );
 	m_button3DShapeRemove->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnRemove3DModel ), NULL, this );
@@ -103,6 +104,7 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::~PANEL_FP_PROPERTIES_3D_MODEL_BASE()
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnUpdateUI ) );
 	m_modelsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::On3DModelCellChanged ), NULL, this );
 	m_modelsGrid->Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::On3DModelSelected ), NULL, this );
+	m_modelsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnGridSize ), NULL, this );
 	m_button3DShapeAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnAdd3DRow ), NULL, this );
 	m_button3DShapeBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnAdd3DModel ), NULL, this );
 	m_button3DShapeRemove->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::OnRemove3DModel ), NULL, this );

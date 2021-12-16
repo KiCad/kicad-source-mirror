@@ -125,6 +125,7 @@ private:
     PCB_EDIT_FRAME* m_frame;
     bool            m_in_build_nets_list = false;
     bool            m_filter_change_no_rebuild = false;
+    int             m_width = 0;
 
     class DATA_MODEL;
     wxObjectDataPtr<DATA_MODEL> m_data_model;

@@ -31,6 +31,7 @@
 #include <board_design_settings.h>
 #include <board_commit.h>
 #include <bitmaps.h>
+#include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
 #include <widgets/text_ctrl_eval.h>
@@ -327,7 +328,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     m_itemsGrid->SetRowLabelSize( m_itemsGrid->GetVisibleWidth( -1, true, true, true ) );
 
     Layout();
-    adjustGridColumns( m_itemsGrid->GetRect().GetWidth() );
+    adjustGridColumns();
 
     return true;
 }
@@ -666,10 +667,10 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnDeleteLayer( wxCommandEvent& event
 }
 
 
-void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::adjustGridColumns( int aWidth )
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::adjustGridColumns()
 {
     // Account for scroll bars
-    int itemsWidth = aWidth - ( m_itemsGrid->GetSize().x - m_itemsGrid->GetClientSize().x );
+    int itemsWidth = KIPLATFORM::UI::GetUnobscuredSize( m_itemsGrid ).x;
 
     itemsWidth -= m_itemsGrid->GetRowLabelSize();
 
@@ -683,14 +684,14 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::adjustGridColumns( int aWidth )
     }
 
     // Update the width of the 3D panel
-    m_3dPanel->AdjustGridColumnWidths( aWidth );
+    m_3dPanel->AdjustGridColumnWidths();
 }
 
 
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 {
     if( !m_itemsGrid->IsCellEditControlShown() )
-        adjustGridColumns( m_itemsGrid->GetRect().GetWidth() );
+        adjustGridColumns();
 
     // Handle a delayed focus.  The delay allows us to:
     // a) change focus when the error was triggered from within a killFocus handler
@@ -743,7 +744,7 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridSize( wxSizeEvent& event )
 {
-    adjustGridColumns( event.GetSize().GetX() );
+    adjustGridColumns();
 
     event.Skip();
 }

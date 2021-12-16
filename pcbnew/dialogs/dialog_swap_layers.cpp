@@ -24,6 +24,7 @@
 #include <pcb_base_edit_frame.h>
 #include <grid_layer_box_helpers.h>
 #include <view/view.h>
+#include <kiplatform/ui.h>
 #include <widgets/wx_grid.h>
 #include <board.h>
 #include "dialog_swap_layers.h"
@@ -140,19 +141,19 @@ bool DIALOG_SWAP_LAYERS::TransferDataFromWindow()
 }
 
 
-void DIALOG_SWAP_LAYERS::adjustGridColumns( int aWidth )
+void DIALOG_SWAP_LAYERS::adjustGridColumns()
 {
     // Account for scroll bars
-    aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
+    int width = KIPLATFORM::UI::GetUnobscuredSize( m_grid ).x;
 
-    m_grid->SetColSize( 0, aWidth / 2 );
-    m_grid->SetColSize( 1, aWidth - m_grid->GetColSize( 0 ) );
+    m_grid->SetColSize( 0, width / 2 );
+    m_grid->SetColSize( 1, width - m_grid->GetColSize( 0 ) );
 }
 
 
 void DIALOG_SWAP_LAYERS::OnSize( wxSizeEvent& event )
 {
-    adjustGridColumns( event.GetSize().GetX() );
+    adjustGridColumns();
 
     event.Skip();
 }

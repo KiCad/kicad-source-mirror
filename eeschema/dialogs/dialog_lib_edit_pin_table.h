@@ -70,7 +70,7 @@ public:
 protected:
 
     void updateSummary();
-    void adjustGridColumns( int aWidth );
+    void adjustGridColumns();
 
     SYMBOL_EDIT_FRAME*    m_editFrame;
     bool                  m_initialized = false;

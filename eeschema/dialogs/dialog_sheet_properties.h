@@ -60,7 +60,7 @@ private:
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnInitDlg( wxInitDialogEvent& event ) override;
 
-    void AdjustGridColumns( int aWidth );
+    void AdjustGridColumns();
 
 private:
     SCH_EDIT_FRAME*               m_frame;

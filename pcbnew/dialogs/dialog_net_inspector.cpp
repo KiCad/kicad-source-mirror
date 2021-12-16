@@ -35,6 +35,7 @@
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
+#include <kiplatform/ui.h>
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <dialogs/dialog_text_entry.h>
@@ -44,6 +45,7 @@
 #include <wx/tokenzr.h>
 #include <wx/filedlg.h>
 #include <wx/dcclient.h>
+#include <wx/wupdlock.h>
 
 #include <bitset>
 
@@ -1708,6 +1710,7 @@ void DIALOG_NET_INSPECTOR::adjustListColumns()
      * That width must be enough to fit column header label and be not less than width of
      * four chars (0000).
      */
+    wxWindowUpdateLocker locker( m_netsList );
 
     wxClientDC dc( GetParent() );
 
@@ -1748,8 +1751,15 @@ void DIALOG_NET_INSPECTOR::adjustListColumns()
 
     assert( column_order.size() == 8 );
 
+    // At resizing of the list the width of middle column (Net Names) changes only.
+    int width = KIPLATFORM::UI::GetUnobscuredSize( m_netsList ).x;
+    w1 = width - w0 - w2 - w3 - w4 - w5 - w6 - w7;
+
+    if( w1 < minw_col1 )
+        w1 = minw_col1;
+
     m_netsList->GetColumn( column_order[0] )->SetWidth( w0 );
-    m_netsList->GetColumn( column_order[1] )->SetMinWidth( minw_col1 );
+    m_netsList->GetColumn( column_order[1] )->SetWidth( w1 );
     m_netsList->GetColumn( column_order[2] )->SetWidth( w2 );
     m_netsList->GetColumn( column_order[3] )->SetWidth( w3 );
     m_netsList->GetColumn( column_order[4] )->SetWidth( w4 );
@@ -1757,21 +1767,28 @@ void DIALOG_NET_INSPECTOR::adjustListColumns()
     m_netsList->GetColumn( column_order[6] )->SetWidth( w6 );
     m_netsList->GetColumn( column_order[7] )->SetWidth( w7 );
 
-    // At resizing of the list the width of middle column (Net Names) changes only.
-    int width = m_netsList->GetClientSize().x - 24;
-    w1        = width - w0 - w2 - w3 - w4 - w5 - w6 - w7;
-
-    if( w1 > minw_col1 )
-        m_netsList->GetColumn( column_order[1] )->SetWidth( w1 );
-
     m_netsList->Refresh();
+
+    // Force refresh on GTK so that horizontal scroll bar won't appear
+#ifdef __WXGTK__
+    wxPoint pos = m_netsList->GetPosition();
+    m_netsList->Move( pos.x, pos.y + 1 );
+    m_netsList->Move( pos.x, pos.y );
+#endif
 }
 
 
 void DIALOG_NET_INSPECTOR::onListSize( wxSizeEvent& aEvent )
 {
+    int width = aEvent.GetSize().x;
+
+    if( width != m_width )
+    {
+        m_width = width;
+        adjustListColumns();
+    }
+
     aEvent.Skip();
-    adjustListColumns();
 }
 
 

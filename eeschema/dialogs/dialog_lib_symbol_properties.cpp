@@ -29,6 +29,7 @@
 #include <symbol_library_manager.h>
 #include <math/util.h> // for KiROUND
 #include <sch_symbol.h>
+#include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/wx_grid.h>
 #include <string_utils.h>
@@ -163,7 +164,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     // notify the grid
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->GetNumberRows() );
     m_grid->ProcessTableMessage( msg );
-    adjustGridColumns( m_grid->GetRect().GetWidth() );
+    adjustGridColumns();
 
     m_SymbolNameCtrl->ChangeValue( UnescapeString( m_libEntry->GetName() ) );
 
@@ -694,12 +695,10 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditFootprintFilter( wxCommandEvent& event 
 }
 
 
-void DIALOG_LIB_SYMBOL_PROPERTIES::adjustGridColumns( int aWidth )
+void DIALOG_LIB_SYMBOL_PROPERTIES::adjustGridColumns()
 {
-    m_width = aWidth;
-
     // Account for scroll bars
-    aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
+    int width = KIPLATFORM::UI::GetUnobscuredSize( m_grid ).x;
 
     m_grid->AutoSizeColumn( FDC_NAME );
 
@@ -708,7 +707,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::adjustGridColumns( int aWidth )
     for( int i = 2; i < m_grid->GetNumberCols(); i++ )
         fixedColsWidth += m_grid->GetColSize( i );
 
-    m_grid->SetColSize( FDC_VALUE, aWidth - fixedColsWidth );
+    m_grid->SetColSize( FDC_VALUE, width - fixedColsWidth );
 }
 
 
@@ -738,7 +737,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_shownColumns = shownColumns;
 
         if( !m_grid->IsCellEditControlShown() )
-            adjustGridColumns( m_grid->GetRect().GetWidth() );
+            adjustGridColumns();
     }
 
     // Handle a delayed focus.  The delay allows us to:
@@ -794,7 +793,9 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
 
     if( new_size != m_width )
     {
-        adjustGridColumns( event.GetSize().GetX() );
+        m_width = new_size;
+
+        adjustGridColumns();
     }
 
     // Always propagate a wxSizeEvent:

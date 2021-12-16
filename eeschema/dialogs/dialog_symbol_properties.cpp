@@ -31,6 +31,7 @@
 #include <pin_numbers.h>
 #include <string_utils.h>
 #include <menus_helpers.h>
+#include <kiplatform/ui.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_combobox.h>
 #include <widgets/wx_grid.h>
@@ -291,7 +292,8 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
 
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_fieldsGrid, m_part );
 
-    m_width = 0;
+    m_widthFields = 0;
+    m_widthPins = 0;
     m_delayedFocusRow = REFERENCE_FIELD;
     m_delayedFocusColumn = FDC_VALUE;
     m_delayedSelection = true;
@@ -441,7 +443,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     // notify the grid
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->size() );
     m_fieldsGrid->ProcessTableMessage( msg );
-    AdjustGridColumns( m_fieldsGrid->GetRect().GetWidth() );
+    AdjustFieldsGridColumns();
 
     // If a multi-unit symbol, set up the unit selector and interchangeable checkbox.
     if( m_symbol->GetUnitCount() > 1 )
@@ -993,15 +995,12 @@ void DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort( wxGridEvent& aEvent )
 }
 
 
-void DIALOG_SYMBOL_PROPERTIES::AdjustGridColumns( int aWidth )
+void DIALOG_SYMBOL_PROPERTIES::AdjustFieldsGridColumns()
 {
-    wxGridUpdateLocker deferRepaintsTillLeavingScope;
-
-    m_width = aWidth;
+    wxGridUpdateLocker deferRepaintsTillLeavingScope( m_fieldsGrid );
 
     // Account for scroll bars
-    int fieldsWidth = aWidth - ( m_fieldsGrid->GetSize().x - m_fieldsGrid->GetClientSize().x );
-    int pinTblWidth = aWidth - ( m_pinGrid->GetSize().x - m_pinGrid->GetClientSize().x );
+    int fieldsWidth = KIPLATFORM::UI::GetUnobscuredSize( m_fieldsGrid ).x;
 
     m_fieldsGrid->AutoSizeColumn( 0 );
 
@@ -1014,6 +1013,15 @@ void DIALOG_SYMBOL_PROPERTIES::AdjustGridColumns( int aWidth )
     colSize = ( colSize == 0 ) ? -1 : colSize; // don't hide the column!
 
     m_fieldsGrid->SetColSize( 1, colSize );
+}
+
+
+void DIALOG_SYMBOL_PROPERTIES::AdjustPinsGridColumns()
+{
+    wxGridUpdateLocker deferRepaintsTillLeavingScope( m_pinGrid );
+
+    // Account for scroll bars
+    int pinTblWidth = KIPLATFORM::UI::GetUnobscuredSize( m_pinGrid ).x;
 
     // Stretch the Base Name and Alternate Assignment columns to fit.
     for( int i = 0; i < COL_COUNT; ++i )
@@ -1021,9 +1029,6 @@ void DIALOG_SYMBOL_PROPERTIES::AdjustGridColumns( int aWidth )
         if( i != COL_BASE_NAME && i != COL_ALT_NAME )
             pinTblWidth -= m_pinGrid->GetColSize( i );
     }
-
-    // Why?  I haven't a clue....
-    pinTblWidth += 22;
 
     m_pinGrid->SetColSize( COL_BASE_NAME, pinTblWidth / 2 );
     m_pinGrid->SetColSize( COL_ALT_NAME, pinTblWidth / 2 );
@@ -1039,7 +1044,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_shownColumns = shownColumns;
 
         if( !m_fieldsGrid->IsCellEditControlShown() )
-            AdjustGridColumns( m_fieldsGrid->GetRect().GetWidth() );
+            AdjustFieldsGridColumns();
     }
 
     // Handle a delayed focus
@@ -1071,14 +1076,31 @@ void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
-void DIALOG_SYMBOL_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
+void DIALOG_SYMBOL_PROPERTIES::OnSizeFieldsGrid( wxSizeEvent& event )
 {
     int new_size = event.GetSize().GetX();
 
-    if( m_width != new_size )
+    if( m_widthFields != new_size )
     {
-        AdjustGridColumns( new_size );
-        Layout();
+        m_widthFields = new_size;
+
+        AdjustFieldsGridColumns();
+    }
+
+    // Always propagate for a grid repaint (needed if the height changes, as well as width)
+    event.Skip();
+}
+
+
+void DIALOG_SYMBOL_PROPERTIES::OnSizePinsGrid( wxSizeEvent& event )
+{
+    int new_size = event.GetSize().GetX();
+
+    if( m_widthPins != new_size )
+    {
+        m_widthPins = new_size;
+
+        AdjustPinsGridColumns();
     }
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)

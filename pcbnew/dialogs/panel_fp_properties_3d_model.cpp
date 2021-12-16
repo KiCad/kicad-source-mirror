@@ -39,6 +39,7 @@
 #include <dialog_footprint_properties_fp_editor.h>
 #include "filename_resolver.h"
 #include <pgm_base.h>
+#include <kiplatform/ui.h>
 #include "dialogs/panel_preview_3d_model.h"
 #include "dialogs/3d_cache_dialogs.h"
 #include <settings/settings_manager.h>
@@ -445,15 +446,23 @@ void PANEL_FP_PROPERTIES_3D_MODEL::Cfg3DPath( wxCommandEvent& event )
 }
 
 
-void PANEL_FP_PROPERTIES_3D_MODEL::AdjustGridColumnWidths( int aWidth )
+void PANEL_FP_PROPERTIES_3D_MODEL::AdjustGridColumnWidths()
 {
     // Account for scroll bars
-    int modelsWidth = aWidth - ( m_modelsGrid->GetSize().x - m_modelsGrid->GetClientSize().x );
+    int modelsWidth = KIPLATFORM::UI::GetUnobscuredSize( m_modelsGrid ).x;
 
     int width = modelsWidth - m_modelsGrid->GetColSize( COL_SHOWN )
-                            - m_modelsGrid->GetColSize( COL_PROBLEM ) - 5;
+                - m_modelsGrid->GetColSize( COL_PROBLEM );
 
     m_modelsGrid->SetColSize( COL_FILENAME, width );
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::OnGridSize( wxSizeEvent& event )
+{
+    AdjustGridColumnWidths();
+
+    event.Skip();
 }
 
 

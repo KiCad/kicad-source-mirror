@@ -28,6 +28,7 @@
 #include <lib_pin.h>
 #include <dialog_pin_properties.h>
 #include <confirm.h>
+#include <kiplatform/ui.h>
 #include <widgets/tab_traversal.h>
 #include <widgets/wx_grid.h>
 #include <grid_tricks.h>
@@ -455,20 +456,18 @@ void DIALOG_PIN_PROPERTIES::OnDeleteAlternate( wxCommandEvent& event )
 }
 
 
-void DIALOG_PIN_PROPERTIES::adjustGridColumns( int aWidth )
+void DIALOG_PIN_PROPERTIES::adjustGridColumns()
 {
-    m_width = aWidth;
-
-    // Account for margins
-    aWidth -= 30;
+    // Account for scroll bars
+    int width = KIPLATFORM::UI::GetUnobscuredSize( m_alternatesGrid ).x;
 
     wxGridUpdateLocker deferRepaintsTillLeavingScope;
 
-    m_alternatesGrid->SetColSize( COL_TYPE, m_originalColWidths[ COL_TYPE ] );
-    m_alternatesGrid->SetColSize( COL_SHAPE, m_originalColWidths[ COL_SHAPE ] );
+    m_alternatesGrid->SetColSize( COL_TYPE, m_originalColWidths[COL_TYPE] );
+    m_alternatesGrid->SetColSize( COL_SHAPE, m_originalColWidths[COL_SHAPE] );
 
-    m_alternatesGrid->SetColSize( COL_NAME, aWidth - m_originalColWidths[ COL_TYPE ]
-                                                   - m_originalColWidths[ COL_SHAPE ] );
+    m_alternatesGrid->SetColSize( COL_NAME, width - m_originalColWidths[COL_TYPE]
+                                                    - m_originalColWidths[COL_SHAPE] );
 }
 
 
@@ -477,7 +476,11 @@ void DIALOG_PIN_PROPERTIES::OnSize( wxSizeEvent& event )
     auto new_size = event.GetSize().GetX();
 
     if( m_initialized && m_width != new_size )
-        adjustGridColumns( new_size );
+    {
+        m_width = new_size;
+
+        adjustGridColumns();
+    }
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
     event.Skip();

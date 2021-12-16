@@ -29,6 +29,7 @@
 #include <confirm.h>
 #include <symbol_edit_frame.h>
 #include <symbol_editor_settings.h>
+#include <kiplatform/ui.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/wx_grid.h>
 #include <settings/settings_manager.h>
@@ -687,16 +688,14 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnRebuildRows( wxCommandEvent&  )
 
     m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue() );
 
-    adjustGridColumns( m_grid->GetRect().GetWidth() );
+    adjustGridColumns();
 }
 
 
-void DIALOG_LIB_EDIT_PIN_TABLE::adjustGridColumns( int aWidth )
+void DIALOG_LIB_EDIT_PIN_TABLE::adjustGridColumns()
 {
-    m_width = aWidth;
-
     // Account for scroll bars
-    aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
+    int width = KIPLATFORM::UI::GetUnobscuredSize( m_grid ).x;
 
     wxGridUpdateLocker deferRepaintsTillLeavingScope;
 
@@ -717,12 +716,12 @@ void DIALOG_LIB_EDIT_PIN_TABLE::adjustGridColumns( int aWidth )
     // to fit.
 
     for( int i = 0; i < COL_COUNT; ++i )
-        aWidth -= m_grid->GetColSize( i );
+        width -= m_grid->GetColSize( i );
 
-    if( aWidth > 0 )
+    if( width > 0 )
     {
-        m_grid->SetColSize( COL_NUMBER, m_grid->GetColSize( COL_NUMBER ) + aWidth / 2 );
-        m_grid->SetColSize( COL_NAME, m_grid->GetColSize( COL_NAME ) + aWidth / 2 );
+        m_grid->SetColSize( COL_NUMBER, m_grid->GetColSize( COL_NUMBER ) + width / 2 );
+        m_grid->SetColSize( COL_NAME, m_grid->GetColSize( COL_NAME ) + width / 2 );
     }
 }
 
@@ -733,7 +732,9 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnSize( wxSizeEvent& event )
 
     if( m_initialized && m_width != new_size )
     {
-        adjustGridColumns( new_size );
+        m_width = new_size;
+
+        adjustGridColumns();
     }
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
@@ -750,7 +751,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
         m_columnsShown = columnsShown;
 
         if( !m_grid->IsCellEditControlShown() )
-            adjustGridColumns( m_grid->GetRect().GetWidth() );
+            adjustGridColumns();
     }
 }
 

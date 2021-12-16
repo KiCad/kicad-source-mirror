@@ -71,7 +71,7 @@ private:
     void OnFilterDClick( wxMouseEvent& event ) override;
     void OnCancelButtonClick( wxCommandEvent& event ) override;
 
-    void adjustGridColumns( int aWidth );
+    void adjustGridColumns();
     void syncControlStates( bool aIsAlias );
 
 public:

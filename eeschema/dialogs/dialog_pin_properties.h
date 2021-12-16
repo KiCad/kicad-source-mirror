@@ -68,7 +68,7 @@ public:
     void onUpdateUIInfo( wxUpdateUIEvent& event ) override;
 
 protected:
-    void adjustGridColumns( int aWidth );
+    void adjustGridColumns();
 
 private:
     SYMBOL_EDIT_FRAME*  m_frame;

@@ -62,7 +62,7 @@ public:
 
     void ReloadModelsFromFootprint();
 
-    void AdjustGridColumnWidths( int aWidth );
+    void AdjustGridColumnWidths();
 
     std::vector<FP_3DMODEL>& GetModelList()
     {
@@ -78,6 +78,7 @@ private:
     void OnAdd3DRow( wxCommandEvent& event ) override;
     void Cfg3DPath( wxCommandEvent& event ) override;
 
+    void OnGridSize( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
     void updateValidateStatus( int aRow );

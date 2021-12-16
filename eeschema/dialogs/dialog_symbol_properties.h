@@ -74,7 +74,8 @@ private:
     void OnEditSpiceModel( wxCommandEvent& event ) override;
     void OnPinTableColSort( wxGridEvent& aEvent );
     void OnPinTableCellEdited( wxGridEvent& event ) override;
-    void OnSizeGrid( wxSizeEvent& event ) override;
+    void OnSizeFieldsGrid( wxSizeEvent& event ) override;
+    void OnSizePinsGrid( wxSizeEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnCancelButtonClick( wxCommandEvent& event ) override;
@@ -88,13 +89,15 @@ private:
     void OnUpdateSymbol( wxCommandEvent&  ) override;
     void OnExchangeSymbol( wxCommandEvent&  ) override;
 
-    void AdjustGridColumns( int aWidth );
+    void AdjustFieldsGridColumns();
+    void AdjustPinsGridColumns();
 
 private:
     SCH_SYMBOL*    m_symbol;
     LIB_SYMBOL*    m_part;
 
-    int            m_width;
+    int            m_widthFields;
+    int            m_widthPins;
     int            m_delayedFocusRow;
     int            m_delayedFocusColumn;
     bool           m_delayedSelection;

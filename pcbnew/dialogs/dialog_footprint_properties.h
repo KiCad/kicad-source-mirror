@@ -74,7 +74,7 @@ private:
     void OnUpdateUI( wxUpdateUIEvent&  ) override;
     void OnPageChange( wxNotebookEvent& event ) override;
 
-    void adjustGridColumns( int aWidth );
+    void adjustGridColumns();
 
 private:
     PCB_EDIT_FRAME*                  m_frame;

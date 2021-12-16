@@ -31,6 +31,7 @@
 #include <validators.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/tab_traversal.h>
+#include <kiplatform/ui.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
 #include <schematic.h>
@@ -51,7 +52,6 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
 {
     m_sheet = aSheet;
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_grid, m_sheet );
-    m_width = 100;  // Will be later set to a better value
     m_delayedFocusRow = SHEETNAME;
     m_delayedFocusColumn = FDC_VALUE;
 
@@ -142,7 +142,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
     // notify the grid
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->size() );
     m_grid->ProcessTableMessage( msg );
-    AdjustGridColumns( m_grid->GetRect().GetWidth() );
+    AdjustGridColumns();
 
     // border width
     m_borderWidth.SetValue( m_sheet->GetBorderWidth() );
@@ -804,11 +804,10 @@ void DIALOG_SHEET_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 }
 
 
-void DIALOG_SHEET_PROPERTIES::AdjustGridColumns( int aWidth )
+void DIALOG_SHEET_PROPERTIES::AdjustGridColumns()
 {
-    m_width = aWidth;
     // Account for scroll bars
-    aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
+    int width = KIPLATFORM::UI::GetUnobscuredSize( m_grid ).x;
 
     m_grid->AutoSizeColumn( 0 );
 
@@ -817,7 +816,7 @@ void DIALOG_SHEET_PROPERTIES::AdjustGridColumns( int aWidth )
     for( int i = 2; i < m_grid->GetNumberCols(); i++ )
         fixedColsWidth += m_grid->GetColSize( i );
 
-    int colSize = std::max( aWidth - fixedColsWidth, -1 );
+    int colSize = std::max( width - fixedColsWidth, -1 );
     colSize = ( colSize == 0 ) ? -1 : colSize; // don't hide the column!
 
     m_grid->SetColSize( 1, colSize );
@@ -833,7 +832,7 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_shownColumns = shownColumns;
 
         if( !m_grid->IsCellEditControlShown() )
-            AdjustGridColumns( m_grid->GetRect().GetWidth() );
+            AdjustGridColumns();
     }
 
     // Propagate changes in sheetname to displayed hierarchical path
@@ -881,10 +880,14 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_SHEET_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
 {
-    int new_size = event.GetSize().GetX();
+    int new_size = event.GetSize();
 
-    if( m_width != new_size )
-        AdjustGridColumns( new_size );
+    if( m_size != new_size )
+    {
+        m_size = new_size;
+
+        AdjustGridColumns();
+    }
 
     // Always propagate for a grid repaint (needed if the height changes, as well as width)
     event.Skip();

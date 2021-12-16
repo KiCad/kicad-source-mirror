@@ -42,7 +42,7 @@ private:
 
     void OnSize( wxSizeEvent& event ) override;
 
-    void adjustGridColumns( int aWidth );
+    void adjustGridColumns();
 
     PCB_BASE_EDIT_FRAME* m_parent;
     PCB_LAYER_ID*        m_layerDestinations;
