@@ -1593,7 +1593,7 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
 
         dwg->SetCenter0( wxPoint( center0_x, center0_y ) );
         dwg->SetStart0( wxPoint( start0_x, start0_y ) );
-        dwg->SetArcAngleAndEnd0( angle );
+        dwg->SetArcAngleAndEnd0( angle, true );
         break;
     }
 
@@ -1847,13 +1847,23 @@ void LEGACY_PLUGIN::loadPCB_LINE()
             dseg->SetShape( static_cast<SHAPE_T>( shape ) );
             dseg->SetFilled( false );
             dseg->SetWidth( width );
-            dseg->SetStart( wxPoint( start_x, start_y ) );
-            dseg->SetEnd( wxPoint( end_x, end_y ) );
+
+            if( dseg->GetShape() == SHAPE_T::ARC )
+            {
+                dseg->SetCenter( wxPoint( start_x, start_y ) );
+                dseg->SetStart( wxPoint( end_x, end_y ) );
+            }
+            else
+            {
+                dseg->SetStart( wxPoint( start_x, start_y ) );
+                dseg->SetEnd( wxPoint( end_x, end_y ) );
+            }
         }
         else if( TESTLINE( "De" ) )
         {
             BIU     x = 0;
             BIU     y;
+            double  angle;
 
             data = strtok_r( line + SZ( "De" ), delims, &saveptr );
 
@@ -1877,9 +1887,11 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     ignore_unused( intParse( data ) );
                     break;
                 case 2:
-                    double angle;
                     angle = degParse( data );
-                    dseg->SetArcAngleAndEnd( angle );    // m_Angle
+
+                    if( dseg->GetShape() == SHAPE_T::ARC )
+                        dseg->SetArcAngleAndEnd( angle, true );    // m_Angle
+
                     break;
                 case 3:
                     const_cast<KIID&>( dseg->m_Uuid ) = KIID( data );
@@ -2622,6 +2634,8 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 void LEGACY_PLUGIN::loadDIMENSION()
 {
     std::unique_ptr<PCB_DIM_ALIGNED> dim = std::make_unique<PCB_DIM_ALIGNED>( m_board );
+    wxPoint                          crossBarO;
+    wxPoint                          crossBarF;
 
     char*   line;
 
@@ -2631,6 +2645,8 @@ void LEGACY_PLUGIN::loadDIMENSION()
 
         if( TESTLINE( "$endCOTATION" ) )
         {
+            dim->UpdateHeight( crossBarF, crossBarO );
+
             m_board->Add( dim.release(), ADD_MODE::APPEND );
             return;     // preferred exit
         }
@@ -2671,11 +2687,8 @@ void LEGACY_PLUGIN::loadDIMENSION()
             double  orient = degParse( data, &data );
             char*   mirror = strtok_r( (char*) data, delims, (char**) &data );
 
-            // This sets both DIMENSION's position and internal m_Text's.
-            // @todo: But why do we even know about internal m_Text?
-            dim->SetPosition( wxPoint( pos_x, pos_y ) );
-            dim->SetTextSize( wxSize( width, height ) );
-
+            dim->Text().SetTextPos( wxPoint( pos_x, pos_y ) );
+            dim->Text().SetTextSize( wxSize( width, height ) );
             dim->Text().SetMirrored( mirror && *mirror == '0' );
             dim->Text().SetTextThickness( thickn );
             dim->Text().SetTextAngle( orient );
@@ -2690,8 +2703,8 @@ void LEGACY_PLUGIN::loadDIMENSION()
             BIU width      = biuParse( data );
 
             dim->SetLineThickness( width );
-            dim->UpdateHeight( wxPoint( crossBarFx, crossBarFy ),
-                               wxPoint( crossBarOx, crossBarOy ) );
+            crossBarO = wxPoint( crossBarOx, crossBarOy );
+            crossBarF = wxPoint( crossBarFx, crossBarFy );
         }
         else if( TESTLINE( "Sd" ) )
         {
