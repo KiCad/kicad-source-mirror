@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-17 23:09+0000\n"
+"PO-Revision-Date: 2021-12-21 08:54+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -6757,7 +6757,7 @@ msgstr "KiCad Footprintbibliotheken Verzeichnisse"
 
 #: common/wildcards_and_files_ext.cpp:360
 msgid "Legacy footprint library files"
-msgstr "Alte Footprint-Bibliotheksdateien"
+msgstr "Ältere Footprint-Bibliotheksdateien"
 
 #: common/wildcards_and_files_ext.cpp:366
 msgid "Eagle ver. 6.x XML library files"
@@ -6821,7 +6821,7 @@ msgstr "Textdateien"
 
 #: common/wildcards_and_files_ext.cpp:461
 msgid "Legacy footprint export files"
-msgstr "Alte Footprint Exportdateien"
+msgstr "Ältere Footprint-Exportdateien"
 
 #: common/wildcards_and_files_ext.cpp:467
 msgid "Electrical rule check file"
@@ -7213,7 +7213,7 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"Einige der zugewiesenen Footprints sind veralte Einträge ohne "
+"Einige der zugewiesenen Footprints sind veraltete Einträge ohne "
 "Bibliotheksnamen. Soll KiCad versuchen, diese in das neue LIB_ID-Format "
 "umzuwandeln? (Wenn Sie Nein antworten, werden die Zuweisungen aufgehoben und "
 "Sie müssen diese Footprints manuell neu zuweisen.)"
@@ -12347,8 +12347,8 @@ msgid ""
 "Select one or more rows containing libraries in Legacy format (*.lib) to "
 "save as current KiCad format (*.kicad_sym)."
 msgstr ""
-"Wählen Sie eine oder mehrere Zeilen mit Bibliotheken im alten Format (*.lib) "
-"aus, die im aktuellen Format (*.kicad_sym) gespeichert werden sollen."
+"Wählen Sie eine oder mehrere Zeilen mit Bibliotheken im veralteten Format (*."
+"lib) aus, die im aktuellen Format (*.kicad_sym) gespeichert werden sollen."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:741
 #, c-format
@@ -12356,8 +12356,8 @@ msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
 "table?"
 msgstr ""
-"'%s' im aktuellen KiCad-Format (*.kicad_sym) speichern und alten Eintrag in "
-"der Tabelle ersetzen?"
+"'%s' im aktuellen KiCad-Format (*.kicad_sym) speichern und veralteten "
+"Eintrag in der Tabelle ersetzen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:747
 #, c-format
@@ -12365,8 +12365,8 @@ msgid ""
 "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
 "replace legacy entries in table?"
 msgstr ""
-"%d alte Bibliotheken im aktuellen KiCad-Format (*.kicad_sym) speichern und "
-"alte Einträge in der Tabelle ersetzen?"
+"%d veraltete Bibliotheken im aktuellen KiCad-Format (*.kicad_sym) speichern "
+"und veraltete Einträge in der Tabelle ersetzen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:775
 #: pcbnew/dialogs/dialog_export_step.cpp:350
@@ -16065,7 +16065,7 @@ msgstr "Linien hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:245 eeschema/tools/ee_actions.cpp:720
 msgid "Add connected graphic lines"
-msgstr "Grafische Linien hinzufügen"
+msgstr "Verbundene grafische Linien hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:250
 msgid "Move Symbol Anchor"
@@ -16073,7 +16073,7 @@ msgstr "Symbolanker verschieben"
 
 #: eeschema/tools/ee_actions.cpp:250
 msgid "Specify a new location for the symbol anchor"
-msgstr "Spezifizieren Sie eine neue Position für den Anker des Bausteils"
+msgstr "Bestimmen Sie eine neue Position für den Symbolanker"
 
 #: eeschema/tools/ee_actions.cpp:255
 msgid "Finish drawing shape"
@@ -16089,19 +16089,19 @@ msgstr "Pinlänge zu anderen Pins im Symbol kopieren"
 
 #: eeschema/tools/ee_actions.cpp:267
 msgid "Push Pin Name Size"
-msgstr "Größe Pinnamen übertragen"
+msgstr "Größe des Pinnamens übertragen"
 
 #: eeschema/tools/ee_actions.cpp:267
 msgid "Copy pin name size to other pins in symbol"
-msgstr "Pinnamengröße zu anderen Pins im Symbol kopieren"
+msgstr "Größe des Pinnamens zu anderen Pins im Symbol kopieren"
 
 #: eeschema/tools/ee_actions.cpp:272
 msgid "Push Pin Number Size"
-msgstr "Größe Pinnummern übertragen"
+msgstr "Größe der Pinnummer übertragen"
 
 #: eeschema/tools/ee_actions.cpp:272
 msgid "Copy pin number size to other pins in symbol"
-msgstr "Pinnummerngröße zu anderen Pins im Symbol kopieren"
+msgstr "Größe der Pinnummer zu anderen Pins im Symbol kopieren"
 
 #: eeschema/tools/ee_actions.cpp:281
 msgid "Add Symbol"
@@ -16125,7 +16125,7 @@ msgstr "Markierung \"Keine-Verbindung\" hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:293
 msgid "Add a no-connection flag"
-msgstr "'Keine-Verbindung' Markierung hinzufügen"
+msgstr "\"Keine-Verbindung\"-Markierung hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:299
 msgid "Add Junction"
@@ -16133,7 +16133,7 @@ msgstr "Knotenpunkt hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:299
 msgid "Add a junction"
-msgstr "Knotenpunkt hinzufügen"
+msgstr "Einen Knotenpunkt hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:305
 msgid "Add Wire to Bus Entry"
@@ -16157,7 +16157,7 @@ msgstr "Hierarchische Bezeichner hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:317
 msgid "Add a hierarchical label"
-msgstr "Hierarchischen Bezeichner hinzufügen"
+msgstr "Einen hierarchischen Bezeichner hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:323
 msgid "Add Sheet"
@@ -16193,7 +16193,7 @@ msgstr "Bild hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:350
 msgid "Add bitmap image"
-msgstr "Bitmap Grafik hinzufügen"
+msgstr "Rastergrafik hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:355
 msgid "Finish Sheet"
@@ -16205,11 +16205,11 @@ msgstr "Zeichnungsblatt beenden"
 
 #: eeschema/tools/ee_actions.cpp:368
 msgid "Repeat Last Item"
-msgstr "Letzten Vorgang wiederholen"
+msgstr "Letztes Element wiederholen"
 
 #: eeschema/tools/ee_actions.cpp:368
 msgid "Duplicates the last drawn item"
-msgstr "Zuletzt gewählte(s) Element(e) duplizieren"
+msgstr "Zuletzt gezeichnetes Element duplizieren"
 
 #: eeschema/tools/ee_actions.cpp:372 pcbnew/tools/pcb_actions.cpp:291
 msgid "Rotate Clockwise"
@@ -16233,7 +16233,7 @@ msgstr "Vertikal spiegeln"
 
 #: eeschema/tools/ee_actions.cpp:384
 msgid "Flips selected item(s) from top to bottom"
-msgstr "Ausgewählte Elemente von der Oberseite an die Unterseite zuweisen"
+msgstr "Ausgewählte Elemente oben/unten wenden"
 
 #: eeschema/tools/ee_actions.cpp:390
 msgid "Mirror Horizontally"
@@ -16241,8 +16241,7 @@ msgstr "Horizontal spiegeln"
 
 #: eeschema/tools/ee_actions.cpp:390
 msgid "Flips selected item(s) from left to right"
-msgstr ""
-"Ausgewählte Elemente von der linken Seite auf die rechte Seite zuweisen"
+msgstr "Ausgewählte Elemente links/rechts wenden"
 
 #: eeschema/tools/ee_actions.cpp:396 pcbnew/tools/pcb_actions.cpp:328
 msgid "Properties..."
@@ -16254,19 +16253,19 @@ msgstr "Anzeige der Elementeigenschaften"
 
 #: eeschema/tools/ee_actions.cpp:402
 msgid "Edit Reference Designator..."
-msgstr "Referenzbezeichner editieren..."
+msgstr "Referenzbezeichner bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:402
 msgid "Displays reference designator dialog"
-msgstr "Anzeige des Dialogs für die Referenzfelder"
+msgstr "Zeigt den Dialog für den Referenzbezeichner"
 
 #: eeschema/tools/ee_actions.cpp:408
 msgid "Edit Value..."
-msgstr "Wert editieren..."
+msgstr "Wert bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:408
 msgid "Displays value field dialog"
-msgstr "Anzeige der Elementeigenschaften"
+msgstr "Zeigt den Dialog for das Wertfeld"
 
 #: eeschema/tools/ee_actions.cpp:414
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:251
@@ -16275,11 +16274,11 @@ msgstr "Footprint bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:414
 msgid "Displays footprint field dialog"
-msgstr "Anzeige des Dialogs für die Footprintfelder"
+msgstr "Zeigt den Dialogs für das Footprintfeld"
 
 #: eeschema/tools/ee_actions.cpp:420
 msgid "Autoplace Fields"
-msgstr "Felder autoplatzieren"
+msgstr "Felder automatisch platzieren"
 
 #: eeschema/tools/ee_actions.cpp:420
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
@@ -16479,7 +16478,7 @@ msgstr "Symbolfelder bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:562
 msgid "Bulk-edit fields of all symbols in schematic"
-msgstr "Massenbearbeitung der Felder von allen Symbolen im Schaltplan"
+msgstr "Sammelbearbeitung der Felder von allen Symbolen im Schaltplan"
 
 #: eeschema/tools/ee_actions.cpp:567
 msgid "Edit Symbol Library Links..."
@@ -16491,7 +16490,7 @@ msgstr "Bearbeitet die Zuordnung zwischen Schaltplan- und Bibliothekssymbolen"
 
 #: eeschema/tools/ee_actions.cpp:572
 msgid "Assign Footprints..."
-msgstr "Symbolfootprints zuweisen..."
+msgstr "Footprints zuweisen..."
 
 #: eeschema/tools/ee_actions.cpp:572
 msgid "Run footprint assignment tool"
@@ -16539,18 +16538,18 @@ msgstr "Symbole wiederherstellen..."
 
 #: eeschema/tools/ee_actions.cpp:600
 msgid "Find old symbols in project and rename/rescue them"
-msgstr "Alte Symbole im Projekt finden und diese umbenennen/sichern"
+msgstr "Alte Symbole im Projekt finden und diese umbenennen/wiederherstellen"
 
 #: eeschema/tools/ee_actions.cpp:605
 msgid "Remap Legacy Library Symbols..."
-msgstr "Legacy-Bibliothekssymbole neu zuordnen..."
+msgstr "Symbole aus veralteten Bibliotheken neu zuordnen..."
 
 #: eeschema/tools/ee_actions.cpp:606
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
-"Bibliothekssymbol-Verweise in alten Schaltplänen der Symbol-"
+"Bibliothekssymbol-Verweise in veralteten Schaltplänen der Symbol-"
 "Bibliothekstabelle neu zuordnen"
 
 #: eeschema/tools/ee_actions.cpp:611
@@ -27955,7 +27954,7 @@ msgstr "Zonen-Füllstrategie"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:111
 msgid "Mimic legacy behavior"
-msgstr "Legacy-Verhalten nachahmen"
+msgstr "Früheres Verhalten nachahmen"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid ""
@@ -30602,7 +30601,7 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
-"Schreiben/Verändern der im alten Format vorliegenden Bibliotheken (.mod-"
+"Schreiben/Verändern der im veralteten Format vorliegenden Bibliotheken (.mod-"
 "Dateien) ist nicht möglich\n"
 "Bitte speichern Sie die aktuelle Bibliothek im neuen .pretty-Format\n"
 "und aktualisieren Sie die Footprint-Bibliothekstabelle,\n"
@@ -30616,8 +30615,8 @@ msgid ""
 "and update your footprint lib table\n"
 "before deleting a footprint"
 msgstr ""
-"Verändern der im alten Format vorliegenden Bibliotheken (.mod-Dateien) ist "
-"nicht möglich.\n"
+"Verändern der im veralteten Format vorliegenden Bibliotheken (.mod-Dateien) "
+"ist nicht möglich.\n"
 "Bitte speichern Sie die aktuelle Bibliothek im neuen .pretty-Format\n"
 "und aktualisieren Sie die Footprint-Bibliothekstabelle,\n"
 "um den Footprint löschen zu können"
@@ -33173,7 +33172,7 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5078
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2486
 msgid "Legacy Zone Warning"
-msgstr "Warnung zu Legacy-Zone"
+msgstr "Warnung zu veralteter Zone"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:172
 #, c-format
@@ -33341,7 +33340,7 @@ msgstr "Die Datei '%s' ist leer."
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2999
 #, c-format
 msgid "File '%s' is not a legacy library."
-msgstr "Die Datei '%s' ist keine im alten Format vorliegende Bibliothek."
+msgstr "Die Datei '%s' ist keine im veralteten Format vorliegende Bibliothek."
 
 #: pcbnew/plugins/pcad/pcb.cpp:51 pcbnew/plugins/pcad/pcb.cpp:62
 #: pcbnew/plugins/pcad/pcb.cpp:73
