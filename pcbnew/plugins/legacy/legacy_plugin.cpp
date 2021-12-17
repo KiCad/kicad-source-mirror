@@ -2675,7 +2675,10 @@ void LEGACY_PLUGIN::loadDIMENSION()
             char  buf[2048];
 
             ReadDelimitedText( buf, line + SZ( "Te" ), sizeof(buf) );
-            dim->SetText( FROM_UTF8( buf ) );
+            dim->SetOverrideText( FROM_UTF8( buf ) );
+            dim->SetOverrideTextEnabled( true );
+            dim->SetUnitsFormat( DIM_UNITS_FORMAT::NO_SUFFIX );
+            dim->SetAutoUnits();
         }
         else if( TESTLINE( "Po" ) )
         {
