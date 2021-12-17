@@ -521,7 +521,6 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
 
     m_initialized = true;
     m_modified = false;
-    m_width = 0;
 
     // Connect Events
     m_grid->Connect( wxEVT_GRID_COL_SORT,
@@ -728,11 +727,11 @@ void DIALOG_LIB_EDIT_PIN_TABLE::adjustGridColumns()
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnSize( wxSizeEvent& event )
 {
-    auto new_size = event.GetSize().GetX();
+    auto new_size = event.GetSize();
 
-    if( m_initialized && m_width != new_size )
+    if( m_initialized && m_size != new_size )
     {
-        m_width = new_size;
+        m_size = new_size;
 
         adjustGridColumns();
     }

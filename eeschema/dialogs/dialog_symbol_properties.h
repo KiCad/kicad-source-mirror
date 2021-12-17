@@ -96,8 +96,8 @@ private:
     SCH_SYMBOL*    m_symbol;
     LIB_SYMBOL*    m_part;
 
-    int            m_widthFields;
-    int            m_widthPins;
+    wxSize         m_fieldsSize;
+    wxSize         m_pinsSize;
     int            m_delayedFocusRow;
     int            m_delayedFocusColumn;
     bool           m_delayedSelection;

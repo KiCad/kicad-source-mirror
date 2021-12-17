@@ -89,7 +89,7 @@ private:
     int                 m_delayedFocusColumn;
 
     int                 m_originalColWidths[ COL_COUNT ];
-    int                 m_width;
+    wxSize              m_size;
     bool                m_initialized;
 };
 

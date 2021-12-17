@@ -235,7 +235,6 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
     Raise();
 
     m_initialized = true;
-    m_width = 0;
 }
 
 
@@ -473,11 +472,11 @@ void DIALOG_PIN_PROPERTIES::adjustGridColumns()
 
 void DIALOG_PIN_PROPERTIES::OnSize( wxSizeEvent& event )
 {
-    auto new_size = event.GetSize().GetX();
+    auto new_size = event.GetSize();
 
-    if( m_initialized && m_width != new_size )
+    if( m_initialized && m_size != new_size )
     {
-        m_width = new_size;
+        m_size = new_size;
 
         adjustGridColumns();
     }

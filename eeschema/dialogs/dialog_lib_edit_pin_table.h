@@ -79,8 +79,7 @@ protected:
     LIB_SYMBOL*           m_part;
     LIB_PINS              m_pins;       // a copy of the pins owned by me
     bool                  m_modified;   ///< true when there are unsaved changes
-
-    int                   m_width;
+    wxSize                m_size;
 
     PIN_TABLE_DATA_MODEL* m_dataModel;
 };

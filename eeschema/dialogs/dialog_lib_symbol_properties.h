@@ -90,7 +90,7 @@ public:
     wxString           m_delayedErrorMessage;
 
     wxString           m_shownColumns;
-    int                m_width;
+    wxSize             m_size;
 
 private:
     static int m_lastOpenedPage;    // To remember the last notebook selection

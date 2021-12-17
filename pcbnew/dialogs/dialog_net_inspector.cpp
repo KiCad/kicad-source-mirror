@@ -1780,11 +1780,11 @@ void DIALOG_NET_INSPECTOR::adjustListColumns()
 
 void DIALOG_NET_INSPECTOR::onListSize( wxSizeEvent& aEvent )
 {
-    int width = aEvent.GetSize().x;
+    auto new_size = aEvent.GetSize();
 
-    if( width != m_width )
+    if( new_size != m_size )
     {
-        m_width = width;
+        m_size = new_size;
         adjustListColumns();
     }
 

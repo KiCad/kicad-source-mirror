@@ -67,7 +67,7 @@ private:
     SCH_SHEET*                    m_sheet;
     bool*                         m_clearAnnotationNewItems;
 
-    int                           m_width;
+    wxSize                        m_size;
     int                           m_delayedFocusRow;
     int                           m_delayedFocusColumn;
     wxString                      m_shownColumns;

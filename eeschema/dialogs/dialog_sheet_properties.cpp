@@ -880,7 +880,7 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_SHEET_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
 {
-    int new_size = event.GetSize();
+    auto new_size = event.GetSize();
 
     if( m_size != new_size )
     {

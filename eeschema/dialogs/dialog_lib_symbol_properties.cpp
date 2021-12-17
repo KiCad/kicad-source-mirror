@@ -58,8 +58,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_delayedFocusGrid( nullptr ),
     m_delayedFocusRow( -1 ),
     m_delayedFocusColumn( -1 ),
-    m_delayedFocusPage( -1 ),
-    m_width( 0 )
+    m_delayedFocusPage( -1 )
 {
     // Give a bit more room for combobox editors
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
@@ -789,11 +788,11 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnSizeGrid( wxSizeEvent& event )
 {
-    auto new_size = event.GetSize().GetX();
+    auto new_size = event.GetSize();
 
-    if( new_size != m_width )
+    if( new_size != m_size )
     {
-        m_width = new_size;
+        m_size = new_size;
 
         adjustGridColumns();
     }

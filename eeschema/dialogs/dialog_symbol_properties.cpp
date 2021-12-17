@@ -292,8 +292,6 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
 
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_fieldsGrid, m_part );
 
-    m_widthFields = 0;
-    m_widthPins = 0;
     m_delayedFocusRow = REFERENCE_FIELD;
     m_delayedFocusColumn = FDC_VALUE;
     m_delayedSelection = true;
@@ -1078,11 +1076,11 @@ void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_SYMBOL_PROPERTIES::OnSizeFieldsGrid( wxSizeEvent& event )
 {
-    int new_size = event.GetSize().GetX();
+    wxSize new_size = event.GetSize();
 
-    if( m_widthFields != new_size )
+    if( m_fieldsSize != new_size )
     {
-        m_widthFields = new_size;
+        m_fieldsSize = new_size;
 
         AdjustFieldsGridColumns();
     }
@@ -1094,11 +1092,11 @@ void DIALOG_SYMBOL_PROPERTIES::OnSizeFieldsGrid( wxSizeEvent& event )
 
 void DIALOG_SYMBOL_PROPERTIES::OnSizePinsGrid( wxSizeEvent& event )
 {
-    int new_size = event.GetSize().GetX();
+    wxSize new_size = event.GetSize();
 
-    if( m_widthPins != new_size )
+    if( m_pinsSize != new_size )
     {
-        m_widthPins = new_size;
+        m_pinsSize = new_size;
 
         AdjustPinsGridColumns();
     }
