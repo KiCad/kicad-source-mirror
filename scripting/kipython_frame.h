@@ -48,6 +48,8 @@ public:
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override {}
     void ProjectChanged() override {}
 
+    void ShowChangedLanguage() override {};
+
     void SetupPythonEditor();
 private:
 
