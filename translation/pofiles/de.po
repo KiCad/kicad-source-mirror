@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-17 00:56+0000\n"
+"PO-Revision-Date: 2021-12-17 23:09+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -15977,7 +15977,7 @@ msgstr "Elektrischen Anschlusstyp anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:183
 msgid "Annotate pins with their electrical types"
-msgstr "Annotieren der Pins mit deren elektrischen Typen"
+msgstr "Zeigt den elektrischen Anschlusstyp an Pins an"
 
 #: eeschema/tools/ee_actions.cpp:188
 msgid "Show Symbol Tree"
@@ -15985,7 +15985,7 @@ msgstr "Symbolbaum anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:193
 msgid "Hide Symbol Tree"
-msgstr "Symbolbaum ausblenden"
+msgstr "Symbolbaum verbergen"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Export View as PNG..."
