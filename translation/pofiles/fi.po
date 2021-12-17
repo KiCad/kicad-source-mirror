@@ -8,13 +8,14 @@
 # J. Lavoie <j.lavoie@net-c.ca>, 2021.
 # PurkkaKoodari <purkka@purkka.codes>, 2021.
 # Simo Mattila <simo.mattila@kapsi.fi>, 2021.
+# Vesa Solonen <vesa.solonen@vli.fi>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-12 21:47+0000\n"
-"Last-Translator: Simo Mattila <simo.mattila@kapsi.fi>\n"
+"PO-Revision-Date: 2021-12-17 23:09+0000\n"
+"Last-Translator: Vesa Solonen <vesa.solonen@vli.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -70,7 +71,7 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
-msgstr "Luo kappaleita ja viestejä"
+msgstr "Luo liuskoja ja läpivientejä"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:683
 msgid "Create zones"
@@ -288,7 +289,7 @@ msgstr "Kopioi 3D-kuva leikepöydälle"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:65
 msgid "Render current view using Raytracing"
-msgstr "Tee nykyinen näkymä Raytracing-toiminnolla"
+msgstr "Tee nykyinen näkymä säteenjäljitystoiminnolla"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:98
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:73
@@ -309,14 +310,12 @@ msgid "General"
 msgstr "Yleiset"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:238
-#, fuzzy
 msgid "Realtime Renderer"
-msgstr "Paljasta Finderissa"
+msgstr "Tosiaikapiirrin"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:239
-#, fuzzy
 msgid "Raytracing Renderer"
-msgstr "Raytracing-renderointivaihtoehdot"
+msgstr "Säteenjäljityspiiirrin"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:240
 #: eeschema/eeschema_config.cpp:70 eeschema/eeschema_config.cpp:247
@@ -413,7 +412,7 @@ msgstr "Palauta näkymä"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip Board"
-msgstr "Kääntölauta"
+msgstr "Käännä levy"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip the board view"
@@ -434,7 +433,7 @@ msgstr "Näkymä edestä"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:132
 msgid "View Back"
-msgstr "Näytä takaisin"
+msgstr "Näkymä täkaa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:138
 msgid "View Left"
@@ -446,15 +445,15 @@ msgstr "Näkymä oikealle"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
 msgid "View Top"
-msgstr "Näytä alkuun"
+msgstr "Näkymä päältä"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:156
 msgid "View Bottom"
-msgstr "Näkymä alhaalta"
+msgstr "Näkymä alta"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:161
 msgid "No 3D Grid"
-msgstr "Ei 3D-ruudukkoa"
+msgstr "Ei 3D-ristikkoa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "3D Grid 10mm"
@@ -473,27 +472,24 @@ msgid "3D Grid 1mm"
 msgstr "3D-ristikko 1 mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
-#, fuzzy
 msgid "Render Realistic Materials"
-msgstr "Dielektriset materiaalit"
+msgstr "Piirrä todenmukaiset materiaalit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
-msgstr "Käytä kaikkien 3D-mallitiedostojen kaikkia materiaaliominaisuuksia"
+msgstr "Käytä kaikkia materiaaliominaisuuksia jokaisesta 3D-mallitiedostosta"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
-#, fuzzy
 msgid "Render Solid Colors"
-msgstr "Render Shadows"
+msgstr "Piirrä tasaiset värit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Käytä vain 3D-mallitiedoston diffuusi väriominaisuutta"
+msgstr "Käytä vain 3D-mallitiedoston diffuusi-väriominaisuutta"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
-#, fuzzy
 msgid "Render CAD Colors"
-msgstr "Määritetyt värit"
+msgstr "Piirrä CAD-värit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
@@ -505,7 +501,7 @@ msgstr "Näytä tai piilota läpireikä-3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:213
 msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "Näytä tai piilota \"Läpireikä\"-tyypin komponenttien 3D-mallit"
+msgstr "Näytä tai piilota 'Läpireikä'-tyypin komponenttien 3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle SMD 3D models"
@@ -513,7 +509,7 @@ msgstr "Näytä tai piilota pintaliitos-3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:219
 msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "Näytä tai piilota \"Pintaliitos\"-tyypin komponenttien 3D-mallit"
+msgstr "Näytä tai piilota 'Pintaliitos'-tyypin komponenttien 3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle Other 3D models"
@@ -521,15 +517,15 @@ msgstr "Näytä tai piilota muut 3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
-msgstr "Näytä tai piilota \"Muu\"-tyypin komponenttien 3D-mallit"
+msgstr "Näytä tai piilota 'Muu'-tyypin komponenttien 3D-mallit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
-msgstr "Näytä mallien rajoituslaatikot"
+msgstr "Näytä mallien rajausalueet"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:235
 msgid "Toggle realistic mode"
-msgstr "Vaihda realistinen tila"
+msgstr "Vaihda todenmukainen tila"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:240
 msgid "Toggle board body display"
@@ -537,15 +533,15 @@ msgstr "Vaihda levyn rungon näyttö"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:245
 msgid "Show 3D Axis"
-msgstr "Näytä 3D-akseli"
+msgstr "Näytä 3D-akselit"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:250
 msgid "Toggle zone display"
-msgstr "Vaihda vyöhykenäyttö"
+msgstr "Vaihda vyöhykkeiden näyttö"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle adhesive display"
-msgstr "Vaihda liima-näyttö"
+msgstr "Vaihda liimakerroksen näyttö"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Toggle display of adhesive layers"
@@ -553,11 +549,11 @@ msgstr "Vaihda liimakerrosten näyttö"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle silkscreen display"
-msgstr "Vaihda silkkipainonäyttö"
+msgstr "Vaihda silkkipainatuksen näyttö"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle display of silkscreen layers"
-msgstr "Vaihda silkkipainikerrosten näyttö"
+msgstr "Vaihda silkkipainokerrosten näyttö"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle solder mask display"
@@ -569,7 +565,7 @@ msgstr "Vaihda juotosmaskikerrosten näyttö"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Toggle solder paste display"
-msgstr "Vaihda juotospastanäyttö"
+msgstr "Vaihda juotospastan näyttö"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Toggle display of solder paste layers"
@@ -581,7 +577,7 @@ msgstr "Vaihda kommenttien näyttö"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
 msgid "Toggle display of comments and drawings layers"
-msgstr "Vaihda kommenttien ja piirustusten tasojen näyttö"
+msgstr "Vaihda kommentti- ja piirustustasojen näyttö"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:280
 msgid "Toggle ECO display"
@@ -610,36 +606,32 @@ msgid "Select 3D Model"
 msgstr "Valitse 3D-malli"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:23
-#, fuzzy
 msgid "Environment Colors"
-msgstr "Ympäristömuuttujat"
+msgstr "Ympäristön värit"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "Takaisin viitteen alku:"
+msgstr "Taustan liukuvärin alku:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:37
 msgid "Background gradient end:"
-msgstr "Taustagradientin loppu:"
+msgstr "Taustan liukuvärin loppu:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:50
 msgid "Solder paste:"
 msgstr "Juotospasta:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:64
-#, fuzzy
 msgid "Board Colors"
-msgstr "Levyn rungon väri"
+msgstr "Levyn rungon värit"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:66
 msgid "Use board stackup colors"
 msgstr "Käytä kortin kerrospinon värejä"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "Verkon värit:"
+msgstr "Käytä värejä:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
@@ -650,41 +642,36 @@ msgid "Silkscreen bottom:"
 msgstr "Silkkipaino alapuoli:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:97
-#, fuzzy
 msgid "Solder mask top:"
-msgstr "Muut valinnat:"
+msgstr "Juotosmaski yläpuoli:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:104
 msgid "Solder mask bottom:"
 msgstr "Juotosmaski alapuoli:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:117
-#, fuzzy
 msgid "Copper/surface finish:"
-msgstr "Kuparin viimeistely:"
+msgstr "Kuparin/pinnan viimeistely:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:130
-#, fuzzy
 msgid "Board body:"
-msgstr "Levyn puoli:"
+msgstr "Levyn runko:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:24
 msgid "Board Layers"
-msgstr "Hallituksen kerrokset"
+msgstr "Levyn kerrokset"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:31
 msgid "Show silkscreen layers"
 msgstr "Näytä silkkipainokerrokset"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Leikkaa silkkipaino via rengas"
+msgstr "Leikkaa silkkipainokuvio juotosmaskin reunoilla"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
-#, fuzzy
 msgid "Clip silkscreen at via annuli"
-msgstr "Leikkaa silkkipaino via rengas"
+msgstr "Leikkaa silkkipainokuvio läpivientien reunoilla"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:40
 msgid "Show solder mask layers"
@@ -700,12 +687,11 @@ msgstr "Näytä liimakerrokset"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "User Layers (not shown in realistic mode)"
-msgstr "Käyttäjätasot (ei näy realistisessa tilassa)"
+msgstr "Käyttäjätasot (ei näy todenmukaisessa tilassa)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
-msgstr "Näytä kommentit ja piirustukset"
+msgstr "Näytä kommentti- ja piirustuskerrokset"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:61
 msgid "Show ECO layers"
@@ -713,15 +699,15 @@ msgstr "Näytä ECO-kerrokset"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Render Options"
-msgstr "Render-asetukset"
+msgstr "Pirron asetukset"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:76
 msgid "Realistic mode"
-msgstr "Realistinen tila"
+msgstr "Todenmukainen tila"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:79
 msgid "Show board body"
-msgstr "Näytä laudan runko"
+msgstr "Näytä levyn runko"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:82
 msgid "Show filled areas in zones"
@@ -729,39 +715,35 @@ msgstr "Näytä täytöt"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:85
 msgid "Use bare copper color for unplated copper"
-msgstr "Käytä päällystämätöntä kuparia paljaalla kuparilla"
+msgstr "Käytä kuparin väriä kasvattamattomalla kuparilla"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:86
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr "Käytä päällystetyn ja päällystämättömän kuparin eri värejä. (Hidas)"
+msgstr "Käytä kasvatettuun ja peruskupariin eri värejä. (Hidas)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:93
 msgid "Material properties:"
 msgstr "Materiaalin ominaisuudet:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "Realistic"
-msgstr "Realistinen tila"
+msgstr "Todenmukainen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "Solid colors"
-msgstr "Valinnan värit"
+msgstr "Tasaiset värit"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "CAD colors"
-msgstr "Värit"
+msgstr "CAD-värit"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:110
 msgid "Camera Options"
 msgstr "Kameran asetukset"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
-msgstr "Kierron lisäys:"
+msgstr "Kierron askel:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:123
 #: common/base_units.cpp:477 pcb_calculator/widgets/unit_selector.cpp:130
@@ -785,26 +767,24 @@ msgstr "Animaation nopeus:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:23
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:21
-#, fuzzy
 msgid "Rendering Options"
-msgstr "Render-asetukset"
+msgstr "Piirron asetukset"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:25
 msgid "Show model bounding boxes"
-msgstr "Näytä mallin rajoituslaatikot"
+msgstr "Näytä mallin rajausalueet"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
 msgid "Show copper thickness"
 msgstr "Näytä kuparin paksuus"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
-#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "Korostetut kohteet"
+msgstr "Korosta kohteet osoittimen alla"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:37
 msgid "Anti-aliasing:"
-msgstr "Antialiasointi:"
+msgstr "Reunojen pehmennys:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:41
 msgid "Disabled"
@@ -837,7 +817,7 @@ msgstr "Liikkumisen aikana"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:65
 msgid "Disable anti-aliasing"
-msgstr "Poista anti-aliasing käytöstä"
+msgstr "Poista reunojen pehmennys käytöstä"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:68
 msgid "Disable thickness"
@@ -845,16 +825,15 @@ msgstr "Poista paksuus käytöstä"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:71
 msgid "Disable vias"
-msgstr "Poista viias käytöstä"
+msgstr "Poista läpiviennit käytöstä"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:74
 msgid "Disable holes"
 msgstr "Poista reiät käytöstä"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
-#, fuzzy
 msgid "Procedural textures (slow)"
-msgstr "Menettelytavat"
+msgstr "Menetelmäpohjaiset pintakuviot (hidas)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 #, fuzzy
@@ -3587,7 +3566,7 @@ msgstr "Liuskan leveys"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:202
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:108
 msgid "Via Size"
-msgstr "Koon kautta"
+msgstr "Läpiviennin koko"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:45
 msgid "Via Hole"
@@ -3596,7 +3575,7 @@ msgstr "Läpiviennin reikä"
 #: common/dialogs/panel_setup_netclasses_base.cpp:46
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:204
 msgid "uVia Size"
-msgstr "uVia-koko"
+msgstr "Mikroläpiviennin koko"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
 msgid "uVia Hole"
@@ -7263,7 +7242,7 @@ msgid ""
 "assignments:\n"
 "\n"
 msgstr ""
-"Seuraavia virheitä yritettiin muuntaa jalanjäljen määrityksiä:\n"
+"Seuraavia virheitä tapahtui yritettäessä muuntaa jalanjäljen määrityksiä:\n"
 "\n"
 
 #: cvpcb/readwrite_dlgs.cpp:181
@@ -18799,9 +18778,8 @@ msgid "Compatible"
 msgstr "Yhteensopiva"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:103
-#, fuzzy
 msgid "Show all versions"
-msgstr "Näytä kaikki vias"
+msgstr "Näytä kaikki versiot"
 
 #: kicad/pcm/dialogs/panel_packages_view_base.cpp:109
 #, fuzzy
@@ -20059,7 +20037,7 @@ msgstr "Pienin puhdistuma"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diam - drill)"
-msgstr "Via: (halkaisija - pora)"
+msgstr "Läpivienti: (halkaisija - pora)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:76
 msgid "Plated Pad: (diam - drill)"
@@ -20639,19 +20617,19 @@ msgstr "Pinnoitteen paksuus (T):"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:57
 msgid "Via length:"
-msgstr "Pituus:"
+msgstr "Läpiviennin pituus:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
-msgstr "Läpivienti on levyn paksuus läpivientireikien kohdalla"
+msgstr "Läpiviennin pituus on levyn paksuus läpivientireikien kohdalla"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 msgid "Via pad diameter:"
-msgstr "Tyynyn halkaisijan kautta:"
+msgstr "Läpiviennin johdinalueen halkaisija:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "Läpivientiholkin läpimitta (rengasmainen rengas)"
+msgstr "Läpivientiä ympäröivän johdinalueen halkaisija"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
@@ -20788,7 +20766,7 @@ msgstr "Induktiivinen reaktanssi annetulla nousuajalla ja laskettu induktanssi"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:353
 msgid "Top view of via"
-msgstr "Yläkuva via"
+msgstr "Ylänäkymä läpivientiin"
 
 #: pcb_calculator/datafile_read_write.cpp:76
 msgid "Data file error."
@@ -21853,11 +21831,11 @@ msgstr "Poista kahden verkon radan oikosulku"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove via shorting two nets"
-msgstr "Poista oikosulkemalla kaksi verkkoa"
+msgstr "Poista läpivienti mikä oikosulkee kaksi verkkoa"
 
 #: pcbnew/cleanup_item.cpp:49
 msgid "Remove redundant via"
-msgstr "Poista tarpeeton kautta"
+msgstr "Poista tarpeeton läpivienti"
 
 #: pcbnew/cleanup_item.cpp:50
 msgid "Remove duplicate track"
@@ -21873,7 +21851,7 @@ msgstr "Poista raita, jota ei ole yhdistetty molemmista päistä"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove via connected on fewer than two layers"
-msgstr "Poista liitetty alle kahdella kerroksella"
+msgstr "Poista läpiviennit alle kahdella johdinkerroksella"
 
 #: pcbnew/cleanup_item.cpp:54
 msgid "Remove zero-length track"
@@ -22529,7 +22507,7 @@ msgstr "NPTH:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:155
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:165
 msgid "Through vias:"
-msgstr "Viasien kautta:"
+msgstr "Läpiviennit:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:156
 msgid "Blind/buried:"
@@ -22538,7 +22516,7 @@ msgstr "Sokea / haudattu:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:157
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:173
 msgid "Micro vias:"
-msgstr "Mikropullot:"
+msgstr "Mikroläpiviennit:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:374
 #: pcbnew/dialogs/dialog_board_statistics.cpp:388
@@ -22649,7 +22627,7 @@ msgstr "Pinnoitettu"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:237
 msgid "Via/Pad"
-msgstr "Via / Pad"
+msgstr "Läpivienti / Antura"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:238
 msgid "Start Layer"
@@ -22725,15 +22703,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
 msgid "&Delete redundant vias"
-msgstr "& Poista tarpeeton vias"
+msgstr "&Poista tarpeettomat läpiviennit"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:28
 msgid "remove vias on through hole pads and superimposed vias"
-msgstr "poista läpiviennit läpiviennistä ja päällekkäiset läpät"
+msgstr "poista läpiviennit läpireikäanturoista ja päällekkäiset läpiviennit"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:32
 msgid "Delete vias connected on only one layer"
-msgstr "Poista vain yhteen kerrokseen liitetyt viias"
+msgstr "Poista vain yhteen kerrokseen liittyvät läpiviennit"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "&Merge co-linear tracks"
@@ -22761,7 +22739,7 @@ msgstr "Poista kappaleet, joissa on sekä alku- että loppuasemat tyynyn sisäll
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:57
 msgid "Cleanup Tracks and Vias"
-msgstr "Siivouksen jäljet ja Vias"
+msgstr "Siisti liuskat ja läpiviennit"
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:45
 msgid "Constraints Resolution Report"
@@ -24153,7 +24131,7 @@ msgstr "Sisällytä ja laudan ääriviivat"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:48
 msgid "Include &vias"
-msgstr "Sisällytä & vias"
+msgstr "Sisällytä &läpiviennit"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:51
 msgid "Include &zones"
@@ -24985,7 +24963,7 @@ msgstr "Päällystämättömät tyynyt:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:181
 msgid "Buried vias:"
-msgstr "Haudatut pullot:"
+msgstr "Piiloläpiviennit:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:91
 msgid "Generate Drill Files"
@@ -25229,7 +25207,7 @@ msgstr "Aseta nettoluokan arvoihin:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:77
 msgid "Set Track and Via Properties"
-msgstr "Aseta Track ja Properties"
+msgstr "Aseta liuskojen ja läpivientien mitat"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:30
 msgid "footprint"
@@ -25384,7 +25362,7 @@ msgstr "Suunnittelusäännöt"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Predefined track and via dimensions"
-msgstr "Ennalta määrätty raita ja läpimitat"
+msgstr "Ennalta määritellyt liuska- ja läpivientimitat"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 msgid "Solder mask/paste defaults"
@@ -25540,11 +25518,11 @@ msgstr "Pad Count"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:79
 msgid "Via Count"
-msgstr "Laskurin kautta"
+msgstr "Läpivientien lukumäärä"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:80
 msgid "Via Length"
-msgstr "Pituuden kautta"
+msgstr "Läpivientien pituus"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:81
 msgid "Track Length"
@@ -26513,7 +26491,7 @@ msgstr "Älä peitä läpivientejä"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Remove soldermask on vias"
-msgstr "Poista juote peite läpivienneistä"
+msgstr "Poista juotosmaski läpivienneistä"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:109
 msgid ""
@@ -26845,11 +26823,11 @@ msgstr "Jäljitä aukko:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
 msgid "Via gap:"
-msgstr "Aukon kautta:"
+msgstr "Läpivientien väli:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
-msgstr "Läpivienti sama kuin jälkiväli"
+msgstr "Läpivientiväli sama kuin liuskaväli"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
@@ -26946,7 +26924,7 @@ msgstr "DRC-rikkomus: korosta esteitä"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr "DRC-rikkomus: työnnä vetoja ja läpivientejä"
+msgstr "Suunnittelusääntörikkomus: työnnä liuskoja ja läpivientejä"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
@@ -26974,15 +26952,15 @@ msgstr "Vapaa kulmatila (ei työntöä / kiertämistä)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:31
 msgid "Shove vias"
-msgstr "Työnnä piilot"
+msgstr "Työnnä läpivientejä"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:33
 msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
-"Kun poistettu käytöstä, piilolinssejä pidetään liikkumattomina esineinä ja "
-"ne halaillaan työnnämisen sijaan."
+"Kun poistettu käytöstä, läpivientejä pidetään liikkumattomina kohteina ja ne "
+"halaillaan työnnämisen sijaan."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:37
 msgid "Jump over obstacles"
@@ -27022,8 +27000,8 @@ msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
-"Kun tämä on käytössä, reititin yrittää rikkoa tyynyt / läpiviennit puhtaalla "
-"tavalla välttäen teräviä kulmia ja rosoisia purkautumisjälkiä."
+"Kun tämä on käytössä, reititin yrittää lähteä anturasta ja läpiviennistä "
+"siististi, välttäen teräviä kulmia ja mutkaisuutta."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid "Smooth dragged segments"
@@ -27261,7 +27239,7 @@ msgstr "Estä johtimien vetäminen tälle alueelle"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:53
 msgid "Keep out vias"
-msgstr "Pidä poissa vias"
+msgstr "Pidä läpiviennit poissa"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 msgid "Prevent vias from being placed in this area"
@@ -27421,9 +27399,8 @@ msgid "Leave Nets Unchanged"
 msgstr "Älä vaihda verkkoja"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:439
-#, fuzzy
 msgid "Via hole size must be smaller than via diameter"
-msgstr "Porauksen koon on oltava pienempi kuin läpimitan"
+msgstr "Porauksen koon on oltava pienempi kuin johdinalueenläpimitan"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:448
 msgid "Via start layer and end layer cannot be the same"
@@ -27431,7 +27408,7 @@ msgstr "Aloituskerros ja loppukerros eivät voi olla samat"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:606
 msgid "Edit track/via properties"
-msgstr "Muokkaa raitaa / ominaisuuksien kautta"
+msgstr "Muokkaa liuskan ja läpiviennin ominaisuuksia"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:671 pcbnew/files.cpp:914
 msgid "Updating nets"
@@ -27446,8 +27423,8 @@ msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
 msgstr ""
-"Muuta tämän verkko automaattisesti, kun tyynyjä tai vyöhykkeitä, joihin se "
-"koskettaa, vaihdetaan"
+"Muuta tämän läpiviennin verkko automaattisesti, kun anturoita tai "
+"vyöhykkeitä, joihin se koskettaa, vaihdetaan"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:60
 msgid "Start point X:"
@@ -27497,7 +27474,7 @@ msgstr "Käytä nettoluokkakokoja"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:251
 msgid "Via type:"
-msgstr "Tyypin kautta:"
+msgstr "Läpiviennin tyyppi:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
 #: pcbnew/pcb_track.cpp:1096
@@ -27533,7 +27510,7 @@ msgstr "%s, %s ja yhdistetyt kerrokset"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
-msgstr "Track & Via -ominaisuudet"
+msgstr "Liuska- ja läpivientiominaisuudet"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
 #, fuzzy
@@ -27542,11 +27519,11 @@ msgstr "Porauksen koon on oltava pienempi kuin läpimitan"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via drill:"
-msgstr "Poran kautta:"
+msgstr "Läpiviennin poraus:"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:54
 msgid "Track Width and Via Size"
-msgstr "Radan leveys ja koon koko"
+msgstr "Liuskan leveys ja läpiviennin koko"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:146
 msgid "Set Unused Pad Properties"
@@ -27554,7 +27531,7 @@ msgstr "Aseta käyttämättömät Pad-ominaisuudet"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Vias"
-msgstr "& Vias"
+msgstr "&Läpiviennit"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:26
 msgid "&Pads"
@@ -27670,16 +27647,15 @@ msgid "Show always"
 msgstr "Näytä aina"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
-#, fuzzy
 msgid "Track && Via Clearances"
-msgstr "Rataetäisyys"
+msgstr "Liuskojen ja läpivientien välykset"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
 msgstr ""
-"Näytä välysviivat vetojen ympärillä, ja valinnaisesti via:n välys vedon "
+"Näytä välysviivat vetojen ympärillä ja valinnaisesti läpiviennin välys vedon "
 "päässä reitityksen aikana."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
@@ -28040,11 +28016,11 @@ msgstr "Sallitut ominaisuudet"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:37
 msgid "Allow blind/buried vias"
-msgstr "Salli sokeat / haudatut aukot"
+msgstr "Salli piiloläpiviennit"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:43
 msgid "Allow micro vias (uVias)"
-msgstr "Salli mikrovias (uVias)"
+msgstr "Salli mikroläpiviennit"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:55
 msgid "Arc/circle approximated by segments"
@@ -28173,15 +28149,16 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:240
 msgid "Minimum via diameter:"
-msgstr "Pienin läpimitta:"
+msgstr "Pienin läpiviennin halkaisija:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:245
 msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Pienin via:n halkaisija. Jos asetettu, tämä on absoluuttinen minimi jota ei "
-"voi alittaa netclass:eilla, kustomisäännöillä tai muilla asetuksilla."
+"Pienin läpiviennin halkaisija. Jos asetettu, tämä on absoluuttinen minimi "
+"jota ei voi alittaa verkkoluokilla, mukautetuilla säännöillä tai muilla "
+"asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:256
 #, fuzzy
@@ -28245,19 +28222,20 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:354
 msgid "uVias"
-msgstr "uVias"
+msgstr "Mikroläpiviennit"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:370
 msgid "Minimum uVia diameter:"
-msgstr "Pienin uVia-halkaisija:"
+msgstr "Pienin mikroläpiviennin halkaisija:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:375
 msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Pienin mikro-via:n halkaisija. Jos asetettu, tämä on absoluuttinen minimi "
-"jota ei voi alittaa netclass:eilla, kustomisäännöillä tai muilla asetuksilla."
+"Pienin mikroläpiviennin halkaisija. Jos asetettu, tämä on absoluuttinen "
+"minimi jota ei voi alittaa verkkoluokilla, mukautetuilla säännöillä tai "
+"muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 msgid "Minimum uVia hole:"
@@ -28268,8 +28246,9 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Pienin mikro-via:n reiän koko. Jos asetettu, tämä on absoluuttinen minimi "
-"jota ei voi alittaa netclass:eilla, kustomisäännöillä tai muilla asetuksilla."
+"Pienin mikroläpiviennin reiän koko. Jos asetettu, tämä on absoluuttinen "
+"minimi jota ei voi alittaa verkkoluokilla, mukautetuilla säännöillä tai "
+"muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
@@ -29477,7 +29456,7 @@ msgstr "Diferenssipareja ei ole määritelty."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr "Ennalta määritelty raita ja läpimitat:"
+msgstr "Ennalta määritellyt liuska- ja läpivientimitat:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
@@ -29506,7 +29485,7 @@ msgstr "Väli"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:157
 msgid "Via Gap"
-msgstr "Via Gap"
+msgstr "Läpiviennin väli"
 
 #: pcbnew/drc/drc_engine.cpp:145 pcbnew/drc/drc_engine.cpp:219
 msgid "board setup constraints"
@@ -29534,7 +29513,7 @@ msgstr "levyn asennusrajoitukset"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
-msgstr "levyn asetusten mikro-via-rajoitteet"
+msgstr "levyn asetusten mikroläpivientirajoitteet"
 
 #: pcbnew/drc/drc_engine.cpp:244 pcbnew/drc/drc_engine.cpp:325
 #: pcbnew/drc/drc_engine.cpp:353
@@ -29835,7 +29814,7 @@ msgstr "Kallistus jälkien välillä kantaman ulkopuolella"
 
 #: pcbnew/drc/drc_item.cpp:194
 msgid "Too many vias on a connection"
-msgstr "Liian monta piilolinssiä yhteydessä"
+msgstr "Liian monta läpivientiä liitoksessa"
 
 #: pcbnew/drc/drc_item.cpp:198
 msgid "Differential pair gap out of range"
@@ -29973,7 +29952,7 @@ msgstr "Tunnistamaton kerros '%s'."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:87
 msgid "Checking via annular rings..."
-msgstr "Tarkistetaan rengasmaisten renkaiden kautta ..."
+msgstr "Tarkistetaan läpivientien liitosalueita..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:128
 #, c-format
@@ -29987,7 +29966,7 @@ msgstr "(%s suurin rengasleveys %s; todellinen %s)"
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:75
 msgid "Checking pad, via and zone connections..."
-msgstr "Tarkistetaan tyyny-, läpivienti- ja vyöhykeliitännät ..."
+msgstr "Tarkistetaan antura-, läpivienti- ja vyöhykeliitännät ..."
 
 #: pcbnew/drc/drc_test_provider_connectivity.cpp:149
 msgid "Checking net connections..."
@@ -29999,7 +29978,7 @@ msgstr "Kupariesineiden kerääminen ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:210
 msgid "Checking track & via clearances..."
-msgstr "Tarkastetaan radaa ja välysten kautta ..."
+msgstr "Tarkistetaan liuskojen ja läpivientien välykset..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:217
 msgid "Checking hole clearances..."
@@ -30098,7 +30077,7 @@ msgstr "Tarkastetaan tyynyreikiä ..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:100
 msgid "Checking via holes..."
-msgstr "Tarkastetaan reikiä ..."
+msgstr "Tarkastetaan läpivientien poraukset..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:105
 msgid "Checking micro-via holes..."
@@ -30234,7 +30213,7 @@ msgstr "Tarkastetaan raideleveyksiä ..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:82
 msgid "Checking via diameters..."
-msgstr "Tarkistetaan halkaisijoiden kautta ..."
+msgstr "Tarkistetaan läpivientien halkaisijat..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:119
 #, c-format
@@ -31527,17 +31506,17 @@ msgstr "Liitä %s tappi %s liittimeen %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:639
 #, c-format
 msgid "Reconnect via from %s to %s."
-msgstr "Muodosta yhteys uudelleen välillä %s - %s."
+msgstr "Muodosta läpivientiyhteys uudelleen välillä %s - %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:657
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected via from %s to %s."
-msgstr "Muodosta yhteys uudelleen välillä %s - %s."
+msgstr "Muodosta läpivientiyhteys uudelleen välillä %s - %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:667
 #, c-format
 msgid "Via connected to unknown net (%s)."
-msgstr "Yhdistettynä tuntemattomaan verkkoon (%s)."
+msgstr "Läpivienti yhdistettynä tuntemattomaan verkkoon (%s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:710
 #, c-format
@@ -32063,17 +32042,17 @@ msgstr "Piirilevyteksti '%s' %s"
 #: pcbnew/pcb_track.cpp:103
 #, c-format
 msgid "Blind/Buried Via %s on %s"
-msgstr "Sokea / haudattu Via %s päällä %s"
+msgstr "Piiloläpivienti %s %s:n päällä"
 
 #: pcbnew/pcb_track.cpp:104
 #, c-format
 msgid "Micro Via %s on %s"
-msgstr "Micro Via %s päällä %s"
+msgstr "Mikroläpivienti %s %s:n päällä"
 
 #: pcbnew/pcb_track.cpp:105
 #, c-format
 msgid "Via %s on %s"
-msgstr "%s kautta %s"
+msgstr "Läpivienti %s %s:n päällä"
 
 #: pcbnew/pcb_track.cpp:140
 msgid "removed annular ring"
@@ -32102,7 +32081,7 @@ msgstr "Piiloläpivienti"
 
 #: pcbnew/pcb_track.cpp:715
 msgid "Through Via"
-msgstr "Läpireikä"
+msgstr "Läpivienti"
 
 #: pcbnew/pcb_track.cpp:731 pcbnew/pcb_track.cpp:1155
 msgid "Drill"
@@ -32145,7 +32124,7 @@ msgstr "Kerroksen pohja"
 
 #: pcbnew/pcb_track.cpp:1162
 msgid "Via Type"
-msgstr "Tyypin kautta"
+msgstr "Läpiviennin tyyppi"
 
 #: pcbnew/pcbnew.cpp:264
 msgid ""
@@ -32402,9 +32381,8 @@ msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Ei-kuparinen antura %s käyttää tuntematonta anturamuotoa."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2482
-#, fuzzy
 msgid "Loading vias..."
-msgstr "Lataa…"
+msgstr "Lataa läpiviennit…"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2523
 #, c-format
@@ -33314,7 +33292,7 @@ msgstr "tuntematon tyynyn tyyppi: %d"
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:1890
 #, c-format
 msgid "unknown via type %d"
-msgstr "tuntematon tyypin kautta %d"
+msgstr "tuntematon läpivientityyppi %d"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2079
 #, c-format
@@ -33458,9 +33436,9 @@ msgid "Unable to find library section."
 msgstr "Kirjastotiedostoa ei löydy %s"
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find viaStyleDef %s."
-msgstr "Tiedoston \"%s\" PDF-katseluohjelmaa ei löydy"
+msgstr "Unable to find viaStyleDef %s."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:71
 msgid "Exception on python action plugin code"
@@ -33538,14 +33516,12 @@ msgid "Length Tuner"
 msgstr "Pituuden viritin"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:475
-#, fuzzy
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
 msgstr ""
-"Täydentäviä differentiaalipareja ei löydy. Varmista, että "
-"differentiaalipariin kuuluvien verkkojen nimet päättyvät joko _N / _P tai "
-"+/-."
+"Differentiaalipareja ei löydy. Varmista, että differentiaalipariin kuuluvien "
+"verkkojen nimet päättyvät joko _N / _P tai +/-."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:492
 msgid ""
@@ -33597,23 +33573,20 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:474
-#, fuzzy
 msgid "existing track"
-msgstr "Liuskoja piirtäessä"
+msgstr "olemassaoleva liuska"
 
 #: pcbnew/router/pns_kicad_iface.cpp:488 pcbnew/router/pns_kicad_iface.cpp:501
 msgid "board minimum width"
-msgstr "kortin minimi leveys"
+msgstr "kortin minimileveys"
 
 #: pcbnew/router/pns_kicad_iface.cpp:497
-#, fuzzy
 msgid "netclass 'Default'"
-msgstr "verkkoluokka \"%s\""
+msgstr "verkkoluokka 'Oletus'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:499
-#, fuzzy
 msgid "user choice"
-msgstr "Tallenna valinta"
+msgstr "käyttäjän valinta"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1056
 #, c-format
@@ -33621,12 +33594,11 @@ msgid "%s is malformed."
 msgstr "%s on epämuodostunut."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1059
-#, fuzzy
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"Tätä vyöhykettä ei voida käsitellä raidan asettelutyökalulla.\n"
+"Tätä vyöhykettä ei voida käsitellä reitittimellä.\n"
 "Varmista, että se ei ole itsensä leikkaava monikulmio."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1670 pcbnew/router/router_tool.cpp:435
@@ -33635,7 +33607,7 @@ msgstr "Interaktiivinen reititin"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:54
 msgid "Please select a differential pair trace you want to tune."
-msgstr "Valitse viritettävä differentiaaliparijälki."
+msgstr "Valitse viritettävä differentiaalipari."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:70
 msgid ""
@@ -33643,9 +33615,9 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"Ei löydy täydentävää differentiaalipariverkkoa vinoviivausta varten. "
-"Varmista, että differentiaalipariin kuuluvien verkkojen nimet päättyvät joko "
-"_N / _P tai +/-."
+"Ei löydy täydentävää differentiaaliparia vinousviritystä varten. Varmista, "
+"että differentiaalipariin kuuluvien verkkojen nimet päättyvät joko _N / _P "
+"tai +/-."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:165
 msgid "Too long: skew "
@@ -33657,25 +33629,24 @@ msgstr "Liian lyhyt: vinous "
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:171
 msgid "Tuned: skew "
-msgstr "Viritetty: vinossa "
+msgstr "Viritetty: vinous "
 
 #: pcbnew/router/pns_router.cpp:211
-#, fuzzy
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "Pariväliero, joka on pienempi kuin pienin välys (%s)."
+msgstr "Differentiaalipariväli on pienempi kuin levyn pienin välys (%s)."
 
 #: pcbnew/router/pns_router.cpp:231
 msgid "Cannot start routing from a non-plated hole."
-msgstr "Reititystä ei voi aloittaa päällystämättömästä reiästä."
+msgstr "Reititystä ei voi aloittaa metalloimattomasta reiästä."
 
 #: pcbnew/router/pns_router.cpp:242
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr "Sääntöalue %s estää raidat."
+msgstr "Sääntöalue %s estää liuskat."
 
 #: pcbnew/router/pns_router.cpp:247
 msgid "Rule area disallows tracks."
-msgstr "Sääntöalue estää raidat."
+msgstr "Sääntöalue estää liuskat."
 
 #: pcbnew/router/pns_router.cpp:254
 msgid "Cannot start routing from a text item."
@@ -33691,7 +33662,7 @@ msgstr "Reitityksen aloituspiste rikkoo DRC: tä."
 
 #: pcbnew/router/pns_router.cpp:313
 msgid "Cannot start a differential pair in the middle of nowhere."
-msgstr "Differentiaaliparia ei voi käynnistää keskellä ei mitään."
+msgstr "Differentiaaliparia ei voi aloittaa keskellä ei mitään."
 
 #: pcbnew/router/router_tool.cpp:91
 msgid "Finish Track"
@@ -33703,51 +33674,49 @@ msgstr "Lopettaa nykyisen radan asettamisen."
 
 #: pcbnew/router/router_tool.cpp:97
 msgid "Auto-finish Track"
-msgstr "Automaattinen viimeistely raita"
+msgstr "Päätä liuska automaattisesti"
 
 #: pcbnew/router/router_tool.cpp:97
-#, fuzzy
 msgid "Automatically finishes laying the current track."
-msgstr "Viimeistelee nykyisen radan asettamisen automaattisesti."
+msgstr "Päättää työn alla olevan liuskan automaattisesti."
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Place Through Via"
-msgstr "Paikka Via: n kautta"
+msgstr "Sijoita läpivienti"
 
 #: pcbnew/router/router_tool.cpp:103
 msgid "Adds a through-hole via at the end of currently routed track."
-msgstr "Lisää läpireikän kautta nykyisen reitin loppuun."
+msgstr "Lisää läpiviennin nykyisen liuskan loppuun."
 
 #: pcbnew/router/router_tool.cpp:109
 msgid "Place Blind/Buried Via"
-msgstr "Aseta sokea / haudattu Via"
+msgstr "Sijoita piiloläpivienti"
 
 #: pcbnew/router/router_tool.cpp:110
 msgid "Adds a blind or buried via at the end of currently routed track."
-msgstr "Lisää blindin tai haudatun reitin nykyisen reitin loppuun."
+msgstr "Lisää piiloläpiviennin nykyisen liuskan loppuun."
 
 #: pcbnew/router/router_tool.cpp:116
 msgid "Place Microvia"
-msgstr "Paikka Microvia"
+msgstr "Sijoita mikroläpivienti"
 
 #: pcbnew/router/router_tool.cpp:116
 msgid "Adds a microvia at the end of currently routed track."
-msgstr "Lisää mikrovian nykyisen reititetyn raidan loppuun."
+msgstr "Lisää mikroläpiviennin nykyisen liuskan loppuun."
 
 #: pcbnew/router/router_tool.cpp:123
 msgid "Select Layer and Place Through Via..."
-msgstr "Valitse kerros ja paikka ..."
+msgstr "Valitse kerros ja sijoita läpivienti..."
 
 #: pcbnew/router/router_tool.cpp:124
 msgid ""
 "Select a layer, then add a through-hole via at the end of currently routed "
 "track."
-msgstr ""
-"Valitse kerros ja lisää sitten läpireikä kautta reititetyn raidan loppuun."
+msgstr "Valitse kerros ja lisää sitten läpivienti nykyisen liuskan loppuun."
 
 #: pcbnew/router/router_tool.cpp:132
 msgid "Select Layer and Place Blind/Buried Via..."
-msgstr "Valitse kerros ja aseta sokea / haudattu ..."
+msgstr "Valitse kerros ja lisää sitten piiloläpivienti..."
 
 #: pcbnew/router/router_tool.cpp:133
 msgid ""
