@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-17 00:56+0000\n"
+"PO-Revision-Date: 2021-12-21 08:54+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -7268,7 +7268,7 @@ msgstr "ピン数でフィルター"
 
 #: cvpcb/tools/cvpcb_actions.cpp:143
 msgid "Filter footprint list by pin count"
-msgstr "ピン数でフットプリントを絞込み"
+msgstr "ピン数でフットプリントを絞り込み"
 
 #: cvpcb/tools/cvpcb_actions.cpp:149
 msgid "Filter by library"
@@ -7276,7 +7276,7 @@ msgstr "ライブラリーでフィルター"
 
 #: cvpcb/tools/cvpcb_actions.cpp:150
 msgid "Filter footprint list by library"
-msgstr "ライブラリーでフットプリントを絞込み"
+msgstr "ライブラリーでフットプリントを絞り込み"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:257
 msgid "Delete all associations?"
@@ -11701,7 +11701,7 @@ msgstr "選択された子アイテムを描画"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:50
 msgid "Fill selected shapes"
-msgstr "選択された輪郭を塗り潰し"
+msgstr "選択された輪郭を塗りつぶし"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
 msgid "&Highlight thickness:"
@@ -13478,7 +13478,7 @@ msgstr "この SCH_PLUGIN で Symbol*() 関数の<b>debug</b>ログを有効に�
 
 #: eeschema/sch_plugin.cpp:142
 msgid "Regular expression <b>symbol name</b> filter."
-msgstr "正規表現で<b>symbol name</b>を絞込みます。"
+msgstr "正規表現で<b>symbol name</b>を絞り込みます。"
 
 #: eeschema/sch_plugin.cpp:146 pcbnew/plugin.cpp:160
 msgid ""
@@ -24616,7 +24616,7 @@ msgstr "基板をクリア"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:55
 msgid "Filter Settings"
-msgstr "設定の絞込み"
+msgstr "設定の絞り込み"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:57
 msgid "Locked graphics"
@@ -34264,7 +34264,7 @@ msgstr "引出線を追加"
 
 #: pcbnew/tools/pcb_actions.cpp:155
 msgid "Add Filled Zone"
-msgstr "塗り潰しゾーンを追加"
+msgstr "塗りつぶしゾーンを追加"
 
 #: pcbnew/tools/pcb_actions.cpp:155
 msgid "Add a filled zone"
