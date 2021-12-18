@@ -1440,12 +1440,14 @@ wxColor PANEL_SETUP_BOARD_STACKUP::getColorIconItem( int aRow )
 
 void PANEL_SETUP_BOARD_STACKUP::updateIconColor( int aRow )
 {
+    // explicit depth important under MSW. We use R,V,B 24 bits/pixel bitmap
+    const int bitmap_depth = 24;
+
     if( aRow >= 0 )
     {
         wxStaticBitmap* st_bitmap = m_rowUiItemsList[aRow].m_Icon;
 
-        // explicit depth important under MSW
-        wxBitmap bmp( m_colorIconsSize.x, m_colorIconsSize.y / 2, 28 );
+        wxBitmap bmp( m_colorIconsSize.x, m_colorIconsSize.y / 2, bitmap_depth );
         drawBitmap( bmp, getColorIconItem( aRow ) );
         st_bitmap->SetBitmap( bmp );
         return;
@@ -1453,8 +1455,7 @@ void PANEL_SETUP_BOARD_STACKUP::updateIconColor( int aRow )
 
     for( unsigned row = 0; row < m_rowUiItemsList.size(); row++ )
     {
-        // explicit depth important under MSW
-        wxBitmap bmp( m_colorIconsSize.x, m_colorIconsSize.y / 2, 28 );
+        wxBitmap bmp( m_colorIconsSize.x, m_colorIconsSize.y / 2, bitmap_depth );
         drawBitmap( bmp, getColorIconItem( row ) );
         m_rowUiItemsList[row].m_Icon->SetBitmap( bmp );
     }
