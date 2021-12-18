@@ -518,7 +518,7 @@ void EDA_3D_CANVAS::DoRePaint()
     if( m_render_pivot )
     {
         const float scale = glm::min( m_camera.GetZoom(), 1.0f );
-        render_pivot( curtime_delta_s, scale * scale );
+        render_pivot( curtime_delta_s, scale );
     }
 
     // "Swaps the double-buffer of this window, making the back-buffer the

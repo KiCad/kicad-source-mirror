@@ -102,7 +102,6 @@ void EDA_3D_CANVAS::render_pivot( float t , float aScale )
     glTranslatef( lookAtPos.x, lookAtPos.y, lookAtPos.z );
 
     glScalef( aScale, aScale, aScale );
-
     pivot_render_triangles( t * 0.5f );
 
     t = t * 0.80f;
