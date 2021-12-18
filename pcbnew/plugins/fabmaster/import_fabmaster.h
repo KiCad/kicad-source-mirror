@@ -191,7 +191,8 @@ private:
         GR_SHAPE_LINE,
         GR_SHAPE_TEXT,
         GR_SHAPE_RECTANGLE,
-        GR_SHAPE_ARC
+        GR_SHAPE_ARC,
+        GR_SHAPE_CIRCLE             ///! Not actually in Fabmaster but we use for 360° arcs
     };
 
     enum GRAPHIC_TYPE

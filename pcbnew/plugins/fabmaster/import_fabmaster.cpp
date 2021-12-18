@@ -1076,6 +1076,9 @@ FABMASTER::GRAPHIC_ARC* FABMASTER::processArc( const FABMASTER::GRAPHIC_DATA& aD
 
     RotatePoint( mid, center, -angle / 2.0 );
 
+    if( start == end )
+        new_arc->shape = GR_SHAPE_CIRCLE;
+
     new_arc->result = SHAPE_ARC( start, mid, end, 0 );
 
     return new_arc;
@@ -2111,6 +2114,27 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         fp->Add( line, ADD_MODE::APPEND );
                         break;
                     }
+                    case GR_SHAPE_CIRCLE:
+                    {
+                        const GRAPHIC_ARC* lsrc = static_cast<const GRAPHIC_ARC*>( seg.get() );
+
+                        FP_SHAPE* circle = new FP_SHAPE( fp, SHAPE_T::CIRCLE );
+
+                        circle->SetLayer( layer );
+                        circle->SetCenter( wxPoint( lsrc->center_x, lsrc->center_y ) );
+                        circle->SetEnd( wxPoint( lsrc->end_x, lsrc->end_y ) );
+                        circle->SetWidth( lsrc->width );
+                        circle->SetLocalCoord();
+
+                        if( lsrc->width == 0 )
+                            circle->SetWidth( ds.GetLineThickness( circle->GetLayer() ) );
+
+                        if( src->mirror )
+                            circle->Flip( circle->GetCenter(), false );
+
+                        fp->Add( circle, ADD_MODE::APPEND );
+                        break;
+                    }
                     case GR_SHAPE_ARC:
                     {
                         const GRAPHIC_ARC* lsrc = static_cast<const GRAPHIC_ARC*>( seg.get() );
@@ -2762,6 +2786,23 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
             aBoard->Add( line, ADD_MODE::APPEND );
             break;
         }
+        case GR_SHAPE_CIRCLE:
+        {
+            const GRAPHIC_ARC* lsrc = static_cast<const GRAPHIC_ARC*>( seg.get() );
+
+            PCB_SHAPE* circle = new PCB_SHAPE( aBoard, SHAPE_T::CIRCLE );
+
+            circle->SetLayer( layer );
+            circle->SetCenter( wxPoint( lsrc->center_x, lsrc->center_y ) );
+            circle->SetEnd( wxPoint( lsrc->end_x, lsrc->end_y ) );
+            circle->SetWidth( lsrc->width );
+
+            if( lsrc->width == 0 )
+                circle->SetWidth( aBoard->GetDesignSettings().GetLineThickness( circle->GetLayer() ) );
+
+            aBoard->Add( circle, ADD_MODE::APPEND );
+            break;
+        }
         case GR_SHAPE_ARC:
         {
             const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
@@ -2877,6 +2918,20 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
                 aBoard->Add( line, ADD_MODE::APPEND );
                 break;
             }
+            case GR_SHAPE_CIRCLE:
+            {
+                const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
+
+                PCB_SHAPE* circle = new PCB_SHAPE( aBoard, SHAPE_T::CIRCLE );
+
+                circle->SetLayer( layer );
+                circle->SetCenter( wxPoint( src->center_x, src->center_y ) );
+                circle->SetEnd( wxPoint( src->end_x, src->end_y ) );
+                circle->SetWidth( src->width );
+
+                aBoard->Add( circle, ADD_MODE::APPEND );
+                break;
+            }
             case GR_SHAPE_ARC:
             {
                 const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
@@ -2901,6 +2956,7 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
                 rect->SetStart( wxPoint( src->start_x, src->start_y ) );
                 rect->SetEnd( wxPoint( src->end_x, src->end_y ) );
                 rect->SetWidth( 0 );
+                rect->SetFilled( true );
                 aBoard->Add( rect, ADD_MODE::APPEND );
                 break;
             }
