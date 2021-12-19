@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-13 18:56+0000\n"
+"PO-Revision-Date: 2021-12-21 08:54+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -13744,14 +13744,15 @@ msgstr ""
 "napájení / symbol. Symbol nebyl načten."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:707
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
-"Symbol '%s' má ve schématu CADSTAR měřítko, ale KiCad jej nepodporuje. "
-"Symbol byl načten v měřítku 1: 1 a může vyžadovat ruční úpravu."
+"Symbol '%s' má v originálu schématu CADSTAR měřítko, ale KiCad jej "
+"nepodporuje. Když je symbol znovu načten z knihovny, vrátí se k původnímu "
+"měřítku 1: 1."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1190
 #, c-format
@@ -15860,7 +15861,7 @@ msgstr "Velikost čísla vývodu -> ostatní"
 
 #: eeschema/tools/ee_actions.cpp:272
 msgid "Copy pin number size to other pins in symbol"
-msgstr ""
+msgstr "Kopírovat velikost čísla vývodu do ostatních vývodů v symbolu"
 
 #: eeschema/tools/ee_actions.cpp:281
 msgid "Add Symbol"
@@ -16077,7 +16078,7 @@ msgstr "Přiřadit třídu spojů..."
 
 #: eeschema/tools/ee_actions.cpp:449
 msgid "Assign a netclass to the net of the selected wire"
-msgstr ""
+msgstr "Přiřadit třídu spojů k vybranému drátu sítě"
 
 #: eeschema/tools/ee_actions.cpp:453
 msgid "De Morgan Conversion"
@@ -31312,9 +31313,9 @@ msgid "NetCode"
 msgstr "Kód sítě"
 
 #: pcbnew/pcb_track.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr "Spoj %s na %s, délka %s"
+msgstr "Spoj (oblouk) %s na %s, délka %s"
 
 #: pcbnew/pcb_track.cpp:891
 #, c-format
@@ -31354,9 +31355,8 @@ msgid "Action Plugins"
 msgstr "Akce pluginu"
 
 #: pcbnew/pcbnew_config.cpp:61
-#, fuzzy
 msgid "Origins & Axes"
-msgstr "Počátek X"
+msgstr "Počátky & osy"
 
 #: pcbnew/pcbnew_printout.cpp:108
 msgid "Multiple Layers"
@@ -31394,9 +31394,9 @@ msgid "Error reading file."
 msgstr "Chyba čtení souboru."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not parsed correctly."
-msgstr "Zóna mědi (%s) nemá žádné plošky připojené."
+msgstr "'%s' nebyl správně analyzován."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:498
 #, c-format
@@ -31433,9 +31433,8 @@ msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1424
-#, fuzzy
 msgid "No 3D-models will be imported."
-msgstr "Nelze vytvořit adresář \"%s\" -> nebudou importovány žádné 3D modely."
+msgstr "Žádný 3D model nebude importován."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1450
 #, c-format
@@ -31447,9 +31446,8 @@ msgid "Loading nets..."
 msgstr "Načítání sítí..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1507
-#, fuzzy
 msgid "Loading polygons..."
-msgstr "Provádím vyplnění polygonů..."
+msgstr "Načítání polygonů..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1520
 #: pcbnew/plugins/altium/altium_pcb.cpp:1771
@@ -31466,9 +31464,8 @@ msgid "Loading rules..."
 msgstr "Načítání pravidel..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1674
-#, fuzzy
 msgid "Loading board regions..."
-msgstr "Načítání souborů Gerber..."
+msgstr "Načítání oblastí desky..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1696
 msgid "Loading zones..."
@@ -31489,9 +31486,8 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1819
-#, fuzzy
 msgid "Loading zone fills..."
-msgstr "Sestavování zón..."
+msgstr "Načítání výplní zón..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1908
 msgid "Loading arcs..."
@@ -31613,9 +31609,8 @@ msgstr ""
 "vrstvy Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2650
-#, fuzzy
 msgid "Loading unicode strings..."
-msgstr "Načítání sítí..."
+msgstr "Načítání řetězců Unicode..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2664
 msgid "Loading text..."
@@ -31655,6 +31650,9 @@ msgid ""
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
 msgstr ""
+"Vybraný soubor označuje, že sítě nemusí být synchronizovány se schématem. "
+"Doporučuje se provádět postup 'Zarovnání sítí' v CADSTAR a re-import, aby se "
+"zabránilo nesrovnalostem mezi DPS a schématem. "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:131
 #, c-format
@@ -31794,12 +31792,12 @@ msgid "Unexpected Dimension type (ID %s). This was not imported."
 msgstr "Neočekávaný typ rozměru (ID %s). Nebylo importováno."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1565
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
 msgstr ""
-"ID kóty %s je úhlový rozměr, který nemá v KiCadu ekvivalent. Objekt nebyl "
+"Rozměr %s je úhlový rozměr, který nemá v KiCadu ekvivalent. Objekt nebyl "
 "importován."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1605
@@ -31819,6 +31817,8 @@ msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
 msgstr ""
+"CADSTAR '%s' oblast nemá ekvivalent KiCadu. Čisté oblasti umístění nejsou "
+"podporovány."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1641
 #, c-format
@@ -32106,9 +32106,9 @@ msgid "Could not insert graphical item %d into padstack '%s'."
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1014
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized pad shape primitive '%s' in row %zu."
-msgstr "Nerozpoznaná vlastnost '%s'"
+msgstr "Nerozpoznaná ploška základní formy '%s' v řadě %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1121
 #, c-format
@@ -32191,14 +32191,14 @@ msgstr "Nedostatečná oprávnění k odstranění složky '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2639
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
-msgstr "Adresář knihovny \"%s\" má neočekávané podadresáře."
+msgstr "Adresář knihovny '%s' má neočekávané podadresáře."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1007
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr "Neočekávaný soubor \"%s\" byl nalezen v cestě knihovny \"%s\"."
+msgstr "Neočekávaný soubor '%s' byl nalezen v cestě knihovny '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2676
@@ -32208,20 +32208,20 @@ msgid "Footprint library '%s' cannot be deleted."
 msgstr "Knihovnu pouzder '%s' nelze odstranit."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:178
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Neplatné reálné číslo v\n"
-"souboru: \"%s\"\n"
+"Neplatné číslo s plovoucí čárkou v\n"
+"souboru: '%s'\n"
 "řádek: %d\n"
 "offset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in\n"
 "file: '%s'\n"
@@ -32229,7 +32229,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Chybí číslo s plovoucí čárkou v\n"
-"souboru: \"%s\"\n"
+"souboru: '%s'\n"
 "řádek:: %d\n"
 "offset: %d"
 
@@ -32239,13 +32239,12 @@ msgid "Cannot interpret date code %d"
 msgstr "Nelze interpretovat kód data %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:846
-#, fuzzy
 msgid ""
 "Items found on undefined layers.  Do you wish to\n"
 "rescue them to the User.Comments layer?"
 msgstr ""
-"Položky nalezené na nedefinovaných vrstvách. Přejete si\n"
-"je zachránit do vrstvy Cmts.User?"
+"Položky nalezené na nedefinovaných vrstvách.  Přejete si\n"
+"je obnovit do vrstvy User.Comments?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:848
 msgid "Undefined layers:"
@@ -32377,10 +32376,9 @@ msgid "Footprint library '%s' is read only."
 msgstr "Knihovna pouzder '%s' je pouze pro čtení."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'"
-msgstr ""
-"Nelze přejmenovat dočasný soubor \"%s\" na soubor knihovny pouzder \"%s\""
+msgstr "Nelze přejmenovat dočasný soubor '%s' na '%s'"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:347
 #, c-format
@@ -32422,12 +32420,12 @@ msgid "This file does not contain a PCB."
 msgstr "Tento soubor neobsahuje DPS."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2499
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' does not exist.\n"
 "Would you like to create it?"
 msgstr ""
-"Knihovna \"%s\" neexistuje.\n"
+"Knihovna '%s' neexistuje.\n"
 "Chcete ji vytvořit?"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2503
@@ -32435,9 +32433,9 @@ msgid "Library Not Found"
 msgstr "Knihovna nenalezena"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2529
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint file name '%s' is not valid."
-msgstr "Název souboru pouzdra \"%s\" není platný."
+msgstr "Název souboru pouzdra '%s' není platný."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2535
 #, c-format
@@ -32445,14 +32443,14 @@ msgid "Insufficient permissions to delete '%s'."
 msgstr "Nedostatečná oprávnění k odstranění '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2606
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr "Nelze přepsat cestu knihovny \"%s\"."
+msgstr "Nelze přepsat cestu knihovny '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2658
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
-msgstr "Neočekávaný soubor \"%s\" byl nalezen v cestě knihovny \"%s\"."
+msgstr "Neočekávaný soubor '%s' byl nalezen v cestě knihovny '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:596
 #, c-format
@@ -32541,9 +32539,8 @@ msgid "KiCad only supports 32 signal layers."
 msgstr "KiCad podporuje pouze 32 signálních vrstev."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:93
-#, fuzzy
 msgid "Unable to find library section."
-msgstr "Nelze najít soubor knihovny %s."
+msgstr "Nelze najít sekci knihovny."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:108
 #, c-format
@@ -32556,9 +32553,9 @@ msgstr "Výjimka v kódu pluginů pro akce Python"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
-msgstr "Metoda \"%s\" nebyla nalezena nebo nelze zavolat"
+msgstr "Metoda '%s' nenalezena nebo nelze zavolat"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:84
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
@@ -32627,13 +32624,13 @@ msgid "Length Tuner"
 msgstr "Ladění délky"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:475
-#, fuzzy
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
 msgstr ""
-"Nelze najít doplňkové dvojice diferenciálních párů. Ujistěte se, že názvy "
-"sítí patřících do dvojice diferenciálních párů končí buď na _N/_P nebo +/-."
+"Nelze najít sítě komplementárního diferenciálního páru. Ujistěte se, že "
+"názvy sítí patřících do dvojice diferenciálních párů končí buď na N/P nebo "
+"+/-."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:492
 msgid ""
@@ -32685,28 +32682,25 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:474
-#, fuzzy
 msgid "existing track"
-msgstr "Při vytváření spojů"
+msgstr "existující spoj"
 
 #: pcbnew/router/pns_kicad_iface.cpp:488 pcbnew/router/pns_kicad_iface.cpp:501
 msgid "board minimum width"
 msgstr "deska minimální šířka"
 
 #: pcbnew/router/pns_kicad_iface.cpp:497
-#, fuzzy
 msgid "netclass 'Default'"
-msgstr "třída spojů '%s'"
+msgstr "třída spojů 'Výchozí'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:499
-#, fuzzy
 msgid "user choice"
-msgstr "Uložení výběru"
+msgstr "Zvolený uživatelem"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1056
-#, fuzzy, c-format
+#, c-format
 msgid "%s is malformed."
-msgstr "%s má nesprávný tvar."
+msgstr "%s je deformováno."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1059
 #, fuzzy
@@ -33000,17 +32994,18 @@ msgid "Show board setup"
 msgstr "Zobrazit nastavení desky"
 
 #: pcbnew/router/router_tool.cpp:876
-#, fuzzy
 msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
-msgstr "Slepé/skryté prokovy musí být povoleny v nastavení návrhu."
+msgstr ""
+"Slepé/vnořené prokovy musí být povoleny v Nastavení desky > Pravidla návrhu "
+"> Omezení."
 
 #: pcbnew/router/router_tool.cpp:897
-#, fuzzy
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
-msgstr "Mikrovia musí být povoleny v nastavení návrhu."
+msgstr ""
+"Mikroprokovy musí být povoleny v Nastavení desky > Pravidla návrhu > Omezení."
 
 #: pcbnew/router/router_tool.cpp:981
 msgid "Blind/buried via need 2 different layers."
@@ -33048,33 +33043,28 @@ msgid "Net Class: %s"
 msgstr "Třída sítě: %s"
 
 #: pcbnew/router/router_tool.cpp:2065
-#, fuzzy
 msgid "Routing Track"
-msgstr "Propojit jednotlivý spoj"
+msgstr "Propojit spoj"
 
 #: pcbnew/router/router_tool.cpp:2065
 msgid "(no net)"
 msgstr "(žádná síť)"
 
 #: pcbnew/router/router_tool.cpp:2072
-#, fuzzy
 msgid "Free-angle"
-msgstr "úhel"
+msgstr "Volný úhel"
 
 #: pcbnew/router/router_tool.cpp:2078
-#, fuzzy
 msgid "45-degree"
 msgstr "45 stupňů"
 
 #: pcbnew/router/router_tool.cpp:2079
-#, fuzzy
 msgid "45-degree rounded"
-msgstr "Táhnout (režim 45 stupňů)"
+msgstr "45 stupňů se zaokrouhlením"
 
 #: pcbnew/router/router_tool.cpp:2080
-#, fuzzy
 msgid "90-degree"
-msgstr "stupeň"
+msgstr "90 stupňů"
 
 #: pcbnew/router/router_tool.cpp:2081
 msgid "90-degree rounded"
