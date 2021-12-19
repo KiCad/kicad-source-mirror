@@ -30,12 +30,8 @@
 #include <pcb_track.h>
 #include <zone.h>
 
-// TODO: remove MAGIC_TEARDROP_ZONE_ID use to identifay teardrops
-// Use only MAGIC_TEARDROP_NAME, and later a specific property
-#define MAGIC_TEARDROP_ZONE_ID 0x4242
 #define MAGIC_TEARDROP_PADVIA_NAME "$teardrop_padvia$"
 #define MAGIC_TEARDROP_TRACK_NAME "$teardrop_track$"
-#define MAGIC_TEARDROP_BASE_NAME "$teardrop_"
 
 class TRACK_BUFFER;
 
@@ -53,7 +49,7 @@ struct VIAPAD
         return m_Parent->IsOnLayer( aLayer );
     }
 
-    wxPoint m_Pos;
+    VECTOR2I m_Pos;
     int m_Width;        // The diameter of a round shape, or the min size for others
     int m_Drill;
     int m_NetCode;
@@ -63,12 +59,11 @@ struct VIAPAD
 };
 
 
-enum class CURVED_OPTION
-{
-    OPTION_NONE,     // No curved teardrop shape
-    OPTION_ROUND,    // Curved teardrop shape for vias and round pads
-    OPTION_ALL_PADS,      // Curved teardrop shape for all pads but custom
-};
+// Curved shapes options
+// The actual value is the ORed of options
+#define CURVED_OPTION_NONE 0        /* No curved teardrop shape */
+#define CURVED_OPTION_ROUND 1       /* Curved teardrop shape for vias and round pad shapes */
+#define CURVED_OPTION_RECT 2        /* Curved teardrop shape for rect pad shapes */
 
 
 /**
@@ -88,7 +83,7 @@ public:
         m_heightRatio( 1.0 ),
         m_curveSegCount( 0 ),
         m_tolerance( Millimeter2iu( 0.01 ) ),
-        m_curveOpt( CURVED_OPTION::OPTION_NONE )
+        m_curveShapeOpt( CURVED_OPTION_NONE )
     {
     }
 
@@ -117,23 +112,32 @@ public:
      * Set the params for teardrop using curved shape
      * note: if aCurveSegCount is < 3, the shape uses a straight line
      */
-    void SetTeardropCurvedPrms( CURVED_OPTION aCurveOpt = CURVED_OPTION::OPTION_NONE,
+    void SetTeardropCurvedPrms( int aCurveShapeOpt = CURVED_OPTION_NONE,
                                 int aCurveSegCount = 5 )
     {
-        m_curveOpt = aCurveOpt;
+        m_curveShapeOpt = aCurveShapeOpt;
         m_curveSegCount = aCurveSegCount;
     }
 
 protected:
-    int    m_tdMaxLen;      /// max allowed lenght for teardrops in IU. <= 0 to disable
-    int    m_tdMaxHeight;   /// max allowed height for teardrops in IU. <= 0 to disable
-    double m_lenghtRatio;   /// The lenght of a teardrop as ratio between lenght and size of pad/via
-    double m_heightRatio;   /// The height of a teardrop as ratio between height and size of pad/via
-    int    m_curveSegCount; /// number of segments to build the curved sides of a teardrop area
-                            /// must be > 2. for values <= 2 a straight line is used
-    int    m_tolerance;     /// the max distance between a track end and a padvia position to see
-                            /// them connected
-    CURVED_OPTION m_curveOpt;
+    /// max allowed lenght for teardrops in IU. <= 0 to disable
+    int     m_tdMaxLen;
+    /// max allowed height for teardrops in IU. <= 0 to disable
+    int     m_tdMaxHeight;
+    /// The lenght of a teardrop as ratio between lenght and size of pad/via
+    double  m_lenghtRatio;
+    /// The height of a teardrop as ratio between height and size of pad/via
+    double  m_heightRatio;
+    /// number of segments to build the curved sides of a teardrop area
+    /// must be > 2. for values <= 2 a straight line is used
+    int     m_curveSegCount;
+    /// the max distance between a track end and a padvia position to see them connected
+    int     m_tolerance;
+    /// Shape of teardrops for round and rect pad shapes
+    /// 0 = straight lines
+    /// m_curveShapeOpt & CURVED_OPTION_ROUND != 0  curved for round shapes
+    /// m_curveShapeOpt & CURVED_OPTION_RECT != 0  curved for rect shapes
+    int     m_curveShapeOpt;
 };
 
 
@@ -217,10 +221,10 @@ public:
      * Set the params for teardrop using curved shape
      * note: if aSegCount is < 3, the shape uses a straight line
      */
-    void SetTeardropCurvedPrms( CURVED_OPTION aCurveOpt = CURVED_OPTION::OPTION_NONE,
+    void SetTeardropCurvedPrms( int aCurveShapeOpt = CURVED_OPTION_NONE,
                                 int aCurveSegCount = 5 )
     {
-        m_Parameters.SetTeardropCurvedPrms( aCurveOpt, aCurveSegCount );
+        m_Parameters.SetTeardropCurvedPrms( aCurveShapeOpt, aCurveSegCount );
     }
 
     /**
@@ -276,10 +280,10 @@ private:
      * and do not give a good curve shape for other pad shapes
      * use m_m_heightRatio
      */
-    void computeCurvedForRoundShape( std::vector<wxPoint>& aPoly,
+    void computeCurvedForRoundShape( std::vector<VECTOR2I>& aPoly,
                                      int aTrackHalfWidth,
                                      VECTOR2D aTrackDir, VIAPAD& aViaPad,
-                                     std::vector<wxPoint>& aPts ) const;
+                                     std::vector<VECTOR2I>& aPts ) const;
 
 
     /**
@@ -287,16 +291,16 @@ private:
      * The Bezier curve control points are not optimized for a special shape,
      * so use computeCurvedForRoundShape() for round shapes for better result
      */
-    void computeCurvedForRectShape( std::vector<wxPoint>& aPoly, int aTdHeight,
+    void computeCurvedForRectShape( std::vector<VECTOR2I>& aPoly, int aTdHeight,
                                             int aTrackHalfWidth, VIAPAD& aViaPad,
-                                            std::vector<wxPoint>& aPts ) const;
+                                            std::vector<VECTOR2I>& aPts ) const;
 
     /**
      * Compute all teardrop points of the polygon shape
      * @return true if the polygonal shape was calculated, false if not buildable
      * use m_lenghtRatio and m_heightRatio
      */
-    bool computeTeardropPolygonPoints( std::vector<wxPoint>& aCorners,
+    bool computeTeardropPolygonPoints( std::vector<VECTOR2I>& aCorners,
                                        PCB_TRACK* aTrack, VIAPAD& aVia,
                                        bool aFollowTracks,
                                        TRACK_BUFFER& aTrackLookupList) const;
@@ -314,7 +318,7 @@ private:
      * m_heightRatio is the factor to calculate the aViaPad teardrop size
     */
     bool ComputePointsOnPadVia( PCB_TRACK* aTrack, VIAPAD& aViaPad,
-                                std::vector<wxPoint>& aPts ) const;
+                                std::vector<VECTOR2I>& aPts ) const;
 
     /**
      * Find a track connected to the end of another track
@@ -325,7 +329,7 @@ private:
      * @param aTrackLookupList is the buffer of available tracks
      */
     PCB_TRACK* findTouchingTrack( EDA_ITEM_FLAGS& aMatchType, PCB_TRACK* aTrackRef,
-                                  const wxPoint& aEndPoint,
+                                  const VECTOR2I& aEndPoint,
                                   TRACK_BUFFER& aTrackLookupList ) const;
 
     /**
@@ -336,7 +340,7 @@ private:
      * (mainly for net info)
      */
     ZONE* createTeardrop( TEARDROP_VARIANT aTeardropVariant,
-                          std::vector<wxPoint>& aPoints, PCB_TRACK* aTrack);
+                          std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack);
 
     /**
      * Set priority of created teardrops. smaller have bigger priority
@@ -356,7 +360,7 @@ private:
      * @param aTrackLookupList is the list of tracks to explore if aFollowTracks = true
      * m_lenghtRatio is the lenght of teardrop (ratio pad/via size/teardrop len)
     */
-    bool findAnchorPointsOnTrack( wxPoint& aStartPoint, wxPoint& aEndPoint,
+    bool findAnchorPointsOnTrack( VECTOR2I& aStartPoint, VECTOR2I& aEndPoint,
                                   PCB_TRACK*& aTrack, VIAPAD& aViaPad,
                                   int* aEffectiveTeardropLen,
                                   bool aFollowTracks, TRACK_BUFFER& aTrackLookupList ) const;

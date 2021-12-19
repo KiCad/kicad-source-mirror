@@ -5572,9 +5572,11 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
             zone->SetZoneName( FromUTF8() );
 
             // TODO: remove this hack and replace it when a suitable token is added
-            // If a zone name is $teardrop$, set its teardrop property flag
-            if( zone->GetZoneName() == "$teardrop$" )
-                zone->SetIsTeardropArea( true );
+            // If a zone name starts by "$teardrop_", set its teardrop property flag
+            if( zone->GetZoneName().StartsWith( "$teardrop_p" ) )
+                zone->SetTeardropAreaType( TEARDROP_TYPE::TD_VIAPAD );
+            else if( zone->GetZoneName().StartsWith( "$teardrop_t" ) )
+                zone->SetTeardropAreaType( TEARDROP_TYPE::TD_TRACKEND );
 
             NeedRIGHT();
             break;

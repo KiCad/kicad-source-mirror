@@ -39,6 +39,9 @@
 
 #include <wx/log.h>
 
+// The first priority level of a teardrop area (arbitrary value)
+#define MAGIC_TEARDROP_ZONE_ID 30000
+
 
 void TEARDROP_MANAGER::SetTargets( bool aApplyToPadVias, bool aApplyToRoundShapesOnly,
                                    bool aApplyToSurfacePads, bool aApplyToTracks )
@@ -52,12 +55,14 @@ void TEARDROP_MANAGER::SetTargets( bool aApplyToPadVias, bool aApplyToRoundShape
 
 // Build a zone teardrop
 ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
-                                        std::vector<wxPoint>& aPoints, PCB_TRACK* aTrack)
+                                        std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack)
 {
     ZONE* teardrop = new ZONE( m_board );
 
     // Add zone properties (priority will be fixed later)
-    teardrop->SetIsTeardropArea( true );
+    teardrop->SetTeardropAreaType( aTeardropVariant == TD_TYPE_PADVIA ?
+                                    TEARDROP_TYPE::TD_VIAPAD :
+                                    TEARDROP_TYPE::TD_TRACKEND );
     teardrop->SetLayer( aTrack->GetLayer() );
     teardrop->SetNetCode( aTrack->GetNetCode() );
     teardrop->SetLocalClearance( 0 );
@@ -71,7 +76,7 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
     SHAPE_POLY_SET* outline = teardrop->Outline();
     outline->NewOutline();
 
-    for( wxPoint pt: aPoints )
+    for( VECTOR2I pt: aPoints )
         outline->Append(pt.x, pt.y);
 
     // Can be usefull:
@@ -149,7 +154,7 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
             if( aDiscardInSameZone && isViaAndTrackInSameZone( viapad, track ) )
                 continue;
 
-            std::vector<wxPoint> points;
+            std::vector<VECTOR2I> points;
             bool success = computeTeardropPolygonPoints( points, track, viapad,
                                                          aFollowTracks, trackLookupList );
 
@@ -301,7 +306,7 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
                 EDA_ITEM_FLAGS match_points;    // to return the end point EDA_ITEM_FLAGS:
                                                 // 0, STARTPOINT, ENDPOINT
 
-                wxPoint roundshape_pos = candidate->GetStart();
+                VECTOR2I roundshape_pos = candidate->GetStart();
                 ENDPOINT_T endPointCandidate = ENDPOINT_START;
                 match_points = track->IsPointOnEnds( roundshape_pos, m_Parameters.m_tolerance);
 
@@ -327,7 +332,7 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
                 if( match_points )
                 {
                     VIAPAD viatrack( candidate, endPointCandidate );
-                    std::vector<wxPoint> points;
+                    std::vector<VECTOR2I> points;
                     bool success = computeTeardropPolygonPoints( points, track, viatrack,
                                                                  false, trackLookupList );
 

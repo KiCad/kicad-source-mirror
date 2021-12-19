@@ -22,6 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/*
+ * Some calculations (mainly computeCurvedForRoundShape) are derived from
+ * https://github.com/NilujePerchut/kicad_scripts/tree/master/teardrops
+ */
 
 #include <board_design_settings.h>
 #include <pcb_track.h>
@@ -144,8 +148,7 @@ void TEARDROP_MANAGER::collectTeardrops( std::vector< ZONE* >& aList )
 {
     for( ZONE* zone : m_board->Zones() )
     {
-        if( zone->GetZoneName().StartsWith( MAGIC_TEARDROP_BASE_NAME )
-            || zone->GetPriority() >= MAGIC_TEARDROP_ZONE_ID )
+        if( zone->IsTeardropArea() )
         {
             aList.push_back( zone );
         }
@@ -158,8 +161,7 @@ bool TEARDROP_MANAGER::isViaAndTrackInSameZone( VIAPAD& aViapad, PCB_TRACK* aTra
     for( ZONE* zone: m_board->Zones() )
     {
         // Skip teardrops
-        if( zone->GetZoneName().StartsWith( MAGIC_TEARDROP_BASE_NAME )
-            || zone->GetPriority() >= MAGIC_TEARDROP_ZONE_ID )
+        if( zone->IsTeardropArea() )
             continue;
 
         // Only consider zones on the same layer
@@ -175,7 +177,8 @@ bool TEARDROP_MANAGER::isViaAndTrackInSameZone( VIAPAD& aViapad, PCB_TRACK* aTra
                 {
                     PAD *pad = static_cast< PAD* >( aViapad.m_Parent );
 
-                    if( zone->GetPadConnection( pad ) == ZONE_CONNECTION::NONE )
+                    if( zone->GetPadConnection() == ZONE_CONNECTION::NONE
+                        || pad->GetZoneConnection() == ZONE_CONNECTION::NONE )
                         return false;
                 }
 
@@ -189,7 +192,7 @@ bool TEARDROP_MANAGER::isViaAndTrackInSameZone( VIAPAD& aViapad, PCB_TRACK* aTra
 
 
 PCB_TRACK* TEARDROP_MANAGER::findTouchingTrack( EDA_ITEM_FLAGS& aMatchType, PCB_TRACK* aTrackRef,
-                                                const wxPoint& aEndPoint,
+                                                const VECTOR2I& aEndPoint,
                                                 TRACK_BUFFER& aTrackLookupList ) const
 {
     EDA_ITEM_FLAGS match = 0;           // to return the end point EDA_ITEM_FLAGS:
@@ -231,7 +234,7 @@ PCB_TRACK* TEARDROP_MANAGER::findTouchingTrack( EDA_ITEM_FLAGS& aMatchType, PCB_
 /**
  * @return a vector unit length from aVector
  */
-static VECTOR2D NormalizeVector( wxPoint aVector )
+static VECTOR2D NormalizeVector( VECTOR2I aVector )
 {
     VECTOR2D vect( aVector );
     double norm = vect.EuclideanNorm();
@@ -244,10 +247,10 @@ static VECTOR2D NormalizeVector( wxPoint aVector )
  * The Bezier curve control points are optimized for a round pad/via shape,
  * and do not give a good curve shape for other pad shapes
  */
-void TEARDROP_MANAGER::computeCurvedForRoundShape( std::vector<wxPoint>& aPoly,
+void TEARDROP_MANAGER::computeCurvedForRoundShape( std::vector<VECTOR2I>& aPoly,
                                         int aTrackHalfWidth,
                                         VECTOR2D aTrackDir, VIAPAD& aViaPad,
-                                        std::vector<wxPoint>& pts ) const
+                                        std::vector<VECTOR2I>& pts ) const
 {
     // in pts:
     // A and B are points on the track ( pts[0] and  pts[1] )
@@ -269,22 +272,22 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( std::vector<wxPoint>& aPoly,
     double biasBC = 0.5 * SEG( pts[1], pts[2] ).Length();
     double biasAE = 0.5 * SEG( pts[4], pts[0] ).Length();
 
-    wxPoint vecC = pts[2] - aViaPad.m_Pos;
-    wxPoint tangentC = wxPoint( pts[2].x - vecC.y * biasBC * weaken,
+    VECTOR2I vecC = (VECTOR2I)pts[2] - aViaPad.m_Pos;
+    VECTOR2I tangentC = VECTOR2I( pts[2].x - vecC.y * biasBC * weaken,
                                 pts[2].y + vecC.x * biasBC * weaken );
-    wxPoint vecE = pts[4] - aViaPad.m_Pos;
-    wxPoint tangentE = wxPoint( pts[4].x + vecE.y * biasAE * weaken,
+    VECTOR2I vecE = (VECTOR2I)pts[4] - aViaPad.m_Pos;
+    VECTOR2I tangentE = VECTOR2I( pts[4].x + vecE.y * biasAE * weaken,
                                 pts[4].y - vecE.x * biasAE * weaken );
 
-    wxPoint tangentB = wxPoint( pts[1].x - aTrackDir.x * biasBC, pts[1].y - aTrackDir.y * biasBC );
-    wxPoint tangentA = wxPoint( pts[0].x - aTrackDir.x * biasAE, pts[0].y - aTrackDir.y * biasAE );
+    VECTOR2I tangentB = VECTOR2I( pts[1].x - aTrackDir.x * biasBC, pts[1].y - aTrackDir.y * biasBC );
+    VECTOR2I tangentA = VECTOR2I( pts[0].x - aTrackDir.x * biasAE, pts[0].y - aTrackDir.y * biasAE );
 
-    std::vector<wxPoint> curve_pts;
+    std::vector<VECTOR2I> curve_pts;
     curve_pts.reserve( m_Parameters.m_curveSegCount );
     BEZIER_POLY( pts[1], tangentB, tangentC, pts[2] ).GetPoly( curve_pts, 0,
                                                                m_Parameters.m_curveSegCount );
 
-    for( wxPoint& corner: curve_pts )
+    for( VECTOR2I& corner: curve_pts )
         aPoly.push_back( corner );
 
     aPoly.push_back( pts[3] );
@@ -293,7 +296,7 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( std::vector<wxPoint>& aPoly,
     BEZIER_POLY( pts[4], tangentE, tangentA, pts[0] ).GetPoly( curve_pts, 0,
                                                                m_Parameters.m_curveSegCount );
 
-    for( wxPoint& corner: curve_pts )
+    for( VECTOR2I& corner: curve_pts )
         aPoly.push_back( corner );
 }
 
@@ -302,9 +305,9 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( std::vector<wxPoint>& aPoly,
  * Compute the curve part points for teardrops connected to a rectangular/polygonal shape
  * The Bezier curve control points are not optimized for a special shape
  */
-void TEARDROP_MANAGER::computeCurvedForRectShape( std::vector<wxPoint>& aPoly, int aTdHeight,
+void TEARDROP_MANAGER::computeCurvedForRectShape( std::vector<VECTOR2I>& aPoly, int aTdHeight,
                                         int aTrackHalfWidth, VIAPAD& aViaPad,
-                                        std::vector<wxPoint>& aPts ) const
+                                        std::vector<VECTOR2I>& aPts ) const
 {
     // in aPts:
     // A and B are points on the track ( pts[0] and  pts[1] )
@@ -316,12 +319,12 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( std::vector<wxPoint>& aPoly, i
     // side2 is ( aPts[4], aPts[0] ); from via to track
     VECTOR2I side2( aPts[4] - aPts[0] );  // vector from track to via
 
-    std::vector<wxPoint> curve_pts;
+    std::vector<VECTOR2I> curve_pts;
     curve_pts.reserve( m_Parameters.m_curveSegCount );
 
     // Note: This side is from track to via
-    wxPoint ctrl1 = ( aPts[1] + aPts[1] + aPts[2] ) / 3;
-    wxPoint ctrl2 = ( aPts[1] + aPts[2] + aPts[2] ) / 3;
+    VECTOR2I ctrl1 = ( aPts[1] + aPts[1] + aPts[2] ) / 3;
+    VECTOR2I ctrl2 = ( aPts[1] + aPts[2] + aPts[2] ) / 3;
 
     // The control points must be moved toward the polygon inside, in order to give a curved shape
     // The move vector is perpendicular to the vertex (side 1 or side 2), and its
@@ -351,7 +354,7 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( std::vector<wxPoint>& aPoly, i
     BEZIER_POLY( aPts[1], ctrl1, ctrl2, aPts[2] ).GetPoly( curve_pts, 0,
                                                            m_Parameters.m_curveSegCount );
 
-    for( wxPoint& corner: curve_pts )
+    for( VECTOR2I& corner: curve_pts )
         aPoly.push_back( corner );
 
     aPoly.push_back( aPts[3] );
@@ -379,14 +382,14 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( std::vector<wxPoint>& aPoly, i
     BEZIER_POLY( aPts[4], ctrl1, ctrl2, aPts[0] ).GetPoly( curve_pts, 0,
                                                            m_Parameters.m_curveSegCount );
 
-    for( wxPoint& corner: curve_pts )
+    for( VECTOR2I& corner: curve_pts )
         aPoly.push_back( corner );
 }
 
 
 bool TEARDROP_MANAGER::ComputePointsOnPadVia( PCB_TRACK* aTrack,
                                               VIAPAD& aViaPad,
-                                              std::vector<wxPoint>& aPts ) const
+                                              std::vector<VECTOR2I>& aPts ) const
 {
     // Compute the 2 anchor points on pad/via of the teardrop shape
 
@@ -437,7 +440,7 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( PCB_TRACK* aTrack,
         // teardrop_axis is the line from anchor point on the track and the end point
         // of the teardrop in the pad/via
         // this is the teardrop_axis of the teardrop shape to build
-        wxPoint ref_on_track = ( aPts[0] + aPts[1] ) / 2;
+        VECTOR2I ref_on_track = ( aPts[0] + aPts[1] ) / 2;
         VECTOR2I teardrop_axis( aPts[3] - ref_on_track );
 
         double orient = teardrop_axis.Angle();
@@ -472,25 +475,25 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( PCB_TRACK* aTrack,
     SHAPE_LINE_CHAIN& padpoly = c_buffer.Outline(0);
     std::vector<VECTOR2I> points = padpoly.CPoints();
 
-    std::vector<wxPoint> initialPoints;
+    std::vector<VECTOR2I> initialPoints;
     initialPoints.push_back( aPts[0] );
     initialPoints.push_back( aPts[1] );
 
     for( const VECTOR2I& pt: points )
         initialPoints.emplace_back( pt.x, pt.y );
 
-    std::vector<wxPoint> hull;
+    std::vector<VECTOR2I> hull;
     BuildConvexHull( hull, initialPoints );
 
     // Search for end points of segments starting at aPts[0] or aPts[1]
     // In some cases, in convex hull, only one point (aPts[0] or aPts[1]) is still in list
-    wxPoint PointC;
-    wxPoint PointE;
+    VECTOR2I PointC;
+    VECTOR2I PointE;
     int found_start = -1;      // 2 points (one start and one end) should be found
     int found_end   = -1;
 
-    wxPoint start = aPts[0];
-    wxPoint pend  = aPts[1];
+    VECTOR2I start = aPts[0];
+    VECTOR2I pend  = aPts[1];
 
     for( unsigned ii = 0, jj = 0; jj < hull.size(); ii++, jj++ )
     {
@@ -536,7 +539,7 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( PCB_TRACK* aTrack,
         PointE = hull[ii];
     }
 
-    if( found_end < 0 )   // PointC was not initalized, because pend point does not exit
+    if( found_end < 0 )   // PointC was not initalized, because end point does not exit
     {
         int ii = found_start-1;
 
@@ -568,15 +571,15 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( PCB_TRACK* aTrack,
 }
 
 
-bool TEARDROP_MANAGER::findAnchorPointsOnTrack( wxPoint& aStartPoint, wxPoint& aEndPoint,
+bool TEARDROP_MANAGER::findAnchorPointsOnTrack( VECTOR2I& aStartPoint, VECTOR2I& aEndPoint,
                                                 PCB_TRACK*& aTrack, VIAPAD& aViaPad,
                                                 int* aEffectiveTeardropLen,
                                                 bool aFollowTracks,
                                                 TRACK_BUFFER& aTrackLookupList ) const
 {
     bool found = true;
-    wxPoint start = aTrack->GetStart();
-    wxPoint end = aTrack->GetEnd();
+    VECTOR2I start = aTrack->GetStart();
+    VECTOR2I end = aTrack->GetEnd();
     int radius = aViaPad.m_Width / 2;
     // Requested length of the teardrop:
     int targetLength = aViaPad.m_Width * m_Parameters.m_lenghtRatio;
@@ -661,12 +664,12 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( wxPoint& aStartPoint, wxPoint& a
 }
 
 
-bool TEARDROP_MANAGER::computeTeardropPolygonPoints( std::vector<wxPoint>& aCorners,
+bool TEARDROP_MANAGER::computeTeardropPolygonPoints( std::vector<VECTOR2I>& aCorners,
                                                      PCB_TRACK* aTrack, VIAPAD& aViaPad,
                                                      bool aFollowTracks,
                                                      TRACK_BUFFER& aTrackLookupList ) const
 {
-    wxPoint start, end;     // Start and end points of the track anchor of the teardrop
+    VECTOR2I start, end;     // Start and end points of the track anchor of the teardrop
                             // the start point is inside the teardrop shape
                             // the end point is outside.
     int track_stub_len;     // the dist between the start point and the anchor point
@@ -681,9 +684,9 @@ bool TEARDROP_MANAGER::computeTeardropPolygonPoints( std::vector<wxPoint>& aCorn
 
     // find the 2 points on the track, sharp end of the teardrop
     int track_halfwidth = aTrack->GetWidth() / 2;
-    wxPoint pointB = start + wxPoint( vecT.x * track_stub_len + vecT.y * track_halfwidth,
+    VECTOR2I pointB = start + VECTOR2I( vecT.x * track_stub_len + vecT.y * track_halfwidth,
                                       vecT.y * track_stub_len - vecT.x * track_halfwidth );
-    wxPoint pointA = start + wxPoint( vecT.x * track_stub_len - vecT.y * track_halfwidth,
+    VECTOR2I pointA = start + VECTOR2I( vecT.x * track_stub_len - vecT.y * track_halfwidth,
                                       vecT.y * track_stub_len + vecT.x * track_halfwidth );
 
     // To build a polygonal valid shape pointA and point B must be outside the pad
@@ -700,19 +703,19 @@ bool TEARDROP_MANAGER::computeTeardropPolygonPoints( std::vector<wxPoint>& aCorn
     }
 
     // Introduce a last point to cover the via centre to ensure it is seen as connected
-    wxPoint pointD = aViaPad.m_Pos;
+    VECTOR2I pointD = aViaPad.m_Pos;
     // add a small offset in order to have the aViaPad.m_Pos reference point inside
     // the teardrop area, just in case...
     int offset = Millimeter2iu( 0.001 );
-    pointD += wxPoint( int( -vecT.x*offset), int(-vecT.y*offset) );
+    pointD += VECTOR2I( int( -vecT.x*offset), int(-vecT.y*offset) );
 
-    wxPoint pointC, pointE;     // Point on PADVIA outlines
-    std::vector<wxPoint> pts = {pointA, pointB, pointC, pointD, pointE};
+    VECTOR2I pointC, pointE;     // Point on PADVIA outlines
+    std::vector<VECTOR2I> pts = {pointA, pointB, pointC, pointD, pointE};
 
     ComputePointsOnPadVia( aTrack, aViaPad, pts );
 
     if( m_Parameters.m_curveSegCount <= 2
-        || m_Parameters.m_curveOpt == CURVED_OPTION::OPTION_NONE )
+        || m_Parameters.m_curveShapeOpt == CURVED_OPTION_NONE )
     {
         aCorners = pts;
         return true;
@@ -720,20 +723,28 @@ bool TEARDROP_MANAGER::computeTeardropPolygonPoints( std::vector<wxPoint>& aCorn
 
     // See if we can use curved teardrop shape
     if( aViaPad.m_IsRound )
-        computeCurvedForRoundShape( aCorners, track_halfwidth,
-                                    vecT, aViaPad, pts );
-    else if( m_Parameters.m_curveOpt == CURVED_OPTION::OPTION_ALL_PADS )
     {
-        int td_height = aViaPad.m_Width * m_Parameters.m_heightRatio;
-
-        if( m_Parameters.m_tdMaxHeight > 0 && m_Parameters.m_tdMaxHeight < td_height )
-            td_height = m_Parameters.m_tdMaxHeight;
-
-        computeCurvedForRectShape( aCorners, td_height, track_halfwidth,
-                                   aViaPad, pts );
+        if( m_Parameters.m_curveShapeOpt & CURVED_OPTION_ROUND )
+            computeCurvedForRoundShape( aCorners, track_halfwidth,
+                                    vecT, aViaPad, pts );
+        else
+            aCorners = pts;
     }
     else
-        aCorners = pts;
+    {
+        if( m_Parameters.m_curveShapeOpt & CURVED_OPTION_RECT )
+        {
+            int td_height = aViaPad.m_Width * m_Parameters.m_heightRatio;
+
+            if( m_Parameters.m_tdMaxHeight > 0 && m_Parameters.m_tdMaxHeight < td_height )
+                td_height = m_Parameters.m_tdMaxHeight;
+
+            computeCurvedForRectShape( aCorners, td_height, track_halfwidth,
+                                       aViaPad, pts );
+        }
+        else
+            aCorners = pts;
+    }
 
     return true;
 }

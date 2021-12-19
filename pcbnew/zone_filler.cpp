@@ -608,6 +608,11 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
                 continue;
             }
 
+            // a teardrop area is always fully connected to its pad
+            // (always equiv to ZONE_CONNECTION::FULL)
+            if( aZone->IsTeardropArea() )
+                continue;
+
             constraint = bds.m_DRCEngine->EvalZoneConnection( pad, aZone, aLayer );
             ZONE_CONNECTION conn = constraint.m_ZoneConnection;
 
@@ -935,7 +940,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
         if( otherZone->GetIsRuleArea() )
         {
-            if( otherZone->GetDoNotAllowCopperPour() )
+            if( otherZone->GetDoNotAllowCopperPour() && !aZone->IsTeardropArea() )
                 knockoutZoneClearance( otherZone );
         }
         else
@@ -957,7 +962,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
             if( otherZone->GetIsRuleArea() )
             {
-                if( otherZone->GetDoNotAllowCopperPour() )
+                if( otherZone->GetDoNotAllowCopperPour() && !aZone->IsTeardropArea() )
                     knockoutZoneClearance( otherZone );
             }
             else
@@ -1000,7 +1005,9 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
         if( otherZone->GetNetCode() == aZone->GetNetCode()
                 && otherZone->GetPriority() > aZone->GetPriority() )
         {
-            knockoutZoneOutline( otherZone );
+            // Do not remove teardrop area: it is not useful and not good
+            if( !otherZone->IsTeardropArea() )
+                knockoutZoneOutline( otherZone );
         }
     }
 
@@ -1011,7 +1018,9 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
             if( otherZone->GetNetCode() == aZone->GetNetCode()
                     && otherZone->GetPriority() > aZone->GetPriority() )
             {
-                knockoutZoneOutline( otherZone );
+                // Do not remove teardrop area: it is not useful and not good
+                if( !otherZone->IsTeardropArea() )
+                    knockoutZoneOutline( otherZone );
             }
         }
     }

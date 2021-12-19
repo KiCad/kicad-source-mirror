@@ -25,23 +25,37 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bSizeScopeSize;
 	bSizeScopeSize = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bSizerBitmaps;
-	bSizerBitmaps = new wxBoxSizer( wxVERTICAL );
+	wxFlexGridSizer* fgSizerBitmaps;
+	fgSizerBitmaps = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerBitmaps->SetFlexibleDirection( wxBOTH );
+	fgSizerBitmaps->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText10 = new wxStaticText( this, wxID_ANY, wxT("Round shapes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10->Wrap( -1 );
+	fgSizerBitmaps->Add( m_staticText10, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_bitmapTdCircularInfo = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBitmaps->Add( m_bitmapTdCircularInfo, 0, wxALL, 5 );
+	fgSizerBitmaps->Add( m_bitmapTdCircularInfo, 0, wxALL, 5 );
+
+	m_staticText11 = new wxStaticText( this, wxID_ANY, wxT("Rect shapes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11->Wrap( -1 );
+	fgSizerBitmaps->Add( m_staticText11, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_bitmapTdRectangularInfo = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBitmaps->Add( m_bitmapTdRectangularInfo, 0, wxALL, 5 );
+	fgSizerBitmaps->Add( m_bitmapTdRectangularInfo, 0, wxALL, 5 );
+
+	m_staticText12 = new wxStaticText( this, wxID_ANY, wxT("Tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12->Wrap( -1 );
+	fgSizerBitmaps->Add( m_staticText12, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_bitmapTdTrackInfo = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBitmaps->Add( m_bitmapTdTrackInfo, 0, wxALL, 5 );
+	fgSizerBitmaps->Add( m_bitmapTdTrackInfo, 0, wxALL, 5 );
 
 
-	bSizeScopeSize->Add( bSizerBitmaps, 0, wxEXPAND, 5 );
+	bSizeScopeSize->Add( fgSizerBitmaps, 1, wxLEFT|wxEXPAND, 5 );
 
 
-	bSizeScopeSize->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizeScopeSize->Add( 30, 0, 0, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerSizes;
 	fgSizerSizes = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -103,6 +117,25 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 	m_stTdSizePercent->Wrap( -1 );
 	fgSizerSizes->Add( m_stTdSizePercent, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
+	m_staticline51 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgSizerSizes->Add( m_staticline51, 0, wxEXPAND | wxALL, 5 );
+
+	m_staticline61 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgSizerSizes->Add( m_staticline61, 0, wxEXPAND | wxALL, 5 );
+
+	m_staticline71 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgSizerSizes->Add( m_staticline71, 0, wxEXPAND | wxALL, 5 );
+
+	m_stPoinCount = new wxStaticText( this, wxID_ANY, wxT("Curve points"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stPoinCount->Wrap( -1 );
+	fgSizerSizes->Add( m_stPoinCount, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_spPointCount = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 10, 5 );
+	fgSizerSizes->Add( m_spPointCount, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+
+	fgSizerSizes->Add( 0, 0, 1, wxEXPAND, 5 );
+
 
 	bSizeScopeSize->Add( fgSizerSizes, 0, wxEXPAND|wxALL, 5 );
 
@@ -130,29 +163,29 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 	sbSizerScope->Add( m_cbSmdSimilarPads, 0, wxALL, 5 );
 
 	m_cbTrack2Track = new wxCheckBox( sbSizerScope->GetStaticBox(), wxID_ANY, wxT("Track to track"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbTrack2Track->SetValue(true);
 	sbSizerScope->Add( m_cbTrack2Track, 0, wxALL, 5 );
 
 
-	bSizerShape->Add( sbSizerScope, 0, 0, 5 );
+	bSizerShape->Add( sbSizerScope, 0, wxTOP|wxBOTTOM, 5 );
 
 
-	bSizerShape->Add( 30, 10, 1, wxEXPAND, 5 );
+	bSizerShape->Add( 30, 10, 0, wxEXPAND, 5 );
 
-	wxString m_rbShapeChoices[] = { wxT("Straight lines"), wxT("Curved for round pads"), wxT("Curved for all pad shapes") };
-	int m_rbShapeNChoices = sizeof( m_rbShapeChoices ) / sizeof( wxString );
-	m_rbShape = new wxRadioBox( this, wxID_ANY, wxT("Teardrop style"), wxDefaultPosition, wxDefaultSize, m_rbShapeNChoices, m_rbShapeChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbShape->SetSelection( 0 );
-	bSizerShape->Add( m_rbShape, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	wxString m_rbShapeRoundChoices[] = { wxT("Straight lines"), wxT("Curved") };
+	int m_rbShapeRoundNChoices = sizeof( m_rbShapeRoundChoices ) / sizeof( wxString );
+	m_rbShapeRound = new wxRadioBox( this, wxID_ANY, wxT("Round shapes teardrop style"), wxDefaultPosition, wxDefaultSize, m_rbShapeRoundNChoices, m_rbShapeRoundChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbShapeRound->SetSelection( 0 );
+	bSizerShape->Add( m_rbShapeRound, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_rbShapeRectChoices[] = { wxT("Straight lines"), wxT("Curved") };
+	int m_rbShapeRectNChoices = sizeof( m_rbShapeRectChoices ) / sizeof( wxString );
+	m_rbShapeRect = new wxRadioBox( this, wxID_ANY, wxT("Rect shapes teardrop style"), wxDefaultPosition, wxDefaultSize, m_rbShapeRectNChoices, m_rbShapeRectChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbShapeRect->SetSelection( 0 );
+	bSizerShape->Add( m_rbShapeRect, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizerShape->Add( 30, 0, 0, 0, 5 );
-
-	m_stPoinCount = new wxStaticText( this, wxID_ANY, wxT("Curve points"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stPoinCount->Wrap( -1 );
-	bSizerShape->Add( m_stPoinCount, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_spPointCount = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 10, 5 );
-	bSizerShape->Add( m_spPointCount, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizerUpper->Add( bSizerShape, 0, wxEXPAND, 5 );
@@ -167,7 +200,7 @@ TEARDROP_DIALOG_BASE::TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id, con
 	sbSizerOptions->Add( m_cbOptUseNextTrack, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerUpper->Add( sbSizerOptions, 1, wxEXPAND, 5 );
+	bSizerUpper->Add( sbSizerOptions, 1, wxEXPAND|wxTOP, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerUpper->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );

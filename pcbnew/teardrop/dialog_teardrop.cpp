@@ -50,7 +50,8 @@ public:
         m_spTeardropSizePercent->SetValue( m_teardropSizePrm );
         m_cbSmdSimilarPads->SetValue( m_includeNotPTH );
         m_cbRoundShapesOnly->SetValue( m_roundShapesOnly );
-        m_rbShape->SetSelection( m_curveOption );
+        m_rbShapeRound->SetSelection( m_curveOptionRoundShapes );
+        m_rbShapeRect->SetSelection( m_curveOptionRectShapes );
         m_cbOptUseNextTrack->SetValue( m_canUseTwoTracks );
         m_spPointCount->SetValue( m_curveSegCount );
         m_cbTrack2Track->SetValue( m_track2Track );
@@ -71,16 +72,25 @@ public:
         m_teardropMaxSizePrm = m_teardropMaxHeightSetting.GetValue();
         m_roundShapesOnly = m_cbRoundShapesOnly->GetValue();
         m_includeNotPTH = m_cbSmdSimilarPads->GetValue();
-        m_curveOption = m_rbShape->GetSelection();
+        m_curveOptionRoundShapes = m_rbShapeRound->GetSelection();
+        m_curveOptionRectShapes = m_rbShapeRect->GetSelection();
         m_canUseTwoTracks = m_cbOptUseNextTrack->GetValue();
         m_curveSegCount = m_spPointCount->GetValue();
         m_track2Track = m_cbTrack2Track->GetValue();
         m_includeViasAndPTH = m_cbPadVia->GetValue();
     }
 
-    CURVED_OPTION CurvedShapeOption()
+    int CurvedShapeOption()
     {
-        return (CURVED_OPTION) m_rbShape->GetSelection();
+        int opt = 0;
+
+        if( m_rbShapeRound->GetSelection() )
+            opt |= CURVED_OPTION_ROUND;
+
+        if( m_rbShapeRect->GetSelection() )
+            opt |= CURVED_OPTION_RECT;
+
+        return opt;
     }
 
     // Options for curved shapes
@@ -111,7 +121,8 @@ private:
     static int      m_teardropMaxSizePrm;
     static bool     m_includeNotPTH;
     static bool     m_roundShapesOnly;
-    static int      m_curveOption;
+    static int      m_curveOptionRoundShapes;
+    static int      m_curveOptionRectShapes;
     static bool     m_canUseTwoTracks;
     static int      m_curveSegCount;
     static bool     m_track2Track;
@@ -126,7 +137,8 @@ int  TEARDROP_DIALOG::m_teardropMaxLenPrm = Millimeter2iu( 1.0 );
 int  TEARDROP_DIALOG::m_teardropMaxSizePrm = Millimeter2iu( 2.0 );
 bool TEARDROP_DIALOG::m_includeNotPTH = true;
 bool TEARDROP_DIALOG::m_roundShapesOnly = false;
-int  TEARDROP_DIALOG::m_curveOption = 0;
+int  TEARDROP_DIALOG::m_curveOptionRoundShapes = 0;
+int  TEARDROP_DIALOG::m_curveOptionRectShapes = 0;
 bool TEARDROP_DIALOG::m_canUseTwoTracks = true;
 int  TEARDROP_DIALOG::m_curveSegCount = 5;
 bool TEARDROP_DIALOG::m_track2Track = true;
@@ -146,12 +158,7 @@ void PCB_EDIT_FRAME::OnRunTeardropTool( wxCommandEvent& event )
 
     TEARDROP_MANAGER trdm( GetBoard(), this );
 
-    int shape_seg_count;
-
-    if( dlg.CurvedShapeOption() != CURVED_OPTION::OPTION_NONE )
-        shape_seg_count = dlg.GetCurvePointCount();
-    else
-        shape_seg_count = 1;
+    int shape_seg_count = dlg.GetCurvePointCount();
 
     trdm.SetTeardropMaxSize( dlg.GetTeardropMaxLen(), dlg.GetTeardropMaxHeight() );
     trdm.SetTeardropSizeRatio( dlg.GetTeardropLenPercent(), dlg.GetTeardropSizePercent() );
