@@ -220,7 +220,7 @@ void PANEL_SETUP_BOARD_STACKUP::onAdjustDielectricThickness( wxCommandEvent& eve
         for( BOARD_STACKUP_ROW_UI_ITEM* ui_item : items_candidate )
         {
             wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( ui_item->m_ThicknessCtrl );
-            textCtrl->SetValue( txt );
+            textCtrl->ChangeValue( txt );
         }
     }
     else
@@ -461,7 +461,7 @@ void PANEL_SETUP_BOARD_STACKUP::computeBoardThickness()
 
     // The text in the event will translate to the value for the text control
     // and is only updated if it changed
-    m_tcCTValue->SetValue( thicknessStr );
+    m_tcCTValue->ChangeValue( thicknessStr );
 }
 
 
@@ -516,9 +516,9 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
             if( matName )
             {
                 if( IsPrmSpecified( item->GetMaterial( sub_item ) ) )
-                    matName->SetValue( item->GetMaterial( sub_item ) );
+                    matName->ChangeValue( item->GetMaterial( sub_item ) );
                 else
-                    matName->SetValue( wxGetTranslation( NotSpecifiedPrm() ) );
+                    matName->ChangeValue( wxGetTranslation( NotSpecifiedPrm() ) );
             }
         }
 
@@ -527,10 +527,8 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
             wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ui_row_item.m_ThicknessCtrl );
 
             if( textCtrl )
-            {
-                textCtrl->SetValue( StringFromValue( m_units, item->GetThickness( sub_item ),
-                                                     true ) );
-            }
+                textCtrl->ChangeValue( StringFromValue( m_units,
+                                        item->GetThickness( sub_item ), true ) );
 
             if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
             {
@@ -584,7 +582,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
             wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ui_row_item.m_EpsilonCtrl );
 
             if( textCtrl )
-                textCtrl->SetValue( txt );
+                textCtrl->ChangeValue( txt );
         }
 
         if( item->HasLossTangentValue() )
@@ -593,7 +591,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
             wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ui_row_item.m_LossTgCtrl );
 
             if( textCtrl )
-                textCtrl->SetValue( txt );
+                textCtrl->ChangeValue( txt );
         }
     }
 
@@ -657,9 +655,9 @@ void PANEL_SETUP_BOARD_STACKUP::addMaterialChooser( wxWindowID aId, const wxStri
     if( aMaterialName )
     {
         if( IsPrmSpecified( *aMaterialName ) )
-            textCtrl->SetValue( *aMaterialName );
+            textCtrl->ChangeValue( *aMaterialName );
         else
-            textCtrl->SetValue( wxGetTranslation( NotSpecifiedPrm() ) );
+            textCtrl->ChangeValue( wxGetTranslation( NotSpecifiedPrm() ) );
     }
 
     textCtrl->SetMinSize( m_numericTextCtrlSize );
@@ -771,7 +769,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
     {
         wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, ID_ITEM_THICKNESS+row );
         textCtrl->SetMinSize( m_numericTextCtrlSize );
-        textCtrl->SetValue( StringFromValue( m_units, item->GetThickness( aSublayerIdx ), true ) );
+        textCtrl->ChangeValue( StringFromValue( m_units, item->GetThickness( aSublayerIdx ), true ) );
         m_fgGridSizer->Add( textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
         m_controlItemsList.push_back( textCtrl );
         textCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED,
@@ -840,7 +838,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
         wxString txt = Double2Str( item->GetEpsilonR( aSublayerIdx ) );
         wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY, wxEmptyString,
                                                wxDefaultPosition, m_numericFieldsSize );
-        textCtrl->SetValue( txt );
+        textCtrl->ChangeValue( txt );
         m_fgGridSizer->Add( textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
         ui_row_item.m_EpsilonCtrl = textCtrl;
     }
@@ -854,7 +852,7 @@ BOARD_STACKUP_ROW_UI_ITEM PANEL_SETUP_BOARD_STACKUP::createRowData( int aRow,
         wxString txt = Double2Str( item->GetLossTangent( aSublayerIdx ) );;
         wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY, wxEmptyString,
                                                wxDefaultPosition, m_numericFieldsSize );
-        textCtrl->SetValue( txt );
+        textCtrl->ChangeValue( txt );
         m_fgGridSizer->Add( textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
         ui_row_item.m_LossTgCtrl = textCtrl;
     }
@@ -1360,7 +1358,7 @@ void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
 
     wxTextCtrl* textCtrl;
     textCtrl = static_cast<wxTextCtrl*>( m_rowUiItemsList[row].m_MaterialCtrl );
-    textCtrl->SetValue( item->GetMaterial( sub_item ) );
+    textCtrl->ChangeValue( item->GetMaterial( sub_item ) );
 
     // some layers have a material choice but not EpsilonR ctrl
     if( item->HasEpsilonRValue() )
@@ -1368,7 +1366,7 @@ void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
         textCtrl = dynamic_cast<wxTextCtrl*>( m_rowUiItemsList[row].m_EpsilonCtrl );
 
         if( textCtrl )
-            textCtrl->SetValue( item->FormatEpsilonR( sub_item ) );
+            textCtrl->ChangeValue( item->FormatEpsilonR( sub_item ) );
     }
 
     // some layers have a material choice but not loss tg ctrl
@@ -1377,7 +1375,7 @@ void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
         textCtrl = dynamic_cast<wxTextCtrl*>( m_rowUiItemsList[row].m_LossTgCtrl );
 
         if( textCtrl )
-            textCtrl->SetValue( item->FormatLossTangent( sub_item ) );
+            textCtrl->ChangeValue( item->FormatLossTangent( sub_item ) );
     }
 }
 
