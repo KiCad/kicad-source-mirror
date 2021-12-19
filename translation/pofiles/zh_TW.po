@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-10 22:05+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2021-12-21 08:55+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -534,11 +534,11 @@ msgstr "切換膠粘層的顯示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle silkscreen display"
-msgstr "切換網版印刷層顯示"
+msgstr "切換絲印層顯示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
 msgid "Toggle display of silkscreen layers"
-msgstr "切換網版印刷層的顯示"
+msgstr "切換絲印層的顯示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:265
 msgid "Toggle solder mask display"
@@ -620,11 +620,11 @@ msgstr "使用顏色："
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:77
 msgid "Silkscreen top:"
-msgstr "網版印刷層頂部："
+msgstr "絲印層頂部："
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:84
 msgid "Silkscreen bottom:"
-msgstr "網版印刷層底部："
+msgstr "絲印層底部："
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:97
 msgid "Solder mask top:"
@@ -648,15 +648,15 @@ msgstr "電路板層"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:31
 msgid "Show silkscreen layers"
-msgstr "顯示網版印刷層"
+msgstr "顯示絲印層"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
 msgid "Clip silkscreen at solder mask edges"
-msgstr "將網版印刷夾在阻焊層邊緣"
+msgstr "將絲印夾在阻焊層邊緣"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 msgid "Clip silkscreen at via annuli"
-msgstr "剪去過孔環的網版印刷"
+msgstr "剪去過孔環的絲印"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:40
 msgid "Show solder mask layers"
@@ -1318,7 +1318,7 @@ msgstr "負片"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:527
 msgid "Front silk screen"
-msgstr "頂層網版印刷"
+msgstr "頂層絲印"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:533
@@ -1344,7 +1344,7 @@ msgid ""
 "layer (but will be marked invisible)."
 msgstr ""
 "選擇要放置輪廓的電路板圖層。\n"
-"位號和值始終放置在網版印刷層上（但會被標記為不可見）。"
+"位號和值始終放置在絲印層上（但會被標記為不可見）。"
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
@@ -1614,7 +1614,7 @@ msgstr "KiCad 使用者論壇 - "
 
 #: common/dialog_about/AboutDialog_main.cpp:187
 msgid "The complete KiCad EDA Suite is released under the"
-msgstr "完整的 KiCad EDA 工具箱在"
+msgstr "完整的 KiCad EDA 工具箱釋出遵循"
 
 #: common/dialog_about/AboutDialog_main.cpp:189
 msgid "GNU General Public License (GPL) version 3 or any later version"
@@ -6517,9 +6517,8 @@ msgid "All KiCad project files"
 msgstr "所有 KiCad 工程檔案"
 
 #: common/wildcards_and_files_ext.cpp:235
-#, fuzzy
 msgid "All KiCad schematic files"
-msgstr "Altium 原理圖檔案"
+msgstr "所有 KiCad 原理圖檔案"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad legacy schematic files"
@@ -6809,7 +6808,7 @@ msgstr "封裝變更的符號未儲存"
 
 #: cvpcb/cvpcb_mainframe.cpp:386
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr "符號和封裝關聯已經變更。儲存變更嗎?"
+msgstr "符號和封裝關聯已經被修改。要儲存變更嗎？"
 
 #: cvpcb/cvpcb_mainframe.cpp:548 cvpcb/tools/cvpcb_association_tool.cpp:207
 #, c-format
@@ -7858,27 +7857,27 @@ msgstr "網路或匯流排名稱"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
-msgstr "更改原理圖中的所有符號"
+msgstr "替換原理圖中的所有符號"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:67
 msgid "Change Symbols"
-msgstr "更改符號"
+msgstr "替換符號"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:76
 msgid "Change selected symbol(s)"
-msgstr "更改已選定符號 (s)"
+msgstr "替換已選中的符號"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
 msgid "Change symbols matching reference designator:"
-msgstr "更改符號匹配的位號："
+msgstr "替換此位號對應的符號："
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:94
 msgid "Change symbols matching value:"
-msgstr "更改符號匹配值："
+msgstr "替換具有這些值的符號："
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching library identifier:"
-msgstr "更改符號匹配的庫標識："
+msgstr "替換具有以下庫標識的符號："
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
 msgid "Update Fields"
@@ -7936,12 +7935,12 @@ msgstr "將符號 %s 從 '%s' 更新到 '%s'"
 #: eeschema/dialogs/dialog_change_symbols.cpp:555
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "將符號 %s 的值從 '%s' 更改為 '%s'"
+msgstr "將符號 %s 從 '%s' 替換為 '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:562
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "將符號 %s 的值從 '%s' 更改為 '%s'"
+msgstr "將符號 %s 從 '%s' 替換為 '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:573
 msgid "*** symbol not found ***"
@@ -7961,19 +7960,19 @@ msgstr "更新已選中的符號"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
 msgid "Update symbols matching reference designator:"
-msgstr "更新這些位號對應的符號："
+msgstr "更新此位號對應的符號："
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:39
 msgid "Update symbols matching value:"
-msgstr "更新具有這些值的符號："
+msgstr "更新具有此值的符號："
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:45
 msgid "Update symbols matching library identifier:"
-msgstr "更新這些庫標識對應的符號："
+msgstr "更新以下庫標識對應的符號："
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:72
 msgid "New library identifier:"
-msgstr "新庫識別符號："
+msgstr "新符號的庫 ID："
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
@@ -8269,7 +8268,7 @@ msgstr "它將從 %s 列表中排除"
 #: eeschema/dialogs/dialog_erc.cpp:527 pcbnew/dialogs/dialog_drc.cpp:469
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr "將所有 \"%s\" 違規的嚴重性更改為錯誤"
+msgstr "將所有“%s”違規的嚴重性等級修改為“錯誤”"
 
 #: eeschema/dialogs/dialog_erc.cpp:529 eeschema/dialogs/dialog_erc.cpp:535
 #: pcbnew/dialogs/dialog_drc.cpp:471 pcbnew/dialogs/dialog_drc.cpp:478
@@ -8279,7 +8278,7 @@ msgstr "違規嚴重程度也可以在“電路板設定...”對話方塊中進
 #: eeschema/dialogs/dialog_erc.cpp:533 pcbnew/dialogs/dialog_drc.cpp:476
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "將所有 \"%s\" 違規的嚴重程度更改為警告"
+msgstr "將所有“%s”違規的嚴重性等級修改為“警告”"
 
 #: eeschema/dialogs/dialog_erc.cpp:538 pcbnew/dialogs/dialog_drc.cpp:482
 #, c-format
@@ -10198,7 +10197,7 @@ msgstr "連結 '%s' 到這個檔案？"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:515
 #, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
-msgstr "要將 '%s' 連結從 '%s' 更改為 '%s' 嗎？"
+msgstr "要將“%s”的連結從“%s”更換為“%s”嗎？"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:520
 #: eeschema/dialogs/dialog_sheet_properties.cpp:536
@@ -11175,7 +11174,7 @@ msgstr "從庫中更新符號..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:216
 #: eeschema/tools/ee_actions.cpp:437
 msgid "Change Symbol..."
-msgstr "更改符號..."
+msgstr "替換符號..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:219
 msgid "Edit Symbol..."
@@ -12052,7 +12051,7 @@ msgid ""
 "modified."
 msgstr ""
 "已對一個或多個符號庫進行了修改。\n"
-"必須先儲存或丟棄變更,然後才能修改符號庫表。"
+"必須先儲存或丟棄變更，然後才能修改符號庫表。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1052
 msgid "Symbol Libraries"
@@ -15327,17 +15326,17 @@ msgstr "使用者取消了封裝重新連結。"
 #: eeschema/tools/backannotate.cpp:329
 #, c-format
 msgid "Change '%s' reference designator to '%s'."
-msgstr "更改 '%s' 的位號為 '%s'。"
+msgstr "修改“%s”的引用位號為“%s”。"
 
 #: eeschema/tools/backannotate.cpp:346
 #, c-format
 msgid "Change %s footprint assignment from '%s' to '%s'."
-msgstr "將 %s 的元件封裝任務排程從 '%s' 更改為 '%s'。"
+msgstr "將 %s 的封裝分配從“%s”替換為“%s”。"
 
 #: eeschema/tools/backannotate.cpp:364
 #, c-format
 msgid "Change %s value from '%s' to '%s'."
-msgstr "將 %s 的值從 '%s' 更改為 '%s'。"
+msgstr "將 %s 的值從“%s”更改為“%s”。"
 
 #: eeschema/tools/backannotate.cpp:389
 #, c-format
@@ -15347,7 +15346,7 @@ msgstr "找不到 %s 引腳 '%s'。"
 #: eeschema/tools/backannotate.cpp:532
 #, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "將引腳%s 網%s的標籤從 '%s' 更改為 '%s'。"
+msgstr "將引腳 %s 網路 %s 的標籤從“%s”更改為“%s”。"
 
 #: eeschema/tools/backannotate.cpp:557
 #, c-format
@@ -15802,7 +15801,7 @@ msgstr "在符號或圖框的欄位上執行自動放置演算法"
 
 #: eeschema/tools/ee_actions.cpp:425
 msgid "Change Symbols..."
-msgstr "更改符號..."
+msgstr "替換符號..."
 
 #: eeschema/tools/ee_actions.cpp:426
 msgid "Assign different symbols from the library"
@@ -16127,14 +16126,12 @@ msgid "Switch H & V only mode for new wires and buses"
 msgstr "切換連線和匯流排正交模式"
 
 #: eeschema/tools/ee_actions.cpp:655
-#, fuzzy
 msgid "Repair Schematic"
-msgstr "建立原理圖"
+msgstr "修復原理圖"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr "執行各種診斷程式並嘗試修復電路板"
+msgstr "執行各種診斷程式並嘗試修復原理圖"
 
 #: eeschema/tools/ee_actions.cpp:662 pcbnew/tools/pcb_actions.cpp:786
 msgid "Scripting Console"
@@ -17054,11 +17051,11 @@ msgstr "頂部阻焊劑"
 
 #: gerbview/files.cpp:149
 msgid "Bottom overlay"
-msgstr "底層網版印刷字元"
+msgstr "底層絲印字元"
 
 #: gerbview/files.cpp:150
 msgid "Top overlay"
-msgstr "頂層網版印刷字元"
+msgstr "頂層絲印字元"
 
 #: gerbview/files.cpp:151
 msgid "Bottom paste"
@@ -18387,8 +18384,8 @@ msgid ""
 "Changing file extension will change file type.\n"
 "Do you want to continue ?"
 msgstr ""
-"更改副檔名可能會導致檔案不可用。\n"
-"你確定要更改嗎?"
+"修改副檔名可能會導致檔案不可用。\n"
+"你確定要修改嗎?"
 
 #: kicad/project_tree_item.cpp:132
 msgid "Rename File"
@@ -18688,7 +18685,7 @@ msgid ""
 msgstr ""
 "無法建立資料夾 '%s'。\n"
 "\n"
-"請確保你有寫入許可權並再次嘗試。"
+"請確保有寫入許可權並重試。"
 
 #: kicad/tools/kicad_manager_control.cpp:589
 msgid "Error!"
@@ -19309,7 +19306,7 @@ msgstr "衰減大於 %f dB, 請重新設定"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Pi"
-msgstr "Pi"
+msgstr "Pi (&#960; )"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Tee"
@@ -19912,7 +19909,7 @@ msgstr "表面粗糙度："
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:156
 msgid "Insulator mu:"
-msgstr "絕緣子畝："
+msgstr "絕緣體 mu："
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:168
 msgid "Conductor mu:"
@@ -20737,7 +20734,7 @@ msgstr "電介質層 %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:529
 msgid "Top Silk Screen"
-msgstr "頂層網版印刷"
+msgstr "頂層絲印"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:537
 msgid "Top Solder Paste"
@@ -20757,7 +20754,7 @@ msgstr "底部焊膏"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:605
 msgid "Bottom Silk Screen"
-msgstr "底層網版印刷"
+msgstr "底層絲印"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:45
 msgid "Incorrect value for Epsilon R"
@@ -22892,7 +22889,7 @@ msgstr "未連線的專案 (%d)"
 #: pcbnew/dialogs/dialog_drc_base.cpp:129
 #, c-format
 msgid "Schematic Parity (%d)"
-msgstr "原理圖奇偶校驗 (%d)"
+msgstr "與原理圖不一致 (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:192
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
@@ -22921,27 +22918,27 @@ msgstr "焊盤列舉設定"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
 msgid "Change Footprints"
-msgstr "修改封裝"
+msgstr "替換封裝"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
 msgid "Change all footprints on board"
-msgstr "更改電路板上的所有封裝"
+msgstr "替換 PCB 上的所有封裝"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Change selected footprint(s)"
-msgstr "更改選定的封裝"
+msgstr "替換選定的封裝"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
 msgid "Change footprints matching reference designator:"
-msgstr "更改封裝匹配的位號："
+msgstr "替換這個位號對應的封裝："
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
 msgid "Change footprints matching value:"
-msgstr "更改封裝匹配值："
+msgstr "替換具有這個值的封裝："
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
 msgid "Change footprints with library id:"
-msgstr "使用庫 ID 更改封裝："
+msgstr "替換具有這個庫 ID 的封裝："
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
 msgid "Update text layers and visibilities"
@@ -22977,7 +22974,7 @@ msgstr "將封裝%s從' %s'更新到 '%s'"
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:382
 #, c-format
 msgid "Change footprint %s from '%s' to '%s'"
-msgstr "將封裝 %s從 '%s' 更改為 '%s'"
+msgstr "將封裝 %s 從“%s”替換為“%s”"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:392
 msgid "*** footprint not found ***"
@@ -23005,7 +23002,7 @@ msgstr "使用庫 ID 更新封裝："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 msgid "New footprint library id:"
-msgstr "新的封裝庫 ID："
+msgstr "新封裝的庫 ID："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:96
 msgid "Remove text items which are not in library footprint"
@@ -23457,7 +23454,7 @@ msgstr "3D 模型"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:294
 msgid "Footprint can be freely moved and oriented on the canvas."
-msgstr "封裝可以在畫布上被自由移動和更改方向。"
+msgstr "在畫布上可以自由移動和旋轉封裝。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:296
 msgid ""
@@ -23555,7 +23552,7 @@ msgstr "從庫中更新封裝..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:248
 #: pcbnew/tools/pcb_actions.cpp:422
 msgid "Change Footprint..."
-msgstr "修改封裝..."
+msgstr "替換封裝..."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:257
 #: pcbnew/tools/pcb_actions.cpp:240
@@ -23757,7 +23754,7 @@ msgstr "間隙覆蓋和設定"
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
-msgstr "當前分配的庫 ID 和封裝 ID。使用“更改封裝…”來分配不同的封裝。"
+msgstr "當前已經分配了庫 ID 和封裝 ID。使用“替換封裝…”來分配不同的封裝。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:135
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:108
@@ -24286,7 +24283,7 @@ msgstr "刪除專案"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:55
 msgid "Silk Layers"
-msgstr "網版印刷層"
+msgstr "絲印層"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:215
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:134
@@ -25343,7 +25340,7 @@ msgstr "底層錫膏"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:530
 msgid "Back silk screen"
-msgstr "底層網版印刷"
+msgstr "底層絲印"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:536
 msgid "Back solder mask"
@@ -25747,11 +25744,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
 msgid "Subtract soldermask from silkscreen"
-msgstr "減去開窗區域中的網版印刷"
+msgstr "剔除開窗區域中的絲印"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "Remove silkscreen from areas without soldermask"
-msgstr "在沒有阻焊的區域移除網版印刷"
+msgstr "在沒有阻焊的區域移除絲印"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:221
 msgid "Coordinate format:"
@@ -26467,7 +26464,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:368
 msgid "Change text properties"
-msgstr "更改文字屬性"
+msgstr "修改文字屬性"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:58
 msgid "Enter the text placed on selected layer."
@@ -26484,21 +26481,21 @@ msgstr "父級封裝描述"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:394
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr "更改網路還會將%s的%s焊盤的網路更新為%s。"
+msgstr "修改網路還會將 %s 的 %s 號焊盤的網路更新為 %s。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:403
 #, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
-msgstr "更改網路還會將%s的%s焊盤和%s的%s焊盤的網路更新為%s。"
+msgstr "修改網路還會將 %s 的 %s 號焊盤和 %s 的 %s 號焊盤的網路更新為 %s。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:412
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr "更改網路還會將%lu個所連線的焊盤的網路更新為%s。"
+msgstr "修改網路還會將 %lu 個所連線的焊盤的網路更新為 %s。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:418
 msgid "Change Nets"
-msgstr "更改網路"
+msgstr "修改網路"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:418
 msgid "Leave Nets Unchanged"
@@ -26528,7 +26525,7 @@ msgstr "透過網自動更新"
 msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
-msgstr "當它接觸的焊盤或敷銅更改時自動更改這個過孔的網路"
+msgstr "將當前過孔的網路繫結到其接觸的焊盤或敷銅的網路"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:60
 msgid "Start point X:"
@@ -26678,9 +26675,7 @@ msgid ""
 "Normally footprints on the board should be changed to match footprint "
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
-msgstr ""
-"通常應變更線路板上的封裝，以匹配原理圖中所做的封裝關聯變更。僅當您不想變更線"
-"路板上的現有封裝時，才取消選中此選項。"
+msgstr "通常應替換 PCB 上的封裝，以匹配原理圖中所做的封裝關聯變更。僅當您不想替換線路板上的現有封裝時，才取消選中此選項。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:53
 msgid "Update PCB from Schematic"
@@ -27311,7 +27306,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:411
 msgid "Silkscreen"
-msgstr "網版印刷層"
+msgstr "絲印層"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:427
 msgid "Minimum item clearance:"
@@ -27322,9 +27317,7 @@ msgid ""
 "Minimum clearance between two items on the same silkscreen layer.  If set "
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
-msgstr ""
-"同一網版印刷層上兩個專案間的最小間隙。設定此值可提高辯認度。(注：不適用於單個"
-"封裝中的多個形狀。)"
+msgstr "同一絲印層上兩個專案間的最小間隙。設定此值可提高辯認度。(注：不適用於單個封裝中的多個形狀。)"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:431
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -27450,11 +27443,11 @@ msgstr "頂層錫膏層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:94
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr "開啟/關閉 頂層網版印刷層"
+msgstr "開啟/關閉 頂層絲印層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:98
 msgid "SilkS_Front"
-msgstr "頂層網版印刷層"
+msgstr "頂層絲印層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:106
 msgid "If you want a solder mask layer for the front of the board"
@@ -27793,11 +27786,11 @@ msgstr "底層阻焊層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:586
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr "開啟/關閉 底層網版印刷層"
+msgstr "開啟/關閉 底層絲印層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:590
 msgid "SilkS_Back"
-msgstr "底層網版印刷層"
+msgstr "底層絲印層"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:598
 msgid "If you want a solder paste layer for the back side of the board"
@@ -28288,7 +28281,7 @@ msgstr ""
 " * hole\\_clearance\n"
 "# （與通孔的間隙）\n"
 " * silk\\_clearance\n"
-"# （與網印的間隙）\n"
+"# （與絲印的間隙）\n"
 " * skew\n"
 "# （總偏差）\n"
 " * track\\_width\n"
@@ -28578,7 +28571,7 @@ msgstr "電路板設定約束"
 
 #: pcbnew/drc/drc_engine.cpp:175
 msgid "board setup constraints silk"
-msgstr "電路板設定約束網版印刷"
+msgstr "電路板設定約束絲印"
 
 #: pcbnew/drc/drc_engine.cpp:181
 msgid "board setup constraints hole"
@@ -28741,7 +28734,7 @@ msgstr "面向製造的設計"
 
 #: pcbnew/drc/drc_item.cpp:45
 msgid "Schematic Parity"
-msgstr "原理圖奇偶校驗"
+msgstr "原理圖一致性檢驗"
 
 #: pcbnew/drc/drc_item.cpp:46
 msgid "Signal Integrity"
@@ -28873,11 +28866,11 @@ msgstr "焊盤網路與原理圖不匹配"
 
 #: pcbnew/drc/drc_item.cpp:178
 msgid "Silkscreen clipped by solder mask"
-msgstr "與開窗區域相交的網版印刷"
+msgstr "與開窗區域相交的絲印"
 
 #: pcbnew/drc/drc_item.cpp:182
 msgid "Silkscreen overlap"
-msgstr "網版印刷重疊"
+msgstr "絲印重疊"
 
 #: pcbnew/drc/drc_item.cpp:186
 msgid "Trace length out of range"
@@ -29204,7 +29197,7 @@ msgstr "在原理圖中未找到引腳 %s 的焊盤。"
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:218
 msgid "Checking PCB to schematic parity..."
-msgstr "正在檢查 PCB 到原理圖奇偶校驗..."
+msgstr "正在檢查 PCB 與原理圖是否一致..."
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:225
 msgid "No netlist provided, skipping LVS."
@@ -29261,21 +29254,21 @@ msgstr "正在檢查文字變數..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:106
 msgid "Checking silkscreen for overlapping items..."
-msgstr "正在檢查重疊專案的網版印刷..."
+msgstr "正在檢查重疊專案的絲印..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:160
 #, c-format
 msgid "Testing %d silkscreen features against %d board items."
-msgstr "正在將 %d 個網版印刷與 %d 個電路板專案測試相交..."
+msgstr "正在將 %d 個絲印與 %d 個電路板專案測試相交..."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:100
 msgid "Checking silkscreen for potential soldermask clipping..."
-msgstr "正在檢查網版印刷是否可能與開窗區相交..."
+msgstr "正在檢查絲印是否可能與開窗區相交..."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:182
 #, c-format
 msgid "Testing %d mask apertures against %d silkscreen features."
-msgstr "正在將 %d 個阻焊區域與 %d 個網版印刷測試相交..."
+msgstr "正在將 %d 個阻焊區域與 %d 個絲印測試相交..."
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:83
 msgid "Checking track widths..."
@@ -29327,7 +29320,7 @@ msgstr "它們已被匯出為橢圓焊盤。"
 #: pcbnew/exporters/export_vrml.cpp:577
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
-msgstr "電路板輪廓不正確。執行DRC進行全面分析。"
+msgstr "PCB 輪廓異常，請執行 DRC 來進行全面分析。"
 
 #: pcbnew/exporters/export_idf.cpp:640 pcbnew/exporters/export_idf.cpp:649
 #: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/export_vrml.cpp:1040
@@ -29472,10 +29465,8 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果此電路板上的敷銅被重新填充，將應用銅邊緣間隙設定 （見電路板配置 > 設計規"
-"則 >限制）。\n"
-"這可能導致來自先前 KiCad 版本的不同填充，這些版本會將電路板邊緣的線粗細用於 "
-"Edge Cuts 層。"
+"如果重新填充此電路板上的敷銅，則將應用銅邊緣間隙設定 （參見電路板配置 > 設計規則 > 限制）。\n"
+"老版本的 KiCad 會將電路板邊緣 (Edge Cuts 層) 的線粗細作為銅間距，因此新的填充結果可能與老版本的填充結果不同。"
 
 #: pcbnew/files.cpp:549
 msgid "Edge Clearance Warning"
@@ -30429,12 +30420,12 @@ msgstr "無法更新 %s (封裝 '%s' 未找到)."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:230
 #, c-format
 msgid "Change %s footprint from '%s' to '%s'."
-msgstr "將封裝 %s從 '%s' 更改為 '%s'。"
+msgstr "將 %s 的封裝從“%s”替換為“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:242
 #, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "將封裝 %s 從 '%s' 更改為 '%s'。"
+msgstr "已將 %s 的封裝從“%s”替換為“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:269
 #, c-format
@@ -30444,17 +30435,17 @@ msgstr "更改 %s 的位號為 %s。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:275
 #, c-format
 msgid "Changed %s reference designator to %s."
-msgstr "更改 %s 的位號為 %s。"
+msgstr "已將 %s 的位號更改為 %s。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:291
 #, c-format
 msgid "Change %s value from %s to %s."
-msgstr "\"%s\" 的值從 \"%s\" 更改為 \"%s\"。"
+msgstr "將 %s 的值從“%s”修改為“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:298
 #, c-format
 msgid "Changed %s value from %s to %s."
-msgstr "將 %s 的值從 %s 更改為了 %s。"
+msgstr "已將 %s 的值從“%s”修改為“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:320
 #, c-format
@@ -30707,7 +30698,7 @@ msgstr "沒有為符號 %s 定義封裝。"
 #: pcbnew/netlist_reader/netlist.cpp:182
 #, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
-msgstr "\"%s\" 的封裝發生了變化：電路板封裝 \"%s\"，網表封裝 \"%s\"。"
+msgstr "“%s”的封裝發生了變化：PCB 封裝“%s”，網表封裝“%s”。"
 
 #: pcbnew/netlist_reader/netlist.cpp:205
 #, c-format
@@ -33193,7 +33184,7 @@ msgstr "專案屬於同一網路。間隙為 0。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:498
 msgid "Silkscreen clearance resolution for:"
-msgstr "網版印刷層間隙解析適用於:"
+msgstr "絲印層間隙解析適用於:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:528
 msgid "Courtyard clearance resolution for:"
@@ -33445,7 +33436,7 @@ msgstr "重新填充所有敷銅..."
 
 #: pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr "原理圖奇偶校驗測試需要一張完整批註的原理圖。"
+msgstr "請先完整批註原理圖，然後才能檢查一致性。"
 
 #: pcbnew/tools/drc_tool.cpp:208
 msgid "DRC"
@@ -33507,7 +33498,7 @@ msgstr "旋轉"
 
 #: pcbnew/tools/edit_tool.cpp:1704 pcbnew/tools/pcb_actions.cpp:303
 msgid "Change Side / Flip"
-msgstr "更改側面/翻轉"
+msgstr "更改所在面 / 翻轉"
 
 #: pcbnew/tools/edit_tool.cpp:2033
 msgid "Move exact"
@@ -33989,7 +33980,7 @@ msgstr "更新封裝..."
 
 #: pcbnew/tools/pcb_actions.cpp:405
 msgid "Update footprint to include any changes from the library"
-msgstr "更新封裝以包含來自庫的任何變更"
+msgstr "更新封裝以包含來自庫的修改"
 
 #: pcbnew/tools/pcb_actions.cpp:410
 msgid "Update Footprints from Library..."
@@ -33997,7 +33988,7 @@ msgstr "從庫中更新封裝..."
 
 #: pcbnew/tools/pcb_actions.cpp:411
 msgid "Update footprints to include any changes from the library"
-msgstr "更新封裝以包含來自庫的任何變更"
+msgstr "更新封裝以包含來自庫的修改"
 
 #: pcbnew/tools/pcb_actions.cpp:416
 msgid "Remove Unused Pads..."
@@ -34014,7 +34005,7 @@ msgstr "從庫中關聯不同的封裝"
 
 #: pcbnew/tools/pcb_actions.cpp:427
 msgid "Change Footprints..."
-msgstr "儲存封裝..."
+msgstr "修改封裝..."
 
 #: pcbnew/tools/pcb_actions.cpp:427
 msgid "Assign different footprints from the library"
@@ -35411,11 +35402,11 @@ msgstr "選擇何時顯示網路和網路類顏色"
 
 #: pcbnew/widgets/appearance_controls.cpp:687
 msgid "Net and netclass colors are shown on all copper items"
-msgstr "網路和網路類顏色顯示在所有銅專案上"
+msgstr "在所有銅專案上顯示網路和網路類顏色"
 
 #: pcbnew/widgets/appearance_controls.cpp:695
 msgid "Net and netclass colors are shown on the ratsnest only"
-msgstr "網路和網路類顏色僅在飛線上顯示"
+msgstr "僅在飛線上顯示網路和網路類顏色"
 
 #: pcbnew/widgets/appearance_controls.cpp:702
 msgid "Net and netclass colors are not shown"
@@ -35488,11 +35479,11 @@ msgstr "單擊以顯示 %s 的飛線"
 #: pcbnew/widgets/appearance_controls.cpp:940
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
-msgstr "雙擊(或中鍵單擊)更改顏色，右鍵單擊檢視更多操作"
+msgstr "雙擊或中鍵更改顏色，右鍵單擊檢視更多操作"
 
 #: pcbnew/widgets/appearance_controls.cpp:1433
 msgid "Double click or middle click for color change, right click for menu"
-msgstr "雙擊或中鍵更改顏色，右鍵單擊選單"
+msgstr "雙擊或中鍵單擊可更改顏色，右鍵單擊可開啟選單"
 
 #: pcbnew/widgets/appearance_controls.cpp:1440
 msgid "Show or hide this layer"
@@ -35516,11 +35507,11 @@ msgstr "底層錫膏"
 
 #: pcbnew/widgets/appearance_controls.cpp:1527
 msgid "Silkscreen on board's front"
-msgstr "頂層網版印刷"
+msgstr "頂層絲印"
 
 #: pcbnew/widgets/appearance_controls.cpp:1528
 msgid "Silkscreen on board's back"
-msgstr "底層網版印刷"
+msgstr "底層絲印"
 
 #: pcbnew/widgets/appearance_controls.cpp:1529
 msgid "Solder mask on board's front"
@@ -35917,7 +35908,7 @@ msgstr "原理圖捕獲工具"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
-msgstr "KiCad 原理圖的獨立原理圖編輯器"
+msgstr "KiCad 原理圖的獨立編輯器"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
@@ -35966,7 +35957,7 @@ msgstr "PCB 佈局編輯器"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
-msgstr "KiCad 電路板的獨立電路板編輯器"
+msgstr "KiCad 電路板的獨立編輯器"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "pcbnew"
@@ -35985,10 +35976,9 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
-"KiCad 是一款免費和開源的電子設計自動化（EDA）套件。 它具有示意圖捕獲、整合電"
-"路模擬、印刷電路板（PCB）佈局、3D 渲染和繪圖/資料匯出到眾多格式等功能。 "
-"KiCad 還包括一個高質量的元件庫，具有成千上萬的符號、封裝和3D模型。KiCad 具有"
-"最小的系統要求，可在 Linux、Windows 和 MacOS 上執行。"
+"KiCad 是一款自由、開源的 EDA 套件。 它具有原理圖編輯、電路模擬、PCB 佈局、3D 渲染和圖形 / "
+"資料匯出等功能，還包括一個高質量的元件庫，具有成千上萬的符號、封裝和 3D 模型。KiCad 對系統性能要求不高，且可在 Linux、Windows 和 "
+"macOS 系統上執行。"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
 msgid "KiCad Main Window"
