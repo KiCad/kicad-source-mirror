@@ -52,6 +52,7 @@ void PCBNEW_PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
     {
         m_DrillMarks = static_cast<DRILL_MARK_SHAPE_T>( cfg->m_Plot.pads_drill_mode );
         m_Pagination = static_cast<PAGINATION_T>( cfg->m_Plot.all_layers_on_one_page );
+        m_PrintEdgeCutsOnAllPages = cfg->m_Plot.edgecut_on_all_layers;
         m_Mirror     = cfg->m_Plot.mirror;
     }
 }
@@ -65,6 +66,7 @@ void PCBNEW_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
     {
         cfg->m_Plot.pads_drill_mode        = m_DrillMarks;
         cfg->m_Plot.all_layers_on_one_page = m_Pagination;
+        cfg->m_Plot.edgecut_on_all_layers  = m_PrintEdgeCutsOnAllPages;
         cfg->m_Plot.mirror                 = m_Mirror;
     }
 }

@@ -182,6 +182,7 @@ public:
     struct DIALOG_PLOT
     {
         int    all_layers_on_one_page;
+        bool   edgecut_on_all_layers;
         int    pads_drill_mode;
         double fine_scale_x;
         double fine_scale_y;
