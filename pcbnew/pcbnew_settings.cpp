@@ -412,6 +412,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "plot.all_layers_on_one_page",
             &m_Plot.all_layers_on_one_page, 1 ) );
 
+    m_params.emplace_back( new PARAM<bool>( "plot.edgecut_on_all_layers",
+            &m_Plot.edgecut_on_all_layers, true ) );
+
     m_params.emplace_back( new PARAM<int>( "plot.pads_drill_mode",
             &m_Plot.pads_drill_mode, 2 ) );
 
