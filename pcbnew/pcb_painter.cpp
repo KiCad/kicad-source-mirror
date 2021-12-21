@@ -1911,6 +1911,8 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
         return;
     }
 
+    const_cast<PCB_MARKER*>( aMarker )->SetZoom( 1.0 / sqrt( m_gal->GetZoomFactor() ) );
+
     SHAPE_LINE_CHAIN polygon;
     aMarker->ShapeToPolygon( polygon );
 

@@ -97,6 +97,8 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
+    void SetZoom( double aZoomFactor );
+
     const BOX2I ViewBBox() const override;
 
     const EDA_RECT GetBoundingBox() const override;

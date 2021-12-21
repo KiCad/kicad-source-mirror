@@ -64,6 +64,7 @@ public:
      * The scaling factor to convert polygonal shape coordinates to internal units.
      */
     int MarkerScale() const { return m_scalingFactor; }
+    void SetMarkerScale( int aScale ) { m_scalingFactor = aScale; }
 
     /**
      * Return the shape polygon in internal units in a #SHAPE_LINE_CHAIN the coordinates
