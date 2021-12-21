@@ -1429,6 +1429,8 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         return 0;
 
     OPT<VECTOR2I> oldRefPt = boost::make_optional<VECTOR2I>( false, VECTOR2I( 0, 0 ) );
+    bool          is_hover = selection.IsHover();   // N.B. This must be saved before the second
+                                                    // call to RequestSelection() below
 
     if( selection.HasReferencePoint() )
         oldRefPt = selection.GetReferencePoint();
@@ -1479,7 +1481,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( !m_dragging )
         m_commit->Push( _( "Rotate" ) );
 
-    if( selection.IsHover() && !m_dragging )
+    if( is_hover && !m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
