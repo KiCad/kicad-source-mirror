@@ -215,7 +215,7 @@ void PANEL_SETUP_BOARD_STACKUP::onAdjustDielectricThickness( wxCommandEvent& eve
     if( items_candidate.size() )
     {
         int thickness_layer = ( iu_thickness - min_thickness ) / items_candidate.size();
-        wxString txt = StringFromValue( m_frame->GetUserUnits(), thickness_layer );
+        wxString txt = StringFromValue( m_frame->GetUserUnits(), thickness_layer, true );
 
         for( BOARD_STACKUP_ROW_UI_ITEM* ui_item : items_candidate )
         {
@@ -527,8 +527,10 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
             wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ui_row_item.m_ThicknessCtrl );
 
             if( textCtrl )
-                textCtrl->SetValue( StringFromValue( m_units,
-                                        item->GetThickness( sub_item ), true ) );
+            {
+                textCtrl->SetValue( StringFromValue( m_units, item->GetThickness( sub_item ),
+                                                     true ) );
+            }
 
             if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
             {

@@ -109,13 +109,13 @@ public:
                 val = StringFromValue( aUserUnits, pin->GetNameTextSize(), true );
                 break;
             case COL_LENGTH:
-                val = StringFromValue( aUserUnits, pin->GetLength() );
+                val = StringFromValue( aUserUnits, pin->GetLength(), true );
                 break;
             case COL_POSX:
-                val = StringFromValue( aUserUnits, pin->GetPosition().x );
+                val = StringFromValue( aUserUnits, pin->GetPosition().x, true );
                 break;
             case COL_POSY:
-                val = StringFromValue( aUserUnits, pin->GetPosition().y );
+                val = StringFromValue( aUserUnits, pin->GetPosition().y, true );
                 break;
             case COL_VISIBLE:
                 val = StringFromBool( pin->IsVisible() );

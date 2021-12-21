@@ -295,10 +295,10 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataToWindow()
         msg.Printf( "Corner %d", row+1 );
         m_gridCornersList->SetRowLabelValue( row, msg );
 
-        msg = StringFromValue( GetUserUnits(), m_currPoints[row].x );
+        msg = StringFromValue( GetUserUnits(), m_currPoints[row].x, true );
         m_gridCornersList->SetCellValue( row, 0, msg );
 
-        msg = StringFromValue( GetUserUnits(), m_currPoints[row].y );
+        msg = StringFromValue( GetUserUnits(), m_currPoints[row].y, true );
         m_gridCornersList->SetCellValue( row, 1, msg );
     }
 
