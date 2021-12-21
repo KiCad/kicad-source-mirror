@@ -266,10 +266,9 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     // same item can be changed and deleted in the same complex command).
     for( int ii = aList->GetCount() - 1; ii >= 0; ii-- )
     {
-        UNDO_REDO status = aList->GetPickedItemStatus((unsigned) ii );
+        UNDO_REDO   status = aList->GetPickedItemStatus( (unsigned) ii );
         EDA_ITEM*   eda_item = aList->GetPickedItem( (unsigned) ii );
-        SCH_SCREEN* screen =
-                dynamic_cast< SCH_SCREEN* >( aList->GetScreenForItem( (unsigned) ii ) );
+        SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( aList->GetScreenForItem( (unsigned) ii ) );
 
         wxCHECK( screen, /* void */ );
 
@@ -295,6 +294,9 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
         else if( status == UNDO_REDO::PAGESETTINGS )
         {
+            SetCurrentSheet( *m_schematic->GetSheets().FindSheetForScreen( screen ) );
+            DisplayCurrentSheet();
+
             // swap current settings with stored settings
             DS_PROXY_UNDO_ITEM  alt_item( this );
             DS_PROXY_UNDO_ITEM* item = static_cast<DS_PROXY_UNDO_ITEM*>( eda_item );
