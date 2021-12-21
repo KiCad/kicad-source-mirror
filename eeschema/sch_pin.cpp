@@ -188,7 +188,8 @@ wxString SCH_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
+    EDA_UNITS units = aFrame->GetUserUnits();
+    wxString  msg;
 
     aList.emplace_back( _( "Type" ), _( "Pin" ) );
 
@@ -215,7 +216,7 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     aList.emplace_back( _( "Visible" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
-    aList.emplace_back( _( "Length" ), StringFromValue( aFrame->GetUserUnits(), GetLength() ) );
+    aList.emplace_back( _( "Length" ), MessageTextFromValue( units, GetLength() ), true );
 
     int i = PinOrientationIndex( GetOrientation() );
     aList.emplace_back( _( "Orientation" ), PinOrientationName( (unsigned) i ) );

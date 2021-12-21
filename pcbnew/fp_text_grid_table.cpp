@@ -190,13 +190,13 @@ wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
         return text.GetText();
 
     case FPT_WIDTH:
-        return StringFromValue( m_userUnits, text.GetTextWidth() );
+        return StringFromValue( m_userUnits, text.GetTextWidth(), true );
 
     case FPT_HEIGHT:
-        return StringFromValue( m_userUnits, text.GetTextHeight() );
+        return StringFromValue( m_userUnits, text.GetTextHeight(), true );
 
     case FPT_THICKNESS:
-        return StringFromValue( m_userUnits, text.GetTextThickness() );
+        return StringFromValue( m_userUnits, text.GetTextThickness(), true );
 
     case FPT_LAYER:
         return text.GetLayerName();
@@ -206,10 +206,10 @@ wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
                                 true );
 
     case FPT_XOFFSET:
-        return StringFromValue( m_userUnits, text.GetPos0().x );
+        return StringFromValue( m_userUnits, text.GetPos0().x, true );
 
     case FPT_YOFFSET:
-        return StringFromValue( m_userUnits, text.GetPos0().y );
+        return StringFromValue( m_userUnits, text.GetPos0().y, true );
 
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking
