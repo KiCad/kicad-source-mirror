@@ -551,9 +551,7 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
             DISPOSITION disposition = itemDisposition.second;
 
             if( disposition == BEFORE )
-            {
                 unhighlight( item, SELECTED, &m_selection );
-            }
         }
 
         for( std::pair<EDA_ITEM* const, DISPOSITION> itemDisposition : itemDispositions )
@@ -561,14 +559,10 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
             BOARD_ITEM* item = static_cast<BOARD_ITEM*>( itemDisposition.first );
             DISPOSITION disposition = itemDisposition.second;
 
-            if( disposition == AFTER )
-            {
+            // Note that we must re-highlight even previously-highlighted items
+            // (ie: disposition BOTH) in case we removed any of their children.
+            if( disposition == AFTER || disposition == BOTH )
                 highlight( item, SELECTED, &m_selection );
-            }
-            else if( disposition == BOTH )
-            {
-                // nothing to do
-            }
         }
 
         m_frame->GetCanvas()->ForceRefresh();

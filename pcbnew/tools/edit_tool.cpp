@@ -699,6 +699,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 sTool->FilterCollectorForMarkers( aCollector );
+                sTool->FilterCollectorForHierarchy( aCollector, true );
             },
             // Prompt user regarding locked items if in board editor and in free-pad-mode (if
             // we're not in free-pad mode we delay this until the second RequestSelection()).
@@ -720,6 +721,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
                     sTool->FilterCollectorForMarkers( aCollector );
+                    sTool->FilterCollectorForHierarchy( aCollector, true );
                     sTool->FilterCollectorForFreePads( aCollector );
                 },
                 true /* prompt user regarding locked items */ );
@@ -1068,6 +1070,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
         m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
 
     editFrame->PopTool( tool );
+    editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
     return restore_state ? -1 : 0;
 }
@@ -1419,6 +1422,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
+                sTool->FilterCollectorForHierarchy( aCollector, true );
                 sTool->FilterCollectorForMarkers( aCollector );
             },
             // Prompt user regarding locked items if in board editor and in free-pad-mode (if
