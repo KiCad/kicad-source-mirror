@@ -40,7 +40,7 @@
 
 
 /// Factor to convert the maker unit shape to internal units:
-#define SCALING_FACTOR  Millimeter2iu( 0.075 )
+#define SCALING_FACTOR  Millimeter2iu( 0.1625 )
 
 
 
@@ -202,6 +202,12 @@ KIGFX::COLOR4D PCB_MARKER::getColor() const
 {
     COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
     return colors->GetColor( GetColorLayer() );
+}
+
+
+void PCB_MARKER::SetZoom( double aZoomFactor )
+{
+    SetMarkerScale( SCALING_FACTOR * aZoomFactor );
 }
 
 
