@@ -655,6 +655,16 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         if( symbolViewer && !symbolViewer->Close() )   // Can close modal symbol viewer?
             return false;
     }
+    else
+    {
+        auto* symbolEditor = (SYMBOL_EDIT_FRAME*) Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, false );
+
+        if( symbolEditor && symbolEditor->IsSymbolFromSchematic() )
+        {
+            if( !symbolEditor->CanCloseSymbolFromSchematic( true ) )
+                return false;
+        }
+    }
 
     SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, false );
 

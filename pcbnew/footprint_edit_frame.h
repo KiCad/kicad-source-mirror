@@ -59,6 +59,8 @@ public:
 
     bool IsCurrentFPFromBoard() const;
 
+    bool CanCloseFPFromBoard( bool doClose );
+
     FOOTPRINT_EDITOR_SETTINGS* GetSettings();
 
     APP_SETTINGS_BASE* config() const override;

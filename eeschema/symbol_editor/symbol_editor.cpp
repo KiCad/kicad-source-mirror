@@ -137,7 +137,7 @@ void SYMBOL_EDIT_FRAME::updateTitle()
     wxString lib = GetCurLib();
     wxString title;
 
-    if( IsSymbolFromSchematic() )
+    if( GetCurSymbol() && IsSymbolFromSchematic() )
     {
         if( GetScreen() && GetScreen()->IsContentModified() )
             title = wxT( "*" );
