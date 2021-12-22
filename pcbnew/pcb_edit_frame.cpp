@@ -104,6 +104,7 @@
 #include <kiplatform/app.h>
 #include <profile.h>
 #include <view/wx_view_controls.h>
+#include <footprint_viewer_frame.h>
 
 #include <action_plugin.h>
 #include "../scripting/python_scripting.h"
@@ -840,6 +841,34 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
             && IsContentModified() )
     {
         return false;
+    }
+
+    if( Kiface().IsSingle() )
+    {
+        auto* fpEditor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false );
+
+        if( fpEditor && !fpEditor->Close() )   // Can close footprint editor?
+            return false;
+
+        auto* fpViewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER, false );
+
+        if( fpViewer && !fpViewer->Close() )   // Can close footprint viewer?
+            return false;
+
+        fpViewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, false );
+
+        if( fpViewer && !fpViewer->Close() )   // Can close modal footprint viewer?
+            return false;
+    }
+    else
+    {
+        auto* fpEditor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false );
+
+        if( fpEditor && fpEditor->IsCurrentFPFromBoard() )
+        {
+            if( !fpEditor->CanCloseFPFromBoard( true ) )
+                return false;
+        }
     }
 
     if( IsContentModified() )

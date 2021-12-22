@@ -78,6 +78,8 @@ public:
      */
     bool HasLibModifications() const;
 
+    bool CanCloseSymbolFromSchematic( bool doClose );
+
     /**
      * The nickname of the current library being edited and empty string if none.
      */

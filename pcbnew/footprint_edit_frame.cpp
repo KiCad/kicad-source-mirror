@@ -649,6 +649,34 @@ const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) 
 }
 
 
+bool FOOTPRINT_EDIT_FRAME::CanCloseFPFromBoard( bool doClose )
+{
+    if( IsContentModified() )
+    {
+        wxString footprintName = GetBoard()->GetFirstFootprint()->GetReference();
+        wxString msg = _( "Save changes to '%s' before closing?" );
+
+        if( !HandleUnsavedChanges( this, wxString::Format( msg, footprintName ),
+                                   [&]() -> bool
+                                   {
+                                       return SaveFootprint( GetBoard()->GetFirstFootprint() );
+                                   } ) )
+        {
+            return false;
+        }
+    }
+
+    if( doClose )
+    {
+        GetInfoBar()->ShowMessageFor( wxEmptyString, 1 );
+        Clear_Pcb( false );
+        UpdateTitle();
+    }
+
+    return true;
+}
+
+
 bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     if( IsContentModified() )
@@ -662,6 +690,10 @@ bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         }
 
         wxString footprintName = GetBoard()->GetFirstFootprint()->GetFPID().GetLibItemName();
+
+        if( IsCurrentFPFromBoard() )
+            footprintName = GetBoard()->GetFirstFootprint()->GetReference();
+
         wxString msg = _( "Save changes to '%s' before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, footprintName ),

@@ -502,40 +502,56 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 }
 
 
-bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
+bool SYMBOL_EDIT_FRAME::CanCloseSymbolFromSchematic( bool doClose )
 {
-    // Shutdown blocks must be determined and vetoed as early as possible
-    if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-            && IsContentModified() )
-    {
-        return false;
-    }
-
-    if( m_isSymbolFromSchematic && IsContentModified() )
+    if( IsContentModified() )
     {
         SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
+        wxString        msg = _( "Save changes to '%s' before closing?" );
 
-        switch( UnsavedChangesDialog( this,
-                                      _( "Save changes to schematic before closing?" ),
-                                      nullptr ) )
+        switch( UnsavedChangesDialog( this, wxString::Format( msg, m_reference ), nullptr ) )
         {
         case wxID_YES:
             if( schframe && GetCurSymbol() )  // Should be always the case
                 schframe->SaveSymbolToSchematic( *GetCurSymbol(), m_schematicSymbolUUID );
 
-            return true;
+            break;
 
-        case wxID_NO: return true;
+        case wxID_NO:
+            break;
 
         default:
-        case wxID_CANCEL: return false;
+        case wxID_CANCEL:
+            return false;
         }
     }
 
-    if( !saveAllLibraries( true ) )
+    if( doClose )
+    {
+        GetInfoBar()->ShowMessageFor( wxEmptyString, 1 );
+        SetCurSymbol( nullptr, false );
+        updateTitle();
+    }
+
+    return true;
+}
+
+
+bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
+{
+    // Shutdown blocks must be determined and vetoed as early as possible
+    if( KIPLATFORM::APP::SupportsShutdownBlockReason()
+            && aEvent.GetId() == wxEVT_QUERY_END_SESSION
+            && IsContentModified() )
     {
         return false;
     }
+
+    if( m_isSymbolFromSchematic && !CanCloseSymbolFromSchematic( false ) )
+        return false;
+
+    if( !saveAllLibraries( true ) )
+        return false;
 
     return true;
 }
