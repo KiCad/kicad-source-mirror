@@ -633,7 +633,7 @@ void EE_POINT_EDITOR::updateParentItem() const
             else if( connected.second == ENDPOINT )
                 static_cast<SCH_LINE*>( connected.first )->SetEndPoint( line->GetPosition() );
 
-            getView()->Update( connected.first, KIGFX::GEOMETRY );
+            updateItem( connected.first, true );
         }
 
         connected = m_editPoints->Point( LINE_END ).GetConnected();
@@ -645,7 +645,7 @@ void EE_POINT_EDITOR::updateParentItem() const
             else if( connected.second == ENDPOINT )
                 static_cast<SCH_LINE*>( connected.first )->SetEndPoint( line->GetEndPoint() );
 
-            getView()->Update( connected.first, KIGFX::GEOMETRY );
+            updateItem( connected.first, true );
         }
     }
         break;
