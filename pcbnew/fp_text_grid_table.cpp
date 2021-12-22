@@ -27,6 +27,7 @@
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_combobox.h>
 #include <trigo.h>
+#include <pcb_base_frame.h>
 #include "grid_layer_box_helpers.h"
 
 enum
@@ -39,8 +40,8 @@ enum
 wxArrayString g_menuOrientations;
 
 
-FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( EDA_UNITS aUserUnits, PCB_BASE_FRAME* aFrame )
-        : m_userUnits( aUserUnits ), m_frame( aFrame )
+FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame ) :
+        m_frame( aFrame )
 {
     // Build the column attributes.
 
@@ -70,6 +71,8 @@ FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( EDA_UNITS aUserUnits, PCB_BASE_FRAME* aF
     m_layerColAttr = new wxGridCellAttr;
     m_layerColAttr->SetRenderer( new GRID_CELL_LAYER_RENDERER( m_frame ) );
     m_layerColAttr->SetEditor( new GRID_CELL_LAYER_SELECTOR( m_frame, {} ) );
+
+    m_frame->Bind( UNITS_CHANGED, &FP_TEXT_GRID_TABLE::onUnitsChanged, this );
 }
 
 
@@ -79,6 +82,17 @@ FP_TEXT_GRID_TABLE::~FP_TEXT_GRID_TABLE()
     m_boolColAttr->DecRef();
     m_orientationColAttr->DecRef();
     m_layerColAttr->DecRef();
+
+    m_frame->Unbind( UNITS_CHANGED, &FP_TEXT_GRID_TABLE::onUnitsChanged, this );
+}
+
+
+void FP_TEXT_GRID_TABLE::onUnitsChanged( wxCommandEvent& aEvent )
+{
+    if( GetView() )
+        GetView()->ForceRefresh();
+
+    aEvent.Skip();
 }
 
 
@@ -190,13 +204,13 @@ wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
         return text.GetText();
 
     case FPT_WIDTH:
-        return StringFromValue( m_userUnits, text.GetTextWidth(), true );
+        return StringFromValue( m_frame->GetUserUnits(), text.GetTextWidth(), true );
 
     case FPT_HEIGHT:
-        return StringFromValue( m_userUnits, text.GetTextHeight(), true );
+        return StringFromValue( m_frame->GetUserUnits(), text.GetTextHeight(), true );
 
     case FPT_THICKNESS:
-        return StringFromValue( m_userUnits, text.GetTextThickness(), true );
+        return StringFromValue( m_frame->GetUserUnits(), text.GetTextThickness(), true );
 
     case FPT_LAYER:
         return text.GetLayerName();
@@ -206,10 +220,10 @@ wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
                                 true );
 
     case FPT_XOFFSET:
-        return StringFromValue( m_userUnits, text.GetPos0().x, true );
+        return StringFromValue( m_frame->GetUserUnits(), text.GetPos0().x, true );
 
     case FPT_YOFFSET:
-        return StringFromValue( m_userUnits, text.GetPos0().y, true );
+        return StringFromValue( m_frame->GetUserUnits(), text.GetPos0().y, true );
 
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking
@@ -261,14 +275,14 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         break;
 
     case FPT_WIDTH:
-        text.SetTextWidth( ValueFromString( m_userUnits, aValue ) );
+        text.SetTextWidth( ValueFromString( m_frame->GetUserUnits(), aValue ) );
         break;
 
     case FPT_HEIGHT:
-        text.SetTextHeight( ValueFromString( m_userUnits, aValue ) );
+        text.SetTextHeight( ValueFromString( m_frame->GetUserUnits(), aValue ) );
         break;
 
-    case FPT_THICKNESS:text.SetTextThickness( ValueFromString( m_userUnits, aValue ) );
+    case FPT_THICKNESS:text.SetTextThickness( ValueFromString( m_frame->GetUserUnits(), aValue ) );
         break;
 
     case FPT_ORIENTATION:
@@ -281,9 +295,9 @@ void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         pos = text.GetPos0();
 
         if( aCol == FPT_XOFFSET )
-            pos.x = ValueFromString( m_userUnits, aValue );
+            pos.x = ValueFromString( m_frame->GetUserUnits(), aValue );
         else
-            pos.y = ValueFromString( m_userUnits, aValue );
+            pos.y = ValueFromString( m_frame->GetUserUnits(), aValue );
 
         text.SetPos0( pos );
         text.SetDrawCoord();

@@ -54,7 +54,7 @@ enum FP_TEXT_COL_ORDER
 class FP_TEXT_GRID_TABLE : public wxGridTableBase, public std::vector<FP_TEXT>
 {
 public:
-    FP_TEXT_GRID_TABLE( EDA_UNITS userUnits, PCB_BASE_FRAME* aFrame );
+    FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame );
     ~FP_TEXT_GRID_TABLE();
 
     int GetNumberRows() override { return (int) size(); }
@@ -80,8 +80,10 @@ public:
     void SetValueAsBool( int aRow, int aCol, bool aValue ) override;
     void SetValueAsLong( int aRow, int aCol, long aValue ) override;
 
+protected:
+    void onUnitsChanged( wxCommandEvent& aEvent );
+
 private:
-    EDA_UNITS       m_userUnits;
     PCB_BASE_FRAME* m_frame;
 
     wxGridCellAttr* m_readOnlyAttr;

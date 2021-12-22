@@ -100,7 +100,10 @@ PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent,
             curr_grid->SetColSize( col,best_w );
         }
     }
+
+    m_Frame->Bind( UNITS_CHANGED, &PANEL_SETUP_TRACKS_AND_VIAS::onUnitsChanged, this );
 }
+
 
 PANEL_SETUP_TRACKS_AND_VIAS::~PANEL_SETUP_TRACKS_AND_VIAS()
 {
@@ -108,7 +111,26 @@ PANEL_SETUP_TRACKS_AND_VIAS::~PANEL_SETUP_TRACKS_AND_VIAS()
     m_trackWidthsGrid->PopEventHandler( true );
     m_viaSizesGrid->PopEventHandler( true );
     m_diffPairsGrid->PopEventHandler( true );
+
+    m_Frame->Unbind( UNITS_CHANGED, &PANEL_SETUP_TRACKS_AND_VIAS::onUnitsChanged, this );
 }
+
+
+void PANEL_SETUP_TRACKS_AND_VIAS::onUnitsChanged( wxCommandEvent& aEvent )
+{
+    BOARD_DESIGN_SETTINGS  tempBDS( nullptr, "dummy" );
+    BOARD_DESIGN_SETTINGS* saveBDS = m_BrdSettings;
+
+    m_BrdSettings = &tempBDS;       // No, address of stack var does not escape function
+
+    TransferDataFromWindow();
+    TransferDataToWindow();
+
+    m_BrdSettings = saveBDS;
+
+    aEvent.Skip();
+}
+
 
 bool PANEL_SETUP_TRACKS_AND_VIAS::TransferDataToWindow()
 {

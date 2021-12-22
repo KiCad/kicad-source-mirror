@@ -49,6 +49,9 @@ public:
 private:
     int getGridValue( int aRow, int aCol );
 
+    void onUnitsChanged( wxCommandEvent& aEvent );
+
+private:
     PAGED_DIALOG*           m_Parent;
     PCB_EDIT_FRAME*         m_Frame;
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
