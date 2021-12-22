@@ -104,10 +104,11 @@ public:
 protected:
     void initGrid( WX_GRID* aGrid );
 
+    void onUnitsChanged( wxCommandEvent& aEvent );
+
 private:
     SCH_BASE_FRAME* m_frame;
     DIALOG_SHIM*    m_dialog;
-    EDA_UNITS       m_userUnits;
     WX_GRID*        m_grid;
     KICAD_T         m_parentType;
     int             m_mandatoryFieldCount;

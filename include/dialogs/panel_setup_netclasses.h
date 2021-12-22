@@ -35,7 +35,7 @@ class NETCLASSES;
 class PANEL_SETUP_NETCLASSES : public PANEL_SETUP_NETCLASSES_BASE
 {
 public:
-    PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses,
+    PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, EDA_DRAW_FRAME* aFrame, NETCLASSES* aNetclasses,
                             const std::vector<wxString>& aNetNames, bool isEEschema );
     ~PANEL_SETUP_NETCLASSES( ) override;
 
@@ -60,6 +60,8 @@ private:
     void OnAssignAll( wxCommandEvent& event ) override { doAssignments( true ); }
     void OnAssignSelected( wxCommandEvent& event ) override { doAssignments( false ); }
 
+    void onUnitsChanged( wxCommandEvent& aEvent );
+
     bool validateNetclassName( int aRow, const wxString& aName, bool focusFirst = true );
 
     void rebuildNetclassDropdowns();
@@ -71,7 +73,8 @@ private:
     void AdjustNetclassGridColumns( int aWidth );
     void AdjustMembershipGridColumns( int aWidth );
 
-    PAGED_DIALOG*         m_Parent;
+    EDA_DRAW_FRAME*       m_frame;
+    PAGED_DIALOG*         m_parent;
     NETCLASSES*           m_netclasses;
     std::vector<wxString> m_netNames;
 

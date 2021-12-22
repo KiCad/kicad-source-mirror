@@ -37,9 +37,26 @@
 class PIN_TABLE_DATA_MODEL : public wxGridTableBase
 {
 public:
-    PIN_TABLE_DATA_MODEL( EDA_UNITS aUserUnits ) : m_userUnits( aUserUnits ), m_edited( false )
+    PIN_TABLE_DATA_MODEL( SYMBOL_EDIT_FRAME* aFrame ) :
+            m_frame( aFrame ),
+            m_edited( false )
     {
+        m_frame->Bind( UNITS_CHANGED, &PIN_TABLE_DATA_MODEL::onUnitsChanged, this );
     }
+
+    ~PIN_TABLE_DATA_MODEL()
+    {
+        m_frame->Unbind( UNITS_CHANGED, &PIN_TABLE_DATA_MODEL::onUnitsChanged, this );
+    }
+
+    void onUnitsChanged( wxCommandEvent& aEvent )
+    {
+        if( GetView() )
+            GetView()->ForceRefresh();
+
+        aEvent.Skip();
+    }
+
 
     int GetNumberRows() override { return (int) m_rows.size(); }
     int GetNumberCols() override { return COL_COUNT; }
@@ -70,7 +87,7 @@ public:
 
     wxString GetValue( int aRow, int aCol ) override
     {
-        return GetValue( m_rows[ aRow ], aCol, m_userUnits );
+        return GetValue( m_rows[ aRow ], aCol, m_frame->GetUserUnits() );
     }
 
     static wxString GetValue( const LIB_PINS& pins, int aCol, EDA_UNITS aUserUnits )
@@ -181,25 +198,25 @@ public:
                 break;
 
             case COL_NUMBER_SIZE:
-                pin->SetNumberTextSize( ValueFromString( m_userUnits, aValue ) );
+                pin->SetNumberTextSize( ValueFromString( m_frame->GetUserUnits(), aValue ) );
                 break;
 
             case COL_NAME_SIZE:
-                pin->SetNameTextSize( ValueFromString( m_userUnits, aValue ) );
+                pin->SetNameTextSize( ValueFromString( m_frame->GetUserUnits(), aValue ) );
                 break;
 
             case COL_LENGTH:
-                pin->SetLength( ValueFromString( m_userUnits, aValue ) );
+                pin->SetLength( ValueFromString( m_frame->GetUserUnits(), aValue ) );
                 break;
 
             case COL_POSX:
-                pin->SetPosition( wxPoint( ValueFromString( m_userUnits, aValue ),
+                pin->SetPosition( wxPoint( ValueFromString( m_frame->GetUserUnits(), aValue ),
                                            pin->GetPosition().y ) );
                 break;
 
             case COL_POSY:
                 pin->SetPosition( wxPoint( pin->GetPosition().x,
-                                           ValueFromString( m_userUnits, aValue ) ) );
+                                           ValueFromString( m_frame->GetUserUnits(), aValue ) ) );
                 break;
 
             case COL_VISIBLE:
@@ -332,7 +349,7 @@ public:
         std::sort( m_rows.begin(), m_rows.end(),
                    [ aSortCol, ascending, this ]( const LIB_PINS& lhs, const LIB_PINS& rhs ) -> bool
                    {
-                       return compare( lhs, rhs, aSortCol, ascending, m_userUnits );
+                       return compare( lhs, rhs, aSortCol, ascending, m_frame->GetUserUnits() );
                    } );
     }
 
@@ -406,13 +423,15 @@ private:
         }
     }
 
+private:
+    SYMBOL_EDIT_FRAME*    m_frame;
+
     // Because the rows of the grid can either be a single pin or a group of pins, the
     // data model is a 2D vector.  If we're in the single pin case, each row's LIB_PINS
     // contains only a single pin.
     std::vector<LIB_PINS> m_rows;
 
-    EDA_UNITS m_userUnits;
-    bool      m_edited;
+    bool                  m_edited;
 };
 
 
@@ -422,7 +441,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
         m_editFrame( parent ),
         m_part( aSymbol )
 {
-    m_dataModel = new PIN_TABLE_DATA_MODEL( GetUserUnits() );
+    m_dataModel = new PIN_TABLE_DATA_MODEL( m_editFrame );
 
     // Save original columns widths so we can do proportional sizing.
     for( int i = 0; i < COL_COUNT; ++i )

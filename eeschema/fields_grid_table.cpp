@@ -51,7 +51,6 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
                                          WX_GRID* aGrid, LIB_SYMBOL* aSymbol ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
-        m_userUnits( aDialog->GetUserUnits() ),
         m_grid( aGrid ),
         m_parentType( SCH_SYMBOL_T ),
         m_mandatoryFieldCount( MANDATORY_FIELDS ),
@@ -73,7 +72,6 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
                                          WX_GRID* aGrid, SCH_SHEET* aSheet ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
-        m_userUnits( aDialog->GetUserUnits() ),
         m_grid( aGrid ),
         m_parentType( SCH_SHEET_T ),
         m_mandatoryFieldCount( SHEET_MANDATORY_FIELDS ),
@@ -170,6 +168,8 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
     m_orientationAttr = new wxGridCellAttr;
     m_orientationAttr->SetEditor( new wxGridCellChoiceEditor( orientationNames ) );
     m_orientationAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
+
+    m_frame->Bind( UNITS_CHANGED, &FIELDS_GRID_TABLE<T>::onUnitsChanged, this );
 }
 
 
@@ -188,6 +188,18 @@ FIELDS_GRID_TABLE<T>::~FIELDS_GRID_TABLE()
     m_vAlignAttr->DecRef();
     m_hAlignAttr->DecRef();
     m_orientationAttr->DecRef();
+
+    m_frame->Unbind( UNITS_CHANGED, &FIELDS_GRID_TABLE<T>::onUnitsChanged, this );
+}
+
+
+template <class T>
+void FIELDS_GRID_TABLE<T>::onUnitsChanged( wxCommandEvent& aEvent )
+{
+    if( GetView() )
+        GetView()->ForceRefresh();
+
+    aEvent.Skip();
 }
 
 
@@ -416,7 +428,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         return StringFromBool( field.IsBold() );
 
     case FDC_TEXT_SIZE:
-        return StringFromValue( m_userUnits, field.GetTextSize().GetHeight(), true );
+        return StringFromValue( m_frame->GetUserUnits(), field.GetTextSize().GetHeight(), true );
 
     case FDC_ORIENTATION:
         switch ( (int) field.GetTextAngle() )
@@ -428,10 +440,10 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         break;
 
     case FDC_POSX:
-        return StringFromValue( m_userUnits, field.GetTextPos().x, true );
+        return StringFromValue( m_frame->GetUserUnits(), field.GetTextPos().x, true );
 
     case FDC_POSY:
-        return StringFromValue( m_userUnits, field.GetTextPos().y, true );
+        return StringFromValue( m_frame->GetUserUnits(), field.GetTextPos().y, true );
 
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking
@@ -534,8 +546,8 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         break;
 
     case FDC_TEXT_SIZE:
-        field.SetTextSize( wxSize( ValueFromString( m_userUnits, aValue ),
-                                   ValueFromString( m_userUnits, aValue ) ) );
+        field.SetTextSize( wxSize( ValueFromString( m_frame->GetUserUnits(), aValue ),
+                                   ValueFromString( m_frame->GetUserUnits(), aValue ) ) );
         break;
 
     case FDC_ORIENTATION:
@@ -551,9 +563,9 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
     case FDC_POSY:
         pos = field.GetTextPos();
         if( aCol == FDC_POSX )
-            pos.x = ValueFromString( m_userUnits, aValue );
+            pos.x = ValueFromString( m_frame->GetUserUnits(), aValue );
         else
-            pos.y = ValueFromString( m_userUnits, aValue );
+            pos.y = ValueFromString( m_frame->GetUserUnits(), aValue );
         field.SetTextPos( pos );
         break;
 

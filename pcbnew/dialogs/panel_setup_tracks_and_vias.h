@@ -58,6 +58,8 @@ protected:
     void OnAddDiffPairsClick( wxCommandEvent& event ) override;
     void OnRemoveDiffPairsClick( wxCommandEvent& event ) override;
 
+    void onUnitsChanged( wxCommandEvent& aEvent );
+
     void AppendTrackWidth( const int aWidth );
     void AppendViaSize( const int aSize, const int aDrill );
     void AppendDiffPairs( const int aWidth, const int aGap, const int aViaGap );

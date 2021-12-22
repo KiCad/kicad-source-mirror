@@ -81,7 +81,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     for( size_t i = 0; i < m_NoteBook->GetPageCount(); ++i )
    	    m_macHack.push_back( true );
 
-    m_texts = new FP_TEXT_GRID_TABLE( m_units, m_frame );
+    m_texts = new FP_TEXT_GRID_TABLE( m_frame );
 
     m_delayedErrorMessage = wxEmptyString;
     m_delayedFocusGrid = nullptr;

@@ -267,11 +267,20 @@ void EDA_DRAW_FRAME::unitsChangeRefresh()
 
 void EDA_DRAW_FRAME::ToggleUserUnits()
 {
-    SetUserUnits( m_userUnits == EDA_UNITS::INCHES ? EDA_UNITS::MILLIMETRES : EDA_UNITS::INCHES );
-    unitsChangeRefresh();
+    if( m_toolManager->GetTool<COMMON_TOOLS>() )
+    {
+        TOOL_EVENT dummy;
+        m_toolManager->GetTool<COMMON_TOOLS>()->ToggleUnits( dummy );
+    }
+    else
+    {
+        SetUserUnits( m_userUnits == EDA_UNITS::INCHES ? EDA_UNITS::MILLIMETRES
+                                                       : EDA_UNITS::INCHES );
+        unitsChangeRefresh();
 
-    wxCommandEvent e( UNITS_CHANGED );
-    ProcessEventLocally( e );
+        wxCommandEvent e( UNITS_CHANGED );
+        ProcessEventLocally( e );
+    }
 }
 
 

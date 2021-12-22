@@ -27,6 +27,7 @@
 
 #include <pgm_base.h>
 #include <base_units.h>
+#include <eda_draw_frame.h>
 #include <bitmaps.h>
 #include <netclass.h>
 #include <confirm.h>
@@ -69,11 +70,13 @@ std::vector<BITMAPS> g_lineStyleIcons;
 wxArrayString        g_lineStyleNames;
 
 
-PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSES* aNetclasses,
+PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, EDA_DRAW_FRAME* aFrame,
+                                                NETCLASSES* aNetclasses,
                                                 const std::vector<wxString>& aNetNames,
                                                 bool aIsEEschema ) :
         PANEL_SETUP_NETCLASSES_BASE( aParent->GetTreebook() ),
-        m_Parent( aParent ),
+        m_frame( aFrame ),
+        m_parent( aParent ),
         m_netclasses( aNetclasses ),
         m_netNames( aNetNames ),
         m_hoveredCol( -1 )
@@ -185,6 +188,8 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
                                                    &PANEL_SETUP_NETCLASSES::OnNetclassGridMouseEvent,
                                                    this );
 
+    m_frame->Bind( UNITS_CHANGED, &PANEL_SETUP_NETCLASSES::onUnitsChanged, this );
+
     m_netclassGrid->EndBatch();
     m_membershipGrid->EndBatch();
     Thaw();
@@ -205,6 +210,24 @@ PANEL_SETUP_NETCLASSES::~PANEL_SETUP_NETCLASSES()
     m_netclassGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
                                 wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ),
                                 nullptr, this );
+
+    m_frame->Unbind( UNITS_CHANGED, &PANEL_SETUP_NETCLASSES::onUnitsChanged, this );
+}
+
+
+void PANEL_SETUP_NETCLASSES::onUnitsChanged( wxCommandEvent& aEvent )
+{
+    NETCLASSES  tempNetClasses;
+    NETCLASSES* saveNetClasses = m_netclasses;
+
+    m_netclasses = &tempNetClasses;       // No, address of stack var does not escape function
+
+    TransferDataFromWindow();
+    TransferDataToWindow();
+
+    m_netclasses = saveNetClasses;
+
+    aEvent.Skip();
 }
 
 
@@ -251,7 +274,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
     m_netclassGrid->AppendRows((int) m_netclasses->GetCount() + 1 ); // + 1 for default netclass
 
     // enter the Default NETCLASS.
-    netclassToGridRow( m_Parent->GetUserUnits(), m_netclassGrid, 0, m_netclasses->GetDefault() );
+    netclassToGridRow( m_frame->GetUserUnits(), m_netclassGrid, 0, m_netclasses->GetDefault() );
 
     // make the Default NETCLASS name read-only
     wxGridCellAttr* cellAttr = m_netclassGrid->GetOrCreateCellAttr( 0, GRID_NAME );
@@ -265,7 +288,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
     {
         NETCLASSPTR netclass = i->second;
 
-        netclassToGridRow( m_Parent->GetUserUnits(), m_netclassGrid, row, netclass );
+        netclassToGridRow( m_frame->GetUserUnits(), m_netclassGrid, row, netclass );
 
         for( const wxString& net : *netclass )
         {
@@ -373,7 +396,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
     m_netclasses->Clear();
 
     // Copy the default NetClass:
-    gridRowToNetclass( m_Parent->GetUserUnits(), m_netclassGrid, 0, m_netclasses->GetDefault() );
+    gridRowToNetclass( m_frame->GetUserUnits(), m_netclassGrid, 0, m_netclasses->GetDefault() );
 
     // Copy other NetClasses:
     for( int row = 1; row < m_netclassGrid->GetNumberRows();  ++row )
@@ -382,7 +405,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
                                                                                    GRID_NAME ) );
 
         if( m_netclasses->Add( nc ) )
-            gridRowToNetclass( m_Parent->GetUserUnits(), m_netclassGrid, row, nc );
+            gridRowToNetclass( m_frame->GetUserUnits(), m_netclassGrid, row, nc );
     }
 
     // Now read all nets and push them in the corresponding netclass net buffer
@@ -415,7 +438,7 @@ bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, const wxString& aNa
     if( tmp.IsEmpty() )
     {
         wxString msg =  _( "Netclass must have a name." );
-        m_Parent->SetError( msg, this, m_netclassGrid, aRow, GRID_NAME );
+        m_parent->SetError( msg, this, m_netclassGrid, aRow, GRID_NAME );
         return false;
     }
 
@@ -424,7 +447,7 @@ bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, const wxString& aNa
         if( ii != aRow && m_netclassGrid->GetCellValue( ii, GRID_NAME ).CmpNoCase( tmp ) == 0 )
         {
             wxString msg = _( "Netclass name already in use." );
-            m_Parent->SetError( msg, this, m_netclassGrid, focusFirst ? aRow : ii, GRID_NAME );
+            m_parent->SetError( msg, this, m_netclassGrid, focusFirst ? aRow : ii, GRID_NAME );
             return false;
         }
     }

@@ -91,6 +91,8 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( PAGED_DIALOG* aPar
     }
 
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+
+    m_Frame->Bind( UNITS_CHANGED, &PANEL_SETUP_TEXT_AND_GRAPHICS::onUnitsChanged, this );
 }
 
 
@@ -98,6 +100,24 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::~PANEL_SETUP_TEXT_AND_GRAPHICS()
 {
     // destroy GRID_TRICKS before m_grid.
     m_grid->PopEventHandler( true );
+
+    m_Frame->Unbind( UNITS_CHANGED, &PANEL_SETUP_TEXT_AND_GRAPHICS::onUnitsChanged, this );
+}
+
+
+void PANEL_SETUP_TEXT_AND_GRAPHICS::onUnitsChanged( wxCommandEvent& aEvent )
+{
+    BOARD_DESIGN_SETTINGS  tempBDS( nullptr, "dummy" );
+    BOARD_DESIGN_SETTINGS* saveBDS = m_BrdSettings;
+
+    m_BrdSettings = &tempBDS;       // No, address of stack var does not escape function
+
+    TransferDataFromWindow();
+    TransferDataToWindow();
+
+    m_BrdSettings = saveBDS;
+
+    aEvent.Skip();
 }
 
 

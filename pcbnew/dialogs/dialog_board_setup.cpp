@@ -68,7 +68,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_severities = new PANEL_SETUP_SEVERITIES( this, DRC_ITEM::GetItemsWithSeverities(),
                                                bds.m_DRCSeverities );
 
-    m_netclasses = new PANEL_SETUP_NETCLASSES( this, &bds.GetNetClasses(),
+    m_netclasses = new PANEL_SETUP_NETCLASSES( this, aFrame, &bds.GetNetClasses(),
                                                board->GetNetClassAssignmentCandidates(), false );
 
     m_textVars = new PANEL_TEXT_VARIABLES( m_treebook, &Prj() );
