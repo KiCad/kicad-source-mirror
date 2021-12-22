@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-12 21:47+0000\n"
+"PO-Revision-Date: 2021-12-23 20:49+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -30726,9 +30726,9 @@ msgid "Edge Clearance Warning"
 msgstr "Marge de seguretat local i ajusts"
 
 #: pcbnew/files.cpp:580
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open."
-msgstr "El fitxer del PCB «%s» ja està obert."
+msgstr "La PCB '%s' ja està oberta."
 
 #: pcbnew/files.cpp:588
 #, fuzzy
@@ -30742,7 +30742,7 @@ msgstr "No existeix la placa «%s». Voleu crear-la?"
 
 #: pcbnew/files.cpp:619
 msgid "Creating PCB"
-msgstr ""
+msgstr "S'està creant la PCB"
 
 #: pcbnew/files.cpp:711 pcbnew/files.cpp:721
 #, c-format
@@ -30775,11 +30775,9 @@ msgid "Insufficient permissions to write file '%s'."
 msgstr "Permisos insuficients per escriure al fitxer '%s'."
 
 #: pcbnew/files.cpp:994 pcbnew/files.cpp:1151
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr ""
-"Error en desar el fitxer de la placa «%s».\n"
-"%s"
+msgstr "Error en desar el fitxer de regles personalitzades '%s'."
 
 #: pcbnew/files.cpp:1025 pcbnew/files.cpp:1127
 #, fuzzy, c-format
@@ -30821,14 +30819,12 @@ msgid "Back (Flipped)"
 msgstr ""
 
 #: pcbnew/footprint.cpp:966
-#, fuzzy
 msgid "autoplaced"
-msgstr "Posiciona automàticament"
+msgstr "autoposicionat"
 
 #: pcbnew/footprint.cpp:969
-#, fuzzy
 msgid "not in schematic"
-msgstr "Ploteja l'esquemàtic"
+msgstr "no a l'esquemàtic"
 
 #: pcbnew/footprint.cpp:972
 #, fuzzy
@@ -30837,7 +30833,7 @@ msgstr "Ploteja els pads en la serigrafia"
 
 #: pcbnew/footprint.cpp:975
 msgid "exclude from BOM"
-msgstr ""
+msgstr "exclou de la BOM"
 
 #: pcbnew/footprint.cpp:977
 msgid "Status: "
@@ -30848,9 +30844,9 @@ msgid "Attributes:"
 msgstr "Atributs:"
 
 #: pcbnew/footprint.cpp:982
-#, fuzzy, c-format
+#, c-format
 msgid "3D-Shape: %s"
-msgstr "Forma 3D"
+msgstr "Forma 3D: %s"
 
 #: pcbnew/footprint.cpp:982
 msgid "<none>"
@@ -30867,19 +30863,18 @@ msgid "Keywords: %s"
 msgstr "Paraules clau: %s"
 
 #: pcbnew/footprint.cpp:1280
-#, fuzzy
 msgid "<no reference designator>"
-msgstr "designador de la referència"
+msgstr "<sense designador de referència>"
 
 #: pcbnew/footprint.cpp:1282
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s"
-msgstr "Empremta: %s"
+msgstr "Empremta %s"
 
 #: pcbnew/footprint.cpp:2109
-#, fuzzy, c-format
+#, c-format
 msgid "Expected \"Through hole\" type but set to \"%s\""
-msgstr "A través de forat"
+msgstr "S'esperava el tipus \"Forat passant\", però és \"%s\""
 
 #: pcbnew/footprint.cpp:2113
 #, c-format
@@ -30894,7 +30889,7 @@ msgstr ""
 #: pcbnew/footprint.cpp:2143
 #, c-format
 msgid "(pad \"%s\")"
-msgstr ""
+msgstr "(pad \"%s\")"
 
 #: pcbnew/footprint.cpp:2390 pcbnew/pad.cpp:1726 pcbnew/zone.cpp:1479
 #, fuzzy
@@ -30922,29 +30917,25 @@ msgid "Thermal Relief Gap"
 msgstr "Alleujaments tèrmics"
 
 #: pcbnew/footprint.h:216
-#, fuzzy, c-format
+#, c-format
 msgid "footprint %s"
-msgstr "Empremta: %s"
+msgstr "empremta %s"
 
 #: pcbnew/footprint_edit_frame.cpp:118
-#, fuzzy
 msgid "KiCad Footprint Editor"
-msgstr "Editor d'empremtes"
+msgstr "Editor d'empremtes KiCad"
 
 #: pcbnew/footprint_edit_frame.cpp:200 pcbnew/zone_settings.cpp:219
-#, fuzzy
 msgid "Inner layers"
-msgstr "Sense capes"
+msgstr "Capes internes"
 
 #: pcbnew/footprint_edit_frame.cpp:239 pcbnew/pcb_edit_frame.cpp:279
-#, fuzzy
 msgid "Selection Filter"
-msgstr "Selecciona un fitxer"
+msgstr "Filtre de selecció"
 
 #: pcbnew/footprint_edit_frame.cpp:295
-#, fuzzy
 msgid "Footprint changes are unsaved"
-msgstr "S'ha desat l'empremta «%s»"
+msgstr "No s'han desat els canvis de l'empremta"
 
 #: pcbnew/footprint_edit_frame.cpp:502
 #, c-format
@@ -30957,9 +30948,8 @@ msgid "[from %s]"
 msgstr "[des de %s]"
 
 #: pcbnew/footprint_edit_frame.cpp:837
-#, fuzzy
 msgid "[no footprint loaded]"
-msgstr "No s'ha especificat cap empremta"
+msgstr "[no s'ha carregat cap empremta]"
 
 #: pcbnew/footprint_edit_frame.cpp:893
 #, fuzzy
@@ -30967,9 +30957,8 @@ msgid "Updating Footprint Libraries"
 msgstr "Càrrega de biblioteques de símbols"
 
 #: pcbnew/footprint_edit_frame.cpp:1190
-#, fuzzy
 msgid "No footprint selected."
-msgstr "No s'ha especificat cap empremta"
+msgstr "No s'ha seleccionat cap empremta."
 
 #: pcbnew/footprint_edit_frame.cpp:1199
 #, fuzzy
@@ -30977,9 +30966,8 @@ msgid "Footprint Image File Name"
 msgstr "Nom del fitxer de la imatge 3D:"
 
 #: pcbnew/footprint_editor_utils.cpp:220
-#, fuzzy
 msgid "Edit Zone"
-msgstr "Edita el camp"
+msgstr "Edita zona"
 
 #: pcbnew/footprint_editor_utils.cpp:294
 #, c-format
