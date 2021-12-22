@@ -422,6 +422,12 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             if( dlg.ShowModal() == wxID_CANCEL )
                 return false;
         }
+        else
+        {
+            // No need to commit something that hasn't changed (and committing will set
+            // the modified flag).
+            return false;
+        }
     }
 
     if( m_progressReporter )
