@@ -55,6 +55,7 @@ inline wxString PrintZoneConnection( ZONE_CONNECTION aConnection )
 {
     switch( aConnection )
     {
+    default:
     case ZONE_CONNECTION::INHERITED:   return _( "inherited" );
     case ZONE_CONNECTION::NONE:        return _( "none" );
     case ZONE_CONNECTION::THERMAL:     return _( "thermal reliefs" );
