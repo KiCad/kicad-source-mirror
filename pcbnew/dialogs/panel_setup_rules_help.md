@@ -97,7 +97,7 @@ Note: `clearance` and `hole_clearance` rules are not run against items of the sa
 
     (rule heavy_thermals
        (constraint thermal_spoke_width (min 0.5mm))
-       (condition "A.NetClass == 'HV'))
+       (condition "A.NetClass == 'HV'"))
 <br><br>
 
 ### Notes
