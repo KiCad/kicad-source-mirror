@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-17 00:56+0000\n"
+"PO-Revision-Date: 2021-12-23 20:49+0000\n"
 "Last-Translator: Ulices <ulicesah@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -17519,14 +17519,12 @@ msgid "Mechanical layers"
 msgstr "Capas mecánicas"
 
 #: gerbview/files.cpp:155
-#, fuzzy
 msgid "Top Pad Master"
-msgstr "Pasta de soldadura superior"
+msgstr "Maestro de pads superiores"
 
 #: gerbview/files.cpp:156
-#, fuzzy
 msgid "Bottom Pad Master"
-msgstr "Pasta de soldadura inferior"
+msgstr "Maestro de pads inferiores"
 
 #: gerbview/files.cpp:174
 msgid "Open Gerber File(s)"
