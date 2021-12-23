@@ -401,6 +401,8 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
             merged = false;
             m_brd->BuildConnectivity();
 
+            auto connectivity = m_brd->GetConnectivity()->GetConnectivityAlgo();
+
             // Keep a duplicate deque to all deleting in the primary
             std::deque<PCB_TRACK*> temp_segments( m_brd->Tracks() );
 
@@ -413,12 +415,13 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                 if( segment->HasFlag( IS_DELETED ) )  // already taken in account
                     continue;
 
-                auto connectivity = m_brd->GetConnectivity();
-
-                auto& entry = connectivity->GetConnectivityAlgo()->ItemEntry( segment );
-
-                for( CN_ITEM* citem : entry.GetItems() )
+                for( CN_ITEM* citem : connectivity->ItemEntry( segment ).GetItems() )
                 {
+                    // Do not merge an end which has different width tracks attached -- it's a
+                    // common use-case for necking-down a track between pads.
+                    std::vector<PCB_TRACK*> sameWidthCandidates;
+                    std::vector<PCB_TRACK*> differentWidthCandidates;
+
                     for( CN_ITEM* connected : citem->ConnectedItems() )
                     {
                         if( !connected->Valid() )
@@ -430,13 +433,19 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
                         {
                             PCB_TRACK* candidateSegment = static_cast<PCB_TRACK*>( candidateItem );
 
-                            // Do not merge segments having different widths: it is a frequent case
-                            // to draw a track between 2 pads:
-                            if( candidateSegment->GetWidth() != segment->GetWidth() )
-                                continue;
+                            if( candidateSegment->GetWidth() == segment->GetWidth() )
+                                sameWidthCandidates.push_back( candidateSegment );
+                            else
+                                differentWidthCandidates.push_back( candidateSegment );
+                        }
+                    }
 
-                            if( segment->ApproxCollinear( *candidateSegment ) )
-                                merged |= mergeCollinearSegments( segment, candidateSegment );
+                    if( differentWidthCandidates.size() == 0 )
+                    {
+                        for( PCB_TRACK* candidate : sameWidthCandidates )
+                        {
+                            if( segment->ApproxCollinear( *candidate ) )
+                                merged |= mergeCollinearSegments( segment, candidate );
                         }
                     }
                 }
