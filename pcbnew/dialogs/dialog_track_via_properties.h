@@ -38,6 +38,8 @@ public:
     DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent, const PCB_SELECTION& aItems,
                                  COMMIT& aCommit );
 
+    ~DIALOG_TRACK_VIA_PROPERTIES();
+
     bool TransferDataFromWindow() override;
 
 private:
@@ -48,6 +50,8 @@ private:
     void onViaNetclassCheck( wxCommandEvent& aEvent ) override;
     void onViaSelect( wxCommandEvent& aEvent ) override;
     void onViaEdit( wxCommandEvent& aEvent ) override;
+
+    void onUnitsChanged( wxCommandEvent& aEvent );
 
     bool confirmPadChange( const std::vector<PAD*>& connectedPads );
 
