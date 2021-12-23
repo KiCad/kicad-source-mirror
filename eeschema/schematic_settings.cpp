@@ -104,7 +104,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             &m_LabelSizeRatio, DEFAULT_LABEL_SIZE_RATIO, 0.0, 2.0 ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.pin_symbol_size",
-            &m_PinSymbolSize, Mils2iu( defaultPinSymbolSize ), Mils2iu( 5 ), Mils2iu( 1000 ),
+            &m_PinSymbolSize, Mils2iu( defaultPinSymbolSize ), Mils2iu( 0 ), Mils2iu( 1000 ),
             1 / IU_PER_MILS ) );
 
     // m_JunctionSize is only a run-time cache of the calculated size.  Do not save it.

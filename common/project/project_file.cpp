@@ -235,16 +235,22 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
     fromLegacy<int>(  aCfg, "SubpartIdSeparator",      "schematic.subpart_id_separator" );
     fromLegacy<int>(  aCfg, "SubpartFirstId",          "schematic.subpart_first_id" );
 
-    fromLegacy<int>( aCfg, "LineThickness",         "schematic.drawing.default_line_thickness" );
-    fromLegacy<int>( aCfg, "WireThickness",         "schematic.drawing.default_wire_thickness" );
-    fromLegacy<int>( aCfg, "BusThickness",          "schematic.drawing.default_bus_thickness" );
-    fromLegacy<int>( aCfg, "LabSize",               "schematic.drawing.default_text_size" );
-    fromLegacy<int>( aCfg, "PinSymbolSize",         "schematic.drawing.pin_symbol_size" );
-    fromLegacy<int>( aCfg, "JunctionSize",          "schematic.drawing.default_junction_size" );
+    fromLegacy<int>( aCfg, "LineThickness",            "schematic.drawing.default_line_thickness" );
+    fromLegacy<int>( aCfg, "WireThickness",            "schematic.drawing.default_wire_thickness" );
+    fromLegacy<int>( aCfg, "BusThickness",             "schematic.drawing.default_bus_thickness" );
+    fromLegacy<int>( aCfg, "LabSize",                  "schematic.drawing.default_text_size" );
 
-    fromLegacyString(   aCfg, "FieldNameTemplates", "schematic.drawing.field_names" );
+    if( !fromLegacy<int>( aCfg, "PinSymbolSize",       "schematic.drawing.pin_symbol_size" ) )
+    {
+        // Use the default symbol size algorithm of Eeschema V5 (based on pin name/number size)
+        Set( "schematic.drawing.pin_symbol_size", 0 );
+    }
 
-    if( !fromLegacy<double>( aCfg, "TextOffsetRatio", "schematic.drawing.text_offset_ratio" ) )
+    fromLegacy<int>( aCfg, "JunctionSize",             "schematic.drawing.default_junction_size" );
+
+    fromLegacyString(   aCfg, "FieldNameTemplates",    "schematic.drawing.field_names" );
+
+    if( !fromLegacy<double>( aCfg, "TextOffsetRatio",  "schematic.drawing.text_offset_ratio" ) )
     {
         // Use the spacing of Eeschema V5
         Set( "schematic.drawing.text_offset_ratio", 0.08 );
