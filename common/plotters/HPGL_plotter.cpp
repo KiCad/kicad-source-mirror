@@ -923,18 +923,11 @@ const char* HPGL_PLOTTER::lineTypeCommand( PLOT_DASH_TYPE linetype )
 {
     switch( linetype )
     {
-    case PLOT_DASH_TYPE::DASH:
-        return "LT -2 4 1;";
-        break;
-    case PLOT_DASH_TYPE::DOT:
-        return "LT -1 2 1;";
-        break;
-    case PLOT_DASH_TYPE::DASHDOT:
-        return "LT -4 6 1;";
-        break;
-    default:
-        return "LT;";
-        break;
+    case PLOT_DASH_TYPE::DASH:       return "LT 2 4 1;";
+    case PLOT_DASH_TYPE::DOT:        return "LT 1 1 1;";
+    case PLOT_DASH_TYPE::DASHDOT:    return "LT 4 6 1;";
+    case PLOT_DASH_TYPE::DASHDOTDOT: return "LT 7 8 1;";
+    default:                         return "LT;";
     }
 }
 
