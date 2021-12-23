@@ -86,6 +86,8 @@ protected:
         m_layerFilterOpt->SetValue( true );
     }
 
+    void onUnitsChanged( wxCommandEvent& aEvent );
+
 private:
     void visitItem( PICKED_ITEMS_LIST* aUndoList, PCB_TRACK* aItem );
     void processItem( PICKED_ITEMS_LIST* aUndoList, PCB_TRACK* aItem );
@@ -108,7 +110,7 @@ private:
 DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent ) :
     DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE( aParent )
 {
-    m_parent  = aParent;
+    m_parent = aParent;
     m_brd = m_parent->GetBoard();
 
     m_originalColWidths = new int[ m_netclassGrid->GetNumberCols() ];
@@ -139,6 +141,8 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
                           wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnNetFilterSelect ),
                           nullptr, this );
 
+    m_parent->Bind( UNITS_CHANGED, &DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onUnitsChanged, this );
+
     finishDialogSettings();
 }
 
@@ -159,7 +163,29 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS()
                              wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnNetFilterSelect ),
                              nullptr, this );
 
+    m_parent->Unbind( UNITS_CHANGED, &DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onUnitsChanged, this );
+
     delete[] m_originalColWidths;
+}
+
+
+void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onUnitsChanged( wxCommandEvent& aEvent )
+{
+    int trackSel = m_trackWidthSelectBox->GetSelection();
+    int viaSel = m_viaSizesSelectBox->GetSelection();
+
+    m_parent->UpdateTrackWidthSelectBox( m_trackWidthSelectBox, false );
+    m_trackWidthSelectBox->Append( INDETERMINATE_ACTION );
+    m_parent->UpdateViaSizeSelectBox( m_viaSizesSelectBox, false );
+    m_viaSizesSelectBox->Append( INDETERMINATE_ACTION );
+
+    m_trackWidthSelectBox->SetSelection( trackSel );
+    m_viaSizesSelectBox->SetSelection( viaSel );
+
+    m_netclassGrid->ClearGrid();
+    buildNetclassesGrid();
+
+    aEvent.Skip();
 }
 
 
@@ -196,7 +222,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildFilterLists()
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
 {
 #define SET_NETCLASS_VALUE( row, col, val ) \
-        m_netclassGrid->SetCellValue( row, col, StringFromValue( GetUserUnits(), val, true ) )
+        m_netclassGrid->SetCellValue( row, col, StringFromValue( m_parent->GetUserUnits(), val, true ) )
 
     m_netclassGrid->SetCellValue( 0, GRID_TRACKSIZE, _( "Track Width" ) );
     m_netclassGrid->SetCellValue( 0, GRID_VIASIZE, _( "Via Size" ) );
