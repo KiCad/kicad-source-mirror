@@ -861,6 +861,26 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           "Traditional Chinese (zh_TW)" ) );
 
+    aInfo.AddTranslator( new CONTRIBUTOR( "Remy Halvick",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Other" ) );
+
+    aInfo.AddTranslator( new CONTRIBUTOR( "David Briscoe",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Other" ) );
+
+    aInfo.AddTranslator( new CONTRIBUTOR( "Dominique Laigle",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Other" ) );
+
+    aInfo.AddTranslator( new CONTRIBUTOR( "Paul Burke",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Other" ) );
+
 
     // Program credits for 3d models
     #define LIBRARIANS _( "KiCad Librarian Team" )
