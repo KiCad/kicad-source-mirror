@@ -23,6 +23,7 @@
  */
 
 #include <pgm_base.h>
+#include <widgets/ui_common.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include "panel_sym_editing_options.h"
@@ -36,7 +37,9 @@ PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( wxWindow* aWindow,
         m_pinLength( aUnitsProvider, m_pinLengthLabel, m_pinLengthCtrl, m_pinLengthUnits ),
         m_pinNameSize( aUnitsProvider, m_pinNameSizeLabel, m_pinNameSizeCtrl, m_pinNameSizeUnits ),
         m_pinNumberSize( aUnitsProvider, m_pinNumSizeLabel, m_pinNumSizeCtrl, m_pinNumSizeUnits )
-{}
+{
+    m_widthHelpText->SetFont( KIUI::GetInfoFont( this ).Italic() );
+}
 
 
 void PANEL_SYM_EDITING_OPTIONS::loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* aCfg )

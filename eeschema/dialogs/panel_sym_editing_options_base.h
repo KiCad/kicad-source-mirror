@@ -18,8 +18,9 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/sizer.h>
+#include <wx/gbsizer.h>
 #include <wx/checkbox.h>
+#include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/choice.h>
 #include <wx/spinctrl.h>
@@ -39,6 +40,7 @@ class PANEL_SYM_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_lineWidthCtrl;
 		wxStaticText* m_lineWidthUnits;
+		wxStaticText* m_widthHelpText;
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
