@@ -35,8 +35,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
 {
     SetTitle( wxString::Format( GetTitle(), aShape->ShowShape() ) );
 
-    m_helpLabel1->SetFont( KIUI::GetInfoFont( this ) );
-    m_helpLabel2->SetFont( KIUI::GetInfoFont( this ) );
+    m_helpLabel1->SetFont( KIUI::GetInfoFont( this ).Italic() );
+    m_helpLabel2->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
     SetInitialFocus( m_lineWidthCtrl );
 

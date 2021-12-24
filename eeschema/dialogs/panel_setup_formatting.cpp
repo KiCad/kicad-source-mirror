@@ -39,14 +39,13 @@ PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, SCH_EDIT_FRAM
         m_lineWidth( aFrame, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits ),
         m_pinSymbolSize( aFrame, m_pinSymbolSizeLabel, m_pinSymbolSizeCtrl, m_pinSymbolSizeUnits )
 {
+    m_dashedLineHelp->SetFont( KIUI::GetInfoFont( this ).Italic() );
 }
 
 
 void PANEL_SETUP_FORMATTING::onCheckBoxIref( wxCommandEvent& event )
 {
     bool enabled = m_showIntersheetsReferences->GetValue();
-
-    m_dashedLineHelp->SetFont( KIUI::GetInfoFont( this ) );
 
     m_radioFormatStandard->Enable( enabled );
     m_radioFormatAbbreviated->Enable( enabled );
