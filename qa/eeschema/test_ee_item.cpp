@@ -34,6 +34,7 @@
 #include <sch_no_connect.h>
 #include <sch_bus_entry.h>
 #include <sch_line.h>
+#include <sch_shape.h>
 #include <sch_bitmap.h>
 #include <sch_text.h>
 #include <sch_field.h>
@@ -82,6 +83,7 @@ public:
         case SCH_BUS_WIRE_ENTRY_T: return new SCH_BUS_WIRE_ENTRY();
         case SCH_BUS_BUS_ENTRY_T:  return new SCH_BUS_BUS_ENTRY();
         case SCH_LINE_T:           return new SCH_LINE();
+        case SCH_SHAPE_T:          return new SCH_SHAPE( SHAPE_T::ARC );
         case SCH_BITMAP_T:         return new SCH_BITMAP();
         case SCH_TEXT_T:           return new SCH_TEXT( wxPoint( 0, 0 ), "test text" );
         case SCH_LABEL_T:          return new SCH_LABEL( wxPoint( 0, 0 ), "test label" );
