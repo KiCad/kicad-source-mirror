@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE( AllCorrect )
     {
         KICAD_T type = static_cast<KICAD_T>( i );
 
-        BOOST_CHECK( IsTypeCorrect( type ) );
+        BOOST_CHECK_MESSAGE( IsTypeCorrect( type ), "Failed for " << type );
     }
 }
 

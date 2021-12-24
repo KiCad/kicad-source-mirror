@@ -395,6 +395,7 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_LEADER_T:
     case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_TARGET_T:
     case PCB_ZONE_T:
