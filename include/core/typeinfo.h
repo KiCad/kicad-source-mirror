@@ -252,6 +252,7 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
     case SCH_ITEM_LOCATE_GRAPHIC_LINE_T:
         return SCH_LINE_T;
 
+    case SCH_LABEL_LOCATE_ANY_T:
     case SCH_LABEL_LOCATE_WIRE_T:
     case SCH_LABEL_LOCATE_BUS_T:
         return SCH_LABEL_T;
@@ -304,6 +305,7 @@ constexpr bool IsInstantiableType( const KICAD_T aType )
     case SCH_ITEM_LOCATE_BUS_T:
     case SCH_ITEM_LOCATE_GRAPHIC_LINE_T:
 
+    case SCH_LABEL_LOCATE_ANY_T:
     case SCH_LABEL_LOCATE_WIRE_T:
     case SCH_LABEL_LOCATE_BUS_T:
 
@@ -347,6 +349,7 @@ constexpr bool IsEeschemaType( const KICAD_T aType )
     case SCH_BITMAP_T:
     case SCH_TEXT_T:
     case SCH_LABEL_T:
+    case SCH_NETCLASS_FLAG_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
     case SCH_FIELD_T:
@@ -364,6 +367,7 @@ constexpr bool IsEeschemaType( const KICAD_T aType )
     case SCH_ITEM_LOCATE_BUS_T:
     case SCH_ITEM_LOCATE_GRAPHIC_LINE_T:
 
+    case SCH_LABEL_LOCATE_ANY_T:
     case SCH_LABEL_LOCATE_WIRE_T:
     case SCH_LABEL_LOCATE_BUS_T:
 
