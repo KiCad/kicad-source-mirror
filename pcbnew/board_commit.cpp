@@ -385,11 +385,11 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         connectivity->RecalculateRatsnest( this );
         connectivity->ClearDynamicRatsnest();
 
-        if( frame )
-        {
+        if( frame && solderMaskDirty )
             frame->HideSolderMask();
+
+        if( frame )
             frame->GetCanvas()->RedrawRatsnest();
-        }
 
         if( m_changes.size() > num_changes )
         {
