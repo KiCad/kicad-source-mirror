@@ -331,6 +331,7 @@ constexpr bool IsEeschemaType( const KICAD_T aType )
     case SCH_BUS_WIRE_ENTRY_T:
     case SCH_BUS_BUS_ENTRY_T:
     case SCH_LINE_T:
+    case SCH_SHAPE_T:
     case SCH_BITMAP_T:
     case SCH_TEXT_T:
     case SCH_LABEL_T:
