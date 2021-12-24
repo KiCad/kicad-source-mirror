@@ -93,6 +93,7 @@ public:
         case PCB_DIM_ALIGNED_T:    return new PCB_DIM_ALIGNED( &m_board );
         case PCB_DIM_LEADER_T:     return new PCB_DIM_LEADER( &m_board );
         case PCB_DIM_CENTER_T:     return new PCB_DIM_CENTER( &m_board );
+        case PCB_DIM_RADIAL_T:     return new PCB_DIM_RADIAL( &m_board );
         case PCB_DIM_ORTHOGONAL_T: return new PCB_DIM_ORTHOGONAL( &m_board );
         case PCB_TARGET_T:         return new PCB_TARGET( &m_board );
         case PCB_ZONE_T:
