@@ -26,6 +26,7 @@
 
 #include <wx/string.h>
 #include <map>
+#include <vector>
 
 #define EESCHEMA_HOTKEY_NAME wxT( "Eeschema" )
 #define PCBNEW_HOTKEY_NAME wxT( "PcbNew" )
