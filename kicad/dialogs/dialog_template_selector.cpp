@@ -297,6 +297,7 @@ void DIALOG_TEMPLATE_SELECTOR::replaceCurrentPage()
     buildPageContent( m_tcTemplatePath->GetValue(), page );
 
     m_selectedWidget = nullptr;
+    PostSizeEvent();    // A easy way to froce refresh displays
 }
 
 
