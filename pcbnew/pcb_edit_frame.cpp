@@ -1800,7 +1800,9 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
             []( KIGFX::VIEW_ITEM* aItem ) -> bool
             {
-                return dynamic_cast<RATSNEST_VIEW_ITEM*>( aItem );
+                return dynamic_cast<RATSNEST_VIEW_ITEM*>( aItem )
+                        || dynamic_cast<PCB_TRACK*>( aItem )
+                        || dynamic_cast<PAD*>( aItem );
             } );
 
     GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
