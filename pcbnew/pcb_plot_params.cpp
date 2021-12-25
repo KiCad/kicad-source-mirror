@@ -96,8 +96,8 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_includeGerberNetlistInfo   = true;
     m_createGerberJobFile        = true;
     m_gerberPrecision            = gbrDefaultPrecision;
-    m_dashedLineDashRatio        = 5.0;
-    m_dashedLineGapRatio         = 3.0;
+    m_dashedLineDashRatio        = 12.0;   // From ISO 128-2
+    m_dashedLineGapRatio         = 3.0;    // From ISO 128-2
 
     // we used 0.1mils for SVG step before, but nm precision is more accurate, so we use nm
     m_svgPrecision               = SVG_PRECISION_DEFAULT;

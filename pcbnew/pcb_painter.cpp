@@ -82,8 +82,8 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     for( unsigned int i = 0; i < arrayDim( m_sketchMode ); ++i )
         m_sketchMode[i] = false;
 
-    SetDashLengthRatio( 5 );
-    SetGapLengthRatio( 3 );
+    SetDashLengthRatio( 12 );       // From ISO 128-2
+    SetGapLengthRatio( 3 );         // From ISO 128-2
 
     update();
 }

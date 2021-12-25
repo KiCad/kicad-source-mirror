@@ -50,24 +50,28 @@ RENDER_SETTINGS::~RENDER_SETTINGS()
 }
 
 
-constexpr double visualCorrection = 0.8;
+#if 0
+constexpr double correction = 0.8;      // Looks best visually
+#else
+constexpr double correction = 1.0;      // Matches ISO 128-2
+#endif
 
 
 double RENDER_SETTINGS::GetDashLength( int aLineWidth ) const
 {
-    return std::max( m_dashLengthRatio - visualCorrection, 1.0 ) * aLineWidth;
+    return std::max( m_dashLengthRatio - correction, 1.0 ) * aLineWidth;
 }
 
 
 double RENDER_SETTINGS::GetDotLength( int aLineWidth ) const
 {
-    return ( 1.0 - visualCorrection ) * aLineWidth;
+    return ( 1.0 - correction ) * aLineWidth;
 }
 
 
 double RENDER_SETTINGS::GetGapLength( int aLineWidth ) const
 {
-    return std::max( m_gapLengthRatio + visualCorrection, 1.0 ) * aLineWidth;
+    return std::max( m_gapLengthRatio + correction, 1.0 ) * aLineWidth;
 }
 
 

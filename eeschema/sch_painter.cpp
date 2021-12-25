@@ -86,8 +86,8 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS )
 {
     SetDefaultPenWidth( DEFAULT_LINE_WIDTH_MILS * IU_PER_MILS );
-    SetDashLengthRatio( 5 );
-    SetGapLengthRatio( 3 );
+    SetDashLengthRatio( 12 );       // From ISO 128-2
+    SetGapLengthRatio( 3 );         // From ISO 128-2
 
     m_minPenWidth = ADVANCED_CFG::GetCfg().m_MinPlotPenWidth * IU_PER_MM;
 }
