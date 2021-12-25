@@ -535,7 +535,7 @@ public:
     void ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMMIT& aCommit,
                             bool deleteExtraTexts = true, bool resetTextLayers = true,
                             bool resetTextEffects = true, bool resetFabricationAttrs = true,
-                            bool reset3DModels = true );
+                            bool reset3DModels = true, bool* aUpdated = nullptr );
 
     bool FootprintMatchesLibrary();
 

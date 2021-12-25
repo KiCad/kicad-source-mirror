@@ -377,43 +377,64 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
         return;
     }
 
-    if( m_updateMode && !aFootprint->FootprintNeedsUpdate( newFootprint ) )
-    {
-        msg += _( ": (no changes)" );
-        m_MessageWindow->Report( msg, RPT_SEVERITY_INFO );
-        return;
-    }
-
-    msg += _( ": OK" );
-    m_MessageWindow->Report( msg, RPT_SEVERITY_ACTION );
+    bool updated = !m_updateMode || aFootprint->FootprintNeedsUpdate( newFootprint );
 
     m_parent->ExchangeFootprint( aFootprint, newFootprint, m_commit,
                                  m_removeExtraBox->GetValue(),
                                  m_resetTextItemLayers->GetValue(),
                                  m_resetTextItemEffects->GetValue(),
                                  m_resetFabricationAttrs->GetValue(),
-                                 m_reset3DModels->GetValue() );
+                                 m_reset3DModels->GetValue(),
+                                 &updated );
 
     if( aFootprint == m_currentFootprint )
         m_currentFootprint = newFootprint;
+
+    if( m_updateMode && !updated )
+    {
+        msg += _( ": (no changes)" );
+        m_MessageWindow->Report( msg, RPT_SEVERITY_INFO );
+    }
+    else
+    {
+        msg += _( ": OK" );
+        m_MessageWindow->Report( msg, RPT_SEVERITY_ACTION );
+    }
 
     return;
 }
 
 
 void processTextItem( const FP_TEXT& aSrc, FP_TEXT& aDest,
-                      bool resetText, bool resetTextLayers, bool resetTextEffects )
+                      bool resetText, bool resetTextLayers, bool resetTextEffects,
+                      bool* aUpdated )
 {
-    if( !resetText )
+    if( resetText )
+        *aUpdated |= aSrc.GetText() != aDest.GetText();
+    else
         aDest.SetText( aSrc.GetText() );
 
-    if( !resetTextLayers )
+    if( resetTextLayers )
+    {
+        *aUpdated |= aSrc.GetLayer() != aDest.GetLayer();
+        *aUpdated |= aSrc.IsVisible() != aDest.IsVisible();
+    }
+    else
     {
         aDest.SetLayer( aSrc.GetLayer() );
         aDest.SetVisible( aSrc.IsVisible() );
     }
 
-    if( !resetTextEffects )
+    if( resetTextEffects )
+    {
+        *aUpdated |= aSrc.GetHorizJustify() != aDest.GetHorizJustify();
+        *aUpdated |= aSrc.GetVertJustify() != aDest.GetVertJustify();
+        *aUpdated |= aSrc.GetTextSize() != aDest.GetTextSize();
+        *aUpdated |= aSrc.GetTextThickness() != aDest.GetTextThickness();
+        *aUpdated |= aSrc.GetTextAngle() != aDest.GetTextAngle();
+        *aUpdated |= aSrc.GetPos0() != aDest.GetPos0();
+    }
+    else
     {
         // Careful: the visible bit is also in Effects
         bool visible = aDest.IsVisible();
@@ -476,9 +497,14 @@ FP_TEXT* getMatchingTextItem( FP_TEXT* aRefItem, FOOTPRINT* aFootprint )
 void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
                                         BOARD_COMMIT& aCommit, bool deleteExtraTexts,
                                         bool resetTextLayers, bool resetTextEffects,
-                                        bool resetFabricationAttrs, bool reset3DModels )
+                                        bool resetFabricationAttrs, bool reset3DModels,
+                                        bool* aUpdated )
 {
     PCB_GROUP* parentGroup = aExisting->GetParentGroup();
+    bool       dummyBool;
+
+    if( !aUpdated )
+        aUpdated = &dummyBool;
 
     if( parentGroup )
     {
@@ -551,14 +577,14 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     processTextItem( aExisting->Reference(), aNew->Reference(),
                      // never reset reference text
                      false,
-                     resetTextLayers, resetTextEffects );
+                     resetTextLayers, resetTextEffects, aUpdated );
 
     // Copy value
     processTextItem( aExisting->Value(), aNew->Value(),
                      // reset value text only when it is a proxy for the footprint ID
                      // (cf replacing value "MountingHole-2.5mm" with "MountingHole-4.0mm")
                      aExisting->GetValue() == aExisting->GetFPID().GetLibItemName(),
-                     resetTextLayers, resetTextEffects );
+                     resetTextLayers, resetTextEffects, aUpdated );
 
     // Copy fields in accordance with the reset* flags
     for( BOARD_ITEM* item : aExisting->GraphicalItems() )
@@ -570,9 +596,14 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
             FP_TEXT* destItem = getMatchingTextItem( srcItem, aNew );
 
             if( destItem )
-                processTextItem( *srcItem, *destItem, false, resetTextLayers, resetTextEffects );
+            {
+                processTextItem( *srcItem, *destItem, false, resetTextLayers, resetTextEffects,
+                                 aUpdated );
+            }
             else if( !deleteExtraTexts )
+            {
                 aNew->Add( new FP_TEXT( *srcItem ) );
+            }
         }
     }
 
