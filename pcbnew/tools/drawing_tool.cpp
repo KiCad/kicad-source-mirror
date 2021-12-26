@@ -1020,7 +1020,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                         textOffset = -textOffset;
 
                     radialDim->Text().SetPosition( radialDim->GetKnee() + textOffset );
-                    radialDim->Update();
                 }
                 else if( t == PCB_DIM_LEADER_T || t == PCB_FP_DIM_LEADER_T )
                 {
@@ -1030,9 +1029,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                         textOffset = -textOffset;
 
                     dimension->Text().SetPosition( dimension->GetEnd() + textOffset );
-                    dimension->Update();
                 }
 
+                dimension->Update();
                 break;
 
             case SET_HEIGHT:
