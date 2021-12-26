@@ -561,7 +561,7 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
 
-    wxFileName newProjectDir( dlg.GetPath() );
+    wxFileName newProjectDir( dlg.GetPath(), wxEmptyString );
 
     if( !newProjectDir.IsAbsolute() )
         newProjectDir.MakeAbsolute();
@@ -592,7 +592,7 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
     }
 
     const wxString&   newProjectDirPath = newProjectDir.GetFullPath();
-    const wxString&   newProjectName = newProjectDir.GetName();
+    const wxString&   newProjectName = newProjectDir.GetDirs().Last();
     wxDir             currentProjectDir( currentProjectDirPath );
 
     SAVE_AS_TRAVERSER traverser( m_frame, currentProjectDirPath, currentProjectName,
