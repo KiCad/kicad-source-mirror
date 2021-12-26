@@ -1363,12 +1363,13 @@ bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )
 }
 
 
-void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const wxPoint& aPos )
+void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const wxPoint& aPos,
+                                  PCB_LAYER_ID aMarkerLayer )
 {
     m_errorLimits[ aItem->GetErrorCode() ] -= 1;
 
     if( m_violationHandler )
-        m_violationHandler( aItem, aPos );
+        m_violationHandler( aItem, aPos, aMarkerLayer );
 
     if( m_reporter )
     {

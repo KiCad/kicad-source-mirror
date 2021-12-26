@@ -114,7 +114,7 @@ int runDRCProto( PROJECT_CONTEXT project, std::shared_ptr<KIGFX::VIEW_OVERLAY> a
     drcEngine->SetProgressReporter( new CONSOLE_PROGRESS_REPORTER ( &consoleLog ) );
 
     drcEngine->SetViolationHandler(
-            [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos )
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos, PCB_LAYER_ID aLayer )
             {
                 // fixme
             } );

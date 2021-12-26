@@ -97,7 +97,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DUPLICATE_FOOTPRINT );
             drcItem->SetItems( footprint, *ins.first );
 
-            reportViolation( drcItem, footprint->GetPosition() );
+            reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
         }
     }
 
@@ -119,7 +119,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
 
             drcItem->SetErrorMessage( m_msg );
-            reportViolation( drcItem, wxPoint() );
+            reportViolation( drcItem, wxPoint(), UNDEFINED_LAYER );
         }
         else
         {
@@ -141,7 +141,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    reportViolation( drcItem, footprint->GetPosition() );
+                    reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
                 }
                 else if( pcb_netname.IsEmpty() && !sch_net.GetNetName().IsEmpty() )
                 {
@@ -151,7 +151,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    reportViolation( drcItem, footprint->GetPosition() );
+                    reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
                 }
                 else if( pcb_netname != sch_net.GetNetName() )
                 {
@@ -162,7 +162,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    reportViolation( drcItem, footprint->GetPosition() );
+                    reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
                 }
             }
 
@@ -181,7 +181,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( footprint );
-                    reportViolation( drcItem, footprint->GetPosition() );
+                    reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
                 }
             }
         }
@@ -201,7 +201,7 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_EXTRA_FOOTPRINT );
 
             drcItem->SetItems( footprint );
-            reportViolation( drcItem, footprint->GetPosition() );
+            reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
         }
     }
 }

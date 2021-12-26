@@ -463,7 +463,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                 drce->SetViolatingRule( maxUncoupledConstraint->GetParentRule() );
 
-                reportViolation( drce, ( *it.second.itemsP.begin() )->GetPosition() );
+                reportViolation( drce, ( *it.second.itemsP.begin() )->GetPosition(),
+                                 ( *it.second.itemsP.begin() )->GetLayer() );
             }
         }
 
@@ -497,7 +498,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                     drcItem->SetViolatingRule( gapConstraint->GetParentRule() );
 
-                    reportViolation( drcItem, cpair.parentP->GetPosition() );
+                    reportViolation( drcItem, cpair.parentP->GetPosition(),
+                                     cpair.parentP->GetLayer() );
                 }
             }
         }

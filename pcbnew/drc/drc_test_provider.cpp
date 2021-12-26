@@ -54,13 +54,13 @@ const wxString DRC_TEST_PROVIDER::GetDescription() const { return ""; }
 
 
 void DRC_TEST_PROVIDER::reportViolation( std::shared_ptr<DRC_ITEM>& item,
-                                         const wxPoint& aMarkerPos )
+                                         const wxPoint& aMarkerPos, PCB_LAYER_ID aMarkerLayer )
 {
     if( item->GetViolatingRule() )
         accountCheck( item->GetViolatingRule() );
 
     item->SetViolatingTest( this );
-    m_drcEngine->ReportViolation( item, aMarkerPos );
+    m_drcEngine->ReportViolation( item, aMarkerPos, aMarkerLayer );
 }
 
 

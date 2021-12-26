@@ -109,7 +109,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( code );
             drcItem->SetItems( track );
-            reportViolation( drcItem, pos );
+            reportViolation( drcItem, pos, track->GetLayer() );
         }
     }
 
@@ -135,7 +135,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ZONE_HAS_EMPTY_NET );
             drcItem->SetItems( zone );
-            reportViolation( drcItem, zone->GetPosition() );
+            reportViolation( drcItem, zone->GetPosition(), zone->GetLayer() );
         }
     }
 
@@ -162,7 +162,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNCONNECTED_ITEMS );
         drcItem->SetItems( edge.GetSourceNode()->Parent(), edge.GetTargetNode()->Parent() );
-        reportViolation( drcItem, (wxPoint) edge.GetSourceNode()->Pos() );
+        reportViolation( drcItem, (wxPoint) edge.GetSourceNode()->Pos(), UNDEFINED_LAYER );
     }
 
     reportRuleStatistics();

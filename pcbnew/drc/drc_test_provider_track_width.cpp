@@ -146,7 +146,7 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drcItem, p0 );
+                    reportViolation( drcItem, p0, item->GetLayer() );
                 }
 
                 return true;

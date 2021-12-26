@@ -139,7 +139,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drcItem, via->GetPosition() );
+                    reportViolation( drcItem, via->GetPosition(), via->GetLayer() );
                 }
 
                 return true;

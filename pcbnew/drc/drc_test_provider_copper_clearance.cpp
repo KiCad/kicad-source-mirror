@@ -291,7 +291,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
                 drcItem->SetItems( track, other );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drcItem, (wxPoint) intersection.get() );
+                reportViolation( drcItem, (wxPoint) intersection.get(), layer );
 
                 return m_drcEngine->GetReportAllTrackErrors();
             }
@@ -312,7 +312,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
             drce->SetItems( track, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos );
+            reportViolation( drce, (wxPoint) pos, layer );
 
             if( !m_drcEngine->GetReportAllTrackErrors() )
                 return false;
@@ -360,7 +360,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
                     drce->SetItems( track, other );
                     drce->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drce, (wxPoint) pos );
+                    reportViolation( drce, (wxPoint) pos, layer );
 
                     if( !m_drcEngine->GetReportAllTrackErrors() )
                         return false;
@@ -446,7 +446,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
             drce->SetItems( aItem, aZone );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos );
+            reportViolation( drce, (wxPoint) pos, aLayer );
         }
     }
 
@@ -492,7 +492,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
                     drce->SetItems( aItem, aZone );
                     drce->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drce, (wxPoint) pos );
+                    reportViolation( drce, (wxPoint) pos, aLayer );
                 }
             }
         }
@@ -566,7 +566,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
 
 bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* padShape,
-                                                             PCB_LAYER_ID layer,
+                                                             PCB_LAYER_ID aLayer,
                                                              BOARD_ITEM* other )
 {
     bool testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
@@ -595,14 +595,14 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     if( other->Type() == PCB_VIA_T )
         otherVia = static_cast<PCB_VIA*>( other );
 
-    if( !IsCopperLayer( layer ) )
+    if( !IsCopperLayer( aLayer ) )
         testClearance = false;
 
     // A NPTH has no cylinder, but it may still have pads on some layers
-    if( pad->GetAttribute() == PAD_ATTRIB::NPTH && !pad->FlashLayer( layer ) )
+    if( pad->GetAttribute() == PAD_ATTRIB::NPTH && !pad->FlashLayer( aLayer ) )
         testClearance = false;
 
-    if( otherPad && otherPad->GetAttribute() == PAD_ATTRIB::NPTH && !otherPad->FlashLayer( layer ) )
+    if( otherPad && otherPad->GetAttribute() == PAD_ATTRIB::NPTH && !otherPad->FlashLayer( aLayer ) )
         testClearance = false;
 
     // Track clearances are tested in testTrackClearances()
@@ -630,7 +630,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     if( !testClearance && !testShorting && !testHoles )
         return false;
 
-    std::shared_ptr<SHAPE> otherShape = DRC_ENGINE::GetShape( other, layer );
+    std::shared_ptr<SHAPE> otherShape = DRC_ENGINE::GetShape( other, aLayer );
     DRC_CONSTRAINT         constraint;
     int                    clearance;
     int                    actual;
@@ -654,7 +654,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
             drce->SetItems( pad, otherPad );
 
-            reportViolation( drce, otherPad->GetPosition() );
+            reportViolation( drce, otherPad->GetPosition(), aLayer );
         }
 
         return true;
@@ -662,7 +662,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
     if( testClearance )
     {
-        constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, pad, other, layer );
+        constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, pad, other, aLayer );
         clearance = constraint.GetValue().Min();
 
         if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
@@ -681,7 +681,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                 drce->SetItems( pad, other );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drce, (wxPoint) pos );
+                reportViolation( drce, (wxPoint) pos, aLayer );
                 testHoles = false;  // No need for multiple violations
             }
         }
@@ -689,14 +689,14 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
     if( testHoles )
     {
-        constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, pad, other, layer );
+        constraint = m_drcEngine->EvalRules( HOLE_CLEARANCE_CONSTRAINT, pad, other, aLayer );
         clearance = constraint.GetValue().Min();
 
         if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
             testHoles = false;
     }
 
-    if( testHoles && otherPad && pad->FlashLayer( layer ) && otherPad->GetDrillSize().x )
+    if( testHoles && otherPad && pad->FlashLayer( aLayer ) && otherPad->GetDrillSize().x )
     {
         if( clearance > 0 && padShape->Collide( otherPad->GetEffectiveHoleShape(),
                                                 std::max( 0, clearance - m_drcEpsilon ),
@@ -713,12 +713,12 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             drce->SetItems( pad, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos );
+            reportViolation( drce, (wxPoint) pos, aLayer );
             testHoles = false;  // No need for multiple violations
         }
     }
 
-    if( testHoles && otherPad && otherPad->FlashLayer( layer ) && pad->GetDrillSize().x )
+    if( testHoles && otherPad && otherPad->FlashLayer( aLayer ) && pad->GetDrillSize().x )
     {
         if( clearance >= 0 && otherShape->Collide( pad->GetEffectiveHoleShape(),
                                                    std::max( 0, clearance - m_drcEpsilon ),
@@ -735,12 +735,12 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             drce->SetItems( pad, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos );
+            reportViolation( drce, (wxPoint) pos, aLayer );
             testHoles = false;  // No need for multiple violations
         }
     }
 
-    if( testHoles && otherVia && otherVia->IsOnLayer( layer ) )
+    if( testHoles && otherVia && otherVia->IsOnLayer( aLayer ) )
     {
         pos = otherVia->GetPosition();
         otherShape.reset( new SHAPE_SEGMENT( pos, pos, otherVia->GetDrill() ) );
@@ -760,7 +760,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             drce->SetItems( pad, otherVia );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos );
+            reportViolation( drce, (wxPoint) pos, aLayer );
         }
     }
 
@@ -910,7 +910,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                         drce->SetItems( zoneA, zoneB );
                         drce->SetViolatingRule( constraint.GetParentRule() );
 
-                        reportViolation( drce, pt );
+                        reportViolation( drce, pt, layer );
                     }
                 }
 
@@ -926,7 +926,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                         drce->SetItems( zoneB, zoneA );
                         drce->SetViolatingRule( constraint.GetParentRule() );
 
-                        reportViolation( drce, pt );
+                        reportViolation( drce, pt, layer );
                     }
                 }
 
@@ -995,7 +995,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     drce->SetItems( zoneA, zoneB );
                     drce->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drce, conflict.first );
+                    reportViolation( drce, conflict.first, layer );
                 }
             }
         }

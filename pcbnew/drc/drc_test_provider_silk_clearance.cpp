@@ -233,7 +233,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                     drcItem->SetItems( aRefItem->parent, aTestItem->parent );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drcItem, (wxPoint) pos );
+                    reportViolation( drcItem, (wxPoint) pos, aLayers.second );
 
                     *aCollisionDetected = true;
                 }

@@ -89,7 +89,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drcItem, item->GetPosition() );
+                    reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
                 }
             };
 
@@ -103,7 +103,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     {
                         std::shared_ptr<DRC_ITEM> drc = DRC_ITEM::Create( DRCE_TEXT_ON_EDGECUTS );
                         drc->SetItems( item );
-                        reportViolation( drc, item->GetPosition() );
+                        reportViolation( drc, item->GetPosition(), Edge_Cuts );
                     }
                 }
 

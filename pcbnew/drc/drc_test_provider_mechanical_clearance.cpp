@@ -76,7 +76,7 @@ private:
 
     void testItemAgainstZones( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
 
-    void testShapeLineChain( const SHAPE_LINE_CHAIN& aOutline, int aLineWidth,
+    void testShapeLineChain( const SHAPE_LINE_CHAIN& aOutline, int aLineWidth, PCB_LAYER_ID aLayer,
                              BOARD_ITEM* aParentItem, DRC_CONSTRAINT& aConstraint );
 
     void testZoneLayer( ZONE* aZone, PCB_LAYER_ID aLayer, DRC_CONSTRAINT& aConstraint );
@@ -297,7 +297,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                             {
                             case SHAPE_T::POLY:
                                 testShapeLineChain( shape->GetPolyShape().Outline( 0 ),
-                                                    shape->GetWidth(), item, c );
+                                                    shape->GetWidth(), layer, item, c );
                                 break;
 
                             case SHAPE_T::BEZIER:
@@ -309,7 +309,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                                 for( const wxPoint& pt : shape->GetBezierPoints() )
                                     asPoly.Append( pt );
 
-                                testShapeLineChain( asPoly, shape->GetWidth(), item, c );
+                                testShapeLineChain( asPoly, shape->GetWidth(), layer, item, c );
                                 break;
                             }
 
@@ -333,7 +333,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                                     asPoly.Append( pt );
                                 }
 
-                                testShapeLineChain( asPoly, shape->GetWidth(), item, c );
+                                testShapeLineChain( asPoly, shape->GetWidth(), layer, item, c );
                                 break;
                             }
 
@@ -359,7 +359,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
 
 
 void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testShapeLineChain( const SHAPE_LINE_CHAIN& aOutline,
-                                                                 int aLineWidth,
+                                                                 int aLineWidth, PCB_LAYER_ID aLayer,
                                                                  BOARD_ITEM* aParentItem,
                                                                  DRC_CONSTRAINT& aConstraint )
 {
@@ -495,7 +495,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testShapeLineChain( const SHAPE_LIN
         drce->SetItems( aParentItem );
         drce->SetViolatingRule( aConstraint.GetParentRule() );
 
-        reportViolation( drce, (wxPoint) collision.first );
+        reportViolation( drce, (wxPoint) collision.first, aLayer );
     }
 }
 
@@ -542,7 +542,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAY
                     drce->SetItems( aZone );
                     drce->SetViolatingRule( aConstraint.GetParentRule() );
 
-                    reportViolation( drce, (wxPoint) pos );
+                    reportViolation( drce, (wxPoint) pos, aLayer );
                 }
             }
         }
@@ -551,7 +551,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAY
 
         for( int holeIdx = 0; holeIdx < fill.HoleCount( outlineIdx ); ++holeIdx )
         {
-            testShapeLineChain( fill.Hole( outlineIdx, holeIdx ), 0, aZone, aConstraint );
+            testShapeLineChain( fill.Hole( outlineIdx, holeIdx ), 0, aLayer, aZone, aConstraint );
         }
     }
 }
@@ -592,7 +592,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* it
             drce->SetItems( item, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos );
+            reportViolation( drce, (wxPoint) pos, layer );
         }
     }
 
@@ -656,7 +656,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* it
                 drce->SetItems( item, other );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drce, (wxPoint) pos );
+                reportViolation( drce, (wxPoint) pos, layer );
             }
 
             if( otherHoleShape && otherHoleShape->Collide( itemShape, clearance, &actual, &pos ) )
@@ -672,7 +672,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* it
                 drce->SetItems( item, other );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drce, (wxPoint) pos );
+                reportViolation( drce, (wxPoint) pos, layer );
             }
         }
     }
@@ -761,7 +761,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* a
                     drce->SetItems( aItem, zone );
                     drce->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drce, (wxPoint) pos );
+                    reportViolation( drce, (wxPoint) pos, aLayer );
                 }
             }
 
@@ -807,7 +807,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* a
                         drce->SetItems( aItem, zone );
                         drce->SetViolatingRule( constraint.GetParentRule() );
 
-                        reportViolation( drce, (wxPoint) pos );
+                        reportViolation( drce, (wxPoint) pos, aLayer );
                     }
                 }
             }

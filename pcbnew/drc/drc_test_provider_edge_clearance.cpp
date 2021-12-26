@@ -106,7 +106,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
             drce->SetItems( edge->m_Uuid, item->m_Uuid );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos );
+            reportViolation( drce, (wxPoint) pos, Edge_Cuts );
             return false;       // don't report violations with multiple edges; one is enough
         }
     }

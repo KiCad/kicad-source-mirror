@@ -90,7 +90,7 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
                 drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                 drcItem->SetItems( itemA, itemB );
 
-                reportViolation( drcItem, pt );
+                reportViolation( drcItem, pt, Edge_Cuts );
                 errorHandled = true;
             };
 
@@ -114,7 +114,7 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
             drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
             drcItem->SetItems( m_board );
 
-            reportViolation( drcItem, m_board->GetBoundingBox().Centre() );
+            reportViolation( drcItem, m_board->GetBoundingBox().Centre(), Edge_Cuts );
         }
     }
 }
@@ -201,7 +201,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
                     drcItem->SetItems( item );
 
-                    reportViolation( drcItem, item->GetPosition() );
+                    reportViolation( drcItem, item->GetPosition(), UNDEFINED_LAYER );
                 }
 
                 return true;
@@ -244,7 +244,7 @@ void DRC_TEST_PROVIDER_MISC::testAssertions()
                                                         + c->GetName() + wxS( ")" ) );
                             drcItem->SetItems( item );
 
-                            reportViolation( drcItem, item->GetPosition() );
+                            reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
                         } );
 
                 return true;
@@ -279,14 +279,15 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                 if( !reportProgress( ii++, items, delta ) )
                     return false;
 
-                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item );
+                BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
+                EDA_TEXT*   text = dynamic_cast<EDA_TEXT*>( boardItem );
 
                 if( text && text->GetShownText().Matches( wxT( "*${*}*" ) ) )
                 {
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                     drcItem->SetItems( item );
 
-                    reportViolation( drcItem, item->GetPosition() );
+                    reportViolation( drcItem, boardItem->GetPosition(), boardItem->GetLayer() );
                 }
                 return true;
             };
@@ -321,7 +322,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
             drcItem->SetItems( text );
 
-            reportViolation( drcItem, text->GetPosition() );
+            reportViolation( drcItem, text->GetPosition(), UNDEFINED_LAYER );
         }
     }
 }

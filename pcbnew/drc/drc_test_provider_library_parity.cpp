@@ -447,7 +447,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
                         libName );
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( footprint );
-            reportViolation( drcItem, footprint->GetCenter() );
+            reportViolation( drcItem, footprint->GetCenter(), UNDEFINED_LAYER );
 
             continue;
         }
@@ -458,7 +458,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
                         libName );
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( footprint );
-            reportViolation( drcItem, footprint->GetCenter() );
+            reportViolation( drcItem, footprint->GetCenter(), UNDEFINED_LAYER );
 
             continue;
         }
@@ -492,7 +492,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
                         libName );
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( footprint );
-            reportViolation( drcItem, footprint->GetCenter() );
+            reportViolation( drcItem, footprint->GetCenter(), UNDEFINED_LAYER );
         }
         else if( footprint->FootprintNeedsUpdate( libFootprint.get() ) )
         {
@@ -502,7 +502,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
                         libName );
             drcItem->SetErrorMessage( msg );
             drcItem->SetItems( footprint );
-            reportViolation( drcItem, footprint->GetCenter() );
+            reportViolation( drcItem, footprint->GetCenter(), UNDEFINED_LAYER );
         }
     }
 

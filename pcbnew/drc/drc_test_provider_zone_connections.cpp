@@ -170,7 +170,7 @@ bool DRC_TEST_PROVIDER_ZONE_CONNECTIONS::Run()
                         drce->SetItems( zone, pad );
                         drce->SetViolatingRule( constraint.GetParentRule() );
 
-                        reportViolation( drce, pad->GetPosition() );
+                        reportViolation( drce, pad->GetPosition(), UNDEFINED_LAYER );
                     }
                 }
             }

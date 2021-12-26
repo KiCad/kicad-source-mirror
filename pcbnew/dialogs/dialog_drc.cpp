@@ -356,7 +356,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
                 }
             };
 
-    if( node && item )
+    if( node && item && item != DELETED_BOARD_ITEM::GetInstance() )
     {
         PCB_LAYER_ID             principalLayer = item->GetLayer();
         LSET                     violationLayers;

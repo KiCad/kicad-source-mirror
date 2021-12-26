@@ -136,7 +136,8 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( DRC_CONSTRAINT& aConstraint
 
             drcItem->SetViolatingRule( aConstraint.GetParentRule() );
 
-            reportViolation( drcItem, (*ent.items.begin() )->GetPosition() );
+            reportViolation( drcItem, ( *ent.items.begin() )->GetPosition(),
+                             ( *ent.items.begin() )->GetLayer() );
         }
     }
 }
@@ -172,7 +173,8 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( DRC_CONSTRAINT& aConstraint,
 
             drcItem->SetViolatingRule( aConstraint.GetParentRule() );
 
-            reportViolation( drcItem, (*ent.items.begin() )->GetPosition() );
+            reportViolation( drcItem, ( *ent.items.begin() )->GetPosition(),
+                             ( *ent.items.begin() )->GetLayer() );
         }
     }
 }
@@ -199,7 +201,8 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkViaCounts( DRC_CONSTRAINT& aConstrai
 
             drcItem->SetViolatingRule( aConstraint.GetParentRule() );
 
-            reportViolation( drcItem, (*ent.items.begin() )->GetPosition() );
+            reportViolation( drcItem, ( *ent.items.begin() )->GetPosition(),
+                             ( *ent.items.begin() )->GetLayer() );
         }
     }
 }

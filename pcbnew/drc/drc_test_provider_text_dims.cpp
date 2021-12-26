@@ -156,7 +156,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                         drcItem->SetItems( item );
                         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                        reportViolation( drcItem, item->GetPosition() );
+                        reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
                     }
                 }
 
@@ -207,7 +207,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                         drcItem->SetItems( item );
                         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                        reportViolation( drcItem, item->GetPosition() );
+                        reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
                     }
                 }
 

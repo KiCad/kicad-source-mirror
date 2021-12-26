@@ -94,7 +94,8 @@ protected:
                              const std::function<bool(BOARD_ITEM*)>& aFunc );
 
     virtual void reportAux( wxString fmt, ... );
-    virtual void reportViolation( std::shared_ptr<DRC_ITEM>& item, const wxPoint& aMarkerPos );
+    virtual void reportViolation( std::shared_ptr<DRC_ITEM>& item, const wxPoint& aMarkerPos,
+                                  PCB_LAYER_ID aMarkerLayer );
     virtual bool reportProgress( int aCount, int aSize, int aDelta );
     virtual bool reportPhase( const wxString& aStageName );
 

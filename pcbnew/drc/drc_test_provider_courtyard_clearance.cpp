@@ -111,7 +111,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
                         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
                         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
                         drcItem->SetItems( footprint );
-                        reportViolation( drcItem, pt );
+                        reportViolation( drcItem, pt, UNDEFINED_LAYER );
                     };
 
             // Re-run courtyard tests to generate DRC_ITEMs
@@ -128,7 +128,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_COURTYARD );
             drcItem->SetItems( footprint );
-            reportViolation( drcItem, footprint->GetPosition() );
+            reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
         }
         else
         {
@@ -217,7 +217,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                         }
 
                         drce->SetItems( fpA, fpB );
-                        reportViolation( drce, (wxPoint) pos );
+                        reportViolation( drce, (wxPoint) pos, F_CrtYd );
                     }
                 }
             }
@@ -246,7 +246,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                         }
 
                         drce->SetItems( fpA, fpB );
-                        reportViolation( drce, (wxPoint) pos );
+                        reportViolation( drce, (wxPoint) pos, B_CrtYd );
                     }
                 }
             }
@@ -270,12 +270,17 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                         const SHAPE_POLY_SET& front = footprint->GetPolyCourtyard( F_CrtYd );
                         const SHAPE_POLY_SET& back = footprint->GetPolyCourtyard( B_CrtYd );
 
-                        if( ( front.OutlineCount() > 0 && front.Collide( hole, 0 ) )
-                            || ( back.OutlineCount() > 0 && back.Collide( hole, 0 ) ) )
+                        if( front.OutlineCount() > 0 && front.Collide( hole, 0 ) )
                         {
                             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( errorCode );
                             drce->SetItems( pad, footprint );
-                            reportViolation( drce, pad->GetPosition() );
+                            reportViolation( drce, pad->GetPosition(), F_CrtYd );
+                        }
+                        else if( back.OutlineCount() > 0 && back.Collide( hole, 0 ) )
+                        {
+                            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( errorCode );
+                            drce->SetItems( pad, footprint );
+                            reportViolation( drce, pad->GetPosition(), B_CrtYd );
                         }
                     };
 
