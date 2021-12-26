@@ -2810,7 +2810,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
     T token;
     bool locked = false;
-    std::unique_ptr<PCB_DIMENSION_BASE> dimension;
+    std::unique_ptr<PCB_DIMENSION_BASE> dim;
 
     token = NextTok();
 
@@ -2832,9 +2832,9 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
     if( token == T_width )
     {
         isLegacyDimension = true;
-        dimension = std::make_unique<PCB_DIM_ALIGNED>( aParent, aInFP ? PCB_FP_DIM_ALIGNED_T
-                                                                      : PCB_DIM_ALIGNED_T );
-        dimension->SetLineThickness( parseBoardUnits( "dimension width value" ) );
+        dim = std::make_unique<PCB_DIM_ALIGNED>( aParent, aInFP ? PCB_FP_DIM_ALIGNED_T
+                                                                : PCB_DIM_ALIGNED_T );
+        dim->SetLineThickness( parseBoardUnits( "dim width value" ) );
         NeedRIGHT();
     }
     else
@@ -2845,28 +2845,28 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
         switch( NextTok() )
         {
         case T_aligned:
-            dimension = std::make_unique<PCB_DIM_ALIGNED>( aParent, aInFP ? PCB_FP_DIM_ALIGNED_T
-                                                                          : PCB_DIM_ALIGNED_T );
+            dim = std::make_unique<PCB_DIM_ALIGNED>( aParent, aInFP ? PCB_FP_DIM_ALIGNED_T
+                                                                    : PCB_DIM_ALIGNED_T );
             break;
 
         case T_orthogonal:
-            dimension = std::make_unique<PCB_DIM_ORTHOGONAL>( aParent, aInFP );
+            dim = std::make_unique<PCB_DIM_ORTHOGONAL>( aParent, aInFP );
             break;
 
         case T_leader:
-            dimension = std::make_unique<PCB_DIM_LEADER>( aParent, aInFP );
+            dim = std::make_unique<PCB_DIM_LEADER>( aParent, aInFP );
             break;
 
         case T_center:
-            dimension = std::make_unique<PCB_DIM_CENTER>( aParent, aInFP );
+            dim = std::make_unique<PCB_DIM_CENTER>( aParent, aInFP );
             break;
 
         case T_radial:
-            dimension = std::make_unique<PCB_DIM_RADIAL>( aParent, aInFP );
+            dim = std::make_unique<PCB_DIM_RADIAL>( aParent, aInFP );
             break;
 
         default:
-            wxFAIL_MSG( wxT( "Cannot parse unknown dimension type %s" ) +
+            wxFAIL_MSG( wxT( "Cannot parse unknown dim type %s" ) +
                         GetTokenString( CurTok() ) );
         }
 
@@ -2883,32 +2883,32 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
         switch( token )
         {
         case T_layer:
-            dimension->SetLayer( parseBoardItemLayer() );
+            dim->SetLayer( parseBoardItemLayer() );
             NeedRIGHT();
             break;
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( dimension->m_Uuid ) = CurStrToKIID();
+            const_cast<KIID&>( dim->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
             break;
 
         case T_gr_text:
         {
             PCB_TEXT* text = parsePCB_TEXT();
-            dimension->Text() = *text;
+            dim->Text() = *text;
 
-            // The text is part of the dimension and shares its uuid
-            const_cast<KIID&>( dimension->Text().m_Uuid ) = dimension->m_Uuid;
+            // The text is part of the dim and shares its uuid
+            const_cast<KIID&>( dim->Text().m_Uuid ) = dim->m_Uuid;
 
-            // Fetch other dimension properties out of the text item
-            dimension->Text().SetTextPos( text->GetTextPos() );
+            // Fetch other dim properties out of the text item
+            dim->Text().SetTextPos( text->GetTextPos() );
 
             if( isLegacyDimension )
             {
                 EDA_UNITS units   = EDA_UNITS::INCHES;
                 FetchUnitsFromString( text->GetText(), units );
-                dimension->SetUnits( units );
+                dim->SetUnits( units );
             }
 
             delete text;
@@ -2921,9 +2921,9 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
             wxPoint point;
 
             parseXY( &point.x, &point.y );
-            dimension->SetStart( point );
+            dim->SetStart( point );
             parseXY( &point.x, &point.y );
-            dimension->SetEnd( point );
+            dim->SetEnd( point );
 
             NeedRIGHT();
             break;
@@ -2931,39 +2931,45 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
         case T_height:
         {
-            wxCHECK_MSG( dimension->Type() == PCB_DIM_ALIGNED_T
-                            || dimension->Type() == PCB_DIM_ORTHOGONAL_T
-                            || dimension->Type() == PCB_FP_DIM_ALIGNED_T
-                            || dimension->Type() == PCB_FP_DIM_ORTHOGONAL_T,
-                         nullptr, wxT( "Invalid height token" ) );
-            PCB_DIM_ALIGNED* aligned = static_cast<PCB_DIM_ALIGNED*>( dimension.get() );
-            aligned->SetHeight( parseBoardUnits( "dimension height value" ) );
+            int height = parseBoardUnits( "dim height value" );
             NeedRIGHT();
+
+            if( dim->Type() == PCB_DIM_ORTHOGONAL_T || dim->Type() == PCB_FP_DIM_ORTHOGONAL_T
+                    || dim->Type() == PCB_DIM_ALIGNED_T || dim->Type() == PCB_FP_DIM_ALIGNED_T )
+            {
+                PCB_DIM_ALIGNED* aligned = static_cast<PCB_DIM_ALIGNED*>( dim.get() );
+                aligned->SetHeight( height );
+            }
+
             break;
         }
 
         case T_leader_length:
         {
-            wxCHECK_MSG( dimension->Type() == PCB_DIM_RADIAL_T
-                            || dimension->Type() == PCB_FP_DIM_RADIAL_T,
-                         nullptr, wxT( "Invalid leader_length token" ) );
-            PCB_DIM_RADIAL* radial = static_cast<PCB_DIM_RADIAL*>( dimension.get() );
-            radial->SetLeaderLength( parseBoardUnits( "dimension leader length value" ) );
+            int length = parseBoardUnits( "dim leader length value" );
             NeedRIGHT();
+
+            if( dim->Type() == PCB_DIM_RADIAL_T || dim->Type() == PCB_FP_DIM_RADIAL_T )
+            {
+                PCB_DIM_RADIAL* radial = static_cast<PCB_DIM_RADIAL*>( dim.get() );
+                radial->SetLeaderLength( length );
+            }
+
             break;
         }
 
         case T_orientation:
         {
-            wxCHECK_MSG( dimension->Type() == PCB_DIM_ORTHOGONAL_T
-                            || dimension->Type() == PCB_FP_DIM_ORTHOGONAL_T,
-                         nullptr, wxT( "Invalid orientation token" ) );
-            PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dimension.get() );
-
-            int orientation = parseInt( "orthogonal dimension orientation" );
-            orientation     = std::max( 0, std::min( 1, orientation ) );
-            ortho->SetOrientation( static_cast<PCB_DIM_ORTHOGONAL::DIR>( orientation ) );
+            int orientation = parseInt( "orthogonal dim orientation" );
             NeedRIGHT();
+
+            if( dim->Type() == PCB_DIM_ORTHOGONAL_T || dim->Type() == PCB_FP_DIM_ORTHOGONAL_T )
+            {
+                PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dim.get() );
+                orientation = std::max( 0, std::min( 1, orientation ) );
+                ortho->SetOrientation( static_cast<PCB_DIM_ORTHOGONAL::DIR>( orientation ) );
+            }
+
             break;
         }
 
@@ -2978,48 +2984,48 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
                 case T_prefix:
                     NeedSYMBOLorNUMBER();
-                    dimension->SetPrefix( FromUTF8() );
+                    dim->SetPrefix( FromUTF8() );
                     NeedRIGHT();
                     break;
 
                 case T_suffix:
                     NeedSYMBOLorNUMBER();
-                    dimension->SetSuffix( FromUTF8() );
+                    dim->SetSuffix( FromUTF8() );
                     NeedRIGHT();
                     break;
 
                 case T_units:
                 {
-                    int mode = parseInt( "dimension units mode" );
+                    int mode = parseInt( "dim units mode" );
                     mode = std::max( 0, std::min( 4, mode ) );
-                    dimension->SetUnitsMode( static_cast<DIM_UNITS_MODE>( mode ) );
+                    dim->SetUnitsMode( static_cast<DIM_UNITS_MODE>( mode ) );
                     NeedRIGHT();
                     break;
                 }
 
                 case T_units_format:
                 {
-                    int format = parseInt( "dimension units format" );
+                    int format = parseInt( "dim units format" );
                     format = std::max( 0, std::min( 3, format ) );
-                    dimension->SetUnitsFormat( static_cast<DIM_UNITS_FORMAT>( format ) );
+                    dim->SetUnitsFormat( static_cast<DIM_UNITS_FORMAT>( format ) );
                     NeedRIGHT();
                     break;
                 }
 
                 case T_precision:
-                    dimension->SetPrecision( parseInt( "dimension precision" ) );
+                    dim->SetPrecision( parseInt( "dim precision" ) );
                     NeedRIGHT();
                     break;
 
                 case T_override_value:
                     NeedSYMBOLorNUMBER();
-                    dimension->SetOverrideTextEnabled( true );
-                    dimension->SetOverrideText( FromUTF8() );
+                    dim->SetOverrideTextEnabled( true );
+                    dim->SetOverrideText( FromUTF8() );
                     NeedRIGHT();
                     break;
 
                 case T_suppress_zeroes:
-                    dimension->SetSuppressZeroes( true );
+                    dim->SetSuppressZeroes( true );
                     break;
 
                 default:
@@ -3033,7 +3039,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
         case T_style:
         {
             // new format: default to keep text aligned off unless token is present
-            dimension->SetKeepTextAligned( false );
+            dim->SetKeepTextAligned( false );
 
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
@@ -3043,27 +3049,27 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
                     continue;
 
                 case T_thickness:
-                    dimension->SetLineThickness( parseBoardUnits( "extension line thickness" ) );
+                    dim->SetLineThickness( parseBoardUnits( "extension line thickness" ) );
                     NeedRIGHT();
                     break;
 
                 case T_arrow_length:
-                    dimension->SetArrowLength( parseBoardUnits( "arrow length" ) );
+                    dim->SetArrowLength( parseBoardUnits( "arrow length" ) );
                     NeedRIGHT();
                     break;
 
                 case T_text_position_mode:
                 {
-                    int mode = parseInt( "dimension text position mode" );
+                    int mode = parseInt( "dim text position mode" );
                     mode = std::max( 0, std::min( 3, mode ) );
-                    dimension->SetTextPositionMode( static_cast<DIM_TEXT_POSITION>( mode ) );
+                    dim->SetTextPositionMode( static_cast<DIM_TEXT_POSITION>( mode ) );
                     NeedRIGHT();
                     break;
                 }
 
                 case T_extension_height:
                 {
-                    PCB_DIM_ALIGNED* aligned = dynamic_cast<PCB_DIM_ALIGNED*>( dimension.get() );
+                    PCB_DIM_ALIGNED* aligned = dynamic_cast<PCB_DIM_ALIGNED*>( dim.get() );
                     wxCHECK_MSG( aligned, nullptr, wxT( "Invalid extension_height token" ) );
                     aligned->SetExtensionHeight( parseBoardUnits( "extension height" ) );
                     NeedRIGHT();
@@ -3071,21 +3077,21 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
                 }
 
                 case T_extension_offset:
-                    dimension->SetExtensionOffset( parseBoardUnits( "extension offset" ) );
+                    dim->SetExtensionOffset( parseBoardUnits( "extension offset" ) );
                     NeedRIGHT();
                     break;
 
                 case T_keep_text_aligned:
-                    dimension->SetKeepTextAligned( true );
+                    dim->SetKeepTextAligned( true );
                     break;
 
                 case T_text_frame:
                 {
-                    wxCHECK_MSG( dimension->Type() == PCB_DIM_LEADER_T, nullptr,
+                    wxCHECK_MSG( dim->Type() == PCB_DIM_LEADER_T, nullptr,
                                  wxT( "Invalid text_frame token" ) );
-                    PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( dimension.get() );
+                    PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( dim.get() );
 
-                    int textFrame = parseInt( "dimension text frame mode" );
+                    int textFrame = parseInt( "dim text frame mode" );
                     textFrame = std::max( 0, std::min( 3, textFrame ) );
                     leader->SetTextBorder( static_cast<DIM_TEXT_BORDER>( textFrame ));
                     NeedRIGHT();
@@ -3113,7 +3119,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
             wxPoint point;
 
             parseXY( &point.x, &point.y );
-            dimension->SetStart( point );
+            dim->SetStart( point );
 
             parseXY( nullptr, nullptr ); // Ignore second point
             NeedRIGHT();
@@ -3133,7 +3139,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
             wxPoint point;
 
             parseXY( &point.x, &point.y );
-            dimension->SetEnd( point );
+            dim->SetEnd( point );
 
             parseXY( nullptr, nullptr ); // Ignore second point
 
@@ -3149,8 +3155,8 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
 
             if( token == T_pts )
             {
-                // If we have a crossbar, we know we're an old aligned dimension
-                PCB_DIM_ALIGNED* aligned = static_cast<PCB_DIM_ALIGNED*>( dimension.get() );
+                // If we have a crossbar, we know we're an old aligned dim
+                PCB_DIM_ALIGNED* aligned = static_cast<PCB_DIM_ALIGNED*>( dim.get() );
 
                 // Old style: calculate height from crossbar
                 wxPoint point1, point2;
@@ -3227,11 +3233,11 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
     }
 
     if( locked )
-        dimension->SetLocked( true );
+        dim->SetLocked( true );
 
-    dimension->Update();
+    dim->Update();
 
-    return dimension.release();
+    return dim.release();
 }
 
 
