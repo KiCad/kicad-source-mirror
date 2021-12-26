@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Ian McInerney <ian.s.mcinerney at ieee.org>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,37 +146,37 @@ bool PCB_EDITOR_CONDITIONS::hasItemsFunc( const SELECTION& aSelection, PCB_BASE_
 
 bool PCB_EDITOR_CONDITIONS::padNumberDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->GetDisplayOptions().m_DisplayPadNum;
+    return aFrame->Settings().m_Display.m_DisplayPadNum;
 }
 
 
 bool PCB_EDITOR_CONDITIONS::padFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->GetDisplayOptions().m_DisplayPadFill;
+    return aFrame->Settings().m_Display.m_DisplayPadFill;
 }
 
 
 bool PCB_EDITOR_CONDITIONS::textFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->GetDisplayOptions().m_DisplayTextFill;
+    return aFrame->Settings().m_Display.m_DisplayTextFill;
 }
 
 
 bool PCB_EDITOR_CONDITIONS::graphicsFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->GetDisplayOptions().m_DisplayGraphicsFill;
+    return aFrame->Settings().m_Display.m_DisplayGraphicsFill;
 }
 
 
 bool PCB_EDITOR_CONDITIONS::viaFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->GetDisplayOptions().m_DisplayViaFill;
+    return aFrame->Settings().m_Display.m_DisplayViaFill;
 }
 
 
 bool PCB_EDITOR_CONDITIONS::trackFillDisplayFunc( const SELECTION& aSelection, PCB_BASE_FRAME* aFrame )
 {
-    return aFrame->GetDisplayOptions().m_DisplayPcbTrackFill;
+    return aFrame->Settings().m_Display.m_DisplayPcbTrackFill;
 }
 
 

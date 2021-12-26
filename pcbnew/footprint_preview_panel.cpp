@@ -109,7 +109,7 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootp
     // Ensure we are not using the high contrast mode to display the selected footprint
     KIGFX::PAINTER* painter = GetView()->GetPainter();
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
-    settings->SetContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL );
+    settings->m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
 
     GetView()->Add( m_currentFootprint.get() );
     GetView()->SetVisible( m_currentFootprint.get(), true );

@@ -39,7 +39,6 @@
 #include <pcb_dimension.h>
 #include <pcb_target.h>
 #include <advanced_config.h>
-#include <core/arraydim.h>
 
 #include <layer_ids.h>
 #include <pcb_painter.h>
@@ -66,21 +65,19 @@ using namespace KIGFX;
 PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
 {
     m_backgroundColor = COLOR4D( 0.0, 0.0, 0.0, 1.0 );
-    m_zoneOutlines = true;
-    m_zoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
-    m_sketchGraphics = false;
-    m_sketchText = false;
+    m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
     m_netColorMode = NET_COLOR_MODE::RATSNEST;
-    m_contrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
+    m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
+    m_DrawIndividualViaLayers = false;
 
     m_trackOpacity = 1.0;
     m_viaOpacity   = 1.0;
     m_padOpacity   = 1.0;
     m_zoneOpacity  = 1.0;
 
-    // By default everything should be displayed as filled
-    for( unsigned int i = 0; i < arrayDim( m_sketchMode ); ++i )
-        m_sketchMode[i] = false;
+    m_ForceClearanceDisplayOff = false;
+    m_ForcePadSketchModeOff    = false;
+    m_ForcePadSketchModeOn     = false;
 
     SetDashLengthRatio( 12 );       // From ISO 128-2
     SetGapLengthRatio( 3 );         // From ISO 128-2
@@ -138,22 +135,9 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
 void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions )
 {
     m_hiContrastEnabled   = aOptions.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
-    m_sketchGraphics      = !aOptions.m_DisplayGraphicsFill;
-    m_sketchText          = !aOptions.m_DisplayTextFill;
-
-    // Whether to draw tracks, vias & pads filled or as outlines
-    m_sketchMode[LAYER_PADS_TH]      = !aOptions.m_DisplayPadFill;
-    m_sketchMode[LAYER_VIA_THROUGH]  = !aOptions.m_DisplayViaFill;
-    m_sketchMode[LAYER_VIA_BBLIND]   = !aOptions.m_DisplayViaFill;
-    m_sketchMode[LAYER_VIA_MICROVIA] = !aOptions.m_DisplayViaFill;
-    m_sketchMode[LAYER_TRACKS]       = !aOptions.m_DisplayPcbTrackFill;
-
-    // Zone display settings
-    m_zoneDisplayMode = aOptions.m_ZoneDisplayMode;
-
-    m_contrastModeDisplay = aOptions.m_ContrastModeDisplay;
-
-    m_netColorMode = aOptions.m_NetColorMode;
+    m_ZoneDisplayMode     = aOptions.m_ZoneDisplayMode;
+    m_ContrastModeDisplay = aOptions.m_ContrastModeDisplay;
+    m_netColorMode        = aOptions.m_NetColorMode;
 
     m_trackOpacity = aOptions.m_TrackOpacity;
     m_viaOpacity   = aOptions.m_ViaOpacity;
@@ -338,7 +322,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 
         if( !isActive )
         {
-            if( m_contrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN || IsNetnameLayer( aLayer ) )
+            if( m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN || IsNetnameLayer( aLayer ) )
                 color = COLOR4D::CLEAR;
             else
                 color = color.Mix( m_layerColors[LAYER_PCB_BACKGROUND], m_hiContrastFactor );
@@ -636,7 +620,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
     else if( IsCopperLayer( aLayer ) )
     {
         // Draw a regular track
-        bool outline_mode = m_pcbSettings.m_sketchMode[LAYER_TRACKS];
+        bool outline_mode = !pcbconfig()->m_Display.m_DisplayPcbTrackFill;
         m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( color );
         m_gal->SetIsStroke( outline_mode );
@@ -647,7 +631,8 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
     }
 
     // Clearance lines
-    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS )
+    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
+            && !m_pcbSettings.m_ForceClearanceDisplayOff )
     {
         int clearance = aTrack->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
@@ -677,7 +662,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     else if( IsCopperLayer( aLayer ) )
     {
         // Draw a regular track
-        bool outline_mode = m_pcbSettings.m_sketchMode[LAYER_TRACKS];
+        bool outline_mode = !pcbconfig()->m_Display.m_DisplayPcbTrackFill;
         m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( color );
         m_gal->SetIsStroke( outline_mode );
@@ -688,7 +673,8 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     }
 
     // Clearance lines
-    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode >= SHOW_TRACK_CLEARANCE_WHILE_ROUTING )
+    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode >= SHOW_TRACK_CLEARANCE_WHILE_ROUTING
+            && !m_pcbSettings.m_ForceClearanceDisplayOff )
     {
         int clearance = aArc->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
@@ -800,19 +786,10 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         return;
     }
 
-    bool sketchMode = false;
+    bool outline_mode = !pcbconfig()->m_Display.m_DisplayViaFill;
 
-    switch( aVia->GetViaType() )
+    if( outline_mode )
     {
-    case VIATYPE::THROUGH:      sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_THROUGH];  break;
-    case VIATYPE::BLIND_BURIED: sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_BBLIND];   break;
-    case VIATYPE::MICROVIA:     sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_MICROVIA]; break;
-    default:                    wxASSERT( false );                                           break;
-    }
-
-    if( sketchMode )
-    {
-        // Outline mode
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( false );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
@@ -820,7 +797,6 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     }
     else
     {
-        // Filled mode
         m_gal->SetIsFill( true );
         m_gal->SetIsStroke( false );
         m_gal->SetFillColor( color );
@@ -830,7 +806,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     {
         m_gal->DrawCircle( center, getDrillSize( aVia ) / 2.0 );
     }
-    else if( aLayer == LAYER_VIA_THROUGH || m_pcbSettings.GetDrawIndividualViaLayers() )
+    else if( aLayer == LAYER_VIA_THROUGH || m_pcbSettings.m_DrawIndividualViaLayers )
     {
         m_gal->DrawCircle( center, aVia->GetWidth() / 2.0 );
     }
@@ -843,20 +819,20 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
         double radius =  aVia->GetWidth() / 2.0;
 
-        if( !sketchMode )
+        if( !outline_mode )
             m_gal->SetLineWidth( ( aVia->GetWidth() - aVia->GetDrillValue() ) / 2.0 );
 
         m_gal->DrawArc( center, radius, M_PI * -0.375, M_PI * 0.375 );
         m_gal->DrawArc( center, radius, M_PI * 0.625, M_PI * 1.375 );
 
-        if( sketchMode )
+        if( outline_mode )
             m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerTop ) );
         else
             m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerTop ) );
 
         m_gal->DrawArc( center, radius, M_PI * 1.375, M_PI * 1.625 );
 
-        if( sketchMode )
+        if( outline_mode )
             m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
         else
             m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
@@ -865,8 +841,9 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     }
 
     // Clearance lines
-    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode >= SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING
-            && aLayer != LAYER_VIA_HOLES )
+    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
+            && aLayer != LAYER_VIA_HOLES
+            && !m_pcbSettings.m_ForceClearanceDisplayOff )
     {
         PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
         double       radius;
@@ -1029,7 +1006,14 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         return;
     }
 
-    if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
+    bool outline_mode = !pcbconfig()->m_Display.m_DisplayPadFill;
+
+    if( m_pcbSettings.m_ForcePadSketchModeOff )
+        outline_mode = false;
+    else if( m_pcbSettings.m_ForcePadSketchModeOn )
+        outline_mode = true;
+
+    if( outline_mode )
     {
         // Outline mode
         m_gal->SetIsFill( false );
@@ -1080,7 +1064,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         std::shared_ptr<SHAPE_COMPOUND> shapes;
 
         // Drawing components of compound shapes in outline mode produces a mess.
-        bool simpleShapes = !m_pcbSettings.m_sketchMode[LAYER_PADS_TH];
+        bool simpleShapes = !outline_mode;
 
         if( simpleShapes )
         {
@@ -1267,7 +1251,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     }
 
     if( pcbconfig()->m_Display.m_DisplayPadClearance
-            && ( aLayer == LAYER_PAD_FR || aLayer == LAYER_PAD_BK || aLayer == LAYER_PADS_TH ) )
+            && ( aLayer == LAYER_PAD_FR || aLayer == LAYER_PAD_BK || aLayer == LAYER_PADS_TH )
+            && !m_pcbSettings.m_ForceClearanceDisplayOff )
     {
         /* Showing the clearance area is not obvious.
          * - A pad can be removed from some copper layers.
@@ -1333,11 +1318,11 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 {
     const COLOR4D& color = m_pcbSettings.GetColor( aShape, aShape->GetLayer() );
-    bool           sketch = m_pcbSettings.m_sketchGraphics;
+    bool           outline_mode = !pcbconfig()->m_Display.m_DisplayGraphicsFill;
     int            thickness = getLineThickness( aShape->GetWidth() );
     PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
 
-    if( sketch )
+    if( outline_mode )
     {
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
@@ -1352,7 +1337,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         switch( aShape->GetShape() )
         {
         case SHAPE_T::SEGMENT:
-            if( sketch )
+            if( outline_mode )
             {
                 m_gal->DrawSegment( aShape->GetStart(), aShape->GetEnd(), thickness );
             }
@@ -1370,7 +1355,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         {
             std::vector<wxPoint> pts = aShape->GetRectCorners();
 
-            if( sketch )
+            if( outline_mode )
             {
                 m_gal->DrawSegment( pts[0], pts[1], thickness );
                 m_gal->DrawSegment( pts[1], pts[2], thickness );
@@ -1411,7 +1396,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             double endAngle;
             aShape->CalcArcAngles( startAngle, endAngle );
 
-            if( sketch )
+            if( outline_mode )
             {
                 m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(),
                                        DEG2RAD( startAngle ), DEG2RAD( endAngle ), thickness,
@@ -1430,7 +1415,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         }
 
         case SHAPE_T::CIRCLE:
-            if( sketch )
+            if( outline_mode )
             {
                 m_gal->DrawCircle( aShape->GetStart(), aShape->GetRadius() - thickness / 2 );
                 m_gal->DrawCircle( aShape->GetStart(), aShape->GetRadius() + thickness / 2 );
@@ -1460,7 +1445,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                 m_gal->Rotate( -parentFootprint->GetOrientationRadians() );
             }
 
-            if( sketch )
+            if( outline_mode )
             {
                 for( int ii = 0; ii < shape.Outline( 0 ).SegmentCount(); ++ii )
                 {
@@ -1502,7 +1487,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         }
 
         case SHAPE_T::BEZIER:
-            if( sketch )
+            if( outline_mode )
             {
                 std::vector<VECTOR2D> output;
                 std::vector<VECTOR2D> pointCtrl;
@@ -1540,7 +1525,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     }
     else
     {
-        if( !sketch )
+        if( !outline_mode )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
@@ -1572,17 +1557,12 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
     VECTOR2D       position( aText->GetTextPos().x, aText->GetTextPos().y );
+    bool           outline_mode = !pcbconfig()->m_Display.m_DisplayTextFill;
 
-    if( m_pcbSettings.m_sketchText || m_pcbSettings.m_sketchMode[aLayer] )
-    {
-        // Outline mode
+    if( outline_mode )
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-    }
     else
-    {
-        // Filled mode
         m_gal->SetLineWidth( getLineThickness( aText->GetEffectiveTextPenWidth() ) );
-    }
 
     m_gal->SetStrokeColor( color );
     m_gal->SetIsFill( false );
@@ -1601,17 +1581,12 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
     VECTOR2D       position( aText->GetTextPos().x, aText->GetTextPos().y );
+    bool           outline_mode = !pcbconfig()->m_Display.m_DisplayTextFill;
 
-    if( m_pcbSettings.m_sketchText )
-    {
-        // Outline mode
+    if( outline_mode )
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-    }
     else
-    {
-        // Filled mode
         m_gal->SetLineWidth( getLineThickness( aText->GetEffectiveTextPenWidth() ) );
-    }
 
     m_gal->SetStrokeColor( color );
     m_gal->SetIsFill( false );
@@ -1738,12 +1713,12 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
 
     COLOR4D              color = m_pcbSettings.GetColor( aZone, layer );
     std::deque<VECTOR2D> corners;
-    ZONE_DISPLAY_MODE    displayMode = m_pcbSettings.m_zoneDisplayMode;
+    ZONE_DISPLAY_MODE    displayMode = m_pcbSettings.m_ZoneDisplayMode;
 
     // Draw the outline
     const SHAPE_POLY_SET* outline = aZone->Outline();
 
-    if( m_pcbSettings.m_zoneOutlines && outline && outline->OutlineCount() > 0 )
+    if( !m_pcbSettings.m_isPrinting && outline && outline->OutlineCount() > 0 )
     {
         m_gal->SetStrokeColor( color.a > 0.0 ? color.WithAlpha( 1.0 ) : color );
         m_gal->SetIsFill( false );
@@ -1816,16 +1791,12 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
 
-    if( m_pcbSettings.m_sketchGraphics )
-    {
-        // Outline mode
+    bool outline_mode = !pcbconfig()->m_Display.m_DisplayGraphicsFill;
+
+    if( outline_mode )
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-    }
     else
-    {
-        // Filled mode
         m_gal->SetLineWidth( getLineThickness( aDimension->GetLineThickness() ) );
-    }
 
     // Draw dimension shapes
     // TODO(JE) lift this out
@@ -1854,18 +1825,12 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
 
     // Draw text
     const PCB_TEXT& text = aDimension->Text();
-    VECTOR2D position( text.GetTextPos().x, text.GetTextPos().y );
+    VECTOR2D        position( text.GetTextPos().x, text.GetTextPos().y );
 
-    if( m_pcbSettings.m_sketchText )
-    {
-        // Outline mode
+    if( outline_mode )
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-    }
     else
-    {
-        // Filled mode
         m_gal->SetLineWidth( getLineThickness( text.GetEffectiveTextPenWidth() ) );
-    }
 
     m_gal->SetTextAttributes( &text );
     m_gal->StrokeText( text.GetShownText(), position, text.GetTextAngleRadians() );

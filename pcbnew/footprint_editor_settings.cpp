@@ -91,15 +91,6 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "editing.fp_use_45_degree_limit",
             &m_Use45Limit, false ) );
 
-    m_params.emplace_back( new PARAM<bool>( "pcb_display.text_fill",
-            &m_Display.m_DisplayTextFill, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "pcb_display.graphic_items_fill",
-            &m_Display.m_DisplayGraphicsFill, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_fill",
-            &m_Display.m_DisplayPadFill, true ) );
-
     m_params.emplace_back( new PARAM_LAYER_PRESET( "pcb_display.layer_presets", &m_LayerPresets ) );
 
     m_params.emplace_back( new PARAM<wxString>( "pcb_display.active_layer_preset",

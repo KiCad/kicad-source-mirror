@@ -94,15 +94,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     LoadSettings( config() );
 
-    // Initialize some display options
-    auto displ_opts = GetDisplayOptions();
-    displ_opts.m_DisplayPadClearance = false;      // Pad clearance has no meaning here
-    displ_opts.m_DisplayPadNoConnects = false;     // Nor do connections
-
-    // Track and via clearance has no meaning here.
-    displ_opts.m_ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
-    SetDisplayOptions( displ_opts );
-
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetBoard(), gal_drawPanel->GetView(),

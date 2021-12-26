@@ -132,13 +132,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     GetBoard()->GetDesignSettings().GetDefault()->SetClearance( 0 );
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
-    PCB_DISPLAY_OPTIONS disp_opts = GetDisplayOptions();
-
-    disp_opts.m_DisplayPadClearance = true;
-    disp_opts.m_DisplayPadNoConnects = false;
-    disp_opts.m_DisplayPadNum  = true;
-    SetDisplayOptions( disp_opts );
-
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetBoard(), gal_drawPanel->GetView(),

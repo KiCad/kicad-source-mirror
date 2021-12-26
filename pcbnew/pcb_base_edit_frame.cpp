@@ -38,7 +38,6 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <widgets/appearance_controls.h>
-#include <dialogs/dialog_grid_settings.h>
 #include <dialogs/eda_view_switcher.h>
 #include <wildcards_and_files_ext.h>
 #include <collectors.h>
@@ -245,7 +244,7 @@ void PCB_BASE_EDIT_FRAME::SetObjectVisible( GAL_LAYER_ID aLayer, bool aVisible )
 
 COLOR_SETTINGS* PCB_BASE_EDIT_FRAME::GetColorSettings( bool aForceRefresh ) const
 {
-    return Pgm().GetSettingsManager().GetColorSettings( GetPcbNewSettings()->m_ColorTheme );
+    return Pgm().GetSettingsManager().GetColorSettings( Settings().m_ColorTheme );
 }
 
 

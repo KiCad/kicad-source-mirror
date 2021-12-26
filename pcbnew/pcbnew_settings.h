@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,6 +29,7 @@ namespace PNS
     class ROUTING_SETTINGS;
 }
 
+
 enum class MAGNETIC_OPTIONS
 {
     NO_EFFECT = 0,
@@ -36,19 +37,20 @@ enum class MAGNETIC_OPTIONS
     CAPTURE_ALWAYS
 };
 
+
 struct MAGNETIC_SETTINGS
 {
     MAGNETIC_OPTIONS pads;
     MAGNETIC_OPTIONS tracks;
     bool             graphics;
 
-    MAGNETIC_SETTINGS()
-            : pads( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
-              tracks( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
-              graphics( false )
-    {
-    }
+    MAGNETIC_SETTINGS() :
+            pads( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
+            tracks( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
+            graphics( false )
+    { }
 };
+
 
 enum class TRACK_DRAG_ACTION
 {
@@ -56,6 +58,25 @@ enum class TRACK_DRAG_ACTION
     DRAG,
     DRAG_FREE_ANGLE
 };
+
+
+enum TRACK_CLEARANCE_MODE
+{
+    DO_NOT_SHOW_CLEARANCE = 0,
+    SHOW_TRACK_CLEARANCE_WHILE_ROUTING,
+    SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING,
+    SHOW_WHILE_ROUTING_OR_DRAGGING,
+    SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
+};
+
+
+enum PCB_DISPLAY_ORIGIN
+{
+    PCB_ORIGIN_PAGE = 0,
+    PCB_ORIGIN_AUX,
+    PCB_ORIGIN_GRID,
+};
+
 
 typedef std::vector<std::pair<wxString, bool>> ACTION_PLUGIN_SETTINGS_LIST;
 
@@ -227,6 +248,35 @@ public:
         double      thermal_relief_copper_width;
     };
 
+    struct DISPLAY_OPTIONS
+    {
+        bool                 m_DisplayPadFill;
+        bool                 m_DisplayViaFill;
+        bool                 m_DisplayGraphicsFill;
+        bool                 m_DisplayTextFill;
+        bool                 m_DisplayPcbTrackFill;
+
+        TRACK_CLEARANCE_MODE m_ShowTrackClearanceMode;
+        bool                 m_DisplayPadClearance;
+
+        int                  m_DisplayNetNamesMode;
+        bool                 m_DisplayPadNum;
+        bool                 m_DisplayPadNoConnects;
+
+        RATSNEST_MODE        m_RatsnestMode;
+
+        int                  m_MaxLinksShowed;
+        bool                 m_ShowModuleRatsnest;
+        bool                 m_ShowGlobalRatsnest;
+        bool                 m_DisplayRatsnestLinesCurved;
+
+        PCB_DISPLAY_ORIGIN   m_DisplayOrigin;
+        bool                 m_DisplayInvertXAxis;
+        bool                 m_DisplayInvertYAxis;
+
+        bool                 m_Live3DRefresh;
+    };
+
     PCBNEW_SETTINGS();
 
     virtual ~PCBNEW_SETTINGS();
@@ -269,7 +319,7 @@ public:
 
     WINDOW_SETTINGS m_FootprintWizard;
 
-    PCB_DISPLAY_OPTIONS m_Display;
+    DISPLAY_OPTIONS m_Display;
 
     MAGNETIC_SETTINGS m_MagneticItems;
 

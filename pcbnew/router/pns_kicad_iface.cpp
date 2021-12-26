@@ -52,6 +52,7 @@
 #include <memory>
 
 #include <advanced_config.h>
+#include <pcbnew_settings.h>
 
 #include "pns_kicad_iface.h"
 
@@ -856,7 +857,6 @@ PNS_KICAD_IFACE::PNS_KICAD_IFACE()
     m_tool = nullptr;
     m_view = nullptr;
     m_previewItems = nullptr;
-    m_dispOptions = nullptr;
 }
 
 
@@ -1422,7 +1422,9 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
     {
         pitem->SetClearance( aClearance );
 
-        switch( m_dispOptions->m_ShowTrackClearanceMode )
+        auto* settings = static_cast<PCBNEW_SETTINGS*>( m_tool->GetManager()->GetSettings() );
+
+        switch( settings->m_Display.m_ShowTrackClearanceMode )
         {
         case SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS:
         case SHOW_WHILE_ROUTING_OR_DRAGGING:
@@ -1721,10 +1723,4 @@ void PNS_KICAD_IFACE::SetHostTool( PCB_TOOL_BASE* aTool )
 {
     m_tool = aTool;
     m_commit = std::make_unique<BOARD_COMMIT>( m_tool );
-}
-
-
-void PNS_KICAD_IFACE::SetDisplayOptions( const PCB_DISPLAY_OPTIONS* aDispOptions )
-{
-    m_dispOptions = aDispOptions;
 }

@@ -26,7 +26,7 @@
 #include <widgets/gal_options_panel.h>
 
 
-static const UTIL::CFG_MAP<TRACE_CLEARANCE_DISPLAY_MODE_T> clearanceModeMap =
+static const UTIL::CFG_MAP<TRACK_CLEARANCE_MODE> clearanceModeMap =
 {
     { SHOW_TRACK_CLEARANCE_WITH_VIA_WHILE_ROUTING, 2 },     // Default
     { DO_NOT_SHOW_CLEARANCE,                       0 },

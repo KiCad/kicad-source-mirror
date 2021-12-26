@@ -878,7 +878,7 @@ int BOARD_INSPECTION_TOOL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
         m_frame->SendMessageToEESCHEMA( nullptr );
 
     // Update 3D viewer highlighting
-    m_frame->Update3DView( false, frame()->GetDisplayOptions().m_Live3DRefresh );
+    m_frame->Update3DView( false, frame()->Settings().m_Display.m_Live3DRefresh );
 
     return 0;
 }
@@ -897,7 +897,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
     }
     m_probingSchToPcb = false;
 
-    bool request3DviewRedraw = frame()->GetDisplayOptions().m_Live3DRefresh;
+    bool request3DviewRedraw = frame()->Settings().m_Display.m_Live3DRefresh;
 
     if( item && item->Type() != PCB_FOOTPRINT_T )
         request3DviewRedraw = false;
@@ -1159,7 +1159,6 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
     picker->SetClickHandler(
         [this, board]( const VECTOR2D& pt ) -> bool
         {
-            const PCB_DISPLAY_OPTIONS& opt = displayOptions();
             PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -1179,7 +1178,7 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
                 for( FOOTPRINT* fp : board->Footprints() )
                 {
                     for( PAD* pad : fp->Pads() )
-                        pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );
+                        pad->SetLocalRatsnestVisible( displayOptions().m_ShowGlobalRatsnest );
                 }
             }
             else
@@ -1211,14 +1210,12 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
     picker->SetFinalizeHandler(
         [this, board]( int aCondition )
         {
-            const PCB_DISPLAY_OPTIONS& opt = displayOptions();
-
             if( aCondition != PCB_PICKER_TOOL::END_ACTIVATE )
             {
                 for( FOOTPRINT* fp : board->Footprints() )
                 {
                     for( PAD* pad : fp->Pads() )
-                        pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );
+                        pad->SetLocalRatsnestVisible( displayOptions().m_ShowGlobalRatsnest );
                 }
             }
         } );

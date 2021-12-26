@@ -34,7 +34,6 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
         m_ActiveLayer( UNDEFINED_LAYER ),
         m_ContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL ),
         m_NetColorMode( NET_COLOR_MODE::RATSNEST ),
-        m_RatsnestMode( RATSNEST_MODE::ALL ),
         m_AutoTrackWidth( true ),
         m_ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED ),
         m_TrackOpacity( 1.0 ),
@@ -164,10 +163,6 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
     m_params.emplace_back( new PARAM_ENUM<NET_COLOR_MODE>( "board.net_color_mode",
                            &m_NetColorMode, NET_COLOR_MODE::RATSNEST, NET_COLOR_MODE::OFF,
                            NET_COLOR_MODE::ALL ) );
-
-    m_params.emplace_back( new PARAM_ENUM<RATSNEST_MODE>( "board.ratsnest_display_mode",
-                           &m_RatsnestMode, RATSNEST_MODE::ALL, RATSNEST_MODE::ALL,
-                           RATSNEST_MODE::VISIBLE ) );
 
     m_params.emplace_back( new PARAM<bool>( "board.auto_track_width",
                            &m_AutoTrackWidth, true ) );

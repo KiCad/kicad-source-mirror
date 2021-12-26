@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 Reece R. Pollack <reece@his.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,15 +24,13 @@
 
 #include <wx/debug.h>     // for wxASSERT
 #include <pcb_base_frame.h>
-#include <pcb_display_options.h>
+#include <pcbnew_settings.h>
 #include <pcb_origin_transforms.h>
 
 using COORD_TYPE = ORIGIN_TRANSFORMS::COORD_TYPES_T;
 
-PCB_ORIGIN_TRANSFORMS::PCB_ORIGIN_TRANSFORMS( PCB_BASE_FRAME& aPcbBaseFrame )
-        : m_pcbBaseFrame( aPcbBaseFrame ),
-          m_invertXAxis( aPcbBaseFrame.GetDisplayOptions().m_DisplayInvertXAxis ),
-          m_invertYAxis( aPcbBaseFrame.GetDisplayOptions().m_DisplayInvertYAxis )
+PCB_ORIGIN_TRANSFORMS::PCB_ORIGIN_TRANSFORMS( PCB_BASE_FRAME& aPcbBaseFrame ) :
+        m_pcbBaseFrame( aPcbBaseFrame )
 {}
 
 PCB_ORIGIN_TRANSFORMS::~PCB_ORIGIN_TRANSFORMS()
@@ -56,8 +54,7 @@ long long int PCB_ORIGIN_TRANSFORMS::ToDisplay( long long int aValue,
     return value;
 }
 
-double PCB_ORIGIN_TRANSFORMS::ToDisplay( double        aValue,
-                                         COORD_TYPES_T aCoordType ) const
+double PCB_ORIGIN_TRANSFORMS::ToDisplay( double aValue, COORD_TYPES_T aCoordType ) const
 {
     double value = aValue;
 
@@ -92,8 +89,7 @@ long long int PCB_ORIGIN_TRANSFORMS::FromDisplay( long long int aValue,
     return value;
 }
 
-double PCB_ORIGIN_TRANSFORMS::FromDisplay( double        aValue,
-                                           COORD_TYPES_T aCoordType ) const
+double PCB_ORIGIN_TRANSFORMS::FromDisplay( double aValue, COORD_TYPES_T aCoordType ) const
 {
     double value = aValue;
 
@@ -111,13 +107,22 @@ double PCB_ORIGIN_TRANSFORMS::FromDisplay( double        aValue,
 }
 
 
-int PCB_ORIGIN_TRANSFORMS::GetUserXOrigin() const
+int PCB_ORIGIN_TRANSFORMS::getUserXOrigin() const
 {
     return m_pcbBaseFrame.GetUserOrigin().x;
 }
 
-int PCB_ORIGIN_TRANSFORMS::GetUserYOrigin() const
+int PCB_ORIGIN_TRANSFORMS::getUserYOrigin() const
 {
     return m_pcbBaseFrame.GetUserOrigin().y;
 }
 
+bool PCB_ORIGIN_TRANSFORMS::invertXAxis() const
+{
+    return m_pcbBaseFrame.Settings().m_Display.m_DisplayInvertXAxis;
+}
+
+bool PCB_ORIGIN_TRANSFORMS::invertYAxis() const
+{
+    return m_pcbBaseFrame.Settings().m_Display.m_DisplayInvertYAxis;
+}

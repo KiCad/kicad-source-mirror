@@ -325,14 +325,14 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
 
     // fix the pad render mode (filled/not filled)
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
-    bool sketchMode = m_cbShowPadOutline->IsChecked();
-    settings->SetSketchMode( LAYER_PADS_TH, sketchMode );
-    settings->SetSketchMode( LAYER_PAD_FR, sketchMode );
-    settings->SetSketchMode( LAYER_PAD_BK, sketchMode );
-    settings->SetSketchModeGraphicItems( sketchMode );
+
+    if( m_cbShowPadOutline->IsChecked() )
+        settings->m_ForcePadSketchModeOn = true;
+    else
+        settings->m_ForcePadSketchModeOff = true;
 
     settings->SetHighContrast( false );
-    settings->SetContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL );
+    settings->m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
 
     // gives a non null grid size (0.001mm) because GAL layer does not like a 0 size grid:
     double gridsize = 0.001 * IU_PER_MM;
@@ -769,16 +769,15 @@ void DIALOG_PAD_PROPERTIES::onChangePadMode( wxCommandEvent& event )
     KIGFX::VIEW* view = m_padPreviewGAL->GetView();
 
     // fix the pad render mode (filled/not filled)
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-        static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+    auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
-    settings->SetSketchMode( LAYER_PADS_TH, m_sketchPreview );
-    settings->SetSketchMode( LAYER_PAD_FR, m_sketchPreview );
-    settings->SetSketchMode( LAYER_PAD_BK, m_sketchPreview );
-    settings->SetSketchModeGraphicItems( m_sketchPreview );
+    if( m_cbShowPadOutline->IsChecked() )
+        settings->m_ForcePadSketchModeOn = true;
+    else
+        settings->m_ForcePadSketchModeOff = true;
 
     settings->SetHighContrast( false );
-    settings->SetContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL );
+    settings->m_ContrastModeDisplay = HIGH_CONTRAST_MODE::NORMAL;
 
     redraw();
 }

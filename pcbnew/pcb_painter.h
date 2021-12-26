@@ -83,47 +83,6 @@ public:
 
     bool GetShowPageLimits() const override;
 
-    /**
-     * Turn on/off sketch mode for given item layer.
-     *
-     * @param aItemLayer is the item layer that is changed.
-     * @param aEnabled decides if it is drawn in sketch mode (true for sketched mode,
-     *                 false for filled mode).
-     */
-    inline void SetSketchMode( int aItemLayer, bool aEnabled )
-    {
-        m_sketchMode[aItemLayer] = aEnabled;
-    }
-
-    /**
-     * Return sketch mode setting for a given item layer.
-     *
-     * @param aItemLayer is the item layer that is changed.
-     */
-    inline bool GetSketchMode( int aItemLayer ) const
-    {
-        return m_sketchMode[aItemLayer];
-    }
-
-    /**
-     * Turn on/off sketch mode for graphic items (DRAWSEGMENTs, texts).
-     *
-     * @param aEnabled decides if it is drawn in sketch mode (true for sketched mode,
-     *                 false for filled mode).
-     */
-    inline void SetSketchModeGraphicItems( bool aEnabled )
-    {
-        m_sketchGraphics = aEnabled;
-    }
-
-    /**
-     * Turn on/off drawing outline and hatched lines for zones.
-     */
-    void EnableZoneOutlines( bool aEnabled )
-    {
-        m_zoneOutlines = aEnabled;
-    }
-
     inline bool IsBackgroundDark() const override
     {
         auto luma = m_layerColors[ LAYER_PCB_BACKGROUND ].GetBrightness();
@@ -142,20 +101,6 @@ public:
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_CURSOR ]; }
 
-    /**
-     * Switch the contrast mode setting (HIGH_CONTRAST_MODE:NORMAL, DIMMED or HIDDEN )
-     * to control how the non active layers are shown
-     */
-    void SetContrastModeDisplay( HIGH_CONTRAST_MODE aMode ) { m_contrastModeDisplay = aMode; }
-
-    /**
-     * @return the contrast mode setting (HIGH_CONTRAST_MODE:NORMAL, DIMMED or HIDDEN ).
-     */
-    HIGH_CONTRAST_MODE GetContrastModeDisplay() { return m_contrastModeDisplay; }
-
-    bool GetDrawIndividualViaLayers() const { return m_drawIndividualViaLayers; }
-    void SetDrawIndividualViaLayers( bool aFlag ) { m_drawIndividualViaLayers = aFlag; }
-
     NET_COLOR_MODE GetNetColorMode() const { return m_netColorMode; }
     void SetNetColorMode( NET_COLOR_MODE aMode ) { m_netColorMode = aMode; }
 
@@ -166,25 +111,21 @@ public:
     std::set<int>& GetHiddenNets() { return m_hiddenNets; }
     const std::set<int>& GetHiddenNets() const { return m_hiddenNets; }
 
-    void SetZoneDisplayMode( ZONE_DISPLAY_MODE mode ) { m_zoneDisplayMode = mode; }
+public:
+    bool               m_ForceClearanceDisplayOff;
+    bool               m_ForcePadSketchModeOff;
+    bool               m_ForcePadSketchModeOn;
+
+    ZONE_DISPLAY_MODE  m_ZoneDisplayMode;
+    HIGH_CONTRAST_MODE m_ContrastModeDisplay;
+    bool               m_DrawIndividualViaLayers;
 
 protected:
     ///< Maximum font size for netnames (and other dynamically shown strings)
     static const double MAX_FONT_SIZE;
 
-    bool               m_sketchMode[GAL_LAYER_ID_END];
-    bool               m_sketchGraphics;
-    bool               m_sketchText;
-
-    bool               m_zoneOutlines;
-
-    bool               m_drawIndividualViaLayers = false;
-
-    ZONE_DISPLAY_MODE  m_zoneDisplayMode;
-    HIGH_CONTRAST_MODE m_contrastModeDisplay;
-
     ///< How to display nets and netclasses with color overrides
-    NET_COLOR_MODE m_netColorMode;
+    NET_COLOR_MODE     m_netColorMode;
 
     ///< Overrides for specific netclass colors
     std::map<wxString, KIGFX::COLOR4D> m_netclassColors;

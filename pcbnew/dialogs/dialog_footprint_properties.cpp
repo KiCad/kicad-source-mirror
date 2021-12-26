@@ -156,8 +156,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
 
 DIALOG_FOOTPRINT_PROPERTIES::~DIALOG_FOOTPRINT_PROPERTIES()
 {
-    m_frame->GetPcbNewSettings()->m_FootprintTextShownColumns =
-                                                    m_itemsGrid->GetShownColumns().ToStdString();
+    m_frame->Settings().m_FootprintTextShownColumns = m_itemsGrid->GetShownColumns().ToStdString();
 
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_texts );

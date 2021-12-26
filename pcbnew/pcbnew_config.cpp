@@ -34,11 +34,9 @@
 #include <project.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/panel_selection_filter.h>
-#include <widgets/paged_dialog.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
-
 
 
 bool PCB_EDIT_FRAME::LoadProjectSettings()
@@ -54,9 +52,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
                                                     Prj().GetProjectPath());
 
     if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
-    {
         ShowInfoBarError( _( "Error loading drawing sheet." ), true );
-    }
 
     // Load render settings that aren't stored in PCB_DISPLAY_OPTIONS
 
@@ -105,7 +101,6 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     PCB_DISPLAY_OPTIONS opts   = GetDisplayOptions();
     opts.m_ContrastModeDisplay = localSettings.m_ContrastModeDisplay;
     opts.m_NetColorMode        = localSettings.m_NetColorMode;
-    opts.m_RatsnestMode        = localSettings.m_RatsnestMode;
     opts.m_TrackOpacity        = localSettings.m_TrackOpacity;
     opts.m_ViaOpacity          = localSettings.m_ViaOpacity;
     opts.m_PadOpacity          = localSettings.m_PadOpacity;
@@ -159,7 +154,6 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
 
     localSettings.m_ContrastModeDisplay = displayOpts.m_ContrastModeDisplay;
     localSettings.m_NetColorMode        = displayOpts.m_NetColorMode;
-    localSettings.m_RatsnestMode        = displayOpts.m_RatsnestMode;
     localSettings.m_TrackOpacity        = displayOpts.m_TrackOpacity;
     localSettings.m_ViaOpacity          = displayOpts.m_ViaOpacity;
     localSettings.m_PadOpacity          = displayOpts.m_PadOpacity;

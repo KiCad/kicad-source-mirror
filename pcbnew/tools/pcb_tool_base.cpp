@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,9 +295,9 @@ void PCB_TOOL_BASE::setTransitions()
 }
 
 
-const PCB_DISPLAY_OPTIONS& PCB_TOOL_BASE::displayOptions() const
+PCBNEW_SETTINGS::DISPLAY_OPTIONS& PCB_TOOL_BASE::displayOptions() const
 {
-    return frame()->GetDisplayOptions();
+    return frame()->GetPcbNewSettings()->m_Display;
 }
 
 PCB_DRAW_PANEL_GAL* PCB_TOOL_BASE::canvas() const

@@ -26,6 +26,7 @@
 
 #include <board.h>
 #include <tool/tool_interactive.h>
+#include <pcbnew_settings.h>
 
 class PCB_BASE_FRAME;
 
@@ -94,9 +95,9 @@ protected:
         return static_cast<KIGFX::PCB_VIEW*>( getView() );
     }
 
-    const PCB_DISPLAY_OPTIONS& displayOptions() const
+    PCBNEW_SETTINGS::DISPLAY_OPTIONS& displayOptions() const
     {
-        return frame()->GetDisplayOptions();
+        return frame()->GetPcbNewSettings()->m_Display;
     }
 
     PCB_DRAW_PANEL_GAL* canvas() const

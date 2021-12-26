@@ -737,7 +737,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         for( PAD* pad : newFootprint->Pads() )
         {
             // Set the pads ratsnest settings to the global settings
-            pad->SetLocalRatsnestVisible( pcbframe->GetDisplayOptions().m_ShowGlobalRatsnest );
+            pad->SetLocalRatsnestVisible( pcbframe->Settings().m_Display.m_ShowGlobalRatsnest );
 
             // Pads in the library all have orphaned nets.  Replace with Default.
             pad->SetNetCode( 0 );
@@ -746,8 +746,10 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         // Put it on FRONT layer,
         // (Can be stored flipped if the lib is an archive built from a board)
         if( newFootprint->IsFlipped() )
+        {
             newFootprint->Flip( newFootprint->GetPosition(),
                                 pcbframe->Settings().m_FlipLeftRight );
+        }
 
         KIGFX::VIEW_CONTROLS* viewControls = pcbframe->GetCanvas()->GetViewControls();
         VECTOR2D              cursorPos = viewControls->GetCursorPosition();

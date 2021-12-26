@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,10 +90,7 @@ template<class T> void Flip( T& aValue )
 
 int PCB_VIEWER_TOOLS::ShowPadNumbers( const TOOL_EVENT& aEvent )
 {
-    auto opts = displayOptions();
-
-    Flip( opts.m_DisplayPadNum );
-    frame()->SetDisplayOptions( opts );
+    Flip( displayOptions().m_DisplayPadNum );
 
     for( FOOTPRINT* fp : board()->Footprints() )
     {
@@ -109,10 +106,7 @@ int PCB_VIEWER_TOOLS::ShowPadNumbers( const TOOL_EVENT& aEvent )
 
 int PCB_VIEWER_TOOLS::PadDisplayMode( const TOOL_EVENT& aEvent )
 {
-    auto opts = displayOptions();
-
-    Flip( opts.m_DisplayPadFill );
-    frame()->SetDisplayOptions( opts );
+    Flip( displayOptions().m_DisplayPadFill );
 
     for( FOOTPRINT* fp : board()->Footprints() )
     {
@@ -128,10 +122,7 @@ int PCB_VIEWER_TOOLS::PadDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCB_VIEWER_TOOLS::GraphicOutlines( const TOOL_EVENT& aEvent )
 {
-    PCB_DISPLAY_OPTIONS opts = displayOptions();
-
-    Flip( opts.m_DisplayGraphicsFill );
-    frame()->SetDisplayOptions( opts );
+    Flip( displayOptions().m_DisplayGraphicsFill );
 
     for( FOOTPRINT* fp : board()->Footprints() )
     {
@@ -160,10 +151,7 @@ int PCB_VIEWER_TOOLS::GraphicOutlines( const TOOL_EVENT& aEvent )
 
 int PCB_VIEWER_TOOLS::TextOutlines( const TOOL_EVENT& aEvent )
 {
-    PCB_DISPLAY_OPTIONS opts = displayOptions();
-
-    Flip( opts.m_DisplayTextFill );
-    frame()->SetDisplayOptions( opts );
+    Flip( displayOptions().m_DisplayTextFill );
 
     for( FOOTPRINT* fp : board()->Footprints() )
     {
@@ -213,8 +201,8 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     bool                       originSet = false;
     EDA_UNITS                  units = frame()->GetUserUnits();
     KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, units,
-            frame()->GetDisplayOptions().m_DisplayInvertXAxis,
-            frame()->GetDisplayOptions().m_DisplayInvertYAxis );
+                                      displayOptions().m_DisplayInvertXAxis,
+                                      displayOptions().m_DisplayInvertYAxis );
 
     view.Add( &ruler );
     view.SetVisible( &ruler, false );
@@ -328,8 +316,8 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &ACTIONS::updatePreferences ) )
         {
-            ruler.UpdateDir( frame()->GetDisplayOptions().m_DisplayInvertXAxis,
-                    frame()->GetDisplayOptions().m_DisplayInvertYAxis );
+            ruler.UpdateDir( displayOptions().m_DisplayInvertXAxis,
+                             displayOptions().m_DisplayInvertYAxis );
 
             view.Update( &ruler, KIGFX::GEOMETRY );
             canvas()->Refresh();

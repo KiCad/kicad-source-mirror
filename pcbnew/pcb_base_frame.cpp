@@ -473,15 +473,14 @@ const wxPoint& PCB_BASE_FRAME::GetAuxOrigin() const
 
 const wxPoint PCB_BASE_FRAME::GetUserOrigin() const
 {
-    auto& displ_opts = GetDisplayOptions();
     wxPoint origin( 0, 0 );
 
-    switch( displ_opts.m_DisplayOrigin )
+    switch( Settings().m_Display.m_DisplayOrigin )
     {
-    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_PAGE:                           break;
-    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_AUX:  origin = GetAuxOrigin();  break;
-    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_GRID: origin = GetGridOrigin(); break;
-    default:                                   wxASSERT( false );        break;
+    case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE:                           break;
+    case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_AUX:  origin = GetAuxOrigin();  break;
+    case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID: origin = GetGridOrigin(); break;
+    default:                                  wxASSERT( false );        break;
     }
 
     return origin;
@@ -779,10 +778,7 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
 
     if( cfg )
-    {
-        m_displayOptions = cfg->m_Display;
         m_polarCoords = cfg->m_PolarCoords;
-    }
 
     wxASSERT( GetCanvas() );
 
@@ -818,10 +814,7 @@ void PCB_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
 
     if( cfg )
-    {
-        cfg->m_Display = m_displayOptions;
         cfg->m_PolarCoords = m_polarCoords;
-    }
 }
 
 

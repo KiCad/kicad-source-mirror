@@ -94,25 +94,25 @@ public:
     template<typename T>
     T ToDisplayRelX( T aInternalValue ) const
     {
-        return ORIGIN_TRANSFORMS::ToDisplayRel( aInternalValue, m_invertXAxis );
+        return ORIGIN_TRANSFORMS::ToDisplayRel( aInternalValue, invertXAxis() );
     }
 
     template<typename T>
     T ToDisplayRelY( T aInternalValue ) const
     {
-        return ORIGIN_TRANSFORMS::ToDisplayRel( aInternalValue, m_invertYAxis );
+        return ORIGIN_TRANSFORMS::ToDisplayRel( aInternalValue, invertYAxis() );
     }
 
     template<typename T>
     T FromDisplayRelX( T aDisplayValue ) const
     {
-        return ORIGIN_TRANSFORMS::FromDisplayRel( aDisplayValue, m_invertXAxis );
+        return ORIGIN_TRANSFORMS::FromDisplayRel( aDisplayValue, invertXAxis() );
     }
 
     template<typename T>
     T FromDisplayRelY( T aDisplayValue ) const
     {
-        return ORIGIN_TRANSFORMS::FromDisplayRel( aDisplayValue, m_invertYAxis );
+        return ORIGIN_TRANSFORMS::FromDisplayRel( aDisplayValue, invertYAxis() );
     }
 
 
@@ -121,25 +121,25 @@ public:
     template<typename T>
     T ToDisplayAbsX( T aInternalValue ) const
     {
-        return ORIGIN_TRANSFORMS::ToDisplayAbs( aInternalValue, GetUserXOrigin(), m_invertXAxis );
+        return ORIGIN_TRANSFORMS::ToDisplayAbs( aInternalValue, getUserXOrigin(), invertXAxis() );
     }
 
     template<typename T>
     T ToDisplayAbsY( T aInternalValue ) const
     {
-        return ORIGIN_TRANSFORMS::ToDisplayAbs( aInternalValue, GetUserYOrigin(), m_invertYAxis );
+        return ORIGIN_TRANSFORMS::ToDisplayAbs( aInternalValue, getUserYOrigin(), invertYAxis() );
     }
 
     template<typename T>
     T FromDisplayAbsX( T aDisplayValue ) const
     {
-        return ORIGIN_TRANSFORMS::FromDisplayAbs( aDisplayValue, GetUserXOrigin(), m_invertXAxis );
+        return ORIGIN_TRANSFORMS::FromDisplayAbs( aDisplayValue, getUserXOrigin(), invertXAxis() );
     }
 
     template<typename T>
     T FromDisplayAbsY( T aDisplayValue ) const
     {
-        return ORIGIN_TRANSFORMS::FromDisplayAbs( aDisplayValue, GetUserYOrigin(), m_invertYAxis );
+        return ORIGIN_TRANSFORMS::FromDisplayAbs( aDisplayValue, getUserYOrigin(), invertYAxis() );
     }
 
 
@@ -190,13 +190,14 @@ public:
     }
 
 protected:
-    int GetUserXOrigin() const;
-    int GetUserYOrigin() const;
+    int getUserXOrigin() const;
+    int getUserYOrigin() const;
+
+    bool invertXAxis() const;
+    bool invertYAxis() const;
 
 protected:
     const PCB_BASE_FRAME& m_pcbBaseFrame;
-    const bool&           m_invertXAxis;
-    const bool&           m_invertYAxis;
 };
 
 #endif // PCB_ORIGIN_TRANSFORMS_H_

@@ -153,15 +153,11 @@ public:
 
     /**
      * Returns the BOARD_DESIGN_SETTINGS for the open project.
-     *
-     * Overloaded in FOOTPRINT_EDIT_FRAME.
      */
     virtual BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
 
     /**
      * Helper to retrieve the current color settings.
-     *
-     * @return a pointer to the active COLOR_SETTINGS.
      */
     virtual COLOR_SETTINGS* GetColorSettings( bool aForceRefresh = false ) const override
     {
@@ -170,6 +166,7 @@ public:
     }
 
     PCBNEW_SETTINGS& Settings() { return *m_settings; }
+    const PCBNEW_SETTINGS& Settings() const { return *m_settings; }
 
     void SetDrawBgColor( const COLOR4D& aColor ) override;
 
@@ -191,16 +188,12 @@ public:
 
     /**
      * Return the #PCB_PLOT_PARAMS for the BOARD owned by this frame.
-     *
-     * Overloaded in FOOTPRINT_EDIT_FRAME.
      */
     virtual const PCB_PLOT_PARAMS& GetPlotSettings() const;
     virtual void SetPlotSettings( const PCB_PLOT_PARAMS& aSettings );
 
     /**
      * Set the #m_Pcb member in such as way as to ensure deleting any previous #BOARD.
-     *
-     * @param aBoard is the #BOARD to put into the frame.
      */
     virtual void SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );
 

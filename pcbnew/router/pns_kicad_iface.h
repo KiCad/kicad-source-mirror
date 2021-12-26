@@ -109,7 +109,6 @@ public:
     ~PNS_KICAD_IFACE();
 
     void SetHostTool( PCB_TOOL_BASE* aTool );
-    void SetDisplayOptions( const PCB_DISPLAY_OPTIONS* aDispOptions );
 
     void SetView( KIGFX::VIEW* aView );
     void EraseView() override;
@@ -141,7 +140,6 @@ private:
 
     PCB_TOOL_BASE*                  m_tool;
     std::unique_ptr<BOARD_COMMIT>   m_commit;
-    const PCB_DISPLAY_OPTIONS*      m_dispOptions;
 };
 
 

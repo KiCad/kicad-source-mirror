@@ -1196,10 +1196,7 @@ void APPEARANCE_CONTROLS::setVisibleObjects( GAL_SET aLayers )
     {
         // Ratsnest visibility is controlled by the ratsnest option, and not by the preset
         if( m_frame->IsType( FRAME_PCB_EDITOR ) )
-        {
-            PCB_DISPLAY_OPTIONS opt = m_frame->GetDisplayOptions();
-            aLayers.set( LAYER_RATSNEST, opt.m_ShowGlobalRatsnest );
-        }
+            aLayers.set( LAYER_RATSNEST, m_frame->Settings().m_Display.m_ShowGlobalRatsnest );
 
         m_frame->GetBoard()->SetVisibleElements( aLayers );
     }
@@ -1267,16 +1264,16 @@ void APPEARANCE_CONTROLS::UpdateDisplayOptions()
 
     if( !m_isFpEditor )
     {
-        if( !options.m_ShowGlobalRatsnest )
+        if( !m_frame->Settings().m_Display.m_ShowGlobalRatsnest )
             m_rbRatsnestNone->SetValue( true );
-        else if( options.m_RatsnestMode == RATSNEST_MODE::ALL )
+        else if( m_frame->Settings().m_Display.m_RatsnestMode == RATSNEST_MODE::ALL )
             m_rbRatsnestAllLayers->SetValue( true );
         else
             m_rbRatsnestVisLayers->SetValue( true );
 
         wxASSERT( m_objectSettingsMap.count( LAYER_RATSNEST ) );
         APPEARANCE_SETTING* ratsnest = m_objectSettingsMap.at( LAYER_RATSNEST );
-        ratsnest->ctl_visibility->SetValue( options.m_ShowGlobalRatsnest );
+        ratsnest->ctl_visibility->SetValue( m_frame->Settings().m_Display.m_ShowGlobalRatsnest );
     }
 }
 
@@ -1929,9 +1926,7 @@ void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool i
 
         if( m_frame->IsType( FRAME_PCB_EDITOR ) )
         {
-            PCB_DISPLAY_OPTIONS opt  = m_frame->GetDisplayOptions();
-            opt.m_ShowGlobalRatsnest = isVisible;
-            m_frame->SetDisplayOptions( opt );
+            m_frame->Settings().m_Display.m_ShowGlobalRatsnest = isVisible;
             m_frame->GetBoard()->SetElementVisibility( aLayer, isVisible );
             m_frame->GetCanvas()->RedrawRatsnest();
         }
@@ -2902,24 +2897,21 @@ void APPEARANCE_CONTROLS::onNetColorMode( wxCommandEvent& aEvent )
 
 void APPEARANCE_CONTROLS::onRatsnestMode( wxCommandEvent& aEvent )
 {
-    PCB_DISPLAY_OPTIONS options = m_frame->GetDisplayOptions();
-
     if( m_rbRatsnestAllLayers->GetValue() )
     {
-        options.m_ShowGlobalRatsnest = true;
-        options.m_RatsnestMode = RATSNEST_MODE::ALL;
+        m_frame->Settings().m_Display.m_ShowGlobalRatsnest = true;
+        m_frame->Settings().m_Display.m_RatsnestMode = RATSNEST_MODE::ALL;
     }
     else if( m_rbRatsnestVisLayers->GetValue() )
     {
-        options.m_ShowGlobalRatsnest = true;
-        options.m_RatsnestMode = RATSNEST_MODE::VISIBLE;
+        m_frame->Settings().m_Display.m_ShowGlobalRatsnest = true;
+        m_frame->Settings().m_Display.m_RatsnestMode = RATSNEST_MODE::VISIBLE;
     }
     else
     {
-        options.m_ShowGlobalRatsnest = false;
+        m_frame->Settings().m_Display.m_ShowGlobalRatsnest = false;
     }
 
-    m_frame->SetDisplayOptions( options );
     m_frame->GetCanvas()->RedrawRatsnest();
     passOnFocus();
 }

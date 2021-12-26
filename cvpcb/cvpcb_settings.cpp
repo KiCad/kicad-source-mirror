@@ -49,21 +49,7 @@ CVPCB_SETTINGS::CVPCB_SETTINGS() :
 
     addParamsForWindow( &m_FootprintViewer, "footprint_viewer" );
 
-    m_params.emplace_back( new PARAM<bool>( "footprint_viewer.pad_fill",
-            &m_FootprintViewerDisplayOptions.m_DisplayPadFill, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "footprint_viewer.pad_numbers",
-            &m_FootprintViewerDisplayOptions.m_DisplayPadNum, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "footprint_viewer.footprint_text_fill",
-            &m_FootprintViewerDisplayOptions.m_DisplayTextFill, true ) );
-
-    m_params.emplace_back( new PARAM<bool>( "footprint_viewer.graphic_items_fill",
-            &m_FootprintViewerDisplayOptions.m_DisplayGraphicsFill, true ) );
-
-    m_params.emplace_back( new PARAM<double>( "footprint_viewer.zoom",
-            &m_FootprintViewerZoom, 1.0 ) );
-
+    m_params.emplace_back( new PARAM<double>( "footprint_viewer.zoom", &m_FootprintViewerZoom, 1.0 ) );
 }
 
 

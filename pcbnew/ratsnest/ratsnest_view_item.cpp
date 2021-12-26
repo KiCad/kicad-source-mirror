@@ -89,7 +89,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     LSET       visibleLayers;
 
     // If we are in "other layers off" mode, the active layer is the only visible layer
-    if( rs->GetContrastModeDisplay() == HIGH_CONTRAST_MODE::HIDDEN )
+    if( rs->m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN )
     {
         visibleLayers.set( rs->GetPrimaryHighContrastLayer() );
     }

@@ -783,7 +783,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     bool lock45          = false;
     bool eatFirstMouseUp = true;
     bool hasRedrawn3D    = false;
-    bool allowRedraw3D   = editFrame->GetDisplayOptions().m_Live3DRefresh;
+    bool allowRedraw3D   = editFrame->Settings().m_Display.m_Live3DRefresh;
 
     // Prime the pump
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
@@ -1988,7 +1988,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         // Make sure the rotation is from the right reference point
         selCenter += translation;
 
-        if( !frame()->GetDisplayOptions().m_DisplayInvertYAxis )
+        if( !frame()->Settings().m_Display.m_DisplayInvertYAxis )
             rotation *= -1.0;
 
         // When editing footprints, all items have the same parent

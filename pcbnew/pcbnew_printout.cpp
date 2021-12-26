@@ -261,8 +261,8 @@ void PCBNEW_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
         break;
     }
 
-    painter.GetSettings()->SetDrawIndividualViaLayers(
-            m_pcbnewSettings.m_Pagination == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE );
+    painter.GetSettings()->m_DrawIndividualViaLayers =
+                        m_pcbnewSettings.m_Pagination == PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE;
 }
 
 
@@ -289,9 +289,7 @@ KIGFX::PCB_PRINT_PAINTER::PCB_PRINT_PAINTER( GAL* aGal ) :
         PCB_PAINTER( aGal ),
         m_drillMarkReal( false ),
         m_drillMarkSize( 0 )
-{
-    m_pcbSettings.EnableZoneOutlines( false );
-}
+{ }
 
 
 int KIGFX::PCB_PRINT_PAINTER::getDrillShape( const PAD* aPad ) const

@@ -125,10 +125,7 @@ template<class T> void Flip( T& aValue )
 
 int PCB_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 {
-    PCB_DISPLAY_OPTIONS opts = displayOptions();
-
-    Flip( opts.m_DisplayPcbTrackFill );
-    m_frame->SetDisplayOptions( opts );
+    Flip( displayOptions().m_DisplayPcbTrackFill );
 
     for( PCB_TRACK* track : board()->Tracks() )
     {
@@ -144,21 +141,17 @@ int PCB_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
 {
-    PCB_DISPLAY_OPTIONS opts = displayOptions();
-
     if( aEvent.IsAction( &PCB_ACTIONS::showRatsnest ) )
     {
         // N.B. Do not disable the Ratsnest layer here.  We use it for local ratsnest
-        Flip( opts.m_ShowGlobalRatsnest );
-        m_frame->SetDisplayOptions( opts );
+        Flip( displayOptions().m_ShowGlobalRatsnest );
         getEditFrame<PCB_EDIT_FRAME>()->SetElementVisibility( LAYER_RATSNEST,
-                                                              opts.m_ShowGlobalRatsnest );
+                                                              displayOptions().m_ShowGlobalRatsnest );
 
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::ratsnestLineMode ) )
     {
-        Flip( opts.m_DisplayRatsnestLinesCurved );
-        m_frame->SetDisplayOptions( opts );
+        Flip( displayOptions().m_DisplayRatsnestLinesCurved );
     }
 
     canvas()->RedrawRatsnest();
@@ -170,10 +163,7 @@ int PCB_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 {
-    PCB_DISPLAY_OPTIONS opts = displayOptions();
-
-    Flip( opts.m_DisplayViaFill );
-    m_frame->SetDisplayOptions( opts );
+    Flip( displayOptions().m_DisplayViaFill );
 
     for( PCB_TRACK* track : board()->Tracks() )
     {
@@ -236,7 +226,7 @@ void PCB_CONTROL::unfilledZoneCheck()
 
 int PCB_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 {
-    PCB_DISPLAY_OPTIONS opts = displayOptions();
+    PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
 
     // Apply new display options to the GAL canvas
     if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayFilled ) )
@@ -282,7 +272,7 @@ int PCB_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 {
-    PCB_DISPLAY_OPTIONS opts = displayOptions();
+    PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
 
     opts.m_ContrastModeDisplay = opts.m_ContrastModeDisplay == HIGH_CONTRAST_MODE::NORMAL
                                         ? HIGH_CONTRAST_MODE::DIMMED
@@ -296,7 +286,7 @@ int PCB_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
 {
-    PCB_DISPLAY_OPTIONS opts = displayOptions();
+    PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
 
     switch( opts.m_ContrastModeDisplay )
     {
@@ -313,7 +303,7 @@ int PCB_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::NetColorModeCycle( const TOOL_EVENT& aEvent )
 {
-    PCB_DISPLAY_OPTIONS opts = displayOptions();
+    PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
 
     switch( opts.m_NetColorMode )
     {
@@ -330,23 +320,19 @@ int PCB_CONTROL::NetColorModeCycle( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::RatsnestModeCycle( const TOOL_EVENT& aEvent )
 {
-    PCB_DISPLAY_OPTIONS opts = displayOptions();
-
-    if( !opts.m_ShowGlobalRatsnest )
+    if( !displayOptions().m_ShowGlobalRatsnest )
     {
-        opts.m_ShowGlobalRatsnest = true;
-        opts.m_RatsnestMode = RATSNEST_MODE::ALL;
+        displayOptions().m_ShowGlobalRatsnest = true;
+        displayOptions().m_RatsnestMode = RATSNEST_MODE::ALL;
     }
-    else if( opts.m_RatsnestMode == RATSNEST_MODE::ALL )
+    else if( displayOptions().m_RatsnestMode == RATSNEST_MODE::ALL )
     {
-        opts.m_RatsnestMode = RATSNEST_MODE::VISIBLE;
+        displayOptions().m_RatsnestMode = RATSNEST_MODE::VISIBLE;
     }
     else
     {
-        opts.m_ShowGlobalRatsnest = false;
+        displayOptions().m_ShowGlobalRatsnest = false;
     }
-
-    m_frame->SetDisplayOptions( opts );
 
     return 0;
 }

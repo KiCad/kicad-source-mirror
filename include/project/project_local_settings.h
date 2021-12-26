@@ -63,10 +63,7 @@ public:
 
     bool SaveToFile( const wxString& aDirectory = "", bool aForce = false ) override;
 
-    void SetProject( PROJECT* aProject )
-    {
-        m_project = aProject;
-    }
+    void SetProject( PROJECT* aProject ) { m_project = aProject; }
 
     void SaveFileState( const wxString& aFileName, const WINDOW_SETTINGS* aWindowCfg, bool aOpen );
 
@@ -115,9 +112,6 @@ public:
 
     /// The current net color mode
     NET_COLOR_MODE m_NetColorMode;
-
-    /// The current ratsnest draw mode
-    RATSNEST_MODE m_RatsnestMode;
 
     /// The current setting for whether to automatically adjust track widths to match
     bool m_AutoTrackWidth;

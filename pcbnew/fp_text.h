@@ -107,15 +107,8 @@ public:
      * @return force the text rotation to be always between -90 .. 90 deg. Otherwise the text
      *         is not easy to read if false, the text rotation is free.
      */
-    bool IsKeepUpright() const
-    {
-        return m_keepUpright;
-    }
-
-    void SetKeepUpright( bool aKeepUpright )
-    {
-        m_keepUpright = aKeepUpright;
-    }
+    bool IsKeepUpright() const { return m_keepUpright; }
+    void SetKeepUpright( bool aKeepUpright ) { m_keepUpright = aKeepUpright; }
 
     /// Rotate text, in footprint editor
     /// (for instance in footprint rotation transform)
@@ -207,7 +200,7 @@ public:
                                                    int aError, ERROR_LOC aErrorLoc ) const;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
-    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
     wxString GetClass() const override
     {
@@ -233,18 +226,13 @@ public:
 #endif
 
 private:
-    /* Note: orientation in 1/10 deg relative to the footprint
-     * Physical orient is m_Orient + m_Parent->m_Orient
-     */
+    TEXT_TYPE m_Type;           ///< 0=ref, 1=val, etc.
 
-    TEXT_TYPE m_Type;       ///< 0=ref, 1=val, etc.
-
-    wxPoint   m_Pos0;       ///< text coordinates relative to the footprint anchor, orient 0.
-                            ///< text coordinate ref point is the text center
+    wxPoint   m_Pos0;           ///< text coordinates relative to the footprint anchor, orient 0.
+                                ///< text coordinate ref point is the text center
 
     bool      m_keepUpright;    ///< if true, keep rotation angle between -90 .. 90 deg.
                                 ///< to keep the text more easy to read
-
 };
 
 #endif // FP_TEXT_H

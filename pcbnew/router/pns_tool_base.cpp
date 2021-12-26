@@ -76,7 +76,6 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
     m_iface->SetBoard( board() );
     m_iface->SetView( getView() );
     m_iface->SetHostTool( this );
-    m_iface->SetDisplayOptions( &( frame()->GetDisplayOptions() ) );
 
     m_router = new ROUTER;
     m_router->SetInterface( m_iface );
@@ -187,7 +186,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
 
     ITEM* rv = nullptr;
 
-    bool highContrast = ( displayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
+    bool highContrast = ( frame()->GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
 
     for( int i = 0; i < candidateCount; i++ )
     {

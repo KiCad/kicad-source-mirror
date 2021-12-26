@@ -40,9 +40,9 @@ void PANEL_PCBNEW_DISPLAY_ORIGIN::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
 
     switch( aCfg->m_Display.m_DisplayOrigin )
     {
-    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_PAGE: origin = 0; break;
-    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_AUX:  origin = 1; break;
-    case PCB_DISPLAY_OPTIONS::PCB_ORIGIN_GRID: origin = 2; break;
+    case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE: origin = 0; break;
+    case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_AUX:  origin = 1; break;
+    case PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID: origin = 2; break;
     }
 
     m_DisplayOrigin->SetSelection( origin );
@@ -67,9 +67,9 @@ bool PANEL_PCBNEW_DISPLAY_ORIGIN::TransferDataFromWindow()
 
     switch( m_DisplayOrigin->GetSelection() )
     {
-    case 0: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_OPTIONS::PCB_ORIGIN_PAGE; break;
-    case 1: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_OPTIONS::PCB_ORIGIN_AUX;  break;
-    case 2: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_OPTIONS::PCB_ORIGIN_GRID; break;
+    case 0: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_PAGE; break;
+    case 1: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_AUX;  break;
+    case 2: cfg->m_Display.m_DisplayOrigin = PCB_DISPLAY_ORIGIN::PCB_ORIGIN_GRID; break;
     }
 
     cfg->m_Display.m_DisplayInvertXAxis = m_XAxisDirection->GetSelection() != 0;

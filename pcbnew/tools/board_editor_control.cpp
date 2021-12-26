@@ -1085,7 +1085,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 
                 for( PAD* pad : fp->Pads() )
                 {
-                    pad->SetLocalRatsnestVisible( m_frame->GetDisplayOptions().m_ShowGlobalRatsnest );
+                    pad->SetLocalRatsnestVisible( m_frame->Settings().m_Display.m_ShowGlobalRatsnest );
 
                     // Pads in the library all have orphaned nets.  Replace with Default.
                     pad->SetNetCode( 0 );

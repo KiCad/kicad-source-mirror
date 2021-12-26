@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -32,6 +33,7 @@
 #include <tools/pcb_tool_base.h>
 #include <tools/pcb_actions.h>
 #include <connectivity/connectivity_data.h>
+#include <pcbnew_settings.h>
 
 #include <functional>
 using namespace std::placeholders;
@@ -443,7 +445,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         if( aSetDirtyBit )
             frame->OnModify();
         else
-            frame->Update3DView( true, frame->GetDisplayOptions().m_Live3DRefresh );
+            frame->Update3DView( true, frame->Settings().m_Display.m_Live3DRefresh );
     }
 
     clear();
