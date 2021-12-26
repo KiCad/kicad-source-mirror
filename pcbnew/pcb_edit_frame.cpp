@@ -395,6 +395,13 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
+    if( ADVANCED_CFG::GetCfg().m_ShowEventCounters )
+    {
+        // Stop the timer during destruction early to avoid potential event race conditions (that do happen on windows)
+        m_eventCounterTimer->Stop();
+        delete m_eventCounterTimer;
+    }
+
     // Close modeless dialogs
     wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME );
 
