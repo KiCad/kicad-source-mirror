@@ -2866,8 +2866,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
             break;
 
         default:
-            wxFAIL_MSG( wxT( "Cannot parse unknown dim type %s" ) +
-                        GetTokenString( CurTok() ) );
+            wxFAIL_MSG( wxT( "Cannot parse unknown dim type %s" ) + GetTokenString( CurTok() ) );
         }
 
         NeedRIGHT();
