@@ -291,7 +291,7 @@ PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) : PNS_LOG_VIEWER_FR
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
             m_galPanel->GetView()->GetPainter()->GetSettings() );
 
-    settings.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
+    settings->m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
 
     m_listPopupMenu = new wxMenu( wxT( "" ) );
     m_listPopupMenu->Append( ID_LIST_COPY, wxT( "Copy selected geometry" ), wxT( "" ),
