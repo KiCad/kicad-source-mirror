@@ -1162,17 +1162,15 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        for( size_t i = 0; i + 1 < elem.points.size(); i++ )
-        {
-            SCH_LINE* line = new SCH_LINE( elem.points.at( i ) + m_sheetOffset,
-                                           SCH_LAYER_ID::LAYER_NOTES );
+        SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY, SCH_LAYER_ID::LAYER_NOTES );
 
-            line->SetEndPoint( elem.points.at( i + 1 ) + m_sheetOffset );
-            line->SetStroke( STROKE_PARAMS( elem.lineWidth, GetPlotDashType( elem.linestyle ) ) );
+        for( wxPoint& point : elem.points )
+            poly->AddPoint( point + m_sheetOffset );
 
-            line->SetFlags( IS_NEW );
-            m_currentSheet->GetScreen()->Append( line );
-        }
+        poly->SetStroke( STROKE_PARAMS( elem.lineWidth, GetPlotDashType( elem.linestyle ) ) );
+        poly->SetFlags( IS_NEW );
+
+        m_currentSheet->GetScreen()->Append( poly );
     }
     else
     {
@@ -1210,26 +1208,16 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        // TODO: we cannot fill this polygon, only draw it for now
-        for( size_t i = 0; i + 1 < elem.points.size(); i++ )
-        {
-            SCH_LINE* line = new SCH_LINE( elem.points.at( i ) + m_sheetOffset,
-                                           SCH_LAYER_ID::LAYER_NOTES );
-            line->SetEndPoint( elem.points.at( i + 1 ) + m_sheetOffset );
-            line->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
+        SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY, SCH_LAYER_ID::LAYER_NOTES );
 
-            line->SetFlags( IS_NEW );
-            m_currentSheet->GetScreen()->Append( line );
-        }
+        for( wxPoint& point : elem.points )
+            poly->AddPoint( point + m_sheetOffset );
+        poly->AddPoint( elem.points.front() + m_sheetOffset );
 
-        // close polygon
-        SCH_LINE* line = new SCH_LINE( elem.points.front() + m_sheetOffset,
-                                       SCH_LAYER_ID::LAYER_NOTES );
-        line->SetEndPoint( elem.points.back() + m_sheetOffset );
-        line->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
+        SetSchShapeFillAndColor( elem, poly );
+        poly->SetFlags( IS_NEW );
 
-        line->SetFlags( IS_NEW );
-        m_currentSheet->GetScreen()->Append( line );
+        m_currentSheet->GetScreen()->Append( poly );
     }
     else
     {
