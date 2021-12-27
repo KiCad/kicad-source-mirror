@@ -107,6 +107,20 @@ enum class ASCH_RECORD_ORIENTATION
 };
 
 
+struct ASCH_SHAPE_INTERFACE
+{
+    int ownerindex;
+    int ownerpartid;
+    int ownerpartdisplaymode;
+
+    int  lineWidth;
+    bool isSolid;
+
+    int color;
+    int areacolor;
+};
+
+
 struct ASCH_SYMBOL
 {
     int      currentpartid;
@@ -330,41 +344,22 @@ struct ASCH_POLYLINE
 };
 
 
-struct ASCH_POLYGON
+struct ASCH_POLYGON : ASCH_SHAPE_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-    int ownerpartdisplaymode;
-
     std::vector<wxPoint> points;
-
-    int  lineWidth;
-    bool isSolid;
-
-    int color;
-    int areacolor;
 
     explicit ASCH_POLYGON( const std::map<wxString, wxString>& aProps );
 };
 
 
-struct ASCH_ROUND_RECTANGLE
+struct ASCH_ROUND_RECTANGLE : ASCH_SHAPE_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-    int ownerpartdisplaymode;
-
     wxPoint bottomLeft;
     wxPoint topRight;
 
     wxSize cornerradius;
 
-    int  lineWidth;
-    bool isSolid;
     bool isTransparent;
-
-    int color;
-    int areacolor;
 
     explicit ASCH_ROUND_RECTANGLE( const std::map<wxString, wxString>& aProps );
 };
@@ -402,21 +397,12 @@ struct ASCH_LINE
 };
 
 
-struct ASCH_RECTANGLE
+struct ASCH_RECTANGLE : ASCH_SHAPE_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-    int ownerpartdisplaymode;
-
     wxPoint bottomLeft;
     wxPoint topRight;
 
-    int  lineWidth;
-    bool isSolid;
     bool isTransparent;
-
-    int color;
-    int areacolor;
 
     explicit ASCH_RECTANGLE( const std::map<wxString, wxString>& aProps );
 };
