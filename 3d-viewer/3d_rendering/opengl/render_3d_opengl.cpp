@@ -1174,8 +1174,11 @@ void RENDER_3D_OPENGL::render3dModelsSelected( bool aRenderTopOrBot, bool aRende
             if( fp->IsSelected() )
                 highlight = true;
 
-            if( m_boardAdapter.m_Cfg->m_Render.opengl_highlight_on_rollover )
+            if( m_boardAdapter.m_Cfg->m_Render.opengl_highlight_on_rollover
+                && fp == m_currentRollOverItem )
+            {
                 highlight = true;
+            }
 
             if( aRenderSelectedOnly != highlight )
                 continue;
