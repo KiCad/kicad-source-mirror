@@ -70,7 +70,7 @@ static wxSearchCtrl* CreateTextFilterBox( wxWindow* aParent, const wxString& aDe
 
 PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow,
                                             bool aReadOnly ) :
-        RESETTABLE_PANEL( aWindow, wxID_ANY, wxDefaultPosition, default_dialog_size ),
+        RESETTABLE_PANEL( aWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize ),
         m_frame( aFrame ),
         m_readOnly( aReadOnly ),
         m_hotkeyStore()
@@ -106,18 +106,6 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
 }
 
 
-bool PANEL_HOTKEYS_EDITOR::Show( bool show )
-{
-    if( show && m_hotkeyStore.GetSections().empty() )
-    {
-        m_hotkeyStore.Init( m_actions, m_readOnly );
-        return m_hotkeyListCtrl->TransferDataToControl();
-    }
-
-    return RESETTABLE_PANEL::Show( show );
-}
-
-
 void PANEL_HOTKEYS_EDITOR::ResetPanel()
 {
     m_hotkeyListCtrl->ResetAllHotkeys( true );
@@ -147,7 +135,6 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
         }
     };
 
-
     if( ADVANCED_CFG::GetCfg().m_HotkeysDumper )
     {
         // Add hotkeys dumper (does not need translation, it's a dev tool only)
@@ -171,7 +158,10 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
 
 bool PANEL_HOTKEYS_EDITOR::TransferDataToWindow()
 {
-    // Deferred to Show() for performance when opening preferences
+    m_hotkeyStore.Init( m_actions, m_readOnly );
+
+    if( !m_hotkeyListCtrl->TransferDataToControl() )
+        false;
 
     return true;
 }
@@ -179,11 +169,11 @@ bool PANEL_HOTKEYS_EDITOR::TransferDataToWindow()
 
 bool PANEL_HOTKEYS_EDITOR::TransferDataFromWindow()
 {
-    if( !m_hotkeyListCtrl->TransferDataFromControl() )
-        return false;
-
     if( m_readOnly )
         return true;
+
+    if( !m_hotkeyListCtrl->TransferDataFromControl() )
+        return false;
 
     WriteHotKeyConfig( m_actions );
 

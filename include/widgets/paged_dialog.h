@@ -56,8 +56,8 @@ protected:
     void OnCancel( wxCommandEvent& event );
     virtual void OnAuxiliaryAction( wxCommandEvent& event ) { event.Skip(); }
     void OnResetButton( wxCommandEvent& aEvent );
-    void OnUpdateUI( wxUpdateUIEvent& event );
     void OnPageChange( wxBookCtrlEvent& event );
+    void OnPageChanging( wxBookCtrlEvent& aEvent );
 
     wxTreebook* m_treebook;
     wxButton*   m_auxiliaryButton;
@@ -69,11 +69,6 @@ private:
     wxString    m_title;
 
     bool        m_dirty;
-
-    wxString    m_errorMessage;
-    wxWindow*   m_errorCtrl;    // the control associated with m_errorMessage
-    int         m_errorRow;     // the row if m_errorCtrl is a grid
-    int         m_errorCol;     // the column if m_errorCtrl is a grid
 
     wxBoxSizer* m_buttonsSizer;
 

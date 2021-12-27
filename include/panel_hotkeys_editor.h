@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,8 +55,6 @@ public:
         return _( "Reset all hotkeys to the built-in KiCad defaults" );
     }
 
-    bool Show( bool show ) override;
-
 private:
     /**
      * Install the button panel (global reset/default, import/export)
@@ -79,7 +77,8 @@ private:
     void ImportHotKeys();
 
     /**
-     * Dumps all actions and their hotkeys to a text file for inclusion in documentation.
+     * Dump all actions and their hotkeys to a text file for inclusion in documentation.
+     *
      * The format is asciidoc-compatible table rows.
      * This function is hidden behind an advanced config flag and not intended for users.
      */

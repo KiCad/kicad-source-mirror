@@ -46,10 +46,7 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
         m_resetButton( nullptr ),
         m_cancelButton( nullptr ),
         m_title( aTitle ),
-        m_dirty( false ),
-        m_errorCtrl( nullptr ),
-        m_errorRow( 0 ),
-        m_errorCol( 0 )
+        m_dirty( false )
 {
     auto mainSizer = new wxBoxSizer( wxVERTICAL );
     SetSizer( mainSizer );
@@ -100,21 +97,17 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
 
     if( m_auxiliaryButton )
     {
-        m_auxiliaryButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                    wxCommandEventHandler( PAGED_DIALOG::OnAuxiliaryAction ),
-                                    nullptr, this );
+        m_auxiliaryButton->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::OnAuxiliaryAction,
+                                 this );
     }
 
     if( m_resetButton )
     {
-        m_resetButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                wxCommandEventHandler( PAGED_DIALOG::OnResetButton ), nullptr,
-                                this );
+        m_resetButton->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::OnResetButton, this );
     }
 
-    m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
-                         wxBookCtrlEventHandler( PAGED_DIALOG::OnPageChange ), nullptr, this );
-    Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PAGED_DIALOG::OnUpdateUI ), nullptr, this );
+    m_treebook->Bind( wxEVT_TREEBOOK_PAGE_CHANGED, &PAGED_DIALOG::OnPageChange, this );
+    m_treebook->Bind( wxEVT_TREEBOOK_PAGE_CHANGING, &PAGED_DIALOG::OnPageChanging, this );
 }
 
 
@@ -170,22 +163,17 @@ PAGED_DIALOG::~PAGED_DIALOG()
 
     if( m_auxiliaryButton )
     {
-        m_auxiliaryButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                       wxCommandEventHandler( PAGED_DIALOG::OnAuxiliaryAction ),
-                                       nullptr, this );
+        m_auxiliaryButton->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::OnAuxiliaryAction,
+                                   this );
     }
 
     if( m_resetButton )
     {
-        m_resetButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                   wxCommandEventHandler( PAGED_DIALOG::OnResetButton ), nullptr,
-                                   this );
+        m_resetButton->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::OnResetButton, this );
     }
 
-    m_treebook->Disconnect( wxEVT_TREEBOOK_PAGE_CHANGED,
-                            wxBookCtrlEventHandler( PAGED_DIALOG::OnPageChange ), nullptr, this );
-    Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PAGED_DIALOG::OnUpdateUI ),
-                nullptr, this );
+    m_treebook->Unbind( wxEVT_TREEBOOK_PAGE_CHANGED, &PAGED_DIALOG::OnPageChange, this );
+    m_treebook->Unbind( wxEVT_TREEBOOK_PAGE_CHANGING, &PAGED_DIALOG::OnPageChanging, this );
 }
 
 
@@ -234,7 +222,7 @@ bool PAGED_DIALOG::TransferDataToWindow()
         }
     }
 
-    m_treebook->SetSelection( (unsigned) std::max( 0, lastPageIndex ) );
+    m_treebook->ChangeSelection( (unsigned) std::max( 0, lastPageIndex ) );
 
     return true;
 }
@@ -258,14 +246,12 @@ bool PAGED_DIALOG::TransferDataFromWindow()
 
         if( !page->TransferDataFromWindow() )
         {
+            m_treebook->ChangeSelection( i );
             ret = false;
             break;
         }
     }
 #endif
-
-    if( !ret && !m_errorMessage.IsEmpty() )
-        m_infoBar->ShowMessage( m_errorMessage, wxICON_WARNING );
 
     return ret;
 }
@@ -281,51 +267,22 @@ void PAGED_DIALOG::SetError( const wxString& aMessage, const wxString& aPageName
 void PAGED_DIALOG::SetError( const wxString& aMessage, wxWindow* aPage, wxWindow* aCtrl,
                              int aRow, int aCol )
 {
-    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
+    if( aCtrl )
     {
-        if( m_treebook->GetPage( i ) == aPage )
-        {
-            m_treebook->SetSelection( i );
-            break;
-        }
-    }
+        m_infoBar->ShowMessageFor( aMessage, 10000, wxICON_WARNING );
 
-    // Once the page has been changed we want to wait for it to update before displaying
-    // the error dialog.  So store the rest of the error info and wait for OnUpdateUI.
-    m_errorMessage = aMessage;
-    m_errorCtrl = aCtrl;
-    m_errorRow = aRow;
-    m_errorCol = aCol;
-}
-
-
-void PAGED_DIALOG::OnUpdateUI( wxUpdateUIEvent& event )
-{
-    // Handle an error.  This is delayed to OnUpdateUI so that we can change the focus
-    // even when the original validation was triggered from a killFocus event, and so
-    // that the corresponding notebook page can be shown in the background when triggered
-    // from an OK.
-    if( m_errorCtrl )
-    {
-        // We will re-enter this routine when the error dialog is displayed, so make
-        // sure we don't keep putting up more dialogs.
-        wxWindow* ctrl = m_errorCtrl;
-        m_errorCtrl = nullptr;
-
-        m_infoBar->ShowMessageFor( m_errorMessage, 10000, wxICON_WARNING );
-
-        if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ctrl ) )
+        if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( aCtrl ) )
         {
             textCtrl->SetSelection( -1, -1 );
             textCtrl->SetFocus();
             return;
         }
 
-        if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( ctrl ) )
+        if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( aCtrl ) )
         {
-            if( m_errorRow > 0 )
+            if( aRow > 0 )
             {
-                int pos = scintilla->PositionFromLine( m_errorRow - 1 ) + ( m_errorCol - 1 );
+                int pos = scintilla->PositionFromLine( aRow - 1 ) + ( aCol - 1 );
                 scintilla->GotoPos( pos );
             }
 
@@ -333,40 +290,41 @@ void PAGED_DIALOG::OnUpdateUI( wxUpdateUIEvent& event )
             return;
         }
 
-        if( wxGrid* grid = dynamic_cast<wxGrid*>( ctrl ) )
+        if( wxGrid* grid = dynamic_cast<wxGrid*>( aCtrl ) )
         {
             grid->SetFocus();
-            grid->MakeCellVisible( m_errorRow, m_errorCol );
-            grid->SetGridCursor( m_errorRow, m_errorCol );
+            grid->MakeCellVisible( aRow, aCol );
+            grid->SetGridCursor( aRow, aCol );
 
             grid->EnableCellEditControl( true );
             grid->ShowCellEditControl();
             return;
         }
     }
-
-    if( m_treebook->GetCurrentPage()->GetChildren().IsEmpty() )
-    {
-        unsigned next = m_treebook->GetSelection() + 1;
-
-        // Use ChangeSelection() here because SetSelection() generates page change events which
-        // creates an infinite wxUpdateUIEvent loop.
-        if( next < m_treebook->GetPageCount() )
-            m_treebook->ChangeSelection( next );
-    }
 }
 
 
 void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
 {
+    // Use the first sub-page when a tree level node is selected.
+    if( m_treebook->GetCurrentPage()->GetChildren().IsEmpty() )
+    {
+        unsigned next = m_treebook->GetSelection() + 1;
+
+        if( next < m_treebook->GetPageCount() )
+            m_treebook->ChangeSelection( next );
+    }
+
     size_t page = event.GetSelection();
+
+    // NB: dynamic_cast doesn't work over Kiway.
+    wxWindow* panel = m_treebook->GetPage( page );
+
+    wxCHECK( panel, /* void */ );
 
     // Enable the reset button only if the page is re-settable
     if( m_resetButton )
     {
-        // NB: dynamic_cast doesn't work over Kiway.
-        wxWindow* panel = m_treebook->GetPage( page );
-
         if( panel && panel->GetWindowStyle() & wxRESETTABLE )
         {
             m_resetButton->SetLabel( wxString::Format( _( "Reset %s to Defaults" ),
@@ -385,6 +343,13 @@ void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
         m_resetButton->GetParent()->Layout();
     }
 
+    wxSizeEvent evt( panel->GetSize() );
+
+    panel->ProcessWindowEvent( evt );
+
+    // @todo Test to see if this macOS hack is still necessary now that a psuedo size event is
+    //       processed above.
+
     // Work around an OSX bug where the wxGrid children don't get placed correctly until
     // the first resize event
 #ifdef __WXMAC__
@@ -398,6 +363,26 @@ void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
         m_macHack[ page ] = false;
     }
 #endif
+}
+
+
+void PAGED_DIALOG::OnPageChanging( wxBookCtrlEvent& aEvent )
+{
+    int currentPage = aEvent.GetOldSelection();
+
+    if( currentPage == wxNOT_FOUND )
+        return;
+
+    wxWindow* page = m_treebook->GetPage( currentPage );
+
+    wxCHECK( page, /* void */ );
+
+    // If there is a validation error on the current page, don't allow the page change.
+    if( !page->Validate() || !page->TransferDataFromWindow() )
+    {
+        aEvent.Veto();
+        return;
+    }
 }
 
 
