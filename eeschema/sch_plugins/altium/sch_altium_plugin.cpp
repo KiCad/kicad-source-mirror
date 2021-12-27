@@ -25,6 +25,7 @@
 #include <memory>
 
 #include "altium_parser_sch.h"
+#include "sch_shape.h"
 #include <plugins/altium/altium_parser.h>
 #include <plugins/altium/altium_parser_utils.h>
 #include <sch_plugins/altium/sch_altium_plugin.h>
@@ -1321,8 +1322,34 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        m_reporter->Report( _( "Arcs on schematic not currently supported." ),
-                            RPT_SEVERITY_ERROR );
+        if( elem.startAngle == 0 && ( elem.endAngle == 0 || elem.endAngle == 360 ) )
+        {
+            SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, SCH_LAYER_ID::LAYER_NOTES );
+
+            circle->SetPosition( elem.center + m_sheetOffset );
+            circle->SetEnd( circle->GetPosition() + wxPoint( elem.radius, 0 ) );
+            circle->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
+
+            m_currentSheet->GetScreen()->Append( circle );
+        }
+        else
+        {
+            SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC, SCH_LAYER_ID::LAYER_NOTES );
+
+            double includedAngle = elem.endAngle - elem.startAngle;
+            double startAngle = DEG2RAD( elem.endAngle );
+
+            wxPoint startOffset = wxPoint( KiROUND( std::cos( startAngle ) * elem.radius ),
+                                           -KiROUND( std::sin( startAngle ) * elem.radius ) );
+
+            arc->SetCenter( elem.center + m_sheetOffset );
+            arc->SetStart( elem.center + startOffset + m_sheetOffset );
+            arc->SetArcAngleAndEnd( NormalizeAngleDegreesPos( includedAngle ) * 10.0, true );
+
+            arc->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
+
+            m_currentSheet->GetScreen()->Append( arc );
+        }
     }
     else
     {
