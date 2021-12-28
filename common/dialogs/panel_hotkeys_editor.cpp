@@ -161,7 +161,7 @@ bool PANEL_HOTKEYS_EDITOR::TransferDataToWindow()
     m_hotkeyStore.Init( m_actions, m_readOnly );
 
     if( !m_hotkeyListCtrl->TransferDataToControl() )
-        false;
+        return false;
 
     return true;
 }
