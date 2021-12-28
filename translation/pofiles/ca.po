@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-23 20:49+0000\n"
+"PO-Revision-Date: 2021-12-29 19:50+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -7191,7 +7191,7 @@ msgstr "Verifica primer les entrades de la taula de biblioteques d'empremtes."
 
 #: cvpcb/readwrite_dlgs.cpp:170
 msgid "Problematic Footprint Library Tables"
-msgstr ""
+msgstr "Taules de biblioteques d'empremtes problemàtiques"
 
 #: cvpcb/readwrite_dlgs.cpp:178
 msgid ""
@@ -7264,14 +7264,12 @@ msgid "Select previous symbol with no footprint assignment"
 msgstr "Elimina totes les associacions d'empremtes"
 
 #: cvpcb/tools/cvpcb_actions.cpp:108
-#, fuzzy
 msgid "Assign footprint"
-msgstr "A&ssigna les empremtes"
+msgstr "Assigna empremta"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
-#, fuzzy
 msgid "Assign footprint to selected symbols"
-msgstr "No s'ha especificat cap empremta"
+msgstr "Assigna l'empremta als símbols seleccionats"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 #, fuzzy
@@ -7284,14 +7282,12 @@ msgid "Perform automatic footprint assignment"
 msgstr "Realitza l'associació automàtica d'empremtes"
 
 #: cvpcb/tools/cvpcb_actions.cpp:121
-#, fuzzy
 msgid "Delete association"
-msgstr "Elimina les seleccions"
+msgstr "Esborra associació"
 
 #: cvpcb/tools/cvpcb_actions.cpp:122
-#, fuzzy
 msgid "Delete selected footprint associations"
-msgstr "Elimina totes les associacions d'empremtes"
+msgstr "Esborra les associacions d'empremtes seleccionades"
 
 #: cvpcb/tools/cvpcb_actions.cpp:127 cvpcb/tools/cvpcb_actions.cpp:128
 msgid "Delete all footprint associations"
@@ -7317,9 +7313,8 @@ msgid "Filter footprint list by pin count"
 msgstr "Filtra la llista de les empremtes pel nombre de pins"
 
 #: cvpcb/tools/cvpcb_actions.cpp:149
-#, fuzzy
 msgid "Filter by library"
-msgstr "Filtra la llista de les empremtes per biblioteca"
+msgstr "Filtra per biblioteca"
 
 #: cvpcb/tools/cvpcb_actions.cpp:150
 msgid "Filter footprint list by library"
@@ -30469,9 +30464,8 @@ msgid "Gathering length-constrained connections..."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:325
-#, fuzzy
 msgid "<unconstrained>"
-msgstr "Restricció:"
+msgstr "< no restringit>"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:116
 msgid "(no edges found on Edge.Cuts layer)"
@@ -30515,24 +30509,22 @@ msgid "Testing %d mask apertures against %d silkscreen features."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:83
-#, fuzzy
 msgid "Checking track widths..."
-msgstr "Amplada mín. de la pista"
+msgstr "S'estan verificant les amplades de les pistes..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:82
-#, fuzzy
 msgid "Checking via diameters..."
-msgstr "Diàmetre mín. de la via"
+msgstr "S'estan verificant els diàmetres de les vies..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:119
 #, c-format
 msgid "(%s min diameter %s; actual %s)"
-msgstr ""
+msgstr "(%s diàmetre mínim %s; actual %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:126
 #, c-format
 msgid "(%s max diameter %s; actual %s)"
-msgstr ""
+msgstr "(%s diàmetre màxim %s; actual %s)"
 
 #: pcbnew/edit_zone_helpers.cpp:86 pcbnew/edit_zone_helpers.cpp:152
 msgid "Modify zone properties"
@@ -30577,15 +30569,14 @@ msgid "VRML Export Failed: Could not add holes to contours."
 msgstr ""
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:67
-#, fuzzy
 msgid "Generate Position File"
-msgstr "Genera els fitxers de posició dels components"
+msgstr "Genera un fitxer de Posició"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:308
 #: pcbnew/exporters/gen_footprints_placefile.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Front (top side) placement file: '%s'."
-msgstr "Fitxer de còpia de seguretat: «%s»"
+msgstr "Fitxer de posicionament frontal (Cara Top): '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:311
 #: pcbnew/exporters/gen_footprints_placefile.cpp:333
@@ -30657,18 +30648,16 @@ msgid "Board stackup settings not up to date."
 msgstr ""
 
 #: pcbnew/files.cpp:144
-#, fuzzy
 msgid "All KiCad Board Files"
-msgstr "Importació d'un fitxer de placa no de Kicad"
+msgstr "Tots els fitxers de Placa de KiCad"
 
 #: pcbnew/files.cpp:186
 msgid "Open Board File"
 msgstr "Obre el fitxer de la placa"
 
 #: pcbnew/files.cpp:186
-#, fuzzy
 msgid "Import Non KiCad Board File"
-msgstr "Importació d'un fitxer de placa no de Kicad"
+msgstr "Importa un fitxer de placa No Kicad"
 
 #: pcbnew/files.cpp:214
 #, fuzzy
@@ -30736,9 +30725,9 @@ msgid "The current PCB has been modified.  Save changes?"
 msgstr "La placa actual ha estat modificada. Voleu desar els canvis?"
 
 #: pcbnew/files.cpp:610
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr "No existeix la placa «%s». Voleu crear-la?"
+msgstr "La PCB '%s' no existeix. Vols crear-la?"
 
 #: pcbnew/files.cpp:619
 msgid "Creating PCB"
@@ -30780,31 +30769,31 @@ msgid "Error saving custom rules file '%s'."
 msgstr "Error en desar el fitxer de regles personalitzades '%s'."
 
 #: pcbnew/files.cpp:1025 pcbnew/files.cpp:1127
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "%s"
 msgstr ""
-"Error en desar el fitxer de la placa «%s».\n"
+"Error en desar el fitxer de la placa '%s'.\n"
 "%s"
 
 #: pcbnew/files.cpp:1042
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving board file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Error en desar el fitxer de la placa «%s».\n"
-"%s"
+"Error en desar el fitxer de la placa '%s'.\n"
+"Error en canviar el nom del fitxer temporal '%s'."
 
 #: pcbnew/files.cpp:1155
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board copied to:\n"
 "%s"
 msgstr ""
-"S'ha copiat la placa a:\n"
-"«%s»"
+"Placa copiada a:\n"
+"%s"
 
 #: pcbnew/footprint.cpp:944 pcbnew/tools/pcb_control.cpp:1231
 msgid "Last Change"
@@ -30816,7 +30805,7 @@ msgstr "Cara de la placa"
 
 #: pcbnew/footprint.cpp:948
 msgid "Back (Flipped)"
-msgstr ""
+msgstr "Posterior (Voltejada)"
 
 #: pcbnew/footprint.cpp:966
 msgid "autoplaced"
@@ -30827,9 +30816,8 @@ msgid "not in schematic"
 msgstr "no a l'esquemàtic"
 
 #: pcbnew/footprint.cpp:972
-#, fuzzy
 msgid "exclude from pos files"
-msgstr "Ploteja els pads en la serigrafia"
+msgstr "excloure dels fitxers pos"
 
 #: pcbnew/footprint.cpp:975
 msgid "exclude from BOM"
@@ -30892,14 +30880,12 @@ msgid "(pad \"%s\")"
 msgstr "(pad \"%s\")"
 
 #: pcbnew/footprint.cpp:2390 pcbnew/pad.cpp:1726 pcbnew/zone.cpp:1479
-#, fuzzy
 msgid "Clearance Override"
-msgstr "Tanca la delimitació de la zona"
+msgstr "Anul·lació del marge"
 
 #: pcbnew/footprint.cpp:2393 pcbnew/pad.cpp:1703
-#, fuzzy
 msgid "Solderpaste Margin Override"
-msgstr "Marge de seguretat de la pasta de soldadura:"
+msgstr "Anul·lació del marge de la pasta de soldadura"
 
 #: pcbnew/footprint.cpp:2397 pcbnew/pad.cpp:1706
 #, fuzzy
@@ -30961,9 +30947,8 @@ msgid "No footprint selected."
 msgstr "No s'ha seleccionat cap empremta."
 
 #: pcbnew/footprint_edit_frame.cpp:1199
-#, fuzzy
 msgid "Footprint Image File Name"
-msgstr "Nom del fitxer de la imatge 3D:"
+msgstr "Nom del fitxer de la imatge de l'empremta"
 
 #: pcbnew/footprint_editor_utils.cpp:220
 msgid "Edit Zone"
@@ -31023,9 +31008,8 @@ msgid "Import Footprint"
 msgstr "Importa una empremta"
 
 #: pcbnew/footprint_libraries_utils.cpp:267
-#, fuzzy
 msgid "Not a footprint file."
-msgstr "No és un fitxer d'empremta"
+msgstr "No és un fitxer d'empremtes."
 
 #: pcbnew/footprint_libraries_utils.cpp:279
 #, fuzzy, c-format
