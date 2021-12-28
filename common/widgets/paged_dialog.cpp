@@ -309,7 +309,7 @@ void PAGED_DIALOG::OnPageChanged( wxBookCtrlEvent& event )
     int page = event.GetSelection();
 
     // Use the first sub-page when a tree level node is selected.
-    if( m_treebook->GetPageParent( page ) == wxNOT_FOUND )
+    if( m_treebook->GetCurrentPage()->GetChildren().IsEmpty() )
     {
         unsigned next = page + 1;
 
