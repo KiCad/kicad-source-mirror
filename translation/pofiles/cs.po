@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-21 08:54+0000\n"
+"PO-Revision-Date: 2021-12-29 19:50+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -1643,7 +1643,7 @@ msgstr "Vedoucí vývojový tým"
 
 #: common/dialog_about/AboutDialog_main.cpp:209
 msgid "Lead Development Alumni"
-msgstr "Absolventi rozvoje absolventů"
+msgstr "Bývalý vývojový manažeři"
 
 #: common/dialog_about/AboutDialog_main.cpp:210
 msgid "Additional Contributions By"
@@ -3901,7 +3901,7 @@ msgstr "&Nápověda"
 #: common/eda_base_frame.cpp:960
 #, c-format
 msgid "File '%s' was not found."
-msgstr "Soubor '%s nenalezen."
+msgstr "Soubor '%s' nenalezen."
 
 #: common/eda_base_frame.cpp:1003
 msgid "Preferences"
@@ -7424,7 +7424,7 @@ msgstr "Rozsah"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:44
 msgid "Order"
-msgstr "Objednat"
+msgstr "Uspořádání"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:49
 msgid "Sort symbols by &X position"
@@ -10458,7 +10458,7 @@ msgstr "Ampéry"
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:126
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:137
 msgid "Ohms"
-msgstr "Ohm"
+msgstr "Ohmů"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:27
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:266
@@ -18053,7 +18053,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "Správa balíčků ke stažení z repozitářů Kicadu a třetích stran"
+msgstr "Správa balíčků ke stažení z repozitářů KiCadu a třetích stran"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -18181,7 +18181,7 @@ msgstr "Projekt CADSTAR..."
 
 #: kicad/menubar.cpp:103
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
-msgstr "Import archívu CADSTAR schéma a DPS (*.csa, *.cpa)"
+msgstr "Import CADSTAR archívu schématu a DPS (*.csa, *.cpa)"
 
 #: kicad/menubar.cpp:107
 msgid "EAGLE Project..."
@@ -21891,6 +21891,8 @@ msgid ""
 "Do not re-annotate this type \n"
 "of reference (R means R*)"
 msgstr ""
+"Neměnit přečíslování tento typ\n"
+"reference (R znamená R*)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:290
 msgid "Reference Designators"
@@ -22811,7 +22813,7 @@ msgstr "Formát kóty"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:102
 msgid "Measured value of this dimension"
-msgstr ""
+msgstr "Naměřená hodnota tohoto rozměru"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:106
 msgid "Override value"
@@ -31651,7 +31653,7 @@ msgid ""
 "and the schematic. "
 msgstr ""
 "Vybraný soubor označuje, že sítě nemusí být synchronizovány se schématem. "
-"Doporučuje se provádět postup 'Zarovnání sítí' v CADSTAR a re-import, aby se "
+"Doporučuje se provádět postup 'Align Nets' v CADSTAR a re-import, aby se "
 "zabránilo nesrovnalostem mezi DPS a schématem. "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:131
@@ -31817,8 +31819,8 @@ msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
 msgstr ""
-"CADSTAR '%s' oblast nemá ekvivalent KiCadu. Čisté oblasti umístění nejsou "
-"podporovány."
+"CADSTAR '%s' oblast nemá ekvivalent KiCadu. Výhradní umístění oblastí není "
+"podporováno."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1641
 #, c-format
@@ -31836,6 +31838,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"Šablona CADSTAR '%s' má nastavení 'Allow in No Routing Areas' povoleno. Toto "
+"nastavení nemá žádný ekvivalent v KiCadu, takže bylo ignorováno."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1836
 #, c-format
@@ -31843,6 +31847,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"Šablona CADSTAR '%s' má nastavení 'Box Isolated Pins' povoleno. Tento "
+"parametr nemá žádný ekvivalent v Kicadu, takže byl ignorován."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1844
 #, c-format
@@ -31850,6 +31856,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"Šablona CADSTAR '%s' má nastavení 'Automatic Repour' povoleno. Toto "
+"nastavení nemá žádný ekvivalent v KiCadu, takže bylo ignorováno."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1855
 #, c-format
@@ -32695,7 +32703,7 @@ msgstr "třída spojů 'Výchozí'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:499
 msgid "user choice"
-msgstr "Zvolený uživatelem"
+msgstr "zvolený uživatelem"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1056
 #, c-format
@@ -34866,9 +34874,8 @@ msgid "Show graphic items in outline mode"
 msgstr "Zobrazit pouze obrys grafických prvků"
 
 #: pcbnew/tools/pcb_actions.cpp:843
-#, fuzzy
 msgid "Sketch Text Items"
-msgstr "Vybrat položky"
+msgstr "Textové prvky jako obrys"
 
 #: pcbnew/tools/pcb_actions.cpp:843
 #, fuzzy
@@ -34885,9 +34892,8 @@ msgid "Show filled areas of zones"
 msgstr "Zobrazit vyplněné oblasti zón"
 
 #: pcbnew/tools/pcb_actions.cpp:858
-#, fuzzy
 msgid "Draw Zone Outlines"
-msgstr "Obrys zóny"
+msgstr "Kreslit obrys zóny"
 
 #: pcbnew/tools/pcb_actions.cpp:858
 msgid "Show only zone boundaries"
@@ -35385,9 +35391,8 @@ msgid "Tune skew of a differential pair"
 msgstr "Ladit sklon diferenciálního páru"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
-#, fuzzy
 msgid "Undo Last Segment"
-msgstr "Vrátit zpět poslední úpravu"
+msgstr "Vrátit zpět poslední segment"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
 #, fuzzy
@@ -35583,14 +35588,12 @@ msgid "Show footprints that are on board's back"
 msgstr "Zobrazit pouzdra na dolní straně desky"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
-#, fuzzy
 msgid "Through-hole Pads"
-msgstr "Průchozí díra plošek"
+msgstr "Průchozí otvor plošek"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
-#, fuzzy
 msgid "Show through-hole pads"
-msgstr "Zobrazit 3D modely s vývody"
+msgstr "Zobrazit průchozí otvor plošek"
 
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "Show footprint values"
@@ -35609,9 +35612,8 @@ msgid "Footprint Text"
 msgstr "Text pouzdra"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
-#, fuzzy
 msgid "Show all footprint text"
-msgstr "Zobrazit text pouzder"
+msgstr "Zobrazit všechny texty pouzder"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Hidden Text"
@@ -35654,9 +35656,8 @@ msgid "DRC Exclusions"
 msgstr "DRC Vyloučení"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "DRC violations which have been individually excluded"
-msgstr "Porušení DRC se závažností varování"
+msgstr "Porušení DRC, které byly individuálně vyloučeny"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Show footprint and text origins as a cross"
@@ -35805,9 +35806,8 @@ msgid "Show ratsnest lines to items on visible layers"
 msgstr "Zahrnout položky v &neviditelných vrstvách"
 
 #: pcbnew/widgets/appearance_controls.cpp:744
-#, fuzzy
 msgid "Hide all ratsnest lines"
-msgstr "Nezobrazovat obecné naznačené spoje"
+msgstr "Skrýt všechny naznačené spoje"
 
 #: pcbnew/widgets/appearance_controls.cpp:882
 msgid "Set Net Color"
@@ -35820,13 +35820,13 @@ msgstr "Zvýraznění %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:888
 #: pcbnew/widgets/appearance_controls.cpp:2273
-#, fuzzy, c-format
+#, c-format
 msgid "Select Tracks and Vias in %s"
 msgstr "Vybrat spoje a prokovy v %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:891
 #: pcbnew/widgets/appearance_controls.cpp:2277
-#, fuzzy, c-format
+#, c-format
 msgid "Unselect Tracks and Vias in %s"
 msgstr "Zrušit výběr spojů a prokovů v %s"
 
@@ -35845,12 +35845,11 @@ msgid "Click to show ratsnest for %s"
 msgstr "Kliknutím zobrazíte naznačené spoje pro %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:940
-#, fuzzy
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
 msgstr ""
-"Dvoj-klik levým nebo středním tlačítkem změníte barvy, kliknutím pravým "
-"tlačítkem pro menu"
+"Dvoj-klik levým (nebo středním tlačítkem) pro změnu barvy, kliknutím pravým "
+"tlačítkem pro další akce"
 
 #: pcbnew/widgets/appearance_controls.cpp:1433
 msgid "Double click or middle click for color change, right click for menu"
@@ -36032,7 +36031,6 @@ msgid "Show or hide ratsnest for nets in %s"
 msgstr "Zobrazit nebo skrýt naznačené spoje pro sítě v %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2265
-#, fuzzy
 msgid "Set Netclass Color"
 msgstr "Nastavit barvu třídy spojů"
 
@@ -36046,9 +36044,8 @@ msgid "Show All Netclasses"
 msgstr "Zobrazit všechny třídy spojů"
 
 #: pcbnew/widgets/appearance_controls.cpp:2287
-#, fuzzy
 msgid "Hide All Other Netclasses"
-msgstr "Skrýt všechna pole pouzdra"
+msgstr "Skrýt všechny ostatní třídy sítí"
 
 #: pcbnew/widgets/appearance_controls.cpp:2341
 msgid "Save preset..."
@@ -36098,9 +36095,8 @@ msgid "Show the Net Inspector"
 msgstr "&Zobrazit informace o verzi"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:123
-#, fuzzy
 msgid "Configure net classes"
-msgstr "Konfigurace cest"
+msgstr "Konfigurace tříd sítě"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:161
 msgid "Presets (Ctrl+Tab):"
