@@ -56,8 +56,8 @@ protected:
     void OnCancel( wxCommandEvent& event );
     virtual void OnAuxiliaryAction( wxCommandEvent& event ) { event.Skip(); }
     void OnResetButton( wxCommandEvent& aEvent );
-    void OnPageChange( wxBookCtrlEvent& event );
-    void OnPageChanging( wxBookCtrlEvent& aEvent );
+    virtual void OnPageChanged( wxBookCtrlEvent& event );
+    virtual void OnPageChanging( wxBookCtrlEvent& aEvent );
 
     wxTreebook* m_treebook;
     wxButton*   m_auxiliaryButton;

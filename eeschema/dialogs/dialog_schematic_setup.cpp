@@ -85,11 +85,6 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
    	    m_macHack.push_back( true );
     }
 
-	// Connect Events
-	m_treebook->Connect( wxEVT_TREEBOOK_PAGE_CHANGED,
-                         wxBookCtrlEventHandler( DIALOG_SCHEMATIC_SETUP::OnPageChange ), nullptr,
-                         this );
-
 	finishDialogSettings();
 
     if( Prj().IsReadOnly() )
@@ -97,58 +92,29 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
         m_infoBar->ShowMessage( _( "Project is missing or read-only. Settings will not be "
                                    "editable." ), wxICON_WARNING );
     }
+
+    wxBookCtrlEvent evt( wxEVT_TREEBOOK_PAGE_CHANGED, wxID_ANY, 0 );
+
+    wxQueueEvent( m_treebook, evt.Clone() );
 }
 
 
 DIALOG_SCHEMATIC_SETUP::~DIALOG_SCHEMATIC_SETUP()
 {
-	m_treebook->Disconnect( wxEVT_TREEBOOK_PAGE_CHANGED,
-                            wxBookCtrlEventHandler( DIALOG_SCHEMATIC_SETUP::OnPageChange ), nullptr,
-                            this );
 }
 
 
-void DIALOG_SCHEMATIC_SETUP::OnPageChange( wxBookCtrlEvent& event )
+void DIALOG_SCHEMATIC_SETUP::OnPageChanged( wxBookCtrlEvent& event )
 {
+    PAGED_DIALOG::OnPageChanged( event );
+
     int page = event.GetSelection();
 
     if( Prj().IsReadOnly() )
         KIUI::Disable( m_treebook->GetPage( page ) );
-
-    // Enable the reset button only if the page is resettable
-    if( m_resetButton )
-    {
-        if( auto panel = dynamic_cast<RESETTABLE_PANEL*>( m_treebook->GetPage( page ) ) )
-        {
-            m_resetButton->SetToolTip( panel->GetResetTooltip() );
-            m_resetButton->Enable( true );
-        }
-        else
-        {
-            m_resetButton->SetToolTip( wxString() );
-            m_resetButton->Enable( false );
-        }
-    }
-
-    // Work around an OSX bug where the wxGrid children don't get placed correctly until
-    // the first resize event
-#ifdef __WXMAC__
-    if( m_macHack[ page ] )
-    {
-        wxSize pageSize = m_treebook->GetPage( page )->GetSize();
-        pageSize.x -= 1;
-        pageSize.y += 2;
-
-        m_treebook->GetPage( page )->SetSize( pageSize );
-        m_macHack[ page ] = false;
-    }
-#endif
-
-    Layout();
 }
 
 
-// Run Import Settings... action
 void DIALOG_SCHEMATIC_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
 {
     DIALOG_SCH_IMPORT_SETTINGS importDlg( this, m_frame );

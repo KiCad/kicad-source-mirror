@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -40,7 +40,9 @@ public:
     ~DIALOG_SCHEMATIC_SETUP();
 
 protected:
-    void OnAuxiliaryAction( wxCommandEvent& event ) override;
+    // event handlers
+    void OnPageChanged( wxBookCtrlEvent& aEvent ) override;
+    void OnAuxiliaryAction( wxCommandEvent& aEvent ) override;
 
     SCH_EDIT_FRAME*             m_frame;
 
@@ -53,9 +55,6 @@ protected:
     std::shared_ptr<ERC_ITEM>   m_pinToPinError;
 
     std::vector<bool>           m_macHack;
-
-    // event handlers
-    void OnPageChange( wxBookCtrlEvent& event );
 };
 
 

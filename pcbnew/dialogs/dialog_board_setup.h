@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -45,7 +45,9 @@ public:
     ~DIALOG_BOARD_SETUP();
 
 protected:
-    void OnAuxiliaryAction( wxCommandEvent& event ) override;
+    // event handlers
+    void OnPageChanged( wxBookCtrlEvent& aEvent ) override;
+    void OnAuxiliaryAction( wxCommandEvent& aEvent ) override;
 
     PCB_EDIT_FRAME*                  m_frame;
 
@@ -63,9 +65,6 @@ protected:
     PANEL_TEXT_VARIABLES*            m_textVars;
 
     std::vector<bool>                m_macHack;
-
-    // event handlers
-    void OnPageChange( wxBookCtrlEvent& event );
 
 private:
     int m_currentPage;              // the current page index

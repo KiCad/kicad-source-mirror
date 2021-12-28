@@ -106,7 +106,7 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
         m_resetButton->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::OnResetButton, this );
     }
 
-    m_treebook->Bind( wxEVT_TREEBOOK_PAGE_CHANGED, &PAGED_DIALOG::OnPageChange, this );
+    m_treebook->Bind( wxEVT_TREEBOOK_PAGE_CHANGED, &PAGED_DIALOG::OnPageChanged, this );
     m_treebook->Bind( wxEVT_TREEBOOK_PAGE_CHANGING, &PAGED_DIALOG::OnPageChanging, this );
 }
 
@@ -172,7 +172,7 @@ PAGED_DIALOG::~PAGED_DIALOG()
         m_resetButton->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::OnResetButton, this );
     }
 
-    m_treebook->Unbind( wxEVT_TREEBOOK_PAGE_CHANGED, &PAGED_DIALOG::OnPageChange, this );
+    m_treebook->Unbind( wxEVT_TREEBOOK_PAGE_CHANGED, &PAGED_DIALOG::OnPageChanged, this );
     m_treebook->Unbind( wxEVT_TREEBOOK_PAGE_CHANGING, &PAGED_DIALOG::OnPageChanging, this );
 }
 
@@ -304,18 +304,18 @@ void PAGED_DIALOG::SetError( const wxString& aMessage, wxWindow* aPage, wxWindow
 }
 
 
-void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
+void PAGED_DIALOG::OnPageChanged( wxBookCtrlEvent& event )
 {
+    int page = event.GetSelection();
+
     // Use the first sub-page when a tree level node is selected.
-    if( m_treebook->GetCurrentPage()->GetChildren().IsEmpty() )
+    if( m_treebook->GetPageParent( page ) == wxNOT_FOUND )
     {
-        unsigned next = m_treebook->GetSelection() + 1;
+        unsigned next = page + 1;
 
         if( next < m_treebook->GetPageCount() )
             m_treebook->ChangeSelection( next );
     }
-
-    size_t page = event.GetSelection();
 
     // NB: dynamic_cast doesn't work over Kiway.
     wxWindow* panel = m_treebook->GetPage( page );
@@ -343,9 +343,9 @@ void PAGED_DIALOG::OnPageChange( wxBookCtrlEvent& event )
         m_resetButton->GetParent()->Layout();
     }
 
-    wxSizeEvent evt( panel->GetSize() );
+    wxSizeEvent evt( wxDefaultSize );
 
-    panel->ProcessWindowEvent( evt );
+    wxQueueEvent( m_treebook, evt.Clone() );
 
     // @todo Test to see if this macOS hack is still necessary now that a psuedo size event is
     //       processed above.
