@@ -124,6 +124,16 @@ public:
     int m_CoroutineStackSize;
 
     /**
+     * The update interval the wxWidgets sends wxUpdateUIEvents to windows.
+     *
+     * The default is 0.  Setting this to -1 will disable all automatic UI events.  Any other
+     * value is the number of milliseconds between events.
+     *
+     * @see https://docs.wxwidgets.org/3.0/classwx_update_u_i_event.html#a24daac56f682b866baac592e761ccede.
+     */
+    int m_UpdateUIEventInterval;
+
+    /**
      * Show PNS router debug graphics
      */
     bool m_ShowRouterDebugGraphics;

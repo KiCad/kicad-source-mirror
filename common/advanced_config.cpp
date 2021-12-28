@@ -189,6 +189,7 @@ static const wxChar ShowEventCounters[] = wxT( "ShowEventCounters" );
 
 static const wxChar AllowManualCanvasScale[] = wxT( "AllowManualCanvasScale" );
 
+static const wxChar UpdateUIEventInterval[] = wxT( "UpdateUIEventInterval" );
 } // namespace KEYS
 
 
@@ -299,6 +300,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_HideVersionFromTitle      = false;
     m_ShowEventCounters         = false;
     m_AllowManualCanvasScale    = false;
+    m_UpdateUIEventInterval     = 0;
 
     loadFromConfigFile();
 }
@@ -362,6 +364,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize,
                                                &m_CoroutineStackSize, AC_STACK::default_stack,
                                                AC_STACK::min_stack, AC_STACK::max_stack ) );
+
+    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::UpdateUIEventInterval,
+                                               &m_UpdateUIEventInterval, 0, -1, 100000 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRouterDebugGraphics,
                                                 &m_ShowRouterDebugGraphics, false ) );

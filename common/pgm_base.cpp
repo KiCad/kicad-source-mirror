@@ -40,6 +40,7 @@
 #include <wx/filedlg.h>
 #include <wx/tooltip.h>
 
+#include <advanced_config.h>
 #include <common.h>
 #include <config_params.h>
 #include <confirm.h>
@@ -298,6 +299,9 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit )
     // This sets the maximum tooltip display duration to 10s (up from 5) but only affects
     // Windows as other platforms display tooltips while the mouse is not moving
     wxToolTip::SetAutoPop( 10000 );
+
+    if( ADVANCED_CFG::GetCfg().m_UpdateUIEventInterval != 0 )
+        wxUpdateUIEvent::SetUpdateInterval( ADVANCED_CFG::GetCfg().m_UpdateUIEventInterval );
 
     return true;
 }
