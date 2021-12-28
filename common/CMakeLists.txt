@@ -614,8 +614,19 @@ generate_lemon_grammar(
     )
 
 # auto-generate stroke_params_lexer.h and stroke_params_keywords.cpp
+# Called twice one for common and one for gal, to ensure the files are created
+# on all devel tools ( Linux and msys2 )
+# works on Linux:
 make_lexer(
     common
+    stroke_params.keywords
+    stroke_params_lexer.h
+    stroke_params_keywords.cpp
+    STROKEPARAMS_T
+    )
+# works on msys2:
+make_lexer(
+    gal
     stroke_params.keywords
     stroke_params_lexer.h
     stroke_params_keywords.cpp
