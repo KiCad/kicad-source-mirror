@@ -1288,7 +1288,7 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
     float          width = getLineWidth( aLine, drawingShadows );
     PLOT_DASH_TYPE lineStyle = aLine->GetEffectiveLineStyle();
 
-    if( drawingDangling )
+    if( drawingDangling || drawingShadows )
     {
         if( aLine->IsStartDangling() && aLine->IsWire() )
         {
@@ -1302,7 +1302,8 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
                                 drawingShadows, aLine->IsBrightened() );
         }
 
-        return;
+        if( drawingDangling )
+            return;
     }
 
     m_gal->SetIsStroke( true );
