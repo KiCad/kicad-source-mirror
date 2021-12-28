@@ -218,12 +218,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         // the margin to the nearest grid, ensuring all items remain on the grid.
         wxSize targetSheetSize = sheetBoundingBox.GetSize();
         int    longestSide = std::max( targetSheetSize.x, targetSheetSize.y );
-        int    margin = ( (double) longestSide * 0.03);
+        int    margin = ( (double) longestSide * 0.03 );
         margin = roundToNearestGrid( margin );
         targetSheetSize.IncBy( margin * 2, margin * 2 );
 
         // Update page size always
-        PAGE_INFO pageInfo   = sheet->GetScreen()->GetPageSettings();
+        PAGE_INFO pageInfo = sheet->GetScreen()->GetPageSettings();
         pageInfo.SetWidthMils( Iu2Mils( targetSheetSize.x ) );
         pageInfo.SetHeightMils( Iu2Mils( targetSheetSize.y ) );
 
@@ -243,7 +243,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         std::vector<SCH_ITEM*> allItems;
 
         std::copy( sheet->GetScreen()->Items().begin(), sheet->GetScreen()->Items().end(),
-                std::back_inserter( allItems ) );
+                   std::back_inserter( allItems ) );
 
         for( SCH_ITEM* item : allItems )
         {
@@ -295,9 +295,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheets()
 
         wxFileName loadedFilePath = wxFileName( Filename );
 
-        std::string filename = wxString::Format(
-                "%s_%02d", loadedFilePath.GetName(), getSheetNumber( rootSheetID ) )
-                                       .ToStdString();
+        std::string filename = wxString::Format( "%s_%02d",
+                                                 loadedFilePath.GetName(),
+                                                 getSheetNumber( rootSheetID ) ).ToStdString();
         ReplaceIllegalFileNameChars( &filename );
         filename += wxT( "." ) + KiCadSchematicFileExtension;
 
@@ -366,7 +366,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
 {
     for( std::pair<PART_ID, PART> partPair : Parts.PartDefinitions )
     {
-        PART_ID partID  = partPair.first;
+        PART_ID partID = partPair.first;
         PART    part = partPair.second;
 
         if( part.Definition.GateSymbols.size() == 0 )
@@ -442,7 +442,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                                                          "symbol was not loaded" ),
                                                       sym.ComponentRef.Designator,
                                                       sym.PartRef.RefID ),
-                                    RPT_SEVERITY_ERROR);
+                                    RPT_SEVERITY_ERROR );
 
                 continue;
             }
@@ -484,8 +484,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
             sym.ComponentRef.Designator.Replace( wxT( " " ), wxT( "_" ) );
 
             refField->SetText( sym.ComponentRef.Designator );
-            loadSymbolFieldAttribute( sym.ComponentRef.AttrLoc, symOrientDeciDeg,
-                                      sym.Mirror, refField );
+            loadSymbolFieldAttribute( sym.ComponentRef.AttrLoc, symOrientDeciDeg, sym.Mirror,
+                                      refField );
 
             if( sym.HasPartRef )
             {
@@ -506,8 +506,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 partname.Replace( wxT( "\t" ), wxT( "\\t" ) );
                 partField->SetText( partname );
 
-                loadSymbolFieldAttribute( sym.PartRef.AttrLoc, symOrientDeciDeg,
-                                          sym.Mirror, partField );
+                loadSymbolFieldAttribute( sym.PartRef.AttrLoc, symOrientDeciDeg, sym.Mirror,
+                                          partField );
 
                 partField->SetVisible( SymbolPartNameColor.IsVisible );
             }
@@ -796,7 +796,6 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadBusses()
                 // (the position of the wire will determine how best to place the bus label)
             }
         }
-
     }
 }
 
@@ -874,23 +873,20 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
         }
 
         auto getHierarchicalLabel =
-            [&]( NETELEMENT_ID aNode ) -> SCH_HIERLABEL*
-            {
-                if( aNode.Contains( "BLKT" ) )
+                [&]( NETELEMENT_ID aNode ) -> SCH_HIERLABEL*
                 {
-                    NET_SCH::BLOCK_TERM blockTerm = net.BlockTerminals.at( aNode );
-                    BLOCK_PIN_ID blockPinID = std::make_pair( blockTerm.BlockID,
-                                                              blockTerm.TerminalID );
-
-                    if( m_sheetPinMap.find( blockPinID )
-                            != m_sheetPinMap.end() )
+                    if( aNode.Contains( "BLKT" ) )
                     {
-                        return m_sheetPinMap.at( blockPinID );
-                    }
-                }
+                        NET_SCH::BLOCK_TERM blockTerm = net.BlockTerminals.at( aNode );
+                        BLOCK_PIN_ID blockPinID = std::make_pair( blockTerm.BlockID,
+                                                                  blockTerm.TerminalID );
 
-                return nullptr;
-            };
+                        if( m_sheetPinMap.find( blockPinID ) != m_sheetPinMap.end() )
+                            return m_sheetPinMap.at( blockPinID );
+                    }
+
+                    return nullptr;
+                };
 
         //Add net name to all hierarchical pins (block terminals in CADSTAR)
         for( std::pair<NETELEMENT_ID, NET_SCH::BLOCK_TERM> blockPair : net.BlockTerminals )
@@ -1067,18 +1063,18 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             }
 
             auto fixNetLabelsAndSheetPins =
-                [&]( double aWireAngleDeciDeg, NETELEMENT_ID& aNetEleID )
-                {
-                    LABEL_SPIN_STYLE spin = getSpinStyleDeciDeg( aWireAngleDeciDeg );
+                    [&]( double aWireAngleDeciDeg, NETELEMENT_ID& aNetEleID )
+                    {
+                        LABEL_SPIN_STYLE spin = getSpinStyleDeciDeg( aWireAngleDeciDeg );
 
-                    if( netlabels.find( aNetEleID ) != netlabels.end() )
-                        netlabels.at( aNetEleID )->SetLabelSpinStyle( spin.MirrorY() );
+                        if( netlabels.find( aNetEleID ) != netlabels.end() )
+                            netlabels.at( aNetEleID )->SetLabelSpinStyle( spin.MirrorY() );
 
-                    SCH_HIERLABEL* sheetPin = getHierarchicalLabel( aNetEleID );
+                        SCH_HIERLABEL* sheetPin = getHierarchicalLabel( aNetEleID );
 
-                    if( sheetPin )
-                        sheetPin->SetLabelSpinStyle( spin.MirrorX() );
-                };
+                        if( sheetPin )
+                            sheetPin->SetLabelSpinStyle( spin.MirrorX() );
+                    };
 
             // Now we can load the wires and fix the label orientations
             for( const VECTOR2I& pt : wireChain.CPoints() )
@@ -1181,7 +1177,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadTexts()
 void CADSTAR_SCH_ARCHIVE_LOADER::loadDocumentationSymbols()
 {
     for( std::pair<DOCUMENTATION_SYMBOL_ID, DOCUMENTATION_SYMBOL> docSymPair :
-            Schematic.DocumentationSymbols )
+         Schematic.DocumentationSymbols )
     {
         DOCUMENTATION_SYMBOL docSym = docSymPair.second;
 
@@ -1241,23 +1237,25 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadDocumentationSymbols()
 
 void CADSTAR_SCH_ARCHIVE_LOADER::loadTextVariables()
 {
-    auto findAndReplaceTextField = [&]( TEXT_FIELD_NAME aField, wxString aValue ) {
-        if( m_context.TextFieldToValuesMap.find( aField ) != m_context.TextFieldToValuesMap.end() )
-        {
-            if( m_context.TextFieldToValuesMap.at( aField ) != aValue )
+    auto findAndReplaceTextField =
+            [&]( TEXT_FIELD_NAME aField, wxString aValue )
             {
-                m_context.TextFieldToValuesMap.at( aField ) = aValue;
-                m_context.InconsistentTextFields.insert( aField );
-                return false;
-            }
-        }
-        else
-        {
-            m_context.TextFieldToValuesMap.insert( { aField, aValue } );
-        }
+                if( m_context.TextFieldToValuesMap.find( aField ) != m_context.TextFieldToValuesMap.end() )
+                {
+                    if( m_context.TextFieldToValuesMap.at( aField ) != aValue )
+                    {
+                        m_context.TextFieldToValuesMap.at( aField ) = aValue;
+                        m_context.InconsistentTextFields.insert( aField );
+                        return false;
+                    }
+                }
+                else
+                {
+                    m_context.TextFieldToValuesMap.insert( { aField, aValue } );
+                }
 
-        return true;
-    };
+                return true;
+            };
 
     PROJECT* pj = &m_schematic->Prj();
 
@@ -1314,7 +1312,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         int    lineThickness = getLineThickness( fig.LineCodeID );
 
         loadLibrarySymbolShapeVertices( fig.Shape.Vertices, symbol.Origin, aSymbol, gateNumber,
-                                            lineThickness );
+                                        lineThickness );
 
         for( CUTOUT c : fig.Shape.Cutouts )
         {
@@ -1428,12 +1426,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
                 EDA_RECT bbox = libtext->GetTextBox( ii, true );
                 wxPoint  linePos = { bbox.GetLeft(), -bbox.GetBottom() };
 
-                RotatePoint( &linePos, libtext->GetTextPos(), -libtext->GetTextAngle() );
+                RotatePoint( &linePos, libtext->GetTextPos(), -libtext->GetTextAngle().AsTenthsOfADegree() );
 
                 LIB_TEXT* line = static_cast<LIB_TEXT*>( libtext->Clone() );
                 line->SetText( strings[ii] );
-                line->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-                line->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                line->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+                line->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
                 line->SetTextPos( linePos );
 
                 // Multiline text not allowed in LIB_TEXT
@@ -1498,87 +1496,87 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         wxString footprintAlternateName = wxEmptyString;
 
         auto loadLibraryField =
-            [&]( ATTRIBUTE_VALUE& aAttributeVal )
-            {
-                wxString attrName = getAttributeName( aAttributeVal.AttributeID );
+                [&]( ATTRIBUTE_VALUE& aAttributeVal )
+                {
+                    wxString attrName = getAttributeName( aAttributeVal.AttributeID );
 
-                // Remove invalid field characters
-                aAttributeVal.Value.Replace( wxT( "\n" ), wxT( "\\n" ) );
-                aAttributeVal.Value.Replace( wxT( "\r" ), wxT( "\\r" ) );
-                aAttributeVal.Value.Replace( wxT( "\t" ), wxT( "\\t" ) );
+                    // Remove invalid field characters
+                    aAttributeVal.Value.Replace( wxT( "\n" ), wxT( "\\n" ) );
+                    aAttributeVal.Value.Replace( wxT( "\r" ), wxT( "\\r" ) );
+                    aAttributeVal.Value.Replace( wxT( "\t" ), wxT( "\\t" ) );
 
-                //TODO: Handle "links": In cadstar a field can be a "link" if its name starts
-                // with the characters "Link ". Need to figure out how to convert them to
-                // equivalent in KiCad.
+                    //TODO: Handle "links": In cadstar a field can be a "link" if its name starts
+                    // with the characters "Link ". Need to figure out how to convert them to
+                    // equivalent in KiCad.
 
-                if( attrName == wxT( "(PartDefinitionNameStem)" ) )
-                {
-                    //Space not allowed in Reference field
-                    aAttributeVal.Value.Replace( wxT( " " ), "_" );
-                    aSymbol->GetReferenceField().SetText( aAttributeVal.Value );
-                    return;
-                }
-                else if( attrName == wxT( "(PartDescription)" ) )
-                {
-                    aSymbol->SetDescription( aAttributeVal.Value );
-                    return;
-                }
-                else if( attrName == wxT( "(PartDefinitionReferenceName)" ) )
-                {
-                    footprintRefName = aAttributeVal.Value;
-                    return;
-                }
-                else if( attrName == wxT( "(PartDefinitionAlternateName)" ) )
-                {
-                    footprintAlternateName = aAttributeVal.Value;
-                    return;
-                }
+                    if( attrName == wxT( "(PartDefinitionNameStem)" ) )
+                    {
+                        //Space not allowed in Reference field
+                        aAttributeVal.Value.Replace( wxT( " " ), "_" );
+                        aSymbol->GetReferenceField().SetText( aAttributeVal.Value );
+                        return;
+                    }
+                    else if( attrName == wxT( "(PartDescription)" ) )
+                    {
+                        aSymbol->SetDescription( aAttributeVal.Value );
+                        return;
+                    }
+                    else if( attrName == wxT( "(PartDefinitionReferenceName)" ) )
+                    {
+                        footprintRefName = aAttributeVal.Value;
+                        return;
+                    }
+                    else if( attrName == wxT( "(PartDefinitionAlternateName)" ) )
+                    {
+                        footprintAlternateName = aAttributeVal.Value;
+                        return;
+                    }
 
-                LIB_FIELD* attrField = aSymbol->FindField( attrName );
+                    LIB_FIELD* attrField = aSymbol->FindField( attrName );
 
-                if( !attrField )
-                {
-                    int fieldID = aSymbol->GetFieldCount();
-                    attrField = new LIB_FIELD( aSymbol, fieldID );
-                    attrField->SetName( attrName );
-                    aSymbol->AddField( attrField );
-                }
+                    if( !attrField )
+                    {
+                        int fieldID = aSymbol->GetFieldCount();
+                        attrField = new LIB_FIELD( aSymbol, fieldID );
+                        attrField->SetName( attrName );
+                        aSymbol->AddField( attrField );
+                    }
 
-                wxASSERT( attrField->GetName() == attrName );
-                attrField->SetText( aAttributeVal.Value );
-                attrField->SetUnit( gateNumber );
+                    wxASSERT( attrField->GetName() == attrName );
+                    attrField->SetText( aAttributeVal.Value );
+                    attrField->SetUnit( gateNumber );
 
-                ATTRIBUTE_ID& attrid = aAttributeVal.AttributeID;
-                attrField->SetVisible( isAttributeVisible( attrid ) );
+                    ATTRIBUTE_ID& attrid = aAttributeVal.AttributeID;
+                    attrField->SetVisible( isAttributeVisible( attrid ) );
 
-                if( aAttributeVal.HasLocation )
-                {
-                    // #1 Check if the part itself defined a location for the field
-                    applyToLibraryFieldAttribute( aAttributeVal.AttributeLocation, symbol.Origin,
-                                                  attrField );
-                }
-                else if( symbol.TextLocations.find( aAttributeVal.AttributeID )
-                         != symbol.TextLocations.end() )
-                {
-                    // #2 Look in the symbol definition: Text locations
-                    TEXT_LOCATION symTxtLoc = symbol.TextLocations.at( aAttributeVal.AttributeID );
-                    applyToLibraryFieldAttribute( symTxtLoc, symbol.Origin, attrField );
-                }
-                else if( symbol.AttributeValues.find( attrid ) != symbol.AttributeValues.end()
-                         && symbol.AttributeValues.at( attrid ).HasLocation )
-                {
-                    // #3 Look in the symbol definition: Attribute values
-                    ATTRIBUTE_VALUE symAttrVal = symbol.AttributeValues.at( attrid );
-                    applyToLibraryFieldAttribute( symAttrVal.AttributeLocation, symbol.Origin,
-                                                  attrField );
-                }
-                else
-                {
-                    attrField->SetVisible( false );
-                    applyTextSettings( attrField, wxT( "TC1" ), ALIGNMENT::NO_ALIGNMENT,
-                                       JUSTIFICATION::LEFT );
-                }
-            };
+                    if( aAttributeVal.HasLocation )
+                    {
+                        // #1 Check if the part itself defined a location for the field
+                        applyToLibraryFieldAttribute( aAttributeVal.AttributeLocation, symbol.Origin,
+                                                      attrField );
+                    }
+                    else if( symbol.TextLocations.find( aAttributeVal.AttributeID )
+                             != symbol.TextLocations.end() )
+                    {
+                        // #2 Look in the symbol definition: Text locations
+                        TEXT_LOCATION symTxtLoc = symbol.TextLocations.at( aAttributeVal.AttributeID );
+                        applyToLibraryFieldAttribute( symTxtLoc, symbol.Origin, attrField );
+                    }
+                    else if( symbol.AttributeValues.find( attrid ) != symbol.AttributeValues.end()
+                             && symbol.AttributeValues.at( attrid ).HasLocation )
+                    {
+                        // #3 Look in the symbol definition: Attribute values
+                        ATTRIBUTE_VALUE symAttrVal = symbol.AttributeValues.at( attrid );
+                        applyToLibraryFieldAttribute( symAttrVal.AttributeLocation, symbol.Origin,
+                                                      attrField );
+                    }
+                    else
+                    {
+                        attrField->SetVisible( false );
+                        applyTextSettings( attrField, wxT( "TC1" ), ALIGNMENT::NO_ALIGNMENT,
+                                           JUSTIFICATION::LEFT );
+                    }
+                };
 
         // Load all attributes in the Part Definition
         for( std::pair<ATTRIBUTE_ID,
@@ -1725,7 +1723,7 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
     symbol->SetPosition( getKiCadPoint( aCadstarSymbol.Origin ) );
 
     double compAngleDeciDeg = getAngleTenthDegree( aCadstarSymbol.OrientAngle );
-    int compOrientation  = 0;
+    int    compOrientation = 0;
 
     if( aCadstarSymbol.Mirror )
     {
@@ -1744,7 +1742,7 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
                                                  "manual fixing." ),
                                               aCadstarSymbol.ComponentRef.Designator,
                                               compAngleDeciDeg / 10.0 ),
-                            RPT_SEVERITY_ERROR);
+                            RPT_SEVERITY_ERROR );
     }
 
     symbol->SetOrientation( compOrientation );
@@ -1779,14 +1777,15 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
                     symbol->GetLibSymbolRef()->GetPin( term.second ) } );
         }
 
-        auto replacePinNumber = [&]( wxString aOldPinNum, wxString aNewPinNum )
-                                {
-                                    if( aOldPinNum == aNewPinNum )
-                                        return;
+        auto replacePinNumber =
+                [&]( wxString aOldPinNum, wxString aNewPinNum )
+                {
+                    if( aOldPinNum == aNewPinNum )
+                        return;
 
-                                    LIB_PIN* libpin = pinNumToLibPinMap.at( aOldPinNum );
-                                    libpin->SetNumber( HandleTextOverbar( aNewPinNum ) );
-                                };
+                    LIB_PIN* libpin = pinNumToLibPinMap.at( aOldPinNum );
+                    libpin->SetNumber( HandleTextOverbar( aNewPinNum ) );
+                };
 
         //Older versions of Cadstar used pin numbers
         for( auto& pinPair : aCadstarSymbol.PinNumbers )
@@ -1847,8 +1846,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolFieldAttribute(
 }
 
 
-int CADSTAR_SCH_ARCHIVE_LOADER::getComponentOrientation(
-        double aOrientAngleDeciDeg, double& aReturnedOrientationDeciDeg )
+int CADSTAR_SCH_ARCHIVE_LOADER::getComponentOrientation( double  aOrientAngleDeciDeg,
+                                                         double& aReturnedOrientationDeciDeg )
 {
     int compOrientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_0;
 
@@ -1879,8 +1878,9 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getComponentOrientation(
 }
 
 
-CADSTAR_SCH_ARCHIVE_LOADER::POINT CADSTAR_SCH_ARCHIVE_LOADER::getLocationOfNetElement(
-        const NET_SCH& aNet, const NETELEMENT_ID& aNetElementID )
+CADSTAR_SCH_ARCHIVE_LOADER::POINT
+CADSTAR_SCH_ARCHIVE_LOADER::getLocationOfNetElement( const NET_SCH&       aNet,
+                                                     const NETELEMENT_ID& aNetElementID )
 {
     // clang-format off
     auto logUnknownNetElementError =
@@ -2028,8 +2028,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
     const VERTEX* prev = &aCadstarVertices.at( 0 );
     const VERTEX* cur;
 
-    wxASSERT_MSG(
-            prev->Type == VERTEX_TYPE::POINT, "First vertex should always be a point vertex" );
+    wxASSERT_MSG( prev->Type == VERTEX_TYPE::POINT,
+                  "First vertex should always be a point vertex" );
 
     for( size_t ii = 1; ii < aCadstarVertices.size(); ii++ )
     {
@@ -2124,8 +2124,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets(
     wxCHECK_MSG( m_sheetMap.find( aCadstarSheetID ) == m_sheetMap.end(), ,
                  "Sheet already loaded!" );
 
-    SCH_SHEET*  sheet  = new SCH_SHEET( aParentSheet.Last(), aPosition );
-    SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
+    SCH_SHEET*     sheet = new SCH_SHEET( aParentSheet.Last(), aPosition );
+    SCH_SCREEN*    screen = new SCH_SCREEN( m_schematic );
     SCH_SHEET_PATH instance( aParentSheet );
 
     sheet->SetSize( aSheetSize );
@@ -2138,8 +2138,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets(
 
     sheetNameField.SetText( name );
 
-    int sheetNum = getSheetNumber( aCadstarSheetID );
-    wxString  loadedFilename = wxFileName( Filename ).GetName();
+    int         sheetNum = getSheetNumber( aCadstarSheetID );
+    wxString    loadedFilename = wxFileName( Filename ).GetName();
     std::string filename = wxString::Format( "%s_%02d", loadedFilename, sheetNum ).ToStdString();
 
     ReplaceIllegalFileNameChars( &filename );
@@ -2168,7 +2168,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets( LAYER_ID aCadstarSheetID,
                                                   const SCH_SHEET_PATH& aSheet )
 {
     wxCHECK_MSG( m_sheetMap.find( aCadstarSheetID ) != m_sheetMap.end(), ,
-            "FIXME! Parent sheet should be loaded before attempting to load subsheets" );
+                 "FIXME! Parent sheet should be loaded before attempting to load subsheets" );
 
     for( std::pair<BLOCK_ID, BLOCK> blockPair : Schematic.Blocks )
     {
@@ -2327,8 +2327,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetI
     }
     else if( aCadstarSheetID == "NO_SHEET" )
     {
-        wxASSERT_MSG(
-                false, "Trying to add an item to NO_SHEET? This might be a documentation symbol." );
+        wxASSERT_MSG( false,
+                      "Trying to add an item to NO_SHEET? This might be a documentation symbol." );
     }
     else
     {
@@ -2345,8 +2345,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetI
 }
 
 
-CADSTAR_SCH_ARCHIVE_LOADER::SYMDEF_ID CADSTAR_SCH_ARCHIVE_LOADER::getSymDefFromName(
-        const wxString& aSymdefName, const wxString& aSymDefAlternate )
+CADSTAR_SCH_ARCHIVE_LOADER::SYMDEF_ID
+CADSTAR_SCH_ARCHIVE_LOADER::getSymDefFromName( const wxString& aSymdefName,
+                                               const wxString& aSymDefAlternate )
 {
     // Do a case-insensitive comparison
     for( std::pair<SYMDEF_ID, SYMDEF_SCM> symPair : Library.SymbolDefinitions )
@@ -2409,8 +2410,8 @@ PLOT_DASH_TYPE CADSTAR_SCH_ARCHIVE_LOADER::getLineStyle( const LINECODE_ID& aCad
 }
 
 
-CADSTAR_SCH_ARCHIVE_LOADER::TEXTCODE CADSTAR_SCH_ARCHIVE_LOADER::getTextCode(
-        const TEXTCODE_ID& aCadstarTextCodeID )
+CADSTAR_SCH_ARCHIVE_LOADER::TEXTCODE
+CADSTAR_SCH_ARCHIVE_LOADER::getTextCode( const TEXTCODE_ID& aCadstarTextCodeID )
 {
     wxCHECK( Assignments.Codedefs.TextCodes.find( aCadstarTextCodeID )
                      != Assignments.Codedefs.TextCodes.end(),
@@ -2438,8 +2439,8 @@ wxString CADSTAR_SCH_ARCHIVE_LOADER::getAttributeName( const ATTRIBUTE_ID& aCads
 }
 
 
-CADSTAR_SCH_ARCHIVE_LOADER::PART CADSTAR_SCH_ARCHIVE_LOADER::getPart(
-        const PART_ID& aCadstarPartID )
+CADSTAR_SCH_ARCHIVE_LOADER::PART
+CADSTAR_SCH_ARCHIVE_LOADER::getPart( const PART_ID& aCadstarPartID )
 {
     wxCHECK( Parts.PartDefinitions.find( aCadstarPartID ) != Parts.PartDefinitions.end(), PART() );
 
@@ -2447,8 +2448,8 @@ CADSTAR_SCH_ARCHIVE_LOADER::PART CADSTAR_SCH_ARCHIVE_LOADER::getPart(
 }
 
 
-CADSTAR_SCH_ARCHIVE_LOADER::ROUTECODE CADSTAR_SCH_ARCHIVE_LOADER::getRouteCode(
-        const ROUTECODE_ID& aCadstarRouteCodeID )
+CADSTAR_SCH_ARCHIVE_LOADER::ROUTECODE
+CADSTAR_SCH_ARCHIVE_LOADER::getRouteCode( const ROUTECODE_ID& aCadstarRouteCodeID )
 {
     wxCHECK( Assignments.Codedefs.RouteCodes.find( aCadstarRouteCodeID )
                      != Assignments.Codedefs.RouteCodes.end(),
@@ -2458,11 +2459,12 @@ CADSTAR_SCH_ARCHIVE_LOADER::ROUTECODE CADSTAR_SCH_ARCHIVE_LOADER::getRouteCode(
 }
 
 
-CADSTAR_SCH_ARCHIVE_LOADER::PART::DEFINITION::PIN CADSTAR_SCH_ARCHIVE_LOADER::getPartDefinitionPin(
-        const PART& aCadstarPart, const GATE_ID& aGateID, const TERMINAL_ID& aTerminalID )
+CADSTAR_SCH_ARCHIVE_LOADER::PART::DEFINITION::PIN
+CADSTAR_SCH_ARCHIVE_LOADER::getPartDefinitionPin( const PART& aCadstarPart, const GATE_ID& aGateID,
+                                                  const TERMINAL_ID& aTerminalID )
 {
     for( std::pair<PART_DEFINITION_PIN_ID, PART::DEFINITION::PIN> pinPair :
-            aCadstarPart.Definition.Pins )
+         aCadstarPart.Definition.Pins )
     {
         PART::DEFINITION::PIN partPin = pinPair.second;
 
@@ -2635,48 +2637,48 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
                                 FixTextPositionNoAlignment( aText );
                                 KI_FALLTHROUGH;
                             case ALIGNMENT::BOTTOMLEFT:
-                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                                aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
                                 break;
 
                             case ALIGNMENT::BOTTOMCENTER:
-                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+                                aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
                                 break;
 
                             case ALIGNMENT::BOTTOMRIGHT:
-                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                                aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
                                 break;
 
                             case ALIGNMENT::CENTERLEFT:
-                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                                aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
                                 break;
 
                             case ALIGNMENT::CENTERCENTER:
-                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+                                aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
                                 break;
 
                             case ALIGNMENT::CENTERRIGHT:
-                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                                aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
                                 break;
 
                             case ALIGNMENT::TOPLEFT:
-                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                                aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
                                 break;
 
                             case ALIGNMENT::TOPCENTER:
-                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+                                aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
                                 break;
 
                             case ALIGNMENT::TOPRIGHT:
-                                aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-                                aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                                aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
                                 break;
                             }
                         };
@@ -2695,7 +2697,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
     {
         // Spin style not used. All text justifications are permitted. However, only orientations
         // of 0 deg or 90 deg are supported
-        double angleDeciDeg = NormalizeAnglePos( aKiCadTextItem->GetTextAngle() );
+        double angleDeciDeg = NormalizeAnglePos( aKiCadTextItem->GetTextAngle().AsTenthsOfADegree() );
         int    quadrant = KiROUND( angleDeciDeg / 900.0 );
         quadrant %= 4;
 
@@ -2725,7 +2727,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
 
     case SCH_TEXT_T:
     {
-        // Note spin style in a SCH_TEXT results in a vertical alignment GR_TEXT_VJUSTIFY_BOTTOM
+        // Note spin style in a SCH_TEXT results in a vertical alignment GR_TEXT_V_ALIGN_BOTTOM
         // so need to adjust the location of the text element based on Cadstar's original text
         // alignment (anchor position).
         setAlignment( aKiCadTextItem, textAlignment );
@@ -3055,6 +3057,6 @@ double CADSTAR_SCH_ARCHIVE_LOADER::getPolarAngle( const wxPoint& aPoint )
 
 double CADSTAR_SCH_ARCHIVE_LOADER::getPolarRadius( const wxPoint& aPoint )
 {
-    return sqrt(
-            ( (double) aPoint.x * (double) aPoint.x ) + ( (double) aPoint.y * (double) aPoint.y ) );
+    return sqrt( ( (double) aPoint.x * (double) aPoint.x )
+                 + ( (double) aPoint.y * (double) aPoint.y ) );
 }

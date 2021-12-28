@@ -107,6 +107,12 @@ void PCB_TEXT::SetTextAngle( double aAngle )
 }
 
 
+void PCB_TEXT::SetTextAngle( const EDA_ANGLE& aAngle )
+{
+    EDA_TEXT::SetTextAngle( aAngle );
+}
+
+
 void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     EDA_UNITS units = aFrame->GetUserUnits();
@@ -121,7 +127,7 @@ void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     aList.emplace_back( _( "Mirror" ), IsMirrored() ? _( "Yes" ) : _( "No" ) );
 
-    aList.emplace_back( _( "Angle" ), wxString::Format( "%g", GetTextAngleDegrees() ) );
+    aList.emplace_back( _( "Angle" ), wxString::Format( "%g", GetTextAngle().AsDegrees() ) );
 
     aList.emplace_back( _( "Thickness" ), MessageTextFromValue( units, GetTextThickness() ) );
     aList.emplace_back( _( "Width" ), MessageTextFromValue( units, GetTextWidth() ) );
@@ -133,8 +139,8 @@ const EDA_RECT PCB_TEXT::GetBoundingBox() const
 {
     EDA_RECT rect = GetTextBox();
 
-    if( GetTextAngle() != 0 )
-        rect = rect.GetBoundingBoxRotated( GetTextPos(), GetTextAngle() );
+    if( GetTextAngle() != EDA_ANGLE::ANGLE_0 )
+        rect = rect.GetBoundingBoxRotated( GetTextPos(), GetTextAngle().AsTenthsOfADegree() );
 
     return rect;
 }
@@ -165,7 +171,7 @@ void PCB_TEXT::Rotate( const wxPoint& aRotCentre, double aAngle )
     RotatePoint( &pt, aRotCentre, aAngle );
     SetTextPos( pt );
 
-    SetTextAngle( GetTextAngle() + aAngle );
+    SetTextAngle( GetTextAngle().AsTenthsOfADegree() + aAngle );
 }
 
 
@@ -179,7 +185,7 @@ void PCB_TEXT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     else
     {
         SetTextY( MIRRORVAL( GetTextPos().y, aCentre.y ) );
-        SetTextAngle( 1800 - GetTextAngle() );
+        SetTextAngle( 1800 - GetTextAngle().AsTenthsOfADegree() );
     }
 
     SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );

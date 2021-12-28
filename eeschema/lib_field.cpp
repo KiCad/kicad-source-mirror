@@ -73,7 +73,7 @@ LIB_FIELD& LIB_FIELD::operator=( const LIB_FIELD& field )
     m_parent = field.m_parent;
 
     SetText( field.GetText() );
-    SetEffects( field );
+    SetAttributes( field );
 
     return *this;
 }
@@ -85,7 +85,7 @@ void LIB_FIELD::Init( int aId )
 
     m_id = aId;
 
-    SetTextAngle( TEXT_ANGLE_HORIZ );    // constructor already did this.
+    SetTextAngle( EDA_ANGLE::HORIZONTAL );    // constructor already did this.
 
     // Fields in RAM must always have names, because we are trying to get less dependent on
     // field ids and more dependent on names. Plus assumptions are made in the field editors.
@@ -152,8 +152,8 @@ bool LIB_FIELD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
     // The text orientation may need to be flipped if the transformation matrix causes xy axes
     // to be flipped.  This simple algo works only for schematic matrix (rot 90 or/and mirror)
-    bool t1 = ( DefaultTransform.x1 != 0 ) ^ ( GetTextAngle() != 0 );
-    tmp_text.SetTextAngle( t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
+    bool t1 = ( DefaultTransform.x1 != 0 ) ^ ( GetTextAngle() != EDA_ANGLE::HORIZONTAL );
+    tmp_text.SetTextAngle( t1 ? EDA_ANGLE::HORIZONTAL : EDA_ANGLE::VERTICAL );
 
     return tmp_text.TextHitTest( aPosition, aAccuracy );
 }
@@ -174,7 +174,7 @@ void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
     aTarget->m_name = m_name;
 
     aTarget->CopyText( *this );
-    aTarget->SetEffects( *this );
+    aTarget->SetAttributes( *this );
     aTarget->SetParent( m_parent );
 }
 
@@ -280,7 +280,8 @@ void LIB_FIELD::Rotate( const wxPoint& center, bool aRotateCCW )
     RotatePoint( &pt, center, rot_angle );
     SetTextPos( pt );
 
-    SetTextAngle( GetTextAngle() != 0.0 ? 0 : 900 );
+    SetTextAngle( GetTextAngle() != EDA_ANGLE::HORIZONTAL ? EDA_ANGLE::HORIZONTAL
+                                                          : EDA_ANGLE::VERTICAL );
 }
 
 
@@ -291,21 +292,21 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         return;
 
     // Calculate the text orientation, according to the symbol orientation/mirror.
-    int orient = (int) GetTextAngle();
+    EDA_ANGLE orient = GetTextAngle();
 
     if( aTransform.y1 )  // Rotate symbol 90 deg.
     {
-        if( orient == TEXT_ANGLE_HORIZ )
-            orient = TEXT_ANGLE_VERT;
+        if( orient.IsHorizontal() )
+            orient = EDA_ANGLE::VERTICAL;
         else
-            orient = TEXT_ANGLE_HORIZ;
+            orient = EDA_ANGLE::HORIZONTAL;
     }
 
     EDA_RECT bbox = GetBoundingBox();
     bbox.RevertYAxis();
 
-    EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_CENTER;
-    EDA_TEXT_VJUSTIFY_T vjustify = GR_TEXT_VJUSTIFY_CENTER;
+    GR_TEXT_H_ALIGN_T hjustify = GR_TEXT_H_ALIGN_CENTER;
+    GR_TEXT_V_ALIGN_T vjustify = GR_TEXT_V_ALIGN_CENTER;
     wxPoint textpos = aTransform.TransformCoordinate( bbox.Centre() ) + aOffset;
 
     COLOR4D color;
@@ -351,8 +352,8 @@ const EDA_RECT LIB_FIELD::GetBoundingBox() const
     wxPoint orig = rect.GetOrigin();
     wxPoint end = rect.GetEnd();
 
-    RotatePoint( &orig, GetTextPos(), -GetTextAngle() );
-    RotatePoint( &end, GetTextPos(), -GetTextAngle() );
+    RotatePoint( &orig, GetTextPos(), -GetTextAngle().AsTenthsOfADegree() );
+    RotatePoint( &end, GetTextPos(), -GetTextAngle().AsTenthsOfADegree() );
 
     rect.SetOrigin( orig );
     rect.SetEnd( end );
@@ -468,18 +469,18 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     switch ( GetHorizJustify() )
     {
-    case GR_TEXT_HJUSTIFY_LEFT:   msg = _( "Left" );   break;
-    case GR_TEXT_HJUSTIFY_CENTER: msg = _( "Center" ); break;
-    case GR_TEXT_HJUSTIFY_RIGHT:  msg = _( "Right" );  break;
+    case GR_TEXT_H_ALIGN_LEFT:   msg = _( "Left" );   break;
+    case GR_TEXT_H_ALIGN_CENTER: msg = _( "Center" ); break;
+    case GR_TEXT_H_ALIGN_RIGHT:  msg = _( "Right" );  break;
     }
 
     aList.emplace_back( _( "H Justification" ), msg );
 
     switch ( GetVertJustify() )
     {
-    case GR_TEXT_VJUSTIFY_TOP:    msg = _( "Top" );    break;
-    case GR_TEXT_VJUSTIFY_CENTER: msg = _( "Center" ); break;
-    case GR_TEXT_VJUSTIFY_BOTTOM: msg = _( "Bottom" ); break;
+    case GR_TEXT_V_ALIGN_TOP:    msg = _( "Top" );    break;
+    case GR_TEXT_V_ALIGN_CENTER: msg = _( "Center" ); break;
+    case GR_TEXT_V_ALIGN_BOTTOM: msg = _( "Bottom" ); break;
     }
 
     aList.emplace_back( _( "V Justification" ), msg );

@@ -211,7 +211,8 @@ wxString FP_TEXT_GRID_TABLE::GetValue( int aRow, int aCol )
         return text.GetLayerName();
 
     case FPT_ORIENTATION:
-        return StringFromValue( EDA_UNITS::DEGREES, (int) NormalizeAnglePos( text.GetTextAngle() ),
+        return StringFromValue( EDA_UNITS::DEGREES,
+                                NormalizeAnglePos( text.GetTextAngle().AsTenthsOfADegree() ),
                                 true );
 
     case FPT_XOFFSET:

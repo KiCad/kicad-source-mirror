@@ -263,16 +263,16 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
 
         switch( item->m_Hjustify )
         {
-        case GR_TEXT_HJUSTIFY_LEFT:   m_choiceHjustify->SetSelection( 0 ); break;
-        case GR_TEXT_HJUSTIFY_CENTER: m_choiceHjustify->SetSelection( 1 ); break;
-        case GR_TEXT_HJUSTIFY_RIGHT:  m_choiceHjustify->SetSelection( 2 ); break;
+        case GR_TEXT_H_ALIGN_LEFT:   m_choiceHjustify->SetSelection( 0 ); break;
+        case GR_TEXT_H_ALIGN_CENTER: m_choiceHjustify->SetSelection( 1 ); break;
+        case GR_TEXT_H_ALIGN_RIGHT:  m_choiceHjustify->SetSelection( 2 ); break;
         }
 
         switch( item->m_Vjustify )
         {
-        case GR_TEXT_VJUSTIFY_TOP:    m_choiceVjustify->SetSelection( 0 ); break;
-        case GR_TEXT_VJUSTIFY_CENTER: m_choiceVjustify->SetSelection( 1 ); break;
-        case GR_TEXT_VJUSTIFY_BOTTOM: m_choiceVjustify->SetSelection( 2 ); break;
+        case GR_TEXT_V_ALIGN_TOP:    m_choiceVjustify->SetSelection( 0 ); break;
+        case GR_TEXT_V_ALIGN_CENTER: m_choiceVjustify->SetSelection( 1 ); break;
+        case GR_TEXT_V_ALIGN_BOTTOM: m_choiceVjustify->SetSelection( 2 ); break;
         }
 
         // Text size
@@ -474,16 +474,16 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
 
         switch( m_choiceHjustify->GetSelection() )
         {
-        case 0: item->m_Hjustify = GR_TEXT_HJUSTIFY_LEFT; break;
-        case 1: item->m_Hjustify = GR_TEXT_HJUSTIFY_CENTER; break;
-        case 2: item->m_Hjustify = GR_TEXT_HJUSTIFY_RIGHT; break;
+        case 0: item->m_Hjustify = GR_TEXT_H_ALIGN_LEFT; break;
+        case 1: item->m_Hjustify = GR_TEXT_H_ALIGN_CENTER; break;
+        case 2: item->m_Hjustify = GR_TEXT_H_ALIGN_RIGHT; break;
         }
 
         switch( m_choiceVjustify->GetSelection() )
         {
-        case 0: item->m_Vjustify = GR_TEXT_VJUSTIFY_TOP;    break;
-        case 1: item->m_Vjustify = GR_TEXT_VJUSTIFY_CENTER; break;
-        case 2: item->m_Vjustify = GR_TEXT_VJUSTIFY_BOTTOM; break;
+        case 0: item->m_Vjustify = GR_TEXT_V_ALIGN_TOP;    break;
+        case 1: item->m_Vjustify = GR_TEXT_V_ALIGN_CENTER; break;
+        case 2: item->m_Vjustify = GR_TEXT_V_ALIGN_BOTTOM; break;
         }
 
         msg = m_textCtrlRotation->GetValue();

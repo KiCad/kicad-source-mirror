@@ -126,10 +126,7 @@ public:
     virtual bool StartPlot() = 0;
     virtual bool EndPlot() = 0;
 
-    virtual void SetNegative( bool aNegative )
-    {
-        m_negativeMode = aNegative;
-    }
+    virtual void SetNegative( bool aNegative ) { m_negativeMode = aNegative; }
 
     /**
      * Plot in B/W or color.
@@ -306,14 +303,14 @@ public:
     // Higher level primitives -- can be drawn as line, sketch or 'filled'
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                OUTLINE_MODE tracemode, void* aData );
-    virtual void ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
-                           int rayon, int width, OUTLINE_MODE tracemode, void* aData );
-    virtual void ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
-                            OUTLINE_MODE tracemode, void* aData );
-    virtual void ThickCircle( const wxPoint& pos, int diametre, int width,
-                              OUTLINE_MODE tracemode, void* aData );
-    virtual void FilledCircle( const wxPoint& pos, int diametre,
-                              OUTLINE_MODE tracemode, void* aData );
+    virtual void ThickArc( const wxPoint& centre, double StAngle, double EndAngle, int rayon,
+                           int width, OUTLINE_MODE tracemode, void* aData );
+    virtual void ThickRect( const wxPoint& p1, const wxPoint& p2, int width, OUTLINE_MODE tracemode,
+                            void* aData );
+    virtual void ThickCircle( const wxPoint& pos, int diametre, int width, OUTLINE_MODE tracemode,
+                              void* aData );
+    virtual void FilledCircle( const wxPoint& pos, int diametre, OUTLINE_MODE tracemode,
+                               void* aData );
 
 
     // Flash primitives
@@ -324,8 +321,8 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData is an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
-                                 OUTLINE_MODE aTraceMode, void* aData ) = 0;
+    virtual void FlashPadCircle( const wxPoint& aPadPos, int aDiameter, OUTLINE_MODE aTraceMode,
+                                 void* aData ) = 0;
 
     /**
      * @param aPadPos Position of the shape (center of the rectangle.
@@ -344,8 +341,8 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
-                               double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0;
+    virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
+                               OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
      * @param aPadPos Position of the shape (center of the rectangle.
@@ -355,9 +352,8 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
-                                    int aCornerRadius, double aOrient,
-                                    OUTLINE_MODE aTraceMode, void* aData ) = 0;
+    virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize, int aCornerRadius,
+                                    double aOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
      * @param aPadPos Position of the shape.
@@ -367,9 +363,9 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
-                                 double aPadOrient, SHAPE_POLY_SET* aPolygons,
-                                 OUTLINE_MODE aTraceMode, void* aData ) = 0;
+    virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
+                                 SHAPE_POLY_SET* aPolygons, OUTLINE_MODE aTraceMode,
+                                 void* aData ) = 0;
 
     /**
      * Flash a trapezoidal pad.
@@ -381,9 +377,8 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, OUTLINE_MODE aTraceMode,
-                                 void* aData ) = 0;
+    virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorners, double aPadOrient,
+                                 OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
      * Flash a regular polygon. Useful only in Gerber files to flash a regular polygon.
@@ -396,7 +391,7 @@ public:
      *              specific to the plotter.
      */
     virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
-                                      double aOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0 ;
+                                      double aOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
      * Draw text with the plotter.
@@ -407,10 +402,10 @@ public:
     virtual void Text( const wxPoint&              aPos,
                        const COLOR4D&              aColor,
                        const wxString&             aText,
-                       double                      aOrient,
+                       const EDA_ANGLE&            aOrient,
                        const wxSize&               aSize,
-                       enum EDA_TEXT_HJUSTIFY_T    aH_justify,
-                       enum EDA_TEXT_VJUSTIFY_T    aV_justify,
+                       enum GR_TEXT_H_ALIGN_T      aH_justify,
+                       enum GR_TEXT_V_ALIGN_T      aV_justify,
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,

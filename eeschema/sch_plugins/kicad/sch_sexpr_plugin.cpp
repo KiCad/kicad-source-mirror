@@ -1148,7 +1148,7 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
                   aField->GetId(),
                   FormatInternalUnits( aField->GetPosition().x ).c_str(),
                   FormatInternalUnits( aField->GetPosition().y ).c_str(),
-                  FormatAngle( aField->GetTextAngleDegrees() * 10.0 ).c_str() );
+                  FormatAngle( aField->GetTextAngle().AsTenthsOfADegree() ).c_str() );
 
     if( !aField->IsDefaultFormatting()
       || ( aField->GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) ) )
@@ -1455,7 +1455,7 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
         m_out->Print( aNestLevel + 1, "(at %s %s %s)",
                       FormatInternalUnits( aText->GetPosition().x ).c_str(),
                       FormatInternalUnits( aText->GetPosition().y ).c_str(),
-                      FormatAngle( aText->GetTextAngle() ).c_str() );
+                      FormatAngle( aText->GetTextAngle().AsTenthsOfADegree() ).c_str() );
     }
 
     if( aText->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
@@ -2042,7 +2042,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFor
                       aField->GetId(),
                       FormatInternalUnits( aField->GetPosition().x ).c_str(),
                       FormatInternalUnits( aField->GetPosition().y ).c_str(),
-                      static_cast<double>( aField->GetTextAngle() ) / 10.0 );
+                      aField->GetTextAngle().AsDegrees() );
 
     aField->Format( &aFormatter, aNestLevel, 0 );
     aFormatter.Print( aNestLevel, ")\n" );
@@ -2101,7 +2101,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveText( LIB_TEXT* aText, OUTPUTFORMATTER& aFormat
                       aFormatter.Quotew( aText->GetText() ).c_str(),
                       FormatInternalUnits( aText->GetPosition().x ).c_str(),
                       FormatInternalUnits( aText->GetPosition().y ).c_str(),
-                      aText->GetTextAngle() );
+                      (double) aText->GetTextAngle().AsTenthsOfADegree() );
     aText->Format( &aFormatter, aNestLevel, 0 );
     aFormatter.Print( aNestLevel, ")\n" );
 }

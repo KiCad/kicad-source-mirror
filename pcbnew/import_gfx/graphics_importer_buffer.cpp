@@ -48,29 +48,30 @@ void GRAPHICS_IMPORTER_BUFFER::AddCircle( const VECTOR2D& aCenter, double aRadiu
 void GRAPHICS_IMPORTER_BUFFER::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
                                        double aAngle, double aWidth )
 {
-    m_shapes.push_back( make_shape< IMPORTED_ARC >( aCenter, aStart, aAngle, aWidth ) );
+    m_shapes.push_back( make_shape<IMPORTED_ARC>( aCenter, aStart, aAngle, aWidth ) );
 }
 
 
 void GRAPHICS_IMPORTER_BUFFER::AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth )
 {
-    m_shapes.push_back( make_shape< IMPORTED_POLYGON >( aVertices, aWidth ) );
+    m_shapes.push_back( make_shape<IMPORTED_POLYGON>( aVertices, aWidth ) );
 }
 
 
 void GRAPHICS_IMPORTER_BUFFER::AddText( const VECTOR2D& aOrigin, const wxString& aText,
-        double aHeight, double aWidth, double aThickness, double aOrientation,
-        EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify )
+                                        double aHeight, double aWidth, double aThickness,
+                                        double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
+                                        GR_TEXT_V_ALIGN_T aVJustify )
 {
     m_shapes.push_back( make_shape< IMPORTED_TEXT >( aOrigin, aText, aHeight, aWidth,
-                            aThickness, aOrientation, aHJustify, aVJustify ) );
+                        aThickness, aOrientation, aHJustify, aVJustify ) );
 }
 
 
 void GRAPHICS_IMPORTER_BUFFER::AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
                 const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd , double aWidth )
 {
-    m_shapes.push_back( make_shape< IMPORTED_SPLINE >( aStart, aBezierControl1, aBezierControl2, aEnd, aWidth ) );
+    m_shapes.push_back( make_shape<IMPORTED_SPLINE>( aStart, aBezierControl1, aBezierControl2, aEnd, aWidth ) );
 }
 
 
@@ -82,6 +83,6 @@ void GRAPHICS_IMPORTER_BUFFER::AddShape( std::unique_ptr<IMPORTED_SHAPE>& aShape
 
 void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
 {
-    for( auto& shape : m_shapes )
+    for( std::unique_ptr<IMPORTED_SHAPE>& shape : m_shapes )
         shape->ImportTo( aImporter );
 }

@@ -254,26 +254,26 @@ static inline char* ReadLine( LINE_READER* rdr, const char* caller )
 #endif
 
 
-static EDA_TEXT_HJUSTIFY_T horizJustify( const char* horizontal )
+static GR_TEXT_H_ALIGN_T horizJustify( const char* horizontal )
 {
     if( !strcmp( "L", horizontal ) )
-        return GR_TEXT_HJUSTIFY_LEFT;
+        return GR_TEXT_H_ALIGN_LEFT;
 
     if( !strcmp( "R", horizontal ) )
-        return GR_TEXT_HJUSTIFY_RIGHT;
+        return GR_TEXT_H_ALIGN_RIGHT;
 
-    return GR_TEXT_HJUSTIFY_CENTER;
+    return GR_TEXT_H_ALIGN_CENTER;
 }
 
-static EDA_TEXT_VJUSTIFY_T vertJustify( const char* vertical )
+static GR_TEXT_V_ALIGN_T vertJustify( const char* vertical )
 {
     if( !strcmp( "T", vertical ) )
-        return GR_TEXT_VJUSTIFY_TOP;
+        return GR_TEXT_V_ALIGN_TOP;
 
     if( !strcmp( "B", vertical ) )
-        return GR_TEXT_VJUSTIFY_BOTTOM;
+        return GR_TEXT_V_ALIGN_BOTTOM;
 
-    return GR_TEXT_VJUSTIFY_CENTER;
+    return GR_TEXT_V_ALIGN_CENTER;
 }
 
 
@@ -2047,7 +2047,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             else
             {
                 // boom, somebody changed a constructor, I was relying on this:
-                wxASSERT( pcbtxt->GetHorizJustify() == GR_TEXT_HJUSTIFY_CENTER );
+                wxASSERT( pcbtxt->GetHorizJustify() == GR_TEXT_H_ALIGN_CENTER );
             }
 
             if( vJustify )

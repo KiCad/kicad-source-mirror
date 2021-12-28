@@ -167,11 +167,11 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
 
                 if( resetEffects )
                 {
-                    // Careful: the visible bit and position are also in Effects
+                    // Careful: the visible bit and position are also set by SetAttributes()
                     bool    visible = field.IsVisible();
                     wxPoint pos = field.GetPosition();
 
-                    field.SetEffects( *parentField );
+                    field.SetAttributes( *parentField );
 
                     field.SetVisible( visible );
                     field.SetPosition( pos );
@@ -207,7 +207,7 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
 
             newField->SetName( parentField->GetCanonicalName() );
             newField->SetText( parentField->GetText() );
-            newField->SetEffects( *parentField );   // Includes visible bit and position
+            newField->SetAttributes( *parentField );   // Includes visible bit and position
         }
     }
 

@@ -466,9 +466,9 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     case FDC_H_ALIGN:
         switch ( field.GetHorizJustify() )
         {
-        case GR_TEXT_HJUSTIFY_LEFT:   return _( "Left" );
-        case GR_TEXT_HJUSTIFY_CENTER: return _( "Center" );
-        case GR_TEXT_HJUSTIFY_RIGHT:  return _( "Right" );
+        case GR_TEXT_H_ALIGN_LEFT:   return _( "Left" );
+        case GR_TEXT_H_ALIGN_CENTER: return _( "Center" );
+        case GR_TEXT_H_ALIGN_RIGHT:  return _( "Right" );
         }
 
         break;
@@ -476,9 +476,9 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     case FDC_V_ALIGN:
         switch ( field.GetVertJustify() )
         {
-        case GR_TEXT_VJUSTIFY_TOP:    return _( "Top" );
-        case GR_TEXT_VJUSTIFY_CENTER: return _( "Center" );
-        case GR_TEXT_VJUSTIFY_BOTTOM: return _( "Bottom" );
+        case GR_TEXT_V_ALIGN_TOP:    return _( "Top" );
+        case GR_TEXT_V_ALIGN_CENTER: return _( "Center" );
+        case GR_TEXT_V_ALIGN_BOTTOM: return _( "Bottom" );
         }
 
         break;
@@ -493,13 +493,10 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         return StringFromValue( m_frame->GetUserUnits(), field.GetTextSize().GetHeight(), true );
 
     case FDC_ORIENTATION:
-        switch ( (int) field.GetTextAngle() )
-        {
-        case TEXT_ANGLE_HORIZ: return _( "Horizontal" );
-        case TEXT_ANGLE_VERT:  return _( "Vertical" );
-        }
-
-        break;
+        if( field.GetTextAngle().IsHorizontal() )
+            return _( "Horizontal" );
+        else
+            return _( "Vertical" );
 
     case FDC_POSX:
         return StringFromValue( m_frame->GetUserUnits(), field.GetTextPos().x, true );
@@ -579,22 +576,22 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
 
     case FDC_H_ALIGN:
         if( aValue == _( "Left" ) )
-            field.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+            field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         else if( aValue == _( "Center" ) )
-            field.SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+            field.SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
         else if( aValue == _( "Right" ) )
-            field.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         else
             wxFAIL_MSG( wxT( "unknown horizontal alignment: " ) + aValue );
         break;
 
     case FDC_V_ALIGN:
         if( aValue == _( "Top" ) )
-            field.SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+            field.SetVertJustify( GR_TEXT_V_ALIGN_TOP );
         else if( aValue == _( "Center" ) )
-            field.SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+            field.SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
         else if( aValue == _( "Bottom" ) )
-            field.SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            field.SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
         else
             wxFAIL_MSG( wxT( "unknown vertical alignment: " ) + aValue);
         break;
@@ -614,9 +611,9 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
 
     case FDC_ORIENTATION:
         if( aValue == _( "Horizontal" ) )
-            field.SetTextAngle( TEXT_ANGLE_HORIZ );
+            field.SetTextAngle( EDA_ANGLE::HORIZONTAL );
         else if( aValue == _( "Vertical" ) )
-            field.SetTextAngle( TEXT_ANGLE_VERT );
+            field.SetTextAngle( EDA_ANGLE::VERTICAL );
         else
             wxFAIL_MSG( wxT( "unknown orientation: " ) + aValue );
         break;

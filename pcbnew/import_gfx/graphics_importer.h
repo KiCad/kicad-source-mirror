@@ -231,9 +231,9 @@ public:
      * @param aVJustify is the text vertical justification.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
      */
-    virtual void AddText( const VECTOR2D& aOrigin, const wxString& aText,
-            double aHeight, double aWidth, double aThickness, double aOrientation,
-            EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify ) = 0;
+    virtual void AddText( const VECTOR2D& aOrigin, const wxString& aText, double aHeight,
+                          double aWidth, double aThickness, double aOrientation,
+                          GR_TEXT_H_ALIGN_T aHJustify, GR_TEXT_V_ALIGN_T aVJustify ) = 0;
 
     /**
      * Create an object representing an arc.

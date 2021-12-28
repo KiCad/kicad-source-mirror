@@ -436,11 +436,11 @@ void PS_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 
 void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
                                             const wxString&          aText,
-                                            int                      aOrient,
+                                            const EDA_ANGLE&         aOrient,
                                             const wxSize&            aSize,
                                             bool                     aMirror,
-                                            enum EDA_TEXT_HJUSTIFY_T aH_justify,
-                                            enum EDA_TEXT_VJUSTIFY_T aV_justify,
+                                            enum GR_TEXT_H_ALIGN_T   aH_justify,
+                                            enum GR_TEXT_V_ALIGN_T   aV_justify,
                                             int                      aWidth,
                                             bool                     aItalic,
                                             bool                     aBold,
@@ -463,36 +463,20 @@ void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
 
     switch( aH_justify )
     {
-    case GR_TEXT_HJUSTIFY_CENTER:
-        dx = -tw / 2;
-        break;
-
-    case GR_TEXT_HJUSTIFY_RIGHT:
-        dx = -tw;
-        break;
-
-    case GR_TEXT_HJUSTIFY_LEFT:
-        dx = 0;
-        break;
+    case GR_TEXT_H_ALIGN_CENTER: dx = -tw / 2; break;
+    case GR_TEXT_H_ALIGN_RIGHT:  dx = -tw;     break;
+    case GR_TEXT_H_ALIGN_LEFT:   dx = 0;       break;
     }
 
     switch( aV_justify )
     {
-    case GR_TEXT_VJUSTIFY_CENTER:
-        dy = th / 2;
-        break;
-
-    case GR_TEXT_VJUSTIFY_TOP:
-        dy = th;
-        break;
-
-    case GR_TEXT_VJUSTIFY_BOTTOM:
-        dy = 0;
-        break;
+    case GR_TEXT_V_ALIGN_CENTER: dy = th / 2; break;
+    case GR_TEXT_V_ALIGN_TOP:    dy = th;     break;
+    case GR_TEXT_V_ALIGN_BOTTOM: dy = 0;      break;
     }
 
-    RotatePoint( &dx, &dy, aOrient );
-    RotatePoint( &tw, &th, aOrient );
+    RotatePoint( &dx, &dy, aOrient.AsTenthsOfADegree() );
+    RotatePoint( &tw, &th, aOrient.AsTenthsOfADegree() );
     start_pos.x += dx;
     start_pos.y += dy;
     DPOINT pos_dev = userToDeviceCoordinates( start_pos );
@@ -503,13 +487,10 @@ void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
 
     // Mirrored texts must be plotted as mirrored!
     if( m_plotMirror )
-    {
         *wideningFactor = -*wideningFactor;
-        aOrient = -aOrient;
-    }
 
     // The CTM transformation matrix
-    double alpha = DECIDEG2RAD( aOrient );
+    double alpha = m_plotMirror ? aOrient.Invert().AsRadians() : aOrient.AsRadians();
     double sinalpha = sin( alpha );
     double cosalpha = cos( alpha );
 
@@ -978,17 +959,17 @@ bool PS_PLOTTER::EndPlot()
 
 
 void PS_PLOTTER::Text( const wxPoint&       aPos,
-                const COLOR4D&              aColor,
-                const wxString&             aText,
-                double                      aOrient,
-                const wxSize&               aSize,
-                enum EDA_TEXT_HJUSTIFY_T    aH_justify,
-                enum EDA_TEXT_VJUSTIFY_T    aV_justify,
-                int                         aWidth,
-                bool                        aItalic,
-                bool                        aBold,
-                bool                        aMultilineAllowed,
-                void*                       aData )
+                       const COLOR4D&              aColor,
+                       const wxString&             aText,
+                       const EDA_ANGLE&            aOrient,
+                       const wxSize&               aSize,
+                       enum GR_TEXT_H_ALIGN_T      aH_justify,
+                       enum GR_TEXT_V_ALIGN_T      aV_justify,
+                       int                         aWidth,
+                       bool                        aItalic,
+                       bool                        aBold,
+                       bool                        aMultilineAllowed,
+                       void*                       aData )
 {
     SetCurrentLineWidth( aWidth );
     SetColor( aColor );

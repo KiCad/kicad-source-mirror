@@ -1770,8 +1770,8 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
                   m_out->Quotew( aText->GetText() ).c_str(),
                   FormatInternalUnits( aText->GetTextPos() ).c_str() );
 
-    if( aText->GetTextAngle() != 0.0 )
-        m_out->Print( 0, " %s", FormatAngle( aText->GetTextAngle() ).c_str() );
+    if( aText->GetTextAngle() != EDA_ANGLE::ANGLE_0 )
+        m_out->Print( 0, " %s", FormatAngle( aText->GetTextAngle().AsTenthsOfADegree() ).c_str() );
 
     m_out->Print( 0, ")" );
 
@@ -1838,8 +1838,8 @@ void PCB_PLUGIN::format( const FP_TEXT* aText, int aNestLevel ) const
     // Due to Pcbnew history, fp_text angle is saved as an absolute on screen angle,
     // but internally the angle is held relative to its parent footprint.  parent
     // may be NULL when saving a footprint outside a BOARD.
-    double   orient = aText->GetTextAngle();
-    FOOTPRINT*  parent = (FOOTPRINT*) aText->GetParent();
+    double     orient = aText->GetTextAngle().AsTenthsOfADegree();
+    FOOTPRINT* parent = static_cast<FOOTPRINT*>( aText->GetParent() );
 
     if( parent )
     {

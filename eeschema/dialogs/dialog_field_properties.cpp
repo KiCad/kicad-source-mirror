@@ -120,7 +120,7 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
     m_isBold = aTextItem->IsBold();
     m_position = aTextItem->GetTextPos();
     m_size = aTextItem->GetTextWidth();
-    m_isVertical = ( aTextItem->GetTextAngle() == TEXT_ANGLE_VERT );
+    m_isVertical = aTextItem->GetTextAngle().IsVertical();
     m_verticalJustification = aTextItem->GetVertJustify() + 1;
     m_horizontalJustification = aTextItem->GetHorizJustify() + 1;
     m_isVisible = aTextItem->IsVisible();
@@ -305,16 +305,16 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
 
     switch ( m_horizontalJustification )
     {
-    case GR_TEXT_HJUSTIFY_LEFT:   m_hAlignLeft->Check( true );   break;
-    case GR_TEXT_HJUSTIFY_CENTER: m_hAlignCenter->Check( true ); break;
-    case GR_TEXT_HJUSTIFY_RIGHT:  m_hAlignRight->Check( true );  break;
+    case GR_TEXT_H_ALIGN_LEFT:   m_hAlignLeft->Check( true );   break;
+    case GR_TEXT_H_ALIGN_CENTER: m_hAlignCenter->Check( true ); break;
+    case GR_TEXT_H_ALIGN_RIGHT:  m_hAlignRight->Check( true );  break;
     }
 
     switch ( m_verticalJustification )
     {
-    case GR_TEXT_VJUSTIFY_TOP:    m_vAlignTop->Check( true );    break;
-    case GR_TEXT_VJUSTIFY_CENTER: m_vAlignCenter->Check( true ); break;
-    case GR_TEXT_VJUSTIFY_BOTTOM: m_vAlignBottom->Check( true ); break;
+    case GR_TEXT_V_ALIGN_TOP:    m_vAlignTop->Check( true );    break;
+    case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check( true ); break;
+    case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check( true ); break;
     }
 
     m_visible->SetValue( m_isVisible );
@@ -369,18 +369,18 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
     m_isItalic = m_italic->IsChecked();
 
     if( m_hAlignLeft->IsChecked() )
-        m_horizontalJustification = GR_TEXT_HJUSTIFY_LEFT;
+        m_horizontalJustification = GR_TEXT_H_ALIGN_LEFT;
     else if( m_hAlignCenter->IsChecked() )
-        m_horizontalJustification = GR_TEXT_HJUSTIFY_CENTER;
+        m_horizontalJustification = GR_TEXT_H_ALIGN_CENTER;
     else
-        m_horizontalJustification = GR_TEXT_HJUSTIFY_RIGHT;
+        m_horizontalJustification = GR_TEXT_H_ALIGN_RIGHT;
 
     if( m_vAlignTop->IsChecked() )
-        m_verticalJustification = GR_TEXT_VJUSTIFY_TOP;
+        m_verticalJustification = GR_TEXT_V_ALIGN_TOP;
     else if( m_vAlignCenter->IsChecked() )
-        m_verticalJustification = GR_TEXT_VJUSTIFY_CENTER;
+        m_verticalJustification = GR_TEXT_V_ALIGN_CENTER;
     else
-        m_verticalJustification = GR_TEXT_VJUSTIFY_BOTTOM;
+        m_verticalJustification = GR_TEXT_V_ALIGN_BOTTOM;
 
     m_isVisible = m_visible->GetValue();
 
@@ -394,7 +394,7 @@ void DIALOG_FIELD_PROPERTIES::updateText( EDA_TEXT* aText )
         aText->SetTextSize( wxSize( m_size, m_size ) );
 
     aText->SetVisible( m_isVisible );
-    aText->SetTextAngle( m_isVertical ? TEXT_ANGLE_VERT : TEXT_ANGLE_HORIZ );
+    aText->SetTextAngle( m_isVertical ? EDA_ANGLE::VERTICAL : EDA_ANGLE::HORIZONTAL );
     aText->SetItalic( m_isItalic );
     aText->SetBold( m_isBold );
 }
@@ -596,14 +596,14 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
             symbol->SetFootprint( m_text );
     }
 
-    EDA_TEXT_HJUSTIFY_T hJustify = EDA_TEXT::MapHorizJustify( m_horizontalJustification - 1 );
-    EDA_TEXT_VJUSTIFY_T vJustify = EDA_TEXT::MapVertJustify( m_verticalJustification - 1 );
+    GR_TEXT_H_ALIGN_T hJustify = EDA_TEXT::MapHorizJustify( m_horizontalJustification - 1 );
+    GR_TEXT_V_ALIGN_T vJustify = EDA_TEXT::MapVertJustify( m_verticalJustification - 1 );
     bool positioningModified = false;
 
     if( aField->GetPosition() != m_position )
         positioningModified = true;
 
-    if( ( aField->GetTextAngle() == TEXT_ANGLE_VERT ) != m_isVertical )
+    if( aField->GetTextAngle().IsVertical() != m_isVertical )
         positioningModified = true;
 
     if( aField->GetEffectiveHorizJustify() != hJustify )

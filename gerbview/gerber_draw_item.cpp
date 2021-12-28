@@ -105,7 +105,7 @@ bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, wxPoint& aPos, double& aOr
     else
         size = std::min( m_Size.x, m_Size.y );
 
-    aOrientation = TEXT_ANGLE_HORIZ;
+    aOrientation = 0;
 
     if( m_Flashed )
     {

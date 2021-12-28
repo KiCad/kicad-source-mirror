@@ -170,8 +170,8 @@ void GAL::ResetTextAttributes()
      // there is no built-in default
     SetGlyphSize( { 1.0, 1.0 } );
 
-    SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
-    SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+    SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
+    SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
 
     SetFontBold( false );
     SetFontItalic( false );

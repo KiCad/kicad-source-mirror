@@ -140,9 +140,9 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
     if( aTextQuadrant.x < 0 )
     {
         if( viewFlipped )
-            gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_RIGHT );
         else
-            gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+            gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_LEFT );
 
         textPos.x += 15.0 / gal->GetWorldScale();
 
@@ -152,9 +152,9 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
     else
     {
         if( viewFlipped )
-            gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+            gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_LEFT );
         else
-            gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_RIGHT );
 
         textPos.x -= 15.0 / gal->GetWorldScale();
 

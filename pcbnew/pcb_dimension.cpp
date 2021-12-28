@@ -213,7 +213,7 @@ void PCB_DIMENSION_BASE::Move( const wxPoint& offset )
 
 void PCB_DIMENSION_BASE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    double newAngle = m_text.GetTextAngle() + aAngle;
+    double newAngle = m_text.GetTextAngle().AsTenthsOfADegree() + aAngle;
 
     if( newAngle >= 3600 )
         newAngle -= 3600;
@@ -613,7 +613,7 @@ void PCB_DIM_ALIGNED::updateGeometry()
     polyBox.Append( textBox.GetOrigin().x, textBox.GetEnd().y );
     polyBox.Append( textBox.GetEnd() );
     polyBox.Append( textBox.GetEnd().x, textBox.GetOrigin().y );
-    polyBox.Rotate( -m_text.GetTextAngleRadians(), textBox.GetCenter() );
+    polyBox.Rotate( -m_text.GetTextAngle().AsRadians(), textBox.GetCenter() );
 
     // The ideal crossbar, if the text doesn't collide
     SEG crossbar( m_crossBarStart, m_crossBarEnd );
@@ -796,7 +796,7 @@ void PCB_DIM_ORTHOGONAL::updateGeometry()
     polyBox.Append( textBox.GetOrigin().x, textBox.GetEnd().y );
     polyBox.Append( textBox.GetEnd() );
     polyBox.Append( textBox.GetEnd().x, textBox.GetOrigin().y );
-    polyBox.Rotate( -m_text.GetTextAngleRadians(), textBox.GetCenter() );
+    polyBox.Rotate( -m_text.GetTextAngle().AsRadians(), textBox.GetCenter() );
 
     // The ideal crossbar, if the text doesn't collide
     SEG crossbar( m_crossBarStart, m_crossBarEnd );
@@ -986,7 +986,7 @@ void PCB_DIM_LEADER::updateGeometry()
     polyBox.Append( textBox.GetOrigin().x, textBox.GetEnd().y );
     polyBox.Append( textBox.GetEnd() );
     polyBox.Append( textBox.GetEnd().x, textBox.GetOrigin().y );
-    polyBox.Rotate( -m_text.GetTextAngleRadians(), textBox.GetCenter() );
+    polyBox.Rotate( -m_text.GetTextAngle().AsRadians(), textBox.GetCenter() );
 
     VECTOR2I firstLine( m_end - m_start );
     VECTOR2I start( m_start );
@@ -1178,7 +1178,7 @@ void PCB_DIM_RADIAL::updateGeometry()
     polyBox.Append( textBox.GetOrigin().x, textBox.GetEnd().y );
     polyBox.Append( textBox.GetEnd() );
     polyBox.Append( textBox.GetEnd().x, textBox.GetOrigin().y );
-    polyBox.Rotate( -m_text.GetTextAngleRadians(), textBox.GetCenter() );
+    polyBox.Rotate( -m_text.GetTextAngle().AsRadians(), textBox.GetCenter() );
 
     VECTOR2I radial( m_end - m_start );
     radial = radial.Resize( m_leaderLength );

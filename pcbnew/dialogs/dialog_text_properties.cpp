@@ -273,14 +273,14 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     switch ( m_edaText->GetHorizJustify() )
     {
-    case GR_TEXT_HJUSTIFY_LEFT:   m_alignLeft->Check( true );   break;
-    case GR_TEXT_HJUSTIFY_CENTER: m_alignCenter->Check( true ); break;
-    case GR_TEXT_HJUSTIFY_RIGHT:  m_alignRight->Check( true );  break;
+    case GR_TEXT_H_ALIGN_LEFT:   m_alignLeft->Check( true );   break;
+    case GR_TEXT_H_ALIGN_CENTER: m_alignCenter->Check( true ); break;
+    case GR_TEXT_H_ALIGN_RIGHT:  m_alignRight->Check( true );  break;
     }
 
     m_mirrored->Check( m_edaText->IsMirrored() );
 
-    m_OrientValue = m_edaText->GetTextAngle();
+    m_OrientValue = m_edaText->GetTextAngle().AsTenthsOfADegree();
     m_orientation.SetDoubleValue( m_OrientValue );
 
     return DIALOG_TEXT_PROPERTIES_BASE::TransferDataToWindow();
@@ -377,11 +377,11 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     m_edaText->SetItalic( m_italic->IsChecked() );
     if( m_alignLeft->IsChecked() )
-        m_edaText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        m_edaText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     else if( m_alignCenter->IsChecked() )
-        m_edaText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        m_edaText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
     else
-        m_edaText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        m_edaText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
     m_edaText->SetMirrored( m_mirrored->IsChecked() );
 

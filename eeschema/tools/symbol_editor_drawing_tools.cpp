@@ -26,7 +26,6 @@
 #include <symbol_edit_frame.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <tools/symbol_editor_pin_tool.h>
-#include <bitmaps.h>
 #include <lib_text.h>
 #include <dialogs/dialog_lib_text_properties.h>
 #include <lib_shape.h>
@@ -40,7 +39,7 @@ static void* g_lastPinWeakPtr;
 
 SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
         EE_TOOL_BASE<SYMBOL_EDIT_FRAME>( "eeschema.SymbolDrawing" ),
-        m_lastTextAngle( 0.0 ),
+        m_lastTextAngle( EDA_ANGLE::HORIZONTAL ),
         m_lastFillStyle( FILL_T::NO_FILL ),
         m_drawSpecificConvert( true ),
         m_drawSpecificUnit( false )

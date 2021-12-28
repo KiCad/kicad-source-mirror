@@ -436,9 +436,9 @@ void processTextItem( const FP_TEXT& aSrc, FP_TEXT& aDest,
     }
     else
     {
-        // Careful: the visible bit is also in Effects
+        // Careful: the visible bit and position are also set by SetAttributes()
         bool visible = aDest.IsVisible();
-        aDest.SetEffects( aSrc );
+        aDest.SetAttributes( aSrc );
         aDest.SetVisible( visible );
     }
 

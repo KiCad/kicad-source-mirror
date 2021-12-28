@@ -225,8 +225,8 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         m_gal->SetFontUnderlined( false );
         m_gal->SetTextMirrored( false );
         m_gal->SetGlyphSize( VECTOR2D( textSize, textSize) );
-        m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
-        m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+        m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
+        m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
         m_gal->BitmapText( codeText, textPosition, orient );
 
         return;

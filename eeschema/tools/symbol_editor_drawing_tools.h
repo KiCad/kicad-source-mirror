@@ -52,8 +52,8 @@ public:
 
     int RepeatDrawItem( const TOOL_EVENT& aEvent );
 
-    void SetLastTextAngle( double aAngle ) { m_lastTextAngle = aAngle; }
-    double GetLastTextAngle() const { return m_lastTextAngle; }
+    void SetLastTextAngle( const EDA_ANGLE& aAngle ) { m_lastTextAngle = aAngle; }
+    EDA_ANGLE GetLastTextAngle() const { return m_lastTextAngle; }
 
     void SetDrawSpecificConvert( bool aSpecific ) { m_drawSpecificConvert = aSpecific; }
     bool GetDrawSpecificConvert() const { return m_drawSpecificConvert; }
@@ -65,7 +65,7 @@ private:
     void setTransitions() override;
 
 private:
-    double    m_lastTextAngle;
+    EDA_ANGLE m_lastTextAngle;
     FILL_T    m_lastFillStyle;
     bool      m_drawSpecificConvert;
     bool      m_drawSpecificUnit;

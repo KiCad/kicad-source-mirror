@@ -74,7 +74,7 @@ public:
         if( aContained )
             return rect.Contains( textBox );
 
-        return rect.Intersects( textBox, GetTextAngle() );
+        return rect.Intersects( textBox, GetTextAngle().AsTenthsOfADegree() );
     }
 
     int GetPenWidth() const override;

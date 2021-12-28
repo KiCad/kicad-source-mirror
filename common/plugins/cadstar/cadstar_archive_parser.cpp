@@ -2618,7 +2618,7 @@ void CADSTAR_ARCHIVE_PARSER::FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextIte
 {
     if( !aKiCadTextItem->GetText().IsEmpty() )
     {
-        int     txtAngleDecideg = aKiCadTextItem->GetTextAngleDegrees() * 10.0;
+        int     txtAngleDecideg = aKiCadTextItem->GetTextAngle().AsTenthsOfADegree();
         wxPoint positionOffset( 0, aKiCadTextItem->GetInterline() );
         RotatePoint( &positionOffset, txtAngleDecideg );
 

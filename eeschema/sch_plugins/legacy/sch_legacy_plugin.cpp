@@ -1740,9 +1740,9 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
                 parseQuotedString( name, aReader, line, &line, true );
 
                 if( hjustify == 'L' )
-                    field.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                    field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
                 else if( hjustify == 'R' )
-                    field.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                    field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
                 else if( hjustify != 'C' )
                     SCH_PARSE_ERROR( "symbol field text horizontal justification must be "
                                      "L, R, or C", aReader, line );
@@ -1750,9 +1750,9 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
                 // We are guaranteed to have a least one character here for older file formats
                 // otherwise an exception would have been raised..
                 if( textAttrs[0] == 'T' )
-                    field.SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                    field.SetVertJustify( GR_TEXT_V_ALIGN_TOP );
                 else if( textAttrs[0] == 'B' )
-                    field.SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                    field.SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
                 else if( textAttrs[0] != 'C' )
                     SCH_PARSE_ERROR( "symbol field text vertical justification must be "
                                      "B, T, or C", aReader, line );
@@ -1784,9 +1784,9 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
             field.SetTextSize( wxSize( size, size ) );
 
             if( orientation == 'H' )
-                field.SetTextAngle( TEXT_ANGLE_HORIZ );
+                field.SetTextAngle( EDA_ANGLE::HORIZONTAL );
             else if( orientation == 'V' )
-                field.SetTextAngle( TEXT_ANGLE_VERT );
+                field.SetTextAngle( EDA_ANGLE::VERTICAL );
             else
                 SCH_PARSE_ERROR( "symbol field orientation must be H or V", aReader, line );
 
@@ -2155,22 +2155,22 @@ void SCH_LEGACY_PLUGIN::saveField( SCH_FIELD* aField )
 {
     char hjustify = 'C';
 
-    if( aField->GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+    if( aField->GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
         hjustify = 'L';
-    else if( aField->GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+    else if( aField->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
         hjustify = 'R';
 
     char vjustify = 'C';
 
-    if( aField->GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
+    if( aField->GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
         vjustify = 'B';
-    else if( aField->GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
+    else if( aField->GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
         vjustify = 'T';
 
     m_out->Print( 0, "F %d %s %c %-3d %-3d %-3d %4.4X %c %c%c%c",
                   aField->GetId(),
                   EscapedUTF8( aField->GetText() ).c_str(),     // wraps in quotes too
-                  aField->GetTextAngle() == TEXT_ANGLE_HORIZ ? 'H' : 'V',
+                  aField->GetTextAngle().IsHorizontal() ? 'H' : 'V',
                   Iu2Mils( aField->GetLibPosition().x ),
                   Iu2Mils( aField->GetLibPosition().y ),
                   Iu2Mils( aField->GetTextWidth() ),
@@ -3093,9 +3093,9 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     char textOrient = parseChar( aReader, line, &line );
 
     if( textOrient == 'H' )
-        field->SetTextAngle( TEXT_ANGLE_HORIZ );
+        field->SetTextAngle( EDA_ANGLE::HORIZONTAL );
     else if( textOrient == 'V' )
-        field->SetTextAngle( TEXT_ANGLE_VERT );
+        field->SetTextAngle( EDA_ANGLE::VERTICAL );
     else
         SCH_PARSE_ERROR( "invalid field text orientation parameter", aReader, line );
 
@@ -3117,11 +3117,11 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol,
         char textHJustify = parseChar( aReader, line, &line );
 
         if( textHJustify == 'C' )
-            field->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+            field->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
         else if( textHJustify == 'L' )
-            field->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+            field->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         else if( textHJustify == 'R' )
-            field->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            field->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         else
             SCH_PARSE_ERROR( "invalid field text horizontal justification", aReader, line );
 
@@ -3136,9 +3136,9 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
         switch( (wxChar) attributes[0] )
         {
-        case 'C': field->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER ); break;
-        case 'B': field->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM ); break;
-        case 'T': field->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );    break;
+        case 'C': field->SetVertJustify( GR_TEXT_V_ALIGN_CENTER ); break;
+        case 'B': field->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM ); break;
+        case 'T': field->SetVertJustify( GR_TEXT_V_ALIGN_TOP );    break;
         default:  SCH_PARSE_ERROR( "invalid field text vertical justification", aReader, line );
         }
 
@@ -3446,18 +3446,18 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& aSymbo
         {
             switch( parseChar( aReader, line, &line ) )
             {
-            case 'L': text->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );   break;
-            case 'C': text->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER ); break;
-            case 'R': text->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );  break;
+            case 'L': text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );   break;
+            case 'C': text->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER ); break;
+            case 'R': text->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );  break;
             default: SCH_PARSE_ERROR( "invalid horizontal text justication; expected L, C, or R",
                                       aReader, line );
             }
 
             switch( parseChar( aReader, line, &line ) )
             {
-            case 'T': text->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );    break;
-            case 'C': text->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER ); break;
-            case 'B': text->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM ); break;
+            case 'T': text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );    break;
+            case 'C': text->SetVertJustify( GR_TEXT_V_ALIGN_CENTER ); break;
+            case 'B': text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM ); break;
             default: SCH_PARSE_ERROR( "invalid vertical text justication; expected T, C, or B",
                                       aReader, line );
             }
@@ -4058,16 +4058,16 @@ void SCH_LEGACY_PLUGIN_CACHE::saveField( const LIB_FIELD* aField, OUTPUTFORMATTE
 
     hjustify = 'C';
 
-    if( aField->GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+    if( aField->GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
         hjustify = 'L';
-    else if( aField->GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+    else if( aField->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
         hjustify = 'R';
 
     vjustify = 'C';
 
-    if( aField->GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
+    if( aField->GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
         vjustify = 'B';
-    else if( aField->GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
+    else if( aField->GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
         vjustify = 'T';
 
     aFormatter.Print( 0, "F%d %s %d %d %d %c %c %c %c%c%c",
@@ -4076,7 +4076,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveField( const LIB_FIELD* aField, OUTPUTFORMATTE
                       Iu2Mils( aField->GetTextPos().x ),
                       Iu2Mils( aField->GetTextPos().y ),
                       Iu2Mils( aField->GetTextWidth() ),
-                      aField->GetTextAngle() == 0 ? 'H' : 'V',
+                      aField->GetTextAngle().IsHorizontal() ? 'H' : 'V',
                       aField->IsVisible() ? 'V' : 'I',
                       hjustify, vjustify,
                       aField->IsItalic() ? 'I' : 'N',
@@ -4207,25 +4207,30 @@ void SCH_LEGACY_PLUGIN_CACHE::saveText( const LIB_TEXT* aText, OUTPUTFORMATTER& 
         text = wxT( "\"" ) + text + wxT( "\"" );
     }
 
-    aFormatter.Print( 0, "T %g %d %d %d %d %d %d %s", aText->GetTextAngle(),
-                      Iu2Mils( aText->GetTextPos().x ), Iu2Mils( aText->GetTextPos().y ),
-                      Iu2Mils( aText->GetTextWidth() ), !aText->IsVisible(),
-                      aText->GetUnit(), aText->GetConvert(), TO_UTF8( text ) );
+    aFormatter.Print( 0, "T %g %d %d %d %d %d %d %s",
+                      (double) aText->GetTextAngle().AsTenthsOfADegree(),
+                      Iu2Mils( aText->GetTextPos().x ),
+                      Iu2Mils( aText->GetTextPos().y ),
+                      Iu2Mils( aText->GetTextWidth() ),
+                      !aText->IsVisible(),
+                      aText->GetUnit(),
+                      aText->GetConvert(),
+                      TO_UTF8( text ) );
 
     aFormatter.Print( 0, " %s %d", aText->IsItalic() ? "Italic" : "Normal", aText->IsBold() );
 
     char hjustify = 'C';
 
-    if( aText->GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+    if( aText->GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
         hjustify = 'L';
-    else if( aText->GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+    else if( aText->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
         hjustify = 'R';
 
     char vjustify = 'C';
 
-    if( aText->GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
+    if( aText->GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
         vjustify = 'B';
-    else if( aText->GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
+    else if( aText->GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
         vjustify = 'T';
 
     aFormatter.Print( 0, " %c %c\n", hjustify, vjustify );

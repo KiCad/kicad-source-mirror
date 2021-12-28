@@ -447,7 +447,7 @@ public:
      *
      * @param aHorizontalJustify is the horizontal justify value.
      */
-    inline void SetHorizontalJustify( const EDA_TEXT_HJUSTIFY_T aHorizontalJustify )
+    inline void SetHorizontalJustify( const GR_TEXT_H_ALIGN_T aHorizontalJustify )
     {
         textProperties.m_horizontalJustify = aHorizontalJustify;
     }
@@ -455,7 +455,7 @@ public:
     /**
      * Return current text horizontal justification setting.
      */
-    inline EDA_TEXT_HJUSTIFY_T GetHorizontalJustify() const
+    inline GR_TEXT_H_ALIGN_T GetHorizontalJustify() const
     {
         return textProperties.m_horizontalJustify;
     }
@@ -465,7 +465,7 @@ public:
      *
      * @param aVerticalJustify is the vertical justify value.
      */
-    inline void SetVerticalJustify( const EDA_TEXT_VJUSTIFY_T aVerticalJustify )
+    inline void SetVerticalJustify( const GR_TEXT_V_ALIGN_T aVerticalJustify )
     {
         textProperties.m_verticalJustify = aVerticalJustify;
     }
@@ -473,7 +473,7 @@ public:
     /**
      * Returns current text vertical justification setting.
      */
-    inline EDA_TEXT_VJUSTIFY_T GetVerticalJustify() const
+    inline GR_TEXT_V_ALIGN_T GetVerticalJustify() const
     {
         return textProperties.m_verticalJustify;
     }
@@ -1218,13 +1218,13 @@ protected:
 private:
     struct TEXT_PROPERTIES
     {
-        VECTOR2D            m_glyphSize;            ///< Size of the glyphs
-        EDA_TEXT_HJUSTIFY_T m_horizontalJustify;    ///< Horizontal justification
-        EDA_TEXT_VJUSTIFY_T m_verticalJustify;      ///< Vertical justification
-        bool                m_bold;
-        bool                m_italic;
-        bool                m_underlined;
-        bool                m_mirrored;
+        VECTOR2D          m_glyphSize;            ///< Size of the glyphs
+        GR_TEXT_H_ALIGN_T m_horizontalJustify;    ///< Horizontal justification
+        GR_TEXT_V_ALIGN_T m_verticalJustify;      ///< Vertical justification
+        bool              m_bold;
+        bool              m_italic;
+        bool              m_underlined;
+        bool              m_mirrored;
     } textProperties;
 };
 

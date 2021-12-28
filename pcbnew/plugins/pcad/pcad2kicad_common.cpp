@@ -468,40 +468,40 @@ void SetTextJustify( EDA_TEXT* aText, TTEXT_JUSTIFY aJustify )
     switch( aJustify )
     {
     case LowerLeft:
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         break;
     case LowerCenter:
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
         break;
     case LowerRight:
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         break;
     case UpperLeft:
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         break;
     case UpperCenter:
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
         break;
     case UpperRight:
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         break;
     case Left:
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         break;
     case Center:
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
         break;
     case Right:
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         break;
     }
 }

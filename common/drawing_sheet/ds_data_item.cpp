@@ -523,8 +523,8 @@ DS_DATA_ITEM_TEXT::DS_DATA_ITEM_TEXT( const wxString& aTextBase ) :
 {
     m_TextBase = aTextBase;
     m_IncrementLabel = 1;
-    m_Hjustify = GR_TEXT_HJUSTIFY_LEFT;
-    m_Vjustify = GR_TEXT_VJUSTIFY_CENTER;
+    m_Hjustify = GR_TEXT_H_ALIGN_LEFT;
+    m_Vjustify = GR_TEXT_V_ALIGN_CENTER;
     m_Italic = false;
     m_Bold = false;
     m_Orient = 0.0;

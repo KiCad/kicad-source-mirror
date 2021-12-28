@@ -30,6 +30,7 @@
 
 #include <outline_mode.h>
 #include <eda_rect.h>
+#include <font/text_attributes.h>
 
 class OUTPUTFORMATTER;
 class SHAPE_COMPOUND;
@@ -66,31 +67,10 @@ namespace KIGFX
 using KIGFX::RENDER_SETTINGS;
 using KIGFX::COLOR4D;
 
-/// Frequent text rotations, used with {Set,Get}TextAngle(),
-/// in 0.1 degrees for now, hoping to migrate to degrees eventually.
-#define TEXT_ANGLE_HORIZ 0
-#define TEXT_ANGLE_VERT 900
-
 // part of the kicad_plugin.h family of defines.
 // See kicad_plugin.h for the choice of the value
 // When set when calling  EDA_TEXT::Format, disable writing the "hide" keyword in save file
 #define CTL_OMIT_HIDE               (1 << 6)
-
-
-// Graphic Text justify:
-// Values -1,0,1 are used in computations, do not change them
-enum EDA_TEXT_HJUSTIFY_T {
-    GR_TEXT_HJUSTIFY_LEFT   = -1,
-    GR_TEXT_HJUSTIFY_CENTER = 0,
-    GR_TEXT_HJUSTIFY_RIGHT  = 1
-};
-
-
-enum EDA_TEXT_VJUSTIFY_T {
-    GR_TEXT_VJUSTIFY_TOP    = -1,
-    GR_TEXT_VJUSTIFY_CENTER = 0,
-    GR_TEXT_VJUSTIFY_BOTTOM = 1
-};
 
 
 /**
@@ -100,35 +80,6 @@ enum EDA_TEXT_VJUSTIFY_T {
  */
 #define DEFAULT_SIZE_TEXT   50     // default text height (in mils, i.e. 1/1000")
 #define DIM_ANCRE_TEXTE     2      // Anchor size for text
-
-
-/**
- * A container for text effects.
- *
- * These fields are bundled so they can be easily copied together as a lot. The privacy
- * policy is established by client (incorporating) code.
- */
-struct TEXT_EFFECTS
-{
-    TEXT_EFFECTS( int aSetOfBits = 0 ) :
-        bits( aSetOfBits ),
-        hjustify( GR_TEXT_HJUSTIFY_CENTER ),
-        vjustify( GR_TEXT_VJUSTIFY_CENTER ),
-        penwidth( 0 ),
-        angle( 0.0 )
-    {}
-
-    int         bits;           ///< any set of booleans a client uses.
-    signed char hjustify;       ///< horizontal justification
-    signed char vjustify;       ///< vertical justification
-    wxSize      size;
-    int         penwidth;
-    double      angle;          ///< now: 0.1 degrees; future: degrees
-    wxPoint     pos;
-
-    void Bit( int aBit, bool aValue )   { aValue ? bits |= (1<<aBit) : bits &= ~(1<<aBit); }
-    bool Bit( int aBit ) const          { return bits & (1<<aBit); }
-};
 
 
 /**
@@ -177,66 +128,63 @@ public:
      * The TextThickness is that set by the user.  The EffectiveTextPenWidth also factors
      * in bold text and thickness clamping.
      */
-    void SetTextThickness( int aWidth ) { m_e.penwidth = aWidth; };
-    int GetTextThickness() const { return m_e.penwidth; };
+    void SetTextThickness( int aWidth ) { m_attributes.m_StrokeWidth = aWidth; };
+    int GetTextThickness() const        { return m_attributes.m_StrokeWidth; };
 
     /**
      * The EffectiveTextPenWidth uses the text thickness if > 1 or aDefaultWidth.
      */
     int GetEffectiveTextPenWidth( int aDefaultWidth = 0 ) const;
 
-    virtual void SetTextAngle( double aAngle )
+    virtual void SetTextAngle( double aAngleInTenthsOfADegree )
     {
         // Higher level classes may be more restrictive than this by overloading
         // SetTextAngle() or merely calling EDA_TEXT::SetTextAngle() after clamping
         // aAngle before calling this lowest inline accessor.
-        m_e.angle = aAngle;
+        m_attributes.m_Angle = EDA_ANGLE( aAngleInTenthsOfADegree, EDA_ANGLE::TENTHS_OF_A_DEGREE );
     }
-    double GetTextAngle() const                 { return m_e.angle; }
 
-    double GetTextAngleDegrees() const          { return GetTextAngle() / 10.0; }
-    double GetTextAngleRadians() const          { return GetTextAngle() * M_PI/1800; }
+    void SetTextAngle( const EDA_ANGLE& aAngle )
+    {
+        m_attributes.m_Angle = aAngle;
+    }
 
-    void SetItalic( bool isItalic )             { m_e.Bit( TE_ITALIC, isItalic ); }
-    bool IsItalic() const                       { return m_e.Bit( TE_ITALIC ); }
+    const EDA_ANGLE& GetTextAngle() const       { return m_attributes.m_Angle; }
 
-    void SetBold( bool aBold )                  { m_e.Bit( TE_BOLD, aBold); }
-    bool IsBold() const                         { return m_e.Bit( TE_BOLD ); }
+    void SetItalic( bool aItalic )              { m_attributes.m_Italic = aItalic; }
+    bool IsItalic() const                       { return m_attributes.m_Italic; }
 
-    virtual void SetVisible( bool aVisible )    { m_e.Bit( TE_VISIBLE, aVisible ); }
-    virtual bool IsVisible() const              { return m_e.Bit( TE_VISIBLE ); }
+    void SetBold( bool aBold )                  { m_attributes.m_Bold = aBold; }
+    bool IsBold() const                         { return m_attributes.m_Bold; }
 
-    void SetMirrored( bool isMirrored )         { m_e.Bit( TE_MIRROR, isMirrored ); }
-    bool IsMirrored() const                     { return m_e.Bit( TE_MIRROR ); }
+    virtual void SetVisible( bool aVisible )    { m_attributes.m_Visible = aVisible; }
+    virtual bool IsVisible() const              { return m_attributes.m_Visible; }
+
+    void SetMirrored( bool isMirrored )         { m_attributes.m_Mirrored = isMirrored; }
+    bool IsMirrored() const                     { return m_attributes.m_Mirrored; }
 
     /**
      * @param aAllow true if ok to use multiline option, false if ok to use only single line
      *               text.  (Single line is faster in calculations than multiline.)
      */
-    void SetMultilineAllowed( bool aAllow )     { m_e.Bit( TE_MULTILINE, aAllow ); }
-    bool IsMultilineAllowed() const             { return m_e.Bit( TE_MULTILINE ); }
+    void SetMultilineAllowed( bool aAllow )     { m_attributes.m_Multiline = aAllow; }
+    bool IsMultilineAllowed() const             { return m_attributes.m_Multiline; }
 
-    EDA_TEXT_HJUSTIFY_T GetHorizJustify() const { return EDA_TEXT_HJUSTIFY_T( m_e.hjustify ); };
-    EDA_TEXT_VJUSTIFY_T GetVertJustify() const  { return EDA_TEXT_VJUSTIFY_T( m_e.vjustify ); };
+    GR_TEXT_H_ALIGN_T GetHorizJustify() const   { return m_attributes.m_Halign; };
+    GR_TEXT_V_ALIGN_T GetVertJustify() const    { return m_attributes.m_Valign; };
 
-    void SetHorizJustify( EDA_TEXT_HJUSTIFY_T aType )   { m_e.hjustify = aType; };
-    void SetVertJustify( EDA_TEXT_VJUSTIFY_T aType )    { m_e.vjustify = aType; };
-
-    /**
-     * Set the text effects from another instance.
-     *
-     * #TEXT_EFFECTS is not exposed in the public API, but includes everything except the actual
-     * text string itself.
-     */
-    void SetEffects( const EDA_TEXT& aSrc );
+    void SetHorizJustify( GR_TEXT_H_ALIGN_T aType )   { m_attributes.m_Halign = aType; };
+    void SetVertJustify( GR_TEXT_V_ALIGN_T aType )    { m_attributes.m_Valign = aType; };
 
     /**
-     * Swap the text effects of the two involved instances.
-     *
-     * #TEXT_EFFECTS is not exposed in the public API, but includes everything except the actual
-     * text string itself.
+     * Set the text attributes from another instance.
      */
-    void SwapEffects( EDA_TEXT& aTradingPartner );
+    void SetAttributes( const EDA_TEXT& aSrc );
+
+    /**
+     * Swap the text attributes of the two involved instances.
+     */
+    void SwapAttributes( EDA_TEXT& aTradingPartner );
 
     void SwapText( EDA_TEXT& aTradingPartner );
 
@@ -255,28 +203,29 @@ public:
 
     bool IsDefaultFormatting() const;
 
-    void SetTextSize( const wxSize& aNewSize )  { m_e.size = aNewSize; }
-    const wxSize& GetTextSize() const           { return m_e.size; }
+    void SetTextSize( const wxSize& aNewSize )  { m_attributes.m_Size = aNewSize; }
+    wxSize GetTextSize() const                  { return wxSize( m_attributes.m_Size.x,
+                                                                 m_attributes.m_Size.y ); }
 
-    void SetTextWidth( int aWidth )             { m_e.size.x = aWidth; }
-    int GetTextWidth() const                    { return m_e.size.x; }
+    void SetTextWidth( int aWidth )             { m_attributes.m_Size.x = aWidth; }
+    int GetTextWidth() const                    { return m_attributes.m_Size.x; }
 
-    void SetTextHeight( int aHeight )           { m_e.size.y = aHeight; }
-    int GetTextHeight() const                   { return m_e.size.y; }
+    void SetTextHeight( int aHeight )           { m_attributes.m_Size.y = aHeight; }
+    int GetTextHeight() const                   { return m_attributes.m_Size.y; }
 
-    void SetTextPos( const wxPoint& aPoint )    { m_e.pos = aPoint; }
-    const wxPoint& GetTextPos() const           { return m_e.pos; }
+    void SetTextPos( const wxPoint& aPoint )    { m_pos = aPoint; }
+    const wxPoint& GetTextPos() const           { return m_pos; }
 
-    void SetTextX( int aX )                     { m_e.pos.x = aX; }
-    void SetTextY( int aY )                     { m_e.pos.y = aY; }
+    void SetTextX( int aX )                     { m_pos.x = aX; }
+    void SetTextY( int aY )                     { m_pos.y = aY; }
 
-    void Offset( const wxPoint& aOffset )       { m_e.pos += aOffset; }
+    void Offset( const wxPoint& aOffset )       { m_pos += aOffset; }
 
     void Empty()                                { m_text.Empty(); }
 
-    static EDA_TEXT_HJUSTIFY_T MapHorizJustify( int aHorizJustify );
+    static GR_TEXT_H_ALIGN_T MapHorizJustify( int aHorizJustify );
 
-    static EDA_TEXT_VJUSTIFY_T MapVertJustify( int aVertJustify );
+    static GR_TEXT_V_ALIGN_T MapVertJustify( int aVertJustify );
 
     /**
      * Print this text object to the device context \a aDC.
@@ -385,10 +334,10 @@ public:
      */
     virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
-    virtual double GetDrawRotation() const                  { return GetTextAngle(); }
+    virtual EDA_ANGLE GetDrawRotation() const               { return GetTextAngle(); }
     virtual wxPoint GetDrawPos() const                      { return GetTextPos(); }
-    virtual EDA_TEXT_HJUSTIFY_T GetDrawHorizJustify() const { return GetHorizJustify(); };
-    virtual EDA_TEXT_VJUSTIFY_T GetDrawVertJustify() const  { return GetVertJustify(); };
+    virtual GR_TEXT_H_ALIGN_T GetDrawHorizJustify() const   { return GetHorizJustify(); };
+    virtual GR_TEXT_V_ALIGN_T GetDrawVertJustify() const    { return GetVertJustify(); };
 
     int Compare( const EDA_TEXT* aOther ) const;
 
@@ -396,7 +345,7 @@ private:
     void cacheShownText();
 
     /**
-     * Print each line of this EDA_TEXT..
+     * Print each line of this EDA_TEXT.
      *
      * @param aOffset draw offset (usually (0,0)).
      * @param aColor text color.
@@ -408,19 +357,12 @@ private:
                              const COLOR4D& aColor, OUTLINE_MODE aFillMode, const wxString& aText,
                              const wxPoint& aPos );
 
-    wxString      m_text;
-    wxString      m_shown_text;           // Cache of unescaped text for efficient access
-    bool          m_shown_text_has_text_var_refs;
+    wxString        m_text;
+    wxString        m_shown_text;           // Cache of unescaped text for efficient access
+    bool            m_shown_text_has_text_var_refs;
 
-    TEXT_EFFECTS  m_e;                    // Private bitflags for text styling.  API above
-                                          // provides accessor funcs.
-    enum TE_FLAGS {
-        TE_MIRROR,
-        TE_ITALIC,
-        TE_BOLD,
-        TE_MULTILINE,
-        TE_VISIBLE,
-    };
+    TEXT_ATTRIBUTES m_attributes;
+    wxPoint         m_pos;
 };
 
 

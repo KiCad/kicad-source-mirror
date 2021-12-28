@@ -298,53 +298,53 @@ static void eagleToKicadAlignment( EDA_TEXT* aText, int aEagleAlignment, int aRe
     switch( align )
     {
     case ETEXT::CENTER:
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
         break;
 
     case ETEXT::CENTER_LEFT:
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
         break;
 
     case ETEXT::CENTER_RIGHT:
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
         break;
 
     case ETEXT::TOP_CENTER:
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
         break;
 
     case ETEXT::TOP_LEFT:
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
         break;
 
     case ETEXT::TOP_RIGHT:
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
         break;
 
     case ETEXT::BOTTOM_CENTER:
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
         break;
 
     case ETEXT::BOTTOM_LEFT:
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
         break;
 
     case ETEXT::BOTTOM_RIGHT:
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
         break;
 
     default:
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
         break;
     }
 }

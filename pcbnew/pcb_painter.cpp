@@ -611,8 +611,8 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         m_gal->SetFontUnderlined( false );
         m_gal->SetTextMirrored( false );
         m_gal->SetGlyphSize( VECTOR2D( textSize * 0.55, textSize * 0.55 ) );
-        m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
-        m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+        m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
+        m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
         m_gal->BitmapText( netName, textPosition, textOrientation );
 
         return;
@@ -912,8 +912,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 size = maxSize;
 
             // Default font settings
-            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
-            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+            m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
+            m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
             m_gal->SetFontBold( false );
             m_gal->SetFontItalic( false );
             m_gal->SetFontUnderlined( false );
@@ -1568,7 +1568,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( shownText, position, aText->GetTextAngleRadians() );
+    m_gal->StrokeText( shownText, position, aText->GetTextAngle().AsRadians() );
 }
 
 
@@ -1592,7 +1592,7 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( shownText, position, aText->GetDrawRotationRadians() );
+    m_gal->StrokeText( shownText, position, aText->GetDrawRotation().AsRadians() );
 
     // Draw the umbilical line
     if( aText->IsSelected() )
@@ -1686,8 +1686,8 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
             m_gal->SetFontItalic( true );
             m_gal->SetFontUnderlined( false );
             m_gal->SetTextMirrored( m_gal->IsFlippedX() );
-            m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
-            m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
+            m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_BOTTOM );
             m_gal->SetIsFill( false );
             m_gal->SetGlyphSize( VECTOR2D( textSize, textSize ) );
             m_gal->SetLineWidth( penWidth );
@@ -1833,7 +1833,7 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
         m_gal->SetLineWidth( getLineThickness( text.GetEffectiveTextPenWidth() ) );
 
     m_gal->SetTextAttributes( &text );
-    m_gal->StrokeText( text.GetShownText(), position, text.GetTextAngleRadians() );
+    m_gal->StrokeText( text.GetShownText(), position, text.GetTextAngle().AsRadians() );
 }
 
 

@@ -893,7 +893,6 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         // Text on silk layer: RefDes and value (are they actually useful?)
         for( FP_TEXT* textItem : { &footprint->Reference(), &footprint->Value() } )
         {
-            double txt_orient = textItem->GetTextAngle();
             std::string layer = GenCADLayerName( cu_count,
                                                  footprint->GetFlag() ? B_SilkS : F_SilkS );
 
@@ -901,7 +900,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
                      textItem->GetPos0().x / SCALE_FACTOR,
                     -textItem->GetPos0().y / SCALE_FACTOR,
                      textItem->GetTextWidth() / SCALE_FACTOR,
-                     txt_orient / 10.0,
+                     textItem->GetTextAngle().AsDegrees(),
                      mirror,
                      layer.c_str(),
                      TO_UTF8( escapeString( textItem->GetText() ) ) );

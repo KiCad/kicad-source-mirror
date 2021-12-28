@@ -22,17 +22,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * This file is part of the common library
- * @file  drawtxt.h
- * @see   common.h
- */
-
-#ifndef __INCLUDE__DRAWTXT_H__
-#define __INCLUDE__DRAWTXT_H__ 1
+#ifndef GR_TEXT_H
+#define GR_TEXT_H
 
 #include <eda_item.h>
-#include <eda_text.h>               // EDA_TEXT_HJUSTIFY_T and EDA_TEXT_VJUSTIFY_T
+#include <font/text_attributes.h>
+
+namespace KIGFX
+{
+    class COLOR4D;
+}
 
 /**
  * Minimum dimension in pixel for drawing/no drawing a text used in Pcbnew to decide to
@@ -93,7 +92,7 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, b
  *  @param aPos text position (according to h_justify, v_justify).
  *  @param aColor (COLOR4D) = text color.
  *  @param aText text to draw.
- *  @param aOrient angle in 0.1 degree.
+ *  @param aOrient angle.
  *  @param aSize text size (size.x or size.y can be < 0 for mirrored texts).
  *  @param aH_justify horizontal justification (Left, center, right).
  *  @param aV_justify vertical justification (bottom, center, top).
@@ -110,24 +109,11 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, b
  *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
  *                    the text. NULL to draw this text.
  */
-void GRText( wxDC* aDC, const wxPoint& aPos, const COLOR4D& aColor, const wxString& aText,
-             double aOrient, const wxSize& aSize, enum EDA_TEXT_HJUSTIFY_T aH_justify,
-             enum EDA_TEXT_VJUSTIFY_T aV_justify, int aWidth, bool aItalic, bool aBold,
+void GRText( wxDC* aDC, const wxPoint& aPos, const KIGFX::COLOR4D& aColor, const wxString& aText,
+             const EDA_ANGLE& aOrient, const wxSize& aSize, enum GR_TEXT_H_ALIGN_T aH_justify,
+             enum GR_TEXT_V_ALIGN_T aV_justify, int aWidth, bool aItalic, bool aBold,
              void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,
              void* aCallbackData = nullptr, PLOTTER* aPlotter = nullptr );
 
 
-/**
- * Draw graphic text with a border so that it can be read on different backgrounds.
- *
- * See GRText for most of the parameters.  If \a aBgColor is a dark color text is drawn
- * in \a aColor2 with \a aColor1 border.  Otherwise colors are swapped.
- */
-void GRHaloText( wxDC* aDC, const wxPoint& aPos, const COLOR4D& aBgColor, const COLOR4D& aColor1,
-                 const COLOR4D& aColor2, const wxString& aText, double aOrient, const wxSize& aSize,
-                 enum EDA_TEXT_HJUSTIFY_T aH_justify, enum EDA_TEXT_VJUSTIFY_T aV_justify,
-                 int aWidth, bool aItalic, bool aBold,
-                 void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,
-                 void* aCallbackData = nullptr, PLOTTER* aPlotter = nullptr );
-
-#endif /* __INCLUDE__DRAWTXT_H__ */
+#endif /* GR_TEXT_H */

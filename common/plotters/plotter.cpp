@@ -630,3 +630,41 @@ void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int a
 
     PlotPoly( cornerList, aFill, aWidth, aData );
 }
+
+
+/**
+ * Same as GRText, but plot graphic text instead of draw it.
+ *
+ * @param aPos is the text position (according to aH_justify, aV_justify).
+ * @param aColor is the text color.
+ * @param aText is the text to draw.
+ * @param aOrient is the angle.
+ * @param aSize is the text size (size.x or size.y can be < 0 for mirrored texts).
+ * @param aH_justify is the horizontal justification (Left, center, right).
+ * @param aV_justify is the vertical justification (bottom, center, top).
+ * @param aPenWidth is the line width (if = 0, use plot default line width).
+ * @param aItalic is the true to simulate an italic font.
+ * @param aBold use true to use a bold font Useful only with default width value (aWidth = 0).
+ * @param aMultilineAllowed use true to plot text as multiline, otherwise single line.
+ * @param aData is a parameter used by some plotters in SetCurrentLineWidth(),
+ *              not directly used here.
+ */
+void PLOTTER::Text( const wxPoint&              aPos,
+                    const COLOR4D&              aColor,
+                    const wxString&             aText,
+                    const EDA_ANGLE&            aOrient,
+                    const wxSize&               aSize,
+                    enum GR_TEXT_H_ALIGN_T      aH_justify,
+                    enum GR_TEXT_V_ALIGN_T      aV_justify,
+                    int                         aPenWidth,
+                    bool                        aItalic,
+                    bool                        aBold,
+                    bool                        aMultilineAllowed,
+                    void*                       aData )
+{
+    SetColor( aColor );
+    SetCurrentLineWidth( aPenWidth, aData );
+
+    GRText( nullptr, aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aPenWidth,
+            aItalic, aBold, nullptr, nullptr, this );
+}

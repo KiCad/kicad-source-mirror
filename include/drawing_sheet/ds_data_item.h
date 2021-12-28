@@ -335,8 +335,8 @@ public:
     wxString            m_TextBase;             // The basic text, with format symbols
     wxString            m_FullText;             // The expanded text, shown on screen
     double              m_Orient;               // Orientation in degrees
-    EDA_TEXT_HJUSTIFY_T m_Hjustify;
-    EDA_TEXT_VJUSTIFY_T m_Vjustify;
+    GR_TEXT_H_ALIGN_T   m_Hjustify;
+    GR_TEXT_V_ALIGN_T   m_Vjustify;
     bool                m_Italic;
     bool                m_Bold;
     DSIZE               m_TextSize;

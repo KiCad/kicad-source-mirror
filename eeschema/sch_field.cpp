@@ -217,7 +217,6 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset 
 {
     wxDC*    DC = aSettings->GetPrintDC();
     COLOR4D  color = aSettings->GetLayerColor( IsForceVisible() ? LAYER_HIDDEN : m_layer );
-    int      orient;
     wxPoint  textpos;
     int      penWidth = GetEffectiveTextPenWidth( aSettings->GetDefaultPenWidth() );
 
@@ -225,7 +224,7 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset 
         return;
 
     // Calculate the text orientation according to the symbol orientation.
-    orient = GetTextAngle();
+    EDA_ANGLE orient = GetTextAngle();
 
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
@@ -233,10 +232,10 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset 
 
         if( parentSymbol && parentSymbol->GetTransform().y1 )  // Rotate symbol 90 degrees.
         {
-            if( orient == TEXT_ANGLE_HORIZ )
-                orient = TEXT_ANGLE_VERT;
+            if( orient == EDA_ANGLE::HORIZONTAL )
+                orient = EDA_ANGLE::VERTICAL;
             else
-                orient = TEXT_ANGLE_HORIZ;
+                orient = EDA_ANGLE::HORIZONTAL;
         }
     }
 
@@ -252,14 +251,14 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset 
      */
     textpos = GetBoundingBox().Centre() + aOffset;
 
-    GRText( DC, textpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_HJUSTIFY_CENTER,
-            GR_TEXT_VJUSTIFY_CENTER, penWidth, IsItalic(), IsBold() );
+    GRText( DC, textpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_H_ALIGN_CENTER,
+            GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold() );
 }
 
 
 void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
 {
-    SetEffects( aSource );
+    SetAttributes( aSource );
 }
 
 
@@ -272,14 +271,14 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 
     std::swap( m_layer, item->m_layer );
     SwapText( *item );
-    SwapEffects( *item );
+    SwapAttributes( *item );
 }
 
 
-double SCH_FIELD::GetDrawRotation() const
+EDA_ANGLE SCH_FIELD::GetDrawRotation() const
 {
     // Calculate the text orientation according to the symbol orientation.
-    int orient = GetTextAngle();
+    EDA_ANGLE orient = GetTextAngle();
 
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
@@ -287,10 +286,10 @@ double SCH_FIELD::GetDrawRotation() const
 
         if( parentSymbol && parentSymbol->GetTransform().y1 )  // Rotate symbol 90 degrees.
         {
-            if( orient == TEXT_ANGLE_HORIZ )
-                orient = TEXT_ANGLE_VERT;
+            if( orient.IsHorizontal() )
+                orient = EDA_ANGLE::VERTICAL;
             else
-                orient = TEXT_ANGLE_HORIZ;
+                orient = EDA_ANGLE::HORIZONTAL;
         }
     }
 
@@ -304,15 +303,15 @@ wxPoint SCH_FIELD::GetDrawPos() const
 }
 
 
-EDA_TEXT_HJUSTIFY_T SCH_FIELD::GetDrawHorizJustify() const
+GR_TEXT_H_ALIGN_T SCH_FIELD::GetDrawHorizJustify() const
 {
-    return GR_TEXT_HJUSTIFY_CENTER;
+    return GR_TEXT_H_ALIGN_CENTER;
 }
 
 
-EDA_TEXT_VJUSTIFY_T SCH_FIELD::GetDrawVertJustify() const
+GR_TEXT_V_ALIGN_T SCH_FIELD::GetDrawVertJustify() const
 {
-    return GR_TEXT_VJUSTIFY_CENTER;
+    return GR_TEXT_V_ALIGN_CENTER;
 }
 
 
@@ -326,8 +325,8 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
     wxPoint pos = GetTextPos() - origin;
     wxPoint begin = rect.GetOrigin() - origin;
     wxPoint end = rect.GetEnd() - origin;
-    RotatePoint( &begin, pos, GetTextAngle() );
-    RotatePoint( &end, pos, GetTextAngle() );
+    RotatePoint( &begin, pos, GetTextAngle().AsTenthsOfADegree() );
+    RotatePoint( &end, pos, GetTextAngle().AsTenthsOfADegree() );
 
     // Now, apply the symbol transform (mirror/rot)
     TRANSFORM transform;
@@ -365,13 +364,13 @@ bool SCH_FIELD::IsHorizJustifyFlipped() const
 
     switch( GetHorizJustify() )
     {
-    case GR_TEXT_HJUSTIFY_LEFT:
-        if( GetDrawRotation() == TEXT_ANGLE_VERT )
+    case GR_TEXT_H_ALIGN_LEFT:
+        if( GetDrawRotation().IsVertical() )
             return render_center.y > pos.y;
         else
             return render_center.x < pos.x;
-    case GR_TEXT_HJUSTIFY_RIGHT:
-        if( GetDrawRotation() == TEXT_ANGLE_VERT )
+    case GR_TEXT_H_ALIGN_RIGHT:
+        if( GetDrawRotation().IsVertical() )
             return render_center.y < pos.y;
         else
             return render_center.x > pos.x;
@@ -381,16 +380,16 @@ bool SCH_FIELD::IsHorizJustifyFlipped() const
 }
 
 
-EDA_TEXT_HJUSTIFY_T SCH_FIELD::GetEffectiveHorizJustify() const
+GR_TEXT_H_ALIGN_T SCH_FIELD::GetEffectiveHorizJustify() const
 {
     switch( GetHorizJustify() )
     {
-    case GR_TEXT_HJUSTIFY_LEFT:
-        return IsHorizJustifyFlipped() ? GR_TEXT_HJUSTIFY_RIGHT : GR_TEXT_HJUSTIFY_LEFT;
-    case GR_TEXT_HJUSTIFY_RIGHT:
-        return IsHorizJustifyFlipped() ? GR_TEXT_HJUSTIFY_LEFT : GR_TEXT_HJUSTIFY_RIGHT;
+    case GR_TEXT_H_ALIGN_LEFT:
+        return IsHorizJustifyFlipped() ? GR_TEXT_H_ALIGN_RIGHT : GR_TEXT_H_ALIGN_LEFT;
+    case GR_TEXT_H_ALIGN_RIGHT:
+        return IsHorizJustifyFlipped() ? GR_TEXT_H_ALIGN_LEFT : GR_TEXT_H_ALIGN_RIGHT;
     default:
-        return GR_TEXT_HJUSTIFY_CENTER;
+        return GR_TEXT_H_ALIGN_CENTER;
     }
 }
 
@@ -402,13 +401,13 @@ bool SCH_FIELD::IsVertJustifyFlipped() const
 
     switch( GetVertJustify() )
     {
-    case GR_TEXT_VJUSTIFY_TOP:
-        if( GetDrawRotation() == TEXT_ANGLE_VERT )
+    case GR_TEXT_V_ALIGN_TOP:
+        if( GetDrawRotation().IsVertical() )
             return render_center.x < pos.x;
         else
             return render_center.y < pos.y;
-    case GR_TEXT_VJUSTIFY_BOTTOM:
-        if( GetDrawRotation() == TEXT_ANGLE_VERT )
+    case GR_TEXT_V_ALIGN_BOTTOM:
+        if( GetDrawRotation().IsVertical() )
             return render_center.x > pos.x;
         else
             return render_center.y > pos.y;
@@ -418,16 +417,16 @@ bool SCH_FIELD::IsVertJustifyFlipped() const
 }
 
 
-EDA_TEXT_VJUSTIFY_T SCH_FIELD::GetEffectiveVertJustify() const
+GR_TEXT_V_ALIGN_T SCH_FIELD::GetEffectiveVertJustify() const
 {
     switch( GetVertJustify() )
     {
-    case GR_TEXT_VJUSTIFY_TOP:
-        return IsVertJustifyFlipped() ? GR_TEXT_VJUSTIFY_BOTTOM : GR_TEXT_VJUSTIFY_TOP;
-    case GR_TEXT_VJUSTIFY_BOTTOM:
-        return IsVertJustifyFlipped() ? GR_TEXT_VJUSTIFY_TOP : GR_TEXT_VJUSTIFY_BOTTOM;
+    case GR_TEXT_V_ALIGN_TOP:
+        return IsVertJustifyFlipped() ? GR_TEXT_V_ALIGN_BOTTOM : GR_TEXT_V_ALIGN_TOP;
+    case GR_TEXT_V_ALIGN_BOTTOM:
+        return IsVertJustifyFlipped() ? GR_TEXT_V_ALIGN_TOP : GR_TEXT_V_ALIGN_BOTTOM;
     default:
-        return GR_TEXT_VJUSTIFY_CENTER;
+        return GR_TEXT_V_ALIGN_CENTER;
     }
 }
 
@@ -610,18 +609,18 @@ void SCH_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     switch ( GetHorizJustify() )
     {
-    case GR_TEXT_HJUSTIFY_LEFT:   msg = _( "Left" );   break;
-    case GR_TEXT_HJUSTIFY_CENTER: msg = _( "Center" ); break;
-    case GR_TEXT_HJUSTIFY_RIGHT:  msg = _( "Right" );  break;
+    case GR_TEXT_H_ALIGN_LEFT:   msg = _( "Left" );   break;
+    case GR_TEXT_H_ALIGN_CENTER: msg = _( "Center" ); break;
+    case GR_TEXT_H_ALIGN_RIGHT:  msg = _( "Right" );  break;
     }
 
     aList.emplace_back( _( "H Justification" ), msg );
 
     switch ( GetVertJustify() )
     {
-    case GR_TEXT_VJUSTIFY_TOP:    msg = _( "Top" );    break;
-    case GR_TEXT_VJUSTIFY_CENTER: msg = _( "Center" ); break;
-    case GR_TEXT_VJUSTIFY_BOTTOM: msg = _( "Bottom" ); break;
+    case GR_TEXT_V_ALIGN_TOP:    msg = _( "Top" );    break;
+    case GR_TEXT_V_ALIGN_CENTER: msg = _( "Center" ); break;
+    case GR_TEXT_V_ALIGN_BOTTOM: msg = _( "Bottom" ); break;
     }
 
     aList.emplace_back( _( "V Justification" ), msg );
@@ -833,7 +832,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter ) const
         return;
 
     // Calculate the text orientation, according to the symbol orientation/mirror
-    int orient = GetTextAngle();
+    EDA_ANGLE orient = GetTextAngle();
 
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
@@ -841,10 +840,10 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter ) const
 
         if( parentSymbol->GetTransform().y1 )  // Rotate symbol 90 deg.
         {
-            if( orient == TEXT_ANGLE_HORIZ )
-                orient = TEXT_ANGLE_VERT;
+            if( orient.IsHorizontal() )
+                orient = EDA_ANGLE::VERTICAL;
             else
-                orient = TEXT_ANGLE_HORIZ;
+                orient = EDA_ANGLE::HORIZONTAL;
         }
     }
 
@@ -858,9 +857,9 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter ) const
      *   to calculate so the easier way is to use no justifications (centered text) and use
      *   GetBoundingBox to know the text coordinate considered as centered
      */
-    EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_CENTER;
-    EDA_TEXT_VJUSTIFY_T vjustify = GR_TEXT_VJUSTIFY_CENTER;
-    wxPoint             textpos = GetBoundingBox().Centre();
+    GR_TEXT_H_ALIGN_T hjustify = GR_TEXT_H_ALIGN_CENTER;
+    GR_TEXT_V_ALIGN_T vjustify = GR_TEXT_V_ALIGN_CENTER;
+    wxPoint           textpos = GetBoundingBox().Centre();
 
     aPlotter->Text( textpos, color, GetShownText(), orient, GetTextSize(),  hjustify, vjustify,
                     penWidth, IsItalic(), IsBold() );

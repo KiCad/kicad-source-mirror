@@ -236,7 +236,7 @@ void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
 
     m_gal->Save();
     m_gal->Translate( position );
-    m_gal->Rotate( -aItem->GetTextAngle() * M_PI / 1800.0 );
+    m_gal->Rotate( -aItem->GetTextAngle().AsRadians() );
     m_gal->SetStrokeColor( m_renderSettings.GetColor( aItem, aLayer ) );
     m_gal->SetLineWidth( penWidth );
     m_gal->SetTextAttributes( aItem );

@@ -181,11 +181,11 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
 
     if( aLine.Angle() > 0 )
     {
-        gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+        gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_LEFT );
     }
     else
     {
-        gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_RIGHT );
         labelAngle += M_PI;
     }
 

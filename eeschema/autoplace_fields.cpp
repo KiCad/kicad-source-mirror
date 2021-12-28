@@ -82,15 +82,6 @@ template<typename T> T round_n( const T& value, const T& n, bool aRoundUp )
 }
 
 
-/**
- * Convert an integer to a horizontal justification; neg=L zero=C pos=R
- */
-EDA_TEXT_HJUSTIFY_T TO_HJUSTIFY( int x )
-{
-    return static_cast<EDA_TEXT_HJUSTIFY_T>( x );
-}
-
-
 class AUTOPLACER
 {
 public:
@@ -204,9 +195,9 @@ protected:
         for( SCH_FIELD* field : m_fields )
         {
             if( m_symbol->GetTransform().y1 )
-                field->SetTextAngle( TEXT_ANGLE_VERT );
+                field->SetTextAngle( EDA_ANGLE::VERTICAL );
             else
-                field->SetTextAngle( TEXT_ANGLE_HORIZ );
+                field->SetTextAngle( EDA_ANGLE::HORIZONTAL );
 
             EDA_RECT bbox = field->GetBoundingBox();
             int      field_width = bbox.GetWidth();
@@ -528,7 +519,7 @@ protected:
         aField->SetHorizJustify( TO_HJUSTIFY( -aFieldSide.x ) );
         aField->SetHorizJustify( TO_HJUSTIFY( -aFieldSide.x
                                                  * ( aField->IsHorizJustifyFlipped() ? -1 : 1 ) ) );
-        aField->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        aField->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
     }
 
     /**
@@ -654,13 +645,13 @@ protected:
 
         switch( field_hjust )
         {
-        case GR_TEXT_HJUSTIFY_LEFT:
+        case GR_TEXT_H_ALIGN_LEFT:
             field_xcoord = aFieldBox.GetLeft();
             break;
-        case GR_TEXT_HJUSTIFY_CENTER:
+        case GR_TEXT_H_ALIGN_CENTER:
             field_xcoord = aFieldBox.Centre().x;
             break;
-        case GR_TEXT_HJUSTIFY_RIGHT:
+        case GR_TEXT_H_ALIGN_RIGHT:
             field_xcoord = aFieldBox.GetRight();
             break;
         default:

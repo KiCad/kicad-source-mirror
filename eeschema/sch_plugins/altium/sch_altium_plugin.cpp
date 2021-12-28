@@ -791,8 +791,8 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
 void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
                          ASCH_RECORD_ORIENTATION orientation )
 {
-    int    vjustify, hjustify;
-    double angle = TEXT_ANGLE_HORIZ;
+    int       vjustify, hjustify;
+    EDA_ANGLE angle = EDA_ANGLE::HORIZONTAL;
 
     switch( justification )
     {
@@ -801,17 +801,17 @@ void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
     case ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT:
     case ASCH_LABEL_JUSTIFICATION::BOTTOM_CENTER:
     case ASCH_LABEL_JUSTIFICATION::BOTTOM_RIGHT:
-        vjustify = EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_BOTTOM;
+        vjustify = GR_TEXT_V_ALIGN_BOTTOM;
         break;
     case ASCH_LABEL_JUSTIFICATION::CENTER_LEFT:
     case ASCH_LABEL_JUSTIFICATION::CENTER_CENTER:
     case ASCH_LABEL_JUSTIFICATION::CENTER_RIGHT:
-        vjustify = EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_CENTER;
+        vjustify = GR_TEXT_V_ALIGN_CENTER;
         break;
     case ASCH_LABEL_JUSTIFICATION::TOP_LEFT:
     case ASCH_LABEL_JUSTIFICATION::TOP_CENTER:
     case ASCH_LABEL_JUSTIFICATION::TOP_RIGHT:
-        vjustify = EDA_TEXT_VJUSTIFY_T::GR_TEXT_VJUSTIFY_TOP;
+        vjustify = GR_TEXT_V_ALIGN_TOP;
         break;
     }
 
@@ -822,42 +822,42 @@ void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
     case ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT:
     case ASCH_LABEL_JUSTIFICATION::CENTER_LEFT:
     case ASCH_LABEL_JUSTIFICATION::TOP_LEFT:
-        hjustify = EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_LEFT;
+        hjustify = GR_TEXT_H_ALIGN_LEFT;
         break;
     case ASCH_LABEL_JUSTIFICATION::BOTTOM_CENTER:
     case ASCH_LABEL_JUSTIFICATION::CENTER_CENTER:
     case ASCH_LABEL_JUSTIFICATION::TOP_CENTER:
-        hjustify = EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_CENTER;
+        hjustify = GR_TEXT_H_ALIGN_CENTER;
         break;
     case ASCH_LABEL_JUSTIFICATION::BOTTOM_RIGHT:
     case ASCH_LABEL_JUSTIFICATION::CENTER_RIGHT:
     case ASCH_LABEL_JUSTIFICATION::TOP_RIGHT:
-        hjustify = EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_RIGHT;
+        hjustify = GR_TEXT_H_ALIGN_RIGHT;
         break;
     }
 
     switch( orientation )
     {
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
-        angle = TEXT_ANGLE_HORIZ;
+        angle = EDA_ANGLE::HORIZONTAL;
         break;
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
         vjustify *= -1;
         hjustify *= -1;
-        angle = TEXT_ANGLE_HORIZ;
+        angle = EDA_ANGLE::HORIZONTAL;
         break;
     case ASCH_RECORD_ORIENTATION::UPWARDS:
-        angle = TEXT_ANGLE_VERT;
+        angle = EDA_ANGLE::VERTICAL;
         break;
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
         vjustify *= -1;
         hjustify *= -1;
-        angle = TEXT_ANGLE_VERT;
+        angle = EDA_ANGLE::VERTICAL;
         break;
     }
 
-    text->SetVertJustify( static_cast<EDA_TEXT_VJUSTIFY_T>( vjustify ) );
-    text->SetHorizJustify( static_cast<EDA_TEXT_HJUSTIFY_T>( hjustify ) );
+    text->SetVertJustify( static_cast<GR_TEXT_V_ALIGN_T>( vjustify ) );
+    text->SetHorizJustify( static_cast<GR_TEXT_H_ALIGN_T>( hjustify ) );
     text->SetTextAngle( angle );
 }
 
@@ -1858,23 +1858,23 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
     {
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_90 );
-        valueField->SetTextAngle( TEXT_ANGLE_VERT );
-        valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_RIGHT );
+        valueField->SetTextAngle( EDA_ANGLE::VERTICAL );
+        valueField->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         break;
     case ASCH_RECORD_ORIENTATION::UPWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_180 );
-        valueField->SetTextAngle( TEXT_ANGLE_HORIZ );
-        valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_CENTER );
+        valueField->SetTextAngle( EDA_ANGLE::HORIZONTAL );
+        valueField->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
         break;
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_270 );
-        valueField->SetTextAngle( TEXT_ANGLE_VERT );
-        valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_RIGHT );
+        valueField->SetTextAngle( EDA_ANGLE::VERTICAL );
+        valueField->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         break;
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_0 );
-        valueField->SetTextAngle( TEXT_ANGLE_HORIZ );
-        valueField->SetHorizJustify( EDA_TEXT_HJUSTIFY_T::GR_TEXT_HJUSTIFY_CENTER );
+        valueField->SetTextAngle( EDA_ANGLE::HORIZONTAL );
+        valueField->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
         break;
     default:
         m_reporter->Report( _( "Pin has unexpected orientation." ), RPT_SEVERITY_WARNING );

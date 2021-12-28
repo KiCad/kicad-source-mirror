@@ -825,10 +825,10 @@ bool PDF_PLOTTER::EndPlot()
 void PDF_PLOTTER::Text( const wxPoint&              aPos,
                         const COLOR4D&              aColor,
                         const wxString&             aText,
-                        double                      aOrient,
+                        const EDA_ANGLE&            aOrient,
                         const wxSize&               aSize,
-                        enum EDA_TEXT_HJUSTIFY_T    aH_justify,
-                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
+                        enum GR_TEXT_H_ALIGN_T      aH_justify,
+                        enum GR_TEXT_V_ALIGN_T      aV_justify,
                         int                         aWidth,
                         bool                        aItalic,
                         bool                        aBold,
@@ -851,9 +851,8 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     double wideningFactor, heightFactor;
 
     computeTextParameters( aPos, aText, aOrient, aSize, m_plotMirror, aH_justify,
-                           aV_justify, aWidth, aItalic, aBold,
-                           &wideningFactor, &ctm_a, &ctm_b, &ctm_c,
-                           &ctm_d, &ctm_e, &ctm_f, &heightFactor );
+                           aV_justify, aWidth, aItalic, aBold, &wideningFactor, &ctm_a,
+                           &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
 
     SetColor( aColor );
     SetCurrentLineWidth( aWidth, aData );

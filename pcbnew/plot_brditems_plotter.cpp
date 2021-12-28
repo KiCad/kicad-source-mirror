@@ -389,7 +389,6 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aTextMod, const COL
     // calculate some text parameters :
     wxSize  size      = aTextMod->GetTextSize();
     wxPoint pos       = aTextMod->GetTextPos();
-    double  orient    = aTextMod->GetDrawRotation();
     int     thickness = aTextMod->GetEffectiveTextPenWidth();
 
     if( aTextMod->IsMirrored() )
@@ -412,7 +411,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aTextMod, const COL
 
     m_plotter->SetCurrentLineWidth( thickness );
 
-    m_plotter->Text( pos, aColor, aTextMod->GetShownText(), orient, size,
+    m_plotter->Text( pos, aColor, aTextMod->GetShownText(), aTextMod->GetDrawRotation(), size,
                      aTextMod->GetHorizJustify(), aTextMod->GetVertJustify(), thickness,
                      aTextMod->IsItalic(), allow_bold, false, &gbr_metadata );
 }
@@ -757,7 +756,6 @@ void BRDITEMS_PLOTTER::PlotPcbText( const PCB_TEXT* aText )
 
     wxSize  size      = aText->GetTextSize();
     wxPoint pos       = aText->GetTextPos();
-    double  orient    = aText->GetTextAngle();
     int     thickness = aText->GetEffectiveTextPenWidth();
 
     if( aText->IsMirrored() )
@@ -783,16 +781,16 @@ void BRDITEMS_PLOTTER::PlotPcbText( const PCB_TEXT* aText )
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
             wxString& txt =  strings_list.Item( ii );
-            m_plotter->Text( positions[ii], color, txt, orient, size, aText->GetHorizJustify(),
-                             aText->GetVertJustify(), thickness, aText->IsItalic(),
-                             allow_bold, false, &gbr_metadata );
+            m_plotter->Text( positions[ii], color, txt, aText->GetTextAngle(), size,
+                             aText->GetHorizJustify(), aText->GetVertJustify(), thickness,
+                             aText->IsItalic(), allow_bold, false, &gbr_metadata );
         }
     }
     else
     {
-        m_plotter->Text( pos, color, shownText, orient, size, aText->GetHorizJustify(),
-                         aText->GetVertJustify(), thickness, aText->IsItalic(), allow_bold,
-                         false, &gbr_metadata );
+        m_plotter->Text( pos, color, shownText, aText->GetTextAngle(), size,
+                         aText->GetHorizJustify(), aText->GetVertJustify(), thickness,
+                         aText->IsItalic(), allow_bold, false, &gbr_metadata );
     }
 }
 

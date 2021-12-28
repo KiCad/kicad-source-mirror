@@ -359,13 +359,13 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         ref.SetText( wxT( "U1" ) );
         ref.SetPosition( MILS_POINT( p.x + 30, p.y + 260 ) );
-        ref.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        ref.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
         LIB_FIELD& value = symbol->GetValueField();
 
         value.SetText( wxT( "OPA604" ) );
         value.SetPosition( MILS_POINT( p.x + 30, p.y + 180 ) );
-        value.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        value.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
         symbol->SetShowPinNames( true );
         symbol->SetShowPinNumbers( true );

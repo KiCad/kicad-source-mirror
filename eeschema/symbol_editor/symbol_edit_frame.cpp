@@ -485,9 +485,9 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::deleteTool,             EDIT_TOOL( ACTIONS::deleteTool ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolPin,      EDIT_TOOL( EE_ACTIONS::placeSymbolPin ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolText,     EDIT_TOOL( EE_ACTIONS::placeSymbolText ) );
-    mgr->SetConditions( EE_ACTIONS::drawRectangle, EDIT_TOOL( EE_ACTIONS::drawRectangle ) );
-    mgr->SetConditions( EE_ACTIONS::drawCircle, EDIT_TOOL( EE_ACTIONS::drawCircle ) );
-    mgr->SetConditions( EE_ACTIONS::drawArc, EDIT_TOOL( EE_ACTIONS::drawArc ) );
+    mgr->SetConditions( EE_ACTIONS::drawRectangle,       EDIT_TOOL( EE_ACTIONS::drawRectangle ) );
+    mgr->SetConditions( EE_ACTIONS::drawCircle,          EDIT_TOOL( EE_ACTIONS::drawCircle ) );
+    mgr->SetConditions( EE_ACTIONS::drawArc,             EDIT_TOOL( EE_ACTIONS::drawArc ) );
     mgr->SetConditions( EE_ACTIONS::drawSymbolLines,     EDIT_TOOL( EE_ACTIONS::drawSymbolLines ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolAnchor,   EDIT_TOOL( EE_ACTIONS::placeSymbolAnchor ) );
 
@@ -1320,7 +1320,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
             libField.SetName( field.GetName( false ) );
 
         libField.SetText( field.GetText() );
-        libField.SetEffects( field );
+        libField.SetAttributes( field );
         libField.SetPosition( wxPoint( pos.x, -pos.y ) );
 
         fullSetOfFields.emplace_back( std::move( libField ) );

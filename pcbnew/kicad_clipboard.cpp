@@ -210,7 +210,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                 else
                     pcb_text->CopyText( *fp_text );
 
-                pcb_text->SetEffects( *fp_text );
+                pcb_text->SetAttributes( *fp_text );
                 pcb_text->SetLayer( fp_text->GetLayer() );
                 copy = pcb_text;
             }

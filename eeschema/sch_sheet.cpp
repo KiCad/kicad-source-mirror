@@ -558,16 +558,16 @@ void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
     if( IsVerticalOrientation() )
     {
         m_fields[ SHEETNAME ].SetTextPos( m_pos + wxPoint( -margin, m_size.y ) );
-        m_fields[ SHEETNAME ].SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        m_fields[ SHEETNAME ].SetVertJustify(GR_TEXT_VJUSTIFY_BOTTOM );
-        m_fields[ SHEETNAME ].SetTextAngle( TEXT_ANGLE_VERT );
+        m_fields[ SHEETNAME ].SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        m_fields[ SHEETNAME ].SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        m_fields[ SHEETNAME ].SetTextAngle( EDA_ANGLE::VERTICAL );
     }
     else
     {
         m_fields[ SHEETNAME ].SetTextPos( m_pos + wxPoint( 0, -margin ) );
-        m_fields[ SHEETNAME ].SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        m_fields[ SHEETNAME ].SetVertJustify(GR_TEXT_VJUSTIFY_BOTTOM );
-        m_fields[ SHEETNAME ].SetTextAngle( TEXT_ANGLE_HORIZ );
+        m_fields[ SHEETNAME ].SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        m_fields[ SHEETNAME ].SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        m_fields[ SHEETNAME ].SetTextAngle( EDA_ANGLE::HORIZONTAL );
     }
 
     textSize = m_fields[ SHEETFILENAME ].GetTextSize();
@@ -576,16 +576,16 @@ void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
     if( IsVerticalOrientation() )
     {
         m_fields[ SHEETFILENAME ].SetTextPos( m_pos + wxPoint( m_size.x + margin, m_size.y ) );
-        m_fields[ SHEETFILENAME ].SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        m_fields[ SHEETFILENAME ].SetVertJustify(GR_TEXT_VJUSTIFY_TOP );
-        m_fields[ SHEETFILENAME ].SetTextAngle( TEXT_ANGLE_VERT );
+        m_fields[ SHEETFILENAME ].SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        m_fields[ SHEETFILENAME ].SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        m_fields[ SHEETFILENAME ].SetTextAngle( EDA_ANGLE::VERTICAL );
     }
     else
     {
         m_fields[ SHEETFILENAME ].SetTextPos( m_pos + wxPoint( 0, m_size.y + margin ) );
-        m_fields[ SHEETFILENAME ].SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        m_fields[ SHEETFILENAME ].SetVertJustify(GR_TEXT_VJUSTIFY_TOP );
-        m_fields[ SHEETFILENAME ].SetTextAngle( TEXT_ANGLE_HORIZ );
+        m_fields[ SHEETFILENAME ].SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        m_fields[ SHEETFILENAME ].SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        m_fields[ SHEETFILENAME ].SetTextAngle( EDA_ANGLE::HORIZONTAL );
     }
 
     m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;

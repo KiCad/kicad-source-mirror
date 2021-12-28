@@ -89,6 +89,7 @@ public:
     }
 
     void SetTextAngle( double aAngle ) override;
+    void SetTextAngle( const EDA_ANGLE& aAngle );
 
     void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 

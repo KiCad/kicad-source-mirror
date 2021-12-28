@@ -119,10 +119,10 @@ public:
     /**
      * Adjusters to allow EDA_TEXT to draw/print/etc. text in absolute coords.
      */
-    double GetDrawRotation() const override;
+    EDA_ANGLE GetDrawRotation() const override;
     wxPoint GetDrawPos() const override;
-    EDA_TEXT_HJUSTIFY_T GetDrawHorizJustify() const override;
-    EDA_TEXT_VJUSTIFY_T GetDrawVertJustify() const override;
+    GR_TEXT_H_ALIGN_T GetDrawHorizJustify() const override;
+    GR_TEXT_V_ALIGN_T GetDrawVertJustify() const override;
 
     const EDA_RECT GetBoundingBox() const override;
 
@@ -133,8 +133,8 @@ public:
     bool IsHorizJustifyFlipped() const;
     bool IsVertJustifyFlipped() const;
 
-    EDA_TEXT_HJUSTIFY_T GetEffectiveHorizJustify() const;
-    EDA_TEXT_VJUSTIFY_T GetEffectiveVertJustify() const;
+    GR_TEXT_H_ALIGN_T GetEffectiveHorizJustify() const;
+    GR_TEXT_V_ALIGN_T GetEffectiveVertJustify() const;
 
     /**
      * @return true if the field is either empty or holds "~".

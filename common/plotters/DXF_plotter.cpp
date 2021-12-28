@@ -831,10 +831,10 @@ bool containsNonAsciiChars( const wxString& string )
 void DXF_PLOTTER::Text( const wxPoint&              aPos,
                         const COLOR4D&              aColor,
                         const wxString&             aText,
-                        double                      aOrient,
+                        const EDA_ANGLE&            aOrient,
                         const wxSize&               aSize,
-                        enum EDA_TEXT_HJUSTIFY_T    aH_justify,
-                        enum EDA_TEXT_VJUSTIFY_T    aV_justify,
+                        enum GR_TEXT_H_ALIGN_T      aH_justify,
+                        enum GR_TEXT_V_ALIGN_T      aV_justify,
                         int                         aWidth,
                         bool                        aItalic,
                         bool                        aBold,
@@ -852,8 +852,8 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
         // output text as graphics.
         // Perhaps multiline texts could be handled as DXF text entity
         // but I do not want spend time about this (JPC)
-        PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                       aWidth, aItalic, aBold, aMultilineAllowed );
+        PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth,
+                       aItalic, aBold, aMultilineAllowed, aData );
     }
     else
     {
@@ -867,72 +867,59 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
 
         switch( aH_justify )
         {
-        case GR_TEXT_HJUSTIFY_LEFT:
-            h_code = 0;
-            break;
-        case GR_TEXT_HJUSTIFY_CENTER:
-            h_code = 1;
-            break;
-        case GR_TEXT_HJUSTIFY_RIGHT:
-            h_code = 2;
-            break;
+        case GR_TEXT_H_ALIGN_LEFT:   h_code = 0; break;
+        case GR_TEXT_H_ALIGN_CENTER: h_code = 1; break;
+        case GR_TEXT_H_ALIGN_RIGHT:  h_code = 2; break;
         }
 
         switch( aV_justify )
         {
-        case GR_TEXT_VJUSTIFY_TOP:
-            v_code = 3;
-            break;
-        case GR_TEXT_VJUSTIFY_CENTER:
-            v_code = 2;
-            break;
-        case GR_TEXT_VJUSTIFY_BOTTOM:
-            v_code = 1;
-            break;
+        case GR_TEXT_V_ALIGN_TOP:    v_code = 3; break;
+        case GR_TEXT_V_ALIGN_CENTER: v_code = 2; break;
+        case GR_TEXT_V_ALIGN_BOTTOM: v_code = 1; break;
         }
 
         // Position, size, rotation and alignment
         // The two alignment point usages is somewhat idiot (see the DXF ref)
         // Anyway since we don't use the fit/aligned options, they're the same
         fprintf( m_outputFile,
-                "  0\n"
-                "TEXT\n"
-                "  7\n"
-                "%s\n"          // Text style
-                "  8\n"
-                "%s\n"          // Layer name
-                "  10\n"
-                "%g\n"          // First point X
-                "  11\n"
-                "%g\n"          // Second point X
-                "  20\n"
-                "%g\n"          // First point Y
-                "  21\n"
-                "%g\n"          // Second point Y
-                "  40\n"
-                "%g\n"          // Text height
-                "  41\n"
-                "%g\n"          // Width factor
-                "  50\n"
-                "%g\n"          // Rotation
-                "  51\n"
-                "%g\n"          // Oblique angle
-                "  71\n"
-                "%d\n"          // Mirror flags
-                "  72\n"
-                "%d\n"          // H alignment
-                "  73\n"
-                "%d\n",         // V alignment
-                aBold ? (aItalic ? "KICADBI" : "KICADB")
-                      : (aItalic ? "KICADI" : "KICAD"),
+                 "  0\n"
+                 "TEXT\n"
+                 "  7\n"
+                 "%s\n"          // Text style
+                 "  8\n"
+                 "%s\n"          // Layer name
+                 "  10\n"
+                 "%g\n"          // First point X
+                 "  11\n"
+                 "%g\n"          // Second point X
+                 "  20\n"
+                 "%g\n"          // First point Y
+                 "  21\n"
+                 "%g\n"          // Second point Y
+                 "  40\n"
+                 "%g\n"          // Text height
+                 "  41\n"
+                 "%g\n"          // Width factor
+                 "  50\n"
+                 "%g\n"          // Rotation
+                 "  51\n"
+                 "%g\n"          // Oblique angle
+                 "  71\n"
+                 "%d\n"          // Mirror flags
+                 "  72\n"
+                 "%d\n"          // H alignment
+                 "  73\n"
+                 "%d\n",         // V alignment
+                 aBold ? (aItalic ? "KICADBI" : "KICADB") : (aItalic ? "KICADI" : "KICAD"),
                  TO_UTF8( cname ),
                  origin_dev.x, origin_dev.x,
                  origin_dev.y, origin_dev.y,
                  size_dev.y, fabs( size_dev.x / size_dev.y ),
-                 aOrient / 10.0,
+                 aOrient.AsDegrees(),
                  aItalic ? DXF_OBLIQUE_ANGLE : 0,
                  size_dev.x < 0 ? 2 : 0, // X mirror flag
-                h_code, v_code );
+                 h_code, v_code );
 
         /* There are two issue in emitting the text:
            - Our overline character (~) must be converted to the appropriate

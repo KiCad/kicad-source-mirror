@@ -537,10 +537,10 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         {
             SCH_FIELD* field = static_cast<SCH_FIELD*>( head );
 
-            if( field->GetTextAngle() == TEXT_ANGLE_HORIZ )
-                field->SetTextAngle( TEXT_ANGLE_VERT );
+            if( field->GetTextAngle().IsHorizontal() )
+                field->SetTextAngle( EDA_ANGLE::VERTICAL );
             else
-                field->SetTextAngle( TEXT_ANGLE_HORIZ );
+                field->SetTextAngle( EDA_ANGLE::HORIZONTAL );
 
             // Now that we're moving a field, they're no longer autoplaced.
             static_cast<SCH_ITEM*>( head->GetParent() )->ClearFieldsAutoplaced();
@@ -643,10 +643,10 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
                     field->Rotate( rotPoint );
 
-                    if( field->GetTextAngle() == TEXT_ANGLE_HORIZ )
-                        field->SetTextAngle( TEXT_ANGLE_VERT );
+                    if( field->GetTextAngle().IsHorizontal() )
+                        field->SetTextAngle( EDA_ANGLE::VERTICAL );
                     else
-                        field->SetTextAngle( TEXT_ANGLE_HORIZ );
+                        field->SetTextAngle( EDA_ANGLE::HORIZONTAL );
 
                     // Now that we're moving a field, they're no longer autoplaced.
                     static_cast<SCH_ITEM*>( field->GetParent() )->ClearFieldsAutoplaced();
@@ -757,12 +757,12 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
 
             if( vertical )
-                field->SetVertJustify( (EDA_TEXT_VJUSTIFY_T)-field->GetVertJustify() );
+                field->SetVertJustify( TO_VJUSTIFY( -field->GetVertJustify() ) );
             else
-                field->SetHorizJustify( (EDA_TEXT_HJUSTIFY_T)-field->GetHorizJustify() );
+                field->SetHorizJustify( TO_HJUSTIFY( -field->GetHorizJustify() ) );
 
             // Now that we're re-justifying a field, they're no longer autoplaced.
-            static_cast<SCH_ITEM*>( item->GetParent() )->ClearFieldsAutoplaced();
+            static_cast<SCH_ITEM*>( field->GetParent() )->ClearFieldsAutoplaced();
 
             break;
         }

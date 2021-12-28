@@ -675,7 +675,8 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
             if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
                 continue;
 
-            text->SetTextAngle( text->GetTextAngle() + aClipFootprint->GetOrientation() );
+            text->SetTextAngle( text->GetTextAngle().AsTenthsOfADegree()
+                                    + aClipFootprint->GetOrientation() );
 
             text->SetParent( nullptr );
             text->SetLocalCoord();
@@ -785,7 +786,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                         // Convert to PCB_FP_TEXT_T
                         FP_TEXT* pastedTextItem = new FP_TEXT( editorFootprint );
                         static_cast<EDA_TEXT*>( pastedTextItem )->SwapText( *clipTextItem );
-                        static_cast<EDA_TEXT*>( pastedTextItem )->SwapEffects( *clipTextItem );
+                        static_cast<EDA_TEXT*>( pastedTextItem )->SwapAttributes( *clipTextItem );
 
                         pastedTextItem->SetParent( editorFootprint );
                         pastedItems.push_back( pastedTextItem );

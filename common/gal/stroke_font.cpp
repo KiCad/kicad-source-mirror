@@ -207,15 +207,15 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
     // align the 1st line of text
     switch( m_gal->GetVerticalJustify() )
     {
-    case GR_TEXT_VJUSTIFY_TOP:
+    case GR_TEXT_V_ALIGN_TOP:
         m_gal->Translate( VECTOR2D( 0, glyphSize.y ) );
         break;
 
-    case GR_TEXT_VJUSTIFY_CENTER:
+    case GR_TEXT_V_ALIGN_CENTER:
         m_gal->Translate( VECTOR2D( 0, glyphSize.y / 2.0 ) );
         break;
 
-    case GR_TEXT_VJUSTIFY_BOTTOM:
+    case GR_TEXT_V_ALIGN_BOTTOM:
         break;
 
     default:
@@ -226,14 +226,14 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
     {
         switch( m_gal->GetVerticalJustify() )
         {
-        case GR_TEXT_VJUSTIFY_TOP:
+        case GR_TEXT_V_ALIGN_TOP:
             break;
 
-        case GR_TEXT_VJUSTIFY_CENTER:
+        case GR_TEXT_V_ALIGN_CENTER:
             m_gal->Translate( VECTOR2D(0, -( lineCount - 1 ) * lineHeight / 2) );
             break;
 
-        case GR_TEXT_VJUSTIFY_BOTTOM:
+        case GR_TEXT_V_ALIGN_BOTTOM:
             m_gal->Translate( VECTOR2D(0, -( lineCount - 1 ) * lineHeight ) );
             break;
         }
@@ -295,16 +295,16 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
     // Adjust the text position to the given horizontal justification
     switch( m_gal->GetHorizontalJustify() )
     {
-    case GR_TEXT_HJUSTIFY_CENTER:
+    case GR_TEXT_H_ALIGN_CENTER:
         m_gal->Translate( VECTOR2D( -textSize.x / 2.0, 0 ) );
         break;
 
-    case GR_TEXT_HJUSTIFY_RIGHT:
+    case GR_TEXT_H_ALIGN_RIGHT:
         if( !m_gal->IsTextMirrored() )
             m_gal->Translate( VECTOR2D( -textSize.x, 0 ) );
         break;
 
-    case GR_TEXT_HJUSTIFY_LEFT:
+    case GR_TEXT_H_ALIGN_LEFT:
         if( m_gal->IsTextMirrored() )
             m_gal->Translate( VECTOR2D( -textSize.x, 0 ) );
         break;

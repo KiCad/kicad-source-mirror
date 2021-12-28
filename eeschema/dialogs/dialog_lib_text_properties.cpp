@@ -137,23 +137,23 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
         m_CommonUnit->SetValue( m_graphicText->GetUnit() == 0 );
         m_CommonConvert->SetValue( m_graphicText->GetConvert() == 0 );
 
-        if( m_graphicText->GetTextAngle() == TEXT_ANGLE_HORIZ )
+        if( m_graphicText->GetTextAngle().IsHorizontal() )
             m_horizontal->Check();
         else
             m_vertical->Check();
 
         switch ( m_graphicText->GetHorizJustify() )
         {
-        case GR_TEXT_HJUSTIFY_LEFT:   m_hAlignLeft->Check( true );   break;
-        case GR_TEXT_HJUSTIFY_CENTER: m_hAlignCenter->Check( true ); break;
-        case GR_TEXT_HJUSTIFY_RIGHT:  m_hAlignRight->Check( true );  break;
+        case GR_TEXT_H_ALIGN_LEFT:   m_hAlignLeft->Check( true );   break;
+        case GR_TEXT_H_ALIGN_CENTER: m_hAlignCenter->Check( true ); break;
+        case GR_TEXT_H_ALIGN_RIGHT:  m_hAlignRight->Check( true );  break;
         }
 
         switch ( m_graphicText->GetVertJustify() )
         {
-        case GR_TEXT_VJUSTIFY_TOP:    m_vAlignTop->Check( true );    break;
-        case GR_TEXT_VJUSTIFY_CENTER: m_vAlignCenter->Check( true ); break;
-        case GR_TEXT_VJUSTIFY_BOTTOM: m_vAlignBottom->Check( true ); break;
+        case GR_TEXT_V_ALIGN_TOP:    m_vAlignTop->Check( true );    break;
+        case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check( true ); break;
+        case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check( true ); break;
         }
     }
     else
@@ -166,7 +166,7 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
         m_CommonUnit->SetValue( !tools->GetDrawSpecificUnit() );
         m_CommonConvert->SetValue( !tools->GetDrawSpecificConvert() );
 
-        if( tools->GetLastTextAngle() == TEXT_ANGLE_HORIZ )
+        if( tools->GetLastTextAngle().IsHorizontal() )
             m_horizontal->Check();
         else
             m_vertical->Check();
@@ -221,9 +221,9 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
             m_graphicText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
         if( m_horizontal->IsChecked() )
-            m_graphicText->SetTextAngle( TEXT_ANGLE_HORIZ );
+            m_graphicText->SetTextAngle( EDA_ANGLE::HORIZONTAL );
         else
-            m_graphicText->SetTextAngle( TEXT_ANGLE_VERT );
+            m_graphicText->SetTextAngle( EDA_ANGLE::VERTICAL );
 
         if( !m_CommonUnit->GetValue() )
             m_graphicText->SetUnit( m_parent->GetUnit() );
@@ -239,18 +239,18 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
         m_graphicText->SetBold( m_bold->IsChecked() );
 
         if( m_hAlignLeft->IsChecked() )
-            m_graphicText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+            m_graphicText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         else if( m_hAlignCenter->IsChecked() )
-            m_graphicText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+            m_graphicText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
         else
-            m_graphicText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            m_graphicText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
         if( m_vAlignTop->IsChecked() )
-            m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+            m_graphicText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
         else if( m_vAlignCenter->IsChecked() )
-            m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+            m_graphicText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
         else
-            m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            m_graphicText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
 
         // Record settings used for next time:
         auto* tools = m_parent->GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();

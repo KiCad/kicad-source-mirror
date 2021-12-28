@@ -31,7 +31,6 @@
 
 #include <gr_basic.h>
 #include <plotters/plotter.h>
-#include <eda_text.h>           // EDA_TEXT_HJUSTIFY_T and EDA_TEXT_VJUSTIFY_T
 #include <trigo.h>
 #include <base_screen.h>
 #include <math/util.h>          // for KiROUND
@@ -109,7 +108,7 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool aItalic, 
  *  @param aPos is the text position (according to h_justify, v_justify).
  *  @param aColor is the text color.
  *  @param aText is the text to draw.
- *  @param aOrient is the angle in 0.1 degree.
+ *  @param aOrient is the angle.
  *  @param aSize is the text size (size.x or size.y can be < 0 for mirrored texts).
  *  @param aH_justify is the horizontal justification (Left, center, right).
  *  @param aV_justify is the vertical justification (bottom, center, top).
@@ -127,8 +126,8 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool aItalic, 
  *                  the text. NULL to draw this text.
  */
 void GRText( wxDC* aDC, const wxPoint& aPos, const COLOR4D& aColor, const wxString& aText,
-             double aOrient, const wxSize& aSize, enum EDA_TEXT_HJUSTIFY_T aH_justify,
-             enum EDA_TEXT_VJUSTIFY_T aV_justify, int aWidth, bool aItalic, bool aBold,
+             const EDA_ANGLE& aOrient, const wxSize& aSize, enum GR_TEXT_H_ALIGN_T aH_justify,
+             enum GR_TEXT_V_ALIGN_T aV_justify, int aWidth, bool aItalic, bool aBold,
              void (* aCallback)( int x0, int y0, int xf, int yf, void* aData ),
              void* aCallbackData, PLOTTER* aPlotter )
 {
@@ -166,72 +165,7 @@ void GRText( wxDC* aDC, const wxPoint& aPos, const COLOR4D& aColor, const wxStri
     basic_gal.m_DC = aDC;
     basic_gal.m_Color = aColor;
     basic_gal.SetClipBox( nullptr );
-    basic_gal.StrokeText( aText, VECTOR2D( aPos ), aOrient * M_PI/1800 );
+    basic_gal.StrokeText( aText, VECTOR2D( aPos ), aOrient.AsRadians() );
 }
 
 
-void GRHaloText( wxDC* aDC, const wxPoint &aPos, const COLOR4D& aBgColor, const COLOR4D& aColor1,
-                 const COLOR4D& aColor2, const wxString &aText, double aOrient, const wxSize &aSize,
-                 enum EDA_TEXT_HJUSTIFY_T aH_justify, enum EDA_TEXT_VJUSTIFY_T aV_justify,
-                 int aWidth, bool aItalic, bool aBold,
-                 void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ),
-                 void* aCallbackData, PLOTTER * aPlotter )
-{
-    COLOR4D color1 = aColor1;
-    COLOR4D color2 = aColor2;
-
-    // Swap color if contrast would be better
-    // TODO: Maybe calculate contrast some way other than brightness
-    if( aBgColor.GetBrightness() > 0.5 )
-    {
-        COLOR4D c = color1;
-        color1 = color2;
-        color2 = c;
-    }
-
-    // Draw the background
-    GRText( aDC, aPos, color1, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
-            aBold, aCallback, aCallbackData, aPlotter );
-
-    // Draw the text
-    GRText( aDC, aPos, color2, aText, aOrient, aSize, aH_justify, aV_justify, aWidth / 4, aItalic,
-            aBold, aCallback, aCallbackData, aPlotter );
-}
-
-
-/**
- * Same as GRText, but plot graphic text instead of draw it.
- *
- * @param aPos is the text position (according to aH_justify, aV_justify).
- * @param aColor is the text color.
- * @param aText is the text to draw.
- * @param aOrient is the angle in 0.1 degree.
- * @param aSize is the text size (size.x or size.y can be < 0 for mirrored texts).
- * @param aH_justify is the horizontal justification (Left, center, right).
- * @param aV_justify is the vertical justification (bottom, center, top).
- * @param aPenWidth is the line width (if = 0, use plot default line width).
- * @param aItalic is the true to simulate an italic font.
- * @param aBold use true to use a bold font Useful only with default width value (aWidth = 0).
- * @param aMultilineAllowed use true to plot text as multiline, otherwise single line.
- * @param aData is a parameter used by some plotters in SetCurrentLineWidth(),
- *              not directly used here.
- */
-void PLOTTER::Text( const wxPoint&              aPos,
-                    const COLOR4D&              aColor,
-                    const wxString&             aText,
-                    double                      aOrient,
-                    const wxSize&               aSize,
-                    enum EDA_TEXT_HJUSTIFY_T    aH_justify,
-                    enum EDA_TEXT_VJUSTIFY_T    aV_justify,
-                    int                         aPenWidth,
-                    bool                        aItalic,
-                    bool                        aBold,
-                    bool                        aMultilineAllowed,
-                    void*                       aData )
-{
-    SetColor( aColor );
-    SetCurrentLineWidth( aPenWidth, aData );
-
-    GRText( nullptr, aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aPenWidth,
-            aItalic, aBold, nullptr, nullptr, this );
-}

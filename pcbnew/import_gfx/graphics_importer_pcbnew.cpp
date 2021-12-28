@@ -146,8 +146,8 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector< VECTOR2D >& aVerti
 
 void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString& aText,
                                         double aHeight, double aWidth, double aThickness,
-                                        double aOrientation, EDA_TEXT_HJUSTIFY_T aHJustify,
-                                        EDA_TEXT_VJUSTIFY_T aVJustify )
+                                        double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
+                                        GR_TEXT_V_ALIGN_T aVJustify )
 {
     std::unique_ptr<BOARD_ITEM> boardItem;
     EDA_TEXT* textItem;

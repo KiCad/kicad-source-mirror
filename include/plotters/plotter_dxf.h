@@ -152,15 +152,15 @@ public:
     virtual void Text( const wxPoint&              aPos,
                        const COLOR4D&              aColor,
                        const wxString&             aText,
-                       double                      aOrient,
+                       const EDA_ANGLE&            aOrient,
                        const wxSize&               aSize,
-                       enum EDA_TEXT_HJUSTIFY_T    aH_justify,
-                       enum EDA_TEXT_VJUSTIFY_T    aV_justify,
+                       enum GR_TEXT_H_ALIGN_T      aH_justify,
+                       enum GR_TEXT_V_ALIGN_T      aV_justify,
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
                        bool                        aMultilineAllowed = false,
-                       void* aData = nullptr ) override;
+                       void*                       aData = nullptr ) override;
 
 
     /**

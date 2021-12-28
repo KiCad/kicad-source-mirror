@@ -97,6 +97,7 @@ public:
     }
 
     void SetTextAngle( double aAngle ) override;
+    void SetTextAngle( const EDA_ANGLE& aAngle );
 
     /**
      * Called when rotating the parent footprint.
@@ -133,27 +134,6 @@ public:
     void SetType( TEXT_TYPE aType )     { m_Type = aType; }
     TEXT_TYPE GetType() const           { return m_Type; }
 
-    /**
-     * Set the text effects from another instance.
-     */
-    void SetEffects( const FP_TEXT& aSrc )
-    {
-        EDA_TEXT::SetEffects( aSrc );
-        SetLocalCoord();
-        // SetType( aSrc.GetType() );
-    }
-
-    /**
-     * Swap the text effects of the two involved instances.
-     */
-    void SwapEffects( FP_TEXT& aTradingPartner )
-    {
-        EDA_TEXT::SwapEffects( aTradingPartner );
-        SetLocalCoord();
-        aTradingPartner.SetLocalCoord();
-        // std::swap( m_Type, aTradingPartner.m_Type );
-    }
-
     // The Pos0 accessors are for footprint-relative coordinates.
     void SetPos0( const wxPoint& aPos ) { m_Pos0 = aPos; SetDrawCoord(); }
     const wxPoint& GetPos0() const      { return m_Pos0; }
@@ -164,8 +144,7 @@ public:
      * @return the text rotation for drawings and plotting the footprint rotation is taken
      *         in account.
      */
-    virtual double GetDrawRotation() const override;
-    double GetDrawRotationRadians() const { return GetDrawRotation() * M_PI/1800; }
+    virtual EDA_ANGLE GetDrawRotation() const override;
 
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;

@@ -132,7 +132,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         }
 
         if( aFlags & HASH_ROT )
-            hash_combine( ret, text->GetTextAngle() );
+            hash_combine( ret, text->GetTextAngle().AsTenthsOfADegree() );
     }
         break;
 

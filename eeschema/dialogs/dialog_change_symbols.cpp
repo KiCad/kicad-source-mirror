@@ -636,11 +636,11 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
 
             if( resetEffects )
             {
-                // Careful: the visible bit and position are also in Effects
+                // Careful: the visible bit and position are also set by SetAttributes()
                 bool    visible = field.IsVisible();
                 wxPoint pos = field.GetPosition();
 
-                field.SetEffects( *libField );
+                field.SetAttributes( *libField );
 
                 field.SetVisible( visible );
                 field.SetPosition( pos );
@@ -672,7 +672,8 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
             SCH_FIELD  newField( wxPoint( 0, 0), aSymbol->GetFieldCount(), aSymbol, fieldName );
             SCH_FIELD* schField = aSymbol->AddField( newField );
 
-            schField->SetEffects( libField );
+            // Careful: the visible bit and position are also set by SetAttributes()
+            schField->SetAttributes( libField );
             schField->SetText( libField.GetText() );
             schField->SetTextPos( aSymbol->GetPosition() + libField.GetTextPos() );
         }

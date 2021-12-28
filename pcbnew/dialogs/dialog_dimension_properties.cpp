@@ -221,7 +221,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
         m_txtTextPosY->Disable();
     }
 
-    m_orientValue = text.GetTextAngleDegrees();
+    m_orientValue = text.GetTextAngle().AsDegrees();
     m_cbKeepAligned->SetValue( m_dimension->GetKeepTextAligned() );
     m_cbTextOrientation->Enable( !m_dimension->GetKeepTextAligned() );
 
@@ -229,7 +229,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     m_cbItalic->SetValue( text.IsItalic() );
     m_cbMirrored->SetValue( text.IsMirrored() );
-    EDA_TEXT_HJUSTIFY_T hJustify = text.GetHorizJustify();
+    GR_TEXT_H_ALIGN_T hJustify = text.GetHorizJustify();
     m_cbJustification->SetSelection( (int) hJustify + 1 );
 
     m_lineThickness.SetValue( m_dimension->GetLineThickness() );
@@ -346,8 +346,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
     text.SetTextThickness( m_textThickness.GetValue() );
     text.SetItalic( m_cbItalic->GetValue() );
     text.SetMirrored( m_cbMirrored->GetValue() );
-    int justification = m_cbJustification->GetSelection() - 1;
-    text.SetHorizJustify( static_cast<EDA_TEXT_HJUSTIFY_T>( justification ) );
+    text.SetHorizJustify( TO_HJUSTIFY( m_cbJustification->GetSelection() - 1 ) );
 
     aTarget->SetLineThickness( m_lineThickness.GetValue() );
     aTarget->SetArrowLength( m_arrowLength.GetValue() );

@@ -470,19 +470,19 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                 switch( token )
                 {
                 case T_left:
-                    aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                    aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
                     break;
 
                 case T_right:
-                    aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                    aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
                     break;
 
                 case T_top:
-                    aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                    aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
                     break;
 
                 case T_bottom:
-                    aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                    aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
                     break;
 
                 case T_mirror:
@@ -3492,7 +3492,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
         {
             FP_TEXT* text = parseFP_TEXT();
             text->SetParent( footprint.get() );
-            double orientation = text->GetTextAngle();
+            double orientation = text->GetTextAngle().AsTenthsOfADegree();
             orientation -= footprint->GetOrientation();
             text->SetTextAngle( orientation );
             text->SetDrawCoord();

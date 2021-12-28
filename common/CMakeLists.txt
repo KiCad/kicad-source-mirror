@@ -296,6 +296,9 @@ set( PLUGINS_EAGLE_SRCS
     plugins/eagle/eagle_parser.cpp
     )
 
+set( FONT_SRCS
+	)
+
 set( COMMON_SRCS
     ${LIB_KICAD_SRCS}
     ${COMMON_ABOUT_DLG_SRCS}
@@ -307,6 +310,7 @@ set( COMMON_SRCS
     ${PLUGINS_ALTIUM_SRCS}
     ${PLUGINS_CADSTAR_SRCS}
     ${PLUGINS_EAGLE_SRCS}
+	${FONT_SRCS}
     advanced_config.cpp
     array_axis.cpp
     array_options.cpp
@@ -325,6 +329,7 @@ set( COMMON_SRCS
     dialog_shim.cpp
     gr_text.cpp
     dsnlexer.cpp
+    eda_angle.cpp
     eda_base_frame.cpp
     eda_dde.cpp
     eda_doc.cpp

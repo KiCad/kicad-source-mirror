@@ -1110,11 +1110,11 @@ FABMASTER::GRAPHIC_TEXT* FABMASTER::processText( const FABMASTER::GRAPHIC_DATA& 
     new_text->mirror   = ( aData.graphic_data4 == "YES" );
 
     if( aData.graphic_data5 == "RIGHT" )
-        new_text->orient = GR_TEXT_HJUSTIFY_RIGHT;
+        new_text->orient = GR_TEXT_H_ALIGN_RIGHT;
     else if( aData.graphic_data5 == "CENTER" )
-        new_text->orient = GR_TEXT_HJUSTIFY_CENTER;
+        new_text->orient = GR_TEXT_H_ALIGN_CENTER;
     else
-        new_text->orient = GR_TEXT_HJUSTIFY_LEFT;
+        new_text->orient = GR_TEXT_H_ALIGN_LEFT;
 
     std::vector<std::string> toks = split( aData.graphic_data6, " \t" );
 

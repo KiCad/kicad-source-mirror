@@ -729,24 +729,24 @@ void DRAWING_SHEET_PARSER::parseText( DS_DATA_ITEM_TEXT* aItem )
                 switch( token )
                 {
                 case T_center:
-                    aItem->m_Hjustify = GR_TEXT_HJUSTIFY_CENTER;
-                    aItem->m_Vjustify = GR_TEXT_VJUSTIFY_CENTER;
+                    aItem->m_Hjustify = GR_TEXT_H_ALIGN_CENTER;
+                    aItem->m_Vjustify = GR_TEXT_V_ALIGN_CENTER;
                     break;
 
                 case T_left:
-                    aItem->m_Hjustify = GR_TEXT_HJUSTIFY_LEFT;
+                    aItem->m_Hjustify = GR_TEXT_H_ALIGN_LEFT;
                     break;
 
                 case T_right:
-                    aItem->m_Hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+                    aItem->m_Hjustify = GR_TEXT_H_ALIGN_RIGHT;
                     break;
 
                 case T_top:
-                    aItem->m_Vjustify = GR_TEXT_VJUSTIFY_TOP;
+                    aItem->m_Vjustify = GR_TEXT_V_ALIGN_TOP;
                     break;
 
                 case T_bottom:
-                    aItem->m_Vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
+                    aItem->m_Vjustify = GR_TEXT_V_ALIGN_BOTTOM;
                     break;
 
                 default:
