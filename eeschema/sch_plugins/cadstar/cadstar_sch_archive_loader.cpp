@@ -52,7 +52,8 @@ const wxString PartNameFieldName = "Part Name";
 
 
 void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
-        SCH_PLUGIN::SCH_PLUGIN_RELEASER* aSchPlugin, const wxFileName& aLibraryFileName )
+                                       SCH_PLUGIN::SCH_PLUGIN_RELEASER* aSchPlugin,
+                                       const wxFileName& aLibraryFileName )
 {
     if( m_progressReporter )
         m_progressReporter->SetNumPhases( 3 ); // (0) Read file, (1) Parse file, (2) Load file
@@ -144,7 +145,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         m_reporter->Report( _( "The CADSTAR design contains re-use blocks which has no KiCad "
                                "equivalent. The re-use block information has been discarded during "
                                "the import." ),
-                            RPT_SEVERITY_WARNING  );
+                            RPT_SEVERITY_WARNING );
     }
 
 
@@ -202,16 +203,16 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         grid = getKiCadLength( grid );
 
         auto roundToNearestGrid =
-            [&]( int aNumber ) -> int
-            {
-                int error = aNumber % grid;
-                int absError = sign( error ) * error;
+                [&]( int aNumber ) -> int
+                {
+                    int error = aNumber % grid;
+                    int absError = sign( error ) * error;
 
-                if( absError > ( grid / 2 ) )
-                 return aNumber + ( sign( error ) * grid ) - error;
-                else
-                  return aNumber - error;
-            };
+                    if( absError > ( grid / 2 ) )
+                        return aNumber + ( sign( error ) * grid ) - error;
+                    else
+                        return aNumber - error;
+                };
 
         // When exporting to pdf, CADSTAR applies a margin of 3% of the longest dimension (height
         // or width) to all 4 sides (top, bottom, left right). For the import, we are also rounding
@@ -1194,11 +1195,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadDocumentationSymbols()
 
         SYMDEF_SCM docSymDef  = Library.SymbolDefinitions.at( docSym.SymdefID );
         wxPoint    moveVector = getKiCadPoint( docSym.Origin ) - getKiCadPoint( docSymDef.Origin );
-        double     rotationAngle = getAngleTenthDegree( docSym.OrientAngle );
-        double     scalingFactor =
-                (double) docSym.ScaleRatioNumerator / (double) docSym.ScaleRatioDenominator;
-        wxPoint centreOfTransform = getKiCadPoint( docSymDef.Origin );
-        bool    mirrorInvert      = docSym.Mirror;
+        double     rotationAngle     = getAngleTenthDegree( docSym.OrientAngle );
+        double     scalingFactor     = (double) docSym.ScaleRatioNumerator
+                                        / (double) docSym.ScaleRatioDenominator;
+        wxPoint    centreOfTransform = getKiCadPoint( docSymDef.Origin );
+        bool       mirrorInvert      = docSym.Mirror;
 
         for( std::pair<FIGURE_ID, FIGURE> figPair : docSymDef.Figures )
         {
@@ -2628,60 +2629,61 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
     if( aMirrored )
         textAlignment = mirrorX( aCadstarAlignment );
 
-    auto setAlignment = [&]( EDA_TEXT* aText, ALIGNMENT aAlignment )
-                        {
-                            switch( aAlignment )
-                            {
-                            case ALIGNMENT::NO_ALIGNMENT: // Bottom left of the first line
-                                //No exact KiCad equivalent, so lets move the position of the text
-                                FixTextPositionNoAlignment( aText );
-                                KI_FALLTHROUGH;
-                            case ALIGNMENT::BOTTOMLEFT:
-                                aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-                                break;
+    auto setAlignment =
+            [&]( EDA_TEXT* aText, ALIGNMENT aAlignment )
+            {
+                switch( aAlignment )
+                {
+                case ALIGNMENT::NO_ALIGNMENT: // Bottom left of the first line
+                    //No exact KiCad equivalent, so lets move the position of the text
+                    FixTextPositionNoAlignment( aText );
+                    KI_FALLTHROUGH;
+                case ALIGNMENT::BOTTOMLEFT:
+                    aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+                    aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+                    break;
 
-                            case ALIGNMENT::BOTTOMCENTER:
-                                aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-                                break;
+                case ALIGNMENT::BOTTOMCENTER:
+                    aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+                    aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+                    break;
 
-                            case ALIGNMENT::BOTTOMRIGHT:
-                                aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-                                break;
+                case ALIGNMENT::BOTTOMRIGHT:
+                    aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+                    aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+                    break;
 
-                            case ALIGNMENT::CENTERLEFT:
-                                aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-                                break;
+                case ALIGNMENT::CENTERLEFT:
+                    aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+                    aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+                    break;
 
-                            case ALIGNMENT::CENTERCENTER:
-                                aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-                                break;
+                case ALIGNMENT::CENTERCENTER:
+                    aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+                    aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+                    break;
 
-                            case ALIGNMENT::CENTERRIGHT:
-                                aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-                                break;
+                case ALIGNMENT::CENTERRIGHT:
+                    aText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+                    aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+                    break;
 
-                            case ALIGNMENT::TOPLEFT:
-                                aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-                                break;
+                case ALIGNMENT::TOPLEFT:
+                    aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+                    aText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+                    break;
 
-                            case ALIGNMENT::TOPCENTER:
-                                aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-                                break;
+                case ALIGNMENT::TOPCENTER:
+                    aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+                    aText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+                    break;
 
-                            case ALIGNMENT::TOPRIGHT:
-                                aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-                                aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-                                break;
-                            }
-                        };
+                case ALIGNMENT::TOPRIGHT:
+                    aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+                    aText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+                    break;
+                }
+            };
 
     LABEL_SPIN_STYLE spin = getSpinStyle( aCadstarOrientAngle, aMirrored );
     EDA_ITEM* textEdaItem = dynamic_cast<EDA_ITEM*>( aKiCadTextItem );
@@ -2722,8 +2724,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
 
         aKiCadTextItem->SetTextAngle( angleDeciDeg );
         setAlignment( aKiCadTextItem, textAlignment );
-    }
         return;
+    }
 
     case SCH_TEXT_T:
     {
@@ -2833,8 +2835,8 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
                 for( size_t ii = 0; ii < poly.GetPointCount(); ++ii )
                     poly.SetPoint( ii, scalePt( (wxPoint) poly.CPoint( ii ) ) );
             }
-        }
             break;
+        }
 
         case KICAD_T::LIB_PIN_T:
         {
@@ -2842,8 +2844,8 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
 
             pin.SetPosition( scalePt( pin.GetPosition() ) );
             pin.SetLength( scaleLen( pin.GetLength() ) );
-        }
             break;
+        }
 
         case KICAD_T::LIB_TEXT_T:
         {
@@ -2851,8 +2853,8 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
 
             txt.SetPosition( scalePt( txt.GetPosition() ) );
             txt.SetTextSize( scaleSize( txt.GetTextSize() ) );
-        }
             break;
+        }
 
         default:
             break;
