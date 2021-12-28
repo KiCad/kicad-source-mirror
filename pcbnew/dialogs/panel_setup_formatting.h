@@ -25,12 +25,13 @@
 
 class PCB_EDIT_FRAME;
 class BOARD;
+class PAGED_DIALOG;
 
 
 class PANEL_SETUP_FORMATTING : public PANEL_SETUP_FORMATTING_BASE
 {
 public:
-    PANEL_SETUP_FORMATTING( wxWindow* aWindow, PCB_EDIT_FRAME* aFrame  );
+    PANEL_SETUP_FORMATTING( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

@@ -26,13 +26,16 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <panel_setup_formatting.h>
+#include <widgets/paged_dialog.h>
+#include <wx/treebook.h>
 
 
-PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( wxWindow* aWindow, PCB_EDIT_FRAME* aFrame  ) :
-        PANEL_SETUP_FORMATTING_BASE( aWindow ),
+PANEL_SETUP_FORMATTING::PANEL_SETUP_FORMATTING( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
+        PANEL_SETUP_FORMATTING_BASE( aParent->GetTreebook() ),
         m_frame( aFrame )
 {
 }
+
 
 bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
 {
