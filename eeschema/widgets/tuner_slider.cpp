@@ -52,7 +52,7 @@ static const struct { double m_law, m_mid; } CURVES[] =
 };
 
 template <typename T, int S>
-static inline int arraysize( const T (&v)[S] ) { return S; }
+static inline int arraysize( const T ( &v )[S] ) { return S; }
 
 
 /**
@@ -91,11 +91,11 @@ static inline int arraysize( const T (&v)[S] ) { return S; }
  *
  * @tparam F is a floating point type.
  * @param  aRatio    is the input (travel) ratio or moving contact (wiper) position, from
- *                   0%/CCW/left (0) through 50%/mid-travel/center (½) to 100%/CW/right (1).
- * @param  aMid      is the logarithmic laws' output ratio at 50%/mid-travel/center (½)
+ *                   0%/CCW/left (0) through 50%/mid-travel/center (1/2) to 100%/CW/right (1).
+ * @param  aMid      is the logarithmic laws' output ratio at 50%/mid-travel/center (1/2)
  *                   input ratio.
  * @param  aLaw      is the (resistance) law, interpolating from *reverse logarithmic* (0)
- *                   through *symmetric/linear* (½) to *logarithmic* (1).
+ *                   through *symmetric/linear* (1/2) to *logarithmic* (1).
  * @param  aInverse  swaps input and output ratios (inverse function, where possible),
  *                   if @c true.
  * @return the output (resistance or voltage) ratio in [0, 1].
@@ -103,6 +103,8 @@ static inline int arraysize( const T (&v)[S] ) { return S; }
 template <typename F>
 static F taper( F aRatio, F aMid = 0.5, F aLaw = 1.0, bool aInverse = false )
 {
+    static_assert( std::is_floating_point<F>::value, "F must be floating point" );
+
     // clamp to [0, 1] and short-cut
     if( aRatio <= 0 )
         return 0;
@@ -122,34 +124,34 @@ static F taper( F aRatio, F aMid = 0.5, F aLaw = 1.0, bool aInverse = false )
         t = aInverse ? 0 : 1;
     else
     {
-        // clamp, and reflect and/or scale for reverse…symmetric…normal laws
+        // clamp, and reflect and/or scale for reverse...symmetric...normal laws
         if( aLaw >= 1 )
-            t =     t;
+            t = t;
         else if( aLaw <= 0 )
-            t =   1-t;
+            t = 1 - t;
         else if( aRatio <= aLaw )
-            t =     t   /     aLaw;
+            t = t / aLaw;
         else
-            t = ( 1-t ) / ( 1-aLaw );
+            t = ( 1 - t ) / ( 1 - aLaw );
 
         // scaling factors for domain and range in [0, 1]
-        F a = std::norm( 1 - 1/aMid );
+        F a = std::norm( 1 - 1 / aMid );
         F b = std::log( a );
         F c = a - 1;
 
-        // scaling: a = (1 - 1/m)²
-        // log law: (aᵗ - 1) / (a - 1)
-        // inverse: logₐ(1 + t (a - 1))
-        t = aInverse ? std::log1p( t * c ) / b : std::expm1( t * b ) / c;
+        // scaling: a = (1 - 1/m)^2
+        // log law: (a' - 1) / (a - 1)
+        // inverse: log[a](1 + t (a - 1))
+        t = aInverse ? ( std::log1p( t * c ) / b ) : ( std::expm1( t * b ) / c );
     }
 
-    // clamp, and scale and/or reflect for reverse…symmetric…normal laws
+    // clamp, and scale and/or reflect for reverse...symmetric...normal laws
     if( aLaw >= 1 )
-        t =     t;
+        t = t;
     else if( aLaw <= 0 )
         t = 1 - t;
     else if( aRatio <= aLaw )
-        t =     t *     aLaw;
+        t = t * aLaw;
     else
         t = 1 - t * ( 1-aLaw );
 
