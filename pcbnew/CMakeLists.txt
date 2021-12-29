@@ -554,12 +554,13 @@ if( DOXYGEN_FOUND )
         )
 endif()
 
-
-if( MINGW )
-    # PCBNEW_RESOURCES variable is set by the macro.
-    mingw_resource_compiler( pcbnew )
-else()
-    set( PCBNEW_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/pcbnew.rc )
+if( WIN32 )
+    if( MINGW )
+        # PCBNEW_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( pcbnew )
+    else()
+        set( PCBNEW_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/pcbnew.rc )
+    endif()
 endif()
 
 
@@ -773,6 +774,10 @@ if( APPLE )
         " COMPONENT Runtime
         )
 else()
+    if( MSVC )
+        target_sources( pcbnew_kiface PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/pcbnew-dll.rc )
+    endif()
+
     install( TARGETS pcbnew
         DESTINATION ${KICAD_BIN}
         COMPONENT binary

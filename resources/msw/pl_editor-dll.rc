@@ -1,0 +1,4 @@
+#define RC_VER_FILE_DESCRIPTION "KiCad Drawing Sheet Editor " KICAD_WIN32_RC_PRODVER_STR
+#define RC_VER_INTERNALNAME "_pl_editor"
+#define RC_VER_ORIGINALFILENAME "_pl_editor.kiface"
+#include "kiwin32-dll.rc"

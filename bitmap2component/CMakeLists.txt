@@ -26,11 +26,13 @@ set_source_files_properties( bitmap2cmp_gui.cpp PROPERTIES
     COMPILE_DEFINITIONS     "COMPILING_DLL"
     )
 
-if( MINGW )
-    # BITMAP2COMPONENT_RESOURCES variable is set by the macro.
-    mingw_resource_compiler( bitmap2component )
-else()
-    set( BITMAP2COMPONENT_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/bitmap2component.rc )
+if( WIN32 )
+    if( MINGW )
+        # BITMAP2COMPONENT_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( bitmap2component )
+    else()
+        set( BITMAP2COMPONENT_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/bitmap2component.rc )
+    endif()
 endif()
 
 if( APPLE )

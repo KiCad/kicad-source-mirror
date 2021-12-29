@@ -80,11 +80,13 @@ set( GERBVIEW_EXTRA_SRCS
     ${CMAKE_SOURCE_DIR}/common/page_info.cpp
 )
 
-if( MINGW )
-    # GERBVIEW_RESOURCES variable is set by the macro.
-    mingw_resource_compiler( gerbview )
-else()
-    set( GERBVIEW_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/gerbview.rc )
+if( WIN32 )
+    if( MINGW )
+        # GERBVIEW_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( gerbview )
+    else()
+        set( GERBVIEW_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/gerbview.rc )
+    endif()
 endif()
 
 if( APPLE )
@@ -203,6 +205,10 @@ if( APPLE )
             " COMPONENT Runtime
         )
 else()
+    if( MSVC )
+        target_sources( gerbview_kiface PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/gerbview-dll.rc )
+    endif()
+
     install( TARGETS gerbview
         DESTINATION ${KICAD_BIN}
         COMPONENT binary

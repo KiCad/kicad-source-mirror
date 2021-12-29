@@ -38,11 +38,13 @@ set( KICAD_SRCS
     tools/kicad_manager_control.cpp
     )
 
-if( MINGW )
-    # KICAD_RESOURCES variable is set by the macro.
-    mingw_resource_compiler( kicad )
-else()
-    set( KICAD_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/kicad.rc )
+if( WIN32 )
+    if( MINGW )
+        # KICAD_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( kicad )
+    else()
+        set( KICAD_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/kicad.rc )
+    endif()
 endif()
 
 if( APPLE )
