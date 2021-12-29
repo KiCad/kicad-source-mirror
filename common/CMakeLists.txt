@@ -297,6 +297,7 @@ set( PLUGINS_EAGLE_SRCS
     )
 
 set( FONT_SRCS
+    font/font.cpp
 	)
 
 set( COMMON_SRCS

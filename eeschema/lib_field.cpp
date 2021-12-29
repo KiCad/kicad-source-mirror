@@ -121,7 +121,7 @@ void LIB_FIELD::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
     wxString text = aData ? *static_cast<wxString*>( aData ) : GetText();
 
     GRText( DC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
-            GetVertJustify(), penWidth, IsItalic(), IsBold() );
+            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetFont() );
 }
 
 

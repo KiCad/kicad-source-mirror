@@ -1923,26 +1923,27 @@ void GERBER_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos, int aDiamete
 }
 
 
-void GERBER_PLOTTER::Text( const wxPoint&              aPos,
-                           const COLOR4D&              aColor,
-                           const wxString&             aText,
-                           const EDA_ANGLE&            aOrient,
-                           const wxSize&               aSize,
-                           enum GR_TEXT_H_ALIGN_T      aH_justify,
-                           enum GR_TEXT_V_ALIGN_T      aV_justify,
-                           int                         aWidth,
-                           bool                        aItalic,
-                           bool                        aBold,
-                           bool                        aMultilineAllowed,
-                           void*                       aData )
+void GERBER_PLOTTER::Text( const wxPoint&           aPos,
+                           const COLOR4D&           aColor,
+                           const wxString&          aText,
+                           const EDA_ANGLE&         aOrient,
+                           const wxSize&            aSize,
+                           enum GR_TEXT_H_ALIGN_T   aH_justify,
+                           enum GR_TEXT_V_ALIGN_T   aV_justify,
+                           int                      aWidth,
+                           bool                     aItalic,
+                           bool                     aBold,
+                           bool                     aMultilineAllowed,
+                           KIFONT::FONT*            aFont,
+                           void*                    aData )
 {
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
     if( gbr_metadata )
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
-    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
-                   aBold, aMultilineAllowed, aData );
+    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth,
+                   aItalic, aBold, aMultilineAllowed, aFont, aData );
 }
 
 

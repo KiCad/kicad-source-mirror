@@ -252,7 +252,7 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset 
     textpos = GetBoundingBox().Centre() + aOffset;
 
     GRText( DC, textpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_H_ALIGN_CENTER,
-            GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold() );
+            GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), GetFont() );
 }
 
 

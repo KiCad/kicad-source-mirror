@@ -335,7 +335,7 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, 
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
     GRText( DC, txtpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_H_ALIGN_CENTER,
-            GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold() );
+            GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), GetFont() );
 }
 
 

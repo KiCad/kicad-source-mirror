@@ -649,22 +649,23 @@ void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int a
  * @param aData is a parameter used by some plotters in SetCurrentLineWidth(),
  *              not directly used here.
  */
-void PLOTTER::Text( const wxPoint&              aPos,
-                    const COLOR4D&              aColor,
-                    const wxString&             aText,
-                    const EDA_ANGLE&            aOrient,
-                    const wxSize&               aSize,
-                    enum GR_TEXT_H_ALIGN_T      aH_justify,
-                    enum GR_TEXT_V_ALIGN_T      aV_justify,
-                    int                         aPenWidth,
-                    bool                        aItalic,
-                    bool                        aBold,
-                    bool                        aMultilineAllowed,
-                    void*                       aData )
+void PLOTTER::Text( const wxPoint&           aPos,
+                    const COLOR4D&           aColor,
+                    const wxString&          aText,
+                    const EDA_ANGLE&         aOrient,
+                    const wxSize&            aSize,
+                    enum GR_TEXT_H_ALIGN_T   aH_justify,
+                    enum GR_TEXT_V_ALIGN_T   aV_justify,
+                    int                      aPenWidth,
+                    bool                     aItalic,
+                    bool                     aBold,
+                    bool                     aMultilineAllowed,
+                    KIFONT::FONT*            aFont,
+                    void*                    aData )
 {
     SetColor( aColor );
     SetCurrentLineWidth( aPenWidth, aData );
 
     GRText( nullptr, aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aPenWidth,
-            aItalic, aBold, nullptr, nullptr, this );
+            aItalic, aBold, aFont, nullptr, nullptr, this );
 }

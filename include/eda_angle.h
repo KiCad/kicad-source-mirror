@@ -211,16 +211,15 @@ public:
     EDA_ANGLE KeepUpright() const;
 
 private:
-    // value is always stored in 1/10ths of a degree
-    int m_value;
-
-    double m_radians; //< only used with as-radians constructor
-
-    ANGLE_TYPE m_initial_type;
-
     void   normalize( bool n720 = false );
     int    normalize( int aValue, ANGLE_TYPE aAngleType, bool n720 = false ) const;
     double normalize( double aValue, ANGLE_TYPE aAngleType, bool n720 = false ) const;
+
+private:
+
+    int          m_value;             ///< value is always stored in 1/10ths of a degree
+    double       m_radians;           ///< only used with as-radians constructor
+    ANGLE_TYPE   m_initial_type;
 
     static constexpr int    TENTHS_OF_A_DEGREE_FULL_CIRCLE = 3600;
     static constexpr int    DEGREES_FULL_CIRCLE = 360;

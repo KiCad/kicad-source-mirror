@@ -958,18 +958,19 @@ bool PS_PLOTTER::EndPlot()
 
 
 
-void PS_PLOTTER::Text( const wxPoint&       aPos,
-                       const COLOR4D&              aColor,
-                       const wxString&             aText,
-                       const EDA_ANGLE&            aOrient,
-                       const wxSize&               aSize,
-                       enum GR_TEXT_H_ALIGN_T      aH_justify,
-                       enum GR_TEXT_V_ALIGN_T      aV_justify,
-                       int                         aWidth,
-                       bool                        aItalic,
-                       bool                        aBold,
-                       bool                        aMultilineAllowed,
-                       void*                       aData )
+void PS_PLOTTER::Text( const wxPoint&           aPos,
+                       const COLOR4D&           aColor,
+                       const wxString&          aText,
+                       const EDA_ANGLE&         aOrient,
+                       const wxSize&            aSize,
+                       enum GR_TEXT_H_ALIGN_T   aH_justify,
+                       enum GR_TEXT_V_ALIGN_T   aV_justify,
+                       int                      aWidth,
+                       bool                     aItalic,
+                       bool                     aBold,
+                       bool                     aMultilineAllowed,
+                       KIFONT::FONT*            aFont,
+                       void*                    aData )
 {
     SetCurrentLineWidth( aWidth );
     SetColor( aColor );
@@ -982,8 +983,8 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
         fprintf( m_outputFile, "%s %g %g phantomshow\n", ps_test.c_str(), pos_dev.x, pos_dev.y );
     }
 
-    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth,
-                   aItalic, aBold, aMultilineAllowed );
+    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
+                   aBold, aMultilineAllowed, aFont, aData );
 }
 
 

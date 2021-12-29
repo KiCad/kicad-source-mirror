@@ -244,7 +244,7 @@ void PCB_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
     COLOR4D color;  // not actually used, but needed by GRText
 
     GRText( nullptr, GetTextPos(), color, GetShownText(), GetTextAngle(), size, GetHorizJustify(),
-            GetVertJustify(), penWidth, IsItalic(), IsBold(), addTextSegmToPoly, &prms );
+            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetFont(), addTextSegmToPoly, &prms );
 }
 
 

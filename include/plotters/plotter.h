@@ -399,18 +399,19 @@ public:
      * For convenience it accept the color to use for specific plotters (GERBER) aData is used
      * to pass extra parameters.
      */
-    virtual void Text( const wxPoint&              aPos,
-                       const COLOR4D&              aColor,
-                       const wxString&             aText,
-                       const EDA_ANGLE&            aOrient,
-                       const wxSize&               aSize,
-                       enum GR_TEXT_H_ALIGN_T      aH_justify,
-                       enum GR_TEXT_V_ALIGN_T      aV_justify,
-                       int                         aWidth,
-                       bool                        aItalic,
-                       bool                        aBold,
-                       bool                        aMultilineAllowed = false,
-                       void*                       aData = nullptr );
+    virtual void Text( const wxPoint&           aPos,
+                       const COLOR4D&           aColor,
+                       const wxString&          aText,
+                       const EDA_ANGLE&         aOrient,
+                       const wxSize&            aSize,
+                       enum GR_TEXT_H_ALIGN_T   aH_justify,
+                       enum GR_TEXT_V_ALIGN_T   aV_justify,
+                       int                      aWidth,
+                       bool                     aItalic,
+                       bool                     aBold,
+                       bool                     aMultilineAllowed = false,
+                       KIFONT::FONT*            aFont = nullptr,
+                       void*                    aData = nullptr );
 
     /**
      * Draw a marker (used for the drill map).

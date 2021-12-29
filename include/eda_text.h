@@ -176,6 +176,9 @@ public:
     void SetHorizJustify( GR_TEXT_H_ALIGN_T aType )   { m_attributes.m_Halign = aType; };
     void SetVertJustify( GR_TEXT_V_ALIGN_T aType )    { m_attributes.m_Valign = aType; };
 
+    void SetKeepUpright( bool aKeepUpright )    { m_attributes.m_KeepUpright = aKeepUpright; }
+    bool IsKeepUpright() const                  { return m_attributes.m_KeepUpright; }
+
     /**
      * Set the text attributes from another instance.
      */
@@ -202,6 +205,14 @@ public:
     bool Replace( const wxFindReplaceData& aSearchData );
 
     bool IsDefaultFormatting() const;
+
+    void SetFont( KIFONT::FONT* aFont )         { m_attributes.m_Font = aFont; }
+    KIFONT::FONT* GetFont() const               { return m_attributes.m_Font; }
+
+    wxString GetFontName() const;
+
+    void SetLineSpacing( double aLineSpacing )  { m_attributes.m_LineSpacing = aLineSpacing; }
+    double GetLineSpacing() const               { return m_attributes.m_LineSpacing; }
 
     void SetTextSize( const wxSize& aNewSize )  { m_attributes.m_Size = aNewSize; }
     wxSize GetTextSize() const                  { return wxSize( m_attributes.m_Size.x,

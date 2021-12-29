@@ -101,6 +101,7 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, b
  *                for a bold text.
  *  @param aItalic true to simulate an italic font.
  *  @param aBold true to use a bold font.
+ *  @param aFont is the font to use, or nullptr for the KiCad stroke font
  *  @param aCallback ( int x0, int y0, int xf, int yf, void* aData ) is a function called
  *                   (if non null) to draw each segment. used to draw 3D texts or for plotting.
  *                   NULL for normal drawings.
@@ -112,6 +113,7 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, b
 void GRText( wxDC* aDC, const wxPoint& aPos, const KIGFX::COLOR4D& aColor, const wxString& aText,
              const EDA_ANGLE& aOrient, const wxSize& aSize, enum GR_TEXT_H_ALIGN_T aH_justify,
              enum GR_TEXT_V_ALIGN_T aV_justify, int aWidth, bool aItalic, bool aBold,
+             KIFONT::FONT* aFont,
              void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,
              void* aCallbackData = nullptr, PLOTTER* aPlotter = nullptr );
 

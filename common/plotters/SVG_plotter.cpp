@@ -755,18 +755,19 @@ bool SVG_PLOTTER::EndPlot()
 }
 
 
-void SVG_PLOTTER::Text( const wxPoint&              aPos,
-                        const COLOR4D&              aColor,
-                        const wxString&             aText,
-                        const EDA_ANGLE&            aOrient,
-                        const wxSize&               aSize,
-                        enum GR_TEXT_H_ALIGN_T      aH_justify,
-                        enum GR_TEXT_V_ALIGN_T      aV_justify,
-                        int                         aWidth,
-                        bool                        aItalic,
-                        bool                        aBold,
-                        bool                        aMultilineAllowed,
-                        void*                       aData )
+void SVG_PLOTTER::Text( const wxPoint&           aPos,
+                        const COLOR4D&           aColor,
+                        const wxString&          aText,
+                        const EDA_ANGLE&         aOrient,
+                        const wxSize&            aSize,
+                        enum GR_TEXT_H_ALIGN_T   aH_justify,
+                        enum GR_TEXT_V_ALIGN_T   aV_justify,
+                        int                      aWidth,
+                        bool                     aItalic,
+                        bool                     aBold,
+                        bool                     aMultilineAllowed,
+                        KIFONT::FONT*            aFont,
+                        void*                    aData )
 {
     setFillMode( FILL_T::NO_FILL );
     SetColor( aColor );
@@ -823,8 +824,8 @@ void SVG_PLOTTER::Text( const wxPoint&              aPos,
     fprintf( m_outputFile, "<g class=\"stroked-text\"><desc>%s</desc>\n",
              TO_UTF8( XmlEsc( aText ) ) );
 
-    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
-                   aWidth, aItalic, aBold, aMultilineAllowed );
+    PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
+                   aBold, aMultilineAllowed, aFont );
 
     fputs( "</g>", m_outputFile );
 }

@@ -214,18 +214,19 @@ public:
                             double aScaleFactor ) override;
 
     virtual void PenTo( const wxPoint& pos, char plume ) override;
-    virtual void Text( const wxPoint&              aPos,
-                       const COLOR4D&              aColor,
-                       const wxString&             aText,
-                       const EDA_ANGLE&            aOrient,
-                       const wxSize&               aSize,
-                       enum GR_TEXT_H_ALIGN_T      aH_justify,
-                       enum GR_TEXT_V_ALIGN_T      aV_justify,
-                       int                         aWidth,
-                       bool                        aItalic,
-                       bool                        aBold,
-                       bool                        aMultilineAllowed = false,
-                       void*                       aData = nullptr ) override;
+    virtual void Text( const wxPoint&           aPos,
+                       const COLOR4D&           aColor,
+                       const wxString&          aText,
+                       const EDA_ANGLE&         aOrient,
+                       const wxSize&            aSize,
+                       enum GR_TEXT_H_ALIGN_T   aH_justify,
+                       enum GR_TEXT_V_ALIGN_T   aV_justify,
+                       int                      aWidth,
+                       bool                     aItalic,
+                       bool                     aBold,
+                       bool                     aMultilineAllowed = false,
+                       KIFONT::FONT*            aFont = nullptr,
+                       void*                    aData = nullptr ) override;
 
 protected:
     virtual void emitSetRGBColor( double r, double g, double b ) override;
@@ -331,18 +332,19 @@ public:
 
     virtual void PenTo( const wxPoint& pos, char plume ) override;
 
-    virtual void Text( const wxPoint&              aPos,
-                       const COLOR4D&              aColor,
-                       const wxString&             aText,
-                       const EDA_ANGLE&            aOrient,
-                       const wxSize&               aSize,
-                       enum GR_TEXT_H_ALIGN_T      aH_justify,
-                       enum GR_TEXT_V_ALIGN_T      aV_justify,
-                       int                         aWidth,
-                       bool                        aItalic,
-                       bool                        aBold,
-                       bool                        aMultilineAllowed = false,
-                       void*                       aData = nullptr ) override;
+    virtual void Text( const wxPoint&           aPos,
+                       const COLOR4D&           aColor,
+                       const wxString&          aText,
+                       const EDA_ANGLE&         aOrient,
+                       const wxSize&            aSize,
+                       enum GR_TEXT_H_ALIGN_T   aH_justify,
+                       enum GR_TEXT_V_ALIGN_T   aV_justify,
+                       int                      aWidth,
+                       bool                     aItalic,
+                       bool                     aBold,
+                       bool                     aMultilineAllowed = false,
+                       KIFONT::FONT*            aFont = nullptr,
+                       void*                    aData = nullptr ) override;
 
     /**
      * PDF images are handles as inline, not XObject streams...
@@ -494,18 +496,19 @@ public:
      */
     virtual void EndBlock( void* aData ) override;
 
-    virtual void Text( const wxPoint&              aPos,
-                       const COLOR4D&              aColor,
-                       const wxString&             aText,
-                       const EDA_ANGLE&            aOrient,
-                       const wxSize&               aSize,
-                       enum GR_TEXT_H_ALIGN_T      aH_justify,
-                       enum GR_TEXT_V_ALIGN_T      aV_justify,
-                       int                         aWidth,
-                       bool                        aItalic,
-                       bool                        aBold,
-                       bool                        aMultilineAllowed = false,
-                       void*                       aData = nullptr ) override;
+    virtual void Text( const wxPoint&           aPos,
+                       const COLOR4D&           aColor,
+                       const wxString&          aText,
+                       const EDA_ANGLE&         aOrient,
+                       const wxSize&            aSize,
+                       enum GR_TEXT_H_ALIGN_T   aH_justify,
+                       enum GR_TEXT_V_ALIGN_T   aV_justify,
+                       int                      aWidth,
+                       bool                     aItalic,
+                       bool                     aBold,
+                       bool                     aMultilineAllowed = false,
+                       KIFONT::FONT*            aFont = nullptr,
+                       void*                    aData = nullptr ) override;
 
 protected:
     /**

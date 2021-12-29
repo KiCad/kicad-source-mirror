@@ -149,18 +149,19 @@ public:
     virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
                             double aOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
 
-    virtual void Text( const wxPoint&              aPos,
-                       const COLOR4D&              aColor,
-                       const wxString&             aText,
-                       const EDA_ANGLE&            aOrient,
-                       const wxSize&               aSize,
-                       enum GR_TEXT_H_ALIGN_T      aH_justify,
-                       enum GR_TEXT_V_ALIGN_T      aV_justify,
-                       int                         aWidth,
-                       bool                        aItalic,
-                       bool                        aBold,
-                       bool                        aMultilineAllowed = false,
-                       void*                       aData = nullptr ) override;
+    virtual void Text( const wxPoint&           aPos,
+                       const COLOR4D&           aColor,
+                       const wxString&          aText,
+                       const EDA_ANGLE&         aOrient,
+                       const wxSize&            aSize,
+                       enum GR_TEXT_H_ALIGN_T   aH_justify,
+                       enum GR_TEXT_V_ALIGN_T   aV_justify,
+                       int                      aWidth,
+                       bool                     aItalic,
+                       bool                     aBold,
+                       bool                     aMultilineAllowed = false,
+                       KIFONT::FONT*            aFont = nullptr,
+                       void*                    aData = nullptr ) override;
 
 
     /**

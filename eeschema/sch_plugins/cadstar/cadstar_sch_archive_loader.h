@@ -153,7 +153,7 @@ private:
             double& aComponentOrientationDeciDeg );
 
     void loadSymbolFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
-                                   const double& aComponentOrientationDeciDeg, bool aIsMirrored,
+                                   double aComponentOrientationDeciDeg, bool aIsMirrored,
                                    SCH_FIELD* aKiCadField );
 
     int getComponentOrientation( double aOrientAngleDeciDeg, double& aReturnedOrientationDeciDeg );

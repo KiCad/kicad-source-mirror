@@ -51,8 +51,8 @@
 #include <i18n_utility.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_compound.h>
+#include <font/font.h>
 #include <geometry/shape_poly_set.h>
-
 
 #include <wx/debug.h>           // for wxASSERT
 #include <wx/string.h>          // wxString, wxArrayString
@@ -109,7 +109,8 @@ EDA_TEXT::EDA_TEXT( const wxString& text ) :
 
 EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
         m_text( aText.m_text ),
-        m_attributes( aText.m_attributes )
+        m_attributes( aText.m_attributes ),
+        m_pos( aText.m_pos )
 {
     cacheShownText();
 }
@@ -440,11 +441,10 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
 
 void EDA_TEXT::GetLinePositions( std::vector<wxPoint>& aPositions, int aLineCount ) const
 {
-    wxPoint        pos  = GetTextPos();     // Position of first line of the
-                                            // multiline text according to
-                                            // the center of the multiline text block
+    wxPoint pos  = GetTextPos();     // Position of first line of the multiline text according
+                                     // to the center of the multiline text block
 
-    wxPoint        offset;                  // Offset to next line.
+    wxPoint offset;                  // Offset to next line.
 
     offset.y = GetInterline();
 
@@ -465,8 +465,7 @@ void EDA_TEXT::GetLinePositions( std::vector<wxPoint>& aPositions, int aLineCoun
         }
     }
 
-    // Rotate the position of the first line
-    // around the center of the multiline text block
+    // Rotate the position of the first line around the center of the multiline text block
     RotatePoint( &pos, GetTextPos(), GetTextAngle() );
 
     // Rotate the offset lines to increase happened in the right direction
@@ -478,6 +477,7 @@ void EDA_TEXT::GetLinePositions( std::vector<wxPoint>& aPositions, int aLineCoun
         pos += offset;
     }
 }
+
 
 void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
                                    const COLOR4D& aColor, OUTLINE_MODE aFillMode,
@@ -495,7 +495,7 @@ void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const wxPoi
         size.x = -size.x;
 
     GRText( DC, aOffset + aPos, aColor, aText, GetTextAngle(), size, GetHorizJustify(),
-            GetVertJustify(), penWidth, IsItalic(), IsBold() );
+            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetFont() );
 }
 
 
@@ -520,6 +520,15 @@ wxString EDA_TEXT::GetTextStyleName() const
 }
 
 
+wxString EDA_TEXT::GetFontName() const
+{
+    if( GetFont() )
+        return GetFont()->Name();
+    else
+        return wxEmptyString;
+}
+
+
 bool EDA_TEXT::IsDefaultFormatting() const
 {
     return ( IsVisible()
@@ -530,6 +539,7 @@ bool EDA_TEXT::IsDefaultFormatting() const
              && !IsItalic()
              && !IsBold()
              && !IsMultilineAllowed()
+             && GetFontName().IsEmpty()
            );
 }
 
@@ -627,14 +637,14 @@ std::vector<wxPoint> EDA_TEXT::TransformToSegmentList() const
             wxString txt = strings_list.Item( ii );
             GRText( nullptr, positions[ii], color, txt, GetDrawRotation(), size,
                     GetDrawHorizJustify(), GetDrawVertJustify(), penWidth, IsItalic(), forceBold,
-                    addTextSegmToBuffer, &cornerBuffer );
+                    GetFont(), addTextSegmToBuffer, &cornerBuffer );
         }
     }
     else
     {
         GRText( nullptr, GetDrawPos(), color, GetShownText(), GetDrawRotation(), size,
                 GetDrawHorizJustify(), GetDrawVertJustify(), penWidth, IsItalic(), forceBold,
-                addTextSegmToBuffer, &cornerBuffer );
+                GetFont(), addTextSegmToBuffer, &cornerBuffer );
     }
 
     return cornerBuffer;
@@ -678,6 +688,11 @@ int EDA_TEXT::Compare( const EDA_TEXT* aOther ) const
     TEST( m_attributes.m_Mirrored, aOther->m_attributes.m_Mirrored );
     TEST( m_attributes.m_Multiline, aOther->m_attributes.m_Multiline );
     TEST( m_attributes.m_KeepUpright, aOther->m_attributes.m_KeepUpright );
+
+    int val = GetFontName().Cmp( aOther->GetFontName() );
+
+    if( val != 0 )
+        return val;
 
     return m_text.Cmp( aOther->m_text );
 }
