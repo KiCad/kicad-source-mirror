@@ -49,11 +49,13 @@ set( PCB_CALCULATOR_SRCS
     ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )
 
-if( MINGW )
-    # PCB_CALCULATOR_RESOURCES variable is set by the macro.
-    mingw_resource_compiler( pcb_calculator )
-else()
-    set( PCB_CALCULATOR_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/pcb_calculator.rc )
+if( WIN32 )
+    if( MINGW )
+        # PCB_CALCULATOR_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( pcb_calculator )
+    else()
+        set( PCB_CALCULATOR_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/pcb_calculator.rc )
+    endif()
 endif()
 
 if( APPLE )
@@ -92,6 +94,7 @@ add_library( pcb_calculator_kiface MODULE
     pcb_calculator.cpp
     ${PCB_CALCULATOR_SRCS}
     )
+
 set_target_properties( pcb_calculator_kiface PROPERTIES
     OUTPUT_NAME     pcb_calculator
     PREFIX          ${KIFACE_PREFIX}
@@ -145,6 +148,10 @@ if( APPLE )
         " COMPONENT Runtime
         )
 else()
+    if( MSVC )
+        target_sources( pcb_calculator_kiface PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/pcb_calculator-dll.rc  )
+    endif()
+
     install( TARGETS pcb_calculator
         DESTINATION ${KICAD_BIN}
         COMPONENT binary

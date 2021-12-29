@@ -51,12 +51,13 @@ set( PL_EDITOR_EXTRA_SRCS
     ${CMAKE_SOURCE_DIR}/common/page_info.cpp
 )
 
-
-if( MINGW )
-    # PL_EDITOR_RESOURCES variable is set by the macro.
-    mingw_resource_compiler( pl_editor )
-else()
-    set( PL_EDITOR_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/pl_editor.rc )
+if( WIN32 )
+    if( MINGW )
+        # PL_EDITOR_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( pl_editor )
+    else()
+        set( PL_EDITOR_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/pl_editor.rc )
+    endif()
 endif()
 
 
@@ -157,6 +158,10 @@ if( APPLE )
         " COMPONENT Runtime
         )
 else()
+    if( MSVC )
+        target_sources( pl_editor_kiface PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/pl_editor-dll.rc )
+    endif()
+
     install( TARGETS pl_editor
         DESTINATION ${KICAD_BIN}
         COMPONENT binary

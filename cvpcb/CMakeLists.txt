@@ -46,12 +46,13 @@ set( CVPCB_SRCS
     tools/cvpcb_fpviewer_selection_tool.cpp
     )
 
-
-if( MINGW )
-    # CVPCB_RESOURCES variable is set by the macro.
-    mingw_resource_compiler( cvpcb )
-else()
-    set( CVPCB_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/cvpcb.rc )
+if( WIN32 )
+    if( MINGW )
+        # CVPCB_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( cvpcb-dll )
+    else()
+        set( CVPCB_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/cvpcb-dll.rc )
+    endif()
 endif()
 
 
@@ -60,6 +61,7 @@ add_library( cvpcb_kiface MODULE
     cvpcb.cpp
     ${CVPCB_SRCS}
     ${CVPCB_DIALOGS}
+    ${CVPCB_RESOURCES}
     )
 
 set_target_properties( cvpcb_kiface PROPERTIES

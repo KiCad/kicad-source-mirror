@@ -299,12 +299,13 @@ if( KICAD_SPICE )
     )
 endif()
 
-
-if( MINGW )
-    # EESCHEMA_RESOURCES variable is set by the macro.
-    mingw_resource_compiler( eeschema )
-else()
-    set( EESCHEMA_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/eeschema.rc )
+if( WIN32 )
+    if( MINGW )
+        # EESCHEMA_RESOURCES variable is set by the macro.
+        mingw_resource_compiler( eeschema )
+    else()
+        set( EESCHEMA_RESOURCES ${CMAKE_SOURCE_DIR}/resources/msw/eeschema.rc )
+    endif()
 endif()
 
 # Create a C++ compilable string initializer containing markdown text into a *.h file:
@@ -481,6 +482,10 @@ if( APPLE )
                  DESTINATION "${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim" )
     endif()
 else()
+    if( MSVC )
+        target_sources( eeschema_kiface PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/eeschema-dll.rc )
+    endif()
+
     install( TARGETS eeschema
         DESTINATION ${KICAD_BIN}
         COMPONENT binary

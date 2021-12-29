@@ -1,0 +1,40 @@
+#include <winver.h> // defines VS_VERSION_INFO
+#include <kicad_build_version.h>
+
+#ifndef DEBUG
+#define VER_DEBUG 0
+#else
+#define VER_DEBUG VS_FF_DEBUG
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION KICAD_WIN32_RC_FILEVER
+PRODUCTVERSION KICAD_WIN32_RC_PRODVER
+FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+FILEFLAGS (VER_DEBUG)
+FILEOS VOS__WINDOWS32
+FILETYPE VFT_DLL
+FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            // this gets dispalyed in the windows 10 task manager
+            VALUE "FileDescription", RC_VER_FILE_DESCRIPTION
+            VALUE "FileVersion", KICAD_WIN32_RC_FILEVER_STR
+            //original filename without extension
+            VALUE "InternalName", RC_VER_INTERNALNAME
+            VALUE "LegalCopyright", "Copyright (C) 2021 KiCad Developers"
+            // the exe name
+            VALUE "OriginalFilename", RC_VER_ORIGINALFILENAME
+            // name of distributed package
+            VALUE "ProductName", "KiCad EDA"
+            VALUE "ProductVersion", KICAD_WIN32_RC_PRODVER_STR
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END

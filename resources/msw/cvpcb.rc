@@ -1,3 +1,0 @@
-icon_cvpcb ICON "../bitmaps_png/icons/icon_cvpcb.ico"
-
-#include "kiwin32.rc"
