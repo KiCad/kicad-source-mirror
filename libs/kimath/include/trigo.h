@@ -24,12 +24,9 @@
 #ifndef TRIGO_H
 #define TRIGO_H
 
-/**
- * @file trigo.h
- */
-
 #include <cmath>
 #include <math/vector2d.h>
+#include <eda_angle.h>
 #include <wx/gdicmn.h> // For wxPoint
 
 /**
@@ -64,18 +61,23 @@ bool SegmentIntersectsSegment( const wxPoint& a_p1_l1, const wxPoint& a_p2_l1,
 
 /*
  * Calculate the new point of coord coord pX, pY,
- * for a rotation center 0, 0, and angle in (1 / 10 degree)
+ * for a rotation center 0, 0, and angle in (1/10 degree)
  */
 void RotatePoint( int *pX, int *pY, double angle );
 
+inline void RotatePoint( int *pX, int *pY, EDA_ANGLE angle )
+{
+    RotatePoint( pX, pY, angle.AsTenthsOfADegree() );
+}
+
 /*
  * Calculate the new point of coord coord pX, pY,
- * for a rotation center cx, cy, and angle in (1 / 10 degree)
+ * for a rotation center cx, cy, and angle in (1/10 degree)
  */
 void RotatePoint( int *pX, int *pY, int cx, int cy, double angle );
 
 /*
- * Calculate the new coord point point for a rotation angle in (1 / 10 degree).
+ * Calculate the new coord point point for a rotation angle in (1/10 degree).
  */
 inline void RotatePoint( wxPoint* point, double angle )
 {
@@ -87,12 +89,22 @@ inline void RotatePoint( VECTOR2I& point, double angle )
     RotatePoint( &point.x, &point.y, angle );
 }
 
+inline void RotatePoint( wxPoint* point, EDA_ANGLE angle )
+{
+    RotatePoint( &point->x, &point->y, angle.AsTenthsOfADegree() );
+}
+
 void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, double angle );
 
 /*
- * Calculate the new coord point point for a center rotation center and angle in (1 / 10 degree).
+ * Calculate the new coord point point for a center rotation center and angle in (1/10 degree).
  */
 void RotatePoint( wxPoint *point, const wxPoint & centre, double angle );
+
+inline void RotatePoint( wxPoint *point, const wxPoint& centre, EDA_ANGLE angle )
+{
+    RotatePoint( point, centre, angle.AsTenthsOfADegree() );
+}
 
 void RotatePoint( double *pX, double *pY, double angle );
 
@@ -160,8 +172,7 @@ inline double EuclideanNorm( const wxSize &vector )
 //! @param linePointA Point on line
 //! @param linePointB Point on line
 //! @param referencePoint Reference point
-inline double DistanceLinePoint( const wxPoint& linePointA,
-                                 const wxPoint& linePointB,
+inline double DistanceLinePoint( const wxPoint& linePointA, const wxPoint& linePointB,
                                  const wxPoint& referencePoint )
 {
     // Some of the multiple double casts are redundant. However in the previous

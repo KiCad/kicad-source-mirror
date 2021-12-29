@@ -396,7 +396,7 @@ bool EDA_TEXT::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
     wxPoint location = aPoint;
 
     rect.Inflate( aAccuracy );
-    RotatePoint( &location, GetTextPos(), -GetTextAngle().AsTenthsOfADegree() );
+    RotatePoint( &location, GetTextPos(), -GetTextAngle() );
 
     return rect.Contains( location );
 }
@@ -467,10 +467,10 @@ void EDA_TEXT::GetLinePositions( std::vector<wxPoint>& aPositions, int aLineCoun
 
     // Rotate the position of the first line
     // around the center of the multiline text block
-    RotatePoint( &pos, GetTextPos(), GetTextAngle().AsTenthsOfADegree() );
+    RotatePoint( &pos, GetTextPos(), GetTextAngle() );
 
     // Rotate the offset lines to increase happened in the right direction
-    RotatePoint( &offset, GetTextAngle().AsTenthsOfADegree() );
+    RotatePoint( &offset, GetTextAngle() );
 
     for( int ii = 0; ii < aLineCount; ii++ )
     {
@@ -723,7 +723,7 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
     for( wxPoint& corner : corners )
     {
         // Rotate polygon
-        RotatePoint( &corner, GetTextPos(), GetTextAngle().AsTenthsOfADegree() );
+        RotatePoint( &corner, GetTextPos(), GetTextAngle() );
         aCornerBuffer->Append( corner.x, corner.y );
     }
 }

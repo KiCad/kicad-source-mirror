@@ -385,8 +385,8 @@ const EDA_RECT LIB_TEXT::GetBoundingBox() const
     wxPoint orig = rect.GetOrigin();
     wxPoint end  = rect.GetEnd();
 
-    RotatePoint( &orig, GetTextPos(), -GetTextAngle().AsTenthsOfADegree() );
-    RotatePoint( &end,  GetTextPos(), -GetTextAngle().AsTenthsOfADegree() );
+    RotatePoint( &orig, GetTextPos(), -GetTextAngle() );
+    RotatePoint( &end,  GetTextPos(), -GetTextAngle() );
 
     rect.SetOrigin( orig );
     rect.SetEnd( end );

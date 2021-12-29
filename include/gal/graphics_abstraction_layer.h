@@ -39,6 +39,7 @@
 #include <gal/stroke_font.h>
 #include <gal/gal_display_options.h>
 #include <newstroke_font.h>
+#include <eda_rect.h>
 
 class SHAPE_LINE_CHAIN;
 class SHAPE_POLY_SET;
@@ -46,7 +47,6 @@ class BITMAP_BASE;
 
 namespace KIGFX
 {
-
 /**
  * Abstract interface for drawing on a 2D-surface.
  *
@@ -114,6 +114,7 @@ public:
      * @param aPointList is a list of 2D-Vectors containing the polyline points.
      */
     virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) {};
+    virtual void DrawPolyline( const std::vector<VECTOR2D>& aPointList ) {};
     virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) {};
     virtual void DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain ) {};
 
@@ -164,6 +165,11 @@ public:
      * @param aEndPoint     is the end point of the rectangle.
      */
     virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) {};
+
+    void DrawRectangle( const EDA_RECT& aRect )
+    {
+        DrawRectangle( aRect.GetOrigin(), aRect.GetEnd() );
+    }
 
     /**
      * Draw a polygon.
@@ -351,8 +357,8 @@ public:
     }
 
     /**
-     * Draw a text using a bitmap font. It should be faster than StrokeText(),
-     * but can be used only for non-Gerber elements.
+     * Draw a text using a bitmap font. It should be faster than StrokeText(), but can be used
+     * only for non-Gerber elements.
      *
      * @param aText is the text to be drawn.
      * @param aPosition is the text position in world coordinates.
@@ -361,27 +367,27 @@ public:
     virtual void BitmapText( const wxString& aText, const VECTOR2D& aPosition,
                              double aRotationAngle )
     {
-        // Fallback: use stroke font
+        // Fallback for implementations that don't implement bitmap text: use stroke font
 
         // Handle flipped view
         if( m_globalFlipX )
-            textProperties.m_mirrored = !textProperties.m_mirrored;
+            m_attributes.m_Mirrored = !m_attributes.m_Mirrored;
 
         // Bitmap font is slightly smaller and slightly heavier than the stroke font so we
         // compensate a bit before stroking
         float    saveLineWidth = m_lineWidth;
-        VECTOR2D saveGlyphSize = textProperties.m_glyphSize;
+        VECTOR2D saveGlyphSize = m_attributes.m_Size;
         {
             m_lineWidth *= 1.2f;
-            textProperties.m_glyphSize = textProperties.m_glyphSize * 0.8;
+            m_attributes.m_Size = m_attributes.m_Size * 0.8;
 
             StrokeText( aText, aPosition, aRotationAngle );
         }
         m_lineWidth = saveLineWidth;
-        textProperties.m_glyphSize = saveGlyphSize;
+        m_attributes.m_Size = saveGlyphSize;
 
         if( m_globalFlipX )
-            textProperties.m_mirrored = !textProperties.m_mirrored;
+            m_attributes.m_Mirrored = !m_attributes.m_Mirrored;
     }
 
     /**
@@ -407,76 +413,34 @@ public:
      */
     void ResetTextAttributes();
 
-    /**
-     * Set the font glyph size.
-     *
-     * @param aGlyphSize is the new font glyph size.
-     */
-    inline void SetGlyphSize( const VECTOR2D& aSize ) { textProperties.m_glyphSize = aSize; }
-    const VECTOR2D& GetGlyphSize() const { return textProperties.m_glyphSize; }
+    void SetGlyphSize( const VECTOR2D aSize )         { m_attributes.m_Size = aSize; }
+    const VECTOR2D& GetGlyphSize() const              { return m_attributes.m_Size; }
 
-    /**
-     * Set bold property of current font.
-     *
-     * @param aBold tells if the font should be bold or not.
-     */
-    inline void SetFontBold( bool aBold ) { textProperties.m_bold = aBold;  }
-    inline bool IsFontBold() const { return textProperties.m_bold; }
+    inline void SetFontBold( const bool aBold )       { m_attributes.m_Bold = aBold; }
+    inline bool IsFontBold() const                    { return m_attributes.m_Bold; }
 
-    /**
-     * Set italic property of current font.
-     *
-     * @param aItalic tells if the font should be italic or not.
-     */
-    inline void SetFontItalic( bool aItalic ) { textProperties.m_italic = aItalic; }
-    inline bool IsFontItalic() const { return textProperties.m_italic; }
+    inline void SetFontItalic( bool aItalic )         { m_attributes.m_Italic = aItalic; }
+    inline bool IsFontItalic() const                  { return m_attributes.m_Italic; }
 
-    inline void SetFontUnderlined( bool aUnderlined ) { textProperties.m_underlined = aUnderlined; }
-    inline bool IsFontUnderlined() const { return textProperties.m_underlined; }
+    inline void SetFontUnderlined( bool aUnderlined ) { m_attributes.m_Underlined = aUnderlined; }
+    inline bool IsFontUnderlined() const              { return m_attributes.m_Underlined; }
 
-    /**
-     * Set a mirrored property of text.
-     *
-     * @param aMirrored tells if the text should be mirrored or not.
-     */
-    inline void SetTextMirrored( bool aMirrored ) { textProperties.m_mirrored = aMirrored; }
-    inline bool IsTextMirrored() const { return textProperties.m_mirrored; }
+    void SetTextMirrored( const bool aMirrored )      { m_attributes.m_Mirrored = aMirrored; }
+    bool IsTextMirrored() const                       { return m_attributes.m_Mirrored; }
 
-    /**
-     * Set the horizontal justify for text drawing.
-     *
-     * @param aHorizontalJustify is the horizontal justify value.
-     */
-    inline void SetHorizontalJustify( const GR_TEXT_H_ALIGN_T aHorizontalJustify )
+    void SetHorizontalJustify( const GR_TEXT_H_ALIGN_T aHorizontalJustify )
     {
-        textProperties.m_horizontalJustify = aHorizontalJustify;
+        m_attributes.m_Halign = aHorizontalJustify;
     }
 
-    /**
-     * Return current text horizontal justification setting.
-     */
-    inline GR_TEXT_H_ALIGN_T GetHorizontalJustify() const
+    GR_TEXT_H_ALIGN_T GetHorizontalJustify() const { return m_attributes.m_Halign; }
+
+    void SetVerticalJustify( const GR_TEXT_V_ALIGN_T aVerticalJustify )
     {
-        return textProperties.m_horizontalJustify;
+        m_attributes.m_Valign = aVerticalJustify;
     }
 
-    /**
-     * Set the vertical justify for text drawing.
-     *
-     * @param aVerticalJustify is the vertical justify value.
-     */
-    inline void SetVerticalJustify( const GR_TEXT_V_ALIGN_T aVerticalJustify )
-    {
-        textProperties.m_verticalJustify = aVerticalJustify;
-    }
-
-    /**
-     * Returns current text vertical justification setting.
-     */
-    inline GR_TEXT_V_ALIGN_T GetVerticalJustify() const
-    {
-        return textProperties.m_verticalJustify;
-    }
+    GR_TEXT_V_ALIGN_T GetVerticalJustify() const { return m_attributes.m_Valign; }
 
 
     // --------------
@@ -617,132 +581,54 @@ public:
      * This defines the length [inch] per one integer. For instance a value 0.001 means
      * that the coordinate [1000, 1000] corresponds with a point at (1 inch, 1 inch) or
      * 1 mil resolution per integer.
-     *
-     * @param aWorldUnitLength is the world Unit length.
      */
-    inline void SetWorldUnitLength( double aWorldUnitLength )
-    {
-        m_worldUnitLength = aWorldUnitLength;
-    }
+    void SetWorldUnitLength( double aWorldUnitLength ) { m_worldUnitLength = aWorldUnitLength; }
 
-    inline void SetScreenSize( const VECTOR2I& aSize )
-    {
-        m_screenSize = aSize;
-    }
+    void SetScreenSize( const VECTOR2I& aSize ) { m_screenSize = aSize; }
 
     /**
      * Set the dots per inch of the screen.
      *
      * This value depends on the user screen, it should be configurable by the application.
      * For instance a typical notebook with HD+ resolution (1600x900) has 106 DPI.
-     *
-     * @param aScreenDPI are the screen DPI.
      */
-    inline void SetScreenDPI( double aScreenDPI )
-    {
-        m_screenDPI = aScreenDPI;
-    }
+    void SetScreenDPI( double aScreenDPI ) { m_screenDPI = aScreenDPI; }
 
     /**
-     * Set the Point in world space to look at.
+     * Get/set the Point in world space to look at.
      *
      * This point corresponds with the center of the actual drawing area.
-     *
-     * @param aPoint is the look at point (center of the actual drawing area).
      */
-    inline void SetLookAtPoint( const VECTOR2D& aPoint )
-    {
-        m_lookAtPoint = aPoint;
-    }
+    void SetLookAtPoint( const VECTOR2D& aPoint ) { m_lookAtPoint = aPoint; }
+    const VECTOR2D& GetLookAtPoint() const        { return m_lookAtPoint; }
+
+    void SetZoomFactor( double aZoomFactor )      { m_zoomFactor = aZoomFactor; }
+    double GetZoomFactor() const                  { return m_zoomFactor; }
 
     /**
-     * Get the look at point.
-     *
-     * @return the look at point.
+     * Get/set the rotation angle (in radians).
      */
-    inline const VECTOR2D& GetLookAtPoint() const
-    {
-        return m_lookAtPoint;
-    }
-
-    /**
-     * Set the zoom factor of the scene.
-     *
-     * @param aZoomFactor is the zoom factor.
-     */
-    inline void SetZoomFactor( double aZoomFactor )
-    {
-        m_zoomFactor = aZoomFactor;
-    }
-
-    /**
-     * Get the zoom factor
-     *
-     * @return the zoom factor.
-     */
-    inline double GetZoomFactor() const
-    {
-        return m_zoomFactor;
-    }
-
-    /**
-     * Set the rotation angle.
-     *
-     * @param aRotation is the new rotation angle (radians).
-     */
-    void SetRotation( double aRotation )
-    {
-        m_rotation = aRotation;
-    }
-
-    /**
-     * Get the rotation angle.
-     *
-     * @return The rotation angle (radians).
-     */
-    double GetRotation() const
-    {
-        return m_rotation;
-    }
+    void SetRotation( double aRotation )          { m_rotation = aRotation; }
+    double GetRotation() const                    { return m_rotation; }
 
     /**
      * Set the range of the layer depth.
      *
      * Usually required for the OpenGL implementation, any object outside this range is not drawn.
      *
-     * @param aDepthRange is the depth range where component x is the near clipping plane and y
-     *                    is the far clipping plane.
+     * The MinDepth (x) is closest to the clipping plane (top) while the MaxDepth (y) is farthest
+     * from the clipping plane (bottom).
      */
-    inline void SetDepthRange( const VECTOR2D& aDepthRange )
-    {
-        m_depthRange = aDepthRange;
-    }
-
-    /**
-     * Return the minimum depth in the currently used range (the top).
-     */
-    inline double GetMinDepth() const
-    {
-        return m_depthRange.x;
-    }
-
-    /**
-     * Return the maximum depth in the currently used range (the bottom).
-     */
-    inline double GetMaxDepth() const
-    {
-        return m_depthRange.y;
-    }
+    void SetDepthRange( const VECTOR2D& aDepthRange ) { m_depthRange = aDepthRange; }
+    double GetMinDepth() const                        { return m_depthRange.x; }
+    double GetMaxDepth() const                        { return m_depthRange.y; }
 
     /**
      * Get the world scale.
      *
      * @return the actual world scale factor.
      */
-    inline double GetWorldScale() const
-    {
-        return m_worldScale;
-    }
+    double GetWorldScale() const { return m_worldScale; }
 
     /**
      * Sets flipping of the screen.
@@ -756,21 +642,8 @@ public:
         m_globalFlipY = yAxis;
     }
 
-    /**
-     * Return true if flip flag for the X axis is set.
-     */
-    bool IsFlippedX() const
-    {
-        return m_globalFlipX;
-    }
-
-    /**
-     * Return true if flip flag for the Y axis is set.
-     */
-    bool IsFlippedY() const
-    {
-        return m_globalFlipY;
-    }
+    bool IsFlippedX() const { return m_globalFlipX; }
+    bool IsFlippedY() const { return m_globalFlipY; }
 
     // ---------------------------
     // Buffer manipulation methods
@@ -1216,16 +1089,7 @@ protected:
     KICURSOR             m_currentNativeCursor; ///< Current cursor
 
 private:
-    struct TEXT_PROPERTIES
-    {
-        VECTOR2D          m_glyphSize;            ///< Size of the glyphs
-        GR_TEXT_H_ALIGN_T m_horizontalJustify;    ///< Horizontal justification
-        GR_TEXT_V_ALIGN_T m_verticalJustify;      ///< Vertical justification
-        bool              m_bold;
-        bool              m_italic;
-        bool              m_underlined;
-        bool              m_mirrored;
-    } textProperties;
+    TEXT_ATTRIBUTES      m_attributes;
 };
 
 

@@ -422,8 +422,8 @@ const EDA_RECT SCH_TEXT::GetBoundingBox() const
         wxPoint pos = rect.GetOrigin();
         wxPoint end = rect.GetEnd();
 
-        RotatePoint( &pos, GetTextPos(), GetTextAngle().AsTenthsOfADegree() );
-        RotatePoint( &end, GetTextPos(), GetTextAngle().AsTenthsOfADegree() );
+        RotatePoint( &pos, GetTextPos(), GetTextAngle() );
+        RotatePoint( &end, GetTextPos(), GetTextAngle() );
 
         rect.SetOrigin( pos );
         rect.SetEnd( end );
@@ -1294,8 +1294,8 @@ const EDA_RECT SCH_LABEL::GetBodyBoundingBox() const
         wxPoint pos = rect.GetOrigin();
         wxPoint end = rect.GetEnd();
 
-        RotatePoint( &pos, GetTextPos(), GetTextAngle().AsTenthsOfADegree() );
-        RotatePoint( &end, GetTextPos(), GetTextAngle().AsTenthsOfADegree() );
+        RotatePoint( &pos, GetTextPos(), GetTextAngle() );
+        RotatePoint( &end, GetTextPos(), GetTextAngle() );
 
         rect.SetOrigin( pos );
         rect.SetEnd( end );

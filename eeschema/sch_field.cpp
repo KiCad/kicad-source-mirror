@@ -325,8 +325,8 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
     wxPoint pos = GetTextPos() - origin;
     wxPoint begin = rect.GetOrigin() - origin;
     wxPoint end = rect.GetEnd() - origin;
-    RotatePoint( &begin, pos, GetTextAngle().AsTenthsOfADegree() );
-    RotatePoint( &end, pos, GetTextAngle().AsTenthsOfADegree() );
+    RotatePoint( &begin, pos, GetTextAngle() );
+    RotatePoint( &end, pos, GetTextAngle() );
 
     // Now, apply the symbol transform (mirror/rot)
     TRANSFORM transform;

@@ -1427,7 +1427,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
                 EDA_RECT bbox = libtext->GetTextBox( ii, true );
                 wxPoint  linePos = { bbox.GetLeft(), -bbox.GetBottom() };
 
-                RotatePoint( &linePos, libtext->GetTextPos(), -libtext->GetTextAngle().AsTenthsOfADegree() );
+                RotatePoint( &linePos, libtext->GetTextPos(), -libtext->GetTextAngle() );
 
                 LIB_TEXT* line = static_cast<LIB_TEXT*>( libtext->Clone() );
                 line->SetText( strings[ii] );

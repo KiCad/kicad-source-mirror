@@ -475,8 +475,8 @@ void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
     case GR_TEXT_V_ALIGN_BOTTOM: dy = 0;      break;
     }
 
-    RotatePoint( &dx, &dy, aOrient.AsTenthsOfADegree() );
-    RotatePoint( &tw, &th, aOrient.AsTenthsOfADegree() );
+    RotatePoint( &dx, &dy, aOrient );
+    RotatePoint( &tw, &th, aOrient );
     start_pos.x += dx;
     start_pos.y += dy;
     DPOINT pos_dev = userToDeviceCoordinates( start_pos );

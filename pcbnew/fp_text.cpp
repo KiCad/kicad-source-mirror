@@ -89,7 +89,7 @@ bool FP_TEXT::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
 
     rect.Inflate( aAccuracy );
 
-    RotatePoint( &location, GetTextPos(), -GetDrawRotation().AsTenthsOfADegree() );
+    RotatePoint( &location, GetTextPos(), -GetDrawRotation() );
 
     return rect.Contains( location );
 }
