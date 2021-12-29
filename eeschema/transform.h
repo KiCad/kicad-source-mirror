@@ -72,6 +72,16 @@ public:
     wxPoint TransformCoordinate( const wxPoint& aPoint ) const;
 
    /**
+    * Calculate a new coordinate according to the mirror/rotation transform.
+    * Useful to calculate actual coordinates of a point
+    * from coordinates relative to a symbol.
+    * which are given for a non rotated, non mirrored item
+    * @param aPoint = The position to transform
+    * @return The transformed coordinate.
+    */
+    VECTOR2I TransformCoordinate( const VECTOR2I& aPoint ) const;
+
+   /**
     * Calculate a new rect according to the mirror/rotation transform.
     * Useful to calculate actual coordinates of a point
     * from coordinates relative to a symbol

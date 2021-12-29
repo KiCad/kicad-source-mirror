@@ -36,7 +36,7 @@ class DIALOG_POSITION_RELATIVE : public DIALOG_POSITION_RELATIVE_BASE
 {
 public:
     // Constructor and destructor
-    DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, wxPoint& translation, wxPoint& anchor );
+    DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, VECTOR2I& translation, VECTOR2I& anchor );
     ~DIALOG_POSITION_RELATIVE() { };
 
     void UpdateAnchor( EDA_ITEM* aItem );
@@ -96,8 +96,8 @@ private:
     static POSITION_RELATIVE_OPTIONS m_options;
 
     TOOL_MANAGER* m_toolMgr;
-    wxPoint&      m_translation;
-    wxPoint&      m_anchor_position;
+    VECTOR2I&     m_translation;
+    VECTOR2I&     m_anchor_position;
 
     UNIT_BINDER   m_xOffset;
     UNIT_BINDER   m_yOffset;

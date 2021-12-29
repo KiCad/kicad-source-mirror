@@ -55,9 +55,9 @@ bool IsPointOnSegment( const wxPoint& aSegStart, const wxPoint& aSegEnd,
  * @return bool - true if the two segments defined by four points intersect.
  * (i.e. if the 2 segments have at least a common point)
  */
-bool SegmentIntersectsSegment( const wxPoint& a_p1_l1, const wxPoint& a_p2_l1,
-                               const wxPoint& a_p1_l2, const wxPoint& a_p2_l2,
-                               wxPoint* aIntersectionPoint = nullptr );
+bool SegmentIntersectsSegment( const VECTOR2I& a_p1_l1, const VECTOR2I& a_p2_l1,
+                               const VECTOR2I& a_p1_l2, const VECTOR2I& a_p2_l2,
+                               VECTOR2I* aIntersectionPoint = nullptr );
 
 /*
  * Calculate the new point of coord coord pX, pY,
@@ -94,7 +94,17 @@ inline void RotatePoint( wxPoint* point, EDA_ANGLE angle )
     RotatePoint( &point->x, &point->y, angle.AsTenthsOfADegree() );
 }
 
+inline void RotatePoint( VECTOR2I& point, EDA_ANGLE angle )
+{
+    RotatePoint( &point.x, &point.y, angle.AsTenthsOfADegree() );
+}
+
 void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, double angle );
+
+inline void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, EDA_ANGLE angle )
+{
+    RotatePoint( point, centre, angle.AsTenthsOfADegree() );
+}
 
 /*
  * Calculate the new coord point point for a center rotation center and angle in (1/10 degree).
@@ -226,7 +236,7 @@ inline double CrossProduct( const wxPoint& vectorA, const wxPoint& vectorB )
  * @param aEnd is the second end-point of the line segment
  * @param aDist = maximum distance for hit
 */
-bool TestSegmentHit( const wxPoint& aRefPoint, const wxPoint& aStart, const wxPoint& aEnd,
+bool TestSegmentHit( const VECTOR2I& aRefPoint, const VECTOR2I& aStart, const VECTOR2I& aEnd,
                      int aDist );
 
 /**

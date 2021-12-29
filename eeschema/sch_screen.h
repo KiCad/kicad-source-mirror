@@ -432,6 +432,12 @@ public:
         return GetLine( aPosition, aAccuracy, LAYER_BUS, aSearchType );
     }
 
+    SCH_LINE* GetBus( const VECTOR2I& aPosition, int aAccuracy = 0,
+                      SCH_LINE_TEST_T aSearchType = ENTIRE_LENGTH_T ) const
+    {
+        return GetLine( (wxPoint)aPosition, aAccuracy, LAYER_BUS, aSearchType );
+    }
+
     /**
      * Return a label item located at \a aPosition.
      *

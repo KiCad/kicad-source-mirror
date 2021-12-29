@@ -60,7 +60,7 @@ public:
      *
      * @param aOffset is the drill coordinates offset.
      */
-    void SetOptions( const wxPoint& aOffset )
+    void SetOptions( const VECTOR2I& aOffset )
     {
         m_offset = aOffset;
         m_merge_PTH_NPTH = false;

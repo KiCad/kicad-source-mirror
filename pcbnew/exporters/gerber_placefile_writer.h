@@ -27,7 +27,7 @@
 #define PLACEFILE_GERBER_WRITER_H
 
 #include <layer_ids.h>
-#include <wx/gdicmn.h>
+#include <math/vector2d.h>
 
 class BOARD;
 class FOOTPRINT;
@@ -53,7 +53,7 @@ public:
      *
      * @param aOffset is the drill coordinates offset.
      */
-    void SetOptions( const wxPoint& aOffset )
+    void SetOptions( const VECTOR2I& aOffset )
     {
         m_offset = aOffset;
     }
@@ -95,7 +95,7 @@ private:
 
     BOARD*       m_pcb;
     PCB_LAYER_ID m_layer;            // The board layer currently used (typically F_Cu or B_Cu)
-    wxPoint      m_offset;           // Drill offset coordinates
+    VECTOR2I     m_offset;           // Drill offset coordinates
 
     bool         m_plotPad1Marker;       // True to plot a flashed marker shape at pad 1 position
     bool         m_plotOtherPadsMarker;  // True to plot a marker shape at other pads position

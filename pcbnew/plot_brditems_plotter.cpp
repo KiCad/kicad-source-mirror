@@ -386,8 +386,8 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
     m_plotter->SetColor( color );
 
     // calculate some text parameters :
-    wxSize  size      = aText->GetTextSize();
-    wxPoint pos       = aText->GetTextPos();
+    VECTOR2I size = aText->GetTextSize();
+    VECTOR2I pos = aText->GetTextPos();
     int     thickness = aText->GetEffectiveTextPenWidth();
 
     if( aText->IsMirrored() )
@@ -753,8 +753,8 @@ void BRDITEMS_PLOTTER::PlotPcbText( const PCB_TEXT* aText )
     COLOR4D color = getColor( aText->GetLayer() );
     m_plotter->SetColor( color );
 
-    wxSize  size      = aText->GetTextSize();
-    wxPoint pos       = aText->GetTextPos();
+    VECTOR2I size = aText->GetTextSize();
+    VECTOR2I pos = aText->GetTextPos();
     int     thickness = aText->GetEffectiveTextPenWidth();
 
     if( aText->IsMirrored() )

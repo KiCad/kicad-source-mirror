@@ -230,7 +230,7 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     {
         // Origin = board center:
         BOARD* pcb = GetBoard();
-        wxPoint center = pcb->GetBoundingBox().GetCenter();
+        VECTOR2I center = pcb->GetBoundingBox().GetCenter();
         aXRef = Iu2Millimeter( center.x );
         aYRef = Iu2Millimeter( center.y );
     }

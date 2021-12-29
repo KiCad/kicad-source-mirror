@@ -640,7 +640,7 @@ const EDA_RECT SCH_SHEET::GetBoundingBox() const
 wxPoint SCH_SHEET::GetRotationCenter() const
 {
     EDA_RECT box( m_pos, m_size );
-    return box.GetCenter();
+    return (wxPoint)box.GetCenter();
 }
 
 
@@ -803,7 +803,7 @@ void SCH_SHEET::Rotate( const wxPoint& aCenter )
         // Move the fields to the new position because the parent itself has moved.
         for( SCH_FIELD& field : m_fields )
         {
-            wxPoint pos = field.GetTextPos();
+            VECTOR2I pos = field.GetTextPos();
             pos.x -= prev.x - m_pos.x;
             pos.y -= prev.y - m_pos.y;
             field.SetTextPos( pos );
@@ -825,7 +825,7 @@ void SCH_SHEET::MirrorVertically( int aCenter )
 
     for( SCH_FIELD& field : m_fields )
     {
-        wxPoint pos = field.GetTextPos();
+        VECTOR2I pos = field.GetTextPos();
         pos.y -= dy;
         field.SetTextPos( pos );
     }
@@ -845,7 +845,7 @@ void SCH_SHEET::MirrorHorizontally( int aCenter )
 
     for( SCH_FIELD& field : m_fields )
     {
-        wxPoint pos = field.GetTextPos();
+        VECTOR2I pos = field.GetTextPos();
         pos.x -= dx;
         field.SetTextPos( pos );
     }

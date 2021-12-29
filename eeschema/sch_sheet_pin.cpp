@@ -249,13 +249,13 @@ void SCH_SHEET_PIN::MirrorHorizontally( int aCenter )
 
 void SCH_SHEET_PIN::Rotate( const wxPoint& aCenter )
 {
-    wxPoint pt = GetTextPos();
-    wxPoint delta = pt - aCenter;
+    VECTOR2I pt = GetTextPos();
+    VECTOR2I delta = pt - aCenter;
 
-    RotatePoint( &pt, aCenter, 900 );
+    RotatePoint( pt, aCenter, 900 );
 
     SHEET_SIDE oldSide = GetSide();
-    ConstrainOnEdge( pt );
+    ConstrainOnEdge( (wxPoint)pt );
 
     // If the new side is the same as the old side, instead mirror across the center of that side.
     if( GetSide() == oldSide )
@@ -323,7 +323,7 @@ void SCH_SHEET_PIN::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
 
 void SCH_SHEET_PIN::GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList )
 {
-    DANGLING_END_ITEM item( SHEET_LABEL_END, this, GetTextPos() );
+    DANGLING_END_ITEM item( SHEET_LABEL_END, this, (wxPoint)GetTextPos() );
     aItemList.push_back( item );
 }
 

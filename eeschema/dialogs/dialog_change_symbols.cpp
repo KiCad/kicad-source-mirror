@@ -647,7 +647,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
             }
 
             if( resetPositions )
-                field.SetTextPos( aSymbol->GetPosition() + libField->GetTextPos() );
+                field.SetTextPos( (VECTOR2I)aSymbol->GetPosition() + libField->GetTextPos() );
         }
         else if( i >= MANDATORY_FIELDS && removeExtras )
         {
@@ -675,7 +675,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
             // Careful: the visible bit and position are also set by SetAttributes()
             schField->SetAttributes( libField );
             schField->SetText( libField.GetText() );
-            schField->SetTextPos( aSymbol->GetPosition() + libField.GetTextPos() );
+            schField->SetTextPos( (VECTOR2I)aSymbol->GetPosition() + libField.GetTextPos() );
         }
     }
 

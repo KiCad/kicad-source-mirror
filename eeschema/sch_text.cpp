@@ -283,9 +283,9 @@ void SCH_TEXT::MirrorVertically( int aCenter )
 
 void SCH_TEXT::Rotate( const wxPoint& aCenter )
 {
-    wxPoint pt = GetTextPos();
-    RotatePoint( &pt, aCenter, 900 );
-    wxPoint offset = pt - GetTextPos();
+    VECTOR2I pt = GetTextPos();
+    RotatePoint( pt, aCenter, 900 );
+    VECTOR2I offset = pt - GetTextPos();
 
     Rotate90( false );
 
@@ -419,11 +419,11 @@ const EDA_RECT SCH_TEXT::GetBoundingBox() const
 
     if( GetTextAngle() != EDA_ANGLE::ANGLE_0 ) // Rotate rect.
     {
-        wxPoint pos = rect.GetOrigin();
-        wxPoint end = rect.GetEnd();
+        VECTOR2I pos = rect.GetOrigin();
+        VECTOR2I end = rect.GetEnd();
 
-        RotatePoint( &pos, GetTextPos(), GetTextAngle() );
-        RotatePoint( &end, GetTextPos(), GetTextAngle() );
+        RotatePoint( pos, GetTextPos(), GetTextAngle() );
+        RotatePoint( end, GetTextPos(), GetTextAngle() );
 
         rect.SetOrigin( pos );
         rect.SetEnd( end );
@@ -728,9 +728,9 @@ void SCH_LABEL_BASE::SwapData( SCH_ITEM* aItem )
 
 void SCH_LABEL_BASE::Rotate( const wxPoint& aCenter )
 {
-    wxPoint pt = GetTextPos();
-    RotatePoint( &pt, aCenter, 900 );
-    wxPoint offset = pt - GetTextPos();
+    VECTOR2I pt = GetTextPos();
+    RotatePoint( pt, aCenter, 900 );
+    VECTOR2I offset = pt - GetTextPos();
 
     Rotate90( false );
 
@@ -786,8 +786,8 @@ void SCH_LABEL_BASE::Rotate90( bool aClockwise )
                 field.SetTextAngle( EDA_ANGLE::VERTICAL );
             }
 
-            wxPoint pos = field.GetTextPos();
-            RotatePoint( &pos, GetPosition(), aClockwise ? -900 : 900 );
+            VECTOR2I pos = field.GetTextPos();
+            RotatePoint( pos, GetPosition(), aClockwise ? -900 : 900 );
             field.SetTextPos( pos );
         }
     }
@@ -967,14 +967,14 @@ SEARCH_RESULT SCH_LABEL_BASE::Visit( INSPECTOR aInspector, void* testData,
 
 void SCH_LABEL_BASE::GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList )
 {
-    DANGLING_END_ITEM item( LABEL_END, this, GetTextPos() );
+    DANGLING_END_ITEM item( LABEL_END, this, (wxPoint)GetTextPos() );
     aItemList.push_back( item );
 }
 
 
 std::vector<wxPoint> SCH_LABEL_BASE::GetConnectionPoints() const
 {
-    return { GetTextPos() };
+    return { (wxPoint)GetTextPos() };
 }
 
 
@@ -1013,7 +1013,7 @@ const EDA_RECT SCH_LABEL_BASE::GetBodyBoundingBox() const
     EDA_RECT             box;
     std::vector<wxPoint> pts;
 
-    CreateGraphicShape( nullptr, pts, GetTextPos() );
+    CreateGraphicShape( nullptr, pts, (wxPoint)GetTextPos() );
 
     for( const wxPoint& pt : pts )
         box.Merge( pt );
@@ -1241,12 +1241,12 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter ) const
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 
-    wxPoint textpos = GetTextPos() + GetSchematicTextOffset( aPlotter->RenderSettings() );
+    VECTOR2I textpos = GetTextPos() + GetSchematicTextOffset( aPlotter->RenderSettings() );
 
     aPlotter->Text( textpos, color, GetShownText(), GetTextAngle(), GetTextSize(),
                     GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold() );
 
-    CreateGraphicShape( aPlotter->RenderSettings(), s_poly, GetTextPos() );
+    CreateGraphicShape( aPlotter->RenderSettings(), s_poly, (wxPoint)GetTextPos() );
 
     if( s_poly.size() )
         aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
@@ -1266,7 +1266,7 @@ void SCH_LABEL_BASE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOf
 
     EDA_TEXT::Print( aSettings, text_offset, color );
 
-    CreateGraphicShape( aSettings, s_poly, GetTextPos() + aOffset );
+    CreateGraphicShape( aSettings, s_poly, (wxPoint)GetTextPos() + aOffset );
 
     if( !s_poly.empty() )
         GRPoly( nullptr, DC, s_poly.size(), &s_poly[0], false, penWidth, color, color );
@@ -1294,11 +1294,11 @@ const EDA_RECT SCH_LABEL::GetBodyBoundingBox() const
     if( GetTextAngle() != EDA_ANGLE::ANGLE_0 )
     {
         // Rotate rect
-        wxPoint pos = rect.GetOrigin();
-        wxPoint end = rect.GetEnd();
+        VECTOR2I pos = rect.GetOrigin();
+        VECTOR2I end = rect.GetEnd();
 
-        RotatePoint( &pos, GetTextPos(), GetTextAngle() );
-        RotatePoint( &end, GetTextPos(), GetTextAngle() );
+        RotatePoint( pos, GetTextPos(), GetTextAngle() );
+        RotatePoint( end, GetTextPos(), GetTextAngle() );
 
         rect.SetOrigin( pos );
         rect.SetEnd( end );
@@ -1552,8 +1552,8 @@ void SCH_GLOBALLABEL::MirrorSpinStyle( bool aLeftRight )
                 field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         }
 
-        wxPoint pos = field.GetTextPos();
-        wxPoint delta = GetPosition() - pos;
+        VECTOR2I pos = field.GetTextPos();
+        VECTOR2I delta = (VECTOR2I)GetPosition() - pos;
 
         if( aLeftRight )
             pos.x = GetPosition().x + delta.x;
@@ -1567,7 +1567,7 @@ void SCH_GLOBALLABEL::MirrorSpinStyle( bool aLeftRight )
 
 void SCH_GLOBALLABEL::MirrorHorizontally( int aCenter )
 {
-    wxPoint old_pos = GetPosition();
+    VECTOR2I old_pos = GetPosition();
     SCH_TEXT::MirrorHorizontally( aCenter );
 
     for( SCH_FIELD& field : m_fields )
@@ -1577,27 +1577,27 @@ void SCH_GLOBALLABEL::MirrorHorizontally( int aCenter )
         else
            field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
-        wxPoint pos = field.GetTextPos();
-        wxPoint delta = old_pos - pos;
+        VECTOR2I pos = field.GetTextPos();
+        VECTOR2I delta = old_pos - pos;
         pos.x = GetPosition().x + delta.x;
 
-        field.SetPosition( pos );
+        field.SetPosition( (wxPoint)pos );
     }
 }
 
 
 void SCH_GLOBALLABEL::MirrorVertically( int aCenter )
 {
-    wxPoint old_pos = GetPosition();
+    VECTOR2I old_pos = GetPosition();
     SCH_TEXT::MirrorVertically( aCenter );
 
     for( SCH_FIELD& field : m_fields )
     {
-        wxPoint pos = field.GetTextPos();
-        wxPoint delta = old_pos - pos;
+        VECTOR2I pos = field.GetTextPos();
+        VECTOR2I delta = old_pos - pos;
         pos.y = GetPosition().y + delta.y;
 
-        field.SetPosition( pos );
+        field.SetPosition( (wxPoint)pos );
     }
 }
 

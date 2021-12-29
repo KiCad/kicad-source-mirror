@@ -94,7 +94,7 @@ protected:
     wxString    m_text;
     bool        m_isItalic;
     bool        m_isBold;
-    wxPoint     m_position;
+    VECTOR2I    m_position;
     int         m_size;
     bool        m_isVertical;
     int         m_verticalJustification;

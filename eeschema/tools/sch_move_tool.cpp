@@ -659,7 +659,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const wxPoin
                 SCH_LINE* line = static_cast<SCH_LINE*>( aOriginalItem );
                 bool      oneEndFixed = !line->HasFlag( STARTPOINT ) || !line->HasFlag( ENDPOINT );
 
-                if( line->HitTest( label->GetTextPos(), 1 ) )
+                if( line->HitTest( (wxPoint)label->GetTextPos(), 1 ) )
                 {
                     label->SetFlags( TEMP_SELECTED );
                     aList.push_back( label );

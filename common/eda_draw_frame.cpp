@@ -834,7 +834,7 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
 
 wxPoint EDA_DRAW_FRAME::GetNearestGridPosition( const wxPoint& aPosition ) const
 {
-    const wxPoint& gridOrigin = GetGridOrigin();
+    const VECTOR2I& gridOrigin = GetGridOrigin();
     VECTOR2D       gridSize = GetCanvas()->GetGAL()->GetGridSize();
 
     double xOffset = fmod( gridOrigin.x, gridSize.x );
@@ -848,7 +848,7 @@ wxPoint EDA_DRAW_FRAME::GetNearestGridPosition( const wxPoint& aPosition ) const
 
 wxPoint EDA_DRAW_FRAME::GetNearestHalfGridPosition( const wxPoint& aPosition ) const
 {
-    const wxPoint& gridOrigin = GetGridOrigin();
+    const VECTOR2I& gridOrigin = GetGridOrigin();
     VECTOR2D       gridSize = GetCanvas()->GetGAL()->GetGridSize() / 2.0;
 
     double xOffset = fmod( gridOrigin.x, gridSize.x );

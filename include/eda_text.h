@@ -224,8 +224,8 @@ public:
     void SetTextHeight( int aHeight )           { m_attributes.m_Size.y = aHeight; }
     int GetTextHeight() const                   { return m_attributes.m_Size.y; }
 
-    void SetTextPos( const wxPoint& aPoint )    { m_pos = aPoint; }
-    const wxPoint& GetTextPos() const           { return m_pos; }
+    void SetTextPos( const VECTOR2I& aPoint )   { m_pos = aPoint; }
+    const VECTOR2I& GetTextPos() const          { return m_pos; }
 
     void SetTextX( int aX )                     { m_pos.x = aX; }
     void SetTextY( int aY )                     { m_pos.y = aY; }
@@ -346,7 +346,7 @@ public:
     virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
     virtual EDA_ANGLE GetDrawRotation() const               { return GetTextAngle(); }
-    virtual wxPoint GetDrawPos() const                      { return GetTextPos(); }
+    virtual wxPoint GetDrawPos() const                      { return (wxPoint)GetTextPos(); }
     virtual GR_TEXT_H_ALIGN_T GetDrawHorizJustify() const   { return GetHorizJustify(); };
     virtual GR_TEXT_V_ALIGN_T GetDrawVertJustify() const    { return GetVertJustify(); };
 
@@ -364,16 +364,16 @@ private:
      * @param aText the single line of text to draw.
      * @param aPos the position of this line ).
      */
-    void printOneLineOfText( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
+    void printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
                              const COLOR4D& aColor, OUTLINE_MODE aFillMode, const wxString& aText,
-                             const wxPoint& aPos );
+                             const VECTOR2I& aPos );
 
     wxString        m_text;
     wxString        m_shown_text;           // Cache of unescaped text for efficient access
     bool            m_shown_text_has_text_var_refs;
 
     TEXT_ATTRIBUTES m_attributes;
-    wxPoint         m_pos;
+    VECTOR2I        m_pos;
 };
 
 

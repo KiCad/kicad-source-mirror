@@ -408,7 +408,7 @@ wxPoint EDA_SHAPE::getCenter() const
     case SHAPE_T::POLY:
     case SHAPE_T::RECT:
     case SHAPE_T::BEZIER:
-        return getBoundingBox().Centre();
+        return (wxPoint)getBoundingBox().Centre();
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );

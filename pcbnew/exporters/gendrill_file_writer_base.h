@@ -103,10 +103,10 @@ public:
                                          // size y).
     int          m_Tool_Reference;       // Tool reference for this hole = 1 ... n (values <=0
                                          // must not be used).
-    wxSize       m_Hole_Size;            // hole size for oblong holes
+    VECTOR2I     m_Hole_Size;            // hole size for oblong holes
     double       m_Hole_Orient;          // Hole rotation (= pad rotation) for oblong holes
     int          m_Hole_Shape;           // hole shape: round (0) or oval (1)
-    wxPoint      m_Hole_Pos;             // hole position
+    VECTOR2I     m_Hole_Pos;             // hole position
     PCB_LAYER_ID m_Hole_Bottom_Layer;    // hole ending layer (usually back layer)
     PCB_LAYER_ID m_Hole_Top_Layer;       // hole starting layer (usually front layer):
                                          // m_Hole_Top_Layer < m_Hole_Bottom_Layer
@@ -180,7 +180,7 @@ public:
     /**
      * Return the plot offset (usually the position of the drill/place origin).
      */
-    wxPoint GetOffset() { return m_offset; }
+    VECTOR2I GetOffset() { return m_offset; }
 
     /**
      * Set the page info used to plot drill maps.
@@ -380,7 +380,7 @@ protected:
     double                   m_conversionUnits;         // scaling factor to convert the board
                                                         // unites to Excellon/Gerber units (i.e
                                                         // inches or mm)
-    wxPoint                  m_offset;                  // Drill offset coordinates
+    VECTOR2I                 m_offset;                  // Drill offset coordinates
     bool                     m_merge_PTH_NPTH;          // True to generate only one drill file
     std::vector<HOLE_INFO>   m_holeListBuffer;          // Buffer containing holes
     std::vector<DRILL_TOOL>  m_toolListBuffer;          // Buffer containing tools

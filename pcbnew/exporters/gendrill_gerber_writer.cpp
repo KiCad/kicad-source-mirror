@@ -172,7 +172,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
     holes_count = 0;
 
-    wxPoint hole_pos;
+    VECTOR2I hole_pos;
     bool last_item_is_via = true;   // a flag to clear object attributes when a via hole is created.
 
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )

@@ -67,7 +67,7 @@ bool AR_MATRIX::ComputeMatrixSize( const EDA_RECT& aBoundingBox )
     m_BrdBox.SetY( m_BrdBox.GetY() - ( m_BrdBox.GetY() % m_GridRouting ) );
 
     // The boundary box must have its end point on routing grid:
-    wxPoint end = m_BrdBox.GetEnd();
+    VECTOR2I end = m_BrdBox.GetEnd();
 
     end.x -= end.x % m_GridRouting;
     end.x += m_GridRouting;

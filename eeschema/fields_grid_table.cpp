@@ -537,7 +537,7 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
 {
     wxCHECK( aRow < GetNumberRows(), /*void*/ );
     T& field = this->at( (size_t) aRow );
-    wxPoint    pos;
+    VECTOR2I pos;
 
     switch( aCol )
     {

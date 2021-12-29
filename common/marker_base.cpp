@@ -122,8 +122,8 @@ void MARKER_BASE::ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon, int aScale ) const
 
 EDA_RECT MARKER_BASE::GetBoundingBoxMarker() const
 {
-    wxSize size_iu = m_shapeBoundingBox.GetSize();
-    wxPoint position_iu = m_shapeBoundingBox.GetPosition();
+    VECTOR2I size_iu = m_shapeBoundingBox.GetSize();
+    VECTOR2I position_iu = m_shapeBoundingBox.GetPosition();
     size_iu.x *= m_scalingFactor;
     size_iu.y *= m_scalingFactor;
     position_iu.x *= m_scalingFactor;

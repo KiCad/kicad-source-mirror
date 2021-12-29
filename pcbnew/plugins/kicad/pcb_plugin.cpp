@@ -498,9 +498,9 @@ void PCB_PLUGIN::formatSetup( const BOARD* aBoard, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(pad_to_paste_clearance_ratio %s)\n",
                       Double2Str( dsnSettings.m_SolderPasteMarginRatio ).c_str() );
 
-    wxPoint origin = dsnSettings.GetAuxOrigin();
+    VECTOR2I origin = dsnSettings.GetAuxOrigin();
 
-    if( origin != wxPoint( 0, 0 ) )
+    if( origin != VECTOR2I( 0, 0 ) )
     {
         m_out->Print( aNestLevel+1, "(aux_axis_origin %s %s)\n",
                       FormatInternalUnits( origin.x ).c_str(),

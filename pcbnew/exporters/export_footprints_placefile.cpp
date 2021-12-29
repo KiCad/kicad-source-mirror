@@ -97,7 +97,7 @@ PLACE_FILE_EXPORTER::PLACE_FILE_EXPORTER( BOARD* aBoard, bool aUnitsMM, bool aOn
     if( aUseAuxOrigin )
         m_place_Offset = m_board->GetDesignSettings().GetAuxOrigin();
     else
-        m_place_Offset = wxPoint( 0, 0 );
+        m_place_Offset = VECTOR2I( 0, 0 );
 }
 
 
@@ -173,7 +173,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
 
         for( int ii = 0; ii < m_fpCount; ii++ )
         {
-            wxPoint  footprint_pos;
+            VECTOR2I footprint_pos;
             footprint_pos  = list[ii].m_Footprint->GetPosition();
             footprint_pos -= m_place_Offset;
 
@@ -239,7 +239,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
 
         for( int ii = 0; ii < m_fpCount; ii++ )
         {
-            wxPoint  footprint_pos;
+            VECTOR2I footprint_pos;
             footprint_pos  = list[ii].m_Footprint->GetPosition();
             footprint_pos -= m_place_Offset;
 
@@ -280,7 +280,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 {
     std::string buffer;
 
-    m_place_Offset = wxPoint( 0, 0 );
+    m_place_Offset = VECTOR2I( 0, 0 );
 
     // Select units:
     double conv_unit = m_unitsMM ? conv_unit_mm : conv_unit_inch;
@@ -351,7 +351,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
         buffer += "\n";
 
-        wxPoint footprint_pos = footprint->GetPosition();
+        VECTOR2I footprint_pos = footprint->GetPosition();
         footprint_pos -= m_place_Offset;
 
         sprintf( line, "position %9.6f %9.6f  orientation %.2f\n",

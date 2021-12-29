@@ -73,7 +73,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     // for the right holes set (PTH, NPTH, buried/blind vias ...)
 
     double    scale = 1.0;
-    wxPoint   offset = GetOffset();
+    VECTOR2I  offset = GetOffset();
     PLOTTER*  plotter = nullptr;
     PAGE_INFO dummy( PAGE_INFO::A4, false );
     int       bottom_limit = 0;        // Y coord limit of page. 0 mean do not use
@@ -440,7 +440,7 @@ bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName )
 bool GENDRILL_WRITER_BASE::plotDrillMarks( PLOTTER* aPlotter )
 {
     // Plot the drill map:
-    wxPoint pos;
+    VECTOR2I pos;
 
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
@@ -455,7 +455,7 @@ bool GENDRILL_WRITER_BASE::plotDrillMarks( PLOTTER* aPlotter )
 
         if( hole.m_Hole_Shape != 0 )
         {
-            wxSize oblong_size = hole.m_Hole_Size;
+            VECTOR2I oblong_size = hole.m_Hole_Size;
             aPlotter->FlashPadOval( pos, oblong_size, hole.m_Hole_Orient, SKETCH, nullptr );
         }
     }

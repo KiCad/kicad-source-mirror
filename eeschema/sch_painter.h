@@ -173,7 +173,7 @@ private:
 
     void drawPinDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColor,
                                 bool aDrawingShadows, bool aBrightened );
-    void drawDanglingSymbol( const wxPoint& aPos, const COLOR4D& aColor, int aWidth,
+    void drawDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
                              bool aDrawingShadows, bool aBrightened );
 
     int internalPinDecoSize( const LIB_PIN &aPin );

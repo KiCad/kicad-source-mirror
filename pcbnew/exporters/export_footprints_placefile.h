@@ -90,14 +90,14 @@ public:
     static std::string GetBackSideName() { return std::string( "bottom" ); }
 
 private:
-    BOARD*  m_board;
-    bool    m_unitsMM;        // true for mm, false for inches
-    bool    m_onlySMD;        // Include only SMD components
-    bool    m_excludeAllTH;   // Exclude any footprints with through-hole pads
-    int     m_side;           // PCB_BACK_SIDE, PCB_FRONT_SIDE, PCB_BOTH_SIDES
-    bool    m_formatCSV;      // true for csv format, false for ascii (utf8) format
-    int     m_fpCount;        // Number of footprints in list, for info
-    wxPoint m_place_Offset;   // Offset for coordinates in generated data.
+    BOARD*   m_board;
+    bool     m_unitsMM;        // true for mm, false for inches
+    bool     m_onlySMD;        // Include only SMD components
+    bool     m_excludeAllTH;   // Exclude any footprints with through-hole pads
+    int      m_side;           // PCB_BACK_SIDE, PCB_FRONT_SIDE, PCB_BOTH_SIDES
+    bool     m_formatCSV;      // true for csv format, false for ascii (utf8) format
+    int      m_fpCount;        // Number of footprints in list, for info
+    VECTOR2I m_place_Offset;   // Offset for coordinates in generated data.
 };
 
 #endif      // #ifndef EXPORT_FOOTPRINTS_PLACEFILE_H

@@ -507,7 +507,7 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
 void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                                                const std::vector<SCH_ITEM*>& aItemList )
 {
-    std::map< wxPoint, std::vector<SCH_ITEM*> > connection_map;
+    std::map<VECTOR2I, std::vector<SCH_ITEM*>> connection_map;
 
     for( SCH_ITEM* item : aItemList )
     {

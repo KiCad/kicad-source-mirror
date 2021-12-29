@@ -319,7 +319,7 @@ bool DIALOG_EXPORT_SVG::CreateSVGFile( const wxString& aFullFileName )
     plot_opts.SetFormat( PLOT_FORMAT::SVG );
 
     PAGE_INFO   savedPageInfo = m_board->GetPageSettings();
-    wxPoint     savedAuxOrigin = m_board->GetDesignSettings().GetAuxOrigin();
+    VECTOR2I  savedAuxOrigin = m_board->GetDesignSettings().GetAuxOrigin();
 
     if( m_rbSvgPageSizeOpt->GetSelection() == 2 )   // Page is board boundary size
     {
@@ -330,7 +330,7 @@ bool DIALOG_EXPORT_SVG::CreateSVGFile( const wxString& aFullFileName )
         currpageInfo.SetHeightMils( bbox.GetHeight() / IU_PER_MILS );
         m_board->SetPageSettings( currpageInfo );
         plot_opts.SetUseAuxOrigin( true );
-        wxPoint origin = bbox.GetOrigin();
+        VECTOR2I origin = bbox.GetOrigin();
         m_board->GetDesignSettings().SetAuxOrigin( origin );
     }
 

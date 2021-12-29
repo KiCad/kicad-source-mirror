@@ -228,8 +228,8 @@ void LIB_TEXT::Rotate( const wxPoint& center, bool aRotateCCW )
     NormalizeJustification( false );
     int rot_angle = aRotateCCW ? -900 : 900;
 
-    wxPoint pt = GetTextPos();
-    RotatePoint( &pt, center, rot_angle );
+    VECTOR2I pt = GetTextPos();
+    RotatePoint( pt, center, rot_angle );
     SetTextPos( pt );
 
     if( GetTextAngle().IsHorizontal() )
@@ -265,12 +265,12 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     EDA_RECT bBox = GetBoundingBox();
     // convert coordinates from draw Y axis to symbol_editor Y axis
     bBox.RevertYAxis();
-    wxPoint txtpos = bBox.Centre();
+    VECTOR2I txtpos = bBox.Centre();
 
     // The text orientation may need to be flipped if the transformation matrix causes xy
     // axes to be flipped.
     int t1  = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != EDA_ANGLE::HORIZONTAL );
-    wxPoint pos = aTransform.TransformCoordinate( txtpos ) + offset;
+    VECTOR2I pos = aTransform.TransformCoordinate( txtpos ) + offset;
 
     // Get color
     COLOR4D color;
@@ -329,7 +329,7 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, 
 
     // convert coordinates from draw Y axis to symbol_editor Y axis:
     bBox.RevertYAxis();
-    wxPoint txtpos = bBox.Centre();
+    VECTOR2I txtpos = bBox.Centre();
 
     // Calculate pos according to mirror/rotation.
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
@@ -382,11 +382,11 @@ const EDA_RECT LIB_TEXT::GetBoundingBox() const
     rect.RevertYAxis();
 
     // We are using now a bottom to top Y axis.
-    wxPoint orig = rect.GetOrigin();
-    wxPoint end  = rect.GetEnd();
+    VECTOR2I orig = rect.GetOrigin();
+    VECTOR2I end = rect.GetEnd();
 
-    RotatePoint( &orig, GetTextPos(), -GetTextAngle() );
-    RotatePoint( &end,  GetTextPos(), -GetTextAngle() );
+    RotatePoint( orig, GetTextPos(), -GetTextAngle() );
+    RotatePoint( end, GetTextPos(), -GetTextAngle() );
 
     rect.SetOrigin( orig );
     rect.SetEnd( end );

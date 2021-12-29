@@ -793,7 +793,7 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
             if( aUpdateStyle )
             {
                 schField->ImportValues( *libField );
-                schField->SetTextPos( m_pos + libField->GetTextPos() );
+                schField->SetTextPos( (VECTOR2I)m_pos + libField->GetTextPos() );
             }
 
             if( id == REFERENCE_FIELD && aPath )
@@ -1459,7 +1459,7 @@ void SCH_SYMBOL::MirrorHorizontally( int aCenter )
     for( SCH_FIELD& field : m_fields )
     {
         // Move the fields to the new position because the symbol itself has moved.
-        wxPoint pos = field.GetTextPos();
+        VECTOR2I pos = field.GetTextPos();
         pos.x -= dx;
         field.SetTextPos( pos );
     }
@@ -1477,7 +1477,7 @@ void SCH_SYMBOL::MirrorVertically( int aCenter )
     for( SCH_FIELD& field : m_fields )
     {
         // Move the fields to the new position because the symbol itself has moved.
-        wxPoint pos = field.GetTextPos();
+        VECTOR2I pos = field.GetTextPos();
         pos.y -= dy;
         field.SetTextPos( pos );
     }
@@ -1495,7 +1495,7 @@ void SCH_SYMBOL::Rotate( const wxPoint& aCenter )
     for( SCH_FIELD& field : m_fields )
     {
         // Move the fields to the new position because the symbol itself has moved.
-        wxPoint pos = field.GetTextPos();
+        VECTOR2I pos = field.GetTextPos();
         pos.x -= prev.x - m_pos.x;
         pos.y -= prev.y - m_pos.y;
         field.SetTextPos( pos );

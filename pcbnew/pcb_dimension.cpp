@@ -220,8 +220,8 @@ void PCB_DIMENSION_BASE::Rotate( const wxPoint& aRotCentre, double aAngle )
 
     m_text.SetTextAngle( newAngle );
 
-    wxPoint pt = m_text.GetTextPos();
-    RotatePoint( &pt, aRotCentre, aAngle );
+    VECTOR2I pt = m_text.GetTextPos();
+    RotatePoint( pt, aRotCentre, aAngle );
     m_text.SetTextPos( pt );
 
     RotatePoint( &m_start, aRotCentre, aAngle );
@@ -242,7 +242,7 @@ void PCB_DIMENSION_BASE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 void PCB_DIMENSION_BASE::Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight )
 {
     int axis = aMirrorLeftRight ? axis_pos.x : axis_pos.y;
-    wxPoint newPos = m_text.GetTextPos();
+    VECTOR2I newPos = m_text.GetTextPos();
 
 #define INVERT( pos ) ( ( pos ) = axis - ( ( pos ) - axis ) )
     if( aMirrorLeftRight )

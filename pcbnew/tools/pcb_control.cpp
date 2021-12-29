@@ -88,7 +88,7 @@ void PCB_CONTROL::Reset( RESET_REASON aReason )
 
     if( aReason == MODEL_RELOAD || aReason == GAL_SWITCH )
     {
-        m_gridOrigin->SetPosition( board()->GetDesignSettings().GetGridOrigin() );
+        m_gridOrigin->SetPosition( (wxPoint) board()->GetDesignSettings().GetGridOrigin() );
         m_gridOrigin->SetColor( m_frame->GetGridColor() );
         getView()->Remove( m_gridOrigin.get() );
         getView()->Add( m_gridOrigin.get() );

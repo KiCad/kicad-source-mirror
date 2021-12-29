@@ -136,12 +136,12 @@ public:
     const PAGE_INFO& GetPageSettings() const override;
     const wxSize GetPageSizeIU() const override;
 
-    const wxPoint& GetGridOrigin() const override;
-    void SetGridOrigin( const wxPoint& aPoint ) override;
+    const VECTOR2I& GetGridOrigin() const override;
+    void            SetGridOrigin( const VECTOR2I& aPoint ) override;
 
-    const wxPoint& GetAuxOrigin() const;
+    const VECTOR2I& GetAuxOrigin() const;
 
-    const wxPoint GetUserOrigin() const;
+    const VECTOR2I GetUserOrigin() const;
 
     /**
      * Return a reference to the default ORIGIN_TRANSFORMS object

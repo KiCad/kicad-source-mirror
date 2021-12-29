@@ -135,8 +135,8 @@ public:
      * This is treated as a relative offset and snapping will occur at multiples of the grid
      * size relative to this point.
      */
-    virtual const wxPoint& GetGridOrigin() const = 0;
-    virtual void SetGridOrigin( const wxPoint& aPosition ) = 0;
+    virtual const VECTOR2I& GetGridOrigin() const = 0;
+    virtual void            SetGridOrigin( const VECTOR2I& aPosition ) = 0;
 
     /**
      * Return the nearest \a aGridSize location to \a aPosition.

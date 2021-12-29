@@ -203,7 +203,7 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
+    wxPoint GetPosition() const override { return (wxPoint)EDA_TEXT::GetTextPos(); }
     void SetPosition( const wxPoint& aPosition ) override { EDA_TEXT::SetTextPos( aPosition ); }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;

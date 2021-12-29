@@ -283,7 +283,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     // Creates bounding box (rectangle) for horizontal, left and top justified text. The
     // bounding box will be moved later according to the actual text options
     wxSize textsize = wxSize( dx, dy );
-    wxPoint pos = GetTextPos();
+    VECTOR2I pos = GetTextPos();
 
     if( IsMultilineAllowed() && aLine > 0 && ( aLine < static_cast<int>( strings.GetCount() ) ) )
     {
@@ -394,10 +394,10 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 bool EDA_TEXT::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
     EDA_RECT rect = GetTextBox();
-    wxPoint location = aPoint;
+    VECTOR2I location = aPoint;
 
     rect.Inflate( aAccuracy );
-    RotatePoint( &location, GetTextPos(), -GetTextAngle() );
+    RotatePoint( location, GetTextPos(), -GetTextAngle() );
 
     return rect.Contains( location );
 }
@@ -441,7 +441,7 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
 
 void EDA_TEXT::GetLinePositions( std::vector<wxPoint>& aPositions, int aLineCount ) const
 {
-    wxPoint pos  = GetTextPos();     // Position of first line of the multiline text according
+    VECTOR2I pos  = GetTextPos();     // Position of first line of the multiline text according
                                      // to the center of the multiline text block
 
     wxPoint offset;                  // Offset to next line.
@@ -466,22 +466,22 @@ void EDA_TEXT::GetLinePositions( std::vector<wxPoint>& aPositions, int aLineCoun
     }
 
     // Rotate the position of the first line around the center of the multiline text block
-    RotatePoint( &pos, GetTextPos(), GetTextAngle() );
+    RotatePoint( pos, GetTextPos(), GetTextAngle() );
 
     // Rotate the offset lines to increase happened in the right direction
     RotatePoint( &offset, GetTextAngle() );
 
     for( int ii = 0; ii < aLineCount; ii++ )
     {
-        aPositions.push_back( pos );
+        aPositions.push_back( (wxPoint) pos );
         pos += offset;
     }
 }
 
 
-void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
+void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
                                    const COLOR4D& aColor, OUTLINE_MODE aFillMode,
-                                   const wxString& aText, const wxPoint &aPos )
+                                   const wxString& aText, const VECTOR2I& aPos )
 {
     wxDC* DC = aSettings->GetPrintDC();
     int   penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetDefaultPenWidth() );
@@ -489,7 +489,7 @@ void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const wxPoi
     if( aFillMode == SKETCH )
         penWidth = -penWidth;
 
-    wxSize size = GetTextSize();
+    VECTOR2I size = GetTextSize();
 
     if( IsMirrored() )
         size.x = -size.x;
@@ -704,7 +704,7 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
     if( GetText().Length() == 0 )
         return;
 
-    wxPoint  corners[4];    // Buffer of polygon corners
+    VECTOR2I  corners[4];    // Buffer of polygon corners
 
     EDA_RECT rect = GetTextBox();
 
@@ -735,10 +735,10 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
 
     aCornerBuffer->NewOutline();
 
-    for( wxPoint& corner : corners )
+    for( VECTOR2I& corner : corners )
     {
         // Rotate polygon
-        RotatePoint( &corner, GetTextPos(), GetTextAngle() );
+        RotatePoint( corner, GetTextPos(), GetTextAngle() );
         aCornerBuffer->Append( corner.x, corner.y );
     }
 }

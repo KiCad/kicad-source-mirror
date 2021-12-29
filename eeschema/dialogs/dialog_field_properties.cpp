@@ -600,7 +600,7 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
     GR_TEXT_V_ALIGN_T vJustify = EDA_TEXT::MapVertJustify( m_verticalJustification - 1 );
     bool positioningModified = false;
 
-    if( aField->GetPosition() != m_position )
+    if( aField->GetPosition() != (wxPoint)m_position )
         positioningModified = true;
 
     if( aField->GetTextAngle().IsVertical() != m_isVertical )
@@ -617,7 +617,7 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
 
     aField->SetText( m_text );
     updateText( aField );
-    aField->SetPosition( m_position );
+    aField->SetPosition( (wxPoint)m_position );
 
     // Note that we must set justifications before we can ask if they're flipped.  If the old
     // justification is center then it won't know (whereas if the new justification is center

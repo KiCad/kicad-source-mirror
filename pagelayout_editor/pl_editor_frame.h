@@ -107,8 +107,8 @@ public:
     PL_DRAW_PANEL_GAL* GetCanvas() const override;
     SELECTION& GetCurrentSelection() override;
 
-    const wxPoint& GetGridOrigin() const override { return m_grid_origin; }
-    void SetGridOrigin( const wxPoint& aPoint ) override { m_grid_origin = aPoint; }
+    const VECTOR2I& GetGridOrigin() const override { return m_grid_origin; }
+    void            SetGridOrigin( const VECTOR2I& aPoint ) override { m_grid_origin = aPoint; }
 
     /**
      * Calculate the position (in page, in iu) of the corner used as coordinate origin
@@ -284,7 +284,7 @@ private:
     wxChoice*   m_pageSelectBox;        // The page number sel'ector (page 1 or other pages
                                         // useful when there are some items which are
                                         // only on page 1, not on page 1
-    wxPoint     m_grid_origin;
+    VECTOR2I m_grid_origin;
 };
 
 #endif /* _PL_EDITOR_FRAME_H */

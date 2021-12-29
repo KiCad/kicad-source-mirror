@@ -442,7 +442,8 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
         PAGE_INFO pageSave = editFrame->GetScreen()->GetPageSettings();
         PAGE_INFO pageTemp = pageSave;
 
-        wxSize symbolSize = symbol->GetUnitBoundingBox( editFrame->GetUnit(),
+        VECTOR2I symbolSize =
+                symbol->GetUnitBoundingBox( editFrame->GetUnit(),
                                                         editFrame->GetConvert() ).GetSize();
 
         // Add a small margin to the plot bounding box

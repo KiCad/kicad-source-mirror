@@ -115,7 +115,7 @@ bool PCB_GROUP::WithinScope( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootpr
 
 wxPoint PCB_GROUP::GetPosition() const
 {
-    return GetBoundingBox().Centre();
+    return (wxPoint)GetBoundingBox().Centre();
 }
 
 

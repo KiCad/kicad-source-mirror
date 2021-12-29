@@ -520,7 +520,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             SCH_SHEET*     sheet = pin->GetParent();
 
             for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
-                pin->Rotate( sheet->GetBodyBoundingBox().GetCenter() );
+                pin->Rotate( (wxPoint)sheet->GetBodyBoundingBox().GetCenter() );
 
             break;
         }
@@ -628,7 +628,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                     SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
                     SCH_SHEET*     sheet = pin->GetParent();
 
-                    pin->Rotate( sheet->GetBodyBoundingBox().GetCenter() );
+                    pin->Rotate( (wxPoint)sheet->GetBodyBoundingBox().GetCenter() );
                 }
             }
             else if( item->Type() == SCH_FIELD_T )
@@ -787,7 +787,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         case SCH_SHEET_T:
             // Mirror the sheet on itself. Sheets do not have a anchor point.
-            mirrorPoint = m_frame->GetNearestHalfGridPosition( item->GetBoundingBox().Centre() );
+            mirrorPoint = m_frame->GetNearestHalfGridPosition( (wxPoint)item->GetBoundingBox().Centre() );
 
             if( vertical )
                 item->MirrorVertically( mirrorPoint.y );

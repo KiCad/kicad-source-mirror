@@ -389,7 +389,7 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     RENDER_SETTINGS* renderSettings = symbolEditor->GetRenderSettings();
     renderSettings->SetPrintDC( &dc );
 
-    m_dummyPin->Print( renderSettings, -bBox.Centre(), (void*) &opts, DefaultTransform );
+    m_dummyPin->Print( renderSettings, (wxPoint) - bBox.Centre(), (void*) &opts, DefaultTransform );
 
     event.Skip();
 }

@@ -416,7 +416,7 @@ float SCH_PAINTER::getTextThickness( const LIB_TEXT* aItem, bool aDrawingShadows
 }
 
 
-static VECTOR2D mapCoords( const wxPoint& aCoord )
+static VECTOR2D mapCoords( const VECTOR2D& aCoord )
 {
     return VECTOR2D( aCoord.x, -aCoord.y );
 }
@@ -685,7 +685,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
     m_gal->SetFillColor( color );
 
     EDA_RECT bbox = aField->GetBoundingBox();
-    wxPoint  textpos = bbox.Centre();
+    VECTOR2I  textpos = bbox.Centre();
 
     if( drawingShadows && eeconfig()->m_Selection.text_as_box )
     {
@@ -1235,7 +1235,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 
 // Draw the target (an open square) for a wire or label which has no connection or is
 // being moved.
-void SCH_PAINTER::drawDanglingSymbol( const wxPoint& aPos, const COLOR4D& aColor, int aWidth,
+void SCH_PAINTER::drawDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
                                       bool aDrawingShadows, bool aBrightened )
 {
     wxPoint radius( aWidth + Mils2iu( DANGLING_SYMBOL_SIZE / 2 ),
@@ -1706,7 +1706,7 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
         bbox.Offset( label->GetSchematicTextOffset( &m_schSettings ) );
     }
 
-    wxPoint  textpos = bbox.Centre();
+    VECTOR2I textpos = bbox.Centre();
 
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( getTextThickness( aField, drawingShadows ) );
@@ -1767,7 +1767,7 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL *aLabel, int aLayer )
     std::vector<wxPoint> pts;
     std::deque<VECTOR2D> pts2;
 
-    aLabel->CreateGraphicShape( &m_schSettings, pts, aLabel->GetTextPos() );
+    aLabel->CreateGraphicShape( &m_schSettings, pts, (wxPoint) aLabel->GetTextPos() );
 
     for( const wxPoint& p : pts )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );
@@ -1841,7 +1841,7 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL *aLabel, int aLayer )
     std::vector<wxPoint> pts;
     std::deque<VECTOR2D> pts2;
 
-    aLabel->CreateGraphicShape( &m_schSettings, pts, aLabel->GetTextPos() );
+    aLabel->CreateGraphicShape( &m_schSettings, pts, (wxPoint)aLabel->GetTextPos() );
 
     for( const wxPoint& p : pts )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );
@@ -1889,7 +1889,7 @@ void SCH_PAINTER::draw( const SCH_NETCLASS_FLAG *aLabel, int aLayer )
     std::vector<wxPoint> pts;
     std::deque<VECTOR2D> pts2;
 
-    aLabel->CreateGraphicShape( &m_schSettings, pts, aLabel->GetTextPos() );
+    aLabel->CreateGraphicShape( &m_schSettings, pts, (wxPoint) aLabel->GetTextPos() );
 
     for( const wxPoint& p : pts )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );
@@ -1950,8 +1950,8 @@ void SCH_PAINTER::draw( const SCH_SHEET *aSheet, int aLayer )
             }
 
             int     width = std::max( aSheet->GetPenWidth(), m_schSettings.GetDefaultPenWidth() );
-            wxPoint initial_pos = sheetPin->GetTextPos();
-            wxPoint offset_pos = initial_pos;
+            VECTOR2I initial_pos = sheetPin->GetTextPos();
+            VECTOR2I offset_pos = initial_pos;
 
             // For aesthetic reasons, the SHEET_PIN is drawn with a small offset of width / 2
             switch( sheetPin->GetSide() )

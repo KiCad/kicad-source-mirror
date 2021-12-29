@@ -66,13 +66,13 @@ public:
     /**
      * Return the position of the selected item(s)
      */
-    wxPoint GetSelectionAnchorPosition() const { return m_selectionAnchor; }
+    VECTOR2I GetSelectionAnchorPosition() const { return m_selectionAnchor; }
 
     /**
      * Position the m_position_relative_selection selection relative to anchor position using
      * the given translation.
      */
-    int RelativeItemSelectionMove( const wxPoint& anchor, const wxPoint& translation );
+    int RelativeItemSelectionMove( const VECTOR2I& anchor, const VECTOR2I& translation );
 
     ///< Set up handlers for various events.
     void setTransitions() override;
@@ -82,14 +82,14 @@ private:
 
     PCB_SELECTION_TOOL*           m_selectionTool;
     PCB_SELECTION                 m_selection;
-    wxPoint                       m_selectionAnchor;
+    VECTOR2I                      m_selectionAnchor;
 
     std::unique_ptr<BOARD_COMMIT> m_commit;
 
     EDA_ITEM*                     m_anchor_item;
-    wxPoint                       m_anchor;
+    VECTOR2I                      m_anchor;
 
-    wxPoint                       m_translation;
+    VECTOR2I                      m_translation;
 };
 
 #endif

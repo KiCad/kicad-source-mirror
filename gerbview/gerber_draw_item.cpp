@@ -408,8 +408,8 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
     }
 
     // calculate the corners coordinates in current Gerber axis orientations
-    wxPoint org = GetABPosition( bbox.GetOrigin() );
-    wxPoint end = GetABPosition( bbox.GetEnd() );
+    VECTOR2I org = GetABPosition( bbox.GetOrigin() );
+    VECTOR2I end = GetABPosition( bbox.GetEnd() );
 
     // Set the corners position:
     bbox.SetOrigin( org );
@@ -827,7 +827,7 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
 
         // This is similar to a segment with thickness = min( m_Size.x, m_Size.y )
         int radius = std::min( m_Size.x, m_Size.y )/2;
-        wxPoint start, end;
+        VECTOR2I start, end;
 
         if( m_Size.x > m_Size.y )   // Horizontal oval
         {

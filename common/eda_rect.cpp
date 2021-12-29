@@ -48,16 +48,16 @@ void EDA_RECT::Normalize()
 }
 
 
-void EDA_RECT::Move( const wxPoint& aMoveVector )
+void EDA_RECT::Move( const VECTOR2I& aMoveVector )
 {
     m_pos += aMoveVector;
 }
 
 
-bool EDA_RECT::Contains( const wxPoint& aPoint ) const
+bool EDA_RECT::Contains( const VECTOR2I& aPoint ) const
 {
-    wxPoint rel_pos = aPoint - m_pos;
-    wxSize  size    = m_size;
+    VECTOR2I rel_pos = aPoint - m_pos;
+    VECTOR2I size = m_size;
 
     if( size.x < 0 )
     {
@@ -82,9 +82,9 @@ bool EDA_RECT::Contains( const EDA_RECT& aRect ) const
 }
 
 
-bool EDA_RECT::Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2 ) const
+bool EDA_RECT::Intersects( const VECTOR2I& aPoint1, const VECTOR2I& aPoint2 ) const
 {
-    wxPoint point2, point4;
+    VECTOR2I point2, point4;
 
     if( Contains( aPoint1 ) || Contains( aPoint2 ) )
         return true;
@@ -108,10 +108,10 @@ bool EDA_RECT::Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2 ) cons
 }
 
 
-bool EDA_RECT::Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2, wxPoint* aIntersection1,
-        wxPoint* aIntersection2 ) const
+bool EDA_RECT::Intersects( const VECTOR2I& aPoint1, const VECTOR2I& aPoint2,
+                           VECTOR2I* aIntersection1, VECTOR2I* aIntersection2 ) const
 {
-    wxPoint point2, point4;
+    VECTOR2I point2, point4;
 
     point2.x = GetEnd().x;
     point2.y = GetOrigin().y;
@@ -120,7 +120,7 @@ bool EDA_RECT::Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2, wxPoi
 
     bool intersects = false;
 
-    wxPoint* aPointToFill = aIntersection1;
+    VECTOR2I* aPointToFill = aIntersection1;
 
     if( SegmentIntersectsSegment( aPoint1, aPoint2, GetOrigin(), point2, aPointToFill ) )
         intersects = true;
@@ -229,7 +229,7 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
      * C) One of the sides of the rotated rect intersect this
      */
 
-    wxPoint corners[4];
+    VECTOR2I corners[4];
 
     /* Test A : Any corners exist in rotated rect? */
     corners[0] = m_pos;
@@ -237,12 +237,12 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
     corners[2] = m_pos + wxPoint( m_size.x, m_size.y );
     corners[3] = m_pos + wxPoint( 0, m_size.y );
 
-    wxPoint rCentre = aRect.Centre();
+    VECTOR2I rCentre = aRect.Centre();
 
     for( int i = 0; i < 4; i++ )
     {
-        wxPoint delta = corners[i] - rCentre;
-        RotatePoint( &delta, -aRot );
+        VECTOR2I delta = corners[i] - rCentre;
+        RotatePoint( delta, -aRot );
         delta += rCentre;
 
         if( aRect.Contains( delta ) )
@@ -264,7 +264,7 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
     // Rotate and test each corner
     for( int j = 0; j < 4; j++ )
     {
-        RotatePoint( &corners[j], aRot );
+        RotatePoint( corners[j], aRot );
         corners[j] += rCentre;
 
         if( Contains( corners[j] ) )
@@ -445,8 +445,8 @@ void EDA_RECT::Merge( const EDA_RECT& aRect )
     Normalize(); // ensure width and height >= 0
     EDA_RECT rect = aRect;
     rect.Normalize(); // ensure width and height >= 0
-    wxPoint end      = GetEnd();
-    wxPoint rect_end = rect.GetEnd();
+    VECTOR2I end = GetEnd();
+    VECTOR2I rect_end = rect.GetEnd();
 
     // Change origin and size in order to contain the given rect
     m_pos.x = std::min( m_pos.x, rect.m_pos.x );
@@ -469,7 +469,7 @@ void EDA_RECT::Merge( const wxPoint& aPoint )
 
     Normalize(); // ensure width and height >= 0
 
-    wxPoint end = GetEnd();
+    VECTOR2I end = GetEnd();
 
     // Change origin and size in order to contain the given rect
     m_pos.x = std::min( m_pos.x, aPoint.x );
@@ -492,27 +492,27 @@ EDA_RECT EDA_RECT::Common( const EDA_RECT& aRect ) const
 
     if( Intersects( aRect ) )
     {
-        wxPoint originA(
-                std::min( GetOrigin().x, GetEnd().x ), std::min( GetOrigin().y, GetEnd().y ) );
-        wxPoint originB( std::min( aRect.GetOrigin().x, aRect.GetEnd().x ),
-                std::min( aRect.GetOrigin().y, aRect.GetEnd().y ) );
-        wxPoint endA(
-                std::max( GetOrigin().x, GetEnd().x ), std::max( GetOrigin().y, GetEnd().y ) );
-        wxPoint endB( std::max( aRect.GetOrigin().x, aRect.GetEnd().x ),
-                std::max( aRect.GetOrigin().y, aRect.GetEnd().y ) );
+        VECTOR2I originA( std::min( GetOrigin().x, GetEnd().x ),
+                          std::min( GetOrigin().y, GetEnd().y ) );
+        VECTOR2I originB( std::min( aRect.GetOrigin().x, aRect.GetEnd().x ),
+                          std::min( aRect.GetOrigin().y, aRect.GetEnd().y ) );
+        VECTOR2I endA( std::max( GetOrigin().x, GetEnd().x ),
+                       std::max( GetOrigin().y, GetEnd().y ) );
+        VECTOR2I endB( std::max( aRect.GetOrigin().x, aRect.GetEnd().x ),
+                       std::max( aRect.GetOrigin().y, aRect.GetEnd().y ) );
 
         r.SetOrigin(
-                wxPoint( std::max( originA.x, originB.x ), std::max( originA.y, originB.y ) ) );
-        r.SetEnd( wxPoint( std::min( endA.x, endB.x ), std::min( endA.y, endB.y ) ) );
+                VECTOR2I( std::max( originA.x, originB.x ), std::max( originA.y, originB.y ) ) );
+        r.SetEnd( VECTOR2I( std::min( endA.x, endB.x ), std::min( endA.y, endB.y ) ) );
     }
 
     return r;
 }
 
 
-const EDA_RECT EDA_RECT::GetBoundingBoxRotated( const wxPoint& aRotCenter, double aAngle ) const
+const EDA_RECT EDA_RECT::GetBoundingBoxRotated( const VECTOR2I& aRotCenter, double aAngle ) const
 {
-    wxPoint corners[4];
+    VECTOR2I corners[4];
 
     // Build the corners list
     corners[0]   = GetOrigin();
@@ -524,11 +524,11 @@ const EDA_RECT EDA_RECT::GetBoundingBoxRotated( const wxPoint& aRotCenter, doubl
 
     // Rotate all corners, to find the bounding box
     for( int ii = 0; ii < 4; ii++ )
-        RotatePoint( &corners[ii], aRotCenter, aAngle );
+        RotatePoint( corners[ii], aRotCenter, aAngle );
 
     // Find the corners bounding box
-    wxPoint start = corners[0];
-    wxPoint end   = corners[0];
+    VECTOR2I start = corners[0];
+    VECTOR2I end = corners[0];
 
     for( int ii = 1; ii < 4; ii++ )
     {

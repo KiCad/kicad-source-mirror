@@ -33,8 +33,8 @@
 DIALOG_POSITION_RELATIVE::POSITION_RELATIVE_OPTIONS DIALOG_POSITION_RELATIVE::m_options;
 
 
-DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, wxPoint& translation,
-                                                    wxPoint& anchor ) :
+DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, VECTOR2I& translation,
+                                                    VECTOR2I& anchor ) :
     DIALOG_POSITION_RELATIVE_BASE( aParent ),
     m_toolMgr( aParent->GetToolManager() ),
     m_translation( translation ),
@@ -182,7 +182,7 @@ void DIALOG_POSITION_RELATIVE::OnClear( wxCommandEvent& event )
     POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
     wxASSERT( posrelTool );
 
-    wxPoint offset = posrelTool->GetSelectionAnchorPosition() - m_anchor_position;
+    VECTOR2I offset = posrelTool->GetSelectionAnchorPosition() - m_anchor_position;
     double  r, q;
     ToPolarDeg( offset.x, offset.y, r, q );
 
@@ -245,7 +245,7 @@ void DIALOG_POSITION_RELATIVE::OnUseUserOriginClick( wxCommandEvent& event )
 {
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) m_toolMgr->GetToolHolder();
 
-    m_anchor_position = (wxPoint) frame->GetScreen()->m_LocalOrigin;
+    m_anchor_position = frame->GetScreen()->m_LocalOrigin;
     m_referenceInfo->SetLabel( _( "Reference location: local coordinates origin" ) );
 }
 

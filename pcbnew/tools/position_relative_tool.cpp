@@ -133,10 +133,10 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
 }
 
 
-int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( const wxPoint& aPosAnchor,
-                                                       const wxPoint& aTranslation )
+int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( const VECTOR2I& aPosAnchor,
+                                                       const VECTOR2I& aTranslation )
 {
-    wxPoint aggregateTranslation = aPosAnchor + aTranslation - GetSelectionAnchorPosition();
+    VECTOR2I aggregateTranslation = aPosAnchor + aTranslation - GetSelectionAnchorPosition();
 
     for( auto item : m_selection )
     {

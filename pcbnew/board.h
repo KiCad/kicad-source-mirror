@@ -277,7 +277,7 @@ public:
 
     wxPoint GetPosition() const override;
     void SetPosition( const wxPoint& aPos ) override;
-    const wxPoint GetFocusPosition() const override { return GetBoundingBox().GetCenter(); }
+    const wxPoint GetFocusPosition() const override { return (wxPoint)GetBoundingBox().GetCenter(); }
 
     bool IsEmpty() const
     {

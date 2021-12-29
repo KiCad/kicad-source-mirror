@@ -356,7 +356,7 @@ void AR_AUTOPLACER::buildFpAreas( FOOTPRINT* aFootprint, int aFpClearance )
     fpBBox.Inflate( ( m_matrix.m_GridRouting / 2 ) + aFpClearance );
 
     // Add a minimal area to the fp area:
-    addFpBody( fpBBox.GetOrigin(), fpBBox.GetEnd(), layerMask );
+    addFpBody( (wxPoint)fpBBox.GetOrigin(), (wxPoint)fpBBox.GetEnd(), layerMask );
 
     // Trace pads + clearance areas.
     for( PAD* pad : aFootprint->Pads() )
@@ -438,8 +438,8 @@ int AR_AUTOPLACER::testRectangle( const EDA_RECT& aRect, int side )
 
     rect.Inflate( m_matrix.m_GridRouting / 2 );
 
-    wxPoint start   = rect.GetOrigin();
-    wxPoint end     = rect.GetEnd();
+    VECTOR2I start = rect.GetOrigin();
+    VECTOR2I end     = rect.GetEnd();
 
     start   -= m_matrix.m_BrdBox.GetOrigin();
     end     -= m_matrix.m_BrdBox.GetOrigin();
@@ -487,8 +487,8 @@ int AR_AUTOPLACER::testRectangle( const EDA_RECT& aRect, int side )
 
 unsigned int AR_AUTOPLACER::calculateKeepOutArea( const EDA_RECT& aRect, int side )
 {
-    wxPoint start   = aRect.GetOrigin();
-    wxPoint end     = aRect.GetEnd();
+    VECTOR2I start = aRect.GetOrigin();
+    VECTOR2I end = aRect.GetEnd();
 
     start   -= m_matrix.m_BrdBox.GetOrigin();
     end     -= m_matrix.m_BrdBox.GetOrigin();
@@ -575,7 +575,7 @@ int AR_AUTOPLACER::testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSid
 int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
 {
     int     error = 1;
-    wxPoint lastPosOK;
+    VECTOR2I lastPosOK;
     double  min_cost, curr_cost, Score;
     bool    testOtherSide;
 
@@ -586,18 +586,18 @@ int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
 
     // Move fpBBox to have the footprint position at (0,0)
     fpBBox.Move( -fpPos );
-    wxPoint fpBBoxOrg = fpBBox.GetOrigin();
+    VECTOR2I fpBBoxOrg = fpBBox.GetOrigin();
 
     // Calculate the limit of the footprint position, relative to the routing matrix area
-    wxPoint xylimit = m_matrix.m_BrdBox.GetEnd() - fpBBox.GetEnd();
+    VECTOR2I xylimit = m_matrix.m_BrdBox.GetEnd() - fpBBox.GetEnd();
 
-    wxPoint initialPos = m_matrix.m_BrdBox.GetOrigin() - fpBBoxOrg;
+    VECTOR2I initialPos = m_matrix.m_BrdBox.GetOrigin() - fpBBoxOrg;
 
     // Stay on grid.
     initialPos.x    -= initialPos.x % m_matrix.m_GridRouting;
     initialPos.y    -= initialPos.y % m_matrix.m_GridRouting;
 
-    m_curPosition = initialPos;
+    m_curPosition = (wxPoint)initialPos;
     wxPoint fpOffset = fpPos - m_curPosition;
 
     // Examine pads, and set testOtherSide to true if a footprint has at least 1 pad through.
@@ -657,7 +657,7 @@ int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
     }
 
     // Regeneration of the modified variable.
-    m_curPosition = lastPosOK;
+    m_curPosition = (wxPoint)lastPosOK;
 
     m_minCost = min_cost;
     return error;

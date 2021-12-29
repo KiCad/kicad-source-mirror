@@ -167,8 +167,8 @@ bool PCB_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy
 
 void PCB_TEXT::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    wxPoint pt = GetTextPos();
-    RotatePoint( &pt, aRotCentre, aAngle );
+    VECTOR2I pt = GetTextPos();
+    RotatePoint( pt, aRotCentre, aAngle );
     SetTextPos( pt );
 
     SetTextAngle( GetTextAngle().AsTenthsOfADegree() + aAngle );

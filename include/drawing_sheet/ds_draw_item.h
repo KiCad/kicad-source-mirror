@@ -316,7 +316,7 @@ public:
 
     void SetTextAngle( double aAngle ) override;
 
-    wxPoint GetPosition() const override { return GetTextPos(); }
+    wxPoint GetPosition() const override { return (wxPoint)GetTextPos(); }
     void SetPosition( const wxPoint& aPos ) override { SetTextPos( aPos ); }
 
     const EDA_RECT GetBoundingBox() const override;

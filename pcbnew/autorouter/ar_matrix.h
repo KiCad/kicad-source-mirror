@@ -73,7 +73,7 @@ public:
      */
     wxPoint GetBrdCoordOrigin()
     {
-        return m_BrdBox.GetOrigin();
+        return (wxPoint)m_BrdBox.GetOrigin();
     }
 
     /**

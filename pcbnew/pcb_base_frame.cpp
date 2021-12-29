@@ -453,27 +453,27 @@ const wxSize PCB_BASE_FRAME::GetPageSizeIU() const
 }
 
 
-const wxPoint& PCB_BASE_FRAME::GetGridOrigin() const
+const VECTOR2I& PCB_BASE_FRAME::GetGridOrigin() const
 {
     return m_pcb->GetDesignSettings().GetGridOrigin();
 }
 
 
-void PCB_BASE_FRAME::SetGridOrigin( const wxPoint& aPoint )
+void PCB_BASE_FRAME::SetGridOrigin( const VECTOR2I& aPoint )
 {
     m_pcb->GetDesignSettings().SetGridOrigin( aPoint );
 }
 
 
-const wxPoint& PCB_BASE_FRAME::GetAuxOrigin() const
+const VECTOR2I& PCB_BASE_FRAME::GetAuxOrigin() const
 {
     return m_pcb->GetDesignSettings().GetAuxOrigin();
 }
 
 
-const wxPoint PCB_BASE_FRAME::GetUserOrigin() const
+const VECTOR2I PCB_BASE_FRAME::GetUserOrigin() const
 {
-    wxPoint origin( 0, 0 );
+    VECTOR2I origin( 0, 0 );
 
     switch( Settings().m_Display.m_DisplayOrigin )
     {

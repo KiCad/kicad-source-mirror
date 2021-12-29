@@ -44,14 +44,14 @@ class EDA_RECT
 public:
     EDA_RECT() : m_init( false ) { };
 
-    EDA_RECT( const wxPoint& aPos, const wxSize& aSize ) :
+    EDA_RECT( const VECTOR2I& aPos, const VECTOR2I& aSize ) :
             m_pos( aPos ),
             m_size( aSize ),
             m_init( true )
     { }
 
-    EDA_RECT( const VECTOR2I& aPos, const VECTOR2I& aSize ) :
-            EDA_RECT( wxPoint( aPos.x, aPos.y ), wxSize( aSize.x, aSize.y ) )
+    EDA_RECT( const wxPoint& aPos, const wxSize& aSize ) :
+            EDA_RECT( VECTOR2I( aPos.x, aPos.y ), VECTOR2I( aSize.x, aSize.y ) )
     { }
 
     template<class T>
@@ -65,9 +65,9 @@ public:
 
     virtual ~EDA_RECT() { };
 
-    wxPoint Centre() const
+    VECTOR2I Centre() const
     {
-        return wxPoint( m_pos.x + ( m_size.x >> 1 ), m_pos.y + ( m_size.y >> 1 ) );
+        return VECTOR2I( m_pos.x + ( m_size.x >> 1 ), m_pos.y + ( m_size.y >> 1 ) );
     }
 
     /**
@@ -75,7 +75,7 @@ public:
      *
      * @param aMoveVector A wxPoint that is the value to move this rectangle.
      */
-    void Move( const wxPoint& aMoveVector );
+    void Move( const VECTOR2I& aMoveVector );
 
     /**
      * Ensures that the height ant width are positive.
@@ -86,14 +86,14 @@ public:
      * @param aPoint the wxPoint to test.
      * @return true if aPoint is inside the boundary box. A point on a edge is seen as inside.
      */
-    bool Contains( const wxPoint& aPoint ) const;
+    bool Contains( const VECTOR2I& aPoint ) const;
 
     /**
      * @param x the x coordinate of the point to test.
      * @param y the x coordinate of the point to test.
      * @return true if point is inside the boundary box. A point on a edge is seen as inside
      */
-    bool Contains( int x, int y ) const { return Contains( wxPoint( x, y ) ); }
+    bool Contains( int x, int y ) const { return Contains( VECTOR2I( x, y ) ); }
 
     /**
      * @param aRect the EDA_RECT to test.
@@ -101,7 +101,7 @@ public:
      */
     bool Contains( const EDA_RECT& aRect ) const;
 
-    const wxSize GetSize() const { return m_size; }
+    const VECTOR2I GetSize() const { return m_size; }
 
     /**
      * @return the max size dimension.
@@ -111,12 +111,12 @@ public:
     int GetX() const { return m_pos.x; }
     int GetY() const { return m_pos.y; }
 
-    const wxPoint GetOrigin() const { return m_pos; }
-    const wxPoint GetPosition() const { return m_pos; }
-    const wxPoint GetEnd() const { return wxPoint( m_pos.x + m_size.x, m_pos.y + m_size.y ); }
-    const wxPoint GetCenter() const
+    const VECTOR2I GetOrigin() const { return m_pos; }
+    const VECTOR2I GetPosition() const { return m_pos; }
+    const VECTOR2I GetEnd() const { return VECTOR2I( m_pos.x + m_size.x, m_pos.y + m_size.y ); }
+    const VECTOR2I GetCenter() const
     {
-        return wxPoint( m_pos.x + ( m_size.x / 2 ), m_pos.y + ( m_size.y / 2 ) );
+        return VECTOR2I( m_pos.x + ( m_size.x / 2 ), m_pos.y + ( m_size.y / 2 ) );
     }
 
     int GetWidth() const { return m_size.x; }
@@ -131,7 +131,7 @@ public:
         return m_init;
     }
 
-    void SetOrigin( const wxPoint& pos )
+    void SetOrigin( const VECTOR2I& pos )
     {
         m_pos = pos;
         m_init = true;
@@ -144,7 +144,7 @@ public:
         m_init = true;
     }
 
-    void SetSize( const wxSize& size )
+    void SetSize( const VECTOR2I& size )
     {
         m_size = size;
         m_init = true;
@@ -163,7 +163,7 @@ public:
         m_pos.y += dy;
     }
 
-    void Offset( const wxPoint& offset )
+    void Offset( const VECTOR2I& offset )
     {
         m_pos += offset;
     }
@@ -194,11 +194,11 @@ public:
 
     void SetEnd( int x, int y )
     {
-        SetEnd( wxPoint( x, y ) );
+        SetEnd( VECTOR2I( x, y ) );
         m_init = true;
     }
 
-    void SetEnd( const wxPoint& pos )
+    void SetEnd( const VECTOR2I& pos )
     {
         m_size.x = pos.x - m_pos.x;
         m_size.y = pos.y - m_pos.y;
@@ -240,7 +240,7 @@ public:
      * @return true if the argument segment intersects this rectangle.
      * (i.e. if the segment and rectangle have at least a common point)
      */
-    bool Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2 ) const;
+    bool Intersects( const VECTOR2I& aPoint1, const VECTOR2I& aPoint2 ) const;
 
     /**
      * Test for intersection between a segment and this rectangle, returning the intersections.
@@ -251,8 +251,8 @@ public:
      * @param aIntersection2 will be filled with the second intersection point, if any.
      * @return true if the segment intersects the rect.
      */
-    bool Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2,
-                     wxPoint* aIntersection1, wxPoint* aIntersection2 ) const;
+    bool Intersects( const VECTOR2I& aPoint1, const VECTOR2I& aPoint2, VECTOR2I* aIntersection1,
+                     VECTOR2I* aIntersection2 ) const;
 
     /**
      * Return the point in this rect that is closest to the provided point
@@ -290,7 +290,7 @@ public:
     {
         EDA_RECT rect( m_pos, m_size );
         rect.Normalize();
-        return wxRect( rect.m_pos, rect.m_size );
+        return wxRect( (wxPoint)rect.m_pos, (wxSize)rect.m_size );
     }
 
     /**
@@ -355,12 +355,12 @@ public:
      * @param aRotCenter the rotation point.
      * @return the bounding box of this, after rotation.
      */
-    const EDA_RECT GetBoundingBoxRotated( const wxPoint& aRotCenter, double aAngle ) const;
+    const EDA_RECT GetBoundingBoxRotated( const VECTOR2I& aRotCenter, double aAngle ) const;
 
 private:
-    wxPoint m_pos;      // Rectangle Origin
-    wxSize  m_size;     // Rectangle Size
-    bool    m_init;     // Is the rectangle initialized
+    VECTOR2I m_pos;      // Rectangle Origin
+    VECTOR2I m_size;     // Rectangle Size
+    bool     m_init;     // Is the rectangle initialized
 };
 
 

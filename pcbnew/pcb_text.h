@@ -75,7 +75,7 @@ public:
 
     virtual wxPoint GetPosition() const override
     {
-        return EDA_TEXT::GetTextPos();
+        return (wxPoint)EDA_TEXT::GetTextPos();
     }
 
     virtual void SetPosition( const wxPoint& aPos ) override

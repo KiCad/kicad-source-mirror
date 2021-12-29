@@ -1037,8 +1037,8 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
     }
 
     EDA_RECT bbox = aBoard->ComputeBoundingBox();
-    wxPoint boardCenter = bbox.Centre();
-    wxSize boardSize = bbox.GetSize();
+    VECTOR2I boardCenter = bbox.Centre();
+    VECTOR2I boardSize = bbox.GetSize();
 
     double compound_scale;
 
@@ -1058,7 +1058,7 @@ static void initializePlotter( PLOTTER* aPlotter, const BOARD* aBoard,
 
     // For the plot offset we have to keep in mind the auxiliary origin too: if autoscaling is
     // off we check that plot option (i.e. autoscaling overrides auxiliary origin)
-    wxPoint offset( 0, 0);
+    VECTOR2I offset( 0, 0);
 
     if( autocenter )
     {

@@ -645,11 +645,11 @@ public:
 
     int GetLayerClass( PCB_LAYER_ID aLayer ) const;
 
-    void SetAuxOrigin( const wxPoint& aOrigin ) { m_auxOrigin = aOrigin; }
-    const wxPoint& GetAuxOrigin() { return m_auxOrigin; }
+    void            SetAuxOrigin( const VECTOR2I& aOrigin ) { m_auxOrigin = aOrigin; }
+    const VECTOR2I& GetAuxOrigin() { return m_auxOrigin; }
 
-    void SetGridOrigin( const wxPoint& aOrigin ) { m_gridOrigin = aOrigin; }
-    const wxPoint& GetGridOrigin() { return m_gridOrigin; }
+    void            SetGridOrigin( const VECTOR2I& aOrigin ) { m_gridOrigin = aOrigin; }
+    const VECTOR2I& GetGridOrigin() { return m_gridOrigin; }
 
 private:
     void initFromOther( const BOARD_DESIGN_SETTINGS& aOther );
@@ -756,8 +756,8 @@ public:
     bool       m_UseHeightForLengthCalcs;
 
 private:
-    wxPoint    m_auxOrigin;                 ///< origin for plot exports
-    wxPoint    m_gridOrigin;                ///< origin for grid offsets
+    VECTOR2I m_auxOrigin;  ///< origin for plot exports
+    VECTOR2I m_gridOrigin; ///< origin for grid offsets
 
     // Indices into the trackWidth, viaSizes and diffPairDimensions lists.
     // The 0 index is always the current netclass value(s)

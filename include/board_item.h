@@ -81,7 +81,7 @@ public:
      */
     virtual wxPoint GetCenter() const
     {
-        return GetBoundingBox().GetCenter();
+        return (wxPoint)GetBoundingBox().GetCenter();
     }
 
     void SetX( int aX )

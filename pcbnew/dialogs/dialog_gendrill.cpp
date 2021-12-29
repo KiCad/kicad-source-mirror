@@ -341,7 +341,7 @@ void DIALOG_GENDRILL::UpdateDrillParams()
     m_UseRouteModeForOvalHoles = m_radioBoxOvalHoleMode->GetSelection() == 0;
 
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
-        m_DrillFileOffset = wxPoint( 0, 0 );
+        m_DrillFileOffset = VECTOR2I( 0, 0 );
     else
         m_DrillFileOffset = m_board->GetDesignSettings().GetAuxOrigin();
 

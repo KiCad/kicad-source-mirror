@@ -196,7 +196,7 @@ void BOARD_EDITOR_CONTROL::Reset( RESET_REASON aReason )
 
     if( aReason == MODEL_RELOAD || aReason == GAL_SWITCH )
     {
-        m_placeOrigin->SetPosition( getModel<BOARD>()->GetDesignSettings().GetAuxOrigin() );
+        m_placeOrigin->SetPosition( (wxPoint)getModel<BOARD>()->GetDesignSettings().GetAuxOrigin() );
         getView()->Remove( m_placeOrigin.get() );
         getView()->Add( m_placeOrigin.get() );
     }

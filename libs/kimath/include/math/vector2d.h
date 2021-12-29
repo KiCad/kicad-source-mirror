@@ -127,6 +127,16 @@ public:
         return wxPoint( x, y );
     }
 
+    /**
+     * Implement the cast to wxPoint.
+     *
+     * @return the vector cast to wxPoint.
+     */
+    explicit operator wxSize() const
+    {
+        return wxSize( x, y );
+    }
+
     // virtual ~VECTOR2();
 
     /**

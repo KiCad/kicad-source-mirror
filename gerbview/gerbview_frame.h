@@ -422,8 +422,8 @@ public:
     const PAGE_INFO& GetPageSettings() const override;
     const wxSize GetPageSizeIU() const override;
 
-    const wxPoint& GetGridOrigin() const override { return m_grid_origin; }
-    void SetGridOrigin( const wxPoint& aPoint ) override { m_grid_origin = aPoint; }
+    const VECTOR2I& GetGridOrigin() const override { return m_grid_origin; }
+    void            SetGridOrigin( const VECTOR2I& aPoint ) override { m_grid_origin = aPoint; }
 
     const TITLE_BLOCK&  GetTitleBlock() const override;
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
@@ -520,7 +520,7 @@ private:
 
     GBR_LAYOUT*         m_gerberLayout;
     int                 m_activeLayer;
-    wxPoint             m_grid_origin;
+    VECTOR2I            m_grid_origin;
     PAGE_INFO           m_paper;            // used only to show paper limits to screen
     wxStaticText*       m_cmpText;          // a message on the auxiliary toolbar,
                                             // relative to the m_SelComponentBox

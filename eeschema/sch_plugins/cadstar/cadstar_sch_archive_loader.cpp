@@ -217,7 +217,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         // When exporting to pdf, CADSTAR applies a margin of 3% of the longest dimension (height
         // or width) to all 4 sides (top, bottom, left right). For the import, we are also rounding
         // the margin to the nearest grid, ensuring all items remain on the grid.
-        wxSize targetSheetSize = sheetBoundingBox.GetSize();
+        wxSize targetSheetSize = (wxSize)sheetBoundingBox.GetSize();
         int    longestSide = std::max( targetSheetSize.x, targetSheetSize.y );
         int    margin = ( (double) longestSide * 0.03 );
         margin = roundToNearestGrid( margin );
@@ -232,11 +232,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         sheet->GetScreen()->SetPageSettings( pageInfo );
 
         wxSize  pageSizeIU = sheet->GetScreen()->GetPageSettings().GetSizeIU();
-        wxPoint sheetcentre( pageSizeIU.x / 2, pageSizeIU.y / 2 );
-        wxPoint itemsCentre = sheetBoundingBox.Centre();
+        VECTOR2I sheetcentre( pageSizeIU.x / 2, pageSizeIU.y / 2 );
+        VECTOR2I itemsCentre = sheetBoundingBox.Centre();
 
         // round the translation to nearest point on the grid
-        wxPoint translation = sheetcentre - itemsCentre;
+        VECTOR2I translation = sheetcentre - itemsCentre;
         translation.x = roundToNearestGrid( translation.x );
         translation.y = roundToNearestGrid( translation.y );
 
@@ -248,7 +248,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
 
         for( SCH_ITEM* item : allItems )
         {
-            item->Move( translation );
+            item->Move( (wxPoint)translation );
             item->ClearFlags();
             sheet->GetScreen()->Update( item );
         }
@@ -1425,9 +1425,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
             for( size_t ii = 0; ii < strings.size(); ++ii )
             {
                 EDA_RECT bbox = libtext->GetTextBox( ii, true );
-                wxPoint  linePos = { bbox.GetLeft(), -bbox.GetBottom() };
+                VECTOR2I linePos = { bbox.GetLeft(), -bbox.GetBottom() };
 
-                RotatePoint( &linePos, libtext->GetTextPos(), -libtext->GetTextAngle() );
+                RotatePoint( linePos, libtext->GetTextPos(), -libtext->GetTextAngle() );
 
                 LIB_TEXT* line = static_cast<LIB_TEXT*>( libtext->Clone() );
                 line->SetText( strings[ii] );

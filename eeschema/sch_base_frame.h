@@ -121,12 +121,12 @@ public:
     const PAGE_INFO& GetPageSettings () const override;
     const wxSize GetPageSizeIU() const override;
 
-    const wxPoint& GetGridOrigin() const override
+    const VECTOR2I& GetGridOrigin() const override
     {
-        static wxPoint zero;
+        static VECTOR2I zero;
         return zero;
     }
-    void SetGridOrigin( const wxPoint& aPoint ) override {}
+    void SetGridOrigin( const VECTOR2I& aPoint ) override {}
 
     const TITLE_BLOCK& GetTitleBlock() const override;
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;

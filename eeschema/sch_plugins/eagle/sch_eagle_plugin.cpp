@@ -929,8 +929,8 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 
     // Calculate the new sheet size.
     EDA_RECT sheetBoundingBox = getSheetBbox( m_currentSheet );
-    wxSize   targetSheetSize  = sheetBoundingBox.GetSize();
-    targetSheetSize.IncBy( Mils2iu( 1500 ), Mils2iu( 1500 ) );
+    VECTOR2I targetSheetSize = sheetBoundingBox.GetSize();
+    targetSheetSize += VECTOR2I( Mils2iu( 1500 ), Mils2iu( 1500 ) );
 
     // Get current Eeschema sheet size.
     wxSize    pageSizeIU = m_currentSheet->GetScreen()->GetPageSettings().GetSizeIU();
@@ -947,11 +947,11 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     m_currentSheet->GetScreen()->SetPageSettings( pageInfo );
 
     pageSizeIU = m_currentSheet->GetScreen()->GetPageSettings().GetSizeIU();
-    wxPoint sheetcentre( pageSizeIU.x / 2, pageSizeIU.y / 2 );
-    wxPoint itemsCentre = sheetBoundingBox.Centre();
+    VECTOR2I sheetcentre( pageSizeIU.x / 2, pageSizeIU.y / 2 );
+    VECTOR2I itemsCentre = sheetBoundingBox.Centre();
 
     // round the translation to nearest 100mil to place it on the grid.
-    wxPoint translation = sheetcentre - itemsCentre;
+    VECTOR2I translation = sheetcentre - itemsCentre;
     translation.x       = translation.x - translation.x % Mils2iu( 100 );
     translation.y       = translation.y - translation.y % Mils2iu( 100 );
 
@@ -972,7 +972,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 
     for( SCH_ITEM* item : allItems )
     {
-        item->SetPosition( item->GetPosition() + translation );
+        item->SetPosition( item->GetPosition() + (wxPoint)translation );
         item->ClearFlags();
         m_currentSheet->GetScreen()->Update( item );
 
@@ -1341,7 +1341,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     for( const LIB_FIELD* field : partFields )
     {
         symbol->GetFieldById( field->GetId() )->ImportValues( *field );
-        symbol->GetFieldById( field->GetId() )->SetTextPos( symbol->GetPosition()
+        symbol->GetFieldById( field->GetId() )->SetTextPos( (VECTOR2I)symbol->GetPosition()
                                                             + field->GetTextPos() );
     }
 
