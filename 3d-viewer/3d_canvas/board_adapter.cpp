@@ -90,8 +90,8 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     if( PgmOrNull() )
         m_colors = Pgm().GetSettingsManager().GetColorSettings();
 
-    m_boardPos = wxPoint();
-    m_boardSize = wxSize();
+    m_boardPos = VECTOR2I();
+    m_boardSize = VECTOR2I();
     m_boardCenter = SFVEC3F( 0.0f );
 
     m_boardBoundingBox.Reset();

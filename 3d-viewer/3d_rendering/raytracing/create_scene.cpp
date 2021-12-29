@@ -994,8 +994,8 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
     else
         objColor = m_boardAdapter.GetItemColor( LAYER_PADS_TH );
 
-    const wxSize drillsize = aPad->GetDrillSize();
-    const bool   hasHole   = drillsize.x && drillsize.y;
+    const VECTOR2I drillsize = aPad->GetDrillSize();
+    const bool     hasHole = drillsize.x && drillsize.y;
 
     if( !hasHole )
         return;
@@ -1053,7 +1053,7 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
     }
     else // Oblong hole
     {
-        wxPoint ends_offset;
+        VECTOR2I ends_offset;
         int     width;
 
         if( drillsize.x > drillsize.y ) // Horizontal oval
@@ -1067,10 +1067,10 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
             width         = drillsize.x;
         }
 
-        RotatePoint( &ends_offset, aPad->GetOrientation() );
+        RotatePoint( ends_offset, aPad->GetOrientation() );
 
-        wxPoint start = aPad->GetPosition() + ends_offset;
-        wxPoint end   = aPad->GetPosition() - ends_offset;
+        VECTOR2I start = VECTOR2I( aPad->GetPosition() ) + ends_offset;
+        VECTOR2I end = VECTOR2I( aPad->GetPosition() ) - ends_offset;
 
         ROUND_SEGMENT_2D* innerSeg =
                 new ROUND_SEGMENT_2D( SFVEC2F( start.x * m_boardAdapter.BiuTo3dUnits(),
@@ -1210,7 +1210,7 @@ void RENDER_3D_RAYTRACE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMa
         {
             double zpos = m_boardAdapter.GetFootprintZPos( fp->IsFlipped() );
 
-            wxPoint pos = fp->GetPosition();
+            VECTOR2I pos = fp->GetPosition();
 
             glm::mat4 fpMatrix = glm::mat4( 1.0f );
 

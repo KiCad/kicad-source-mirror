@@ -94,7 +94,7 @@ void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
 void BOARD_ADAPTER::addShapeWithClearance( const PCB_TEXT* aText, CONTAINER_2D_BASE* aDstContainer,
                                            PCB_LAYER_ID aLayerId, int aClearanceValue )
 {
-    wxSize size = aText->GetTextSize();
+    VECTOR2I size = aText->GetTextSize();
 
     if( aText->IsMirrored() )
         size.x = -size.x;
@@ -234,7 +234,7 @@ void BOARD_ADAPTER::addFootprintShapesWithClearance( const FOOTPRINT* aFootprint
         callbackData.m_BiuTo3Dunits = m_biuTo3Dunits;
         callbackData.m_TextWidth = text->GetEffectiveTextPenWidth() + ( 2 * aInflateValue );
 
-        wxSize size = text->GetTextSize();
+        VECTOR2I size = text->GetTextSize();
         bool   isBold = text->IsBold();
         int    penWidth = text->GetEffectiveTextPenWidth();
 
@@ -294,7 +294,7 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
             }
         }
 
-        transformArcToSegments( wxPoint( center.x, center.y ), arc->GetStart(),
+        transformArcToSegments( VECTOR2I( center.x, center.y ), arc->GetStart(),
                                 arc_angle, circlesegcount,
                                 arc->GetWidth() + 2 * aClearanceValue, aDstContainer, *arc );
         break;
@@ -329,11 +329,11 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
 
 void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
                                             PCB_LAYER_ID aLayer,
-                                            const wxSize& aClearanceValue ) const
+                                            const VECTOR2I& aClearanceValue ) const
 {
     SHAPE_POLY_SET poly;
     int            maxError = GetBoard()->GetDesignSettings().m_MaxError;
-    wxSize         clearance = aClearanceValue;
+    VECTOR2I       clearance = aClearanceValue;
 
     // Our shape-based builder can't handle negative or differing x:y clearance values (the
     // former are common for solder paste while the later get generated when a relative paste
@@ -345,13 +345,13 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
     if( ( clearance.x < 0 || clearance.x != clearance.y )
             && aPad->GetShape() != PAD_SHAPE::CUSTOM )
     {
-        wxSize dummySize = aPad->GetSize() + clearance + clearance;
+        VECTOR2I dummySize = VECTOR2I( aPad->GetSize() ) + clearance + clearance;
 
         if( dummySize.x <= 0 || dummySize.y <= 0 )
             return;
 
         PAD dummy( *aPad );
-        dummy.SetSize( dummySize );
+        dummy.SetSize( wxSize( dummySize.x, dummySize.y ) );
         dummy.TransformShapeWithClearanceToPolygon( poly, aLayer, 0, maxError, ERROR_INSIDE );
         clearance = { 0, 0 };
     }
@@ -471,7 +471,7 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
 
 OBJECT_2D* BOARD_ADAPTER::createPadWithDrill( const PAD* aPad, int aInflateValue )
 {
-    wxSize drillSize = aPad->GetDrillSize();
+    VECTOR2I drillSize = aPad->GetDrillSize();
 
     if( !drillSize.x || !drillSize.y )
     {
@@ -557,7 +557,7 @@ void BOARD_ADAPTER::addPadsWithClearance( const FOOTPRINT* aFootprint,
         if( aSkipNonPlatedPads && !isPlated )
             continue;
 
-        wxSize margin( aInflateValue, aInflateValue );
+        VECTOR2I margin( aInflateValue, aInflateValue );
 
         switch( aLayerId )
         {
@@ -583,19 +583,19 @@ void BOARD_ADAPTER::addPadsWithClearance( const FOOTPRINT* aFootprint,
 
 // based on TransformArcToPolygon function from
 // common/convert_basic_shapes_to_polygon.cpp
-void BOARD_ADAPTER::transformArcToSegments( const wxPoint& aCentre, const wxPoint& aStart,
+void BOARD_ADAPTER::transformArcToSegments( const VECTOR2I& aCentre, const VECTOR2I& aStart,
                                             double aArcAngle, int aCircleToSegmentsCount,
                                             int aWidth, CONTAINER_2D_BASE* aDstContainer,
                                             const BOARD_ITEM& aBoardItem )
 {
-    wxPoint arc_start, arc_end;
+    VECTOR2I arc_start, arc_end;
     int     delta = 3600 / aCircleToSegmentsCount;   // rotate angle in 0.1 degree
 
     arc_end = arc_start = aStart;
 
     if( aArcAngle != 3600 )
     {
-        RotatePoint( &arc_end, aCentre, -aArcAngle );
+        RotatePoint( arc_end, aCentre, -aArcAngle );
     }
 
     if( aArcAngle < 0 )
@@ -605,13 +605,13 @@ void BOARD_ADAPTER::transformArcToSegments( const wxPoint& aCentre, const wxPoin
     }
 
     // Compute the ends of segments and creates poly
-    wxPoint curr_end    = arc_start;
-    wxPoint curr_start  = arc_start;
+    VECTOR2I curr_end = arc_start;
+    VECTOR2I curr_start = arc_start;
 
     for( int ii = delta; ii < aArcAngle; ii += delta )
     {
         curr_end = arc_start;
-        RotatePoint( &curr_end, aCentre, -ii );
+        RotatePoint( curr_end, aCentre, -ii );
 
         const SFVEC2F start3DU( curr_start.x * m_biuTo3Dunits, -curr_start.y * m_biuTo3Dunits );
         const SFVEC2F end3DU  ( curr_end.x   * m_biuTo3Dunits, -curr_end.y   * m_biuTo3Dunits );

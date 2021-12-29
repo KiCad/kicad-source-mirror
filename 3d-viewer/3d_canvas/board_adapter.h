@@ -39,7 +39,6 @@
 #include <layer_ids.h>
 #include <pad.h>
 #include <pcb_track.h>
-#include <wx/gdicmn.h>
 #include <pcb_base_frame.h>
 #include <pcb_text.h>
 #include <pcb_shape.h>
@@ -182,7 +181,7 @@ public:
      *
      * @return size in BIU units.
      */
-    wxSize GetBoardSize() const noexcept
+    VECTOR2I GetBoardSize() const noexcept
     {
         return m_boardSize;
     }
@@ -192,7 +191,7 @@ public:
      *
      * @return position in BIU units.
      */
-    wxPoint GetBoardPos() const noexcept
+    VECTOR2I GetBoardPos() const noexcept
     {
         return m_boardPos;
     }
@@ -470,7 +469,7 @@ private:
                        int aClearanceValue );
 
     void createPadWithClearance( const PAD *aPad, CONTAINER_2D_BASE* aDstContainer,
-                                 PCB_LAYER_ID aLayer, const wxSize& aClearanceValue ) const;
+                                 PCB_LAYER_ID aLayer, const VECTOR2I& aClearanceValue ) const;
 
     OBJECT_2D* createPadWithDrill( const PAD* aPad, int aInflateValue );
 
@@ -496,7 +495,7 @@ private:
     void addSolidAreasShapes( const ZONE* aZoneContainer, CONTAINER_2D_BASE* aDstContainer,
                               PCB_LAYER_ID aLayerId );
 
-    void transformArcToSegments( const wxPoint& aCentre, const wxPoint& aStart, double aArcAngle,
+    void transformArcToSegments( const VECTOR2I& aCentre, const VECTOR2I& aStart, double aArcAngle,
                                  int aCircleToSegmentsCount, int aWidth,
                                  CONTAINER_2D_BASE* aDstContainer, const BOARD_ITEM& aBoardItem );
 
@@ -544,8 +543,8 @@ private:
     S3D_CACHE*        m_3dModelManager;
     COLOR_SETTINGS*   m_colors;
 
-    wxPoint           m_boardPos;          ///< Board center position in board internal units.
-    wxSize            m_boardSize;         ///< Board size in board internal units.
+    VECTOR2I          m_boardPos;          ///< Board center position in board internal units.
+    VECTOR2I          m_boardSize;         ///< Board size in board internal units.
     SFVEC3F           m_boardCenter;       ///< 3D center position of the board in 3D units.
     BBOX_3D           m_boardBoundingBox;  ///< 3D bounding box of the board in 3D units.
 

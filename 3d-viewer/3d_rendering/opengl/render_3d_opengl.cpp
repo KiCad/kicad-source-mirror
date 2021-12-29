@@ -1218,7 +1218,7 @@ void RENDER_3D_OPENGL::renderFootprint( const FOOTPRINT* aFootprint, bool aRende
 
         glPushMatrix();
 
-        wxPoint pos = aFootprint->GetPosition();
+        VECTOR2I pos = aFootprint->GetPosition();
 
         glTranslatef( pos.x * m_boardAdapter.BiuTo3dUnits(), -pos.y * m_boardAdapter.BiuTo3dUnits(),
                       zpos );
@@ -1373,8 +1373,8 @@ void RENDER_3D_OPENGL::generate3dGrid( GRID3D_TYPE aGridType )
 
     glNormal3f( 0.0, 0.0, 1.0 );
 
-    const wxSize brd_size = m_boardAdapter.GetBoardSize();
-    wxPoint brd_center_pos = m_boardAdapter.GetBoardPos();
+    const VECTOR2I brd_size = m_boardAdapter.GetBoardSize();
+    VECTOR2I       brd_center_pos = m_boardAdapter.GetBoardPos();
 
     brd_center_pos.y = -brd_center_pos.y;
 

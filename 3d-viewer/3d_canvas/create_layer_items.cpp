@@ -450,7 +450,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     {
         for( PAD* pad : footprint->Pads() )
         {
-            const wxSize padHole = pad->GetDrillSize();
+            const VECTOR2I padHole = pad->GetDrillSize();
 
             if( !padHole.x )    // Not drilled pad like SMD pad
                 continue;
@@ -480,7 +480,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     {
         for( PAD* pad : footprint->Pads() )
         {
-            const wxSize padHole = pad->GetDrillSize();
+            const VECTOR2I padHole = pad->GetDrillSize();
 
             if( !padHole.x ) // Not drilled pad like SMD pad
                 continue;

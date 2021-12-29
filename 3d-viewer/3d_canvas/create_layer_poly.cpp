@@ -53,7 +53,7 @@ void BOARD_ADAPTER::buildPadOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& a
         const VECTOR2I& a = path.CPoint( ii );
         const VECTOR2I& b = path.CPoint( ii + 1 );
 
-        TransformOvalToPolygon( aCornerBuffer, (wxPoint) a, (wxPoint) b, aWidth, ARC_HIGH_DEF,
+        TransformOvalToPolygon( aCornerBuffer, a, b, aWidth, ARC_HIGH_DEF,
                                 ERROR_INSIDE );
     }
 }
