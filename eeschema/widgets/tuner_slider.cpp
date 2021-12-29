@@ -72,7 +72,7 @@ static inline int arraysize( const T ( &v )[S] ) { return S; }
  * |    0.50 |    0.50 |   0B | (ideal) linear
  * |     ^   |    0.15 |   4B | symmetric (audio S-curve)
  * |     ^   |    0.10 |   5B | symmetric (S-curve)
- * |     ^   |    0.00 |   —  | switch
+ * |     ^   |    0.00 |   -  | switch
  *
  * Standards code letters cross-reference:
  *
@@ -80,9 +80,9 @@ static inline int arraysize( const T ( &v )[S] ) { return S; }
  * | ----------------: | :--------------: | :------: | :-------------
  * |                0B |         A        |     A    | linear
  * |               10A |         B        |     C    | logarithmic
- * |               15A |         ^        |     —    | ^
+ * |               15A |         ^        |     -    | ^
  * |               10C |         C        |     F    | reverse logarithmic
- * |               15C |         ^        |     —    | ^
+ * |               15C |         ^        |     -    | ^
  *
  * **Logarithmic Law** is for *levels* (logarithmic units) and is actually an exponential curve.
  * **Reverse** refers to a reverse-mounted resistive element or shaft on a potentiometer
@@ -140,8 +140,8 @@ static F taper( F aRatio, F aMid = 0.5, F aLaw = 1.0, bool aInverse = false )
         F c = a - 1;
 
         // scaling: a = (1 - 1/m)^2
-        // log law: (a' - 1) / (a - 1)
-        // inverse: log[a](1 + t (a - 1))
+        // log law: (a^t - 1) / (a - 1)
+        // inverse: log_a(1 + t (a - 1))
         t = aInverse ? ( std::log1p( t * c ) / b ) : ( std::expm1( t * b ) / c );
     }
 
