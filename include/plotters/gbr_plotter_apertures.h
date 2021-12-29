@@ -78,7 +78,7 @@ public:
         m_Size = aSize;
     }
 
-    const wxSize GetSize()
+    const VECTOR2I GetSize()
     {
         return m_Size;
     }
@@ -130,10 +130,10 @@ public:
     APERTURE_TYPE m_Type;
 
     // horiz and Vert size
-    wxSize        m_Size;
+    VECTOR2I        m_Size;
 
     // list of corners for polygon shape
-    std::vector<wxPoint>  m_Corners;
+    std::vector<VECTOR2I> m_Corners;
 
     // Radius for polygon and round rect shape
     int           m_Radius;
@@ -159,7 +159,7 @@ public:
 class APER_MACRO_FREEPOLY
 {
 public:
-    APER_MACRO_FREEPOLY( const std::vector<wxPoint>& aPolygon, int aId )
+    APER_MACRO_FREEPOLY( const std::vector<VECTOR2I>& aPolygon, int aId )
     {
         m_Corners = aPolygon;
         m_Id = aId;
@@ -170,7 +170,7 @@ public:
      * aPolygon is the same as m_Corners
      * @param aOther is the candidate to compare
      */
-    bool IsSamePoly( const std::vector<wxPoint>& aPolygon ) const;
+    bool IsSamePoly( const std::vector<VECTOR2I>& aPolygon ) const;
 
     /**
      * print the aperture macro definition to aOutput
@@ -182,7 +182,7 @@ public:
 
     int CornersCount() const { return (int)m_Corners.size(); }
 
-    std::vector<wxPoint> m_Corners;
+    std::vector<VECTOR2I> m_Corners;
     int m_Id;
 };
 
@@ -199,14 +199,14 @@ public:
     /**
      * append a new APER_MACRO_FREEPOLY containing the polygon aPolygon to the current list
      */
-    void Append( const std::vector<wxPoint>& aPolygon );
+    void Append( const std::vector<VECTOR2I>& aPolygon );
 
     /**
      * @return the index in m_AMList of the APER_MACRO_FREEPOLY having the
      * same polygon as aPolygon, or -1
      * @param aCandidate is the polygon candidate to compare
      */
-    int FindAm( const std::vector<wxPoint>& aPolygon ) const;
+    int FindAm( const std::vector<VECTOR2I>& aPolygon ) const;
 
     /**
      * print the aperture macro list to aOutput

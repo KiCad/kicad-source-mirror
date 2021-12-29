@@ -132,7 +132,7 @@ public:
     void SetHeightMils( int aHeightInMils );
     int GetHeightMils() const { return m_size.y; }
 
-    const wxSize& GetSizeMils() const { return m_size; }
+    const VECTOR2I& GetSizeMils() const { return m_size; }
 
     // Accessors returning "Internal Units (IU)".  IUs are mils in EESCHEMA,
     // and either deci-mils or nanometers in PCBNew.
@@ -202,7 +202,7 @@ private:
     // all dimensions here are in mils
 
     wxString    m_type;             ///< paper type: A4, A3, etc.
-    wxSize      m_size;             ///< mils
+    VECTOR2I    m_size;             ///< mils
 
     bool        m_portrait;         ///< true if portrait, false if landscape
 

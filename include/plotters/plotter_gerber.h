@@ -61,81 +61,81 @@ public:
     virtual void SetColor( const COLOR4D& color ) override {}
 
     // Currently, aScale and aMirror are not used in gerber plotter
-    virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
+    virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror ) override;
 
     // Basic plot primitives
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
+    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle, int aRadius,
+    virtual void Arc( const VECTOR2I& aCenter, double aStAngle, double aEndAngle, int aRadius,
                       FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void Arc( const SHAPE_ARC& aArc ) override;
 
     // These functions plot an item and manage X2 gerber attributes
-    virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
+    virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData ) override;
 
-    virtual void ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
+    virtual void ThickArc( const VECTOR2I& centre, double StAngle, double EndAngle,
                            int rayon, int width, OUTLINE_MODE tracemode, void* aData ) override;
-    virtual void ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
+    virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width,
                             OUTLINE_MODE tracemode, void* aData ) override;
-    virtual void ThickCircle( const wxPoint& pos, int diametre, int width,
+    virtual void ThickCircle( const VECTOR2I& pos, int diametre, int width,
                               OUTLINE_MODE tracemode, void* aData ) override;
-    virtual void FilledCircle( const wxPoint& pos, int diametre,
+    virtual void FilledCircle( const VECTOR2I& pos, int diametre,
                               OUTLINE_MODE tracemode, void* aData ) override;
 
     /**
      * Gerber polygon: they can (and *should*) be filled with the
      * appropriate G36/G37 sequence
      */
-    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
+    virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
     virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
-    virtual void PenTo( const wxPoint& pos, char plume ) override;
+    virtual void PenTo( const VECTOR2I& pos, char plume ) override;
 
-    virtual void Text( const wxPoint&           aPos,
-                       const COLOR4D&           aColor,
-                       const wxString&          aText,
-                       const EDA_ANGLE&         aOrient,
-                       const wxSize&            aSize,
-                       enum GR_TEXT_H_ALIGN_T   aH_justify,
-                       enum GR_TEXT_V_ALIGN_T   aV_justify,
-                       int                      aWidth,
-                       bool                     aItalic,
-                       bool                     aBold,
-                       bool                     aMultilineAllowed = false,
-                       KIFONT::FONT*            aFont = nullptr,
-                       void*                    aData = nullptr ) override;
+    virtual void Text( const VECTOR2I&             aPos,
+                       const COLOR4D&              aColor,
+                       const wxString&             aText,
+                       const EDA_ANGLE&            aOrient,
+                       const VECTOR2I&              aSize,
+                       enum GR_TEXT_H_ALIGN_T      aH_justify,
+                       enum GR_TEXT_V_ALIGN_T      aV_justify,
+                       int                         aWidth,
+                       bool                        aItalic,
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false,
+                       KIFONT::FONT*               aFont = nullptr,
+                       void*                       aData = nullptr ) override;
 
     /**
      * Filled circular flashes are stored as apertures
      */
-    virtual void FlashPadCircle( const wxPoint& pos, int diametre,
+    virtual void FlashPadCircle( const VECTOR2I& pos, int diametre,
                                  OUTLINE_MODE trace_mode, void* aData ) override;
 
-    virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& size, double orient,
+    virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& size, double orient,
                                OUTLINE_MODE trace_mode, void* aData ) override;
 
-    virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& size,
+    virtual void FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& size,
                                double orient, OUTLINE_MODE trace_mode, void* aData ) override;
 
-    virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+    virtual void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                     int aCornerRadius, double aOrient,
                                     OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
+    virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                  double aPadOrient, SHAPE_POLY_SET* aPolygons,
                                  OUTLINE_MODE aTraceMode, void* aData ) override;
 
-    virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
+    virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
                             double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
 
-    virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
+    virtual void FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter, int aCornerCount,
                             double aOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
 
     /**
@@ -155,7 +155,7 @@ public:
      * @param aPlotMode is the drawing mode, FILLED or SKETCH.
      * @param aData is the a reference to Gerber attributes descr.
      */
-    void FlashPadChamferRoundRect( const wxPoint& aShapePos, const wxSize& aPadSize,
+    void FlashPadChamferRoundRect( const VECTOR2I& aShapePos, const VECTOR2I& aPadSize,
                                    int aCornerRadius, double aChamferRatio,
                                    int aChamferPositions, double aPadOrient,
                                    OUTLINE_MODE aPlotMode, void* aData );
@@ -165,7 +165,7 @@ public:
      * and add the TA.AperFunction if aData contains this attribute, and clear it
      * after plotting.
      */
-    void PlotGerberRegion( const std::vector< wxPoint >& aCornerList, void* aData = nullptr );
+    void PlotGerberRegion( const std::vector<VECTOR2I>& aCornerList, void* aData = nullptr );
 
     void PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly, void* aData = nullptr );
 
@@ -233,7 +233,7 @@ public:
      * @return an index to the aperture in aperture list which meets the size and type of tool
      *         if the aperture does not exist, it is created and entered in aperture list.
      */
-    int GetOrCreateAperture( const wxSize& aSize, int aRadius, double aRotDegree,
+    int GetOrCreateAperture( const VECTOR2I& aSize, int aRadius, double aRotDegree,
                              APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
     /**
@@ -245,7 +245,7 @@ public:
      * @return an index to the aperture in aperture list which meets the data and type of tool
      *         if the aperture does not exist, it is created and entered in aperture list.
      */
-    int GetOrCreateAperture( const std::vector<wxPoint>& aCorners, double aRotDegree,
+    int GetOrCreateAperture( const std::vector<VECTOR2I>& aCorners, double aRotDegree,
                              APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
 protected:
@@ -260,7 +260,7 @@ protected:
      * @param aCornerRadius is the radius of the corners.
      * @param aOrient is the rotation of the rectangle.
      */
-    void plotRoundRectAsRegion( const wxPoint& aRectCenter, const wxSize& aSize,
+    void plotRoundRectAsRegion( const VECTOR2I& aRectCenter, const VECTOR2I& aSize,
                                 int aCornerRadius, double aOrient );
     /**
      * Plot a Gerber arc.
@@ -272,7 +272,7 @@ protected:
      * plot an usual arc item.  The line thickness is not initialized in plotArc, and must
      * be initialized before calling it if needed.
      */
-    void plotArc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
+    void plotArc( const VECTOR2I& aCenter, double aStAngle, double aEndAngle,
                   int aRadius, bool aPlotInRegion );
     void plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion );
 
@@ -281,7 +281,7 @@ protected:
      *
      * Write the DCode selection on gerber file.
      */
-    void selectAperture( const wxSize& aSize, int aRadius, double aRotDegree,
+    void selectAperture( const VECTOR2I& aSize, int aRadius, double aRotDegree,
                          APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
     /**
      * Pick an existing aperture or create a new one, matching the aDiameter, aPolygonRotation,
@@ -290,7 +290,7 @@ protected:
      * It apply only to apertures with type = AT_REGULAR_POLY3 to AT_REGULAR_POLY12
      * write the DCode selection on gerber file
      */
-    void selectAperture( const std::vector<wxPoint>& aCorners, double aPolygonRotation,
+    void selectAperture( const std::vector<VECTOR2I>& aCorners, double aPolygonRotation,
                          APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
     /**

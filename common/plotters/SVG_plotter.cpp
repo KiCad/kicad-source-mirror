@@ -173,7 +173,7 @@ SVG_PLOTTER::SVG_PLOTTER()
 }
 
 
-void SVG_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
+void SVG_PLOTTER::SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                                double aScale, bool aMirror )
 {
     m_plotMirror    = aMirror;
@@ -371,9 +371,9 @@ void SVG_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 }
 
 
-void SVG_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
+void SVG_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
 {
-    EDA_RECT rect( p1, wxSize( p2.x -p1.x,  p2.y -p1.y ) );
+    EDA_RECT rect( p1, VECTOR2I( p2.x - p1.x, p2.y - p1.y ) );
     rect.Normalize();
     DPOINT  org_dev  = userToDeviceCoordinates( rect.GetOrigin() );
     DPOINT  end_dev = userToDeviceCoordinates( rect.GetEnd() );
@@ -408,7 +408,7 @@ void SVG_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int w
 }
 
 
-void SVG_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T fill, int width )
+void SVG_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width )
 {
     DPOINT  pos_dev = userToDeviceCoordinates( pos );
     double  radius  = userToDeviceSize( diametre / 2.0 );
@@ -431,7 +431,7 @@ void SVG_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T fill, int wid
 }
 
 
-void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
+void SVG_PLOTTER::Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int radius,
                        FILL_T fill, int width )
 {
     /* Draws an arc of a circle, centered on (xc,yc), with starting point
@@ -533,8 +533,8 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 }
 
 
-void SVG_PLOTTER::BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
-                               const wxPoint& aControl2, const wxPoint& aEnd,
+void SVG_PLOTTER::BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1,
+                               const VECTOR2I& aControl2, const VECTOR2I& aEnd,
                                int aTolerance, int aLineThickness )
 {
 #if 1
@@ -556,7 +556,7 @@ void SVG_PLOTTER::BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
 }
 
 
-void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_T aFill,
+void SVG_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
                             int aWidth, void* aData )
 {
     if( aCornerList.size() <= 1 )
@@ -601,15 +601,15 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_T aFil
 }
 
 
-void SVG_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos, double aScaleFactor )
+void SVG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor )
 {
-    wxSize pix_size( aImage.GetWidth(), aImage.GetHeight() );
+    VECTOR2I pix_size( aImage.GetWidth(), aImage.GetHeight() );
 
     // Requested size (in IUs)
     DPOINT drawsize( aScaleFactor * pix_size.x, aScaleFactor * pix_size.y );
 
     // calculate the bitmap start position
-    wxPoint start( aPos.x - drawsize.x / 2, aPos.y - drawsize.y / 2);
+    VECTOR2I start( aPos.x - drawsize.x / 2, aPos.y - drawsize.y / 2 );
 
     // Rectangles having a 0 size value for height or width are just not drawn on Inkscape,
     // so use a line when happens.
@@ -647,7 +647,7 @@ void SVG_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos, double 
 }
 
 
-void SVG_PLOTTER::PenTo( const wxPoint& pos, char plume )
+void SVG_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 {
     if( plume == 'Z' )
     {
@@ -712,7 +712,7 @@ bool SVG_PLOTTER::StartPlot()
     }
 
     // Write viewport pos and size
-    wxPoint origin;    // TODO set to actual value
+    VECTOR2I origin; // TODO set to actual value
     fprintf( m_outputFile, "  width=\"%fcm\" height=\"%fcm\" viewBox=\"%d %d %d %d\">\n",
              (double) m_paperSize.x / m_IUsPerDecimil * 2.54 / 10000,
              (double) m_paperSize.y / m_IUsPerDecimil * 2.54 / 10000, origin.x, origin.y,
@@ -755,26 +755,26 @@ bool SVG_PLOTTER::EndPlot()
 }
 
 
-void SVG_PLOTTER::Text( const wxPoint&           aPos,
-                        const COLOR4D&           aColor,
-                        const wxString&          aText,
-                        const EDA_ANGLE&         aOrient,
-                        const wxSize&            aSize,
-                        enum GR_TEXT_H_ALIGN_T   aH_justify,
-                        enum GR_TEXT_V_ALIGN_T   aV_justify,
-                        int                      aWidth,
-                        bool                     aItalic,
-                        bool                     aBold,
-                        bool                     aMultilineAllowed,
-                        KIFONT::FONT*            aFont,
-                        void*                    aData )
+void SVG_PLOTTER::Text( const VECTOR2I&             aPos,
+                        const COLOR4D&              aColor,
+                        const wxString&             aText,
+                        const EDA_ANGLE&            aOrient,
+                        const VECTOR2I&             aSize,
+                        enum GR_TEXT_H_ALIGN_T      aH_justify,
+                        enum GR_TEXT_V_ALIGN_T      aV_justify,
+                        int                         aWidth,
+                        bool                        aItalic,
+                        bool                        aBold,
+                        bool                        aMultilineAllowed,
+                        KIFONT::FONT*               aFont,
+                        void*                       aData )
 {
     setFillMode( FILL_T::NO_FILL );
     SetColor( aColor );
     SetCurrentLineWidth( aWidth );
 
-    wxPoint text_pos = aPos;
-    const char *hjust = "start";
+    VECTOR2I    text_pos = aPos;
+    const char* hjust = "start";
 
     switch( aH_justify )
     {
@@ -790,7 +790,7 @@ void SVG_PLOTTER::Text( const wxPoint&           aPos,
     case GR_TEXT_V_ALIGN_BOTTOM:                            break;
     }
 
-    wxSize text_size;
+    VECTOR2I text_size;
 
     // aSize.x or aSize.y is < 0 for mirrored texts.
     // The actual text size value is the absolute value

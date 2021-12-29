@@ -62,7 +62,6 @@
 #include <zone.h>
 
 #include <wx/debug.h>                         // for wxASSERT_MSG
-#include <wx/gdicmn.h>
 
 
 COLOR4D BRDITEMS_PLOTTER::getColor( int aLayer ) const
@@ -244,16 +243,16 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
         // Build the pad polygon in coordinates relative to the pad
         // (i.e. for a pad at pos 0,0, rot 0.0). Needed to use aperture macros,
         // to be able to create a pattern common to all trapezoid pads having the same shape
-        wxPoint coord[4];
+        VECTOR2I coord[4];
 
         // Order is lower left, lower right, upper right, upper left.
-        wxSize half_size = aPad->GetSize()/2;
-        wxSize trap_delta = aPad->GetDelta()/2;
+        VECTOR2I half_size = aPad->GetSize() / 2;
+        VECTOR2I trap_delta = aPad->GetDelta() / 2;
 
-        coord[0] = wxPoint( -half_size.x - trap_delta.y,  half_size.y + trap_delta.x );
-        coord[1] = wxPoint( half_size.x + trap_delta.y,  half_size.y - trap_delta.x );
-        coord[2] = wxPoint( half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
-        coord[3] = wxPoint( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
+        coord[0] = VECTOR2I( -half_size.x - trap_delta.y, half_size.y + trap_delta.x );
+        coord[1] = VECTOR2I( half_size.x + trap_delta.y, half_size.y - trap_delta.x );
+        coord[2] = VECTOR2I( half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
+        coord[3] = VECTOR2I( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
 
         m_plotter->FlashPadTrapez( shape_pos, coord, aPad->GetOrientation(), aPlotMode,
                                    &gbr_metadata );

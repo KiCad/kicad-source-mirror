@@ -40,6 +40,15 @@ BEZIER_POLY::BEZIER_POLY( const std::vector<wxPoint>& aControlPoints )
 }
 
 
+BEZIER_POLY::BEZIER_POLY( const std::vector<VECTOR2I>& aControlPoints )
+{
+    for( unsigned ii = 0; ii < aControlPoints.size(); ++ii )
+        m_ctrlPts.emplace_back( VECTOR2I( aControlPoints[ii] ) );
+
+    m_minSegLen = 0.0;
+}
+
+
 void BEZIER_POLY::GetPoly( std::vector<wxPoint>& aOutput, int aMinSegLen )
 {
     aOutput.clear();
@@ -48,6 +57,17 @@ void BEZIER_POLY::GetPoly( std::vector<wxPoint>& aOutput, int aMinSegLen )
 
     for( unsigned ii = 0; ii < buffer.size(); ++ii )
         aOutput.emplace_back( wxPoint( int( buffer[ii].x ), int( buffer[ii].y ) ) );
+}
+
+
+void BEZIER_POLY::GetPoly( std::vector<VECTOR2I>& aOutput, int aMinSegLen )
+{
+    aOutput.clear();
+    std::vector<VECTOR2I> buffer;
+    GetPoly( buffer, double( aMinSegLen ) );
+
+    for( unsigned ii = 0; ii < buffer.size(); ++ii )
+        aOutput.emplace_back( VECTOR2I( int( buffer[ii].x ), int( buffer[ii].y ) ) );
 }
 
 

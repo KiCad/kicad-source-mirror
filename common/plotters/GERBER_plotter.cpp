@@ -68,8 +68,8 @@
 // number of vertices and each vertex coordinate are similar, i.e. if the difference
 // between coordinates is small ( <= margin to accept rounding issues coming from polygon
 // geometric transforms like rotation
-static bool polyCompare( const std::vector<wxPoint>& aPolygon,
-                         const std::vector<wxPoint>& aTestPolygon )
+static bool polyCompare( const std::vector<VECTOR2I>& aPolygon,
+                         const std::vector<VECTOR2I>& aTestPolygon )
 {
     // fast test: polygon sizes must be the same:
     if( aTestPolygon.size() != aPolygon.size() )
@@ -118,7 +118,7 @@ GERBER_PLOTTER::GERBER_PLOTTER()
 }
 
 
-void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
+void GERBER_PLOTTER::SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                                   double aScale, bool aMirror )
 {
     wxASSERT( aMirror == false );
@@ -407,12 +407,12 @@ void GERBER_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
     int aperture_attribute = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
 
-    selectAperture( wxSize( aWidth, aWidth ), 0, 0.0, APERTURE::AT_PLOTTING, aperture_attribute );
+    selectAperture( VECTOR2I( aWidth, aWidth ), 0, 0.0, APERTURE::AT_PLOTTING, aperture_attribute );
     m_currentPenWidth = aWidth;
 }
 
 
-int GERBER_PLOTTER::GetOrCreateAperture( const wxSize& aSize, int aRadius, double aRotDegree,
+int GERBER_PLOTTER::GetOrCreateAperture( const VECTOR2I& aSize, int aRadius, double aRotDegree,
                         APERTURE::APERTURE_TYPE aType, int aApertureAttribute )
 {
     int last_D_code = 9;
@@ -444,7 +444,7 @@ int GERBER_PLOTTER::GetOrCreateAperture( const wxSize& aSize, int aRadius, doubl
 }
 
 
-int GERBER_PLOTTER::GetOrCreateAperture( const std::vector<wxPoint>& aCorners, double aRotDegree,
+int GERBER_PLOTTER::GetOrCreateAperture( const std::vector<VECTOR2I>& aCorners, double aRotDegree,
                                          APERTURE::APERTURE_TYPE aType, int aApertureAttribute )
 {
     int last_D_code = 9;
@@ -484,7 +484,7 @@ int GERBER_PLOTTER::GetOrCreateAperture( const std::vector<wxPoint>& aCorners, d
     APERTURE new_tool;
 
     new_tool.m_Corners  = aCorners;
-    new_tool.m_Size     = wxSize( 0, 0 );   // Not used
+    new_tool.m_Size     = VECTOR2I( 0, 0 );   // Not used
     new_tool.m_Type     = aType;
     new_tool.m_Radius   = 0;             // Not used
     new_tool.m_Rotation = aRotDegree;
@@ -497,7 +497,7 @@ int GERBER_PLOTTER::GetOrCreateAperture( const std::vector<wxPoint>& aCorners, d
 }
 
 
-void GERBER_PLOTTER::selectAperture( const wxSize& aSize, int aRadius, double aRotDegree,
+void GERBER_PLOTTER::selectAperture( const VECTOR2I& aSize, int aRadius, double aRotDegree,
                                      APERTURE::APERTURE_TYPE aType, int aApertureAttribute )
 {
     bool change = ( m_currentApertureIdx < 0 ) ||
@@ -519,7 +519,7 @@ void GERBER_PLOTTER::selectAperture( const wxSize& aSize, int aRadius, double aR
 }
 
 
-void GERBER_PLOTTER::selectAperture( const std::vector<wxPoint>& aCorners, double aRotDegree,
+void GERBER_PLOTTER::selectAperture( const std::vector<VECTOR2I>& aCorners, double aRotDegree,
                                      APERTURE::APERTURE_TYPE aType, int aApertureAttribute )
 {
     bool change = ( m_currentApertureIdx < 0 ) ||
@@ -562,8 +562,8 @@ void GERBER_PLOTTER::selectAperture( int aDiameter, double aPolygonRotation,
     wxASSERT( aType>= APERTURE::APERTURE_TYPE::AT_REGULAR_POLY3 &&
               aType <= APERTURE::APERTURE_TYPE::AT_REGULAR_POLY12 );
 
-    wxSize size( aDiameter, (int)( aPolygonRotation * 1000.0 ) );
-    selectAperture( wxSize( 0, 0), aDiameter/2, aPolygonRotation, aType, aApertureAttribute );
+    VECTOR2I size( aDiameter, (int) ( aPolygonRotation * 1000.0 ) );
+    selectAperture( VECTOR2I( 0, 0 ), aDiameter / 2, aPolygonRotation, aType, aApertureAttribute );
 }
 
 void GERBER_PLOTTER::writeApertureList()
@@ -645,7 +645,7 @@ void GERBER_PLOTTER::writeApertureList()
         {
             // The aperture macro needs coordinates of the centers of the 4 corners
             std::vector<VECTOR2I> corners;
-            wxSize half_size( tool.m_Size.x/2-tool.m_Radius, tool.m_Size.y/2-tool.m_Radius );
+            VECTOR2I half_size( tool.m_Size.x/2-tool.m_Radius, tool.m_Size.y/2-tool.m_Radius );
 
             corners.emplace_back( -half_size.x, -half_size.y );
             corners.emplace_back( half_size.x, -half_size.y );
@@ -771,7 +771,7 @@ void GERBER_PLOTTER::writeApertureList()
 }
 
 
-void GERBER_PLOTTER::PenTo( const wxPoint& aPos, char plume )
+void GERBER_PLOTTER::PenTo( const VECTOR2I& aPos, char plume )
 {
     wxASSERT( m_outputFile );
     DPOINT pos_dev = userToDeviceCoordinates( aPos );
@@ -793,13 +793,14 @@ void GERBER_PLOTTER::PenTo( const wxPoint& aPos, char plume )
 }
 
 
-void GERBER_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
+void GERBER_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
 {
-    std::vector< wxPoint > cornerList;
+    std::vector<VECTOR2I> cornerList;
 
     // Build corners list
     cornerList.push_back( p1 );
-    wxPoint corner(p1.x, p2.y);
+
+    VECTOR2I corner( p1.x, p2.y );
     cornerList.push_back( corner );
     cornerList.push_back( p2 );
     corner.x = p2.x;
@@ -811,14 +812,14 @@ void GERBER_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, in
 }
 
 
-void GERBER_PLOTTER::Circle( const wxPoint& aCenter, int aDiameter, FILL_T aFill, int aWidth )
+void GERBER_PLOTTER::Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFill, int aWidth )
 {
     Arc( aCenter, 0, 3600, aDiameter / 2, aFill, aWidth );
 }
 
 
 
-void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle, int aRadius,
+void GERBER_PLOTTER::Arc( const VECTOR2I& aCenter, double aStAngle, double aEndAngle, int aRadius,
                           FILL_T aFill, int aWidth )
 {
     SetCurrentLineWidth( aWidth );
@@ -839,9 +840,9 @@ void GERBER_PLOTTER::Arc( const SHAPE_ARC& aArc )
 
 void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
 {
-    wxPoint start( aArc.GetP0() );
-    wxPoint end( aArc.GetP1() );
-    wxPoint center( aArc.GetCenter() );
+    VECTOR2I start( aArc.GetP0() );
+    VECTOR2I end( aArc.GetP1() );
+    VECTOR2I center( aArc.GetCenter() );
     double start_angle = aArc.GetStartAngle();
     double end_angle = aArc.GetEndAngle();
 
@@ -868,10 +869,10 @@ void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
 }
 
 
-void GERBER_PLOTTER::plotArc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
+void GERBER_PLOTTER::plotArc( const VECTOR2I& aCenter, double aStAngle, double aEndAngle,
                               int aRadius, bool aPlotInRegion )
 {
-    wxPoint start, end;
+    VECTOR2I start, end;
     start.x = aCenter.x + KiROUND( cosdecideg( aRadius, aStAngle ) );
     start.y = aCenter.y - KiROUND( sindecideg( aRadius, aStAngle ) );
 
@@ -937,7 +938,7 @@ void GERBER_PLOTTER::PlotGerberRegion( const SHAPE_LINE_CHAIN& aPoly, void* aDat
 }
 
 
-void GERBER_PLOTTER::PlotGerberRegion( const std::vector< wxPoint >& aCornerList, void* aData )
+void GERBER_PLOTTER::PlotGerberRegion( const std::vector<VECTOR2I>& aCornerList, void* aData )
 {
     if( aCornerList.size() <= 2 )
         return;
@@ -992,7 +993,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
     {
         fputs( "G36*\n", m_outputFile );
 
-        MoveTo( wxPoint( aPoly.CPoint( 0 ) ) );
+        MoveTo( VECTOR2I( aPoly.CPoint( 0 ) ) );
 
         fputs( "G01*\n", m_outputFile );      // Set linear interpolation.
 
@@ -1003,7 +1004,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
             if( arcindex < 0 )
             {
                 /// Plain point
-                LineTo( wxPoint( aPoly.CPoint( ii ) ) );
+                LineTo( VECTOR2I( aPoly.CPoint( ii ) ) );
             }
             else
             {
@@ -1015,7 +1016,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
 
         // If the polygon is not closed, close it:
         if( aPoly.CPoint( 0 ) != aPoly.CPoint( -1 ) )
-            FinishTo( wxPoint( aPoly.CPoint( 0 ) ) );
+            FinishTo( VECTOR2I( aPoly.CPoint( 0 ) ) );
 
         fputs( "G37*\n", m_outputFile );
     }
@@ -1024,7 +1025,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
     {
         SetCurrentLineWidth( aWidth, gbr_metadata );
 
-        MoveTo( wxPoint( aPoly.CPoint( 0 ) ) );
+        MoveTo( VECTOR2I( aPoly.CPoint( 0 ) ) );
 
         for( int ii = 1; ii < aPoly.PointCount(); ii++ )
         {
@@ -1033,7 +1034,7 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
             if( arcindex < 0 )
             {
                 /// Plain point
-                LineTo( wxPoint( aPoly.CPoint( ii ) ) );
+                LineTo( VECTOR2I( aPoly.CPoint( ii ) ) );
             }
             else
             {
@@ -1046,13 +1047,13 @@ void GERBER_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aPoly, FILL_T aFill, int 
         // Ensure the thick outline is closed for filled polygons
         // (if not filled, could be only a polyline)
         if( aFill != FILL_T::NO_FILL && ( aPoly.CPoint( 0 ) != aPoly.CPoint( -1 ) ) )
-            LineTo( wxPoint( aPoly.CPoint( 0 ) ) );
+            LineTo( VECTOR2I( aPoly.CPoint( 0 ) ) );
 
         PenFinish();
     }
 }
 
-void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth,
+void GERBER_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
                                void * aData )
 {
     if( aCornerList.size() <= 1 )
@@ -1102,7 +1103,7 @@ void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T
 }
 
 
-void GERBER_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int width,
+void GERBER_PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                    OUTLINE_MODE tracemode, void* aData )
 {
     if( tracemode == FILLED )
@@ -1123,7 +1124,7 @@ void GERBER_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int
     }
 }
 
-void GERBER_PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
+void GERBER_PLOTTER::ThickArc( const VECTOR2I& centre, double StAngle, double EndAngle,
                            int radius, int width, OUTLINE_MODE tracemode, void* aData )
 {
     GBR_METADATA *gbr_metadata = static_cast<GBR_METADATA*>( aData );
@@ -1147,7 +1148,7 @@ void GERBER_PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double End
 }
 
 
-void GERBER_PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
+void GERBER_PLOTTER::ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width,
                             OUTLINE_MODE tracemode, void* aData )
 {
     GBR_METADATA *gbr_metadata = static_cast<GBR_METADATA*>( aData );
@@ -1163,10 +1164,10 @@ void GERBER_PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
     else
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        wxPoint offsetp1( p1.x - (width - m_currentPenWidth) / 2,
-                          p1.y - (width - m_currentPenWidth) / 2 );
-        wxPoint offsetp2( p2.x + (width - m_currentPenWidth) / 2,
-                          p2.y + (width - m_currentPenWidth) / 2 );
+        VECTOR2I offsetp1( p1.x - ( width - m_currentPenWidth ) / 2,
+                           p1.y - (width - m_currentPenWidth) / 2 );
+        VECTOR2I offsetp2( p2.x + ( width - m_currentPenWidth ) / 2,
+                           p2.y + (width - m_currentPenWidth) / 2 );
         Rect( offsetp1, offsetp2, FILL_T::NO_FILL, -1 );
         offsetp1.x += (width - m_currentPenWidth);
         offsetp1.y += (width - m_currentPenWidth);
@@ -1177,7 +1178,7 @@ void GERBER_PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
 }
 
 
-void GERBER_PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width,
+void GERBER_PLOTTER::ThickCircle( const VECTOR2I& pos, int diametre, int width,
                                   OUTLINE_MODE tracemode, void* aData )
 {
     GBR_METADATA *gbr_metadata = static_cast<GBR_METADATA*>( aData );
@@ -1201,7 +1202,7 @@ void GERBER_PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width,
 }
 
 
-void GERBER_PLOTTER::FilledCircle( const wxPoint& pos, int diametre,
+void GERBER_PLOTTER::FilledCircle( const VECTOR2I& pos, int diametre,
                               OUTLINE_MODE tracemode, void* aData )
 {
     // A filled circle is a graphic item, not a pad.
@@ -1226,10 +1227,10 @@ void GERBER_PLOTTER::FilledCircle( const wxPoint& pos, int diametre,
 }
 
 
-void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, OUTLINE_MODE trace_mode,
+void GERBER_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre, OUTLINE_MODE trace_mode,
                                      void* aData )
 {
-    wxSize size( diametre, diametre );
+    VECTOR2I      size( diametre, diametre );
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
     if( trace_mode == SKETCH )
@@ -1256,11 +1257,11 @@ void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, OUTLINE_M
 }
 
 
-void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
+void GERBER_PLOTTER::FlashPadOval( const VECTOR2I& pos, const VECTOR2I& aSize, double orient,
                                    OUTLINE_MODE trace_mode, void* aData )
 {
     wxASSERT( m_outputFile );
-    wxSize size( aSize );
+    VECTOR2I size( aSize );
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
     // Flash a vertical or horizontal shape (this is a basic aperture).
@@ -1335,12 +1336,12 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
 }
 
 
-void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
+void GERBER_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& aSize,
                                    double orient, OUTLINE_MODE trace_mode, void* aData )
 
 {
     wxASSERT( m_outputFile );
-    wxSize size( aSize );
+    VECTOR2I size( aSize );
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
     // Plot as an aperture flash
@@ -1359,10 +1360,10 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
                 formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
             SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-            Rect( wxPoint( pos.x - (size.x - GetCurrentLineWidth()) / 2,
-                           pos.y - (size.y - GetCurrentLineWidth()) / 2 ),
-                  wxPoint( pos.x + (size.x - GetCurrentLineWidth()) / 2,
-                           pos.y + (size.y - GetCurrentLineWidth()) / 2 ),
+            Rect( VECTOR2I( pos.x - ( size.x - GetCurrentLineWidth() ) / 2,
+                            pos.y - (size.y - GetCurrentLineWidth()) / 2 ),
+                  VECTOR2I( pos.x + ( size.x - GetCurrentLineWidth() ) / 2,
+                            pos.y + (size.y - GetCurrentLineWidth()) / 2 ),
                   FILL_T::NO_FILL, GetCurrentLineWidth() );
         }
         else
@@ -1397,7 +1398,7 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
     #endif
         {
         // plot pad shape as Gerber region
-        wxPoint coord[4];
+        VECTOR2I coord[4];
         // coord[0] is assumed the lower left
         // coord[1] is assumed the upper left
         // coord[2] is assumed the upper right
@@ -1418,7 +1419,7 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
     }
 }
 
-void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+void GERBER_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                      int aCornerRadius, double aOrient,
                                      OUTLINE_MODE aTraceMode, void* aData )
 
@@ -1434,7 +1435,7 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, &gbr_metadata );
         outline.Inflate( -GetCurrentLineWidth()/2, 16 );
 
-        std::vector< wxPoint > cornerList;
+        std::vector<VECTOR2I> cornerList;
         // TransformRoundRectToPolygon creates only one convex polygon
         SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
         cornerList.reserve( poly.PointCount() + 1 );
@@ -1499,7 +1500,7 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
 }
 
 
-void GERBER_PLOTTER::plotRoundRectAsRegion( const wxPoint& aRectCenter, const wxSize& aSize,
+void GERBER_PLOTTER::plotRoundRectAsRegion( const VECTOR2I& aRectCenter, const VECTOR2I& aSize,
                                             int aCornerRadius, double aOrient )
 {
     // The region outline is generated by 4 sides and 4 90 deg arcs
@@ -1514,9 +1515,9 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const wxPoint& aRectCenter, const wx
     // in user coordinates
     struct RR_EDGE
     {
-        wxPoint m_start;
-        wxPoint m_end;
-        wxPoint m_center;
+        VECTOR2I m_start;
+        VECTOR2I m_end;
+        VECTOR2I m_center;
         // in decidegrees: angle start. angle end = m_arc_angle_start+arc_angle
         double  m_arc_angle_start;
     };
@@ -1575,14 +1576,14 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const wxPoint& aRectCenter, const wx
     rr_outline.push_back( curr_edge );
 
     // Move relative coordinates to the actual location and rotation:
-    wxPoint arc_last_center;
+    VECTOR2I arc_last_center;
     int arc_last_angle = curr_edge.m_arc_angle_start+arc_angle;
 
     for( RR_EDGE& rr_edge: rr_outline )
     {
-        RotatePoint( &rr_edge.m_start, aOrient );
-        RotatePoint( &rr_edge.m_end, aOrient );
-        RotatePoint( &rr_edge.m_center, aOrient );
+        RotatePoint( rr_edge.m_start, aOrient );
+        RotatePoint( rr_edge.m_end, aOrient );
+        RotatePoint( rr_edge.m_center, aOrient );
         rr_edge.m_start += aRectCenter;
         rr_edge.m_end += aRectCenter;
         rr_edge.m_center += aRectCenter;
@@ -1593,11 +1594,11 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const wxPoint& aRectCenter, const wx
     // (end of arc) is the same as the first point. Rounding issues can create a
     // small difference, mainly for rotated pads.
     // calculate last point (end of last arc):
-    wxPoint last_pt;
+    VECTOR2I last_pt;
     last_pt.x = arc_last_center.x + KiROUND( cosdecideg( aCornerRadius, arc_last_angle ) );
     last_pt.y = arc_last_center.y - KiROUND( sindecideg( aCornerRadius, arc_last_angle ) );
 
-    wxPoint first_pt = rr_outline[0].m_start;
+    VECTOR2I first_pt = rr_outline[0].m_start;
 
 #if 0    // For test only:
     if( last_pt != first_pt )
@@ -1628,7 +1629,7 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const wxPoint& aRectCenter, const wx
 }
 
 
-void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
+void GERBER_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                      double aOrient, SHAPE_POLY_SET* aPolygons,
                                      OUTLINE_MODE aTraceMode, void* aData )
 
@@ -1647,7 +1648,7 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
         polyshape.Inflate( -GetCurrentLineWidth()/2, 16 );
     }
 
-    std::vector< wxPoint > cornerList;
+    std::vector<VECTOR2I> cornerList;
 
     for( int cnt = 0; cnt < polyshape.OutlineCount(); ++cnt )
     {
@@ -1678,7 +1679,7 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
                 for( size_t ii = 0; ii < cornerList.size(); ii++ )
                 {
                     cornerList[ii] -= aPadPos;
-                    RotatePoint( &cornerList[ii], -aOrient );
+                    RotatePoint( cornerList[ii], -aOrient );
                 }
 
                 DPOINT pos_dev = userToDeviceCoordinates( aPadPos );
@@ -1696,7 +1697,7 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
 }
 
 
-void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const wxSize& aPadSize,
+void GERBER_PLOTTER::FlashPadChamferRoundRect( const VECTOR2I& aShapePos, const VECTOR2I& aPadSize,
                                                int aCornerRadius, double aChamferRatio,
                                                int aChamferPositions, double aPadOrient,
                                                OUTLINE_MODE aPlotMode, void* aData )
@@ -1711,7 +1712,7 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const w
 
     SHAPE_POLY_SET outline;
     // polygon corners list
-    std::vector<wxPoint> cornerList;
+    std::vector<VECTOR2I> cornerList;
 
     bool hasRoundedCorner = aCornerRadius != 0 && aChamferPositions != 15;
 
@@ -1749,7 +1750,7 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const w
                 for( size_t ii = 0; ii < cornerList.size(); ii++ )
                 {
                     cornerList[ii] -= aShapePos;
-                    RotatePoint( &cornerList[ii], -aPadOrient );
+                    RotatePoint( cornerList[ii], -aPadOrient );
                 }
 
                 selectAperture( cornerList, aPadOrient/10.0,
@@ -1767,7 +1768,7 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const w
     }
 
     // Build the chamfered polygon (4 to 8 corners )
-    TransformRoundChamferedRectToPolygon( outline, wxPoint( 0, 0 ), aPadSize, 0.0, 0,
+    TransformRoundChamferedRectToPolygon( outline, VECTOR2I( 0, 0 ), aPadSize, 0.0, 0,
                                           aChamferRatio, aChamferPositions, 0,
                                           GetPlotterArcHighDef(), ERROR_INSIDE );
 
@@ -1822,17 +1823,17 @@ void GERBER_PLOTTER::FlashPadChamferRoundRect( const wxPoint& aShapePos, const w
 }
 
 
-void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCorners,
+void GERBER_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
                                      double aPadOrient, OUTLINE_MODE aTrace_Mode, void* aData )
 
 {
     // polygon corners list
-    std::vector<wxPoint> cornerList = { aCorners[0], aCorners[1], aCorners[2], aCorners[3] };
+    std::vector<VECTOR2I> cornerList = { aCorners[0], aCorners[1], aCorners[2], aCorners[3] };
 
     // Draw the polygon and fill the interior as required
     for( unsigned ii = 0; ii < 4; ii++ )
     {
-        RotatePoint( &cornerList[ii], aPadOrient );
+        RotatePoint( cornerList[ii], aPadOrient );
         cornerList[ii] += aPadPos;
     }
 
@@ -1859,7 +1860,7 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
         m_hasApertureOutline4P = true;
         DPOINT pos_dev = userToDeviceCoordinates( aPadPos );
         // polygon corners list
-        std::vector<wxPoint> corners = { aCorners[0], aCorners[1], aCorners[2], aCorners[3] };
+        std::vector<VECTOR2I> corners = { aCorners[0], aCorners[1], aCorners[2], aCorners[3] };
         int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
         selectAperture( corners, aPadOrient/10.0, APERTURE::APER_MACRO_OUTLINE4P, aperture_attrib );
 
@@ -1874,7 +1875,7 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
 }
 
 
-void GERBER_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter,
+void GERBER_PLOTTER::FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter,
                                           int aCornerCount, double aOrient,
                                           OUTLINE_MODE aTraceMode, void* aData )
 {
@@ -1888,15 +1889,15 @@ void GERBER_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos, int aDiamete
     if( aTraceMode == SKETCH )
     {
         // Build the polygon:
-        std::vector< wxPoint > cornerList;
+        std::vector<VECTOR2I> cornerList;
 
         double angle_delta = 3600.0 / aCornerCount; // in 0.1 degree
 
         for( int ii = 0; ii < aCornerCount; ii++ )
         {
             double rot = aOrient + (angle_delta*ii);
-            wxPoint vertice( aDiameter/2, 0 );
-            RotatePoint( &vertice, rot );
+            VECTOR2I vertice( aDiameter / 2, 0 );
+            RotatePoint( vertice, rot );
             vertice += aShapePos;
             cornerList.push_back( vertice );
         }
@@ -1923,19 +1924,19 @@ void GERBER_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos, int aDiamete
 }
 
 
-void GERBER_PLOTTER::Text( const wxPoint&           aPos,
-                           const COLOR4D&           aColor,
-                           const wxString&          aText,
-                           const EDA_ANGLE&         aOrient,
-                           const wxSize&            aSize,
-                           enum GR_TEXT_H_ALIGN_T   aH_justify,
-                           enum GR_TEXT_V_ALIGN_T   aV_justify,
-                           int                      aWidth,
-                           bool                     aItalic,
-                           bool                     aBold,
-                           bool                     aMultilineAllowed,
-                           KIFONT::FONT*            aFont,
-                           void*                    aData )
+void GERBER_PLOTTER::Text( const VECTOR2I&             aPos,
+                           const COLOR4D&              aColor,
+                           const wxString&             aText,
+                           const EDA_ANGLE&            aOrient,
+                           const VECTOR2I&             aSize,
+                           enum GR_TEXT_H_ALIGN_T      aH_justify,
+                           enum GR_TEXT_V_ALIGN_T      aV_justify,
+                           int                         aWidth,
+                           bool                        aItalic,
+                           bool                        aBold,
+                           bool                        aMultilineAllowed,
+                           KIFONT::FONT*               aFont,
+                           void*                       aData )
 {
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
@@ -1956,7 +1957,7 @@ void GERBER_PLOTTER::SetLayerPolarity( bool aPositive )
 }
 
 
-bool APER_MACRO_FREEPOLY::IsSamePoly( const std::vector<wxPoint>& aPolygon ) const
+bool APER_MACRO_FREEPOLY::IsSamePoly( const std::vector<VECTOR2I>& aPolygon ) const
 {
     return polyCompare( m_Corners, aPolygon );
 }
@@ -2002,13 +2003,13 @@ void APER_MACRO_FREEPOLY_LIST::Format( FILE * aOutput, double aIu2GbrMacroUnit )
 }
 
 
-void APER_MACRO_FREEPOLY_LIST::Append( const std::vector<wxPoint>& aPolygon )
+void APER_MACRO_FREEPOLY_LIST::Append( const std::vector<VECTOR2I>& aPolygon )
 {
     m_AMList.emplace_back( aPolygon, AmCount() );
 }
 
 
-int APER_MACRO_FREEPOLY_LIST::FindAm( const std::vector<wxPoint>& aPolygon ) const
+int APER_MACRO_FREEPOLY_LIST::FindAm( const std::vector<VECTOR2I>& aPolygon ) const
 {
     for( int idx = 0; idx < AmCount(); idx++ )
     {

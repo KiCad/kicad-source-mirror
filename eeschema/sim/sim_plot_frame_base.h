@@ -17,7 +17,6 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/menu.h>
-#include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>

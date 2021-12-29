@@ -87,12 +87,12 @@ void PSLIKE_PLOTTER::SetColor( const COLOR4D& color )
 }
 
 
-void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize,
+void PSLIKE_PLOTTER::FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                    double aPadOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
     wxASSERT( m_outputFile );
     int x0, y0, x1, y1, delta;
-    wxSize size( aSize );
+    VECTOR2I size( aSize );
 
     // The pad is reduced to an oval by dy > dx
     if( size.x > size.y )
@@ -110,14 +110,14 @@ void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize,
     RotatePoint( &x1, &y1, aPadOrient );
 
     if( aTraceMode == FILLED )
-        ThickSegment( wxPoint( aPadPos.x + x0, aPadPos.y + y0 ),
-                      wxPoint( aPadPos.x + x1, aPadPos.y + y1 ), size.x, aTraceMode, nullptr );
+        ThickSegment( VECTOR2I( aPadPos.x + x0, aPadPos.y + y0 ),
+                      VECTOR2I( aPadPos.x + x1, aPadPos.y + y1 ), size.x, aTraceMode, nullptr );
     else
         sketchOval( aPadPos, size, aPadOrient, -1 );
 }
 
 
-void PSLIKE_PLOTTER::FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
+void PSLIKE_PLOTTER::FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter,
                                      OUTLINE_MODE aTraceMode, void* aData )
 {
     if( aTraceMode == FILLED )
@@ -140,11 +140,11 @@ void PSLIKE_PLOTTER::FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
 }
 
 
-void PSLIKE_PLOTTER::FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
+void PSLIKE_PLOTTER::FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                    double aPadOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
-    static std::vector< wxPoint > cornerList;
-    wxSize size( aSize );
+    static std::vector<VECTOR2I> cornerList;
+    VECTOR2I size( aSize );
     cornerList.clear();
 
     if( aTraceMode == FILLED )
@@ -164,7 +164,7 @@ void PSLIKE_PLOTTER::FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
     int dx = size.x / 2;
     int dy = size.y / 2;
 
-    wxPoint corner;
+    VECTOR2I corner;
     corner.x = aPadPos.x - dx;
     corner.y = aPadPos.y + dy;
     cornerList.push_back( corner );
@@ -180,7 +180,7 @@ void PSLIKE_PLOTTER::FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
 
     for( unsigned ii = 0; ii < cornerList.size(); ii++ )
     {
-        RotatePoint( &cornerList[ii], aPadPos, aPadOrient );
+        RotatePoint( cornerList[ii], aPadPos, aPadOrient );
     }
 
     cornerList.push_back( cornerList[0] );
@@ -190,11 +190,11 @@ void PSLIKE_PLOTTER::FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
 }
 
 
-void PSLIKE_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+void PSLIKE_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                         int aCornerRadius, double aOrient,
                                         OUTLINE_MODE aTraceMode, void* aData )
 {
-    wxSize size( aSize );
+    VECTOR2I size( aSize );
 
     if( aTraceMode == FILLED )
     {
@@ -213,7 +213,7 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
     TransformRoundChamferedRectToPolygon( outline, aPadPos, size, aOrient, aCornerRadius,
                                           0.0, 0, 0, GetPlotterArcHighDef(), ERROR_INSIDE );
 
-    std::vector< wxPoint > cornerList;
+    std::vector<VECTOR2I> cornerList;
 
     // TransformRoundRectToPolygon creates only one convex polygon
     SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
@@ -230,11 +230,11 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
 }
 
 
-void PSLIKE_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
+void PSLIKE_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                      double aOrient, SHAPE_POLY_SET* aPolygons,
                                      OUTLINE_MODE aTraceMode, void* aData )
 {
-    wxSize size( aSize );
+    VECTOR2I size( aSize );
 
     if( aTraceMode == FILLED )
     {
@@ -248,7 +248,7 @@ void PSLIKE_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
     }
 
 
-    std::vector< wxPoint > cornerList;
+    std::vector<VECTOR2I> cornerList;
 
     for( int cnt = 0; cnt < aPolygons->OutlineCount(); ++cnt )
     {
@@ -267,10 +267,10 @@ void PSLIKE_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
 }
 
 
-void PSLIKE_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
+void PSLIKE_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
                                      double aPadOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
-    static std::vector< wxPoint > cornerList;
+    static std::vector<VECTOR2I> cornerList;
     cornerList.clear();
 
     for( int ii = 0; ii < 4; ii++ )
@@ -304,7 +304,7 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCor
 
     for( int ii = 0; ii < 4; ii++ )
     {
-        RotatePoint( &cornerList[ii], aPadOrient );
+        RotatePoint( cornerList[ii], aPadOrient );
         cornerList[ii] += aPadPos;
     }
 
@@ -314,7 +314,7 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCor
 }
 
 
-void PSLIKE_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos, int aRadius, int aCornerCount,
+void PSLIKE_PLOTTER::FlashRegularPolygon( const VECTOR2I& aShapePos, int aRadius, int aCornerCount,
                                           double aOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
     // Do nothing
@@ -417,7 +417,7 @@ void PSLIKE_PLOTTER::postscriptOverlinePositions( const wxString& aText, int aXS
 }
 
 
-void PS_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
+void PS_PLOTTER::SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror )
 {
     wxASSERT( !m_outputFile );
@@ -434,10 +434,10 @@ void PS_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 }
 
 
-void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
+void PSLIKE_PLOTTER::computeTextParameters( const VECTOR2I&          aPos,
                                             const wxString&          aText,
                                             const EDA_ANGLE&         aOrient,
-                                            const wxSize&            aSize,
+                                            const VECTOR2I&          aSize,
                                             bool                     aMirror,
                                             enum GR_TEXT_H_ALIGN_T   aH_justify,
                                             enum GR_TEXT_V_ALIGN_T   aV_justify,
@@ -454,7 +454,7 @@ void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
                                             double                   *heightFactor )
 {
     // Compute the starting position (compensated for alignment)
-    wxPoint start_pos = aPos;
+    VECTOR2I start_pos = aPos;
 
     // This is an approximation of the text bounds (in IUs)
     int tw = returnPostscriptTextWidth( aText, aSize.x, aItalic, aWidth );
@@ -564,7 +564,7 @@ void PS_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 }
 
 
-void PS_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
+void PS_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
 {
     DPOINT p1_dev = userToDeviceCoordinates( p1 );
     DPOINT p2_dev = userToDeviceCoordinates( p2 );
@@ -575,7 +575,7 @@ void PS_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int wi
 }
 
 
-void PS_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T fill, int width )
+void PS_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
     DPOINT pos_dev = userToDeviceCoordinates( pos );
@@ -586,7 +586,7 @@ void PS_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T fill, int widt
 }
 
 
-void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
+void PS_PLOTTER::Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int radius,
                       FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
@@ -623,7 +623,7 @@ void PS_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, in
 }
 
 
-void PS_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
+void PS_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
                            int aWidth, void * aData )
 {
     if( aCornerList.size() <= 1 )
@@ -645,21 +645,21 @@ void PS_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFi
 }
 
 
-void PS_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos, double aScaleFactor )
+void PS_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor )
 {
-    wxSize pix_size;                // size of the bitmap in pixels
+    VECTOR2I pix_size; // size of the bitmap in pixels
     pix_size.x = aImage.GetWidth();
     pix_size.y = aImage.GetHeight();
     DPOINT drawsize( aScaleFactor * pix_size.x,
                      aScaleFactor * pix_size.y ); // requested size of image
 
     // calculate the bottom left corner position of bitmap
-    wxPoint start = aPos;
+    VECTOR2I start = aPos;
     start.x -= drawsize.x / 2;    // left
     start.y += drawsize.y / 2;    // bottom (Y axis reversed)
 
     // calculate the top right corner position of bitmap
-    wxPoint end;
+    VECTOR2I end;
     end.x = start.x + drawsize.x;
     end.y = start.y - drawsize.y;
 
@@ -752,7 +752,7 @@ void PS_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos, double a
 }
 
 
-void PS_PLOTTER::PenTo( const wxPoint& pos, char plume )
+void PS_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 {
     wxASSERT( m_outputFile );
 
@@ -864,10 +864,13 @@ bool PS_PLOTTER::StartPlot()
     /* The coordinates of the lower left corner of the boundary
        box need to be "rounded down", but the coordinates of its
        upper right corner need to be "rounded up" instead. */
-    wxSize psPaperSize = m_pageInfo.GetSizeMils();
+    VECTOR2I psPaperSize = m_pageInfo.GetSizeMils();
 
     if( !m_pageInfo.IsPortrait() )
-        psPaperSize.Set( m_pageInfo.GetHeightMils(), m_pageInfo.GetWidthMils() );
+    {
+        psPaperSize.x = m_pageInfo.GetHeightMils();
+        psPaperSize.y = m_pageInfo.GetWidthMils();
+    }
 
     fprintf( m_outputFile, "%%%%BoundingBox: 0 0 %d %d\n",
              (int) ceil( psPaperSize.x * BIGPTsPERMIL ),
@@ -958,19 +961,19 @@ bool PS_PLOTTER::EndPlot()
 
 
 
-void PS_PLOTTER::Text( const wxPoint&           aPos,
-                       const COLOR4D&           aColor,
-                       const wxString&          aText,
-                       const EDA_ANGLE&         aOrient,
-                       const wxSize&            aSize,
-                       enum GR_TEXT_H_ALIGN_T   aH_justify,
-                       enum GR_TEXT_V_ALIGN_T   aV_justify,
-                       int                      aWidth,
-                       bool                     aItalic,
-                       bool                     aBold,
-                       bool                     aMultilineAllowed,
-                       KIFONT::FONT*            aFont,
-                       void*                    aData )
+void PS_PLOTTER::Text( const VECTOR2I&             aPos,
+                       const COLOR4D&              aColor,
+                       const wxString&             aText,
+                       const EDA_ANGLE&            aOrient,
+                       const VECTOR2I&             aSize,
+                       enum GR_TEXT_H_ALIGN_T      aH_justify,
+                       enum GR_TEXT_V_ALIGN_T      aV_justify,
+                       int                         aWidth,
+                       bool                        aItalic,
+                       bool                        aBold,
+                       bool                        aMultilineAllowed,
+                       KIFONT::FONT*               aFont,
+                       void*                       aData )
 {
     SetCurrentLineWidth( aWidth );
     SetColor( aColor );

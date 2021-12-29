@@ -746,7 +746,8 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
 
         wxASSERT( i != arrayDim(papers) );   // dialog UI match the above list?
 
-        m_layout_size = pageInfo.GetSizeMils();
+        VECTOR2I sz = pageInfo.GetSizeMils();
+        m_layout_size = wxSize( sz.x, sz.y );
 
         // swap sizes to match orientation
         bool isPortrait = (bool) m_orientationComboBox->GetSelection();

@@ -110,8 +110,8 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aCe
  * @param aMinSegCount is the min count of segments to approximate.
  * Default = 0 to do not force a min count.
  */
-void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aStart,
-                             const wxPoint& aEnd, int aWidth, int aError, ERROR_LOC aErrorLoc,
+void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStart,
+                             const VECTOR2I& aEnd, int aWidth, int aError, ERROR_LOC aErrorLoc,
                              int aMinSegCount = 0 );
 
 /**
@@ -157,7 +157,7 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
  */
 void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                           const wxPoint& aPosition, const wxSize& aSize,
+                                           const VECTOR2I& aPosition, const VECTOR2I& aSize,
                                            double aRotation, int aCornerRadius,
                                            double aChamferRatio, int aChamferCorners, int aInflate,
                                            int aError, ERROR_LOC aErrorLoc );

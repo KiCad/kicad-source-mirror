@@ -63,7 +63,7 @@ class PLOTTER;
  */
 int Clamp_Text_PenSize( int aPenSize, int aSize, bool aBold = true );
 float Clamp_Text_PenSize( float aPenSize, int aSize, bool aBold = true );
-int Clamp_Text_PenSize( int aPenSize, const wxSize& aSize, bool aBold = true );
+int Clamp_Text_PenSize( int aPenSize, const VECTOR2I& aSize, bool aBold = true );
 
 /**
  * @param aTextSize the char size (height or width).
@@ -82,7 +82,7 @@ int GetPenSizeForNormal( int aTextSize );
  *
  * @return the X size of the graphic text.
  */
-int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, bool bold );
+int GraphicTextWidth( const wxString& aText, const VECTOR2I& aSize, bool italic, bool bold );
 
 /**
  * Draw a graphic text (like footprint text)
@@ -110,8 +110,8 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, b
  *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
  *                    the text. NULL to draw this text.
  */
-void GRText( wxDC* aDC, const wxPoint& aPos, const KIGFX::COLOR4D& aColor, const wxString& aText,
-             const EDA_ANGLE& aOrient, const wxSize& aSize, enum GR_TEXT_H_ALIGN_T aH_justify,
+void GRText( wxDC* aDC, const VECTOR2I& aPos, const KIGFX::COLOR4D& aColor, const wxString& aText,
+             const EDA_ANGLE& aOrient, const VECTOR2I& aSize, enum GR_TEXT_H_ALIGN_T aH_justify,
              enum GR_TEXT_V_ALIGN_T aV_justify, int aWidth, bool aItalic, bool aBold,
              KIFONT::FONT* aFont,
              void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,

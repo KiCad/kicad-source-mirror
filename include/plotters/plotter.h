@@ -187,7 +187,7 @@ public:
      * @param aMirror flips the plot in the Y direction (useful for toner
      *      transfers or some kind of film).
      */
-    virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
+    virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror ) = 0;
 
     /**
@@ -212,15 +212,15 @@ public:
     int GetPlotterArcHighDef() const { return m_IUsPerDecimil * 2; }
 
     // Low level primitives
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) = 0;
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
+    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) = 0;
 
     /**
      * Generic fallback: arc rendered as a polyline.
      */
-    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle, int rayon,
+    virtual void Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int rayon,
                       FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
     virtual void Arc(  const SHAPE_ARC& aArc );
 
@@ -229,8 +229,8 @@ public:
      * In KiCad the bezier curves have 4 control points:
      * start ctrl1 ctrl2 end
      */
-    virtual void BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
-                              const wxPoint& aControl2, const wxPoint& aEnd,
+    virtual void BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1,
+                              const VECTOR2I& aControl2, const VECTOR2I& aEnd,
                               int aTolerance, int aLineThickness = USE_DEFAULT_LINE_WIDTH );
 
     /**
@@ -241,20 +241,20 @@ public:
      *      'D' draw a line from the current position and 'Z' finish
      *      the drawing and returns the 'pen' to rest (flushes the trace).
      */
-    virtual void PenTo( const wxPoint& pos, char plume ) = 0;
+    virtual void PenTo( const VECTOR2I& pos, char plume ) = 0;
 
     // Convenience functions for PenTo
-    void MoveTo( const wxPoint& pos )
+    void MoveTo( const VECTOR2I& pos )
     {
         PenTo( pos, 'U' );
     }
 
-    void LineTo( const wxPoint& pos )
+    void LineTo( const VECTOR2I& pos )
     {
         PenTo( pos, 'D' );
     }
 
-    void FinishTo( const wxPoint& pos )
+    void FinishTo( const VECTOR2I& pos )
     {
         PenTo( pos, 'D' );
         PenTo( pos, 'Z' );
@@ -263,18 +263,18 @@ public:
     void PenFinish()
     {
         // The point is not important with Z motion
-        PenTo( wxPoint( 0, 0 ), 'Z' );
+        PenTo( VECTOR2I( 0, 0 ), 'Z' );
     }
 
     /**
      * Draw a polygon ( filled or not ).
      *
-     * @param aCornerList is the corners list (a std::vector< wxPoint >).
+     * @param aCornerList is the corners list (a std::vector< VECTOR2I >).
      * @param aFill is the type of fill.
      * @param aWidth is the line width.
      * @param aData is an auxiliary info (mainly for gerber format).
      */
-    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
+    virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) = 0;
 
     /**
@@ -298,18 +298,18 @@ public:
      * @param aScaleFactor is the scale factor to apply to the bitmap size
      *                      (this is not the plot scale factor).
      */
-    virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos, double aScaleFactor );
+    virtual void PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor );
 
     // Higher level primitives -- can be drawn as line, sketch or 'filled'
-    virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
+    virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData );
-    virtual void ThickArc( const wxPoint& centre, double StAngle, double EndAngle, int rayon,
+    virtual void ThickArc( const VECTOR2I& centre, double StAngle, double EndAngle, int rayon,
                            int width, OUTLINE_MODE tracemode, void* aData );
-    virtual void ThickRect( const wxPoint& p1, const wxPoint& p2, int width, OUTLINE_MODE tracemode,
+    virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width, OUTLINE_MODE tracemode,
                             void* aData );
-    virtual void ThickCircle( const wxPoint& pos, int diametre, int width, OUTLINE_MODE tracemode,
+    virtual void ThickCircle( const VECTOR2I& pos, int diametre, int width, OUTLINE_MODE tracemode,
                               void* aData );
-    virtual void FilledCircle( const wxPoint& pos, int diametre, OUTLINE_MODE tracemode,
+    virtual void FilledCircle( const VECTOR2I& pos, int diametre, OUTLINE_MODE tracemode,
                                void* aData );
 
 
@@ -321,7 +321,7 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData is an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadCircle( const wxPoint& aPadPos, int aDiameter, OUTLINE_MODE aTraceMode,
+    virtual void FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter, OUTLINE_MODE aTraceMode,
                                  void* aData ) = 0;
 
     /**
@@ -331,7 +331,7 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
+    virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aPadOrient,
                                OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
@@ -341,7 +341,7 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
+    virtual void FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aPadOrient,
                                OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
@@ -352,7 +352,7 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize, int aCornerRadius,
+    virtual void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize, int aCornerRadius,
                                     double aOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
@@ -363,7 +363,7 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
+    virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aPadOrient,
                                  SHAPE_POLY_SET* aPolygons, OUTLINE_MODE aTraceMode,
                                  void* aData ) = 0;
 
@@ -377,7 +377,7 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorners, double aPadOrient,
+    virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners, double aPadOrient,
                                  OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
@@ -390,7 +390,7 @@ public:
      * @param aData is a auxiliary parameter used (if needed) to handle extra info
      *              specific to the plotter.
      */
-    virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
+    virtual void FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter, int aCornerCount,
                                       double aOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
@@ -399,19 +399,19 @@ public:
      * For convenience it accept the color to use for specific plotters (GERBER) aData is used
      * to pass extra parameters.
      */
-    virtual void Text( const wxPoint&           aPos,
-                       const COLOR4D&           aColor,
-                       const wxString&          aText,
-                       const EDA_ANGLE&         aOrient,
-                       const wxSize&            aSize,
-                       enum GR_TEXT_H_ALIGN_T   aH_justify,
-                       enum GR_TEXT_V_ALIGN_T   aV_justify,
-                       int                      aWidth,
-                       bool                     aItalic,
-                       bool                     aBold,
-                       bool                     aMultilineAllowed = false,
-                       KIFONT::FONT*            aFont = nullptr,
-                       void*                    aData = nullptr );
+    virtual void Text( const VECTOR2I&             aPos,
+                       const COLOR4D&              aColor,
+                       const wxString&             aText,
+                       const EDA_ANGLE&            aOrient,
+                       const VECTOR2I&             aSize,
+                       enum GR_TEXT_H_ALIGN_T      aH_justify,
+                       enum GR_TEXT_V_ALIGN_T      aV_justify,
+                       int                         aWidth,
+                       bool                        aItalic,
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false,
+                       KIFONT::FONT*               aFont = nullptr,
+                       void*                       aData = nullptr );
 
     /**
      * Draw a marker (used for the drill map).
@@ -425,7 +425,7 @@ public:
      * @param aDiameter is the diameter of the marker.
      * @param aShapeId is the index (used to generate forms characters).
      */
-    void Marker( const wxPoint& position, int diametre, unsigned aShapeId );
+    void Marker( const VECTOR2I& position, int diametre, unsigned aShapeId );
 
     /**
      * Set the current Gerber layer polarity to positive or negative
@@ -484,61 +484,61 @@ protected:
     /**
      * Plot a circle centered on the position. Building block for markers
      */
-    void markerCircle( const wxPoint& pos, int radius );
+    void markerCircle( const VECTOR2I& pos, int radius );
 
     /**
      * Plot a - bar centered on the position. Building block for markers
      */
-    void markerHBar( const wxPoint& pos, int radius );
+    void markerHBar( const VECTOR2I& pos, int radius );
 
     /**
      * Plot a / bar centered on the position. Building block for markers
      */
-    void markerSlash( const wxPoint& pos, int radius );
+    void markerSlash( const VECTOR2I& pos, int radius );
 
     /**
      * Plot a \ bar centered on the position. Building block for markers
      */
-    void markerBackSlash( const wxPoint& pos, int radius );
+    void markerBackSlash( const VECTOR2I& pos, int radius );
 
     /**
      * Plot a | bar centered on the position. Building block for markers
      */
-    void markerVBar( const wxPoint& pos, int radius );
+    void markerVBar( const VECTOR2I& pos, int radius );
 
     /**
      * Plot a square centered on the position. Building block for markers
      */
-    void markerSquare( const wxPoint& position, int radius );
+    void markerSquare( const VECTOR2I& position, int radius );
 
     /**
      * Plot a lozenge centered on the position. Building block for markers
      */
-    void markerLozenge( const wxPoint& position, int radius );
+    void markerLozenge( const VECTOR2I& position, int radius );
 
     // Helper function for sketched filler segment
 
     /**
      * Convert a thick segment and plot it as an oval
      */
-    void segmentAsOval( const wxPoint& start, const wxPoint& end, int width,
+    void segmentAsOval( const VECTOR2I& start, const VECTOR2I& end, int width,
                         OUTLINE_MODE tracemode );
 
-    void sketchOval( const wxPoint& pos, const wxSize& size, double orient, int width );
+    void sketchOval( const VECTOR2I& pos, const VECTOR2I& size, double orient, int width );
 
     // Coordinate and scaling conversion functions
 
     /**
      * Modify coordinates according to the orientation, scale factor, and offsets trace. Also
-     * convert from a wxPoint to DPOINT, since some output engines needs floating point
+     * convert from a VECTOR2I to DPOINT, since some output engines needs floating point
      * coordinates.
      */
-    virtual DPOINT userToDeviceCoordinates( const wxPoint& aCoordinate );
+    virtual DPOINT userToDeviceCoordinates( const VECTOR2I& aCoordinate );
 
     /**
-     * Modify size according to the plotter scale factors (wxSize version, returns a DPOINT).
+     * Modify size according to the plotter scale factors (VECTOR2I version, returns a DPOINT).
      */
-    virtual DPOINT userToDeviceSize( const wxSize& size );
+    virtual DPOINT userToDeviceSize( const VECTOR2I& size );
 
     /**
      * Modify size according to the plotter scale factors (simple double version).
@@ -563,7 +563,7 @@ protected:      // variables used in most of plotters:
 
     double           m_iuPerDeviceUnit;     // Device scale (from IUs to plotter device units;
                                             // usually decimils)
-    wxPoint          m_plotOffset;          // Plot offset (in IUs)
+    VECTOR2I         m_plotOffset;          // Plot offset (in IUs)
     bool             m_plotMirror;          // X axis orientation (SVG)
                                             // and plot mirrored (only for PS, PDF HPGL and SVG)
     bool             m_mirrorIsHorizontal;  // true to mirror horizontally (else vertically)
@@ -577,13 +577,13 @@ protected:      // variables used in most of plotters:
     bool             m_negativeMode;        // true to generate a negative image (PS mode mainly)
     int              m_currentPenWidth;
     char             m_penState;            // current pen state: 'U', 'D' or 'Z' (see PenTo)
-    wxPoint          m_penLastpos;          // last pen position; -1,-1 when pen is at rest
+    VECTOR2I         m_penLastpos;          // last pen position; -1,-1 when pen is at rest
 
     wxString         m_creator;
     wxString         m_filename;
     wxString         m_title;
     PAGE_INFO        m_pageInfo;
-    wxSize           m_paperSize;           // Paper size in IU - not in mils
+    VECTOR2I         m_paperSize;           // Paper size in IU - not in mils
 
     wxArrayString    m_headerExtraLines;    // a set of string to print in header file
 

@@ -61,21 +61,21 @@ public:
     }
 
     // Pad routines are handled with lower level primitives
-    virtual void FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
+    virtual void FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter,
                                  OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
+    virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aPadOrient,
                                OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
+    virtual void FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aPadOrient,
                                OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+    virtual void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                     int aCornerRadius, double aOrient,
                                     OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize, double aOrient,
+    virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aOrient,
                                  SHAPE_POLY_SET* aPolygons,
                                  OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
+    virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
                                  double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
+    virtual void FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter, int aCornerCount,
                                       double aOrient, OUTLINE_MODE aTraceMode,
                                       void* aData ) override;
 
@@ -95,10 +95,10 @@ protected:
      * operator to simplify PDF generation (concat is everything PDF
      * has to modify the CTM. Lots of parameters, both in and out.
      */
-    void computeTextParameters( const wxPoint&           aPos,
+    void computeTextParameters( const VECTOR2I&          aPos,
                                 const wxString&          aText,
                                 const EDA_ANGLE&         aOrient,
-                                const wxSize&            aSize,
+                                const VECTOR2I&          aSize,
                                 bool                     aMirror,
                                 enum GR_TEXT_H_ALIGN_T   aH_justify,
                                 enum GR_TEXT_V_ALIGN_T   aV_justify,
@@ -195,38 +195,38 @@ public:
      */
     virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
 
-    virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
+    virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror ) override;
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
+    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle, int rayon,
+    virtual void Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int rayon,
                       FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
 
-    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
+    virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
     /**
      * PostScript-likes at the moment are the only plot engines supporting bitmaps.
      */
-    virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
+    virtual void PlotImage( const wxImage& aImage, const VECTOR2I& aPos,
                             double aScaleFactor ) override;
 
-    virtual void PenTo( const wxPoint& pos, char plume ) override;
-    virtual void Text( const wxPoint&           aPos,
-                       const COLOR4D&           aColor,
-                       const wxString&          aText,
-                       const EDA_ANGLE&         aOrient,
-                       const wxSize&            aSize,
-                       enum GR_TEXT_H_ALIGN_T   aH_justify,
-                       enum GR_TEXT_V_ALIGN_T   aV_justify,
-                       int                      aWidth,
-                       bool                     aItalic,
-                       bool                     aBold,
-                       bool                     aMultilineAllowed = false,
-                       KIFONT::FONT*            aFont = nullptr,
-                       void*                    aData = nullptr ) override;
+    virtual void PenTo( const VECTOR2I& pos, char plume ) override;
+    virtual void Text( const VECTOR2I&             aPos,
+                       const COLOR4D&              aColor,
+                       const wxString&             aText,
+                       const EDA_ANGLE&            aOrient,
+                       const VECTOR2I&             aSize,
+                       enum GR_TEXT_H_ALIGN_T      aH_justify,
+                       enum GR_TEXT_V_ALIGN_T      aV_justify,
+                       int                         aWidth,
+                       bool                        aItalic,
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false,
+                       KIFONT::FONT*               aFont = nullptr,
+                       void*                       aData = nullptr ) override;
 
 protected:
     virtual void emitSetRGBColor( double r, double g, double b ) override;
@@ -302,54 +302,54 @@ public:
      * PDF can have multiple pages, so SetPageSettings can be called
      * with the outputFile open (but not inside a page stream!)
      */
-    virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
+    virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror ) override;
 
     /**
      * Rectangles in PDF. Supported by the native operator.
      */
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
 
     /**
      * Circle drawing for PDF. They're approximated by curves, but fill is supported
      */
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
+    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
 
     /**
      * The PDF engine can't directly plot arcs, it uses the base emulation.
      * So no filled arcs (not a great loss... )
      */
-    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle, int rayon,
+    virtual void Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int rayon,
                       FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
 
     /**
      * Polygon plotting for PDF. Everything is supported
      */
-    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
+    virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
-    virtual void PenTo( const wxPoint& pos, char plume ) override;
+    virtual void PenTo( const VECTOR2I& pos, char plume ) override;
 
-    virtual void Text( const wxPoint&           aPos,
-                       const COLOR4D&           aColor,
-                       const wxString&          aText,
-                       const EDA_ANGLE&         aOrient,
-                       const wxSize&            aSize,
-                       enum GR_TEXT_H_ALIGN_T   aH_justify,
-                       enum GR_TEXT_V_ALIGN_T   aV_justify,
-                       int                      aWidth,
-                       bool                     aItalic,
-                       bool                     aBold,
-                       bool                     aMultilineAllowed = false,
-                       KIFONT::FONT*            aFont = nullptr,
-                       void*                    aData = nullptr ) override;
+    virtual void Text( const VECTOR2I&             aPos,
+                       const COLOR4D&              aColor,
+                       const wxString&             aText,
+                       const EDA_ANGLE&            aOrient,
+                       const VECTOR2I&             aSize,
+                       enum GR_TEXT_H_ALIGN_T      aH_justify,
+                       enum GR_TEXT_V_ALIGN_T      aV_justify,
+                       int                         aWidth,
+                       bool                        aItalic,
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false,
+                       KIFONT::FONT*               aFont = nullptr,
+                       void*                       aData = nullptr ) override;
 
     /**
      * PDF images are handles as inline, not XObject streams...
      */
-    virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
+    virtual void PlotImage( const wxImage& aImage, const VECTOR2I& aPos,
                             double aScaleFactor ) override;
 
 
@@ -444,30 +444,30 @@ public:
      */
     virtual void SetDash( PLOT_DASH_TYPE dashed ) override;
 
-    virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
+    virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror ) override;
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
+    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle, int rayon,
+    virtual void Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int rayon,
                       FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
 
-    virtual void BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
-                              const wxPoint& aControl2, const wxPoint& aEnd,
+    virtual void BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1,
+                              const VECTOR2I& aControl2, const VECTOR2I& aEnd,
                               int aTolerance,
                               int aLineThickness = USE_DEFAULT_LINE_WIDTH ) override;
 
-    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
+    virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = nullptr ) override;
 
     /**
      * PostScript-likes at the moment are the only plot engines supporting bitmaps.
      */
-    virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
+    virtual void PlotImage( const wxImage& aImage, const VECTOR2I& aPos,
                             double aScaleFactor ) override;
 
-    virtual void PenTo( const wxPoint& pos, char plume ) override;
+    virtual void PenTo( const VECTOR2I& pos, char plume ) override;
 
     /**
      * Select SVG step size (number of digits needed for 1 mm or 1 inch )
@@ -496,19 +496,19 @@ public:
      */
     virtual void EndBlock( void* aData ) override;
 
-    virtual void Text( const wxPoint&           aPos,
-                       const COLOR4D&           aColor,
-                       const wxString&          aText,
-                       const EDA_ANGLE&         aOrient,
-                       const wxSize&            aSize,
-                       enum GR_TEXT_H_ALIGN_T   aH_justify,
-                       enum GR_TEXT_V_ALIGN_T   aV_justify,
-                       int                      aWidth,
-                       bool                     aItalic,
-                       bool                     aBold,
-                       bool                     aMultilineAllowed = false,
-                       KIFONT::FONT*            aFont = nullptr,
-                       void*                    aData = nullptr ) override;
+    virtual void Text( const VECTOR2I&             aPos,
+                       const COLOR4D&              aColor,
+                       const wxString&             aText,
+                       const EDA_ANGLE&            aOrient,
+                       const VECTOR2I&             aSize,
+                       enum GR_TEXT_H_ALIGN_T      aH_justify,
+                       enum GR_TEXT_V_ALIGN_T      aV_justify,
+                       int                         aWidth,
+                       bool                        aItalic,
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false,
+                       KIFONT::FONT*               aFont = nullptr,
+                       void*                       aData = nullptr ) override;
 
 protected:
     /**

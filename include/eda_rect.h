@@ -50,6 +50,10 @@ public:
             m_init( true )
     { }
 
+    EDA_RECT( const VECTOR2I& aPos, const VECTOR2I& aSize ) :
+            EDA_RECT( wxPoint( aPos.x, aPos.y ), wxSize( aSize.x, aSize.y ) )
+    { }
+
     template<class T>
     EDA_RECT( const BOX2<T> aBox )
     {

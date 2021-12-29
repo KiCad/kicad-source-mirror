@@ -83,13 +83,13 @@ public:
      * The DXF engine doesn't support line widths and mirroring. The output
      * coordinate system is in the first quadrant (in mm).
      */
-    virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
+    virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror ) override;
 
     /**
      * DXF rectangle: fill not supported.
      */
-    virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
 
     /**
@@ -98,7 +98,7 @@ public:
      *
      * I could use this trick to do other filled primitives.
      */
-    virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
+    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
 
     /**
@@ -108,60 +108,60 @@ public:
      * It does not know thick segments, therefore filled polygons with thick outline
      * are converted to inflated polygon by aWidth/2.
      */
-    virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
+    virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
-    virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
+    virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData ) override;
-    virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
+    virtual void Arc( const VECTOR2I& centre, double StAngle, double EndAngle,
                       int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void PenTo( const wxPoint& pos, char plume ) override;
+    virtual void PenTo( const VECTOR2I& pos, char plume ) override;
 
     /**
      * DXF round pad: always done in sketch mode; it could be filled but it isn't
      * pretty if other kinds of pad aren't...
      */
-    virtual void FlashPadCircle( const wxPoint& pos, int diametre,
+    virtual void FlashPadCircle( const VECTOR2I& pos, int diametre,
                                  OUTLINE_MODE trace_mode, void* aData ) override;
 
     /**
      * DXF oval pad: always done in sketch mode.
      */
-    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
+    virtual void FlashPadOval( const VECTOR2I& pos, const VECTOR2I& size, double orient,
                                OUTLINE_MODE trace_mode, void* aData ) override;
 
     /**
      * DXF rectangular pad: always done in sketch mode.
      */
-    virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
+    virtual void FlashPadRect( const VECTOR2I& pos, const VECTOR2I& size,
                                double orient, OUTLINE_MODE trace_mode, void* aData ) override;
-    virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+    virtual void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                     int aCornerRadius, double aOrient,
                                     OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize, double aOrient,
+    virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aOrient,
                                  SHAPE_POLY_SET* aPolygons,
                                  OUTLINE_MODE aTraceMode, void* aData ) override;
 
     /**
      * DXF trapezoidal pad: only sketch mode is supported.
      */
-    virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
+    virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
                                  double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
+    virtual void FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter, int aCornerCount,
                             double aOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
 
-    virtual void Text( const wxPoint&           aPos,
-                       const COLOR4D&           aColor,
-                       const wxString&          aText,
-                       const EDA_ANGLE&         aOrient,
-                       const wxSize&            aSize,
-                       enum GR_TEXT_H_ALIGN_T   aH_justify,
-                       enum GR_TEXT_V_ALIGN_T   aV_justify,
-                       int                      aWidth,
-                       bool                     aItalic,
-                       bool                     aBold,
-                       bool                     aMultilineAllowed = false,
+    virtual void Text( const VECTOR2I&             aPos,
+                       const COLOR4D&              aColor,
+                       const wxString&             aText,
+                       const EDA_ANGLE&            aOrient,
+                       const VECTOR2I&             aSize,
+                       enum GR_TEXT_H_ALIGN_T      aH_justify,
+                       enum GR_TEXT_V_ALIGN_T      aV_justify,
+                       int                         aWidth,
+                       bool                        aItalic,
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false,
                        KIFONT::FONT*            aFont = nullptr,
-                       void*                    aData = nullptr ) override;
+                       void*                       aData = nullptr ) override;
 
 
     /**

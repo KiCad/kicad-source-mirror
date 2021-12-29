@@ -38,6 +38,8 @@ class BEZIER_POLY
 public:
     BEZIER_POLY( const std::vector<wxPoint>& aControlPoints );
 
+    BEZIER_POLY( const std::vector<VECTOR2I>& aControlPoints );
+
     BEZIER_POLY( const std::vector<VECTOR2D>& aControlPoints )
         : m_ctrlPts( aControlPoints )
     {
@@ -53,6 +55,7 @@ public:
      * (the last point is always generated)
      */
     void GetPoly( std::vector<wxPoint>& aOutput, int aMinSegLen = 0 );
+    void GetPoly( std::vector<VECTOR2I>& aOutput, int aMinSegLen = 0 );
     void GetPoly( std::vector<VECTOR2D>& aOutput, double aMinSegLen = 0.0 );
 
 private:

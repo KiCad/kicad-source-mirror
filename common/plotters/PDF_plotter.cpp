@@ -122,7 +122,7 @@ bool PDF_PLOTTER::OpenFile( const wxString& aFullFilename )
 }
 
 
-void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
+void PDF_PLOTTER::SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                                double aScale, bool aMirror )
 {
     m_plotMirror    = aMirror;
@@ -196,7 +196,7 @@ void PDF_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 }
 
 
-void PDF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
+void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
 {
     wxASSERT( workFile );
     DPOINT p1_dev = userToDeviceCoordinates( p1 );
@@ -208,7 +208,7 @@ void PDF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int w
 }
 
 
-void PDF_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T aFill, int width )
+void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int width )
 {
     wxASSERT( workFile );
     DPOINT pos_dev = userToDeviceCoordinates( pos );
@@ -261,7 +261,7 @@ void PDF_PLOTTER::Circle( const wxPoint& pos, int diametre, FILL_T aFill, int wi
 }
 
 
-void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
+void PDF_PLOTTER::Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int radius,
                        FILL_T fill, int width )
 {
     wxASSERT( workFile );
@@ -274,7 +274,7 @@ void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 
     /* Arcs are not so easily approximated by beziers (in the general case),
        so we approximate them in the old way */
-    wxPoint   start, end;
+    VECTOR2I  start, end;
     const int delta = 50;   // increment (in 0.1 degrees) to draw circles
 
     if( StAngle > EndAngle )
@@ -315,7 +315,7 @@ void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 }
 
 
-void PDF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth,
+void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
                             void* aData )
 {
     wxASSERT( workFile );
@@ -339,7 +339,7 @@ void PDF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aF
 }
 
 
-void PDF_PLOTTER::PenTo( const wxPoint& pos, char plume )
+void PDF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 {
     wxASSERT( workFile );
 
@@ -369,16 +369,16 @@ void PDF_PLOTTER::PenTo( const wxPoint& pos, char plume )
 }
 
 
-void PDF_PLOTTER::PlotImage( const wxImage& aImage, const wxPoint& aPos, double aScaleFactor )
+void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor )
 {
     wxASSERT( workFile );
-    wxSize pix_size( aImage.GetWidth(), aImage.GetHeight() );
+    VECTOR2I pix_size( aImage.GetWidth(), aImage.GetHeight() );
 
     // Requested size (in IUs)
     DPOINT drawsize( aScaleFactor * pix_size.x, aScaleFactor * pix_size.y );
 
     // calculate the bitmap start position
-    wxPoint start( aPos.x - drawsize.x / 2, aPos.y + drawsize.y / 2);
+    VECTOR2I start( aPos.x - drawsize.x / 2, aPos.y + drawsize.y / 2 );
 
     DPOINT dev_start = userToDeviceCoordinates( start );
 
@@ -632,7 +632,7 @@ void PDF_PLOTTER::ClosePage()
        to use */
 
     const double BIGPTsPERMIL = 0.072;
-    wxSize psPaperSize = m_pageInfo.GetSizeMils();
+    VECTOR2I psPaperSize = m_pageInfo.GetSizeMils();
 
     fprintf( m_outputFile,
              "<<\n"
@@ -822,19 +822,19 @@ bool PDF_PLOTTER::EndPlot()
 }
 
 
-void PDF_PLOTTER::Text( const wxPoint&           aPos,
-                        const COLOR4D&           aColor,
-                        const wxString&          aText,
-                        const EDA_ANGLE&         aOrient,
-                        const wxSize&            aSize,
-                        enum GR_TEXT_H_ALIGN_T   aH_justify,
-                        enum GR_TEXT_V_ALIGN_T   aV_justify,
-                        int                      aWidth,
-                        bool                     aItalic,
-                        bool                     aBold,
-                        bool                     aMultilineAllowed,
-                        KIFONT::FONT*            aFont,
-                        void*                    aData )
+void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
+                        const COLOR4D&              aColor,
+                        const wxString&             aText,
+                        const EDA_ANGLE&            aOrient,
+                        const VECTOR2I&             aSize,
+                        enum GR_TEXT_H_ALIGN_T      aH_justify,
+                        enum GR_TEXT_V_ALIGN_T      aV_justify,
+                        int                         aWidth,
+                        bool                        aItalic,
+                        bool                        aBold,
+                        bool                        aMultilineAllowed,
+                        KIFONT::FONT*               aFont,
+                        void*                       aData )
 {
     // PDF files do not like 0 sized texts which create broken files.
     if( aSize.x == 0 || aSize.y == 0 )

@@ -141,7 +141,7 @@ void DXF_PLOTTER::SetUnits( DXF_UNITS aUnit )
 }
 
 
-void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
+void DXF_PLOTTER::SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                                double aScale, bool aMirror )
 {
     m_plotOffset  = aOffset;
@@ -409,18 +409,18 @@ void DXF_PLOTTER::SetColor( const COLOR4D& color )
 }
 
 
-void DXF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill, int width )
+void DXF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
     MoveTo( p1 );
-    LineTo( wxPoint( p1.x, p2.y ) );
-    LineTo( wxPoint( p2.x, p2.y ) );
-    LineTo( wxPoint( p2.x, p1.y ) );
-    FinishTo( wxPoint( p1.x, p1.y ) );
+    LineTo( VECTOR2I( p1.x, p2.y ) );
+    LineTo( VECTOR2I( p2.x, p2.y ) );
+    LineTo( VECTOR2I( p2.x, p1.y ) );
+    FinishTo( VECTOR2I( p1.x, p1.y ) );
 }
 
 
-void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int width )
+void DXF_PLOTTER::Circle( const VECTOR2I& centre, int diameter, FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
     double radius = userToDeviceSize( diameter / 2 );
@@ -454,7 +454,7 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int 
 }
 
 
-void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_T aFill, int aWidth,
+void DXF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
                             void* aData )
 {
     if( aCornerList.size() <= 1 )
@@ -534,18 +534,18 @@ void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_T aFil
     last = path.PointCount() - 1;
     VECTOR2I point = path.CPoint( 0 );
 
-    wxPoint startPoint( point.x, point.y );
+    VECTOR2I startPoint( point.x, point.y );
     MoveTo( startPoint );
 
     for( int ii = 1; ii < path.PointCount(); ii++ )
     {
         point = path.CPoint( ii );
-        LineTo( wxPoint( point.x, point.y ) );
+        LineTo( VECTOR2I( point.x, point.y ) );
     }
 
     // Close polygon, if needed
     point = path.CPoint( last );
-    wxPoint endPoint( point.x, point.y );
+    VECTOR2I endPoint( point.x, point.y );
 
     if( endPoint != startPoint )
         LineTo( startPoint );
@@ -554,7 +554,7 @@ void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList, FILL_T aFil
 }
 
 
-void DXF_PLOTTER::PenTo( const wxPoint& pos, char plume )
+void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 {
     wxASSERT( m_outputFile );
 
@@ -589,12 +589,12 @@ void DXF_PLOTTER::SetDash( PLOT_DASH_TYPE aDashed )
 }
 
 
-void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int aWidth,
+void DXF_PLOTTER::ThickSegment( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aWidth,
                                 OUTLINE_MODE aPlotMode, void* aData )
 {
     if( aPlotMode == SKETCH )
     {
-        std::vector<wxPoint> cornerList;
+        std::vector<VECTOR2I> cornerList;
         SHAPE_POLY_SET outlineBuffer;
         TransformOvalToPolygon( outlineBuffer, aStart, aEnd, aWidth, GetPlotterArcHighDef(),
                                 ERROR_INSIDE );
@@ -619,7 +619,7 @@ void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int 
 }
 
 
-void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
+void DXF_PLOTTER::Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int radius,
                        FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
@@ -648,11 +648,11 @@ void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 }
 
 
-void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
+void DXF_PLOTTER::FlashPadOval( const VECTOR2I& pos, const VECTOR2I& aSize, double orient,
                                 OUTLINE_MODE trace_mode, void* aData )
 {
     wxASSERT( m_outputFile );
-    wxSize size( aSize );
+    VECTOR2I size( aSize );
 
     /* The chip is reduced to an oval tablet with size.y > size.x
      * (Oval vertical orientation 0) */
@@ -666,7 +666,7 @@ void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double 
 }
 
 
-void DXF_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
+void DXF_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre,
                                   OUTLINE_MODE trace_mode, void* aData )
 {
     wxASSERT( m_outputFile );
@@ -674,11 +674,11 @@ void DXF_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
 }
 
 
-void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
+void DXF_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& padsize,
                                 double orient, OUTLINE_MODE trace_mode, void* aData )
 {
     wxASSERT( m_outputFile );
-    wxSize size;
+    VECTOR2I size;
     int    ox, oy, fx, fy;
 
     size.x = padsize.x / 2;
@@ -699,8 +699,8 @@ void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
         fx = pos.x;
         fy = pos.y + size.y;
         RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-        MoveTo( wxPoint( ox, oy ) );
-        FinishTo( wxPoint( fx, fy ) );
+        MoveTo( VECTOR2I( ox, oy ) );
+        FinishTo( VECTOR2I( fx, fy ) );
         return;
     }
 
@@ -712,36 +712,36 @@ void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
         fx = pos.x + size.x;
         fy = pos.y;
         RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-        MoveTo( wxPoint( ox, oy ) );
-        FinishTo( wxPoint( fx, fy ) );
+        MoveTo( VECTOR2I( ox, oy ) );
+        FinishTo( VECTOR2I( fx, fy ) );
         return;
     }
 
     ox = pos.x - size.x;
     oy = pos.y - size.y;
     RotatePoint( &ox, &oy, pos.x, pos.y, orient );
-    MoveTo( wxPoint( ox, oy ) );
+    MoveTo( VECTOR2I( ox, oy ) );
 
     fx = pos.x - size.x;
     fy = pos.y + size.y;
     RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-    LineTo( wxPoint( fx, fy ) );
+    LineTo( VECTOR2I( fx, fy ) );
 
     fx = pos.x + size.x;
     fy = pos.y + size.y;
     RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-    LineTo( wxPoint( fx, fy ) );
+    LineTo( VECTOR2I( fx, fy ) );
 
     fx = pos.x + size.x;
     fy = pos.y - size.y;
     RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-    LineTo( wxPoint( fx, fy ) );
+    LineTo( VECTOR2I( fx, fy ) );
 
-    FinishTo( wxPoint( ox, oy ) );
+    FinishTo( VECTOR2I( ox, oy ) );
 }
 
 
-void DXF_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
+void DXF_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                      int aCornerRadius, double aOrient,
                                      OUTLINE_MODE aTraceMode, void* aData )
 {
@@ -752,15 +752,15 @@ void DXF_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize
     // TransformRoundRectToPolygon creates only one convex polygon
     SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
 
-    MoveTo( wxPoint( poly.CPoint( 0 ).x, poly.CPoint( 0 ).y ) );
+    MoveTo( VECTOR2I( poly.CPoint( 0 ).x, poly.CPoint( 0 ).y ) );
 
     for( int ii = 1; ii < poly.PointCount(); ++ii )
-        LineTo( wxPoint( poly.CPoint( ii ).x, poly.CPoint( ii ).y ) );
+        LineTo( VECTOR2I( poly.CPoint( ii ).x, poly.CPoint( ii ).y ) );
 
-    FinishTo( wxPoint( poly.CPoint( 0 ).x, poly.CPoint( 0 ).y ) );
+    FinishTo( VECTOR2I( poly.CPoint( 0 ).x, poly.CPoint( 0 ).y ) );
 }
 
-void DXF_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
+void DXF_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
                                   double aOrient, SHAPE_POLY_SET* aPolygons,
                                   OUTLINE_MODE aTraceMode, void* aData )
 {
@@ -768,26 +768,26 @@ void DXF_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
     {
         SHAPE_LINE_CHAIN& poly = aPolygons->Outline( cnt );
 
-        MoveTo( wxPoint( poly.CPoint( 0 ).x, poly.CPoint( 0 ).y ) );
+        MoveTo( VECTOR2I( poly.CPoint( 0 ).x, poly.CPoint( 0 ).y ) );
 
         for( int ii = 1; ii < poly.PointCount(); ++ii )
-            LineTo( wxPoint( poly.CPoint( ii ).x, poly.CPoint( ii ).y ) );
+            LineTo( VECTOR2I( poly.CPoint( ii ).x, poly.CPoint( ii ).y ) );
 
-        FinishTo( wxPoint( poly.CPoint( 0 ).x, poly.CPoint( 0 ).y ) );
+        FinishTo( VECTOR2I( poly.CPoint( 0 ).x, poly.CPoint( 0 ).y ) );
     }
 }
 
 
-void DXF_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
+void DXF_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
                                   double aPadOrient, OUTLINE_MODE aTrace_Mode, void* aData )
 {
     wxASSERT( m_outputFile );
-    wxPoint coord[4];       /* coord actual corners of a trapezoidal trace */
+    VECTOR2I coord[4]; /* coord actual corners of a trapezoidal trace */
 
     for( int ii = 0; ii < 4; ii++ )
     {
         coord[ii] = aCorners[ii];
-        RotatePoint( &coord[ii], aPadOrient );
+        RotatePoint( coord[ii], aPadOrient );
         coord[ii] += aPadPos;
     }
 
@@ -800,7 +800,7 @@ void DXF_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorner
 }
 
 
-void DXF_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos, int aRadius, int aCornerCount,
+void DXF_PLOTTER::FlashRegularPolygon( const VECTOR2I& aShapePos, int aRadius, int aCornerCount,
                                        double aOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
     // Do nothing
@@ -828,19 +828,19 @@ bool containsNonAsciiChars( const wxString& string )
 }
 
 
-void DXF_PLOTTER::Text( const wxPoint&           aPos,
-                        const COLOR4D&           aColor,
-                        const wxString&          aText,
-                        const EDA_ANGLE&         aOrient,
-                        const wxSize&            aSize,
-                        enum GR_TEXT_H_ALIGN_T   aH_justify,
-                        enum GR_TEXT_V_ALIGN_T   aV_justify,
-                        int                      aWidth,
-                        bool                     aItalic,
-                        bool                     aBold,
-                        bool                     aMultilineAllowed,
-                        KIFONT::FONT*            aFont,
-                        void*                    aData )
+void DXF_PLOTTER::Text( const VECTOR2I&             aPos,
+                        const COLOR4D&              aColor,
+                        const wxString&             aText,
+                        const EDA_ANGLE&            aOrient,
+                        const VECTOR2I&             aSize,
+                        enum GR_TEXT_H_ALIGN_T      aH_justify,
+                        enum GR_TEXT_V_ALIGN_T      aV_justify,
+                        int                         aWidth,
+                        bool                        aItalic,
+                        bool                        aBold,
+                        bool                        aMultilineAllowed,
+                        KIFONT::FONT*               aFont,
+                        void*                       aData )
 {
     // Fix me: see how to use DXF text mode for multiline texts
     if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
