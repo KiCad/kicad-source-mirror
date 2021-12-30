@@ -119,20 +119,32 @@ static F taper( F aRatio, F aMid = 0.5, F aLaw = 1.0, bool aInverse = false )
 
     // clamp to [0, 1] and short-cut at (non-invertible) limits
     if( aMid <= 0 )
+    {
         t = aInverse ? 1 : 0;
+    }
     else if( aMid >= 1 )
+    {
         t = aInverse ? 0 : 1;
+    }
     else
     {
         // clamp, and reflect and/or scale for reverse...symmetric...normal laws
         if( aLaw >= 1 )
-            t = t;
+        {
+            // Do nothing, leave t = t
+        }
         else if( aLaw <= 0 )
+        {
             t = 1 - t;
+        }
         else if( aRatio <= aLaw )
+        {
             t = t / aLaw;
+        }
         else
+        {
             t = ( 1 - t ) / ( 1 - aLaw );
+        }
 
         // scaling factors for domain and range in [0, 1]
         F a = std::norm( 1 - 1 / aMid );
@@ -147,13 +159,21 @@ static F taper( F aRatio, F aMid = 0.5, F aLaw = 1.0, bool aInverse = false )
 
     // clamp, and scale and/or reflect for reverse...symmetric...normal laws
     if( aLaw >= 1 )
-        t = t;
+    {
+        // Do nothing, leave t = t
+    }
     else if( aLaw <= 0 )
+    {
         t = 1 - t;
+    }
     else if( aRatio <= aLaw )
+    {
         t = t * aLaw;
+    }
     else
+    {
         t = 1 - t * ( 1-aLaw );
+    }
 
     return t;
 }
@@ -166,6 +186,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_SYMBO
     m_min( 0.0 ),
     m_max( 0.0 ),
     m_value( 0.0 ),
+    m_changed( false ),
     m_frame ( aFrame )
 {
     const wxString compName = aSymbol->GetField( REFERENCE_FIELD )->GetText();
@@ -268,7 +289,7 @@ void TUNER_SLIDER::updateComponentValue()
 
 void TUNER_SLIDER::updateSlider()
 {
-    assert( m_max >= m_value && m_value >= m_min );
+    wxASSERT( m_max >= m_value && m_value >= m_min );
 
     int choice = m_curve->GetSelection();
     wxCHECK( choice >= 0 && choice < arraysize( CURVES ), /*void*/ );

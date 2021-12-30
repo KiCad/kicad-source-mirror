@@ -108,7 +108,7 @@ private:
     SPICE_VALUE m_min, m_max, m_value;
     bool m_changed;
 
-    SIM_PLOT_FRAME *m_frame;
+    SIM_PLOT_FRAME* m_frame;
 };
 
 #endif /* TUNER_SLIDER_H */
