@@ -36,6 +36,7 @@
 #include <connectivity/from_to_cache.h>
 
 #include <ratsnest/ratsnest_data.h>
+#include <progress_reporter.h>
 #include <trigo.h>
 
 CONNECTIVITY_DATA::CONNECTIVITY_DATA()
@@ -99,7 +100,19 @@ void CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         if( net->GetNetClass()->GetName() != NETCLASS::Default )
             m_netclassMap[ net->GetNetCode() ] = net->GetNetClass()->GetName();
 
+    if( aReporter )
+    {
+        aReporter->SetCurrentProgress( 0.75 );
+        aReporter->KeepRefreshing( false );
+    }
+
     RecalculateRatsnest();
+
+    if( aReporter )
+    {
+        aReporter->SetCurrentProgress( 1.0 );
+        aReporter->KeepRefreshing( false );
+    }
 }
 
 
