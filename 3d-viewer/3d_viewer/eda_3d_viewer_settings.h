@@ -21,19 +21,23 @@
 #ifndef EDA_3D_VIEWER_SETTINGS_H_
 #define EDA_3D_VIEWER_SETTINGS_H_
 
+#include <3d_enums.h>
+#include <common_ogl/ogl_attr_list.h>
+#include <plugins/3dapi/xv3d_types.h>
 #include <settings/app_settings.h>
 #include <settings/parameters.h>
-#include <plugins/3dapi/xv3d_types.h>
+
 
 class EDA_3D_VIEWER_SETTINGS : public APP_SETTINGS_BASE
 {
 public:
     struct RENDER_SETTINGS
     {
-        int  engine;
-        int  grid_type;
-        int  opengl_AA_mode;
-        int  material_mode;
+        RENDER_ENGINE     engine;
+        GRID3D_TYPE       grid_type;
+        ANTIALIASING_MODE opengl_AA_mode;
+        MATERIAL_MODE     material_mode;
+
         bool opengl_AA_disableOnMove;
         bool opengl_thickness_disableOnMove;
         bool opengl_vias_disableOnMove;

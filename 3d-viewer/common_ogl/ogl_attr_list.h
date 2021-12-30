@@ -33,10 +33,11 @@
 /// Anti-aliasing options
 enum class ANTIALIASING_MODE
 {
-    AA_NONE,
-    AA_2X,
-    AA_4X,
-    AA_8X
+    // Do not change these numbers, they are stored in the config file
+    AA_NONE = 0,
+    AA_2X   = 1,
+    AA_4X   = 2,
+    AA_8X   = 3
 };
 
 /**

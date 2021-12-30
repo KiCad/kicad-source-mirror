@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <3d_enums.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <eda_3d_viewer_settings.h>
@@ -57,7 +58,7 @@ void PANEL_3D_DISPLAY_OPTIONS::loadViewSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
     m_checkBoxClipSilkOnViaAnnulus->SetValue( aCfg->m_Render.clip_silk_on_via_annulus );
     m_checkBoxRenderPlatedPadsAsPlated->SetValue( aCfg->m_Render.renderPlatedPadsAsPlated );
 
-    m_materialProperties->SetSelection( aCfg->m_Render.material_mode );
+    m_materialProperties->SetSelection( static_cast<int>( aCfg->m_Render.material_mode ) );
 
     // Camera Options
     m_checkBoxEnableAnimation->SetValue( aCfg->m_Camera.animation_enabled );
@@ -92,7 +93,7 @@ bool PANEL_3D_DISPLAY_OPTIONS::TransferDataFromWindow()
     cfg->m_Render.clip_silk_on_via_annulus = m_checkBoxClipSilkOnViaAnnulus->GetValue();
     cfg->m_Render.renderPlatedPadsAsPlated = m_checkBoxRenderPlatedPadsAsPlated->GetValue();
 
-    cfg->m_Render.material_mode = m_materialProperties->GetSelection();
+    cfg->m_Render.material_mode = static_cast<MATERIAL_MODE>( m_materialProperties->GetSelection() );
 
     // Set Layer visibility
     cfg->m_Render.show_silkscreen = m_checkBoxSilkscreen->GetValue();

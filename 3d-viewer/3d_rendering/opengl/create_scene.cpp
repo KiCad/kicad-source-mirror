@@ -920,8 +920,8 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
                     // only add it if the return is not NULL
                     if( modelPtr )
                     {
-                        int       materialMode = m_boardAdapter.m_Cfg->m_Render.material_mode;
-                        MODEL_3D* model = new MODEL_3D( *modelPtr, (MATERIAL_MODE) materialMode );
+                        MATERIAL_MODE materialMode = m_boardAdapter.m_Cfg->m_Render.material_mode;
+                        MODEL_3D*     model        = new MODEL_3D( *modelPtr, materialMode );
 
                         m_3dModelMap[ fp_model.m_Filename ] = model;
                     }

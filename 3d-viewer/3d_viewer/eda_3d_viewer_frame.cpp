@@ -346,7 +346,7 @@ void EDA_3D_VIEWER_FRAME::Process_Special_Functions( wxCommandEvent &event )
 
 void EDA_3D_VIEWER_FRAME::OnRenderEngineSelection( wxCommandEvent &event )
 {
-    int old_engine = m_boardAdapter.m_Cfg->m_Render.engine;
+    RENDER_ENGINE old_engine = m_boardAdapter.m_Cfg->m_Render.engine;
 
     if( old_engine == RENDER_ENGINE::OPENGL )
         m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::RAYTRACING;

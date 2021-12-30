@@ -41,39 +41,37 @@ enum class ROTATION_DIR
     Z_CCW
 };
 
-
 /// Camera types
 enum class CAMERA_TYPE
 {
     TRACKBALL
 };
 
+// Do not modify the following enum numbers, they are saved in the config file and used in the UI
 
 /// Grid types
-enum GRID3D_TYPE
+enum class GRID3D_TYPE
 {
-    NONE,
-    GRID_1MM,
-    GRID_2P5MM,
-    GRID_5MM,
-    GRID_10MM
+    NONE       = 0,
+    GRID_1MM   = 1,
+    GRID_2P5MM = 2,
+    GRID_5MM   = 3,
+    GRID_10MM  = 4
 };
-
 
 /// Render engine mode
-enum RENDER_ENGINE
+enum class RENDER_ENGINE
 {
-    OPENGL,
-    RAYTRACING,
+    OPENGL     = 0,
+    RAYTRACING = 1,
 };
 
-
 /// Render 3d model shape materials mode
-enum MATERIAL_MODE
+enum class MATERIAL_MODE
 {
-    NORMAL,       ///< Use all material properties from model file
-    DIFFUSE_ONLY, ///< Use only diffuse material properties
-    CAD_MODE      ///< Use a gray shading based on diffuse material
+    NORMAL       = 0, ///< Use all material properties from model file
+    DIFFUSE_ONLY = 1, ///< Use only diffuse material properties
+    CAD_MODE     = 2  ///< Use a gray shading based on diffuse material
 };
 
 #endif // _3D_ENUMS_H_
