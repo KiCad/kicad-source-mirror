@@ -70,14 +70,11 @@ bool EE_INSPECTION_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
 
-    auto singleMarkerCondition = SELECTION_CONDITIONS::OnlyType( SCH_MARKER_T )
-                              && SELECTION_CONDITIONS::Count( 1 );
-
     // Add inspection actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( EE_ACTIONS::excludeMarker, singleMarkerCondition, 100 );
+    selToolMenu.AddItem( EE_ACTIONS::excludeMarker, EE_CONDITIONS::SingleNonExcludedMarker, 100 );
 
     selToolMenu.AddItem( EE_ACTIONS::showDatasheet,
                          EE_CONDITIONS::SingleSymbol && EE_CONDITIONS::Idle, 220 );
@@ -171,25 +168,26 @@ int EE_INSPECTION_TOOL::NextMarker( const TOOL_EVENT& aEvent )
 
 int EE_INSPECTION_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
 {
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    EE_SELECTION&      selection = selTool->GetSelection();
+    SCH_MARKER*        marker = nullptr;
+
+    if( selection.GetSize() == 1 && selection.Front()->Type() == SCH_MARKER_T )
+        marker = static_cast<SCH_MARKER*>( selection.Front() );
+
     if( m_ercDialog )
     {
         // Let the ERC dialog handle it since it has more update hassles to worry about
-        m_ercDialog->ExcludeMarker();
+        // Note that if marker is nullptr the dialog will exclude whichever marker is selected
+        // in the dialog itself
+        m_ercDialog->ExcludeMarker( marker );
     }
-    else
+    else if( marker != nullptr )
     {
-        EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-        EE_SELECTION&      selection = selTool->GetSelection();
-
-        if( selection.GetSize() == 1 && selection.Front()->Type() == SCH_MARKER_T )
-        {
-            SCH_MARKER* marker = static_cast<SCH_MARKER*>( selection.Front() );
-
-            marker->SetExcluded( true );
-            m_frame->GetCanvas()->GetView()->Update( marker );
-            m_frame->GetCanvas()->Refresh();
-            m_frame->OnModify();
-        }
+        marker->SetExcluded( true );
+        m_frame->GetCanvas()->GetView()->Update( marker );
+        m_frame->GetCanvas()->Refresh();
+        m_frame->OnModify();
     }
 
     return 0;

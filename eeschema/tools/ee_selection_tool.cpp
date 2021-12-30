@@ -45,6 +45,7 @@
 #include <sch_item.h>
 #include <sch_line.h>
 #include <sch_junction.h>
+#include <sch_marker.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <lib_shape.h>
@@ -104,6 +105,15 @@ SELECTION_CONDITION EE_CONDITIONS::SingleMultiUnitSymbol = []( const SELECTION& 
     }
 
     return false;
+};
+
+
+SELECTION_CONDITION EE_CONDITIONS::SingleNonExcludedMarker = []( const SELECTION& aSel )
+{
+    if( aSel.CountType( SCH_MARKER_T ) != 1 )
+        return false;
+
+    return !static_cast<SCH_MARKER*>( aSel.Front() )->IsExcluded();
 };
 
 
