@@ -78,3 +78,9 @@ bool GRAPHICS_IMPORTER::Import( double aScale )
 
     return success;
 }
+
+
+void GRAPHICS_IMPORTER::NewShape( POLY_FILL_RULE aFillRule )
+{
+    m_shapeFillRules.push_back( aFillRule );
+}

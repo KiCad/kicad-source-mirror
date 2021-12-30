@@ -45,6 +45,12 @@ class EDA_ITEM;
 class GRAPHICS_IMPORTER
 {
 public:
+    enum POLY_FILL_RULE
+    {
+        PF_NONZERO = 0,
+        PF_EVEN_ODD
+    };
+
     GRAPHICS_IMPORTER();
 
     virtual ~GRAPHICS_IMPORTER()
@@ -186,6 +192,8 @@ public:
     ///< Default line thickness (in mm)
     static constexpr unsigned int DEFAULT_LINE_WIDTH_DFX = 1;
 
+    virtual void NewShape( POLY_FILL_RULE aFillRule = PF_NONZERO );
+
     /**
      * Create an object representing a line segment.
      *
@@ -260,6 +268,8 @@ protected:
 
     ///< Offset (in mm) for imported coordinates
     VECTOR2D m_offsetCoordmm;
+
+    std::vector<POLY_FILL_RULE> m_shapeFillRules;
 
 private:
     ///< List of imported items

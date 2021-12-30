@@ -41,6 +41,12 @@ public:
 
     virtual void Translate( const VECTOR2D& aVec ) = 0;
     virtual void Scale( double scaleX, double scaleY ) = 0;
+
+    void SetParentShapeIndex( int aIndex ) { m_parentShapeIndex = aIndex; }
+    int GetParentShapeIndex() const { return m_parentShapeIndex; }
+
+protected:
+    int m_parentShapeIndex = -1;
 };
 
 
@@ -208,6 +214,10 @@ public:
         }
     }
 
+    std::vector<VECTOR2D>& Vertices() { return m_vertices; }
+
+    int GetWidth() const { return m_width; }
+
 private:
     std::vector<VECTOR2D> m_vertices;
     double                      m_width;
@@ -343,6 +353,8 @@ public:
     {
         return m_shapes;
     }
+
+    void PostprocessNestedPolygons();
 
 protected:
     ///< List of imported shapes
