@@ -17,16 +17,16 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-14 00:13+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-12-31 04:51+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
-"kicad/master-source/zh_Hans/>\n"
+"kicad/v6/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4894,11 +4894,11 @@ msgstr "F.Paste"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
-msgstr "B.Silkscreen"
+msgstr "底层丝印层"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
+msgstr "顶层丝印层"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
@@ -4930,15 +4930,15 @@ msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
-msgstr "Margin"
+msgstr "边界"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
-msgstr "F.Courtyard"
+msgstr "顶层外框层"
 
 #: common/layer_id.cpp:85
 msgid "B.Courtyard"
-msgstr "B.Courtyard"
+msgstr "底层外框层"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
@@ -17237,7 +17237,7 @@ msgstr "图像偏移对齐"
 #: gerbview/gerber_file_image_list.cpp:196
 #, c-format
 msgid "Graphic layer %d"
-msgstr "Graphic layer %d"
+msgstr "图形层 %d"
 
 #: gerbview/gerbview_frame.cpp:74 gerbview/menubar.cpp:125
 msgid "Clear Recent Zip Files"
@@ -29684,7 +29684,7 @@ msgstr "KiCad 封装编辑器"
 
 #: pcbnew/footprint_edit_frame.cpp:200 pcbnew/zone_settings.cpp:219
 msgid "Inner layers"
-msgstr "Inner layers"
+msgstr "内部图层"
 
 #: pcbnew/footprint_edit_frame.cpp:239 pcbnew/pcb_edit_frame.cpp:279
 msgid "Selection Filter"
