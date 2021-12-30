@@ -37,6 +37,9 @@
 #define DIALOG_ERC_WINDOW_NAME "DialogErcWindowName"
 
 
+class SCH_MARKER;
+
+
 class DIALOG_ERC : public DIALOG_ERC_BASE, PROGRESS_REPORTER_BASE
 {
 public:
@@ -50,7 +53,14 @@ public:
 
     void PrevMarker();
     void NextMarker();
-    void ExcludeMarker();
+
+    /**
+     * Exclude aMarker from the ERC list. If aMarker is nullptr, exclude the selected marker
+     * in this dialog.
+     *
+     * @param aMarker aMarker to exclude
+     */
+    void ExcludeMarker( SCH_MARKER* aMarker = nullptr );
 
     void UpdateAnnotationWarning();
 

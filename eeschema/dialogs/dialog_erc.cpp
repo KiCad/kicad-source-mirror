@@ -675,15 +675,22 @@ void DIALOG_ERC::NextMarker()
 }
 
 
-void DIALOG_ERC::ExcludeMarker()
+void DIALOG_ERC::ExcludeMarker( SCH_MARKER* aMarker )
 {
+    SCH_MARKER* marker = aMarker;
+
+    if( marker != nullptr )
+        m_markerTreeModel->SelectMarker( marker );
+
     if( m_notebook->GetSelection() != 1 )
         return;
 
     RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( m_markerDataView->GetCurrentItem() );
-    SCH_MARKER*   marker = dynamic_cast<SCH_MARKER*>( node->m_RcItem->GetParent() );
 
-    if( marker && !marker->IsExcluded() )
+    if( node && node->m_RcItem )
+        marker = dynamic_cast<SCH_MARKER*>( node->m_RcItem->GetParent() );
+
+    if( node && marker && !marker->IsExcluded() )
     {
         marker->SetExcluded( true );
         m_parent->GetCanvas()->GetView()->Update( marker );
