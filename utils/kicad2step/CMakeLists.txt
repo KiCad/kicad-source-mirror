@@ -19,7 +19,7 @@ set( KS2_LIB_FILES
 
 # Break the library out for re-use by both kicad2step and any qa that needs it
 # In future, this could move for re-use by other programs needing s-expr support (?)
-add_library( kicad2step_lib OBJECT
+add_library( kicad2step_lib STATIC
     ${KS2_LIB_FILES}
 )
 
@@ -65,7 +65,7 @@ if( APPLE )
             RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
             )
 else()
-    install( TARGETS kicad2step_bin kicad2step_lib
+    install( TARGETS kicad2step_bin
             RUNTIME DESTINATION ${KICAD_BIN}
             ARCHIVE DESTINATION ${KICAD_LIB}
             COMPONENT binary )
