@@ -1350,6 +1350,16 @@ public:
      */
     bool IsVertexInHole( int aGlobalIdx );
 
+    /**
+     * Build a SHAPE_POLY_SET from a bunch of outlines in provided in random order.
+     * 
+     * @param aPath set of closed outlines forming the polygon. Positive orientation = outline, negative = hole
+     * @param aReverseOrientation inverts the sign of the orientation of aPaths (so negative = outline)
+     * @param aEvenOdd forces the even-off fill rule (default is non zero)
+     * @return the constructed poly set
+     */
+    static const SHAPE_POLY_SET BuildPolysetFromOrientedPaths( const std::vector<SHAPE_LINE_CHAIN>& aPaths, bool aReverseOrientation = false, bool aEvenOdd = false );
+
 private:
     void fractureSingle( POLYGON& paths );
     void unfractureSingle ( POLYGON& path );
