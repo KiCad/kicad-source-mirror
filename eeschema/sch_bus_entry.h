@@ -108,6 +108,12 @@ public:
     void     SetPosition( const VECTOR2I& aPosition ) override { m_pos = aPosition; }
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
+    bool IsPointClickableAnchor( const VECTOR2I& aPos ) const override
+    {
+        return ( GetPosition() == aPos && IsDanglingStart() )
+               || ( GetEnd() == aPos && IsDanglingEnd() );
+    }
+
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void Plot( PLOTTER* aPlotter ) const override;

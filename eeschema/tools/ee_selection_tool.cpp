@@ -44,6 +44,7 @@
 #include <sch_edit_frame.h>
 #include <sch_item.h>
 #include <sch_line.h>
+#include <sch_bus_entry.h>
 #include <sch_junction.h>
 #include <sch_marker.h>
 #include <sch_sheet.h>
@@ -397,7 +398,14 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         if( ( connection && ( connection->IsNet() || connection->IsUnconnected() ) )
                             || collector[0]->Type() == SCH_SYMBOL_T )
                         {
-                            newEvt = EE_ACTIONS::drawWire.MakeEvent();
+                            // For bus wire entries, we want to autostart a wire or a bus
+                            // depending on what is connected to the other side.
+                            auto entry = static_cast<SCH_BUS_WIRE_ENTRY*>( collector[0] );
+
+                            if( ( entry != nullptr ) && ( entry->m_connected_bus_item == nullptr ) )
+                                newEvt = EE_ACTIONS::drawBus.MakeEvent();
+                            else
+                                newEvt = EE_ACTIONS::drawWire.MakeEvent();
                         }
                         else if( connection && connection->IsBus() )
                         {
