@@ -76,6 +76,17 @@ bool SVG_IMPORT_PLUGIN::Import()
     {
         double lineWidth = shape->strokeWidth;
 
+        GRAPHICS_IMPORTER::POLY_FILL_RULE rule = GRAPHICS_IMPORTER::PF_NONZERO;
+
+        switch( shape->fillRule )
+        {
+            case NSVG_FILLRULE_NONZERO: rule = GRAPHICS_IMPORTER::PF_NONZERO; break;
+            case NSVG_FILLRULE_EVENODD: rule = GRAPHICS_IMPORTER::PF_EVEN_ODD; break;
+            default: break;
+        }
+
+        m_importer->NewShape( rule );
+
         for( NSVGpath* path = shape->paths; path != nullptr; path = path->next )
             DrawPath( path->pts, path->npts, path->closed, shape->fill.type == NSVG_PAINT_COLOR,
                       lineWidth );
@@ -117,7 +128,7 @@ void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aCl
     if( aNumPoints > 0 )
         DrawCubicBezierPath( aPoints, aNumPoints, collectedPathPoints );
 
-    if( aFilled && aClosedPath )
+    if( aFilled )
         DrawPolygon( collectedPathPoints, aLineWidth );
     else
         DrawLineSegments( collectedPathPoints, aLineWidth );
