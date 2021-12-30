@@ -673,7 +673,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     }
 
     // Clearance lines
-    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode >= SHOW_TRACK_CLEARANCE_WHILE_ROUTING
+    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
             && !m_pcbSettings.m_ForceClearanceDisplayOff )
     {
         int clearance = aArc->GetOwnClearance( m_pcbSettings.GetActiveLayer() );

@@ -2947,7 +2947,7 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchCircle()
 
     T             token;
     wxPoint       center;
-    int           radius;
+    int           radius = 0;
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
     std::unique_ptr<SCH_SHAPE> circle = std::make_unique<SCH_SHAPE>( SHAPE_T::CIRCLE );
