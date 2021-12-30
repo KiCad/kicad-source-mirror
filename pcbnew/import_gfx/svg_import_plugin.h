@@ -29,6 +29,7 @@
 #include "nanosvg.h"
 
 #include "graphics_import_plugin.h"
+#include "graphics_importer_buffer.h"
 #include <math/vector2d.h>
 #include <wildcards_and_files_ext.h>
 
@@ -85,6 +86,8 @@ private:
 
     wxString m_messages; // messages generated during svg file parsing.
                                 // Each message ends by '\n'
+
+    GRAPHICS_IMPORTER_BUFFER m_internalImporter;
 };
 
 #endif /* SVG_IMPORT_PLUGIN_H */

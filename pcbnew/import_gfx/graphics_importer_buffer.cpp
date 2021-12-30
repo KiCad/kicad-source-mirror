@@ -23,6 +23,10 @@
  */
 
 #include <eda_item.h>
+
+#include <geometry/shape_line_chain.h>
+#include <geometry/shape_poly_set.h>
+
 #include "graphics_importer_buffer.h"
 
 using namespace std;
@@ -55,6 +59,7 @@ void GRAPHICS_IMPORTER_BUFFER::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
 void GRAPHICS_IMPORTER_BUFFER::AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth )
 {
     m_shapes.push_back( make_shape< IMPORTED_POLYGON >( aVertices, aWidth ) );
+    m_shapes.back()->SetParentShapeIndex( m_shapeFillRules.size() - 1 );
 }
 
 
@@ -84,4 +89,123 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
 {
     for( auto& shape : m_shapes )
         shape->ImportTo( aImporter );
+}
+
+// converts a single SVG-style polygon (multiple outlines, hole detection based on orientation, custom fill rule) to a format that can be digested by KiCad (single outline, fractured)
+static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
+                            std::vector<IMPORTED_POLYGON*>&             aPaths,
+                            GRAPHICS_IMPORTER::POLY_FILL_RULE           aFillRule,
+                            int aWidth )
+{
+    double minX = std::numeric_limits<double>::max();
+    double minY = minX;
+    double maxX = std::numeric_limits<double>::min();
+    double maxY = maxX;
+
+    // as Clipper/SHAPE_POLY_SET uses ints we first need to upscale to a reasonably large size (in integer coordinates)
+    // to avoid loosing accuracy
+    const double convert_scale = 1000000000.0;
+
+    for( IMPORTED_POLYGON* path : aPaths )
+    {
+        for( VECTOR2D& v : path->Vertices() )
+        {
+            minX = std::min( minX, v.x );
+            minY = std::min( minY, v.y );
+            maxX = std::max( maxX, v.x );
+            maxY = std::max( maxY, v.y );
+        }
+    }
+
+    double origW = ( maxX - minX );
+    double origH = ( maxY - minY );
+    double upscaledW, upscaledH;
+
+    if( origW > origH )
+    {
+        upscaledW = convert_scale;
+        upscaledH = ( origH == 0.0f ? 0.0 : origH * convert_scale / origW );
+    }
+    else
+    {
+        upscaledH = convert_scale;
+        upscaledW = ( origW == 0.0f ? 0.0 : origW * convert_scale / origH );
+    }
+
+    std::vector<SHAPE_LINE_CHAIN> upscaledPaths;
+
+    for( IMPORTED_POLYGON* path : aPaths )
+    {
+        SHAPE_LINE_CHAIN lc;
+
+        for( VECTOR2D& v : path->Vertices() )
+        {
+            int xp = KiROUND( ( v.x - minX ) * ( upscaledW / origW ) );
+            int yp = KiROUND( ( v.y - minY ) * ( upscaledH / origH ) );
+            lc.Append( xp, yp );
+        }
+        lc.SetClosed( true );
+        upscaledPaths.push_back( lc );
+    }
+
+    SHAPE_POLY_SET result = SHAPE_POLY_SET::BuildPolysetFromOrientedPaths(
+            upscaledPaths, false, aFillRule == GRAPHICS_IMPORTER::PF_EVEN_ODD );
+    result.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+    for( int outl = 0; outl < result.OutlineCount(); outl++ )
+    {
+        const SHAPE_LINE_CHAIN& ro = result.COutline( outl );
+        std::vector<VECTOR2D>   pts;
+        for( int i = 0; i < ro.PointCount(); i++ )
+        {
+            double xp = (double) ro.CPoint( i ).x * ( origW / upscaledW ) + minX;
+            double yp = (double) ro.CPoint( i ).y * ( origH / upscaledH ) + minY;
+            pts.emplace_back( VECTOR2D( xp, yp ) );
+        }
+
+        aShapes.push_back( std::make_unique<IMPORTED_POLYGON>( pts, aWidth ) );
+    }
+}
+
+
+void GRAPHICS_IMPORTER_BUFFER::PostprocessNestedPolygons()
+{
+    int curShapeIdx = -1;
+    int lastWidth = 1;
+
+    std::list<std::unique_ptr<IMPORTED_SHAPE>> newShapes;
+    std::vector<IMPORTED_POLYGON*>             polypaths;
+
+    for( auto& shape : m_shapes )
+    {
+        IMPORTED_POLYGON* poly = dynamic_cast<IMPORTED_POLYGON*>( shape.get() );
+
+        if( !poly || poly->GetParentShapeIndex() < 0 )
+        {
+            newShapes.push_back( shape->clone() );
+            continue;
+        }
+
+        lastWidth = poly->GetWidth();
+        int index = poly->GetParentShapeIndex();
+
+        if( curShapeIdx < 0 )
+            index = curShapeIdx;
+
+        if( index == curShapeIdx )
+        {
+            polypaths.push_back( poly );
+        }
+        else if( index >= curShapeIdx + 1 )
+        {
+            convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastWidth );
+            curShapeIdx++;
+            polypaths.clear();
+            polypaths.push_back( poly );
+        }
+    }
+
+    convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastWidth );
+
+    m_shapes.swap( newShapes );
 }
