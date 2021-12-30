@@ -135,6 +135,10 @@ DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_SYMBOL& aSymbol,
 
 void DIALOG_SPICE_MODEL::Init()
 {
+    // Reserve room for m_stInfoNote wxStaticText, to display longest texts ( 3 lines )
+    m_stInfoNote->SetLabel("X\nX\nX\n");
+    m_model->Layout();
+
     m_pasValue->SetValidator( m_spiceValidator );
 
     m_modelType->SetValidator( m_notEmptyValidator );
@@ -232,6 +236,8 @@ void DIALOG_SPICE_MODEL::Init()
     m_powerNotebook->RemovePage( m_powerNotebook->FindPage( m_pwrExtData ) );
 
     m_scintillaTricks = std::make_unique<SCINTILLA_TRICKS>( m_libraryContents, wxT( "{}" ), false );
+
+    Layout();
 }
 
 
