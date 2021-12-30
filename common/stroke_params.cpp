@@ -36,8 +36,8 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int 
                             const KIGFX::RENDER_SETTINGS* aRenderSettings,
                             std::function<void( const wxPoint& a, const wxPoint& b )> aStroker )
 {
-    double strokes[6];
-    int    wrapAround;
+    double strokes[6] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+    int    wrapAround = 0;
 
     switch( aLineStyle )
     {

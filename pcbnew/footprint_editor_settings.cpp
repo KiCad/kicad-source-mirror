@@ -44,6 +44,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
         m_Display(),
         m_UserGrid(),
         m_PolarCoords( false ),
+        m_RotationAngle( 900 ),
         m_Use45Limit( true ),
         m_LibWidth( 250 ),
         m_LastImportExportPath(),

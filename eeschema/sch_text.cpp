@@ -612,7 +612,10 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
 
 
 SCH_LABEL_BASE::SCH_LABEL_BASE( const wxPoint& aPos, const wxString& aText, KICAD_T aType ) :
-        SCH_TEXT( aPos, aText, aType )
+        SCH_TEXT( aPos, aText, aType ),
+        m_shape( L_UNSPECIFIED ),
+        m_connectionType( CONNECTION_TYPE::NONE ),
+        m_isDangling( true )
 {
     SetMultilineAllowed( false );
     SetFieldsAutoplaced();

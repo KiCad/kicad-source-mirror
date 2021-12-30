@@ -53,7 +53,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
         m_Graphics(),
         m_Session(),
         m_System(),
-        m_NetclassPanel()
+        m_DoNotShowAgain(),
+        m_NetclassPanel(),
+        m_PackageManager()
 {
     /*
      * Automatic dark mode detection works fine on Mac.

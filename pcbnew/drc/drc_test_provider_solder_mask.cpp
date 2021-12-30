@@ -47,6 +47,9 @@ class DRC_TEST_PROVIDER_SOLDER_MASK : public ::DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_SOLDER_MASK ():
+            m_board( nullptr ),
+            m_webWidth( 0 ),
+            m_maxError( 0 ),
             m_largestClearance( 0 )
     {
         m_bridgeRule.m_Name = _( "board setup solder mask min width" );

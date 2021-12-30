@@ -52,6 +52,7 @@ LINE_PLACER::LINE_PLACER( ROUTER* aRouter ) :
     m_currentNet = 0;
     m_currentLayer = 0;
     m_startItem = nullptr;
+    m_endItem = nullptr;
     m_chainedPlacement = false;
     m_orthoMode = false;
     m_placementCorrect = false;

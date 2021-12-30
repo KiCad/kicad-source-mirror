@@ -501,7 +501,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
                                         bool* aUpdated )
 {
     PCB_GROUP* parentGroup = aExisting->GetParentGroup();
-    bool       dummyBool;
+    bool       dummyBool   = false;
 
     if( !aUpdated )
         aUpdated = &dummyBool;

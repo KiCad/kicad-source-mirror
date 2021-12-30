@@ -81,9 +81,9 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
 {
     int     pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
     wxPoint center;
-    int     radius;
-    int     startAngle;
-    int     endAngle;
+    int     radius     = 0;
+    int     startAngle = 0;
+    int     endAngle   = 0;
 
     static std::vector<wxPoint> cornerList;
 

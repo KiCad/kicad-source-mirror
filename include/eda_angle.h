@@ -40,6 +40,8 @@ public:
     // Angle type must be explicitly specified at creation, because
     // there is no other way of knowing what an int or a double represents
     EDA_ANGLE( int aValue, ANGLE_TYPE aAngleType ) :
+            m_value( 0 ),
+            m_radians( 0.0 ),
             m_initial_type( aAngleType )
     {
         switch( aAngleType )
@@ -55,6 +57,8 @@ public:
     }
 
     EDA_ANGLE( double aValue, ANGLE_TYPE aAngleType ) :
+            m_value( 0 ),
+            m_radians( 0.0 ),
             m_initial_type( aAngleType )
     {
         switch( aAngleType )
