@@ -29,7 +29,7 @@
 using KIGFX::COLOR4D;
 
 ///! Update the schema version whenever a migration is required
-const int viewer3dSchemaVersion = 1;
+const int viewer3dSchemaVersion = 2;
 
 
 EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
@@ -63,7 +63,7 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
 
     // OpenGL options
     m_params.emplace_back( new PARAM<bool>( "render.opengl_copper_thickness",
-                                            &m_Render.opengl_copper_thickness, true ) );
+                                            &m_Render.opengl_copper_thickness, false ) );
     m_params.emplace_back( new PARAM<bool>( "render.opengl_show_model_bbox",
                                             &m_Render.opengl_show_model_bbox, false ) );
     m_params.emplace_back( new PARAM<bool>( "render.opengl_highlight_on_rollover",
@@ -202,6 +202,12 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
                                            &m_Camera.projection_mode, 1 ) );
 
     registerMigration( 0, 1, std::bind( &EDA_3D_VIEWER_SETTINGS::migrateSchema0to1, this ) );
+
+    registerMigration( 1, 2, [&]() -> bool
+    {
+        Set( "render.opengl_copper_thickness", false );
+        return true;
+    } );
 }
 
 
