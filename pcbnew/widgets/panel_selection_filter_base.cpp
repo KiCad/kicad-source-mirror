@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -71,7 +71,6 @@ PANEL_SELECTION_FILTER_BASE::PANEL_SELECTION_FILTER_BASE( wxWindow* parent, wxWi
 	this->Layout();
 
 	// Connect Events
-	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SELECTION_FILTER_BASE::OnUpdateUI ) );
 	m_cbAllItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbLockedItems->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
@@ -89,7 +88,6 @@ PANEL_SELECTION_FILTER_BASE::PANEL_SELECTION_FILTER_BASE( wxWindow* parent, wxWi
 PANEL_SELECTION_FILTER_BASE::~PANEL_SELECTION_FILTER_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SELECTION_FILTER_BASE::OnUpdateUI ) );
 	m_cbAllItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbLockedItems->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );
 	m_cbFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SELECTION_FILTER_BASE::OnFilterChanged ), NULL, this );

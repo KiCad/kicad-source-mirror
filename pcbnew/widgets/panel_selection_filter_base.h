@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -44,14 +44,14 @@ class PANEL_SELECTION_FILTER_BASE : public WX_PANEL
 		wxCheckBox* m_cbDimensions;
 		wxCheckBox* m_cbOtherItems;
 
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		// Virtual event handlers, override them in your derived class
 		virtual void OnFilterChanged( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
 		PANEL_SELECTION_FILTER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 249,146 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_SELECTION_FILTER_BASE();
 
 };
