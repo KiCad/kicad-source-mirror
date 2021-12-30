@@ -370,6 +370,7 @@ set( COMMON_SRCS
     lockfile.cpp
     lset.cpp
     marker_base.cpp
+    markup_parser.cpp
     netclass.cpp
     observable.cpp
     origin_transforms.cpp
@@ -498,6 +499,13 @@ target_include_directories( common
         .
         ${CMAKE_BINARY_DIR}
     )
+
+# text markup support
+add_dependencies( common pegtl )
+target_include_directories( common PUBLIC
+    $<TARGET_PROPERTY:pegtl,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+
 
 set( PCB_COMMON_SRCS
     base_screen.cpp
