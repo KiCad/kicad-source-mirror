@@ -80,6 +80,7 @@ static void formatFill( OUTPUTFORMATTER* aFormatter, int aNestLevel, FILL_T aFil
 
     switch( aFillMode )
     {
+    default:
     case FILL_T::NO_FILL:                  fillType = "none";       break;
     case FILL_T::FILLED_SHAPE:             fillType = "outline";    break;
     case FILL_T::FILLED_WITH_BG_BODYCOLOR: fillType = "background"; break;
