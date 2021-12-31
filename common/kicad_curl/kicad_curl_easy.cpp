@@ -44,67 +44,72 @@
 
 struct CURL_PROGRESS
 {
-    KICAD_CURL_EASY*  curl;
-    TRANSFER_CALLBACK callback;
-    curl_off_t        last_run_time;
-    curl_off_t        interval;
-    CURL_PROGRESS( KICAD_CURL_EASY* c, TRANSFER_CALLBACK cb, curl_off_t i ) :
-            curl( c ), callback( cb ), last_run_time( 0 ), interval( i )
+    KICAD_CURL_EASY*  m_Curl;
+    TRANSFER_CALLBACK m_Callback;
+    curl_off_t        m_Last_run_time;
+    curl_off_t        m_Interval;
+
+    CURL_PROGRESS( KICAD_CURL_EASY* aCURL, TRANSFER_CALLBACK aCallback, curl_off_t aInterval ) :
+            m_Curl( aCURL ),
+            m_Callback( aCallback ),
+            m_Last_run_time( 0 ),
+            m_Interval( aInterval )
     {
     }
 };
 
 
-static size_t write_callback( void* contents, size_t size, size_t nmemb, void* userp )
+static size_t write_callback( void* aContents, size_t aSize, size_t aNmemb, void* aUserp )
 {
-    size_t realsize = size * nmemb;
+    size_t realsize = aSize * aNmemb;
 
-    std::string* p = static_cast<std::string*>( userp );
+    std::string* p = static_cast<std::string*>( aUserp );
 
-    p->append( static_cast<const char*>( contents ), realsize );
+    p->append( static_cast<const char*>( aContents ), realsize );
 
     return realsize;
 }
 
 
-static size_t stream_write_callback( void* contents, size_t size, size_t nmemb, void* userp )
+static size_t stream_write_callback( void* aContents, size_t aSize, size_t aNmemb, void* aUserp )
 {
-    size_t realsize = size * nmemb;
+    size_t realsize = aSize * aNmemb;
 
-    std::ostream* p = (std::ostream*) userp;
+    std::ostream* p = static_cast<std::ostream*>( aUserp );
 
-    p->write( static_cast<const char*>( contents ), realsize );
+    p->write( static_cast<const char*>( aContents ), realsize );
 
     return realsize;
 }
 
 
-static int xferinfo( void* p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal,
-                     curl_off_t ulnow )
+static int xferinfo( void* aProgress, curl_off_t aDLtotal, curl_off_t aDLnow, curl_off_t aULtotal,
+                     curl_off_t aULnow )
 {
-    CURL_PROGRESS* progress = static_cast<CURL_PROGRESS*>( p );
-    curl_off_t     curtime = 0;
+    CURL_PROGRESS* progress = static_cast<CURL_PROGRESS*>( aProgress );
+    curl_off_t     curtime  = 0;
 
-    curl_easy_getinfo( progress->curl->GetCurl(), CURLINFO_TOTAL_TIME, &curtime );
+    curl_easy_getinfo( progress->m_Curl->GetCurl(), CURLINFO_TOTAL_TIME, &curtime );
 
-    if( curtime - progress->last_run_time >= progress->interval )
+    if( curtime - progress->m_Last_run_time >= progress->m_Interval )
     {
-        progress->last_run_time = curtime;
-        return progress->callback( dltotal, dlnow, ultotal, ulnow );
+        progress->m_Last_run_time = curtime;
+        return progress->m_Callback( aDLtotal, aDLnow, aULtotal, aULnow );
     }
 
     return CURLE_OK;
 }
 
 
-static int progressinfo( void* p, double dltotal, double dlnow, double ultotal, double ulnow )
+static int progressinfo( void* aProgress, double aDLtotal, double aDLnow, double aULtotal, double aULnow )
 {
-    return xferinfo( p, static_cast<curl_off_t>( dltotal ), static_cast<curl_off_t>( dlnow ),
-                     static_cast<curl_off_t>( ultotal ), static_cast<curl_off_t>( ulnow ) );
+    return xferinfo( aProgress, static_cast<curl_off_t>( aDLtotal ), static_cast<curl_off_t>( aDLnow ),
+                     static_cast<curl_off_t>( aULtotal ), static_cast<curl_off_t>( aULnow ) );
 }
 
 
-KICAD_CURL_EASY::KICAD_CURL_EASY() : m_headers( nullptr )
+KICAD_CURL_EASY::KICAD_CURL_EASY() :
+        m_headers( nullptr )
 {
     // Call KICAD_CURL::Init() from in here every time, but only the first time
     // will incur any overhead.  This strategy ensures that libcurl is never loaded
@@ -115,12 +120,10 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() : m_headers( nullptr )
     m_CURL = curl_easy_init();
 
     if( !m_CURL )
-    {
         THROW_IO_ERROR( "Unable to initialize CURL session" );
-    }
 
     curl_easy_setopt( m_CURL, CURLOPT_WRITEFUNCTION, write_callback );
-    curl_easy_setopt( m_CURL, CURLOPT_WRITEDATA, (void*) &m_buffer );
+    curl_easy_setopt( m_CURL, CURLOPT_WRITEDATA, static_cast<void*>( &m_buffer ) );
 
     // Only allow HTTP and HTTPS protocols
     curl_easy_setopt( m_CURL, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS );
@@ -162,16 +165,12 @@ KICAD_CURL_EASY::~KICAD_CURL_EASY()
 int KICAD_CURL_EASY::Perform()
 {
     if( m_headers )
-    {
         curl_easy_setopt( m_CURL, CURLOPT_HTTPHEADER, m_headers );
-    }
 
     // bonus: retain worst case memory allocation, should re-use occur
     m_buffer.clear();
 
-    CURLcode res = curl_easy_perform( m_CURL );
-
-    return res;
+    return curl_easy_perform( m_CURL );
 }
 
 
@@ -198,9 +197,7 @@ const std::string KICAD_CURL_EASY::GetErrorText( int aCode )
 bool KICAD_CURL_EASY::SetUserAgent( const std::string& aAgent )
 {
     if( setOption<const char*>( CURLOPT_USERAGENT, aAgent.c_str() ) == CURLE_OK )
-    {
         return true;
-    }
 
     return false;
 }
@@ -217,6 +214,7 @@ bool KICAD_CURL_EASY::SetURL( const std::string& aURL )
         if( KIPLATFORM::ENV::GetSystemProxyConfig( aURL, cfg ) )
         {
             curl_easy_setopt( m_CURL, CURLOPT_PROXY, static_cast<const char*>( cfg.host.c_str() ) );
+
             if( !cfg.username.empty() )
             {
                 curl_easy_setopt( m_CURL, CURLOPT_PROXYUSERNAME,
@@ -240,9 +238,7 @@ bool KICAD_CURL_EASY::SetURL( const std::string& aURL )
 bool KICAD_CURL_EASY::SetFollowRedirects( bool aFollow )
 {
     if( setOption<long>( CURLOPT_FOLLOWLOCATION, ( aFollow ? 1 : 0 ) ) == CURLE_OK )
-    {
         return true;
-    }
 
     return false;
 }
@@ -288,7 +284,7 @@ int KICAD_CURL_EASY::GetTransferTotal( uint64_t& aDownloadedBytes ) const
 #ifdef CURLINFO_SIZE_DOWNLOAD_T
     curl_off_t dl;
     int        result = curl_easy_getinfo( m_CURL, CURLINFO_SIZE_DOWNLOAD_T, &dl );
-    aDownloadedBytes = static_cast<uint64_t>( dl );
+    aDownloadedBytes  = static_cast<uint64_t>( dl );
 #else
     double dl;
     int    result = curl_easy_getinfo( m_CURL, CURLINFO_SIZE_DOWNLOAD, &dl );
