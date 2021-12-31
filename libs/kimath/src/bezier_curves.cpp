@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,28 @@ BEZIER_POLY::BEZIER_POLY( const std::vector<wxPoint>& aControlPoints )
     m_minSegLen = 0.0;
 }
 
+BEZIER_POLY::BEZIER_POLY( const VECTOR2I& aStart, const VECTOR2I& aCtrl1,
+                          const VECTOR2I& aCtrl2, const VECTOR2I& aEnd )
+{
+    m_ctrlPts.emplace_back( VECTOR2D( aStart ) );
+    m_ctrlPts.emplace_back( VECTOR2D( aCtrl1 ) );
+    m_ctrlPts.emplace_back( VECTOR2D( aCtrl2 ) );
+    m_ctrlPts.emplace_back( VECTOR2D( aEnd ) );
+
+    m_minSegLen = 0.0;
+}
+
+
+void BEZIER_POLY::GetPoly( std::vector<wxPoint>& aOutput, int aMinSegLen, int aMaxSegCount )
+{
+    aOutput.clear();
+    std::vector<VECTOR2D> buffer;
+    GetPoly( buffer, double( aMinSegLen ), aMaxSegCount );
+
+    for( unsigned ii = 0; ii < buffer.size(); ++ii )
+        aOutput.emplace_back( wxPoint( int( buffer[ii].x ), int( buffer[ii].y ) ) );
+}
+
 
 BEZIER_POLY::BEZIER_POLY( const std::vector<VECTOR2I>& aControlPoints )
 {
@@ -49,36 +71,24 @@ BEZIER_POLY::BEZIER_POLY( const std::vector<VECTOR2I>& aControlPoints )
 }
 
 
-void BEZIER_POLY::GetPoly( std::vector<wxPoint>& aOutput, int aMinSegLen )
-{
-    aOutput.clear();
-    std::vector<VECTOR2D> buffer;
-    GetPoly( buffer, double( aMinSegLen ) );
-
-    for( unsigned ii = 0; ii < buffer.size(); ++ii )
-        aOutput.emplace_back( wxPoint( int( buffer[ii].x ), int( buffer[ii].y ) ) );
-}
-
-
-void BEZIER_POLY::GetPoly( std::vector<VECTOR2I>& aOutput, int aMinSegLen )
+void BEZIER_POLY::GetPoly( std::vector<VECTOR2I>& aOutput, int aMinSegLen, int aMaxSegCount )
 {
     aOutput.clear();
     std::vector<VECTOR2I> buffer;
-    GetPoly( buffer, double( aMinSegLen ) );
+    GetPoly( buffer, double( aMinSegLen ), aMaxSegCount );
 
     for( unsigned ii = 0; ii < buffer.size(); ++ii )
         aOutput.emplace_back( VECTOR2I( int( buffer[ii].x ), int( buffer[ii].y ) ) );
 }
 
 
-void BEZIER_POLY::GetPoly( std::vector<VECTOR2D>& aOutput, double aMinSegLen )
+void BEZIER_POLY::GetPoly( std::vector<VECTOR2D>& aOutput, double aMinSegLen, int aMaxSegCount )
 {
     wxASSERT( m_ctrlPts.size() == 4 );
     // FIXME Brute force method, use a better (recursive?) algorithm
     // with a max error value.
     // to optimize the number of segments
-    #define CURVE_POINTS 32
-    double dt = 1.0 / CURVE_POINTS;
+     double dt = 1.0 / aMaxSegCount;
 
     aOutput.clear();
     aOutput.push_back( m_ctrlPts[0] );
@@ -88,7 +98,7 @@ void BEZIER_POLY::GetPoly( std::vector<VECTOR2D>& aOutput, double aMinSegLen )
 
     if( !degenerated )
     {
-        for( int ii = 1; ii < CURVE_POINTS; ii++ )
+        for( int ii = 1; ii < aMaxSegCount; ii++ )
         {
             double t = dt * ii;
             double omt  = 1.0 - t;
