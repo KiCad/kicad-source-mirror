@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-29 10:15+0100\n"
-"PO-Revision-Date: 2021-12-30 10:17+0100\n"
+"POT-Creation-Date: 2021-12-31 10:39+0100\n"
+"PO-Revision-Date: 2021-12-31 10:43+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -2385,7 +2385,7 @@ msgstr "Portrait"
 msgid "Landscape"
 msgstr "Paysage"
 
-#: common/dialogs/dialog_page_settings.cpp:792
+#: common/dialogs/dialog_page_settings.cpp:793
 msgid "Select Drawing Sheet File"
 msgstr "Sélection Feuille de Dessin"
 
@@ -2915,11 +2915,11 @@ msgstr ""
 "Sur certaines plateformes, la valeur automatique est incorrecte et doit être "
 "réglée manuellement."
 
-#: common/dialogs/panel_common_settings.cpp:458
+#: common/dialogs/panel_common_settings.cpp:460
 msgid "Executable files ("
 msgstr "Fichiers exécutables ("
 
-#: common/dialogs/panel_common_settings.cpp:463
+#: common/dialogs/panel_common_settings.cpp:465
 msgid "Select Preferred PDF Viewer"
 msgstr "Sélection Visualisateur PDF Préféré"
 
@@ -3513,8 +3513,8 @@ msgstr "La net class par défaut est obligatoire."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:41
 #: common/dialogs/panel_setup_netclasses_base.cpp:215
-#: eeschema/sch_field.cpp:757 eeschema/sch_text.cpp:649
-#: eeschema/sch_text.cpp:1334 pcbnew/pad.cpp:874 pcbnew/pcb_track.cpp:790
+#: eeschema/sch_field.cpp:757 eeschema/sch_text.cpp:652
+#: eeschema/sch_text.cpp:1337 pcbnew/pad.cpp:874 pcbnew/pcb_track.cpp:790
 #: pcbnew/zone.cpp:567
 msgid "Net Class"
 msgstr "Classe d'Equipot"
@@ -3678,7 +3678,7 @@ msgid "Info:"
 msgstr "Info:"
 
 #: common/dialogs/wx_html_report_panel.cpp:359
-#: eeschema/dialogs/dialog_erc.cpp:746 pcbnew/dialogs/dialog_drc.cpp:749
+#: eeschema/dialogs/dialog_erc.cpp:753 pcbnew/dialogs/dialog_drc.cpp:749
 msgid "Save Report to File"
 msgstr "Sauver Fichier Rapport sous"
 
@@ -3760,7 +3760,7 @@ msgstr "La feuille de dessin '%s' n'a pas été complètement  lue."
 #: common/drawing_sheet/ds_data_item.cpp:370
 #: common/drawing_sheet/ds_draw_item.cpp:122 common/eda_item.cpp:318
 #: common/eda_item.cpp:319 common/eda_item.cpp:348 common/eda_item.cpp:369
-#: common/eda_text.cpp:747 eeschema/dialogs/panel_setup_formatting_base.cpp:47
+#: common/eda_text.cpp:762 eeschema/dialogs/panel_setup_formatting_base.cpp:47
 #: eeschema/lib_field.cpp:461 eeschema/lib_text.cpp:349 eeschema/lib_text.h:55
 #: eeschema/sch_field.cpp:601
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:40
@@ -4225,21 +4225,21 @@ msgstr "Bitmap"
 msgid "Net Label"
 msgstr "Label de Net"
 
-#: common/eda_item.cpp:350 eeschema/sch_text.cpp:1172
-#: eeschema/sch_text.cpp:1471
+#: common/eda_item.cpp:350 eeschema/sch_text.cpp:1175
+#: eeschema/sch_text.cpp:1474
 msgid "Net Class Flag"
 msgstr "Indicateur de Classe de Net"
 
-#: common/eda_item.cpp:351 eeschema/sch_text.cpp:1173
+#: common/eda_item.cpp:351 eeschema/sch_text.cpp:1176
 msgid "Global Label"
 msgstr "Label Global"
 
-#: common/eda_item.cpp:352 eeschema/sch_text.cpp:1174
+#: common/eda_item.cpp:352 eeschema/sch_text.cpp:1177
 msgid "Hierarchical Label"
 msgstr "Label Hiérarchique"
 
 #: common/eda_item.cpp:353 eeschema/dialogs/dialog_symbol_fields_table.cpp:687
-#: eeschema/lib_field.cpp:458 eeschema/lib_field.h:79 eeschema/sch_text.cpp:650
+#: eeschema/lib_field.cpp:458 eeschema/lib_field.h:79 eeschema/sch_text.cpp:653
 msgid "Field"
 msgstr "Champ"
 
@@ -4345,7 +4345,7 @@ msgstr "Longueur"
 msgid "Points"
 msgstr "Points"
 
-#: common/eda_shape.cpp:584 common/eda_text.cpp:764 eeschema/sch_bitmap.cpp:203
+#: common/eda_shape.cpp:584 common/eda_text.cpp:779 eeschema/sch_bitmap.cpp:203
 #: pcbnew/dialogs/dialog_board_statistics.cpp:677
 #: pcbnew/dialogs/dialog_board_statistics.cpp:687
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
@@ -4359,7 +4359,7 @@ msgstr "Points"
 msgid "Width"
 msgstr "Largeur"
 
-#: common/eda_shape.cpp:587 common/eda_text.cpp:768 eeschema/sch_bitmap.cpp:204
+#: common/eda_shape.cpp:587 common/eda_text.cpp:783 eeschema/sch_bitmap.cpp:204
 #: pcbnew/dialogs/dialog_board_statistics.cpp:679
 #: pcbnew/dialogs/dialog_board_statistics.cpp:688
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
@@ -4417,7 +4417,7 @@ msgstr "Fin Y"
 msgid "Line Width"
 msgstr "Épaisseur Ligne"
 
-#: common/eda_text.cpp:513 eeschema/sch_text.cpp:577 eeschema/sch_text.cpp:1186
+#: common/eda_text.cpp:513 eeschema/sch_text.cpp:577 eeschema/sch_text.cpp:1189
 #: eeschema/symbol_editor/symbol_editor.cpp:1234
 #: gerbview/gerber_file_image.cpp:350 gerbview/gerber_file_image.cpp:354
 #: gerbview/gerber_file_image.cpp:357
@@ -4426,7 +4426,7 @@ msgstr "Épaisseur Ligne"
 msgid "Normal"
 msgstr "Normal"
 
-#: common/eda_text.cpp:514 common/eda_text.cpp:753
+#: common/eda_text.cpp:514 common/eda_text.cpp:768
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:205
 #: eeschema/dialogs/dialog_label_properties_base.cpp:87
 #: eeschema/dialogs/dialog_label_properties_base.cpp:203
@@ -4436,7 +4436,7 @@ msgstr "Normal"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/dialog_text_properties_base.cpp:89
 #: eeschema/fields_grid_table.cpp:260 eeschema/sch_text.cpp:577
-#: eeschema/sch_text.cpp:1186
+#: eeschema/sch_text.cpp:1189
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:114
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:298
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:58
@@ -4449,7 +4449,7 @@ msgstr "Normal"
 msgid "Italic"
 msgstr "Italique"
 
-#: common/eda_text.cpp:515 common/eda_text.cpp:756
+#: common/eda_text.cpp:515 common/eda_text.cpp:771
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:183
 #: eeschema/dialogs/dialog_label_properties_base.cpp:88
 #: eeschema/dialogs/dialog_label_properties_base.cpp:198
@@ -4459,7 +4459,7 @@ msgstr "Italique"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:58
 #: eeschema/dialogs/dialog_text_properties_base.cpp:84
 #: eeschema/fields_grid_table.cpp:261 eeschema/sch_text.cpp:577
-#: eeschema/sch_text.cpp:1186
+#: eeschema/sch_text.cpp:1189
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:98
 msgid "Bold"
 msgstr "Gras"
@@ -4468,7 +4468,7 @@ msgstr "Gras"
 msgid "Bold+Italic"
 msgstr "Gras+Italique"
 
-#: common/eda_text.cpp:737
+#: common/eda_text.cpp:752
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:193
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
 #: eeschema/fields_grid_table.cpp:184 eeschema/fields_grid_table.cpp:469
@@ -4480,7 +4480,7 @@ msgstr "Gras+Italique"
 msgid "Left"
 msgstr "Gauche"
 
-#: common/eda_text.cpp:738 common/eda_text.cpp:742 common/tool/actions.cpp:326
+#: common/eda_text.cpp:753 common/eda_text.cpp:757 common/tool/actions.cpp:326
 #: common/widgets/mathplot.cpp:1665
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
@@ -4499,7 +4499,7 @@ msgstr "Gauche"
 msgid "Center"
 msgstr "Centrer"
 
-#: common/eda_text.cpp:739
+#: common/eda_text.cpp:754
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:193
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:233
 #: eeschema/fields_grid_table.cpp:186 eeschema/fields_grid_table.cpp:471
@@ -4511,7 +4511,7 @@ msgstr "Centrer"
 msgid "Right"
 msgstr "Droite"
 
-#: common/eda_text.cpp:741
+#: common/eda_text.cpp:756
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: eeschema/fields_grid_table.cpp:176 eeschema/fields_grid_table.cpp:479
 #: eeschema/fields_grid_table.cpp:589 eeschema/lib_field.cpp:481
@@ -4520,7 +4520,7 @@ msgstr "Droite"
 msgid "Top"
 msgstr "Dessus"
 
-#: common/eda_text.cpp:743
+#: common/eda_text.cpp:758
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:255
 #: eeschema/fields_grid_table.cpp:178 eeschema/fields_grid_table.cpp:481
 #: eeschema/fields_grid_table.cpp:593 eeschema/lib_field.cpp:483
@@ -4529,7 +4529,7 @@ msgstr "Dessus"
 msgid "Bottom"
 msgstr "Dessous"
 
-#: common/eda_text.cpp:749
+#: common/eda_text.cpp:764
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:90
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:57
@@ -4538,13 +4538,13 @@ msgstr "Dessous"
 msgid "Thickness"
 msgstr "Épaisseur"
 
-#: common/eda_text.cpp:758
+#: common/eda_text.cpp:773
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:306
 #: pcbnew/microwave/microwave_polygon.cpp:128
 msgid "Mirrored"
 msgstr "Miroir"
 
-#: common/eda_text.cpp:761 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:79
+#: common/eda_text.cpp:776 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:79
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:55
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:84
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
@@ -4555,11 +4555,11 @@ msgstr "Miroir"
 msgid "Visible"
 msgstr "Visible"
 
-#: common/eda_text.cpp:773
+#: common/eda_text.cpp:788
 msgid "Horizontal Justification"
 msgstr "Justification Horizontale"
 
-#: common/eda_text.cpp:777
+#: common/eda_text.cpp:792
 msgid "Vertical Justification"
 msgstr "Justification Verticale"
 
@@ -5640,7 +5640,7 @@ msgstr "Extraction fichier '%s'."
 msgid "Error extracting file!"
 msgstr "Erreur en extrayant le fichier!"
 
-#: common/project/project_archiver.cpp:159 eeschema/dialogs/dialog_erc.cpp:770
+#: common/project/project_archiver.cpp:159 eeschema/dialogs/dialog_erc.cpp:777
 #: eeschema/dialogs/dialog_plot_schematic.cpp:513
 #: eeschema/dialogs/dialog_plot_schematic.cpp:684
 #: eeschema/dialogs/dialog_plot_schematic.cpp:834
@@ -5829,7 +5829,7 @@ msgid "Plot..."
 msgstr "Tracer..."
 
 #: common/tool/actions.cpp:108 pcbnew/dialogs/dialog_plot.cpp:66
-#: pcbnew/dialogs/dialog_plot_base.h:153
+#: pcbnew/dialogs/dialog_plot_base.h:152
 msgid "Plot"
 msgstr "Tracer"
 
@@ -8610,17 +8610,17 @@ msgstr "Carte des Conflits de Pins"
 msgid "Violation Severity"
 msgstr "Gravité de la Violation"
 
-#: eeschema/dialogs/dialog_erc.cpp:765 pcbnew/dialogs/dialog_gendrill.cpp:472
+#: eeschema/dialogs/dialog_erc.cpp:772 pcbnew/dialogs/dialog_gendrill.cpp:472
 #, c-format
 msgid "Report file '%s' created."
 msgstr "Fichier rapport '%s' créé."
 
-#: eeschema/dialogs/dialog_erc.cpp:783
+#: eeschema/dialogs/dialog_erc.cpp:790
 #, c-format
 msgid "ERC report (%s, Encoding UTF8)\n"
 msgstr "Rapport ERC (%s, Encodage UTF8)\n"
 
-#: eeschema/dialogs/dialog_erc.cpp:798
+#: eeschema/dialogs/dialog_erc.cpp:805
 #, c-format
 msgid ""
 "\n"
@@ -8629,7 +8629,7 @@ msgstr ""
 "\n"
 "***** Feuille %s\n"
 
-#: eeschema/dialogs/dialog_erc.cpp:822
+#: eeschema/dialogs/dialog_erc.cpp:829
 #, c-format
 msgid ""
 "\n"
@@ -9013,7 +9013,7 @@ msgstr "Alignement V"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:59
 #: eeschema/fields_grid_table.cpp:262 eeschema/lib_field.cpp:467
 #: eeschema/lib_text.cpp:353 eeschema/sch_field.cpp:607
-#: eeschema/sch_text.cpp:581 eeschema/sch_text.cpp:1190
+#: eeschema/sch_text.cpp:581 eeschema/sch_text.cpp:1193
 msgid "Text Size"
 msgstr "Taille du Texte"
 
@@ -9619,7 +9619,7 @@ msgstr "Texte vertical"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:145
 #: eeschema/dialogs/dialog_text_properties_base.cpp:109
-#: eeschema/sch_text.cpp:588 eeschema/sch_text.cpp:1197
+#: eeschema/sch_text.cpp:588 eeschema/sch_text.cpp:1200
 msgid "Align left"
 msgstr "Aligner à gauche"
 
@@ -9629,13 +9629,13 @@ msgstr "Alignement au centre horizontal"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:155
 #: eeschema/dialogs/dialog_text_properties_base.cpp:99
-#: eeschema/sch_text.cpp:586 eeschema/sch_text.cpp:1195
+#: eeschema/sch_text.cpp:586 eeschema/sch_text.cpp:1198
 msgid "Align right"
 msgstr "Aligner à droite"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:165
 #: eeschema/dialogs/dialog_text_properties_base.cpp:114
-#: eeschema/sch_text.cpp:589 eeschema/sch_text.cpp:1198
+#: eeschema/sch_text.cpp:589 eeschema/sch_text.cpp:1201
 msgid "Align top"
 msgstr "Aligner en haut"
 
@@ -9645,7 +9645,7 @@ msgstr "Alignement au centre vertical"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:175
 #: eeschema/dialogs/dialog_text_properties_base.cpp:104
-#: eeschema/sch_text.cpp:587 eeschema/sch_text.cpp:1196
+#: eeschema/sch_text.cpp:587 eeschema/sch_text.cpp:1199
 msgid "Align bottom"
 msgstr "Aligner en bas"
 
@@ -10248,7 +10248,7 @@ msgstr "Ajustement au contenu, unités utilisateur"
 msgid "Pen width:"
 msgstr "Diamètre plume:"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.h:86
+#: eeschema/dialogs/dialog_plot_schematic_base.h:85
 msgid "Plot Schematic Options"
 msgstr "Options de Tracé Schématique"
 
@@ -10705,7 +10705,7 @@ msgstr "Chemin hiérarchique: "
 #: eeschema/lib_field.cpp:465 eeschema/lib_pin.cpp:1047
 #: eeschema/lib_pin.cpp:1049 eeschema/lib_text.cpp:351
 #: eeschema/sch_field.cpp:605 eeschema/sch_pin.cpp:215
-#: eeschema/sch_text.cpp:579 eeschema/sch_text.cpp:1188
+#: eeschema/sch_text.cpp:579 eeschema/sch_text.cpp:1191
 msgid "Style"
 msgstr "Style"
 
@@ -11073,7 +11073,7 @@ msgstr "Sous-circuit"
 msgid "Code Model"
 msgstr "Modèle de Code"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:446
+#: eeschema/dialogs/dialog_spice_model.cpp:452
 msgid ""
 "Symbol pin numbering don't always match the required SPICE pin order\n"
 "Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
@@ -11084,25 +11084,25 @@ msgstr ""
 "Vérifiez le symbole et utiliser la \"Séquence des nœuds alternative\" pour "
 "réorganiser les broches, si nécessaire"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:455
+#: eeschema/dialogs/dialog_spice_model.cpp:461
 msgid "For a Diode, pin order is anode, cathode"
 msgstr "Pour une diode, l’ordre des broches est anode, cathode"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:459
+#: eeschema/dialogs/dialog_spice_model.cpp:465
 msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
 msgstr ""
 "Pour un BJT, l’ordre des broches est collecteur, base, émetteur, substrat "
 "(facultatif)"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:463
+#: eeschema/dialogs/dialog_spice_model.cpp:469
 msgid "For a MOSFET, pin order is drain, gate, source"
 msgstr "Pour un MOSFET, l’ordre des broches est drain, grille, source"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:467
+#: eeschema/dialogs/dialog_spice_model.cpp:473
 msgid "For a JFET, pin order is drain, gate, source"
 msgstr "Pour un JFET, l’ordre des broches est drain, grille, source"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:800
+#: eeschema/dialogs/dialog_spice_model.cpp:806
 #, c-format
 msgid ""
 "You need to specify at least the first %d parameters for the transient source"
@@ -11110,45 +11110,45 @@ msgstr ""
 "Vous devez spécifier au moins les %d premiers paramètres pour la source "
 "transitoire"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:809
+#: eeschema/dialogs/dialog_spice_model.cpp:815
 msgid ""
 "You cannot leave interleaved empty fields when defining a transient source"
 msgstr ""
 "Vous ne pouvez pas laisser de champs vides entrelacés lors de la définition "
 "d’une source transitoire"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1026
+#: eeschema/dialogs/dialog_spice_model.cpp:1032
 msgid "Select library"
 msgstr "Sélection Librairie"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1094
+#: eeschema/dialogs/dialog_spice_model.cpp:1100
 #: eeschema/dialogs/dialog_spice_model_base.cpp:885
 msgid "Range:"
 msgstr "Intervalle:"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1095
-#: eeschema/dialogs/dialog_spice_model.cpp:1107
+#: eeschema/dialogs/dialog_spice_model.cpp:1101
 #: eeschema/dialogs/dialog_spice_model.cpp:1113
+#: eeschema/dialogs/dialog_spice_model.cpp:1119
 #: eeschema/dialogs/dialog_spice_model_base.cpp:675
 #: eeschema/dialogs/dialog_spice_model_base.cpp:779
 #: eeschema/dialogs/dialog_spice_model_base.cpp:895
 msgid "Offset:"
 msgstr "Décalage:"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1100
+#: eeschema/dialogs/dialog_spice_model.cpp:1106
 msgid "Standard deviation:"
 msgstr "Écart type:"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1101
-#: eeschema/dialogs/dialog_spice_model.cpp:1106
+#: eeschema/dialogs/dialog_spice_model.cpp:1107
+#: eeschema/dialogs/dialog_spice_model.cpp:1112
 msgid "Mean:"
 msgstr "Moyenne:"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1112
+#: eeschema/dialogs/dialog_spice_model.cpp:1118
 msgid "Lambda:"
 msgstr "Lambda:"
 
-#: eeschema/dialogs/dialog_spice_model.cpp:1117
+#: eeschema/dialogs/dialog_spice_model.cpp:1123
 msgid "type of random generator for source is invalid"
 msgstr "type de générateur aléatoire pour la source invalide"
 
@@ -13282,7 +13282,7 @@ msgid "V Justification"
 msgstr "Justification V"
 
 #: eeschema/lib_item.cpp:47 eeschema/lib_pin.cpp:1046 eeschema/sch_pin.cpp:194
-#: eeschema/sch_pin.cpp:214 eeschema/sch_text.cpp:1184
+#: eeschema/sch_pin.cpp:214 eeschema/sch_text.cpp:1187
 #: eeschema/symbol_editor/symbol_editor.cpp:1243
 #: gerbview/gerber_draw_item.cpp:674
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:37
@@ -13627,7 +13627,7 @@ msgid "Bus Entry Type"
 msgstr "Type Entrée de Bus"
 
 #: eeschema/sch_bus_entry.cpp:521 eeschema/sch_line.cpp:930
-#: eeschema/sch_text.cpp:1221
+#: eeschema/sch_text.cpp:1224
 msgid "Assigned Netclass"
 msgstr "NetClasses Assignées"
 
@@ -13736,8 +13736,8 @@ msgstr "Accéder à la page %s (%s)"
 msgid "Back to Previous Selected Sheet"
 msgstr "Revenir à la Feuille Sélectionnée Précédente"
 
-#: eeschema/sch_field.cpp:759 eeschema/sch_text.cpp:648
-#: eeschema/sch_text.cpp:1484
+#: eeschema/sch_field.cpp:759 eeschema/sch_text.cpp:651
+#: eeschema/sch_text.cpp:1487
 msgid "Sheet References"
 msgstr "Références de Feuilles"
 
@@ -14161,7 +14161,7 @@ msgstr ""
 "Le symbole '%s' fait référence à l'ID de feuille '%s' qui n’existe pas dans "
 "la conception. Le symbole n’a pas été chargé."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1890
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1891
 #, c-format
 msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
@@ -14170,7 +14170,7 @@ msgstr ""
 "Net %s référence un élément  inconnu %s. Le net n’a pas été correctement "
 "chargé et peut nécessiter une correction manuelle."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2184
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2185
 #, c-format
 msgid ""
 "The block ID %s (Block name: '%s') is drawn on sheet '%s' but is not linked "
@@ -14182,7 +14182,7 @@ msgstr ""
 "symboles de feuille soient associés à une feuille, de sorte que le bloc n’a "
 "pas été chargé."
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2209
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:2210
 #, c-format
 msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
@@ -14513,38 +14513,38 @@ msgstr "3 états"
 msgid "Graphic Text"
 msgstr "Texte Graphique"
 
-#: eeschema/sch_text.cpp:577 eeschema/sch_text.cpp:1186
+#: eeschema/sch_text.cpp:577 eeschema/sch_text.cpp:1189
 msgid "Bold Italic"
 msgstr "Gras Italique"
 
-#: eeschema/sch_text.cpp:593 eeschema/sch_text.cpp:1202
+#: eeschema/sch_text.cpp:593 eeschema/sch_text.cpp:1205
 msgid "Justification"
 msgstr "Justification"
 
-#: eeschema/sch_text.cpp:1171
+#: eeschema/sch_text.cpp:1174
 msgid "Label"
 msgstr "Label"
 
-#: eeschema/sch_text.cpp:1175
+#: eeschema/sch_text.cpp:1178
 msgid "Hierarchical Sheet Pin"
 msgstr "Pin de Hiérarchie"
 
-#: eeschema/sch_text.cpp:1315
+#: eeschema/sch_text.cpp:1318
 #, c-format
 msgid "Label '%s'"
 msgstr "Label '%s'"
 
-#: eeschema/sch_text.cpp:1736
+#: eeschema/sch_text.cpp:1739
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Label Global '%s'"
 
-#: eeschema/sch_text.cpp:1868
+#: eeschema/sch_text.cpp:1871
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Label Hiérarchique '%s'"
 
-#: eeschema/sch_text.cpp:1884 pcbnew/dialogs/panel_setup_rules.cpp:567
+#: eeschema/sch_text.cpp:1887 pcbnew/dialogs/panel_setup_rules.cpp:567
 msgid "Syntax Help"
 msgstr "Aide Syntaxe"
 
@@ -15095,7 +15095,7 @@ msgstr "Paramètres Sim"
 msgid "Simulation parameters and settings"
 msgstr "Paramètres et réglages de simulation"
 
-#: eeschema/sim/sim_plot_frame.cpp:358 eeschema/sim/sim_plot_frame_base.h:127
+#: eeschema/sim/sim_plot_frame.cpp:358 eeschema/sim/sim_plot_frame_base.h:126
 msgid "Spice Simulator"
 msgstr "Simulateur Spice"
 
@@ -16979,7 +16979,7 @@ msgid "Save a copy of the current sheet to another location or name"
 msgstr ""
 "Enregistrer une copie de la feuille active dans un autre emplacement ou nom"
 
-#: eeschema/tools/ee_inspection_tool.cpp:266
+#: eeschema/tools/ee_inspection_tool.cpp:264
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16988,7 +16988,7 @@ msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%.3f, %.3f)</b> en conflit avec "
 "pin %s%s en position <b>(%.3f, %.3f)</b> de converti."
 
-#: eeschema/tools/ee_inspection_tool.cpp:280
+#: eeschema/tools/ee_inspection_tool.cpp:278
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
@@ -16997,7 +16997,7 @@ msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%.3f, %.3f)</b> en conflit avec "
 "pin %s %s en position <b>(%.3f, %.3f)</b> unité %c et %c de converti."
 
-#: eeschema/tools/ee_inspection_tool.cpp:299
+#: eeschema/tools/ee_inspection_tool.cpp:297
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -17006,7 +17006,7 @@ msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin %s"
 "%s en position <b>(%s %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:312
+#: eeschema/tools/ee_inspection_tool.cpp:310
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
@@ -17015,7 +17015,7 @@ msgstr ""
 "<b>Pin dupliquée %s</b> %s en position <b>(%s, %s)</b> en conflit avec pin %s"
 "%s en position <b>(%s, %s)</b> unité %c et %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:350
+#: eeschema/tools/ee_inspection_tool.cpp:348
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
@@ -17023,7 +17023,7 @@ msgstr ""
 "Info: <b>Pin power invisible '%s' </b>%s en position <b>(%s, %s)</b> de "
 "converti."
 
-#: eeschema/tools/ee_inspection_tool.cpp:359
+#: eeschema/tools/ee_inspection_tool.cpp:357
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
@@ -17032,12 +17032,12 @@ msgstr ""
 "Info: <b>Pin power invisible '%s' </b>%s en position <b>(%s, %s)</b> dans "
 "unité %c de converti."
 
-#: eeschema/tools/ee_inspection_tool.cpp:372
+#: eeschema/tools/ee_inspection_tool.cpp:370
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "Info: <b>Pin power invisible '%s' </b>%s en position <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:380
+#: eeschema/tools/ee_inspection_tool.cpp:378
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
@@ -17045,20 +17045,20 @@ msgstr ""
 "Info: <b>Pin power invisible '%s' </b>%s en position <b>(%s, %s)</b> dans "
 "unité %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:391
+#: eeschema/tools/ee_inspection_tool.cpp:389
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
 "(Les pins d’alimentation invisibles donneront leurs noms à toutes les "
 "équipotentielles connectées.)"
 
-#: eeschema/tools/ee_inspection_tool.cpp:404
+#: eeschema/tools/ee_inspection_tool.cpp:402
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
 "<b>Pin %s hors grille </b> '%s' en position <b>(%s, %s)</b> de converti."
 
-#: eeschema/tools/ee_inspection_tool.cpp:413
+#: eeschema/tools/ee_inspection_tool.cpp:411
 #, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
@@ -17067,36 +17067,36 @@ msgstr ""
 "<b>Pin %s hors grille </b> '%s' en position <b>(%s, %s)</b> dans unité %c de "
 "converti."
 
-#: eeschema/tools/ee_inspection_tool.cpp:426
+#: eeschema/tools/ee_inspection_tool.cpp:424
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr "<b>Pin %s hors grille </b> '%s' en position <b>(%s, %s)</b>."
 
-#: eeschema/tools/ee_inspection_tool.cpp:434
+#: eeschema/tools/ee_inspection_tool.cpp:432
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
 "<b>Pin %s hors grille </b> '%s' en position <b>(%s, %s)</b> dans symbole %c."
 
-#: eeschema/tools/ee_inspection_tool.cpp:451
+#: eeschema/tools/ee_inspection_tool.cpp:449
 msgid "No symbol issues found."
 msgstr "Aucun problème de symbole trouvé."
 
-#: eeschema/tools/ee_inspection_tool.cpp:460
+#: eeschema/tools/ee_inspection_tool.cpp:458
 msgid "Symbol Warnings"
 msgstr "Avertissements de Symboles"
 
-#: eeschema/tools/ee_inspection_tool.cpp:526
+#: eeschema/tools/ee_inspection_tool.cpp:524
 msgid "No datasheet defined."
 msgstr "Aucune fiche de données n’a été définie."
 
-#: eeschema/tools/ee_selection_tool.cpp:1597
+#: eeschema/tools/ee_selection_tool.cpp:1607
 #: pagelayout_editor/tools/pl_selection_tool.cpp:618
 #: pcbnew/tools/pcb_selection_tool.cpp:1883
 msgid "Select &All\tA"
 msgstr "Tout Sélectionner\tT"
 
-#: eeschema/tools/ee_selection_tool.cpp:1600
+#: eeschema/tools/ee_selection_tool.cpp:1610
 #: pcbnew/tools/pcb_selection_tool.cpp:1886
 msgid "&Expand Selection\tE"
 msgstr "&Expandre Sélection\tE"
@@ -21087,11 +21087,11 @@ msgid ""
 "The formula, from IPC 2221, is\n"
 "<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
 "H)<sup>0.725</sup>___</center>\n"
-"where:\n"
-"___I___ is maximum current in A\n"
-"___&Delta;T___ is temperature rise above ambient in &deg;C\n"
-"___W___ is width in mils\n"
-"___H___ is thickness (height) in mils\n"
+"where:<br>\n"
+"___I___ is maximum current in A<br>\n"
+"___&Delta;T___ is temperature rise above ambient in &deg;C<br>\n"
+"___W___ is width in mils<br>\n"
+"___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
 "Si vous spécifiez le courant maximum, les largeurs de piste  seront "
@@ -21110,13 +21110,13 @@ msgstr ""
 "La formule, tirée de l'IPC 2221, est\n"
 "<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
 "H)<sup>0.725</sup>___</center>\n"
-"où:  \n"
-"___I___ = courant maximum en ampères  \n"
+"où:<br>\n"
+"___I___ = courant maximum en ampères <br>\n"
 "___&Delta;T___ = élévation de la température au-dessus de l'ambiante en "
-"°C  \n"
-"___W___ est la largeur en mils  \n"
-"___H___ iest l'épaisseur (hauteur) en mils  \n"
-"___K___ = 0,024 pour les piste internes ou 0,048 pour les pistes externes  \n"
+"°C<br>\n"
+"___W___ est la largeur en mils<br>\n"
+"___H___ iest l'épaisseur (hauteur) en mils<br>\n"
+"___K___ = 0,024 pour les piste internes ou 0,048 pour les pistes externes\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -30002,9 +30002,8 @@ msgid "Signal Integrity"
 msgstr "Intégrité de Signal"
 
 #: pcbnew/drc/drc_item.cpp:48
-#, fuzzy
 msgid "Readability"
-msgstr "Lecture Seule"
+msgstr "Lisibilité"
 
 #: pcbnew/drc/drc_item.cpp:52
 msgid "Missing connection between items"
@@ -30143,9 +30142,8 @@ msgid "Assertion failure"
 msgstr "Assertion en échec"
 
 #: pcbnew/drc/drc_item.cpp:192
-#, fuzzy
 msgid "Copper sliver"
-msgstr "Couches cuivre:"
+msgstr "Pointes sur cuivre:"
 
 #: pcbnew/drc/drc_item.cpp:196
 msgid "Solder mask aperture bridges items with different nets"
@@ -30396,7 +30394,7 @@ msgstr "Vérification des zones..."
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:755
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:801
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:225
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:272
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:275
 #, c-format
 msgid "(%s clearance %s; actual %s)"
 msgstr "(%s isolation %s; réel %s)"
@@ -30502,32 +30500,32 @@ msgstr "Chargement table des librairie d'empreintes..."
 msgid "Checking board footprints against library..."
 msgstr "Vérification des empreintes du PCB contre librairies..."
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:119
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:113
 #, c-format
 msgid "(%s min length: %s; actual: %s)"
 msgstr "(%s longueur min: %s; réelle: %s)"
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:126
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:120
 #, c-format
 msgid "(%s max length: %s; actual: %s)"
 msgstr "(%s longueur max: %s; réelle: %s)"
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:162
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:156
 #, c-format
 msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
 msgstr ""
 "(%s biais maximal: %s; réel: %s; longueur net moyenne : %s; réelle : %s)"
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:192
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:186
 #, c-format
 msgid "(%s max count: %d; actual: %d)"
 msgstr "(%s compte max: %d; réel: %d)"
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:224
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:218
 msgid "Gathering length-constrained connections..."
 msgstr "Collecte des connexions avec contrainte de longueur..."
 
-#: pcbnew/drc/drc_test_provider_matched_length.cpp:321
+#: pcbnew/drc/drc_test_provider_matched_length.cpp:323
 msgid "<unconstrained>"
 msgstr "<non contraint>"
 
@@ -30612,33 +30610,33 @@ msgstr ""
 msgid "Running sliver detection on copper layers..."
 msgstr "Détection des angles vifs sur des couches de cuivre..."
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:52
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:55
 msgid "board setup solder mask min width"
 msgstr "configuration largeur min masque de soudure"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:380
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:445
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:383
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:448
 msgid "Front solder mask aperture bridges items with different nets"
 msgstr ""
 "L’ouverture du masque de soudure de dessus relie des éléments de différents "
 "nets"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:385
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:450
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:388
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:453
 msgid "Rear solder mask aperture bridges items with different nets"
 msgstr ""
 "L’ouverture du masque de soudure de dessous relie des éléments de différents "
 "nets"
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:553
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:556
 msgid "Building solder mask..."
 msgstr "Construction du masque de soudure..."
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:558
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:561
 msgid "Checking solder mask to silk clearance..."
 msgstr "Vérification marge masque de soudure à sérigraphie..."
 
-#: pcbnew/drc/drc_test_provider_solder_mask.cpp:563
+#: pcbnew/drc/drc_test_provider_solder_mask.cpp:566
 msgid "Checking solder mask web integrity..."
 msgstr "Vérification de l’intégrité du masque de soudure..."
 
@@ -30691,7 +30689,7 @@ msgstr "Vérification freins thermiques..."
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:164
 #, c-format
 msgid "(%s min spoke count %d; actual %d)"
-msgstr "(%s compte min rayons freins thermiques: %d; réel: %d)"
+msgstr "(%s nbre min rayons freins thermiques: %d; réel: %d)"
 
 #: pcbnew/edit_zone_helpers.cpp:86 pcbnew/edit_zone_helpers.cpp:151
 msgid "Modify zone properties"
