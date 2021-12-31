@@ -249,7 +249,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     m_BoardSideCtrl->SetSelection( (m_footprint->GetLayer() == B_Cu) ? 1 : 0 );
 
-    m_orientation.SetDoubleValue( m_footprint->GetOrientation() / 10.0 );
+    m_orientation.SetDoubleValue( m_footprint->GetOrientation() );
 
     m_cbLocked->SetValue( m_footprint->IsLocked() );
     m_cbLocked->SetToolTip( _( "Locked footprints cannot be freely moved and oriented on the "
@@ -444,7 +444,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
     m_footprint->SetAttributes( attributes );
 
-    double orient = m_orientation.GetDoubleValue() * 10.0;
+    double orient = m_orientation.GetDoubleValue();
 
     if( m_footprint->GetOrientation() != orient )
         m_footprint->Rotate( m_footprint->GetPosition(), orient - m_footprint->GetOrientation() );
