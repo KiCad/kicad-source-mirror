@@ -454,22 +454,13 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createSwatches()
         createSwatch( layer, name );
     }
 
-    // Give a minimal width to m_colorsListWindow, in order to always having
-    // a full row shown
-    int min_width = m_colorsGridSizer->GetMinSize().x;
-    const int margin = 20;  // A margin around the sizer
-    m_colorsListWindow->SetMinSize( wxSize( min_width + margin, -1 ) );
-
-    m_colorsMainSizer->Insert( 0, 10, 0, 0, wxEXPAND, 5 );
-
     m_preview = FOOTPRINT_PREVIEW_PANEL::New( nullptr, this );
     m_preview->GetGAL()->SetAxesEnabled( false );
 
-    m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );
-    m_colorsMainSizer->Add( m_preview, 1, wxALL | wxEXPAND, 5 );
-    m_colorsMainSizer->Add( 10, 0, 0, wxEXPAND, 5 );
+    m_previewPanelSizer->Add( m_preview, 1, wxALL | wxEXPAND, 5 );
 
     createPreviewItems();
+    Layout();
     updatePreview();
     zoomFitPreview();
 }

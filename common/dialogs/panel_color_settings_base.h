@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,10 +19,10 @@
 #include <wx/settings.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/scrolwin.h>
@@ -46,8 +46,9 @@ class PANEL_COLOR_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxBoxSizer* m_colorsMainSizer;
 		wxScrolledWindow* m_colorsListWindow;
 		wxFlexGridSizer* m_colorsGridSizer;
+		wxBoxSizer* m_previewPanelSizer;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnThemeChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLeftDownTheme( wxMouseEvent& event ) { event.Skip(); }
@@ -58,7 +59,8 @@ class PANEL_COLOR_SETTINGS_BASE : public RESETTABLE_PANEL
 	public:
 		wxCheckBox* m_optOverrideColors;
 
-		PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 826,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_COLOR_SETTINGS_BASE();
 
 };

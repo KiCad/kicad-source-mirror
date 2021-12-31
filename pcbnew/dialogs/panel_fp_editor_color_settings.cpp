@@ -125,4 +125,6 @@ void PANEL_FP_EDITOR_COLOR_SETTINGS::createSwatches()
 
     for( GAL_LAYER_ID layer : galLayers )
         createSwatch( layer, LayerName( layer ) );
+
+    Layout();
 }

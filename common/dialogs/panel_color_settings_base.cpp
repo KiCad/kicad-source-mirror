@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,14 +18,14 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Theme:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
-	bControlSizer->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bControlSizer->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_cbThemeChoices;
 	m_cbTheme = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbThemeChoices, 0 );
 	m_cbTheme->SetSelection( 0 );
 	m_cbTheme->SetMinSize( wxSize( 150,-1 ) );
 
-	bControlSizer->Add( m_cbTheme, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bControlSizer->Add( m_cbTheme, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 
 
 	bControlSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -33,7 +33,7 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_optOverrideColors = new wxCheckBox( this, wxID_ANY, _("Override individual item colors"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_optOverrideColors->SetToolTip( _("Show all items in their default color even if they have specific colors set in their properties.") );
 
-	bControlSizer->Add( m_optOverrideColors, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bControlSizer->Add( m_optOverrideColors, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	bControlSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -41,7 +41,7 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_btnOpenFolder = new wxButton( this, wxID_ANY, _("Open Theme Folder"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnOpenFolder->SetToolTip( _("Open the folder containing color themes") );
 
-	bControlSizer->Add( m_btnOpenFolder, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bControlSizer->Add( m_btnOpenFolder, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	m_mainSizer->Add( bControlSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -74,12 +74,18 @@ PANEL_COLOR_SETTINGS_BASE::PANEL_COLOR_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	m_colorsMainSizer->Add( bottomMargin, 0, wxEXPAND|wxBOTTOM, 3 );
 
+	m_previewPanelSizer = new wxBoxSizer( wxVERTICAL );
+
+
+	m_colorsMainSizer->Add( m_previewPanelSizer, 1, wxEXPAND, 5 );
+
 
 	m_mainSizer->Add( m_colorsMainSizer, 1, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( m_mainSizer );
 	this->Layout();
+	m_mainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_COLOR_SETTINGS_BASE::OnSize ) );
