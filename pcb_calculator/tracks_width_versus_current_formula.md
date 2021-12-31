@@ -8,9 +8,9 @@ The calculations are valid for currents up to 35 A (external) or 17.5 A (interna
 
 The formula, from IPC 2221, is
 <center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)<sup>0.725</sup>___</center>
-where:
-___I___ is maximum current in A
-___&Delta;T___ is temperature rise above ambient in &deg;C
-___W___ is width in mils
-___H___ is thickness (height) in mils
+where:<br>
+___I___ is maximum current in A<br>
+___&Delta;T___ is temperature rise above ambient in &deg;C<br>
+___W___ is width in mils<br>
+___H___ is thickness (height) in mils<br>
 ___K___ is 0.024 for internal traces or 0.048 for external traces
