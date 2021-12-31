@@ -23,6 +23,10 @@
  */
 
 #include <eda_item.h>
+
+#include <geometry/shape_line_chain.h>
+#include <geometry/shape_poly_set.h>
+
 #include "graphics_importer_buffer.h"
 
 using namespace std;
@@ -55,6 +59,7 @@ void GRAPHICS_IMPORTER_BUFFER::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
 void GRAPHICS_IMPORTER_BUFFER::AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth )
 {
     m_shapes.push_back( make_shape<IMPORTED_POLYGON>( aVertices, aWidth ) );
+    m_shapes.back()->SetParentShapeIndex( m_shapeFillRules.size() - 1 );
 }
 
 
