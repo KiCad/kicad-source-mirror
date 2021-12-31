@@ -255,9 +255,11 @@ wxString PANEL_PREVIEW_3D_MODEL::formatOffsetValue( double aValue )
 {
     // Convert from internal units (mm) to user units
     if( m_userUnits == EDA_UNITS::INCHES )
-        aValue /= 25.4f;
+        aValue /= 25.4;
+    else if( m_userUnits == EDA_UNITS::MILS )
+        aValue /= 25.4 / 1e3;
 
-    return wxString::Format( "%.4f %s", aValue, GetAbbreviatedUnitsLabel( m_userUnits ) );
+    return wxString::Format( "%.6f %s", aValue, GetAbbreviatedUnitsLabel( m_userUnits ) );
 }
 
 
@@ -397,18 +399,19 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementOffset( wxSpinEvent& event, double aSign
     else if( spinCtrl == m_spinZoffset )
         textCtrl = zoff;
 
-    double step = OFFSET_INCREMENT_MM;
+    double step_mm = OFFSET_INCREMENT_MM;
+    double curr_value_mm = DoubleValueFromString( m_userUnits, textCtrl->GetValue() ) / IU_PER_MM;
 
-    if( m_userUnits == EDA_UNITS::INCHES )
-        step = OFFSET_INCREMENT_MIL/1000.0;
+    if( m_userUnits == EDA_UNITS::MILS || m_userUnits == EDA_UNITS::INCHES )
+    {
+        step_mm = 25.4*OFFSET_INCREMENT_MIL/1000;
+    }
 
-    double curr_value = DoubleValueFromString( m_userUnits, textCtrl->GetValue() ) / IU_PER_MM;
+    curr_value_mm += ( step_mm * aSign );
+    curr_value_mm = std::max( -MAX_OFFSET, curr_value_mm );
+    curr_value_mm = std::min( curr_value_mm, MAX_OFFSET );
 
-    curr_value += ( step * aSign );
-    curr_value = std::max( -MAX_OFFSET, curr_value );
-    curr_value = std::min( curr_value, MAX_OFFSET );
-
-    textCtrl->SetValue( formatOffsetValue( curr_value ) );
+    textCtrl->SetValue( formatOffsetValue( curr_value_mm ) );
 }
 
 
@@ -460,29 +463,29 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelOffset( wxMouseEvent& event )
 {
     wxTextCtrl* textCtrl = (wxTextCtrl*) event.GetEventObject();
 
-    double step = OFFSET_INCREMENT_MM;
+    double step_mm = OFFSET_INCREMENT_MM;
 
     if( event.ShiftDown( ) )
-        step = OFFSET_INCREMENT_MM_FINE;
+        step_mm = OFFSET_INCREMENT_MM_FINE;
 
-    if( m_userUnits == EDA_UNITS::INCHES )
+    if( m_userUnits == EDA_UNITS::MILS || m_userUnits == EDA_UNITS::INCHES )
     {
-        step = OFFSET_INCREMENT_MIL/1000.0;
+        step_mm = 25.4*OFFSET_INCREMENT_MIL/1000.0;
 
         if( event.ShiftDown( ) )
-            step = OFFSET_INCREMENT_MIL_FINE/1000.0;
+            step_mm = 25.4*OFFSET_INCREMENT_MIL_FINE/1000.0;
     }
 
     if( event.GetWheelRotation() >= 0 )
-        step = -step;
+        step_mm = -step_mm;
 
-    double curr_value = DoubleValueFromString( m_userUnits, textCtrl->GetValue() ) / IU_PER_MM;
+    double curr_value_mm = DoubleValueFromString( m_userUnits, textCtrl->GetValue() ) / IU_PER_MM;
 
-    curr_value += step;
-    curr_value = std::max( -MAX_OFFSET, curr_value );
-    curr_value = std::min( curr_value, MAX_OFFSET );
+    curr_value_mm += step_mm;
+    curr_value_mm = std::max( -MAX_OFFSET, curr_value_mm );
+    curr_value_mm = std::min( curr_value_mm, MAX_OFFSET );
 
-    textCtrl->SetValue( formatOffsetValue( curr_value ) );
+    textCtrl->SetValue( formatOffsetValue( curr_value_mm ) );
 }
 
 
