@@ -1079,7 +1079,7 @@
                     <property name="flag">wxALL|wxALIGN_RIGHT</property>
                     <property name="proportion">0</property>
                     <object class="wxStdDialogButtonSizer" expanded="1">
-                        <property name="Apply">1</property>
+                        <property name="Apply">0</property>
                         <property name="Cancel">1</property>
                         <property name="ContextHelp">0</property>
                         <property name="Help">0</property>
@@ -1090,7 +1090,6 @@
                         <property name="minimum_size"></property>
                         <property name="name">m_sdbSizer</property>
                         <property name="permission">protected</property>
-                        <event name="OnApplyButtonClick">resetDefaults</event>
                     </object>
                 </object>
             </object>

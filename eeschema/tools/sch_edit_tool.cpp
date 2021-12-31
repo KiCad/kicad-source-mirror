@@ -255,6 +255,7 @@ bool SCH_EDIT_TOOL::Init()
                 case SCH_HIER_LABEL_T:
                 case SCH_NETCLASS_FLAG_T:
                 case SCH_FIELD_T:
+                case SCH_SHAPE_T:
                 case SCH_BITMAP_T:
                     return aSel.GetSize() == 1;
 

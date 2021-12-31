@@ -11,10 +11,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( DIALOG_SHAPE_PROPERTIES_BASE, DIALOG_SHIM )
-	EVT_BUTTON( wxID_APPLY, DIALOG_SHAPE_PROPERTIES_BASE::_wxFB_resetDefaults )
-END_EVENT_TABLE()
-
 DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
@@ -56,7 +52,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_panel1->SetSizer( bSizer2 );
 	m_panel1->Layout();
 	bSizer2->Fit( m_panel1 );
-	fgSizerGeneral->Add( m_panel1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 2 );
+	fgSizerGeneral->Add( m_panel1, 0, wxALIGN_CENTER_VERTICAL, 2 );
 
 
 	fgSizerGeneral->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -106,7 +102,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_panel11->SetSizer( bSizer21 );
 	m_panel11->Layout();
 	bSizer21->Fit( m_panel11 );
-	fgSizerGeneral->Add( m_panel11, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerGeneral->Add( m_panel11, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	mainSizer->Add( fgSizerGeneral, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 10 );
@@ -125,8 +121,6 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
-	m_sdbSizerApply = new wxButton( this, wxID_APPLY );
-	m_sdbSizer->AddButton( m_sdbSizerApply );
 	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();

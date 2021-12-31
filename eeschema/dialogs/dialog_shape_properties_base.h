@@ -35,12 +35,7 @@ class COLOR_SWATCH;
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 {
-	DECLARE_EVENT_TABLE()
 	private:
-
-		// Private event handlers
-		void _wxFB_resetDefaults( wxCommandEvent& event ){ resetDefaults( event ); }
-
 
 	protected:
 		wxStaticText* m_lineWidthLabel;
@@ -60,12 +55,7 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
-		wxButton* m_sdbSizerApply;
 		wxButton* m_sdbSizerCancel;
-
-		// Virtual event handlers, overide them in your derived class
-		virtual void resetDefaults( wxCommandEvent& event ) { event.Skip(); }
-
 
 	public:
 
