@@ -154,7 +154,7 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
 
         if( trail.Area() > areaCutoff )
             areaOk = true;
-}
+    }
 
     DIRECTION_45 straightDirection;
     DIRECTION_45 diagDirection;
@@ -197,16 +197,16 @@ DIRECTION_45 MOUSE_TRAIL_TRACER::GetPosture( const VECTOR2I& aP )
         }
         else if( diagDirection == m_lastSegDirection )
         {
-            if( m_direction != straightDirection )
+            if( m_direction != diagDirection )
             {
                 PNS_DBG( dbg, Message, wxString::Format( "Posture: forcing diagonal => %s",
                                                          diagDirection.Format() ) );
             }
 
             m_direction = diagDirection;
-    }
-    else
-    {
+        }
+        else
+        {
             switch( m_direction.Angle( m_lastSegDirection ) )
             {
             case DIRECTION_45::ANG_HALF_FULL:
