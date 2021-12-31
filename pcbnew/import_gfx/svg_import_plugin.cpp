@@ -85,12 +85,16 @@ bool SVG_IMPORT_PLUGIN::Import()
             default: break;
         }
 
-        m_importer->NewShape( rule );
+        m_internalImporter.NewShape( rule );
 
         for( NSVGpath* path = shape->paths; path != nullptr; path = path->next )
             DrawPath( path->pts, path->npts, path->closed, shape->fill.type == NSVG_PAINT_COLOR,
                       lineWidth );
     }
+
+    m_internalImporter.PostprocessNestedPolygons();
+    wxCHECK( m_importer, false );
+    m_internalImporter.ImportTo( *m_importer );
 
     return true;
 }
@@ -168,7 +172,7 @@ void SVG_IMPORT_PLUGIN::DrawCubicBezierCurve( const float* aPoints,
 
 void SVG_IMPORT_PLUGIN::DrawPolygon( const std::vector< VECTOR2D >& aPoints, double aWidth )
 {
-    m_importer->AddPolygon( aPoints, aWidth );
+    m_internalImporter.AddPolygon( aPoints, aWidth );
 }
 
 
@@ -177,7 +181,7 @@ void SVG_IMPORT_PLUGIN::DrawLineSegments( const std::vector< VECTOR2D >& aPoints
     unsigned int numLineStartPoints = aPoints.size() - 1;
 
     for( unsigned int pointIndex = 0; pointIndex < numLineStartPoints; ++pointIndex )
-        m_importer->AddLine( aPoints[ pointIndex ], aPoints[ pointIndex + 1 ], aWidth );
+        m_internalImporter.AddLine( aPoints[ pointIndex ], aPoints[ pointIndex + 1 ], aWidth );
 }
 
 
