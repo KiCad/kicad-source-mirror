@@ -11,16 +11,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-04 19:50+0000\n"
-"Last-Translator: VEDAT YAMAN <weddat@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2022-01-01 15:53+0000\n"
+"Last-Translator: Gökhan Koçmarlı <gokhankocmarli@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v6/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -495,9 +494,8 @@ msgid "Toggle 3D models for 'Surface mount' type components"
 msgstr "'Yüzey monte' özelliği olan 3D modelleri aç/kapat"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
-#, fuzzy
 msgid "Toggle Other 3D models"
-msgstr "Yüzey monte 3B modelleri aç/kapat"
+msgstr "Diğer 3B modelleri gizle/göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:225
 msgid "Toggle 3D models for 'Other' type components"
@@ -590,24 +588,20 @@ msgid "Select 3D Model"
 msgstr "3D Model Seç"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:23
-#, fuzzy
 msgid "Environment Colors"
-msgstr "Ortam Değişkenleri"
+msgstr "Ortam Renkleri"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:30
-#, fuzzy
 msgid "Background gradient start:"
-msgstr "Arka Plan Rengi, Alt"
+msgstr "Arkaplan gradyanı başlangıcı:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:37
-#, fuzzy
 msgid "Background gradient end:"
-msgstr "Arka Plan Rengi, Üst"
+msgstr "Arkaplan gradyanı bitişi:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:50
-#, fuzzy
 msgid "Solder paste:"
-msgstr "Lehim Pastası Rengi"
+msgstr "Lehim pastası:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:64
 #, fuzzy
@@ -619,19 +613,16 @@ msgid "Use board stackup colors"
 msgstr "Kart yığın renklerini kullan"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:69
-#, fuzzy
 msgid "Use colors:"
-msgstr "Ağ renkleri:"
+msgstr "Şu renkleri kullanın:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:77
-#, fuzzy
 msgid "Silkscreen top:"
-msgstr "İpek Baskı Rengi"
+msgstr "Üst serigrafi:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:84
-#, fuzzy
 msgid "Silkscreen bottom:"
-msgstr "İpek Baskı Rengi"
+msgstr "Alt serigrafi:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:97
 #, fuzzy
@@ -639,19 +630,16 @@ msgid "Solder mask top:"
 msgstr "Lehim Maskesi Rengi"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:104
-#, fuzzy
 msgid "Solder mask bottom:"
-msgstr "Lehim Maskesi Rengi"
+msgstr "Alt lehim maskesi:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:117
-#, fuzzy
 msgid "Copper/surface finish:"
-msgstr "Bakır/Yüzey Kaplama Rengi..."
+msgstr "Bakır/yüzey kaplama:"
 
 #: 3d-viewer/dialogs/panel_3D_colors_base.cpp:130
-#, fuzzy
 msgid "Board body:"
-msgstr "Kart gövdesini göster"
+msgstr "Kart gövdesi:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:24
 msgid "Board Layers"
@@ -662,9 +650,8 @@ msgid "Show silkscreen layers"
 msgstr "İpek baskı katmanlarını göster"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Geçiş (via) halkasından serigrafiyi sil"
+msgstr "Lehim maskesinin kenarlarındaki serigrafiyi kesin"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:37
 #, fuzzy
@@ -688,9 +675,8 @@ msgid "User Layers (not shown in realistic mode)"
 msgstr "Kullanıcı Katmanları (gerçekçi modda gösterilmez)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
-#, fuzzy
 msgid "Show comment and drawing layers"
-msgstr "Yorumlar ve çizimler katmanlarını göster"
+msgstr "Yorumları ve çizim katmanlarını göster"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:61
 msgid "Show ECO layers"
@@ -721,33 +707,28 @@ msgid "Use different colors for plated and unplated copper. (Slow)"
 msgstr "Kaplanmış ve kaplanmamış bakır için farklı renkler kullan. (Yavaş)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:93
-#, fuzzy
 msgid "Material properties:"
-msgstr "Malzeme Özellikleri"
+msgstr "Malzeme özellikleri:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "Realistic"
 msgstr "Gerçekçi mod"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "Solid colors"
-msgstr "Seçim rengi:"
+msgstr "Düz renkler"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:97
-#, fuzzy
 msgid "CAD colors"
-msgstr "Ağ renkleri:"
+msgstr "CAD renkleri"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:110
 msgid "Camera Options"
 msgstr "Kamera Seçenekleri"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:115
-#, fuzzy
 msgid "Rotation increment:"
-msgstr "Döndürme Artışı:"
+msgstr "Döndürme artışı:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:123
 #: common/base_units.cpp:477 pcb_calculator/widgets/unit_selector.cpp:130
@@ -771,9 +752,8 @@ msgstr "Canlandırma hızı:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:23
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:21
-#, fuzzy
 msgid "Rendering Options"
-msgstr "Oluşturma Seçenekleri"
+msgstr "Render Ayarları"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:25
 msgid "Show model bounding boxes"
@@ -838,9 +818,8 @@ msgid "Disable holes"
 msgstr "Delikleri devre dışı bırak"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
-#, fuzzy
 msgid "Procedural textures (slow)"
-msgstr "İşlemsel dokular"
+msgstr "İşlemsel dokular (yavaş)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 #, fuzzy
@@ -34842,7 +34821,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "pcbnew"
-msgstr ""
+msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
