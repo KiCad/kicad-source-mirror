@@ -115,11 +115,16 @@ void UNIT_BINDER::SetDataType( EDA_DATA_TYPE aDataType )
 
 void UNIT_BINDER::onUnitsChanged( wxCommandEvent& aEvent )
 {
-    int temp = (int) GetValue();
+    if( m_units != EDA_UNITS::UNSCALED
+            && m_units != EDA_UNITS::DEGREES
+            && m_units != EDA_UNITS::PERCENT )
+    {
+        int temp = (int) GetValue();
 
-    SetUnits( m_frame->GetUserUnits() );
+        SetUnits( m_frame->GetUserUnits() );
 
-    SetValue( temp );
+        SetValue( temp );
+    }
 
     aEvent.Skip();
 }
