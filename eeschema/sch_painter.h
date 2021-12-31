@@ -193,8 +193,10 @@ private:
     bool setDeviceColors( const LIB_ITEM* aItem, int aLayer );
 
     void triLine ( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
-    void strokeText( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle );
-    void boxText( const wxString& aText, const VECTOR2D& aPosition, double aAngle );
+    void strokeText( const wxString& aText, const VECTOR2D& aPosition,
+                     const TEXT_ATTRIBUTES& aAttributes );
+    void boxText( const wxString& aText, const VECTOR2D& aPosition,
+                  const TEXT_ATTRIBUTES& aAttrs );
 
 private:
     SCH_RENDER_SETTINGS m_schSettings;

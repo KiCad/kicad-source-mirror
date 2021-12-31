@@ -57,25 +57,6 @@
 #define CELL_IS_ZONE   0x80   /* Area and auto-placement: cell available */
 
 
-/* Penalty (cost) for CntRot90 and CntRot180:
- * CntRot90 and CntRot180 are from 0 (rotation allowed) to 10 (rotation not allowed)
- */
-static const double OrientationPenalty[11] =
-{
-    2.0,        // CntRot = 0 rotation prohibited
-    1.9,        // CntRot = 1
-    1.8,        // CntRot = 2
-    1.7,        // CntRot = 3
-    1.6,        // CntRot = 4
-    1.5,        // CntRot = 5
-    1.4,        // CntRot = 5
-    1.3,        // CntRot = 7
-    1.2,        // CntRot = 8
-    1.1,        // CntRot = 9
-    1.0         // CntRot = 10 rotation authorized, no penalty
-};
-
-
 AR_AUTOPLACER::AR_AUTOPLACER( BOARD* aBoard )
 {
     m_board = aBoard;

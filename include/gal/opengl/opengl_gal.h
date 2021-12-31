@@ -140,6 +140,7 @@ public:
 
     /// @copydoc GAL::DrawPolyline()
     void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) override;
+    void DrawPolyline( const std::vector<VECTOR2D>& aPointList ) override;
     void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override;
     void DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain ) override;
 
@@ -148,6 +149,9 @@ public:
     void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) override;
     void DrawPolygon( const SHAPE_POLY_SET& aPolySet, bool aStrokeTriangulation = false ) override;
     void DrawPolygon( const SHAPE_LINE_CHAIN& aPolySet ) override;
+
+    /// @copydoc GAL::DrawGlyph()
+    virtual void DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTotal ) override;
 
     /// @copydoc GAL::DrawCurve()
     void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,

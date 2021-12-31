@@ -26,10 +26,7 @@
 #define BASIC_GAL_H
 
 #include <eda_rect.h>
-
-#include <gal/stroke_font.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <newstroke_font.h>
 
 class PLOTTER;
 
@@ -62,12 +59,12 @@ class BASIC_GAL: public KIGFX::GAL
 public:
     BASIC_GAL( KIGFX::GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
         GAL( aDisplayOptions ),
+        m_callback( nullptr ),
         m_DC( nullptr ),
         m_Color( RED ),
         m_transform(),
         m_clipBox(),
         m_isClipped( false ),
-        m_callback( nullptr ),
         m_callbackData( nullptr ),
         m_plotter( nullptr )
     {
@@ -96,12 +93,12 @@ public:
     }
 
     /// Save the context.
-    virtual void Save() override
+    void Save() override
     {
         m_transformHistory.push( m_transform );
     }
 
-    virtual void Restore() override
+    void Restore() override
     {
         m_transform = m_transformHistory.top();
         m_transformHistory.pop();
@@ -112,9 +109,9 @@ public:
      *
      * @param aPointList is a list of 2D-Vectors containing the polyline points.
      */
-    virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) override;
-
-    virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override;
+    void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) override;
+    void DrawPolyline( const std::vector<VECTOR2D>& aPointList ) override;
+    void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override;
 
     /**
      * Start and end points are defined as 2D-Vectors.
@@ -122,14 +119,19 @@ public:
      * @param aStartPoint   is the start point of the line.
      * @param aEndPoint     is the end point of the line.
      */
-    virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
+    void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
+
+    /**
+     * Draw a polygon representing an outline font glyph.
+     */
+    void DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTotal ) override;
 
     /**
      * Translate the context.
      *
      * @param aTranslation is the translation vector.
      */
-    virtual void Translate( const VECTOR2D& aTranslation ) override
+    void Translate( const VECTOR2D& aTranslation ) override
     {
         m_transform.m_moveOffset += aTranslation;
     }
@@ -139,7 +141,7 @@ public:
      *
      * @param aAngle is the rotation angle in radians.
      */
-    virtual void Rotate( double aAngle ) override
+    void Rotate( double aAngle ) override
     {
         m_transform.m_rotAngle = aAngle;
         m_transform.m_rotCenter = m_transform.m_moveOffset;
@@ -151,26 +153,26 @@ private:
     // Apply the rotation/translation transform to aPoint
     const VECTOR2D transform( const VECTOR2D& aPoint ) const;
 
+    // When calling the draw functions outside a wxDC, to get the basic drawings lines /
+    // polylines ..., a callback function (used in DRC) to store coordinates of each segment:
+    void (* m_callback)( int x0, int y0, int xf, int yf, void* aData );
+
 public:
-    wxDC* m_DC;
-    COLOR4D m_Color;
+    wxDC*                     m_DC;
+    KIGFX::COLOR4D            m_Color;
 
 private:
-    TRANSFORM_PRM m_transform;
-    std::stack <TRANSFORM_PRM>  m_transformHistory;
+    TRANSFORM_PRM             m_transform;
+    std::stack<TRANSFORM_PRM> m_transformHistory;
 
     // A clip box, to clip drawings in a wxDC (mandatory to avoid draw issues)
-    EDA_RECT  m_clipBox;        // The clip box
-    bool      m_isClipped;      // Allows/disallows clipping
+    EDA_RECT                  m_clipBox;        // The clip box
+    bool                      m_isClipped;      // Allows/disallows clipping
 
-    // When calling the draw functions outside a wxDC, to get the basic drawings
-    // lines / polylines ..., a callback function (used in DRC) to store
-    // coordinates of each segment:
-    void (* m_callback)( int x0, int y0, int xf, int yf, void* aData );
-    void* m_callbackData;       // a optional parameter for m_callback
+    void*                     m_callbackData;   // a optional parameter for m_callback
 
-    // When calling the draw functions for plot, the plotter acts as a wxDC to plot basic items.
-    PLOTTER* m_plotter;
+    PLOTTER*                  m_plotter;        // When calling the draw functions for plot, the
+                                                // plotter acts as a wxDC to plot basic items.
 };
 
 

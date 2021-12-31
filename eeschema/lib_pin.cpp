@@ -212,8 +212,9 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, 
     {
         printPinSymbol( aSettings, pos1, orient );
 
-        printPinTexts( aSettings, pos1, orient, part->GetPinNameOffset(), part->ShowPinNumbers(),
-                       part->ShowPinNames() );
+        printPinTexts( aSettings, pos1, orient, part->GetPinNameOffset(),
+                       opts->force_draw_pin_text || part->ShowPinNumbers(),
+                       opts->force_draw_pin_text || part->ShowPinNames() );
 
         if( showPinType )
             printPinElectricalTypeName( aSettings, pos1, orient );
@@ -457,7 +458,7 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
     }
     else     /**** Draw num & text pin outside  ****/
     {
-        if(( aPinOrient == PIN_LEFT) || ( aPinOrient == PIN_RIGHT) )
+        if( ( aPinOrient == PIN_LEFT) || ( aPinOrient == PIN_RIGHT) )
         {
             /* Its an horizontal line. */
             if( aDrawPinName )
@@ -1068,7 +1069,7 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
 const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly ) const
 {
-    const KIGFX::STROKE_FONT& font = basic_gal.GetStrokeFont();
+    KIFONT::FONT* font = KIFONT::FONT::GetFont();
 
     EDA_RECT       bbox;
     VECTOR2I       begin;
@@ -1108,7 +1109,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     if( showNum )
     {
         VECTOR2D fontSize( m_numTextSize, m_numTextSize );
-        VECTOR2D numSize = font.ComputeStringBoundaryLimits( number, fontSize, GetPenWidth() );
+        VECTOR2D numSize = font->StringBoundaryLimits( number, fontSize, GetPenWidth() );
 
         numberTextLength = KiROUND( numSize.x );
         numberTextHeight = KiROUND( numSize.y );
@@ -1126,7 +1127,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     if( showName )
     {
         VECTOR2D fontSize( m_nameTextSize, m_nameTextSize );
-        VECTOR2D nameSize = font.ComputeStringBoundaryLimits( name, fontSize, GetPenWidth() );
+        VECTOR2D nameSize = font->StringBoundaryLimits( name, fontSize, GetPenWidth() );
 
         nameTextLength = KiROUND( nameSize.x ) + nameTextOffset;
         nameTextHeight = KiROUND( nameSize.y ) + Mils2iu( PIN_TEXT_MARGIN );

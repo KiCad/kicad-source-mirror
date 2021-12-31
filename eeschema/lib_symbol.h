@@ -62,6 +62,7 @@ extern bool operator<( const LIB_SYMBOL& aItem1, const LIB_SYMBOL& aItem2 );
 struct LIB_SYMBOL_OPTIONS
 {
     TRANSFORM transform;            // Coordinate adjustment settings
+    bool force_draw_pin_text;       // Whether or not to force the drawing of pin names and numbers
     bool draw_visible_fields;       // Whether to draw "visible" fields
     bool draw_hidden_fields;        // Whether to draw "hidden" fields
     bool show_elec_type;            // Whether to show the pin electrical type
@@ -71,6 +72,7 @@ struct LIB_SYMBOL_OPTIONS
     LIB_SYMBOL_OPTIONS()
     {
         transform = DefaultTransform;
+        force_draw_pin_text = false;
         draw_visible_fields = true;
         draw_hidden_fields = true;
         show_elec_type = false;

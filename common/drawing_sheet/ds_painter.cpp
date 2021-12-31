@@ -230,20 +230,21 @@ void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_POLYPOLYGONS* aItem, int aLayer
 
 void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
 {
-    VECTOR2D position( aItem->GetTextPos().x, aItem->GetTextPos().y );
-    int      penWidth = std::max( aItem->GetEffectiveTextPenWidth(),
-                                  m_renderSettings.GetDefaultPenWidth() );
+    KIFONT::FONT* font = aItem->GetFont();
 
-    m_gal->Save();
-    m_gal->Translate( position );
-    m_gal->Rotate( -aItem->GetTextAngle().AsRadians() );
-    m_gal->SetStrokeColor( m_renderSettings.GetColor( aItem, aLayer ) );
-    m_gal->SetLineWidth( penWidth );
-    m_gal->SetTextAttributes( aItem );
-    m_gal->SetIsFill( false );
-    m_gal->SetIsStroke( true );
-    m_gal->StrokeText( aItem->GetShownText(), VECTOR2D( 0, 0 ), 0.0 );
-    m_gal->Restore();
+    if( !font )
+        font = KIFONT::FONT::GetFont( wxEmptyString, aItem->IsBold(), aItem->IsItalic() );
+
+    const COLOR4D& color = m_renderSettings.GetColor( aItem, aLayer );
+
+    m_gal->SetStrokeColor( color );
+    m_gal->SetFillColor( color );
+
+    TEXT_ATTRIBUTES attrs = aItem->GetAttributes();
+    attrs.m_StrokeWidth = std::max( aItem->GetEffectiveTextPenWidth(),
+                                    m_renderSettings.GetDefaultPenWidth() );
+
+    font->Draw( m_gal, aItem->GetShownText(), aItem->GetTextPos(), attrs );
 }
 
 

@@ -1,8 +1,3 @@
-/**
- * Functions to draw and plot text on screen
- * @file draw_graphic_text.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -48,9 +43,21 @@ int GetPenSizeForBold( int aTextSize )
 }
 
 
+int GetPenSizeForBold( const wxSize& aTextSize )
+{
+    return GetPenSizeForBold( std::min( aTextSize.x, aTextSize.y ) );
+}
+
+
 int GetPenSizeForNormal( int aTextSize )
 {
     return KiROUND( aTextSize / 8.0 );
+}
+
+
+int GetPenSizeForNormal( const wxSize& aTextSize )
+{
+    return GetPenSizeForNormal( std::min( aTextSize.x, aTextSize.y ) );
 }
 
 
@@ -89,15 +96,14 @@ int Clamp_Text_PenSize( int aPenSize, const VECTOR2I& aSize, bool aBold )
 }
 
 
-int GraphicTextWidth( const wxString& aText, const VECTOR2I& aSize, bool aItalic, bool aBold )
+int GraphicTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I& aSize,
+                      bool aItalic, bool aBold )
 {
     basic_gal.SetFontItalic( aItalic );
     basic_gal.SetFontBold( aBold );
     basic_gal.SetGlyphSize( VECTOR2D( aSize ) );
 
-    VECTOR2D tsize = basic_gal.GetTextLineSize( aText );
-
-    return KiROUND( tsize.x );
+    return KiROUND( aFont->ComputeTextLineSize( &basic_gal, aText ).x );
 }
 
 
@@ -134,6 +140,9 @@ void GRText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const wxStr
 {
     bool fill_mode = true;
 
+    if( !aFont )
+        aFont = KIFONT::FONT::GetFont();
+
     if( aWidth == 0 && aBold ) // Use default values if aWidth == 0
         aWidth = GetPenSizeForBold( std::min( aSize.x, aSize.y ) );
 
@@ -145,28 +154,29 @@ void GRText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const wxStr
 
     basic_gal.SetIsFill( fill_mode );
     basic_gal.SetLineWidth( aWidth );
-
-    EDA_TEXT dummy;
-    dummy.SetItalic( aItalic );
-    dummy.SetBold( aBold );
-    dummy.SetHorizJustify( aH_justify );
-    dummy.SetVertJustify( aV_justify );
-
-    wxSize size = wxSize( aSize.x, aSize.y );
-    dummy.SetMirrored( size.x < 0 );
-
-    if( size.x < 0 )
-        size.x = - size.x;
-
-    dummy.SetTextSize( size );
-
-    basic_gal.SetTextAttributes( &dummy );
     basic_gal.SetPlotter( aPlotter );
     basic_gal.SetCallback( aCallback, aCallbackData );
     basic_gal.m_DC = aDC;
     basic_gal.m_Color = aColor;
     basic_gal.SetClipBox( nullptr );
-    basic_gal.StrokeText( aText, VECTOR2D( aPos ), aOrient.AsRadians() );
+
+    TEXT_ATTRIBUTES attributes;
+    attributes.m_Angle = aOrient;
+    attributes.m_StrokeWidth = aWidth;
+    attributes.m_Italic = aItalic;
+    attributes.m_Bold = aBold;
+    attributes.m_Halign = aH_justify;
+    attributes.m_Valign = aV_justify;
+
+    VECTOR2D size = aSize;
+    attributes.m_Mirrored = size.x < 0;
+
+    if( size.x < 0 )
+        size.x = - size.x;
+
+    attributes.m_Size = size;
+
+    aFont->Draw( &basic_gal, aText, VECTOR2D( aPos ), attributes );
 }
 
 

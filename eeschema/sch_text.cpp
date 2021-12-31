@@ -32,7 +32,6 @@
 #include <sch_edit_frame.h>
 #include <plotters/plotter.h>
 #include <widgets/msgpanel.h>
-#include <gal/stroke_font.h>
 #include <bitmaps.h>
 #include <string_utils.h>
 #include <sch_text.h>
@@ -1682,7 +1681,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
     int margin    = GetLabelBoxExpansion( aRenderSettings );
     int halfSize  = ( GetTextHeight() / 2 ) + margin;
     int linewidth = GetPenWidth();
-    int symb_len  = LenSize( GetShownText(), linewidth ) + 2 * margin;
+    int symb_len  = GetTextBox().GetWidth() + 2 * margin;
 
     int x = symb_len + linewidth + 3;
     int y = halfSize + linewidth + 3;
@@ -1812,8 +1811,9 @@ const EDA_RECT SCH_HIERLABEL::GetBodyBoundingBox() const
     int y  = GetTextPos().y;
 
     int height = GetTextHeight() + penWidth + margin;
-    int length = LenSize( GetShownText(), penWidth )
-                 + height;                // add height for triangular shapes
+    int length = GetTextBox().GetWidth();
+
+    length += height;       // add height for triangular shapes
 
     int dx, dy;
 

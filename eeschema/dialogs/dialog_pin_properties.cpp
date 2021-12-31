@@ -135,7 +135,11 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
     m_initialized( false )
 {
     // Creates a dummy pin to show on a panel, inside this dialog:
+    m_dummyParent = new LIB_SYMBOL( *m_pin->GetParent() );
     m_dummyPin = new LIB_PIN( *m_pin );
+    m_dummyPin->SetParent( m_dummyParent );
+    m_dummyParent->SetShowPinNames( true );
+    m_dummyParent->SetShowPinNumbers( true );
 
     m_bSizerInfo->Show( m_frame->m_SyncPinEdit );
 
@@ -241,6 +245,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
 DIALOG_PIN_PROPERTIES::~DIALOG_PIN_PROPERTIES()
 {
     delete m_dummyPin;
+    delete m_dummyParent;
 
     // Prevents crash bug in wxGrid's d'tor
     m_alternatesGrid->DestroyTable( m_alternatesDataModel );
@@ -366,7 +371,7 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     wxSize    dc_size = dc.GetSize();
     dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
 
-    // Give a parent to m_dummyPin only from draw purpose.
+    // Give a parent to m_dummyPin for draw purposes.
     // In fact m_dummyPin should not have a parent, but draw functions need a parent
     // to know some options, about pin texts
     SYMBOL_EDIT_FRAME* symbolEditor = (SYMBOL_EDIT_FRAME*) GetParent();
@@ -383,6 +388,7 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     GRResetPenAndBrush( &dc );
 
     LIB_SYMBOL_OPTIONS opts;
+    opts.force_draw_pin_text = true;
     opts.draw_hidden_fields = true;
     opts.show_connect_point = true;
 

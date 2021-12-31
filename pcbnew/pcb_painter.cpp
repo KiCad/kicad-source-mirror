@@ -1548,6 +1548,21 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 }
 
 
+void PCB_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition,
+                              const TEXT_ATTRIBUTES& aAttrs )
+{
+    KIFONT::FONT* font = aAttrs.m_Font;
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( wxEmptyString, aAttrs.m_Bold, aAttrs.m_Italic );
+
+    m_gal->SetIsFill( font->IsOutline() );
+    m_gal->SetIsStroke( font->IsStroke() );
+
+    font->Draw( m_gal, aText, aPosition, aAttrs );
+}
+
+
 void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 {
     wxString shownText( aText->GetShownText() );
@@ -1556,19 +1571,19 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
-    VECTOR2D       position( aText->GetTextPos().x, aText->GetTextPos().y );
     bool           outline_mode = !pcbconfig()->m_Display.m_DisplayTextFill;
 
-    if( outline_mode )
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-    else
-        m_gal->SetLineWidth( getLineThickness( aText->GetEffectiveTextPenWidth() ) );
-
     m_gal->SetStrokeColor( color );
-    m_gal->SetIsFill( false );
-    m_gal->SetIsStroke( true );
-    m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( shownText, position, aText->GetTextAngle().AsRadians() );
+    m_gal->SetFillColor( color );
+
+    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
+
+    if( outline_mode )
+        attrs.m_StrokeWidth = m_pcbSettings.m_outlineWidth;
+    else
+        attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
+
+    strokeText( shownText, aText->GetTextPos(), attrs );
 }
 
 
@@ -1580,26 +1595,28 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
-    VECTOR2D       position( aText->GetTextPos().x, aText->GetTextPos().y );
     bool           outline_mode = !pcbconfig()->m_Display.m_DisplayTextFill;
 
-    if( outline_mode )
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-    else
-        m_gal->SetLineWidth( getLineThickness( aText->GetEffectiveTextPenWidth() ) );
-
     m_gal->SetStrokeColor( color );
-    m_gal->SetIsFill( false );
-    m_gal->SetIsStroke( true );
-    m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( shownText, position, aText->GetDrawRotation().AsRadians() );
+    m_gal->SetFillColor( color );
+
+    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
+
+    attrs.m_Angle = aText->GetDrawRotation();
+
+    if( outline_mode )
+        attrs.m_StrokeWidth = m_pcbSettings.m_outlineWidth;
+    else
+        attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
+
+    strokeText( shownText, aText->GetTextPos(), attrs );
 
     // Draw the umbilical line
     if( aText->IsSelected() )
     {
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
         m_gal->SetStrokeColor( m_pcbSettings.GetColor( nullptr, LAYER_ANCHOR ) );
-        m_gal->DrawLine( position, aText->GetParent()->GetPosition() );
+        m_gal->DrawLine( aText->GetTextPos(), aText->GetParent()->GetPosition() );
     }
 }
 
@@ -1826,14 +1843,14 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     // Draw text
     const PCB_TEXT& text = aDimension->Text();
     VECTOR2D        position( text.GetTextPos().x, text.GetTextPos().y );
+    TEXT_ATTRIBUTES attrs = text.GetAttributes();
 
     if( outline_mode )
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        attrs.m_StrokeWidth = m_pcbSettings.m_outlineWidth;
     else
-        m_gal->SetLineWidth( getLineThickness( text.GetEffectiveTextPenWidth() ) );
+        attrs.m_StrokeWidth = getLineThickness( text.GetEffectiveTextPenWidth() );
 
-    m_gal->SetTextAttributes( &text );
-    m_gal->StrokeText( text.GetShownText(), position, text.GetTextAngle().AsRadians() );
+    strokeText( text.GetShownText(), position, attrs );
 }
 
 

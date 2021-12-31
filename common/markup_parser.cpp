@@ -25,27 +25,11 @@
 using namespace MARKUP;
 
 
-MARKUP::MARKUP_NODE MARKUP_PARSER::Parse()
+std::unique_ptr<NODE> MARKUP_PARSER::Parse()
 {
     //string_input<> in( source, "from_input" );
     auto root = parse_tree::parse<MARKUP::grammar, MARKUP::NODE, MARKUP::selector>( in );
     return root;
-}
-
-
-std::ostream& operator<<( std::ostream& os, const MARKUP_NODE& node )
-{
-    os << "<";
-
-    if( !node->is_root() )
-        os << node->asString();
-
-    for( const auto& child : node->children )
-        os << " " << child;
-
-    os << ">";
-
-    return os;
 }
 
 

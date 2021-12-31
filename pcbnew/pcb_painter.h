@@ -53,6 +53,7 @@ class PCB_TARGET;
 class PCB_MARKER;
 class NET_SETTINGS;
 class NETINFO_LIST;
+class TEXT_ATTRIBUTES;
 
 namespace KIGFX
 {
@@ -199,6 +200,9 @@ protected:
      * Return drill diameter for a via (internal units).
      */
     virtual int getDrillSize( const PCB_VIA* aVia ) const;
+
+    void strokeText( const wxString& aText, const VECTOR2D& aPosition,
+                     const TEXT_ATTRIBUTES& aAttrs );
 
 protected:
     PCB_RENDER_SETTINGS m_pcbSettings;

@@ -40,7 +40,6 @@
 #include <eda_rect.h>         // for EDA_RECT
 #include <eda_text.h>         // for EDA_TEXT, TEXT_EFFECTS, GR_TEXT_VJUSTIF...
 #include <gal/color4d.h>      // for COLOR4D, COLOR4D::BLACK
-#include <gal/stroke_font.h>  // for STROKE_FONT
 #include <gr_text.h>          // for GRText
 #include <string_utils.h>     // for UnescapeString
 #include <math/util.h>        // for KiROUND
@@ -203,20 +202,6 @@ void EDA_TEXT::cacheShownText()
 }
 
 
-int EDA_TEXT::LenSize( const wxString& aLine, int aThickness ) const
-{
-    basic_gal.SetFontItalic( IsItalic() );
-    basic_gal.SetFontBold( IsBold() );
-    basic_gal.SetFontUnderlined( false );
-    basic_gal.SetLineWidth( (float) aThickness );
-    basic_gal.SetGlyphSize( VECTOR2D( GetTextSize() ) );
-
-    VECTOR2D tsize = basic_gal.GetTextLineSize( aLine );
-
-    return KiROUND( tsize.x );
-}
-
-
 wxString EDA_TEXT::ShortenedShownText() const
 {
     wxString tmp = GetShownText();
@@ -234,7 +219,12 @@ wxString EDA_TEXT::ShortenedShownText() const
 
 int EDA_TEXT::GetInterline() const
 {
-    return KiROUND( KIGFX::STROKE_FONT::GetInterline( GetTextHeight() ) );
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( wxEmptyString, m_attributes.m_Bold, m_attributes.m_Italic );
+
+    return KiROUND( font->GetInterline( GetTextHeight() ) );
 }
 
 
@@ -274,21 +264,19 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     }
 
     // calculate the H and V size
-    const auto& font = basic_gal.GetStrokeFont();
-    VECTOR2D    fontSize( GetTextSize() );
-    double      penWidth( thickness );
-    int         dx = KiROUND( font.ComputeStringBoundaryLimits( text, fontSize, penWidth ).x );
-    int         dy = GetInterline();
+    KIFONT::FONT* font = KIFONT::FONT::GetFont();
+    VECTOR2D      fontSize( GetTextSize() );
+    double        penWidth( thickness );
+    int           dx = KiROUND( font->StringBoundaryLimits( text, fontSize, penWidth ).x );
+    int           dy = GetInterline();
 
     // Creates bounding box (rectangle) for horizontal, left and top justified text. The
     // bounding box will be moved later according to the actual text options
-    wxSize textsize = wxSize( dx, dy );
+    wxSize   textsize = wxSize( dx, fontSize.y );
     VECTOR2I pos = GetTextPos();
 
     if( IsMultilineAllowed() && aLine > 0 && ( aLine < static_cast<int>( strings.GetCount() ) ) )
-    {
         pos.y -= aLine * GetInterline();
-    }
 
     if( aInvertY )
         pos.y = -pos.y;
@@ -299,7 +287,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     {   // A overbar adds an extra size to the text
         // Height from the base line text of chars like [ or {
         double curr_height = GetTextHeight() * 1.15;
-        double overbarPosition = font.ComputeOverbarVerticalPosition( fontSize.y );
+        double overbarPosition = font->ComputeOverbarVerticalPosition( fontSize.y );
         int    extra_height = KiROUND( overbarPosition - curr_height );
 
         extra_height += thickness / 2;
@@ -314,7 +302,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
             text = strings.Item( ii );
-            dx = KiROUND( font.ComputeStringBoundaryLimits( text, fontSize, penWidth ).x );
+            dx = KiROUND( font->StringBoundaryLimits( text, fontSize, penWidth ).x );
             textsize.x = std::max( textsize.x, dx );
             textsize.y += dy;
         }
@@ -336,7 +324,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         break;
 
     case GR_TEXT_H_ALIGN_CENTER:
-        rect.SetX( rect.GetX() - (rect.GetWidth() / 2) );
+        rect.SetX( rect.GetX() - rect.GetWidth() / 2 );
         break;
 
     case GR_TEXT_H_ALIGN_RIGHT:
@@ -347,38 +335,9 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
     switch( GetVertJustify() )
     {
-    case GR_TEXT_V_ALIGN_TOP:
-        break;
-
-    case GR_TEXT_V_ALIGN_CENTER:
-        rect.SetY( rect.GetY() - ( dy / 2) );
-        break;
-
-    case GR_TEXT_V_ALIGN_BOTTOM:
-        rect.SetY( rect.GetY() - dy );
-        break;
-    }
-
-    if( linecount > 1 )
-    {
-        int yoffset;
-        linecount -= 1;
-
-        switch( GetVertJustify() )
-        {
-        case GR_TEXT_V_ALIGN_TOP:
-            break;
-
-        case GR_TEXT_V_ALIGN_CENTER:
-            yoffset = linecount * GetInterline() / 2;
-            rect.SetY( rect.GetY() - yoffset );
-            break;
-
-        case GR_TEXT_V_ALIGN_BOTTOM:
-            yoffset = linecount * GetInterline();
-            rect.SetY( rect.GetY() - yoffset );
-            break;
-        }
+    case GR_TEXT_V_ALIGN_TOP:                                                     break;
+    case GR_TEXT_V_ALIGN_CENTER: rect.SetY( rect.GetY() - rect.GetHeight() / 2 ); break;
+    case GR_TEXT_V_ALIGN_BOTTOM: rect.SetY( rect.GetY() - rect.GetHeight() );     break;
     }
 
     // Many fonts draw diacriticals, descenders, etc. outside the X-height of the font.  This

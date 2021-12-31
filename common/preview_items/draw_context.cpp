@@ -22,12 +22,12 @@
  */
 
 #include <preview_items/draw_context.h>
-
 #include <preview_items/preview_utils.h>
-
 #include <view/view.h>
 
 using namespace KIGFX::PREVIEW;
+
+using KIGFX::COLOR4D;
 
 
 static constexpr double ANGLE_EPSILON = 1e-9;

@@ -28,6 +28,7 @@
 
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/definitions.h>
+#include <font/font.h>
 
 #include <math/util.h>      // for KiROUND
 
@@ -38,7 +39,6 @@ using namespace KIGFX;
 
 GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
         m_options( aDisplayOptions ),
-        m_strokeFont( this ),
         // m_currentNativeCursor is initialized with KICURSOR::DEFAULT value to avoid
         // if comparison with uninitialized value on SetNativeCursorStyle method.
         // Some classes inheriting from GAL has different SetNativeCursorStyle method
@@ -85,8 +85,6 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
 
     // Initialize text properties
     ResetTextAttributes();
-
-    m_strokeFont.LoadNewStrokeFont( newstroke_font, newstroke_font_bufsize );
 
     // subscribe for settings updates
     m_observerLink = m_options.Subscribe( this );
@@ -152,15 +150,9 @@ bool GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 }
 
 
-void GAL::SetTextAttributes( const EDA_TEXT* aText )
+void GAL::SetTextAttributes( const TEXT_ATTRIBUTES& aAttributes )
 {
-    SetGlyphSize( VECTOR2D( aText->GetTextSize() ) );
-    SetHorizontalJustify( aText->GetHorizJustify() );
-    SetVerticalJustify( aText->GetVertJustify() );
-    SetFontBold( aText->IsBold() );
-    SetFontItalic( aText->IsItalic() );
-    SetFontUnderlined( false );
-    SetTextMirrored( aText->IsMirrored() );
+    m_attributes = aAttributes;
 }
 
 
@@ -177,15 +169,6 @@ void GAL::ResetTextAttributes()
     SetFontItalic( false );
     SetFontUnderlined( false );
     SetTextMirrored( false );
-}
-
-
-VECTOR2D GAL::GetTextLineSize( const UTF8& aText ) const
-{
-    // Compute the X and Y size of a given text.
-    // Because computeTextLineSize expects a one line text,
-    // aText is expected to be only one line text.
-    return m_strokeFont.computeTextLineSize( aText );
 }
 
 
@@ -274,6 +257,65 @@ COLOR4D GAL::getCursorColor() const
         color.a = color.a * 0.5;
 
     return color;
+}
+
+
+void GAL::StrokeText( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle,
+                      KIFONT::FONT* aFont, double aLineSpacing )
+{
+    if( aText.IsEmpty() )
+        return;
+
+    if( !aFont )
+        aFont = KIFONT::FONT::GetFont( wxEmptyString );
+
+    TEXT_ATTRIBUTES attributes;
+    attributes.m_Angle = EDA_ANGLE( aRotationAngle, EDA_ANGLE::RADIANS );
+    attributes.m_Halign = GetHorizontalJustify();
+    attributes.m_Valign = GetVerticalJustify();
+    attributes.m_LineSpacing = aLineSpacing;
+
+    aFont->Draw( this, aText, aPosition, attributes );
+}
+
+
+void GAL::DrawGlyphs( const KIFONT::GLYPH_LIST& aGlyphs )
+{
+    int nth = 0;
+    int total = aGlyphs.size();
+
+    for( const std::shared_ptr<KIFONT::GLYPH>& glyph : aGlyphs )
+    {
+        DrawGlyph( glyph, nth, total );
+        nth++;
+    }
+}
+
+
+/*
+ * Fallback for implementations that don't implement bitmap text: use stroke font
+ */
+void GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle )
+{
+    // Handle flipped view
+    if( m_globalFlipX )
+        m_attributes.m_Mirrored = !m_attributes.m_Mirrored;
+
+    // Bitmap font is slightly smaller and slightly heavier than the stroke font so we
+    // compensate a bit before stroking
+    float    saveLineWidth = m_lineWidth;
+    VECTOR2D saveGlyphSize = m_attributes.m_Size;
+    {
+        m_lineWidth *= 1.2f;
+        m_attributes.m_Size = m_attributes.m_Size * 0.8;
+
+        StrokeText( aText, aPosition, aRotationAngle );
+    }
+    m_lineWidth = saveLineWidth;
+    m_attributes.m_Size = saveGlyphSize;
+
+    if( m_globalFlipX )
+        m_attributes.m_Mirrored = !m_attributes.m_Mirrored;
 }
 
 

@@ -107,9 +107,6 @@ using selector = parse_tree::selector< Rule,
                                                                      subscript,
                                                                      overbar>>;
 
-typedef std::unique_ptr<MARKUP::NODE, std::default_delete<MARKUP::NODE>> MARKUP_NODE;
-
-
 class MARKUP_PARSER
 {
 public:
@@ -117,7 +114,7 @@ public:
             in( source, "from_input" )
     {}
 
-    MARKUP_NODE Parse();
+    std::unique_ptr<NODE> Parse();
 
 private:
     string_input<> in;
@@ -125,6 +122,5 @@ private:
 
 } // namespace MARKUP
 
-std::ostream& operator<<( std::ostream& os, const MARKUP::MARKUP_NODE& node );
 
 #endif //MARKUP_PARSER_H

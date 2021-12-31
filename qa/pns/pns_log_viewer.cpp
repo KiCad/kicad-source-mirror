@@ -67,7 +67,8 @@ void LABEL_MANAGER::Add( VECTOR2I target, std::string msg, COLOR4D color )
     lbl.m_color = color;
     m_gal->SetGlyphSize( VECTOR2D( m_textSize, m_textSize ) );
 
-    VECTOR2I textDims = m_gal->GetTextLineSize( msg );
+    KIFONT::FONT* strokeFont = KIFONT::GetFont( wxEmptyString );
+    VECTOR2I textDims = strokeFont->StringBoundaryLimits( m_gal, msg );
 
     lbl.m_bbox.SetOrigin( lbl.m_target - textDims - VECTOR2I( m_textSize, m_textSize ) );
     lbl.m_bbox.SetSize( textDims );

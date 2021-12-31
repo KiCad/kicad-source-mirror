@@ -107,6 +107,20 @@ void BASIC_GAL::DrawPolyline( const std::deque<VECTOR2D>& aPointList )
 }
 
 
+void BASIC_GAL::DrawPolyline( const std::vector<VECTOR2D>& aPointList )
+{
+    if( aPointList.size() < 2 )
+        return;
+
+    std::vector<VECTOR2I> polyline_corners;
+
+    for( const VECTOR2D& pt : aPointList )
+        polyline_corners.emplace_back( (VECTOR2I) transform( pt ) );
+
+    doDrawPolyline( polyline_corners );
+}
+
+
 void BASIC_GAL::DrawPolyline( const VECTOR2D aPointList[], int aListSize )
 {
     if( aListSize < 2 )
@@ -149,4 +163,19 @@ void BASIC_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint
     {
         m_callback( startVector.x, startVector.y, endVector.x, endVector.y, m_callbackData );
     }
+}
+
+
+void BASIC_GAL::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTotal )
+{
+    if( aGlyph.IsStroke() )
+    {
+        for( const std::vector<VECTOR2D>& pointList : aGlyph.GetPoints() )
+            DrawPolyline( pointList );
+    }
+#if 0 // FONT TODO
+    else if( aGlyph.IsOutline() )
+    {
+    }
+#endif
 }

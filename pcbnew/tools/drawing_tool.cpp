@@ -574,14 +574,19 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 m_controls->ForceCursorPosition( true, m_controls->GetCursorPosition() );
                 PCB_LAYER_ID layer = m_frame->GetActiveLayer();
 
+                wxSize textSize = dsnSettings.GetTextSize( layer );
+                int    thickness = dsnSettings.GetTextThickness( layer );
+
                 // Init the new item attributes
                 if( m_isFootprintEditor )
                 {
                     FP_TEXT* fpText = new FP_TEXT( (FOOTPRINT*) m_frame->GetModel() );
 
                     fpText->SetLayer( layer );
-                    fpText->SetTextSize( dsnSettings.GetTextSize( layer ) );
-                    fpText->SetTextThickness( dsnSettings.GetTextThickness( layer ) );
+                    fpText->SetTextSize( textSize );
+                    fpText->SetTextThickness( thickness );
+                    fpText->SetBold( abs( thickness - GetPenSizeForBold( textSize ) ) <
+                                     abs( thickness - GetPenSizeForNormal( textSize ) ) );
                     fpText->SetItalic( dsnSettings.GetTextItalic( layer ) );
                     fpText->SetKeepUpright( dsnSettings.GetTextUpright( layer ) );
                     fpText->SetTextPos( (wxPoint) cursorPos );
@@ -619,8 +624,10 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     if( IsBackLayer( layer ) )
                         pcbText->SetMirrored( true );
 
-                    pcbText->SetTextSize( dsnSettings.GetTextSize( layer ) );
-                    pcbText->SetTextThickness( dsnSettings.GetTextThickness( layer ) );
+                    pcbText->SetTextSize( textSize );
+                    pcbText->SetTextThickness( thickness );
+                    pcbText->SetBold( abs( thickness - GetPenSizeForBold( textSize ) ) <
+                                      abs( thickness - GetPenSizeForNormal( textSize ) ) );
                     pcbText->SetItalic( dsnSettings.GetTextItalic( layer ) );
                     pcbText->SetTextPos( (wxPoint) cursorPos );
 

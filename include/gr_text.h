@@ -70,19 +70,22 @@ int Clamp_Text_PenSize( int aPenSize, const VECTOR2I& aSize, bool aBold = true )
  * @return the "best" value for a pen size to draw/plot a bold text.
  */
 int GetPenSizeForBold( int aTextSize );
+int GetPenSizeForBold( const wxSize& aTextSize );
 
 /**
  * @param aTextSize = the char size (height or width).
  * @return the "best" value for a pen size to draw/plot a non-bold text.
  */
 int GetPenSizeForNormal( int aTextSize );
+int GetPenSizeForNormal( const wxSize& aTextSize );
 
 /**
  * The full X size is GraphicTextWidth + the thickness of graphic lines.
  *
  * @return the X size of the graphic text.
  */
-int GraphicTextWidth( const wxString& aText, const VECTOR2I& aSize, bool italic, bool bold );
+int GraphicTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I& aSize,
+                      bool italic, bool bold );
 
 /**
  * Draw a graphic text (like footprint text)

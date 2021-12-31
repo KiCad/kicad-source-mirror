@@ -29,6 +29,7 @@
 #include <view/view.h>
 
 using namespace KIGFX::PREVIEW;
+using KIGFX::COLOR4D;
 
 struct SELECTION_COLORS
 {

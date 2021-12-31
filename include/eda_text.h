@@ -193,6 +193,8 @@ public:
 
     void CopyText( const EDA_TEXT& aSrc );
 
+    const TEXT_ATTRIBUTES& GetAttributes() const { return m_attributes; }
+
     /**
      * Helper function used in search and replace dialog.
      *
@@ -291,14 +293,6 @@ public:
      * @return true if a hit, else false.
      */
     virtual bool TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy = 0 ) const;
-
-    /**
-     * @return the text length in internal units.
-     * @param aLine the line of text to consider.  For single line text, this parameter
-     *              is always m_Text.
-     * @param aThickness the stroke width of the text.
-     */
-    int LenSize( const wxString& aLine, int aThickness ) const;
 
     /**
      * Useful in multiline texts to calculate the full text or a line area (for zones filling,
