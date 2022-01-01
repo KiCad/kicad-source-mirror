@@ -72,6 +72,10 @@ target_link_libraries( gal
     ${PIXMAN_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
+	# outline font support
+	${FREETYPE_LIBRARIES}
+	${HarfBuzz_LIBRARIES}
+	${Fontconfig_LIBRARIES}
 )
 
 
@@ -296,6 +300,10 @@ set( FONT_SRCS
     font/font.cpp
     font/glyph.cpp
     font/stroke_font.cpp
+	font/outline_font.cpp
+	font/outline_decomposer.cpp
+	font/triangulate.cpp
+	font/fontconfig.cpp
 	)
 
 set( COMMON_SRCS
@@ -493,6 +501,10 @@ target_link_libraries( common
     ${CURL_LIBRARIES}
     ${wxWidgets_LIBRARIES}
     ${EXTRA_LIBS}
+    # outline font support
+   	${FREETYPE_LIBRARIES}
+   	${HarfBuzz_LIBRARIES}
+	${Fontconfig_LIBRARIES}
     )
 
 target_include_directories( common

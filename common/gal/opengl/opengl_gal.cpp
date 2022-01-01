@@ -44,6 +44,7 @@
 #include <bezier_curves.h>
 #include <math/util.h> // for KiROUND
 #include <trace_helpers.h>
+#include <font/triangulate.h>
 
 #include <wx/frame.h>
 
@@ -2420,12 +2421,28 @@ void OPENGL_GAL::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTotal )
         for( const std::vector<VECTOR2D>& pointList : strokeGlyph )
             DrawPolyline( pointList );
     }
-#if 0 // FONT TODO
     else if( aGlyph.IsOutline() )
     {
-        fillPolygonAsTriangles( aGlyph.GetPolylist() );
+        const auto& outlineGlyph = static_cast<const KIFONT::OUTLINE_GLYPH&>( aGlyph );
+
+        fillPolygonAsTriangles( outlineGlyph );
     }
-#endif
 }
 
 
+void OPENGL_GAL::fillPolygonAsTriangles( const SHAPE_POLY_SET& aPolyList )
+{
+    m_currentManager->Shader( SHADER_NONE );
+    m_currentManager->Color( m_fillColor );
+
+    auto triangleCallback = [&]( int aPolygonIndex, const VECTOR2D& aVertex1,
+                                 const VECTOR2D& aVertex2, const VECTOR2D& aVertex3,
+                                 void* aCallbackData )
+    {
+        m_currentManager->Vertex( aVertex1.x, aVertex1.y, m_layerDepth );
+        m_currentManager->Vertex( aVertex2.x, aVertex2.y, m_layerDepth );
+        m_currentManager->Vertex( aVertex3.x, aVertex3.y, m_layerDepth );
+    };
+
+    Triangulate( aPolyList, triangleCallback );
+}

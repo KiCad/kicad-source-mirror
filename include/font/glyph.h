@@ -47,6 +47,21 @@ public:
 };
 
 
+class OUTLINE_GLYPH : public GLYPH, public SHAPE_POLY_SET
+{
+public:
+    OUTLINE_GLYPH() :
+            SHAPE_POLY_SET()
+    {}
+
+    bool IsOutline() const override { return true; }
+
+    BOX2D BoundingBox() override;
+
+    void Mirror( const VECTOR2D& aMirrorOrigin = VECTOR2D( 0, 0 ) ) override;
+};
+
+
 class STROKE_GLYPH : public GLYPH, public std::vector<std::vector<VECTOR2D>>
 {
 public:

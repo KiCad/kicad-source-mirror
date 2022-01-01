@@ -116,3 +116,16 @@ void STROKE_GLYPH::Mirror( const VECTOR2D& aMirrorOrigin )
             point.x = originX - ( point.x - originX );
     }
 }
+
+
+BOX2D OUTLINE_GLYPH::BoundingBox()
+{
+    BOX2I bbox = BBox();
+    return BOX2D( bbox.GetOrigin(), bbox.GetSize() );
+}
+
+
+void OUTLINE_GLYPH::Mirror( const VECTOR2D& aMirrorOrigin )
+{
+    SHAPE_POLY_SET::Mirror( true, false, aMirrorOrigin );
+}

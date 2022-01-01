@@ -28,6 +28,7 @@
 #include <string_utils.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <font/stroke_font.h>
+#include <font/outline_font.h>
 #include <trigo.h>
 #include <markup_parser.h>
 
@@ -68,22 +69,18 @@ FONT* FONT::getDefaultFont()
 
 FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic )
 {
-    if( aFontName.empty() )
+    if( aFontName.empty() || aFontName == _( "KiCad" ) )
         return getDefaultFont();
 
     std::tuple<wxString, bool, bool> key = { aFontName, aBold, aItalic };
 
     FONT* font = s_fontMap[key];
 
-#if 0
-        // FONT TODO: load a real font
     if( !font )
         font = OUTLINE_FONT::LoadFont( aFontName, aBold, aItalic );
-#else
 
     if( !font )
         font = getDefaultFont();
-#endif
 
     s_fontMap[key] = font;
 
@@ -102,7 +99,7 @@ bool FONT::IsStroke( const wxString& aFontName )
 
     return font && font->IsStroke();
 #else
-    return aFontName == _( "Default Font" );
+    return aFontName == _( "Default Font" ) || aFontName == wxT( "KiCad" );
 #endif
 }
 
