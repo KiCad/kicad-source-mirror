@@ -78,9 +78,9 @@ public:
 
     void CalcArcAngles( int& aStartAngle, int& aEndAngle ) const;
 
-    void BeginEdit( const wxPoint& aStartPoint )      { beginEdit( aStartPoint ); }
-    bool ContinueEdit( const wxPoint& aPosition )     { return continueEdit( aPosition ); }
-    void CalcEdit( const wxPoint& aPosition )         { calcEdit( aPosition ); }
+    void BeginEdit( const VECTOR2I& aStartPoint ) { beginEdit( aStartPoint ); }
+    bool ContinueEdit( const VECTOR2I& aPosition ) { return continueEdit( aPosition ); }
+    void CalcEdit( const VECTOR2I& aPosition ) { calcEdit( aPosition ); }
     void EndEdit()                                    { endEdit(); }
     void SetEditState( int aState )                   { setEditState( aState ); }
 

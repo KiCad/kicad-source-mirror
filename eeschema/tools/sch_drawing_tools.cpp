@@ -257,9 +257,9 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 // but only if it has meaning (i.e inside the canvas)
                 VECTOR2D newMousePos = controls->GetMousePosition(false);
 
-                if( canvas_area.Contains( wxPoint( initialMousePos ) ) )
+                if( canvas_area.Contains( VECTOR2I( initialMousePos ) ) )
                     controls->WarpCursor( controls->GetCursorPosition(), true );
-                else if( !canvas_area.Contains( wxPoint( newMousePos ) ) )
+                else if( !canvas_area.Contains( VECTOR2I( newMousePos ) ) )
                     // The mouse is outside the canvas area, after closing the dialog,
                     // thus can creating autopan issues. Warp the mouse to the canvas center
                     controls->WarpCursor( canvas_area.Centre(), false );
@@ -270,7 +270,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 if( !libSymbol )
                     continue;
 
-                wxPoint pos( cursorPos );
+                VECTOR2I pos( cursorPos );
                 symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, pos );
                 addSymbol( symbol );
 
@@ -346,7 +346,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         }
         else if( symbol && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            symbol->SetPosition( (wxPoint)cursorPos );
+            symbol->SetPosition( cursorPos );
             m_view->Update( symbol );
         }
         else if( symbol && evt->IsAction( &ACTIONS::doDelete ) )
@@ -387,7 +387,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     // Add all the drawable symbols to preview
     if( image )
     {
-        image->SetPosition( (wxPoint)cursorPos );
+        image->SetPosition( cursorPos );
         m_view->ClearPreview();
         m_view->AddToPreview( image->Clone() );
     }
@@ -503,9 +503,9 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 // but only if it has meaning (i.e inside the canvas)
                 VECTOR2D newMousePos = controls->GetMousePosition( false );
 
-                if( canvas_area.Contains( wxPoint( initialMousePos ) ) )
+                if( canvas_area.Contains( VECTOR2I( initialMousePos ) ) )
                     controls->WarpCursor( controls->GetCursorPosition(), true );
-                else if( !canvas_area.Contains( wxPoint( newMousePos ) ) )
+                else if( !canvas_area.Contains( VECTOR2I( newMousePos ) ) )
                     // The mouse is outside the canvas area, after closing the dialog,
                     // thus can creating autopan issues. Warp the mouse to the canvas center
                     controls->WarpCursor( canvas_area.Centre(), false );
@@ -515,7 +515,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 wxString fullFilename = dlg.GetPath();
 
                 if( wxFileExists( fullFilename ) )
-                    image = new SCH_BITMAP( (wxPoint)cursorPos );
+                    image = new SCH_BITMAP( cursorPos );
 
                 if( !image || !image->ReadImageFile( fullFilename ) )
                 {
@@ -563,7 +563,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         }
         else if( image && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            image->SetPosition( (wxPoint)cursorPos );
+            image->SetPosition( cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( image->Clone() );
             m_view->RecacheAllItems();  // Bitmaps are cached in Opengl
@@ -872,25 +872,25 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     switch( aType )
     {
     case LAYER_NOTES:
-        textItem = new SCH_TEXT( (wxPoint) aPosition );
+        textItem = new SCH_TEXT( aPosition );
         break;
 
     case LAYER_LOCLABEL:
-        textItem = new SCH_LABEL( (wxPoint) aPosition );
+        textItem = new SCH_LABEL( aPosition );
         break;
 
     case LAYER_NETCLASS_REFS:
-        textItem = new SCH_NETCLASS_FLAG( (wxPoint) aPosition );
+        textItem = new SCH_NETCLASS_FLAG( aPosition );
         textItem->SetShape( m_lastNetClassFlagShape );
         break;
 
     case LAYER_HIERLABEL:
-        textItem = new SCH_HIERLABEL( (wxPoint) aPosition );
+        textItem = new SCH_HIERLABEL( aPosition );
         textItem->SetShape( m_lastGlobalLabelShape );
         break;
 
     case LAYER_GLOBLABEL:
-        textItem = new SCH_GLOBALLABEL( (wxPoint) aPosition );
+        textItem = new SCH_GLOBALLABEL( aPosition );
         textItem->SetShape( m_lastGlobalLabelShape );
         static_cast<SCH_GLOBALLABEL*>( textItem )->GetFields()[0].SetVisible( true );
         break;
@@ -991,7 +991,7 @@ SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createSheetPin( SCH_SHEET* aSheet, SCH_HIERLAB
         m_lastSheetPinType = aLabel->GetShape();
     }
 
-    sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), text );
+    sheetPin = new SCH_SHEET_PIN( aSheet, VECTOR2I( 0, 0 ), text );
     sheetPin->SetFlags( IS_NEW );
     sheetPin->SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
     sheetPin->SetShape( m_lastSheetPinType );
@@ -1009,7 +1009,7 @@ SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createSheetPin( SCH_SHEET* aSheet, SCH_HIERLAB
 
     m_lastSheetPinType = sheetPin->GetShape();
 
-    sheetPin->SetPosition( (wxPoint) getViewControls()->GetCursorPosition() );
+    sheetPin->SetPosition( (VECTOR2I) getViewControls()->GetCursorPosition() );
 
     return sheetPin;
 }
@@ -1539,7 +1539,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-            sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), (wxPoint) cursorPos );
+            sheet = new SCH_SHEET( m_frame->GetCurrentSheet().Last(), (VECTOR2I) cursorPos );
             sheet->SetFlags( IS_NEW | IS_RESIZING );
             sheet->SetScreen( nullptr );
             sheet->SetBorderWidth( Mils2iu( cfg->m_Drawing.default_line_thickness ) );

@@ -243,12 +243,12 @@ bool PAD::FlashLayer( int aLayer ) const
     case PAD_ATTRIB::NPTH:
         if( GetShape() == PAD_SHAPE::CIRCLE && GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
         {
-            if( GetOffset() == wxPoint( 0, 0 ) && GetDrillSize().x >= GetSize().x )
+            if( GetOffset() == VECTOR2I( 0, 0 ) && GetDrillSize().x >= GetSize().x )
                 return false;
         }
         else if( GetShape() == PAD_SHAPE::OVAL && GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )
         {
-            if( GetOffset() == wxPoint( 0, 0 )
+            if( GetOffset() == VECTOR2I( 0, 0 )
                     && GetDrillSize().x >= GetSize().x && GetDrillSize().y >= GetSize().y )
             {
                 return false;
@@ -376,8 +376,8 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         {
             wxSize  half_size = m_size / 2;
             int     half_width = std::min( half_size.x, half_size.y );
-            wxPoint half_len( half_size.x - half_width, half_size.y - half_width );
-            RotatePoint( &half_len, m_orient );
+            VECTOR2I half_len( half_size.x - half_width, half_size.y - half_width );
+            RotatePoint( half_len, m_orient );
             add( new SHAPE_SEGMENT( shapePos - half_len, shapePos + half_len, half_width * 2 ) );
         }
 
@@ -387,13 +387,13 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     case PAD_SHAPE::TRAPEZOID:
     case PAD_SHAPE::ROUNDRECT:
     {
-        int     r = ( effectiveShape == PAD_SHAPE::ROUNDRECT ) ? GetRoundRectCornerRadius() : 0;
-        wxPoint half_size( m_size.x / 2, m_size.y / 2 );
-        wxSize  trap_delta( 0, 0 );
+        int      r = ( effectiveShape == PAD_SHAPE::ROUNDRECT ) ? GetRoundRectCornerRadius() : 0;
+        VECTOR2I half_size( m_size.x / 2, m_size.y / 2 );
+        wxSize   trap_delta( 0, 0 );
 
         if( r )
         {
-            half_size -= wxPoint( r, r );
+            half_size -= VECTOR2I( r, r );
 
             // Avoid degenerated shapes (0 length segments) that always create issues
             // For roundrect pad very near a circle, use only a circle
@@ -490,20 +490,20 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     }
 
     BOX2I bbox = m_effectiveShape->BBox();
-    m_effectiveBoundingBox = EDA_RECT( (wxPoint) bbox.GetPosition(),
+    m_effectiveBoundingBox = EDA_RECT( bbox.GetPosition(),
                                        wxSize( bbox.GetWidth(), bbox.GetHeight() ) );
 
     // Hole shape
-    wxSize  half_size = m_drill / 2;
-    int     half_width = std::min( half_size.x, half_size.y );
-    wxPoint half_len( half_size.x - half_width, half_size.y - half_width );
+    wxSize   half_size = m_drill / 2;
+    int      half_width = std::min( half_size.x, half_size.y );
+    VECTOR2I half_len( half_size.x - half_width, half_size.y - half_width );
 
-    RotatePoint( &half_len, m_orient );
+    RotatePoint( half_len, m_orient );
 
     m_effectiveHoleShape = std::make_shared<SHAPE_SEGMENT>( m_pos - half_len, m_pos + half_len,
                                                             half_width * 2 );
     bbox = m_effectiveHoleShape->BBox();
-    m_effectiveBoundingBox.Merge( EDA_RECT( (wxPoint) bbox.GetPosition(),
+    m_effectiveBoundingBox.Merge( EDA_RECT( bbox.GetPosition(),
                                             wxSize( bbox.GetWidth(), bbox.GetHeight() ) ) );
 
     // All done
@@ -681,7 +681,7 @@ void PAD::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 void PAD::FlipPrimitives( bool aFlipLeftRight )
 {
     for( std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
-        primitive->Flip( wxPoint( 0, 0 ), aFlipLeftRight );
+        primitive->Flip( VECTOR2I( 0, 0 ), aFlipLeftRight );
 
     SetDirty();
 }
@@ -998,15 +998,15 @@ bool PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 
         for( int ii = 0; ii < count; ii++ )
         {
-            auto vertex = poly->CVertex( ii );
-            auto vertexNext = poly->CVertex(( ii + 1 ) % count );
+            VECTOR2I vertex = poly->CVertex( ii );
+            VECTOR2I vertexNext = poly->CVertex( ( ii + 1 ) % count );
 
             // Test if the point is within aRect
-            if( arect.Contains( ( wxPoint ) vertex ) )
+            if( arect.Contains( vertex ) )
                 return true;
 
             // Test if this edge intersects aRect
-            if( arect.Intersects( ( wxPoint ) vertex, ( wxPoint ) vertexNext ) )
+            if( arect.Intersects( vertex, vertexNext ) )
                 return true;
         }
 
@@ -1490,7 +1490,7 @@ bool PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, in
 
     const SHAPE_SEGMENT* seg = GetEffectiveHoleShape();
 
-    TransformOvalToPolygon( aCornerBuffer, (wxPoint) seg->GetSeg().A, (wxPoint) seg->GetSeg().B,
+    TransformOvalToPolygon( aCornerBuffer, seg->GetSeg().A, seg->GetSeg().B,
                             seg->GetWidth() + aInflateValue * 2, aError, aErrorLoc );
 
     return true;
@@ -1527,10 +1527,10 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         }
         else
         {
-            int     half_width = std::min( dx, dy );
-            wxPoint delta( dx - half_width, dy - half_width );
+            int      half_width = std::min( dx, dy );
+            VECTOR2I delta( dx - half_width, dy - half_width );
 
-            RotatePoint( &delta, angle );
+            RotatePoint( delta, angle );
 
             TransformOvalToPolygon( aCornerBuffer, padShapePos - delta, padShapePos + delta,
                                     ( half_width + aClearanceValue ) * 2, aError, aErrorLoc,

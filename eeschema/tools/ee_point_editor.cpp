@@ -187,10 +187,10 @@ public:
             VECTOR2I   topLeft = sheet->GetPosition();
             VECTOR2I   botRight = sheet->GetPosition() + sheet->GetSize();
 
-            points->AddPoint( (wxPoint) topLeft );
-            points->AddPoint( wxPoint( botRight.x, topLeft.y ) );
-            points->AddPoint( wxPoint( topLeft.x, botRight.y ) );
-            points->AddPoint( (wxPoint) botRight );
+            points->AddPoint( topLeft );
+            points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
+            points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
+            points->AddPoint( botRight );
         }
             break;
 
@@ -200,10 +200,10 @@ public:
             VECTOR2I    topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
             VECTOR2I    botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
 
-            points->AddPoint( (wxPoint) topLeft );
-            points->AddPoint( wxPoint( botRight.x, topLeft.y ) );
-            points->AddPoint( wxPoint( topLeft.x, botRight.y ) );
-            points->AddPoint( (wxPoint) botRight );
+            points->AddPoint( topLeft );
+            points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
+            points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
+            points->AddPoint( botRight );
         }
             break;
 
@@ -608,23 +608,23 @@ void EE_POINT_EDITOR::updateParentItem() const
             if( getEditedPointIndex() == ARC_CENTER )
             {
                 shape->SetEditState( 4 );
-                shape->CalcEdit( (wxPoint) m_editPoints->Point( ARC_CENTER ).GetPosition() );
+                shape->CalcEdit( m_editPoints->Point( ARC_CENTER ).GetPosition() );
             }
             else if( getEditedPointIndex() == ARC_START )
             {
                 shape->SetEditState( 2 );
-                shape->CalcEdit( (wxPoint) m_editPoints->Point( ARC_START ).GetPosition() );
+                shape->CalcEdit( m_editPoints->Point( ARC_START ).GetPosition() );
             }
             else if( getEditedPointIndex() == ARC_END )
             {
                 shape->SetEditState( 3 );
-                shape->CalcEdit( (wxPoint) m_editPoints->Point( ARC_END ).GetPosition() );
+                shape->CalcEdit( m_editPoints->Point( ARC_END ).GetPosition() );
             }
             break;
 
         case SHAPE_T::CIRCLE:
-            shape->SetPosition( (wxPoint) m_editPoints->Point( CIRC_CENTER ).GetPosition() );
-            shape->SetEnd( (wxPoint) m_editPoints->Point( CIRC_END ).GetPosition() );
+            shape->SetPosition( m_editPoints->Point( CIRC_CENTER ).GetPosition() );
+            shape->SetEnd( m_editPoints->Point( CIRC_END ).GetPosition() );
             break;
 
         case SHAPE_T::POLY:
@@ -647,8 +647,8 @@ void EE_POINT_EDITOR::updateParentItem() const
             pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ),
                              topLeft, topRight, botLeft, botRight, &gridHelper );
 
-            shape->SetPosition( (wxPoint) topLeft );
-            shape->SetEnd( (wxPoint) botRight );
+            shape->SetPosition( topLeft );
+            shape->SetEnd( botRight );
         }
             break;
 
@@ -703,9 +703,9 @@ void EE_POINT_EDITOR::updateParentItem() const
 
         // Pin positions are relative to origin.  Attempt to leave them where they
         // are if the origin moves.
-        VECTOR2I originDelta = sheet->GetPosition() - (wxPoint) topLeft;
+        VECTOR2I originDelta = sheet->GetPosition() - topLeft;
 
-        sheet->SetPosition( (wxPoint) topLeft );
+        sheet->SetPosition( topLeft );
         sheet->SetSize( wxSize( botRight.x - topLeft.x, botRight.y - topLeft.y ) );
 
         // Update the fields if we're in autoplace mode
@@ -737,8 +737,8 @@ void EE_POINT_EDITOR::updateParentItem() const
     {
         SCH_LINE* line = (SCH_LINE*) item;
 
-        line->SetStartPoint( (wxPoint) m_editPoints->Point( LINE_START ).GetPosition() );
-        line->SetEndPoint( (wxPoint) m_editPoints->Point( LINE_END ).GetPosition() );
+        line->SetStartPoint( m_editPoints->Point( LINE_START ).GetPosition() );
+        line->SetEndPoint( m_editPoints->Point( LINE_END ).GetPosition() );
 
         std::pair<EDA_ITEM*, int> connected = m_editPoints->Point( LINE_START ).GetConnected();
 
@@ -1022,7 +1022,7 @@ bool EE_POINT_EDITOR::addCornerCondition( const SELECTION& )
     VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
     double   threshold = getView()->ToWorld( EDIT_POINT::POINT_SIZE );
 
-    return shape->HitTest( (wxPoint) cursorPos, (int) threshold );
+    return shape->HitTest( cursorPos, (int) threshold );
 }
 
 
@@ -1035,14 +1035,14 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
 
     VECTOR2I cursor = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
-    wxPoint  pos = mapCoords( cursor );
+    VECTOR2I pos = mapCoords( cursor );
     int      currentMinDistance = INT_MAX;
     int      closestLineStart = 0;
 
     for( unsigned i = 0; i < poly.GetPointCount() - 1; ++i )
     {
-        int distance = (int) DistanceLinePoint( (wxPoint) poly.CPoint( i ),
-                                                (wxPoint) poly.CPoint( i + 1 ), pos );
+        int distance = (int) DistanceLinePoint( poly.CPoint( i ),
+                                                poly.CPoint( i + 1 ), pos );
 
         if( distance < currentMinDistance )
         {

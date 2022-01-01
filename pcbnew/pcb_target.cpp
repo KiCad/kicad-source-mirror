@@ -45,8 +45,8 @@ PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :
     m_layer     = Edge_Cuts;                   // a target is on all layers
 }
 
-PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent, int aShape, PCB_LAYER_ID aLayer,
-                        const wxPoint& aPos, int aSize, int aWidth ) :
+PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent, int aShape, PCB_LAYER_ID aLayer, const VECTOR2I& aPos,
+                        int aSize, int aWidth ) :
     BOARD_ITEM( aParent, PCB_TARGET_T )
 {
     m_shape     = aShape;

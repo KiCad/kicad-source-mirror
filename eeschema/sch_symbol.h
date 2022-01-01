@@ -92,10 +92,10 @@ public:
      * @param setNewItemFlag is used to set the symbol #IS_NEW and #IS_MOVING flags.
      */
     SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId, const SCH_SHEET_PATH* aSheet,
-                int unit = 0, int convert = 0, const wxPoint& pos = wxPoint( 0, 0 ) );
+                int unit = 0, int convert = 0, const VECTOR2I& pos = VECTOR2I( 0, 0 ) );
 
     SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet, const PICKED_SYMBOL& aSel,
-                const wxPoint& pos = wxPoint( 0, 0 ) );
+                const VECTOR2I& pos = VECTOR2I( 0, 0 ) );
 
     /**
      * Clone \a aSymbol into a new schematic symbol object.
