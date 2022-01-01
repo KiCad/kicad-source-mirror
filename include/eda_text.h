@@ -252,7 +252,7 @@ public:
     /**
      * Convert the text shape to a list of segment.
      *
-     * Each segment is stored as 2 wxPoints: the starting point and the ending point
+     * Each segment is stored as 2 VECTOR2Is: the starting point and the ending point
      * there are therefore 2*n points.
      */
     std::vector<VECTOR2I> TransformToSegmentList() const;
@@ -276,7 +276,7 @@ public:
     /**
      * Test if \a aPoint is within the bounds of this object.
      *
-     * @param aPoint A wxPoint to test.
+     * @param aPoint A VECTOR2I to test.
      * @param aAccuracy Amount to inflate the bounding box.
      * @return true if a hit, else false.
      */
@@ -330,7 +330,7 @@ public:
      * Populate \a aPositions with the position of each line of a multiline text, according
      * to the vertical justification and the rotation of the whole text.
      *
-     * @param aPositions is the list to populate by the wxPoint positions.
+     * @param aPositions is the list to populate by the VECTOR2I positions.
      * @param aLineCount is the number of lines (not recalculated here for efficiency reasons.
      */
     void GetLinePositions( std::vector<VECTOR2I>& aPositions, int aLineCount ) const;

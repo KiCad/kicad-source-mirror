@@ -443,8 +443,8 @@ void BRDITEMS_PLOTTER::PlotDimension( const PCB_DIMENSION_BASE* aDim )
             const SEG& seg = static_cast<const SHAPE_SEGMENT*>( shape.get() )->GetSeg();
 
             draw.SetShape( SHAPE_T::SEGMENT );
-            draw.SetStart( wxPoint( seg.A ) );
-            draw.SetEnd( wxPoint( seg.B ) );
+            draw.SetStart(  seg.A );
+            draw.SetEnd( seg.B );
 
             PlotPcbShape( &draw );
             break;
@@ -452,13 +452,13 @@ void BRDITEMS_PLOTTER::PlotDimension( const PCB_DIMENSION_BASE* aDim )
 
         case SH_CIRCLE:
         {
-            wxPoint start( shape->Centre() );
+            VECTOR2I start( shape->Centre() );
             int radius = static_cast<const SHAPE_CIRCLE*>( shape.get() )->GetRadius();
 
             draw.SetShape( SHAPE_T::CIRCLE );
             draw.SetFilled( false );
             draw.SetStart( start );
-            draw.SetEnd( wxPoint( start.x + radius, start.y ) );
+            draw.SetEnd( VECTOR2I( start.x + radius, start.y ) );
 
             PlotPcbShape( &draw );
             break;
@@ -493,7 +493,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( const PCB_TARGET* aMire )
         radius = aMire->GetSize() / 2;
 
     // Draw the circle
-    draw.SetEnd( wxPoint( draw.GetStart().x + radius, draw.GetStart().y ) );
+    draw.SetEnd( VECTOR2I( draw.GetStart().x + radius, draw.GetStart().y ) );
 
     PlotPcbShape( &draw );
 
@@ -512,15 +512,15 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( const PCB_TARGET* aMire )
         dy2 = -dy1;
     }
 
-    wxPoint mirePos( aMire->GetPosition() );
+    VECTOR2I mirePos( aMire->GetPosition() );
 
     // Draw the X or + shape:
-    draw.SetStart( wxPoint( mirePos.x - dx1, mirePos.y - dy1 ) );
-    draw.SetEnd(   wxPoint( mirePos.x + dx1, mirePos.y + dy1 ) );
+    draw.SetStart( VECTOR2I( mirePos.x - dx1, mirePos.y - dy1 ) );
+    draw.SetEnd( VECTOR2I( mirePos.x + dx1, mirePos.y + dy1 ) );
     PlotPcbShape( &draw );
 
-    draw.SetStart( wxPoint( mirePos.x - dx2, mirePos.y - dy2 ) );
-    draw.SetEnd(   wxPoint( mirePos.x + dx2, mirePos.y + dy2 ) );
+    draw.SetStart( VECTOR2I( mirePos.x - dx2, mirePos.y - dy2 ) );
+    draw.SetEnd( VECTOR2I( mirePos.x + dx2, mirePos.y + dy2 ) );
     PlotPcbShape( &draw );
 }
 
@@ -721,7 +721,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
         for( SHAPE* shape : shapes )
         {
             STROKE_PARAMS::Stroke( shape, lineStyle, thickness, m_plotter->RenderSettings(),
-                                   [&]( const wxPoint& a, const wxPoint& b )
+                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
                                    {
                                        m_plotter->ThickSegment( a, b, thickness, GetPlotMode(),
                                                                 &gbr_metadata );
@@ -856,8 +856,8 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET&
 
                     if( outline.CPoint( 0 ) != outline.CPoint( last_idx ) )
                     {
-                        m_plotter->ThickSegment( wxPoint( outline.CPoint( 0 ) ),
-                                                 wxPoint( outline.CPoint( last_idx ) ),
+                        m_plotter->ThickSegment( VECTOR2I( outline.CPoint( 0 ) ),
+                                                 VECTOR2I( outline.CPoint( last_idx ) ),
                                                  outline_thickness, GetPlotMode(), &gbr_metadata );
                     }
                 }
@@ -879,8 +879,8 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET&
 
                 for( int jj = 1; jj <= last_idx; jj++ )
                 {
-                    m_plotter->ThickSegment( wxPoint( outline.CPoint( jj - 1) ),
-                                             wxPoint( outline.CPoint( jj ) ),
+                    m_plotter->ThickSegment( VECTOR2I( outline.CPoint( jj - 1 ) ),
+                                             VECTOR2I( outline.CPoint( jj ) ),
                                              outline_thickness,
                                              GetPlotMode(), &gbr_metadata );
                 }
@@ -888,8 +888,8 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( const ZONE* aZone, const SHAPE_POLY_SET&
                 // Ensure the outline is closed:
                 if( outline.CPoint( 0 ) != outline.CPoint( last_idx ) )
                 {
-                    m_plotter->ThickSegment( wxPoint( outline.CPoint( 0 ) ),
-                                             wxPoint( outline.CPoint( last_idx ) ),
+                    m_plotter->ThickSegment( VECTOR2I( outline.CPoint( 0 ) ),
+                                             VECTOR2I( outline.CPoint( last_idx ) ),
                                              outline_thickness,
                                              GetPlotMode(), &gbr_metadata );
                 }
@@ -982,8 +982,8 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
                     for( auto it = aShape->GetPolyShape().CIterateSegments( 0 ); it; it++ )
                     {
                         auto seg = it.Get();
-                        m_plotter->ThickSegment( wxPoint( seg.A ), wxPoint( seg.B ),
-                                                 thickness, GetPlotMode(), &gbr_metadata );
+                        m_plotter->ThickSegment( seg.A, seg.B, thickness, GetPlotMode(),
+                                                 &gbr_metadata );
                     }
                 }
 
@@ -1045,7 +1045,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
         for( SHAPE* shape : shapes )
         {
             STROKE_PARAMS::Stroke( shape, lineStyle, thickness, m_plotter->RenderSettings(),
-                                   [&]( const wxPoint& a, const wxPoint& b )
+                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
                                    {
                                        m_plotter->ThickSegment( a, b, thickness, GetPlotMode(),
                                                                 &gbr_metadata );

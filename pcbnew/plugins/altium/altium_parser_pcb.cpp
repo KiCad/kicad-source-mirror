@@ -157,10 +157,10 @@ void altium_parse_polygons( std::map<wxString, wxString>& aProps,
         const int32_t radius = ALTIUM_PARSER::ReadKicadUnit( aProps, "R" + si, "0mil" );
         const double  sa = ALTIUM_PARSER::ReadDouble( aProps, "SA" + si, 0. );
         const double  ea = ALTIUM_PARSER::ReadDouble( aProps, "EA" + si, 0. );
-        const wxPoint vp = wxPoint( ALTIUM_PARSER::ReadKicadUnit( aProps, vxi, "0mil" ),
-                                    -ALTIUM_PARSER::ReadKicadUnit( aProps, vyi, "0mil" ) );
-        const wxPoint cp = wxPoint( ALTIUM_PARSER::ReadKicadUnit( aProps, "CX" + si, "0mil" ),
-                                    -ALTIUM_PARSER::ReadKicadUnit( aProps, "CY" + si, "0mil" ) );
+        const VECTOR2I vp = VECTOR2I( ALTIUM_PARSER::ReadKicadUnit( aProps, vxi, "0mil" ),
+                                     -ALTIUM_PARSER::ReadKicadUnit( aProps, vyi, "0mil" ) );
+        const VECTOR2I cp = VECTOR2I( ALTIUM_PARSER::ReadKicadUnit( aProps, "CX" + si, "0mil" ),
+                                     -ALTIUM_PARSER::ReadKicadUnit( aProps, "CY" + si, "0mil" ) );
 
         aVertices.emplace_back( isRound, radius, sa, ea, vp, cp );
     }
@@ -173,7 +173,7 @@ ABOARD6::ABOARD6( ALTIUM_PARSER& aReader )
     if( props.empty() )
         THROW_IO_ERROR( "Board6 stream has no props!" );
 
-    sheetpos  = wxPoint( ALTIUM_PARSER::ReadKicadUnit( props, "SHEETX", "0mil" ),
+    sheetpos = VECTOR2I( ALTIUM_PARSER::ReadKicadUnit( props, "SHEETX", "0mil" ),
                          -ALTIUM_PARSER::ReadKicadUnit( props, "SHEETY", "0mil" ) );
     sheetsize = wxSize( ALTIUM_PARSER::ReadKicadUnit( props, "SHEETWIDTH", "0mil" ),
                         ALTIUM_PARSER::ReadKicadUnit( props, "SHEETHEIGHT", "0mil" ) );
@@ -243,7 +243,7 @@ ACOMPONENT6::ACOMPONENT6( ALTIUM_PARSER& aReader )
         THROW_IO_ERROR( "Components6 stream has no props" );
 
     layer = altium_layer_from_name( ALTIUM_PARSER::ReadString( props, "LAYER", "" ) );
-    position         = wxPoint( ALTIUM_PARSER::ReadKicadUnit( props, "X", "0mil" ),
+    position         = VECTOR2I( ALTIUM_PARSER::ReadKicadUnit( props, "X", "0mil" ),
                                 -ALTIUM_PARSER::ReadKicadUnit( props, "Y", "0mil" ) );
     rotation         = ALTIUM_PARSER::ReadDouble( props, "ROTATION", 0. );
     locked           = ALTIUM_PARSER::ReadBool( props, "LOCKED", false );
@@ -296,8 +296,8 @@ ADIMENSION6::ADIMENSION6( ALTIUM_PARSER& aReader )
 
     wxString text_position_raw = ALTIUM_PARSER::ReadString( props, "TEXTPOSITION", "" );
 
-    xy1 = wxPoint( ALTIUM_PARSER::ReadKicadUnit( props, "X1", "0mil" ),
-                   -ALTIUM_PARSER::ReadKicadUnit( props, "Y1", "0mil" ) );
+    xy1 = VECTOR2I( ALTIUM_PARSER::ReadKicadUnit( props, "X1", "0mil" ),
+                    -ALTIUM_PARSER::ReadKicadUnit( props, "Y1", "0mil" ) );
 
     int refcount = ALTIUM_PARSER::ReadInt( props, "REFERENCES_COUNT", 0 );
 
@@ -506,7 +506,7 @@ AARC6::AARC6( ALTIUM_PARSER& aReader )
     subpolyindex = aReader.Read<uint16_t>();
     component    = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
-    center     = aReader.ReadWxPoint();
+    center     = aReader.ReadVector2I();
     radius     = aReader.ReadKicadUnit();
     startangle = aReader.Read<double>();
     endangle   = aReader.Read<double>();
@@ -616,7 +616,7 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
     component = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
 
-    position = aReader.ReadWxPoint();
+    position = aReader.ReadVector2I();
     topsize  = aReader.ReadWxSize();
     midsize  = aReader.ReadWxSize();
     botsize  = aReader.ReadWxSize();
@@ -675,10 +675,10 @@ APAD6::APAD6( ALTIUM_PARSER& aReader )
         sizeAndShape->slotsize     = aReader.ReadKicadUnit();
         sizeAndShape->slotrotation = aReader.Read<double>();
 
-        for( wxPoint& pt : sizeAndShape->holeoffset )
+        for( VECTOR2I& pt : sizeAndShape->holeoffset )
             pt.x = aReader.ReadKicadUnitX();
 
-        for( wxPoint& pt : sizeAndShape->holeoffset )
+        for( VECTOR2I& pt : sizeAndShape->holeoffset )
             pt.y = aReader.ReadKicadUnitY();
 
         aReader.Skip( 1 );
@@ -723,7 +723,7 @@ AVIA6::AVIA6( ALTIUM_PARSER& aReader )
 
     net = aReader.Read<uint16_t>();
     aReader.Skip( 8 );
-    position = aReader.ReadWxPoint();
+    position = aReader.ReadVector2I();
     diameter = aReader.ReadKicadUnit();
     holesize = aReader.ReadKicadUnit();
 
@@ -769,8 +769,8 @@ ATRACK6::ATRACK6( ALTIUM_PARSER& aReader )
     subpolyindex = aReader.Read<uint16_t>();
     component    = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
-    start = aReader.ReadWxPoint();
-    end   = aReader.ReadWxPoint();
+    start = aReader.ReadVector2I();
+    end   = aReader.ReadVector2I();
     width = aReader.ReadKicadUnit();
 
     aReader.SkipSubrecord();
@@ -793,7 +793,7 @@ ATEXT6::ATEXT6( ALTIUM_PARSER& aReader, std::map<uint32_t, wxString>& aStringTab
     aReader.Skip( 6 );
     component = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
-    position = aReader.ReadWxPoint();
+    position = aReader.ReadVector2I();
     height   = aReader.ReadKicadUnit();
     aReader.Skip( 2 );
     rotation     = aReader.Read<double>();
@@ -863,8 +863,8 @@ AFILL6::AFILL6( ALTIUM_PARSER& aReader )
     aReader.Skip( 2 );
     component = aReader.Read<uint16_t>();
     aReader.Skip( 4 );
-    pos1     = aReader.ReadWxPoint();
-    pos2     = aReader.ReadWxPoint();
+    pos1     = aReader.ReadVector2I();
+    pos2     = aReader.ReadVector2I();
     rotation = aReader.Read<double>();
 
     aReader.SkipSubrecord();
@@ -947,12 +947,12 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
     {
         if( aExtendedVertices )
         {
-            bool    isRound  = aReader.Read<uint8_t>() != 0;
-            wxPoint position = aReader.ReadWxPoint();
-            wxPoint center   = aReader.ReadWxPoint();
-            int32_t radius   = aReader.ReadKicadUnit();
-            double  angle1   = aReader.Read<double>();
-            double  angle2   = aReader.Read<double>();
+            bool     isRound  = aReader.Read<uint8_t>() != 0;
+            VECTOR2I position = aReader.ReadVector2I();
+            VECTOR2I center   = aReader.ReadVector2I();
+            int32_t  radius   = aReader.ReadKicadUnit();
+            double   angle1   = aReader.Read<double>();
+            double   angle2   = aReader.Read<double>();
             outline.emplace_back( isRound, radius, angle1, angle2, position, center );
         }
         else
@@ -960,7 +960,7 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
             // For some regions the coordinates are stored as double and not as int32_t
             int32_t x = ALTIUM_PARSER::ConvertToKicadUnit( aReader.Read<double>() );
             int32_t y = ALTIUM_PARSER::ConvertToKicadUnit( -aReader.Read<double>() );
-            outline.emplace_back( wxPoint( x, y ) );
+            outline.emplace_back( VECTOR2I( x, y ) );
         }
     }
 

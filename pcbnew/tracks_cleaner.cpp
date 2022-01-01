@@ -482,13 +482,13 @@ bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 
     if( ( aSeg1->GetStart().x > aSeg1->GetEnd().x )
             == ( aSeg1->GetStart().y > aSeg1->GetEnd().y ) )
     {
-        dummy_seg.SetStart( wxPoint( min_x, min_y ) );
-        dummy_seg.SetEnd( wxPoint( max_x, max_y ) );
+        dummy_seg.SetStart( VECTOR2I( min_x, min_y ) );
+        dummy_seg.SetEnd( VECTOR2I( max_x, max_y ) );
     }
     else
     {
-        dummy_seg.SetStart( wxPoint( min_x, max_y ) );
-        dummy_seg.SetEnd( wxPoint( max_x, min_y ) );
+        dummy_seg.SetStart( VECTOR2I( min_x, max_y ) );
+        dummy_seg.SetEnd( VECTOR2I( max_x, min_y ) );
     }
 
     // Now find the removed end(s) and stop merging if it is a node:

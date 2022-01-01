@@ -99,7 +99,7 @@
 void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                           APERTURE_T        aAperture,
                           int               Dcode_index,
-                          const wxPoint&    aPos,
+                          const VECTOR2I&   aPos,
                           wxSize            aSize,
                           bool              aLayerNegative )
 {
@@ -152,8 +152,8 @@ void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  */
 void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                        int               Dcode_index,
-                       const wxPoint&    aStart,
-                       const wxPoint&    aEnd,
+                       const VECTOR2I&   aStart,
+                       const VECTOR2I&   aEnd,
                        wxSize            aPenSize,
                        bool              aLayerNegative )
 {
@@ -199,11 +199,11 @@ void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  *                      false when arc is inside one quadrant
  * @param aLayerNegative set to true if the current layer is negative.
  */
-void fillArcGBRITEM( GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, const wxPoint& aStart,
-                     const wxPoint& aEnd, const wxPoint& aRelCenter, wxSize aPenSize,
-                     bool aClockwise, bool aMultiquadrant, bool aLayerNegative  )
+void fillArcGBRITEM( GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, const VECTOR2I& aStart,
+                     const VECTOR2I& aEnd, const VECTOR2I& aRelCenter, wxSize aPenSize,
+                     bool aClockwise, bool aMultiquadrant, bool aLayerNegative )
 {
-    wxPoint center, delta;
+    VECTOR2I center, delta;
 
     aGbrItem->m_Shape = GBR_ARC;
     aGbrItem->m_Size  = aPenSize;
@@ -325,8 +325,8 @@ void fillArcGBRITEM( GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, const wxPoint&
  *                       false when arc is inside one quadrant
  * @param aLayerNegative set to true if the current layer is negative
  */
-static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const wxPoint& aStart, const wxPoint& aEnd,
-                          const wxPoint& rel_center, bool aClockwise, bool aMultiquadrant,
+static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                         const VECTOR2I& rel_center, bool aClockwise, bool aMultiquadrant,
                           bool aLayerNegative )
 {
     /* in order to calculate arc parameters, we use fillArcGBRITEM

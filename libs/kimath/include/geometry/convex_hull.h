@@ -27,8 +27,8 @@
 
 
 #include <vector>
+#include <math/vector2d.h>
 
-class wxPoint;      // Defined in wxWidgets
 class SHAPE_POLY_SET;
 
 /**
@@ -38,7 +38,7 @@ class SHAPE_POLY_SET;
  * @param aPoly is the list of points.
  */
 
-void BuildConvexHull( std::vector<wxPoint>& aResult, const std::vector<wxPoint>& aPoly );
+void BuildConvexHull( std::vector<VECTOR2I>& aResult, const std::vector<VECTOR2I>& aPoly );
 
 /**
  * Calculate the convex hull of a #SHAPE_POLY_SET.
@@ -46,7 +46,7 @@ void BuildConvexHull( std::vector<wxPoint>& aResult, const std::vector<wxPoint>&
  * @param aResult is a vector to store the convex polygon.
  * @param aPolygons is the #SHAPE_POLY_SET.
  */
-void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPolygons );
+void BuildConvexHull( std::vector<VECTOR2I>& aResult, const SHAPE_POLY_SET& aPolygons );
 
 /**
  * Calculate the convex hull (rotated and moved) of a #SHAPE_POLY_SET.
@@ -56,7 +56,7 @@ void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPoly
  * @param aPosition is the final position of the convex hull.
  * @param aRotation is the rotation of the convex hull.
  */
-void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPolygons,
-                      const wxPoint& aPosition, double aRotation );
+void BuildConvexHull( std::vector<VECTOR2I>& aResult, const SHAPE_POLY_SET& aPolygons,
+                      const VECTOR2I& aPosition, double aRotation );
 
 #endif // __CONVEX_HULL_H

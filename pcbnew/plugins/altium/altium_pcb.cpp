@@ -2360,10 +2360,10 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
                 int offsetX = aElem.topsize.x / 2 - offset;
                 int offsetY = aElem.topsize.y / 2 - offset;
 
-                wxPoint p11 = aElem.position + wxPoint( offsetX, offsetY );
-                wxPoint p12 = aElem.position + wxPoint( offsetX, -offsetY );
-                wxPoint p22 = aElem.position + wxPoint( -offsetX, -offsetY );
-                wxPoint p21 = aElem.position + wxPoint( -offsetX, offsetY );
+                VECTOR2I p11 = aElem.position + VECTOR2I( offsetX, offsetY );
+                VECTOR2I p12 = aElem.position + VECTOR2I( offsetX, -offsetY );
+                VECTOR2I p22 = aElem.position + VECTOR2I( -offsetX, -offsetY );
+                VECTOR2I p21 = aElem.position + VECTOR2I( -offsetX, offsetY );
 
                 shape->SetShape( SHAPE_T::POLY );
                 shape->SetFilled( true );
@@ -2375,7 +2375,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
                 shape->SetShape( SHAPE_T::CIRCLE );
                 shape->SetFilled( true );
                 shape->SetStart( aElem.position );
-                shape->SetEnd( aElem.position - wxPoint( 0, aElem.topsize.x / 4 ) );
+                shape->SetEnd( aElem.position - VECTOR2I( 0, aElem.topsize.x / 4 ) );
                 shape->SetStroke( STROKE_PARAMS( aElem.topsize.x / 2, PLOT_DASH_TYPE::SOLID ) );
             }
             else if( aElem.topsize.x < aElem.topsize.y )
@@ -2450,14 +2450,14 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
         shape->SetLayer( klayer );
         shape->SetStroke( STROKE_PARAMS( 0 ) );
 
-        wxPoint p11 = aElem.position + wxPoint( aElem.topsize.x / 2, aElem.topsize.y / 2 );
-        wxPoint p12 = aElem.position + wxPoint( aElem.topsize.x / 2, -aElem.topsize.y / 2 );
-        wxPoint p22 = aElem.position + wxPoint( -aElem.topsize.x / 2, -aElem.topsize.y / 2 );
-        wxPoint p21 = aElem.position + wxPoint( -aElem.topsize.x / 2, aElem.topsize.y / 2 );
+        VECTOR2I p11 = aElem.position + wxPoint( aElem.topsize.x / 2, aElem.topsize.y / 2 );
+        VECTOR2I p12 = aElem.position + wxPoint( aElem.topsize.x / 2, -aElem.topsize.y / 2 );
+        VECTOR2I p22 = aElem.position + wxPoint( -aElem.topsize.x / 2, -aElem.topsize.y / 2 );
+        VECTOR2I p21 = aElem.position + wxPoint( -aElem.topsize.x / 2, aElem.topsize.y / 2 );
 
         int     chamfer = std::min( aElem.topsize.x, aElem.topsize.y ) / 4;
-        wxPoint chamferX( chamfer, 0 );
-        wxPoint chamferY( 0, chamfer );
+        VECTOR2I chamferX( chamfer, 0 );
+        VECTOR2I chamferY( 0, chamfer );
 
         shape->SetPolyPoints( { p11 - chamferX, p11 - chamferY, p12 + chamferY, p12 - chamferX,
                                 p22 + chamferX, p22 + chamferY, p21 - chamferY, p21 + chamferX } );

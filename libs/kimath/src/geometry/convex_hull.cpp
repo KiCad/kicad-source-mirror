@@ -67,7 +67,7 @@ typedef long long coord2_t;     // must be big enough to hold 2*max(|coordinate|
 
 // this function is used to sort points.
 // Andrew's monotone chain 2D convex hull algorithm needs a sorted set of points
-static bool compare_point( const wxPoint& ref, const wxPoint& p )
+static bool compare_point( const VECTOR2I& ref, const VECTOR2I& p )
 {
     return ref.x < p.x || (ref.x == p.x && ref.y < p.y);
 }
@@ -76,7 +76,7 @@ static bool compare_point( const wxPoint& ref, const wxPoint& p )
 // 2D cross product of OA and OB vectors, i.e. z-component of their 3D cross product.
 // Returns a positive value, if OAB makes a counter-clockwise turn,
 // negative for clockwise turn, and zero if the points are collinear.
-static coord2_t cross_product( const wxPoint& O, const wxPoint& A, const wxPoint& B )
+static coord2_t cross_product( const VECTOR2I& O, const VECTOR2I& A, const VECTOR2I& B )
 {
     return (coord2_t) (A.x - O.x) * (coord2_t) (B.y - O.y)
            - (coord2_t) (A.y - O.y) * (coord2_t) (B.x - O.x);
@@ -84,9 +84,9 @@ static coord2_t cross_product( const wxPoint& O, const wxPoint& A, const wxPoint
 
 
 // Fills aResult with a list of points on the convex hull in counter-clockwise order.
-void BuildConvexHull( std::vector<wxPoint>& aResult, const std::vector<wxPoint>& aPoly )
+void BuildConvexHull( std::vector<VECTOR2I>& aResult, const std::vector<VECTOR2I>& aPoly )
 {
-    std::vector<wxPoint> poly = aPoly;
+    std::vector<VECTOR2I> poly = aPoly;
     int point_count = poly.size();
 
     if( point_count < 2 )     // Should not happen, but who know
@@ -131,17 +131,17 @@ void BuildConvexHull( std::vector<wxPoint>& aResult, const std::vector<wxPoint>&
 }
 
 
-void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPolygons )
+void BuildConvexHull( std::vector<VECTOR2I>& aResult, const SHAPE_POLY_SET& aPolygons )
 {
-    BuildConvexHull( aResult, aPolygons, wxPoint( 0, 0 ), 0.0 );
+    BuildConvexHull( aResult, aPolygons, VECTOR2I( 0, 0 ), 0.0 );
 }
 
 
-void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPolygons,
-                      const wxPoint& aPosition, double aRotation )
+void BuildConvexHull( std::vector<VECTOR2I>& aResult, const SHAPE_POLY_SET& aPolygons,
+                      const VECTOR2I& aPosition, double aRotation )
 {
     // Build the convex hull of the SHAPE_POLY_SET
-    std::vector<wxPoint> buf;
+    std::vector<VECTOR2I> buf;
 
     for( int cnt = 0; cnt < aPolygons.OutlineCount(); cnt++ )
     {
@@ -157,7 +157,7 @@ void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPoly
 
     for( unsigned ii = 0; ii < aResult.size(); ii++ )
     {
-        RotatePoint( &aResult[ii], aRotation );
+        RotatePoint( aResult[ii], aRotation );
         aResult[ii] += aPosition;
     }
 }

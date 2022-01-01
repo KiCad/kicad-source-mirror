@@ -516,12 +516,12 @@ void ZONE_FILLER::addKnockout( PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_P
         // the pad shape in zone can be its convex hull or the shape itself
         if( aPad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
         {
-            std::vector<wxPoint> convex_hull;
+            std::vector<VECTOR2I> convex_hull;
             BuildConvexHull( convex_hull, poly );
 
             aHoles.NewOutline();
 
-            for( const wxPoint& pt : convex_hull )
+            for( const VECTOR2I& pt : convex_hull )
                 aHoles.Append( pt );
         }
         else

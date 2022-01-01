@@ -29,6 +29,7 @@
 #include <memory>
 
 #include <wx/gdicmn.h>
+#include <math/vector2d.h>
 #include <vector>
 
 
@@ -144,7 +145,7 @@ public:
         return -ReadKicadUnit();
     }
 
-    wxPoint ReadWxPoint()
+    VECTOR2I ReadVector2I()
     {
         int32_t x = ReadKicadUnitX();
         int32_t y = ReadKicadUnitY();

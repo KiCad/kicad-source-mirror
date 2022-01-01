@@ -180,10 +180,10 @@ void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter ) const
 
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_NOCONNECT ) );
-    aPlotter->MoveTo( wxPoint( pX - delta, pY - delta ) );
-    aPlotter->FinishTo( wxPoint( pX + delta, pY + delta ) );
-    aPlotter->MoveTo( wxPoint( pX + delta, pY - delta ) );
-    aPlotter->FinishTo( wxPoint( pX - delta, pY + delta ) );
+    aPlotter->MoveTo( VECTOR2I( pX - delta, pY - delta ) );
+    aPlotter->FinishTo( VECTOR2I( pX + delta, pY + delta ) );
+    aPlotter->MoveTo( VECTOR2I( pX + delta, pY - delta ) );
+    aPlotter->FinishTo( VECTOR2I( pX - delta, pY + delta ) );
 }
 
 

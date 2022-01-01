@@ -870,15 +870,15 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as an arc." ) );
 
     T             token;
-    wxPoint       startPoint( 1, 0 );   // Initialize to a non-degenerate arc just for safety
-    wxPoint       midPoint( 1, 1 );
-    wxPoint       endPoint( 0, 1 );
+    VECTOR2I      startPoint( 1, 0 ); // Initialize to a non-degenerate arc just for safety
+    VECTOR2I      midPoint( 1, 1 );
+    VECTOR2I      endPoint( 0, 1 );
     bool          hasMidPoint = false;
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
 
     // Parameters for legacy format
-    wxPoint       center( 0, 0 );
+    VECTOR2I      center( 0, 0 );
     int           startAngle = 0;
     int           endAngle = 900;
     bool          hasAngles = false;
@@ -972,7 +972,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
 
     if( hasMidPoint )
     {
-        arc->SetCenter( (wxPoint) CalcArcCenter( arc->GetStart(), midPoint, arc->GetEnd() ) );
+        arc->SetCenter( CalcArcCenter( arc->GetStart(), midPoint, arc->GetEnd() ) );
     }
     else if( hasAngles )
     {
@@ -1079,7 +1079,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseCircle()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a circle." ) );
 
     T             token;
-    wxPoint       center( 0, 0 );
+    VECTOR2I      center( 0, 0 );
     int           radius = 1;     // defaulting to 0 could result in troublesome math....
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
@@ -1125,7 +1125,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseCircle()
     }
 
     circle->SetCenter( center );
-    circle->SetEnd( wxPoint( center.x + radius, center.y ) );
+    circle->SetEnd( VECTOR2I( center.x + radius, center.y ) );
 
     return circle.release();
 }
@@ -1751,7 +1751,7 @@ SCH_SHEET_PIN* SCH_SEXPR_PARSER::parseSchSheetPin( SCH_SHEET* aSheet )
                            CurOffset() );
     }
 
-    auto sheetPin = std::make_unique<SCH_SHEET_PIN>( aSheet, wxPoint( 0, 0 ), name );
+    auto sheetPin = std::make_unique<SCH_SHEET_PIN>( aSheet, VECTOR2I( 0, 0 ), name );
 
     token = NextTok();
 
@@ -2753,7 +2753,7 @@ SCH_LINE* SCH_SEXPR_PARSER::parseLine()
         wxCHECK_MSG( false, nullptr, "Cannot parse " + GetTokenString( CurTok() ) + " as a line." );
     }
 
-    std::unique_ptr<SCH_LINE> line = std::make_unique<SCH_LINE>( wxPoint(), layer );
+    std::unique_ptr<SCH_LINE> line = std::make_unique<SCH_LINE>( VECTOR2I(), layer );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -2810,10 +2810,10 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchArc()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as an arc." ) );
 
     T             token;
-    wxPoint       startPoint;
-    wxPoint       midPoint;
-    wxPoint       endPoint;
-    wxPoint       pos;
+    VECTOR2I      startPoint;
+    VECTOR2I      midPoint;
+    VECTOR2I      endPoint;
+    VECTOR2I      pos;
     int           startAngle;
     int           endAngle;
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
@@ -2914,7 +2914,7 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchArc()
     {
         VECTOR2I center = CalcArcCenter( arc->GetStart(), midPoint, arc->GetEnd() );
 
-        arc->SetCenter( (wxPoint) center );
+        arc->SetCenter( center );
     }
     else if( hasAngles )
     {
@@ -2946,7 +2946,7 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchCircle()
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a circle." ) );
 
     T             token;
-    wxPoint       center;
+    VECTOR2I      center;
     int           radius = 0;
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
@@ -2994,7 +2994,7 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchCircle()
     }
 
     circle->SetCenter( center );
-    circle->SetEnd( wxPoint( center.x + radius, center.y ) );
+    circle->SetEnd( VECTOR2I( center.x + radius, center.y ) );
 
     return circle.release();
 }

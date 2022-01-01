@@ -1536,7 +1536,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         for( SHAPE* shape : shapes )
         {
             STROKE_PARAMS::Stroke( shape, lineStyle, thickness, &m_pcbSettings,
-                                   [&]( const wxPoint& a, const wxPoint& b )
+                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
                                    {
                                        m_gal->DrawSegment( a, b, thickness );
                                    } );

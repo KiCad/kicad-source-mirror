@@ -85,7 +85,7 @@ template<typename T> T round_n( const T& value, const T& n, bool aRoundUp )
 class AUTOPLACER
 {
 public:
-    typedef wxPoint SIDE;
+    typedef VECTOR2I  SIDE;
     static const SIDE SIDE_TOP, SIDE_BOTTOM, SIDE_LEFT, SIDE_RIGHT;
     enum COLLISION { COLLIDE_NONE, COLLIDE_OBJECTS, COLLIDE_H_WIRES };
 
@@ -138,7 +138,7 @@ public:
         bool            force_wire_spacing = false;
         SIDE_AND_NPINS  sideandpins = chooseSideForFields( aManual );
         SIDE            field_side = sideandpins.side;
-        wxPoint         fbox_pos = fieldBoxPlacement( sideandpins );
+        VECTOR2I        fbox_pos = fieldBoxPlacement( sideandpins );
         EDA_RECT        field_box( fbox_pos, m_fbox_size );
 
         if( aManual )
@@ -166,8 +166,9 @@ public:
                 }
             }
 
-            wxPoint pos( fieldHorizPlacement( field, field_box ),
-                         fieldVertPlacement( field, field_box, &last_y_coord, !force_wire_spacing ) );
+            VECTOR2I pos(
+                    fieldHorizPlacement( field, field_box ),
+                    fieldVertPlacement( field, field_box, &last_y_coord, !force_wire_spacing ) );
 
             if( m_align_to_grid )
             {
@@ -482,7 +483,7 @@ protected:
         std::vector<SIDE_AND_NPINS> sides = getPreferredSides();
 
         std::reverse( sides.begin(), sides.end() );
-        SIDE_AND_NPINS side = { wxPoint( 1, 0 ), UINT_MAX };
+        SIDE_AND_NPINS side = { VECTOR2I( 1, 0 ), UINT_MAX };
 
         if( aAvoidCollisions )
         {
@@ -525,7 +526,7 @@ protected:
     /**
      * Return the position of the field bounding box.
      */
-    wxPoint fieldBoxPlacement( SIDE_AND_NPINS aFieldSideAndPins )
+    VECTOR2I fieldBoxPlacement( SIDE_AND_NPINS aFieldSideAndPins )
     {
         VECTOR2I fbox_center = m_symbol_bbox.Centre();
         int     offs_x = ( m_symbol_bbox.GetWidth() + m_fbox_size.GetWidth() ) / 2;
@@ -543,7 +544,7 @@ protected:
         int     y = fbox_center.y - ( m_fbox_size.GetHeight() / 2 );
 
         auto getPinsBox =
-                [&]( const wxPoint& aSide )
+                [&]( const VECTOR2I& aSide )
                 {
                     EDA_RECT pinsBox;
 
@@ -573,7 +574,7 @@ protected:
             }
         }
 
-        return wxPoint( x, y );
+        return VECTOR2I( x, y );
     }
 
     /**

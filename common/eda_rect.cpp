@@ -233,9 +233,9 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
 
     /* Test A : Any corners exist in rotated rect? */
     corners[0] = m_pos;
-    corners[1] = m_pos + wxPoint( m_size.x, 0 );
-    corners[2] = m_pos + wxPoint( m_size.x, m_size.y );
-    corners[3] = m_pos + wxPoint( 0, m_size.y );
+    corners[1] = m_pos + VECTOR2I( m_size.x, 0 );
+    corners[2] = m_pos + VECTOR2I( m_size.x, m_size.y );
+    corners[3] = m_pos + VECTOR2I( 0, m_size.y );
 
     VECTOR2I rCentre = aRect.Centre();
 
@@ -256,10 +256,10 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
     int h = aRect.GetHeight() / 2;
 
     // Construct corners around center of shape
-    corners[0] = wxPoint( -w, -h );
-    corners[1] = wxPoint( w, -h );
-    corners[2] = wxPoint( w, h );
-    corners[3] = wxPoint( -w, h );
+    corners[0] = VECTOR2I( -w, -h );
+    corners[1] = VECTOR2I( w, -h );
+    corners[2] = VECTOR2I( w, h );
+    corners[3] = VECTOR2I( -w, h );
 
     // Rotate and test each corner
     for( int j = 0; j < 4; j++ )

@@ -387,7 +387,7 @@ void SCH_LINE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& offset )
         SHAPE_SEGMENT segment( start, end );
 
         STROKE_PARAMS::Stroke( &segment, lineStyle, penWidth, aSettings,
-                               [&]( const wxPoint& a, const wxPoint& b )
+                               [&]( const VECTOR2I& a, const VECTOR2I& b )
                                {
                                    GRLine( nullptr, DC, a.x, a.y, b.x, b.y, penWidth, color );
                                } );

@@ -212,7 +212,7 @@ struct ALTIUM_VERTICE
     const VECTOR2I position;
     const VECTOR2I center;
 
-    explicit ALTIUM_VERTICE( const wxPoint& aPosition )
+    explicit ALTIUM_VERTICE( const VECTOR2I& aPosition )
             : isRound( false ),
               radius( 0 ),
               startangle( 0. ),
@@ -223,7 +223,7 @@ struct ALTIUM_VERTICE
     }
 
     explicit ALTIUM_VERTICE( bool aIsRound, int32_t aRadius, double aStartAngle, double aEndAngle,
-            const wxPoint aPosition, const wxPoint aCenter )
+                             const VECTOR2I aPosition, const VECTOR2I aCenter )
             : isRound( aIsRound ),
               radius( aRadius ),
               startangle( aStartAngle ),
@@ -345,8 +345,8 @@ struct ABOARD6_LAYER_STACKUP
 
 struct ABOARD6
 {
-    wxPoint sheetpos;
-    wxSize  sheetsize;
+    VECTOR2I sheetpos;
+    wxSize   sheetsize;
 
     int                                layercount;
     std::vector<ABOARD6_LAYER_STACKUP> stackup;
@@ -371,7 +371,7 @@ struct ACLASS6
 struct ACOMPONENT6
 {
     ALTIUM_LAYER layer;
-    wxPoint      position;
+    VECTOR2I     position;
     double       rotation;
     bool         locked;
     bool         nameon;
@@ -552,7 +552,7 @@ struct APAD6_SIZE_AND_SHAPE
 
     wxSize               inner_size[29];
     ALTIUM_PAD_SHAPE     inner_shape[29];
-    wxPoint              holeoffset[32];
+    VECTOR2I             holeoffset[32];
     ALTIUM_PAD_SHAPE_ALT alt_shape[32];
     uint8_t              cornerradius[32];
 };
@@ -571,7 +571,7 @@ struct APAD6
     uint16_t     net;
     uint16_t     component;
 
-    wxPoint  position;
+    VECTOR2I position;
     wxSize   topsize;
     wxSize   midsize;
     wxSize   botsize;
@@ -609,7 +609,7 @@ struct AVIA6
 
     uint16_t net;
 
-    wxPoint  position;
+    VECTOR2I position;
     uint32_t diameter;
     uint32_t holesize;
 
@@ -631,8 +631,8 @@ struct ATRACK6
     uint16_t     component;
     uint16_t     subpolyindex;
 
-    wxPoint  start;
-    wxPoint  end;
+    VECTOR2I start;
+    VECTOR2I end;
     uint32_t width;
 
     explicit ATRACK6( ALTIUM_PARSER& aReader );
@@ -643,7 +643,7 @@ struct ATEXT6
     ALTIUM_LAYER layer;
     uint16_t     component;
 
-    wxPoint              position;
+    VECTOR2I             position;
     uint32_t             height;
     double               rotation;
     uint32_t             strokewidth;
@@ -673,9 +673,9 @@ struct AFILL6
     uint16_t     component;
     uint16_t     net;
 
-    wxPoint pos1;
-    wxPoint pos2;
-    double  rotation;
+    VECTOR2I pos1;
+    VECTOR2I pos2;
+    double   rotation;
 
     explicit AFILL6( ALTIUM_PARSER& aReader );
 };

@@ -301,7 +301,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
     {
         char offsetTxt[64];
 
-        wxPoint offset( aPad->GetOffset().x, aPad->GetOffset().y );
+        VECTOR2I offset( aPad->GetOffset().x, aPad->GetOffset().y );
 
         dsnOffset = mapPt( offset );
 
@@ -500,7 +500,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         bool doChamfer = aPad->GetShape() == PAD_SHAPE::CHAMFERED_RECT;
 
         TransformRoundChamferedRectToPolygon(
-                cornerBuffer, wxPoint( 0, 0 ), psize, 0, rradius, aPad->GetChamferRectRatio(),
+                cornerBuffer, VECTOR2I( 0, 0 ), psize, 0, rradius, aPad->GetChamferRectRatio(),
                 doChamfer ? aPad->GetChamferPositions() : 0, 0,
                 aBoard->GetDesignSettings().m_MaxError, ERROR_INSIDE );
         SHAPE_LINE_CHAIN& polygonal_shape = cornerBuffer.Outline( 0 );
@@ -549,7 +549,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
     case PAD_SHAPE::CUSTOM:
     {
-        std::vector<wxPoint> polygonal_shape;
+        std::vector<VECTOR2I> polygonal_shape;
         SHAPE_POLY_SET       pad_shape;
         aPad->MergePrimitivesAsPolygon( &pad_shape );
 

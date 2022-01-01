@@ -61,13 +61,13 @@ void SCH_SHAPE::Move( const VECTOR2I& aOffset )
 
 void SCH_SHAPE::MirrorHorizontally( int aCenter )
 {
-    flip( wxPoint( aCenter, 0 ), true );
+    flip( VECTOR2I( aCenter, 0 ), true );
 }
 
 
 void SCH_SHAPE::MirrorVertically( int aCenter )
 {
-    flip( wxPoint( 0, aCenter ), false );
+    flip( VECTOR2I( 0, aCenter ), false );
 }
 
 
@@ -85,14 +85,14 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
     int     startAngle = 0;
     int     endAngle   = 0;
 
-    static std::vector<wxPoint> cornerList;
+    static std::vector<VECTOR2I> cornerList;
 
     if( GetShape() == SHAPE_T::POLY )
     {
         cornerList.clear();
 
         for( const VECTOR2I& pt : m_poly.Outline( 0 ).CPoints() )
-            cornerList.push_back( (wxPoint) pt );
+            cornerList.push_back( pt );
     }
     else if( GetShape() == SHAPE_T::ARC )
     {
@@ -220,7 +220,7 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         buffer = new VECTOR2I[ptCount];
 
         for( unsigned ii = 0; ii < ptCount; ++ii )
-            buffer[ii] = (wxPoint) poly.CPoint( ii );
+            buffer[ii] = poly.CPoint( ii );
     }
     else if( GetShape() == SHAPE_T::BEZIER )
     {
@@ -312,7 +312,7 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         for( SHAPE* shape : shapes )
         {
             STROKE_PARAMS::Stroke( shape, GetStroke().GetPlotStyle(), penWidth, aSettings,
-                                   [&]( const wxPoint& a, const wxPoint& b )
+                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
                                    {
                                        GRLine( nullptr, DC, a.x, a.y, b.x, b.y, penWidth, color );
                                    } );

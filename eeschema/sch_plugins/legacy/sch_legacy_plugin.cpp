@@ -1028,7 +1028,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
     {
         if( strCompare( "S", line, &line ) )        // Sheet dimensions.
         {
-            wxPoint position;
+            VECTOR2I position;
 
             position.x = Mils2Iu( parseInt( aReader, line, &line ) );
             position.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -1100,7 +1100,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
                     SCH_PARSE_ERROR( "invalid sheet pin side", aReader, line );
                 }
 
-                wxPoint position;
+                VECTOR2I position;
 
                 position.x = Mils2Iu( parseInt( aReader, line, &line ) );
                 position.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -1142,7 +1142,7 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
     {
         if( strCompare( "Pos", line, &line ) )
         {
-            wxPoint position;
+            VECTOR2I position;
 
             position.x = Mils2Iu( parseInt( aReader, line, &line ) );
             position.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -1229,7 +1229,7 @@ SCH_JUNCTION* SCH_LEGACY_PLUGIN::loadJunction( LINE_READER& aReader )
 
     parseUnquotedString( name, aReader, line, &line );
 
-    wxPoint position;
+    VECTOR2I position;
 
     position.x = Mils2Iu( parseInt( aReader, line, &line ) );
     position.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -1251,7 +1251,7 @@ SCH_NO_CONNECT* SCH_LEGACY_PLUGIN::loadNoConnect( LINE_READER& aReader )
 
     parseUnquotedString( name, aReader, line, &line );
 
-    wxPoint position;
+    VECTOR2I position;
 
     position.x = Mils2Iu( parseInt( aReader, line, &line ) );
     position.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -1345,7 +1345,7 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( LINE_READER& aReader )
     // Read the segment en points coordinates:
     line = aReader.ReadLine();
 
-    wxPoint begin, end;
+    VECTOR2I begin, end;
 
     begin.x = Mils2Iu( parseInt( aReader, line, &line ) );
     begin.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -1386,7 +1386,7 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( LINE_READER& aReader )
 
     line = aReader.ReadLine();
 
-    wxPoint pos;
+    VECTOR2I pos;
     wxSize size;
 
     pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -1441,7 +1441,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
         SCH_PARSE_ERROR( "unknown Text type", aReader, line );
 
     // Parse the parameters common to all text objects.
-    wxPoint position;
+    VECTOR2I position;
 
     position.x = Mils2Iu( parseInt( aReader, line, &line ) );
     position.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -1632,7 +1632,7 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
         }
         else if( strCompare( "P", line, &line ) )
         {
-            wxPoint pos;
+            VECTOR2I pos;
 
             pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
             pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -1704,7 +1704,7 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
             parseQuotedString( text, aReader, line, &line, true );
 
             char orientation = parseChar( aReader, line, &line );
-            wxPoint pos;
+            VECTOR2I pos;
             pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
             pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
             int size = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -1722,7 +1722,7 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
                 // We freely renumber the index to fit the next available field slot.
                 index = symbol->GetFieldCount();  // new has this index after insertion
 
-                SCH_FIELD field( wxPoint( 0, 0 ), index, symbol.get(), name );
+                SCH_FIELD field( VECTOR2I( 0, 0 ), index, symbol.get(), name );
                 symbol->AddField( field );
             }
 
@@ -3079,7 +3079,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     else
         field->SetText( ConvertToNewOverbarNotation( text ) );
 
-    wxPoint pos;
+    VECTOR2I pos;
 
     pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
     pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -3350,7 +3350,7 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL>& aSy
 
     LIB_SHAPE* circle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::CIRCLE );
 
-    wxPoint center;
+    VECTOR2I center;
 
     center.x = Mils2Iu( parseInt( aReader, line, &line ) );
     center.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -3358,7 +3358,7 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL>& aSy
     int radius = Mils2Iu( parseInt( aReader, line, &line ) );
 
     circle->SetStart( center );
-    circle->SetEnd( wxPoint( center.x + radius, center.y ) );
+    circle->SetEnd( VECTOR2I( center.x + radius, center.y ) );
     circle->SetUnit( parseInt( aReader, line, &line ) );
     circle->SetConvert( parseInt( aReader, line, &line ) );
     circle->SetStroke( STROKE_PARAMS( Mils2Iu( parseInt( aReader, line, &line ) ),
@@ -3384,7 +3384,7 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     text->SetTextAngle( (double) parseInt( aReader, line, &line ) );
 
-    wxPoint center;
+    VECTOR2I center;
 
     center.x = Mils2Iu( parseInt( aReader, line, &line ) );
     center.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -3477,13 +3477,13 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadRect( std::unique_ptr<LIB_SYMBOL>& aSymb
 
     LIB_SHAPE* rectangle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::RECT );
 
-    wxPoint pos;
+    VECTOR2I pos;
 
     pos.x = Mils2Iu( parseInt( aReader, line, &line ) );
     pos.y = Mils2Iu( parseInt( aReader, line, &line ) );
     rectangle->SetPosition( pos );
 
-    wxPoint end;
+    VECTOR2I end;
 
     end.x = Mils2Iu( parseInt( aReader, line, &line ) );
     end.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -3528,7 +3528,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     pos += tmp.size() + 1;
 
     long num;
-    wxPoint position;
+    VECTOR2I position;
 
     tmp = tokens.GetNextToken();
 
@@ -3715,7 +3715,7 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_SYMBOL>& a
     polyLine->SetStroke( STROKE_PARAMS( Mils2Iu( parseInt( aReader, line, &line ) ),
                                         PLOT_DASH_TYPE::SOLID ) );
 
-    wxPoint pt;
+    VECTOR2I pt;
 
     for( int i = 0; i < points; i++ )
     {
@@ -3749,17 +3749,17 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_SYMBOL>& aSy
     bezier->SetStroke( STROKE_PARAMS( Mils2Iu( parseInt( aReader, line, &line ) ),
                                       PLOT_DASH_TYPE::SOLID ) );
 
-    bezier->SetStart( wxPoint( Mils2Iu( parseInt( aReader, line, &line ) ),
-                               Mils2Iu( parseInt( aReader, line, &line ) ) ) );
+    bezier->SetStart( VECTOR2I( Mils2Iu( parseInt( aReader, line, &line ) ),
+                                Mils2Iu( parseInt( aReader, line, &line ) ) ) );
 
-    bezier->SetBezierC1( wxPoint( Mils2Iu( parseInt( aReader, line, &line ) ),
-                                  Mils2Iu( parseInt( aReader, line, &line ) ) ) );
+    bezier->SetBezierC1( VECTOR2I( Mils2Iu( parseInt( aReader, line, &line ) ),
+                                   Mils2Iu( parseInt( aReader, line, &line ) ) ) );
 
-    bezier->SetBezierC2( wxPoint( Mils2Iu( parseInt( aReader, line, &line ) ),
-                                  Mils2Iu( parseInt( aReader, line, &line ) ) ) );
+    bezier->SetBezierC2( VECTOR2I( Mils2Iu( parseInt( aReader, line, &line ) ),
+                                   Mils2Iu( parseInt( aReader, line, &line ) ) ) );
 
-    bezier->SetEnd( wxPoint( Mils2Iu( parseInt( aReader, line, &line ) ),
-                             Mils2Iu( parseInt( aReader, line, &line ) ) ) );
+    bezier->SetEnd( VECTOR2I( Mils2Iu( parseInt( aReader, line, &line ) ),
+                              Mils2Iu( parseInt( aReader, line, &line ) ) ) );
 
     bezier->RebuildBezierToSegmentsPointsList( bezier->GetWidth() );
 

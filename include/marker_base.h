@@ -77,7 +77,7 @@ public:
     void ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon, int aScale = -1 ) const;
 
     /**
-     * Print the shape is the polygon defined in m_Corners (array of wxPoints).
+     * Print the shape is the polygon defined in m_Corners (array of VECTOR2Is).
      */
     void PrintMarker( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset );
 
@@ -105,9 +105,9 @@ public:
     std::shared_ptr<RC_ITEM> GetRCItem() const { return m_rcItem; }
 
     /**
-     * Test if the given wxPoint is within the bounds of this object.
+     * Test if the given VECTOR2I is within the bounds of this object.
      *
-     * @param aHitPosition is the wxPoint to test (in internal units).
+     * @param aHitPosition is the VECTOR2I to test (in internal units).
      * @return true if a hit, else false.
      */
     bool HitTestMarker( const VECTOR2I& aHitPosition, int aAccuracy ) const;

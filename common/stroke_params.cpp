@@ -34,7 +34,7 @@ using namespace STROKEPARAMS_T;
 
 void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int aWidth,
                             const KIGFX::RENDER_SETTINGS* aRenderSettings,
-                            std::function<void( const wxPoint& a, const wxPoint& b )> aStroker )
+                            std::function<void( const VECTOR2I& a, const VECTOR2I& b )> aStroker )
 {
     double strokes[6] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
     int    wrapAround = 0;
@@ -93,7 +93,7 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int 
         VECTOR2D start = line->GetSeg().A;
         VECTOR2D end = line->GetSeg().B;
 
-        EDA_RECT clip( (wxPoint)start, wxSize( end.x - start.x, end.y - start.y ) );
+        EDA_RECT clip( (VECTOR2I) start, wxSize( end.x - start.x, end.y - start.y ) );
         clip.Normalize();
 
         double theta = atan2( end.y - start.y, end.x - start.x );
@@ -106,8 +106,8 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int 
                            start.y + strokes[ i % wrapAround ] * sin( theta ) );
 
             // Drawing each segment can be done rounded to ints.
-            wxPoint a( KiROUND( start.x ), KiROUND( start.y ) );
-            wxPoint b( KiROUND( next.x ), KiROUND( next.y ) );
+            VECTOR2I a( KiROUND( start.x ), KiROUND( start.y ) );
+            VECTOR2I b( KiROUND( next.x ), KiROUND( next.y ) );
 
             if( ClipLine( &clip, a.x, a.y, b.x, b.y ) )
                 break;
@@ -151,10 +151,10 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int 
 
             if( i % 2 == 0 )
             {
-                wxPoint a( center.x + r * cos( startAngle * M_PI / 180.0 ),
-                           center.y + r * sin( startAngle * M_PI / 180.0 ) );
-                wxPoint b( center.x + r * cos( endAngle * M_PI / 180.0 ),
-                           center.y + r * sin( endAngle * M_PI / 180.0 ) );
+                VECTOR2I a( center.x + r * cos( startAngle * M_PI / 180.0 ),
+                            center.y + r * sin( startAngle * M_PI / 180.0 ) );
+                VECTOR2I b( center.x + r * cos( endAngle * M_PI / 180.0 ),
+                            center.y + r * sin( endAngle * M_PI / 180.0 ) );
 
                 aStroker( a, b );
             }

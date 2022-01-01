@@ -283,7 +283,7 @@ void SCH_BUS_ENTRY_BASE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I
         SHAPE_SEGMENT segment( start, end );
 
         STROKE_PARAMS::Stroke( &segment, GetLineStyle(), penWidth, aSettings,
-                               [&]( const wxPoint& a, const wxPoint& b )
+                               [&]( const VECTOR2I& a, const VECTOR2I& b )
                                {
                                    GRLine( nullptr, DC, a.x, a.y, b.x, b.y, penWidth, color );
                                } );

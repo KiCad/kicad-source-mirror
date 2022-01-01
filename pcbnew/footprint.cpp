@@ -919,13 +919,13 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
         rawPolys.Append( GetPosition().x - halfsize,  GetPosition().y + halfsize );
     }
 
-    std::vector<wxPoint> convex_hull;
+    std::vector<VECTOR2I> convex_hull;
     BuildConvexHull( convex_hull, rawPolys );
 
     m_cachedHull.RemoveAllContours();
     m_cachedHull.NewOutline();
 
-    for( const wxPoint& pt : convex_hull )
+    for( const VECTOR2I& pt : convex_hull )
         m_cachedHull.Append( pt );
 
     if( board )

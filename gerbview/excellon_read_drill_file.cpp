@@ -84,9 +84,9 @@
 // A helper function to calculate the arc center of an arc
 // known by 2 end points, the radius, and the angle direction (CW or CCW)
 // Arc angles are <= 180 degrees in circular interpol.
-static wxPoint computeCenter(wxPoint aStart, wxPoint aEnd, int& aRadius, bool aRotCCW )
+static VECTOR2I computeCenter( VECTOR2I aStart, VECTOR2I aEnd, int& aRadius, bool aRotCCW )
 {
-    wxPoint center;
+    VECTOR2I center;
     VECTOR2D end;
     end.x = double(aEnd.x - aStart.x);
     end.y = double(aEnd.y - aStart.y);
@@ -161,22 +161,26 @@ extern double ReadDouble( char*& text, bool aSkipSeparator = true );
 extern void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                                  APERTURE_T        aAperture,
                                  int               Dcode_index,
-                                 const wxPoint&    aPos,
+                                 const VECTOR2I& aPos,
                                  wxSize            aSize,
                                  bool              aLayerNegative );
 
-extern void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
-                              int               Dcode_index,
-                              const wxPoint&    aStart,
-                              const wxPoint&    aEnd,
-                              wxSize            aPenSize,
-                              bool              aLayerNegative  );
+extern void fillLineGBRITEM( GERBER_DRAW_ITEM* aGbrItem,
+                             int Dcode_index,
+                             const VECTOR2I& aStart,
+                             const VECTOR2I& aEnd,
+                             wxSize aPenSize,
+                             bool aLayerNegative );
 
-extern void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index,
-                             const wxPoint& aStart, const wxPoint& aEnd,
-                             const wxPoint& aRelCenter, wxSize aPenSize,
-                             bool aClockwise, bool aMultiquadrant,
-                             bool aLayerNegative  );
+extern void fillArcGBRITEM( GERBER_DRAW_ITEM* aGbrItem,
+                            int Dcode_index,
+                            const VECTOR2I& aStart,
+                            const VECTOR2I& aEnd,
+                            const VECTOR2I& aRelCenter,
+                            wxSize aPenSize,
+                            bool aClockwise,
+                            bool aMultiquadrant,
+                            bool aLayerNegative );
 
 // Gerber X2 files have a file attribute which specify the type of image
 // (copper, solder paste ... and sides tpo, bottom or inner copper layers)
@@ -1011,10 +1015,10 @@ void EXCELLON_IMAGE::FinishRouteCommand()
         {
         bool rot_ccw = m_RoutePositions[ii].m_rmode == ROUTE_CW;
         int radius = m_RoutePositions[ii].m_radius; // Can be adjusted by computeCenter.
-        wxPoint center;
+        VECTOR2I center;
 
         if( m_RoutePositions[ii].m_arc_type_info == ARC_INFO_TYPE_CENTER )
-            center = wxPoint( m_RoutePositions[ii].m_cx, m_RoutePositions[ii].m_cy );
+            center = VECTOR2I( m_RoutePositions[ii].m_cx, m_RoutePositions[ii].m_cy );
         else
             center = computeCenter( m_RoutePositions[ii-1].GetPos(),
                                     m_RoutePositions[ii].GetPos(), radius, rot_ccw );

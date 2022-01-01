@@ -319,7 +319,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
     // GPCB unit = 0.01 mils and Pcbnew 0.1.
     double                     conv_unit = NEW_GPCB_UNIT_CONV;
-    wxPoint                    textPos;
+    VECTOR2I                   textPos;
     wxString                   msg;
     wxArrayString              parameters;
     std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( nullptr );
@@ -383,13 +383,13 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
     if( paramCnt == 14 )
     {
-        textPos = wxPoint( parseInt( parameters[8], conv_unit ),
-                           parseInt( parameters[9], conv_unit ) );
+        textPos = VECTOR2I( parseInt( parameters[8], conv_unit ),
+                            parseInt( parameters[9], conv_unit ) );
     }
     else
     {
-        textPos = wxPoint( parseInt( parameters[6], conv_unit ),
-                           parseInt( parameters[7], conv_unit ) );
+        textPos = VECTOR2I( parseInt( parameters[6], conv_unit ),
+                            parseInt( parameters[7], conv_unit ) );
     }
 
     int orientation = parseInt( parameters[paramCnt-4], 1.0 );
@@ -465,10 +465,10 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
             FP_SHAPE* shape = new FP_SHAPE( footprint.get(), SHAPE_T::SEGMENT );
             shape->SetLayer( F_SilkS );
-            shape->SetStart0( wxPoint( parseInt( parameters[2], conv_unit ),
-                                       parseInt( parameters[3], conv_unit ) ) );
-            shape->SetEnd0( wxPoint( parseInt( parameters[4], conv_unit ),
-                                     parseInt( parameters[5], conv_unit ) ) );
+            shape->SetStart0( VECTOR2I( parseInt( parameters[2], conv_unit ),
+                                        parseInt( parameters[3], conv_unit ) ) );
+            shape->SetEnd0( VECTOR2I( parseInt( parameters[4], conv_unit ),
+                                      parseInt( parameters[5], conv_unit ) ) );
             shape->SetStroke( STROKE_PARAMS( parseInt( parameters[6], conv_unit ),
                                              PLOT_DASH_TYPE::SOLID ) );
             shape->SetDrawCoord();
@@ -495,8 +495,8 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             int     radius = ( parseInt( parameters[4], conv_unit ) +
                                parseInt( parameters[5], conv_unit ) ) / 2;
 
-            wxPoint centre( parseInt( parameters[2], conv_unit ),
-                            parseInt( parameters[3], conv_unit ) );
+            VECTOR2I centre( parseInt( parameters[2], conv_unit ),
+                             parseInt( parameters[3], conv_unit ) );
 
             shape->SetCenter0( centre );
 
@@ -511,8 +511,8 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
                 shape->SetShape( SHAPE_T::CIRCLE );
 
             // Calculate start point coordinate of arc
-            wxPoint arcStart( radius, 0 );
-            RotatePoint( &arcStart, -start_angle );
+            VECTOR2I arcStart( radius, 0 );
+            RotatePoint( arcStart, -start_angle );
             shape->SetStart0( arcStart + centre );
 
             // Angle value is clockwise in gpcb and Pcbnew.
@@ -565,7 +565,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             int y1 = parseInt( parameters[3], conv_unit );
             int y2 = parseInt( parameters[5], conv_unit );
             int width = parseInt( parameters[6], conv_unit );
-            wxPoint delta( x2 - x1, y2 - y1 );
+            VECTOR2I delta( x2 - x1, y2 - y1 );
             double angle = atan2( (double)delta.y, (double)delta.x );
 
             // Get the pad clearance and the solder mask clearance.
