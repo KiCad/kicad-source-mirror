@@ -64,9 +64,9 @@ EDA_ITEM* PCB_TRACK::Clone() const
 PCB_ARC::PCB_ARC( BOARD_ITEM* aParent, const SHAPE_ARC* aArc ) :
     PCB_TRACK( aParent, PCB_ARC_T )
 {
-    m_Start = wxPoint( aArc->GetP0() );
-    m_End = wxPoint( aArc->GetP1() );
-    m_Mid = wxPoint( aArc->GetArcMid() );
+    m_Start = aArc->GetP0();
+    m_End = aArc->GetP1();
+    m_Mid = aArc->GetArcMid();
 }
 
 
@@ -250,7 +250,7 @@ const EDA_RECT PCB_TRACK::GetBoundingBox() const
     xmin -= radius;
 
     // return a rectangle which is [pos,dim) in nature.  therefore the +1
-    EDA_RECT ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
+    EDA_RECT ret( VECTOR2I( xmin, ymin ), VECTOR2I( xmax - xmin + 1, ymax - ymin + 1 ) );
 
     return ret;
 }

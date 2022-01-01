@@ -117,7 +117,7 @@ public:
     /**
      * A value of wxPoint(0,0) which can be passed to the Draw() functions.
      */
-    static wxPoint ZeroOffset;
+    static VECTOR2I ZeroOffset;
 
     /**
      * Some pad shapes can be complex (rounded/chamfered rectangle), even without considering

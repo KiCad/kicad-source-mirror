@@ -285,8 +285,8 @@ private:
     bool        m_swapAxis;                 // false if A = X, B = Y; true if A =Y, B = Y
     bool        m_mirrorA;                  // true: mirror / axis A
     bool        m_mirrorB;                  // true: mirror / ax's B
-    wxRealPoint m_drawScale;                // A and B scaling factor
-    wxPoint     m_layerOffset;              // Offset for A and B axis, from OF parameter
+    VECTOR2I    m_drawScale;                // A and B scaling factor
+    VECTOR2I    m_layerOffset;              // Offset for A and B axis, from OF parameter
     double      m_lyrRotation;              // Fine rotation, from OR parameter, in degrees
     GBR_NETLIST_METADATA m_netAttributes;   ///< the string given by a %TO attribute set in aperture
                                             ///< (dcode). Stored in each item, because %TO is

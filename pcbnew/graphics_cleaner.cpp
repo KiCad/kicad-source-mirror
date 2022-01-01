@@ -189,13 +189,13 @@ void GRAPHICS_CLEANER::mergeRects()
                 std::swap( start, end );
         }
 
-        wxPoint    start;
-        wxPoint    end;
+        VECTOR2I   start;
+        VECTOR2I   end;
         PCB_SHAPE* shape;
     };
 
     std::vector<SIDE_CANDIDATE*> sides;
-    std::map<wxPoint, std::vector<SIDE_CANDIDATE*>> ptMap;
+    std::map<VECTOR2I, std::vector<SIDE_CANDIDATE*>> ptMap;
 
     // First load all the candidates into the side vector and layer maps
     for( BOARD_ITEM* item : m_drawings )

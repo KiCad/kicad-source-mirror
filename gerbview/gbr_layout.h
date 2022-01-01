@@ -57,8 +57,8 @@ public:
     // which handles the list of gerber files (and drill files) images loaded
     GERBER_FILE_IMAGE_LIST* GetImagesList() const;
 
-    const wxPoint& GetAuxOrigin() const { return m_originAxisPosition; }
-    void SetAuxOrigin( const wxPoint& aPosition ) { m_originAxisPosition = aPosition; }
+    const VECTOR2I& GetAuxOrigin() const { return m_originAxisPosition; }
+    void            SetAuxOrigin( const VECTOR2I& aPosition ) { m_originAxisPosition = aPosition; }
 
     TITLE_BLOCK& GetTitleBlock() { return m_titles; }
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) { m_titles = aTitleBlock; }
@@ -87,7 +87,7 @@ public:
 private:
     mutable EDA_RECT    m_BoundingBox;
     TITLE_BLOCK         m_titles;
-    wxPoint             m_originAxisPosition;
+    VECTOR2I            m_originAxisPosition;
 };
 
 #endif      // #ifndef GBR_LAYOUT_H

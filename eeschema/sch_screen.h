@@ -150,8 +150,8 @@ public:
     void SetFileExists( bool aFileExists )                  { m_fileExists = aFileExists; }
     bool FileExists() const                                 { return m_fileExists; }
 
-    const wxPoint& GetAuxOrigin() const                     { return m_aux_origin; }
-    void SetAuxOrigin( const wxPoint& aPosition )           { m_aux_origin = aPosition; }
+    const VECTOR2I& GetAuxOrigin() const                    { return m_aux_origin; }
+    void SetAuxOrigin( const VECTOR2I& aPosition )          { m_aux_origin = aPosition; }
 
     const TITLE_BLOCK& GetTitleBlock() const                { return m_titles; }
 
@@ -410,7 +410,7 @@ public:
     /**
      * Return a line item located at \a aPosition.
      *
-     * @param[in] aPosition The wxPoint to test for a line item.
+     * @param[in] aPosition The VECTOR2I to test for a line item.
      * @param aAccuracy Amount to inflate the item hit test bounding box.
      * @param aLayer The layer the line is drawn upon.
      * @param aSearchType Additional line test criteria.
@@ -435,7 +435,7 @@ public:
     /**
      * Return a label item located at \a aPosition.
      *
-     * @param[in] aPosition The wxPoint to test for label items.
+     * @param[in] aPosition The VECTOR2I to test for label items.
      * @param aAccuracy Amount to inflate the item hit test bounding box.
      * @return The SCH_TEXT* of the label item found at \a aPosition or NULL if item not
      *         found.
@@ -534,7 +534,7 @@ private:
 
     PAGE_INFO   m_paper;                    // The size of the paper to print or plot on.
     TITLE_BLOCK m_titles;
-    wxPoint     m_aux_origin;               // Origin used for drill & place files by Pcbnew.
+    VECTOR2I    m_aux_origin;               // Origin used for drill & place files by Pcbnew.
     EE_RTREE    m_rtree;
 
     int         m_modification_sync;        // Inequality with SYMBOL_LIBS::GetModificationHash()

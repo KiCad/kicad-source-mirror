@@ -174,8 +174,8 @@ void PCB_ARC::AddToFootprint( FOOTPRINT* aFootprint )
         FP_SHAPE* arc = new FP_SHAPE( aFootprint, IsCircle() ? SHAPE_T::CIRCLE : SHAPE_T::ARC );
         aFootprint->Add( arc );
 
-        arc->SetCenter0( wxPoint( m_positionX, m_positionY ) );
-        arc->SetStart0( wxPoint( m_StartX, m_StartY ) );
+        arc->SetCenter0( VECTOR2I( m_positionX, m_positionY ) );
+        arc->SetStart0( VECTOR2I( m_StartX, m_StartY ) );
         arc->SetArcAngleAndEnd0( -m_Angle );
 
         arc->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
@@ -194,8 +194,8 @@ void PCB_ARC::AddToBoard()
 
     arc->SetFilled( false );
     arc->SetLayer( m_KiCadLayer );
-    arc->SetCenter( wxPoint( m_positionX, m_positionY ) );
-    arc->SetStart( wxPoint( m_StartX, m_StartY ) );
+    arc->SetCenter( VECTOR2I( m_positionX, m_positionY ) );
+    arc->SetStart( VECTOR2I( m_StartX, m_StartY ) );
     arc->SetArcAngleAndEnd( -m_Angle );
     arc->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
 }

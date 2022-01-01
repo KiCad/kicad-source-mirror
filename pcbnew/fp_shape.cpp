@@ -195,7 +195,8 @@ void FP_SHAPE::SetArcAngleAndEnd0( double aAngle, bool aCheckNegativeAngle )
 }
 
 
-void FP_SHAPE::SetArcGeometry0( const wxPoint& aStart0, const wxPoint& aMid0, const wxPoint& aEnd0 )
+void FP_SHAPE::SetArcGeometry0( const VECTOR2I& aStart0, const VECTOR2I& aMid0,
+                                const VECTOR2I& aEnd0 )
 {
     m_start0 = aStart0;
     m_end0 = aEnd0;

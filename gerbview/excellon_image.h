@@ -106,25 +106,25 @@ struct EXCELLON_ROUTE_COORD
         m_rmode( 0 ), m_arc_type_info( 0 )
     {}
 
-    EXCELLON_ROUTE_COORD( const wxPoint& aPos ):
+    EXCELLON_ROUTE_COORD( const VECTOR2I& aPos ) :
         m_x( aPos.x ),  m_y( aPos.y ),
         m_cx( 0 ), m_cy( 0 ), m_radius( 0 ), m_rmode( 0 ),
         m_arc_type_info( ARC_INFO_TYPE_NONE )
     {}
 
-    EXCELLON_ROUTE_COORD( const wxPoint& aPos, const wxPoint& aCenter, int aMode ):
+    EXCELLON_ROUTE_COORD( const VECTOR2I& aPos, const VECTOR2I& aCenter, int aMode ) :
         m_x( aPos.x ),  m_y( aPos.y ),
         m_cx( aCenter.x ), m_cy( aCenter.y ), m_radius( 0 ),  m_rmode( aMode ),
         m_arc_type_info( ARC_INFO_TYPE_CENTER )
     {}
 
-    EXCELLON_ROUTE_COORD( const wxPoint& aPos, int aRadius, int aMode ):
+    EXCELLON_ROUTE_COORD( const VECTOR2I& aPos, int aRadius, int aMode ) :
         m_x( aPos.x ),  m_y( aPos.y ),
         m_cx( 0 ), m_cy( 0 ), m_radius( aRadius ),  m_rmode( aMode ),
         m_arc_type_info( ARC_INFO_TYPE_RADIUS )
     {}
 
-    wxPoint GetPos() { return wxPoint( m_x, m_y ); }
+    VECTOR2I GetPos() { return VECTOR2I( m_x, m_y ); }
 };
 
 /**

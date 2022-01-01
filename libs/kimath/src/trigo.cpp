@@ -359,7 +359,7 @@ void RotatePoint( double* pX, double* pY, double angle )
 }
 
 
-const wxPoint CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double aAngle )
+const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double aAngle )
 {
     VECTOR2I start = aStart;
     VECTOR2I end = aEnd;
@@ -459,27 +459,6 @@ const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, cons
     VECTOR2D dCenter = CalcArcCenter( dStart, dMid, dEnd );
 
     VECTOR2I iCenter;
-
-    iCenter.x = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2.0 ),
-                                        dCenter.x,
-                                        double( std::numeric_limits<int>::max() / 2.0 ) ) );
-
-    iCenter.y = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2.0 ),
-                                        dCenter.y,
-                                        double( std::numeric_limits<int>::max() / 2.0 ) ) );
-
-    return iCenter;
-}
-
-
-const wxPoint CalcArcCenter( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd )
-{
-    VECTOR2D dStart( static_cast<double>( aStart.x ), static_cast<double>( aStart.y ) );
-    VECTOR2D dMid( static_cast<double>( aMid.x ), static_cast<double>( aMid.y ) );
-    VECTOR2D dEnd( static_cast<double>( aEnd.x ), static_cast<double>( aEnd.y ) );
-    VECTOR2D dCenter = CalcArcCenter( dStart, dMid, dEnd );
-
-    wxPoint iCenter;
 
     iCenter.x = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2.0 ),
                                         dCenter.x,

@@ -73,7 +73,7 @@ public:
      */
     void SetArcAngleAndEnd0( double aAngle, bool aCheckNegativeAngle = false );
 
-    void SetArcGeometry0( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd );
+    void SetArcGeometry0( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
 
     /**
      * Move an edge of the footprint.

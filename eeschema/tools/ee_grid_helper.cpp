@@ -214,8 +214,8 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
     else if( snapPoint )
     {
         m_snapItem = nearest;
-        m_viewSnapPoint.SetPosition( (wxPoint) pt );
-        m_viewSnapLine.SetPosition( (wxPoint) pt );
+        m_viewSnapPoint.SetPosition( pt );
+        m_viewSnapLine.SetPosition( pt );
 
         m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, false );
 
@@ -316,16 +316,14 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
         {
             VECTOR2I possible( line->GetStartPoint().x, pt.y );
 
-            if( TestSegmentHit( wxPoint( possible ), line->GetStartPoint(), line->GetEndPoint(),
-                                0 ) )
+            if( TestSegmentHit( possible, line->GetStartPoint(), line->GetEndPoint(), 0 ) )
                 addAnchor( possible, SNAPPABLE | VERTICAL, aItem );
         }
         else if( line->GetStartPoint().y == line->GetEndPoint().y )
         {
             VECTOR2I possible( pt.x, line->GetStartPoint().y );
 
-            if( TestSegmentHit( wxPoint( possible ), line->GetStartPoint(), line->GetEndPoint(),
-                                0 ) )
+            if( TestSegmentHit( possible, line->GetStartPoint(), line->GetEndPoint(), 0 ) )
                 addAnchor( possible, SNAPPABLE | HORIZONTAL, aItem );
         }
 

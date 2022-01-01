@@ -473,7 +473,7 @@ public:
      * Print a symbol.
      *
      * @param aDC is the device context (can be null).
-     * @param aOffset is the drawing offset (usually wxPoint(0,0), but can be different when
+     * @param aOffset is the drawing offset (usually VECTOR2I(0,0), but can be different when
      *                moving an object)
      */
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
@@ -563,7 +563,7 @@ public:
 
     void Move( const VECTOR2I& aMoveVector ) override
     {
-        if( aMoveVector == wxPoint( 0, 0 ) )
+        if( aMoveVector == VECTOR2I( 0, 0 ) )
             return;
 
         m_pos += aMoveVector;

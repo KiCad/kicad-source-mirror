@@ -48,9 +48,9 @@ extern int scaletoIU( double aCoord, bool isMetric );
  *
  * @return The GerbView coordinate system vector.
  */
-static wxPoint mapPt( double x, double y, bool isMetric )
+static VECTOR2I mapPt( double x, double y, bool isMetric )
 {
-    wxPoint ret( scaletoIU( x, isMetric ), scaletoIU( y, isMetric ) );
+    VECTOR2I ret( scaletoIU( x, isMetric ), scaletoIU( y, isMetric ) );
 
     return ret;
 }
@@ -377,7 +377,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         // the shape rotation is the last param of list, after corners
         int last_prm = params.size() - 1;
         rotation  = params[last_prm].GetValue( tool ) * 10.0;
-        wxPoint pos;
+        VECTOR2I pos;
 
         // Read points.
         // Note: numCorners is the polygon corner count, following the first corner
@@ -498,17 +498,17 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
     case AMP_LINE2:
     case AMP_LINE20:        // Line with rectangle ends. (Width, start and end pos + rotation)
     {
-        int     width = scaletoIU( params[1].GetValue( tool ), m_GerbMetric );
-        wxPoint start = mapPt( params[2].GetValue( tool ),
-                               params[3].GetValue( tool ), m_GerbMetric );
-        wxPoint end = mapPt( params[4].GetValue( tool ),
-                             params[5].GetValue( tool ), m_GerbMetric );
-        wxPoint delta = end - start;
+        int      width = scaletoIU( params[1].GetValue( tool ), m_GerbMetric );
+        VECTOR2I start =
+                mapPt( params[2].GetValue( tool ), params[3].GetValue( tool ), m_GerbMetric );
+        VECTOR2I end =
+                mapPt( params[4].GetValue( tool ), params[5].GetValue( tool ), m_GerbMetric );
+        VECTOR2I delta = end - start;
         int     len   = KiROUND( EuclideanNorm( delta ) );
 
         // To build the polygon, we must create a horizontal polygon starting to "start"
         // and rotate it to have the end point to "end"
-        wxPoint currpt;
+        VECTOR2I currpt;
         currpt.y += width / 2;          // Upper left
         aBuffer.push_back( currpt );
         currpt.x = len;                 // Upper right
@@ -676,8 +676,8 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
 
         for( int ii = 0; ii <= vertexcount; ii++ )
         {
-            wxPoint pos( radius, 0);
-            RotatePoint( &pos, ii * 3600 / vertexcount );
+            VECTOR2I pos( radius, 0 );
+            RotatePoint( pos, ii * 3600 / vertexcount );
             aBuffer.push_back( pos );
         }
 

@@ -866,7 +866,7 @@ public:
      * @return a reference to the new area.
      */
     ZONE* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_ID aLayer,
-                   wxPoint aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch );
+                   VECTOR2I aStartPointPosition, ZONE_BORDER_DISPLAY_STYLE aHatch );
 
     /**
      * Process an area that has been modified, by normalizing its polygon against itself.
@@ -1002,7 +1002,7 @@ public:
      * @param aVisibleOnly Search only the visible layers if true.
      * @param aIgnoreLocked Ignore locked footprints when true.
      */
-    FOOTPRINT* GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer,
+    FOOTPRINT* GetFootprint( const VECTOR2I& aPosition, PCB_LAYER_ID aActiveLayer,
                              bool aVisibleOnly, bool aIgnoreLocked = false ) const;
 
     /**

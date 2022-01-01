@@ -68,13 +68,13 @@ int scaletoIU( double aCoord, bool isMetric )
 }
 
 
-wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
+VECTOR2I GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
 {
-    wxPoint pos;
-    int     type_coord = 0, current_coord, nbdigits;
-    bool    is_float   = false;
-    char*   text;
-    char    line[256];
+    VECTOR2I pos;
+    int      type_coord = 0, current_coord, nbdigits;
+    bool     is_float   = false;
+    char*    text;
+    char     line[256];
 
 
     if( m_Relative )
@@ -190,9 +190,9 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
 }
 
 
-wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )
+VECTOR2I GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )
 {
-    wxPoint pos( 0, 0 );
+    VECTOR2I pos( 0, 0 );
 
     int     type_coord = 0, current_coord, nbdigits;
     bool    is_float   = false;

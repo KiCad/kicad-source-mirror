@@ -2331,10 +2331,10 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
         shape->SetLayer( klayer );
         shape->SetStroke( STROKE_PARAMS( 0 ) );
 
-        shape->SetPolyPoints( { aElem.position + wxPoint( aElem.topsize.x / 2, aElem.topsize.y / 2 ),
-                                aElem.position + wxPoint( aElem.topsize.x / 2, -aElem.topsize.y / 2 ),
-                                aElem.position + wxPoint( -aElem.topsize.x / 2, -aElem.topsize.y / 2 ),
-                                aElem.position + wxPoint( -aElem.topsize.x / 2, aElem.topsize.y / 2 ) } );
+        shape->SetPolyPoints( { aElem.position + VECTOR2I( aElem.topsize.x / 2, aElem.topsize.y / 2 ),
+                                aElem.position + VECTOR2I( aElem.topsize.x / 2, -aElem.topsize.y / 2 ),
+                                aElem.position + VECTOR2I( -aElem.topsize.x / 2, -aElem.topsize.y / 2 ),
+                                aElem.position + VECTOR2I( -aElem.topsize.x / 2, aElem.topsize.y / 2 ) } );
 
         if( aElem.direction != 0 )
             shape->Rotate( aElem.position, aElem.direction * 10 );
@@ -2382,7 +2382,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
             {
                 // short vertical line
                 shape->SetShape( SHAPE_T::SEGMENT );
-                wxPoint pointOffset( 0, ( aElem.topsize.y - aElem.topsize.x ) / 2 );
+                VECTOR2I pointOffset( 0, ( aElem.topsize.y - aElem.topsize.x ) / 2 );
                 shape->SetStart( aElem.position + pointOffset );
                 shape->SetEnd( aElem.position - pointOffset );
             }
@@ -2390,7 +2390,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
             {
                 // short horizontal line
                 shape->SetShape( SHAPE_T::SEGMENT );
-                wxPoint pointOffset( ( aElem.topsize.x - aElem.topsize.y ) / 2, 0 );
+                VECTOR2I pointOffset( ( aElem.topsize.x - aElem.topsize.y ) / 2, 0 );
                 shape->SetStart( aElem.position + pointOffset );
                 shape->SetEnd( aElem.position - pointOffset );
             }
@@ -2423,13 +2423,13 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
 
             if( aElem.topsize.x < aElem.topsize.y )
             {
-                wxPoint offset( 0, ( aElem.topsize.y - aElem.topsize.x ) / 2 );
+                VECTOR2I offset( 0, ( aElem.topsize.y - aElem.topsize.x ) / 2 );
                 shape->SetStart( aElem.position + offset );
                 shape->SetEnd( aElem.position - offset );
             }
             else
             {
-                wxPoint offset( ( aElem.topsize.x - aElem.topsize.y ) / 2, 0 );
+                VECTOR2I offset( ( aElem.topsize.x - aElem.topsize.y ) / 2, 0 );
                 shape->SetStart( aElem.position + offset );
                 shape->SetEnd( aElem.position - offset );
             }
@@ -2856,12 +2856,12 @@ void ALTIUM_PCB::ParseFills6Data( const CFB::CompoundFileReader& aReader,
         checkpoint();
         AFILL6 elem( reader );
 
-        wxPoint p11( elem.pos1.x, elem.pos1.y );
-        wxPoint p12( elem.pos1.x, elem.pos2.y );
-        wxPoint p22( elem.pos2.x, elem.pos2.y );
-        wxPoint p21( elem.pos2.x, elem.pos1.y );
+        VECTOR2I p11( elem.pos1.x, elem.pos1.y );
+        VECTOR2I p12( elem.pos1.x, elem.pos2.y );
+        VECTOR2I p22( elem.pos2.x, elem.pos2.y );
+        VECTOR2I p21( elem.pos2.x, elem.pos1.y );
 
-        wxPoint center( ( elem.pos1.x + elem.pos2.x ) / 2, ( elem.pos1.y + elem.pos2.y ) / 2 );
+        VECTOR2I center( ( elem.pos1.x + elem.pos2.x ) / 2, ( elem.pos1.y + elem.pos2.y ) / 2 );
 
         PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
 

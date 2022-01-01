@@ -61,7 +61,7 @@ const VECTOR2I PCB_SHAPE::GetFocusPosition() const
     {
     case SHAPE_T::CIRCLE:
         if( !IsFilled() )
-            return wxPoint( GetCenter().x + GetRadius(), GetCenter().y );
+            return VECTOR2I( GetCenter().x + GetRadius(), GetCenter().y );
         else
             return GetCenter();
 
@@ -75,7 +75,7 @@ const VECTOR2I PCB_SHAPE::GetFocusPosition() const
         if( !IsFilled() )
         {
             VECTOR2I pos = GetPolyShape().Outline(0).CPoint(0);
-            return wxPoint( pos.x, pos.y );
+            return VECTOR2I( pos.x, pos.y );
         }
         else
         {

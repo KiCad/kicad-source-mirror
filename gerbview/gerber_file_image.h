@@ -212,7 +212,7 @@ public:
      * it forces truncation of a digit string to a maximum length because the exact coordinate
      * format is not always known.
      */
-    wxPoint ReadXYCoord( char*& aText, bool aExcellonMode = false );
+    VECTOR2I ReadXYCoord( char*& aText, bool aExcellonMode = false );
 
     /**
      * Return the current coordinate type pointed to by InnJnn Text (InnnnJmmmm)
@@ -220,7 +220,7 @@ public:
      * These coordinates are relative, so if coordinate is absent, its value
      * defaults to 0
      */
-    wxPoint ReadIJCoord( char*& Text );
+    VECTOR2I ReadIJCoord( char*& Text );
 
     // functions to read G commands or D commands:
     int GCodeNumber( char*& Text );
@@ -377,13 +377,13 @@ public:
     bool               m_ImageJustifyYCenter;
 
     ///< Image Justify Offset on XY axis (default = 0,0).
-    wxPoint            m_ImageJustifyOffset;
+    VECTOR2I            m_ImageJustifyOffset;
     bool               m_GerbMetric;                     // false = Inches, true = metric
 
     ///< false = absolute Coord, true = relative Coord.
     bool               m_Relative;
     bool               m_NoTrailingZeros;                // true: remove tailing zeros.
-    wxPoint            m_ImageOffset;                    // Coord Offset, from IO command
+    VECTOR2I            m_ImageOffset;                   // Coord Offset, from IO command
 
     ///< Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4.
     wxSize             m_FmtScale;
@@ -397,8 +397,8 @@ public:
     ///< Local rotation in degrees added to m_ImageRotation.
     ///< @note This value is stored in 0.1 degrees.
     double             m_LocalRotation;
-    wxPoint            m_Offset;                         // Coord Offset, from OF command
-    wxRealPoint        m_Scale;                          // scale (X and Y) of layer.
+    VECTOR2I           m_Offset;                         // Coord Offset, from OF command
+    VECTOR2I           m_Scale;                          // scale (X and Y) of layer.
     bool               m_SwapAxis;                       // false (default) if A = X and B = Y
                                                          // true if A = Y, B = X
     bool               m_MirrorA;                        // true: mirror / axis A (X)
@@ -412,9 +412,9 @@ public:
 
     ///< Line number of the gerber file while reading.
     int                m_LineNum;
-    wxPoint            m_CurrentPos;                     // current specified coord for plot
-    wxPoint            m_PreviousPos;                    // old current specified coord for plot
-    wxPoint            m_IJPos;                          // IJ coord (for arcs & circles )
+    VECTOR2I           m_CurrentPos;                     // current specified coord for plot
+    VECTOR2I           m_PreviousPos;                    // old current specified coord for plot
+    VECTOR2I           m_IJPos;                          // IJ coord (for arcs & circles )
 
     ///< True if a IJ coord was read (for arcs & circles ).
     bool               m_LastCoordIsIJPos;

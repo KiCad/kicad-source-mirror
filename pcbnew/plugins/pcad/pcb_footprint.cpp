@@ -508,7 +508,7 @@ void PCB_FOOTPRINT::AddToBoard()
     FOOTPRINT* footprint = new FOOTPRINT( m_board );
     m_board->Add( footprint, ADD_MODE::APPEND );
 
-    footprint->SetPosition( wxPoint( m_positionX, m_positionY ) );
+    footprint->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
     footprint->SetLayer( m_Mirror ? B_Cu : F_Cu );
     footprint->SetOrientation( m_rotation );
     footprint->SetLastEditTime( 0 );
@@ -523,7 +523,7 @@ void PCB_FOOTPRINT::AddToBoard()
     ref_text->SetText( ValidateReference( m_name.text ) );
     ref_text->SetType( FP_TEXT::TEXT_is_REFERENCE );
 
-    ref_text->SetPos0( wxPoint( m_name.correctedPositionX, m_name.correctedPositionY ) );
+    ref_text->SetPos0( VECTOR2I( m_name.correctedPositionX, m_name.correctedPositionY ) );
 
     if( m_name.isTrueType )
         SetTextSizeFromTrueTypeFontHeight( ref_text, m_name.textHeight );
@@ -551,7 +551,7 @@ void PCB_FOOTPRINT::AddToBoard()
     val_text->SetText( m_Value.text );
     val_text->SetType( FP_TEXT::TEXT_is_VALUE );
 
-    val_text->SetPos0( wxPoint( m_Value.correctedPositionX, m_Value.correctedPositionY ) );
+    val_text->SetPos0( VECTOR2I( m_Value.correctedPositionX, m_Value.correctedPositionY ) );
 
     if( m_Value.isTrueType )
         SetTextSizeFromTrueTypeFontHeight( val_text, m_Value.textHeight );
