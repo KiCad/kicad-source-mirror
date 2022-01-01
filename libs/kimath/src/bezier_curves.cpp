@@ -74,7 +74,7 @@ BEZIER_POLY::BEZIER_POLY( const std::vector<VECTOR2I>& aControlPoints )
 void BEZIER_POLY::GetPoly( std::vector<VECTOR2I>& aOutput, int aMinSegLen, int aMaxSegCount )
 {
     aOutput.clear();
-    std::vector<VECTOR2I> buffer;
+    std::vector<VECTOR2D> buffer;
     GetPoly( buffer, double( aMinSegLen ), aMaxSegCount );
 
     for( unsigned ii = 0; ii < buffer.size(); ++ii )
@@ -88,7 +88,7 @@ void BEZIER_POLY::GetPoly( std::vector<VECTOR2D>& aOutput, double aMinSegLen, in
     // FIXME Brute force method, use a better (recursive?) algorithm
     // with a max error value.
     // to optimize the number of segments
-     double dt = 1.0 / aMaxSegCount;
+    double dt = 1.0 / aMaxSegCount;
 
     aOutput.clear();
     aOutput.push_back( m_ctrlPts[0] );
