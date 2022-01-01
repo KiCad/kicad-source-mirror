@@ -483,7 +483,7 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createPreviewItems()
     m_page->SetWidthMils( 6000 );
 
     STRING_LINE_READER reader( g_previewBoard, "preview" );
-    PCB_PLUGIN             pi;
+    PCB_PLUGIN         pi;
 
     try
     {
@@ -499,6 +499,7 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createPreviewItems()
 
     DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( (int) IU_PER_MILS, m_page, nullptr,
                                                                m_titleBlock );
+    drawingSheet->SetIsFirstPage( true );
     drawingSheet->SetColorLayer( LAYER_DRAWINGSHEET );
     m_preview->SetDrawingSheet( drawingSheet );
 
