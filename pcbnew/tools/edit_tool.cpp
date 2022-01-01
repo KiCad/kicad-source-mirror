@@ -1453,6 +1453,10 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 true /* prompt user regarding locked items */ );
     }
 
+    // Did we filter everything out?  If so, don't try to operate further
+    if( selection.Empty() )
+        return 0;
+
     updateModificationPoint( selection );
 
     VECTOR2I refPt = selection.GetReferencePoint();
@@ -2249,6 +2253,10 @@ void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
 bool EDIT_TOOL::updateModificationPoint( PCB_SELECTION& aSelection )
 {
     if( m_dragging && aSelection.HasReferencePoint() )
+        return false;
+
+    // Can't modify an empty group
+    if( aSelection.Empty() )
         return false;
 
     // When there is only one item selected, the reference point is its position...
