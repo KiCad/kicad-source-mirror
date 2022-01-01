@@ -111,4 +111,11 @@ target_link_libraries( qa_pcbnew
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )
 
+if( WIN32 )
+    # Copy dynamic lib dependency to build dir to allow running directly
+    add_custom_command( TARGET qa_pcbnew POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:kicad_3dsg>" "$<TARGET_FILE_DIR:qa_pcbnew>"
+        )
+endif()
+
 kicad_add_boost_test( qa_pcbnew qa_pcbnew )
