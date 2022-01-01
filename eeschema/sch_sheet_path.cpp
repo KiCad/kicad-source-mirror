@@ -172,10 +172,10 @@ int SCH_SHEET_PATH::ComparePageNumAndName( const SCH_SHEET_PATH& aSheetPathToTes
 
     if( pageNumComp == 0 )
     {
-        wxString nameA = Last()->GetName();
-        wxString nameB = aSheetPathToTest.Last()->GetName();
+        int virtualPageA = GetVirtualPageNumber();
+        int virtualPageB = aSheetPathToTest.GetVirtualPageNumber();
 
-        return nameA.Cmp( nameB );
+        return virtualPageA > virtualPageB ? 1 : -1;
     }
     else
     {
