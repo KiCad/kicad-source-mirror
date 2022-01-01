@@ -305,7 +305,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         moveItem( item, delta );
                         updateItem( item, false );
 
-                        isPasted |= item->GetFlags() & IS_PASTED;
+                        isPasted |= ( item->GetFlags() & IS_PASTED ) != 0;
                         item->ClearFlags( IS_PASTED );
                     }
 

@@ -75,7 +75,7 @@ EDA_RECT EE_SELECTION::GetBoundingBox() const
             {
                 bbox.Merge( static_cast<SCH_SYMBOL*>( item )->GetBoundingBox() );
             }
-            catch( const boost::bad_pointer& exc )
+            catch( const boost::bad_pointer& )
             {
                 wxFAIL_MSG( "Invalid pointer." );
             }
