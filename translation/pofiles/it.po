@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-11-26 09:51+0100\n"
+"PO-Revision-Date: 2022-01-01 17:07+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -695,7 +695,7 @@ msgstr "Percorsi disponibili:"
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
 msgid "Configure Paths"
-msgstr "Configura percorsi"
+msgstr "Configurazione percorsi"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:63
 msgid "Select 3D Model"
@@ -1148,7 +1148,7 @@ msgstr "Opacità"
 #: eeschema/dialogs/dialog_print_using_printer.cpp:274
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:252
 msgid "Preview"
-msgstr "Anteprima di stampa"
+msgstr "Anteprima"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:221
 msgid "Reload board and 3D models"
@@ -4886,7 +4886,7 @@ msgstr "Editor C.S."
 #: pagelayout_editor/menubar.cpp:86 pagelayout_editor/pl_editor_frame.cpp:486
 #: pagelayout_editor/pl_editor_frame.cpp:563
 msgid "Drawing Sheet Editor"
-msgstr "Editor foglio di disegno"
+msgstr "Editor fogli di disegno"
 
 #: common/hotkey_store.cpp:156
 msgid "Gestures"
@@ -6243,7 +6243,7 @@ msgstr "Esplora le librerie di simboli"
 #: eeschema/symbol_editor/symbol_editor.cpp:163
 #: kicad/tools/kicad_manager_actions.cpp:75
 msgid "Symbol Editor"
-msgstr "Editor di simboli"
+msgstr "Editor simboli"
 
 #: common/tool/actions.cpp:577
 msgid "Create, delete and edit symbols"
@@ -6303,7 +6303,7 @@ msgstr "Modifica gli elenchi librerie di simboli globale e del progetto"
 
 #: common/tool/actions.cpp:619
 msgid "Manage Footprint Libraries..."
-msgstr "Gestione librerie di impronte..."
+msgstr "Gestione librerie impronte..."
 
 #: common/tool/actions.cpp:620
 msgid "Edit the global and project footprint library lists"
@@ -18104,7 +18104,7 @@ msgstr "Selettore modelli di progetto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:116
 msgid "Edit the project schematic"
-msgstr "Modifica lo schema del progetto"
+msgstr "Modifica lo schema elettrico del progetto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:120
 msgid "Edit global and/or project schematic symbol libraries"
@@ -18120,11 +18120,11 @@ msgstr "Modifica le librerie di impronte globali e/o del progetto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:132
 msgid "Preview Gerber files"
-msgstr "Anteprima file Gerber"
+msgstr "Mostra l'anteprima dei file Gerber"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:136
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "Converti immagini bitmap in simboli dello schema o impronte del C.S."
+msgstr "Converte immagini bitmap in simboli dello schema o impronte del circuito stampato"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:140
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -18135,13 +18135,11 @@ msgstr ""
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
-msgstr ""
-"Modifica squadratura del foglio e riquadro iscrizioni per usarli nei "
-"progetti di schema e circuito stampato"
+msgstr "Modifica il riquadro iscrizioni e la squadratura fogli per la progettazione di schemi elettrici e circuiti stampati"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "Gestisci pacchetti scaricabili da repository KiCad e di terze parti"
+msgstr "Gestisce i pacchetti scaricabili da repository KiCad e di terze parti"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -18380,7 +18378,7 @@ msgstr "Chiudere la gestione pacchetti ed annullare i cambiamenti pendenti?"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:173
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Plugin and Content Manager"
-msgstr "Plugin gestore contenuto"
+msgstr "Gestione plugin e contenuti"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:252
 msgid "Choose package file"
@@ -18427,7 +18425,7 @@ msgstr "Installa da file..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:74
 msgid "Plugin And Content Manager"
-msgstr "Gestione plugin e contenuto"
+msgstr "Gestione plugin e contenuti"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:57
 msgid "Aborting remaining tasks."
@@ -19432,7 +19430,7 @@ msgstr "Il file di disposizione pagina è in sola lettura."
 
 #: pagelayout_editor/pl_editor_frame.cpp:100
 msgid "KiCad Drawing Sheet Editor"
-msgstr "Editor foglio di disegno KiCad"
+msgstr "Editor fogli di disegno KiCad"
 
 #: pagelayout_editor/pl_editor_frame.cpp:157
 msgid "coord origin: Right Bottom page corner"
@@ -36568,75 +36566,21 @@ msgid "The KiCad Developers"
 msgstr "Gli sviluppatori di KiCad"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber file"
 msgstr "File Gerber"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:26
-#, fuzzy
 msgid "Excellon drill file"
-msgstr "Genera file forature Excellon2"
+msgstr "File forature Excellon"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
-msgstr "File progetto KiCad"
+msgstr "Progetto KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "Schema non-KiCad..."
+msgstr "Schema elettrico KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:27
-#, fuzzy
 msgid "KiCad Printed Circuit Board"
-msgstr "File di circuiti stampati KiCad"
-
-#~ msgid "Others"
-#~ msgstr "Altri"
-
-#~ msgid "Notes"
-#~ msgstr "Note"
-
-#~ msgid "Default line thickness:"
-#~ msgstr "Spessore predefinito linea:"
-
-#~ msgid "Sheet name"
-#~ msgstr "Nome foglio"
-
-#~ msgid "Sheet file"
-#~ msgstr "File foglio"
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
-
-#~ msgid ""
-#~ "KiCad can use your graphics card to give you a smoother and faster "
-#~ "experience. This option is turned off by default since it is not "
-#~ "compatible with all computers.\n"
-#~ "\n"
-#~ "Would you like to try enabling graphics acceleration?\n"
-#~ "\n"
-#~ "If you'd like to choose later, select Accelerated Graphics in the "
-#~ "Preferences menu."
-#~ msgstr ""
-#~ "KiCad può usare la scheda grafica per fornire un'esperienza di lavoro più "
-#~ "veloce ed agevole. Questa opzione è disabilitata in modo predefinito dato "
-#~ "che non è compatibile con tutti i computer.\n"
-#~ "\n"
-#~ "Provare ad abilitare l'accelerazione grafica?\n"
-#~ "\n"
-#~ "Se si preferisce, è possibile selezionare in un secondo momento la "
-#~ "grafica accelerata nel menu delle preferenze."
-
-#~ msgid "Enable Graphics Acceleration"
-#~ msgstr "Abilita accelerazione grafica"
-
-#~ msgid "&Enable Acceleration"
-#~ msgstr "Abilita acc&elerazione grafica"
-
-#~ msgid "&No Thanks"
-#~ msgstr "&No grazie"
+msgstr "Circuito stampato KiCad"
