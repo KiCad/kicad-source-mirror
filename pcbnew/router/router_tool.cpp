@@ -1595,7 +1595,7 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
 
     int refNet = reference->GetNetCode();
 
-    wxPoint refPoint( aPt.x, aPt.y );
+    VECTOR2I       refPoint( aPt.x, aPt.y );
     EDA_ITEM_FLAGS flags = reference->IsPointOnEnds( refPoint, -1 );
 
     if( flags & STARTPOINT )

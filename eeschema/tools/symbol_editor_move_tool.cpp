@@ -206,8 +206,8 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 else if( selection.Size() == 1 && m_frame->GetMoveWarpsCursor() )
                 {
-                    wxPoint itemPos = lib_item->GetPosition();
-                    m_anchorPos = wxPoint( itemPos.x, -itemPos.y );
+                    VECTOR2I itemPos = lib_item->GetPosition();
+                    m_anchorPos = VECTOR2I( itemPos.x, -itemPos.y );
 
                     getViewControls()->WarpCursor( m_anchorPos, true, true );
                     m_cursor = m_anchorPos;

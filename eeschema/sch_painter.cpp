@@ -144,8 +144,8 @@ static LIB_SYMBOL* dummy()
 
         LIB_SHAPE* square = new LIB_SHAPE( symbol, SHAPE_T::RECT );
 
-        square->MoveTo( wxPoint( Mils2iu( -200 ), Mils2iu( 200 ) ) );
-        square->SetEnd( wxPoint( Mils2iu( 200 ), Mils2iu( -200 ) ) );
+        square->MoveTo( VECTOR2I( Mils2iu( -200 ), Mils2iu( 200 ) ) );
+        square->SetEnd( VECTOR2I( Mils2iu( 200 ), Mils2iu( -200 ) ) );
 
         LIB_TEXT* text = new LIB_TEXT( symbol );
 
@@ -446,7 +446,7 @@ void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition, dou
     const STROKE_FONT& font = m_gal->GetStrokeFont();
     VECTOR2D           extents = font.ComputeStringBoundaryLimits( aText, m_gal->GetGlyphSize(),
                                                                    m_gal->GetLineWidth() );
-    EDA_RECT           box( (wxPoint) aPosition, wxSize( extents.x, extents.y ) );
+    EDA_RECT           box( (VECTOR2I) aPosition, wxSize( extents.x, extents.y ) );
 
     if( m_gal->GetHorizontalJustify() == GR_TEXT_H_ALIGN_CENTER )
         box.SetX( box.GetX() - ( box.GetWidth() / 2) );
@@ -459,7 +459,7 @@ void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition, dou
         box.SetY( box.GetY() - box.GetHeight() );
 
     box.Normalize();       // Make h and v sizes always >= 0
-    box = box.GetBoundingBoxRotated((wxPoint) aPosition, RAD2DECIDEG( aAngle ) );
+    box = box.GetBoundingBoxRotated((VECTOR2I) aPosition, RAD2DECIDEG( aAngle ) );
     box.RevertYAxis();
     m_gal->DrawRectangle( mapCoords( box.GetOrigin() ), mapCoords( box.GetEnd() ) );
 }
@@ -617,7 +617,7 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
             std::deque<VECTOR2D>   mappedPts;
 
             for( const VECTOR2I& pt : poly.CPoints() )
-                mappedPts.push_back( mapCoords( (wxPoint) pt ) );
+                mappedPts.push_back( mapCoords( pt ) );
 
             m_gal->DrawPolygon( mappedPts );
         }
@@ -627,7 +627,7 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
         {
             std::deque<VECTOR2D> mappedPts;
 
-            for( const wxPoint& p : aShape->GetBezierPoints() )
+            for( const VECTOR2I& p : aShape->GetBezierPoints() )
                 mappedPts.push_back( mapCoords( p ) );
 
             m_gal->DrawPolygon( mappedPts );
@@ -709,7 +709,7 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
     {
         m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
         m_gal->SetStrokeColor( getRenderColor( aField, LAYER_SCHEMATIC_ANCHOR, drawingShadows ) );
-        m_gal->DrawLine( textpos, wxPoint( 0, 0 ) );
+        m_gal->DrawLine( textpos, VECTOR2I( 0, 0 ) );
     }
 }
 
@@ -1238,8 +1238,8 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 void SCH_PAINTER::drawDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
                                       bool aDrawingShadows, bool aBrightened )
 {
-    wxPoint radius( aWidth + Mils2iu( DANGLING_SYMBOL_SIZE / 2 ),
-                    aWidth + Mils2iu( DANGLING_SYMBOL_SIZE / 2 ) );
+    VECTOR2I radius( aWidth + Mils2iu( DANGLING_SYMBOL_SIZE / 2 ),
+                     aWidth + Mils2iu( DANGLING_SYMBOL_SIZE / 2 ) );
 
     // Dangling symbols must be drawn in a slightly different colour so they can be seen when
     // they overlap with a junction dot.
@@ -1319,7 +1319,7 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
         SHAPE_SEGMENT line( aLine->GetStartPoint(), aLine->GetEndPoint() );
 
         STROKE_PARAMS::Stroke( &line, lineStyle, width, &m_schSettings,
-                               [&]( const wxPoint& a, const wxPoint& b )
+                               [&]( const VECTOR2I& a, const VECTOR2I& b )
                                {
                                    m_gal->DrawLine( a, b );
                                } );
@@ -1422,7 +1422,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
             for( SHAPE* shape : shapes )
             {
                 STROKE_PARAMS::Stroke( shape, lineStyle, lineWidth, &m_schSettings,
-                                       [&]( const wxPoint& a, const wxPoint& b )
+                                       [&]( const VECTOR2I& a, const VECTOR2I& b )
                                        {
                                            m_gal->DrawLine( a, b );
                                        } );
@@ -1564,13 +1564,13 @@ static void orientSymbol( LIB_SYMBOL* symbol, int orientation )
     for( auto& item : symbol->GetDrawItems() )
     {
         for( int i = 0; i < o.n_rots; i++ )
-            item.Rotate( wxPoint(0, 0 ), true );
+            item.Rotate( VECTOR2I(0, 0 ), true );
 
         if( o.mirror_x )
-            item.MirrorVertical( wxPoint( 0, 0 ) );
+            item.MirrorVertical( VECTOR2I( 0, 0 ) );
 
         if( o.mirror_y )
-            item.MirrorHorizontal( wxPoint( 0, 0 ) );
+            item.MirrorHorizontal( VECTOR2I( 0, 0 ) );
     }
 }
 
@@ -1612,7 +1612,7 @@ void SCH_PAINTER::draw( SCH_SYMBOL* aSymbol, int aLayer )
     for( auto& tempItem : tempSymbol.GetDrawItems() )
     {
         tempItem.SetFlags( aSymbol->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
-        tempItem.MoveTo( tempItem.GetPosition() + (wxPoint) mapCoords( aSymbol->GetPosition() ) );
+        tempItem.MoveTo( tempItem.GetPosition() + (VECTOR2I) mapCoords( aSymbol->GetPosition() ) );
     }
 
     // Copy the pin info from the symbol to the temp pins
@@ -1737,7 +1737,7 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
     // Draw the umbilical line
     if( aField->IsMoving() )
     {
-        wxPoint parentPos = aField->GetParentPosition();
+        VECTOR2I parentPos = aField->GetParentPosition();
 
         m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
         m_gal->SetStrokeColor( getRenderColor( aField, LAYER_SCHEMATIC_ANCHOR, drawingShadows ) );
@@ -1764,12 +1764,12 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL *aLabel, int aLayer )
 
     COLOR4D color = getRenderColor( aLabel, LAYER_GLOBLABEL, drawingShadows );
 
-    std::vector<wxPoint> pts;
+    std::vector<VECTOR2I> pts;
     std::deque<VECTOR2D> pts2;
 
-    aLabel->CreateGraphicShape( &m_schSettings, pts, (wxPoint) aLabel->GetTextPos() );
+    aLabel->CreateGraphicShape( &m_schSettings, pts, aLabel->GetTextPos() );
 
-    for( const wxPoint& p : pts )
+    for( const VECTOR2I& p : pts )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );
 
     // The text is drawn inside the graphic shape.
@@ -1838,12 +1838,12 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL *aLabel, int aLayer )
             color = getRenderColor( aLabel, LAYER_BUS, drawingShadows );
     }
 
-    std::vector<wxPoint> pts;
+    std::vector<VECTOR2I> pts;
     std::deque<VECTOR2D> pts2;
 
-    aLabel->CreateGraphicShape( &m_schSettings, pts, (wxPoint)aLabel->GetTextPos() );
+    aLabel->CreateGraphicShape( &m_schSettings, pts, (VECTOR2I)aLabel->GetTextPos() );
 
-    for( const wxPoint& p : pts )
+    for( const VECTOR2I& p : pts )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );
 
     m_gal->SetIsFill( true );
@@ -1886,12 +1886,12 @@ void SCH_PAINTER::draw( const SCH_NETCLASS_FLAG *aLabel, int aLayer )
         return;
     }
 
-    std::vector<wxPoint> pts;
+    std::vector<VECTOR2I> pts;
     std::deque<VECTOR2D> pts2;
 
-    aLabel->CreateGraphicShape( &m_schSettings, pts, (wxPoint) aLabel->GetTextPos() );
+    aLabel->CreateGraphicShape( &m_schSettings, pts, aLabel->GetTextPos() );
 
-    for( const wxPoint& p : pts )
+    for( const VECTOR2I& p : pts )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );
 
     m_gal->SetIsFill( false );
@@ -2017,7 +2017,7 @@ void SCH_PAINTER::draw( const SCH_NO_CONNECT *aNC, int aLayer )
 void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 {
     SCH_LAYER_ID layer = aEntry->Type() == SCH_BUS_WIRE_ENTRY_T ? LAYER_WIRE : LAYER_BUS;
-    SCH_LINE     line( wxPoint(), layer );
+    SCH_LINE     line( VECTOR2I(), layer );
     bool         drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
     bool         drawingDangling = aLayer == LAYER_DANGLING;
 

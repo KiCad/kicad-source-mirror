@@ -41,7 +41,7 @@ class MSG_PANEL_ITEM;
 class PCB_MARKER : public BOARD_ITEM, public MARKER_BASE
 {
 public:
-    PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const wxPoint& aPosition );
+    PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const VECTOR2I& aPosition );
     ~PCB_MARKER();
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
@@ -55,24 +55,24 @@ public:
 
     static PCB_MARKER* Deserialize( const wxString& data );
 
-    void Move(const wxPoint& aMoveVector) override
+    void Move( const VECTOR2I& aMoveVector ) override
     {
         m_Pos += aMoveVector;
     }
 
-    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
 
-    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
-    wxPoint GetPosition() const override { return m_Pos; }
-    void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
+    VECTOR2I GetPosition() const override { return m_Pos; }
+    void     SetPosition( const VECTOR2I& aPos ) override { m_Pos = aPos; }
 
-    wxPoint GetCenter() const override
+    VECTOR2I GetCenter() const override
     {
         return GetPosition();
     }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override
     {
         if( GetMarkerType() == MARKER_RATSNEST )
             return false;

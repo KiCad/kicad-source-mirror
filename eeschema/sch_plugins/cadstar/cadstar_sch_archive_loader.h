@@ -126,8 +126,8 @@ private:
     void loadTextVariables();
 
     //Helper Functions for loading sheets
-    void loadSheetAndChildSheets( LAYER_ID aCadstarSheetID, const wxPoint& aPosition,
-                                  wxSize aSheetSize, const SCH_SHEET_PATH& aParentSheet );
+    void loadSheetAndChildSheets( LAYER_ID aCadstarSheetID, const VECTOR2I& aPosition,
+                                  VECTOR2I aSheetSize, const SCH_SHEET_PATH& aParentSheet );
 
     void loadChildSheets( LAYER_ID aCadstarSheetID, const SCH_SHEET_PATH& aSheet );
 
@@ -164,22 +164,26 @@ private:
     wxString getNetName( const NET_SCH& aNet );
 
     //Helper functions for loading figures / graphical items
-    void loadGraphicStaightSegment( const wxPoint& aStartPoint, const wxPoint& aEndPoint,
+    void loadGraphicStaightSegment(
+            const VECTOR2I& aStartPoint, const VECTOR2I& aEndPoint,
             const LINECODE_ID& aCadstarLineCodeID, const LAYER_ID& aCadstarSheetID,
-            const SCH_LAYER_ID& aKiCadSchLayerID, const wxPoint& aMoveVector = { 0, 0 },
+            const SCH_LAYER_ID& aKiCadSchLayerID, const VECTOR2I& aMoveVector = { 0, 0 },
             const double& aRotationAngleDeciDeg = 0.0, const double& aScalingFactor = 1.0,
-            const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
+            const VECTOR2I& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
 
     void loadShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
-            LINECODE_ID aCadstarLineCodeID, LAYER_ID aCadstarSheetID, SCH_LAYER_ID aKiCadSchLayerID,
-            const wxPoint& aMoveVector = { 0, 0 }, const double& aRotationAngleDeciDeg = 0.0,
-            const double& aScalingFactor = 1.0, const wxPoint& aTransformCentre = { 0, 0 },
-            const bool& aMirrorInvert = false );
+                            LINECODE_ID aCadstarLineCodeID, LAYER_ID aCadstarSheetID,
+                            SCH_LAYER_ID aKiCadSchLayerID, const VECTOR2I& aMoveVector = { 0, 0 },
+                            const double&   aRotationAngleDeciDeg = 0.0,
+                            const double&   aScalingFactor = 1.0,
+                            const VECTOR2I& aTransformCentre = { 0, 0 },
+                            const bool&     aMirrorInvert = false );
 
     void loadFigure( const FIGURE& aCadstarFigure, const LAYER_ID& aCadstarSheetIDOverride,
-            SCH_LAYER_ID aKiCadSchLayerID, const wxPoint& aMoveVector = { 0, 0 },
-            const double& aRotationAngleDeciDeg = 0.0, const double& aScalingFactor = 1.0,
-            const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
+                     SCH_LAYER_ID aKiCadSchLayerID, const VECTOR2I& aMoveVector = { 0, 0 },
+                     const double& aRotationAngleDeciDeg = 0.0, const double& aScalingFactor = 1.0,
+                     const VECTOR2I& aTransformCentre = { 0, 0 },
+                     const bool&     aMirrorInvert = false );
 
     //Helper functions for loading text elements
     void applyTextSettings( EDA_TEXT* aKiCadTextItem,
@@ -223,15 +227,17 @@ private:
 
     void fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int aGateNumber );
 
-    std::pair<wxPoint, wxSize> getFigureExtentsKiCad( const FIGURE& aCadstarFigure );
+    std::pair<VECTOR2I, wxSize> getFigureExtentsKiCad( const FIGURE& aCadstarFigure );
 
-    wxPoint getKiCadPoint( const wxPoint& aCadstarPoint );
+    VECTOR2I getKiCadPoint( const VECTOR2I& aCadstarPoint );
 
     wxPoint getKiCadLibraryPoint( const wxPoint& aCadstarPoint, const wxPoint& aCadstarCentre );
 
-    wxPoint applyTransform( const wxPoint& aPoint, const wxPoint& aMoveVector = { 0, 0 },
-            const double& aRotationAngleDeciDeg = 0.0, const double& aScalingFactor = 1.0,
-            const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
+    VECTOR2I applyTransform( const VECTOR2I& aPoint, const VECTOR2I& aMoveVector = { 0, 0 },
+                            const double&   aRotationAngleDeciDeg = 0.0,
+                            const double&   aScalingFactor = 1.0,
+                            const VECTOR2I& aTransformCentre = { 0, 0 },
+                            const bool&     aMirrorInvert = false );
 
     int getKiCadLength( long long aCadstarLength )
     {
@@ -288,14 +294,14 @@ private:
      * @param aPoint
      * @return Angle in decidegrees of the polar representation of the point, scaled 0..360
      */
-    double getPolarAngle( const wxPoint& aPoint );
+    double getPolarAngle( const VECTOR2I& aPoint );
 
     /**
      * @brief
      * @param aPoint
      * @return Radius of polar representation of the point
      */
-    double getPolarRadius( const wxPoint& aPoint );
+    double getPolarRadius( const VECTOR2I& aPoint );
 
 }; // CADSTAR_SCH_ARCHIVE_LOADER
 

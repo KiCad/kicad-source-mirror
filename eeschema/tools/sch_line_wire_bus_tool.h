@@ -52,7 +52,7 @@ struct BUS_UNFOLDING_T
     bool flipY;         ///< True if the bus entry should be flipped in the y-axis
     bool label_placed;  ///< True if user has placed the net label
 
-    wxPoint origin;     ///< Origin (on the bus) of the unfold
+    VECTOR2I origin;   ///< Origin (on the bus) of the unfold
     wxString net_name;  ///< Net label for the unfolding operation
 
     SCH_BUS_WIRE_ENTRY* entry;
@@ -96,7 +96,7 @@ public:
 private:
     int       doDrawSegments( const std::string& aTool, int aType, bool aQuitOnDraw );
     SCH_LINE* startSegments( int aType, const VECTOR2D& aPos );
-    SCH_LINE* doUnfoldBus( const wxString& aNet, const wxPoint& aPos = wxDefaultPosition );
+    SCH_LINE* doUnfoldBus( const wxString& aNet, const VECTOR2I& aPos = VECTOR2I( 0, 0 ) );
     void finishSegments();
 
     /**
@@ -114,7 +114,7 @@ private:
      * @param aPosition grid point to search for existing sheet pin
      * @return Pointer to sheet pin or nullptr on failure
      */
-    const SCH_SHEET_PIN* getSheetPin( const wxPoint& aPosition );
+    const SCH_SHEET_PIN* getSheetPin( const VECTOR2I& aPosition );
 
     /**
      * Compute the middle coordinate for 2 segments from the start point to \a aPosition
@@ -125,7 +125,7 @@ private:
      * @param aPosition A reference to a wxPoint object containing the coordinates of the
      *                  position used to calculate the line break point.
      */
-    void computeBreakPoint( const std::pair<SCH_LINE*, SCH_LINE*>& aSegments, wxPoint& aPosition );
+    void computeBreakPoint( const std::pair<SCH_LINE*, SCH_LINE*>& aSegments, VECTOR2I& aPosition );
 
 private:
     /// Data related to bus unfolding tool.

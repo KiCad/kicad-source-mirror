@@ -73,10 +73,10 @@ public:
         return false;
     }
 
-    void SetPosition( const wxPoint& aPos ) override { setPosition( aPos ); }
-    wxPoint GetPosition() const override { return getPosition(); }
+    void    SetPosition( const VECTOR2I& aPos ) override { setPosition( aPos ); }
+    VECTOR2I GetPosition() const override { return getPosition(); }
 
-    wxPoint GetCenter() const override { return getCenter(); }
+    VECTOR2I GetCenter() const override { return getCenter(); }
 
     bool HasLineStroke() const override { return true; }
 
@@ -87,7 +87,7 @@ public:
      * Allows items to return their visual center rather than their anchor. For some shapes this
      * is similar to GetCenter(), but for unfilled shapes a point on the outline is better.
      */
-    const wxPoint GetFocusPosition() const override;
+    const VECTOR2I GetFocusPosition() const override;
 
     /**
      * Return the parent footprint or NULL if PCB_SHAPE does not belong to a footprint.
@@ -105,7 +105,7 @@ public:
 
     const EDA_RECT GetBoundingBox() const override { return getBoundingBox(); }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override
     {
         return hitTest( aPosition, aAccuracy );
     }
@@ -115,11 +115,11 @@ public:
         return hitTest( aRect, aContained, aAccuracy );
     }
 
-    virtual void Move( const wxPoint& aMoveVector ) override;
+    virtual void Move( const VECTOR2I& aMoveVector ) override;
 
-    virtual void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
+    virtual void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
 
-    virtual void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
+    virtual void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     void Scale( double aScale );
 
@@ -161,7 +161,7 @@ public:
 
 protected:
     double getParentOrientation() const override;
-    wxPoint getParentPosition() const override;
+    VECTOR2I getParentPosition() const override;
 };
 
 #endif  // PCB_SHAPE_H

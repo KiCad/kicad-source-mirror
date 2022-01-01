@@ -191,7 +191,7 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
 }
 
 
-void SCH_SYMBOL::Init( const wxPoint& pos )
+void SCH_SYMBOL::Init( const VECTOR2I& pos )
 {
     m_pos     = pos;
     m_unit    = 1;  // In multi unit chip - which unit to draw.
@@ -381,7 +381,7 @@ int SCH_SYMBOL::GetUnitCount() const
 }
 
 
-void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     LIB_SYMBOL_OPTIONS opts;
     opts.transform = m_transform;
@@ -1484,11 +1484,11 @@ void SCH_SYMBOL::MirrorVertically( int aCenter )
 }
 
 
-void SCH_SYMBOL::Rotate( const wxPoint& aCenter )
+void SCH_SYMBOL::Rotate( const VECTOR2I& aCenter )
 {
-    wxPoint prev = m_pos;
+    VECTOR2I prev = m_pos;
 
-    RotatePoint( &m_pos, aCenter, 900 );
+    RotatePoint( m_pos, aCenter, 900 );
 
     SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
 
@@ -1537,7 +1537,7 @@ bool SCH_SYMBOL::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
         bool previousState = pin->IsDangling();
         pin->SetIsDangling( true );
 
-        wxPoint pos = m_transform.TransformCoordinate( pin->GetLocalPosition() ) + m_pos;
+        VECTOR2I pos = m_transform.TransformCoordinate( pin->GetLocalPosition() ) + m_pos;
 
         for( DANGLING_END_ITEM& each_item : aItemList )
         {
@@ -1577,7 +1577,7 @@ bool SCH_SYMBOL::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
 }
 
 
-wxPoint SCH_SYMBOL::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
+VECTOR2I SCH_SYMBOL::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
 {
     wxCHECK_MSG( Pin != nullptr && Pin->Type() == LIB_PIN_T, wxPoint( 0, 0 ),
                  wxT( "Cannot get physical position of pin." ) );
@@ -1586,9 +1586,9 @@ wxPoint SCH_SYMBOL::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
 }
 
 
-std::vector<wxPoint> SCH_SYMBOL::GetConnectionPoints() const
+std::vector<VECTOR2I> SCH_SYMBOL::GetConnectionPoints() const
 {
-    std::vector<wxPoint> retval;
+    std::vector<VECTOR2I> retval;
 
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
@@ -1610,12 +1610,12 @@ std::vector<wxPoint> SCH_SYMBOL::GetConnectionPoints() const
 }
 
 
-LIB_ITEM* SCH_SYMBOL::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
+LIB_ITEM* SCH_SYMBOL::GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType )
 {
     if( m_part )
     {
         // Calculate the position relative to the symbol.
-        wxPoint libPosition = aPosition - m_pos;
+        VECTOR2I libPosition = aPosition - m_pos;
 
         return m_part->LocateDrawItem( m_unit, m_convert, aType, libPosition, m_transform );
     }
@@ -1786,7 +1786,7 @@ SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_ITEM& aItem )
 }
 
 
-bool SCH_SYMBOL::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool SCH_SYMBOL::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     EDA_RECT bBox = GetBodyBoundingBox();
     bBox.Inflate( aAccuracy / 2 );
@@ -1814,9 +1814,9 @@ bool SCH_SYMBOL::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy 
 }
 
 
-bool SCH_SYMBOL::doIsConnected( const wxPoint& aPosition ) const
+bool SCH_SYMBOL::doIsConnected( const VECTOR2I& aPosition ) const
 {
-    wxPoint new_pos = m_transform.InverseTransform().TransformCoordinate( aPosition - m_pos );
+    VECTOR2I new_pos = m_transform.InverseTransform().TransformCoordinate( aPosition - m_pos );
 
     for( const auto& pin : m_pins )
     {
@@ -1884,7 +1884,7 @@ void SCH_SYMBOL::ClearBrightenedPins()
 }
 
 
-bool SCH_SYMBOL::IsPointClickableAnchor( const wxPoint& aPos ) const
+bool SCH_SYMBOL::IsPointClickableAnchor( const VECTOR2I& aPos ) const
 {
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {

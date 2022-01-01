@@ -698,7 +698,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
         while( sheetNode )
         {
-            wxPoint                    pos    = wxPoint( x * Mils2iu( 1000 ), y * Mils2iu( 1000 ) );
+            VECTOR2I                   pos    = VECTOR2I( x * Mils2iu( 1000 ), y * Mils2iu( 1000 ) );
             std::unique_ptr<SCH_SHEET> sheet  = std::make_unique<SCH_SHEET>( m_rootSheet, pos );
             SCH_SCREEN*                screen = new SCH_SCREEN( m_schematic );
 
@@ -750,7 +750,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     // placement for the new symbols
     wxSize   pageSizeIU = m_rootSheet->GetScreen()->GetPageSettings().GetSizeIU();
     EDA_RECT sheetBbox  = getSheetBbox( m_rootSheet );
-    wxPoint  newCmpPosition( sheetBbox.GetLeft(), sheetBbox.GetBottom() );
+    VECTOR2I newCmpPosition( sheetBbox.GetLeft(), sheetBbox.GetBottom() );
     int      maxY = sheetBbox.GetY();
 
     SCH_SHEET_PATH sheetpath;
@@ -778,12 +778,12 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             // Calculate the placement position
             EDA_RECT cmpBbox = symbol->GetBoundingBox();
             int      posY    = newCmpPosition.y + cmpBbox.GetHeight();
-            symbol->SetPosition( wxPoint( newCmpPosition.x, posY ) );
+            symbol->SetPosition( VECTOR2I( newCmpPosition.x, posY ) );
             newCmpPosition.x += cmpBbox.GetWidth();
             maxY = std::max( maxY, posY );
 
             if( newCmpPosition.x >= pageSizeIU.GetWidth() )            // reached the page boundary?
-                newCmpPosition = wxPoint( sheetBbox.GetLeft(), maxY ); // then start a new row
+                newCmpPosition = VECTOR2I( sheetBbox.GetLeft(), maxY ); // then start a new row
 
             // Add the global net labels to recreate the implicit connections
             addImplicitConnections( symbol.get(), m_rootSheet->GetScreen(), false );
@@ -972,7 +972,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
 
     for( SCH_ITEM* item : allItems )
     {
-        item->SetPosition( item->GetPosition() + (wxPoint)translation );
+        item->SetPosition( item->GetPosition() + translation );
         item->ClearFlags();
         m_currentSheet->GetScreen()->Update( item );
 
@@ -984,10 +984,10 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_LINE*>&
 {
     EFRAME eframe( aFrameNode );
 
-    wxPoint corner1( eframe.x1.ToSchUnits(), -eframe.y1.ToSchUnits() );
-    wxPoint corner3( eframe.x2.ToSchUnits(), -eframe.y2.ToSchUnits() );
-    wxPoint corner2( corner3.x, corner1.y );
-    wxPoint corner4( corner1.x, corner3.y );
+    VECTOR2I corner1( eframe.x1.ToSchUnits(), -eframe.y1.ToSchUnits() );
+    VECTOR2I corner3( eframe.x2.ToSchUnits(), -eframe.y2.ToSchUnits() );
+    VECTOR2I corner2( corner3.x, corner1.y );
+    VECTOR2I corner4( corner1.x, corner3.y );
 
     SCH_LINE* line = new SCH_LINE();
     line->SetLineStyle( PLOT_DASH_TYPE::SOLID );
@@ -1156,7 +1156,7 @@ SCH_LINE* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode )
 
     wire->SetLayer( kiCadLayer( ewire.layer ) );
 
-    wxPoint begin, end;
+    VECTOR2I begin, end;
 
     begin.x = ewire.x1.ToSchUnits();
     begin.y = -ewire.y1.ToSchUnits();
@@ -1178,7 +1178,7 @@ SCH_JUNCTION* SCH_EAGLE_PLUGIN::loadJunction( wxXmlNode* aJunction )
     std::unique_ptr<SCH_JUNCTION> junction = std::make_unique<SCH_JUNCTION>();
 
     EJUNCTION ejunction = EJUNCTION( aJunction );
-    wxPoint   pos( ejunction.x.ToSchUnits(), -ejunction.y.ToSchUnits() );
+    VECTOR2I  pos( ejunction.x.ToSchUnits(), -ejunction.y.ToSchUnits() );
 
     junction->SetPosition( pos );
 
@@ -1189,7 +1189,7 @@ SCH_JUNCTION* SCH_EAGLE_PLUGIN::loadJunction( wxXmlNode* aJunction )
 SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName )
 {
     ELABEL  elabel = ELABEL( aLabelNode, aNetName );
-    wxPoint elabelpos( elabel.x.ToSchUnits(), -elabel.y.ToSchUnits() );
+    VECTOR2I elabelpos( elabel.x.ToSchUnits(), -elabel.y.ToSchUnits() );
 
     // Determine if the label is local or global depending on
     // the number of sheets the net appears in
@@ -1223,7 +1223,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
 
 
 std::pair<VECTOR2I, const SEG*>
-SCH_EAGLE_PLUGIN::findNearestLinePoint( const wxPoint& aPoint,
+SCH_EAGLE_PLUGIN::findNearestLinePoint( const VECTOR2I&         aPoint,
                                         const std::vector<SEG>& aLines ) const
 {
     VECTOR2I   nearestPoint;
@@ -1324,7 +1324,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     std::unique_ptr<SCH_SYMBOL> symbol = std::make_unique<SCH_SYMBOL>();
     symbol->SetLibId( libId );
     symbol->SetUnit( unit );
-    symbol->SetPosition( wxPoint( einstance.x.ToSchUnits(), -einstance.y.ToSchUnits() ) );
+    symbol->SetPosition( VECTOR2I( einstance.x.ToSchUnits(), -einstance.y.ToSchUnits() ) );
     symbol->GetField( FOOTPRINT_FIELD )->SetText( package );
 
     if( einstance.rot )
@@ -1422,7 +1422,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
             if( field )
             {
 
-                field->SetPosition( wxPoint( attr.x->ToSchUnits(), -attr.y->ToSchUnits() ) );
+                field->SetPosition( VECTOR2I( attr.x->ToSchUnits(), -attr.y->ToSchUnits() ) );
                 int  align      = attr.align ? *attr.align : ETEXT::BOTTOM_LEFT;
                 int  absdegrees = attr.rot ? attr.rot->degrees : 0;
                 bool mirror     = attr.rot ? attr.rot->mirror : false;
@@ -1751,10 +1751,10 @@ LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSym
     // Parse the circle properties
     ECIRCLE    c( aCircleNode );
     LIB_SHAPE* circle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::CIRCLE );
-    wxPoint    center( c.x.ToSchUnits(), c.y.ToSchUnits() );
+    VECTOR2I   center( c.x.ToSchUnits(), c.y.ToSchUnits() );
 
     circle->SetPosition( center );
-    circle->SetEnd( wxPoint( center.x + c.radius.ToSchUnits(), center.y ) );
+    circle->SetEnd( VECTOR2I( center.x + c.radius.ToSchUnits(), center.y ) );
     circle->SetStroke( STROKE_PARAMS( c.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
     circle->SetUnit( aGateNumber );
 
@@ -1768,8 +1768,8 @@ LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& a
     ERECT      rect( aRectNode );
     LIB_SHAPE* rectangle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::RECT );
 
-    rectangle->SetPosition( wxPoint( rect.x1.ToSchUnits(), rect.y1.ToSchUnits() ) );
-    rectangle->SetEnd( wxPoint( rect.x2.ToSchUnits(), rect.y2.ToSchUnits() ) );
+    rectangle->SetPosition( VECTOR2I( rect.x1.ToSchUnits(), rect.y1.ToSchUnits() ) );
+    rectangle->SetEnd( VECTOR2I( rect.x2.ToSchUnits(), rect.y2.ToSchUnits() ) );
 
     rectangle->SetUnit( aGateNumber );
 
@@ -1785,7 +1785,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
 {
     EWIRE ewire = EWIRE( aWireNode );
 
-    wxPoint begin, end;
+    VECTOR2I begin, end;
 
     begin.x = ewire.x1.ToSchUnits();
     begin.y = ewire.y1.ToSchUnits();
@@ -1799,7 +1799,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
     if( ewire.curve )
     {
         LIB_SHAPE* arc = new LIB_SHAPE( aSymbol.get(), SHAPE_T::ARC );
-        wxPoint    center = ConvertArcCenter( begin, end, *ewire.curve * -1 );
+        VECTOR2I   center = ConvertArcCenter( begin, end, *ewire.curve * -1 );
         double     radius = sqrt( abs( ( ( center.x - begin.x ) * ( center.x - begin.x ) )
                                      + ( ( center.y - begin.y ) * ( center.y - begin.y ) ) ) )
                             * 2;
@@ -1807,8 +1807,8 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
         // this emulates the filled semicircles created by a thick arc with flat ends caps.
         if( ewire.width.ToSchUnits() * 2 > radius )
         {
-            wxPoint centerStartVector = begin - center;
-            wxPoint centerEndVector   = end - center;
+            VECTOR2I centerStartVector = begin - center;
+            VECTOR2I centerEndVector = end - center;
 
             centerStartVector.x = centerStartVector.x * ewire.width.ToSchUnits() * 2 / radius;
             centerStartVector.y = centerStartVector.y * ewire.width.ToSchUnits() * 2 / radius;
@@ -1831,7 +1831,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol
             arc->SetStroke( STROKE_PARAMS( ewire.width.ToSchUnits(), PLOT_DASH_TYPE::SOLID ) );
         }
 
-        arc->SetArcGeometry( begin, (wxPoint) CalcArcMid( begin, end, center ), end );
+        arc->SetArcGeometry( begin, CalcArcMid( begin, end, center ), end );
         arc->SetUnit( aGateNumber );
 
         return arc;
@@ -1856,14 +1856,14 @@ LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aS
     LIB_SHAPE* poly = new LIB_SHAPE( aSymbol.get(), SHAPE_T::POLY );
     EPOLYGON   epoly( aPolygonNode );
     wxXmlNode* vertex = aPolygonNode->GetChildren();
-    wxPoint    pt;
+    VECTOR2I   pt;
 
     while( vertex )
     {
         if( vertex->GetName() == "vertex" ) // skip <xmlattr> node
         {
             EVERTEX evertex( vertex );
-            pt = wxPoint( evertex.x.ToSchUnits(), evertex.y.ToSchUnits() );
+            pt = VECTOR2I( evertex.x.ToSchUnits(), evertex.y.ToSchUnits() );
             poly->AddPoint( pt );
         }
 
@@ -1881,7 +1881,7 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlN
                                     EPIN* aEPin, int aGateNumber )
 {
     std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( aSymbol.get() );
-    pin->SetPosition( wxPoint( aEPin->x.ToSchUnits(), aEPin->y.ToSchUnits() ) );
+    pin->SetPosition( VECTOR2I( aEPin->x.ToSchUnits(), aEPin->y.ToSchUnits() ) );
     pin->SetName( aEPin->name );
     pin->SetUnit( aGateNumber );
 
@@ -1961,7 +1961,7 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol
     ETEXT                     etext( aLibText );
 
     libtext->SetUnit( aGateNumber );
-    libtext->SetPosition( wxPoint( etext.x.ToSchUnits(), etext.y.ToSchUnits() ) );
+    libtext->SetPosition( VECTOR2I( etext.x.ToSchUnits(), etext.y.ToSchUnits() ) );
 
     // Eagle supports multiple line text in library symbols.  Legacy library symbol text cannot
     // contain CRs or LFs.
@@ -1995,18 +1995,18 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         std::swap( yMin, yMax );
 
     LIB_SHAPE* lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
-    lines->AddPoint( wxPoint( xMin, yMin ) );
-    lines->AddPoint( wxPoint( xMax, yMin ) );
-    lines->AddPoint( wxPoint( xMax, yMax ) );
-    lines->AddPoint( wxPoint( xMin, yMax ) );
-    lines->AddPoint( wxPoint( xMin, yMin ) );
+    lines->AddPoint( VECTOR2I( xMin, yMin ) );
+    lines->AddPoint( VECTOR2I( xMax, yMin ) );
+    lines->AddPoint( VECTOR2I( xMax, yMax ) );
+    lines->AddPoint( VECTOR2I( xMin, yMax ) );
+    lines->AddPoint( VECTOR2I( xMin, yMin ) );
     aItems.push_back( lines );
 
     if( !eframe.border_left )
     {
         lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
-        lines->AddPoint( wxPoint( xMin + Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
-        lines->AddPoint( wxPoint( xMin + Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
         aItems.push_back( lines );
 
         int i;
@@ -2021,8 +2021,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         {
             int newY = KiROUND( yMin + ( rowSpacing * (double) i ) );
             lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
-            lines->AddPoint( wxPoint( x1, newY ) );
-            lines->AddPoint( wxPoint( x2, newY ) );
+            lines->AddPoint( VECTOR2I( x1, newY ) );
+            lines->AddPoint( VECTOR2I( x2, newY ) );
             aItems.push_back( lines );
         }
 
@@ -2031,7 +2031,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         for( i = 0; i < eframe.rows; i++ )
         {
             LIB_TEXT* legendText = new LIB_TEXT( nullptr );
-            legendText->SetPosition( wxPoint( legendPosX, KiROUND( legendPosY ) ) );
+            legendText->SetPosition( VECTOR2I( legendPosX, KiROUND( legendPosY ) ) );
             legendText->SetText( wxString( legendChar ) );
             legendText->SetTextSize( wxSize( Mils2iu( 90 ), Mils2iu( 100 ) ) );
             aItems.push_back( legendText );
@@ -2043,8 +2043,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
     if( !eframe.border_right )
     {
         lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
-        lines->AddPoint( wxPoint( xMax - Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
-        lines->AddPoint( wxPoint( xMax - Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMax - Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMax - Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
         aItems.push_back( lines );
 
         int i;
@@ -2059,8 +2059,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         {
             int newY = KiROUND( yMin + ( rowSpacing * (double) i ) );
             lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
-            lines->AddPoint( wxPoint( x1, newY ) );
-            lines->AddPoint( wxPoint( x2, newY ) );
+            lines->AddPoint( VECTOR2I( x1, newY ) );
+            lines->AddPoint( VECTOR2I( x2, newY ) );
             aItems.push_back( lines );
         }
 
@@ -2069,7 +2069,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         for( i = 0; i < eframe.rows; i++ )
         {
             LIB_TEXT* legendText = new LIB_TEXT( nullptr );
-            legendText->SetPosition( wxPoint( legendPosX, KiROUND( legendPosY ) ) );
+            legendText->SetPosition( VECTOR2I( legendPosX, KiROUND( legendPosY ) ) );
             legendText->SetText( wxString( legendChar ) );
             legendText->SetTextSize( wxSize( Mils2iu( 90 ), Mils2iu( 100 ) ) );
             aItems.push_back( legendText );
@@ -2081,8 +2081,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
     if( !eframe.border_top )
     {
         lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
-        lines->AddPoint( wxPoint( xMax - Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
-        lines->AddPoint( wxPoint( xMin + Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMax - Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + Mils2iu( 150 ), yMax - Mils2iu( 150 ) ) );
         aItems.push_back( lines );
 
         int i;
@@ -2097,8 +2097,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         {
             int newX = KiROUND( xMin + ( columnSpacing * (double) i ) );
             lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
-            lines->AddPoint( wxPoint( newX, y1 ) );
-            lines->AddPoint( wxPoint( newX, y2 ) );
+            lines->AddPoint( VECTOR2I( newX, y1 ) );
+            lines->AddPoint( VECTOR2I( newX, y2 ) );
             aItems.push_back( lines );
         }
 
@@ -2107,7 +2107,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         for( i = 0; i < eframe.columns; i++ )
         {
             LIB_TEXT* legendText = new LIB_TEXT( nullptr );
-            legendText->SetPosition( wxPoint( KiROUND( legendPosX ), legendPosY ) );
+            legendText->SetPosition( VECTOR2I( KiROUND( legendPosX ), legendPosY ) );
             legendText->SetText( wxString( legendChar ) );
             legendText->SetTextSize( wxSize( Mils2iu( 90 ), Mils2iu( 100 ) ) );
             aItems.push_back( legendText );
@@ -2119,8 +2119,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
     if( !eframe.border_bottom )
     {
         lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
-        lines->AddPoint( wxPoint( xMax - Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
-        lines->AddPoint( wxPoint( xMin + Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMax - Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + Mils2iu( 150 ), yMin + Mils2iu( 150 ) ) );
         aItems.push_back( lines );
 
         int i;
@@ -2135,8 +2135,8 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         {
             int newX = KiROUND( xMin + ( columnSpacing * (double) i ) );
             lines = new LIB_SHAPE( nullptr, SHAPE_T::POLY );
-            lines->AddPoint( wxPoint( newX, y1 ) );
-            lines->AddPoint( wxPoint( newX, y2 ) );
+            lines->AddPoint( VECTOR2I( newX, y1 ) );
+            lines->AddPoint( VECTOR2I( newX, y2 ) );
             aItems.push_back( lines );
         }
 
@@ -2145,7 +2145,7 @@ void SCH_EAGLE_PLUGIN::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>&
         for( i = 0; i < eframe.columns; i++ )
         {
             LIB_TEXT* legendText = new LIB_TEXT( nullptr );
-            legendText->SetPosition( wxPoint( KiROUND( legendPosX ), legendPosY ) );
+            legendText->SetPosition( VECTOR2I( KiROUND( legendPosX ), legendPosY ) );
             legendText->SetText( wxString( legendChar ) );
             legendText->SetTextSize( wxSize( Mils2iu( 90 ), Mils2iu( 100 ) ) );
             aItems.push_back( legendText );
@@ -2180,7 +2180,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadPlainText( wxXmlNode* aSchText )
     }
 
     schtext->SetText( adjustedText.IsEmpty() ? "\" \"" : escapeName( adjustedText ) );
-    schtext->SetPosition( wxPoint( etext.x.ToSchUnits(), -etext.y.ToSchUnits() ) );
+    schtext->SetPosition( VECTOR2I( etext.x.ToSchUnits(), -etext.y.ToSchUnits() ) );
     loadTextAttributes( schtext.get(), etext );
     schtext->SetItalic( false );
 
@@ -2275,12 +2275,12 @@ void SCH_EAGLE_PLUGIN::adjustNetLabels()
                 // Move along the attached wire to find the new label position
                 if( trial % 2 == 1 )
                 {
-                    labelPos = wxPoint( origPos + wireDirection * trial / 2 );
+                    labelPos = VECTOR2I( origPos + wireDirection * trial / 2 );
                     move = checkPositive = segAttached->Contains( labelPos );
                 }
                 else
                 {
-                    labelPos = wxPoint( origPos - wireDirection * trial / 2 );
+                    labelPos = VECTOR2I( origPos - wireDirection * trial / 2 );
                     move = checkNegative = segAttached->Contains( labelPos );
                 }
 
@@ -2288,7 +2288,7 @@ void SCH_EAGLE_PLUGIN::adjustNetLabels()
             }
 
             if( move )
-                label->SetPosition( wxPoint( labelPos ) );
+                label->SetPosition( VECTOR2I( labelPos ) );
         }
     }
 
@@ -2316,7 +2316,7 @@ bool SCH_EAGLE_PLUGIN::CheckHeader( const wxString& aFileName )
 }
 
 
-void SCH_EAGLE_PLUGIN::moveLabels( SCH_LINE* aWire, const wxPoint& aNewEndPoint )
+void SCH_EAGLE_PLUGIN::moveLabels( SCH_LINE* aWire, const VECTOR2I& aNewEndPoint )
 {
     static KICAD_T labelTypes[] = { SCH_LABEL_LOCATE_ANY_T, EOT };
     SCH_SCREEN*    screen = m_currentSheet->GetScreen();
@@ -2355,23 +2355,23 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 
     for( SCH_LINE* wire : wires )
     {
-        wxPoint wireStart = wire->GetStartPoint();
-        wxPoint wireEnd   = wire->GetEndPoint();
+        VECTOR2I wireStart = wire->GetStartPoint();
+        VECTOR2I wireEnd = wire->GetEndPoint();
 
         for( SCH_LINE* bus : buses )
         {
-            wxPoint busStart = bus->GetStartPoint();
-            wxPoint busEnd   = bus->GetEndPoint();
+            VECTOR2I busStart = bus->GetStartPoint();
+            VECTOR2I busEnd = bus->GetEndPoint();
 
             auto entrySize =
-                    []( int signX, int signY ) -> wxPoint
+                    []( int signX, int signY ) -> VECTOR2I
                     {
-                        return wxPoint( Mils2iu( DEFAULT_SCH_ENTRY_SIZE ) * signX,
+                        return VECTOR2I( Mils2iu( DEFAULT_SCH_ENTRY_SIZE ) * signX,
                                         Mils2iu( DEFAULT_SCH_ENTRY_SIZE ) * signY );
                     };
 
             auto testBusHit =
-                    [&]( const wxPoint& aPt ) -> bool
+                    [&]( const VECTOR2I& aPt ) -> bool
                     {
                         return TestSegmentHit( aPt, busStart, busEnd, 0 );
                     };
@@ -2391,7 +2391,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                          *   ——————⎥⎢
                          *         ⎥⎢
                          */
-                        wxPoint p = wireStart + entrySize( -1, 0 );
+                        VECTOR2I p = wireStart + entrySize( -1, 0 );
 
                         if( testBusHit( wireStart + entrySize( 0, -1 )  ) )
                         {
@@ -2433,7 +2433,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                          *   ⎥⎢——————
                          *   ⎥⎢
                          */
-                        wxPoint p = wireStart + entrySize( 1, 0 );
+                        VECTOR2I p = wireStart + entrySize( 1, 0 );
 
                         if( testBusHit( wireStart + entrySize( 0, -1 ) ) )
                         {
@@ -2482,7 +2482,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                          *  ——————⎥⎢
                          *        ⎥⎢
                          */
-                        wxPoint p = wireEnd + entrySize( -1, 0 );
+                        VECTOR2I p = wireEnd + entrySize( -1, 0 );
 
                         if( testBusHit( wireEnd + entrySize( 0, -1 ) ) )
                         {
@@ -2524,7 +2524,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                          *   ⎥⎢——————
                          *   ⎥⎢
                          */
-                        wxPoint p = wireEnd + entrySize( 1, 0 );
+                        VECTOR2I p = wireEnd + entrySize( 1, 0 );
 
                         if( testBusHit( wireEnd + entrySize( 0, -1 ) ) )
                         {
@@ -2579,7 +2579,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                          *      |
                          *   =======
                          */
-                        wxPoint p = wireStart + entrySize( 0, -1 );
+                        VECTOR2I p = wireStart + entrySize( 0, -1 );
 
                         if( testBusHit( wireStart + entrySize( -1, 0 ) ) )
                         {
@@ -2624,7 +2624,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                          *      |
                          *      |
                          */
-                        wxPoint p = wireStart + entrySize( 0, 1 );
+                        VECTOR2I p = wireStart + entrySize( 0, 1 );
 
                         if( testBusHit( wireStart + entrySize( -1, 0 ) ) )
                         {
@@ -2676,7 +2676,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                          *      |
                          *   =======
                          */
-                        wxPoint p = wireEnd + entrySize( 0, -1 );
+                        VECTOR2I p = wireEnd + entrySize( 0, -1 );
 
                         if( testBusHit( wireEnd + entrySize( -1, 0 ) ) )
                         {
@@ -2721,7 +2721,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                          *      |
                          *      |
                          */
-                        wxPoint p = wireEnd + entrySize( 0, 1 );
+                        VECTOR2I p = wireEnd + entrySize( 0, 1 );
 
                         if( testBusHit( wireEnd + entrySize( -1, 0 ) ) )
                         {
@@ -2768,13 +2768,13 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 
                 if( testBusHit( wireStart ) )
                 {
-                    wxPoint wirevector = wireStart - wireEnd;
+                    VECTOR2I wirevector = wireStart - wireEnd;
 
                     if( wirevector.x > 0 )
                     {
                         if( wirevector.y > 0 )
                         {
-                            wxPoint             p = wireStart + entrySize( -1, -1 );
+                            VECTOR2I            p = wireStart + entrySize( -1, -1 );
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2784,7 +2784,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else
                         {
-                            wxPoint             p = wireStart + entrySize( -1, 1 );
+                            VECTOR2I            p = wireStart + entrySize( -1, 1 );
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2797,7 +2797,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                     {
                         if( wirevector.y > 0 )
                         {
-                            wxPoint             p = wireStart + entrySize( 1, -1 );
+                            VECTOR2I            p = wireStart + entrySize( 1, -1 );
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2807,7 +2807,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else
                         {
-                            wxPoint             p = wireStart + entrySize( 1, 1 );
+                            VECTOR2I            p = wireStart + entrySize( 1, 1 );
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2821,13 +2821,13 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                 }
                 else if( testBusHit( wireEnd ) )
                 {
-                    wxPoint wirevector = wireStart - wireEnd;
+                    VECTOR2I wirevector = wireStart - wireEnd;
 
                     if( wirevector.x > 0 )
                     {
                         if( wirevector.y > 0 )
                         {
-                            wxPoint             p = wireEnd + entrySize( 1, 1 );
+                            VECTOR2I            p = wireEnd + entrySize( 1, 1 );
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 4 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2837,7 +2837,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else
                         {
-                            wxPoint             p = wireEnd + entrySize( 1, -1 );
+                            VECTOR2I            p = wireEnd + entrySize( 1, -1 );
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 3 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2850,7 +2850,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                     {
                         if( wirevector.y > 0 )
                         {
-                            wxPoint             p = wireEnd + entrySize( -1, 1 );
+                            VECTOR2I            p = wireEnd + entrySize( -1, 1 );
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 1 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2860,7 +2860,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
                         }
                         else
                         {
-                            wxPoint             p = wireEnd + entrySize( -1, -1 );
+                            VECTOR2I            p = wireEnd + entrySize( -1, -1 );
                             SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( p, 2 );
                             busEntry->SetFlags( IS_NEW );
                             m_currentSheet->GetScreen()->Append( busEntry );
@@ -2896,8 +2896,8 @@ const SEG* SCH_EAGLE_PLUGIN::SEG_DESC::LabelAttached( const SCH_TEXT* aLabel ) c
 // (see SCH_EDIT_FRAME::importFile())
 bool SCH_EAGLE_PLUGIN::checkConnections( const SCH_SYMBOL* aSymbol, const LIB_PIN* aPin ) const
 {
-    wxPoint pinPosition = aSymbol->GetPinPhysicalPosition( aPin );
-    auto    pointIt     = m_connPoints.find( pinPosition );
+    VECTOR2I pinPosition = aSymbol->GetPinPhysicalPosition( aPin );
+    auto     pointIt     = m_connPoints.find( pinPosition );
 
     if( pointIt == m_connPoints.end() )
         return false;

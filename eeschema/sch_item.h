@@ -78,7 +78,7 @@ enum DANGLING_END_T
 class DANGLING_END_ITEM
 {
 public:
-    DANGLING_END_ITEM( DANGLING_END_T aType, EDA_ITEM* aItem, const wxPoint& aPosition )
+    DANGLING_END_ITEM( DANGLING_END_T aType, EDA_ITEM* aItem, const VECTOR2I& aPosition )
     {
         m_item = aItem;
         m_type = aType;
@@ -86,7 +86,7 @@ public:
         m_parent = aItem;
     }
 
-    DANGLING_END_ITEM( DANGLING_END_T aType, EDA_ITEM* aItem, const wxPoint& aPosition,
+    DANGLING_END_ITEM( DANGLING_END_T aType, EDA_ITEM* aItem, const VECTOR2I& aPosition,
                        const EDA_ITEM* aParent )
     {
         m_item = aItem;
@@ -117,14 +117,14 @@ public:
                 || ( m_pos == rhs.m_pos && m_item < rhs.m_item ) );
     }
 
-    wxPoint GetPosition() const { return m_pos; }
+    VECTOR2I GetPosition() const { return m_pos; }
     EDA_ITEM* GetItem() const { return m_item; }
     const EDA_ITEM* GetParent() const { return m_parent; }
     DANGLING_END_T GetType() const { return m_type; }
 
 private:
     EDA_ITEM*       m_item;         /// A pointer to the connectable object.
-    wxPoint         m_pos;          /// The position of the connection point.
+    VECTOR2I        m_pos;          /// The position of the connection point.
     DANGLING_END_T  m_type;         /// The type of connection of #m_item.
     const EDA_ITEM* m_parent;       /// A pointer to the parent object (in the case of pins)
 };
@@ -203,8 +203,8 @@ public:
      */
     virtual bool IsMovableFromAnchorPoint() const { return true; }
 
-    wxPoint& GetStoredPos() { return m_storedPos; }
-    void     SetStoredPos( const wxPoint& aPos ) { m_storedPos = aPos; }
+    VECTOR2I& GetStoredPos() { return m_storedPos; }
+    void     SetStoredPos( const VECTOR2I& aPos ) { m_storedPos = aPos; }
 
     /**
      * Searches the item hierarchy to find a SCHEMATIC.
@@ -267,12 +267,12 @@ public:
      * @param aOffset is the drawing offset (usually {0,0} but can be different when moving an
      *                object).
      */
-    virtual void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) = 0;
+    virtual void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) = 0;
 
     /**
      * Move the item by \a aMoveVector to a new position.
      */
-    virtual void Move( const wxPoint& aMoveVector ) = 0;
+    virtual void Move( const VECTOR2I& aMoveVector ) = 0;
 
     /**
      * Mirror item horizontally about \a aCenter.
@@ -287,7 +287,7 @@ public:
     /**
      * Rotate the item around \a aCenter 90 degrees in the clockwise direction.
      */
-    virtual void Rotate( const wxPoint& aCenter ) = 0;
+    virtual void Rotate( const VECTOR2I& aCenter ) = 0;
 
     /**
      * Add the schematic item end points to \a aItemList if the item has end points.
@@ -336,7 +336,7 @@ public:
      * @return true if the given point can start drawing (usually means the anchor is
      *         unused/free/dangling).
      */
-    virtual bool IsPointClickableAnchor( const wxPoint& aPos ) const { return false; }
+    virtual bool IsPointClickableAnchor( const VECTOR2I& aPos ) const { return false; }
 
     /**
      * Add all the connection points for this item to \a aPoints.
@@ -345,7 +345,7 @@ public:
      *
      * @param aPoints is the list of connection points to add to.
      */
-    virtual std::vector<wxPoint> GetConnectionPoints() const { return {}; }
+    virtual std::vector<VECTOR2I> GetConnectionPoints() const { return {}; }
 
     /**
      * Clears all of the connection items from the list.
@@ -358,10 +358,10 @@ public:
     /**
      * Test the item to see if it is connected to \a aPoint.
      *
-     * @param aPoint is a reference to a wxPoint object containing the coordinates to test.
+     * @param aPoint is a reference to a VECTOR2I object containing the coordinates to test.
      * @return True if connection to \a aPoint exists.
      */
-    bool IsConnected( const wxPoint& aPoint ) const;
+    bool IsConnected( const VECTOR2I& aPoint ) const;
 
     /**
      * Retrieve the connection associated with this object in the given sheet.
@@ -462,16 +462,16 @@ private:
      *       which performs tests common to all schematic items before calling the
      *       item specific connection testing.
      *
-     * @param aPosition is a reference to a wxPoint object containing the test position.
+     * @param aPosition is a reference to a VECTOR2I object containing the test position.
      * @return True if connection to \a aPosition exists.
      */
-    virtual bool doIsConnected( const wxPoint& aPosition ) const { return false; }
+    virtual bool doIsConnected( const VECTOR2I& aPosition ) const { return false; }
 
 protected:
     SCH_LAYER_ID      m_layer;
     EDA_ITEMS         m_connections;      // List of items connected to this item.
     FIELDS_AUTOPLACED m_fieldsAutoplaced; // indicates status of field autoplacement
-    wxPoint           m_storedPos;        // a temporary variable used in some move commands
+    VECTOR2I          m_storedPos;        // a temporary variable used in some move commands
                                           // to store a initial pos of the item or mouse cursor
 
     /// Store pointers to other items that are connected to this one, per sheet.

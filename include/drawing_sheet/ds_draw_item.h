@@ -65,7 +65,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    virtual void SetEnd( const wxPoint& aPos ) { /* not all types will need this */ }
+    virtual void SetEnd( const VECTOR2I& aPos ) { /* not all types will need this */ }
 
     virtual int GetPenWidth() const
     {
@@ -78,17 +78,17 @@ public:
     // The function to print a WS_DRAW_ITEM
     virtual void PrintWsItem( const RENDER_SETTINGS* aSettings )
     {
-        PrintWsItem( aSettings, wxPoint( 0, 0 ) );
+        PrintWsItem( aSettings, VECTOR2I( 0, 0 ) );
     }
 
     // More advanced version of DrawWsItem. This is what must be defined in the derived type.
-    virtual void PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) = 0;
+    virtual void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) = 0;
 
     // Derived types must define GetBoundingBox() as a minimum, and can then override the
     // two HitTest() functions if they need something more specific.
     const EDA_RECT GetBoundingBox() const override = 0;
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override
     {
         // This is just here to prevent annoying compiler warnings about hidden overloaded
         // virtual functions
@@ -119,7 +119,7 @@ protected:
 class DS_DRAW_ITEM_LINE : public DS_DRAW_ITEM_BASE
 {
 public:
-    DS_DRAW_ITEM_LINE( DS_DATA_ITEM* aPeer, int aIndex, wxPoint aStart, wxPoint aEnd,
+    DS_DRAW_ITEM_LINE( DS_DATA_ITEM* aPeer, int aIndex, VECTOR2I aStart, VECTOR2I aEnd,
                        int aPenWidth ) :
             DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_LINE_T )
     {
@@ -130,18 +130,18 @@ public:
 
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_LINE" ); }
 
-    const wxPoint&  GetStart() const { return m_start; }
-    void SetStart( const wxPoint& aPos ) { m_start = aPos; }
-    const wxPoint&  GetEnd() const { return m_end; }
-    void SetEnd( const wxPoint& aPos ) override { m_end = aPos; }
+    const VECTOR2I& GetStart() const { return m_start; }
+    void           SetStart( const VECTOR2I& aPos ) { m_start = aPos; }
+    const VECTOR2I& GetEnd() const { return m_end; }
+    void            SetEnd( const VECTOR2I& aPos ) override { m_end = aPos; }
 
-    wxPoint GetPosition() const override { return GetStart(); }
-    void SetPosition( const wxPoint& aPos ) override { SetStart( aPos ); }
+    VECTOR2I GetPosition() const override { return GetStart(); }
+    void     SetPosition( const VECTOR2I& aPos ) override { SetStart( aPos ); }
 
     const EDA_RECT GetBoundingBox() const override;
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool           HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
-    void PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
@@ -150,15 +150,15 @@ public:
 #endif
 
 private:
-    wxPoint m_start;    // start point of line/rect
-    wxPoint m_end;      // end point
+    VECTOR2I m_start; // start point of line/rect
+    VECTOR2I m_end;   // end point
 };
 
 
 class DS_DRAW_ITEM_POLYPOLYGONS : public DS_DRAW_ITEM_BASE
 {
 public:
-    DS_DRAW_ITEM_POLYPOLYGONS( DS_DATA_ITEM* aPeer, int aIndex, wxPoint aPos, int aPenWidth ) :
+    DS_DRAW_ITEM_POLYPOLYGONS( DS_DATA_ITEM* aPeer, int aIndex, VECTOR2I aPos, int aPenWidth ) :
             DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_POLY_T )
     {
         m_penWidth = aPenWidth;
@@ -168,14 +168,15 @@ public:
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_POLYPOLYGONS" ); }
 
     SHAPE_POLY_SET& GetPolygons() { return m_Polygons; }
-    wxPoint GetPosition() const override { return m_pos; }
-    void SetPosition( const wxPoint& aPos ) override;
+    VECTOR2I        GetPosition() const override { return m_pos; }
+    void            SetPosition( const VECTOR2I& aPos ) override;
 
     const EDA_RECT GetBoundingBox() const override;
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    void PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
@@ -194,8 +195,8 @@ public:
 
 
 private:
-    wxPoint m_pos;      // position of reference point, from the DS_DATA_ITEM_POLYGONS parent
-                        // (used only in drawing sheet editor to draw anchors)
+    VECTOR2I m_pos; // position of reference point, from the DS_DATA_ITEM_POLYGONS parent
+                    // (used only in drawing sheet editor to draw anchors)
 };
 
 
@@ -205,7 +206,7 @@ private:
 class DS_DRAW_ITEM_RECT : public DS_DRAW_ITEM_BASE
 {
 public:
-    DS_DRAW_ITEM_RECT( DS_DATA_ITEM* aPeer, int aIndex, wxPoint aStart, wxPoint aEnd,
+    DS_DRAW_ITEM_RECT( DS_DATA_ITEM* aPeer, int aIndex, VECTOR2I aStart, VECTOR2I aEnd,
                        int aPenWidth ) :
             DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_RECT_T )
     {
@@ -216,18 +217,19 @@ public:
 
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_RECT" ); }
 
-    const wxPoint&  GetStart() const { return m_start; }
-    void SetStart( const wxPoint& aPos ) { m_start = aPos; }
-    const wxPoint&  GetEnd() const { return m_end; }
-    void SetEnd( const wxPoint& aPos ) override { m_end = aPos; }
+    const VECTOR2I& GetStart() const { return m_start; }
+    void           SetStart( const VECTOR2I& aPos ) { m_start = aPos; }
+    const VECTOR2I& GetEnd() const { return m_end; }
+    void            SetEnd( const VECTOR2I& aPos ) override { m_end = aPos; }
 
-    wxPoint GetPosition() const override { return GetStart(); }
-    void SetPosition( const wxPoint& aPos ) override { SetStart( aPos ); }
+    VECTOR2I GetPosition() const override { return GetStart(); }
+    void     SetPosition( const VECTOR2I& aPos ) override { SetStart( aPos ); }
 
-    void PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     const EDA_RECT GetBoundingBox() const override;
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
@@ -237,8 +239,8 @@ public:
 #endif
 
 private:
-    wxPoint m_start;    // start point of line/rect
-    wxPoint m_end;      // end point
+    VECTOR2I m_start; // start point of line/rect
+    VECTOR2I m_end;   // end point
 };
 
 
@@ -261,19 +263,21 @@ public:
 
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_PAGE" ); }
 
-    void SetPageSize( const wxSize& aSize ) { m_pageSize = aSize; }
-    wxSize GetPageSize() const { return m_pageSize; }
-    const wxPoint& GetMarkerPos() const { return m_markerPos; }
-    void SetMarkerPos( const wxPoint& aPos ) { m_markerPos = aPos; }
+    void            SetPageSize( const VECTOR2I& aSize ) { m_pageSize = aSize; }
+    VECTOR2I        GetPageSize() const { return m_pageSize; }
+
+    const VECTOR2I& GetMarkerPos() const { return m_markerPos; }
+    void            SetMarkerPos( const VECTOR2I& aPos ) { m_markerPos = aPos; }
+
     double GetMarkerSize() const { return m_markerSize; }
 
-    wxPoint GetPosition() const override { return wxPoint( 0, 0 ); }
-    void SetPosition( const wxPoint& aPos ) override { /* do nothing */ }
+    VECTOR2I GetPosition() const override { return VECTOR2I( 0, 0 ); }
+    void SetPosition( const VECTOR2I& aPos ) override { /* do nothing */ }
 
-    void PrintWsItem( const RENDER_SETTINGS* , const wxPoint& ) override { /* do nothing */ }
+    void PrintWsItem( const RENDER_SETTINGS* , const VECTOR2I& ) override { /* do nothing */ }
 
     const EDA_RECT GetBoundingBox() const override;
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override { return false; }
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override { return false; }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
@@ -282,8 +286,8 @@ public:
 #endif
 
 private:
-    wxPoint m_markerPos;    // position of the marker
-    wxSize  m_pageSize;     // full size of the page
+    VECTOR2I m_markerPos; // position of the marker
+    VECTOR2I m_pageSize;  // full size of the page
     double m_markerSize;
 };
 
@@ -297,14 +301,14 @@ private:
 class DS_DRAW_ITEM_TEXT : public DS_DRAW_ITEM_BASE, public EDA_TEXT
 {
 public:
-    DS_DRAW_ITEM_TEXT( DS_DATA_ITEM* aPeer, int aIndex, const wxString& aText, const wxPoint& aPos,
-                       const wxSize& aSize, int aPenWidth, bool aItalic = false,
+    DS_DRAW_ITEM_TEXT( DS_DATA_ITEM* aPeer, int aIndex, const wxString& aText, const VECTOR2I& aPos,
+                       const VECTOR2I& aSize, int aPenWidth, bool aItalic = false,
                        bool aBold = false ) :
             DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_TEXT_T),
             EDA_TEXT( aText )
     {
         SetTextPos( aPos );
-        SetTextSize( aSize );
+        SetTextSize( (wxSize) aSize );
         SetTextThickness( aPenWidth );
         SetItalic( aItalic );
         SetBold( aBold );
@@ -312,15 +316,16 @@ public:
 
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_TEXT" ); }
 
-    void PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     void SetTextAngle( double aAngle ) override;
 
-    wxPoint GetPosition() const override { return (wxPoint)GetTextPos(); }
-    void SetPosition( const wxPoint& aPos ) override { SetTextPos( aPos ); }
+    VECTOR2I GetPosition() const override { return GetTextPos(); }
+    void     SetPosition( const VECTOR2I& aPos ) override { SetTextPos( aPos ); }
 
     const EDA_RECT GetBoundingBox() const override;
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
@@ -337,7 +342,7 @@ public:
 class DS_DRAW_ITEM_BITMAP : public DS_DRAW_ITEM_BASE
 {
 public:
-    DS_DRAW_ITEM_BITMAP( DS_DATA_ITEM* aPeer, int aIndex, wxPoint aPos ) :
+    DS_DRAW_ITEM_BITMAP( DS_DATA_ITEM* aPeer, int aIndex, VECTOR2I aPos ) :
             DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_BITMAP_T )
     {
         m_pos = aPos;
@@ -347,12 +352,12 @@ public:
 
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_BITMAP" ); }
 
-    wxPoint GetPosition() const override { return m_pos; }
-    void SetPosition( const wxPoint& aPos ) override { m_pos = aPos; }
+    VECTOR2I GetPosition() const override { return m_pos; }
+    void    SetPosition( const VECTOR2I& aPos ) override { m_pos = aPos; }
 
-    void PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
     const EDA_RECT GetBoundingBox() const override;
 
@@ -363,7 +368,7 @@ public:
 #endif
 
 private:
-    wxPoint m_pos;                  // position of reference point
+    VECTOR2I m_pos; // position of reference point
 };
 
 

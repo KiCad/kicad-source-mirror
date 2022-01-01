@@ -29,15 +29,15 @@
 
 struct EXPORT_VIA
 {
-    EXPORT_VIA( const wxPoint& aPos, int aSize, int aDrill ) :
+    EXPORT_VIA( const VECTOR2I& aPos, int aSize, int aDrill ) :
             m_Pos( aPos ),
             m_Size( aSize ),
             m_Drill( aDrill )
     { }
 
-    wxPoint m_Pos;
-    int     m_Size;
-    int     m_Drill;
+    VECTOR2I m_Pos;
+    int      m_Size;
+    int      m_Drill;
 };
 
 
@@ -95,7 +95,7 @@ private:
      * @param aLayer is the technical layer to use.
      */
     void writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLayer,
-                          const wxPoint& aOffset = { 0, 0 } );
+                          const VECTOR2I& aOffset = { 0, 0 } );
 
     /**
      * Write a filled circle to the board file (with line thickness = 0).
@@ -155,7 +155,8 @@ private:
     /**
      * Basic write function to write a a #PCB_TRACK to the board file from a non flashed item.
      */
-    void writeCopperLineItem( const wxPoint& aStart, const wxPoint& aEnd, int aWidth, int aLayer );
+    void writeCopperLineItem( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aWidth,
+                              int aLayer );
 
     /**
      * Write a very basic header to the board file.

@@ -37,7 +37,7 @@
 #include <wx/mstream.h>
 
 
-BITMAP_BASE::BITMAP_BASE( const wxPoint& pos )
+BITMAP_BASE::BITMAP_BASE( const VECTOR2I& pos )
 {
     m_scale  = 1.0;                     // 1.0 = original bitmap size
     m_bitmap = nullptr;
@@ -229,12 +229,12 @@ const EDA_RECT BITMAP_BASE::GetBoundingBox() const
 }
 
 
-void BITMAP_BASE::DrawBitmap( wxDC* aDC, const wxPoint& aPos )
+void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
 {
     if( m_bitmap == nullptr )
         return;
 
-    wxPoint pos  = aPos;
+    VECTOR2I pos = aPos;
     wxSize  size = GetSize();
 
     // This fixes a bug in OSX that should be fixed in the 3.0.3 version or later.
@@ -328,8 +328,7 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
 }
 
 
-void BITMAP_BASE::PlotImage( PLOTTER*       aPlotter,
-                             const wxPoint& aPos,
+void BITMAP_BASE::PlotImage( PLOTTER*       aPlotter, const VECTOR2I& aPos,
                              const COLOR4D& aDefaultColor,
                              int            aDefaultPensize ) const
 {

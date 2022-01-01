@@ -419,7 +419,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     for( unsigned i = 0; i<pads.size(); ++i )
     {
         PAD* pad = pads[i];
-        const wxPoint& off = pad->GetOffset();
+        const VECTOR2I& off = pad->GetOffset();
 
         pad->SetSubRatsnest( pad_name_number );
 
@@ -563,11 +563,11 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
             int  ddx = pad->GetDelta().x / 2;
             int  ddy = pad->GetDelta().y / 2;
 
-            wxPoint poly[4];
-            poly[0] = wxPoint( -dx + ddy,  dy + ddx );
-            poly[1] = wxPoint(  dx - ddy,  dy - ddx );
-            poly[2] = wxPoint(  dx + ddy, -dy + ddx );
-            poly[3] = wxPoint( -dx - ddy, -dy - ddx );
+            VECTOR2I poly[4];
+            poly[0] = VECTOR2I( -dx + ddy, dy + ddx );
+            poly[1] = VECTOR2I( dx - ddy, dy - ddx );
+            poly[2] = VECTOR2I( dx + ddy, -dy + ddx );
+            poly[3] = VECTOR2I( -dx - ddy, -dy - ddx );
 
             for( int cur = 0; cur < 4; ++cur )
             {
@@ -588,7 +588,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
             SHAPE_POLY_SET outline;
             int            maxError = aPcb->GetDesignSettings().m_MaxError;
-            wxPoint        padOffset( 0, 0 );
+            VECTOR2I       padOffset( 0, 0 );
 
             TransformRoundChamferedRectToPolygon( outline, padOffset, pad->GetSize(),
                                                   pad->GetOrientation(),
@@ -1270,8 +1270,8 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
 
                 case SHAPE_T::ARC:
                 {
-                    wxPoint start = shape->GetStart0();
-                    wxPoint end = shape->GetEnd0();
+                    VECTOR2I start = shape->GetStart0();
+                    VECTOR2I end = shape->GetEnd0();
 
                     if( shape->GetArcAngle() > 0 )
                         std::swap( start, end );

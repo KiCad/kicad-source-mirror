@@ -197,9 +197,9 @@ bool ZONE::UnFill()
 }
 
 
-wxPoint ZONE::GetPosition() const
+VECTOR2I ZONE::GetPosition() const
 {
-    return (wxPoint) GetCornerPosition( 0 );
+    return GetCornerPosition( 0 );
 }
 
 
@@ -371,7 +371,7 @@ void ZONE::BuildHashValue( PCB_LAYER_ID aLayer )
 }
 
 
-bool ZONE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool ZONE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // When looking for an "exact" hit aAccuracy will be 0 which works poorly for very thin
     // lines.  Give it a floor.
@@ -381,7 +381,7 @@ bool ZONE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-void ZONE::SetSelectedCorner( const wxPoint& aPosition, int aAccuracy )
+void ZONE::SetSelectedCorner( const VECTOR2I& aPosition, int aAccuracy )
 {
     SHAPE_POLY_SET::VERTEX_INDEX corner;
 
@@ -396,28 +396,28 @@ void ZONE::SetSelectedCorner( const wxPoint& aPosition, int aAccuracy )
     }
 }
 
-bool ZONE::HitTestForCorner( const wxPoint& refPos, int aAccuracy,
+bool ZONE::HitTestForCorner( const VECTOR2I& refPos, int aAccuracy,
                              SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const
 {
     return m_Poly->CollideVertex( VECTOR2I( refPos ), aCornerHit, aAccuracy );
 }
 
 
-bool ZONE::HitTestForCorner( const wxPoint& refPos, int aAccuracy ) const
+bool ZONE::HitTestForCorner( const VECTOR2I& refPos, int aAccuracy ) const
 {
     SHAPE_POLY_SET::VERTEX_INDEX dummy;
     return HitTestForCorner( refPos, aAccuracy, dummy );
 }
 
 
-bool ZONE::HitTestForEdge( const wxPoint& refPos, int aAccuracy,
+bool ZONE::HitTestForEdge( const VECTOR2I& refPos, int aAccuracy,
                            SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const
 {
     return m_Poly->CollideEdge( VECTOR2I( refPos ), aCornerHit, aAccuracy );
 }
 
 
-bool ZONE::HitTestForEdge( const wxPoint& refPos, int aAccuracy ) const
+bool ZONE::HitTestForEdge( const VECTOR2I& refPos, int aAccuracy ) const
 {
     SHAPE_POLY_SET::VERTEX_INDEX dummy;
     return HitTestForEdge( refPos, aAccuracy, dummy );
@@ -477,7 +477,7 @@ int ZONE::GetLocalClearance( wxString* aSource ) const
 }
 
 
-bool ZONE::HitTestFilledArea( PCB_LAYER_ID aLayer, const wxPoint &aRefPos, int aAccuracy ) const
+bool ZONE::HitTestFilledArea( PCB_LAYER_ID aLayer, const VECTOR2I& aRefPos, int aAccuracy ) const
 {
     // Rule areas have no filled area, but it's generally nice to treat their interior as if it were
     // filled so that people don't have to select them by their outline (which is min-width)
@@ -645,7 +645,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 }
 
 
-void ZONE::Move( const wxPoint& offset )
+void ZONE::Move( const VECTOR2I& offset )
 {
     /* move outlines */
     m_Poly->Move( offset );
@@ -659,14 +659,14 @@ void ZONE::Move( const wxPoint& offset )
     {
         for( SEG& seg : pair.second )
         {
-            seg.A += VECTOR2I( offset );
-            seg.B += VECTOR2I( offset );
+            seg.A += offset;
+            seg.B += offset;
         }
     }
 }
 
 
-void ZONE::MoveEdge( const wxPoint& offset, int aEdge )
+void ZONE::MoveEdge( const VECTOR2I& offset, int aEdge )
 {
     int next_corner;
 
@@ -681,7 +681,7 @@ void ZONE::MoveEdge( const wxPoint& offset, int aEdge )
 }
 
 
-void ZONE::Rotate( const wxPoint& aCentre, double aAngle )
+void ZONE::Rotate( const VECTOR2I& aCentre, double aAngle )
 {
     aAngle = -DECIDEG2RAD( aAngle );
 
@@ -690,24 +690,25 @@ void ZONE::Rotate( const wxPoint& aCentre, double aAngle )
 
     /* rotate filled areas: */
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
-        pair.second.Rotate( aAngle, VECTOR2I( aCentre ) );
+        pair.second.Rotate( aAngle, aCentre );
 
     for( std::pair<const PCB_LAYER_ID, std::vector<SEG> >& pair : m_FillSegmList )
     {
         for( SEG& seg : pair.second )
         {
-            wxPoint a( seg.A );
-            RotatePoint( &a, aCentre, aAngle );
+            VECTOR2I a( seg.A );
+            RotatePoint( a, aCentre, aAngle );
             seg.A = a;
-            wxPoint b( seg.B );
-            RotatePoint( &b, aCentre, aAngle );
+
+            VECTOR2I b( seg.B );
+            RotatePoint( b, aCentre, aAngle );
             seg.B = a;
         }
     }
 }
 
 
-void ZONE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void ZONE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     Mirror( aCentre, aFlipLeftRight );
     int copperLayerCount = GetBoard()->GetCopperLayerCount();
@@ -719,15 +720,15 @@ void ZONE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-void ZONE::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
+void ZONE::Mirror( const VECTOR2I& aMirrorRef, bool aMirrorLeftRight )
 {
     // ZONEs mirror about the x-axis (why?!?)
-    m_Poly->Mirror( aMirrorLeftRight, !aMirrorLeftRight, VECTOR2I( aMirrorRef ) );
+    m_Poly->Mirror( aMirrorLeftRight, !aMirrorLeftRight, aMirrorRef );
 
     HatchBorder();
 
     for( std::pair<const PCB_LAYER_ID, SHAPE_POLY_SET>& pair : m_FilledPolysList )
-        pair.second.Mirror( aMirrorLeftRight, !aMirrorLeftRight, VECTOR2I( aMirrorRef ) );
+        pair.second.Mirror( aMirrorLeftRight, !aMirrorLeftRight, aMirrorRef );
 
     for( std::pair<const PCB_LAYER_ID, std::vector<SEG> >& pair : m_FillSegmList )
     {
@@ -777,7 +778,7 @@ void ZONE::AddPolygon( const SHAPE_LINE_CHAIN& aPolygon )
 }
 
 
-void ZONE::AddPolygon( std::vector< wxPoint >& aPolygon )
+void ZONE::AddPolygon( std::vector<VECTOR2I>& aPolygon )
 {
     if( aPolygon.empty() )
         return;
@@ -785,7 +786,7 @@ void ZONE::AddPolygon( std::vector< wxPoint >& aPolygon )
     SHAPE_LINE_CHAIN outline;
 
     // Create an outline and populate it with the points of aPolygon
-    for( const wxPoint& pt : aPolygon)
+    for( const VECTOR2I& pt : aPolygon )
         outline.Append( pt );
 
     outline.SetClosed( true );
@@ -794,7 +795,7 @@ void ZONE::AddPolygon( std::vector< wxPoint >& aPolygon )
 }
 
 
-bool ZONE::AppendCorner( wxPoint aPosition, int aHoleIdx, bool aAllowDuplication )
+bool ZONE::AppendCorner( VECTOR2I aPosition, int aHoleIdx, bool aAllowDuplication )
 {
     // Ensure the main outline exists:
     if( m_Poly->OutlineCount() == 0 )

@@ -142,7 +142,7 @@ EDA_ITEM* FP_SHAPE::Clone() const
 }
 
 
-wxPoint FP_SHAPE::GetCenter0() const
+VECTOR2I FP_SHAPE::GetCenter0() const
 {
     switch( m_shape )
     {
@@ -154,12 +154,12 @@ wxPoint FP_SHAPE::GetCenter0() const
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
-        return wxPoint();
+        return VECTOR2I();
     }
 }
 
 
-void FP_SHAPE::SetCenter0( const wxPoint& aCenter )
+void FP_SHAPE::SetCenter0( const VECTOR2I& aCenter )
 {
     switch( m_shape )
     {
@@ -177,10 +177,10 @@ void FP_SHAPE::SetCenter0( const wxPoint& aCenter )
 }
 
 
-wxPoint FP_SHAPE::GetArcMid0() const
+VECTOR2I FP_SHAPE::GetArcMid0() const
 {
-    wxPoint mid0 = m_start0;
-    RotatePoint( &mid0, m_arcCenter0, -GetArcAngle() / 2.0 );
+    VECTOR2I mid0 = m_start0;
+    RotatePoint( mid0, m_arcCenter0, -GetArcAngle() / 2.0 );
     return mid0;
 }
 
@@ -188,7 +188,7 @@ wxPoint FP_SHAPE::GetArcMid0() const
 void FP_SHAPE::SetArcAngleAndEnd0( double aAngle, bool aCheckNegativeAngle )
 {
     m_end0 = m_start0;
-    RotatePoint( &m_end0, m_arcCenter0, -NormalizeAngle360Max( aAngle ) );
+    RotatePoint( m_end0, m_arcCenter0, -NormalizeAngle360Max( aAngle ) );
 
     if( aCheckNegativeAngle && aAngle < 0 )
         std::swap( m_start0, m_end0 );
@@ -203,9 +203,9 @@ void FP_SHAPE::SetArcGeometry0( const wxPoint& aStart0, const wxPoint& aMid0, co
 }
 
 
-void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void FP_SHAPE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
-    wxPoint pt( 0, 0 );
+    VECTOR2I pt( 0, 0 );
 
     switch( GetShape() )
     {
@@ -276,7 +276,7 @@ bool FP_SHAPE::IsParentFlipped() const
     return false;
 }
 
-void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
+void FP_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
 {
     // Mirror an edge of the footprint. the layer is not modified
     // This is a footprint shape modification.
@@ -323,7 +323,7 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
     SetDrawCoord();
 }
 
-void FP_SHAPE::Rotate( const wxPoint& aRotCentre, double aAngle )
+void FP_SHAPE::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
     // We should rotate the relative coordinates, but to avoid duplicate code do the base class
     // rotation of draw coordinates, which is acceptable because in the footprint editor
@@ -335,7 +335,7 @@ void FP_SHAPE::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void FP_SHAPE::Move( const wxPoint& aMoveVector )
+void FP_SHAPE::Move( const VECTOR2I& aMoveVector )
 {
     // Move an edge of the footprint.
     // This is a footprint shape modification.

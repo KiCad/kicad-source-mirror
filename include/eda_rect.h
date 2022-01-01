@@ -257,12 +257,12 @@ public:
     /**
      * Return the point in this rect that is closest to the provided point
      */
-    const wxPoint ClosestPointTo( const wxPoint& aPoint ) const;
+    const VECTOR2I ClosestPointTo( const VECTOR2I& aPoint ) const;
 
     /**
      * Return the point in this rect that is farthest from the provided point
      */
-    const wxPoint FarthestPointTo( const wxPoint& aPoint ) const;
+    const VECTOR2I FarthestPointTo( const VECTOR2I& aPoint ) const;
 
     /**
      * Test for a common area between a circle and this rectangle.
@@ -270,7 +270,7 @@ public:
      * @param aCenter center of the circle.
      * @param aRadius radius of the circle.
      */
-    bool IntersectsCircle( const wxPoint& aCenter, const int aRadius ) const;
+    bool IntersectsCircle( const VECTOR2I& aCenter, const int aRadius ) const;
 
     /**
      * Test for intersection between this rect and the edge (radius) of a circle.
@@ -279,7 +279,7 @@ public:
      * @param aRadius radius of the circle.
      * @param aWidth width of the circle edge.
      */
-    bool IntersectsCircleEdge( const wxPoint& aCenter, const int aRadius, const int aWidth ) const;
+    bool IntersectsCircleEdge( const VECTOR2I& aCenter, const int aRadius, const int aWidth ) const;
 
     /**
      * Overload the cast operator to return a wxRect.
@@ -331,7 +331,7 @@ public:
      *
      * @param aPoint The point to merge with the rectangle.
      */
-    void Merge( const wxPoint& aPoint );
+    void Merge( const VECTOR2I& aPoint );
 
     /**
      * Return the area of the rectangle.

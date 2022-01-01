@@ -212,7 +212,7 @@ LABEL_SPIN_STYLE LABEL_SPIN_STYLE::MirrorY()
 }
 
 
-SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
+SCH_TEXT::SCH_TEXT( const VECTOR2I& pos, const wxString& text, KICAD_T aType ) :
         SCH_ITEM( nullptr, aType ),
         EDA_TEXT( text )
 {
@@ -243,9 +243,9 @@ bool SCH_TEXT::IncrementLabel( int aIncrement )
 }
 
 
-wxPoint SCH_TEXT::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
+VECTOR2I SCH_TEXT::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
 {
-    wxPoint text_offset;
+    VECTOR2I text_offset;
 
     // add an offset to x (or y) position to aid readability of text on a wire or line
     int dist = GetTextOffset( aSettings ) + GetPenWidth();
@@ -281,7 +281,7 @@ void SCH_TEXT::MirrorVertically( int aCenter )
 }
 
 
-void SCH_TEXT::Rotate( const wxPoint& aCenter )
+void SCH_TEXT::Rotate( const VECTOR2I& aCenter )
 {
     VECTOR2I pt = GetTextPos();
     RotatePoint( pt, aCenter, 900 );
@@ -404,10 +404,10 @@ int SCH_TEXT::GetPenWidth() const
 }
 
 
-void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     COLOR4D color = aSettings->GetLayerColor( m_layer );
-    wxPoint text_offset = aOffset + GetSchematicTextOffset( aSettings );
+    VECTOR2I text_offset = aOffset + GetSchematicTextOffset( aSettings );
 
     EDA_TEXT::Print( aSettings, text_offset, color );
 }
@@ -509,7 +509,7 @@ BITMAPS SCH_TEXT::GetMenuImage() const
 }
 
 
-bool SCH_TEXT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool SCH_TEXT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     EDA_RECT bBox = GetBoundingBox();
     bBox.Inflate( aAccuracy );
@@ -539,7 +539,7 @@ void SCH_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
 
 void SCH_TEXT::Plot( PLOTTER* aPlotter ) const
 {
-    static std::vector<wxPoint> s_poly;
+    static std::vector<VECTOR2I> s_poly;
 
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     SCH_CONNECTION*  connection = Connection();
@@ -550,7 +550,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter ) const
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 
-    std::vector<wxPoint> positions;
+    std::vector<VECTOR2I> positions;
     wxArrayString strings_list;
     wxStringSplit( GetShownText(), strings_list, '\n' );
     positions.reserve( strings_list.Count() );
@@ -559,7 +559,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter ) const
 
     for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
     {
-        wxPoint textpos = positions[ii] + GetSchematicTextOffset( aPlotter->RenderSettings() );
+        VECTOR2I  textpos = positions[ii] + GetSchematicTextOffset( aPlotter->RenderSettings() );
         wxString& txt = strings_list.Item( ii );
         aPlotter->Text( textpos, color, txt, GetTextAngle(), GetTextSize(), GetHorizJustify(),
                         GetVertJustify(), penWidth, IsItalic(), IsBold() );
@@ -611,7 +611,7 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-SCH_LABEL_BASE::SCH_LABEL_BASE( const wxPoint& aPos, const wxString& aText, KICAD_T aType ) :
+SCH_LABEL_BASE::SCH_LABEL_BASE( const VECTOR2I& aPos, const wxString& aText, KICAD_T aType ) :
         SCH_TEXT( aPos, aText, aType ),
         m_shape( L_UNSPECIFIED ),
         m_connectionType( CONNECTION_TYPE::NONE ),
@@ -726,7 +726,7 @@ void SCH_LABEL_BASE::SwapData( SCH_ITEM* aItem )
 }
 
 
-void SCH_LABEL_BASE::Rotate( const wxPoint& aCenter )
+void SCH_LABEL_BASE::Rotate( const VECTOR2I& aCenter )
 {
     VECTOR2I pt = GetTextPos();
     RotatePoint( pt, aCenter, 900 );
@@ -805,7 +805,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 
     for( SCH_FIELD& field : m_fields )
     {
-        wxPoint offset( 0, 0 );
+        VECTOR2I offset( 0, 0 );
 
         switch( GetLabelSpinStyle() )
         {
@@ -967,14 +967,14 @@ SEARCH_RESULT SCH_LABEL_BASE::Visit( INSPECTOR aInspector, void* testData,
 
 void SCH_LABEL_BASE::GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList )
 {
-    DANGLING_END_ITEM item( LABEL_END, this, (wxPoint)GetTextPos() );
+    DANGLING_END_ITEM item( LABEL_END, this, GetTextPos() );
     aItemList.push_back( item );
 }
 
 
-std::vector<wxPoint> SCH_LABEL_BASE::GetConnectionPoints() const
+std::vector<VECTOR2I> SCH_LABEL_BASE::GetConnectionPoints() const
 {
-    return { (wxPoint)GetTextPos() };
+    return { GetTextPos() };
 }
 
 
@@ -1011,11 +1011,11 @@ const EDA_RECT SCH_LABEL_BASE::GetBodyBoundingBox() const
     // build the bounding box of the label only, without taking into account its fields
 
     EDA_RECT             box;
-    std::vector<wxPoint> pts;
+    std::vector<VECTOR2I> pts;
 
-    CreateGraphicShape( nullptr, pts, (wxPoint)GetTextPos() );
+    CreateGraphicShape( nullptr, pts, GetTextPos() );
 
-    for( const wxPoint& pt : pts )
+    for( const VECTOR2I& pt : pts )
         box.Merge( pt );
 
     box.Inflate( GetEffectiveTextPenWidth() / 2 );
@@ -1040,7 +1040,7 @@ const EDA_RECT SCH_LABEL_BASE::GetBoundingBox() const
 }
 
 
-bool SCH_LABEL_BASE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool SCH_LABEL_BASE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     EDA_RECT bbox = GetBodyBoundingBox();
     bbox.Inflate( aAccuracy );
@@ -1230,7 +1230,7 @@ void SCH_LABEL_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
 void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter ) const
 {
-    static std::vector<wxPoint> s_poly;
+    static std::vector<VECTOR2I> s_poly;
 
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     SCH_CONNECTION*  connection = Connection();
@@ -1246,27 +1246,27 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter ) const
     aPlotter->Text( textpos, color, GetShownText(), GetTextAngle(), GetTextSize(),
                     GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold() );
 
-    CreateGraphicShape( aPlotter->RenderSettings(), s_poly, (wxPoint)GetTextPos() );
+    CreateGraphicShape( aPlotter->RenderSettings(), s_poly, GetTextPos() );
 
     if( s_poly.size() )
         aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
 }
 
 
-void SCH_LABEL_BASE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_LABEL_BASE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
-    static std::vector<wxPoint> s_poly;
+    static std::vector<VECTOR2I> s_poly;
 
     SCH_CONNECTION* connection = Connection();
     int             layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
     wxDC*           DC = aSettings->GetPrintDC();
     COLOR4D         color = aSettings->GetLayerColor( layer );
     int             penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
-    wxPoint         text_offset = aOffset + GetSchematicTextOffset( aSettings );
+    VECTOR2I        text_offset = aOffset + GetSchematicTextOffset( aSettings );
 
     EDA_TEXT::Print( aSettings, text_offset, color );
 
-    CreateGraphicShape( aSettings, s_poly, (wxPoint)GetTextPos() + aOffset );
+    CreateGraphicShape( aSettings, s_poly, GetTextPos() + aOffset );
 
     if( !s_poly.empty() )
         GRPoly( nullptr, DC, s_poly.size(), &s_poly[0], false, penWidth, color, color );
@@ -1276,7 +1276,7 @@ void SCH_LABEL_BASE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOf
 }
 
 
-SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
+SCH_LABEL::SCH_LABEL( const VECTOR2I& pos, const wxString& text ) :
         SCH_LABEL_BASE( pos, text, SCH_LABEL_T )
 {
     m_layer      = LAYER_LOCLABEL;
@@ -1325,7 +1325,7 @@ BITMAPS SCH_LABEL::GetMenuImage() const
 }
 
 
-SCH_NETCLASS_FLAG::SCH_NETCLASS_FLAG( const wxPoint& pos ) :
+SCH_NETCLASS_FLAG::SCH_NETCLASS_FLAG( const VECTOR2I& pos ) :
         SCH_LABEL_BASE( pos, wxEmptyString, SCH_NETCLASS_FLAG_T )
 {
     m_layer      = LAYER_NETCLASS_REFS;
@@ -1351,8 +1351,8 @@ SCH_NETCLASS_FLAG::SCH_NETCLASS_FLAG( const SCH_NETCLASS_FLAG& aClassLabel ) :
 
 
 void SCH_NETCLASS_FLAG::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
-                                            std::vector<wxPoint>& aPoints,
-                                            const wxPoint& aPos ) const
+                                            std::vector<VECTOR2I>& aPoints,
+                                            const VECTOR2I&        aPos ) const
 {
     int symbolSize = m_symbolSize;
 
@@ -1366,36 +1366,36 @@ void SCH_NETCLASS_FLAG::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettin
 
     case LABEL_FLAG_SHAPE::F_ROUND:
         // First 3 points are used for generating shape
-        aPoints.emplace_back( wxPoint(             0, 0                        ) );
-        aPoints.emplace_back( wxPoint(             0, m_pinLength - symbolSize ) );
-        aPoints.emplace_back( wxPoint(             0, m_pinLength              ) );
+        aPoints.emplace_back( VECTOR2I(             0, 0                        ) );
+        aPoints.emplace_back( VECTOR2I(             0, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( VECTOR2I(             0, m_pinLength              ) );
         // These points are just used to bulk out the bounding box
-        aPoints.emplace_back( wxPoint( -m_symbolSize, m_pinLength              ) );
-        aPoints.emplace_back( wxPoint(             0, m_pinLength              ) );
-        aPoints.emplace_back( wxPoint(  m_symbolSize, m_pinLength + symbolSize ) );
+        aPoints.emplace_back( VECTOR2I( -m_symbolSize, m_pinLength              ) );
+        aPoints.emplace_back( VECTOR2I(             0, m_pinLength              ) );
+        aPoints.emplace_back( VECTOR2I(  m_symbolSize, m_pinLength + symbolSize ) );
         break;
 
     case LABEL_FLAG_SHAPE::F_DIAMOND:
-        aPoints.emplace_back( wxPoint(                 0, 0                        ) );
-        aPoints.emplace_back( wxPoint(                 0, m_pinLength - symbolSize ) );
-        aPoints.emplace_back( wxPoint( -2 * m_symbolSize, m_pinLength              ) );
-        aPoints.emplace_back( wxPoint(                 0, m_pinLength + symbolSize ) );
-        aPoints.emplace_back( wxPoint(  2 * m_symbolSize, m_pinLength              ) );
-        aPoints.emplace_back( wxPoint(                 0, m_pinLength - symbolSize ) );
-        aPoints.emplace_back( wxPoint(                 0, 0                        ) );
+        aPoints.emplace_back( VECTOR2I(                 0, 0                        ) );
+        aPoints.emplace_back( VECTOR2I(                 0, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( VECTOR2I( -2 * m_symbolSize, m_pinLength              ) );
+        aPoints.emplace_back( VECTOR2I(                 0, m_pinLength + symbolSize ) );
+        aPoints.emplace_back( VECTOR2I(  2 * m_symbolSize, m_pinLength              ) );
+        aPoints.emplace_back( VECTOR2I(                 0, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( VECTOR2I(                 0, 0                        ) );
         break;
 
     case LABEL_FLAG_SHAPE::F_RECTANGLE:
         symbolSize = KiROUND( symbolSize * 0.8 );
 
-        aPoints.emplace_back( wxPoint(               0, 0                        ) );
-        aPoints.emplace_back( wxPoint(               0, m_pinLength - symbolSize ) );
-        aPoints.emplace_back( wxPoint( -2 * symbolSize, m_pinLength - symbolSize ) );
-        aPoints.emplace_back( wxPoint( -2 * symbolSize, m_pinLength + symbolSize ) );
-        aPoints.emplace_back( wxPoint(  2 * symbolSize, m_pinLength + symbolSize ) );
-        aPoints.emplace_back( wxPoint(  2 * symbolSize, m_pinLength - symbolSize ) );
-        aPoints.emplace_back( wxPoint(               0, m_pinLength - symbolSize ) );
-        aPoints.emplace_back( wxPoint(               0, 0                        ) );
+        aPoints.emplace_back( VECTOR2I(               0, 0                        ) );
+        aPoints.emplace_back( VECTOR2I(               0, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( VECTOR2I( -2 * symbolSize, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( VECTOR2I( -2 * symbolSize, m_pinLength + symbolSize ) );
+        aPoints.emplace_back( VECTOR2I(  2 * symbolSize, m_pinLength + symbolSize ) );
+        aPoints.emplace_back( VECTOR2I(  2 * symbolSize, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( VECTOR2I(               0, m_pinLength - symbolSize ) );
+        aPoints.emplace_back( VECTOR2I(               0, 0                        ) );
         break;
 
     default:
@@ -1403,15 +1403,15 @@ void SCH_NETCLASS_FLAG::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettin
     }
 
     // Rotate outlines and move corners to real position
-    for( wxPoint& aPoint : aPoints )
+    for( VECTOR2I& aPoint : aPoints )
     {
         switch( GetLabelSpinStyle() )
         {
         default:
         case LABEL_SPIN_STYLE::LEFT:                                 break;
-        case LABEL_SPIN_STYLE::UP:     RotatePoint( &aPoint, -900 ); break;
-        case LABEL_SPIN_STYLE::RIGHT:  RotatePoint( &aPoint, 1800 ); break;
-        case LABEL_SPIN_STYLE::BOTTOM: RotatePoint( &aPoint, 900 );  break;
+        case LABEL_SPIN_STYLE::UP:     RotatePoint( aPoint, -900 ); break;
+        case LABEL_SPIN_STYLE::RIGHT:  RotatePoint( aPoint, 1800 ); break;
+        case LABEL_SPIN_STYLE::BOTTOM: RotatePoint( aPoint, 900 );  break;
         }
 
         aPoint += aPos;
@@ -1431,7 +1431,7 @@ void SCH_NETCLASS_FLAG::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
     if( IsItalic() )
         margin = KiROUND( margin * 1.5 );
 
-    wxPoint offset;
+    VECTOR2I offset;
 
     for( SCH_FIELD& field : m_fields )
     {
@@ -1475,7 +1475,7 @@ wxString SCH_NETCLASS_FLAG::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
+SCH_GLOBALLABEL::SCH_GLOBALLABEL( const VECTOR2I& pos, const wxString& text ) :
         SCH_LABEL_BASE( pos, text, SCH_GLOBAL_LABEL_T )
 {
     m_layer      = LAYER_GLOBLABEL;
@@ -1498,7 +1498,7 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const SCH_GLOBALLABEL& aGlobalLabel ) :
 }
 
 
-wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
+VECTOR2I SCH_GLOBALLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
 {
     int horiz = GetLabelBoxExpansion( aSettings );
 
@@ -1522,10 +1522,10 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSetting
     switch( GetLabelSpinStyle() )
     {
     default:
-    case LABEL_SPIN_STYLE::LEFT:   return wxPoint( -horiz, vert );
-    case LABEL_SPIN_STYLE::UP:     return wxPoint( vert, -horiz );
-    case LABEL_SPIN_STYLE::RIGHT:  return wxPoint( horiz, vert );
-    case LABEL_SPIN_STYLE::BOTTOM: return wxPoint( vert, horiz );
+    case LABEL_SPIN_STYLE::LEFT:   return VECTOR2I( -horiz, vert );
+    case LABEL_SPIN_STYLE::UP:     return VECTOR2I( vert, -horiz );
+    case LABEL_SPIN_STYLE::RIGHT:  return VECTOR2I( horiz, vert );
+    case LABEL_SPIN_STYLE::BOTTOM: return VECTOR2I( vert, horiz );
     }
 }
 
@@ -1581,7 +1581,7 @@ void SCH_GLOBALLABEL::MirrorHorizontally( int aCenter )
         VECTOR2I delta = old_pos - pos;
         pos.x = GetPosition().x + delta.x;
 
-        field.SetPosition( (wxPoint)pos );
+        field.SetPosition( pos );
     }
 }
 
@@ -1597,7 +1597,7 @@ void SCH_GLOBALLABEL::MirrorVertically( int aCenter )
         VECTOR2I delta = old_pos - pos;
         pos.y = GetPosition().y + delta.y;
 
-        field.SetPosition( (wxPoint)pos );
+        field.SetPosition( pos );
     }
 }
 
@@ -1667,8 +1667,8 @@ void SCH_GLOBALLABEL::ViewGetLayers( int aLayers[], int& aCount ) const
 
 
 void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
-                                          std::vector<wxPoint>& aPoints,
-                                          const wxPoint& aPos ) const
+                                          std::vector<VECTOR2I>& aPoints,
+                                          const VECTOR2I&        aPos ) const
 {
     int margin    = GetLabelBoxExpansion( aRenderSettings );
     int halfSize  = ( GetTextHeight() / 2 ) + margin;
@@ -1681,12 +1681,12 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
     aPoints.clear();
 
     // Create outline shape : 6 points
-    aPoints.emplace_back( wxPoint( 0, 0 ) );
-    aPoints.emplace_back( wxPoint( 0, -y ) );     // Up
-    aPoints.emplace_back( wxPoint( -x, -y ) );    // left
-    aPoints.emplace_back( wxPoint( -x, 0 ) );     // Up left
-    aPoints.emplace_back( wxPoint( -x, y ) );     // left down
-    aPoints.emplace_back( wxPoint( 0, y ) );      // down
+    aPoints.emplace_back( VECTOR2I( 0, 0 ) );
+    aPoints.emplace_back( VECTOR2I( 0, -y ) );    // Up
+    aPoints.emplace_back( VECTOR2I( -x, -y ) );   // left
+    aPoints.emplace_back( VECTOR2I( -x, 0 ) );    // Up left
+    aPoints.emplace_back( VECTOR2I( -x, y ) );    // left down
+    aPoints.emplace_back( VECTOR2I( 0, y ) );     // down
 
     int x_offset = 0;
 
@@ -1714,7 +1714,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
     }
 
     // Rotate outlines and move corners in real position
-    for( wxPoint& aPoint : aPoints )
+    for( VECTOR2I& aPoint : aPoints )
     {
         aPoint.x += x_offset;
 
@@ -1722,9 +1722,9 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
         {
         default:
         case LABEL_SPIN_STYLE::LEFT:                                 break;
-        case LABEL_SPIN_STYLE::UP:     RotatePoint( &aPoint, -900 ); break;
-        case LABEL_SPIN_STYLE::RIGHT:  RotatePoint( &aPoint, 1800 ); break;
-        case LABEL_SPIN_STYLE::BOTTOM: RotatePoint( &aPoint, 900 );  break;
+        case LABEL_SPIN_STYLE::UP:     RotatePoint( aPoint, -900 ); break;
+        case LABEL_SPIN_STYLE::RIGHT:  RotatePoint( aPoint, 1800 ); break;
+        case LABEL_SPIN_STYLE::BOTTOM: RotatePoint( aPoint, 900 );  break;
         }
 
         aPoint += aPos;
@@ -1746,7 +1746,7 @@ BITMAPS SCH_GLOBALLABEL::GetMenuImage() const
 }
 
 
-SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
+SCH_HIERLABEL::SCH_HIERLABEL( const VECTOR2I& pos, const wxString& text, KICAD_T aType ) :
         SCH_LABEL_BASE( pos, text, aType )
 {
     m_layer      = LAYER_HIERLABEL;
@@ -1763,14 +1763,14 @@ void SCH_HIERLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 
 
 void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
-                                        std::vector<wxPoint>& aPoints, const wxPoint& aPos ) const
+                                        std::vector<VECTOR2I>& aPoints, const VECTOR2I& aPos ) const
 {
     CreateGraphicShape( aSettings, aPoints, aPos, m_shape );
 }
 
 
 void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
-                                        std::vector<wxPoint>& aPoints, const wxPoint& aPos,
+                                        std::vector<VECTOR2I>& aPoints, const VECTOR2I& aPos,
                                         LABEL_FLAG_SHAPE aShape ) const
 {
     int* Template = TemplateShape[static_cast<int>( aShape )][static_cast<int>( m_spin_style )];
@@ -1782,7 +1782,7 @@ void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
 
     for( int ii = 0; ii < imax; ii++ )
     {
-        wxPoint corner;
+        VECTOR2I corner;
         corner.x = ( halfSize * (*Template) ) + aPos.x;
         Template++;
 
@@ -1840,15 +1840,15 @@ const EDA_RECT SCH_HIERLABEL::GetBodyBoundingBox() const
         break;
     }
 
-    EDA_RECT box( wxPoint( x, y ), wxSize( dx, dy ) );
+    EDA_RECT box( VECTOR2I( x, y ), VECTOR2I( dx, dy ) );
     box.Normalize();
     return box;
 }
 
 
-wxPoint SCH_HIERLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
+VECTOR2I SCH_HIERLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
 {
-    wxPoint text_offset;
+    VECTOR2I text_offset;
     int     dist = GetTextOffset( aSettings );
 
     dist += GetTextWidth();

@@ -85,7 +85,7 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                     return false;
 
                 int     actual;
-                wxPoint p0;
+                VECTOR2I p0;
 
                 if( PCB_ARC* arc = dyn_cast<PCB_ARC*>( item ) )
                 {

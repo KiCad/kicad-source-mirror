@@ -695,10 +695,10 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                     FP_SHAPE* graphic = new FP_SHAPE( footprint, SHAPE_T::SEGMENT );
 
                     graphic->SetLayer( targetLayer );
-                    graphic->SetStart( wxPoint( seg.A ) );
-                    graphic->SetStart0( wxPoint( seg.A ) );
-                    graphic->SetEnd( wxPoint( seg.B ) );
-                    graphic->SetEnd0( wxPoint( seg.B ) );
+                    graphic->SetStart( VECTOR2I( seg.A ) );
+                    graphic->SetStart0( VECTOR2I( seg.A ) );
+                    graphic->SetEnd( VECTOR2I( seg.B ) );
+                    graphic->SetEnd0( VECTOR2I( seg.B ) );
                     commit.Add( graphic );
                 }
                 else
@@ -706,8 +706,8 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                     PCB_SHAPE* graphic = new PCB_SHAPE( nullptr, SHAPE_T::SEGMENT );
 
                     graphic->SetLayer( targetLayer );
-                    graphic->SetStart( wxPoint( seg.A ) );
-                    graphic->SetEnd( wxPoint( seg.B ) );
+                    graphic->SetStart( VECTOR2I( seg.A ) );
+                    graphic->SetEnd( VECTOR2I( seg.B ) );
                     commit.Add( graphic );
                 }
             }
@@ -734,10 +734,10 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                 {
                     FP_SHAPE* graphic = new FP_SHAPE( footprint, SHAPE_T::SEGMENT );
                     graphic->SetLayer( targetLayer );
-                    graphic->SetStart( wxPoint( seg.A ) );
-                    graphic->SetStart0( wxPoint( seg.A ) );
-                    graphic->SetEnd( wxPoint( seg.B ) );
-                    graphic->SetEnd0( wxPoint( seg.B ) );
+                    graphic->SetStart( VECTOR2I( seg.A ) );
+                    graphic->SetStart0( VECTOR2I( seg.A ) );
+                    graphic->SetEnd( VECTOR2I( seg.B ) );
+                    graphic->SetEnd0( VECTOR2I( seg.B ) );
                     commit.Add( graphic );
                 }
             }
@@ -749,8 +749,8 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                     PCB_TRACK* track = new PCB_TRACK( parent );
 
                     track->SetLayer( targetLayer );
-                    track->SetStart( wxPoint( seg.A ) );
-                    track->SetEnd( wxPoint( seg.B ) );
+                    track->SetStart( VECTOR2I( seg.A ) );
+                    track->SetEnd( VECTOR2I( seg.B ) );
                     commit.Add( track );
                 }
             }
@@ -824,9 +824,9 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
         arc->SetLayer( layer );
         arc->SetStroke( line->GetStroke() );
 
-        arc->SetCenter( wxPoint( center ) );
-        arc->SetStart( wxPoint( start ) );
-        arc->SetEnd( wxPoint( end ) );
+        arc->SetCenter( VECTOR2I( center ) );
+        arc->SetStart( VECTOR2I( start ) );
+        arc->SetEnd( VECTOR2I( end ) );
 
         commit.Add( arc );
     }
@@ -838,9 +838,9 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
 
         arc->SetLayer( layer );
         arc->SetWidth( line->GetWidth() );
-        arc->SetStart( wxPoint( start ) );
-        arc->SetMid( wxPoint( mid ) );
-        arc->SetEnd( wxPoint( end ) );
+        arc->SetStart( VECTOR2I( start ) );
+        arc->SetMid( VECTOR2I( mid ) );
+        arc->SetEnd( VECTOR2I( end ) );
 
         commit.Add( arc );
     }

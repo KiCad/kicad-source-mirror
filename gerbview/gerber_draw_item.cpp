@@ -84,7 +84,7 @@ int GERBER_DRAW_ITEM::GetLayer() const
 }
 
 
-bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, wxPoint& aPos, double& aOrientation )
+bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, VECTOR2I& aPos, double& aOrientation )
 {
     // calculate the best size and orientation of the D_Code text
 
@@ -114,7 +114,7 @@ bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, wxPoint& aPos, double& aOr
     }
     else        // this item is a line
     {
-        wxPoint delta = m_Start - m_End;
+        VECTOR2I delta = m_Start - m_End;
 
         aOrientation = RAD2DECIDEG( atan2( (double)delta.y, (double)delta.x ) );
         NORMALIZE_ANGLE_90( aOrientation );
@@ -133,7 +133,7 @@ bool GERBER_DRAW_ITEM::GetTextD_CodePrms( double& aSize, VECTOR2D& aPos, double&
 {
     // aOrientation is returned in radians
     int size;
-    wxPoint pos;
+    VECTOR2I pos;
 
     if( ! GetTextD_CodePrms( size, pos, aOrientation ) )
         return false;
@@ -146,13 +146,13 @@ bool GERBER_DRAW_ITEM::GetTextD_CodePrms( double& aSize, VECTOR2D& aPos, double&
 }
 
 
-wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition ) const
+VECTOR2I GERBER_DRAW_ITEM::GetABPosition( const VECTOR2I& aXYPosition ) const
 {
     /* Note: RS274Xrevd_e is obscure about the order of transforms:
      * For instance: Rotation must be made after or before mirroring ?
      * Note: if something is changed here, GetYXPosition must reflect changes
      */
-    wxPoint abPos = aXYPosition + m_GerberImageFile->m_ImageJustifyOffset;
+    VECTOR2I abPos = aXYPosition + m_GerberImageFile->m_ImageJustifyOffset;
 
     if( m_swapAxis )
         std::swap( abPos.x, abPos.y );
@@ -163,7 +163,7 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition ) const
     double rotation = m_lyrRotation * 10 + m_GerberImageFile->m_ImageRotation * 10;
 
     if( rotation )
-        RotatePoint( &abPos, -rotation );
+        RotatePoint( abPos, -rotation );
 
     // Negate A axis if mirrored
     if( m_mirrorA )
@@ -177,10 +177,10 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition ) const
 }
 
 
-wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition ) const
+VECTOR2I GERBER_DRAW_ITEM::GetXYPosition( const VECTOR2I& aABPosition ) const
 {
     // do the inverse transform made by GetABPosition
-    wxPoint xyPos = aABPosition;
+    VECTOR2I xyPos = aABPosition;
 
     if( m_mirrorA )
         xyPos.x = -xyPos.x;
@@ -191,7 +191,7 @@ wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition ) const
     double rotation = m_lyrRotation * 10 + m_GerberImageFile->m_ImageRotation * 10;
 
     if( rotation )
-        RotatePoint( &xyPos, rotation );
+        RotatePoint( xyPos, rotation );
 
     xyPos.x = KiROUND( xyPos.x / m_drawScale.x );
     xyPos.y = KiROUND( xyPos.y / m_drawScale.y );
@@ -397,7 +397,7 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
             int ymin = std::min( m_Start.y, m_End.y ) - radius;
             int xmin = std::min( m_Start.x, m_End.x ) - radius;
 
-            bbox = EDA_RECT( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
+            bbox = EDA_RECT( VECTOR2I( xmin, ymin ), VECTOR2I( xmax - xmin + 1, ymax - ymin + 1 ) );
         }
 
         break;
@@ -420,25 +420,25 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
 }
 
 
-void GERBER_DRAW_ITEM::MoveAB( const wxPoint& aMoveVector )
+void GERBER_DRAW_ITEM::MoveAB( const VECTOR2I& aMoveVector )
 {
-    wxPoint xymove = GetXYPosition( aMoveVector );
+    VECTOR2I xymove = GetXYPosition( aMoveVector );
 
     m_Start     += xymove;
     m_End       += xymove;
     m_ArcCentre += xymove;
 
-    m_Polygon.Move( VECTOR2I( xymove ) );
+    m_Polygon.Move( xymove );
 }
 
 
-void GERBER_DRAW_ITEM::MoveXY( const wxPoint& aMoveVector )
+void GERBER_DRAW_ITEM::MoveXY( const VECTOR2I& aMoveVector )
 {
     m_Start     += aMoveVector;
     m_End       += aMoveVector;
     m_ArcCentre += aMoveVector;
 
-    m_Polygon.Move( VECTOR2I( aMoveVector ) );
+    m_Polygon.Move( aMoveVector );
 }
 
 
@@ -451,7 +451,7 @@ bool GERBER_DRAW_ITEM::HasNegativeItems()
 }
 
 
-void GERBER_DRAW_ITEM::Print( wxDC* aDC, const wxPoint& aOffset, GBR_DISPLAY_OPTIONS* aOptions )
+void GERBER_DRAW_ITEM::Print( wxDC* aDC, const VECTOR2I& aOffset, GBR_DISPLAY_OPTIONS* aOptions )
 {
     // used when a D_CODE is not found. default D_CODE to draw a flashed item
     static D_CODE dummyD_CODE( 0 );
@@ -580,8 +580,8 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( SHAPE_POLY_SET* aPolygon ) const
     aPolygon->RemoveAllContours();
     aPolygon->NewOutline();
 
-    wxPoint start = m_Start;
-    wxPoint end = m_End;
+    VECTOR2I start = m_Start;
+    VECTOR2I end = m_End;
 
     // make calculations more easy if ensure start.x < end.x
     // (only 2 quadrants to consider)
@@ -589,7 +589,7 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( SHAPE_POLY_SET* aPolygon ) const
         std::swap( start, end );
 
     // calculate values relative to start point:
-    wxPoint delta = end - start;
+    VECTOR2I delta = end - start;
 
     // calculate corners for the first quadrant only (delta.x and delta.y > 0 )
     // currently, delta.x already is > 0.
@@ -604,10 +604,10 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( SHAPE_POLY_SET* aPolygon ) const
     // 3 4
     // 2 5
     // 1 6
-    wxPoint corner;
+    VECTOR2I corner;
     corner.x -= m_Size.x/2;
     corner.y -= m_Size.y/2;
-    wxPoint close = corner;
+    VECTOR2I close = corner;
     aPolygon->Append( VECTOR2I( corner ) );  // Lower left corner, start point (1)
     corner.y += m_Size.y;
     aPolygon->Append( VECTOR2I( corner ) );  // upper left corner, start point (2)
@@ -645,10 +645,10 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon()
 }
 
 
-void GERBER_DRAW_ITEM::PrintGerberPoly( wxDC* aDC, const COLOR4D& aColor, const wxPoint& aOffset,
+void GERBER_DRAW_ITEM::PrintGerberPoly( wxDC* aDC, const COLOR4D& aColor, const VECTOR2I& aOffset,
                                         bool aFilledShape )
 {
-    std::vector<wxPoint> points;
+    std::vector<VECTOR2I> points;
     SHAPE_LINE_CHAIN& poly = m_Polygon.Outline( 0 );
     int pointCount = poly.PointCount() - 1;
 
@@ -656,7 +656,7 @@ void GERBER_DRAW_ITEM::PrintGerberPoly( wxDC* aDC, const COLOR4D& aColor, const 
 
     for( int ii = 0; ii < pointCount; ii++ )
     {
-        wxPoint p( poly.CPoint( ii ).x, poly.CPoint( ii ).y );
+        VECTOR2I p( poly.CPoint( ii ).x, poly.CPoint( ii ).y );
         points[ii] = p + aOffset;
         points[ii] = GetABPosition( points[ii] );
     }
@@ -794,13 +794,13 @@ BITMAPS GERBER_DRAW_ITEM::GetMenuImage() const
 }
 
 
-bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
+bool GERBER_DRAW_ITEM::HitTest( const VECTOR2I& aRefPos, int aAccuracy ) const
 {
     // In case the item has a very tiny width defined, allow it to be selected
     const int MIN_HIT_TEST_RADIUS = Millimeter2iu( 0.01 );
 
     // calculate aRefPos in XY Gerber axis:
-    wxPoint ref_pos = GetXYPosition( aRefPos );
+    VECTOR2I ref_pos = GetXYPosition( aRefPos );
 
     SHAPE_POLY_SET poly;
 
@@ -910,7 +910,7 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
 
 bool GERBER_DRAW_ITEM::HitTest( const EDA_RECT& aRefArea, bool aContained, int aAccuracy ) const
 {
-    wxPoint pos = GetABPosition( m_Start );
+    VECTOR2I pos = GetABPosition( m_Start );
 
     if( aRefArea.Contains( pos ) )
         return true;

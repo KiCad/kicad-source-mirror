@@ -90,7 +90,7 @@ VECTOR2I SELECTION::GetCenter() const
 
     if( hasOnlyText )
     {
-        wxPoint center( 0, 0 );
+        VECTOR2I center( 0, 0 );
 
         for( EDA_ITEM* item : m_items )
             center += item->GetPosition();

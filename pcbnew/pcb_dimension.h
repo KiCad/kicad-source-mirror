@@ -118,14 +118,14 @@ public:
      * one or more feature points, so every dimension has at least an origin.
      * @return the origin point of this dimension
      */
-    virtual const wxPoint& GetStart() const { return m_start; }
-    virtual void SetStart( const wxPoint& aPoint ) { m_start = aPoint; }
+    virtual const VECTOR2I& GetStart() const { return m_start; }
+    virtual void            SetStart( const VECTOR2I& aPoint ) { m_start = aPoint; }
 
-    virtual const wxPoint& GetEnd() const { return m_end; }
-    virtual void SetEnd( const wxPoint& aPoint ) { m_end = aPoint; }
+    virtual const VECTOR2I& GetEnd() const { return m_end; }
+    virtual void            SetEnd( const VECTOR2I& aPoint ) { m_end = aPoint; }
 
-    wxPoint GetPosition() const override { return m_start; }
-    void SetPosition( const wxPoint& aPos ) override { m_start = aPos; }
+    VECTOR2I GetPosition() const override { return m_start; }
+    void     SetPosition( const VECTOR2I& aPos ) override { m_start = aPos; }
 
     bool GetOverrideTextEnabled() const { return m_overrideTextEnabled; }
     void SetOverrideTextEnabled( bool aOverride ) { m_overrideTextEnabled = aOverride; }
@@ -221,9 +221,9 @@ public:
 
     // BOARD_ITEM overrides
 
-    void Move( const wxPoint& offset ) override;
-    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
-    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
+    void Move( const VECTOR2I& offset ) override;
+    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
+    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     /**
      * Mirror the dimension relative to a given horizontal axis.
@@ -233,11 +233,11 @@ public:
      *
      * @param axis_pos is the vertical axis position to mirror around.
      */
-    void Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight = false );
+    void Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight = false );
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     const EDA_RECT GetBoundingBox() const override;
@@ -304,8 +304,8 @@ protected:
     // Internal
     PCB_TEXT          m_text;             ///< The actual text object
     int               m_measuredValue;    ///< value of PCB dimensions
-    wxPoint           m_start;
-    wxPoint           m_end;
+    VECTOR2I          m_start;
+    VECTOR2I          m_end;
 
     ///< Internal cache of drawn shapes
     std::vector<std::shared_ptr<SHAPE>> m_shapes;
@@ -363,9 +363,9 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    const wxPoint& GetCrossbarStart() const { return m_crossBarStart; }
+    const VECTOR2I& GetCrossbarStart() const { return m_crossBarStart; }
 
-    const wxPoint& GetCrossbarEnd() const { return m_crossBarEnd; }
+    const VECTOR2I& GetCrossbarEnd() const { return m_crossBarEnd; }
 
     /**
      * Set the distance from the feature points to the crossbar line.
@@ -380,7 +380,7 @@ public:
      *
      * @param aCrossbarStart is the start point of the crossbar.
      */
-    void UpdateHeight( const wxPoint& aCrossbarStart, const wxPoint& aCrossbarEnd );
+    void UpdateHeight( const VECTOR2I& aCrossbarStart, const VECTOR2I& aCrossbarEnd );
 
     void SetExtensionHeight( int aHeight ) { m_extensionHeight = aHeight; }
     int GetExtensionHeight() const { return m_extensionHeight; }
@@ -413,8 +413,8 @@ protected:
     int          m_height;           ///< Perpendicular distance from features to crossbar
     int          m_extensionHeight;  ///< Length of extension lines past the crossbar
 
-    wxPoint      m_crossBarStart;    ///< Crossbar start control point
-    wxPoint      m_crossBarEnd;      ///< Crossbar end control point
+    VECTOR2I m_crossBarStart; ///< Crossbar start control point
+    VECTOR2I m_crossBarEnd;   ///< Crossbar end control point
 
 };
 
@@ -460,7 +460,7 @@ public:
     {
         return wxT( "PCB_DIM_ORTHOGONAL" );
     }
-    void     Rotate( const wxPoint& aRotCentre, double aAngle ) override;
+    void     Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
 
 protected:
     void updateGeometry() override;
@@ -513,7 +513,7 @@ public:
     int GetLeaderLength() const { return m_leaderLength; }
 
     // Returns the point (c).
-    wxPoint GetKnee() const;
+    VECTOR2I GetKnee() const;
 
     BITMAPS GetMenuImage() const override;
 

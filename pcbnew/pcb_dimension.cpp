@@ -200,7 +200,7 @@ void PCB_DIMENSION_BASE::SetLayer( PCB_LAYER_ID aLayer )
 }
 
 
-void PCB_DIMENSION_BASE::Move( const wxPoint& offset )
+void PCB_DIMENSION_BASE::Move( const VECTOR2I& offset )
 {
     m_text.Offset( offset );
 
@@ -211,7 +211,7 @@ void PCB_DIMENSION_BASE::Move( const wxPoint& offset )
 }
 
 
-void PCB_DIMENSION_BASE::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_DIMENSION_BASE::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
     double newAngle = m_text.GetTextAngle().AsTenthsOfADegree() + aAngle;
 
@@ -224,14 +224,14 @@ void PCB_DIMENSION_BASE::Rotate( const wxPoint& aRotCentre, double aAngle )
     RotatePoint( pt, aRotCentre, aAngle );
     m_text.SetTextPos( pt );
 
-    RotatePoint( &m_start, aRotCentre, aAngle );
-    RotatePoint( &m_end, aRotCentre, aAngle );
+    RotatePoint( m_start, aRotCentre, aAngle );
+    RotatePoint( m_end, aRotCentre, aAngle );
 
     Update();
 }
 
 
-void PCB_DIMENSION_BASE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_DIMENSION_BASE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     Mirror( aCentre );
 
@@ -239,7 +239,7 @@ void PCB_DIMENSION_BASE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-void PCB_DIMENSION_BASE::Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight )
+void PCB_DIMENSION_BASE::Mirror( const VECTOR2I& axis_pos, bool aMirrorLeftRight )
 {
     int axis = aMirrorLeftRight ? axis_pos.x : axis_pos.y;
     VECTOR2I newPos = m_text.GetTextPos();
@@ -308,7 +308,7 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     if( Type() == PCB_DIM_CENTER_T || Type() == PCB_FP_DIM_CENTER_T )
     {
-        wxPoint startCoord = originTransforms.ToDisplayAbs( GetStart() );
+        VECTOR2I startCoord = originTransforms.ToDisplayAbs( GetStart() );
         wxString start = wxString::Format( "@(%s, %s)",
                                            MessageTextFromValue( units, startCoord.x ),
                                            MessageTextFromValue( units, startCoord.y ) );
@@ -317,11 +317,11 @@ void PCB_DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     }
     else
     {
-        wxPoint startCoord = originTransforms.ToDisplayAbs( GetStart() );
+        VECTOR2I startCoord = originTransforms.ToDisplayAbs( GetStart() );
         wxString start = wxString::Format( "@(%s, %s)",
                                            MessageTextFromValue( units, startCoord.x ),
                                            MessageTextFromValue( units, startCoord.y ) );
-        wxPoint endCoord = originTransforms.ToDisplayAbs( GetEnd() );
+        VECTOR2I endCoord = originTransforms.ToDisplayAbs( GetEnd() );
         wxString end   = wxString::Format( "@(%s, %s)",
                                            MessageTextFromValue( units, endCoord.x ),
                                            MessageTextFromValue( units, endCoord.y ) );
@@ -349,7 +349,7 @@ std::shared_ptr<SHAPE> PCB_DIMENSION_BASE::GetEffectiveShape( PCB_LAYER_ID aLaye
 }
 
 
-bool PCB_DIMENSION_BASE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool PCB_DIMENSION_BASE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     if( m_text.TextHitTest( aPosition ) )
         return true;
@@ -552,7 +552,7 @@ BITMAPS PCB_DIM_ALIGNED::GetMenuImage() const
 }
 
 
-void PCB_DIM_ALIGNED::UpdateHeight( const wxPoint& aCrossbarStart, const wxPoint& aCrossbarEnd )
+void PCB_DIM_ALIGNED::UpdateHeight( const VECTOR2I& aCrossbarStart, const VECTOR2I& aCrossbarEnd )
 {
     VECTOR2D height( aCrossbarStart - GetStart() );
     VECTOR2D crossBar( aCrossbarEnd - aCrossbarStart );
@@ -878,7 +878,7 @@ void PCB_DIM_ORTHOGONAL::updateText()
 }
 
 
-void PCB_DIM_ORTHOGONAL::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_DIM_ORTHOGONAL::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
     // restrict angle to -179.9 to 180.0 degrees
     if( aAngle > 1800 )
@@ -1069,7 +1069,7 @@ void PCB_DIM_LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
     EDA_UNITS         units = aFrame->GetUserUnits();
 
-    wxPoint startCoord = originTransforms.ToDisplayAbs( GetStart() );
+    VECTOR2I startCoord = originTransforms.ToDisplayAbs( GetStart() );
     wxString start = wxString::Format( "@(%s, %s)",
                                        MessageTextFromValue( units, startCoord.x ),
                                        MessageTextFromValue( units, startCoord.y ) );
@@ -1117,11 +1117,11 @@ BITMAPS PCB_DIM_RADIAL::GetMenuImage() const
 }
 
 
-wxPoint PCB_DIM_RADIAL::GetKnee() const
+VECTOR2I PCB_DIM_RADIAL::GetKnee() const
 {
     VECTOR2I radial( m_end - m_start );
 
-    return m_end + (wxPoint) radial.Resize( m_leaderLength );
+    return m_end + radial.Resize( m_leaderLength );
 }
 
 

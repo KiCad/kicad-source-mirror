@@ -39,11 +39,11 @@
 // Returns true if the point P is on the segment S.
 // faster than TestSegmentHit() because P should be exactly on S
 // therefore works fine only for H, V and 45 deg segm (suitable for wires in eeschema)
-bool IsPointOnSegment( const wxPoint& aSegStart, const wxPoint& aSegEnd,
-                       const wxPoint& aTestPoint )
+bool IsPointOnSegment( const VECTOR2I& aSegStart, const VECTOR2I& aSegEnd,
+                       const VECTOR2I& aTestPoint )
 {
-    wxPoint vectSeg   = aSegEnd - aSegStart;    // Vector from S1 to S2
-    wxPoint vectPoint = aTestPoint - aSegStart; // Vector from S1 to P
+    VECTOR2I vectSeg = aSegEnd - aSegStart;      // Vector from S1 to S2
+    VECTOR2I vectPoint = aTestPoint - aSegStart; // Vector from S1 to P
 
     // Use long long here to avoid overflow in calculations
     if( (long long) vectSeg.x * vectPoint.y - (long long) vectSeg.y * vectPoint.x )

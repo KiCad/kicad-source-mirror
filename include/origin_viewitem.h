@@ -94,14 +94,14 @@ public:
         m_drawAtZero = aDrawFlag;
     }
 
-    void SetPosition( const wxPoint& aPosition ) override
+    void SetPosition( const VECTOR2I& aPosition ) override
     {
         m_position = VECTOR2D( aPosition );
     }
 
-    wxPoint GetPosition() const override
+    VECTOR2I GetPosition() const override
     {
-        return wxPoint( m_position.x, m_position.y );
+        return VECTOR2I( m_position.x, m_position.y );
     }
 
     inline void SetEndPosition( const VECTOR2D& aPosition )

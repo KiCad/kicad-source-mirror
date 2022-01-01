@@ -116,7 +116,7 @@ private:
     void countNets( wxXmlNode* aSchematicNode );
 
     /// Move any labels on the wire to the new end point of the wire.
-    void moveLabels( SCH_LINE* aWire, const wxPoint& aNewEndPoint );
+    void moveLabels( SCH_LINE* aWire, const VECTOR2I& aNewEndPoint );
 
     /// This function finds best way to place a bus entry symbol for when an Eagle wire segment
     /// ends on an Eagle bus segment.
@@ -125,7 +125,7 @@ private:
     /// Return the matching layer or return LAYER_NOTES
     SCH_LAYER_ID kiCadLayer( int aEagleLayer );
 
-    std::pair<VECTOR2I, const SEG*> findNearestLinePoint( const wxPoint& aPoint,
+    std::pair<VECTOR2I, const SEG*> findNearestLinePoint( const VECTOR2I&         aPoint,
                                                           const std::vector<SEG>& aLines ) const;
 
     void          loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
@@ -258,7 +258,7 @@ private:
     std::map<wxString, ENET> m_nets;
 
     ///< Positions of pins and wire endings mapped to its parent
-    std::map<wxPoint, std::set<const EDA_ITEM*>> m_connPoints;
+    std::map<VECTOR2I, std::set<const EDA_ITEM*>> m_connPoints;
 };
 
 #endif  // _SCH_EAGLE_PLUGIN_H_

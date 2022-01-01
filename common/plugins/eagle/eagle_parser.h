@@ -358,7 +358,7 @@ public:
 NODE_MAP MapChildren( wxXmlNode* aCurrentNode );
 
 ///< Convert an Eagle curve end to a KiCad center for S_ARC
-wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAngle );
+VECTOR2I ConvertArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double aAngle );
 
 // Pre-declare for typedefs
 struct EROT;

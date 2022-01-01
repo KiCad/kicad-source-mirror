@@ -509,8 +509,8 @@ wxString LIB_SYMBOL::SubReference( int aUnit, bool aAddSeparator )
 }
 
 
-void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
-                        int aUnit, int aConvert, const LIB_SYMBOL_OPTIONS& aOpts )
+void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, int aUnit,
+                        int aConvert, const LIB_SYMBOL_OPTIONS& aOpts )
 {
     /* draw background for filled items using background option
      * Solid lines will be drawn after the background
@@ -580,7 +580,7 @@ void LIB_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
 }
 
 
-void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
+void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const VECTOR2I& aOffset,
                        const TRANSFORM& aTransform ) const
 {
     wxASSERT( aPlotter != nullptr );
@@ -635,8 +635,8 @@ void LIB_SYMBOL::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint
 }
 
 
-void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
-                                const wxPoint& aOffset, const TRANSFORM& aTransform )
+void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, const VECTOR2I& aOffset,
+                                const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != nullptr );
 
@@ -1107,7 +1107,7 @@ int LIB_SYMBOL::GetNextAvailableFieldId() const
 }
 
 
-void LIB_SYMBOL::SetOffset( const wxPoint& aOffset )
+void LIB_SYMBOL::SetOffset( const VECTOR2I& aOffset )
 {
     for( LIB_ITEM& item : m_drawings )
         item.Offset( aOffset );
@@ -1155,8 +1155,8 @@ void LIB_SYMBOL::ClearEditFlags()
 }
 
 
-LIB_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aConvert,
-                                      KICAD_T aType, const wxPoint& aPoint )
+LIB_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
+                                      const VECTOR2I& aPoint )
 {
     for( LIB_ITEM& item : m_drawings )
     {
@@ -1176,10 +1176,10 @@ LIB_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aConvert,
 
 
 LIB_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
-                                      const wxPoint& aPoint, const TRANSFORM& aTransform )
+                                      const VECTOR2I& aPoint, const TRANSFORM& aTransform )
 {
     /* we use LocateDrawItem( int aUnit, int convert, KICAD_T type, const
-     * wxPoint& pt ) to search items.
+     * VECTOR2I& pt ) to search items.
      * because this function uses DefaultTransform as orient/mirror matrix
      * we temporary copy aTransform in DefaultTransform
      */

@@ -73,12 +73,12 @@ public:
     }
 
     // pure virtuals:
-    void SetPosition( const wxPoint& ) override {}
-    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override {}
-    void Move( const wxPoint& aMoveVector ) override {}
+    void SetPosition( const VECTOR2I& ) override {}
+    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override {}
+    void Move( const VECTOR2I& aMoveVector ) override {}
     void MirrorHorizontally( int aCenter ) override {}
     void MirrorVertically( int aCenter ) override {}
-    void Rotate( const wxPoint& aCenter ) override {}
+    void Rotate( const VECTOR2I& aCenter ) override {}
 
 #if defined(DEBUG)
     void Show( int , std::ostream&  ) const override {}

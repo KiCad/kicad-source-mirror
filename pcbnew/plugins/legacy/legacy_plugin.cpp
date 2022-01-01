@@ -1509,9 +1509,9 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
             // pad's "Position" is not relative to the footprint's, whereas Pos0 is relative
             // to the footprint's but is the unrotated coordinate.
 
-            wxPoint padpos = pad->GetPos0();
+            VECTOR2I padpos = pad->GetPos0();
 
-            RotatePoint( &padpos, aFootprint->GetOrientation() );
+            RotatePoint( padpos, aFootprint->GetOrientation() );
 
             pad->SetPosition( padpos + aFootprint->GetPosition() );
 
@@ -1601,7 +1601,7 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
         dwg->SetStart0( wxPoint( start0_x, start0_y ) );
         dwg->SetEnd0( wxPoint( end0_x, end0_y ) );
 
-        std::vector<wxPoint> pts;
+        std::vector<VECTOR2I> pts;
         pts.reserve( ptCount );
 
         for( int ii = 0; ii < ptCount; ++ii )

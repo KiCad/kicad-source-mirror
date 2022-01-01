@@ -87,7 +87,7 @@ MARKER_BASE::~MARKER_BASE()
 }
 
 
-bool MARKER_BASE::HitTestMarker( const wxPoint& aHitPosition, int aAccuracy ) const
+bool MARKER_BASE::HitTestMarker( const VECTOR2I& aHitPosition, int aAccuracy ) const
 {
     EDA_RECT bbox = GetBoundingBoxMarker();
     bbox.Inflate( aAccuracy );
@@ -134,12 +134,12 @@ EDA_RECT MARKER_BASE::GetBoundingBoxMarker() const
 }
 
 
-void MARKER_BASE::PrintMarker( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void MARKER_BASE::PrintMarker( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     wxDC* DC = aSettings->GetPrintDC();
 
     // Build the marker shape polygon in internal units:
-    std::vector<wxPoint> shape;
+    std::vector<VECTOR2I> shape;
     shape.reserve( CORNERS_COUNT );
 
     for( const VECTOR2I& corner : MarkerShapeCorners )

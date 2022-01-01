@@ -237,14 +237,14 @@ public:
         return EE_TYPE( m_tree, SCH_LOCATE_ANY_T, aRect );
     }
 
-    EE_TYPE Overlapping( const wxPoint& aPoint, int aAccuracy = 0 ) const
+    EE_TYPE Overlapping( const VECTOR2I& aPoint, int aAccuracy = 0 ) const
     {
         EDA_RECT rect( aPoint, wxSize( 0, 0 ) );
         rect.Inflate( aAccuracy );
         return EE_TYPE( m_tree, SCH_LOCATE_ANY_T, rect );
     }
 
-    EE_TYPE Overlapping( KICAD_T aType, const wxPoint& aPoint, int aAccuracy = 0 ) const
+    EE_TYPE Overlapping( KICAD_T aType, const VECTOR2I& aPoint, int aAccuracy = 0 ) const
     {
         EDA_RECT rect( aPoint, wxSize( 0, 0 ) );
         rect.Inflate( aAccuracy );

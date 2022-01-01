@@ -217,11 +217,11 @@ public:
     /**
      * Test if \a aPosition is inside or on the boundary of this item.
      *
-     * @param aPosition A reference to a wxPoint object containing the coordinates to test.
+     * @param aPosition A reference to a VECTOR2I object containing the coordinates to test.
      * @param aAccuracy Increase the item bounding box by this amount.
      * @return True if \a aPosition is within the item bounding box.
      */
-    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const
+    virtual bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const
     {
         return false;   // derived classes should override this function
     }
@@ -248,14 +248,14 @@ public:
      */
     virtual const EDA_RECT GetBoundingBox() const;
 
-    virtual wxPoint GetPosition() const { return wxPoint(); }
-    virtual void SetPosition( const wxPoint& aPos ) {};
+    virtual VECTOR2I GetPosition() const { return VECTOR2I(); }
+    virtual void     SetPosition( const VECTOR2I& aPos ){};
 
     /**
      * Similar to GetPosition, but allows items to return their visual center rather
      * than their anchor.
      */
-    virtual const wxPoint GetFocusPosition() const { return GetPosition(); }
+    virtual const VECTOR2I GetFocusPosition() const { return GetPosition(); }
 
     /**
      * Create a duplicate of this item with linked list members set to NULL.

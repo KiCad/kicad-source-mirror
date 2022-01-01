@@ -73,8 +73,8 @@ public:
         case WSG_RECT_T:
         {
             DS_DRAW_ITEM_RECT* rect = static_cast<DS_DRAW_ITEM_RECT*>( aItem );
-            wxPoint            topLeft = rect->GetStart();
-            wxPoint            botRight = rect->GetEnd();
+            VECTOR2I           topLeft = rect->GetStart();
+            VECTOR2I           botRight = rect->GetEnd();
 
             if( topLeft.y > botRight.y )
                 std::swap( topLeft.y, botRight.y );
@@ -82,10 +82,10 @@ public:
             if( topLeft.x > botRight.x )
                 std::swap( topLeft.x, botRight.x );
 
-            points->AddPoint( (VECTOR2I) topLeft );
+            points->AddPoint( topLeft );
             points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
             points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
-            points->AddPoint( (VECTOR2I) botRight );
+            points->AddPoint( botRight );
             break;
         }
         default:
@@ -319,10 +319,8 @@ void PL_POINT_EDITOR::updateItem() const
     {
         DS_DRAW_ITEM_LINE* line = static_cast<DS_DRAW_ITEM_LINE*>( item );
 
-        wxPoint move_startpoint = (wxPoint) m_editPoints->Point( LINE_START ).GetPosition()
-                                  - line->GetStart();
-        wxPoint move_endpoint = (wxPoint) m_editPoints->Point( LINE_END ).GetPosition()
-                                - line->GetEnd();
+        VECTOR2I move_startpoint = m_editPoints->Point( LINE_START ).GetPosition() - line->GetStart();
+        VECTOR2I move_endpoint = m_editPoints->Point( LINE_END ).GetPosition() - line->GetEnd();
 
         dataItem->MoveStartPointToUi( dataItem->GetStartPosUi() + move_startpoint );
         dataItem->MoveEndPointToUi( dataItem->GetEndPosUi() + move_endpoint );
@@ -350,7 +348,7 @@ void PL_POINT_EDITOR::updateItem() const
         pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ),
                          topLeft, topRight, botLeft, botRight );
 
-        wxPoint start_delta, end_delta;
+        VECTOR2I start_delta, end_delta;
 
         if( rect->GetStart().y > rect->GetEnd().y )
         {
@@ -426,8 +424,8 @@ void PL_POINT_EDITOR::updatePoints()
     case WSG_RECT_T:
     {
         DS_DRAW_ITEM_RECT* rect = static_cast<DS_DRAW_ITEM_RECT*>( item );
-        wxPoint            topLeft = rect->GetPosition();
-        wxPoint            botRight = rect->GetEnd();
+        VECTOR2I           topLeft = rect->GetPosition();
+        VECTOR2I           botRight = rect->GetEnd();
 
         if( topLeft.y > botRight.y )
             std::swap( topLeft.y, botRight.y );

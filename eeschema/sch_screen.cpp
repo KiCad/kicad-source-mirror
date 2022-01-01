@@ -339,7 +339,7 @@ bool SCH_SCREEN::CheckIfOnDrawList( const SCH_ITEM* aItem ) const
 }
 
 
-SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T aType ) const
+SCH_ITEM* SCH_SCREEN::GetItem( const VECTOR2I& aPosition, int aAccuracy, KICAD_T aType ) const
 {
     EDA_RECT bbox;
     bbox.SetOrigin( aPosition );
@@ -400,7 +400,7 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 }
 
 
-bool SCH_SCREEN::IsJunction( const wxPoint& aPosition ) const
+bool SCH_SCREEN::IsJunction( const VECTOR2I& aPosition ) const
 {
     bool hasExplicitJunction;
     bool hasBusEntry;
@@ -410,7 +410,7 @@ bool SCH_SCREEN::IsJunction( const wxPoint& aPosition ) const
 }
 
 
-bool SCH_SCREEN::IsExplicitJunction( const wxPoint& aPosition ) const
+bool SCH_SCREEN::IsExplicitJunction( const VECTOR2I& aPosition ) const
 {
     bool hasExplicitJunction;
     bool hasBusEntry;
@@ -420,7 +420,7 @@ bool SCH_SCREEN::IsExplicitJunction( const wxPoint& aPosition ) const
 }
 
 
-bool SCH_SCREEN::IsExplicitJunctionNeeded( const wxPoint& aPosition ) const
+bool SCH_SCREEN::IsExplicitJunctionNeeded( const VECTOR2I& aPosition ) const
 {
     bool hasExplicitJunction;
     bool hasBusEntry;
@@ -430,7 +430,7 @@ bool SCH_SCREEN::IsExplicitJunctionNeeded( const wxPoint& aPosition ) const
 }
 
 
-bool SCH_SCREEN::IsExplicitJunctionAllowed( const wxPoint& aPosition ) const
+bool SCH_SCREEN::IsExplicitJunctionAllowed( const VECTOR2I& aPosition ) const
 {
     bool hasExplicitJunction;
     bool hasBusEntry;
@@ -441,7 +441,7 @@ bool SCH_SCREEN::IsExplicitJunctionAllowed( const wxPoint& aPosition ) const
 
 
 
-bool SCH_SCREEN::doIsJunction( const wxPoint& aPosition, bool aBreakCrossings,
+bool SCH_SCREEN::doIsJunction( const VECTOR2I& aPosition, bool aBreakCrossings,
                              bool* aHasExplicitJunctionDot, bool* aHasBusEntry ) const
 {
     enum layers { WIRES = 0, BUSES };
@@ -542,7 +542,7 @@ bool SCH_SCREEN::doIsJunction( const wxPoint& aPosition, bool aBreakCrossings,
 }
 
 
-bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer ) const
+bool SCH_SCREEN::IsTerminalPoint( const VECTOR2I& aPosition, int aLayer ) const
 {
     wxCHECK_MSG( aLayer == LAYER_NOTES || aLayer == LAYER_BUS || aLayer == LAYER_WIRE, false,
                  wxT( "Invalid layer type passed to SCH_SCREEN::IsTerminalPoint()." ) );
@@ -825,13 +825,13 @@ void SCH_SCREEN::Print( const RENDER_SETTINGS* aSettings )
                } );
 
     for( SCH_ITEM* item : bitmaps )
-        item->Print( aSettings, wxPoint( 0, 0 ) );
+        item->Print( aSettings, VECTOR2I( 0, 0 ) );
 
     for( SCH_ITEM* item : other )
-        item->Print( aSettings, wxPoint( 0, 0 ) );
+        item->Print( aSettings, VECTOR2I( 0, 0 ) );
 
     for( SCH_ITEM* item : junctions )
-        item->Print( aSettings, wxPoint( 0, 0 ) );
+        item->Print( aSettings, VECTOR2I( 0, 0 ) );
 }
 
 
@@ -897,7 +897,7 @@ void SCH_SCREEN::ClearDrawingState()
 }
 
 
-LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_SYMBOL** aSymbol,
+LIB_PIN* SCH_SCREEN::GetPin( const VECTOR2I& aPosition, SCH_SYMBOL** aSymbol,
                              bool aEndPointOnly ) const
 {
     SCH_SYMBOL*  candidate = nullptr;
@@ -949,7 +949,7 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_SYMBOL** aSymbol,
 }
 
 
-SCH_SHEET_PIN* SCH_SCREEN::GetSheetPin( const wxPoint& aPosition ) const
+SCH_SHEET_PIN* SCH_SCREEN::GetSheetPin( const VECTOR2I& aPosition ) const
 {
     SCH_SHEET_PIN* sheetPin = nullptr;
 
@@ -967,7 +967,7 @@ SCH_SHEET_PIN* SCH_SCREEN::GetSheetPin( const wxPoint& aPosition ) const
 }
 
 
-size_t SCH_SCREEN::CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) const
+size_t SCH_SCREEN::CountConnectedItems( const VECTOR2I& aPos, bool aTestJunctions ) const
 {
     size_t count = 0;
 
@@ -1073,7 +1073,7 @@ void SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath,
 }
 
 
-SCH_LINE* SCH_SCREEN::GetLine( const wxPoint& aPosition, int aAccuracy, int aLayer,
+SCH_LINE* SCH_SCREEN::GetLine( const VECTOR2I& aPosition, int aAccuracy, int aLayer,
                                SCH_LINE_TEST_T aSearchType ) const
 {
     // an accuracy of 0 had problems with rounding errors; use at least 1
@@ -1110,7 +1110,7 @@ SCH_LINE* SCH_SCREEN::GetLine( const wxPoint& aPosition, int aAccuracy, int aLay
 }
 
 
-SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy ) const
+SCH_TEXT* SCH_SCREEN::GetLabel( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     for( SCH_ITEM* item : Items().Overlapping( aPosition, aAccuracy ) )
     {

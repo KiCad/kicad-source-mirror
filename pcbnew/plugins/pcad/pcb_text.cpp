@@ -117,7 +117,7 @@ void PCB_TEXT::AddToBoard()
     pcbtxt->SetTextThickness( m_name.textstrokeWidth );
 
     SetTextJustify( pcbtxt, m_name.justify );
-    pcbtxt->SetTextPos( wxPoint( m_name.textPositionX, m_name.textPositionY ) );
+    pcbtxt->SetTextPos( VECTOR2I( m_name.textPositionX, m_name.textPositionY ) );
 
     pcbtxt->SetMirrored( m_name.mirror );
 

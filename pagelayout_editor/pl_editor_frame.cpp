@@ -193,7 +193,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Add the exit key handler
     setupUnits( config() );
 
-    wxPoint originCoord = ReturnCoordOriginCorner();
+    VECTOR2I originCoord = ReturnCoordOriginCorner();
     SetGridOrigin( originCoord );
 
     // Initialize the current drawing sheet
@@ -612,11 +612,11 @@ void PL_EDITOR_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVar
 }
 
 
-wxPoint PL_EDITOR_FRAME::ReturnCoordOriginCorner() const
+VECTOR2I PL_EDITOR_FRAME::ReturnCoordOriginCorner() const
 {
     // calculate the position (in page, in iu) of the corner used as coordinate origin
      // coordinate origin can be the paper Top Left corner, or each of 4 page corners
-    wxPoint originCoord;
+    VECTOR2I originCoord;
 
     // To avoid duplicate code, we use a dummy segment starting at 0,0 in relative coord
     DS_DATA_ITEM dummy( DS_DATA_ITEM::DS_SEGMENT );
@@ -677,7 +677,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     SetStatusText( GetZoomLevelIndicator(), 1 );
 
     // coordinate origin can be the paper Top Left corner, or each of 4 page corners
-    wxPoint originCoord = ReturnCoordOriginCorner();
+    VECTOR2I originCoord = ReturnCoordOriginCorner();
     SetGridOrigin( originCoord );
 
     // We need the orientation of axis (sign of coordinates)

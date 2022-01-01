@@ -200,13 +200,13 @@ BOARD_ITEM_CONTAINER* BOARD_ITEM::GetParentFootprint() const
 }
 
 
-void BOARD_ITEM::Rotate( const wxPoint& aRotCentre, double aAngle )
+void BOARD_ITEM::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
     wxMessageBox( wxT( "virtual BOARD_ITEM::Rotate used, should not occur" ), GetClass() );
 }
 
 
-void BOARD_ITEM::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void BOARD_ITEM::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     wxMessageBox( wxT( "virtual BOARD_ITEM::Flip used, should not occur" ), GetClass() );
 }

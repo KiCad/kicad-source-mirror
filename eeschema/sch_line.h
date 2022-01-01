@@ -79,21 +79,21 @@ public:
         return false;
     }
 
-    bool IsEndPoint( const wxPoint& aPoint ) const
+    bool IsEndPoint( const VECTOR2I& aPoint ) const
     {
         return aPoint == m_start || aPoint == m_end;
     }
 
-    int GetAngleFrom( const wxPoint& aPoint ) const;
-    int GetReverseAngleFrom( const wxPoint& aPoint ) const;
+    int GetAngleFrom( const VECTOR2I& aPoint ) const;
+    int GetReverseAngleFrom( const VECTOR2I& aPoint ) const;
 
     bool IsNull() const { return m_start == m_end; }
 
-    wxPoint GetStartPoint() const { return m_start; }
-    void SetStartPoint( const wxPoint& aPosition ) { m_start = aPosition; }
+    VECTOR2I GetStartPoint() const { return m_start; }
+    void     SetStartPoint( const VECTOR2I& aPosition ) { m_start = aPosition; }
 
-    wxPoint GetEndPoint() const { return m_end; }
-    void SetEndPoint( const wxPoint& aPosition ) { m_end = aPosition; }
+    VECTOR2I GetEndPoint() const { return m_end; }
+    void     SetEndPoint( const VECTOR2I& aPosition ) { m_end = aPosition; }
 
     void SetLastResolvedState( const SCH_ITEM* aItem ) override
     {
@@ -174,19 +174,19 @@ public:
      */
     double GetLength() const;
 
-    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     int GetPenWidth() const override;
 
-    void Move( const wxPoint& aMoveVector ) override;
-    void MoveStart( const wxPoint& aMoveVector );
-    void MoveEnd( const wxPoint& aMoveVector );
+    void Move( const VECTOR2I& aMoveVector ) override;
+    void MoveStart( const VECTOR2I& aMoveVector );
+    void MoveEnd( const VECTOR2I& aMoveVector );
 
     void MirrorVertically( int aCenter ) override;
     void MirrorHorizontally( int aCenter ) override;
-    void Rotate( const wxPoint& aCenter ) override;
-    void RotateStart( const wxPoint& aCenter );
-    void RotateEnd( const wxPoint& aCenter );
+    void Rotate( const VECTOR2I& aCenter ) override;
+    void RotateStart( const VECTOR2I& aCenter );
+    void RotateEnd( const VECTOR2I& aCenter );
 
     /**
      * Check line against \a aLine to see if it overlaps and merge if it does.
@@ -216,11 +216,11 @@ public:
 
     bool IsConnectable() const override;
 
-    std::vector<wxPoint> GetConnectionPoints() const override;
+    std::vector<VECTOR2I> GetConnectionPoints() const override;
 
     bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const override;
 
-    void GetSelectedPoints( std::vector< wxPoint >& aPoints ) const;
+    void GetSelectedPoints( std::vector<VECTOR2I>& aPoints ) const;
 
     bool CanConnect( const SCH_ITEM* aItem ) const override;
 
@@ -230,16 +230,16 @@ public:
 
     bool operator <( const SCH_ITEM& aItem ) const override;
 
-    wxPoint GetPosition() const override { return m_start; }
-    void SetPosition( const wxPoint& aPosition ) override;
+    VECTOR2I GetPosition() const override { return m_start; }
+    void     SetPosition( const VECTOR2I& aPosition ) override;
 
-    bool IsPointClickableAnchor( const wxPoint& aPos ) const override
+    bool IsPointClickableAnchor( const VECTOR2I& aPos ) const override
     {
         return ( GetStartPoint() == aPos && IsStartDangling() )
                || ( GetEndPoint() == aPos && IsEndDangling() );
     }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void Plot( PLOTTER* aPlotter ) const override;
@@ -276,12 +276,12 @@ public:
     bool IsBus() const;
 
 private:
-    bool doIsConnected( const wxPoint& aPosition ) const override;
+    bool doIsConnected( const VECTOR2I& aPosition ) const override;
 
     bool          m_startIsDangling;  ///< True if start point is not connected.
     bool          m_endIsDangling;    ///< True if end point is not connected.
-    wxPoint       m_start;            ///< Line start point
-    wxPoint       m_end;              ///< Line end point
+    VECTOR2I      m_start;            ///< Line start point
+    VECTOR2I      m_end;              ///< Line end point
     STROKE_PARAMS m_stroke;           ///< Line stroke properties.
 
     // If real-time connectivity gets disabled (due to being too slow on a particular

@@ -83,7 +83,7 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
     bool           errorHandled = false;
 
     OUTLINE_ERROR_HANDLER errorHandler =
-            [&]( const wxString& msg, BOARD_ITEM* itemA, BOARD_ITEM* itemB, const wxPoint& pt )
+            [&]( const wxString& msg, BOARD_ITEM* itemA, BOARD_ITEM* itemB, const VECTOR2I& pt )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
 

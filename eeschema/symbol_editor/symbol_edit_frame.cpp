@@ -1313,7 +1313,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
     for( int i = 0; i < (int) aSymbol->GetFields().size(); ++i )
     {
         const SCH_FIELD& field = aSymbol->GetFields()[i];
-        wxPoint          pos = field.GetPosition() - aSymbol->GetPosition();
+        VECTOR2I         pos = field.GetPosition() - aSymbol->GetPosition();
         LIB_FIELD        libField( symbol.get(), field.GetId() );
 
         if( i >= MANDATORY_FIELDS && !field.GetName( false ).IsEmpty() )

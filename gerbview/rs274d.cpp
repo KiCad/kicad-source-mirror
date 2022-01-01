@@ -341,12 +341,12 @@ static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const wxPoint& aStart, cons
 
     aGbrItem->SetNetAttributes( aGbrItem->m_GerberImageFile->m_NetAttributeDict );
 
-    wxPoint   center;
+    VECTOR2I center;
     center = dummyGbrItem.m_ArcCentre;
 
     // Calculate coordinates relative to arc center;
-    wxPoint start = dummyGbrItem.m_Start - center;
-    wxPoint end   = dummyGbrItem.m_End - center;
+    VECTOR2I start = dummyGbrItem.m_Start - center;
+    VECTOR2I end = dummyGbrItem.m_End - center;
 
     /* Calculate angle arc
      * angles are in 0.1 deg
@@ -379,7 +379,7 @@ static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const wxPoint& aStart, cons
     for( int ii = 0; ii <= count; ii++ )
     {
         double rot;
-        wxPoint end_arc = start;
+        VECTOR2I end_arc = start;
 
         if( aClockwise )
             rot = ii * increment_angle;              // rot is in 0.1 deg
@@ -387,11 +387,11 @@ static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const wxPoint& aStart, cons
             rot = ( count - ii ) * increment_angle;  // rot is in 0.1 deg
 
         if( ii < count )
-            RotatePoint( &end_arc, -rot );
+            RotatePoint( end_arc, -rot );
         else    // last point
             end_arc = aClockwise ? end : start;
 
-        aGbrItem->m_Polygon.Append( VECTOR2I( end_arc + center ) );
+        aGbrItem->m_Polygon.Append( end_arc + center );
     }
 }
 

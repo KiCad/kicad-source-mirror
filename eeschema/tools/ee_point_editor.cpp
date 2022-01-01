@@ -184,8 +184,8 @@ public:
         case SCH_SHEET_T:
         {
             SCH_SHEET* sheet = (SCH_SHEET*) aItem;
-            wxPoint    topLeft = sheet->GetPosition();
-            wxPoint    botRight = sheet->GetPosition() + sheet->GetSize();
+            VECTOR2I   topLeft = sheet->GetPosition();
+            VECTOR2I   botRight = sheet->GetPosition() + sheet->GetSize();
 
             points->AddPoint( (wxPoint) topLeft );
             points->AddPoint( wxPoint( botRight.x, topLeft.y ) );
@@ -197,8 +197,8 @@ public:
         case SCH_BITMAP_T:
         {
             SCH_BITMAP* bitmap = (SCH_BITMAP*) aItem;
-            wxPoint     topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
-            wxPoint     botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
+            VECTOR2I    topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
+            VECTOR2I    botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
 
             points->AddPoint( (wxPoint) topLeft );
             points->AddPoint( wxPoint( botRight.x, topLeft.y ) );
@@ -703,7 +703,7 @@ void EE_POINT_EDITOR::updateParentItem() const
 
         // Pin positions are relative to origin.  Attempt to leave them where they
         // are if the origin moves.
-        wxPoint originDelta = sheet->GetPosition() - (wxPoint) topLeft;
+        VECTOR2I originDelta = sheet->GetPosition() - (wxPoint) topLeft;
 
         sheet->SetPosition( (wxPoint) topLeft );
         sheet->SetSize( wxSize( botRight.x - topLeft.x, botRight.y - topLeft.y ) );
@@ -715,7 +715,7 @@ void EE_POINT_EDITOR::updateParentItem() const
         // Keep sheet pins attached to edges:
         for( SCH_SHEET_PIN* pin : sheet->GetPins() )
         {
-            wxPoint pos = pin->GetPosition();
+            VECTOR2I pos = pin->GetPosition();
 
             pos += originDelta;
 
@@ -922,8 +922,8 @@ void EE_POINT_EDITOR::updatePoints()
     case SCH_BITMAP_T:
     {
         SCH_BITMAP* bitmap = (SCH_BITMAP*) item;
-        wxPoint        topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
-        wxPoint        botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
+        VECTOR2I    topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
+        VECTOR2I    botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
 
         m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
         m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( botRight.x, topLeft.y );
@@ -935,8 +935,8 @@ void EE_POINT_EDITOR::updatePoints()
     case SCH_SHEET_T:
     {
         SCH_SHEET* sheet = (SCH_SHEET*) item;
-        wxPoint    topLeft = sheet->GetPosition();
-        wxPoint    botRight = sheet->GetPosition() + sheet->GetSize();
+        VECTOR2I   topLeft = sheet->GetPosition();
+        VECTOR2I   botRight = sheet->GetPosition() + sheet->GetSize();
 
         m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
         m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( botRight.x, topLeft.y );

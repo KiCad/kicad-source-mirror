@@ -476,7 +476,7 @@ public:
      * @param aOffset is the drawing offset (usually wxPoint(0,0), but can be different when
      *                moving an object)
      */
-    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 
@@ -561,7 +561,7 @@ public:
 
     // Geometric transforms (used in block operations):
 
-    void Move( const wxPoint& aMoveVector ) override
+    void Move( const VECTOR2I& aMoveVector ) override
     {
         if( aMoveVector == wxPoint( 0, 0 ) )
             return;
@@ -576,7 +576,7 @@ public:
 
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
-    void Rotate( const wxPoint& aCenter ) override;
+    void Rotate( const VECTOR2I& aCenter ) override;
 
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
 
@@ -595,7 +595,7 @@ public:
     bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
                               const SCH_SHEET_PATH* aPath = nullptr ) override;
 
-    wxPoint GetPinPhysicalPosition( const LIB_PIN* Pin ) const;
+    VECTOR2I GetPinPhysicalPosition( const LIB_PIN* Pin ) const;
 
     bool IsConnectable() const override { return true; }
 
@@ -616,7 +616,7 @@ public:
      */
     bool IsInNetlist() const;
 
-    std::vector<wxPoint> GetConnectionPoints() const override;
+    std::vector<VECTOR2I> GetConnectionPoints() const override;
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
@@ -627,7 +627,7 @@ public:
      * @param aType is the type of symbol library object to find or any if set to TYPE_NOT_INIT.
      * @return is the symbol library object if found otherwise NULL.
      */
-    LIB_ITEM* GetDrawItem( const wxPoint& aPosition, KICAD_T aType = TYPE_NOT_INIT );
+    LIB_ITEM* GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType = TYPE_NOT_INIT );
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
@@ -642,10 +642,10 @@ public:
 
     bool IsReplaceable() const override { return true; }
 
-    wxPoint GetPosition() const override { return m_pos; }
-    void SetPosition( const wxPoint& aPosition ) override { Move( aPosition - m_pos ); }
+    VECTOR2I GetPosition() const override { return m_pos; }
+    void    SetPosition( const VECTOR2I& aPosition ) override { Move( aPosition - m_pos ); }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void Plot( PLOTTER* aPlotter ) const override;
@@ -666,16 +666,16 @@ public:
     bool GetIncludeOnBoard() const { return m_onBoard; }
     void SetIncludeOnBoard( bool aIncludeOnBoard ) { m_onBoard = aIncludeOnBoard; }
 
-    bool IsPointClickableAnchor( const wxPoint& aPos ) const override;
+    bool IsPointClickableAnchor( const VECTOR2I& aPos ) const override;
 
 private:
     EDA_RECT doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) const;
 
-    bool doIsConnected( const wxPoint& aPosition ) const override;
+    bool doIsConnected( const VECTOR2I& aPosition ) const override;
 
-    void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
+    void Init( const VECTOR2I& pos = VECTOR2I( 0, 0 ) );
 
-    wxPoint     m_pos;
+    VECTOR2I    m_pos;
     LIB_ID      m_lib_id;       ///< Name and library the symbol was loaded from, i.e. 74xx:74LS00.
     int         m_unit;         ///< The unit for multiple part per package symbols.
     int         m_convert;      ///< The alternate body style for symbols that have more than

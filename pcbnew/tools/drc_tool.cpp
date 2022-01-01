@@ -172,7 +172,7 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
     m_drcEngine->SetProgressReporter( aProgressReporter );
 
     m_drcEngine->SetViolationHandler(
-            [&]( const std::shared_ptr<DRC_ITEM>& aItem, wxPoint aPos, PCB_LAYER_ID aLayer )
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, PCB_LAYER_ID aLayer )
             {
                 PCB_MARKER* marker = new PCB_MARKER( aItem, aPos );
                 marker->SetLayer( aLayer );

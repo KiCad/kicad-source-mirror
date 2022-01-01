@@ -146,7 +146,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
         pad->SetAnchorPadShape( PAD_SHAPE::RECT );
 
         int numPoints = ( angle / 50 ) + 3;       // Note: angles are in 0.1 degrees
-        std::vector<wxPoint> polyPoints;
+        std::vector<VECTOR2I> polyPoints;
         polyPoints.reserve( numPoints );
 
         polyPoints.emplace_back( wxPoint( 0, 0 ) );

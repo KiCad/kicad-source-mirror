@@ -252,8 +252,8 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     case PCB_PAD_T:
     {
         const PAD* pad = static_cast<const PAD*>( aItem );
-        wxPoint    shapePos = pad->ShapePos();
-        wxPoint    halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
+        VECTOR2I   shapePos = pad->ShapePos();
+        VECTOR2I   halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
 
         if( !m_isFootprintEditor || pad->IsLocked() )
             break;
@@ -1123,7 +1123,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
             if( isModified( m_editPoints->Point( ARC_CENTER ) ) )
             {
-                wxPoint moveVector = wxPoint( center.x, center.y ) - shape->GetCenter();
+                VECTOR2I moveVector = VECTOR2I( center.x, center.y ) - shape->GetCenter();
                 shape->Move( moveVector );
             }
             else if( isModified( m_editPoints->Point( ARC_MID ) ) )
@@ -1155,12 +1155,12 @@ void PCB_POINT_EDITOR::updateItem() const
 
             if( isModified( m_editPoints->Point( CIRC_CENTER ) ) )
             {
-                wxPoint moveVector = wxPoint( center.x, center.y ) - shape->GetCenter();
+                VECTOR2I moveVector = VECTOR2I( center.x, center.y ) - shape->GetCenter();
                 shape->Move( moveVector );
             }
             else
             {
-                shape->SetEnd( wxPoint( end.x, end.y ) );
+                shape->SetEnd( VECTOR2I( end.x, end.y ) );
             }
         }
             break;
@@ -1218,7 +1218,7 @@ void PCB_POINT_EDITOR::updateItem() const
         {
         case PAD_SHAPE::CIRCLE:
         {
-            wxPoint end = (wxPoint) m_editPoints->Point( 0 ).GetPosition();
+            VECTOR2I end = (wxPoint) m_editPoints->Point( 0 ).GetPosition();
             int     diameter = (int) EuclideanNorm( end - pad->GetPosition() ) * 2;
 
             pad->SetSize( wxSize( diameter, diameter ) );
@@ -1246,8 +1246,8 @@ void PCB_POINT_EDITOR::updateItem() const
             {
                 // Keep hole pinned at the current location; adjust the pad around the hole
 
-                wxPoint center = pad->GetPosition();
-                int     dist[4];
+                VECTOR2I center = pad->GetPosition();
+                int      dist[4];
 
                 if( isModified( m_editPoints->Point( RECT_TOP_LEFT ) )
                         || isModified( m_editPoints->Point( RECT_BOT_RIGHT ) ) )
@@ -1497,7 +1497,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
         if( isModified( m_editPoints->Point( DIM_START ) ) )
         {
-            dimension->SetStart( (wxPoint) m_editedPoint->GetPosition() );
+            dimension->SetStart( (VECTOR2I) m_editedPoint->GetPosition() );
             dimension->Update();
 
             m_editPoints->Point( DIM_KNEE ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_START ),
@@ -1505,12 +1505,12 @@ void PCB_POINT_EDITOR::updateItem() const
         }
         else if( isModified( m_editPoints->Point( DIM_END ) ) )
         {
-            wxPoint  oldKnee = dimension->GetKnee();
+            VECTOR2I oldKnee = dimension->GetKnee();
 
-            dimension->SetEnd( (wxPoint) m_editedPoint->GetPosition() );
+            dimension->SetEnd( (VECTOR2I) m_editedPoint->GetPosition() );
             dimension->Update();
 
-            wxPoint kneeDelta = dimension->GetKnee() - oldKnee;
+            VECTOR2I kneeDelta = dimension->GetKnee() - oldKnee;
             dimension->Text().SetPosition( dimension->Text().GetPosition() + kneeDelta );
             dimension->Update();
 
@@ -1519,14 +1519,14 @@ void PCB_POINT_EDITOR::updateItem() const
         }
         else if( isModified( m_editPoints->Point( DIM_KNEE ) ) )
         {
-            wxPoint  oldKnee = dimension->GetKnee();
+            VECTOR2I oldKnee = dimension->GetKnee();
             VECTOR2I arrowVec = m_editPoints->Point( DIM_KNEE ).GetPosition()
                                 - m_editPoints->Point( DIM_END ).GetPosition();
 
             dimension->SetLeaderLength( arrowVec.EuclideanNorm() );
             dimension->Update();
 
-            wxPoint kneeDelta = dimension->GetKnee() - oldKnee;
+            VECTOR2I kneeDelta = dimension->GetKnee() - oldKnee;
             dimension->Text().SetPosition( dimension->Text().GetPosition() + kneeDelta );
             dimension->Update();
         }
@@ -1546,19 +1546,19 @@ void PCB_POINT_EDITOR::updateItem() const
 
         if( isModified( m_editPoints->Point( DIM_START ) ) )
         {
-            dimension->SetStart( (wxPoint) m_editedPoint->GetPosition() );
+            dimension->SetStart( (VECTOR2I) m_editedPoint->GetPosition() );
         }
         else if( isModified( m_editPoints->Point( DIM_END ) ) )
         {
-            wxPoint newPoint( m_editedPoint->GetPosition() );
-            wxPoint delta = newPoint - dimension->GetEnd();
+            VECTOR2I newPoint( m_editedPoint->GetPosition() );
+            VECTOR2I delta = newPoint - dimension->GetEnd();
 
             dimension->SetEnd( newPoint );
             dimension->Text().SetPosition( dimension->Text().GetPosition() + delta );
         }
         else if( isModified( m_editPoints->Point( DIM_TEXT ) ) )
         {
-            dimension->Text().SetPosition( (wxPoint) m_editedPoint->GetPosition() );
+            dimension->Text().SetPosition( (VECTOR2I) m_editedPoint->GetPosition() );
         }
 
         dimension->Update();
@@ -1654,7 +1654,7 @@ void PCB_POINT_EDITOR::updatePoints()
 
         case SHAPE_T::POLY:
         {
-            std::vector<wxPoint> points;
+            std::vector<VECTOR2I> points;
             shape->DupPolyPointsList( points );
 
             if( m_editPoints->PointsSize() != (unsigned) points.size() )
@@ -1694,8 +1694,8 @@ void PCB_POINT_EDITOR::updatePoints()
     {
         const PAD* pad = static_cast<const PAD*>( item );
         bool       locked = pad->GetParent() && pad->IsLocked();
-        wxPoint    shapePos = pad->ShapePos();
-        wxPoint    halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
+        VECTOR2I   shapePos = pad->ShapePos();
+        VECTOR2I   halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
 
         switch( pad->GetShape() )
         {

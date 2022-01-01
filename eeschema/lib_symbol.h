@@ -311,8 +311,8 @@ public:
      * @param aConvert - Symbol conversion (DeMorgan) if available.
      * @param aOpts - Drawing options
      */
-    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
-                int aMulti, int aConvert, const LIB_SYMBOL_OPTIONS& aOpts );
+    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, int aMulti, int aConvert,
+                const LIB_SYMBOL_OPTIONS& aOpts );
 
     /**
      * Plot lib symbol to plotter.
@@ -325,7 +325,7 @@ public:
      * @param aOffset - Distance to shift the plot coordinates.
      * @param aTransform - Symbol plot transform matrix.
      */
-    void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
+    void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const VECTOR2I& aOffset,
                const TRANSFORM& aTransform ) const;
 
     /**
@@ -338,7 +338,7 @@ public:
      * @param aOffset - Distance to shift the plot coordinates.
      * @param aTransform - Symbol plot transform matrix.
      */
-    void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
+    void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, const VECTOR2I& aOffset,
                         const TRANSFORM& aTransform );
 
     /**
@@ -432,7 +432,7 @@ public:
      *
      * @param aOffset - Offset displacement.
      */
-    void SetOffset( const wxPoint& aOffset );
+    void SetOffset( const VECTOR2I& aOffset );
 
     /**
      * Remove duplicate draw items from list.
@@ -461,7 +461,7 @@ public:
      * @param aPoint - Coordinate for hit testing.
      * @return The draw object if found.  Otherwise NULL.
      */
-    LIB_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType, const wxPoint& aPoint );
+    LIB_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType, const VECTOR2I& aPoint );
 
     /**
      * Locate a draw object (overlaid)
@@ -473,7 +473,7 @@ public:
      * @param aTransform = the transform matrix
      * @return The draw object if found.  Otherwise NULL.
      */
-    LIB_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType, const wxPoint& aPoint,
+    LIB_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType, const VECTOR2I& aPoint,
                               const TRANSFORM& aTransform );
 
     /**

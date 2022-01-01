@@ -73,17 +73,17 @@ public:
         return BOARD_ITEM::Matches( GetShownText(), aSearchData );
     }
 
-    virtual wxPoint GetPosition() const override
+    virtual VECTOR2I GetPosition() const override
     {
-        return (wxPoint)EDA_TEXT::GetTextPos();
+        return EDA_TEXT::GetTextPos();
     }
 
-    virtual void SetPosition( const wxPoint& aPos ) override
+    virtual void SetPosition( const VECTOR2I& aPos ) override
     {
         EDA_TEXT::SetTextPos( aPos );
     }
 
-    void Move( const wxPoint& aMoveVector ) override
+    void Move( const VECTOR2I& aMoveVector ) override
     {
         EDA_TEXT::Offset( aMoveVector );
     }
@@ -91,16 +91,16 @@ public:
     void SetTextAngle( double aAngle ) override;
     void SetTextAngle( const EDA_ANGLE& aAngle );
 
-    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
 
-    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const override;
+    bool TextHitTest( const VECTOR2I& aPoint, int aAccuracy = 0 ) const override;
     bool TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy = 0 ) const override;
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy ) const override
     {
         return TextHitTest( aPosition, aAccuracy );
     }

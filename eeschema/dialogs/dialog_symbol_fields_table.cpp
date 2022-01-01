@@ -608,7 +608,7 @@ public:
 
                 if( !destField && !srcValue.IsEmpty() )
                 {
-                    const wxPoint symbolPos = symbol.GetPosition();
+                    const VECTOR2I symbolPos = symbol.GetPosition();
                     destField = symbol.AddField( SCH_FIELD( symbolPos, -1, &symbol, srcName ) );
                 }
 

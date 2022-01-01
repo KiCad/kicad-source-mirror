@@ -233,7 +233,7 @@ BOOST_AUTO_TEST_CASE( EndconnectionPoints )
             expectedConnections.push_back( pin.m_pos );
         }
 
-        std::vector<wxPoint> connections = m_sheet.GetConnectionPoints();
+        std::vector<VECTOR2I> connections = m_sheet.GetConnectionPoints();
 
         BOOST_CHECK_EQUAL_COLLECTIONS( connections.begin(), connections.end(),
                                        expectedConnections.begin(), expectedConnections.end() );

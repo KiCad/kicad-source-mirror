@@ -27,6 +27,7 @@
 #include <wx/dataview.h>
 #include <kiid.h>
 #include <reporter.h>
+#include <math/vector2d.h>
 
 class MARKER_BASE;
 class EDA_BASE_FRAME;
@@ -160,7 +161,7 @@ public:
     /**
      * Format a coordinate or position to text.
      */
-    static wxString ShowCoord( EDA_UNITS aUnits, const wxPoint& aPos );
+    static wxString ShowCoord( EDA_UNITS aUnits, const VECTOR2I& aPos );
 
 protected:
     int           m_errorCode;         ///< The error code's numeric value

@@ -51,7 +51,7 @@ class PLOTTER;
 class BITMAP_BASE
 {
 public:
-    BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
+    BITMAP_BASE( const VECTOR2I& pos = VECTOR2I( 0, 0 ) );
 
     BITMAP_BASE( const BITMAP_BASE& aSchBitmap );
 
@@ -146,7 +146,7 @@ public:
      */
     const EDA_RECT GetBoundingBox() const;
 
-    void DrawBitmap( wxDC* aDC, const wxPoint& aPos );
+    void DrawBitmap( wxDC* aDC, const VECTOR2I& aPos );
 
     /**
      * Reads and stores in memory an image file.
@@ -230,7 +230,7 @@ public:
      * @param aDefaultColor the color used to plot the rectangle when bitmap is not supported.
      * @param aDefaultPensize the pen size used to plot the rectangle when bitmap is not supported.
      */
-    void PlotImage( PLOTTER* aPlotter, const wxPoint& aPos,
+    void PlotImage( PLOTTER* aPlotter, const VECTOR2I& aPos,
                     const KIGFX::COLOR4D& aDefaultColor, int aDefaultPensize ) const;
 
 private:

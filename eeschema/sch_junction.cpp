@@ -42,7 +42,7 @@
 #include <connection_graph.h>
 
 
-SCH_JUNCTION::SCH_JUNCTION( const wxPoint& aPosition, int aDiameter, SCH_LAYER_ID aLayer ) :
+SCH_JUNCTION::SCH_JUNCTION( const VECTOR2I& aPosition, int aDiameter, SCH_LAYER_ID aLayer ) :
     SCH_ITEM( nullptr, SCH_JUNCTION_T )
 {
     m_pos   = aPosition;
@@ -116,7 +116,7 @@ const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 }
 
 
-void SCH_JUNCTION::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_JUNCTION::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     wxDC*   DC    = aSettings->GetPrintDC();
     COLOR4D color = GetJunctionColor();
@@ -126,7 +126,7 @@ void SCH_JUNCTION::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffs
 
     SHAPE_CIRCLE circle = getEffectiveShape();
 
-    GRFilledCircle( nullptr, DC, (wxPoint) circle.GetCenter() + aOffset, circle.GetRadius(),
+    GRFilledCircle( nullptr, DC, circle.GetCenter() + aOffset, circle.GetRadius(),
                     color );
 }
 
@@ -143,9 +143,9 @@ void SCH_JUNCTION::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_JUNCTION::Rotate( const wxPoint& aCenter )
+void SCH_JUNCTION::Rotate( const VECTOR2I& aCenter )
 {
-    RotatePoint( &m_pos, aCenter, 900 );
+    RotatePoint( m_pos, aCenter, 900 );
 }
 
 
@@ -156,7 +156,7 @@ void SCH_JUNCTION::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-std::vector<wxPoint> SCH_JUNCTION::GetConnectionPoints() const
+std::vector<VECTOR2I> SCH_JUNCTION::GetConnectionPoints() const
 {
     return { m_pos };
 }
@@ -198,7 +198,7 @@ int SCH_JUNCTION::GetEffectiveDiameter() const
 }
 
 
-bool SCH_JUNCTION::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool SCH_JUNCTION::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     if( aAccuracy >= 0 )
         return getEffectiveShape().Collide( SEG( aPosition, aPosition ), aAccuracy );
@@ -230,7 +230,7 @@ bool SCH_JUNCTION::HitTest( const EDA_RECT& aRect, bool aContained, int aAccurac
 }
 
 
-bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
+bool SCH_JUNCTION::doIsConnected( const VECTOR2I& aPosition ) const
 {
     return m_pos == aPosition;
 }

@@ -134,8 +134,8 @@ public:
     void SetPage1Option( PAGE_OPTION aChoice ) { m_pageOption = aChoice; }
 
     // Coordinate handling
-    const wxPoint GetStartPosUi( int ii = 0 ) const;
-    const wxPoint GetEndPosUi( int ii = 0 ) const;
+    const VECTOR2I GetStartPosUi( int ii = 0 ) const;
+    const VECTOR2I GetEndPosUi( int ii = 0 ) const;
     const DPOINT GetStartPos( int ii = 0 ) const;
     const DPOINT GetEndPos( int ii = 0 ) const;
 
@@ -153,7 +153,7 @@ public:
      *
      * @param aPosition the new position of the starting point in graphic units.
      */
-    void MoveToUi( const wxPoint& aPosition );
+    void MoveToUi( const VECTOR2I& aPosition );
 
     /**
      * Move the starting point of the item to a new position.
@@ -167,7 +167,7 @@ public:
      *
      * @param aPosition is the new position of item in graphic units.
      */
-    void MoveStartPointToUi( const wxPoint& aPosition );
+    void MoveStartPointToUi( const VECTOR2I& aPosition );
 
 
     /**
@@ -186,7 +186,7 @@ public:
      *
      * @param aPosition is the new position of the ending point in graphic units
      */
-    void MoveEndPointToUi( const wxPoint& aPosition );
+    void MoveEndPointToUi( const VECTOR2I& aPosition );
 
     /**
      * @return true if the item is inside the rectangle defined by the 4 corners, false otherwise.
@@ -275,7 +275,7 @@ public:
      * @return the coordinate (in draw/plot units) of the corner \a aIdx and the repeated
      *         item \a aRepeat
      */
-    const wxPoint GetCornerPositionUi( unsigned aIdx, int aRepeat = 0 ) const;
+    const VECTOR2I GetCornerPositionUi( unsigned aIdx, int aRepeat = 0 ) const;
 
     /**
      * Calculate the bounding box of the set polygons.

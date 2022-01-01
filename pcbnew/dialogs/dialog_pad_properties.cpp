@@ -670,7 +670,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 }
 
 // A small helper function, to display coordinates:
-static wxString formatCoord( EDA_UNITS aUnits, wxPoint aCoord )
+static wxString formatCoord( EDA_UNITS aUnits, VECTOR2I aCoord )
 {
     return wxString::Format( "(X:%s Y:%s)",
                              MessageTextFromValue( aUnits, aCoord.x ),
@@ -1590,7 +1590,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetDrillSize( m_padMaster->GetDrillSize() );
     m_currentPad->SetDrillShape( m_padMaster->GetDrillShape() );
 
-    wxPoint offset = m_padMaster->GetOffset();
+    VECTOR2I offset = m_padMaster->GetOffset();
     m_currentPad->SetOffset( offset );
 
     m_currentPad->SetPadToDieLength( m_padMaster->GetPadToDieLength() );
@@ -1652,8 +1652,8 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
         // compute the pos 0 value, i.e. pad position for footprint with orientation = 0
         // i.e. relative to footprint origin (footprint position)
-        wxPoint pt = m_currentPad->GetPosition() - footprint->GetPosition();
-        RotatePoint( &pt, -footprint->GetOrientation() );
+        VECTOR2I pt = m_currentPad->GetPosition() - footprint->GetPosition();
+        RotatePoint( pt, -footprint->GetOrientation() );
         m_currentPad->SetPos0( pt );
         m_currentPad->SetOrientation( m_currentPad->GetOrientation() +
                                       footprint->GetOrientation() );

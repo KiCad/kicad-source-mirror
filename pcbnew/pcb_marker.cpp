@@ -44,7 +44,7 @@
 
 
 
-PCB_MARKER::PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const wxPoint& aPosition ) :
+PCB_MARKER::PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const VECTOR2I& aPosition ) :
     BOARD_ITEM( nullptr, PCB_MARKER_T ),  // parent set during BOARD::Add()
     MARKER_BASE( SCALING_FACTOR, aItem )
 {
@@ -137,13 +137,13 @@ void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 }
 
 
-void PCB_MARKER::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_MARKER::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
     // Marker geometry isn't user-editable
 }
 
 
-void PCB_MARKER::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_MARKER::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     // Marker geometry isn't user-editable
 }
@@ -237,7 +237,7 @@ const EDA_RECT PCB_MARKER::GetBoundingBox() const
 {
     EDA_RECT bbox = m_shapeBoundingBox;
 
-    wxPoint pos = m_Pos;
+    VECTOR2I pos = m_Pos;
     pos.x += int( bbox.GetOrigin().x * MarkerScale() );
     pos.y += int( bbox.GetOrigin().y * MarkerScale() );
 

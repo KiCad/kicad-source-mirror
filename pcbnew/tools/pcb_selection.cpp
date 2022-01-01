@@ -52,7 +52,7 @@ EDA_ITEM* PCB_SELECTION::GetTopLeftItem( bool aFootprintsOnly ) const
 {
     EDA_ITEM* topLeftItem = nullptr;
 
-    wxPoint pnt;
+    VECTOR2I pnt;
 
     // find the leftmost (smallest x coord) and highest (smallest y with the smallest x) item in the selection
     for( EDA_ITEM* item : m_items )

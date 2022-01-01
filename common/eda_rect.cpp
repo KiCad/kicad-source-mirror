@@ -285,7 +285,7 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
 }
 
 
-const wxPoint EDA_RECT::ClosestPointTo( const wxPoint& aPoint ) const
+const VECTOR2I EDA_RECT::ClosestPointTo( const VECTOR2I& aPoint ) const
 {
     EDA_RECT me( *this );
 
@@ -295,11 +295,11 @@ const wxPoint EDA_RECT::ClosestPointTo( const wxPoint& aPoint ) const
     int nx = std::max( me.GetLeft(), std::min( aPoint.x, me.GetRight() ) );
     int ny = std::max( me.GetTop(), std::min( aPoint.y, me.GetBottom() ) );
 
-    return wxPoint( nx, ny );
+    return VECTOR2I( nx, ny );
 }
 
 
-const wxPoint EDA_RECT::FarthestPointTo( const wxPoint& aPoint ) const
+const VECTOR2I EDA_RECT::FarthestPointTo( const VECTOR2I& aPoint ) const
 {
     EDA_RECT me( *this );
 
@@ -308,16 +308,16 @@ const wxPoint EDA_RECT::FarthestPointTo( const wxPoint& aPoint ) const
     int fx = std::max( std::abs( aPoint.x - me.GetLeft() ), std::abs( aPoint.x - me.GetRight() ) );
     int fy = std::max( std::abs( aPoint.y - me.GetTop() ), std::abs( aPoint.y - me.GetBottom() ) );
 
-    return wxPoint( fx, fy );
+    return VECTOR2I( fx, fy );
 }
 
 
-bool EDA_RECT::IntersectsCircle( const wxPoint& aCenter, const int aRadius ) const
+bool EDA_RECT::IntersectsCircle( const VECTOR2I& aCenter, const int aRadius ) const
 {
     if( !m_init )
         return false;
 
-    wxPoint closest = ClosestPointTo( aCenter );
+    VECTOR2I closest = ClosestPointTo( aCenter );
 
     double dx = static_cast<double>( aCenter.x ) - closest.x;
     double dy = static_cast<double>( aCenter.y ) - closest.y;
@@ -328,7 +328,7 @@ bool EDA_RECT::IntersectsCircle( const wxPoint& aCenter, const int aRadius ) con
 }
 
 
-bool EDA_RECT::IntersectsCircleEdge( const wxPoint& aCenter, const int aRadius,
+bool EDA_RECT::IntersectsCircleEdge( const VECTOR2I& aCenter, const int aRadius,
                                      const int aWidth ) const
 {
     if( !m_init )
@@ -343,7 +343,7 @@ bool EDA_RECT::IntersectsCircleEdge( const wxPoint& aCenter, const int aRadius,
         return false;
     }
 
-    wxPoint farpt = FarthestPointTo( aCenter );
+    VECTOR2I farpt = FarthestPointTo( aCenter );
     // Farthest point must be further than the inside of the line
     double fx = (double) farpt.x;
     double fy = (double) farpt.y;
@@ -457,12 +457,12 @@ void EDA_RECT::Merge( const EDA_RECT& aRect )
 }
 
 
-void EDA_RECT::Merge( const wxPoint& aPoint )
+void EDA_RECT::Merge( const VECTOR2I& aPoint )
 {
     if( !m_init )
     {
         m_pos  = aPoint;
-        m_size = wxSize( 0, 0 );
+        m_size = VECTOR2I( 0, 0 );
         m_init = true;
         return;
     }

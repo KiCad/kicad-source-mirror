@@ -36,7 +36,7 @@ class EE_SELECTION_TOOL;
 struct SPECIAL_CASE_LABEL_INFO
 {
     SCH_LINE* attachedLine;
-    wxPoint   originalLabelPos;
+    VECTOR2I  originalLabelPos;
 };
 
 
@@ -68,7 +68,7 @@ private:
     ///< Find additional items for a drag operation.
     ///< Connected items with no wire are included (as there is no wire to adjust for the drag).
     ///< Connected wires are included with any un-connected ends flagged (STARTPOINT or ENDPOINT).
-    void getConnectedDragItems( SCH_ITEM* aOriginalItem, const wxPoint& aPoint, EDA_ITEMS& aList );
+    void getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR2I& aPoint, EDA_ITEMS& aList );
 
     ///< Set up handlers for various events.
     void setTransitions() override;

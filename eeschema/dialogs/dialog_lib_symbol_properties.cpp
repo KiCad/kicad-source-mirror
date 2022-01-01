@@ -155,7 +155,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     // to bottom: we must change the y coord sign for editing
     for( size_t i = 0; i < m_fields->size(); ++i )
     {
-        wxPoint pos = m_fields->at( i ).GetPosition();
+        VECTOR2I pos = m_fields->at( i ).GetPosition();
         pos.y = -pos.y;
         m_fields->at( i ).SetPosition( pos );
     }
@@ -329,7 +329,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     // to bottom: we must change the y coord sign when writing back to the library
     for( size_t i = 0; i < m_fields->size(); ++i )
     {
-        wxPoint pos = m_fields->at( i ).GetPosition();
+        VECTOR2I pos = m_fields->at( i ).GetPosition();
         pos.y = -pos.y;
         m_fields->at( i ).SetPosition( pos );
         m_fields->at( i ).SetId( i );

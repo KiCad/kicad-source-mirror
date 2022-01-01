@@ -44,7 +44,7 @@ wxString RC_ITEM::GetErrorMessage() const
 }
 
 
-wxString RC_ITEM::ShowCoord( EDA_UNITS aUnits, const wxPoint& aPos )
+wxString RC_ITEM::ShowCoord( EDA_UNITS aUnits, const VECTOR2I& aPos )
 {
     return wxString::Format( "@(%s, %s)",
                              MessageTextFromValue( aUnits, aPos.x ),

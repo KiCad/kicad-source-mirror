@@ -3262,7 +3262,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as FOOTPRINT." ) );
 
     wxString name;
-    wxPoint  pt;
+    VECTOR2I pt;
     T        token;
     LIB_ID   fpid;
     int      attributes = 0;
@@ -3544,7 +3544,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             PAD* pad = parsePAD( footprint.get() );
             pt       = pad->GetPos0();
 
-            RotatePoint( &pt, footprint->GetOrientation() );
+            RotatePoint( pt, footprint->GetOrientation() );
             pad->SetPosition( pt + footprint->GetPosition() );
             footprint->Add( pad, ADD_MODE::APPEND );
             break;

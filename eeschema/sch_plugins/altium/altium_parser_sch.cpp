@@ -600,7 +600,7 @@ ASCH_SHEET_FONT::ASCH_SHEET_FONT( const std::map<wxString, wxString>& aProps, in
     underline = ALTIUM_PARSER::ReadBool( aProps, "UNDERLINE" + sid, false );
 }
 
-wxPoint ASchSheetGetSize( ASCH_SHEET_SIZE aSheetSize )
+VECTOR2I ASchSheetGetSize( ASCH_SHEET_SIZE aSheetSize )
 {
     // From: https://github.com/vadmium/python-altium/blob/master/format.md#sheet
     switch( aSheetSize )

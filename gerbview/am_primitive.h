@@ -142,7 +142,7 @@ public:
      */
     void DrawBasicShape( const GERBER_DRAW_ITEM* aParent,
                          SHAPE_POLY_SET& aShapeBuffer,
-                         const wxPoint& aShapePos );
+                         const VECTOR2I& aShapePos );
 
 private:
     /**
@@ -155,7 +155,7 @@ private:
      *       converted because circles are very easy to draw (no rotation problem) so convert
      *       them in polygons and draw them as polygons is not a good idea.
      */
-    void ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent, std::vector<wxPoint>& aBuffer );
+    void ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent, std::vector<VECTOR2I>& aBuffer );
 };
 
 
@@ -190,7 +190,7 @@ struct APERTURE_MACRO
      * @return the shape of the item.
      */
     SHAPE_POLY_SET* GetApertureMacroShape( const GERBER_DRAW_ITEM* aParent,
-                                           const wxPoint& aShapePos );
+                                           const VECTOR2I&         aShapePos );
 
    /**
      * Draw the primitive shape for flashed items.
@@ -205,7 +205,7 @@ struct APERTURE_MACRO
      * @param aFilledShape set to true to draw in filled mode, false to draw in sketch mode.
      */
     void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                                 const COLOR4D& aColor, const wxPoint& aShapePos,
+                                 const COLOR4D& aColor, const VECTOR2I& aShapePos,
                                  bool aFilledShape );
 
     /**

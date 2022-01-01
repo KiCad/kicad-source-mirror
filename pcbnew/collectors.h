@@ -365,8 +365,8 @@ public:
      * @param aRefPos A wxPoint to use in hit-testing.
      * @param aGuide The COLLECTORS_GUIDE to use in collecting items.
      */
-    void Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
-                  const wxPoint& aRefPos, const COLLECTORS_GUIDE& aGuide );
+    void Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[], const VECTOR2I& aRefPos,
+                  const COLLECTORS_GUIDE& aGuide );
 };
 
 

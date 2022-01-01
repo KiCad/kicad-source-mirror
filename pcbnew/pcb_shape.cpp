@@ -52,7 +52,7 @@ PCB_SHAPE::~PCB_SHAPE()
 }
 
 
-const wxPoint PCB_SHAPE::GetFocusPosition() const
+const VECTOR2I PCB_SHAPE::GetFocusPosition() const
 {
     // For some shapes return the visual center, but for not filled polygonal shapes,
     // the center is usually far from the shape: a point on the outline is better
@@ -94,7 +94,7 @@ const wxPoint PCB_SHAPE::GetFocusPosition() const
 }
 
 
-void PCB_SHAPE::Move( const wxPoint& aMoveVector )
+void PCB_SHAPE::Move( const VECTOR2I& aMoveVector )
 {
     move( aMoveVector );
 }
@@ -106,13 +106,13 @@ void PCB_SHAPE::Scale( double aScale )
 }
 
 
-void PCB_SHAPE::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_SHAPE::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
     rotate( aRotCentre, aAngle );
 }
 
 
-void PCB_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_SHAPE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     flip( aCentre, aFlipLeftRight );
 
@@ -138,7 +138,7 @@ double PCB_SHAPE::getParentOrientation() const
 }
 
 
-wxPoint PCB_SHAPE::getParentPosition() const
+VECTOR2I PCB_SHAPE::getParentPosition() const
 {
     if( GetParentFootprint() )
         return GetParentFootprint()->GetPosition();

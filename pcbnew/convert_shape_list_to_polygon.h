@@ -30,7 +30,7 @@ class wxPoint;
 
 typedef
 const std::function<void( const wxString& msg, BOARD_ITEM* itemA, BOARD_ITEM* itemB,
-                          const wxPoint& pt )> OUTLINE_ERROR_HANDLER;
+                          const VECTOR2I& pt )> OUTLINE_ERROR_HANDLER;
 
 /**
  * Function ConvertOutlineToPolygon

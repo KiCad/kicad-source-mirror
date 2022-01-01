@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE( Move )
                     []( EDA_ITEM* aOriginalItem, wxPoint aRef )
                     {
                         auto item = std::unique_ptr<EDA_ITEM>( aOriginalItem->Clone() );
-                        wxPoint originalPos = item->GetPosition();
+                        VECTOR2I originalPos = item->GetPosition();
 
                         SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item.get() );
                         LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( item.get() );

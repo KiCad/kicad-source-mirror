@@ -102,11 +102,11 @@ public:
     /**
      * Return the starting point of the graphic.
      */
-    const wxPoint& GetStart() const         { return m_start; }
-    int GetStartY()                         { return m_start.y; }
-    int GetStartX()                         { return m_start.x; }
+    const VECTOR2I& GetStart() const { return m_start; }
+    int             GetStartY() { return m_start.y; }
+    int             GetStartX() { return m_start.x; }
 
-    void SetStart( const wxPoint& aStart )
+    void SetStart( const VECTOR2I& aStart )
     {
         m_start = aStart;
         m_endsSwapped = false;
@@ -127,11 +127,11 @@ public:
     /**
      * Return the ending point of the graphic.
      */
-    const wxPoint& GetEnd() const           { return m_end; }
-    int GetEndY()                           { return m_end.y; }
-    int GetEndX()                           { return m_end.x; }
+    const VECTOR2I& GetEnd() const { return m_end; }
+    int             GetEndY() { return m_end.y; }
+    int             GetEndX() { return m_end.x; }
 
-    void SetEnd( const wxPoint& aEnd )
+    void SetEnd( const VECTOR2I& aEnd )
     {
         m_end = aEnd;
         m_endsSwapped = false;
@@ -149,14 +149,14 @@ public:
         m_endsSwapped = false;
     }
 
-    void SetBezierC1( const wxPoint& aPt )  { m_bezierC1 = aPt; }
-    const wxPoint& GetBezierC1() const      { return m_bezierC1; }
+    void            SetBezierC1( const VECTOR2I& aPt ) { m_bezierC1 = aPt; }
+    const VECTOR2I& GetBezierC1() const { return m_bezierC1; }
 
-    void SetBezierC2( const wxPoint& aPt )  { m_bezierC2 = aPt; }
-    const wxPoint& GetBezierC2() const      { return m_bezierC2; }
+    void            SetBezierC2( const VECTOR2I& aPt ) { m_bezierC2 = aPt; }
+    const VECTOR2I& GetBezierC2() const { return m_bezierC2; }
 
-    wxPoint getCenter() const;
-    void SetCenter( const wxPoint& aCenter );
+    VECTOR2I getCenter() const;
+    void     SetCenter( const VECTOR2I& aCenter );
 
     /**
      * Set the end point from the angle center and start.
@@ -176,8 +176,8 @@ public:
     // Some attributes are read only, since they are derived from m_Start, m_End, and m_Angle.
     // No Set...() function for these attributes.
 
-    wxPoint GetArcMid() const;
-    std::vector<wxPoint> GetRectCorners() const;
+    VECTOR2I              GetArcMid() const;
+    std::vector<VECTOR2I> GetRectCorners() const;
 
     /**
      * Calc arc start and end angles such that aStartAngle < aEndAngle.  Each may be between
@@ -193,18 +193,18 @@ public:
      * NB: these are NOT what's currently stored, so we have to do some calculations behind
      * the scenes.  However, they are what SHOULD be stored.
      */
-    void SetArcGeometry( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd );
+    void SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
 
-    const std::vector<wxPoint>& GetBezierPoints() const { return m_bezierPoints; }
+    const std::vector<VECTOR2I>& GetBezierPoints() const { return m_bezierPoints; }
 
     /**
-     * Duplicate the list of corners in a std::vector<wxPoint>
+     * Duplicate the list of corners in a std::vector<VECTOR2I>
      *
      * It must be used only to convert the SHAPE_POLY_SET internal corner buffer
-     * to a list of wxPoints, and nothing else, because it duplicates the buffer,
+     * to a list of VECTOR2Is, and nothing else, because it duplicates the buffer,
      * that is inefficient to know for instance the corner count
      */
-    void DupPolyPointsList( std::vector<wxPoint>& aBuffer ) const;
+    void DupPolyPointsList( std::vector<VECTOR2I>& aBuffer ) const;
 
     /**
      * @return the number of corners of the polygonal shape
@@ -234,7 +234,7 @@ public:
      */
     void RebuildBezierToSegmentsPointsList( int aMinSegLen );
 
-    void SetPolyPoints( const std::vector<wxPoint>& aPoints );
+    void SetPolyPoints( const std::vector<VECTOR2I>& aPoints );
 
     /**
      * Make a set of SHAPE objects representing the EDA_SHAPE.  Caller owns the objects.
@@ -273,53 +273,53 @@ public:
     int Compare( const EDA_SHAPE* aOther ) const;
 
 protected:
-    void setPosition( const wxPoint& aPos );
-    wxPoint getPosition() const;
+    void    setPosition( const VECTOR2I& aPos );
+    VECTOR2I getPosition() const;
 
-    void move( const wxPoint& aMoveVector );
-    void rotate( const wxPoint& aRotCentre, double aAngle );
-    void flip( const wxPoint& aCentre, bool aFlipLeftRight );
+    void move( const VECTOR2I& aMoveVector );
+    void rotate( const VECTOR2I& aRotCentre, double aAngle );
+    void flip( const VECTOR2I& aCentre, bool aFlipLeftRight );
     void scale( double aScale );
 
     // To be implemented by concrete classes
     virtual double getParentOrientation() const = 0;
-    virtual wxPoint getParentPosition() const = 0;
+    virtual VECTOR2I getParentPosition() const = 0;
 
     const EDA_RECT getBoundingBox() const;
 
     void computeArcBBox( EDA_RECT& aBBox ) const;
 
-    bool hitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const;
+    bool hitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const;
     bool hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const;
 
-    const std::vector<wxPoint> buildBezierToSegmentsPointsList( int aMinSegLen  ) const;
+    const std::vector<VECTOR2I> buildBezierToSegmentsPointsList( int aMinSegLen ) const;
 
-    void beginEdit( const wxPoint& aStartPoint );
-    bool continueEdit( const wxPoint& aPosition );
-    void calcEdit( const wxPoint& aPosition );
+    void beginEdit( const VECTOR2I& aStartPoint );
+    bool continueEdit( const VECTOR2I& aPosition );
+    void calcEdit( const VECTOR2I& aPosition );
     void endEdit();
     void setEditState( int aState ) { m_editState = aState; }
 
 protected:
-    bool                 m_endsSwapped;  // true if start/end were swapped e.g. SetArcAngleAndEnd
-    SHAPE_T              m_shape;        // Shape: line, Circle, Arc
-    STROKE_PARAMS        m_stroke;       // Line style, width, etc.
-    FILL_T               m_fill;
-    COLOR4D              m_fillColor;
+    bool                  m_endsSwapped;  // true if start/end were swapped e.g. SetArcAngleAndEnd
+    SHAPE_T               m_shape;        // Shape: line, Circle, Arc
+    STROKE_PARAMS         m_stroke;       // Line style, width, etc.
+    FILL_T                m_fill;
+    COLOR4D               m_fillColor;
 
-    wxPoint              m_start;        // Line start point or Circle center
-    wxPoint              m_end;          // Line end point or Circle 3 o'clock point
+    VECTOR2I              m_start; // Line start point or Circle center
+    VECTOR2I              m_end;   // Line end point or Circle 3 o'clock point
 
-    wxPoint              m_arcCenter;    // Used only for Arcs: arc end point
+    VECTOR2I              m_arcCenter; // Used only for Arcs: arc end point
 
-    wxPoint              m_bezierC1;     // Bezier Control Point 1
-    wxPoint              m_bezierC2;     // Bezier Control Point 2
+    VECTOR2I              m_bezierC1; // Bezier Control Point 1
+    VECTOR2I              m_bezierC2; // Bezier Control Point 2
 
-    std::vector<wxPoint> m_bezierPoints;
-    SHAPE_POLY_SET       m_poly;         // Stores the S_POLYGON shape
+    std::vector<VECTOR2I> m_bezierPoints;
+    SHAPE_POLY_SET        m_poly;         // Stores the S_POLYGON shape
 
-    int                  m_editState;
-    bool                 m_eeWinding;    // Awful hack
+    int                   m_editState;
+    bool                  m_eeWinding;    // Awful hack
 };
 
 #endif  // EDA_SHAPE_H

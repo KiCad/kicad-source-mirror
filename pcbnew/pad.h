@@ -169,13 +169,13 @@ public:
      */
     PAD_SHAPE GetShape() const { return m_padShape; }
 
-    void SetPosition( const wxPoint& aPos ) override
+    void SetPosition( const VECTOR2I& aPos ) override
     {
         m_pos = aPos;
         SetDirty();
     }
 
-    wxPoint GetPosition() const override { return m_pos; }
+    VECTOR2I GetPosition() const override { return m_pos; }
 
     /**
      * @return the shape of the anchor pad shape, for custom shaped pads.
@@ -223,8 +223,8 @@ public:
     void SetY( int y )                          { m_pos.y = y; SetDirty(); }
     void SetX( int x )                          { m_pos.x = x; SetDirty(); }
 
-    void SetPos0( const wxPoint& aPos )         { m_pos0 = aPos; }
-    const wxPoint& GetPos0() const              { return m_pos0; }
+    void SetPos0( const VECTOR2I& aPos )        { m_pos0 = aPos; }
+    const VECTOR2I& GetPos0() const             { return m_pos0; }
 
     void SetY0( int y )                         { m_pos0.y = y; }
     void SetX0( int x )                         { m_pos0.x = x; }
@@ -246,10 +246,10 @@ public:
     void SetDrillSizeY( const int aY )          { m_drill.y = aY; SetDirty(); }
     const int GetDrillSizeY() const             { return m_drill.y; }
 
-    void SetOffset( const wxPoint& aOffset )    { m_offset = aOffset; SetDirty(); }
-    const wxPoint& GetOffset() const            { return m_offset; }
+    void SetOffset( const VECTOR2I& aOffset )    { m_offset = aOffset; SetDirty(); }
+    const VECTOR2I& GetOffset() const            { return m_offset; }
 
-    wxPoint GetCenter() const override          { return GetPosition(); }
+    VECTOR2I GetCenter() const override          { return GetPosition(); }
 
     /**
      * Has meaning only for custom shape pads.
@@ -263,15 +263,15 @@ public:
      *  - a bezier curve
      */
     void AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aFilled );
-    void AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness, bool aFilled );
-    void AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int aThickness );
-    void AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness, bool aFilled );
-    void AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness,
+    void AddPrimitivePoly( const std::vector<VECTOR2I>& aPoly, int aThickness, bool aFilled );
+    void AddPrimitiveSegment( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aThickness );
+    void AddPrimitiveCircle( const VECTOR2I& aCenter, int aRadius, int aThickness, bool aFilled );
+    void AddPrimitiveRect( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aThickness,
                            bool aFilled );
-    void AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aArcAngle,
+    void AddPrimitiveArc( const VECTOR2I& aCenter, const VECTOR2I& aStart, int aArcAngle,
                           int aThickness );
-    void AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const wxPoint& aCtrl1,
-                            const wxPoint& aCtrl2, int aThickness );
+    void AddPrimitiveCurve( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCtrl1,
+                            const VECTOR2I& aCtrl2, int aThickness );
 
 
     bool GetBestAnchorPosition( VECTOR2I& aPos );
@@ -303,7 +303,7 @@ public:
         return m_editPrimitives;
     }
 
-    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& VECTOR2I, bool aFlipLeftRight ) override;
 
     /**
      * Flip (mirror) the primitives left to right or top to bottom, around the anchor position
@@ -507,7 +507,7 @@ public:
     void SetRoundRectCornerRadius( double aRadius );
     int GetRoundRectCornerRadius() const;
 
-    wxPoint ShapePos() const;
+    VECTOR2I ShapePos() const;
 
     /**
      * Has meaning only for rounded rectangle pads.
@@ -582,7 +582,7 @@ public:
      */
     bool FlashLayer( LSET aLayers ) const;
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     wxString GetClass() const override
@@ -610,14 +610,14 @@ public:
      */
     static int Compare( const PAD* aPadRef, const PAD* aPadCmp );
 
-    void Move( const wxPoint& aMoveVector ) override
+    void Move( const VECTOR2I& aMoveVector ) override
     {
         m_pos += aMoveVector;
         SetLocalCoord();
         SetDirty();
     }
 
-    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
@@ -674,7 +674,7 @@ private:
     wxString      m_pinFunction;        // Pin name in schematic
     wxString      m_pinType;            // Pin electrical type in schematic
 
-    wxPoint       m_pos;                // Pad Position on board
+    VECTOR2I      m_pos; // Pad Position on board
 
     PAD_SHAPE     m_padShape;           // Shape: PAD_SHAPE::CIRCLE, PAD_SHAPE::RECT,
                                         //   PAD_SHAPE::OVAL, PAD_SHAPE::TRAPEZOID,
@@ -728,7 +728,7 @@ private:
      * of the pad shape (ie: the copper area around the hole).
      * ShapePos() returns the board shape position according to the offset and the pad rotation.
      */
-    wxPoint     m_offset;
+    VECTOR2I    m_offset;
 
     LSET        m_layerMask;        // Bitwise layer: 1 = copper layer, 15 = cmp,
                                     // 2..14 = internal layers, 16..31 = technical layers
@@ -737,7 +737,7 @@ private:
                                     //   one end and half expands the other.  It is only valid
                                     //   to have a single axis be non-0.
 
-    wxPoint     m_pos0;             // Initial Pad position (i.e. pad position relative to the
+    VECTOR2I    m_pos0; // Initial Pad position (i.e. pad position relative to the
                                     //   footprint anchor, orientation 0)
 
     PAD_ATTRIB  m_attribute;        // PAD_ATTRIB_NORMAL, PAD_ATTRIB::SMD, PAD_ATTRIB::CONN,

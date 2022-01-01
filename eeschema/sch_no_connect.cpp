@@ -38,7 +38,7 @@
 #include <trigo.h>
 
 
-SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :
+SCH_NO_CONNECT::SCH_NO_CONNECT( const VECTOR2I& pos ) :
     SCH_ITEM( nullptr, SCH_NO_CONNECT_T )
 {
     m_pos    = pos;
@@ -101,7 +101,7 @@ int SCH_NO_CONNECT::GetPenWidth() const
 }
 
 
-void SCH_NO_CONNECT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_NO_CONNECT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     int     half = GetSize() / 2;
@@ -127,29 +127,29 @@ void SCH_NO_CONNECT::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_NO_CONNECT::Rotate( const wxPoint& aCenter )
+void SCH_NO_CONNECT::Rotate( const VECTOR2I& aCenter )
 {
-    RotatePoint( &m_pos, aCenter, 900 );
+    RotatePoint( m_pos, aCenter, 900 );
 }
 
 
-std::vector<wxPoint> SCH_NO_CONNECT::GetConnectionPoints() const
+std::vector<VECTOR2I> SCH_NO_CONNECT::GetConnectionPoints() const
 {
     return { m_pos };
 }
 
 
-bool SCH_NO_CONNECT::doIsConnected( const wxPoint& aPosition ) const
+bool SCH_NO_CONNECT::doIsConnected( const VECTOR2I& aPosition ) const
 {
     return m_pos == aPosition;
 }
 
 
-bool SCH_NO_CONNECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool SCH_NO_CONNECT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     int delta = ( GetPenWidth() + GetSize() ) / 2 + aAccuracy;
 
-    wxPoint dist = aPosition - m_pos;
+    VECTOR2I dist = aPosition - m_pos;
 
     if( ( std::abs( dist.x ) <= delta ) && ( std::abs( dist.y ) <= delta ) )
         return true;

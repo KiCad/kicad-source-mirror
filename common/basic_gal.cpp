@@ -53,7 +53,7 @@ const VECTOR2D BASIC_GAL::transform( const VECTOR2D& aPoint ) const
 }
 
 
-void BASIC_GAL::doDrawPolyline( const std::vector<wxPoint>& aLocalPointList )
+void BASIC_GAL::doDrawPolyline( const std::vector<VECTOR2I>& aLocalPointList )
 {
     if( m_DC )
     {
@@ -98,10 +98,10 @@ void BASIC_GAL::DrawPolyline( const std::deque<VECTOR2D>& aPointList )
     if( aPointList.size() < 2 )
         return;
 
-    std::vector<wxPoint> polyline_corners;
+    std::vector<VECTOR2I> polyline_corners;
 
     for( const VECTOR2D& pt : aPointList )
-        polyline_corners.emplace_back( (wxPoint) transform( pt ) );
+        polyline_corners.emplace_back( (VECTOR2I) transform( pt ) );
 
     doDrawPolyline( polyline_corners );
 }
@@ -112,10 +112,10 @@ void BASIC_GAL::DrawPolyline( const VECTOR2D aPointList[], int aListSize )
     if( aListSize < 2 )
         return;
 
-    std::vector<wxPoint> polyline_corners;
+    std::vector<VECTOR2I> polyline_corners;
 
     for( int ii = 0; ii < aListSize; ++ii )
-        polyline_corners.emplace_back( (wxPoint) transform( aPointList[ ii ] ) );
+        polyline_corners.emplace_back( (VECTOR2I) transform( aPointList[ii] ) );
 
     doDrawPolyline( polyline_corners );
 }

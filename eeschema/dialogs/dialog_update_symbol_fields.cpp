@@ -169,7 +169,7 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
                 {
                     // Careful: the visible bit and position are also set by SetAttributes()
                     bool    visible = field.IsVisible();
-                    wxPoint pos = field.GetPosition();
+                    VECTOR2I pos = field.GetPosition();
 
                     field.SetAttributes( *parentField );
 

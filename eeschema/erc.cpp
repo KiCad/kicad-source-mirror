@@ -201,7 +201,7 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
                 {
                     if( unresolved( field.GetShownText() ) )
                     {
-                        wxPoint pos = field.GetPosition() - symbol->GetPosition();
+                        VECTOR2I pos = field.GetPosition() - symbol->GetPosition();
                         pos = symbol->GetTransform().TransformCoordinate( pos );
                         pos += symbol->GetPosition();
 
@@ -392,7 +392,7 @@ int ERC_TESTER::TestNoConnectPins()
 
     for( const SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
     {
-        std::map<wxPoint, std::vector<SCH_PIN*>> pinMap;
+        std::map<VECTOR2I, std::vector<SCH_PIN*>> pinMap;
 
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {

@@ -314,9 +314,9 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
     {
         // pad's "Position" is not relative to the footprint's, whereas Pos0 is relative to
         // the footprint's but is the unrotated coordinate.
-        wxPoint padpos( m_positionX, m_positionY );
+        VECTOR2I padpos( m_positionX, m_positionY );
         pad->SetPos0( padpos );
-        RotatePoint( &padpos, aFootprint->GetOrientation() );
+        RotatePoint( padpos, aFootprint->GetOrientation() );
         pad->SetPosition( padpos + aFootprint->GetPosition() );
     }
 

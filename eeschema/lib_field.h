@@ -130,7 +130,7 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
     LIB_FIELD& operator=( const LIB_FIELD& field );
 
@@ -148,19 +148,19 @@ public:
 
     SCH_LAYER_ID GetDefaultLayer() const;
 
-    void BeginEdit( const wxPoint& aStartPoint ) override;
+    void BeginEdit( const VECTOR2I& aStartPoint ) override;
 
-    void Offset( const wxPoint& aOffset ) override;
+    void Offset( const VECTOR2I& aOffset ) override;
 
-    void MoveTo( const wxPoint& aPosition ) override;
+    void MoveTo( const VECTOR2I& aPosition ) override;
 
-    wxPoint GetPosition() const override { return (wxPoint)EDA_TEXT::GetTextPos(); }
+    VECTOR2I GetPosition() const override { return EDA_TEXT::GetTextPos(); }
 
-    void MirrorHorizontal( const wxPoint& aCenter ) override;
-    void MirrorVertical( const wxPoint& aCenter ) override;
-    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
+    void MirrorHorizontal( const VECTOR2I& aCenter ) override;
+    void MirrorVertical( const VECTOR2I& aCenter ) override;
+    void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) override;
 
-    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+    void Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
                const TRANSFORM& aTransform ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
@@ -194,7 +194,7 @@ private:
      * If \a aData not NULL, \a aData must point a wxString which is used instead of
      * the m_Text
      */
-    void print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+    void print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
 
     /**
@@ -202,7 +202,7 @@ private:
      *
      * @param aPosition - The position to edit the circle in drawing coordinates.
      */
-    void CalcEdit( const wxPoint& aPosition ) override;
+    void CalcEdit( const VECTOR2I& aPosition ) override;
 
     friend class SCH_LEGACY_PLUGIN_CACHE;   // Required to access m_name.
 

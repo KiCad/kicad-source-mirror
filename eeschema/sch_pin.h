@@ -69,20 +69,20 @@ public:
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override {}
+    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override {}
 
-    void Move( const wxPoint& aMoveVector ) override {}
+    void Move( const VECTOR2I& aMoveVector ) override {}
 
     void MirrorHorizontally( int aCenter ) override {}
     void MirrorVertically( int aCenter ) override {}
-    void Rotate( const wxPoint& aCenter ) override {}
+    void Rotate( const VECTOR2I& aCenter ) override {}
 
-    wxPoint GetPosition() const override { return GetTransformedPosition(); }
-    const wxPoint GetLocalPosition() const { return m_position; }
-    void SetPosition( const wxPoint& aPosition ) override { m_position = aPosition; }
+    VECTOR2I       GetPosition() const override { return GetTransformedPosition(); }
+    const VECTOR2I GetLocalPosition() const { return m_position; }
+    void           SetPosition( const VECTOR2I& aPosition ) override { m_position = aPosition; }
 
     const EDA_RECT GetBoundingBox() const override;
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool           HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
     EDA_ITEM* Clone() const override;
 
@@ -98,13 +98,13 @@ public:
 
     void SetIsDangling( bool isDangling ) { m_isDangling = isDangling; }
 
-    bool IsPointClickableAnchor( const wxPoint& aPos ) const override
+    bool IsPointClickableAnchor( const VECTOR2I& aPos ) const override
     {
         return m_isDangling && GetPosition() == aPos;
     }
 
     /// @return the pin's position in global coordinates.
-    wxPoint GetTransformedPosition() const;
+    VECTOR2I GetTransformedPosition() const;
 
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
 
@@ -151,7 +151,7 @@ private:
 
     wxString       m_number;
     wxString       m_alt;
-    wxPoint        m_position;
+    VECTOR2I       m_position;
     bool           m_isDangling;
 
     /// The name that this pin connection will drive onto a net.

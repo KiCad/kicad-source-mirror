@@ -54,7 +54,7 @@ enum  SHEET_FIELD_TYPE
 class SCH_SHEET : public SCH_ITEM
 {
 public:
-    SCH_SHEET( EDA_ITEM* aParent = nullptr, const wxPoint& aPos = wxPoint( 0, 0 ),
+    SCH_SHEET( EDA_ITEM* aParent = nullptr, const VECTOR2I& aPos = VECTOR2I( 0, 0 ),
                wxSize aSize = wxSize( Mils2iu( MIN_SHEET_WIDTH ), Mils2iu( MIN_SHEET_HEIGHT ) ),
                FIELDS_AUTOPLACED aAutoplaceFields = FIELDS_AUTOPLACED_AUTO );
 
@@ -212,7 +212,7 @@ public:
      *
      * @return The sheet pin found at \a aPosition or NULL if no sheet pin is found.
      */
-    SCH_SHEET_PIN* GetPin( const wxPoint& aPosition );
+    SCH_SHEET_PIN* GetPin( const VECTOR2I& aPosition );
 
     /**
      * Checks if the sheet already has a sheet pin named \a aName.
@@ -258,7 +258,7 @@ public:
 
     int GetPenWidth() const override;
 
-    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     /**
      * Return a bounding box for the sheet body but not the fields.
@@ -272,7 +272,7 @@ public:
      * filename is longer than the edge it's on.  Use this instead, which always returns
      * the center of the sheet itself.
      */
-    wxPoint GetRotationCenter() const;
+    VECTOR2I GetRotationCenter() const;
 
     void SwapData( SCH_ITEM* aItem ) override;
 
@@ -330,10 +330,10 @@ public:
 
     // Geometric transforms (used in block operations):
 
-    void Move( const wxPoint& aMoveVector ) override;
+    void Move( const VECTOR2I& aMoveVector ) override;
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
-    void Rotate( const wxPoint& aCenter ) override;
+    void Rotate( const VECTOR2I& aCenter ) override;
 
     bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
 
@@ -363,7 +363,7 @@ public:
                 || ( aItem->Type() == SCH_SYMBOL_T );
     }
 
-    std::vector<wxPoint> GetConnectionPoints() const override;
+    std::vector<VECTOR2I> GetConnectionPoints() const override;
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
@@ -379,10 +379,10 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    wxPoint GetPosition() const override { return m_pos; }
-    void SetPosition( const wxPoint& aPosition ) override;
+    VECTOR2I GetPosition() const override { return m_pos; }
+    void     SetPosition( const VECTOR2I& aPosition ) override;
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void Plot( PLOTTER* aPlotter ) const override;
@@ -465,7 +465,7 @@ protected:
     void renumberPins();
 
 private:
-    bool doIsConnected( const wxPoint& aPosition ) const override;
+    bool doIsConnected( const VECTOR2I& aPosition ) const override;
 
     friend class SCH_SHEET_PIN;
 
@@ -475,7 +475,7 @@ private:
     std::vector<SCH_SHEET_PIN*> m_pins;               // The list of sheet connection points.
     std::vector<SCH_FIELD>      m_fields;
 
-    wxPoint                     m_pos;                // The position of the sheet.
+    VECTOR2I                    m_pos;                // The position of the sheet.
     wxSize                      m_size;               // The size of the sheet.
     int                         m_borderWidth;
     KIGFX::COLOR4D              m_borderColor;

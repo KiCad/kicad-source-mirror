@@ -618,7 +618,7 @@ void CONNECTIVITY_DATA::GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges) const
 }
 
 
-static int getMinDist( BOARD_CONNECTED_ITEM* aItem, const wxPoint& aPoint )
+static int getMinDist( BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aPoint )
 {
     switch( aItem->Type() )
     {
@@ -637,7 +637,7 @@ static int getMinDist( BOARD_CONNECTED_ITEM* aItem, const wxPoint& aPoint )
 }
 
 
-bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, wxPoint* aPos )
+bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, VECTOR2I* aPos )
 {
     std::list<CN_ITEM*> items = GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems();
 

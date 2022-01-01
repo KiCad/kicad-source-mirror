@@ -275,16 +275,16 @@ public:
     BOARD();
     ~BOARD();
 
-    wxPoint GetPosition() const override;
-    void SetPosition( const wxPoint& aPos ) override;
-    const wxPoint GetFocusPosition() const override { return (wxPoint)GetBoundingBox().GetCenter(); }
+    VECTOR2I       GetPosition() const override;
+    void           SetPosition( const VECTOR2I& aPos ) override;
+    const VECTOR2I GetFocusPosition() const override { return GetBoundingBox().GetCenter(); }
 
     bool IsEmpty() const
     {
         return m_drawings.empty() && m_footprints.empty() && m_tracks.empty() && m_zones.empty();
     }
 
-    void Move( const wxPoint& aMoveVector ) override;
+    void Move( const VECTOR2I& aMoveVector ) override;
 
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
     int GetFileFormatVersionAtLoad() const { return m_fileFormatVersionAtLoad; }
@@ -909,8 +909,8 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a PAD object if found or NULL if not found.
      */
-    PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask ) const;
-    PAD* GetPad( const wxPoint& aPosition ) const
+    PAD* GetPad( const VECTOR2I& aPosition, LSET aLayerMask ) const;
+    PAD* GetPad( const VECTOR2I& aPosition ) const
     {
         return GetPad( aPosition, LSET().set() );
     }
@@ -933,7 +933,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a PAD object if found or NULL if not found.
      */
-    PAD* GetPadFast( const wxPoint& aPosition, LSET aLayerMask ) const;
+    PAD* GetPadFast( const VECTOR2I& aPosition, LSET aLayerMask ) const;
 
     /**
      * Locate the pad connected at \a aPosition on \a aLayer starting at list position
@@ -949,7 +949,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return a PAD object pointer to the connected pad.
      */
-    PAD* GetPad( std::vector<PAD*>& aPadList, const wxPoint& aPosition, LSET aLayerMask ) const;
+    PAD* GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, LSET aLayerMask ) const;
 
     /**
      * Delete a given pad from the BOARD by removing it from its footprint and from the

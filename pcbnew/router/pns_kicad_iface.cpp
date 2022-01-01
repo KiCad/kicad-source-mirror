@@ -933,12 +933,12 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     solid->SetPadToDie( aPad->GetPadToDieLength() );
     solid->SetOrientation( aPad->GetOrientation() );
 
-    wxPoint wx_c = aPad->ShapePos();
-    wxPoint offset = aPad->GetOffset();
+    VECTOR2I wx_c = aPad->ShapePos();
+    VECTOR2I offset = aPad->GetOffset();
 
     VECTOR2I c( wx_c.x, wx_c.y );
 
-    RotatePoint( &offset, aPad->GetOrientation() );
+    RotatePoint( offset, aPad->GetOrientation() );
 
     solid->SetPos( VECTOR2I( c.x - offset.x, c.y - offset.y ) );
     solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
@@ -1110,7 +1110,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
         return false;
 
     int textWidth = aText->GetEffectiveTextPenWidth();
-    std::vector<wxPoint> textShape = aText->TransformToSegmentList();
+    std::vector<VECTOR2I> textShape = aText->TransformToSegmentList();
 
     if( textShape.size() < 2 )
         return false;

@@ -102,7 +102,7 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     }
 
     OUTLINE_ERROR_HANDLER errorHandler =
-            [&]( const wxString& aMsg, BOARD_ITEM* aItemA, BOARD_ITEM* aItemB, const wxPoint& aPt )
+            [&]( const wxString& aMsg, BOARD_ITEM* aItemA, BOARD_ITEM* aItemB, const VECTOR2I& aPt )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
 
@@ -130,8 +130,8 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
                 m_frame->GetCanvas()->GetView()->Add( marker );
             };
 
-    const std::function<void( const wxString& msg, const wxPoint& position )> tstHoleInTHPad =
-            [&]( const wxString& aMsg, const wxPoint& aPosition )
+    const std::function<void( const wxString& msg, const VECTOR2I& position )> tstHoleInTHPad =
+            [&]( const wxString& aMsg, const VECTOR2I& aPosition )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_PAD_TH_WITH_NO_HOLE );
 

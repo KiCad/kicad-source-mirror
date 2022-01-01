@@ -95,7 +95,7 @@ const int seg_per_circle = 64;   // Number of segments to approximate a circle
 
 
 void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_SET& aShapeBuffer,
-                                   const wxPoint& aShapePos )
+                                   const VECTOR2I& aShapePos )
 {
 #define TO_POLY_SHAPE                                                                          \
     {                                                                                          \
@@ -112,10 +112,10 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
 
     // Draw the primitive shape for flashed items.
     // Create a static buffer to avoid a lot of memory reallocation.
-    static std::vector<wxPoint> polybuffer;
+    static std::vector<VECTOR2I> polybuffer;
     polybuffer.clear();
 
-    wxPoint curPos = aShapePos;
+    VECTOR2I curPos = aShapePos;
     D_CODE* tool   = aParent->GetDcodeDescr();
     double rotation;
 
@@ -139,7 +139,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
             if( rotation != 0)
             {
                 for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
-                    RotatePoint( &polybuffer[ii], -rotation );
+                    RotatePoint( polybuffer[ii], -rotation );
             }
         }
 
@@ -175,7 +175,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         if( rotation != 0)
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
-                RotatePoint( &polybuffer[ii], -rotation );
+                RotatePoint( polybuffer[ii], -rotation );
         }
 
         // Move to current position:
@@ -207,7 +207,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         if( rotation != 0 )
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
-                RotatePoint( &polybuffer[ii], -rotation );
+                RotatePoint( polybuffer[ii], -rotation );
         }
 
         // Move to current position:
@@ -235,7 +235,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         if( rotation != 0)
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
-                RotatePoint( &polybuffer[ii], -rotation );
+                RotatePoint( polybuffer[ii], -rotation );
         }
 
         // Move to current position:
@@ -259,7 +259,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
          * The thermal primitive is a ring (annulus) interrupted by four gaps. Exposure is always
          * on.
          */
-        std::vector<wxPoint> subshape_poly;
+        std::vector<VECTOR2I> subshape_poly;
         curPos += mapPt( params[0].GetValue( tool ), params[1].GetValue( tool ), m_GerbMetric );
         ConvertShapeToPolygon( aParent, subshape_poly );
 
@@ -274,7 +274,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
             double sub_rotation = rotation + 900 * ii;
 
             for( unsigned jj = 0; jj < polybuffer.size(); jj++ )
-                RotatePoint( &polybuffer[jj], -sub_rotation );
+                RotatePoint( polybuffer[jj], -sub_rotation );
 
             // Move to current position:
             for( unsigned jj = 0; jj < polybuffer.size(); jj++ )
@@ -309,7 +309,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         int numCircles = KiROUND( params[5].GetValue( tool ) );
 
         // Draw circles:
-        wxPoint center = aParent->GetABPosition( curPos );
+        VECTOR2I center = aParent->GetABPosition( curPos );
 
         // adjust outerDiam by this on each nested circle
         int diamAdjust = ( gap + penThickness ) * 2;
@@ -342,7 +342,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
             // shape rotation:
-            RotatePoint( &polybuffer[ii], -rotation );
+            RotatePoint( polybuffer[ii], -rotation );
 
             // Move to current position:
             polybuffer[ii] += curPos;
@@ -403,7 +403,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         // rotate polygon and move it to the actual position shape rotation:
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
-            RotatePoint( &polybuffer[ii], -rotation );
+            RotatePoint( polybuffer[ii], -rotation );
         }
 
         // Move to current position:
@@ -436,7 +436,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         rotation  = params[5].GetValue( tool ) * 10.0;
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
-            RotatePoint( &polybuffer[ii], -rotation );
+            RotatePoint( polybuffer[ii], -rotation );
             polybuffer[ii] += curPos;
             polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
         }
@@ -457,7 +457,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
 
 
 void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
-                                          std::vector<wxPoint>& aBuffer )
+                                          std::vector<VECTOR2I>&  aBuffer )
 {
     D_CODE* tool = aParent->GetDcodeDescr();
 
@@ -478,16 +478,16 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
         if( radius <= 0 )
             break;
 
-        wxPoint center = mapPt( params[2].GetValue( tool ), params[3].GetValue( tool ),
-                                m_GerbMetric );
-        wxPoint corner;
+        VECTOR2I center =
+                mapPt( params[2].GetValue( tool ), params[3].GetValue( tool ), m_GerbMetric );
+        VECTOR2I  corner;
         const int delta = 3600 / seg_per_circle;    // rot angle in 0.1 degree
 
         for( int angle = 0; angle < 3600; angle += delta )
         {
             corner.x   = radius;
             corner.y   = 0;
-            RotatePoint( &corner, angle );
+            RotatePoint( corner, angle );
             corner += center;
             aBuffer.push_back( corner );
         }
@@ -523,7 +523,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
 
         for( unsigned ii = 0; ii < 4; ii++ )
         {
-            RotatePoint( &aBuffer[ii], -angle );
+            RotatePoint( aBuffer[ii], -angle );
             aBuffer[ii] += start;
         }
 
@@ -532,10 +532,10 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
 
     case AMP_LINE_CENTER:
     {
-        wxPoint size = mapPt( params[1].GetValue( tool ), params[2].GetValue( tool ),
-                              m_GerbMetric );
-        wxPoint pos  = mapPt( params[3].GetValue( tool ), params[4].GetValue( tool ),
-                              m_GerbMetric );
+        VECTOR2I size =
+                mapPt( params[1].GetValue( tool ), params[2].GetValue( tool ), m_GerbMetric );
+        VECTOR2I pos =
+                mapPt( params[3].GetValue( tool ), params[4].GetValue( tool ), m_GerbMetric );
 
         // Build poly:
         pos.x -= size.x / 2;
@@ -552,10 +552,10 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
 
     case AMP_LINE_LOWER_LEFT:
     {
-        wxPoint size = mapPt( params[1].GetValue( tool ), params[2].GetValue( tool ),
-                              m_GerbMetric );
-        wxPoint lowerLeft = mapPt( params[3].GetValue( tool ), params[4].GetValue( tool ),
-                                   m_GerbMetric );
+        VECTOR2I size =
+                mapPt( params[1].GetValue( tool ), params[2].GetValue( tool ), m_GerbMetric );
+        VECTOR2I lowerLeft =
+                mapPt( params[3].GetValue( tool ), params[4].GetValue( tool ), m_GerbMetric );
 
         // Build poly:
         aBuffer.push_back( lowerLeft );
@@ -585,7 +585,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
         double angle_start = RAD2DECIDEG( asin( (double) halfthickness / innerRadius ) );
 
         // Draw shape in the first quadrant (X and Y > 0)
-        wxPoint pos, startpos;
+        VECTOR2I pos, startpos;
 
         // Inner arc
         startpos.x = innerRadius;
@@ -594,13 +594,13 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
         for( double angle = angle_start; angle < angle_end; angle += 100 )
         {
             pos = startpos;
-            RotatePoint( &pos, angle );
+            RotatePoint( pos, angle );
             aBuffer.push_back( pos );
         }
 
         // Last point
         pos = startpos;
-        RotatePoint( &pos, angle_end );
+        RotatePoint( pos, angle_end );
         aBuffer.push_back( pos );
 
         // outer arc
@@ -613,13 +613,13 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
         for( double angle = angle_end; angle > angle_start; angle -= 100 )
         {
             pos = startpos;
-            RotatePoint( &pos, angle );
+            RotatePoint( pos, angle );
             aBuffer.push_back( pos );
         }
 
         // last point
         pos = startpos;
-        RotatePoint( &pos, angle_start );
+        RotatePoint( pos, angle_start );
         aBuffer.push_back( pos );
 
         aBuffer.push_back( aBuffer[0] );  // Close poly
@@ -635,7 +635,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
 
         // Create cross. First create 1/4 of the shape.
         // Others point are the same, rotated by 90, 180 and 270 deg
-        wxPoint pos( crossHairThickness / 2, crossHairLength / 2 );
+        VECTOR2I pos( crossHairThickness / 2, crossHairLength / 2 );
         aBuffer.push_back( pos );
         pos.y = crossHairThickness / 2;
         aBuffer.push_back( pos );
@@ -650,7 +650,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
             for( int ii = 0; ii < 4; ii++ )
             {
                 pos = aBuffer[ii];
-                RotatePoint( &pos, jj*900 );
+                RotatePoint( pos, jj*900 );
                 aBuffer.push_back( pos );
             }
         }
@@ -711,16 +711,16 @@ int AM_PRIMITIVE::GetShapeDim( const GERBER_DRAW_ITEM* aParent )
 
     case AMP_LINE_CENTER:
     {
-        wxPoint size = mapPt( params[1].GetValue( tool ), params[2].GetValue( tool ),
-                              m_GerbMetric );
+        VECTOR2I size =
+                mapPt( params[1].GetValue( tool ), params[2].GetValue( tool ), m_GerbMetric );
         dim = std::min(size.x, size.y);
         break;
     }
 
     case AMP_LINE_LOWER_LEFT:
     {
-        wxPoint size = mapPt( params[1].GetValue( tool ), params[2].GetValue( tool ),
-                              m_GerbMetric );
+        VECTOR2I size =
+                mapPt( params[1].GetValue( tool ), params[2].GetValue( tool ), m_GerbMetric );
         dim = std::min(size.x, size.y);
         break;
     }
@@ -749,7 +749,7 @@ int AM_PRIMITIVE::GetShapeDim( const GERBER_DRAW_ITEM* aParent )
 
         // Read points. numPoints does not include the starting point, so add 1.
         // and calculate the bounding box;
-        wxSize pos_min, pos_max, pos;
+        VECTOR2I pos_min, pos_max, pos;
         int prm_idx = 2;    //  params[2] is the first X coordinate
         int last_prm = params.size() - 1;
 
@@ -789,7 +789,7 @@ int AM_PRIMITIVE::GetShapeDim( const GERBER_DRAW_ITEM* aParent )
         }
 
         // calculate dim
-        wxSize size;
+        VECTOR2I size;
         size.x = pos_max.x - pos_min.x;
         size.y = pos_max.y - pos_min.y;
         dim = std::min( size.x, size.y );
@@ -811,7 +811,7 @@ int AM_PRIMITIVE::GetShapeDim( const GERBER_DRAW_ITEM* aParent )
 
 
 SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* aParent,
-                                                       const wxPoint& aShapePos )
+                                                       const VECTOR2I&         aShapePos )
 {
     SHAPE_POLY_SET holeBuffer;
     bool hasHole = false;
@@ -849,9 +849,11 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
     if( hasHole )
         m_shape.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-    m_boundingBox = EDA_RECT( wxPoint( 0, 0 ), wxSize( 1, 1 ) );
+    m_boundingBox = EDA_RECT( VECTOR2I( 0, 0 ), VECTOR2I( 1, 1 ) );
+
     auto bb = m_shape.BBox();
-    wxPoint center( bb.Centre().x, bb.Centre().y );
+    VECTOR2I center( bb.Centre().x, bb.Centre().y );
+
     m_boundingBox.Move( aParent->GetABPosition( center ) );
     m_boundingBox.Inflate( bb.GetWidth() / 2, bb.GetHeight() / 2 );
 
@@ -861,7 +863,7 @@ SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* a
 
 void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox,
                                              wxDC* aDC, const COLOR4D& aColor,
-                                             const wxPoint& aShapePos, bool aFilledShape )
+                                             const VECTOR2I& aShapePos, bool aFilledShape )
 {
     SHAPE_POLY_SET* shapeBuffer = GetApertureMacroShape( aParent, aShapePos );
 
@@ -872,7 +874,7 @@ void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT
     {
         SHAPE_LINE_CHAIN& poly = shapeBuffer->Outline( ii );
 
-        GRClosedPoly( aClipBox, aDC, poly.PointCount(), (wxPoint*) &poly.CPoint( 0 ), aFilledShape,
+        GRClosedPoly( aClipBox, aDC, poly.PointCount(), (VECTOR2I*) &poly.CPoint( 0 ), aFilledShape,
                       aColor, aColor );
     }
 }

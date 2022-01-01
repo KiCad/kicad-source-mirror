@@ -188,8 +188,8 @@ public:
     std::vector<FP_3DMODEL>& Models()             { return m_3D_Drawings; }
     const std::vector<FP_3DMODEL>& Models() const { return m_3D_Drawings; }
 
-    void SetPosition( const wxPoint& aPos ) override;
-    wxPoint GetPosition() const override { return m_pos; }
+    void     SetPosition( const VECTOR2I& aPos ) override;
+    VECTOR2I GetPosition() const override { return m_pos; }
 
     void SetOrientation( double aNewAngle );
     void SetOrientationDegrees( double aOrientation ) { SetOrientation( aOrientation * 10.0 ); }
@@ -252,11 +252,11 @@ public:
      */
     int GetLikelyAttribute() const;
 
-    void Move( const wxPoint& aMoveVector ) override;
+    void Move( const VECTOR2I& aMoveVector ) override;
 
-    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
 
-    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     /**
      * Move the reference point of the footprint.
@@ -269,7 +269,7 @@ public:
      * (a move footprint does not change these local coordinates,
      * but changes the footprint position)
      */
-    void MoveAnchorPosition( const wxPoint& aMoveVector );
+    void MoveAnchorPosition( const VECTOR2I& aMoveVector );
 
     /**
      * @return true if the footprint is flipped, i.e. on the back side of the board
@@ -364,8 +364,7 @@ public:
      *
      * @param aErrorHandler callback to handle the error messages generated
      */
-    void CheckFootprintTHPadNoHoles( const std::function
-                                     <void( const wxString& msg, const wxPoint& position )>*
+    void CheckFootprintTHPadNoHoles( const std::function<void( const wxString& msg, const VECTOR2I& position )>*
                                      aErrorHandler );
 
     /**
@@ -442,7 +441,7 @@ public:
     ///< @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
     /**
      * Test if a point is inside the bounding polygon of the footprint.
@@ -453,7 +452,7 @@ public:
      * @param aPosition is the point to test
      * @return true if aPosition is inside the bounding polygon
      */
-    bool HitTestAccurate( const wxPoint& aPosition, int aAccuracy = 0 ) const;
+    bool HitTestAccurate( const VECTOR2I& aPosition, int aAccuracy = 0 ) const;
 
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
@@ -530,7 +529,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a #PAD object if found otherwise NULL.
      */
-    PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask = LSET::AllLayersMask() );
+    PAD* GetPad( const VECTOR2I& aPosition, LSET aLayerMask = LSET::AllLayersMask() );
 
     PAD* GetTopLeftPad();
 
@@ -738,7 +737,7 @@ private:
     FP_GROUPS       m_fp_groups;         // PCB_GROUP items, owned by pointer
 
     double          m_orient;            // Orientation in tenths of a degree, 900=90.0 degrees.
-    wxPoint         m_pos;               // Position of footprint on the board in internal units.
+    VECTOR2I        m_pos;               // Position of footprint on the board in internal units.
     FP_TEXT*        m_reference;         // Component reference designator value (U34, R18..)
     FP_TEXT*        m_value;             // Component value (74LS00, 22K..)
     LIB_ID          m_fpid;              // The #LIB_ID of the FOOTPRINT.

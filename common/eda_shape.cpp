@@ -87,18 +87,18 @@ wxString EDA_SHAPE::SHAPE_T_asString() const
 }
 
 
-void EDA_SHAPE::setPosition( const wxPoint& aPos )
+void EDA_SHAPE::setPosition( const VECTOR2I& aPos )
 {
     move( aPos - getPosition() );
 }
 
 
-wxPoint EDA_SHAPE::getPosition() const
+VECTOR2I EDA_SHAPE::getPosition() const
 {
     if( m_shape == SHAPE_T::ARC )
         return getCenter();
     else if( m_shape == SHAPE_T::POLY )
-        return (wxPoint) m_poly.CVertex( 0 );
+        return m_poly.CVertex( 0 );
     else
         return m_start;
 }
@@ -135,7 +135,7 @@ double EDA_SHAPE::GetLength() const
 }
 
 
-void EDA_SHAPE::move( const wxPoint& aMoveVector )
+void EDA_SHAPE::move( const VECTOR2I& aMoveVector )
 {
     switch ( m_shape )
     {
@@ -158,7 +158,7 @@ void EDA_SHAPE::move( const wxPoint& aMoveVector )
         m_bezierC1 += aMoveVector;
         m_bezierC2 += aMoveVector;
 
-        for( wxPoint& pt : m_bezierPoints)
+        for( VECTOR2I& pt : m_bezierPoints )
             pt += aMoveVector;
 
         break;
@@ -172,7 +172,7 @@ void EDA_SHAPE::move( const wxPoint& aMoveVector )
 
 void EDA_SHAPE::scale( double aScale )
 {
-    auto scalePt = [&]( wxPoint& pt )
+    auto scalePt = [&]( VECTOR2I& pt )
                    {
                        pt.x = KiROUND( pt.x * aScale );
                        pt.y = KiROUND( pt.y * aScale );
@@ -196,7 +196,7 @@ void EDA_SHAPE::scale( double aScale )
 
     case SHAPE_T::POLY: // polygon
     {
-        std::vector<wxPoint> pts;
+        std::vector<VECTOR2I> pts;
 
         for( const VECTOR2I& pt : m_poly.Outline( 0 ).CPoints() )
         {
@@ -222,27 +222,27 @@ void EDA_SHAPE::scale( double aScale )
 }
 
 
-void EDA_SHAPE::rotate( const wxPoint& aRotCentre, double aAngle )
+void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
     switch( m_shape )
     {
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
-        RotatePoint( &m_start, aRotCentre, aAngle );
-        RotatePoint( &m_end, aRotCentre, aAngle );
+        RotatePoint( m_start, aRotCentre, aAngle );
+        RotatePoint( m_end, aRotCentre, aAngle );
         break;
 
     case SHAPE_T::ARC:
-        RotatePoint( &m_start, aRotCentre, aAngle );
-        RotatePoint( &m_end, aRotCentre, aAngle );
-        RotatePoint( &m_arcCenter, aRotCentre, aAngle );
+        RotatePoint( m_start, aRotCentre, aAngle );
+        RotatePoint( m_end, aRotCentre, aAngle );
+        RotatePoint( m_arcCenter, aRotCentre, aAngle );
         break;
 
     case SHAPE_T::RECT:
         if( KiROUND( aAngle ) % 900 == 0 )
         {
-            RotatePoint( &m_start, aRotCentre, aAngle );
-            RotatePoint( &m_end, aRotCentre, aAngle );
+            RotatePoint( m_start, aRotCentre, aAngle );
+            RotatePoint( m_end, aRotCentre, aAngle );
             break;
         }
 
@@ -262,13 +262,13 @@ void EDA_SHAPE::rotate( const wxPoint& aRotCentre, double aAngle )
         break;
 
     case SHAPE_T::BEZIER:
-        RotatePoint( &m_start, aRotCentre, aAngle);
-        RotatePoint( &m_end, aRotCentre, aAngle);
-        RotatePoint( &m_bezierC1, aRotCentre, aAngle);
-        RotatePoint( &m_bezierC2, aRotCentre, aAngle);
+        RotatePoint( m_start, aRotCentre, aAngle );
+        RotatePoint( m_end, aRotCentre, aAngle );
+        RotatePoint( m_bezierC1, aRotCentre, aAngle );
+        RotatePoint( m_bezierC2, aRotCentre, aAngle );
 
-        for( wxPoint& pt : m_bezierPoints )
-            RotatePoint( &pt, aRotCentre, aAngle);
+        for( VECTOR2I& pt : m_bezierPoints )
+            RotatePoint( pt, aRotCentre, aAngle);
 
         break;
 
@@ -279,7 +279,7 @@ void EDA_SHAPE::rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void EDA_SHAPE::flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void EDA_SHAPE::flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     switch ( m_shape )
     {
@@ -330,7 +330,7 @@ void EDA_SHAPE::flip( const wxPoint& aCentre, bool aFlipLeftRight )
         break;
 
     case SHAPE_T::POLY:
-        m_poly.Mirror( aFlipLeftRight, !aFlipLeftRight, VECTOR2I( aCentre ) );
+        m_poly.Mirror( aFlipLeftRight, !aFlipLeftRight, aCentre );
         break;
 
     case SHAPE_T::BEZIER:
@@ -351,7 +351,7 @@ void EDA_SHAPE::flip( const wxPoint& aCentre, bool aFlipLeftRight )
 
         // Rebuild the poly points shape
         {
-            std::vector<wxPoint> ctrlPoints = { m_start, m_bezierC1, m_bezierC2, m_end };
+            std::vector<VECTOR2I> ctrlPoints = { m_start, m_bezierC1, m_bezierC2, m_end };
             BEZIER_POLY converter( ctrlPoints );
             converter.GetPoly( m_bezierPoints, m_stroke.GetWidth() );
         }
@@ -378,12 +378,12 @@ void EDA_SHAPE::RebuildBezierToSegmentsPointsList( int aMinSegLen )
 }
 
 
-const std::vector<wxPoint> EDA_SHAPE::buildBezierToSegmentsPointsList( int aMinSegLen  ) const
+const std::vector<VECTOR2I> EDA_SHAPE::buildBezierToSegmentsPointsList( int aMinSegLen ) const
 {
-    std::vector<wxPoint> bezierPoints;
+    std::vector<VECTOR2I> bezierPoints;
 
     // Rebuild the m_BezierPoints vertex list that approximate the Bezier curve
-    std::vector<wxPoint> ctrlPoints = { m_start, m_bezierC1, m_bezierC2, m_end };
+    std::vector<VECTOR2I> ctrlPoints = { m_start, m_bezierC1, m_bezierC2, m_end };
     BEZIER_POLY converter( ctrlPoints );
     converter.GetPoly( bezierPoints, aMinSegLen );
 
@@ -391,7 +391,7 @@ const std::vector<wxPoint> EDA_SHAPE::buildBezierToSegmentsPointsList( int aMinS
 }
 
 
-wxPoint EDA_SHAPE::getCenter() const
+VECTOR2I EDA_SHAPE::getCenter() const
 {
     switch( m_shape )
     {
@@ -408,16 +408,16 @@ wxPoint EDA_SHAPE::getCenter() const
     case SHAPE_T::POLY:
     case SHAPE_T::RECT:
     case SHAPE_T::BEZIER:
-        return (wxPoint)getBoundingBox().Centre();
+        return getBoundingBox().Centre();
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
-        return wxPoint();
+        return VECTOR2I();
     }
 }
 
 
-void EDA_SHAPE::SetCenter( const wxPoint& aCenter )
+void EDA_SHAPE::SetCenter( const VECTOR2I& aCenter )
 {
     switch( m_shape )
     {
@@ -435,10 +435,10 @@ void EDA_SHAPE::SetCenter( const wxPoint& aCenter )
 }
 
 
-wxPoint EDA_SHAPE::GetArcMid() const
+VECTOR2I EDA_SHAPE::GetArcMid() const
 {
-    wxPoint mid = m_start;
-    RotatePoint( &mid, m_arcCenter, -GetArcAngle() / 2.0 );
+    VECTOR2I mid = m_start;
+    RotatePoint( mid, m_arcCenter, -GetArcAngle() / 2.0 );
     return mid;
 }
 
@@ -487,7 +487,7 @@ int EDA_SHAPE::GetRadius() const
 }
 
 
-void EDA_SHAPE::SetArcGeometry( const wxPoint& aStart, const wxPoint& aMid, const wxPoint& aEnd )
+void EDA_SHAPE::SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
 {
     m_start = aStart;
     m_end = aEnd;
@@ -499,7 +499,7 @@ void EDA_SHAPE::SetArcGeometry( const wxPoint& aStart, const wxPoint& aMid, cons
      * on the other side of the arc.  In this case, we need to flip the start/end points and flag this
      * change for the system
      */
-    wxPoint new_mid = GetArcMid();
+    VECTOR2I new_mid = GetArcMid();
     VECTOR2D dist( new_mid - aMid );
     VECTOR2D dist2( new_mid - m_arcCenter );
 
@@ -526,7 +526,7 @@ double EDA_SHAPE::GetArcAngle() const
 void EDA_SHAPE::SetArcAngleAndEnd( double aAngle, bool aCheckNegativeAngle )
 {
     m_end = m_start;
-    RotatePoint( &m_end, m_arcCenter, -NormalizeAngle360Max( aAngle ) );
+    RotatePoint( m_end, m_arcCenter, -NormalizeAngle360Max( aAngle ) );
 
     if( aCheckNegativeAngle && aAngle < 0 )
     {
@@ -617,7 +617,7 @@ const EDA_RECT EDA_SHAPE::getBoundingBox() const
     switch( m_shape )
     {
     case SHAPE_T::RECT:
-        for( wxPoint& pt : GetRectCorners() )
+        for( VECTOR2I& pt : GetRectCorners() )
             bbox.Merge( pt );
 
         break;
@@ -642,9 +642,9 @@ const EDA_RECT EDA_SHAPE::getBoundingBox() const
 
         for( auto iter = m_poly.CIterate(); iter; iter++ )
         {
-            wxPoint pt( iter->x, iter->y );
+            VECTOR2I pt( iter->x, iter->y );
 
-            RotatePoint( &pt, getParentOrientation() );
+            RotatePoint( pt, getParentOrientation() );
             pt += getParentPosition();
 
             bbox.Merge( pt );
@@ -671,7 +671,7 @@ const EDA_RECT EDA_SHAPE::getBoundingBox() const
 }
 
 
-bool EDA_SHAPE::hitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     int maxdist = aAccuracy;
 
@@ -699,9 +699,9 @@ bool EDA_SHAPE::hitTest( const wxPoint& aPosition, int aAccuracy ) const
         if( EuclideanNorm( aPosition - m_end ) <= maxdist )
             return true;
 
-        wxPoint relPos = aPosition - getCenter();
-        int     radius = GetRadius();
-        int     dist   = KiROUND( EuclideanNorm( relPos ) );
+        VECTOR2I relPos = aPosition - getCenter();
+        int      radius = GetRadius();
+        int      dist = KiROUND( EuclideanNorm( relPos ) );
 
         if( abs( radius - dist ) <= maxdist )
         {
@@ -747,14 +747,14 @@ bool EDA_SHAPE::hitTest( const wxPoint& aPosition, int aAccuracy ) const
             SHAPE_POLY_SET poly;
             poly.NewOutline();
 
-            for( const wxPoint& pt : GetRectCorners() )
+            for( const VECTOR2I& pt : GetRectCorners() )
                 poly.Append( pt );
 
             return poly.Collide( VECTOR2I( aPosition ), maxdist );
         }
         else                        // Open rect hit-test
         {
-            std::vector<wxPoint> pts = GetRectCorners();
+            std::vector<VECTOR2I> pts = GetRectCorners();
 
             return TestSegmentHit( aPosition, pts[0], pts[1], maxdist )
                     || TestSegmentHit( aPosition, pts[1], pts[2], maxdist )
@@ -836,7 +836,7 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
         }
         else
         {
-            std::vector<wxPoint> pts = GetRectCorners();
+            std::vector<VECTOR2I> pts = GetRectCorners();
 
             // Account for the width of the lines
             arect.Inflate( GetWidth() / 2 );
@@ -877,7 +877,7 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
             // Therefore, instead of using m_poly, we make a copy which is translated
             // to the actual location in the board.
             double  orientation = 0.0;
-            wxPoint offset = getParentPosition();
+            VECTOR2I offset = getParentPosition();
 
             if( getParentOrientation() )
                 orientation = -DECIDEG2RAD( getParentOrientation() );
@@ -893,7 +893,7 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
                 VECTOR2I vertex = poly.GetPoint( ii );
 
                 // Test if the point is within aRect
-                if( arect.Contains( ( wxPoint ) vertex ) )
+                if( arect.Contains( vertex ) )
                     return true;
 
                 if( ii + 1 < count )
@@ -901,7 +901,7 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
                     VECTOR2I vertexNext = poly.GetPoint( ii + 1 );
 
                     // Test if this edge intersects aRect
-                    if( arect.Intersects( ( wxPoint ) vertex, ( wxPoint ) vertexNext ) )
+                    if( arect.Intersects( vertex, vertexNext ) )
                         return true;
                 }
                 else if( poly.IsClosed() )
@@ -909,7 +909,7 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
                     VECTOR2I vertexNext = poly.GetPoint( 0 );
 
                     // Test if this edge intersects aRect
-                    if( arect.Intersects( ( wxPoint ) vertex, ( wxPoint ) vertexNext ) )
+                    if( arect.Intersects( vertex, vertexNext ) )
                         return true;
                 }
             }
@@ -935,11 +935,11 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 
             for( unsigned ii = 1; ii < count; ii++ )
             {
-                wxPoint vertex = m_bezierPoints[ ii - 1];
-                wxPoint vertexNext = m_bezierPoints[ii];
+                VECTOR2I vertex = m_bezierPoints[ii - 1];
+                VECTOR2I vertexNext = m_bezierPoints[ii];
 
                 // Test if the point is within aRect
-                if( arect.Contains( ( wxPoint ) vertex ) )
+                if( arect.Contains( vertex ) )
                     return true;
 
                 // Test if this edge intersects aRect
@@ -957,20 +957,20 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 }
 
 
-std::vector<wxPoint> EDA_SHAPE::GetRectCorners() const
+std::vector<VECTOR2I> EDA_SHAPE::GetRectCorners() const
 {
-    std::vector<wxPoint> pts;
-    wxPoint              topLeft = GetStart();
-    wxPoint              botRight = GetEnd();
+    std::vector<VECTOR2I> pts;
+    VECTOR2I              topLeft = GetStart();
+    VECTOR2I              botRight = GetEnd();
 
     // Un-rotate rect topLeft and botRight
     if( KiROUND( getParentOrientation() ) % 900 != 0 )
     {
         topLeft -= getParentPosition();
-        RotatePoint( &topLeft, -getParentOrientation() );
+        RotatePoint( topLeft, -getParentOrientation() );
 
         botRight -= getParentPosition();
-        RotatePoint( &botRight, -getParentOrientation() );
+        RotatePoint( botRight, -getParentOrientation() );
     }
 
     // Set up the un-rotated 4 corners
@@ -982,9 +982,9 @@ std::vector<wxPoint> EDA_SHAPE::GetRectCorners() const
     // Now re-rotate the 4 corners to get a diamond
     if( KiROUND( getParentOrientation() ) % 900 != 0 )
     {
-        for( wxPoint& pt : pts )
+        for( VECTOR2I& pt : pts )
         {
-            RotatePoint( &pt, getParentOrientation() );
+            RotatePoint( pt, getParentOrientation() );
             pt += getParentPosition();
         }
     }
@@ -995,8 +995,8 @@ std::vector<wxPoint> EDA_SHAPE::GetRectCorners() const
 
 void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
 {
-    wxPoint start = m_start;
-    wxPoint end = m_end;
+    VECTOR2I start = m_start;
+    VECTOR2I end = m_end;
     double  t1, t2;
 
     CalcArcAngles( t1, t2 );
@@ -1049,10 +1049,10 @@ void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
     {
         switch( quarter )
         {
-        case 0: aBBox.Merge( wxPoint( m_arcCenter.x, m_arcCenter.y + radius ) ); break;  // down
-        case 1: aBBox.Merge( wxPoint( m_arcCenter.x - radius, m_arcCenter.y ) ); break;  // left
-        case 2: aBBox.Merge( wxPoint( m_arcCenter.x, m_arcCenter.y - radius ) ); break;  // up
-        case 3: aBBox.Merge( wxPoint( m_arcCenter.x + radius, m_arcCenter.y ) ); break;  // right
+        case 0: aBBox.Merge( VECTOR2I( m_arcCenter.x, m_arcCenter.y + radius ) ); break; // down
+        case 1: aBBox.Merge( VECTOR2I( m_arcCenter.x - radius, m_arcCenter.y ) ); break; // left
+        case 2: aBBox.Merge( VECTOR2I( m_arcCenter.x, m_arcCenter.y - radius ) ); break; // up
+        case 3: aBBox.Merge( VECTOR2I( m_arcCenter.x + radius, m_arcCenter.y ) ); break; // right
         }
 
         ++quarter %= 4;
@@ -1061,12 +1061,12 @@ void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
 }
 
 
-void EDA_SHAPE::SetPolyPoints( const std::vector<wxPoint>& aPoints )
+void EDA_SHAPE::SetPolyPoints( const std::vector<VECTOR2I>& aPoints )
 {
     m_poly.RemoveAllContours();
     m_poly.NewOutline();
 
-    for ( const wxPoint& p : aPoints )
+    for( const VECTOR2I& p : aPoints )
         m_poly.Append( p.x, p.y );
 }
 
@@ -1088,7 +1088,7 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
 
     case SHAPE_T::RECT:
     {
-        std::vector<wxPoint> pts = GetRectCorners();
+        std::vector<VECTOR2I> pts = GetRectCorners();
 
         if( IsFilled() && !aEdgeOnly )
             effectiveShapes.emplace_back( new SHAPE_SIMPLE( pts ) );
@@ -1116,12 +1116,12 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
 
     case SHAPE_T::BEZIER:
     {
-        std::vector<wxPoint> bezierPoints = buildBezierToSegmentsPointsList( GetWidth() );
-        wxPoint start_pt = bezierPoints[0];
+        std::vector<VECTOR2I> bezierPoints = buildBezierToSegmentsPointsList( GetWidth() );
+        VECTOR2I              start_pt = bezierPoints[0];
 
         for( unsigned int jj = 1; jj < bezierPoints.size(); jj++ )
         {
-            wxPoint end_pt = bezierPoints[jj];
+            VECTOR2I end_pt = bezierPoints[jj];
             effectiveShapes.emplace_back( new SHAPE_SEGMENT( start_pt, end_pt, GetWidth() ) );
             start_pt = end_pt;
         }
@@ -1156,7 +1156,7 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
 }
 
 
-void EDA_SHAPE::DupPolyPointsList( std::vector<wxPoint>& aBuffer ) const
+void EDA_SHAPE::DupPolyPointsList( std::vector<VECTOR2I>& aBuffer ) const
 {
     if( m_poly.OutlineCount() )
     {
@@ -1196,7 +1196,7 @@ int EDA_SHAPE::GetPointCount() const
 }
 
 
-void EDA_SHAPE::beginEdit( const wxPoint& aPosition )
+void EDA_SHAPE::beginEdit( const VECTOR2I& aPosition )
 {
     switch( GetShape() )
     {
@@ -1227,7 +1227,7 @@ void EDA_SHAPE::beginEdit( const wxPoint& aPosition )
 }
 
 
-bool EDA_SHAPE::continueEdit( const wxPoint& aPosition )
+bool EDA_SHAPE::continueEdit( const VECTOR2I& aPosition )
 {
     switch( GetShape() )
     {
@@ -1254,7 +1254,7 @@ bool EDA_SHAPE::continueEdit( const wxPoint& aPosition )
 }
 
 
-void EDA_SHAPE::calcEdit( const wxPoint& aPosition )
+void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
 {
 #define sq( x ) pow( x, 2 )
 
@@ -1291,7 +1291,7 @@ void EDA_SHAPE::calcEdit( const wxPoint& aPosition )
         case 2:
         case 3:
         {
-            wxPoint v = m_start - m_end;
+            VECTOR2I v = m_start - m_end;
             double chordBefore = sq( v.x ) + sq( v.y );
 
             if( m_editState == 2 )
@@ -1328,15 +1328,15 @@ void EDA_SHAPE::calcEdit( const wxPoint& aPosition )
         //
         // Let 'l' be the length of the chord and 'm' the middle point of the chord
         double  l = GetLineLength( m_start, m_end );
-        wxPoint m = ( m_start + m_end ) / 2;
+        VECTOR2I m = ( m_start + m_end ) / 2;
 
         // Calculate 'd', the vector from the chord midpoint to the center
-        wxPoint d;
+        VECTOR2I d;
         d.x = KiROUND( sqrt( sq( radius ) - sq( l/2 ) ) * ( m_start.y - m_end.y ) / l );
         d.y = KiROUND( sqrt( sq( radius ) - sq( l/2 ) ) * ( m_end.x - m_start.x ) / l );
 
-        wxPoint c1 = m + d;
-        wxPoint c2 = m - d;
+        VECTOR2I c1 = m + d;
+        VECTOR2I c2 = m - d;
 
         // Solution gives us 2 centers; we need to pick one:
         switch( m_editState )
@@ -1344,12 +1344,12 @@ void EDA_SHAPE::calcEdit( const wxPoint& aPosition )
         case 1:
         {
             // Keep center clockwise from chord while drawing
-            wxPoint chordVector = m_end - m_start;
+            VECTOR2I chordVector = m_end - m_start;
             double  chordAngle = ArcTangente( chordVector.y, chordVector.x );
             NORMALIZE_ANGLE_POS( chordAngle );
 
-            wxPoint c1Test = c1;
-            RotatePoint( &c1Test, m_start, -chordAngle );
+            VECTOR2I c1Test = c1;
+            RotatePoint( c1Test, m_start, -chordAngle );
 
             m_arcCenter = c1Test.x > 0 ? c2 : c1;
         }
@@ -1500,13 +1500,13 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
 
     case SHAPE_T::RECT:
     {
-        std::vector<wxPoint> pts = GetRectCorners();
+        std::vector<VECTOR2I> pts = GetRectCorners();
 
         if( IsFilled() )
         {
             aCornerBuffer.NewOutline();
 
-            for( const wxPoint& pt : pts )
+            for( const VECTOR2I& pt : pts )
                 aCornerBuffer.Append( pt );
         }
 
@@ -1538,15 +1538,15 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
 
         // The polygon is expected to be a simple polygon; not self intersecting, no hole.
         double  orientation = getParentOrientation();
-        wxPoint offset = getParentPosition();
+        VECTOR2I offset = getParentPosition();
 
         // Build the polygon with the actual position and orientation:
-        std::vector<wxPoint> poly;
+        std::vector<VECTOR2I> poly;
         DupPolyPointsList( poly );
 
-        for( wxPoint& point : poly )
+        for( VECTOR2I& point : poly )
         {
-            RotatePoint( &point, orientation );
+            RotatePoint( point, orientation );
             point += offset;
         }
 
@@ -1554,15 +1554,15 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
         {
             aCornerBuffer.NewOutline();
 
-            for( const wxPoint& point : poly )
+            for( const VECTOR2I& point : poly )
                 aCornerBuffer.Append( point.x, point.y );
         }
 
         if( width > 0 || !IsFilled() )
         {
-            wxPoint pt1( poly[ poly.size() - 1] );
+            VECTOR2I pt1( poly[poly.size() - 1] );
 
-            for( const wxPoint& pt2 : poly )
+            for( const VECTOR2I& pt2 : poly )
             {
                 if( pt2 != pt1 )
                     TransformOvalToPolygon( aCornerBuffer, pt1, pt2, width, aError, aErrorLoc );
@@ -1576,9 +1576,9 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
 
     case SHAPE_T::BEZIER:
     {
-        std::vector<wxPoint> ctrlPts = { GetStart(), GetBezierC1(), GetBezierC2(), GetEnd() };
+        std::vector<VECTOR2I> ctrlPts = { GetStart(), GetBezierC1(), GetBezierC2(), GetEnd() };
         BEZIER_POLY converter( ctrlPts );
-        std::vector< wxPoint> poly;
+        std::vector<VECTOR2I> poly;
         converter.GetPoly( poly, GetWidth() );
 
         for( unsigned ii = 1; ii < poly.size(); ii++ )

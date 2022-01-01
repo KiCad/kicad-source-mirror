@@ -38,7 +38,7 @@
 #include <trigo.h>
 
 
-SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxString& text ) :
+SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const VECTOR2I& pos, const wxString& text ) :
     SCH_HIERLABEL( pos, text, SCH_SHEET_PIN_T ),
     m_edge( SHEET_SIDE::UNDEFINED )
 {
@@ -65,7 +65,7 @@ EDA_ITEM* SCH_SHEET_PIN::Clone() const
 }
 
 
-void SCH_SHEET_PIN::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_SHEET_PIN::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     // The icon selection is handle by the virtual method CreateGraphicShape called by ::Print
     SCH_HIERLABEL::Print( aSettings, aOffset );
@@ -156,7 +156,7 @@ enum SHEET_SIDE SCH_SHEET_PIN::GetSide() const
 }
 
 
-void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
+void SCH_SHEET_PIN::ConstrainOnEdge( VECTOR2I Pos )
 {
     SCH_SHEET* sheet = GetParent();
 
@@ -247,7 +247,7 @@ void SCH_SHEET_PIN::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_SHEET_PIN::Rotate( const wxPoint& aCenter )
+void SCH_SHEET_PIN::Rotate( const VECTOR2I& aCenter )
 {
     VECTOR2I pt = GetTextPos();
     VECTOR2I delta = pt - aCenter;
@@ -300,7 +300,7 @@ void SCH_SHEET_PIN::Rotate( const wxPoint& aCenter )
 
 
 void SCH_SHEET_PIN::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
-                                        std::vector<wxPoint>& aPoints, const wxPoint& aPos ) const
+                                        std::vector<VECTOR2I>& aPoints, const VECTOR2I& aPos ) const
 {
     /*
      * These are the same icon shapes as SCH_HIERLABEL but the graphic icon is slightly
@@ -340,7 +340,7 @@ BITMAPS SCH_SHEET_PIN::GetMenuImage() const
 }
 
 
-bool SCH_SHEET_PIN::HitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool SCH_SHEET_PIN::HitTest( const VECTOR2I& aPoint, int aAccuracy ) const
 {
     EDA_RECT rect = GetBoundingBox();
 

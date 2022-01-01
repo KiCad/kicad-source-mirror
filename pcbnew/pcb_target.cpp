@@ -62,7 +62,7 @@ PCB_TARGET::~PCB_TARGET()
 }
 
 
-bool PCB_TARGET::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool PCB_TARGET::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     int dX = aPosition.x - m_pos.x;
     int dY = aPosition.y - m_pos.y;
@@ -83,13 +83,13 @@ bool PCB_TARGET::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy 
 }
 
 
-void PCB_TARGET::Rotate(const wxPoint& aRotCentre, double aAngle)
+void PCB_TARGET::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
-    RotatePoint( &m_pos, aRotCentre, aAngle );
+    RotatePoint( m_pos, aRotCentre, aAngle );
 }
 
 
-void PCB_TARGET::Flip(const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_TARGET::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )
         m_pos.x = aCentre.x - ( m_pos.x - aCentre.x );

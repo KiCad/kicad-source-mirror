@@ -37,7 +37,8 @@
 class SCH_BUS_ENTRY_BASE : public SCH_ITEM
 {
 public:
-    SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos = wxPoint( 0, 0 ), bool aFlipY = false );
+    SCH_BUS_ENTRY_BASE( KICAD_T aType, const VECTOR2I& pos = VECTOR2I( 0, 0 ),
+                        bool aFlipY = false );
 
     bool IsDanglingStart() const { return m_isDanglingStart; }
     bool IsDanglingEnd() const { return m_isDanglingEnd; }
@@ -65,7 +66,7 @@ public:
      */
     bool IsMovableFromAnchorPoint() const override { return false; }
 
-    wxPoint GetEnd() const;
+    VECTOR2I GetEnd() const;
 
     wxSize GetSize() const { return m_size; }
     void SetSize( const wxSize& aSize ) { m_size = aSize; }
@@ -84,29 +85,29 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     const EDA_RECT GetBoundingBox() const override;
 
-    void Move( const wxPoint& aMoveVector ) override
+    void Move( const VECTOR2I& aMoveVector ) override
     {
         m_pos += aMoveVector;
     }
 
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
-    void Rotate( const wxPoint& aCenter ) override;
+    void Rotate( const VECTOR2I& aCenter ) override;
 
     bool IsDangling() const override;
 
     bool IsConnectable() const override { return true; }
 
-    std::vector<wxPoint> GetConnectionPoints() const override;
+    std::vector<VECTOR2I> GetConnectionPoints() const override;
 
-    wxPoint GetPosition() const override { return m_pos; }
-    void SetPosition( const wxPoint& aPosition ) override { m_pos = aPosition; }
+    VECTOR2I GetPosition() const override { return m_pos; }
+    void     SetPosition( const VECTOR2I& aPosition ) override { m_pos = aPosition; }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void Plot( PLOTTER* aPlotter ) const override;
@@ -120,10 +121,10 @@ public:
 #endif
 
 private:
-    bool doIsConnected( const wxPoint& aPosition ) const override;
+    bool doIsConnected( const VECTOR2I& aPosition ) const override;
 
 protected:
-    wxPoint       m_pos;
+    VECTOR2I      m_pos;
     wxSize        m_size;
     bool          m_isDanglingStart;
     bool          m_isDanglingEnd;
@@ -143,9 +144,9 @@ protected:
 class SCH_BUS_WIRE_ENTRY : public SCH_BUS_ENTRY_BASE
 {
 public:
-    SCH_BUS_WIRE_ENTRY( const wxPoint& pos = wxPoint( 0, 0 ), bool aFlipY = false );
+    SCH_BUS_WIRE_ENTRY( const VECTOR2I& pos = VECTOR2I( 0, 0 ), bool aFlipY = false );
 
-    SCH_BUS_WIRE_ENTRY( const wxPoint& pos, int aQuadrant );
+    SCH_BUS_WIRE_ENTRY( const VECTOR2I& pos, int aQuadrant );
 
     ~SCH_BUS_WIRE_ENTRY() { }
 

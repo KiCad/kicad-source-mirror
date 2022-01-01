@@ -52,7 +52,7 @@ public:
     STROKE_PARAMS GetStroke() const { return m_stroke; }
     void SetStroke( const STROKE_PARAMS& aStroke ) { m_stroke = aStroke; }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     int GetPenWidth() const override;
@@ -74,30 +74,30 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    void BeginEdit( const wxPoint& aStartPoint ) override  { beginEdit( aStartPoint ); }
-    bool ContinueEdit( const wxPoint& aPosition ) override { return continueEdit( aPosition ); }
-    void CalcEdit( const wxPoint& aPosition ) override     { calcEdit( aPosition ); }
+    void BeginEdit( const VECTOR2I& aStartPoint ) override { beginEdit( aStartPoint ); }
+    bool ContinueEdit( const VECTOR2I& aPosition ) override { return continueEdit( aPosition ); }
+    void CalcEdit( const VECTOR2I& aPosition ) override { calcEdit( aPosition ); }
     void EndEdit() override                                { endEdit(); }
     void SetEditState( int aState )                        { setEditState( aState ); }
 
-    void AddPoint( const wxPoint& aPosition );
+    void AddPoint( const VECTOR2I& aPosition );
 
-    void Offset( const wxPoint& aOffset ) override;
+    void Offset( const VECTOR2I& aOffset ) override;
 
-    void MoveTo( const wxPoint& aPosition ) override;
+    void MoveTo( const VECTOR2I& aPosition ) override;
 
-    wxPoint GetPosition() const override                  { return getPosition(); }
-    void SetPosition( const wxPoint& aPosition ) override { setPosition( aPosition ); }
+    VECTOR2I GetPosition() const override { return getPosition(); }
+    void     SetPosition( const VECTOR2I& aPosition ) override { setPosition( aPosition ); }
 
-    wxPoint GetCenter() const { return getCenter(); }
+    VECTOR2I GetCenter() const { return getCenter(); }
 
     void CalcArcAngles( int& aStartAngle, int& aEndAngle ) const;
 
-    void MirrorHorizontal( const wxPoint& aCenter ) override;
-    void MirrorVertical( const wxPoint& aCenter ) override;
-    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
+    void MirrorHorizontal( const VECTOR2I& aCenter ) override;
+    void MirrorVertical( const VECTOR2I& aCenter ) override;
+    void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) override;
 
-    void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+    void Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
                const TRANSFORM& aTransform ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
@@ -118,11 +118,11 @@ private:
     int compare( const LIB_ITEM& aOther,
             LIB_ITEM::COMPARE_FLAGS aCompareFlags = LIB_ITEM::COMPARE_FLAGS::NORMAL ) const override;
 
-    void print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+    void print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
 
     double getParentOrientation() const override { return 0.0; }
-    wxPoint getParentPosition() const override { return wxPoint(); }
+    VECTOR2I getParentPosition() const override { return VECTOR2I(); }
 };
 
 

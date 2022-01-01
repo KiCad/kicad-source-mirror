@@ -287,7 +287,7 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
         // Focus on the object's location.  Prefer a visible part of the object to its anchor
         // in order to keep from scrolling around.
 
-        wxPoint        focusPt = aItem->GetFocusPosition();
+        VECTOR2I       focusPt = aItem->GetFocusPosition();
         KIGFX::VIEW*   view = GetCanvas()->GetView();
         SHAPE_POLY_SET viewportPoly( view->GetViewport() );
 

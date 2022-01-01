@@ -144,7 +144,7 @@ public:
      * @param aPosition The position to check.
      * @return The nearest grid position.
      */
-    wxPoint GetNearestGridPosition( const wxPoint& aPosition ) const;
+    VECTOR2I GetNearestGridPosition( const VECTOR2I& aPosition ) const;
 
     /**
      * Return the nearest \a aGridSize / 2 location to \a aPosition.
@@ -155,7 +155,7 @@ public:
      * @param aPosition The position to check.
      * @return The nearest half-grid position.
      */
-    wxPoint GetNearestHalfGridPosition( const wxPoint& aPosition ) const;
+    VECTOR2I GetNearestHalfGridPosition( const VECTOR2I& aPosition ) const;
 
     virtual const TITLE_BLOCK& GetTitleBlock() const = 0;
     virtual void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) = 0;
@@ -291,7 +291,7 @@ public:
      *
      * @param aPos is the point to go to.
      */
-    void FocusOnLocation( const wxPoint& aPos );
+    void FocusOnLocation( const VECTOR2I& aPos );
 
     /**
      * Construct a "basic" menu for a tool, containing only items that apply to all tools

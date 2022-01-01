@@ -41,23 +41,23 @@
 #include <trigo.h>
 
 
-std::vector<wxPoint> SCH_EDIT_FRAME::GetSchematicConnections()
+std::vector<VECTOR2I> SCH_EDIT_FRAME::GetSchematicConnections()
 {
-    std::vector<wxPoint> retval;
+    std::vector<VECTOR2I> retval;
 
     for( SCH_ITEM* item : GetScreen()->Items() )
     {
         // Avoid items that are changing
         if( !( item->GetEditFlags() & ( IS_DRAGGING | IS_MOVING | IS_DELETED ) ) )
         {
-            std::vector<wxPoint> pts = item->GetConnectionPoints();
+            std::vector<VECTOR2I> pts = item->GetConnectionPoints();
             retval.insert( retval.end(), pts.begin(), pts.end() );
         }
     }
 
     // We always have some overlapping connection points.  Drop duplicates here
     std::sort( retval.begin(), retval.end(),
-            []( const wxPoint& a, const wxPoint& b ) -> bool
+            []( const VECTOR2I& a, const VECTOR2I& b ) -> bool
             { return a.x < b.x || (a.x == b.x && a.y < b.y); } );
     retval.erase(
             std::unique( retval.begin(), retval.end() ), retval.end() );
@@ -78,7 +78,7 @@ void SCH_EDIT_FRAME::TestDanglingEnds()
 }
 
 
-bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd )
+bool SCH_EDIT_FRAME::TrimWire( const VECTOR2I& aStart, const VECTOR2I& aEnd )
 {
     SCH_SCREEN* screen = GetScreen();
     bool        retval = false;
@@ -292,7 +292,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
 }
 
 
-bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
+bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const VECTOR2I& aPoint,
                                    SCH_LINE** aNewSegment, SCH_SCREEN* aScreen )
 {
     if( aScreen == nullptr )
@@ -317,7 +317,7 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
 }
 
 
-bool SCH_EDIT_FRAME::BreakSegments( const wxPoint& aPoint, SCH_SCREEN* aScreen )
+bool SCH_EDIT_FRAME::BreakSegments( const VECTOR2I& aPoint, SCH_SCREEN* aScreen )
 {
     static const KICAD_T wiresAndBuses[] = { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T, EOT };
 
@@ -355,7 +355,7 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_SCREEN* aScreen )
 
     bool brokenSegments = false;
 
-    std::set<wxPoint> point_set;
+    std::set<VECTOR2I> point_set;
 
     for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
         point_set.insert( item->GetPosition() );
@@ -368,7 +368,7 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_SCREEN* aScreen )
     }
 
 
-    for( const wxPoint& pt : point_set )
+    for( const VECTOR2I& pt : point_set )
         brokenSegments |= BreakSegments( pt, aScreen );
 
     return brokenSegments;
@@ -452,7 +452,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
 }
 
 
-SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( SCH_SCREEN* aScreen, const wxPoint& aPos,
+SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( SCH_SCREEN* aScreen, const VECTOR2I& aPos,
                                            bool aUndoAppend, bool aFinal )
 {
     SCH_JUNCTION* junction = new SCH_JUNCTION( aPos );

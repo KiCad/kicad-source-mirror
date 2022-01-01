@@ -151,7 +151,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 0 )
         return 0;
 
-    wxPoint   rotPoint;
+    VECTOR2I  rotPoint;
     bool      ccw = ( aEvent.Matches( EE_ACTIONS::rotateCCW.MakeEvent() ) );
     LIB_ITEM* item = static_cast<LIB_ITEM*>( selection.Front() );
 
@@ -195,7 +195,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 0 )
         return 0;
 
-    wxPoint   mirrorPoint;
+    VECTOR2I  mirrorPoint;
     bool      xAxis = ( aEvent.Matches( EE_ACTIONS::mirrorV.MakeEvent() ) );
     LIB_ITEM* item = static_cast<LIB_ITEM*>( selection.Front() );
 
@@ -267,7 +267,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         if( item->Type() == LIB_PIN_T )
         {
             LIB_PIN*  pin = static_cast<LIB_PIN*>( item );
-            wxPoint   pos = pin->GetPosition();
+            VECTOR2I pos = pin->GetPosition();
 
             toDelete.insert( pin );
 

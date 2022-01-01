@@ -511,7 +511,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
 
     for( SCH_ITEM* item : aItemList )
     {
-        std::vector< wxPoint > points = item->GetConnectionPoints();
+        std::vector<VECTOR2I> points = item->GetConnectionPoints();
         item->ConnectedItems( aSheet ).clear();
 
         if( item->Type() == SCH_SHEET_T )
@@ -534,7 +534,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
             {
                 pin->InitializeConnection( aSheet, this );
 
-                wxPoint pos = pin->GetPosition();
+                VECTOR2I pos = pin->GetPosition();
 
                 // because calling the first time is not thread-safe
                 pin->GetDefaultNetName( aSheet );
@@ -583,7 +583,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
                 break;
             }
 
-            for( const wxPoint& point : points )
+            for( const VECTOR2I& point : points )
                 connection_map[ point ].push_back( item );
         }
 
@@ -2559,7 +2559,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         bool has_other_items = false;
         SCH_PIN* pin = nullptr;
         std::vector<SCH_ITEM*> invalid_items;
-        wxPoint noConnectPos = aSubgraph->m_no_connect->GetPosition();
+        VECTOR2I noConnectPos = aSubgraph->m_no_connect->GetPosition();
         double minDist = 0;
 
         // Any subgraph that contains both a pin and a no-connect should not

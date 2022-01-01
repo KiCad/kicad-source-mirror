@@ -40,7 +40,7 @@
 #include <wx/mstream.h>
 
 
-SCH_BITMAP::SCH_BITMAP( const wxPoint& pos ) :
+SCH_BITMAP::SCH_BITMAP( const VECTOR2I& pos ) :
     SCH_ITEM( nullptr, SCH_BITMAP_T )
 {
     m_pos   = pos;
@@ -114,9 +114,9 @@ const EDA_RECT SCH_BITMAP::GetBoundingBox() const
 }
 
 
-void SCH_BITMAP::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset  )
+void SCH_BITMAP::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
-    wxPoint pos = m_pos + aOffset;
+    VECTOR2I pos = m_pos + aOffset;
 
     m_image->DrawBitmap( aSettings->GetPrintDC(), pos );
 }
@@ -142,9 +142,9 @@ void SCH_BITMAP::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_BITMAP::Rotate( const wxPoint& aCenter )
+void SCH_BITMAP::Rotate( const VECTOR2I& aCenter )
 {
-    RotatePoint( &m_pos, aCenter, 900 );
+    RotatePoint( m_pos, aCenter, 900 );
     m_image->Rotate( false );
 }
 
@@ -160,7 +160,7 @@ void SCH_BITMAP::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-bool SCH_BITMAP::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool SCH_BITMAP::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     EDA_RECT rect = GetBoundingBox();
 

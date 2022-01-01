@@ -3271,7 +3271,7 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     LIB_SHAPE* arc = new LIB_SHAPE( aSymbol.get(), SHAPE_T::ARC );
 
-    wxPoint center;
+    VECTOR2I center;
 
     center.x = Mils2Iu( parseInt( aReader, line, &line ) );
     center.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -3298,7 +3298,7 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
     // Actual Coordinates of arc ends are read from file
     if( *line != 0 )
     {
-        wxPoint arcStart, arcEnd;
+        VECTOR2I arcStart, arcEnd;
 
         arcStart.x = Mils2Iu( parseInt( aReader, line, &line ) );
         arcStart.y = Mils2Iu( parseInt( aReader, line, &line ) );
@@ -3312,8 +3312,8 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
     {
         // Actual Coordinates of arc ends are not read from file
         // (old library), calculate them
-        wxPoint arcStart( radius, 0 );
-        wxPoint arcEnd( radius, 0 );
+        VECTOR2I arcStart( radius, 0 );
+        VECTOR2I arcEnd( radius, 0 );
 
         RotatePoint( &arcStart.x, &arcStart.y, -angle1 );
         arcStart += arc->GetCenter();
@@ -3332,7 +3332,7 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
      */
     if( !TRANSFORM().MapAngles( &angle1, &angle2 ) )
     {
-        wxPoint temp = arc->GetStart();
+        VECTOR2I temp = arc->GetStart();
         arc->SetStart( arc->GetEnd() );
         arc->SetEnd( temp );
     }
@@ -4026,7 +4026,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveBezier( LIB_SHAPE* aBezier, OUTPUTFORMATTER& a
                       aBezier->GetConvert(),
                       Iu2Mils( aBezier->GetWidth() ) );
 
-    for( const wxPoint& pt : aBezier->GetBezierPoints() )
+    for( const VECTOR2I& pt : aBezier->GetBezierPoints() )
         aFormatter.Print( 0, " %d %d", Iu2Mils( pt.x ), Iu2Mils( pt.y ) );
 
     aFormatter.Print( 0, " %c\n", fill_tab[ static_cast<int>( aBezier->GetFillMode() ) - 1 ] );

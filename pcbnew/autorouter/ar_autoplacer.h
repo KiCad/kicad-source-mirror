@@ -98,9 +98,9 @@ private:
 
     int testRectangle( const EDA_RECT& aRect, int side );
     unsigned int calculateKeepOutArea( const EDA_RECT& aRect, int side );
-    int testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSide, const wxPoint& aOffset );
+    int testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSide, const VECTOR2I& aOffset );
     int getOptimalFPPlacement( FOOTPRINT* aFootprint );
-    double computePlacementRatsnestCost( FOOTPRINT* aFootprint, const wxPoint& aOffset );
+    double computePlacementRatsnestCost( FOOTPRINT* aFootprint, const VECTOR2I& aOffset );
 
     /**
      * Find the "best" footprint place. The criteria are:
@@ -109,12 +109,12 @@ private:
      */
     FOOTPRINT* pickFootprint();
 
-    void placeFootprint( FOOTPRINT* aFootprint, bool aDoNotRecreateRatsnest, const wxPoint& aPos );
+    void placeFootprint( FOOTPRINT* aFootprint, bool aDoNotRecreateRatsnest, const VECTOR2I& aPos );
 
-    const PAD* nearestPad( FOOTPRINT* aRefFP, PAD* aRefPad, const wxPoint& aOffset );
+    const PAD* nearestPad( FOOTPRINT* aRefFP, PAD* aRefPad, const VECTOR2I& aOffset );
 
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
-    void addFpBody( const wxPoint& aStart, const wxPoint& aEnd, LSET aLayerMask );
+    void addFpBody( const VECTOR2I& aStart, const VECTOR2I& aEnd, LSET aLayerMask );
 
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
     void addPad( PAD* aPad, int aClearance );
@@ -134,9 +134,9 @@ private:
 
     BOARD* m_board;
 
-    wxPoint m_curPosition;
-    double  m_minCost;
-    int     m_gridSize;
+    VECTOR2I m_curPosition;
+    double   m_minCost;
+    int      m_gridSize;
 
     std::shared_ptr<KIGFX::VIEW_OVERLAY>        m_overlay;
     std::unique_ptr<CONNECTIVITY_DATA>          m_connectivity;

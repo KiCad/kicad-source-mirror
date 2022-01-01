@@ -53,7 +53,7 @@ void SCH_SHAPE::SetStroke( const STROKE_PARAMS& aStroke )
 }
 
 
-void SCH_SHAPE::Move( const wxPoint& aOffset )
+void SCH_SHAPE::Move( const VECTOR2I& aOffset )
 {
     move( aOffset );
 }
@@ -71,7 +71,7 @@ void SCH_SHAPE::MirrorVertically( int aCenter )
 }
 
 
-void SCH_SHAPE::Rotate( const wxPoint& aCenter )
+void SCH_SHAPE::Rotate( const VECTOR2I& aCenter )
 {
     rotate( aCenter, 900 );
 }
@@ -80,7 +80,7 @@ void SCH_SHAPE::Rotate( const wxPoint& aCenter )
 void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
 {
     int     pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
-    wxPoint center;
+    VECTOR2I center;
     int     radius     = 0;
     int     startAngle = 0;
     int     endAngle   = 0;
@@ -123,7 +123,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
 
     case SHAPE_T::RECT:
     {
-        std::vector<wxPoint> pts = GetRectCorners();
+        std::vector<VECTOR2I> pts = GetRectCorners();
 
         aPlotter->MoveTo( pts[0] );
         aPlotter->LineTo( pts[1] );
@@ -198,26 +198,26 @@ int SCH_SHAPE::GetPenWidth() const
 }
 
 
-void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     int      penWidth = GetPenWidth();
     wxDC*    DC = aSettings->GetPrintDC();
-    wxPoint  pt1 = GetStart();
-    wxPoint  pt2 = GetEnd();
-    wxPoint  c;
+    VECTOR2I pt1 = GetStart();
+    VECTOR2I pt2 = GetEnd();
+    VECTOR2I c;
     COLOR4D  color;
 
     penWidth = std::max( penWidth, aSettings->GetDefaultPenWidth() );
 
     unsigned ptCount = 0;
-    wxPoint* buffer = nullptr;
+    VECTOR2I* buffer = nullptr;
 
     if( GetShape() == SHAPE_T::POLY )
     {
         SHAPE_LINE_CHAIN poly = m_poly.Outline( 0 );
 
         ptCount = poly.GetPointCount();
-        buffer = new wxPoint[ ptCount ];
+        buffer = new VECTOR2I[ptCount];
 
         for( unsigned ii = 0; ii < ptCount; ++ii )
             buffer[ii] = (wxPoint) poly.CPoint( ii );
@@ -225,7 +225,7 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset 
     else if( GetShape() == SHAPE_T::BEZIER )
     {
         ptCount = m_bezierPoints.size();
-        buffer = new wxPoint[ ptCount ];
+        buffer = new VECTOR2I[ptCount];
 
         for( size_t ii = 0; ii < ptCount; ++ii )
             buffer[ii] = m_bezierPoints[ii];
@@ -392,7 +392,7 @@ void SCH_SHAPE::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void SCH_SHAPE::AddPoint( const wxPoint& aPosition )
+void SCH_SHAPE::AddPoint( const VECTOR2I& aPosition )
 {
     if( GetShape() == SHAPE_T::POLY )
     {

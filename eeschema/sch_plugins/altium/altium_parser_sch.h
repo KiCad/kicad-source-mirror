@@ -30,6 +30,8 @@
 #include <map>
 #include <vector>
 
+#include <math/vector2d.h>
+
 #include <wx/gdicmn.h>
 #include <wx/string.h>
 
@@ -128,9 +130,9 @@ struct ASCH_SYMBOL
     wxString sourcelibraryname;
     wxString componentdescription;
 
-    int     orientation;
-    bool    isMirrored;
-    wxPoint location;
+    int      orientation;
+    bool     isMirrored;
+    VECTOR2I location;
 
     int partcount;
     int displaymodecount;
@@ -223,10 +225,10 @@ struct ASCH_PIN
     ASCH_PIN_ELECTRICAL     electrical;
     ASCH_RECORD_ORIENTATION orientation;
 
-    wxPoint location;
-    int     pinlength;
+    VECTOR2I location;
+    int      pinlength;
 
-    wxPoint kicadLocation; // location of pin in KiCad without rounding error
+    VECTOR2I kicadLocation; // location of pin in KiCad without rounding error
 
     bool showPinName;
     bool showDesignator;
@@ -264,7 +266,7 @@ struct ASCH_LABEL
     int ownerindex;
     int ownerpartid;
 
-    wxPoint location;
+    VECTOR2I location;
 
     wxString text;
 
@@ -280,8 +282,8 @@ struct ASCH_LABEL
 
 struct ASCH_TEXT_FRAME
 {
-    wxPoint location;
-    wxSize  size;
+    VECTOR2I location;
+    wxSize   size;
 
     wxString text;
 
@@ -311,7 +313,7 @@ struct ASCH_BEZIER
     int ownerpartid;
     int ownerpartdisplaymode;
 
-    std::vector<wxPoint> points;
+    std::vector<VECTOR2I> points;
 
     int lineWidth;
 
@@ -334,7 +336,7 @@ struct ASCH_POLYLINE
     int ownerpartid;
     int ownerpartdisplaymode;
 
-    std::vector<wxPoint> points;
+    std::vector<VECTOR2I> points;
 
     int lineWidth;
 
@@ -346,7 +348,7 @@ struct ASCH_POLYLINE
 
 struct ASCH_POLYGON : ASCH_SHAPE_INTERFACE
 {
-    std::vector<wxPoint> points;
+    std::vector<VECTOR2I> points;
 
     explicit ASCH_POLYGON( const std::map<wxString, wxString>& aProps );
 };
@@ -354,8 +356,8 @@ struct ASCH_POLYGON : ASCH_SHAPE_INTERFACE
 
 struct ASCH_ROUND_RECTANGLE : ASCH_SHAPE_INTERFACE
 {
-    wxPoint bottomLeft;
-    wxPoint topRight;
+    VECTOR2I bottomLeft;
+    VECTOR2I topRight;
 
     wxSize cornerradius;
 
@@ -371,10 +373,10 @@ struct ASCH_ARC
     int ownerpartid;
     int ownerpartdisplaymode;
 
-    wxPoint center;
-    int     radius;
-    double  startAngle;
-    double  endAngle;
+    VECTOR2I center;
+    int      radius;
+    double   startAngle;
+    double   endAngle;
 
     int lineWidth;
 
@@ -388,8 +390,8 @@ struct ASCH_LINE
     int ownerpartid;
     int ownerpartdisplaymode;
 
-    wxPoint point1;
-    wxPoint point2;
+    VECTOR2I point1;
+    VECTOR2I point2;
 
     int lineWidth;
 
@@ -399,8 +401,8 @@ struct ASCH_LINE
 
 struct ASCH_RECTANGLE : ASCH_SHAPE_INTERFACE
 {
-    wxPoint bottomLeft;
-    wxPoint topRight;
+    VECTOR2I bottomLeft;
+    VECTOR2I topRight;
 
     bool isTransparent;
 
@@ -410,7 +412,7 @@ struct ASCH_RECTANGLE : ASCH_SHAPE_INTERFACE
 
 struct ASCH_SHEET_SYMBOL
 {
-    wxPoint location;
+    VECTOR2I location;
     wxSize  size;
 
     bool isSolid;
@@ -495,7 +497,7 @@ struct ASCH_POWER_PORT
     wxString text;
     bool     showNetName;
 
-    wxPoint                 location;
+    VECTOR2I                location;
     ASCH_RECORD_ORIENTATION orientation;
     ASCH_POWER_PORT_STYLE   style;
 
@@ -510,9 +512,9 @@ struct ASCH_PORT
     wxString name;
     wxString harnessType;
 
-    wxPoint location;
-    int     width;
-    int     height;
+    VECTOR2I location;
+    int      width;
+    int      height;
 
     ASCH_PORT_IOTYPE iotype;
     ASCH_PORT_STYLE  style;
@@ -523,7 +525,7 @@ struct ASCH_PORT
 
 struct ASCH_NO_ERC
 {
-    wxPoint location;
+    VECTOR2I location;
 
     bool isActive;
     bool supressAll;
@@ -536,7 +538,7 @@ struct ASCH_NET_LABEL
 {
     wxString text;
 
-    wxPoint location;
+    VECTOR2I location;
 
     ASCH_RECORD_ORIENTATION orientation;
 
@@ -549,7 +551,7 @@ struct ASCH_BUS
     int indexinsheet;
     int lineWidth;
 
-    std::vector<wxPoint> points;
+    std::vector<VECTOR2I> points;
 
     explicit ASCH_BUS( const std::map<wxString, wxString>& aProps );
 };
@@ -560,7 +562,7 @@ struct ASCH_WIRE
     int indexinsheet;
     int lineWidth;
 
-    std::vector<wxPoint> points;
+    std::vector<VECTOR2I> points;
 
     explicit ASCH_WIRE( const std::map<wxString, wxString>& aProps );
 };
@@ -570,7 +572,7 @@ struct ASCH_JUNCTION
 {
     int ownerpartid;
 
-    wxPoint location;
+    VECTOR2I location;
 
     explicit ASCH_JUNCTION( const std::map<wxString, wxString>& aProps );
 };
@@ -582,8 +584,8 @@ struct ASCH_IMAGE
     int ownerpartid;
 
     wxString filename;
-    wxPoint  location;
-    wxPoint  corner;
+    VECTOR2I location;
+    VECTOR2I corner;
 
     bool embedimage;
     bool keepaspect;
@@ -631,7 +633,7 @@ enum class ASCH_SHEET_SIZE
     ORCAD_E = 17  // 4280 × 3280
 };
 
-wxPoint ASchSheetGetSize( ASCH_SHEET_SIZE aSheetSize );
+VECTOR2I ASchSheetGetSize( ASCH_SHEET_SIZE aSheetSize );
 
 
 enum class ASCH_SHEET_WORKSPACEORIENTATION
@@ -660,7 +662,7 @@ struct ASCH_SHEET_NAME
     wxString text;
 
     ASCH_RECORD_ORIENTATION orientation;
-    wxPoint                 location;
+    VECTOR2I                location;
 
     bool isHidden;
 
@@ -676,7 +678,7 @@ struct ASCH_FILE_NAME
     wxString text;
 
     ASCH_RECORD_ORIENTATION orientation;
-    wxPoint                 location;
+    VECTOR2I                location;
 
     bool isHidden;
 
@@ -694,7 +696,7 @@ struct ASCH_DESIGNATOR
 
     ASCH_RECORD_ORIENTATION  orientation;
     ASCH_LABEL_JUSTIFICATION justification;
-    wxPoint                  location;
+    VECTOR2I                 location;
 
     explicit ASCH_DESIGNATOR( const std::map<wxString, wxString>& aProps );
 };
@@ -723,8 +725,8 @@ struct ASCH_IMPLEMENTATION_LIST
 
 struct ASCH_BUS_ENTRY
 {
-    wxPoint location;
-    wxPoint corner;
+    VECTOR2I location;
+    VECTOR2I corner;
 
     explicit ASCH_BUS_ENTRY( const std::map<wxString, wxString>& aProps );
 };
@@ -735,7 +737,7 @@ struct ASCH_PARAMETER
     int ownerindex;
     int ownerpartid;
 
-    wxPoint                  location;
+    VECTOR2I                 location;
     ASCH_LABEL_JUSTIFICATION justification;
     ASCH_RECORD_ORIENTATION  orientation;
 

@@ -135,7 +135,7 @@ void DS_PROXY_VIEW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-bool DS_PROXY_VIEW_ITEM::HitTestDrawingSheetItems( VIEW* aView, const wxPoint& aPosition )
+bool DS_PROXY_VIEW_ITEM::HitTestDrawingSheetItems( VIEW* aView, const VECTOR2I& aPosition )
 {
     int               accuracy = (int) aView->ToWorld( 5.0 );   // five pixels at current zoom
     DS_DRAW_ITEM_LIST drawList;

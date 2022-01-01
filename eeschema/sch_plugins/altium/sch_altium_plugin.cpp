@@ -61,7 +61,7 @@
 #include <wx/wfstream.h>
 #include <trigo.h>
 
-static const wxPoint GetRelativePosition( const wxPoint& aPosition, const SCH_SYMBOL* aSymbol )
+static const VECTOR2I GetRelativePosition( const VECTOR2I& aPosition, const SCH_SYMBOL* aSymbol )
 {
     TRANSFORM t = aSymbol->GetTransform().InverseTransform();
     return t.TransformCoordinate( aPosition - aSymbol->GetPosition() );
@@ -675,7 +675,7 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
     if( !elem.showPinName )
         pin->SetNameTextSize( 0 );
 
-    wxPoint pinLocation = elem.location; // the location given is not the connection point!
+    VECTOR2I pinLocation = elem.location; // the location given is not the connection point!
 
     switch( elem.orientation )
     {
@@ -1049,8 +1049,8 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
             else
             {
                 // simulate Bezier using line segments
-                std::vector<wxPoint> bezierPoints;
-                std::vector<wxPoint> polyPoints;
+                std::vector<VECTOR2I> bezierPoints;
+                std::vector<VECTOR2I> polyPoints;
 
                 for( size_t j = i; j < elem.points.size() && j < i + 4; j++ )
                     bezierPoints.push_back( elem.points.at( j ) );
@@ -1137,7 +1137,8 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
 
                 for( size_t j = i; j < elem.points.size() && j < i + 4; j++ )
                 {
-                    wxPoint pos = GetRelativePosition( elem.points.at( j ) + m_sheetOffset, symbol );
+                    VECTOR2I pos =
+                            GetRelativePosition( elem.points.at( j ) + m_sheetOffset, symbol );
 
                     switch( j - i )
                     {
@@ -1164,7 +1165,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
     {
         SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY, SCH_LAYER_ID::LAYER_NOTES );
 
-        for( wxPoint& point : elem.points )
+        for( VECTOR2I& point : elem.points )
             poly->AddPoint( point + m_sheetOffset );
 
         poly->SetStroke( STROKE_PARAMS( elem.lineWidth, GetPlotDashType( elem.linestyle ) ) );
@@ -1194,7 +1195,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
 
         line->SetUnit( elem.ownerpartid );
 
-        for( wxPoint& point : elem.points )
+        for( VECTOR2I& point : elem.points )
             line->AddPoint( GetRelativePosition( point + m_sheetOffset, symbol ) );
 
         line->SetStroke( STROKE_PARAMS( elem.lineWidth, GetPlotDashType( elem.linestyle ) ) );
@@ -1210,7 +1211,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
     {
         SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY, SCH_LAYER_ID::LAYER_NOTES );
 
-        for( wxPoint& point : elem.points )
+        for( VECTOR2I& point : elem.points )
             poly->AddPoint( point + m_sheetOffset );
         poly->AddPoint( elem.points.front() + m_sheetOffset );
 
@@ -1241,7 +1242,7 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
 
         line->SetUnit( elem.ownerpartid );
 
-        for( wxPoint& point : elem.points )
+        for( VECTOR2I& point : elem.points )
             line->AddPoint( GetRelativePosition( point + m_sheetOffset, symbol ) );
 
         line->AddPoint( GetRelativePosition( elem.points.front() + m_sheetOffset, symbol ) );
@@ -1254,13 +1255,13 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
 {
     ASCH_ROUND_RECTANGLE elem( aProperties );
 
-    wxPoint sheetTopRight   = elem.topRight + m_sheetOffset;
-    wxPoint sheetBottomLeft = elem.bottomLeft + m_sheetOffset;
+    VECTOR2I sheetTopRight = elem.topRight + m_sheetOffset;
+    VECTOR2I sheetBottomLeft = elem.bottomLeft + m_sheetOffset;
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        const wxPoint topLeft     = { sheetBottomLeft.x, sheetTopRight.y };
-        const wxPoint bottomRight = { sheetTopRight.x, sheetBottomLeft.y };
+        const VECTOR2I topLeft = { sheetBottomLeft.x, sheetTopRight.y };
+        const VECTOR2I bottomRight = { sheetTopRight.x, sheetBottomLeft.y };
 
         // TODO: misses rounded edges
         SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECT, SCH_LAYER_ID::LAYER_NOTES );
@@ -1313,7 +1314,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, SCH_LAYER_ID::LAYER_NOTES );
 
             circle->SetPosition( elem.center + m_sheetOffset );
-            circle->SetEnd( circle->GetPosition() + wxPoint( elem.radius, 0 ) );
+            circle->SetEnd( circle->GetPosition() + VECTOR2I( elem.radius, 0 ) );
             circle->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
 
             m_currentSheet->GetScreen()->Append( circle );
@@ -1325,8 +1326,8 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             double includedAngle = elem.endAngle - elem.startAngle;
             double startAngle = DEG2RAD( elem.endAngle );
 
-            wxPoint startOffset = wxPoint( KiROUND( std::cos( startAngle ) * elem.radius ),
-                                           -KiROUND( std::sin( startAngle ) * elem.radius ) );
+            VECTOR2I startOffset = VECTOR2I( KiROUND( std::cos( startAngle ) * elem.radius ),
+                                            -KiROUND( std::sin( startAngle ) * elem.radius ) );
 
             arc->SetCenter( elem.center + m_sheetOffset );
             arc->SetStart( elem.center + startOffset + m_sheetOffset );
@@ -1363,7 +1364,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             circle->SetUnit( elem.ownerpartid );
 
             circle->SetPosition( GetRelativePosition( elem.center + m_sheetOffset, symbol ) );
-            circle->SetEnd( circle->GetPosition() + wxPoint( elem.radius, 0 ) );
+            circle->SetEnd( circle->GetPosition() + VECTOR2I( elem.radius, 0 ) );
             circle->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
         }
         else
@@ -1374,12 +1375,12 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
 
             arc->SetCenter( GetRelativePosition( elem.center + m_sheetOffset, symbol ) );
 
-            wxPoint arcStart( elem.radius, 0 );
+            VECTOR2I arcStart( elem.radius, 0 );
             RotatePoint( &arcStart.x, &arcStart.y, -elem.startAngle * 10.0 );
             arcStart += arc->GetCenter();
             arc->SetStart( arcStart );
 
-            wxPoint arcEnd( elem.radius, 0 );
+            VECTOR2I arcEnd( elem.radius, 0 );
             RotatePoint( &arcEnd.x, &arcEnd.y, -elem.endAngle * 10.0 );
             arcEnd += arc->GetCenter();
             arc->SetEnd( arcEnd );
@@ -1438,13 +1439,13 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
 {
     ASCH_RECTANGLE elem( aProperties );
 
-    wxPoint sheetTopRight   = elem.topRight + m_sheetOffset;
-    wxPoint sheetBottomLeft = elem.bottomLeft + m_sheetOffset;
+    VECTOR2I sheetTopRight = elem.topRight + m_sheetOffset;
+    VECTOR2I sheetBottomLeft = elem.bottomLeft + m_sheetOffset;
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        const wxPoint topLeft     = { sheetBottomLeft.x, sheetTopRight.y };
-        const wxPoint bottomRight = { sheetTopRight.x, sheetBottomLeft.y };
+        const VECTOR2I topLeft = { sheetBottomLeft.x, sheetTopRight.y };
+        const VECTOR2I bottomRight = { sheetTopRight.x, sheetBottomLeft.y };
 
         SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECT, SCH_LAYER_ID::LAYER_NOTES );
 
@@ -1537,7 +1538,7 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
     //sheetPin->SetLabelSpinStyle( getSpinStyle( term.OrientAngle, false ) );
     //sheetPin->SetPosition( getKiCadPoint( term.Position ) );
 
-    wxPoint pos  = sheetIt->second->GetPosition();
+    VECTOR2I pos = sheetIt->second->GetPosition();
     wxSize  size = sheetIt->second->GetSize();
 
     switch( elem.side )
@@ -1584,7 +1585,7 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
 }
 
 
-wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_STYLE aStyle,
+VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_STYLE aStyle,
                                          REPORTER* aReporter )
 {
     if( aStyle == ASCH_POWER_PORT_STYLE::CIRCLE || aStyle == ASCH_POWER_PORT_STYLE::ARROW )
@@ -1601,7 +1602,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
             aKsymbol->AddDrawItem( circle );
             circle->SetStroke( STROKE_PARAMS( Mils2iu( 5 ), PLOT_DASH_TYPE::SOLID ) );
             circle->SetPosition( { Mils2iu( 0 ), Mils2iu( -75 ) } );
-            circle->SetEnd( circle->GetPosition() + wxPoint( Mils2iu( 25 ), 0 ) );
+            circle->SetEnd( circle->GetPosition() + VECTOR2I( Mils2iu( 25 ), 0 ) );
         }
         else
         {
@@ -1745,7 +1746,7 @@ wxPoint HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_S
         aKsymbol->AddDrawItem( circle );
         circle->SetStroke( STROKE_PARAMS( Mils2iu( 10 ), PLOT_DASH_TYPE::SOLID ) );
         circle->SetPosition( { Mils2iu( 0 ), Mils2iu( -160 ) } );
-        circle->SetEnd( circle->GetPosition() + wxPoint( Mils2iu( 120 ), 0 ) );
+        circle->SetEnd( circle->GetPosition() + VECTOR2I( Mils2iu( 120 ), 0 ) );
 
         return { 0, Mils2iu( 350 ) };
     }
@@ -1827,7 +1828,8 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
         pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
         pin->SetVisible( false );
 
-        wxPoint valueFieldPos = HelperGeneratePowerPortGraphics( libSymbol, elem.style, m_reporter );
+        VECTOR2I valueFieldPos =
+                HelperGeneratePowerPortGraphics( libSymbol, elem.style, m_reporter );
 
         libSymbol->GetValueField().SetPosition( valueFieldPos );
 
@@ -1888,8 +1890,8 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
 void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
 {
     bool    isHarness = !aElem.harnessType.IsEmpty();
-    wxPoint start     = aElem.location + m_sheetOffset;
-    wxPoint end       = start;
+    VECTOR2I start = aElem.location + m_sheetOffset;
+    VECTOR2I end = start;
 
     switch( aElem.style )
     {
@@ -1931,7 +1933,7 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     }
 
     // Select label position. In case both match, we will add a line later.
-    wxPoint   position = ( startIsWireTerminal || startIsBusTerminal ) ? start : end;
+    VECTOR2I  position = ( startIsWireTerminal || startIsBusTerminal ) ? start : end;
     SCH_TEXT* label;
 
     if( isHarness )
@@ -2108,7 +2110,7 @@ void SCH_ALTIUM_PLUGIN::ParseImage( const std::map<wxString, wxString>& aPropert
 {
     ASCH_IMAGE elem( aProperties );
 
-    wxPoint                     center = ( elem.location + elem.corner ) / 2 + m_sheetOffset;
+    VECTOR2I                    center = ( elem.location + elem.corner ) / 2 + m_sheetOffset;
     std::unique_ptr<SCH_BITMAP> bitmap = std::make_unique<SCH_BITMAP>( center );
 
     if( elem.embedimage )
@@ -2161,7 +2163,7 @@ void SCH_ALTIUM_PLUGIN::ParseImage( const std::map<wxString, wxString>& aPropert
 
     // we only support one scale, thus we need to select one in case it does not keep aspect ratio
     wxSize  currentImageSize = bitmap->GetSize();
-    wxPoint expectedImageSize = elem.location - elem.corner;
+    VECTOR2I expectedImageSize = elem.location - elem.corner;
     double  scaleX = std::abs( static_cast<double>( expectedImageSize.x ) / currentImageSize.x );
     double  scaleY = std::abs( static_cast<double>( expectedImageSize.y ) / currentImageSize.y );
     bitmap->SetImageScale( std::min( scaleX, scaleY ) );
@@ -2299,7 +2301,7 @@ void SCH_ALTIUM_PLUGIN::ParseBusEntry( const std::map<wxString, wxString>& aProp
 
     SCH_BUS_WIRE_ENTRY* busWireEntry = new SCH_BUS_WIRE_ENTRY( elem.location + m_sheetOffset );
 
-    wxPoint vector = elem.corner - elem.location;
+    VECTOR2I vector = elem.corner - elem.location;
     busWireEntry->SetSize( { vector.x, vector.y } );
 
     busWireEntry->SetFlags( IS_NEW );
@@ -2376,7 +2378,7 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
             if( fieldName == "VALUE" )
                 fieldName = "ALTIUM_VALUE";
 
-            field = symbol->AddField( SCH_FIELD( wxPoint(), fieldIdx, symbol, fieldName ) );
+            field = symbol->AddField( SCH_FIELD( VECTOR2I(), fieldIdx, symbol, fieldName ) );
         }
 
         wxString kicadText = AltiumSpecialStringsToKiCadVariables( elem.text, variableMap );

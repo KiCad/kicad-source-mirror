@@ -40,13 +40,13 @@ EE_SELECTION::EE_SELECTION( SCH_SCREEN* aScreen ) :
 EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
 {
     EDA_ITEM* topLeftItem = nullptr;
-    wxPoint   topLeftPos;
+    VECTOR2I  topLeftPos;
 
     // find the leftmost (smallest x coord) and highest (smallest y with the smallest x) item
     // in the selection
     for( EDA_ITEM* item : m_items )
     {
-        wxPoint pos = item->GetPosition();
+        VECTOR2I pos = item->GetPosition();
 
         if( ( topLeftItem == nullptr )
             || ( pos.x < topLeftPos.x )

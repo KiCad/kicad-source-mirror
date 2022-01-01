@@ -1024,14 +1024,14 @@ bool FOOTPRINT::IsOnLayer( PCB_LAYER_ID aLayer ) const
 }
 
 
-bool FOOTPRINT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool FOOTPRINT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     EDA_RECT rect = GetBoundingBox( false, false );
     return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
 
 
-bool FOOTPRINT::HitTestAccurate( const wxPoint& aPosition, int aAccuracy ) const
+bool FOOTPRINT::HitTestAccurate( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     return GetBoundingHull().Collide( aPosition, aAccuracy );
 }
@@ -1103,7 +1103,7 @@ PAD* FOOTPRINT::FindPadByNumber( const wxString& aPadNumber, PAD* aSearchAfterMe
 }
 
 
-PAD* FOOTPRINT::GetPad( const wxPoint& aPosition, LSET aLayerMask )
+PAD* FOOTPRINT::GetPad( const VECTOR2I& aPosition, LSET aLayerMask )
 {
     for( PAD* pad : m_pads )
     {
@@ -1125,7 +1125,7 @@ PAD* FOOTPRINT::GetTopLeftPad()
 
     for( PAD* p : m_pads )
     {
-        wxPoint pnt = p->GetPosition(); // GetPosition() returns the center of the pad
+        VECTOR2I pnt = p->GetPosition(); // GetPosition() returns the center of the pad
 
         if( ( pnt.x < topLeftPad->GetPosition().x ) ||
             ( topLeftPad->GetPosition().x == pnt.x && pnt.y < topLeftPad->GetPosition().y ) )
@@ -1477,19 +1477,19 @@ const wxChar* FOOTPRINT::StringLibNameInvalidChars( bool aUserReadable )
 }
 
 
-void FOOTPRINT::Move( const wxPoint& aMoveVector )
+void FOOTPRINT::Move( const VECTOR2I& aMoveVector )
 {
-    wxPoint newpos = m_pos + aMoveVector;
+    VECTOR2I newpos = m_pos + aMoveVector;
     SetPosition( newpos );
 }
 
 
-void FOOTPRINT::Rotate( const wxPoint& aRotCentre, double aAngle )
+void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
     double  orientation = GetOrientation();
     double  newOrientation = orientation + aAngle;
-    wxPoint newpos = m_pos;
-    RotatePoint( &newpos, aRotCentre, aAngle );
+    VECTOR2I newpos = m_pos;
+    RotatePoint( newpos, aRotCentre, aAngle );
     SetPosition( newpos );
     SetOrientation( newOrientation );
 
@@ -1509,10 +1509,10 @@ void FOOTPRINT::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void FOOTPRINT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     // Move footprint to its final position:
-    wxPoint finalPos = m_pos;
+    VECTOR2I finalPos = m_pos;
 
     // Now Flip the footprint.
     // Flipping a footprint is a specific transform: it is not mirrored like a text.
@@ -1580,9 +1580,9 @@ void FOOTPRINT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-void FOOTPRINT::SetPosition( const wxPoint& aPos )
+void FOOTPRINT::SetPosition( const VECTOR2I& aPos )
 {
-    wxPoint delta = aPos - m_pos;
+    VECTOR2I delta = aPos - m_pos;
 
     m_pos += delta;
 
@@ -1634,7 +1634,7 @@ void FOOTPRINT::SetPosition( const wxPoint& aPos )
 }
 
 
-void FOOTPRINT::MoveAnchorPosition( const wxPoint& aMoveVector )
+void FOOTPRINT::MoveAnchorPosition( const VECTOR2I& aMoveVector )
 {
     /* Move the reference point of the footprint
      * the footprints elements (pads, outlines, edges .. ) are moved
@@ -1646,8 +1646,8 @@ void FOOTPRINT::MoveAnchorPosition( const wxPoint& aMoveVector )
 
 
     // Update (move) the relative coordinates relative to the new anchor point.
-    wxPoint moveVector = aMoveVector;
-    RotatePoint( &moveVector, -GetOrientation() );
+    VECTOR2I moveVector = aMoveVector;
+    RotatePoint( moveVector, -GetOrientation() );
 
     // Update of the reference and value.
     m_reference->SetPos0( m_reference->GetPos0() + moveVector );
@@ -2169,8 +2169,7 @@ void FOOTPRINT::CheckFootprintAttributes( const std::function<void( const wxStri
 }
 
 void FOOTPRINT::CheckFootprintTHPadNoHoles(
-                const std::function<void( const wxString& msg, const wxPoint& position )>*
-                aErrorHandler )
+        const std::function<void( const wxString& msg, const VECTOR2I& position )>* aErrorHandler )
 {
     if( aErrorHandler == nullptr )
         return;

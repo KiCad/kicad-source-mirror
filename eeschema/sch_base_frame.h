@@ -192,9 +192,9 @@ public:
                                             const LIB_ID& aPreselectedLibId,
                                             int aUnit, int aConvert );
 
-    virtual void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
+    virtual void RedrawScreen( const VECTOR2I& aCenterPoint, bool aWarpPointer );
 
-    virtual void CenterScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
+    virtual void CenterScreen( const VECTOR2I& aCenterPoint, bool aWarpPointer );
 
     void HardRedraw() override;
 

@@ -209,8 +209,8 @@ struct ALTIUM_VERTICE
     const int32_t radius;
     const double  startangle;
     const double  endangle;
-    const wxPoint position;
-    const wxPoint center;
+    const VECTOR2I position;
+    const VECTOR2I center;
 
     explicit ALTIUM_VERTICE( const wxPoint& aPosition )
             : isRound( false ),
@@ -218,7 +218,7 @@ struct ALTIUM_VERTICE
               startangle( 0. ),
               endangle( 0. ),
               position( aPosition ),
-              center( wxPoint( 0, 0 ) )
+              center( VECTOR2I( 0, 0 ) )
     {
     }
 
@@ -412,10 +412,10 @@ struct ADIMENSION6
 
     ALTIUM_UNIT textunit;
 
-    wxPoint xy1;
+    VECTOR2I xy1;
 
-    std::vector<wxPoint> referencePoint;
-    std::vector<wxPoint> textPoint;
+    std::vector<VECTOR2I> referencePoint;
+    std::vector<VECTOR2I> textPoint;
 
     explicit ADIMENSION6( ALTIUM_PARSER& aReader );
 };
@@ -519,7 +519,7 @@ struct AARC6
     uint16_t     component;
     uint16_t     subpolyindex;
 
-    wxPoint  center;
+    VECTOR2I center;
     uint32_t radius;
     double   startangle;
     double   endangle;

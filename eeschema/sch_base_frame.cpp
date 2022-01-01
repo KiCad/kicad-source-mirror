@@ -240,7 +240,7 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
 }
 
 
-void SCH_BASE_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
+void SCH_BASE_FRAME::RedrawScreen( const VECTOR2I& aCenterPoint, bool aWarpPointer )
 {
     GetCanvas()->GetView()->SetCenter( aCenterPoint );
 
@@ -251,7 +251,7 @@ void SCH_BASE_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 }
 
 
-void SCH_BASE_FRAME::CenterScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
+void SCH_BASE_FRAME::CenterScreen( const VECTOR2I& aCenterPoint, bool aWarpPointer )
 {
     GetCanvas()->GetView()->SetCenter( aCenterPoint );
 

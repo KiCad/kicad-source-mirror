@@ -305,8 +305,8 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 
         // These are swapped because wxDC fills arcs counterclockwise and GAL
         // fills them clockwise.
-        wxPoint arcStart = aItem->m_End;
-        wxPoint arcEnd = aItem->m_Start;
+        VECTOR2I arcStart = aItem->m_End;
+        VECTOR2I arcEnd = aItem->m_Start;
 
         // Gerber arcs are 3-point (start, center, end)
         // GAL needs center, radius, start angle, end angle
@@ -480,11 +480,11 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
 
     case GBR_SPOT_RECT:
     {
-        wxPoint codeStart;
-        wxPoint aShapePos = aItem->m_Start;
+        VECTOR2I codeStart;
+        VECTOR2I aShapePos = aItem->m_Start;
         codeStart.x = aShapePos.x - code->m_Size.x / 2;
         codeStart.y = aShapePos.y - code->m_Size.y / 2;
-        wxPoint codeEnd = codeStart + code->m_Size;
+        VECTOR2I codeEnd = codeStart + code->m_Size;
         codeStart = aItem->GetABPosition( codeStart );
         codeEnd = aItem->GetABPosition( codeEnd );
 
@@ -506,8 +506,8 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
     {
         int radius = 0;
 
-        wxPoint codeStart = aItem->m_Start;
-        wxPoint codeEnd = aItem->m_Start;
+        VECTOR2I codeStart = aItem->m_Start;
+        VECTOR2I codeEnd = aItem->m_Start;
 
         if( code->m_Size.x > code->m_Size.y )   // horizontal oval
         {

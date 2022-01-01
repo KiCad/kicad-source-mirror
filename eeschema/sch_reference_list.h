@@ -171,7 +171,7 @@ private:
     UTF8            m_ref;               // it's private, use the accessors please
     SCH_SYMBOL*     m_rootSymbol;        ///< The symbol associated the reference object.
     LIB_SYMBOL*     m_libPart;           ///< The source symbol from a library.
-    wxPoint         m_symbolPos;         ///< The physical position of the symbol in schematic
+    VECTOR2I        m_symbolPos;         ///< The physical position of the symbol in schematic
                                          ///< used to annotate by X or Y position
     int             m_unit;              ///< The unit number for symbol with multiple parts
                                          ///< per package.

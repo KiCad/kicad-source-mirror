@@ -62,11 +62,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
 
     LONGPOINT designLimit = Assignments.Settings.DesignLimit;
 
-    //Note: can't use getKiCadPoint() due wxPoint being int - need long long to make the check
+    //Note: can't use getKiCadPoint() due VECTOR2I being int - need long long to make the check
     long long designSizeXkicad = (long long) designLimit.x / KiCadUnitDivider;
     long long designSizeYkicad = (long long) designLimit.y / KiCadUnitDivider;
 
-    // Max size limited by the positive dimension of wxPoint (which is an int)
+    // Max size limited by the positive dimension of VECTOR2I (which is an int)
     constexpr long long maxDesignSizekicad = std::numeric_limits<int>::max();
 
     if( designSizeXkicad > maxDesignSizekicad || designSizeYkicad > maxDesignSizekicad )
@@ -248,7 +248,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
 
         for( SCH_ITEM* item : allItems )
         {
-            item->Move( (wxPoint)translation );
+            item->Move( translation );
             item->ClearFlags();
             sheet->GetScreen()->Update( item );
         }
@@ -276,8 +276,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheets()
 
         for( LAYER_ID sheetID : orphanSheets )
         {
-            wxPoint pos( x * Mils2iu( 1000 ), y * Mils2iu( 1000 ) );
-            wxSize  siz( Mils2iu( 1000 ), Mils2iu( 1000 ) );
+            VECTOR2I pos( x * Mils2iu( 1000 ), y * Mils2iu( 1000 ) );
+            wxSize   siz( Mils2iu( 1000 ), Mils2iu( 1000 ) );
 
             loadSheetAndChildSheets( sheetID, pos, siz, rootPath );
 
@@ -495,8 +495,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 if( !partField )
                 {
                     int fieldID = symbol->GetFieldCount();
-                    partField = symbol->AddField( SCH_FIELD( wxPoint(), fieldID, symbol,
-                                                             PartNameFieldName ) );
+                    partField = symbol->AddField(
+                            SCH_FIELD( VECTOR2I(), fieldID, symbol, PartNameFieldName ) );
                 }
 
                 wxASSERT( partField->GetName() == PartNameFieldName );
@@ -525,8 +525,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     if( !attrField )
                     {
                         int fieldID = symbol->GetFieldCount();
-                        attrField = symbol->AddField( SCH_FIELD( wxPoint(), fieldID,
-                                                                 symbol, attrName ) );
+                        attrField = symbol->AddField(
+                                SCH_FIELD( VECTOR2I(), fieldID, symbol, attrName ) );
                     }
 
                     wxASSERT( attrField->GetName() == attrName );
@@ -607,7 +607,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                         TEXT_LOCATION txtLoc =
                                 symbolDef.TextLocations.at( SIGNALNAME_ORIGIN_ATTRID );
 
-                        wxPoint valPos = getKiCadLibraryPoint( txtLoc.Position, symbolDef.Origin );
+                        VECTOR2I valPos = getKiCadLibraryPoint( txtLoc.Position, symbolDef.Origin );
 
                         kiPart->GetValueField().SetPosition( valPos );
                         kiPart->GetValueField().SetVisible( true );
@@ -641,16 +641,16 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
             {
                 // There should only be one pin and we'll use that to set the position
                 TERMINAL& symbolTerminal = libSymDef.Terminals.begin()->second;
-                wxPoint   terminalPosOffset = symbolTerminal.Position - libSymDef.Origin;
+                VECTOR2I  terminalPosOffset = symbolTerminal.Position - libSymDef.Origin;
                 double    rotateDeciDegree = getAngleTenthDegree( sym.OrientAngle );
 
                 if( sym.Mirror )
                     rotateDeciDegree += 1800.0;
 
-                RotatePoint( &terminalPosOffset, -rotateDeciDegree );
+                RotatePoint( terminalPosOffset, -rotateDeciDegree );
 
                 SCH_GLOBALLABEL* netLabel = new SCH_GLOBALLABEL;
-                netLabel->SetPosition( getKiCadPoint( sym.Origin + terminalPosOffset ) );
+                netLabel->SetPosition( getKiCadPoint( (VECTOR2I)sym.Origin + terminalPosOffset ) );
                 netLabel->SetText( "***UNKNOWN NET****" ); // This should be later updated when we load the netlist
                 netLabel->SetTextSize( wxSize( Mils2iu( 50 ), Mils2iu( 50 ) ) );
 
@@ -781,7 +781,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadBusses()
             {
                 //lets find the closest point in the busline to the label
                 VECTOR2I busLabelLoc = getKiCadPoint( bus.BusLabel.Position );
-                wxPoint  nearestPt   = (wxPoint) busLineChain.NearestPoint( busLabelLoc );
+                VECTOR2I nearestPt = busLineChain.NearestPoint( busLabelLoc );
 
                 label->SetPosition( nearestPt );
 
@@ -910,7 +910,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             SCH_BUS_WIRE_ENTRY* busEntry =
                     new SCH_BUS_WIRE_ENTRY( getKiCadPoint( busTerm.FirstPoint ), false );
 
-            wxPoint size =
+            VECTOR2I size =
                     getKiCadPoint( busTerm.SecondPoint ) - getKiCadPoint( busTerm.FirstPoint );
             busEntry->SetSize( wxSize( size.x, size.y ) );
 
@@ -984,7 +984,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
 
             bool      firstPt  = true;
             bool      secondPt = false;
-            wxPoint   last;
+            VECTOR2I  last;
             SCH_LINE* wire = nullptr;
 
             SHAPE_LINE_CHAIN wireChain; // Create a temp. line chain representing the connection
@@ -1014,7 +1014,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                     {
                         SCH_SHEET* parentSheet   = static_cast<SCH_SHEET*>( sheetPin->GetParent() );
                         wxSize     sheetSize     = parentSheet->GetSize();
-                        wxPoint    sheetPosition = parentSheet->GetPosition();
+                        VECTOR2I   sheetPosition = parentSheet->GetPosition();
 
                         int leftSide  = sheetPosition.x;
                         int rightSide = sheetPosition.x + sheetSize.x;
@@ -1057,7 +1057,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                             else
                                 wireChain.Replace( intsctIndx + 1, /*end index*/ -1, intsctPt );
 
-                            sheetPin->SetPosition( (wxPoint) intsctPt );
+                            sheetPin->SetPosition( intsctPt );
                         }
                     }
                 }
@@ -1082,7 +1082,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             {
                 if( firstPt )
                 {
-                    last     = (wxPoint) pt;
+                    last     = pt;
                     firstPt  = false;
                     secondPt = true;
                     continue;
@@ -1093,8 +1093,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                     secondPt = false;
 
 
-                    wxPoint kiLast           = last;
-                    wxPoint kiCurrent        = (wxPoint) pt;
+                    VECTOR2I kiLast = last;
+                    VECTOR2I kiCurrent = pt;
                     double  wireangleDeciDeg = getPolarAngle( kiLast - kiCurrent );
                     fixNetLabelsAndSheetPins( wireangleDeciDeg, conn.StartNode );
                 }
@@ -1102,13 +1102,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                 wire = new SCH_LINE();
 
                 wire->SetStartPoint( last );
-                wire->SetEndPoint( (wxPoint) pt );
+                wire->SetEndPoint( pt );
                 wire->SetLayer( LAYER_WIRE );
 
                 if( !conn.ConnectionLineCode.IsEmpty() )
                     wire->SetLineWidth( getLineThickness( conn.ConnectionLineCode ) );
 
-                last = (wxPoint) pt;
+                last = pt;
 
                 m_sheetMap.at( conn.LayerID )->GetScreen()->Append( wire );
             }
@@ -1116,8 +1116,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             //Fix labels on the end wire
             if( wire )
             {
-                wxPoint kiLast           = wire->GetEndPoint();
-                wxPoint kiCurrent        = wire->GetStartPoint();
+                VECTOR2I kiLast = wire->GetEndPoint();
+                VECTOR2I kiCurrent = wire->GetStartPoint();
                 double  wireangleDeciDeg = getPolarAngle( kiLast - kiCurrent );
                 fixNetLabelsAndSheetPins( wireangleDeciDeg, conn.EndNode );
             }
@@ -1194,11 +1194,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadDocumentationSymbols()
         }
 
         SYMDEF_SCM docSymDef  = Library.SymbolDefinitions.at( docSym.SymdefID );
-        wxPoint    moveVector = getKiCadPoint( docSym.Origin ) - getKiCadPoint( docSymDef.Origin );
+        VECTOR2I   moveVector = getKiCadPoint( docSym.Origin ) - getKiCadPoint( docSymDef.Origin );
         double     rotationAngle     = getAngleTenthDegree( docSym.OrientAngle );
         double     scalingFactor     = (double) docSym.ScaleRatioNumerator
                                         / (double) docSym.ScaleRatioDenominator;
-        wxPoint    centreOfTransform = getKiCadPoint( docSymDef.Origin );
+        VECTOR2I   centreOfTransform = getKiCadPoint( docSymDef.Origin );
         bool       mirrorInvert      = docSym.Mirror;
 
         for( std::pair<FIGURE_ID, FIGURE> figPair : docSymDef.Figures )
@@ -1218,8 +1218,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadDocumentationSymbols()
 
             SCH_TEXT* kiTxt = getKiCadSchText( txt );
 
-            wxPoint newPosition = applyTransform( kiTxt->GetPosition(), moveVector, rotationAngle,
-                                                  scalingFactor, centreOfTransform, mirrorInvert );
+            VECTOR2I newPosition = applyTransform( kiTxt->GetPosition(), moveVector, rotationAngle,
+                                                   scalingFactor, centreOfTransform, mirrorInvert );
 
             int     newTxtWidth     = KiROUND( kiTxt->GetTextWidth() * scalingFactor );
             int     newTxtHeight    = KiROUND( kiTxt->GetTextHeight() * scalingFactor );
@@ -1997,11 +1997,12 @@ wxString CADSTAR_SCH_ARCHIVE_LOADER::getNetName( const NET_SCH& aNet )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::loadGraphicStaightSegment( const wxPoint& aStartPoint,
-        const wxPoint& aEndPoint, const LINECODE_ID& aCadstarLineCodeID,
-        const LAYER_ID& aCadstarSheetID, const SCH_LAYER_ID& aKiCadSchLayerID,
-        const wxPoint& aMoveVector, const double& aRotationAngleDeciDeg,
-        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+void CADSTAR_SCH_ARCHIVE_LOADER::loadGraphicStaightSegment(
+        const VECTOR2I& aStartPoint, const VECTOR2I& aEndPoint,
+        const LINECODE_ID& aCadstarLineCodeID, const LAYER_ID& aCadstarSheetID,
+        const SCH_LAYER_ID& aKiCadSchLayerID, const VECTOR2I& aMoveVector,
+        const double& aRotationAngleDeciDeg, const double& aScalingFactor,
+        const VECTOR2I& aTransformCentre, const bool& aMirrorInvert )
 {
     SCH_LINE* segment = new SCH_LINE();
 
@@ -2010,9 +2011,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadGraphicStaightSegment( const wxPoint& aStar
     segment->SetLineStyle( getLineStyle( aCadstarLineCodeID ) );
 
     //Apply transforms
-    wxPoint startPoint = applyTransform( aStartPoint, aMoveVector, aRotationAngleDeciDeg,
+    VECTOR2I startPoint = applyTransform( aStartPoint, aMoveVector, aRotationAngleDeciDeg,
                                          aScalingFactor, aTransformCentre, aMirrorInvert );
-    wxPoint endPoint = applyTransform( aEndPoint, aMoveVector, aRotationAngleDeciDeg,
+    VECTOR2I endPoint = applyTransform( aEndPoint, aMoveVector, aRotationAngleDeciDeg,
                                        aScalingFactor, aTransformCentre, aMirrorInvert );
 
     segment->SetStartPoint( startPoint );
@@ -2022,10 +2023,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadGraphicStaightSegment( const wxPoint& aStar
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
-        LINECODE_ID aCadstarLineCodeID, LAYER_ID aCadstarSheetID, SCH_LAYER_ID aKiCadSchLayerID,
-        const wxPoint& aMoveVector, const double& aRotationAngleDeciDeg,
-        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices(
+        const std::vector<VERTEX>& aCadstarVertices, LINECODE_ID aCadstarLineCodeID,
+        LAYER_ID aCadstarSheetID, SCH_LAYER_ID aKiCadSchLayerID, const VECTOR2I& aMoveVector,
+        const double& aRotationAngleDeciDeg, const double& aScalingFactor,
+        const VECTOR2I& aTransformCentre, const bool& aMirrorInvert )
 {
     const VERTEX* prev = &aCadstarVertices.at( 0 );
     const VERTEX* cur;
@@ -2037,9 +2039,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
     {
         cur = &aCadstarVertices.at( ii );
 
-        wxPoint   startPoint  = getKiCadPoint( prev->End );
-        wxPoint   endPoint    = getKiCadPoint( cur->End );
-        wxPoint   centerPoint = getKiCadPoint( cur->Center );
+        VECTOR2I  startPoint = getKiCadPoint( prev->End );
+        VECTOR2I  endPoint = getKiCadPoint( cur->End );
+        VECTOR2I  centerPoint = getKiCadPoint( cur->Center );
         bool      cw          = false;
 
         if( cur->Type == VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE
@@ -2075,8 +2077,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
 
             for( int jj = 0; jj < arcSegments.SegmentCount(); jj++ )
             {
-                wxPoint segStart = (wxPoint) arcSegments.Segment( jj ).A;
-                wxPoint segEnd   = (wxPoint) arcSegments.Segment( jj ).B;
+                VECTOR2I segStart = (wxPoint) arcSegments.Segment( jj ).A;
+                VECTOR2I segEnd = (wxPoint) arcSegments.Segment( jj ).B;
 
                 loadGraphicStaightSegment( segStart, segEnd, aCadstarLineCodeID, aCadstarSheetID,
                                            aKiCadSchLayerID, aMoveVector, aRotationAngleDeciDeg,
@@ -2101,10 +2103,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::loadFigure( const FIGURE& aCadstarFigure,
-        const LAYER_ID& aCadstarSheetIDOverride, SCH_LAYER_ID aKiCadSchLayerID,
-        const wxPoint& aMoveVector, const double& aRotationAngleDeciDeg,
-        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+void CADSTAR_SCH_ARCHIVE_LOADER::loadFigure(
+        const FIGURE& aCadstarFigure, const LAYER_ID& aCadstarSheetIDOverride,
+        SCH_LAYER_ID aKiCadSchLayerID, const VECTOR2I& aMoveVector,
+        const double& aRotationAngleDeciDeg, const double& aScalingFactor,
+        const VECTOR2I& aTransformCentre, const bool& aMirrorInvert )
 {
     loadShapeVertices( aCadstarFigure.Shape.Vertices, aCadstarFigure.LineCodeID,
                        aCadstarSheetIDOverride, aKiCadSchLayerID, aMoveVector,
@@ -2119,9 +2122,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadFigure( const FIGURE& aCadstarFigure,
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets(
-        LAYER_ID aCadstarSheetID, const wxPoint& aPosition, wxSize aSheetSize,
-        const SCH_SHEET_PATH& aParentSheet )
+void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets( LAYER_ID              aCadstarSheetID,
+                                                          const VECTOR2I&       aPosition,
+                                                          VECTOR2I              aSheetSize,
+                                                          const SCH_SHEET_PATH& aParentSheet )
 {
     wxCHECK_MSG( m_sheetMap.find( aCadstarSheetID ) == m_sheetMap.end(), ,
                  "Sheet already loaded!" );
@@ -2130,7 +2134,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets(
     SCH_SCREEN*    screen = new SCH_SCREEN( m_schematic );
     SCH_SHEET_PATH instance( aParentSheet );
 
-    sheet->SetSize( aSheetSize );
+    sheet->SetSize( (wxSize) aSheetSize );
     sheet->SetScreen( screen );
 
     wxString name = Sheets.SheetNames.at( aCadstarSheetID );
@@ -2199,7 +2203,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets( LAYER_ID aCadstarSheetID,
             // In KiCad you can only draw rectangular shapes whereas in Cadstar arbitrary shapes
             // are allowed. We will calculate the extents of the Cadstar shape and draw a rectangle
 
-            std::pair<wxPoint, wxSize> blockExtents;
+            std::pair<VECTOR2I, wxSize> blockExtents;
 
             if( block.Figures.size() > 0 )
             {
@@ -2802,9 +2806,9 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
         };
 
     auto scalePt =
-        [&]( wxPoint aCoord ) -> wxPoint
+        [&]( VECTOR2I aCoord ) -> VECTOR2I
         {
-            return wxPoint( scaleLen( aCoord.x ), scaleLen( aCoord.y ) );
+            return VECTOR2I( scaleLen( aCoord.x ), scaleLen( aCoord.y ) );
         };
 
     auto scaleSize =
@@ -2947,11 +2951,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
 }
 
 
-std::pair<wxPoint, wxSize>
+std::pair<VECTOR2I, wxSize>
 CADSTAR_SCH_ARCHIVE_LOADER::getFigureExtentsKiCad( const FIGURE& aCadstarFigure )
 {
-    wxPoint upperLeft( Assignments.Settings.DesignLimit.x, 0 );
-    wxPoint lowerRight( 0, Assignments.Settings.DesignLimit.y );
+    VECTOR2I upperLeft( Assignments.Settings.DesignLimit.x, 0 );
+    VECTOR2I lowerRight( 0, Assignments.Settings.DesignLimit.y );
 
     for( const VERTEX& v : aCadstarFigure.Shape.Vertices )
     {
@@ -2986,18 +2990,18 @@ CADSTAR_SCH_ARCHIVE_LOADER::getFigureExtentsKiCad( const FIGURE& aCadstarFigure 
         }
     }
 
-    wxPoint upperLeftKiCad  = getKiCadPoint( upperLeft );
-    wxPoint lowerRightKiCad = getKiCadPoint( lowerRight );
+    VECTOR2I upperLeftKiCad = getKiCadPoint( upperLeft );
+    VECTOR2I lowerRightKiCad = getKiCadPoint( lowerRight );
 
-    wxPoint size = lowerRightKiCad - upperLeftKiCad;
+    VECTOR2I size = lowerRightKiCad - upperLeftKiCad;
 
     return { upperLeftKiCad, wxSize( abs( size.x ), abs( size.y ) ) };
 }
 
 
-wxPoint CADSTAR_SCH_ARCHIVE_LOADER::getKiCadPoint( const wxPoint& aCadstarPoint )
+VECTOR2I CADSTAR_SCH_ARCHIVE_LOADER::getKiCadPoint( const VECTOR2I& aCadstarPoint )
 {
-    wxPoint retval;
+    VECTOR2I retval;
 
     retval.x = getKiCadLength( aCadstarPoint.x - m_designCenter.x );
     retval.y = -getKiCadLength( aCadstarPoint.y - m_designCenter.y );
@@ -3018,11 +3022,11 @@ wxPoint CADSTAR_SCH_ARCHIVE_LOADER::getKiCadLibraryPoint( const wxPoint& aCadsta
 }
 
 
-wxPoint CADSTAR_SCH_ARCHIVE_LOADER::applyTransform( const wxPoint& aPoint,
-        const wxPoint& aMoveVector, const double& aRotationAngleDeciDeg,
-        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+VECTOR2I CADSTAR_SCH_ARCHIVE_LOADER::applyTransform(
+        const VECTOR2I& aPoint, const VECTOR2I& aMoveVector, const double& aRotationAngleDeciDeg,
+        const double& aScalingFactor, const VECTOR2I& aTransformCentre, const bool& aMirrorInvert )
 {
-    wxPoint retVal = aPoint;
+    VECTOR2I retVal = aPoint;
 
     if( aScalingFactor != 1.0 )
     {
@@ -3040,7 +3044,7 @@ wxPoint CADSTAR_SCH_ARCHIVE_LOADER::applyTransform( const wxPoint& aPoint,
 
     if( aRotationAngleDeciDeg != 0.0 )
     {
-        RotatePoint( &retVal, aTransformCentre, aRotationAngleDeciDeg );
+        RotatePoint( retVal, aTransformCentre, aRotationAngleDeciDeg );
     }
 
     if( aMoveVector != wxPoint{ 0, 0 } )
@@ -3052,13 +3056,13 @@ wxPoint CADSTAR_SCH_ARCHIVE_LOADER::applyTransform( const wxPoint& aPoint,
 }
 
 
-double CADSTAR_SCH_ARCHIVE_LOADER::getPolarAngle( const wxPoint& aPoint )
+double CADSTAR_SCH_ARCHIVE_LOADER::getPolarAngle( const VECTOR2I& aPoint )
 {
     return NormalizeAnglePos( ArcTangente( aPoint.y, aPoint.x ) );
 }
 
 
-double CADSTAR_SCH_ARCHIVE_LOADER::getPolarRadius( const wxPoint& aPoint )
+double CADSTAR_SCH_ARCHIVE_LOADER::getPolarRadius( const VECTOR2I& aPoint )
 {
     return sqrt( ( (double) aPoint.x * (double) aPoint.x )
                  + ( (double) aPoint.y * (double) aPoint.y ) );

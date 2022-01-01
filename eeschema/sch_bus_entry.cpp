@@ -43,7 +43,7 @@
 #include "sch_painter.h"
 
 
-SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, bool aFlipY ) :
+SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const VECTOR2I& pos, bool aFlipY ) :
     SCH_ITEM( nullptr, aType )
 {
     m_pos    = pos;
@@ -65,7 +65,7 @@ SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, bool 
 }
 
 
-SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, bool aFlipY ) :
+SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const VECTOR2I& pos, bool aFlipY ) :
     SCH_BUS_ENTRY_BASE( SCH_BUS_WIRE_ENTRY_T, pos, aFlipY )
 {
     m_layer  = LAYER_WIRE;
@@ -77,7 +77,7 @@ SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, bool aFlipY ) :
 }
 
 
-SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, int aQuadrant ) :
+SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const VECTOR2I& pos, int aQuadrant ) :
     SCH_BUS_ENTRY_BASE( SCH_BUS_WIRE_ENTRY_T, pos, false )
 {
     switch( aQuadrant )
@@ -123,15 +123,15 @@ EDA_ITEM* SCH_BUS_BUS_ENTRY::Clone() const
 }
 
 
-bool SCH_BUS_ENTRY_BASE::doIsConnected( const wxPoint& aPosition ) const
+bool SCH_BUS_ENTRY_BASE::doIsConnected( const VECTOR2I& aPosition ) const
 {
     return ( m_pos == aPosition || GetEnd() == aPosition );
 }
 
 
-wxPoint SCH_BUS_ENTRY_BASE::GetEnd() const
+VECTOR2I SCH_BUS_ENTRY_BASE::GetEnd() const
 {
-    return wxPoint( m_pos.x + m_size.x, m_pos.y + m_size.y );
+    return VECTOR2I( m_pos.x + m_size.x, m_pos.y + m_size.y );
 }
 
 
@@ -265,13 +265,13 @@ void SCH_BUS_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemLis
 }
 
 
-void SCH_BUS_ENTRY_BASE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_BUS_ENTRY_BASE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = ( GetBusEntryColor() == COLOR4D::UNSPECIFIED ) ?
                     aSettings->GetLayerColor( m_layer ) : GetBusEntryColor();
-    wxPoint start = m_pos + aOffset;
-    wxPoint end = GetEnd() + aOffset;
+    VECTOR2I start = m_pos + aOffset;
+    VECTOR2I end = GetEnd() + aOffset;
     int     penWidth = ( GetPenWidth() == 0 ) ? aSettings->GetDefaultPenWidth() : GetPenWidth();
 
     if( GetLineStyle() <= PLOT_DASH_TYPE::FIRST_TYPE )
@@ -305,9 +305,9 @@ void SCH_BUS_ENTRY_BASE::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_BUS_ENTRY_BASE::Rotate( const wxPoint& aCenter )
+void SCH_BUS_ENTRY_BASE::Rotate( const VECTOR2I& aCenter )
 {
-    RotatePoint( &m_pos, aCenter, 900 );
+    RotatePoint( m_pos, aCenter, 900 );
     RotatePoint( &m_size.x, &m_size.y, 900 );
 }
 
@@ -415,7 +415,7 @@ bool SCH_BUS_ENTRY_BASE::IsDangling() const
 }
 
 
-std::vector<wxPoint> SCH_BUS_ENTRY_BASE::GetConnectionPoints() const
+std::vector<VECTOR2I> SCH_BUS_ENTRY_BASE::GetConnectionPoints() const
 {
     return { m_pos, GetEnd() };
 }
@@ -445,7 +445,7 @@ BITMAPS SCH_BUS_BUS_ENTRY::GetMenuImage() const
 }
 
 
-bool SCH_BUS_ENTRY_BASE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool SCH_BUS_ENTRY_BASE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // Insure minimum accuracy
     if( aAccuracy == 0 )

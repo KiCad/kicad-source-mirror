@@ -368,8 +368,8 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         []( const VECTOR2I& aWhere, GENERAL_COLLECTOR& aCollector,
                             PCB_SELECTION_TOOL* aTool )
                         {
-                            wxPoint location = wxPoint( aWhere );
-                            int     accuracy = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
+                            VECTOR2I location = aWhere;
+                            int      accuracy = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
                             std::set<EDA_ITEM*> remove;
 
                             for( EDA_ITEM* item : aCollector )
@@ -663,12 +663,12 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 
     guide.SetIgnoreZoneFills( displayOpts.m_ZoneDisplayMode != ZONE_DISPLAY_MODE::SHOW_FILLED );
 
-    if( m_enteredGroup && !m_enteredGroup->GetBoundingBox().Contains( (wxPoint) aWhere ) )
+    if( m_enteredGroup && !m_enteredGroup->GetBoundingBox().Contains( aWhere ) )
         ExitGroup();
 
     collector.Collect( board(), m_isFootprintEditor ? GENERAL_COLLECTOR::FootprintItems
                                                     : GENERAL_COLLECTOR::AllBoardItems,
-                       (wxPoint) aWhere, guide );
+                       aWhere, guide );
 
     // Remove unselectable items
     for( int i = collector.GetCount() - 1; i >= 0; --i )
@@ -1145,9 +1145,9 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
     auto connectivity = board()->GetConnectivity();
     auto connectedItems = connectivity->GetConnectedItems( &aStartItem, types, true );
 
-    std::map<wxPoint, std::vector<PCB_TRACK*>> trackMap;
-    std::map<wxPoint, PCB_VIA*>                viaMap;
-    std::map<wxPoint, PAD*>                    padMap;
+    std::map<VECTOR2I, std::vector<PCB_TRACK*>> trackMap;
+    std::map<VECTOR2I, PCB_VIA*>                viaMap;
+    std::map<VECTOR2I, PAD*>                    padMap;
 
     // Build maps of connected items
     for( BOARD_CONNECTED_ITEM* item : connectedItems )
@@ -1184,7 +1184,7 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
         item->ClearFlags( TEMP_SELECTED );
     }
 
-    std::vector< std::pair<wxPoint, PCB_LAYER_ID> > activePts;
+    std::vector<std::pair<VECTOR2I, PCB_LAYER_ID>> activePts;
 
     // Set up the initial active points
     switch( aStartItem.Type() )
@@ -1221,7 +1221,7 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
 
         for( int i = activePts.size() - 1; i >= 0; --i )
         {
-            wxPoint      pt = activePts[i].first;
+            VECTOR2I     pt = activePts[i].first;
             PCB_LAYER_ID layer = activePts[i].second;
             size_t       pt_count = 0;
 

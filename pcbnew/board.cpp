@@ -281,19 +281,19 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
 }
 
 
-wxPoint BOARD::GetPosition() const
+VECTOR2I BOARD::GetPosition() const
 {
     return ZeroOffset;
 }
 
 
-void BOARD::SetPosition( const wxPoint& aPos )
+void BOARD::SetPosition( const VECTOR2I& aPos )
 {
     wxLogWarning( wxT( "This should not be called on the BOARD object") );
 }
 
 
-void BOARD::Move( const wxPoint& aMoveVector )        // overload
+void BOARD::Move( const VECTOR2I& aMoveVector ) // overload
 {
     // @todo : anything like this elsewhere?  maybe put into GENERAL_COLLECTOR class.
     static const KICAD_T top_level_board_stuff[] = {
@@ -1482,7 +1482,7 @@ int BOARD::SetAreasNetCodesFromNetNames()
 }
 
 
-PAD* BOARD::GetPad( const wxPoint& aPosition, LSET aLayerSet ) const
+PAD* BOARD::GetPad( const VECTOR2I& aPosition, LSET aLayerSet ) const
 {
     if( !aLayerSet.any() )
         aLayerSet = LSET::AllCuMask();
@@ -1504,7 +1504,7 @@ PAD* BOARD::GetPad( const wxPoint& aPosition, LSET aLayerSet ) const
 
 PAD* BOARD::GetPad( const PCB_TRACK* aTrace, ENDPOINT_T aEndPoint ) const
 {
-    const wxPoint& aPosition = aTrace->GetEndPoint( aEndPoint );
+    const VECTOR2I& aPosition = aTrace->GetEndPoint( aEndPoint );
 
     LSET lset( aTrace->GetLayer() );
 
@@ -1512,7 +1512,7 @@ PAD* BOARD::GetPad( const PCB_TRACK* aTrace, ENDPOINT_T aEndPoint ) const
 }
 
 
-PAD* BOARD::GetPadFast( const wxPoint& aPosition, LSET aLayerSet ) const
+PAD* BOARD::GetPadFast( const VECTOR2I& aPosition, LSET aLayerSet ) const
 {
     for( FOOTPRINT* footprint : Footprints() )
     {
@@ -1531,7 +1531,7 @@ PAD* BOARD::GetPadFast( const wxPoint& aPosition, LSET aLayerSet ) const
 }
 
 
-PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const wxPoint& aPosition, LSET aLayerSet ) const
+PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const VECTOR2I& aPosition, LSET aLayerSet ) const
 {
     // Search aPadList for aPosition
     // aPadList is sorted by X then Y values, and a fast binary search is used

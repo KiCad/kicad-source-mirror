@@ -185,8 +185,8 @@ BOOST_AUTO_TEST_CASE( Move )
                         if( originalDimension != nullptr )
                             originalDimension->Update();
 
-                        auto    item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate() );
-                        wxPoint originalPos = item->GetPosition();
+                        auto     item = std::unique_ptr<BOARD_ITEM>( aOriginalItem->Duplicate() );
+                        VECTOR2I originalPos = item->GetPosition();
 
                         // Move to a point, then go back.
                         // This has to be an identity transformation.

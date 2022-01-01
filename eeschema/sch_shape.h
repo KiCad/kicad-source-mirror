@@ -43,7 +43,7 @@ public:
         return wxT( "SCH_SHAPE" );
     }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override
     {
         return hitTest( aPosition, aAccuracy );
     }
@@ -71,10 +71,10 @@ public:
 
     const EDA_RECT GetBoundingBox() const override    { return getBoundingBox(); }
 
-    wxPoint GetPosition() const override              { return getPosition(); }
-    void SetPosition( const wxPoint& aPos ) override  { setPosition( aPos ); }
+    VECTOR2I GetPosition() const override { return getPosition(); }
+    void     SetPosition( const VECTOR2I& aPos ) override { setPosition( aPos ); }
 
-    wxPoint GetCenter() const                         { return getCenter(); }
+    VECTOR2I GetCenter() const { return getCenter(); }
 
     void CalcArcAngles( int& aStartAngle, int& aEndAngle ) const;
 
@@ -84,13 +84,13 @@ public:
     void EndEdit()                                    { endEdit(); }
     void SetEditState( int aState )                   { setEditState( aState ); }
 
-    void Move( const wxPoint& aOffset ) override;
+    void Move( const VECTOR2I& aOffset ) override;
 
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
-    void Rotate( const wxPoint& aCenter ) override;
+    void Rotate( const VECTOR2I& aCenter ) override;
 
-    void AddPoint( const wxPoint& aPosition );
+    void AddPoint( const VECTOR2I& aPosition );
 
     void Plot( PLOTTER* aPlotter ) const override;
 
@@ -109,10 +109,10 @@ public:
 #endif
 
 private:
-    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     double getParentOrientation() const override { return 0.0; }
-    wxPoint getParentPosition() const override { return wxPoint(); }
+    VECTOR2I getParentPosition() const override { return VECTOR2I(); }
 };
 
 

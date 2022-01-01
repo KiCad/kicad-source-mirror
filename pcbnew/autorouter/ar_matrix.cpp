@@ -912,7 +912,7 @@ void AR_MATRIX::CreateKeepOutRectangle(
 void AR_MATRIX::PlacePad( PAD* aPad, int color, int marge, AR_MATRIX::CELL_OP op_logic )
 {
     int     dx, dy;
-    wxPoint shape_pos = aPad->ShapePos();
+    VECTOR2I shape_pos = aPad->ShapePos();
 
     dx = aPad->GetSize().x / 2;
     dx += marge;

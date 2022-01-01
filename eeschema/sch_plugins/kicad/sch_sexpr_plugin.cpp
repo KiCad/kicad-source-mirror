@@ -329,8 +329,8 @@ static void formatBezier( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE
 {
     aFormatter->Print( aNestLevel, "(bezier (pts " );
 
-    for( const wxPoint& pt : { aBezier->GetStart(), aBezier->GetBezierC1(),
-                               aBezier->GetBezierC2(), aBezier->GetEnd() } )
+    for( const VECTOR2I& pt : { aBezier->GetStart(), aBezier->GetBezierC1(),
+                                aBezier->GetBezierC2(), aBezier->GetEnd() } )
     {
         aFormatter->Print( 0, " (xy %s %s)",
                            FormatInternalUnits( pt.x ).c_str(),

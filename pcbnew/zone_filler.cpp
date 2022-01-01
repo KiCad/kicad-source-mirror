@@ -1337,7 +1337,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
         // Thermal spokes consist of segments from the pad center to points just outside
         // the thermal relief.
-        wxPoint shapePos = pad->ShapePos();
+        VECTOR2I shapePos = pad->ShapePos();
         double  spokesAngle = pad->GetOrientation() + pad->GetThermalSpokeAngle();
 
         while( spokesAngle >= 900.0 )
@@ -1353,7 +1353,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         dummy_pad.SetOrientation( spokesAngle );
 
         // Spokes are from center of pad, not from hole
-        dummy_pad.SetPosition( -pad->GetOffset() );
+        dummy_pad.SetPosition( -1*pad->GetOffset() );
 
         BOX2I reliefBB = dummy_pad.GetBoundingBox();
         reliefBB.Inflate( thermalReliefGap + epsilon );

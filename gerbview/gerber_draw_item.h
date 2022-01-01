@@ -87,7 +87,7 @@ public:
      * @param aOrientation is a reference to return the text orientation
      * @return true if the parameters can be calculated, false for unknown D_Code
      */
-    bool GetTextD_CodePrms( int& aSize, wxPoint& aPos, double& aOrientation );
+    bool GetTextD_CodePrms( int& aSize, VECTOR2I& aPos, double& aOrientation );
 
     /**
      * Return the best size and orientation to display the D_Code in GAL
@@ -121,14 +121,14 @@ public:
      *
      * @param aMoveVector the move vector for this object.
      */
-    void MoveAB( const wxPoint& aMoveVector );
+    void MoveAB( const VECTOR2I& aMoveVector );
 
      /**
       * Move this object.
       *
       * @param aMoveVector the move vector for this object, in XY gerber axis.
       */
-    void MoveXY( const wxPoint& aMoveVector );
+    void MoveXY( const VECTOR2I& aMoveVector );
 
     /**
      * Return the position of this object.
@@ -137,8 +137,8 @@ public:
      *
      * @return The position of this object.
      */
-    wxPoint GetPosition() const override                { return m_Start; }
-    void SetPosition( const wxPoint& aPos ) override    {  m_Start = aPos; }
+    VECTOR2I GetPosition() const override { return m_Start; }
+    void     SetPosition( const VECTOR2I& aPos ) override { m_Start = aPos; }
 
     /**
      * Return the image position of aPosition for this object.
@@ -149,12 +149,7 @@ public:
      * @param aXYPosition is position in X,Y gerber axis
      * @return  The given position in plotter A,B axis.
      */
-    wxPoint GetABPosition( const wxPoint& aXYPosition ) const;
-
-    VECTOR2I GetABPosition( const VECTOR2I& aXYPosition ) const
-    {
-        return VECTOR2I( GetABPosition( wxPoint( aXYPosition.x, aXYPosition.y ) ) );
-    }
+    VECTOR2I GetABPosition( const VECTOR2I& aXYPosition ) const;
 
     /**
      * Return the image position of aPosition for this object.
@@ -165,7 +160,7 @@ public:
      * @param aABPosition = position in A,B plotter axis
      * @return The given position in X,Y axis.
      */
-    wxPoint GetXYPosition( const wxPoint& aABPosition ) const;
+    VECTOR2I GetXYPosition( const VECTOR2I& aABPosition ) const;
 
     /**
      * Return the GetDcodeDescr of this object, or NULL.
@@ -176,7 +171,7 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    void Print( wxDC* aDC, const wxPoint& aOffset, GBR_DISPLAY_OPTIONS* aOptions );
+    void Print( wxDC* aDC, const VECTOR2I& aOffset, GBR_DISPLAY_OPTIONS* aOptions );
 
     /**
      * Convert a line to an equivalent polygon.
@@ -192,7 +187,7 @@ public:
     /**
      * Print the polygon stored in m_PolyCorners.
      */
-    void PrintGerberPoly( wxDC* aDC, const COLOR4D& aColor, const wxPoint& aOffset,
+    void PrintGerberPoly( wxDC* aDC, const COLOR4D& aColor, const VECTOR2I& aOffset,
                           bool aFilledShape );
 
     int Shape() const { return m_Shape; }
@@ -207,7 +202,7 @@ public:
      * @param aRefPos a wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool HitTest( const wxPoint& aRefPos, int aAccuracy = 0 ) const override;
+    bool HitTest( const VECTOR2I& aRefPos, int aAccuracy = 0 ) const override;
 
     /**
      * Test if the given wxRect intersect this object.
@@ -253,10 +248,10 @@ public:
     bool               m_UnitsMetric;       // store here the gerber units (inch/mm).  Used
                                             // only to calculate aperture macros shapes sizes
     int                m_Shape;             // Shape and type of this gerber item
-    wxPoint            m_Start;             // Line or arc start point or position of the shape
+    VECTOR2I           m_Start;             // Line or arc start point or position of the shape
                                             // for flashed items
-    wxPoint            m_End;               // Line or arc end point
-    wxPoint            m_ArcCentre;         // for arcs only: Center of arc
+    VECTOR2I           m_End;               // Line or arc end point
+    VECTOR2I           m_ArcCentre;         // for arcs only: Center of arc
     SHAPE_POLY_SET     m_Polygon;           // Polygon shape data (G36 to G37 coordinates)
                                             // or for complex shapes which are converted to polygon
     wxSize             m_Size;              // Flashed shapes: size of the shape

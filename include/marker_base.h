@@ -79,12 +79,12 @@ public:
     /**
      * Print the shape is the polygon defined in m_Corners (array of wxPoints).
      */
-    void PrintMarker( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset );
+    void PrintMarker( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset );
 
     /**
      * @return the position of this marker in internal units.
      */
-    const wxPoint& GetPos() const { return m_Pos; }
+    const VECTOR2I& GetPos() const { return m_Pos; }
 
     virtual const KIID GetUUID() const = 0;
 
@@ -110,7 +110,7 @@ public:
      * @param aHitPosition is the wxPoint to test (in internal units).
      * @return true if a hit, else false.
      */
-    bool HitTestMarker( const wxPoint& aHitPosition, int aAccuracy ) const;
+    bool HitTestMarker( const VECTOR2I& aHitPosition, int aAccuracy ) const;
 
     /**
      * Return the orthogonal, bounding box of this object for display purposes.
@@ -125,7 +125,7 @@ protected:
     virtual KIGFX::COLOR4D getColor() const = 0;
 
 public:
-    wxPoint               m_Pos;                 ///< position of the marker
+    VECTOR2I              m_Pos; ///< position of the marker
 
 protected:
     TYPEMARKER            m_markerType;          // The type of marker (useful to filter markers)

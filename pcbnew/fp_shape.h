@@ -80,7 +80,7 @@ public:
      * This is a footprint shape modification.
      * (should be only called by a footprint editing function)
      */
-    void Move( const wxPoint& aMoveVector ) override;
+    void Move( const VECTOR2I& aMoveVector ) override;
 
     /**
      * Mirror an edge of the footprint.
@@ -88,14 +88,14 @@ public:
      * This is a footprint shape modification.
      * (should be only called by a footprint editing function)
      */
-    void Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis );
+    void Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis );
 
     /**
      * Rotate an edge of the footprint.
      * This is a footprint shape modification.
      * (should be only called by a footprint editing function )
      */
-    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
 
     /**
      * Flip entity relative to aCentre.
@@ -104,26 +104,26 @@ public:
      * This function should be called only from FOOTPRINT::Flip because it is not usual to flip
      * an item alone, without flipping the parent footprint (consider Mirror() instead).
      */
-    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     bool IsParentFlipped() const;
 
-    void SetStart0( const wxPoint& aPoint )     { m_start0 = aPoint; }
-    const wxPoint& GetStart0() const            { return m_start0; }
+    void            SetStart0( const VECTOR2I& aPoint ) { m_start0 = aPoint; }
+    const VECTOR2I& GetStart0() const { return m_start0; }
 
-    void SetEnd0( const wxPoint& aPoint )       { m_end0 = aPoint; }
-    const wxPoint& GetEnd0() const              { return m_end0; }
+    void            SetEnd0( const VECTOR2I& aPoint ) { m_end0 = aPoint; }
+    const VECTOR2I& GetEnd0() const { return m_end0; }
 
-    void SetBezierC1_0( const wxPoint& aPoint ) { m_bezierC1_0 = aPoint; }
-    const wxPoint& GetBezierC1_0() const        { return m_bezierC1_0; }
+    void            SetBezierC1_0( const VECTOR2I& aPoint ) { m_bezierC1_0 = aPoint; }
+    const VECTOR2I& GetBezierC1_0() const { return m_bezierC1_0; }
 
-    void SetBezierC2_0( const wxPoint& aPoint ) { m_bezierC2_0 = aPoint; }
-    const wxPoint& GetBezierC2_0() const        { return m_bezierC2_0; }
+    void            SetBezierC2_0( const VECTOR2I& aPoint ) { m_bezierC2_0 = aPoint; }
+    const VECTOR2I& GetBezierC2_0() const { return m_bezierC2_0; }
 
-    wxPoint GetCenter0() const;
-    void SetCenter0( const wxPoint& aPt );
+    VECTOR2I GetCenter0() const;
+    void    SetCenter0( const VECTOR2I& aPt );
 
-    wxPoint GetArcMid0() const;
+    VECTOR2I GetArcMid0() const;
 
     /**
      * Set relative coordinates from draw coordinates.
@@ -160,11 +160,11 @@ public:
 #endif
 
 protected:
-    wxPoint m_start0;       ///< Start point or circle center, relative to footprint origin, orient 0.
-    wxPoint m_end0;         ///< End point or circle edge, relative to footprint origin, orient 0.
-    wxPoint m_arcCenter0;   ///< Center of arc, relative to footprint origin, orient 0.
-    wxPoint m_bezierC1_0;   ///< Bezier Control Point 1, relative to footprint origin, orient 0.
-    wxPoint m_bezierC2_0;   ///< Bezier Control Point 2, relative to footprint origin, orient 0.
+    VECTOR2I m_start0; ///< Start point or circle center, relative to footprint origin, orient 0.
+    VECTOR2I m_end0;   ///< End point or circle edge, relative to footprint origin, orient 0.
+    VECTOR2I m_arcCenter0;   ///< Center of arc, relative to footprint origin, orient 0.
+    VECTOR2I m_bezierC1_0; ///< Bezier Control Point 1, relative to footprint origin, orient 0.
+    VECTOR2I m_bezierC2_0;   ///< Bezier Control Point 2, relative to footprint origin, orient 0.
 };
 
 #endif    // FP_SHAPE_H

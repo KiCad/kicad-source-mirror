@@ -139,7 +139,7 @@ SEARCH_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 }
 
 
-void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], const wxPoint& aPos,
+void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], const VECTOR2I& aPos,
                             int aUnit, int aConvert )
 {
     Empty(); // empty the collection just in case
@@ -160,7 +160,7 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
 
 
 void EE_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterList[],
-                            const wxPoint& aPos, int aUnit, int aConvert )
+                            const VECTOR2I& aPos, int aUnit, int aConvert )
 {
     Empty();        // empty the collection just in case
 

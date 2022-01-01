@@ -110,10 +110,10 @@ public:
 #endif
 
     ///< @copydoc EDA_ITEM::GetPosition
-    wxPoint GetPosition() const override;
+    VECTOR2I GetPosition() const override;
 
     ///< @copydoc EDA_ITEM::SetPosition
-    void SetPosition( const wxPoint& aNewpos ) override;
+    void SetPosition( const VECTOR2I& aNewpos ) override;
 
     ///< @copydoc BOARD_ITEM::GetLayerSet
     LSET GetLayerSet() const override;
@@ -152,7 +152,7 @@ public:
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
     ///< @copydoc EDA_ITEM::HitTest
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
     ///< @copydoc EDA_ITEM::HitTest
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
@@ -171,13 +171,13 @@ public:
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     ///< @copydoc BOARD_ITEM::Move
-    void Move( const wxPoint& aMoveVector ) override;
+    void Move( const VECTOR2I& aMoveVector ) override;
 
     ///< @copydoc BOARD_ITEM::Rotate
-    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
 
     ///< @copydoc BOARD_ITEM::Flip
-    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     ///< @copydoc EDA_ITEM::GetSelectMenuText
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;

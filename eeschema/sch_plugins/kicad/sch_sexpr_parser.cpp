@@ -985,7 +985,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
          */
         if( !TRANSFORM().MapAngles( &startAngle, &endAngle ) )
         {
-            wxPoint temp = arc->GetStart();
+            VECTOR2I temp = arc->GetStart();
             arc->SetStart( arc->GetEnd() );
             arc->SetEnd( temp );
         }
@@ -2928,7 +2928,7 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchArc()
          */
         if( !TRANSFORM().MapAngles( &startAngle, &endAngle ) )
         {
-            wxPoint temp = arc->GetStart();
+            VECTOR2I temp = arc->GetStart();
             arc->SetStart( arc->GetEnd() );
             arc->SetEnd( temp );
         }

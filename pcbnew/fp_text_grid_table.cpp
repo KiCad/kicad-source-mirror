@@ -264,7 +264,7 @@ long FP_TEXT_GRID_TABLE::GetValueAsLong( int aRow, int aCol )
 void FP_TEXT_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 {
     FP_TEXT& text = this->at( (size_t) aRow );
-    wxPoint  pos;
+    VECTOR2I pos;
 
     switch( aCol )
     {

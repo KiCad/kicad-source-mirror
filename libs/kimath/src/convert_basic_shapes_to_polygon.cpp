@@ -39,10 +39,10 @@
 #include <trigo.h>
 
 
-void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, const wxPoint& aCenter, int aRadius,
-                               int aError, ERROR_LOC aErrorLoc, int aMinSegCount )
+void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, const VECTOR2I& aCenter,
+                               int aRadius, int aError, ERROR_LOC aErrorLoc, int aMinSegCount )
 {
-    wxPoint corner_position;
+    VECTOR2I corner_position;
     int     numSegs = GetArcToSegmentCount( aRadius, aError, 360.0 );
     numSegs = std::max( aMinSegCount, numSegs );
 
@@ -69,7 +69,7 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, const wxPoint& a
     {
         corner_position.x   = radius;
         corner_position.y   = 0;
-        RotatePoint( &corner_position, angle );
+        RotatePoint( corner_position, angle );
         corner_position += aCenter;
         aCornerBuffer.Append( corner_position.x, corner_position.y );
     }
@@ -78,12 +78,12 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, const wxPoint& a
 }
 
 
-void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aCenter, int aRadius,
+void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aCenter, int aRadius,
                                int aError, ERROR_LOC aErrorLoc, int aMinSegCount )
 {
-    wxPoint corner_position;
-    int     numSegs = GetArcToSegmentCount( aRadius, aError, 360.0 );
-    numSegs = std::max( aMinSegCount, numSegs);
+    VECTOR2I corner_position;
+    int      numSegs = GetArcToSegmentCount( aRadius, aError, 360.0 );
+    numSegs = std::max( aMinSegCount, numSegs );
 
     // The shape will be built with a even number of segs. Reason: the horizontal
     // diameter begins and ends to points on the actual circle, or circle
@@ -110,7 +110,7 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aCe
     {
         corner_position.x = radius;
         corner_position.y = 0;
-        RotatePoint( &corner_position, angle );
+        RotatePoint( corner_position, angle );
         corner_position += aCenter;
         aCornerBuffer.Append( corner_position.x, corner_position.y );
     }
@@ -361,7 +361,7 @@ void CornerListRemoveDuplicates( std::vector<ROUNDED_CORNER>& aCorners )
 }
 
 
-void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aPosition,
+void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aPosition,
                                   const wxSize& aSize, double aRotation, int aDeltaX, int aDeltaY,
                                   int aInflate, int aError, ERROR_LOC aErrorLoc )
 {
@@ -532,8 +532,8 @@ int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRa
 }
 
 
-void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aStart,
-                            const wxPoint& aMid, const wxPoint& aEnd, int aWidth,
+void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStart,
+                            const VECTOR2I& aMid, const VECTOR2I& aEnd, int aWidth,
                             int aError, ERROR_LOC aErrorLoc )
 {
     SHAPE_ARC        arc( aStart, aMid, aEnd, aWidth );
@@ -665,7 +665,7 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aStart
 }
 
 
-void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxPoint& aCentre, int aRadius,
+void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aCentre, int aRadius,
                              int aWidth, int aError, ERROR_LOC aErrorLoc )
 {
     int inner_radius = aRadius - ( aWidth / 2 );

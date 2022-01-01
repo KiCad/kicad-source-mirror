@@ -157,7 +157,7 @@ private:
     std::unique_ptr<TITLE_BLOCK>    m_currentTitleBlock; // Will be assigned at the end of parsing
                                                          // a sheet
 
-    wxPoint                         m_sheetOffset;
+    VECTOR2I                        m_sheetOffset;
     std::unique_ptr<ASCH_SHEET>     m_altiumSheet;
     std::map<int, SCH_SYMBOL*>      m_symbols;
     std::map<int, SCH_SHEET*>       m_sheets;

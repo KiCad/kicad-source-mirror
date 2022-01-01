@@ -46,7 +46,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
 {
     SCH_SHEET_PATH* sheetWithSymbolFound = nullptr;
     SCH_SYMBOL*     symbol                  = nullptr;
-    wxPoint         pos;
+    VECTOR2I        pos;
     SCH_PIN*        pin = nullptr;
     SCH_SHEET_LIST  sheetList;
     SCH_ITEM*       foundItem = nullptr;

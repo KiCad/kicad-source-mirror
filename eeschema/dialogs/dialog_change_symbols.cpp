@@ -637,8 +637,8 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
             if( resetEffects )
             {
                 // Careful: the visible bit and position are also set by SetAttributes()
-                bool    visible = field.IsVisible();
-                wxPoint pos = field.GetPosition();
+                bool     visible = field.IsVisible();
+                VECTOR2I pos = field.GetPosition();
 
                 field.SetAttributes( *libField );
 
@@ -647,7 +647,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
             }
 
             if( resetPositions )
-                field.SetTextPos( (VECTOR2I)aSymbol->GetPosition() + libField->GetTextPos() );
+                field.SetTextPos( aSymbol->GetPosition() + libField->GetTextPos() );
         }
         else if( i >= MANDATORY_FIELDS && removeExtras )
         {
@@ -669,13 +669,13 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_
         if( !aSymbol->FindField( libField.GetName(), false ) )
         {
             wxString   fieldName = libField.GetCanonicalName();
-            SCH_FIELD  newField( wxPoint( 0, 0), aSymbol->GetFieldCount(), aSymbol, fieldName );
+            SCH_FIELD  newField( VECTOR2I( 0, 0), aSymbol->GetFieldCount(), aSymbol, fieldName );
             SCH_FIELD* schField = aSymbol->AddField( newField );
 
             // Careful: the visible bit and position are also set by SetAttributes()
             schField->SetAttributes( libField );
             schField->SetText( libField.GetText() );
-            schField->SetTextPos( (VECTOR2I)aSymbol->GetPosition() + libField.GetTextPos() );
+            schField->SetTextPos( aSymbol->GetPosition() + libField.GetTextPos() );
         }
     }
 

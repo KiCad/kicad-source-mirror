@@ -132,9 +132,9 @@ PLOT_DASH_TYPE SCH_LINE::GetLineStyleByName( const wxString& aStyleName )
 }
 
 
-void SCH_LINE::Move( const wxPoint& aOffset )
+void SCH_LINE::Move( const VECTOR2I& aOffset )
 {
-    if( aOffset != wxPoint( 0, 0 ) )
+    if( aOffset != VECTOR2I( 0, 0 ) )
     {
         m_start += aOffset;
         m_end += aOffset;
@@ -143,9 +143,9 @@ void SCH_LINE::Move( const wxPoint& aOffset )
 }
 
 
-void SCH_LINE::MoveStart( const wxPoint& aOffset )
+void SCH_LINE::MoveStart( const VECTOR2I& aOffset )
 {
-    if( aOffset != wxPoint( 0, 0 ) )
+    if( aOffset != VECTOR2I( 0, 0 ) )
     {
         m_start += aOffset;
         SetModified();
@@ -153,9 +153,9 @@ void SCH_LINE::MoveStart( const wxPoint& aOffset )
 }
 
 
-void SCH_LINE::MoveEnd( const wxPoint& aOffset )
+void SCH_LINE::MoveEnd( const VECTOR2I& aOffset )
 {
-    if( aOffset != wxPoint( 0, 0 ) )
+    if( aOffset != VECTOR2I( 0, 0 ) )
     {
         m_end += aOffset;
         SetModified();
@@ -365,7 +365,7 @@ int SCH_LINE::GetPenWidth() const
 }
 
 
-void SCH_LINE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset )
+void SCH_LINE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& offset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = GetLineColor();
@@ -373,8 +373,8 @@ void SCH_LINE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset )
     if( color == COLOR4D::UNSPECIFIED )
         color = aSettings->GetLayerColor( GetLayer() );
 
-    wxPoint        start = m_start;
-    wxPoint        end = m_end;
+    VECTOR2I       start = m_start;
+    VECTOR2I       end = m_end;
     PLOT_DASH_TYPE lineStyle = GetEffectiveLineStyle();
     int            penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
 
@@ -415,31 +415,31 @@ void SCH_LINE::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_LINE::Rotate( const wxPoint& aCenter )
+void SCH_LINE::Rotate( const VECTOR2I& aCenter )
 {
     if( m_flags & STARTPOINT )
-        RotatePoint( &m_start, aCenter, 900 );
+        RotatePoint( m_start, aCenter, 900 );
 
     if( m_flags & ENDPOINT )
-        RotatePoint( &m_end, aCenter, 900 );
+        RotatePoint( m_end, aCenter, 900 );
 }
 
 
-void SCH_LINE::RotateStart( const wxPoint& aCenter )
+void SCH_LINE::RotateStart( const VECTOR2I& aCenter )
 {
-    RotatePoint( &m_start, aCenter, 900 );
+    RotatePoint( m_start, aCenter, 900 );
 }
 
 
-void SCH_LINE::RotateEnd( const wxPoint& aCenter )
+void SCH_LINE::RotateEnd( const VECTOR2I& aCenter )
 {
-    RotatePoint( &m_end, aCenter, 900 );
+    RotatePoint( m_end, aCenter, 900 );
 }
 
 
-int SCH_LINE::GetAngleFrom( const wxPoint& aPoint ) const
+int SCH_LINE::GetAngleFrom( const VECTOR2I& aPoint ) const
 {
-    wxPoint vec;
+    VECTOR2I vec;
 
     if( aPoint == m_start )
         vec = m_end - aPoint;
@@ -450,9 +450,9 @@ int SCH_LINE::GetAngleFrom( const wxPoint& aPoint ) const
 }
 
 
-int SCH_LINE::GetReverseAngleFrom( const wxPoint& aPoint ) const
+int SCH_LINE::GetReverseAngleFrom( const VECTOR2I& aPoint ) const
 {
-    wxPoint vec;
+    VECTOR2I vec;
 
     if( aPoint == m_end )
         vec = m_start - aPoint;
@@ -468,8 +468,8 @@ bool SCH_LINE::IsParallel( const SCH_LINE* aLine ) const
     wxCHECK_MSG( aLine != nullptr && aLine->Type() == SCH_LINE_T, false,
                  wxT( "Cannot test line segment for overlap." ) );
 
-    wxPoint firstSeg   = m_end - m_start;
-    wxPoint secondSeg = aLine->m_end - aLine->m_start;
+    VECTOR2I firstSeg = m_end - m_start;
+    VECTOR2I secondSeg = aLine->m_end - aLine->m_start;
 
     // Use long long here to avoid overflow in calculations
     return !( (long long) firstSeg.x * secondSeg.y - (long long) firstSeg.y * secondSeg.x );
@@ -479,7 +479,7 @@ bool SCH_LINE::IsParallel( const SCH_LINE* aLine ) const
 SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCheckJunctions )
 {
     auto less =
-            []( const wxPoint& lhs, const wxPoint& rhs ) -> bool
+            []( const VECTOR2I& lhs, const VECTOR2I& rhs ) -> bool
             {
                 if( lhs.x == rhs.x )
                     return lhs.y < rhs.y;
@@ -493,11 +493,11 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
     if( this == aLine || GetLayer() != aLine->GetLayer() )
         return nullptr;
 
-    wxPoint leftmost_start = aLine->m_start;
-    wxPoint leftmost_end = aLine->m_end;
+    VECTOR2I leftmost_start = aLine->m_start;
+    VECTOR2I leftmost_end = aLine->m_end;
 
-    wxPoint rightmost_start = m_start;
-    wxPoint rightmost_end = m_end;
+    VECTOR2I rightmost_start = m_start;
+    VECTOR2I rightmost_end = m_end;
 
     // We place the start to the left and below the end of both lines
     if( leftmost_start != std::min( { leftmost_start, leftmost_end }, less ) )
@@ -515,8 +515,8 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
         std::swap( leftmost_end, rightmost_end );
     }
 
-    wxPoint other_start = rightmost_start;
-    wxPoint other_end = rightmost_end;
+    VECTOR2I other_start = rightmost_start;
+    VECTOR2I other_end = rightmost_end;
 
     if( less( rightmost_end, leftmost_end ) )
     {
@@ -700,7 +700,7 @@ bool SCH_LINE::CanConnect( const SCH_ITEM* aItem ) const
 }
 
 
-std::vector<wxPoint> SCH_LINE::GetConnectionPoints() const
+std::vector<VECTOR2I> SCH_LINE::GetConnectionPoints() const
 {
     return { m_start, m_end };
 }
@@ -719,7 +719,7 @@ bool SCH_LINE::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
 }
 
 
-void SCH_LINE::GetSelectedPoints( std::vector< wxPoint >& aPoints ) const
+void SCH_LINE::GetSelectedPoints( std::vector<VECTOR2I>& aPoints ) const
 {
     if( m_flags & STARTPOINT )
         aPoints.push_back( m_start );
@@ -800,7 +800,7 @@ bool SCH_LINE::operator <( const SCH_ITEM& aItem ) const
 }
 
 
-bool SCH_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool SCH_LINE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // Performance enhancement for connection-building
     if( aPosition == m_start || aPosition == m_end )
@@ -852,7 +852,7 @@ void SCH_LINE::SwapData( SCH_ITEM* aItem )
 }
 
 
-bool SCH_LINE::doIsConnected( const wxPoint& aPosition ) const
+bool SCH_LINE::doIsConnected( const VECTOR2I& aPosition ) const
 {
     if( m_layer != LAYER_WIRE && m_layer != LAYER_BUS )
         return false;
@@ -882,7 +882,7 @@ void SCH_LINE::Plot( PLOTTER* aPlotter ) const
 }
 
 
-void SCH_LINE::SetPosition( const wxPoint& aPosition )
+void SCH_LINE::SetPosition( const VECTOR2I& aPosition )
 {
     m_end = m_end - ( m_start - aPosition );
     m_start = aPosition;

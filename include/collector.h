@@ -215,7 +215,7 @@ public:
         m_scanTypes = scanTypes;
     }
 
-    void SetRefPos( const wxPoint& aRefPos )  { m_refPos = aRefPos; }
+    void SetRefPos( const VECTOR2I& aRefPos )  { m_refPos = aRefPos; }
 
     const EDA_RECT& GetBoundingBox() const {  return m_refBox; }
 
@@ -249,7 +249,7 @@ protected:
 
     const KICAD_T*         m_scanTypes;
     INSPECTOR_FUNC         m_inspector;
-    wxPoint                m_refPos;     // Reference position used to generate the collection.
+    VECTOR2I               m_refPos;     // Reference position used to generate the collection.
     EDA_RECT               m_refBox;     // Selection rectangle used to generate the collection.};
 };
 

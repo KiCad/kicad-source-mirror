@@ -126,7 +126,7 @@ void PL_DRAW_PANEL_GAL::DisplayDrawingSheet()
     m_view->SetBoundary( boundary );
 
     m_pageDrawItem->SetPageSize( m_edaFrame->GetPageSizeIU() );
-    wxPoint originCoord = static_cast<PL_EDITOR_FRAME*>( m_edaFrame )->ReturnCoordOriginCorner();
+    VECTOR2I originCoord = static_cast<PL_EDITOR_FRAME*>( m_edaFrame )->ReturnCoordOriginCorner();
     m_pageDrawItem->SetMarkerPos( originCoord );
 }
 

@@ -1628,13 +1628,13 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
 void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos )
 {
-    wxPoint pos = aSheet->GetPosition();
-    wxPoint size = (wxPoint) aPos - pos;
+    VECTOR2I pos = aSheet->GetPosition();
+    VECTOR2I size = aPos - pos;
 
     size.x = std::max( size.x, MIN_SHEET_WIDTH );
     size.y = std::max( size.y, MIN_SHEET_HEIGHT );
 
-    wxPoint grid = m_frame->GetNearestGridPosition( pos + size );
+    VECTOR2I grid = m_frame->GetNearestGridPosition( pos + size );
     aSheet->Resize( wxSize( grid.x - pos.x, grid.y - pos.y ) );
 }
 

@@ -144,8 +144,8 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
     // used when a D_CODE is not found. default D_CODE to draw a flashed item
     static D_CODE  dummyD_CODE( 0 );
 
-    wxPoint        seg_start   = aGbrItem->m_Start;
-    wxPoint        seg_end     = aGbrItem->m_End;
+    VECTOR2I       seg_start = aGbrItem->m_Start;
+    VECTOR2I       seg_end = aGbrItem->m_End;
     D_CODE*        d_codeDescr = aGbrItem->GetDcodeDescr();
     SHAPE_POLY_SET polygon;
 
@@ -256,7 +256,7 @@ void GBR_TO_PCB_EXPORTER::collect_hole( const GERBER_DRAW_ITEM* aGbrItem )
 
 void GBR_TO_PCB_EXPORTER::export_via( const EXPORT_VIA& aVia )
 {
-    wxPoint via_pos = aVia.m_Pos;
+    VECTOR2I via_pos = aVia.m_Pos;
 
     // Reverse Y axis:
     via_pos.y = -via_pos.y;
@@ -310,7 +310,7 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, 
 
 void GBR_TO_PCB_EXPORTER::export_segline_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
-    wxPoint seg_start, seg_end;
+    VECTOR2I seg_start, seg_end;
 
     seg_start   = aGbrItem->m_Start;
     seg_end     = aGbrItem->m_End;
@@ -323,7 +323,7 @@ void GBR_TO_PCB_EXPORTER::export_segline_copper_item( const GERBER_DRAW_ITEM* aG
 }
 
 
-void GBR_TO_PCB_EXPORTER::writeCopperLineItem( const wxPoint& aStart, const wxPoint& aEnd,
+void GBR_TO_PCB_EXPORTER::writeCopperLineItem( const VECTOR2I& aStart, const VECTOR2I& aEnd,
                                                int aWidth, int aLayer )
 {
   fprintf( m_fp, "(segment (start %s %s) (end %s %s) (width %s) (layer %s) (net 0))\n",
@@ -343,8 +343,8 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( const GERBER_DRAW_ITEM* aGb
     double  b = atan2( (double) ( aGbrItem->m_End.y - aGbrItem->m_ArcCentre.y ),
                        (double) ( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
 
-    wxPoint start   = aGbrItem->m_Start;
-    wxPoint end     = aGbrItem->m_End;
+    VECTOR2I start = aGbrItem->m_Start;
+    VECTOR2I end = aGbrItem->m_End;
 
     /* Because Pcbnew does not know arcs in tracks,
      * approximate arc by segments (SEG_COUNT__CIRCLE segment per 360 deg)
@@ -358,16 +358,16 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( const GERBER_DRAW_ITEM* aGb
     if( a > b )
         b += 2 * M_PI;
 
-    wxPoint curr_start = start;
-    wxPoint seg_start, seg_end;
+    VECTOR2I curr_start = start;
+    VECTOR2I seg_start, seg_end;
 
     int     ii = 1;
 
     for( double rot = a; rot < (b - DELTA_ANGLE); rot += DELTA_ANGLE, ii++ )
     {
         seg_start = curr_start;
-        wxPoint curr_end = start;
-        RotatePoint( &curr_end, aGbrItem->m_ArcCentre, -RAD2DECIDEG( DELTA_ANGLE * ii ) );
+        VECTOR2I curr_end = start;
+        RotatePoint( curr_end, aGbrItem->m_ArcCentre, -RAD2DECIDEG( DELTA_ANGLE * ii ) );
         seg_end = curr_end;
 
         // Reverse Y axis:
@@ -413,7 +413,7 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aG
         }
     }
 
-    wxPoint offset = aGbrItem->GetABPosition( aGbrItem->m_Start );
+    VECTOR2I offset = aGbrItem->GetABPosition( aGbrItem->m_Start );
 
     if( aGbrItem->m_Shape == GBR_SPOT_CIRCLE ) // export it as filled circle
     {
@@ -474,7 +474,7 @@ void GBR_TO_PCB_EXPORTER::writePcbHeader( const int* aLayerLookUpTable )
 
 
 void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, int aLayer,
-                                           const wxPoint& aOffset )
+                                           const VECTOR2I& aOffset )
 {
     SHAPE_POLY_SET polys = aPolys;
 

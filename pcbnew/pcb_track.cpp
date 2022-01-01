@@ -178,7 +178,7 @@ int PCB_VIA::GetDrillValue() const
 }
 
 
-EDA_ITEM_FLAGS PCB_TRACK::IsPointOnEnds( const wxPoint& point, int min_dist ) const
+EDA_ITEM_FLAGS PCB_TRACK::IsPointOnEnds( const VECTOR2I& point, int min_dist ) const
 {
     EDA_ITEM_FLAGS result = 0;
 
@@ -262,22 +262,22 @@ double PCB_TRACK::GetLength() const
 }
 
 
-void PCB_TRACK::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_TRACK::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
-    RotatePoint( &m_Start, aRotCentre, aAngle );
-    RotatePoint( &m_End, aRotCentre, aAngle );
+    RotatePoint( m_Start, aRotCentre, aAngle );
+    RotatePoint( m_End, aRotCentre, aAngle );
 }
 
 
-void PCB_ARC::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_ARC::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
-    RotatePoint( &m_Start, aRotCentre, aAngle );
-    RotatePoint( &m_End, aRotCentre, aAngle );
-    RotatePoint( &m_Mid, aRotCentre, aAngle );
+    RotatePoint( m_Start, aRotCentre, aAngle );
+    RotatePoint( m_End, aRotCentre, aAngle );
+    RotatePoint( m_Mid, aRotCentre, aAngle );
 }
 
 
-void PCB_TRACK::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_TRACK::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )
     {
@@ -295,7 +295,7 @@ void PCB_TRACK::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-void PCB_ARC::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_ARC::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )
     {
@@ -315,7 +315,7 @@ void PCB_ARC::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-void PCB_VIA::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_VIA::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )
     {
@@ -820,13 +820,13 @@ wxString PCB_VIA::layerMaskDescribe() const
 }
 
 
-bool PCB_TRACK::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool PCB_TRACK::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     return TestSegmentHit( aPosition, m_Start, m_End, aAccuracy + ( m_Width / 2 ) );
 }
 
 
-bool PCB_ARC::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool PCB_ARC::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     int max_dist = aAccuracy + ( m_Width / 2 );
 
@@ -837,8 +837,8 @@ bool PCB_ARC::HitTest( const wxPoint& aPosition, int aAccuracy ) const
         return true;
     }
 
-    wxPoint center = GetPosition();
-    wxPoint relpos = aPosition - center;
+    VECTOR2I center = GetPosition();
+    VECTOR2I relpos = aPosition - center;
     double dist = EuclideanNorm( relpos );
     double radius = GetRadius();
 
@@ -862,12 +862,12 @@ bool PCB_ARC::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
-bool PCB_VIA::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool PCB_VIA::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     int max_dist = aAccuracy + ( m_Width / 2 );
 
     // rel_pos is aPosition relative to m_Start (or the center of the via)
-    wxPoint rel_pos = aPosition - m_Start;
+    VECTOR2I rel_pos = aPosition - m_Start;
     double dist = (double) rel_pos.x * rel_pos.x + (double) rel_pos.y * rel_pos.y;
     return  dist <= (double) max_dist * max_dist;
 }
@@ -957,24 +957,24 @@ void PCB_VIA::SwapData( BOARD_ITEM* aImage )
 }
 
 
-wxPoint PCB_ARC::GetPosition() const
+VECTOR2I PCB_ARC::GetPosition() const
 {
-    auto center = CalcArcCenter( VECTOR2I( m_Start ), VECTOR2I( m_Mid ), VECTOR2I( m_End ));
-    return wxPoint( center.x, center.y );
+    VECTOR2I center = CalcArcCenter( m_Start, m_Mid, m_End );
+    return center;
 }
 
 double PCB_ARC::GetRadius() const
 {
-    auto center = CalcArcCenter( VECTOR2I( m_Start ), VECTOR2I( m_Mid ), VECTOR2I( m_End ));
-    return GetLineLength( wxPoint( center ), m_Start );
+    auto center = CalcArcCenter( m_Start, m_Mid , m_End );
+    return GetLineLength( center, m_Start );
 }
 
 double PCB_ARC::GetAngle() const
 {
-    wxPoint center = GetPosition();
-    wxPoint p0 = m_Start - center;
-    wxPoint p1 = m_Mid - center;
-    wxPoint p2 = m_End - center;
+    VECTOR2I center = GetPosition();
+    VECTOR2I p0 = m_Start - center;
+    VECTOR2I p1 = m_Mid - center;
+    VECTOR2I p2 = m_End - center;
     double angle1 = ArcTangente( p1.y, p1.x ) - ArcTangente( p0.y, p0.x );
     double angle2 = ArcTangente( p2.y, p2.x ) - ArcTangente( p1.y, p1.x );
 
@@ -983,7 +983,7 @@ double PCB_ARC::GetAngle() const
 
 double PCB_ARC::GetArcAngleStart() const
 {
-    wxPoint center = GetPosition();
+    VECTOR2I center = GetPosition();
 
     double angleStart = ArcTangente( m_Start.y - center.y,
                                      m_Start.x - center.x );
@@ -992,7 +992,7 @@ double PCB_ARC::GetArcAngleStart() const
 
 double PCB_ARC::GetArcAngleEnd() const
 {
-    wxPoint center = GetPosition();
+    VECTOR2I center = GetPosition();
 
     double angleEnd = ArcTangente( m_End.y - center.y,
                                    m_End.x - center.x );

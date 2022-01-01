@@ -113,15 +113,15 @@ bool PCB_GROUP::WithinScope( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootpr
 }
 
 
-wxPoint PCB_GROUP::GetPosition() const
+VECTOR2I PCB_GROUP::GetPosition() const
 {
-    return (wxPoint)GetBoundingBox().Centre();
+    return GetBoundingBox().Centre();
 }
 
 
-void PCB_GROUP::SetPosition( const wxPoint& aNewpos )
+void PCB_GROUP::SetPosition( const VECTOR2I& aNewpos )
 {
-    wxPoint delta = aNewpos - GetPosition();
+    VECTOR2I delta = aNewpos - GetPosition();
 
     Move( delta );
 }
@@ -206,7 +206,7 @@ void PCB_GROUP::SwapData( BOARD_ITEM* aImage )
 }
 
 
-bool PCB_GROUP::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool PCB_GROUP::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // Groups are selected by promoting a selection of one of their children
     return false;
@@ -289,21 +289,21 @@ double PCB_GROUP::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-void PCB_GROUP::Move( const wxPoint& aMoveVector )
+void PCB_GROUP::Move( const VECTOR2I& aMoveVector )
 {
     for( BOARD_ITEM* member : m_items )
         member->Move( aMoveVector );
 }
 
 
-void PCB_GROUP::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PCB_GROUP::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
     for( BOARD_ITEM* item : m_items )
         item->Rotate( aRotCentre, aAngle );
 }
 
 
-void PCB_GROUP::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_GROUP::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     for( BOARD_ITEM* item : m_items )
         item->Flip( aCentre, aFlipLeftRight );

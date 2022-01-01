@@ -589,7 +589,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             angle = - RAD2DECIDEG( angle );
             pad->SetOrientation( KiROUND( angle ) );
 
-            wxPoint padPos( (x1 + x2) / 2, (y1 + y2) / 2 );
+            VECTOR2I padPos( ( x1 + x2 ) / 2, ( y1 + y2 ) / 2 );
 
             pad->SetSize( wxSize( KiROUND( EuclideanNorm( delta ) ) + width, width ) );
 
@@ -642,8 +642,8 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             // which is used for the same purpose.
             pad->SetNumber( parameters[paramCnt-3] );
 
-            wxPoint padPos( parseInt( parameters[2], conv_unit ),
-                            parseInt( parameters[3], conv_unit ) );
+            VECTOR2I padPos( parseInt( parameters[2], conv_unit ),
+                             parseInt( parameters[3], conv_unit ) );
 
             int padSize = parseInt( parameters[4], conv_unit );
 

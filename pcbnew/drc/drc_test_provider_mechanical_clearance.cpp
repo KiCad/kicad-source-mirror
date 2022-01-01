@@ -306,7 +306,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
 
                                 shape->RebuildBezierToSegmentsPointsList( shape->GetWidth() );
 
-                                for( const wxPoint& pt : shape->GetBezierPoints() )
+                                for( const VECTOR2I& pt : shape->GetBezierPoints() )
                                     asPoly.Append( pt );
 
                                 testShapeLineChain( asPoly, shape->GetWidth(), layer, item, c );
@@ -317,7 +317,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                             {
                                 SHAPE_LINE_CHAIN asPoly;
 
-                                wxPoint center = shape->GetCenter();
+                                VECTOR2I center = shape->GetCenter();
                                 double  angle  = -shape->GetArcAngle();
                                 double  r      = shape->GetRadius();
                                 int     steps  = GetArcToSegmentCount( r, errorMax, angle / 10.0 );
@@ -328,8 +328,8 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                                 {
                                     double rotation = ( angle * step ) / steps;
 
-                                    wxPoint pt = shape->GetStart();
-                                    RotatePoint( &pt, center, rotation );
+                                    VECTOR2I pt = shape->GetStart();
+                                    RotatePoint( pt, center, rotation );
                                     asPoly.Append( pt );
                                 }
 

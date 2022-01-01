@@ -163,7 +163,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
 
         gbr_metadata.m_NetlistMetadata.SetExtraData( pnpAttrib.FormatCmpPnPMetadata() );
 
-        wxPoint flash_pos = footprint->GetPosition();
+        VECTOR2I flash_pos = footprint->GetPosition();
 
         plotter.FlashPadCircle( flash_pos, flash_position_shape_diam, FILLED, &gbr_metadata );
         gbr_metadata.m_NetlistMetadata.ClearExtraData();

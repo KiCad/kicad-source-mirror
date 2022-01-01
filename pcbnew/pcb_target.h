@@ -52,8 +52,8 @@ public:
         return aItem && PCB_TARGET_T == aItem->Type();
     }
 
-    void SetPosition( const wxPoint& aPos ) override { m_pos = aPos; }
-    wxPoint GetPosition() const override { return m_pos; }
+    void     SetPosition( const VECTOR2I& aPos ) override { m_pos = aPos; }
+    VECTOR2I GetPosition() const override { return m_pos; }
 
     void SetShape( int aShape )     { m_shape = aShape; }
     int GetShape() const            { return m_shape; }
@@ -64,21 +64,21 @@ public:
     void SetWidth( int aWidth )     { m_lineWidth = aWidth; }
     int GetWidth() const            { return m_lineWidth; }
 
-    void Move( const wxPoint& aMoveVector ) override
+    void Move( const VECTOR2I& aMoveVector ) override
     {
         m_pos += aMoveVector;
     }
 
-    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
 
-    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
+    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     wxString GetClass() const override
     {
         return wxT( "PCB_TARGET" );
     }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     // Virtual function
@@ -101,10 +101,10 @@ public:
 #endif
 
 private:
-    int     m_shape;            // bit 0 : 0 = draw +, 1 = draw X
-    int     m_size;
-    int     m_lineWidth;
-    wxPoint m_pos;
+    int      m_shape;            // bit 0 : 0 = draw +, 1 = draw X
+    int      m_size;
+    int      m_lineWidth;
+    VECTOR2I m_pos;
 };
 
 

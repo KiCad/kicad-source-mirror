@@ -41,7 +41,7 @@ LIB_SHAPE::LIB_SHAPE( LIB_SYMBOL* aParent, SHAPE_T aShape, int aLineWidth, FILL_
 }
 
 
-bool LIB_SHAPE::HitTest( const wxPoint& aPosRef, int aAccuracy ) const
+bool LIB_SHAPE::HitTest( const VECTOR2I& aPosRef, int aAccuracy ) const
 {
     if( aAccuracy < Mils2iu( MINIMUM_SELECTION_DISTANCE ) )
         aAccuracy = Mils2iu( MINIMUM_SELECTION_DISTANCE );
@@ -76,31 +76,31 @@ int LIB_SHAPE::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompare
 }
 
 
-void LIB_SHAPE::Offset( const wxPoint& aOffset )
+void LIB_SHAPE::Offset( const VECTOR2I& aOffset )
 {
     move( aOffset );
 }
 
 
-void LIB_SHAPE::MoveTo( const wxPoint& aPosition )
+void LIB_SHAPE::MoveTo( const VECTOR2I& aPosition )
 {
     setPosition( aPosition );
 }
 
 
-void LIB_SHAPE::MirrorHorizontal( const wxPoint& aCenter )
+void LIB_SHAPE::MirrorHorizontal( const VECTOR2I& aCenter )
 {
     flip( aCenter, true );
 }
 
 
-void LIB_SHAPE::MirrorVertical( const wxPoint& aCenter )
+void LIB_SHAPE::MirrorVertical( const VECTOR2I& aCenter )
 {
     flip( aCenter, false );
 }
 
 
-void LIB_SHAPE::Rotate( const wxPoint& aCenter, bool aRotateCCW )
+void LIB_SHAPE::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
 
@@ -108,18 +108,18 @@ void LIB_SHAPE::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 }
 
 
-void LIB_SHAPE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+void LIB_SHAPE::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
                       const TRANSFORM& aTransform ) const
 {
-    wxPoint start = aTransform.TransformCoordinate( m_start ) + aOffset;
-    wxPoint end = aTransform.TransformCoordinate( m_end ) + aOffset;
-    wxPoint center;
+    VECTOR2I start = aTransform.TransformCoordinate( m_start ) + aOffset;
+    VECTOR2I end = aTransform.TransformCoordinate( m_end ) + aOffset;
+    VECTOR2I center;
     int     startAngle = 0;
     int     endAngle = 0;
     int     pen_size = GetEffectivePenWidth( aPlotter->RenderSettings() );
     FILL_T fill = aFill ? m_fill : FILL_T::NO_FILL;
 
-    static std::vector<wxPoint> cornerList;
+    static std::vector<VECTOR2I> cornerList;
 
     if( GetShape() == SHAPE_T::POLY )
     {
@@ -127,13 +127,13 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
         cornerList.clear();
 
         for( const VECTOR2I& pt : poly.CPoints() )
-            cornerList.push_back( aTransform.TransformCoordinate( (wxPoint) pt ) + aOffset );
+            cornerList.push_back( aTransform.TransformCoordinate( pt ) + aOffset );
     }
     else if( GetShape() == SHAPE_T::BEZIER )
     {
         cornerList.clear();
 
-        for( const wxPoint& pt : m_bezierPoints )
+        for( const VECTOR2I& pt : m_bezierPoints )
             cornerList.push_back( aTransform.TransformCoordinate( pt ) + aOffset );
     }
     else if( GetShape() == SHAPE_T::ARC )
@@ -210,8 +210,8 @@ int LIB_SHAPE::GetPenWidth() const
 }
 
 
-void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
-                       void* aData, const TRANSFORM& aTransform )
+void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
+                       const TRANSFORM& aTransform )
 {
     bool forceNoFill = static_cast<bool>( aData );
     int  penWidth = GetEffectivePenWidth( aSettings );
@@ -220,29 +220,29 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
         return;
 
     wxDC*    DC = aSettings->GetPrintDC();
-    wxPoint  pt1 = aTransform.TransformCoordinate( m_start ) + aOffset;
-    wxPoint  pt2 = aTransform.TransformCoordinate( m_end ) + aOffset;
-    wxPoint  c;
+    VECTOR2I pt1 = aTransform.TransformCoordinate( m_start ) + aOffset;
+    VECTOR2I pt2 = aTransform.TransformCoordinate( m_end ) + aOffset;
+    VECTOR2I c;
     COLOR4D  color = aSettings->GetLayerColor( LAYER_DEVICE );
     COLOR4D  fillColor = color;
 
     unsigned ptCount = 0;
-    wxPoint* buffer = nullptr;
+    VECTOR2I* buffer = nullptr;
 
     if( GetShape() == SHAPE_T::POLY )
     {
         const SHAPE_LINE_CHAIN& poly = m_poly.Outline( 0 );
 
         ptCount = poly.GetPointCount();
-        buffer = new wxPoint[ ptCount ];
+        buffer = new VECTOR2I[ptCount];
 
         for( unsigned ii = 0; ii < ptCount; ++ii )
-            buffer[ii] = aTransform.TransformCoordinate( (wxPoint) poly.CPoint( ii ) ) + aOffset;
+            buffer[ii] = aTransform.TransformCoordinate( poly.CPoint( ii ) ) + aOffset;
     }
     else if( GetShape() == SHAPE_T::BEZIER )
     {
         ptCount = m_bezierPoints.size();
-        buffer = new wxPoint[ ptCount ];
+        buffer = new VECTOR2I[ptCount];
 
         for( size_t ii = 0; ii < ptCount; ++ii )
             buffer[ii] = aTransform.TransformCoordinate( m_bezierPoints[ii] ) + aOffset;
@@ -403,7 +403,7 @@ BITMAPS LIB_SHAPE::GetMenuImage() const
 }
 
 
-void LIB_SHAPE::AddPoint( const wxPoint& aPosition )
+void LIB_SHAPE::AddPoint( const VECTOR2I& aPosition )
 {
     if( GetShape() == SHAPE_T::POLY )
     {

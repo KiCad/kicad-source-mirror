@@ -79,7 +79,7 @@ COLOR4D BRDITEMS_PLOTTER::getColor( int aLayer ) const
 
 void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_MODE aPlotMode )
 {
-    wxPoint shape_pos = aPad->ShapePos();
+    VECTOR2I     shape_pos = aPad->ShapePos();
     GBR_METADATA gbr_metadata;
 
     bool plotOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
@@ -591,7 +591,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
 
         case SHAPE_T::RECT:
         {
-            std::vector<wxPoint> pts = aShape->GetRectCorners();
+            std::vector<VECTOR2I> pts = aShape->GetRectCorners();
 
             if( sketch || thickness > 0 )
             {
@@ -605,7 +605,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
             {
                 SHAPE_LINE_CHAIN poly;
 
-                for( const wxPoint& pt : pts )
+                for( const VECTOR2I& pt : pts )
                     poly.Append( pt );
 
                 m_plotter->PlotPoly( poly, FILL_T::FILLED_SHAPE, -1, &gbr_metadata );
@@ -653,7 +653,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
         case SHAPE_T::POLY:
             if( aShape->IsPolyShapeValid() )
             {
-                std::vector<wxPoint> cornerList;
+                std::vector<VECTOR2I> cornerList;
                 aShape->DupPolyPointsList( cornerList );
 
                 // We must compute board coordinates from m_PolyList which are relative to the parent
@@ -664,9 +664,8 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
                 {
                     for( unsigned ii = 0; ii < cornerList.size(); ++ii )
                     {
-                        wxPoint* corner = &cornerList[ii];
-                        RotatePoint( corner, parentFootprint->GetOrientation() );
-                        *corner += parentFootprint->GetPosition();
+                        RotatePoint( cornerList[ii], parentFootprint->GetOrientation() );
+                        cornerList[ii] += parentFootprint->GetPosition();
                     }
                 }
 
@@ -770,7 +769,7 @@ void BRDITEMS_PLOTTER::PlotPcbText( const PCB_TEXT* aText )
 
     if( aText->IsMultilineAllowed() )
     {
-        std::vector<wxPoint> positions;
+        std::vector<VECTOR2I> positions;
         wxArrayString strings_list;
         wxStringSplit( shownText, strings_list, '\n' );
         positions.reserve(  strings_list.Count() );
@@ -1012,7 +1011,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 
         case SHAPE_T::RECT:
         {
-            std::vector<wxPoint> pts = aShape->GetRectCorners();
+            std::vector<VECTOR2I> pts = aShape->GetRectCorners();
 
             if( sketch || thickness > 0 )
             {
@@ -1026,7 +1025,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
             {
                 SHAPE_LINE_CHAIN poly;
 
-                for( const wxPoint& pt : pts )
+                for( const VECTOR2I& pt : pts )
                     poly.Append( pt );
 
                 m_plotter->PlotPoly( poly, FILL_T::FILLED_SHAPE, -1, &gbr_metadata );
@@ -1059,7 +1058,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 }
 
 
-void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const wxPoint& aDrillPos,
+void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const VECTOR2I& aDrillPos,
                                          const wxSize& aDrillSize, const wxSize& aPadSize,
                                          double aOrientation, int aSmallDrill )
 {

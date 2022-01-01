@@ -103,7 +103,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
         // Test for dangling items
         int code = track->Type() == PCB_VIA_T ? DRCE_DANGLING_VIA : DRCE_DANGLING_TRACK;
-        wxPoint pos;
+        VECTOR2I pos;
 
         if( connectivity->TestTrackEndpointDangling( track, &pos ) )
         {

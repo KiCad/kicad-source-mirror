@@ -632,8 +632,8 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
             };
 
     // Amend the end points of the arc if we delete the joining tracks
-    wxPoint newStart = trackOnStart->GetStart();
-    wxPoint newEnd = trackOnEnd->GetStart();
+    VECTOR2I newStart = trackOnStart->GetStart();
+    VECTOR2I newEnd = trackOnEnd->GetStart();
 
     if( isStartTrackOnStartPt )
         newStart = trackOnStart->GetEnd();
@@ -1215,7 +1215,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
         auto processFilletOp =
                 [&]( bool aStartPoint )
                 {
-                    wxPoint anchor = ( aStartPoint ) ? track->GetStart() : track->GetEnd();
+            VECTOR2I anchor = ( aStartPoint ) ? track->GetStart() : track->GetEnd();
                     auto connectivity = board()->GetConnectivity();
                     auto itemsOnAnchor = connectivity->GetConnectedItemsAtAnchor( track, anchor,
                                                                                   track_types );
@@ -1508,9 +1508,9 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 /**
  * Mirror a point about the vertical axis passing through another point.
  */
-static wxPoint mirrorPointX( const wxPoint& aPoint, const wxPoint& aMirrorPoint )
+static VECTOR2I mirrorPointX( const VECTOR2I& aPoint, const VECTOR2I& aMirrorPoint )
 {
-    wxPoint mirrored = aPoint;
+    VECTOR2I mirrored = aPoint;
 
     mirrored.x -= aMirrorPoint.x;
     mirrored.x = -mirrored.x;
@@ -1523,12 +1523,12 @@ static wxPoint mirrorPointX( const wxPoint& aPoint, const wxPoint& aMirrorPoint 
 /**
  * Mirror a pad in the vertical axis passing through a point (mirror left to right).
  */
-static void mirrorPadX( PAD& aPad, const wxPoint& aMirrorPoint )
+static void mirrorPadX( PAD& aPad, const VECTOR2I& aMirrorPoint )
 {
     if( aPad.GetShape() == PAD_SHAPE::CUSTOM )
         aPad.FlipPrimitives( true );  // mirror primitives left to right
 
-    wxPoint tmpPt = mirrorPointX( aPad.GetPosition(), aMirrorPoint );
+    VECTOR2I tmpPt = mirrorPointX( aPad.GetPosition(), aMirrorPoint );
     aPad.SetPosition( tmpPt );
 
     aPad.SetX0( aPad.GetPosition().x );

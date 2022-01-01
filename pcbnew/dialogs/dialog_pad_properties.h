@@ -252,7 +252,7 @@ private:
     PCB_SHAPE*           m_shape;
 
     // The working copy of the basic shape currently edited
-    std::vector<wxPoint> m_currPoints;
+    std::vector<VECTOR2I> m_currPoints;
 
     UNIT_BINDER          m_thickness;
 };

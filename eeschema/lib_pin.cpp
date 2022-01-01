@@ -121,7 +121,7 @@ LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent ) :
 
 LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent, const wxString& aName, const wxString& aNumber,
                   int aOrientation, ELECTRICAL_PINTYPE aPinType, int aLength, int aNameTextSize,
-                  int aNumTextSize, int aConvert, const wxPoint& aPos, int aUnit ) :
+                  int aNumTextSize, int aConvert, const VECTOR2I& aPos, int aUnit ) :
         LIB_ITEM( LIB_PIN_T, aParent ),
         m_position( aPos ),
         m_length( aLength ),
@@ -139,7 +139,7 @@ LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent, const wxString& aName, const wxString& aN
 }
 
 
-bool LIB_PIN::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool LIB_PIN::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     EDA_RECT rect = GetBoundingBox();
 
@@ -179,20 +179,20 @@ wxString LIB_PIN::GetShownName() const
 }
 
 
-wxPoint LIB_PIN::GetPinRoot() const
+VECTOR2I LIB_PIN::GetPinRoot() const
 {
     switch( m_orientation )
     {
     default:
-    case PIN_RIGHT: return wxPoint( m_position.x + m_length, -( m_position.y ) );
-    case PIN_LEFT:  return wxPoint( m_position.x - m_length, -( m_position.y ) );
-    case PIN_UP:    return wxPoint( m_position.x, -( m_position.y + m_length ) );
-    case PIN_DOWN:  return wxPoint( m_position.x, -( m_position.y - m_length ) );
+    case PIN_RIGHT: return VECTOR2I( m_position.x + m_length, -( m_position.y ) );
+    case PIN_LEFT:  return VECTOR2I( m_position.x - m_length, -( m_position.y ) );
+    case PIN_UP:    return VECTOR2I( m_position.x, -( m_position.y + m_length ) );
+    case PIN_DOWN:  return VECTOR2I( m_position.x, -( m_position.y - m_length ) );
     }
 }
 
 
-void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
                      const TRANSFORM& aTransform )
 {
     LIB_SYMBOL_OPTIONS* opts = (LIB_SYMBOL_OPTIONS*) aData;
@@ -206,7 +206,7 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
     int orient = PinDrawOrient( aTransform );
 
     /* Calculate the pin position */
-    wxPoint pos1 = aTransform.TransformCoordinate( m_position ) + aOffset;
+    VECTOR2I pos1 = aTransform.TransformCoordinate( m_position ) + aOffset;
 
     if( IsVisible() || drawHiddenFields )
     {
@@ -230,7 +230,7 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
 }
 
 
-void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const wxPoint& aPos, int aOrient )
+void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& aPos, int aOrient )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     int     MapX1, MapY1, x1, y1;
@@ -341,7 +341,7 @@ void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const wxPoint& a
 }
 
 
-void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, wxPoint& aPinPos, int aPinOrient,
+void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos, int aPinOrient,
                              int aTextInside, bool aDrawPinNum, bool aDrawPinName )
 {
     if( !aDrawPinName && !aDrawPinNum )
@@ -394,14 +394,14 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, wxPoint& aPinPos,
                 if( aPinOrient == PIN_RIGHT )
                 {
                     x = x1 + aTextInside;
-                    GRText( DC, wxPoint( x, y1 ), NameColor, name, EDA_ANGLE::HORIZONTAL,
+                    GRText( DC, VECTOR2I( x, y1 ), NameColor, name, EDA_ANGLE::HORIZONTAL,
                             PinNameSize, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, namePenWidth,
                             false, false, nullptr );
                 }
                 else    // Orient == PIN_LEFT
                 {
                     x = x1 - aTextInside;
-                    GRText( DC, wxPoint( x, y1 ), NameColor, name, EDA_ANGLE::HORIZONTAL,
+                    GRText( DC, VECTOR2I( x, y1 ), NameColor, name, EDA_ANGLE::HORIZONTAL,
                             PinNameSize, GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, namePenWidth,
                             false, false, nullptr );
                 }
@@ -409,7 +409,7 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, wxPoint& aPinPos,
 
             if( aDrawPinNum )
             {
-                GRText( DC, wxPoint(( x1 + aPinPos.x) / 2, y1 - num_offset ), NumColor, number,
+                GRText( DC, VECTOR2I(( x1 + aPinPos.x) / 2, y1 - num_offset ), NumColor, number,
                         EDA_ANGLE::HORIZONTAL, PinNumSize, GR_TEXT_H_ALIGN_CENTER,
                         GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, nullptr );
             }
@@ -423,14 +423,14 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, wxPoint& aPinPos,
 
                 if( aDrawPinName )
                 {
-                    GRText( DC, wxPoint( x1, y ), NameColor, name, EDA_ANGLE::VERTICAL, PinNameSize,
+                    GRText( DC, VECTOR2I( x1, y ), NameColor, name, EDA_ANGLE::VERTICAL, PinNameSize,
                             GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, namePenWidth, false,
                             false, nullptr );
                 }
 
                 if( aDrawPinNum )
                 {
-                    GRText( DC, wxPoint( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
+                    GRText( DC, VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
                             number, EDA_ANGLE::VERTICAL, PinNumSize, GR_TEXT_H_ALIGN_CENTER,
                             GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, nullptr );
                 }
@@ -441,14 +441,14 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, wxPoint& aPinPos,
 
                 if( aDrawPinName )
                 {
-                    GRText( DC, wxPoint( x1, y ), NameColor, name, EDA_ANGLE::VERTICAL, PinNameSize,
+                    GRText( DC, VECTOR2I( x1, y ), NameColor, name, EDA_ANGLE::VERTICAL, PinNameSize,
                             GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, namePenWidth, false,
                             false, nullptr );
                 }
 
                 if( aDrawPinNum )
                 {
-                    GRText( DC, wxPoint( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
+                    GRText( DC, VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
                             number, EDA_ANGLE::VERTICAL, PinNumSize, GR_TEXT_H_ALIGN_CENTER,
                             GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, nullptr );
                 }
@@ -463,14 +463,14 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, wxPoint& aPinPos,
             if( aDrawPinName )
             {
                 x = ( x1 + aPinPos.x) / 2;
-                GRText( DC, wxPoint( x, y1 - name_offset ), NameColor, name, EDA_ANGLE::HORIZONTAL,
+                GRText( DC, VECTOR2I( x, y1 - name_offset ), NameColor, name, EDA_ANGLE::HORIZONTAL,
                         PinNameSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM,
                         namePenWidth, false, false, nullptr );
             }
             if( aDrawPinNum )
             {
                 x = ( x1 + aPinPos.x) / 2;
-                GRText( DC, wxPoint( x, y1 + num_offset ), NumColor, number, EDA_ANGLE::HORIZONTAL,
+                GRText( DC, VECTOR2I( x, y1 + num_offset ), NumColor, number, EDA_ANGLE::HORIZONTAL,
                         PinNumSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, numPenWidth,
                         false, false, nullptr );
             }
@@ -480,14 +480,14 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, wxPoint& aPinPos,
             if( aDrawPinName )
             {
                 y = ( y1 + aPinPos.y) / 2;
-                GRText( DC, wxPoint( x1 - name_offset, y ), NameColor, name, EDA_ANGLE::VERTICAL,
+                GRText( DC, VECTOR2I( x1 - name_offset, y ), NameColor, name, EDA_ANGLE::VERTICAL,
                         PinNameSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM,
                         namePenWidth, false, false, nullptr );
             }
 
             if( aDrawPinNum )
             {
-                GRText( DC, wxPoint( x1 + num_offset, ( y1 + aPinPos.y) / 2 ), NumColor, number,
+                GRText( DC, VECTOR2I( x1 + num_offset, ( y1 + aPinPos.y) / 2 ), NumColor, number,
                         EDA_ANGLE::VERTICAL, PinNumSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP,
                         numPenWidth, false, false, nullptr );
             }
@@ -497,7 +497,7 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, wxPoint& aPinPos,
 
 
 
-void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, wxPoint& aPosition,
+void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECTOR2I& aPosition,
                                           int aOrientation )
 {
     wxDC*       DC = aSettings->GetPrintDC();
@@ -517,7 +517,7 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, wxPo
     // Get a suitable color
     COLOR4D color = aSettings->GetLayerColor( IsVisible() ? LAYER_NOTES : LAYER_HIDDEN );
 
-    wxPoint txtpos = aPosition;
+    VECTOR2I txtpos = aPosition;
     int offset = Millimeter2iu( 0.4 );
     GR_TEXT_H_ALIGN_T hjustify = GR_TEXT_H_ALIGN_LEFT;
     EDA_ANGLE orient = EDA_ANGLE::HORIZONTAL;
@@ -550,7 +550,7 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, wxPo
 }
 
 
-void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation ) const
+void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const VECTOR2I& aPosition, int aOrientation ) const
 {
     int     MapX1, MapY1, x1, y1;
     COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( LAYER_PIN );
@@ -573,10 +573,10 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
     {
         const int radius = externalPinDecoSize( aPlotter->RenderSettings(), *this );
-        aPlotter->Circle( wxPoint( MapX1 * radius + x1, MapY1 * radius + y1 ), radius * 2,
+        aPlotter->Circle( VECTOR2I( MapX1 * radius + x1, MapY1 * radius + y1 ), radius * 2,
                           FILL_T::NO_FILL, penWidth );
 
-        aPlotter->MoveTo( wxPoint( MapX1 * radius * 2 + x1, MapY1 * radius * 2 + y1 ) );
+        aPlotter->MoveTo( VECTOR2I( MapX1 * radius * 2 + x1, MapY1 * radius * 2 + y1 ) );
         aPlotter->FinishTo( aPosition );
     }
     else if( m_shape == GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK )
@@ -584,23 +584,23 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
         const int deco_size = internalPinDecoSize( aPlotter->RenderSettings(), *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
-            aPlotter->MoveTo( wxPoint( x1, y1 + deco_size ) );
-            aPlotter->LineTo( wxPoint( x1 + MapX1 * deco_size * 2, y1 ) );
-            aPlotter->FinishTo( wxPoint( x1, y1 - deco_size ) );
+            aPlotter->MoveTo( VECTOR2I( x1, y1 + deco_size ) );
+            aPlotter->LineTo( VECTOR2I( x1 + MapX1 * deco_size * 2, y1 ) );
+            aPlotter->FinishTo( VECTOR2I( x1, y1 - deco_size ) );
         }
         else    /* MapX1 = 0 */
         {
-            aPlotter->MoveTo( wxPoint( x1 + deco_size, y1 ) );
-            aPlotter->LineTo( wxPoint( x1, y1 + MapY1 * deco_size * 2 ) );
-            aPlotter->FinishTo( wxPoint( x1 - deco_size, y1 ) );
+            aPlotter->MoveTo( VECTOR2I( x1 + deco_size, y1 ) );
+            aPlotter->LineTo( VECTOR2I( x1, y1 + MapY1 * deco_size * 2 ) );
+            aPlotter->FinishTo( VECTOR2I( x1 - deco_size, y1 ) );
         }
 
-        aPlotter->MoveTo( wxPoint( MapX1 * deco_size * 2 + x1, MapY1 * deco_size * 2 + y1 ) );
+        aPlotter->MoveTo( VECTOR2I( MapX1 * deco_size * 2 + x1, MapY1 * deco_size * 2 + y1 ) );
         aPlotter->FinishTo( aPosition );
     }
     else
     {
-        aPlotter->MoveTo( wxPoint( x1, y1 ) );
+        aPlotter->MoveTo( VECTOR2I( x1, y1 ) );
         aPlotter->FinishTo( aPosition );
     }
 
@@ -611,15 +611,15 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
         const int deco_size = internalPinDecoSize( aPlotter->RenderSettings(), *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
-            aPlotter->MoveTo( wxPoint( x1, y1 + deco_size ) );
-            aPlotter->LineTo( wxPoint( x1 - MapX1 * deco_size * 2, y1 ) );
-            aPlotter->FinishTo( wxPoint( x1, y1 - deco_size ) );
+            aPlotter->MoveTo( VECTOR2I( x1, y1 + deco_size ) );
+            aPlotter->LineTo( VECTOR2I( x1 - MapX1 * deco_size * 2, y1 ) );
+            aPlotter->FinishTo( VECTOR2I( x1, y1 - deco_size ) );
         }
         else    /* MapX1 = 0 */
         {
-            aPlotter->MoveTo( wxPoint( x1 + deco_size, y1 ) );
-            aPlotter->LineTo( wxPoint( x1, y1 - MapY1 * deco_size * 2 ) );
-            aPlotter->FinishTo( wxPoint( x1 - deco_size, y1 ) );
+            aPlotter->MoveTo( VECTOR2I( x1 + deco_size, y1 ) );
+            aPlotter->LineTo( VECTOR2I( x1, y1 - MapY1 * deco_size * 2 ) );
+            aPlotter->FinishTo( VECTOR2I( x1 - deco_size, y1 ) );
         }
     }
 
@@ -630,15 +630,15 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
 
         if( MapY1 == 0 )        /* MapX1 = +- 1 */
         {
-            aPlotter->MoveTo( wxPoint( x1 + MapX1 * deco_size * 2, y1 ) );
-            aPlotter->LineTo( wxPoint( x1 + MapX1 * deco_size * 2, y1 - deco_size * 2 ) );
-            aPlotter->FinishTo( wxPoint( x1, y1 ) );
+            aPlotter->MoveTo( VECTOR2I( x1 + MapX1 * deco_size * 2, y1 ) );
+            aPlotter->LineTo( VECTOR2I( x1 + MapX1 * deco_size * 2, y1 - deco_size * 2 ) );
+            aPlotter->FinishTo( VECTOR2I( x1, y1 ) );
         }
         else    /* MapX1 = 0 */
         {
-            aPlotter->MoveTo( wxPoint( x1, y1 + MapY1 * deco_size * 2 ) );
-            aPlotter->LineTo( wxPoint( x1 - deco_size * 2, y1 + MapY1 * deco_size * 2 ) );
-            aPlotter->FinishTo( wxPoint( x1, y1 ) );
+            aPlotter->MoveTo( VECTOR2I( x1, y1 + MapY1 * deco_size * 2 ) );
+            aPlotter->LineTo( VECTOR2I( x1 - deco_size * 2, y1 + MapY1 * deco_size * 2 ) );
+            aPlotter->FinishTo( VECTOR2I( x1, y1 ) );
         }
     }
 
@@ -648,22 +648,26 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
 
         if( MapY1 == 0 )        /* MapX1 = +- 1 */
         {
-            aPlotter->MoveTo( wxPoint( x1, y1 - symbol_size * 2 ) );
-            aPlotter->FinishTo( wxPoint( x1 + MapX1 * symbol_size * 2, y1 ) );
+            aPlotter->MoveTo( VECTOR2I( x1, y1 - symbol_size * 2 ) );
+            aPlotter->FinishTo( VECTOR2I( x1 + MapX1 * symbol_size * 2, y1 ) );
         }
         else    /* MapX1 = 0 */
         {
-            aPlotter->MoveTo( wxPoint( x1 - symbol_size * 2, y1 ) );
-            aPlotter->FinishTo( wxPoint( x1, y1 + MapY1 * symbol_size * 2 ) );
+            aPlotter->MoveTo( VECTOR2I( x1 - symbol_size * 2, y1 ) );
+            aPlotter->FinishTo( VECTOR2I( x1, y1 + MapY1 * symbol_size * 2 ) );
         }
     }
     else if( m_shape == GRAPHIC_PINSHAPE::NONLOGIC ) /* NonLogic pin symbol */
     {
         const int deco_size = externalPinDecoSize( aPlotter->RenderSettings(), *this );
-        aPlotter->MoveTo( wxPoint( x1 - (MapX1 + MapY1) * deco_size, y1 - (MapY1 - MapX1) * deco_size ) );
-        aPlotter->FinishTo( wxPoint( x1 + (MapX1 + MapY1) * deco_size, y1 + (MapY1 - MapX1) * deco_size ) );
-        aPlotter->MoveTo( wxPoint( x1 - (MapX1 - MapY1) * deco_size, y1 - (MapY1 + MapX1) * deco_size ) );
-        aPlotter->FinishTo( wxPoint( x1 + (MapX1 - MapY1) * deco_size, y1 + (MapY1 + MapX1) * deco_size ) );
+        aPlotter->MoveTo( VECTOR2I( x1 - ( MapX1 + MapY1 ) * deco_size,
+                                    y1 - ( MapY1 - MapX1 ) * deco_size ) );
+        aPlotter->FinishTo( VECTOR2I( x1 + ( MapX1 + MapY1 ) * deco_size,
+                                      y1 + ( MapY1 - MapX1 ) * deco_size ) );
+        aPlotter->MoveTo( VECTOR2I( x1 - ( MapX1 - MapY1 ) * deco_size,
+                                    y1 - ( MapY1 + MapX1 ) * deco_size ) );
+        aPlotter->FinishTo( VECTOR2I( x1 + ( MapX1 - MapY1 ) * deco_size,
+                                      y1 + ( MapY1 + MapX1 ) * deco_size ) );
     }
 
     if( m_type == ELECTRICAL_PINTYPE::PT_NC ) // Draw a N.C. symbol
@@ -671,15 +675,15 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
         const int deco_size = TARGET_PIN_RADIUS;
         const int ex1 = aPosition.x;
         const int ey1 = aPosition.y;
-        aPlotter->MoveTo( wxPoint( ex1 - deco_size, ey1 - deco_size ) );
-        aPlotter->FinishTo( wxPoint( ex1 + deco_size, ey1 + deco_size ) );
-        aPlotter->MoveTo( wxPoint( ex1 + deco_size, ey1 - deco_size ) );
-        aPlotter->FinishTo( wxPoint( ex1 - deco_size, ey1 + deco_size ) );
+        aPlotter->MoveTo( VECTOR2I( ex1 - deco_size, ey1 - deco_size ) );
+        aPlotter->FinishTo( VECTOR2I( ex1 + deco_size, ey1 + deco_size ) );
+        aPlotter->MoveTo( VECTOR2I( ex1 + deco_size, ey1 - deco_size ) );
+        aPlotter->FinishTo( VECTOR2I( ex1 - deco_size, ey1 + deco_size ) );
     }
 }
 
 
-void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const wxPoint& aPinPos, int aPinOrient,
+void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPinOrient,
                             int aTextInside, bool aDrawPinNum, bool aDrawPinName ) const
 {
     wxString name = GetShownName();
@@ -740,13 +744,13 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const wxPoint& aPinPos, int aPinO
                     hjustify = GR_TEXT_H_ALIGN_RIGHT;
                 }
 
-                aPlotter->Text( wxPoint( x, y1 ), nameColor, name, EDA_ANGLE::HORIZONTAL,
+                aPlotter->Text( VECTOR2I( x, y1 ), nameColor, name, EDA_ANGLE::HORIZONTAL,
                                 pinNameSize, hjustify, GR_TEXT_V_ALIGN_CENTER, namePenWidth,
                                 false, false );
             }
             if( aDrawPinNum )
             {
-                aPlotter->Text( wxPoint( ( x1 + aPinPos.x) / 2, y1 - num_offset ), numColor,
+                aPlotter->Text( VECTOR2I( ( x1 + aPinPos.x) / 2, y1 - num_offset ), numColor,
                                 number, EDA_ANGLE::HORIZONTAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                                 GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false );
             }
@@ -758,13 +762,13 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const wxPoint& aPinPos, int aPinO
                 y = y1 + aTextInside;
 
                 if( aDrawPinName )
-                    aPlotter->Text( wxPoint( x1, y ), nameColor, name, EDA_ANGLE::VERTICAL,
+                    aPlotter->Text( VECTOR2I( x1, y ), nameColor, name, EDA_ANGLE::VERTICAL,
                                     pinNameSize, GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER,
                                     namePenWidth, false, false );
 
                 if( aDrawPinNum )
                 {
-                    aPlotter->Text( wxPoint( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), numColor,
+                    aPlotter->Text( VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), numColor,
                                     number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                                     GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false );
                 }
@@ -775,14 +779,14 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const wxPoint& aPinPos, int aPinO
 
                 if( aDrawPinName )
                 {
-                    aPlotter->Text( wxPoint( x1, y ), nameColor, name, EDA_ANGLE::VERTICAL,
+                    aPlotter->Text( VECTOR2I( x1, y ), nameColor, name, EDA_ANGLE::VERTICAL,
                                     pinNameSize, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER,
                                     namePenWidth, false, false );
                 }
 
                 if( aDrawPinNum )
                 {
-                    aPlotter->Text( wxPoint( x1 - num_offset,  ( y1 + aPinPos.y) / 2 ), numColor,
+                    aPlotter->Text( VECTOR2I( x1 - num_offset,  ( y1 + aPinPos.y) / 2 ), numColor,
                                     number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                                     GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false );
                 }
@@ -797,7 +801,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const wxPoint& aPinPos, int aPinO
             if( aDrawPinName )
             {
                 x = ( x1 + aPinPos.x) / 2;
-                aPlotter->Text( wxPoint( x, y1 - name_offset ), nameColor, name,
+                aPlotter->Text( VECTOR2I( x, y1 - name_offset ), nameColor, name,
                                 EDA_ANGLE::HORIZONTAL, pinNameSize, GR_TEXT_H_ALIGN_CENTER,
                                 GR_TEXT_V_ALIGN_BOTTOM, namePenWidth, false, false );
             }
@@ -805,7 +809,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const wxPoint& aPinPos, int aPinO
             if( aDrawPinNum )
             {
                 x = ( x1 + aPinPos.x ) / 2;
-                aPlotter->Text( wxPoint( x, y1 + num_offset ), numColor, number,
+                aPlotter->Text( VECTOR2I( x, y1 + num_offset ), numColor, number,
                                 EDA_ANGLE::HORIZONTAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                                 GR_TEXT_V_ALIGN_TOP, numPenWidth, false, false );
             }
@@ -815,14 +819,14 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const wxPoint& aPinPos, int aPinO
             if( aDrawPinName )
             {
                 y = ( y1 + aPinPos.y ) / 2;
-                aPlotter->Text( wxPoint( x1 - name_offset, y ), nameColor, name,
+                aPlotter->Text( VECTOR2I( x1 - name_offset, y ), nameColor, name,
                                 EDA_ANGLE::VERTICAL, pinNameSize, GR_TEXT_H_ALIGN_CENTER,
                                 GR_TEXT_V_ALIGN_BOTTOM, namePenWidth, false, false );
             }
 
             if( aDrawPinNum )
             {
-                aPlotter->Text( wxPoint( x1 + num_offset, ( y1 + aPinPos.y ) / 2 ), numColor,
+                aPlotter->Text( VECTOR2I( x1 + num_offset, ( y1 + aPinPos.y ) / 2 ), numColor,
                                 number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                                 GR_TEXT_V_ALIGN_TOP, numPenWidth, false, false );
             }
@@ -833,8 +837,8 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const wxPoint& aPinPos, int aPinO
 
 int LIB_PIN::PinDrawOrient( const TRANSFORM& aTransform ) const
 {
-    int     orient;
-    wxPoint end;   // position of pin end starting at 0,0 according to its orientation, length = 1
+    int      orient;
+    VECTOR2I end; // position of pin end starting at 0,0 according to its orientation, length = 1
 
     switch( m_orientation )
     {
@@ -949,13 +953,13 @@ int LIB_PIN::compare( const LIB_ITEM& aOther, LIB_ITEM::COMPARE_FLAGS aCompareFl
 }
 
 
-void LIB_PIN::Offset( const wxPoint& aOffset )
+void LIB_PIN::Offset( const VECTOR2I& aOffset )
 {
     m_position += aOffset;
 }
 
 
-void LIB_PIN::MoveTo( const wxPoint& aNewPosition )
+void LIB_PIN::MoveTo( const VECTOR2I& aNewPosition )
 {
     if( m_position != aNewPosition )
     {
@@ -965,7 +969,7 @@ void LIB_PIN::MoveTo( const wxPoint& aNewPosition )
 }
 
 
-void LIB_PIN::MirrorHorizontal( const wxPoint& aCenter )
+void LIB_PIN::MirrorHorizontal( const VECTOR2I& aCenter )
 {
     m_position.x -= aCenter.x;
     m_position.x *= -1;
@@ -978,7 +982,7 @@ void LIB_PIN::MirrorHorizontal( const wxPoint& aCenter )
 }
 
 
-void LIB_PIN::MirrorVertical( const wxPoint& aCenter )
+void LIB_PIN::MirrorVertical( const VECTOR2I& aCenter )
 {
     m_position.y -= aCenter.y;
     m_position.y *= -1;
@@ -991,11 +995,11 @@ void LIB_PIN::MirrorVertical( const wxPoint& aCenter )
 }
 
 
-void LIB_PIN::Rotate( const wxPoint& aCenter, bool aRotateCCW )
+void LIB_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
 
-    RotatePoint( &m_position, aCenter, rot_angle );
+    RotatePoint( m_position, aCenter, rot_angle );
 
     if( aRotateCCW )
     {
@@ -1020,14 +1024,14 @@ void LIB_PIN::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 }
 
 
-void LIB_PIN::Plot( PLOTTER* aPlotter, const wxPoint& aPffset, bool aFill,
+void LIB_PIN::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
                     const TRANSFORM& aTransform ) const
 {
     if( !IsVisible() )
         return;
 
     int     orient = PinDrawOrient( aTransform );
-    wxPoint pos = aTransform.TransformCoordinate( m_position ) + aPffset;
+    VECTOR2I pos = aTransform.TransformCoordinate( m_position ) + aOffset;
 
     PlotSymbol( aPlotter, pos, orient );
     PlotPinTexts( aPlotter, pos, orient, GetParent()->GetPinNameOffset(),
@@ -1054,7 +1058,7 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     int i = PinOrientationIndex( m_orientation );
     aList.emplace_back( _( "Orientation" ), PinOrientationName( (unsigned) i ) );
 
-    wxPoint pinpos = GetPosition();
+    VECTOR2I pinpos = GetPosition();
     pinpos.y = -pinpos.y;   // Display coords are top to bottom; lib item coords are bottom to top
 
     aList.emplace_back( _( "Pos X" ), MessageTextFromValue( units, pinpos.x, true ) );
@@ -1067,8 +1071,8 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     const KIGFX::STROKE_FONT& font = basic_gal.GetStrokeFont();
 
     EDA_RECT       bbox;
-    wxPoint        begin;
-    wxPoint        end;
+    VECTOR2I       begin;
+    VECTOR2I       end;
     int            nameTextOffset = 0;
     int            nameTextLength = 0;
     int            nameTextHeight = 0;
@@ -1150,13 +1154,13 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     {
     case PIN_UP:
         // Pin is rotated and texts positions are mirrored
-        RotatePoint( &begin, wxPoint( 0, 0 ), -900 );
-        RotatePoint( &end, wxPoint( 0, 0 ), -900 );
+        RotatePoint( begin, VECTOR2I( 0, 0 ), -900 );
+        RotatePoint( end, VECTOR2I( 0, 0 ), -900 );
         break;
 
     case PIN_DOWN:
-        RotatePoint( &begin, wxPoint( 0, 0 ), 900 );
-        RotatePoint( &end, wxPoint( 0, 0 ), 900 );
+        RotatePoint( begin, VECTOR2I( 0, 0 ), 900 );
+        RotatePoint( end, VECTOR2I( 0, 0 ), 900 );
         begin.x = -begin.x;
         end.x = -end.x;
         break;
@@ -1224,7 +1228,7 @@ void LIB_PIN::Show( int nestLevel, std::ostream& os ) const
 
 #endif
 
-void LIB_PIN::CalcEdit( const wxPoint& aPosition )
+void LIB_PIN::CalcEdit( const VECTOR2I& aPosition )
 {
     if( IsMoving() )
         MoveTo( aPosition );

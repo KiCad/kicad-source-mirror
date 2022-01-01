@@ -1353,7 +1353,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
         case SHAPE_T::RECT:
         {
-            std::vector<wxPoint> pts = aShape->GetRectCorners();
+            std::vector<VECTOR2I> pts = aShape->GetRectCorners();
 
             if( outline_mode )
             {
@@ -1380,7 +1380,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                     SHAPE_POLY_SET poly;
                     poly.NewOutline();
 
-                    for( const wxPoint& pt : pts )
+                    for( const VECTOR2I& pt : pts )
                         poly.Append( pt );
 
                     m_gal->DrawPolygon( poly );

@@ -92,7 +92,7 @@ AR_AUTOPLACER::AR_AUTOPLACER( BOARD* aBoard )
 
 
 void AR_AUTOPLACER::placeFootprint( FOOTPRINT* aFootprint, bool aDoNotRecreateRatsnest,
-                                    const wxPoint& aPos )
+                                    const VECTOR2I& aPos )
 {
     if( !aFootprint )
         return;
@@ -161,7 +161,7 @@ bool AR_AUTOPLACER::fillMatrix()
     std::vector <int> x_coordinates;
     bool success = true;
     int step = m_matrix.m_GridRouting;
-    wxPoint coord_orgin = m_matrix.GetBrdCoordOrigin(); // Board coordinate of matruix cell (0,0)
+    VECTOR2I coord_orgin = m_matrix.GetBrdCoordOrigin(); // Board coordinate of matruix cell (0,0)
 
     // Create a single board outline:
     SHAPE_POLY_SET brd_shape = m_boardShape;
@@ -285,7 +285,7 @@ void AR_AUTOPLACER::rotateFootprint( FOOTPRINT* aFootprint, double angle, bool i
 }
 
 
-void AR_AUTOPLACER::addFpBody( const wxPoint& aStart, const wxPoint& aEnd, LSET aLayerMask )
+void AR_AUTOPLACER::addFpBody( const VECTOR2I& aStart, const VECTOR2I& aEnd, LSET aLayerMask )
 {
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
     if( aLayerMask[ F_Cu ] )
@@ -356,7 +356,7 @@ void AR_AUTOPLACER::buildFpAreas( FOOTPRINT* aFootprint, int aFpClearance )
     fpBBox.Inflate( ( m_matrix.m_GridRouting / 2 ) + aFpClearance );
 
     // Add a minimal area to the fp area:
-    addFpBody( (wxPoint)fpBBox.GetOrigin(), (wxPoint)fpBBox.GetEnd(), layerMask );
+    addFpBody( fpBBox.GetOrigin(), fpBBox.GetEnd(), layerMask );
 
     // Trace pads + clearance areas.
     for( PAD* pad : aFootprint->Pads() )
@@ -535,7 +535,7 @@ unsigned int AR_AUTOPLACER::calculateKeepOutArea( const EDA_RECT& aRect, int sid
 
 
 int AR_AUTOPLACER::testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSide,
-                                         const wxPoint& aOffset )
+                                         const VECTOR2I& aOffset )
 {
     int side = AR_SIDE_TOP;
     int otherside = AR_SIDE_BOTTOM;
@@ -546,7 +546,7 @@ int AR_AUTOPLACER::testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSid
     }
 
     EDA_RECT    fpBBox = aFootprint->GetBoundingBox( false, false );
-    fpBBox.Move( -aOffset );
+    fpBBox.Move( -1*aOffset );
 
     buildFpAreas( aFootprint, 0 );
 
@@ -581,7 +581,7 @@ int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
 
     lastPosOK = m_matrix.m_BrdBox.GetOrigin();
 
-    wxPoint  fpPos = aFootprint->GetPosition();
+    VECTOR2I fpPos = aFootprint->GetPosition();
     EDA_RECT fpBBox  = aFootprint->GetBoundingBox( false, false );
 
     // Move fpBBox to have the footprint position at (0,0)
@@ -597,8 +597,8 @@ int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
     initialPos.x    -= initialPos.x % m_matrix.m_GridRouting;
     initialPos.y    -= initialPos.y % m_matrix.m_GridRouting;
 
-    m_curPosition = (wxPoint)initialPos;
-    wxPoint fpOffset = fpPos - m_curPosition;
+    m_curPosition = initialPos;
+    VECTOR2I fpOffset = fpPos - m_curPosition;
 
     // Examine pads, and set testOtherSide to true if a footprint has at least 1 pad through.
     testOtherSide = false;
@@ -657,14 +657,14 @@ int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
     }
 
     // Regeneration of the modified variable.
-    m_curPosition = (wxPoint)lastPosOK;
+    m_curPosition = lastPosOK;
 
     m_minCost = min_cost;
     return error;
 }
 
 
-const PAD* AR_AUTOPLACER::nearestPad( FOOTPRINT *aRefFP, PAD* aRefPad, const wxPoint& aOffset)
+const PAD* AR_AUTOPLACER::nearestPad( FOOTPRINT* aRefFP, PAD* aRefPad, const VECTOR2I& aOffset )
 {
     const PAD* nearest = nullptr;
     int64_t    nearestDist = INT64_MAX;
@@ -697,7 +697,7 @@ const PAD* AR_AUTOPLACER::nearestPad( FOOTPRINT *aRefFP, PAD* aRefPad, const wxP
 }
 
 
-double AR_AUTOPLACER::computePlacementRatsnestCost( FOOTPRINT *aFootprint, const wxPoint& aOffset )
+double AR_AUTOPLACER::computePlacementRatsnestCost( FOOTPRINT* aFootprint, const VECTOR2I& aOffset )
 {
     double  curr_cost;
     VECTOR2I start;      // start point of a ratsnest
@@ -862,9 +862,9 @@ AR_RESULT AR_AUTOPLACER::AutoplaceFootprints( std::vector<FOOTPRINT*>& aFootprin
                                               BOARD_COMMIT* aCommit,
                                               bool aPlaceOffboardModules )
 {
-    wxPoint memopos;
-    int     error;
-    bool    cancelled = false;
+    VECTOR2I memopos;
+    int      error;
+    bool     cancelled = false;
 
     memopos = m_curPosition;
 

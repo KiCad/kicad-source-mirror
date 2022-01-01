@@ -40,7 +40,7 @@
 class SCH_BITMAP : public SCH_ITEM
 {
 public:
-    SCH_BITMAP( const wxPoint& pos = wxPoint( 0, 0 ) );
+    SCH_BITMAP( const VECTOR2I& pos = VECTOR2I( 0, 0 ) );
 
     SCH_BITMAP( const SCH_BITMAP& aSchBitmap );
 
@@ -92,7 +92,7 @@ public:
 
     void SwapData( SCH_ITEM* aItem ) override;
 
-    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
@@ -107,7 +107,7 @@ public:
      */
     bool ReadImageFile( const wxString& aFullFilename );
 
-    void Move( const wxPoint& aMoveVector ) override
+    void Move( const VECTOR2I& aMoveVector ) override
     {
         m_pos += aMoveVector;
     }
@@ -122,7 +122,7 @@ public:
 
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
-    void Rotate( const wxPoint& aCenter ) override;
+    void Rotate( const VECTOR2I& aCenter ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override
     {
@@ -133,10 +133,10 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    wxPoint GetPosition() const override { return m_pos; }
-    void SetPosition( const wxPoint& aPosition ) override { m_pos = aPosition; }
+    VECTOR2I GetPosition() const override { return m_pos; }
+    void     SetPosition( const VECTOR2I& aPosition ) override { m_pos = aPosition; }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void Plot( PLOTTER* aPlotter ) const override;
@@ -148,7 +148,7 @@ public:
 #endif
 
 private:
-    wxPoint      m_pos;                 // XY coordinates of center of the bitmap
+    VECTOR2I     m_pos;                 // XY coordinates of center of the bitmap
     BITMAP_BASE* m_image;               // the BITMAP_BASE item
 };
 

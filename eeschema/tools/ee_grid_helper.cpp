@@ -296,9 +296,9 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
     case SCH_NETCLASS_FLAG_T:
     case SCH_BUS_WIRE_ENTRY_T:
     {
-        std::vector<wxPoint> pts = aItem->GetConnectionPoints();
+        std::vector<VECTOR2I> pts = aItem->GetConnectionPoints();
 
-        for( const wxPoint& pt : pts )
+        for( const VECTOR2I& pt : pts )
             addAnchor( VECTOR2I( pt ), SNAPPABLE | CORNER, aItem );
 
         break;

@@ -260,7 +260,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
                        m_previewItems.push_back( aItem );
                    };
 
-    std::vector<std::pair<SCH_LAYER_ID, std::pair<wxPoint, wxPoint>>> lines = {
+    std::vector<std::pair<SCH_LAYER_ID, std::pair<VECTOR2I, VECTOR2I>>> lines = {
                 { LAYER_WIRE,  { { 1950, 1500 }, { 2325, 1500 } } },
                 { LAYER_WIRE,  { { 1950, 2600 }, { 2350, 2600 } } },
                 { LAYER_WIRE,  { { 2150, 1700 }, { 2325, 1700 } } },
@@ -277,7 +277,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
                 { LAYER_NOTES, { { 2950, 2300 }, { 2350, 2300 } } }
             };
 
-    for( const std::pair<SCH_LAYER_ID, std::pair<wxPoint, wxPoint>>& line : lines )
+    for( const std::pair<SCH_LAYER_ID, std::pair<VECTOR2I, VECTOR2I>>& line : lines )
     {
         SCH_LINE* wire = new SCH_LINE;
         wire->SetLayer( line.first );
@@ -295,14 +295,14 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         wire->SetStroke( stroke );
 
-        wire->SetStartPoint( wxPoint( Mils2iu( line.second.first.x ),
-                                      Mils2iu( line.second.first.y ) ) );
-        wire->SetEndPoint( wxPoint( Mils2iu( line.second.second.x ),
-                                    Mils2iu( line.second.second.y ) ) );
+        wire->SetStartPoint( VECTOR2I( Mils2iu( line.second.first.x ),
+                                       Mils2iu( line.second.first.y ) ) );
+        wire->SetEndPoint( VECTOR2I( Mils2iu( line.second.second.x ),
+                                     Mils2iu( line.second.second.y ) ) );
         addItem( wire );
     }
 
-#define MILS_POINT( x, y ) wxPoint( Mils2iu( x ), Mils2iu( y ) )
+#define MILS_POINT( x, y ) VECTOR2I( Mils2iu( x ), Mils2iu( y ) )
 
     SCH_NO_CONNECT* nc = new SCH_NO_CONNECT;
     nc->SetPosition( MILS_POINT( 2525, 1300 ) );
@@ -347,13 +347,13 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
     {
         auto mapLibItemPosition =
-                []( const wxPoint& aLibPosition ) -> wxPoint
+                []( const VECTOR2I& aLibPosition ) -> VECTOR2I
                 {
-                    return wxPoint( aLibPosition.x, -aLibPosition.y );
+                    return VECTOR2I( aLibPosition.x, -aLibPosition.y );
                 };
 
         LIB_SYMBOL* symbol = new LIB_SYMBOL( wxEmptyString );
-        wxPoint p( 2625, -1600 );
+        VECTOR2I p( 2625, -1600 );
 
         LIB_FIELD& ref = symbol->GetReferenceField();
 

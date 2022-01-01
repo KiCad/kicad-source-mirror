@@ -410,7 +410,7 @@ protected:
 
                 if( line && !side.x )
                 {
-                    wxPoint start = line->GetStartPoint(), end = line->GetEndPoint();
+                    VECTOR2I start = line->GetStartPoint(), end = line->GetEndPoint();
 
                     if( start.y == end.y && collision != COLLIDE_OBJECTS )
                         collision = COLLIDE_H_WIRES;
@@ -600,7 +600,7 @@ protected:
             if( !line )
                 return false;
 
-            wxPoint start = line->GetStartPoint(), end = line->GetEndPoint();
+            VECTOR2I start = line->GetStartPoint(), end = line->GetEndPoint();
 
             if( start.y != end.y )
                 return false;

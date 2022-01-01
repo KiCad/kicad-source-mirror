@@ -204,14 +204,14 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     for( EDA_ITEM* edaItem : selection )
                     {
                         SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
-                        std::vector<wxPoint> connections;
+                        std::vector<VECTOR2I> connections;
 
                         if( item->Type() == SCH_LINE_T )
                             static_cast<SCH_LINE*>( item )->GetSelectedPoints( connections );
                         else
                             connections = item->GetConnectionPoints();
 
-                        for( wxPoint point : connections )
+                        for( VECTOR2I point : connections )
                             getConnectedDragItems( item, point, connectedDragItems );
                     }
 
@@ -525,7 +525,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const wxPoint& aPoint,
+void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const VECTOR2I& aPoint,
                                            EDA_ITEMS& aList )
 {
     EE_RTREE&         items = m_frame->GetScreen()->Items();
@@ -659,7 +659,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const wxPoin
                 SCH_LINE* line = static_cast<SCH_LINE*>( aOriginalItem );
                 bool      oneEndFixed = !line->HasFlag( STARTPOINT ) || !line->HasFlag( ENDPOINT );
 
-                if( line->HitTest( (wxPoint)label->GetTextPos(), 1 ) )
+                if( line->HitTest( label->GetTextPos(), 1 ) )
                 {
                     label->SetFlags( TEMP_SELECTED );
                     aList.push_back( label );
@@ -694,7 +694,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const wxPoin
                     continue;
                 }
 
-                for( wxPoint& point : test->GetConnectionPoints() )
+                for( VECTOR2I& point : test->GetConnectionPoints() )
                 {
                     if( line->HitTest( point, 1 ) )
                     {
@@ -702,8 +702,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, const wxPoin
                         aList.push_back( test );
 
                         // A bus entry needs its wire & label as well
-                        std::vector<wxPoint> ends = test->GetConnectionPoints();
-                        wxPoint              otherEnd;
+                        std::vector<VECTOR2I> ends = test->GetConnectionPoints();
+                        VECTOR2I              otherEnd;
 
                         if( ends[0] == point )
                             otherEnd = ends[1];
@@ -736,10 +736,10 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
         SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
 
         if( aItem->HasFlag( STARTPOINT ) )
-            line->MoveStart( (wxPoint) aDelta );
+            line->MoveStart( aDelta );
 
         if( aItem->HasFlag( ENDPOINT ) )
-            line->MoveEnd( (wxPoint) aDelta );
+            line->MoveEnd( aDelta );
 
     }
         break;
@@ -748,7 +748,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
     case SCH_FIELD_T:
     {
         SCH_ITEM* parent = (SCH_ITEM*) aItem->GetParent();
-        wxPoint   delta( aDelta );
+        VECTOR2I  delta( aDelta );
 
         if( parent && parent->Type() == SCH_SYMBOL_T )
         {
@@ -769,7 +769,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
     case SCH_SHEET_PIN_T:
     {
         SCH_SHEET_PIN* pin = (SCH_SHEET_PIN*) aItem;
-        pin->SetStoredPos( pin->GetStoredPos() + (wxPoint) aDelta );
+        pin->SetStoredPos( pin->GetStoredPos() + aDelta );
         pin->ConstrainOnEdge( pin->GetStoredPos() );
         break;
     }
@@ -782,17 +782,17 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
         {
             SPECIAL_CASE_LABEL_INFO info = m_specialCaseLabels[ label ];
             SEG currentLine( info.attachedLine->GetStartPoint(), info.attachedLine->GetEndPoint() );
-            label->SetPosition( (wxPoint) currentLine.NearestPoint( info.originalLabelPos ) );
+            label->SetPosition( currentLine.NearestPoint( info.originalLabelPos ) );
         }
         else
         {
-            label->Move( (wxPoint) aDelta );
+            label->Move( aDelta );
         }
 
         break;
     }
     default:
-        static_cast<SCH_ITEM*>( aItem )->Move( (wxPoint) aDelta );
+        static_cast<SCH_ITEM*>( aItem )->Move( aDelta );
         break;
     }
 
@@ -830,7 +830,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
         {
             SCH_LINE* line = static_cast<SCH_LINE*>( item );
             std::vector<int> flags{ STARTPOINT, ENDPOINT };
-            std::vector<wxPoint> pts{ line->GetStartPoint(), line->GetEndPoint() };
+            std::vector<VECTOR2I> pts{ line->GetStartPoint(), line->GetEndPoint() };
 
             for( int ii = 0; ii < 2; ++ii )
             {
@@ -876,18 +876,18 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
         }
         else
         {
-            std::vector<wxPoint> connections;
+            std::vector<VECTOR2I> connections;
             EDA_ITEMS drag_items{ item };
             connections = static_cast<SCH_ITEM*>( item )->GetConnectionPoints();
 
-            for( const wxPoint& point : connections )
+            for( const VECTOR2I& point : connections )
                 getConnectedDragItems( static_cast<SCH_ITEM*>( item ), point, drag_items );
 
             std::map<VECTOR2I, int> shifts;
             VECTOR2I most_common( 0, 0 );
             int max_count = 0;
 
-            for( const wxPoint& conn : connections )
+            for( const VECTOR2I& conn : connections )
             {
                 VECTOR2I gridpt = grid.AlignGrid( conn ) - conn;
 

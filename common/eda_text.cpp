@@ -65,7 +65,7 @@ class wxFindReplaceData;
 void addTextSegmToPoly( int x0, int y0, int xf, int yf, void* aData )
 {
     TSEGM_2_POLY_PRMS* prm = static_cast<TSEGM_2_POLY_PRMS*>( aData );
-    TransformOvalToPolygon( *prm->m_cornerBuffer, wxPoint( x0, y0 ), wxPoint( xf, yf ),
+    TransformOvalToPolygon( *prm->m_cornerBuffer, VECTOR2I( x0, y0 ), VECTOR2I( xf, yf ),
                             prm->m_textWidth, prm->m_error, ERROR_INSIDE );
 }
 
@@ -304,7 +304,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
         extra_height += thickness / 2;
         textsize.y += extra_height;
-        rect.Move( wxPoint( 0, -extra_height ) );
+        rect.Move( VECTOR2I( 0, -extra_height ) );
     }
 
     // for multiline texts and aLine < 0, merge all rectangles
@@ -391,7 +391,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 }
 
 
-bool EDA_TEXT::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool EDA_TEXT::TextHitTest( const VECTOR2I& aPoint, int aAccuracy ) const
 {
     EDA_RECT rect = GetTextBox();
     VECTOR2I location = aPoint;
@@ -416,12 +416,12 @@ bool EDA_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy
 }
 
 
-void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
+void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
                       const COLOR4D& aColor, OUTLINE_MODE aFillMode )
 {
     if( IsMultilineAllowed() )
     {
-        std::vector<wxPoint> positions;
+        std::vector<VECTOR2I> positions;
         wxArrayString  strings;
         wxStringSplit( GetShownText(), strings, '\n' );
 
@@ -439,12 +439,12 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
 }
 
 
-void EDA_TEXT::GetLinePositions( std::vector<wxPoint>& aPositions, int aLineCount ) const
+void EDA_TEXT::GetLinePositions( std::vector<VECTOR2I>& aPositions, int aLineCount ) const
 {
-    VECTOR2I pos  = GetTextPos();     // Position of first line of the multiline text according
-                                     // to the center of the multiline text block
+    VECTOR2I pos = GetTextPos();    // Position of first line of the multiline text according
+                                    // to the center of the multiline text block
 
-    wxPoint offset;                  // Offset to next line.
+    VECTOR2I offset;                // Offset to next line.
 
     offset.y = GetInterline();
 
@@ -469,11 +469,11 @@ void EDA_TEXT::GetLinePositions( std::vector<wxPoint>& aPositions, int aLineCoun
     RotatePoint( pos, GetTextPos(), GetTextAngle() );
 
     // Rotate the offset lines to increase happened in the right direction
-    RotatePoint( &offset, GetTextAngle() );
+    RotatePoint( offset, GetTextAngle() );
 
     for( int ii = 0; ii < aLineCount; ii++ )
     {
-        aPositions.push_back( (wxPoint) pos );
+        aPositions.push_back( (VECTOR2I) pos );
         pos += offset;
     }
 }
@@ -599,21 +599,21 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 }
 
 // Convert the text shape to a list of segment
-// each segment is stored as 2 wxPoints: its starting point and its ending point
+// each segment is stored as 2 VECTOR2Is: its starting point and its ending point
 // we are using GRText to create the segments and therefore a call-back function is needed
 
 // This is a call back function, used by GRText to put each segment in buffer
 static void addTextSegmToBuffer( int x0, int y0, int xf, int yf, void* aData )
 {
-    std::vector<wxPoint>* cornerBuffer = static_cast<std::vector<wxPoint>*>( aData );
-    cornerBuffer->push_back( wxPoint( x0, y0 ) );
-    cornerBuffer->push_back( wxPoint( xf, yf ) );
+    std::vector<VECTOR2I>* cornerBuffer = static_cast<std::vector<VECTOR2I>*>( aData );
+    cornerBuffer->push_back( VECTOR2I( x0, y0 ) );
+    cornerBuffer->push_back( VECTOR2I( xf, yf ) );
 }
 
 
-std::vector<wxPoint> EDA_TEXT::TransformToSegmentList() const
+std::vector<VECTOR2I> EDA_TEXT::TransformToSegmentList() const
 {
-    std::vector<wxPoint> cornerBuffer;
+    std::vector<VECTOR2I> cornerBuffer;
     wxSize size = GetTextSize();
 
     if( IsMirrored() )
@@ -628,7 +628,7 @@ std::vector<wxPoint> EDA_TEXT::TransformToSegmentList() const
     {
         wxArrayString strings_list;
         wxStringSplit( GetShownText(), strings_list, wxChar('\n') );
-        std::vector<wxPoint> positions;
+        std::vector<VECTOR2I> positions;
         positions.reserve( strings_list.Count() );
         GetLinePositions( positions, strings_list.Count() );
 
@@ -654,8 +654,8 @@ std::vector<wxPoint> EDA_TEXT::TransformToSegmentList() const
 std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
-    int penWidth = GetEffectiveTextPenWidth();
-    std::vector<wxPoint> pts = TransformToSegmentList();
+    int                             penWidth = GetEffectiveTextPenWidth();
+    std::vector<VECTOR2I>           pts = TransformToSegmentList();
 
     for( unsigned jj = 0; jj < pts.size(); jj += 2 )
         shape->AddShape( new SHAPE_SEGMENT( pts[jj], pts[jj+1], penWidth ) );

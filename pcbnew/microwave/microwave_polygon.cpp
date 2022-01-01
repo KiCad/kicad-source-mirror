@@ -327,7 +327,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     footprint = createBaseFootprint( cmp_name, 0, pad_count );
 
     // We try to place the footprint anchor to the middle of the shape len
-    wxPoint offset;
+    VECTOR2I offset;
     offset.x = -g_ShapeSize.x / 2;
 
     auto it = footprint->Pads().begin();
@@ -348,13 +348,13 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     footprint->Add( shape, ADD_MODE::INSERT );
 
     // Get the corner buffer of the polygonal edge
-    std::vector<wxPoint> polyPoints;
+    std::vector<VECTOR2I> polyPoints;
     polyPoints.reserve( g_PolyEdges.size() + 2 );
 
     // Init start point coord:
     polyPoints.emplace_back( wxPoint( offset.x, 0 ) );
 
-    wxPoint last_coordinate;
+    VECTOR2I last_coordinate;
 
     for( wxRealPoint& pt: g_PolyEdges )  // Copy points
     {
@@ -377,7 +377,7 @@ FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
     case 1:     // Symmetric shape: add the symmetric (mirrored) shape
         for( int ndx = (int) polyPoints.size() - 1; ndx >= 0; --ndx )
         {
-            wxPoint pt = polyPoints[ndx];
+            VECTOR2I pt = polyPoints[ndx];
             pt.y = -pt.y;   // mirror about X axis
             polyPoints.push_back( pt );
         }

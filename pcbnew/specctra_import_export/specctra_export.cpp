@@ -200,7 +200,7 @@ static inline double mapY( int y )
  * Kicad's #BOARD coordinates are in nanometers (called Internal Units or IU) and we are
  * exporting in units of mils, so we have to scale them.
  */
-static POINT mapPt( const wxPoint& pt )
+static POINT mapPt( const VECTOR2I& pt )
 {
     POINT ret;
 
@@ -749,7 +749,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             path->SetLayerId( "signal" );
 
             double radius = graphic->GetRadius();
-            wxPoint circle_centre = graphic->GetStart0();
+            VECTOR2I circle_centre = graphic->GetStart0();
 
             SHAPE_LINE_CHAIN polyline;
             ConvertArcToPolyline( polyline, VECTOR2I( circle_centre ), radius, 0.0, 360.0,
@@ -757,7 +757,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 
             for( int ii = 0; ii < polyline.PointCount(); ++ii )
             {
-                wxPoint corner( polyline.CPoint( ii ).x, polyline.CPoint( ii ).y );
+                VECTOR2I corner( polyline.CPoint( ii ).x, polyline.CPoint( ii ).y );
                 path->AppendPoint( mapPt( corner ) );
             }
 
@@ -774,7 +774,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             outline->SetShape( path );
             path->SetAperture( scale( graphic->GetWidth() ) );
             path->SetLayerId( "signal" );
-            wxPoint corner = graphic->GetStart0();
+            VECTOR2I corner = graphic->GetStart0();
             path->AppendPoint( mapPt( corner ) );
 
             corner.x = graphic->GetEnd0().x;
@@ -802,7 +802,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             path->SetAperture( 0 );//scale( graphic->GetWidth() ) );
             path->SetLayerId( "signal" );
 
-            wxPoint arc_centre = graphic->GetCenter0();
+            VECTOR2I arc_centre = graphic->GetCenter0();
             double radius = graphic->GetRadius() + graphic->GetWidth()/2;
             double arcAngleDeg = graphic->GetArcAngle() / 10.0;
 
@@ -845,7 +845,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             // ensure the polygon is closed
             polyBuffer.Append( polyBuffer.Outline( 0 ).CPoint( 0 ) );
 
-            wxPoint move = graphic->GetCenter() - arc_centre;
+            VECTOR2I move = graphic->GetCenter() - arc_centre;
 
             TransformCircleToPolygon( polyBuffer, graphic->GetStart() - move,
                                       graphic->GetWidth() / 2, ARC_HIGH_DEF, ERROR_INSIDE );
@@ -858,7 +858,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 
             for( int ii = 0; ii < poly.PointCount(); ++ii )
             {
-                wxPoint corner( poly.CPoint( ii ).x, poly.CPoint( ii ).y );
+                VECTOR2I corner( poly.CPoint( ii ).x, poly.CPoint( ii ).y );
                 path->AppendPoint( mapPt( corner ) );
             }
 
@@ -920,11 +920,11 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             // Handle the main outlines
             SHAPE_POLY_SET::ITERATOR iterator;
             bool is_first_point = true;
-            wxPoint startpoint;
+            VECTOR2I startpoint;
 
             for( iterator = untransformedZone.IterateWithHoles(); iterator; iterator++ )
             {
-                wxPoint point( iterator->x, iterator->y );
+                VECTOR2I point( iterator->x, iterator->y );
 
                 point -= aFootprint->GetPosition();
 
@@ -969,7 +969,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
                 wxASSERT( window );
                 wxASSERT( cutout );
 
-                wxPoint point( iterator->x, iterator->y );
+                VECTOR2I point( iterator->x, iterator->y );
 
                 point -= aFootprint->GetPosition();
 

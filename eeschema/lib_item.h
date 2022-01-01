@@ -94,7 +94,7 @@ public:
      * @param aPosition The position in drawing coordinates where the drawing was started.
      *                  May or may not be required depending on the item being drawn.
      */
-    virtual void BeginEdit( const wxPoint& aPosition ) {}
+    virtual void BeginEdit( const VECTOR2I& aPosition ) {}
 
     /**
      * Continue an edit in progress at \a aPosition.
@@ -106,7 +106,7 @@ public:
      * @param aPosition The position of the mouse left click in drawing coordinates.
      * @return True if additional mouse clicks are required to complete the edit in progress.
      */
-    virtual bool ContinueEdit( const wxPoint& aPosition ) { return false; }
+    virtual bool ContinueEdit( const VECTOR2I& aPosition ) { return false; }
 
     /**
      * End an object editing action.
@@ -124,7 +124,7 @@ public:
      *
      * @param aPosition The current mouse position in drawing coordinates.
      */
-    virtual void CalcEdit( const wxPoint& aPosition ) {}
+    virtual void CalcEdit( const VECTOR2I& aPosition ) {}
 
     /**
      * Draw an item
@@ -137,8 +137,8 @@ public:
      *              pass reference to the lib symbol for pins.
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
-    virtual void Print( const RENDER_SETTINGS* aSettings, const wxPoint &aOffset,
-                        void* aData, const TRANSFORM& aTransform );
+    virtual void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
+                        const TRANSFORM& aTransform );
 
     virtual int GetPenWidth() const = 0;
 
@@ -160,7 +160,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override
+    bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override
     {
         // This is just here to prevent annoying compiler warnings about hidden overloaded
         // virtual functions
@@ -210,30 +210,30 @@ public:
      *
      * @param aOffset Coordinates to offset the item position.
      */
-    virtual void Offset( const wxPoint& aOffset ) = 0;
+    virtual void Offset( const VECTOR2I& aOffset ) = 0;
 
     /**
      * Move a draw object to \a aPosition.
      *
      * @param aPosition Position to move draw item to.
      */
-    virtual void MoveTo( const wxPoint& aPosition ) = 0;
+    virtual void MoveTo( const VECTOR2I& aPosition ) = 0;
 
-    void SetPosition( const wxPoint& aPosition ) override { MoveTo( aPosition ); }
+    void SetPosition( const VECTOR2I& aPosition ) override { MoveTo( aPosition ); }
 
     /**
      * Mirror the draw object along the horizontal (X) axis about \a aCenter point.
      *
      * @param aCenter Point to mirror around.
      */
-    virtual void MirrorHorizontal( const wxPoint& aCenter ) = 0;
+    virtual void MirrorHorizontal( const VECTOR2I& aCenter ) = 0;
 
     /**
      * Mirror the draw object along the MirrorVertical (Y) axis about \a aCenter point.
      *
      * @param aCenter Point to mirror around.
      */
-    virtual void MirrorVertical( const wxPoint& aCenter ) = 0;
+    virtual void MirrorVertical( const VECTOR2I& aCenter ) = 0;
 
     /**
      * Rotate the object about \a aCenter point.
@@ -241,7 +241,7 @@ public:
      * @param aCenter Point to rotate around.
      * @param aRotateCCW True to rotate counter clockwise.  False to rotate clockwise.
      */
-    virtual void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) = 0;
+    virtual void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) = 0;
 
     /**
      * Plot the draw item using the plot object.
@@ -251,7 +251,7 @@ public:
      * @param aFill Flag to indicate whether or not the object is filled.
      * @param aTransform The plot transform.
      */
-    virtual void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
+    virtual void Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
                        const TRANSFORM& aTransform ) const = 0;
 
     void SetUnit( int aUnit ) { m_unit = aUnit; }
@@ -296,7 +296,7 @@ protected:
      * @param aData A pointer to any object specific data required to perform the draw.
      * @param aTransform A reference to a #TRANSFORM object containing drawing transform.
      */
-    virtual void print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+    virtual void print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
                         const TRANSFORM& aTransform ) = 0;
 
 private:

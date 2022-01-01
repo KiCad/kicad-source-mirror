@@ -81,7 +81,7 @@ public:
      * @param aUnit is the symbol unit filter (for symbol editor).
      * @param aConvert is the DeMorgan filter (for symbol editor)
      */
-    void Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], const wxPoint& aPos,
+    void Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], const VECTOR2I& aPos,
                   int aUnit = 0, int aConvert = 0 );
 
     /**
@@ -95,7 +95,7 @@ public:
      * @param aUnit is the symbol unit filter (for symbol editor).
      * @param aConvert is the DeMorgan filter (for symbol editor).
      */
-    void Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterList[], const wxPoint& aPos,
+    void Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterList[], const VECTOR2I& aPos,
                   int aUnit = 0, int aConvert = 0 );
 
     /**

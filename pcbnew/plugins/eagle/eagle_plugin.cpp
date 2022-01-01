@@ -721,7 +721,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 }
                 else
                 {
-                    wxPoint center = ConvertArcCenter( start, end, *w.curve );
+                    VECTOR2I center = ConvertArcCenter( start, end, *w.curve );
 
                     shape->SetShape( SHAPE_T::ARC );
                     shape->SetCenter( center );
@@ -1440,10 +1440,10 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
 
         if( v1.curve )
         {
-            EVERTEX v2 = vertices[i + 1];
-            wxPoint center = ConvertArcCenter( wxPoint( kicad_x( v1.x ), kicad_y( v1.y ) ),
-                                               wxPoint( kicad_x( v2.x ), kicad_y( v2.y ) ),
-                                               *v1.curve );
+            EVERTEX  v2 = vertices[i + 1];
+            VECTOR2I center =
+                    ConvertArcCenter( VECTOR2I( kicad_x( v1.x ), kicad_y( v1.y ) ),
+                                      VECTOR2I( kicad_x( v2.x ), kicad_y( v2.y ) ), *v1.curve );
             double angle = DEG2RAD( *v1.curve );
             double  end_angle = atan2( kicad_y( v2.y ) - center.y, kicad_x( v2.x ) - center.x );
             double  radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 )
@@ -1796,7 +1796,7 @@ void EAGLE_PLUGIN::packageWire( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     else
     {
         dwg = new FP_SHAPE( aFootprint, SHAPE_T::ARC );
-        wxPoint center = ConvertArcCenter( start, end, *w.curve );
+        VECTOR2I center = ConvertArcCenter( start, end, *w.curve );
 
         dwg->SetCenter0( center );
         dwg->SetStart0( start );
@@ -1941,7 +1941,7 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
     txt->SetText( FROM_UTF8( t.text.c_str() ) );
 
-    wxPoint pos( kicad_x( t.x ), kicad_y( t.y ) );
+    VECTOR2I pos( kicad_x( t.x ), kicad_y( t.y ) );
 
     txt->SetTextPos( pos );
     txt->SetPos0( pos - aFootprint->GetPosition() );
@@ -2051,8 +2051,8 @@ void EAGLE_PLUGIN::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
 
         if( r.rot )
         {
-            wxPoint center( ( kicad_x( r.x1 ) + kicad_x( r.x2 ) ) / 2,
-                    ( kicad_y( r.y1 ) + kicad_y( r.y2 ) ) / 2 );
+            VECTOR2I center( ( kicad_x( r.x1 ) + kicad_x( r.x2 ) ) / 2,
+                             ( kicad_y( r.y1 ) + kicad_y( r.y2 ) ) / 2 );
             zone->Rotate( center, r.rot->degrees * 10 );
         }
 
@@ -2079,10 +2079,10 @@ void EAGLE_PLUGIN::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
         dwg->SetStroke( STROKE_PARAMS( 0 ) );
         dwg->SetFilled( true );
 
-        std::vector<wxPoint> pts;
+        std::vector<VECTOR2I> pts;
 
-        wxPoint start( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
-        wxPoint end( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
+        VECTOR2I start( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
+        VECTOR2I end( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
 
         pts.push_back( start );
         pts.emplace_back( kicad_x( r.x2 ), kicad_y( r.y1 ) );
@@ -2104,7 +2104,7 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
 {
     EPOLYGON      p( aTree );
 
-    std::vector<wxPoint> pts;
+    std::vector<VECTOR2I> pts;
 
     // Get the first vertex and iterate
     wxXmlNode* vertex = aTree->GetChildren();
@@ -2133,10 +2133,10 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
 
         if( v1.curve )
         {
-            EVERTEX v2 = vertices[i + 1];
-            wxPoint center =
-                    ConvertArcCenter( wxPoint( kicad_x( v1.x ), kicad_y( v1.y ) ),
-                                      wxPoint( kicad_x( v2.x ), kicad_y( v2.y ) ), *v1.curve );
+            EVERTEX  v2 = vertices[i + 1];
+            VECTOR2I center =
+                    ConvertArcCenter( VECTOR2I( kicad_x( v1.x ), kicad_y( v1.y ) ),
+                                      VECTOR2I( kicad_x( v2.x ), kicad_y( v2.y ) ), *v1.curve );
             double angle = DEG2RAD( *v1.curve );
             double end_angle = atan2( kicad_y( v2.y ) - center.y, kicad_x( v2.x ) - center.x );
             double radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 )
@@ -2151,8 +2151,9 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
 
             for( double a = end_angle + angle; fabs( a - end_angle ) > fabs( delta ); a -= delta )
             {
-                pts.push_back( wxPoint( KiROUND( radius * cos( a ) ),
-                                        KiROUND( radius * sin( a ) ) ) + center );
+                pts.push_back(
+                        VECTOR2I( KiROUND( radius * cos( a ) ), KiROUND( radius * sin( a ) ) )
+                        + center );
             }
         }
     }
@@ -2307,7 +2308,7 @@ void EAGLE_PLUGIN::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aC
     // pad->SetOffset( wxPoint( 0, 0 ) );
     // pad->SetNumber( wxEmptyString );
 
-    wxPoint padpos( kicad_x( e.x ), kicad_y( e.y ) );
+    VECTOR2I padpos( kicad_x( e.x ), kicad_y( e.y ) );
 
     if( aCenter )
     {
@@ -2409,7 +2410,7 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
 
     // pad's "Position" is not relative to the footprint's,
     // whereas Pos0 is relative to the footprint's but is the unrotated coordinate.
-    wxPoint padPos( kicad_x( aEaglePad.x ), kicad_y( aEaglePad.y ) );
+    VECTOR2I padPos( kicad_x( aEaglePad.x ), kicad_y( aEaglePad.y ) );
     aPad->SetPos0( padPos );
 
     // Solder mask
@@ -2426,7 +2427,7 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
 
     FOOTPRINT* footprint = aPad->GetParent();
     wxCHECK( footprint, /* void */ );
-    RotatePoint( &padPos, footprint->GetOrientation() );
+    RotatePoint( padPos, footprint->GetOrientation() );
     aPad->SetPosition( padPos + footprint->GetPosition() );
 }
 
@@ -2552,12 +2553,12 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                 if( IsCopperLayer( layer ) )
                 {
-                    wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
+                    VECTOR2I start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
                     double angle = 0.0;
                     double end_angle = 0.0;
                     double radius = 0.0;
                     double delta_angle = 0.0;
-                    wxPoint center;
+                    VECTOR2I center;
 
                     int width = w.width.ToPcbUnits();
 

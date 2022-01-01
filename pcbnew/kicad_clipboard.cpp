@@ -163,7 +163,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
         // Set the new relative internal local coordinates of copied items
         FOOTPRINT* editedFootprint = m_board->Footprints().front();
-        wxPoint    moveVector = partialFootprint.GetPosition() + editedFootprint->GetPosition();
+        VECTOR2I   moveVector = partialFootprint.GetPosition() + editedFootprint->GetPosition();
 
         partialFootprint.MoveAnchorPosition( moveVector );
 

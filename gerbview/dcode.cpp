@@ -146,7 +146,7 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 
 
 void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                               const COLOR4D& aColor, const wxPoint& aShapePos, bool aFilledShape )
+                               const COLOR4D& aColor, const VECTOR2I& aShapePos, bool aFilledShape )
 {
     int radius;
 
@@ -186,10 +186,10 @@ void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wx
 
     case APT_RECT:
     {
-        wxPoint start;
+        VECTOR2I start;
         start.x = aShapePos.x - m_Size.x / 2;
         start.y = aShapePos.y - m_Size.y / 2;
-        wxPoint end = start + m_Size;
+        VECTOR2I end = start + m_Size;
         start = aParent->GetABPosition( start );
         end = aParent->GetABPosition( end );
 
@@ -213,8 +213,8 @@ void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wx
 
     case APT_OVAL:
     {
-        wxPoint start = aShapePos;
-        wxPoint end   = aShapePos;
+        VECTOR2I start = aShapePos;
+        VECTOR2I end = aShapePos;
 
         if( m_Size.x > m_Size.y )   // horizontal oval
         {
@@ -264,18 +264,18 @@ void D_CODE::DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wx
 
 
 void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                                 const COLOR4D& aColor, bool aFilled, const wxPoint& aPosition )
+                                 const COLOR4D& aColor, bool aFilled, const VECTOR2I& aPosition )
 {
     if( m_Polygon.OutlineCount() == 0 )
         return;
 
     int pointCount = m_Polygon.VertexCount();
-    std::vector<wxPoint> points;
+    std::vector<VECTOR2I> points;
     points.reserve( pointCount );
 
     for( int ii = 0; ii < pointCount; ii++ )
     {
-        wxPoint p( m_Polygon.CVertex( ii ).x, m_Polygon.CVertex( ii ).y );
+        VECTOR2I p( m_Polygon.CVertex( ii ).x, m_Polygon.CVertex( ii ).y );
         points[ii] = p + aPosition;
         points[ii] = aParent->GetABPosition( points[ii] );
     }
@@ -289,16 +289,14 @@ void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, 
 
 
 // A helper function for D_CODE::ConvertShapeToPolygon().   Add a hole to a polygon
-static void addHoleToPolygon( SHAPE_POLY_SET*       aPolygon,
-                              APERTURE_DEF_HOLETYPE aHoleShape,
-                              const wxSize&         aSize,
-                              const wxPoint&        aAnchorPos );
+static void addHoleToPolygon( SHAPE_POLY_SET* aPolygon, APERTURE_DEF_HOLETYPE aHoleShape,
+                              const VECTOR2I& aSize, const VECTOR2I& aAnchorPos );
 
 
 void D_CODE::ConvertShapeToPolygon()
 {
-    wxPoint initialpos;
-    wxPoint currpos;
+    VECTOR2I initialpos;
+    VECTOR2I currpos;
 
     m_Polygon.RemoveAllContours();
 
@@ -356,7 +354,7 @@ void D_CODE::ConvertShapeToPolygon()
         for( ; ii <= SEGS_CNT / 2; ii++ )
         {
             currpos = initialpos;
-            RotatePoint( &currpos, ii * 3600.0 / SEGS_CNT );
+            RotatePoint( currpos, ii * 3600.0 / SEGS_CNT );
             currpos.x += delta;
             m_Polygon.Append( VECTOR2I( currpos ) );
         }
@@ -365,7 +363,7 @@ void D_CODE::ConvertShapeToPolygon()
         for( ii = SEGS_CNT / 2; ii <= SEGS_CNT; ii++ )
         {
             currpos = initialpos;
-            RotatePoint( &currpos, ii * 3600.0 / SEGS_CNT );
+            RotatePoint( currpos, ii * 3600.0 / SEGS_CNT );
             currpos.x -= delta;
             m_Polygon.Append( VECTOR2I( currpos ) );
         }
@@ -395,7 +393,7 @@ void D_CODE::ConvertShapeToPolygon()
         for( int ii = 0; ii < m_EdgesCount; ii++ )
         {
             currpos = initialpos;
-            RotatePoint( &currpos, ii * 3600.0 / m_EdgesCount );
+            RotatePoint( currpos, ii * 3600.0 / m_EdgesCount );
             m_Polygon.Append( VECTOR2I( currpos ) );
         }
 
@@ -419,17 +417,15 @@ void D_CODE::ConvertShapeToPolygon()
 
 // The helper function for D_CODE::ConvertShapeToPolygon().
 // Add a hole to a polygon
-static void addHoleToPolygon( SHAPE_POLY_SET*       aPolygon,
-                              APERTURE_DEF_HOLETYPE aHoleShape,
-                              const wxSize&         aSize,
-                              const wxPoint&        aAnchorPos )
+static void addHoleToPolygon( SHAPE_POLY_SET* aPolygon, APERTURE_DEF_HOLETYPE aHoleShape,
+                              const VECTOR2I& aSize, const VECTOR2I& aAnchorPos )
 {
-    wxPoint currpos;
+    VECTOR2I       currpos;
     SHAPE_POLY_SET holeBuffer;
 
     if( aHoleShape == APT_DEF_ROUND_HOLE )
     {
-        TransformCircleToPolygon( holeBuffer, wxPoint( 0, 0 ), aSize.x / 2, ARC_HIGH_DEF,
+        TransformCircleToPolygon( holeBuffer, VECTOR2I( 0, 0 ), aSize.x / 2, ARC_HIGH_DEF,
                                   ERROR_INSIDE );
     }
     else if( aHoleShape == APT_DEF_RECT_HOLE )

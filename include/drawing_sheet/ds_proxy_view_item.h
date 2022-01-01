@@ -121,7 +121,7 @@ public:
         return wxT( "DS_PROXY_VIEW_ITEM" );
     }
 
-    bool HitTestDrawingSheetItems( KIGFX::VIEW* aView, const wxPoint& aPosition );
+    bool HitTestDrawingSheetItems( KIGFX::VIEW* aView, const VECTOR2I& aPosition );
 
 protected:
     void buildDrawList( KIGFX::VIEW* aView, DS_DRAW_ITEM_LIST* aDrawList ) const;

@@ -619,7 +619,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
         newPin->SetType( last->GetType() );
         newPin->SetShape( last->GetShape() );
 
-        wxPoint pos = last->GetPosition();
+        VECTOR2I pos = last->GetPosition();
 
         SYMBOL_EDITOR_SETTINGS* cfg = m_editFrame->GetSettings();
 

@@ -355,7 +355,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
                    m_effectiveShape->AddShape( aShape );
                };
 
-    wxPoint shapePos = ShapePos();  // Fetch only once; rotation involves trig
+    VECTOR2I  shapePos = ShapePos(); // Fetch only once; rotation involves trig
     PAD_SHAPE effectiveShape = GetShape();
 
     if( GetShape() == PAD_SHAPE::CUSTOM )
@@ -620,7 +620,7 @@ void PAD::SetOrientation( double aAngle )
 }
 
 
-void PAD::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void PAD::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )
     {
@@ -687,16 +687,16 @@ void PAD::FlipPrimitives( bool aFlipLeftRight )
 }
 
 
-wxPoint PAD::ShapePos() const
+VECTOR2I PAD::ShapePos() const
 {
     if( m_offset.x == 0 && m_offset.y == 0 )
         return m_pos;
 
-    wxPoint loc_offset = m_offset;
+    VECTOR2I loc_offset = m_offset;
 
-    RotatePoint( &loc_offset, m_orient );
+    RotatePoint( loc_offset, m_orient );
 
-    wxPoint shape_pos = m_pos + loc_offset;
+    VECTOR2I shape_pos = m_pos + loc_offset;
 
     return shape_pos;
 }
@@ -961,7 +961,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 }
 
 
-bool PAD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool PAD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     VECTOR2I delta = aPosition - GetPosition();
     int      boundingRadius = GetBoundingRadius() + aAccuracy;
@@ -1091,9 +1091,9 @@ int PAD::Compare( const PAD* aPadRef, const PAD* aPadCmp )
 }
 
 
-void PAD::Rotate( const wxPoint& aRotCentre, double aAngle )
+void PAD::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
-    RotatePoint( &m_pos, aRotCentre, aAngle );
+    RotatePoint( m_pos, aRotCentre, aAngle );
 
     m_orient = NormalizeAngle360Min( m_orient + aAngle );
 
@@ -1512,7 +1512,7 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     int     dx = m_size.x / 2;
     int     dy = m_size.y / 2;
 
-    wxPoint padShapePos = ShapePos();         // Note: for pad having a shape offset,
+    VECTOR2I padShapePos = ShapePos(); // Note: for pad having a shape offset,
                                               // the pad position is NOT the shape position
 
     switch( GetShape() )

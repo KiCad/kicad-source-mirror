@@ -41,8 +41,8 @@
  *
  * @return true if the point is on the line segment.
  */
-bool IsPointOnSegment( const wxPoint& aSegStart, const wxPoint& aSegEnd,
-                       const wxPoint& aTestPoint );
+bool IsPointOnSegment( const VECTOR2I& aSegStart, const VECTOR2I& aSegEnd,
+                       const VECTOR2I& aTestPoint );
 
 /**
  * Test if two lines intersect.
@@ -188,8 +188,8 @@ inline double EuclideanNorm( const VECTOR2I& vector )
 //! @param linePointA Point on line
 //! @param linePointB Point on line
 //! @param referencePoint Reference point
-inline double DistanceLinePoint( const wxPoint& linePointA, const wxPoint& linePointB,
-                                 const wxPoint& referencePoint )
+inline double DistanceLinePoint( const VECTOR2I& linePointA, const VECTOR2I& linePointB,
+                                 const VECTOR2I& referencePoint )
 {
     // Some of the multiple double casts are redundant. However in the previous
     // definition the cast was (implicitly) done too late, just before
@@ -208,9 +208,9 @@ inline double DistanceLinePoint( const wxPoint& linePointA, const wxPoint& lineP
 //! @param pointB Second point
 //! @param threshold The maximum distance
 //! @return True or false
-inline bool HitTestPoints( const wxPoint& pointA, const wxPoint& pointB, double threshold )
+inline bool HitTestPoints( const VECTOR2I& pointA, const VECTOR2I& pointB, double threshold )
 {
-    wxPoint vectorAB = pointB - pointA;
+    VECTOR2I vectorAB = pointB - pointA;
 
     // Compare the distances squared. The double is needed to avoid
     // overflow during int multiplication
@@ -247,6 +247,19 @@ bool TestSegmentHit( const VECTOR2I& aRefPoint, const VECTOR2I& aStart, const VE
  * @return Length of a line (as double)
  */
 inline double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB )
+{
+    // Implicitly casted to double
+    return hypot( aPointA.x - aPointB.x, aPointA.y - aPointB.y );
+}
+
+/**
+ * Return the length of a line segment defined by \a aPointA and \a aPointB.
+ *
+ * See also EuclideanNorm and Distance for the single vector or four scalar versions.
+ *
+ * @return Length of a line (as double)
+ */
+inline double GetLineLength( const VECTOR2I& aPointA, const VECTOR2I& aPointB )
 {
     // Implicitly casted to double
     return hypot( aPointA.x - aPointB.x, aPointA.y - aPointB.y );

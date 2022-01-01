@@ -267,12 +267,12 @@ NODE_MAP MapChildren( wxXmlNode* aCurrentNode )
 }
 
 
-wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAngle )
+VECTOR2I ConvertArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double aAngle )
 {
     // Eagle give us start and end.
     // S_ARC wants start to give the center, and end to give the start.
     double dx = aEnd.x - aStart.x, dy = aEnd.y - aStart.y;
-    wxPoint mid = ( aStart + aEnd ) / 2;
+    VECTOR2I mid = ( aStart + aEnd ) / 2;
 
     double dlen = sqrt( dx*dx + dy*dy );
 
@@ -285,7 +285,7 @@ wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAn
 
     double dist = dlen / ( 2 * tan( DEG2RAD( aAngle ) / 2 ) );
 
-    wxPoint center(
+    VECTOR2I center(
         mid.x + dist * ( dy / dlen ),
         mid.y - dist * ( dx / dlen )
     );

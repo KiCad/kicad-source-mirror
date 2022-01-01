@@ -114,7 +114,7 @@ public:
      * Calculate the position (in page, in iu) of the corner used as coordinate origin
      * of items.
      */
-    wxPoint ReturnCoordOriginCorner() const;
+    VECTOR2I ReturnCoordOriginCorner() const;
 
     const TITLE_BLOCK& GetTitleBlock() const override;
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;

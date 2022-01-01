@@ -302,7 +302,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
 }
 
 
-wxPoint SCH_PIN::GetTransformedPosition() const
+VECTOR2I SCH_PIN::GetTransformedPosition() const
 {
     TRANSFORM t = GetParentSymbol()->GetTransform();
     return t.TransformCoordinate( GetLocalPosition() ) + GetParentSymbol()->GetPosition();
@@ -323,7 +323,7 @@ const EDA_RECT SCH_PIN::GetBoundingBox() const
 }
 
 
-bool SCH_PIN::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool SCH_PIN::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // When looking for an "exact" hit aAccuracy will be 0 which works poorly if the pin has
     // no pin number or name.  Give it a floor.
