@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE( PinNumbering )
     SCH_SHEET_PATH path;
 
     const wxString name = m_sch_pin->GetDefaultNetName( path );
-    BOOST_CHECK_EQUAL( name, "Net-(U2-Pad42)" );
+    BOOST_CHECK_EQUAL( name, "Net-(U2-pinname)" );
 
     // do it again: this should now (transparently) go though the net name map
     // can't really check directly, but coverage tools should see this

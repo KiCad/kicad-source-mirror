@@ -198,8 +198,8 @@ void TEST_NETLISTS_FIXTURE::compareNetlists()
             const COMPONENT_NET& testNet   = refComp->GetNet( net );
 
             // The two nets at the same index should be identical
-            BOOST_REQUIRE_EQUAL( goldenNet.GetPinName(), testNet.GetPinName() );
             BOOST_REQUIRE_EQUAL( goldenNet.GetNetName(), testNet.GetNetName() );
+            BOOST_REQUIRE_EQUAL( goldenNet.GetPinName(), testNet.GetPinName() );
         }
     }
 }

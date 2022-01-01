@@ -79,6 +79,8 @@ EDA_ITEM* SCH_FIELD::Clone() const
 
 void SCH_FIELD::SetId( int aId )
 {
+    KICAD_T labelTypes[] = { SCH_LABEL_LOCATE_ANY_T, EOT };
+
     m_id = aId;
 
     if( m_parent && m_parent->Type() == SCH_SHEET_T )
@@ -99,7 +101,7 @@ void SCH_FIELD::SetId( int aId )
         default:              SetLayer( LAYER_FIELDS );        break;
         }
     }
-    else
+    else if( m_parent && m_parent->IsType( labelTypes ) )
     {
         // We can't use defined IDs for labels because there can be multiple net class
         // assignments.

@@ -87,6 +87,7 @@ public:
         case SCH_BITMAP_T:         return new SCH_BITMAP();
         case SCH_TEXT_T:           return new SCH_TEXT( wxPoint( 0, 0 ), "test text" );
         case SCH_LABEL_T:          return new SCH_LABEL( wxPoint( 0, 0 ), "test label" );
+        case SCH_NETCLASS_FLAG_T:  return new SCH_NETCLASS_FLAG( wxPoint( 0, 0 ) );
         case SCH_GLOBAL_LABEL_T:   return new SCH_GLOBALLABEL();
         case SCH_HIER_LABEL_T:     return new SCH_HIERLABEL();
         case SCH_FIELD_T:          return new SCH_FIELD( wxPoint( 0, 0 ), 0, nullptr );
