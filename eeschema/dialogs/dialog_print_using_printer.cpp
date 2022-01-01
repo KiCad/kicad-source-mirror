@@ -395,9 +395,9 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
  */
 void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
 {
-    wxPoint  tmp_startvisu;
+    VECTOR2I tmp_startvisu;
     wxSize   pageSizeIU;             // Page size in internal units
-    wxPoint  old_org;
+    VECTOR2I old_org;
     wxRect   fitRect;
     wxDC*    dc = GetDC();
 

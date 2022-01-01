@@ -85,12 +85,12 @@ public:
     static wxString m_DrawingSheetFileName;  ///< the name of the drawing sheet file, or empty
                                              ///< to use the default drawing sheet
 
-    wxPoint     m_DrawOrg;          ///< offsets for drawing the circuit on the screen
+    VECTOR2I    m_DrawOrg;          ///< offsets for drawing the circuit on the screen
 
     VECTOR2D    m_LocalOrigin;      ///< Relative Screen cursor coordinate (on grid)
                                     ///< in user units. (coordinates from last reset position)
 
-    wxPoint     m_StartVisu;        ///< Coordinates in drawing units of the current
+    VECTOR2I    m_StartVisu;        ///< Coordinates in drawing units of the current
                                     ///< view position (upper left corner of device)
 
     bool        m_Center;           ///< Center on screen.  If true (0.0) is centered on screen

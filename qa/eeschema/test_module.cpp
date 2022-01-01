@@ -27,6 +27,7 @@
  * Main file for the Eeschema tests to be compiled
  */
 #include <boost/test/unit_test.hpp>
+#include <kiplatform/app.h>
 
 #include <pgm_base.h>
 #include <wx/init.h>
@@ -47,6 +48,7 @@ void wxAssertThrower( const wxString& aFile, int aLine, const wxString& aFunc,
 
 bool init_unit_test()
 {
+    KIPLATFORM::APP::Init();
     boost::unit_test::framework::master_test_suite().p_name.value = "Common Eeschema module tests";
 
     bool ok = wxInitialize( boost::unit_test::framework::master_test_suite().argc,

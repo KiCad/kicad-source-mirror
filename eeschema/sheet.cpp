@@ -503,9 +503,9 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 
     // Set draw offset, zoom... to values needed to draw in the memory DC
     // after saving initial values:
-    wxPoint tmp_startvisu = screen->m_StartVisu;
-    wxPoint old_org       = screen->m_DrawOrg;
-    screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
+    VECTOR2I tmp_startvisu = screen->m_StartVisu;
+    VECTOR2I old_org = screen->m_DrawOrg;
+    screen->m_DrawOrg.x = screen->m_DrawOrg.y = 0;
     screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
 
     wxMemoryDC dc;

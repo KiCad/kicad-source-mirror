@@ -156,9 +156,9 @@ void PLEDITOR_PRINTOUT::GetPageInfo( int* minPage, int* maxPage,
 
 void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
 {
-    wxPoint  tmp_startvisu;
+    VECTOR2I  tmp_startvisu;
     wxSize   pageSizeIU;             // Page size in internal units
-    wxPoint  old_org;
+    VECTOR2I     old_org;
     wxRect   fitRect;
     wxDC*    dc = GetDC();
     BASE_SCREEN* screen = m_parent->GetScreen();
