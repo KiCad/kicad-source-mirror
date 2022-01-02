@@ -217,7 +217,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                         }
 
                         drce->SetItems( fpA, fpB );
-                        reportViolation( drce, (wxPoint) pos, F_CrtYd );
+                        reportViolation( drce, pos, F_CrtYd );
                     }
                 }
             }
@@ -246,7 +246,7 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                         }
 
                         drce->SetItems( fpA, fpB );
-                        reportViolation( drce, (wxPoint) pos, B_CrtYd );
+                        reportViolation( drce, pos, B_CrtYd );
                     }
                 }
             }

@@ -2144,9 +2144,9 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         FP_SHAPE* arc = new FP_SHAPE( fp, SHAPE_T::ARC );
 
                         arc->SetLayer( layer );
-                        arc->SetArcGeometry( (wxPoint) lsrc->result.GetP0(),
-                                             (wxPoint) lsrc->result.GetArcMid(),
-                                             (wxPoint) lsrc->result.GetP1() );
+                        arc->SetArcGeometry( lsrc->result.GetP0(),
+                                             lsrc->result.GetArcMid(),
+                                             lsrc->result.GetP1() );
                         arc->SetStroke( STROKE_PARAMS( lsrc->width, PLOT_DASH_TYPE::SOLID ) );
                         arc->SetLocalCoord();
 
@@ -2815,9 +2815,9 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 
             PCB_SHAPE* arc = new PCB_SHAPE( aBoard, SHAPE_T::ARC );
             arc->SetLayer( layer );
-            arc->SetArcGeometry( (wxPoint) src->result.GetP0(),
-                                 (wxPoint) src->result.GetArcMid(),
-                                 (wxPoint) src->result.GetP1() );
+            arc->SetArcGeometry( src->result.GetP0(),
+                                 src->result.GetArcMid(),
+                                 src->result.GetP1() );
             arc->SetStroke( STROKE_PARAMS( src->width, PLOT_DASH_TYPE::SOLID ) );
 
             if( arc->GetWidth() == 0 )
@@ -2944,9 +2944,9 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
 
                 PCB_SHAPE* arc = new PCB_SHAPE( aBoard, SHAPE_T::ARC );
                 arc->SetLayer( layer );
-                arc->SetArcGeometry( (wxPoint) src->result.GetP0(),
-                                     (wxPoint) src->result.GetArcMid(),
-                                     (wxPoint) src->result.GetP1() );
+                arc->SetArcGeometry( src->result.GetP0(),
+                                     src->result.GetArcMid(),
+                                     src->result.GetP1() );
                 arc->SetStroke( STROKE_PARAMS( src->width, PLOT_DASH_TYPE::SOLID ) );
 
                 aBoard->Add( arc, ADD_MODE::APPEND );

@@ -213,18 +213,18 @@ BOOST_AUTO_TEST_CASE( Rotate )
                 if( schItem != nullptr )
                 {
                     // Only rotating pins around the center of parent sheet works.
-                    schItem->Rotate( (wxPoint) m_sheet.GetBodyBoundingBox().GetCenter() );
-                    schItem->Rotate( (wxPoint) m_sheet.GetBodyBoundingBox().GetCenter() );
-                    schItem->Rotate( (wxPoint) m_sheet.GetBodyBoundingBox().GetCenter() );
-                    schItem->Rotate( (wxPoint) m_sheet.GetBodyBoundingBox().GetCenter() );
+                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
                 }
 
                 if( libItem != nullptr )
                 {
-                    libItem->Rotate( (wxPoint) m_sheet.GetBodyBoundingBox().GetCenter() );
-                    libItem->Rotate( (wxPoint) m_sheet.GetBodyBoundingBox().GetCenter() );
-                    libItem->Rotate( (wxPoint) m_sheet.GetBodyBoundingBox().GetCenter() );
-                    libItem->Rotate( (wxPoint) m_sheet.GetBodyBoundingBox().GetCenter() );
+                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
                 }
 
                 CompareItems( newItem.get(), item.get() );

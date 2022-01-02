@@ -347,7 +347,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
             else
                 segOwners[ std::make_pair( prevPt, pt ) ] = graphic;
 
-            prevPt = (wxPoint) pt;
+            prevPt = pt;
         }
 
         polygonComplete = true;
@@ -583,7 +583,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 else
                     segOwners[ std::make_pair( prevPt, pt ) ] = graphic;
 
-                prevPt = (wxPoint) pt;
+                prevPt = pt;
             }
         }
         else if( graphic->GetShape() == SHAPE_T::CIRCLE )
@@ -809,7 +809,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     BOARD_ITEM* b = fetchOwner( *seg2 );
 
                     if( a && b )
-                        (*aErrorHandler)( _( "(self-intersecting)" ), a, b, (wxPoint) ( *seg1 ).A );
+                        (*aErrorHandler)( _( "(self-intersecting)" ), a, b, ( *seg1 ).A );
                 }
 
                 selfIntersecting = true;
@@ -823,7 +823,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     BOARD_ITEM* b = fetchOwner( *seg2 );
 
                     if( a && b )
-                        (*aErrorHandler)( _( "(self-intersecting)" ), a, b, (wxPoint) pt.get() );
+                        (*aErrorHandler)( _( "(self-intersecting)" ), a, b, pt.get() );
                 }
 
                 selfIntersecting = true;

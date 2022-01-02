@@ -151,7 +151,7 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
                 {
                     std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_COPPER_SLIVER );
                     drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + layerDesc( layer ) );
-                    reportViolation( drce, (wxPoint) pt, layer );
+                    reportViolation( drce, pt, layer );
                 }
             }
         }

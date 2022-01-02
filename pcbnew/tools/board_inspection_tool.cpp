@@ -736,7 +736,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     DRC_CONSTRAINT constraint;
 
     WX_HTML_REPORT_BOX* r = nullptr;
-    
+
     if( item->Type() == PCB_TRACE_T )
     {
         r = m_inspectConstraintsDialog->AddPage( _( "Track Width" ) );
@@ -963,10 +963,10 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         guide.SetPreferredLayer( activeLayer );
 
         GENERAL_COLLECTOR collector;
-        collector.Collect( board, GENERAL_COLLECTOR::PadsOrTracks, (wxPoint) aPosition, guide );
+        collector.Collect( board, GENERAL_COLLECTOR::PadsOrTracks, aPosition, guide );
 
         if( collector.GetCount() == 0 )
-            collector.Collect( board, GENERAL_COLLECTOR::Zones, (wxPoint) aPosition, guide );
+            collector.Collect( board, GENERAL_COLLECTOR::Zones, aPosition, guide );
 
         // Apply the active selection filter, except we want to allow picking locked items for
         // highlighting even if the user has disabled them for selection

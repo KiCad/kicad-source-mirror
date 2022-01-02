@@ -162,7 +162,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
 
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNCONNECTED_ITEMS );
         drcItem->SetItems( edge.GetSourceNode()->Parent(), edge.GetTargetNode()->Parent() );
-        reportViolation( drcItem, (wxPoint) edge.GetSourceNode()->Pos(), UNDEFINED_LAYER );
+        reportViolation( drcItem, edge.GetSourceNode()->Pos(), UNDEFINED_LAYER );
     }
 
     reportRuleStatistics();

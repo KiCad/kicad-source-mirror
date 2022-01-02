@@ -1266,7 +1266,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         const SEG            drillSeg   = drillShape->GetSeg();
         SHAPE_POLY_SET       drillOutline;
 
-        TransformOvalToPolygon( drillOutline, (wxPoint) drillSeg.A, (wxPoint) drillSeg.B,
+        TransformOvalToPolygon( drillOutline, drillSeg.A, drillSeg.B,
                                 drillShape->GetWidth(), maxError, ERROR_LOC::ERROR_INSIDE );
 
         drillOutline.BooleanSubtract( padOutline, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );

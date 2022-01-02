@@ -114,7 +114,7 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
             drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
             drcItem->SetItems( m_board );
 
-            reportViolation( drcItem, (wxPoint)m_board->GetBoundingBox().Centre(), Edge_Cuts );
+            reportViolation( drcItem, m_board->GetBoundingBox().Centre(), Edge_Cuts );
         }
     }
 }

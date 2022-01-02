@@ -117,7 +117,7 @@ std::unique_ptr<FOOTPRINT> MakeCourtyardTestFP( BOARD& aBoard, const COURTYARD_T
     footprint->SetReference( aFPDef.m_refdes );
 
     // This has to go after adding the courtyards, or all the poly sets are empty when DRC'd
-    footprint->SetPosition( (wxPoint) aFPDef.m_pos );
+    footprint->SetPosition( aFPDef.m_pos );
 
     return footprint;
 }

@@ -495,7 +495,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testShapeLineChain( const SHAPE_LIN
         drce->SetItems( aParentItem );
         drce->SetViolatingRule( aConstraint.GetParentRule() );
 
-        reportViolation( drce, (wxPoint) collision.first, aLayer );
+        reportViolation( drce, collision.first, aLayer );
     }
 }
 
@@ -542,7 +542,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testZoneLayer( ZONE* aZone, PCB_LAY
                     drce->SetItems( aZone );
                     drce->SetViolatingRule( aConstraint.GetParentRule() );
 
-                    reportViolation( drce, (wxPoint) pos, aLayer );
+                    reportViolation( drce, pos, aLayer );
                 }
             }
         }
@@ -592,7 +592,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* it
             drce->SetItems( item, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos, layer );
+            reportViolation( drce, pos, layer );
         }
     }
 
@@ -656,7 +656,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* it
                 drce->SetItems( item, other );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drce, (wxPoint) pos, layer );
+                reportViolation( drce, pos, layer );
             }
 
             if( otherHoleShape && otherHoleShape->Collide( itemShape, clearance, &actual, &pos ) )
@@ -672,7 +672,7 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstItem( BOARD_ITEM* it
                 drce->SetItems( item, other );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drce, (wxPoint) pos, layer );
+                reportViolation( drce, pos, layer );
             }
         }
     }
@@ -761,7 +761,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* a
                     drce->SetItems( aItem, zone );
                     drce->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drce, (wxPoint) pos, aLayer );
+                    reportViolation( drce, pos, aLayer );
                 }
             }
 
@@ -807,7 +807,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* a
                         drce->SetItems( aItem, zone );
                         drce->SetViolatingRule( constraint.GetParentRule() );
 
-                        reportViolation( drce, (wxPoint) pos, aLayer );
+                        reportViolation( drce, pos, aLayer );
                     }
                 }
             }

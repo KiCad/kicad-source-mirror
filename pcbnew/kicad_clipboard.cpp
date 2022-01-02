@@ -154,7 +154,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             }
 
             // locate the reference point at (0, 0) in the copied items
-            clone->Move( (wxPoint) -refPoint );
+            clone->Move( -refPoint );
 
             // Now delete items, duplicated but not added:
             for( BOARD_ITEM* skp_item : skipped_items )
@@ -251,7 +251,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                 prepItem( copy );
 
                 // locate the reference point at (0, 0) in the copied items
-                copy->Move( (wxPoint) -refPoint );
+                copy->Move( -refPoint );
 
                 Format( copy, 1 );
 

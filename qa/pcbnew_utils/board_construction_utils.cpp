@@ -36,8 +36,8 @@ void DrawSegment( FOOTPRINT& aFootprint, const SEG& aSeg, int aWidth, PCB_LAYER_
 {
     std::unique_ptr<FP_SHAPE> seg = std::make_unique<FP_SHAPE>( &aFootprint, SHAPE_T::SEGMENT );
 
-    seg->SetStart0( (wxPoint) aSeg.A );
-    seg->SetEnd0( (wxPoint) aSeg.B );
+    seg->SetStart0( aSeg.A );
+    seg->SetEnd0( aSeg.B );
 
     seg->SetStroke( STROKE_PARAMS( aWidth, PLOT_DASH_TYPE::SOLID ) );
     seg->SetLayer( aLayer );
@@ -61,8 +61,8 @@ void DrawArc( FOOTPRINT& aFootprint, const VECTOR2I& aCentre, const VECTOR2I& aS
 {
     std::unique_ptr<FP_SHAPE>  arc = std::make_unique<FP_SHAPE>( &aFootprint, SHAPE_T::ARC );
 
-    arc->SetCenter0( (wxPoint) aCentre );
-    arc->SetStart0( (wxPoint) aStart );
+    arc->SetCenter0( aCentre );
+    arc->SetStart0( aStart );
     arc->SetArcAngleAndEnd0( aAngle * 10 );
 
     arc->SetStroke( STROKE_PARAMS( aWidth, PLOT_DASH_TYPE::SOLID ) );

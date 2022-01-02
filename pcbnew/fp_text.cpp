@@ -226,7 +226,7 @@ void FP_TEXT::SetLocalCoord()
     }
     else
     {
-        m_Pos0 = (wxPoint)GetTextPos();
+        m_Pos0 = GetTextPos();
     }
 }
 

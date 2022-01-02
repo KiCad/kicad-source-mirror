@@ -516,7 +516,7 @@ void PCB_BASE_FRAME::PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsne
         s_PickedList.ClearItemsList();
     }
 
-    aFootprint->SetPosition((wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition() );
+    aFootprint->SetPosition( GetCanvas()->GetViewControls()->GetCursorPosition() );
     aFootprint->ClearFlags();
 
     delete s_FootprintInitialCopy;

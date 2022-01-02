@@ -288,7 +288,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
         {
             std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_DRILLED_HOLES_COLOCATED );
             drce->SetItems( aItem, aOther );
-            reportViolation( drce, (wxPoint) aHole->GetCenter(), UNDEFINED_LAYER );
+            reportViolation( drce, aHole->GetCenter(), UNDEFINED_LAYER );
         }
     }
     else if( reportHole2Hole )
@@ -315,7 +315,7 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
             drce->SetItems( aItem, aOther );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) aHole->GetCenter(), UNDEFINED_LAYER );
+            reportViolation( drce, aHole->GetCenter(), UNDEFINED_LAYER );
         }
     }
 

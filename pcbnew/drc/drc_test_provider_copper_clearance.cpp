@@ -291,7 +291,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
                 drcItem->SetItems( track, other );
                 drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drcItem, (wxPoint) intersection.get(), layer );
+                reportViolation( drcItem, intersection.get(), layer );
 
                 return m_drcEngine->GetReportAllTrackErrors();
             }
@@ -312,7 +312,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
             drce->SetItems( track, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos, layer );
+            reportViolation( drce, pos, layer );
 
             if( !m_drcEngine->GetReportAllTrackErrors() )
                 return false;
@@ -360,7 +360,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( PCB_TRACK* track,
                     drce->SetItems( track, other );
                     drce->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drce, (wxPoint) pos, layer );
+                    reportViolation( drce, pos, layer );
 
                     if( !m_drcEngine->GetReportAllTrackErrors() )
                         return false;
@@ -446,7 +446,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
             drce->SetItems( aItem, aZone );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos, aLayer );
+            reportViolation( drce, pos, aLayer );
         }
     }
 
@@ -492,7 +492,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
                     drce->SetItems( aItem, aZone );
                     drce->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drce, (wxPoint) pos, aLayer );
+                    reportViolation( drce, pos, aLayer );
                 }
             }
         }
@@ -681,7 +681,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                 drce->SetItems( pad, other );
                 drce->SetViolatingRule( constraint.GetParentRule() );
 
-                reportViolation( drce, (wxPoint) pos, aLayer );
+                reportViolation( drce, pos, aLayer );
                 testHoles = false;  // No need for multiple violations
             }
         }
@@ -713,7 +713,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             drce->SetItems( pad, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos, aLayer );
+            reportViolation( drce, pos, aLayer );
             testHoles = false;  // No need for multiple violations
         }
     }
@@ -735,7 +735,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             drce->SetItems( pad, other );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos, aLayer );
+            reportViolation( drce, pos, aLayer );
             testHoles = false;  // No need for multiple violations
         }
     }
@@ -760,7 +760,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             drce->SetItems( pad, otherVia );
             drce->SetViolatingRule( constraint.GetParentRule() );
 
-            reportViolation( drce, (wxPoint) pos, aLayer );
+            reportViolation( drce, pos, aLayer );
         }
     }
 
@@ -931,7 +931,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                 }
 
                 // Iterate through all the segments of refSmoothedPoly
-                std::map<wxPoint, int> conflictPoints;
+                std::map<VECTOR2I, int> conflictPoints;
 
                 for( auto refIt = smoothed_polys[ia].IterateSegmentsWithHoles(); refIt; refIt++ )
                 {
@@ -943,7 +943,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     {
                         // Build test segment
                         SEG testSegment = *testIt;
-                        wxPoint pt;
+                        VECTOR2I pt;
 
                         int ax1, ay1, ax2, ay2;
                         ax1 = refSegment.A.x;
@@ -971,7 +971,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     }
                 }
 
-                for( const std::pair<const wxPoint, int>& conflict : conflictPoints )
+                for( const std::pair<const VECTOR2I, int>& conflict : conflictPoints )
                 {
                     int actual = conflict.second;
                     std::shared_ptr<DRC_ITEM> drce;

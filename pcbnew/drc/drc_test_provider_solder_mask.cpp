@@ -281,7 +281,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
                         drce->SetItems( item );
                         drce->SetViolatingRule( constraint.GetParentRule() );
 
-                        reportViolation( drce, (wxPoint) pos, layer );
+                        reportViolation( drce, pos, layer );
                     }
                 }
 
@@ -391,7 +391,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
 
                     drce->SetItems( aItem, other );
                     drce->SetViolatingRule( &m_bridgeRule );
-                    reportViolation( drce, (wxPoint) pos, aTargetLayer );
+                    reportViolation( drce, pos, aTargetLayer );
                 }
 
                 return true;
@@ -456,7 +456,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
 
                 drce->SetItems( aItem, zone );
                 drce->SetViolatingRule( &m_bridgeRule );
-                reportViolation( drce, (wxPoint) pos, aTargetLayer );
+                reportViolation( drce, pos, aTargetLayer );
             }
         }
     }

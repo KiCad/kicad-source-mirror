@@ -57,7 +57,7 @@ public:
     template<class T>
     EDA_RECT( const BOX2<T> aBox )
     {
-        m_pos = (wxPoint) aBox.GetPosition();
+        m_pos = aBox.GetPosition();
         m_size.x = aBox.GetWidth();
         m_size.y = aBox.GetHeight();
         m_init   = true;

@@ -267,8 +267,8 @@ BOOST_AUTO_TEST_CASE( GridGeometry )
 
             grid_opts.m_nx = c.m_geom.m_nx;
             grid_opts.m_ny = c.m_geom.m_ny;
-            grid_opts.m_delta = (wxPoint) c.m_geom.m_delta;
-            grid_opts.m_offset = (wxPoint) c.m_geom.m_offset;
+            grid_opts.m_delta = c.m_geom.m_delta;
+            grid_opts.m_offset = c.m_geom.m_offset;
             grid_opts.m_stagger = c.m_geom.m_stagger;
             grid_opts.m_stagger_rows = c.m_geom.m_stagger_by_row;
             grid_opts.m_reverseNumberingAlternate = c.m_geom.m_alternate_numbers;

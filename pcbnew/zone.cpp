@@ -309,9 +309,9 @@ bool ZONE::IsOnLayer( PCB_LAYER_ID aLayer ) const
 
 const EDA_RECT ZONE::GetBoundingBox() const
 {
-    auto bb = m_Poly->BBox();
+    BOX2I bb = m_Poly->BBox();
 
-    EDA_RECT ret( (wxPoint) bb.GetOrigin(), wxSize( bb.GetWidth(), bb.GetHeight() ) );
+    EDA_RECT ret( bb.GetOrigin(), VECTOR2I( bb.GetWidth(), bb.GetHeight() ) );
 
     return ret;
 }

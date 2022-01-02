@@ -112,7 +112,7 @@ bool EDIT_TOOL::Init()
                         DS_PROXY_VIEW_ITEM* ds = frame()->GetCanvas()->GetDrawingSheet();
                         VECTOR2D            cursor = getViewControls()->GetCursorPosition( false );
 
-                        if( ds && ds->HitTestDrawingSheetItems( getView(), (wxPoint) cursor ) )
+                        if( ds && ds->HitTestDrawingSheetItems( getView(), cursor ) )
                             return true;
                     }
 
@@ -387,8 +387,8 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
             if( !retval )
             {
                 retval = new PCB_TRACK( theArc->GetParent() );
-                retval->SetStart( (wxPoint) aAnchor );
-                retval->SetEnd( (wxPoint) aAnchor );
+                retval->SetStart( aAnchor );
+                retval->SetEnd( aAnchor );
                 retval->SetNet( theArc->GetNet() );
                 retval->SetLayer( theArc->GetLayer() );
                 retval->SetWidth( theArc->GetWidth() );
@@ -543,19 +543,19 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
         VECTOR2I newMid = CalcArcMid( newStart, newEnd, newCenter );
 
         // Update objects
-        theArc->SetStart( (wxPoint) newStart );
-        theArc->SetEnd( (wxPoint) newEnd );
-        theArc->SetMid( (wxPoint) newMid );
+        theArc->SetStart( newStart );
+        theArc->SetEnd( newEnd );
+        theArc->SetMid( newMid );
 
         if( isStartTrackOnStartPt )
-            trackOnStart->SetStart( (wxPoint) newStart );
+            trackOnStart->SetStart( newStart );
         else
-            trackOnStart->SetEnd( (wxPoint) newStart );
+            trackOnStart->SetEnd( newStart );
 
         if( isEndTrackOnStartPt )
-            trackOnEnd->SetStart( (wxPoint) newEnd );
+            trackOnEnd->SetStart( newEnd );
         else
-            trackOnEnd->SetEnd( (wxPoint) newEnd );
+            trackOnEnd->SetEnd( newEnd );
 
         // Update view
         getView()->Update( trackOnStart );
@@ -1380,7 +1380,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         DS_PROXY_VIEW_ITEM* ds = editFrame->GetCanvas()->GetDrawingSheet();
         VECTOR2D            cursorPos = getViewControls()->GetCursorPosition( false );
 
-        if( ds && ds->HitTestDrawingSheetItems( getView(), (wxPoint) cursorPos ) )
+        if( ds && ds->HitTestDrawingSheetItems( getView(), cursorPos ) )
             m_toolMgr->RunAction( ACTIONS::pageSettings );
         else
             m_toolMgr->RunAction( PCB_ACTIONS::footprintProperties, true );
@@ -2030,7 +2030,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                 item->Rotate( selCenter, rotation );
                 break;
             case ROTATE_AROUND_USER_ORIGIN:
-                item->Rotate( (wxPoint) frame()->GetScreen()->m_LocalOrigin, rotation );
+                item->Rotate( frame()->GetScreen()->m_LocalOrigin, rotation );
                 break;
             case ROTATE_AROUND_AUX_ORIGIN:
                 item->Rotate( board()->GetDesignSettings().GetAuxOrigin(), rotation );

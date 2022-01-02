@@ -383,7 +383,7 @@ const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, doub
     vec = vec.Resize( r );
     vec = vec.Rotate( ( 180.0 - aAngle ) * M_PI / 360.0 );
 
-    return (wxPoint) ( start + vec );
+    return (VECTOR2I) ( start + vec );
 }
 
 

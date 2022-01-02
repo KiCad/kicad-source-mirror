@@ -376,10 +376,10 @@ bool CN_ANCHOR::IsDangling() const
         {
             ZONE* zone = static_cast<ZONE*>( item->Parent() );
 
-            if( zone->HitTestFilledArea( ToLAYER_ID( item->Layer() ), (wxPoint) Pos(), accuracy ) )
+            if( zone->HitTestFilledArea( ToLAYER_ID( item->Layer() ), Pos(), accuracy ) )
                 connected_count++;
         }
-        else if( item->Parent()->HitTest( (wxPoint) Pos(), accuracy ) )
+        else if( item->Parent()->HitTest( Pos(), accuracy ) )
         {
             connected_count++;
         }
@@ -402,10 +402,10 @@ int CN_ANCHOR::ConnectedItemsCount() const
         {
             ZONE* zone = static_cast<ZONE*>( item->Parent() );
 
-            if( zone->HitTestFilledArea( ToLAYER_ID( item->Layer() ), (wxPoint) Pos() ) )
+            if( zone->HitTestFilledArea( ToLAYER_ID( item->Layer() ), Pos() ) )
                 connected_count++;
         }
-        else if( item->Parent()->HitTest( (wxPoint) Pos() ) )
+        else if( item->Parent()->HitTest( Pos() ) )
         {
             connected_count++;
         }

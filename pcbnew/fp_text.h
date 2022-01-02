@@ -87,7 +87,7 @@ public:
 
     virtual VECTOR2I GetPosition() const override
     {
-        return (wxPoint)EDA_TEXT::GetTextPos();
+        return EDA_TEXT::GetTextPos();
     }
 
     virtual void SetPosition( const VECTOR2I& aPos ) override
