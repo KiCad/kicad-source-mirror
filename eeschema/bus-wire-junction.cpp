@@ -268,7 +268,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
 
                     AddToScreen( mergedLine, aScreen );
 
-                    if( firstLine->IsSelected() )
+                    if( firstLine->IsSelected() || secondLine->IsSelected() )
                         selectionTool->AddItemToSel( mergedLine, true /*quiet mode*/ );
 
                     break;
