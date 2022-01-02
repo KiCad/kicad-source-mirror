@@ -81,6 +81,9 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     int m_convert;          ///< The current body style being parsed.
     wxString m_symbolName;  ///< The current symbol name.
 
+    /// Field IDs that have been read so far for the current symbol.
+    std::set<int>      m_fieldIDsRead;
+
     std::set<KIID>     m_uuids;
 
     PROGRESS_REPORTER* m_progressReporter;  // optional; may be nullptr
