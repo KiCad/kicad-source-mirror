@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers.
+ * Copyright (C) 2020-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,8 +67,11 @@ void LABEL_MANAGER::Add( VECTOR2I target, std::string msg, COLOR4D color )
     lbl.m_color = color;
     m_gal->SetGlyphSize( VECTOR2D( m_textSize, m_textSize ) );
 
-    KIFONT::FONT* strokeFont = KIFONT::GetFont( wxEmptyString );
-    VECTOR2I textDims = strokeFont->StringBoundaryLimits( m_gal, msg );
+    KIFONT::FONT* strokeFont = KIFONT::FONT::GetFont( wxEmptyString );
+    UTF8 text( msg );
+    VECTOR2I textDims = strokeFont->StringBoundaryLimits( m_gal, text,
+                                                          VECTOR2D( m_textSize, m_textSize ),
+                                                          m_textSize/8 );
 
     lbl.m_bbox.SetOrigin( lbl.m_target - textDims - VECTOR2I( m_textSize, m_textSize ) );
     lbl.m_bbox.SetSize( textDims );

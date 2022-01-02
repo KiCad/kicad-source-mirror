@@ -48,6 +48,7 @@ DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent ):
     main_sizer->Add( sdb_sizer, 0, wxEXPAND | wxALL, margin );
 
     SetSizer( main_sizer );
+    main_sizer->SetMinSize( 600, 400 );
 
     finishDialogSettings();
 }

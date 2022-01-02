@@ -264,7 +264,7 @@ VECTOR2D FONT::getBoundingBox( const UTF8& aText, TEXT_STYLE_FLAGS aTextStyle,
 }
 
 
-void FONT::DrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
+void FONT::KiDrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
                      const TEXT_ATTRIBUTES& aAttributes ) const
 {
     // FONT TODO: do we need to set the attributes to the gal at all?
