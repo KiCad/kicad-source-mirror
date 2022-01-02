@@ -11,16 +11,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-10 22:05+0000\n"
+"PO-Revision-Date: 2022-01-03 10:45+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
-"kicad/master-source/pt_BR/>\n"
+"kicad/v6/pt_BR/>\n"
 "Language: pt_br\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -132,7 +132,7 @@ msgstr "Net %s\tNetClass %s\tNomeIlha %s"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:767
 #, c-format
 msgid "Net %s\tNetClass %s"
-msgstr "Net %s\tNetClass %s"
+msgstr "Rede %s\tNetClass %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:449
 msgid "Load OpenGL: board"
@@ -4069,7 +4069,7 @@ msgstr "Tela"
 #: pcbnew/fp_text.cpp:279 pcbnew/load_select_footprint.cpp:371
 #: pcbnew/pad.cpp:890
 msgid "Footprint"
-msgstr "footprint"
+msgstr "Footprint"
 
 #: common/eda_item.cpp:316 pcbnew/dialogs/dialog_board_statistics.cpp:494
 #: pcbnew/pad.cpp:893
@@ -4310,7 +4310,7 @@ msgstr "Espessura da linha"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:709
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2128
 msgid "Bezier"
-msgstr "Bezier"
+msgstr "Bézier"
 
 #: common/eda_shape.cpp:1623
 msgid "Start X"
@@ -11020,7 +11020,7 @@ msgstr "CC:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:775
 #: eeschema/dialogs/dialog_spice_model_base.cpp:786
 msgid "Volts/Amps"
-msgstr "Volts/Amps"
+msgstr "Tensão/Corrente"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:333
 msgid "AC magnitude:"
@@ -17455,7 +17455,7 @@ msgstr "Houve um erro de leitura no arquivo de perfuração EXCELLON"
 #: gerbview/excellon_read_drill_file.cpp:446
 #, c-format
 msgid "Unknown Excellon command &lt;%s&gt;"
-msgstr "Comando Excellon &lt;%s&gt é desconhecido;"
+msgstr "O comando Excellon &lt;%s&gt; é desconhecido"
 
 #: gerbview/excellon_read_drill_file.cpp:646
 msgid "Tool definition shape not found"
@@ -21321,7 +21321,7 @@ msgstr "Material"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:105
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:286
 msgid "Epsilon R"
-msgstr "Epsilon R"
+msgstr "Épsilon R"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:95
 msgid "Loss Tg"
@@ -21329,7 +21329,7 @@ msgstr "Perda Tg"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:35
 msgid "Epsilon R:"
-msgstr "Epsilon R:"
+msgstr "Épsilon R:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
 msgid "Loss Tg:"
@@ -34450,7 +34450,7 @@ msgstr "Cópia cancelada"
 
 #: pcbnew/tools/footprint_editor_control.cpp:344
 msgid "_copy"
-msgstr "_copy"
+msgstr "_copia"
 
 #: pcbnew/tools/footprint_editor_control.cpp:591
 msgid "No footprint problems found."
