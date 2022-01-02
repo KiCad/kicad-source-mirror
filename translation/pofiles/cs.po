@@ -7,7 +7,7 @@
 # translation of kicad.po to
 # Radovan Blažek <blazra@gmail.com>, 2020.
 # Jan Vykydal <vvykys@gmail.com>, 2020, 2021.
-# Jan Straka <bach@email.cz>, 2020, 2021.
+# Jan Straka <bach@email.cz>, 2020, 2021, 2022.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 # Radek Kuznik <radek.kzn@gmail.com>, 2021.
 msgid ""
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-29 19:50+0000\n"
+"PO-Revision-Date: 2022-01-02 12:48+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -31866,6 +31866,9 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
+"Šablona CADSTAR '%s' má nenulovou hodnotu definovanou pro nastavení 'Sliver "
+"Width'. Neexistuje žádný ekvivalent v KiCadu, takže tento parametr byl "
+"ignorován."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1865
 #, c-format
@@ -31875,6 +31878,10 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
+"Šablona CADSTAR '%s' má různá nastavení pro 'Retain Poured Copper - "
+"Disjoint' a 'Retain Poured Copper - Isolated'. KiCad nerozlišuje tato dvě "
+"nastavení. Nastavení pro nesouvislou měď bylo použito jako minimální "
+"ostrovní oblast KiCad zóny."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1916
 #, c-format
@@ -31883,6 +31890,9 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
+"Šablona CADSTAR '%s' má různá nastavení pro teplotní reliéf v ploškách a "
+"prokovech. KiCad podporuje pouze jeden parametr pro oba. Nastavení pro "
+"plošky bylo aplikováno."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1933
 #, c-format
@@ -31893,6 +31903,10 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
+"Šablona CADSTAR '%s' má teplotní reliéf v původním provedení, ale šířka "
+"paprsku (%.2f mm) je tenčí než minimální tloušťka zóny (%.2f mm).KiCad "
+"požaduje zachování minimální tloušťky zóny. Proto byla minimální tloušťka "
+"použita jako nová šířka paprsku a bude použito při příštím vyplnění zóny."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1980
 #, c-format
@@ -31901,6 +31915,9 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
+"Vrstva CADSTAR '%s' je definována jako vrstva napájecí plochy. Neexistuje "
+"žádná síť s tímto názvem. Vrstva byla načtena, ale nebyly vytvořeny žádné "
+"zóny mědi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2085
 msgid ""
@@ -34510,9 +34527,8 @@ msgid "Import Specctra Session..."
 msgstr "Relace Specctra..."
 
 #: pcbnew/tools/pcb_actions.cpp:574
-#, fuzzy
 msgid "Import routed Specctra session (*.ses) file"
-msgstr "Importovat propojený soubor \"Relace Specctra\" (*.ses)"
+msgstr "Importovat propojený soubor Relace Specctra (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:579
 msgid "Export Specctra DSN..."
