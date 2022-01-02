@@ -1572,10 +1572,19 @@ void SCH_GLOBALLABEL::MirrorHorizontally( int aCenter )
 
     for( SCH_FIELD& field : m_fields )
     {
-        if( field.GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
-           field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-        else
-           field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        switch( field.GetHorizJustify() )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:
+            field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            break;
+
+        case GR_TEXT_H_ALIGN_CENTER:
+            break;
+
+        case GR_TEXT_H_ALIGN_RIGHT:
+            field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            break;
+        }
 
         VECTOR2I pos = field.GetTextPos();
         VECTOR2I delta = old_pos - pos;
