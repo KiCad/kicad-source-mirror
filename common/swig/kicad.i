@@ -154,6 +154,7 @@ typedef long time_t;
 
 // Contains VECTOR2I
 %include math.i
+%template(VECTOR_VECTOR2I) std::vector<VECTOR2I>;
 
 // ignore warning from nested classes
 #pragma SWIG nowarn=325
@@ -173,6 +174,7 @@ typedef long time_t;
 
 #include <utf8.h>
 %include <utf8.h>
+
 
 %extend UTF8
 {

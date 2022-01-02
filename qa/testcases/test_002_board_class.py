@@ -44,8 +44,8 @@ class TestBoardClass(unittest.TestCase):
         track = PCB_TRACK(pcb)
         pcb.Add(track)
 
-        track.SetStart(wxPointMM(10.0, 10.0))
-        track.SetEnd(wxPointMM(20.0, 30.0))
+        track.SetStart(VECTOR2I_MM(10.0, 10.0))
+        track.SetEnd(VECTOR2I_MM(20.0, 30.0))
 
         track.SetWidth(FromMM(0.5))
 
@@ -67,16 +67,16 @@ class TestBoardClass(unittest.TestCase):
 
         pad.SetShape(PAD_SHAPE_OVAL)
         pad.SetSize(wxSizeMM(2.0, 3.0))
-        pad.SetPosition(wxPointMM(0,0))
+        pad.SetPosition(VECTOR2I_MM(0,0))
 
         # easy case
-        p1 = pcb.GetPad(wxPointMM(0,0))
+        p1 = pcb.GetPad(VECTOR2I_MM(0,0))
 
         # top side
-        p2 = pcb.GetPad(wxPointMM(0.9,0.0))
+        p2 = pcb.GetPad(VECTOR2I_MM(0.9,0.0))
 
         # bottom side
-        p3 = pcb.GetPad(wxPointMM(0,1.4))
+        p3 = pcb.GetPad(VECTOR2I_MM(0,1.4))
 
         # TODO: get pad == p1 evaluated as true instead
         #       of relying in the internal C++ object pointer
