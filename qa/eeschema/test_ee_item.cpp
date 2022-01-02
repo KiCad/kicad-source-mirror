@@ -202,6 +202,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
         BOOST_TEST_CONTEXT( "Class: " << item->GetClass() )
         {
             // Four equivalent 90 degree rotations are an identity.
+            // (warning: only for items having no autoplaced fields).
 
             if( item->GetClass() == "SCH_SHEET_PIN" )
             {
@@ -212,6 +213,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
 
                 if( schItem != nullptr )
                 {
+                    schItem->ClearFieldsAutoplaced();
                     // Only rotating pins around the center of parent sheet works.
                     schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
                     schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
@@ -286,10 +288,11 @@ BOOST_AUTO_TEST_CASE( MirrorHorizontally )
                         SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item.get() );
                         LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( item.get() );
 
-                        // Two mirrorings are an identity.
-
+                        // Two mirrorings are an identity
+                        // (warning: only for text items having no autoplaced fields).
                         if( schItem != nullptr )
                         {
+                            schItem->ClearFieldsAutoplaced();
                             schItem->MirrorHorizontally( aRef.x );
                             schItem->MirrorHorizontally( aRef.x );
                         }
@@ -329,10 +332,12 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
                         SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item.get() );
                         LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( item.get() );
 
-                        // Two mirrorings are an identity.
+                        // Two mirrorings are an identity
+                        // (warning only for text items having no autoplaced fields).
 
                         if( schItem != nullptr )
                         {
+                            schItem->ClearFieldsAutoplaced();
                             schItem->MirrorVertically( aRef.y );
                             schItem->MirrorVertically( aRef.y );
                         }

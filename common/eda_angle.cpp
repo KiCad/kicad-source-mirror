@@ -59,7 +59,7 @@ void EDA_ANGLE::normalize( bool n720 )
 
 int EDA_ANGLE::normalize( int aValue, ANGLE_TYPE aAngleType, bool n720 ) const
 {
-    int full_circle_upper;
+    int full_circle_upper = DEGREES_FULL_CIRCLE;
 
     switch( aAngleType )
     {
@@ -93,7 +93,7 @@ int EDA_ANGLE::normalize( int aValue, ANGLE_TYPE aAngleType, bool n720 ) const
 
 double EDA_ANGLE::normalize( double aValue, ANGLE_TYPE aAngleType, bool n720 ) const
 {
-    double full_circle_upper;
+    double full_circle_upper = DEGREES_FULL_CIRCLE;
 
     switch( aAngleType )
     {

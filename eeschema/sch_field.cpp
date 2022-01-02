@@ -765,7 +765,12 @@ wxString SCH_FIELD::GetCanonicalName() const
     }
     else
     {
-        wxFAIL_MSG( "Unhandled field owner type." );
+        if( m_parent )
+        {
+            wxFAIL_MSG( wxString::Format( "Unhandled field owner type (id %d, parent type %d).",
+                                           m_id, m_parent->Type() ) );
+        }
+
         return m_name;
     }
 }
