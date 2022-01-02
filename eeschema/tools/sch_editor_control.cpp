@@ -469,13 +469,13 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
         std::sort( paths.begin(), paths.end(), [] ( const SCH_SHEET_PATH* lhs,
                                                     const SCH_SHEET_PATH* rhs ) -> bool
                 {
-                    int retval = lhs->ComparePageNumAndName( *rhs );
+                    int retval = lhs->ComparePageNum( *rhs );
 
                     if( retval < 0 )
                         return true;
                     else if( retval > 0 )
                         return false;
-                    else /// Enforce strict ordering.  If the name and number are the same, we use UUIDs
+                    else /// Enforce strict ordering.  If the page numbers are the same, use UUIDs
                         return lhs->GetCurrentHash() < rhs->GetCurrentHash();
                 } );
 

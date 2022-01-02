@@ -165,7 +165,7 @@ int HIERARCHY_TREE::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemI
     SCH_SHEET_PATH* item1Path = &static_cast<TreeItemData*>( GetItemData( item1 ) )->m_SheetPath;
     SCH_SHEET_PATH* item2Path = &static_cast<TreeItemData*>( GetItemData( item2 ) )->m_SheetPath;
 
-    return item1Path->ComparePageNumAndName( *item2Path );
+    return item1Path->ComparePageNum( *item2Path );
 }
 
 

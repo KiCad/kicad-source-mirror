@@ -215,14 +215,14 @@ public:
     int Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const;
 
     /**
-     * Compare sheets by their page number and then by their name. Finally
-     * compare using #Cmp()
+     * Compare sheets by their page number. If the actual page number is equal, use virtual page numbers
+     * to compare.
      *
      * @return -1 if aSheetPathToTest is greater than this (should appear later in the sort order)
      *          0 if aSheetPathToTest is equal to this
      *          1 if aSheetPathToTest is less than this (should appear earlier in the sort order)
      */
-    int ComparePageNumAndName( const SCH_SHEET_PATH& aSheetPathToTest ) const;
+    int ComparePageNum( const SCH_SHEET_PATH& aSheetPathToTest ) const;
 
     /**
      * Check if this path is contained inside aSheetPathToTest.
