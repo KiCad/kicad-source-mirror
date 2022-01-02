@@ -1509,6 +1509,27 @@ void ROUTER_TOOL::performDragging( int aMode )
             return;
     }
 
+    // We don't support dragging arcs inside the PNS right now
+    if( m_startItem && m_startItem->Kind() == PNS::ITEM::ARC_T )
+    {
+        if( m_router->RoutingInProgress() )
+            m_router->StopRouting();
+
+        m_startItem = nullptr;
+
+        m_gridHelper->SetAuxAxes( false );
+        frame()->UndoRedoBlock( false );
+        ctls->SetAutoPan( false );
+        ctls->ForceCursorPosition( false );
+        highlightNet( false );
+
+        m_cancelled = true;
+
+        m_toolMgr->RunAction( PCB_ACTIONS::drag45Degree, false );
+
+        return;
+    }
+
     bool dragStarted = m_router->StartDragging( m_startSnapPoint, m_startItem, aMode );
 
     if( !dragStarted )
