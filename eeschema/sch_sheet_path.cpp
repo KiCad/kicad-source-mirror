@@ -163,7 +163,7 @@ int SCH_SHEET_PATH::Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const
 }
 
 
-int SCH_SHEET_PATH::ComparePageNumAndName( const SCH_SHEET_PATH& aSheetPathToTest ) const
+int SCH_SHEET_PATH::ComparePageNum( const SCH_SHEET_PATH& aSheetPathToTest ) const
 {
     wxString pageA = GetPageNumber();
     wxString pageB = aSheetPathToTest.GetPageNumber();
@@ -588,7 +588,7 @@ void SCH_SHEET_LIST::SortByPageNumbers( bool aUpdateVirtualPageNums )
     std::sort( begin(), end(),
         []( SCH_SHEET_PATH a, SCH_SHEET_PATH b ) -> bool
         {
-             return a.ComparePageNumAndName( b ) < 0;
+             return a.ComparePageNum( b ) < 0;
         } );
 
     if( aUpdateVirtualPageNums )
