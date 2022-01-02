@@ -197,6 +197,13 @@ void TEST_NETLISTS_FIXTURE::compareNetlists()
             const COMPONENT_NET& goldenNet = goldenComp->GetNet( net );
             const COMPONENT_NET& testNet   = refComp->GetNet( net );
 
+            // The video test has a bunch of unconnected RESERVED pins which cause duplicate
+            // auto-generated netnames.  The connectivity algo disambiguates these with "_n"
+            // suffixes, but since the algorithm is multi-threaded which ones get which suffix
+            // is not deterministic.  So skip these.
+            if( testNet.GetPinName().Contains( "RESERVED" ) )
+                continue;
+
             // The two nets at the same index should be identical
             BOOST_REQUIRE_EQUAL( goldenNet.GetNetName(), testNet.GetNetName() );
             BOOST_REQUIRE_EQUAL( goldenNet.GetPinName(), testNet.GetPinName() );
