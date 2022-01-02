@@ -162,14 +162,13 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aF
     wxString name;
     wxString error;
     LIB_ITEM* item;
-    LIB_FIELD* field;
     std::unique_ptr<LIB_SYMBOL> symbol = std::make_unique<LIB_SYMBOL>( wxEmptyString );
-    std::set<int> fieldIDsRead;
 
     m_requiredVersion = aFileVersion;
     symbol->SetUnitCount( 1 );
 
     m_fieldId = MANDATORY_FIELDS;
+    m_fieldIDsRead.clear();
 
     token = NextTok();
 
@@ -232,29 +231,7 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aF
             break;
 
         case T_property:
-            field = parseProperty( symbol );
-
-            if( field )
-            {
-                // Due to an bug when in #LIB_SYMBOL::Flatten, duplicate ids slipped through
-                // when writing files.  This section replaces duplicate #LIB_FIELD indices on
-                // load.
-                if( fieldIDsRead.count( field->GetId() ) )
-                {
-                    int nextAvailableId = field->GetId() + 1;
-
-                    while( fieldIDsRead.count( nextAvailableId ) )
-                        nextAvailableId += 1;
-
-                    fieldIDsRead.insert( nextAvailableId );
-                    field->SetId( nextAvailableId );
-                }
-                else if( field )
-                {
-                    fieldIDsRead.insert( field->GetId() );
-                }
-            }
-
+            parseProperty( symbol );
             break;
 
         case T_extends:
@@ -781,6 +758,19 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
         }
     }
 
+    // Due to an bug when in #LIB_SYMBOL::Flatten, duplicate ids slipped through
+    // when writing files.  This section replaces duplicate #LIB_FIELD indices on
+    // load.
+    if( m_fieldIDsRead.count( field->GetId() ) )
+    {
+        int nextAvailableId = field->GetId() + 1;
+
+        while( m_fieldIDsRead.count( nextAvailableId ) )
+            nextAvailableId += 1;
+
+        field->SetId( nextAvailableId );
+    }
+
     LIB_FIELD* existingField;
 
     if( field->GetId() < MANDATORY_FIELDS )
@@ -788,6 +778,7 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
         existingField = aSymbol->GetFieldById( field->GetId() );
 
         *existingField = *field;
+        m_fieldIDsRead.insert( field->GetId() );
         return existingField;
     }
     else if( name == "ki_keywords" )
@@ -853,6 +844,7 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
         if( !existingField )
         {
             aSymbol->AddDrawItem( field.get(), false );
+            m_fieldIDsRead.insert( field->GetId() );
             return field.release();
         }
         else
