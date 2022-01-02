@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <macros.h>
 #include <pcb_text.h>
 #include <fp_text.h>
 #include <drc/drc_engine.h>
@@ -105,8 +106,10 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                 wxASSERT( item->Type() == PCB_TEXT_T || item->Type() == PCB_FP_TEXT_T );
 
-                int actualH = 0, actualT = 0;
-                bool visible;
+                DRC_CONSTRAINT constraint;
+                int            actualH = 0;
+                int            actualT = 0;
+                bool           visible = false;
 
                 if( item->Type() == PCB_TEXT_T )
                 {
@@ -115,15 +118,17 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                     actualH = textItem->GetTextHeight();
                     actualT = textItem->GetTextThickness();
                 }
-                else if (  item->Type() == PCB_FP_TEXT_T )
+                else if( item->Type() == PCB_FP_TEXT_T )
                 {
                     FP_TEXT*      fpTextItem = static_cast<FP_TEXT*>( item );
                     visible = fpTextItem->IsVisible();
                     actualH = fpTextItem->GetTextHeight();
                     actualT = fpTextItem->GetTextThickness();
                 }
-                DRC_CONSTRAINT constraint;
-
+                else
+                {
+                    UNIMPLEMENTED_FOR( item->GetClass() );
+                }
 
                 if( !visible )
                     return true;
