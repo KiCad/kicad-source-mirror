@@ -204,8 +204,10 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
         m_cachedManager( nullptr ),
         m_nonCachedManager( nullptr ),
         m_overlayManager( nullptr ),
+        m_tempManager( nullptr ),
         m_mainBuffer( 0 ),
         m_overlayBuffer( 0 ),
+        m_tempBuffer( 0 ),
         m_isContextLocked( false ),
         m_lockClientCookie( 0 )
 {
@@ -300,6 +302,7 @@ OPENGL_GAL::~OPENGL_GAL()
         delete m_cachedManager;
         delete m_nonCachedManager;
         delete m_overlayManager;
+        delete m_tempManager;
     }
 
     GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glPrivContext );
@@ -442,6 +445,7 @@ void OPENGL_GAL::BeginDrawing()
         // Prepare rendering target buffers
         m_compositor->Initialize();
         m_mainBuffer = m_compositor->CreateBuffer();
+        m_tempBuffer = m_compositor->CreateBuffer();
         try
         {
             m_overlayBuffer = m_compositor->CreateBuffer();
@@ -493,10 +497,12 @@ void OPENGL_GAL::BeginDrawing()
     // Remove all previously stored items
     m_nonCachedManager->Clear();
     m_overlayManager->Clear();
+    m_tempManager->Clear();
 
     m_cachedManager->BeginDrawing();
     m_nonCachedManager->BeginDrawing();
     m_overlayManager->BeginDrawing();
+    m_tempManager->BeginDrawing();
 
     if( !m_isBitmapFontInitialized )
     {
@@ -1705,6 +1711,7 @@ void OPENGL_GAL::SetTarget( RENDER_TARGET aTarget )
     case TARGET_CACHED:    m_currentManager = m_cachedManager;    break;
     case TARGET_NONCACHED: m_currentManager = m_nonCachedManager; break;
     case TARGET_OVERLAY:   m_currentManager = m_overlayManager;   break;
+    case TARGET_TEMP:      m_currentManager = m_tempManager;      break;
     }
 
     m_currentTarget = aTarget;
@@ -1731,6 +1738,10 @@ void OPENGL_GAL::ClearTarget( RENDER_TARGET aTarget )
         m_compositor->SetBuffer( m_mainBuffer );
         break;
 
+    case TARGET_TEMP:
+        m_compositor->SetBuffer( m_tempBuffer );
+        break;
+
     case TARGET_OVERLAY:
         if( m_overlayBuffer )
             m_compositor->SetBuffer( m_overlayBuffer );
@@ -1752,6 +1763,7 @@ bool OPENGL_GAL::HasTarget( RENDER_TARGET aTarget )
     switch( aTarget )
     {
     default:
+    case TARGET_TEMP:
     case TARGET_CACHED:
     case TARGET_NONCACHED: return true;
     case TARGET_OVERLAY:   return ( m_overlayBuffer != 0 );
@@ -1762,14 +1774,18 @@ bool OPENGL_GAL::HasTarget( RENDER_TARGET aTarget )
 void OPENGL_GAL::StartDiffLayer()
 {
     m_currentManager->EndDrawing();
+    SetTarget( TARGET_TEMP );
+    ClearTarget( TARGET_TEMP );
 }
 
 
 void OPENGL_GAL::EndDiffLayer()
 {
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+    glBlendEquation( GL_MAX );
     m_currentManager->EndDrawing();
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    glBlendEquation( GL_FUNC_ADD );
+
+    m_compositor->DrawBuffer( m_tempBuffer, m_mainBuffer );
 }
 
 
@@ -2296,11 +2312,13 @@ void OPENGL_GAL::init()
     m_cachedManager = new VERTEX_MANAGER( true );
     m_nonCachedManager = new VERTEX_MANAGER( false );
     m_overlayManager = new VERTEX_MANAGER( false );
+    m_tempManager = new VERTEX_MANAGER( false );
 
     // Make VBOs use shaders
     m_cachedManager->SetShader( *m_shader );
     m_nonCachedManager->SetShader( *m_shader );
     m_overlayManager->SetShader( *m_shader );
+    m_tempManager->SetShader( *m_shader );
 
     m_isInitialized = true;
 }
