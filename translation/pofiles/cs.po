@@ -15,16 +15,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-13 18:56+0000\n"
+"PO-Revision-Date: 2022-01-03 10:45+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
-"master-source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v6/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -1643,7 +1642,7 @@ msgstr "Vedoucí vývojový tým"
 
 #: common/dialog_about/AboutDialog_main.cpp:209
 msgid "Lead Development Alumni"
-msgstr "Absolventi rozvoje absolventů"
+msgstr "Bývalý vývojový manažeři"
 
 #: common/dialog_about/AboutDialog_main.cpp:210
 msgid "Additional Contributions By"
@@ -3901,7 +3900,7 @@ msgstr "&Nápověda"
 #: common/eda_base_frame.cpp:960
 #, c-format
 msgid "File '%s' was not found."
-msgstr "Soubor '%s nenalezen."
+msgstr "Soubor '%s' nenalezen."
 
 #: common/eda_base_frame.cpp:1003
 msgid "Preferences"
@@ -7424,7 +7423,7 @@ msgstr "Rozsah"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:44
 msgid "Order"
-msgstr "Objednat"
+msgstr "Uspořádání"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:49
 msgid "Sort symbols by &X position"
@@ -10458,7 +10457,7 @@ msgstr "Ampéry"
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:126
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:137
 msgid "Ohms"
-msgstr "Ohm"
+msgstr "Ohmů"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:27
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:266
@@ -13744,14 +13743,15 @@ msgstr ""
 "napájení / symbol. Symbol nebyl načten."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:707
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
-"Symbol '%s' má ve schématu CADSTAR měřítko, ale KiCad jej nepodporuje. "
-"Symbol byl načten v měřítku 1: 1 a může vyžadovat ruční úpravu."
+"Symbol '%s' má v originálu schématu CADSTAR měřítko, ale KiCad jej "
+"nepodporuje. Když je symbol znovu načten z knihovny, vrátí se k původnímu "
+"měřítku 1: 1."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1190
 #, c-format
@@ -15860,7 +15860,7 @@ msgstr "Velikost čísla vývodu -> ostatní"
 
 #: eeschema/tools/ee_actions.cpp:272
 msgid "Copy pin number size to other pins in symbol"
-msgstr ""
+msgstr "Kopírovat velikost čísla vývodu do ostatních vývodů v symbolu"
 
 #: eeschema/tools/ee_actions.cpp:281
 msgid "Add Symbol"
@@ -16077,7 +16077,7 @@ msgstr "Přiřadit třídu spojů..."
 
 #: eeschema/tools/ee_actions.cpp:449
 msgid "Assign a netclass to the net of the selected wire"
-msgstr ""
+msgstr "Přiřadit třídu spojů k vybranému drátu sítě"
 
 #: eeschema/tools/ee_actions.cpp:453
 msgid "De Morgan Conversion"
@@ -18052,7 +18052,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "Správa balíčků ke stažení z repozitářů Kicadu a třetích stran"
+msgstr "Správa balíčků ke stažení z repozitářů KiCadu a třetích stran"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -18180,7 +18180,7 @@ msgstr "Projekt CADSTAR..."
 
 #: kicad/menubar.cpp:103
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
-msgstr "Import archívu CADSTAR schéma a DPS (*.csa, *.cpa)"
+msgstr "Import CADSTAR archívu schématu a DPS (*.csa, *.cpa)"
 
 #: kicad/menubar.cpp:107
 msgid "EAGLE Project..."
@@ -21890,6 +21890,8 @@ msgid ""
 "Do not re-annotate this type \n"
 "of reference (R means R*)"
 msgstr ""
+"Neměnit přečíslování tento typ\n"
+"reference (R znamená R*)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:290
 msgid "Reference Designators"
@@ -22810,7 +22812,7 @@ msgstr "Formát kóty"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:102
 msgid "Measured value of this dimension"
-msgstr ""
+msgstr "Naměřená hodnota tohoto rozměru"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:106
 msgid "Override value"
@@ -31312,9 +31314,9 @@ msgid "NetCode"
 msgstr "Kód sítě"
 
 #: pcbnew/pcb_track.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr "Spoj %s na %s, délka %s"
+msgstr "Spoj (oblouk) %s na %s, délka %s"
 
 #: pcbnew/pcb_track.cpp:891
 #, c-format
@@ -31354,9 +31356,8 @@ msgid "Action Plugins"
 msgstr "Akce pluginu"
 
 #: pcbnew/pcbnew_config.cpp:61
-#, fuzzy
 msgid "Origins & Axes"
-msgstr "Počátek X"
+msgstr "Počátky & osy"
 
 #: pcbnew/pcbnew_printout.cpp:108
 msgid "Multiple Layers"
@@ -31394,9 +31395,9 @@ msgid "Error reading file."
 msgstr "Chyba čtení souboru."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' was not parsed correctly."
-msgstr "Zóna mědi (%s) nemá žádné plošky připojené."
+msgstr "'%s' nebyl správně analyzován."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:498
 #, c-format
@@ -31433,9 +31434,8 @@ msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1424
-#, fuzzy
 msgid "No 3D-models will be imported."
-msgstr "Nelze vytvořit adresář \"%s\" -> nebudou importovány žádné 3D modely."
+msgstr "Žádný 3D model nebude importován."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1450
 #, c-format
@@ -31447,9 +31447,8 @@ msgid "Loading nets..."
 msgstr "Načítání sítí..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1507
-#, fuzzy
 msgid "Loading polygons..."
-msgstr "Provádím vyplnění polygonů..."
+msgstr "Načítání polygonů..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1520
 #: pcbnew/plugins/altium/altium_pcb.cpp:1771
@@ -31466,9 +31465,8 @@ msgid "Loading rules..."
 msgstr "Načítání pravidel..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1674
-#, fuzzy
 msgid "Loading board regions..."
-msgstr "Načítání souborů Gerber..."
+msgstr "Načítání oblastí desky..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1696
 msgid "Loading zones..."
@@ -31489,9 +31487,8 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1819
-#, fuzzy
 msgid "Loading zone fills..."
-msgstr "Sestavování zón..."
+msgstr "Načítání výplní zón..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1908
 msgid "Loading arcs..."
@@ -31613,9 +31610,8 @@ msgstr ""
 "vrstvy Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2650
-#, fuzzy
 msgid "Loading unicode strings..."
-msgstr "Načítání sítí..."
+msgstr "Načítání řetězců Unicode..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2664
 msgid "Loading text..."
@@ -31655,6 +31651,9 @@ msgid ""
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
 msgstr ""
+"Vybraný soubor označuje, že sítě nemusí být synchronizovány se schématem. "
+"Doporučuje se provádět postup 'Align Nets' v CADSTAR a re-import, aby se "
+"zabránilo nesrovnalostem mezi DPS a schématem. "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:131
 #, c-format
@@ -31794,12 +31793,12 @@ msgid "Unexpected Dimension type (ID %s). This was not imported."
 msgstr "Neočekávaný typ rozměru (ID %s). Nebylo importováno."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1565
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
 msgstr ""
-"ID kóty %s je úhlový rozměr, který nemá v KiCadu ekvivalent. Objekt nebyl "
+"Rozměr %s je úhlový rozměr, který nemá v KiCadu ekvivalent. Objekt nebyl "
 "importován."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1605
@@ -31819,6 +31818,8 @@ msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
 msgstr ""
+"CADSTAR '%s' oblast nemá ekvivalent KiCadu. Výhradní umístění oblastí není "
+"podporováno."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1641
 #, c-format
@@ -31836,6 +31837,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"Šablona CADSTAR '%s' má nastavení 'Allow in No Routing Areas' povoleno. Toto "
+"nastavení nemá žádný ekvivalent v KiCadu, takže bylo ignorováno."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1836
 #, c-format
@@ -31843,6 +31846,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"Šablona CADSTAR '%s' má nastavení 'Box Isolated Pins' povoleno. Tento "
+"parametr nemá žádný ekvivalent v Kicadu, takže byl ignorován."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1844
 #, c-format
@@ -31850,6 +31855,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"Šablona CADSTAR '%s' má nastavení 'Automatic Repour' povoleno. Toto "
+"nastavení nemá žádný ekvivalent v KiCadu, takže bylo ignorováno."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1855
 #, c-format
@@ -31858,6 +31865,9 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
+"Šablona CADSTAR '%s' má nenulovou hodnotu definovanou pro nastavení 'Sliver "
+"Width'. Neexistuje žádný ekvivalent v KiCadu, takže tento parametr byl "
+"ignorován."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1865
 #, c-format
@@ -31867,6 +31877,10 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
+"Šablona CADSTAR '%s' má různá nastavení pro 'Retain Poured Copper - "
+"Disjoint' a 'Retain Poured Copper - Isolated'. KiCad nerozlišuje tato dvě "
+"nastavení. Nastavení pro nesouvislou měď bylo použito jako minimální "
+"ostrovní oblast KiCad zóny."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1916
 #, c-format
@@ -31875,6 +31889,9 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
+"Šablona CADSTAR '%s' má různá nastavení pro teplotní reliéf v ploškách a "
+"prokovech. KiCad podporuje pouze jeden parametr pro oba. Nastavení pro "
+"plošky bylo aplikováno."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1933
 #, c-format
@@ -31885,6 +31902,10 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
+"Šablona CADSTAR '%s' má teplotní reliéf v původním provedení, ale šířka "
+"paprsku (%.2f mm) je tenčí než minimální tloušťka zóny (%.2f mm).KiCad "
+"požaduje zachování minimální tloušťky zóny. Proto byla minimální tloušťka "
+"použita jako nová šířka paprsku a bude použito při příštím vyplnění zóny."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1980
 #, c-format
@@ -31893,6 +31914,9 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
+"Vrstva CADSTAR '%s' je definována jako vrstva napájecí plochy. Neexistuje "
+"žádná síť s tímto názvem. Vrstva byla načtena, ale nebyly vytvořeny žádné "
+"zóny mědi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2085
 msgid ""
@@ -32106,9 +32130,9 @@ msgid "Could not insert graphical item %d into padstack '%s'."
 msgstr ""
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1014
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized pad shape primitive '%s' in row %zu."
-msgstr "Nerozpoznaná vlastnost '%s'"
+msgstr "Nerozpoznaná ploška základní formy '%s' v řadě %zu."
 
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:1121
 #, c-format
@@ -32191,14 +32215,14 @@ msgstr "Nedostatečná oprávnění k odstranění složky '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:988
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2639
-#, fuzzy, c-format
+#, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
-msgstr "Adresář knihovny \"%s\" má neočekávané podadresáře."
+msgstr "Adresář knihovny '%s' má neočekávané podadresáře."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1007
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library '%s'."
-msgstr "Neočekávaný soubor \"%s\" byl nalezen v cestě knihovny \"%s\"."
+msgstr "Neočekávaný soubor '%s' byl nalezen v cestě knihovny '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1026
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2676
@@ -32208,20 +32232,20 @@ msgid "Footprint library '%s' cannot be deleted."
 msgstr "Knihovnu pouzder '%s' nelze odstranit."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:178
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Neplatné reálné číslo v\n"
-"souboru: \"%s\"\n"
+"Neplatné číslo s plovoucí čárkou v\n"
+"souboru: '%s'\n"
 "řádek: %d\n"
 "offset: %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in\n"
 "file: '%s'\n"
@@ -32229,7 +32253,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Chybí číslo s plovoucí čárkou v\n"
-"souboru: \"%s\"\n"
+"souboru: '%s'\n"
 "řádek:: %d\n"
 "offset: %d"
 
@@ -32239,13 +32263,12 @@ msgid "Cannot interpret date code %d"
 msgstr "Nelze interpretovat kód data %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:846
-#, fuzzy
 msgid ""
 "Items found on undefined layers.  Do you wish to\n"
 "rescue them to the User.Comments layer?"
 msgstr ""
-"Položky nalezené na nedefinovaných vrstvách. Přejete si\n"
-"je zachránit do vrstvy Cmts.User?"
+"Položky nalezené na nedefinovaných vrstvách.  Přejete si\n"
+"je obnovit do vrstvy User.Comments?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:848
 msgid "Undefined layers:"
@@ -32377,10 +32400,9 @@ msgid "Footprint library '%s' is read only."
 msgstr "Knihovna pouzder '%s' je pouze pro čtení."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot rename temporary file '%s' to '%s'"
-msgstr ""
-"Nelze přejmenovat dočasný soubor \"%s\" na soubor knihovny pouzder \"%s\""
+msgstr "Nelze přejmenovat dočasný soubor '%s' na '%s'"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:347
 #, c-format
@@ -32422,12 +32444,12 @@ msgid "This file does not contain a PCB."
 msgstr "Tento soubor neobsahuje DPS."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2499
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' does not exist.\n"
 "Would you like to create it?"
 msgstr ""
-"Knihovna \"%s\" neexistuje.\n"
+"Knihovna '%s' neexistuje.\n"
 "Chcete ji vytvořit?"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2503
@@ -32435,9 +32457,9 @@ msgid "Library Not Found"
 msgstr "Knihovna nenalezena"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2529
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint file name '%s' is not valid."
-msgstr "Název souboru pouzdra \"%s\" není platný."
+msgstr "Název souboru pouzdra '%s' není platný."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2535
 #, c-format
@@ -32445,14 +32467,14 @@ msgid "Insufficient permissions to delete '%s'."
 msgstr "Nedostatečná oprávnění k odstranění '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2606
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot overwrite library path '%s'."
-msgstr "Nelze přepsat cestu knihovny \"%s\"."
+msgstr "Nelze přepsat cestu knihovny '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2658
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
-msgstr "Neočekávaný soubor \"%s\" byl nalezen v cestě knihovny \"%s\"."
+msgstr "Neočekávaný soubor '%s' byl nalezen v cestě knihovny '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:596
 #, c-format
@@ -32541,9 +32563,8 @@ msgid "KiCad only supports 32 signal layers."
 msgstr "KiCad podporuje pouze 32 signálních vrstev."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:93
-#, fuzzy
 msgid "Unable to find library section."
-msgstr "Nelze najít soubor knihovny %s."
+msgstr "Nelze najít sekci knihovny."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:108
 #, c-format
@@ -32556,9 +32577,9 @@ msgstr "Výjimka v kódu pluginů pro akce Python"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
-msgstr "Metoda \"%s\" nebyla nalezena nebo nelze zavolat"
+msgstr "Metoda '%s' nenalezena nebo nelze zavolat"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:84
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
@@ -32627,13 +32648,13 @@ msgid "Length Tuner"
 msgstr "Ladění délky"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:475
-#, fuzzy
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
 msgstr ""
-"Nelze najít doplňkové dvojice diferenciálních párů. Ujistěte se, že názvy "
-"sítí patřících do dvojice diferenciálních párů končí buď na _N/_P nebo +/-."
+"Nelze najít sítě komplementárního diferenciálního páru. Ujistěte se, že "
+"názvy sítí patřících do dvojice diferenciálních párů končí buď na N/P nebo "
+"+/-."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:492
 msgid ""
@@ -32685,28 +32706,25 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:474
-#, fuzzy
 msgid "existing track"
-msgstr "Při vytváření spojů"
+msgstr "existující spoj"
 
 #: pcbnew/router/pns_kicad_iface.cpp:488 pcbnew/router/pns_kicad_iface.cpp:501
 msgid "board minimum width"
 msgstr "deska minimální šířka"
 
 #: pcbnew/router/pns_kicad_iface.cpp:497
-#, fuzzy
 msgid "netclass 'Default'"
-msgstr "třída spojů '%s'"
+msgstr "třída spojů 'Výchozí'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:499
-#, fuzzy
 msgid "user choice"
-msgstr "Uložení výběru"
+msgstr "zvolený uživatelem"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1056
-#, fuzzy, c-format
+#, c-format
 msgid "%s is malformed."
-msgstr "%s má nesprávný tvar."
+msgstr "%s je deformováno."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1059
 #, fuzzy
@@ -33000,17 +33018,18 @@ msgid "Show board setup"
 msgstr "Zobrazit nastavení desky"
 
 #: pcbnew/router/router_tool.cpp:876
-#, fuzzy
 msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
-msgstr "Slepé/skryté prokovy musí být povoleny v nastavení návrhu."
+msgstr ""
+"Slepé/vnořené prokovy musí být povoleny v Nastavení desky > Pravidla návrhu "
+"> Omezení."
 
 #: pcbnew/router/router_tool.cpp:897
-#, fuzzy
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
-msgstr "Mikrovia musí být povoleny v nastavení návrhu."
+msgstr ""
+"Mikroprokovy musí být povoleny v Nastavení desky > Pravidla návrhu > Omezení."
 
 #: pcbnew/router/router_tool.cpp:981
 msgid "Blind/buried via need 2 different layers."
@@ -33048,33 +33067,28 @@ msgid "Net Class: %s"
 msgstr "Třída sítě: %s"
 
 #: pcbnew/router/router_tool.cpp:2065
-#, fuzzy
 msgid "Routing Track"
-msgstr "Propojit jednotlivý spoj"
+msgstr "Propojit spoj"
 
 #: pcbnew/router/router_tool.cpp:2065
 msgid "(no net)"
 msgstr "(žádná síť)"
 
 #: pcbnew/router/router_tool.cpp:2072
-#, fuzzy
 msgid "Free-angle"
-msgstr "úhel"
+msgstr "Volný úhel"
 
 #: pcbnew/router/router_tool.cpp:2078
-#, fuzzy
 msgid "45-degree"
 msgstr "45 stupňů"
 
 #: pcbnew/router/router_tool.cpp:2079
-#, fuzzy
 msgid "45-degree rounded"
-msgstr "Táhnout (režim 45 stupňů)"
+msgstr "45 stupňů se zaokrouhlením"
 
 #: pcbnew/router/router_tool.cpp:2080
-#, fuzzy
 msgid "90-degree"
-msgstr "stupeň"
+msgstr "90 stupňů"
 
 #: pcbnew/router/router_tool.cpp:2081
 msgid "90-degree rounded"
@@ -34512,9 +34526,8 @@ msgid "Import Specctra Session..."
 msgstr "Relace Specctra..."
 
 #: pcbnew/tools/pcb_actions.cpp:574
-#, fuzzy
 msgid "Import routed Specctra session (*.ses) file"
-msgstr "Importovat propojený soubor \"Relace Specctra\" (*.ses)"
+msgstr "Importovat propojený soubor Relace Specctra (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:579
 msgid "Export Specctra DSN..."
@@ -34876,9 +34889,8 @@ msgid "Show graphic items in outline mode"
 msgstr "Zobrazit pouze obrys grafických prvků"
 
 #: pcbnew/tools/pcb_actions.cpp:843
-#, fuzzy
 msgid "Sketch Text Items"
-msgstr "Vybrat položky"
+msgstr "Textové prvky jako obrys"
 
 #: pcbnew/tools/pcb_actions.cpp:843
 #, fuzzy
@@ -34895,9 +34907,8 @@ msgid "Show filled areas of zones"
 msgstr "Zobrazit vyplněné oblasti zón"
 
 #: pcbnew/tools/pcb_actions.cpp:858
-#, fuzzy
 msgid "Draw Zone Outlines"
-msgstr "Obrys zóny"
+msgstr "Kreslit obrys zóny"
 
 #: pcbnew/tools/pcb_actions.cpp:858
 msgid "Show only zone boundaries"
@@ -35395,9 +35406,8 @@ msgid "Tune skew of a differential pair"
 msgstr "Ladit sklon diferenciálního páru"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
-#, fuzzy
 msgid "Undo Last Segment"
-msgstr "Vrátit zpět poslední úpravu"
+msgstr "Vrátit zpět poslední segment"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
 #, fuzzy
@@ -35593,14 +35603,12 @@ msgid "Show footprints that are on board's back"
 msgstr "Zobrazit pouzdra na dolní straně desky"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
-#, fuzzy
 msgid "Through-hole Pads"
-msgstr "Průchozí díra plošek"
+msgstr "Průchozí otvor plošek"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
-#, fuzzy
 msgid "Show through-hole pads"
-msgstr "Zobrazit 3D modely s vývody"
+msgstr "Zobrazit průchozí otvor plošek"
 
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "Show footprint values"
@@ -35619,9 +35627,8 @@ msgid "Footprint Text"
 msgstr "Text pouzdra"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
-#, fuzzy
 msgid "Show all footprint text"
-msgstr "Zobrazit text pouzder"
+msgstr "Zobrazit všechny texty pouzder"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Hidden Text"
@@ -35664,9 +35671,8 @@ msgid "DRC Exclusions"
 msgstr "DRC Vyloučení"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
-#, fuzzy
 msgid "DRC violations which have been individually excluded"
-msgstr "Porušení DRC se závažností varování"
+msgstr "Porušení DRC, které byly individuálně vyloučeny"
 
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Show footprint and text origins as a cross"
@@ -35815,9 +35821,8 @@ msgid "Show ratsnest lines to items on visible layers"
 msgstr "Zahrnout položky v &neviditelných vrstvách"
 
 #: pcbnew/widgets/appearance_controls.cpp:744
-#, fuzzy
 msgid "Hide all ratsnest lines"
-msgstr "Nezobrazovat obecné naznačené spoje"
+msgstr "Skrýt všechny naznačené spoje"
 
 #: pcbnew/widgets/appearance_controls.cpp:882
 msgid "Set Net Color"
@@ -35830,13 +35835,13 @@ msgstr "Zvýraznění %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:888
 #: pcbnew/widgets/appearance_controls.cpp:2273
-#, fuzzy, c-format
+#, c-format
 msgid "Select Tracks and Vias in %s"
 msgstr "Vybrat spoje a prokovy v %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:891
 #: pcbnew/widgets/appearance_controls.cpp:2277
-#, fuzzy, c-format
+#, c-format
 msgid "Unselect Tracks and Vias in %s"
 msgstr "Zrušit výběr spojů a prokovů v %s"
 
@@ -35855,12 +35860,11 @@ msgid "Click to show ratsnest for %s"
 msgstr "Kliknutím zobrazíte naznačené spoje pro %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:940
-#, fuzzy
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
 msgstr ""
-"Dvoj-klik levým nebo středním tlačítkem změníte barvy, kliknutím pravým "
-"tlačítkem pro menu"
+"Dvoj-klik levým (nebo středním tlačítkem) pro změnu barvy, kliknutím pravým "
+"tlačítkem pro další akce"
 
 #: pcbnew/widgets/appearance_controls.cpp:1433
 msgid "Double click or middle click for color change, right click for menu"
@@ -36042,7 +36046,6 @@ msgid "Show or hide ratsnest for nets in %s"
 msgstr "Zobrazit nebo skrýt naznačené spoje pro sítě v %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2265
-#, fuzzy
 msgid "Set Netclass Color"
 msgstr "Nastavit barvu třídy spojů"
 
@@ -36056,9 +36059,8 @@ msgid "Show All Netclasses"
 msgstr "Zobrazit všechny třídy spojů"
 
 #: pcbnew/widgets/appearance_controls.cpp:2287
-#, fuzzy
 msgid "Hide All Other Netclasses"
-msgstr "Skrýt všechna pole pouzdra"
+msgstr "Skrýt všechny ostatní třídy sítí"
 
 #: pcbnew/widgets/appearance_controls.cpp:2341
 msgid "Save preset..."
@@ -36108,9 +36110,8 @@ msgid "Show the Net Inspector"
 msgstr "&Zobrazit informace o verzi"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:123
-#, fuzzy
 msgid "Configure net classes"
-msgstr "Konfigurace cest"
+msgstr "Konfigurace tříd sítě"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:161
 msgid "Presets (Ctrl+Tab):"
