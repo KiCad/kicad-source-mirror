@@ -617,11 +617,28 @@ std::ostream& operator<<( std::ostream& aStream, const VECTOR2<T>& aVector )
     return aStream;
 }
 
-
 /* Default specializations */
 typedef VECTOR2<double>       VECTOR2D;
 typedef VECTOR2<int>          VECTOR2I;
 typedef VECTOR2<unsigned int> VECTOR2U;
+
+/* STL specializations */
+namespace std
+{
+    // Required to enable correct use in std::map/unordered_map
+    template <>
+    struct hash<VECTOR2I>
+    {
+        size_t operator()( const VECTOR2I& k ) const;
+    };
+
+    // Required to enable use of std::hash with maps
+    template <>
+    struct less<VECTOR2I>
+    {
+        bool operator()( const VECTOR2I& aA, const VECTOR2I& aB ) const;
+    };
+}
 
 /* Compatibility typedefs */
 // FIXME should be removed to avoid multiple typedefs for the same type
