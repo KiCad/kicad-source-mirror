@@ -867,6 +867,8 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
 
     if( aSetActive )
         settings = RegisterSettings( settings );
+    else
+        settings->LoadFromFile( path.GetPath() );
 
     m_projects[fullPath]->setLocalSettings( settings );
 
