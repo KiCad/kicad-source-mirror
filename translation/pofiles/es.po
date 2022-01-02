@@ -9,21 +9,22 @@
 # ZbeeGin <zbeegin@op.pl>, 2021.
 # Augusto Fraga Giachero <afg@augustofg.net>, 2021.
 # ferdymercury <fernando.hueso@uv.es>, 2021.
+# Jose Perez <mirror.k2@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-02 21:49+0000\n"
-"Last-Translator: ferdymercury <fernando.hueso@uv.es>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"PO-Revision-Date: 2022-01-02 22:55+0000\n"
+"Last-Translator: Jose Perez <mirror.k2@gmail.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1031,7 +1032,7 @@ msgstr "Rotación"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:111
 msgid "Offset"
-msgstr "Desplazamiento"
+msgstr "Corrección de desplazamiento"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:156
 msgid "Opacity"
@@ -6203,7 +6204,7 @@ msgstr "Editar las variables de entorno de configuración rutas"
 
 #: common/tool/actions.cpp:613
 msgid "Manage Symbol Libraries..."
-msgstr "Administrar librerías de símbolos..."
+msgstr "Gestionar librerías de símbolos..."
 
 #: common/tool/actions.cpp:614
 msgid "Edit the global and project symbol library lists"
@@ -6211,7 +6212,7 @@ msgstr "Editar las listas de librerías de símbolos globales y de proyecto"
 
 #: common/tool/actions.cpp:619
 msgid "Manage Footprint Libraries..."
-msgstr "Administrar librerías de huellas..."
+msgstr "Gestionar librerías de huellas..."
 
 #: common/tool/actions.cpp:620
 msgid "Edit the global and project footprint library lists"
@@ -6639,9 +6640,8 @@ msgid "All KiCad project files"
 msgstr "Todos los archivos de proyecto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:235
-#, fuzzy
 msgid "All KiCad schematic files"
-msgstr "Archivos de esquema de Altium"
+msgstr "Archivos de esquema de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad legacy schematic files"
@@ -16555,14 +16555,12 @@ msgid "Switch H & V only mode for new wires and buses"
 msgstr "Alternar el modo de solo H/V para nuevas líneas y buses"
 
 #: eeschema/tools/ee_actions.cpp:655
-#, fuzzy
 msgid "Repair Schematic"
-msgstr "Creando esquema"
+msgstr "Reparar esquema"
 
 #: eeschema/tools/ee_actions.cpp:656
-#, fuzzy
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr "Ejecutar varios diagnósticos e intentar reparar la placa"
+msgstr "Ejecutar varios diagnósticos e intentar reparar el esquema"
 
 #: eeschema/tools/ee_actions.cpp:662 pcbnew/tools/pcb_actions.cpp:786
 msgid "Scripting Console"
@@ -21325,7 +21323,7 @@ msgstr "Características del material dieléctrico"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
-msgstr "Tiene pads castellados"
+msgstr "Tiene pads almena"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
 msgid "Plated board edge"
