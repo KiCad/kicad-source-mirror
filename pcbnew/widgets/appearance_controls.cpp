@@ -2443,6 +2443,9 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         }
         else
         {
+            preset->layers       = getVisibleLayers();
+            preset->renderLayers = getVisibleObjects();
+
             index = m_cbLayerPresets->FindString( name );
             m_presetMRU.Remove( name );
         }
