@@ -335,11 +335,13 @@ private:
     VERTEX_MANAGER*         m_cachedManager;    ///< Container for storing cached VERTEX_ITEMs
     VERTEX_MANAGER*         m_nonCachedManager; ///< Container for storing non-cached VERTEX_ITEMs
     VERTEX_MANAGER*         m_overlayManager;   ///< Container for storing overlaid VERTEX_ITEMs
+    VERTEX_MANAGER*         m_tempManager;      ///< Container for storing temp (diff mode) VERTEX_ITEMs
 
     // Framebuffer & compositing
     OPENGL_COMPOSITOR*      m_compositor;       ///< Handles multiple rendering targets
     unsigned int            m_mainBuffer;       ///< Main rendering target
     unsigned int            m_overlayBuffer;    ///< Auxiliary rendering target (for menus etc.)
+    unsigned int            m_tempBuffer;       ///< Temporary rendering target (for diffing etc.)
     RENDER_TARGET           m_currentTarget;    ///< Current rendering target
 
     // Shader
