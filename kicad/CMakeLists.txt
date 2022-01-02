@@ -5,19 +5,15 @@ if( COMPILER_SUPPORTS_WARNINGS )
 endif()
 
 add_definitions( -DKICAD )
+add_subdirectory( pcm )
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${CMAKE_SOURCE_DIR}/eeschema
+    ${CMAKE_SOURCE_DIR}/kicad/pcm
     ${INC_AFTER}
     )
-
-if ( KICAD_PCM )
-    add_definitions( -DPCM )
-    add_subdirectory( pcm )
-    include_directories( ./pcm )
-endif ( KICAD_PCM )
 
 set( KICAD_SRCS
     dialogs/dialog_template_selector_base.cpp
@@ -96,9 +92,7 @@ else()
         )
 endif()
 
-if( KICAD_PCM )
-    target_link_libraries( kicad pcm )
-endif()
+target_link_libraries( kicad pcm )
 
 install( TARGETS kicad
     DESTINATION ${KICAD_BIN}

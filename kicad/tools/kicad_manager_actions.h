@@ -46,9 +46,7 @@ public:
     static TOOL_ACTION showCalculator;
     static TOOL_ACTION editDrawingSheet;
     static TOOL_ACTION openTextEditor;
-#ifdef PCM
     static TOOL_ACTION showPluginManager;
-#endif
 
     static TOOL_ACTION editOtherSch;
     static TOOL_ACTION editOtherPCB;

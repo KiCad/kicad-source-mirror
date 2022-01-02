@@ -144,11 +144,9 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
                  _( "Edit drawing sheet borders and title blocks for use in schematics and PCB "
                     "designs" ) );
 
-#ifdef PCM
     addLauncher( KICAD_MANAGER_ACTIONS::showPluginManager,
                  KiScaledBitmap( BITMAPS::icon_pcm, this, 48, true ),
                  _( "Manage downloadable packages from KiCad and 3rd party repositories" ) );
-#endif
 
     Layout();
 }

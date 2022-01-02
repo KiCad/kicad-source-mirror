@@ -35,7 +35,6 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
     m_params.emplace_back(
             new PARAM_LIST<wxString>( "system.open_projects", &m_OpenProjects, {} ) );
 
-#ifdef PCM
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
             "pcm.repositories",
             [&]() -> nlohmann::json
@@ -76,7 +75,6 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
 
     m_params.emplace_back(
             new PARAM<wxString>( "pcm.last_download_dir", &m_PcmLastDownloadDir, "" ) );
-#endif
 }
 
 

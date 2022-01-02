@@ -37,10 +37,7 @@
 #include <wx/checkbox.h>
 #include <wx/dir.h>
 #include <wx/filedlg.h>
-
-#ifdef PCM
 #include "dialog_pcm.h"
-#endif
 
 
 ///> Helper widget to select whether a new directory should be created for a project.
@@ -819,7 +816,6 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 
 int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
 {
-#ifdef PCM
     DIALOG_PCM pcm( m_frame );
     pcm.ShowModal();
 
@@ -827,7 +823,6 @@ int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
     // PCM keeps the focus althougt the focus was not set to this button.
     // This hack force removing the focus from this button
     m_frame->SetFocus();
-#endif
 
     return 0;
 }
@@ -858,7 +853,5 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::editOtherSch.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::editOtherPCB.MakeEvent() );
 
-#ifdef PCM
     Go( &KICAD_MANAGER_CONTROL::ShowPluginManager, KICAD_MANAGER_ACTIONS::showPluginManager.MakeEvent() );
-#endif
 }
