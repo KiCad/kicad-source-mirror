@@ -19,13 +19,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef __WXMSW__
-#include <windows.h>
-#include <gdiplus.h>
-#include <cairo-win32.h>
-#include <wx/msw/enhmeta.h>
-#endif /* __WXMSW__ */
-
 #include <gal/cairo/cairo_print.h>
 
 #include <stdexcept>
@@ -39,6 +32,15 @@
 using std::max;
 using std::min;
 #endif
+
+#ifdef __WXMSW__
+#include <windows.h>
+#include <ObjIdl.h>
+#include <gdiplus.h>
+#include <cairo-win32.h>
+#include <wx/msw/enhmeta.h>
+#endif /* __WXMSW__ */
+
 
 #ifdef __WXMAC__
 #include <ApplicationServices/ApplicationServices.h>
