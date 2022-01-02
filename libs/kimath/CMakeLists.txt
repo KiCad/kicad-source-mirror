@@ -21,6 +21,7 @@ set( KIMATH_SRCS
     src/geometry/shape_segment.cpp
 
 
+    src/math/vector2.cpp
     src/math/util.cpp
 )
 
