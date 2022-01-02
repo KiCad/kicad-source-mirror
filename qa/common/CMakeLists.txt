@@ -56,6 +56,7 @@ set( common_srcs
 
 set( common_libs
     common
+    libcontext
     gal
     qa_utils
     ${wxWidgets_LIBRARIES}
@@ -65,10 +66,6 @@ set( common_libs
 # Test executable for non-program-specific code
 add_executable( qa_common ${common_srcs} )
 target_link_libraries( qa_common ${common_libs} )
-target_include_directories( qa_common PRIVATE
-    $<TARGET_PROPERTY:libcontext,INTERFACE_INCLUDE_DIRECTORIES>
-)
-
 
 include_directories(
     ${CMAKE_SOURCE_DIR}
