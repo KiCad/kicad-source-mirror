@@ -544,7 +544,7 @@ void EDA_DRAW_FRAME::AddStandardSubMenus( TOOL_MENU& aToolMenu )
     gridMenu->SetTool( commonTools );
     aToolMenu.AddSubMenu( gridMenu );
 
-    aMenu.AddMenu( zoomMenu.get(),   SELECTION_CONDITIONS::ShowAlways, 1000 );
+    aMenu.AddMenu( zoomMenu.get(), SELECTION_CONDITIONS::ShowAlways, 1000 );
     aMenu.AddMenu( gridMenu.get(), SELECTION_CONDITIONS::ShowAlways, 1000 );
 }
 
@@ -913,7 +913,7 @@ void EDA_DRAW_FRAME::FocusOnLocation( const VECTOR2I& aPos )
     }
 
     // Center if we're behind an obscuring dialog, or within 10% of its edge
-    for( BOX2D rect : dialogScreenRects ) 
+    for( BOX2D rect : dialogScreenRects )
     {
         rect.Inflate( rect.GetWidth() / 10 );
 
@@ -1009,18 +1009,22 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
     wxString prompt = doOpen ? _( "Select Library" ) : _( "New Library" );
     aFilename.SetExt( ext );
 
-    wxString dir = aGlobalPath;
+    wxString dir;
+
+    if( GetMruPath().IsEmpty() )
+        dir = aGlobalPath;
+    else
+        dir = GetMruPath();
 
 
     if( isDirectory && doOpen )
     {
-        if( !aIsGlobal )
+        if( !aIsGlobal && GetMruPath().IsEmpty() )
         {
             dir = Prj().GetProjectPath();
         }
 
-        wxDirDialog dlg( this, prompt, dir,
-                         wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+        wxDirDialog dlg( this, prompt, dir, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
@@ -1034,7 +1038,7 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
         if( aFilename.GetName().empty() )
             aFilename.SetName( "Library" );
 
-        if( !aIsGlobal )
+        if( !aIsGlobal && GetMruPath().IsEmpty() )
         {
             dir = Prj().IsNullProject() ? aFilename.GetFullPath() : Prj().GetProjectPath();
         }
@@ -1049,6 +1053,8 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
         aFilename = dlg.GetPath();
         aFilename.SetExt( ext );
     }
+
+    SetMruPath( aFilename.GetPath() );
 
     return true;
 }
