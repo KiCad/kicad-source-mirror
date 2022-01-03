@@ -11,16 +11,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-14 22:19+0000\n"
+"PO-Revision-Date: 2022-01-03 10:45+0000\n"
 "Last-Translator: Rafael Silva <perigoso@riseup.net>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
-"master-source/pt/>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v6/pt/>"
+"\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -15172,7 +15172,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:734
 msgid "Manage symbol libraries"
-msgstr "Gerencie os símbolos das bibliotecas"
+msgstr "Gerir bibliotecas de símbolos"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:745
 msgid ""
@@ -18487,7 +18487,7 @@ msgstr ""
 #: kicad/pcm/dialogs/dialog_pcm.cpp:173
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Plugin and Content Manager"
-msgstr "Plug-in e o gestor de conteúdo"
+msgstr "Gestor de Conteúdo e Plug-ins"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:252
 msgid "Choose package file"
@@ -18507,7 +18507,7 @@ msgstr "Instalado (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:37
 msgid "Manage"
-msgstr "Gerencie"
+msgstr "Gerir"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:86
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:103
@@ -18534,7 +18534,7 @@ msgstr "Instale a partir do arquivo..."
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:74
 msgid "Plugin And Content Manager"
-msgstr "Plug-in e o gestor de conteúdo"
+msgstr "Gestor de Conteúdo e Plug-ins"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:57
 msgid "Aborting remaining tasks."
@@ -19080,7 +19080,7 @@ msgstr "Edite as bordas da folha de desenho e do bloco de título"
 
 #: kicad/tools/kicad_manager_actions.cpp:117
 msgid "Run Plugin and Content Manager"
-msgstr "Executa o plug-in e o gestor de conteúdo"
+msgstr "Executar Gestor de Conteúdo e Plug-ins"
 
 #: kicad/tools/kicad_manager_actions.cpp:124
 msgid "Open Text Editor"
