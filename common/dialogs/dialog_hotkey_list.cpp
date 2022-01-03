@@ -34,10 +34,23 @@ DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent ):
 {
     const int   margin = KIUI::GetStdMargin();
     wxBoxSizer* main_sizer = new wxBoxSizer( wxVERTICAL );
+    KIFACE*     kiface = nullptr;
 
     m_hk_list = new PANEL_HOTKEYS_EDITOR( aParent, this, true );
 
-    Kiface().GetActions( m_hk_list->ActionsList() );
+    Kiway().GetActions( m_hk_list->ActionsList() );
+
+    kiface = Kiway().KiFACE( KIWAY::FACE_SCH );
+    kiface->GetActions( m_hk_list->ActionsList() );
+
+    kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
+    kiface->GetActions( m_hk_list->ActionsList() );
+
+    kiface = Kiway().KiFACE( KIWAY::FACE_GERBVIEW );
+    kiface->GetActions( m_hk_list->ActionsList() );
+
+    kiface = Kiway().KiFACE( KIWAY::FACE_PL_EDITOR );
+    kiface->GetActions( m_hk_list->ActionsList() );
 
     main_sizer->Add( m_hk_list, 1, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, margin );
 
