@@ -50,7 +50,8 @@
 #include <i18n_utility.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_compound.h>
-#include <font/font.h>
+#include <geometry/shape_simple.h>
+#include <font/outline_font.h>
 #include <geometry/shape_poly_set.h>
 
 #include <wx/debug.h>           // for wxASSERT
@@ -622,11 +623,52 @@ std::vector<VECTOR2I> EDA_TEXT::TransformToSegmentList() const
 std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
-    int                             penWidth = GetEffectiveTextPenWidth();
-    std::vector<VECTOR2I>           pts = TransformToSegmentList();
 
-    for( unsigned jj = 0; jj < pts.size(); jj += 2 )
-        shape->AddShape( new SHAPE_SEGMENT( pts[jj], pts[jj+1], penWidth ) );
+    if( GetFont() && GetFont()->IsOutline() )
+    {
+        // FONT TODO: Use the cached glyphs rather than rendering them
+
+        KIFONT::OUTLINE_FONT* font = static_cast<KIFONT::OUTLINE_FONT*>( GetFont() );
+        std::vector<std::unique_ptr<KIFONT::GLYPH>> glyphs;
+
+        font->GetLinesAsGlyphs( glyphs, this );
+
+        for( std::unique_ptr<KIFONT::GLYPH>& baseGlyph : glyphs )
+        {
+            KIFONT::OUTLINE_GLYPH* glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( baseGlyph.get() );
+
+            if( IsMirrored() )
+                glyph->Mirror( GetTextPos() );
+
+            glyph->CacheTriangulation();
+
+            for( unsigned int ii = 0; ii < glyph->TriangulatedPolyCount(); ++ii )
+            {
+                const SHAPE_POLY_SET::TRIANGULATED_POLYGON* tri = glyph->TriangulatedPolygon( ii );
+
+                for( size_t jj = 0; jj < tri->GetTriangleCount(); ++jj )
+                {
+                    VECTOR2I a, b, c;
+                    tri->GetTriangle( jj, a, b, c );
+                    SHAPE_SIMPLE* triShape = new SHAPE_SIMPLE;
+
+                    triShape->Append( a );
+                    triShape->Append( b );
+                    triShape->Append( c );
+
+                    shape->AddShape( triShape );
+                }
+            }
+        }
+    }
+    else
+    {
+        int                   penWidth = GetEffectiveTextPenWidth();
+        std::vector<VECTOR2I> pts = TransformToSegmentList();
+
+        for( unsigned jj = 0; jj < pts.size(); jj += 2 )
+            shape->AddShape( new SHAPE_SEGMENT( pts[jj], pts[jj+1], penWidth ) );
+    }
 
     return shape;
 }
