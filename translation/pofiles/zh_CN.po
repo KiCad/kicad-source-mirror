@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-01-03 10:45+0000\n"
+"PO-Revision-Date: 2022-01-05 00:19+0000\n"
 "Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -23003,15 +23003,15 @@ msgstr "更新选择的封装"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
 msgid "Update footprints matching reference designator:"
-msgstr "更新封装匹配的位号："
+msgstr "更新此位号对应的封装："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:38
 msgid "Update footprints matching value:"
-msgstr "更新封装匹配值："
+msgstr "更新具有此值的封装："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:44
 msgid "Update footprints with library id:"
-msgstr "使用库 ID 更新封装："
+msgstr "更新具有以下库 ID 的封装："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 msgid "New footprint library id:"
