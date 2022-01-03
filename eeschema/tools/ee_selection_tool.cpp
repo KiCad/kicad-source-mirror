@@ -420,6 +420,10 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         newParams->quitOnDraw = true;
                         newEvt->SetParameter( newParams );
 
+                        // Make it so we can copy the parameters of the line we are extending
+                        if( collector[0]->Type() == SCH_LINE_T )
+                            newParams->sourceSegment = static_cast<SCH_LINE*>( collector[0] );
+
                         getViewControls()->ForceCursorPosition( true, snappedCursorPos );
                         newEvt->SetMousePosition( snappedCursorPos );
                         newEvt->SetHasPosition( true );

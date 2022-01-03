@@ -292,7 +292,7 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !aEvent.DisableGridSnapping() );
 
         VECTOR2D cursorPos = grid.BestSnapAnchor( aEvent.Position(), LAYER_CONNECTABLE, nullptr );
-        startSegments( params->layer, cursorPos );
+        startSegments( params->layer, cursorPos, params->sourceSegment );
     }
 
     return doDrawSegments( tool, params->layer, params->quitOnDraw );
@@ -792,36 +792,46 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
 }
 
 
-SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos )
+SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos,
+                                                 SCH_LINE* aSegment )
 {
-    SCH_LINE* segment = nullptr;
-
-    switch ( aType )
+    // If a segment isn't provided to copy properties from, we need to create one
+    if( aSegment == nullptr )
     {
-    default:         segment = new SCH_LINE( aPos, LAYER_NOTES ); break;
-    case LAYER_WIRE: segment = new SCH_LINE( aPos, LAYER_WIRE );  break;
-    case LAYER_BUS:  segment = new SCH_LINE( aPos, LAYER_BUS );   break;
+        switch( aType )
+        {
+        default: aSegment = new SCH_LINE( aPos, LAYER_NOTES ); break;
+        case LAYER_WIRE: aSegment = new SCH_LINE( aPos, LAYER_WIRE ); break;
+        case LAYER_BUS: aSegment = new SCH_LINE( aPos, LAYER_BUS ); break;
+        }
+
+        // Give segments a parent so they find the default line/wire/bus widths
+        aSegment->SetParent( &m_frame->Schematic() );
+    }
+    else
+    {
+        aSegment = static_cast<SCH_LINE*>( aSegment->Duplicate() );
+        aSegment->SetStartPoint( (wxPoint) aPos );
     }
 
-    // Give segments a parent so they find the default line/wire/bus widths
-    segment->SetParent( &m_frame->Schematic() );
-    segment->SetFlags( IS_NEW | IS_MOVING );
-    m_wires.push_back( segment );
 
-    m_selectionTool->AddItemToSel( segment, true /*quiet mode*/ );
+    aSegment->SetFlags( IS_NEW | IS_MOVING );
+    m_wires.push_back( aSegment );
+
+    m_selectionTool->AddItemToSel( aSegment, true /*quiet mode*/ );
 
     // We need 2 segments to go from a given start pin to an end point when the
     // horizontal and vertical lines only switch is on.
     if( m_frame->eeconfig()->m_Drawing.hv_lines_only )
     {
-        segment = static_cast<SCH_LINE*>( segment->Duplicate() );
-        segment->SetFlags( IS_NEW | IS_MOVING );
-        m_wires.push_back( segment );
+        aSegment = static_cast<SCH_LINE*>( aSegment->Duplicate() );
+        aSegment->SetFlags( IS_NEW | IS_MOVING );
+        m_wires.push_back( aSegment );
 
-        m_selectionTool->AddItemToSel( segment, true /*quiet mode*/ );
+        m_selectionTool->AddItemToSel( aSegment, true /*quiet mode*/ );
     }
 
-    return segment;
+    return aSegment;
 }
 
 

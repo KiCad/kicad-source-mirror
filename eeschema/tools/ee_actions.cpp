@@ -717,14 +717,14 @@ TOOL_ACTION EE_ACTIONS::addNeededJunctions( "eeschema.InteractiveDrawingLineWire
         BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
 
-const DRAW_SEGMENT_EVENT_PARAMS drawWireActionParam = { LAYER_WIRE, false };
+const DRAW_SEGMENT_EVENT_PARAMS drawWireActionParam = { LAYER_WIRE, false, nullptr };
 TOOL_ACTION EE_ACTIONS::drawWire( "eeschema.InteractiveDrawingLineWireBus.drawWires",
         AS_GLOBAL,
         'W', LEGACY_HK_NAME( "Begin Wire" ),
         _( "Add Wire" ), _( "Add a wire" ),
         BITMAPS::add_line, AF_ACTIVATE, (void*) &drawWireActionParam );
 
-const DRAW_SEGMENT_EVENT_PARAMS drawBusActionParam = { LAYER_BUS, false };
+const DRAW_SEGMENT_EVENT_PARAMS drawBusActionParam = { LAYER_BUS, false, nullptr };
 TOOL_ACTION EE_ACTIONS::drawBus( "eeschema.InteractiveDrawingLineWireBus.drawBuses",
         AS_GLOBAL,
         'B', LEGACY_HK_NAME( "Begin Bus" ),
@@ -737,7 +737,7 @@ TOOL_ACTION EE_ACTIONS::unfoldBus( "eeschema.InteractiveDrawingLineWireBus.unfol
         _( "Unfold from Bus" ), _( "Break a wire out of a bus" ),
                                    BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
-const DRAW_SEGMENT_EVENT_PARAMS drawLinesActionParam = { LAYER_NOTES, false };
+const DRAW_SEGMENT_EVENT_PARAMS drawLinesActionParam = { LAYER_NOTES, false, nullptr };
 TOOL_ACTION EE_ACTIONS::drawLines( "eeschema.InteractiveDrawingLineWireBus.drawLines",
         AS_GLOBAL,
         'I', LEGACY_HK_NAME( "Add Graphic PolyLine" ),
