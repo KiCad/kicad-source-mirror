@@ -2484,17 +2484,20 @@ void EAGLE_PLUGIN::loadClasses( wxXmlNode* aClasses )
     {
         for( std::pair<const wxString&, ECOORD> entry : eClass.clearanceMap )
         {
-            wxString rule;
-            rule.Printf( "(rule \"class %s:%s\"\n"
-                         "  (condition \"A.NetClass == '%s' && B.NetClass == '%s'\")\n"
-                         "  (constraint clearance (min %smm)))\n",
-                         eClass.number,
-                         entry.first,
-                         eClass.name,
-                         m_classMap[ entry.first ]->GetName(),
-                         StringFromValue( EDA_UNITS::MILLIMETRES, entry.second.ToPcbUnits() ) );
+            if( m_classMap[ entry.first ] != nullptr )
+            {
+                wxString rule;
+                rule.Printf( "(rule \"class %s:%s\"\n"
+                             "  (condition \"A.NetClass == '%s' && B.NetClass == '%s'\")\n"
+                             "  (constraint clearance (min %smm)))\n",
+                             eClass.number,
+                             entry.first,
+                             eClass.name,
+                             m_classMap[ entry.first ]->GetName(),
+                             StringFromValue( EDA_UNITS::MILLIMETRES, entry.second.ToPcbUnits() ) );
 
-            m_customRules += "\n" + rule;
+                m_customRules += "\n" + rule;
+            }
         }
     }
 
