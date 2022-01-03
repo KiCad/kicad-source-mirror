@@ -6,6 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/bitmap_button.h"
+#include "widgets/font_choice.h"
 #include "widgets/wx_grid.h"
 
 #include "dialog_label_properties_base.h"
@@ -175,19 +176,23 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	wxStaticBoxSizer* formatting;
 	formatting = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Formatting") ), wxVERTICAL );
 
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 3, 0 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_fontLabel = new wxStaticText( formatting->GetStaticBox(), wxID_ANY, _("Font:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fontLabel->Wrap( -1 );
+	gbSizer1->Add( m_fontLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_fontCtrlChoices[] = { _("Default Font"), _("KiCad Font") };
+	int m_fontCtrlNChoices = sizeof( m_fontCtrlChoices ) / sizeof( wxString );
+	m_fontCtrl = new FONT_CHOICE( formatting->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fontCtrlNChoices, m_fontCtrlChoices, 0 );
+	m_fontCtrl->SetSelection( 0 );
+	gbSizer1->Add( m_fontCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
 	wxBoxSizer* formattingSizer;
 	formattingSizer = new wxBoxSizer( wxHORIZONTAL );
-
-	m_textSizeLabel = new wxStaticText( formatting->GetStaticBox(), wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textSizeLabel->Wrap( -1 );
-	formattingSizer->Add( m_textSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-
-	m_textSizeCtrl = new wxTextCtrl( formatting->GetStaticBox(), wxID_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	formattingSizer->Add( m_textSizeCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_textSizeUnits = new wxStaticText( formatting->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_textSizeUnits->Wrap( -1 );
-	formattingSizer->Add( m_textSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 2 );
 
 	m_separator1 = new BITMAP_BUTTON( formatting->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator1->Enable( false );
@@ -227,7 +232,21 @@ DIALOG_LABEL_PROPERTIES_BASE::DIALOG_LABEL_PROPERTIES_BASE( wxWindow* parent, wx
 	formattingSizer->Add( m_separator3, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	formatting->Add( formattingSizer, 0, wxEXPAND|wxBOTTOM, 5 );
+	gbSizer1->Add( formattingSizer, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	m_textSizeLabel = new wxStaticText( formatting->GetStaticBox(), wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textSizeLabel->Wrap( -1 );
+	gbSizer1->Add( m_textSizeLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_textSizeCtrl = new wxTextCtrl( formatting->GetStaticBox(), wxID_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_textSizeCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), 0, 5 );
+
+	m_textSizeUnits = new wxStaticText( formatting->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textSizeUnits->Wrap( -1 );
+	gbSizer1->Add( m_textSizeUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	formatting->Add( gbSizer1, 1, wxEXPAND, 5 );
 
 
 	optionsSizer->Add( formatting, 1, wxEXPAND|wxTOP, 5 );

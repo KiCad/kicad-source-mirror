@@ -51,7 +51,7 @@ private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    SCH_EDIT_FRAME*       m_Parent;
+    SCH_EDIT_FRAME*       m_frame;
     SCH_TEXT*             m_currentText;
     UNIT_BINDER           m_textSize;
     SCINTILLA_TRICKS*     m_scintillaTricks;

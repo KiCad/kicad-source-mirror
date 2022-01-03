@@ -52,14 +52,17 @@ public:
     virtual void OnSetFocusText( wxFocusEvent& event ) override;
 
 private:
+    void onFontSelected( wxCommandEvent &aEvent ) override;
+    void onBoldToggle( wxCommandEvent &aEvent ) override;
     void onAlignButton( wxCommandEvent &aEvent ) override;
+    void onThickness( wxCommandEvent &aEvent ) override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
     void onMultiLineTCLostFocus( wxFocusEvent& event ) override;
 
 private:
-    PCB_BASE_EDIT_FRAME* m_Parent;
+    PCB_BASE_EDIT_FRAME* m_frame;
     BOARD_ITEM*          m_item;        // FP_TEXT or PCB_TEXT
     EDA_TEXT*            m_edaText;     // always non-null
     FP_TEXT*             m_fpText;      // only non-null for FP_TEXTs
@@ -71,7 +74,6 @@ private:
     UNIT_BINDER          m_posX;
     UNIT_BINDER          m_posY;
     UNIT_BINDER          m_orientation;     // rotation in degrees
-    double               m_OrientValue;
 
     SCINTILLA_TRICKS*    m_scintillaTricks;
 };

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class BITMAP_BUTTON;
+class FONT_CHOICE;
 class PCB_LAYER_BOX_SELECTOR;
 
 #include "dialog_shim.h"
@@ -25,6 +26,7 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include <wx/bmpcbox.h>
+#include <wx/choice.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -52,11 +54,14 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_TextLabel;
 		wxTextCtrl* m_SingleLineText;
 		wxCheckBox* m_cbLocked;
-		wxCheckBox* m_Visible;
-		wxCheckBox* m_KeepUpright;
 		wxStaticText* m_LayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
+		wxCheckBox* m_Visible;
+		wxCheckBox* m_KeepUpright;
+		wxStaticText* m_fontLabel;
+		FONT_CHOICE* m_fontCtrl;
 		BITMAP_BUTTON* m_separator0;
+		BITMAP_BUTTON* m_bold;
 		BITMAP_BUTTON* m_italic;
 		BITMAP_BUTTON* m_separator1;
 		BITMAP_BUTTON* m_alignLeft;
@@ -93,7 +98,10 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSetFocusText( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onFontSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onBoldToggle( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onAlignButton( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onThickness( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

@@ -24,6 +24,7 @@
  */
 
 #include <widgets/bitmap_button.h>
+#include <widgets/font_choice.h>
 #include <sch_edit_frame.h>
 #include <base_units.h>
 #include <sch_validators.h>
@@ -39,6 +40,7 @@
 #include <project/net_settings.h>
 #include <project/project_file.h>
 #include <kiface_base.h>
+
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
@@ -293,6 +295,8 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
         }
     }
 
+    m_fontCtrl->SetFontSelection( m_currentLabel->GetFont() );
+
     if( m_currentLabel->Type() == SCH_NETCLASS_FLAG_T )
         m_textSize.SetValue( static_cast<SCH_NETCLASS_FLAG*>( m_currentLabel )->GetPinLength() );
     else
@@ -436,6 +440,12 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
             m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_DIAMOND );
         else if( m_rectangle->GetValue() )
             m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_RECTANGLE );
+    }
+
+    if( m_fontCtrl->HaveFontSelection() )
+    {
+        m_currentLabel->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
+                                                               m_italic->IsChecked() ) );
     }
 
     if( m_currentLabel->Type() == SCH_NETCLASS_FLAG_T )

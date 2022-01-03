@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class BITMAP_BUTTON;
+class FONT_CHOICE;
 class PCB_LAYER_BOX_SELECTOR;
 
 #include "dialog_shim.h"
@@ -26,8 +28,12 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
-#include <wx/combobox.h>
+#include <wx/bmpbuttn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/combobox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -72,6 +78,18 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblPreview;
 		wxStaticText* m_staticTextPreview;
 		wxStaticBoxSizer* m_sizerText;
+		wxStaticText* m_fontLabel;
+		FONT_CHOICE* m_fontCtrl;
+		BITMAP_BUTTON* m_separator0;
+		BITMAP_BUTTON* m_bold;
+		BITMAP_BUTTON* m_italic;
+		BITMAP_BUTTON* m_separator1;
+		BITMAP_BUTTON* m_alignLeft;
+		BITMAP_BUTTON* m_alignCenter;
+		BITMAP_BUTTON* m_alignRight;
+		BITMAP_BUTTON* m_separator2;
+		BITMAP_BUTTON* m_mirrored;
+		BITMAP_BUTTON* m_separator3;
 		wxStaticText* m_lblTextWidth;
 		wxTextCtrl* m_txtTextWidth;
 		wxStaticText* m_lblTextWidthUnits;
@@ -89,13 +107,9 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblTextThicknessUnits;
 		wxStaticText* m_lblTextOrientation;
 		wxComboBox* m_cbTextOrientation;
-		wxCheckBox* m_cbItalic;
-		wxCheckBox* m_cbKeepAligned;
-		wxCheckBox* m_cbMirrored;
-		wxStaticText* m_lblJustification;
-		wxChoice* m_cbJustification;
 		wxStaticText* m_lblTextPositionMode;
 		wxChoice* m_cbTextPositionMode;
+		wxCheckBox* m_cbKeepAligned;
 		wxStaticText* m_lblLineThickness;
 		wxTextCtrl* m_txtLineThickness;
 		wxStaticText* m_lblLineThicknessUnits;
@@ -109,16 +123,19 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, override them in your derived class
+		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnDimensionUnitsChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onFontSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onBoldToggle( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onAlignButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onThickness( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
 		DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dimension Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
-
 		~DIALOG_DIMENSION_PROPERTIES_BASE();
 
 };

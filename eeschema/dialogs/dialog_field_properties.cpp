@@ -24,6 +24,7 @@
  */
 
 #include <widgets/bitmap_button.h>
+#include <widgets/font_choice.h>
 #include <bitmaps.h>
 #include <kiway.h>
 #include <confirm.h>
@@ -293,6 +294,8 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
     else if( m_StyledTextCtrl->IsShown() )
         m_StyledTextCtrl->SetValue( m_text );
 
+    m_fontCtrl->SetFontSelection( m_font );
+
     m_posX.SetValue( m_position.x );
     m_posY.SetValue( m_position.y );
     m_textSize.SetValue( m_size );
@@ -362,6 +365,9 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
 
     m_position = wxPoint( m_posX.GetValue(), m_posY.GetValue() );
     m_size = m_textSize.GetValue();
+
+    if( m_fontCtrl->HaveFontSelection() )
+        m_font = m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() );
 
     m_isVertical = m_vertical->IsChecked();
 
@@ -474,6 +480,8 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
     // show text variable cross-references in a human-readable format
     m_text = aField->Schematic()->ConvertKIIDsToRefs( aField->GetText() );
 
+    m_font = m_field->GetFont();
+
     m_isPower = false;
 
     m_textLabel->SetLabel( m_field->GetName() + ":" );
@@ -496,8 +504,8 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
             m_isPower = true;
     }
 
-    m_StyledTextCtrl->Bind( wxEVT_STC_CHARADDED,
-                            &DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded, this );
+    m_StyledTextCtrl->Bind( wxEVT_STC_CHARADDED, &DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded,
+                            this );
 
     init();
 
@@ -617,8 +625,6 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
             symbol->SetFootprint( m_text );
     }
 
-    GR_TEXT_H_ALIGN_T hJustify = EDA_TEXT::MapHorizJustify( m_horizontalJustification );
-    GR_TEXT_V_ALIGN_T vJustify = EDA_TEXT::MapVertJustify( m_verticalJustification );
     bool positioningModified = false;
 
     if( aField->GetPosition() != m_position )
@@ -627,10 +633,10 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
     if( aField->GetTextAngle().IsVertical() != m_isVertical )
         positioningModified = true;
 
-    if( aField->GetEffectiveHorizJustify() != hJustify )
+    if( aField->GetEffectiveHorizJustify() != m_horizontalJustification )
         positioningModified = true;
 
-    if( aField->GetEffectiveVertJustify() != vJustify )
+    if( aField->GetEffectiveVertJustify() != m_verticalJustification )
         positioningModified = true;
 
     // convert any text variable cross-references to their UUIDs
@@ -640,17 +646,19 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
     updateText( aField );
     aField->SetPosition( m_position );
 
+    aField->SetFont( m_font );
+
     // Note that we must set justifications before we can ask if they're flipped.  If the old
     // justification is center then it won't know (whereas if the new justification is center
     // the we don't care).
-    aField->SetHorizJustify( hJustify );
-    aField->SetVertJustify( vJustify );
+    aField->SetHorizJustify( m_horizontalJustification );
+    aField->SetVertJustify( m_verticalJustification );
 
     if( aField->IsHorizJustifyFlipped() )
-        aField->SetHorizJustify( EDA_TEXT::MapHorizJustify( -hJustify ) );
+        aField->SetHorizJustify( EDA_TEXT::MapHorizJustify( -m_horizontalJustification ) );
 
     if( aField->IsVertJustifyFlipped() )
-        aField->SetVertJustify( EDA_TEXT::MapVertJustify( -vJustify ) );
+        aField->SetVertJustify( EDA_TEXT::MapVertJustify( -m_verticalJustification ) );
 
     // The value, footprint and datasheet fields should be kept in sync in multi-unit parts.
     // Of course the symbol must be annotated to collect other units.

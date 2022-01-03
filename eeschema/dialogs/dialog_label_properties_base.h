@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class BITMAP_BUTTON;
+class FONT_CHOICE;
 class WX_GRID;
 
 #include "dialog_shim.h"
@@ -32,6 +33,8 @@ class WX_GRID;
 #include <wx/button.h>
 #include <wx/statbox.h>
 #include <wx/radiobut.h>
+#include <wx/choice.h>
+#include <wx/gbsizer.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -71,9 +74,8 @@ class DIALOG_LABEL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxRadioButton* m_circle;
 		wxRadioButton* m_diamond;
 		wxRadioButton* m_rectangle;
-		wxStaticText* m_textSizeLabel;
-		wxTextCtrl* m_textSizeCtrl;
-		wxStaticText* m_textSizeUnits;
+		wxStaticText* m_fontLabel;
+		FONT_CHOICE* m_fontCtrl;
 		BITMAP_BUTTON* m_separator1;
 		BITMAP_BUTTON* m_bold;
 		BITMAP_BUTTON* m_italic;
@@ -83,6 +85,9 @@ class DIALOG_LABEL_PROPERTIES_BASE : public DIALOG_SHIM
 		BITMAP_BUTTON* m_spin2;
 		BITMAP_BUTTON* m_spin3;
 		BITMAP_BUTTON* m_separator3;
+		wxStaticText* m_textSizeLabel;
+		wxTextCtrl* m_textSizeCtrl;
+		wxStaticText* m_textSizeUnits;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

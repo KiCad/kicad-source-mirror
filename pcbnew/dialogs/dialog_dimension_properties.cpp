@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <widgets/bitmap_button.h>
+#include <widgets/font_choice.h>
 #include <board.h>
 #include <board_commit.h>
 #include <pcb_dimension.h>
@@ -41,7 +43,7 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_textThickness( aParent, m_lblTextThickness, m_txtTextThickness, m_lblTextThicknessUnits ),
         m_textPosX( aParent, m_lblTextPosX, m_txtTextPosX, m_lblTextPosXUnits ),
         m_textPosY( aParent, m_lblTextPosY, m_txtTextPosY, m_lblTextPosYUnits ),
-        m_orientValidator( 1, &m_orientValue ),
+        m_orientation( aParent, m_lblTextOrientation, m_cbTextOrientation, nullptr ),
         m_lineThickness( aParent, m_lblLineThickness, m_txtLineThickness, m_lblLineThicknessUnits ),
         m_arrowLength( aParent, m_lblArrowLength, m_txtArrowLength, m_lblArrowLengthUnits ),
         m_extensionOffset( aParent, m_lblExtensionOffset, m_txtExtensionOffset, m_lblExtensionOffsetUnits )
@@ -90,6 +92,29 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         break;
     }
 
+    m_separator0->SetIsSeparator();
+
+    m_bold->SetIsCheckButton();
+    m_bold->SetBitmap( KiBitmap( BITMAPS::text_bold ) );
+    m_italic->SetIsCheckButton();
+    m_italic->SetBitmap( KiBitmap( BITMAPS::text_italic ) );
+
+    m_separator1->SetIsSeparator();
+
+    m_alignLeft->SetIsCheckButton();
+    m_alignLeft->SetBitmap( KiBitmap( BITMAPS::text_align_left ) );
+    m_alignCenter->SetIsCheckButton();
+    m_alignCenter->SetBitmap( KiBitmap( BITMAPS::text_align_center ) );
+    m_alignRight->SetIsCheckButton();
+    m_alignRight->SetBitmap( KiBitmap( BITMAPS::text_align_right ) );
+
+    m_separator2->SetIsSeparator();
+
+    m_mirrored->SetIsCheckButton();
+    m_mirrored->SetBitmap( KiBitmap( BITMAPS::text_mirrored ) );
+
+    m_separator3->SetIsSeparator();
+
     // Fix the size after hiding/showing some of the properties
     Layout();
 
@@ -106,18 +131,15 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     m_cbLayerActual->SetBoardFrame( aParent );
     m_cbLayerActual->Resync();
 
-    m_orientValue = 0.0;
-    m_orientValidator.SetRange( -360.0, 360.0 );
-    m_cbTextOrientation->SetValidator( m_orientValidator );
-    m_orientValidator.SetWindow( m_cbTextOrientation );
+    m_orientation.SetUnits( EDA_UNITS::DEGREES );
+    m_orientation.SetPrecision( 3 );
 
-    // Handle decimal separators in combo dropdown
-    for( size_t i = 0; i < m_cbTextOrientation->GetCount(); ++i )
-    {
-        wxString item = m_cbTextOrientation->GetString( i );
-        item.Replace( '.', localeconv()->decimal_point[0] );
-        m_cbTextOrientation->SetString( i, item );
-    }
+    // Set predefined rotations in combo dropdown, according to the locale floating point
+    // separator notation
+    double rot_list[] = { 0.0, 90.0, -90.0, 180.0 };
+
+    for( size_t ii = 0; ii < m_cbTextOrientation->GetCount() && ii < 4; ++ii )
+        m_cbTextOrientation->SetString( ii, wxString::Format( "%.1f", rot_list[ii] ) );
 
     m_cbOverrideValue->Bind( wxEVT_CHECKBOX,
             [&]( wxCommandEvent& evt )
@@ -207,6 +229,8 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     PCB_TEXT& text = m_dimension->Text();
 
+    m_fontCtrl->SetFontSelection( text.GetFont() );
+
     m_textWidth.SetValue( text.GetTextSize().x );
     m_textHeight.SetValue( text.GetTextSize().y );
     m_textThickness.SetValue( text.GetTextThickness() );
@@ -221,16 +245,19 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
         m_txtTextPosY->Disable();
     }
 
-    m_orientValue = text.GetTextAngle().AsDegrees();
-    m_cbKeepAligned->SetValue( m_dimension->GetKeepTextAligned() );
-    m_cbTextOrientation->Enable( !m_dimension->GetKeepTextAligned() );
+    m_orientation.SetDoubleValue( text.GetTextAngle().AsTenthsOfADegree() );
 
-    m_orientValidator.TransferToWindow();
+    m_bold->Check( text.IsBold() );
+    m_italic->Check( text.IsItalic() );
 
-    m_cbItalic->SetValue( text.IsItalic() );
-    m_cbMirrored->SetValue( text.IsMirrored() );
-    GR_TEXT_H_ALIGN_T hJustify = text.GetHorizJustify();
-    m_cbJustification->SetSelection( (int) hJustify + 1 );
+    switch ( text.GetHorizJustify() )
+    {
+    case GR_TEXT_H_ALIGN_LEFT:   m_alignLeft->Check( true );   break;
+    case GR_TEXT_H_ALIGN_CENTER: m_alignCenter->Check( true ); break;
+    case GR_TEXT_H_ALIGN_RIGHT:  m_alignRight->Check( true );  break;
+    }
+
+    m_mirrored->Check( text.IsMirrored() );
 
     m_lineThickness.SetValue( m_dimension->GetLineThickness() );
     m_arrowLength.SetValue( m_dimension->GetArrowLength() );
@@ -285,11 +312,61 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataFromWindow()
 }
 
 
+void DIALOG_DIMENSION_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
+{
+    if( KIFONT::FONT::IsStroke( aEvent.GetString() ) )
+    {
+        m_textThickness.Show( true );
+
+        int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+        int thickness = m_textThickness.GetValue();
+
+        m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
+                        < abs( thickness - GetPenSizeForNormal( textSize ) ) );
+    }
+    else
+    {
+        m_textThickness.Show( false );
+    }
+}
+
+
+void DIALOG_DIMENSION_PROPERTIES::onBoldToggle( wxCommandEvent & aEvent )
+{
+    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+
+    if( aEvent.IsChecked() )
+        m_textThickness.ChangeValue( GetPenSizeForBold( textSize ) );
+    else
+        m_textThickness.ChangeValue( GetPenSizeForNormal( textSize ) );
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_DIMENSION_PROPERTIES::onAlignButton( wxCommandEvent& aEvent )
+{
+    for( BITMAP_BUTTON* btn : { m_alignLeft, m_alignCenter, m_alignRight } )
+    {
+        if( btn->IsChecked() && btn != aEvent.GetEventObject() )
+            btn->Check( false );
+    }
+}
+
+
+void DIALOG_DIMENSION_PROPERTIES::onThickness( wxCommandEvent& event )
+{
+    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+    int thickness = m_textThickness.GetValue();
+
+    m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
+                    < abs( thickness - GetPenSizeForNormal( textSize ) ) );
+}
+
+
 void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE* aTarget )
 {
     BOARD* board = m_frame->GetBoard();
-
-    m_orientValidator.TransferFromWindow();
 
     aTarget->SetOverrideTextEnabled( m_cbOverrideValue->GetValue() );
 
@@ -340,13 +417,22 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
 
     aTarget->SetKeepTextAligned( m_cbKeepAligned->GetValue() );
 
-    text.SetTextAngle( KiROUND( m_orientValue * 10.0 ) );
+    text.SetTextAngle( m_orientation.GetDoubleValue() );
     text.SetTextWidth( m_textWidth.GetValue() );
     text.SetTextHeight( m_textHeight.GetValue() );
     text.SetTextThickness( m_textThickness.GetValue() );
-    text.SetItalic( m_cbItalic->GetValue() );
-    text.SetMirrored( m_cbMirrored->GetValue() );
-    text.SetHorizJustify( TO_HJUSTIFY( m_cbJustification->GetSelection() - 1 ) );
+
+    text.SetBold( m_bold->IsChecked() );
+    text.SetItalic( m_italic->IsChecked() );
+
+    if( m_alignLeft->IsChecked() )
+        text.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+    else if( m_alignCenter->IsChecked() )
+        text.SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+    else
+        text.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+
+    text.SetMirrored( m_mirrored->IsChecked() );
 
     aTarget->SetLineThickness( m_lineThickness.GetValue() );
     aTarget->SetArrowLength( m_arrowLength.GetValue() );

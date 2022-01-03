@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2020 Ian McInerney <ian.s.mcinerney at ieee dot org>
- * Copyright (C) 2020-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -168,17 +168,28 @@ void BITMAP_BUTTON::OnLeftButtonDown( wxMouseEvent& aEvent )
         if( hasFlag( wxCONTROL_CHECKED ) )
         {
             clearFlag( wxCONTROL_CHECKED );
+
+            GetEventHandler()->CallAfter(
+                    [=]()
+                    {
+                        wxCommandEvent evt( wxEVT_BUTTON, GetId() );
+                        evt.SetEventObject( this );
+                        evt.SetInt( 0 );
+                        GetEventHandler()->ProcessEvent( evt );
+                    } );
         }
         else
         {
             setFlag( wxCONTROL_CHECKED );
 
-            GetEventHandler()->CallAfter( [=]()
-                                          {
-                                              wxCommandEvent evt( wxEVT_BUTTON, GetId() );
-                                              evt.SetEventObject( this );
-                                              GetEventHandler()->ProcessEvent( evt );
-                                          } );
+            GetEventHandler()->CallAfter(
+                    [=]()
+                    {
+                        wxCommandEvent evt( wxEVT_BUTTON, GetId() );
+                        evt.SetEventObject( this );
+                        evt.SetInt( 1 );
+                        GetEventHandler()->ProcessEvent( evt );
+                    } );
         }
     }
     else

@@ -211,6 +211,7 @@ set( COMMON_WIDGET_SRCS
     widgets/button_row_panel.cpp
     widgets/collapsible_pane.cpp
     widgets/color_swatch.cpp
+    widgets/font_choice.cpp
     widgets/footprint_choice.cpp
     widgets/footprint_preview_widget.cpp
     widgets/footprint_select_widget.cpp

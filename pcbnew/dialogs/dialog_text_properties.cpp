@@ -23,6 +23,7 @@
  */
 
 #include <widgets/bitmap_button.h>
+#include <widgets/font_choice.h>
 #include <dialog_text_properties.h>
 #include <confirm.h>
 #include <widgets/unit_binder.h>
@@ -41,18 +42,18 @@
 
 
 DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem ) :
-    DIALOG_TEXT_PROPERTIES_BASE( aParent ),
-    m_Parent( aParent ),
-    m_item( aItem ),
-    m_edaText( nullptr ),
-    m_fpText( nullptr ),
-    m_pcbText( nullptr ),
-    m_textWidth( aParent, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits ),
-    m_textHeight( aParent, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits ),
-    m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits ),
-    m_posX( aParent, m_PositionXLabel, m_PositionXCtrl, m_PositionXUnits ),
-    m_posY( aParent, m_PositionYLabel, m_PositionYCtrl, m_PositionYUnits ),
-    m_orientation( aParent, m_OrientLabel, m_OrientCtrl, nullptr )
+        DIALOG_TEXT_PROPERTIES_BASE( aParent ),
+        m_frame( aParent ),
+        m_item( aItem ),
+        m_edaText( nullptr ),
+        m_fpText( nullptr ),
+        m_pcbText( nullptr ),
+        m_textWidth( aParent, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits ),
+        m_textHeight( aParent, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits ),
+        m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits ),
+        m_posX( aParent, m_PositionXLabel, m_PositionXCtrl, m_PositionXUnits ),
+        m_posY( aParent, m_PositionYLabel, m_PositionYCtrl, m_PositionYUnits ),
+        m_orientation( aParent, m_OrientLabel, m_OrientCtrl, nullptr )
 {
     wxString title;
 
@@ -118,6 +119,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
     m_separator0->SetIsSeparator();
 
+    m_bold->SetIsCheckButton();
+    m_bold->SetBitmap( KiBitmap( BITMAPS::text_bold ) );
     m_italic->SetIsCheckButton();
     m_italic->SetBitmap( KiBitmap( BITMAPS::text_italic ) );
 
@@ -142,14 +145,13 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
     // Configure the layers list selector.  Note that footprints are built outside the current
     // board and so we may need to show all layers if the text is on an unactivated layer.
-    if( !m_Parent->GetBoard()->IsLayerEnabled( m_item->GetLayer() ) )
+    if( !m_frame->GetBoard()->IsLayerEnabled( m_item->GetLayer() ) )
         m_LayerSelectionCtrl->ShowNonActivatedLayers( true );
 
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
-    m_LayerSelectionCtrl->SetBoardFrame( m_Parent );
+    m_LayerSelectionCtrl->SetBoardFrame( m_frame );
     m_LayerSelectionCtrl->Resync();
 
-    m_OrientValue = 0.0;
     m_orientation.SetUnits( EDA_UNITS::DEGREES );
     m_orientation.SetPrecision( 3 );
 
@@ -225,7 +227,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     }
     else if( m_MultiLineText->IsShown() )
     {
-        BOARD*   board = m_Parent->GetBoard();
+        BOARD*   board = m_frame->GetBoard();
         wxString converted = board->ConvertKIIDsToCrossReferences(
                 UnescapeString( m_edaText->GetText() ) );
 
@@ -258,6 +260,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
 
+    m_fontCtrl->SetFontSelection( m_edaText->GetFont() );
+
     m_textWidth.SetValue( m_edaText->GetTextSize().x );
     m_textHeight.SetValue( m_edaText->GetTextSize().y );
     m_thickness.SetValue( m_edaText->GetTextThickness() );
@@ -269,6 +273,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     if( m_fpText )
         m_KeepUpright->SetValue( m_fpText->IsKeepUpright() );
 
+    m_bold->Check( m_edaText->IsBold() );
     m_italic->Check( m_edaText->IsItalic() );
 
     switch ( m_edaText->GetHorizJustify() )
@@ -280,10 +285,41 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     m_mirrored->Check( m_edaText->IsMirrored() );
 
-    m_OrientValue = m_edaText->GetTextAngle().AsTenthsOfADegree();
-    m_orientation.SetDoubleValue( m_OrientValue );
+    m_orientation.SetDoubleValue( m_edaText->GetTextAngle().AsTenthsOfADegree() );
 
     return DIALOG_TEXT_PROPERTIES_BASE::TransferDataToWindow();
+}
+
+
+void DIALOG_TEXT_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
+{
+    if( KIFONT::FONT::IsStroke( aEvent.GetString() ) )
+    {
+        m_thickness.Show( true );
+
+        int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+        int thickness = m_thickness.GetValue();
+
+        m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
+                        < abs( thickness - GetPenSizeForNormal( textSize ) ) );
+    }
+    else
+    {
+        m_thickness.Show( false );
+    }
+}
+
+
+void DIALOG_TEXT_PROPERTIES::onBoldToggle( wxCommandEvent & aEvent )
+{
+    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+
+    if( aEvent.IsChecked() )
+        m_thickness.ChangeValue( GetPenSizeForBold( textSize ) );
+    else
+        m_thickness.ChangeValue( GetPenSizeForNormal( textSize ) );
+
+    aEvent.Skip();
 }
 
 
@@ -294,6 +330,16 @@ void DIALOG_TEXT_PROPERTIES::onAlignButton( wxCommandEvent& aEvent )
         if( btn->IsChecked() && btn != aEvent.GetEventObject() )
             btn->Check( false );
     }
+}
+
+
+void DIALOG_TEXT_PROPERTIES::onThickness( wxCommandEvent& event )
+{
+    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+    int thickness = m_thickness.GetValue();
+
+    m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
+                    < abs( thickness - GetPenSizeForNormal( textSize ) ) );
 }
 
 
@@ -308,7 +354,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         return false;
     }
 
-    BOARD_COMMIT commit( m_Parent );
+    BOARD_COMMIT commit( m_frame );
     commit.Modify( m_item );
 
     // If no other command in progress, prepare undo command
@@ -330,7 +376,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     {
         if( !m_MultiLineText->GetValue().IsEmpty() )
         {
-            BOARD*   board = m_Parent->GetBoard();
+            BOARD*   board = m_frame->GetBoard();
             wxString txt = board->ConvertCrossReferencesToKIIDs( m_MultiLineText->GetValue() );
 
 #ifdef __WXMAC__
@@ -350,6 +396,12 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     m_item->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
 
+    if( m_fontCtrl->HaveFontSelection() )
+    {
+        m_edaText->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
+                                                          m_italic->IsChecked() ) );
+    }
+
     m_edaText->SetTextSize( wxSize( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
     m_edaText->SetTextThickness( m_thickness.GetValue() );
     m_edaText->SetTextPos( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
@@ -367,15 +419,16 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         m_edaText->SetTextThickness( maxPenWidth );
     }
 
-    m_OrientValue = m_orientation.GetDoubleValue();
-    m_edaText->SetTextAngle( m_OrientValue );
+    m_edaText->SetTextAngle( m_orientation.GetDoubleValue() );
 
     m_edaText->SetVisible( m_Visible->GetValue() );
 
     if( m_fpText )
         m_fpText->SetKeepUpright( m_KeepUpright->GetValue() );
 
+    m_edaText->SetBold( m_bold->IsChecked() );
     m_edaText->SetItalic( m_italic->IsChecked() );
+
     if( m_alignLeft->IsChecked() )
         m_edaText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     else if( m_alignCenter->IsChecked() )

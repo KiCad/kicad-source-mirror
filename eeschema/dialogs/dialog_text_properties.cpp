@@ -25,6 +25,7 @@
 
 #include <sch_edit_frame.h>
 #include <widgets/bitmap_button.h>
+#include <widgets/font_choice.h>
 #include <base_units.h>
 #include <tool/tool_manager.h>
 #include <general.h>
@@ -46,7 +47,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_TEX
         m_scintillaTricks( nullptr ),
         m_helpWindow( nullptr )
 {
-    m_Parent = aParent;
+    m_frame = aParent;
     m_currentText = aTextItem;
 
     m_textCtrl->SetEOLMode( wxSTC_EOL_LF );
@@ -109,11 +110,12 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    SCHEMATIC& schematic = m_Parent->Schematic();
+    SCHEMATIC& schematic = m_frame->Schematic();
 
     // show text variable cross-references in a human-readable format
     m_textCtrl->SetValue( schematic.ConvertKIIDsToRefs( m_currentText->GetText() ) );
 
+    m_fontCtrl->SetFontSelection( m_currentText->GetFont() );
     m_textSize.SetValue( m_currentText->GetTextWidth() );
 
     m_bold->Check( m_currentText->IsBold() );
@@ -155,7 +157,7 @@ void DIALOG_TEXT_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             partial = te->GetRange( start+1, text_pos );
 
             wxString           ref = te->GetRange( refStart, start-1 );
-            SCH_SHEET_LIST     sheets = m_Parent->Schematic().GetSheets();
+            SCH_SHEET_LIST     sheets = m_frame->Schematic().GetSheets();
             SCH_REFERENCE_LIST refs;
             SCH_SYMBOL*        refSymbol = nullptr;
 
@@ -216,14 +218,14 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     /* save old text in undo list if not already in edit */
     if( m_currentText->GetEditFlags() == 0 )
     {
-        m_Parent->SaveCopyInUndoList( m_Parent->GetScreen(), m_currentText, UNDO_REDO::CHANGED,
-                                      false );
+        m_frame->SaveCopyInUndoList( m_frame->GetScreen(), m_currentText, UNDO_REDO::CHANGED,
+                                     false );
     }
 
-    m_Parent->GetCanvas()->Refresh();
+    m_frame->GetCanvas()->Refresh();
 
     // convert any text variable cross-references to their UUIDs
-    text = m_Parent->Schematic().ConvertRefsToKIIDs( m_textCtrl->GetValue() );
+    text = m_frame->Schematic().ConvertRefsToKIIDs( m_textCtrl->GetValue() );
 
     if( !text.IsEmpty() )
     {
@@ -242,6 +244,12 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     if( m_currentText->GetTextWidth() != m_textSize.GetValue() )
         m_currentText->SetTextSize( wxSize( m_textSize.GetValue(), m_textSize.GetValue() ) );
+
+    if( m_fontCtrl->HaveFontSelection() )
+    {
+        m_currentText->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
+                                                              m_italic->IsChecked() ) );
+    }
 
     if( m_bold->IsChecked() != m_currentText->IsBold() )
     {
@@ -273,9 +281,9 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( m_currentText->GetLabelSpinStyle() != selectedSpinStyle )
         m_currentText->SetLabelSpinStyle( selectedSpinStyle );
 
-    m_Parent->UpdateItem( m_currentText, false, true );
-    m_Parent->GetCanvas()->Refresh();
-    m_Parent->OnModify();
+    m_frame->UpdateItem( m_currentText, false, true );
+    m_frame->GetCanvas()->Refresh();
+    m_frame->OnModify();
 
     return true;
 }

@@ -23,6 +23,7 @@
  */
 
 #include <widgets/bitmap_button.h>
+#include <widgets/font_choice.h>
 #include <symbol_edit_frame.h>
 #include <lib_text.h>
 #include <settings/settings_manager.h>
@@ -132,6 +133,8 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
         m_textSize.SetValue( m_graphicText->GetTextWidth() );
         m_TextCtrl->SetValue( m_graphicText->GetText() );
 
+        m_fontCtrl->SetFontSelection( m_graphicText->GetFont() );
+
         m_italic->Check( m_graphicText->IsItalic() );
         m_bold->Check( m_graphicText->IsBold() );
         m_CommonUnit->SetValue( m_graphicText->GetUnit() == 0 );
@@ -214,6 +217,12 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
             m_graphicText->SetText( wxT( "[null]" ) );
         else
             m_graphicText->SetText( m_TextCtrl->GetValue() );
+
+        if( m_fontCtrl->HaveFontSelection() )
+        {
+            m_graphicText->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
+                                                                  m_italic->IsChecked() ) );
+        }
 
         m_graphicText->SetPosition( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
 

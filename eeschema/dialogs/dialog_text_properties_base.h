@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class BITMAP_BUTTON;
+class FONT_CHOICE;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -20,14 +21,16 @@ class BITMAP_BUTTON;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/stc/stc.h>
-#include <wx/textctrl.h>
+#include <wx/choice.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/hyperlink.h>
 #include <wx/sizer.h>
+#include <wx/hyperlink.h>
+#include <wx/textctrl.h>
+#include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
@@ -46,12 +49,11 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 			wxID_SIZE = 1000
 		};
 
-		wxFlexGridSizer* m_textEntrySizer;
+		wxGridBagSizer* m_textEntrySizer;
 		wxStaticText* m_textLabel;
 		wxStyledTextCtrl* m_textCtrl;
-		wxStaticText* m_textSizeLabel;
-		wxTextCtrl* m_textSizeCtrl;
-		wxStaticText* m_textSizeUnits;
+		wxStaticText* m_fontLabel;
+		FONT_CHOICE* m_fontCtrl;
 		BITMAP_BUTTON* m_separator1;
 		BITMAP_BUTTON* m_bold;
 		BITMAP_BUTTON* m_italic;
@@ -62,6 +64,9 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		BITMAP_BUTTON* m_spin3;
 		BITMAP_BUTTON* m_separator3;
 		wxHyperlinkCtrl* m_syntaxHelp;
+		wxStaticText* m_textSizeLabel;
+		wxTextCtrl* m_textSizeCtrl;
+		wxStaticText* m_textSizeUnits;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;

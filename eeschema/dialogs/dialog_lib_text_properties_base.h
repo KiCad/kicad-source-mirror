@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class BITMAP_BUTTON;
+class FONT_CHOICE;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -28,6 +29,8 @@ class BITMAP_BUTTON;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/choice.h>
+#include <wx/gbsizer.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
@@ -47,9 +50,8 @@ class DIALOG_LIB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_TextValueSelectButton;
 		wxStaticText* m_note;
 		wxCheckBox* m_visible;
-		wxStaticText* m_textSizeLabel;
-		wxTextCtrl* m_textSizeCtrl;
-		wxStaticText* m_textSizeUnits;
+		wxStaticText* m_fontLabel;
+		FONT_CHOICE* m_fontCtrl;
 		BITMAP_BUTTON* m_separator1;
 		BITMAP_BUTTON* m_horizontal;
 		BITMAP_BUTTON* m_vertical;
@@ -65,13 +67,16 @@ class DIALOG_LIB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		BITMAP_BUTTON* m_vAlignCenter;
 		BITMAP_BUTTON* m_vAlignBottom;
 		BITMAP_BUTTON* m_separator5;
+		wxStaticText* m_textSizeLabel;
+		wxTextCtrl* m_textSizeCtrl;
+		wxStaticText* m_textSizeUnits;
 		wxStaticText* m_xPosLabel;
 		wxTextCtrl* m_xPosCtrl;
 		wxStaticText* m_xPosUnits;
-		wxCheckBox* m_CommonUnit;
 		wxStaticText* m_yPosLabel;
 		wxTextCtrl* m_yPosCtrl;
 		wxStaticText* m_yPosUnits;
+		wxCheckBox* m_CommonUnit;
 		wxCheckBox* m_CommonConvert;
 		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;

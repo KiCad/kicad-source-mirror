@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -45,7 +45,16 @@ protected:
     bool TransferDataFromWindow() override;
 
 private:
+    void onFontSelected( wxCommandEvent &aEvent ) override;
+    void onBoldToggle( wxCommandEvent &aEvent ) override;
+    void onAlignButton( wxCommandEvent &aEvent ) override;
+    void onThickness( wxCommandEvent &aEvent ) override;
 
+    void updateDimensionFromDialog( PCB_DIMENSION_BASE* aTarget );
+
+    void updatePreviewText();
+
+private:
     PCB_BASE_EDIT_FRAME*    m_frame;
 
     PCB_DIMENSION_BASE*     m_dimension;
@@ -54,22 +63,15 @@ private:
     PCB_LAYER_BOX_SELECTOR* m_cbLayerActual;       // The active layer box control
     wxTextCtrl*             m_txtValueActual;      // The active value control
 
-    UNIT_BINDER m_textWidth;
-    UNIT_BINDER m_textHeight;
-    UNIT_BINDER m_textThickness;
-    UNIT_BINDER m_textPosX;
-    UNIT_BINDER m_textPosY;
-
-    wxFloatingPointValidator<double> m_orientValidator;
-    double                           m_orientValue;
-
-    UNIT_BINDER m_lineThickness;
-    UNIT_BINDER m_arrowLength;
-    UNIT_BINDER m_extensionOffset;
-
-    void updateDimensionFromDialog( PCB_DIMENSION_BASE* aTarget );
-
-    void updatePreviewText();
+    UNIT_BINDER             m_textWidth;
+    UNIT_BINDER             m_textHeight;
+    UNIT_BINDER             m_textThickness;
+    UNIT_BINDER             m_textPosX;
+    UNIT_BINDER             m_textPosY;
+    UNIT_BINDER             m_orientation;         // rotation in degrees
+    UNIT_BINDER             m_lineThickness;
+    UNIT_BINDER             m_arrowLength;
+    UNIT_BINDER             m_extensionOffset;
 };
 
 

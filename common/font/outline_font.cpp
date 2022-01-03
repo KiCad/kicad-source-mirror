@@ -402,7 +402,7 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBoundingBox,
                 VECTOR2D ptC( pt.x + cursor.x, pt.y + cursor.y );
                 wxPoint  scaledPtOrig( -ptC.x * scaleFactor.x, -ptC.y * scaleFactor.y );
                 wxPoint  scaledPt( scaledPtOrig );
-                RotatePoint( &scaledPt, aOrientation.AsRadians() );
+                RotatePoint( &scaledPt.x, &scaledPt.y, aOrientation.AsTenthsOfADegree() );
                 scaledPt.x += offset.x;
                 scaledPt.y += offset.y;
 
