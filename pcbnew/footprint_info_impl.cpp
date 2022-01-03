@@ -288,9 +288,29 @@ bool FOOTPRINT_LIST_IMPL::joinWorkers()
 
                 for( unsigned jj = 0; jj < fpnames.size() && !m_cancelled; ++jj )
                 {
-                    wxString fpname = fpnames[jj];
-                    FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname );
-                    queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
+                    try
+                    {
+                        wxString fpname = fpnames[jj];
+                        FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname );
+                        queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
+                    }
+                    catch( const IO_ERROR& ioe )
+                    {
+                        m_errors.move_push( std::make_unique<IO_ERROR>( ioe ) );
+                    }
+                    catch( const std::exception& se )
+                    {
+                        // This is a round about way to do this, but who knows what THROW_IO_ERROR()
+                        // may be tricked out to do someday, keep it in the game.
+                        try
+                        {
+                            THROW_IO_ERROR( se.what() );
+                        }
+                        catch( const IO_ERROR& ioe )
+                        {
+                            m_errors.move_push( std::make_unique<IO_ERROR>( ioe ) );
+                        }
+                    }
                 }
 
                 if( m_progress_reporter )
