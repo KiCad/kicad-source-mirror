@@ -549,7 +549,15 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
             if( aCfg->Read( key, &value ) )
             {
                 std::string key_utf( key.ToUTF8() );
-                js[JSON_SETTINGS_INTERNALS::PointerFromString( key_utf )] = value;
+
+                try
+                {
+                    js[key_utf] = value;
+                }
+                catch(...)
+                {
+                    continue;
+                }
             }
         }
 
@@ -562,7 +570,15 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
             if( aCfg->Read( key, &value ) )
             {
                 std::string key_utf( key.ToUTF8() );
-                js[JSON_SETTINGS_INTERNALS::PointerFromString( key_utf )] = value;
+
+                try
+                {
+                    js[key_utf] = value;
+                }
+                catch(...)
+                {
+                    continue;
+                }
             }
         }
 
