@@ -97,6 +97,11 @@ private:
     std::vector<ZONE*>         m_copperZones;
 
     std::map< std::tuple<BOARD_ITEM*, BOARD_ITEM*, PCB_LAYER_ID>, int> m_checkedPairs;
+
+    // Shapes used to define solder mask apertures don't have nets, so we assign them the
+    // first net that bridges their aperture (after which any other nets will generate
+    // violations).
+    std::map< std::pair<BOARD_ITEM*, PCB_LAYER_ID>, int> m_maskApertureNetMap;
 };
 
 
@@ -290,6 +295,17 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testSilkToMaskClearance()
 }
 
 
+bool isMaskAperture( BOARD_ITEM* aItem )
+{
+    static const LSET saved( 2, F_Mask, B_Mask );
+
+    LSET maskLayers = aItem->GetLayerSet() & saved;
+    LSET otherLayers = aItem->GetLayerSet() & ~saved;
+
+    return maskLayers.count() > 0 && otherLayers.count() == 0;
+}
+
+
 void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                                                           const EDA_RECT& aItemBBox,
                                                           PCB_LAYER_ID aRefLayer,
@@ -349,6 +365,11 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
                 PAD*     otherPad = dynamic_cast<PAD*>( other );
                 PCB_VIA* otherVia = dynamic_cast<PCB_VIA*>( other );
                 auto     otherShape = other->GetEffectiveShape( aTargetLayer );
+                int      otherNet = -1;
+
+                if( other->IsConnected() )
+                    otherNet = static_cast<BOARD_CONNECTED_ITEM*>( other )->GetNetCode();
+
                 int      actual;
                 VECTOR2I pos;
                 int      clearance = 0;
@@ -376,6 +397,28 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testItemAgainstItems( BOARD_ITEM* aItem,
 
                 if( itemShape->Collide( otherShape.get(), clearance, &actual, &pos ) )
                 {
+                    if( isMaskAperture( aItem ) )
+                    {
+                        std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { aItem, aRefLayer };
+
+                        if( m_maskApertureNetMap.count( key ) == 0 )
+                            m_maskApertureNetMap[ key ] = otherNet;
+
+                        if( m_maskApertureNetMap.at( key ) == otherNet && otherNet > 0 )
+                            return true;
+                    }
+
+                    if( isMaskAperture( other ) )
+                    {
+                        std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { other, aRefLayer };
+
+                        if( m_maskApertureNetMap.count( key ) == 0 )
+                            m_maskApertureNetMap[ key ] = itemNet;
+
+                        if( m_maskApertureNetMap.at( key ) == itemNet && itemNet > 0 )
+                            return true;
+                    }
+
                     auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
                     if( aTargetLayer == F_Mask )
@@ -410,9 +453,13 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
         if( !zone->GetLayerSet().test( aTargetLayer ) )
             continue;
 
-        if( zone->GetNetCode() && aItem->IsConnected() )
+        int zoneNet = zone->GetNetCode();
+
+        if( aItem->IsConnected() )
         {
-            if( zone->GetNetCode() == static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode() )
+            BOARD_CONNECTED_ITEM* connectedItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
+
+            if( zoneNet == connectedItem->GetNetCode() && zoneNet > 0 )
                 continue;
         }
 
@@ -441,6 +488,17 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::testMaskItemAgainstZones( BOARD_ITEM* aItem,
             if( zoneTree && zoneTree->QueryColliding( aItemBBox, itemShape.get(), aTargetLayer,
                                                       clearance, &actual, &pos ) )
             {
+                if( isMaskAperture( aItem ) )
+                {
+                    std::pair<BOARD_ITEM*, PCB_LAYER_ID> key = { aItem, aMaskLayer };
+
+                    if( m_maskApertureNetMap.count( key ) == 0 )
+                        m_maskApertureNetMap[ key ] = zoneNet;
+
+                    if( m_maskApertureNetMap.at( key ) == zoneNet && zoneNet > 0 )
+                        continue;
+                }
+
                 auto drce = DRC_ITEM::Create( DRCE_SOLDERMASK_BRIDGE );
 
                 if( aMaskLayer == F_Mask )
