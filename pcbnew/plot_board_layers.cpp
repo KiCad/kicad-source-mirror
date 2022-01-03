@@ -882,11 +882,12 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         for( const PCB_TRACK* track : aBoard->Tracks() )
         {
             const PCB_VIA* via = dyn_cast<const PCB_VIA*>( track );
-            int            clearance = via->GetSolderMaskExpansion();
 
             // Note: IsOnLayer() checks relevant mask layers of untented vias
             if( !via || !via->IsOnLayer( layer ) )
                 continue;
+
+            int            clearance = via->GetSolderMaskExpansion();
 
             // add shapes with their exact mask layer size in initialPolys
             via->TransformShapeWithClearanceToPolygon( initialPolys, layer, clearance, maxError,
