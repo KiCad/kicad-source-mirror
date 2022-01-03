@@ -10,15 +10,15 @@
 # David Chen <d0123456789g@yahoo.com.tw>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
 # Dingzhong Chen <wsxy162@gmail.com>, 2021.
-# Tian Yunhao <t123yh@outlook.com>, 2021.
+# Tian Yunhao <t123yh@outlook.com>, 2021, 2022.
 # obit <szpttboy@163.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-31 04:51+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2022-01-03 10:45+0000\n"
+"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -17970,7 +17970,7 @@ msgstr "压缩全部工程文件"
 
 #: kicad/menubar.cpp:238
 msgid "Reveal project folder in Finder"
-msgstr "在查找器中显示工程文件夹"
+msgstr "在“访达”中显示工程文件夹"
 
 #: kicad/menubar.cpp:240
 msgid "Open project directory in file explorer"
@@ -18448,11 +18448,11 @@ msgstr "创建一个新目录"
 
 #: kicad/project_tree_pane.cpp:705 kicad/project_tree_pane.cpp:715
 msgid "Reveal in Finder"
-msgstr "在查找器中显示"
+msgstr "在“访达”中显示"
 
 #: kicad/project_tree_pane.cpp:706
 msgid "Reveals the directory in a Finder window"
-msgstr "在查找器窗口中显示目录"
+msgstr "在“访达”窗口中显示目录"
 
 #: kicad/project_tree_pane.cpp:708
 msgid "Open Directory in File Explorer"
@@ -18464,7 +18464,7 @@ msgstr "在默认系统文件管理器中打开目录"
 
 #: kicad/project_tree_pane.cpp:716
 msgid "Reveals the directories in a Finder window"
-msgstr "在查找器窗口中显示目录"
+msgstr "在“访达”窗口中显示目录"
 
 #: kicad/project_tree_pane.cpp:718
 msgid "Open Directories in File Explorer"
@@ -26268,7 +26268,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
 msgid "Position Relative To Reference Item"
-msgstr "相対于参考项目的位置"
+msgstr "相对于参考项目的位置"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
 msgid "Print according to objects tab of appearance manager"
@@ -34196,11 +34196,11 @@ msgstr "重新加载所有的 Python 插件并刷新插件菜单"
 
 #: pcbnew/tools/pcb_actions.cpp:553
 msgid "Reveal Plugin Folder in Finder"
-msgstr "在查找器中显示插件文件夹"
+msgstr "在“访达”中显示插件文件夹"
 
 #: pcbnew/tools/pcb_actions.cpp:553
 msgid "Reveals the plugins folder in a Finder window"
-msgstr "在查找器窗口中显示插件文件夹"
+msgstr "在“访达”窗口中显示插件文件夹"
 
 #: pcbnew/tools/pcb_actions.cpp:563
 msgid "Board Setup..."
@@ -35181,7 +35181,7 @@ msgstr "垂直分布"
 
 #: pcbnew/tools/position_relative_tool.cpp:151
 msgid "Position Relative"
-msgstr "相対位置"
+msgstr "相对位置"
 
 #: pcbnew/tools/position_relative_tool.cpp:172
 msgid "Click on reference item..."
