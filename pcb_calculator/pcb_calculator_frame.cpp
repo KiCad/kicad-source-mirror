@@ -51,8 +51,7 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                  wxSize( 646,361 ), // Default size
                  wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER | wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL,
                  wxT( "pcb_calculator" ) ), // Window name
-    m_lastNotebookPage( -1 ),
-    m_macHack( true )
+    m_lastNotebookPage( -1 )
 {
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
                             // some methods in code and avoid link errors
@@ -204,28 +203,7 @@ void PCB_CALCULATOR_FRAME::OnUpdateUI( wxUpdateUIEvent& event )
         // Until it's shown on screen the above won't work; but doing it anyway at least keeps
         // putting new OnUpdateUI events into the queue until it *is* shown on screen.
         if( m_notebook->IsShownOnScreen() )
-        {
-            // Work around an OSX bug where the wxGrid children don't get placed correctly until
-            // the first resize event.
-#ifdef __WXMAC__
-            if( m_macHack )
-            {
-                wxSize pageSize = elecSpacingPanel->GetSize();
-
-                pageSize.x -= 100;
-                elecSpacingPanel->SetSize( pageSize );
-                elecSpacingPanel->Layout();
-
-                pageSize.x += 100;
-                elecSpacingPanel->SetSize( pageSize );
-                elecSpacingPanel->Layout();
-
-                m_macHack = false;
-            }
-#endif
-
             m_lastNotebookPage = m_notebook->GetSelection();
-        }
     }
 }
 

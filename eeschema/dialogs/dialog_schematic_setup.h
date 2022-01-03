@@ -53,8 +53,6 @@ protected:
     PANEL_SETUP_NETCLASSES*     m_netclasses;
     PANEL_TEXT_VARIABLES*       m_textVars;
     std::shared_ptr<ERC_ITEM>   m_pinToPinError;
-
-    std::vector<bool>           m_macHack;
 };
 
 

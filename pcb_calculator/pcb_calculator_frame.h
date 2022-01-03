@@ -81,7 +81,6 @@ private:
     wxBoxSizer* m_mainSizer;
 
     int         m_lastNotebookPage;
-    bool        m_macHack;
 
     std::vector<CALCULATOR_PANEL*>           m_panels;
     std::map<std::size_t, CALCULATOR_PANEL*> m_panelTypes;

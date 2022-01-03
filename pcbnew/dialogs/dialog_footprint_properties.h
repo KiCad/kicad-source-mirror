@@ -98,7 +98,6 @@ private:
     int                              m_delayedFocusColumn;
     bool                             m_initialFocus;
 
-    std::vector<bool>                m_macHack;
     enum FP_PROPS_RETVALUE           m_returnValue; // the option that closed the dialog
 
     PANEL_FP_PROPERTIES_3D_MODEL*    m_3dPanel;

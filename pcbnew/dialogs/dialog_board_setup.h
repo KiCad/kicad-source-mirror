@@ -64,8 +64,6 @@ protected:
     PANEL_SETUP_SEVERITIES*          m_severities;
     PANEL_TEXT_VARIABLES*            m_textVars;
 
-    std::vector<bool>                m_macHack;
-
 private:
     int m_currentPage;              // the current page index
     int m_physicalStackupPage;      // the page index of the PANEL_SETUP_BOARD_STACKUP page

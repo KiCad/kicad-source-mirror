@@ -71,8 +71,6 @@ private:
     bool        m_dirty;
 
     wxBoxSizer* m_buttonsSizer;
-
-    std::vector<bool> m_macHack;
 };
 
 

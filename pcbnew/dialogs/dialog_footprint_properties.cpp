@@ -79,9 +79,6 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
-    for( size_t i = 0; i < m_NoteBook->GetPageCount(); ++i )
-   	    m_macHack.push_back( true );
-
     m_texts = new FP_TEXT_GRID_TABLE( m_frame );
 
     m_delayedErrorMessage = wxEmptyString;
@@ -659,19 +656,6 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnPageChange( wxNotebookEvent& aEvent )
     // Shouldn't be necessary, but is on at least OSX
     if( page >= 0 )
         m_NoteBook->ChangeSelection( (unsigned) page );
-
-#ifdef __WXMAC__
-    // Work around an OSX bug where the wxGrid children don't get placed correctly until
-    // the first resize event
-    if( m_macHack[ page ] )
-    {
-        wxSize pageSize = m_NoteBook->GetPage( page )->GetSize();
-        pageSize.x -= 1;
-
-        m_NoteBook->GetPage( page )->SetSize( pageSize );
-        m_macHack[ page ] = false;
-    }
-#endif
 }
 
 

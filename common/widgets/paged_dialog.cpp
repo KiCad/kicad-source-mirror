@@ -113,9 +113,6 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
 
 void PAGED_DIALOG::finishInitialization()
 {
-    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
-   	    m_macHack.push_back( true );
-
     // For some reason adding page labels to the treeCtrl doesn't invalidate its bestSize
     // cache so we have to do it by hand
     m_treebook->GetTreeCtrl()->InvalidateBestSize();
