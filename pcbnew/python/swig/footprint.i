@@ -31,6 +31,7 @@
 
 %template(MAP_STRING_STRING) std::map<wxString, wxString>;
 %rename(GetPropertiesNative) FOOTPRINT::GetProperties;
+%rename(GetPropertyNative) FOOTPRINT::GetProperty;
 %rename(SetPropertiesNative) FOOTPRINT::SetProperties;
 %rename(MODULE_3D_SETTINGS_VECTOR3D) MODULE_3D_SETTINGS::VECTOR3D;
 %feature("flatnested");
@@ -65,6 +66,13 @@
       """ Returns footprint properties map. """
       properties = self.GetPropertiesNative()
       return {str(k): str(v) for k, v in properties.items()}
+
+    def GetProperty(self, key):
+      """ Returns property with a given key if it exists, throws KeyError otherwise. """
+      if self.HasProperty(key):
+        return self.GetPropertyNative(key)
+      else:
+        raise KeyError("Property not found: " + key)
 
     def SetProperties(self, properties):
       """ Sets footprint properties map. """
