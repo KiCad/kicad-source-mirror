@@ -2,13 +2,14 @@
 # kai chiao chuang <joechuang01.tw@gmail.com>, 2021.
 # David Chen <d0123456789g@yahoo.com.tw>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
+# pondahai <dahai.pon@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-23 20:49+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2022-01-05 00:19+0000\n"
+"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -37,7 +38,7 @@ msgstr "構建電路板邊框"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:538
 msgid "Create layers"
-msgstr "建立圖層"
+msgstr "建立板層"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:712
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:105
@@ -3027,11 +3028,11 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "Session"
-msgstr "會話"
+msgstr "工作階段"
 
 #: common/dialogs/panel_common_settings_base.cpp:192
 msgid "Remember open files for next project launch"
-msgstr "啟動時開啟的上一次的工程"
+msgstr "啟動時開啟的上一次的專案"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
 msgid ""
@@ -3079,11 +3080,11 @@ msgstr "天"
 
 #: common/dialogs/panel_common_settings_base.cpp:250
 msgid "Project Backup"
-msgstr "工程備份"
+msgstr "專案備份"
 
 #: common/dialogs/panel_common_settings_base.cpp:257
 msgid "Automatically backup projects"
-msgstr "自動備份工程"
+msgstr "專案自動備份"
 
 #: common/dialogs/panel_common_settings_base.cpp:258
 msgid ""
@@ -6518,7 +6519,7 @@ msgstr "所有 KiCad 工程檔案"
 
 #: common/wildcards_and_files_ext.cpp:235
 msgid "All KiCad schematic files"
-msgstr "所有 KiCad 原理圖檔案"
+msgstr "所有KiCad電路圖檔案"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad legacy schematic files"
@@ -16127,11 +16128,11 @@ msgstr "切換連線和匯流排正交模式"
 
 #: eeschema/tools/ee_actions.cpp:655
 msgid "Repair Schematic"
-msgstr "修復原理圖"
+msgstr "修復電路圖"
 
 #: eeschema/tools/ee_actions.cpp:656
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr "執行各種診斷程式並嘗試修復原理圖"
+msgstr "執行各種診斷程式並嘗試修復電路圖"
 
 #: eeschema/tools/ee_actions.cpp:662 pcbnew/tools/pcb_actions.cpp:786
 msgid "Scripting Console"
