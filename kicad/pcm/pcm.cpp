@@ -706,6 +706,14 @@ const std::vector<PCM_INSTALLATION_ENTRY> PLUGIN_CONTENT_MANAGER::GetInstalledPa
                        v.push_back( entry.second );
                    } );
 
+    std::sort( v.begin(), v.end(),
+               []( const PCM_INSTALLATION_ENTRY& a, const PCM_INSTALLATION_ENTRY& b )
+               {
+                   return ( a.install_timestamp < b.install_timestamp )
+                          || ( a.install_timestamp == b.install_timestamp
+                               && a.package.identifier < b.package.identifier );
+               } );
+
     return v;
 }
 
