@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-01 22:05+0100\n"
-"PO-Revision-Date: 2022-01-01 22:05+0100\n"
+"PO-Revision-Date: 2022-01-03 12:01+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -6973,7 +6973,7 @@ msgstr ""
 
 #: cvpcb/auto_associate.cpp:306
 msgid "CvPcb Warning"
-msgstr "Avvertenza CvPcb"
+msgstr "Avviso CvPcb"
 
 #: cvpcb/cvpcb.cpp:174
 msgid ""
@@ -8458,11 +8458,11 @@ msgstr "Cancella tutti i marcatori"
 
 #: eeschema/dialogs/dialog_erc.cpp:212
 msgid "Errors and Warnings Only"
-msgstr "Solo errori e avvertimenti"
+msgstr "Solo errori e avvisi"
 
 #: eeschema/dialogs/dialog_erc.cpp:212
 msgid "Errors, Warnings and Exclusions"
-msgstr "Errori, avvertimenti ed esclusioni"
+msgstr "Errori, avvisi ed esclusioni"
 
 #: eeschema/dialogs/dialog_erc.cpp:313
 #, c-format
@@ -8558,7 +8558,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_erc.cpp:533 pcbnew/dialogs/dialog_drc.cpp:476
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "Cambia l'importanza ad Avvertimento per tutte le violazioni \"%s\""
+msgstr "Cambia l'importanza ad Avviso per tutte le violazioni \"%s\""
 
 #: eeschema/dialogs/dialog_erc.cpp:538 pcbnew/dialogs/dialog_drc.cpp:482
 #, c-format
@@ -8616,9 +8616,7 @@ msgstr ""
 msgid ""
 "\n"
 " ** ERC messages: %d  Errors %d  Warnings %d\n"
-msgstr ""
-"\n"
-" ** messaggi ERC: %d  Errori %d  Avvertimenti %d\n"
+msgstr "\n ** messaggi ERC: %d  Errori %d  Avvisi %d\n"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:42 gerbview/files.cpp:681
 #: gerbview/job_file_reader.cpp:241
@@ -12808,7 +12806,7 @@ msgstr "Voce irregolare nell'elenco librerie di simboli del progetto."
 
 #: eeschema/files-io.cpp:386
 msgid "Project Load Warning"
-msgstr "Avvertimento caricamento progetto"
+msgstr "Avviso caricamento progetto"
 
 #: eeschema/files-io.cpp:389
 msgid ""
@@ -12953,7 +12951,7 @@ msgstr "Il salvataggio sovrascriverà i file esistenti."
 
 #: eeschema/files-io.cpp:973
 msgid "Save Warning"
-msgstr "Avvertimento di salvataggio"
+msgstr "Avviso salvataggio"
 
 #: eeschema/files-io.cpp:976
 msgid ""
@@ -13889,7 +13887,7 @@ msgid ""
 "Please review the import errors and warnings (if any)."
 msgstr ""
 "Il progetto CADSTAR è stato importato con successo.\n"
-"Verificare gli errori e gli avvertimeni di importazione (se presenti)."
+"Verificare gli errori e gli avvisi di importazione (se presenti)."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:312
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
@@ -16705,7 +16703,7 @@ msgstr "Nessun problema trovato sui simboli."
 
 #: eeschema/tools/ee_inspection_tool.cpp:458
 msgid "Symbol Warnings"
-msgstr "Avvertimenti simboli"
+msgstr "Avvisi simboli"
 
 #: eeschema/tools/ee_inspection_tool.cpp:524
 msgid "No datasheet defined."
@@ -23528,7 +23526,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step.cpp:214
 msgid "Model Scale Warning"
-msgstr "Avvertimento di scalatura modelli"
+msgstr "Avviso scalatura modelli"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:276
 msgid "STEP export failed!  Please save the PCB and try again"
@@ -23903,10 +23901,7 @@ msgid ""
 "Footprint is locked: it cannot be freely moved and oriented on the canvas "
 "and can only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
-msgstr ""
-"L'impronta è bloccatà: non si può spostare né orientare sull'area di lavoro "
-"e può essere selezionata solo se la casella \"Elementi bloccati\" è "
-"abilitata nel filtro di selezione."
+msgstr "L'impronta è bloccata: non si può spostare né orientare sull'area di lavoro e può essere selezionata solo se la casella \"Elementi bloccati\" è abilitata nel filtro di selezione."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:384
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:323
@@ -25609,7 +25604,7 @@ msgstr "Errori proprietà piazzole"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1421
 msgid "Pad Properties Warnings"
-msgstr "Avvertenze proprietà piazzole"
+msgstr "Avvisi proprietà piazzole"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1654
 msgid "Modify pad"
@@ -29849,7 +29844,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:549
 msgid "Edge Clearance Warning"
-msgstr "Avvertimeno distanza bordi"
+msgstr "Avviso distanza bordo"
 
 #: pcbnew/files.cpp:580
 #, c-format
@@ -31018,7 +31013,7 @@ msgstr "Aggiorna netlist"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1033
 #, c-format
 msgid "Total warnings: %d, errors: %d."
-msgstr "Totale avvertimenti: %d, errori: %d."
+msgstr "Totale avvisi: %d, errori: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:270
 #, c-format
@@ -32674,7 +32669,7 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5078
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2498
 msgid "Legacy Zone Warning"
-msgstr "Avvertimento zona obsoleta"
+msgstr "Avviso zona obsoleta"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:172
 #, c-format
@@ -35852,7 +35847,7 @@ msgstr "Avvisi DRC"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC violations with a Warning severity"
-msgstr "Violazioni DRC con importanza avvertimento"
+msgstr "Violazioni DRC con importanza avviso"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "DRC Errors"
@@ -36581,21 +36576,3 @@ msgstr "Editor di C.S. KiCad"
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:85
 msgid "The KiCad Developers"
 msgstr "Gli sviluppatori di KiCad"
-
-#~ msgid "Save changes to schematic before closing?"
-#~ msgstr "Salvare le modifiche dello schema prima di chiudere?"
-
-#~ msgid "Gerber file"
-#~ msgstr "File Gerber"
-
-#~ msgid "Excellon drill file"
-#~ msgstr "File forature Excellon"
-
-#~ msgid "KiCad Project"
-#~ msgstr "Progetto KiCad"
-
-#~ msgid "KiCad Schematic"
-#~ msgstr "Schema elettrico KiCad"
-
-#~ msgid "KiCad Printed Circuit Board"
-#~ msgstr "Circuito stampato KiCad"
