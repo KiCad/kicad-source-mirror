@@ -99,30 +99,30 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
                                                  shape=pad_shape, rot_degree=90.0)
         v_pad = PA.PadMaker(self.module).SMDPad( pad_length, pad_width, shape=pad_shape)
 
-        h_pitch = h_pitch / 2 - pad_length + pad_offset + pad_length/2
-        v_pitch = v_pitch / 2 - pad_length +pad_offset + pad_length/2
+        h_pitch = (int)(h_pitch / 2 - pad_length + pad_offset + pad_length/2)
+        v_pitch = (int)(v_pitch / 2 - pad_length +pad_offset + pad_length/2)
 
         #left row
-        pin1Pos = pcbnew.wxPoint(-h_pitch, 0)
+        pin1Pos = pcbnew.VECTOR2I( -h_pitch), 0)
         array = PA.PadLineArray(h_pad, pads_per_row, pad_pitch, True, pin1Pos)
         array.SetFirstPadInArray(1)
         array.AddPadsToModule(self.draw)
 
         #bottom row
-        pin1Pos = pcbnew.wxPoint(0, v_pitch)
+        pin1Pos = pcbnew.VECTOR2I(0, v_pitch)
         array = PA.PadLineArray(v_pad, pads_per_row, pad_pitch, False, pin1Pos)
         array.SetFirstPadInArray(pads_per_row + 1)
         array.AddPadsToModule(self.draw)
 
         #right row
-        pin1Pos = pcbnew.wxPoint(h_pitch, 0)
+        pin1Pos = pcbnew.VECTOR2I(h_pitch, 0)
         array = PA.PadLineArray(h_pad, pads_per_row, -pad_pitch, True,
                                 pin1Pos)
         array.SetFirstPadInArray(2*pads_per_row + 1)
         array.AddPadsToModule(self.draw)
 
         #top row
-        pin1Pos = pcbnew.wxPoint(0, -v_pitch)
+        pin1Pos = pcbnew.VECTOR2I(0, -v_pitch)
         array = PA.PadLineArray(v_pad, pads_per_row, -pad_pitch, False,
                                 pin1Pos)
         array.SetFirstPadInArray(3*pads_per_row + 1)
@@ -158,7 +158,7 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
             layers.AddLayer(pcbnew.F_Paste)
             epad.SetName(epad_num)
 
-            array = PA.EPADGridArray( epad, epad_ny, epad_nx, epad_l, epad_w, pcbnew.wxPoint(0,0) )
+            array = PA.EPADGridArray( epad, epad_ny, epad_nx, epad_l, epad_w, pcbnew.VECTOR2I(0,0) )
             array.SetFirstPadInArray(epad_num)
             array.AddPadsToModule(self.draw)
 
@@ -173,7 +173,7 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
                 layers.AddLayer(pcbnew.F_Mask)
                 via.SetLayerSet(layers)
 
-                via_array = PA.EPADGridArray(via, epad_ny, epad_nx, epad_l, epad_w, pcbnew.wxPoint(0,0) )
+                via_array = PA.EPADGridArray(via, epad_ny, epad_nx, epad_l, epad_w, pcbnew.VECTOR2I(0,0) )
                 via_array.SetFirstPadInArray(epad_num)
                 via_array.AddPadsToModule(self.draw)
 

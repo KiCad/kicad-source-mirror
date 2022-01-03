@@ -80,9 +80,9 @@ class BGAWizard(FootprintWizardBase.FootprintWizard):
 
         # add in the pads
         pad = PA.PadMaker(self.module).SMTRoundPad(pads["size"])
-
-        pin1_pos = pcbnew.wxPoint(-((cols - 1) * pad_pitch) / 2,
-                                  -((rows - 1) * pad_pitch) / 2)
+        px = (int)( -((cols - 1) * pad_pitch) / 2)
+        py = (int)(-((rows - 1) * pad_pitch) / 2)
+        pin1_pos = pcbnew.VECTOR2I( px, py )
 
         array = BGAPadGridArray(pad, cols, rows, pad_pitch, pad_pitch)
         array.AddPadsToModule(self.draw)

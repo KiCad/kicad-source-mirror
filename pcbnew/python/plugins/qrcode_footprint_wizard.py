@@ -88,7 +88,7 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         if self.UseCu:
             pad = pcbnew.PAD(self.module)
             pad.SetSize(pcbnew.wxSize(self.X, self.X))
-            pad_pos = pcbnew.wxPoint(xposition,yposition)
+            pad_pos = pcbnew.VECTOR2I(xposition,yposition)
             pad.SetPosition(pad_pos)
             pad.SetPos0(pad_pos)
             pad.SetShape(pcbnew.PAD_SHAPE_RECT)
@@ -147,7 +147,7 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
 
         # Add value field
         textPosition = int((self.textHeight) + ((1 + half_number_of_elements) * self.X))
-        pos = pcbnew.wxPoint(0, - textPosition)
+        pos = pcbnew.VECTOR2I(0, - textPosition)
         self.module.Value().SetPosition(pos)
         self.module.Value().SetPos0(pos)
         self.module.Value().SetTextHeight(self.textHeight)
@@ -155,7 +155,7 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         self.module.Value().SetTextThickness(self.textThickness)
 
         # Add Reference field
-        pos = pcbnew.wxPoint(0, textPosition)
+        pos = pcbnew.VECTOR2I(0, textPosition)
         self.module.Reference().SetPosition(pos)
         self.module.Reference().SetPos0(pos)
         self.module.Reference().SetTextHeight(self.textHeight)

@@ -433,14 +433,14 @@ class FootprintWizardDrawingAids:
         @param x: the x coordinate of the point to transform
         @param y: the y coordinate of the point to transform
         @param mat: the transform matrix to use or None to use the current DC's
-        @return: the transformed point as a wxPoint
+        @return: the transformed point as a VECTOR2I
         """
 
         if not mat:
             mat = self.dc['transform']
 
-        return pcbnew.wxPoint(x * mat[0] + y * mat[1] + mat[2],
-                              x * mat[3] + y * mat[4] + mat[5])
+        return pcbnew.VECTOR2I( (int)(x * mat[0] + y * mat[1] + mat[2]),
+                                (int)(x * mat[3] + y * mat[4] + mat[5]) )
 
     def SetLineThickness(self, lineThickness):
         """!

@@ -84,17 +84,17 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
 
         # create a pad array and add it to the module
         for n in range ( 0, pad_count ):
-            xpos = pad_pitch*n - offsetX
-            pad = self.smdRectPad(self.module,size_pad, pcbnew.wxPoint(xpos,0),str(n+1))
+            xpos = (int)(pad_pitch*n - offsetX)
+            pad = self.smdRectPad(self.module,size_pad, pcbnew.VECTOR2I( xpos, 0), str(n+1))
             self.module.Add(pad)
 
 
         # Mechanical shield pads: left pad and right pad
-        xpos = -shl_to_pad-offsetX
-        pad_s0_pos = pcbnew.wxPoint(xpos,shl_from_top)
+        xpos = (int)(-shl_to_pad-offsetX)
+        pad_s0_pos = pcbnew.VECTOR2I( xpos, (int)shl_from_top )
         pad_s0 = self.smdRectPad(self.module, size_shld, pad_s0_pos, "0")
         xpos = (pad_count-1) * pad_pitch+shl_to_pad - offsetX
-        pad_s1_pos = pcbnew.wxPoint(xpos,shl_from_top)
+        pad_s1_pos = pcbnew.VECTOR2I( xpos, (int)shl_from_top )
         pad_s1 = self.smdRectPad(self.module, size_shld, pad_s1_pos, "0")
 
         self.module.Add(pad_s0)

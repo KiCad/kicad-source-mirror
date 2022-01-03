@@ -81,26 +81,26 @@ class QFPWizard(FootprintWizardBase.FootprintWizard):
         v_pad = PA.PadMaker(self.module).SMDPad( pad_length, pad_width, shape=pad_shape)
 
         #left row
-        pin1Pos = pcbnew.wxPoint(-h_pitch / 2, 0)
+        pin1Pos = pcbnew.VECTOR2I( (int)(-h_pitch / 2), 0)
         array = PA.PadLineArray(h_pad, pads_per_row, pad_pitch, True, pin1Pos)
         array.SetFirstPadInArray(1)
         array.AddPadsToModule(self.draw)
 
         #bottom row
-        pin1Pos = pcbnew.wxPoint(0, v_pitch / 2)
+        pin1Pos = pcbnew.VECTOR2I( 0, (int)(v_pitch / 2) )
         array = PA.PadLineArray(v_pad, pads_per_row, pad_pitch, False, pin1Pos)
         array.SetFirstPadInArray(pads_per_row + 1)
         array.AddPadsToModule(self.draw)
 
         #right row
-        pin1Pos = pcbnew.wxPoint(h_pitch / 2, 0)
+        pin1Pos = pcbnew.VECTOR2I( (int)(h_pitch / 2), 0)
         array = PA.PadLineArray(h_pad, pads_per_row, -pad_pitch, True,
                                 pin1Pos)
         array.SetFirstPadInArray(2*pads_per_row + 1)
         array.AddPadsToModule(self.draw)
 
         #top row
-        pin1Pos = pcbnew.wxPoint(0, -v_pitch / 2)
+        pin1Pos = pcbnew.VECTOR2I(0, (int)(-v_pitch / 2) )
         array = PA.PadLineArray(v_pad, pads_per_row, -pad_pitch, False,
                                 pin1Pos)
         array.SetFirstPadInArray(3*pads_per_row + 1)

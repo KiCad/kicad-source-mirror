@@ -89,27 +89,42 @@ class MutualcapButtonWizard(FootprintWizardBase.FootprintWizard):
         ###border h
         self.module.SetLayer(F_Cu)
         size_pad = pcbnew.wxSize( w, oew )
-        self.module.Add(self.smdRectPad(self.module,size_pad, pcbnew.wxPoint(0,(-h/2)+oew/2),str(1)))
-        self.module.Add(self.smdRectPad(self.module,size_pad, pcbnew.wxPoint(0,( h/2)-oew/2),str(1)))
+        self.module.Add(self.smdRectPad(self.module,size_pad,
+                                        pcbnew.VECTOR2I(0, (int)((-h/2)+oew/2) ),
+                                        str(1)))
+        self.module.Add(self.smdRectPad(self.module,size_pad,
+                                        pcbnew.VECTOR2I(0, (int)(( h/2)-oew/2) ),
+                                        str(1)))
         ###border v
         size_pad = pcbnew.wxSize(oBorderWidth, h-2*oew)
-        self.module.Add(self.smdRectPad(self.module,size_pad, pcbnew.wxPoint((-w/2)+oBorderWidth/2,0),str(1)))
-        self.module.Add(self.smdRectPad(self.module,size_pad, pcbnew.wxPoint(( w/2)-oBorderWidth/2,0),str(1)))
+        self.module.Add(self.smdRectPad(self.module,size_pad,
+                                        pcbnew.VECTOR2I( (int)((-w/2)+oBorderWidth/2), 0),
+                                        str(1)))
+        self.module.Add(self.smdRectPad(self.module,size_pad,
+                                        pcbnew.VECTOR2I( (int)((w/2)-oBorderWidth/2), 0),
+                                        str(1)))
 
         xPos = -w/2+oBorderWidth+clearance+iew
         oFingerSize = pcbnew.wxSize(oew/2, h-oew-iew-2*clearance-oew)
         iFingerSize = pcbnew.wxSize(iew,h-2*oew-2*clearance)
         #horizontal inner electrode trace
-        self.module.Add(self.smdRectPad(self.module,pcbnew.wxSize(w-2*oBorderWidth-2*clearance,iew), pcbnew.wxPoint(0,h/2-oew-clearance-iew/2),str(2)))
+        self.module.Add(self.smdRectPad(self.module,pcbnew.wxSize(w-2*oBorderWidth-2*clearance,iew),
+                        pcbnew.VECTOR2I(0, (int)(h/2-oew-clearance-iew/2) ),str(2)))
         for i in range(0,oFingerCount):
             #inner electrode fingers
-            self.module.Add(self.smdRectPad(self.module,iFingerSize, pcbnew.wxPoint(xPos-iew/2 ,0),str(2)))
+            self.module.Add(self.smdRectPad(self.module,iFingerSize,
+                                            pcbnew.VECTOR2I( (int)(xPos-iew/2) ,0),
+                                            str(2)))
             #outer electrode fingers
-            self.module.Add(self.smdRectPad(self.module,oFingerSize, pcbnew.wxPoint(xPos+oew*0.75,-w/h-oew-iew/2+oew/2),str(1)))
+            self.module.Add(self.smdRectPad(self.module,oFingerSize,
+                                            pcbnew.VECTOR2I( (int)(xPos+oew*0.75),
+                                                             (int)(-w/h-oew-iew/2+oew/2) ),
+                                            str(1)))
             xPos += oew*1.5+iew
 
         #rightmost inner electrode finger
-        self.module.Add(self.smdRectPad(self.module,iFingerSize, pcbnew.wxPoint(xPos-iew/2,0),str(2)))
+        self.module.Add(self.smdRectPad(self.module,iFingerSize,
+                                        pcbnew.VECTOR2I( (int)(xPos-iew/2), 0),str(2)))
 
         textSize = self.GetTextSize()
         self.draw.Value(0, h/2+textSize, textSize)

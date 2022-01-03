@@ -31,7 +31,7 @@ class PadStaggeredZGridArray(PA.PadArray):
                   o   o   o   o
     """
     def __init__(self, aPad, aPadCount, aLineCount, aLinePitch,
-                 aPadPitch, aStagger=0, aCentre=pcbnew.wxPoint(0, 0)):
+                 aPadPitch, aStagger=0, aCentre=pcbnew.VECTOR2I(0, 0)):
         """
         @param aPad         Template for all pads
         @param aPadCount    Overall pad count

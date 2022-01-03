@@ -89,7 +89,7 @@ class circular_pad_array_wizard(FootprintWizardBase.FootprintWizard):
         array = PA.PadCircleArray(
             pad, pads['count'], pads['center diameter'] / 2,
             angle_offset=pads["angle"],
-            centre=pcbnew.wxPoint(0, 0),
+            centre=pcbnew.VECTOR2I(0, 0),
             clockwise=numbering["clockwise"],
             padRotationEnable= padRotation["pad rotation"],
             padRotationOffset = padRotation["pad angle offset"])

@@ -203,7 +203,7 @@ class PadGridArray(PadArray):
     A basic grid of pads
     """
 
-    def __init__(self, pad, nx, ny, px, py, centre=pcbnew.wxPoint(0, 0)):
+    def __init__(self, pad, nx, ny, px, py, centre=pcbnew.VECTOR2I(0, 0)):
         """!
         @param pad: the prototypical pad of the array
         @param nx: number of pads in x-direction
@@ -297,7 +297,7 @@ class PadZGridArray(PadArray):
     """
 
     def __init__(self, pad, pad_count, line_count, line_pitch,
-                 pad_pitch, centre=pcbnew.wxPoint(0, 0)):
+                 pad_pitch, centre=pcbnew.VECTOR2I(0, 0)):
         """!
         @param pad: the prototypical pad
         @param pad_count: total pad count
@@ -353,7 +353,7 @@ class PadLineArray(PadGridArray):
     """
 
     def __init__(self, pad, n, pitch, isVertical,
-                 centre=pcbnew.wxPoint(0, 0)):
+                 centre=pcbnew.VECTOR2I(0, 0)):
         """!
         @param pad: the prototypical pad
         @param n: number of pads in array
@@ -374,7 +374,7 @@ class PadCircleArray(PadArray):
     Circular pad array
     """
 
-    def __init__(self, pad, n, r, angle_offset=0, centre=pcbnew.wxPoint(0, 0),
+    def __init__(self, pad, n, r, angle_offset=0, centre=pcbnew.VECTOR2I(0, 0),
                  clockwise=True, padRotationEnable=False, padRotationOffset=0):
         """!
         @param pad: the prototypical pad
