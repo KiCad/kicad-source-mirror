@@ -513,10 +513,19 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 
     aFormatter->Print( 0, " (font" );
 
+    if( GetFont() && !GetFont()->Name().IsEmpty() )
+        aFormatter->Print( 0, " (face \"%s\")", GetFont()->NameAsToken() );
+
     // Text size
     aFormatter->Print( 0, " (size %s %s)",
                        FormatInternalUnits( GetTextHeight() ).c_str(),
                        FormatInternalUnits( GetTextWidth() ).c_str() );
+
+    if( GetLineSpacing() != 1.0 )
+    {
+        aFormatter->Print( 0, " (line_spacing %s)",
+                           Double2Str( GetLineSpacing() ).c_str() );
+    }
 
     if( GetTextThickness() )
     {
@@ -719,7 +728,8 @@ static struct EDA_TEXT_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( EDA_TEXT );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Text" ),
-                    &EDA_TEXT::SetText, &EDA_TEXT::GetText ) );
+                                                               &EDA_TEXT::SetText,
+                                                               &EDA_TEXT::GetText ) );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Thickness" ),
                                                           &EDA_TEXT::SetTextThickness,
                                                           &EDA_TEXT::GetTextThickness,

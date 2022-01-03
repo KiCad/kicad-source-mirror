@@ -37,6 +37,7 @@
 #include <lib_pin.h>
 #include <lib_text.h>
 #include <math/util.h>                           // KiROUND, Clamp
+#include <font/font.h>
 #include <string_utils.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
@@ -539,7 +540,8 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSynta
     if( aConvertOverbarSyntax && m_requiredVersion < 20210606 )
         aText->SetText( ConvertToNewOverbarNotation( aText->GetText() ) );
 
-    T token;
+    T        token;
+    wxString faceName;
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -556,6 +558,12 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSynta
 
                 switch( token )
                 {
+                case T_face:
+                    NeedSYMBOL();
+                    faceName = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
                 case T_size:
                 {
                     wxSize sz;
@@ -579,9 +587,21 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSynta
                     aText->SetItalic( true );
                     break;
 
+                case T_line_spacing:
+                    aText->SetLineSpacing( parseDouble( "line spacing" ) );
+                    NeedRIGHT();
+                    break;
+
                 default:
-                    Expecting( "size, bold, or italic" );
+                    Expecting( "face, size, thickness, line_spacing, bold, or italic" );
                 }
+            }
+
+            if( !faceName.IsEmpty() )
+            {
+                // FONT TODO: notify user about missing font
+                aText->SetFont( KIFONT::FONT::GetFont( faceName, aText->IsBold(),
+                                                       aText->IsItalic() ) );
             }
 
             break;

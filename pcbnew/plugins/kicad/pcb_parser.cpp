@@ -42,7 +42,7 @@
 #include <pcb_target.h>
 #include <footprint.h>
 #include <geometry/shape_line_chain.h>
-
+#include <font/font.h>
 #include <ignore.h>
 #include <netclass.h>
 #include <pad.h>
@@ -413,7 +413,8 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 
     // Prior to v5.0 text size was omitted from file format if equal to 60mils
     // Now, it is always explicitly written to file
-    bool foundTextSize = false;
+    bool     foundTextSize = false;
+    wxString faceName;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -430,6 +431,12 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 
                 switch( token )
                 {
+                case T_face:
+                    NeedSYMBOL();
+                    faceName = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
                 case T_size:
                 {
                     wxSize sz;
@@ -441,6 +448,11 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                     foundTextSize = true;
                     break;
                 }
+
+                case T_line_spacing:
+                    aText->SetLineSpacing( parseDouble( "line spacing" ) );
+                    NeedRIGHT();
+                    break;
 
                 case T_thickness:
                     aText->SetTextThickness( parseBoardUnits( "text thickness" ) );
@@ -456,9 +468,17 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                     break;
 
                 default:
-                    Expecting( "size, bold, or italic" );
+                    Expecting( "face, size, line_spacing, thickness, bold, or italic" );
                 }
             }
+
+            if( !faceName.IsEmpty() )
+            {
+                // FONT TODO: notify user about missing font
+                aText->SetFont( KIFONT::FONT::GetFont( faceName, aText->IsBold(),
+                                                       aText->IsItalic() ) );
+            }
+
             break;
 
         case T_justify:
