@@ -72,13 +72,14 @@
         "drill_out_of_range": "error",
         "duplicate_footprints": "warning",
         "extra_footprint": "warning",
+        "footprint_type_mismatch": "error",
         "hole_clearance": "error",
         "hole_near_hole": "error",
         "invalid_outline": "error",
         "item_on_disabled_layer": "error",
         "items_not_allowed": "error",
         "length_out_of_range": "error",
-        "lib_footprint_issues": "error",
+        "lib_footprint_issues": "ignore",
         "malformed_courtyard": "error",
         "microvia_drill_out_of_range": "error",
         "missing_courtyard": "ignore",
@@ -95,6 +96,7 @@
         "starved_thermal": "error",
         "text_height": "warning",
         "text_thickness": "warning",
+        "through_hole_pad_without_hole": "error",
         "too_many_vias": "error",
         "track_dangling": "warning",
         "track_width": "error",
@@ -124,6 +126,7 @@
         "min_via_annular_width": 0.049999999999999996,
         "min_via_annulus": 0.049999999999999996,
         "min_via_diameter": 0.39999999999999997,
+        "solder_mask_to_copper_clearance": 0.0,
         "use_height_for_length_calcs": true
       },
       "track_widths": [
@@ -199,7 +202,8 @@
           144
         ]
       }
-    ]
+    ],
+    "viewports": []
   },
   "boards": [],
   "cvpcb": {
@@ -383,7 +387,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "LoRaNode.kicad_pro",
+    "filename": "solder_mask_bridge_test.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -427,7 +431,7 @@
       }
     ],
     "meta": {
-      "version": 1
+      "version": 2
     },
     "net_colors": null
   },
