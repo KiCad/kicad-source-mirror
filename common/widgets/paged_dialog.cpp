@@ -346,23 +346,6 @@ void PAGED_DIALOG::OnPageChanged( wxBookCtrlEvent& event )
     wxSizeEvent evt( wxDefaultSize );
 
     wxQueueEvent( m_treebook, evt.Clone() );
-
-    // @todo Test to see if this macOS hack is still necessary now that a psuedo size event is
-    //       processed above.
-
-    // Work around an OSX bug where the wxGrid children don't get placed correctly until
-    // the first resize event
-#ifdef __WXMAC__
-    if( page + 1 <= m_macHack.size() && m_macHack[ page ] )
-    {
-        wxSize pageSize = m_treebook->GetPage( page )->GetSize();
-        pageSize.x -= 5;
-        pageSize.y += 2;
-
-        m_treebook->GetPage( page )->SetSize( pageSize );
-        m_macHack[ page ] = false;
-    }
-#endif
 }
 
 
