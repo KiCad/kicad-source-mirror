@@ -351,7 +351,7 @@ PCBNEW_SETTINGS* pcbconfig()
 
 bool PCB_RENDER_SETTINGS::GetShowPageLimits() const
 {
-    return pcbconfig()->m_ShowPageLimits;
+    return pcbconfig() && pcbconfig()->m_ShowPageLimits;
 }
 
 
@@ -553,7 +553,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 
     if( IsNetnameLayer( aLayer ) )
     {
-        if( pcbconfig()->m_Display.m_DisplayNetNamesMode < 2 )
+        if( !pcbconfig() || pcbconfig()->m_Display.m_DisplayNetNamesMode < 2 )
             return;
 
         if( aTrack->GetNetCode() <= NETINFO_LIST::UNCONNECTED )
@@ -619,7 +619,7 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
     else if( IsCopperLayer( aLayer ) )
     {
         // Draw a regular track
-        bool outline_mode = !pcbconfig()->m_Display.m_DisplayPcbTrackFill;
+        bool outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayPcbTrackFill;
         m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( color );
         m_gal->SetIsStroke( outline_mode );
@@ -630,7 +630,8 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
     }
 
     // Clearance lines
-    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
+    if( pcbconfig()
+            && pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
             && !m_pcbSettings.m_ForceClearanceDisplayOff )
     {
         int clearance = aTrack->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
@@ -661,7 +662,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     else if( IsCopperLayer( aLayer ) )
     {
         // Draw a regular track
-        bool outline_mode = !pcbconfig()->m_Display.m_DisplayPcbTrackFill;
+        bool outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayPcbTrackFill;
         m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( color );
         m_gal->SetIsStroke( outline_mode );
@@ -672,7 +673,8 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
     }
 
     // Clearance lines
-    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
+    if( pcbconfig()
+            && pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
             && !m_pcbSettings.m_ForceClearanceDisplayOff )
     {
         int clearance = aArc->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
@@ -731,6 +733,9 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         VECTOR2D position( center );
 
         // Is anything that we can display enabled?
+        if( !pcbconfig() )
+            return;
+
         if( pcbconfig()->m_Display.m_DisplayNetNamesMode == 0
                 || pcbconfig()->m_Display.m_DisplayNetNamesMode == 2
                 || aVia->GetNetname().empty() )
@@ -785,7 +790,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         return;
     }
 
-    bool outline_mode = !pcbconfig()->m_Display.m_DisplayViaFill;
+    bool outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayViaFill;
 
     if( outline_mode )
     {
@@ -840,7 +845,8 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     }
 
     // Clearance lines
-    if( pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
+    if( pcbconfig()
+            && pcbconfig()->m_Display.m_ShowTrackClearanceMode == SHOW_TRACK_CLEARANCE_WITH_VIA_ALWAYS
             && aLayer != LAYER_VIA_HOLES
             && !m_pcbSettings.m_ForceClearanceDisplayOff )
     {
@@ -868,11 +874,11 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     if( IsNetnameLayer( aLayer ) )
     {
         // Is anything that we can display enabled?
-        bool displayNetname = ( pcbconfig()->m_Display.m_DisplayNetNamesMode == 1
-                                || pcbconfig()->m_Display.m_DisplayNetNamesMode == 3 )
-                            && !aPad->GetNetname().empty();
+        bool displayNetname = ( (pcbconfig() && pcbconfig()->m_Display.m_DisplayNetNamesMode == 1)
+                                || (pcbconfig() && pcbconfig()->m_Display.m_DisplayNetNamesMode == 3 ) )
+                                && !aPad->GetNetname().empty();
 
-        bool displayPadNumber = pcbconfig()->m_Display.m_DisplayPadNum;
+        bool displayPadNumber = !pcbconfig() || pcbconfig()->m_Display.m_DisplayPadNum;
 
         if( displayNetname || displayPadNumber )
         {
@@ -1005,7 +1011,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         return;
     }
 
-    bool outline_mode = !pcbconfig()->m_Display.m_DisplayPadFill;
+    bool outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayPadFill;
 
     if( m_pcbSettings.m_ForcePadSketchModeOff )
         outline_mode = false;
@@ -1249,7 +1255,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         }
     }
 
-    if( pcbconfig()->m_Display.m_DisplayPadClearance
+    if( pcbconfig()
+            && pcbconfig()->m_Display.m_DisplayPadClearance
             && ( aLayer == LAYER_PAD_FR || aLayer == LAYER_PAD_BK || aLayer == LAYER_PADS_TH )
             && !m_pcbSettings.m_ForceClearanceDisplayOff )
     {
@@ -1317,7 +1324,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 {
     const COLOR4D& color = m_pcbSettings.GetColor( aShape, aShape->GetLayer() );
-    bool           outline_mode = !pcbconfig()->m_Display.m_DisplayGraphicsFill;
+    bool           outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayGraphicsFill;
     int            thickness = getLineThickness( aShape->GetWidth() );
     PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
 
@@ -1570,7 +1577,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
-    bool           outline_mode = !pcbconfig()->m_Display.m_DisplayTextFill;
+    bool           outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayTextFill;
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
@@ -1594,7 +1601,7 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
-    bool           outline_mode = !pcbconfig()->m_Display.m_DisplayTextFill;
+    bool           outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayTextFill;
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
@@ -1807,7 +1814,7 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
 
-    bool outline_mode = !pcbconfig()->m_Display.m_DisplayGraphicsFill;
+    bool outline_mode = pcbconfig() && !pcbconfig()->m_Display.m_DisplayGraphicsFill;
 
     if( outline_mode )
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
