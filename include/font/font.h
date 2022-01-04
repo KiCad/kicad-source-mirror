@@ -35,7 +35,12 @@
 #include <utf8.h>
 #include <font/glyph.h>
 #include <font/text_attributes.h>
-#include <markup_parser.h>
+
+
+namespace MARKUP
+{
+struct NODE;
+}
 
 namespace KIGFX
 {
@@ -132,8 +137,8 @@ public:
         return Draw( aGal, aText, aPosition, VECTOR2D( 0, 0 ), aAttributes );
     }
 
-    virtual void DrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
-                           const TEXT_ATTRIBUTES& aAttributes ) const;
+    virtual void KiDrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
+                             const TEXT_ATTRIBUTES& aAttributes ) const;
 
     /**
      * Compute the boundary limits of aText (the bounding box of all shapes).
