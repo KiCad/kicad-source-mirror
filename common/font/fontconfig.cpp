@@ -107,9 +107,9 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
                 std::ostringstream s;
                 s << family;
 
-                std::string theFile( (char*) file );
-                std::string theFamily( (char*) family );
-                std::string theStyle( (char*) style );
+                std::string theFile( reinterpret_cast<char *>( file ) );
+                std::string theFamily( reinterpret_cast<char *>( family ) );
+                std::string theStyle( reinterpret_cast<char *>( style ) );
                 FONTINFO    fontInfo( theFile, theStyle, theFamily );
 
                 if( theFamily.length() > 0 && theFamily.front() == '.' )

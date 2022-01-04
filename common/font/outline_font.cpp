@@ -106,12 +106,13 @@ bool OUTLINE_FONT::loadFontSimple( const wxString& aFontFileName )
 
     if( ft_error == FT_Err_Unknown_File_Format )
     {
-        std::cerr << "The font file " << fileName << " could be opened and read, "
-                  << "but it appears that its font format is unsupported." << std::endl;
+        wxLogWarning( _( "The font file %s could be opened and read, "
+                         "but it appears that its font format is unsupported." ),
+                      fileName );
     }
     else if( ft_error )
     {
-        std::cerr << "ft_error " << ft_error << std::endl;
+        wxLogWarning( _( "Unknown font error (%d) " ), ft_error );
         return false;
     }
     else

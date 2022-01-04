@@ -148,34 +148,33 @@ void OUTLINE_DECOMPOSER::OutlineToSegments( CONTOURS* aContours )
 
 
 // use converter in kimath
-bool OUTLINE_DECOMPOSER::approximateQuadraticBezierCurve( GLYPH_POINTS& aResult,
+bool OUTLINE_DECOMPOSER::approximateQuadraticBezierCurve( GLYPH_POINTS&       aResult,
                                                           const GLYPH_POINTS& aBezier ) const
 {
-    // TODO: assert aBezier.size == 3
+    wxASSERT( aBezier.size() == 3 );
 
-    // BEZIER_POLY only handles cubic Bezier curves, even though the comments say otherwise...
+    // BEZIER_POLY only handles cubic Bezier curves, even though the
+    // comments say otherwise...
     //
     // Quadratic to cubic Bezier conversion:
     // cpn = Cubic Bezier control points (n = 0..3, 4 in total)
     // qpn = Quadratic Bezier control points (n = 0..2, 3 in total)
     // cp0 = qp0, cp1 = qp0 + 2/3 * (qp1 - qp0), cp2 = qp2 + 2/3 * (qp1 - qp2), cp3 = qp2
 
-    static const double twoThirds = 2 / 3.0;
-
     GLYPH_POINTS cubic;
-    cubic.push_back( aBezier.at( 0 ) );                                                     // cp0
-    cubic.push_back( aBezier.at( 0 ) + twoThirds * ( aBezier.at( 1 ) - aBezier.at( 0 ) ) ); // cp1
-    cubic.push_back( aBezier.at( 2 ) + twoThirds * ( aBezier.at( 1 ) - aBezier.at( 2 ) ) ); // cp2
-    cubic.push_back( aBezier.at( 2 ) );                                                     // cp3
+    cubic.push_back( aBezier[0] );                                           // cp0
+    cubic.push_back( aBezier[0] + ( ( aBezier[1] - aBezier[0] ) * 2 / 3 ) ); // cp1
+    cubic.push_back( aBezier[2] + ( ( aBezier[1] - aBezier[2] ) * 2 / 3 ) ); // cp2
+    cubic.push_back( aBezier[2] );                                           // cp3
 
     return approximateCubicBezierCurve( aResult, cubic );
 }
 
 
-bool OUTLINE_DECOMPOSER::approximateCubicBezierCurve( GLYPH_POINTS& aResult,
+bool OUTLINE_DECOMPOSER::approximateCubicBezierCurve( GLYPH_POINTS&       aResult,
                                                       const GLYPH_POINTS& aCubicBezier ) const
 {
-    // TODO: assert aCubicBezier.size == 4
+    wxASSERT( aCubicBezier.size() == 4 );
 
     // TODO: find out what the minimum segment length should really be!
     static const int minimumSegmentLength = 50;
@@ -184,21 +183,27 @@ bool OUTLINE_DECOMPOSER::approximateCubicBezierCurve( GLYPH_POINTS& aResult,
     converter.GetPoly( tmp, minimumSegmentLength );
 
     for( unsigned int i = 0; i < tmp.size(); i++ )
-        aResult.push_back( tmp.at( i ) );
+        aResult.push_back( tmp[i] );
 
     return true;
 }
 
 
-bool OUTLINE_DECOMPOSER::approximateBezierCurve( GLYPH_POINTS& aResult,
+bool OUTLINE_DECOMPOSER::approximateBezierCurve( GLYPH_POINTS&       aResult,
                                                  const GLYPH_POINTS& aBezier ) const
 {
-    bool bezierIsCubic = ( aBezier.size() == 4 );
-
-    if( bezierIsCubic )
+    switch( aBezier.size() )
+    {
+    case 4: // cubic
         return approximateCubicBezierCurve( aResult, aBezier );
-    else
+        break;
+    case 3: // quadratic
         return approximateQuadraticBezierCurve( aResult, aBezier );
+        break;
+    default:
+        // error, only 3 and 4 are acceptable values
+        return false;
+    }
 }
 
 
