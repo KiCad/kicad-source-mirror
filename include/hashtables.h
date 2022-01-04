@@ -33,7 +33,7 @@
 // First some utility classes and functions
 
 /// Equality test for "const char*" type used in very specialized KEYWORD_MAP below
-struct iequal_to : std::binary_function< const char*, const char*, bool >
+struct iequal_to
 {
     bool operator()( const char* x, const char* y ) const
     {
@@ -77,7 +77,7 @@ struct fnv_1a
 
 
 /// Hash function for wxString, counterpart of std::string hash
-struct WXSTRING_HASH : std::unary_function<wxString, std::size_t>
+struct WXSTRING_HASH
 {
     std::size_t operator()( const wxString& aString ) const
     {
@@ -127,10 +127,6 @@ struct WXSTRING_HASH : std::unary_function<wxString, std::size_t>
  * @author Dick Hollenbeck
  */
 typedef std::unordered_map< const char*, int, fnv_1a, iequal_to > KEYWORD_MAP;
-
-/// Map a C string to an EDA_RECT.
-/// The key is the classname of the derived wxformbuilder dialog.
-typedef std::unordered_map< std::string, EDA_RECT > RECT_MAP;
 
 
 #endif // HASHTABLES_H_
