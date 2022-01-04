@@ -53,16 +53,19 @@ void FONT_CHOICE::SetFontSelection( KIFONT::FONT* aFont )
     if( !aFont )
     {
         SetSelection( 0 );
-        return;
     }
-
-    SetStringSelection( aFont->Name() );
-
-    if( GetSelection() == wxNOT_FOUND )
+    else
     {
-        Append( aFont->Name() + m_notFound );
-        SetSelection( GetCount() );
+        SetStringSelection( aFont->Name() );
+
+        if( GetSelection() == wxNOT_FOUND )
+        {
+            Append( aFont->Name() + m_notFound );
+            SetSelection( GetCount() );
+        }
     }
+
+    SendSelectionChangedEvent( wxEVT_CHOICE );
 }
 
 

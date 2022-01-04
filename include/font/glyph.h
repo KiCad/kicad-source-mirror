@@ -27,6 +27,7 @@
 
 #include <memory>
 #include <math/box2.h>
+#include <eda_angle.h>
 #include <geometry/shape_poly_set.h>
 #include <wx/debug.h>
 
@@ -42,8 +43,6 @@ public:
     virtual bool IsStroke() const  { return false; }
 
     virtual BOX2D BoundingBox() = 0;
-
-    virtual void Mirror( const VECTOR2D& aMirrorOrigin = { 0, 0 } ) = 0;
 };
 
 
@@ -54,11 +53,17 @@ public:
             SHAPE_POLY_SET()
     {}
 
+    OUTLINE_GLYPH( const OUTLINE_GLYPH& aGlyph ) :
+            SHAPE_POLY_SET( aGlyph )
+    {}
+
+    OUTLINE_GLYPH( const SHAPE_POLY_SET& aPoly ) :
+            SHAPE_POLY_SET( aPoly )
+    {}
+
     bool IsOutline() const override { return true; }
 
     BOX2D BoundingBox() override;
-
-    void Mirror( const VECTOR2D& aMirrorOrigin = VECTOR2D( 0, 0 ) ) override;
 };
 
 
@@ -79,10 +84,9 @@ public:
     BOX2D BoundingBox() override { return m_boundingBox; }
     void SetBoundingBox( const BOX2D& bbox ) { m_boundingBox = bbox; }
 
-    void Mirror( const VECTOR2D& aMirrorOrigin = { 0, 0 } ) override;
-
-    std::unique_ptr<GLYPH> Transform( const VECTOR2D& aGlyphSize,  const VECTOR2D& aOffset,
-                                      double aTilt );
+    std::unique_ptr<GLYPH> Transform( const VECTOR2D& aGlyphSize,  const VECTOR2I& aOffset,
+                                      double aTilt, const EDA_ANGLE& aAngle, bool aMirror,
+                                      const VECTOR2I& aOrigin  );
 
 private:
     bool  m_penIsDown = false;

@@ -36,14 +36,30 @@
 #include FT_BBOX_H
 #include <trigo.h>
 #include <font/fontconfig.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 using namespace KIFONT;
+
+
+// The height of the KiCad stroke font is the distance between stroke endpoints for a vertical
+// line of cap-height.  So the cap-height of the font is actually stroke-width taller than its
+// height.
+// Outline fonts are normally scaled on full-height (including ascenders and descenders), so we
+// need to compensate to keep them from being much smaller than their stroked counterparts.
+constexpr double OUTLINE_FONT_SIZE_COMPENSATION = 1.4;
+
+// The KiCad stroke font uses a subscript/superscript size ratio of 0.7.  This ratio is also
+// commonly used in LaTeX, but fonts with designed-in subscript and superscript glyphs are more
+// likely to use 0.58.
+// For auto-generated subscript and superscript glyphs in outline fonts we split the difference
+// with 0.64.
+static constexpr double SUBSCRIPT_SUPERSCRIPT_SIZE = 0.64;
+
 
 FT_Library OUTLINE_FONT::m_freeType = nullptr;
 
 OUTLINE_FONT::OUTLINE_FONT() :
-        m_faceSize( 16 ),
-        m_subscriptSize( 13 )
+        m_faceSize( 16 )
 {
     if( !m_freeType )
     {
@@ -83,27 +99,6 @@ bool OUTLINE_FONT::loadFontSimple( const wxString& aFontFileName )
     // TODO: handle ft_error properly (now we just return false if load does not succeed)
     FT_Error ft_error = loadFace( fileName );
 
-    if( ft_error )
-    {
-        // Try user dir
-        fontFile.SetExt( "otf" );
-        fontFile.SetPath( Pgm().GetSettingsManager().GetUserSettingsPath() + wxT( "/fonts" ) );
-        fileName = fontFile.GetFullPath();
-
-        if( wxFile::Exists( fileName ) )
-        {
-            ft_error = loadFace( fileName );
-        }
-        else
-        {
-            fontFile.SetExt( "ttf" );
-            fileName = fontFile.GetFullPath();
-
-            if( wxFile::Exists( fileName ) )
-                ft_error = loadFace( fileName );
-        }
-    }
-
     if( ft_error == FT_Err_Unknown_File_Format )
     {
         wxLogWarning( _( "The font file %s could be opened and read, "
@@ -128,7 +123,7 @@ bool OUTLINE_FONT::loadFontSimple( const wxString& aFontFileName )
 FT_Error OUTLINE_FONT::loadFace( const wxString& aFontFileName )
 {
     m_faceScaler = m_faceSize * 64;
-    m_subscriptFaceScaler = m_subscriptSize * 64;
+    m_subscriptFaceScaler = KiROUND( m_faceSize * 64 * SUBSCRIPT_SUPERSCRIPT_SIZE );
 
     // TODO: check that going from wxString to char* with UTF-8
     // conversion for filename makes sense on any/all platforms
@@ -223,10 +218,12 @@ double OUTLINE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight ) const
  */
 double OUTLINE_FONT::GetInterline( double aGlyphHeight, double aLineSpacing ) const
 {
+    double pitch = INTERLINE_PITCH_RATIO;
+
     if( GetFace()->units_per_EM )
-        return ( aLineSpacing * aGlyphHeight * ( GetFace()->height / GetFace()->units_per_EM ) );
-    else
-        return ( aLineSpacing * aGlyphHeight * INTERLINE_PITCH_RATIO );
+        pitch = GetFace()->height / GetFace()->units_per_EM;
+
+    return ( aLineSpacing * aGlyphHeight * pitch * OUTLINE_FONT_SIZE_COMPENSATION );
 }
 
 
@@ -292,32 +289,34 @@ VECTOR2I OUTLINE_FONT::GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>& aG
                                          const EDA_TEXT* aText ) const
 {
     wxArrayString         strings;
-    std::vector<wxPoint>  positions;
-    int                   n;
+    std::vector<VECTOR2I> positions;
     VECTOR2I              ret;
     std::vector<VECTOR2D> boundingBoxes;
+    TEXT_ATTRIBUTES       attrs = aText->GetAttributes();
     TEXT_STYLE_FLAGS      textStyle = 0;
+
+    attrs.m_Angle = aText->GetDrawRotation();
 
     if( aText->IsItalic() )
         textStyle |= TEXT_STYLE::ITALIC;
 
-    getLinePositions( aText->GetShownText(), aText->GetTextPos(), strings, positions, n,
-                      boundingBoxes, aText->GetAttributes() );
+    getLinePositions( aText->GetShownText(), aText->GetTextPos(), strings, positions, boundingBoxes,
+                      attrs );
 
-    for( int i = 0; i < n; i++ )
+    for( size_t i = 0; i < strings.GetCount(); i++ )
     {
-        ret = drawMarkup( nullptr, aGlyphs, UTF8( strings.Item( i ) ), positions[i],
-                          aText->GetTextSize(), aText->GetTextAngle(), textStyle );
+        ret = drawMarkup( nullptr, aGlyphs, UTF8( strings.Item( i ) ), positions[i], attrs.m_Size,
+                          attrs.m_Angle, attrs.m_Mirrored, aText->GetTextPos(), textStyle );
     }
 
     return ret;
 }
 
 
-VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBoundingBox,
-                                        std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
-                                        const UTF8& aText, const VECTOR2D& aGlyphSize,
-                                        const wxPoint& aPosition, const EDA_ANGLE& aOrientation,
+VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
+                                        const UTF8& aText, const VECTOR2D& aSize,
+                                        const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
+                                        bool aMirror, const VECTOR2I& aOrigin,
                                         TEXT_STYLE_FLAGS aTextStyle ) const
 {
     hb_buffer_t* buf = hb_buffer_create();
@@ -331,28 +330,22 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBoundingBox,
     hb_glyph_position_t* glyphPos = hb_buffer_get_glyph_positions( buf, &glyphCount );
     hb_font_t*           referencedFont;
 
-    //const double subscriptAndSuperscriptScaler = 0.5;
-    VECTOR2D glyphSize = aGlyphSize;
+    VECTOR2D glyphSize = aSize;
     FT_Face  face = m_face;
-    int      scaler = m_faceScaler;
+    double   scaler = m_faceScaler / OUTLINE_FONT_SIZE_COMPENSATION;
 
     if( IsSubscript( aTextStyle ) || IsSuperscript( aTextStyle ) )
-    {
         face = m_subscriptFace;
-        //scaler = m_subscriptFaceScaler;
-    }
 
     referencedFont = hb_ft_font_create_referenced( face );
     hb_ft_font_set_funcs( referencedFont );
     hb_shape( referencedFont, buf, nullptr, 0 );
 
-    const VECTOR2D scaleFactor( -glyphSize.x / scaler, glyphSize.y / scaler );
+    const VECTOR2D scaleFactor( glyphSize.x / scaler, -glyphSize.y / scaler );
 
     VECTOR2I cursor( 0, 0 );
-    VECTOR2I extentBottomLeft( INT_MAX, INT_MAX );
-    VECTOR2I extentTopRight( INT_MIN, INT_MIN );
-    VECTOR2I vBottomLeft( INT_MAX, INT_MAX );
-    VECTOR2I vTopRight( INT_MIN, INT_MIN );
+    VECTOR2D topLeft( INT_MAX * 1.0, -INT_MAX * 1.0 );
+    VECTOR2D topRight( -INT_MAX * 1.0, -INT_MAX * 1.0 );
 
     for( unsigned int i = 0; i < glyphCount; i++ )
     {
@@ -380,45 +373,33 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBoundingBox,
             GLYPH_POINTS     points = c.points;
             SHAPE_LINE_CHAIN shape;
 
-            VECTOR2D offset( aPosition );
-
-            if( IsSubscript( aTextStyle ) )
-                offset.y += glyphSize.y * 0.1;
-            else if( IsSuperscript( aTextStyle ) )
-                offset.y -= glyphSize.y * 0.2;
-
             for( const VECTOR2D& v : points )
             {
-                // Save text extents
-                if( vBottomLeft.x > v.x )
-                    vBottomLeft.x = v.x;
-                if( vBottomLeft.y > v.y )
-                    vBottomLeft.y = v.y;
-                if( vTopRight.x < v.x )
-                    vTopRight.x = v.x;
-                if( vTopRight.y < v.y )
-                    vTopRight.y = v.y;
+                VECTOR2D pt( v + cursor );
 
-                VECTOR2D pt( v.x, v.y );
-                VECTOR2D ptC( pt.x + cursor.x, pt.y + cursor.y );
-                wxPoint  scaledPtOrig( -ptC.x * scaleFactor.x, -ptC.y * scaleFactor.y );
-                wxPoint  scaledPt( scaledPtOrig );
-                RotatePoint( &scaledPt.x, &scaledPt.y, aOrientation.AsTenthsOfADegree() );
-                scaledPt.x += offset.x;
-                scaledPt.y += offset.y;
+                topLeft.x = std::min( topLeft.x, pt.x );
+                topLeft.y = std::max( topLeft.y, pt.y );
+                topRight.x = std::max( topRight.x, pt.x );
+                topRight.y = std::max( topRight.y, pt.y );
 
-                if( extentBottomLeft.x > scaledPt.x )
-                    extentBottomLeft.x = scaledPt.x;
-                if( extentBottomLeft.y > scaledPt.y )
-                    extentBottomLeft.y = scaledPt.y;
-                if( extentTopRight.x < scaledPt.x )
-                    extentTopRight.x = scaledPt.x;
-                if( extentTopRight.y < scaledPt.y )
-                    extentTopRight.y = scaledPt.y;
+                if( IsSubscript( aTextStyle ) )
+                    pt.y -= 0.25 * scaler;
+                else if( IsSuperscript( aTextStyle ) )
+                    pt.y += 0.45 * scaler;
 
-                shape.Append( scaledPt.x, scaledPt.y );
-                //ptListScaled.push_back( scaledPt );
+                pt *= scaleFactor;
+                pt += aPosition;
+
+                if( aMirror )
+                    pt.x = aOrigin.x - ( pt.x - aOrigin.x );
+
+                if( !aAngle.IsZero() )
+                    RotatePoint( pt, aOrigin, aAngle );
+
+                shape.Append( pt.x, pt.y );
             }
+
+            shape.SetClosed( true );
 
             if( contourIsHole( c ) )
                 holes.push_back( std::move( shape ) );
@@ -429,10 +410,7 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBoundingBox,
         for( SHAPE_LINE_CHAIN& outline : outlines )
         {
             if( outline.PointCount() )
-            {
-                outline.SetClosed( true );
                 glyph->AddOutline( outline );
-            }
         }
 
         int nthHole = 0;
@@ -441,17 +419,14 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBoundingBox,
         {
             if( hole.PointCount() )
             {
-                hole.SetClosed( true );
                 VECTOR2I firstPoint = hole.GetPoint( 0 );
-                //SHAPE_SIMPLE *outlineForHole = nullptr;
-                int nthOutline = -1;
-                int n = 0;
+                int      nthOutline = -1;
+                int      n = 0;
 
                 for( SHAPE_LINE_CHAIN& outline : outlines )
                 {
                     if( outline.PointInside( firstPoint ) )
                     {
-                        //outlineForHole = outline;
                         nthOutline = n;
                         break;
                     }
@@ -476,96 +451,42 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBoundingBox,
 
     if( IsOverbar( aTextStyle ) )
     {
-        std::unique_ptr<OUTLINE_GLYPH> overbarGlyph = std::make_unique<OUTLINE_GLYPH>();
-        SHAPE_LINE_CHAIN               overbar;
+        topLeft *= scaleFactor;
+        topRight *= scaleFactor;
 
-        int left = extentBottomLeft.x;
-        int right = extentTopRight.x;
-        int top = extentBottomLeft.y - 800;
-        int barHeight = -3200;
+        topLeft.y -= aSize.y * 0.16;
+        topRight.y -= aSize.y * 0.16;
 
-        overbar.Append( VECTOR2D( left, top ) );
-        overbar.Append( VECTOR2D( right, top ) );
-        overbar.Append( VECTOR2D( right, top + barHeight ) );
-        overbar.Append( VECTOR2D( left, top + barHeight ) );
-        overbar.SetClosed( true );
+        topLeft += aPosition;
+        topRight += aPosition;
 
-        overbarGlyph->AddOutline( overbar );
+        if( !aAngle.IsZero() )
+        {
+            RotatePoint( topLeft, aOrigin, aAngle );
+            RotatePoint( topRight, aOrigin, aAngle );
+        }
 
+        double         overbarHeight = aSize.y * 0.07;
+        SHAPE_POLY_SET overbar;
+
+        TransformOvalToPolygon( overbar, topLeft, topRight, overbarHeight, overbarHeight / 8,
+                                ERROR_INSIDE );
+
+        std::unique_ptr<OUTLINE_GLYPH> overbarGlyph = std::make_unique<OUTLINE_GLYPH>( overbar );
         aGlyphs.push_back( std::move( overbarGlyph ) );
     }
 
     hb_buffer_destroy( buf );
 
-    VECTOR2I cursorDisplacement( -cursorEnd.x * scaleFactor.x, cursorEnd.y * scaleFactor.y );
+    VECTOR2I cursorDisplacement( cursorEnd.x * scaleFactor.x, -cursorEnd.y * scaleFactor.y );
 
-    if( aBoundingBox )
+    if( aBBox )
     {
-        aBoundingBox->SetOrigin( aPosition.x, aPosition.y );
-        aBoundingBox->SetEnd( cursorDisplacement );
+        aBBox->SetOrigin( aPosition.x, aPosition.y );
+        aBBox->SetEnd( cursorDisplacement );
     }
 
     return VECTOR2I( aPosition.x + cursorDisplacement.x, aPosition.y + cursorDisplacement.y );
-}
-
-
-VECTOR2D OUTLINE_FONT::getBoundingBox( const UTF8& aString, const VECTOR2D& aGlyphSize,
-                                       TEXT_STYLE_FLAGS aTextStyle ) const
-{
-    hb_buffer_t* buf = hb_buffer_create();
-    hb_buffer_add_utf8( buf, aString.c_str(), -1, 0, -1 );
-
-    // guess direction, script, and language based on contents
-    hb_buffer_guess_segment_properties( buf );
-
-    FT_Face face = m_face;
-    int     scaler = m_faceScaler;
-
-    if( IsSubscript( aTextStyle ) || IsSuperscript( aTextStyle ) )
-        face = m_subscriptFace;
-
-    hb_font_t* referencedFont = hb_ft_font_create_referenced( face );
-    hb_ft_font_set_funcs( referencedFont );
-    hb_shape( referencedFont, buf, nullptr, 0 );
-
-    unsigned int     glyphCount;
-    hb_glyph_info_t* glyphInfo = hb_buffer_get_glyph_infos( buf, &glyphCount );
-    //hb_glyph_position_t* glyphPos = hb_buffer_get_glyph_positions( buf, &glyphCount );
-
-    VECTOR2D boundingBox( 0, 0 );
-
-    int    xScaler = aGlyphSize.x / scaler;
-    int    yScaler = aGlyphSize.y / scaler;
-    double maxHeight = 0.0;
-
-    for( unsigned int i = 0; i < glyphCount; i++ )
-    {
-        //hb_glyph_position_t& pos = glyphPos[i];
-        int codepoint = glyphInfo[i].codepoint;
-
-        FT_Load_Glyph( face, codepoint, FT_LOAD_NO_BITMAP );
-
-        FT_GlyphSlot glyphSlot = face->glyph;
-        FT_Glyph     glyph;
-        FT_BBox      controlBox;
-
-        FT_Get_Glyph( glyphSlot, &glyph );
-        FT_Glyph_Get_CBox( glyph, FT_Glyph_BBox_Mode::FT_GLYPH_BBOX_UNSCALED, &controlBox );
-
-        double width = controlBox.xMax * xScaler;
-        boundingBox.x += width;
-
-        double height = controlBox.yMax * yScaler;
-        if( height > maxHeight )
-            maxHeight = height;
-
-        FT_Done_Glyph( glyph );
-    }
-    boundingBox.y = aGlyphSize.y; //maxHeight;
-
-    hb_buffer_destroy( buf );
-
-    return boundingBox;
 }
 
 
@@ -575,7 +496,7 @@ VECTOR2D OUTLINE_FONT::getBoundingBox( const UTF8& aString, const VECTOR2D& aGly
  * WIP: eeschema (and PDF output?) should use pixel rendering instead of linear segmentation
  */
 void OUTLINE_FONT::RenderToOpenGLCanvas( KIGFX::OPENGL_GAL& aGal, const UTF8& aString,
-                                         const VECTOR2D& aGlyphSize, const wxPoint& aPosition,
+                                         const VECTOR2D& aGlyphSize, const VECTOR2I& aPosition,
                                          const EDA_ANGLE& aOrientation, bool aIsMirrored ) const
 {
     hb_buffer_t* buf = hb_buffer_create();

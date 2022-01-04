@@ -1554,7 +1554,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 }
 
 
-void PCB_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition,
+void PCB_PAINTER::strokeText( const wxString& aText, const VECTOR2I& aPosition,
                               const TEXT_ATTRIBUTES& aAttrs )
 {
     KIFONT::FONT* font = aAttrs.m_Font;
@@ -1571,9 +1571,9 @@ void PCB_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition,
 
 void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 {
-    wxString shownText( aText->GetShownText() );
+    wxString resolvedText( aText->GetShownText() );
 
-    if( shownText.Length() == 0 )
+    if( resolvedText.Length() == 0 )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
@@ -1589,15 +1589,25 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
     else
         attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
 
-    strokeText( shownText, aText->GetTextPos(), attrs );
+    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aText->GetRenderCache( resolvedText );
+
+    if( cache )
+    {
+        for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
+            m_gal->DrawGlyph( *glyph.get() );
+    }
+    else
+    {
+        strokeText( resolvedText, aText->GetTextPos(), attrs );
+    }
 }
 
 
 void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
 {
-    wxString shownText( aText->GetShownText() );
+    wxString resolvedText( aText->GetShownText() );
 
-    if( shownText.Length() == 0 )
+    if( resolvedText.Length() == 0 )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
@@ -1615,7 +1625,17 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
     else
         attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
 
-    strokeText( shownText, aText->GetTextPos(), attrs );
+    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aText->GetRenderCache( resolvedText );
+
+    if( cache )
+    {
+        for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
+            m_gal->DrawGlyph( *glyph.get() );
+    }
+    else
+    {
+        strokeText( resolvedText, aText->GetTextPos(), attrs );
+    }
 
     // Draw the umbilical line
     if( aText->IsSelected() )
@@ -1848,6 +1868,7 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
 
     // Draw text
     const PCB_TEXT& text = aDimension->Text();
+    wxString        resolvedText = text.GetShownText();
     VECTOR2D        position( text.GetTextPos().x, text.GetTextPos().y );
     TEXT_ATTRIBUTES attrs = text.GetAttributes();
 
@@ -1856,7 +1877,17 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     else
         attrs.m_StrokeWidth = getLineThickness( text.GetEffectiveTextPenWidth() );
 
-    strokeText( text.GetShownText(), position, attrs );
+    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = text.GetRenderCache( resolvedText );
+
+    if( cache )
+    {
+        for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
+            m_gal->DrawGlyph( *glyph.get() );
+    }
+    else
+    {
+        strokeText( resolvedText, position, attrs );
+    }
 }
 
 

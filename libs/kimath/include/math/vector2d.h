@@ -221,6 +221,9 @@ public:
     VECTOR2<T>& operator+=( const VECTOR2<T>& aVector );
 
     /// Compound assignment operator
+    VECTOR2<T>& operator*=( const VECTOR2<T>& aVector );
+
+    /// Compound assignment operator
     VECTOR2<T>& operator+=( const T& aScalar );
 
     /// Vector subtraction operator
@@ -342,6 +345,15 @@ VECTOR2<T>& VECTOR2<T>::operator+=( const VECTOR2<T>& aVector )
 {
     x += aVector.x;
     y += aVector.y;
+    return *this;
+}
+
+
+template <class T>
+VECTOR2<T>& VECTOR2<T>::operator*=( const VECTOR2<T>& aVector )
+{
+    x *= aVector.x;
+    y *= aVector.y;
     return *this;
 }
 

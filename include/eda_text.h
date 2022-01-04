@@ -30,6 +30,7 @@
 
 #include <outline_mode.h>
 #include <eda_rect.h>
+#include <font/glyph.h>
 #include <font/text_attributes.h>
 
 class OUTPUTFORMATTER;
@@ -46,9 +47,16 @@ class wxFindReplaceData;
  */
 struct TSEGM_2_POLY_PRMS
 {
-    int m_textWidth;
-    int m_error;
+    int             m_textWidth;
+    int             m_error;
     SHAPE_POLY_SET* m_cornerBuffer;
+};
+
+
+struct TSEGM_2_SHAPE_PRMS
+{
+    int             m_penWidth;
+    SHAPE_COMPOUND* m_shape;
 };
 
 
@@ -97,6 +105,8 @@ public:
 
     virtual ~EDA_TEXT();
 
+    EDA_TEXT& operator=( const EDA_TEXT& aItem );
+
     /**
      * Return the string associated with the text object.
      *
@@ -128,7 +138,7 @@ public:
      * The TextThickness is that set by the user.  The EffectiveTextPenWidth also factors
      * in bold text and thickness clamping.
      */
-    void SetTextThickness( int aWidth ) { m_attributes.m_StrokeWidth = aWidth; };
+    void SetTextThickness( int aWidth );
     int GetTextThickness() const        { return m_attributes.m_StrokeWidth; };
 
     /**
@@ -141,42 +151,38 @@ public:
         // Higher level classes may be more restrictive than this by overloading
         // SetTextAngle() or merely calling EDA_TEXT::SetTextAngle() after clamping
         // aAngle before calling this lowest inline accessor.
-        m_attributes.m_Angle = EDA_ANGLE( aAngleInTenthsOfADegree, EDA_ANGLE::TENTHS_OF_A_DEGREE );
+        SetTextAngle( EDA_ANGLE( aAngleInTenthsOfADegree, EDA_ANGLE::TENTHS_OF_A_DEGREE ) );
     }
 
-    void SetTextAngle( const EDA_ANGLE& aAngle )
-    {
-        m_attributes.m_Angle = aAngle;
-    }
-
+    void SetTextAngle( const EDA_ANGLE& aAngle );
     const EDA_ANGLE& GetTextAngle() const       { return m_attributes.m_Angle; }
 
-    void SetItalic( bool aItalic )              { m_attributes.m_Italic = aItalic; }
+    void SetItalic( bool aItalic );
     bool IsItalic() const                       { return m_attributes.m_Italic; }
 
-    void SetBold( bool aBold )                  { m_attributes.m_Bold = aBold; }
+    void SetBold( bool aBold );
     bool IsBold() const                         { return m_attributes.m_Bold; }
 
-    virtual void SetVisible( bool aVisible )    { m_attributes.m_Visible = aVisible; }
+    virtual void SetVisible( bool aVisible );
     virtual bool IsVisible() const              { return m_attributes.m_Visible; }
 
-    void SetMirrored( bool isMirrored )         { m_attributes.m_Mirrored = isMirrored; }
+    void SetMirrored( bool isMirrored );
     bool IsMirrored() const                     { return m_attributes.m_Mirrored; }
 
     /**
      * @param aAllow true if ok to use multiline option, false if ok to use only single line
      *               text.  (Single line is faster in calculations than multiline.)
      */
-    void SetMultilineAllowed( bool aAllow )     { m_attributes.m_Multiline = aAllow; }
+    void SetMultilineAllowed( bool aAllow );
     bool IsMultilineAllowed() const             { return m_attributes.m_Multiline; }
 
+    void SetHorizJustify( GR_TEXT_H_ALIGN_T aType );
     GR_TEXT_H_ALIGN_T GetHorizJustify() const   { return m_attributes.m_Halign; };
+
+    void SetVertJustify( GR_TEXT_V_ALIGN_T aType );
     GR_TEXT_V_ALIGN_T GetVertJustify() const    { return m_attributes.m_Valign; };
 
-    void SetHorizJustify( GR_TEXT_H_ALIGN_T aType )   { m_attributes.m_Halign = aType; };
-    void SetVertJustify( GR_TEXT_V_ALIGN_T aType )    { m_attributes.m_Valign = aType; };
-
-    void SetKeepUpright( bool aKeepUpright )    { m_attributes.m_KeepUpright = aKeepUpright; }
+    void SetKeepUpright( bool aKeepUpright );
     bool IsKeepUpright() const                  { return m_attributes.m_KeepUpright; }
 
     /**
@@ -208,36 +214,35 @@ public:
 
     bool IsDefaultFormatting() const;
 
-    void SetFont( KIFONT::FONT* aFont )         { m_attributes.m_Font = aFont; }
+    void SetFont( KIFONT::FONT* aFont );
     KIFONT::FONT* GetFont() const               { return m_attributes.m_Font; }
 
     wxString GetFontName() const;
 
-    void SetLineSpacing( double aLineSpacing )  { m_attributes.m_LineSpacing = aLineSpacing; }
+    void SetLineSpacing( double aLineSpacing );
     double GetLineSpacing() const               { return m_attributes.m_LineSpacing; }
 
-    void SetTextSize( const wxSize& aNewSize )  { m_attributes.m_Size = aNewSize; }
+    void SetTextSize( const wxSize& aNewSize );
     wxSize GetTextSize() const                  { return wxSize( m_attributes.m_Size.x,
                                                                  m_attributes.m_Size.y ); }
 
-    void SetTextWidth( int aWidth )             { m_attributes.m_Size.x = aWidth; }
+    void SetTextWidth( int aWidth );
     int GetTextWidth() const                    { return m_attributes.m_Size.x; }
 
-    void SetTextHeight( int aHeight )           { m_attributes.m_Size.y = aHeight; }
+    void SetTextHeight( int aHeight );
     int GetTextHeight() const                   { return m_attributes.m_Size.y; }
 
-    void SetTextPos( const VECTOR2I& aPoint )   { m_pos = aPoint; }
+    void SetTextPos( const VECTOR2I& aPoint );
     const VECTOR2I& GetTextPos() const          { return m_pos; }
 
-    void SetTextX( int aX )                     { m_pos.x = aX; }
-    void SetTextY( int aY )                     { m_pos.y = aY; }
+    void SetTextX( int aX );
+    void SetTextY( int aY );
 
-    void Offset( const VECTOR2I& aOffset ) { m_pos += aOffset; }
+    void Offset( const VECTOR2I& aOffset );
 
-    void Empty()                                { m_text.Empty(); }
+    void Empty();
 
     static GR_TEXT_H_ALIGN_T MapHorizJustify( int aHorizJustify );
-
     static GR_TEXT_V_ALIGN_T MapVertJustify( int aVertJustify );
 
     /**
@@ -250,14 +255,6 @@ public:
      */
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
                 const COLOR4D& aColor, OUTLINE_MODE aDisplay_mode = FILLED );
-
-    /**
-     * Convert the text shape to a list of segment.
-     *
-     * Each segment is stored as 2 VECTOR2Is: the starting point and the ending point
-     * there are therefore 2*n points.
-     */
-    std::vector<VECTOR2I> TransformToSegmentList() const;
 
     /**
      * Convert the text bounding box to a rectangular polygon depending on the text
@@ -340,9 +337,18 @@ public:
     virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
     virtual EDA_ANGLE GetDrawRotation() const               { return GetTextAngle(); }
-    virtual VECTOR2I GetDrawPos() const                      { return GetTextPos(); }
+    virtual VECTOR2I GetDrawPos() const                     { return GetTextPos(); }
     virtual GR_TEXT_H_ALIGN_T GetDrawHorizJustify() const   { return GetHorizJustify(); };
     virtual GR_TEXT_V_ALIGN_T GetDrawVertJustify() const    { return GetVertJustify(); };
+
+    void ClearRenderCache() { m_render_cache.clear(); }
+
+    std::vector<std::unique_ptr<KIFONT::GLYPH>>*
+    GetRenderCache( const wxString& forResolvedText ) const;
+
+    // Support for reading the cache from disk.
+    void SetupRenderCache( const wxString& aResolvedText, const EDA_ANGLE& aAngle );
+    void AddRenderCacheGlyph( const SHAPE_POLY_SET& aPoly );
 
     int Compare( const EDA_TEXT* aOther ) const;
 
@@ -365,6 +371,10 @@ private:
     wxString        m_text;
     wxString        m_shown_text;           // Cache of unescaped text for efficient access
     bool            m_shown_text_has_text_var_refs;
+
+    mutable wxString                                    m_render_cache_text;
+    mutable EDA_ANGLE                                   m_render_cache_angle;
+    mutable std::vector<std::unique_ptr<KIFONT::GLYPH>> m_render_cache;
 
     TEXT_ATTRIBUTES m_attributes;
     VECTOR2I        m_pos;

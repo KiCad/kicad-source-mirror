@@ -201,7 +201,7 @@ protected:
      */
     virtual int getDrillSize( const PCB_VIA* aVia ) const;
 
-    void strokeText( const wxString& aText, const VECTOR2D& aPosition,
+    void strokeText( const wxString& aText, const VECTOR2I& aPosition,
                      const TEXT_ATTRIBUTES& aAttrs );
 
 protected:

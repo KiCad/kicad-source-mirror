@@ -119,19 +119,21 @@ public:
      * @param aGal is the graphics context.
      * @param aText is the text to be drawn.
      * @param aPosition is the text position in world coordinates.
-     * @param aRotationAngle is the text rotation angle
+     * @param aCursor is the current text position (for multiple text blocks within a single text
+     *                object, such as a run of superscript characters)
+     * @param aAttrs are the styling attributes of the text, including its rotation
      * @return bounding box
      */
-    VECTOR2D Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
-                   const VECTOR2D& aOrigin, const TEXT_ATTRIBUTES& aAttrs ) const;
+    VECTOR2D Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
+                   const VECTOR2I& aCursor, const TEXT_ATTRIBUTES& aAttrs ) const;
 
-    VECTOR2D Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
+    VECTOR2D Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
                    const TEXT_ATTRIBUTES& aAttributes ) const
     {
-        return Draw( aGal, aText, aPosition, VECTOR2D( 0, 0 ), aAttributes );
+        return Draw( aGal, aText, aPosition, VECTOR2I( 0, 0 ), aAttributes );
     }
 
-    virtual void DrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
+    virtual void DrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
                            const TEXT_ATTRIBUTES& aAttributes ) const;
 
     /**
@@ -169,19 +171,21 @@ public:
     /**
      * Convert text string to an array of GLYPHs.
      *
-     * @param aBoundingBox pointer to a BOX2I that will set to the bounding box, or nullptr
+     * @param aBBox pointer to a BOX2I that will set to the bounding box, or nullptr
      * @param aGlyphs storage for the returned GLYPHs
      * @param aText text to convert to polygon/polyline
-     * @param aGlyphSize glyph size
+     * @param aSize is the cap-height and em-width of the text
      * @param aPosition position of text (cursor position before this text)
      * @param aAngle text angle
+     * @param aMirror is true if text should be drawn mirrored, false otherwise.
+     * @param aOrigin is the point around which the text should be rotated, mirrored, etc.
      * @param aTextStyle text style flags
      * @return text cursor position after this text
      */
-    virtual VECTOR2I GetTextAsGlyphs( BOX2I* aBoundingBox,
-                                      std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
-                                      const UTF8& aText, const VECTOR2D& aGlyphSize,
-                                      const wxPoint& aPosition, const EDA_ANGLE& aAngle,
+    virtual VECTOR2I GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
+                                      const UTF8& aText, const VECTOR2D& aSize,
+                                      const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
+                                      bool aMirror, const VECTOR2I& aOrigin,
                                       TEXT_STYLE_FLAGS aTextStyle ) const = 0;
 
 protected:
@@ -205,45 +209,42 @@ protected:
      * function.
      *
      * @param aGal is a pointer to the graphics abstraction layer, or nullptr (nothing is drawn)
-     * @param aBoundingBox is a pointer to a BOX2I variable which will be set to the bounding box,
-     *                     or nullptr
+     * @param aBBox is an optional pointer to be filled with the bounding box.
      * @param aText is the text to be drawn.
      * @param aPosition is text position.
+     * @param aSize is the cap-height and em-width of the text
      * @param aAngle is text angle.
-     * @param aIsMirrored is true if text should be drawn mirrored, false otherwise.
-     * @return new cursor position
+     * @param aMirror is true if text should be drawn mirrored, false otherwise.
+     * @param aOrigin is the point around which the text should be rotated, mirrored, etc.
+     * @return new cursor position in non-rotated, non-mirrored coordinates
      */
     VECTOR2D drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const UTF8& aText,
-                                 const VECTOR2D& aPosition, const VECTOR2D& aGlyphSize,
-                                 const EDA_ANGLE& aAngle, bool aIsItalic, bool aIsMirrored ) const;
+                                 const VECTOR2I& aPosition, const VECTOR2D& aSize,
+                                 const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
+                                 bool aItalic ) const;
 
     /**
      * Computes the bounding box for a single line of text.
      * Multiline texts should be split before using the function.
      *
-     * @param aBoundingBox is a pointer to a BOX2I variable which will be set to the bounding box,
-     *                     or nullptr
+     * @param aBBox is an optional pointer to be filled with the bounding box.
      * @param aText is the text to be drawn.
      * @param aPosition is text position.
-     * @param aGlyphSize is glyph size.
-     * @param aAngle is text angle.
+     * @param aSize is the cap-height and em-width of the text.
      * @return new cursor position
      */
-    VECTOR2D boundingBoxSingleLine( BOX2I* aBoundingBox, const UTF8& aText,
-                                    const VECTOR2D& aPosition, const VECTOR2D& aGlyphSize,
-                                    const EDA_ANGLE& aAngle, bool aIsItalic ) const;
+    VECTOR2D boundingBoxSingleLine( BOX2I* aBBox, const UTF8& aText, const VECTOR2I& aPosition,
+                                    const VECTOR2D& aSize, bool aItalic ) const;
 
-    void getLinePositions( const UTF8& aText, const VECTOR2D& aPosition, wxArrayString& aStringList,
-                           std::vector<wxPoint>& aPositions, int& aLineCount,
+    void getLinePositions( const UTF8& aText, const VECTOR2I& aPosition,
+                           wxArrayString& aTextLines, std::vector<VECTOR2I>& aPositions,
                            std::vector<VECTOR2D>& aBoundingBoxes,
                            const TEXT_ATTRIBUTES& aAttributes ) const;
 
-    virtual VECTOR2D getBoundingBox( const UTF8& aString, const VECTOR2D& aGlyphSize,
-                                     TEXT_STYLE_FLAGS aTextStyle = 0 ) const = 0;
-
     VECTOR2D drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
-                         const UTF8& aText, const VECTOR2D& aPosition, const VECTOR2D& aGlyphSize,
-                         const EDA_ANGLE& aAngle, TEXT_STYLE_FLAGS aTextStyle ) const;
+                         const UTF8& aText, const VECTOR2I& aPosition, const VECTOR2D& aSize,
+                         const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
+                         TEXT_STYLE_FLAGS aTextStyle ) const;
 
     ///< Factor that determines the pitch between 2 lines.
     static constexpr double INTERLINE_PITCH_RATIO = 1.62;   // The golden mean
@@ -251,10 +252,8 @@ protected:
 private:
     static FONT* getDefaultFont();
 
-    VECTOR2D doDrawString( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
+    VECTOR2D doDrawString( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
                            bool aParse, const TEXT_ATTRIBUTES& aAttrs ) const;
-    VECTOR2D getBoundingBox( const UTF8& aText, TEXT_STYLE_FLAGS aTextStyle,
-                             const TEXT_ATTRIBUTES& aAttrs ) const;
 
 protected:
     wxString     m_fontName;         ///< Font name

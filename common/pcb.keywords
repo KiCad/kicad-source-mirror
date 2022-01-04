@@ -238,6 +238,7 @@ rect
 rect_delta
 reference
 remove_unused_layers
+render_cache
 right
 rotate
 roundrect

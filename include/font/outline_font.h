@@ -111,8 +111,8 @@ public:
 
 
     VECTOR2I GetTextAsGlyphs( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
-                              const UTF8& aText, const VECTOR2D& aGlyphSize,
-                              const wxPoint& aPosition, const EDA_ANGLE& aAngle,
+                              const UTF8& aText, const VECTOR2D& aSize, const VECTOR2I& aPosition,
+                              const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
                               TEXT_STYLE_FLAGS aTextStyle ) const override;
 
     /**
@@ -130,15 +130,11 @@ public:
 
 #if 0
     void RenderToOpenGLCanvas( KIGFX::OPENGL_FREETYPE& aTarget, const UTF8& aString,
-                               const VECTOR2D& aGlyphSize, const wxPoint& aPosition,
-                               double aOrientation, bool aIsMirrored ) const;
+                               const VECTOR2D& aSize, const wxPoint& aPosition,
+                               const EDA_ANGLE& aAngle, bool aMirror ) const;
 #endif
 
 protected:
-    VECTOR2D getBoundingBox( const UTF8& aString, const VECTOR2D& aGlyphSize,
-                             TEXT_STYLE_FLAGS aTextStyle ) const override;
-
-
     FT_Error loadFace( const wxString& aFontFileName );
 
     bool loadFontSimple( const wxString& aFontFileName );
@@ -151,10 +147,9 @@ private:
     FT_Face           m_face;
     const int         m_faceSize;
     FT_Face           m_subscriptFace;
-    const int         m_subscriptSize;
 
-    int m_faceScaler;
-    int m_subscriptFaceScaler;
+    int               m_faceScaler;
+    int               m_subscriptFaceScaler;
 
     // cache for glyphs converted to straight segments
     // key is glyph index (FT_GlyphSlot field glyph_index)

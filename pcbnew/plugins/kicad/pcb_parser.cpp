@@ -537,6 +537,57 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 }
 
 
+void PCB_PARSER::parseRenderCache( EDA_TEXT* text )
+{
+    T token;
+
+    NeedSYMBOLorNUMBER();
+    wxString cacheText = FROM_UTF8( CurText() );
+    double   cacheAngle = parseAngle( "render cache angle" );
+
+    text->SetupRenderCache( cacheText,
+                            EDA_ANGLE( cacheAngle, EDA_ANGLE::TENTHS_OF_A_DEGREE ) );
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        if( token != T_polygon )
+            Expecting( T_polygon );
+
+        SHAPE_POLY_SET poly;
+
+        for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+        {
+            if( token != T_LEFT )
+                Expecting( T_LEFT );
+
+            token = NextTok();
+
+            if( token != T_pts )
+                Expecting( T_pts );
+
+            SHAPE_LINE_CHAIN lineChain;
+
+            while( (token = NextTok() ) != T_RIGHT )
+                parseOutlinePoints( lineChain );
+
+            lineChain.SetClosed( true );
+
+            if( poly.OutlineCount() == 0 )
+                poly.AddOutline( lineChain );
+            else
+                poly.AddHole( lineChain );
+        }
+
+        text->AddRenderCacheGlyph( poly );
+    }
+}
+
+
 FP_3DMODEL* PCB_PARSER::parse3DModel()
 {
     wxCHECK_MSG( CurTok() == T_model, nullptr,
@@ -2811,7 +2862,11 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
             break;
 
         case T_effects:
-            parseEDA_TEXT( (EDA_TEXT*) text.get() );
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ) );
+            break;
+
+        case T_render_cache:
+            parseRenderCache( static_cast<EDA_TEXT*>( text.get() ) );
             break;
 
         default:
@@ -3714,7 +3769,11 @@ FP_TEXT* PCB_PARSER::parseFP_TEXT()
             break;
 
         case T_effects:
-            parseEDA_TEXT( (EDA_TEXT*) text.get() );
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ) );
+            break;
+
+        case T_render_cache:
+            parseRenderCache( static_cast<EDA_TEXT*>( text.get() ) );
             break;
 
         case T_tstamp:

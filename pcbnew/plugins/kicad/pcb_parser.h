@@ -254,10 +254,18 @@ private:
     /**
      * Parse the common settings for any object derived from #EDA_TEXT.
      *
-     * @param aText A point to the #EDA_TEXT object to save the parsed settings into.
+     * @param aText A pointer to the #EDA_TEXT object to save the parsed settings into.
      * @throw PARSE_ERROR if the text syntax is not valid.
      */
     void parseEDA_TEXT( EDA_TEXT* aText );
+
+    /**
+     * Parse the render cache for any object derived from #EDA_TEXT.
+     *
+     * @param aText A pointer to the #EDA_TEXT object to save the parsed settings into.
+     * @throw PARSE_ERROR if the text syntax is not valid.
+     */
+    void parseRenderCache( EDA_TEXT* text );
 
     FP_3DMODEL* parse3DModel();
 

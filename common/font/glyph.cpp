@@ -20,6 +20,7 @@
 
 #include <vector>
 #include <font/glyph.h>
+#include <trigo.h>
 
 using namespace KIFONT;
 
@@ -62,8 +63,9 @@ void STROKE_GLYPH::Finalize()
 }
 
 
-std::unique_ptr<GLYPH> STROKE_GLYPH::Transform( const VECTOR2D& aGlyphSize, const VECTOR2D& aOffset,
-                                                double aTilt )
+std::unique_ptr<GLYPH> STROKE_GLYPH::Transform( const VECTOR2D& aGlyphSize, const VECTOR2I& aOffset,
+                                                double aTilt, const EDA_ANGLE& aAngle, bool aMirror,
+                                                const VECTOR2I& aOrigin )
 {
     std::unique_ptr<STROKE_GLYPH> glyph = std::make_unique<STROKE_GLYPH>( *this );
 
@@ -82,14 +84,18 @@ std::unique_ptr<GLYPH> STROKE_GLYPH::Transform( const VECTOR2D& aGlyphSize, cons
     {
         for( VECTOR2D& point : pointList )
         {
-            point.x *= aGlyphSize.x;
-            point.y *= aGlyphSize.y;
+            point *= aGlyphSize;
 
             if( aTilt )
                 point.x -= point.y * aTilt;
 
-            point.x += aOffset.x;
-            point.y += aOffset.y;
+            point += aOffset;
+
+            if( aMirror )
+                point.x = aOrigin.x - ( point.x - aOrigin.x );
+
+            if( !aAngle.IsZero() )
+                RotatePoint( point, aOrigin, aAngle );
         }
     }
 
@@ -97,35 +103,8 @@ std::unique_ptr<GLYPH> STROKE_GLYPH::Transform( const VECTOR2D& aGlyphSize, cons
 }
 
 
-void STROKE_GLYPH::Mirror( const VECTOR2D& aMirrorOrigin )
-{
-    double originX = aMirrorOrigin.x;
-
-    VECTOR2D pos = m_boundingBox.GetPosition();
-    VECTOR2D end = m_boundingBox.GetEnd();
-
-    pos.x = originX - ( pos.x - originX );
-    end.x = originX - ( end.x - originX );
-
-    m_boundingBox.SetOrigin( pos );
-    m_boundingBox.SetEnd( end );
-
-    for( std::vector<VECTOR2D>& pointList : *this )
-    {
-        for( VECTOR2D& point : pointList )
-            point.x = originX - ( point.x - originX );
-    }
-}
-
-
 BOX2D OUTLINE_GLYPH::BoundingBox()
 {
     BOX2I bbox = BBox();
     return BOX2D( bbox.GetOrigin(), bbox.GetSize() );
-}
-
-
-void OUTLINE_GLYPH::Mirror( const VECTOR2D& aMirrorOrigin )
-{
-    SHAPE_POLY_SET::Mirror( true, false, aMirrorOrigin );
 }

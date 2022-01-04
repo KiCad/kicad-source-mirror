@@ -211,28 +211,20 @@ VECTOR2D STROKE_FONT::StringBoundaryLimits( const KIGFX::GAL* aGal, const UTF8& 
     BOX2I                               boundingBox;
 
     (void) drawMarkup( &boundingBox, glyphs, aText, VECTOR2D(), aGlyphSize, EDA_ANGLE::ANGLE_0,
-                       0 /* TODO: this should really include TEXT_STYLE::ITALIC if set */ );
+                       false, VECTOR2D(), 0 /* TODO: should include TEXT_STYLE::ITALIC if set */ );
 
     return boundingBox.GetSize();
 }
 
 
-VECTOR2D STROKE_FONT::getBoundingBox( const UTF8& aString, const VECTOR2D& aGlyphSize,
-                                      TEXT_STYLE_FLAGS aTextStyle ) const
-{
-    // TODO: take glyph thickness into account!
-    return StringBoundaryLimits( nullptr, aString, aGlyphSize, 0 );
-}
-
-
-VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBoundingBox,
-                                       std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
-                                       const UTF8& aText, const VECTOR2D& aGlyphSize,
-                                       const wxPoint& aPosition, const EDA_ANGLE& aAngle,
+VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
+                                       const UTF8& aText, const VECTOR2D& aSize,
+                                       const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
+                                       bool aMirror, const VECTOR2I& aOrigin,
                                        TEXT_STYLE_FLAGS aTextStyle ) const
 {
     wxPoint  cursor( aPosition );
-    VECTOR2D glyphSize( aGlyphSize );
+    VECTOR2D glyphSize( aSize );
     double   tilt = ( aTextStyle & TEXT_STYLE::ITALIC ) ? ITALIC_TILT : 0.0;
 
     if( aTextStyle & TEXT_STYLE::SUBSCRIPT || aTextStyle & TEXT_STYLE::SUPERSCRIPT )
@@ -282,7 +274,8 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBoundingBox,
         {
             STROKE_GLYPH* source = static_cast<STROKE_GLYPH*>( m_glyphs->at( dd ).get() );
 
-            aGlyphs.push_back( source->Transform( glyphSize, cursor, tilt ) );
+            aGlyphs.push_back( source->Transform( glyphSize, cursor, tilt, aAngle, aMirror,
+                                                  aOrigin ) );
 
             cursor.x = aGlyphs.back()->BoundingBox().GetEnd().x;
         }
@@ -299,18 +292,27 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBoundingBox,
         if( aTextStyle & TEXT_STYLE::ITALIC )
             barOffset.x = barOffset.y * ITALIC_TILT;
 
-        overbarGlyph->AddPoint( VECTOR2D( aPosition.x + barOffset.x, cursor.y - barOffset.y ) );
-        overbarGlyph->AddPoint( VECTOR2D( cursor.x + barOffset.x, cursor.y - barOffset.y ) );
+        VECTOR2D barStart( aPosition.x + barOffset.x, cursor.y - barOffset.y );
+        VECTOR2D barEnd( cursor.x + barOffset.x, cursor.y - barOffset.y );
+
+        if( !aAngle.IsZero() )
+        {
+            RotatePoint( barStart, aOrigin, aAngle );
+            RotatePoint( barEnd, aOrigin, aAngle );
+        }
+
+        overbarGlyph->AddPoint( barStart );
+        overbarGlyph->AddPoint( barEnd );
         overbarGlyph->Finalize();
 
         aGlyphs.push_back( std::move( overbarGlyph ) );
     }
 
-    if( aBoundingBox )
+    if( aBBox )
     {
-        aBoundingBox->SetOrigin( aPosition.x, aPosition.y );
-        aBoundingBox->SetEnd( cursor.x + barOffset.x, cursor.y + std::max( glyphSize.y, barOffset.y ) );
-        aBoundingBox->Normalize();
+        aBBox->SetOrigin( aPosition );
+        aBBox->SetEnd( cursor.x + barOffset.x, cursor.y + std::max( glyphSize.y, barOffset.y ) );
+        aBBox->Normalize();
     }
 
     return VECTOR2I( cursor.x, aPosition.y );

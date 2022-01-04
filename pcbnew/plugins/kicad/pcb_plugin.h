@@ -45,6 +45,8 @@ class PCB_GROUP;
 class PCB_TRACK;
 class ZONE;
 class PCB_TEXT;
+class EDA_TEXT;
+class SHAPE_LINE_CHAIN;
 
 
 /// Current s-expression file format version.  2 was the last legacy format version.
@@ -279,6 +281,10 @@ private:
     void format( const PCB_TRACK* aTrack, int aNestLevel = 0 ) const;
 
     void format( const ZONE* aZone, int aNestLevel = 0 ) const;
+
+    void formatPolyPts( const SHAPE_LINE_CHAIN& outline, int aNestLevel, bool aCompact ) const;
+
+    void formatRenderCache( const EDA_TEXT* aText, int aNestLevel ) const;
 
     void formatLayer( const BOARD_ITEM* aItem ) const;
 
