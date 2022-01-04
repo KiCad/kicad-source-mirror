@@ -1,4 +1,4 @@
-# 킴슨김랑기 <korearf@gmail.com>, 2021.
+# 킴슨김랑기 <korearf@gmail.com>, 2021, 2022.
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 # jeongsuAn <dks9467@gmail.com>, 2021.
 # 이상수 <kku1818@gmail.com>, 2021.
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-17 00:56+0000\n"
+"PO-Revision-Date: 2022-01-05 00:19+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -19484,11 +19484,11 @@ msgid ""
 msgstr ""
 "### 분할 감쇠기\n"
 "감쇠는 6 dB입니다  \n"
-"___Z<sub>in</sub>___ &#x2126 에서 원하는 입력 임피던스;  \n"
-"___Z<sub>out</sub>___ &#x2126 에서 원하는 출력 임피던스;  \n"
+"___Z<sub>in</sub>___ 은 원하는 입력 임피던스 &#x2126;  \n"
+"___Z<sub>out</sub>___ 은 원하는 출력 임피던스 &#x2126;  \n"
 "___Z<sub>0</sub> = Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
-"___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
+"___R1 = R2 = R3 = Z<sub>0</sub>___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
 msgid ""
