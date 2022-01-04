@@ -27,6 +27,7 @@
 #define PCB_GRID_HELPER_H
 
 #include <vector>
+#include <pcb_item_containers.h>
 #include <tool/grid_helper.h>
 
 class TOOL_MANAGER;
@@ -51,6 +52,8 @@ public:
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, std::vector<BOARD_ITEM*>& aItem );
 
     VECTOR2I AlignToArc ( const VECTOR2I& aPoint, const SHAPE_ARC& aSeg );
+
+    VECTOR2I AlignToNearestPad( const VECTOR2I& aMousePos, PADS& aPads );
 
     /**
      * Chooses the "best" snap anchor around the given point, optionally taking layers from
