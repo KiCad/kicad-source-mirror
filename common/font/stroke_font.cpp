@@ -32,7 +32,6 @@
 #include <newstroke_font.h>
 #include <font/glyph.h>
 #include <font/stroke_font.h>
-#include <markup_parser.h>
 #include <geometry/shape_line_chain.h>
 #include <trigo.h>
 
@@ -208,14 +207,11 @@ VECTOR2D STROKE_FONT::StringBoundaryLimits( const KIGFX::GAL* aGal, const UTF8& 
                                             double          aGlyphThickness ) const
 {
     // TODO do we need to parse every time - have we already parsed?
-    MARKUP::MARKUP_PARSER markupParser( aText );
-    auto                  root = markupParser.Parse();
-
     std::vector<std::unique_ptr<GLYPH>> glyphs; // ignored
     BOX2I                               boundingBox;
 
-    (void) drawMarkup( &boundingBox, glyphs, root, VECTOR2D(), aGlyphSize, EDA_ANGLE::ANGLE_0,
-                       false, 0 /* TODO: this should really include italic */ );
+    (void) drawMarkup( &boundingBox, glyphs, aText, VECTOR2D(), aGlyphSize, EDA_ANGLE::ANGLE_0,
+                       0 /* TODO: this should really include TEXT_STYLE::ITALIC if set */ );
 
     return boundingBox.GetSize();
 }

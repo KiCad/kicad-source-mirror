@@ -31,6 +31,11 @@
 #include <trigo.h>
 #include <markup_parser.h>
 
+
+// markup_parser.h includes pegtl.hpp which includes windows.h... which leaks #define DrawText
+#undef DrawText
+
+
 using namespace KIFONT;
 
 FONT* FONT::s_defaultFont = nullptr;
@@ -261,8 +266,8 @@ VECTOR2D FONT::getBoundingBox( const UTF8& aText, TEXT_STYLE_FLAGS aTextStyle,
 }
 
 
-void FONT::KiDrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
-                       const TEXT_ATTRIBUTES& aAttributes ) const
+void FONT::DrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
+                     const TEXT_ATTRIBUTES& aAttributes ) const
 {
     // FONT TODO: do we need to set the attributes to the gal at all?
     aGal->SetHorizontalJustify( aAttributes.m_Halign );
@@ -337,10 +342,10 @@ VECTOR2D FONT::Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosit
 /**
  * @return position of cursor for drawing next substring
  */
-VECTOR2D FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
-                           const std::unique_ptr<MARKUP::NODE>& aNode, const VECTOR2D& aPosition,
-                           const VECTOR2D& aGlyphSize, const EDA_ANGLE& aAngle,
-                           TEXT_STYLE_FLAGS aTextStyle, int aLevel ) const
+VECTOR2D drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
+                     const std::unique_ptr<MARKUP::NODE>& aNode, const VECTOR2D& aPosition,
+                     const KIFONT::FONT* aFont, const VECTOR2D& aGlyphSize, const EDA_ANGLE& aAngle,
+                     TEXT_STYLE_FLAGS aTextStyle )
 {
     VECTOR2D nextPosition = aPosition;
 
@@ -363,7 +368,8 @@ VECTOR2D FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYP
             wxPoint pt( aPosition.x, aPosition.y );
 
             BOX2I bbox;
-            nextPosition = GetTextAsGlyphs( &bbox, aGlyphs, txt, aGlyphSize, pt, aAngle, textStyle );
+            nextPosition = aFont->GetTextAsGlyphs( &bbox, aGlyphs, txt, aGlyphSize, pt, aAngle,
+                                                   textStyle );
 
             if( aBoundingBox )
             {
@@ -377,11 +383,23 @@ VECTOR2D FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYP
 
     for( const auto& child : aNode->children )
     {
-        nextPosition = drawMarkup( aBoundingBox, aGlyphs, child, nextPosition, aGlyphSize, aAngle,
-                                   textStyle, aLevel + 1 );
+        nextPosition = drawMarkup( aBoundingBox, aGlyphs, child, nextPosition, aFont, aGlyphSize,
+                                   aAngle, textStyle );
     }
 
     return nextPosition;
+}
+
+
+VECTOR2D FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
+                           const UTF8& aText, const VECTOR2D& aPosition, const VECTOR2D& aGlyphSize,
+                           const EDA_ANGLE& aAngle, TEXT_STYLE_FLAGS aTextStyle ) const
+{
+    MARKUP::MARKUP_PARSER         markupParser( aText );
+    std::unique_ptr<MARKUP::NODE> root = markupParser.Parse();
+
+    return ::drawMarkup( aBoundingBox, aGlyphs, root, aPosition, this, aGlyphSize, aAngle,
+                         aTextStyle );
 }
 
 
@@ -395,15 +413,13 @@ VECTOR2D FONT::drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const 
         return aPosition;
     }
 
-    MARKUP::MARKUP_PARSER         markupParser( aText );
-    std::unique_ptr<MARKUP::NODE> markupRoot = markupParser.Parse();
-    TEXT_STYLE_FLAGS              textStyle = 0;
+    TEXT_STYLE_FLAGS textStyle = 0;
 
     if( aIsItalic )
         textStyle |= TEXT_STYLE::ITALIC;
 
     std::vector<std::unique_ptr<GLYPH>> glyphs;
-    VECTOR2D nextPosition = drawMarkup( aBoundingBox, glyphs, markupRoot, aPosition, aGlyphSize,
+    VECTOR2D nextPosition = drawMarkup( aBoundingBox, glyphs, aText, aPosition, aGlyphSize,
                                         aAngle, textStyle );
 
     for( const std::unique_ptr<GLYPH>& glyph : glyphs )
@@ -422,16 +438,14 @@ VECTOR2D FONT::boundingBoxSingleLine( BOX2I* aBoundingBox, const UTF8& aText,
                                       const VECTOR2D& aPosition, const VECTOR2D& aGlyphSize,
                                       const EDA_ANGLE& aAngle, bool aIsItalic ) const
 {
-    MARKUP::MARKUP_PARSER         markupParser( aText );
-    std::unique_ptr<MARKUP::NODE> markupRoot = markupParser.Parse();
-    TEXT_STYLE_FLAGS              textStyle = 0;
+    TEXT_STYLE_FLAGS textStyle = 0;
 
     if( aIsItalic )
         textStyle |= TEXT_STYLE::ITALIC;
 
     std::vector<std::unique_ptr<GLYPH>> glyphs; // ignored
-    VECTOR2D nextPosition = drawMarkup( aBoundingBox, glyphs, markupRoot, aPosition, aGlyphSize,
-                                        aAngle, false, textStyle );
+    VECTOR2D nextPosition = drawMarkup( aBoundingBox, glyphs, aText, aPosition, aGlyphSize,
+                                        aAngle, textStyle );
 
     return nextPosition;
 }

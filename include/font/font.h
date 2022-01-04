@@ -36,12 +36,6 @@
 #include <font/glyph.h>
 #include <font/text_attributes.h>
 
-
-namespace MARKUP
-{
-struct NODE;
-}
-
 namespace KIGFX
 {
 class GAL;
@@ -137,8 +131,8 @@ public:
         return Draw( aGal, aText, aPosition, VECTOR2D( 0, 0 ), aAttributes );
     }
 
-    virtual void KiDrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
-                             const TEXT_ATTRIBUTES& aAttributes ) const;
+    virtual void DrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
+                           const TEXT_ATTRIBUTES& aAttributes ) const;
 
     /**
      * Compute the boundary limits of aText (the bounding box of all shapes).
@@ -248,9 +242,8 @@ protected:
                                      TEXT_STYLE_FLAGS aTextStyle = 0 ) const = 0;
 
     VECTOR2D drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
-                         const std::unique_ptr<MARKUP::NODE>& aNode, const VECTOR2D& aPosition,
-                         const VECTOR2D& aGlyphSize, const EDA_ANGLE& aAngle,
-                         TEXT_STYLE_FLAGS aTextStyle, int aLevel = 0 ) const;
+                         const UTF8& aText, const VECTOR2D& aPosition, const VECTOR2D& aGlyphSize,
+                         const EDA_ANGLE& aAngle, TEXT_STYLE_FLAGS aTextStyle ) const;
 
     ///< Factor that determines the pitch between 2 lines.
     static constexpr double INTERLINE_PITCH_RATIO = 1.62;   // The golden mean
