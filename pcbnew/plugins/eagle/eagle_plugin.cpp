@@ -1928,9 +1928,9 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
     FP_TEXT* txt;
 
-    if( t.text == ">NAME" || t.text == ">name" )
+    if( t.text.MakeUpper() == ">NAME" )
         txt = &aFootprint->Reference();
-    else if( t.text == ">VALUE" || t.text == ">value" )
+    else if( t.text.MakeUpper() == ">VALUE" )
         txt = &aFootprint->Value();
     else
     {
