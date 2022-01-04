@@ -802,7 +802,7 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
     //  therefore, we check HitTest both directions A->B & B->A
     for( int i = 0; i < aCandidate->AnchorCount(); ++i )
     {
-        if( parentB->HitTest( wxPoint( aCandidate->GetAnchor( i ) ), accuracyA ) )
+        if( parentB->HitTest( VECTOR2I( aCandidate->GetAnchor( i ) ), accuracyA ) )
         {
             m_item->Connect( aCandidate );
             aCandidate->Connect( m_item );
@@ -812,7 +812,7 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
 
     for( int i = 0; i < m_item->AnchorCount(); ++i )
     {
-        if( parentA->HitTest( wxPoint( m_item->GetAnchor( i ) ), accuracyB ) )
+        if( parentA->HitTest( VECTOR2I( m_item->GetAnchor( i ) ), accuracyB ) )
         {
             m_item->Connect( aCandidate );
             aCandidate->Connect( m_item );

@@ -65,8 +65,8 @@ MARKER_BASE::MARKER_BASE( int aScalingFactor, std::shared_ptr<RC_ITEM> aItem, TY
         m_scalingFactor( aScalingFactor )
 {
     const VECTOR2I* point_shape = MarkerShapeCorners;
-    wxPoint start( point_shape->x, point_shape->y );
-    wxPoint end = start;
+    VECTOR2I        start( point_shape->x, point_shape->y );
+    VECTOR2I        end = start;
 
     for( unsigned ii = 1; ii < CORNERS_COUNT; ii++ )
     {

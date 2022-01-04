@@ -79,11 +79,11 @@ public:
      * @param aScanList A list of KICAD_Ts with a terminating EOT, that specs
      *                  what is to be collected and the priority order of the resultant
      *                  collection in "m_list".
-     * @param aRefPos A wxPoint to use in hit-testing.
+     * @param aRefPos A VECTOR2I to use in hit-testing.
      * @param aGuide The COLLECTORS_GUIDE to use in collecting items.
      */
     void Collect( EDA_ITEM* aItem, const KICAD_T aScanList[],
-                  const wxPoint& aRefPos /*, const COLLECTORS_GUIDE& aGuide */ );
+                  const VECTOR2I& aRefPos /*, const COLLECTORS_GUIDE& aGuide */ );
 
 protected:
     /**

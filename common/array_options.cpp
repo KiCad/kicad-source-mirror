@@ -43,7 +43,7 @@ VECTOR2I ARRAY_GRID_OPTIONS::getGridCoords( int n ) const
     if( m_reverseNumberingAlternate && ( y % 2 ) )
         x = axisSize - x - 1;
 
-    wxPoint coords( x, y );
+    VECTOR2I coords( x, y );
 
     return coords;
 }

@@ -151,7 +151,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aSta
     // end point is the coordinate relative to aStart
     VECTOR2I       endp = aEnd - aStart;
     VECTOR2I       startp = aStart;
-    wxPoint        corner;
+    VECTOR2I       corner;
     SHAPE_POLY_SET polyshape;
 
     polyshape.NewOutline();
@@ -176,26 +176,26 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aSta
 
     for( int angle = 0; angle < 1800; angle += delta )
     {
-        corner = wxPoint( 0, radius );
-        RotatePoint( &corner, angle );
+        corner = VECTOR2I( 0, radius );
+        RotatePoint( corner, angle );
         corner.x += seg_len;
         polyshape.Append( corner.x, corner.y );
     }
 
     // Finish arc:
-    corner = wxPoint( seg_len, -radius );
+    corner = VECTOR2I( seg_len, -radius );
     polyshape.Append( corner.x, corner.y );
 
     // add left rounded end:
     for( int angle = 0; angle < 1800; angle += delta )
     {
-        corner = wxPoint( 0, -radius );
-        RotatePoint( &corner, angle );
+        corner = VECTOR2I( 0, -radius );
+        RotatePoint( corner, angle );
         polyshape.Append( corner.x, corner.y );
     }
 
     // Finish arc:
-    corner = wxPoint( 0, radius );
+    corner = VECTOR2I( 0, radius );
     polyshape.Append( corner.x, corner.y );
 
     // Now trim the edges of the polygonal shape which will be slightly outside the

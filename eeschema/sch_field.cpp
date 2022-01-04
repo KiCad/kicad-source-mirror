@@ -911,7 +911,7 @@ VECTOR2I SCH_FIELD::GetPosition() const
 
 VECTOR2I SCH_FIELD::GetParentPosition() const
 {
-    return m_parent ? m_parent->GetPosition() : wxPoint( 0, 0 );
+    return m_parent ? m_parent->GetPosition() : VECTOR2I( 0, 0 );
 }
 
 

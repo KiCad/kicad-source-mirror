@@ -187,7 +187,7 @@ static bool sortFootprintsbySheetPath( FOOTPRINT* ref, FOOTPRINT* compare );
  * @param aSpreadAreaPosition the position of the upper left corner of the
  *        area allowed to spread footprints
  */
-void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, wxPoint aSpreadAreaPosition )
+void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, VECTOR2I aSpreadAreaPosition )
 {
     // Build candidate list
     // calculate also the area needed by these footprints
@@ -315,8 +315,8 @@ void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, wxPoint aSpreadArea
             for( unsigned it = 0; it < vecSubRects.size(); ++it )
             {
                 TSubRect& srect = vecSubRects[it];
-                wxPoint pos( srect.x*scale, srect.y*scale );
-                wxSize size( srect.w*scale, srect.h*scale );
+                VECTOR2I  pos( srect.x * scale, srect.y * scale );
+                VECTOR2I  size( srect.w * scale, srect.h * scale );
 
                 // Avoid too large coordinates: Overlapping components
                 // are better than out of screen components

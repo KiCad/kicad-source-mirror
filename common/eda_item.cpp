@@ -76,7 +76,7 @@ const EDA_RECT EDA_ITEM::GetBoundingBox() const
 {
     // return a zero-sized box per default. derived classes should override
     // this
-    return EDA_RECT( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
+    return EDA_RECT( VECTOR2I( 0, 0 ), VECTOR2I( 0, 0 ) );
 }
 
 

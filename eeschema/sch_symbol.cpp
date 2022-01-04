@@ -79,8 +79,8 @@ static LIB_SYMBOL* dummy()
 
         LIB_SHAPE* square = new LIB_SHAPE( symbol, SHAPE_T::RECT );
 
-        square->MoveTo( wxPoint( Mils2iu( -200 ), Mils2iu( 200 ) ) );
-        square->SetEnd( wxPoint( Mils2iu( 200 ), Mils2iu( -200 ) ) );
+        square->MoveTo( VECTOR2I( Mils2iu( -200 ), Mils2iu( 200 ) ) );
+        square->SetEnd( VECTOR2I( Mils2iu( 200 ), Mils2iu( -200 ) ) );
 
         LIB_TEXT* text = new LIB_TEXT( symbol );
 
@@ -98,7 +98,7 @@ static LIB_SYMBOL* dummy()
 SCH_SYMBOL::SCH_SYMBOL() :
     SCH_ITEM( nullptr, SCH_SYMBOL_T )
 {
-    Init( wxPoint( 0, 0 ) );
+    Init( VECTOR2I( 0, 0 ) );
 }
 
 
@@ -785,7 +785,7 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
                 if( !schField )
                 {
                     wxString  fieldName = libField->GetCanonicalName();
-                    SCH_FIELD newField( wxPoint( 0, 0), GetFieldCount(), this, fieldName );
+                    SCH_FIELD newField( VECTOR2I( 0, 0 ), GetFieldCount(), this, fieldName );
                     schField = AddField( newField );
                 }
             }
@@ -793,7 +793,7 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
             if( aUpdateStyle )
             {
                 schField->ImportValues( *libField );
-                schField->SetTextPos( (VECTOR2I)m_pos + libField->GetTextPos() );
+                schField->SetTextPos( m_pos + libField->GetTextPos() );
             }
 
             if( id == REFERENCE_FIELD && aPath )
@@ -1579,7 +1579,7 @@ bool SCH_SYMBOL::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
 
 VECTOR2I SCH_SYMBOL::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
 {
-    wxCHECK_MSG( Pin != nullptr && Pin->Type() == LIB_PIN_T, wxPoint( 0, 0 ),
+    wxCHECK_MSG( Pin != nullptr && Pin->Type() == LIB_PIN_T, VECTOR2I( 0, 0 ),
                  wxT( "Cannot get physical position of pin." ) );
 
     return m_transform.TransformCoordinate( Pin->GetPosition() ) + m_pos;

@@ -194,7 +194,7 @@ public:
 class SCH_BUS_BUS_ENTRY : public SCH_BUS_ENTRY_BASE
 {
 public:
-    SCH_BUS_BUS_ENTRY( const wxPoint& pos = wxPoint( 0, 0 ), bool aFlipY = false );
+    SCH_BUS_BUS_ENTRY( const VECTOR2I& pos = VECTOR2I( 0, 0 ), bool aFlipY = false );
 
     ~SCH_BUS_BUS_ENTRY() { }
 

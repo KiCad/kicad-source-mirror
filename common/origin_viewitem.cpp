@@ -104,7 +104,7 @@ void ORIGIN_VIEWITEM::ViewDraw( int, VIEW* aView ) const
 
             VECTOR2D start( m_position );
             VECTOR2D end( m_end );
-            EDA_RECT clip( wxPoint( start ), wxSize( end.x - start.x, end.y - start.y ) );
+            EDA_RECT clip( VECTOR2I( start ), VECTOR2I( end.x - start.x, end.y - start.y ) );
             clip.Normalize();
 
             double               theta = atan2( end.y - start.y, end.x - start.x );
@@ -116,8 +116,8 @@ void ORIGIN_VIEWITEM::ViewDraw( int, VIEW* aView ) const
                                start.y + strokes[ i % 2 ] * sin( theta ) );
 
                 // Drawing each segment can be done rounded to ints.
-                wxPoint segStart( KiROUND( start.x ), KiROUND( start.y ) );
-                wxPoint segEnd( KiROUND( next.x ), KiROUND( next.y ) );
+                VECTOR2I segStart( KiROUND( start.x ), KiROUND( start.y ) );
+                VECTOR2I segEnd( KiROUND( next.x ), KiROUND( next.y ) );
 
                 if( ClipLine( &clip, segStart.x, segStart.y, segEnd.x, segEnd.y ) )
                     break;

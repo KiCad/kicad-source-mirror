@@ -170,7 +170,7 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_MD5_value.Empty();                            // MD5 value found in a %TF.MD5 command
     m_PartString.Empty();                           // string found in a %TF.Part command
     m_hasNegativeItems    = -1;                     // set to uninitialized
-    m_ImageJustifyOffset  = wxPoint(0,0);           // Image justify Offset
+    m_ImageJustifyOffset = VECTOR2I( 0, 0 );        // Image justify Offset
     m_ImageJustifyXCenter = false;                  // Image Justify Center on X axis (default = false)
     m_ImageJustifyYCenter = false;                  // Image Justify Center on Y axis (default = false)
     m_GerbMetric    = false;                        // false = Inches (default), true = metric
@@ -308,7 +308,7 @@ void GERBER_FILE_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
                 continue;
 
             GERBER_DRAW_ITEM* dupItem = new GERBER_DRAW_ITEM( aItem );
-            wxPoint           move_vector;
+            VECTOR2I          move_vector;
             move_vector.x = scaletoIU( ii * GetLayerParams().m_StepForRepeat.x,
                                        GetLayerParams().m_StepForRepeatMetric );
             move_vector.y = scaletoIU( jj * GetLayerParams().m_StepForRepeat.y,

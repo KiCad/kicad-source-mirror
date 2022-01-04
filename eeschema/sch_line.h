@@ -39,10 +39,10 @@ class SCH_LINE : public SCH_ITEM
 public:
     static const enum wxPenStyle PenStyle[];
 
-    SCH_LINE( const wxPoint& pos = wxPoint( 0, 0 ), int layer = LAYER_NOTES );
+    SCH_LINE( const VECTOR2I& pos = VECTOR2I( 0, 0 ), int layer = LAYER_NOTES );
 
     SCH_LINE( const VECTOR2D& pos, int layer = LAYER_NOTES ) :
-        SCH_LINE( wxPoint( pos.x, pos.y ), layer )
+            SCH_LINE( VECTOR2I( pos.x, pos.y ), layer )
     {}
 
     SCH_LINE( const SCH_LINE& aLine );

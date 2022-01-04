@@ -39,8 +39,6 @@ public:
     BEZIER_POLY( const VECTOR2I& aStart, const VECTOR2I& aCtrl1,
                  const VECTOR2I& aCtrl2, const VECTOR2I& aEnd );
 
-    BEZIER_POLY( const std::vector<wxPoint>& aControlPoints );
-
     BEZIER_POLY( const std::vector<VECTOR2I>& aControlPoints );
 
     BEZIER_POLY( const std::vector<VECTOR2D>& aControlPoints )
@@ -58,7 +56,6 @@ public:
      * (the last point is always generated)
      * aMaxSegCount is the max number of segments created
      */
-    void GetPoly( std::vector<wxPoint>& aOutput, int aMinSegLen = 0, int aMaxSegCount = 32 );
     void GetPoly( std::vector<VECTOR2I>& aOutput, int aMinSegLen = 0, int aMaxSegCount = 32 );
     void GetPoly( std::vector<VECTOR2D>& aOutput, double aMinSegLen = 0.0, int aMaxSegCount = 32 );
 

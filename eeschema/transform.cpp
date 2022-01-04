@@ -39,13 +39,6 @@ bool TRANSFORM::operator==( const TRANSFORM& aTransform ) const
 }
 
 
-wxPoint TRANSFORM::TransformCoordinate( const wxPoint& aPoint ) const
-{
-    return wxPoint( ( x1 * aPoint.x ) + ( y1 * aPoint.y ),
-                    ( x2 * aPoint.x ) + ( y2 * aPoint.y ) );
-}
-
-
 VECTOR2I TRANSFORM::TransformCoordinate( const VECTOR2I& aPoint ) const
 {
     return VECTOR2I( ( x1 * aPoint.x ) + ( y1 * aPoint.y ), ( x2 * aPoint.x ) + ( y2 * aPoint.y ) );

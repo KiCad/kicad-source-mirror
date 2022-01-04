@@ -582,9 +582,9 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         break;
 
     case IMAGE_JUSTIFY: // Command IJAnBn*
-        m_ImageJustifyXCenter = false;          // Image Justify Center on X axis (default = false)
-        m_ImageJustifyYCenter = false;          // Image Justify Center on Y axis (default = false)
-        m_ImageJustifyOffset = wxPoint(0,0);    // Image Justify Offset on XY axis (default = 0,0)
+        m_ImageJustifyXCenter = false;           // Image Justify Center on X axis (default = false)
+        m_ImageJustifyYCenter = false;           // Image Justify Center on Y axis (default = false)
+        m_ImageJustifyOffset = VECTOR2I( 0, 0 ); // Image Justify Offset on XY axis (default = 0,0)
         while( *aText && *aText != '*' )
         {
             // IJ command is (for A or B axis) AC or AL or A<coordinate>

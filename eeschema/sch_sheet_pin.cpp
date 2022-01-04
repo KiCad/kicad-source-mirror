@@ -255,7 +255,7 @@ void SCH_SHEET_PIN::Rotate( const VECTOR2I& aCenter )
     RotatePoint( pt, aCenter, 900 );
 
     SHEET_SIDE oldSide = GetSide();
-    ConstrainOnEdge( (wxPoint)pt );
+    ConstrainOnEdge( pt );
 
     // If the new side is the same as the old side, instead mirror across the center of that side.
     if( GetSide() == oldSide )
@@ -264,12 +264,12 @@ void SCH_SHEET_PIN::Rotate( const VECTOR2I& aCenter )
         {
         case SHEET_SIDE::TOP:
         case SHEET_SIDE::BOTTOM:
-            SetTextPos( wxPoint( aCenter.x - delta.x, GetTextPos().y ) );
+            SetTextPos( VECTOR2I( aCenter.x - delta.x, GetTextPos().y ) );
             break;
 
         case SHEET_SIDE::LEFT:
         case SHEET_SIDE::RIGHT:
-            SetTextPos( wxPoint( GetTextPos().x, aCenter.y - delta.y ) );
+            SetTextPos( VECTOR2I( GetTextPos().x, aCenter.y - delta.y ) );
             break;
 
         default:
@@ -284,12 +284,12 @@ void SCH_SHEET_PIN::Rotate( const VECTOR2I& aCenter )
         {
         case SHEET_SIDE::TOP:
         case SHEET_SIDE::BOTTOM:
-            SetTextPos( wxPoint( aCenter.x + delta.x, GetTextPos().y ) );
+            SetTextPos( VECTOR2I( aCenter.x + delta.x, GetTextPos().y ) );
             break;
 
         case SHEET_SIDE::LEFT:
         case SHEET_SIDE::RIGHT:
-            SetTextPos( wxPoint( GetTextPos().x, aCenter.y + delta.y ) );
+            SetTextPos( VECTOR2I( GetTextPos().x, aCenter.y + delta.y ) );
             break;
 
         default:
@@ -323,7 +323,7 @@ void SCH_SHEET_PIN::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
 
 void SCH_SHEET_PIN::GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList )
 {
-    DANGLING_END_ITEM item( SHEET_LABEL_END, this, (wxPoint)GetTextPos() );
+    DANGLING_END_ITEM item( SHEET_LABEL_END, this, GetTextPos() );
     aItemList.push_back( item );
 }
 

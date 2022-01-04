@@ -44,7 +44,7 @@ SEARCH_RESULT GERBER_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
 
 void GERBER_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aScanList[],
-                                const wxPoint& aRefPos/*, const COLLECTORS_GUIDE& aGuide*/ )
+                                const VECTOR2I& aRefPos /*, const COLLECTORS_GUIDE& aGuide*/ )
 {
     Empty();        // empty the collection, primary criteria list
 

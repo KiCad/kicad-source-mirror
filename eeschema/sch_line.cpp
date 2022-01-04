@@ -39,7 +39,7 @@
 #include <advanced_config.h>
 
 
-SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
+SCH_LINE::SCH_LINE( const VECTOR2I& pos, int layer ) :
     SCH_ITEM( nullptr, SCH_LINE_T )
 {
     m_start           = pos;
@@ -200,7 +200,7 @@ const EDA_RECT SCH_LINE::GetBoundingBox() const
     int      xmax = std::max( m_start.x, m_end.x ) + width + extra;
     int      ymax = std::max( m_start.y, m_end.y ) + width + extra;
 
-    EDA_RECT ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin, ymax - ymin ) );
+    EDA_RECT ret( VECTOR2I( xmin, ymin ), VECTOR2I( xmax - xmin, ymax - ymin ) );
 
     return ret;
 }

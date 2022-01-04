@@ -28,16 +28,7 @@
 #include <bezier_curves.h>
 #include <math/vector2d.h>  // for VECTOR2D, operator*, VECTOR2
 #include <wx/debug.h>       // for wxASSERT
-#include <wx/gdicmn.h>      // for wxPoint
 
-
-BEZIER_POLY::BEZIER_POLY( const std::vector<wxPoint>& aControlPoints )
-{
-    for( unsigned ii = 0; ii < aControlPoints.size(); ++ii )
-        m_ctrlPts.emplace_back( VECTOR2D( aControlPoints[ii] ) );
-
-    m_minSegLen = 0.0;
-}
 
 BEZIER_POLY::BEZIER_POLY( const VECTOR2I& aStart, const VECTOR2I& aCtrl1,
                           const VECTOR2I& aCtrl2, const VECTOR2I& aEnd )
@@ -48,17 +39,6 @@ BEZIER_POLY::BEZIER_POLY( const VECTOR2I& aStart, const VECTOR2I& aCtrl1,
     m_ctrlPts.emplace_back( VECTOR2D( aEnd ) );
 
     m_minSegLen = 0.0;
-}
-
-
-void BEZIER_POLY::GetPoly( std::vector<wxPoint>& aOutput, int aMinSegLen, int aMaxSegCount )
-{
-    aOutput.clear();
-    std::vector<VECTOR2D> buffer;
-    GetPoly( buffer, double( aMinSegLen ), aMaxSegCount );
-
-    for( unsigned ii = 0; ii < buffer.size(); ++ii )
-        aOutput.emplace_back( wxPoint( int( buffer[ii].x ), int( buffer[ii].y ) ) );
 }
 
 

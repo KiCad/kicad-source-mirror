@@ -347,8 +347,8 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
         RN_DYNAMIC_LINE      l;
 
         // Use the parents' positions
-        l.a = nodeA->Parent()->GetPosition() + (wxPoint) aInternalOffset;
-        l.b = nodeB->Parent()->GetPosition() + (wxPoint) aInternalOffset;
+        l.a = nodeA->Parent()->GetPosition() + aInternalOffset;
+        l.b = nodeB->Parent()->GetPosition() + aInternalOffset;
         l.netCode = 0;
         m_dynamicRatsnest.push_back( l );
     }

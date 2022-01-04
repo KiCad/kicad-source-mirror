@@ -905,7 +905,7 @@ public:
     /**
      * Find a pad \a aPosition on \a aLayer.
      *
-     * @param aPosition A wxPoint object containing the position to hit test.
+     * @param aPosition A VECTOR2I object containing the position to hit test.
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a PAD object if found or NULL if not found.
      */
@@ -929,7 +929,7 @@ public:
      * <p>
      * The fast search method only works if the pad list has already been built.
      * </p>
-     * @param aPosition A wxPoint object containing the position to hit test.
+     * @param aPosition A VECTOR2I object containing the position to hit test.
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a PAD object if found or NULL if not found.
      */
@@ -945,7 +945,7 @@ public:
      * </p>
      * @note The normal pad list is sorted by increasing netcodes.
      * @param aPadList is the list of pads candidates (a std::vector<PAD*>).
-     * @param aPosition A wxPoint object containing the position to test.
+     * @param aPosition A VECTOR2I object containing the position to test.
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return a PAD object pointer to the connected pad.
      */
@@ -997,7 +997,7 @@ public:
      * active layer is returned.  The distance is calculated via manhattan distance from
      * the center of the bounding rectangle to \a aPosition.
      *
-     * @param aPosition A wxPoint object containing the position to test.
+     * @param aPosition A VECTOR2I object containing the position to test.
      * @param aActiveLayer Layer to test.
      * @param aVisibleOnly Search only the visible layers if true.
      * @param aIgnoreLocked Ignore locked footprints when true.

@@ -77,7 +77,7 @@ wxString SCH_MARKER::Serialize() const
 SCH_MARKER* SCH_MARKER::Deserialize( const wxString& data )
 {
     wxArrayString props = wxSplit( data, '|' );
-    wxPoint       markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
+    VECTOR2I      markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
                              (int) strtol( props[2].c_str(), nullptr, 10 ) );
 
     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( props[0] );

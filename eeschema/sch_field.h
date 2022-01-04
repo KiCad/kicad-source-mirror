@@ -196,7 +196,7 @@ public:
 
     bool IsReplaceable() const override;
 
-    wxPoint GetLibPosition() const { return (wxPoint)EDA_TEXT::GetTextPos(); }
+    VECTOR2I GetLibPosition() const { return EDA_TEXT::GetTextPos(); }
 
     VECTOR2I GetPosition() const override;
     void     SetPosition( const VECTOR2I& aPosition ) override;
