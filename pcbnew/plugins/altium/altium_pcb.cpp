@@ -845,63 +845,36 @@ void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
 
 void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aVertices )
 {
-    if( !aVertices.empty() )
-    {
-        const ALTIUM_VERTICE* last = &aVertices.at( 0 );
-        for( size_t i = 0; i < aVertices.size(); i++ )
-        {
-            const ALTIUM_VERTICE* cur = &aVertices.at( ( i + 1 ) % aVertices.size() );
+    SHAPE_LINE_CHAIN lineChain;
+    HelperShapeLineChainFromAltiumVertices( lineChain, aVertices );
 
-            PCB_SHAPE* shape = new PCB_SHAPE( m_board );
+    for( int i = 0; i <= lineChain.PointCount() && i != -1; i = lineChain.NextShape( i ) )
+    {
+        if( lineChain.IsArcStart( i ) )
+        {
+            const SHAPE_ARC& currentArc = lineChain.Arc( lineChain.ArcIndex( i ) );
+            int              nextShape = lineChain.NextShape( i );
+            bool             isLastShape = nextShape < 0;
+
+            PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::ARC );
             m_board->Add( shape, ADD_MODE::APPEND );
 
             shape->SetWidth( m_board->GetDesignSettings().GetLineThickness( Edge_Cuts ) );
             shape->SetLayer( Edge_Cuts );
+            shape->SetArcGeometry( (wxPoint) currentArc.GetP0(), (wxPoint) currentArc.GetArcMid(),
+                                   (wxPoint) currentArc.GetP1() );
+        }
+        else
+        {
+            const SEG& seg = lineChain.Segment( i );
 
-            if( !last->isRound && !cur->isRound )
-            {
-                shape->SetShape( SHAPE_T::SEGMENT );
-                shape->SetStart( last->position );
-                shape->SetEnd( cur->position );
-            }
-            else if( cur->isRound )
-            {
-                shape->SetShape( SHAPE_T::ARC );
+            PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
+            m_board->Add( shape, ADD_MODE::APPEND );
 
-                double  includedAngle  = cur->endangle - cur->startangle;
-                double  startradiant   = DEG2RAD( cur->startangle );
-                wxPoint arcStartOffset = wxPoint( KiROUND( std::cos( startradiant ) * cur->radius ),
-                                                 -KiROUND( std::sin( startradiant ) * cur->radius ) );
-                wxPoint arcStart       = cur->center + arcStartOffset;
-
-                shape->SetCenter( cur->center );
-                shape->SetStart( arcStart );
-                shape->SetArcAngleAndEnd( -NormalizeAngleDegreesPos( includedAngle ) * 10.0, true );
-
-                if( !last->isRound )
-                {
-                    double  endradiant   = DEG2RAD( cur->endangle );
-                    wxPoint arcEndOffset = wxPoint( KiROUND( std::cos( endradiant ) * cur->radius ),
-                                                   -KiROUND( std::sin( endradiant ) * cur->radius ) );
-                    wxPoint arcEnd       = cur->center + arcEndOffset;
-
-                    PCB_SHAPE* shape2 = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
-                    m_board->Add( shape2, ADD_MODE::APPEND );
-                    shape2->SetWidth( m_board->GetDesignSettings().GetLineThickness( Edge_Cuts ) );
-                    shape2->SetLayer( Edge_Cuts );
-                    shape2->SetStart( last->position );
-
-                    // TODO: this is more of a hack than the real solution
-                    double lineLengthStart = GetLineLength( last->position, arcStart );
-                    double lineLengthEnd   = GetLineLength( last->position, arcEnd );
-
-                    if( lineLengthStart > lineLengthEnd )
-                        shape2->SetEnd( cur->center + arcEndOffset );
-                    else
-                        shape2->SetEnd( cur->center + arcStartOffset );
-                }
-            }
-            last = cur;
+            shape->SetWidth( m_board->GetDesignSettings().GetLineThickness( Edge_Cuts ) );
+            shape->SetLayer( Edge_Cuts );
+            shape->SetStart( (wxPoint) seg.A );
+            shape->SetEnd( (wxPoint) seg.B );
         }
     }
 }
