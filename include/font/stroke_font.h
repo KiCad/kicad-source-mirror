@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -90,9 +90,10 @@ public:
      */
     VECTOR2D ComputeTextLineSize( const KIGFX::GAL* aGal, const UTF8& aText ) const override;
 
-    VECTOR2I GetTextAsPolygon( BOX2I* aBoundingBox, GLYPH_LIST& aGlyphs, const UTF8& aText,
-                               const VECTOR2D& aGlyphSize, const wxPoint& aPosition,
-                               const EDA_ANGLE& aAngle, TEXT_STYLE_FLAGS aTextStyle ) const override;
+    VECTOR2I GetTextAsGlyphs( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
+                              const UTF8& aText, const VECTOR2D& aGlyphSize,
+                              const wxPoint& aPosition, const EDA_ANGLE& aAngle,
+                              TEXT_STYLE_FLAGS aTextStyle ) const override;
 
 protected:
     VECTOR2D getBoundingBox( const UTF8& aString, const VECTOR2D& aGlyphSize,
@@ -108,9 +109,9 @@ private:
     void loadNewStrokeFont( const char* const aNewStrokeFont[], int aNewStrokeFontSize );
 
 private:
-    const GLYPH_LIST*              m_glyphs;             ///< Glyph list
-    const GLYPH_BOUNDING_BOX_LIST* m_glyphBoundingBoxes; ///< Bounding boxes of the glyphs
-    double                         m_maxGlyphWidth;
+    const std::vector<std::shared_ptr<GLYPH>>* m_glyphs;
+    const GLYPH_BOUNDING_BOX_LIST*             m_glyphBoundingBoxes;
+    double                                     m_maxGlyphWidth;
 };
 
 } //namespace KIFONT

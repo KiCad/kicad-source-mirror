@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski
- * Copyright (C) 2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,110 +38,16 @@ public:
     virtual ~GLYPH()
     {}
 
-    virtual void AddPoint( const VECTOR2D& aPoint ) = 0;
-
-    virtual void RaisePen() = 0;
-
-    virtual void Finalize() = 0;
+    virtual bool IsOutline() const { return false; }
+    virtual bool IsStroke() const  { return false; }
 
     virtual BOX2D BoundingBox() = 0;
 
-    virtual std::shared_ptr<GLYPH> Resize( const VECTOR2D& aGlyphSize ) const = 0;
-
-    virtual std::shared_ptr<GLYPH> Translate( const VECTOR2D& aOffset ) const = 0;
-
-    virtual std::shared_ptr<GLYPH> Mirror( bool aMirror,
-                                           const VECTOR2D& aMirrorOrigin = { 0, 0 } ) const = 0;
-
     virtual void Mirror( const VECTOR2D& aMirrorOrigin = { 0, 0 } ) = 0;
-
-    virtual const SHAPE_POLY_SET& GetPolylist() const = 0;
-
-    virtual const std::vector<std::vector<VECTOR2D>>& GetPoints() const = 0;
-
-    virtual bool IsOutline() const { return false; }
-    virtual bool IsStroke() const { return false; }
-};
-
-typedef std::vector<std::shared_ptr<GLYPH>> GLYPH_LIST;
-
-
-class OUTLINE_GLYPH : public GLYPH
-{
-public:
-    OUTLINE_GLYPH( const SHAPE_POLY_SET& poly )
-    {
-        m_polySet = poly;
-    }
-
-    const SHAPE_POLY_SET& GetPolylist() const override { return m_polySet; }
-
-    bool IsOutline() const override
-    {
-        return true;
-    }
-
-    //
-    void AddPoint( const VECTOR2D& aPoint ) override
-    {
-        wxFAIL_MSG( "unimplemented" );
-    }
-
-    void  RaisePen() override
-    {
-        wxFAIL_MSG( "unimplemented" );
-    }
-
-    void  Finalize() override
-    {
-        wxFAIL_MSG( "unimplemented" );
-    }
-
-    BOX2D BoundingBox() override
-    {
-        wxFAIL_MSG( "unimplemented" );
-        return BOX2D();
-    }
-
-    std::shared_ptr<GLYPH> Resize( const VECTOR2D& aGlyphSize ) const override
-    {
-        wxFAIL_MSG( "unimplemented" );
-        return nullptr;
-    }
-
-    std::shared_ptr<GLYPH> Translate( const VECTOR2D& aOffset ) const override
-    {
-        wxFAIL_MSG( "unimplemented" );
-        return nullptr;
-    }
-
-    std::shared_ptr<GLYPH> Mirror( bool aMirror,
-                                   const VECTOR2D& aMirrorOrigin = { 0, 0 } ) const override
-    {
-        wxFAIL_MSG( "unimplemented" );
-        return nullptr;
-    }
-
-    void Mirror( const VECTOR2D& aMirrorOrigin = VECTOR2D( 0, 0 ) ) override
-    {
-        wxFAIL_MSG( "unimplemented" );
-    }
-
-    const std::vector<std::vector<VECTOR2D>>& GetPoints() const override
-    {
-        wxFAIL_MSG( "unimplemented" );
-        return m_dummy;
-    }
-
-private:
-    SHAPE_POLY_SET                     m_polySet;
-
-    // For unimplemented return values
-    std::vector<std::vector<VECTOR2D>> m_dummy;
 };
 
 
-class STROKE_GLYPH : public GLYPH
+class STROKE_GLYPH : public GLYPH, public std::vector<std::vector<VECTOR2D>>
 {
 public:
     STROKE_GLYPH()
@@ -149,51 +55,23 @@ public:
 
     STROKE_GLYPH( const STROKE_GLYPH& aGlyph );
 
-    void AddPoint( const VECTOR2D& aPoint ) override;
+    bool IsStroke() const override { return true; }
 
-    void RaisePen() override;
+    void AddPoint( const VECTOR2D& aPoint );
+    void RaisePen();
+    void Finalize();
 
-    void Finalize() override;
-
-    BOX2D BoundingBox() override;
-
-    std::shared_ptr<GLYPH> Resize( const VECTOR2D& aGlyphSize ) const override;
-
-    std::shared_ptr<GLYPH> Translate( const VECTOR2D& aOffset ) const override;
-
-    std::shared_ptr<GLYPH> Transform( const VECTOR2D& aGlyphSize,  const VECTOR2D& aOffset,
-                                      double aTilt );
-
-    std::shared_ptr<GLYPH> Mirror( bool aMirror,
-                                   const VECTOR2D& aMirrorOrigin = { 0, 0 } ) const override;
+    BOX2D BoundingBox() override { return m_boundingBox; }
+    void SetBoundingBox( const BOX2D& bbox ) { m_boundingBox = bbox; }
 
     void Mirror( const VECTOR2D& aMirrorOrigin = { 0, 0 } ) override;
 
-    bool IsStroke() const override { return true; }
-
-    //
-    const SHAPE_POLY_SET& GetPolylist() const override
-    {
-        wxFAIL_MSG( "unimplemented" );
-        return m_dummy;
-    }
-
-    const std::vector<std::vector<VECTOR2D>>& GetPoints() const override { return m_pointLists; }
+    std::unique_ptr<GLYPH> Transform( const VECTOR2D& aGlyphSize,  const VECTOR2D& aOffset,
+                                      double aTilt );
 
 private:
-    void clearBoundingBox()
-    {
-        m_boundingBox.SetOrigin( 0, 0 );
-        m_boundingBox.SetSize( 0, 0 );
-    }
-
-private:
-    bool                               m_penIsDown = false;
-    std::vector<std::vector<VECTOR2D>> m_pointLists;
-    BOX2D                              m_boundingBox;
-
-    // For unimplemented return values
-    SHAPE_POLY_SET                     m_dummy;
+    bool  m_penIsDown = false;
+    BOX2D m_boundingBox;
 };
 
 

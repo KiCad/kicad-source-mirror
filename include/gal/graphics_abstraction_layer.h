@@ -176,13 +176,6 @@ public:
      */
     virtual void DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth = 0, int aTotal = 1 ) {};
 
-    void DrawGlyph( const std::shared_ptr<KIFONT::GLYPH>& aGlyph, int aNth = 0, int aTotal = 1 )
-    {
-        DrawGlyph( *aGlyph, aNth, aTotal );
-    }
-
-    void DrawGlyphs( const KIFONT::GLYPH_LIST& aGlyphs );
-
     /**
      * Draw a polygon.
      *

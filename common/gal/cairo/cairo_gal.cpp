@@ -1765,7 +1765,9 @@ void CAIRO_GAL_BASE::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTota
 {
     if( aGlyph.IsStroke() )
     {
-        for( const std::vector<VECTOR2D>& pointList : aGlyph.GetPoints() )
+        const auto& strokeGlyph = static_cast<const KIFONT::STROKE_GLYPH&>( aGlyph );
+
+        for( const std::vector<VECTOR2D>& pointList : strokeGlyph )
             drawPoly( pointList );
     }
 #if 0 // FONT TODO

@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski
- * Copyright (C) 2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Font abstract base class
  *
@@ -70,20 +70,17 @@ FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic )
 
     FONT* font = s_fontMap[key];
 
-    if( !font )
-    {
-        wxFont   wx_font( wxFontInfo().FaceName( aFontName ).Bold( aBold ).Italic( aItalic ) );
-        wxString fullfontname = wx_font.GetNativeFontInfoDesc();
-
 #if 0
         // FONT TODO: load a real font
-        font->m_fontName = aFontName;
+    if( !font )
+        font = OUTLINE_FONT::LoadFont( aFontName, aBold, aItalic );
 #else
+
+    if( !font )
         font = getDefaultFont();
 #endif
 
-        s_fontMap[key] = font;
-    }
+    s_fontMap[key] = font;
 
     return font;
 }
@@ -264,7 +261,7 @@ VECTOR2D FONT::getBoundingBox( const UTF8& aText, TEXT_STYLE_FLAGS aTextStyle,
 }
 
 
-void FONT::KiDrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
+void FONT::DrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
                      const TEXT_ATTRIBUTES& aAttributes ) const
 {
     // FONT TODO: do we need to set the attributes to the gal at all?
@@ -340,7 +337,7 @@ VECTOR2D FONT::Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosit
 /**
  * @return position of cursor for drawing next substring
  */
-VECTOR2D FONT::drawMarkup( BOX2I* aBoundingBox, GLYPH_LIST& aGlyphs,
+VECTOR2D FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
                            const std::unique_ptr<MARKUP::NODE>& aNode, const VECTOR2D& aPosition,
                            const VECTOR2D& aGlyphSize, const EDA_ANGLE& aAngle,
                            TEXT_STYLE_FLAGS aTextStyle, int aLevel ) const
@@ -366,7 +363,7 @@ VECTOR2D FONT::drawMarkup( BOX2I* aBoundingBox, GLYPH_LIST& aGlyphs,
             wxPoint pt( aPosition.x, aPosition.y );
 
             BOX2I bbox;
-            nextPosition = GetTextAsPolygon( &bbox, aGlyphs, txt, aGlyphSize, pt, aAngle, textStyle );
+            nextPosition = GetTextAsGlyphs( &bbox, aGlyphs, txt, aGlyphSize, pt, aAngle, textStyle );
 
             if( aBoundingBox )
             {
@@ -405,17 +402,16 @@ VECTOR2D FONT::drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const 
     if( aIsItalic )
         textStyle |= TEXT_STYLE::ITALIC;
 
+    std::vector<std::unique_ptr<GLYPH>> glyphs;
+    VECTOR2D nextPosition = drawMarkup( aBoundingBox, glyphs, markupRoot, aPosition, aGlyphSize,
+                                        aAngle, textStyle );
 
-    GLYPH_LIST glyphs;
-    VECTOR2D   nextPosition = drawMarkup( aBoundingBox, glyphs, markupRoot, aPosition, aGlyphSize,
-                                          aAngle, textStyle );
-
-    for( const std::shared_ptr<GLYPH>& glyph : glyphs )
+    for( const std::unique_ptr<GLYPH>& glyph : glyphs )
     {
         if( aIsMirrored )
             glyph->Mirror( aPosition );
 
-        aGal->DrawGlyph( glyph );
+        aGal->DrawGlyph( *glyph.get() );
     }
 
     return nextPosition;
@@ -433,9 +429,9 @@ VECTOR2D FONT::boundingBoxSingleLine( BOX2I* aBoundingBox, const UTF8& aText,
     if( aIsItalic )
         textStyle |= TEXT_STYLE::ITALIC;
 
-    GLYPH_LIST glyphs; // ignored
-    VECTOR2D   nextPosition = drawMarkup( aBoundingBox, glyphs, markupRoot, aPosition, aGlyphSize,
-                                          aAngle, false, textStyle );
+    std::vector<std::unique_ptr<GLYPH>> glyphs; // ignored
+    VECTOR2D nextPosition = drawMarkup( aBoundingBox, glyphs, markupRoot, aPosition, aGlyphSize,
+                                        aAngle, false, textStyle );
 
     return nextPosition;
 }

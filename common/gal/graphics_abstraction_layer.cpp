@@ -279,19 +279,6 @@ void GAL::StrokeText( const wxString& aText, const VECTOR2D& aPosition, double a
 }
 
 
-void GAL::DrawGlyphs( const KIFONT::GLYPH_LIST& aGlyphs )
-{
-    int nth = 0;
-    int total = aGlyphs.size();
-
-    for( const std::shared_ptr<KIFONT::GLYPH>& glyph : aGlyphs )
-    {
-        DrawGlyph( glyph, nth, total );
-        nth++;
-    }
-}
-
-
 /*
  * Fallback for implementations that don't implement bitmap text: use stroke font
  */

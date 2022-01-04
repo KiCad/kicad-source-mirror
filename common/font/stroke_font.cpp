@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2022 Kicad Developers, see change_log.txt for contributors.
  *
  * Stroke font class
  *
@@ -28,7 +28,6 @@
 
 #include <gal/graphics_abstraction_layer.h>
 #include <wx/string.h>
-#include <wx/filename.h>
 #include <wx/textfile.h>
 #include <newstroke_font.h>
 #include <font/glyph.h>
@@ -46,19 +45,16 @@ static constexpr double OVERBAR_POSITION_FACTOR = 1.33;
 ///< Scale factor for a glyph
 static constexpr double STROKE_FONT_SCALE = 1.0 / 21.0;
 
-///< Tilt factor for italic style (the is is the scaling factor
-///< on dY relative coordinates to give a tilt shape
+///< Tilt factor for italic style (this is the scaling factor on dY relative coordinates to
+///< give a tilted shape)
 static constexpr double ITALIC_TILT = 1.0 / 8;
-
-///< Factor that determines the pitch between 2 lines.
-static constexpr double INTERLINE_PITCH_RATIO = 1.62;   // The golden mean
 
 static constexpr int FONT_OFFSET = -10;
 
 
-bool                g_defaultFontInitialized = false;
-GLYPH_LIST          g_defaultFontGlyphs;             ///< Glyph list
-std::vector<BOX2D>* g_defaultFontGlyphBoundingBoxes; ///< Bounding boxes of the glyphs
+bool                                g_defaultFontInitialized = false;
+std::vector<std::shared_ptr<GLYPH>> g_defaultFontGlyphs;
+std::vector<BOX2D>*                 g_defaultFontGlyphBoundingBoxes;
 
 
 STROKE_FONT::STROKE_FONT() :
@@ -83,6 +79,25 @@ STROKE_FONT* STROKE_FONT::LoadFont( const wxString& aFontName )
     }
 }
 
+
+void buildGlyphBoundingBox( std::shared_ptr<STROKE_GLYPH>& aGlyph, double aGlyphWidth )
+{
+    VECTOR2D min( 0, 0 );
+    VECTOR2D max( aGlyphWidth, 0 );
+
+    for( const std::vector<VECTOR2D>& pointList : *aGlyph )
+    {
+        for( const VECTOR2D& point : pointList )
+        {
+            min.y = std::min( min.y, point.y );
+            max.y = std::max( max.y, point.y );
+        }
+    }
+
+    aGlyph->SetBoundingBox( BOX2D( min, max - min ) );
+}
+
+
 void STROKE_FONT::loadNewStrokeFont( const char* const aNewStrokeFont[], int aNewStrokeFontSize )
 {
     if( !g_defaultFontInitialized )
@@ -96,6 +111,8 @@ void STROKE_FONT::loadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
         {
             auto   glyph = std::make_shared<STROKE_GLYPH>();
             double glyphStartX = 0.0;
+            double glyphEndX = 0.0;
+            double glyphWidth = 0.0;
 
             std::vector<VECTOR2D>* pointList = nullptr;
 
@@ -104,9 +121,7 @@ void STROKE_FONT::loadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
             while( aNewStrokeFont[j][i] )
             {
                 VECTOR2D point( 0.0, 0.0 );
-                char     coordinate[2] = {
-                    0,
-                };
+                char     coordinate[2] = { 0, };
 
                 for( int k : { 0, 1 } )
                     coordinate[k] = aNewStrokeFont[j][i + k];
@@ -115,6 +130,8 @@ void STROKE_FONT::loadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
                 {
                     // The first two values contain the width of the char
                     glyphStartX = ( coordinate[0] - 'R' ) * STROKE_FONT_SCALE;
+                    glyphEndX   = ( coordinate[1] - 'R' ) * STROKE_FONT_SCALE;
+                    glyphWidth  = glyphEndX - glyphStartX;
                 }
                 else if( ( coordinate[0] == ' ' ) && ( coordinate[1] == 'R' ) )
                 {
@@ -149,10 +166,10 @@ void STROKE_FONT::loadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
             glyph->Finalize();
 
             // Compute the bounding box of the glyph
+            buildGlyphBoundingBox( glyph, glyphWidth );
             g_defaultFontGlyphBoundingBoxes->emplace_back( glyph->BoundingBox() );
             g_defaultFontGlyphs.push_back( glyph );
-            m_maxGlyphWidth = std::max( m_maxGlyphWidth,
-                                        g_defaultFontGlyphBoundingBoxes->back().GetWidth() );
+            m_maxGlyphWidth = std::max( m_maxGlyphWidth, glyphWidth );
         }
 
         g_defaultFontInitialized = true;
@@ -194,8 +211,8 @@ VECTOR2D STROKE_FONT::StringBoundaryLimits( const KIGFX::GAL* aGal, const UTF8& 
     MARKUP::MARKUP_PARSER markupParser( aText );
     auto                  root = markupParser.Parse();
 
-    GLYPH_LIST glyphs; // ignored
-    BOX2I      boundingBox;
+    std::vector<std::unique_ptr<GLYPH>> glyphs; // ignored
+    BOX2I                               boundingBox;
 
     (void) drawMarkup( &boundingBox, glyphs, root, VECTOR2D(), aGlyphSize, EDA_ANGLE::ANGLE_0,
                        false, 0 /* TODO: this should really include italic */ );
@@ -212,10 +229,11 @@ VECTOR2D STROKE_FONT::getBoundingBox( const UTF8& aString, const VECTOR2D& aGlyp
 }
 
 
-VECTOR2I STROKE_FONT::GetTextAsPolygon( BOX2I* aBoundingBox, GLYPH_LIST& aGlyphs,
-                                        const UTF8& aText, const VECTOR2D& aGlyphSize,
-                                        const wxPoint& aPosition, const EDA_ANGLE& aAngle,
-                                        TEXT_STYLE_FLAGS aTextStyle ) const
+VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBoundingBox,
+                                       std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
+                                       const UTF8& aText, const VECTOR2D& aGlyphSize,
+                                       const wxPoint& aPosition, const EDA_ANGLE& aAngle,
+                                       TEXT_STYLE_FLAGS aTextStyle ) const
 {
     wxPoint  cursor( aPosition );
     VECTOR2D glyphSize( aGlyphSize );
@@ -266,13 +284,11 @@ VECTOR2I STROKE_FONT::GetTextAsPolygon( BOX2I* aBoundingBox, GLYPH_LIST& aGlyphs
         }
         else
         {
-            constexpr double interGlyphSpaceMultiplier = 0.15;
-            double           interGlyphSpace = glyphSize.x * interGlyphSpaceMultiplier;
-            STROKE_GLYPH*    source = static_cast<STROKE_GLYPH*>( m_glyphs->at( dd ).get() );
+            STROKE_GLYPH* source = static_cast<STROKE_GLYPH*>( m_glyphs->at( dd ).get() );
 
             aGlyphs.push_back( source->Transform( glyphSize, cursor, tilt ) );
 
-            cursor.x = aGlyphs.back()->BoundingBox().GetEnd().x + interGlyphSpace;
+            cursor.x = aGlyphs.back()->BoundingBox().GetEnd().x;
         }
     }
 
@@ -280,7 +296,7 @@ VECTOR2I STROKE_FONT::GetTextAsPolygon( BOX2I* aBoundingBox, GLYPH_LIST& aGlyphs
 
     if( aTextStyle & TEXT_STYLE::OVERBAR )
     {
-        std::shared_ptr<STROKE_GLYPH> overbarGlyph = std::make_shared<STROKE_GLYPH>();
+        std::unique_ptr<STROKE_GLYPH> overbarGlyph;
 
         barOffset.y = ComputeOverbarVerticalPosition( glyphSize.y );
 
@@ -291,7 +307,7 @@ VECTOR2I STROKE_FONT::GetTextAsPolygon( BOX2I* aBoundingBox, GLYPH_LIST& aGlyphs
         overbarGlyph->AddPoint( VECTOR2D( cursor.x + barOffset.x, cursor.y - barOffset.y ) );
         overbarGlyph->Finalize();
 
-        aGlyphs.push_back( overbarGlyph );
+        aGlyphs.push_back( std::move( overbarGlyph ) );
     }
 
     if( aBoundingBox )

@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski
- * Copyright (C) 2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Font abstract base class
  *
@@ -35,12 +35,7 @@
 #include <utf8.h>
 #include <font/glyph.h>
 #include <font/text_attributes.h>
-
-
-namespace MARKUP
-{
-struct NODE;
-}
+#include <markup_parser.h>
 
 namespace KIGFX
 {
@@ -137,32 +132,8 @@ public:
         return Draw( aGal, aText, aPosition, VECTOR2D( 0, 0 ), aAttributes );
     }
 
-    virtual void KiDrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
-                             const TEXT_ATTRIBUTES& aAttributes ) const;
-
-    /**
-     * Draw a string.
-     *
-     * @param aGal is the graphics context
-     * @param aText is the text string
-     * @param aPosition is the text position in world coordinates
-     * @param aParse is true is aText should first be parsed for variable substition etc.,
-     *     otherwise false (default is false)
-     * @return bounding box
-     */
-    VECTOR2D DrawString( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
-                         bool aParse, const TEXT_ATTRIBUTES& aAttributes ) const
-    {
-        return doDrawString( aGal, aText, aPosition, aParse, aAttributes );
-    }
-
-    VECTOR2D DrawString( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
-                         bool aParse, const EDA_ANGLE& aAngle ) const
-    {
-        TEXT_ATTRIBUTES attributes;
-        attributes.m_Angle = aAngle;
-        return doDrawString( aGal, aText, aPosition, aParse, attributes );
-    }
+    virtual void DrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2D& aPosition,
+                           const TEXT_ATTRIBUTES& aAttributes ) const;
 
     /**
      * Compute the boundary limits of aText (the bounding box of all shapes).
@@ -197,9 +168,10 @@ public:
     virtual VECTOR2D ComputeTextLineSize( const KIGFX::GAL* aGal, const UTF8& aText ) const = 0;
 
     /**
-     * Convert text string to polygon (outline font) or polyline (stroke font).
+     * Convert text string to an array of GLYPHs.
      *
      * @param aBoundingBox pointer to a BOX2I that will set to the bounding box, or nullptr
+     * @param aGlyphs storage for the returned GLYPHs
      * @param aText text to convert to polygon/polyline
      * @param aGlyphSize glyph size
      * @param aPosition position of text (cursor position before this text)
@@ -207,10 +179,11 @@ public:
      * @param aTextStyle text style flags
      * @return text cursor position after this text
      */
-    virtual VECTOR2I GetTextAsPolygon( BOX2I* aBoundingBox, GLYPH_LIST& aGlyphs,
-                                       const UTF8& aText, const VECTOR2D& aGlyphSize,
-                                       const wxPoint& aPosition, const EDA_ANGLE& aAngle,
-                                       TEXT_STYLE_FLAGS aTextStyle ) const = 0;
+    virtual VECTOR2I GetTextAsGlyphs( BOX2I* aBoundingBox,
+                                      std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
+                                      const UTF8& aText, const VECTOR2D& aGlyphSize,
+                                      const wxPoint& aPosition, const EDA_ANGLE& aAngle,
+                                      TEXT_STYLE_FLAGS aTextStyle ) const = 0;
 
 protected:
     /**
@@ -269,10 +242,13 @@ protected:
     virtual VECTOR2D getBoundingBox( const UTF8& aString, const VECTOR2D& aGlyphSize,
                                      TEXT_STYLE_FLAGS aTextStyle = 0 ) const = 0;
 
-    VECTOR2D drawMarkup( BOX2I* aBoundingBox, GLYPH_LIST& aGlyphs,
+    VECTOR2D drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
                          const std::unique_ptr<MARKUP::NODE>& aNode, const VECTOR2D& aPosition,
                          const VECTOR2D& aGlyphSize, const EDA_ANGLE& aAngle,
                          TEXT_STYLE_FLAGS aTextStyle, int aLevel = 0 ) const;
+
+    ///< Factor that determines the pitch between 2 lines.
+    static constexpr double INTERLINE_PITCH_RATIO = 1.62;   // The golden mean
 
 private:
     static FONT* getDefaultFont();

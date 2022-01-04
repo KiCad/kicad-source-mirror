@@ -2415,7 +2415,9 @@ void OPENGL_GAL::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTotal )
 {
     if( aGlyph.IsStroke() )
     {
-        for( const std::vector<VECTOR2D>& pointList : aGlyph.GetPoints() )
+        const auto& strokeGlyph = static_cast<const KIFONT::STROKE_GLYPH&>( aGlyph );
+
+        for( const std::vector<VECTOR2D>& pointList : strokeGlyph )
             DrawPolyline( pointList );
     }
 #if 0 // FONT TODO
