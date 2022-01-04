@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2016-2022 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Stroke font class
  *
@@ -292,7 +292,7 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBoundingBox,
 
     if( aTextStyle & TEXT_STYLE::OVERBAR )
     {
-        std::unique_ptr<STROKE_GLYPH> overbarGlyph;
+        std::unique_ptr<STROKE_GLYPH> overbarGlyph = std::make_unique<STROKE_GLYPH>();
 
         barOffset.y = ComputeOverbarVerticalPosition( glyphSize.y );
 
