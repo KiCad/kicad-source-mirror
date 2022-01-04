@@ -139,7 +139,7 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
             return Cast_to_PCB_SHAPE(self)
         elif ct=="MGRAPHIC":
             return Cast_to_FP_SHAPE(self)
-        elif ct=="MODULE":
+        elif ct=="FOOTPRINT":
             return Cast_to_FOOTPRINT(self)
         elif ct=="PCB_GROUP":
             return Cast_to_PCB_GROUP(self)
