@@ -151,6 +151,39 @@ VECTOR2I PCB_GRID_HELPER::AlignToArc( const VECTOR2I& aPoint, const SHAPE_ARC& a
 }
 
 
+VECTOR2I PCB_GRID_HELPER::AlignToNearestPad( const VECTOR2I& aMousePos, PADS& aPads )
+{
+    clearAnchors();
+
+    for( BOARD_ITEM* item : aPads )
+        computeAnchors( item, aMousePos, true );
+
+    double  minDist = std::numeric_limits<double>::max();
+    ANCHOR* nearestOrigin = nullptr;
+
+    for( ANCHOR& a : m_anchors )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( a.item );
+
+        if( ( ORIGIN & a.flags ) != ORIGIN )
+            continue;
+
+        if( !item->HitTest( wxPoint( aMousePos.x, aMousePos.y ) ) )
+            continue;
+
+        double dist = a.Distance( aMousePos );
+
+        if( dist < minDist )
+        {
+            minDist = dist;
+            nearestOrigin = &a;
+        }
+    }
+
+    return nearestOrigin ? nearestOrigin->pos : aMousePos;
+}
+
+
 VECTOR2I PCB_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos,
                                           std::vector<BOARD_ITEM*>& aItems )
 {

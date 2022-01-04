@@ -32,9 +32,11 @@
 #include <footprint.h>
 #include <fp_shape.h>
 #include <pad.h>
+#include <pcbnew_settings.h>
 #include <board_commit.h>
 #include <dialogs/dialog_push_pad_properties.h>
 #include <tools/pcb_actions.h>
+#include <tools/pcb_grid_helper.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_selection_conditions.h>
 #include <tools/edit_tool.h>
@@ -295,6 +297,16 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     std::list<PAD*> selectedPads;
     BOARD_COMMIT    commit( frame() );
     bool            isFirstPoint = true;   // make sure oldCursorPos is initialized at least once
+    PADS            pads = board()->GetFirstFootprint()->Pads();
+
+    MAGNETIC_SETTINGS mag_settings;
+    mag_settings.graphics = false;
+    mag_settings.tracks = MAGNETIC_OPTIONS::NO_EFFECT;
+    mag_settings.pads = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
+    PCB_GRID_HELPER grid( m_toolMgr, &mag_settings );
+
+    grid.SetSnap( true );
+    grid.SetUseGrid( false );
 
     auto setCursor =
             [&]()
@@ -318,6 +330,9 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     {
         setCursor();
 
+        VECTOR2I cursorPos = grid.AlignToNearestPad( getViewControls()->GetMousePosition(), pads );
+        getViewControls()->ForceCursorPosition( true, cursorPos );
+
         if( evt->IsCancelInteractive() )
         {
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -336,7 +351,6 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
         else if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
             selectedPads.clear();
-            VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
 
             // Be sure the old cursor mouse position was initialized:
             if( isFirstPoint )
