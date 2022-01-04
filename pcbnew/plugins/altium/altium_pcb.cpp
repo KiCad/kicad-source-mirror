@@ -848,66 +848,38 @@ void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
 
 void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aVertices )
 {
-    if( !aVertices.empty() )
+    SHAPE_LINE_CHAIN lineChain;
+    HelperShapeLineChainFromAltiumVertices( lineChain, aVertices );
+
+    STROKE_PARAMS stroke( m_board->GetDesignSettings().GetLineThickness( Edge_Cuts ),
+                          PLOT_DASH_TYPE::SOLID );
+
+    for( int i = 0; i <= lineChain.PointCount() && i != -1; i = lineChain.NextShape( i ) )
     {
-        const ALTIUM_VERTICE* last = &aVertices.at( 0 );
-        STROKE_PARAMS         stroke( m_board->GetDesignSettings().GetLineThickness( Edge_Cuts ),
-                                      PLOT_DASH_TYPE::SOLID );
-
-        for( size_t i = 0; i < aVertices.size(); i++ )
+        if( lineChain.IsArcStart( i ) )
         {
-            const ALTIUM_VERTICE* cur = &aVertices.at( ( i + 1 ) % aVertices.size() );
+            const SHAPE_ARC& currentArc = lineChain.Arc( lineChain.ArcIndex( i ) );
+            int              nextShape = lineChain.NextShape( i );
+            bool             isLastShape = nextShape < 0;
 
-            PCB_SHAPE* shape = new PCB_SHAPE( m_board );
+            PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::ARC );
             m_board->Add( shape, ADD_MODE::APPEND );
 
             shape->SetStroke( stroke );
             shape->SetLayer( Edge_Cuts );
+            shape->SetArcGeometry( currentArc.GetP0(), currentArc.GetArcMid(), currentArc.GetP1() );
+        }
+        else
+        {
+            const SEG& seg = lineChain.Segment( i );
 
-            if( !last->isRound && !cur->isRound )
-            {
-                shape->SetShape( SHAPE_T::SEGMENT );
-                shape->SetStart( last->position );
-                shape->SetEnd( cur->position );
-            }
-            else if( cur->isRound )
-            {
-                shape->SetShape( SHAPE_T::ARC );
+            PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
+            m_board->Add( shape, ADD_MODE::APPEND );
 
-                double  includedAngle = cur->endangle - cur->startangle;
-                double  startAngle    = DEG2RAD( cur->endangle );
-                VECTOR2I startOffset   = VECTOR2I( KiROUND( std::cos( startAngle ) * cur->radius ),
-                                                 -KiROUND( std::sin( startAngle ) * cur->radius ) );
-                VECTOR2I arcStart      = cur->center + startOffset;
-
-                shape->SetCenter( cur->center );
-                shape->SetStart( arcStart );
-                shape->SetArcAngleAndEnd( -NormalizeAngleDegreesPos( includedAngle ) * 10.0, true );
-
-                if( !last->isRound )
-                {
-                    double  endAngle  = DEG2RAD( cur->endangle );
-                    VECTOR2I endOffset = VECTOR2I( KiROUND( std::cos( endAngle ) * cur->radius ),
-                                                 -KiROUND( std::sin( endAngle ) * cur->radius ) );
-                    VECTOR2I arcEnd    = cur->center + endOffset;
-
-                    PCB_SHAPE* shape2 = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
-                    m_board->Add( shape2, ADD_MODE::APPEND );
-                    shape2->SetStroke( stroke );
-                    shape2->SetLayer( Edge_Cuts );
-                    shape2->SetStart( last->position );
-
-                    // TODO: this is more of a hack than the real solution
-                    double lineLengthStart = GetLineLength( last->position, arcStart );
-                    double lineLengthEnd   = GetLineLength( last->position, arcEnd );
-
-                    if( lineLengthStart > lineLengthEnd )
-                        shape2->SetEnd( cur->center + endOffset );
-                    else
-                        shape2->SetEnd( cur->center + startOffset );
-                }
-            }
-            last = cur;
+            shape->SetStroke( stroke );
+            shape->SetLayer( Edge_Cuts );
+            shape->SetStart( seg.A );
+            shape->SetEnd( seg.B );
         }
     }
 }
