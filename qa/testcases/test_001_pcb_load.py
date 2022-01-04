@@ -64,7 +64,7 @@ class TestPCBLoad(unittest.TestCase):
         footprint = self.pcb.FindFootprintByReference("U1")
         reference = footprint.Reference()
         segments = [[p.x, p.y] for p in reference.TransformToSegmentList()]
-        expected_segments = [            
+        expected_segments = [
             [141901333, 69196857], [143340666, 69196857], [143340666, 69196857],
             [143510000, 69142428], [143510000, 69142428], [143594666, 69088000],
             [143594666, 69088000], [143679333, 68979142], [143679333, 68979142],
@@ -76,7 +76,14 @@ class TestPCBLoad(unittest.TestCase):
             [142155333, 67836142], [142324666, 67945000], [142324666, 67945000],
             [142409333, 68053857]
         ]
-        self.assertEqual(segments, expected_segments)
+
+        # Compare the value of each x and y coord of segments and expected_segments
+        # To avoid false positive due to rounding issues allow a difference of 1 unit
+        for i in range( len(segments) ):
+            p1=segments[i]
+            p2=expected_segments[i]
+            self.assertLessEqual(abs(p1[0] - p2[0]), 1)
+            self.assertLessEqual(abs(p1[1] - p2[1]), 1)
 
     def verify_text(self, text, x, y, layer, s):
         self.assertEquals(list(text.GetPosition()), [x, y])
