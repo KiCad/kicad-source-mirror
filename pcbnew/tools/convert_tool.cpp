@@ -29,6 +29,7 @@
 #include <collectors.h>
 #include <confirm.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <footprint.h>
 #include <footprint_edit_frame.h>
 #include <fp_shape.h>
 #include <geometry/shape_compound.h>
@@ -183,6 +184,10 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
     if( FP_SHAPE* graphic = dynamic_cast<FP_SHAPE*>( selection.Front() ) )
         parentFootprint = graphic->GetParentFootprint();
+    else if( FP_ZONE* zone = dynamic_cast<FP_ZONE*>( selection.Front() ) )
+        parentFootprint = static_cast<FOOTPRINT*>( zone->GetParent() );
+    else
+        wxFAIL_MSG( "Unimplemented footprint parent in CONVERT_TOOL::CreatePolys" );
 
     BOARD_COMMIT commit( m_frame );
 
