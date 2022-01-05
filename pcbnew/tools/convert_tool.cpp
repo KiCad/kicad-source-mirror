@@ -505,6 +505,7 @@ SHAPE_POLY_SET CONVERT_TOOL::extractPolygons( const std::deque<EDA_ITEM*>& aItem
         switch( item->Type() )
         {
         case PCB_SHAPE_T:
+        case PCB_FP_SHAPE_T:
             switch( static_cast<PCB_SHAPE*>( item )->GetShape() )
             {
             case SHAPE_T::POLY:
