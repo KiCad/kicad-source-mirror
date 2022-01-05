@@ -648,8 +648,16 @@ void SCH_SEXPR_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
                 m_error += ioe.What();
             }
 
-            aSheet->GetScreen()->SetFileReadOnly( !fileName.IsFileWritable() );
-            aSheet->GetScreen()->SetFileExists( true );
+            if( fileName.FileExists() )
+            {
+                aSheet->GetScreen()->SetFileReadOnly( !fileName.IsFileWritable() );
+                aSheet->GetScreen()->SetFileExists( true );
+            }
+            else
+            {
+                aSheet->GetScreen()->SetFileReadOnly( !fileName.IsDirWritable() );
+                aSheet->GetScreen()->SetFileExists( false );
+            }
 
             // This was moved out of the try{} block so that any sheets definitionsthat
             // the plugin fully parsed before the exception was raised will be loaded.
