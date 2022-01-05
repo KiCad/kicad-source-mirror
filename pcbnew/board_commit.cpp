@@ -122,12 +122,17 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         int changeFlags = ent.m_type & CHT_FLAGS;
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
 
+        wxASSERT( ent.m_item );
+
         // Module items need to be saved in the undo buffer before modification
         if( m_isFootprintEditor )
         {
             // Be sure that we are storing a footprint
             if( ent.m_item->Type() != PCB_FOOTPRINT_T )
+            {
                 ent.m_item = ent.m_item->GetParent();
+                wxASSERT( ent.m_item );
+            }
 
             // We have not saved the footprint yet, so let's create an entry
             if( savedModules.count( ent.m_item ) == 0 )
