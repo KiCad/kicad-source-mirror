@@ -212,7 +212,19 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
     try
     {
         cntUpd.Start();
-        m_view->UpdateItems();
+        try
+        {
+            m_view->UpdateItems();
+        }
+        catch( std::out_of_range& err )
+        {
+            // Don't do anything here but don't fail
+            // This can happen when we don't catch `at()` calls
+            wxString msg;
+            msg.Printf( wxT( "Out of Range error: %s" ), err.what() );
+            wxLogDebug( msg );
+        }
+
         cntUpd.Stop();
 
         cntCtx.Start();
