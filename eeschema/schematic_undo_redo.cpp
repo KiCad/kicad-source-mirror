@@ -264,15 +264,16 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 {
     // Undo in the reverse order of list creation: (this can allow stacked changes like the
     // same item can be changed and deleted in the same complex command).
-    for( int ii = aList->GetCount() - 1; ii >= 0; ii-- )
+    // After hitting 0, subtracting 1 will roll the value over to its max representation
+    for( unsigned ii = aList->GetCount() - 1; ii < std::numeric_limits<unsigned>::max(); ii-- )
     {
-        UNDO_REDO   status = aList->GetPickedItemStatus( (unsigned) ii );
-        EDA_ITEM*   eda_item = aList->GetPickedItem( (unsigned) ii );
-        SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( aList->GetScreenForItem( (unsigned) ii ) );
+        UNDO_REDO   status = aList->GetPickedItemStatus( ii );
+        EDA_ITEM*   eda_item = aList->GetPickedItem( ii );
+        SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( aList->GetScreenForItem( ii ) );
 
         wxCHECK( screen, /* void */ );
 
-        eda_item->SetFlags( aList->GetPickerFlags( (unsigned) ii ) );
+        eda_item->SetFlags( aList->GetPickerFlags( ii ) );
         eda_item->ClearEditFlags();
         eda_item->ClearTempFlags();
 
@@ -284,13 +285,13 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         {
             // new items are deleted on undo
             RemoveFromScreen( eda_item, screen );
-            aList->SetPickedItemStatus( UNDO_REDO::DELETED, (unsigned) ii );
+            aList->SetPickedItemStatus( UNDO_REDO::DELETED, ii );
         }
         else if( status == UNDO_REDO::DELETED )
         {
             // deleted items are re-inserted on undo
             AddToScreen( eda_item, screen );
-            aList->SetPickedItemStatus( UNDO_REDO::NEWITEM, (unsigned) ii );
+            aList->SetPickedItemStatus( UNDO_REDO::NEWITEM, ii );
         }
         else if( status == UNDO_REDO::PAGESETTINGS )
         {
@@ -303,11 +304,10 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             item->Restore( this );
             *item = alt_item;
         }
-        else if( dynamic_cast<SCH_ITEM*>( eda_item ) )
+        else if( SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( eda_item ) )
         {
             // everything else is modified in place
-            SCH_ITEM* item = (SCH_ITEM*) eda_item;
-            SCH_ITEM* alt_item = (SCH_ITEM*) aList->GetPickedItemLink( (unsigned) ii );
+            SCH_ITEM* alt_item = static_cast<SCH_ITEM*>( aList->GetPickedItemLink( ii ) );
 
             // The root sheet is a pseudo object that owns the root screen object but is not on
             // the root screen so do not attempt to remove it from the screen it owns.
@@ -321,15 +321,21 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 break;
 
             case UNDO_REDO::EXCHANGE_T:
-                aList->SetPickedItem( alt_item, (unsigned) ii );
-                aList->SetPickedItemLink( item, (unsigned) ii );
+                aList->SetPickedItem( alt_item, ii );
+                aList->SetPickedItemLink( item, ii );
                 item = alt_item;
                 break;
 
             default:
                 wxFAIL_MSG( wxString::Format( wxT( "Unknown undo/redo command %d" ),
-                                              aList->GetPickedItemStatus( (unsigned) ii ) ) );
+                                              aList->GetPickedItemStatus( ii ) ) );
                 break;
+            }
+
+            if( item->Type() == SCH_SYMBOL_T )
+            {
+                SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
+                sym->UpdatePins();
             }
 
             if( item != &Schematic().Root() )
