@@ -1582,6 +1582,10 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             if( gates_count == 1 && ispower )
                 libSymbol->SetPower();
 
+            // assume that footprint library is identical to project name
+            wxString packageString = m_schematic->Prj().GetProjectName() + wxT( ":" ) + aEagleLibrary->package[symbolName];
+            libSymbol->GetFootprintField().SetText( packageString );
+
             wxString name = libSymbol->GetName();
             libSymbol->SetName( name );
             m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_SYMBOL( *libSymbol.get() ),
