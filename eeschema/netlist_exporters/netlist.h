@@ -34,6 +34,7 @@
 /// netlist types
 enum  NETLIST_TYPE_ID {
     NET_TYPE_UNINIT = 0,
+    NET_TYPE_BOM,       // Used by the BOM generator
     NET_TYPE_PCBNEW,
     NET_TYPE_ORCADPCB2,
     NET_TYPE_CADSTAR,

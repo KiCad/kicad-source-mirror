@@ -32,18 +32,19 @@
 #include <bom_plugins.h>
 #include <confirm.h>
 #include <dialog_bom_base.h>
-#include <string_utils.h>
+#include <dialogs/html_message_box.h>
 #include <eeschema_settings.h>
 #include <gestfich.h>
-#include <dialogs/html_message_box.h>
 #include <i18n_utility.h> // for _HKI definition used in dialog_bom_help_md.h
 #include <invoke_sch_dialog.h>
 #include <kiface_base.h>
+#include <netlist.h>
 #include <netlist_exporter_xml.h>
+#include <paths.h>
 #include <pgm_base.h>
 #include <reporter.h>
 #include <sch_edit_frame.h>
-#include <paths.h>
+#include <string_utils.h>
 
 #include <wx/filedlg.h>
 #include <wx/log.h>
@@ -343,7 +344,7 @@ void DIALOG_BOM::OnRunGenerator( wxCommandEvent& event )
 #endif
 
     if( m_parent->ReadyToNetlist( _( "Generating BOM requires a fully annotated schematic." ) ) )
-        m_parent->WriteNetListFile( -1, fullfilename, GNL_OPT_BOM, &reporter );
+        m_parent->WriteNetListFile( NET_TYPE_BOM, fullfilename, GNL_OPT_BOM, &reporter );
 
     m_Messages->SetValue( reportmsg );
 
