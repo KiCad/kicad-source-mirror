@@ -510,7 +510,7 @@ void GERBVIEW_FRAME::SortLayersByX2Attributes()
 
     for( const std::pair<const int, int>& entry : remapping )
     {
-        view_remapping[ entry.first ] = GERBER_DRAW_LAYER( entry.second );
+        view_remapping[ GERBER_DRAW_LAYER( entry.first ) ] = GERBER_DRAW_LAYER( entry.second );
         view_remapping[ GERBER_DCODE_LAYER( entry.first ) ] = GERBER_DCODE_LAYER( entry.second );
     }
 
