@@ -27,7 +27,6 @@
 
 #include <geometry/shape_poly_set.h>
 #include <geometry/geometry_utils.h>
-#include <wx/gdicmn.h>      // for wxPoint
 
 
 // The chamfer positions of chamfered rect shape.

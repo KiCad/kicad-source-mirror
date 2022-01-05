@@ -27,8 +27,6 @@
 #define FP_SHAPE_H
 
 
-#include <wx/gdicmn.h>
-
 #include <pcb_shape.h>
 
 

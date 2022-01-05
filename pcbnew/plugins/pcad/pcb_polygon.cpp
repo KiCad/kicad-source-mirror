@@ -32,7 +32,6 @@
 #include <xnode.h>
 #include <zone.h>
 
-#include <wx/gdicmn.h>
 #include <wx/string.h>
 
 namespace PCAD2KICAD {
@@ -198,8 +197,8 @@ void PCB_POLYGON::AddToBoard()
         // add outline
         for( i = 0; i < (int) m_outline.GetCount(); i++ )
         {
-            zone->AppendCorner( wxPoint( KiROUND( m_outline[i]->x ),
-                                         KiROUND( m_outline[i]->y ) ), -1 );
+            zone->AppendCorner( VECTOR2I( KiROUND( m_outline[i]->x ),
+                                          KiROUND( m_outline[i]->y ) ), -1 );
         }
 
         zone->SetLocalClearance( m_width );

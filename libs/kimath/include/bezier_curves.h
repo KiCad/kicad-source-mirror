@@ -25,7 +25,6 @@
 #define BEZIER_CURVES_H
 
 #include <vector>
-#include <wx/gdicmn.h>
 #include <math/vector2d.h>
 
 /**

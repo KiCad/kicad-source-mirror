@@ -27,7 +27,6 @@
 #include <common.h>
 #include <xnode.h>
 
-#include <wx/gdicmn.h>
 #include <wx/string.h>
 
 namespace PCAD2KICAD {
