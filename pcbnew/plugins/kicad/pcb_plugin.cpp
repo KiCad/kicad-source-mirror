@@ -716,7 +716,10 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
     if( aDimension->IsLocked() )
         m_out->Print( 0, " locked" );
 
-    if( aligned )
+    if( ortho ) // must be tested before aligned, because ortho is derived from aligned
+                // and aligned is not null
+        m_out->Print( 0, " (type orthogonal)" );
+    else if( aligned )
         m_out->Print( 0, " (type aligned)" );
     else if( leader )
         m_out->Print( 0, " (type leader)" );
@@ -724,8 +727,6 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
         m_out->Print( 0, " (type center)" );
     else if( radial )
         m_out->Print( 0, " (type radial)" );
-    else if( ortho )
-        m_out->Print( 0, " (type orthogonal)" );
     else
         wxFAIL_MSG( wxT( "Cannot format unknown dimension type!" ) );
 
@@ -753,7 +754,7 @@ void PCB_PLUGIN::format( const PCB_DIMENSION_BASE* aDimension, int aNestLevel ) 
                       FormatInternalUnits( radial->GetLeaderLength() ).c_str() );
     }
 
-    if( ortho && !aligned )
+    if( ortho )
     {
         m_out->Print( aNestLevel+1, "(orientation %d)\n",
                       static_cast<int>( ortho->GetOrientation() ) );
