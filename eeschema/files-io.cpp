@@ -1417,7 +1417,7 @@ void SCH_EDIT_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
 
             // Attempt to back up the last schematic file before overwriting it with the auto
             // save file.
-            if( !wxRenameFile( recoveredFn.GetFullPath(), backupFn.GetFullPath() ) )
+            if( !wxCopyFile( recoveredFn.GetFullPath(), backupFn.GetFullPath() ) )
             {
                 unrecoveredFiles.Add( recoveredFn.GetFullPath() );
             }
