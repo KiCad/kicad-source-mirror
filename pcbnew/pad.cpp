@@ -374,7 +374,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         }
         else
         {
-            wxSize  half_size = m_size / 2;
+            VECTOR2I half_size = m_size / 2;
             int     half_width = std::min( half_size.x, half_size.y );
             VECTOR2I half_len( half_size.x - half_width, half_size.y - half_width );
             RotatePoint( half_len, m_orient );
@@ -389,7 +389,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     {
         int      r = ( effectiveShape == PAD_SHAPE::ROUNDRECT ) ? GetRoundRectCornerRadius() : 0;
         VECTOR2I half_size( m_size.x / 2, m_size.y / 2 );
-        wxSize   trap_delta( 0, 0 );
+        VECTOR2I trap_delta( 0, 0 );
 
         if( r )
         {
@@ -490,11 +490,10 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     }
 
     BOX2I bbox = m_effectiveShape->BBox();
-    m_effectiveBoundingBox = EDA_RECT( bbox.GetPosition(),
-                                       wxSize( bbox.GetWidth(), bbox.GetHeight() ) );
+    m_effectiveBoundingBox = EDA_RECT( bbox.GetPosition(), VECTOR2I( bbox.GetWidth(), bbox.GetHeight() ) );
 
     // Hole shape
-    wxSize   half_size = m_drill / 2;
+    VECTOR2I half_size = m_drill / 2;
     int      half_width = std::min( half_size.x, half_size.y );
     VECTOR2I half_len( half_size.x - half_width, half_size.y - half_width );
 
@@ -503,8 +502,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     m_effectiveHoleShape = std::make_shared<SHAPE_SEGMENT>( m_pos - half_len, m_pos + half_len,
                                                             half_width * 2 );
     bbox = m_effectiveHoleShape->BBox();
-    m_effectiveBoundingBox.Merge( EDA_RECT( bbox.GetPosition(),
-                                            wxSize( bbox.GetWidth(), bbox.GetHeight() ) ) );
+    m_effectiveBoundingBox.Merge( EDA_RECT( bbox.GetPosition(), VECTOR2I( bbox.GetWidth(), bbox.GetHeight() ) ) );
 
     // All done
     m_shapesDirty = false;
@@ -597,7 +595,7 @@ void PAD::SetAttribute( PAD_ATTRIB aAttribute )
     m_attribute = aAttribute;
 
     if( aAttribute == PAD_ATTRIB::SMD )
-        m_drill = wxSize( 0, 0 );
+        m_drill = VECTOR2I( 0, 0 );
 
     SetDirty();
 }
@@ -770,7 +768,7 @@ int PAD::GetSolderMaskExpansion() const
 }
 
 
-wxSize PAD::GetSolderPasteMargin() const
+VECTOR2I PAD::GetSolderPasteMargin() const
 {
     // The pad inherits the margin only to calculate a default shape,
     // therefore only if it is also a copper layer.
@@ -779,7 +777,7 @@ wxSize PAD::GetSolderPasteMargin() const
     bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
 
     if( !isOnCopperLayer )
-        return wxSize( 0, 0 );
+        return VECTOR2I( 0, 0 );
 
     int     margin = m_localSolderPasteMargin;
     double  mratio = m_localSolderPasteMarginRatio;
@@ -805,7 +803,7 @@ wxSize PAD::GetSolderPasteMargin() const
         }
     }
 
-    wxSize pad_margin;
+    VECTOR2I pad_margin;
     pad_margin.x = margin + KiROUND( m_size.x * mratio );
     pad_margin.y = margin + KiROUND( m_size.y * mratio );
 
@@ -1415,7 +1413,7 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     SetOrientation( pad_rot );
 
     SetSize( aMasterPad.GetSize() );
-    SetDelta( wxSize( 0, 0 ) );
+    SetDelta( VECTOR2I( 0, 0 ) );
     SetOffset( aMasterPad.GetOffset() );
     SetDrillSize( aMasterPad.GetDrillSize() );
     SetDrillShape( aMasterPad.GetDrillShape() );
@@ -1431,7 +1429,7 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
 
     case PAD_SHAPE::CIRCLE:
         // ensure size.y == size.x
-        SetSize( wxSize( GetSize().x, GetSize().x ) );
+        SetSize( VECTOR2I( GetSize().x, GetSize().x ) );
         break;
 
     default:
@@ -1444,7 +1442,7 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     case PAD_ATTRIB::CONN:
         // These pads do not have hole (they are expected to be only on one
         // external copper layer)
-        SetDrillSize( wxSize( 0, 0 ) );
+        SetDrillSize( VECTOR2I( 0, 0 ) );
         break;
 
     default:
@@ -1483,7 +1481,7 @@ void PAD::SwapData( BOARD_ITEM* aImage )
 bool PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
                                                int aError, ERROR_LOC aErrorLoc ) const
 {
-    wxSize drillsize = GetDrillSize();
+    VECTOR2I drillsize = GetDrillSize();
 
     if( !drillsize.x || !drillsize.y )
         return false;

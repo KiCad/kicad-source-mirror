@@ -229,18 +229,18 @@ public:
     void SetY0( int y )                         { m_pos0.y = y; }
     void SetX0( int x )                         { m_pos0.x = x; }
 
-    void SetSize( const wxSize& aSize )         { m_size = aSize; SetDirty(); }
-    const wxSize& GetSize() const               { return m_size; }
+    void SetSize( const VECTOR2I& aSize )       { m_size = aSize; SetDirty(); }
+    const VECTOR2I& GetSize() const             { return m_size; }
     void SetSizeX( const int aX )               { m_size.x = aX; SetDirty(); }
     const int GetSizeX() const                  { return m_size.x; }
     void SetSizeY( const int aY )               { m_size.y = aY; SetDirty(); }
     const int GetSizeY() const                  { return m_size.y; }
 
-    void SetDelta( const wxSize& aSize )        { m_deltaSize = aSize; SetDirty(); }
-    const wxSize& GetDelta() const              { return m_deltaSize; }
+    void SetDelta( const VECTOR2I& aSize )      { m_deltaSize = aSize; SetDirty(); }
+    const VECTOR2I& GetDelta() const            { return m_deltaSize; }
 
-    void SetDrillSize( const wxSize& aSize )    { m_drill = aSize; SetDirty(); }
-    const wxSize& GetDrillSize() const          { return m_drill; }
+    void SetDrillSize( const VECTOR2I& aSize )  { m_drill = aSize; SetDirty(); }
+    const VECTOR2I& GetDrillSize() const        { return m_drill; }
     void SetDrillSizeX( const int aX )          { m_drill.x = aX; SetDirty(); }
     const int GetDrillSizeX() const             { return m_drill.x; }
     void SetDrillSizeY( const int aY )          { m_drill.y = aY; SetDirty(); }
@@ -470,7 +470,7 @@ public:
      *
      * @return the margin for the solder mask layer.
     */
-    wxSize GetSolderPasteMargin() const;
+    VECTOR2I GetSolderPasteMargin() const;
 
     void SetZoneConnection( ZONE_CONNECTION aType ) { m_zoneConnection = aType; }
     ZONE_CONNECTION GetZoneConnection() const { return m_zoneConnection; }
@@ -707,8 +707,8 @@ private:
     int               m_subRatsnest;        // Variable used to handle subnet (block) number in
                                             //   ratsnest computations
 
-    wxSize            m_drill;              // Drill diameter (x == y) or slot dimensions (x != y)
-    wxSize            m_size;               // X and Y size (relative to orient 0)
+    VECTOR2I          m_drill;              // Drill diameter (x == y) or slot dimensions (x != y)
+    VECTOR2I          m_size;               // X and Y size (relative to orient 0)
 
     PAD_DRILL_SHAPE_T m_drillShape;         // PAD_DRILL_SHAPE_CIRCLE, PAD_DRILL_SHAPE_OBLONG
 
@@ -733,7 +733,7 @@ private:
     LSET        m_layerMask;        // Bitwise layer: 1 = copper layer, 15 = cmp,
                                     // 2..14 = internal layers, 16..31 = technical layers
 
-    wxSize      m_deltaSize;        // Delta for PAD_SHAPE::TRAPEZOID; half the delta squeezes
+    VECTOR2I    m_deltaSize;        // Delta for PAD_SHAPE::TRAPEZOID; half the delta squeezes
                                     //   one end and half expands the other.  It is only valid
                                     //   to have a single axis be non-0.
 

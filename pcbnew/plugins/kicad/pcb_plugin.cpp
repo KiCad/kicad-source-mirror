@@ -1454,13 +1454,13 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
 
     m_out->Print( 0, " (size %s)", FormatInternalUnits( aPad->GetSize() ).c_str() );
 
-    if( (aPad->GetDelta().GetWidth()) != 0 || (aPad->GetDelta().GetHeight() != 0 ) )
+    if( (aPad->GetDelta().x) != 0 || (aPad->GetDelta().y != 0 ) )
         m_out->Print( 0, " (rect_delta %s)", FormatInternalUnits( aPad->GetDelta() ).c_str() );
 
-    wxSize sz = aPad->GetDrillSize();
+    VECTOR2I sz = aPad->GetDrillSize();
     VECTOR2I shapeoffset = aPad->GetOffset();
 
-    if( (sz.GetWidth() > 0) || (sz.GetHeight() > 0) ||
+    if( (sz.x > 0) || (sz.y > 0) ||
         (shapeoffset.x != 0) || (shapeoffset.y != 0) )
     {
         m_out->Print( 0, " (drill" );
@@ -1468,11 +1468,11 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
         if( aPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )
             m_out->Print( 0, " oval" );
 
-        if( sz.GetWidth() > 0 )
-            m_out->Print( 0,  " %s", FormatInternalUnits( sz.GetWidth() ).c_str() );
+        if( sz.x > 0 )
+            m_out->Print( 0,  " %s", FormatInternalUnits( sz.x ).c_str() );
 
-        if( sz.GetHeight() > 0  && sz.GetWidth() != sz.GetHeight() )
-            m_out->Print( 0,  " %s", FormatInternalUnits( sz.GetHeight() ).c_str() );
+        if( sz.y > 0  && sz.x != sz.y )
+            m_out->Print( 0,  " %s", FormatInternalUnits( sz.y ).c_str() );
 
         if( (shapeoffset.x != 0) || (shapeoffset.y != 0) )
             m_out->Print( 0, " (offset %s)", FormatInternalUnits( aPad->GetOffset() ).c_str() );

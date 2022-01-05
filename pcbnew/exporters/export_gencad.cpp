@@ -470,7 +470,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         case PAD_SHAPE::ROUNDRECT:
         case PAD_SHAPE::OVAL:
         {
-            const wxSize& size = pad->GetSize();
+            const VECTOR2I& size = pad->GetSize();
             int radius = std::min( size.x, size.y ) / 2;
 
             if( pad->GetShape() == PAD_SHAPE::ROUNDRECT )

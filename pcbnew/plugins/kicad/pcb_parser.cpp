@@ -4219,7 +4219,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         case T_drill:
         {
             bool   haveWidth = false;
-            wxSize drillSize = pad->GetDrillSize();
+            VECTOR2I drillSize = pad->GetDrillSize();
 
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
@@ -4234,15 +4234,15 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 {
                     if( !haveWidth )
                     {
-                        drillSize.SetWidth( parseBoardUnits() );
+                        drillSize.x = parseBoardUnits();
 
                         // If height is not defined the width and height are the same.
-                        drillSize.SetHeight( drillSize.GetWidth() );
+                        drillSize.y = drillSize.x;
                         haveWidth = true;
                     }
                     else
                     {
-                        drillSize.SetHeight( parseBoardUnits() );
+                        drillSize.y = parseBoardUnits();
                     }
                 }
 

@@ -128,7 +128,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aSta
  * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
  */
 void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aPosition,
-                                  const wxSize& aSize, double aRotation, int aDeltaX, int aDeltaY,
+                                  const VECTOR2I& aSize, double aRotation, int aDeltaX, int aDeltaY,
                                   int aInflate, int aError, ERROR_LOC aErrorLoc );
 
 /**

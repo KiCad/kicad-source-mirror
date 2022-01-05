@@ -281,7 +281,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             else if( sketchPads && aLayerMask[B_Fab] )
                 color = aPlotOpt.ColorSettings()->GetColor( B_Fab );
 
-            wxSize margin;
+            VECTOR2I margin;
             int width_adj = 0;
 
             if( onCopperLayer )
@@ -300,12 +300,12 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             int mask_clearance = margin.x;
 
             // Now offset the pad size by margin + width_adj
-            wxSize padPlotsSize = pad->GetSize() + margin * 2 + wxSize( width_adj, width_adj );
+            VECTOR2I padPlotsSize = pad->GetSize() + margin * 2 + VECTOR2I( width_adj, width_adj );
 
             // Store these parameters that can be modified to plot inflated/deflated pads shape
             PAD_SHAPE padShape = pad->GetShape();
-            wxSize      padSize  = pad->GetSize();
-            wxSize      padDelta = pad->GetDelta(); // has meaning only for trapezoidal pads
+            VECTOR2I    padSize = pad->GetSize();
+            VECTOR2I  padDelta = pad->GetDelta(); // has meaning only for trapezoidal pads
             double      padCornerRadius = pad->GetRoundRectCornerRadius();
 
             // Don't draw a 0 sized pad.
@@ -744,7 +744,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             {
                 for( PAD* pad : footprint->Pads() )
                 {
-                    wxSize hole = pad->GetDrillSize();
+                    VECTOR2I hole = pad->GetDrillSize();
 
                     if( hole.x == 0 || hole.y == 0 )
                         continue;

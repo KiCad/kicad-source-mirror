@@ -1059,10 +1059,10 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 
 
 void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const VECTOR2I& aDrillPos,
-                                         const wxSize& aDrillSize, const wxSize& aPadSize,
+                                         const VECTOR2I& aDrillSize, const VECTOR2I& aPadSize,
                                          double aOrientation, int aSmallDrill )
 {
-    wxSize drillSize = aDrillSize;
+    VECTOR2I drillSize = aDrillSize;
 
     // Small drill marks have no significance when applied to slots
     if( aSmallDrill && aDrillShape == PAD_DRILL_SHAPE_CIRCLE )

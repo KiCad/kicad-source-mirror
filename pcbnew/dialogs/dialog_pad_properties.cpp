@@ -1233,8 +1233,8 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     wxArrayString error_msgs;
     wxArrayString warning_msgs;
     wxString      msg;
-    wxSize        pad_size = m_dummyPad->GetSize();
-    wxSize        drill_size = m_dummyPad->GetDrillSize();
+    VECTOR2I      pad_size = m_dummyPad->GetSize();
+    VECTOR2I      drill_size = m_dummyPad->GetDrillSize();
 
     if( m_dummyPad->GetShape() == PAD_SHAPE::CUSTOM )
     {
@@ -1579,7 +1579,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     if( !m_locked->GetValue() || m_isFpEditor )
         m_currentPad->SetPosition( m_padMaster->GetPosition() );
 
-    wxSize     size;
+    VECTOR2I   size;
     FOOTPRINT* footprint = m_currentPad->GetParent();
 
     m_currentPad->SetSize( m_padMaster->GetSize() );

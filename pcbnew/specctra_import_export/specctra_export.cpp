@@ -493,7 +493,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
          */
         double correctionFactor = cos( M_PI / (double) circleToSegmentsCount );
         int    extra_clearance = KiROUND( rradius * ( 1.0 - correctionFactor ) );
-        wxSize psize = aPad->GetSize();
+        VECTOR2I psize = aPad->GetSize();
         psize.x += extra_clearance * 2;
         psize.y += extra_clearance * 2;
         rradius += extra_clearance;

@@ -792,8 +792,8 @@ void RENDER_3D_OPENGL::generateViasAndPads()
             {
                 if( pad->GetAttribute() != PAD_ATTRIB::NPTH )
                 {
-                    const wxSize drillsize = pad->GetDrillSize();
-                    const bool   hasHole   = drillsize.x && drillsize.y;
+                    const VECTOR2I drillsize = pad->GetDrillSize();
+                    const bool     hasHole = drillsize.x && drillsize.y;
 
                     if( !hasHole )
                         continue;

@@ -1895,7 +1895,7 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     {
         // The Eagle "long" pad is wider than it is tall,
         // m_elongation is percent elongation
-        wxSize sz = pad->GetSize();
+        VECTOR2I sz = pad->GetSize();
         sz.x = ( sz.x * ( 100 + m_rules->psElongationLong ) ) / 100;
         pad->SetSize( sz );
 
@@ -2414,7 +2414,7 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
     aPad->SetPos0( padPos );
 
     // Solder mask
-    const wxSize& padSize( aPad->GetSize() );
+    const VECTOR2I& padSize( aPad->GetSize() );
 
     aPad->SetLocalSolderMaskMargin(
             eagleClamp( m_rules->mlMinStopFrame,

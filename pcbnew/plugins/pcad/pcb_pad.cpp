@@ -33,7 +33,6 @@
 #include <trigo.h>
 #include <xnode.h>
 
-#include <wx/gdicmn.h>
 #include <wx/string.h>
 
 namespace PCAD2KICAD {
@@ -287,13 +286,13 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
             pad->SetShape( PAD_SHAPE::RECT ); // approximation
         }
 
-        pad->SetSize( wxSize( width, height ) );
-        pad->SetDelta( wxSize( 0, 0 ) );
+        pad->SetSize( VECTOR2I( width, height ) );
+        pad->SetDelta( VECTOR2I( 0, 0 ) );
         pad->SetOrientation( m_rotation + aRotation );
 
         pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
-        pad->SetOffset( wxPoint( 0, 0 ) );
-        pad->SetDrillSize( wxSize( m_Hole, m_Hole ) );
+        pad->SetOffset( VECTOR2I( 0, 0 ) );
+        pad->SetDrillSize( VECTOR2I( m_Hole, m_Hole ) );
 
         pad->SetAttribute( padType );
 

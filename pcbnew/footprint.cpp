@@ -2341,7 +2341,7 @@ void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuff
         if( aSkipNonPlatedPads && !isPlated )
             continue;
 
-        wxSize clearance( aClearance, aClearance );
+        VECTOR2I clearance( aClearance, aClearance );
 
         switch( aLayer )
         {
@@ -2370,7 +2370,7 @@ void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuff
         if( ( clearance.x < 0 || clearance.x != clearance.y )
                 && pad->GetShape() != PAD_SHAPE::CUSTOM )
         {
-            wxSize dummySize = pad->GetSize() + clearance + clearance;
+            VECTOR2I dummySize = pad->GetSize() + clearance + clearance;
 
             if( dummySize.x <= 0 || dummySize.y <= 0 )
                 continue;

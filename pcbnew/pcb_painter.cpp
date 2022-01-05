@@ -1045,8 +1045,8 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     }
     else
     {
-        wxSize pad_size = aPad->GetSize();
-        wxSize margin;
+        VECTOR2I pad_size = aPad->GetSize();
+        VECTOR2I margin;
 
         switch( aLayer )
         {

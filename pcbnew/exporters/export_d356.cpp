@@ -111,7 +111,7 @@ static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
                 rk.pin = pad->GetNumber();
                 rk.refdes = footprint->GetReference();
                 rk.midpoint = false; // XXX MAYBE need to be computed (how?)
-                const wxSize& drill = pad->GetDrillSize();
+                const VECTOR2I& drill = pad->GetDrillSize();
                 rk.drill = std::min( drill.x, drill.y );
                 rk.hole = (rk.drill != 0);
                 rk.smd = pad->GetAttribute() == PAD_ATTRIB::SMD;

@@ -362,11 +362,11 @@ void CornerListRemoveDuplicates( std::vector<ROUNDED_CORNER>& aCorners )
 
 
 void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aPosition,
-                                  const wxSize& aSize, double aRotation, int aDeltaX, int aDeltaY,
+                                  const VECTOR2I& aSize, double aRotation, int aDeltaX, int aDeltaY,
                                   int aInflate, int aError, ERROR_LOC aErrorLoc )
 {
     SHAPE_POLY_SET              outline;
-    wxSize                      size( aSize / 2 );
+    VECTOR2I                    size( aSize / 2 );
     std::vector<ROUNDED_CORNER> corners;
 
     if( aInflate < 0 )
