@@ -79,19 +79,9 @@ void RotatePoint( int *pX, int *pY, int cx, int cy, double angle );
 /*
  * Calculate the new coord point point for a rotation angle in (1/10 degree).
  */
-inline void RotatePoint( wxPoint* point, double angle )
-{
-    RotatePoint( &point->x, &point->y, angle );
-}
-
 inline void RotatePoint( VECTOR2I& point, double angle )
 {
     RotatePoint( &point.x, &point.y, angle );
-}
-
-inline void RotatePoint( wxPoint* point, EDA_ANGLE angle )
-{
-    RotatePoint( &point->x, &point->y, angle.AsTenthsOfADegree() );
 }
 
 inline void RotatePoint( VECTOR2I& point, EDA_ANGLE angle )
@@ -109,12 +99,6 @@ inline void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, EDA_ANGLE angl
 /*
  * Calculate the new coord point point for a center rotation center and angle in (1/10 degree).
  */
-void RotatePoint( wxPoint *point, const wxPoint & centre, double angle );
-
-inline void RotatePoint( wxPoint *point, const wxPoint& centre, EDA_ANGLE angle )
-{
-    RotatePoint( point, centre, angle.AsTenthsOfADegree() );
-}
 
 void RotatePoint( double *pX, double *pY, double angle );
 
@@ -161,21 +145,6 @@ const VECTOR2I CalcArcMid( const VECTOR2I& aStart, const VECTOR2I& aEnd, const V
  */
 double ArcTangente( int dy, int dx );
 
-//! @brief Euclidean norm of a 2D vector
-//! @param vector Two-dimensional vector
-//! @return Euclidean norm of the vector
-inline double EuclideanNorm( const wxPoint &vector )
-{
-    // this is working with doubles
-    return hypot( vector.x, vector.y );
-}
-
-inline double EuclideanNorm( const wxSize &vector )
-{
-    // this is working with doubles, too
-    return hypot( vector.x, vector.y );
-}
-
 inline double EuclideanNorm( const VECTOR2I& vector )
 {
     // this is working with doubles
@@ -218,15 +187,6 @@ inline bool HitTestPoints( const VECTOR2I& pointA, const VECTOR2I& pointB, doubl
     return sqdistance < threshold * threshold;
 }
 
-//! @brief Determine the cross product
-//! @param vectorA Two-dimensional vector
-//! @param vectorB Two-dimensional vector
-inline double CrossProduct( const wxPoint& vectorA, const wxPoint& vectorB )
-{
-    // As before the cast is to avoid int overflow
-    return (double)vectorA.x * vectorB.y - (double)vectorA.y * vectorB.x;
-}
-
 /**
  * Test if \a aRefPoint is with \a aDistance on the line defined by \a aStart and \a aEnd..
  *
@@ -237,19 +197,6 @@ inline double CrossProduct( const wxPoint& vectorA, const wxPoint& vectorB )
 */
 bool TestSegmentHit( const VECTOR2I& aRefPoint, const VECTOR2I& aStart, const VECTOR2I& aEnd,
                      int aDist );
-
-/**
- * Return the length of a line segment defined by \a aPointA and \a aPointB.
- *
- * See also EuclideanNorm and Distance for the single vector or four scalar versions.
- *
- * @return Length of a line (as double)
- */
-inline double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB )
-{
-    // Implicitly casted to double
-    return hypot( aPointA.x - aPointB.x, aPointA.y - aPointB.y );
-}
 
 /**
  * Return the length of a line segment defined by \a aPointA and \a aPointB.

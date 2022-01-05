@@ -222,10 +222,10 @@ void FONT::getLinePositions( const UTF8& aText, const VECTOR2D& aPosition,
         case GR_TEXT_H_ALIGN_RIGHT:  lineOffset.x = mirrorX * -lineSize.x;     break;
         }
 
-        wxPoint pos( aPosition.x + lineOffset.x, aPosition.y + lineOffset.y );
-        RotatePoint( &pos, origin, aAttrs.m_Angle );
+        VECTOR2I pos( aPosition.x + lineOffset.x, aPosition.y + lineOffset.y );
+        RotatePoint( pos, origin, aAttrs.m_Angle );
 
-        aPositions.push_back( pos );
+        aPositions.push_back( (wxPoint) pos );
     }
 }
 

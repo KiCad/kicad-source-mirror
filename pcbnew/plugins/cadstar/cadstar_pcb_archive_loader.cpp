@@ -1024,8 +1024,8 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         csPadcode.Shape.Size = 1;
     }
 
-    wxPoint padOffset = { 0, 0 }; // offset of the pad origin (before rotating)
-    wxPoint drillOffset = { 0, 0 }; // offset of the drill origin w.r.t. the pad (before rotating)
+    VECTOR2I padOffset = { 0, 0 };   // offset of the pad origin (before rotating)
+    VECTOR2I drillOffset = { 0, 0 }; // offset of the drill origin w.r.t. the pad (before rotating)
 
     switch( csPadcode.Shape.ShapeType )
     {
@@ -1224,8 +1224,8 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
     double padOrientation = getAngleTenthDegree( aCadstarPad.OrientAngle )
                             + getAngleTenthDegree( csPadcode.Shape.OrientAngle );
 
-    RotatePoint( &padOffset, padOrientation );
-    RotatePoint( &drillOffset, padOrientation );
+    RotatePoint( padOffset, padOrientation );
+    RotatePoint( drillOffset, padOrientation );
     pad->SetPos0( getKiCadPoint( aCadstarPad.Position ) - aParent->GetPosition() - padOffset
                   - drillOffset );
     pad->SetOrientation( padOrientation + getAngleTenthDegree( csPadcode.SlotOrientation ) );

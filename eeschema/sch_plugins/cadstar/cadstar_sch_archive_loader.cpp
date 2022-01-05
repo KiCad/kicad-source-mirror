@@ -1919,20 +1919,20 @@ CADSTAR_SCH_ARCHIVE_LOADER::getLocationOfNetElement( const NET_SCH&       aNet,
 
         SYMBOL    sym          = Schematic.Symbols.at( symid );
         SYMDEF_ID symdefid     = sym.SymdefID;
-        wxPoint   symbolOrigin = sym.Origin;
+        VECTOR2I  symbolOrigin = sym.Origin;
 
         if( Library.SymbolDefinitions.find( symdefid ) == Library.SymbolDefinitions.end() )
             return logUnknownNetElementError();
 
-        wxPoint libpinPosition =
+        VECTOR2I libpinPosition =
                 Library.SymbolDefinitions.at( symdefid ).Terminals.at( termid ).Position;
-        wxPoint libOrigin   = Library.SymbolDefinitions.at( symdefid ).Origin;
+        VECTOR2I libOrigin = Library.SymbolDefinitions.at( symdefid ).Origin;
 
-        wxPoint pinOffset = libpinPosition - libOrigin;
+        VECTOR2I pinOffset = libpinPosition - libOrigin;
         pinOffset.x = ( pinOffset.x * sym.ScaleRatioNumerator ) / sym.ScaleRatioDenominator;
         pinOffset.y = ( pinOffset.y * sym.ScaleRatioNumerator ) / sym.ScaleRatioDenominator;
 
-        wxPoint pinPosition = symbolOrigin + pinOffset;
+        VECTOR2I pinPosition = symbolOrigin + pinOffset;
 
         double compAngleDeciDeg = getAngleTenthDegree( sym.OrientAngle );
 
@@ -1942,7 +1942,7 @@ CADSTAR_SCH_ARCHIVE_LOADER::getLocationOfNetElement( const NET_SCH&       aNet,
         double adjustedOrientationDecideg;
         getComponentOrientation( compAngleDeciDeg, adjustedOrientationDecideg );
 
-        RotatePoint( &pinPosition, symbolOrigin, -adjustedOrientationDecideg );
+        RotatePoint( pinPosition, symbolOrigin, -adjustedOrientationDecideg );
 
         POINT retval;
         retval.x = pinPosition.x;

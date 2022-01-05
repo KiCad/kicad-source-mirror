@@ -47,10 +47,8 @@
  * @param  aCenter = arc centre.
  * @param  a_ArcAngle = arc length in 0.1 degrees.
  */
-static void gen_arc( std::vector <wxPoint>& aBuffer,
-                     const wxPoint&         aStartPoint,
-                     const wxPoint&         aCenter,
-                     int                    a_ArcAngle )
+static void gen_arc( std::vector<VECTOR2I>& aBuffer, const VECTOR2I& aStartPoint,
+                     const VECTOR2I& aCenter, int a_ArcAngle )
 {
     auto first_point = aStartPoint - aCenter;
     auto radius = KiROUND( EuclideanNorm( first_point ) );
@@ -64,7 +62,7 @@ static void gen_arc( std::vector <wxPoint>& aBuffer,
         double  rot_angle = increment_angle * ii;
         double  fcos = cos( rot_angle );
         double  fsin = sin( rot_angle );
-        wxPoint currpt;
+        VECTOR2I currpt;
 
         // Rotate current point:
         currpt.x = KiROUND( ( first_point.x * fcos + first_point.y * fsin ) );
@@ -94,8 +92,10 @@ enum class INDUCTOR_S_SHAPE_RESULT
  * @param  aLength = full length of the path
  * @param  aWidth = segment width
  */
-static INDUCTOR_S_SHAPE_RESULT BuildCornersList_S_Shape( std::vector<wxPoint>& aBuffer,
-        const wxPoint& aStartPoint, const wxPoint& aEndPoint, int aLength, int aWidth )
+static INDUCTOR_S_SHAPE_RESULT BuildCornersList_S_Shape( std::vector<VECTOR2I>& aBuffer,
+                                                         const VECTOR2I&        aStartPoint,
+                                                         const VECTOR2I& aEndPoint, int aLength,
+                                                         int aWidth )
 {
 /* We must determine:
  * segm_count = number of segments perpendicular to the direction
@@ -279,7 +279,7 @@ static INDUCTOR_S_SHAPE_RESULT BuildCornersList_S_Shape( std::vector<wxPoint>& a
 
     for( unsigned jj = 0; jj < aBuffer.size(); jj++ )
     {
-        RotatePoint( &aBuffer[jj], aStartPoint, angle );
+        RotatePoint( aBuffer[jj], aStartPoint, angle );
     }
 
     // push last point (end point)
@@ -385,7 +385,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     }
 
     // Calculate the elements.
-    std::vector <wxPoint> buffer;
+    std::vector<VECTOR2I>         buffer;
     const INDUCTOR_S_SHAPE_RESULT res = BuildCornersList_S_Shape( buffer, aInductorPattern.m_Start,
                                                                   aInductorPattern.m_End,
                                                                   aInductorPattern.m_Length,
@@ -443,7 +443,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     pad->SetPosition( aInductorPattern.m_End );
     pad->SetPos0( pad->GetPosition() - footprint->GetPosition() );
 
-    pad->SetSize( wxSize( aInductorPattern.m_Width, aInductorPattern.m_Width ) );
+    pad->SetSize( VECTOR2I( aInductorPattern.m_Width, aInductorPattern.m_Width ) );
 
     pad->SetLayerSet( LSET( footprint->GetLayer() ) );
     pad->SetAttribute( PAD_ATTRIB::SMD );
@@ -460,10 +460,10 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     pad->SetPos0( pad->GetPosition() - footprint->GetPosition() );
 
     // Modify text positions.
-    wxPoint refPos( ( aInductorPattern.m_Start.x + aInductorPattern.m_End.x ) / 2,
-                    ( aInductorPattern.m_Start.y + aInductorPattern.m_End.y ) / 2 );
+    VECTOR2I refPos( ( aInductorPattern.m_Start.x + aInductorPattern.m_End.x ) / 2,
+                     ( aInductorPattern.m_Start.y + aInductorPattern.m_End.y ) / 2 );
 
-    wxPoint valPos = refPos;
+    VECTOR2I valPos = refPos;
 
     refPos.y -= footprint->Reference().GetTextSize().y;
     footprint->Reference().SetPosition( refPos );

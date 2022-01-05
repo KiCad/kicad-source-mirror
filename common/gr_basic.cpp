@@ -253,9 +253,9 @@ void GRCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int w
     int dx = x2 - x1;
     int dy = y2 - y1;
     double angle = -ArcTangente( dy, dx );
-    wxPoint start;
-    wxPoint end;
-    wxPoint org( x1, y1 );
+    VECTOR2I start;
+    VECTOR2I end;
+    VECTOR2I org( x1, y1 );
     int len = (int) hypot( dx, dy );
 
     // We know if the DC is mirrored, to draw arcs
@@ -268,37 +268,37 @@ void GRCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int w
     start.y = radius;
     end.x = len;
     end.y = radius;
-    RotatePoint( &start, angle );
-    RotatePoint( &end, angle );
+    RotatePoint( start, angle );
+    RotatePoint( end, angle );
 
     start += org;
     end += org;
 
-    DC->DrawLine( start, end );
+    DC->DrawLine( (wxPoint) start, (wxPoint) end );
 
     // first rounded end
     end.x = 0;
     end.y = -radius;
-    RotatePoint( &end, angle );
+    RotatePoint( end, angle );
     end += org;
 
     if( !mirrored )
-        DC->DrawArc( end, start, org );
+        DC->DrawArc( (wxPoint) end, (wxPoint) start, (wxPoint) org );
     else
-        DC->DrawArc( start, end, org );
+        DC->DrawArc( (wxPoint) start, (wxPoint) end, (wxPoint) org );
 
     // second edge
     start.x = len;
     start.y = -radius;
-    RotatePoint( &start, angle );
+    RotatePoint( start, angle );
     start += org;
 
-    DC->DrawLine( start, end );
+    DC->DrawLine( (wxPoint) start, (wxPoint) end );
 
     // second rounded end
     end.x = len;
     end.y = radius;
-    RotatePoint( &end, angle);
+    RotatePoint( end, angle);
     end += org;
 
     if( !mirrored )
