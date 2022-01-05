@@ -27,7 +27,6 @@
 #include <cmath>
 #include <math/vector2d.h>
 #include <eda_angle.h>
-#include <wx/gdicmn.h> // For wxPoint
 
 /**
  * Test if \a aTestPoint is on line defined by \a aSegStart and \a aSegEnd.
