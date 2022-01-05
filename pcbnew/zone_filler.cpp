@@ -1396,7 +1396,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 break;
             }
 
-            spoke.Rotate( -DECIDEG2RAD( pad->GetOrientation() + spokesAngle ) );
+            spoke.Rotate( -DECIDEG2RAD( spokesAngle ) );
             spoke.Move( shapePos );
 
             spoke.SetClosed( true );
