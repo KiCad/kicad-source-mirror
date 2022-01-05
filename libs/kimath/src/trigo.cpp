@@ -294,13 +294,14 @@ void RotatePoint( wxPoint* point, const wxPoint& centre, double angle )
 
 void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, double angle )
 {
-    wxPoint c( centre.x, centre.y );
-    wxPoint p( point.x, point.y );
+    int ox, oy;
 
-    RotatePoint(&p, c, angle);
+    ox = point.x - centre.x;
+    oy = point.y - centre.y;
 
-    point.x = p.x;
-    point.y = p.y;
+    RotatePoint( &ox, &oy, angle );
+    point.x = ox + centre.x;
+    point.y = oy + centre.y;
 }
 
 
