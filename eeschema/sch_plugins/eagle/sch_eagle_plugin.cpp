@@ -1325,7 +1325,10 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     symbol->SetLibId( libId );
     symbol->SetUnit( unit );
     symbol->SetPosition( wxPoint( einstance.x.ToSchUnits(), -einstance.y.ToSchUnits() ) );
-    symbol->GetField( FOOTPRINT_FIELD )->SetText( package );
+
+    // assume that footprint library is identical to project name
+    wxString packageString = m_schematic->Prj().GetProjectName() + wxT( ":" ) + package;
+    symbol->GetField( FOOTPRINT_FIELD )->SetText( packageString );
 
     if( einstance.rot )
     {
