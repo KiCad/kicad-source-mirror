@@ -12,12 +12,31 @@ meta:
   encoding: ISO8859-1
 
 seq:
+# Only relevant for *.PcbLib files
+#  - id: name
+#    type: name
   - id: record
     type: record
     repeat: eos
 
 # https://github.com/thesourcerer8/altium2kicad/blob/master/convertpcb.pl#L1291
 types:
+  name:
+    seq:
+    - id: sub1_len
+      type: u4
+    - id: data
+      type: name_sub1
+      size: sub1_len
+
+  name_sub1:
+    seq:
+    - id: name_len
+      type: u1
+    - id: name
+      size: name_len
+      type: str
+
   record:
     seq:
       - id: recordtype
