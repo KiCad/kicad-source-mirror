@@ -40,8 +40,8 @@ struct COMPOUND_FILE_ENTRY;
 } // namespace CFB
 
 // Helper method to find file inside compound file
-const CFB::COMPOUND_FILE_ENTRY* FindStream(
-        const CFB::CompoundFileReader& aReader, const char* aStreamName );
+const CFB::COMPOUND_FILE_ENTRY* FindStream( const CFB::CompoundFileReader& aReader,
+                                            const std::string              aStreamName );
 
 
 class ALTIUM_PARSER

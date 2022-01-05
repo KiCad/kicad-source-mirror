@@ -480,7 +480,7 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
 
             std::string mappedFile = mappedDirectory->second + "Header";
 
-            const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, mappedFile.c_str() );
+            const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, mappedFile );
             if( file == nullptr )
             {
                 continue;
@@ -528,7 +528,7 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
         if( directory != ALTIUM_PCB_DIR::FILE_HEADER )
             mappedFile += "Data";
 
-        const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, mappedFile.c_str() );
+        const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, mappedFile );
 
         if( file != nullptr )
             fp( aReader, file );
@@ -1445,7 +1445,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
 
         idx++;
 
-        const CFB::COMPOUND_FILE_ENTRY* stepEntry = FindStream( aReader, stepPath.c_str() );
+        const CFB::COMPOUND_FILE_ENTRY* stepEntry = FindStream( aReader, stepPath.ToStdString() );
 
         if( stepEntry == nullptr )
         {

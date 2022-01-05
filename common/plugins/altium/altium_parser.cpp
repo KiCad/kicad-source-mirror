@@ -32,37 +32,52 @@
 #include <wx/log.h>
 #include <wx/translation.h>
 
-const CFB::COMPOUND_FILE_ENTRY* FindStream( const CFB::CompoundFileReader& aReader,
-                                            const char* aStreamName )
+static const CFB::COMPOUND_FILE_ENTRY*
+FindStreamSingleLevel( const CFB::CompoundFileReader&  aReader,
+                       const CFB::COMPOUND_FILE_ENTRY* aEntry, const std::string aName,
+                       const bool aIsStream )
 {
     const CFB::COMPOUND_FILE_ENTRY* ret = nullptr;
-    aReader.EnumFiles( aReader.GetRootEntry(), -1,
-            [&]( const CFB::COMPOUND_FILE_ENTRY* aEntry, const CFB::utf16string& aU16dir,
-                 int level ) -> void
-            {
-                if( aReader.IsStream( aEntry ) )
-                {
-                    std::string name = UTF16ToUTF8( aEntry->name );
-                    if( aU16dir.length() > 0 )
-                    {
-                        std::string dir = UTF16ToUTF8( aU16dir.c_str() );
-                        if( strncmp( aStreamName, dir.c_str(), dir.length() ) == 0
-                                && aStreamName[dir.length()] == '\\'
-                                && strcmp( aStreamName + dir.length() + 1, name.c_str() ) == 0 )
-                        {
-                            ret = aEntry;
-                        }
-                    }
-                    else
-                    {
-                        if( strcmp( aStreamName, name.c_str() ) == 0 )
-                        {
-                            ret = aEntry;
-                        }
-                    }
-                }
-            } );
+
+    aReader.EnumFiles( aEntry, 1,
+                       [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string& dir,
+                            int level ) -> void
+                       {
+                           if( aReader.IsStream( entry ) == aIsStream )
+                           {
+                               std::string name = UTF16ToUTF8( entry->name );
+                               if( name == aName.c_str() )
+                               {
+                                   ret = entry;
+                               }
+                           }
+                       } );
+
     return ret;
+}
+
+const CFB::COMPOUND_FILE_ENTRY* FindStream( const CFB::CompoundFileReader& aReader,
+                                            const std::string              aStreamName )
+{
+    const CFB::COMPOUND_FILE_ENTRY* currentDirEntry = aReader.GetRootEntry();
+
+    size_t startCh = 0;
+    size_t delimiter = aStreamName.find( '\\', startCh );
+    while( delimiter != std::string::npos )
+    {
+        std::string directoryName = aStreamName.substr( startCh, delimiter );
+        currentDirEntry = FindStreamSingleLevel( aReader, currentDirEntry, directoryName, false );
+        if( currentDirEntry == nullptr )
+        {
+            return nullptr;
+        }
+
+        startCh = delimiter + 1;
+        delimiter = aStreamName.find( '\\', startCh );
+    }
+
+    std::string fileName = aStreamName.substr( startCh, delimiter );
+    return FindStreamSingleLevel( aReader, currentDirEntry, fileName, true );
 }
 
 
