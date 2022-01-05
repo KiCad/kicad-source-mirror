@@ -81,6 +81,15 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
         helper = new NETLIST_EXPORTER_PSPICE( sch );
         break;
 
+    case NET_TYPE_BOM:
+        // When generating the BOM, we have a bare filename so don't strip
+        // the extension or you might string a '.' from the middle of the filename
+        fileName += wxT( "." GENERIC_INTERMEDIATE_NETLIST_EXT );
+
+        helper = new NETLIST_EXPORTER_XML( sch );
+        executeCommandLine = true;
+        break;
+
     default:
     {
         wxFileName  tmpFile = fileName;
