@@ -74,10 +74,14 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    void BeginEdit( const VECTOR2I& aStartPoint ) override { beginEdit( aStartPoint ); }
+    void BeginEdit( const VECTOR2I& aStartPoint ) override  { beginEdit( aStartPoint ); }
     bool ContinueEdit( const VECTOR2I& aPosition ) override { return continueEdit( aPosition ); }
-    void CalcEdit( const VECTOR2I& aPosition ) override { calcEdit( aPosition ); }
-    void EndEdit() override                                { endEdit(); }
+    void CalcEdit( const VECTOR2I& aPosition ) override     { calcEdit( aPosition ); }
+
+    /**
+     * The base EndEdit() removes the last point in the polyline, so don't call that here
+     */
+    void EndEdit() override                                { }
     void SetEditState( int aState )                        { setEditState( aState ); }
 
     void AddPoint( const VECTOR2I& aPosition );
