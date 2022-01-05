@@ -120,25 +120,7 @@ public:
 
     ~DIALOG_LIB_FIELD_PROPERTIES() {}
 
-    void UpdateField( LIB_FIELD* aField )
-    {
-        wxString value = m_text;
-
-        if( m_fieldId == VALUE_FIELD )
-            value = EscapeString( value, CTX_LIBID );
-
-        aField->SetText( value );
-
-        // VALUE === symbol name, so update the parent symbol if it changes.
-        if( m_fieldId == VALUE_FIELD && aField->GetParent() )
-            aField->GetParent()->SetName( value );
-
-        updateText( aField );
-
-        aField->SetHorizJustify( EDA_TEXT::MapHorizJustify( m_horizontalJustification - 1 ) );
-        aField->SetVertJustify( EDA_TEXT::MapVertJustify( m_verticalJustification - 1 ) );
-        aField->SetTextPos( m_position );
-    }
+    void UpdateField( LIB_FIELD* aField );
 };
 
 

@@ -121,8 +121,8 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
     m_position = aTextItem->GetTextPos();
     m_size = aTextItem->GetTextWidth();
     m_isVertical = aTextItem->GetTextAngle().IsVertical();
-    m_verticalJustification = aTextItem->GetVertJustify() + 1;
-    m_horizontalJustification = aTextItem->GetHorizJustify() + 1;
+    m_verticalJustification = aTextItem->GetVertJustify();
+    m_horizontalJustification = aTextItem->GetHorizJustify();
     m_isVisible = aTextItem->IsVisible();
 }
 
@@ -278,7 +278,7 @@ void DIALOG_FIELD_PROPERTIES::onHAlignButton( wxCommandEvent& aEvent )
 
 void DIALOG_FIELD_PROPERTIES::onVAlignButton( wxCommandEvent& aEvent )
 {
-    for( BITMAP_BUTTON* btn : { m_vAlignTop, m_vAlignTop, m_vAlignBottom } )
+    for( BITMAP_BUTTON* btn : { m_vAlignTop, m_vAlignCenter, m_vAlignBottom } )
     {
         if( btn->IsChecked() && btn != aEvent.GetEventObject() )
             btn->Check( false );
@@ -416,6 +416,27 @@ DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 }
 
 
+void DIALOG_LIB_FIELD_PROPERTIES::UpdateField( LIB_FIELD* aField )
+{
+    wxString value = m_text;
+
+    if( m_fieldId == VALUE_FIELD )
+        value = EscapeString( value, CTX_LIBID );
+
+    aField->SetText( value );
+
+    // VALUE === symbol name, so update the parent symbol if it changes.
+    if( m_fieldId == VALUE_FIELD && aField->GetParent() )
+        aField->GetParent()->SetName( value );
+
+    updateText( aField );
+
+    aField->SetHorizJustify( EDA_TEXT::MapHorizJustify( m_horizontalJustification ) );
+    aField->SetVertJustify( EDA_TEXT::MapVertJustify( m_verticalJustification  ) );
+    aField->SetTextPos( m_position );
+}
+
+
 DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent,
                                                           const wxString& aTitle,
                                                           const SCH_FIELD* aField ) :
@@ -459,8 +480,8 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     m_position = m_field->GetPosition();
 
-    m_horizontalJustification = m_field->GetEffectiveHorizJustify() + 1;
-    m_verticalJustification = m_field->GetEffectiveVertJustify() + 1;
+    m_horizontalJustification = m_field->GetEffectiveHorizJustify();
+    m_verticalJustification = m_field->GetEffectiveVertJustify();
 
     // The library symbol may have been removed so using SCH_SYMBOL::GetLibSymbolRef() here
     // could result in a segfault.  If the library symbol is no longer available, the
@@ -596,8 +617,8 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
             symbol->SetFootprint( m_text );
     }
 
-    GR_TEXT_H_ALIGN_T hJustify = EDA_TEXT::MapHorizJustify( m_horizontalJustification - 1 );
-    GR_TEXT_V_ALIGN_T vJustify = EDA_TEXT::MapVertJustify( m_verticalJustification - 1 );
+    GR_TEXT_H_ALIGN_T hJustify = EDA_TEXT::MapHorizJustify( m_horizontalJustification );
+    GR_TEXT_V_ALIGN_T vJustify = EDA_TEXT::MapVertJustify( m_verticalJustification );
     bool positioningModified = false;
 
     if( aField->GetPosition() != m_position )
