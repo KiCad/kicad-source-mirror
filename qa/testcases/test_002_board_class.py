@@ -66,7 +66,7 @@ class TestBoardClass(unittest.TestCase):
         module.Add(pad)
 
         pad.SetShape(PAD_SHAPE_OVAL)
-        pad.SetSize(wxSizeMM(2.0, 3.0))
+        pad.SetSize(VECTOR2I_MM(2.0, 3.0))
         pad.SetPosition(VECTOR2I_MM(0,0))
 
         # easy case
