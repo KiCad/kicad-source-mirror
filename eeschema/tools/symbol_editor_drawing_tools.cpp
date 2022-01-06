@@ -343,6 +343,9 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) && !item )
         {
+            // Update in case the symbol was changed while the tool was running
+            symbol = m_frame->GetCurSymbol();
+
             if( !symbol )
                 continue;
 
@@ -365,6 +368,12 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         else if( item && ( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
                         || evt->IsAction( &EE_ACTIONS::finishDrawing ) ) )
         {
+            if( symbol != m_frame->GetCurSymbol() )
+            {
+                symbol = m_frame->GetCurSymbol();
+                item->SetParent( symbol );
+            }
+
             if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &EE_ACTIONS::finishDrawing )
                     || !item->ContinueEdit( wxPoint( cursorPos.x, -cursorPos.y ) ) )
             {
