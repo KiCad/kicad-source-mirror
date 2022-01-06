@@ -98,6 +98,8 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
 
     m_boardAdapter.SetBoard( m_dummyBoard );
     m_boardAdapter.m_IsBoardView = false;
+    m_boardAdapter.m_IsPreviewer = true;   // Force display 3D models, regardless the 3D viewer options
+
     loadSettings();
 
     // Create the manager

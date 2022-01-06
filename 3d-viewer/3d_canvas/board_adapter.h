@@ -527,6 +527,9 @@ public:
     EDA_3D_VIEWER_SETTINGS*     m_Cfg;
     bool                        m_IsBoardView;
     bool                        m_MousewheelPanning;
+    bool                        m_IsPreviewer;  ///< true if the board adaptater is living in a
+                                                ///< 3d preview panel, false for the standard 3D viewer
+                                                ///< allows specific features for the panel previewer
 
     SFVEC4F m_BgColorBot;         ///< background bottom color
     SFVEC4F m_BgColorTop;         ///< background top color

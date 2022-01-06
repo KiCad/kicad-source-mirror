@@ -79,6 +79,7 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
         m_Cfg( nullptr ),
         m_IsBoardView( true ),
         m_MousewheelPanning( true ),
+        m_IsPreviewer( false ),
         m_board( nullptr ),
         m_3dModelManager( nullptr ),
         m_colors( nullptr ),
@@ -257,6 +258,9 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer ) const
 
 bool BOARD_ADAPTER::IsFootprintShown( FOOTPRINT_ATTR_T aFPAttributes ) const
 {
+    if( m_IsPreviewer )     // In panel Preview, footprints are always shown, of cource
+        return true;
+
     if( aFPAttributes & FP_SMD )
         return m_Cfg->m_Render.show_footprints_insert;
     else if( aFPAttributes & FP_THROUGH_HOLE )
