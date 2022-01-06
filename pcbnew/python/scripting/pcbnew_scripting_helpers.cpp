@@ -457,7 +457,16 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 
     wxFileName fn = aBoard->GetFileName();
     fn.SetExt( DesignRulesFileExtension );
-    wxString drcRulesPath = s_SettingsManager->Prj().AbsolutePath( fn.GetFullName() );
+    PROJECT* prj = nullptr;
+
+    if( aBoard->GetProject() )
+        prj = aBoard->GetProject();
+    else if( s_SettingsManager )
+        prj = &s_SettingsManager->Prj();
+
+    wxCHECK( prj, false );
+
+    wxString drcRulesPath = prj->AbsolutePath( fn.GetFullName() );
 
     try
     {
