@@ -679,19 +679,13 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
     std::vector<VIEW_LAYER> new_map;
     new_map.reserve( m_layers.size() );
 
-    for( int ii = 0; ii < VIEW_MAX_LAYERS; ++ii )
-        new_map.emplace_back();
-
     for( const VIEW_LAYER& layer : m_layers )
+        new_map.push_back( layer );
+
+    for( auto& pair : aReorderMap )
     {
-        int orig_idx = layer.id;
-        int new_idx = orig_idx;
-
-        if( aReorderMap.count( orig_idx ) )
-            new_idx = aReorderMap.at( orig_idx );
-
-        new_map[new_idx] = layer;
-        new_map[new_idx].id = new_idx;
+        new_map[pair.second] = m_layers[pair.first];
+        new_map[pair.second].id = pair.second;
     }
 
     m_layers = new_map;
