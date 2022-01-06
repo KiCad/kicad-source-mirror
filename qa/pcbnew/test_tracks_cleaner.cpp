@@ -135,7 +135,8 @@ BOOST_FIXTURE_TEST_CASE( TrackCleanerRegressionTests, TRACK_CLEANER_TEST_FIXTURE
      */
     std::vector<wxString> tests = { "issue832",
                                     "issue4257",
-                                    "issue8909" };
+                                    "issue8909"
+                                  };
 
     for( const wxString& relPath : tests )
     {
@@ -169,6 +170,11 @@ BOOST_FIXTURE_TEST_CASE( TrackCleanerRegressionTests, TRACK_CLEANER_TEST_FIXTURE
 
         std::vector<DRC_ITEM>  violations;
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+        // Disable some DRC tests not useful in this testcase
+        bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_ISSUES ] = SEVERITY::RPT_SEVERITY_IGNORE;
+        bds.m_DRCSeverities[ DRCE_COPPER_SLIVER ] = SEVERITY::RPT_SEVERITY_IGNORE;
+        bds.m_DRCSeverities[ DRCE_STARVED_THERMAL ] = SEVERITY::RPT_SEVERITY_IGNORE;
 
         bds.m_DRCEngine->SetViolationHandler(
                 [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, PCB_LAYER_ID aLayer )

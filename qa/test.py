@@ -2,6 +2,7 @@ import unittest
 import platform
 import sys
 import argparse
+import locale
 
 if platform.python_version() < '2.7':
     unittest = __import__('unittest2')
@@ -28,6 +29,10 @@ if __name__ == '__main__':
         print("XML test reporting not available")
         print("Install the xmlrunner package.")
         sys.exit(2)
+
+    # Useful in some non English installs (using a comma as load number separator) to avoid
+    # wxWidgets alerts when running the test code
+    locale.setlocale(locale.LC_ALL, 'C')
 
     testsuite = unittest.TestLoader().discover('testcases', pattern="*.py")
 
