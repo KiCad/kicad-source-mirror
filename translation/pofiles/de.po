@@ -15,16 +15,15 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-17 00:56+0000\n"
+"PO-Revision-Date: 2022-01-08 20:28+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
-"master-source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -529,7 +528,7 @@ msgstr "3D-Modelle für andere Typen umschalten"
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:230
 msgid "Show Model Bounding Boxes"
-msgstr "Zeige Modell-Begrenzungsbox"
+msgstr "Modell-Begrenzungsrahmen anzeigen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:235
 msgid "Toggle realistic mode"
@@ -541,7 +540,7 @@ msgstr "Anzeige des Platinenkörpers umschalten"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:245
 msgid "Show 3D Axis"
-msgstr "3D-Achsen einblenden"
+msgstr "3D-Achsen anzeigen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:250
 msgid "Toggle zone display"
@@ -671,7 +670,7 @@ msgstr "Platinenlagen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:31
 msgid "Show silkscreen layers"
-msgstr "Bestückungsdrucklagen einblenden"
+msgstr "Bestückungsdrucklagen anzeigen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:34
 msgid "Clip silkscreen at solder mask edges"
@@ -683,15 +682,15 @@ msgstr "Bestückungsdruck auf Via-Ringflächen aussparen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:40
 msgid "Show solder mask layers"
-msgstr "Lagen mit Lötstoppmaske einblenden"
+msgstr "Lagen mit Lötstoppmaske anzeigen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:43
 msgid "Show solder paste layers"
-msgstr "Lagen mit Lötpaste einblenden"
+msgstr "Lagen mit Lötpaste anzeigen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:46
 msgid "Show adhesive layers"
-msgstr "Kleberlagen einblenden"
+msgstr "Kleberlagen anzeigen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "User Layers (not shown in realistic mode)"
@@ -699,11 +698,11 @@ msgstr "Benutzerlagen (nicht angezeigt im realistischen Modus)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:58
 msgid "Show comment and drawing layers"
-msgstr "Lagen mit Kommentaren und Zeichnungen einblenden"
+msgstr "Lagen mit Kommentaren und Zeichnungen anzeigen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:61
 msgid "Show ECO layers"
-msgstr "ECO-Lagen einblenden"
+msgstr "ECO-Lagen anzeigen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Render Options"
@@ -715,11 +714,11 @@ msgstr "Realistischer Modus"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:79
 msgid "Show board body"
-msgstr "Platinenkörper einblenden"
+msgstr "Platinenkörper anzeigen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:82
 msgid "Show filled areas in zones"
-msgstr "Ausgefüllte Flächenbereiche einblenden"
+msgstr "Ausgefüllte Flächenbereiche anzeigen"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:85
 msgid "Use bare copper color for unplated copper"
@@ -783,11 +782,11 @@ msgstr "Rendering-Optionen"
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:25
 msgid "Show model bounding boxes"
-msgstr "Zeige Modell-Begrenzungsbox"
+msgstr "Modell-Begrenzungsrahmen anzeigen"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:28
 msgid "Show copper thickness"
-msgstr "Kupferstärke einblenden"
+msgstr "Kupferstärke anzeigen"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:31
 msgid "Highlight items on rollover"
@@ -4426,7 +4425,7 @@ msgstr "Links"
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:117
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:145
 msgid "Center"
-msgstr "Zentrieren"
+msgstr "Mitte"
 
 #: common/eda_text.cpp:731
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:193
@@ -5258,7 +5257,7 @@ msgstr "Hervorgehobene Elemente"
 
 #: common/layer_id.cpp:137
 msgid "Hidden items"
-msgstr "Versteckte Elemente"
+msgstr "Verborgene Elemente"
 
 #: common/layer_id.cpp:138 common/layer_id.cpp:174
 msgid "Selection highlight"
@@ -5298,7 +5297,7 @@ msgstr "Footprint-Text"
 
 #: common/layer_id.cpp:148
 msgid "Hidden text"
-msgstr "Versteckter Text"
+msgstr "Verborgener Text"
 
 #: common/layer_id.cpp:149
 msgid "SMD pads front"
@@ -5773,7 +5772,7 @@ msgstr "Aktuelles Werkzeug abwählen"
 
 #: common/tool/actions.cpp:127
 msgid "Show Context Menu"
-msgstr "Zeige Kontextmenü"
+msgstr "Kontextmenü anzeigen"
 
 #: common/tool/actions.cpp:127
 msgid "Perform the right-mouse-button action"
@@ -6054,7 +6053,7 @@ msgstr "Rasterursprung festlegen"
 
 #: common/tool/actions.cpp:476
 msgid "Show Grid"
-msgstr "Raster einblenden"
+msgstr "Raster anzeigen"
 
 #: common/tool/actions.cpp:476
 msgid "Display grid dots or lines in the edit window"
@@ -6530,7 +6529,7 @@ msgstr "Auf Bildschirm einpassen"
 
 #: common/widgets/mathplot.cpp:1666
 msgid "Set plot view to show all items"
-msgstr "Alle Teile in der Plot-Ansicht erfassen"
+msgstr "Alle Elemente in der Plot-Ansicht anzeigen"
 
 #: common/widgets/mathplot.cpp:1667
 msgid "Zoom in plot view."
@@ -7661,7 +7660,7 @@ msgid ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
-"Standardmäßig wird die Ausgabe von Befehlen, die in einem versteckten "
+"Standardmäßig wird die Ausgabe von Befehlen, die in einem verborgenen "
 "Fenster ausgeführt werden,\n"
 "in das Infofenster umgeleitet. Setzen Sie diese Option, um den laufenden "
 "Befehl in einem Fenster zu sehen."
@@ -7899,8 +7898,8 @@ msgstr ""
 "einer Ausgabedatei zu speichern. Die Verwendung von `xsltproc` erfordert "
 "eine Stylesheet-Datei unter Verwendung von XSLT-Konventionen. Der "
 "vollständige Konvertierungsprozess wird von Eeschema ausgeführt, nachdem es "
-"einmal konfiguriert wurde um `xsltproc` auf eine bestimmte Weise "
-"auszuführen.\n"
+"einmal konfiguriert wurde um `xsltproc` auf eine bestimmte Weise auszuführen."
+"\n"
 "\n"
 "Ein Python Skript ist etwas einfacher zu erstellen.\n"
 "\n"
@@ -7919,7 +7918,7 @@ msgstr ""
 "Skript).\n"
 "\n"
 "***Hinweis (Nur Windows)***\n"
-"*Standardmäßig wird die Befehlszeile in einem verstecktem Konsolenfenster "
+"*Standardmäßig wird die Befehlszeile in einem verborgenen Konsolenfenster "
 "ausgeführt und die Ausgabe wird in das Feld \"Plugin-Informationen\" "
 "umgeleitet. Um das Fenster des laufenden Befehls anzuzeigen, aktivieren Sie "
 "das Kontrollkästchen \"Konsolenfenster anzeigen\".*\n"
@@ -7946,8 +7945,8 @@ msgstr ""
 "Unter Windows waäre die zu verwendende Kommandozeile folgende.\n"
 "\n"
 "```\n"
-"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%I"
-"\"\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
+"I\"\n"
 "```\n"
 "\n"
 "Auf einem Linuxsystem könnte die zu verwendende Kommandozeile so aussehen.\n"
@@ -7970,8 +7969,8 @@ msgstr ""
 "oder\n"
 "\n"
 "```\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter.xsl \"%I\" \"%O"
-"\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter.xsl \"%I\" \"%"
+"O\"\n"
 "```\n"
 "\n"
 "Das Kommandozeilenformat erlaubt die Benutzung von Parametern für "
@@ -8006,8 +8005,8 @@ msgstr ""
 "\n"
 "Zum Beispiel:\n"
 "\n"
-" * **%O.csv** um eine .csv Datei zu erstellen (Komma separierte "
-"Wertedatei).\n"
+" * **%O.csv** um eine .csv Datei zu erstellen (Komma separierte Wertedatei)."
+"\n"
 " * **%O.htm** um eine .html Datei zu erstellen.\n"
 " * **%O.bom** um eine .bom Datei zu erstellen.\n"
 "\n"
@@ -8027,8 +8026,8 @@ msgstr ""
 "\n"
 "Unter Linux:\n"
 "```\n"
-"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-"xsl \"%I\"\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"%I\"\n"
 "```\n"
 "\n"
 "Die obigen Beispiele gehen davon aus, dass `xsltproc` auf ihrem PC "
@@ -8051,8 +8050,8 @@ msgstr ""
 "\n"
 "Unter Windows:\n"
 "```\n"
-"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
-"\"%O.html\"\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" \"%O"
+".html\"\n"
 "```\n"
 "\n"
 "Unter Linux:\n"
@@ -8557,7 +8556,7 @@ msgstr "Pin-Konfliktkarte"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: pcbnew/dialogs/dialog_board_setup.cpp:107 pcbnew/dialogs/dialog_drc.cpp:594
 msgid "Violation Severity"
-msgstr "Schweregrad des Verstoßes"
+msgstr "Verstoß-Schweregrad"
 
 #: eeschema/dialogs/dialog_erc.cpp:770 pcbnew/dialogs/dialog_gendrill.cpp:474
 #, c-format
@@ -9065,11 +9064,11 @@ msgstr "Versatz der Pinnamen-Position:"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:120
 msgid "Show pin number text"
-msgstr "Text mit Pinnummer anzeigen"
+msgstr "Pinnummer-Text anzeigen"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:124
 msgid "Show pin name text"
-msgstr "Text mit Pinname anzeigen"
+msgstr "Pinname-Text anzeigen"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:128
 msgid "Pin name inside"
@@ -9219,7 +9218,7 @@ msgstr "Feld hinzufügen"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:115
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:111
 msgid "Move up"
-msgstr "Nach oben bewegen"
+msgstr "Nach oben schieben"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:95
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:90
@@ -9227,7 +9226,7 @@ msgstr "Nach oben bewegen"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:120
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:116
 msgid "Move down"
-msgstr "Nach unten bewegen"
+msgstr "Nach unten schieben"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:103
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:98
@@ -9325,7 +9324,7 @@ msgstr "Pin-Text-Optionen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:216
 msgid "Show pin number"
-msgstr "Pinnummern anzeigen"
+msgstr "Pinnummer anzeigen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:218
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:178
@@ -9334,7 +9333,7 @@ msgstr "Pinnummern ein-/ausblenden"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:222
 msgid "Show pin name"
-msgstr "Pinnamen anzeigen"
+msgstr "Pinname anzeigen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:224
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:184
@@ -10270,7 +10269,7 @@ msgstr "Pin&namen und -nummern durchsuchen"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:95
 msgid "Search hidden fields"
-msgstr "&Versteckte Felder durchsuchen"
+msgstr "&Verborgene Felder durchsuchen"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:98
 msgid "Search the current &sheet only"
@@ -11822,11 +11821,11 @@ msgstr "Erscheinungsbild"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:28
 msgid "S&how hidden pins"
-msgstr "Versteckte Pins &einblenden"
+msgstr "Verborgene Pins anz&eigen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:31
 msgid "Show hidden fields"
-msgstr "Versteckte Felder anzeigen"
+msgstr "Verborgene Felder anzeigen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:34
 msgid "Show page limi&ts"
@@ -12242,7 +12241,7 @@ msgstr "Vor&einstellung für Pinnamen-Größe:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:96
 msgid "Show pin &electrical type"
-msgstr "Zeige &elektrischen Anschlusstyp"
+msgstr "&Elektrischen Pintyp anzeigen"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:111
 msgid "&Pitch of repeated pins:"
@@ -13958,8 +13957,8 @@ msgid ""
 "revert to the original 1:1 scale."
 msgstr ""
 "Das Symbol \"%s\" ist im ursprünglichen CADSTAR-Schaltplan skaliert, dies "
-"wird jedoch in KiCad nicht unterstützt. Wenn das Symbol aus der Bibliothek "
-"neu geladen wird, wird die Skalierung auf 1:1 zurückgesetzt."
+"wird jedoch in KiCad nicht unterstützt. Beim Neuladen des Symbols aus der "
+"Bibliothek wird die Skalierung auf 1:1 zurückgesetzt."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1190
 #, c-format
@@ -14985,7 +14984,7 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:1826
 msgid "Hide Signal"
-msgstr "Signal ausblenden"
+msgstr "Signal verbergen"
 
 #: eeschema/sim/sim_plot_frame.cpp:1826
 msgid "Erase the signal from plot screen"
@@ -14993,11 +14992,11 @@ msgstr "Löschen des Signals aus der Plotanzeige"
 
 #: eeschema/sim/sim_plot_frame.cpp:1832
 msgid "Hide Cursor"
-msgstr "Cursor ausblenden"
+msgstr "Cursor verbergen"
 
 #: eeschema/sim/sim_plot_frame.cpp:1834
 msgid "Show Cursor"
-msgstr "Cursor zeigen"
+msgstr "Cursor anzeigen"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:19
 msgid "New Plot"
@@ -15048,11 +15047,11 @@ msgstr "Simulation"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:101
 msgid "Show &Grid"
-msgstr "&Raster einblenden"
+msgstr "&Raster anzeigen"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:105
 msgid "Show &Legend"
-msgstr "&Legende einblenden"
+msgstr "&Legende anzeigen"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:111
 msgid "Dotted Current/Phase"
@@ -15977,7 +15976,7 @@ msgstr "Elektrischen Anschlusstyp anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:183
 msgid "Annotate pins with their electrical types"
-msgstr "Annotieren der Pins mit deren elektrischen Typen"
+msgstr "Zeigt den elektrischen Anschlusstyp an Pins an"
 
 #: eeschema/tools/ee_actions.cpp:188
 msgid "Show Symbol Tree"
@@ -15985,7 +15984,7 @@ msgstr "Symbolbaum anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:193
 msgid "Hide Symbol Tree"
-msgstr "Symbolbaum ausblenden"
+msgstr "Symbolbaum verbergen"
 
 #: eeschema/tools/ee_actions.cpp:198
 msgid "Export View as PNG..."
@@ -16065,7 +16064,7 @@ msgstr "Linien hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:245 eeschema/tools/ee_actions.cpp:720
 msgid "Add connected graphic lines"
-msgstr "Grafische Linien hinzufügen"
+msgstr "Verbundene grafische Linien hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:250
 msgid "Move Symbol Anchor"
@@ -16125,7 +16124,7 @@ msgstr "Markierung \"Keine-Verbindung\" hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:293
 msgid "Add a no-connection flag"
-msgstr "'Keine-Verbindung' Markierung hinzufügen"
+msgstr "\"Keine-Verbindung\"-Markierung hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:299
 msgid "Add Junction"
@@ -16233,7 +16232,7 @@ msgstr "Vertikal spiegeln"
 
 #: eeschema/tools/ee_actions.cpp:384
 msgid "Flips selected item(s) from top to bottom"
-msgstr "Ausgewählte Elemente von der Oberseite an die Unterseite zuweisen"
+msgstr "Ausgewählte Elemente oben/unten wenden"
 
 #: eeschema/tools/ee_actions.cpp:390
 msgid "Mirror Horizontally"
@@ -16241,8 +16240,7 @@ msgstr "Horizontal spiegeln"
 
 #: eeschema/tools/ee_actions.cpp:390
 msgid "Flips selected item(s) from left to right"
-msgstr ""
-"Ausgewählte Elemente von der linken Seite auf die rechte Seite zuweisen"
+msgstr "Ausgewählte Elemente links/rechts wenden"
 
 #: eeschema/tools/ee_actions.cpp:396 pcbnew/tools/pcb_actions.cpp:328
 msgid "Properties..."
@@ -16254,7 +16252,7 @@ msgstr "Anzeige der Elementeigenschaften"
 
 #: eeschema/tools/ee_actions.cpp:402
 msgid "Edit Reference Designator..."
-msgstr "Referenzbezeichner editieren..."
+msgstr "Referenzbezeichner bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:402
 msgid "Displays reference designator dialog"
@@ -16421,7 +16419,7 @@ msgstr "Elektrische Verbindung zerteilen"
 msgid "Divide a wire into segments which can be dragged independently"
 msgstr ""
 "Aufteilen einer Verbindung in einzelne Elemente, die unabhängig voneinander "
-"verschoben werden können"
+"gezogen werden können"
 
 #: eeschema/tools/ee_actions.cpp:513
 msgid "Break Bus"
@@ -16431,7 +16429,7 @@ msgstr "Bus zerteilen"
 msgid "Divide a bus into segments which can be dragged independently"
 msgstr ""
 "Aufteilen eines Busses in einzelne Elemente, die unabhängig voneinander "
-"verschoben werden können"
+"gezogen werden können"
 
 #: eeschema/tools/ee_actions.cpp:524
 msgid "Add a simulator probe"
@@ -16479,7 +16477,7 @@ msgstr "Symbolfelder bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:562
 msgid "Bulk-edit fields of all symbols in schematic"
-msgstr "Massenbearbeitung der Felder von allen Symbolen im Schaltplan"
+msgstr "Sammelbearbeitung der Felder von allen Symbolen im Schaltplan"
 
 #: eeschema/tools/ee_actions.cpp:567
 msgid "Edit Symbol Library Links..."
@@ -16539,7 +16537,7 @@ msgstr "Symbole wiederherstellen..."
 
 #: eeschema/tools/ee_actions.cpp:600
 msgid "Find old symbols in project and rename/rescue them"
-msgstr "Alte Symbole im Projekt finden und diese umbenennen/sichern"
+msgstr "Alte Symbole im Projekt finden und diese umbenennen/wiederherstellen"
 
 #: eeschema/tools/ee_actions.cpp:605
 msgid "Remap Legacy Library Symbols..."
@@ -16605,19 +16603,19 @@ msgstr "Hebt alle entsprechenden Elemente im Leiterplatteneditor hervor"
 
 #: eeschema/tools/ee_actions.cpp:641
 msgid "Show Hidden Pins"
-msgstr "Versteckte Pins einblenden"
+msgstr "Verborgene Pins anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:641
 msgid "Toggle display of hidden pins"
-msgstr "Anzeige versteckter Pins umschalten"
+msgstr "Anzeige verborgener Pins umschalten"
 
 #: eeschema/tools/ee_actions.cpp:646
 msgid "Show Hidden Fields"
-msgstr "Versteckte Felder anzeigen"
+msgstr "Verborgene Felder anzeigen"
 
 #: eeschema/tools/ee_actions.cpp:646
 msgid "Toggle display of hidden text fields"
-msgstr "Anzeige versteckter Textfelder umschalten"
+msgstr "Anzeige verborgener Textfelder umschalten"
 
 #: eeschema/tools/ee_actions.cpp:650
 msgid "Force H/V Wires and Buses"
@@ -16817,7 +16815,7 @@ msgstr ""
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
 msgstr ""
-"Hinweis: <b>Versteckter Stromversorgungs-Pin %s</b> %s an Position <b>(%s, "
+"Hinweis: <b>Verborgener Stromversorgungs-Pin %s</b> %s an Position <b>(%s, "
 "%s)</b> des konvertierten."
 
 #: eeschema/tools/ee_inspection_tool.cpp:359
@@ -16826,14 +16824,14 @@ msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of converted."
 msgstr ""
-"Hinweis: <b>Versteckter Stromversorgungs-Pin %s</b> %s an Position <b>(%s, "
+"Hinweis: <b>Verborgener Stromversorgungs-Pin %s</b> %s an Position <b>(%s, "
 "%s)</b> in Einheit %c des konvertieren."
 
 #: eeschema/tools/ee_inspection_tool.cpp:372
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
 msgstr ""
-"Hinweis: <b>Versteckter Stromversorgungs-Pin %s</b> %s an Position <b>(%s, "
+"Hinweis: <b>Verborgener Stromversorgungs-Pin %s</b> %s an Position <b>(%s, "
 "%s)</b>."
 
 #: eeschema/tools/ee_inspection_tool.cpp:380
@@ -16841,14 +16839,14 @@ msgstr ""
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"Hinweis: <b>Versteckter Stromversorgungs-Pin %s</b> %s an Position <b>(%s, "
+"Hinweis: <b>Verborgener Stromversorgungs-Pin %s</b> %s an Position <b>(%s, "
 "%s)</b> in Einheit %c."
 
 #: eeschema/tools/ee_inspection_tool.cpp:391
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
-"(Versteckte Stromversorgungs-Pins leiten ihre Pin-Namen an alle "
+"(Verborgene Stromversorgungs-Pins leiten ihre Pin-Namen an alle "
 "angeschlossenen Netze.)"
 
 #: eeschema/tools/ee_inspection_tool.cpp:404
@@ -17064,7 +17062,7 @@ msgstr "Drücken Sie <ESC>, um den Zeichenvorgang abzubrechen."
 
 #: eeschema/tools/sch_move_tool.cpp:391
 msgid "Press <ESC> to cancel drag."
-msgstr "Drücken Sie <ESC>, um den Verschiebevorgang abzubrechen."
+msgstr "<ESC> drücken, um den Ziehvorgang abzubrechen."
 
 #: eeschema/tools/sch_move_tool.cpp:393
 #: pagelayout_editor/tools/pl_edit_tool.cpp:214
@@ -17307,7 +17305,7 @@ msgstr "Lagen"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:30
 msgid "Show D codes"
-msgstr "DCodes einblenden"
+msgstr "DCodes anzeigen"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:38
 msgid "Drawing Mode"
@@ -17944,7 +17942,7 @@ msgstr "Laden einer Zip-Archivdatei (Gerber und Bohrungen)"
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Show Layers Manager"
-msgstr "Lagenverwaltung einblenden"
+msgstr "Lagenverwaltung anzeigen"
 
 #: gerbview/tools/gerbview_actions.cpp:64
 msgid "Show or hide the layer manager"
@@ -18153,7 +18151,7 @@ msgstr "Negative Objekte"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:96
 msgid "Show negative objects in this color"
-msgstr "Zeige negative Objekte in dieser Farbe"
+msgstr "Negative Objekte in dieser Farbe anzeigen"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:99
 #: pcbnew/widgets/appearance_controls.cpp:356
@@ -18171,21 +18169,21 @@ msgstr "Platinen-Hintergrund"
 #: gerbview/widgets/gerbview_layer_widget.cpp:122
 #: pcbnew/widgets/appearance_controls.cpp:1685
 msgid "Show All Layers"
-msgstr "Alle Lagen einblenden"
+msgstr "Alle Lagen anzeigen"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:126
 #: pcbnew/widgets/appearance_controls.cpp:1672
 msgid "Hide All Layers But Active"
-msgstr "Alle Lagen, außer der Aktiven, ausblenden"
+msgstr "Alle außer aktive Lagen verbergen"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:130
 msgid "Always Hide All Layers But Active"
-msgstr "Alle Lagen, außer der Aktiven, ausblenden"
+msgstr "Immer alle außer aktive Lagen verbergen"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:133
 #: pcbnew/widgets/appearance_controls.cpp:1688
 msgid "Hide All Layers"
-msgstr "Alle Lagen ausblenden"
+msgstr "Alle Lagen verbergen"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:137
 msgid "Sort Layers if X2 Mode"
@@ -18260,7 +18258,7 @@ msgstr "unbenannt"
 
 #: include/widgets/infobar.h:117
 msgid "Hide this message."
-msgstr "Diesen Hinweis ausblenden."
+msgstr "Diesen Hinweis verbergen."
 
 #: include/widgets/resettable_panel.h:54
 msgid "Reset all settings on this page to their default"
@@ -19417,7 +19415,7 @@ msgstr "(Papierformat)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "Show on all pages"
-msgstr "Anzeige auf allen Seiten"
+msgstr "Auf allen Seiten anzeigen"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "First page only"
@@ -19425,7 +19423,7 @@ msgstr "Nur auf erster Seite"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:34
 msgid "Subsequent pages only"
-msgstr "Auf allen nachfolgenden Seiten"
+msgstr "Nur auf nachfolgenden Seiten"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:85
 msgid "H align:"
@@ -20867,19 +20865,19 @@ msgstr ""
 "\n"
 "Der erste vorgegebene Wert ist fett dargestellt.\n"
 "\n"
-"Die Berechnungen gelten für Ströme bis zu 35 A (extern) oder 17,5 A "
-"(intern), Temperaturanstiege bis zu 100 °C und Breiten von bis zu 400 mil "
-"(10 mm).\n"
+"Die Berechnungen gelten für Ströme bis zu 35 A (extern) oder 17,5 A (intern)"
+", Temperaturanstiege bis zu 100 °C und Breiten von bis zu 400 mil (10 mm).\n"
 "\n"
 "Die zugehörige Formel aus IPC 2221 ist\n"
-"<center>__I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &sdot; &Delta;T<sup>0,44</sup> &sdot; (W &sdot; "
+"H)<sup>0,725</sup>___</center>  \n"
 "Wobei:  \n"
-"__I__ = Maximaler Strom in Ampere  \n"
-"__&Delta;__ = Temperaturanstieg über die Umgebungstemperatur in &deg;C  \n"
-"__W,__ = Breite in mils  \n"
-"__H__ = Dicke in mils  \n"
-"__K__ = 0,024 für interne Leiterzüge oder 0,048 für externe Leiterbahnen  \n"
+"___I___ = Maximaler Strom in Ampere  \n"
+"___&Delta;T___ = Temperaturanstieg über die Umgebungstemperatur in &deg;C  \n"
+"___W___ = Breite in mils  \n"
+"___H___ = Dicke in mils  \n"
+"___K___ = 0,024 für interne Leiterzüge oder 0,048 für externe Leiterbahnen  "
+"\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21223,7 +21221,7 @@ msgstr "Automatische Bauteilplatzierung ..."
 #: pcbnew/autorouter/ar_autoplacer.cpp:940
 #, c-format
 msgid "Autoplacing %s"
-msgstr "Autoplatzieren %s"
+msgstr "Autoplatziere %s"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:68
 #, c-format
@@ -21232,11 +21230,11 @@ msgstr "Platinenränder müssen auf der %s-Lage definiert werden."
 
 #: pcbnew/autorouter/autoplace_tool.cpp:89
 msgid "Autoplace Components"
-msgstr "Autoplatzieren Bauteile"
+msgstr "Bauteile autoplatzieren"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:95
 msgid "Autoplace components"
-msgstr "Autoplatzieren Bauteile"
+msgstr "Bauteile autoplatzieren"
 
 #: pcbnew/board.cpp:92
 msgid "This is the default net class."
@@ -21494,8 +21492,8 @@ msgstr ""
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
-"Ungültiger Wert für Verlusttangens (Verlusttangens muss einen positiven Wert "
-"besitzen, oder Null sein wenn nicht benutzt)"
+"Ungültiger Wert für Verlusttangens (Wert muss positiv sein oder Null wenn "
+"nicht benutzt)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1102
 msgid "A layer thickness is < 0. Fix it"
@@ -22678,7 +22676,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
 msgid "Hide auto-generated net names"
-msgstr "Automatisch generierte Netznamen ausblenden"
+msgstr "Automatisch generierte Netznamen verbergen"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:62
 msgid "Sort nets by pad count"
@@ -24193,7 +24191,7 @@ msgstr "Verschieben und Platzieren"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:204
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:134
 msgid "Auto-placement Rules"
-msgstr "Regeln Autoplatzierung"
+msgstr "Regeln für Autoplatzierung"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:138
@@ -24718,7 +24716,7 @@ msgstr "Excellon"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Mirror Y axis"
-msgstr "Spiegelung an Y-Achse"
+msgstr "An Y-Achse spiegeln"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:51
 msgid ""
@@ -24726,7 +24724,7 @@ msgid ""
 "Used mostly by users who make the boards themselves."
 msgstr ""
 "Nicht empfohlen.\n"
-"Wird in der Regel von Benutzern genutzt die Platinen selbst fertigen."
+"Wird in der Regel von Benutzern genutzt, die Platinen selbst fertigen."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:55
 msgid "Minimal header"
@@ -24738,12 +24736,12 @@ msgid ""
 "Only use it for board houses which do not accept fully featured headers."
 msgstr ""
 "Nicht empfohlen.\n"
-"Verwenden Sie dies nur für Fertiger, die voll gekennzeichnete Header nicht "
-"akzeptieren."
+"Verwenden Sie dies nur für Fertiger, die Header mit vollem Funktionsumfang "
+"nicht akzeptieren."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:60
 msgid "PTH and NPTH in single file"
-msgstr "PTH- und NPTH-Bohrungen innerhalb einer Datei vereinen"
+msgstr "PTH- und NPTH-Bohrungen in einer Datei vereinen"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:61
 msgid ""
@@ -24757,11 +24755,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use route command (recommended)"
-msgstr "Benutze Routing Kommando (empfohlene Methode)"
+msgstr "Routing-Kommando verwenden (empfohlene Methode)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use alternate drill mode"
-msgstr "Benutze alternativen Bohrmodus"
+msgstr "Alternativen Bohrmodus verwenden"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:67
 msgid "Oval Holes Drill Mode"
@@ -24774,13 +24772,13 @@ msgid ""
 " \"Use alternate mode\" uses another drill/ route command (G85)\n"
 "(Use it only if the recommended command does not work)"
 msgstr ""
-"Ovale Bohrungen stellen Fabrikanten von Leiterplatten meistens vor "
-"Probleme.\n"
-"\"Benutze Routing Kommando\" benutzt das übliche G00 Routing Kommando "
+"Ovale Bohrungen stellen Fabrikanten von Leiterplatten meistens vor Probleme."
+"\n"
+"\"Routing-Kommando verwenden\" benutzt das übliche G00 Routing-Kommando "
 "(empfohlen)\n"
-"\"Benutze alternativen Bohrmodus\" benutzt statt dessen ein anderes Bohr-/"
-"Routingkommando (G85)\n"
-"(nur benutzen, wenn die empfohlene Methode nicht funktioniert)"
+"\"Alternativen Bohrmodus verwenden\" benutzt statt dessen ein anderes Bohr-/"
+"Routing-Kommando (G85)\n"
+"(nur verwenden, wenn die empfohlene Methode nicht funktioniert)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:76
 msgid "Gerber X2"
@@ -24797,7 +24795,7 @@ msgstr "Gerber"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 msgid "Map File Format"
-msgstr "Bohrplan Dateiformat"
+msgstr "Bohrplan-Dateiformat"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "Creates a drill map in PS, HPGL or other formats"
@@ -24825,19 +24823,19 @@ msgstr "Dezimalformat (empfohlen)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
 msgid "Suppress leading zeros"
-msgstr "Unterdrücke führende Nullen"
+msgstr "Führende Nullen unterdrücken"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
 msgid "Suppress trailing zeros"
-msgstr "Unterdrücke nachfolgende Nullen"
+msgstr "Nachfolgende Nullen unterdrücken"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
 msgid "Keep zeros"
-msgstr "Behalte Nullen"
+msgstr "Nullen beibehalten"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:112
 msgid "Zeros Format"
-msgstr "Nullen Format"
+msgstr "Format für Nullen"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:114
 msgid "Choose EXCELLON numbers notation"
@@ -24845,7 +24843,7 @@ msgstr "Wähle Excellon Nummernnotation"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:128 pcbnew/pcb_dimension.cpp:314
 msgid "Precision"
-msgstr "Präzision"
+msgstr "Genauigkeit"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:142
 msgid "Hole Counts"
@@ -24857,7 +24855,7 @@ msgstr "Metallisierte Pads:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:157
 msgid "Non-plated pads:"
-msgstr "Nicht metallisierte Pads:"
+msgstr "Nicht-metallisierte Pads:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:181
 msgid "Buried vias:"
@@ -24865,7 +24863,7 @@ msgstr "Vergrabene Vias:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:91
 msgid "Generate Drill Files"
-msgstr "Bohrdatei erzeugen"
+msgstr "Bohrdateien erzeugen"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:67
@@ -24875,8 +24873,8 @@ msgstr "Referenzbezeichner:"
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:35
 msgid "(specify multiple items separated by spaces for successive placement)"
 msgstr ""
-"(Spezifiziert mehrere Elemente die für eine sukzessive Platzierung durch "
-"Leerzeichen getrennt sind.)"
+"(für fortlaufende Platzierung mehrere Einträge durch Leerzeichen getrennt "
+"notieren)"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
 msgid "Available footprints:"
@@ -24930,7 +24928,7 @@ msgstr "Marker"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:46
 msgid "Clear board"
-msgstr "Entferne Platine"
+msgstr "Platine leeren"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:55
 msgid "Filter Settings"
@@ -24966,7 +24964,7 @@ msgstr "Alle Lagen"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
 msgid "Current layer only"
-msgstr "Nur die aktuelle Lage"
+msgstr "Nur aktuelle Lage"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:86
 msgid "Layer Filter"
@@ -25050,7 +25048,7 @@ msgstr "Weitere Footprint-Textelemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:36
 msgid "Footprint graphic items"
-msgstr "Grafikelemente Footprints"
+msgstr "Footprint-Grafikelemente"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:42
 msgid "PCB graphic items"
@@ -25067,12 +25065,12 @@ msgstr "Elemente nach Lagen filtern:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:78
 msgid "Filter items by parent footprint library id:"
-msgstr "Elemente nach Eltern-Footprintbibliothek-ID filtern:"
+msgstr "Elemente nach übergeordneter Footprintbibliothek-ID filtern:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:105
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:92
 msgid "Set to specified values:"
-msgstr "Anwenden von spezifischen Werten:"
+msgstr "Auf eingestellte Werte setzen:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:202
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:211
@@ -25081,7 +25079,7 @@ msgstr "Aufrecht halten"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:226
 msgid "Set to layer default values:"
-msgstr "Anwenden Standardwerte für Lagen:"
+msgstr "Lagen-Standardwerte anwenden:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:203
 msgid "Via Drill"
@@ -25495,15 +25493,15 @@ msgstr "Platzhalter"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:56
 msgid "RegEx"
-msgstr "RegEx"
+msgstr "Reg. Ausdruck"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:57
 msgid "Wildcard Substr"
-msgstr "Platzhalter Substr"
+msgstr "Platzhalter Teilstring"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:58
 msgid "RegEx Substr"
-msgstr "RegEx Substr"
+msgstr "Reg. Ausdruck Teilstring"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:97
 msgid "Create Report..."
@@ -25588,7 +25586,7 @@ msgstr "Footprints ohne Komponenten in der Netzliste entfernen"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60
 msgid "Delete tracks shorting multiple nets"
-msgstr "Löschen von Leiterbahnen die mehrere Netze kurzschließen"
+msgstr "Löschen von Leiterbahnen, die mehrere Netze kurzschließen"
 
 #: pcbnew/dialogs/dialog_netlist_base.h:67
 msgid "Import Netlist"
@@ -26789,12 +26787,12 @@ msgid ""
 "Minimum spacing between adjacent meander segments. The resulting spacing may "
 "be greater based on design rules."
 msgstr ""
-"Mindestabstand zwischen benachbarten geschlängelten Segmenten. Der "
-"resultierende Abstand kann auf Basis der Designregeln größer ausfallen."
+"Mindestabstand zwischen benachbarten Mäander-Segmenten. Der resultierende "
+"Abstand kann auf Basis der Designregeln größer ausfallen."
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:144
 msgid "Miter style:"
-msgstr "Auskehlungsdarstellung:"
+msgstr "Gehrungsstil:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:148
 msgid "45 degree"
@@ -26802,15 +26800,15 @@ msgstr "45°"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:148
 msgid "arc"
-msgstr "Kreisbogen"
+msgstr "Bogen"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:157
 msgid "Miter radius (r):"
-msgstr "Auskehlungsradius (r):"
+msgstr "Gehrungsradius (r):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.h:74
 msgid "Trace Length Tuning"
-msgstr "Anpassen Leiterbahnlänge"
+msgstr "Leiterbahnlänge anpassen"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:34
 msgid "DRC violation: highlight obstacles"
@@ -26844,36 +26842,36 @@ msgstr "Modus"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:28
 msgid "Free angle mode (no shove/walkaround)"
-msgstr "Freier Winkelmodus (kein Schieben/Umgehen)"
+msgstr "Freiwinkel-Modus (kein Schieben/Umgehen)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:31
 msgid "Shove vias"
-msgstr "Schiebe Vias"
+msgstr "Vias schieben"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:33
 msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
-"Wenn ausgeschaltet werden Vias als unverschiebbare Objekte behandelt, statt "
-"verschoben zu werden."
+"Wenn ausgeschaltet, werden Vias als unverschiebbare Objekte behandelt und "
+"umlaufen, statt verschoben zu werden."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:37
 msgid "Jump over obstacles"
-msgstr "Gehe um Hindernisse"
+msgstr "Hindernisse überspringen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
 msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
-"Wenn diese Option aktiviert ist, versucht der Router, kollidierende "
-"Leiterbahnen hinter festen Hindernissen (z. B. Pads) zu verschieben, anstatt "
-"die Kollision zu \"reflektieren\""
+"Wenn aktiviert, versucht der Router, kollidierende Leiterbahnen hinter feste "
+"Hindernisse (z. B. Pads) zu verschieben, anstatt die Kollision zu "
+"\"reflektieren\""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:42
 msgid "Remove redundant tracks"
-msgstr "Entferne redundante Leiterbahnen"
+msgstr "Redundante Leiterbahnen entfernen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:43
 msgid ""
@@ -26882,46 +26880,46 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
-"Entfernt doppelte Verbindungen während des Routings (z. B. wenn die neue "
-"Leiterbahn dieselbe Konnektivität wie eine bereits vorhandene hat wird die "
-"alte Leiterbahn entfernt).\n"
-"Die Entfernung der redundanten Leiterbahn arbeitet auf dem lokalen Segment "
-"(nur zwischen dem Start und dem Ende der aktuell gerouteten Leiterbahn)."
+"Entfernt Schleifen (doppelte Leiterbahnen) während des Routings (z. B. wird "
+"die alte Leiterbahn entfernt, wenn die neue Leiterbahn dieselbe Verbindung "
+"wie die bestehende sicherstellt).\n"
+"Die Entfernung von Schleifen wirkt sich auf das lokale Segment aus (nur "
+"zwischen Beginn und Ende der aktuell gerouteten Leiterbahn)."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Optimize pad connections"
-msgstr "Optimiere Padverbindungen"
+msgstr "Padverbindungen optimieren"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:48
 msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
-"Wenn eingeschaltet versucht der Router Pads/Vias auf eine saubere Art "
+"Wenn eingeschaltet, versucht der Router, Pads/Vias auf saubere Weise "
 "auszubrechen und große Winkel und unförmige Leiterbahnen zu vermeiden."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid "Smooth dragged segments"
-msgstr "Glatt gezogene Segmente"
+msgstr "Gezogene Segmente glätten"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:53
 msgid ""
 "When enabled, the router attempts to merge several jagged segments into a "
 "single straight one (dragging mode)."
 msgstr ""
-"Wenn eingeschaltet wird der Router die einzelnen verformten Segmente in eine "
-"möglichst geradlinige Form bringen (Glattziehmodus)."
+"Wenn eingeschaltet, wird der Router die einzelnen verformten Segmente in "
+"eine möglichst geradlinige Form bringen (Ziehmodus)."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
 msgid "Allow DRC violations"
-msgstr "DRC-Fehler erlauben"
+msgstr "DRC-Fehler zulassen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:58
 msgid ""
 "(Highlight collisions mode only) - allows one to establish a track even if "
 "is violating the DRC rules."
 msgstr ""
-"(Nur im Modus Kollisionen hervorheben) - Erlaubt es, einen Leiterzug zu "
+"(Nur im Modus \"Kollisionen hervorheben\") - Erlaubt es, einen Leiterzug zu "
 "verlegen, auch wenn dies gegen DRC-Regeln verstößt."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:62
@@ -26930,7 +26928,7 @@ msgstr "Leiterbahn-Abschluss vorschlagen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 msgid "Optimize entire track being dragged"
-msgstr "Ganze Leiterbahn beim Ziehen optimieren"
+msgstr "Gesamte Leiterbahn beim Ziehen optimieren"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:68
 msgid ""
@@ -26938,13 +26936,13 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
-"Falls aktiviert, wird beim Ziehen eines Segments der ganze auf dem "
+"Falls aktiviert, wird beim Ziehen eines Segments der gesamte auf dem "
 "Bildschirm sichtbare Bereich der Leiterbahn optimiert und neu geroutet. Wenn "
-"deaktiviert, wird nur der Bereich bei dem gezogenen Segment optimiert."
+"deaktiviert, wird nur der Bereich nahe dem gezogenen Segment optimiert."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid "Use mouse path to set track posture"
-msgstr "Mauspfad benutzen, um Leiterbahnausrichtung zu bestimmen"
+msgstr "Mauspfad verwenden, um Leiterbahnausrichtung zu bestimmen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:73
 msgid ""
@@ -26952,7 +26950,7 @@ msgid ""
 "from the starting location"
 msgstr ""
 "Wenn aktiviert, wird die Ausrichtung von Leiterbahnen dadurch bestimmt, wie "
-"die Maus vom Startpunkt aus bewegt wird"
+"der Mauszeiger vom Startpunkt aus bewegt wird"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:77
 msgid "Fix all segments on click"
@@ -26978,7 +26976,7 @@ msgstr "Auf den aktuellen Abstand von der Referenzposition zurücksetzen."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:166
 msgid "Reset to the current angle from the reference position."
-msgstr "Von der Referenzposition auf den aktuellen Winkel zurücksetzen."
+msgstr "Auf den aktuellen Winkel von der Referenzposition zurücksetzen."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:170
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:67
@@ -27504,7 +27502,7 @@ msgstr "Netznamen"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Show or hide net names on pads and/or tracks."
-msgstr "Anzeige von Netznamen an Pads und/oder Leiterbahnen."
+msgstr "Netznamen an Pads und/oder Leiterbahnen ein- oder ausblenden."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:45
 #: pcbnew/tools/pcb_actions.cpp:848
@@ -27696,19 +27694,19 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:346
 #: pcbnew/tools/pcb_actions.cpp:1393
 msgid "Drag (45 degree mode)"
-msgstr "Ziehen (45° Modus)"
+msgstr "Ziehen (45°-Modus)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:347
 #: pcbnew/tools/pcb_actions.cpp:1394
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr ""
-"Verschiebt das Leiterbahnelement und behält verbundene Leiterbahnelemente in "
-"einem Winkel von 45°."
+"Zieht das Leiterbahnelement und erhält 45°-Winkel bei verbundenen "
+"Leiterbahnelementen bei."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:351
 #: pcbnew/tools/pcb_actions.cpp:1400
 msgid "Drag (free angle)"
-msgstr "Ziehen (Freier Winkelmodus)"
+msgstr "Ziehen (freier Winkel)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:352
 #: pcbnew/tools/pcb_actions.cpp:1401
@@ -27955,7 +27953,7 @@ msgstr "Zonen-Füllstrategie"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:111
 msgid "Mimic legacy behavior"
-msgstr "Legacy-Verhalten nachahmen"
+msgstr "Früheres Verhalten nachahmen"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid ""
@@ -28388,7 +28386,7 @@ msgstr "Signal"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:547
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 msgid "power plane"
-msgstr "Spannung/Strom"
+msgstr "Potenzialfläche"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:127
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:141
@@ -28423,7 +28421,7 @@ msgstr "Spannung/Strom"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:547
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 msgid "mixed"
-msgstr "Mix"
+msgstr "gemischt"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:127
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:141
@@ -28458,7 +28456,7 @@ msgstr "Mix"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:547
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:565
 msgid "jumper"
-msgstr "Jumper"
+msgstr "Überbrückung"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:131
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:145
@@ -28683,7 +28681,7 @@ msgstr "Platinenumriss"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:659
 msgid "Edge_Cuts setback"
-msgstr "Edge_Cuts setback"
+msgstr "Edge.Cuts Randabstand"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:666
 msgid "Eco1"
@@ -33173,7 +33171,7 @@ msgstr ""
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5078
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2486
 msgid "Legacy Zone Warning"
-msgstr "Warnung zu Legacy-Zone"
+msgstr "Warnung zu veralteter Zone"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:172
 #, c-format
@@ -33197,8 +33195,8 @@ msgid ""
 "\n"
 "Save anyway?"
 msgstr ""
-"Bitte melden Sie diesen Fehler.  Fehler beim Überprüfen der Gruppenstruktur: "
-"%s\n"
+"Bitte melden Sie diesen Programmfehler.  Fehler beim Überprüfen der "
+"Gruppenstruktur: %s\n"
 "\n"
 "Trotzdem speichern?"
 
@@ -33341,7 +33339,7 @@ msgstr "Die Datei '%s' ist leer."
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2999
 #, c-format
 msgid "File '%s' is not a legacy library."
-msgstr "Die Datei '%s' ist keine im alten Format vorliegende Bibliothek."
+msgstr "Die Datei '%s' ist keine im veralteten Format vorliegende Bibliothek."
 
 #: pcbnew/plugins/pcad/pcb.cpp:51 pcbnew/plugins/pcad/pcb.cpp:62
 #: pcbnew/plugins/pcad/pcb.cpp:73
@@ -33402,7 +33400,7 @@ msgstr "Leiterbahn beenden"
 
 #: pcbnew/router/length_tuner_tool.cpp:51
 msgid "Stops laying the current meander."
-msgstr "Beendet die Mäanderung des aktuellen Leiterzuges."
+msgstr "Beendet das Mäandern des aktuellen Leiterzuges."
 
 #: pcbnew/router/length_tuner_tool.cpp:56
 msgid "Increase Spacing"
@@ -33410,7 +33408,7 @@ msgstr "Abstand vergrößern"
 
 #: pcbnew/router/length_tuner_tool.cpp:56
 msgid "Increase meander spacing by one step."
-msgstr "Erhöhen des Mäander Abstands um einen Stufe."
+msgstr "Erhöhen des Mäander-Abstands um eine Stufe."
 
 #: pcbnew/router/length_tuner_tool.cpp:62
 msgid "Decrease Spacing"
@@ -33418,23 +33416,23 @@ msgstr "Abstand verkleinern"
 
 #: pcbnew/router/length_tuner_tool.cpp:62
 msgid "Decrease meander spacing by one step."
-msgstr "Verkleinern des Mäander Abstands um einen Stufe."
+msgstr "Verringern des Mäander-Abstands um eine Stufe."
 
 #: pcbnew/router/length_tuner_tool.cpp:68
 msgid "Increase Amplitude"
-msgstr "Schwingungsweite vergrößern"
+msgstr "Amplitude vergrößern"
 
 #: pcbnew/router/length_tuner_tool.cpp:68
 msgid "Increase meander amplitude by one step."
-msgstr "Erhöhen des Mäander Schwingungsabstands um einen Stufe."
+msgstr "Erhöhen der Mäander-Amplitude um eine Stufe."
 
 #: pcbnew/router/length_tuner_tool.cpp:74
 msgid "Decrease Amplitude"
-msgstr "Schwingungsweite verkleinern"
+msgstr "Amplitude verringern"
 
 #: pcbnew/router/length_tuner_tool.cpp:74
 msgid "Decrease meander amplitude by one step."
-msgstr "Verkleinern des Mäander Schwingungsabstands um einen Stufe."
+msgstr "Verringern der Mäander-Amplitude um eine Stufe."
 
 #: pcbnew/router/length_tuner_tool.cpp:99
 msgid "Length Tuner"
@@ -34957,7 +34955,7 @@ msgstr "Footprintbaum anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:341
 msgid "Hide Footprint Tree"
-msgstr "Footprintbaum ausblenden"
+msgstr "Footprintbaum verbergen"
 
 #: pcbnew/tools/pcb_actions.cpp:347
 msgid "New Footprint..."
@@ -35116,7 +35114,7 @@ msgstr "Bereinigen Sie redundante Elemente usw."
 
 #: pcbnew/tools/pcb_actions.cpp:469
 msgid "Add Microwave Gap"
-msgstr "Mikrowellenspalt hinzufügen"
+msgstr "Mikrowellen-Spalt hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:469
 msgid "Create gap of specified length for microwave applications"
@@ -35446,11 +35444,11 @@ msgstr "Elemente aus der Gruppe entfernen"
 
 #: pcbnew/tools/pcb_actions.cpp:706
 msgid "Enter Group"
-msgstr "Gruppe eingeben"
+msgstr "Gruppe betreten"
 
 #: pcbnew/tools/pcb_actions.cpp:706
 msgid "Enter the group to edit items"
-msgstr "Die Gruppe betreten um Elemente zu bearbeiten"
+msgstr "Die Gruppe betreten, um Elemente zu bearbeiten"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "Leave Group"
@@ -35494,11 +35492,11 @@ msgstr "Alle Kupfer-Elemente der ausgewählten Netze hervorheben"
 
 #: pcbnew/tools/pcb_actions.cpp:751
 msgid "Hide Net"
-msgstr "Netz verstecken"
+msgstr "Netz verbergen"
 
 #: pcbnew/tools/pcb_actions.cpp:751
 msgid "Hide the ratsnest for the selected net"
-msgstr "Netzlinien des ausgewählten Netzes verstecken"
+msgstr "Netzlinien des ausgewählten Netzes verbergen"
 
 #: pcbnew/tools/pcb_actions.cpp:756
 msgid "Show Net"
@@ -35530,7 +35528,7 @@ msgstr "Den Netzinspektor anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:791
 msgid "Show Appearance Manager"
-msgstr "Darstellungsverwaltung einblenden"
+msgstr "Darstellungsverwaltung anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:791
 msgid "Show/hide the appearance manager"
@@ -35546,11 +35544,11 @@ msgstr "Platine von der gegenüberliegenden Seite anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:802
 msgid "Show Ratsnest"
-msgstr "Netzlinien einblenden"
+msgstr "Netzlinien anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:802
 msgid "Show board ratsnest"
-msgstr "Netzlinien der Platine einblenden"
+msgstr "Netzlinien der Platine anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:807
 msgid "Curved Ratsnest Lines"
@@ -36025,7 +36023,7 @@ msgstr "Ausgewählten Footprint platzieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1296
 msgid "Performs automatic placement of selected components"
-msgstr "Führt ein Autoplatzieren der selektierten Bauteile durch"
+msgstr "Platziert die ausgewählten Bauteile automatisch"
 
 #: pcbnew/tools/pcb_actions.cpp:1300
 msgid "Place Off-Board Footprints"
@@ -36190,7 +36188,7 @@ msgstr "Selbstüberschneidende Polygone sind nicht zulässig."
 
 #: pcbnew/tools/pcb_point_editor.cpp:568
 msgid "Drag a corner"
-msgstr "Rundung ziehen"
+msgstr "Ecke ziehen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2057
 msgid "Add a zone corner"
@@ -36354,7 +36352,7 @@ msgstr "Alle Footprinttexte anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Hidden Text"
-msgstr "Versteckter Text"
+msgstr "Verborgener Text"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Show footprint text marked as invisible"
@@ -36468,7 +36466,7 @@ msgstr "Inaktive Lagen werden abgeblendet"
 
 #: pcbnew/widgets/appearance_controls.cpp:624
 msgid "Hide"
-msgstr "Ausblenden"
+msgstr "Verbergen"
 
 #: pcbnew/widgets/appearance_controls.cpp:626
 msgid "Inactive layers will be hidden"
@@ -36536,7 +36534,7 @@ msgstr "Netzlinien zu Elementen auf sichtbaren Lagen anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:744
 msgid "Hide all ratsnest lines"
-msgstr "Alle Netzlinien ausblenden"
+msgstr "Alle Netzlinien verbergen"
 
 #: pcbnew/widgets/appearance_controls.cpp:882
 msgid "Set Net Color"
@@ -36561,17 +36559,17 @@ msgstr "Leiterbahnen und Vias in %s abwählen"
 
 #: pcbnew/widgets/appearance_controls.cpp:898
 msgid "Hide All Other Nets"
-msgstr "Alle anderen Netze ausblenden"
+msgstr "Alle anderen Netze verbergen"
 
 #: pcbnew/widgets/appearance_controls.cpp:930
 #, c-format
 msgid "Click to hide ratsnest for %s"
-msgstr "Auswählen, um Netzlinien für %s auszublenden"
+msgstr "Auswählen, um Netzlinien für %s zu verbergen"
 
 #: pcbnew/widgets/appearance_controls.cpp:931
 #, c-format
 msgid "Click to show ratsnest for %s"
-msgstr "Auswählen, um Netzlinien für %s einzublenden"
+msgstr "Auswählen, um Netzlinien für %s anzuzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:940
 msgid ""
@@ -36707,23 +36705,23 @@ msgstr "Innere Kupferlage"
 
 #: pcbnew/widgets/appearance_controls.cpp:1663
 msgid "Show All Copper Layers"
-msgstr "Alle Kupferlagen einblenden"
+msgstr "Alle Kupferlagen anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:1666
 msgid "Hide All Copper Layers"
-msgstr "Alle Kupferlagen ausblenden"
+msgstr "Alle Kupferlagen verbergen"
 
 #: pcbnew/widgets/appearance_controls.cpp:1677
 msgid "Show All Non Copper Layers"
-msgstr "Alle Nicht-Kupferlagen einblenden"
+msgstr "Alle Nicht-Kupferlagen anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:1680
 msgid "Hide All Non Copper Layers"
-msgstr "Alle Nicht-Kupferlagen ausblenden"
+msgstr "Alle Nicht-Kupferlagen verbergen"
 
 #: pcbnew/widgets/appearance_controls.cpp:1694
 msgid "Show Only Front Assembly Layers"
-msgstr "Nur Frontmontage-Lagen einblenden"
+msgstr "Nur vordere Montage-Lagen anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:1697
 msgid "Show Only Front Layers"
@@ -36739,7 +36737,7 @@ msgstr "Nur hintere Lagen anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:1710
 msgid "Show Only Back Assembly Layers"
-msgstr "Nur Rückseitenmontage-Lagen einblenden"
+msgstr "Nur hintere Montage-Lagen anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:2037
 #, c-format
@@ -36749,7 +36747,7 @@ msgstr "%s ein- oder ausblenden"
 #: pcbnew/widgets/appearance_controls.cpp:2078
 #, c-format
 msgid "Set opacity of %s"
-msgstr "Deckkraft auf %s setzen"
+msgstr "Deckkraft von %s setzen"
 
 #: pcbnew/widgets/appearance_controls.cpp:2234
 #, c-format
@@ -36771,7 +36769,7 @@ msgstr "Alle Netzklassen anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:2287
 msgid "Hide All Other Netclasses"
-msgstr "Verstecke alle anderen Netzklassen"
+msgstr "Alle anderen Netzklassen verbergen"
 
 #: pcbnew/widgets/appearance_controls.cpp:2341
 msgid "Save preset..."
@@ -36783,11 +36781,11 @@ msgstr "Voreinstellung löschen..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2420
 msgid "Layer preset name:"
-msgstr "Voreinstellungsname der Lage:"
+msgstr "Name der Lagen-Voreinstellung:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2420
 msgid "Save Layer Preset"
-msgstr "Lage-Voreinstellung speichern"
+msgstr "Lagen-Voreinstellung speichern"
 
 #: pcbnew/widgets/appearance_controls.cpp:2461
 msgid "Presets"
@@ -36799,7 +36797,7 @@ msgstr "Voreinstellung löschen"
 
 #: pcbnew/widgets/appearance_controls.cpp:2474
 msgid "Select preset:"
-msgstr "Voreinstellung auswählen:"
+msgstr "Voreinstellung wählen:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2949
 msgid "Open Preferences"
