@@ -8,16 +8,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-15 04:18+0000\n"
+"PO-Revision-Date: 2022-01-08 22:35+0000\n"
 "Last-Translator: Axel Henriksson <axe.henriksson@gmail.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
-"master-source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v6/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -3387,7 +3386,7 @@ msgstr "Ctrl"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:117
 #: pcbnew/dialogs/panel_edit_options_base.cpp:188
 msgid "Shift"
-msgstr "Shift"
+msgstr "Skift"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:187
 msgid "Alt"
@@ -7215,7 +7214,7 @@ msgstr "Spara till Schema"
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr ""
-"Spara fotspårsassociationer i fälten för fotavtryck i schematiska symboler"
+"Spara fotavtrycksassociationer i fälten för fotavtryck i schematiska symboler"
 
 #: cvpcb/tools/cvpcb_actions.cpp:91
 msgid "Select next unassigned symbol"
@@ -8943,7 +8942,7 @@ msgstr "Uteslut från schematisk materialförteckning"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:181
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 msgid "Exclude from board"
-msgstr "Uteslut från styrelsen"
+msgstr "Uteslut från mönsterkort"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:103
 msgid "Pin name position offset:"
@@ -17840,7 +17839,7 @@ msgstr "Inget av Gerber-lagren innehåller några data"
 
 #: gerbview/tools/gerbview_control.cpp:119
 msgid "Board File Name"
-msgstr "Styrelsens filnamn"
+msgstr "Kortfilsnamn"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
 msgid "D Codes"
@@ -18707,7 +18706,7 @@ msgstr "Döp om fil"
 
 #: kicad/project_tree_item.cpp:140
 msgid "Unable to rename file ... "
-msgstr "Det gick inte att byta namn på filen ... "
+msgstr "Kunde inte att byta namn på filen... "
 
 #: kicad/project_tree_item.cpp:140
 msgid "Permission error?"
@@ -20542,7 +20541,7 @@ msgstr "Elektriskt avstånd"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:93
 msgid "Board Classes"
-msgstr "Styrelseklasser"
+msgstr "Kortklasser"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:242
 msgid "Write Data Failed"
@@ -22046,7 +22045,7 @@ msgstr "Designregler"
 #: pcbnew/dialogs/dialog_board_setup.cpp:103 pcbnew/router/router_tool.cpp:870
 #: pcbnew/router/router_tool.cpp:891
 msgid "Constraints"
-msgstr "Begränsning"
+msgstr "Begränsningar"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104 pcbnew/edit_track_width.cpp:179
 #: pcbnew/edit_track_width.cpp:199
@@ -22071,7 +22070,7 @@ msgid ""
 "Error importing settings from board:\n"
 "Associated project file %s could not be loaded"
 msgstr ""
-"Fel vid import av inställningar från styrelsen:\n"
+"Fel vid import av inställningar från kort:\n"
 "Associerad projektfil %s kunde inte laddas"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:198 pcbnew/files.cpp:620
@@ -22200,7 +22199,7 @@ msgstr "Datum"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:670
 msgid "Board name"
-msgstr "Styrelsens namn"
+msgstr "Kortnamn"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:673
 msgid "Board"
@@ -22272,7 +22271,7 @@ msgstr "Skapa rapportfil ..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:68
 msgid "Board Statistics"
-msgstr "Styrelsestatistik"
+msgstr "Kortstatistik"
 
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:229
 msgid "No footprint selected"
@@ -23567,8 +23566,8 @@ msgstr "Använd en relativ väg?"
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
-"Det går inte att göra sökväg relativ (målvolym skiljer sig från styrelsens "
-"filvolym)!"
+"Det går inte att göra sökväg relativ (målvolym skiljer sig från "
+"kortfilsvolym)!"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:264 pcbnew/dialogs/dialog_plot.cpp:816
 #: pcbnew/exporters/gen_footprints_placefile.cpp:284
@@ -23614,7 +23613,7 @@ msgstr "Aktuell sidstorlek"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:88
 msgid "Board area only"
-msgstr "Endast styrelseområde"
+msgstr "Endast kortyta"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:90
 msgid "SVG Page Size"
@@ -24434,7 +24433,8 @@ msgid ""
 "Only use it for board houses which do not accept fully featured headers."
 msgstr ""
 "Rekommenderas inte.\n"
-"Använd den bara för styrelsehus som inte accepterar fullt utrustade rubriker."
+"Använd bara för mönsterkortstillverkare som inte tillåter fullfjädrade "
+"rubriker."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:60
 msgid "PTH and NPTH in single file"
@@ -24447,8 +24447,8 @@ msgid ""
 "file."
 msgstr ""
 "Rekommenderas inte.\n"
-"Använd endast för styrelser som ber om sammanslagna PTH och NPTH till en "
-"enda fil."
+"Använd bara för mönsterkortstillverkare som ber om PTH och NPTH sammanslagna "
+"till en enda fil."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:65
 msgid "Use route command (recommended)"
@@ -24469,12 +24469,11 @@ msgid ""
 " \"Use alternate mode\" uses another drill/ route command (G85)\n"
 "(Use it only if the recommended command does not work)"
 msgstr ""
-"Ovala hål skapar ofta problem för styrelser.\n"
-"\"Använd ruttkommando\" använder det vanliga G00-ruttkommandot "
-"(rekommenderas)\n"
-" \"Använd alternativt läge\" använder ett annat drill / route-kommando "
-"(G85)\n"
-"(Använd det bara om det rekommenderade kommandot inte fungerar)"
+"Ovala hål skapar ofta problem för mönsterkortstillverkare.\n"
+"\"Använd route-kommando\" använder det vanliga G00-kommandot (rekommenderas)"
+"\n"
+" \"Använd alternativt läge\" använder ett annat drill/route-kommando (G85)\n"
+"(Använd bara om det rekommenderade kommandot inte fungerar)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:76
 msgid "Gerber X2"
@@ -24599,7 +24598,7 @@ msgstr "Zoner"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:31
 msgid "Board outlines"
-msgstr "Styrelsens konturer"
+msgstr "Kortkonturer"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:34
 #: pcbnew/widgets/panel_selection_filter_base.cpp:49
@@ -25790,9 +25789,9 @@ msgid ""
 msgstr ""
 "Valfri egenskap för att ange ett speciellt syfte eller begränsning i "
 "tillverkningsfiler:\n"
-"BGA-attributet är för dynor i BGA-fotavtryck\n"
+"BGA-attributet är för lödytor i BGA-fotavtryck\n"
 "Fiducial local är en fiducial för det överordnade fotavtrycket\n"
-"Fiducial global är en fiducial för hela styrelsen\n"
+"Fiducial global är en fiducial för hela kortet\n"
 "Test Point pad är användbart för att specificera testpunkter i Gerber-filer\n"
 "Heatsink pad anger en termisk pad\n"
 "Castellated specificera castellated genom hålkuddar på en brädkant\n"
@@ -26118,11 +26117,9 @@ msgid "Check zone fills before plotting"
 msgstr "Kontrollera zonens fyllningar innan du planerar"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
-#, fuzzy
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr ""
-"Global lodmask min bredd och / eller marginal är inte inställd på 0. De "
-"flesta styrelser"
+"Globalt minimi-bredd och/eller -marginal för lödmask är inte ställd till 0. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
 #, fuzzy
@@ -26703,7 +26700,7 @@ msgid ""
 "Click and select a board item.\n"
 "The anchor position will be the position of the selected item."
 msgstr ""
-"Klicka och välj ett styrelseobjekt.\n"
+"Klicka och välj ett kortobjekt.\n"
 "Ankarpositionen kommer att vara positionen för det valda objektet."
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
@@ -28853,28 +28850,28 @@ msgid "Via Gap"
 msgstr "Via Gap"
 
 #: pcbnew/drc/drc_engine.cpp:145 pcbnew/drc/drc_engine.cpp:219
+#, fuzzy
 msgid "board setup constraints"
-msgstr "begränsningar för styrelsen"
+msgstr "kortinställningsbegränsningar"
 
 #: pcbnew/drc/drc_engine.cpp:175
 #, fuzzy
 msgid "board setup constraints silk"
-msgstr "begränsningar för styrelsen"
+msgstr "kortinställningsbegränsningar silkscreen"
 
 #: pcbnew/drc/drc_engine.cpp:181
 #, fuzzy
 msgid "board setup constraints hole"
-msgstr "begränsningar för styrelsen"
+msgstr "kortinställningsbegränsningar hål"
 
 #: pcbnew/drc/drc_engine.cpp:186
-#, fuzzy
 msgid "board setup constraints edge"
-msgstr "begränsningar för styrelsen"
+msgstr "kortinställningsbegränsningar kanter"
 
 #: pcbnew/drc/drc_engine.cpp:191
 #, fuzzy
 msgid "board setup constraints courtyard"
-msgstr "begränsningar för styrelsen"
+msgstr "kortinställningsbegränsningar courtyard"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup micro-via constraints"
@@ -29142,7 +29139,7 @@ msgstr "Objekt på ett inaktiverat lager"
 
 #: pcbnew/drc/drc_item.cpp:154
 msgid "Board has malformed outline"
-msgstr "Styrelsen har missformat"
+msgstr "Kortet har missformad kontur"
 
 #: pcbnew/drc/drc_item.cpp:158
 msgid "Duplicate footprints"
@@ -29548,7 +29545,7 @@ msgstr "(lager %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:261
 msgid "Checking board outline..."
-msgstr "Kontrollera styrelsens kontur ..."
+msgstr "Kontrollera kortkontur..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:269
 msgid "Checking disabled layers..."
@@ -29629,7 +29626,7 @@ msgstr "De har exporterats som ovala lödytor."
 #: pcbnew/exporters/export_vrml.cpp:577
 #: pcbnew/specctra_import_export/specctra_export.cpp:134
 msgid "Board outline is malformed. Run DRC for a full analysis."
-msgstr "Styrelsens översikt är felaktig. Kör DRC för en fullständig analys."
+msgstr "Kortkontur är felaktig. Kör DRC för en fullständig analys."
 
 #: pcbnew/exporters/export_idf.cpp:640 pcbnew/exporters/export_idf.cpp:649
 #: pcbnew/exporters/export_idf.cpp:657 pcbnew/exporters/export_vrml.cpp:1040
@@ -29726,7 +29723,7 @@ msgstr "Alla KiCad Board-filer"
 
 #: pcbnew/files.cpp:186
 msgid "Open Board File"
-msgstr "Öppna styrelsefilen"
+msgstr "Öppna kortfil"
 
 #: pcbnew/files.cpp:186
 msgid "Import Non KiCad Board File"
@@ -29734,7 +29731,7 @@ msgstr "Importera icke KiCad Board-fil"
 
 #: pcbnew/files.cpp:214
 msgid "Create a new project for this board"
-msgstr "Skapa ett nytt projekt för denna styrelse"
+msgstr "Skapa ett nytt projekt för detta kort"
 
 #: pcbnew/files.cpp:216
 msgid ""
@@ -29746,7 +29743,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:256
 msgid "Save Board File As"
-msgstr "Spara styrelsefil som"
+msgstr "Spara kortfil som"
 
 #: pcbnew/files.cpp:284
 msgid "Printed circuit board"
@@ -29769,7 +29766,7 @@ msgstr "Det aktuella kortet stängs, spara ändringar till '%s' först?"
 
 #: pcbnew/files.cpp:390
 msgid "Current Board will be closed. Continue?"
-msgstr "Nuvarande styrelse kommer att stängas. Fortsätta?"
+msgstr "Aktuellt mönsterkort kommer att stängas. Vill du fortsätta?"
 
 #: pcbnew/files.cpp:544
 #, fuzzy
@@ -29872,7 +29869,7 @@ msgstr "Sista ändring"
 
 #: pcbnew/footprint.cpp:948
 msgid "Board Side"
-msgstr "Styrelsens sida"
+msgstr "Kortsida"
 
 #: pcbnew/footprint.cpp:948
 msgid "Back (Flipped)"
@@ -29997,7 +29994,7 @@ msgstr "Ändringar av fotavtryck sparas inte"
 #: pcbnew/footprint_edit_frame.cpp:502
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
-msgstr "Redigering %s från tavlan. Om du sparar uppdateras endast styrelsen."
+msgstr "Redigerar %s från kort.  Om du sparar uppdateras endast kortet."
 
 #: pcbnew/footprint_edit_frame.cpp:803
 #, c-format
@@ -30148,7 +30145,7 @@ msgstr "Uppdatera fotavtrycken på kortet så de refererar till nytt bibliotek?"
 #: pcbnew/footprint_libraries_utils.cpp:878
 #: pcbnew/footprint_viewer_frame.cpp:715
 msgid "No board currently open."
-msgstr "Ingen styrelse öppen för närvarande."
+msgstr "Inget kort är för närvarande öppnat."
 
 #: pcbnew/footprint_libraries_utils.cpp:905
 msgid ""
@@ -30429,8 +30426,8 @@ msgstr "Ogiltig Bezier-kurva skapad"
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
 msgstr ""
-"Nuvarande styrelse kommer att gå vilse och den här åtgärden kan inte ångras. "
-"Fortsätta?"
+"Aktuellt kort kommer gå förlorat och åtgärden kan inte ångras. Vill du "
+"fortsätta?"
 
 #: pcbnew/initpcb.cpp:109 pcbnew/tools/footprint_editor_control.cpp:189
 msgid "The current footprint has been modified.  Save changes?"
@@ -31272,7 +31269,7 @@ msgstr "PCB-filändringar sparas inte"
 
 #: pcbnew/pcb_edit_frame.cpp:1446
 msgid "The schematic for this board cannot be found."
-msgstr "Schemat för denna styrelse kan inte hittas."
+msgstr "Kretsschemat för detta kort kan inte hittas."
 
 #: pcbnew/pcb_edit_frame.cpp:1470
 msgid ""
@@ -32474,7 +32471,7 @@ msgid "Page type '%s' is not valid."
 msgstr "Sidtyp '%s' är inte giltig."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:1664
-#, fuzzy, c-format
+#, c-format
 msgid "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 msgstr "Lager '%s' i fil '%s' på rad %d finns inte i hash med fast lager."
 
@@ -32668,9 +32665,9 @@ msgid "Cannot overwrite library path '%s'."
 msgstr "Kunde inte skriva över biblioteksökvägen '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2658
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
-msgstr "oväntad fil \"%s\" hittades i bibliotekssökvägen \"%s\"."
+msgstr "Oväntad fil '%s' hittades i bibliotekssökvägen '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:596
 #, c-format
@@ -32678,29 +32675,29 @@ msgid "File '%s' has an unrecognized version: %d."
 msgstr "Filen %s har en okänd version: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:742
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "Okänd arktyp \"%s\" på rad: %d"
+msgstr "Okänd arktyp '%s' på rad: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1327
-#, fuzzy, c-format
+#, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
-msgstr "$ EndMODULE saknas för MODUL \"%s\""
+msgstr "'$EndMODULE' saknas för MODUL '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1377
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
-msgstr "Okänd padshape '%c = 0x %02x' på rad: %d av fotavtryck: \"%s\""
+msgstr "Okänd lödyteform '%c = 0x%02x' på rad: %d i fotavtryck: '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:1567
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
-msgstr "Okänd FP_SHAPE-typ: '%c = 0x %02x' på rad: %d av fotavtryck: \"%s\""
+msgstr "Okänd FP_SHAPE-typ:'%c=0x%02x' på rad: %d i fotavtryck: '%s'"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2326
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate NETCLASS name '%s'."
-msgstr "duplicera NETCLASS-namnet \"%s\""
+msgstr "Dubletter av NETCLASS-namn '%s'."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2403
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2414
@@ -32720,27 +32717,23 @@ msgstr "Dåligt val för ZClearance för CZONE_CONTAINER \"%s\""
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2805
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2844
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Ogiltigt flytnummer i\n"
-"fil: \"%s\"\n"
-"rad: %d\n"
-"förskjutning: %d"
+"Ogiltigt flyttalsnummer i fil: '%s'\n"
+"rad: %d, förskjutning: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2815
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2854
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
 "line: %d, offset: %d"
 msgstr ""
-"Flyttpunktsnummer saknas i\n"
-"fil: \"%s\"\n"
-"rad: %d\n"
-"förskjutning: %d"
+"Flyttalsnummer saknas i fil: '%s'\n"
+"rad: %d, förskjutning: %d"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2996
 #, c-format
@@ -32759,19 +32752,17 @@ msgid "Unknown PCad layer %u"
 msgstr "Okänt PCad-lager %u"
 
 #: pcbnew/plugins/pcad/pcb.cpp:764
-#, fuzzy
 msgid "KiCad only supports 32 signal layers."
-msgstr "KiCad stöder endast 32 signallager"
+msgstr "KiCad stöder endast 32 signallager."
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:93
-#, fuzzy
 msgid "Unable to find library section."
-msgstr "Kunde inte hitta biblioteksfilen %s"
+msgstr "Kunde inte hitta bibliotekssektion"
 
 #: pcbnew/plugins/pcad/pcb_via.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find viaStyleDef %s."
-msgstr "Det gick inte att hitta en PDF-tittare för \"%s\""
+msgstr "Kunde inte hitta viaStyleDef %s."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:71
 msgid "Exception on python action plugin code"
@@ -32779,9 +32770,9 @@ msgstr "Undantag för plugin-kod för python-åtgärd"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Method '%s' not found, or not callable"
-msgstr "Metoden \"%s\" hittades inte eller kan inte kallas"
+msgstr "Metod '%s' hittades inte eller kan inte anropas"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:84
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:84
@@ -32849,14 +32840,13 @@ msgid "Length Tuner"
 msgstr "Längdmottagare"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:475
-#, fuzzy
 msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
 msgstr ""
-"Det gick inte att hitta kompletterande differentiella parnät. Se till att "
-"namnen på de nät som tillhör ett differentiellt par slutar med antingen _N / "
-"_P eller +/-."
+"Det gick inte att hitta komplementerande nät för differentiellt par. Se till "
+"att namnen på de nät som tillhör ett differentiellt par slutar med antingen "
+"N/P eller +/-."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:492
 msgid ""
@@ -32908,23 +32898,20 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:474
-#, fuzzy
 msgid "existing track"
-msgstr "När du skapar spår"
+msgstr "befintligt spår"
 
 #: pcbnew/router/pns_kicad_iface.cpp:488 pcbnew/router/pns_kicad_iface.cpp:501
 msgid "board minimum width"
 msgstr "kortets minsta bredd"
 
 #: pcbnew/router/pns_kicad_iface.cpp:497
-#, fuzzy
 msgid "netclass 'Default'"
-msgstr "netklass '%s'"
+msgstr "nätklass 'Default'"
 
 #: pcbnew/router/pns_kicad_iface.cpp:499
-#, fuzzy
 msgid "user choice"
-msgstr "Butiksval"
+msgstr "användarval"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1056
 #, c-format
@@ -32932,7 +32919,6 @@ msgid "%s is malformed."
 msgstr "%s är felaktig."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1059
-#, fuzzy
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
@@ -32971,14 +32957,12 @@ msgid "Tuned: skew "
 msgstr "Stämd: skev "
 
 #: pcbnew/router/pns_router.cpp:211
-#, fuzzy
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "Differentialparavstånd mindre än minsta spelrum (%s)."
+msgstr "Differentialparavståndet är mindre än kortets minimiavstånd."
 
 #: pcbnew/router/pns_router.cpp:231
-#, fuzzy
 msgid "Cannot start routing from a non-plated hole."
-msgstr "Det går inte att börja dirigera inuti ett Keepout-område eller ombord."
+msgstr "Kan inte dra spår från ett icke-pläterat hål."
 
 #: pcbnew/router/pns_router.cpp:242
 #, c-format
@@ -32990,21 +32974,18 @@ msgid "Rule area disallows tracks."
 msgstr "Regelområdet tillåter inte spår."
 
 #: pcbnew/router/pns_router.cpp:254
-#, fuzzy
 msgid "Cannot start routing from a text item."
-msgstr "Det går inte att börja dirigera inuti ett Keepout-område eller ombord."
+msgstr "Kan inte dra spår från ett text-element."
 
 #: pcbnew/router/pns_router.cpp:259
-#, fuzzy
 msgid "Cannot start routing from a graphic."
-msgstr "Det går inte att börja dirigera inuti ett Keepout-område eller ombord."
+msgstr "Kan inte dra spår från ett grafiskt element."
 
 #: pcbnew/router/pns_router.cpp:305 pcbnew/router/pns_router.cpp:361
 msgid "The routing start point violates DRC."
 msgstr "Ruttstartpunkten bryter mot DRC."
 
 #: pcbnew/router/pns_router.cpp:313
-#, fuzzy
 msgid "Cannot start a differential pair in the middle of nowhere."
 msgstr "Kan inte starta ett differentiellt par mitt i ingenstans."
 
@@ -33078,17 +33059,15 @@ msgstr ""
 "det nuvarande dirigerade spåret."
 
 #: pcbnew/router/router_tool.cpp:141
-#, fuzzy
 msgid "Select Layer and Place Micro Via..."
-msgstr "Välj lager och placera genom ..."
+msgstr "Välj lager och placera micro-via..."
 
 #: pcbnew/router/router_tool.cpp:142
-#, fuzzy
 msgid ""
 "Select a layer, then add a micro via at the end of currently routed track."
 msgstr ""
-"Välj ett lager och lägg sedan till ett genomgående hål via i slutet av det "
-"för närvarande dirigerade spåret."
+"Välj ett lager och lägg sedan till en micro-via i slutet av det för "
+"närvarande dragna spåret."
 
 #: pcbnew/router/router_tool.cpp:149
 msgid "Custom Track/Via Size..."
@@ -33107,9 +33086,8 @@ msgid "Switches posture of the currently routed track."
 msgstr "Byt ställning för det nuvarande dirigerade spåret."
 
 #: pcbnew/router/router_tool.cpp:163
-#, fuzzy
 msgid "Track Corner Mode"
-msgstr "Spårutrymme"
+msgstr "Spårhörnsläge"
 
 #: pcbnew/router/router_tool.cpp:164
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
@@ -33209,9 +33187,8 @@ msgstr ""
 "Kort-dump: %s"
 
 #: pcbnew/router/router_tool.cpp:523
-#, fuzzy
 msgid "Save router log"
-msgstr "Spara projekt till"
+msgstr "Spara spårdragar-logg"
 
 #: pcbnew/router/router_tool.cpp:523
 msgid ""
@@ -33223,32 +33200,31 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:864 pcbnew/router/router_tool.cpp:886
 msgid "Show board setup"
-msgstr "Visa inställningar för styrelsen"
+msgstr "Visa kortinställningar"
 
 #: pcbnew/router/router_tool.cpp:876
-#, fuzzy
 msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
 msgstr ""
-"Blind / begravda vias måste aktiveras i Board Board> Design Rules> "
-"Constraints."
+"Blinda/begravda vior måste först aktiveras i Kortinställningar > "
+"Designregler > Begränsningar."
 
 #: pcbnew/router/router_tool.cpp:897
-#, fuzzy
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
-msgstr "Microvias måste aktiveras i Board Board> Design Rules> Constraints."
+msgstr ""
+"Micro-vior måste först aktiveras i Kortinställningar > Designregler > "
+"Begränsningar."
 
 #: pcbnew/router/router_tool.cpp:981
-#, fuzzy
 msgid "Blind/buried via need 2 different layers."
-msgstr "Ändra inte dynor med olika lager"
+msgstr "Blinda/begravda vior behöver 2 olika lager."
 
 #: pcbnew/router/router_tool.cpp:1059
 #, fuzzy
 msgid "Tracks on Copper layers only."
-msgstr "Spår endast på kopparlager"
+msgstr "Ledare endast på kopparlager"
 
 #: pcbnew/router/router_tool.cpp:1495 pcbnew/router/router_tool.cpp:1983
 msgid "The selected item is locked."
@@ -33278,43 +33254,36 @@ msgid "Net Class: %s"
 msgstr "Nätklass: %s"
 
 #: pcbnew/router/router_tool.cpp:2065
-#, fuzzy
 msgid "Routing Track"
-msgstr "Rutt enstaka spår"
+msgstr "Drar ledare"
 
 #: pcbnew/router/router_tool.cpp:2065
-#, fuzzy
 msgid "(no net)"
-msgstr "<inget nät>"
+msgstr "(inget nät)"
 
 #: pcbnew/router/router_tool.cpp:2072
-#, fuzzy
 msgid "Free-angle"
-msgstr "vinkel"
+msgstr "Frivinkel"
 
 #: pcbnew/router/router_tool.cpp:2078
-#, fuzzy
 msgid "45-degree"
-msgstr "45 grader"
+msgstr "45-graders"
 
 #: pcbnew/router/router_tool.cpp:2079
-#, fuzzy
 msgid "45-degree rounded"
-msgstr "Dra (45 graders läge)"
+msgstr "45-graders avrundad"
 
 #: pcbnew/router/router_tool.cpp:2080
-#, fuzzy
 msgid "90-degree"
-msgstr "grad"
+msgstr "90-graders"
 
 #: pcbnew/router/router_tool.cpp:2081
 msgid "90-degree rounded"
 msgstr "90-graders rundad"
 
 #: pcbnew/router/router_tool.cpp:2086
-#, fuzzy
 msgid "Corner Style"
-msgstr "Linjestil"
+msgstr "Hörnstil"
 
 #: pcbnew/router/router_tool.cpp:2091
 #, c-format
@@ -33322,7 +33291,6 @@ msgid "Track Width: %s"
 msgstr "Spårbredd: %s"
 
 #: pcbnew/router/router_tool.cpp:2113
-#, fuzzy
 msgid "Diff Pair Gap"
 msgstr "Mellanrum mellan differentialpar"
 
@@ -33339,21 +33307,21 @@ msgid "Unable to export, please fix and try again"
 msgstr "Det gick inte att exportera, fixa och försök igen"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1117
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol with value of '%s' has empty reference id."
-msgstr "Symbolen med värdet \"%s\" har tom referens-id."
+msgstr "Symbol med värdet '%s' har tomt referens-id."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1127
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple symbols have identical reference IDs of '%s'."
-msgstr "Flera symboler har identiska referens-ID \"%s\"."
+msgstr "Flera symboler har identiska referens-ID:n '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:70
 msgid ""
 "Board may be corrupted, do not save it.\n"
 " Fix problem and try again"
 msgstr ""
-"Styrelsen kan vara skadad, spara inte den.\n"
+"Kortet kan vara korrupt, spara det inte.\n"
 " Åtgärda problemet och försök igen"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:93
@@ -33361,18 +33329,18 @@ msgid "Session file imported and merged OK."
 msgstr "Sessionsfilen importerades och slogs samman OK."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Session file uses invalid layer id '%s'."
-msgstr "Sessionsfilen använder ogiltigt lager-id \"%s\""
+msgstr "Sessionsfilen använder ogiltigt lager-id '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:217
 msgid "Session via padstack has no shapes"
 msgstr "Session via padstack har inga former"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported via shape: %s."
-msgstr "Ej stöds via form: %s"
+msgstr "Icke-stödd via-form: %s."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:246
 #: pcbnew/specctra_import_export/specctra_import.cpp:271
@@ -33403,9 +33371,9 @@ msgid "Reference '%s' not found."
 msgstr "Referens '%s' hittades inte."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "En wire_via refererar till en saknad padstack \"%s\""
+msgstr "En wire_via refererar till en saknad padstack '%s'."
 
 #: pcbnew/toolbars_footprint_editor.cpp:92
 msgid "Load footprint from current board"
@@ -33442,14 +33410,12 @@ msgstr ""
 "existerande spårbredd' är aktiverad."
 
 #: pcbnew/toolbars_pcb_editor.cpp:540
-#, fuzzy
 msgid ""
 "When routing from an existing track use its width instead of the current "
 "width setting"
 msgstr ""
-"Automatisk spårbredd: använd dess bredd när du startar på ett befintligt "
-"spår\n"
-"annars använder du aktuell breddinställning"
+"använd ledarens bredd när du startar på en befintlig ledare, annars används "
+"aktuell breddinställning"
 
 #: pcbnew/toolbars_pcb_editor.cpp:647
 msgid "Track: use netclass width"
@@ -33478,14 +33444,12 @@ msgid "Locking"
 msgstr "Låser"
 
 #: pcbnew/tools/board_editor_control.cpp:135
-#, fuzzy
 msgid "Omit extra information"
-msgstr "Bitmapinformation"
+msgstr "Utelämna extra information"
 
 #: pcbnew/tools/board_editor_control.cpp:136
-#, fuzzy
 msgid "Omit nets"
-msgstr "Filtrera nät"
+msgstr "Utelämna nät"
 
 #: pcbnew/tools/board_editor_control.cpp:138
 msgid "Do not prefix path with footprint UUID."
@@ -33500,9 +33464,8 @@ msgid "Specctra DSN File"
 msgstr "Specctra DSN-fil"
 
 #: pcbnew/tools/board_editor_control.cpp:446
-#, fuzzy
 msgid "Export Board Netlist"
-msgstr "Exportera Netlist"
+msgstr "Exportera kortets nätlista"
 
 #: pcbnew/tools/board_editor_control.cpp:447
 #, fuzzy
@@ -33510,14 +33473,13 @@ msgid "KiCad board netlist files"
 msgstr "KiCad netlist-filer"
 
 #: pcbnew/tools/board_editor_control.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid "Path `%s` is read only."
-msgstr "Biblioteket \"%s\" är skrivskyddat."
+msgstr "Sökvägen '%s' är skrivskyddad."
 
 #: pcbnew/tools/board_editor_control.cpp:462
-#, fuzzy
 msgid "I/O Error"
-msgstr "Fel"
+msgstr "I/O Fel"
 
 #: pcbnew/tools/board_editor_control.cpp:550
 #, c-format
@@ -33529,9 +33491,9 @@ msgid "No board problems found."
 msgstr "Inga brädproblem hittades."
 
 #: pcbnew/tools/board_editor_control.cpp:640
-#, fuzzy
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr "För att exportera netlistan krävs ett fullständigt kommenterat schema."
+msgstr ""
+"Uppdatering av mönsterkort kräver att schemat är fullständigt annoterat."
 
 #: pcbnew/tools/board_editor_control.cpp:655
 msgid ""
@@ -33569,9 +33531,8 @@ msgid "[netclass %s]"
 msgstr "[netklass %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:132
-#, fuzzy
 msgid "Report incomplete: could not compile custom design rules.  "
-msgstr "Rapportera ofullständig: kunde inte sammanställa designregler.  "
+msgstr "Rapport ofullständig: kunde inte kompilera anpassade designregler.  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:170
 #: pcbnew/tools/board_inspection_tool.cpp:481
@@ -33592,7 +33553,7 @@ msgstr "Rensningsrapport"
 #: pcbnew/tools/board_inspection_tool.cpp:605
 #, fuzzy
 msgid "Edge clearance resolution for:"
-msgstr "Rensningsupplösning för:"
+msgstr "Kantmarginalsupplösning för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:235
 #: pcbnew/tools/board_inspection_tool.cpp:459
@@ -33611,7 +33572,7 @@ msgstr "Det går inte att generera godkännanderapport för tom grupp."
 #: pcbnew/tools/board_inspection_tool.cpp:383
 #, fuzzy
 msgid "Zone connection resolution for:"
-msgstr "Rensningsupplösning för:"
+msgstr "Zonkontaktsupplösning för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 #, c-format
@@ -33656,12 +33617,12 @@ msgstr "Upplösning för silkscreen för:"
 #: pcbnew/tools/board_inspection_tool.cpp:528
 #, fuzzy
 msgid "Courtyard clearance resolution for:"
-msgstr "Rensningsupplösning för:"
+msgstr "Courtyard-marginalsupplösning för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:566
 #, fuzzy
 msgid "Hole clearance resolution for:"
-msgstr "Rensningsupplösning för:"
+msgstr "Hålmarinalsupplösning för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:629
 msgid "Items share no relevant layers:"
@@ -33748,9 +33709,8 @@ msgid "Item allowed at current location."
 msgstr "Objekt tillåtet på aktuell plats."
 
 #: pcbnew/tools/convert_tool.cpp:76
-#, fuzzy
 msgid "Create from Selection"
-msgstr "Ta bort från urvalet"
+msgstr "Skapa från markering"
 
 #: pcbnew/tools/convert_tool.cpp:210
 msgid "Convert shapes to polygon"
@@ -33769,34 +33729,29 @@ msgid "Create arc from line segment"
 msgstr "Skapa båge från linjesegment"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:258
-#, fuzzy
 msgid "Layer Name"
-msgstr "Basnamn"
+msgstr "Lagernamn"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:273
-#, fuzzy
 msgid "Thickness (mm)"
-msgstr "Tjocklek"
+msgstr "Tjocklek (mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:274
-#, fuzzy
 msgid "Thickness (inches)"
-msgstr "Tjocklek"
+msgstr "Tjocklek (tum)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
-#, fuzzy
 msgid "Thickness (mils)"
-msgstr "Tjocklek"
+msgstr "Tjocklek (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:290
 #, fuzzy
 msgid "Loss Tangent"
-msgstr "Förlust Tg"
+msgstr "Förlust-tangent"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:313
-#, fuzzy
 msgid "Dielectric"
-msgstr "Dielektrisk %d"
+msgstr "Dielektrikum"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:365
 msgid "Insert board stackup table"
@@ -33811,9 +33766,8 @@ msgid "Copper Layer Count: "
 msgstr "Antal kopparlager: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:432
-#, fuzzy
 msgid "Board overall dimensions: "
-msgstr "Rita en dimension"
+msgstr "Kortets totala dimensioner: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:442
 msgid "Min track/spacing: "
@@ -33824,9 +33778,8 @@ msgid "Copper Finish: "
 msgstr "Kopparytbehandling: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:460
-#, fuzzy
 msgid "Castellated pads: "
-msgstr "Castellated pad"
+msgstr "Krenelerade lödytor: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:468
 msgid "Board Thickness: "
@@ -33837,23 +33790,20 @@ msgid "Min hole diameter: "
 msgstr "Minsta håldiameter: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:494
-#, fuzzy
 msgid "Impedance Control: "
-msgstr "Impedanskontroll"
+msgstr "Impedanskontroll: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:502
-#, fuzzy
 msgid "Plated Board Edge: "
-msgstr "Pläterad brädkant"
+msgstr "Pläterad kortkant: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:510
 msgid "Edge card connectors: "
 msgstr "Kortkantskontakter: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:518
-#, fuzzy
 msgid "Yes, Bevelled"
-msgstr "Ja, fasad"
+msgstr "Ja, avfasad"
 
 #: pcbnew/tools/drawing_tool.cpp:81
 msgid "Select Via Size"
@@ -33888,9 +33838,8 @@ msgid "Draw a dimension"
 msgstr "Rita en dimension"
 
 #: pcbnew/tools/drawing_tool.cpp:1183
-#, fuzzy
 msgid "No graphic items found in file."
-msgstr "Inga grafiska objekt hittades i filen att importera"
+msgstr "Inga grafiska objekt hittades i filen."
 
 #: pcbnew/tools/drawing_tool.cpp:1233 pcbnew/tools/drawing_tool.cpp:1304
 msgid "Place a DXF_SVG drawing"
@@ -33905,9 +33854,8 @@ msgid "Self-intersecting polygons are not allowed"
 msgstr "Självskärande polygoner är inte tillåtna"
 
 #: pcbnew/tools/drawing_tool.cpp:2601
-#, fuzzy
 msgid "Via location violates DRC."
-msgstr "Ruttstartpunkten bryter mot DRC."
+msgstr "Via-placering bryter mot DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:2705
 msgid "Place via"
@@ -33918,9 +33866,8 @@ msgid "Refilling all zones..."
 msgstr "Påfyllning av alla zoner ..."
 
 #: pcbnew/tools/drc_tool.cpp:160
-#, fuzzy
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr "För att exportera netlistan krävs ett fullständigt kommenterat schema."
+msgstr "Paritetskontroll av schema kräver att det är fullständigt annoterat."
 
 #: pcbnew/tools/drc_tool.cpp:208
 msgid "DRC"
@@ -33936,9 +33883,8 @@ msgid "Unable to resize arc tracks %.1f degrees or greater."
 msgstr "Kunde inte skala om bågformade spår %.1f grader eller mer."
 
 #: pcbnew/tools/edit_tool.cpp:658
-#, fuzzy
 msgid "Drag Arc Track"
-msgstr "Kapa bana"
+msgstr "Dra bågformad ledare"
 
 #: pcbnew/tools/edit_tool.cpp:739
 msgid "Select reference point for move..."
@@ -34003,18 +33949,16 @@ msgid "Selection copied"
 msgstr "Urvalet kopierades"
 
 #: pcbnew/tools/edit_tool.cpp:2387
-#, fuzzy
 msgid "Copy canceled"
-msgstr "Kopian avbröts"
+msgstr "Kopiering avbröts"
 
 #: pcbnew/tools/footprint_editor_control.cpp:344
 msgid "_copy"
 msgstr "_kopiera"
 
 #: pcbnew/tools/footprint_editor_control.cpp:591
-#, fuzzy
 msgid "No footprint problems found."
-msgstr "Inga brädproblem hittades."
+msgstr "Inga fotavtrycksproblem hittades."
 
 #: pcbnew/tools/group_tool.cpp:43
 msgid "Grouping"
@@ -34072,60 +34016,52 @@ msgid "Recombine pads"
 msgstr "Rekombinerar dynor"
 
 #: pcbnew/tools/pcb_actions.cpp:48
-#, fuzzy
 msgid "Create Polygon from Selection"
-msgstr "Skapar en grafisk polygon från urvalet"
+msgstr "Skapa polygon från markering"
 
 #: pcbnew/tools/pcb_actions.cpp:48
 msgid "Creates a graphic polygon from the selection"
 msgstr "Skapar en grafisk polygon från urvalet"
 
 #: pcbnew/tools/pcb_actions.cpp:53
-#, fuzzy
 msgid "Create Zone from Selection"
-msgstr "Ta bort från urvalet"
+msgstr "Skapa zon från markering"
 
 #: pcbnew/tools/pcb_actions.cpp:53
 msgid "Creates a copper zone from the selection"
 msgstr "Skapar en kopparzon från urvalet"
 
 #: pcbnew/tools/pcb_actions.cpp:58
-#, fuzzy
 msgid "Create Rule Area from Selection"
-msgstr "Skapar ett regelområde från urvalet"
+msgstr "Skapa ett regelområde från markering"
 
 #: pcbnew/tools/pcb_actions.cpp:58
 msgid "Creates a rule area from the selection"
 msgstr "Skapar ett regelområde från urvalet"
 
 #: pcbnew/tools/pcb_actions.cpp:63
-#, fuzzy
 msgid "Create Lines from Selection"
-msgstr "Skapar grafiska linjer från urvalet"
+msgstr "Skapa linjer från markering"
 
 #: pcbnew/tools/pcb_actions.cpp:63
 msgid "Creates graphic lines from the selection"
 msgstr "Skapar grafiska linjer från urvalet"
 
 #: pcbnew/tools/pcb_actions.cpp:68
-#, fuzzy
 msgid "Create Arc from Selection"
-msgstr "Ta bort från urvalet"
+msgstr "Skapa båge från markering"
 
 #: pcbnew/tools/pcb_actions.cpp:68
-#, fuzzy
 msgid "Creates an arc from the selected line segment"
-msgstr "Skapa båge från linjesegment"
+msgstr "Skapar en båge från det valda linjesegmentet"
 
 #: pcbnew/tools/pcb_actions.cpp:73
-#, fuzzy
 msgid "Create Tracks from Selection"
-msgstr "Skapar grafiska linjer från urvalet"
+msgstr "Skapa ledare från markering"
 
 #: pcbnew/tools/pcb_actions.cpp:73
-#, fuzzy
 msgid "Creates tracks from the selected graphic lines"
-msgstr "Rensa det valda grafiska lagret"
+msgstr "Skapar ledare från de valda grafiska linjerna"
 
 #: pcbnew/tools/pcb_actions.cpp:82
 msgid "Draw Line"
@@ -34156,18 +34092,16 @@ msgid "Draw Arc"
 msgstr "Rita båge"
 
 #: pcbnew/tools/pcb_actions.cpp:110
-#, fuzzy
 msgid "Add Board Characteristics"
-msgstr "Styrelsestatistik"
+msgstr "Lägg till kortkarakteristik"
 
 #: pcbnew/tools/pcb_actions.cpp:111
 msgid "Add a board characteristics table on a graphic layer"
 msgstr "Lägg till mönsterkortskarakteristiktabell på ett grafiskt lager"
 
 #: pcbnew/tools/pcb_actions.cpp:116
-#, fuzzy
 msgid "Add Stackup Table"
-msgstr "Lägg till bitmappsbild"
+msgstr "Lägg till lageruppbyggnadstabell"
 
 #: pcbnew/tools/pcb_actions.cpp:117
 msgid "Add a board stackup table on a graphic layer"
@@ -34246,9 +34180,8 @@ msgid "Add a zone with the same settings as an existing zone"
 msgstr "Lägg till en zon med samma inställningar som en befintlig zon"
 
 #: pcbnew/tools/pcb_actions.cpp:185
-#, fuzzy
 msgid "Import Graphics..."
-msgstr "& Importera grafik ..."
+msgstr "Importera grafik..."
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Import 2D drawing file"
@@ -34403,9 +34336,8 @@ msgid "Show Footprint Tree"
 msgstr "Visa Footprint Tree"
 
 #: pcbnew/tools/pcb_actions.cpp:341
-#, fuzzy
 msgid "Hide Footprint Tree"
-msgstr "Visa Footprint Tree"
+msgstr "Göm fotavtrycksträd"
 
 #: pcbnew/tools/pcb_actions.cpp:347
 msgid "New Footprint..."
@@ -34452,27 +34384,24 @@ msgid "Import Footprint..."
 msgstr "Importera fotavtryck ..."
 
 #: pcbnew/tools/pcb_actions.cpp:382
-#, fuzzy
 msgid "Import footprint from file"
-msgstr "Redigera fält"
+msgstr "Importera fotavtryck från fil"
 
 #: pcbnew/tools/pcb_actions.cpp:387
 msgid "Export Footprint..."
 msgstr "Exportera fotavtryck ..."
 
 #: pcbnew/tools/pcb_actions.cpp:387
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "Exportera fotavtryck till redigeraren"
+msgstr "Exportera fotavtryck till fil"
 
 #: pcbnew/tools/pcb_actions.cpp:392
 msgid "Footprint Properties..."
 msgstr "Egenskaper för fotavtryck ..."
 
 #: pcbnew/tools/pcb_actions.cpp:392
-#, fuzzy
 msgid "Edit footprint properties"
-msgstr "Ändra egenskaperna för fotavtryck"
+msgstr "Ändra egenskaper för fotavtryck"
 
 #: pcbnew/tools/pcb_actions.cpp:397
 msgid "Show the footprint checker window"
@@ -34499,12 +34428,11 @@ msgid "Remove Unused Pads..."
 msgstr "Ta bort oanvända dynor ..."
 
 #: pcbnew/tools/pcb_actions.cpp:417
-#, fuzzy
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
-"Ta bort eller återställ de icke anslutna inre skikten på genomgående "
-"hålkuddar och vias"
+"Ta bort eller återställ de icke anslutna inre lagren på genomgående hål och "
+"vior"
 
 #: pcbnew/tools/pcb_actions.cpp:422
 msgid "Assign a different footprint from the library"
@@ -34531,9 +34459,8 @@ msgid "Edit Track & Via Properties..."
 msgstr "Redigera egenskaper för spår och via ..."
 
 #: pcbnew/tools/pcb_actions.cpp:438
-#, fuzzy
 msgid "Edit track and via properties globally across board"
-msgstr "Redigera text- och grafikegenskaper över hela världen"
+msgstr "Ändra ledar- och viaegenskaper globalt över hela kortet"
 
 #: pcbnew/tools/pcb_actions.cpp:444
 msgid "Edit Text and graphics properties globally across board"
@@ -34695,27 +34622,24 @@ msgstr ""
 "standardinställningar"
 
 #: pcbnew/tools/pcb_actions.cpp:569
-#, fuzzy
 msgid "Import Netlist..."
-msgstr "Importera Netlist"
+msgstr "Importera Nätlista..."
 
 #: pcbnew/tools/pcb_actions.cpp:569
 msgid "Read netlist and update board connectivity"
 msgstr "Läs nätlista och uppdatera kortanslutningar"
 
 #: pcbnew/tools/pcb_actions.cpp:574
-#, fuzzy
 msgid "Import Specctra Session..."
-msgstr "Specctra Session ..."
+msgstr "Importera Specctra-session..."
 
 #: pcbnew/tools/pcb_actions.cpp:574
 msgid "Import routed Specctra session (*.ses) file"
 msgstr "Importera dirigerad Specctra-session (*.ses) -fil"
 
 #: pcbnew/tools/pcb_actions.cpp:579
-#, fuzzy
 msgid "Export Specctra DSN..."
-msgstr "Specctra DSN ..."
+msgstr "Exportera Specctra-DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:579
 msgid "Export Specctra DSN routing info"
@@ -34738,14 +34662,12 @@ msgid "Generate Excellon drill file(s)"
 msgstr "Skapa Excellon borrfil (er)"
 
 #: pcbnew/tools/pcb_actions.cpp:594
-#, fuzzy
 msgid "Component Placement (.pos)..."
-msgstr "Komponentparametrar"
+msgstr "Komponentplacering (.pos)..."
 
 #: pcbnew/tools/pcb_actions.cpp:595
-#, fuzzy
 msgid "Generate component placement file(s) for pick and place"
-msgstr "Skapa positioneringsfil för fotavtryck för val och plats"
+msgstr "Generera komponentpositioneringsfil(er) för pick and place"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Footprint Report (.rpt)..."
@@ -34753,7 +34675,7 @@ msgstr "Footprint Report (.rpt) ..."
 
 #: pcbnew/tools/pcb_actions.cpp:601
 msgid "Create report of all footprints from current board"
-msgstr "Skapa rapport över alla fotavtryck från nuvarande styrelse"
+msgstr "Skapa rapport över alla fotavtryck från aktuellt mönsterkort"
 
 #: pcbnew/tools/pcb_actions.cpp:606
 msgid "IPC-D-356 Netlist File..."
@@ -34769,7 +34691,7 @@ msgstr "BOM ..."
 
 #: pcbnew/tools/pcb_actions.cpp:611
 msgid "Create bill of materials from board"
-msgstr "Skapa materialförteckning från styrelsen"
+msgstr "Skapa materialförteckning från mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:618
 msgid "Switch Track Width to Next"
@@ -34840,24 +34762,24 @@ msgid "Drill/Place File Origin"
 msgstr "Borra / placera filens ursprung"
 
 #: pcbnew/tools/pcb_actions.cpp:663
-#, fuzzy
 msgid "Place origin point for drill files and component placement files"
-msgstr "Placera startpunkt för borrfiler och positioner för fotavtryck"
+msgstr "Placera origo för borr- och komponentplaceringsfiler"
 
 #: pcbnew/tools/pcb_actions.cpp:669
 msgid "Toggle Lock"
 msgstr "Växla lås"
 
 #: pcbnew/tools/pcb_actions.cpp:669
-#, fuzzy
 msgid "Lock or unlock selected items"
-msgstr "Visa ratsnest för valt objekt"
+msgstr "Lås eller lås upp valda objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:676
 #, fuzzy
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
-msgstr "L & imitera grafiska linjer till H, V och 45 grader"
+msgstr ""
+"Begränsa vinklar till horisontellt, vertikalt, eller 45 grader från "
+"startpunkten"
 
 #: pcbnew/tools/pcb_actions.cpp:681
 msgid "Prevent items from being moved and/or resized on the canvas"
@@ -34868,18 +34790,16 @@ msgid "Allow items to be moved and/or resized on the canvas"
 msgstr "Tillåt att objekt flyttas och/eller skalas om på duken"
 
 #: pcbnew/tools/pcb_actions.cpp:691
-#, fuzzy
 msgid "Group the selected items so that they are treated as a single item"
-msgstr "Flyttar markerade objekt med en angiven startpunkt"
+msgstr "Gruppera markerade objekt så de hanteras som ett objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:696
 msgid "Ungroup"
 msgstr "Dela upp"
 
 #: pcbnew/tools/pcb_actions.cpp:696
-#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "inget bibliotek har valts"
+msgstr "Avgruppera markerade grupper"
 
 #: pcbnew/tools/pcb_actions.cpp:701
 msgid "Remove Items"
@@ -34907,7 +34827,7 @@ msgstr "Lämna den nuvarande gruppen"
 
 #: pcbnew/tools/pcb_actions.cpp:716
 msgid "Append Board..."
-msgstr "Lägg till styrelsen ..."
+msgstr "Lägg till kort..."
 
 #: pcbnew/tools/pcb_actions.cpp:716
 msgid "Open another board and append its contents to this board"
@@ -34928,17 +34848,15 @@ msgstr "Växla mellan de två sista markerade näten"
 #: pcbnew/tools/pcb_actions.cpp:736
 #, fuzzy
 msgid "Toggle Net Highlight"
-msgstr "Toggle Last Net Highlight"
+msgstr "Nätmarkering"
 
 #: pcbnew/tools/pcb_actions.cpp:736
-#, fuzzy
 msgid "Toggle net highlighting"
-msgstr "Rensa nätmarkering"
+msgstr "Växla nätmarkering"
 
 #: pcbnew/tools/pcb_actions.cpp:743
-#, fuzzy
 msgid "Highlight all copper items on the selected net(s)"
-msgstr "Markera alla kopparartiklar i ett nät"
+msgstr "Markera alla kopparobjekt i markerade nät"
 
 #: pcbnew/tools/pcb_actions.cpp:751
 msgid "Hide Net"
@@ -34967,12 +34885,12 @@ msgstr "Öppet schema i Eeschema"
 #: pcbnew/tools/pcb_actions.cpp:770
 #, fuzzy
 msgid "Local Ratsnest"
-msgstr "Visa Ratsnest"
+msgstr "Lokalt ratsnest"
 
 #: pcbnew/tools/pcb_actions.cpp:770
 #, fuzzy
 msgid "Toggle ratsnest display of selected item(s)"
-msgstr "Visa ratsnest för valt objekt"
+msgstr "Visa ratsnest för markerade objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:781
 msgid "Show the net inspector"
@@ -35007,29 +34925,27 @@ msgid "Curved Ratsnest Lines"
 msgstr "Böjda Ratsnest-linjer"
 
 #: pcbnew/tools/pcb_actions.cpp:812
-#, fuzzy
 msgid "Ratsnest Mode (3-state)"
-msgstr "Visningsläge för Enskilt Lager (3-läge)"
+msgstr "Ratsnest-läge (3-läge)"
 
 #: pcbnew/tools/pcb_actions.cpp:813
-#, fuzzy
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
 msgstr ""
-"Cykla mellan att visa fyllda zoner, trådkonfigurerade zoner och skissade "
-"zoner"
+"Byt mellan att visa ratsnest för alla lager, endast synliga lager och inga "
+"lager"
 
 #: pcbnew/tools/pcb_actions.cpp:817
-#, fuzzy
 msgid "Net Color Mode (3-state)"
-msgstr "Visningsläge för Enskilt Lager (3-läge)"
+msgstr "Färgläge för nät (3-läge)"
 
 #: pcbnew/tools/pcb_actions.cpp:818
-#, fuzzy
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
-msgstr "Nät- och nätklassfärger visas endast på ratsnest"
+msgstr ""
+"Byt mellan att använda nät- och nätklass-färger för alla nät, bara ratsnest, "
+"och inget"
 
 #: pcbnew/tools/pcb_actions.cpp:823
 msgid "Sketch Tracks"
@@ -35072,18 +34988,16 @@ msgid "Show footprint texts in line mode"
 msgstr "Visa fotavtryckstexter i linjeläge"
 
 #: pcbnew/tools/pcb_actions.cpp:853
-#, fuzzy
 msgid "Draw Zone Fills"
-msgstr "Ritningsläge"
+msgstr "Rita zonfyllningar"
 
 #: pcbnew/tools/pcb_actions.cpp:853
 msgid "Show filled areas of zones"
 msgstr "Visa fyllda områden i zoner"
 
 #: pcbnew/tools/pcb_actions.cpp:858
-#, fuzzy
 msgid "Draw Zone Outlines"
-msgstr "Clearance konturer"
+msgstr "Rita zonkonturer"
 
 #: pcbnew/tools/pcb_actions.cpp:858
 msgid "Show only zone boundaries"
@@ -35095,18 +35009,15 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:868
 msgid "Draw Zone Fill Triangulation"
-msgstr ""
+msgstr "Rita zonfyllningstriangulering"
 
 #: pcbnew/tools/pcb_actions.cpp:874
 msgid "Toggle Zone Display"
 msgstr "Växla zonvisning"
 
 #: pcbnew/tools/pcb_actions.cpp:875
-#, fuzzy
 msgid "Cycle between showing zone fills and just their outlines"
-msgstr ""
-"Cykla mellan att visa fyllda zoner, trådkonfigurerade zoner och skissade "
-"zoner"
+msgstr "Byt mellan att visa zonfyllningar och att bara visa deras konturer"
 
 #: pcbnew/tools/pcb_actions.cpp:883
 msgid "Switch to Component (F.Cu) layer"
@@ -35257,9 +35168,8 @@ msgid "Increase Layer Opacity"
 msgstr "Öka lagrets opacitet"
 
 #: pcbnew/tools/pcb_actions.cpp:1070
-#, fuzzy
 msgid "Make the current layer less transparent"
-msgstr "Spara aktuellt lager som..."
+msgstr "Minska det aktuella lagrets transparens"
 
 #: pcbnew/tools/pcb_actions.cpp:1077
 msgid "Decrease Layer Opacity"
@@ -35271,11 +35181,11 @@ msgstr "Gör det aktuella lagret mer transparent"
 
 #: pcbnew/tools/pcb_actions.cpp:1088
 msgid "Show Board Statistics"
-msgstr "Visa styrelsestatistik"
+msgstr "Visa mönsterkortsstatistik"
 
 #: pcbnew/tools/pcb_actions.cpp:1088
 msgid "Shows board statistics"
-msgstr "Visar styrelsestatistik"
+msgstr "Visar mönsterkortsstatistik"
 
 #: pcbnew/tools/pcb_actions.cpp:1092
 msgid "Clearance Resolution..."
@@ -35311,14 +35221,12 @@ msgid "Run various diagnostics and attempt to repair board"
 msgstr "Kör olika diagnoser och försök att reparera kortet"
 
 #: pcbnew/tools/pcb_actions.cpp:1116
-#, fuzzy
 msgid "Repair Footprint"
-msgstr "Nytt fotavtryck"
+msgstr "Reparera fotavtryck"
 
 #: pcbnew/tools/pcb_actions.cpp:1117
-#, fuzzy
 msgid "Run various diagnostics and attempt to repair footprint"
-msgstr "Kör olika diagnoser och försök att reparera kortet"
+msgstr "Kör olika diagnoser och försök reparera fotavtrycket"
 
 #: pcbnew/tools/pcb_actions.cpp:1124
 msgid "Align to Top"
@@ -35434,50 +35342,44 @@ msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Väljer alla fotavtryck och spår i samma schematiska ark"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
-#, fuzzy
 msgid "Filter Selected Items..."
-msgstr "Filterval ..."
+msgstr "Filtrera valda objekt..."
 
 #: pcbnew/tools/pcb_actions.cpp:1262
-#, fuzzy
 msgid "Remove items from the selection by type"
-msgstr "Ta bort objekt från markeringen."
+msgstr "Avmarkera objekt efter typ"
 
 #: pcbnew/tools/pcb_actions.cpp:1270 pcbnew/tools/zone_filler_tool.cpp:211
 msgid "Fill Zone"
 msgstr "Fyll zon"
 
 #: pcbnew/tools/pcb_actions.cpp:1270
-#, fuzzy
 msgid "Update copper fill of selected zone(s)"
-msgstr "Uppdatera valt fotavtryck"
+msgstr "Uppdatera valda zoners kopparfyllning"
 
 #: pcbnew/tools/pcb_actions.cpp:1276 pcbnew/tools/zone_filler_tool.cpp:154
 msgid "Fill All Zones"
 msgstr "Fyll i alla zoner"
 
 #: pcbnew/tools/pcb_actions.cpp:1276
-#, fuzzy
 msgid "Update copper fill of all zones"
-msgstr "Fyll i alla zoner"
+msgstr "Uppdatera alla zoners kopparfyllning"
 
 #: pcbnew/tools/pcb_actions.cpp:1281 pcbnew/tools/zone_filler_tool.cpp:249
 msgid "Unfill Zone"
 msgstr "Unfill Zone"
 
 #: pcbnew/tools/pcb_actions.cpp:1281
-#, fuzzy
 msgid "Remove copper fill from selected zone(s)"
-msgstr "Ta bort objekt från markeringen."
+msgstr "Ta bort kopparfyllning från valda zoner"
 
 #: pcbnew/tools/pcb_actions.cpp:1287 pcbnew/tools/zone_filler_tool.cpp:267
 msgid "Unfill All Zones"
 msgstr "Avsluta alla zoner"
 
 #: pcbnew/tools/pcb_actions.cpp:1287
-#, fuzzy
 msgid "Remove copper fill from all zones"
-msgstr "Anslut kopparzon igen från %s till %s."
+msgstr "Ta bort kopparfyllning från alla zoner"
 
 #: pcbnew/tools/pcb_actions.cpp:1295
 msgid "Place Selected Footprints"
@@ -35500,18 +35402,16 @@ msgid "Route Single Track"
 msgstr "Rutt enstaka spår"
 
 #: pcbnew/tools/pcb_actions.cpp:1309
-#, fuzzy
 msgid "Route tracks"
-msgstr "Inga spår"
+msgstr "Dra ledare"
 
 #: pcbnew/tools/pcb_actions.cpp:1316
 msgid "Route Differential Pair"
 msgstr "Ruttdifferentialpar"
 
 #: pcbnew/tools/pcb_actions.cpp:1316
-#, fuzzy
 msgid "Route differential pairs"
-msgstr "Ruttdifferentialpar"
+msgstr "Dra differentialpar"
 
 #: pcbnew/tools/pcb_actions.cpp:1322
 msgid "Interactive Router Settings..."
@@ -35554,14 +35454,12 @@ msgid "Switch router to walkaround mode"
 msgstr "Byt router till walkaround-läge"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle Router Mode"
-msgstr "Router Shove Mode"
+msgstr "Byt dragningsläge"
 
 #: pcbnew/tools/pcb_actions.cpp:1347
-#, fuzzy
 msgid "Cycle router to the next mode"
-msgstr "Byt router till shove-läge"
+msgstr "Byt till nästa dragningsläge"
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Set Layer Pair..."
@@ -35569,29 +35467,27 @@ msgstr "Ställ in lagerpar ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1352
 msgid "Change active layer pair for routing"
-msgstr "Ändra aktivt lagerpar för dirigering"
+msgstr "Ändra aktivt lagerpar för routing"
 
 #: pcbnew/tools/pcb_actions.cpp:1359
 msgid "Tune length of a single track"
-msgstr "Ställa in längden på ett spår"
+msgstr "Ställ in längden på ett enskilt spår"
 
 #: pcbnew/tools/pcb_actions.cpp:1366
 msgid "Tune length of a differential pair"
-msgstr "Ställa in längden på ett differentiellt par"
+msgstr "Ställ in längden på ett differentialpar"
 
 #: pcbnew/tools/pcb_actions.cpp:1373
 msgid "Tune skew of a differential pair"
 msgstr "Ställ in ett differentiellt par"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
-#, fuzzy
 msgid "Undo Last Segment"
-msgstr "Ångra det senaste segmentet"
+msgstr "Ångra senaste segmentet"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
-#, fuzzy
 msgid "Walks the current track back one segment."
-msgstr "Gör det aktuella lagret mer transparent"
+msgstr "Går tillbaka med den aktuella ledaren ett segment."
 
 #: pcbnew/tools/pcb_actions.cpp:1387
 msgid ""
@@ -35635,7 +35531,7 @@ msgid ""
 "Error loading board.\n"
 "%s"
 msgstr ""
-"Fel vid inläsning av styrelsen.\n"
+"Fel vid inläsning av kort.\n"
 "%s"
 
 #: pcbnew/tools/pcb_control.cpp:1204
@@ -35860,9 +35756,8 @@ msgid "Show footprint and text origins as a cross"
 msgstr "Visa fotavtryck och textursprung som ett kors"
 
 #: pcbnew/widgets/appearance_controls.cpp:355
-#, fuzzy
 msgid "Show drawing sheet borders and title block"
-msgstr "Skriv ut ram och titelblock"
+msgstr "Visa ritningsbladets ram och titelblock"
 
 #: pcbnew/widgets/appearance_controls.cpp:376
 msgid "No Layers"
@@ -35911,32 +35806,28 @@ msgid "Inactive layers (%s):"
 msgstr "Inaktiva lager (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:598
-#, fuzzy
 msgid "Inactive layers:"
-msgstr "Icke-aktiva lager:"
+msgstr "Inaktiva lager:"
 
 #: pcbnew/widgets/appearance_controls.cpp:612
-#, fuzzy
 msgid "Inactive layers will be shown in full color"
-msgstr "Icke-aktiva lager visas i fullfärg"
+msgstr "Inaktiva lager kommer visas i fullfärg"
 
 #: pcbnew/widgets/appearance_controls.cpp:617
 msgid "Dim"
 msgstr "Dämpa"
 
 #: pcbnew/widgets/appearance_controls.cpp:619
-#, fuzzy
 msgid "Inactive layers will be dimmed"
-msgstr "Icke-aktiva lager dämpas"
+msgstr "Inaktiva lager kommer mörkas"
 
 #: pcbnew/widgets/appearance_controls.cpp:624
 msgid "Hide"
 msgstr "Dölj"
 
 #: pcbnew/widgets/appearance_controls.cpp:626
-#, fuzzy
 msgid "Inactive layers will be hidden"
-msgstr "Icke-aktiva lager kommer att döljas"
+msgstr "Inaktiva lager kommer gömmas"
 
 #: pcbnew/widgets/appearance_controls.cpp:637
 msgid "Flip board view"
@@ -35981,31 +35872,26 @@ msgid "Ratsnest display:"
 msgstr "Ratsnest-skärm:"
 
 #: pcbnew/widgets/appearance_controls.cpp:720
-#, fuzzy
 msgid "Choose which ratsnest lines to display"
 msgstr "Välj vilka ratsnest-rader som ska visas"
 
 #: pcbnew/widgets/appearance_controls.cpp:730
-#, fuzzy
 msgid "Show ratsnest lines to items on all layers"
-msgstr "Ratsnest-rader visas för objekt i alla lager"
+msgstr "Visa ratsnest-rader för objekt på alla lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:735
 msgid "Visible layers"
 msgstr "Synliga lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:737
-#, fuzzy
 msgid "Show ratsnest lines to items on visible layers"
-msgstr "Ratsnest-rader visas för objekt i synliga lager"
+msgstr "Visa ratsnest-rader för objekt på synliga lager"
 
 #: pcbnew/widgets/appearance_controls.cpp:744
-#, fuzzy
 msgid "Hide all ratsnest lines"
-msgstr "Dölj alla fotavtrycksfält"
+msgstr "Dölj alla ratsnest-rader"
 
 #: pcbnew/widgets/appearance_controls.cpp:882
-#, fuzzy
 msgid "Set Net Color"
 msgstr "Ställ in nätfärg"
 
@@ -36016,18 +35902,17 @@ msgstr "Markera %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:888
 #: pcbnew/widgets/appearance_controls.cpp:2273
-#, fuzzy, c-format
+#, c-format
 msgid "Select Tracks and Vias in %s"
-msgstr "Avmarkera spår och vias i %s"
+msgstr "Välj ledare och vior i %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:891
 #: pcbnew/widgets/appearance_controls.cpp:2277
-#, fuzzy, c-format
+#, c-format
 msgid "Unselect Tracks and Vias in %s"
-msgstr "Avmarkera spår och vias i %s"
+msgstr "Avmarkera ledare och vior i %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:898
-#, fuzzy
 msgid "Hide All Other Nets"
 msgstr "Dölj alla andra nät"
 
@@ -36042,10 +35927,11 @@ msgid "Click to show ratsnest for %s"
 msgstr "Klicka för att visa ratsnest för %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:940
-#, fuzzy
 msgid ""
 "Double click (or middle click) to change color; right click for more actions"
-msgstr "Dubbelklicka eller mittklicka för att ändra färg, högerklicka för meny"
+msgstr ""
+"Dubbelklicka eller mittklicka för att ändra färg; högerklicka för fler "
+"åtgärder"
 
 #: pcbnew/widgets/appearance_controls.cpp:1433
 msgid "Double click or middle click for color change, right click for menu"
@@ -36102,11 +35988,11 @@ msgstr "Användardefinierad betydelse"
 
 #: pcbnew/widgets/appearance_controls.cpp:1535
 msgid "Board's perimeter definition"
-msgstr "Styrelsens perimeterdefinition"
+msgstr "Kortets omkretsdefinition"
 
 #: pcbnew/widgets/appearance_controls.cpp:1536
 msgid "Board's edge setback outline"
-msgstr "Styrelsens kant bakslag kontur"
+msgstr "Kortets kantindragsskontur"
 
 #: pcbnew/widgets/appearance_controls.cpp:1537
 msgid "Footprint courtyards on board's front"
@@ -36224,22 +36110,19 @@ msgid "Show or hide ratsnest for nets in %s"
 msgstr "Visa eller dölj råttnät för nät i %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2265
-#, fuzzy
 msgid "Set Netclass Color"
 msgstr "Ställ in nätklassfärg"
 
 #: pcbnew/widgets/appearance_controls.cpp:2270
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Nets in %s"
 msgstr "Markera nät i %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2284
-#, fuzzy
 msgid "Show All Netclasses"
 msgstr "Visa alla nätklasser"
 
 #: pcbnew/widgets/appearance_controls.cpp:2287
-#, fuzzy
 msgid "Hide All Other Netclasses"
 msgstr "Dölj alla andra nätklasser"
 
@@ -36458,23 +36341,20 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] belastning misslyckades: inmatningsraden för lång\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:9
-#, fuzzy
 msgid "KiCad Image Converter"
-msgstr "Konverterad"
+msgstr "KiCad bildkonverterare"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Skapa en komponent från en bitmap-bild för användning med KiCad"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
-#, fuzzy
 msgid "bitmap2component"
-msgstr "importera komponent"
+msgstr "bitmap2component"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
-#, fuzzy
 msgid "KiCad Schematic Editor (Standalone)"
-msgstr "Byt till schematisk redigerare"
+msgstr "KiCad schemaredigerare (fristående)"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 #, fuzzy
@@ -36486,24 +36366,20 @@ msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Fristående schemaredigerare för KiCad-scheman"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
-#, fuzzy
 msgid "eeschema"
-msgstr "Eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
-#, fuzzy
 msgid "Gerber File Viewer"
-msgstr "Gerber-filer"
+msgstr "Gerberfil-visare"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
-#, fuzzy
 msgid "View Gerber files"
-msgstr "Visa Gerber Files"
+msgstr "Visa Gerberfiler"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
-#, fuzzy
 msgid "gerbview"
-msgstr "Gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -36519,23 +36395,21 @@ msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Svit av verktyg för schema- och kretskortsdesign"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
-#, fuzzy
 msgid "KiCad PCB Calculator"
-msgstr "PCB-kalkylator"
+msgstr "KiCad PCB-kalkylator"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
 msgstr "Kalkylator för elektronikrelaterade beräkningar"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:10
-#, fuzzy
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "Byt till PCB Editor"
+msgstr "KiCad PCB-redigerare (fristående)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 #, fuzzy
 msgid "PCB layout editor"
-msgstr "Sidlayoutredigerare"
+msgstr "PCB-layout-redigerare"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
@@ -36572,32 +36446,27 @@ msgstr "KiCads huvudfönster"
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
 #, fuzzy
 msgid "KiCad PCB Layout Editor"
-msgstr "Byt till PCB Editor"
+msgstr "KiCad PCB-layout-redigerare"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:85
-#, fuzzy
 msgid "The KiCad Developers"
-msgstr "Utvecklare"
+msgstr "KiCads utvecklare"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber file"
-msgstr "Gerber-filer"
+msgstr "Gerberfil"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:26
-#, fuzzy
 msgid "Excellon drill file"
-msgstr "Skapa Excellon borrfil (er)"
+msgstr "Exfellon-borrfil"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
-#, fuzzy
 msgid "KiCad Project"
-msgstr "KiCad projektfil"
+msgstr "KiCad projekt"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
-#, fuzzy
 msgid "KiCad Schematic"
-msgstr "Redigera schemat"
+msgstr "KiCad schema"
 
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
