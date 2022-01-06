@@ -103,6 +103,9 @@ int GraphicTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I
     basic_gal.SetFontBold( aBold );
     basic_gal.SetGlyphSize( VECTOR2D( aSize ) );
 
+    if( !aFont )
+        aFont = KIFONT::FONT::GetFont();
+
     return KiROUND( aFont->ComputeTextLineSize( &basic_gal, aText ).x );
 }
 
