@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,8 +123,9 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataToGrid()
     for( int row = 0; row < m_grid->GetNumberRows(); ++row )
     {
         m_grid->SetCellValue( row, 0, m_fields[row].m_Name );
-        m_grid->SetCellValue( row, 1, m_fields[row].m_Visible ? wxT( "1" ) : wxEmptyString );
-        m_grid->SetCellValue( row, 2, m_fields[row].m_URL     ? wxT( "1" ) : wxEmptyString );
+        // columns 1 and 2 show a boolean value (in a check box):
+        m_grid->SetCellValue( row, 1, m_fields[row].m_Visible ? "1" : "0" );
+        m_grid->SetCellValue( row, 2, m_fields[row].m_URL     ? "1" : "0" );
 
         // Set cell properties
         m_grid->SetCellAlignment( row, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
@@ -153,8 +154,8 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataFromGrid()
     for( int row = 0; row < m_grid->GetNumberRows(); ++row )
     {
         m_fields[row].m_Name    = m_grid->GetCellValue( row, 0 );
-        m_fields[row].m_Visible = m_grid->GetCellValue( row, 1 ) != wxEmptyString;
-        m_fields[row].m_URL     = m_grid->GetCellValue( row, 2 ) != wxEmptyString;
+        m_fields[row].m_Visible = m_grid->GetCellValue( row, 1 ) == "1";
+        m_fields[row].m_URL     = m_grid->GetCellValue( row, 2 ) == "1";
     }
 
     return true;
