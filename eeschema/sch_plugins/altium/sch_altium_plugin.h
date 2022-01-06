@@ -37,10 +37,7 @@ class SCH_SYMBOL;
 class SCH_SHEET;
 class TITLE_BLOCK;
 
-namespace CFB
-{
-class CompoundFileReader;
-}
+class ALTIUM_COMPOUND_FILE;
 
 /**
  * SCH_ALTIUM_PLUGIN
@@ -105,8 +102,8 @@ public:
     wxFileName getLibFileName();
 
     void ParseAltiumSch( const wxString& aFileName );
-    void ParseStorage( const CFB::CompoundFileReader& aReader );
-    void ParseFileHeader( const CFB::CompoundFileReader& aReader );
+    void ParseStorage( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
+    void ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
 
 private:
     bool IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const;

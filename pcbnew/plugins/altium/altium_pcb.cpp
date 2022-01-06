@@ -57,54 +57,16 @@
 
 constexpr double BOLD_FACTOR = 1.75;    // CSS font-weight-normal is 400; bold is 700
 
-
-static std::vector<char> ReadFileIntoVector( const wxString& aFileName )
-{
-    // Open file
-    FILE* fp = wxFopen( aFileName, "rb" );
-
-    if( fp == nullptr )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Cannot open file '%s'." ), aFileName ) );
-    }
-
-    fseek( fp, 0, SEEK_END );
-    long len = ftell( fp );
-
-    if( len < 0 )
-    {
-        fclose( fp );
-        THROW_IO_ERROR( _( "Error reading file: cannot determine length." ) );
-    }
-
-    std::vector<char> buffer( len );
-
-    fseek( fp, 0, SEEK_SET );
-
-    size_t bytesRead = fread( buffer.data(), sizeof( unsigned char ), len, fp );
-    fclose( fp );
-
-    if( static_cast<size_t>( len ) != bytesRead )
-    {
-        THROW_IO_ERROR( _( "Error reading file." ) );
-    }
-
-    return buffer;
-}
-
-
 void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER* aProgressReporter,
                      const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping )
 {
-    std::vector<char> buffer = ReadFileIntoVector( aFileName );
+    ALTIUM_COMPOUND_FILE altiumPcbFile( aFileName );
 
     try
     {
-        CFB::CompoundFileReader reader( buffer.data(), buffer.size() );
-
         // Parse File
         ALTIUM_PCB pcb( aBoard, aProgressReporter );
-        pcb.Parse( reader, aFileMapping );
+        pcb.Parse( altiumPcbFile, aFileMapping );
     }
     catch( CFB::CFBException& exception )
     {
@@ -115,20 +77,18 @@ void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER
 
 void ParseAltiumPcbLibFootprintNames( wxArrayString& aFootprintNames, const wxString& aLibraryPath )
 {
-    std::vector<char> buffer = ReadFileIntoVector( aLibraryPath );
+    ALTIUM_COMPOUND_FILE altiumLibFile( aLibraryPath );
 
     try
     {
-        CFB::CompoundFileReader reader( buffer.data(), buffer.size() );
-
         std::string                     streamName = "Library\\Data";
-        const CFB::COMPOUND_FILE_ENTRY* libraryData = FindStream( reader, streamName );
+        const CFB::COMPOUND_FILE_ENTRY* libraryData = altiumLibFile.FindStream( streamName );
         if( libraryData == nullptr )
         {
             THROW_IO_ERROR( wxString::Format( _( "File not found: '%s'." ), streamName ) );
         }
 
-        ALTIUM_PARSER parser( reader, libraryData );
+        ALTIUM_PARSER parser( altiumLibFile, libraryData );
 
         std::map<wxString, wxString> properties = parser.ReadProperties();
 
@@ -402,112 +362,112 @@ void ALTIUM_PCB::checkpoint()
     }
 }
 
-void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
-                        const std::map<ALTIUM_PCB_DIR, std::string>&   aFileMapping )
+void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFile,
+                        const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping )
 {
     // this vector simply declares in which order which functions to call.
     const std::vector<std::tuple<bool, ALTIUM_PCB_DIR, PARSE_FUNCTION_POINTER_fp>> parserOrder = {
         { true, ALTIUM_PCB_DIR::FILE_HEADER,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseFileHeader( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseFileHeader( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::BOARD6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseBoard6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseBoard6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::COMPONENTS6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseComponents6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseComponents6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::MODELS,
-                [this, aFileMapping]( auto aReader, auto fileHeader )
-                {
-                    wxString dir( aFileMapping.at( ALTIUM_PCB_DIR::MODELS ) );
-                    this->ParseModelsData( aReader, fileHeader, dir );
-                } },
+          [this, aFileMapping]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              wxString dir( aFileMapping.at( ALTIUM_PCB_DIR::MODELS ) );
+              this->ParseModelsData( aFile, fileHeader, dir );
+          } },
         { true, ALTIUM_PCB_DIR::COMPONENTBODIES6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseComponentsBodies6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseComponentsBodies6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::NETS6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseNets6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseNets6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::CLASSES6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseClasses6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseClasses6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::RULES6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseRules6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseRules6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::DIMENSIONS6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseDimensions6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseDimensions6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::POLYGONS6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParsePolygons6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParsePolygons6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::ARCS6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseArcs6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseArcs6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::PADS6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParsePads6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParsePads6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::VIAS6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseVias6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseVias6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::TRACKS6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseTracks6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseTracks6Data( aFile, fileHeader );
+          } },
         { false, ALTIUM_PCB_DIR::WIDESTRINGS6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseWideStrings6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseWideStrings6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::TEXTS6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseTexts6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseTexts6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::FILLS6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseFills6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseFills6Data( aFile, fileHeader );
+          } },
         { false, ALTIUM_PCB_DIR::BOARDREGIONS,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseBoardRegionsData( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseBoardRegionsData( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::SHAPEBASEDREGIONS6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseShapeBasedRegions6Data( aReader, fileHeader );
-                } },
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseShapeBasedRegions6Data( aFile, fileHeader );
+          } },
         { true, ALTIUM_PCB_DIR::REGIONS6,
-                [this]( auto aReader, auto fileHeader )
-                {
-                    this->ParseRegions6Data( aReader, fileHeader );
-                } }
+          [this]( const ALTIUM_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseRegions6Data( aFile, fileHeader );
+          } }
     };
 
     if( m_progressReporter != nullptr )
@@ -533,13 +493,13 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
 
             std::string mappedFile = mappedDirectory->second + "Header";
 
-            const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, mappedFile );
+            const CFB::COMPOUND_FILE_ENTRY* file = altiumPcbFile.FindStream( mappedFile );
             if( file == nullptr )
             {
                 continue;
             }
 
-            ALTIUM_PARSER reader( aReader, file );
+            ALTIUM_PARSER reader( altiumPcbFile, file );
             uint32_t      numOfRecords = reader.Read<uint32_t>();
 
             if( reader.HasParsingError() )
@@ -581,10 +541,10 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
         if( directory != ALTIUM_PCB_DIR::FILE_HEADER )
             mappedFile += "Data";
 
-        const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, mappedFile );
+        const CFB::COMPOUND_FILE_ENTRY* file = altiumPcbFile.FindStream( mappedFile );
 
         if( file != nullptr )
-            fp( aReader, file );
+            fp( altiumPcbFile, file );
         else if( isRequired )
             wxLogError( _( "File not found: '%s'." ), mappedFile );
     }
@@ -736,10 +696,10 @@ const ARULE6* ALTIUM_PCB::GetRuleDefault( ALTIUM_RULE_KIND aKind ) const
     return nullptr;
 }
 
-void ALTIUM_PCB::ParseFileHeader( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseFileHeader( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     reader.ReadAndSetSubrecordLength();
     wxString header = reader.ReadWxString();
@@ -755,13 +715,13 @@ void ALTIUM_PCB::ParseFileHeader( const CFB::CompoundFileReader& aReader,
     //}
 }
 
-void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( "Loading board data..." );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     checkpoint();
     ABOARD6 elem( reader );
@@ -938,13 +898,13 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
     }
 }
 
-void ALTIUM_PCB::ParseClasses6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                     const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( "Loading netclasses..." );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -975,13 +935,13 @@ void ALTIUM_PCB::ParseClasses6Data( const CFB::CompoundFileReader& aReader,
     m_board->m_LegacyNetclassesLoaded = true;
 }
 
-void ALTIUM_PCB::ParseComponents6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( "Loading components..." );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     uint16_t componentId = 0;
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
@@ -1033,13 +993,13 @@ double normalizeAngleDegrees( double Angle, double aMin, double aMax )
 }
 
 
-void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                              const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( "Loading component 3D models..." );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -1402,13 +1362,13 @@ void ALTIUM_PCB::HelperParseDimensions6Center( const ADIMENSION6& aElem )
 }
 
 
-void ALTIUM_PCB::ParseDimensions6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseDimensions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( "Loading dimension drawings..." );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -1444,13 +1404,13 @@ void ALTIUM_PCB::ParseDimensions6Data( const CFB::CompoundFileReader& aReader,
 }
 
 
-void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseModelsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString& aRootDir )
 {
     if( m_progressReporter )
         m_progressReporter->Report( "Loading 3D models..." );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     if( reader.GetRemainingBytes() == 0 )
         return;
@@ -1498,7 +1458,8 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
 
         idx++;
 
-        const CFB::COMPOUND_FILE_ENTRY* stepEntry = FindStream( aReader, stepPath.ToStdString() );
+        const CFB::COMPOUND_FILE_ENTRY* stepEntry =
+                aAltiumPcbFile.FindStream( stepPath.ToStdString() );
 
         if( stepEntry == nullptr )
         {
@@ -1506,11 +1467,12 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
             continue;
         }
 
-        size_t                  stepSize = static_cast<size_t>( stepEntry->size );
-        std::unique_ptr<char[]> stepContent( new char[stepSize] );
+        size_t            stepSize = static_cast<size_t>( stepEntry->size );
+        std::vector<char> stepContent( stepSize );
 
         // read file into buffer
-        aReader.ReadFile( stepEntry, 0, stepContent.get(), stepSize );
+        aAltiumPcbFile.GetCompoundFileReader().ReadFile( stepEntry, 0, stepContent.data(),
+                                                         stepSize );
 
         if( !storagePath.IsDirWritable() )
         {
@@ -1519,7 +1481,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
             continue;
         }
 
-        wxMemoryInputStream stepStream( stepContent.get(), stepSize );
+        wxMemoryInputStream stepStream( stepContent.data(), stepSize );
         wxZlibInputStream   zlibInputStream( stepStream );
 
         wxFFileOutputStream outputStream( storagePath.GetFullPath() );
@@ -1534,13 +1496,13 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
 }
 
 
-void ALTIUM_PCB::ParseNets6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseNets6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading nets..." ) );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     wxASSERT( m_num_nets == 0 );
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
@@ -1555,13 +1517,13 @@ void ALTIUM_PCB::ParseNets6Data( const CFB::CompoundFileReader& aReader,
         THROW_IO_ERROR( "Nets6 stream is not fully parsed" );
 }
 
-void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                      const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading polygons..." ) );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -1690,13 +1652,13 @@ void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
     }
 }
 
-void ALTIUM_PCB::ParseRules6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseRules6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading rules..." ) );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -1722,13 +1684,13 @@ void ALTIUM_PCB::ParseRules6Data( const CFB::CompoundFileReader& aReader,
     }
 }
 
-void ALTIUM_PCB::ParseBoardRegionsData( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseBoardRegionsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                         const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading board regions..." ) );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -1744,13 +1706,13 @@ void ALTIUM_PCB::ParseBoardRegionsData( const CFB::CompoundFileReader& aReader,
     }
 }
 
-void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseShapeBasedRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                               const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading zones..." ) );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -1867,13 +1829,13 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
     }
 }
 
-void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                     const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading zone fills..." ) );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     for( ZONE* zone : m_polygons )
     {
@@ -1956,7 +1918,7 @@ void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
 }
 
 
-void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseArcs6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
@@ -1990,7 +1952,7 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
                 shape.SetArcAngleAndEnd( includedAngle.Normalize(), true );
             };
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -2106,13 +2068,13 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
 }
 
 
-void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParsePads6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading pads..." ) );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -2518,13 +2480,13 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
     }
 }
 
-void ALTIUM_PCB::ParseVias6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading vias..." ) );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -2580,13 +2542,13 @@ void ALTIUM_PCB::ParseVias6Data( const CFB::CompoundFileReader& aReader,
     }
 }
 
-void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                    const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading tracks..." ) );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -2686,13 +2648,13 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
     }
 }
 
-void ALTIUM_PCB::ParseWideStrings6Data( const CFB::CompoundFileReader&  aReader,
+void ALTIUM_PCB::ParseWideStrings6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                         const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading unicode strings..." ) );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     m_unicodeStrings = reader.ReadWideStringTable();
 
@@ -2700,13 +2662,13 @@ void ALTIUM_PCB::ParseWideStrings6Data( const CFB::CompoundFileReader&  aReader,
         THROW_IO_ERROR( "WideStrings6 stream is not fully parsed" );
 }
 
-void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseTexts6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading text..." ) );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -2885,13 +2847,13 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
     }
 }
 
-void ALTIUM_PCB::ParseFills6Data( const CFB::CompoundFileReader& aReader,
+void ALTIUM_PCB::ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading rectangles..." ) );
 
-    ALTIUM_PARSER reader( aReader, aEntry );
+    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {

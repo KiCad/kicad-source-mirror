@@ -111,16 +111,15 @@ void ParseAltiumPcbLibFootprintNames( wxArrayString&  aFootprintNames,
 
 namespace CFB
 {
-class CompoundFileReader;
 struct COMPOUND_FILE_ENTRY;
 } // namespace CFB
 
+class ALTIUM_COMPOUND_FILE;
 
 // type declaration required for a helper method
 class ALTIUM_PCB;
-typedef std::function<void( const CFB::CompoundFileReader&, const CFB::COMPOUND_FILE_ENTRY* )>
+typedef std::function<void( const ALTIUM_COMPOUND_FILE&, const CFB::COMPOUND_FILE_ENTRY* )>
         PARSE_FUNCTION_POINTER_fp;
-
 
 class ALTIUM_PCB
 {
@@ -128,7 +127,7 @@ public:
     explicit ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter );
     ~ALTIUM_PCB();
 
-    void Parse( const CFB::CompoundFileReader&               aReader,
+    void Parse( const ALTIUM_COMPOUND_FILE&                  aAltiumPcbFile,
                 const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping );
 
 private:
@@ -139,50 +138,50 @@ private:
     const ARULE6* GetRule( ALTIUM_RULE_KIND aKind, const wxString& aName ) const;
     const ARULE6* GetRuleDefault( ALTIUM_RULE_KIND aKind ) const;
 
-    void ParseFileHeader(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseFileHeader( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
 
     // Text Format
-    void ParseBoard6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseClasses6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseComponents6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseDimensions6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseModelsData( const CFB::CompoundFileReader& aReader,
-            const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString& aRootDir );
-    void ParseNets6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParsePolygons6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseRules6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseBoard6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseClasses6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                            const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseComponents6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                               const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseDimensions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                               const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseModelsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                          const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString& aRootDir );
+    void ParseNets6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                         const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                             const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseRules6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
 
     // Binary Format
-    void ParseArcs6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseComponentsBodies6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParsePads6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseVias6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseTracks6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseTexts6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseFills6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseBoardRegionsData(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseShapeBasedRegions6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseRegions6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseWideStrings6Data(
-            const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseArcs6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                         const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseComponentsBodies6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                                     const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParsePads6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                         const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                         const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                           const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseTexts6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseBoardRegionsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                                const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseShapeBasedRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                                      const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                            const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseWideStrings6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
+                                const CFB::COMPOUND_FILE_ENTRY* aEntry );
 
     // Helper Functions
     void HelperParseDimensions6Linear( const ADIMENSION6& aElem );

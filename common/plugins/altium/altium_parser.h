@@ -39,15 +39,34 @@ class CompoundFileReader;
 struct COMPOUND_FILE_ENTRY;
 } // namespace CFB
 
-// Helper method to find file inside compound file
-const CFB::COMPOUND_FILE_ENTRY* FindStream( const CFB::CompoundFileReader& aReader,
-                                            const std::string              aStreamName );
+
+class ALTIUM_COMPOUND_FILE
+{
+public:
+    /**
+     * Open a CFB file. Constructor might throw an IO_ERROR.
+     *
+     * @param aFilePath path to file to open
+     */
+    ALTIUM_COMPOUND_FILE( const wxString& aFilePath );
+    ALTIUM_COMPOUND_FILE( const ALTIUM_COMPOUND_FILE& temp_obj ) = delete;
+    ALTIUM_COMPOUND_FILE& operator=( const ALTIUM_COMPOUND_FILE& temp_obj ) = delete;
+    ~ALTIUM_COMPOUND_FILE() = default;
+
+    const CFB::CompoundFileReader& GetCompoundFileReader() const { return *m_reader; }
+
+    const CFB::COMPOUND_FILE_ENTRY* FindStream( const std::string& aStreamPath ) const;
+
+private:
+    std::unique_ptr<CFB::CompoundFileReader> m_reader;
+    std::vector<char>                        m_buffer;
+};
 
 
 class ALTIUM_PARSER
 {
 public:
-    ALTIUM_PARSER( const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    ALTIUM_PARSER( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FILE_ENTRY* aEntry );
     ALTIUM_PARSER( std::unique_ptr<char[]>& aContent, size_t aSize );
     ~ALTIUM_PARSER() = default;
 

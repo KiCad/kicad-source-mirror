@@ -290,39 +290,12 @@ SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchem
 
 void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
 {
-    // Open file
-    FILE* fp = wxFopen( aFileName, "rb" );
-
-    if( fp == nullptr )
-    {
-        m_reporter->Report( wxString::Format( _( "Cannot open file '%s'." ), aFileName ),
-                            RPT_SEVERITY_ERROR );
-        return;
-    }
-
-    fseek( fp, 0, SEEK_END );
-    long len = ftell( fp );
-
-    if( len < 0 )
-    {
-        fclose( fp );
-        THROW_IO_ERROR( "Read error, cannot determine length of file." );
-    }
-
-    std::unique_ptr<unsigned char[]> buffer( new unsigned char[len] );
-    fseek( fp, 0, SEEK_SET );
-
-    size_t bytesRead = fread( buffer.get(), sizeof( unsigned char ), len, fp );
-    fclose( fp );
-
-    if( static_cast<size_t>( len ) != bytesRead )
-        THROW_IO_ERROR( "Read error." );
+    ALTIUM_COMPOUND_FILE altiumSchFile( aFileName );
 
     try
     {
-        CFB::CompoundFileReader reader( buffer.get(), bytesRead );
-        ParseStorage( reader ); // we need this before parsing the FileHeader
-        ParseFileHeader( reader );
+        ParseStorage( altiumSchFile ); // we need this before parsing the FileHeader
+        ParseFileHeader( altiumSchFile );
     }
     catch( CFB::CFBException& exception )
     {
@@ -331,14 +304,14 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseStorage( const CFB::CompoundFileReader& aReader )
+void SCH_ALTIUM_PLUGIN::ParseStorage( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
 {
-    const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, "Storage" );
+    const CFB::COMPOUND_FILE_ENTRY* file = aAltiumSchFile.FindStream( "Storage" );
 
     if( file == nullptr )
         return;
 
-    ALTIUM_PARSER reader( aReader, file );
+    ALTIUM_PARSER reader( aAltiumSchFile, file );
 
     std::map<wxString, wxString> properties = reader.ReadProperties();
     wxString header = ALTIUM_PARSER::ReadString( properties, "HEADER", "" );
@@ -367,14 +340,14 @@ void SCH_ALTIUM_PLUGIN::ParseStorage( const CFB::CompoundFileReader& aReader )
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseFileHeader( const CFB::CompoundFileReader& aReader )
+void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
 {
-    const CFB::COMPOUND_FILE_ENTRY* file = FindStream( aReader, "FileHeader" );
+    const CFB::COMPOUND_FILE_ENTRY* file = aAltiumSchFile.FindStream( "FileHeader" );
 
     if( file == nullptr )
         THROW_IO_ERROR( "FileHeader not found" );
 
-    ALTIUM_PARSER reader( aReader, file );
+    ALTIUM_PARSER reader( aAltiumSchFile, file );
 
     if( reader.GetRemainingBytes() <= 0 )
     {
