@@ -138,6 +138,10 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
     {
         ret = EAGLE;
     }
+    else if( fn.GetExt() == AltiumFootprintLibPathExtension )
+    {
+        ret = ALTIUM_DESIGNER;
+    }
 
     // Test this one anyways, even though it's the default guess, to avoid
     // the wxURI instantiation below.

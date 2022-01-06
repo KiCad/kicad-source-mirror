@@ -58,16 +58,14 @@
 constexpr double BOLD_FACTOR = 1.75;    // CSS font-weight-normal is 400; bold is 700
 
 
-void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER* aProgressReporter,
-                     const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping )
+static std::vector<char> ReadFileIntoVector( const wxString& aFileName )
 {
     // Open file
     FILE* fp = wxFopen( aFileName, "rb" );
 
     if( fp == nullptr )
     {
-        wxLogError( _( "Cannot open file '%s'." ), aFileName );
-        return;
+        THROW_IO_ERROR( wxString::Format( _( "Cannot open file '%s'." ), aFileName ) );
     }
 
     fseek( fp, 0, SEEK_END );
@@ -79,10 +77,11 @@ void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER
         THROW_IO_ERROR( _( "Error reading file: cannot determine length." ) );
     }
 
-    std::unique_ptr<unsigned char[]> buffer( new unsigned char[len] );
+    std::vector<char> buffer( len );
+
     fseek( fp, 0, SEEK_SET );
 
-    size_t bytesRead = fread( buffer.get(), sizeof( unsigned char ), len, fp );
+    size_t bytesRead = fread( buffer.data(), sizeof( unsigned char ), len, fp );
     fclose( fp );
 
     if( static_cast<size_t>( len ) != bytesRead )
@@ -90,13 +89,67 @@ void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER
         THROW_IO_ERROR( _( "Error reading file." ) );
     }
 
+    return buffer;
+}
+
+
+void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER* aProgressReporter,
+                     const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping )
+{
+    std::vector<char> buffer = ReadFileIntoVector( aFileName );
+
     try
     {
-        CFB::CompoundFileReader reader( buffer.get(), bytesRead );
+        CFB::CompoundFileReader reader( buffer.data(), buffer.size() );
 
         // Parse File
         ALTIUM_PCB pcb( aBoard, aProgressReporter );
         pcb.Parse( reader, aFileMapping );
+    }
+    catch( CFB::CFBException& exception )
+    {
+        THROW_IO_ERROR( exception.what() );
+    }
+}
+
+
+void ParseAltiumPcbLibFootprintNames( wxArrayString& aFootprintNames, const wxString& aLibraryPath )
+{
+    std::vector<char> buffer = ReadFileIntoVector( aLibraryPath );
+
+    try
+    {
+        CFB::CompoundFileReader reader( buffer.data(), buffer.size() );
+
+        std::string                     streamName = "Library\\Data";
+        const CFB::COMPOUND_FILE_ENTRY* libraryData = FindStream( reader, streamName );
+        if( libraryData == nullptr )
+        {
+            THROW_IO_ERROR( wxString::Format( _( "File not found: '%s'." ), streamName ) );
+        }
+
+        ALTIUM_PARSER parser( reader, libraryData );
+
+        std::map<wxString, wxString> properties = parser.ReadProperties();
+
+        uint32_t numberOfFootprints = parser.Read<uint32_t>();
+        aFootprintNames.Alloc( numberOfFootprints );
+        for( size_t i = 0; i < numberOfFootprints; i++ )
+        {
+            parser.ReadAndSetSubrecordLength();
+            wxString footprintName = parser.ReadWxString();
+            aFootprintNames.Add( footprintName );
+        }
+
+        if( parser.HasParsingError() )
+        {
+            THROW_IO_ERROR( wxString::Format( "%s stream was not parsed correctly", streamName ) );
+        }
+
+        if( parser.GetRemainingBytes() != 0 )
+        {
+            THROW_IO_ERROR( wxString::Format( "%s stream is not fully parsed", streamName ) );
+        }
     }
     catch( CFB::CFBException& exception )
     {

@@ -54,7 +54,8 @@ public:
     template <typename Type>
     Type Read()
     {
-        if( GetRemainingBytes() >= sizeof( Type ) )
+        const size_t remainingBytes = GetRemainingBytes();
+        if( remainingBytes >= sizeof( Type ) )
         {
             Type val = *(Type*) ( m_pos );
             m_pos += sizeof( Type );
@@ -62,6 +63,7 @@ public:
         }
         else
         {
+            m_pos += remainingBytes; // Ensure remaining bytes are zero
             m_error = true;
             return 0;
         }

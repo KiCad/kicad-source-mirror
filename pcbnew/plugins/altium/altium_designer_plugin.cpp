@@ -104,3 +104,37 @@ BOARD* ALTIUM_DESIGNER_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendTo
 
     return m_board;
 }
+
+long long ALTIUM_DESIGNER_PLUGIN::GetLibraryTimestamp( const wxString& aLibraryPath ) const
+{
+    // File hasn't been loaded yet.
+    if( aLibraryPath.IsEmpty() )
+    {
+        return 0;
+    }
+
+    wxFileName fn( aLibraryPath );
+
+    if( fn.IsFileReadable() )
+    {
+        return fn.GetModificationTime().GetValue().GetValue();
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames,
+                                                 const wxString& aLibraryPath, bool aBestEfforts,
+                                                 const PROPERTIES* aProperties )
+{
+    ParseAltiumPcbLibFootprintNames( aFootprintNames, aLibraryPath );
+}
+
+FOOTPRINT* ALTIUM_DESIGNER_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
+                                                  const wxString& aFootprintName, bool aKeepUUID,
+                                                  const PROPERTIES* aProperties )
+{
+    return nullptr; // TODO: implement
+}

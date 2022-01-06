@@ -46,11 +46,18 @@ public:
 
     const wxString GetFileExtension() const override;
 
-    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override
-    {
-        // TODO?
-        return 0;
-    }
+    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
+
+    void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
+                             bool aBestEfforts, const PROPERTIES* aProperties = nullptr ) override;
+
+    FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                              bool              aKeepUUID = false,
+                              const PROPERTIES* aProperties = nullptr ) override;
+
+    //bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = nullptr );
+
+    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override { return false; }
 
     // -----</PUBLIC PLUGIN API>-------------------------------------------------
 
