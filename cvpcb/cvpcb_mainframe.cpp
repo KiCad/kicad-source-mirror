@@ -419,8 +419,11 @@ void CVPCB_MAINFRAME::OnEnterFilteringText( wxCommandEvent& aEvent )
     // If the option FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN is set, update the list
     // of available footprints which match the filter
 
+    long pos = m_tcFilterString->GetInsertionPoint();
     wxListEvent l_event;
     OnSelectComponent( l_event );
+    m_tcFilterString->SetFocus();
+    m_tcFilterString->SetInsertionPoint( pos );
 }
 
 
