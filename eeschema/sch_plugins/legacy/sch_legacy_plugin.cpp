@@ -2727,7 +2727,6 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
 
         aliasName = wxString::FromUTF8( line );
         aliasName.Trim();
-        // aliasName = EscapeString( aliasName, CTX_LIBID );
 
         LIB_SYMBOL_MAP::iterator it = m_symbols.find( aliasName );
 
@@ -2834,6 +2833,7 @@ LIB_SYMBOL* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorV
     wxString name, prefix, tmp;
 
     name = tokens.GetNextToken();
+    name = EscapeString( name, CTX_LIBID );
     pos += name.size() + 1;
 
     prefix = tokens.GetNextToken();
@@ -3070,6 +3070,11 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol,
         SCH_PARSE_ERROR( _( "unexpected end of line" ), aReader, line );
 
     parseQuotedString( text, aReader, line, &line, true );
+
+    // The value field needs to be "special" escaped.  The other fields are
+    // escaped normally and don't need special handling
+    if( id == VALUE_FIELD )
+        text = EscapeString( text, CTX_QUOTED_STR );
 
     // Doctor the *.lib file field which has a "~" in blank fields.  New saves will
     // not save like this.
