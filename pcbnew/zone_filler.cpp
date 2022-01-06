@@ -1338,13 +1338,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         // Thermal spokes consist of segments from the pad center to points just outside
         // the thermal relief.
         VECTOR2I shapePos = pad->ShapePos();
-        double  spokesAngle = pad->GetOrientation() + pad->GetThermalSpokeAngle();
-
-        while( spokesAngle >= 900.0 )
-            spokesAngle -= 900.0;
-
-        while( spokesAngle < 0.0 )
-            spokesAngle += 900.0;
+        double  spokesAngle = pad->GetThermalSpokeAngle();
 
         // We use the bounding-box to lay out the spokes, but for this to work the
         // bounding box has to be built at the same rotation as the spokes.
@@ -1396,7 +1390,8 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 break;
             }
 
-            spoke.Rotate( -DECIDEG2RAD( spokesAngle ) );
+            // Rottae and move the spokes tho the right position
+            spoke.Rotate( -DECIDEG2RAD( pad->GetOrientation() + spokesAngle ) );
             spoke.Move( shapePos );
 
             spoke.SetClosed( true );
