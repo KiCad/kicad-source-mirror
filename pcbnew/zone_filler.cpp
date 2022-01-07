@@ -1316,11 +1316,15 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         int spoke_w = constraint.GetValue().Opt();
 
         // Spoke width should ideally be smaller than the pad minor axis.
-        spoke_w = std::min( spoke_w, pad->GetSize().x );
-        spoke_w = std::min( spoke_w, pad->GetSize().y );
+        // Otherwise the thermal shape is not really a thermal relief,
+        // and the algo to count the actual number of spokes can fail
+        int spoke_max_allowed_w = std::min( pad->GetSize().x, pad->GetSize().y );
 
         spoke_w = std::max( spoke_w, constraint.Value().Min() );
         spoke_w = std::min( spoke_w, constraint.Value().Max() );
+
+        // ensure the spoke width is smaller than the pad minor size
+        spoke_w = std::min( spoke_w, spoke_max_allowed_w );
 
         // Cannot create stubs having a width < zone min thickness
         if( spoke_w < aZone->GetMinThickness() )
