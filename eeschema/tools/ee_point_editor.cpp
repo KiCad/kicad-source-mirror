@@ -570,7 +570,7 @@ void EE_POINT_EDITOR::updateParentItem() const
 
             for( unsigned i = 0; i < m_editPoints->PointsSize(); ++i )
             {
-                wxPoint pt = mapCoords( m_editPoints->Point( i ).GetPosition() );
+                VECTOR2I pt = mapCoords( m_editPoints->Point( i ).GetPosition() );
                 shape->GetPolyShape().Append( pt.x, pt.y, -1, -1, true );
             }
 
