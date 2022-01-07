@@ -368,6 +368,37 @@ VECTOR2D FONT::drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const 
 }
 
 
+VECTOR2D FONT::StringBoundaryLimits( const UTF8& aText, const VECTOR2D& aSize, int aThickness,
+                                     bool aBold, bool aItalic ) const
+{
+    // TODO do we need to parse every time - have we already parsed?
+    std::vector<std::unique_ptr<GLYPH>> glyphs; // ignored
+    BOX2I                               boundingBox;
+    TEXT_STYLE_FLAGS                    textStyle = 0;
+
+    if( aBold )
+        textStyle |= TEXT_STYLE::BOLD;
+
+    if( aItalic )
+        textStyle |= TEXT_STYLE::ITALIC;
+
+    (void) drawMarkup( &boundingBox, glyphs, aText, VECTOR2D(), aSize, EDA_ANGLE::ANGLE_0,
+                       false, VECTOR2D(), textStyle );
+
+    if( IsStroke() )
+    {
+        // Inflate by a bit more than thickness/2 to catch diacriticals, descenders, etc.
+        boundingBox.Inflate( KiROUND( aThickness * 0.75 ) );
+    }
+    else if( IsOutline() )
+    {
+        // Outline fonts have thickness built in
+    }
+
+    return boundingBox.GetSize();
+}
+
+
 VECTOR2D FONT::boundingBoxSingleLine( BOX2I* aBoundingBox, const UTF8& aText,
                                       const VECTOR2I& aPosition, const VECTOR2D& aSize,
                                       bool aItalic ) const

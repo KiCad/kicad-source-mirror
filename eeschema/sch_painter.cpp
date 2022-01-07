@@ -464,7 +464,8 @@ void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
                                       aAttrs.m_Italic );
     }
 
-    VECTOR2D extents = font->StringBoundaryLimits( aText, aAttrs.m_Size, aAttrs.m_StrokeWidth );
+    VECTOR2D extents = font->StringBoundaryLimits( aText, aAttrs.m_Size, aAttrs.m_StrokeWidth,
+                                                   aAttrs.m_Bold, aAttrs.m_Italic );
     EDA_RECT box( (VECTOR2I) aPosition, wxSize( extents.x, aAttrs.m_Size.y ) );
 
     switch( aAttrs.m_Halign )
@@ -1470,8 +1471,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
 
-    VECTOR2D textPos( aText->GetTextPos() );
-    VECTOR2D text_offset = aText->GetSchematicTextOffset( &m_schSettings );
+    VECTOR2I text_offset = aText->GetSchematicTextOffset( &m_schSettings );
     wxString shownText( aText->GetShownText() );
 
     if( drawingShadows && eeconfig()->m_Selection.text_as_box )
@@ -1491,7 +1491,20 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         TEXT_ATTRIBUTES attrs = aText->GetAttributes();
         attrs.m_StrokeWidth = getTextThickness( aText, drawingShadows );
 
-        strokeText( shownText, textPos + text_offset, attrs );
+        std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
+
+        if( !text_offset.x && !text_offset.y )
+            cache = aText->GetRenderCache( shownText );
+
+        if( cache )
+        {
+            for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
+                m_gal->DrawGlyph( *glyph.get() );
+        }
+        else
+        {
+            strokeText( shownText, aText->GetTextPos(), attrs );
+        }
     }
 }
 

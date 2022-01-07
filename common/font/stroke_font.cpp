@@ -176,6 +176,8 @@ void STROKE_FONT::loadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
     m_glyphs = &g_defaultFontGlyphs;
     m_glyphBoundingBoxes = g_defaultFontGlyphBoundingBoxes;
+    m_fontName = wxT( "KiCad Font" );
+    m_fontFileName = wxEmptyString;
 }
 
 
@@ -190,30 +192,6 @@ double STROKE_FONT::GetInterline( double aGlyphHeight, double aLineSpacing ) con
 double STROKE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight ) const
 {
     return aGlyphHeight * OVERBAR_POSITION_FACTOR;
-}
-
-
-VECTOR2D STROKE_FONT::ComputeTextLineSize( const KIGFX::GAL* aGal, const UTF8& aText ) const
-{
-    //TODO default glyph size (and line width) is a guess
-    VECTOR2D glyphSize = aGal ? aGal->GetGlyphSize() : VECTOR2D( 16.0, 16.0 );
-    double   lineWidth = aGal ? aGal->GetLineWidth() : 1.0;
-    return StringBoundaryLimits( aGal, aText, glyphSize, lineWidth );
-}
-
-
-VECTOR2D STROKE_FONT::StringBoundaryLimits( const KIGFX::GAL* aGal, const UTF8& aText,
-                                            const VECTOR2D& aGlyphSize,
-                                            double          aGlyphThickness ) const
-{
-    // TODO do we need to parse every time - have we already parsed?
-    std::vector<std::unique_ptr<GLYPH>> glyphs; // ignored
-    BOX2I                               boundingBox;
-
-    (void) drawMarkup( &boundingBox, glyphs, aText, VECTOR2D(), aGlyphSize, EDA_ANGLE::ANGLE_0,
-                       false, VECTOR2D(), 0 /* TODO: should include TEXT_STYLE::ITALIC if set */ );
-
-    return boundingBox.GetSize();
 }
 
 

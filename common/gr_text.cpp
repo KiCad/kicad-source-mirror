@@ -97,16 +97,12 @@ int Clamp_Text_PenSize( int aPenSize, const VECTOR2I& aSize, bool aBold )
 
 
 int GraphicTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I& aSize,
-                      bool aItalic, bool aBold )
+                      int aThickness, bool aBold, bool aItalic )
 {
-    basic_gal.SetFontItalic( aItalic );
-    basic_gal.SetFontBold( aBold );
-    basic_gal.SetGlyphSize( VECTOR2D( aSize ) );
-
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();
 
-    return KiROUND( aFont->ComputeTextLineSize( &basic_gal, aText ).x );
+    return KiROUND( aFont->StringBoundaryLimits( aText, aSize, aThickness, aBold, aItalic ).x );
 }
 
 

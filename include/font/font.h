@@ -141,15 +141,8 @@ public:
      *
      * @return a VECTOR2D giving the width and height of text.
      */
-    virtual VECTOR2D StringBoundaryLimits( const KIGFX::GAL* aGal, const UTF8& aText,
-                                           const VECTOR2D& aGlyphSize,
-                                           double aGlyphThickness ) const = 0;
-
-    VECTOR2D StringBoundaryLimits( const UTF8& aText, const VECTOR2D& aGlyphSize,
-                                   double aGlyphThickness ) const
-    {
-        return StringBoundaryLimits( nullptr, aText, aGlyphSize, aGlyphThickness );
-    }
+    VECTOR2D StringBoundaryLimits( const UTF8& aText, const VECTOR2D& aSize, int aThickness,
+                                   bool aBold, bool aItalic ) const;
 
     /**
      * Compute the vertical position of an overbar.  This is the distance between the text
@@ -162,11 +155,6 @@ public:
      * the distance between baselines, not the space between line bounding boxes.
      */
     virtual double GetInterline( double aGlyphHeight, double aLineSpacing = 1.0 ) const = 0;
-
-    /**
-     * Compute the X and Y size of a given text. The text is expected to be a single line.
-     */
-    virtual VECTOR2D ComputeTextLineSize( const KIGFX::GAL* aGal, const UTF8& aText ) const = 0;
 
     /**
      * Convert text string to an array of GLYPHs.

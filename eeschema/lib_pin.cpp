@@ -1092,6 +1092,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     bool           showName = !name.IsEmpty();
     bool           showNum = !number.IsEmpty();
     int            minsizeV = TARGET_PIN_RADIUS;
+    int            penWidth = GetPenWidth();
 
     if( !aIncludeInvisibles && !IsVisible() )
         showName = false;
@@ -1117,7 +1118,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     if( showNum )
     {
         VECTOR2D fontSize( m_numTextSize, m_numTextSize );
-        VECTOR2D numSize = font->StringBoundaryLimits( number, fontSize, GetPenWidth() );
+        VECTOR2D numSize = font->StringBoundaryLimits( number, fontSize, penWidth, false, false );
 
         numberTextLength = KiROUND( numSize.x );
         numberTextHeight = KiROUND( numSize.y );
@@ -1135,7 +1136,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     if( showName )
     {
         VECTOR2D fontSize( m_nameTextSize, m_nameTextSize );
-        VECTOR2D nameSize = font->StringBoundaryLimits( name, fontSize, GetPenWidth() );
+        VECTOR2D nameSize = font->StringBoundaryLimits( name, fontSize, penWidth, false, false );
 
         nameTextLength = KiROUND( nameSize.x ) + nameTextOffset;
         nameTextHeight = KiROUND( nameSize.y ) + Mils2iu( PIN_TEXT_MARGIN );

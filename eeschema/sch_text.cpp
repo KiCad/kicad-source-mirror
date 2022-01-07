@@ -244,21 +244,7 @@ bool SCH_TEXT::IncrementLabel( int aIncrement )
 
 VECTOR2I SCH_TEXT::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
 {
-    VECTOR2I text_offset;
-
-    // add an offset to x (or y) position to aid readability of text on a wire or line
-    int dist = GetTextOffset( aSettings ) + GetPenWidth();
-
-    switch( GetLabelSpinStyle() )
-    {
-    case LABEL_SPIN_STYLE::UP:
-    case LABEL_SPIN_STYLE::BOTTOM: text_offset.x = -dist;  break; // Vert Orientation
-    default:
-    case LABEL_SPIN_STYLE::LEFT:
-    case LABEL_SPIN_STYLE::RIGHT:  text_offset.y = -dist;  break; // Horiz Orientation
-    }
-
-    return text_offset;
+    return VECTOR2I( 0, 0 );
 }
 
 
@@ -734,6 +720,26 @@ void SCH_LABEL_BASE::SwapData( SCH_ITEM* aItem )
     std::swap( m_shape, label->m_shape );
     std::swap( m_connectionType, label->m_connectionType );
     std::swap( m_isDangling, label->m_isDangling );
+}
+
+
+VECTOR2I SCH_LABEL_BASE::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
+{
+    VECTOR2I text_offset;
+
+    // add an offset to x (or y) position to aid readability of text on a wire or line
+    int dist = GetTextOffset( aSettings ) + GetPenWidth();
+
+    switch( GetLabelSpinStyle() )
+    {
+    case LABEL_SPIN_STYLE::UP:
+    case LABEL_SPIN_STYLE::BOTTOM: text_offset.x = -dist;  break; // Vert Orientation
+    default:
+    case LABEL_SPIN_STYLE::LEFT:
+    case LABEL_SPIN_STYLE::RIGHT:  text_offset.y = -dist;  break; // Horiz Orientation
+    }
+
+    return text_offset;
 }
 
 

@@ -82,17 +82,6 @@ public:
 #endif
 
     /**
-     * Compute the boundary limits of aText (the bounding box of all shapes).
-     *
-     * The overbar and alignment are not taken in account, '~' characters are skipped.
-     *
-     * @return a VECTOR2D giving the width and height of text.
-     */
-    VECTOR2D StringBoundaryLimits( const KIGFX::GAL* aGal, const UTF8& aText,
-                                   const VECTOR2D& aGlyphSize,
-                                   double          aGlyphThickness ) const override;
-
-    /**
      * Compute the vertical position of an overbar.  This is the distance between the text
      * baseline and the overbar.
      */
@@ -103,12 +92,6 @@ public:
      * the distance between baselines, not the space between line bounding boxes.
      */
     double GetInterline( double aGlyphHeight = 0.0, double aLineSpacing = 1.0 ) const override;
-
-    /**
-     * Compute the X and Y size of a given text. The text is expected to be a single line.
-     */
-    VECTOR2D ComputeTextLineSize( const KIGFX::GAL* aGal, const UTF8& aText ) const override;
-
 
     VECTOR2I GetTextAsGlyphs( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
                               const UTF8& aText, const VECTOR2D& aSize, const VECTOR2I& aPosition,

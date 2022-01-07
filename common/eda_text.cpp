@@ -478,8 +478,6 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     wxArrayString  strings;
     wxString       text = GetShownText();
     int            thickness = GetEffectiveTextPenWidth();
-    int            linecount = 1;
-    bool           hasOverBar = false;     // true if the first line of text as an overbar
 
     if( IsMultilineAllowed() )
     {
@@ -491,19 +489,6 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
                 text = strings.Item( aLine );
             else
                 text = strings.Item( 0 );
-
-            linecount = strings.GetCount();
-        }
-    }
-
-    // Search for overbar symbol. Only text is scanned,
-    // because only this line can change the bounding box
-    for( unsigned ii = 1; ii < text.size(); ii++ )
-    {
-        if( text[ii-1] == '~' && text[ii] == '{' )
-        {
-            hasOverBar = true;
-            break;
         }
     }
 
@@ -511,7 +496,10 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     KIFONT::FONT* font = GetDrawFont();
     VECTOR2D      fontSize( GetTextSize() );
     double        penWidth( thickness );
-    int           dx = KiROUND( font->StringBoundaryLimits( text, fontSize, penWidth ).x );
+    bool          bold = IsBold();
+    bool          italic = IsItalic();
+    VECTOR2D      extents = font->StringBoundaryLimits( text, fontSize, penWidth, bold, italic );
+    int           dx = KiROUND( extents.x );
     int           dy = GetInterline();
 
     // Creates bounding box (rectangle) for horizontal, left and top justified text. The
@@ -527,26 +515,13 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
     rect.SetOrigin( pos );
 
-    if( hasOverBar )
-    {   // A overbar adds an extra size to the text
-        // Height from the base line text of chars like [ or {
-        double curr_height = GetTextHeight() * 1.15;
-        double overbarPosition = font->ComputeOverbarVerticalPosition( fontSize.y );
-        int    extra_height = KiROUND( overbarPosition - curr_height );
-
-        extra_height += thickness / 2;
-        textsize.y += extra_height;
-        rect.Move( VECTOR2I( 0, -extra_height ) );
-    }
-
-    // for multiline texts and aLine < 0, merge all rectangles
-    // ( if aLine < 0, we want the full text bounding box )
+    // for multiline texts and aLine < 0, merge all rectangles (aLine == -1 signals all lines)
     if( IsMultilineAllowed() && aLine < 0 )
     {
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
             text = strings.Item( ii );
-            dx = KiROUND( font->StringBoundaryLimits( text, fontSize, penWidth ).x );
+            dx = KiROUND( font->StringBoundaryLimits( text, fontSize, penWidth, bold, italic ).x );
             textsize.x = std::max( textsize.x, dx );
             textsize.y += dy;
         }
@@ -583,10 +558,6 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     case GR_TEXT_V_ALIGN_CENTER: rect.SetY( rect.GetY() - rect.GetHeight() / 2 ); break;
     case GR_TEXT_V_ALIGN_BOTTOM: rect.SetY( rect.GetY() - rect.GetHeight() );     break;
     }
-
-    // Many fonts draw diacriticals, descenders, etc. outside the X-height of the font.  This
-    // will cacth most (but probably not all) of them.
-    rect.Inflate( 0, thickness * 1.5 );
 
     rect.Normalize();       // Make h and v sizes always >= 0
 

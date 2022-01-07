@@ -151,64 +151,15 @@ FT_Error OUTLINE_FONT::loadFace( const wxString& aFontFileName )
 
 
 /**
- * Compute the boundary limits of aText (the bounding box of all shapes).
- *
- * @return a VECTOR2D giving the width and height of text.
- */
-VECTOR2D OUTLINE_FONT::StringBoundaryLimits( const KIGFX::GAL* aGal, const UTF8& aText,
-                                             const VECTOR2D& aGlyphSize,
-                                             double          aGlyphThickness ) const
-{
-    hb_buffer_t* buf = hb_buffer_create();
-    hb_buffer_add_utf8( buf, aText.c_str(), -1, 0, -1 );
-
-    // guess direction, script, and language based on contents
-    hb_buffer_guess_segment_properties( buf );
-
-    unsigned int     glyphCount;
-    hb_glyph_info_t* glyphInfo = hb_buffer_get_glyph_infos( buf, &glyphCount );
-    hb_font_t*       referencedFont = hb_ft_font_create_referenced( m_face );
-    //hb_glyph_position_t* glyphPos = hb_buffer_get_glyph_positions( buf, &glyphCount );
-
-    hb_ft_font_set_funcs( referencedFont );
-    hb_shape( referencedFont, buf, nullptr, 0 );
-
-    int width = 0;
-    int height = m_face->size->metrics.height;
-
-    FT_UInt previous;
-
-    for( int i = 0; i < (int) glyphCount; i++ )
-    {
-        //hb_glyph_position_t& pos = glyphPos[i];
-        int codepoint = glyphInfo[i].codepoint;
-
-        if( i > 0 )
-        {
-            FT_Vector delta;
-            FT_Get_Kerning( m_face, previous, codepoint, FT_KERNING_DEFAULT, &delta );
-            width += delta.x >> 6;
-        }
-
-        FT_Load_Glyph( m_face, codepoint, FT_LOAD_NO_BITMAP );
-        FT_GlyphSlot glyph = m_face->glyph;
-
-        width += glyph->advance.x >> 6;
-        previous = codepoint;
-    }
-
-    return VECTOR2D( width * m_faceScaler, height * m_faceScaler );
-}
-
-
-/**
  * Compute the vertical position of an overbar.  This is the distance between the text
  * baseline and the overbar.
  */
 double OUTLINE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight ) const
 {
-    // TODO: dummy to make this compile! not used
-    return aGlyphHeight;
+    // The overbar on actual text is positioned above the bounding box of the glyphs.  However,
+    // that's expensive to calculate so we use an estimation here (as this is only used for
+    // calculating bounding boxes).
+    return aGlyphHeight * OUTLINE_FONT_SIZE_COMPENSATION;
 }
 
 
@@ -224,15 +175,6 @@ double OUTLINE_FONT::GetInterline( double aGlyphHeight, double aLineSpacing ) co
         pitch = GetFace()->height / GetFace()->units_per_EM;
 
     return ( aLineSpacing * aGlyphHeight * pitch * OUTLINE_FONT_SIZE_COMPENSATION );
-}
-
-
-/**
- * Compute the X and Y size of a given text. The text is expected to be a single line.
- */
-VECTOR2D OUTLINE_FONT::ComputeTextLineSize( const KIGFX::GAL* aGal, const UTF8& aText ) const
-{
-    return StringBoundaryLimits( aGal, aText, aGal->GetGlyphSize(), 0.0 );
 }
 
 

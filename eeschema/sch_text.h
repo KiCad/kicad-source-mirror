@@ -296,6 +296,8 @@ public:
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
+    VECTOR2I GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const override;
+
     /**
      * Calculate the graphic shape (a polygon) associated to the text.
      *

@@ -85,7 +85,7 @@ int GetPenSizeForNormal( const wxSize& aTextSize );
  * @return the X size of the graphic text.
  */
 int GraphicTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I& aSize,
-                      bool italic, bool bold );
+                      int aThickness, bool aBold, bool aItalic );
 
 /**
  * Draw a graphic text (like footprint text)
