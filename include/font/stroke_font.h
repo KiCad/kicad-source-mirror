@@ -76,7 +76,7 @@ public:
      */
     double GetInterline( double aGlyphHeight, double aLineSpacing = 1.0 ) const override;
 
-    VECTOR2I GetTextAsGlyphs( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
+    VECTOR2I GetTextAsGlyphs( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                               const UTF8& aText, const VECTOR2D& aSize, const VECTOR2I& aPosition,
                               const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
                               TEXT_STYLE_FLAGS aTextStyle ) const override;

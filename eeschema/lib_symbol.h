@@ -126,6 +126,8 @@ public:
     LIB_SYMBOL_REF& GetParent() { return m_parent; }
     const LIB_SYMBOL_REF& GetParent() const { return m_parent; }
 
+    void ClearCaches();
+
     virtual wxString GetClass() const override
     {
         return wxT( "LIB_SYMBOL" );

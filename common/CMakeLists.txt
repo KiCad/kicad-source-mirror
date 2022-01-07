@@ -303,7 +303,6 @@ set( FONT_SRCS
     font/stroke_font.cpp
 	font/outline_font.cpp
 	font/outline_decomposer.cpp
-	font/triangulate.cpp
 	font/fontconfig.cpp
 	)
 

@@ -524,8 +524,6 @@ private:
 
     VECTOR2D getScreenPixelSize() const;
 
-    void fillPolygonAsTriangles( const SHAPE_POLY_SET& aPolyList );
-
     /**
      * Basic OpenGL initialization and feature checks.
      *

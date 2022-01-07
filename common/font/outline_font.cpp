@@ -227,35 +227,43 @@ BOX2I OUTLINE_FONT::getBoundingBox( const std::vector<std::unique_ptr<GLYPH>>& a
 }
 
 
-VECTOR2I OUTLINE_FONT::GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
-                                         const EDA_TEXT* aText ) const
+void OUTLINE_FONT::GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
+                                     const EDA_TEXT* aText ) const
 {
     wxArrayString         strings;
     std::vector<VECTOR2I> positions;
-    VECTOR2I              ret;
-    std::vector<VECTOR2D> boundingBoxes;
+    std::vector<VECTOR2I> extents;
     TEXT_ATTRIBUTES       attrs = aText->GetAttributes();
-    TEXT_STYLE_FLAGS      textStyle = 0;
 
     attrs.m_Angle = aText->GetDrawRotation();
 
-    if( aText->IsItalic() )
-        textStyle |= TEXT_STYLE::ITALIC;
-
-    getLinePositions( aText->GetShownText(), aText->GetTextPos(), strings, positions, boundingBoxes,
-                      attrs );
-
-    for( size_t i = 0; i < strings.GetCount(); i++ )
-    {
-        ret = drawMarkup( nullptr, aGlyphs, UTF8( strings.Item( i ) ), positions[i], attrs.m_Size,
-                          attrs.m_Angle, attrs.m_Mirrored, aText->GetTextPos(), textStyle );
-    }
-
-    return ret;
+    return GetLinesAsGlyphs( aGlyphs, aText->GetShownText(), aText->GetTextPos(), attrs );
 }
 
 
-VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
+void OUTLINE_FONT::GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
+                                     const UTF8& aText, const VECTOR2I& aPosition,
+                                     const TEXT_ATTRIBUTES& aAttrs ) const
+{
+    wxArrayString         strings;
+    std::vector<VECTOR2I> positions;
+    std::vector<VECTOR2I> extents;
+    TEXT_STYLE_FLAGS      textStyle = 0;
+
+    if( aAttrs.m_Italic )
+        textStyle |= TEXT_STYLE::ITALIC;
+
+    getLinePositions( aText, aPosition, strings, positions, extents, aAttrs );
+
+    for( size_t i = 0; i < strings.GetCount(); i++ )
+    {
+        (void) drawMarkup( nullptr, aGlyphs, UTF8( strings.Item( i ) ), positions[i],
+                           aAttrs.m_Size, aAttrs.m_Angle, aAttrs.m_Mirrored, aPosition, textStyle );
+    }
+}
+
+
+VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                                         const UTF8& aText, const VECTOR2D& aSize,
                                         const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
                                         bool aMirror, const VECTOR2I& aOrigin,
@@ -294,104 +302,88 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
         hb_glyph_position_t& pos = glyphPos[i];
         int                  codepoint = glyphInfo[i].codepoint;
 
-        FT_Load_Glyph( face, codepoint, FT_LOAD_NO_BITMAP );
-
-        FT_GlyphSlot faceGlyph = face->glyph;
-
-        // contours is a collection of all outlines in the glyph;
-        // example: glyph for 'o' generally contains 2 contours,
-        // one for the glyph outline and one for the hole
-        CONTOURS contours;
-
-        OUTLINE_DECOMPOSER decomposer( faceGlyph->outline );
-        decomposer.OutlineToSegments( &contours );
-
-        std::unique_ptr<OUTLINE_GLYPH> glyph = std::make_unique<OUTLINE_GLYPH>();
-        std::vector<SHAPE_LINE_CHAIN>  holes;
-        std::vector<SHAPE_LINE_CHAIN>  outlines;
-
-        for( CONTOUR& c : contours )
+        if( aGlyphs )
         {
-            GLYPH_POINTS     points = c.points;
-            SHAPE_LINE_CHAIN shape;
+            FT_Load_Glyph( face, codepoint, FT_LOAD_NO_BITMAP );
 
-            for( const VECTOR2D& v : points )
+            FT_GlyphSlot faceGlyph = face->glyph;
+
+            // contours is a collection of all outlines in the glyph;
+            // example: glyph for 'o' generally contains 2 contours,
+            // one for the glyph outline and one for the hole
+            CONTOURS contours;
+
+            OUTLINE_DECOMPOSER decomposer( faceGlyph->outline );
+            decomposer.OutlineToSegments( &contours );
+
+            std::unique_ptr<OUTLINE_GLYPH> glyph = std::make_unique<OUTLINE_GLYPH>();
+            std::vector<SHAPE_LINE_CHAIN>  holes;
+
+            for( CONTOUR& c : contours )
             {
-                VECTOR2D pt( v + cursor );
+                GLYPH_POINTS     points = c.points;
+                SHAPE_LINE_CHAIN shape;
 
-                topLeft.x = std::min( topLeft.x, pt.x );
-                topLeft.y = std::max( topLeft.y, pt.y );
-                topRight.x = std::max( topRight.x, pt.x );
-                topRight.y = std::max( topRight.y, pt.y );
-
-                if( IsSubscript( aTextStyle ) )
-                    pt.y -= 0.25 * scaler;
-                else if( IsSuperscript( aTextStyle ) )
-                    pt.y += 0.45 * scaler;
-
-                pt *= scaleFactor;
-                pt += aPosition;
-
-                if( aMirror )
-                    pt.x = aOrigin.x - ( pt.x - aOrigin.x );
-
-                if( !aAngle.IsZero() )
-                    RotatePoint( pt, aOrigin, aAngle );
-
-                shape.Append( pt.x, pt.y );
-            }
-
-            shape.SetClosed( true );
-
-            if( contourIsHole( c ) )
-                holes.push_back( std::move( shape ) );
-            else
-                outlines.push_back( std::move( shape ) );
-        }
-
-        for( SHAPE_LINE_CHAIN& outline : outlines )
-        {
-            if( outline.PointCount() )
-                glyph->AddOutline( outline );
-        }
-
-        int nthHole = 0;
-
-        for( SHAPE_LINE_CHAIN& hole : holes )
-        {
-            if( hole.PointCount() )
-            {
-                VECTOR2I firstPoint = hole.GetPoint( 0 );
-                int      nthOutline = -1;
-                int      n = 0;
-
-                for( SHAPE_LINE_CHAIN& outline : outlines )
+                for( const VECTOR2D& v : points )
                 {
-                    if( outline.PointInside( firstPoint ) )
-                    {
-                        nthOutline = n;
-                        break;
-                    }
+                    VECTOR2D pt( v + cursor );
 
-                    n++;
+                    topLeft.x = std::min( topLeft.x, pt.x );
+                    topLeft.y = std::max( topLeft.y, pt.y );
+                    topRight.x = std::max( topRight.x, pt.x );
+                    topRight.y = std::max( topRight.y, pt.y );
+
+                    if( IsSubscript( aTextStyle ) )
+                        pt.y -= 0.25 * scaler;
+                    else if( IsSuperscript( aTextStyle ) )
+                        pt.y += 0.45 * scaler;
+
+                    pt *= scaleFactor;
+                    pt += aPosition;
+
+                    if( aMirror )
+                        pt.x = aOrigin.x - ( pt.x - aOrigin.x );
+
+                    if( !aAngle.IsZero() )
+                        RotatePoint( pt, aOrigin, aAngle );
+
+                    shape.Append( pt.x, pt.y );
                 }
 
-                if( nthOutline > -1 )
-                    glyph->AddHole( hole, n );
+                shape.SetClosed( true );
+
+                if( contourIsHole( c ) )
+                    holes.push_back( std::move( shape ) );
+                else
+                    glyph->AddOutline( std::move( shape ) );
             }
 
-            nthHole++;
-        }
+            for( SHAPE_LINE_CHAIN& hole : holes )
+            {
+                if( hole.PointCount() )
+                {
+                    for( int ii = 0; ii < glyph->OutlineCount(); ++ii )
+                    {
+                        if( glyph->Outline( ii ).PointInside( hole.GetPoint( 0 ) ) )
+                        {
+                            glyph->AddHole( std::move( hole ), ii );
+                            break;
+                        }
+                    }
+                }
+            }
 
-        aGlyphs.push_back( std::move( glyph ) );
+            if( glyph->HasHoles() )
+                glyph->Fracture( SHAPE_POLY_SET::PM_FAST ); // FONT TODO verify aFastMode
+
+            aGlyphs->push_back( std::move( glyph ) );
+        }
 
         cursor.x += pos.x_advance;
         cursor.y += pos.y_advance;
     }
 
-    VECTOR2I cursorEnd( cursor );
-
-    if( IsOverbar( aTextStyle ) )
+    if( IsOverbar( aTextStyle ) && aGlyphs )
     {
         topLeft *= scaleFactor;
         topRight *= scaleFactor;
@@ -415,12 +407,12 @@ VECTOR2I OUTLINE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_pt
                                 ERROR_INSIDE );
 
         std::unique_ptr<OUTLINE_GLYPH> overbarGlyph = std::make_unique<OUTLINE_GLYPH>( overbar );
-        aGlyphs.push_back( std::move( overbarGlyph ) );
+        aGlyphs->push_back( std::move( overbarGlyph ) );
     }
 
     hb_buffer_destroy( buf );
 
-    VECTOR2I cursorDisplacement( cursorEnd.x * scaleFactor.x, -cursorEnd.y * scaleFactor.y );
+    VECTOR2I cursorDisplacement( cursor.x * scaleFactor.x, -cursor.y * scaleFactor.y );
 
     if( aBBox )
     {

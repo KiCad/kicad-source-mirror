@@ -1165,6 +1165,8 @@ void SYMBOL_EDIT_FRAME::HardRedraw()
             else
                 item.SetSelected();
         }
+
+        m_symbol->ClearCaches();
     }
 
     RebuildView();
@@ -1481,4 +1483,16 @@ bool SYMBOL_EDIT_FRAME::IsSymbolAlias() const
 bool SYMBOL_EDIT_FRAME::IsSymbolEditable() const
 {
     return m_symbol && ( !IsSymbolFromLegacyLibrary() || IsSymbolFromSchematic() );
+}
+
+
+void SYMBOL_EDIT_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aUpdateRtree )
+{
+    SCH_BASE_FRAME::UpdateItem( aItem, isAddOrDelete, aUpdateRtree );
+
+    if( EDA_TEXT* eda_text = dynamic_cast<EDA_TEXT*>( aItem ) )
+    {
+        eda_text->ClearBoundingBoxCache();
+        eda_text->ClearRenderCache();
+    }
 }

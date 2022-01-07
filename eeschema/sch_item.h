@@ -429,6 +429,8 @@ public:
 
     virtual void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) { }
 
+    virtual void ClearCaches();
+
     /**
      * Check if this schematic item has line stoke properties.
      *

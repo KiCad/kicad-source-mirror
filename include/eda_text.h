@@ -342,7 +342,8 @@ public:
     virtual GR_TEXT_H_ALIGN_T GetDrawHorizJustify() const   { return GetHorizJustify(); };
     virtual GR_TEXT_V_ALIGN_T GetDrawVertJustify() const    { return GetVertJustify(); };
 
-    void ClearRenderCache() { m_render_cache.clear(); }
+    virtual void ClearRenderCache();
+    virtual void ClearBoundingBoxCache();
 
     std::vector<std::unique_ptr<KIFONT::GLYPH>>*
     GetRenderCache( const wxString& forResolvedText ) const;
@@ -369,16 +370,19 @@ private:
                              const COLOR4D& aColor, OUTLINE_MODE aFillMode, const wxString& aText,
                              const VECTOR2I& aPos );
 
-    wxString        m_text;
-    wxString        m_shown_text;           // Cache of unescaped text for efficient access
-    bool            m_shown_text_has_text_var_refs;
+    wxString         m_text;
+    wxString         m_shown_text;           // Cache of unescaped text for efficient access
+    bool             m_shown_text_has_text_var_refs;
 
     mutable wxString                                    m_render_cache_text;
     mutable EDA_ANGLE                                   m_render_cache_angle;
     mutable std::vector<std::unique_ptr<KIFONT::GLYPH>> m_render_cache;
 
-    TEXT_ATTRIBUTES m_attributes;
-    VECTOR2I        m_pos;
+    mutable bool     m_bounding_box_cache_valid;
+    mutable EDA_RECT m_bounding_box_cache;
+
+    TEXT_ATTRIBUTES  m_attributes;
+    VECTOR2I         m_pos;
 };
 
 

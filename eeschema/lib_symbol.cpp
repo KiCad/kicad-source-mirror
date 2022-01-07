@@ -432,6 +432,19 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
 }
 
 
+void LIB_SYMBOL::ClearCaches()
+{
+    for( LIB_ITEM& item : m_drawings )
+    {
+        if( EDA_TEXT* eda_text = dynamic_cast<EDA_TEXT*>( &item ) )
+        {
+            eda_text->ClearBoundingBoxCache();
+            eda_text->ClearRenderCache();
+        }
+    }
+}
+
+
 const wxString LIB_SYMBOL::GetLibraryName() const
 {
     if( m_library )

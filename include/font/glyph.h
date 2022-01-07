@@ -31,6 +31,10 @@
 #include <geometry/shape_poly_set.h>
 #include <wx/debug.h>
 
+typedef std::function<void( int, const VECTOR2I& aPoint1, const VECTOR2I& aPoint2,
+                            const VECTOR2I& aPoint3 )>
+        TRIANGULATE_CALLBACK;
+
 namespace KIFONT
 {
 class GLYPH
@@ -64,6 +68,8 @@ public:
     bool IsOutline() const override { return true; }
 
     BOX2D BoundingBox() override;
+
+    void Triangulate( TRIANGULATE_CALLBACK aCallback ) const;
 };
 
 

@@ -1786,44 +1786,44 @@ void CAIRO_GAL_BASE::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTota
         // eventually glyphs should not be drawn as polygons at all,
         // but as bitmaps with antialiasing, this is just a stopgap measure
         // of getting some form of outline font display
-        auto triangleCallback = [&]( int aPolygonIndex, const VECTOR2D& aVertex1,
-                                     const VECTOR2D& aVertex2, const VECTOR2D& aVertex3,
-                                     void* aCallbackData )
-        {
-    #if 1
-            syncLineWidth();
+        auto triangleCallback =
+                [&]( int aPolygonIndex, const VECTOR2D& aVertex1, const VECTOR2D& aVertex2,
+                     const VECTOR2D& aVertex3, void* aCallbackData )
+                {
+#if 1
+                    syncLineWidth();
 
-            const auto p0 = roundp( xform( aVertex1 ) );
-            const auto p1 = roundp( xform( aVertex2 ) );
-            const auto p2 = roundp( xform( aVertex3 ) );
+                    const auto p0 = roundp( xform( aVertex1 ) );
+                    const auto p1 = roundp( xform( aVertex2 ) );
+                    const auto p2 = roundp( xform( aVertex3 ) );
 
-            /*
-            cairo_move_to( currentContext, aVertex1.x, aVertex1.y );
-            cairo_line_to( currentContext, aVertex2.x, aVertex2.y );
-            cairo_line_to( currentContext, aVertex3.x, aVertex3.y );
-            cairo_line_to( currentContext, aVertex1.x, aVertex1.y );
-        */
-            cairo_move_to( m_currentContext, p0.x, p0.y );
-            cairo_line_to( m_currentContext, p1.x, p1.y );
-            cairo_line_to( m_currentContext, p2.x, p2.y );
-            cairo_close_path( m_currentContext );
-            /*
-            setSourceRgba( currentContext, fillColor );
-            SetIsFill( true );
-            cairo_set_fill_rule( currentContext, CAIRO_FILL_RULE_EVEN_ODD );
-            flushPath();
-            */
-            //cairo_fill( currentContext );
-    #else
-            // just a silly test
-            /*
-            DrawRectangle(aVertex1, aVertex2);
-            DrawRectangle(aVertex2, aVertex3);
-            DrawRectangle(aVertex3, aVertex1);
-            */
-            DrawTriangle( aVertex1, aVertex2, aVertex3 );
-    #endif
-        };
+                    /*
+                    cairo_move_to( currentContext, aVertex1.x, aVertex1.y );
+                    cairo_line_to( currentContext, aVertex2.x, aVertex2.y );
+                    cairo_line_to( currentContext, aVertex3.x, aVertex3.y );
+                    cairo_line_to( currentContext, aVertex1.x, aVertex1.y );
+                */
+                    cairo_move_to( m_currentContext, p0.x, p0.y );
+                    cairo_line_to( m_currentContext, p1.x, p1.y );
+                    cairo_line_to( m_currentContext, p2.x, p2.y );
+                    cairo_close_path( m_currentContext );
+                    /*
+                    setSourceRgba( currentContext, fillColor );
+                    SetIsFill( true );
+                    cairo_set_fill_rule( currentContext, CAIRO_FILL_RULE_EVEN_ODD );
+                    flushPath();
+                    */
+                    //cairo_fill( currentContext );
+#else
+                    // just a silly test
+                    /*
+                    DrawRectangle(aVertex1, aVertex2);
+                    DrawRectangle(aVertex2, aVertex3);
+                    DrawRectangle(aVertex3, aVertex1);
+                    */
+                    DrawTriangle( aVertex1, aVertex2, aVertex3 );
+#endif
+                };
 
         Triangulate( aGlyph, triangleCallback );
 

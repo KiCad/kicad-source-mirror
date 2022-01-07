@@ -464,7 +464,7 @@ void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
                                       aAttrs.m_Italic );
     }
 
-    VECTOR2D extents = font->StringBoundaryLimits( aText, aAttrs.m_Size, aAttrs.m_StrokeWidth,
+    VECTOR2I extents = font->StringBoundaryLimits( aText, aAttrs.m_Size, aAttrs.m_StrokeWidth,
                                                    aAttrs.m_Bold, aAttrs.m_Italic );
     EDA_RECT box( (VECTOR2I) aPosition, wxSize( extents.x, aAttrs.m_Size.y ) );
 
@@ -718,11 +718,10 @@ void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
 
     if( drawingShadows && eeconfig()->m_Selection.text_as_box )
     {
-        bbox.RevertYAxis();
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
         m_gal->SetLineWidth( getTextThickness( aField, drawingShadows ) );
-        m_gal->DrawRectangle( mapCoords( bbox.GetPosition() ), mapCoords( bbox.GetEnd() ) );
+        m_gal->DrawRectangle( bbox.GetPosition(), bbox.GetEnd() );
     }
     else
     {
@@ -765,18 +764,27 @@ void SCH_PAINTER::draw( const LIB_TEXT *aText, int aLayer )
     }
 
     EDA_RECT bBox = aText->GetBoundingBox();
-    bBox.RevertYAxis();
-    VECTOR2D pos = mapCoords( bBox.Centre() );
+    VECTOR2D pos = bBox.Centre();
 
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
 
-    TEXT_ATTRIBUTES attrs( aText->GetAttributes() );
-    attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
-    attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
-    attrs.m_StrokeWidth = getTextThickness( aText, drawingShadows );
+    if( drawingShadows && eeconfig()->m_Selection.text_as_box )
+    {
+        m_gal->SetIsStroke( true );
+        m_gal->SetIsFill( true );
+        m_gal->SetLineWidth( getTextThickness( aText, drawingShadows ) );
+        m_gal->DrawRectangle( bBox.GetPosition(), bBox.GetEnd() );
+    }
+    else
+    {
+        TEXT_ATTRIBUTES attrs( aText->GetAttributes() );
+        attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
+        attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
+        attrs.m_StrokeWidth = getTextThickness( aText, drawingShadows );
 
-    strokeText( aText->GetText(), pos, attrs );
+        strokeText( aText->GetText(), pos, attrs );
+    }
 }
 
 
@@ -1477,7 +1485,6 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
     if( drawingShadows && eeconfig()->m_Selection.text_as_box )
     {
         EDA_RECT bBox = aText->GetBoundingBox();
-        bBox.Offset( text_offset.x, text_offset.y );
         bBox.RevertYAxis();
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
@@ -1503,7 +1510,7 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
         }
         else
         {
-            strokeText( shownText, aText->GetTextPos(), attrs );
+            strokeText( shownText, aText->GetTextPos() + text_offset, attrs );
         }
     }
 }
@@ -1705,13 +1712,27 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
     }
     else
     {
+        wxString        shownText = aField->GetShownText();
         TEXT_ATTRIBUTES attributes = aField->GetAttributes();
+
         attributes.m_Halign = GR_TEXT_H_ALIGN_CENTER;
         attributes.m_Valign = GR_TEXT_V_ALIGN_CENTER;
         attributes.m_StrokeWidth = getTextThickness( aField, drawingShadows );
         attributes.m_Angle = orient;
 
-        strokeText( aField->GetShownText(), textpos, attributes );
+        std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
+
+        cache = aField->GetRenderCache( shownText, textpos, attributes );
+
+        if( cache )
+        {
+            for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *cache )
+                m_gal->DrawGlyph( *glyph.get() );
+        }
+        else
+        {
+            strokeText( shownText, textpos, attributes );
+        }
     }
 
     // Draw the umbilical line

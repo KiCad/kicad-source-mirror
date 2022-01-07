@@ -107,7 +107,8 @@ GR_TEXT_V_ALIGN_T EDA_TEXT::MapVertJustify( int aVertJustify )
 
 
 EDA_TEXT::EDA_TEXT( const wxString& text ) :
-        m_text( text )
+        m_text( text ),
+        m_bounding_box_cache_valid( false )
 {
     int sz = Mils2iu( DEFAULT_SIZE_TEXT );
     SetTextSize( wxSize( sz, sz ) );
@@ -134,6 +135,9 @@ EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText )
         KIFONT::OUTLINE_GLYPH* outline_glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() );
         m_render_cache.emplace_back( std::make_unique<KIFONT::OUTLINE_GLYPH>( *outline_glyph ) );
     }
+
+    m_bounding_box_cache_valid = aText.m_bounding_box_cache_valid;
+    m_bounding_box_cache = aText.m_bounding_box_cache;
 }
 
 
@@ -162,6 +166,9 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
         m_render_cache.emplace_back( std::make_unique<KIFONT::OUTLINE_GLYPH>( *outline_glyph ) );
     }
 
+    m_bounding_box_cache_valid = aText.m_bounding_box_cache_valid;
+    m_bounding_box_cache = aText.m_bounding_box_cache;
+
     return *this;
 }
 
@@ -169,7 +176,11 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
 void EDA_TEXT::SetText( const wxString& aText )
 {
     m_text = aText;
+
     cacheShownText();
+
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
@@ -179,77 +190,87 @@ void EDA_TEXT::CopyText( const EDA_TEXT& aSrc )
     m_shown_text = aSrc.m_shown_text;
     m_shown_text_has_text_var_refs = aSrc.m_shown_text_has_text_var_refs;
 
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::SetTextThickness( int aWidth )
 {
     m_attributes.m_StrokeWidth = aWidth;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::SetTextAngle( const EDA_ANGLE& aAngle )
 {
     m_attributes.m_Angle = aAngle;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::SetItalic( bool aItalic )
 {
     m_attributes.m_Italic = aItalic;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::SetBold( bool aBold )
 {
     m_attributes.m_Bold = aBold;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::SetVisible( bool aVisible )
 {
     m_attributes.m_Visible = aVisible;
-    m_render_cache.clear();
+    ClearRenderCache();
 }
 
 
 void EDA_TEXT::SetMirrored( bool isMirrored )
 {
     m_attributes.m_Mirrored = isMirrored;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::SetMultilineAllowed( bool aAllow )
 {
     m_attributes.m_Multiline = aAllow;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::SetHorizJustify( GR_TEXT_H_ALIGN_T aType )
 {
     m_attributes.m_Halign = aType;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::SetVertJustify( GR_TEXT_V_ALIGN_T aType )
 {
     m_attributes.m_Valign = aType;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::SetKeepUpright( bool aKeepUpright )
 {
     m_attributes.m_KeepUpright = aKeepUpright;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
@@ -257,7 +278,8 @@ void EDA_TEXT::SetAttributes( const EDA_TEXT& aSrc )
 {
     m_attributes = aSrc.m_attributes;
     m_pos = aSrc.m_pos;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
@@ -267,7 +289,8 @@ void EDA_TEXT::SwapText( EDA_TEXT& aTradingPartner )
     std::swap( m_shown_text, aTradingPartner.m_shown_text );
     std::swap( m_shown_text_has_text_var_refs, aTradingPartner.m_shown_text_has_text_var_refs );
 
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
@@ -276,7 +299,11 @@ void EDA_TEXT::SwapAttributes( EDA_TEXT& aTradingPartner )
     std::swap( m_attributes, aTradingPartner.m_attributes );
     std::swap( m_pos, aTradingPartner.m_pos );
 
-    m_render_cache.clear();
+    ClearRenderCache();
+    aTradingPartner.ClearRenderCache();
+
+    m_bounding_box_cache_valid = false;
+    aTradingPartner.m_bounding_box_cache_valid = false;
 }
 
 
@@ -304,7 +331,11 @@ int EDA_TEXT::GetEffectiveTextPenWidth( int aDefaultWidth ) const
 bool EDA_TEXT::Replace( const wxFindReplaceData& aSearchData )
 {
     bool retval = EDA_ITEM::Replace( aSearchData, m_text );
+
     cacheShownText();
+
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 
     return retval;
 }
@@ -313,35 +344,40 @@ bool EDA_TEXT::Replace( const wxFindReplaceData& aSearchData )
 void EDA_TEXT::SetFont( KIFONT::FONT* aFont )
 {
     m_attributes.m_Font = aFont;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::SetLineSpacing( double aLineSpacing )
 {
     m_attributes.m_LineSpacing = aLineSpacing;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::SetTextSize( const wxSize& aNewSize )
 {
     m_attributes.m_Size = aNewSize;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::SetTextWidth( int aWidth )
 {
     m_attributes.m_Size.x = aWidth;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::SetTextHeight( int aHeight )
 {
     m_attributes.m_Size.y = aHeight;
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
@@ -368,17 +404,17 @@ void EDA_TEXT::Offset( const VECTOR2I& aOffset )
     m_pos += aOffset;
 
     for( std::unique_ptr<KIFONT::GLYPH>& glyph : m_render_cache )
-    {
-        KIFONT::OUTLINE_GLYPH* outline_glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() );
-        outline_glyph->Move( aOffset );
-    }
+        static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() )->Move( aOffset );
+
+    m_bounding_box_cache.Move( aOffset );
 }
 
 
 void EDA_TEXT::Empty()
 {
     m_text.Empty();
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
@@ -395,7 +431,8 @@ void EDA_TEXT::cacheShownText()
         m_shown_text_has_text_var_refs = m_shown_text.Contains( wxT( "${" ) );
     }
 
-    m_render_cache.clear();
+    ClearRenderCache();
+    m_bounding_box_cache_valid = false;
 }
 
 
@@ -407,6 +444,19 @@ KIFONT::FONT* EDA_TEXT::GetDrawFont() const
         font = KIFONT::FONT::GetFont( wxEmptyString, IsBold(), IsItalic() );
 
     return font;
+}
+
+
+
+void EDA_TEXT::ClearRenderCache()
+{
+    m_render_cache.clear();
+}
+
+
+void EDA_TEXT::ClearBoundingBoxCache()
+{
+    m_bounding_box_cache_valid = false;
 }
 
 
@@ -424,7 +474,7 @@ EDA_TEXT::GetRenderCache( const wxString& forResolvedText ) const
             m_render_cache.clear();
 
             KIFONT::OUTLINE_FONT* font = static_cast<KIFONT::OUTLINE_FONT*>( GetFont() );
-            font->GetLinesAsGlyphs( m_render_cache, this );
+            font->GetLinesAsGlyphs( &m_render_cache, this );
 
             m_render_cache_angle = resolvedAngle;
             m_render_cache_text = forResolvedText;
@@ -474,6 +524,9 @@ int EDA_TEXT::GetInterline() const
 
 EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 {
+    if( m_bounding_box_cache_valid && aLine < 0 && !aInvertY )
+        return m_bounding_box_cache;
+
     EDA_RECT       rect;
     wxArrayString  strings;
     wxString       text = GetShownText();
@@ -498,8 +551,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     double        penWidth( thickness );
     bool          bold = IsBold();
     bool          italic = IsItalic();
-    VECTOR2D      extents = font->StringBoundaryLimits( text, fontSize, penWidth, bold, italic );
-    int           dx = KiROUND( extents.x );
+    int           dx = font->StringBoundaryLimits( text, fontSize, penWidth, bold, italic ).x;
     int           dy = GetInterline();
 
     // Creates bounding box (rectangle) for horizontal, left and top justified text. The
@@ -521,7 +573,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
             text = strings.Item( ii );
-            dx = KiROUND( font->StringBoundaryLimits( text, fontSize, penWidth, bold, italic ).x );
+            dx = font->StringBoundaryLimits( text, fontSize, penWidth, bold, italic ).x;
             textsize.x = std::max( textsize.x, dx );
             textsize.y += dy;
         }
@@ -560,6 +612,12 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     }
 
     rect.Normalize();       // Make h and v sizes always >= 0
+
+    if( aLine < 0 && !aInvertY )
+    {
+        m_bounding_box_cache_valid = true;
+        m_bounding_box_cache = rect;
+    }
 
     return rect;
 }
@@ -797,25 +855,18 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
         {
             KIFONT::OUTLINE_GLYPH* glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( baseGlyph.get() );
 
-            glyph->CacheTriangulation();
+            glyph->Triangulate(
+                    [&]( int aPolygonIndex, const VECTOR2D& aVertex1, const VECTOR2D& aVertex2,
+                         const VECTOR2D& aVertex3 )
+                    {
+                        SHAPE_SIMPLE* triShape = new SHAPE_SIMPLE;
 
-            for( unsigned int ii = 0; ii < glyph->TriangulatedPolyCount(); ++ii )
-            {
-                const SHAPE_POLY_SET::TRIANGULATED_POLYGON* tri = glyph->TriangulatedPolygon( ii );
+                        triShape->Append( aVertex1 );
+                        triShape->Append( aVertex2 );
+                        triShape->Append( aVertex3 );
 
-                for( size_t jj = 0; jj < tri->GetTriangleCount(); ++jj )
-                {
-                    VECTOR2I a, b, c;
-                    tri->GetTriangle( jj, a, b, c );
-                    SHAPE_SIMPLE* triShape = new SHAPE_SIMPLE;
-
-                    triShape->Append( a );
-                    triShape->Append( b );
-                    triShape->Append( c );
-
-                    shape->AddShape( triShape );
-                }
-            }
+                        shape->AddShape( triShape );
+                    } );
         }
     }
     else

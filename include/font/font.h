@@ -122,15 +122,14 @@ public:
      * @param aCursor is the current text position (for multiple text blocks within a single text
      *                object, such as a run of superscript characters)
      * @param aAttrs are the styling attributes of the text, including its rotation
-     * @return bounding box
      */
-    VECTOR2D Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
-                   const VECTOR2I& aCursor, const TEXT_ATTRIBUTES& aAttrs ) const;
+    void Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
+               const VECTOR2I& aCursor, const TEXT_ATTRIBUTES& aAttrs ) const;
 
-    VECTOR2D Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
-                   const TEXT_ATTRIBUTES& aAttributes ) const
+    void Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
+               const TEXT_ATTRIBUTES& aAttributes ) const
     {
-        return Draw( aGal, aText, aPosition, VECTOR2I( 0, 0 ), aAttributes );
+        Draw( aGal, aText, aPosition, VECTOR2I( 0, 0 ), aAttributes );
     }
 
     virtual void DrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
@@ -141,7 +140,7 @@ public:
      *
      * @return a VECTOR2D giving the width and height of text.
      */
-    VECTOR2D StringBoundaryLimits( const UTF8& aText, const VECTOR2D& aSize, int aThickness,
+    VECTOR2I StringBoundaryLimits( const UTF8& aText, const VECTOR2D& aSize, int aThickness,
                                    bool aBold, bool aItalic ) const;
 
     /**
@@ -170,7 +169,7 @@ public:
      * @param aTextStyle text style flags
      * @return text cursor position after this text
      */
-    virtual VECTOR2I GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
+    virtual VECTOR2I GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                                       const UTF8& aText, const VECTOR2D& aSize,
                                       const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
                                       bool aMirror, const VECTOR2I& aOrigin,
@@ -206,10 +205,10 @@ protected:
      * @param aOrigin is the point around which the text should be rotated, mirrored, etc.
      * @return new cursor position in non-rotated, non-mirrored coordinates
      */
-    VECTOR2D drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const UTF8& aText,
-                                 const VECTOR2I& aPosition, const VECTOR2D& aSize,
-                                 const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
-                                 bool aItalic ) const;
+    void drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const UTF8& aText,
+                             const VECTOR2I& aPosition, const VECTOR2D& aSize,
+                             const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
+                             bool aItalic ) const;
 
     /**
      * Computes the bounding box for a single line of text.
@@ -221,15 +220,14 @@ protected:
      * @param aSize is the cap-height and em-width of the text.
      * @return new cursor position
      */
-    VECTOR2D boundingBoxSingleLine( BOX2I* aBBox, const UTF8& aText, const VECTOR2I& aPosition,
+    VECTOR2I boundingBoxSingleLine( BOX2I* aBBox, const UTF8& aText, const VECTOR2I& aPosition,
                                     const VECTOR2D& aSize, bool aItalic ) const;
 
     void getLinePositions( const UTF8& aText, const VECTOR2I& aPosition,
                            wxArrayString& aTextLines, std::vector<VECTOR2I>& aPositions,
-                           std::vector<VECTOR2D>& aBoundingBoxes,
-                           const TEXT_ATTRIBUTES& aAttributes ) const;
+                           std::vector<VECTOR2I>& aExtents, const TEXT_ATTRIBUTES& aAttrs ) const;
 
-    VECTOR2D drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
+    VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                          const UTF8& aText, const VECTOR2I& aPosition, const VECTOR2D& aSize,
                          const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
                          TEXT_STYLE_FLAGS aTextStyle ) const;
@@ -239,9 +237,6 @@ protected:
 
 private:
     static FONT* getDefaultFont();
-
-    VECTOR2D doDrawString( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
-                           bool aParse, const TEXT_ATTRIBUTES& aAttrs ) const;
 
 protected:
     wxString     m_fontName;         ///< Font name

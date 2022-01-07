@@ -52,13 +52,16 @@
 #include <eeschema_id.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
+#include <font/outline_font.h>
+
 
 SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
                       const wxString& aName ) :
     SCH_ITEM( aParent, SCH_FIELD_T ),
     EDA_TEXT( wxEmptyString ),
     m_id( 0 ),
-    m_name( aName )
+    m_name( aName ),
+    m_renderCacheValid( false )
 {
     SetTextPos( aPos );
     SetId( aFieldId );  // will also set the layer
@@ -66,8 +69,50 @@ SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
 }
 
 
+SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
+    SCH_ITEM( aField ),
+    EDA_TEXT( aField )
+{
+    m_id = aField.m_id;
+    m_name = aField.m_name;
+
+    m_renderCache.clear();
+
+    for( const std::unique_ptr<KIFONT::GLYPH>& glyph : aField.m_renderCache )
+    {
+        KIFONT::OUTLINE_GLYPH* outline_glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() );
+        m_renderCache.emplace_back( std::make_unique<KIFONT::OUTLINE_GLYPH>( *outline_glyph ) );
+    }
+
+    m_renderCacheValid = aField.m_renderCacheValid;
+    m_renderCachePos = aField.m_renderCachePos;
+}
+
+
 SCH_FIELD::~SCH_FIELD()
 {
+}
+
+
+SCH_FIELD& SCH_FIELD::operator=( const SCH_FIELD& aField )
+{
+    EDA_TEXT::operator=( aField );
+
+    m_id = aField.m_id;
+    m_name = aField.m_name;
+
+    m_renderCache.clear();
+
+    for( const std::unique_ptr<KIFONT::GLYPH>& glyph : aField.m_renderCache )
+    {
+        KIFONT::OUTLINE_GLYPH* outline_glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() );
+        m_renderCache.emplace_back( std::make_unique<KIFONT::OUTLINE_GLYPH>( *outline_glyph ) );
+    }
+
+    m_renderCacheValid = aField.m_renderCacheValid;
+    m_renderCachePos = aField.m_renderCachePos;
+
+    return *this;
 }
 
 
@@ -223,6 +268,54 @@ KIFONT::FONT* SCH_FIELD::GetDrawFont() const
         font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
 
     return font;
+}
+
+
+void SCH_FIELD::ClearCaches()
+{
+    ClearRenderCache();
+    EDA_TEXT::ClearBoundingBoxCache();
+}
+
+
+void SCH_FIELD::ClearRenderCache()
+{
+    EDA_TEXT::ClearRenderCache();
+    m_renderCacheValid = false;
+}
+
+
+std::vector<std::unique_ptr<KIFONT::GLYPH>>*
+SCH_FIELD::GetRenderCache( const wxString& forResolvedText, const VECTOR2I& forPosition,
+                           TEXT_ATTRIBUTES& aAttrs ) const
+{
+    if( GetDrawFont()->IsOutline() )
+    {
+        if( m_renderCache.empty() || !m_renderCacheValid )
+        {
+            m_renderCache.clear();
+
+            KIFONT::OUTLINE_FONT* font = static_cast<KIFONT::OUTLINE_FONT*>( GetDrawFont() );
+            font->GetLinesAsGlyphs( &m_renderCache, forResolvedText, forPosition, aAttrs );
+
+            m_renderCachePos = forPosition;
+            m_renderCacheValid = true;
+        }
+
+        if( m_renderCachePos != forPosition )
+        {
+            VECTOR2I delta = forPosition - m_renderCachePos;
+
+            for( std::unique_ptr<KIFONT::GLYPH>& glyph : m_renderCache )
+                static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() )->Move( delta );
+
+            m_renderCachePos = forPosition;
+        }
+
+        return &m_renderCache;
+    }
+
+    return nullptr;
 }
 
 

@@ -1118,10 +1118,10 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     if( showNum )
     {
         VECTOR2D fontSize( m_numTextSize, m_numTextSize );
-        VECTOR2D numSize = font->StringBoundaryLimits( number, fontSize, penWidth, false, false );
+        VECTOR2I numSize = font->StringBoundaryLimits( number, fontSize, penWidth, false, false );
 
-        numberTextLength = KiROUND( numSize.x );
-        numberTextHeight = KiROUND( numSize.y );
+        numberTextLength = numSize.x;
+        numberTextHeight = numSize.y;
     }
 
     if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
@@ -1136,10 +1136,10 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     if( showName )
     {
         VECTOR2D fontSize( m_nameTextSize, m_nameTextSize );
-        VECTOR2D nameSize = font->StringBoundaryLimits( name, fontSize, penWidth, false, false );
+        VECTOR2I nameSize = font->StringBoundaryLimits( name, fontSize, penWidth, false, false );
 
-        nameTextLength = KiROUND( nameSize.x ) + nameTextOffset;
-        nameTextHeight = KiROUND( nameSize.y ) + Mils2iu( PIN_TEXT_MARGIN );
+        nameTextLength = nameSize.x + nameTextOffset;
+        nameTextHeight = nameSize.y + Mils2iu( PIN_TEXT_MARGIN );
     }
 
     if( nameTextOffset )        // for values > 0, pin name is inside the body

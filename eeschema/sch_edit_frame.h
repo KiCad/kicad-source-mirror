@@ -429,6 +429,9 @@ public:
 
     void SetCurrentSheet( const SCH_SHEET_PATH& aSheet );
 
+    void UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete = false,
+                     bool aUpdateRtree = false ) override;
+
     /**
      * Rebuild the GAL and redraw the screen.  Call when something went wrong.
      */

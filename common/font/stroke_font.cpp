@@ -195,7 +195,7 @@ double STROKE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight ) const
 }
 
 
-VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>& aGlyphs,
+VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                                        const UTF8& aText, const VECTOR2D& aSize,
                                        const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
                                        bool aMirror, const VECTOR2I& aOrigin,
@@ -252,10 +252,20 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
         {
             STROKE_GLYPH* source = static_cast<STROKE_GLYPH*>( m_glyphs->at( dd ).get() );
 
-            aGlyphs.push_back( source->Transform( glyphSize, cursor, tilt, aAngle, aMirror,
-                                                  aOrigin ) );
+            if( aGlyphs )
+            {
+                aGlyphs->push_back( source->Transform( glyphSize, cursor, tilt, aAngle, aMirror,
+                                                       aOrigin ) );
+            }
 
-            cursor.x = aGlyphs.back()->BoundingBox().GetEnd().x;
+            VECTOR2D glyphExtents = source->BoundingBox().GetEnd();
+
+            glyphExtents *= glyphSize;
+
+            if( tilt )
+                glyphExtents.x -= glyphExtents.y * tilt;
+
+            cursor.x += glyphExtents.x;
         }
     }
 
@@ -263,8 +273,6 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
 
     if( aTextStyle & TEXT_STYLE::OVERBAR )
     {
-        std::unique_ptr<STROKE_GLYPH> overbarGlyph = std::make_unique<STROKE_GLYPH>();
-
         barOffset.y = ComputeOverbarVerticalPosition( glyphSize.y );
 
         if( aTextStyle & TEXT_STYLE::ITALIC )
@@ -279,11 +287,16 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
             RotatePoint( barEnd, aOrigin, aAngle );
         }
 
-        overbarGlyph->AddPoint( barStart );
-        overbarGlyph->AddPoint( barEnd );
-        overbarGlyph->Finalize();
+        if( aGlyphs )
+        {
+            std::unique_ptr<STROKE_GLYPH> overbarGlyph = std::make_unique<STROKE_GLYPH>();
 
-        aGlyphs.push_back( std::move( overbarGlyph ) );
+            overbarGlyph->AddPoint( barStart );
+            overbarGlyph->AddPoint( barEnd );
+            overbarGlyph->Finalize();
+
+            aGlyphs->push_back( std::move( overbarGlyph ) );
+        }
     }
 
     if( aBBox )

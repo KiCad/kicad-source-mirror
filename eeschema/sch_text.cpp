@@ -1049,7 +1049,10 @@ const EDA_RECT SCH_LABEL_BASE::GetBoundingBox() const
     EDA_RECT box( GetBodyBoundingBox() );
 
     for( const SCH_FIELD& field : m_fields )
-        box.Merge( field.GetBoundingBox() );
+    {
+        if( field.IsVisible() )
+            box.Merge( field.GetBoundingBox() );
+    }
 
     box.Normalize();
 

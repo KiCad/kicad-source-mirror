@@ -108,3 +108,23 @@ BOX2D OUTLINE_GLYPH::BoundingBox()
     BOX2I bbox = BBox();
     return BOX2D( bbox.GetOrigin(), bbox.GetSize() );
 }
+
+
+void OUTLINE_GLYPH::Triangulate( TRIANGULATE_CALLBACK aCallback ) const
+{
+    const_cast<OUTLINE_GLYPH*>( this )->CacheTriangulation();
+
+    for( unsigned int i = 0; i < TriangulatedPolyCount(); i++ )
+    {
+        const SHAPE_POLY_SET::TRIANGULATED_POLYGON* polygon = TriangulatedPolygon( i );
+
+        for ( size_t j = 0; j < polygon->GetTriangleCount(); j++ )
+        {
+            VECTOR2I a, b, c;
+            polygon->GetTriangle( j, a, b, c );
+            aCallback( i, a, b, c );
+        }
+    }
+}
+
+

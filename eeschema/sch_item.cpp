@@ -230,6 +230,26 @@ void SCH_ITEM::SwapData( SCH_ITEM* aItem )
 }
 
 
+void SCH_ITEM::ClearCaches()
+{
+    auto clearTextCaches =
+            []( SCH_ITEM* aItem )
+            {
+                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
+
+                if( text )
+                {
+                    text->ClearBoundingBoxCache();
+                    text->ClearRenderCache();
+                }
+            };
+
+    clearTextCaches( this );
+
+    RunOnChildren( clearTextCaches );
+}
+
+
 bool SCH_ITEM::operator < ( const SCH_ITEM& aItem ) const
 {
     if( Type() != aItem.Type() )
