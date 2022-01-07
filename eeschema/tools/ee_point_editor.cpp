@@ -569,7 +569,10 @@ void EE_POINT_EDITOR::updateParentItem() const
             shape->GetPolyShape().NewOutline();
 
             for( unsigned i = 0; i < m_editPoints->PointsSize(); ++i )
-                shape->GetPolyShape().Append( mapCoords( m_editPoints->Point( i ).GetPosition() ) );
+            {
+                wxPoint pt = mapCoords( m_editPoints->Point( i ).GetPosition() );
+                shape->GetPolyShape().Append( pt.x, pt.y, -1, -1, true );
+            }
 
             break;
 
