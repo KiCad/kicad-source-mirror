@@ -204,6 +204,8 @@ wxColour COLOR4D::ToColour() const
     return colour;
 }
 
+#endif
+
 
 COLOR4D COLOR4D::LegacyMix( const COLOR4D& aColor ) const
 {
@@ -236,8 +238,6 @@ void COLOR4D::FromU32( unsigned int aPackedColor )
     b = c.Blue() / 255.0;
     a = c.Alpha() / 255.0;
 }
-
-#endif
 
 
 namespace KIGFX {
