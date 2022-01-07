@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009-2016 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -390,30 +390,34 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
             if( a || b || c || d )
                 violationLayers = LSET::AllLayersMask();
 
-            if( a )
-                violationLayers &= getActiveLayers( a );
+            for( BOARD_ITEM* it: {a, b, c, d} )
+            {
+                if( !it )
+                    continue;
 
-            if( b )
-                violationLayers &= getActiveLayers( b );
-
-            if( c )
-                violationLayers &= getActiveLayers( c );
-
-            if( d )
-                violationLayers &= getActiveLayers( d );
+                LSET layersList = getActiveLayers( it );
+                violationLayers &= layersList;
+                // Try to initialize principalLayer to a valid layer
+                // Some markers have a layer set to UNDEFINED_LAYER, and setting
+                // principalLayer to a valid layer can be useful
+                if( principalLayer <= UNDEFINED_LAYER )
+                    principalLayer = layersList.Seq().front();
+            }
         }
 
         if( violationLayers.count() )
             principalLayer = violationLayers.Seq().front();
-        else
+        else if( !(principalLayer <= UNDEFINED_LAYER ) )
             violationLayers.set( principalLayer );
 
         WINDOW_THAWER thawer( m_frame );
 
-        if( ( violationLayers & board->GetVisibleLayers() ) == 0 )
+        if( !(principalLayer <= UNDEFINED_LAYER )
+                && ( violationLayers & board->GetVisibleLayers() ) == 0 )
             m_frame->GetAppearancePanel()->SetLayerVisible( principalLayer, true );
 
-        if( board->GetVisibleLayers().test( principalLayer ) )
+        if( !(principalLayer <= UNDEFINED_LAYER )
+                && board->GetVisibleLayers().test( principalLayer ) )
             m_frame->SetActiveLayer( principalLayer );
 
         if( m_centerMarkerOnIdle )
