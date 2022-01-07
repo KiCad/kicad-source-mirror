@@ -274,6 +274,8 @@ void GAL::StrokeText( const wxString& aText, const VECTOR2D& aPosition, double a
     attributes.m_Halign = GetHorizontalJustify();
     attributes.m_Valign = GetVerticalJustify();
     attributes.m_LineSpacing = aLineSpacing;
+    attributes.m_Size = GetGlyphSize();
+    attributes.m_StrokeWidth = GetLineWidth();
 
     aFont->Draw( this, aText, aPosition, attributes );
 }
