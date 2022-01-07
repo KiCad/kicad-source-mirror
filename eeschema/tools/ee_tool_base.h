@@ -187,12 +187,12 @@ inline VECTOR2I mapCoords( const wxPoint& aCoord )
 
 inline VECTOR2I mapCoords( const VECTOR2I& aCoord )
 {
-    return wxPoint( aCoord.x, -aCoord.y );
+    return VECTOR2I( aCoord.x, -aCoord.y );
 }
 
 inline VECTOR2I mapCoords( const int x, const int y )
 {
-    return wxPoint( x, -y );
+    return VECTOR2I( x, -y );
 }
 
 #endif
