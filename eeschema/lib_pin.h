@@ -191,6 +191,8 @@ public:
 
     int GetPenWidth() const override;
 
+    KIFONT::FONT* GetDrawFont() const;
+
     /**
      * Plot the pin number and pin text info, given the pin line coordinates.
      * Same as DrawPinTexts((), but output is the plotter

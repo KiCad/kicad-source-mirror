@@ -399,6 +399,17 @@ void EDA_TEXT::cacheShownText()
 }
 
 
+KIFONT::FONT* EDA_TEXT::GetDrawFont() const
+{
+    KIFONT::FONT* font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( wxEmptyString, IsBold(), IsItalic() );
+
+    return font;
+}
+
+
 std::vector<std::unique_ptr<KIFONT::GLYPH>>*
 EDA_TEXT::GetRenderCache( const wxString& forResolvedText ) const
 {
@@ -457,12 +468,7 @@ wxString EDA_TEXT::ShortenedShownText() const
 
 int EDA_TEXT::GetInterline() const
 {
-    KIFONT::FONT* font = GetFont();
-
-    if( !font )
-        font = KIFONT::FONT::GetFont( wxEmptyString, m_attributes.m_Bold, m_attributes.m_Italic );
-
-    return KiROUND( font->GetInterline( GetTextHeight() ) );
+    return KiROUND( GetDrawFont()->GetInterline( GetTextHeight() ) );
 }
 
 
@@ -502,7 +508,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     }
 
     // calculate the H and V size
-    KIFONT::FONT* font = KIFONT::FONT::GetFont();
+    KIFONT::FONT* font = GetDrawFont();
     VECTOR2D      fontSize( GetTextSize() );
     double        penWidth( thickness );
     int           dx = KiROUND( font->StringBoundaryLimits( text, fontSize, penWidth ).x );
@@ -626,6 +632,7 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
 
         GetLinePositions( positions, strings.Count() );
 
+        // FONT TODO: this is going to use the KiCad font because it doesn't know any better...
         for( unsigned ii = 0; ii < strings.Count(); ii++ )
             printOneLineOfText( aSettings, aOffset, aColor, aFillMode, strings[ii], positions[ii] );
     }
@@ -692,7 +699,7 @@ void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTO
         size.x = -size.x;
 
     GRText( DC, aOffset + aPos, aColor, aText, GetTextAngle(), size, GetHorizJustify(),
-            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetFont() );
+            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont() );
 }
 
 
@@ -808,8 +815,9 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
+    KIFONT::FONT*                   font = GetDrawFont();
 
-    if( GetFont() && GetFont()->IsOutline() )
+    if( font->IsOutline() )
     {
         // Make sure the cache is up-to-date before using it
         (void) GetRenderCache( m_render_cache_text );
@@ -864,14 +872,14 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
             {
                 GRText( nullptr, positions[ii], COLOR4D::BLACK, strings_list.Item( ii ),
                         GetDrawRotation(), size, GetDrawHorizJustify(), GetDrawVertJustify(),
-                        penWidth, IsItalic(), forceBold, GetFont(), addTextSegmToShape, &prms );
+                        penWidth, IsItalic(), forceBold, font, addTextSegmToShape, &prms );
             }
         }
         else
         {
             GRText( nullptr, GetDrawPos(), COLOR4D::BLACK, GetShownText(),
                     GetDrawRotation(), size, GetDrawHorizJustify(), GetDrawVertJustify(),
-                    penWidth, IsItalic(), forceBold, GetFont(), addTextSegmToShape, &prms );
+                    penWidth, IsItalic(), forceBold, font, addTextSegmToShape, &prms );
         }
     }
 

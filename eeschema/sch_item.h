@@ -259,6 +259,8 @@ public:
      */
     virtual int GetPenWidth() const { return 0; }
 
+    const wxString& GetDefaultFont() const;
+
     /**
      * Print a schematic item.
      *

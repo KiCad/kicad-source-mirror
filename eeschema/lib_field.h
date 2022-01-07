@@ -117,6 +117,8 @@ public:
 
     int GetPenWidth() const override;
 
+    KIFONT::FONT* GetDrawFont() const override;
+
     /**
      * Copy parameters of this field to another field. Pointers are not copied.
      *

@@ -403,6 +403,17 @@ int SCH_TEXT::GetPenWidth() const
 }
 
 
+KIFONT::FONT* SCH_TEXT::GetDrawFont() const
+{
+    KIFONT::FONT* font = EDA_TEXT::GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
+
+    return font;
+}
+
+
 void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     COLOR4D color = aSettings->GetLayerColor( m_layer );
@@ -545,6 +556,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter ) const
     int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
     COLOR4D          color = settings->GetLayerColor( layer );
     int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
+    KIFONT::FONT*    font = GetDrawFont();
 
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
@@ -561,7 +573,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter ) const
         VECTOR2I  textpos = positions[ii] + GetSchematicTextOffset( aPlotter->RenderSettings() );
         wxString& txt = strings_list.Item( ii );
         aPlotter->Text( textpos, color, txt, GetTextAngle(), GetTextSize(), GetHorizJustify(),
-                        GetVertJustify(), penWidth, IsItalic(), IsBold() );
+                        GetVertJustify(), penWidth, IsItalic(), IsBold(), false, font );
     }
 }
 

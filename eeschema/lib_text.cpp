@@ -296,6 +296,17 @@ int LIB_TEXT::GetPenWidth() const
 }
 
 
+KIFONT::FONT* LIB_TEXT::GetDrawFont() const
+{
+    KIFONT::FONT* font = EDA_TEXT::GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
+
+    return font;
+}
+
+
 void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
                       const TRANSFORM& aTransform )
 {
@@ -335,7 +346,7 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
     GRText( DC, txtpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_H_ALIGN_CENTER,
-            GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), GetFont() );
+            GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), GetDrawFont() );
 }
 
 

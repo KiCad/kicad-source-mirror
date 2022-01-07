@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/font_choice.h"
+
 #include "panel_eeschema_display_options_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -25,8 +27,24 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Appearance") ), wxVERTICAL );
 
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_defaultFontLabel = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Default font:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_defaultFontLabel->Wrap( -1 );
+	bSizer4->Add( m_defaultFontLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_defaultFontCtrlChoices[] = { _("KiCad Font") };
+	int m_defaultFontCtrlNChoices = sizeof( m_defaultFontCtrlChoices ) / sizeof( wxString );
+	m_defaultFontCtrl = new FONT_CHOICE( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_defaultFontCtrlNChoices, m_defaultFontCtrlChoices, 0 );
+	m_defaultFontCtrl->SetSelection( 0 );
+	bSizer4->Add( m_defaultFontCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	sbSizer1->Add( bSizer4, 1, wxEXPAND, 5 );
+
 	m_checkShowHiddenPins = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("S&how hidden pins"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_checkShowHiddenPins, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizer1->Add( m_checkShowHiddenPins, 0, wxEXPAND|wxALL, 5 );
 
 	m_checkShowHiddenFields = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Show hidden fields"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_checkShowHiddenFields, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );

@@ -42,6 +42,7 @@ public:
         bool footprint_preview;
         bool navigator_stays_open;
         bool print_sheet_reference;
+        wxString default_font;
         bool show_hidden_pins;
         bool show_hidden_fields;
         bool show_erc_warnings;

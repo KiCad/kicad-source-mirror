@@ -241,10 +241,10 @@ void PCB_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
     prms.m_cornerBuffer = &aCornerBuffer;
     prms.m_textWidth = GetEffectiveTextPenWidth() + ( 2 * aClearanceValue );
     prms.m_error = aError;
-    COLOR4D color;  // not actually used, but needed by GRText
 
-    GRText( nullptr, GetTextPos(), color, GetShownText(), GetTextAngle(), size, GetHorizJustify(),
-            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetFont(), addTextSegmToPoly, &prms );
+    GRText( nullptr, GetTextPos(), COLOR4D::BLACK, GetShownText(), GetTextAngle(), size,
+            GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont(),
+            addTextSegmToPoly, &prms );
 }
 
 

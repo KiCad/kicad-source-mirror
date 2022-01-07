@@ -215,6 +215,17 @@ int SCH_FIELD::GetPenWidth() const
 }
 
 
+KIFONT::FONT* SCH_FIELD::GetDrawFont() const
+{
+    KIFONT::FONT* font = EDA_TEXT::GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
+
+    return font;
+}
+
+
 void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     wxDC*    DC = aSettings->GetPrintDC();
@@ -254,7 +265,7 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     textpos = GetBoundingBox().Centre() + aOffset;
 
     GRText( DC, textpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_H_ALIGN_CENTER,
-            GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), GetFont() );
+            GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), GetDrawFont() );
 }
 
 

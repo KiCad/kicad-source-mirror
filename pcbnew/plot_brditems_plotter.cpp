@@ -412,7 +412,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4
 
     m_plotter->Text( pos, aColor, aText->GetShownText(), aText->GetDrawRotation(), size,
                      aText->GetHorizJustify(), aText->GetVertJustify(), thickness,
-                     aText->IsItalic(), allow_bold, false, aText->GetFont(), &gbr_metadata );
+                     aText->IsItalic(), allow_bold, false, aText->GetDrawFont(), &gbr_metadata );
 }
 
 
@@ -736,7 +736,8 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
 
 void BRDITEMS_PLOTTER::PlotPcbText( const PCB_TEXT* aText )
 {
-    wxString shownText( aText->GetShownText() );
+    wxString      shownText( aText->GetShownText() );
+    KIFONT::FONT* font = aText->GetDrawFont();
 
     if( shownText.IsEmpty() )
         return;
@@ -781,16 +782,14 @@ void BRDITEMS_PLOTTER::PlotPcbText( const PCB_TEXT* aText )
             wxString& txt =  strings_list.Item( ii );
             m_plotter->Text( positions[ii], color, txt, aText->GetTextAngle(), size,
                              aText->GetHorizJustify(), aText->GetVertJustify(), thickness,
-                             aText->IsItalic(), allow_bold, false, aText->GetFont(),
-                             &gbr_metadata );
+                             aText->IsItalic(), allow_bold, false, font, &gbr_metadata );
         }
     }
     else
     {
         m_plotter->Text( pos, color, shownText, aText->GetTextAngle(), size,
                          aText->GetHorizJustify(), aText->GetVertJustify(), thickness,
-                         aText->IsItalic(), allow_bold, false, aText->GetFont(),
-                         &gbr_metadata );
+                         aText->IsItalic(), allow_bold, false, font, &gbr_metadata );
     }
 }
 

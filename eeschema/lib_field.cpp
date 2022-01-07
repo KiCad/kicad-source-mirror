@@ -111,6 +111,17 @@ int LIB_FIELD::GetPenWidth() const
 }
 
 
+KIFONT::FONT* LIB_FIELD::GetDrawFont() const
+{
+    KIFONT::FONT* font = EDA_TEXT::GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
+
+    return font;
+}
+
+
 void LIB_FIELD::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
                        const TRANSFORM& aTransform )
 {
@@ -121,7 +132,7 @@ void LIB_FIELD::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     wxString text = aData ? *static_cast<wxString*>( aData ) : GetText();
 
     GRText( DC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
-            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetFont() );
+            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont() );
 }
 
 

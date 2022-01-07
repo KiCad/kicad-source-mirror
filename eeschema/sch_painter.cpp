@@ -441,7 +441,10 @@ void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition,
     KIFONT::FONT* font = aAttrs.m_Font;
 
     if( !font )
-        font = KIFONT::FONT::GetFont( wxEmptyString, aAttrs.m_Bold, aAttrs.m_Italic );
+    {
+        font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, aAttrs.m_Bold,
+                                      aAttrs.m_Italic );
+    }
 
     m_gal->SetIsFill( font->IsOutline() );
     m_gal->SetIsStroke( font->IsStroke() );
@@ -456,7 +459,10 @@ void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
     KIFONT::FONT* font = aAttrs.m_Font;
 
     if( !font )
-        font = KIFONT::FONT::GetFont( wxEmptyString, aAttrs.m_Bold, aAttrs.m_Italic );
+    {
+        font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, aAttrs.m_Bold,
+                                      aAttrs.m_Italic );
+    }
 
     VECTOR2D extents = font->StringBoundaryLimits( aText, aAttrs.m_Size, aAttrs.m_StrokeWidth );
     EDA_RECT box( (VECTOR2I) aPosition, wxSize( extents.x, aAttrs.m_Size.y ) );

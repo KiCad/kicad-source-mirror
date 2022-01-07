@@ -10,16 +10,19 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class FONT_CHOICE;
+
 #include "widgets/resettable_panel.h"
 #include <wx/sizer.h>
 #include <wx/gdicmn.h>
 #include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/stattext.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/choice.h>
+#include <wx/checkbox.h>
 #include <wx/statbox.h>
-#include <wx/stattext.h>
 #include <wx/spinctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/panel.h>
@@ -35,6 +38,8 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 
 	protected:
 		wxBoxSizer* m_galOptionsSizer;
+		wxStaticText* m_defaultFontLabel;
+		FONT_CHOICE* m_defaultFontCtrl;
 		wxCheckBox* m_checkShowHiddenPins;
 		wxCheckBox* m_checkShowHiddenFields;
 		wxCheckBox* m_checkShowERCErrors;

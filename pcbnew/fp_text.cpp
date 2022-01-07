@@ -476,7 +476,7 @@ void FP_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         size.x = -size.x;
 
     GRText( nullptr, GetTextPos(), BLACK, GetShownText(), GetDrawRotation(), size,
-            GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold(), GetFont(),
+            GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont(),
             addTextSegmToPoly, &prms );
 }
 

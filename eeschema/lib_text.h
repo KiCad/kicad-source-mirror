@@ -79,6 +79,8 @@ public:
 
     int GetPenWidth() const override;
 
+    KIFONT::FONT* GetDrawFont() const override;
+
     const EDA_RECT GetBoundingBox() const override;
 
     void BeginEdit( const VECTOR2I& aStartPoint ) override;

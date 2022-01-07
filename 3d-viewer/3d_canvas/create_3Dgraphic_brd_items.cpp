@@ -115,7 +115,7 @@ void BOARD_ADAPTER::addShapeWithClearance( const PCB_TEXT* aText, CONTAINER_2D_B
 
     GRText( nullptr, aText->GetTextPos(), dummy_color, aText->GetShownText(), aText->GetTextAngle(),
             size, aText->GetHorizJustify(), aText->GetVertJustify(), penWidth, aText->IsItalic(),
-            isBold, aText->GetFont(), addTextSegmToContainer, &callbackData );
+            isBold, aText->GetDrawFont(), addTextSegmToContainer, &callbackData );
 }
 
 
@@ -243,7 +243,7 @@ void BOARD_ADAPTER::addFootprintShapesWithClearance( const FOOTPRINT* aFootprint
 
         GRText( nullptr, text->GetTextPos(), BLACK, text->GetShownText(), text->GetDrawRotation(),
                 size, text->GetHorizJustify(), text->GetVertJustify(), penWidth, text->IsItalic(),
-                isBold, text->GetFont(), addTextSegmToContainer, &callbackData );
+                isBold, text->GetDrawFont(), addTextSegmToContainer, &callbackData );
     }
 }
 

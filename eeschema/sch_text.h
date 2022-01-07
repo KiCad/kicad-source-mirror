@@ -173,6 +173,8 @@ public:
 
     int GetPenWidth() const override;
 
+    KIFONT::FONT* GetDrawFont() const override;
+
     void Move( const VECTOR2I& aMoveVector ) override
     {
         EDA_TEXT::Offset( aMoveVector );

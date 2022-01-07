@@ -154,6 +154,8 @@ public:
 
     int GetPenWidth() const override;
 
+    KIFONT::FONT* GetDrawFont() const override;
+
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     void Move( const VECTOR2I& aMoveVector ) override

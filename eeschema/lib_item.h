@@ -142,6 +142,8 @@ public:
 
     virtual int GetPenWidth() const = 0;
 
+    const wxString& GetDefaultFont() const;
+
     virtual int GetEffectivePenWidth( const RENDER_SETTINGS* aSettings ) const
     {
         // For historical reasons, a stored value of 0 means "default width" and negative

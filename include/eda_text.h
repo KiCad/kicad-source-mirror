@@ -336,6 +336,7 @@ public:
      */
     virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
+    virtual KIFONT::FONT* GetDrawFont() const;
     virtual EDA_ANGLE GetDrawRotation() const               { return GetTextAngle(); }
     virtual VECTOR2I GetDrawPos() const                     { return GetTextPos(); }
     virtual GR_TEXT_H_ALIGN_T GetDrawHorizJustify() const   { return GetHorizJustify(); };
