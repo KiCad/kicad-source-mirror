@@ -438,6 +438,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     controls->SetAutoPan( false );
     controls->CaptureCursor( false );
+    setEditedPoint( nullptr );
 
     if( m_editPoints )
     {
