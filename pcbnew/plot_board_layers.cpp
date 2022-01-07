@@ -270,11 +270,11 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
             COLOR4D color = COLOR4D::BLACK;
 
-            if( pad->GetLayerSet()[B_Cu] )
-               color = aPlotOpt.ColorSettings()->GetColor( LAYER_PAD_BK );
+            if( ( pad->GetLayerSet() & aLayerMask )[B_Cu] )
+               color = aPlotOpt.ColorSettings()->GetColor( B_Cu );
 
-            if( pad->GetLayerSet()[F_Cu] )
-                color = color.LegacyMix( aPlotOpt.ColorSettings()->GetColor( LAYER_PAD_FR ) );
+            if( ( pad->GetLayerSet() & aLayerMask )[F_Cu] )
+                color = color.LegacyMix( aPlotOpt.ColorSettings()->GetColor( F_Cu ) );
 
             if( sketchPads && aLayerMask[F_Fab] )
                 color = aPlotOpt.ColorSettings()->GetColor( F_Fab );
