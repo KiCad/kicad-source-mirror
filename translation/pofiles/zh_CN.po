@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-01-05 11:54+0000\n"
-"Last-Translator: Tian Yunhao <t123yh@outlook.com>\n"
+"PO-Revision-Date: 2022-01-08 22:35+0000\n"
+"Last-Translator: obit <szpttboy@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v6/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -8533,7 +8533,7 @@ msgstr "结点颜色："
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:110
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:95
 msgid "Edit Text and Graphic Properties"
-msgstr "编辑文本和图形属性属性"
+msgstr "编辑文本和图形属性"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
 msgid "symbol"
