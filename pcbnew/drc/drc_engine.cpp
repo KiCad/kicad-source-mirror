@@ -833,15 +833,15 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     {
         if( pad && pad->GetLocalThermalGapOverride( nullptr ) > 0 )
         {
-            int override = pad->GetLocalThermalGapOverride( &m_msg );
+            int gap_override = pad->GetLocalThermalGapOverride( &m_msg );
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; thermal relief gap: %s." ),
                                       EscapeHTML( pad->GetSelectMenuText( UNITS ) ),
-                                      EscapeHTML( REPORT_VALUE( override ) ) ) )
+                                      EscapeHTML( REPORT_VALUE( gap_override ) ) ) )
 
             constraint.SetName( m_msg );
-            constraint.m_Value.SetMin( override );
+            constraint.m_Value.SetMin( gap_override );
             return constraint;
         }
     }
@@ -849,25 +849,25 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     {
         if( pad && pad->GetLocalSpokeWidthOverride( nullptr ) > 0 )
         {
-            int override = pad->GetLocalSpokeWidthOverride( &m_msg );
+            int spoke_override = pad->GetLocalSpokeWidthOverride( &m_msg );
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; thermal spoke width: %s." ),
                                       EscapeHTML( pad->GetSelectMenuText( UNITS ) ),
-                                      EscapeHTML( REPORT_VALUE( override ) ) ) )
+                                      EscapeHTML( REPORT_VALUE( spoke_override ) ) ) )
 
-            if( zone && zone->GetMinThickness() > override )
+            if( zone && zone->GetMinThickness() > spoke_override )
             {
-                override = zone->GetMinThickness();
+                spoke_override = zone->GetMinThickness();
 
                 REPORT( "" )
                 REPORT( wxString::Format( _( "Zone %s min thickness: %s." ),
                                           EscapeHTML( zone->GetSelectMenuText( UNITS ) ),
-                                          EscapeHTML( REPORT_VALUE( override ) ) ) )
+                                          EscapeHTML( REPORT_VALUE( spoke_override ) ) ) )
             }
 
             constraint.SetName( m_msg );
-            constraint.m_Value.SetMin( override );
+            constraint.m_Value.SetMin( spoke_override );
             return constraint;
         }
     }
@@ -1242,7 +1242,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     {
         if( zone )
         {
-            int local = zone->GetThermalReliefSpokeWidth();
+            int local = zone->GetThermalReliefGap();
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Zone %s thermal relief gap: %s." ),
