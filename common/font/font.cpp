@@ -99,7 +99,7 @@ bool FONT::IsStroke( const wxString& aFontName )
 
     return font && font->IsStroke();
 #else
-    return aFontName == _( "Default Font" ) || aFontName == wxT( "KiCad" );
+    return aFontName == _( "Default Font" ) || aFontName == wxT( "KiCad Font" );
 #endif
 }
 
