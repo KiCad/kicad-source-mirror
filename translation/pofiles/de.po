@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-01-08 20:28+0000\n"
+"PO-Revision-Date: 2022-01-08 22:35+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -3095,7 +3095,7 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:175
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:21
 msgid "Editing"
-msgstr "Bearbeiten"
+msgstr "Bearbeitung"
 
 #: common/dialogs/panel_common_settings_base.cpp:177
 msgid "Warp mouse to origin of moved object"
@@ -3671,11 +3671,11 @@ msgstr "Neue Netzklasse:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:181
 msgid "Assign To All Listed Nets"
-msgstr "Zuweisen auf alle gelisteten Netze"
+msgstr "Allen gelisteten Netzen zuweisen"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:187
 msgid "Assign To Selected Nets"
-msgstr "Zuweisen auf ausgewählte Netze"
+msgstr "Ausgewählten Netzen zuweisen"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:214
 #: pcbnew/board_connected_item.cpp:176
@@ -6186,7 +6186,7 @@ msgstr "Symboleditor"
 
 #: common/tool/actions.cpp:577
 msgid "Create, delete and edit symbols"
-msgstr "Schaltplansymbole erstellen, löschen oder verändern"
+msgstr "Schaltplansymbole erstellen, löschen oder bearbeiten"
 
 #: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:110
 #: pcbnew/footprint_viewer_frame.cpp:996
@@ -6205,7 +6205,7 @@ msgstr "Footprinteditor"
 
 #: common/tool/actions.cpp:587
 msgid "Create, delete and edit footprints"
-msgstr "Footprints erstellen, löschen oder verändern"
+msgstr "Footprints erstellen, löschen oder bearbeiten"
 
 #: common/tool/actions.cpp:593
 msgid "Update PCB from Schematic..."
@@ -6452,7 +6452,7 @@ msgstr "Kleine Kreuze"
 
 #: common/widgets/gal_options_panel.cpp:115
 msgid "Grid Style"
-msgstr "Rasterstil"
+msgstr "Rasterdarstellung"
 
 #: common/widgets/gal_options_panel.cpp:127
 msgid "Grid thickness:"
@@ -8557,7 +8557,7 @@ msgstr "Pin-Konfliktkarte"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 #: pcbnew/dialogs/dialog_board_setup.cpp:107 pcbnew/dialogs/dialog_drc.cpp:594
 msgid "Violation Severity"
-msgstr "Verstoß-Schweregrad"
+msgstr "Verstoß-Schweregrade"
 
 #: eeschema/dialogs/dialog_erc.cpp:770 pcbnew/dialogs/dialog_gendrill.cpp:474
 #, c-format
@@ -9651,7 +9651,7 @@ msgstr "Alternativer Pinname"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:145
 msgid "Synchronized pins edit mode, and this pin is new"
-msgstr "Synchronisierter Pin-Bearbeitungsmodus und dieser Pin ist neu"
+msgstr "Synchronisierter Pin-Bearbeitungsmodus, und dieser Pin ist neu"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:146
 msgid ""
@@ -9688,7 +9688,7 @@ msgid ""
 "Synchronized pin edit mode is enabled.\n"
 "Similar pins will be edited, regardless this option."
 msgstr ""
-"Der synchronisierte Pin-Editiermodus ist aktiviert.\n"
+"Der synchronisierte Pin-Bearbeitungsmodus ist aktiv.\n"
 "Ähnliche Pins werden unabhängig von dieser Option bearbeitet."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:288
@@ -10298,7 +10298,7 @@ msgstr "Schaltplan einrichten"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Import Settings from Another Project..."
-msgstr "Einstellungen aus einem anderen Projekt importieren..."
+msgstr "Einstellungen aus anderem Projekt importieren..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:67
 msgid "Formatting"
@@ -11840,11 +11840,11 @@ msgstr "Auswahl"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:44
 msgid "Draw selected text items as box"
-msgstr "Zeichne ausgewählte Textelemente als Box"
+msgstr "Ausgewählte Textelemente als Box zeichnen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:47
 msgid "Draw selected child items"
-msgstr "Zeichne ausgewählte untergeordnete Elemente"
+msgstr "Ausgewählte untergeordnete Elemente zeichnen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:50
 msgid "Fill selected shapes"
@@ -16959,7 +16959,7 @@ msgstr "Bezeichnerwert kann nicht kleiner Null werden"
 #: eeschema/tools/symbol_editor_edit_tool.cpp:513
 #, c-format
 msgid "Edit %s Field"
-msgstr "Feld %s editieren"
+msgstr "Feld %s bearbeiten"
 
 #: eeschema/tools/sch_edit_tool.cpp:1103
 #: eeschema/tools/symbol_editor_edit_tool.cpp:515
@@ -18427,7 +18427,7 @@ msgstr "Editoren"
 
 #: kicad/kicad_manager_frame.cpp:579
 msgid "Load File to Edit"
-msgstr "Datei zum Editieren öffnen"
+msgstr "Datei zum Bearbeiten öffnen"
 
 #: kicad/kicad_manager_frame.cpp:648
 msgid "[no project loaded]"
@@ -18497,7 +18497,7 @@ msgstr "Projektverzeichnis im Dateimanager öffnen"
 
 #: kicad/menubar.cpp:165
 msgid "Edit Local File..."
-msgstr "Lokale Datei editieren..."
+msgstr "Lokale Datei bearbeiten..."
 
 #: kicad/menubar.cpp:166
 msgid "Edit local file in text editor"
@@ -22137,7 +22137,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
 msgid "Reannotation Scope"
-msgstr "Reannotations-Bereich"
+msgstr "Reannotation-Geltungsbereich"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:170
 msgid "Reannotate:"
@@ -22157,7 +22157,7 @@ msgstr "Rückseite"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
 msgid "Front reference start:"
-msgstr "Start Referenz vorne:"
+msgstr "Vorderseiten-Referenzbeginn:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:210
 msgid "Starting reference designation for front."
@@ -22184,7 +22184,7 @@ msgstr "Standard ist 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:220
 msgid "Back reference start:"
-msgstr "Start Referenz hinten:"
+msgstr "Rückseiten-Referenzbeginn:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:222
 msgid ""
@@ -26226,7 +26226,7 @@ msgstr "Benutze konvexe Padformhülle"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:776
 msgid "Primitives list:"
-msgstr "Formen Liste:"
+msgstr "Formen-Liste:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:780
 msgid "Note: coordinates are relative to anchor pad, orientation 0."
@@ -26234,7 +26234,7 @@ msgstr "Hinweis: Koordinaten sind relativ zum Ankerpad, Ausrichtung 0."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:799
 msgid "Edit Primitive"
-msgstr "Form editieren"
+msgstr "Form bearbeiten"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:802
 msgid "Duplicate Primitive"
@@ -26630,9 +26630,9 @@ msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
-"Aktivieren, um KiCad-Kontur-Schriftart zu benutzen\n"
-"Deaktivieren, um einzeiligen ASCII-Text als veränderbaren Text zu plotten "
-"(mit DXF-Schriftart)"
+"Aktivieren, um KiCad-Kontur-Schriftart zu verwenden\n"
+"Deaktivieren, um einzeiligen ASCII-Text als veränderbaren Text zu plotten ("
+"mit DXF-Schriftart)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:354
 msgid "Export units:"
@@ -27771,7 +27771,7 @@ msgstr "Optionseditor..."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:288
 msgid "Edit options"
-msgstr "Optionen editieren"
+msgstr "Optionen bearbeiten"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:555
 #, c-format
@@ -30129,7 +30129,7 @@ msgstr "(%s maximaler Durchmesser %s; tatsächlich %s)"
 
 #: pcbnew/edit_zone_helpers.cpp:86 pcbnew/edit_zone_helpers.cpp:152
 msgid "Modify zone properties"
-msgstr "Zoneneigenschaften editieren"
+msgstr "Zoneneigenschaften bearbeiten"
 
 #: pcbnew/edit_zone_helpers.cpp:137
 #, c-format
@@ -30543,7 +30543,7 @@ msgstr "[Kein Footprint geladen]"
 
 #: pcbnew/footprint_edit_frame.cpp:893
 msgid "Updating Footprint Libraries"
-msgstr "Aktualisierung Footprintbibliotheken"
+msgstr "Aktualisiere Footprintbibliotheken"
 
 #: pcbnew/footprint_edit_frame.cpp:1190
 msgid "No footprint selected."
@@ -35228,7 +35228,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:547
 msgid "Refresh Plugins"
-msgstr "Aktualisierung Plugins"
+msgstr "Plugins aktualisieren"
 
 #: pcbnew/tools/pcb_actions.cpp:547
 msgid "Reload all python plugins and refresh plugin menus"
@@ -35935,8 +35935,8 @@ msgstr "Relativ zu Bezugspunkt positionieren..."
 #: pcbnew/tools/pcb_actions.cpp:1197
 msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr ""
-"Die ausgewählte(n) Element(e) einen exakten Wert relativ zu einem anderen "
-"positionieren"
+"Die ausgewählten Elemente um einen exakten Betrag relativ zu einem anderen "
+"Element positionieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1234
 msgid "Select/Expand Connection"
@@ -36377,7 +36377,7 @@ msgstr "DRC-Warnungen"
 
 #: pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC violations with a Warning severity"
-msgstr "DRC-Verstöße mit Schweregrad Warnung"
+msgstr "DRC-Verstöße mit Schweregrad \"Warnung\""
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "DRC Errors"
@@ -36385,7 +36385,7 @@ msgstr "DRC-Fehler"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "DRC violations with an Error severity"
-msgstr "DRC-Verstöße mit Schweregrad Fehler"
+msgstr "DRC-Verstöße mit Schweregrad \"Fehler\""
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "DRC Exclusions"
@@ -36434,7 +36434,7 @@ msgstr "Hintere Lagen"
 
 #: pcbnew/widgets/appearance_controls.cpp:395
 msgid "Back Assembly View"
-msgstr "Ansicht der hinteren Baugruppe"
+msgstr "Hintere Montageansicht"
 
 #: pcbnew/widgets/appearance_controls.cpp:444
 msgid "Filter nets"
