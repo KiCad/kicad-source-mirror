@@ -888,7 +888,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
             if( aPad->GetShape() != PAD_SHAPE::CUSTOM )
             {
-                // Don't allow a 45º rotation to bloat a pad's bounding box unnecessarily
+                // Don't allow a 45° rotation to bloat a pad's bounding box unnecessarily
                 double limit = std::min( aPad->GetSize().x, aPad->GetSize().y ) * 1.1;
 
                 if( padsize.x > limit && padsize.y > limit )

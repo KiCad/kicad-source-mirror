@@ -453,7 +453,7 @@ bool SCH_SCREEN::doIsJunction( const VECTOR2I& aPosition, bool aBreakCrossings,
     std::unordered_set<int>       exitAngles[ 2 ];
     std::vector<const SCH_LINE*>  midPointLines[ 2 ];
 
-    // A pin at 90º still shouldn't match a line at 90º so just give pins unique numbers
+    // A pin at 90° still shouldn't match a line at 90° so just give pins unique numbers
     int                           uniqueAngle = 10000;
 
     for( const SCH_ITEM* item : Items().Overlapping( aPosition ) )

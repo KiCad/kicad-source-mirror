@@ -238,7 +238,7 @@ void LIB_TEXT::Rotate( const VECTOR2I& center, bool aRotateCCW )
     }
     else
     {
-        // 180º of rotation is a mirror
+        // 180° rotation is a mirror
 
         if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
             SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );

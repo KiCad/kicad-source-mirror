@@ -740,7 +740,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
     // Save cache library.
     m_out->Print( 1, "(lib_symbols\n" );
 
-    for( auto libSymbol : screen->GetLibSymbols() )
+    for( std::pair<const wxString, LIB_SYMBOL*>& libSymbol : screen->GetLibSymbols() )
         SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( libSymbol.second, *m_out, 2, libSymbol.first );
 
     m_out->Print( 1, ")\n\n" );

@@ -149,7 +149,7 @@ public:
 
     /**
      * This function has limited utility for SHAPE_RECT as non-cartesian rotations will distort
-     * the rectangle.  If you might need to handle non-90º rotations then the SHAPE_RECT should
+     * the rectangle.  If you might need to handle non-90° rotations then the SHAPE_RECT should
      * first be converted to a SHAPE_SIMPLE which can then be free-rotated.
      */
     void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override

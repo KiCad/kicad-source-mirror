@@ -978,7 +978,7 @@ protected:
     /// For each layer, a set of insulated islands that were not removed
     std::map<PCB_LAYER_ID, std::set<int>> m_insulatedIslands;
 
-    bool                      m_hv45;              // constrain edges to horiz, vert or 45º
+    bool                      m_hv45;              // constrain edges to horiz, vert or 45°
 
     double                    m_area;              // The filled zone area
     double                    m_outlinearea;       // The outline zone area
