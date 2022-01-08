@@ -29,7 +29,11 @@
 
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/shape_poly_set.h>
+#ifdef _MSC_VER
+#include <ft2build.h>
+#else
 #include <freetype2/ft2build.h>
+#endif
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
 //#include <gal/opengl/opengl_freetype.h>

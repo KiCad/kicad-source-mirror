@@ -28,7 +28,11 @@
 #define OUTLINE_DECOMPOSER_H
 
 #include <vector>
+#ifdef _MSC_VER
+#include <ft2build.h>
+#else
 #include <freetype2/ft2build.h>
+#endif
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
 #include <math/box2.h>
