@@ -324,6 +324,7 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 
     delete m_selectionFilterPanel;
     delete m_appearancePanel;
+    delete m_treePane;
 }
 
 
