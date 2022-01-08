@@ -274,7 +274,7 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
     }
 
     aDC->DestroyClippingRegion();
-    aDC->SetClippingRegion( pos, size );
+    aDC->SetClippingRegion( wxPoint( pos.x, pos.y ), size );
 
     if( GetGRForceBlackPenState() )
     {
