@@ -96,8 +96,15 @@ bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
     static bool s_presetSwitcherShown = false;
     static bool s_viewportSwitcherShown = false;
 
-    if( !s_presetSwitcherShown && wxGetKeyState( WXK_RAW_CONTROL ) && !wxGetKeyState( WXK_SHIFT )
-            && wxGetKeyState( WXK_TAB ) )
+#ifdef __WXMAC__
+    wxKeyCode presetSwitchKey = WXK_RAW_CONTROL;
+    wxKeyCode viewSwitchKey = WXK_ALT;
+#else
+    wxKeyCode presetSwitchKey = WXK_RAW_CONTROL;
+    wxKeyCode viewSwitchKey = WXK_WINDOWS_LEFT;
+#endif
+
+    if( !s_presetSwitcherShown && wxGetKeyState( presetSwitchKey ) && wxGetKeyState( WXK_TAB ) )
     {
         if( m_appearancePanel && this->IsActive() )
         {
@@ -105,7 +112,7 @@ bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
 
             if( mru.size() > 1 )
             {
-                EDA_VIEW_SWITCHER switcher( this, mru, WXK_RAW_CONTROL );
+                EDA_VIEW_SWITCHER switcher( this, mru, presetSwitchKey );
 
                 s_presetSwitcherShown = true;
                 switcher.ShowModal();
@@ -120,8 +127,7 @@ bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
             }
         }
     }
-    else if( !s_viewportSwitcherShown && wxGetKeyState( WXK_RAW_CONTROL )
-            && wxGetKeyState( WXK_SHIFT ) && wxGetKeyState( WXK_TAB ) )
+    else if( !s_viewportSwitcherShown && wxGetKeyState( viewSwitchKey ) && wxGetKeyState( WXK_TAB ) )
     {
         if( m_appearancePanel && this->IsActive() )
         {
@@ -129,7 +135,7 @@ bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
 
             if( mru.size() > 1 )
             {
-                EDA_VIEW_SWITCHER switcher( this, mru, WXK_RAW_CONTROL );
+                EDA_VIEW_SWITCHER switcher( this, mru, viewSwitchKey );
 
                 s_viewportSwitcherShown = true;
                 switcher.ShowModal();
