@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -244,6 +244,7 @@ BOOST_AUTO_TEST_CASE( Rotate )
 
                             if( schItem != nullptr )
                             {
+                                schItem->ClearFieldsAutoplaced();
                                 schItem->Rotate( aRef );
                                 schItem->Rotate( aRef );
                                 schItem->Rotate( aRef );

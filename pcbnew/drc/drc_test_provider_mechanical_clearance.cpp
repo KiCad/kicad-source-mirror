@@ -337,6 +337,20 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                                 break;
                             }
 
+                            case SHAPE_T::RECT:
+                            {
+                                SHAPE_LINE_CHAIN asPoly;
+                                std::vector<VECTOR2I> pts = shape->GetRectCorners();
+                                asPoly.Append( pts[0] );
+                                asPoly.Append( pts[1] );
+                                asPoly.Append( pts[2] );
+                                asPoly.Append( pts[3] );
+                                asPoly.SetClosed( true );
+
+                                testShapeLineChain( asPoly, shape->GetWidth(), layer, item, c );
+                                break;
+                            }
+
                             default:
                                 UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
                             }
