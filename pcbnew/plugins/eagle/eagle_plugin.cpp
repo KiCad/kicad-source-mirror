@@ -1713,6 +1713,11 @@ FOOTPRINT* EAGLE_PLUGIN::makeFootprint( wxXmlNode* aPackage, const wxString& aPk
     // Get the first package item and iterate
     wxXmlNode* packageItem = aPackage->GetChildren();
 
+    // layer 27 is default layer for tValues
+    // set default layer for created footprint
+    PCB_LAYER_ID layer = kicad_layer( 27 );
+    m.get()->Value().SetLayer( layer );
+
     while( packageItem )
     {
         const wxString& itemName = packageItem->GetName();
