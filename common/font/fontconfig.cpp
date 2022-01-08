@@ -90,7 +90,8 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
     if( m_fonts.empty() )
     {
         FcPattern*   pat = FcPatternCreate();
-        FcObjectSet* os = FcObjectSetBuild( FC_FAMILY, FC_STYLE, FC_LANG, FC_FILE, nullptr );
+        FcObjectSet* os = FcObjectSetBuild( FC_FAMILY, FC_STYLE, FC_LANG, FC_FILE, FC_OUTLINE,
+                                            nullptr );
         FcFontSet*   fs = FcFontList( nullptr, pat, os );
 
         for( int i = 0; fs && i < fs->nfont; ++i )
@@ -99,11 +100,40 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
             FcChar8*   file;
             FcChar8*   style;
             FcChar8*   family;
+            FcLangSet* langSet;
+            FcBool     outline;
+            bool       langSupported = false;
 
             if( FcPatternGetString( font, FC_FILE, 0, &file ) == FcResultMatch
                 && FcPatternGetString( font, FC_FAMILY, 0, &family ) == FcResultMatch
-                && FcPatternGetString( font, FC_STYLE, 0, &style ) == FcResultMatch )
+                && FcPatternGetString( font, FC_STYLE, 0, &style ) == FcResultMatch
+                && FcPatternGetLangSet( font, FC_LANG, 0, &langSet ) == FcResultMatch
+                && FcPatternGetBool( font, FC_OUTLINE, 0, &outline ) == FcResultMatch )
             {
+                if( !outline )
+                    continue;
+
+                FcStrSet*  langStrSet = FcLangSetGetLangs( langSet );
+                FcStrList* langStrList = FcStrListCreate( langStrSet );
+
+                while( FcChar8* langStr = FcStrListNext( langStrList ) )
+                {
+                    wxString langWxStr( reinterpret_cast<char *>( langStr ) );
+                    const wxLanguageInfo* langInfo = wxLocale::FindLanguageInfo( langWxStr );
+
+                    if( langInfo && wxLocale::IsAvailable( langInfo->Language ) )
+                    {
+                        langSupported = true;
+                        break;
+                    }
+                }
+
+                FcStrListDone( langStrList );
+                FcStrSetDestroy( langStrSet );
+
+                if( !langSupported )
+                    continue;
+
                 std::ostringstream s;
                 s << family;
 
