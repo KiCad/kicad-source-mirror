@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,18 @@ class BOARD;
 class ZONE;
 class MSG_PANEL_ITEM;
 
+/**
+ * define the type of a teardrop: on a via or pad, or atrack end
+ */
+enum class TEARDROP_TYPE
+{
+    TD_NONE = 0,        // Not a teardrop: just a standard zone
+    TD_UNSPECIFIED,     // Not specified/unknown teardrop type
+    TD_VIAPAD,          // a teardrop on a via or pad
+    TD_TRACKEND         // a teardrop on a track end
+                        // (when 2 tracks having different widths have a teardrop on the
+                        // end of the largest track)
+};
 
 /**
  * Handle a list of polygons defining a copper zone.
@@ -209,6 +221,12 @@ public:
     double CalculateFilledArea();
 
     /**
+     * Compute the area of the zone outline (not the filled area).
+     * @return the currently calculated area
+     */
+    double CalculateOutlineArea();
+
+    /**
      * This area is cached from the most recent call to CalculateFilledArea().
      *
      * @return the filled area
@@ -216,6 +234,16 @@ public:
     double GetFilledArea()
     {
         return m_area;
+    }
+
+    /**
+     * This area is cached from the most recent call to CalculateOutlineArea().
+     *
+     * @return the outline area
+     */
+    double GetOutlineArea()
+    {
+        return m_outlinearea;
     }
 
     std::mutex& GetLock()
@@ -726,6 +754,22 @@ public:
     EDA_ITEM* Clone() const override;
 
     /**
+     * @return true if the zone is a teardrop area
+     */
+    bool IsTeardropArea() const { return m_teardropType != TEARDROP_TYPE::TD_NONE; }
+
+    /**
+     * Set the type of teardrop if the zone is a teardrop area
+     * for non teardrop area, the type must be TEARDROP_TYPE::TD_NONE
+     */
+    void SetTeardropAreaType( TEARDROP_TYPE aType ) { m_teardropType = aType; }
+
+    /**
+     * @return the type of the teardrop ( has meaning only if the zone is a teardrop area)
+     */
+    TEARDROP_TYPE GetTeardropAreaType() const { return m_teardropType; }
+
+    /**
      * Accessors to parameters used in Rule Area zones:
      */
     bool GetIsRuleArea() const           { return m_isRuleArea; }
@@ -837,6 +881,12 @@ protected:
      */
     bool m_isRuleArea;
 
+    /* A zone outline can be a teardrop zone with different rules for priority
+     * (alway bigger priority than copper zones) and never removed from a
+     * copper zone having the same netcode
+     */
+    TEARDROP_TYPE m_teardropType;
+
     /* For keepout zones only:
      * what is not allowed inside the keepout ( pads, tracks and vias )
      */
@@ -931,6 +981,7 @@ protected:
     bool                      m_hv45;              // constrain edges to horiz, vert or 45º
 
     double                    m_area;              // The filled zone area
+    double                    m_outlinearea;       // The outline zone area
 
     /// Lock used for multi-threaded filling on multi-layer zones
     std::mutex m_lock;

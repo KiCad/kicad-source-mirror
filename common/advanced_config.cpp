@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,6 +190,8 @@ static const wxChar ShowEventCounters[] = wxT( "ShowEventCounters" );
 static const wxChar AllowManualCanvasScale[] = wxT( "AllowManualCanvasScale" );
 
 static const wxChar UpdateUIEventInterval[] = wxT( "UpdateUIEventInterval" );
+
+static const wxChar AllowTeardrops[] = wxT( "AllowTeardrops" );
 } // namespace KEYS
 
 
@@ -301,6 +303,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_ShowEventCounters         = false;
     m_AllowManualCanvasScale    = false;
     m_UpdateUIEventInterval     = 0;
+
+    m_AllowTeardrops            = false;
 
     loadFromConfigFile();
 }
@@ -430,6 +434,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::AllowManualCanvasScale,
                                                 &m_AllowManualCanvasScale, false ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::AllowTeardrops,
+                                                &m_AllowTeardrops, false ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

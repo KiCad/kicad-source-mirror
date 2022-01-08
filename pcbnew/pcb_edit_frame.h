@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright (C) 2010-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -481,6 +481,17 @@ public:
      * Export the current BOARD to a Hyperlynx HYP file.
      */
     void OnExportHyperlynx( wxCommandEvent& event );
+
+    /**
+     * run teardrop tool
+     */
+    void OnRunTeardropTool( wxCommandEvent& event );
+
+    /**
+     * Remove all teardrops
+     */
+    void OnRemoveTeardropTool( wxCommandEvent& event );
+
 
     /**
      * Create an IDF3 compliant BOARD (*.emn) and LIBRARY (*.emp) file.
