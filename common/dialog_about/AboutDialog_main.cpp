@@ -866,7 +866,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           "Other" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( "David Briscoe",
+    aInfo.AddTranslator( new CONTRIBUTOR( "David J S Briscoe",
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Other" ) );
