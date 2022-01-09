@@ -35,8 +35,17 @@ class FONTCONFIG
 public:
     FONTCONFIG();
 
+    /**
+     * Given a fully-qualified font name ("Times:Bold:Italic") find the closest matching font
+     * and return its filepath in \a aFontFile.
+     *
+     * A return value of false indicates a serious error in the font system.
+     */
     bool FindFont( const wxString& aFontName, wxString& aFontFile );
 
+    /**
+     * List the current available font families.
+     */
     void ListFonts( std::vector<std::string>& aFonts );
 
 private:
@@ -45,6 +54,8 @@ private:
 
 } // namespace fontconfig
 
-fontconfig::FONTCONFIG& Fontconfig();
+
+fontconfig::FONTCONFIG* Fontconfig();
+
 
 #endif //KICAD_FONTCONFIG_H

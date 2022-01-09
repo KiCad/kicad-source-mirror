@@ -18,8 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <sstream>
 #include <font/fontconfig.h>
 #include <pgm_base.h>
 #include <wx/log.h>
@@ -42,7 +40,7 @@ FONTCONFIG::FONTCONFIG()
 };
 
 
-FONTCONFIG& Fontconfig()
+FONTCONFIG* Fontconfig()
 {
     if( !g_config )
     {
@@ -50,7 +48,7 @@ FONTCONFIG& Fontconfig()
         g_config = new FONTCONFIG();
     }
 
-    return *g_config;
+    return g_config;
 }
 
 
@@ -137,8 +135,14 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
 
                 FcStrSet*  langStrSet = FcLangSetGetLangs( langSet );
                 FcStrList* langStrList = FcStrListCreate( langStrSet );
+                FcChar8*   langStr = FcStrListNext( langStrList );
 
-                while( FcChar8* langStr = FcStrListNext( langStrList ) )
+                if( !langStr )
+                {
+                    // Symbol fonts (Wingdings, etc.) have no language
+                    langSupported = true;
+                }
+                else while( langStr )
                 {
                     wxString langWxStr( reinterpret_cast<char *>( langStr ) );
                     const wxLanguageInfo* langInfo = wxLocale::FindLanguageInfo( langWxStr );
@@ -148,6 +152,8 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
                         langSupported = true;
                         break;
                     }
+
+                    langStr = FcStrListNext( langStrList );
                 }
 
                 FcStrListDone( langStrList );
@@ -155,9 +161,6 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
 
                 if( !langSupported )
                     continue;
-
-                std::ostringstream s;
-                s << family;
 
                 std::string theFile( reinterpret_cast<char *>( file ) );
                 std::string theFamily( reinterpret_cast<char *>( family ) );
@@ -167,7 +170,7 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
                 if( theFamily.length() > 0 && theFamily.front() == '.' )
                     continue;
 
-                auto it = m_fonts.find( theFamily );
+                std::map<std::string, FONTINFO>::iterator it = m_fonts.find( theFamily );
 
                 if( it == m_fonts.end() )
                     m_fonts.insert( std::pair<std::string, FONTINFO>( theFamily, fontInfo ) );

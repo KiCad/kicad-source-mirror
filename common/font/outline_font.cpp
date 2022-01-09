@@ -82,7 +82,7 @@ OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, boo
     if( aItalic )
         qualifiedFontName << ":Italic";
 
-    if( Fontconfig().FindFont( qualifiedFontName, fontFile ) )
+    if( Fontconfig()->FindFont( qualifiedFontName, fontFile ) )
         (void) font->loadFace( fontFile );
 
     font->m_fontName = aFontName;       // Keep asked-for name, even if we substituted.

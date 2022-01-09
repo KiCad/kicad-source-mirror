@@ -29,7 +29,7 @@ FONT_CHOICE::FONT_CHOICE( wxWindow* aParent, int aId, wxPoint aPosition, wxSize 
     m_systemFontCount = wxChoice::GetCount();
 
     std::vector<std::string> fontNames;
-    Fontconfig().ListFonts( fontNames );
+    Fontconfig()->ListFonts( fontNames );
 
     wxArrayString menuList;
 
