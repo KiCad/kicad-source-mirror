@@ -47,12 +47,16 @@ public:
 
         Display *dpy = glXGetCurrentDisplay();
         GLXDrawable drawable = glXGetCurrentDrawable();
+        std::string vendor( reinterpret_cast<const char*>( glGetString( GL_VENDOR ) ) );
+        bool is_mesa = ( vendor.find( "Mesa" ) != std::string::npos );
 
-        if( glXSwapIntervalEXT && glXQueryDrawable && dpy && drawable )
+        if( !is_mesa && glXSwapIntervalEXT && glXQueryDrawable && dpy && drawable )
         {
+            std::string exts( glXQueryExtensionsString( dpy, DefaultScreen( dpy ) ) );
+
             if( aVal < 0 )
             {
-                if( !wxGLCanvas::IsExtensionSupported( "GLX_EXT_swap_control_tear" ) )
+                if( exts.find( "GLX_EXT_swap_control_tear" ) == std::string::npos )
                 {
                     aVal = 0;
                 }
@@ -62,7 +66,7 @@ public:
                     // we need to be sure that late/adaptive swaps are
                     // enabled on the drawable.
 
-                    unsigned lateSwapsEnabled;
+                    unsigned lateSwapsEnabled = 0;
                     glXQueryDrawable( dpy, drawable, GLX_LATE_SWAPS_TEAR_EXT, &lateSwapsEnabled );
 
                     if( !lateSwapsEnabled )
