@@ -88,6 +88,8 @@ bool FONTCONFIG::FindFont( const wxString& aFontName, wxString& aFontFile )
                 fontName += ":" + styleStr;
             }
 
+            // TODO: report Regular vs Book, Italic vs Oblique, etc. or filter them out?
+
             if( aFontName.CmpNoCase( fontName ) != 0 )
                 wxLogWarning( _( "Font '%s' not found; substituting '%s'." ), aFontName, fontName );
 
