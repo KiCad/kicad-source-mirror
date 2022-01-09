@@ -40,7 +40,6 @@ public:
     void ListFonts( std::vector<std::string>& aFonts );
 
 private:
-    FcConfig*                       m_config;
     std::map<std::string, FONTINFO> m_fonts;
 };
 

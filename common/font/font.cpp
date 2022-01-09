@@ -57,9 +57,6 @@ const wxString& FONT::Name() const
 
 FONT* FONT::getDefaultFont()
 {
-    // FONT TODO: default font should be user-selectable in Eeschema but the KiCad stroke
-    // font in Pcbnew
-
     if( !s_defaultFont )
         s_defaultFont = STROKE_FONT::LoadFont( wxEmptyString );
 
@@ -90,17 +87,9 @@ FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic )
 
 bool FONT::IsStroke( const wxString& aFontName )
 {
-#if 0  // FONT TODO
-    // Stroke fonts will be loaded under all four bold/italic combinations, so we only have
-    // to check for one.
-    std::tuple<wxString, bool, bool> key = { aFontName, false, false };
-
-    FONT* font = s_fontMap[key];
-
-    return font && font->IsStroke();
-#else
+    // This would need a more complex implementation if we ever support more stroke fonts
+    // than the KiCad Font.
     return aFontName == _( "Default Font" ) || aFontName == wxT( "KiCad Font" );
-#endif
 }
 
 
@@ -156,21 +145,6 @@ void FONT::getLinePositions( const UTF8& aText, const VECTOR2I& aPosition,
 
         aPositions.push_back( aPosition + lineOffset );
     }
-}
-
-
-void FONT::DrawText( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
-                     const TEXT_ATTRIBUTES& aAttributes ) const
-{
-    // FONT TODO: do we need to set the attributes to the gal at all?
-    aGal->SetHorizontalJustify( aAttributes.m_Halign );
-    aGal->SetVerticalJustify( aAttributes.m_Valign );
-    aGal->SetGlyphSize( aAttributes.m_Size );
-    aGal->SetFontItalic( aAttributes.m_Italic );
-    aGal->SetFontBold( aAttributes.m_Bold );
-    aGal->SetTextMirrored( aAttributes.m_Mirrored );
-
-    Draw( aGal, aText, aPosition, aAttributes );
 }
 
 

@@ -22,11 +22,12 @@
 #include <sstream>
 #include <font/fontconfig.h>
 #include <pgm_base.h>
-#include <settings/settings_manager.h>
+#include <wx/log.h>
 
 using namespace fontconfig;
 
 static FONTCONFIG* g_config = nullptr;
+
 
 inline static FcChar8* wxStringToFcChar8( const wxString& str )
 {
@@ -37,10 +38,7 @@ inline static FcChar8* wxStringToFcChar8( const wxString& str )
 
 FONTCONFIG::FONTCONFIG()
 {
-    m_config = FcInitLoadConfigAndFonts();
-
-    wxString configDirPath( Pgm().GetSettingsManager().GetUserSettingsPath() + wxT( "/fonts" ) );
-    FcConfigAppFontAddDir( nullptr, wxStringToFcChar8( configDirPath ) );
+    (void) FcInitLoadConfigAndFonts();
 };
 
 
@@ -74,11 +72,33 @@ bool FONTCONFIG::FindFont( const wxString& aFontName, wxString& aFontFile )
         if( FcPatternGetString( font, FC_FILE, 0, &file ) == FcResultMatch )
         {
             aFontFile = wxString::FromUTF8( (char*) file );
+
+            FcChar8* family = nullptr;
+            FcChar8* style = nullptr;
+
+            FcPatternGetString( font, FC_FAMILY, 0, &family );
+            FcPatternGetString( font, FC_STYLE, 0, &style );
+
+            wxString fontName( family );
+            wxString styleStr( style );
+
+            if( !styleStr.IsEmpty() )
+            {
+                styleStr.Replace( " ", ":" );
+                fontName += ":" + styleStr;
+            }
+
+            if( aFontName.CmpNoCase( fontName ) != 0 )
+                wxLogWarning( _( "Font '%s' not found; substituting '%s'." ), aFontName, fontName );
+
             ok = true;
         }
 
         FcPatternDestroy( font );
     }
+
+    if( !ok )
+        wxLogWarning( _( "Error loading font '%s'." ), aFontName );
 
     FcPatternDestroy( pat );
     return ok;

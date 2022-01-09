@@ -127,8 +127,6 @@ public:
 protected:
     FT_Error loadFace( const wxString& aFontFileName );
 
-    bool loadFontSimple( const wxString& aFontFileName );
-
     BOX2I getBoundingBox( const std::vector<std::unique_ptr<GLYPH>>& aGlyphs ) const;
 
 private:

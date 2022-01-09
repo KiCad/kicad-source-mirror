@@ -62,11 +62,7 @@ OUTLINE_FONT::OUTLINE_FONT() :
         m_faceSize( 16 )
 {
     if( !m_freeType )
-    {
-        //FT_Error ft_error = FT_Init_FreeType( &m_freeType );
-        // TODO: handle ft_error
         FT_Init_FreeType( &m_freeType );
-    }
 }
 
 
@@ -77,46 +73,22 @@ OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, boo
     wxString fontFile;
     wxString qualifiedFontName = aFontName;
 
+    if( !aBold && !aItalic )
+        qualifiedFontName << ":Regular";
+
     if( aBold )
-        qualifiedFontName << ":bold";
+        qualifiedFontName << ":Bold";
 
     if( aItalic )
-        qualifiedFontName << ":italic";
+        qualifiedFontName << ":Italic";
 
     if( Fontconfig().FindFont( qualifiedFontName, fontFile ) )
         (void) font->loadFace( fontFile );
-    else
-        (void) font->loadFontSimple( aFontName );
+
+    font->m_fontName = aFontName;       // Keep asked-for name, even if we substituted.
+    font->m_fontFileName = fontFile;
 
     return font;
-}
-
-
-bool OUTLINE_FONT::loadFontSimple( const wxString& aFontFileName )
-{
-    wxFileName fontFile( aFontFileName );
-    wxString   fileName = fontFile.GetFullPath();
-    // TODO: handle ft_error properly (now we just return false if load does not succeed)
-    FT_Error ft_error = loadFace( fileName );
-
-    if( ft_error == FT_Err_Unknown_File_Format )
-    {
-        wxLogWarning( _( "The font file %s could be opened and read, "
-                         "but it appears that its font format is unsupported." ),
-                      fileName );
-    }
-    else if( ft_error )
-    {
-        wxLogWarning( _( "Unknown font error (%d) " ), ft_error );
-        return false;
-    }
-    else
-    {
-        m_fontName = aFontFileName;
-        m_fontFileName = fileName;
-    }
-
-    return true;
 }
 
 
@@ -140,9 +112,6 @@ FT_Error OUTLINE_FONT::loadFace( const wxString& aFontFileName )
         {
             FT_Select_Charmap( m_subscriptFace, FT_Encoding::FT_ENCODING_UNICODE );
             FT_Set_Char_Size( m_subscriptFace, 0, m_subscriptFaceScaler, 0, 0 );
-
-            m_fontName = wxString( m_face->family_name );
-            m_fontFileName = aFontFileName;
         }
     }
 
