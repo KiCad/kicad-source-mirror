@@ -199,9 +199,9 @@ void TEST_NETLISTS_FIXTURE::compareNetlists()
 
             // The video test has a bunch of unconnected RESERVED pins which cause duplicate
             // auto-generated netnames.  The connectivity algo disambiguates these with "_n"
-            // suffixes, but since the algorithm is multi-threaded which ones get which suffix
+            // suffixes, but since the algorithm is multi-threaded, which ones get which suffix
             // is not deterministic.  So skip these.
-            if( testNet.GetPinName().Contains( "RESERVED" ) )
+            if( testNet.GetPinFunction().Contains( "RESERVED" ) )
                 continue;
 
             // The two nets at the same index should be identical

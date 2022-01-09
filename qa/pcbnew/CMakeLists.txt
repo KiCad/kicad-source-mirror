@@ -1,6 +1,6 @@
 # This program source code file is part of KiCad, a free EDA CAD application.
 #
-# Copyright (C) 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+# Copyright (C) 2018-2022 KiCad Developers, see CHANGELOG.TXT for contributors.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@ set( QA_PCBNEW_SRCS
     test_lset.cpp
     test_pad_numbering.cpp
     test_libeval_compiler.cpp
+    test_save_load.cpp
     test_tracks_cleaner.cpp
     test_zone_filler.cpp
 
