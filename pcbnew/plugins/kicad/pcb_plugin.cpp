@@ -941,7 +941,6 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
 
             m_out->Print( aNestLevel, "(gr_poly%s\n", locked.c_str() );
             formatPolyPts( outline, aNestLevel, ADVANCED_CFG::GetCfg().m_CompactSave );
-            m_out->Print( aNestLevel + 1, ")\n" );
         }
         else
         {
@@ -1031,7 +1030,6 @@ void PCB_PLUGIN::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
 
             m_out->Print( aNestLevel, "(fp_poly%s\n", locked.c_str() );
             formatPolyPts( outline, aNestLevel, ADVANCED_CFG::GetCfg().m_CompactSave );
-            m_out->Print( aNestLevel + 1, ")\n" );
         }
         else
         {
@@ -1688,7 +1686,6 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
 
                     m_out->Print( nested_level, "(gr_poly\n" );
                     formatPolyPts( outline, nested_level, ADVANCED_CFG::GetCfg().m_CompactSave );
-                    m_out->Print( aNestLevel + 1, ")\n" );
                 }
                 break;
 
