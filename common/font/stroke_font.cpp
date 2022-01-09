@@ -108,14 +108,26 @@ void STROKE_FONT::loadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
         for( int j = 0; j < aNewStrokeFontSize; j++ )
         {
-            auto   glyph = std::make_shared<STROKE_GLYPH>();
+            std::shared_ptr<STROKE_GLYPH> glyph = std::make_shared<STROKE_GLYPH>();
+
             double glyphStartX = 0.0;
             double glyphEndX = 0.0;
             double glyphWidth = 0.0;
+            int    strokes = 0;
+            int    i = 0;
 
-            std::vector<VECTOR2D>* pointList = nullptr;
+            while( aNewStrokeFont[j][i] )
+            {
 
-            int i = 0;
+                if( aNewStrokeFont[j][i] == ' ' && aNewStrokeFont[j][i+1] == 'R' )
+                    strokes++;
+
+                i += 2;
+            }
+
+            glyph->reserve( strokes + 1 );
+
+            i = 0;
 
             while( aNewStrokeFont[j][i] )
             {
@@ -152,9 +164,6 @@ void STROKE_FONT::loadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
                     // was built. It allows shapes coordinates like W M ... to be >= 0
                     // Only shapes like j y have coordinates < 0
                     point.y = (double) ( coordinate[1] - 'R' + FONT_OFFSET ) * STROKE_FONT_SCALE;
-
-                    if( !pointList )
-                        pointList = new std::vector<VECTOR2D>;
 
                     glyph->AddPoint( point );
                 }

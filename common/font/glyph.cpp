@@ -38,8 +38,8 @@ void STROKE_GLYPH::AddPoint( const VECTOR2D& aPoint )
 {
     if( !m_penIsDown )
     {
-        std::vector<VECTOR2D> v;
-        push_back( v );
+        emplace_back();
+        back().reserve( 16 );   // This handles all but 359 strokes (out of over 328,000)
         m_penIsDown = true;
     }
 
@@ -49,8 +49,10 @@ void STROKE_GLYPH::AddPoint( const VECTOR2D& aPoint )
 
 void STROKE_GLYPH::RaisePen()
 {
+#if 0
     if( m_penIsDown )
         back().shrink_to_fit();
+#endif
 
     m_penIsDown = false;
 }
@@ -58,8 +60,12 @@ void STROKE_GLYPH::RaisePen()
 
 void STROKE_GLYPH::Finalize()
 {
-    if( !empty() && !back().empty() )
+    // Shrinking the strokes saves a bit less than 512K of memory.  It's not worth it for the
+    // performance hit of doing more than 328,000 reallocs.
+#if 0
+if( !empty() && !back().empty() )
         back().shrink_to_fit();
+#endif
 }
 
 
