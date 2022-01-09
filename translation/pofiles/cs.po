@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-01-02 12:48+0000\n"
+"PO-Revision-Date: 2022-01-10 17:54+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -14168,7 +14168,6 @@ msgid "Syntax Help"
 msgstr "Nápověda syntaxe"
 
 #: eeschema/sch_text_help_md.h:2
-#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -14312,7 +14311,7 @@ msgid ""
 msgstr ""
 "<tabulka>\n"
 "    <tr>\n"
-"        <th>Označení</th>\n"
+"        <th>Markup</th>\n"
 "        <th> </th>\n"
 "        <th>Výsledek</th>\n"
 "    </tr>\n"
@@ -14343,12 +14342,12 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
-"samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> "
+"&nbsp;<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>/samp> </td>\n"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -14369,8 +14368,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>hodnota_pole</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>hodnota_pole</i> symbol "
+"<i>refdes</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -14385,14 +14384,14 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definice sběrnice</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
+";&nbsp;&nbsp;</th>\n"
 "        <th>Výsledné sítě</th>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>předponam k prefixun</samp></td>\n"
+"        <td>&nbsp;<br><samp>předponam k prefixn</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
@@ -14423,7 +14422,7 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>USB1.D +, USB1.D-</samp></td>\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14434,12 +14433,12 @@ msgstr ""
 "        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~LATCH}</samp></td>\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -14447,7 +14446,7 @@ msgstr ""
 "</tabulka>\n"
 "<p></p>\n"
 "<p></p>\n"
-"<i>Note that markup has precedence over bus definitions.</i>\n"
+"<i>Všimněte si, že markup má přednost před definicemi sběrnice.</i>\n"
 "\n"
 
 #: eeschema/sch_validators.cpp:102
@@ -16372,9 +16371,8 @@ msgid "Switch H & V only mode for new wires and buses"
 msgstr "Přepínač pouze H & V režim pro nové spoje a sběrnice"
 
 #: eeschema/tools/ee_actions.cpp:655
-#, fuzzy
 msgid "Repair Schematic"
-msgstr "Vytváření schématu"
+msgstr "Oprava schématu"
 
 #: eeschema/tools/ee_actions.cpp:656
 msgid "Run various diagnostics and attempt to repair schematic"
@@ -17295,53 +17293,44 @@ msgid "Bottom layer"
 msgstr "Spodní vrstva"
 
 #: gerbview/files.cpp:147
-#, fuzzy
 msgid "Bottom solder resist"
-msgstr "Pájecí pasta dole"
-
-#: gerbview/files.cpp:148
-#, fuzzy
-msgid "Top solder resist"
-msgstr "Pájecí pasta nahoře"
-
-#: gerbview/files.cpp:149
-#, fuzzy
-msgid "Bottom overlay"
 msgstr "Nepájivá maska dole"
 
+#: gerbview/files.cpp:148
+msgid "Top solder resist"
+msgstr "Nepájivá maska nahoře"
+
+#: gerbview/files.cpp:149
+msgid "Bottom overlay"
+msgstr "Overlay dole"
+
 #: gerbview/files.cpp:150
-#, fuzzy
 msgid "Top overlay"
-msgstr "Přesah pera"
+msgstr "Overlay nahoře"
 
 #: gerbview/files.cpp:151
-#, fuzzy
 msgid "Bottom paste"
-msgstr "Nic pro vložení"
+msgstr "Pájecí pasta dole"
 
 #: gerbview/files.cpp:152
-#, fuzzy
 msgid "Top paste"
 msgstr "Pájecí pasta nahoře"
 
 #: gerbview/files.cpp:153
-#, fuzzy
 msgid "Keep-out layer"
-msgstr "Bez prokovů"
+msgstr "Keep-out vrstva"
 
 #: gerbview/files.cpp:154
 msgid "Mechanical layers"
 msgstr "Mechanické vrstvy"
 
 #: gerbview/files.cpp:155
-#, fuzzy
 msgid "Top Pad Master"
-msgstr "Pájecí pasta nahoře"
+msgstr "Pad Master nahoře"
 
 #: gerbview/files.cpp:156
-#, fuzzy
 msgid "Bottom Pad Master"
-msgstr "Pájecí pasta dole"
+msgstr "Pad Master dole"
 
 #: gerbview/files.cpp:174
 msgid "Open Gerber File(s)"
@@ -17844,9 +17833,9 @@ msgid "Highlight Items of Net '%s'"
 msgstr "Zvýraznit položky sítě '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "Zvýraznit typ otvoru \"%s\""
+msgstr "Zvýraznit typ otvoru '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:96
 #, c-format
@@ -18372,14 +18361,12 @@ msgid "Applying Package Changes"
 msgstr "Použít změny balíčku"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
-#, fuzzy
 msgid "Pending install"
-msgstr "Možnosti vykreslování"
+msgstr "Neskončená instalace"
 
 #: kicad/pcm/dialogs/panel_package.cpp:101
-#, fuzzy
 msgid "Pending uninstall"
-msgstr "Odinstalace čeká"
+msgstr "Neskončená odinstalace"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:212
 msgid "Metadata"
@@ -18434,7 +18421,7 @@ msgstr ""
 #: kicad/pcm/dialogs/panel_packages_view.cpp:518
 #, fuzzy
 msgid "Keep downloaded file"
-msgstr "Bez zón mědi"
+msgstr "stažený soubor"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:558
 msgid ""
@@ -21959,9 +21946,9 @@ msgid "Custom Rules"
 msgstr "Vlastní pravidla"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:123
-#, fuzzy
 msgid "Project is missing or read-only. Some settings will not be editable."
-msgstr "Projekt chybí nebo je jen pro čtení. Změny nebudou uloženy."
+msgstr ""
+"Projekt chybí nebo je jen pro čtení. Některá nastavení nebudou upravitelná."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:178
 #, c-format
@@ -22235,9 +22222,8 @@ msgid "Delete vias connected on only one layer"
 msgstr "Odstranit prokovy připojené pouze na jedné vrstvě"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
-#, fuzzy
 msgid "&Merge co-linear tracks"
-msgstr "Díra blízko průchozí díry"
+msgstr "&Sloučit ko-lineární spoje"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:36
 msgid "merge aligned track segments, and remove null segments"
@@ -22301,9 +22287,8 @@ msgstr ""
 "Pouze názvy sítí odpovídající tomuto vzoru budou zobrazeny."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
-#, fuzzy
 msgid "Hide auto-generated net names"
-msgstr "Alternativní název vývodu"
+msgstr "Skrýt automaticky generované názvy sítě"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:62
 msgid "Sort nets by pad count"
@@ -24885,9 +24870,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:342
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:22
-#, fuzzy
 msgid "Unmatched Layers"
-msgstr "Ostatní Vrstvy"
+msgstr "Nepřiřazené vrstvy"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:32
 msgid "Imported Layers"
@@ -25090,9 +25074,8 @@ msgstr "Skupina podle:"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:54
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:55
-#, fuzzy
 msgid "Wildcard"
-msgstr "Zástupné znaky"
+msgstr "Zástupný znak"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:56
 msgid "RegEx"
@@ -25437,14 +25420,12 @@ msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr "Chyba: Vlastní tvar plošky musí vyřešit jeden mnohoúhelník."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1420
-#, fuzzy
 msgid "Pad Properties Errors"
-msgstr "Vlastnosti plošky"
+msgstr "Chyby vlastností plošky"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1421
-#, fuzzy
 msgid "Pad Properties Warnings"
-msgstr "Vlastnosti plošky"
+msgstr "Varování vlastností plošky"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1654
 msgid "Modify pad"
@@ -25930,9 +25911,8 @@ msgid "Plot format:"
 msgstr "Formát kreslení:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
-#, fuzzy
 msgid "Include Layers"
-msgstr "Zahrnuté vrstvy"
+msgstr "Zahrnout vrstvy"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:75
 msgid "Plot border and title block"
@@ -25956,9 +25936,8 @@ msgid "Force plot invisible footprint values and reference designators"
 msgstr "Vynutit kreslení neviditelných hodnot a/nebo referencí"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
-#, fuzzy
 msgid "Plot Edge.Cuts on all layers"
-msgstr "Kreslit odkazy listů ve všech vrstvách"
+msgstr "Vykreslit Edge.Cuts na všech vrstvách"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Plot the contents of the PCB edge layer on all layers"
@@ -26213,9 +26192,8 @@ msgid "Uncheck to plot graphic items using their center lines"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
-#, fuzzy
 msgid "Use KiCad font to plot text"
-msgstr "Použít písmo Pcbnew pro kreslení textů"
+msgstr "Použít písmo KiCadu pro vykreslení textu"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
 #, fuzzy
@@ -26366,9 +26344,8 @@ msgid "Max amplitude (Amax):"
 msgstr "Max amplituda (Amax):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:131
-#, fuzzy
 msgid "Min spacing (s):"
-msgstr "Rozteč (s):"
+msgstr "Min odstup (s):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:136
 msgid ""
@@ -26632,14 +26609,13 @@ msgid "Real drill"
 msgstr "Skutečné vrtání"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:21
-#, fuzzy
 msgid "Select Manufacturer"
-msgstr "Vybrat složku"
+msgstr "Vybrat výrobce"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:25
-#, fuzzy, c-format
+#, c-format
 msgid "from %s"
-msgstr "[z %s]"
+msgstr "z %s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:29
 #, c-format
@@ -27118,9 +27094,8 @@ msgid "Show always"
 msgstr "Zobrazit vždy"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:61
-#, fuzzy
 msgid "Track && Via Clearances"
-msgstr "Izolační mezera spoje"
+msgstr "Izolační mezera Spoj && Prokov"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:63
 msgid ""
@@ -27174,9 +27149,8 @@ msgstr ""
 "klávesových zkratek."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
-#, fuzzy
 msgid "Allow free pads"
-msgstr "Povolené funkce"
+msgstr "Povolit volné plošky"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:71
 msgid ""
@@ -27196,9 +27170,8 @@ msgstr "Vybrat položku(y)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:142
 #: pcbnew/dialogs/panel_edit_options_base.cpp:213
-#, fuzzy
 msgid "Highlight net (for pads or tracks)."
-msgstr "Zvýraznit síť pod kurzorem (pro plošky nebo spoje)."
+msgstr "Zvýraznit síť (pro plošky nebo spoje)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:243
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
@@ -27207,9 +27180,8 @@ msgid "Graphics Editing"
 msgstr "Upravuji spoj"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
-#, fuzzy
 msgid "Constrain to H, V, 45 degrees"
-msgstr "Omezit obrys na H, V a 45 stupňů"
+msgstr "Omezit na H, V a 45 stupňů"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
 msgid "Magnetic Points"
@@ -27263,9 +27235,8 @@ msgid "Track Editing"
 msgstr "Upravuji spoj"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:332
-#, fuzzy
 msgid "Mouse drag track behavior:"
-msgstr "Chování přetahování myší:"
+msgstr "Chování při tažení spoje myší:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:334
 msgid ""
@@ -27389,9 +27360,8 @@ msgid "No filename entered"
 msgstr "Název soubor není zvolen"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:390
-#, fuzzy
 msgid "Illegal filename"
-msgstr "Neplatný název souboru: %s"
+msgstr "Neplatný název souboru"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:395
 #: pcbnew/microwave/microwave_polygon.cpp:224
@@ -27432,14 +27402,12 @@ msgid "Reload Plugins"
 msgstr "Znovu načíst pluginy"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:85
-#, fuzzy
 msgid "Show Plugin Errors"
-msgstr "Zobrazit v prohlížeči"
+msgstr "Zobrazit chyby pluginu"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
-#, fuzzy
 msgid "Page origin"
-msgstr "Okraje strany"
+msgstr "Referenční bod stránky"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:25
 #, fuzzy
@@ -27677,9 +27645,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
-#, fuzzy
 msgid "Minimum uVia hole:"
-msgstr "Minimální velikost uProkovu:"
+msgstr "Minimální díra uProkovu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:391
 msgid ""
@@ -27767,9 +27734,8 @@ msgid "All user-defined layers have already been added."
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:817
-#, fuzzy
 msgid "Add User-defined Layer"
-msgstr "Uživatelem definovaná mřížka"
+msgstr "Přidat uživatelem definovanou vrstvu"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:26
 msgid "Add User Defined Layer..."
@@ -28739,9 +28705,9 @@ msgstr "třída spojů '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:271 pcbnew/drc/drc_engine.cpp:288
 #: pcbnew/drc/drc_engine.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "třída spojů '%s'"
+msgstr "třída spojů '%s' (diff pár)"
 
 #: pcbnew/drc/drc_engine.cpp:427
 msgid "keepout area"
@@ -28783,9 +28749,9 @@ msgid "Board minimum hole clearance: %s."
 msgstr "Minimální izolační mezera desky: %s."
 
 #: pcbnew/drc/drc_engine.cpp:868
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: %s."
-msgstr "Kontrola %s; izolační mezera: %s."
+msgstr "Kontrola %s izolační mezera: %s."
 
 #: pcbnew/drc/drc_engine.cpp:880 pcbnew/drc/drc_engine.cpp:881
 #: pcbnew/drc/drc_engine.cpp:882 pcbnew/tools/board_inspection_tool.cpp:647
@@ -28801,9 +28767,9 @@ msgid "Checking %s %s: %s."
 msgstr "Kontrola %s %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:913
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "Znovu připojte %s pin %s z %s na %s."
+msgstr "Kontrola %s: min %s; opt %s; max %s."
 
 #: pcbnew/drc/drc_engine.cpp:924
 #, c-format
@@ -28879,9 +28845,8 @@ msgid "Electrical"
 msgstr "Elektrický typ"
 
 #: pcbnew/drc/drc_item.cpp:44
-#, fuzzy
 msgid "Design For Manufacturing"
-msgstr "Mimo desku, výrobní"
+msgstr "Design pro výrobu"
 
 #: pcbnew/drc/drc_item.cpp:45
 #, fuzzy
@@ -28942,9 +28907,8 @@ msgid "Track has unconnected end"
 msgstr "Spoj má nespojený konec"
 
 #: pcbnew/drc/drc_item.cpp:94
-#, fuzzy
 msgid "Hole clearance violation"
-msgstr "Izolační mezera porušení"
+msgstr "Izolační mezera díry porušení"
 
 #: pcbnew/drc/drc_item.cpp:98
 msgid "Drilled holes too close together"
@@ -28964,9 +28928,8 @@ msgid "Annular width"
 msgstr "Šířka prstence"
 
 #: pcbnew/drc/drc_item.cpp:114
-#, fuzzy
 msgid "Drill out of range"
-msgstr "Ladění délky spoje"
+msgstr "Vrtání mimo rozsah"
 
 #: pcbnew/drc/drc_item.cpp:118
 msgid "Via diameter"
@@ -29013,9 +28976,8 @@ msgid "Board has malformed outline"
 msgstr "Deska má nesprávný obrys"
 
 #: pcbnew/drc/drc_item.cpp:158
-#, fuzzy
 msgid "Duplicate footprints"
-msgstr "Aktualizovat pouzdra"
+msgstr "Duplicitní pouzdra"
 
 #: pcbnew/drc/drc_item.cpp:162
 msgid "Missing footprint"
@@ -29077,9 +29039,8 @@ msgid "Rule: %s"
 msgstr "Pravidlo: %s"
 
 #: pcbnew/drc/drc_item.cpp:336
-#, fuzzy
 msgid "Local override"
-msgstr "Místní izolační mezera"
+msgstr "Místní přepsání"
 
 #: pcbnew/drc/drc_rule.h:137
 #, c-format
@@ -29431,9 +29392,8 @@ msgid "Checking disabled layers..."
 msgstr "Kontrola deaktivovaných vrstev..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:277
-#, fuzzy
 msgid "Checking text variables..."
-msgstr "Textové proměnné..."
+msgstr "Kontrola textových proměnných..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:106
 msgid "Checking silkscreen for overlapping items..."
@@ -29519,9 +29479,9 @@ msgstr "Generovat soubor pozic"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:308
 #: pcbnew/exporters/gen_footprints_placefile.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Front (top side) placement file: '%s'."
-msgstr "Přední strana (horní strana) soubor umístění: \"%s\"."
+msgstr "Přední strana (horní strana) soubor umístění: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:311
 #: pcbnew/exporters/gen_footprints_placefile.cpp:333
@@ -29533,9 +29493,9 @@ msgstr "Počet pouzder %d."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:330
 #: pcbnew/exporters/gen_footprints_placefile.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "Back (bottom side) placement file: '%s'."
-msgstr "Zadní strana (spodní strana) soubor umístění: \"%s\"."
+msgstr "Zadní strana (spodní strana) soubor umístění: '%s'."
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:337
 #: pcbnew/exporters/gen_footprints_placefile.cpp:485
@@ -29813,9 +29773,8 @@ msgid "(pad \"%s\")"
 msgstr "(ploška \"%s\")"
 
 #: pcbnew/footprint.cpp:2390 pcbnew/pad.cpp:1726 pcbnew/zone.cpp:1479
-#, fuzzy
 msgid "Clearance Override"
-msgstr "Izolační mezera obrysů"
+msgstr "Izolační mezera přepsání"
 
 #: pcbnew/footprint.cpp:2393 pcbnew/pad.cpp:1703
 #, fuzzy
@@ -30542,9 +30501,8 @@ msgid "Component Value:"
 msgstr "Hodnota součástky:"
 
 #: pcbnew/microwave/microwave_polygon.cpp:111
-#, fuzzy
 msgid "Complex Shape"
-msgstr "Komplexní tvar"
+msgstr "Složitý tvar"
 
 #: pcbnew/microwave/microwave_polygon.cpp:128
 msgid "Symmetrical"
@@ -30584,9 +30542,9 @@ msgid "Cannot add %s (no footprint assigned)."
 msgstr "Nelze přidat %s (není přiřazeno pouzdro)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "Nelze přidat %s (pouzdro \"%s\" nenalezeno)."
+msgstr "Nelze přidat %s (pouzdro '%s' nenalezeno)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:160
 #, c-format
@@ -30634,7 +30592,7 @@ msgid "Change %s value from %s to %s."
 msgstr "Změna %s hodnoty z %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "Changed %s value from %s to %s."
 msgstr "Změna %s hodnoty z %s na %s."
 
@@ -30644,9 +30602,9 @@ msgid "Update %s symbol association from %s to %s."
 msgstr "Aktualizovat přiřazení symbolu %s z %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "Aktualizovat přiřazení symbolu %s z %s na %s."
+msgstr "Aktualizováno přiřazení symbolů %s z %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:343
 #, c-format
@@ -30654,9 +30612,9 @@ msgid "Update %s properties."
 msgstr "Aktualizovat %s vlastnosti."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s properties."
-msgstr "Aktualizovat %s vlastnosti."
+msgstr "Aktualizovány vlastnosti %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
 #, c-format
@@ -30684,14 +30642,14 @@ msgid "Disconnect %s pin %s."
 msgstr "Odpojit %s vývod %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "Disconnected %s pin %s."
-msgstr "Odpojit %s vývod %s."
+msgstr "Odpojení %s vývodu %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:472
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for symbol %s pin %s."
-msgstr "Žádná síť pro součástku %s vývod %s."
+msgstr "Žádná síť pro symbol %s vývod %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:524
 #, c-format
@@ -30704,9 +30662,9 @@ msgid "Reconnect %s pin %s from %s to %s."
 msgstr "Znovu připojte %s pin %s z %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:542
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected %s pin %s from %s to %s."
-msgstr "Znovu připojte %s pin %s z %s na %s."
+msgstr "Znovu připojit %s vývod %s z %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:553
 #, c-format
@@ -30714,9 +30672,9 @@ msgid "Connect %s pin %s to %s."
 msgstr "Připojit %s pin %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:560
-#, fuzzy, c-format
+#, c-format
 msgid "Connected %s pin %s to %s."
-msgstr "Připojit %s pin %s na %s."
+msgstr "Připojit %s vývod %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:639
 #, c-format
@@ -30724,7 +30682,7 @@ msgid "Reconnect via from %s to %s."
 msgstr "Přepojit prokov z %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:657
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected via from %s to %s."
 msgstr "Přepojit prokov z %s na %s."
 
@@ -30749,14 +30707,14 @@ msgid "Reconnected copper zone '%s' from %s to %s."
 msgstr "Znovu připojte zónu mědi '%s' od %s do %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:745
-#, fuzzy, c-format
+#, c-format
 msgid "Reconnected copper zone from %s to %s."
-msgstr "Znovu připojte zónu mědi od %s do %s."
+msgstr "Znovu připojte zónu mědi z %s na %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:758
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone '%s' has no pads connected."
-msgstr "Zóna mědi (%s) nemá žádné plošky připojené."
+msgstr "Zóna mědi '%s' nemá připojené žádné plošky."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:766
 #, c-format
@@ -30769,14 +30727,14 @@ msgid "%s pad %s not found in %s."
 msgstr "%s ploška %s nenalezena v %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:859
-#, fuzzy, c-format
+#, c-format
 msgid "Processing symbol '%s:%s'."
-msgstr "Zpracování komponenty \"%s:%s\"."
+msgstr "Zpracování symbolu '%s:%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:928
-#, fuzzy, c-format
+#, c-format
 msgid "Multiple footprints found for '%s'."
-msgstr "Nalezeno více pouzder pro \"%s\"."
+msgstr "Nalezeno více pouzder pro '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:958
 #, c-format
@@ -30784,7 +30742,7 @@ msgid "Cannot remove unused footprint %s (locked)."
 msgstr "Nelze odstranit nepoužité pouzdro %s (uzamčeno)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:963
-#, fuzzy, c-format
+#, c-format
 msgid "Could not remove unused footprint %s (locked)."
 msgstr "Nelze odstranit nepoužité pouzdro %s (uzamčeno)."
 
@@ -30794,14 +30752,14 @@ msgid "Remove unused footprint %s."
 msgstr "Odstranění nepoužitého pouzdra %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:980
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused footprint %s."
-msgstr "Odstranění nepoužitého pouzdra %s."
+msgstr "Odstraněno nepoužité pouzdro %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1007
-#, fuzzy, c-format
+#, c-format
 msgid "Removed unused net %s."
-msgstr "Odstranit nepoužitou síť \"%s\"."
+msgstr "Odstranit nepoužitou síť %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1015
 msgid "Update netlist"
@@ -30818,7 +30776,7 @@ msgid "Cannot find component with ref '%s' in netlist."
 msgstr "Nelze najít součástku s referencí \"%s\" v netlistu."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -30826,7 +30784,7 @@ msgid ""
 "offset: %d"
 msgstr ""
 "Neplatné ID pouzdra v\n"
-"souboru: \"%s\"\n"
+"souboru: '%s'\n"
 "řádek: %d\n"
 "offset: %d"
 
@@ -30861,14 +30819,14 @@ msgid "Cannot parse net name in symbol net section of netlist."
 msgstr "Nelze přečíst název sítě v sekci sítí součástky netlistu."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr "Nelze najít symbol \"%s\" v sekci filtru pouzdra netlistu."
+msgstr "Nelze najít symbol %s v sekci filtru pouzdra netlistu."
 
 #: pcbnew/netlist_reader/netlist.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open netlist file '%s'."
-msgstr "Nelze otevřít soubor netlistu \"%s\"."
+msgstr "Nelze otevřít soubor netlistu '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:68
 msgid "Netlist Load Error."
@@ -30893,14 +30851,14 @@ msgid "No footprint defined for symbol %s."
 msgstr "Není definované pouzdro pro symbol %s."
 
 #: pcbnew/netlist_reader/netlist.cpp:182
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
-msgstr "Změna pouzdra \"%s\": pouzdro deska \"%s\", netlist pouzdro \"%s\"."
+msgstr "Změna pouzdra %s: pouzdro deska '%s', netlist pouzdro '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint ID '%s' is not valid."
-msgstr "%s pouzdro ID \"%s\" není platné."
+msgstr "%s pouzdro ID '%s' není platné."
 
 #: pcbnew/netlist_reader/netlist.cpp:222
 #, c-format
@@ -30910,14 +30868,14 @@ msgstr ""
 "%s pouzdro '%s' nenalezeno v žádné knihovně v tabulce knihoven pouzder."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d"
 msgstr ""
 "Neplatné ID pouzdra v\n"
-"souboru: \"%s\"\n"
+"souboru: '%s'\n"
 "řádek: %d"
 
 #: pcbnew/pad.cpp:721 pcbnew/pad.cpp:836 pcbnew/pad.cpp:856 pcbnew/pad.cpp:875
@@ -31157,9 +31115,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcb_edit_frame.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic file '%s' not found."
-msgstr "Soubor schématu \"%s\" nenalezen."
+msgstr "Soubor schématu '%s' nenalezen."
 
 #: pcbnew/pcb_edit_frame.cpp:1560
 msgid "Eeschema failed to load."
@@ -31203,9 +31161,8 @@ msgid "Footprint has no back courtyard."
 msgstr "Pouzdro nemá dole žádnou zónu obsazení."
 
 #: pcbnew/pcb_expr_evaluator.cpp:1151
-#, fuzzy
 msgid "must be mm, in, or mil"
-msgstr "musí být mm, in nebo mil"
+msgstr "musí být mm, in nebo mily"
 
 #: pcbnew/pcb_group.cpp:317
 #, c-format
@@ -31213,9 +31170,9 @@ msgid "Unnamed Group, %zu members"
 msgstr "Nejmenovaná skupina, %zu členů"
 
 #: pcbnew/pcb_group.cpp:321
-#, fuzzy, c-format
+#, c-format
 msgid "Group '%s', %zu members"
-msgstr "Skupina \"%s\", %zu členů"
+msgstr "Skupina '%s', %zu členů"
 
 #: pcbnew/pcb_group.cpp:335
 msgid "<unnamed>"
@@ -32945,9 +32902,8 @@ msgid "Track %s"
 msgstr "Spoj %s"
 
 #: pcbnew/router/router_tool.cpp:243
-#, fuzzy
 msgid "Via netclass values"
-msgstr "Použít hodnoty tříd sítí"
+msgstr "Prokov hodnoty třídy sítě"
 
 #: pcbnew/router/router_tool.cpp:247 pcbnew/tools/drawing_tool.cpp:113
 #, c-format
@@ -32960,14 +32916,12 @@ msgid "Via %s"
 msgstr "Prokov %s"
 
 #: pcbnew/router/router_tool.cpp:315
-#, fuzzy
 msgid "Select Differential Pair Dimensions"
-msgstr "Diferenciální pár - rozměry"
+msgstr "Výběr rozměrů diferenciálního páru"
 
 #: pcbnew/router/router_tool.cpp:332
-#, fuzzy
 msgid "Use differential pair dimensions from the net class"
-msgstr "Použít velikosti spojů a via z jejich třídy spojů"
+msgstr "Použít rozměry diferenciálního páru ze třídy sítě"
 
 #: pcbnew/router/router_tool.cpp:337
 #, fuzzy
@@ -33187,9 +33141,9 @@ msgid "Reference '%s' not found."
 msgstr "Reference '%s' nenalezena."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "U reference drátové propojky chybí prvky vrstev \"%s\""
+msgstr "U reference drátové propojky chybí prvky plošky '%s'."
 
 #: pcbnew/toolbars_footprint_editor.cpp:92
 msgid "Load footprint from current board"
@@ -33231,7 +33185,6 @@ msgstr ""
 "nastavení šířky"
 
 #: pcbnew/toolbars_pcb_editor.cpp:647
-#, fuzzy
 msgid "Track: use netclass width"
 msgstr "Spoj: použít šířku třídy spojů"
 
@@ -33361,9 +33314,8 @@ msgstr "Izolační mezera zóny: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:186
 #: pcbnew/tools/board_inspection_tool.cpp:305
-#, fuzzy
 msgid "Clearance Report"
-msgstr "Izolační mezera"
+msgstr "Izolační mezera zpráva"
 
 #: pcbnew/tools/board_inspection_tool.cpp:198
 #: pcbnew/tools/board_inspection_tool.cpp:605
@@ -33449,9 +33401,8 @@ msgid "Select an item for a constraints resolution report."
 msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:685
-#, fuzzy
 msgid "Constraints Report"
-msgstr "Report pouzdra"
+msgstr "Omezení Zpráva"
 
 #: pcbnew/tools/board_inspection_tool.cpp:729
 msgid "Track width resolution for:"
@@ -33502,9 +33453,8 @@ msgid "Hole constraint: min %s."
 msgstr "Omezení díry: min. %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:816
-#, fuzzy
 msgid "Keepouts"
-msgstr "Bez via"
+msgstr "Zakázané zóny"
 
 #: pcbnew/tools/board_inspection_tool.cpp:818
 msgid "Keepout resolution for:"
@@ -33527,9 +33477,8 @@ msgid "Item allowed at current location."
 msgstr ""
 
 #: pcbnew/tools/convert_tool.cpp:76
-#, fuzzy
 msgid "Create from Selection"
-msgstr "Odebrat z výběru"
+msgstr "Vytvořit z výběru"
 
 #: pcbnew/tools/convert_tool.cpp:210
 msgid "Convert shapes to polygon"
@@ -33558,9 +33507,8 @@ msgid "Thickness (mm)"
 msgstr "Tloušťka (mm)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:274
-#, fuzzy
 msgid "Thickness (inches)"
-msgstr "Tloušťka (milů)"
+msgstr "Tloušťka (palce)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:275
 msgid "Thickness (mils)"
@@ -33572,9 +33520,8 @@ msgid "Loss Tangent"
 msgstr "Loss Tg"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:313
-#, fuzzy
 msgid "Dielectric"
-msgstr "Dielektrikum %d"
+msgstr "Dielektrika"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:365
 msgid "Insert board stackup table"
@@ -33780,7 +33727,6 @@ msgid "Selection copied"
 msgstr "Výběr zkopírován"
 
 #: pcbnew/tools/edit_tool.cpp:2387
-#, fuzzy
 msgid "Copy canceled"
 msgstr "Kopírování zrušeno"
 
@@ -34185,9 +34131,8 @@ msgid "Change Track Width"
 msgstr "Změnit šířku spoje"
 
 #: pcbnew/tools/pcb_actions.cpp:313
-#, fuzzy
 msgid "Updates selected track & via sizes"
-msgstr "Zadejte vlastní spoje a velikosti via"
+msgstr "Aktualizace velikosti spojů & prokov"
 
 #: pcbnew/tools/pcb_actions.cpp:317
 msgid "Adds arcs tangent to the selected straight track segments"
@@ -34522,9 +34467,8 @@ msgid "Read netlist and update board connectivity"
 msgstr "Načíst netlist a aktualizovat propojení desky"
 
 #: pcbnew/tools/pcb_actions.cpp:574
-#, fuzzy
 msgid "Import Specctra Session..."
-msgstr "Relace Specctra..."
+msgstr "Import relace Specctra..."
 
 #: pcbnew/tools/pcb_actions.cpp:574
 msgid "Import routed Specctra session (*.ses) file"
@@ -34535,9 +34479,8 @@ msgid "Export Specctra DSN..."
 msgstr "Specctra DSN export..."
 
 #: pcbnew/tools/pcb_actions.cpp:579
-#, fuzzy
 msgid "Export Specctra DSN routing info"
-msgstr "Exportovat soubor Specctra (do FreeRouteru)"
+msgstr "Export souboru Specctra DSN (info o tažení)"
 
 #: pcbnew/tools/pcb_actions.cpp:584
 msgid "Gerbers (.gbr)..."
@@ -34569,9 +34512,8 @@ msgid "Footprint Report (.rpt)..."
 msgstr "Report pouzdra (.rpt)..."
 
 #: pcbnew/tools/pcb_actions.cpp:601
-#, fuzzy
 msgid "Create report of all footprints from current board"
-msgstr "Vytvořit zprávu o všech pouzdrech aktuální desky"
+msgstr "Vytvořit zprávu o všech pouzdrech z aktuální desky"
 
 #: pcbnew/tools/pcb_actions.cpp:606
 msgid "IPC-D-356 Netlist File..."
@@ -34657,9 +34599,8 @@ msgid "Add a footprint"
 msgstr "Přidat pouzdro"
 
 #: pcbnew/tools/pcb_actions.cpp:662
-#, fuzzy
 msgid "Drill/Place File Origin"
-msgstr "Počátek vrtání"
+msgstr "Základní bod souboru vrtání/umístění"
 
 #: pcbnew/tools/pcb_actions.cpp:663
 #, fuzzy
@@ -34701,7 +34642,7 @@ msgstr ""
 #: pcbnew/tools/pcb_actions.cpp:696
 #, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "není vybrána knihovna"
+msgstr "vybraných skupin"
 
 #: pcbnew/tools/pcb_actions.cpp:701
 msgid "Remove Items"
@@ -34805,14 +34746,12 @@ msgid "Show the net inspector"
 msgstr "&Zobrazit informace o verzi"
 
 #: pcbnew/tools/pcb_actions.cpp:791
-#, fuzzy
 msgid "Show Appearance Manager"
-msgstr "Zobrazit Správce vrstev"
+msgstr "Zobrazit Správce vzhledu"
 
 #: pcbnew/tools/pcb_actions.cpp:791
-#, fuzzy
 msgid "Show/hide the appearance manager"
-msgstr "Zobrazit/skrýt nástrojovou lištu manažeru vrstev"
+msgstr "Zobrazit/skrýt správce vzhledu"
 
 #: pcbnew/tools/pcb_actions.cpp:796
 msgid "Flip Board View"
@@ -34899,9 +34838,8 @@ msgid "Show footprint texts in line mode"
 msgstr "Zobrazit texty v režimu čáry"
 
 #: pcbnew/tools/pcb_actions.cpp:853
-#, fuzzy
 msgid "Draw Zone Fills"
-msgstr "Smazat výplň zóny"
+msgstr "Nakreslit vyplněné zóny"
 
 #: pcbnew/tools/pcb_actions.cpp:853
 msgid "Show filled areas of zones"
@@ -35125,7 +35063,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1105
 msgid "Reannotate PCB in geographical order"
-msgstr ""
+msgstr "Přečíslování DPS podle vybrané sady směrů"
 
 #: pcbnew/tools/pcb_actions.cpp:1110
 msgid "Repair Board"
@@ -35136,9 +35074,8 @@ msgid "Run various diagnostics and attempt to repair board"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1116
-#, fuzzy
 msgid "Repair Footprint"
-msgstr "Nové pouzdro"
+msgstr "Opravit pouzdro"
 
 #: pcbnew/tools/pcb_actions.cpp:1117
 msgid "Run various diagnostics and attempt to repair footprint"
@@ -35235,27 +35172,24 @@ msgid "Selects all tracks & vias belonging to the same net."
 msgstr "Vybrat všechny spoje & prokovy patřící do stejné sítě."
 
 #: pcbnew/tools/pcb_actions.cpp:1245
-#, fuzzy
 msgid "Deselect All Tracks in Net"
-msgstr "Vybrat všechny spoje v síti"
+msgstr "Zrušit výběr všech spojů v síti"
 
 #: pcbnew/tools/pcb_actions.cpp:1246
 msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "Zruší výběr všech spojů & prokovů patřící do stejné sítě."
 
 #: pcbnew/tools/pcb_actions.cpp:1251
-#, fuzzy
 msgid "Selects all footprints and tracks in the schematic sheet"
-msgstr "Vybírá všechny moduly a spoje v listu schématu"
+msgstr "Vybere všechny pouzdra a spoje v listu schématu"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
 msgid "Items in Same Hierarchical Sheet"
 msgstr "Položky ve stejném hierarchickém listu"
 
 #: pcbnew/tools/pcb_actions.cpp:1257
-#, fuzzy
 msgid "Selects all footprints and tracks in the same schematic sheet"
-msgstr "Vybrat všechny moduly a spoje ve stejném listu schématu"
+msgstr "Vybere všechny pouzdra a spoje ve stejném listu schématu"
 
 #: pcbnew/tools/pcb_actions.cpp:1262
 msgid "Filter Selected Items..."
@@ -35270,18 +35204,16 @@ msgid "Fill Zone"
 msgstr "Vyplnit zónu"
 
 #: pcbnew/tools/pcb_actions.cpp:1270
-#, fuzzy
 msgid "Update copper fill of selected zone(s)"
-msgstr "Aktualizovat vybrané pouzdro"
+msgstr "Aktualizace výplně mědi vybrané zón(y)"
 
 #: pcbnew/tools/pcb_actions.cpp:1276 pcbnew/tools/zone_filler_tool.cpp:154
 msgid "Fill All Zones"
 msgstr "Vyplnění všech zón"
 
 #: pcbnew/tools/pcb_actions.cpp:1276
-#, fuzzy
 msgid "Update copper fill of all zones"
-msgstr "Odstraní vyplnění všech zón"
+msgstr "Aktualizace výplně mědi všech zón"
 
 #: pcbnew/tools/pcb_actions.cpp:1281 pcbnew/tools/zone_filler_tool.cpp:249
 msgid "Unfill Zone"
@@ -35296,9 +35228,8 @@ msgid "Unfill All Zones"
 msgstr "Odstranit vyplnění všech zón"
 
 #: pcbnew/tools/pcb_actions.cpp:1287
-#, fuzzy
 msgid "Remove copper fill from all zones"
-msgstr "Odstraní výplň ze všech zón na desce"
+msgstr "Odstraňte výplň mědi ze všech zón"
 
 #: pcbnew/tools/pcb_actions.cpp:1295
 msgid "Place Selected Footprints"
@@ -35411,9 +35342,8 @@ msgid "Undo Last Segment"
 msgstr "Vrátit zpět poslední segment"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
-#, fuzzy
 msgid "Walks the current track back one segment."
-msgstr "Zvyší průhlednost aktuální vrstvy"
+msgstr "Jít zpět o jeden segment aktuálního spoje."
 
 #: pcbnew/tools/pcb_actions.cpp:1387
 #, fuzzy
@@ -35706,27 +35636,24 @@ msgid "Front Layers"
 msgstr "Horní vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:389
-#, fuzzy
 msgid "Front Assembly View"
-msgstr "Zobrazit pouze přední vrstvy"
+msgstr "Pohled na osazení součástek nahoře"
 
 #: pcbnew/widgets/appearance_controls.cpp:392
 msgid "Back Layers"
 msgstr "Dolní vrstva"
 
 #: pcbnew/widgets/appearance_controls.cpp:395
-#, fuzzy
 msgid "Back Assembly View"
-msgstr "Zobrazit pouze zadní vrstvy"
+msgstr "Pohled na osazení součástek dole"
 
 #: pcbnew/widgets/appearance_controls.cpp:444
 msgid "Filter nets"
 msgstr "Filtr sítí"
 
 #: pcbnew/widgets/appearance_controls.cpp:584
-#, fuzzy
 msgid "Layer Display Options"
-msgstr "Nastavení zobrazení"
+msgstr "Možnosti zobrazení vrstvy"
 
 #: pcbnew/widgets/appearance_controls.cpp:596
 #, c-format
@@ -35746,9 +35673,8 @@ msgid "Dim"
 msgstr "Roz"
 
 #: pcbnew/widgets/appearance_controls.cpp:619
-#, fuzzy
 msgid "Inactive layers will be dimmed"
-msgstr "Přepínat neaktivní vrstvy mezi normálními a šedými"
+msgstr "Neaktivní vrstvy budou stmívány"
 
 #: pcbnew/widgets/appearance_controls.cpp:624
 msgid "Hide"
@@ -35763,9 +35689,8 @@ msgid "Flip board view"
 msgstr "Obrátit pohled na desku"
 
 #: pcbnew/widgets/appearance_controls.cpp:659
-#, fuzzy
 msgid "Net Display Options"
-msgstr "Nastavení zobrazení"
+msgstr "Možnosti zobrazení sítě"
 
 #: pcbnew/widgets/appearance_controls.cpp:671
 #, c-format
@@ -35789,9 +35714,8 @@ msgid "Net and netclass colors are shown on the ratsnest only"
 msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:702
-#, fuzzy
 msgid "Net and netclass colors are not shown"
-msgstr "Nastavit barvu třídy spojů"
+msgstr "Barvy sítí a třídy spojů nejsou zobrazeny"
 
 #: pcbnew/widgets/appearance_controls.cpp:713
 #, c-format
@@ -35799,9 +35723,8 @@ msgid "Ratsnest display (%s):"
 msgstr "Zobrazení naznačených spojů (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:715
-#, fuzzy
 msgid "Ratsnest display:"
-msgstr "Obrys zešikmení:"
+msgstr "Zobrazení naznačených spojů:"
 
 #: pcbnew/widgets/appearance_controls.cpp:720
 msgid "Choose which ratsnest lines to display"
@@ -36106,9 +36029,8 @@ msgid "Objects"
 msgstr "Objekty"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:71
-#, fuzzy
 msgid "Show the Net Inspector"
-msgstr "&Zobrazit informace o verzi"
+msgstr "Zobrazit Inspektor sítě"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:123
 msgid "Configure net classes"
