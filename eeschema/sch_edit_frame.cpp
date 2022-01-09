@@ -1517,6 +1517,14 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     view->SetLayerVisible( LAYER_ERC_WARN, cfg->m_Appearance.show_erc_warnings );
     view->SetLayerVisible( LAYER_ERC_EXCLUSION, cfg->m_Appearance.show_erc_exclusions );
 
+    SCH_SCREEN* screen = GetCurrentSheet().LastScreen();
+
+    for( SCH_ITEM* item : screen->Items() )
+        item->ClearCaches();
+
+    for( std::pair<const wxString, LIB_SYMBOL*>& libSymbol : screen->GetLibSymbols() )
+        libSymbol.second->ClearCaches();
+
     GetCanvas()->ForceRefresh();
 
     RecreateToolbars();

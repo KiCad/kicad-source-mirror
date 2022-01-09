@@ -1104,6 +1104,9 @@ void SYMBOL_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextV
 
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
 
+    if( m_symbol )
+        m_symbol->ClearCaches();
+
     GetCanvas()->ForceRefresh();
 
     RecreateToolbars();
