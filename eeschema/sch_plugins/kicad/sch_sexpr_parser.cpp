@@ -599,7 +599,6 @@ void SCH_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSynta
 
             if( !faceName.IsEmpty() )
             {
-                // FONT TODO: notify user about missing font
                 aText->SetFont( KIFONT::FONT::GetFont( faceName, aText->IsBold(),
                                                        aText->IsItalic() ) );
             }

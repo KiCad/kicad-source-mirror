@@ -66,7 +66,7 @@ FONT* FONT::getDefaultFont()
 
 FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic )
 {
-    if( aFontName.empty() || aFontName == wxT( "KiCad Font" ) )
+    if( aFontName.empty() || aFontName.StartsWith( wxT( "KiCad Font" ) ) )
         return getDefaultFont();
 
     std::tuple<wxString, bool, bool> key = { aFontName, aBold, aItalic };

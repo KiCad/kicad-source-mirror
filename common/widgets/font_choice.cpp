@@ -88,7 +88,7 @@ KIFONT::FONT* FONT_CHOICE::GetFontSelection( bool aBold, bool aItalic ) const
     if( GetSelection() <= 0 )
         return nullptr;
     else if( GetSelection() == 1 && m_systemFontCount == 2 )
-        return KIFONT::FONT::GetFont( "KiCad", aBold, aItalic );
+        return KIFONT::FONT::GetFont( "KiCad Font", aBold, aItalic );
     else
         return KIFONT::FONT::GetFont( GetStringSelection(), aBold, aItalic );
 }

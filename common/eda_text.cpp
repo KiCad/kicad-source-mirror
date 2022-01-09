@@ -661,7 +661,6 @@ void EDA_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
 
         GetLinePositions( positions, strings.Count() );
 
-        // FONT TODO: this is going to use the KiCad font because it doesn't know any better...
         for( unsigned ii = 0; ii < strings.Count(); ii++ )
             printOneLineOfText( aSettings, aOffset, aColor, aFillMode, strings[ii], positions[ii] );
     }

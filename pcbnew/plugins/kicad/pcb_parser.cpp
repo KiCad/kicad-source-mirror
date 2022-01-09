@@ -474,7 +474,6 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 
             if( !faceName.IsEmpty() )
             {
-                // FONT TODO: notify user about missing font
                 aText->SetFont( KIFONT::FONT::GetFont( faceName, aText->IsBold(),
                                                        aText->IsItalic() ) );
             }
