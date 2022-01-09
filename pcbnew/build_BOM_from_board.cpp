@@ -121,6 +121,9 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 
     for( FOOTPRINT* footprint : GetBoard()->Footprints() )
     {
+        if( footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM )
+            continue;
+
         bool valExist = false;
 
         // try to find component in existing list
