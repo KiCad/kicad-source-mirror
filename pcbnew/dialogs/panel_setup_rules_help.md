@@ -244,11 +244,22 @@ For the latter use a `(layer "layer_name")` clause in the rule.
     (rule fully_spoked_pads
         (constraint min_resolved_spokes 4))
 
+    # Set thermal relief gap & spoke width for all zones
+    (rule defined_relief
+        (constraint thermal_relief_gap (min 10mil))
+        (constraint thermal_spoke_width (min 12mil)))
+
+    # Override thermal relief gap & spoke width for GND and PWR zones
+    (rule defined_relief_pwr
+        (constraint thermal_relief_gap (min 10mil))
+        (constraint thermal_spoke_width (min 12mil))
+        (condition "A.Name == 'zone_GND' || A.Name == 'zone_PWR'"))
+    
+
     # Prevent solder wicking from SMD pads
     (rule holes_in_pads
         (constraint mechanical_hole_clearance (min 0.2mm))
         (condition "B.Pad_Type == 'SMD'"))
-
 
     # Disallow solder mask margin overrides
     (rule "disallow solder mask margin overrides"
