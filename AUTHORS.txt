@@ -81,7 +81,7 @@ German (DE) Rafael Sokolowski <Rafael.Sokolowski[at]web-dot-de
 Japanese (JA) Kenta Yonekura <yoneken[at]kicad-dot-jp>
 Simplified Chinese (zh_CN) taotieren <admin[at]taotieren-dot-com>
 
-Remy Halvick, David Briscoe, Dominique Laigle, Paul Burke
+Remy Halvick, David J S Briscoe, Dominique Laigle, Paul Burke
 
 
 == Programm credits for icons and others
