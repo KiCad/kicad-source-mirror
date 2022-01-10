@@ -146,6 +146,13 @@ private:
     // Binary Format
     void ParseArcs6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ConvertArcs6ToPcbShape( const AARC6& aElem, PCB_SHAPE* aShape );
+    void ConvertArcs6ToBoardItem( const AARC6& aElem );
+    void ConvertArcs6ToFootprintItem( FOOTPRINT* aFootprint, const AARC6& aElem,
+                                      const bool aIsBoardImport );
+    void ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_ID aLayer );
+    void ConvertArcs6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const AARC6& aElem,
+                                             PCB_LAYER_ID aLayer );
     void ParseComponentsBodies6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                      const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParsePads6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
@@ -154,12 +161,12 @@ private:
                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                            const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseTracks6DataBoard( const ATRACK6& aElem );
-    void ParseTracks6DataFootprint( FOOTPRINT* aFootprint, const ATRACK6& aElem,
-                                    const bool aBoardImport );
-    void ParseTracks6DataBoardLayer( const ATRACK6& aElem, PCB_LAYER_ID aLayer );
-    void ParseTracks6DataFootprintLayer( FOOTPRINT* aFootprint, const ATRACK6& aElem,
-                                         PCB_LAYER_ID aLayer );
+    void ConvertTracks6ToBoardItem( const ATRACK6& aElem );
+    void ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATRACK6& aElem,
+                                        const bool aIsBoardImport );
+    void ConvertTracks6ToBoardItemOnLayer( const ATRACK6& aElem, PCB_LAYER_ID aLayer );
+    void ConvertTracks6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const ATRACK6& aElem,
+                                               PCB_LAYER_ID aLayer );
     void ParseTexts6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                           const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,

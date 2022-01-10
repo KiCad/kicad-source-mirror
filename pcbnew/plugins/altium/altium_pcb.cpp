@@ -674,6 +674,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         case ALTIUM_RECORD::ARC:
         {
             AARC6 arc( parser );
+            ConvertArcs6ToFootprintItem( footprint.get(), arc, false );
             break;
         }
         case ALTIUM_RECORD::PAD:
@@ -689,7 +690,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         case ALTIUM_RECORD::TRACK:
         {
             ATRACK6 track( parser );
-            ParseTracks6DataFootprint( footprint.get(), track, false );
+            ConvertTracks6ToFootprintItem( footprint.get(), track, false );
             break;
         }
         case ALTIUM_RECORD::TEXT:
@@ -2007,34 +2008,6 @@ void ALTIUM_PCB::ParseArcs6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading arcs..." ) );
 
-    auto setupShape =
-            [&]( AARC6& elem, PCB_LAYER_ID layer, PCB_SHAPE& shape )
-            {
-                shape.SetLayer( layer );
-                shape.SetStroke( STROKE_PARAMS( elem.width, PLOT_DASH_TYPE::SOLID ) );
-
-                if( elem.startangle == 0. && elem.endangle == 360. )
-                {
-                    // TODO: other variants to define circle?
-                    shape.SetShape( SHAPE_T::CIRCLE );
-                    shape.SetStart( elem.center );
-                    shape.SetEnd( elem.center - VECTOR2I( 0, elem.radius ) );
-                    return;
-                }
-
-                shape.SetShape( SHAPE_T::ARC );
-
-                EDA_ANGLE includedAngle( elem.endangle - elem.startangle, DEGREES_T );
-                EDA_ANGLE startAngle( elem.endangle, DEGREES_T );
-
-                VECTOR2I startOffset( KiROUND( elem.radius * startAngle.Cos() ),
-                                     -KiROUND( elem.radius * startAngle.Sin() ) );
-
-                shape.SetCenter( elem.center );
-                shape.SetStart( elem.center + startOffset );
-                shape.SetArcAngleAndEnd( includedAngle.Normalize(), true );
-            };
-
     ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
@@ -2042,112 +2015,173 @@ void ALTIUM_PCB::ParseArcs6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
         checkpoint();
         AARC6 elem( reader );
 
-        if( elem.is_polygonoutline || elem.subpolyindex != ALTIUM_POLYGON_NONE )
-            continue;
-
-        // element in plane is in fact substracted from the plane. Should be already done by Altium?
-        //if( IsAltiumLayerAPlane( elem.layer ) )
-        //    continue;
-
-        PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
-
-        if( elem.is_keepout || IsAltiumLayerAPlane( elem.layer ) )
+        if( elem.component == ALTIUM_COMPONENT_NONE )
         {
-            PCB_SHAPE shape( nullptr ); // just a helper to get the graphic
-            setupShape( elem, klayer, shape );
-
-            ZONE* zone = new ZONE( m_board );
-            m_board->Add( zone, ADD_MODE::APPEND );
-
-            zone->SetFillVersion( 6 );
-            zone->SetIsRuleArea( true );
-            zone->SetDoNotAllowTracks( false );
-            zone->SetDoNotAllowVias( false );
-            zone->SetDoNotAllowPads( false );
-            zone->SetDoNotAllowFootprints( false );
-            zone->SetDoNotAllowCopperPour( true );
-
-            if( elem.layer == ALTIUM_LAYER::MULTI_LAYER )
-            {
-                zone->SetLayer( F_Cu );
-                zone->SetLayerSet( LSET::AllCuMask() );
-            }
-            else
-            {
-                if( klayer == UNDEFINED_LAYER )
-                {
-                    wxLogWarning( _( "Arc keepout found on an Altium layer (%d) with no KiCad "
-                                     "equivalent. It has been moved to KiCad layer Eco1_User." ),
-                                  elem.layer );
-                    klayer = Eco1_User;
-                }
-                zone->SetLayer( klayer );
-            }
-
-            shape.TransformShapeWithClearanceToPolygon( *zone->Outline(), klayer, 0, ARC_HIGH_DEF,
-                                                        ERROR_INSIDE );
-            zone->Outline()->Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE ); // the outline is not a single polygon!
-
-            zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                         ZONE::GetDefaultHatchPitch(), true );
-            continue;
-        }
-
-        if( klayer == UNDEFINED_LAYER )
-        {
-            wxLogWarning( _( "Arc found on an Altium layer (%d) with no KiCad equivalent. "
-                             "It has been moved to KiCad layer Eco1_User." ),
-                          elem.layer );
-            klayer = Eco1_User;
-        }
-
-        if( klayer >= F_Cu && klayer <= B_Cu )
-        {
-            EDA_ANGLE angle( elem.startangle - elem.endangle, DEGREES_T );
-            angle.Normalize();
-
-            double   startradiant = DEG2RAD( elem.startangle );
-            VECTOR2I arcStartOffset = VECTOR2I( KiROUND( std::cos( startradiant ) * elem.radius ),
-                                               -KiROUND( std::sin( startradiant ) * elem.radius ) );
-
-            arcStartOffset += elem.center;
-
-            // If it's a circle then add two 180-degree arcs
-            if( elem.startangle == 0.0 && elem.endangle == 360.0 )
-                angle = ANGLE_180;
-
-            SHAPE_ARC shapeArc( elem.center, arcStartOffset, angle, elem.width );
-            PCB_ARC*  arc = new PCB_ARC( m_board, &shapeArc );
-            m_board->Add( arc, ADD_MODE::APPEND );
-
-            arc->SetWidth( elem.width );
-            arc->SetLayer( klayer );
-            arc->SetNetCode( GetNetCode( elem.net ) );
-
-            // Add second 180-degree arc for a circle
-            if( elem.startangle == 0. && elem.endangle == 360. )
-            {
-                shapeArc = SHAPE_ARC( elem.center, arcStartOffset, -angle, elem.width );
-                arc = new PCB_ARC( m_board, &shapeArc );
-                m_board->Add( arc, ADD_MODE::APPEND );
-
-                arc->SetWidth( elem.width );
-                arc->SetLayer( klayer );
-                arc->SetNetCode( GetNetCode( elem.net ) );
-            }
+            ConvertArcs6ToBoardItem( elem );
         }
         else
         {
-            PCB_SHAPE* shape = HelperCreateAndAddShape( elem.component );
-
-            setupShape( elem, klayer, *shape );
-
-            HelperShapeSetLocalCoord( shape, elem.component );
+            FOOTPRINT* footprint = HelperGetFootprint( elem.component );
+            ConvertArcs6ToFootprintItem( footprint, elem, true );
         }
     }
 
     if( reader.GetRemainingBytes() != 0 )
+    {
         THROW_IO_ERROR( "Arcs6 stream is not fully parsed" );
+    }
+}
+
+
+void ALTIUM_PCB::ConvertArcs6ToPcbShape( const AARC6& aElem, PCB_SHAPE* aShape )
+{
+    if( aElem.startangle == 0. && aElem.endangle == 360. )
+    {
+        aShape->SetShape( SHAPE_T::CIRCLE );
+
+        // TODO: other variants to define circle?
+        aShape->SetStart( aElem.center );
+        aShape->SetEnd( aElem.center - VECTOR2I( 0, aElem.radius ) );
+    }
+    else
+    {
+        aShape->SetShape( SHAPE_T::ARC );
+
+        EDA_ANGLE includedAngle( aElem.endangle - aElem.startangle, DEGREES_T );
+        EDA_ANGLE startAngle( aElem.endangle, DEGREES_T );
+
+        VECTOR2I startOffset = VECTOR2I( KiROUND( startAngle.Cos() * aElem.radius ),
+                                         -KiROUND( startAngle.Sin() * aElem.radius ) );
+
+        aShape->SetCenter( aElem.center );
+        aShape->SetStart( aElem.center + startOffset );
+        aShape->SetArcAngleAndEnd( includedAngle.Normalize(), true );
+    }
+}
+
+
+void ALTIUM_PCB::ConvertArcs6ToBoardItem(
+        const AARC6& aElem ) // ConvertTracks6ToBoardItem (OnLayer)
+{
+    if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
+        return;
+
+    if( aElem.is_keepout || IsAltiumLayerAPlane( aElem.layer ) )
+    {
+        // This is not the actual board item. We can use it to create the polygon for the region
+        PCB_SHAPE shape( nullptr );
+
+        ConvertArcs6ToPcbShape( aElem, &shape );
+        shape.SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+
+        HelperPcpShapeAsBoardKeepoutRegion( shape, aElem.layer );
+    }
+    else
+    {
+        for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+        {
+            ConvertArcs6ToBoardItemOnLayer( aElem, klayer );
+        }
+    }
+}
+
+
+void ALTIUM_PCB::ConvertArcs6ToFootprintItem( FOOTPRINT* aFootprint, const AARC6& aElem,
+                                              const bool aIsBoardImport )
+{
+    if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
+        return;
+
+    if( aElem.is_keepout || IsAltiumLayerAPlane( aElem.layer ) )
+    {
+        // This is not the actual board item. We can use it to create the polygon for the region
+        PCB_SHAPE shape( nullptr );
+
+        ConvertArcs6ToPcbShape( aElem, &shape );
+        shape.SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+
+        HelperPcpShapeAsFootprintKeepoutRegion( aFootprint, shape, aElem.layer );
+    }
+    else
+    {
+        for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+        {
+            if( aIsBoardImport && IsCopperLayer( klayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
+            {
+                // Special case: do to not lose net connections in footprints
+                ConvertArcs6ToBoardItemOnLayer( aElem, klayer );
+            }
+            else
+            {
+                ConvertArcs6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
+            }
+        }
+    }
+}
+
+
+void ALTIUM_PCB::ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_ID aLayer )
+{
+    if( IsCopperLayer( aLayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
+    {
+        EDA_ANGLE angle( aElem.startangle - aElem.endangle, DEGREES_T );
+        angle.Normalize();
+
+        double   startradiant = DEG2RAD( aElem.startangle );
+        VECTOR2I arcStartOffset = VECTOR2I( KiROUND( std::cos( startradiant ) * aElem.radius ),
+                                            -KiROUND( std::sin( startradiant ) * aElem.radius ) );
+
+        arcStartOffset += aElem.center;
+
+        // If it's a circle then add two 180-degree arcs
+        if( aElem.startangle == 0.0 && aElem.endangle == 360.0 )
+            angle = ANGLE_180;
+
+        SHAPE_ARC shapeArc( aElem.center, arcStartOffset, angle, aElem.width );
+        PCB_ARC*  arc = new PCB_ARC( m_board, &shapeArc );
+        m_board->Add( arc, ADD_MODE::APPEND );
+
+        arc->SetWidth( aElem.width );
+        arc->SetLayer( aLayer );
+        arc->SetNetCode( GetNetCode( aElem.net ) );
+
+        // Add second 180-degree arc for a circle
+        // TODO: can we remove this workaround?
+        if( aElem.startangle == 0. && aElem.endangle == 360. )
+        {
+            shapeArc = SHAPE_ARC( aElem.center, arcStartOffset, -angle, aElem.width );
+            arc = new PCB_ARC( m_board, &shapeArc );
+            m_board->Add( arc, ADD_MODE::APPEND );
+
+            arc->SetWidth( aElem.width );
+            arc->SetLayer( aLayer );
+            arc->SetNetCode( GetNetCode( aElem.net ) );
+        }
+    }
+    else
+    {
+        PCB_SHAPE* arc = new PCB_SHAPE( m_board );
+
+        ConvertArcs6ToPcbShape( aElem, arc );
+        arc->SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+        arc->SetLayer( aLayer );
+
+        m_board->Add( arc, ADD_MODE::APPEND );
+    }
+}
+
+
+void ALTIUM_PCB::ConvertArcs6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const AARC6& aElem,
+                                                     PCB_LAYER_ID aLayer )
+{
+    FP_SHAPE* arc = new FP_SHAPE( aFootprint );
+
+    ConvertArcs6ToPcbShape( aElem, arc );
+    arc->SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+    arc->SetLayer( aLayer );
+
+    arc->SetLocalCoord();
+    aFootprint->Add( arc, ADD_MODE::APPEND );
 }
 
 
@@ -2640,12 +2674,12 @@ void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFil
 
         if( elem.component == ALTIUM_COMPONENT_NONE )
         {
-            ParseTracks6DataBoard( elem );
+            ConvertTracks6ToBoardItem( elem );
         }
         else
         {
             FOOTPRINT* footprint = HelperGetFootprint( elem.component );
-            ParseTracks6DataFootprint( footprint, elem, true );
+            ConvertTracks6ToFootprintItem( footprint, elem, true );
         }
     }
 
@@ -2656,7 +2690,8 @@ void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFil
 }
 
 
-void ALTIUM_PCB::ParseTracks6DataBoard( const ATRACK6& aElem )
+void ALTIUM_PCB::ConvertTracks6ToBoardItem(
+        const ATRACK6& aElem ) // ConvertTracks6ToBoardItem (OnLayer)
 {
     if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
         return;
@@ -2675,14 +2710,14 @@ void ALTIUM_PCB::ParseTracks6DataBoard( const ATRACK6& aElem )
     {
         for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
         {
-            ParseTracks6DataBoardLayer( aElem, klayer );
+            ConvertTracks6ToBoardItemOnLayer( aElem, klayer );
         }
     }
 }
 
 
-void ALTIUM_PCB::ParseTracks6DataFootprint( FOOTPRINT* aFootprint, const ATRACK6& aElem,
-                                            const bool aBoardImport )
+void ALTIUM_PCB::ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATRACK6& aElem,
+                                                const bool aIsBoardImport )
 {
     if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
         return;
@@ -2701,21 +2736,21 @@ void ALTIUM_PCB::ParseTracks6DataFootprint( FOOTPRINT* aFootprint, const ATRACK6
     {
         for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
         {
-            if( aBoardImport && IsCopperLayer( klayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
+            if( aIsBoardImport && IsCopperLayer( klayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
             {
                 // Special case: do to not lose net connections in footprints
-                ParseTracks6DataBoardLayer( aElem, klayer );
+                ConvertTracks6ToBoardItemOnLayer( aElem, klayer );
             }
             else
             {
-                ParseTracks6DataFootprintLayer( aFootprint, aElem, klayer );
+                ConvertTracks6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
             }
         }
     }
 }
 
 
-void ALTIUM_PCB::ParseTracks6DataBoardLayer( const ATRACK6& aElem, PCB_LAYER_ID aLayer )
+void ALTIUM_PCB::ConvertTracks6ToBoardItemOnLayer( const ATRACK6& aElem, PCB_LAYER_ID aLayer )
 {
     if( IsCopperLayer( aLayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
     {
@@ -2743,8 +2778,8 @@ void ALTIUM_PCB::ParseTracks6DataBoardLayer( const ATRACK6& aElem, PCB_LAYER_ID 
 }
 
 
-void ALTIUM_PCB::ParseTracks6DataFootprintLayer( FOOTPRINT* aFootprint, const ATRACK6& aElem,
-                                                 PCB_LAYER_ID aLayer )
+void ALTIUM_PCB::ConvertTracks6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const ATRACK6& aElem,
+                                                       PCB_LAYER_ID aLayer )
 {
     FP_SHAPE* seg = new FP_SHAPE( aFootprint, SHAPE_T::SEGMENT );
 
@@ -3110,5 +3145,6 @@ void ALTIUM_PCB::HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT*       aFootp
     zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                  ZONE::GetDefaultHatchPitch(), true );
 
+    // TODO: zone->SetLocalCoord(); missing?
     aFootprint->Add( zone, ADD_MODE::APPEND );
 }
