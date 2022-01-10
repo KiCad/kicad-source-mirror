@@ -111,7 +111,9 @@ void HOTKEY_STORE::Init( std::vector<TOOL_ACTION*> aActionsList, bool aIncludeRe
 
         HOTKEY& hotkey = masterMap[ action->GetName() ];
         hotkey.m_Actions.push_back( action );
-        hotkey.m_EditKeycode = action->GetHotKey();
+
+        if( !hotkey.m_EditKeycode )
+            hotkey.m_EditKeycode = action->GetHotKey();
     }
 
     wxString        currentApp;
