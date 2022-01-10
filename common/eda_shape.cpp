@@ -1388,7 +1388,7 @@ void EDA_SHAPE::calcEdit( const wxPoint& aPosition )
 }
 
 
-void EDA_SHAPE::endEdit()
+void EDA_SHAPE::endEdit( bool aClosed )
 {
     switch( GetShape() )
     {
@@ -1407,7 +1407,7 @@ void EDA_SHAPE::endEdit()
         {
             if( poly.CPoint( poly.GetPointCount() - 2 ) == poly.CLastPoint() )
             {
-                poly.SetClosed( true );
+                poly.SetClosed( aClosed );
                 poly.Remove( poly.GetPointCount() - 1 );
             }
         }

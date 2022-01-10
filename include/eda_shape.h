@@ -288,7 +288,12 @@ protected:
     void beginEdit( const wxPoint& aStartPoint );
     bool continueEdit( const wxPoint& aPosition );
     void calcEdit( const wxPoint& aPosition );
-    void endEdit();
+
+    /**
+     * Finishes editing the shape.
+     * @param aClosed Should polygon shapes be closed (yes for pcbnew/fpeditor, no for libedit)
+     */
+    void endEdit( bool aClosed = true );
     void setEditState( int aState ) { m_editState = aState; }
 
 protected:

@@ -75,10 +75,7 @@ public:
     bool ContinueEdit( const wxPoint& aPosition ) override { return continueEdit( aPosition ); }
     void CalcEdit( const wxPoint& aPosition ) override     { calcEdit( aPosition ); }
 
-    /**
-     * The base EndEdit() removes the last point in the polyline, so don't call that here
-     */
-    void EndEdit() override                                { }
+    void EndEdit() override                                { endEdit( false ); }
     void SetEditState( int aState )                        { setEditState( aState ); }
 
     void AddPoint( const wxPoint& aPosition );
