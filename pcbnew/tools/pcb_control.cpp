@@ -817,6 +817,9 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
             else
             {
+                clipBoard->SetElementVisibility( LAYER_RATSNEST,
+                    board()->IsElementVisible( LAYER_RATSNEST ) );
+
                 if( pasteMode == PASTE_MODE::REMOVE_ANNOTATIONS )
                 {
                     for( FOOTPRINT* clipFootprint : clipBoard->Footprints() )
@@ -844,6 +847,10 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
             else
             {
+
+                for( PAD* pad : clipFootprint->Pads() )
+                    pad->SetLocalRatsnestVisible( board()->IsElementVisible( LAYER_RATSNEST ) );
+
                 if( pasteMode == PASTE_MODE::REMOVE_ANNOTATIONS )
                     clipFootprint->SetReference( defaultRef );
 
