@@ -27,12 +27,11 @@
  * @brief Pcbnew PLUGIN for Altium *.PcbDoc format.
  */
 
-#include <iomanip>
-
 #include <wx/string.h>
 
 #include <altium_circuit_maker_plugin.h>
 #include <altium_pcb.h>
+#include "plugins/altium/altium_parser.h"
 
 #include <board.h>
 
@@ -100,7 +99,18 @@ BOARD* ALTIUM_CIRCUIT_MAKER_PLUGIN::Load( const wxString& aFileName, BOARD* aApp
     };
     // clang-format on
 
-    ParseAltiumPcb( m_board, aFileName, aProgressReporter, mapping );
+    ALTIUM_COMPOUND_FILE altiumPcbFile( aFileName );
+
+    try
+    {
+        // Parse File
+        ALTIUM_PCB pcb( m_board, aProgressReporter );
+        pcb.Parse( altiumPcbFile, mapping );
+    }
+    catch( CFB::CFBException& exception )
+    {
+        THROW_IO_ERROR( exception.what() );
+    }
 
     return m_board;
 }

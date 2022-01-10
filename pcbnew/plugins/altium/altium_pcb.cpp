@@ -57,23 +57,6 @@
 
 constexpr double BOLD_FACTOR = 1.75;    // CSS font-weight-normal is 400; bold is 700
 
-void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER* aProgressReporter,
-                     const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping )
-{
-    ALTIUM_COMPOUND_FILE altiumPcbFile( aFileName );
-
-    try
-    {
-        // Parse File
-        ALTIUM_PCB pcb( aBoard, aProgressReporter );
-        pcb.Parse( altiumPcbFile, aFileMapping );
-    }
-    catch( CFB::CFBException& exception )
-    {
-        THROW_IO_ERROR( exception.what() );
-    }
-}
-
 
 void ParseAltiumPcbLibFootprintNames( wxArrayString& aFootprintNames, const wxString& aLibraryPath )
 {

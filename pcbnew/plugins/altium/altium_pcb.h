@@ -88,18 +88,6 @@ class ZONE;
 class PCB_DIM_RADIAL;
 class PROGRESS_REPORTER;
 
-
-/**
- * Helper method which opens a Altium Board File and parses it.
- *
- * @param aBoard board the pcb should be appended to
- * @param aFileName file name of board file
- * @param aProgressReporter report import progress, might be a nullptr.
- * @param aFileMapping mapping how altium stream names are mapped
- */
-void ParseAltiumPcb( BOARD* aBoard, const wxString& aFileName, PROGRESS_REPORTER* aProgressReporter,
-                     const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping );
-
 /**
  * Helper method to get all footprint names in a given library
  *

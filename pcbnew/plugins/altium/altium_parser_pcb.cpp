@@ -338,7 +338,7 @@ AMODEL::AMODEL( ALTIUM_PARSER& aReader )
     std::map<wxString, wxString> properties = aReader.ReadProperties();
 
     if( properties.empty() )
-        THROW_IO_ERROR( "Classes6 stream has no properties!" );
+        THROW_IO_ERROR( "Model stream has no properties!" );
 
     name       = ALTIUM_PARSER::ReadString( properties, "NAME", "" );
     id         = ALTIUM_PARSER::ReadString( properties, "ID", "" );
@@ -349,7 +349,7 @@ AMODEL::AMODEL( ALTIUM_PARSER& aReader )
     rotation.z = ALTIUM_PARSER::ReadDouble( properties, "ROTZ", 0. );
 
     if( aReader.HasParsingError() )
-        THROW_IO_ERROR( "Classes6 stream was not parsed correctly" );
+        THROW_IO_ERROR( "Model stream was not parsed correctly" );
 }
 
 ANET6::ANET6( ALTIUM_PARSER& aReader )
