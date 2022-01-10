@@ -88,14 +88,6 @@ class ZONE;
 class PCB_DIM_RADIAL;
 class PROGRESS_REPORTER;
 
-/**
- * Helper method to get all footprint names in a given library
- *
- * @param aFootprintNames footprint names to populate
- * @param aLibraryPath path to PcbLib
- */
-void ParseAltiumPcbLibFootprintNames( wxArrayString&  aFootprintNames,
-                                      const wxString& aLibraryPath );
 
 namespace CFB
 {
@@ -117,6 +109,9 @@ public:
 
     void Parse( const ALTIUM_COMPOUND_FILE&                  aAltiumPcbFile,
                 const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping );
+
+    FOOTPRINT* ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile,
+                               const wxString&             aFootprintName );
 
 private:
     void checkpoint();
@@ -156,6 +151,7 @@ private:
                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseTracks6OfFootprint( FOOTPRINT* footprint, const ATRACK6& elem );
     void ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                            const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseTexts6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,

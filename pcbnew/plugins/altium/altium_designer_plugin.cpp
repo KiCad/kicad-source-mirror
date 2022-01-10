@@ -139,12 +139,61 @@ void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames
                                                  const wxString& aLibraryPath, bool aBestEfforts,
                                                  const PROPERTIES* aProperties )
 {
-    ParseAltiumPcbLibFootprintNames( aFootprintNames, aLibraryPath );
+    ALTIUM_COMPOUND_FILE altiumLibFile( aLibraryPath );
+
+    try
+    {
+        std::string                     streamName = "Library\\Data";
+        const CFB::COMPOUND_FILE_ENTRY* libraryData = altiumLibFile.FindStream( streamName );
+        if( libraryData == nullptr )
+        {
+            THROW_IO_ERROR( wxString::Format( _( "File not found: '%s'." ), streamName ) );
+        }
+
+        ALTIUM_PARSER parser( altiumLibFile, libraryData );
+
+        std::map<wxString, wxString> properties = parser.ReadProperties();
+
+        uint32_t numberOfFootprints = parser.Read<uint32_t>();
+        aFootprintNames.Alloc( numberOfFootprints );
+        for( size_t i = 0; i < numberOfFootprints; i++ )
+        {
+            parser.ReadAndSetSubrecordLength();
+            wxString footprintName = parser.ReadWxString();
+            aFootprintNames.Add( footprintName );
+            parser.SkipSubrecord();
+        }
+
+        if( parser.HasParsingError() )
+        {
+            THROW_IO_ERROR( wxString::Format( "%s stream was not parsed correctly", streamName ) );
+        }
+
+        if( parser.GetRemainingBytes() != 0 )
+        {
+            THROW_IO_ERROR( wxString::Format( "%s stream is not fully parsed", streamName ) );
+        }
+    }
+    catch( CFB::CFBException& exception )
+    {
+        THROW_IO_ERROR( exception.what() );
+    }
 }
 
 FOOTPRINT* ALTIUM_DESIGNER_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
                                                   const wxString& aFootprintName, bool aKeepUUID,
                                                   const PROPERTIES* aProperties )
 {
-    return nullptr; // TODO: implement
+    ALTIUM_COMPOUND_FILE altiumLibFile( aLibraryPath );
+
+    try
+    {
+        // Parse File
+        ALTIUM_PCB pcb( m_board, nullptr );
+        return pcb.ParseFootprint( altiumLibFile, aFootprintName );
+    }
+    catch( CFB::CFBException& exception )
+    {
+        THROW_IO_ERROR( exception.what() );
+    }
 }

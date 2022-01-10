@@ -58,49 +58,6 @@
 constexpr double BOLD_FACTOR = 1.75;    // CSS font-weight-normal is 400; bold is 700
 
 
-void ParseAltiumPcbLibFootprintNames( wxArrayString& aFootprintNames, const wxString& aLibraryPath )
-{
-    ALTIUM_COMPOUND_FILE altiumLibFile( aLibraryPath );
-
-    try
-    {
-        std::string                     streamName = "Library\\Data";
-        const CFB::COMPOUND_FILE_ENTRY* libraryData = altiumLibFile.FindStream( streamName );
-        if( libraryData == nullptr )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "File not found: '%s'." ), streamName ) );
-        }
-
-        ALTIUM_PARSER parser( altiumLibFile, libraryData );
-
-        std::map<wxString, wxString> properties = parser.ReadProperties();
-
-        uint32_t numberOfFootprints = parser.Read<uint32_t>();
-        aFootprintNames.Alloc( numberOfFootprints );
-        for( size_t i = 0; i < numberOfFootprints; i++ )
-        {
-            parser.ReadAndSetSubrecordLength();
-            wxString footprintName = parser.ReadWxString();
-            aFootprintNames.Add( footprintName );
-        }
-
-        if( parser.HasParsingError() )
-        {
-            THROW_IO_ERROR( wxString::Format( "%s stream was not parsed correctly", streamName ) );
-        }
-
-        if( parser.GetRemainingBytes() != 0 )
-        {
-            THROW_IO_ERROR( wxString::Format( "%s stream is not fully parsed", streamName ) );
-        }
-    }
-    catch( CFB::CFBException& exception )
-    {
-        THROW_IO_ERROR( exception.what() );
-    }
-}
-
-
 bool IsAltiumLayerCopper( ALTIUM_LAYER aLayer )
 {
     return aLayer >= ALTIUM_LAYER::TOP_LAYER && aLayer <= ALTIUM_LAYER::BOTTOM_LAYER;
@@ -628,6 +585,94 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
     bds.SetGridOrigin( bds.GetGridOrigin() + movementVector );
 
     m_board->SetModified();
+}
+
+FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile,
+                                       const wxString&             aFootprintName )
+{
+    std::unique_ptr<FOOTPRINT>   footprint = std::make_unique<FOOTPRINT>( m_board );
+    std::map<uint32_t, wxString> stringTable; // TODO
+
+    std::string                     streamName = aFootprintName.ToStdString() + "\\Data";
+    const CFB::COMPOUND_FILE_ENTRY* footprintData = altiumLibFile.FindStream( streamName );
+    if( footprintData == nullptr )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "File not found: '%s'." ), streamName ) );
+    }
+
+    ALTIUM_PARSER parser( altiumLibFile, footprintData );
+
+    parser.ReadAndSetSubrecordLength();
+    wxString footprintName = parser.ReadWxString();
+    parser.SkipSubrecord();
+
+    LIB_ID fpID = AltiumToKiCadLibID( "", footprintName ); // TODO: library name
+    footprint->SetFPID( fpID );
+
+    footprint->SetDescription( "Test Description for " + aFootprintName + " - " + footprintName );
+
+    while( parser.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
+    {
+        ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( parser.Peek<uint8_t>() );
+        switch( recordtype )
+        {
+        case ALTIUM_RECORD::ARC:
+        {
+            AARC6 arc( parser );
+            break;
+        }
+        case ALTIUM_RECORD::PAD:
+        {
+            APAD6 pad( parser );
+            break;
+        }
+        case ALTIUM_RECORD::VIA:
+        {
+            AVIA6 via( parser );
+            break;
+        }
+        case ALTIUM_RECORD::TRACK:
+        {
+            ATRACK6 track( parser );
+            ParseTracks6OfFootprint( footprint.get(), track );
+            break;
+        }
+        case ALTIUM_RECORD::TEXT:
+        {
+            ATEXT6 text( parser, stringTable );
+            break;
+        }
+        case ALTIUM_RECORD::FILL:
+        {
+            AFILL6 fill( parser );
+            break;
+        }
+        case ALTIUM_RECORD::REGION:
+        {
+            AREGION6 region( parser, false /* TODO */ );
+            break;
+        }
+        case ALTIUM_RECORD::MODEL:
+        {
+            ACOMPONENTBODY6 componentBody( parser );
+            break;
+        }
+        default:
+            THROW_IO_ERROR( wxString::Format( _( "Record of unknown type: '%d'." ), recordtype ) );
+        }
+    }
+
+    if( parser.HasParsingError() )
+    {
+        THROW_IO_ERROR( wxString::Format( "%s stream was not parsed correctly", streamName ) );
+    }
+
+    if( parser.GetRemainingBytes() != 0 )
+    {
+        THROW_IO_ERROR( wxString::Format( "%s stream is not fully parsed", streamName ) );
+    }
+
+    return footprint.release();
 }
 
 int ALTIUM_PCB::GetNetCode( uint16_t aId ) const
@@ -2523,6 +2568,32 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
     {
         THROW_IO_ERROR( "Vias6 stream is not fully parsed" );
     }
+}
+
+void ALTIUM_PCB::ParseTracks6OfFootprint( FOOTPRINT* footprint, const ATRACK6& elem )
+{
+    PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
+
+    if( klayer == UNDEFINED_LAYER )
+    {
+        /*wxLogWarning( _( "Track found on an Altium layer (%d) with no KiCad "
+                         "equivalent. It has been moved to KiCad layer Eco1_User." ),
+                      elem.layer );*/
+        klayer = Eco1_User;
+    }
+
+    if( elem.is_polygonoutline || elem.subpolyindex != ALTIUM_POLYGON_NONE )
+        return;
+
+    FP_SHAPE* shape = new FP_SHAPE( footprint, SHAPE_T::SEGMENT );
+
+    shape->SetStart0( elem.start );
+    shape->SetEnd0( elem.end );
+    shape->SetStroke( STROKE_PARAMS( elem.width, PLOT_DASH_TYPE::SOLID ) );
+    shape->SetLayer( klayer );
+
+    shape->SetDrawCoord(); // TODO: use HelperShapeSetLocalCoord
+    footprint->Add( shape, ADD_MODE::APPEND );
 }
 
 void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,

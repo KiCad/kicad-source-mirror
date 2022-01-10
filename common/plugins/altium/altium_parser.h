@@ -88,6 +88,17 @@ public:
         }
     }
 
+    template <typename Type>
+    Type Peek()
+    {
+        char* const oldPos = m_pos;
+        const bool  oldError = m_error;
+        Type        result = Read<Type>();
+        m_pos = oldPos;
+        m_error = oldError;
+        return result;
+    }
+
     wxString ReadWxString()
     {
         uint8_t len = Read<uint8_t>();
