@@ -200,7 +200,7 @@ public:
 };
 
 
-class RC_TREE_MODEL : public wxDataViewModel, wxEvtHandler
+class RC_TREE_MODEL : public wxDataViewModel, public wxEvtHandler
 {
 public:
     static wxDataViewItem ToItem( RC_TREE_NODE const* aNode )
