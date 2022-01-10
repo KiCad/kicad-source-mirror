@@ -117,6 +117,7 @@ private:
     void checkpoint();
 
     PCB_LAYER_ID  GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const;
+    std::vector<PCB_LAYER_ID> GetKicadLayersToIterate( ALTIUM_LAYER aAltiumLayer ) const;
     int           GetNetCode( uint16_t aId ) const;
     const ARULE6* GetRule( ALTIUM_RULE_KIND aKind, const wxString& aName ) const;
     const ARULE6* GetRuleDefault( ALTIUM_RULE_KIND aKind ) const;
@@ -151,9 +152,14 @@ private:
                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ParseTracks6OfFootprint( FOOTPRINT* footprint, const ATRACK6& elem );
     void ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                            const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseTracks6DataBoard( const ATRACK6& aElem );
+    void ParseTracks6DataFootprint( FOOTPRINT* aFootprint, const ATRACK6& aElem,
+                                    const bool aBoardImport );
+    void ParseTracks6DataBoardLayer( const ATRACK6& aElem, PCB_LAYER_ID aLayer );
+    void ParseTracks6DataFootprintLayer( FOOTPRINT* aFootprint, const ATRACK6& aElem,
+                                         PCB_LAYER_ID aLayer );
     void ParseTexts6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                           const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
@@ -178,6 +184,11 @@ private:
 
     void HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aVertices );
 
+    void HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE& aShape, ALTIUM_LAYER aAltiumLayer );
+    void HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT* aFootprint, const PCB_SHAPE& aShape,
+                                                 ALTIUM_LAYER aAltiumLayer );
+
+    FOOTPRINT* HelperGetFootprint( uint16_t aComponent ) const;
     PCB_SHAPE* HelperCreateAndAddShape( uint16_t aComponent );
     void HelperShapeSetLocalCoord( PCB_SHAPE* aShape, uint16_t aComponent );
 

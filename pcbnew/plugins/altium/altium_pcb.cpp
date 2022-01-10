@@ -69,6 +69,17 @@ bool IsAltiumLayerAPlane( ALTIUM_LAYER aLayer )
     return aLayer >= ALTIUM_LAYER::INTERNAL_PLANE_1 && aLayer <= ALTIUM_LAYER::INTERNAL_PLANE_16;
 }
 
+FOOTPRINT* ALTIUM_PCB::HelperGetFootprint( uint16_t aComponent ) const
+{
+    if( aComponent == ALTIUM_COMPONENT_NONE || m_components.size() <= aComponent )
+    {
+        THROW_IO_ERROR( wxString::Format( "Component creator tries to access component id %d "
+                                          "of %d existing components",
+                                          aComponent, m_components.size() ) );
+    }
+
+    return m_components.at( aComponent );
+}
 
 PCB_SHAPE* ALTIUM_PCB::HelperCreateAndAddShape( uint16_t aComponent )
 {
@@ -265,6 +276,37 @@ PCB_LAYER_ID ALTIUM_PCB::GetKicadLayer( ALTIUM_LAYER aAltiumLayer ) const
 
     default:                              return UNDEFINED_LAYER;
     }
+}
+
+
+std::vector<PCB_LAYER_ID> ALTIUM_PCB::GetKicadLayersToIterate( ALTIUM_LAYER aAltiumLayer ) const
+{
+    static std::set<ALTIUM_LAYER> altiumLayersWithWarning;
+
+    if( aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER )
+    {
+        std::vector<PCB_LAYER_ID> layers;
+        layers.reserve( MAX_CU_LAYERS ); // TODO: only use Cu layers which are on the board
+        for( PCB_LAYER_ID layer = PCB_LAYER_ID::F_Cu; layer <= PCB_LAYER_ID::B_Cu;
+             layer = static_cast<PCB_LAYER_ID>( static_cast<int>( layer ) + 1 ) )
+        {
+            layers.emplace_back( layer );
+        }
+
+        return layers;
+    }
+
+    PCB_LAYER_ID klayer = GetKicadLayer( aAltiumLayer );
+
+    if( klayer == UNDEFINED_LAYER )
+    {
+        wxLogWarning( _( "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad "
+                         "layer Eco1_User." ),
+                      aAltiumLayer );
+        klayer = Eco1_User;
+    }
+
+    return { klayer };
 }
 
 
@@ -590,8 +632,21 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
 FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile,
                                        const wxString&             aFootprintName )
 {
-    std::unique_ptr<FOOTPRINT>   footprint = std::make_unique<FOOTPRINT>( m_board );
-    std::map<uint32_t, wxString> stringTable; // TODO
+    std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );
+
+    // TODO: what should we do with those layers?
+    m_layermap.emplace( ALTIUM_LAYER::MECHANICAL_14, Eco2_User );
+    m_layermap.emplace( ALTIUM_LAYER::MECHANICAL_15, Eco2_User );
+    m_layermap.emplace( ALTIUM_LAYER::MECHANICAL_16, Eco2_User );
+
+    m_unicodeStrings.clear();
+    // TODO: WideStrings are stored as parameterMap in the case of footprints, not as binary
+    //    std::string                     unicodeStringsStreamName = aFootprintName.ToStdString() + "\\WideStrings";
+    //    const CFB::COMPOUND_FILE_ENTRY* unicodeStringsData = altiumLibFile.FindStream( unicodeStringsStreamName );
+    //    if( unicodeStringsData != nullptr )
+    //    {
+    //        ParseWideStrings6Data( altiumLibFile, unicodeStringsData );
+    //    }
 
     std::string                     streamName = aFootprintName.ToStdString() + "\\Data";
     const CFB::COMPOUND_FILE_ENTRY* footprintData = altiumLibFile.FindStream( streamName );
@@ -634,12 +689,12 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         case ALTIUM_RECORD::TRACK:
         {
             ATRACK6 track( parser );
-            ParseTracks6OfFootprint( footprint.get(), track );
+            ParseTracks6DataFootprint( footprint.get(), track, false );
             break;
         }
         case ALTIUM_RECORD::TEXT:
         {
-            ATEXT6 text( parser, stringTable );
+            ATEXT6 text( parser, m_unicodeStrings );
             break;
         }
         case ALTIUM_RECORD::FILL:
@@ -2570,32 +2625,6 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
     }
 }
 
-void ALTIUM_PCB::ParseTracks6OfFootprint( FOOTPRINT* footprint, const ATRACK6& elem )
-{
-    PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
-
-    if( klayer == UNDEFINED_LAYER )
-    {
-        /*wxLogWarning( _( "Track found on an Altium layer (%d) with no KiCad "
-                         "equivalent. It has been moved to KiCad layer Eco1_User." ),
-                      elem.layer );*/
-        klayer = Eco1_User;
-    }
-
-    if( elem.is_polygonoutline || elem.subpolyindex != ALTIUM_POLYGON_NONE )
-        return;
-
-    FP_SHAPE* shape = new FP_SHAPE( footprint, SHAPE_T::SEGMENT );
-
-    shape->SetStart0( elem.start );
-    shape->SetEnd0( elem.end );
-    shape->SetStroke( STROKE_PARAMS( elem.width, PLOT_DASH_TYPE::SOLID ) );
-    shape->SetLayer( klayer );
-
-    shape->SetDrawCoord(); // TODO: use HelperShapeSetLocalCoord
-    footprint->Add( shape, ADD_MODE::APPEND );
-}
-
 void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                    const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
@@ -2609,91 +2638,15 @@ void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFil
         checkpoint();
         ATRACK6 elem( reader );
 
-        if( elem.is_polygonoutline || elem.subpolyindex != ALTIUM_POLYGON_NONE )
-            continue;
-
-        // element in plane is in fact substracted from the plane. Already done by Altium?
-        //if( IsAltiumLayerAPlane( elem.layer ) )
-        //    continue;
-
-        PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
-
-        if( elem.is_keepout || IsAltiumLayerAPlane( elem.layer ) )
+        if( elem.component == ALTIUM_COMPONENT_NONE )
         {
-            PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
-            shape.SetStart( elem.start );
-            shape.SetEnd( elem.end );
-            shape.SetStroke( STROKE_PARAMS( elem.width, PLOT_DASH_TYPE::SOLID ) );
-
-            ZONE* zone = new ZONE( m_board );
-            m_board->Add( zone, ADD_MODE::APPEND );
-
-            zone->SetFillVersion( 6 );
-            zone->SetIsRuleArea( true );
-            zone->SetDoNotAllowTracks( false );
-            zone->SetDoNotAllowVias( false );
-            zone->SetDoNotAllowPads( false );
-            zone->SetDoNotAllowFootprints( false );
-            zone->SetDoNotAllowCopperPour( true );
-
-            if( elem.layer == ALTIUM_LAYER::MULTI_LAYER )
-            {
-                zone->SetLayer( F_Cu );
-                zone->SetLayerSet( LSET::AllCuMask() );
-            }
-            else
-            {
-                PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
-
-                if( klayer == UNDEFINED_LAYER )
-                {
-                    wxLogWarning( _( "Track keepout found on an Altium layer (%d) with no KiCad "
-                                     "equivalent. It has been moved to KiCad layer Eco1_User." ),
-                                  elem.layer );
-                    klayer = Eco1_User;
-                }
-                zone->SetLayer( klayer );
-            }
-
-            shape.TransformShapeWithClearanceToPolygon( *zone->Outline(), klayer, 0, ARC_HIGH_DEF,
-                                                        ERROR_INSIDE );
-
-            zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                         ZONE::GetDefaultHatchPitch(), true );
-            continue;
-        }
-
-        if( klayer == UNDEFINED_LAYER )
-        {
-            wxLogWarning( _( "Track found on an Altium layer (%d) with no KiCad equivalent. "
-                             "It has been moved to KiCad layer Eco1_User." ),
-                          elem.layer );
-            klayer = Eco1_User;
-        }
-
-        if( IsCopperLayer( klayer ) )
-        {
-            PCB_TRACK* track = new PCB_TRACK( m_board );
-            m_board->Add( track, ADD_MODE::APPEND );
-
-            track->SetStart( elem.start );
-            track->SetEnd( elem.end );
-            track->SetWidth( elem.width );
-            track->SetLayer( klayer );
-            track->SetNetCode( GetNetCode( elem.net ) );
+            ParseTracks6DataBoard( elem );
         }
         else
         {
-            PCB_SHAPE* shape = HelperCreateAndAddShape( elem.component );
-            shape->SetShape( SHAPE_T::SEGMENT );
-            shape->SetStart( elem.start );
-            shape->SetEnd( elem.end );
-            shape->SetStroke( STROKE_PARAMS( elem.width, PLOT_DASH_TYPE::SOLID ) );
-            shape->SetLayer( klayer );
-            HelperShapeSetLocalCoord( shape, elem.component );
+            FOOTPRINT* footprint = HelperGetFootprint( elem.component );
+            ParseTracks6DataFootprint( footprint, elem, true );
         }
-
-        reader.SkipSubrecord();
     }
 
     if( reader.GetRemainingBytes() != 0 )
@@ -2701,6 +2654,109 @@ void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFil
         THROW_IO_ERROR( "Tracks6 stream is not fully parsed" );
     }
 }
+
+
+void ALTIUM_PCB::ParseTracks6DataBoard( const ATRACK6& aElem )
+{
+    if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
+        return;
+
+    if( aElem.is_keepout || IsAltiumLayerAPlane( aElem.layer ) )
+    {
+        // This is not the actual board item. We can use it to create the polygon for the region
+        PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
+        shape.SetStart( aElem.start );
+        shape.SetEnd( aElem.end );
+        shape.SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+
+        HelperPcpShapeAsBoardKeepoutRegion( shape, aElem.layer );
+    }
+    else
+    {
+        for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+        {
+            ParseTracks6DataBoardLayer( aElem, klayer );
+        }
+    }
+}
+
+
+void ALTIUM_PCB::ParseTracks6DataFootprint( FOOTPRINT* aFootprint, const ATRACK6& aElem,
+                                            const bool aBoardImport )
+{
+    if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
+        return;
+
+    if( aElem.is_keepout || IsAltiumLayerAPlane( aElem.layer ) )
+    {
+        // This is not the actual board item. We can use it to create the polygon for the region
+        PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
+        shape.SetStart( aElem.start );
+        shape.SetEnd( aElem.end );
+        shape.SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+
+        HelperPcpShapeAsFootprintKeepoutRegion( aFootprint, shape, aElem.layer );
+    }
+    else
+    {
+        for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+        {
+            if( aBoardImport && IsCopperLayer( klayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
+            {
+                // Special case: do to not lose net connections in footprints
+                ParseTracks6DataBoardLayer( aElem, klayer );
+            }
+            else
+            {
+                ParseTracks6DataFootprintLayer( aFootprint, aElem, klayer );
+            }
+        }
+    }
+}
+
+
+void ALTIUM_PCB::ParseTracks6DataBoardLayer( const ATRACK6& aElem, PCB_LAYER_ID aLayer )
+{
+    if( IsCopperLayer( aLayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
+    {
+        PCB_TRACK* track = new PCB_TRACK( m_board );
+
+        track->SetStart( aElem.start );
+        track->SetEnd( aElem.end );
+        track->SetWidth( aElem.width );
+        track->SetLayer( aLayer );
+        track->SetNetCode( GetNetCode( aElem.net ) );
+
+        m_board->Add( track, ADD_MODE::APPEND );
+    }
+    else
+    {
+        PCB_SHAPE* seg = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
+
+        seg->SetStart( aElem.start );
+        seg->SetEnd( aElem.end );
+        seg->SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+        seg->SetLayer( aLayer );
+
+        m_board->Add( seg, ADD_MODE::APPEND );
+    }
+}
+
+
+void ALTIUM_PCB::ParseTracks6DataFootprintLayer( FOOTPRINT* aFootprint, const ATRACK6& aElem,
+                                                 PCB_LAYER_ID aLayer )
+{
+    FP_SHAPE* seg = new FP_SHAPE( aFootprint, SHAPE_T::SEGMENT );
+
+    seg->SetStart( aElem.start );
+    seg->SetEnd( aElem.end );
+    seg->SetStroke( STROKE_PARAMS( aElem.width, PLOT_DASH_TYPE::SOLID ) );
+    seg->SetLayer( aLayer );
+
+    seg->SetLocalCoord();
+    aFootprint->Add( seg, ADD_MODE::APPEND );
+}
+
 
 void ALTIUM_PCB::ParseWideStrings6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                         const CFB::COMPOUND_FILE_ENTRY* aEntry )
@@ -2987,4 +3043,72 @@ void ALTIUM_PCB::ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
     {
         THROW_IO_ERROR( "Fills6 stream is not fully parsed" );
     }
+}
+
+
+void ALTIUM_PCB::HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE& aShape,
+                                                     ALTIUM_LAYER     aAltiumLayer )
+{
+    ZONE* zone = new ZONE( m_board );
+
+    zone->SetFillVersion( 6 );
+    zone->SetIsRuleArea( true );
+    zone->SetDoNotAllowTracks( false );
+    zone->SetDoNotAllowVias( false );
+    zone->SetDoNotAllowPads( false );
+    zone->SetDoNotAllowFootprints( false );
+    zone->SetDoNotAllowCopperPour( true );
+
+    if( aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER )
+    {
+        zone->SetLayer( F_Cu );
+        zone->SetLayerSet( LSET::AllCuMask() );
+    }
+    else
+    {
+        std::vector<PCB_LAYER_ID> klayers = GetKicadLayersToIterate( aAltiumLayer );
+        zone->SetLayer( klayers.at( 0 ) );
+    }
+
+    aShape.EDA_SHAPE::TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF,
+                                                            ERROR_INSIDE, false );
+
+    zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                 ZONE::GetDefaultHatchPitch(), true );
+
+    m_board->Add( zone, ADD_MODE::APPEND );
+}
+
+void ALTIUM_PCB::HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT*       aFootprint,
+                                                         const PCB_SHAPE& aShape,
+                                                         ALTIUM_LAYER     aAltiumLayer )
+{
+    FP_ZONE* zone = new FP_ZONE( aFootprint );
+
+    zone->SetFillVersion( 6 );
+    zone->SetIsRuleArea( true );
+    zone->SetDoNotAllowTracks( false );
+    zone->SetDoNotAllowVias( false );
+    zone->SetDoNotAllowPads( false );
+    zone->SetDoNotAllowFootprints( false );
+    zone->SetDoNotAllowCopperPour( true );
+
+    if( aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER )
+    {
+        zone->SetLayer( F_Cu );
+        zone->SetLayerSet( LSET::AllCuMask() );
+    }
+    else
+    {
+        std::vector<PCB_LAYER_ID> klayers = GetKicadLayersToIterate( aAltiumLayer );
+        zone->SetLayer( klayers.at( 0 ) );
+    }
+
+    aShape.EDA_SHAPE::TransformShapeWithClearanceToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF,
+                                                            ERROR_INSIDE, false );
+
+    zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                 ZONE::GetDefaultHatchPitch(), true );
+
+    aFootprint->Add( zone, ADD_MODE::APPEND );
 }
