@@ -826,50 +826,28 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
+    KIGFX::GAL_DISPLAY_OPTIONS      empty_opts;
     KIFONT::FONT*                   font = GetDrawFont();
-    wxSize                          size = GetTextSize();
     int                             penWidth = GetEffectiveTextPenWidth();
-    bool                            forceBold = true;
 
-    if( IsMirrored() )
-        size.x = -size.x;
+    CALLBACK_GAL callback_gal( empty_opts,
+            // Stroke callback
+            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
+            {
+                shape->AddShape( new SHAPE_SEGMENT( aPt1, aPt2, penWidth ) );
+            },
+            // Triangulation callback
+            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
+            {
+                SHAPE_SIMPLE* triShape = new SHAPE_SIMPLE;
 
-    wxArrayString strings_list;
-    std::vector<VECTOR2I> positions;
+                for( const VECTOR2I& point : { aPt1, aPt2, aPt3 } )
+                    triShape->Append( point.x, point.y );
 
-    if( IsMultilineAllowed() )
-    {
-        wxStringSplit( GetShownText(), strings_list, wxChar('\n') );
-        positions.reserve( strings_list.Count() );
-        GetLinePositions( positions, strings_list.Count() );
-    }
-    else
-    {
-        strings_list.Add( GetShownText() );
-        positions.push_back( GetDrawPos() );
-    }
+                shape->AddShape( triShape );
+            } );
 
-    for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
-    {
-        GRText( positions[ii], strings_list.Item( ii ), GetDrawRotation(), size,
-                GetDrawHorizJustify(), GetDrawVertJustify(), penWidth, IsItalic(), forceBold, font,
-                // Stroke callback
-                [&]( const VECTOR2D& aPt1, const VECTOR2D& aPt2 )
-                {
-                    shape->AddShape( new SHAPE_SEGMENT( aPt1, aPt2, penWidth ) );
-                },
-                // Triangulation callback
-                [&]( const VECTOR2D& aPt1, const VECTOR2D& aPt2, const VECTOR2D& aPt3 )
-                {
-                    SHAPE_SIMPLE* triShape = new SHAPE_SIMPLE;
-
-                    triShape->Append( aPt1 );
-                    triShape->Append( aPt2 );
-                    triShape->Append( aPt3 );
-
-                    shape->AddShape( triShape );
-                } );
-    }
+    font->Draw( &callback_gal, GetShownText(), GetTextPos(), GetAttributes() );
 
     return shape;
 }

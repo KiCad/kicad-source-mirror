@@ -129,7 +129,8 @@ void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const 
                   enum GR_TEXT_H_ALIGN_T aH_justify, enum GR_TEXT_V_ALIGN_T aV_justify,
                   int aWidth, bool aItalic, bool aBold, KIFONT::FONT* aFont )
 {
-    bool fill_mode = true;
+    KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
+    bool                       fill_mode = true;
 
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();
@@ -143,7 +144,7 @@ void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const 
         fill_mode = false;
     }
 
-    GRText( aPos, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic, aBold, aFont,
+    CALLBACK_GAL callback_gal( empty_opts,
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
@@ -158,48 +159,6 @@ void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const 
                 VECTOR2I pts[3] = { aPt1, aPt2, aPt3 };
                 GRClosedPoly( nullptr, aDC, 3, pts, true, 0, aColor, aColor );
             } );
-}
-
-
-/**
- * De-compose graphic text into either strokes and/or triangles.
- *
- *  @param aPos is the text position (according to h_justify, v_justify).
- *  @param aText is the text to draw.
- *  @param aOrient is the angle.
- *  @param aSize is the text size (size.x or size.y can be < 0 for mirrored texts).
- *  @param aH_justify is the horizontal justification (Left, center, right).
- *  @param aV_justify is the vertical justification (bottom, center, top).
- *  @param aWidth is the line width (pen width) (use default width if aWidth = 0).
- *      if width < 0 : draw segments in sketch mode, width = abs(width)
- *      Use a value min(aSize.x, aSize.y) / 5 for a bold text.
- *  @param aItalic is the true to simulate an italic font.
- *  @param aBold use true to use a bold font. Useful only with default width value (aWidth = 0).
- *  @param aFont is the font to use, or nullptr for the KiCad stroke font
- *  @param aStrokeCallback is a two-point stroking callback
- *  @param aTriangleCallback is a three-point triangulation callback
- */
-void GRText( const VECTOR2I& aPos, const wxString& aText, const EDA_ANGLE& aOrient,
-             const VECTOR2I& aSize, enum GR_TEXT_H_ALIGN_T aH_justify,
-             enum GR_TEXT_V_ALIGN_T aV_justify, int aWidth, bool aItalic, bool aBold,
-             KIFONT::FONT* aFont,
-             std::function<void( const VECTOR2I& aPt1,
-                                 const VECTOR2I& aPt2 )> aStrokeCallback,
-             std::function<void( const VECTOR2I& aPt1,
-                                 const VECTOR2I& aPt2,
-                                 const VECTOR2I& aPt3 )> aTriangleCallback )
-{
-    if( !aFont )
-        aFont = KIFONT::FONT::GetFont();
-
-    KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
-    CALLBACK_GAL               callback_gal( empty_opts, aStrokeCallback, aTriangleCallback );
-
-    if( aWidth == 0 && aBold ) // Use default values if aWidth == 0
-        aWidth = GetPenSizeForBold( std::min( aSize.x, aSize.y ) );
-
-    if( aWidth < 0 )
-        aWidth = -aWidth;
 
     TEXT_ATTRIBUTES attributes;
     attributes.m_Angle = aOrient;
@@ -209,15 +168,7 @@ void GRText( const VECTOR2I& aPos, const wxString& aText, const EDA_ANGLE& aOrie
     attributes.m_Halign = aH_justify;
     attributes.m_Valign = aV_justify;
 
-    VECTOR2D size = aSize;
-    attributes.m_Mirrored = size.x < 0;
-
-    if( size.x < 0 )
-        size.x = - size.x;
-
-    attributes.m_Size = size;
-
-    aFont->Draw( &callback_gal, aText, VECTOR2D( aPos ), attributes );
+    aFont->Draw( &callback_gal, aText, aPos, attributes );
 }
 
 

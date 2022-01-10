@@ -110,32 +110,5 @@ void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const KIGFX::COLOR4D& aColor,
                   enum GR_TEXT_H_ALIGN_T aH_justify, enum GR_TEXT_V_ALIGN_T aV_justify,
                   int aWidth, bool aItalic, bool aBold, KIFONT::FONT* aFont );
 
-/**
- * De-compose graphic text into either strokes and/or triangles.
- *
- *  @param aPos is the text position (according to h_justify, v_justify).
- *  @param aText is the text to draw.
- *  @param aOrient is the angle.
- *  @param aSize is the text size (size.x or size.y can be < 0 for mirrored texts).
- *  @param aH_justify is the horizontal justification (Left, center, right).
- *  @param aV_justify is the vertical justification (bottom, center, top).
- *  @param aWidth is the line width (pen width) (use default width if aWidth = 0).
- *      if width < 0 : draw segments in sketch mode, width = abs(width)
- *      Use a value min(aSize.x, aSize.y) / 5 for a bold text.
- *  @param aItalic is the true to simulate an italic font.
- *  @param aBold use true to use a bold font. Useful only with default width value (aWidth = 0).
- *  @param aFont is the font to use, or nullptr for the KiCad stroke font
- *  @param aStrokeCallback is a two-point stroking callback
- *  @param aTriangleCallback is a three-point triangulation callback
- */
-void GRText( const VECTOR2I& aPos, const wxString& aText, const EDA_ANGLE& aOrient,
-             const VECTOR2I& aSize, enum GR_TEXT_H_ALIGN_T aH_justify,
-             enum GR_TEXT_V_ALIGN_T aV_justify, int aWidth, bool aItalic, bool aBold,
-             KIFONT::FONT* aFont,
-             std::function<void( const VECTOR2I& aPt1,
-                                 const VECTOR2I& aPt2 )> aStrokeCallback,
-             std::function<void( const VECTOR2I& aPt1,
-                                 const VECTOR2I& aPt2,
-                                 const VECTOR2I& aPt3 )> aTriangleCallback );
 
 #endif /* GR_TEXT_H */

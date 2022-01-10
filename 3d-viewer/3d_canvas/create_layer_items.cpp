@@ -247,7 +247,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 continue;
 
             // Add object item to layer container
-            createTrack( track, layerContainer, 0.0f );
+            createTrack( track, layerContainer );
         }
     }
 
@@ -529,11 +529,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         {
             // Note: NPTH pads are not drawn on copper layers when the pad has the same shape
             // as its hole
-            addPadsWithClearance( footprint, layerContainer, curr_layer_id, 0, true,
-                                  renderPlatedPadsAsPlated, false );
+            addPads( footprint, layerContainer, curr_layer_id, true, renderPlatedPadsAsPlated,
+                     false );
 
             // Micro-wave footprints may have items on copper layers
-            addFootprintShapesWithClearance( footprint, layerContainer, curr_layer_id, 0 );
+            addFootprintShapes( footprint, layerContainer, curr_layer_id );
         }
     }
 
@@ -542,9 +542,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // ADD PLATED PADS
         for( FOOTPRINT* footprint : m_board->Footprints() )
         {
-            addPadsWithClearance( footprint, m_platedPadsFront, F_Cu, 0, true, false, true );
+            addPads( footprint, m_platedPadsFront, F_Cu, true, false, true );
 
-            addPadsWithClearance( footprint, m_platedPadsBack, B_Cu, 0, true, false, true );
+            addPads( footprint, m_platedPadsBack, B_Cu, true, false, true );
         }
 
         m_platedPadsFront->BuildBVH();
@@ -606,28 +606,25 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             switch( item->Type() )
             {
             case PCB_SHAPE_T:
-                addShapeWithClearance( static_cast<PCB_SHAPE*>( item ), layerContainer,
-                                       curr_layer_id, 0 );
-            break;
+                addShape( static_cast<PCB_SHAPE*>( item ), layerContainer );
+                break;
 
             case PCB_TEXT_T:
-                addShapeWithClearance( static_cast<PCB_TEXT*>( item ), layerContainer,
-                                       curr_layer_id, 0 );
-            break;
+                addShape( static_cast<PCB_TEXT*>( item ), layerContainer );
+                break;
 
             case PCB_DIM_ALIGNED_T:
             case PCB_DIM_CENTER_T:
             case PCB_DIM_RADIAL_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-                addShapeWithClearance( static_cast<PCB_DIMENSION_BASE*>( item ),
-                                       layerContainer, curr_layer_id, 0 );
-            break;
+                addShape( static_cast<PCB_DIMENSION_BASE*>( item ), layerContainer );
+                break;
 
             default:
                 wxLogTrace( m_logTrace, wxT( "createLayers: item type: %d not implemented" ),
                             item->Type() );
-            break;
+                break;
             }
         }
     }
@@ -914,13 +911,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             switch( item->Type() )
             {
             case PCB_SHAPE_T:
-                addShapeWithClearance( static_cast<PCB_SHAPE*>( item ), layerContainer,
-                                       curr_layer_id, 0 );
+                addShape( static_cast<PCB_SHAPE*>( item ), layerContainer );
                 break;
 
             case PCB_TEXT_T:
-                addShapeWithClearance( static_cast<PCB_TEXT*>( item ), layerContainer,
-                                       curr_layer_id, 0 );
+                addShape( static_cast<PCB_TEXT*>( item ), layerContainer );
                 break;
 
             case PCB_DIM_ALIGNED_T:
@@ -928,8 +923,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             case PCB_DIM_RADIAL_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-                addShapeWithClearance( static_cast<PCB_DIMENSION_BASE*>( item ), layerContainer,
-                                       curr_layer_id, 0 );
+                addShape( static_cast<PCB_DIMENSION_BASE*>( item ), layerContainer );
                 break;
 
             default:
@@ -981,11 +975,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
             else
             {
-                addPadsWithClearance( footprint, layerContainer, curr_layer_id, 0,
-                                      false, false, false );
+                addPads( footprint, layerContainer, curr_layer_id, false, false, false );
             }
 
-            addFootprintShapesWithClearance( footprint, layerContainer, curr_layer_id, 0 );
+            addFootprintShapes( footprint, layerContainer, curr_layer_id );
         }
 
 

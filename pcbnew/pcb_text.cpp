@@ -36,6 +36,7 @@
 #include <trigo.h>
 #include <string_utils.h>
 #include <geometry/shape_compound.h>
+#include <callback_gal.h>
 #include <convert_basic_shapes_to_polygon.h>
 
 using KIGFX::PCB_RENDER_SETTINGS;
@@ -230,15 +231,11 @@ void PCB_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
                                                          PCB_LAYER_ID aLayer, int aClearance,
                                                          int aError, ERROR_LOC aErrorLoc ) const
 {
-    wxSize size = GetTextSize();
+    KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
+    KIFONT::FONT*              font = GetDrawFont();
+    int                        penWidth = GetEffectiveTextPenWidth();
 
-    if( IsMirrored() )
-        size.x = -size.x;
-
-    int  penWidth = GetEffectiveTextPenWidth();
-
-    GRText( GetTextPos(), GetShownText(), GetTextAngle(), size, GetHorizJustify(),
-            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont(),
+    CALLBACK_GAL callback_gal( empty_opts,
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
@@ -253,6 +250,8 @@ void PCB_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
                 for( const VECTOR2I& point : { aPt1, aPt2, aPt3 } )
                     aCornerBuffer.Append( point.x, point.y );
             } );
+
+    font->Draw( &callback_gal, GetShownText(), GetTextPos(), GetAttributes() );
 }
 
 

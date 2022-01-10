@@ -465,32 +465,25 @@ private:
     void destroyLayers();
 
     // Helper functions to create the board
-     void createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
-                       int aClearanceValue );
+    void createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer );
 
-    void createPadWithClearance( const PAD *aPad, CONTAINER_2D_BASE* aDstContainer,
-                                 PCB_LAYER_ID aLayer, const VECTOR2I& aClearanceValue ) const;
+    void createPadWithMargin( const PAD *aPad, CONTAINER_2D_BASE* aDstContainer,
+                              PCB_LAYER_ID aLayer, const VECTOR2I& aMargin ) const;
 
     OBJECT_2D* createPadWithDrill( const PAD* aPad, int aInflateValue );
 
-    void addPadsWithClearance( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aDstContainer,
-                               PCB_LAYER_ID aLayerId, int aInflateValue,
-                               bool aSkipNPTHPadsWihNoCopper, bool aSkipPlatedPads,
-                               bool aSkipNonPlatedPads );
+    void addPads( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aDstContainer,
+                  PCB_LAYER_ID aLayerId, bool aSkipNPTHPadsWihNoCopper, bool aSkipPlatedPads,
+                  bool aSkipNonPlatedPads );
 
-    void addFootprintShapesWithClearance( const FOOTPRINT* aFootprint,
-                                          CONTAINER_2D_BASE* aDstContainer,
-                                          PCB_LAYER_ID aLayerId, int aInflateValue );
+    void addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aDstContainer,
+                             PCB_LAYER_ID aLayerId );
 
-    void addShapeWithClearance( const PCB_TEXT* aText, CONTAINER_2D_BASE* aDstContainer,
-                                PCB_LAYER_ID aLayerId, int aClearanceValue );
+    void addShape( const PCB_TEXT* aText, CONTAINER_2D_BASE* aDstContainer );
 
-    void addShapeWithClearance( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aDstContainer,
-                                PCB_LAYER_ID aLayerId, int aClearanceValue );
+    void addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aDstContainer );
 
-    void addShapeWithClearance( const PCB_DIMENSION_BASE* aDimension,
-                                CONTAINER_2D_BASE* aDstContainer, PCB_LAYER_ID aLayerId,
-                                int aClearanceValue );
+    void addShape( const PCB_DIMENSION_BASE* aDimension, CONTAINER_2D_BASE* aDstContainer );
 
     void addSolidAreasShapes( const ZONE* aZoneContainer, CONTAINER_2D_BASE* aDstContainer,
                               PCB_LAYER_ID aLayerId );

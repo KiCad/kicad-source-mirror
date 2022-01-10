@@ -42,6 +42,7 @@
 #include <plotters/plotter.h>
 #include <geometry/shape_line_chain.h>
 #include <bezier_curves.h>
+#include <callback_gal.h>
 #include <math/util.h>      // for KiROUND
 
 
@@ -666,6 +667,8 @@ void PLOTTER::Text( const VECTOR2I&             aPos,
                     KIFONT::FONT*               aFont,
                     void*                       aData )
 {
+    KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
+
     SetColor( aColor );
     SetCurrentLineWidth( aPenWidth, aData );
 
@@ -675,7 +678,7 @@ void PLOTTER::Text( const VECTOR2I&             aPos,
     if( aPenWidth < 0 )
         aPenWidth = -aPenWidth;
 
-    GRText( aPos, aText, aOrient, aSize, aH_justify, aV_justify, aPenWidth, aItalic, aBold, aFont,
+    CALLBACK_GAL callback_gal( empty_opts,
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
@@ -694,4 +697,14 @@ void PLOTTER::Text( const VECTOR2I&             aPos,
 
                 PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0, aData );
             } );
+
+    TEXT_ATTRIBUTES attributes;
+    attributes.m_Angle = aOrient;
+    attributes.m_StrokeWidth = aPenWidth;
+    attributes.m_Italic = aItalic;
+    attributes.m_Bold = aBold;
+    attributes.m_Halign = aH_justify;
+    attributes.m_Valign = aV_justify;
+
+    aFont->Draw( &callback_gal, aText, aPos, attributes );
 }

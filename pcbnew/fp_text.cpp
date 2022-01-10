@@ -35,6 +35,7 @@
 #include <string_utils.h>
 #include <painter.h>
 #include <geometry/shape_compound.h>
+#include <callback_gal.h>
 #include <convert_basic_shapes_to_polygon.h>
 
 FP_TEXT::FP_TEXT( FOOTPRINT* aParentFootprint, TEXT_TYPE text_type ) :
@@ -465,14 +466,11 @@ void FP_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
                                                         PCB_LAYER_ID aLayer, int aClearance,
                                                         int aError, ERROR_LOC aErrorLoc ) const
 {
-    wxSize size = GetTextSize();
-    int    penWidth = GetEffectiveTextPenWidth();
+    KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
+    KIFONT::FONT*              font = GetDrawFont();
+    int                        penWidth = GetEffectiveTextPenWidth();
 
-    if( IsMirrored() )
-        size.x = -size.x;
-
-    GRText( GetTextPos(), GetShownText(), GetDrawRotation(), size, GetHorizJustify(),
-            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont(),
+    CALLBACK_GAL callback_gal( empty_opts,
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
@@ -487,6 +485,8 @@ void FP_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
                 for( const VECTOR2I& point : { aPt1, aPt2, aPt3 } )
                     aCornerBuffer.Append( point.x, point.y );
             } );
+
+    font->Draw( &callback_gal, GetShownText(), GetTextPos(), GetAttributes() );
 }
 
 
