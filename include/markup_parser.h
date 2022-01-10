@@ -22,6 +22,7 @@
 #define MARKUP_PARSER_H
 
 #include <pegtl.hpp>
+#include <pegtl/contrib/parse_tree.hpp>
 #include <iostream>
 #include <string>
 #include <utf8.h>
@@ -41,9 +42,9 @@ struct NODE : parse_tree::basic_node<NODE>
 
     std::string typeString() const;
 
-    bool isOverbar() const     { return is<MARKUP::overbar>(); }
-    bool isSubscript() const   { return is<MARKUP::subscript>(); }
-    bool isSuperscript() const { return is<MARKUP::superscript>(); }
+    bool isOverbar() const     { return is_type<MARKUP::overbar>(); }
+    bool isSubscript() const   { return is_type<MARKUP::subscript>(); }
+    bool isSuperscript() const { return is_type<MARKUP::superscript>(); }
 };
 
 struct varPrefix : string<'$', '{'> {};

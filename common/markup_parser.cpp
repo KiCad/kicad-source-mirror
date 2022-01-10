@@ -37,13 +37,13 @@ std::string NODE::typeString() const
 {
     std::stringstream os;
 
-    if( is<MARKUP::subscript>() )                  os << "SUBSCRIPT";
-    else if( is<MARKUP::superscript>() )           os << "SUPERSCRIPT";
-    else if( is<MARKUP::anyString>() )             os << "ANYSTRING";
-    else if( is<MARKUP::anyStringWithinBraces>() ) os << "ANYSTRINGWITHINBRACES";
-    else if( is<MARKUP::varNamespaceName>() )      os << "VARNAMESPACENAME";
-    else if( is<MARKUP::varName>() )               os << "VARNAME";
-    else                                           os << "other";
+    if( is_type<MARKUP::subscript>() )                  os << "SUBSCRIPT";
+    else if( is_type<MARKUP::superscript>() )           os << "SUPERSCRIPT";
+    else if( is_type<MARKUP::anyString>() )             os << "ANYSTRING";
+    else if( is_type<MARKUP::anyStringWithinBraces>() ) os << "ANYSTRINGWITHINBRACES";
+    else if( is_type<MARKUP::varNamespaceName>() )      os << "VARNAMESPACENAME";
+    else if( is_type<MARKUP::varName>() )               os << "VARNAME";
+    else                                                os << "other";
 
     return os.str();
 }
@@ -53,7 +53,7 @@ std::string NODE::asString() const
 {
     std::stringstream os;
 
-    os << name(); // << "{" << typeString() << "}";
+    os << type;
 
     if( has_content() )
         os << " \"" << string() << "\"";

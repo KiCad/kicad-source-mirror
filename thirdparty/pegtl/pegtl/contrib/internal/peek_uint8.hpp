@@ -1,0 +1,33 @@
+// Copyright (c) 2018-2021 Dr. Colin Hirsch and Daniel Frey
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at https://www.boost.org/LICENSE_1_0.txt)
+
+#ifndef TAO_PEGTL_CONTRIB_INTERNAL_PEEK_UINT8_HPP
+#define TAO_PEGTL_CONTRIB_INTERNAL_PEEK_UINT8_HPP
+
+#include <cstddef>
+#include <cstdint>
+
+#include "../../config.hpp"
+#include "../../internal/input_pair.hpp"
+
+namespace TAO_PEGTL_NAMESPACE::internal
+{
+   struct peek_uint8
+   {
+      using data_t = std::uint8_t;
+      using pair_t = input_pair< std::uint8_t >;
+
+      template< typename ParseInput >
+      [[nodiscard]] static pair_t peek( ParseInput& in ) noexcept( noexcept( in.empty() ) )
+      {
+         if( in.empty() ) {
+            return { 0, 0 };
+         }
+         return { in.peek_uint8(), 1 };
+      }
+   };
+
+}  // namespace TAO_PEGTL_NAMESPACE::internal
+
+#endif
