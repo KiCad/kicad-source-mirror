@@ -231,19 +231,20 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
     {
     case PCB_VIA_T:
     {
-        const float radius = ( aTrack->GetWidth() / 2 ) * m_biuTo3Dunits;
-        aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU, radius, *aTrack ) );
+        const float radius3DU = ( aTrack->GetWidth() / 2 ) * m_biuTo3Dunits;
+        aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU, radius3DU, *aTrack ) );
         break;
     }
 
     case PCB_ARC_T:
     {
         const PCB_ARC* arc = static_cast<const PCB_ARC*>( aTrack );
+
         VECTOR2D center( arc->GetCenter() );
-        double arc_angle = arc->GetAngle();
-        double radius = arc->GetRadius();
-        int arcsegcount = GetArcToSegmentCount( radius, Millimeter2iu( 0.005), arc_angle/10 );
-        int circlesegcount;
+        double   arc_angle = arc->GetAngle();
+        double   radius = arc->GetRadius();
+        int      arcsegcount = GetArcToSegmentCount( radius, ARC_HIGH_DEF, arc_angle / 10 );
+        int      circlesegcount;
 
         // We need a circle to segment count. However, the arc angle can be small, and the
         // radius very big. so we calculate a reasonable value for circlesegcount.
@@ -253,20 +254,8 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
         }
         else
         {
-            double cnt = arcsegcount * 3600/std::abs( arc_angle );
-
-#define SEG_CNT_MAX 128
-            if( cnt < SEG_CNT_MAX )
-            {
-                circlesegcount = (int)cnt;
-
-                if( circlesegcount == 0 )
-                    circlesegcount = 1;
-            }
-            else
-            {
-                circlesegcount = SEG_CNT_MAX;
-            }
+            circlesegcount = KiROUND( arcsegcount * 3600 / std::abs( arc_angle ) );
+            circlesegcount = std::max( 1, std::min( circlesegcount, 128 ) );
         }
 
         transformArcToSegments( VECTOR2I( center.x, center.y ), arc->GetStart(), arc_angle,
@@ -281,15 +270,15 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
         // Cannot add segments that have the same start and end point
         if( Is_segment_a_circle( start3DU, end3DU ) )
         {
-            const float radius = ( aTrack->GetWidth() / 2 ) * m_biuTo3Dunits;
+            const float radius3DU = ( aTrack->GetWidth() / 2 ) * m_biuTo3Dunits;
 
-            aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU, radius, *aTrack ) );
+            aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU, radius3DU, *aTrack ) );
         }
         else
         {
-            const float width = aTrack->GetWidth() * m_biuTo3Dunits;
+            const float width3DU = aTrack->GetWidth() * m_biuTo3Dunits;
 
-            aDstContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU, width, *aTrack ) );
+            aDstContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU, width3DU, *aTrack ) );
         }
 
         break;
@@ -339,37 +328,30 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aDs
             case SH_SEGMENT:
             {
                 const SHAPE_SEGMENT* seg = (SHAPE_SEGMENT*) shape;
-                const SFVEC2F        start3DU(  seg->GetSeg().A.x * m_biuTo3Dunits,
-                                               -seg->GetSeg().A.y * m_biuTo3Dunits );
-                const SFVEC2F        end3DU  (  seg->GetSeg().B.x * m_biuTo3Dunits,
-                                               -seg->GetSeg().B.y * m_biuTo3Dunits );
-                const int            width = seg->GetWidth() + clearance.x * 2;
+
+                const SFVEC2F a3DU(  seg->GetSeg().A.x * m_biuTo3Dunits,
+                                    -seg->GetSeg().A.y * m_biuTo3Dunits );
+                const SFVEC2F b3DU(  seg->GetSeg().B.x * m_biuTo3Dunits,
+                                    -seg->GetSeg().B.y * m_biuTo3Dunits );
+                const int     width3DU = ( seg->GetWidth() + clearance.x * 2 ) * m_biuTo3Dunits;
 
                  // Cannot add segments that have the same start and end point
-                if( Is_segment_a_circle( start3DU, end3DU ) )
-                {
-                    aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU,
-                                                              ( width / 2 ) * m_biuTo3Dunits,
-                                                              *aPad ) );
-                }
+                if( Is_segment_a_circle( a3DU, b3DU ) )
+                    aDstContainer->Add( new FILLED_CIRCLE_2D( a3DU, width3DU / 2, *aPad ) );
                 else
-                {
-                    aDstContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU,
-                                                              width * m_biuTo3Dunits,
-                                                              *aPad ) );
-                }
+                    aDstContainer->Add( new ROUND_SEGMENT_2D( a3DU, b3DU, width3DU, *aPad ) );
             }
                 break;
 
             case SH_CIRCLE:
             {
                 const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shape;
-                const int           radius = circle->GetRadius() + clearance.x;
-                const SFVEC2F       center(  circle->GetCenter().x * m_biuTo3Dunits,
-                                             -circle->GetCenter().y * m_biuTo3Dunits );
 
-                aDstContainer->Add( new FILLED_CIRCLE_2D( center, radius * m_biuTo3Dunits,
-                                                          *aPad ) );
+                const int     radius3DU = ( circle->GetRadius() + clearance.x ) * m_biuTo3Dunits;
+                const SFVEC2F center3DU(  circle->GetCenter().x * m_biuTo3Dunits,
+                                         -circle->GetCenter().y * m_biuTo3Dunits );
+
+                aDstContainer->Add( new FILLED_CIRCLE_2D( center3DU, radius3DU, *aPad ) );
             }
                 break;
 
@@ -395,31 +377,23 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aDs
 
             case SH_ARC:
             {
-                SHAPE_ARC* arc = (SHAPE_ARC*) shape;
+                SHAPE_ARC*       arc = (SHAPE_ARC*) shape;
                 SHAPE_LINE_CHAIN l = arc->ConvertToPolyline( maxError );
 
                 for( int i = 0; i < l.SegmentCount(); i++ )
                 {
                     SHAPE_SEGMENT seg( l.Segment( i ).A, l.Segment( i ).B, arc->GetWidth() );
-                    const SFVEC2F start3DU(  seg.GetSeg().A.x * m_biuTo3Dunits,
-                                             -seg.GetSeg().A.y * m_biuTo3Dunits );
-                    const SFVEC2F end3DU( seg.GetSeg().B.x * m_biuTo3Dunits,
-                                          -seg.GetSeg().B.y * m_biuTo3Dunits );
-                    const int width = arc->GetWidth() + clearance.x * 2;
+                    const SFVEC2F a3DU(  seg.GetSeg().A.x * m_biuTo3Dunits,
+                                        -seg.GetSeg().A.y * m_biuTo3Dunits );
+                    const SFVEC2F b3DU(  seg.GetSeg().B.x * m_biuTo3Dunits,
+                                        -seg.GetSeg().B.y * m_biuTo3Dunits );
+                    const int width3DU = ( arc->GetWidth() + clearance.x * 2 ) * m_biuTo3Dunits;
 
                      // Cannot add segments that have the same start and end point
-                    if( Is_segment_a_circle( start3DU, end3DU ) )
-                    {
-                        aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU,
-                                                                  ( width / 2 ) * m_biuTo3Dunits,
-                                                                  *aPad ) );
-                    }
+                    if( Is_segment_a_circle( a3DU, b3DU ) )
+                        aDstContainer->Add( new FILLED_CIRCLE_2D( a3DU, width3DU / 2, *aPad ) );
                     else
-                    {
-                        aDstContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU,
-                                                                  width * m_biuTo3Dunits,
-                                                                  *aPad ) );
-                    }
+                        aDstContainer->Add( new ROUND_SEGMENT_2D( a3DU, b3DU, width3DU, *aPad ) );
                 }
             }
                 break;
