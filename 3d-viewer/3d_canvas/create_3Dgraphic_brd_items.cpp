@@ -214,10 +214,12 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint,
         textItem = text;
         penWidth = textItem->GetEffectiveTextPenWidth() * m_biuTo3Dunits;
 
-        KIFONT::FONT* font = textItem->GetDrawFont();
+        KIFONT::FONT*   font = textItem->GetDrawFont();
+        TEXT_ATTRIBUTES attrs = textItem->GetAttributes();
 
-        font->Draw( &callback_gal, textItem->GetShownText(), textItem->GetTextPos(),
-                    textItem->GetAttributes() );
+        attrs.m_Angle = textItem->GetDrawRotation();
+
+        font->Draw( &callback_gal, textItem->GetShownText(), textItem->GetTextPos(), attrs );
     }
 }
 

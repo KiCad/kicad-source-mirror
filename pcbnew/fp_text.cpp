@@ -486,7 +486,10 @@ void FP_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
                     aCornerBuffer.Append( point.x, point.y );
             } );
 
-    font->Draw( &callback_gal, GetShownText(), GetTextPos(), GetAttributes() );
+    TEXT_ATTRIBUTES attrs = GetAttributes();
+    attrs.m_Angle = GetDrawRotation();
+
+    font->Draw( &callback_gal, GetShownText(), GetTextPos(), attrs );
 }
 
 

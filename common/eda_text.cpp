@@ -847,7 +847,10 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
                 shape->AddShape( triShape );
             } );
 
-    font->Draw( &callback_gal, GetShownText(), GetTextPos(), GetAttributes() );
+    TEXT_ATTRIBUTES attrs = GetAttributes();
+    attrs.m_Angle = GetDrawRotation();
+
+    font->Draw( &callback_gal, GetShownText(), GetTextPos(), attrs );
 
     return shape;
 }
