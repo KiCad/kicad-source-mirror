@@ -78,10 +78,7 @@ public:
     bool ContinueEdit( const VECTOR2I& aPosition ) override { return continueEdit( aPosition ); }
     void CalcEdit( const VECTOR2I& aPosition ) override     { calcEdit( aPosition ); }
 
-    /**
-     * The base EndEdit() removes the last point in the polyline, so don't call that here
-     */
-    void EndEdit() override                                { }
+    void EndEdit() override                                { endEdit( false ); }
     void SetEditState( int aState )                        { setEditState( aState ); }
 
     void AddPoint( const VECTOR2I& aPosition );

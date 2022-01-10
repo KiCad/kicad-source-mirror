@@ -297,7 +297,12 @@ protected:
     void beginEdit( const VECTOR2I& aStartPoint );
     bool continueEdit( const VECTOR2I& aPosition );
     void calcEdit( const VECTOR2I& aPosition );
-    void endEdit();
+
+    /**
+     * Finishes editing the shape.
+     * @param aClosed Should polygon shapes be closed (yes for pcbnew/fpeditor, no for libedit)
+     */
+    void endEdit( bool aClosed = true );
     void setEditState( int aState ) { m_editState = aState; }
 
 protected:
