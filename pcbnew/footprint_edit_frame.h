@@ -157,9 +157,9 @@ public:
     /**
      * Called from the main toolbar to load a footprint from board mainly to edit it.
      */
-    void LoadFootprintFromBoard( wxCommandEvent& event );
+    void OnLoadFootprintFromBoard( wxCommandEvent& event );
 
-    void SaveFootprintToBoard( wxCommandEvent& event );
+    void OnSaveFootprintToBoard( wxCommandEvent& event );
 
     void LoadFootprintFromLibrary( LIB_ID aFPID );
 

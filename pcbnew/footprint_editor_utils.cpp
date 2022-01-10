@@ -43,7 +43,7 @@
 using namespace std::placeholders;
 
 
-void FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( wxCommandEvent& event )
+void FOOTPRINT_EDIT_FRAME::OnLoadFootprintFromBoard( wxCommandEvent& event )
 {
     LoadFootprintFromBoard( nullptr );
 }
@@ -127,7 +127,7 @@ void FOOTPRINT_EDIT_FRAME::SelectLayer( wxCommandEvent& event )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( wxCommandEvent& event )
+void FOOTPRINT_EDIT_FRAME::OnSaveFootprintToBoard( wxCommandEvent& event )
 {
     SaveFootprintToBoard( true );
 }
