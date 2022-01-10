@@ -354,10 +354,30 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
         case PCB_FP_DIM_CENTER_T:
         case PCB_FP_DIM_RADIAL_T:
         case PCB_FP_DIM_ORTHOGONAL_T:
-        case PCB_ZONE_T:
             aItem->TransformShapeWithClearanceToPolygon( itemPoly, aLayer, 0, Millimeter2iu( 0.1 ),
                                                          ERROR_INSIDE );
             break;
+
+        case PCB_ZONE_T:
+        {
+            ZONE* zone = static_cast<ZONE*>( aItem );
+            #if 0
+            // Using the filled area shapes to find a Focus point can give good results, but
+            // unfortunately the calculations are highly time consuming, even for not very
+            // large areas (can be easily a few minutes for large areas).
+            // so we used only the zone outline that usually do not have too many vertices.
+            zone->TransformShapeWithClearanceToPolygon( itemPoly, aLayer, 0, Millimeter2iu( 0.1 ),
+                                                        ERROR_INSIDE );
+
+            if( itemPoly.IsEmpty() )
+                itemPoly = *zone->Outline();
+            #else
+            // much faster calculation time when using only the zone outlines
+            itemPoly = *zone->Outline();
+            #endif
+
+            break;
+        }
 
         default:
         {
@@ -396,7 +416,7 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
         while( !itemPoly.IsEmpty() )
         {
             focusPt = (wxPoint) itemPoly.BBox().Centre();
-            itemPoly.Deflate( step, 4 );
+            itemPoly.Deflate( step, 4, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
         }
 
         FocusOnLocation( focusPt );

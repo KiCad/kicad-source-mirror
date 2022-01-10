@@ -1375,9 +1375,12 @@ void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
     aCornerBuffer = m_FilledPolysList.at( aLayer );
 
-    int numSegs = GetArcToSegmentCount( aClearance, aError, 360.0 );
-    aCornerBuffer.Inflate( aClearance, numSegs );
-    aCornerBuffer.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    // Rebuild filled areas only if clearance is not 0
+    if( aClearance )
+    {
+        int numSegs = GetArcToSegmentCount( aClearance, aError, 360.0 );
+        aCornerBuffer.InflateWithLinkedHoles( aClearance, numSegs, SHAPE_POLY_SET::PM_FAST );
+    }
 }
 
 
