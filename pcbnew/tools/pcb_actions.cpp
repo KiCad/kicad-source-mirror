@@ -658,7 +658,7 @@ TOOL_ACTION PCB_ACTIONS::placeTarget( "pcbnew.EditorControl.placeTarget",
 
 TOOL_ACTION PCB_ACTIONS::placeFootprint( "pcbnew.EditorControl.placeFootprint",
         AS_GLOBAL,
-        'O', LEGACY_HK_NAME( "Add Footprint" ),
+        'A', LEGACY_HK_NAME( "Add Footprint" ),
         _( "Add Footprint" ), _( "Add a footprint" ),
         BITMAPS::module, AF_ACTIVATE );
 
@@ -875,7 +875,7 @@ TOOL_ACTION PCB_ACTIONS::zoneDisplayTriangulated( "pcbnew.Control.zoneDisplayTes
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayToggle( "pcbnew.Control.zoneDisplayToggle",
         AS_GLOBAL,
-        'A', "",
+        0, "",
         _( "Toggle Zone Display" ),
         _( "Cycle between showing zone fills and just their outlines" ),
         BITMAPS::show_zone );
