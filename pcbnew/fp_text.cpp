@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 #include <string_utils.h>
 #include <painter.h>
 #include <geometry/shape_compound.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 FP_TEXT::FP_TEXT( FOOTPRINT* aParentFootprint, TEXT_TYPE text_type ) :
     BOARD_ITEM( aParentFootprint, PCB_FP_TEXT_T ),
@@ -464,20 +465,28 @@ void FP_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
                                                         PCB_LAYER_ID aLayer, int aClearance,
                                                         int aError, ERROR_LOC aErrorLoc ) const
 {
-    struct TSEGM_2_POLY_PRMS prms;
-
-    prms.m_cornerBuffer = &aCornerBuffer;
-    prms.m_textWidth  = GetEffectiveTextPenWidth() + ( 2 * aClearance );
-    prms.m_error = aError;
     wxSize size = GetTextSize();
-    int  penWidth = GetEffectiveTextPenWidth();
+    int    penWidth = GetEffectiveTextPenWidth();
 
     if( IsMirrored() )
         size.x = -size.x;
 
-    GRText( nullptr, GetTextPos(), BLACK, GetShownText(), GetDrawRotation(), size,
-            GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont(),
-            addTextSegmToPoly, &prms );
+    GRText( GetTextPos(), GetShownText(), GetDrawRotation(), size, GetHorizJustify(),
+            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont(),
+            // Stroke callback
+            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
+            {
+                TransformOvalToPolygon( aCornerBuffer, aPt1, aPt2, penWidth+ ( 2 * aClearance ),
+                                        aError, ERROR_INSIDE );
+            },
+            // Triangulation callback
+            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
+            {
+                aCornerBuffer.NewOutline();
+
+                for( const VECTOR2I& point : { aPt1, aPt2, aPt3 } )
+                    aCornerBuffer.Append( point.x, point.y );
+            } );
 }
 
 

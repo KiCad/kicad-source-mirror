@@ -222,7 +222,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_PositionYUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PositionYUnits->Wrap( -1 );
-	gbSizer1->Add( m_PositionYUnits, wxGBPosition( 5, 6 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_PositionYUnits, wxGBPosition( 4, 6 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_OrientLabel = new wxStaticText( this, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OrientLabel->Wrap( -1 );
@@ -235,7 +235,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_OrientCtrl->Append( _("90.0") );
 	m_OrientCtrl->Append( _("-90.0") );
 	m_OrientCtrl->Append( _("180.0") );
-	gbSizer1->Add( m_OrientCtrl, wxGBPosition( 5, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer1->Add( m_OrientCtrl, wxGBPosition( 5, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
 	bMainSizer->Add( gbSizer1, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );

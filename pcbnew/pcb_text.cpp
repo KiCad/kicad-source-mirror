@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@
 #include <trigo.h>
 #include <string_utils.h>
 #include <geometry/shape_compound.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 using KIGFX::PCB_RENDER_SETTINGS;
 
@@ -226,11 +227,9 @@ std::shared_ptr<SHAPE> PCB_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 
 
 void PCB_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                         PCB_LAYER_ID aLayer, int aClearanceValue,
+                                                         PCB_LAYER_ID aLayer, int aClearance,
                                                          int aError, ERROR_LOC aErrorLoc ) const
 {
-    struct TSEGM_2_POLY_PRMS prms;
-
     wxSize size = GetTextSize();
 
     if( IsMirrored() )
@@ -238,13 +237,22 @@ void PCB_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
 
     int  penWidth = GetEffectiveTextPenWidth();
 
-    prms.m_cornerBuffer = &aCornerBuffer;
-    prms.m_textWidth = GetEffectiveTextPenWidth() + ( 2 * aClearanceValue );
-    prms.m_error = aError;
+    GRText( GetTextPos(), GetShownText(), GetTextAngle(), size, GetHorizJustify(),
+            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont(),
+            // Stroke callback
+            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
+            {
+                TransformOvalToPolygon( aCornerBuffer, aPt1, aPt2, penWidth+ ( 2 * aClearance ),
+                                        aError, ERROR_INSIDE );
+            },
+            // Triangulation callback
+            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
+            {
+                aCornerBuffer.NewOutline();
 
-    GRText( nullptr, GetTextPos(), COLOR4D::BLACK, GetShownText(), GetTextAngle(), size,
-            GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont(),
-            addTextSegmToPoly, &prms );
+                for( const VECTOR2I& point : { aPt1, aPt2, aPt3 } )
+                    aCornerBuffer.Append( point.x, point.y );
+            } );
 }
 
 

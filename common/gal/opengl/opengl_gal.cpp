@@ -2428,12 +2428,11 @@ void OPENGL_GAL::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTotal )
         m_currentManager->Color( m_fillColor );
 
         outlineGlyph.Triangulate(
-                [&]( int aPolygonIndex, const VECTOR2D& aVertex1, const VECTOR2D& aVertex2,
-                     const VECTOR2D& aVertex3 )
+                [&]( const VECTOR2D& aPt1, const VECTOR2D& aPt2, const VECTOR2D& aPt3 )
                 {
-                    m_currentManager->Vertex( aVertex1.x, aVertex1.y, m_layerDepth );
-                    m_currentManager->Vertex( aVertex2.x, aVertex2.y, m_layerDepth );
-                    m_currentManager->Vertex( aVertex3.x, aVertex3.y, m_layerDepth );
+                    m_currentManager->Vertex( aPt1.x, aPt1.y, m_layerDepth );
+                    m_currentManager->Vertex( aPt2.x, aPt2.y, m_layerDepth );
+                    m_currentManager->Vertex( aPt3.x, aPt3.y, m_layerDepth );
                 } );
     }
 }

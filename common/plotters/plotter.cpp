@@ -647,7 +647,7 @@ void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int a
  * @param aV_justify is the vertical justification (bottom, center, top).
  * @param aPenWidth is the line width (if = 0, use plot default line width).
  * @param aItalic is the true to simulate an italic font.
- * @param aBold use true to use a bold font Useful only with default width value (aWidth = 0).
+ * @param aBold use true to use a bold font Useful only with default width value (aPenWidth = 0).
  * @param aMultilineAllowed use true to plot text as multiline, otherwise single line.
  * @param aData is a parameter used by some plotters in SetCurrentLineWidth(),
  *              not directly used here.
@@ -656,7 +656,7 @@ void PLOTTER::Text( const VECTOR2I&             aPos,
                     const COLOR4D&              aColor,
                     const wxString&             aText,
                     const EDA_ANGLE&            aOrient,
-                    const VECTOR2I&              aSize,
+                    const VECTOR2I&             aSize,
                     enum GR_TEXT_H_ALIGN_T      aH_justify,
                     enum GR_TEXT_V_ALIGN_T      aV_justify,
                     int                         aPenWidth,
@@ -669,6 +669,29 @@ void PLOTTER::Text( const VECTOR2I&             aPos,
     SetColor( aColor );
     SetCurrentLineWidth( aPenWidth, aData );
 
-    GRText( nullptr, aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aPenWidth,
-            aItalic, aBold, aFont, nullptr, nullptr, this );
+    if( aPenWidth == 0 && aBold ) // Use default values if aPenWidth == 0
+        aPenWidth = GetPenSizeForBold( std::min( aSize.x, aSize.y ) );
+
+    if( aPenWidth < 0 )
+        aPenWidth = -aPenWidth;
+
+    GRText( aPos, aText, aOrient, aSize, aH_justify, aV_justify, aPenWidth, aItalic, aBold, aFont,
+            // Stroke callback
+            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
+            {
+                MoveTo( (wxPoint) aPt1 );
+                LineTo( (wxPoint) aPt2 );
+                PenFinish();
+            },
+            // Triangulation callback
+            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
+            {
+                std::vector<VECTOR2I> cornerList;
+                cornerList.reserve( 3 );
+
+                for( const VECTOR2I& pt : { aPt1, aPt2, aPt3, aPt1 } )
+                    cornerList.emplace_back( pt );
+
+                PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0, aData );
+            } );
 }

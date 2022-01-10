@@ -61,7 +61,9 @@ bool FONTCONFIG::FindFont( const wxString& aFontName, wxString& aFontFile )
     FcResult   r = FcResultNoMatch;
     FcPattern* font = FcFontMatch( nullptr, pat, &r );
 
-    bool ok = false;
+    wxString fontName;
+    bool     ok = false;
+    bool     substituted = false;
 
     if( font )
     {
@@ -74,22 +76,28 @@ bool FONTCONFIG::FindFont( const wxString& aFontName, wxString& aFontFile )
             FcChar8* family = nullptr;
             FcChar8* style = nullptr;
 
-            FcPatternGetString( font, FC_FAMILY, 0, &family );
-            FcPatternGetString( font, FC_STYLE, 0, &style );
-
-            wxString fontName( family );
-            wxString styleStr( style );
-
-            if( !styleStr.IsEmpty() )
+            if( FcPatternGetString( font, FC_FAMILY, 0, &family ) == FcResultMatch )
             {
-                styleStr.Replace( " ", ":" );
-                fontName += ":" + styleStr;
+                fontName = wxString::FromUTF8( (char*) family );
+
+                if( FcPatternGetString( font, FC_STYLE, 0, &style ) == FcResultMatch )
+                {
+                    wxString styleStr = wxString::FromUTF8( (char*) style );
+
+                    if( !styleStr.IsEmpty() )
+                    {
+                        styleStr.Replace( " ", ":" );
+                        fontName += ":" + styleStr;
+                    }
+                }
+
+                // TODO: report Regular vs Book, Italic vs Oblique, etc. or filter them out?
+
+                if( aFontName.Contains( ":" ) )
+                    substituted = aFontName.CmpNoCase( fontName ) != 0;
+                else
+                    substituted = !fontName.StartsWith( aFontName );
             }
-
-            // TODO: report Regular vs Book, Italic vs Oblique, etc. or filter them out?
-
-            if( aFontName.CmpNoCase( fontName ) != 0 )
-                wxLogWarning( _( "Font '%s' not found; substituting '%s'." ), aFontName, fontName );
 
             ok = true;
         }
@@ -99,6 +107,8 @@ bool FONTCONFIG::FindFont( const wxString& aFontName, wxString& aFontFile )
 
     if( !ok )
         wxLogWarning( _( "Error loading font '%s'." ), aFontName );
+    else if( substituted )
+        wxLogWarning( _( "Font '%s' not found; substituting '%s'." ), aFontName, fontName );
 
     FcPatternDestroy( pat );
     return ok;

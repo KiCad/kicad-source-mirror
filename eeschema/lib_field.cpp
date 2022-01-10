@@ -131,8 +131,8 @@ void LIB_FIELD::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     VECTOR2I text_pos = aTransform.TransformCoordinate( GetTextPos() ) + aOffset;
     wxString text = aData ? *static_cast<wxString*>( aData ) : GetText();
 
-    GRText( DC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
-            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont() );
+    GRPrintText( DC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
+                 GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont() );
 }
 
 

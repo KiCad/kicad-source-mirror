@@ -406,7 +406,7 @@ public:
                        const VECTOR2I&             aSize,
                        enum GR_TEXT_H_ALIGN_T      aH_justify,
                        enum GR_TEXT_V_ALIGN_T      aV_justify,
-                       int                         aWidth,
+                       int                         aPenWidth,
                        bool                        aItalic,
                        bool                        aBold,
                        bool                        aMultilineAllowed = false,

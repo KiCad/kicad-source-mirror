@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@
 #include <symbol_editor/symbol_editor_settings.h>
 #include <trigo.h>
 #include <string_utils.h>
-#include <basic_gal.h>
 #include "sch_painter.h"
 
 // small margin in internal units between the pin text and the pin line
@@ -403,24 +402,24 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
                 if( aPinOrient == PIN_RIGHT )
                 {
                     x = x1 + aTextInside;
-                    GRText( DC, VECTOR2I( x, y1 ), NameColor, name, EDA_ANGLE::HORIZONTAL,
-                            pinNameSize, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, namePenWidth,
-                            false, false, font );
+                    GRPrintText( DC, VECTOR2I( x, y1 ), NameColor, name, EDA_ANGLE::HORIZONTAL,
+                                 pinNameSize, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER,
+                                 namePenWidth, false, false, font );
                 }
                 else    // Orient == PIN_LEFT
                 {
                     x = x1 - aTextInside;
-                    GRText( DC, VECTOR2I( x, y1 ), NameColor, name, EDA_ANGLE::HORIZONTAL,
-                            pinNameSize, GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, namePenWidth,
-                            false, false, font );
+                    GRPrintText( DC, VECTOR2I( x, y1 ), NameColor, name, EDA_ANGLE::HORIZONTAL,
+                                 pinNameSize, GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER,
+                                 namePenWidth, false, false, font );
                 }
             }
 
             if( aDrawPinNum )
             {
-                GRText( DC, VECTOR2I(( x1 + aPinPos.x) / 2, y1 - num_offset ), NumColor, number,
-                        EDA_ANGLE::HORIZONTAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
-                        GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, font );
+                GRPrintText( DC, VECTOR2I(( x1 + aPinPos.x) / 2, y1 - num_offset ), NumColor,
+                             number, EDA_ANGLE::HORIZONTAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
+                             GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, font );
             }
         }
         else            /* Its a vertical line. */
@@ -432,16 +431,16 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
 
                 if( aDrawPinName )
                 {
-                    GRText( DC, VECTOR2I( x1, y ), NameColor, name, EDA_ANGLE::VERTICAL, pinNameSize,
-                            GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, namePenWidth, false,
-                            false, font );
+                    GRPrintText( DC, VECTOR2I( x1, y ), NameColor, name, EDA_ANGLE::VERTICAL,
+                                 pinNameSize, GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER,
+                                 namePenWidth, false, false, font );
                 }
 
                 if( aDrawPinNum )
                 {
-                    GRText( DC, VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
-                            number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
-                            GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, font );
+                    GRPrintText( DC, VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
+                                 number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
+                                 GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, font );
                 }
             }
             else        /* PIN_UP */
@@ -450,16 +449,16 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
 
                 if( aDrawPinName )
                 {
-                    GRText( DC, VECTOR2I( x1, y ), NameColor, name, EDA_ANGLE::VERTICAL, pinNameSize,
-                            GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, namePenWidth, false,
-                            false, font );
+                    GRPrintText( DC, VECTOR2I( x1, y ), NameColor, name, EDA_ANGLE::VERTICAL,
+                                 pinNameSize, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER,
+                                 namePenWidth, false, false, font );
                 }
 
                 if( aDrawPinNum )
                 {
-                    GRText( DC, VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
-                            number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
-                            GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, font );
+                    GRPrintText( DC, VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
+                                 number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
+                                 GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, font );
                 }
             }
         }
@@ -472,16 +471,16 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
             if( aDrawPinName )
             {
                 x = ( x1 + aPinPos.x) / 2;
-                GRText( DC, VECTOR2I( x, y1 - name_offset ), NameColor, name, EDA_ANGLE::HORIZONTAL,
-                        pinNameSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM,
-                        namePenWidth, false, false, font );
+                GRPrintText( DC, VECTOR2I( x, y1 - name_offset ), NameColor, name,
+                             EDA_ANGLE::HORIZONTAL, pinNameSize, GR_TEXT_H_ALIGN_CENTER,
+                             GR_TEXT_V_ALIGN_BOTTOM, namePenWidth, false, false, font );
             }
             if( aDrawPinNum )
             {
                 x = ( x1 + aPinPos.x) / 2;
-                GRText( DC, VECTOR2I( x, y1 + num_offset ), NumColor, number, EDA_ANGLE::HORIZONTAL,
-                        pinNumSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, numPenWidth,
-                        false, false, font );
+                GRPrintText( DC, VECTOR2I( x, y1 + num_offset ), NumColor, number,
+                             EDA_ANGLE::HORIZONTAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
+                             GR_TEXT_V_ALIGN_TOP, numPenWidth, false, false, font );
             }
         }
         else     /* Its a vertical line. */
@@ -489,16 +488,16 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
             if( aDrawPinName )
             {
                 y = ( y1 + aPinPos.y) / 2;
-                GRText( DC, VECTOR2I( x1 - name_offset, y ), NameColor, name, EDA_ANGLE::VERTICAL,
-                        pinNameSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM,
-                        namePenWidth, false, false, font );
+                GRPrintText( DC, VECTOR2I( x1 - name_offset, y ), NameColor, name,
+                             EDA_ANGLE::VERTICAL, pinNameSize, GR_TEXT_H_ALIGN_CENTER,
+                             GR_TEXT_V_ALIGN_BOTTOM, namePenWidth, false, false, font );
             }
 
             if( aDrawPinNum )
             {
-                GRText( DC, VECTOR2I( x1 + num_offset, ( y1 + aPinPos.y) / 2 ), NumColor, number,
-                        EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP,
-                        numPenWidth, false, false, font );
+                GRPrintText( DC, VECTOR2I( x1 + num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
+                             number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
+                             GR_TEXT_V_ALIGN_TOP, numPenWidth, false, false, font );
             }
         }
     }
@@ -554,8 +553,8 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
         break;
     }
 
-    GRText( DC, txtpos, color, typeName, orient, wxSize( textSize, textSize ), hjustify,
-            GR_TEXT_V_ALIGN_CENTER, pensize, false, false, GetDrawFont() );
+    GRPrintText( DC, txtpos, color, typeName, orient, wxSize( textSize, textSize ), hjustify,
+                 GR_TEXT_V_ALIGN_CENTER, pensize, false, false, GetDrawFont() );
 }
 
 

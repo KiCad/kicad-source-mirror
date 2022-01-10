@@ -120,7 +120,7 @@ void GRSetColorPen( wxDC* DC, const COLOR4D& Color, int width, wxPenStyle style 
 
     // Under OSX and while printing when wxPen is set to 0, renderer follows the request drawing
     // nothing & in the bitmap world the minimum is enough to light a pixel, in vectorial one not
-    if( width <= 1 )
+    if( width <= 1 && DC->GetBrush().GetStyle() != wxBRUSHSTYLE_SOLID )
         width = DC->DeviceToLogicalXRel( 1 );
 
     if( s_ForceBlackPen )

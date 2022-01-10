@@ -1765,14 +1765,15 @@ void CAIRO_GAL_BASE::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTota
 {
     if( aGlyph.IsStroke() )
     {
-        const auto& strokeGlyph = static_cast<const KIFONT::STROKE_GLYPH&>( aGlyph );
+        const KIFONT::STROKE_GLYPH& glyph = static_cast<const KIFONT::STROKE_GLYPH&>( aGlyph );
 
-        for( const std::vector<VECTOR2D>& pointList : strokeGlyph )
+        for( const std::vector<VECTOR2D>& pointList : glyph )
             drawPoly( pointList );
     }
-#if 0 // FONT TODO
     else if( aGlyph.IsOutline() )
     {
+        const KIFONT::OUTLINE_GLYPH& glyph = static_cast<const KIFONT::OUTLINE_GLYPH&>( aGlyph );
+
         if( aNth == 0 )
         {
             cairo_close_path( m_currentContext );
@@ -1786,46 +1787,24 @@ void CAIRO_GAL_BASE::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTota
         // eventually glyphs should not be drawn as polygons at all,
         // but as bitmaps with antialiasing, this is just a stopgap measure
         // of getting some form of outline font display
-        auto triangleCallback =
-                [&]( int aPolygonIndex, const VECTOR2D& aVertex1, const VECTOR2D& aVertex2,
-                     const VECTOR2D& aVertex3, void* aCallbackData )
+
+        glyph.Triangulate(
+                [&]( const VECTOR2D& aVertex1, const VECTOR2D& aVertex2, const VECTOR2D& aVertex3 )
                 {
-#if 1
                     syncLineWidth();
 
-                    const auto p0 = roundp( xform( aVertex1 ) );
-                    const auto p1 = roundp( xform( aVertex2 ) );
-                    const auto p2 = roundp( xform( aVertex3 ) );
+                    const VECTOR2D p0 = roundp( xform( aVertex1 ) );
+                    const VECTOR2D p1 = roundp( xform( aVertex2 ) );
+                    const VECTOR2D p2 = roundp( xform( aVertex3 ) );
 
-                    /*
-                    cairo_move_to( currentContext, aVertex1.x, aVertex1.y );
-                    cairo_line_to( currentContext, aVertex2.x, aVertex2.y );
-                    cairo_line_to( currentContext, aVertex3.x, aVertex3.y );
-                    cairo_line_to( currentContext, aVertex1.x, aVertex1.y );
-                */
                     cairo_move_to( m_currentContext, p0.x, p0.y );
                     cairo_line_to( m_currentContext, p1.x, p1.y );
                     cairo_line_to( m_currentContext, p2.x, p2.y );
                     cairo_close_path( m_currentContext );
-                    /*
-                    setSourceRgba( currentContext, fillColor );
-                    SetIsFill( true );
-                    cairo_set_fill_rule( currentContext, CAIRO_FILL_RULE_EVEN_ODD );
+                    cairo_set_fill_rule( m_currentContext, CAIRO_FILL_RULE_EVEN_ODD );
                     flushPath();
-                    */
-                    //cairo_fill( currentContext );
-#else
-                    // just a silly test
-                    /*
-                    DrawRectangle(aVertex1, aVertex2);
-                    DrawRectangle(aVertex2, aVertex3);
-                    DrawRectangle(aVertex3, aVertex1);
-                    */
-                    DrawTriangle( aVertex1, aVertex2, aVertex3 );
-#endif
-                };
-
-        Triangulate( aGlyph, triangleCallback );
+                    cairo_fill( m_currentContext );
+                } );
 
         if( aNth == aTotal - 1 )
         {
@@ -1841,5 +1820,4 @@ void CAIRO_GAL_BASE::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTota
             m_isElementAdded = true;
         }
     }
-#endif
 }

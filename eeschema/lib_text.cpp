@@ -345,8 +345,8 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
     // Calculate pos according to mirror/rotation.
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
-    GRText( DC, txtpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_H_ALIGN_CENTER,
-            GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), GetDrawFont() );
+    GRPrintText( DC, txtpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_H_ALIGN_CENTER,
+                 GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(), GetDrawFont() );
 }
 
 

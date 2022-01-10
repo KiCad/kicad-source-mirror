@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,20 +30,19 @@
 #include <algorithm>          // for max
 #include <stddef.h>           // for NULL
 #include <type_traits>        // for swap
-#include <vector>             // for vector
+#include <vector>
 
-#include <eda_item.h>         // for EDA_ITEM
+#include <eda_item.h>
 #include <base_units.h>
-#include <basic_gal.h>        // for BASIC_GAL, basic_gal
+#include <callback_gal.h>
 #include <convert_to_biu.h>   // for Mils2iu
-#include <convert_basic_shapes_to_polygon.h>
-#include <eda_rect.h>         // for EDA_RECT
+#include <eda_rect.h>
 #include <eda_text.h>         // for EDA_TEXT, TEXT_EFFECTS, GR_TEXT_VJUSTIF...
 #include <gal/color4d.h>      // for COLOR4D, COLOR4D::BLACK
-#include <gr_text.h>          // for GRText
+#include <gr_text.h>
 #include <string_utils.h>     // for UnescapeString
 #include <math/util.h>        // for KiROUND
-#include <math/vector2d.h>    // for VECTOR2D
+#include <math/vector2d.h>
 #include <richio.h>
 #include <render_settings.h>
 #include <trigo.h>            // for RotatePoint
@@ -55,27 +54,11 @@
 #include <geometry/shape_poly_set.h>
 
 #include <wx/debug.h>           // for wxASSERT
-#include <wx/string.h>          // wxString, wxArrayString
-#include <wx/gdicmn.h>          // for wxPoint,wxSize
+#include <wx/string.h>
+#include <wx/gdicmn.h>          // for wxPoint, wxSize
 
 class OUTPUTFORMATTER;
 class wxFindReplaceData;
-
-
-void addTextSegmToPoly( int x0, int y0, int xf, int yf, void* aData )
-{
-    TSEGM_2_POLY_PRMS* prm = static_cast<TSEGM_2_POLY_PRMS*>( aData );
-    TransformOvalToPolygon( *prm->m_cornerBuffer, VECTOR2I( x0, y0 ), VECTOR2I( xf, yf ),
-                            prm->m_textWidth, prm->m_error, ERROR_INSIDE );
-}
-
-
-void addTextSegmToShape( int x0, int y0, int xf, int yf, void* aData )
-{
-    TSEGM_2_SHAPE_PRMS* prm = static_cast<TSEGM_2_SHAPE_PRMS*>( aData );
-    prm->m_shape->AddShape( new SHAPE_SEGMENT( VECTOR2I( x0, y0 ), VECTOR2I( xf, yf ),
-                                               prm->m_penWidth ) );
-}
 
 
 GR_TEXT_H_ALIGN_T EDA_TEXT::MapHorizJustify( int aHorizJustify )
@@ -726,8 +709,8 @@ void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTO
     if( IsMirrored() )
         size.x = -size.x;
 
-    GRText( DC, aOffset + aPos, aColor, aText, GetTextAngle(), size, GetHorizJustify(),
-            GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont() );
+    GRPrintText( DC, aOffset + aPos, aColor, aText, GetTextAngle(), size, GetHorizJustify(),
+                 GetVertJustify(), penWidth, IsItalic(), IsBold(), GetDrawFont() );
 }
 
 
@@ -844,64 +827,48 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
     KIFONT::FONT*                   font = GetDrawFont();
+    wxSize                          size = GetTextSize();
+    int                             penWidth = GetEffectiveTextPenWidth();
+    bool                            forceBold = true;
 
-    if( font->IsOutline() )
+    if( IsMirrored() )
+        size.x = -size.x;
+
+    wxArrayString strings_list;
+    std::vector<VECTOR2I> positions;
+
+    if( IsMultilineAllowed() )
     {
-        // Make sure the cache is up-to-date before using it
-        (void) GetRenderCache( m_render_cache_text );
-
-        for( std::unique_ptr<KIFONT::GLYPH>& baseGlyph : m_render_cache )
-        {
-            KIFONT::OUTLINE_GLYPH* glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( baseGlyph.get() );
-
-            glyph->Triangulate(
-                    [&]( int aPolygonIndex, const VECTOR2D& aVertex1, const VECTOR2D& aVertex2,
-                         const VECTOR2D& aVertex3 )
-                    {
-                        SHAPE_SIMPLE* triShape = new SHAPE_SIMPLE;
-
-                        triShape->Append( aVertex1 );
-                        triShape->Append( aVertex2 );
-                        triShape->Append( aVertex3 );
-
-                        shape->AddShape( triShape );
-                    } );
-        }
+        wxStringSplit( GetShownText(), strings_list, wxChar('\n') );
+        positions.reserve( strings_list.Count() );
+        GetLinePositions( positions, strings_list.Count() );
     }
     else
     {
-        wxSize size = GetTextSize();
-        int    penWidth = GetEffectiveTextPenWidth();
-        bool   forceBold = true;
+        strings_list.Add( GetShownText() );
+        positions.push_back( GetDrawPos() );
+    }
 
-        TSEGM_2_SHAPE_PRMS prms;
-        prms.m_penWidth = penWidth;
-        prms.m_shape = shape.get();
+    for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
+    {
+        GRText( positions[ii], strings_list.Item( ii ), GetDrawRotation(), size,
+                GetDrawHorizJustify(), GetDrawVertJustify(), penWidth, IsItalic(), forceBold, font,
+                // Stroke callback
+                [&]( const VECTOR2D& aPt1, const VECTOR2D& aPt2 )
+                {
+                    shape->AddShape( new SHAPE_SEGMENT( aPt1, aPt2, penWidth ) );
+                },
+                // Triangulation callback
+                [&]( const VECTOR2D& aPt1, const VECTOR2D& aPt2, const VECTOR2D& aPt3 )
+                {
+                    SHAPE_SIMPLE* triShape = new SHAPE_SIMPLE;
 
-        if( IsMirrored() )
-            size.x = -size.x;
+                    triShape->Append( aPt1 );
+                    triShape->Append( aPt2 );
+                    triShape->Append( aPt3 );
 
-        if( IsMultilineAllowed() )
-        {
-            wxArrayString strings_list;
-            wxStringSplit( GetShownText(), strings_list, wxChar('\n') );
-            std::vector<VECTOR2I> positions;
-            positions.reserve( strings_list.Count() );
-            GetLinePositions( positions, strings_list.Count() );
-
-            for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
-            {
-                GRText( nullptr, positions[ii], COLOR4D::BLACK, strings_list.Item( ii ),
-                        GetDrawRotation(), size, GetDrawHorizJustify(), GetDrawVertJustify(),
-                        penWidth, IsItalic(), forceBold, font, addTextSegmToShape, &prms );
-            }
-        }
-        else
-        {
-            GRText( nullptr, GetDrawPos(), COLOR4D::BLACK, GetShownText(),
-                    GetDrawRotation(), size, GetDrawHorizJustify(), GetDrawVertJustify(),
-                    penWidth, IsItalic(), forceBold, font, addTextSegmToShape, &prms );
-        }
+                    shape->AddShape( triShape );
+                } );
     }
 
     return shape;

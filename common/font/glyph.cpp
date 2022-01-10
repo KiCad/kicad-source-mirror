@@ -116,7 +116,9 @@ BOX2D OUTLINE_GLYPH::BoundingBox()
 }
 
 
-void OUTLINE_GLYPH::Triangulate( TRIANGULATE_CALLBACK aCallback ) const
+void OUTLINE_GLYPH::Triangulate( std::function<void( const VECTOR2I& aPt1,
+                                                     const VECTOR2I& aPt2,
+                                                     const VECTOR2I& aPt3 )> aCallback ) const
 {
     const_cast<OUTLINE_GLYPH*>( this )->CacheTriangulation();
 
@@ -128,7 +130,7 @@ void OUTLINE_GLYPH::Triangulate( TRIANGULATE_CALLBACK aCallback ) const
         {
             VECTOR2I a, b, c;
             polygon->GetTriangle( j, a, b, c );
-            aCallback( i, a, b, c );
+            aCallback( a, b, c );
         }
     }
 }

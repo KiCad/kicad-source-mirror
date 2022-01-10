@@ -73,9 +73,6 @@ OUTLINE_FONT* OUTLINE_FONT::LoadFont( const wxString& aFontName, bool aBold, boo
     wxString fontFile;
     wxString qualifiedFontName = aFontName;
 
-    if( !aBold && !aItalic )
-        qualifiedFontName << ":Regular";
-
     if( aBold )
         qualifiedFontName << ":Bold";
 

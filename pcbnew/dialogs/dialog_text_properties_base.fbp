@@ -2483,7 +2483,7 @@
                             <property name="colspan">1</property>
                             <property name="column">6</property>
                             <property name="flag">wxALIGN_CENTER_VERTICAL</property>
-                            <property name="row">5</property>
+                            <property name="row">4</property>
                             <property name="rowspan">1</property>
                             <object class="wxStaticText" expanded="0">
                                 <property name="BottomDockable">1</property>
@@ -2610,7 +2610,7 @@
                             <property name="border">5</property>
                             <property name="colspan">1</property>
                             <property name="column">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
                             <property name="row">5</property>
                             <property name="rowspan">1</property>
                             <object class="wxComboBox" expanded="0">

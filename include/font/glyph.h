@@ -31,9 +31,6 @@
 #include <geometry/shape_poly_set.h>
 #include <wx/debug.h>
 
-typedef std::function<void( int, const VECTOR2I& aPoint1, const VECTOR2I& aPoint2,
-                            const VECTOR2I& aPoint3 )>
-        TRIANGULATE_CALLBACK;
 
 namespace KIFONT
 {
@@ -69,7 +66,9 @@ public:
 
     BOX2D BoundingBox() override;
 
-    void Triangulate( TRIANGULATE_CALLBACK aCallback ) const;
+    void Triangulate( std::function<void( const VECTOR2I& aPt1,
+                                          const VECTOR2I& aPt2,
+                                          const VECTOR2I& aPt3 )> aCallback ) const;
 };
 
 

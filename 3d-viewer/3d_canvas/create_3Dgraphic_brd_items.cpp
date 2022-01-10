@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,38 +56,6 @@
 #include <macros.h>
 
 
-struct CALLBACK_DATA
-{
-    const BOARD_ITEM*  m_BoardItem;
-    CONTAINER_2D_BASE* m_Container;
-    int                m_TextWidth;
-    float              m_BiuTo3Dunits;
-};
-
-
-// This is a call back function, used by GRText to draw the 3D text shape:
-void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
-{
-    CALLBACK_DATA* data = static_cast<CALLBACK_DATA*>( aData );
-
-    const SFVEC2F start3DU( x0 * data->m_BiuTo3Dunits, -y0 * data->m_BiuTo3Dunits );
-    const SFVEC2F end3DU  ( xf * data->m_BiuTo3Dunits, -yf * data->m_BiuTo3Dunits );
-
-    if( Is_segment_a_circle( start3DU, end3DU ) )
-    {
-        data->m_Container->Add( new FILLED_CIRCLE_2D( start3DU,
-                                                      data->m_TextWidth * data->m_BiuTo3Dunits / 2,
-                                                      *data->m_BoardItem ) );
-    }
-    else
-    {
-        data->m_Container->Add( new ROUND_SEGMENT_2D( start3DU, end3DU,
-                                                      data->m_TextWidth * data->m_BiuTo3Dunits,
-                                                      *data->m_BoardItem ) );
-    }
-}
-
-
 // Based on
 // void PCB_TEXT::TransformTextShapeWithClearanceToPolygon
 // board_items_to_polygon_shape_transform.cpp
@@ -99,23 +67,40 @@ void BOARD_ADAPTER::addShapeWithClearance( const PCB_TEXT* aText, CONTAINER_2D_B
     if( aText->IsMirrored() )
         size.x = -size.x;
 
-    CALLBACK_DATA callbackData;
-    callbackData.m_BoardItem = aText;
-    callbackData.m_Container = aDstContainer;
-    callbackData.m_TextWidth = aText->GetEffectiveTextPenWidth() + ( 2 * aClearanceValue );
-    callbackData.m_BiuTo3Dunits = m_biuTo3Dunits;
-
-    // not actually used, but needed by GRText
-    const COLOR4D dummy_color;
-
     // Use the actual text width to generate segments. The segment position depend on
     // text thickness and justification
-    bool isBold = aText->IsBold();
-    int  penWidth = aText->GetEffectiveTextPenWidth();
+    int penWidth = aText->GetEffectiveTextPenWidth();
+    int adjustedWidth = penWidth + ( 2 * aClearanceValue );
 
-    GRText( nullptr, aText->GetTextPos(), dummy_color, aText->GetShownText(), aText->GetTextAngle(),
-            size, aText->GetHorizJustify(), aText->GetVertJustify(), penWidth, aText->IsItalic(),
-            isBold, aText->GetDrawFont(), addTextSegmToContainer, &callbackData );
+    GRText( aText->GetTextPos(), aText->GetShownText(), aText->GetTextAngle(), size,
+            aText->GetHorizJustify(), aText->GetVertJustify(), penWidth, aText->IsItalic(),
+            aText->IsBold(), aText->GetDrawFont(),
+            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
+            {
+                const SFVEC2F start3DU( aPt1.x * m_biuTo3Dunits, -aPt1.y * m_biuTo3Dunits );
+                const SFVEC2F end3DU  ( aPt1.x * m_biuTo3Dunits, -aPt2.y * m_biuTo3Dunits );
+
+                if( Is_segment_a_circle( start3DU, end3DU ) )
+                {
+                    aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU,
+                                                              adjustedWidth * m_biuTo3Dunits / 2,
+                                                              *aText ) );
+                }
+                else
+                {
+                    aDstContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU,
+                                                              adjustedWidth * m_biuTo3Dunits,
+                                                              *aText ) );
+                }
+            },
+            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
+            {
+                const SFVEC2F a3DU( aPt1.x * m_biuTo3Dunits, -aPt1.y * m_biuTo3Dunits );
+                const SFVEC2F b3DU( aPt2.x * m_biuTo3Dunits, -aPt2.y * m_biuTo3Dunits );
+                const SFVEC2F c3DU( aPt3.x * m_biuTo3Dunits, -aPt3.y * m_biuTo3Dunits );
+
+                aDstContainer->Add( new TRIANGLE_2D( a3DU, b3DU, c3DU, *aText ) );
+            } );
 }
 
 
@@ -161,9 +146,7 @@ void BOARD_ADAPTER::addShapeWithClearance( const PCB_DIMENSION_BASE* aDimension,
         default:
             break;
         }
-
     }
-
 }
 
 
@@ -228,22 +211,38 @@ void BOARD_ADAPTER::addFootprintShapesWithClearance( const FOOTPRINT* aFootprint
 
     for( FP_TEXT* text : texts )
     {
-        CALLBACK_DATA callbackData;
-        callbackData.m_BoardItem = &aFootprint->Value();
-        callbackData.m_Container = aDstContainer;
-        callbackData.m_BiuTo3Dunits = m_biuTo3Dunits;
-        callbackData.m_TextWidth = text->GetEffectiveTextPenWidth() + ( 2 * aInflateValue );
-
         VECTOR2I size = text->GetTextSize();
-        bool   isBold = text->IsBold();
-        int    penWidth = text->GetEffectiveTextPenWidth();
+        int      penWidth = text->GetEffectiveTextPenWidth();
+        int      adjustedWidth = penWidth + ( 2 * aInflateValue );
 
         if( text->IsMirrored() )
             size.x = -size.x;
 
-        GRText( nullptr, text->GetTextPos(), BLACK, text->GetShownText(), text->GetDrawRotation(),
-                size, text->GetHorizJustify(), text->GetVertJustify(), penWidth, text->IsItalic(),
-                isBold, text->GetDrawFont(), addTextSegmToContainer, &callbackData );
+        GRText( text->GetTextPos(), text->GetShownText(), text->GetTextAngle(), size,
+                text->GetHorizJustify(), text->GetVertJustify(), penWidth, text->IsItalic(),
+                text->IsBold(), text->GetDrawFont(),
+                [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
+                {
+                    const SFVEC2F start3DU( aPt1.x * m_biuTo3Dunits, -aPt1.y * m_biuTo3Dunits );
+                    const SFVEC2F end3DU  ( aPt1.x * m_biuTo3Dunits, -aPt2.y * m_biuTo3Dunits );
+
+                    if( Is_segment_a_circle( start3DU, end3DU ) )
+                    {
+                        aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU,
+                                                                  adjustedWidth * m_biuTo3Dunits / 2,
+                                                                  aFootprint->Value() ) );
+                    }
+                    else
+                    {
+                        aDstContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU,
+                                                                  adjustedWidth * m_biuTo3Dunits,
+                                                                  aFootprint->Value() ) );
+                    }
+                },
+                [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
+                {
+                    //FONT TODO: add triangle to container
+                } );
     }
 }
 
