@@ -374,7 +374,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
 
     case SHAPE_T::CIRCLE:
         // Check radius.
-        if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
+        if( m_endX.GetValue() == 0 )
             error_msgs.Add( _( "The radius cannot be zero." ) );
         break;
 
