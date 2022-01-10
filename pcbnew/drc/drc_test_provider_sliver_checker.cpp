@@ -132,6 +132,13 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
         // Sharpen corners
         poly.Deflate( widthTolerance / 2, ARC_LOW_DEF, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
 
+        // Frequently, in filled areas, some points of the polygons are very near (dist is only
+        // a few internal units, like 2 or 3 units.
+        // We skip very small vertices: one cannot really compute a valid orientation of
+        // such a vertex
+        // So skip points near than min_len (in internal units).
+        const int min_len = 3;
+
         for( int jj = 0; jj < poly.OutlineCount(); ++jj )
         {
             const std::vector<VECTOR2I>& pts = poly.Outline( jj ).CPoints();
@@ -141,10 +148,27 @@ bool DRC_TEST_PROVIDER_SLIVER_CHECKER::Run()
             {
                 VECTOR2I pt = pts[ kk ];
                 VECTOR2I ptBefore = pts[ ( ptCount + kk - 1 ) % ptCount ];
-                VECTOR2I ptAfter  = pts[ ( kk + 1 ) % ptCount ];
-
                 VECTOR2I vBefore = ( ptBefore - pt );
+
+                if( std::abs( vBefore.x ) < min_len
+                        && std::abs( vBefore.y ) < min_len
+                        && ptCount > 5)
+                {
+                    ptBefore = pts[ ( ptCount + kk - 2 ) % ptCount ];
+                    vBefore = ( ptBefore - pt );
+                }
+
+                VECTOR2I ptAfter  = pts[ ( kk + 1 ) % ptCount ];
                 VECTOR2I vAfter = ( ptAfter - pt );
+
+                if( std::abs( vAfter.x ) < min_len
+                        && std::abs( vAfter.y ) < min_len
+                        && ptCount > 5 )
+                {
+                    ptAfter  = pts[ ( kk + 2 ) % ptCount ];
+                    vAfter = ( ptAfter - pt );
+                }
+
                 VECTOR2I vIncluded = vBefore.Resize( testLength ) - vAfter.Resize( testLength );
 
                 if( vIncluded.SquaredEuclideanNorm() < SEG::Square( widthTolerance ) )
