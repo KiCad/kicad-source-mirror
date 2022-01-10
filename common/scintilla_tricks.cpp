@@ -281,11 +281,11 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
 #ifdef __WXMAC__
     else if( aEvent.GetModifiers() == wxMOD_RAW_CONTROL && aEvent.GetKeyCode() == 'A' )
     {
-        m_te->LineEndWrap();
+        m_te->HomeWrap();
     }
     else if( aEvent.GetModifiers() == wxMOD_RAW_CONTROL && aEvent.GetKeyCode() == 'E' )
     {
-        m_te->HomeWrap();
+        m_te->LineEndWrap();
     }
 #endif
     else if( aEvent.GetKeyCode() == WXK_SPECIAL20 )
