@@ -496,7 +496,7 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
         m_view->Freeze();
     }
 
-    for( int i = m_rcItemsProvider->GetCount() - 1; i >= 0; --i )
+    for( int i = m_rcItemsProvider->GetCount( m_severities ) - 1; i >= 0; --i )
     {
         std::shared_ptr<RC_ITEM> rcItem = m_rcItemsProvider->GetItem( i );
         MARKER_BASE*             marker = rcItem->GetParent();

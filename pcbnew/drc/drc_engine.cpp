@@ -85,8 +85,7 @@ DRC_ENGINE::DRC_ENGINE( BOARD* aBoard, BOARD_DESIGN_SETTINGS *aSettings ) :
 
 DRC_ENGINE::~DRC_ENGINE()
 {
-    for( DRC_RULE* rule : m_rules )
-        delete rule;
+    m_rules.clear();
 
     for( std::pair<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>*> pair : m_constraintMap )
     {
@@ -127,9 +126,9 @@ static bool isKeepoutZone( const BOARD_ITEM* aItem, bool aCheckFlags )
 }
 
 
-DRC_RULE* DRC_ENGINE::createImplicitRule( const wxString& name )
+std::shared_ptr<DRC_RULE> DRC_ENGINE::createImplicitRule( const wxString& name )
 {
-    DRC_RULE *rule = new DRC_RULE;
+    std::shared_ptr<DRC_RULE> rule = std::make_shared<DRC_RULE>();
 
     rule->m_Name = name;
     rule->m_Implicit = true;
@@ -148,7 +147,7 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 1) global defaults
 
-    DRC_RULE* rule = createImplicitRule( _( "board setup constraints" ) );
+    std::shared_ptr<DRC_RULE> rule = createImplicitRule( _( "board setup constraints" ) );
 
     DRC_CONSTRAINT clearanceConstraint( CLEARANCE_CONSTRAINT );
     clearanceConstraint.Value().SetMin( bds.m_MinClearance );
@@ -216,7 +215,7 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 2) micro-via specific defaults (new DRC doesn't treat microvias in any special way)
 
-    DRC_RULE* uViaRule = createImplicitRule( _( "board setup micro-via constraints" ) );
+    std::shared_ptr<DRC_RULE> uViaRule = createImplicitRule( _( "board setup micro-via constraints" ) );
 
     uViaRule->m_Condition = new DRC_RULE_CONDITION( "A.Via_Type == 'Micro'" );
 
@@ -237,7 +236,7 @@ void DRC_ENGINE::loadImplicitRules()
 
     if( !bds.m_BlindBuriedViaAllowed )
     {
-        DRC_RULE* bbViaRule = createImplicitRule( _( "board setup constraints" ) );
+        std::shared_ptr<DRC_RULE> bbViaRule = createImplicitRule( _( "board setup constraints" ) );
 
         bbViaRule->m_Condition = new DRC_RULE_CONDITION( "A.Via_Type == 'Blind/buried'" );
 
@@ -248,20 +247,18 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 3) per-netclass rules
 
-    std::vector<DRC_RULE*> netclassClearanceRules;
-    std::vector<DRC_RULE*> netclassItemSpecificRules;
+    std::vector<std::shared_ptr<DRC_RULE>> netclassClearanceRules;
+    std::vector<std::shared_ptr<DRC_RULE>> netclassItemSpecificRules;
 
     auto makeNetclassRules =
             [&]( const NETCLASSPTR& nc, bool isDefault )
             {
                 wxString ncName = nc->GetName();
-
-                DRC_RULE* netclassRule;
-                wxString  expr;
+                wxString expr;
 
                 if( nc->GetClearance() || nc->GetTrackWidth() )
                 {
-                    netclassRule = new DRC_RULE;
+                    std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
                     netclassRule->m_Implicit = true;
 
@@ -288,7 +285,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                 if( nc->GetDiffPairWidth() )
                 {
-                    netclassRule = new DRC_RULE;
+                    std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
                                                              ncName );
                     netclassRule->m_Implicit = true;
@@ -305,7 +302,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                 if( nc->GetDiffPairGap() )
                 {
-                    netclassRule = new DRC_RULE;
+                    std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
                                                              ncName );
                     netclassRule->m_Implicit = true;
@@ -323,7 +320,7 @@ void DRC_ENGINE::loadImplicitRules()
                     // trimmed to the board min clearance, which is absolute).
                     if( nc->GetDiffPairGap() < nc->GetClearance() )
                     {
-                        netclassRule = new DRC_RULE;
+                        netclassRule = std::make_shared<DRC_RULE>();
                         netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
                                                                  ncName );
                         netclassRule->m_Implicit = true;
@@ -342,7 +339,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                 if( nc->GetViaDiameter() || nc->GetViaDrill() )
                 {
-                    netclassRule = new DRC_RULE;
+                    std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
                     netclassRule->m_Implicit = true;
 
@@ -370,7 +367,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                 if( nc->GetuViaDiameter() || nc->GetuViaDrill() )
                 {
-                    netclassRule = new DRC_RULE;
+                    std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
                     netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ), ncName );
                     netclassRule->m_Implicit = true;
 
@@ -409,16 +406,16 @@ void DRC_ENGINE::loadImplicitRules()
     // The item-specific netclass rules are all unary, so there's no 'A' vs 'B' issue.
 
     std::sort( netclassClearanceRules.begin(), netclassClearanceRules.end(),
-               []( DRC_RULE* lhs, DRC_RULE* rhs )
+               []( const std::shared_ptr<DRC_RULE>& lhs, const std::shared_ptr<DRC_RULE>& rhs )
                {
                    return lhs->m_Constraints[0].m_Value.Min()
                                 < rhs->m_Constraints[0].m_Value.Min();
                } );
 
-    for( DRC_RULE* ncRule : netclassClearanceRules )
+    for( std::shared_ptr<DRC_RULE>& ncRule : netclassClearanceRules )
         addRule( ncRule );
 
-    for( DRC_RULE* ncRule : netclassItemSpecificRules )
+    for( std::shared_ptr<DRC_RULE>& ncRule : netclassItemSpecificRules )
         addRule( ncRule );
 
     // 3) keepout area rules
@@ -485,7 +482,7 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
 {
     if( aPath.FileExists() )
     {
-        std::vector<DRC_RULE*> rules;
+        std::vector<std::shared_ptr<DRC_RULE>> rules;
 
         FILE* fp = wxFopen( aPath.GetFullPath(), wxT( "rt" ) );
 
@@ -498,7 +495,7 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
         // Copy the rules into the member variable afterwards so that if Parse() throws then
         // the possibly malformed rules won't contaminate the current ruleset.
 
-        for( DRC_RULE* rule : rules )
+        for( std::shared_ptr<DRC_RULE>& rule : rules )
             m_rules.push_back( rule );
     }
 }
@@ -508,7 +505,7 @@ void DRC_ENGINE::compileRules()
 {
     ReportAux( wxString::Format( "Compiling Rules (%d rules): ", (int) m_rules.size() ) );
 
-    for( DRC_RULE* rule : m_rules )
+    for( std::shared_ptr<DRC_RULE>& rule : m_rules )
     {
         DRC_RULE_CONDITION* condition = nullptr;
 
@@ -544,9 +541,6 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
         ReportAux( wxString::Format( "Create DRC provider: '%s'", provider->GetName() ) );
         provider->SetDRCEngine( this );
     }
-
-    for( DRC_RULE* rule : m_rules )
-        delete rule;
 
     m_rules.clear();
     m_rulesValid = false;

@@ -194,7 +194,7 @@ public:
     static std::shared_ptr<SHAPE> GetShape( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer );
 
 private:
-    void addRule( DRC_RULE* rule )
+    void addRule( std::shared_ptr<DRC_RULE>& rule )
     {
         m_rules.push_back(rule);
     }
@@ -210,36 +210,36 @@ private:
 
     struct DRC_ENGINE_CONSTRAINT
     {
-        LSET                 layerTest;
-        DRC_RULE_CONDITION*  condition;
-        DRC_RULE*            parentRule;
-        DRC_CONSTRAINT       constraint;
+        LSET                       layerTest;
+        DRC_RULE_CONDITION*        condition;
+        std::shared_ptr<DRC_RULE>  parentRule;
+        DRC_CONSTRAINT             constraint;
     };
 
     void loadImplicitRules();
-    DRC_RULE* createImplicitRule( const wxString& name );
+    std::shared_ptr<DRC_RULE> createImplicitRule( const wxString& name );
 
 protected:
-    BOARD_DESIGN_SETTINGS*           m_designSettings;
-    BOARD*                           m_board;
-    DS_PROXY_VIEW_ITEM*              m_drawingSheet;
-    NETLIST*                         m_schematicNetlist;
+    BOARD_DESIGN_SETTINGS*     m_designSettings;
+    BOARD*                     m_board;
+    DS_PROXY_VIEW_ITEM*        m_drawingSheet;
+    NETLIST*                   m_schematicNetlist;
 
-    std::vector<DRC_RULE*>           m_rules;
-    bool                             m_rulesValid;
-    std::vector<DRC_TEST_PROVIDER*>  m_testProviders;
+    std::vector<std::shared_ptr<DRC_RULE>>  m_rules;
+    bool                                    m_rulesValid;
+    std::vector<DRC_TEST_PROVIDER*>         m_testProviders;
 
-    EDA_UNITS                        m_userUnits;
-    std::vector<int>                 m_errorLimits;
-    bool                             m_reportAllTrackErrors;
-    bool                             m_testFootprints;
+    EDA_UNITS                  m_userUnits;
+    std::vector<int>           m_errorLimits;
+    bool                       m_reportAllTrackErrors;
+    bool                       m_testFootprints;
 
     // constraint -> rule -> provider
     std::unordered_map<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>*> m_constraintMap;
 
-    DRC_VIOLATION_HANDLER            m_violationHandler;
-    REPORTER*                        m_reporter;
-    PROGRESS_REPORTER*               m_progressReporter;
+    DRC_VIOLATION_HANDLER      m_violationHandler;
+    REPORTER*                  m_reporter;
+    PROGRESS_REPORTER*         m_progressReporter;
 
     wxString m_msg;  // Allocating strings gets expensive enough to want to avoid it
     std::shared_ptr<KIGFX::VIEW_OVERLAY> m_debugOverlay;

@@ -90,7 +90,7 @@ void DRC_RULES_PARSER::parseUnknown()
 }
 
 
-void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporter )
+void DRC_RULES_PARSER::Parse( std::vector<std::shared_ptr<DRC_RULE>>& aRules, REPORTER* aReporter )
 {
     bool     haveVersion = false;
     wxString msg;
@@ -146,7 +146,7 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporte
             break;
 
         case T_rule:
-            aRules.push_back( parseDRC_RULE() );
+            aRules.emplace_back( parseDRC_RULE() );
             break;
 
         case T_EOF:
@@ -168,11 +168,12 @@ void DRC_RULES_PARSER::Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporte
 }
 
 
-DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
+std::shared_ptr<DRC_RULE> DRC_RULES_PARSER::parseDRC_RULE()
 {
-    DRC_RULE* rule = new DRC_RULE();
-    T         token = NextTok();
-    wxString  msg;
+    std::shared_ptr<DRC_RULE> rule = std::make_shared<DRC_RULE>();
+
+    T        token = NextTok();
+    wxString msg;
 
     if( !IsSymbol( token ) )
         reportError( _( "Missing rule name." ) );
@@ -189,7 +190,7 @@ DRC_RULE* DRC_RULES_PARSER::parseDRC_RULE()
         switch( token )
         {
         case T_constraint:
-            parseConstraint( rule );
+            parseConstraint( rule.get() );
             break;
 
         case T_condition:

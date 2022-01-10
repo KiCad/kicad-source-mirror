@@ -43,10 +43,10 @@ public:
     DRC_RULES_PARSER( const wxString& aSource, const wxString& aSourceDescr );
     DRC_RULES_PARSER( FILE* aFile, const wxString& aFilename );
 
-    void Parse( std::vector<DRC_RULE*>& aRules, REPORTER* aReporter );
+    void Parse( std::vector<std::shared_ptr<DRC_RULE>>& aRules, REPORTER* aReporter );
 
 private:
-    DRC_RULE* parseDRC_RULE();
+    std::shared_ptr<DRC_RULE> parseDRC_RULE();
 
     void parseConstraint( DRC_RULE* aRule );
     void parseValueWithUnits( const wxString& aExpr, int& aResult );

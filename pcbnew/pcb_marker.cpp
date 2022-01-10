@@ -78,6 +78,8 @@ PCB_MARKER::PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const VECTOR2I& aPositio
 /* destructor */
 PCB_MARKER::~PCB_MARKER()
 {
+    if( m_rcItem )
+        m_rcItem->SetParent( nullptr );
 }
 
 

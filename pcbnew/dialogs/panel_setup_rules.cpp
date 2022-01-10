@@ -441,7 +441,7 @@ void PANEL_SETUP_RULES::OnCompile( wxCommandEvent& event )
 
     try
     {
-        std::vector<DRC_RULE*> dummyRules;
+        std::vector<std::shared_ptr<DRC_RULE>> dummyRules;
 
         DRC_RULES_PARSER parser( m_textEditor->GetText(), _( "DRC rules" ) );
 

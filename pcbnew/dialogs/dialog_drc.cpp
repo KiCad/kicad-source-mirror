@@ -657,6 +657,9 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     {
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
 
+        m_ignoredList->InsertItem( m_ignoredList->GetItemCount(),
+                                   wxT( " • " ) + rcItem->GetErrorText() );
+
         std::vector<PCB_MARKER*>& markers = m_frame->GetBoard()->Markers();
 
         for( unsigned i = 0; i < markers.size(); )
