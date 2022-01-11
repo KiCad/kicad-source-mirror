@@ -335,7 +335,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aDs
                                     -seg->GetSeg().A.y * m_biuTo3Dunits );
                 const SFVEC2F b3DU(  seg->GetSeg().B.x * m_biuTo3Dunits,
                                     -seg->GetSeg().B.y * m_biuTo3Dunits );
-                const int     width3DU = ( seg->GetWidth() + clearance.x * 2 ) * m_biuTo3Dunits;
+                const double  width3DU = ( seg->GetWidth() + clearance.x * 2 ) * m_biuTo3Dunits;
 
                  // Cannot add segments that have the same start and end point
                 if( Is_segment_a_circle( a3DU, b3DU ) )
@@ -349,7 +349,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aDs
             {
                 const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shape;
 
-                const int     radius3DU = ( circle->GetRadius() + clearance.x ) * m_biuTo3Dunits;
+                const double  radius3DU = ( circle->GetRadius() + clearance.x ) * m_biuTo3Dunits;
                 const SFVEC2F center3DU(  circle->GetCenter().x * m_biuTo3Dunits,
                                          -circle->GetCenter().y * m_biuTo3Dunits );
 
@@ -389,7 +389,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aDs
                                         -seg.GetSeg().A.y * m_biuTo3Dunits );
                     const SFVEC2F b3DU(  seg.GetSeg().B.x * m_biuTo3Dunits,
                                         -seg.GetSeg().B.y * m_biuTo3Dunits );
-                    const int width3DU = ( arc->GetWidth() + clearance.x * 2 ) * m_biuTo3Dunits;
+                    const double  width3DU = ( arc->GetWidth() + clearance.x * 2 ) * m_biuTo3Dunits;
 
                      // Cannot add segments that have the same start and end point
                     if( Is_segment_a_circle( a3DU, b3DU ) )
@@ -795,7 +795,7 @@ void BOARD_ADAPTER::buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BAS
         const SFVEC2F center3DU( aPad->ShapePos().x * m_biuTo3Dunits,
                                  -aPad->ShapePos().y * m_biuTo3Dunits );
 
-        const int radius = aPad->GetSize().x / 2;
+        const int   radius = aPad->GetSize().x / 2;
         const float inner_radius = ( radius - aWidth / 2 ) * m_biuTo3Dunits;
         const float outer_radius = ( radius + aWidth / 2 ) * m_biuTo3Dunits;
 
