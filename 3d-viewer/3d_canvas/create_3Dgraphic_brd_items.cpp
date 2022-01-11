@@ -59,7 +59,7 @@ void BOARD_ADAPTER::addShape( const PCB_TEXT* aText, CONTAINER_2D_BASE* aDstCont
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = aText->GetDrawFont();
-    int                        penWidth = aText->GetEffectiveTextPenWidth() * m_biuTo3Dunits;
+    float                      penWidth = aText->GetEffectiveTextPenWidth() * m_biuTo3Dunits;
 
     CALLBACK_GAL callback_gal( empty_opts,
             // Stroke callback
