@@ -177,8 +177,12 @@ DRC_ITEM DRC_ITEM::netConflict( DRCE_NET_CONFLICT,
         wxT( "net_conflict" ) );
 
 DRC_ITEM DRC_ITEM::libFootprintIssues( DRCE_LIB_FOOTPRINT_ISSUES,
-        _( "Library footprint issue" ),
+        _( "Footprint not found in libraries" ),
         wxT( "lib_footprint_issues" ) );
+
+DRC_ITEM DRC_ITEM::libFootprintMismatch( DRCE_LIB_FOOTPRINT_MISMATCH,
+        _( "Footprint doesn't match copy in library" ),
+        wxT( "lib_footprint_mismatch" ) );
 
 DRC_ITEM DRC_ITEM::unresolvedVariable( DRCE_UNRESOLVED_VARIABLE,
         _( "Unresolved text variable" ),
@@ -297,6 +301,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
 
             DRC_ITEM::footprintTypeMismatch,
             DRC_ITEM::libFootprintIssues,
+            DRC_ITEM::libFootprintMismatch,
             DRC_ITEM::footprintTHPadhasNoHole
         } );
 
@@ -338,6 +343,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_NET_CONFLICT:             return std::make_shared<DRC_ITEM>( netConflict );
     case DRCE_EXTRA_FOOTPRINT:          return std::make_shared<DRC_ITEM>( extraFootprint );
     case DRCE_LIB_FOOTPRINT_ISSUES:     return std::make_shared<DRC_ITEM>( libFootprintIssues );
+    case DRCE_LIB_FOOTPRINT_MISMATCH:   return std::make_shared<DRC_ITEM>( libFootprintMismatch );
     case DRCE_UNRESOLVED_VARIABLE:      return std::make_shared<DRC_ITEM>( unresolvedVariable );
     case DRCE_ASSERTION_FAILURE:        return std::make_shared<DRC_ITEM>( assertionFailure );
     case DRCE_COPPER_SLIVER:            return std::make_shared<DRC_ITEM>( copperSliver );
