@@ -308,14 +308,19 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
 {
     BOARD_DESIGN_SETTINGS& brdSettings = m_brd->GetDesignSettings();
     bool                   isTrack = aItem->Type() == PCB_TRACE_T;
+    bool                   isArc = aItem->Type() == PCB_ARC_T;
     bool                   isVia = aItem->Type() == PCB_VIA_T;
 
     if( m_setToSpecifiedValues->GetValue() )
     {
-        if( isTrack && m_trackWidthSelectBox->GetStringSelection() != INDETERMINATE_ACTION )
+        if( ( isArc || isTrack )
+                && m_trackWidthSelectBox->GetStringSelection() != INDETERMINATE_ACTION )
         {
             unsigned int prevTrackWidthIndex = brdSettings.GetTrackWidthIndex();
-            brdSettings.SetTrackWidthIndex( (unsigned) m_trackWidthSelectBox->GetSelection() );
+            int trackWidthIndex = m_trackWidthSelectBox->GetSelection();
+
+            if( trackWidthIndex >= 0 )
+                brdSettings.SetTrackWidthIndex( static_cast<unsigned>( trackWidthIndex ) );
 
             m_parent->SetTrackSegmentWidth( aItem, aUndoList, false );
 
@@ -324,14 +329,17 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
         else if( isVia && m_viaSizesSelectBox->GetStringSelection() != INDETERMINATE_ACTION )
         {
             unsigned int prevViaSizeIndex = brdSettings.GetViaSizeIndex();
-            brdSettings.SetViaSizeIndex( (unsigned) m_viaSizesSelectBox->GetSelection() );
+            int viaSizeIndex = m_viaSizesSelectBox->GetSelection();
+
+            if( viaSizeIndex >= 0 )
+                brdSettings.SetViaSizeIndex( static_cast<unsigned>( viaSizeIndex ) );
 
             m_parent->SetTrackSegmentWidth( aItem, aUndoList, false );
 
             brdSettings.SetViaSizeIndex( prevViaSizeIndex );
         }
 
-        if( isTrack && m_layerBox->GetLayerSelection() != UNDEFINED_LAYER )
+        if( ( isArc || isTrack ) && m_layerBox->GetLayerSelection() != UNDEFINED_LAYER )
         {
             if( aUndoList->FindItem( aItem ) < 0 )
             {
@@ -402,6 +410,8 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
         if( m_tracks->GetValue() && track->Type() == PCB_TRACE_T )
             visitItem( &itemsListPicker, track );
         else if ( m_vias->GetValue() && track->Type() == PCB_VIA_T )
+            visitItem( &itemsListPicker, track );
+        else if ( m_vias->GetValue() && track->Type() == PCB_ARC_T )
             visitItem( &itemsListPicker, track );
     }
 
