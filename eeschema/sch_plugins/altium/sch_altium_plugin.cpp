@@ -1260,9 +1260,6 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        const VECTOR2I topLeft = { sheetBottomLeft.x, sheetTopRight.y };
-        const VECTOR2I bottomRight = { sheetTopRight.x, sheetBottomLeft.y };
-
         // TODO: misses rounded edges
         SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECT, SCH_LAYER_ID::LAYER_NOTES );
 
@@ -1444,9 +1441,6 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
 
     if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
-        const VECTOR2I topLeft = { sheetBottomLeft.x, sheetTopRight.y };
-        const VECTOR2I bottomRight = { sheetTopRight.x, sheetBottomLeft.y };
-
         SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECT, SCH_LAYER_ID::LAYER_NOTES );
 
         rect->SetPosition( sheetTopRight );
