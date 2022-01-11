@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@
 #include <fp_shape.h>
 #include <pcb_text.h>
 #include <widgets/unit_binder.h>
+#include <widgets/font_choice.h>
 #include <tool/tool_manager.h>
 #include <tools/global_edit_tool.h>
 #include <tools/footprint_editor_control.h>
@@ -224,12 +225,17 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_selectedItemsFilter->SetValue( g_filterSelected );
 
     m_lineWidth.SetValue( INDETERMINATE_ACTION );
+
+    m_fontCtrl->Append( INDETERMINATE_ACTION );
+    m_fontCtrl->SetStringSelection( INDETERMINATE_ACTION );
+
     m_textWidth.SetValue( INDETERMINATE_ACTION );
     m_textHeight.SetValue( INDETERMINATE_ACTION );
     m_thickness.SetValue( INDETERMINATE_ACTION );
-    m_Italic->Set3StateValue( wxCHK_UNDETERMINED );
+    m_bold->Set3StateValue( wxCHK_UNDETERMINED );
+    m_italic->Set3StateValue( wxCHK_UNDETERMINED );
     m_keepUpright->Set3StateValue( wxCHK_UNDETERMINED );
-    m_Visible->Set3StateValue( wxCHK_UNDETERMINED );
+    m_visible->Set3StateValue( wxCHK_UNDETERMINED );
     m_LayerCtrl->SetLayerSelection( UNDEFINED_LAYER );
 
 #define SET_INT_VALUE( aRow, aCol, aValue ) \
@@ -343,11 +349,21 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
         if( !m_thickness.IsIndeterminate() && textItem )
             textItem->SetTextThickness( m_thickness.GetValue() );
 
-        if( m_Italic->Get3StateValue() != wxCHK_UNDETERMINED && textItem )
-            textItem->SetItalic( m_Italic->GetValue() );
+        if( m_bold->Get3StateValue() != wxCHK_UNDETERMINED && textItem )
+            textItem->SetBold( m_bold->GetValue() );
 
-        if( m_Visible->Get3StateValue() != wxCHK_UNDETERMINED && textItem )
-            textItem->SetVisible( m_Visible->GetValue() );
+        if( m_italic->Get3StateValue() != wxCHK_UNDETERMINED && textItem )
+            textItem->SetItalic( m_italic->GetValue() );
+
+        // Must come after setting bold & italic
+        if( m_fontCtrl->GetStringSelection() != INDETERMINATE_ACTION && textItem )
+        {
+            textItem->SetFont( m_fontCtrl->GetFontSelection( textItem->IsBold(),
+                                                             textItem->IsItalic() ) );
+        }
+
+        if( m_visible->Get3StateValue() != wxCHK_UNDETERMINED && textItem )
+            textItem->SetVisible( m_visible->GetValue() );
 
         if( m_keepUpright->Get3StateValue() != wxCHK_UNDETERMINED && fpTextItem )
             fpTextItem->SetKeepUpright( m_keepUpright->GetValue() );

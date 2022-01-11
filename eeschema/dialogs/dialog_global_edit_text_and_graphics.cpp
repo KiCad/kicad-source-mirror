@@ -37,6 +37,8 @@
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_edit_tool.h>
 #include <widgets/unit_binder.h>
+#include <widgets/font_choice.h>
+
 
 static bool       g_modifyReferences;
 static bool       g_modifyValues;
@@ -207,13 +209,16 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
 
     m_netFilterOpt->SetValue( g_filterByNet );
 
+    m_fontCtrl->Append( INDETERMINATE_ACTION );
+    m_fontCtrl->SetStringSelection( INDETERMINATE_ACTION );
+
     m_textSize.SetValue( INDETERMINATE_ACTION );
     m_orientation->SetStringSelection( INDETERMINATE_ACTION );
     m_hAlign->SetStringSelection( INDETERMINATE_ACTION );
     m_vAlign->SetStringSelection( INDETERMINATE_ACTION );
-    m_Italic->Set3StateValue( wxCHK_UNDETERMINED );
-    m_Bold->Set3StateValue( wxCHK_UNDETERMINED );
-    m_Visible->Set3StateValue( wxCHK_UNDETERMINED );
+    m_italic->Set3StateValue( wxCHK_UNDETERMINED );
+    m_bold->Set3StateValue( wxCHK_UNDETERMINED );
+    m_visible->Set3StateValue( wxCHK_UNDETERMINED );
     m_lineWidth.SetValue( INDETERMINATE_ACTION );
     m_lineStyle->SetStringSelection( INDETERMINATE_ACTION );
     m_junctionSize.SetValue( INDETERMINATE_ACTION );
@@ -257,14 +262,21 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
         if( m_vAlign->GetStringSelection() != INDETERMINATE_ACTION )
             eda_text->SetVertJustify( EDA_TEXT::MapVertJustify( m_vAlign->GetSelection() - 1 ) );
 
-        if( m_Visible->Get3StateValue() != wxCHK_UNDETERMINED )
-            eda_text->SetVisible( m_Visible->GetValue() );
+        if( m_visible->Get3StateValue() != wxCHK_UNDETERMINED )
+            eda_text->SetVisible( m_visible->GetValue() );
 
-        if( m_Italic->Get3StateValue() != wxCHK_UNDETERMINED )
-            eda_text->SetItalic( m_Italic->GetValue() );
+        if( m_italic->Get3StateValue() != wxCHK_UNDETERMINED )
+            eda_text->SetItalic( m_italic->GetValue() );
 
-        if( m_Bold->Get3StateValue() != wxCHK_UNDETERMINED )
-            eda_text->SetBold( m_Bold->GetValue() );
+        if( m_bold->Get3StateValue() != wxCHK_UNDETERMINED )
+            eda_text->SetBold( m_bold->GetValue() );
+
+        // Must comer after bold & italic
+        if( m_fontCtrl->GetStringSelection() != INDETERMINATE_ACTION )
+        {
+            eda_text->SetFont( m_fontCtrl->GetFontSelection( eda_text->IsBold(),
+                                                             eda_text->IsItalic() ) );
+        }
     }
 
     // No else!  Labels are both.

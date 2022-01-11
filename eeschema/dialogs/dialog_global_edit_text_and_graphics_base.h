@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class FONT_CHOICE;
+
 #include "widgets/color_swatch.h"
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -63,16 +65,18 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_netFilter;
 		wxCheckBox* m_selectedFilterOpt;
 		wxPanel* m_specifiedValues;
+		wxStaticText* m_fontLabel;
+		FONT_CHOICE* m_fontCtrl;
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
-		wxCheckBox* m_Bold;
+		wxCheckBox* m_bold;
 		wxStaticText* orientationLabel;
 		wxChoice* m_orientation;
-		wxCheckBox* m_Italic;
+		wxCheckBox* m_italic;
 		wxStaticText* hAlignLabel;
 		wxChoice* m_hAlign;
-		wxCheckBox* m_Visible;
+		wxCheckBox* m_visible;
 		wxStaticText* vAlignLabel;
 		wxChoice* m_vAlign;
 		wxStaticLine* m_staticline1;
@@ -103,6 +107,7 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnReferenceFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSymbolFilterText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onFontSelected( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

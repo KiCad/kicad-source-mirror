@@ -6,6 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "pcb_layer_box_selector.h"
+#include "widgets/font_choice.h"
 
 #include "dialog_global_edit_text_and_graphics_base.h"
 
@@ -91,7 +92,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	bSizerTop->Add( sbFilters, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
-	bMainSizer->Add( bSizerTop, 0, wxEXPAND, 5 );
+	bMainSizer->Add( bSizerTop, 1, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( 0, 0, 0, wxTOP, 5 );
@@ -130,9 +131,9 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer1->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_Visible = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
-	m_Visible->SetValue(true);
-	fgSizer1->Add( m_Visible, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 120 );
+	m_visible = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
+	m_visible->SetValue(true);
+	fgSizer1->Add( m_visible, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 120 );
 
 	m_lineWidthLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("Line thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineWidthLabel->Wrap( -1 );
@@ -166,6 +167,25 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 
+	m_fontLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("Font:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fontLabel->Wrap( -1 );
+	fgSizer1->Add( m_fontLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_fontCtrlChoices[] = { _("KiCad Font") };
+	int m_fontCtrlNChoices = sizeof( m_fontCtrlChoices ) / sizeof( wxString );
+	m_fontCtrl = new FONT_CHOICE( m_specifiedValues, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fontCtrlNChoices, m_fontCtrlChoices, 0 );
+	m_fontCtrl->SetSelection( 0 );
+	fgSizer1->Add( m_fontCtrl, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_bold = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Bold"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
+	fgSizer1->Add( m_bold, 0, wxEXPAND|wxLEFT|wxALIGN_CENTER_VERTICAL, 120 );
+
 	m_SizeXlabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("Text width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeXlabel->Wrap( -1 );
 	fgSizer1->Add( m_SizeXlabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
@@ -182,8 +202,8 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer1->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 20 );
 
-	m_Italic = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Italic"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
-	fgSizer1->Add( m_Italic, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 120 );
+	m_italic = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Italic"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
+	fgSizer1->Add( m_italic, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 120 );
 
 	m_SizeYlabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("Text height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeYlabel->Wrap( -1 );
@@ -221,7 +241,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_specifiedValues->SetSizer( bSizer2 );
 	m_specifiedValues->Layout();
 	bSizer2->Fit( m_specifiedValues );
-	sbAction->Add( m_specifiedValues, 1, wxEXPAND|wxBOTTOM|wxLEFT, 12 );
+	sbAction->Add( m_specifiedValues, 0, wxEXPAND|wxBOTTOM|wxLEFT, 12 );
 
 	m_setToLayerDefaults = new wxRadioButton( sbAction->GetStaticBox(), ID_ALL_TRACKS_VIAS, _("Set to layer default values:"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbAction->Add( m_setToLayerDefaults, 0, wxTOP|wxBOTTOM, 5 );
@@ -265,7 +285,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	sbAction->Add( 0, 0, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bMainSizer->Add( sbAction, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( sbAction, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizerButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerButtonsOK = new wxButton( this, wxID_OK );
@@ -288,8 +308,10 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_setToSpecifiedValues->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onActionButtonChange ), NULL, this );
 	m_LayerLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
 	m_LayerCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
-	m_Visible->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
-	m_Italic->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
+	m_visible->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
+	m_fontCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onFontSelected ), NULL, this );
+	m_bold->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
+	m_italic->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
 	m_keepUpright->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
 	m_setToLayerDefaults->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onActionButtonChange ), NULL, this );
 	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnSizeNetclassGrid ), NULL, this );
@@ -304,8 +326,10 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS
 	m_setToSpecifiedValues->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onActionButtonChange ), NULL, this );
 	m_LayerLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
 	m_LayerCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
-	m_Visible->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
-	m_Italic->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
+	m_visible->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
+	m_fontCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onFontSelected ), NULL, this );
+	m_bold->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
+	m_italic->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
 	m_keepUpright->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
 	m_setToLayerDefaults->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onActionButtonChange ), NULL, this );
 	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnSizeNetclassGrid ), NULL, this );

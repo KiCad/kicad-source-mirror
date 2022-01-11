@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class FONT_CHOICE;
 class PCB_LAYER_BOX_SELECTOR;
 
 #include "dialog_shim.h"
@@ -25,6 +26,7 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/textctrl.h>
 #include <wx/radiobut.h>
 #include <wx/stattext.h>
+#include <wx/choice.h>
 #include <wx/panel.h>
 #include <wx/grid.h>
 #include <wx/button.h>
@@ -60,14 +62,17 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxPanel* m_specifiedValues;
 		wxStaticText* m_LayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_LayerCtrl;
-		wxCheckBox* m_Visible;
+		wxCheckBox* m_visible;
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_LineWidthCtrl;
 		wxStaticText* m_lineWidthUnits;
+		wxStaticText* m_fontLabel;
+		FONT_CHOICE* m_fontCtrl;
+		wxCheckBox* m_bold;
 		wxStaticText* m_SizeXlabel;
 		wxTextCtrl* m_SizeXCtrl;
 		wxStaticText* m_SizeXunit;
-		wxCheckBox* m_Italic;
+		wxCheckBox* m_italic;
 		wxStaticText* m_SizeYlabel;
 		wxTextCtrl* m_SizeYCtrl;
 		wxStaticText* m_SizeYunit;
@@ -87,6 +92,7 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		virtual void OnFootprintFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onActionButtonChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSpecifiedValueUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onFontSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeNetclassGrid( wxSizeEvent& event ) { event.Skip(); }
 
 
