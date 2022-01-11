@@ -26,6 +26,7 @@
 #define GERBER_DRAW_ITEM_H
 
 #include <eda_item.h>
+#include <eda_angle.h>
 #include <layer_ids.h>
 #include <gr_basic.h>
 #include <gbr_netlist_metadata.h>
@@ -87,13 +88,7 @@ public:
      * @param aOrientation is a reference to return the text orientation
      * @return true if the parameters can be calculated, false for unknown D_Code
      */
-    bool GetTextD_CodePrms( int& aSize, VECTOR2I& aPos, double& aOrientation );
-
-    /**
-     * Return the best size and orientation to display the D_Code in GAL
-     * aOrientation is returned in radians.
-     */
-    bool GetTextD_CodePrms( double& aSize, VECTOR2D& aPos, double& aOrientation );
+    bool GetTextD_CodePrms( int& aSize, VECTOR2I& aPos, EDA_ANGLE& aOrientation );
 
     /**
      * Optimize screen refresh (when no items are in background color refresh can be faster).

@@ -84,7 +84,7 @@ int GERBER_DRAW_ITEM::GetLayer() const
 }
 
 
-bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, VECTOR2I& aPos, double& aOrientation )
+bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, VECTOR2I& aPos, EDA_ANGLE& aOrientation )
 {
     // calculate the best size and orientation of the D_Code text
 
@@ -105,7 +105,7 @@ bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, VECTOR2I& aPos, double& aO
     else
         size = std::min( m_Size.x, m_Size.y );
 
-    aOrientation = 0;
+    aOrientation = EDA_ANGLE::HORIZONTAL;
 
     if( m_Flashed )
     {
@@ -116,31 +116,15 @@ bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, VECTOR2I& aPos, double& aO
     {
         VECTOR2I delta = m_Start - m_End;
 
-        aOrientation = RAD2DECIDEG( atan2( (double)delta.y, (double)delta.x ) );
-        NORMALIZE_ANGLE_90( aOrientation );
+        double deci = RAD2DECIDEG( atan2( (double)delta.y, (double)delta.x ) );
+        NORMALIZE_ANGLE_90( deci );
+        aOrientation = EDA_ANGLE( deci, EDA_ANGLE::TENTHS_OF_A_DEGREE );
 
         // A reasonable size for text is size/2 because text needs margin below and above it.
         // a margin = size/4 seems good, expecting the line len is large enough to show 3 chars,
         // that is the case most of time.
         aSize = size / 2;
     }
-
-    return true;
-}
-
-
-bool GERBER_DRAW_ITEM::GetTextD_CodePrms( double& aSize, VECTOR2D& aPos, double& aOrientation )
-{
-    // aOrientation is returned in radians
-    int size;
-    VECTOR2I pos;
-
-    if( ! GetTextD_CodePrms( size, pos, aOrientation ) )
-        return false;
-
-    aPos = pos;
-    aSize = (double) size;
-    aOrientation = DECIDEG2RAD( aOrientation );
 
     return true;
 }

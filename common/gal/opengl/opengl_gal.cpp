@@ -1286,12 +1286,12 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
 }
 
 
-void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
-                             double aRotationAngle )
+void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2I& aPosition,
+                             const EDA_ANGLE& aAngle )
 {
     // Fallback to generic impl (which uses the stroke font) on cases we don't handle
     if( IsTextMirrored() || aText.Contains( wxT( "^{" ) ) || aText.Contains( wxT( "_{" ) ) )
-        return GAL::BitmapText( aText, aPosition, aRotationAngle );
+        return GAL::BitmapText( aText, aPosition, aAngle );
 
     const UTF8   text( aText );
     VECTOR2D     textSize;
@@ -1306,7 +1306,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
     m_currentManager->Color( m_strokeColor.r, m_strokeColor.g, m_strokeColor.b, m_strokeColor.a );
     m_currentManager->Translate( aPosition.x, aPosition.y, m_layerDepth );
-    m_currentManager->Rotate( aRotationAngle, 0.0f, 0.0f, -1.0f );
+    m_currentManager->Rotate( aAngle.AsRadians(), 0.0f, 0.0f, -1.0f );
 
     double sx = SCALE * ( m_globalFlipX ? -1.0 : 1.0 );
     double sy = SCALE * ( m_globalFlipY ? -1.0 : 1.0 );
@@ -1352,8 +1352,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
     for( UTF8::uni_iter chIt = text.ubegin(), end = text.uend(); chIt < end; ++chIt )
     {
-        wxASSERT_MSG( *chIt != '\n' && *chIt != '\r',
-                wxT( "No support for multiline bitmap text yet" ) );
+        wxASSERT_MSG( *chIt != '\n' && *chIt != '\r', "No support for multiline bitmap text yet" );
 
         if( *chIt == '~' && overbarDepth == -1 )
         {

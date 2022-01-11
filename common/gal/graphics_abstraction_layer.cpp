@@ -150,17 +150,11 @@ bool GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 }
 
 
-void GAL::SetTextAttributes( const TEXT_ATTRIBUTES& aAttributes )
-{
-    m_attributes = aAttributes;
-}
-
-
 void GAL::ResetTextAttributes()
 {
      // Tiny but non-zero - this will always need setting
      // there is no built-in default
-    SetGlyphSize( { 1.0, 1.0 } );
+    SetGlyphSize( { 1, 1 } );
 
     SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
     SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
@@ -260,51 +254,26 @@ COLOR4D GAL::getCursorColor() const
 }
 
 
-void GAL::StrokeText( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle,
-                      KIFONT::FONT* aFont, double aLineSpacing )
-{
-    if( aText.IsEmpty() )
-        return;
-
-    if( !aFont )
-        aFont = KIFONT::FONT::GetFont( wxEmptyString );
-
-    TEXT_ATTRIBUTES attributes;
-    attributes.m_Angle = EDA_ANGLE( aRotationAngle, EDA_ANGLE::RADIANS );
-    attributes.m_Halign = GetHorizontalJustify();
-    attributes.m_Valign = GetVerticalJustify();
-    attributes.m_LineSpacing = aLineSpacing;
-    attributes.m_Size = GetGlyphSize();
-    attributes.m_StrokeWidth = GetLineWidth();
-
-    aFont->Draw( this, aText, aPosition, attributes );
-}
-
-
 /*
  * Fallback for implementations that don't implement bitmap text: use stroke font
  */
-void GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle )
+void GAL::BitmapText( const wxString& aText, const VECTOR2I& aPosition, const EDA_ANGLE& aAngle )
 {
-    // Handle flipped view
-    if( m_globalFlipX )
-        m_attributes.m_Mirrored = !m_attributes.m_Mirrored;
+    KIFONT::FONT* font = KIFONT::FONT::GetFont();
+
+    if( aText.IsEmpty() )
+        return;
+
+    TEXT_ATTRIBUTES attrs = m_attributes;
+    attrs.m_Angle = aAngle;
+    attrs.m_Mirrored = m_globalFlipX;    // Prevent text flipping when view is flipped
 
     // Bitmap font is slightly smaller and slightly heavier than the stroke font so we
     // compensate a bit before stroking
-    float    saveLineWidth = m_lineWidth;
-    VECTOR2D saveGlyphSize = m_attributes.m_Size;
-    {
-        m_lineWidth *= 1.2f;
-        m_attributes.m_Size = m_attributes.m_Size * 0.8;
+    attrs.m_StrokeWidth *= 1.2f;
+    attrs.m_Size = attrs.m_Size * 0.8;
 
-        StrokeText( aText, aPosition, aRotationAngle );
-    }
-    m_lineWidth = saveLineWidth;
-    m_attributes.m_Size = saveGlyphSize;
-
-    if( m_globalFlipX )
-        m_attributes.m_Mirrored = !m_attributes.m_Mirrored;
+    font->Draw( this, aText, aPosition, attrs );
 }
 
 

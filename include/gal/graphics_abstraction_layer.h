@@ -344,43 +344,25 @@ public:
     // ----
 
     /**
-     * Draw a vector type text using preloaded Newstroke font.
-     *
-     * @param aText is the text to be drawn.
-     * @param aPosition is the text position in world coordinates.
-     * @param aRotationAngle is the text rotation angle.
-     * @param aFont is the text font, or nullptr (defaults to newstroke)
-     * @param aLineSpacing is the line spacing for multiline text (defaults to 1.0)
-     */
-    virtual void StrokeText( const wxString& aText, const VECTOR2D& aPosition,
-                             double aRotationAngle, KIFONT::FONT* aFont = nullptr,
-                             double aLineSpacing = 1.0 );
-
-    /**
      * Draw a text using a bitmap font. It should be faster than StrokeText(), but can be used
      * only for non-Gerber elements.
      *
      * @param aText is the text to be drawn.
      * @param aPosition is the text position in world coordinates.
-     * @param aRotationAngle is the text rotation angle.
+     * @param aAngle is the text rotation angle.
      */
-    virtual void BitmapText( const wxString& aText, const VECTOR2D& aPosition,
-                             double aRotationAngle );
+    virtual void BitmapText( const wxString& aText, const VECTOR2I& aPosition,
+                             const EDA_ANGLE& aAngle );
 
     /**
-     * Loads attributes of the text (bold/italic/underline/mirrored and so on).
-     */
-    virtual void SetTextAttributes( const TEXT_ATTRIBUTES& aAttributes );
-
-    /**
-     * Reset text attributes to default styling.
+     * Reset text attributes to default styling.  FONT TODO: do we need any of this in GAL anymore?
      *
      * Normally, custom attributes will be set individually after this, otherwise you can use
      * SetTextAttributes()
      */
     void ResetTextAttributes();
 
-    void SetGlyphSize( const VECTOR2D aSize )         { m_attributes.m_Size = aSize; }
+    void SetGlyphSize( const VECTOR2I aSize )         { m_attributes.m_Size = aSize; }
     const VECTOR2D& GetGlyphSize() const              { return m_attributes.m_Size; }
 
     inline void SetFontBold( const bool aBold )       { m_attributes.m_Bold = aBold; }

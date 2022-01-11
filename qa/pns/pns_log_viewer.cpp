@@ -99,7 +99,7 @@ void LABEL_MANAGER::Redraw( KIGFX::VIEW_OVERLAY* aOvl )
         aOvl->SetLineWidth( 10000 );
         aOvl->SetStrokeColor( lbl.m_color.Brighten( 0.7 ) );
         aOvl->Rectangle( lbl.m_bbox.GetOrigin(), lbl.m_bbox.GetEnd() );
-        aOvl->BitmapText( lbl.m_msg, lbl.m_bbox.Centre(), 0.0 );
+        aOvl->BitmapText( lbl.m_msg, lbl.m_bbox.Centre(), EDA_ANGLE::HORIZONTAL );
         VECTOR2I nearest = nearestBoxCorner( lbl.m_bbox, lbl.m_target );
         aOvl->Line( lbl.m_target, nearest );
     }

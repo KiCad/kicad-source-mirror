@@ -90,14 +90,14 @@ public:
     void Polyline( const SHAPE_LINE_CHAIN& aPolyLine );
     void Polygon( const VECTOR2D aPointList[], int aListSize );
 
-    void BitmapText( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle );
+    void BitmapText( const wxString& aText, const VECTOR2I& aPosition, const EDA_ANGLE& aAngle );
 
     // Draw settings
     void SetIsFill( bool aIsFillEnabled );
     void SetIsStroke( bool aIsStrokeEnabled );
     void SetFillColor( const COLOR4D& aColor );
     void SetStrokeColor( const COLOR4D& aColor );
-    void SetGlyphSize( const VECTOR2D& aSize );
+    void SetGlyphSize( const VECTOR2I& aSize );
     void SetLineWidth( double aLineWidth );
 
     const COLOR4D& GetStrokeColor() const { return m_strokeColor; }

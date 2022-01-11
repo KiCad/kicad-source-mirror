@@ -1112,7 +1112,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
                 m_gal->SetFillColor( colour[i] );
 
                 TEXT_ATTRIBUTES attrs;
-                attrs.m_Size = VECTOR2D( size[i], size[i] );
+                attrs.m_Size = VECTOR2I( size[i], size[i] );
                 attrs.m_Halign = hAlign;
                 attrs.m_Valign = vAlign;
                 attrs.m_Angle = aAngle;

@@ -61,9 +61,10 @@ wxString KIGFX::PREVIEW::DimensionLabel( const wxString& prefix, double aVal, ED
 }
 
 
-KIGFX::PREVIEW::TEXT_DIMS KIGFX::PREVIEW::SetConstantGlyphHeight( KIGFX::GAL* aGal,
+KIGFX::PREVIEW::TEXT_DIMS KIGFX::PREVIEW::GetConstantGlyphHeight( KIGFX::GAL* aGal,
                                                                   int aRelativeSize )
 {
+    constexpr double aspectRatio = 1.0;
     constexpr double hdpiSizes[] = { 8, 9, 11, 13, 15 };
     constexpr double sizes[] = { 10, 12, 14, 16, 18 };
 
@@ -91,15 +92,12 @@ KIGFX::PREVIEW::TEXT_DIMS KIGFX::PREVIEW::SetConstantGlyphHeight( KIGFX::GAL* aG
 
     height /= aGal->GetWorldScale();
 
-    VECTOR2D glyphSize = aGal->GetGlyphSize();
-    glyphSize = glyphSize * ( height / glyphSize.y );
-    aGal->SetGlyphSize( glyphSize );
-
     TEXT_DIMS textDims;
 
-    textDims.StrokeWidth = glyphSize.x * thicknessFactor;
-    textDims.ShadowWidth = glyphSize.x * shadowFactor;
-    textDims.LinePitch = glyphSize.y * linePitchFactor;
+    textDims.GlyphSize = VECTOR2I( height * aspectRatio, height );
+    textDims.StrokeWidth = height * thicknessFactor;
+    textDims.ShadowWidth = height * shadowFactor;
+    textDims.LinePitch = height * linePitchFactor;
 
     return textDims;
 }
@@ -120,10 +118,11 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
                                            bool aDrawingDropShadows )
 {
     KIGFX::GAL*      gal = aView->GetGAL();
-    RENDER_SETTINGS* rs = aView->GetPainter()->GetSettings();
+    KIFONT::FONT*    font = KIFONT::FONT::GetFont();
 
     // constant text size on screen
-    TEXT_DIMS        textDims = SetConstantGlyphHeight( gal );
+    TEXT_DIMS        textDims = GetConstantGlyphHeight( gal );
+    TEXT_ATTRIBUTES  textAttrs;
 
     // radius string goes on the right of the cursor centre line with a small horizontal
     // offset (enough to keep clear of a system cursor if present)
@@ -133,50 +132,42 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
 
     // if the text goes above the cursor, shift it up
     if( aTextQuadrant.y > 0 )
-    {
         textPos.y -= textDims.LinePitch * ( aStrings.size() + 1 );
-    }
 
     if( aTextQuadrant.x < 0 )
     {
         if( viewFlipped )
-            gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_RIGHT );
+            textAttrs.m_Halign = GR_TEXT_H_ALIGN_RIGHT;
         else
-            gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_LEFT );
+            textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
 
         textPos.x += 15.0 / gal->GetWorldScale();
-
-        if( aDrawingDropShadows )
-            textPos.x -= textDims.ShadowWidth;
     }
     else
     {
         if( viewFlipped )
-            gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_LEFT );
+            textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
         else
-            gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_RIGHT );
+            textAttrs.m_Halign = GR_TEXT_H_ALIGN_RIGHT;
 
         textPos.x -= 15.0 / gal->GetWorldScale();
-
-        if( aDrawingDropShadows )
-            textPos.x += textDims.ShadowWidth;
     }
 
-    gal->SetIsFill( false );
-    gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
-    gal->SetLineWidth( textDims.StrokeWidth );
-    gal->SetTextMirrored( viewFlipped ); // Prevent text flipping when view is flipped
+    gal->SetStrokeColor( aView->GetPainter()->GetSettings()->GetLayerColor( LAYER_AUX_ITEMS ) );
+    textAttrs.m_Mirrored = viewFlipped; // Prevent text flipping when view is flipped
+    textAttrs.m_Size = textDims.GlyphSize;
+    textAttrs.m_StrokeWidth = textDims.StrokeWidth;
 
     if( aDrawingDropShadows )
     {
+        textAttrs.m_StrokeWidth = textDims.StrokeWidth + ( 2 * textDims.ShadowWidth );
         gal->SetStrokeColor( GetShadowColor( gal->GetStrokeColor() ) );
-        gal->SetLineWidth( gal->GetLineWidth() + 2 * textDims.ShadowWidth );
     }
 
     // write strings top-to-bottom
     for( const wxString& str : aStrings )
     {
         textPos.y += textDims.LinePitch;
-        gal->StrokeText( str, textPos, 0.0 );
+        font->Draw( gal, str, textPos, textAttrs );
     }
 }

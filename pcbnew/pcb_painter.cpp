@@ -57,6 +57,7 @@
 #include <geometry/shape_circle.h>
 #include <bezier_curves.h>
 #include <kiface_base.h>
+#include <gr_text.h>
 #include <pgm_base.h>
 #include "pcbnew_settings.h"
 
@@ -578,25 +579,25 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         if( length < 6 * width )
             return;
 
-        const wxString& netName = UnescapeString( aTrack->GetShortNetname() );
-        double   textSize = width;
-        double   penWidth = width / 12.0;
-        VECTOR2D textPosition = start + line / 2.0;     // center of the track
-        double   textOrientation;
+        const     wxString& netName = UnescapeString( aTrack->GetShortNetname() );
+        double    textSize = width;
+        double    penWidth = width / 12.0;
+        VECTOR2D  textPosition = start + line / 2.0;     // center of the track
+        EDA_ANGLE textOrientation;
 
         if( end.y == start.y ) // horizontal
         {
-            textOrientation = 0;
+            textOrientation = EDA_ANGLE::HORIZONTAL;
             textPosition.y += penWidth;
         }
         else if( end.x == start.x ) // vertical
         {
-            textOrientation = M_PI / 2;
+            textOrientation = EDA_ANGLE::VERTICAL;
             textPosition.x += penWidth;
         }
         else
         {
-            textOrientation = -atan( line.y / line.x );
+            textOrientation = EDA_ANGLE( -atan( line.y / line.x ), EDA_ANGLE::RADIANS );
             textPosition.x += penWidth / 1.4;
             textPosition.y += penWidth / 1.4;
         }
@@ -772,7 +773,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
         m_gal->SetGlyphSize( namesize );
         m_gal->SetLineWidth( namesize.x / 12.0 );
-        m_gal->BitmapText( netname, textpos, 0.0 );
+        m_gal->BitmapText( netname, textpos, EDA_ANGLE::HORIZONTAL );
 
         m_gal->Restore();
 
@@ -929,7 +930,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
             // We have already translated the GAL to be centered at the center of the pad's
             // bounding box
-            VECTOR2D textpos( 0.0, 0.0 );
+            VECTOR2I textpos( 0, 0 );
 
             // Divide the space, to display both pad numbers and netnames and set the Y text
             // position to display 2 lines
@@ -966,7 +967,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
                 m_gal->SetGlyphSize( namesize );
                 m_gal->SetLineWidth( namesize.x / 12.0 );
-                m_gal->BitmapText( netname, textpos, 0.0 );
+                m_gal->BitmapText( netname, textpos, EDA_ANGLE::HORIZONTAL );
             }
 
             if( displayPadNumber )
@@ -985,7 +986,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
                 m_gal->SetGlyphSize( numsize );
                 m_gal->SetLineWidth( numsize.x / 12.0 );
-                m_gal->BitmapText( padNumber, textpos, 0.0 );
+                m_gal->BitmapText( padNumber, textpos, EDA_ANGLE::HORIZONTAL );
             }
 
             m_gal->Restore();
@@ -1714,8 +1715,7 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
         int unscaledSize = Mils2iu( ptSize );
 
         // Scale by zoom a bit, but not too much
-        int     textSize = ( scaledSize + ( unscaledSize * 2 ) ) / 3;
-        int     penWidth = textSize / 10;
+        int      textSize = ( scaledSize + ( unscaledSize * 2 ) ) / 3;
         VECTOR2I textOffset = VECTOR2I( width.x / 2, -KiROUND( textSize * 0.5 ) );
         VECTOR2I titleHeight = VECTOR2I( 0, KiROUND( textSize * 2.0 ) );
 
@@ -1725,16 +1725,14 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
             m_gal->DrawLine( topLeft - titleHeight, topLeft + width - titleHeight );
             m_gal->DrawLine( topLeft + width - titleHeight, topLeft + width );
 
-            m_gal->SetFontBold( false );
-            m_gal->SetFontItalic( true );
-            m_gal->SetFontUnderlined( false );
-            m_gal->SetTextMirrored( m_gal->IsFlippedX() );
-            m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
-            m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_BOTTOM );
-            m_gal->SetIsFill( false );
-            m_gal->SetGlyphSize( VECTOR2D( textSize, textSize ) );
-            m_gal->SetLineWidth( penWidth );
-            m_gal->StrokeText( aGroup->GetName(), topLeft + textOffset, 0.0 );
+            TEXT_ATTRIBUTES attrs;
+            attrs.m_Italic = true;
+            attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
+            attrs.m_Valign = GR_TEXT_V_ALIGN_BOTTOM;
+            attrs.m_Size = VECTOR2I( textSize, textSize );
+            attrs.m_StrokeWidth = GetPenSizeForNormal( textSize );
+
+            KIFONT::FONT::GetFont()->Draw( m_gal, aGroup->GetName(), topLeft + textOffset, attrs );
         }
     }
 }

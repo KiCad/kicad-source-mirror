@@ -229,7 +229,7 @@ struct VIEW_OVERLAY::COMMAND_SET_WIDTH : public VIEW_OVERLAY::COMMAND
 
 struct VIEW_OVERLAY::COMMAND_GLYPH_SIZE : public VIEW_OVERLAY::COMMAND
 {
-    COMMAND_GLYPH_SIZE( const VECTOR2D aSize ) :
+    COMMAND_GLYPH_SIZE( const VECTOR2I aSize ) :
         m_size( aSize )
     { };
 
@@ -238,16 +238,17 @@ struct VIEW_OVERLAY::COMMAND_GLYPH_SIZE : public VIEW_OVERLAY::COMMAND
         aView->GetGAL()->SetGlyphSize( m_size );
     }
 
-    VECTOR2D m_size;
+    VECTOR2I m_size;
 };
 
 
 struct VIEW_OVERLAY::COMMAND_BITMAP_TEXT : public VIEW_OVERLAY::COMMAND
 {
-    COMMAND_BITMAP_TEXT( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle ) :
+    COMMAND_BITMAP_TEXT( const wxString& aText, const VECTOR2I& aPosition,
+                         const EDA_ANGLE& aAngle ) :
         m_text( aText ),
         m_pos( aPosition ),
-        m_angle (aRotationAngle)
+        m_angle( aAngle )
     { }
 
     virtual void Execute( VIEW* aView ) const override
@@ -255,9 +256,9 @@ struct VIEW_OVERLAY::COMMAND_BITMAP_TEXT : public VIEW_OVERLAY::COMMAND
         aView->GetGAL()->BitmapText( m_text, m_pos, m_angle );
     }
 
-    wxString m_text;
-    VECTOR2D m_pos;
-    double m_angle;
+    wxString  m_text;
+    VECTOR2I  m_pos;
+    EDA_ANGLE m_angle;
 };
 
 VIEW_OVERLAY::VIEW_OVERLAY()
@@ -381,16 +382,16 @@ void VIEW_OVERLAY::SetIsFill( bool aIsFillEnabled )
 }
 
 
-void VIEW_OVERLAY::SetGlyphSize( const VECTOR2D& aSize )
+void VIEW_OVERLAY::SetGlyphSize( const VECTOR2I& aSize )
 {
     m_commands.push_back( new COMMAND_GLYPH_SIZE( aSize ) );
 }
 
 
-void VIEW_OVERLAY::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
-                               double aRotationAngle )
+void VIEW_OVERLAY::BitmapText( const wxString& aText, const VECTOR2I& aPosition,
+                               const EDA_ANGLE& aAngle )
 {
-    m_commands.push_back( new COMMAND_BITMAP_TEXT( aText, aPosition, aRotationAngle ) );
+    m_commands.push_back( new COMMAND_BITMAP_TEXT( aText, aPosition, aAngle ) );
 }
 
 

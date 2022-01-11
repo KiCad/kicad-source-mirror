@@ -135,9 +135,9 @@ public:
     /**
      * Compute the boundary limits of aText (the bounding box of all shapes).
      *
-     * @return a VECTOR2D giving the width and height of text.
+     * @return a VECTOR2I giving the width and height of text.
      */
-    VECTOR2I StringBoundaryLimits( const UTF8& aText, const VECTOR2D& aSize, int aThickness,
+    VECTOR2I StringBoundaryLimits( const UTF8& aText, const VECTOR2I& aSize, int aThickness,
                                    bool aBold, bool aItalic ) const;
 
     /**
@@ -167,7 +167,7 @@ public:
      * @return text cursor position after this text
      */
     virtual VECTOR2I GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                                      const UTF8& aText, const VECTOR2D& aSize,
+                                      const UTF8& aText, const VECTOR2I& aSize,
                                       const VECTOR2I& aPosition, const EDA_ANGLE& aAngle,
                                       bool aMirror, const VECTOR2I& aOrigin,
                                       TEXT_STYLE_FLAGS aTextStyle ) const = 0;
@@ -203,7 +203,7 @@ protected:
      * @return new cursor position in non-rotated, non-mirrored coordinates
      */
     void drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const UTF8& aText,
-                             const VECTOR2I& aPosition, const VECTOR2D& aSize,
+                             const VECTOR2I& aPosition, const VECTOR2I& aSize,
                              const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
                              bool aItalic ) const;
 
@@ -218,14 +218,14 @@ protected:
      * @return new cursor position
      */
     VECTOR2I boundingBoxSingleLine( BOX2I* aBBox, const UTF8& aText, const VECTOR2I& aPosition,
-                                    const VECTOR2D& aSize, bool aItalic ) const;
+                                    const VECTOR2I& aSize, bool aItalic ) const;
 
     void getLinePositions( const UTF8& aText, const VECTOR2I& aPosition,
                            wxArrayString& aTextLines, std::vector<VECTOR2I>& aPositions,
                            std::vector<VECTOR2I>& aExtents, const TEXT_ATTRIBUTES& aAttrs ) const;
 
     VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                         const UTF8& aText, const VECTOR2I& aPosition, const VECTOR2D& aSize,
+                         const UTF8& aText, const VECTOR2I& aPosition, const VECTOR2I& aSize,
                          const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
                          TEXT_STYLE_FLAGS aTextStyle ) const;
 

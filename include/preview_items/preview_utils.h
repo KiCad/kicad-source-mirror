@@ -38,9 +38,10 @@ namespace PREVIEW
 
 struct TEXT_DIMS
 {
-    double StrokeWidth;
-    double ShadowWidth;
-    double LinePitch;
+    VECTOR2I GlyphSize;
+    int      StrokeWidth;
+    int      ShadowWidth;
+    double   LinePitch;
 };
 
 /**
@@ -64,7 +65,7 @@ wxString DimensionLabel( const wxString& prefix, double aVal, EDA_UNITS aUnits,
  *                      will give larger and -1 etc. will give smaller.
  * @returns the text widths for the resulting glyph size.
  */
-TEXT_DIMS SetConstantGlyphHeight( KIGFX::GAL* aGal, int aRelativeSize = 0 );
+TEXT_DIMS GetConstantGlyphHeight( KIGFX::GAL* aGal, int aRelativeSize = 0 );
 
 COLOR4D GetShadowColor( const COLOR4D& aColor );
 

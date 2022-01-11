@@ -119,7 +119,7 @@ void FONT::getLinePositions( const UTF8& aText, const VECTOR2I& aPosition,
             height += interline;
     }
 
-    wxPoint offset( 0, 0 );
+    VECTOR2I offset( 0, 0 );
     offset.y += aAttrs.m_Size.y;
 
     switch(  aAttrs.m_Valign )
@@ -132,7 +132,7 @@ void FONT::getLinePositions( const UTF8& aText, const VECTOR2I& aPosition,
     for( int i = 0; i < lineCount; i++ )
     {
         VECTOR2I lineSize = aExtents.at( i );
-        wxPoint  lineOffset( offset );
+        VECTOR2I lineOffset( offset );
 
         lineOffset.y += i * interline;
 
@@ -188,7 +188,7 @@ void FONT::Draw( KIGFX::GAL* aGal, const UTF8& aText, const VECTOR2I& aPosition,
  */
 VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                      const std::unique_ptr<MARKUP::NODE>& aNode, const VECTOR2I& aPosition,
-                     const KIFONT::FONT* aFont, const VECTOR2D& aSize, const EDA_ANGLE& aAngle,
+                     const KIFONT::FONT* aFont, const VECTOR2I& aSize, const EDA_ANGLE& aAngle,
                      bool aMirror, const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle )
 {
     VECTOR2I nextPosition = aPosition;
@@ -229,7 +229,7 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
 
 
 VECTOR2I FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
-                           const UTF8& aText, const VECTOR2I& aPosition, const VECTOR2D& aSize,
+                           const UTF8& aText, const VECTOR2I& aPosition, const VECTOR2I& aSize,
                            const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
                            TEXT_STYLE_FLAGS aTextStyle ) const
 {
@@ -242,7 +242,7 @@ VECTOR2I FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYP
 
 
 void FONT::drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const UTF8& aText,
-                               const VECTOR2I& aPosition, const VECTOR2D& aSize,
+                               const VECTOR2I& aPosition, const VECTOR2I& aSize,
                                const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
                                bool aItalic ) const
 {
@@ -264,7 +264,7 @@ void FONT::drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const UTF8
 }
 
 
-VECTOR2I FONT::StringBoundaryLimits( const UTF8& aText, const VECTOR2D& aSize, int aThickness,
+VECTOR2I FONT::StringBoundaryLimits( const UTF8& aText, const VECTOR2I& aSize, int aThickness,
                                      bool aBold, bool aItalic ) const
 {
     // TODO do we need to parse every time - have we already parsed?
@@ -295,7 +295,7 @@ VECTOR2I FONT::StringBoundaryLimits( const UTF8& aText, const VECTOR2D& aSize, i
 
 
 VECTOR2I FONT::boundingBoxSingleLine( BOX2I* aBBox, const UTF8& aText, const VECTOR2I& aPosition,
-                                      const VECTOR2D& aSize, bool aItalic ) const
+                                      const VECTOR2I& aSize, bool aItalic ) const
 {
     TEXT_STYLE_FLAGS textStyle = 0;
 

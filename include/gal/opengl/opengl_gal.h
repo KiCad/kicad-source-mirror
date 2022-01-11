@@ -162,8 +162,8 @@ public:
     void DrawBitmap( const BITMAP_BASE& aBitmap ) override;
 
     /// @copydoc GAL::BitmapText()
-    void BitmapText( const wxString& aText, const VECTOR2D& aPosition,
-                             double aRotationAngle ) override;
+    void BitmapText( const wxString& aText, const VECTOR2I& aPosition,
+                     const EDA_ANGLE& aAngle ) override;
 
     /// @copydoc GAL::DrawGrid()
     void DrawGrid() override;

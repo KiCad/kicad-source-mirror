@@ -197,13 +197,14 @@ int playground_main_func( int argc, char* argv[] )
         {
             overlay->SetStrokeColor( YELLOW );
             overlay->Line( closestDist.A, closestDist.B );
-            overlay->SetLineWidth( 10000.0 );
-            overlay->SetGlyphSize( { 100000.0, 100000.0 } );
+            overlay->SetLineWidth( 10000 );
+            overlay->SetGlyphSize( { 100000, 100000 } );
             overlay->BitmapText( wxString::Format( "dist=%d, l=%d", closestDist.Length() ),
-                                 closestDist.A + VECTOR2I( 0, -arcs[i].GetWidth() ), 0 );
+                                 closestDist.A + VECTOR2I( 0, -arcs[i].GetWidth() ),
+                                 EDA_ANGLE::HORIZONTAL );
         }
 
-        overlay->SetLineWidth( 10000.0 );
+        overlay->SetLineWidth( 10000 );
         overlay->SetStrokeColor( CYAN );
         overlay->AnnotatedPoint( arcs[i].GetP0(), arcs[i].GetWidth() / 2 );
         overlay->AnnotatedPoint( arcs[i + 1].GetP0(), arcs[i + 1].GetWidth() / 2 );
@@ -262,9 +263,10 @@ int drawShapes( int argc, char* argv[] )
     {
         int mult = ( i % 2 ) ? 1 : -1;
         overlay->AnnotatedPoint( lc.GetPoint( i ), arc.GetWidth() * 2 );
-        overlay->SetGlyphSize( { 800000.0, 800000.0 } );
+        overlay->SetGlyphSize( { 800000, 800000 } );
         overlay->BitmapText( wxString::Format( "x=%d, y=%d", lc.GetPoint( i ).x, lc.GetPoint( i ).y ),
-                lc.GetPoint( i ) + VECTOR2I( 0, mult*arc.GetWidth() * 4 ), 0 );
+                             lc.GetPoint( i ) + VECTOR2I( 0, mult*arc.GetWidth() * 4 ),
+                             EDA_ANGLE::HORIZONTAL );
     }
 
     arc.Collide( &lc, 100000 );

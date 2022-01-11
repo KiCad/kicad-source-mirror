@@ -204,10 +204,10 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     // Draw DCODE overlay text
     if( IsDCodeLayer( aLayer ) )
     {
-        wxString codeText;
-        VECTOR2D textPosition;
-        double textSize;
-        double orient;
+        wxString  codeText;
+        VECTOR2I  textPosition;
+        int       textSize;
+        EDA_ANGLE orient;
 
         if( !aItem->GetTextD_CodePrms( textSize, textPosition, orient ) )
             return;
