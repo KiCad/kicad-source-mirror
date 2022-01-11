@@ -347,7 +347,7 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
                                                -seg->GetSeg().A.y * m_biuTo3Dunits );
                 const SFVEC2F        end3DU  (  seg->GetSeg().B.x * m_biuTo3Dunits,
                                                -seg->GetSeg().B.y * m_biuTo3Dunits );
-                const int            width = seg->GetWidth() + clearance.x * 2;
+                const double         width = seg->GetWidth() + clearance.x * 2;
 
                  // Cannot add segments that have the same start and end point
                 if( Is_segment_a_circle( start3DU, end3DU ) )
@@ -368,7 +368,7 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
             case SH_CIRCLE:
             {
                 const SHAPE_CIRCLE* circle = (SHAPE_CIRCLE*) shape;
-                const int           radius = circle->GetRadius() + clearance.x;
+                const double        radius = circle->GetRadius() + clearance.x;
                 const SFVEC2F       center(  circle->GetCenter().x * m_biuTo3Dunits,
                                              -circle->GetCenter().y * m_biuTo3Dunits );
 
@@ -409,7 +409,7 @@ void BOARD_ADAPTER::createPadWithClearance( const PAD* aPad, CONTAINER_2D_BASE* 
                                              -seg.GetSeg().A.y * m_biuTo3Dunits );
                     const SFVEC2F end3DU( seg.GetSeg().B.x * m_biuTo3Dunits,
                                           -seg.GetSeg().B.y * m_biuTo3Dunits );
-                    const int width = arc->GetWidth() + clearance.x * 2;
+                    const double width = arc->GetWidth() + clearance.x * 2;
 
                      // Cannot add segments that have the same start and end point
                     if( Is_segment_a_circle( start3DU, end3DU ) )
@@ -459,7 +459,7 @@ OBJECT_2D* BOARD_ADAPTER::createPadWithDrill( const PAD* aPad, int aInflateValue
 
     if( drillSize.x == drillSize.y )    // usual round hole
     {
-        const int radius = ( drillSize.x / 2 ) + aInflateValue;
+        const double radius = ( drillSize.x / 2.0 ) + aInflateValue;
 
         const SFVEC2F center(  aPad->GetPosition().x * m_biuTo3Dunits,
                               -aPad->GetPosition().y * m_biuTo3Dunits );
@@ -470,7 +470,7 @@ OBJECT_2D* BOARD_ADAPTER::createPadWithDrill( const PAD* aPad, int aInflateValue
     else                                // Oblong hole
     {
         const SHAPE_SEGMENT* seg = aPad->GetEffectiveHoleShape();
-        float width = seg->GetWidth() + aInflateValue * 2;
+        double width = seg->GetWidth() + aInflateValue * 2;
 
         SFVEC2F start3DU(  seg->GetSeg().A.x * m_biuTo3Dunits,
                           -seg->GetSeg().A.y * m_biuTo3Dunits );
@@ -567,7 +567,7 @@ void BOARD_ADAPTER::transformArcToSegments( const wxPoint& aCentre, const wxPoin
                                             const BOARD_ITEM& aBoardItem )
 {
     wxPoint arc_start, arc_end;
-    int     delta = 3600 / aCircleToSegmentsCount;   // rotate angle in 0.1 degree
+    double  delta = 3600 / aCircleToSegmentsCount;   // rotate angle in 0.1 degree
 
     arc_end = arc_start = aStart;
 
@@ -586,7 +586,7 @@ void BOARD_ADAPTER::transformArcToSegments( const wxPoint& aCentre, const wxPoin
     wxPoint curr_end    = arc_start;
     wxPoint curr_start  = arc_start;
 
-    for( int ii = delta; ii < aArcAngle; ii += delta )
+    for( double ii = delta; ii < aArcAngle; ii += delta )
     {
         curr_end = arc_start;
         RotatePoint( &curr_end, aCentre, -ii );
@@ -636,7 +636,7 @@ void BOARD_ADAPTER::addShapeWithClearance( const PCB_SHAPE* aShape,
 {
     // The full width of the lines to create
     // The extra 1 protects the inner/outer radius values from degeneracy
-    const int linewidth = aShape->GetWidth() + ( 2 * aClearanceValue ) + 1;
+    const double linewidth = aShape->GetWidth() + ( 2 * aClearanceValue ) + 1;
 
     switch( aShape->GetShape() )
     {
@@ -831,9 +831,9 @@ void BOARD_ADAPTER::buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BAS
         const SFVEC2F center3DU( aPad->ShapePos().x * m_biuTo3Dunits,
                                  -aPad->ShapePos().y * m_biuTo3Dunits );
 
-        const int radius = aPad->GetSize().x / 2;
-        const float inner_radius = ( radius - aWidth / 2 ) * m_biuTo3Dunits;
-        const float outer_radius = ( radius + aWidth / 2 ) * m_biuTo3Dunits;
+        const double radius = aPad->GetSize().x / 2.0;
+        const float inner_radius = ( radius - aWidth / 2.0 ) * m_biuTo3Dunits;
+        const float outer_radius = ( radius + aWidth / 2.0 ) * m_biuTo3Dunits;
 
         aDstContainer->Add( new RING_2D( center3DU, inner_radius, outer_radius, *aPad ) );
 
