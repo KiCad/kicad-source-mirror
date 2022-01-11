@@ -706,5 +706,8 @@ void PLOTTER::Text( const VECTOR2I&             aPos,
     attributes.m_Halign = aH_justify;
     attributes.m_Valign = aV_justify;
 
+    if( !aFont )
+        aFont = KIFONT::FONT::GetFont();
+
     aFont->Draw( &callback_gal, aText, aPos, attributes );
 }
