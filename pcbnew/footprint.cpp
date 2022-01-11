@@ -713,10 +713,10 @@ EDA_RECT FOOTPRINT::GetFpPadsLocalBbox() const
     // Create such a image:
     FOOTPRINT dummy( *this );
 
-    dummy.SetPosition( wxPoint( 0, 0 ) );
+    dummy.SetPosition( VECTOR2I( 0, 0 ) );
 
     if( dummy.IsFlipped() )
-        dummy.Flip( wxPoint( 0, 0 ) , false );
+        dummy.Flip( VECTOR2I( 0, 0 ), false );
 
     if( dummy.GetOrientation() )
         dummy.SetOrientation( 0 );
@@ -2310,7 +2310,7 @@ void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuff
         // as their hole:
         if( aSkipNPTHPadsWihNoCopper && pad->GetAttribute() == PAD_ATTRIB::NPTH )
         {
-            if( pad->GetDrillSize() == pad->GetSize() && pad->GetOffset() == wxPoint( 0, 0 ) )
+            if( pad->GetDrillSize() == pad->GetSize() && pad->GetOffset() == VECTOR2I( 0, 0 ) )
             {
                 switch( pad->GetShape() )
                 {

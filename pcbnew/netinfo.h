@@ -37,7 +37,6 @@
 
 
 class wxDC;
-class wxPoint;
 class LINE_READER;
 class EDA_DRAW_FRAME;
 class PAD;

@@ -977,7 +977,7 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
             {
                 int32_t x = ALTIUM_PARSER::ConvertToKicadUnit( aReader.Read<double>() );
                 int32_t y = ALTIUM_PARSER::ConvertToKicadUnit( -aReader.Read<double>() );
-                holes.at( k ).emplace_back( wxPoint( x, y ) );
+                holes.at( k ).emplace_back( VECTOR2I( x, y ) );
             }
         }
     }

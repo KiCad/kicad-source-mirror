@@ -358,8 +358,8 @@ void PCB_PAD::AddToBoard()
             PCB_VIA* via = new PCB_VIA( m_board );
             m_board->Add( via );
 
-            via->SetPosition( wxPoint( m_positionX, m_positionY ) );
-            via->SetEnd( wxPoint( m_positionX, m_positionY ) );
+            via->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
+            via->SetEnd( VECTOR2I( m_positionX, m_positionY ) );
 
             via->SetWidth( height );
             via->SetViaType( VIATYPE::THROUGH );
@@ -377,7 +377,7 @@ void PCB_PAD::AddToBoard()
 
         m_name.text = m_defaultPinDes;
 
-        footprint->SetPosition( wxPoint( m_positionX, m_positionY ) );
+        footprint->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
         AddToFootprint( footprint, 0, true );
     }
 }

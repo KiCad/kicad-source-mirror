@@ -143,7 +143,7 @@ VECTOR2I PCB_SHAPE::getParentPosition() const
     if( GetParentFootprint() )
         return GetParentFootprint()->GetPosition();
     else
-        return wxPoint( 0, 0 );
+        return VECTOR2I( 0, 0 );
 }
 
 

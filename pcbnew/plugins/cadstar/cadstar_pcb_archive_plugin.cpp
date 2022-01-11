@@ -134,7 +134,7 @@ BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppe
             int desired_x = ( w - bbbox.GetWidth() ) / 2;
             int desired_y = ( h - bbbox.GetHeight() ) / 2;
 
-            m_board->Move( wxPoint( desired_x - bbbox.GetX(), desired_y - bbbox.GetY() ) );
+            m_board->Move( VECTOR2I( desired_x - bbbox.GetX(), desired_y - bbbox.GetY() ) );
         }
     }
 

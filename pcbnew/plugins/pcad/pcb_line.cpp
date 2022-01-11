@@ -122,8 +122,8 @@ void PCB_LINE::AddToFootprint( FOOTPRINT* aFootprint )
         FP_SHAPE* segment = new FP_SHAPE( aFootprint, SHAPE_T::SEGMENT );
         aFootprint->Add( segment );
 
-        segment->SetStart0( wxPoint( m_positionX, m_positionY ) );
-        segment->SetEnd0( wxPoint( m_ToX, m_ToY ) );
+        segment->SetStart0( VECTOR2I( m_positionX, m_positionY ) );
+        segment->SetEnd0( VECTOR2I( m_ToX, m_ToY ) );
 
         segment->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
         segment->SetLayer( m_KiCadLayer );
@@ -140,8 +140,8 @@ void PCB_LINE::AddToBoard()
         PCB_TRACK* track = new PCB_TRACK( m_board );
         m_board->Add( track );
 
-        track->SetPosition( wxPoint( m_positionX, m_positionY ) );
-        track->SetEnd( wxPoint( m_ToX, m_ToY ) );
+        track->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
+        track->SetEnd( VECTOR2I( m_ToX, m_ToY ) );
 
         track->SetWidth( m_Width );
 
@@ -154,8 +154,8 @@ void PCB_LINE::AddToBoard()
         m_board->Add( segment, ADD_MODE::APPEND );
 
         segment->SetLayer( m_KiCadLayer );
-        segment->SetStart( wxPoint( m_positionX, m_positionY ) );
-        segment->SetEnd( wxPoint( m_ToX, m_ToY ) );
+        segment->SetStart( VECTOR2I( m_positionX, m_positionY ) );
+        segment->SetEnd( VECTOR2I( m_ToX, m_ToY ) );
         segment->SetStroke( STROKE_PARAMS( m_Width, PLOT_DASH_TYPE::SOLID ) );
     }
 }

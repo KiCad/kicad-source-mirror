@@ -127,7 +127,7 @@ void GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
 
 #if !FLASH_OVAL_HOLE
 // A helper class to transform an oblong hole to a segment
-static void convertOblong2Segment( wxSize aSize, double aOrient, wxPoint& aStart, wxPoint& aEnd );
+static void convertOblong2Segment( wxSize aSize, double aOrient, VECTOR2I& aStart, VECTOR2I& aEnd );
 #endif
 
 
@@ -235,7 +235,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
                                   hole_descr.m_Hole_Orient, FILLED, &gbr_metadata );
 #else
             // Use routing for oblong hole (Slots)
-            wxPoint start, end;
+            VECTOR2I start, end;
             convertOblong2Segment( hole_descr.m_Hole_Size, hole_descr.m_Hole_Orient, start, end );
             int width = std::min( hole_descr.m_Hole_Size.x, hole_descr.m_Hole_Size.y );
 
@@ -261,7 +261,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
 
 #if !FLASH_OVAL_HOLE
-void convertOblong2Segment( wxSize aSize, double aOrient, wxPoint& aStart, wxPoint& aEnd )
+void convertOblong2Segment( wxSize aSize, double aOrient, VECTOR2I& aStart, VECTOR2I& aEnd )
 {
     wxSize  size( aSize );
     double orient = aOrient;
@@ -280,10 +280,10 @@ void convertOblong2Segment( wxSize aSize, double aOrient, wxPoint& aStart, wxPoi
     int cx = 0;
     int cy = deltaxy / 2;
     RotatePoint( &cx, &cy, orient );
-    aStart = wxPoint( cx, cy );
+    aStart = VECTOR2I( cx, cy );
     cx = 0; cy = -deltaxy / 2;
     RotatePoint( &cx, &cy, orient );
-    aEnd = wxPoint( cx, cy );
+    aEnd = VECTOR2I( cx, cy );
 }
 #endif
 

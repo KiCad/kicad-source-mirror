@@ -454,11 +454,11 @@ bool ZONE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) cons
             auto vertexNext = m_Poly->CVertex( ( ii + 1 ) % count );
 
             // Test if the point is within the rect
-            if( arect.Contains( ( wxPoint ) vertex ) )
+            if( arect.Contains( vertex ) )
                 return true;
 
             // Test if this edge intersects the rect
-            if( arect.Intersects( ( wxPoint ) vertex, ( wxPoint ) vertexNext ) )
+            if( arect.Intersects( vertex, vertexNext ) )
                 return true;
         }
 
@@ -881,7 +881,7 @@ void ZONE::UnHatchBorder()
 
 
 // Creates hatch lines inside the outline of the complex polygon
-// sort function used in ::HatchBorder to sort points by descending wxPoint.x values
+// sort function used in ::HatchBorder to sort points by descending VECTOR2I.x values
 bool sortEndsByDescendingX( const VECTOR2I& ref, const VECTOR2I& tst )
 {
     return tst.x < ref.x;

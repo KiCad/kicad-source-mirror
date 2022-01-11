@@ -392,7 +392,7 @@ public:
      */
     double GetAngle() const
     {
-        wxPoint delta( m_end - m_start );
+        VECTOR2I delta( m_end - m_start );
 
         return atan2( (double)delta.y, (double)delta.x );
     }

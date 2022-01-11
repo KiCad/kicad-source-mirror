@@ -525,7 +525,7 @@ public:
     /**
      * Get a pad at \a aPosition on \a aLayerMask in the footprint.
      *
-     * @param aPosition A wxPoint object containing the position to hit test.
+     * @param aPosition A VECTOR2I object containing the position to hit test.
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A pointer to a #PAD object if found otherwise NULL.
      */

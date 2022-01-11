@@ -162,19 +162,6 @@ public:
 
     SHAPE_LINE_CHAIN( const std::vector<int>& aV );
 
-    SHAPE_LINE_CHAIN( const std::vector<wxPoint>& aV, bool aClosed = false ) :
-            SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
-            m_closed( aClosed ),
-            m_width( 0 )
-    {
-        m_points.reserve( aV.size() );
-
-        for( auto pt : aV )
-            m_points.emplace_back( pt.x, pt.y );
-
-        m_shapes = std::vector<std::pair<ssize_t, ssize_t>>( aV.size(), SHAPES_ARE_PT );
-    }
-
     SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClosed = false ) :
             SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
             m_closed( aClosed ),

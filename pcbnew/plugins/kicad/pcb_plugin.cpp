@@ -595,7 +595,7 @@ void PCB_PLUGIN::formatSetup( const BOARD* aBoard, int aNestLevel ) const
 
     origin = dsnSettings.GetGridOrigin();
 
-    if( origin != wxPoint( 0, 0 ) )
+    if( origin != VECTOR2I( 0, 0 ) )
     {
         m_out->Print( aNestLevel+1, "(grid_origin %s %s)\n",
                       FormatInternalUnits( origin.x ).c_str(),
@@ -2139,8 +2139,8 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
             for( const SEG& seg : segs )
             {
                 m_out->Print( aNestLevel + 2, "(pts (xy %s) (xy %s))\n",
-                              FormatInternalUnits( wxPoint( seg.A ) ).c_str(),
-                              FormatInternalUnits( wxPoint( seg.B ) ).c_str() );
+                              FormatInternalUnits( seg.A ).c_str(),
+                              FormatInternalUnits( seg.B ).c_str() );
             }
 
             m_out->Print( aNestLevel + 1, ")\n" );

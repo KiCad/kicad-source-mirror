@@ -267,12 +267,12 @@ wxString PCB_PARSER::GetRequiredVersion()
 }
 
 
-wxPoint PCB_PARSER::parseXY()
+VECTOR2I PCB_PARSER::parseXY()
 {
     if( CurTok() != T_LEFT )
         NeedLEFT();
 
-    wxPoint pt;
+    VECTOR2I pt;
     T token = NextTok();
 
     if( token != T_xy )
@@ -374,7 +374,7 @@ void PCB_PARSER::parseOutlinePoints( SHAPE_LINE_CHAIN& aPoly )
 
 void PCB_PARSER::parseXY( int* aX, int* aY )
 {
-    wxPoint pt = parseXY();
+    VECTOR2I pt = parseXY();
 
     if( aX )
         *aX = pt.x;
@@ -2117,7 +2117,7 @@ void PCB_PARSER::parseSetup()
         {
             int x = parseBoardUnits( "auxiliary origin X" );
             int y = parseBoardUnits( "auxiliary origin Y" );
-            designSettings.SetAuxOrigin( wxPoint( x, y ) );
+            designSettings.SetAuxOrigin( VECTOR2I( x, y ) );
 
             // Aux origin still stored in board for the moment
             //m_board->m_LegacyDesignSettingsLoaded = true;
@@ -2129,7 +2129,7 @@ void PCB_PARSER::parseSetup()
         {
             int x = parseBoardUnits( "grid origin X" );
             int y = parseBoardUnits( "grid origin Y" );
-            designSettings.SetGridOrigin( wxPoint( x, y ) );
+            designSettings.SetGridOrigin( VECTOR2I( x, y ) );
             // Grid origin still stored in board for the moment
             //m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
@@ -2434,9 +2434,9 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
                  CurTok() == T_gr_rect || CurTok() == T_gr_line || CurTok() == T_gr_poly, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_SHAPE." ) );
 
-    T token;
-    wxPoint pt;
-    STROKE_PARAMS stroke( 0, PLOT_DASH_TYPE::SOLID );
+    T                          token;
+    VECTOR2I                   pt;
+    STROKE_PARAMS              stroke( 0, PLOT_DASH_TYPE::SOLID );
     std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( nullptr );
 
     switch( CurTok() )
@@ -2480,7 +2480,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
         }
         else
         {
-            wxPoint arc_start, arc_mid, arc_end;
+            VECTOR2I arc_start, arc_mid, arc_end;
 
             if( token != T_start )
                 Expecting( T_start );
@@ -2821,7 +2821,7 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
     if( token != T_at )
         Expecting( T_at );
 
-    wxPoint pt;
+    VECTOR2I pt;
 
     pt.x = parseBoardUnits( "X coordinate" );
     pt.y = parseBoardUnits( "Y coordinate" );
@@ -2991,7 +2991,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
         // New format: feature points
         case T_pts:
         {
-            wxPoint point;
+            VECTOR2I point;
 
             parseXY( &point.x, &point.y );
             dim->SetStart( point );
@@ -3189,7 +3189,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
             if( token != T_pts )
                 Expecting( T_pts );
 
-            wxPoint point;
+            VECTOR2I point;
 
             parseXY( &point.x, &point.y );
             dim->SetStart( point );
@@ -3209,7 +3209,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
             if( token != T_pts )
                 Expecting( T_pts );
 
-            wxPoint point;
+            VECTOR2I point;
 
             parseXY( &point.x, &point.y );
             dim->SetEnd( point );
@@ -3232,7 +3232,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent, bool aInFP 
                 PCB_DIM_ALIGNED* aligned = static_cast<PCB_DIM_ALIGNED*>( dim.get() );
 
                 // Old style: calculate height from crossbar
-                wxPoint point1, point2;
+                VECTOR2I point1, point2;
                 parseXY( &point1.x, &point1.y );
                 parseXY( &point2.x, &point2.y );
                 aligned->UpdateHeight( point2, point1 ); // Yes, backwards intentionally
@@ -3726,7 +3726,7 @@ FP_TEXT* PCB_PARSER::parseFP_TEXT()
     if( token != T_at )
         Expecting( T_at );
 
-    wxPoint pt;
+    VECTOR2I pt;
 
     pt.x = parseBoardUnits( "X coordinate" );
     pt.y = parseBoardUnits( "Y coordinate" );
@@ -3796,7 +3796,7 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
                  CurTok() == T_fp_rect || CurTok() == T_fp_line || CurTok() == T_fp_poly, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as FP_SHAPE." ) );
 
-    wxPoint pt;
+    VECTOR2I pt;
     STROKE_PARAMS stroke( 0, PLOT_DASH_TYPE::SOLID );
     T token;
 
@@ -3851,7 +3851,7 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
         }
         else
         {
-            wxPoint arc_start, arc_mid, arc_end;
+            VECTOR2I arc_start, arc_mid, arc_end;
 
             if( token != T_start )
                 Expecting( T_start );
@@ -4160,8 +4160,8 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
     wxCHECK_MSG( CurTok() == T_pad, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PAD." ) );
 
-    wxSize  sz;
-    wxPoint pt;
+    VECTOR2I sz;
+    VECTOR2I pt;
 
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( aParent );
 
@@ -4184,7 +4184,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
         // Default PAD object is thru hole with drill.
         // SMD pads have no hole
-        pad->SetDrillSize( wxSize( 0, 0 ) );
+        pad->SetDrillSize( VECTOR2I( 0, 0 ) );
         break;
 
     case T_connect:
@@ -4192,7 +4192,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
         // Default PAD object is thru hole with drill.
         // CONN pads have no hole
-        pad->SetDrillSize( wxSize( 0, 0 ) );
+        pad->SetDrillSize( VECTOR2I( 0, 0 ) );
         break;
 
     case T_np_thru_hole:
@@ -4260,8 +4260,8 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         switch( token )
         {
         case T_size:
-            sz.SetWidth( parseBoardUnits( "width value" ) );
-            sz.SetHeight( parseBoardUnits( "height value" ) );
+            sz.x = parseBoardUnits( "width value" );
+            sz.y = parseBoardUnits( "height value" );
             pad->SetSize( sz );
             NeedRIGHT();
             break;
@@ -4741,8 +4741,8 @@ void PCB_PARSER::parseGROUP( BOARD_ITEM* aParent )
     wxCHECK_RET( CurTok() == T_group,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_GROUP." ) );
 
-    wxPoint pt;
-    T       token;
+    VECTOR2I pt;
+    T        token;
 
     m_groupInfos.push_back( GROUP_INFO() );
     GROUP_INFO& groupInfo = m_groupInfos.back();
@@ -4791,8 +4791,8 @@ PCB_ARC* PCB_PARSER::parseARC()
     wxCHECK_MSG( CurTok() == T_arc, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as ARC." ) );
 
-    wxPoint pt;
-    T       token;
+    VECTOR2I pt;
+    T        token;
 
     std::unique_ptr<PCB_ARC> arc = std::make_unique<PCB_ARC>( m_board );
 
@@ -4875,8 +4875,8 @@ PCB_TRACK* PCB_PARSER::parsePCB_TRACK()
     wxCHECK_MSG( CurTok() == T_segment, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_TRACK." ) );
 
-    wxPoint pt;
-    T token;
+    VECTOR2I pt;
+    T        token;
 
     std::unique_ptr<PCB_TRACK> track = std::make_unique<PCB_TRACK>( m_board );
 
@@ -4953,8 +4953,8 @@ PCB_VIA* PCB_PARSER::parsePCB_VIA()
     wxCHECK_MSG( CurTok() == T_via, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_VIA." ) );
 
-    wxPoint pt;
-    T token;
+    VECTOR2I pt;
+    T        token;
 
     std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( m_board );
 
@@ -5075,7 +5075,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
     ZONE_BORDER_DISPLAY_STYLE hatchStyle = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;
 
     int      hatchPitch = ZONE::GetDefaultHatchPitch();
-    wxPoint  pt;
+    VECTOR2I pt;
     T        token;
     int      tmp;
     wxString netnameFromfile;    // the zone net name find in file
@@ -5653,8 +5653,8 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET()
     wxCHECK_MSG( CurTok() == T_target, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_TARGET." ) );
 
-    wxPoint pt;
-    T token;
+    VECTOR2I pt;
+    T        token;
 
     std::unique_ptr<PCB_TARGET> target = std::make_unique<PCB_TARGET>( nullptr );
 

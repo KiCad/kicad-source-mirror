@@ -482,9 +482,9 @@ public:
         return DRC_LAYER( m_tree[int( aLayer )] );
     }
 
-    DRC_LAYER Overlapping( PCB_LAYER_ID aLayer, const wxPoint& aPoint, int aAccuracy = 0 ) const
+    DRC_LAYER Overlapping( PCB_LAYER_ID aLayer, const VECTOR2I& aPoint, int aAccuracy = 0 ) const
     {
-        EDA_RECT rect( aPoint, wxSize( 0, 0 ) );
+        EDA_RECT rect( aPoint, VECTOR2I( 0, 0 ) );
         rect.Inflate( aAccuracy );
         return DRC_LAYER( m_tree[int( aLayer )], rect );
     }

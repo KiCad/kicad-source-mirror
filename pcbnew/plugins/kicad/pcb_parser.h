@@ -236,7 +236,7 @@ private:
      * @return A wxPoint object containing the coordinate pair.
      * @throw PARSE_ERROR if the coordinate pair syntax is incorrect.
      */
-    wxPoint parseXY();
+    VECTOR2I parseXY();
 
     void parseXY( int* aX, int* aY );
 

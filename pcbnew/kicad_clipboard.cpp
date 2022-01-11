@@ -88,7 +88,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
         newFootprint.SetLocked( false );
 
         // locate the reference point at (0, 0) in the copied items
-        newFootprint.Move( wxPoint( -refPoint.x, -refPoint.y ) );
+        newFootprint.Move( VECTOR2I( -refPoint.x, -refPoint.y ) );
 
         Format( static_cast<BOARD_ITEM*>( &newFootprint ) );
     }
@@ -221,7 +221,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                 PAD*       pad = (PAD*) item->Clone();
 
                 footprint->SetPosition( pad->GetPosition() );
-                pad->SetPos0( wxPoint() );
+                pad->SetPos0( VECTOR2I() );
                 footprint->Add( pad );
                 copy = footprint;
             }

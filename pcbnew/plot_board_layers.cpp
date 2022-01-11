@@ -417,7 +417,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     // Build the dummy pad outline with coordinates relative to the pad position
                     // and orientation 0. The actual pos and rotation will be taken in account
                     // later by the plot function
-                    dummy.SetPosition( wxPoint( 0, 0 ) );
+                    dummy.SetPosition( VECTOR2I( 0, 0 ) );
                     dummy.SetOrientation( 0 );
                     SHAPE_POLY_SET outline;
                     int maxError = aBoard->GetDesignSettings().m_MaxError;
@@ -584,7 +584,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             double   start_angle = arc->GetArcAngleStart();
             double   end_angle = start_angle + arc->GetAngle();
 
-            aPlotter->ThickArc( wxPoint( center.x, center.y ), -end_angle, -start_angle,
+            aPlotter->ThickArc( VECTOR2I( center.x, center.y ), -end_angle, -start_angle,
                                 radius, width, plotMode, &gbr_metadata );
         }
         else
@@ -719,7 +719,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         outlines.Simplify( SHAPE_POLY_SET::PM_FAST );
 
         // Plot outlines
-        std::vector<wxPoint> cornerList;
+        std::vector<VECTOR2I> cornerList;
 
         // Now we have one or more basic polygons: plot each polygon
         for( int ii = 0; ii < outlines.OutlineCount(); ii++ )
@@ -758,8 +758,8 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     {
                         // Note: small drill marks have no significance when applied to slots
                         const SHAPE_SEGMENT* seg = pad->GetEffectiveHoleShape();
-                        aPlotter->ThickSegment( (wxPoint) seg->GetSeg().A,
-                                                (wxPoint) seg->GetSeg().B,
+                        aPlotter->ThickSegment( seg->GetSeg().A,
+                                                seg->GetSeg().B,
                                                 seg->GetWidth(), SKETCH, nullptr );
                     }
                 }

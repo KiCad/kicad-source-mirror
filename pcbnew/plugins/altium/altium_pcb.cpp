@@ -2380,7 +2380,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
             shape->SetFilled( true );
             shape->SetLayer( klayer );
             shape->SetStart( aElem.position );
-            shape->SetEnd( aElem.position - wxPoint( 0, aElem.topsize.x / 4 ) );
+            shape->SetEnd( aElem.position - VECTOR2I( 0, aElem.topsize.x / 4 ) );
             shape->SetStroke( STROKE_PARAMS( aElem.topsize.x / 2, PLOT_DASH_TYPE::SOLID ) );
             HelperShapeSetLocalCoord( shape, aElem.component );
         }
@@ -2422,10 +2422,10 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
         shape->SetLayer( klayer );
         shape->SetStroke( STROKE_PARAMS( 0 ) );
 
-        VECTOR2I p11 = aElem.position + wxPoint( aElem.topsize.x / 2, aElem.topsize.y / 2 );
-        VECTOR2I p12 = aElem.position + wxPoint( aElem.topsize.x / 2, -aElem.topsize.y / 2 );
-        VECTOR2I p22 = aElem.position + wxPoint( -aElem.topsize.x / 2, -aElem.topsize.y / 2 );
-        VECTOR2I p21 = aElem.position + wxPoint( -aElem.topsize.x / 2, aElem.topsize.y / 2 );
+        VECTOR2I p11 = aElem.position + VECTOR2I( aElem.topsize.x / 2, aElem.topsize.y / 2 );
+        VECTOR2I p12 = aElem.position + VECTOR2I( aElem.topsize.x / 2, -aElem.topsize.y / 2 );
+        VECTOR2I p22 = aElem.position + VECTOR2I( -aElem.topsize.x / 2, -aElem.topsize.y / 2 );
+        VECTOR2I p21 = aElem.position + VECTOR2I( -aElem.topsize.x / 2, aElem.topsize.y / 2 );
 
         int     chamfer = std::min( aElem.topsize.x, aElem.topsize.y ) / 4;
         VECTOR2I chamferX( chamfer, 0 );

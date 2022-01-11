@@ -252,7 +252,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
     // Plot title  "Info"
     wxString Text = wxT( "Drill Map:" );
-    plotter->Text( wxPoint( plotX, plotY ), COLOR4D::UNSPECIFIED, Text, EDA_ANGLE::HORIZONTAL,
+    plotter->Text( VECTOR2I( plotX, plotY ), COLOR4D::UNSPECIFIED, Text, EDA_ANGLE::HORIZONTAL,
                    wxSize( KiROUND( charSize * charScale ), KiROUND( charSize * charScale ) ),
                    GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, TextWidth, false, false );
 
@@ -286,7 +286,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         int y = KiROUND( plotY + charSize * charScale );
 
         plotter->SetCurrentLineWidth( getMarkerBestPenSize( plot_diam ) );
-        plotter->Marker( wxPoint( x, y ), plot_diam, ii );
+        plotter->Marker( VECTOR2I( x, y ), plot_diam, ii );
         plotter->SetCurrentLineWidth( -1 );
 
         // List the diameter of each drill in mm and inches.
@@ -313,8 +313,8 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         if( tool.m_Hole_NotPlated )
             msg += wxT( " (not plated)" );
 
-        plotter->Text( wxPoint( plotX, y ), COLOR4D::UNSPECIFIED, msg, EDA_ANGLE::HORIZONTAL,
-                       wxSize( KiROUND( charSize * charScale ), KiROUND( charSize * charScale ) ),
+        plotter->Text( VECTOR2I( plotX, y ), COLOR4D::UNSPECIFIED, msg, EDA_ANGLE::HORIZONTAL,
+                       VECTOR2I( KiROUND( charSize * charScale ), KiROUND( charSize * charScale ) ),
                        GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, TextWidth, false, false );
 
         intervalle = KiROUND( ( ( charSize * charScale ) + TextWidth ) * 1.2 );

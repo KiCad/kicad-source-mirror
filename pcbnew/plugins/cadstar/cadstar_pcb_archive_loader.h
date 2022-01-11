@@ -121,7 +121,7 @@ private:
     std::vector<LAYER_ID> m_powerPlaneLayers;            ///< List of layers that are marked as
                                                          ///< power plane in CADSTAR. This is used
                                                          ///< by "loadtemplates"
-    wxPoint m_designCenter;                              ///< Used for calculating the required
+    VECTOR2I m_designCenter;                             ///< Used for calculating the required
                                                          ///< offset to apply to the Cadstar design
                                                          ///< so that it fits in KiCad canvas
     std::set<HATCHCODE_ID> m_hatchcodesTested;           ///< Used by checkAndLogHatchCode() to

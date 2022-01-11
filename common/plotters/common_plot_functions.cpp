@@ -127,8 +127,8 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
         case WSG_POLY_T:
         {
             DS_DRAW_ITEM_POLYPOLYGONS* poly = (DS_DRAW_ITEM_POLYPOLYGONS*) item;
-            int penWidth = std::max( poly->GetPenWidth(), defaultPenWidth );
-            std::vector<wxPoint> points;
+            int                        penWidth = std::max( poly->GetPenWidth(), defaultPenWidth );
+            std::vector<VECTOR2I>      points;
 
             for( int idx = 0; idx < poly->GetPolygons().OutlineCount(); ++idx )
             {

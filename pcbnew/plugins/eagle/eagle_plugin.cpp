@@ -699,8 +699,8 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             EWIRE        w( gr );
             PCB_LAYER_ID layer = kicad_layer( w.layer );
 
-            wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
-            wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
+            VECTOR2I start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
+            VECTOR2I end( kicad_x( w.x2 ), kicad_y( w.y2 ) );
 
             if( layer != UNDEFINED_LAYER )
             {
@@ -750,7 +750,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 pcbtxt->SetLayer( layer );
                 wxString kicadText = interpret_text( t.text );
                 pcbtxt->SetText( FROM_UTF8( kicadText.c_str() ) );
-                pcbtxt->SetTextPos( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
+                pcbtxt->SetTextPos( VECTOR2I( kicad_x( t.x ), kicad_y( t.y ) ) );
 
                 double ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
                 int textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100 );
@@ -910,8 +910,8 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     m_board->Add( shape, ADD_MODE::APPEND );
                     shape->SetFilled( false );
                     shape->SetLayer( layer );
-                    shape->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
-                    shape->SetEnd( wxPoint( kicad_x( c.x ) + radius, kicad_y( c.y ) ) );
+                    shape->SetStart( VECTOR2I( kicad_x( c.x ), kicad_y( c.y ) ) );
+                    shape->SetEnd( VECTOR2I( kicad_x( c.x ) + radius, kicad_y( c.y ) ) );
                     shape->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
                 }
             }
@@ -939,10 +939,10 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 ZONE_BORDER_DISPLAY_STYLE outline_hatch = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
 
                 const int outlineIdx = -1;      // this is the id of the copper zone main outline
-                zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
-                zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ), outlineIdx );
-                zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ), outlineIdx );
-                zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
+                zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
+                zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y1 ) ), outlineIdx );
+                zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y2 ) ), outlineIdx );
+                zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
 
                 if( r.rot )
                     zone->Rotate( zone->GetPosition(), r.rot->degrees * 10 );
@@ -1014,8 +1014,8 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 dimension->SetPrecision( DIMENSION_PRECISION );
 
                 // The origin and end are assumed to always be in this order from eagle
-                dimension->SetStart( wxPoint( kicad_x( d.x1 ), kicad_y( d.y1 ) ) );
-                dimension->SetEnd( wxPoint( kicad_x( d.x2 ), kicad_y( d.y2 ) ) );
+                dimension->SetStart( VECTOR2I( kicad_x( d.x1 ), kicad_y( d.y1 ) ) );
+                dimension->SetEnd( VECTOR2I( kicad_x( d.x2 ), kicad_y( d.y2 ) ) );
                 dimension->Text().SetTextSize( designSettings.GetTextSize( layer ) );
                 dimension->Text().SetTextThickness( designSettings.GetTextThickness( layer ) );
                 dimension->SetLineThickness( designSettings.GetLineThickness( layer ) );
@@ -1186,7 +1186,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
         refanceNamePresetInPackageLayout = true;
         valueNamePresetInPackageLayout = true;
-        footprint->SetPosition( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
+        footprint->SetPosition( VECTOR2I( kicad_x( e.x ), kicad_y( e.y ) ) );
 
         // Is >NAME field set in package layout ?
         if( footprint->GetReference().size() == 0 )
@@ -1561,7 +1561,7 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
 
         if( a.x && a.y )    // OPT
         {
-            wxPoint pos( kicad_x( *a.x ), kicad_y( *a.y ) );
+            VECTOR2I pos( kicad_x( *a.x ), kicad_y( *a.y ) );
             aFPText->SetTextPos( pos );
         }
 
@@ -1742,8 +1742,8 @@ void EAGLE_PLUGIN::packageWire( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 {
     EWIRE        w( aTree );
     PCB_LAYER_ID layer = kicad_layer( w.layer );
-    wxPoint      start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
-    wxPoint      end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
+    VECTOR2I     start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
+    VECTOR2I     end( kicad_x( w.x2 ), kicad_y( w.y2 ) );
     int          width = w.width.ToPcbUnits();
 
     if( layer == UNDEFINED_LAYER )
@@ -1902,7 +1902,7 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
         if( e.shape && *e.shape == EPAD::OFFSET )
         {
             int offset = KiROUND( ( sz.x - sz.y ) / 2.0 );
-            pad->SetOffset( wxPoint( offset, 0 ) );
+            pad->SetOffset( VECTOR2I( offset, 0 ) );
         }
     }
 
@@ -2044,10 +2044,10 @@ void EAGLE_PLUGIN::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
         setKeepoutSettingsToZone( zone, r.layer );
 
         const int outlineIdx = -1; // this is the id of the copper zone main outline
-        zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
-        zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ), outlineIdx );
-        zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ), outlineIdx );
-        zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
+        zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
+        zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y1 ) ), outlineIdx );
+        zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y2 ) ), outlineIdx );
+        zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
 
         if( r.rot )
         {
@@ -2282,8 +2282,8 @@ void EAGLE_PLUGIN::packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) cons
         }
 
         gr->SetLayer( layer );
-        gr->SetStart0( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
-        gr->SetEnd0( wxPoint( kicad_x( e.x ) + radius, kicad_y( e.y ) ) );
+        gr->SetStart0( VECTOR2I( kicad_x( e.x ), kicad_y( e.y ) ) );
+        gr->SetEnd0( VECTOR2I( kicad_x( e.x ) + radius, kicad_y( e.y ) ) );
         gr->SetDrawCoord();
     }
 }
@@ -2305,14 +2305,14 @@ void EAGLE_PLUGIN::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aC
 
     // Mechanical purpose only:
     // no offset, no net name, no pad name allowed
-    // pad->SetOffset( wxPoint( 0, 0 ) );
+    // pad->SetOffset( VECTOR2I( 0, 0 ) );
     // pad->SetNumber( wxEmptyString );
 
     VECTOR2I padpos( kicad_x( e.x ), kicad_y( e.y ) );
 
     if( aCenter )
     {
-        pad->SetPos0( wxPoint( 0, 0 ) );
+        pad->SetPos0( VECTOR2I( 0, 0 ) );
         aFootprint->SetPosition( padpos );
         pad->SetPosition( padpos );
     }
@@ -2573,8 +2573,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     if( w.curve )
                     {
-                        center = ConvertArcCenter( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ),
-                                                   wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ),
+                        center = ConvertArcCenter( VECTOR2I( kicad_x( w.x1 ), kicad_y( w.y1 ) ),
+                                                   VECTOR2I( kicad_x( w.x2 ), kicad_y( w.y2 ) ),
                                                    *w.curve );
 
                         angle = DEG2RAD( *w.curve );
@@ -2593,8 +2593,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     while( fabs( angle ) > fabs( delta_angle ) )
                     {
                         wxASSERT( radius > 0.0 );
-                        wxPoint end( KiROUND( radius * cos( end_angle + angle ) + center.x ),
-                                     KiROUND( radius * sin( end_angle + angle ) + center.y ) );
+                        VECTOR2I end( KiROUND( radius * cos( end_angle + angle ) + center.x ),
+                                      KiROUND( radius * sin( end_angle + angle ) + center.y ) );
 
                         PCB_TRACK*  t = new PCB_TRACK( m_board );
 
@@ -2613,7 +2613,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     PCB_TRACK*  t = new PCB_TRACK( m_board );
 
                     t->SetPosition( start );
-                    t->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
+                    t->SetEnd( VECTOR2I( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
                     t->SetWidth( width );
                     t->SetLayer( layer );
                     t->SetNetCode( netCode );
@@ -2704,7 +2704,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                         via->SetViaType( VIATYPE::BLIND_BURIED );
                     }
 
-                    wxPoint pos( kicad_x( v.x ), kicad_y( v.y ) );
+                    VECTOR2I pos( kicad_x( v.x ), kicad_y( v.y ) );
 
                     via->SetLayerPair( layer_front_most, layer_back_most );
                     via->SetPosition( pos  );
@@ -2988,7 +2988,7 @@ void EAGLE_PLUGIN::centerBoard()
             int desired_x = ( w - bbbox.GetWidth() )  / 2;
             int desired_y = ( h - bbbox.GetHeight() ) / 2;
 
-            m_board->Move( wxPoint( desired_x - bbbox.GetX(), desired_y - bbbox.GetY() ) );
+            m_board->Move( VECTOR2I( desired_x - bbbox.GetX(), desired_y - bbbox.GetY() ) );
         }
     }
 }
