@@ -50,9 +50,9 @@ class PCB_GROUP;
 class BOARD_ITEM : public EDA_ITEM
 {
 public:
-    BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
+    BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype, PCB_LAYER_ID aLayer = F_Cu ) :
             EDA_ITEM( aParent, idtype ),
-            m_layer( F_Cu ),
+            m_layer( aLayer ),
             m_group( nullptr )
     {
     }
