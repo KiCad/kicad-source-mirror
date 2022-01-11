@@ -408,9 +408,9 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
     {
         if( m_tracks->GetValue() && track->Type() == PCB_TRACE_T )
             visitItem( &itemsListPicker, track );
-        else if ( m_vias->GetValue() && track->Type() == PCB_VIA_T )
+        else if ( m_tracks->GetValue() && track->Type() == PCB_ARC_T )
             visitItem( &itemsListPicker, track );
-        else if ( m_vias->GetValue() && track->Type() == PCB_ARC_T )
+        else if ( m_vias->GetValue() && track->Type() == PCB_VIA_T )
             visitItem( &itemsListPicker, track );
     }
 
