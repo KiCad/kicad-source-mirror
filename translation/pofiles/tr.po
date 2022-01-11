@@ -7,13 +7,14 @@
 # Sadıkhan Doğdu <sadikhandogdu@gmail.com>, 2021.
 # VEDAT YAMAN <weddat@gmail.com>, 2021.
 # Gökhan Koçmarlı <gokhankocmarli@gmail.com>, 2022.
+# prometheus <181903185@ogrenci.ibu.edu.tr>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-01-01 15:53+0000\n"
-"Last-Translator: Gökhan Koçmarlı <gokhankocmarli@gmail.com>\n"
+"PO-Revision-Date: 2022-01-13 14:55+0000\n"
+"Last-Translator: prometheus <181903185@ogrenci.ibu.edu.tr>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
 "Language: tr\n"
@@ -12574,12 +12575,12 @@ msgstr ""
 #: eeschema/menubar.cpp:102 pcbnew/menubar_footprint_editor.cpp:65
 #: pcbnew/menubar_pcb_editor.cpp:107
 msgid "Import"
-msgstr ""
+msgstr "İçe Aktar"
 
 #: eeschema/menubar.cpp:104
 #, fuzzy
 msgid "Non-KiCad Schematic..."
-msgstr "KiCad Şeması"
+msgstr "KiCad olmayan şematik..."
 
 #: eeschema/menubar.cpp:105
 msgid ""
@@ -12595,7 +12596,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_svg.cpp:96
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:126
 msgid "Export"
-msgstr ""
+msgstr "Dışa Aktar"
 
 #: eeschema/menubar.cpp:117
 #, fuzzy
@@ -12641,9 +12642,9 @@ msgid "P&references"
 msgstr ""
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file %s."
-msgstr "%s isminde özel bir ped bulunamadı"
+msgstr "%s kütüphane dosyası bulunamadı."
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:313
 msgid ""
@@ -12658,7 +12659,7 @@ msgstr ""
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:130
 msgid "Success."
-msgstr ""
+msgstr "Başarılı."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:177
 msgid "Error: duplicate sheet names. Continue?"
@@ -12670,15 +12671,15 @@ msgstr ""
 
 #: eeschema/pin_type.cpp:57
 msgid "Unspecified"
-msgstr ""
+msgstr "Belirtilmemiş"
 
 #: eeschema/pin_type.cpp:58
 msgid "Power input"
-msgstr ""
+msgstr "Güç girişi"
 
 #: eeschema/pin_type.cpp:59
 msgid "Power output"
-msgstr ""
+msgstr "Güç çıkışı"
 
 #: eeschema/pin_type.cpp:60
 msgid "Open collector"
@@ -12690,7 +12691,7 @@ msgstr ""
 
 #: eeschema/pin_type.cpp:62
 msgid "Unconnected"
-msgstr ""
+msgstr "Bağlanmamış"
 
 #: eeschema/pin_type.cpp:77
 msgid "Inverted"
@@ -12757,7 +12758,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:192
 #, fuzzy, c-format
 msgid "Failed to create symbol library file '%s'."
-msgstr "%s isminde özel bir ped bulunamadı"
+msgstr "%s sembol dosyası oluşturulması başarısız oldu."
 
 #: eeschema/project_rescue.cpp:815
 #, c-format
@@ -12823,7 +12824,7 @@ msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:172 pcbnew/board_connected_item.cpp:142
 msgid "Not Found"
-msgstr ""
+msgstr "Bulunamadı"
 
 #: eeschema/sch_edit_frame.cpp:174
 msgid "The following libraries were not found:"
@@ -12855,16 +12856,16 @@ msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:967
 msgid "New Schematic"
-msgstr ""
+msgstr "Yeni Şematik"
 
 #: eeschema/sch_edit_frame.cpp:979
 #, fuzzy, c-format
 msgid "Schematic file '%s' already exists."
-msgstr "Şema bağlantı rengi"
+msgstr "Şematik dosyası %s zaten var."
 
 #: eeschema/sch_edit_frame.cpp:1000
 msgid "Open Schematic"
-msgstr ""
+msgstr "Şematiği Aç"
 
 #: eeschema/sch_edit_frame.cpp:1063
 msgid "Assigning footprints requires a fully annotated schematic."
@@ -17426,7 +17427,7 @@ msgstr "İz düşümü yüklenmedi."
 #: kicad/kicad_manager_frame.cpp:695
 #, c-format
 msgid "Project: %s"
-msgstr ""
+msgstr "Proje: %s"
 
 #: kicad/kicad_manager_frame.cpp:739
 msgid "Restoring session"
@@ -17455,7 +17456,7 @@ msgstr ""
 
 #: kicad/menubar.cpp:107
 msgid "EAGLE Project..."
-msgstr ""
+msgstr "EAGLE Projesi..."
 
 #: kicad/menubar.cpp:108
 msgid "Import EAGLE CAD XML schematic and board"
@@ -24596,22 +24597,22 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:269
 msgid "Top left"
-msgstr ""
+msgstr "Sol üst"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:223
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:273
 msgid "Top right"
-msgstr ""
+msgstr "Sağ üst"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:226
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:276
 msgid "Bottom left"
-msgstr ""
+msgstr "Sol alt"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:229
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:279
 msgid "Bottom right"
-msgstr ""
+msgstr "Sağ alt"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:314
 msgid "Pad size X:"
@@ -24619,11 +24620,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:342
 msgid "90"
-msgstr ""
+msgstr "90"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:366
 msgid "Hole shape:"
-msgstr ""
+msgstr "Delik şekli:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:376
 msgid "Hole size X:"
@@ -24709,12 +24710,13 @@ msgid "Fiducial, global to board"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1660
+#, fuzzy
 msgid "Test point pad"
-msgstr ""
+msgstr "Test noktası pedi"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1661
 msgid "Heatsink pad"
-msgstr ""
+msgstr "Soğutucu ped"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 msgid "Castellated pad (through hole only)"
@@ -24757,7 +24759,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:711
 msgid "Pad connection:"
-msgstr ""
+msgstr "Ped bağlantısı:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:715
 msgid "From parent footprint"
@@ -34801,7 +34803,7 @@ msgstr ""
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
-msgstr ""
+msgstr "KiCad PCB Hesaplayıcı"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "Calculator for various electronics-related computations"
@@ -34813,9 +34815,8 @@ msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad baskılı devre kartı düzeni (bağımsız)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
-#, fuzzy
 msgid "PCB layout editor"
-msgstr "PCB düzeni"
+msgstr "PCB düzenleme editörü"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "Standalone circuit board editor for KiCad boards"
@@ -34826,10 +34827,12 @@ msgid "pcbnew"
 msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
+#, fuzzy
 msgid "An EDA suite for schematic and circuit board design"
-msgstr ""
+msgstr "Şematik ve Kart tasarımı için elektronik tasarım otomasyon yazılımı"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
+#, fuzzy
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
 "It features schematic capture, integrated circuit simulation, printed "
@@ -34838,22 +34841,27 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
+"KiCad ücretsiz ve açık kaynak kodlu bir elektronik tasarım yazılımıdır. "
+"Şematik oluşturma, entegre devre simülasyonu, PCB tasarımı, 3D modelleme ve "
+"birçok formatta veri ve grafiğin dışa aktarımını destekleyen özelliklere "
+"sahiptir. KiCad ayrıca yüksek kaliteli sembol, iz düşümleri ve 3D modelleri "
+"içerir. KiCad düşük sistem gereksinimlerine sahiptir ve Linux, Windows ve "
+"macOS üzerinde çalışabilir."
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
 msgid "KiCad Main Window"
-msgstr ""
+msgstr "KiCad Ana Pencere"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
 #, fuzzy
 msgid "KiCad PCB Layout Editor"
-msgstr "KiCad Sembol Düzenleyici"
+msgstr "KiCad PCB Tasarım Editörü"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:85
 msgid "The KiCad Developers"
 msgstr "KiCad Geliştiricileri"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
-#, fuzzy
 msgid "Gerber file"
 msgstr "Gerber Dosyası"
 
