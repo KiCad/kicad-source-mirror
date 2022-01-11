@@ -167,6 +167,7 @@ void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const 
     attributes.m_Bold = aBold;
     attributes.m_Halign = aH_justify;
     attributes.m_Valign = aV_justify;
+    attributes.m_Size = aSize;
 
     aFont->Draw( &callback_gal, aText, aPos, attributes );
 }
