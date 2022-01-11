@@ -192,7 +192,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
 int SCH_SHAPE::GetPenWidth() const
 {
     if( m_stroke.GetWidth() > 0 )
-        return GetWidth();
+        return m_stroke.GetWidth();
 
     // Historically 0 meant "default width" and negative numbers meant "don't stroke".
     if( GetWidth() < 0 && GetFillMode() != FILL_T::NO_FILL )

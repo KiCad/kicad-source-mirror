@@ -308,7 +308,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
     }
     else if( aItem->Type() == SCH_SHEET_T )
     {
-        SCH_SHEET* sheet = (SCH_SHEET*) aItem;
+        const SCH_SHEET* sheet = static_cast<const SCH_SHEET*>( aItem );
 
         if( m_schSettings.m_OverrideItemColors )
             color = m_schSettings.GetLayerColor( aLayer );
@@ -316,6 +316,20 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
             color = sheet->GetBorderColor();
         else if( aLayer == LAYER_SHEET_BACKGROUND )
             color = sheet->GetBackgroundColor();
+
+        if( color == COLOR4D::UNSPECIFIED )
+            color = m_schSettings.GetLayerColor( aLayer );
+    }
+    else if( aItem->Type() == SCH_SHAPE_T )
+    {
+        const SCH_SHAPE* shape = static_cast<const SCH_SHAPE*>( aItem );
+
+        if( m_schSettings.m_OverrideItemColors )
+            color = m_schSettings.GetLayerColor( aLayer );
+        else if( aLayer == LAYER_NOTES )
+            color = shape->GetStroke().GetColor();
+        else if( aLayer == LAYER_NOTES_BACKGROUND )
+            color = shape->GetFillColor();
 
         if( color == COLOR4D::UNSPECIFIED )
             color = m_schSettings.GetLayerColor( aLayer );
@@ -1395,7 +1409,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
     }
     else if( aLayer == LAYER_NOTES )
     {
-        int lineWidth =  getLineWidth( aShape, drawingShadows );
+        int lineWidth = getLineWidth( aShape, drawingShadows );
 
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
