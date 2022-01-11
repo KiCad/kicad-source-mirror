@@ -1658,7 +1658,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
                 break;
 
             case SHAPE_T::ARC:
-                m_out->Print( aNestLevel, "(gr_arc (start %s) (mid %s) (end %s)",
+                m_out->Print( nested_level, "(gr_arc (start %s) (mid %s) (end %s)",
                               FormatInternalUnits( primitive->GetStart() ).c_str(),
                               FormatInternalUnits( primitive->GetArcMid() ).c_str(),
                               FormatInternalUnits( primitive->GetEnd() ).c_str() );
