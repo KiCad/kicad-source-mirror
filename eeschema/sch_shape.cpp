@@ -30,6 +30,7 @@
 #include <bitmaps.h>
 #include <eda_draw_frame.h>
 #include <general.h>
+#include <schematic.h>
 #include <sch_shape.h>
 
 
@@ -190,11 +191,19 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
 
 int SCH_SHAPE::GetPenWidth() const
 {
+    if( m_stroke.GetWidth() > 0 )
+        return GetWidth();
+
     // Historically 0 meant "default width" and negative numbers meant "don't stroke".
     if( GetWidth() < 0 && GetFillMode() != FILL_T::NO_FILL )
         return 0;
-    else
-        return std::max( GetWidth(), 1 );
+
+    SCHEMATIC* schematic = Schematic();
+
+    if( schematic )
+        return schematic->Settings().m_DefaultLineWidth;
+
+    return Mils2iu( DEFAULT_LINE_WIDTH_MILS );
 }
 
 
