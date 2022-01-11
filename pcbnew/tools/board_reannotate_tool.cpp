@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pcb_group.h>
 #include <refdes_utils.h>
 #include <string_utils.h>
 #include <tool/tool_manager.h>
@@ -85,6 +86,18 @@ int BOARD_REANNOTATE_TOOL::ReannotateDuplicates( const PCB_SELECTION& aSelection
     {
         if( item->Type() == PCB_FOOTPRINT_T )
             fpOnBoard.push_back( static_cast<FOOTPRINT*>( item ) );
+
+        if( item->Type() == PCB_GROUP_T )
+        {
+            PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+
+            group->RunOnDescendants(
+                    [&]( BOARD_ITEM* aGroupItem )
+                    {
+                        if( aGroupItem->Type() == PCB_FOOTPRINT_T )
+                            fpOnBoard.push_back( static_cast<FOOTPRINT*>( aGroupItem ) );
+                    } );
+        }
     }
 
     for( FOOTPRINT* fp : fpOnBoard )
@@ -97,6 +110,18 @@ int BOARD_REANNOTATE_TOOL::ReannotateDuplicates( const PCB_SELECTION& aSelection
     {
         if( item->Type() == PCB_FOOTPRINT_T )
             fpInSelection.push_back( static_cast<FOOTPRINT*>( item ) );
+
+        if( item->Type() == PCB_GROUP_T )
+        {
+            PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+
+            group->RunOnDescendants(
+                    [&]( BOARD_ITEM* aGroupItem )
+                    {
+                        if( aGroupItem->Type() == PCB_FOOTPRINT_T )
+                            fpInSelection.push_back( static_cast<FOOTPRINT*>( aGroupItem ) );
+                    } );
+        }
     }
 
     std::sort( fpInSelection.begin(), fpInSelection.end(),
