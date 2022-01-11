@@ -30,6 +30,7 @@
 
 DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHAPE* aShape ) :
     DIALOG_SHAPE_PROPERTIES_BASE( aParent ),
+    m_frame( aParent ),
     m_shape( aShape ),
     m_lineWidth( aParent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits, true )
 {
@@ -87,6 +88,9 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
         return false;
+
+    if( !m_shape->IsNew() )
+        m_frame->SaveCopyInUndoList( m_frame->GetScreen(), m_shape, UNDO_REDO::CHANGED, false );
 
     STROKE_PARAMS stroke = m_shape->GetStroke();
 

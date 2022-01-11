@@ -43,6 +43,8 @@ public:
         return wxT( "SCH_SHAPE" );
     }
 
+    void SwapData( SCH_ITEM* aItem ) override;
+
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override
     {
         return hitTest( aPosition, aAccuracy );

@@ -48,6 +48,15 @@ EDA_ITEM* SCH_SHAPE::Clone() const
 }
 
 
+void SCH_SHAPE::SwapData( SCH_ITEM* aItem )
+{
+    SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
+
+    EDA_SHAPE::SwapShape( shape );
+    std::swap( m_layer, shape->m_layer );
+}
+
+
 void SCH_SHAPE::SetStroke( const STROKE_PARAMS& aStroke )
 {
     m_stroke = aStroke;
