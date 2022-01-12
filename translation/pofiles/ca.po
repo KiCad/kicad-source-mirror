@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-01-12 00:42+0000\n"
+"PO-Revision-Date: 2022-01-13 14:56+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v6/ca/>\n"
 "Language: ca\n"
@@ -7234,15 +7234,17 @@ msgid "View the selected footprint in the footprint viewer"
 msgstr "Mostra l'empremta seleccionada al visor d'empremtes"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
-#, fuzzy
 msgid "Manage Footprint Association Files"
-msgstr "Desa el fitxer de l'associació de l'empremta"
+msgstr "Administra els fitxers d'associació d'empremtes"
 
 #: cvpcb/tools/cvpcb_actions.cpp:61
 msgid ""
 "Configure footprint association file (.equ) list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
+"Configura el fitxer d'associació d'empremtes (.equ). Aquests fitxers "
+"s'utilitzen per assignar automàticament el nom de l'empremta des del valor "
+"del component."
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
 msgid "Save to Schematic"
@@ -7251,26 +7253,23 @@ msgstr "Desa a l'esquemàtic"
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr ""
+"Desa l'associació d'empremta al camp d'empremtes del component de l'esquema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:91
-#, fuzzy
 msgid "Select next unassigned symbol"
-msgstr "Selecciona el següent component sense enllaçar"
+msgstr "Selecciona el següent símbol sense assignar"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
-#, fuzzy
 msgid "Select next symbol with no footprint assignment"
-msgstr "Elimina totes les associacions d'empremtes"
+msgstr "Selecciona el següent símbol sense empremta assignada"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
-#, fuzzy
 msgid "Select previous unassigned symbol"
-msgstr "Selecciona l'anterior component sense enllaçar"
+msgstr "Selecciona el símbol precedent sense assignar"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
-#, fuzzy
 msgid "Select previous symbol with no footprint assignment"
-msgstr "Elimina totes les associacions d'empremtes"
+msgstr "Selecciona el símbol precedent sense empremta assignada"
 
 #: cvpcb/tools/cvpcb_actions.cpp:108
 msgid "Assign footprint"
@@ -7282,9 +7281,8 @@ msgid "Assign footprint to selected symbols"
 msgstr "No s'ha especificat cap empremta"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
-#, fuzzy
 msgid "Automatically assign footprints"
-msgstr "Afegeix automàticament l'empremta"
+msgstr "Assigna empremtes automàticament"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 #, fuzzy
@@ -7390,6 +7388,7 @@ msgstr "Element sense anotar: %s%s\n"
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr ""
+"Error: el símbol %s%s%s (unitat %d) sobrepassa les unitats definides (%d)\n"
 
 #: eeschema/component_references_lister.cpp:670
 #: eeschema/component_references_lister.cpp:698
@@ -12085,9 +12084,8 @@ msgid "Default text size:"
 msgstr "Mida del text per defecte:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Text offset ratio:"
-msgstr "Posició del text X"
+msgstr "Rati de desplaçament del text:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 msgid "Percentage of the text size to offset text above or below wire or bus"
@@ -13220,7 +13218,7 @@ msgstr "Desa el fitxer de l'associació de l'empremta"
 #: pcbnew/dialogs/dialog_export_svg.cpp:96
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:126
 msgid "Export"
-msgstr "Exporta"
+msgstr "Exporta+"
 
 #: eeschema/menubar.cpp:117
 #, fuzzy
@@ -32119,19 +32117,19 @@ msgid "Pad %s of %s on %s"
 msgstr "Pad %s en %s de %s"
 
 #: pcbnew/pad.cpp:1179 pcbnew/pad.cpp:1185 pcbnew/pad.cpp:1202
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s of %s"
-msgstr "A través de forat"
+msgstr "Pad de forat passant %s de %s"
 
 #: pcbnew/pad.cpp:1194
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "Pad %s en %s de %s"
+msgstr "Pad %s %s de %s sobre %s"
 
 #: pcbnew/pad.cpp:1208
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "A través de forat"
+msgstr "Pad de forat passant %s %s de %s"
 
 #: pcbnew/pad.cpp:1643
 #, fuzzy
@@ -32311,9 +32309,9 @@ msgid "Missing argument to '%s'"
 msgstr ""
 
 #: pcbnew/pcb_expr_evaluator.cpp:130
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized layer '%s'"
-msgstr "Capa final:"
+msgstr "Capa no reconeguda '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:497
 #, fuzzy
@@ -32335,14 +32333,14 @@ msgid "must be mm, in, or mil"
 msgstr ""
 
 #: pcbnew/pcb_group.cpp:317
-#, fuzzy, c-format
+#, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "Símbol d'alimentació"
+msgstr "Grup sense nom, %zu membres"
 
 #: pcbnew/pcb_group.cpp:321
-#, fuzzy, c-format
+#, c-format
 msgid "Group '%s', %zu members"
-msgstr "Símbol d'alimentació"
+msgstr "Grup '%s', %zu membres"
 
 #: pcbnew/pcb_group.cpp:335
 #, fuzzy
@@ -32364,9 +32362,9 @@ msgid "Violation"
 msgstr "Simulació"
 
 #: pcbnew/pcb_marker.cpp:142
-#, fuzzy, c-format
+#, c-format
 msgid "Marker (%s)"
-msgstr "Marcador @(%d,%d)"
+msgstr "Marcador (%s)"
 
 #: pcbnew/pcb_shape.cpp:152
 msgid "Drawing"
@@ -32387,14 +32385,14 @@ msgid "PCB Text '%s' on %s"
 msgstr "Text PCB «%s» en %s"
 
 #: pcbnew/pcb_track.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "Blind/Buried Via %s on %s"
-msgstr "Via cega o enterrada %s, xarxa[%s] (%d) en les capes %s/%s"
+msgstr "Via cega/enterrada %s sobre %s"
 
 #: pcbnew/pcb_track.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Micro Via %s on %s"
-msgstr "Microvia %s, Xarxa [%s] (%d) en les capes %s/%s"
+msgstr "Micro Via %s sobre %s"
 
 #: pcbnew/pcb_track.cpp:105
 #, fuzzy, c-format
@@ -32444,14 +32442,14 @@ msgid "NetCode"
 msgstr "Codi de xarxa"
 
 #: pcbnew/pcb_track.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr "Pista de %s, xarxa [%s] (%d) en la capa %s, longitud: %s"
+msgstr "Pista (arc) %s sobre %s, longitud %s"
 
 #: pcbnew/pcb_track.cpp:891
-#, fuzzy, c-format
+#, c-format
 msgid "Track %s on %s, length %s"
-msgstr "Pista de %s, xarxa [%s] (%d) en la capa %s, longitud: %s"
+msgstr "Pista %s sobre (%s), longitud %s"
 
 #: pcbnew/pcb_track.cpp:1119 pcbnew/pcb_track.cpp:1136
 #, fuzzy
@@ -32545,14 +32543,14 @@ msgid "'%s' was not fully parsed."
 msgstr "No s'ha llegit totalment el fitxer <%s>"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'."
-msgstr "Fitxer no trobat"
+msgstr "No s'ha trobat el fitxer: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:935
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate netclass name '%s'."
-msgstr "Duplica la marca de temps (%s) per a %s%d i %s%d"
+msgstr "Nom de classe de xarxa '%s' duplicat."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1075
 #: pcbnew/plugins/altium/altium_pcb.cpp:1161
@@ -32576,9 +32574,9 @@ msgid "No 3D-models will be imported."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1450
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'. 3D-model not imported."
-msgstr "Fitxer no trobat"
+msgstr "No s'ha trobat el fitxer: '%s'. No s'ha importat el model 3D."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1486
 #, fuzzy
