@@ -1326,7 +1326,12 @@ void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
         STROKE_PARAMS::Stroke( &line, lineStyle, width, &m_schSettings,
                                [&]( const VECTOR2I& a, const VECTOR2I& b )
                                {
-                                   m_gal->DrawLine( a, b );
+                                    // DrawLine has problem with 0 length lines
+                                    // so draw a line with a minimal length
+                                    if( a == b )
+                                        m_gal->DrawLine( a+1, b );
+                                    else
+                                        m_gal->DrawLine( a, b );
                                } );
     }
 }
@@ -1429,7 +1434,12 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
                 STROKE_PARAMS::Stroke( shape, lineStyle, lineWidth, &m_schSettings,
                                        [&]( const VECTOR2I& a, const VECTOR2I& b )
                                        {
-                                           m_gal->DrawLine( a, b );
+                                            // DrawLine has problem with 0 length lines
+                                            // so draw a line with a minimal length
+                                            if( a == b )
+                                                m_gal->DrawLine( a+1, b );
+                                            else
+                                                m_gal->DrawLine( a, b );
                                        } );
             }
 
