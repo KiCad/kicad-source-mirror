@@ -1778,6 +1778,19 @@ LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& a
     rectangle->SetPosition( wxPoint( rect.x1.ToSchUnits(), rect.y1.ToSchUnits() ) );
     rectangle->SetEnd( wxPoint( rect.x2.ToSchUnits(), rect.y2.ToSchUnits() ) );
 
+    if( rect.rot )
+    {
+        wxPoint pos( rectangle->GetPosition() );
+        wxPoint end( rectangle->GetEnd() );
+        wxPoint center( rectangle->GetCenter() );
+
+        RotatePoint( &pos, center, rect.rot->degrees * 10 );
+        RotatePoint( &end,  center, rect.rot->degrees * 10 );
+
+        rectangle->SetPosition( pos );
+        rectangle->SetEnd( end );
+    }
+
     rectangle->SetUnit( aGateNumber );
 
     // Eagle rectangles are filled by definition.
