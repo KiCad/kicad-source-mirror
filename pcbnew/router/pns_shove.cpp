@@ -1012,8 +1012,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
             const VIA& currentVia = currentLine->Via();
             int        viaClearance = getClearance( &currentVia, aObstacleVia );
 
-            viaCollision = aObstacleVia->Shape()->Collide( currentVia.Shape(), viaClearance,
-                                                           &mtvVia );
+            viaCollision = aObstacleVia->PushoutForce( m_currentNode, &currentVia, mtvVia );
         }
     }
     else if( aCurrent->OfKind( ITEM::SOLID_T ) )
@@ -1024,7 +1023,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 
     // fixme: we may have a sign issue in Collide(CIRCLE, LINE_CHAIN)
     if( viaCollision )
-        mtv = mtvVia;
+        mtv = -mtvVia;
     else if ( lineCollision )
         mtv = -mtvLine;
     else
