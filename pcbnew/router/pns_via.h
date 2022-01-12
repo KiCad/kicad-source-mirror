@@ -130,6 +130,8 @@ public:
     bool PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForce,
                        bool aSolidsOnly = true, int aMaxIterations = 10 );
 
+    bool PushoutForce( NODE* aNode, const ITEM* aOther, VECTOR2I& aForce );
+
     const SHAPE* Shape() const override { return &m_shape; }
 
     const SHAPE_CIRCLE* Hole() const override { return &m_hole; }

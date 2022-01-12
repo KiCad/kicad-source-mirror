@@ -29,12 +29,40 @@
 
 namespace PNS {
 
+bool VIA::PushoutForce( NODE* aNode, const ITEM* aOther, VECTOR2I& aForce )
+{
+    int      clearance = aNode->GetClearance( this, aOther );
+    int      holeClearance = aNode->GetHoleClearance( this, aOther );
+    int      hole2holeClearance = aNode->GetHoleToHoleClearance( this, aOther );
+    VECTOR2I f[4], force;
+
+    if( aOther->Hole() )
+    {
+        aOther->Hole()->Collide( Shape(), holeClearance, &f[0] );
+        aOther->Hole()->Collide( Hole(), hole2holeClearance, &f[1] );
+    }
+
+    aOther->Shape()->Collide( Shape(), clearance, &f[2] );
+    aOther->Shape()->Collide( Hole(), holeClearance, &f[3] );
+
+    for( int i = 0; i < 4; i++ )
+    {
+        if( f[i].SquaredEuclideanNorm() > force.SquaredEuclideanNorm() )
+            force = f[i];
+    }
+
+    aForce = force;
+
+    return ( force != VECTOR2I( 0, 0 ) );
+}
+
 bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForce,
                             bool aSolidsOnly, int aMaxIterations )
 {
     int iter = 0;
     VIA mv( *this );
-    VECTOR2I force, totalForce;
+    VECTOR2I totalForce;
+
 
     while( iter < aMaxIterations )
     {
@@ -44,8 +72,6 @@ bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForc
         if( !obs )
             break;
 
-        int clearance = aNode->GetClearance( obs->m_item, &mv );
-
         if( iter > aMaxIterations / 2 )
         {
             VECTOR2I l = aDirection.Resize( m_diameter / 2 );
@@ -53,7 +79,10 @@ bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForc
             mv.SetPos( mv.Pos() + l );
         }
 
-        if( obs->m_item->Shape()->Collide( mv.Shape(), clearance, &force ) )
+        VECTOR2I force;
+        bool collFound = PushoutForce( aNode, obs->m_item, force );
+
+        if( collFound )
         {
             totalForce += force;
             mv.SetPos( mv.Pos() + force );
