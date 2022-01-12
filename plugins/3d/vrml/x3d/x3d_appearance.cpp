@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -232,9 +232,14 @@ SGNODE* X3DAPP::TranslateToSG( SGNODE* aParent )
 {
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    wxCHECK_MSG( aParent && ( ptype == S3D::SGTYPE_SHAPE ), nullptr,
-                 wxString::Format( wxT( "Appearance does not have a Shape parent (parent ID: %d)" ),
-                                   ptype ) );
+    if( nullptr != aParent && ptype != S3D::SGTYPE_SHAPE )
+    {
+        wxLogTrace( traceVrmlPlugin,
+                    wxT( " * [BUG] Appearance does not have a Shape parent (parent ID: %d)" ),
+                    ptype );
+
+        return nullptr;
+    }
 
     wxLogTrace( traceVrmlPlugin,
                 wxT( " * [INFO] Translating Appearance node with %zu children, %zu"

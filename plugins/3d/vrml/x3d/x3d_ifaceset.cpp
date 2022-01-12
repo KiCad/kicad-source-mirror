@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -227,10 +227,14 @@ SGNODE* X3DIFACESET::TranslateToSG( SGNODE* aParent )
 {
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
 
-    wxCHECK_MSG( aParent && ( ptype == S3D::SGTYPE_SHAPE ), nullptr,
-                 wxString::Format( wxT( "IndexedFaceSet does not have a valid Shape parent "
-                                        "(parent ID: %d)" ),
-                                   ptype ) );
+    if( nullptr != aParent && ptype != S3D::SGTYPE_SHAPE )
+    {
+        wxLogTrace( traceVrmlPlugin,
+                    wxT( " * [BUG] IndexedFaceSet does not have a valid Shape parent "
+                         "(parent ID: %d)" ), ptype );
+
+        return nullptr;
+    }
 
     wxLogTrace( traceVrmlPlugin,
                 wxT( " * [INFO] Translating IndexedFaceSet with %zu children, %zu references, "
