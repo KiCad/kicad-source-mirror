@@ -1679,13 +1679,10 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
     if( drawingShadows && !eeconfig()->m_Selection.draw_selected_children )
         return;
 
-    bool underline = false;
-
     if( aField->IsHypertext() && ( aField->GetFlags() & IS_ROLLOVER ) > 0
             && !drawingShadows && !aField->IsMoving() )
     {
         color = PUREBLUE;
-        underline = true;
     }
 
     // Calculate the text orientation according to the parent orientation.

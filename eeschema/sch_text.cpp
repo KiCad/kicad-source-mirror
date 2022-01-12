@@ -1270,6 +1270,9 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter ) const
 
     if( s_poly.size() )
         aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
+
+    for( const SCH_FIELD& field : m_fields )
+        field.Plot( aPlotter );
 }
 
 
