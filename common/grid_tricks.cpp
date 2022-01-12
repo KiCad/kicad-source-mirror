@@ -300,8 +300,11 @@ void GRID_TRICKS::showPopupMenu( wxMenu& menu )
 
     if( wxTheClipboard->Open() )
     {
-        if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
+        if( wxTheClipboard->IsSupported( wxDF_TEXT )
+            || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
+        {
             menu.Enable( GRIDTRICKS_ID_PASTE, true );
+        }
 
         wxTheClipboard->Close();
     }
@@ -367,7 +370,8 @@ void GRID_TRICKS::onCharHook( wxKeyEvent& ev )
     {
         if( m_grid->IsCellEditControlShown() && wxTheClipboard->Open() )
         {
-            if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
+            if( wxTheClipboard->IsSupported( wxDF_TEXT )
+                || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
             {
                 wxTextDataObject data;
                 wxTheClipboard->GetData( data );
@@ -567,7 +571,8 @@ void GRID_TRICKS::paste_clipboard()
 
     if( wxTheClipboard->Open() )
     {
-        if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
+        if( wxTheClipboard->IsSupported( wxDF_TEXT )
+            || wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) )
         {
             wxTextDataObject    data;
 

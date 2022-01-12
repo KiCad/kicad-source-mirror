@@ -845,8 +845,12 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
         auto clipboard = wxTheClipboard;
         wxClipboardLocker clipboardLock( clipboard );
 
-        if( !clipboardLock || ! clipboard->IsSupported( wxDF_TEXT ) )
+        if( !clipboardLock
+            || !( clipboard->IsSupported( wxDF_TEXT )
+                  || clipboard->IsSupported( wxDF_UNICODETEXT ) ) )
+        {
             return;
+        }
 
         wxTextDataObject data;
         clipboard->GetData( data );
