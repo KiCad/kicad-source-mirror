@@ -291,7 +291,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
     // clipboard is closed seems to cause an ASAN error (heap-buffer-overflow)
     // since it uses the cached version of the clipboard data and not the system
     // clipboard data.
-    if( clipboard->IsSupported( wxDF_TEXT ) )
+    if( clipboard->IsSupported( wxDF_TEXT ) || clipboard->IsSupported( wxDF_UNICODETEXT ) )
     {
         wxTextDataObject data;
         clipboard->GetData( data );
@@ -314,7 +314,7 @@ BOARD_ITEM* CLIPBOARD_IO::Parse()
     if( !clipboardLock )
         return nullptr;
 
-    if( clipboard->IsSupported( wxDF_TEXT ) )
+    if( clipboard->IsSupported( wxDF_TEXT ) || clipboard->IsSupported( wxDF_UNICODETEXT ) )
     {
         wxTextDataObject data;
         clipboard->GetData( data );
@@ -370,7 +370,7 @@ void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
     // been processed by the system clipboard.  This appears to be needed for
     // extremely large clipboard copies on asynchronous linux clipboard managers
     // such as KDE's Klipper
-    if( clipboard->IsSupported( wxDF_TEXT ) )
+    if( clipboard->IsSupported( wxDF_TEXT ) || clipboard->IsSupported( wxDF_UNICODETEXT ) )
     {
         wxTextDataObject data;
         clipboard->GetData( data );
@@ -393,7 +393,7 @@ BOARD* CLIPBOARD_IO::Load( const wxString& aFileName, BOARD* aAppendToMe,
     if( !clipboardLock )
         return nullptr;
 
-    if( clipboard->IsSupported( wxDF_TEXT ) )
+    if( clipboard->IsSupported( wxDF_TEXT ) || clipboard->IsSupported( wxDF_UNICODETEXT ) )
     {
         wxTextDataObject data;
         clipboard->GetData( data );
