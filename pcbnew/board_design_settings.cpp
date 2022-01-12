@@ -924,6 +924,9 @@ int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue() const
 
         m_DRCEngine->QueryWorstConstraint( EDGE_CLEARANCE_CONSTRAINT, constraint );
         biggest = std::max( biggest, constraint.Value().Min() );
+
+        m_DRCEngine->QueryWorstConstraint( HOLE_TO_HOLE_CONSTRAINT, constraint );
+        biggest = std::max( biggest, constraint.Value().Min() );
     }
 
     return biggest;
