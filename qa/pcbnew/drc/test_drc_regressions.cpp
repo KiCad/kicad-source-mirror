@@ -48,14 +48,17 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
 {
     // These documents at one time flagged DRC errors that they shouldn't have.
 
-    std::vector<wxString> tests = { "issue4139",
-                                    "issue4774",
-                                    "issue5978",
-                                    "issue5990",
-                                    "issue6443",
-                                    "issue7567",
-                                    "issue7975",
-                                    "issue8407" };
+    std::vector<wxString> tests = { "issue4139",    // DRC fails wrongly with minimally-spaced pads at 45 degree
+                                    "issue4774",    // Shape collisions missing SH_POLY_SET - Breaks DRC
+                                    "issue5978",    // Hole clearance violation with non-copper pad
+                                    "issue5990",    // DRC flags a board edge clearance violation
+                                                    // although the clearance is respected
+                                    "issue6443",    // Wrong DRC and rendering of THT pads with
+                                                    // selective inner copper layers
+                                    "issue7567",    // DRC constraint to disallow holes gets SMD pads also
+                                    "issue7975",    // Differential pair gap out of range fault by DRC
+                                    "issue8407"     // PCBNEW: Arc for diff pair has clearance DRC error
+                                  };
 
     for( const wxString& relPath : tests )
     {
