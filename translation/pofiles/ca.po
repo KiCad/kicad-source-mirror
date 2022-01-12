@@ -1,10 +1,10 @@
-# Arnau Llovet Vidal <arnaullv@gmail.com>, 2021.
+# Arnau Llovet Vidal <arnaullv@gmail.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2021-12-29 19:50+0000\n"
+"PO-Revision-Date: 2022-01-13 14:55+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
 "master-source/ca/>\n"
@@ -7170,6 +7170,10 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
+"Algunes de les biblioteques assignades són entrades obsoletes que no "
+"disposen de nom. Vols que KiCad intenti convertir-les al nou format requerit "
+"LIB_ID? (Si la teva resposta es negativa, aquestes assignacions seran "
+"eliminades i hauràs de reassignar aquestes empremtes manualment.)"
 
 #: cvpcb/readwrite_dlgs.cpp:148
 #, c-format
@@ -7199,6 +7203,9 @@ msgid ""
 "assignments:\n"
 "\n"
 msgstr ""
+"S'han produït els següents errors al intentar convertir les assignacions "
+"d'empremtes:\n"
+"\n"
 
 #: cvpcb/readwrite_dlgs.cpp:181
 msgid ""
@@ -7206,6 +7213,10 @@ msgid ""
 "You will need to reassign them manually if you want them to be updated "
 "correctly the next time you import the netlist in Pcbnew."
 msgstr ""
+"\n"
+"Es necessita la teva reassignació manual per a que puguin ser actualitzades "
+"correctament la propera vegada que la llista de xarxes sigui importada des "
+"de Pcbnew."
 
 #: cvpcb/readwrite_dlgs.cpp:299
 msgid "Schematic saved"
@@ -7220,20 +7231,21 @@ msgid "View selected footprint"
 msgstr "Visualitza l'empremta seleccionada"
 
 #: cvpcb/tools/cvpcb_actions.cpp:53
-#, fuzzy
 msgid "View the selected footprint in the footprint viewer"
-msgstr "Obre l'empremta seleccionada a l'editor d'empremtes"
+msgstr "Mostra l'empremta seleccionada al visor d'empremtes"
 
 #: cvpcb/tools/cvpcb_actions.cpp:60
-#, fuzzy
 msgid "Manage Footprint Association Files"
-msgstr "Desa el fitxer de l'associació de l'empremta"
+msgstr "Administra els fitxers d'associació d'empremtes"
 
 #: cvpcb/tools/cvpcb_actions.cpp:61
 msgid ""
 "Configure footprint association file (.equ) list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
+"Configura el fitxer d'associació d'empremtes (.equ). Aquests fitxers "
+"s'utilitzen per assignar automàticament el nom de l'empremta des del valor "
+"del component."
 
 #: cvpcb/tools/cvpcb_actions.cpp:67
 msgid "Save to Schematic"
@@ -7242,26 +7254,23 @@ msgstr "Desa a l'esquemàtic"
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr ""
+"Desa l'associació d'empremta al camp d'empremtes del component de l'esquema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:91
-#, fuzzy
 msgid "Select next unassigned symbol"
-msgstr "Selecciona el següent component sense enllaçar"
+msgstr "Selecciona el següent símbol sense assignar"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
-#, fuzzy
 msgid "Select next symbol with no footprint assignment"
-msgstr "Elimina totes les associacions d'empremtes"
+msgstr "Selecciona el següent símbol sense empremta assignada"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
-#, fuzzy
 msgid "Select previous unassigned symbol"
-msgstr "Selecciona l'anterior component sense enllaçar"
+msgstr "Selecciona el símbol precedent sense assignar"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
-#, fuzzy
 msgid "Select previous symbol with no footprint assignment"
-msgstr "Elimina totes les associacions d'empremtes"
+msgstr "Selecciona el símbol precedent sense empremta assignada"
 
 #: cvpcb/tools/cvpcb_actions.cpp:108
 msgid "Assign footprint"
@@ -7272,9 +7281,8 @@ msgid "Assign footprint to selected symbols"
 msgstr "Assigna l'empremta als símbols seleccionats"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
-#, fuzzy
 msgid "Automatically assign footprints"
-msgstr "Afegeix automàticament l'empremta"
+msgstr "Assigna empremtes automàticament"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 #, fuzzy
@@ -7378,6 +7386,7 @@ msgstr "Element sense anotar: %s%s\n"
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)\n"
 msgstr ""
+"Error: el símbol %s%s%s (unitat %d) sobrepassa les unitats definides (%d)\n"
 
 #: eeschema/component_references_lister.cpp:670
 #: eeschema/component_references_lister.cpp:698
@@ -10356,9 +10365,8 @@ msgid "Sheet Pin Properties"
 msgstr "Propietats del pin del full"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:249
-#, fuzzy
 msgid "A sheet must have a valid file name."
-msgstr "Valor Netclass"
+msgstr "Una fulla ha tenir un nom de fitxer vàlid."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:259
 msgid "Sheet file must have a '.kicad_sch' extension."
@@ -10463,9 +10471,8 @@ msgid "Failed to save schematic '%s'"
 msgstr "No s'ha pogut desar «%s»"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:664
-#, fuzzy
 msgid "A sheet must have a name."
-msgstr "Valor Netclass"
+msgstr "Una fulla ha de tenir un nom."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:672
 msgid "A sheet must have a file specified."
@@ -10490,14 +10497,12 @@ msgid "Border width:"
 msgstr "Amplada de la vora de la placa:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:131
-#, fuzzy
 msgid "Border color:"
-msgstr "Color del coure"
+msgstr "Color de la vora:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:144
-#, fuzzy
 msgid "Background fill:"
-msgstr "Fons"
+msgstr "Ompliment del fons:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:165
 #, fuzzy
@@ -10505,9 +10510,8 @@ msgid "Page number:"
 msgstr "Número del pad:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:184
-#, fuzzy
 msgid "Hierarchical path:"
-msgstr "Etiqueta jeràrquica"
+msgstr "Camí jeràrquic:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:79
 #, fuzzy
@@ -10515,9 +10519,8 @@ msgid "Sheet Properties"
 msgstr "Propietats del pin del full"
 
 #: eeschema/dialogs/dialog_signal_list_base.cpp:27
-#, fuzzy
 msgid "Add signal by name:"
-msgstr "Afegeix senyals al ploteig"
+msgstr "Afegeix senyal pel nom:"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:113
 msgid "You need to select DC source"
@@ -10592,14 +10595,12 @@ msgid "Frequency scale"
 msgstr "Escala de freqüència"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:43
-#, fuzzy
 msgid "Number of points:"
-msgstr "Nombre de punts"
+msgstr "Nombre de punts:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:53
-#, fuzzy
 msgid "Start frequency:"
-msgstr "Freqüència inicial [Hz]"
+msgstr "Freqüència inicial:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:60
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:71
@@ -10611,9 +10612,8 @@ msgid "Hertz"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:64
-#, fuzzy
 msgid "Stop frequency:"
-msgstr "Freqüència d'acabament [Hz]"
+msgstr "Freqüència d'acabament:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:85
 msgid "AC"
@@ -10652,9 +10652,8 @@ msgid "TEMP"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:115
-#, fuzzy
 msgid "Source:"
-msgstr "Font"
+msgstr "Font:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:119
 msgid "Sweep type:"
@@ -10666,19 +10665,16 @@ msgid "Source 1"
 msgstr "Font"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:139
-#, fuzzy
 msgid "Starting value:"
-msgstr "Voltatge inicial [V]"
+msgstr "Valor inicial:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:159
-#, fuzzy
 msgid "Final value:"
-msgstr "Valor inicial [V/A]"
+msgstr "Valor final:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:179
-#, fuzzy
 msgid "Increment step:"
-msgstr "Increment del pas [V]"
+msgstr "Pas incremental:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:199
 #, fuzzy
@@ -10904,9 +10900,8 @@ msgstr "Selecciona la biblioteca"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1092
 #: eeschema/dialogs/dialog_spice_model_base.cpp:885
-#, fuzzy
 msgid "Range:"
-msgstr "Canvia"
+msgstr "Rang:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1093
 #: eeschema/dialogs/dialog_spice_model.cpp:1105
@@ -10918,9 +10913,8 @@ msgid "Offset:"
 msgstr "Desplaçament:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1098
-#, fuzzy
 msgid "Standard deviation:"
-msgstr "Tipus estàndard"
+msgstr "Desviació estàndard:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1099
 #: eeschema/dialogs/dialog_spice_model.cpp:1104
@@ -10940,9 +10934,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:850
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
-#, fuzzy
 msgid "Type:"
-msgstr "Tipus"
+msgstr "Tipus:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:34
 #: eeschema/dialogs/dialog_spice_model_base.cpp:35
@@ -10988,15 +10981,13 @@ msgid "Select file..."
 msgstr "Selecciona el fitxer..."
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:226
-#, fuzzy
 msgid "Model:"
-msgstr "Model"
+msgstr "Model:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:107
-#, fuzzy
 msgid "Note:"
-msgstr "Notes"
+msgstr "Nota:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:244
 msgid "note"
@@ -11033,14 +11024,12 @@ msgid "Volts/Amps"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:333
-#, fuzzy
 msgid "AC magnitude:"
-msgstr "Magnitud AC [V/A]"
+msgstr "Magnitud CA:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:346
-#, fuzzy
 msgid "AC phase:"
-msgstr "Fase AC [rad]"
+msgstr "Fase CA:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:355
 msgid "radians"
@@ -11053,49 +11042,41 @@ msgstr "Anàlisi transitori"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:376
 #: eeschema/dialogs/dialog_spice_model_base.cpp:536
-#, fuzzy
 msgid "Initial value:"
-msgstr "Valor inicial [V/A]"
+msgstr "Valor inicial:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:389
 #: eeschema/dialogs/dialog_spice_model_base.cpp:549
-#, fuzzy
 msgid "Pulsed value:"
-msgstr "Valor d'impuls [V/A]"
+msgstr "Valor del pols:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:400
-#, fuzzy
 msgid "Delay time:"
-msgstr "Temps de retard [s]"
+msgstr "Temps de retard:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:411
-#, fuzzy
 msgid "Rise time:"
-msgstr "Temps de pujada [s]"
+msgstr "Temps de pujada:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:422
-#, fuzzy
 msgid "Fall time:"
-msgstr "Temps de baixada [s]"
+msgstr "Temps de baixada:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:433
-#, fuzzy
 msgid "Pulse width:"
-msgstr "Amplada del pols [s]"
+msgstr "Amplada del pols:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:444
-#, fuzzy
 msgid "Period:"
-msgstr "Període [s]"
+msgstr "Període:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:459
 msgid "Pulse"
 msgstr "Pols"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:467
-#, fuzzy
 msgid "DC offset:"
-msgstr "Desplaçament DC [V/A]"
+msgstr "Desplaçament CC:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:480
 #: eeschema/dialogs/dialog_spice_model_base.cpp:688
@@ -11119,9 +11100,8 @@ msgid "Delay:"
 msgstr "Mostra:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:513
-#, fuzzy
 msgid "Damping factor:"
-msgstr "Factor d'esmorteïment [1/s]"
+msgstr "Factor d'esmorteïment:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:520
 msgid "1/seconds"
@@ -11132,24 +11112,20 @@ msgid "Sinusoidal"
 msgstr "Sinusoïdal"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:560
-#, fuzzy
 msgid "Rise delay time:"
-msgstr "Temps de retard de pujada [s]"
+msgstr "Temps de retard de pujada:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:571
-#, fuzzy
 msgid "Rise time constant:"
-msgstr "Constant de temps de pujada [s]"
+msgstr "Constant de temps de pujada:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:582
-#, fuzzy
 msgid "Fall delay time:"
-msgstr "Temps de retard de baixada [s]"
+msgstr "Temps de retard de baixada:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:593
-#, fuzzy
 msgid "Fall time constant:"
-msgstr "Constant de temps de baixada [s]"
+msgstr "Constant de temps de baixada:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:608
 #: eeschema/dialogs/dialog_spice_model_base.cpp:854
@@ -11161,9 +11137,8 @@ msgid "Piece-wise linear"
 msgstr "Lineal per trams"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:625
-#, fuzzy
 msgid "Time:"
-msgstr "Temps [s]"
+msgstr "Temps:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:634
 msgid "second"
@@ -11175,9 +11150,8 @@ msgstr "Lineal per trams"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:699
 #: eeschema/dialogs/dialog_spice_model_base.cpp:801
-#, fuzzy
 msgid "Carrier frequency:"
-msgstr "Freqüència inicial [Hz]"
+msgstr "Freqüència de la portadora:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:710
 #, fuzzy
@@ -11191,15 +11165,13 @@ msgid "-"
 msgstr "-A"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:721
-#, fuzzy
 msgid "Signal frequency:"
-msgstr "Freqüència inicial [Hz]"
+msgstr "Freqüència de la senyal:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:732
 #: eeschema/dialogs/dialog_spice_model_base.cpp:823
-#, fuzzy
 msgid "Carrier phase:"
-msgstr "Fase AC [rad]"
+msgstr "Fase de la portadora:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:739
 #: eeschema/dialogs/dialog_spice_model_base.cpp:750
@@ -11208,23 +11180,20 @@ msgid "degrees"
 msgstr "graus"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:743
-#, fuzzy
 msgid "Signal phase:"
-msgstr "Senyals"
+msgstr "Fase de la senyal:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:758
 msgid "FM"
 msgstr "FM"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:790
-#, fuzzy
 msgid "Modulating frequency:"
-msgstr "Freqüència inicial [Hz]"
+msgstr "Freqüència de modulació:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:812
-#, fuzzy
 msgid "Signal delay:"
-msgstr "Senyal"
+msgstr "Retard de la senyal:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:838
 msgid "AM"
@@ -11248,14 +11217,12 @@ msgid "Poisson"
 msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:863
-#, fuzzy
 msgid "Individual value duration:"
-msgstr "Valor inicial [V/A]"
+msgstr "Duració individual del valor:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:874
-#, fuzzy
 msgid "Time delay:"
-msgstr "Temps de retard de pujada [s]"
+msgstr "Temps de retard:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:909
 msgid "Random"
@@ -11299,9 +11266,8 @@ msgstr "Edita el model de Spice"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:84
 #: eeschema/fields_grid_table.cpp:607
-#, fuzzy
 msgid "Select Footprint..."
-msgstr "Edita l'empremta"
+msgstr "Selecciona empremta..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:85
 #: eeschema/fields_grid_table.cpp:608
@@ -11356,9 +11322,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1000
 #: eeschema/dialogs/dialog_symbol_properties.cpp:785
-#, fuzzy, c-format
+#, c-format
 msgid "Field name '%s' already in use."
-msgstr "El fitxer «%s» ja existeix a la llista"
+msgstr "El nom del camp '%s' ja està en ús."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:31
 #, fuzzy
@@ -11370,9 +11336,8 @@ msgid "Group symbols together based on common properties"
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:53
-#, fuzzy
 msgid "Add Field..."
-msgstr "Edita el camp"
+msgstr "Afegeix camp..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:76
 #, fuzzy
@@ -11432,9 +11397,8 @@ msgid "180"
 msgstr "180"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:152
-#, fuzzy
 msgid "Mirror:"
-msgstr "Reflexió"
+msgstr "Mirall:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:156
 #, fuzzy
@@ -11488,26 +11452,22 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
-#, fuzzy
 msgid "Update Symbol from Library..."
-msgstr "Obre una empremta d'una biblioteca"
+msgstr "Actualitza el símbol des de la biblioteca..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:216
 #: eeschema/tools/ee_actions.cpp:437
-#, fuzzy
 msgid "Change Symbol..."
-msgstr "Símbol d'alimentació"
+msgstr "Canvia el Símbol..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:219
-#, fuzzy
 msgid "Edit Symbol..."
-msgstr "Símbol"
+msgstr "Edita Símbol..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:225
 #: eeschema/tools/ee_actions.cpp:557
-#, fuzzy
 msgid "Edit Library Symbol..."
-msgstr "Fitxers de biblioteques:"
+msgstr "Edita biblioteca de símbols..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:264
 msgid "Pin Number"
@@ -11525,14 +11485,12 @@ msgstr "Assignació de l'esquemàtic"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:432
-#, fuzzy
 msgid "Library link:"
-msgstr "Biblioteca"
+msgstr "Enllaç de biblioteca:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:316
-#, fuzzy
 msgid "Spice Model..."
-msgstr "Edita el model de Spice"
+msgstr "Model d'Spice..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.h:102
 #, fuzzy
@@ -11567,9 +11525,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:216
 #: eeschema/dialogs/panel_sym_lib_table.cpp:765
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found."
-msgstr "Fitxer %s no trobat"
+msgstr "No s'ha trobat la biblioteca '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:233
 #, c-format
@@ -11588,9 +11546,9 @@ msgid "No symbol %s found in symbol library table."
 msgstr "No s'ha trobat el símbol %s a la taula de biblioteques de símbols."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s mapped to symbol library '%s'."
-msgstr "La peça «%s» ja existeix a la biblioteca «%s»"
+msgstr "El símbol %s està lligat a la biblioteca de símbols '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:275
 msgid "Symbol library table mapping complete!"
@@ -11666,9 +11624,8 @@ msgid "Label Properties"
 msgstr "Propietats de l'etiqueta"
 
 #: eeschema/dialogs/dialog_text_and_label_properties.cpp:108
-#, fuzzy
 msgid "Hierarchical Sheet Pin Properties"
-msgstr "Propietats del pin del full jeràrquic."
+msgstr "Propietats del pin del full jeràrquic"
 
 #: eeschema/dialogs/dialog_text_and_label_properties.cpp:109
 #: eeschema/dialogs/dialog_text_and_label_properties_base.h:73
@@ -11683,18 +11640,16 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:26
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:73
-#, fuzzy
 msgid "Label:"
-msgstr "Etiqueta"
+msgstr "Etiqueta:"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:28
 msgid "Enter the text to be used within the schematic"
 msgstr "Introduïu el text que s'utilitzarà dins de l'esquemàtic"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:82
-#, fuzzy
 msgid "Text Size:"
-msgstr "Estableix la mida del text"
+msgstr "Mida del text:"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:111
 msgid ""
@@ -11724,9 +11679,8 @@ msgstr "Alinea al capdavall"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:123
 #: eeschema/sch_text.cpp:793
-#, fuzzy
 msgid "Justification"
-msgstr "Justificació:"
+msgstr "Justificació"
 
 #: eeschema/dialogs/dialog_text_and_label_properties_base.cpp:127
 #, fuzzy
@@ -11735,9 +11689,8 @@ msgstr "Cursiva negreta"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:42
 #: pcbnew/dialogs/dialog_netlist.cpp:77 pcbnew/dialogs/dialog_update_pcb.cpp:49
-#, fuzzy
 msgid "Changes To Be Applied"
-msgstr "Els canvis que s'aplicaran:"
+msgstr "Canvis que s'aplicaran"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:66
 #, fuzzy
@@ -11788,9 +11741,8 @@ msgid "Update Schematic from PCB"
 msgstr "Actualitza el PCB a partir de l'esquemàtic"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:21
-#, fuzzy
 msgid "Parent symbol:"
-msgstr "Símbol d'alimentació"
+msgstr "Símbol pare:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
 #, fuzzy
@@ -11874,9 +11826,8 @@ msgid "Fill selected shapes"
 msgstr "Capgira els elements seleccionats"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:59
-#, fuzzy
 msgid "&Highlight thickness:"
-msgstr "Ressalta la xarxa"
+msgstr "Gruix del real&çat:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:70
 msgid "(highlight color can be edited in the \"Colors\" page)"
@@ -11939,14 +11890,12 @@ msgid "Defaults for New Objects"
 msgstr "Format predeterminat"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:46
-#, fuzzy
 msgid "Sheet border:"
-msgstr "Full número: %d"
+msgstr "Vora de la fulla:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:55
-#, fuzzy
 msgid "Sheet background:"
-msgstr "Fons del cos"
+msgstr "Fons de la fulla:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:73
 msgid "Clicking on a pin selects the symbol"
@@ -11993,9 +11942,8 @@ msgstr "Clarifica la selecció del menú."
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: pcbnew/dialogs/panel_edit_options_base.cpp:122
 #: pcbnew/dialogs/panel_edit_options_base.cpp:193
-#, fuzzy
 msgid "Add item(s) to selection."
-msgstr "Zoom a la selecció"
+msgstr "Afegeix element(s) a la selecció."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:114
 #: pcbnew/dialogs/panel_edit_options_base.cpp:127
@@ -12052,15 +12000,13 @@ msgid "&Horizontal pitch:"
 msgstr "Espaiament horitzontal:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:232
-#, fuzzy
 msgid "&Vertical pitch:"
-msgstr "Vertical amunt"
+msgstr "Espaiat &Vertical:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:243
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:125
-#, fuzzy
 msgid "Label increment:"
-msgstr "Increment del text"
+msgstr "Increment d'etiqueta:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:260
 msgid "Dialog Preferences"
@@ -12136,9 +12082,8 @@ msgid "Default text size:"
 msgstr "Mida del text per defecte:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Text offset ratio:"
-msgstr "Posició del text X"
+msgstr "Rati de desplaçament del text:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:68
 msgid "Percentage of the text size to offset text above or below wire or bus"
@@ -13271,7 +13216,7 @@ msgstr "Desa el fitxer de l'associació de l'empremta"
 #: pcbnew/dialogs/dialog_export_svg.cpp:96
 #: pcbnew/menubar_footprint_editor.cpp:74 pcbnew/menubar_pcb_editor.cpp:126
 msgid "Export"
-msgstr "Exporta"
+msgstr "Exporta+"
 
 #: eeschema/menubar.cpp:117
 #, fuzzy
@@ -30465,7 +30410,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:325
 msgid "<unconstrained>"
-msgstr "< no restringit>"
+msgstr "<no restringit>"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:116
 msgid "(no edges found on Edge.Cuts layer)"
@@ -31012,9 +30957,9 @@ msgid "Not a footprint file."
 msgstr "No és un fitxer d'empremtes."
 
 #: pcbnew/footprint_libraries_utils.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load footprint '%s' from '%s'"
-msgstr "No s'ha pogut trobar l'origen de l'empremta a la placa principal"
+msgstr "No es pot carregar l'empremta '%s' des de '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:336
 msgid "Export Footprint"
@@ -31245,9 +31190,9 @@ msgid "Documentation"
 msgstr "Obre la documentació"
 
 #: pcbnew/generate_footprint_info.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint %s from library '%s'."
-msgstr "Error en crear la biblioteca de símbols «%s»"
+msgstr "Error al carregar l'empremta %s des de la biblioteca '%s'."
 
 #: pcbnew/generate_footprint_info.cpp:121
 msgid "doc url"
@@ -31376,9 +31321,9 @@ msgid "The current footprint has been modified.  Save changes?"
 msgstr "La placa actual ha estat modificada. Voleu desar els canvis?"
 
 #: pcbnew/io_mgr.cpp:89
-#, fuzzy, c-format
+#, c-format
 msgid "UNKNOWN (%d)"
-msgstr "DESCONEGUT"
+msgstr "DESCONEGUT (%d)"
 
 #: pcbnew/kicad_clipboard.cpp:434
 msgid "Clipboard content is not KiCad compatible"
@@ -31691,9 +31636,9 @@ msgid "Cannot add %s (no footprint assigned)."
 msgstr "No es pot afegir %s (no té empremta assignada)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "No s'ha trobat l'empremta «%s»"
+msgstr "No pot afegir-se %s (no s'ha trobat l'empremta '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:160
 #, c-format
@@ -31711,9 +31656,9 @@ msgid "Cannot update %s (no footprint assigned)."
 msgstr "No es pot actualitzar %s (no se li ha assignat empremta)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:220
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot update %s (footprint '%s' not found)."
-msgstr "No s'ha trobat l'empremta «%s»"
+msgstr "No es pot actualitzar %s (no s'ha trobat l'empremta '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:230
 #, c-format
@@ -31756,34 +31701,40 @@ msgid "Updated %s symbol association from %s to %s."
 msgstr "Pad %s en %s de %s"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s properties."
-msgstr "Edita les propietats del camp"
+msgstr "Actualitza %s propietats."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:348
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s properties."
-msgstr "Edita les propietats del camp"
+msgstr "%s propietats actualitzades."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "Sortides de &fabricació"
+msgstr ""
+"Afegeix l'atribut de fabricació 'excloure de la llista de materials' a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "Sortides de &fabricació"
+msgstr ""
+"Elimina l'atribut de fabricació 'excloure de la llista de materials' de %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "Sortides de &fabricació"
+msgstr ""
+"S'ha afegit l'atribut de fabricació 'excloure de la llista de materials' a "
+"%s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "Sortides de &fabricació"
+msgstr ""
+"S'ha eliminat l'atribut de fabricació 'excloure de la llista de materials' a "
+"%s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:456
 #, c-format
@@ -31866,14 +31817,14 @@ msgid "Copper zone '%s' has no pads connected."
 msgstr "La zona de coure (nom de la xarxa %s): la xarxa no té pads connectats."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:766
-#, fuzzy, c-format
+#, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "La zona de coure (nom de la xarxa %s): la xarxa no té pads connectats."
+msgstr "La zona de coure a la capa %s a (%s, %s) no té pads connectats."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:808
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad %s not found in %s."
-msgstr "%s pin %s no trobat"
+msgstr "No s'ha trobat %s pad %s a %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:859
 #, c-format
@@ -31980,11 +31931,11 @@ msgstr ""
 "xarxa del component del netlist."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
 msgstr ""
-"No es pot analitzar sintàcticament el nom del pin a la secció de la xarxa "
-"del component del netlist."
+"No es pot trobar el símbol %s a la secció de filtres d'empremtes de la "
+"llista de xarxes."
 
 #: pcbnew/netlist_reader/netlist.cpp:67
 #, fuzzy, c-format
@@ -32034,16 +31985,15 @@ msgstr ""
 "biblioteques d'empremtes."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d"
 msgstr ""
-"número en punt flotant no vàlid a\n"
-"fitxer: <%s>\n"
-"línia: %d\n"
-"desplaçament: %d"
+"ID de l'empremta invàlida al\n"
+"fitxer: '%s'\n"
+"línia: %d"
 
 #: pcbnew/pad.cpp:721 pcbnew/pad.cpp:836 pcbnew/pad.cpp:856 pcbnew/pad.cpp:875
 #, fuzzy
@@ -32108,9 +32058,9 @@ msgstr "Perforació X / Y"
 
 #: pcbnew/pad.cpp:983 pcbnew/pcb_track.cpp:700 pcbnew/pcb_track.cpp:736
 #: pcbnew/router/router_tool.cpp:2105 pcbnew/zone.cpp:646
-#, fuzzy, c-format
+#, c-format
 msgid "Min Clearance: %s"
-msgstr "Marge de seguretat mín."
+msgstr "Marge mínim: %s"
 
 #: pcbnew/pad.cpp:985 pcbnew/pcb_track.cpp:702 pcbnew/pcb_track.cpp:738
 #: pcbnew/pcb_track.cpp:744 pcbnew/router/router_tool.cpp:2093
@@ -32146,19 +32096,19 @@ msgid "Pad %s of %s on %s"
 msgstr "Pad %s en %s de %s"
 
 #: pcbnew/pad.cpp:1179 pcbnew/pad.cpp:1185 pcbnew/pad.cpp:1202
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s of %s"
-msgstr "A través de forat"
+msgstr "Pad de forat passant %s de %s"
 
 #: pcbnew/pad.cpp:1194
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "Pad %s en %s de %s"
+msgstr "Pad %s %s de %s sobre %s"
 
 #: pcbnew/pad.cpp:1208
-#, fuzzy, c-format
+#, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "A través de forat"
+msgstr "Pad de forat passant %s %s de %s"
 
 #: pcbnew/pad.cpp:1643
 #, fuzzy
@@ -32338,9 +32288,9 @@ msgid "Missing argument to '%s'"
 msgstr ""
 
 #: pcbnew/pcb_expr_evaluator.cpp:130
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized layer '%s'"
-msgstr "Capa final:"
+msgstr "Capa no reconeguda '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:497
 #, fuzzy
@@ -32362,14 +32312,14 @@ msgid "must be mm, in, or mil"
 msgstr ""
 
 #: pcbnew/pcb_group.cpp:317
-#, fuzzy, c-format
+#, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "Símbol d'alimentació"
+msgstr "Grup sense nom, %zu membres"
 
 #: pcbnew/pcb_group.cpp:321
-#, fuzzy, c-format
+#, c-format
 msgid "Group '%s', %zu members"
-msgstr "Símbol d'alimentació"
+msgstr "Grup '%s', %zu membres"
 
 #: pcbnew/pcb_group.cpp:335
 #, fuzzy
@@ -32391,9 +32341,9 @@ msgid "Violation"
 msgstr "Simulació"
 
 #: pcbnew/pcb_marker.cpp:142
-#, fuzzy, c-format
+#, c-format
 msgid "Marker (%s)"
-msgstr "Marcador @(%d,%d)"
+msgstr "Marcador (%s)"
 
 #: pcbnew/pcb_shape.cpp:152
 msgid "Drawing"
@@ -32414,14 +32364,14 @@ msgid "PCB Text '%s' on %s"
 msgstr "Text PCB «%s» en %s"
 
 #: pcbnew/pcb_track.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "Blind/Buried Via %s on %s"
-msgstr "Via cega o enterrada %s, xarxa[%s] (%d) en les capes %s/%s"
+msgstr "Via cega/enterrada %s sobre %s"
 
 #: pcbnew/pcb_track.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Micro Via %s on %s"
-msgstr "Microvia %s, Xarxa [%s] (%d) en les capes %s/%s"
+msgstr "Micro Via %s sobre %s"
 
 #: pcbnew/pcb_track.cpp:105
 #, fuzzy, c-format
@@ -32471,14 +32421,14 @@ msgid "NetCode"
 msgstr "Codi de xarxa"
 
 #: pcbnew/pcb_track.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr "Pista de %s, xarxa [%s] (%d) en la capa %s, longitud: %s"
+msgstr "Pista (arc) %s sobre %s, longitud %s"
 
 #: pcbnew/pcb_track.cpp:891
-#, fuzzy, c-format
+#, c-format
 msgid "Track %s on %s, length %s"
-msgstr "Pista de %s, xarxa [%s] (%d) en la capa %s, longitud: %s"
+msgstr "Pista %s sobre (%s), longitud %s"
 
 #: pcbnew/pcb_track.cpp:1119 pcbnew/pcb_track.cpp:1136
 #, fuzzy
@@ -32572,14 +32522,14 @@ msgid "'%s' was not fully parsed."
 msgstr "No s'ha llegit totalment el fitxer <%s>"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:532
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'."
-msgstr "Fitxer no trobat"
+msgstr "No s'ha trobat el fitxer: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:935
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate netclass name '%s'."
-msgstr "Duplica la marca de temps (%s) per a %s%d i %s%d"
+msgstr "Nom de classe de xarxa '%s' duplicat."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1075
 #: pcbnew/plugins/altium/altium_pcb.cpp:1161
@@ -32603,9 +32553,9 @@ msgid "No 3D-models will be imported."
 msgstr ""
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1450
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'. 3D-model not imported."
-msgstr "Fitxer no trobat"
+msgstr "No s'ha trobat el fitxer: '%s'. No s'ha importat el model 3D."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1486
 #, fuzzy
