@@ -419,6 +419,10 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         {
                             newEvt = EE_ACTIONS::drawLines.MakeEvent();
                         }
+                        else
+                        {
+                            newEvt = EE_ACTIONS::drawLines.MakeEvent();
+                        }
 
                         auto* params = newEvt->Parameter<DRAW_SEGMENT_EVENT_PARAMS*>();
                         auto* newParams = new DRAW_SEGMENT_EVENT_PARAMS();
