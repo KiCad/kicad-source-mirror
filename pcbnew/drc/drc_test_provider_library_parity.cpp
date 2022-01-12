@@ -499,7 +499,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
             drcItem->SetItems( footprint );
             reportViolation( drcItem, footprint->GetCenter(), UNDEFINED_LAYER );
         }
-        else if( libFootprint && footprint->FootprintNeedsUpdate( libFootprint.get() )
+        else if( footprint->FootprintNeedsUpdate( libFootprint.get() )
                     && !m_drcEngine->IsErrorLimitExceeded( DRCE_LIB_FOOTPRINT_MISMATCH ))
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LIB_FOOTPRINT_MISMATCH );

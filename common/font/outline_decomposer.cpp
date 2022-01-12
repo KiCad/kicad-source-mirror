@@ -223,7 +223,7 @@ int OUTLINE_DECOMPOSER::winding( const GLYPH_POINTS& aContour ) const
         return 0;
     }
 
-    unsigned int i_lowest_vertex;
+    unsigned int i_lowest_vertex = 0;
     double       lowest_y = std::numeric_limits<double>::max();
 
     for( unsigned int i = 0; i < aContour.size(); i++ )
