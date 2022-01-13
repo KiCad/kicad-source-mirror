@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2019 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -587,17 +587,17 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 
         if( end.y == start.y ) // horizontal
         {
-            textOrientation = EDA_ANGLE::HORIZONTAL;
+            textOrientation = ANGLE_HORIZONTAL;
             textPosition.y += penWidth;
         }
         else if( end.x == start.x ) // vertical
         {
-            textOrientation = EDA_ANGLE::VERTICAL;
+            textOrientation = ANGLE_VERTICAL;
             textPosition.x += penWidth;
         }
         else
         {
-            textOrientation = EDA_ANGLE( -atan( line.y / line.x ), EDA_ANGLE::RADIANS );
+            textOrientation = EDA_ANGLE( -atan( line.y / line.x ), RADIANS_T );
             textPosition.x += penWidth / 1.4;
             textPosition.y += penWidth / 1.4;
         }
@@ -773,7 +773,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
         m_gal->SetGlyphSize( namesize );
         m_gal->SetLineWidth( namesize.x / 12.0 );
-        m_gal->BitmapText( netname, textpos, EDA_ANGLE::HORIZONTAL );
+        m_gal->BitmapText( netname, textpos, ANGLE_HORIZONTAL );
 
         m_gal->Restore();
 
@@ -967,7 +967,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
                 m_gal->SetGlyphSize( namesize );
                 m_gal->SetLineWidth( namesize.x / 12.0 );
-                m_gal->BitmapText( netname, textpos, EDA_ANGLE::HORIZONTAL );
+                m_gal->BitmapText( netname, textpos, ANGLE_HORIZONTAL );
             }
 
             if( displayPadNumber )
@@ -986,7 +986,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
                 m_gal->SetGlyphSize( numsize );
                 m_gal->SetLineWidth( numsize.x / 12.0 );
-                m_gal->BitmapText( padNumber, textpos, EDA_ANGLE::HORIZONTAL );
+                m_gal->BitmapText( padNumber, textpos, ANGLE_HORIZONTAL );
             }
 
             m_gal->Restore();

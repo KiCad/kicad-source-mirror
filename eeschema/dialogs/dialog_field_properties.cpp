@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2004-2021 KiCad Developers, see AITHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AITHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -400,7 +400,7 @@ void DIALOG_FIELD_PROPERTIES::updateText( EDA_TEXT* aText )
         aText->SetTextSize( wxSize( m_size, m_size ) );
 
     aText->SetVisible( m_isVisible );
-    aText->SetTextAngle( m_isVertical ? EDA_ANGLE::VERTICAL : EDA_ANGLE::HORIZONTAL );
+    aText->SetTextAngle( m_isVertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL );
     aText->SetItalic( m_isItalic );
     aText->SetBold( m_isBold );
 }

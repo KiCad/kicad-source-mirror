@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2017 <Jean-Pierre Charras>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,7 +105,7 @@ bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, VECTOR2I& aPos, EDA_ANGLE&
     else
         size = std::min( m_Size.x, m_Size.y );
 
-    aOrientation = EDA_ANGLE::HORIZONTAL;
+    aOrientation = ANGLE_HORIZONTAL;
 
     if( m_Flashed )
     {
@@ -118,7 +118,7 @@ bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, VECTOR2I& aPos, EDA_ANGLE&
 
         double deci = RAD2DECIDEG( atan2( (double)delta.y, (double)delta.x ) );
         NORMALIZE_ANGLE_90( deci );
-        aOrientation = EDA_ANGLE( deci, EDA_ANGLE::TENTHS_OF_A_DEGREE );
+        aOrientation = EDA_ANGLE( deci, TENTHS_OF_A_DEGREE_T );
 
         // A reasonable size for text is size/2 because text needs margin below and above it.
         // a margin = size/4 seems good, expecting the line len is large enough to show 3 chars,

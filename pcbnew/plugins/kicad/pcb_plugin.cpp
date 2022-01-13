@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1718,7 +1718,7 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
                   m_out->Quotew( aText->GetText() ).c_str(),
                   FormatInternalUnits( aText->GetTextPos() ).c_str() );
 
-    if( aText->GetTextAngle() != EDA_ANGLE::ANGLE_0 )
+    if( !aText->GetTextAngle().IsZero() )
         m_out->Print( 0, " %s", FormatAngle( aText->GetTextAngle().AsTenthsOfADegree() ).c_str() );
 
     m_out->Print( 0, ")" );

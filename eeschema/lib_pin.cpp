@@ -402,14 +402,14 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
                 if( aPinOrient == PIN_RIGHT )
                 {
                     x = x1 + aTextInside;
-                    GRPrintText( DC, VECTOR2I( x, y1 ), NameColor, name, EDA_ANGLE::HORIZONTAL,
+                    GRPrintText( DC, VECTOR2I( x, y1 ), NameColor, name, ANGLE_HORIZONTAL,
                                  pinNameSize, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER,
                                  namePenWidth, false, false, font );
                 }
                 else    // Orient == PIN_LEFT
                 {
                     x = x1 - aTextInside;
-                    GRPrintText( DC, VECTOR2I( x, y1 ), NameColor, name, EDA_ANGLE::HORIZONTAL,
+                    GRPrintText( DC, VECTOR2I( x, y1 ), NameColor, name, ANGLE_HORIZONTAL,
                                  pinNameSize, GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER,
                                  namePenWidth, false, false, font );
                 }
@@ -418,7 +418,7 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
             if( aDrawPinNum )
             {
                 GRPrintText( DC, VECTOR2I(( x1 + aPinPos.x) / 2, y1 - num_offset ), NumColor,
-                             number, EDA_ANGLE::HORIZONTAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
+                             number, ANGLE_HORIZONTAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                              GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, font );
             }
         }
@@ -431,7 +431,7 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
 
                 if( aDrawPinName )
                 {
-                    GRPrintText( DC, VECTOR2I( x1, y ), NameColor, name, EDA_ANGLE::VERTICAL,
+                    GRPrintText( DC, VECTOR2I( x1, y ), NameColor, name, ANGLE_VERTICAL,
                                  pinNameSize, GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER,
                                  namePenWidth, false, false, font );
                 }
@@ -439,7 +439,7 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
                 if( aDrawPinNum )
                 {
                     GRPrintText( DC, VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
-                                 number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
+                                 number, ANGLE_VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                                  GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, font );
                 }
             }
@@ -449,7 +449,7 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
 
                 if( aDrawPinName )
                 {
-                    GRPrintText( DC, VECTOR2I( x1, y ), NameColor, name, EDA_ANGLE::VERTICAL,
+                    GRPrintText( DC, VECTOR2I( x1, y ), NameColor, name, ANGLE_VERTICAL,
                                  pinNameSize, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER,
                                  namePenWidth, false, false, font );
                 }
@@ -457,7 +457,7 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
                 if( aDrawPinNum )
                 {
                     GRPrintText( DC, VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
-                                 number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
+                                 number, ANGLE_VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                                  GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false, font );
                 }
             }
@@ -471,16 +471,16 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
             if( aDrawPinName )
             {
                 x = ( x1 + aPinPos.x) / 2;
-                GRPrintText( DC, VECTOR2I( x, y1 - name_offset ), NameColor, name,
-                             EDA_ANGLE::HORIZONTAL, pinNameSize, GR_TEXT_H_ALIGN_CENTER,
-                             GR_TEXT_V_ALIGN_BOTTOM, namePenWidth, false, false, font );
+                GRPrintText( DC, VECTOR2I( x, y1 - name_offset ), NameColor, name, ANGLE_HORIZONTAL,
+                             pinNameSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM,
+                             namePenWidth, false, false, font );
             }
             if( aDrawPinNum )
             {
                 x = ( x1 + aPinPos.x) / 2;
-                GRPrintText( DC, VECTOR2I( x, y1 + num_offset ), NumColor, number,
-                             EDA_ANGLE::HORIZONTAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
-                             GR_TEXT_V_ALIGN_TOP, numPenWidth, false, false, font );
+                GRPrintText( DC, VECTOR2I( x, y1 + num_offset ), NumColor, number, ANGLE_HORIZONTAL,
+                             pinNumSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP,
+                             numPenWidth, false, false, font );
             }
         }
         else     /* Its a vertical line. */
@@ -488,15 +488,15 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
             if( aDrawPinName )
             {
                 y = ( y1 + aPinPos.y) / 2;
-                GRPrintText( DC, VECTOR2I( x1 - name_offset, y ), NameColor, name,
-                             EDA_ANGLE::VERTICAL, pinNameSize, GR_TEXT_H_ALIGN_CENTER,
-                             GR_TEXT_V_ALIGN_BOTTOM, namePenWidth, false, false, font );
+                GRPrintText( DC, VECTOR2I( x1 - name_offset, y ), NameColor, name, ANGLE_VERTICAL,
+                             pinNameSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM,
+                             namePenWidth, false, false, font );
             }
 
             if( aDrawPinNum )
             {
                 GRPrintText( DC, VECTOR2I( x1 + num_offset, ( y1 + aPinPos.y) / 2 ), NumColor,
-                             number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
+                             number, ANGLE_VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                              GR_TEXT_V_ALIGN_TOP, numPenWidth, false, false, font );
             }
         }
@@ -528,19 +528,19 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
     VECTOR2I txtpos = aPosition;
     int offset = Millimeter2iu( 0.4 );
     GR_TEXT_H_ALIGN_T hjustify = GR_TEXT_H_ALIGN_LEFT;
-    EDA_ANGLE orient = EDA_ANGLE::HORIZONTAL;
+    EDA_ANGLE orient = ANGLE_HORIZONTAL;
 
     switch( aOrientation )
     {
     case PIN_UP:
         txtpos.y += offset;
-        orient = EDA_ANGLE::VERTICAL;
+        orient = ANGLE_VERTICAL;
         hjustify = GR_TEXT_H_ALIGN_RIGHT;
         break;
 
     case PIN_DOWN:
         txtpos.y -= offset;
-        orient = EDA_ANGLE::VERTICAL;
+        orient = ANGLE_VERTICAL;
         break;
 
     case PIN_LEFT:
@@ -752,14 +752,13 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
                     hjustify = GR_TEXT_H_ALIGN_RIGHT;
                 }
 
-                aPlotter->Text( VECTOR2I( x, y1 ), nameColor, name, EDA_ANGLE::HORIZONTAL,
-                                pinNameSize, hjustify, GR_TEXT_V_ALIGN_CENTER, namePenWidth,
-                                false, false );
+                aPlotter->Text( VECTOR2I( x, y1 ), nameColor, name, ANGLE_HORIZONTAL, pinNameSize,
+                                hjustify, GR_TEXT_V_ALIGN_CENTER, namePenWidth, false, false );
             }
             if( aDrawPinNum )
             {
                 aPlotter->Text( VECTOR2I( ( x1 + aPinPos.x) / 2, y1 - num_offset ), numColor,
-                                number, EDA_ANGLE::HORIZONTAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
+                                number, ANGLE_HORIZONTAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                                 GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false );
             }
         }
@@ -770,14 +769,14 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
                 y = y1 + aTextInside;
 
                 if( aDrawPinName )
-                    aPlotter->Text( VECTOR2I( x1, y ), nameColor, name, EDA_ANGLE::VERTICAL,
+                    aPlotter->Text( VECTOR2I( x1, y ), nameColor, name, ANGLE_VERTICAL,
                                     pinNameSize, GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER,
                                     namePenWidth, false, false );
 
                 if( aDrawPinNum )
                 {
                     aPlotter->Text( VECTOR2I( x1 - num_offset, ( y1 + aPinPos.y) / 2 ), numColor,
-                                    number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
+                                    number, ANGLE_VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                                     GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false );
                 }
             }
@@ -787,7 +786,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
 
                 if( aDrawPinName )
                 {
-                    aPlotter->Text( VECTOR2I( x1, y ), nameColor, name, EDA_ANGLE::VERTICAL,
+                    aPlotter->Text( VECTOR2I( x1, y ), nameColor, name, ANGLE_VERTICAL,
                                     pinNameSize, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER,
                                     namePenWidth, false, false );
                 }
@@ -795,7 +794,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
                 if( aDrawPinNum )
                 {
                     aPlotter->Text( VECTOR2I( x1 - num_offset,  ( y1 + aPinPos.y) / 2 ), numColor,
-                                    number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
+                                    number, ANGLE_VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                                     GR_TEXT_V_ALIGN_BOTTOM, numPenWidth, false, false );
                 }
             }
@@ -809,17 +808,17 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
             if( aDrawPinName )
             {
                 x = ( x1 + aPinPos.x) / 2;
-                aPlotter->Text( VECTOR2I( x, y1 - name_offset ), nameColor, name,
-                                EDA_ANGLE::HORIZONTAL, pinNameSize, GR_TEXT_H_ALIGN_CENTER,
-                                GR_TEXT_V_ALIGN_BOTTOM, namePenWidth, false, false );
+                aPlotter->Text( VECTOR2I( x, y1 - name_offset ), nameColor, name, ANGLE_HORIZONTAL,
+                                pinNameSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM,
+                                namePenWidth, false, false );
             }
 
             if( aDrawPinNum )
             {
                 x = ( x1 + aPinPos.x ) / 2;
-                aPlotter->Text( VECTOR2I( x, y1 + num_offset ), numColor, number,
-                                EDA_ANGLE::HORIZONTAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
-                                GR_TEXT_V_ALIGN_TOP, numPenWidth, false, false );
+                aPlotter->Text( VECTOR2I( x, y1 + num_offset ), numColor, number, ANGLE_HORIZONTAL,
+                                pinNumSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP,
+                                numPenWidth, false, false );
             }
         }
         else     /* Its a vertical line. */
@@ -827,15 +826,15 @@ void LIB_PIN::PlotPinTexts( PLOTTER* aPlotter, const VECTOR2I& aPinPos, int aPin
             if( aDrawPinName )
             {
                 y = ( y1 + aPinPos.y ) / 2;
-                aPlotter->Text( VECTOR2I( x1 - name_offset, y ), nameColor, name,
-                                EDA_ANGLE::VERTICAL, pinNameSize, GR_TEXT_H_ALIGN_CENTER,
-                                GR_TEXT_V_ALIGN_BOTTOM, namePenWidth, false, false );
+                aPlotter->Text( VECTOR2I( x1 - name_offset, y ), nameColor, name, ANGLE_VERTICAL,
+                                pinNameSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM,
+                                namePenWidth, false, false );
             }
 
             if( aDrawPinNum )
             {
                 aPlotter->Text( VECTOR2I( x1 + num_offset, ( y1 + aPinPos.y ) / 2 ), numColor,
-                                number, EDA_ANGLE::VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
+                                number, ANGLE_VERTICAL, pinNumSize, GR_TEXT_H_ALIGN_CENTER,
                                 GR_TEXT_V_ALIGN_TOP, numPenWidth, false, false );
             }
         }

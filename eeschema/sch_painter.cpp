@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -1144,22 +1144,22 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         if( size[INSIDE] )
         {
             drawText( INSIDE, pos + VECTOR2D( -insideOffset - len, 0 ),
-                      GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, EDA_ANGLE::HORIZONTAL );
+                      GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, ANGLE_HORIZONTAL );
         }
         if( size[OUTSIDE] )
         {
             drawText( OUTSIDE, pos + VECTOR2D( outsideOffset, 0 ),
-                      GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, EDA_ANGLE::HORIZONTAL );
+                      GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, ANGLE_HORIZONTAL );
         }
         if( size[ABOVE] )
         {
             drawText( ABOVE, pos + VECTOR2D( -len / 2.0, -aboveOffset ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, EDA_ANGLE::HORIZONTAL );
+                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, ANGLE_HORIZONTAL );
         }
         if( size[BELOW] )
         {
             drawText( BELOW, pos + VECTOR2D( -len / 2.0, belowOffset ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, EDA_ANGLE::HORIZONTAL );
+                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, ANGLE_HORIZONTAL );
         }
         break;
 
@@ -1167,22 +1167,22 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         if( size[INSIDE] )
         {
             drawText( INSIDE, pos + VECTOR2D( insideOffset + len, 0 ),
-                      GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, EDA_ANGLE::HORIZONTAL );
+                      GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, ANGLE_HORIZONTAL );
         }
         if( size[OUTSIDE] )
         {
             drawText( OUTSIDE, pos + VECTOR2D( -outsideOffset, 0 ),
-                      GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, EDA_ANGLE::HORIZONTAL );
+                      GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, ANGLE_HORIZONTAL );
         }
         if( size[ABOVE] )
         {
             drawText( ABOVE, pos + VECTOR2D( len / 2.0, -aboveOffset ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, EDA_ANGLE::HORIZONTAL );
+                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, ANGLE_HORIZONTAL );
         }
         if( size[BELOW] )
         {
             drawText( BELOW, pos + VECTOR2D( len / 2.0, belowOffset ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, EDA_ANGLE::HORIZONTAL );
+                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, ANGLE_HORIZONTAL );
         }
         break;
 
@@ -1190,22 +1190,22 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         if( size[INSIDE] )
         {
             drawText( INSIDE, pos + VECTOR2D( 0, insideOffset + len ),
-                      GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, EDA_ANGLE::VERTICAL );
+                      GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, ANGLE_VERTICAL );
         }
         if( size[OUTSIDE] )
         {
             drawText( OUTSIDE, pos + VECTOR2D( 0, -outsideOffset ),
-                      GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, EDA_ANGLE::VERTICAL );
+                      GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, ANGLE_VERTICAL );
         }
         if( size[ABOVE] )
         {
             drawText( ABOVE, pos + VECTOR2D( -aboveOffset, len / 2.0 ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, EDA_ANGLE::VERTICAL );
+                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, ANGLE_VERTICAL );
         }
         if( size[BELOW] )
         {
             drawText( BELOW, pos + VECTOR2D( belowOffset, len / 2.0 ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, EDA_ANGLE::VERTICAL );
+                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, ANGLE_VERTICAL );
         }
         break;
 
@@ -1213,22 +1213,22 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         if( size[INSIDE] )
         {
             drawText( INSIDE, pos + VECTOR2D( 0, -insideOffset - len ),
-                      GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, EDA_ANGLE::VERTICAL );
+                      GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, ANGLE_VERTICAL );
         }
         if( size[OUTSIDE] )
         {
             drawText( OUTSIDE, pos + VECTOR2D( 0, outsideOffset ),
-                      GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, EDA_ANGLE::VERTICAL );
+                      GR_TEXT_H_ALIGN_RIGHT, GR_TEXT_V_ALIGN_CENTER, ANGLE_VERTICAL );
         }
         if( size[ABOVE] )
         {
             drawText( ABOVE, pos + VECTOR2D( -aboveOffset, -len / 2.0 ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, EDA_ANGLE::VERTICAL );
+                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, ANGLE_VERTICAL );
         }
         if( size[BELOW] )
         {
             drawText( BELOW, pos + VECTOR2D( belowOffset, -len / 2.0 ),
-                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, EDA_ANGLE::VERTICAL );
+                      GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, ANGLE_VERTICAL );
         }
         break;
 
@@ -1694,9 +1694,9 @@ void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
         {
         // Rotate symbol 90 degrees.
         if( orient.IsHorizontal() )
-            orient = EDA_ANGLE::VERTICAL;
+            orient = ANGLE_VERTICAL;
         else
-            orient = EDA_ANGLE::HORIZONTAL;
+            orient = ANGLE_HORIZONTAL;
         }
     }
 

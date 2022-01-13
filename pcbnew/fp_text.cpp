@@ -266,7 +266,7 @@ EDA_ANGLE FP_TEXT::GetDrawRotation() const
         NORMALIZE_ANGLE_POS( rotation );
     }
 
-    return EDA_ANGLE( rotation, EDA_ANGLE::TENTHS_OF_A_DEGREE );
+    return EDA_ANGLE( rotation, TENTHS_OF_A_DEGREE_T );
 }
 
 

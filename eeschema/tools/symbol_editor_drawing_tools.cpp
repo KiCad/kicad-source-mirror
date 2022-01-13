@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ static void* g_lastPinWeakPtr;
 
 SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
         EE_TOOL_BASE<SYMBOL_EDIT_FRAME>( "eeschema.SymbolDrawing" ),
-        m_lastTextAngle( EDA_ANGLE::HORIZONTAL ),
+        m_lastTextAngle( ANGLE_HORIZONTAL ),
         m_lastFillStyle( FILL_T::NO_FILL ),
         m_drawSpecificConvert( true ),
         m_drawSpecificUnit( false )

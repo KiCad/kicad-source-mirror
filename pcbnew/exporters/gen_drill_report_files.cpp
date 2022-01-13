@@ -1,13 +1,8 @@
-/**
- * @file gen_drill_report_files.cpp
- * @brief Functions to create report and map files for EXCELLON drill files.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -252,7 +247,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
     // Plot title  "Info"
     wxString Text = wxT( "Drill Map:" );
-    plotter->Text( VECTOR2I( plotX, plotY ), COLOR4D::UNSPECIFIED, Text, EDA_ANGLE::HORIZONTAL,
+    plotter->Text( VECTOR2I( plotX, plotY ), COLOR4D::UNSPECIFIED, Text, ANGLE_HORIZONTAL,
                    wxSize( KiROUND( charSize * charScale ), KiROUND( charSize * charScale ) ),
                    GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, TextWidth, false, false );
 
@@ -313,7 +308,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         if( tool.m_Hole_NotPlated )
             msg += wxT( " (not plated)" );
 
-        plotter->Text( VECTOR2I( plotX, y ), COLOR4D::UNSPECIFIED, msg, EDA_ANGLE::HORIZONTAL,
+        plotter->Text( VECTOR2I( plotX, y ), COLOR4D::UNSPECIFIED, msg, ANGLE_HORIZONTAL,
                        VECTOR2I( KiROUND( charSize * charScale ), KiROUND( charSize * charScale ) ),
                        GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_CENTER, TextWidth, false, false );
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,11 +20,14 @@
 
 #include <eda_angle.h>
 
-EDA_ANGLE EDA_ANGLE::m_angle0 = EDA_ANGLE( 0, EDA_ANGLE::DEGREES );
-EDA_ANGLE EDA_ANGLE::m_angle90 = EDA_ANGLE( 90, EDA_ANGLE::DEGREES );
-EDA_ANGLE EDA_ANGLE::m_angle180 = EDA_ANGLE( 180, EDA_ANGLE::DEGREES );
-EDA_ANGLE EDA_ANGLE::m_angle270 = EDA_ANGLE( 270, EDA_ANGLE::DEGREES );
-EDA_ANGLE EDA_ANGLE::m_angle360 = EDA_ANGLE( 360, EDA_ANGLE::DEGREES );
+
+EDA_ANGLE EDA_ANGLE::m_Angle0 = EDA_ANGLE( 0, DEGREES_T );
+EDA_ANGLE EDA_ANGLE::m_Angle45 = EDA_ANGLE( 45, DEGREES_T );
+EDA_ANGLE EDA_ANGLE::m_Angle90 = EDA_ANGLE( 90, DEGREES_T );
+EDA_ANGLE EDA_ANGLE::m_Angle180 = EDA_ANGLE( 180, DEGREES_T );
+EDA_ANGLE EDA_ANGLE::m_Angle270 = EDA_ANGLE( 270, DEGREES_T );
+EDA_ANGLE EDA_ANGLE::m_Angle360 = EDA_ANGLE( 360, DEGREES_T );
+
 
 EDA_ANGLE EDA_ANGLE::KeepUpright() const
 {
@@ -39,39 +42,39 @@ EDA_ANGLE EDA_ANGLE::KeepUpright() const
     else
         outDegrees = 90;
 
-    return EDA_ANGLE( outDegrees, EDA_ANGLE::DEGREES );
+    return EDA_ANGLE( outDegrees, DEGREES_T );
 }
 
 
 void EDA_ANGLE::normalize( bool n720 )
 {
-    if( GetInitialAngleType() == EDA_ANGLE::RADIANS )
+    if( GetInitialAngleType() == RADIANS_T )
     {
-        m_radians = normalize( m_radians, EDA_ANGLE::RADIANS, n720 );
+        m_radians = normalize( m_radians, RADIANS_T, n720 );
         m_value = int( m_radians / TENTHS_OF_A_DEGREE_TO_RADIANS );
     }
     else
     {
-        m_value = normalize( m_value, EDA_ANGLE::TENTHS_OF_A_DEGREE, n720 );
+        m_value = normalize( m_value, TENTHS_OF_A_DEGREE_T, n720 );
     }
 }
 
 
-int EDA_ANGLE::normalize( int aValue, ANGLE_TYPE aAngleType, bool n720 ) const
+int EDA_ANGLE::normalize( int aValue, EDA_ANGLE_T aAngleType, bool n720 ) const
 {
     int full_circle_upper = DEGREES_FULL_CIRCLE;
 
     switch( aAngleType )
     {
-    case DEGREES:
+    case DEGREES_T:
         full_circle_upper = DEGREES_FULL_CIRCLE;
         break;
 
-    case TENTHS_OF_A_DEGREE:
+    case TENTHS_OF_A_DEGREE_T:
         full_circle_upper = TENTHS_OF_A_DEGREE_FULL_CIRCLE;
         break;
 
-    case RADIANS:
+    case RADIANS_T:
         /* ?? should not get here */
         assert( 1 == 0 );
     }
@@ -91,15 +94,15 @@ int EDA_ANGLE::normalize( int aValue, ANGLE_TYPE aAngleType, bool n720 ) const
 }
 
 
-double EDA_ANGLE::normalize( double aValue, ANGLE_TYPE aAngleType, bool n720 ) const
+double EDA_ANGLE::normalize( double aValue, EDA_ANGLE_T aAngleType, bool n720 ) const
 {
     double full_circle_upper = DEGREES_FULL_CIRCLE;
 
     switch( aAngleType )
     {
-    case DEGREES:            full_circle_upper = DEGREES_FULL_CIRCLE;            break;
-    case TENTHS_OF_A_DEGREE: full_circle_upper = TENTHS_OF_A_DEGREE_FULL_CIRCLE; break;
-    case RADIANS:            full_circle_upper = RADIANS_FULL_CIRCLE;            break;
+    case DEGREES_T: full_circle_upper = DEGREES_FULL_CIRCLE;            break;
+    case TENTHS_OF_A_DEGREE_T: full_circle_upper = TENTHS_OF_A_DEGREE_FULL_CIRCLE; break;
+    case RADIANS_T: full_circle_upper = RADIANS_FULL_CIRCLE;            break;
     }
 
     double full_circle_lower = n720 ? 0 : -full_circle_upper;

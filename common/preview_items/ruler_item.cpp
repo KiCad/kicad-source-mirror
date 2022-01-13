@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2022 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -181,12 +181,12 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
     if( aLine.Angle() > 0 )
     {
         labelAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
-        labelAttrs.m_Angle = EDA_ANGLE( labelAngle, EDA_ANGLE::RADIANS );
+        labelAttrs.m_Angle = EDA_ANGLE( labelAngle, RADIANS_T );
     }
     else
     {
         labelAttrs.m_Halign = GR_TEXT_H_ALIGN_RIGHT;
-        labelAttrs.m_Angle = EDA_ANGLE( labelAngle + M_PI, EDA_ANGLE::RADIANS );
+        labelAttrs.m_Angle = EDA_ANGLE( labelAngle + M_PI, RADIANS_T );
     }
 
     BOX2D viewportD = aView->GetViewport();

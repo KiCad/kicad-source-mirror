@@ -124,7 +124,7 @@ public:
         // Higher level classes may be more restrictive than this by overloading
         // SetTextAngle() or merely calling EDA_TEXT::SetTextAngle() after clamping
         // aAngle before calling this lowest inline accessor.
-        SetTextAngle( EDA_ANGLE( aAngleInTenthsOfADegree, EDA_ANGLE::TENTHS_OF_A_DEGREE ) );
+        SetTextAngle( EDA_ANGLE( aAngleInTenthsOfADegree, TENTHS_OF_A_DEGREE_T ) );
     }
 
     void SetTextAngle( const EDA_ANGLE& aAngle );

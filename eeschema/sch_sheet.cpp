@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -560,14 +560,14 @@ void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
         m_fields[SHEETNAME].SetTextPos( m_pos + VECTOR2I( -margin, m_size.y ) );
         m_fields[ SHEETNAME ].SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         m_fields[ SHEETNAME ].SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-        m_fields[ SHEETNAME ].SetTextAngle( EDA_ANGLE::VERTICAL );
+        m_fields[ SHEETNAME ].SetTextAngle( ANGLE_VERTICAL );
     }
     else
     {
         m_fields[SHEETNAME].SetTextPos( m_pos + VECTOR2I( 0, -margin ) );
         m_fields[ SHEETNAME ].SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         m_fields[ SHEETNAME ].SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-        m_fields[ SHEETNAME ].SetTextAngle( EDA_ANGLE::HORIZONTAL );
+        m_fields[ SHEETNAME ].SetTextAngle( ANGLE_HORIZONTAL );
     }
 
     textSize = m_fields[ SHEETFILENAME ].GetTextSize();
@@ -578,14 +578,14 @@ void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
         m_fields[SHEETFILENAME].SetTextPos( m_pos + VECTOR2I( m_size.x + margin, m_size.y ) );
         m_fields[ SHEETFILENAME ].SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         m_fields[ SHEETFILENAME ].SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-        m_fields[ SHEETFILENAME ].SetTextAngle( EDA_ANGLE::VERTICAL );
+        m_fields[ SHEETFILENAME ].SetTextAngle( ANGLE_VERTICAL );
     }
     else
     {
         m_fields[SHEETFILENAME].SetTextPos( m_pos + VECTOR2I( 0, m_size.y + margin ) );
         m_fields[ SHEETFILENAME ].SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         m_fields[ SHEETFILENAME ].SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-        m_fields[ SHEETFILENAME ].SetTextAngle( EDA_ANGLE::HORIZONTAL );
+        m_fields[ SHEETFILENAME ].SetTextAngle( ANGLE_HORIZONTAL );
     }
 
     m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;

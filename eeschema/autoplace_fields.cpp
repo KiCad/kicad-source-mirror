@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015, 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015, 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -196,9 +196,9 @@ protected:
         for( SCH_FIELD* field : m_fields )
         {
             if( m_symbol->GetTransform().y1 )
-                field->SetTextAngle( EDA_ANGLE::VERTICAL );
+                field->SetTextAngle( ANGLE_VERTICAL );
             else
-                field->SetTextAngle( EDA_ANGLE::HORIZONTAL );
+                field->SetTextAngle( ANGLE_HORIZONTAL );
 
             EDA_RECT bbox = field->GetBoundingBox();
             int      field_width = bbox.GetWidth();

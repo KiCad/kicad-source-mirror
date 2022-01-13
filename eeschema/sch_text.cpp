@@ -310,22 +310,22 @@ void SCH_TEXT::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
         KI_FALLTHROUGH;
 
     case LABEL_SPIN_STYLE::RIGHT: // Horiz Normal Orientation
-        SetTextAngle( EDA_ANGLE::HORIZONTAL );
+        SetTextAngle( ANGLE_HORIZONTAL );
         SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         break;
 
     case LABEL_SPIN_STYLE::UP: // Vert Orientation UP
-        SetTextAngle( EDA_ANGLE::VERTICAL );
+        SetTextAngle( ANGLE_VERTICAL );
         SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         break;
 
     case LABEL_SPIN_STYLE::LEFT: // Horiz Orientation - Right justified
-        SetTextAngle( EDA_ANGLE::HORIZONTAL );
+        SetTextAngle( ANGLE_HORIZONTAL );
         SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         break;
 
     case LABEL_SPIN_STYLE::BOTTOM: //  Vert Orientation BOTTOM
-        SetTextAngle( EDA_ANGLE::VERTICAL );
+        SetTextAngle( ANGLE_VERTICAL );
         SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         break;
     }
@@ -413,7 +413,7 @@ const EDA_RECT SCH_TEXT::GetBoundingBox() const
 {
     EDA_RECT rect = GetTextBox();
 
-    if( GetTextAngle() != EDA_ANGLE::ANGLE_0 ) // Rotate rect.
+    if( !GetTextAngle().IsZero() ) // Rotate rect.
     {
         VECTOR2I pos = rect.GetOrigin();
         VECTOR2I end = rect.GetEnd();
@@ -776,7 +776,7 @@ void SCH_LABEL_BASE::Rotate90( bool aClockwise )
                 if( !aClockwise )
                     field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
-                field.SetTextAngle( EDA_ANGLE::HORIZONTAL );
+                field.SetTextAngle( ANGLE_HORIZONTAL );
             }
             else if( field.GetTextAngle().IsVertical()
                         && field.GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
@@ -784,7 +784,7 @@ void SCH_LABEL_BASE::Rotate90( bool aClockwise )
                 if( !aClockwise )
                     field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
-                field.SetTextAngle( EDA_ANGLE::HORIZONTAL );
+                field.SetTextAngle( ANGLE_HORIZONTAL );
             }
             else if( field.GetTextAngle().IsHorizontal()
                         && field.GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
@@ -792,7 +792,7 @@ void SCH_LABEL_BASE::Rotate90( bool aClockwise )
                 if( aClockwise )
                     field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
-                field.SetTextAngle( EDA_ANGLE::VERTICAL );
+                field.SetTextAngle( ANGLE_VERTICAL );
             }
             else if( field.GetTextAngle().IsHorizontal()
                         && field.GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
@@ -800,7 +800,7 @@ void SCH_LABEL_BASE::Rotate90( bool aClockwise )
                 if( aClockwise )
                     field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
-                field.SetTextAngle( EDA_ANGLE::VERTICAL );
+                field.SetTextAngle( ANGLE_VERTICAL );
             }
 
             VECTOR2I pos = field.GetTextPos();
@@ -828,7 +828,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
         {
         default:
         case LABEL_SPIN_STYLE::LEFT:
-            field.SetTextAngle( EDA_ANGLE::HORIZONTAL );
+            field.SetTextAngle( ANGLE_HORIZONTAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
             if( Type() == SCH_GLOBAL_LABEL_T && field.GetId() == 0 )
@@ -839,7 +839,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
             break;
 
         case LABEL_SPIN_STYLE::UP:
-            field.SetTextAngle( EDA_ANGLE::VERTICAL );
+            field.SetTextAngle( ANGLE_VERTICAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
             if( Type() == SCH_GLOBAL_LABEL_T && field.GetId() == 0 )
@@ -850,7 +850,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
             break;
 
         case LABEL_SPIN_STYLE::RIGHT:
-            field.SetTextAngle( EDA_ANGLE::HORIZONTAL );
+            field.SetTextAngle( ANGLE_HORIZONTAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
             if( Type() == SCH_GLOBAL_LABEL_T && field.GetId() == 0 )
@@ -861,7 +861,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
             break;
 
         case LABEL_SPIN_STYLE::BOTTOM:
-            field.SetTextAngle( EDA_ANGLE::VERTICAL );
+            field.SetTextAngle( ANGLE_VERTICAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
             if( Type() == SCH_GLOBAL_LABEL_T && field.GetId() == 0 )
@@ -1314,7 +1314,7 @@ const EDA_RECT SCH_LABEL::GetBodyBoundingBox() const
 
     rect.Offset( 0, -GetTextOffset() );
 
-    if( GetTextAngle() != EDA_ANGLE::ANGLE_0 )
+    if( !GetTextAngle().IsZero() )
     {
         // Rotate rect
         VECTOR2I pos = rect.GetOrigin();
@@ -1462,22 +1462,22 @@ void SCH_NETCLASS_FLAG::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
         {
         default:
         case LABEL_SPIN_STYLE::LEFT:
-            field.SetTextAngle( EDA_ANGLE::HORIZONTAL );
+            field.SetTextAngle( ANGLE_HORIZONTAL );
             offset = { symbolWidth + margin, origin };
             break;
 
         case LABEL_SPIN_STYLE::UP:
-            field.SetTextAngle( EDA_ANGLE::VERTICAL );
+            field.SetTextAngle( ANGLE_VERTICAL );
             offset = { -origin, -( symbolWidth + margin ) };
             break;
 
         case LABEL_SPIN_STYLE::RIGHT:
-            field.SetTextAngle( EDA_ANGLE::HORIZONTAL );
+            field.SetTextAngle( ANGLE_HORIZONTAL );
             offset = { symbolWidth + margin, -origin };
             break;
 
         case LABEL_SPIN_STYLE::BOTTOM:
-            field.SetTextAngle( EDA_ANGLE::VERTICAL );
+            field.SetTextAngle( ANGLE_VERTICAL );
             offset = { origin, -( symbolWidth + margin ) };
             break;
         }

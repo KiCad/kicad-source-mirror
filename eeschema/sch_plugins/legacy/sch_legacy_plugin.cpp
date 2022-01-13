@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -1784,9 +1784,9 @@ SCH_SYMBOL* SCH_LEGACY_PLUGIN::loadSymbol( LINE_READER& aReader )
             field.SetTextSize( wxSize( size, size ) );
 
             if( orientation == 'H' )
-                field.SetTextAngle( EDA_ANGLE::HORIZONTAL );
+                field.SetTextAngle( ANGLE_HORIZONTAL );
             else if( orientation == 'V' )
-                field.SetTextAngle( EDA_ANGLE::VERTICAL );
+                field.SetTextAngle( ANGLE_VERTICAL );
             else
                 SCH_PARSE_ERROR( "symbol field orientation must be H or V", aReader, line );
 
@@ -3098,9 +3098,9 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     char textOrient = parseChar( aReader, line, &line );
 
     if( textOrient == 'H' )
-        field->SetTextAngle( EDA_ANGLE::HORIZONTAL );
+        field->SetTextAngle( ANGLE_HORIZONTAL );
     else if( textOrient == 'V' )
-        field->SetTextAngle( EDA_ANGLE::VERTICAL );
+        field->SetTextAngle( ANGLE_VERTICAL );
     else
         SCH_PARSE_ERROR( "invalid field text orientation parameter", aReader, line );
 

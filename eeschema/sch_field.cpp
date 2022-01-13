@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -338,10 +338,10 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 
         if( parentSymbol && parentSymbol->GetTransform().y1 )  // Rotate symbol 90 degrees.
         {
-            if( orient == EDA_ANGLE::HORIZONTAL )
-                orient = EDA_ANGLE::VERTICAL;
+            if( orient == ANGLE_HORIZONTAL )
+                orient = ANGLE_VERTICAL;
             else
-                orient = EDA_ANGLE::HORIZONTAL;
+                orient = ANGLE_HORIZONTAL;
         }
     }
 
@@ -393,9 +393,9 @@ EDA_ANGLE SCH_FIELD::GetDrawRotation() const
         if( parentSymbol && parentSymbol->GetTransform().y1 )  // Rotate symbol 90 degrees.
         {
             if( orient.IsHorizontal() )
-                orient = EDA_ANGLE::VERTICAL;
+                orient = ANGLE_VERTICAL;
             else
-                orient = EDA_ANGLE::HORIZONTAL;
+                orient = ANGLE_HORIZONTAL;
         }
     }
 
@@ -952,9 +952,9 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter ) const
         if( parentSymbol->GetTransform().y1 )  // Rotate symbol 90 deg.
         {
             if( orient.IsHorizontal() )
-                orient = EDA_ANGLE::VERTICAL;
+                orient = ANGLE_VERTICAL;
             else
-                orient = EDA_ANGLE::HORIZONTAL;
+                orient = ANGLE_HORIZONTAL;
         }
     }
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,9 +62,9 @@ bool LIB_TEXT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
      * transformation matrix causes xy axes to be flipped.
      * this simple algo works only for schematic matrix (rot 90 or/and mirror)
      */
-    bool t1 = ( DefaultTransform.x1 != 0 ) ^ ( GetTextAngle() != EDA_ANGLE::HORIZONTAL );
+    bool t1 = ( DefaultTransform.x1 != 0 ) ^ ( GetTextAngle() != ANGLE_HORIZONTAL );
 
-    tmp_text.SetTextAngle( t1 ? EDA_ANGLE::HORIZONTAL : EDA_ANGLE::VERTICAL );
+    tmp_text.SetTextAngle( t1 ? ANGLE_HORIZONTAL : ANGLE_VERTICAL );
     return tmp_text.TextHitTest( aPosition, aAccuracy );
 }
 
@@ -234,7 +234,7 @@ void LIB_TEXT::Rotate( const VECTOR2I& center, bool aRotateCCW )
 
     if( GetTextAngle().IsHorizontal() )
     {
-        SetTextAngle( EDA_ANGLE::VERTICAL );
+        SetTextAngle( ANGLE_VERTICAL );
     }
     else
     {
@@ -269,7 +269,7 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const VECTOR2I& offset, bool fill,
 
     // The text orientation may need to be flipped if the transformation matrix causes xy
     // axes to be flipped.
-    int t1  = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != EDA_ANGLE::HORIZONTAL );
+    int t1  = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != ANGLE_HORIZONTAL );
     VECTOR2I pos = aTransform.TransformCoordinate( txtpos ) + offset;
 
     // Get color
@@ -284,9 +284,8 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const VECTOR2I& offset, bool fill,
 
     int penWidth = std::max( GetEffectiveTextPenWidth(), settings->GetMinPenWidth() );
 
-    plotter->Text( pos, color, GetText(), t1 ? EDA_ANGLE::HORIZONTAL : EDA_ANGLE::VERTICAL,
-                   GetTextSize(), GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth,
-                   IsItalic(), IsBold() );
+    plotter->Text( pos, color, GetText(), t1 ? ANGLE_HORIZONTAL : ANGLE_VERTICAL, GetTextSize(),
+                   GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold() );
 }
 
 
@@ -320,10 +319,10 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
 
     if( aTransform.y1 )  // Rotate symbol 90 degrees.
     {
-        if( orient == EDA_ANGLE::HORIZONTAL )
-            orient = EDA_ANGLE::VERTICAL;
+        if( orient == ANGLE_HORIZONTAL )
+            orient = ANGLE_VERTICAL;
         else
-            orient = EDA_ANGLE::HORIZONTAL;
+            orient = ANGLE_HORIZONTAL;
     }
 
     /*

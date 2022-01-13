@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,7 +85,7 @@ void LIB_FIELD::Init( int aId )
 
     m_id = aId;
 
-    SetTextAngle( EDA_ANGLE::HORIZONTAL );    // constructor already did this.
+    SetTextAngle( ANGLE_HORIZONTAL );    // constructor already did this.
 
     // Fields in RAM must always have names, because we are trying to get less dependent on
     // field ids and more dependent on names. Plus assumptions are made in the field editors.
@@ -163,8 +163,8 @@ bool LIB_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
     // The text orientation may need to be flipped if the transformation matrix causes xy axes
     // to be flipped.  This simple algo works only for schematic matrix (rot 90 or/and mirror)
-    bool t1 = ( DefaultTransform.x1 != 0 ) ^ ( GetTextAngle() != EDA_ANGLE::HORIZONTAL );
-    tmp_text.SetTextAngle( t1 ? EDA_ANGLE::HORIZONTAL : EDA_ANGLE::VERTICAL );
+    bool t1 = ( DefaultTransform.x1 != 0 ) ^ ( GetTextAngle() != ANGLE_HORIZONTAL );
+    tmp_text.SetTextAngle( t1 ? ANGLE_HORIZONTAL : ANGLE_VERTICAL );
 
     return tmp_text.TextHitTest( aPosition, aAccuracy );
 }
@@ -291,8 +291,7 @@ void LIB_FIELD::Rotate( const VECTOR2I& center, bool aRotateCCW )
     RotatePoint( pt, center, rot_angle );
     SetTextPos( pt );
 
-    SetTextAngle( GetTextAngle() != EDA_ANGLE::HORIZONTAL ? EDA_ANGLE::HORIZONTAL
-                                                          : EDA_ANGLE::VERTICAL );
+    SetTextAngle( GetTextAngle() != ANGLE_HORIZONTAL ? ANGLE_HORIZONTAL  : ANGLE_VERTICAL );
 }
 
 
@@ -308,9 +307,9 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, const VECTOR2I& aOffset, bool aFill,
     if( aTransform.y1 )  // Rotate symbol 90 deg.
     {
         if( orient.IsHorizontal() )
-            orient = EDA_ANGLE::VERTICAL;
+            orient = ANGLE_VERTICAL;
         else
-            orient = EDA_ANGLE::HORIZONTAL;
+            orient = ANGLE_HORIZONTAL;
     }
 
     EDA_RECT bbox = GetBoundingBox();

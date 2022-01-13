@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -792,7 +792,7 @@ void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
                          ASCH_RECORD_ORIENTATION orientation )
 {
     int       vjustify, hjustify;
-    EDA_ANGLE angle = EDA_ANGLE::HORIZONTAL;
+    EDA_ANGLE angle = ANGLE_HORIZONTAL;
 
     switch( justification )
     {
@@ -839,20 +839,20 @@ void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
     switch( orientation )
     {
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
-        angle = EDA_ANGLE::HORIZONTAL;
+        angle = ANGLE_HORIZONTAL;
         break;
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
         vjustify *= -1;
         hjustify *= -1;
-        angle = EDA_ANGLE::HORIZONTAL;
+        angle = ANGLE_HORIZONTAL;
         break;
     case ASCH_RECORD_ORIENTATION::UPWARDS:
-        angle = EDA_ANGLE::VERTICAL;
+        angle = ANGLE_VERTICAL;
         break;
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
         vjustify *= -1;
         hjustify *= -1;
-        angle = EDA_ANGLE::VERTICAL;
+        angle = ANGLE_VERTICAL;
         break;
     }
 
@@ -1854,22 +1854,22 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
     {
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_90 );
-        valueField->SetTextAngle( EDA_ANGLE::VERTICAL );
+        valueField->SetTextAngle( ANGLE_VERTICAL );
         valueField->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         break;
     case ASCH_RECORD_ORIENTATION::UPWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_180 );
-        valueField->SetTextAngle( EDA_ANGLE::HORIZONTAL );
+        valueField->SetTextAngle( ANGLE_HORIZONTAL );
         valueField->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
         break;
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_270 );
-        valueField->SetTextAngle( EDA_ANGLE::VERTICAL );
+        valueField->SetTextAngle( ANGLE_VERTICAL );
         valueField->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         break;
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_0 );
-        valueField->SetTextAngle( EDA_ANGLE::HORIZONTAL );
+        valueField->SetTextAngle( ANGLE_HORIZONTAL );
         valueField->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
         break;
     default:

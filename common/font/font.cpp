@@ -280,7 +280,7 @@ VECTOR2I FONT::StringBoundaryLimits( const UTF8& aText, const VECTOR2I& aSize, i
     if( aItalic )
         textStyle |= TEXT_STYLE::ITALIC;
 
-    (void) drawMarkup( &boundingBox, nullptr, aText, VECTOR2I(), aSize, EDA_ANGLE::ANGLE_0, false,
+    (void) drawMarkup( &boundingBox, nullptr, aText, VECTOR2I(), aSize, ANGLE_0, false,
                        VECTOR2I(), textStyle );
 
     if( IsStroke() )
@@ -305,8 +305,8 @@ VECTOR2I FONT::boundingBoxSingleLine( BOX2I* aBBox, const UTF8& aText, const VEC
     if( aItalic )
         textStyle |= TEXT_STYLE::ITALIC;
 
-    VECTOR2I extents = drawMarkup( aBBox, nullptr, aText, aPosition, aSize, EDA_ANGLE::ANGLE_0,
-                                   false, VECTOR2I(), textStyle );
+    VECTOR2I extents = drawMarkup( aBBox, nullptr, aText, aPosition, aSize, ANGLE_0, false,
+                                   VECTOR2I(), textStyle );
 
     return extents;
 }

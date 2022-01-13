@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -544,8 +544,7 @@ void PCB_PARSER::parseRenderCache( EDA_TEXT* text )
     wxString cacheText = FROM_UTF8( CurText() );
     double   cacheAngle = parseAngle( "render cache angle" );
 
-    text->SetupRenderCache( cacheText,
-                            EDA_ANGLE( cacheAngle, EDA_ANGLE::TENTHS_OF_A_DEGREE ) );
+    text->SetupRenderCache( cacheText, EDA_ANGLE( cacheAngle, TENTHS_OF_A_DEGREE_T ) );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {

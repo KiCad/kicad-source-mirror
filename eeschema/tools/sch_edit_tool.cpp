@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -539,9 +539,9 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             SCH_FIELD* field = static_cast<SCH_FIELD*>( head );
 
             if( field->GetTextAngle().IsHorizontal() )
-                field->SetTextAngle( EDA_ANGLE::VERTICAL );
+                field->SetTextAngle( ANGLE_VERTICAL );
             else
-                field->SetTextAngle( EDA_ANGLE::HORIZONTAL );
+                field->SetTextAngle( ANGLE_HORIZONTAL );
 
             // Now that we're moving a field, they're no longer autoplaced.
             static_cast<SCH_ITEM*>( head->GetParent() )->ClearFieldsAutoplaced();
@@ -645,9 +645,9 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                     field->Rotate( rotPoint );
 
                     if( field->GetTextAngle().IsHorizontal() )
-                        field->SetTextAngle( EDA_ANGLE::VERTICAL );
+                        field->SetTextAngle( ANGLE_VERTICAL );
                     else
-                        field->SetTextAngle( EDA_ANGLE::HORIZONTAL );
+                        field->SetTextAngle( ANGLE_HORIZONTAL );
 
                     // Now that we're moving a field, they're no longer autoplaced.
                     static_cast<SCH_ITEM*>( field->GetParent() )->ClearFieldsAutoplaced();
