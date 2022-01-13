@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
 
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 #define TOOL_EVENT_UTILS_H
 
 #include <tool/tool_interactive.h>
+#include <eda_angle.h>
 
 
 class PCB_BASE_EDIT_FRAME;
@@ -33,10 +34,9 @@ class PCB_BASE_EDIT_FRAME;
 /**
  * Namespace TOOL_EVT_UTILS
  *
- * Utility functions for dealing with various tool events. These are
- * free functions, so they interface with any classes exclusively via
- * the public interfaces, so they don't need to be subsumed into the
- * "helped" classes.
+ * Utility functions for dealing with various tool events. These are free functions, so they
+ * interface with any classes exclusively via the public interfaces, so they don't need to be
+ * subsumed into the "helped" classes.
  */
 namespace TOOL_EVT_UTILS
 {
@@ -51,18 +51,16 @@ namespace TOOL_EVT_UTILS
     /**
      * Function getEventRotationAngle()
      *
-     * Helper function to get a rotation angle based on a frame's
-     * configured angle and the direction indicated by a rotation action event
+     * Helper function to get a rotation angle based on a frame's configured angle and the
+     * direction indicated by a rotation action event
      *
-     * @param aFrame the PCB edit frame to use to get the base rotation
-     * step value from
-     * @param aEvt the tool event - should be a rotation action event
-     * and should have a rotation multiplier parameter
+     * @param aFrame the PCB edit frame to use to get the base rotation step value from
+     * @param aEvt the tool event - should be a rotation action event and should have a rotation
+     *                              multiplier parameter
      *
-     * @return the rotation angle in clockwise internal units
+     * @return the clockwise rotation angle
      */
-    int GetEventRotationAngle( const PCB_BASE_EDIT_FRAME& aFrame,
-                               const TOOL_EVENT& aEvt );
+    EDA_ANGLE GetEventRotationAngle( const PCB_BASE_EDIT_FRAME& aFrame, const TOOL_EVENT& aEvent );
 }
 
 #endif // TOOL_EVENT_UTILS_H

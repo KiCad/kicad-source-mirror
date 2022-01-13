@@ -159,12 +159,12 @@ public:
     /**
      * Return the angle used for rotate operations.
      */
-    int GetRotationAngle() const { return m_rotationAngle; }
+    EDA_ANGLE GetRotationAngle() const { return m_rotationAngle; }
 
     /**
      * Set the angle used for rotate operations.
      */
-    void SetRotationAngle( int aRotationAngle );
+    void SetRotationAngle( EDA_ANGLE aRotationAngle );
 
     void ShowTextPropertiesDialog( BOARD_ITEM* aText );
     void ShowGraphicItemPropertiesDialog( BOARD_ITEM* aItem );
@@ -226,7 +226,7 @@ protected:
     void unitsChangeRefresh() override;
 
 protected:
-    int                     m_rotationAngle;        // Rotation step (in tenths of a degree)
+    EDA_ANGLE               m_rotationAngle;        // Rotation step (in tenths of a degree)
     bool                    m_undoRedoBlocked;
 
     PANEL_SELECTION_FILTER* m_selectionFilterPanel;

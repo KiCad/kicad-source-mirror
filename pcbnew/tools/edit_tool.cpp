@@ -1461,8 +1461,8 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     updateModificationPoint( selection );
 
-    VECTOR2I refPt = selection.GetReferencePoint();
-    const int rotateAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *editFrame, aEvent );
+    VECTOR2I  refPt = selection.GetReferencePoint();
+    EDA_ANGLE rotateAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *editFrame, aEvent );
 
     // When editing footprints, all items have the same parent
     if( IsFootprintEditor() )
@@ -1484,7 +1484,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             }
         }
 
-        static_cast<BOARD_ITEM*>( item )->Rotate( refPt, EDA_ANGLE( rotateAngle, TENTHS_OF_A_DEGREE_T ) );
+        static_cast<BOARD_ITEM*>( item )->Rotate( refPt, rotateAngle );
     }
 
     if( !m_dragging )

@@ -48,7 +48,8 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                           const wxPoint& aPos, const wxSize& aSize, long aStyle,
                                           const wxString& aFrameName ) :
         PCB_BASE_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
-                        m_rotationAngle( 900 ), m_undoRedoBlocked( false ),
+        m_rotationAngle( ANGLE_90 ),
+        m_undoRedoBlocked( false ),
         m_selectionFilterPanel( nullptr ),
         m_appearancePanel( nullptr )
 {
@@ -158,9 +159,10 @@ bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
 }
 
 
-void PCB_BASE_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
+void PCB_BASE_EDIT_FRAME::SetRotationAngle( EDA_ANGLE aRotationAngle )
 {
-    wxCHECK2_MSG( aRotationAngle > 0 && aRotationAngle <= 900, aRotationAngle = 900,
+    wxCHECK2_MSG( aRotationAngle > ANGLE_0 && aRotationAngle <= ANGLE_90,
+                  aRotationAngle = ANGLE_90,
                   wxT( "Invalid rotation angle, defaulting to 90." ) );
 
     m_rotationAngle = aRotationAngle;
