@@ -41,7 +41,6 @@
 #include <gal/hidpi_gl_canvas.h>
 
 #include <unordered_map>
-#include <boost/smart_ptr/shared_array.hpp>
 #include <memory>
 #include <wx/event.h>
 
