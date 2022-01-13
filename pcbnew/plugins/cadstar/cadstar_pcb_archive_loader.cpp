@@ -2513,8 +2513,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText(
     aContainer->Add( txt );
     txt->SetText( aCadstarText.Text );
 
-    VECTOR2I rotatedTextPos = getKiCadPoint( aCadstarText.Position );
-    RotatePoint( rotatedTextPos, aTransformCentre, aRotationAngle );
+    EDA_ANGLE rotationAngle( aRotationAngle, TENTHS_OF_A_DEGREE_T );
+    VECTOR2I  rotatedTextPos = getKiCadPoint( aCadstarText.Position );
+    RotatePoint( rotatedTextPos, aTransformCentre, rotationAngle );
     rotatedTextPos.x =
             KiROUND( (double) ( rotatedTextPos.x - aTransformCentre.x ) * aScalingFactor );
     rotatedTextPos.y =
@@ -2523,7 +2524,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText(
     txt->SetTextPos( rotatedTextPos );
     txt->SetPosition( rotatedTextPos );
 
-    txt->SetTextAngle( getAngleTenthDegree( aCadstarText.OrientAngle ) + aRotationAngle );
+    txt->SetTextAngle( getAngle( aCadstarText.OrientAngle ) + rotationAngle );
 
     txt->SetMirrored( aCadstarText.Mirror );
 

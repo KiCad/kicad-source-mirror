@@ -2831,7 +2831,7 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
 
     if( token == T_NUMBER )
     {
-        text->SetTextAngle( parseAngle() );
+        text->SetTextAngle( EDA_ANGLE( parseAngle(), TENTHS_OF_A_DEGREE_T ) );
         NeedRIGHT();
     }
     else if( token != T_RIGHT )
@@ -3735,7 +3735,7 @@ FP_TEXT* PCB_PARSER::parseFP_TEXT()
 
     if( CurTok() == T_NUMBER )
     {
-        text->SetTextAngle( parseAngle() );
+        text->SetTextAngle( EDA_ANGLE( parseAngle(), TENTHS_OF_A_DEGREE_T ) );
         NextTok();
     }
 

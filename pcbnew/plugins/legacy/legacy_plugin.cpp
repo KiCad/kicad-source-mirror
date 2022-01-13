@@ -2007,14 +2007,15 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
         }
         else if( TESTLINE( "Po" ) )
         {
-            wxSize  size;
+            wxSize size;
+            BIU    pos_x = biuParse( line + SZ( "Po" ), &data );
+            BIU    pos_y = biuParse( data, &data );
 
-            BIU pos_x   = biuParse( line + SZ( "Po" ), &data );
-            BIU pos_y   = biuParse( data, &data );
-            size.x      = biuParse( data, &data );
-            size.y      = biuParse( data, &data );
-            BIU thickn  = biuParse( data, &data );
-            double angle = degParse( data );
+            size.x = biuParse( data, &data );
+            size.y = biuParse( data, &data );
+
+            BIU       thickn = biuParse( data, &data );
+            EDA_ANGLE angle = EDA_ANGLE( degParse( data ), TENTHS_OF_A_DEGREE_T );
 
             pcbtxt->SetTextSize( size );
             pcbtxt->SetTextThickness( thickn );
@@ -2642,13 +2643,13 @@ void LEGACY_PLUGIN::loadDIMENSION()
         }
         else if( TESTLINE( "Po" ) )
         {
-            BIU     pos_x  = biuParse( line + SZ( "Po" ), &data );
-            BIU     pos_y  = biuParse( data, &data );
-            BIU     width  = biuParse( data, &data );
-            BIU     height = biuParse( data, &data );
-            BIU     thickn = biuParse( data, &data );
-            double  orient = degParse( data, &data );
-            char*   mirror = strtok_r( (char*) data, delims, (char**) &data );
+            BIU       pos_x  = biuParse( line + SZ( "Po" ), &data );
+            BIU       pos_y  = biuParse( data, &data );
+            BIU       width  = biuParse( data, &data );
+            BIU       height = biuParse( data, &data );
+            BIU       thickn = biuParse( data, &data );
+            EDA_ANGLE orient = EDA_ANGLE( degParse( data, &data ), TENTHS_OF_A_DEGREE_T );
+            char*     mirror = strtok_r( (char*) data, delims, (char**) &data );
 
             dim->Text().SetTextPos( VECTOR2I( pos_x, pos_y ) );
             dim->Text().SetTextSize( wxSize( width, height ) );

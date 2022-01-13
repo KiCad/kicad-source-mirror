@@ -679,12 +679,11 @@ void PCB_DIM_ALIGNED::updateText()
 
     if( m_keepTextAligned )
     {
-        double textAngle = 3600 - RAD2DECIDEG( crossbarCenter.Angle() );
+        EDA_ANGLE textAngle = FULL_CIRCLE - EDA_ANGLE( crossbarCenter.Angle(), RADIANS_T );
+        textAngle.Normalize();
 
-        NORMALIZE_ANGLE_POS( textAngle );
-
-        if( textAngle > 900 && textAngle <= 2700 )
-            textAngle -= 1800;
+        if( textAngle > ANGLE_90 && textAngle <= ANGLE_270 )
+            textAngle -= ANGLE_180;
 
         m_text.SetTextAngle( textAngle );
     }
@@ -859,14 +858,10 @@ void PCB_DIM_ORTHOGONAL::updateText()
 
     if( m_keepTextAligned )
     {
-        double textAngle;
-
         if( abs( crossbarCenter.x ) > abs( crossbarCenter.y ) )
-            textAngle = 0;
+            m_text.SetTextAngle( ANGLE_HORIZONTAL );
         else
-            textAngle = 900;
-
-        m_text.SetTextAngle( textAngle );
+            m_text.SetTextAngle( ANGLE_VERTICAL );
     }
 
     PCB_DIMENSION_BASE::updateText();
@@ -1124,16 +1119,18 @@ void PCB_DIM_RADIAL::updateText()
 {
     if( m_keepTextAligned )
     {
-        VECTOR2I textLine( Text().GetPosition() - GetKnee() );
-        double   textAngle = 3600 - RAD2DECIDEG( textLine.Angle() );
+        VECTOR2I  textLine( Text().GetPosition() - GetKnee() );
+        EDA_ANGLE textAngle = FULL_CIRCLE - EDA_ANGLE( textLine.Angle(), RADIANS_T );
 
-        NORMALIZE_ANGLE_POS( textAngle );
+        textAngle.Normalize();
 
-        if( textAngle > 900 && textAngle <= 2700 )
-            textAngle -= 1800;
+        if( textAngle > ANGLE_90 && textAngle <= ANGLE_270 )
+            textAngle -= ANGLE_180;
 
         // Round to nearest degree
-        m_text.SetTextAngle( KiROUND( textAngle / 10 ) * 10 );
+        textAngle = EDA_ANGLE( KiROUND( textAngle.AsDegrees() ), DEGREES_T );
+
+        m_text.SetTextAngle( textAngle );
     }
 
     PCB_DIMENSION_BASE::updateText();

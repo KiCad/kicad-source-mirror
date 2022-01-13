@@ -119,14 +119,6 @@ public:
      */
     int GetEffectiveTextPenWidth( int aDefaultWidth = 0 ) const;
 
-    virtual void SetTextAngle( double aAngleInTenthsOfADegree )
-    {
-        // Higher level classes may be more restrictive than this by overloading
-        // SetTextAngle() or merely calling EDA_TEXT::SetTextAngle() after clamping
-        // aAngle before calling this lowest inline accessor.
-        SetTextAngle( EDA_ANGLE( aAngleInTenthsOfADegree, TENTHS_OF_A_DEGREE_T ) );
-    }
-
     virtual void SetTextAngle( const EDA_ANGLE& aAngle );
     const EDA_ANGLE& GetTextAngle() const       { return m_attributes.m_Angle; }
 

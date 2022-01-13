@@ -255,13 +255,13 @@ static void eagleToKicadAlignment( EDA_TEXT* aText, int aEagleAlignment, int aRe
 
     if( aRelDegress == 90 )
     {
-        aText->SetTextAngle( 900 );
+        aText->SetTextAngle( ANGLE_VERTICAL );
     }
     else if( aRelDegress == 180 )
         align = -align;
     else if( aRelDegress == 270 )
     {
-        aText->SetTextAngle( 900 );
+        aText->SetTextAngle( ANGLE_VERTICAL );
         align = -align;
     }
 

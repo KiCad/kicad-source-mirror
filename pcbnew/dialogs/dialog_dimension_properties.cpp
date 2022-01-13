@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -417,7 +417,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
 
     aTarget->SetKeepTextAligned( m_cbKeepAligned->GetValue() );
 
-    text.SetTextAngle( m_orientation.GetDoubleValue() );
+    text.SetTextAngle( EDA_ANGLE( m_orientation.GetDoubleValue(), TENTHS_OF_A_DEGREE_T ) );
     text.SetTextWidth( m_textWidth.GetValue() );
     text.SetTextHeight( m_textHeight.GetValue() );
     text.SetTextThickness( m_textThickness.GetValue() );

@@ -3386,8 +3386,9 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& aSymbo
     wxCHECK_MSG( strCompare( "T", line, &line ), nullptr, "Invalid LIB_TEXT definition" );
 
     LIB_TEXT* text = new LIB_TEXT( aSymbol.get() );
+    double    angleInTenths = parseInt( aReader, line, &line );
 
-    text->SetTextAngle( (double) parseInt( aReader, line, &line ) );
+    text->SetTextAngle( EDA_ANGLE( angleInTenths, TENTHS_OF_A_DEGREE_T ) );
 
     VECTOR2I center;
 

@@ -72,18 +72,6 @@ FP_TEXT::~FP_TEXT()
 }
 
 
-void FP_TEXT::SetTextAngle( double aAngle )
-{
-    EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
-}
-
-
-void FP_TEXT::SetTextAngle( const EDA_ANGLE& aAngle )
-{
-    EDA_TEXT::SetTextAngle( aAngle );
-}
-
-
 bool FP_TEXT::TextHitTest( const VECTOR2I& aPoint, int aAccuracy ) const
 {
     EDA_RECT rect = GetTextBox();

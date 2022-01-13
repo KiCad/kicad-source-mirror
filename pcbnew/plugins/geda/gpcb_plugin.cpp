@@ -393,7 +393,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
     }
 
     int orientation = parseInt( parameters[paramCnt-4], 1.0 );
-    footprint->Reference().SetTextAngle(( orientation % 2) ? 900 : 0 );
+    footprint->Reference().SetTextAngle( ( orientation % 2) ? ANGLE_VERTICAL : ANGLE_HORIZONTAL );
 
     // Calculate size: default height is 40 mils, width 30 mil.
     // real size is:  default * ibuf[idx+3] / 100 (size in gpcb is given in percent of default size

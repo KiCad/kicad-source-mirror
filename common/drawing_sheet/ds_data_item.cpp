@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -596,7 +596,7 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
 
         text->SetHorizJustify( m_Hjustify ) ;
         text->SetVertJustify( m_Vjustify );
-        text->SetTextAngle( m_Orient * 10 );    // graphic text orient unit = 0.1 degree
+        text->SetTextAngle( EDA_ANGLE( m_Orient, DEGREES_T ) );
         text->SetMultilineAllowed( multilines );
 
         // Increment label for the next text (has no meaning for multiline texts)
@@ -697,7 +697,7 @@ void DS_DATA_ITEM_TEXT::SetConstrainedTextSize()
         dummy.SetMultilineAllowed( true );
         dummy.SetHorizJustify( m_Hjustify ) ;
         dummy.SetVertJustify( m_Vjustify );
-        dummy.SetTextAngle( m_Orient * 10 );
+        dummy.SetTextAngle( EDA_ANGLE( m_Orient, DEGREES_T ) );
 
         EDA_RECT rect = dummy.GetTextBox();
         DSIZE size;

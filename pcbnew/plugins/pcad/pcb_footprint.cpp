@@ -530,7 +530,7 @@ void PCB_FOOTPRINT::AddToBoard()
         SetTextSizeFromStrokeFontHeight( ref_text, m_name.textHeight );
 
     r = m_name.textRotation - m_rotation;
-    ref_text->SetTextAngle( r );
+    ref_text->SetTextAngle( EDA_ANGLE( r, TENTHS_OF_A_DEGREE_T ) );
     ref_text->SetKeepUpright( false );
 
     ref_text->SetItalic( m_name.isItalic );
@@ -558,7 +558,7 @@ void PCB_FOOTPRINT::AddToBoard()
         SetTextSizeFromStrokeFontHeight( val_text, m_Value.textHeight );
 
     r = m_Value.textRotation - m_rotation;
-    val_text->SetTextAngle( r );
+    val_text->SetTextAngle( EDA_ANGLE( r, TENTHS_OF_A_DEGREE_T ) );
     val_text->SetKeepUpright( false );
 
     val_text->SetItalic( m_Value.isItalic );

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,7 +155,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
     boardItem->SetLayer( GetLayer() );
     textItem->SetTextThickness( MapLineWidth( aThickness ) );
     textItem->SetTextPos( MapCoordinate( aOrigin ) );
-    textItem->SetTextAngle( aOrientation * 10.0 );      // Pcbnew uses the decidegree
+    textItem->SetTextAngle( EDA_ANGLE( aOrientation, DEGREES_T ) );      // Pcbnew uses the decidegree
     textItem->SetTextWidth( aWidth * ImportScalingFactor() );
     textItem->SetTextHeight( aHeight * ImportScalingFactor() );
     textItem->SetVertJustify( aVJustify );

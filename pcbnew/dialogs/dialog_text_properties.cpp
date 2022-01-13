@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2010-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -419,7 +419,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         m_edaText->SetTextThickness( maxPenWidth );
     }
 
-    m_edaText->SetTextAngle( m_orientation.GetDoubleValue() );
+    m_edaText->SetTextAngle( EDA_ANGLE( m_orientation.GetDoubleValue(), TENTHS_OF_A_DEGREE_T ) );
 
     m_edaText->SetVisible( m_Visible->GetValue() );
 

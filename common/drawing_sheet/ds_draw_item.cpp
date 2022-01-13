@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -188,11 +188,6 @@ wxString DS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
                              GetShownText() );
 }
 
-
-void DS_DRAW_ITEM_TEXT::SetTextAngle( double aAngle )
-{
-    EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
-}
 
 // ============================ POLYGON =================================
 

@@ -333,8 +333,8 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         bool ok = true;
 
         // ints
-        ok = ok && validateLongEntry(*m_entryNx, newGrid->m_nx, _("horizontal count"), errors);
-        ok = ok && validateLongEntry(*m_entryNy, newGrid->m_ny, _("vertical count"), errors);
+        ok &= validateLongEntry(*m_entryNx, newGrid->m_nx, _("horizontal count"), errors);
+        ok &= validateLongEntry(*m_entryNy, newGrid->m_ny, _("vertical count"), errors);
 
         newGrid->m_delta.x = m_hSpacing.GetValue();
         newGrid->m_delta.y = m_vSpacing.GetValue();
@@ -342,7 +342,7 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         newGrid->m_offset.x = m_hOffset.GetValue();
         newGrid->m_offset.y = m_vOffset.GetValue();
 
-        ok = ok && validateLongEntry(*m_entryStagger, newGrid->m_stagger, _("stagger"), errors);
+        ok &= validateLongEntry(*m_entryStagger, newGrid->m_stagger, _("stagger"), errors);
 
         newGrid->m_stagger_rows = m_radioBoxGridStaggerType->GetSelection() == 0;
 
@@ -361,18 +361,19 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
                 // validate from the input fields
                 bool numOk = validateAxisOptions( *m_entryGridPriNumberingOffset,
-                        *m_choicePriAxisNumbering, *m_entryGridPriNumberingStep,
-                        newGrid->m_pri_axis, errors );
+                                                  *m_choicePriAxisNumbering,
+                                                  *m_entryGridPriNumberingStep,
+                                                  newGrid->m_pri_axis, errors );
 
                 if( newGrid->m_2dArrayNumbering )
                 {
-                    numOk = validateAxisOptions( *m_entryGridSecNumberingOffset,
-                                    *m_choiceSecAxisNumbering, *m_entryGridSecNumberingStep,
-                                    newGrid->m_sec_axis, errors )
-                            && numOk;
+                    numOk &= validateAxisOptions( *m_entryGridSecNumberingOffset,
+                                                  *m_choiceSecAxisNumbering,
+                                                  *m_entryGridSecNumberingStep,
+                                                  newGrid->m_sec_axis, errors );
                 }
 
-                ok = ok && numOk;
+                ok &= numOk;
             }
             else
             {
@@ -389,15 +390,15 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
     }
     else if( page == m_circularPanel )
     {
-        auto newCirc = std::make_unique<ARRAY_CIRCULAR_OPTIONS>();
-        bool ok = true;
+        auto   newCirc = std::make_unique<ARRAY_CIRCULAR_OPTIONS>();
+        bool   ok = true;
+        double angle = DoubleValueFromString( EDA_UNITS::UNSCALED, m_entryCircAngle->GetValue() );
 
         newCirc->m_centre.x = m_hCentre.GetValue();
         newCirc->m_centre.y = m_vCentre.GetValue();
-        newCirc->m_angle = DoubleValueFromString( EDA_UNITS::DEGREES,
-                                                  m_entryCircAngle->GetValue() );
+        newCirc->m_angle = EDA_ANGLE( angle, DEGREES_T );
 
-        ok = ok && validateLongEntry(*m_entryCircCount, newCirc->m_nPts, _("point count"), errors);
+        ok = validateLongEntry(*m_entryCircCount, newCirc->m_nPts, _("point count"), errors);
 
         newCirc->m_rotateItems = m_entryRotateItemsCb->GetValue();
         newCirc->SetShouldNumber( m_isFootprintEditor );
@@ -408,9 +409,8 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
             if( newCirc->GetNumberingStartIsSpecified() )
             {
-                ok = ok
-                     && validateAxisOptions( *m_entryCircNumberingStart, *m_choiceCircNumbering,
-                             *m_entryCircNumberingStep, newCirc->m_axis, errors );
+                ok &= validateAxisOptions( *m_entryCircNumberingStart, *m_choiceCircNumbering,
+                                           *m_entryCircNumberingStep, newCirc->m_axis, errors );
             }
             else
             {

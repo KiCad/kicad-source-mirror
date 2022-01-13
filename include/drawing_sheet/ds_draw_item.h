@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -317,8 +317,6 @@ public:
     virtual wxString GetClass() const override { return wxT( "DS_DRAW_ITEM_TEXT" ); }
 
     void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
-
-    void SetTextAngle( double aAngle ) override;
 
     VECTOR2I GetPosition() const override { return GetTextPos(); }
     void     SetPosition( const VECTOR2I& aPos ) override { SetTextPos( aPos ); }

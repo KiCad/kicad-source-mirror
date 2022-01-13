@@ -41,7 +41,7 @@
  */
 std::ostream& operator<<( std::ostream& os, const ARRAY_OPTIONS::TRANSFORM& aObj )
 {
-    os << "TRANSFORM[ " << aObj.m_offset << " r " << aObj.m_rotation << "deg"
+    os << "TRANSFORM[ " << aObj.m_offset << " r " << aObj.m_rotation.AsDegrees() << "deg"
        << " ]";
     return os;
 }
@@ -53,7 +53,8 @@ std::ostream& operator<<( std::ostream& os, const ARRAY_OPTIONS::TRANSFORM& aObj
 bool TransformIsClose( const ARRAY_OPTIONS::TRANSFORM& aL, const ARRAY_OPTIONS::TRANSFORM& aR )
 {
     return KI_TEST::IsVecWithinTol<VECTOR2I>( aL.m_offset, aR.m_offset, 1 )
-           && KI_TEST::IsWithin<double>( aL.m_rotation, aR.m_rotation, 0.001 );
+               && KI_TEST::IsWithin<double>( aL.m_rotation.AsDegrees(),
+                                             aR.m_rotation.AsDegrees(), 0.001 );
 }
 
 
@@ -129,12 +130,12 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         },
         { 0, 0 },
         {
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, 0 },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 0 ) }, 0 },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 2 ) }, 0 },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 2 ) }, 0 },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 4 ) }, 0 },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 4 ) }, 0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, ANGLE_0 },
+            { { Millimeter2iu( 2 ), Millimeter2iu( 0 ) }, ANGLE_0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 2 ) }, ANGLE_0 },
+            { { Millimeter2iu( 2 ), Millimeter2iu( 2 ) }, ANGLE_0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 4 ) }, ANGLE_0 },
+            { { Millimeter2iu( 2 ), Millimeter2iu( 4 ) }, ANGLE_0 },
         },
     },
     {
@@ -152,12 +153,12 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         { 0, 0 },
         {
             // add the offsets for each positions
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, 0 },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 0.2 ) }, 0 },
-            { { Millimeter2iu( 0.1 ), Millimeter2iu( 2 ) }, 0 },
-            { { Millimeter2iu( 2.1 ), Millimeter2iu( 2.2 ) }, 0 },
-            { { Millimeter2iu( 0.2 ), Millimeter2iu( 4.0 ) }, 0 },
-            { { Millimeter2iu( 2.2 ), Millimeter2iu( 4.2 ) }, 0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, ANGLE_0 },
+            { { Millimeter2iu( 2 ), Millimeter2iu( 0.2 ) }, ANGLE_0 },
+            { { Millimeter2iu( 0.1 ), Millimeter2iu( 2 ) }, ANGLE_0 },
+            { { Millimeter2iu( 2.1 ), Millimeter2iu( 2.2 ) }, ANGLE_0 },
+            { { Millimeter2iu( 0.2 ), Millimeter2iu( 4.0 ) }, ANGLE_0 },
+            { { Millimeter2iu( 2.2 ), Millimeter2iu( 4.2 ) }, ANGLE_0 },
         },
     },
     {
@@ -175,12 +176,12 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         { 0, 0 },
         {
             // add the offsets for each positions
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, 0 },
-            { { Millimeter2iu( 3 ), Millimeter2iu( 0 ) }, 0 },
-            { { Millimeter2iu( 1 ), Millimeter2iu( 2 ) }, 0 },
-            { { Millimeter2iu( 4 ), Millimeter2iu( 2 ) }, 0 },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 4 ) }, 0 },
-            { { Millimeter2iu( 5 ), Millimeter2iu( 4 ) }, 0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, ANGLE_0 },
+            { { Millimeter2iu( 3 ), Millimeter2iu( 0 ) }, ANGLE_0 },
+            { { Millimeter2iu( 1 ), Millimeter2iu( 2 ) }, ANGLE_0 },
+            { { Millimeter2iu( 4 ), Millimeter2iu( 2 ) }, ANGLE_0 },
+            { { Millimeter2iu( 2 ), Millimeter2iu( 4 ) }, ANGLE_0 },
+            { { Millimeter2iu( 5 ), Millimeter2iu( 4 ) }, ANGLE_0 },
         },
     },
     {
@@ -198,12 +199,12 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         { 0, 0 },
         {
             // add the offsets for each positions
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, 0 },
-            { { Millimeter2iu( 3 ), Millimeter2iu( 1 ) }, 0 },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 2 ) }, 0 },
-            { { Millimeter2iu( 3 ), Millimeter2iu( 3 ) }, 0 },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 4 ) }, 0 },
-            { { Millimeter2iu( 3 ), Millimeter2iu( 5 ) }, 0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, ANGLE_0 },
+            { { Millimeter2iu( 3 ), Millimeter2iu( 1 ) }, ANGLE_0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 2 ) }, ANGLE_0 },
+            { { Millimeter2iu( 3 ), Millimeter2iu( 3 ) }, ANGLE_0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 4 ) }, ANGLE_0 },
+            { { Millimeter2iu( 3 ), Millimeter2iu( 5 ) }, ANGLE_0 },
         },
     },
     {
@@ -220,12 +221,12 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         },
         { 0, 0 },
         {
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, 0 },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 0 ) }, 0 },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 2 ) }, 0 },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 2 ) }, 0 },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 4 ) }, 0 },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 4 ) }, 0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, ANGLE_0 },
+            { { Millimeter2iu( 2 ), Millimeter2iu( 0 ) }, ANGLE_0 },
+            { { Millimeter2iu( 2 ), Millimeter2iu( 2 ) }, ANGLE_0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 2 ) }, ANGLE_0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 4 ) }, ANGLE_0 },
+            { { Millimeter2iu( 2 ), Millimeter2iu( 4 ) }, ANGLE_0 },
         },
     },
     {
@@ -242,12 +243,12 @@ static const std::vector<GRID_ARRAY_TEST_CASE> grid_geom_cases = {
         },
         { 0, 0 },
         {
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, 0 },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 2 ) }, 0 },
-            { { Millimeter2iu( 0 ), Millimeter2iu( 4 ) }, 0 },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 0 ) }, 0 },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 2 ) }, 0 },
-            { { Millimeter2iu( 2 ), Millimeter2iu( 4 ) }, 0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, ANGLE_0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 2 ) }, ANGLE_0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 4 ) }, ANGLE_0 },
+            { { Millimeter2iu( 2 ), Millimeter2iu( 0 ) }, ANGLE_0 },
+            { { Millimeter2iu( 2 ), Millimeter2iu( 2 ) }, ANGLE_0 },
+            { { Millimeter2iu( 2 ), Millimeter2iu( 4 ) }, ANGLE_0 },
         },
     },
 };
@@ -310,10 +311,10 @@ static const std::vector<CIRC_ARRAY_TEST_CASE> circ_geom_cases = {
         { Millimeter2iu( 10 ), 0 },
         {
             // diamond shape
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) } , 0 },
-            { { Millimeter2iu( -10 ), Millimeter2iu( -10 ) } , 0 },
-            { { Millimeter2iu( -20 ), Millimeter2iu( 0 ) } , 0 },
-            { {Millimeter2iu( -10 ), Millimeter2iu( 10 ) } , 0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, ANGLE_0 },
+            { { Millimeter2iu( -10 ), Millimeter2iu( -10 ) }, ANGLE_0 },
+            { { Millimeter2iu( -20 ), Millimeter2iu( 0 ) }, ANGLE_0 },
+            { {Millimeter2iu( -10 ), Millimeter2iu( 10 ) }, ANGLE_0 },
         },
     },
     {
@@ -326,10 +327,10 @@ static const std::vector<CIRC_ARRAY_TEST_CASE> circ_geom_cases = {
         },
         { Millimeter2iu( 10 ), 0 },
         {
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) } , 0 },
-            { { Millimeter2iu( -10 ), Millimeter2iu( -10 ) } , 90 },
-            { { Millimeter2iu( -20 ), Millimeter2iu( 0 ) } , 180 },
-            { {Millimeter2iu( -10 ), Millimeter2iu( 10 ) } , 270 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, ANGLE_0 },
+            { { Millimeter2iu( -10 ), Millimeter2iu( -10 ) }, ANGLE_90 },
+            { { Millimeter2iu( -20 ), Millimeter2iu( 0 ) }, ANGLE_180 },
+            { {Millimeter2iu( -10 ), Millimeter2iu( 10 ) }, ANGLE_270 },
         },
     },
     {
@@ -342,10 +343,10 @@ static const std::vector<CIRC_ARRAY_TEST_CASE> circ_geom_cases = {
         },
         { Millimeter2iu( 10 ), 0 },
         {
-            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) } , 0 },
+            { { Millimeter2iu( 0 ), Millimeter2iu( 0 ) }, ANGLE_0 },
             // 10 * [ 1-sin(45), sin(45) ]
-            { { Millimeter2iu( -2.9289321881 ), Millimeter2iu( -7.0710678118 ) } , 45 },
-            { { Millimeter2iu( -10 ), Millimeter2iu( -10 ) } , 90 },
+            { { Millimeter2iu( -2.9289321881 ), Millimeter2iu( -7.0710678118 ) }, ANGLE_45 },
+            { { Millimeter2iu( -10 ), Millimeter2iu( -10 ) }, ANGLE_90 },
         },
     },
 };
@@ -363,7 +364,7 @@ BOOST_AUTO_TEST_CASE( CircularGeometry )
             ARRAY_CIRCULAR_OPTIONS grid_opts;
 
             grid_opts.m_nPts = c.m_geom.n;
-            grid_opts.m_angle = 10 * c.m_geom.angle_offset;
+            grid_opts.m_angle = EDA_ANGLE( c.m_geom.angle_offset, DEGREES_T );
             grid_opts.m_centre = c.m_geom.centre;
             grid_opts.m_rotateItems = c.m_geom.rotate;
 

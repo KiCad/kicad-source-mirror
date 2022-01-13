@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020-2021 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -2622,7 +2622,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
     aKiCadTextItem->SetTextWidth( textWidth );
     aKiCadTextItem->SetTextHeight( textHeight );
     aKiCadTextItem->SetTextThickness( getKiCadLength( textCode.LineWidth ) );
-    aKiCadTextItem->SetTextAngle( getAngleTenthDegree( aCadstarOrientAngle ) );
+    aKiCadTextItem->SetTextAngle( EDA_ANGLE( getAngleDegrees( aCadstarOrientAngle ), DEGREES_T ) );
     aKiCadTextItem->SetBold( textCode.Font.Modifier1 == FONT_BOLD );
     aKiCadTextItem->SetItalic( textCode.Font.Italic );
 
@@ -2704,30 +2704,32 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
     {
         // Spin style not used. All text justifications are permitted. However, only orientations
         // of 0 deg or 90 deg are supported
-        double angleDeciDeg = NormalizeAnglePos( aKiCadTextItem->GetTextAngle().AsTenthsOfADegree() );
-        int    quadrant = KiROUND( angleDeciDeg / 900.0 );
+        EDA_ANGLE angle = aKiCadTextItem->GetTextAngle();
+        angle.Normalize();
+
+        int quadrant = KiROUND( angle.AsDegrees() / 90.0 );
         quadrant %= 4;
 
         switch( quadrant )
         {
         case 0:
-            angleDeciDeg = 0;
+            angle = ANGLE_HORIZONTAL;
             break;
         case 1:
-            angleDeciDeg = 900;
+            angle = ANGLE_VERTICAL;
             break;
         case 2:
-            angleDeciDeg = 0;
+            angle = ANGLE_HORIZONTAL;
             textAlignment = rotate180( textAlignment );
             break;
         case 3:
-            angleDeciDeg = 900;
+            angle = ANGLE_VERTICAL;
             textAlignment = rotate180( textAlignment );
             break;
         default: wxFAIL_MSG( "Unknown Quadrant" );
         }
 
-        aKiCadTextItem->SetTextAngle( angleDeciDeg );
+        aKiCadTextItem->SetTextAngle( angle );
         setAlignment( aKiCadTextItem, textAlignment );
         return;
     }

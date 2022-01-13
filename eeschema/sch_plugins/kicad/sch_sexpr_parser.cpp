@@ -764,7 +764,7 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
 
         case T_at:
             field->SetPosition( parseXY() );
-            field->SetTextAngle( static_cast<int>( parseDouble( "text angle" ) * 10.0 ) );
+            field->SetTextAngle( EDA_ANGLE( parseDouble( "text angle" ), DEGREES_T ) );
             NeedRIGHT();
             break;
 
@@ -1496,7 +1496,8 @@ LIB_TEXT* SCH_SEXPR_PARSER::parseText()
         {
         case T_at:
             text->SetPosition( parseXY() );
-            text->SetTextAngle( parseDouble( "text angle" ) );
+            // Yes, LIB_TEXT is really decidegrees even though all the others are degrees. :(
+            text->SetTextAngle( EDA_ANGLE( parseDouble( "text angle" ), TENTHS_OF_A_DEGREE_T ) );
             NeedRIGHT();
             break;
 
@@ -1723,7 +1724,7 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
 
         case T_at:
             field->SetPosition( parseXY() );
-            field->SetTextAngle( static_cast<int>( parseDouble( "text angle" ) * 10.0 ) );
+            field->SetTextAngle( EDA_ANGLE( parseDouble( "text angle" ), DEGREES_T ) );
             NeedRIGHT();
             break;
 

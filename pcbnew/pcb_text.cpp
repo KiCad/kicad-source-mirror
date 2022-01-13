@@ -103,18 +103,6 @@ wxString PCB_TEXT::GetShownText( int aDepth ) const
 }
 
 
-void PCB_TEXT::SetTextAngle( double aAngle )
-{
-    EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
-}
-
-
-void PCB_TEXT::SetTextAngle( const EDA_ANGLE& aAngle )
-{
-    EDA_TEXT::SetTextAngle( aAngle );
-}
-
-
 void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     EDA_UNITS units = aFrame->GetUserUnits();
@@ -187,7 +175,7 @@ void PCB_TEXT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     else
     {
         SetTextY( MIRRORVAL( GetTextPos().y, aCentre.y ) );
-        SetTextAngle( 1800 - GetTextAngle().AsTenthsOfADegree() );
+        SetTextAngle( ANGLE_180 - GetTextAngle() );
     }
 
     SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );

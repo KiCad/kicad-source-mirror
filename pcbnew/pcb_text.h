@@ -88,9 +88,6 @@ public:
         EDA_TEXT::Offset( aMoveVector );
     }
 
-    void SetTextAngle( double aAngle ) override;
-    void SetTextAngle( const EDA_ANGLE& aAngle );
-
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;

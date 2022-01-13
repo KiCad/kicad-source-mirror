@@ -2713,7 +2713,7 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
         }
 
         itm->SetPosition( elem.position );
-        tx->SetTextAngle( elem.rotation * 10. );
+        tx->SetTextAngle( EDA_ANGLE( elem.rotation, DEGREES_T ) );
 
         if( elem.component != ALTIUM_COMPONENT_NONE )
         {

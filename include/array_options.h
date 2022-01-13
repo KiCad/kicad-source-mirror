@@ -25,7 +25,7 @@
 #define PCBNEW_ARRAY_OPTIONS__H
 
 #include <math/vector2d.h>
-
+#include <eda_angle.h>
 #include <array_axis.h>
 
 /**
@@ -57,8 +57,8 @@ public:
      */
     struct TRANSFORM
     {
-        VECTOR2I m_offset;
-        double   m_rotation; // in degrees
+        VECTOR2I  m_offset;
+        EDA_ANGLE m_rotation;
     };
 
     /**
@@ -177,7 +177,7 @@ struct ARRAY_CIRCULAR_OPTIONS : public ARRAY_OPTIONS
     ARRAY_CIRCULAR_OPTIONS()
             : ARRAY_OPTIONS( ARRAY_CIRCULAR ),
               m_nPts( 0 ),
-              m_angle( 0.0f ),
+              m_angle( ANGLE_0 ),
               m_rotateItems( false )
     {
     }
@@ -185,7 +185,7 @@ struct ARRAY_CIRCULAR_OPTIONS : public ARRAY_OPTIONS
     /// number of point in the array
     long             m_nPts;
     /// angle between points, or 0 for each point separated by this value (decideg)
-    double           m_angle;
+    EDA_ANGLE        m_angle;
     VECTOR2I         m_centre;
     bool             m_rotateItems;
     ARRAY_AXIS       m_axis;

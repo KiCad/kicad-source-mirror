@@ -250,7 +250,7 @@ void LIB_TEXT::Rotate( const VECTOR2I& center, bool aRotateCCW )
         else if( GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
             SetVertJustify( GR_TEXT_V_ALIGN_TOP );
 
-        SetTextAngle( 0 );
+        SetTextAngle( ANGLE_0 );
     }
 
     NormalizeJustification( true );

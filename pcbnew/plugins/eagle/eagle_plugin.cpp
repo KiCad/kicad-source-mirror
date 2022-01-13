@@ -768,7 +768,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
                     if( degrees == 90 || t.rot->spin )
                     {
-                        pcbtxt->SetTextAngle( sign * t.rot->degrees * 10 );
+                        pcbtxt->SetTextAngle( EDA_ANGLE( sign * t.rot->degrees, DEGREES_T ) );
                     }
                     else if( degrees == 180 )
                     {
@@ -776,7 +776,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     }
                     else if( degrees == 270 )
                     {
-                        pcbtxt->SetTextAngle( sign * 90 * 10 );
+                        pcbtxt->SetTextAngle( EDA_ANGLE( sign * 90, DEGREES_T ) );
                         align = -align;
                     }
                     else
@@ -785,21 +785,21 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                         // placement right.
                         if( ( degrees > 0 ) &&  ( degrees < 90 ) )
                         {
-                            pcbtxt->SetTextAngle( sign * t.rot->degrees * 10 );
+                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * t.rot->degrees, DEGREES_T ) );
                         }
                         else if( ( degrees > 90 ) && ( degrees < 180 ) )
                         {
-                            pcbtxt->SetTextAngle( sign * ( t.rot->degrees + 180 ) * 10 );
+                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * ( t.rot->degrees + 180 ), DEGREES_T ) );
                             align = ETEXT::TOP_RIGHT;
                         }
                         else if( ( degrees > 180 ) && ( degrees < 270 ) )
                         {
-                            pcbtxt->SetTextAngle( sign * ( t.rot->degrees - 180 ) * 10 );
+                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * ( t.rot->degrees - 180 ), DEGREES_T ) );
                             align = ETEXT::TOP_RIGHT;
                         }
                         else if( ( degrees > 270 ) && ( degrees < 360 ) )
                         {
-                            pcbtxt->SetTextAngle( sign * t.rot->degrees * 10 );
+                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * t.rot->degrees, DEGREES_T ) );
                             align = ETEXT::BOTTOM_LEFT;
                         }
                     }
@@ -1607,24 +1607,24 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
         if( degrees == 90 || degrees == 0 || spin )
         {
             orient = degrees - aFootprint->GetOrientation().AsDegrees();
-            aFPText->SetTextAngle( sign * orient * 10 );
+            aFPText->SetTextAngle( EDA_ANGLE( sign * orient, DEGREES_T ) );
         }
         else if( degrees == 180 )
         {
             orient = 0 - aFootprint->GetOrientation().AsDegrees();
-            aFPText->SetTextAngle( sign * orient * 10 );
+            aFPText->SetTextAngle( EDA_ANGLE( sign * orient, DEGREES_T ) );
             align = -align;
         }
         else if( degrees == 270 )
         {
             orient = 90 - aFootprint->GetOrientation().AsDegrees();
             align = -align;
-            aFPText->SetTextAngle( sign * orient * 10 );
+            aFPText->SetTextAngle( EDA_ANGLE( sign * orient, DEGREES_T ) );
         }
         else
         {
             orient = 90 - degrees - aFootprint->GetOrientation().AsDegrees();
-            aFPText->SetTextAngle( sign * orient * 10 );
+            aFPText->SetTextAngle( EDA_ANGLE( sign * orient, DEGREES_T ) );
         }
 
         switch( align )
@@ -1966,7 +1966,7 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
         if( degrees == 90 || t.rot->spin )
         {
-            txt->SetTextAngle( sign * degrees * 10 );
+            txt->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
         }
         else if( degrees == 180 )
         {
@@ -1975,7 +1975,7 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
         else if( degrees == 270 )
         {
             align = ETEXT::TOP_RIGHT;
-            txt->SetTextAngle( sign * 90 * 10 );
+            txt->SetTextAngle( EDA_ANGLE( sign * 90, DEGREES_T ) );
         }
     }
 

@@ -75,7 +75,7 @@ ARRAY_OPTIONS::TRANSFORM ARRAY_GRID_OPTIONS::GetTransform( int n, const VECTOR2I
     }
 
     // this is already relative to the first array entry
-    return { point, 0.0 };
+    return { point, ANGLE_0 };
 }
 
 
@@ -107,23 +107,23 @@ int ARRAY_CIRCULAR_OPTIONS::GetArraySize() const
 
 ARRAY_OPTIONS::TRANSFORM ARRAY_CIRCULAR_OPTIONS::GetTransform( int n, const VECTOR2I& aPos ) const
 {
-    double angle;
+    EDA_ANGLE angle;
 
-    if( m_angle == 0 )
+    if( m_angle.IsZero() )
         // angle is zero, divide evenly into m_nPts
-        angle = 10 * 360.0 * n / double( m_nPts );
+        angle = EDA_ANGLE( 360.0 * n / double( m_nPts ), DEGREES_T );
     else
         // n'th step
-        angle = m_angle * n;
+        angle = EDA_ANGLE( m_angle.AsDegrees() * n, DEGREES_T );
 
     VECTOR2I new_pos = aPos;
     RotatePoint( new_pos, m_centre, angle );
 
     // take off the rotation (but not the translation) if needed
     if( !m_rotateItems )
-        angle = 0;
+        angle = ANGLE_0;
 
-    return { new_pos - aPos, angle / 10.0 };
+    return { new_pos - aPos, angle };
 }
 
 
