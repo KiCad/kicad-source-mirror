@@ -30,7 +30,8 @@
 using namespace KIFONT;
 
 OUTLINE_DECOMPOSER::OUTLINE_DECOMPOSER( FT_Outline& aOutline ) :
-        m_outline( aOutline )
+        m_outline( aOutline ),
+        m_contours( nullptr )
 {
 }
 
