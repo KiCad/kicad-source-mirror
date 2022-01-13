@@ -96,20 +96,10 @@ public:
         SetLocalCoord();
     }
 
-    void SetTextAngle( double aAngle ) override;
-    void SetTextAngle( const EDA_ANGLE& aAngle );
-
     /**
      * Called when rotating the parent footprint.
      */
-    void KeepUpright( double aOldOrientation, double aNewOrientation );
-
-    /**
-     * @return force the text rotation to be always between -90 .. 90 deg. Otherwise the text
-     *         is not easy to read if false, the text rotation is free.
-     */
-    bool IsKeepUpright() const { return m_keepUpright; }
-    void SetKeepUpright( bool aKeepUpright ) { m_keepUpright = aKeepUpright; }
+    void KeepUpright( const EDA_ANGLE& aOldOrientation, const EDA_ANGLE& aNewOrientation );
 
     /// Rotate text, in footprint editor
     /// (for instance in footprint rotation transform)
@@ -209,9 +199,6 @@ private:
 
     VECTOR2I  m_Pos0;           ///< text coordinates relative to the footprint anchor, orient 0.
                                 ///< text coordinate ref point is the text center
-
-    bool      m_keepUpright;    ///< if true, keep rotation angle between -90 .. 90 deg.
-                                ///< to keep the text more easy to read
 };
 
 #endif // FP_TEXT_H

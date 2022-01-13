@@ -1491,13 +1491,13 @@ void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     SetPosition( newpos );
     SetOrientation( newOrientation );
 
-    m_reference->KeepUpright( orientation.AsTenthsOfADegree(), newOrientation.AsTenthsOfADegree() );
-    m_value->KeepUpright( orientation.AsTenthsOfADegree(), newOrientation.AsTenthsOfADegree() );
+    m_reference->KeepUpright( orientation, newOrientation );
+    m_value->KeepUpright( orientation, newOrientation );
 
     for( BOARD_ITEM* item : m_drawings )
     {
         if( item->Type() == PCB_FP_TEXT_T )
-            static_cast<FP_TEXT*>( item )->KeepUpright( orientation.AsTenthsOfADegree(), newOrientation.AsTenthsOfADegree()  );
+            static_cast<FP_TEXT*>( item )->KeepUpright( orientation, newOrientation  );
     }
 
     m_boundingBoxCacheTimeStamp = 0;

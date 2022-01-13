@@ -127,7 +127,7 @@ public:
         SetTextAngle( EDA_ANGLE( aAngleInTenthsOfADegree, TENTHS_OF_A_DEGREE_T ) );
     }
 
-    void SetTextAngle( const EDA_ANGLE& aAngle );
+    virtual void SetTextAngle( const EDA_ANGLE& aAngle );
     const EDA_ANGLE& GetTextAngle() const       { return m_attributes.m_Angle; }
 
     void SetItalic( bool aItalic );
