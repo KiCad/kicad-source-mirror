@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2946,7 +2946,7 @@ std::tuple<PCB_LAYER_ID, LSET, bool> EAGLE_PLUGIN::defaultKicadLayer( int aEagle
     case EAGLE_LAYER::BTEST:
     case EAGLE_LAYER::HOLES:
     default:
-        kiLayer = UNSELECTED_LAYER;
+        kiLayer = UNDEFINED_LAYER;
         break;
     }
 
