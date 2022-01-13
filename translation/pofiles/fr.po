@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2021-12-31 10:43+0100\n"
+"POT-Creation-Date: 2022-01-13 19:40+0100\n"
+"PO-Revision-Date: 2022-01-12 20:05+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -2559,6 +2559,7 @@ msgid "Revision:"
 msgstr "Révision:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:238
+#: eeschema/dialogs/dialog_netlist - new.cpp:385
 #: eeschema/dialogs/dialog_netlist.cpp:384
 msgid "Title:"
 msgstr "Titre:"
@@ -2655,6 +2656,7 @@ msgstr "Prévisualisation"
 #: eeschema/dialogs/dialog_annotate.cpp:91 eeschema/dialogs/dialog_bom.cpp:135
 #: eeschema/dialogs/dialog_change_symbols.cpp:157
 #: eeschema/dialogs/dialog_erc.cpp:77 eeschema/dialogs/dialog_erc.cpp:320
+#: eeschema/dialogs/dialog_netlist - new.cpp:269
 #: eeschema/dialogs/dialog_netlist.cpp:268
 #: eeschema/dialogs/dialog_plot_schematic.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer.cpp:146
@@ -2849,7 +2851,7 @@ msgstr "Thème :"
 
 #: common/dialogs/panel_color_settings_base.cpp:33
 msgid "Override individual item colors"
-msgstr "Ignorer les couleurs individuees des éléments"
+msgstr "Ignorer les couleurs individuelles des éléments"
 
 #: common/dialogs/panel_color_settings_base.cpp:34
 msgid ""
@@ -4717,19 +4719,18 @@ msgstr "Problèmes d'écriture du fichier de configuration"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:101
 #: eeschema/dialogs/dialog_text_properties_base.cpp:67
-#, fuzzy
 msgid "Default Font"
-msgstr "Unités par défaut:"
+msgstr "Fonte par Défaut"
 
 #: common/font/fontconfig.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading font '%s'."
-msgstr "Erreur lors du chargement du fichier PCB '%s'."
+msgstr "Erreur de chargement de la fonte '%s'."
 
 #: common/font/fontconfig.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "Empreinte '%s' non trouvée."
+msgstr "Fonte '%s' introuvable; remplacée par '%s'."
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:884
 #: eeschema/symbol_editor/symbol_library_manager.cpp:104
@@ -6463,9 +6464,8 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "Mise en miroir pour l’axe des Y n'est pas encore supporté"
 
 #: common/widgets/font_choice.cpp:58
-#, fuzzy
 msgid "<not found>"
-msgstr "%s  non trouvé"
+msgstr "<non trouvé>"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
@@ -7681,7 +7681,8 @@ msgstr "Ajouter Générateur"
 msgid "Nickname '%s' already in use."
 msgstr "Un nom logique '%s' existe déjà."
 
-#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist.cpp:682
+#: eeschema/dialogs/dialog_bom.cpp:419 eeschema/dialogs/dialog_netlist -
+#: new.cpp:709 eeschema/dialogs/dialog_netlist.cpp:682
 msgid "Generator File"
 msgstr "Fichier Générateur"
 
@@ -8779,7 +8780,7 @@ msgstr "Ajuster à"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:170
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:108
 msgid "Font:"
-msgstr ""
+msgstr "Fonte:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
@@ -8789,9 +8790,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:174
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:112
-#, fuzzy
 msgid "KiCad Font"
-msgstr "KiCad "
+msgstr "Fonte KiCad "
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:191
 #: eeschema/dialogs/dialog_label_properties_base.cpp:237
@@ -9776,27 +9776,33 @@ msgstr "Accepter Nom"
 msgid "Migrate Buses"
 msgstr "Migration des Bus"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:268
 #: eeschema/dialogs/dialog_netlist.cpp:267
 #: eeschema/dialogs/dialog_netlist_base.h:69
 msgid "Export Netlist"
 msgstr "Exporter Netliste"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:300
 #: eeschema/dialogs/dialog_netlist.cpp:296
 msgid "Simulator requires a fully annotated schematic."
 msgstr "La simulation nécessite un schéma complètement numéroté."
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:323
 #: eeschema/dialogs/dialog_netlist.cpp:322
 msgid "Reformat passive symbol values"
 msgstr "Reformater les valeurs des composants passifs"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:324
 #: eeschema/dialogs/dialog_netlist.cpp:323
 msgid "Reformat passive symbol values e.g. 1M -> 1Meg"
 msgstr "Reformater les valeurs des composants passifs, par exemple 1M-> 1Meg"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:329
 #: eeschema/dialogs/dialog_netlist.cpp:328
 msgid "External simulator command:"
 msgstr "Commande simulateur externe :"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:330
 #: eeschema/dialogs/dialog_netlist.cpp:329
 msgid ""
 "Enter the command line to run spice\n"
@@ -9807,38 +9813,46 @@ msgstr ""
 "Habituellement <path to spice binary> %I\n"
 "%I sera remplacé par le nom réel de la netliste spice</path>"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:344
 #: eeschema/dialogs/dialog_netlist.cpp:343
 msgid "Create Netlist and Run Simulator Command"
 msgstr "Créer la Netlist et Exécuter la commande de simulation"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:395
 #: eeschema/dialogs/dialog_netlist.cpp:394
 msgid "Netlist command:"
 msgstr "Commande netliste:"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:441
 #: eeschema/dialogs/dialog_netlist.cpp:440
 msgid "Save Netlist File"
 msgstr "Sauver Fichier Netliste"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:499
 #: eeschema/dialogs/dialog_netlist.cpp:473
 #, c-format
 msgid "%s Export"
 msgstr "Export %s"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:528
 #: eeschema/dialogs/dialog_netlist.cpp:502
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
 msgid "Exporting netlist requires a fully annotated schematic."
 msgstr ""
 "L'exportation de la net liste nécessite un schéma complètement numéroté."
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:652
 #: eeschema/dialogs/dialog_netlist.cpp:625
 msgid "This plugin already exists."
 msgstr "Ce plugin existe déjà."
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:685
 #: eeschema/dialogs/dialog_netlist.cpp:658
 msgid "You must provide a netlist generator command string"
 msgstr ""
 "Vous devez fournir une ligne de commande pour le générateur de netliste"
 
+#: eeschema/dialogs/dialog_netlist - new.cpp:691
 #: eeschema/dialogs/dialog_netlist.cpp:664
 msgid "You must provide a netlist generator title"
 msgstr "Vous devez fournir un titre pour le générateur de netliste"
@@ -11964,9 +11978,8 @@ msgid "Appearance"
 msgstr "Apparence"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
-#, fuzzy
 msgid "Default font:"
-msgstr "Format par défaut"
+msgstr "Fonte par Défaut:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:46
 msgid "S&how hidden pins"
@@ -29204,7 +29217,6 @@ msgid "Check rule syntax"
 msgstr "Vérification de la syntaxe de la règle"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -29488,7 +29500,7 @@ msgstr ""
 "    (rule <rule_name> <rule_clause> ...)\n"
 "\n"
 "\n"
-"<br><br>\n"
+"<br>\n"
 "\n"
 "### Rule Clauses\n"
 "\n"
@@ -29498,8 +29510,10 @@ msgstr ""
 "\n"
 "    (layer \"<layer_name>\")\n"
 "\n"
+"    (severity <severity_name>)\n"
 "\n"
-"<br><br>\n"
+"\n"
+"<br>\n"
 "\n"
 "### Constraint Types\n"
 "\n"
@@ -29513,26 +29527,53 @@ msgstr ""
 " * length\n"
 " * hole\\_clearance\n"
 " * hole\\_size\n"
+" * mechanical\\_clearance\n"
+" * mechanical\\_hole\\_clearance\n"
+" * min\\_resolved\\_spokes\n"
 " * silk\\_clearance\n"
 " * skew\n"
+" * text\\_height\n"
+" * text\\_thickness\n"
+" * thermal\\_relief\\_gap\n"
+" * thermal\\_spoke\\_width\n"
 " * track\\_width\n"
 " * via\\_count\n"
 " * via\\_diameter\n"
+" * zone\\_connection\n"
 "\n"
-"\n"
-"<br><br>\n"
+"Note: `clearance` and `hole_clearance` rules are not run against items of "
+"the same net; `mechanical_clearance` and `mechanical_hole_clearance` rules "
+"are.\n"
+"<br>\n"
 "\n"
 "### Item Types\n"
 "\n"
-" * buried_via\n"
+" * buried\\_via\n"
 " * graphic\n"
 " * hole\n"
-" * micro_via\n"
+" * micro\\_via\n"
 " * pad\n"
 " * text\n"
 " * track\n"
 " * via\n"
 " * zone\n"
+"\n"
+"<br>\n"
+"\n"
+"### Zone Connections\n"
+"\n"
+" * solid\n"
+" * thermal\\_reliefs\n"
+" * none\n"
+"\n"
+"<br>\n"
+"\n"
+"### Severity Names\n"
+"\n"
+" * warning\n"
+" * error\n"
+" * exclusion\n"
+" * ignore\n"
 "\n"
 "<br>\n"
 "\n"
@@ -29560,6 +29601,11 @@ msgstr ""
 "    (rule HV_unshielded\n"
 "       (constraint clearance (min 2mm))\n"
 "       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
 "<br><br>\n"
 "\n"
 "### Notes\n"
@@ -29648,25 +29694,27 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"  \n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"  \n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"  \n"
 "        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type =='Via' && B.Type =='Track'\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
 "    \n"
 "    (rule \"Pad to Track Clearance\"  \n"
 "        (constraint clearance (min 0.2mm))\n"
-"        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
 "\n"
 "\n"
 "    (rule \"clearance-to-1mm-cutout\"\n"
 "        (constraint clearance (min 0.8mm))\n"
-"        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
+"        (condition \"A.Layer == 'Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
 "\n"
 "    (rule \"Max Drill Hole Size Mechanical\"  \n"
@@ -29686,7 +29734,39 @@ msgstr ""
 "    # Specify a larger clearance around any diff-pair\n"
 "    (rule \"dp clearance\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
-"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))"
+"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # Don't use thermal reliefs on heatsink pads\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # Require all four thermal relief spokes to connect to parent zone\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # Set thermal relief gap & spoke width for all zones\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # Override thermal relief gap & spoke width for GND and PWR zones\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"    \n"
+"\n"
+"    # Prevent solder wicking from SMD pads\n"
+"    (rule holes_in_pads\n"
+"        (constraint mechanical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # Disallow solder mask margin overrides\n"
+"    (rule \"disallow solder mask margin overrides\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (condition \"A.Type == 'Pad'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -30166,14 +30246,12 @@ msgid "Pad net doesn't match schematic"
 msgstr "Le net du pad  n'a pas de correspondance schématique"
 
 #: pcbnew/drc/drc_item.cpp:180
-#, fuzzy
 msgid "Footprint not found in libraries"
-msgstr "Empreinte non trouvée dans la liste de changement"
+msgstr "Empreinte introuvable dans les librairies"
 
 #: pcbnew/drc/drc_item.cpp:184
-#, fuzzy
 msgid "Footprint doesn't match copy in library"
-msgstr "Le type d’empreinte ne correspond pas aux type de pads"
+msgstr "L’empreinte ne correspond pas à la copie en librairie"
 
 #: pcbnew/drc/drc_item.cpp:192
 msgid "Assertion failure"
@@ -31762,14 +31840,12 @@ msgid "Auto-Place Footprints"
 msgstr "Autoplacement des Empreintes"
 
 #: pcbnew/menubar_pcb_editor.cpp:410
-#, fuzzy
 msgid "Add Teardrops"
-msgstr "Ajouter Repère"
+msgstr "Ajouter Teardrops"
 
 #: pcbnew/menubar_pcb_editor.cpp:412
-#, fuzzy
 msgid "Remove Teardrops"
-msgstr "Supprimer Pads Inutilisés"
+msgstr "Supprimer Teardrops"
 
 #: pcbnew/menubar_pcb_editor.cpp:434
 msgid "External Plugins"
@@ -34596,22 +34672,20 @@ msgstr "Une 'wire_via'  a une référence vers un padstack '%s' manquant."
 #: pcbnew/teardrop/dialog_teardrop.cpp:177
 #, c-format
 msgid "%d Teardrops created"
-msgstr ""
+msgstr "%d Teardrops créés"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:192
 #, c-format
 msgid "%d Teardrops removed."
-msgstr ""
+msgstr "%d Teardrops supprimés."
 
 #: pcbnew/teardrop/teardrop.cpp:189
-#, fuzzy
 msgid "Add teardrops"
-msgstr "Ajouter Repère"
+msgstr "Ajouter teardrops"
 
 #: pcbnew/teardrop/teardrop.cpp:382
-#, fuzzy
 msgid "Remove teardrops"
-msgstr "Supprimer Éléments"
+msgstr "Supprimer teardrops"
 
 #: pcbnew/toolbars_footprint_editor.cpp:92
 msgid "Load footprint from current board"
@@ -37698,6 +37772,11 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] chargement échouée: ligne d’entrée trop longue\n"
 
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
@@ -37708,9 +37787,10 @@ msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
-msgid "bitmap2component"
-msgstr "bitmap2component"
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:5
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+msgid "eeschema"
+msgstr "eeschema"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
@@ -37724,9 +37804,10 @@ msgstr "Outil de Capture Schématique"
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
-msgid "eeschema"
-msgstr "eeschema"
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:5
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+msgid "gerbview"
+msgstr "gerbview"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
@@ -37736,9 +37817,9 @@ msgstr "Visionneuse de fichiers Gerber"
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
-msgid "gerbview"
-msgstr "gerbview"
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:5
+msgid "kicad"
+msgstr "kicad"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -37753,6 +37834,10 @@ msgstr "Suite CAO Electronique"
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
@@ -37760,6 +37845,11 @@ msgstr "Calculateur pour PCB KiCad"
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
+
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+msgid "pcbnew"
+msgstr "pcbnew"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
@@ -37772,10 +37862,6 @@ msgstr "Éditeur de circuit imprimé"
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
-
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
-msgid "pcbnew"
-msgstr "pcbnew"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
@@ -37830,20 +37916,14 @@ msgstr "Schématique KiCad"
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
 
+#~ msgid "Library footprint issue"
+#~ msgstr "Problème de librairie d'empreintes"
+
 #~ msgid "Mirror text"
 #~ msgstr "Texte en miroir"
 
 #~ msgid "Justification:"
 #~ msgstr "Justification:"
-
-#~ msgid "Library footprint issue"
-#~ msgstr "Problème de librairie d'empreintes"
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
 
 #~ msgid "Random direction factor of the cast rays"
 #~ msgstr "Facteur de direction aléatoire des rayons lancés"
@@ -40031,6 +40111,9 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Options:"
 #~ msgstr "Options :"
+
+#~ msgid "Default format"
+#~ msgstr "Format par défaut"
 
 #~ msgid "No constraint"
 #~ msgstr "Aucune contrainte"
