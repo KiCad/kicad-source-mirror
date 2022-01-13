@@ -309,7 +309,7 @@ public:
         VERTEX_MANAGER* vboManager;
 
         /// Intersect points, that have to be freed after tessellation
-        std::deque<std::shared_ptr<GLdouble>>& intersectPoints;
+        std::deque<std::shared_ptr<GLdouble[]>>& intersectPoints;
     };
 
 private:
@@ -367,7 +367,7 @@ private:
 
     // Polygon tesselation
     GLUtesselator*                        m_tesselator;
-    std::deque<std::shared_ptr<GLdouble>> m_tessIntersects;
+    std::deque<std::shared_ptr<GLdouble[]>> m_tessIntersects;
 
     /// @copydoc GAL::BeginUpdate()
     void beginUpdate() override;
