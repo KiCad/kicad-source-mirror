@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-01-12 00:42+0000\n"
-"Last-Translator: prometheus <181903185@ogrenci.ibu.edu.tr>\n"
+"PO-Revision-Date: 2022-01-13 18:57+0000\n"
+"Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v6/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -6281,8 +6281,9 @@ msgid "No default footprint"
 msgstr ""
 
 #: common/widgets/gal_options_panel.cpp:86
+#, fuzzy
 msgid "Accelerated graphics"
-msgstr ""
+msgstr "Hızlandırılmış grafikler"
 
 #: common/widgets/gal_options_panel.cpp:86
 msgid "Fallback graphics"
@@ -6293,60 +6294,69 @@ msgid "Rendering Engine"
 msgstr "Oluşturma Motoru"
 
 #: common/widgets/gal_options_panel.cpp:91
+#, fuzzy
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr ""
+msgstr "Donanım hızlandırmalı grafikler (önerilen)"
 
 #: common/widgets/gal_options_panel.cpp:92
+#, fuzzy
 msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
+"Yazılım grafikleri (KiCad'in donanım hızlandırma gereksinimlerini "
+"desteklemeyen bilgisayarlar için)"
 
 #: common/widgets/gal_options_panel.cpp:104
+#, fuzzy
 msgid "Grid Options"
-msgstr ""
+msgstr "Izgara Seçenekleri"
 
 #: common/widgets/gal_options_panel.cpp:109
 msgid "Dots"
-msgstr ""
+msgstr "Noktalar"
 
 #: common/widgets/gal_options_panel.cpp:110
 msgid "Lines"
-msgstr ""
+msgstr "Çizgiler"
 
 #: common/widgets/gal_options_panel.cpp:111
 msgid "Small crosses"
-msgstr ""
+msgstr "Küçük Artı"
 
 #: common/widgets/gal_options_panel.cpp:115
+#, fuzzy
 msgid "Grid Style"
-msgstr ""
+msgstr "Izgara Stili"
 
 #: common/widgets/gal_options_panel.cpp:127
+#, fuzzy
 msgid "Grid thickness:"
-msgstr ""
+msgstr "Izgara kalınlığı:"
 
 #: common/widgets/gal_options_panel.cpp:138
 #: common/widgets/gal_options_panel.cpp:154
 #: common/widgets/gal_options_panel.cpp:172
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: common/widgets/gal_options_panel.cpp:143
 msgid "Min grid spacing:"
-msgstr ""
+msgstr "En az ızgara aralığı:"
 
 #: common/widgets/gal_options_panel.cpp:159
+#, fuzzy
 msgid "Snap to Grid:"
-msgstr ""
+msgstr "Izgaraya Yasla:"
 
 #: common/widgets/gal_options_panel.cpp:163
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:343
 #: pcbnew/dialogs/panel_edit_options_base.cpp:275
 #: pcbnew/dialogs/panel_edit_options_base.cpp:289
 #: pcbnew/dialogs/panel_edit_options_base.cpp:303
+#, fuzzy
 msgid "Always"
-msgstr ""
+msgstr "Her zaman"
 
 #: common/widgets/gal_options_panel.cpp:163
 msgid "When grid shown"
