@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,12 +69,11 @@ void FP_SHAPE::SetLocalCoord()
     m_bezierC1_0 = m_bezierC1  - fp->GetPosition();
     m_bezierC2_0 = m_bezierC2  - fp->GetPosition();
 
-    double angle = fp->GetOrientation();
-    RotatePoint( &m_start0.x,     &m_start0.y,     -angle );
-    RotatePoint( &m_end0.x,       &m_end0.y,       -angle );
-    RotatePoint( &m_arcCenter0.x, &m_arcCenter0.y, -angle );
-    RotatePoint( &m_bezierC1_0.x, &m_bezierC1_0.y, -angle );
-    RotatePoint( &m_bezierC2_0.x, &m_bezierC2_0.y, -angle );
+    RotatePoint( &m_start0.x,     &m_start0.y,     - fp->GetOrientation() );
+    RotatePoint( &m_end0.x,       &m_end0.y,       - fp->GetOrientation() );
+    RotatePoint( &m_arcCenter0.x, &m_arcCenter0.y, - fp->GetOrientation() );
+    RotatePoint( &m_bezierC1_0.x, &m_bezierC1_0.y, - fp->GetOrientation() );
+    RotatePoint( &m_bezierC2_0.x, &m_bezierC2_0.y, - fp->GetOrientation() );
 }
 
 

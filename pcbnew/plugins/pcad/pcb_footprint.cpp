@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -509,7 +509,7 @@ void PCB_FOOTPRINT::AddToBoard()
 
     footprint->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
     footprint->SetLayer( m_Mirror ? B_Cu : F_Cu );
-    footprint->SetOrientation( m_rotation );
+    footprint->SetOrientation( EDA_ANGLE( m_rotation, TENTHS_OF_A_DEGREE_T ) );
     footprint->SetLastEditTime( 0 );
 
     LIB_ID fpID;

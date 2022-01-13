@@ -1449,7 +1449,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             {
                 m_gal->Save();
                 m_gal->Translate( parentFootprint->GetPosition() );
-                m_gal->Rotate( -parentFootprint->GetOrientationRadians() );
+                m_gal->Rotate( -parentFootprint->GetOrientation().AsRadians() );
             }
 
             if( outline_mode )

@@ -1139,8 +1139,11 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
         m_out->Print( aNestLevel+1, "(at %s",
                       FormatInternalUnits( aFootprint->GetPosition() ).c_str() );
 
-        if( aFootprint->GetOrientation() != 0.0 )
-            m_out->Print( 0, " %s", FormatAngle( aFootprint->GetOrientation() ).c_str() );
+        if( !aFootprint->GetOrientation().IsZero() )
+        {
+            m_out->Print( 0, " %s",
+                          FormatAngle( aFootprint->GetOrientation().AsTenthsOfADegree() ).c_str() );
+        }
 
         m_out->Print( 0, ")\n" );
     }
@@ -1789,7 +1792,7 @@ void PCB_PLUGIN::format( const FP_TEXT* aText, int aNestLevel ) const
     // Due to Pcbnew history, fp_text angle is saved as an absolute on screen angle,
     // but internally the angle is held relative to its parent footprint.  parent
     // may be NULL when saving a footprint outside a BOARD.
-    double     orient = aText->GetTextAngle().AsTenthsOfADegree();
+    EDA_ANGLE  orient = aText->GetTextAngle();
     FOOTPRINT* parent = static_cast<FOOTPRINT*>( aText->GetParent() );
 
     if( parent )
@@ -1806,12 +1809,12 @@ void PCB_PLUGIN::format( const FP_TEXT* aText, int aNestLevel ) const
 #else
         // Choose compatibility for now, even though this is only a 720 degree clamp
         // with two possible values for every angle.
-        orient = NormalizeAngle360Min( orient + parent->GetOrientation() );
+        orient = ( orient + parent->GetOrientation() ).Normalize720();
 #endif
     }
 
-    if( orient != 0.0 )
-        m_out->Print( 0, " %s", FormatAngle( orient ).c_str() );
+    if( !orient.IsZero() )
+        m_out->Print( 0, " %s", FormatAngle( orient.AsTenthsOfADegree() ).c_str() );
 
     if( !aText->IsKeepUpright() )
         m_out->Print( 0, " unlocked" );
@@ -2431,7 +2434,7 @@ void PCB_PLUGIN::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* a
     FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aFootprint->Clone() );
 
     // It's orientation should be zero and it should be on the front layer.
-    footprint->SetOrientation( 0 );
+    footprint->SetOrientation( ANGLE_0 );
 
     if( footprint->GetLayer() != F_Cu )
     {

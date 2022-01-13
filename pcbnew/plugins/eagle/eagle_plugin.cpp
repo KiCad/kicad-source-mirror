@@ -1530,13 +1530,12 @@ void EAGLE_PLUGIN::orientFootprintAndText( FOOTPRINT* aFootprint, const EELEMENT
     {
         if( e.rot->mirror )
         {
-            double orientation = e.rot->degrees + 180.0;
-            aFootprint->SetOrientation( orientation * 10 );
+            aFootprint->SetOrientation( EDA_ANGLE( e.rot->degrees + 180.0, DEGREES_T ) );
             aFootprint->Flip( aFootprint->GetPosition(), false );
         }
         else
         {
-            aFootprint->SetOrientation( e.rot->degrees * 10 );
+            aFootprint->SetOrientation( EDA_ANGLE( e.rot->degrees, DEGREES_T ) );
         }
     }
 
@@ -1592,7 +1591,7 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
         // present, and this zero rotation becomes an override to the
         // package's text field.  If they did not want zero, they specify
         // what they want explicitly.
-        double  degrees  = a.rot ? a.rot->degrees : 0;
+        double  degrees  = a.rot ? a.rot->degrees : 0.0;
         double  orient;      // relative to parent
 
         int     sign = 1;
@@ -1607,24 +1606,24 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
 
         if( degrees == 90 || degrees == 0 || spin )
         {
-            orient = degrees - aFootprint->GetOrientation() / 10;
+            orient = degrees - aFootprint->GetOrientation().AsDegrees();
             aFPText->SetTextAngle( sign * orient * 10 );
         }
         else if( degrees == 180 )
         {
-            orient = 0 - aFootprint->GetOrientation() / 10;
+            orient = 0 - aFootprint->GetOrientation().AsDegrees();
             aFPText->SetTextAngle( sign * orient * 10 );
             align = -align;
         }
         else if( degrees == 270 )
         {
-            orient = 90 - aFootprint->GetOrientation() / 10;
+            orient = 90 - aFootprint->GetOrientation().AsDegrees();
             align = -align;
             aFPText->SetTextAngle( sign * orient * 10 );
         }
         else
         {
-            orient = 90 - degrees - aFootprint->GetOrientation() / 10;
+            orient = 90 - degrees - aFootprint->GetOrientation().AsDegrees();
             aFPText->SetTextAngle( sign * orient * 10 );
         }
 
@@ -1681,9 +1680,10 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
     }
     else
     {
-        // Part is not smash so use Lib default for NAME/VALUE // the text is per the original
-        // package, sans <attribute>.
-        double degrees = aFPText->GetTextAngle().AsDegrees() + aFootprint->GetOrientation() / 10.0;
+        // Part is not smash so use Lib default for NAME/VALUE
+        // the text is per the original package, sans <attribute>.
+        double degrees = aFPText->GetTextAngle().AsDegrees()
+                            + aFootprint->GetOrientation().AsDegrees();
 
         // @todo there are a few more cases than these to contend with:
         if( ( !aFPText->IsMirrored() && ( abs( degrees ) == 180 || abs( degrees ) == 270 ) )

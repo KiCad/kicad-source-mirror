@@ -828,8 +828,8 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
                 pins.insert( pinname );
             }
 
-            double orient = pad->GetOrientation().AsTenthsOfADegree() - footprint->GetOrientation();
-            NORMALIZE_ANGLE_POS( orient );
+            EDA_ANGLE orient = pad->GetOrientation() - footprint->GetOrientation();
+            orient.Normalize();
 
             // Bottom side footprints use the flipped padstack
             fprintf( aFile, ( flipBottomPads && footprint->GetFlag() ) ?
@@ -838,7 +838,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
                      TO_UTF8( escapeString( pinname ) ), pad->GetSubRatsnest(),
                      pad->GetPos0().x / SCALE_FACTOR,
                      -pad->GetPos0().y / SCALE_FACTOR,
-                     layer, orient / 10.0, mirror );
+                     layer, orient.AsDegrees(), mirror );
         }
     }
 
@@ -861,7 +861,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
     {
         const char*   mirror;
         const char*   flip;
-        double        fp_orient = footprint->GetOrientation();
+        double        fp_orient = footprint->GetOrientation().AsTenthsOfADegree();
 
         if( footprint->GetFlag() )
         {

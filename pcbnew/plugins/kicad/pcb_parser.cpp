@@ -3425,7 +3425,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
             if( token == T_NUMBER )
             {
-                footprint->SetOrientation( parseAngle() );
+                footprint->SetOrientation( EDA_ANGLE( parseAngle(), TENTHS_OF_A_DEGREE_T ) );
                 NeedRIGHT();
             }
             else if( token != T_RIGHT )
@@ -3565,7 +3565,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
         {
             FP_TEXT* text = parseFP_TEXT();
             text->SetParent( footprint.get() );
-            double orientation = text->GetTextAngle().AsTenthsOfADegree();
+            EDA_ANGLE orientation = text->GetTextAngle();
             orientation -= footprint->GetOrientation();
             text->SetTextAngle( orientation );
             text->SetDrawCoord();

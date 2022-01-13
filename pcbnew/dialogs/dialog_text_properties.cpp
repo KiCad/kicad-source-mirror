@@ -246,7 +246,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
                         footprint->GetReference(),
                         footprint->GetValue(),
                         footprint->IsFlipped() ? _( "back side (mirrored)" ) : _( "front side" ),
-                        footprint->GetOrientation() / 10.0 );
+                        footprint->GetOrientation().AsDegrees() );
         }
 
         m_statusLine->SetLabel( msg );

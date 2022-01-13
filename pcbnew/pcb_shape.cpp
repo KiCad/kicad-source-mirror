@@ -132,7 +132,7 @@ FOOTPRINT* PCB_SHAPE::GetParentFootprint() const
 double PCB_SHAPE::getParentOrientation() const
 {
     if( GetParentFootprint() )
-        return GetParentFootprint()->GetOrientation();
+        return GetParentFootprint()->GetOrientation().AsTenthsOfADegree();
     else
         return 0.0;
 }

@@ -251,10 +251,12 @@ bool AR_AUTOPLACER::fillMatrix()
 }
 
 
-void AR_AUTOPLACER::rotateFootprint( FOOTPRINT* aFootprint, double angle, bool incremental )
+void AR_AUTOPLACER::rotateFootprint( FOOTPRINT* aFootprint, double aAngle, bool incremental )
 {
     if( aFootprint == nullptr )
         return;
+
+    EDA_ANGLE angle( aAngle, TENTHS_OF_A_DEGREE_T );
 
     if( incremental )
         aFootprint->SetOrientation( aFootprint->GetOrientation() + angle );

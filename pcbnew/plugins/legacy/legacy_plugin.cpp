@@ -1194,7 +1194,7 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
 
             aFootprint->SetPosition( VECTOR2I( pos_x, pos_y ) );
             aFootprint->SetLayer( layer_id );
-            aFootprint->SetOrientation( orient );
+            aFootprint->SetOrientation( EDA_ANGLE( orient, TENTHS_OF_A_DEGREE_T ) );
             const_cast<KIID&>( aFootprint->m_Uuid ) = KIID( uuid );
             aFootprint->SetLastEditTime( edittime );
         }
@@ -1658,22 +1658,18 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
     const char* txt_end;
     const char* line = m_reader->Line();     // current (old) line
 
-    // sscanf( line + 1, "%d %d %d %d %d %d %d %s %s %d %s",
-    //  &type, &m_Pos0.x, &m_Pos0.y, &m_Size.y, &m_Size.x,
-    //  &m_Orient, &m_Thickness, BufCar1, BufCar2, &layer, BufCar3 ) >= 10 )
-
     // e.g. "T1 6940 -16220 350 300 900 60 M I 20 N "CFCARD"\r\n"
     // or    T1 0 500 600 400 900 80 M V 20 N"74LS245"
     // ouch, the last example has no space between N and "74LS245" !
     // that is an older version.
 
-    int     type    = intParse( line+1, &data );
-    BIU     pos0_x  = biuParse( data, &data );
-    BIU     pos0_y  = biuParse( data, &data );
-    BIU     size0_y = biuParse( data, &data );
-    BIU     size0_x = biuParse( data, &data );
-    double  orient  = degParse( data, &data );
-    BIU     thickn  = biuParse( data, &data );
+    int       type    = intParse( line+1, &data );
+    BIU       pos0_x  = biuParse( data, &data );
+    BIU       pos0_y  = biuParse( data, &data );
+    BIU       size0_y = biuParse( data, &data );
+    BIU       size0_x = biuParse( data, &data );
+    EDA_ANGLE orient  = EDA_ANGLE( degParse( data, &data ), TENTHS_OF_A_DEGREE_T );
+    BIU       thickn  = biuParse( data, &data );
 
     // read the quoted text before the first call to strtok() which introduces
     // NULs into the string and chops it into multiple C strings, something
@@ -1709,7 +1705,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
     aText->SetPos0( VECTOR2I( pos0_x, pos0_y ) );
     aText->SetTextSize( wxSize( size0_x, size0_y ) );
 
-    orient -= ( static_cast<FOOTPRINT*>( aText->GetParent() ) )->GetOrientation();
+    orient -= ( static_cast<FOOTPRINT*>( aText->GetParentFootprint() ) )->GetOrientation();
 
     aText->SetTextAngle( orient );
 

@@ -191,11 +191,13 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             tmp << "\"" << csv_sep;
 
             tmp << wxString::Format( "%f%c%f%c%f",
-                                    footprint_pos.x * conv_unit, csv_sep,
-                                    // Keep the Y axis oriented from bottom to top,
-                                    // ( change y coordinate sign )
-                                    -footprint_pos.y * conv_unit, csv_sep,
-                                     list[ii].m_Footprint->GetOrientation() / 10.0 );
+                                     footprint_pos.x * conv_unit,
+                                     csv_sep,
+                                     // Keep the Y axis oriented from bottom to top,
+                                     // ( change y coordinate sign )
+                                     -footprint_pos.y * conv_unit,
+                                     csv_sep,
+                                     list[ii].m_Footprint->GetOrientation().AsDegrees() );
             tmp << csv_sep;
 
             tmp << ( (layer == F_Cu ) ? PLACE_FILE_EXPORTER::GetFrontSideName()
@@ -263,7 +265,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
                     // Keep the coordinates in the first quadrant,
                     // (i.e. change y sign
                     -footprint_pos.y * conv_unit,
-                    list[ii].m_Footprint->GetOrientation() / 10.0,
+                    list[ii].m_Footprint->GetOrientation().AsDegrees(),
                     (layer == F_Cu ) ? GetFrontSideName().c_str() : GetBackSideName().c_str() );
             buffer += line;
         }
@@ -357,7 +359,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
         sprintf( line, "position %9.6f %9.6f  orientation %.2f\n",
                  footprint_pos.x * conv_unit,
                  footprint_pos.y * conv_unit,
-                 footprint->GetOrientation() / 10.0 );
+                 footprint->GetOrientation().AsDegrees() );
         buffer += line;
 
         if( footprint->GetLayer() == F_Cu )
@@ -402,7 +404,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
                      pad->GetPos0().y * conv_unit,
                      pad->GetSize().x * conv_unit,
                      pad->GetSize().y * conv_unit,
-                     pad->GetOrientation().AsDegrees() - ( footprint->GetOrientation() / 10.0 ) );
+                     ( pad->GetOrientation() - footprint->GetOrientation() ).AsDegrees() );
             buffer += line;
 
             sprintf( line, "drill %9.6f\n", pad->GetDrillSize().x * conv_unit );

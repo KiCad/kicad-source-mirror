@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -246,7 +246,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     m_BoardSideCtrl->SetSelection( (m_footprint->GetLayer() == B_Cu) ? 1 : 0 );
 
-    m_orientation.SetDoubleValue( m_footprint->GetOrientation() );
+    m_orientation.SetDoubleValue( m_footprint->GetOrientation().AsTenthsOfADegree() );
 
     m_cbLocked->SetValue( m_footprint->IsLocked() );
     m_cbLocked->SetToolTip( _( "Locked footprints cannot be freely moved and oriented on the "
@@ -441,10 +441,13 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
     m_footprint->SetAttributes( attributes );
 
-    double orient = m_orientation.GetDoubleValue();
+    EDA_ANGLE orient( m_orientation.GetDoubleValue(), TENTHS_OF_A_DEGREE_T );
 
     if( m_footprint->GetOrientation() != orient )
-        m_footprint->Rotate( m_footprint->GetPosition(), orient - m_footprint->GetOrientation() );
+    {
+        m_footprint->Rotate( m_footprint->GetPosition(),
+                             ( orient - m_footprint->GetOrientation() ).AsTenthsOfADegree() );
+    }
 
     // Set component side, that also have effect on the fields positions on board
     bool change_layer = false;

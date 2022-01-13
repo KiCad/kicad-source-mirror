@@ -151,7 +151,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
 
     // Put it in orientation 0,
     // because this is the default orientation in Footprint Editor, and in libs
-    newFootprint->SetOrientation( 0 );
+    newFootprint->SetOrientation( ANGLE_0 );
 
     Zoom_Automatique( false );
 

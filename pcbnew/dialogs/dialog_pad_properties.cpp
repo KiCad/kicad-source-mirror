@@ -486,8 +486,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
         if( footprint )
         {
-            EDA_ANGLE angle = m_dummyPad->GetOrientation();
-            angle -= EDA_ANGLE( footprint->GetOrientation(), TENTHS_OF_A_DEGREE_T );
+            EDA_ANGLE angle = m_dummyPad->GetOrientation() - footprint->GetOrientation();
             m_dummyPad->SetOrientation( angle );
 
             // Display parent footprint info
@@ -495,7 +494,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
                          footprint->Reference().GetShownText(),
                          footprint->Value().GetShownText(),
                          footprint->IsFlipped() ? _( "back side (mirrored)" ) : _( "front side" ),
-                         footprint->GetOrientationDegrees() );
+                         footprint->GetOrientation().AsDegrees() );
         }
 
         m_parentInfo->SetLabel( msg );
@@ -1655,8 +1654,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
         VECTOR2I pt = m_currentPad->GetPosition() - footprint->GetPosition();
         RotatePoint( pt, -footprint->GetOrientation() );
         m_currentPad->SetPos0( pt );
-        m_currentPad->SetOrientation( m_currentPad->GetOrientation()
-                                        + EDA_ANGLE( footprint->GetOrientation(), TENTHS_OF_A_DEGREE_T ) );
+        m_currentPad->SetOrientation( m_currentPad->GetOrientation() + footprint->GetOrientation() );
     }
 
     m_parent->SetMsgPanel( m_currentPad );

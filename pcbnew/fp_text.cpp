@@ -203,10 +203,8 @@ void FP_TEXT::SetDrawCoord()
 
     if( parentFootprint  )
     {
-        double angle = parentFootprint->GetOrientation();
-
         VECTOR2I pt = GetTextPos();
-        RotatePoint( pt, angle );
+        RotatePoint( pt, parentFootprint->GetOrientation() );
         SetTextPos( pt );
 
         Offset( parentFootprint->GetPosition() );
@@ -221,10 +219,7 @@ void FP_TEXT::SetLocalCoord()
     if( parentFootprint )
     {
         m_Pos0 = GetTextPos() - parentFootprint->GetPosition();
-
-        double angle = parentFootprint->GetOrientation();
-
-        RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
+        RotatePoint( &m_Pos0.x, &m_Pos0.y, - parentFootprint->GetOrientation() );
     }
     else
     {
@@ -247,7 +242,7 @@ const EDA_RECT FP_TEXT::GetBoundingBox() const
 EDA_ANGLE FP_TEXT::GetDrawRotation() const
 {
     FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
-    double     rotation = GetTextAngle().AsTenthsOfADegree();
+    EDA_ANGLE  rotation = GetTextAngle();
 
     if( parentFootprint )
         rotation += parentFootprint->GetOrientation();
@@ -255,18 +250,18 @@ EDA_ANGLE FP_TEXT::GetDrawRotation() const
     if( m_keepUpright )
     {
         // Keep angle between 0 .. 90 deg. Otherwise the text is not easy to read
-        while( rotation > 900 )
-            rotation -= 1800;
+        while( rotation > ANGLE_90 )
+            rotation -= ANGLE_180;
 
-        while( rotation < 0 )
-            rotation += 1800;
+        while( rotation < ANGLE_0 )
+            rotation += ANGLE_180;
     }
     else
     {
-        NORMALIZE_ANGLE_POS( rotation );
+        rotation.Normalize();
     }
 
-    return EDA_ANGLE( rotation, TENTHS_OF_A_DEGREE_T );
+    return rotation;
 }
 
 

@@ -441,7 +441,7 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
         if( !outline )
             throw( std::runtime_error( aIDFBoard.GetError() ) );
 
-        double rotz = aFootprint->GetOrientation() / 10.0;
+        double rotz = aFootprint->GetOrientation().AsDegrees();
         double locx = sM->m_Offset.x * 25.4;  // part offsets are in inches
         double locy = sM->m_Offset.y * 25.4;
         double locz = sM->m_Offset.z * 25.4;

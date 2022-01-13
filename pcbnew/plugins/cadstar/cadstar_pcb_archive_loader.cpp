@@ -1537,12 +1537,12 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
                     }
                 }
 
-                wxPoint endOffset( csDim.Line.LeaderLineLength * cos( angRad ) * orientX,
-                                   csDim.Line.LeaderLineLength * sin( angRad ) * orientY );
+                VECTOR2I endOffset( csDim.Line.LeaderLineLength * cos( angRad ) * orientX,
+                                    csDim.Line.LeaderLineLength * sin( angRad ) * orientY );
 
-                wxPoint endPoint = csDim.Line.End + endOffset;
-                wxPoint txtPoint( endPoint.x + ( csDim.Line.LeaderLineExtensionLength * orientX ),
-                                  endPoint.y );
+                VECTOR2I endPoint = VECTOR2I( csDim.Line.End ) + endOffset;
+                VECTOR2I txtPoint( endPoint.x + ( csDim.Line.LeaderLineExtensionLength * orientX ),
+                                   endPoint.y );
 
                 leaderDim->SetEnd( getKiCadPoint( endPoint ) );
                 leaderDim->Text().SetTextPos( getKiCadPoint( txtPoint ) );
@@ -1721,13 +1721,13 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
         footprint->SetValue( wxEmptyString );
 
         footprint->SetPosition( getKiCadPoint( comp.Origin ) );
-        footprint->SetOrientation( getAngleTenthDegree( comp.OrientAngle ) );
+        footprint->SetOrientation( getAngle( comp.OrientAngle ) );
         footprint->SetReference( comp.Name );
 
         if( comp.Mirror )
         {
-            double mirroredAngle = - getAngleTenthDegree( comp.OrientAngle );
-            NORMALIZE_ANGLE_180( mirroredAngle );
+            EDA_ANGLE mirroredAngle = - getAngle( comp.OrientAngle );
+            mirroredAngle.Normalize180();
             footprint->SetOrientation( mirroredAngle );
             footprint->Flip( getKiCadPoint( comp.Origin ), true );
         }
@@ -2879,7 +2879,7 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
     if( aRotationAngle != 0.0 )
         shape->Rotate( aTransformCentre, aRotationAngle );
 
-    if( aMoveVector != wxPoint{ 0, 0 } )
+    if( aMoveVector != VECTOR2I{ 0, 0 } )
         shape->Move( aMoveVector );
 
     if( isFootprint( aContainer ) && shape != nullptr )
@@ -3242,8 +3242,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
     txt->SetPos0( rotatedTextPos );
     txt->SetLayer( getKiCadLayer( aCadstarAttrLoc.LayerID ) );
     txt->SetMirrored( aCadstarAttrLoc.Mirror );
-    txt->SetTextAngle(
-            getAngleTenthDegree( aCadstarAttrLoc.OrientAngle ) - aFootprint->GetOrientation() );
+    txt->SetTextAngle( getAngle( aCadstarAttrLoc.OrientAngle ) - aFootprint->GetOrientation() );
 
     if( aCadstarAttrLoc.Mirror ) // If mirroring, invert angle to match CADSTAR
         txt->SetTextAngle( -txt->GetTextAngle() );
@@ -3480,7 +3479,7 @@ double CADSTAR_PCB_ARCHIVE_LOADER::getHatchCodeAngleDegrees(
     if( hcode.Hatches.size() < 1 )
         return m_board->GetDesignSettings().GetDefaultZoneSettings().m_HatchOrientation;
     else
-        return getAngleDegrees( hcode.Hatches.at( 0 ).OrientAngle );
+        return getAngle( hcode.Hatches.at( 0 ).OrientAngle ).AsDegrees();
 }
 
 
@@ -3570,9 +3569,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::checkAndLogHatchCode( const HATCHCODE_ID& aCads
                            "degrees apart.  The imported hatching has two hatches 90 "
                            "degrees apart, oriented %.1f degrees from horizontal." ),
                         hcode.Name,
-                        getAngleDegrees( abs( hcode.Hatches.at( 0 ).OrientAngle
-                                              - hcode.Hatches.at( 1 ).OrientAngle ) ),
-                        getAngleDegrees( hcode.Hatches.at( 0 ).OrientAngle ) ) );
+                        getAngle( abs( hcode.Hatches.at( 0 ).OrientAngle
+                                         - hcode.Hatches.at( 1 ).OrientAngle ) ).AsDegrees(),
+                        getAngle( hcode.Hatches.at( 0 ).OrientAngle ).AsDegrees() ) );
             }
         }
 

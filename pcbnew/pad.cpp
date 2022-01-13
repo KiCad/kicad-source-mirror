@@ -59,9 +59,9 @@ using KIGFX::PCB_RENDER_SETTINGS;
 PAD::PAD( FOOTPRINT* parent ) :
     BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
 {
-    m_size.x = m_size.y   = Mils2iu( 60 );  // Default pad size 60 mils.
-    m_drill.x = m_drill.y = Mils2iu( 30 );  // Default drill size 30 mils.
-    m_orient              = ANGLE_0;        // Pad rotation.
+    m_size.x = m_size.y   = Mils2iu( 60 );       // Default pad size 60 mils.
+    m_drill.x = m_drill.y = Mils2iu( 30 );       // Default drill size 30 mils.
+    m_orient              = ANGLE_0;
     m_lengthPadToDie      = 0;
 
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
@@ -567,9 +567,7 @@ void PAD::SetDrawCoord()
     if( parentFootprint == nullptr )
         return;
 
-    double angle = parentFootprint->GetOrientation();
-
-    RotatePoint( &m_pos.x, &m_pos.y, angle );
+    RotatePoint( &m_pos.x, &m_pos.y, parentFootprint->GetOrientation() );
     m_pos += parentFootprint->GetPosition();
 
     SetDirty();
@@ -1404,10 +1402,10 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     EDA_ANGLE pad_rot = aMasterPad.GetOrientation();
 
     if( aMasterPad.GetParent() )
-        pad_rot -= EDA_ANGLE( aMasterPad.GetParent()->GetOrientation(), TENTHS_OF_A_DEGREE_T );
+        pad_rot -= aMasterPad.GetParent()->GetOrientation();
 
     if( GetParent() )
-        pad_rot += EDA_ANGLE( GetParent()->GetOrientation(), TENTHS_OF_A_DEGREE_T );
+        pad_rot += GetParent()->GetOrientation();
 
     SetOrientation( pad_rot );
 

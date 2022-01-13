@@ -247,7 +247,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         case SHAPE_T::POLY:
             {
                 const SHAPE_POLY_SET poly = graphic->GetPolyShape();
-                double               orientation = 0.0;
+                EDA_ANGLE            orientation = ANGLE_0;
                 VECTOR2I             offset = VECTOR2I( 0, 0 );
 
                 if( graphic->GetParentFootprint() )
@@ -323,8 +323,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
     }
     else if( graphic->GetShape() == SHAPE_T::POLY )
     {
-        double   orientation = 0.0;
-        VECTOR2I offset = VECTOR2I( 0, 0 );
+        EDA_ANGLE orientation = ANGLE_0;
+        VECTOR2I  offset = VECTOR2I( 0, 0 );
 
         if( graphic->GetParentFootprint() )
         {
@@ -561,8 +561,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         // connect to other elements, so we process them independently
         if( graphic->GetShape() == SHAPE_T::POLY )
         {
-            double   orientation = 0.0;
-            VECTOR2I offset = VECTOR2I( 0, 0 );
+            EDA_ANGLE orientation = ANGLE_0;
+            VECTOR2I  offset = VECTOR2I( 0, 0 );
 
             if( graphic->GetParentFootprint() )
             {
@@ -602,7 +602,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
             {
                 double rotation = ( angle * step ) / steps;
                 nextPt = start;
-                RotatePoint( &nextPt.x, &nextPt.y, center.x, center.y, rotation );
+                RotatePoint( nextPt, center, rotation );
                 aPolygons.Append( nextPt, -1, hole );
 
                 if( firstPt )

@@ -191,11 +191,18 @@ public:
     void     SetPosition( const VECTOR2I& aPos ) override;
     VECTOR2I GetPosition() const override { return m_pos; }
 
-    void SetOrientation( double aNewAngle );
-    void SetOrientationDegrees( double aOrientation ) { SetOrientation( aOrientation * 10.0 ); }
-    double GetOrientation() const { return m_orient; }
-    double GetOrientationDegrees() const { return m_orient / 10.0; }
-    double GetOrientationRadians() const { return m_orient * M_PI / 1800; }
+    void SetOrientation( const EDA_ANGLE& aNewAngle );
+    EDA_ANGLE GetOrientation() const { return m_orient; }
+
+    // For property system:
+    void SetOrientationDegrees( double aOrientation )
+    {
+        SetOrientation( EDA_ANGLE( aOrientation, DEGREES_T ) );
+    }
+    double GetOrientationDegrees() const
+    {
+        return m_orient.AsDegrees();
+    }
 
     const LIB_ID& GetFPID() const { return m_fpid; }
     void SetFPID( const LIB_ID& aFPID ) { m_fpid = aFPID; }
@@ -736,12 +743,12 @@ private:
     FP_ZONES        m_fp_zones;          // FP_ZONE items, owned by pointer
     FP_GROUPS       m_fp_groups;         // PCB_GROUP items, owned by pointer
 
-    double          m_orient;            // Orientation in tenths of a degree, 900=90.0 degrees.
+    EDA_ANGLE       m_orient;            // Orientation
     VECTOR2I        m_pos;               // Position of footprint on the board in internal units.
     FP_TEXT*        m_reference;         // Component reference designator value (U34, R18..)
     FP_TEXT*        m_value;             // Component value (74LS00, 22K..)
     LIB_ID          m_fpid;              // The #LIB_ID of the FOOTPRINT.
-    int             m_attributes;        // Flag bits ( see FOOTPRINT_ATTR_T )
+    int             m_attributes;        // Flag bits (see FOOTPRINT_ATTR_T)
     int             m_fpStatus;          // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
 
     // Bounding box caching strategy:

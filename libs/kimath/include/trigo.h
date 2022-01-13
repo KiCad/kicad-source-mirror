@@ -101,12 +101,22 @@ inline void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, EDA_ANGLE angl
 
 void RotatePoint( double* pX, double* pY, double angle );
 
+inline void RotatePoint( double* pX, double* pY, EDA_ANGLE angle )
+{
+    RotatePoint( pX, pY, angle.AsTenthsOfADegree() );
+}
+
 inline void RotatePoint( VECTOR2D& point, EDA_ANGLE angle )
 {
     RotatePoint( &point.x, &point.y, angle.AsTenthsOfADegree() );
 }
 
 void RotatePoint( double* pX, double* pY, double cx, double cy, double angle );
+
+inline void RotatePoint( double* pX, double* pY, double cx, double cy, EDA_ANGLE angle )
+{
+    RotatePoint( pX, pY, cx, cy, angle.AsTenthsOfADegree() );
+}
 
 inline void RotatePoint( VECTOR2D& point, const VECTOR2D& aCenter, EDA_ANGLE angle )
 {

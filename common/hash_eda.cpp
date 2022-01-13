@@ -62,7 +62,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
             hash_combine( ret, footprint->GetPosition().x, footprint->GetPosition().y );
 
         if( aFlags & HASH_ROT )
-            hash_combine( ret, footprint->GetOrientation() );
+            hash_combine( ret, footprint->GetOrientation().AsTenthsOfADegree() );
 
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
             hash_combine( ret, hash_fp_item( item, aFlags ) );

@@ -58,7 +58,7 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
 {
     m_attributes   = 0;
     m_layer        = F_Cu;
-    m_orient       = 0;
+    m_orient       = ANGLE_0;
     m_fpStatus     = FP_PADS_are_LOCKED;
     m_arflag       = 0;
     m_link         = 0;
@@ -714,12 +714,10 @@ EDA_RECT FOOTPRINT::GetFpPadsLocalBbox() const
     FOOTPRINT dummy( *this );
 
     dummy.SetPosition( VECTOR2I( 0, 0 ) );
+    dummy.SetOrientation( ANGLE_0 );
 
     if( dummy.IsFlipped() )
         dummy.Flip( VECTOR2I( 0, 0 ), false );
-
-    if( dummy.GetOrientation() )
-        dummy.SetOrientation( 0 );
 
     for( PAD* pad : dummy.Pads() )
         area.Merge( pad->GetBoundingBox() );
@@ -988,7 +986,7 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
     aList.emplace_back( _( "Status: " ) + status, _( "Attributes:" ) + wxS( " " ) + attrs );
 
-    aList.emplace_back( _( "Rotation" ), wxString::Format( "%.4g", GetOrientationDegrees() ) );
+    aList.emplace_back( _( "Rotation" ), wxString::Format( "%.4g", GetOrientation().AsDegrees() ) );
 
     msg.Printf( _( "Footprint: %s" ), m_fpid.GetUniStringLibId() );
     msg2.Printf( _( "3D-Shape: %s" ), m_3D_Drawings.empty() ? _( "<none>" )
@@ -1486,12 +1484,12 @@ void FOOTPRINT::Move( const VECTOR2I& aMoveVector )
 
 void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
-    double  orientation = GetOrientation();
+    double  orientation = GetOrientation().AsTenthsOfADegree();
     double  newOrientation = orientation + aAngle;
     VECTOR2I newpos = m_pos;
     RotatePoint( newpos, aRotCentre, aAngle );
     SetPosition( newpos );
-    SetOrientation( newOrientation );
+    SetOrientation( EDA_ANGLE( newOrientation, TENTHS_OF_A_DEGREE_T ) );
 
     m_reference->KeepUpright( orientation, newOrientation );
     m_value->KeepUpright( orientation, newOrientation );
@@ -1532,8 +1530,7 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
     // Reverse mirror orientation.
     m_orient = -m_orient;
-
-    NORMALIZE_ANGLE_180( m_orient );
+    m_orient.Normalize180();
 
     // Mirror pads to other side of board.
     for( PAD* pad : m_pads )
@@ -1707,24 +1704,21 @@ void FOOTPRINT::MoveAnchorPosition( const VECTOR2I& aMoveVector )
 }
 
 
-void FOOTPRINT::SetOrientation( double aNewAngle )
+void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
 {
-    double angleChange = aNewAngle - m_orient;  // change in rotation
-
-    NORMALIZE_ANGLE_180( aNewAngle );
+    EDA_ANGLE angleChange = aNewAngle - m_orient;  // change in rotation
 
     m_orient = aNewAngle;
+    m_orient.Normalize180();
 
     for( PAD* pad : m_pads )
     {
-        pad->SetOrientation( pad->GetOrientation() + EDA_ANGLE( angleChange, TENTHS_OF_A_DEGREE_T ) );
+        pad->SetOrientation( pad->GetOrientation() + angleChange );
         pad->SetDrawCoord();
     }
 
     for( ZONE* zone : m_fp_zones )
-    {
-        zone->Rotate( GetPosition(), angleChange );
-    }
+        zone->Rotate( GetPosition(), angleChange.AsTenthsOfADegree() );
 
     // Update of the reference and value.
     m_reference->SetDrawCoord();
@@ -1734,20 +1728,16 @@ void FOOTPRINT::SetOrientation( double aNewAngle )
     for( BOARD_ITEM* item : m_drawings )
     {
         if( item->Type() == PCB_FP_SHAPE_T )
-        {
             static_cast<FP_SHAPE*>( item )->SetDrawCoord();
-        }
         else if( item->Type() == PCB_FP_TEXT_T )
-        {
             static_cast<FP_TEXT*>( item )->SetDrawCoord();
-        }
     }
 
     m_boundingBoxCacheTimeStamp = 0;
     m_visibleBBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
 
-    m_cachedHull.Rotate( -DECIDEG2RAD( angleChange ), GetPosition() );
+    m_cachedHull.Rotate( - angleChange.AsRadians(), GetPosition() );
 }
 
 

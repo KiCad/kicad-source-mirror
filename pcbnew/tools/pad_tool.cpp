@@ -178,8 +178,7 @@ static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT&
 {
     const FOOTPRINT* refFootprint = aSrcPad.GetParent();
 
-    EDA_ANGLE srcPadAngle = aSrcPad.GetOrientation()
-                            - EDA_ANGLE( refFootprint->GetOrientation(), TENTHS_OF_A_DEGREE_T );
+    EDA_ANGLE srcPadAngle = aSrcPad.GetOrientation() - refFootprint->GetOrientation();
 
     for( FOOTPRINT* footprint : board.Footprints() )
     {
@@ -194,8 +193,7 @@ static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT&
             if( aPadShapeFilter && ( pad->GetShape() != aSrcPad.GetShape() ) )
                 continue;
 
-            EDA_ANGLE padAngle = pad->GetOrientation()
-                                 - EDA_ANGLE( footprint->GetOrientation(), TENTHS_OF_A_DEGREE_T );
+            EDA_ANGLE padAngle = pad->GetOrientation() - footprint->GetOrientation();
 
             if( aPadOrientFilter && ( padAngle != srcPadAngle ) )
                 continue;

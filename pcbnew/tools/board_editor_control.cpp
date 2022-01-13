@@ -1096,7 +1096,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                 if( fp->IsFlipped() )
                     fp->Flip( fp->GetPosition(), m_frame->Settings().m_FlipLeftRight );
 
-                fp->SetOrientation( 0 );
+                fp->SetOrientation( ANGLE_0 );
                 fp->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
                 commit.Add( fp );

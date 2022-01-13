@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -878,9 +878,9 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
         // IMAGE object coordinates are relative to the IMAGE not absolute board coordinates.
         ZONE untransformedZone( *zone );
 
-        double angle = -aFootprint->GetOrientation();
-        NORMALIZE_ANGLE_POS( angle );
-        untransformedZone.Rotate( aFootprint->GetPosition(), angle );
+        EDA_ANGLE angle = -aFootprint->GetOrientation();
+        angle.Normalize();
+        untransformedZone.Rotate( aFootprint->GetPosition(), angle.AsTenthsOfADegree() );
 
         // keepout areas have a type. types are
         // T_place_keepout, T_via_keepout, T_wire_keepout,

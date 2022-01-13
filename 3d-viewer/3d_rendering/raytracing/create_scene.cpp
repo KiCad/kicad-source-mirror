@@ -1219,11 +1219,10 @@ void RENDER_3D_RAYTRACE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMa
                                                 -pos.y * m_boardAdapter.BiuTo3dUnits(),
                                                 zpos ) );
 
-            if( fp->GetOrientation() )
+            if( !fp->GetOrientation().IsZero() )
             {
-                fpMatrix = glm::rotate( fpMatrix,
-                        ( (float) ( fp->GetOrientation() / 10.0f ) / 180.0f ) * glm::pi<float>(),
-                        SFVEC3F( 0.0f, 0.0f, 1.0f ) );
+                fpMatrix = glm::rotate( fpMatrix, (float) fp->GetOrientation().AsRadians(),
+                                        SFVEC3F( 0.0f, 0.0f, 1.0f ) );
             }
 
             if( fp->IsFlipped() )

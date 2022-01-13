@@ -836,7 +836,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
 
         // Note here aFootprint->GetOrientation() is in 0.1 degrees, so footprint rotation
         // has to be converted to radians
-        build_quat( 0, 0, 1, DECIDEG2RAD( aFootprint->GetOrientation() ), q2 );
+        build_quat( 0, 0, 1, aFootprint->GetOrientation().AsRadians(), q2 );
         compose_quat( q1, q2, q1 );
         from_quat( q1, rot );
 

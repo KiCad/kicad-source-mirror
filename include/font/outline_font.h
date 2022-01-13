@@ -137,7 +137,6 @@ private:
     FT_Face           m_subscriptFace;
 
     int               m_faceScaler;
-    int               m_subscriptFaceScaler;
 
     // cache for glyphs converted to straight segments
     // key is glyph index (FT_GlyphSlot field glyph_index)

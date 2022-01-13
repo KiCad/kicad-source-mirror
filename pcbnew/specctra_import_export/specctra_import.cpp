@@ -372,7 +372,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                 if( place->side == T_front )
                 {
                     // convert from degrees to tenths of degrees used in KiCad.
-                    int orientation = KiROUND( place->rotation * 10.0 );
+                    EDA_ANGLE orientation( place->rotation, DEGREES_T );
 
                     if( footprint->GetLayer() != F_Cu )
                     {
@@ -384,7 +384,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                 }
                 else if( place->side == T_back )
                 {
-                    int orientation = KiROUND( (place->rotation + 180.0) * 10.0 );
+                    EDA_ANGLE orientation( place->rotation + 180.0, DEGREES_T );
 
                     if( footprint->GetLayer() != B_Cu )
                     {

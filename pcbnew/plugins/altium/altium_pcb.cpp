@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -162,7 +162,7 @@ void ALTIUM_PCB::HelperShapeSetLocalCoord( PCB_SHAPE* aShape, uint16_t aComponen
                 FOOTPRINT* fp = m_components.at( aComponent );
 
                 polyShape.Move( -fp->GetPosition() );
-                polyShape.Rotate( -fp->GetOrientationRadians() );
+                polyShape.Rotate( -fp->GetOrientation().AsRadians() );
             }
         }
     }
@@ -1012,7 +1012,7 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aRea
         modelSettings.m_Offset.y = -Iu2Millimeter((int) elem.modelPosition.y - fpPosition.y );
         modelSettings.m_Offset.z = Iu2Millimeter( (int) elem.modelPosition.z );
 
-        double orientation = footprint->GetOrientation();
+        EDA_ANGLE orientation = footprint->GetOrientation();
 
         if( footprint->IsFlipped() )
         {
@@ -1026,7 +1026,7 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aRea
         modelSettings.m_Rotation.y = NormalizeAngleDegrees( -elem.modelRotation.y, -180, 180 );
         modelSettings.m_Rotation.z = NormalizeAngleDegrees( -elem.modelRotation.z
                                                                 + elem.rotation
-                                                                + orientation / 10, -180, 180 );
+                                                                + orientation.AsDegrees(), -180, 180 );
         modelSettings.m_Opacity = elem.bodyOpacity;
 
         footprint->Models().push_back( modelSettings );
@@ -2722,9 +2722,9 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
             if( fpText )
             {
                 FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( fpText->GetParent() );
-                double     orientation     = parentFootprint->GetOrientation();
+                EDA_ANGLE  orientation     = parentFootprint->GetOrientation();
 
-                fpText->SetTextAngle( fpText->GetTextAngle().AsTenthsOfADegree() - orientation );
+                fpText->SetTextAngle( fpText->GetTextAngle() - orientation );
                 fpText->SetLocalCoord();
             }
         }

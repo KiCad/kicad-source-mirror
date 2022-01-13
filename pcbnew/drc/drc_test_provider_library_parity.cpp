@@ -147,8 +147,8 @@ bool padsNeedUpdate( const PAD* a, const PAD* b )
     TEST( a->GetProperty(), b->GetProperty() );
 
     // The pad orientation, for historical reasons is the pad rotation + parent rotation.
-    TEST( ( a->GetOrientation() - EDA_ANGLE( a->GetParent()->GetOrientation(), TENTHS_OF_A_DEGREE_T ) ).Normalize().AsTenthsOfADegree(),
-          ( b->GetOrientation() - EDA_ANGLE( b->GetParent()->GetOrientation(), TENTHS_OF_A_DEGREE_T ) ).Normalize().AsTenthsOfADegree() );
+    TEST( ( a->GetOrientation() - a->GetParent()->GetOrientation() ).Normalize().AsTenthsOfADegree(),
+          ( b->GetOrientation() - b->GetParent()->GetOrientation() ).Normalize().AsTenthsOfADegree() );
 
     TEST( a->GetSize(), b->GetSize() );
     TEST( a->GetDelta(), b->GetDelta() );

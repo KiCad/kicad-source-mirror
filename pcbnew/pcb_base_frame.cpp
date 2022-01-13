@@ -202,7 +202,7 @@ void PCB_BASE_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
 
         // Place it in orientation 0 even if it is not saved with orientation 0 in lib (note that
         // it might be stored in another orientation if the lib is an archive built from a board)
-        aFootprint->SetOrientation( 0 );
+        aFootprint->SetOrientation( ANGLE_0 );
     }
 }
 

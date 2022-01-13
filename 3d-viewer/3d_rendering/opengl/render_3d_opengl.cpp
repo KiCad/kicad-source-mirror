@@ -1223,8 +1223,8 @@ void RENDER_3D_OPENGL::renderFootprint( const FOOTPRINT* aFootprint, bool aRende
         glTranslatef( pos.x * m_boardAdapter.BiuTo3dUnits(), -pos.y * m_boardAdapter.BiuTo3dUnits(),
                       zpos );
 
-        if( aFootprint->GetOrientation() )
-            glRotated( (double) aFootprint->GetOrientation() / 10.0, 0.0, 0.0, 1.0 );
+        if( !aFootprint->GetOrientation().IsZero() )
+            glRotated( aFootprint->GetOrientation().AsDegrees(), 0.0, 0.0, 1.0 );
 
         if( aFootprint->IsFlipped() )
         {
