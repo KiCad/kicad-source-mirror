@@ -91,7 +91,7 @@ public:
     void SetTextAngle( double aAngle ) override;
     void SetTextAngle( const EDA_ANGLE& aAngle );
 
-    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 

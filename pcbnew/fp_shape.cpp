@@ -323,7 +323,7 @@ void FP_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
     SetDrawCoord();
 }
 
-void FP_SHAPE::Rotate( const VECTOR2I& aRotCentre, double aAngle )
+void FP_SHAPE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     // We should rotate the relative coordinates, but to avoid duplicate code do the base class
     // rotation of draw coordinates, which is acceptable because in the footprint editor

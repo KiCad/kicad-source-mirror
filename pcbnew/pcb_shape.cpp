@@ -106,9 +106,9 @@ void PCB_SHAPE::Scale( double aScale )
 }
 
 
-void PCB_SHAPE::Rotate( const VECTOR2I& aRotCentre, double aAngle )
+void PCB_SHAPE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
-    rotate( aRotCentre, aAngle );
+    rotate( aRotCentre, aAngle.AsTenthsOfADegree() );
 }
 
 

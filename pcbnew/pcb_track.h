@@ -90,7 +90,7 @@ public:
         m_End   += aMoveVector;
     }
 
-    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
@@ -263,7 +263,7 @@ public:
         m_End   += aMoveVector;
     }
 
-    virtual void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
+    virtual void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
     virtual void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 

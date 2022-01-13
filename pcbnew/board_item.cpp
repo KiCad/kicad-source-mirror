@@ -200,7 +200,7 @@ BOARD_ITEM_CONTAINER* BOARD_ITEM::GetParentFootprint() const
 }
 
 
-void BOARD_ITEM::Rotate( const VECTOR2I& aRotCentre, double aAngle )
+void BOARD_ITEM::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     wxMessageBox( wxT( "virtual BOARD_ITEM::Rotate used, should not occur" ), GetClass() );
 }

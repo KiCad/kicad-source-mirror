@@ -164,7 +164,7 @@ void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 }
 
 
-void PCB_MARKER::Rotate( const VECTOR2I& aRotCentre, double aAngle )
+void PCB_MARKER::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     // Marker geometry isn't user-editable
 }

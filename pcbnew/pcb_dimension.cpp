@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -211,12 +211,11 @@ void PCB_DIMENSION_BASE::Move( const VECTOR2I& offset )
 }
 
 
-void PCB_DIMENSION_BASE::Rotate( const VECTOR2I& aRotCentre, double aAngle )
+void PCB_DIMENSION_BASE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
-    double newAngle = m_text.GetTextAngle().AsTenthsOfADegree() + aAngle;
+    EDA_ANGLE newAngle = m_text.GetTextAngle() + aAngle;
 
-    if( newAngle >= 3600 )
-        newAngle -= 3600;
+    newAngle.Normalize();
 
     m_text.SetTextAngle( newAngle );
 
@@ -874,16 +873,18 @@ void PCB_DIM_ORTHOGONAL::updateText()
 }
 
 
-void PCB_DIM_ORTHOGONAL::Rotate( const VECTOR2I& aRotCentre, double aAngle )
+void PCB_DIM_ORTHOGONAL::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
+    EDA_ANGLE angle( aAngle );
+
     // restrict angle to -179.9 to 180.0 degrees
-    if( aAngle > 1800 )
+    if( angle > ANGLE_180 )
     {
-        aAngle -= 3600;
+        angle -= ANGLE_360;
     }
-    else if( aAngle <= -1800 )
+    else if( angle <= -ANGLE_180 )
     {
-        aAngle += 3600;
+        angle += ANGLE_360;
     }
 
     // adjust orientation and height to new angle
@@ -891,7 +892,7 @@ void PCB_DIM_ORTHOGONAL::Rotate( const VECTOR2I& aRotCentre, double aAngle )
     // in the other cases we will use the nearest 90 degree angle to
     // choose at least an approximate axis for the target orientation
     // In case of exactly 45 or 135 degrees, we will round towards zero for consistency
-    if( aAngle > 450 && aAngle <= 1350 )
+    if( angle > ANGLE_45 && angle <= ANGLE_135 )
     {
         // about 90 degree
         if( m_orientation == DIR::HORIZONTAL )
@@ -904,7 +905,7 @@ void PCB_DIM_ORTHOGONAL::Rotate( const VECTOR2I& aRotCentre, double aAngle )
             m_height = -m_height;
         }
     }
-    else if( aAngle < -450 && aAngle >= -1350 )
+    else if( angle < -ANGLE_45 && angle >= -ANGLE_135 )
     {
         // about -90 degree
         if( m_orientation == DIR::HORIZONTAL )
@@ -917,14 +918,14 @@ void PCB_DIM_ORTHOGONAL::Rotate( const VECTOR2I& aRotCentre, double aAngle )
             m_orientation = DIR::HORIZONTAL;
         }
     }
-    else if( aAngle > 1350 || aAngle < -1350 )
+    else if( angle > ANGLE_135 || angle < -ANGLE_135 )
     {
         // about 180 degree
         m_height = -m_height;
     }
 
     // this will update m_crossBarStart and m_crossbarEnd
-    PCB_DIMENSION_BASE::Rotate( aRotCentre, aAngle );
+    PCB_DIMENSION_BASE::Rotate( aRotCentre, angle );
 }
 
 

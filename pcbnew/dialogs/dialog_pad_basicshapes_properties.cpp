@@ -631,7 +631,7 @@ void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<std::shared_ptr<PCB
 
             shape->Move( currMoveVect );
             shape->Scale( scale );
-            shape->Rotate( wxPoint( 0, 0 ), curr_rotation );
+            shape->Rotate( VECTOR2I( 0, 0 ), EDA_ANGLE( curr_rotation, TENTHS_OF_A_DEGREE_T ) );
         }
 
         // Prepare new transform on duplication:

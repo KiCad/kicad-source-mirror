@@ -1482,22 +1482,22 @@ void FOOTPRINT::Move( const VECTOR2I& aMoveVector )
 }
 
 
-void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, double aAngle )
+void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
-    double  orientation = GetOrientation().AsTenthsOfADegree();
-    double  newOrientation = orientation + aAngle;
-    VECTOR2I newpos = m_pos;
+    EDA_ANGLE orientation = GetOrientation();
+    EDA_ANGLE newOrientation = orientation + aAngle;
+    VECTOR2I  newpos = m_pos;
     RotatePoint( newpos, aRotCentre, aAngle );
     SetPosition( newpos );
-    SetOrientation( EDA_ANGLE( newOrientation, TENTHS_OF_A_DEGREE_T ) );
+    SetOrientation( newOrientation );
 
-    m_reference->KeepUpright( orientation, newOrientation );
-    m_value->KeepUpright( orientation, newOrientation );
+    m_reference->KeepUpright( orientation.AsTenthsOfADegree(), newOrientation.AsTenthsOfADegree() );
+    m_value->KeepUpright( orientation.AsTenthsOfADegree(), newOrientation.AsTenthsOfADegree() );
 
     for( BOARD_ITEM* item : m_drawings )
     {
         if( item->Type() == PCB_FP_TEXT_T )
-            static_cast<FP_TEXT*>( item )->KeepUpright( orientation, newOrientation  );
+            static_cast<FP_TEXT*>( item )->KeepUpright( orientation.AsTenthsOfADegree(), newOrientation.AsTenthsOfADegree()  );
     }
 
     m_boundingBoxCacheTimeStamp = 0;
@@ -1565,7 +1565,7 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 
     // Now rotate 180 deg if required
     if( aFlipLeftRight )
-        Rotate( aCentre, 1800.0 );
+        Rotate( aCentre, ANGLE_180 );
 
     m_boundingBoxCacheTimeStamp = 0;
     m_visibleBBoxCacheTimeStamp = 0;
@@ -1718,7 +1718,7 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
     }
 
     for( ZONE* zone : m_fp_zones )
-        zone->Rotate( GetPosition(), angleChange.AsTenthsOfADegree() );
+        zone->Rotate( GetPosition(), angleChange );
 
     // Update of the reference and value.
     m_reference->SetDrawCoord();

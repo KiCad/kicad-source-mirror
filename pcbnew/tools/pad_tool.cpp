@@ -665,7 +665,7 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
 
             shape->SetLocalCoord();
             shape->Move( aPad->GetPosition() );
-            shape->Rotate( aPad->GetPosition(), aPad->GetOrientation().AsTenthsOfADegree() );
+            shape->Rotate( aPad->GetPosition(), aPad->GetOrientation() );
             shape->SetLayer( layer );
 
             commit.Add( shape );
@@ -748,14 +748,14 @@ void PAD_TOOL::recombinePad( PAD* aPad )
             if( aPad->GetSizeX() > aPad->GetSizeY() )
                 aPad->SetSizeX( aPad->GetSizeY() );
 
-            aPad->SetOffset( wxPoint( 0, 0 ) );
+            aPad->SetOffset( VECTOR2I( 0, 0 ) );
 
             PCB_SHAPE* shape = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
             shape->SetFilled( true );
             shape->SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
             shape->SetPolyShape( existingOutline );
             shape->Move( - aPad->GetPosition() );
-            shape->Rotate( wxPoint( 0, 0 ), - aPad->GetOrientation().AsTenthsOfADegree() );
+            shape->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
 
             aPad->AddPrimitive( shape );
         }
@@ -802,7 +802,7 @@ void PAD_TOOL::recombinePad( PAD* aPad )
         }
 
         pcbShape->Move( - aPad->GetPosition() );
-        pcbShape->Rotate( wxPoint( 0, 0 ), - aPad->GetOrientation().AsTenthsOfADegree() );
+        pcbShape->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
         aPad->AddPrimitive( pcbShape );
 
         fpShape->SetFlags( STRUCT_DELETED );

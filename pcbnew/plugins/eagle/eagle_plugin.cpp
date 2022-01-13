@@ -945,7 +945,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
 
                 if( r.rot )
-                    zone->Rotate( zone->GetPosition(), r.rot->degrees * 10 );
+                    zone->Rotate( zone->GetPosition(), EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
 
                 // this is not my fault:
                 zone->SetBorderDisplayStyle( outline_hatch, ZONE::GetDefaultHatchPitch(),
@@ -2051,7 +2051,7 @@ void EAGLE_PLUGIN::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
         {
             VECTOR2I center( ( kicad_x( r.x1 ) + kicad_x( r.x2 ) ) / 2,
                              ( kicad_y( r.y1 ) + kicad_y( r.y2 ) ) / 2 );
-            zone->Rotate( center, r.rot->degrees * 10 );
+            zone->Rotate( center, EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
         }
 
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
@@ -2093,7 +2093,7 @@ void EAGLE_PLUGIN::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
         dwg->SetEnd0( end );
 
         if( r.rot )
-            dwg->Rotate( dwg->GetCenter(), r.rot->degrees * 10 );
+            dwg->Rotate( dwg->GetCenter(), EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
     }
 }
 

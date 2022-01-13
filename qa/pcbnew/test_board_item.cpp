@@ -247,10 +247,10 @@ BOOST_AUTO_TEST_CASE( Rotate )
 
                         // Four equivalent 90 degree rotations are an identity.
 
-                        item->Rotate( aRef, 900 );
-                        item->Rotate( aRef, 900 );
-                        item->Rotate( aRef, 900 );
-                        item->Rotate( aRef, 900 );
+                        item->Rotate( aRef, ANGLE_90 );
+                        item->Rotate( aRef, ANGLE_90 );
+                        item->Rotate( aRef, ANGLE_90 );
+                        item->Rotate( aRef, ANGLE_90 );
 
                         FP_SHAPE* fpShape = dynamic_cast<FP_SHAPE*>( aOriginalItem );
 

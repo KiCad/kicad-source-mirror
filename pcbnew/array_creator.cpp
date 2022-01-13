@@ -45,7 +45,7 @@ static void TransformItem( const ARRAY_OPTIONS& aArrOpts, int aIndex, BOARD_ITEM
     const ARRAY_OPTIONS::TRANSFORM transform = aArrOpts.GetTransform( aIndex, aItem.GetPosition() );
 
     aItem.Move( (wxPoint) transform.m_offset );
-    aItem.Rotate( aItem.GetPosition(), transform.m_rotation * 10 );
+    aItem.Rotate( aItem.GetPosition(), EDA_ANGLE( transform.m_rotation, DEGREES_T ) );
 }
 
 

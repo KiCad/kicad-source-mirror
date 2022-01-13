@@ -1088,11 +1088,11 @@ int PAD::Compare( const PAD* aPadRef, const PAD* aPadCmp )
 }
 
 
-void PAD::Rotate( const VECTOR2I& aRotCentre, double aAngle )
+void PAD::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     RotatePoint( m_pos, aRotCentre, aAngle );
 
-    m_orient += EDA_ANGLE( aAngle, TENTHS_OF_A_DEGREE_T );
+    m_orient += aAngle;
     m_orient.Normalize();
 
     SetLocalCoord();

@@ -222,7 +222,7 @@ public:
     // BOARD_ITEM overrides
 
     void Move( const VECTOR2I& offset ) override;
-    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
     /**
@@ -460,7 +460,7 @@ public:
     {
         return wxT( "PCB_DIM_ORTHOGONAL" );
     }
-    void     Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
+    void     Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
 protected:
     void updateGeometry() override;

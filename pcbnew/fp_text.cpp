@@ -128,7 +128,7 @@ void FP_TEXT::KeepUpright( double aOldOrientation, double aNewOrientation )
 }
 
 
-void FP_TEXT::Rotate( const VECTOR2I& aRotCentre, double aAngle )
+void FP_TEXT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     // Used in footprint editing
     // Note also in footprint editor, m_Pos0 = m_Pos
@@ -137,7 +137,7 @@ void FP_TEXT::Rotate( const VECTOR2I& aRotCentre, double aAngle )
     RotatePoint( pt, aRotCentre, aAngle );
     SetTextPos( pt );
 
-    SetTextAngle( GetTextAngle().AsTenthsOfADegree() + aAngle );
+    SetTextAngle( GetTextAngle() + aAngle );
     SetLocalCoord();
 }
 
@@ -153,7 +153,7 @@ void FP_TEXT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     else
     {
         SetTextY( MIRRORVAL( GetTextPos().y, aCentre.y ) );
-        SetTextAngle( 1800 - GetTextAngle().AsTenthsOfADegree() );
+        SetTextAngle( ANGLE_180 - GetTextAngle() );
     }
 
     SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );

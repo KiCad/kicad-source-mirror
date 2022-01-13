@@ -1484,7 +1484,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             }
         }
 
-        static_cast<BOARD_ITEM*>( item )->Rotate( refPt, rotateAngle );
+        static_cast<BOARD_ITEM*>( item )->Rotate( refPt, EDA_ANGLE( rotateAngle, TENTHS_OF_A_DEGREE_T ) );
     }
 
     if( !m_dragging )
@@ -1986,8 +1986,9 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
     if( ret == wxID_OK )
     {
-        VECTOR2I rp = selection.GetCenter();
-        wxPoint selCenter( rp.x, rp.y );
+        EDA_ANGLE angle( rotation, TENTHS_OF_A_DEGREE_T );
+        VECTOR2I  rp = selection.GetCenter();
+        wxPoint   selCenter( rp.x, rp.y );
 
         // Make sure the rotation is from the right reference point
         selCenter += translation;
@@ -2024,16 +2025,16 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
             switch( rotationAnchor )
             {
             case ROTATE_AROUND_ITEM_ANCHOR:
-                item->Rotate( item->GetPosition(), rotation );
+                item->Rotate( item->GetPosition(), angle );
                 break;
             case ROTATE_AROUND_SEL_CENTER:
-                item->Rotate( selCenter, rotation );
+                item->Rotate( selCenter, angle );
                 break;
             case ROTATE_AROUND_USER_ORIGIN:
-                item->Rotate( frame()->GetScreen()->m_LocalOrigin, rotation );
+                item->Rotate( frame()->GetScreen()->m_LocalOrigin, angle );
                 break;
             case ROTATE_AROUND_AUX_ORIGIN:
-                item->Rotate( board()->GetDesignSettings().GetAuxOrigin(), rotation );
+                item->Rotate( board()->GetDesignSettings().GetAuxOrigin(), angle );
                 break;
             }
 

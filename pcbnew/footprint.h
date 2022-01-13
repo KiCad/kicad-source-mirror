@@ -261,7 +261,7 @@ public:
 
     void Move( const VECTOR2I& aMoveVector ) override;
 
-    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 

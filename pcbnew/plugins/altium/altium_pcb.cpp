@@ -2309,7 +2309,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
                                 aElem.position + VECTOR2I( -aElem.topsize.x / 2, aElem.topsize.y / 2 ) } );
 
         if( aElem.direction != 0 )
-            shape->Rotate( aElem.position, aElem.direction * 10 );
+            shape->Rotate( aElem.position, EDA_ANGLE( aElem.direction, DEGREES_T ) );
 
         HelperShapeSetLocalCoord( shape, aElem.component );
     }
@@ -2368,7 +2368,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
             }
 
             if( aElem.direction != 0 )
-                shape->Rotate( aElem.position, aElem.direction * 10 );
+                shape->Rotate( aElem.position, EDA_ANGLE( aElem.direction, DEGREES_T ) );
 
             HelperShapeSetLocalCoord( shape, aElem.component );
         }
@@ -2407,7 +2407,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
             }
 
             if( aElem.direction != 0 )
-                shape->Rotate( aElem.position, aElem.direction * 10. );
+                shape->Rotate( aElem.position, EDA_ANGLE( aElem.direction, DEGREES_T ) );
 
             HelperShapeSetLocalCoord( shape, aElem.component );
         }
@@ -2435,7 +2435,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
                                 p22 + chamferX, p22 + chamferY, p21 - chamferY, p21 + chamferX } );
 
         if( aElem.direction != 0. )
-            shape->Rotate( aElem.position, aElem.direction * 10 );
+            shape->Rotate( aElem.position, EDA_ANGLE( aElem.direction, DEGREES_T ) );
 
         HelperShapeSetLocalCoord( shape, aElem.component );
     }
@@ -2877,7 +2877,7 @@ void ALTIUM_PCB::ParseFills6Data( const CFB::CompoundFileReader& aReader,
             }
 
             if( elem.rotation != 0. )
-                zone->Rotate( center, elem.rotation * 10 );
+                zone->Rotate( center, EDA_ANGLE( elem.rotation, DEGREES_T ) );
 
             zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                          ZONE::GetDefaultHatchPitch(), true );
@@ -2893,7 +2893,7 @@ void ALTIUM_PCB::ParseFills6Data( const CFB::CompoundFileReader& aReader,
             shape->SetPolyPoints( { p11, p12, p22, p21 } );
 
             if( elem.rotation != 0. )
-                shape->Rotate( center, elem.rotation * 10 );
+                shape->Rotate( center, EDA_ANGLE( elem.rotation, DEGREES_T ) );
         }
     }
 

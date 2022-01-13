@@ -296,7 +296,7 @@ void PCB_GROUP::Move( const VECTOR2I& aMoveVector )
 }
 
 
-void PCB_GROUP::Rotate( const VECTOR2I& aRotCentre, double aAngle )
+void PCB_GROUP::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     for( BOARD_ITEM* item : m_items )
         item->Rotate( aRotCentre, aAngle );

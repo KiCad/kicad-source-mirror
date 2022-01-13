@@ -629,7 +629,7 @@ public:
         SetDirty();
     }
 
-    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 

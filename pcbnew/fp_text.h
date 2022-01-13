@@ -113,7 +113,7 @@ public:
 
     /// Rotate text, in footprint editor
     /// (for instance in footprint rotation transform)
-    void Rotate( const VECTOR2I& aOffset, double aAngle ) override;
+    void Rotate( const VECTOR2I& aOffset, const EDA_ANGLE& aAngle ) override;
 
     /// Flip entity during footprint flip
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;

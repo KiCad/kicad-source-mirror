@@ -1181,8 +1181,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
             padShape->SetPolyShape( padOutline );
             padShape->SetStroke( STROKE_PARAMS( 0 ) );
             padShape->Move( padOffset - drillOffset );
-            padShape->Rotate( VECTOR2I( 0, 0 ),
-                              1800.0 - getAngleTenthDegree( csPadcode.SlotOrientation ) );
+            padShape->Rotate( VECTOR2I( 0, 0 ), ANGLE_180 - getAngle( csPadcode.SlotOrientation ) );
 
             SHAPE_POLY_SET editedPadOutline = padShape->GetPolyShape();
 
@@ -2877,7 +2876,7 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
     }
 
     if( aRotationAngle != 0.0 )
-        shape->Rotate( aTransformCentre, aRotationAngle );
+        shape->Rotate( aTransformCentre, EDA_ANGLE( aRotationAngle, TENTHS_OF_A_DEGREE_T ) );
 
     if( aMoveVector != VECTOR2I{ 0, 0 } )
         shape->Move( aMoveVector );

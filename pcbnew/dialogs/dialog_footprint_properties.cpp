@@ -444,10 +444,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     EDA_ANGLE orient( m_orientation.GetDoubleValue(), TENTHS_OF_A_DEGREE_T );
 
     if( m_footprint->GetOrientation() != orient )
-    {
-        m_footprint->Rotate( m_footprint->GetPosition(),
-                             ( orient - m_footprint->GetOrientation() ).AsTenthsOfADegree() );
-    }
+        m_footprint->Rotate( m_footprint->GetPosition(), orient - m_footprint->GetOrientation() );
 
     // Set component side, that also have effect on the fields positions on board
     bool change_layer = false;

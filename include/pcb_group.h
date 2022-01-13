@@ -174,7 +174,7 @@ public:
     void Move( const VECTOR2I& aMoveVector ) override;
 
     ///< @copydoc BOARD_ITEM::Rotate
-    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
     ///< @copydoc BOARD_ITEM::Flip
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;

@@ -880,7 +880,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 
         EDA_ANGLE angle = -aFootprint->GetOrientation();
         angle.Normalize();
-        untransformedZone.Rotate( aFootprint->GetPosition(), angle.AsTenthsOfADegree() );
+        untransformedZone.Rotate( aFootprint->GetPosition(), angle );
 
         // keepout areas have a type. types are
         // T_place_keepout, T_via_keepout, T_wire_keepout,

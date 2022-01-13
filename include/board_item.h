@@ -28,6 +28,7 @@
 
 #include <eda_item.h>
 #include <eda_units.h>
+#include <eda_angle.h>
 #include <convert_to_biu.h>
 #include <gr_basic.h>
 #include <layer_ids.h>
@@ -254,10 +255,9 @@ public:
     /**
      * Rotate this object.
      *
-     * @param aRotCentre the rotation point.
-     * @param aAngle the rotation angle in 0.1 degree.
+     * @param aRotCentre the rotation center point.
      */
-    virtual void Rotate( const VECTOR2I& aRotCentre, double aAngle );
+    virtual void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle );
 
     /**
      * Flip this object, i.e. change the board side for this object.

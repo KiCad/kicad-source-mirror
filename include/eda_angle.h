@@ -263,6 +263,7 @@ public:
     static EDA_ANGLE m_Angle0;
     static EDA_ANGLE m_Angle45;
     static EDA_ANGLE m_Angle90;
+    static EDA_ANGLE m_Angle135;
     static EDA_ANGLE m_Angle180;
     static EDA_ANGLE m_Angle270;
     static EDA_ANGLE m_Angle360;
@@ -314,6 +315,11 @@ inline bool operator<=( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
     return aAngleA.AsTenthsOfADegree() <= aAngleB.AsTenthsOfADegree();
 }
 
+inline bool operator>=( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
+{
+    return aAngleA.AsTenthsOfADegree() >= aAngleB.AsTenthsOfADegree();
+}
+
 
 static constexpr EDA_ANGLE& ANGLE_HORIZONTAL  = EDA_ANGLE::m_Angle0;
 static constexpr EDA_ANGLE& ANGLE_VERTICAL    = EDA_ANGLE::m_Angle90;
@@ -322,8 +328,10 @@ static constexpr EDA_ANGLE& FULL_CIRCLE       = EDA_ANGLE::m_Angle360;
 static constexpr EDA_ANGLE& ANGLE_0   = EDA_ANGLE::m_Angle0;
 static constexpr EDA_ANGLE& ANGLE_45  = EDA_ANGLE::m_Angle45;
 static constexpr EDA_ANGLE& ANGLE_90  = EDA_ANGLE::m_Angle90;
+static constexpr EDA_ANGLE& ANGLE_135 = EDA_ANGLE::m_Angle135;
 static constexpr EDA_ANGLE& ANGLE_180 = EDA_ANGLE::m_Angle180;
 static constexpr EDA_ANGLE& ANGLE_270 = EDA_ANGLE::m_Angle270;
+static constexpr EDA_ANGLE& ANGLE_360 = EDA_ANGLE::m_Angle360;
 
 
 #endif // EDA_ANGLE_H

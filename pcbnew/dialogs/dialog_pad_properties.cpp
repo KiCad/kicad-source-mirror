@@ -1477,7 +1477,7 @@ void DIALOG_PAD_PROPERTIES::redraw()
     {
         PCB_SHAPE* dummyShape = (PCB_SHAPE*) m_primitives[select]->Clone();
         dummyShape->SetLayer( SELECTED_ITEMS_LAYER );
-        dummyShape->Rotate( VECTOR2I( 0, 0), m_dummyPad->GetOrientation().AsTenthsOfADegree() );
+        dummyShape->Rotate( VECTOR2I( 0, 0), m_dummyPad->GetOrientation() );
         dummyShape->Move( m_dummyPad->GetPosition() );
 
         view->Add( dummyShape );

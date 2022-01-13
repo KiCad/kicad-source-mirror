@@ -93,7 +93,7 @@ public:
      * This is a footprint shape modification.
      * (should be only called by a footprint editing function )
      */
-    void Rotate( const VECTOR2I& aRotCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
     /**
      * Flip entity relative to aCentre.

@@ -262,14 +262,14 @@ double PCB_TRACK::GetLength() const
 }
 
 
-void PCB_TRACK::Rotate( const VECTOR2I& aRotCentre, double aAngle )
+void PCB_TRACK::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     RotatePoint( m_Start, aRotCentre, aAngle );
     RotatePoint( m_End, aRotCentre, aAngle );
 }
 
 
-void PCB_ARC::Rotate( const VECTOR2I& aRotCentre, double aAngle )
+void PCB_ARC::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     RotatePoint( m_Start, aRotCentre, aAngle );
     RotatePoint( m_End, aRotCentre, aAngle );

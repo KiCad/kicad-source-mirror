@@ -218,7 +218,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
             if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) && ( aOptions & IPO_ROTATE ) )
             {
                 const int rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *frame(), *evt );
-                newItem->Rotate( newItem->GetPosition(), rotationAngle );
+                newItem->Rotate( newItem->GetPosition(), EDA_ANGLE( rotationAngle, TENTHS_OF_A_DEGREE_T ) );
                 view()->Update( &preview );
             }
             else if( evt->IsAction( &PCB_ACTIONS::flip ) && ( aOptions & IPO_FLIP ) )

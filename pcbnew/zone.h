@@ -506,12 +506,11 @@ public:
     void MoveEdge( const VECTOR2I& offset, int aEdge );
 
     /**
-     * Move the outlines.
+     * Rotate the outlines.
      *
      * @param aCentre is rot centre
-     * @param aAngle is in 0.1 degree
      */
-    void Rotate( const VECTOR2I& aCentre, double aAngle ) override;
+    void Rotate( const VECTOR2I& aCentre, const EDA_ANGLE& aAngle ) override;
 
     /**
      * Flip this object, i.e. change the board side for this object
