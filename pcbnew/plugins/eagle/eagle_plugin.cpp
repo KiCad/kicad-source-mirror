@@ -1907,9 +1907,7 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     }
 
     if( e.rot )
-    {
-        pad->SetOrientation( e.rot->degrees * 10 );
-    }
+        pad->SetOrientation( EDA_ANGLE( e.rot->degrees, DEGREES_T ) );
 }
 
 
@@ -2378,7 +2376,7 @@ void EAGLE_PLUGIN::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     }
 
     if( e.rot )
-        pad->SetOrientation( e.rot->degrees * 10 );
+        pad->SetOrientation( EDA_ANGLE( e.rot->degrees, DEGREES_T ) );
 
     pad->SetLocalSolderPasteMargin( -eagleClamp( m_rules->mlMinCreamFrame,
                                                  (int) ( m_rules->mvCreamFrame * minPadSize ),

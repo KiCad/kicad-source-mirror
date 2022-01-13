@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,7 +141,7 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
                                                 ? HOLE_ATTRIBUTE::HOLE_MECHANICAL
                                                 : HOLE_ATTRIBUTE::HOLE_PAD;
                 new_hole.m_Tool_Reference = -1;         // Flag is: Not initialized
-                new_hole.m_Hole_Orient    = pad->GetOrientation();
+                new_hole.m_Hole_Orient    = pad->GetOrientation().AsTenthsOfADegree();
                 new_hole.m_Hole_Shape     = 0;           // hole shape: round
                 new_hole.m_Hole_Diameter  = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
                 new_hole.m_Hole_Size.x    = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;

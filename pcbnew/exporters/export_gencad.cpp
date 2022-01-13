@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -591,7 +591,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
             VECTOR2I       padOffset( 0, 0 );
 
             TransformRoundChamferedRectToPolygon( outline, padOffset, pad->GetSize(),
-                                                  pad->GetOrientation(),
+                                                  pad->GetOrientation().AsTenthsOfADegree(),
                                                   pad->GetRoundRectCornerRadius(),
                                                   pad->GetChamferRectRatio(),
                                                   pad->GetChamferPositions(), 0, maxError,
@@ -828,7 +828,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
                 pins.insert( pinname );
             }
 
-            double orient = pad->GetOrientation() - footprint->GetOrientation();
+            double orient = pad->GetOrientation().AsTenthsOfADegree() - footprint->GetOrientation();
             NORMALIZE_ANGLE_POS( orient );
 
             // Bottom side footprints use the flipped padstack

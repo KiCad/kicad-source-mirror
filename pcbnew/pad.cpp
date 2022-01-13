@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ PAD::PAD( FOOTPRINT* parent ) :
 {
     m_size.x = m_size.y   = Mils2iu( 60 );  // Default pad size 60 mils.
     m_drill.x = m_drill.y = Mils2iu( 30 );  // Default drill size 30 mils.
-    m_orient              = 0;              // Pad rotation in 1/10 degrees.
+    m_orient              = ANGLE_0;        // Pad rotation.
     m_lengthPadToDie      = 0;
 
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
@@ -87,7 +87,7 @@ PAD::PAD( FOOTPRINT* parent ) :
 
     m_zoneConnection    = ZONE_CONNECTION::INHERITED; // Use parent setting by default
     m_thermalSpokeWidth = 0;                          // Use parent setting by default
-    m_thermalSpokeAngle = 450.0;                      // Default for circular pads
+    m_thermalSpokeAngle = ANGLE_45;                   // Default for circular pads
     m_thermalGap        = 0;                          // Use parent setting by default
 
     m_customShapeClearanceArea = CUST_PAD_SHAPE_IN_ZONE_OUTLINE;
@@ -417,7 +417,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         corners.Append(  half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
         corners.Append( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
 
-        corners.Rotate( -DECIDEG2RAD( m_orient ) );
+        corners.Rotate( - m_orient.AsRadians() );
         corners.Move( shapePos );
 
         // GAL renders rectangles faster than 4-point polygons so it's worth checking if our
@@ -462,7 +462,8 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     {
         SHAPE_POLY_SET outline;
 
-        TransformRoundChamferedRectToPolygon( outline, shapePos, GetSize(), m_orient,
+        TransformRoundChamferedRectToPolygon( outline, shapePos, GetSize(),
+                                              m_orient.AsTenthsOfADegree(),
                                               GetRoundRectCornerRadius(), GetChamferRectRatio(),
                                               GetChamferPositions(), 0, maxError, ERROR_INSIDE );
 
@@ -482,7 +483,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         {
             for( SHAPE* shape : primitive->MakeEffectiveShapes() )
             {
-                shape->Rotate( -DECIDEG2RAD( m_orient ) );
+                shape->Rotate( - m_orient.AsRadians() );
                 shape->Move( shapePos );
                 add( shape );
             }
@@ -609,10 +610,10 @@ void PAD::SetProperty( PAD_PROP aProperty )
 }
 
 
-void PAD::SetOrientation( double aAngle )
+void PAD::SetOrientation( const EDA_ANGLE& aAngle )
 {
-    NORMALIZE_ANGLE_POS( aAngle );
     m_orient = aAngle;
+    m_orient.Normalize();
 
     SetDirty();
 }
@@ -1093,7 +1094,8 @@ void PAD::Rotate( const VECTOR2I& aRotCentre, double aAngle )
 {
     RotatePoint( m_pos, aRotCentre, aAngle );
 
-    m_orient = NormalizeAngle360Min( m_orient + aAngle );
+    m_orient += EDA_ANGLE( aAngle, TENTHS_OF_A_DEGREE_T );
+    m_orient.Normalize();
 
     SetLocalCoord();
 
@@ -1392,23 +1394,20 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     SetAttribute( aMasterPad.GetAttribute() );
     SetProperty( aMasterPad.GetProperty() );
 
-    // I am not sure the m_LengthPadToDie must be imported, because this is
-    // a parameter really specific to a given pad (JPC).
-    // So this is currently non imported
+    // I am not sure the m_LengthPadToDie should be imported, because this is a parameter
+    // really specific to a given pad (JPC).
 #if 0
     SetPadToDieLength( aMasterPad.GetPadToDieLength() );
 #endif
 
-    // The pad orientation, for historical reasons is the
-    // pad rotation + parent rotation.
-    // So we have to manage this parent rotation
-    double pad_rot = aMasterPad.GetOrientation();
+    // The pad orientation, for historical reasons is the pad rotation + parent rotation.
+    EDA_ANGLE pad_rot = aMasterPad.GetOrientation();
 
     if( aMasterPad.GetParent() )
-        pad_rot -= aMasterPad.GetParent()->GetOrientation();
+        pad_rot -= EDA_ANGLE( aMasterPad.GetParent()->GetOrientation(), TENTHS_OF_A_DEGREE_T );
 
     if( GetParent() )
-        pad_rot += GetParent()->GetOrientation();
+        pad_rot += EDA_ANGLE( GetParent()->GetOrientation(), TENTHS_OF_A_DEGREE_T );
 
     SetOrientation( pad_rot );
 
@@ -1440,8 +1439,7 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     {
     case PAD_ATTRIB::SMD:
     case PAD_ATTRIB::CONN:
-        // These pads do not have hole (they are expected to be only on one
-        // external copper layer)
+        // These pads do not have a hole (they are expected to be on one external copper layer)
         SetDrillSize( VECTOR2I( 0, 0 ) );
         break;
 
@@ -1474,7 +1472,7 @@ void PAD::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_PAD_T );
 
-    std::swap( *((PAD*) this), *((PAD*) aImage) );
+    std::swap( *this, *static_cast<PAD*>( aImage ) );
 }
 
 
@@ -1506,9 +1504,8 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     // This minimal value is mainly for very small pads, like SM0402.
     // Most of time pads are using the segment count given by aError value.
     const int pad_min_seg_per_circle_count = 16;
-    double  angle = m_orient;
-    int     dx = m_size.x / 2;
-    int     dy = m_size.y / 2;
+    int       dx = m_size.x / 2;
+    int       dy = m_size.y / 2;
 
     VECTOR2I padShapePos = ShapePos(); // Note: for pad having a shape offset,
                                               // the pad position is NOT the shape position
@@ -1528,7 +1525,7 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
             int      half_width = std::min( dx, dy );
             VECTOR2I delta( dx - half_width, dy - half_width );
 
-            RotatePoint( delta, angle );
+            RotatePoint( delta, m_orient );
 
             TransformOvalToPolygon( aCornerBuffer, padShapePos - delta, padShapePos + delta,
                                     ( half_width + aClearanceValue ) * 2, aError, aErrorLoc,
@@ -1544,8 +1541,8 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         int  ddy = GetShape() == PAD_SHAPE::TRAPEZOID ? m_deltaSize.y / 2 : 0;
 
         SHAPE_POLY_SET outline;
-        TransformTrapezoidToPolygon( outline, padShapePos, m_size, angle, ddx, ddy,
-                                     aClearanceValue, aError, aErrorLoc );
+        TransformTrapezoidToPolygon( outline, padShapePos, m_size, m_orient.AsTenthsOfADegree(),
+                                     ddx, ddy, aClearanceValue, aError, aErrorLoc );
         aCornerBuffer.Append( outline );
         break;
     }
@@ -1556,7 +1553,8 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         bool doChamfer = GetShape() == PAD_SHAPE::CHAMFERED_RECT;
 
         SHAPE_POLY_SET outline;
-        TransformRoundChamferedRectToPolygon( outline, padShapePos, m_size, angle,
+        TransformRoundChamferedRectToPolygon( outline, padShapePos, m_size,
+                                              m_orient.AsTenthsOfADegree(),
                                               GetRoundRectCornerRadius(),
                                               doChamfer ? GetChamferRectRatio() : 0,
                                               doChamfer ? GetChamferPositions() : 0,
@@ -1569,7 +1567,7 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     {
         SHAPE_POLY_SET outline;
         MergePrimitivesAsPolygon( &outline, aErrorLoc );
-        outline.Rotate( -DECIDEG2RAD( m_orient ) );
+        outline.Rotate( - m_orient.AsRadians() );
         outline.Move( VECTOR2I( m_pos ) );
 
         if( aClearanceValue )
@@ -1677,7 +1675,7 @@ static struct PAD_DESC
                     &PAD::SetThermalSpokeWidth, &PAD::GetThermalSpokeWidth,
                     PROPERTY_DISPLAY::DISTANCE ) );
         propMgr.AddProperty( new PROPERTY<PAD, double>( _HKI( "Thermal Relief Spoke Angle" ),
-                    &PAD::SetThermalSpokeAngle, &PAD::GetThermalSpokeAngle,
+                    &PAD::SetThermalSpokeAngleDegrees, &PAD::GetThermalSpokeAngleDegrees,
                     PROPERTY_DISPLAY::DEGREE ) );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Thermal Relief Gap" ),
                     &PAD::SetThermalGap, &PAD::GetThermalGap,

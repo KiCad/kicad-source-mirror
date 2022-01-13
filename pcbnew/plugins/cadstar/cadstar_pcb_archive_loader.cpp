@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020-2021 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -1181,7 +1181,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
             padShape->SetPolyShape( padOutline );
             padShape->SetStroke( STROKE_PARAMS( 0 ) );
             padShape->Move( padOffset - drillOffset );
-            padShape->Rotate( wxPoint( 0, 0 ),
+            padShape->Rotate( VECTOR2I( 0, 0 ),
                               1800.0 - getAngleTenthDegree( csPadcode.SlotOrientation ) );
 
             SHAPE_POLY_SET editedPadOutline = padShape->GetPolyShape();
@@ -1221,14 +1221,14 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         pad->SetOffset( drillOffset );
     }
 
-    double padOrientation = getAngleTenthDegree( aCadstarPad.OrientAngle )
-                            + getAngleTenthDegree( csPadcode.Shape.OrientAngle );
+    EDA_ANGLE padOrientation = getAngle( aCadstarPad.OrientAngle )
+                                    + getAngle( csPadcode.Shape.OrientAngle );
 
     RotatePoint( padOffset, padOrientation );
     RotatePoint( drillOffset, padOrientation );
     pad->SetPos0( getKiCadPoint( aCadstarPad.Position ) - aParent->GetPosition() - padOffset
                   - drillOffset );
-    pad->SetOrientation( padOrientation + getAngleTenthDegree( csPadcode.SlotOrientation ) );
+    pad->SetOrientation( padOrientation + getAngle( csPadcode.SlotOrientation ) );
 
     //TODO handle csPadcode.Reassigns when KiCad supports full padstacks
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 #include <zones.h>
 #include <board_connected_item.h>
 #include <convert_to_biu.h>
+#include <eda_angle.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_compound.h>
 #include <pad_shapes.h>
@@ -331,24 +332,25 @@ public:
     /**
      * Set the rotation angle of the pad.
      *
-     * If \a aAngle is outside of 0 - 3600, then it will be normalized.
-     *
-     * @param aAngle in tenths of degrees.
+     * If \a aAngle is outside of 0 - 360, then it will be normalized.
      */
-    void SetOrientation( double aAngle );
+    void SetOrientation( const EDA_ANGLE& aAngle );
+
 
     /**
-     * Set orientation in degrees.
+     * Return the rotation angle of the pad.
      */
-    void SetOrientationDegrees( double aOrientation ) { SetOrientation( aOrientation*10.0 ); }
+    EDA_ANGLE GetOrientation() const { return m_orient; }
 
-    /**
-     * Return the rotation angle of the pad in a variety of units (the basic call returns
-     * tenths of degrees).
-     */
-    double GetOrientation() const { return m_orient; }
-    double GetOrientationDegrees() const   { return m_orient/10.0; }
-    double GetOrientationRadians() const   { return m_orient*M_PI/1800; }
+    // For property system
+    void SetOrientationDegrees( double aOrientation )
+    {
+        SetOrientation( EDA_ANGLE( aOrientation, DEGREES_T ) );
+    }
+    double GetOrientationDegrees() const
+    {
+        return m_orient.AsDegrees();
+    }
 
     void SetDrillShape( PAD_DRILL_SHAPE_T aShape ) { m_drillShape = aShape; m_shapesDirty = true; }
     PAD_DRILL_SHAPE_T GetDrillShape() const     { return m_drillShape; }
@@ -487,12 +489,22 @@ public:
     int GetLocalSpokeWidthOverride( wxString* aSource = nullptr ) const;
 
     /**
-     * The orientation of the thermal spokes (in decidegrees).  450 will produce an X (the
-     * default for circular pads and circular-anchored custom shaped pads), while 900 will
-     * produce a + (the default for all other shapes).
+     * The orientation of the thermal spokes.  45° will produce an X (the default for circular
+     * pads and circular-anchored custom shaped pads), while 90° will produce a + (the default
+     * for all other shapes).
      */
-    void SetThermalSpokeAngle( double aAngle ) { m_thermalSpokeAngle = aAngle; }
-    double GetThermalSpokeAngle() const { return m_thermalSpokeAngle; }
+    void SetThermalSpokeAngle( const EDA_ANGLE& aAngle ) { m_thermalSpokeAngle = aAngle; }
+    EDA_ANGLE GetThermalSpokeAngle() const { return m_thermalSpokeAngle; }
+
+    // For property system
+    void SetThermalSpokeAngleDegrees( double aAngle )
+    {
+        m_thermalSpokeAngle = EDA_ANGLE( aAngle, DEGREES_T );
+    }
+    double GetThermalSpokeAngleDegrees() const
+    {
+        return m_thermalSpokeAngle.AsDegrees();
+    }
 
     void SetThermalGap( int aGap ) { m_thermalGap = aGap; }
     int GetThermalGap() const { return m_thermalGap; }
@@ -737,14 +749,14 @@ private:
                                     //   one end and half expands the other.  It is only valid
                                     //   to have a single axis be non-0.
 
-    VECTOR2I    m_pos0; // Initial Pad position (i.e. pad position relative to the
+    VECTOR2I    m_pos0;             // Initial Pad position (i.e. pad position relative to the
                                     //   footprint anchor, orientation 0)
 
     PAD_ATTRIB  m_attribute;        // PAD_ATTRIB_NORMAL, PAD_ATTRIB::SMD, PAD_ATTRIB::CONN,
                                     //   PAD_ATTRIB::NPTH
     PAD_PROP    m_property;         // Property in fab files (BGA, FIDUCIAL, TESTPOINT, etc.)
 
-    double      m_orient;           // in 1/10 degrees
+    EDA_ANGLE   m_orient;
 
     int         m_lengthPadToDie;   // Length net from pad to die, inside the package
 
@@ -772,8 +784,8 @@ private:
 
     ZONE_CONNECTION m_zoneConnection;           // No connection, thermal relief, etc.
     int         m_thermalSpokeWidth;            // Thermal spoke width.
-    double      m_thermalSpokeAngle;            // Rotation of the spokes, in deci-degrees.  450
-                                                //   will produce an X, while 900 will produce a +.
+    EDA_ANGLE   m_thermalSpokeAngle;            // Rotation of the spokes.  45° will produce an X,
+                                                //   while 90° will produce a +.
     int         m_thermalGap;
 };
 

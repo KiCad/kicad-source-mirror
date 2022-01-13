@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,7 +288,7 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
 
         pad->SetSize( VECTOR2I( width, height ) );
         pad->SetDelta( VECTOR2I( 0, 0 ) );
-        pad->SetOrientation( m_rotation + aRotation );
+        pad->SetOrientation( EDA_ANGLE( m_rotation + aRotation, TENTHS_OF_A_DEGREE_T ) );
 
         pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
         pad->SetOffset( VECTOR2I( 0, 0 ) );

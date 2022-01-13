@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -585,9 +585,9 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
                 pad->SetLocalSolderMaskMargin( maskMargin );
             }
 
-            // Negate angle (due to Y reversed axis) and convert it to internal units
-            angle = - RAD2DECIDEG( angle );
-            pad->SetOrientation( KiROUND( angle ) );
+            // Negate angle (due to Y reversed axis)
+            EDA_ANGLE orient( -angle, RADIANS_T );
+            pad->SetOrientation( orient );
 
             VECTOR2I padPos( ( x1 + x2 ) / 2, ( y1 + y2 ) / 2 );
 

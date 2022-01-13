@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -402,7 +402,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
                      pad->GetPos0().y * conv_unit,
                      pad->GetSize().x * conv_unit,
                      pad->GetSize().y * conv_unit,
-                     ( pad->GetOrientation() - footprint->GetOrientation()) / 10.0 );
+                     pad->GetOrientation().AsDegrees() - ( footprint->GetOrientation() / 10.0 ) );
             buffer += line;
 
             sprintf( line, "drill %9.6f\n", pad->GetDrillSize().x * conv_unit );

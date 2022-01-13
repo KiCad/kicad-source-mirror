@@ -1441,8 +1441,8 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
 
     m_out->Print( 0, " (at %s", FormatInternalUnits( aPad->GetPos0() ).c_str() );
 
-    if( aPad->GetOrientation() != 0.0 )
-        m_out->Print( 0, " %s", FormatAngle( aPad->GetOrientation() ).c_str() );
+    if( !aPad->GetOrientation().IsZero() )
+        m_out->Print( 0, " %s", FormatAngle( aPad->GetOrientation().AsTenthsOfADegree() ).c_str() );
 
     m_out->Print( 0, ")" );
 
@@ -1591,11 +1591,11 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
                    FormatInternalUnits( aPad->GetThermalSpokeWidth() ).c_str() );
     }
 
-    if( ( aPad->GetShape() == PAD_SHAPE::CIRCLE && aPad->GetThermalSpokeAngle() != 450.0 )
-            || ( aPad->GetShape() != PAD_SHAPE::CIRCLE && aPad->GetThermalSpokeAngle() != 900.0 ) )
+    if( ( aPad->GetShape() == PAD_SHAPE::CIRCLE && aPad->GetThermalSpokeAngle() != ANGLE_45 )
+            || ( aPad->GetShape() != PAD_SHAPE::CIRCLE && aPad->GetThermalSpokeAngle() != ANGLE_90 ) )
     {
         StrPrintf( &output, " (thermal_bridge_angle %s)",
-                   FormatAngle( aPad->GetThermalSpokeAngle() ).c_str() );
+                   FormatAngle( aPad->GetThermalSpokeAngle().AsTenthsOfADegree() ).c_str() );
     }
 
     if( aPad->GetThermalGap() != 0 )

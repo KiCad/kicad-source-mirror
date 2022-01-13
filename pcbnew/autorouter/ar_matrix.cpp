@@ -5,7 +5,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -933,10 +933,10 @@ void AR_MATRIX::PlacePad( PAD* aPad, int color, int marge, AR_MATRIX::CELL_OP op
     }
 
     // The pad is a rectangle ( horizontal or vertical )
-    if( int( aPad->GetOrientation() ) % 900 == 0 )
+    if( aPad->GetOrientation().IsCardinal() )
     {
         // Orientation turned 90 deg.
-        if( aPad->GetOrientation() == 900 || aPad->GetOrientation() == 2700 )
+        if( aPad->GetOrientation() == ANGLE_90 || aPad->GetOrientation() == ANGLE_270 )
         {
             std::swap( dx, dy );
         }
@@ -947,6 +947,7 @@ void AR_MATRIX::PlacePad( PAD* aPad, int color, int marge, AR_MATRIX::CELL_OP op
     else
     {
         TraceFilledRectangle( shape_pos.x - dx, shape_pos.y - dy, shape_pos.x + dx,
-                shape_pos.y + dy, aPad->GetOrientation(), aPad->GetLayerSet(), color, op_logic );
+                              shape_pos.y + dy, aPad->GetOrientation().AsTenthsOfADegree(),
+                              aPad->GetLayerSet(), color, op_logic );
     }
 }

@@ -4,7 +4,7 @@
  * Copyright (C) 2009-2013  Lorenzo Mercantonio
  * Copyright (C) 2014-2017  Cirilo Bernardo
  * Copyright (C) 2018 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -699,17 +699,17 @@ void EXPORTER_PCB_VRML::ExportVrmlPadHole( PAD* aPad )
             if( pth )
             {
                 m_holes.AddSlot( hole_x, -hole_y, hole_drill_w * 2.0 + PLATE_OFFSET,
-                    hole_drill_h * 2.0 + PLATE_OFFSET,
-                    aPad->GetOrientation()/10.0, true, true );
+                                 hole_drill_h * 2.0 + PLATE_OFFSET,
+                                 aPad->GetOrientation().AsDegrees(), true, true );
 
                 m_plated_holes.AddSlot( hole_x, -hole_y,
-                    hole_drill_w * 2.0, hole_drill_h * 2.0,
-                    aPad->GetOrientation()/10.0, true, false );
+                                        hole_drill_w * 2.0, hole_drill_h * 2.0,
+                                        aPad->GetOrientation().AsDegrees(), true, false );
             }
             else
             {
                 m_holes.AddSlot( hole_x, -hole_y, hole_drill_w * 2.0, hole_drill_h * 2.0,
-                    aPad->GetOrientation()/10.0, true, false );
+                                 aPad->GetOrientation().AsDegrees(), true, false );
 
             }
         }

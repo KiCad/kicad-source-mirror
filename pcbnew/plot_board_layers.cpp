@@ -8,7 +8,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -418,7 +418,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     // and orientation 0. The actual pos and rotation will be taken in account
                     // later by the plot function
                     dummy.SetPosition( VECTOR2I( 0, 0 ) );
-                    dummy.SetOrientation( 0 );
+                    dummy.SetOrientation( ANGLE_0 );
                     SHAPE_POLY_SET outline;
                     int maxError = aBoard->GetDesignSettings().m_MaxError;
                     int numSegs = GetArcToSegmentCount( mask_clearance, maxError, 360.0 );

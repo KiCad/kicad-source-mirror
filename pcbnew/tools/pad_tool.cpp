@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,7 +178,8 @@ static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT&
 {
     const FOOTPRINT* refFootprint = aSrcPad.GetParent();
 
-    double pad_orient = aSrcPad.GetOrientation() - refFootprint->GetOrientation();
+    EDA_ANGLE srcPadAngle = aSrcPad.GetOrientation()
+                            - EDA_ANGLE( refFootprint->GetOrientation(), TENTHS_OF_A_DEGREE_T );
 
     for( FOOTPRINT* footprint : board.Footprints() )
     {
@@ -188,14 +189,15 @@ static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT&
         if( footprint->GetFPID() != refFootprint->GetFPID() )
             continue;
 
-        for( auto pad : footprint->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( aPadShapeFilter && ( pad->GetShape() != aSrcPad.GetShape() ) )
                 continue;
 
-            double currpad_orient = pad->GetOrientation() - footprint->GetOrientation();
+            EDA_ANGLE padAngle = pad->GetOrientation()
+                                 - EDA_ANGLE( footprint->GetOrientation(), TENTHS_OF_A_DEGREE_T );
 
-            if( aPadOrientFilter && ( currpad_orient != pad_orient ) )
+            if( aPadOrientFilter && ( padAngle != srcPadAngle ) )
                 continue;
 
             if( aPadLayerFilter && ( pad->GetLayerSet() != aSrcPad.GetLayerSet() ) )
@@ -665,7 +667,7 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
 
             shape->SetLocalCoord();
             shape->Move( aPad->GetPosition() );
-            shape->Rotate( aPad->GetPosition(), aPad->GetOrientation() );
+            shape->Rotate( aPad->GetPosition(), aPad->GetOrientation().AsTenthsOfADegree() );
             shape->SetLayer( layer );
 
             commit.Add( shape );
@@ -755,7 +757,7 @@ void PAD_TOOL::recombinePad( PAD* aPad )
             shape->SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
             shape->SetPolyShape( existingOutline );
             shape->Move( - aPad->GetPosition() );
-            shape->Rotate( wxPoint( 0, 0 ), - aPad->GetOrientation() );
+            shape->Rotate( wxPoint( 0, 0 ), - aPad->GetOrientation().AsTenthsOfADegree() );
 
             aPad->AddPrimitive( shape );
         }
@@ -802,7 +804,7 @@ void PAD_TOOL::recombinePad( PAD* aPad )
         }
 
         pcbShape->Move( - aPad->GetPosition() );
-        pcbShape->Rotate( wxPoint( 0, 0 ), - aPad->GetOrientation() );
+        pcbShape->Rotate( wxPoint( 0, 0 ), - aPad->GetOrientation().AsTenthsOfADegree() );
         aPad->AddPrimitive( pcbShape );
 
         fpShape->SetFlags( STRUCT_DELETED );

@@ -1,12 +1,8 @@
-/**
- * @file export_idf.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013  Cirilo Bernardo
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -357,7 +353,7 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
                 // NOTE: The orientation of footprints and pads have
                 // the opposite sense due to KiCad drawing on a
                 // screen with a LH coordinate system
-                double angle = pad->GetOrientation() / 10.0;
+                double angle = pad->GetOrientation().AsDegrees();
 
                 // NOTE: Since this code assumes the scenario where
                 // GetDrillSize().y is the length but idf_parser.cpp

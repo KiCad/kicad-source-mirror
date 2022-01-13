@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
+ * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -232,7 +233,7 @@ HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PAD* aPad )
     m_board = aBoard;
     m_sx    = aPad->GetSize().x;
     m_sy    = aPad->GetSize().y;
-    m_angle = 180.0 - ( aPad->GetOrientation() / 10.0 );
+    m_angle = 180.0 - aPad->GetOrientation().AsDegrees();
 
     if( m_angle < 0.0 )
     {

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Włostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -1350,8 +1350,8 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
         // Thermal spokes consist of segments from the pad center to points just outside
         // the thermal relief.
-        VECTOR2I shapePos = pad->ShapePos();
-        double  spokesAngle = pad->GetThermalSpokeAngle();
+        VECTOR2I  shapePos = pad->ShapePos();
+        EDA_ANGLE spokesAngle = pad->GetThermalSpokeAngle();
 
         // We use the bounding-box to lay out the spokes, but for this to work the
         // bounding box has to be built at the same rotation as the spokes.
@@ -1403,8 +1403,8 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 break;
             }
 
-            // Rottae and move the spokes tho the right position
-            spoke.Rotate( -DECIDEG2RAD( pad->GetOrientation() + spokesAngle ) );
+            // Rotate and move the spokes tho the right position
+            spoke.Rotate( - ( pad->GetOrientation() + spokesAngle ).AsRadians() );
             spoke.Move( shapePos );
 
             spoke.SetClosed( true );

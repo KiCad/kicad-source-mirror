@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -930,7 +930,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     solid->SetNet( aPad->GetNetCode() );
     solid->SetParent( aPad );
     solid->SetPadToDie( aPad->GetPadToDieLength() );
-    solid->SetOrientation( aPad->GetOrientation() );
+    solid->SetOrientation( aPad->GetOrientation().AsTenthsOfADegree() );
 
     VECTOR2I wx_c = aPad->ShapePos();
     VECTOR2I offset = aPad->GetOffset();

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers.
+ * Copyright (C) 2021-2022 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -147,8 +147,8 @@ bool padsNeedUpdate( const PAD* a, const PAD* b )
     TEST( a->GetProperty(), b->GetProperty() );
 
     // The pad orientation, for historical reasons is the pad rotation + parent rotation.
-    TEST( NormalizeAnglePos( a->GetOrientation() - a->GetParent()->GetOrientation() ),
-          NormalizeAnglePos( b->GetOrientation() - b->GetParent()->GetOrientation() ) );
+    TEST( ( a->GetOrientation() - EDA_ANGLE( a->GetParent()->GetOrientation(), TENTHS_OF_A_DEGREE_T ) ).Normalize().AsTenthsOfADegree(),
+          ( b->GetOrientation() - EDA_ANGLE( b->GetParent()->GetOrientation(), TENTHS_OF_A_DEGREE_T ) ).Normalize().AsTenthsOfADegree() );
 
     TEST( a->GetSize(), b->GetSize() );
     TEST( a->GetDelta(), b->GetDelta() );
@@ -169,7 +169,7 @@ bool padsNeedUpdate( const PAD* a, const PAD* b )
     TEST( a->GetZoneConnection(), b->GetZoneConnection() );
     TEST( a->GetThermalGap(), b->GetThermalGap() );
     TEST( a->GetThermalSpokeWidth(), b->GetThermalSpokeWidth() );
-    TEST( a->GetThermalSpokeAngle(), b->GetThermalSpokeAngle() );
+    TEST( a->GetThermalSpokeAngle().AsTenthsOfADegree(), b->GetThermalSpokeAngle().AsTenthsOfADegree() );
     TEST( a->GetCustomShapeInZoneOpt(), b->GetCustomShapeInZoneOpt() );
 
     TEST( a->GetPrimitives().size(), b->GetPrimitives().size() );

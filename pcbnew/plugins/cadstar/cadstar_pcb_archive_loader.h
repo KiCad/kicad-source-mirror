@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020-2021 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -456,6 +456,26 @@ private:
         else
         {
             return (double) aCadstarAngle;
+        }
+    }
+
+    /**
+     * @brief
+     * @param aCadstarAngle
+     * @return
+    */
+    EDA_ANGLE getAngle( const long long& aCadstarAngle )
+    {
+        // CADSTAR v6 (which outputted Format Version 8) and earlier versions used 1/10 degree
+        // as the unit for angles/orientations. It is assumed that CADSTAR version 7 (i.e. Format
+        // Version 9 and later) is the version that introduced 1/1000 degree for angles.
+        if( Header.Format.Version > 8 )
+        {
+            return EDA_ANGLE( aCadstarAngle / 1000.0, DEGREES_T );
+        }
+        else
+        {
+            return EDA_ANGLE( (int) aCadstarAngle, TENTHS_OF_A_DEGREE_T );
         }
     }
 

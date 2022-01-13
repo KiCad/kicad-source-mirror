@@ -4237,11 +4237,11 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
     }
 
     if( pad->GetShape() == PAD_SHAPE::CIRCLE )
-        pad->SetThermalSpokeAngle( 450 );
+        pad->SetThermalSpokeAngle( ANGLE_45 );
     else if( pad->GetShape() == PAD_SHAPE::CUSTOM && pad->GetAnchorPadShape() == PAD_SHAPE::CIRCLE )
-        pad->SetThermalSpokeAngle( 450 );
+        pad->SetThermalSpokeAngle( ANGLE_45 );
     else
-        pad->SetThermalSpokeAngle( 900 );
+        pad->SetThermalSpokeAngle( ANGLE_90 );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -4273,7 +4273,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
             if( token == T_NUMBER )
             {
-                pad->SetOrientation( parseAngle() );
+                pad->SetOrientation( EDA_ANGLE( parseAngle(), TENTHS_OF_A_DEGREE_T ) );
                 NeedRIGHT();
             }
             else if( token != T_RIGHT )
@@ -4437,7 +4437,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_thermal_bridge_angle:
-            pad->SetThermalSpokeAngle( parseAngle( "thermal spoke angle value" ) );
+            pad->SetThermalSpokeAngle( EDA_ANGLE( parseAngle( "thermal spoke angle value" ), TENTHS_OF_A_DEGREE_T ) );
             NeedRIGHT();
             break;
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2013 Lorenzo Marcantonio <l.marcantonio@logossrl.com>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,13 +126,17 @@ static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
                 else
                     rk.y_size = pad->GetSize().y;
 
-                rk.rotation = -KiROUND( pad->GetOrientation() ) / 10;
-                if( rk.rotation < 0 ) rk.rotation += 360;
+                rk.rotation = - pad->GetOrientation().AsDegrees();
+
+                if( rk.rotation < 0 )
+                    rk.rotation += 360;
 
                 // the value indicates which sides are *not* accessible
                 rk.soldermask = 3;
+
                 if( pad->GetLayerSet()[F_Mask] )
                     rk.soldermask &= ~1;
+
                 if( pad->GetLayerSet()[B_Mask] )
                     rk.soldermask &= ~2;
 

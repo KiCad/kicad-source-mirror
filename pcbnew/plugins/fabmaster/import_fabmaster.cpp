@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 BeagleBoard Foundation
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Seth Hillbrand <hillbrand@kipro-pcb.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -2407,9 +2407,9 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     newpad->SetLocalCoord();
 
                     if( src->mirror )
-                        newpad->SetOrientation( ( -src->rotate + pin->rotation ) * 10.0 );
+                        newpad->SetOrientation( EDA_ANGLE( -src->rotate + pin->rotation, DEGREES_T ) );
                     else
-                        newpad->SetOrientation( ( src->rotate - pin->rotation ) * 10.0 );
+                        newpad->SetOrientation( EDA_ANGLE( src->rotate - pin->rotation, DEGREES_T ) );
 
                     fp->Add( newpad, ADD_MODE::APPEND );
                 }

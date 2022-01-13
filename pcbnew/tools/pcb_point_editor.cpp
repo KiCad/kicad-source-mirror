@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2021 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -270,10 +270,10 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
         case PAD_SHAPE::ROUNDRECT:
         case PAD_SHAPE::CHAMFERED_RECT:
         {
-            if( (int) pad->GetOrientation() % 900 != 0 )
+            if( !pad->GetOrientation().IsCardinal() )
                 break;
 
-            if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
+            if( pad->GetOrientation() == ANGLE_90 || pad->GetOrientation() == ANGLE_270 )
                 std::swap( halfSize.x, halfSize.y );
 
             points->AddPoint( shapePos - halfSize );
@@ -1268,7 +1268,7 @@ void PCB_POINT_EDITOR::updateItem() const
                 wxSize padSize( dist[0] + dist[2], dist[1] + dist[3] );
                 VECTOR2I deltaOffset( padSize.x / 2 - dist[2], padSize.y / 2 - dist[3] );
 
-                if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
+                if( pad->GetOrientation() == ANGLE_90 || pad->GetOrientation() == ANGLE_270 )
                     std::swap( padSize.x, padSize.y );
 
                 RotatePoint( deltaOffset, -pad->GetOrientation() );
@@ -1300,7 +1300,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
                 wxSize padSize( abs( right - left ), abs( bottom - top ) );
 
-                if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
+                if( pad->GetOrientation() == ANGLE_90 || pad->GetOrientation() == ANGLE_270 )
                     std::swap( padSize.x, padSize.y );
 
                 pad->SetSize( padSize );
@@ -1729,7 +1729,7 @@ void PCB_POINT_EDITOR::updatePoints()
         case PAD_SHAPE::CHAMFERED_RECT:
         {
             // Careful; pad shape and orientation are mutable...
-            int target = locked || (int) pad->GetOrientation() % 900 > 0 ? 0 : 4;
+            int target = locked || !pad->GetOrientation().IsCardinal() ? 0 : 4;
 
             if( int( m_editPoints->PointsSize() ) != target )
             {
@@ -1743,7 +1743,7 @@ void PCB_POINT_EDITOR::updatePoints()
             }
             else if( target == 4 )
             {
-                if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
+                if( pad->GetOrientation() == ANGLE_90 || pad->GetOrientation() == ANGLE_270 )
                     std::swap( halfSize.x, halfSize.y );
 
                 m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( shapePos - halfSize );

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -224,18 +224,21 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
         break;
 
     case PAD_SHAPE::OVAL:
-        m_plotter->FlashPadOval( shape_pos, aPad->GetSize(), aPad->GetOrientation(), aPlotMode,
+        m_plotter->FlashPadOval( shape_pos, aPad->GetSize(),
+                                 aPad->GetOrientation().AsTenthsOfADegree(), aPlotMode,
                                  &gbr_metadata );
         break;
 
     case PAD_SHAPE::RECT:
-        m_plotter->FlashPadRect( shape_pos, aPad->GetSize(), aPad->GetOrientation(), aPlotMode,
+        m_plotter->FlashPadRect( shape_pos, aPad->GetSize(),
+                                 aPad->GetOrientation().AsTenthsOfADegree(), aPlotMode,
                                  &gbr_metadata );
         break;
 
     case PAD_SHAPE::ROUNDRECT:
         m_plotter->FlashPadRoundRect( shape_pos, aPad->GetSize(), aPad->GetRoundRectCornerRadius(),
-                                      aPad->GetOrientation(), aPlotMode, &gbr_metadata );
+                                      aPad->GetOrientation().AsTenthsOfADegree(), aPlotMode,
+                                      &gbr_metadata );
         break;
 
     case PAD_SHAPE::TRAPEZOID:
@@ -254,8 +257,8 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
         coord[2] = VECTOR2I( half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
         coord[3] = VECTOR2I( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
 
-        m_plotter->FlashPadTrapez( shape_pos, coord, aPad->GetOrientation(), aPlotMode,
-                                   &gbr_metadata );
+        m_plotter->FlashPadTrapez( shape_pos, coord, aPad->GetOrientation().AsTenthsOfADegree(),
+                                   aPlotMode, &gbr_metadata );
     }
         break;
 
@@ -263,11 +266,14 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
         if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
         {
             static_cast<GERBER_PLOTTER*>( m_plotter )->FlashPadChamferRoundRect(
-                                    shape_pos, aPad->GetSize(),
-                                    aPad->GetRoundRectCornerRadius(),
-                                    aPad->GetChamferRectRatio(),
-                                    aPad->GetChamferPositions(),
-                                    aPad->GetOrientation(), aPlotMode, &gbr_metadata );
+                                                        shape_pos,
+                                                        aPad->GetSize(),
+                                                        aPad->GetRoundRectCornerRadius(),
+                                                        aPad->GetChamferRectRatio(),
+                                                        aPad->GetChamferPositions(),
+                                                        aPad->GetOrientation().AsTenthsOfADegree(),
+                                                        aPlotMode,
+                                                        &gbr_metadata );
             break;
         }
 
@@ -280,8 +286,9 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
 
         if( polygons->OutlineCount() )
         {
-            m_plotter->FlashPadCustom( shape_pos, aPad->GetSize(), aPad->GetOrientation(),
-                                       polygons.get(), aPlotMode, &gbr_metadata );
+            m_plotter->FlashPadCustom( shape_pos, aPad->GetSize(),
+                                       aPad->GetOrientation().AsTenthsOfADegree(), polygons.get(),
+                                       aPlotMode, &gbr_metadata );
         }
     }
         break;
@@ -1125,7 +1132,8 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
                 continue;
 
             plotOneDrillMark( pad->GetDrillShape(), pad->GetPosition(), pad->GetDrillSize(),
-                              pad->GetSize(), pad->GetOrientation(), smallDrill );
+                              pad->GetSize(), pad->GetOrientation().AsTenthsOfADegree(),
+                              smallDrill );
         }
     }
 
