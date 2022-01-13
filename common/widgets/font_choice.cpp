@@ -21,6 +21,9 @@
 #include <wx/fontenum.h>
 #include <font/fontconfig.h>
 
+// The "official" name of the building Kicad stroke font (always existing)
+#include <font/kicad_font_name.h>
+
 
 FONT_CHOICE::FONT_CHOICE( wxWindow* aParent, int aId, wxPoint aPosition, wxSize aSize,
                           int nChoices, wxString* aChoices, int aStyle ) :
@@ -32,6 +35,19 @@ FONT_CHOICE::FONT_CHOICE( wxWindow* aParent, int aId, wxPoint aPosition, wxSize 
     Fontconfig()->ListFonts( fontNames );
 
     wxArrayString menuList;
+
+    // The initial list of fonts has on top 1 or 2 options
+    // only "KiCad Font" (KICAD_FONT_NAME)
+    // "Default Font" and "KiCad Font" (KICAD_FONT_NAME)
+    // "KiCad Font" is also a keyword, and cannot be translated.
+    // So rebuilt the starting list
+    wxChoice::Clear();
+
+    if( m_systemFontCount > 1 )
+        Append( _( "Default Font" ) );
+
+    Append( KICAD_FONT_NAME );
+    m_systemFontCount = wxChoice::GetCount();
 
     for( const std::string& name : fontNames )
         menuList.Add( wxString( name ) );
@@ -88,7 +104,7 @@ KIFONT::FONT* FONT_CHOICE::GetFontSelection( bool aBold, bool aItalic ) const
     if( GetSelection() <= 0 )
         return nullptr;
     else if( GetSelection() == 1 && m_systemFontCount == 2 )
-        return KIFONT::FONT::GetFont( "KiCad Font", aBold, aItalic );
+        return KIFONT::FONT::GetFont( KICAD_FONT_NAME, aBold, aItalic );
     else
         return KIFONT::FONT::GetFont( GetStringSelection(), aBold, aItalic );
 }

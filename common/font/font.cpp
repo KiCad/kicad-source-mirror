@@ -32,6 +32,9 @@
 #include <trigo.h>
 #include <markup_parser.h>
 
+// The "official" name of the building Kicad stroke font (always existing)
+#include <font/kicad_font_name.h>
+
 
 // markup_parser.h includes pegtl.hpp which includes windows.h... which leaks #define DrawText
 #undef DrawText
@@ -66,7 +69,7 @@ FONT* FONT::getDefaultFont()
 
 FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic )
 {
-    if( aFontName.empty() || aFontName.StartsWith( wxT( "KiCad Font" ) ) )
+    if( aFontName.empty() || aFontName.StartsWith( KICAD_FONT_NAME ) )
         return getDefaultFont();
 
     std::tuple<wxString, bool, bool> key = { aFontName, aBold, aItalic };
@@ -89,7 +92,7 @@ bool FONT::IsStroke( const wxString& aFontName )
 {
     // This would need a more complex implementation if we ever support more stroke fonts
     // than the KiCad Font.
-    return aFontName == _( "Default Font" ) || aFontName == wxT( "KiCad Font" );
+    return aFontName == _( "Default Font" ) || aFontName == KICAD_FONT_NAME;
 }
 
 

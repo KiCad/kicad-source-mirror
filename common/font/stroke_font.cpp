@@ -35,6 +35,9 @@
 #include <geometry/shape_line_chain.h>
 #include <trigo.h>
 
+// The "official" name of the building Kicad stroke font (always existing)
+#include <font/kicad_font_name.h>
+
 using namespace KIFONT;
 
 
@@ -185,7 +188,7 @@ void STROKE_FONT::loadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
     m_glyphs = &g_defaultFontGlyphs;
     m_glyphBoundingBoxes = g_defaultFontGlyphBoundingBoxes;
-    m_fontName = wxT( "KiCad Font" );
+    m_fontName = KICAD_FONT_NAME;
     m_fontFileName = wxEmptyString;
 }
 
