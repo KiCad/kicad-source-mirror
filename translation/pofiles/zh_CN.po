@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# taotieren <admin@taotieren.com>,2019-2020, 2021.
+# taotieren <admin@taotieren.com>,2019-2020, 2021, 2022.
 # Rigo Ligo <rigoligo03@gmail.com>, 2020, 2021, 2022.
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
 # Liu Guang <l.g110@163.com>, 2021.
@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
 "PO-Revision-Date: 2022-01-14 10:30+0000\n"
-"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1672,7 +1672,7 @@ msgstr "取消 (&C)"
 
 #: common/dialog_shim.cpp:661
 msgid "&Yes"
-msgstr ""
+msgstr "是 (&Y)"
 
 #: common/dialog_shim.cpp:662
 msgid "&No"
@@ -2953,7 +2953,7 @@ msgstr "(这个临时解决方案将改善一些 GTK HiDPI 字体缩放问题。
 
 #: common/dialogs/panel_common_settings_base.cpp:171
 msgid "High-contrast mode dimming factor:"
-msgstr ""
+msgstr "高对比度模式的调光系数："
 
 #: common/dialogs/panel_common_settings_base.cpp:178
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
@@ -6023,7 +6023,7 @@ msgstr "网格属性..."
 
 #: common/tool/actions.cpp:481
 msgid "Set grid dimensions"
-msgstr "设置网格标注"
+msgstr "设置网格尺寸"
 
 #: common/tool/actions.cpp:486
 msgid "Use inches"
@@ -8552,7 +8552,7 @@ msgstr "设置为"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:170
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:108
 msgid "Font:"
-msgstr ""
+msgstr "字体："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
@@ -8923,7 +8923,7 @@ msgstr "点"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:167
 msgid "Diamond"
-msgstr ""
+msgstr "菱形"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:177
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -12038,7 +12038,7 @@ msgstr "Gap 长度："
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:237
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
 msgid "Dash and dot lengths are ratios of the line width."
-msgstr ""
+msgstr "虚线和点长度是线条宽度的比率。"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:169
 msgid "No error or warning"
@@ -12077,7 +12077,7 @@ msgstr "默认线宽 (&D)："
 msgid ""
 "Set to 0 to allow symbols to inherit their line widths from\n"
 "their parent Schematic"
-msgstr ""
+msgstr "设置为 0 可允许符号继承其父系原理图的线宽"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:55
 msgid "D&efault pin length:"
@@ -20523,7 +20523,6 @@ msgstr ""
 "是否要退出并放弃变更？"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20550,23 +20549,21 @@ msgid ""
 msgstr ""
 "如果你指定最大电流，则会计算相应的布线宽度。\n"
 "\n"
-"如果你指定其中一个布线宽度，则将计算它可以处理的最大电流。然后将计算另外的同"
-"样处理此电流的布线宽度。\n"
+"如果你指定其中一个布线宽度，则将计算它可以处理的最大电流。然后将计算另外的同样处理此电流的布线宽度。\n"
 "\n"
 "控制值以粗体显示。\n"
 "\n"
-"计算适用于最大 35A（外部）或 17.5A（内部）的电流、高达 100 °C的温升和最多 "
-"400mil（10mm）的宽度。\n"
+"计算适用于最大 35A（外部）或 17.5A（内部）的电流、高达 100 °C的温升和最多 400mil（10mm）的宽度。\n"
 "\n"
-"来自 IPC 2221的该公式，为\n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
+"IPC 2221 中的公式为\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>  \n"
 "其中： \n"
 "__I__ = 最大电流（单位：A 安培） \n"
 "__&Delta;T__ = 环境温度温升（单位：°C 摄氏度） \n"
 "__W__ = 布线的宽度 （单位：mil 密耳）\n"
 "__H__ = 布线的厚度 （单位：mil 密耳）\n"
-"__K__ = 0.024 用于内部布线，0.048 用于外部布线  \n"
+"__K__ = 0.024 用于内部布线，0.048 用于外部布线\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21369,23 +21366,23 @@ msgstr "黄色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
-msgstr ""
+msgstr "FR4 自然色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:79
 msgid "PTFE natural"
-msgstr ""
+msgstr "聚四氟乙烯自然色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
 msgid "Polyimide"
-msgstr "聚酰亚胺"
+msgstr "聚酰亚胺自然色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
-msgstr ""
+msgstr "酚类自然色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
-msgstr ""
+msgstr "铝自然色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
 msgid "Not specified"
@@ -23296,7 +23293,7 @@ msgstr ": (无更改)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:400
 msgid ": OK"
-msgstr ""
+msgstr ": OK"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 msgid "Update all footprints on board"
@@ -23884,12 +23881,12 @@ msgstr "从 BOM 中排除"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:210
 msgid "Exempt from courtyard requirement"
-msgstr ""
+msgstr "排除外框要求"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:207
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr ""
+msgstr "不会产生“缺失外框”的 DRC 违规行为"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:223
 msgid "Update Footprint from Library..."
@@ -23951,7 +23948,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:298
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:269
 msgid "Allow bridged solder mask apertures between pads"
-msgstr ""
+msgstr "允许焊盘之间的桥接阻焊孔径"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
@@ -24863,7 +24860,7 @@ msgstr "设计规则约束"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
 msgid "Predefined track && via dimensions"
-msgstr "预定义的走线和过孔标注"
+msgstr "预定义的走线和过孔尺寸"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:243
 #: pcbnew/dialogs/dialog_imported_layers.cpp:251
@@ -25769,7 +25766,7 @@ msgstr "来自父级封装"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
 msgid "Zone knockout:"
-msgstr ""
+msgstr "敷铜挖空："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
 msgid "Pad shape"
@@ -25788,14 +25785,12 @@ msgid "Relief gap:"
 msgstr "防散热间距："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:752
-#, fuzzy
 msgid "Spoke width:"
-msgstr "Spoke 宽度："
+msgstr "辐条 (散热) 宽度："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:763
-#, fuzzy
 msgid "Spoke angle:"
-msgstr "Spoke 角度："
+msgstr "辐条 (散热) 角度："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 msgid "Primitives list:"
@@ -27457,9 +27452,7 @@ msgstr "模仿旧行为"
 msgid ""
 "Produces a slightly smoother outline at the expense of performance, some "
 "export fidelity issues, and overly aggressive higher-priority zone knockouts."
-msgstr ""
-"以牺牲性能、一些导出保真度问题和过于激进的高优先级区域挖空为代价，生成稍微平"
-"滑的轮廓。"
+msgstr "以牺牲性能、一些导出保真度问题和过于激进的高优先级敷铜挖空为代价，生成稍微平滑的轮廓。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:116
 msgid "Smoothed polygons (best performance)"
@@ -27476,9 +27469,8 @@ msgid "Allow fillets outside zone outline"
 msgstr "允许圆角超出敷铜轮廓"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:146
-#, fuzzy
 msgid "Min thermal relief spoke count:"
-msgstr "花焊盘最小 spoke 数目："
+msgstr "花焊盘最小辐条 (散热) 数目："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
 msgid "Length tuning"
@@ -28299,12 +28291,11 @@ msgstr "阻焊层到铜间隙："
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
-msgstr ""
+msgstr "允许在封装内的焊盘之间桥接阻焊孔径"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
-#, fuzzy
 msgid "Tent vias"
-msgstr "不允许过孔盖油"
+msgstr "过孔盖油"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid ""
@@ -28370,7 +28361,6 @@ msgid "Check rule syntax"
 msgstr "检查规则语法"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -28658,7 +28648,7 @@ msgstr ""
 "#    规则语句：(rule <规则名> <规则语句> ...)\n"
 "\n"
 "\n"
-"<br><br>\n"
+"<br>\n"
 "\n"
 "### Rule Clauses\n"
 "### 规则语句\n"
@@ -28673,7 +28663,7 @@ msgstr ""
 "#    层语句：(layer \"<层名>\")\n"
 "\n"
 "\n"
-"<br><br>\n"
+"<br>\n"
 "\n"
 "### Constraint Types\n"
 "### 约束类型\n"
@@ -28694,21 +28684,44 @@ msgstr ""
 "# （与板边的间隙）\n"
 " * length\n"
 "# （长度）\n"
-" * hole\n"
-"# （通孔）\n"
 " * hole\\_clearance\n"
 "# （与通孔的间隙）\n"
+" * hole\\_size\n"
+"# （通孔尺寸）\n"
+" * mechanical\\_clearance\n"
+"# （机械间隙）\n"
+" * mechanical\\_hole\\_clearance\n"
+"# （机械孔间隙）\n"
+" * min\\_resolved\\_spokes\n"
+"# （与辐条（散热）最小解析）\n"
 " * silk\\_clearance\n"
 "# （与丝印的间隙）\n"
 " * skew\n"
 "# （总偏差）\n"
+" * text\\_height\n"
+"# （文本高度）\n"
+" * text\\_thickness\n"
+"# （文本宽度）\n"
+" * thermal\\_relief\\_gap\n"
+"# （散热（花焊盘）间隙）\n"
+" * thermal\\_spoke\\_width\n"
+"# （散热辐条宽度）\n"
 " * track\\_width\n"
 "# （布线线宽）\n"
 " * via\\_count\n"
-"# （过孔个数）\n"
+"# （过孔计数）\n"
+" * via\\_diameter\n"
+"# （过孔直径）\n"
+" * zone\\_connection\n"
+"# （敷铜连接）\n"
 "\n"
-"\n"
-"<br><br>\n"
+"Note: `clearance` and `hole_clearance` rules are not run against items of "
+"the same net; `mechanical_clearance` and `mechanical_hole_clearance` rules "
+"are.\n"
+"# 注：`clearance(间隙)` 和 `hole_clearance (过孔间隙)` 规则不是针对同一网中的项目运行，`"
+"mechanical_clearance (机械间隙)` 和 `mechanical_hole_clearance (机械孔间隙)` "
+"规则是针对同一网络中的项目运行的。\n"
+"<br>\n"
 "\n"
 "### Item Types\n"
 "### 电路板元素类型\n"
@@ -28731,6 +28744,32 @@ msgstr ""
 "# （过孔）\n"
 " * zone\n"
 "# （敷铜）\n"
+"\n"
+"<br>\n"
+"\n"
+"### Zone Connections\n"
+"### 敷铜连接\n"
+"\n"
+" * solid\n"
+"# （实心敷铜）\n"
+" * thermal\\_reliefs\n"
+"# （散热（花焊盘））\n"
+" * none\n"
+"# （无）\n"
+"\n"
+"<br>\n"
+"\n"
+"### Severity Names\n"
+"### 严重性名称\n"
+"\n"
+" * warning\n"
+"# （警告）\n"
+" * error\n"
+"# （错误）\n"
+" * exclusion\n"
+"# （拒绝）\n"
+" * ignore\n"
+"# （忽略）\n"
 "\n"
 "<br>\n"
 "\n"
@@ -28764,9 +28803,17 @@ msgstr ""
 "#    (rule 无护罩高压线路\n"
 "       (constraint clearance (min 2mm))\n"
 "       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"# (rule 强散热\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
 "<br><br>\n"
 "\n"
-"### \n"
+"### Notes\n"
+"### 注意\n"
 "\n"
 "版本语句标志着文件的语法版本，所以版本语句必须是第一个语句，\n"
 "以便将来的 KiCad 解析新版本的规则文件。版本应设为“1”。\n"
@@ -28877,7 +28924,7 @@ msgstr ""
 "\n"
 "\n"
 "    (rule \"clearance-to-1mm-cutout\"\n"
-"#    (rule \"1mm宽开槽周围的间距\"\n"
+"#    (rule \"1mm 宽开槽周围的间距\"\n"
 "        (constraint clearance (min 0.8mm))\n"
 "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
@@ -28906,6 +28953,44 @@ msgstr ""
 "#    (rule \"差分对外间距\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # Don't use thermal reliefs on heatsink pads\n"
+"    # 不要在散热焊盘上使用散热片\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # Require all four thermal relief spokes to connect to parent zone\n"
+"    # 需要所有四个散热辐条才能连接到父系敷铜\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # Set thermal relief gap & spoke width for all zones\n"
+"    # 设置所有敷铜的散热间隙和辐条宽度\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # Override thermal relief gap & spoke width for GND and PWR zones\n"
+"    # 覆盖 GND 和 PWR 敷铜的散热间隙和辐条宽度\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"    \n"
+"\n"
+"    # Prevent solder wicking from SMD pads\n"
+"    # 防止 SMD 焊盘的焊芯脱落\n"
+"    (rule holes_in_pads\n"
+"        (constraint mechanical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # Disallow solder mask margin overrides\n"
+"    # 禁止阻焊层边距覆盖\n"
+"    (rule \"disallow solder mask margin overrides\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (condition \"A.Type == 'Pad'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -28952,7 +29037,7 @@ msgstr "没有定义差分对间距。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr "预定义布线和过孔标注："
+msgstr "预定义布线和过孔尺寸："
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
