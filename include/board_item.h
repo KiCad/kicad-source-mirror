@@ -156,7 +156,14 @@ public:
     /**
      * Return a std::bitset of all layers on which the item physically resides.
      */
-    virtual LSET GetLayerSet() const { return LSET( m_layer ); }
+    virtual LSET GetLayerSet() const
+    {
+        if( m_layer == UNDEFINED_LAYER )
+            return LSET();
+        else
+            return LSET( m_layer );
+    }
+
     virtual void SetLayerSet( LSET aLayers )
     {
         wxFAIL_MSG( "Attempted to SetLayerSet() on a single-layer object." );
