@@ -95,7 +95,7 @@ bool primitivesNeedUpdate( const std::shared_ptr<PCB_SHAPE>& a,
         TEST( a->GetStart(), b->GetStart() );
         TEST( a->GetEnd(), b->GetEnd() );
         TEST( a->GetCenter(), b->GetCenter() );
-        TEST( a->GetArcAngle(), b->GetArcAngle() );
+        TEST( a->GetArcAngle().AsTenthsOfADegree(), b->GetArcAngle().AsTenthsOfADegree() );
         break;
 
     case SHAPE_T::BEZIER:
@@ -198,7 +198,7 @@ bool shapesNeedUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
         TEST( a->GetStart0(), b->GetStart0() );
         TEST( a->GetEnd0(), b->GetEnd0() );
         TEST( a->GetCenter0(), b->GetCenter0() );
-        TEST( a->GetArcAngle(), b->GetArcAngle() );
+        TEST( a->GetArcAngle().AsTenthsOfADegree(), b->GetArcAngle().AsTenthsOfADegree() );
         break;
 
     case SHAPE_T::BEZIER:

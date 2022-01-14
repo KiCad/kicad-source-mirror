@@ -318,7 +318,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
         return 0;
 
     PCB_ARC* theArc = static_cast<PCB_ARC*>( selection.Front() );
-    double   arcAngleDegrees = std::abs( theArc->GetAngle() ) / 10.0;
+    double   arcAngleDegrees = std::abs( theArc->GetAngle().AsDegrees() );
 
     if( arcAngleDegrees + ADVANCED_CFG::GetCfg().m_MaxTangentAngleDeviation >= 180.0 )
     {

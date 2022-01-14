@@ -752,7 +752,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             VECTOR2I circle_centre = graphic->GetStart0();
 
             SHAPE_LINE_CHAIN polyline;
-            ConvertArcToPolyline( polyline, VECTOR2I( circle_centre ), radius, 0.0, 360.0,
+            ConvertArcToPolyline( polyline, VECTOR2I( circle_centre ), radius, ANGLE_0, ANGLE_360,
                                   ARC_HIGH_DEF, ERROR_INSIDE );
 
             for( int ii = 0; ii < polyline.PointCount(); ++ii )
@@ -802,29 +802,30 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             path->SetAperture( 0 );//scale( graphic->GetWidth() ) );
             path->SetLayerId( "signal" );
 
-            VECTOR2I arc_centre = graphic->GetCenter0();
-            double radius = graphic->GetRadius() + graphic->GetWidth()/2;
-            double arcAngleDeg = graphic->GetArcAngle() / 10.0;
+            VECTOR2I  arc_centre = graphic->GetCenter0();
+            double    radius = graphic->GetRadius() + graphic->GetWidth()/2;
+            EDA_ANGLE arcAngle = graphic->GetArcAngle();
 
-            VECTOR2I startRadial = graphic->GetStart() - graphic->GetCenter();
-            double arcStartDeg = ArcTangente( startRadial.y, startRadial.x ) / 10;
-            NORMALIZE_ANGLE_DEGREES_POS( arcStartDeg );
+            VECTOR2I  startRadial = graphic->GetStart() - graphic->GetCenter();
+            EDA_ANGLE arcStart( startRadial );
+
+            arcStart.Normalize();
 
             // For some obscure reason, FreeRouter does not show the same polygonal
             // shape for polygons CW and CCW. So used only the order of corners
             // giving the best look.
-            if( arcAngleDeg < 0 )
+            if( arcAngle < ANGLE_0 )
             {
                 VECTOR2I endRadial = graphic->GetEnd() - graphic->GetCenter();
-                arcStartDeg = ArcTangente( endRadial.y, endRadial.x ) / 10;
-                NORMALIZE_ANGLE_DEGREES_POS( arcStartDeg );
+                arcStart = EDA_ANGLE( endRadial );
+                arcStart.Normalize();
 
-                arcAngleDeg = -arcAngleDeg;
+                arcAngle = -arcAngle;
             }
 
             SHAPE_LINE_CHAIN polyline;
-            ConvertArcToPolyline( polyline, VECTOR2I( arc_centre ), radius, arcStartDeg,
-                                  arcAngleDeg, ARC_HIGH_DEF, ERROR_INSIDE );
+            ConvertArcToPolyline( polyline, VECTOR2I( arc_centre ), radius, arcStart, arcAngle,
+                                  ARC_HIGH_DEF, ERROR_INSIDE );
 
             SHAPE_POLY_SET polyBuffer;
             polyBuffer.AddOutline( polyline );
@@ -834,8 +835,8 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             if( radius > 0 )
             {
                 polyline.Clear();
-                ConvertArcToPolyline( polyline, VECTOR2I( arc_centre ), radius, arcStartDeg,
-                                      arcAngleDeg, ARC_HIGH_DEF, ERROR_INSIDE );
+                ConvertArcToPolyline( polyline, VECTOR2I( arc_centre ), radius, arcStart, arcAngle,
+                                      ARC_HIGH_DEF, ERROR_INSIDE );
 
                 // Add points in reverse order, to create a closed polygon
                 for( int ii = polyline.PointCount() - 1; ii >= 0; --ii )

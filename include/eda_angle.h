@@ -23,6 +23,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <math/vector2d.h>  // for VECTOR2I
 
 
 enum EDA_ANGLE_T
@@ -36,11 +37,13 @@ enum EDA_ANGLE_T
 class EDA_ANGLE
 {
 public:
-    // Angles can be created in degrees, 1/10ths of a degree, and radians,
-    // and read as any of the angle types
-    //
-    // Angle type must be explicitly specified at creation, because
-    // there is no other way of knowing what an int or a double represents
+    /**
+     * Angles can be created in degrees, 1/10ths of a degree, or radians, and read as any of
+     * the angle types.
+     *
+     * Angle type must be explicitly specified at creation, because there is no other way of
+     * knowing what an int or a double represents.
+     */
     EDA_ANGLE( int aValue, EDA_ANGLE_T aAngleType ) :
             m_value( 0 ),
             m_radians( 0.0 ),
@@ -72,6 +75,52 @@ public:
 
         default:
             m_value = int( aValue * aAngleType );
+        }
+    }
+
+    explicit EDA_ANGLE( const VECTOR2I& aVector ) :
+            m_value( 0 ),
+            m_radians( 0.0 ),
+            m_initial_type( TENTHS_OF_A_DEGREE_T )
+    {
+        /* gcc is surprisingly smart in optimizing these conditions in a tree! */
+    
+        if( aVector.x == 0 && aVector.y == 0 )
+        {
+            m_value = 0;
+        }
+        else if( aVector.y == 0 )
+        {
+            if( aVector.x >= 0 )
+                m_value = 0;
+            else
+                m_value = -1800;
+        }
+        else if( aVector.x == 0 )
+        {
+            if( aVector.y >= 0 )
+                m_value = 900;
+            else
+                m_value = -900;
+        }
+        else if( aVector.x == aVector.y )
+        {
+            if( aVector.x >= 0 )
+                m_value = 450;
+            else
+                m_value = -1800 + 450;
+        }
+        else if( aVector.x == -aVector.y )
+        {
+            if( aVector.x >= 0 )
+                m_value = -450;
+            else
+                m_value = 1800 - 450;
+        }
+        else
+        {
+            m_value = atan2( (double) aVector.y, (double) aVector.x )
+                        / TENTHS_OF_A_DEGREE_TO_RADIANS;
         }
     }
 
@@ -149,11 +198,8 @@ public:
             return EDA_ANGLE( newAngle, RADIANS_T );
         }
 
-        // if both were not given in radians, addition is done using
-        // 1/10ths of a degree, then converted to original angle type
-        // of this angle
-        //int newAngle = normalize( AsTenthsOfADegree() + aAngle.AsTenthsOfADegree(),
-        //TENTHS_OF_A_DEGREE_T );
+        // if both were not given in radians, addition is done using 1/10ths of a degree, then
+        // converted to original angle type
         int newAngle = AsTenthsOfADegree() + aAngle.AsTenthsOfADegree();
 
         switch( initialType )
@@ -285,6 +331,30 @@ inline EDA_ANGLE operator-( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 inline EDA_ANGLE operator+( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 {
     return aAngleA.Add( aAngleB );
+}
+
+
+inline EDA_ANGLE operator*( const EDA_ANGLE& aAngleA, double aOperator )
+{
+    switch( aAngleA.GetInitialAngleType() )
+    {
+    case RADIANS_T:
+        return EDA_ANGLE( aAngleA.AsRadians() * aOperator, RADIANS_T );
+    default:
+        return EDA_ANGLE( aAngleA.AsDegrees() * aOperator, DEGREES_T );
+    }
+}
+
+
+inline EDA_ANGLE operator/( const EDA_ANGLE& aAngleA, double aOperator )
+{
+    switch( aAngleA.GetInitialAngleType() )
+    {
+    case RADIANS_T:
+        return EDA_ANGLE( aAngleA.AsRadians() / aOperator, RADIANS_T );
+    default:
+        return EDA_ANGLE( aAngleA.AsDegrees() / aOperator, DEGREES_T );
+    }
 }
 
 

@@ -1907,7 +1907,7 @@ const std::string SHAPE_LINE_CHAIN::Format() const
     for( size_t i = 0; i < m_arcs.size(); i++ )
         ss << m_arcs[i].GetCenter().x << " " << m_arcs[i].GetCenter().y << " "
         << m_arcs[i].GetP0().x << " " << m_arcs[i].GetP0().y << " "
-        << m_arcs[i].GetCentralAngle();
+        << m_arcs[i].GetCentralAngle().AsDegrees();
 
     return ss.str();*/
 }
@@ -1986,7 +1986,7 @@ bool SHAPE_LINE_CHAIN::Parse( std::stringstream& aStream )
         aStream >> p0.y;
         aStream >> angle;
 
-        m_arcs.emplace_back( pc, p0, angle );
+        m_arcs.emplace_back( pc, p0, EDA_ANGLE( angle, DEGREES_T ) );
     }
 
     return true;

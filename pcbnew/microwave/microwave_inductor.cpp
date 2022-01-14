@@ -48,13 +48,13 @@
  * @param  a_ArcAngle = arc length in 0.1 degrees.
  */
 static void gen_arc( std::vector<VECTOR2I>& aBuffer, const VECTOR2I& aStartPoint,
-                     const VECTOR2I& aCenter, int a_ArcAngle )
+                     const VECTOR2I& aCenter, const EDA_ANGLE& a_ArcAngle )
 {
     auto first_point = aStartPoint - aCenter;
     auto radius = KiROUND( EuclideanNorm( first_point ) );
-    int  seg_count = GetArcToSegmentCount( radius, ARC_HIGH_DEF, a_ArcAngle / 10.0 );
+    int  seg_count = GetArcToSegmentCount( radius, ARC_HIGH_DEF, a_ArcAngle );
 
-    double increment_angle = (double) a_ArcAngle * M_PI / 1800 / seg_count;
+    double increment_angle = a_ArcAngle.AsRadians() / seg_count;
 
     // Creates nb_seg point to approximate arc by segments:
     for( int ii = 1; ii <= seg_count; ii++ )
@@ -138,12 +138,13 @@ static INDUCTOR_S_SHAPE_RESULT BuildCornersList_S_Shape( std::vector<VECTOR2I>& 
     // of 360/ADJUST_SIZE angle
     #define ADJUST_SIZE 0.988
 
-    auto    pt       = aEndPoint - aStartPoint;
-    double  angle    = -ArcTangente( pt.y, pt.x );
-    int     min_len  = KiROUND( EuclideanNorm( pt ) );
-    int     segm_len = 0;           // length of segments
-    int     full_len;               // full len of shape (sum of length of all segments + arcs)
+    auto      pt  = aEndPoint - aStartPoint;
+    EDA_ANGLE angle( pt );
+    int       min_len = KiROUND( EuclideanNorm( pt ) );
+    int       segm_len = 0;       // length of segments
+    int       full_len;           // full len of shape (sum of length of all segments + arcs)
 
+    angle = -angle;
 
     /* Note: calculations are made for a vertical coil (more easy calculations)
      * and after points are rotated to their actual position
@@ -228,7 +229,7 @@ static INDUCTOR_S_SHAPE_RESULT BuildCornersList_S_Shape( std::vector<VECTOR2I>& 
 
     auto centre = pt;
     centre.x -= radius;
-    gen_arc( aBuffer, pt, centre, -900 );
+    gen_arc( aBuffer, pt, centre, -ANGLE_90 );
     pt = aBuffer.back();
 
     int half_size_seg_len = segm_len / 2 - radius;
@@ -246,17 +247,14 @@ static INDUCTOR_S_SHAPE_RESULT BuildCornersList_S_Shape( std::vector<VECTOR2I>& 
 
     for( ii = 0; ii < segm_count; ii++ )
     {
-        int arc_angle;
-
         if( ii & 1 ) // odd order arcs are greater than 0
             sign = -1;
         else
             sign = 1;
 
-        arc_angle = 1800 * sign;
         centre    = pt;
         centre.y += radius;
-        gen_arc( aBuffer, pt, centre, arc_angle );
+        gen_arc( aBuffer, pt, centre, ANGLE_180 * sign );
         pt    = aBuffer.back();
         pt.x += segm_len * sign;
         aBuffer.push_back( pt );
@@ -272,15 +270,13 @@ static INDUCTOR_S_SHAPE_RESULT BuildCornersList_S_Shape( std::vector<VECTOR2I>& 
     pt        = aBuffer.back();
     centre    = pt;
     centre.y += radius;
-    gen_arc( aBuffer, pt, centre, 900 * sign );
+    gen_arc( aBuffer, pt, centre, ANGLE_90 * sign );
 
     // Rotate point
-    angle += 900;
+    angle += ANGLE_90;
 
     for( unsigned jj = 0; jj < aBuffer.size(); jj++ )
-    {
         RotatePoint( aBuffer[jj], aStartPoint, angle );
-    }
 
     // push last point (end point)
     aBuffer.push_back( aEndPoint );

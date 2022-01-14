@@ -176,7 +176,8 @@ void HelperShapeLineChainFromAltiumVertices( SHAPE_LINE_CHAIN& aLine,
     {
         if( vertex.isRound )
         {
-            double angle = NormalizeAngleDegreesPos( vertex.endangle - vertex.startangle );
+            EDA_ANGLE angle( vertex.endangle - vertex.startangle, DEGREES_T );
+            angle.Normalize();
 
             double  startradiant   = DEG2RAD( vertex.startangle );
             double  endradiant     = DEG2RAD( vertex.endangle );
@@ -1990,17 +1991,18 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
 
         if( klayer >= F_Cu && klayer <= B_Cu )
         {
-            double  angle          = -NormalizeAngleDegreesPos( elem.endangle - elem.startangle );
+            EDA_ANGLE angle( elem.startangle - elem.endangle, DEGREES_T );
+            angle.Normalize();
+
             double   startradiant = DEG2RAD( elem.startangle );
-            VECTOR2I arcStartOffset =
-                    VECTOR2I( KiROUND( std::cos( startradiant ) * elem.radius ),
-                              -KiROUND( std::sin( startradiant ) * elem.radius ) );
+            VECTOR2I arcStartOffset = VECTOR2I( KiROUND( std::cos( startradiant ) * elem.radius ),
+                                               -KiROUND( std::sin( startradiant ) * elem.radius ) );
 
             arcStartOffset += elem.center;
 
             // If it's a circle then add two 180-degree arcs
-            if( elem.startangle == 0. && elem.endangle == 360. )
-                angle = 180.;
+            if( elem.startangle == 0.0 && elem.endangle == 360.0 )
+                angle = ANGLE_180;
 
             SHAPE_ARC shapeArc( elem.center, arcStartOffset, angle, elem.width );
             PCB_ARC*  arc = new PCB_ARC( m_board, &shapeArc );

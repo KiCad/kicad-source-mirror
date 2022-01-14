@@ -462,21 +462,14 @@ void PLOTTER::Marker( const VECTOR2I& position, int diametre, unsigned aShapeId 
 void PLOTTER::segmentAsOval( const VECTOR2I& start, const VECTOR2I& end, int width,
                              OUTLINE_MODE tracemode )
 {
-    VECTOR2I center( ( start.x + end.x ) / 2, ( start.y + end.y ) / 2 );
-    VECTOR2I size( end.x - start.x, end.y - start.y );
-    double  orient;
-
-    if( size.y == 0 )
-        orient = 0;
-    else if( size.x == 0 )
-        orient = 900;
-    else
-        orient = -ArcTangente( size.y, size.x );
+    VECTOR2I  center( ( start.x + end.x ) / 2, ( start.y + end.y ) / 2 );
+    VECTOR2I  size( end.x - start.x, end.y - start.y );
+    EDA_ANGLE orient( size );
 
     size.x = KiROUND( EuclideanNorm( size ) ) + width;
     size.y = width;
 
-    FlashPadOval( center, size, orient, tracemode, nullptr );
+    FlashPadOval( center, size, orient.AsTenthsOfADegree(), tracemode, nullptr );
 }
 
 

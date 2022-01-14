@@ -280,9 +280,9 @@ public:
     virtual VECTOR2I GetCenter() const override { return GetPosition(); }
 
     double GetRadius() const;
-    double GetAngle() const;
-    double GetArcAngleStart() const;
-    double GetArcAngleEnd() const;
+    EDA_ANGLE GetAngle() const;
+    EDA_ANGLE GetArcAngleStart() const;
+    EDA_ANGLE GetArcAngleEnd() const;
     virtual bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
     virtual bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
@@ -302,10 +302,7 @@ public:
      */
     virtual double GetLength() const override
     {
-        double radius = GetRadius();
-        double includedAngle  = std::abs( GetAngle() );
-
-        return radius * M_PI * includedAngle / 1800.0;
+        return GetRadius() * std::abs( GetAngle().AsRadians() );
     }
 
     EDA_ITEM* Clone() const override;

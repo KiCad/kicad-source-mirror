@@ -1273,7 +1273,7 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
                     VECTOR2I start = shape->GetStart0();
                     VECTOR2I end = shape->GetEnd0();
 
-                    if( shape->GetArcAngle() > 0 )
+                    if( shape->GetArcAngle() > ANGLE_0 )
                         std::swap( start, end );
 
                     fprintf( aFile, "ARC %g %g %g %g %g %g\n",

@@ -40,7 +40,7 @@
 // with a 0.01mm maximum deviation yields 11 segments.)
 #define MIN_SEGCOUNT_FOR_CIRCLE 8
 
-int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
+int GetArcToSegmentCount( int aRadius, int aErrorMax, const EDA_ANGLE& aArcAngle )
 {
     // calculate the number of segments to approximate a circle by segments
     // given the max distance between the middle of a segment and the circle
@@ -57,7 +57,7 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
     // (360.0 degrees). For very small radius values, this is mandatory.
     arc_increment = std::min( 360.0/MIN_SEGCOUNT_FOR_CIRCLE, arc_increment );
 
-    int segCount = KiROUND( fabs( aArcAngleDegree ) / arc_increment );
+    int segCount = KiROUND( fabs( aArcAngle.AsDegrees() ) / arc_increment );
 
     // Ensure at least two segments are used for algorithmic safety
     return std::max( segCount, 2 );

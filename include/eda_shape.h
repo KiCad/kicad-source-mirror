@@ -165,7 +165,7 @@ public:
      */
     void SetArcAngleAndEnd( double aAngle, bool aCheckNegativeAngle = false );
 
-    double GetArcAngle() const;
+    EDA_ANGLE GetArcAngle() const;
 
     /**
      * Have the start and end points been swapped since they were set?

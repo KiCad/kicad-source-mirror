@@ -189,18 +189,16 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
 
         case SHAPE_T::ARC:
             {
-                VECTOR2I pstart = graphic->GetStart();
-                VECTOR2I center = graphic->GetCenter();
-                double   angle  = -graphic->GetArcAngle();
-                double   radius = graphic->GetRadius();
-                int      steps  = GetArcToSegmentCount( radius, aErrorMax, angle / 10.0 );
-                VECTOR2I pt;
+                VECTOR2I  pstart = graphic->GetStart();
+                VECTOR2I  center = graphic->GetCenter();
+                EDA_ANGLE angle  = -graphic->GetArcAngle();
+                double    radius = graphic->GetRadius();
+                int       steps  = GetArcToSegmentCount( radius, aErrorMax, angle );
 
                 for( int step = 1; step<=steps; ++step )
                 {
-                    double rotation = ( angle * step ) / steps;
-
-                    pt = pstart;
+                    EDA_ANGLE rotation = ( angle * step ) / steps;
+                    VECTOR2I  pt = pstart;
 
                     RotatePoint( pt, center, rotation );
 
@@ -410,12 +408,12 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 // We do not support arcs in polygons, so approximate an arc with a series of
                 // short lines and put those line segments into the !same! PATH.
 
-                VECTOR2I pstart = graphic->GetStart();
-                VECTOR2I pend = graphic->GetEnd();
-                VECTOR2I pcenter = graphic->GetCenter();
-                double  angle   = -graphic->GetArcAngle();
-                double  radius  = graphic->GetRadius();
-                int     steps   = GetArcToSegmentCount( radius, aErrorMax, angle / 10.0 );
+                VECTOR2I  pstart = graphic->GetStart();
+                VECTOR2I  pend = graphic->GetEnd();
+                VECTOR2I  pcenter = graphic->GetCenter();
+                EDA_ANGLE angle   = -graphic->GetArcAngle();
+                double    radius  = graphic->GetRadius();
+                int       steps   = GetArcToSegmentCount( radius, aErrorMax, angle );
 
                 if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
                 {
@@ -428,8 +426,9 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 // Create intermediate points between start and end:
                 for( int step = 1; step < steps; ++step )
                 {
-                    double rotation = ( angle * step ) / steps;
-                    VECTOR2I pt = pstart;
+                    EDA_ANGLE rotation = ( angle * step ) / steps;
+                    VECTOR2I  pt = pstart;
+
                     RotatePoint( pt, pcenter, rotation );
 
                     aPolygons.Append( pt );
@@ -593,7 +592,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
             double   angle   = 3600.0;
             VECTOR2I start = center;
             int      radius  = graphic->GetRadius();
-            int      steps   = GetArcToSegmentCount( radius, aErrorMax, 360.0 );
+            int      steps   = GetArcToSegmentCount( radius, aErrorMax, FULL_CIRCLE );
             VECTOR2I nextPt;
 
             start.x += radius;
@@ -665,12 +664,12 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     // We do not support arcs in polygons, so approximate an arc with a series of
                     // short lines and put those line segments into the !same! PATH.
                     {
-                        VECTOR2I pstart = graphic->GetStart();
-                        VECTOR2I pend = graphic->GetEnd();
-                        VECTOR2I pcenter = graphic->GetCenter();
-                        double  angle   = -graphic->GetArcAngle();
-                        int     radius  = graphic->GetRadius();
-                        int     steps   = GetArcToSegmentCount( radius, aErrorMax, angle / 10.0 );
+                        VECTOR2I  pstart  = graphic->GetStart();
+                        VECTOR2I  pend    = graphic->GetEnd();
+                        VECTOR2I  pcenter = graphic->GetCenter();
+                        EDA_ANGLE angle   = -graphic->GetArcAngle();
+                        int       radius  = graphic->GetRadius();
+                        int       steps   = GetArcToSegmentCount( radius, aErrorMax, angle );
 
                         if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
                         {
@@ -683,8 +682,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         // Create intermediate points between start and end:
                         for( int step = 1; step < steps; ++step )
                         {
-                            double  rotation = ( angle * step ) / steps;
-                            VECTOR2I pt = pstart;
+                            EDA_ANGLE rotation = ( angle * step ) / steps;
+                            VECTOR2I  pt = pstart;
 
                             RotatePoint( pt, pcenter, rotation );
 

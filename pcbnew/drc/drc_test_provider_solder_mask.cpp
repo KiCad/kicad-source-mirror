@@ -210,7 +210,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::buildRTrees()
     solderMask->GetFill( F_Mask )->Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     solderMask->GetFill( B_Mask )->Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-    int numSegs = GetArcToSegmentCount( m_webWidth / 2, m_maxError, 360.0 );
+    int numSegs = GetArcToSegmentCount( m_webWidth / 2, m_maxError, FULL_CIRCLE );
 
     solderMask->GetFill( F_Mask )->Deflate( m_webWidth / 2, numSegs );
     solderMask->GetFill( B_Mask )->Deflate( m_webWidth / 2, numSegs );

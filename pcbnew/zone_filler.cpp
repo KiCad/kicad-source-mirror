@@ -1064,7 +1064,7 @@ bool ZONE_FILLER::computeRawFilledArea( const ZONE* aZone,
     // deflating/inflating.
     int half_min_width = aZone->GetMinThickness() / 2;
     int epsilon = Millimeter2iu( 0.001 );
-    int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, 360.0 );
+    int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, FULL_CIRCLE );
 
     // Solid polygons are deflated and inflated during calculations.  Deflating doesn't cause
     // issues, but inflate is tricky as it can create excessively long and narrow spikes for
@@ -1265,7 +1265,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_S
         // deflating/inflating.
         int half_min_width = aZone->GetMinThickness() / 2;
         int epsilon = Millimeter2iu( 0.001 );
-        int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, 360.0 );
+        int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, FULL_CIRCLE );
 
         smoothedPoly.Deflate( half_min_width - epsilon, numSegs );
 

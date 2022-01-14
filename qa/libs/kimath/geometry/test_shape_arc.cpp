@@ -327,7 +327,8 @@ BOOST_AUTO_TEST_CASE( BasicCPAGeom )
         {
 
             const auto this_arc = SHAPE_ARC{ c.m_geom.m_center_point, c.m_geom.m_start_point,
-                c.m_geom.m_center_angle, c.m_width };
+                                             EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ),
+                                             c.m_width };
 
             CheckArc( this_arc, c.m_properties );
         }
@@ -599,7 +600,7 @@ BOOST_AUTO_TEST_CASE( CollidePt )
         BOOST_TEST_CONTEXT( c.m_ctx_name )
         {
             SHAPE_ARC arc( c.m_geom.m_center_point, c.m_geom.m_start_point,
-                           c.m_geom.m_center_angle );
+                           EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ) );
 
             // Test a zero width arc (distance should equal the clearance)
             BOOST_TEST_CONTEXT( "Test Clearance" )
@@ -664,7 +665,7 @@ BOOST_AUTO_TEST_CASE( CollideSeg )
         BOOST_TEST_CONTEXT( c.m_ctx_name )
         {
             SHAPE_ARC arc( c.m_geom.m_center_point, c.m_geom.m_start_point,
-                           c.m_geom.m_center_angle );
+                           EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ) );
 
             // Test a zero width arc (distance should equal the clearance)
             BOOST_TEST_CONTEXT( "Test Clearance" )
@@ -707,7 +708,7 @@ struct ARC_DATA_MM
     {
         SHAPE_ARC arc( VECTOR2D( PcbMm2iu( m_center_x ), PcbMm2iu( m_center_y ) ),
                        VECTOR2D( PcbMm2iu( m_start_x ), PcbMm2iu( m_start_y ) ),
-                       m_center_angle, PcbMm2iu( m_width ) );
+                       EDA_ANGLE( m_center_angle, DEGREES_T ), PcbMm2iu( m_width ) );
 
         return arc;
     }
@@ -877,16 +878,16 @@ BOOST_AUTO_TEST_CASE( CollideArcToShapeLineChain )
 
 BOOST_AUTO_TEST_CASE( CollideArcToPolygonApproximation )
 {
-    SHAPE_ARC arc( VECTOR2I( 73843527, 74355869 ), VECTOR2I( 71713528, 72965869 ), -76.36664803,
-                   2000000 );
+    SHAPE_ARC arc( VECTOR2I( 73843527, 74355869 ), VECTOR2I( 71713528, 72965869 ),
+                   EDA_ANGLE( -76.36664803, DEGREES_T ), 2000000 );
 
     // Create a polyset approximation from the arc - error outside (simulating the zone filler)
     SHAPE_POLY_SET arcBuffer;
     int            clearance = ( arc.GetWidth() * 3 ) / 2;
     int            polygonApproximationError = SHAPE_ARC::DefaultAccuracyForPCB();
 
-    TransformArcToPolygon( arcBuffer, wxPoint( arc.GetP0() ), wxPoint( arc.GetArcMid() ),
-                           wxPoint( arc.GetP1() ), arc.GetWidth() + 2 * clearance,
+    TransformArcToPolygon( arcBuffer, arc.GetP0(), arc.GetArcMid(), arc.GetP1(),
+                           arc.GetWidth() + 2 * clearance,
                            polygonApproximationError, ERROR_OUTSIDE );
 
     BOOST_REQUIRE_EQUAL( arcBuffer.OutlineCount(), 1 );
@@ -1027,7 +1028,7 @@ BOOST_AUTO_TEST_CASE( ArcToPolyline )
         BOOST_TEST_CONTEXT( c.m_ctx_name )
         {
             const SHAPE_ARC this_arc{ c.m_geom.m_center_point, c.m_geom.m_start_point,
-                                      c.m_geom.m_center_angle, width };
+                                      EDA_ANGLE( c.m_geom.m_center_angle, DEGREES_T ), width };
 
             const SHAPE_LINE_CHAIN chain = this_arc.ConvertToPolyline( accuracy );
 

@@ -1269,7 +1269,7 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aCornerBuffer, int
         if( board )
             maxError = board->GetDesignSettings().m_MaxError;
 
-        int segCount = GetArcToSegmentCount( aClearance, maxError, 360.0 );
+        int segCount = GetArcToSegmentCount( aClearance, maxError, FULL_CIRCLE );
         polybuffer.Inflate( aClearance, segCount );
     }
 
@@ -1376,7 +1376,7 @@ void ZONE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     // Rebuild filled areas only if clearance is not 0
     if( aClearance )
     {
-        int numSegs = GetArcToSegmentCount( aClearance, aError, 360.0 );
+        int numSegs = GetArcToSegmentCount( aClearance, aError, FULL_CIRCLE );
         aCornerBuffer.InflateWithLinkedHoles( aClearance, numSegs, SHAPE_POLY_SET::PM_FAST );
     }
 }
@@ -1406,7 +1406,7 @@ void ZONE::TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_S
     if( board )
         maxError = board->GetDesignSettings().m_MaxError;
 
-    int numSegs = GetArcToSegmentCount( GetMinThickness(), maxError, 360.0 );
+    int numSegs = GetArcToSegmentCount( GetMinThickness(), maxError, FULL_CIRCLE );
 
     polys.InflateWithLinkedHoles( GetMinThickness()/2, numSegs, SHAPE_POLY_SET::PM_FAST );
 

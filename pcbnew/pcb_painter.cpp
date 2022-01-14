@@ -648,12 +648,12 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
 {
-    VECTOR2D center( aArc->GetCenter() );
-    int      width = aArc->GetWidth();
-    COLOR4D  color = m_pcbSettings.GetColor( aArc, aLayer );
-    double   radius = aArc->GetRadius();
-    double   start_angle = DECIDEG2RAD( aArc->GetArcAngleStart() );
-    double   angle = DECIDEG2RAD( aArc->GetAngle() );
+    VECTOR2D  center( aArc->GetCenter() );
+    int       width = aArc->GetWidth();
+    COLOR4D   color = m_pcbSettings.GetColor( aArc, aLayer );
+    double    radius = aArc->GetRadius();
+    EDA_ANGLE start_angle = aArc->GetArcAngleStart();
+    EDA_ANGLE angle = aArc->GetAngle();
 
     if( IsNetnameLayer( aLayer ) )
     {
@@ -670,7 +670,8 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         m_gal->SetIsFill( not outline_mode );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
-        m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle, width, m_maxError );
+        m_gal->DrawArcSegment( center, radius, start_angle.AsRadians(),
+                               ( start_angle + angle ).AsRadians(), width, m_maxError );
     }
 
     // Clearance lines
@@ -685,8 +686,9 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
 
-        m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle,
-                               width + clearance * 2, m_maxError );
+        m_gal->DrawArcSegment( center, radius, start_angle.AsRadians(),
+                               ( start_angle + angle ).AsRadians(), width + clearance * 2,
+                               m_maxError );
     }
 
 // Debug only: enable this code only to test the TransformArcToPolygon function
@@ -1211,7 +1213,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
                     if( margin.x < 0 )  // The poly shape must be deflated
                     {
-                        int numSegs = GetArcToSegmentCount( -margin.x, m_maxError, 360.0 );
+                        int numSegs = GetArcToSegmentCount( -margin.x, m_maxError, FULL_CIRCLE );
                         SHAPE_POLY_SET outline;
                         outline.NewOutline();
 

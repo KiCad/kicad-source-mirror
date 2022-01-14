@@ -4577,7 +4577,8 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_gr_arc:
                     dummyShape = parsePCB_SHAPE();
                     pad->AddPrimitiveArc( dummyShape->GetCenter(), dummyShape->GetStart(),
-                                          dummyShape->GetArcAngle(), dummyShape->GetWidth() );
+                                          dummyShape->GetArcAngle().AsTenthsOfADegree(),
+                                          dummyShape->GetWidth() );
                     break;
 
                 case T_gr_line:

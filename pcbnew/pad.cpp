@@ -1570,7 +1570,7 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
         if( aClearanceValue )
         {
-            int numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
+            int numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, FULL_CIRCLE ),
                                                           pad_min_seg_per_circle_count );
             int clearance = aClearanceValue;
 

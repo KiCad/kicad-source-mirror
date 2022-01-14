@@ -32,7 +32,7 @@
 
 #include <math.h>           // for copysign
 #include <stdlib.h>         // for abs
-
+#include <eda_angle.h>
 #include <math/vector2d.h>
 
 class EDA_RECT;
@@ -50,9 +50,9 @@ enum ERROR_LOC { ERROR_OUTSIDE, ERROR_INSIDE };
  * @param aRadius is the radius od the circle or arc
  * @param aErrorMax is the max error
  * This is the max distance between the middle of a segment and the circle.
- * @param aArcAngleDegree is the arc angle in degrees
+ * @param aArcAngleDegree is the arc angle
  */
-int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree );
+int GetArcToSegmentCount( int aRadius, int aErrorMax, const EDA_ANGLE& aArcAngle );
 
 /**
  * @return the radius diffence of the circle defined by segments inside the circle

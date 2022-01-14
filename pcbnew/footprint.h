@@ -107,7 +107,7 @@ class FOOTPRINT : public BOARD_ITEM_CONTAINER
 public:
     FOOTPRINT( BOARD* parent );
 
-    FOOTPRINT( const FOOTPRINT& aFootprint );
+     FOOTPRINT( const FOOTPRINT& aFootprint );
 
     // Move constructor and operator needed due to std containers inside the footprint
     FOOTPRINT( FOOTPRINT&& aFootprint );

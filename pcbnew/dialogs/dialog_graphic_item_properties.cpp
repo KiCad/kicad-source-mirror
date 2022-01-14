@@ -228,7 +228,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
 
     case SHAPE_T::ARC:
         SetTitle( _( "Arc Properties" ) );
-        m_AngleValue = m_item->GetArcAngle() / 10.0;
+        m_AngleValue = m_item->GetArcAngle().AsDegrees();
         m_filledCtrl->Show( false );
         break;
 

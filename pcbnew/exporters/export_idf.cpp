@@ -134,7 +134,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
             sp.y = -graphic->GetCenter().y * scale + offY;
             ep.x = graphic->GetStart().x * scale + offX;
             ep.y = -graphic->GetStart().y * scale + offY;
-            IDF_SEGMENT* seg = new IDF_SEGMENT( sp, ep, -graphic->GetArcAngle() / 10.0, true );
+            IDF_SEGMENT* seg = new IDF_SEGMENT( sp, ep, -graphic->GetArcAngle().AsDegrees(), true );
 
             if( seg )
                 lines.push_back( seg );

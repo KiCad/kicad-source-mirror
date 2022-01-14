@@ -2805,7 +2805,6 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
 {
     PCB_SHAPE* shape = nullptr;
     bool       cw = false;
-    double     arcStartAngle, arcEndAngle, arcAngle;
 
     VECTOR2I startPoint = getKiCadPoint( aCadstarStartPoint );
     VECTOR2I endPoint = getKiCadPoint( aCadstarVertex.End );
@@ -2842,7 +2841,7 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
 
     case VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE:
     case VERTEX_TYPE::ANTICLOCKWISE_ARC:
-
+    {
         if( isFootprint( aContainer ) )
             shape = new FP_SHAPE((FOOTPRINT*) aContainer, SHAPE_T::ARC );
         else
@@ -2851,18 +2850,19 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
         shape->SetCenter( centerPoint );
         shape->SetStart( startPoint );
 
-        arcStartAngle = getPolarAngle( startPoint - centerPoint );
-        arcEndAngle   = getPolarAngle( endPoint - centerPoint );
-        arcAngle      = arcEndAngle - arcStartAngle;
+        EDA_ANGLE arcStartAngle( startPoint - centerPoint );
+        EDA_ANGLE arcEndAngle( endPoint - centerPoint );
+        EDA_ANGLE arcAngle = arcEndAngle - arcStartAngle;
         //TODO: detect if we are supposed to draw a circle instead (i.e. two SEMICIRCLEs
         // with opposite start/end points and same centre point)
 
         if( cw )
-            shape->SetArcAngleAndEnd( NormalizeAnglePos( arcAngle ) );
+            shape->SetArcAngleAndEnd( arcAngle.Normalize().AsTenthsOfADegree() );
         else
-            shape->SetArcAngleAndEnd( NormalizeAngleNeg( arcAngle ), true );
+            shape->SetArcAngleAndEnd( -arcAngle.Normalize().AsTenthsOfADegree(), true );
 
         break;
+    }
     }
 
     //Apply transforms
@@ -2992,7 +2992,7 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromShapes( const std::
             if( shape->GetClass() == wxT( "MGRAPHIC" ) )
             {
                 FP_SHAPE* fp_shape = (FP_SHAPE*) shape;
-                SHAPE_ARC arc( fp_shape->GetCenter0(), fp_shape->GetStart0(), fp_shape->GetArcAngle() / 10.0 );
+                SHAPE_ARC arc( fp_shape->GetCenter0(), fp_shape->GetStart0(), fp_shape->GetArcAngle() );
 
                 if( shape->EndsSwapped() )
                     arc.Reverse();
@@ -3001,7 +3001,7 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromShapes( const std::
             }
             else
             {
-                SHAPE_ARC arc( shape->GetCenter(), shape->GetStart(), shape->GetArcAngle() / 10.0 );
+                SHAPE_ARC arc( shape->GetCenter(), shape->GetStart(), shape->GetArcAngle() );
 
                 if( shape->EndsSwapped() )
                     arc.Reverse();
@@ -3877,12 +3877,6 @@ VECTOR2I CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPoint( const VECTOR2I& aCadstarPoin
     retval.y = -( aCadstarPoint.y - m_designCenter.y ) * KiCadUnitMultiplier;
 
     return retval;
-}
-
-
-double CADSTAR_PCB_ARCHIVE_LOADER::getPolarAngle( const VECTOR2I& aPoint )
-{
-    return NormalizeAnglePos( ArcTangente( aPoint.y, aPoint.x ) );
 }
 
 

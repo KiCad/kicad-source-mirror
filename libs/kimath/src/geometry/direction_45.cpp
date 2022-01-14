@@ -188,7 +188,7 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
             {
                 // Negative tangentLength: arc goes at the start
                 VECTOR2I  arcCenter = aP0 + centerDir.Resize( arcRadius );
-                SHAPE_ARC ca( arcCenter, aP0, 45 * rotationSign );
+                SHAPE_ARC ca( arcCenter, aP0, ANGLE_45 * rotationSign );
 
                 // Constructing with a center can lead to imprecise endpoint.  We need to guarantee
                 // tangency of the endpoint.

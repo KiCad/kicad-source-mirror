@@ -345,18 +345,7 @@ void AR_MATRIX::drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int 
     dx = ux1 - ux0;
     dy = uy1 - uy0;
 
-    double angle;
-    if( dx )
-    {
-        angle = ArcTangente( dy, dx );
-    }
-    else
-    {
-        angle = 900;
-
-        if( dy < 0 )
-            angle = -900;
-    }
+    EDA_ANGLE angle( VECTOR2I( dx, dy ) );
 
     RotatePoint( &dx, &dy, angle ); // dx = length, dy = 0
 
@@ -789,7 +778,8 @@ void AR_MATRIX::TraceSegmentPcb( PCB_SHAPE* aShape, int aColor, int aMargin,
         int ux1 = aShape->GetStart().x - GetBrdCoordOrigin().x;
         int uy1 = aShape->GetStart().y - GetBrdCoordOrigin().y;
 
-        traceArc( ux0, uy0, ux1, uy1, aShape->GetArcAngle(), half_width, layer, aColor, op_logic );
+        traceArc( ux0, uy0, ux1, uy1, aShape->GetArcAngle().AsTenthsOfADegree(), half_width,
+                  layer, aColor, op_logic );
     }
 }
 

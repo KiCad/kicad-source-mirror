@@ -76,19 +76,19 @@ int EDA_ANGLE::normalize( int aValue, EDA_ANGLE_T aAngleType, bool n720 ) const
         break;
 
     case RADIANS_T:
-        /* ?? should not get here */
-        assert( 1 == 0 );
+        wxFAIL_MSG( "should be unreachable..." );
     }
 
-    /* if n720 == false, clamp between 0..full_circle_upper
-         * if n720 == true, clamp between +/- full_circle_upper
-         */
+    /*
+     * if n720 == false, clamp between 0..full_circle_upper
+     * if n720 == true, clamp between +/- full_circle_upper
+     */
     int full_circle_lower = n720 ? 0 : -full_circle_upper;
 
     while( aValue < full_circle_lower )
         aValue += full_circle_upper;
 
-    while( aValue > full_circle_upper )
+    while( aValue >= full_circle_upper )
         aValue -= full_circle_upper;
 
     return aValue;
@@ -101,9 +101,9 @@ double EDA_ANGLE::normalize( double aValue, EDA_ANGLE_T aAngleType, bool n720 ) 
 
     switch( aAngleType )
     {
-    case DEGREES_T: full_circle_upper = DEGREES_FULL_CIRCLE;            break;
+    case DEGREES_T:            full_circle_upper = DEGREES_FULL_CIRCLE;            break;
     case TENTHS_OF_A_DEGREE_T: full_circle_upper = TENTHS_OF_A_DEGREE_FULL_CIRCLE; break;
-    case RADIANS_T: full_circle_upper = RADIANS_FULL_CIRCLE;            break;
+    case RADIANS_T:            full_circle_upper = RADIANS_FULL_CIRCLE;            break;
     }
 
     double full_circle_lower = n720 ? 0 : -full_circle_upper;
@@ -111,7 +111,7 @@ double EDA_ANGLE::normalize( double aValue, EDA_ANGLE_T aAngleType, bool n720 ) 
     while( aValue < full_circle_lower )
         aValue += full_circle_upper;
 
-    while( aValue > full_circle_upper )
+    while( aValue >= full_circle_upper )
         aValue -= full_circle_upper;
 
     return aValue;

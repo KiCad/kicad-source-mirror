@@ -252,7 +252,10 @@ void GRCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int w
     int radius = ( width + 1 ) >> 1;
     int dx = x2 - x1;
     int dy = y2 - y1;
-    double angle = -ArcTangente( dy, dx );
+    EDA_ANGLE angle( VECTOR2I( dx, dy ) );
+
+    angle = -angle;
+
     VECTOR2I start;
     VECTOR2I end;
     VECTOR2I org( x1, y1 );

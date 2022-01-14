@@ -373,7 +373,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
                     // which can create bad shapes if margin.x is < 0
                     int maxError = aBoard->GetDesignSettings().m_MaxError;
-                    int numSegs = GetArcToSegmentCount( mask_clearance, maxError, 360.0 );
+                    int numSegs = GetArcToSegmentCount( mask_clearance, maxError, FULL_CIRCLE );
                     outline.InflateWithLinkedHoles( mask_clearance, numSegs,
                                                     SHAPE_POLY_SET::PM_FAST );
                     dummy.DeletePrimitivesList();
@@ -421,7 +421,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     dummy.SetOrientation( ANGLE_0 );
                     SHAPE_POLY_SET outline;
                     int maxError = aBoard->GetDesignSettings().m_MaxError;
-                    int numSegs = GetArcToSegmentCount( mask_clearance, maxError, 360.0 );
+                    int numSegs = GetArcToSegmentCount( mask_clearance, maxError, FULL_CIRCLE );
                     dummy.TransformShapeWithClearanceToPolygon( outline, UNDEFINED_LAYER, 0,
                                                                 maxError, ERROR_INSIDE );
                     outline.InflateWithLinkedHoles( mask_clearance, numSegs,
@@ -456,7 +456,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
                 // which can create bad shapes if margin.x is < 0
                 int maxError = aBoard->GetDesignSettings().m_MaxError;
-                int numSegs = GetArcToSegmentCount( mask_clearance, maxError, 360.0 );
+                int numSegs = GetArcToSegmentCount( mask_clearance, maxError, FULL_CIRCLE );
                 shape.InflateWithLinkedHoles( mask_clearance, numSegs, SHAPE_POLY_SET::PM_FAST );
                 dummy.DeletePrimitivesList();
                 dummy.AddPrimitivePoly( shape, 0, true );
@@ -578,14 +578,15 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
         if( track->Type() == PCB_ARC_T )
         {
-            const    PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
-            VECTOR2D center( arc->GetCenter() );
-            int      radius = arc->GetRadius();
-            double   start_angle = arc->GetArcAngleStart();
-            double   end_angle = start_angle + arc->GetAngle();
+            const     PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
+            VECTOR2D  center( arc->GetCenter() );
+            int       radius = arc->GetRadius();
+            EDA_ANGLE start_angle = arc->GetArcAngleStart();
+            EDA_ANGLE end_angle = start_angle + arc->GetAngle();
 
-            aPlotter->ThickArc( VECTOR2I( center.x, center.y ), -end_angle, -start_angle,
-                                radius, width, plotMode, &gbr_metadata );
+            aPlotter->ThickArc( VECTOR2I( center.x, center.y ), -end_angle.AsTenthsOfADegree(),
+                                -start_angle.AsTenthsOfADegree(), radius, width, plotMode,
+                                &gbr_metadata );
         }
         else
         {
@@ -934,7 +935,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         }
     }
 
-    int numSegs = GetArcToSegmentCount( inflate, maxError, 360.0 );
+    int numSegs = GetArcToSegmentCount( inflate, maxError, FULL_CIRCLE );
 
     // Merge all polygons: After deflating, not merged (not overlapping) polygons
     // will have the initial shape (with perhaps small changes due to deflating transform)

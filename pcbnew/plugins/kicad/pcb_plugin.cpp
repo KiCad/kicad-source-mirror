@@ -530,7 +530,7 @@ void PCB_PLUGIN::formatRenderCache( const EDA_TEXT* aText, int aNestLevel ) cons
 
     m_out->Print( aNestLevel, "(render_cache %s %s\n",
                   m_out->Quotew( shownText ).c_str(),
-                  FormatAngle( aText->GetDrawRotation().AsTenthsOfADegree() ).c_str() );
+                  FormatAngle( aText->GetDrawRotation() ).c_str() );
 
     for( const std::unique_ptr<KIFONT::GLYPH>& baseGlyph : *cache )
     {
@@ -1140,10 +1140,7 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
                       FormatInternalUnits( aFootprint->GetPosition() ).c_str() );
 
         if( !aFootprint->GetOrientation().IsZero() )
-        {
-            m_out->Print( 0, " %s",
-                          FormatAngle( aFootprint->GetOrientation().AsTenthsOfADegree() ).c_str() );
-        }
+            m_out->Print( 0, " %s", FormatAngle( aFootprint->GetOrientation() ).c_str() );
 
         m_out->Print( 0, ")\n" );
     }
@@ -1445,7 +1442,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     m_out->Print( 0, " (at %s", FormatInternalUnits( aPad->GetPos0() ).c_str() );
 
     if( !aPad->GetOrientation().IsZero() )
-        m_out->Print( 0, " %s", FormatAngle( aPad->GetOrientation().AsTenthsOfADegree() ).c_str() );
+        m_out->Print( 0, " %s", FormatAngle( aPad->GetOrientation() ).c_str() );
 
     m_out->Print( 0, ")" );
 
@@ -1598,7 +1595,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
             || ( aPad->GetShape() != PAD_SHAPE::CIRCLE && aPad->GetThermalSpokeAngle() != ANGLE_90 ) )
     {
         StrPrintf( &output, " (thermal_bridge_angle %s)",
-                   FormatAngle( aPad->GetThermalSpokeAngle().AsTenthsOfADegree() ).c_str() );
+                   FormatAngle( aPad->GetThermalSpokeAngle() ).c_str() );
     }
 
     if( aPad->GetThermalGap() != 0 )
@@ -1722,7 +1719,7 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
                   FormatInternalUnits( aText->GetTextPos() ).c_str() );
 
     if( !aText->GetTextAngle().IsZero() )
-        m_out->Print( 0, " %s", FormatAngle( aText->GetTextAngle().AsTenthsOfADegree() ).c_str() );
+        m_out->Print( 0, " %s", FormatAngle( aText->GetTextAngle() ).c_str() );
 
     m_out->Print( 0, ")" );
 
@@ -1814,7 +1811,7 @@ void PCB_PLUGIN::format( const FP_TEXT* aText, int aNestLevel ) const
     }
 
     if( !orient.IsZero() )
-        m_out->Print( 0, " %s", FormatAngle( orient.AsTenthsOfADegree() ).c_str() );
+        m_out->Print( 0, " %s", FormatAngle( orient ).c_str() );
 
     if( !aText->IsKeepUpright() )
         m_out->Print( 0, " unlocked" );

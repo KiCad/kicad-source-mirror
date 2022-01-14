@@ -451,12 +451,12 @@ std::string FormatInternalUnits( int aValue )
 }
 
 
-std::string FormatAngle( double aAngle )
+std::string FormatAngle( const EDA_ANGLE& aAngle )
 {
     char temp[50];
     int len;
 
-    len = snprintf( temp, sizeof(temp), "%.10g", aAngle / 10.0 );
+    len = snprintf( temp, sizeof(temp), "%.10g", aAngle.AsDegrees() );
 
     return std::string( temp, len );
 }

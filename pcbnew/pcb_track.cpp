@@ -845,20 +845,20 @@ bool PCB_ARC::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
     if( std::abs( dist - radius ) > max_dist )
         return false;
 
-    double arc_angle_start = GetArcAngleStart();    // Always 0.0 ... 360 deg, in 0.1 deg
-    double arc_hittest = ArcTangente( relpos.y, relpos.x );
+    EDA_ANGLE arc_angle = GetAngle();
+    EDA_ANGLE arc_angle_start = GetArcAngleStart();    // Always 0.0 ... 360 deg
+    EDA_ANGLE arc_hittest( relpos );
 
     // Calculate relative angle between the starting point of the arc, and the test point
     arc_hittest -= arc_angle_start;
 
     // Normalise arc_hittest between 0 ... 360 deg
-    NORMALIZE_ANGLE_POS( arc_hittest );
-    double arc_angle = GetAngle();
+    arc_hittest.Normalize();
 
-    if( arc_angle < 0 )
-        return arc_hittest >= 3600 + arc_angle;
+    if( arc_angle < ANGLE_0 )
+        return arc_hittest >= ANGLE_360 + arc_angle;
 
-    return  arc_hittest <= arc_angle;
+    return arc_hittest <= arc_angle;
 }
 
 
@@ -969,34 +969,25 @@ double PCB_ARC::GetRadius() const
     return GetLineLength( center, m_Start );
 }
 
-double PCB_ARC::GetAngle() const
+EDA_ANGLE PCB_ARC::GetAngle() const
 {
-    VECTOR2I center = GetPosition();
-    VECTOR2I p0 = m_Start - center;
-    VECTOR2I p1 = m_Mid - center;
-    VECTOR2I p2 = m_End - center;
-    double angle1 = ArcTangente( p1.y, p1.x ) - ArcTangente( p0.y, p0.x );
-    double angle2 = ArcTangente( p2.y, p2.x ) - ArcTangente( p1.y, p1.x );
+    VECTOR2I  center = GetPosition();
+    EDA_ANGLE angle1 = EDA_ANGLE( m_Mid - center ) - EDA_ANGLE( m_Start - center );
+    EDA_ANGLE angle2 = EDA_ANGLE( m_End - center ) - EDA_ANGLE( m_Mid - center );
 
-    return NormalizeAngle180( angle1 ) + NormalizeAngle180( angle2 );
+    return angle1.Normalize180() + angle2.Normalize180();
 }
 
-double PCB_ARC::GetArcAngleStart() const
+EDA_ANGLE PCB_ARC::GetArcAngleStart() const
 {
-    VECTOR2I center = GetPosition();
-
-    double angleStart = ArcTangente( m_Start.y - center.y,
-                                     m_Start.x - center.x );
-    return NormalizeAnglePos( angleStart );
+    EDA_ANGLE angleStart( m_Start - GetPosition() );
+    return angleStart.Normalize();
 }
 
-double PCB_ARC::GetArcAngleEnd() const
+EDA_ANGLE PCB_ARC::GetArcAngleEnd() const
 {
-    VECTOR2I center = GetPosition();
-
-    double angleEnd = ArcTangente( m_End.y - center.y,
-                                   m_End.x - center.x );
-    return NormalizeAnglePos( angleEnd );
+    EDA_ANGLE angleEnd( m_End - GetPosition() );
+    return angleEnd.Normalize();
 }
 
 

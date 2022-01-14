@@ -490,13 +490,6 @@ private:
     }
 
     /**
-     * @brief
-     * @param aPoint
-     * @return Angle in decidegrees of the polar representation of the point, scaled 0..360
-     */
-    double getPolarAngle( const VECTOR2I& aPoint );
-
-    /**
      * @brief Searches m_netMap and returns the NETINFO_ITEM pointer if exists. Otherwise
      * creates a new one and adds it to m_board.
      * @param aCadstarNetID

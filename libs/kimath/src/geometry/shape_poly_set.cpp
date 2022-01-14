@@ -2155,11 +2155,11 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
                     argument = 1;
 
                 double arcAngle = acos( argument );
-                double arcAngleDegrees = arcAngle * 180.0 / M_PI;
-                int    segments = GetArcToSegmentCount( radius, aErrorMax, arcAngleDegrees );
+                int    segments = GetArcToSegmentCount( radius, aErrorMax,
+                                                        EDA_ANGLE( arcAngle, RADIANS_T ) );
 
-                double  deltaAngle  = arcAngle / segments;
-                double  startAngle  = atan2( -ys, xs );
+                double deltaAngle = arcAngle / segments;
+                double startAngle = atan2( -ys, xs );
 
                 // Flip arc for inner corners
                 if( xa * yb - ya * xb <= 0 )

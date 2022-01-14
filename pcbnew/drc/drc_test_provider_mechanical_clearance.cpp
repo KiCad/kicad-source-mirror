@@ -317,18 +317,18 @@ bool DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::Run()
                             {
                                 SHAPE_LINE_CHAIN asPoly;
 
-                                VECTOR2I center = shape->GetCenter();
-                                double  angle  = -shape->GetArcAngle();
-                                double  r      = shape->GetRadius();
-                                int     steps  = GetArcToSegmentCount( r, errorMax, angle / 10.0 );
+                                VECTOR2I  center = shape->GetCenter();
+                                EDA_ANGLE angle  = -shape->GetArcAngle();
+                                double    r      = shape->GetRadius();
+                                int       steps  = GetArcToSegmentCount( r, errorMax, angle );
 
                                 asPoly.Append( shape->GetStart() );
 
                                 for( int step = 1; step <= steps; ++step )
                                 {
-                                    double rotation = ( angle * step ) / steps;
+                                    EDA_ANGLE rotation = ( angle * step ) / steps;
+                                    VECTOR2I  pt = shape->GetStart();
 
-                                    VECTOR2I pt = shape->GetStart();
                                     RotatePoint( pt, center, rotation );
                                     asPoly.Append( pt );
                                 }

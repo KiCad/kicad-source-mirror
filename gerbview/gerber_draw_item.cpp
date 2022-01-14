@@ -275,19 +275,18 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
 
     case GBR_ARC:
     {
-        double arc_angle =
-            atan2( double( m_End.y - m_ArcCentre.y ),  double( m_End.x - m_ArcCentre.x ) )
-            - atan2( double( m_Start.y - m_ArcCentre.y ),  double( m_Start.x - m_ArcCentre.x ) );
-
-        arc_angle *= 180.0 / M_PI;
-
-        if( arc_angle < 0.0 )
-            arc_angle += 360.0;
+        EDA_ANGLE angle( atan2( double( m_End.y - m_ArcCentre.y ),
+                                double( m_End.x - m_ArcCentre.x ) )
+                         - atan2( double( m_Start.y - m_ArcCentre.y ),
+                                  double( m_Start.x - m_ArcCentre.x ) ),
+                         RADIANS_T );
 
         if( m_End == m_Start )  // Arc with the end point = start point is expected to be a circle.
-            arc_angle = 360.0;
+            angle = ANGLE_360;
+        else
+            angle.Normalize();
 
-        SHAPE_ARC arc( m_ArcCentre, m_Start, arc_angle );
+        SHAPE_ARC arc( m_ArcCentre, m_Start, angle );
         BOX2I arc_bbox = arc.BBox( m_Size.x / 2 );  // m_Size.x is the line thickness
         bbox.SetOrigin( arc_bbox.GetX(), arc_bbox.GetY() );
         bbox.SetWidth( arc_bbox.GetWidth() );

@@ -1449,7 +1449,8 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
             double  radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 )
                                   + pow( center.y - kicad_y( v1.y ), 2 ) );
 
-            int segCount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF, *v1.curve );
+            int segCount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF,
+                                                 EDA_ANGLE( *v1.curve, DEGREES_T ) );
             double delta_angle = angle / segCount;
 
             for( double a = end_angle + angle; fabs( a - end_angle ) > fabs( delta_angle );
@@ -2144,7 +2145,8 @@ void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
             if( KiROUND( radius ) == 0 )
                 radius = 1.0;
 
-            int segCount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF, *v1.curve );
+            int segCount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF,
+                                                 EDA_ANGLE( *v1.curve, DEGREES_T ) );
             double delta = angle / segCount;
 
             for( double a = end_angle + angle; fabs( a - end_angle ) > fabs( delta ); a -= delta )
@@ -2584,7 +2586,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                                        pow( center.y - kicad_y( w.y1 ), 2 ) );
 
                         int segs = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF,
-                                                         *w.curve );
+                                                         EDA_ANGLE( *w.curve, DEGREES_T ) );
                         delta_angle = angle / segs;
                     }
 

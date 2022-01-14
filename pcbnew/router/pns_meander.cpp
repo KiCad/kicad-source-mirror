@@ -229,7 +229,7 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( const VECTOR2D& aP, const VECTOR
     {
         VECTOR2D center = aP + dir_v * ( aSide ? -1.0 : 1.0 );
 
-        lc.Append( SHAPE_ARC( center, aP, ( aSide ? -90 : 90 ) ) );
+        lc.Append( SHAPE_ARC( center, aP, ( aSide ? -ANGLE_90 : ANGLE_90 ) ) );
     }
         break;
 

@@ -47,9 +47,9 @@ BOOST_AUTO_TEST_CASE( ArcToPolyline )
             VECTOR2I( 1500, 0 ),
     } );
 
-    SHAPE_LINE_CHAIN arc_insert1( SHAPE_ARC( VECTOR2I( 0, -100 ), VECTOR2I( 0, -200 ), 180.0 ) );
+    SHAPE_LINE_CHAIN arc_insert1( SHAPE_ARC( VECTOR2I( 0, -100 ), VECTOR2I( 0, -200 ), ANGLE_180 ) );
 
-    SHAPE_LINE_CHAIN arc_insert2( SHAPE_ARC( VECTOR2I( 0, 500 ), VECTOR2I( 0, 400 ), 180.0 ) );
+    SHAPE_LINE_CHAIN arc_insert2( SHAPE_ARC( VECTOR2I( 0, 500 ), VECTOR2I( 0, 400 ), ANGLE_180 ) );
 
     BOOST_CHECK_EQUAL( base_chain.CShapes().size(), base_chain.CPoints().size() );
     BOOST_CHECK_EQUAL( arc_insert1.CShapes().size(), arc_insert1.CPoints().size() );
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE( ArcToPolyline )
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( arc_insert1 ) );
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( arc_insert2 ) );
 
-    base_chain.Insert( 0, SHAPE_ARC( VECTOR2I( 0, -100 ), VECTOR2I( 0, -200 ), 1800 ) );
+    base_chain.Insert( 0, SHAPE_ARC( VECTOR2I( 0, -100 ), VECTOR2I( 0, -200 ), ANGLE_180 ) );
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
     BOOST_CHECK_EQUAL( base_chain.CShapes().size(), base_chain.CPoints().size() );
 
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE( ArcToPolylineLargeCoords )
             VECTOR2I( 1500000, 0 ),
     } );
 
-    base_chain.Append( SHAPE_ARC( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 100000 ), 180.0 ) );
+    base_chain.Append( SHAPE_ARC( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 100000 ), ANGLE_180 ) );
 
     BOOST_CHECK( GEOM_TEST::IsOutlineValid( base_chain ) );
     BOOST_CHECK_EQUAL( base_chain.PointCount(), 11 );
@@ -198,7 +198,7 @@ BOOST_AUTO_TEST_CASE( Split )
 {
     SEG       seg1( VECTOR2I( 0, 100000 ), VECTOR2I( 50000, 0 ) );
     SEG       seg2( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 0 ) );
-    SHAPE_ARC arc( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 0 ), 180.0 );
+    SHAPE_ARC arc( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 0 ), ANGLE_180 );
 
     // Start a chain with 2 points (seg1)
     SHAPE_LINE_CHAIN chain( { seg1.A, seg1.B } );
@@ -271,8 +271,8 @@ BOOST_AUTO_TEST_CASE( Split )
 BOOST_AUTO_TEST_CASE( Slice )
 {
     SEG       targetSegment( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 0 ) );
-    SHAPE_ARC firstArc( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 0 ), 180.0 );
-    SHAPE_ARC secondArc( VECTOR2I( -200000, -200000 ), VECTOR2I( -300000, -100000 ), -180.0 );
+    SHAPE_ARC firstArc( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 0 ), ANGLE_180 );
+    SHAPE_ARC secondArc( VECTOR2I( -200000, -200000 ), VECTOR2I( -300000, -100000 ), -ANGLE_180 );
     int       tol = SHAPE_ARC::DefaultAccuracyForPCB(); // Tolerance for arc collisions
 
     // Start a chain with 3 points
@@ -433,7 +433,7 @@ BOOST_AUTO_TEST_CASE( NearestPointPt )
 {
     SEG       seg1( VECTOR2I( 0, 100000 ), VECTOR2I( 50000, 0 ) );
     SEG       seg2( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 0 ) );
-    SHAPE_ARC arc( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 0 ), 180.0 );
+    SHAPE_ARC arc( VECTOR2I( 200000, 0 ), VECTOR2I( 300000, 0 ), ANGLE_180 );
 
     // Start a chain with 2 points (seg1)
     SHAPE_LINE_CHAIN chain( { seg1.A, seg1.B } );

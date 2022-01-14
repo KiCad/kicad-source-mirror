@@ -639,19 +639,19 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
         case SHAPE_T::ARC:
         {
             radius = KiROUND( GetLineLength( aShape->GetCenter(), aShape->GetStart() ) );
-            double startAngle  = ArcTangente( aShape->GetStart().y - aShape->GetCenter().y,
-                                              aShape->GetStart().x - aShape->GetCenter().x );
-            double endAngle = startAngle + aShape->GetArcAngle();
+            EDA_ANGLE startAngle( aShape->GetStart() - aShape->GetCenter() );
+            EDA_ANGLE endAngle = startAngle + aShape->GetArcAngle();
 
             // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
-            if( std::abs( aShape->GetArcAngle() ) == 3600.0 )
+            if( std::abs( aShape->GetArcAngle().AsDegrees() ) == 360.0 )
             {
                 m_plotter->ThickCircle( aShape->GetCenter(), radius * 2, thickness, GetPlotMode(),
                                         &gbr_metadata );
             }
             else
             {
-                m_plotter->ThickArc( aShape->GetCenter(), -endAngle, -startAngle, radius, thickness,
+                m_plotter->ThickArc( aShape->GetCenter(), -endAngle.AsTenthsOfADegree(),
+                                     -startAngle.AsTenthsOfADegree(), radius, thickness,
                                      GetPlotMode(), &gbr_metadata );
             }
         }
@@ -956,20 +956,20 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 
         case SHAPE_T::ARC:
         {
-            double startAngle  = ArcTangente( aShape->GetStart().y - aShape->GetCenter().y,
-                                              aShape->GetStart().x - aShape->GetCenter().x );
-            double endAngle = startAngle + aShape->GetArcAngle();
+            EDA_ANGLE startAngle( aShape->GetStart() - aShape->GetCenter() );
+            EDA_ANGLE endAngle = startAngle + aShape->GetArcAngle();
 
             // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
-            if( std::abs( aShape->GetArcAngle() ) == 3600.0 )
+            if( std::abs( aShape->GetArcAngle().AsDegrees() ) == 360.0 )
             {
                 m_plotter->ThickCircle( aShape->GetCenter(), aShape->GetRadius() * 2, thickness,
                                         GetPlotMode(), &gbr_metadata );
             }
             else
             {
-                m_plotter->ThickArc( aShape->GetCenter(), -endAngle, -startAngle,
-                                     aShape->GetRadius(), thickness, GetPlotMode(), &gbr_metadata );
+                m_plotter->ThickArc( aShape->GetCenter(), -endAngle.AsTenthsOfADegree(),
+                                     -startAngle.AsTenthsOfADegree(), aShape->GetRadius(),
+                                     thickness, GetPlotMode(), &gbr_metadata );
             }
 
             break;

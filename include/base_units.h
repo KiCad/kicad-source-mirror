@@ -35,6 +35,7 @@
 #include <string>
 
 #include <eda_units.h>
+#include <eda_angle.h>
 #include <convert_to_biu.h>
 #include <math/vector2d.h>
 
@@ -194,7 +195,7 @@ std::string FormatInternalUnits( int aValue );
  * @param aAngle A angle value to convert.
  * @return A std::string object containing the converted angle.
  */
-std::string FormatAngle( double aAngle );
+std::string FormatAngle( const EDA_ANGLE& aAngle );
 
 std::string FormatInternalUnits( const wxPoint& aPoint );
 

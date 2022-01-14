@@ -651,8 +651,8 @@ void EXPORTER_PCB_VRML::ExportVrmlViaHoles()
         // Set the optimal number of segments to approximate a circle.
         // SetArcParams needs a count max, and the minimal and maximal length
         // of segments
-        int nsides = GetArcToSegmentCount( via->GetDrillValue(),
-                                           Millimeter2iu( err_approx_max ), 360.0 );
+        int nsides = GetArcToSegmentCount( via->GetDrillValue(), Millimeter2iu( err_approx_max ),
+                                           FULL_CIRCLE );
         double minSegLength = M_PI * 2.0 * hole_radius / nsides;
         double maxSegLength = minSegLength*2.0;
 
@@ -679,8 +679,8 @@ void EXPORTER_PCB_VRML::ExportVrmlPadHole( PAD* aPad )
     // Export the hole on the edge layer
     if( hole_drill > 0 )
     {
-        int nsides = GetArcToSegmentCount( hole_drill,
-                                           Millimeter2iu( err_approx_max ), 360.0 );
+        int nsides = GetArcToSegmentCount( hole_drill, Millimeter2iu( err_approx_max ),
+                                           FULL_CIRCLE );
         double minSegLength = M_PI * hole_drill / nsides;
         double maxSegLength = minSegLength*2.0;
 

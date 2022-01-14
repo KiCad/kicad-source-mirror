@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -28,6 +28,7 @@
 
 #include <geometry/shape.h>
 #include <convert_to_biu.h>
+#include <eda_angle.h>
 #include <math/vector2d.h>   // for VECTOR2I
 
 class SHAPE_LINE_CHAIN;
@@ -49,11 +50,11 @@ public:
      *
      * @param aArcCenter is the arc center.
      * @param aArcStartPoint is the arc start point.
-     * @param aCenterAngle is the arc angle in degrees.
+     * @param aCenterAngle is the arc angle.
      * @param aWidth is the arc line thickness.
      */
-    SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint, double aCenterAngle,
-               int aWidth = 0 );
+    SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint,
+               const EDA_ANGLE& aCenterAngle, int aWidth = 0 );
 
     /**
      * @param aArcStart is the arc start point.

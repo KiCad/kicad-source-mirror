@@ -242,11 +242,11 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
     {
         const PCB_ARC* arc = static_cast<const PCB_ARC*>( aTrack );
 
-        VECTOR2D center( arc->GetCenter() );
-        double   arc_angle = arc->GetAngle();
-        double   radius = arc->GetRadius();
-        int      arcsegcount = GetArcToSegmentCount( radius, ARC_HIGH_DEF, arc_angle / 10 );
-        int      circlesegcount;
+        VECTOR2D  center( arc->GetCenter() );
+        EDA_ANGLE arc_angle = arc->GetAngle();
+        double    radius = arc->GetRadius();
+        int       arcsegcount = GetArcToSegmentCount( radius, ARC_HIGH_DEF, arc_angle );
+        int       circlesegcount;
 
         // We need a circle to segment count. However, the arc angle can be small, and the
         // radius very big. so we calculate a reasonable value for circlesegcount.
@@ -256,12 +256,13 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
         }
         else
         {
-            circlesegcount = KiROUND( arcsegcount * 3600 / std::abs( arc_angle ) );
+            circlesegcount = KiROUND( arcsegcount * 360.0 / std::abs( arc_angle.AsDegrees() ) );
             circlesegcount = std::max( 1, std::min( circlesegcount, 128 ) );
         }
 
-        transformArcToSegments( VECTOR2I( center.x, center.y ), arc->GetStart(), arc_angle,
-                                circlesegcount, arc->GetWidth(), aDstContainer, *arc );
+        transformArcToSegments( VECTOR2I( center.x, center.y ), arc->GetStart(),
+                                arc_angle.AsTenthsOfADegree(), circlesegcount, arc->GetWidth(),
+                                aDstContainer, *arc );
         break;
     }
 
@@ -658,8 +659,9 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aDstCo
     {
         unsigned int segCount = GetCircleSegmentCount( aShape->GetBoundingBox().GetSizeMax() );
 
-        transformArcToSegments( aShape->GetCenter(), aShape->GetStart(), aShape->GetArcAngle(),
-                                segCount, linewidth, aDstContainer, *aShape );
+        transformArcToSegments( aShape->GetCenter(), aShape->GetStart(),
+                                aShape->GetArcAngle().AsTenthsOfADegree(), segCount, linewidth,
+                                aDstContainer, *aShape );
     }
     break;
 

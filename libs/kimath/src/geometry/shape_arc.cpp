@@ -41,15 +41,16 @@ std::ostream& operator<<( std::ostream& aStream, const SHAPE_ARC& aArc )
 
 
 SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint,
-                      double aCenterAngle, int aWidth ) :
-        SHAPE( SH_ARC ), m_width( aWidth )
+                      const EDA_ANGLE& aCenterAngle, int aWidth ) :
+        SHAPE( SH_ARC ),
+        m_width( aWidth )
 {
     m_start = aArcStartPoint;
     m_mid = aArcStartPoint;
     m_end = aArcStartPoint;
 
-    RotatePoint( m_mid, aArcCenter, -aCenterAngle * 10.0 / 2.0 );
-    RotatePoint( m_end, aArcCenter, -aCenterAngle * 10.0 );
+    RotatePoint( m_mid, aArcCenter, -EDA_ANGLE( aCenterAngle.AsDegrees() / 2.0, DEGREES_T ) );
+    RotatePoint( m_end, aArcCenter, -aCenterAngle );
 
     update_bbox();
 }
@@ -57,15 +58,18 @@ SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint
 
 SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid,
                       const VECTOR2I& aArcEnd, int aWidth ) :
-    SHAPE( SH_ARC ), m_start( aArcStart ), m_mid( aArcMid ), m_end( aArcEnd ),
-    m_width( aWidth )
+        SHAPE( SH_ARC ),
+        m_start( aArcStart ),
+        m_mid( aArcMid ),
+        m_end( aArcEnd ),
+        m_width( aWidth )
 {
     update_bbox();
 }
 
 
-SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, int aWidth )
-        : SHAPE( SH_ARC )
+SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, int aWidth ) :
+        SHAPE( SH_ARC )
 {
     m_width = aWidth;
 
@@ -135,18 +139,17 @@ SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, i
         if( pToB.EuclideanNorm() == 0 )
             pToB = aSegmentB.A - p.get();
 
-        double pToAangle = ArcTangente( pToA.y, pToA.x );
-        double pToBangle = ArcTangente( pToB.y, pToB.x );
+        EDA_ANGLE pToAangle( pToA );
+        EDA_ANGLE pToBangle( pToB );
 
-        double alpha = NormalizeAngle180( pToAangle - pToBangle );
+        EDA_ANGLE alpha = ( pToAangle - pToBangle ).Normalize180();
 
-        double distPC = (double) aRadius / abs( sin( DECIDEG2RAD( alpha / 2 ) ) );
-        double angPC  = pToAangle - alpha / 2;
+        double    distPC = (double) aRadius / abs( sin( alpha.AsRadians() / 2 ) );
+        EDA_ANGLE angPC  = pToAangle - alpha / 2;
+        VECTOR2I  arcCenter;
 
-        VECTOR2I arcCenter;
-
-        arcCenter.x = p.get().x + KiROUND( distPC * cos( DECIDEG2RAD( angPC ) ) );
-        arcCenter.y = p.get().y + KiROUND( distPC * sin( DECIDEG2RAD( angPC ) ) );
+        arcCenter.x = p.get().x + KiROUND( distPC * cos( angPC.AsRadians() ) );
+        arcCenter.y = p.get().y + KiROUND( distPC * sin( angPC.AsRadians() ) );
 
         // The end points of the arc are the orthogonal projected lines from the line segments
         // to the center of the arc
@@ -157,10 +160,10 @@ SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, i
         VECTOR2I startVector = m_start - arcCenter;
         VECTOR2I endVector   = m_end - arcCenter;
 
-        double startAngle = ArcTangente( startVector.y, startVector.x );
-        double endAngle   = ArcTangente( endVector.y, endVector.x );
+        EDA_ANGLE startAngle( startVector );
+        EDA_ANGLE endAngle( endVector );
+        EDA_ANGLE midPointRotAngle = ( startAngle - endAngle ).Normalize180() / 2;
 
-        double midPointRotAngle = NormalizeAngle180( startAngle - endAngle ) / 2;
         m_mid = m_start;
         RotatePoint( m_mid, arcCenter, midPointRotAngle );
     }
@@ -438,14 +441,11 @@ double SHAPE_ARC::GetLength() const
 
 double SHAPE_ARC::GetCentralAngle() const
 {
-    VECTOR2I center = GetCenter();
-    VECTOR2I p0 = m_start - center;
-    VECTOR2I p1 = m_mid - center;
-    VECTOR2I p2 = m_end - center;
-    double   angle1 = ArcTangente( p1.y, p1.x ) - ArcTangente( p0.y, p0.x );
-    double   angle2 = ArcTangente( p2.y, p2.x ) - ArcTangente( p1.y, p1.x );
+    VECTOR2I  center = GetCenter();
+    EDA_ANGLE angle1 = EDA_ANGLE( m_mid - center ) - EDA_ANGLE( m_start - center );
+    EDA_ANGLE angle2 = EDA_ANGLE( m_end - center ) - EDA_ANGLE( m_mid - center );
 
-    return ( NormalizeAngle180( angle1 ) + NormalizeAngle180( angle2 ) ) / 10.0;
+    return ( angle1 + angle2 ).Normalize180().AsTenthsOfADegree();
 }
 
 
@@ -481,7 +481,7 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy,
     else
     {
         double arc_angle = std::abs( ca );
-        n = GetArcToSegmentCount( external_radius, aAccuracy, arc_angle );
+        n = GetArcToSegmentCount( external_radius, aAccuracy, EDA_ANGLE( arc_angle, DEGREES_T ) );
 
         // Recalculate the effective error of approximation, that can be < aAccuracy
         int seg360 = n * 360.0 / arc_angle;

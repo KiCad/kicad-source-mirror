@@ -1092,11 +1092,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                 {
                     secondPt = false;
 
-
-                    VECTOR2I kiLast = last;
-                    VECTOR2I kiCurrent = pt;
-                    double  wireangleDeciDeg = getPolarAngle( kiLast - kiCurrent );
-                    fixNetLabelsAndSheetPins( wireangleDeciDeg, conn.StartNode );
+                    EDA_ANGLE wireAngle( last - pt );
+                    fixNetLabelsAndSheetPins( wireAngle.AsTenthsOfADegree(), conn.StartNode );
                 }
 
                 wire = new SCH_LINE();
@@ -1116,10 +1113,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             //Fix labels on the end wire
             if( wire )
             {
-                VECTOR2I kiLast = wire->GetEndPoint();
-                VECTOR2I kiCurrent = wire->GetStartPoint();
-                double  wireangleDeciDeg = getPolarAngle( kiLast - kiCurrent );
-                fixNetLabelsAndSheetPins( wireangleDeciDeg, conn.EndNode );
+                EDA_ANGLE wireAngle( wire->GetEndPoint() - wire->GetStartPoint() );
+                fixNetLabelsAndSheetPins( wireAngle.AsTenthsOfADegree(), conn.EndNode );
             }
         }
 
@@ -2059,18 +2054,18 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices(
         case VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE:
         case VERTEX_TYPE::ANTICLOCKWISE_ARC:
         {
-            double arcStartAngle = getPolarAngle( startPoint - centerPoint );
-            double arcEndAngle   = getPolarAngle( endPoint - centerPoint );
-            double arcAngleDeciDeg = arcEndAngle - arcStartAngle;
+            EDA_ANGLE arcStartAngle( startPoint - centerPoint );
+            EDA_ANGLE arcEndAngle( endPoint - centerPoint );
+            EDA_ANGLE arcAngle = arcEndAngle - arcStartAngle;
 
             if( cw )
-                arcAngleDeciDeg = NormalizeAnglePos( arcAngleDeciDeg );
+                arcAngle = arcAngle.Normalize();
             else
-                arcAngleDeciDeg = NormalizeAngleNeg( arcAngleDeciDeg );
+                arcAngle = -arcAngle.Normalize();
 
-            // JEY TODO: Load as arc...
+            // TODO: Load as arc...
 
-            SHAPE_ARC tempArc( centerPoint, startPoint, arcAngleDeciDeg / 10.0 );
+            SHAPE_ARC        tempArc( centerPoint, startPoint, arcAngle );
             SHAPE_LINE_CHAIN arcSegments = tempArc.ConvertToPolyline( Millimeter2iu( 0.1 ) );
 
             // Load the arc as a series of piece-wise segments
@@ -3055,12 +3050,6 @@ VECTOR2I CADSTAR_SCH_ARCHIVE_LOADER::applyTransform(
     }
 
     return retVal;
-}
-
-
-double CADSTAR_SCH_ARCHIVE_LOADER::getPolarAngle( const VECTOR2I& aPoint )
-{
-    return NormalizeAnglePos( ArcTangente( aPoint.y, aPoint.x ) );
 }
 
 

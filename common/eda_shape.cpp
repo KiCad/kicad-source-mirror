@@ -126,7 +126,7 @@ double EDA_SHAPE::GetLength() const
         return length;
 
     case SHAPE_T::ARC:
-        return 2 * M_PI * GetRadius() * ( GetArcAngle() / 3600.0 );
+        return GetRadius() * GetArcAngle().AsRadians();
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
@@ -512,14 +512,14 @@ void EDA_SHAPE::SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, co
 }
 
 
-double EDA_SHAPE::GetArcAngle() const
+EDA_ANGLE EDA_SHAPE::GetArcAngle() const
 {
     double startAngle;
     double endAngle;
 
     CalcArcAngles( startAngle, endAngle );
 
-    return ( endAngle - startAngle ) * 10;
+    return EDA_ANGLE( endAngle - startAngle, DEGREES_T );
 }
 
 
@@ -556,7 +556,7 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     case SHAPE_T::ARC:
         aList.emplace_back( shape, _( "Arc" ) );
 
-        msg.Printf( wxT( "%.1f" ), GetArcAngle() / 10.0 );
+        msg.Printf( wxT( "%.1f" ), GetArcAngle().AsDegrees() );
         aList.emplace_back( _( "Angle" ), msg );
 
         msg = MessageTextFromValue( units, GetRadius() );
@@ -1078,7 +1078,7 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
     switch( m_shape )
     {
     case SHAPE_T::ARC:
-        effectiveShapes.emplace_back( new SHAPE_ARC( m_arcCenter, m_start, GetArcAngle() / 10.0,
+        effectiveShapes.emplace_back( new SHAPE_ARC( m_arcCenter, m_start, GetArcAngle(),
                                                      GetWidth() ) );
         break;
 
@@ -1109,7 +1109,7 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
             effectiveShapes.emplace_back( new SHAPE_CIRCLE( getCenter(), GetRadius() ) );
 
         if( GetWidth() > 0 || !IsFilled() || aEdgeOnly )
-            effectiveShapes.emplace_back( new SHAPE_ARC( getCenter(), GetEnd(), 360.0 ) );
+            effectiveShapes.emplace_back( new SHAPE_ARC( getCenter(), GetEnd(), ANGLE_360 ) );
 
         break;
     }
@@ -1344,12 +1344,11 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
         case 1:
         {
             // Keep center clockwise from chord while drawing
-            VECTOR2I chordVector = m_end - m_start;
-            double  chordAngle = ArcTangente( chordVector.y, chordVector.x );
-            NORMALIZE_ANGLE_POS( chordAngle );
+            VECTOR2I  chordVector = m_end - m_start;
+            EDA_ANGLE chordAngle( chordVector );
 
             VECTOR2I c1Test = c1;
-            RotatePoint( c1Test, m_start, -chordAngle );
+            RotatePoint( c1Test, m_start, -chordAngle.Normalize() );
 
             m_arcCenter = c1Test.x > 0 ? c2 : c1;
         }
@@ -1365,7 +1364,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
             // Pick the one closer to the mouse position
             m_arcCenter = GetLineLength( c1, aPosition ) < GetLineLength( c2, aPosition ) ? c1 : c2;
 
-            if( GetArcAngle() > 1800 )
+            if( GetArcAngle() > ANGLE_180 )
                 std::swap( m_start, m_end );
 
             break;

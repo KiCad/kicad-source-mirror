@@ -292,13 +292,6 @@ private:
     /**
      * @brief
      * @param aPoint
-     * @return Angle in decidegrees of the polar representation of the point, scaled 0..360
-     */
-    double getPolarAngle( const VECTOR2I& aPoint );
-
-    /**
-     * @brief
-     * @param aPoint
      * @return Radius of polar representation of the point
      */
     double getPolarRadius( const VECTOR2I& aPoint );
