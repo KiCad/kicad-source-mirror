@@ -104,6 +104,9 @@ bool PCB_BASE_EDIT_FRAME::TryBefore( wxEvent& aEvent )
     wxKeyCode viewSwitchKey = WXK_WINDOWS_LEFT;
 #endif
 
+    if( aEvent.GetEventType() != wxEVT_CHAR && aEvent.GetEventType() != wxEVT_CHAR_HOOK )
+        return PCB_BASE_FRAME::TryBefore( aEvent );
+
     if( !s_presetSwitcherShown && wxGetKeyState( presetSwitchKey ) && wxGetKeyState( WXK_TAB ) )
     {
         if( m_appearancePanel && this->IsActive() )
