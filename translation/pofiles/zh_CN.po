@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
 "PO-Revision-Date: 2022-01-14 10:32+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -29333,7 +29333,7 @@ msgstr "信号完整性"
 
 #: pcbnew/drc/drc_item.cpp:48
 msgid "Readability"
-msgstr "易读"
+msgstr "可读性"
 
 #: pcbnew/drc/drc_item.cpp:52
 msgid "Missing connection between items"
