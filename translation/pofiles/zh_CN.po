@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
 "PO-Revision-Date: 2022-01-14 10:30+0000\n"
-"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -29306,7 +29306,7 @@ msgstr "敷铜 %s 散热间隙：%s。"
 #: pcbnew/drc/drc_engine.cpp:1258
 #, c-format
 msgid "Zone %s thermal spoke width: %s."
-msgstr "区域 %s 防散热导线宽度：%s。"
+msgstr "敷铜 %s 散热辐条宽度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1290
 #, c-format
@@ -29318,7 +29318,6 @@ msgid "Electrical"
 msgstr "电路"
 
 #: pcbnew/drc/drc_item.cpp:45
-#, fuzzy
 msgid "Design for Manufacturing"
 msgstr "面向制造的设计"
 
@@ -29331,9 +29330,8 @@ msgid "Signal Integrity"
 msgstr "信号完整性"
 
 #: pcbnew/drc/drc_item.cpp:48
-#, fuzzy
 msgid "Readability"
-msgstr "只读"
+msgstr "易读"
 
 #: pcbnew/drc/drc_item.cpp:52
 msgid "Missing connection between items"
@@ -29373,7 +29371,7 @@ msgstr "敷铜区没有焊盘连接"
 
 #: pcbnew/drc/drc_item.cpp:88
 msgid "Thermal relief connection to zone incomplete"
-msgstr ""
+msgstr "与敷铜的花焊盘连接不完整"
 
 #: pcbnew/drc/drc_item.cpp:92
 msgid "Via is not connected or connected on only one layer"
@@ -29465,28 +29463,24 @@ msgid "Pad net doesn't match schematic"
 msgstr "焊盘网络与原理图不匹配"
 
 #: pcbnew/drc/drc_item.cpp:180
-#, fuzzy
 msgid "Footprint not found in libraries"
-msgstr "在变更列表中找不到模块"
+msgstr "在库中找不到封装"
 
 #: pcbnew/drc/drc_item.cpp:184
-#, fuzzy
 msgid "Footprint doesn't match copy in library"
-msgstr "封装类型与封装焊盘不匹配"
+msgstr "封装与库中副本不匹配"
 
 #: pcbnew/drc/drc_item.cpp:192
-#, fuzzy
 msgid "Assertion failure"
-msgstr "截面积："
+msgstr "断言失败"
 
 #: pcbnew/drc/drc_item.cpp:196
-#, fuzzy
 msgid "Copper sliver"
-msgstr "铜层："
+msgstr "铜条"
 
 #: pcbnew/drc/drc_item.cpp:200
 msgid "Solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "阻焊层孔径可桥接具有不同网络的项目"
 
 #: pcbnew/drc/drc_item.cpp:204
 msgid "Silkscreen clipped by solder mask"
@@ -29497,14 +29491,12 @@ msgid "Silkscreen overlap"
 msgstr "丝印重叠"
 
 #: pcbnew/drc/drc_item.cpp:212
-#, fuzzy
 msgid "Text height out of range"
-msgstr "布线长度超过范围"
+msgstr "文字高度超出范围"
 
 #: pcbnew/drc/drc_item.cpp:216
-#, fuzzy
 msgid "Text thickness out of range"
-msgstr "布线长度超过范围"
+msgstr "文本宽度超出范围"
 
 #: pcbnew/drc/drc_item.cpp:220
 msgid "Trace length out of range"
@@ -29633,14 +29625,12 @@ msgid "Rule already has a '%s' constraint."
 msgstr "规则已经有 '%s' 约束。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:407
-#, fuzzy
 msgid "Expecting number."
-msgstr "预期 %s"
+msgstr "期望数。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:422
-#, fuzzy
 msgid "Missing assertion expression."
-msgstr "缺少条件表达式。"
+msgstr "缺少断言表达。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:459
 msgid "Missing min value."
@@ -29664,9 +29654,8 @@ msgid "Unrecognized layer '%s'."
 msgstr "无法识别的图层 '%s'。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:622
-#, fuzzy
 msgid "Missing severity name."
-msgstr "缺少版本号。"
+msgstr "缺少严重性名称。"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:83
 msgid "Checking via annular rings..."
@@ -29833,17 +29822,15 @@ msgstr "(%s 最小 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:406
 msgid "No project loaded, skipping library parity tests."
-msgstr ""
+msgstr "没有加载工程，跳过库的奇偶性测试。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:410
-#, fuzzy
 msgid "Loading footprint library table..."
-msgstr "加载封装库表时出错。"
+msgstr "正在加载封装库表..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:420
-#, fuzzy
 msgid "Checking board footprints against library..."
-msgstr "检查封装..."
+msgstr "正在根据库检查电路板封装..."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:113
 #, c-format
@@ -29874,14 +29861,12 @@ msgid "<unconstrained>"
 msgstr "< 无约束 >"
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:176
-#, fuzzy
 msgid "Gathering items..."
-msgstr "正在收集铜项目..."
+msgstr "正在收集项目..."
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:229
-#, fuzzy
 msgid "Checking mechanical clearances..."
-msgstr "正在检查孔间隙..."
+msgstr "正在检查机械间隙..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:112
 msgid "(no edges found on Edge.Cuts layer)"
@@ -29905,9 +29890,8 @@ msgid "Checking text variables..."
 msgstr "正在检查文本变量..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:361
-#, fuzzy
 msgid "Checking assertions..."
-msgstr "正在检查引脚..."
+msgstr "正在检查断言..."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
@@ -29938,9 +29922,8 @@ msgid "Checking PCB to schematic parity..."
 msgstr "正在检查 PCB 与原理图是否一致..."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:221
-#, fuzzy
 msgid "No netlist provided, skipping schematic parity tests."
-msgstr "没有提供网表， 跳过 LVS。"
+msgstr "没有提供网表，跳过原理图奇偶性测试。"
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:99
 msgid "Checking silkscreen for overlapping items..."
@@ -29953,62 +29936,57 @@ msgstr "正在将 %d 个丝印与 %d 个电路板项目测试相交..."
 
 #: pcbnew/drc/drc_test_provider_sliver_checker.cpp:83
 msgid "Running sliver detection on copper layers..."
-msgstr ""
+msgstr "在铜层上运行铜条检测..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:55
-#, fuzzy
 msgid "board setup solder mask min width"
-msgstr "电路板设置约束"
+msgstr "电路板设置阻焊层最小宽度"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:426
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:506
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "顶层阻焊层孔径桥接具有不同网络的项目"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:431
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:511
 msgid "Rear solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "底层阻焊层孔径桥接具有不同网络的项目"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:614
-#, fuzzy
 msgid "Building solder mask..."
-msgstr "构造敷铜填充..."
+msgstr "正在构造阻焊层..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:619
-#, fuzzy
 msgid "Checking solder mask to silk clearance..."
-msgstr "正在检查通孔到通孔间隙..."
+msgstr "正在检查阻焊层与丝印的间隙..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:624
-#, fuzzy
 msgid "Checking solder mask web integrity..."
-msgstr "正在检查布线宽度..."
+msgstr "正在检查阻焊层网络的完整性..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:85
-#, fuzzy
 msgid "Checking text dimensions..."
-msgstr "正在检查文本变量..."
+msgstr "正在检查文本尺寸..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min height %s; actual %s)"
-msgstr "(%s 最小宽度 %s; 实际 %s)"
+msgstr "(%s 最小高度 %s；实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max height %s; actual %s)"
-msgstr "(%s 最大宽度 %s; 实际 %s)"
+msgstr "(%s 最大高度 %s；实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min thickness %s; actual %s)"
-msgstr "(%s 最小宽度 %s; 实际 %s)"
+msgstr "(%s 最小宽度 %s；实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max thickness %s; actual %s)"
-msgstr "(%s 最大宽度 %s; 实际 %s)"
+msgstr "(%s 最大宽度 %s；实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:78
 msgid "Checking track widths..."
@@ -30029,14 +30007,13 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s 最大直径 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:81
-#, fuzzy
 msgid "Checking thermal reliefs..."
-msgstr "正在检查文本变量..."
+msgstr "正在检查防散热..."
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min spoke count %d; actual %d)"
-msgstr "(%s 最大计数：%d; 实际：%d)"
+msgstr "(%s 最小辐条数 %d；实际 %d)"
 
 #: pcbnew/edit_zone_helpers.cpp:86 pcbnew/edit_zone_helpers.cpp:151
 msgid "Modify zone properties"
@@ -31035,14 +31012,12 @@ msgid "Auto-Place Footprints"
 msgstr "自动放置封装"
 
 #: pcbnew/menubar_pcb_editor.cpp:410
-#, fuzzy
 msgid "Add Teardrops"
-msgstr "添加引线"
+msgstr "添加泪滴"
 
 #: pcbnew/menubar_pcb_editor.cpp:412
-#, fuzzy
 msgid "Remove Teardrops"
-msgstr "删除未使用的焊盘"
+msgstr "移除泪滴"
 
 #: pcbnew/menubar_pcb_editor.cpp:434
 msgid "External Plugins"
@@ -31627,14 +31602,12 @@ msgid "Soldermask Margin Override"
 msgstr "阻焊层边界覆盖"
 
 #: pcbnew/pad.cpp:1676 pcbnew/zone.cpp:1450
-#, fuzzy
 msgid "Thermal Relief Spoke Width"
-msgstr "花焊盘宽度"
+msgstr "防散热辐条宽度"
 
 #: pcbnew/pad.cpp:1679
-#, fuzzy
 msgid "Thermal Relief Spoke Angle"
-msgstr "防散热 (花焊盘) 间距"
+msgstr "防散热辐条角度"
 
 #: pcbnew/pad.cpp:1682 pcbnew/zone.cpp:1447
 msgid "Thermal Relief Gap"
@@ -31740,9 +31713,9 @@ msgid "Export Hyperlynx Layout"
 msgstr "导出 Hyperlynx 布局"
 
 #: pcbnew/pcb_expr_evaluator.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Missing layer name argument to %s."
-msgstr "缺少 '%s' 的参数"
+msgstr "缺少对 %s 的层名参数。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:130
 #, c-format
@@ -31751,10 +31724,10 @@ msgstr "无法识别的图层 '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:263 pcbnew/pcb_expr_evaluator.cpp:330
 #: pcbnew/pcb_expr_evaluator.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing footprint identifier argument (A, B, or reference designator) to %s."
-msgstr "使用位号链接封装"
+msgstr "缺少封装标识符参数（A，B，或位号）到 %s。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:500
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -31771,22 +31744,22 @@ msgstr "封装没有底层外框。"
 #: pcbnew/pcb_expr_evaluator.cpp:616
 #, c-format
 msgid "Missing rule-area identifier argument (A, B, or rule-area name) to %s."
-msgstr ""
+msgstr "缺少规则区标识符参数（A、B 或规则区名称）到 %s。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:719
-#, fuzzy, c-format
+#, c-format
 msgid "Missing group name argument to %s."
-msgstr "缺少 '%s' 的参数"
+msgstr "缺少对 %s 的组名参数。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:829
-#, fuzzy, c-format
+#, c-format
 msgid "Missing diff-pair name argument to %s."
-msgstr "缺少 '%s' 的参数"
+msgstr "缺少对 %s 的差分对名参数。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:877
-#, fuzzy, c-format
+#, c-format
 msgid "Missing field name argument to %s."
-msgstr "缺少 '%s' 的参数"
+msgstr "缺少对 %s 的字段名参数。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:1196
 msgid "must be mm, in, or mil"
@@ -31819,9 +31792,8 @@ msgid "Violation"
 msgstr "违规"
 
 #: pcbnew/pcb_marker.cpp:143
-#, fuzzy
 msgid "Severity"
-msgstr "恢复"
+msgstr "严重性"
 
 #: pcbnew/pcb_marker.cpp:191
 #, c-format
@@ -33524,11 +33496,11 @@ msgstr "选择差分对标注"
 
 #: pcbnew/router/router_tool.cpp:332
 msgid "Use differential pair dimensions from the net class"
-msgstr "使用网络类中的差分对标注"
+msgstr "使用网络类中的差分对尺寸"
 
 #: pcbnew/router/router_tool.cpp:337
 msgid "Specify custom differential pair dimensions"
-msgstr "指定自定义差分对标注"
+msgstr "指定自定义差分对尺寸"
 
 #: pcbnew/router/router_tool.cpp:354
 #, c-format
@@ -33748,22 +33720,20 @@ msgstr "一个导线_过孔指向了丢失的焊盘叠 \"%s\"。"
 #: pcbnew/teardrop/dialog_teardrop.cpp:177
 #, c-format
 msgid "%d Teardrops created"
-msgstr ""
+msgstr "%d 已创建泪滴"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:192
 #, c-format
 msgid "%d Teardrops removed."
-msgstr ""
+msgstr "%d 已移除泪滴。"
 
 #: pcbnew/teardrop/teardrop.cpp:189
-#, fuzzy
 msgid "Add teardrops"
-msgstr "添加引线"
+msgstr "添加泪滴"
 
 #: pcbnew/teardrop/teardrop.cpp:382
-#, fuzzy
 msgid "Remove teardrops"
-msgstr "删除项目"
+msgstr "移除泪滴"
 
 #: pcbnew/toolbars_footprint_editor.cpp:92
 msgid "Load footprint from current board"
@@ -33957,17 +33927,17 @@ msgstr "无法为空组合生成间隙报告。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 msgid "Zone connection resolution for:"
-msgstr "区域连接解像度，用于："
+msgstr "敷铜连接解像度，用于："
 
 #: pcbnew/tools/board_inspection_tool.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "敷铜防散热 (花焊盘)：%s。"
+msgstr "已解决的散热间隙：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal spoke width: %s."
-msgstr "防散热导线宽度："
+msgstr "已解决的散热辐条宽度：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:422
 #, c-format
@@ -34002,27 +33972,24 @@ msgid "Hole clearance resolution for:"
 msgstr "孔间隙解像度，用于:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:602
-#, fuzzy
 msgid "Mechanical"
-msgstr "非金属化孔，机械的"
+msgstr "机械"
 
 #: pcbnew/tools/board_inspection_tool.cpp:611
-#, fuzzy
 msgid "Mechanical clearance resolution for:"
-msgstr "边缘间隙解析解像度，用于:"
+msgstr "机械间隙解析为："
 
 #: pcbnew/tools/board_inspection_tool.cpp:623
 msgid "No 'mechanical_clearance' constraints defined."
-msgstr ""
+msgstr "未定义 'mechanical_clearance' (机械间隙) 约束。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:650
-#, fuzzy
 msgid "Mechanical hole clearance resolution for:"
-msgstr "孔间隙解像度，用于:"
+msgstr "机械孔间隙解析为："
 
 #: pcbnew/tools/board_inspection_tool.cpp:662
 msgid "No 'mechanical_hole_clearance' constraints defined."
-msgstr ""
+msgstr "未定义 'mechanical_hole_clearance' (机械孔间隙) 约束。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:716
 msgid "Select an item for a constraints resolution report."
@@ -34107,13 +34074,12 @@ msgid "Item allowed at current location."
 msgstr "当前位置允许的项目。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:843
-#, fuzzy
 msgid "Assertions"
-msgstr "操作"
+msgstr "断言"
 
 #: pcbnew/tools/board_inspection_tool.cpp:844
 msgid "Assertions for:"
-msgstr ""
+msgstr "断言："
 
 #: pcbnew/tools/convert_tool.cpp:77
 msgid "Create from Selection"
@@ -34526,14 +34492,12 @@ msgid "Add a center dimension"
 msgstr "添加中心标注"
 
 #: pcbnew/tools/pcb_actions.cpp:139
-#, fuzzy
 msgid "Add Radial Dimension"
-msgstr "添加尺寸标注"
+msgstr "添加径向标注"
 
 #: pcbnew/tools/pcb_actions.cpp:139
-#, fuzzy
 msgid "Add a radial dimension"
-msgstr "添加引线标注"
+msgstr "添加径向标注"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add Orthogonal Dimension"
@@ -36546,39 +36510,33 @@ msgid "Select preset:"
 msgstr "选择预设："
 
 #: pcbnew/widgets/appearance_controls.cpp:2557
-#, fuzzy
 msgid "Save viewport..."
-msgstr "保存预设..."
+msgstr "保存视口..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2558
-#, fuzzy
 msgid "Delete viewport..."
-msgstr "删除预设..."
+msgstr "删除视口..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2605
 #, fuzzy
 msgid "Viewport name:"
-msgstr "禁止名称："
+msgstr "视口名称。"
 
 #: pcbnew/widgets/appearance_controls.cpp:2605
-#, fuzzy
 msgid "Save Viewport"
-msgstr "保存报告文件"
+msgstr "保存视口"
 
 #: pcbnew/widgets/appearance_controls.cpp:2643
-#, fuzzy
 msgid "Viewports"
-msgstr "报告"
+msgstr "视口"
 
 #: pcbnew/widgets/appearance_controls.cpp:2652
-#, fuzzy
 msgid "Delete Viewport"
-msgstr "删除过孔"
+msgstr "删除视口"
 
 #: pcbnew/widgets/appearance_controls.cpp:2653
-#, fuzzy
 msgid "Select viewport:"
-msgstr "选择预设："
+msgstr "选择视口："
 
 #: pcbnew/widgets/appearance_controls.cpp:3089
 msgid "Open Preferences"
@@ -36617,9 +36575,8 @@ msgid "Layer presets"
 msgstr "层预设"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:182
-#, fuzzy
 msgid "Viewports (Alt+Tab):"
-msgstr "预设 (Ctrl+Tab)："
+msgstr "视口 (Alt+Tab)："
 
 #: pcbnew/widgets/panel_selection_filter.cpp:146
 #, c-format
@@ -36640,7 +36597,7 @@ msgstr "规则区域"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
 msgid "Dimensions"
-msgstr "尺寸"
+msgstr "标注"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
 msgid "Other items"
@@ -36724,7 +36681,7 @@ msgstr "%s 上的敷铜挖空"
 #: pcbnew/zone.cpp:847
 #, c-format
 msgid "Rule Area on %s"
-msgstr "%s上的规则区域"
+msgstr "%s 上的规则区域"
 
 #: pcbnew/zone.cpp:849
 #, c-format
@@ -36736,9 +36693,8 @@ msgid "Inherited"
 msgstr "继承"
 
 #: pcbnew/zone.cpp:1428
-#, fuzzy
 msgid "Thermal reliefs for PTH"
-msgstr "防散热 (花焊盘)"
+msgstr "用于金属化孔 (PTH) 的防散热"
 
 #: pcbnew/zone.cpp:1442
 msgid "Min Width"
@@ -36773,7 +36729,6 @@ msgid "Performing polygon fills..."
 msgstr "执行多边形填充..."
 
 #: pcbnew/zones.h:59
-#, fuzzy
 msgid "inherited"
 msgstr "继承"
 
@@ -36782,19 +36737,16 @@ msgid "none"
 msgstr "无"
 
 #: pcbnew/zones.h:61
-#, fuzzy
 msgid "thermal reliefs"
 msgstr "防散热 (花焊盘)"
 
 #: pcbnew/zones.h:62
-#, fuzzy
 msgid "solid"
 msgstr "实心"
 
 #: pcbnew/zones.h:63
-#, fuzzy
 msgid "thermal reliefs for PTH"
-msgstr "防散热 (花焊盘)"
+msgstr "用于金属化孔 (PTH) 的防散热"
 
 #: plugins/3d/vrml/vrml.cpp:228
 msgid "[INFO] load failed: input line too long\n"
