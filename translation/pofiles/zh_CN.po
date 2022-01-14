@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-01-13 14:56+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2022-01-15 22:43+0000\n"
+"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v6/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -25093,7 +25093,7 @@ msgstr "警告：测试点属性在\"非导通孔\"(NPTH)焊盘上没有意义�
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1381
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
-msgstr "警告：散热片属性在\"非导通孔\"(NPTH) 焊盘上没有意义。"
+msgstr "警告：防散热片属性在\"非导通孔\"(NPTH) 焊盘上没有意义。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1387
 msgid "Warning: Castellated property is for PTH pads."
@@ -25417,7 +25417,7 @@ msgstr "测试点焊盘"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1661
 msgid "Heatsink pad"
-msgstr "散热片焊盘"
+msgstr "防散热片焊盘"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 msgid "Castellated pad (through hole only)"
@@ -30778,7 +30778,7 @@ msgstr "测试点"
 
 #: pcbnew/pad.cpp:927
 msgid "Heat sink"
-msgstr "散热片"
+msgstr "防散热片"
 
 #: pcbnew/pad.cpp:928
 msgid "Castellated"
