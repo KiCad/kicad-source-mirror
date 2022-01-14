@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
 "PO-Revision-Date: 2022-01-15 22:43+0000\n"
-"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v6/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -5931,7 +5931,7 @@ msgstr "网格属性..."
 
 #: common/tool/actions.cpp:481
 msgid "Set grid dimensions"
-msgstr "设置网格标注"
+msgstr "设置网格尺寸"
 
 #: common/tool/actions.cpp:486
 msgid "Use inches"
@@ -27153,9 +27153,7 @@ msgstr "模仿旧行为"
 msgid ""
 "Produces a slightly smoother outline at the expense of performance, some "
 "export fidelity issues, and overly aggressive higher-priority zone knockouts."
-msgstr ""
-"以牺牲性能、一些导出保真度问题和过于激进的高优先级区域挖空为代价，生成稍微平"
-"滑的轮廓。"
+msgstr "以牺牲性能、一些导出保真度问题和过于激进的高优先级敷铜挖空为代价，生成稍微平滑的轮廓。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:116
 msgid "Smoothed polygons (best performance)"
@@ -28553,7 +28551,7 @@ msgstr "没有定义差分对间距。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr "预定义布线和过孔标注："
+msgstr "预定义布线和过孔尺寸："
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
@@ -32761,11 +32759,11 @@ msgstr "选择差分对标注"
 
 #: pcbnew/router/router_tool.cpp:332
 msgid "Use differential pair dimensions from the net class"
-msgstr "使用网络类中的差分对标注"
+msgstr "使用网络类中的差分对尺寸"
 
 #: pcbnew/router/router_tool.cpp:337
 msgid "Specify custom differential pair dimensions"
-msgstr "指定自定义差分对标注"
+msgstr "指定自定义差分对尺寸"
 
 #: pcbnew/router/router_tool.cpp:354
 #, c-format
@@ -33171,7 +33169,7 @@ msgstr "无法为空组合生成间隙报告。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:383
 msgid "Zone connection resolution for:"
-msgstr "区域连接解像度，用于："
+msgstr "敷铜连接解像度，用于："
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 #, c-format
@@ -35782,7 +35780,7 @@ msgstr "规则区域"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
 msgid "Dimensions"
-msgstr "尺寸"
+msgstr "标注"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
 msgid "Other items"
@@ -35866,7 +35864,7 @@ msgstr "%s 上的敷铜挖空"
 #: pcbnew/zone.cpp:897
 #, c-format
 msgid "Rule Area on %s"
-msgstr "%s上的规则区域"
+msgstr "%s 上的规则区域"
 
 #: pcbnew/zone.cpp:899
 #, c-format
