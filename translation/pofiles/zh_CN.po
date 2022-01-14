@@ -29301,7 +29301,7 @@ msgstr "敷铜"
 #: pcbnew/drc/drc_engine.cpp:1242
 #, c-format
 msgid "Zone %s thermal relief gap: %s."
-msgstr "区域 %s 防散热 (花焊盘) 间距：%s。"
+msgstr "敷铜 %s 散热间隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1258
 #, c-format
