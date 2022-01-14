@@ -739,7 +739,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
         {
             int smallDrill = (aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE)
-                                  ? ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize : INT_MAX;
+                                  ? Millimeter2iu( ADVANCED_CFG::GetCfg().m_SmallDrillMarkSize ) : INT_MAX;
 
             for( FOOTPRINT* footprint : aBoard->Footprints() )
             {
