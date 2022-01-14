@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1420,15 +1420,22 @@ void EDA_SHAPE::SwapShape( EDA_SHAPE* aImage )
     EDA_SHAPE* image = dynamic_cast<EDA_SHAPE*>( aImage );
     assert( image );
 
-    std::swap( m_stroke, image->m_stroke );
-    std::swap( m_start, image->m_start );
-    std::swap( m_end, image->m_end );
-    std::swap( m_arcCenter, image->m_arcCenter );
-    std::swap( m_shape, image->m_shape );
-    std::swap( m_bezierC1, image->m_bezierC1 );
-    std::swap( m_bezierC2, image->m_bezierC2 );
-    std::swap( m_bezierPoints, image->m_bezierPoints );
-    std::swap( m_poly, image->m_poly );
+    #define SWAPITEM( x ) std::swap( x, image->x )
+    SWAPITEM( m_stroke );
+    SWAPITEM( m_start );
+    SWAPITEM( m_end );
+    SWAPITEM( m_arcCenter );
+    SWAPITEM( m_shape );
+    SWAPITEM( m_bezierC1 );
+    SWAPITEM( m_bezierC2 );
+    SWAPITEM( m_bezierPoints );
+    SWAPITEM( m_poly );
+    SWAPITEM( m_fill );
+    SWAPITEM( m_fillColor );
+    SWAPITEM( m_eeWinding );
+    SWAPITEM( m_editState );
+    SWAPITEM( m_endsSwapped );
+    #undef SWAPITEM
 }
 
 
