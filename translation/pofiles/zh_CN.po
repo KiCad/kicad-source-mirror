@@ -29251,7 +29251,7 @@ msgstr "应用无条件规则。"
 
 #: pcbnew/drc/drc_engine.cpp:1083
 msgid "Unconditional rule applied; overrides previous constraints."
-msgstr "已应用无条件的规则；覆盖以前的约束。"
+msgstr "应用无条件的规则；覆盖以前的约束。"
 
 #: pcbnew/drc/drc_engine.cpp:1098 pcbnew/drc/drc_engine.cpp:1323
 #, c-format
