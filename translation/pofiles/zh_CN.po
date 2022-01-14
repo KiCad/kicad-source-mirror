@@ -29286,7 +29286,7 @@ msgstr "本地间隙 %s；间隙：%s。"
 #: pcbnew/drc/drc_engine.cpp:1211
 #, c-format
 msgid "Footprint %s zone connection: %s."
-msgstr "封装 %s 区域连接：%s。"
+msgstr "封装 %s 敷铜连接：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1226
 #, c-format
