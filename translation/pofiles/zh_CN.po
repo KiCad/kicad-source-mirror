@@ -29291,7 +29291,7 @@ msgstr "封装 %s 敷铜连接：%s。"
 #: pcbnew/drc/drc_engine.cpp:1226
 #, c-format
 msgid "Zone %s pad connection: %s."
-msgstr "区域 %s 焊盘连接：%s。"
+msgstr "敷铜 %s 焊盘连接：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1230 pcbnew/drc/drc_engine.cpp:1246
 #: pcbnew/drc/drc_engine.cpp:1262 pcbnew/zone.cpp:327 pcbnew/zone.cpp:476
