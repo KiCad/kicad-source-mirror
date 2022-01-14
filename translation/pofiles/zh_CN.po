@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-14 10:32+0000\n"
+"PO-Revision-Date: 2022-01-15 22:43+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -27613,7 +27613,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:402
 msgid "Minimum uVia hole:"
-msgstr "最小微孔内径："
+msgstr "最小 U 形导通孔："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:407
 msgid ""
@@ -29832,7 +29832,7 @@ msgstr "正在加载封装库表..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:420
 msgid "Checking board footprints against library..."
-msgstr "正在根据库检查电路板封装..."
+msgstr "正在根据库检查电路板封装…"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:113
 #, c-format
@@ -29864,11 +29864,11 @@ msgstr "< 无约束 >"
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:176
 msgid "Gathering items..."
-msgstr "正在收集项目..."
+msgstr "正在收集项目…"
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:229
 msgid "Checking mechanical clearances..."
-msgstr "正在检查机械间隙..."
+msgstr "正在检查机械间隙…"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:112
 msgid "(no edges found on Edge.Cuts layer)"
@@ -29893,7 +29893,7 @@ msgstr "正在检查文本变量..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:361
 msgid "Checking assertions..."
-msgstr "正在检查断言..."
+msgstr "正在检查断言…"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
@@ -29956,19 +29956,19 @@ msgstr "底层阻焊层孔径桥接具有不同网络的项目"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:614
 msgid "Building solder mask..."
-msgstr "正在构造阻焊层..."
+msgstr "正在构造阻焊层…"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:619
 msgid "Checking solder mask to silk clearance..."
-msgstr "正在检查阻焊层与丝印的间隙..."
+msgstr "正在检查阻焊层与丝印的间隙…"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:624
 msgid "Checking solder mask web integrity..."
-msgstr "正在检查阻焊层网络的完整性..."
+msgstr "正在检查阻焊层网络的完整性…"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:85
 msgid "Checking text dimensions..."
-msgstr "正在检查文本尺寸..."
+msgstr "正在检查文本尺寸…"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:165
 #, c-format
@@ -31717,7 +31717,7 @@ msgstr "导出 Hyperlynx 布局"
 #: pcbnew/pcb_expr_evaluator.cpp:94
 #, c-format
 msgid "Missing layer name argument to %s."
-msgstr "缺少对 %s 的层名参数。"
+msgstr "缺少 %s 的层名参数。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:130
 #, c-format
@@ -31729,7 +31729,7 @@ msgstr "无法识别的图层 '%s'"
 #, c-format
 msgid ""
 "Missing footprint identifier argument (A, B, or reference designator) to %s."
-msgstr "缺少封装标识符参数（A，B，或位号）到 %s。"
+msgstr "缺少 %s 的封装标识符参数（A，B，或位号）。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:500
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -31751,17 +31751,17 @@ msgstr "缺少规则区标识符参数（A、B 或规则区名称）到 %s。"
 #: pcbnew/pcb_expr_evaluator.cpp:719
 #, c-format
 msgid "Missing group name argument to %s."
-msgstr "缺少对 %s 的组名参数。"
+msgstr "缺少 %s 的组名参数。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:829
 #, c-format
 msgid "Missing diff-pair name argument to %s."
-msgstr "缺少对 %s 的差分对名参数。"
+msgstr "缺少 %s 的差分对名参数。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:877
 #, c-format
 msgid "Missing field name argument to %s."
-msgstr "缺少对 %s 的字段名参数。"
+msgstr "缺少 %s 的字段名参数。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:1196
 msgid "must be mm, in, or mil"
@@ -33934,12 +33934,12 @@ msgstr "敷铜连接解像度，用于："
 #: pcbnew/tools/board_inspection_tool.cpp:406
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "已解决的散热间隙：%s。"
+msgstr "已解决的防散热间隙：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:416
 #, c-format
 msgid "Resolved thermal spoke width: %s."
-msgstr "已解决的散热辐条宽度：%s。"
+msgstr "已解决的防散热辐条宽度：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:422
 #, c-format
@@ -33979,7 +33979,7 @@ msgstr "机械"
 
 #: pcbnew/tools/board_inspection_tool.cpp:611
 msgid "Mechanical clearance resolution for:"
-msgstr "机械间隙解析为："
+msgstr "下列项目的机械间隙分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:623
 msgid "No 'mechanical_clearance' constraints defined."
@@ -33987,7 +33987,7 @@ msgstr "未定义 'mechanical_clearance' (机械间隙) 约束。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:650
 msgid "Mechanical hole clearance resolution for:"
-msgstr "机械孔间隙解析为："
+msgstr "下列项目的机械孔间隙分辨率："
 
 #: pcbnew/tools/board_inspection_tool.cpp:662
 msgid "No 'mechanical_hole_clearance' constraints defined."
@@ -36513,11 +36513,11 @@ msgstr "选择预设："
 
 #: pcbnew/widgets/appearance_controls.cpp:2557
 msgid "Save viewport..."
-msgstr "保存视口..."
+msgstr "保存视口…"
 
 #: pcbnew/widgets/appearance_controls.cpp:2558
 msgid "Delete viewport..."
-msgstr "删除视口..."
+msgstr "删除视口…"
 
 #: pcbnew/widgets/appearance_controls.cpp:2605
 msgid "Viewport name:"
