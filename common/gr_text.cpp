@@ -153,11 +153,10 @@ void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const 
                 else
                     GRCSegm( nullptr, aDC, aPt1.x, aPt1.y, aPt2.x, aPt2.y, aWidth, 0, aColor );
             },
-            // Triangulation callback
-            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
+            // Polygon callback
+            [&]( const SHAPE_LINE_CHAIN& aPoly )
             {
-                VECTOR2I pts[3] = { aPt1, aPt2, aPt3 };
-                GRClosedPoly( nullptr, aDC, 3, pts, true, 0, aColor, aColor );
+                GRClosedPoly( nullptr, aDC, aPoly.PointCount(), aPoly.CPoints().data(), true, aColor, aColor );
             } );
 
     TEXT_ATTRIBUTES attributes;
