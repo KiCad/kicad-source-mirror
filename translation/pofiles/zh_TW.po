@@ -1,4 +1,4 @@
-# taotieren <admin@taotieren.com>, 2021.
+# taotieren <admin@taotieren.com>, 2021, 2022.
 # kai chiao chuang <joechuang01.tw@gmail.com>, 2021.
 # David Chen <d0123456789g@yahoo.com.tw>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-05 00:19+0000\n"
-"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
+"PO-Revision-Date: 2022-01-15 22:43+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -38,7 +38,7 @@ msgstr "構建電路板邊框"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:506
 msgid "Create layers"
-msgstr "建立板層"
+msgstr "建立圖層"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:655
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:100
@@ -1662,21 +1662,19 @@ msgstr "確定 (&O)"
 
 #: common/dialog_shim.cpp:660
 msgid "&Cancel"
-msgstr "取消(&C)"
+msgstr "取消 (&C)"
 
 #: common/dialog_shim.cpp:661
 msgid "&Yes"
-msgstr ""
+msgstr "是 (&Y)"
 
 #: common/dialog_shim.cpp:662
-#, fuzzy
 msgid "&No"
-msgstr "否"
+msgstr "否(&N)"
 
 #: common/dialog_shim.cpp:663
-#, fuzzy
 msgid "&Apply"
-msgstr "應用"
+msgstr "應用(&A)"
 
 #: common/dialog_shim.cpp:664
 msgid "&Save"
@@ -1891,9 +1889,9 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad 首次使用新的 %s 庫表來訪問庫。\n"
-"為了讓 KiCad 訪問 %s 庫，\n"
-"您必須配置全域性 %s 庫表。\n"
+"KiCad 首次使用新的%s庫表來訪問庫。\n"
+"為了讓 KiCad 訪問%s庫，\n"
+"您必須配置全域性%s庫表。\n"
 "請從以下選項中選擇一個。\n"
 "如果您不確定要選擇哪個選項，請使用預設選擇。"
 
@@ -2945,7 +2943,7 @@ msgstr "(這個臨時解決方案將改善一些 GTK HiDPI 字型縮放問題。
 
 #: common/dialogs/panel_common_settings_base.cpp:171
 msgid "High-contrast mode dimming factor:"
-msgstr ""
+msgstr "高對比度模式的調光係數："
 
 #: common/dialogs/panel_common_settings_base.cpp:178
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
@@ -2987,11 +2985,11 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:210
 msgid "Session"
-msgstr "工作階段"
+msgstr "會話"
 
 #: common/dialogs/panel_common_settings_base.cpp:212
 msgid "Remember open files for next project launch"
-msgstr "啟動時開啟的上一次的專案"
+msgstr "啟動時開啟的上一次的工程"
 
 #: common/dialogs/panel_common_settings_base.cpp:214
 msgid ""
@@ -3039,11 +3037,11 @@ msgstr "天"
 
 #: common/dialogs/panel_common_settings_base.cpp:270
 msgid "Project Backup"
-msgstr "專案備份"
+msgstr "工程備份"
 
 #: common/dialogs/panel_common_settings_base.cpp:277
 msgid "Automatically backup projects"
-msgstr "專案自動備份"
+msgstr "自動備份工程"
 
 #: common/dialogs/panel_common_settings_base.cpp:278
 msgid ""
@@ -3350,9 +3348,8 @@ msgstr "點劃線"
 
 #: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1617
 #: include/stroke_params.h:74
-#, fuzzy
 msgid "Dash-Dot-Dot"
-msgstr "點劃線"
+msgstr "雙點劃線"
 
 #: common/dialogs/panel_setup_netclasses.cpp:442
 msgid "Netclass must have a name."
@@ -4123,9 +4120,8 @@ msgstr "網路標籤"
 
 #: common/eda_item.cpp:350 eeschema/sch_text.cpp:1195
 #: eeschema/sch_text.cpp:1497
-#, fuzzy
 msgid "Net Class Flag"
-msgstr "網路類"
+msgstr "網路類標記"
 
 #: common/eda_item.cpp:351 eeschema/sch_text.cpp:1196
 msgid "Global Label"
@@ -4602,19 +4598,18 @@ msgstr "寫入配置檔案時出錯"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:101
 #: eeschema/dialogs/dialog_text_properties_base.cpp:67
-#, fuzzy
 msgid "Default Font"
-msgstr "預設計量單位："
+msgstr "預設字型"
 
 #: common/font/fontconfig.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading font '%s'."
-msgstr "載入 PCB '%s' 時出錯。"
+msgstr "載入字型 '%s' 時出錯。"
 
 #: common/font/fontconfig.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "未找到封裝 \"%s\" 。"
+msgstr "未找到字型 \"%s\" ；替代 '%s'。"
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:884
 #: eeschema/symbol_editor/symbol_library_manager.cpp:104
@@ -4960,11 +4955,11 @@ msgstr "F.Paste"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
-msgstr "B.Silkscreen"
+msgstr "底層絲印層"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
+msgstr "頂層絲印層"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
@@ -4996,15 +4991,15 @@ msgstr "Edge.Cuts"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:656
 msgid "Margin"
-msgstr "Margin"
+msgstr "邊界"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
-msgstr "F.Courtyard"
+msgstr "頂層外框層"
 
 #: common/layer_id.cpp:85
 msgid "B.Courtyard"
-msgstr "B.Courtyard"
+msgstr "底層外框層"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
@@ -5105,14 +5100,12 @@ msgid "Symbol fields"
 msgstr "符號欄位"
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Sheet references"
-msgstr "插入圖紙頁參考"
+msgstr "圖框參考"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Net class references"
-msgstr "網路類"
+msgstr "網路類參考"
 
 #: common/layer_id.cpp:119
 msgid "Symbol body outlines"
@@ -5128,9 +5121,8 @@ msgid "Schematic text && graphics"
 msgstr "原理圖文字和圖形"
 
 #: common/layer_id.cpp:122
-#, fuzzy
 msgid "Schematic text && graphics backgrounds"
-msgstr "原理圖文字和圖形"
+msgstr "原理圖文字和圖形背景"
 
 #: common/layer_id.cpp:123
 msgid "Pins"
@@ -5174,9 +5166,8 @@ msgid "ERC errors"
 msgstr "ERC 錯誤"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "ERC exclusions"
-msgstr "DRC 排除"
+msgstr "ERC 排除"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:171
 #: pcbnew/widgets/appearance_controls.cpp:354
@@ -5574,14 +5565,12 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "已建立 Zip 壓縮包 \"%s\" (%s 未壓縮，%s 已壓縮)。"
 
 #: common/rc_item.cpp:360
-#, fuzzy
 msgid "Excluded warning: "
-msgstr "縮放比例:"
+msgstr "排除的警告： "
 
 #: common/rc_item.cpp:362
-#, fuzzy
 msgid "Excluded error: "
-msgstr "排除 "
+msgstr "排除的錯誤： "
 
 #: common/rc_item.cpp:366
 msgid "Warning: "
@@ -6024,7 +6013,7 @@ msgstr "網格屬性..."
 
 #: common/tool/actions.cpp:481
 msgid "Set grid dimensions"
-msgstr "設定網格標註"
+msgstr "設定網格尺寸"
 
 #: common/tool/actions.cpp:486
 msgid "Use inches"
@@ -6334,9 +6323,8 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "Y 軸的映象尚不支援"
 
 #: common/widgets/font_choice.cpp:58
-#, fuzzy
 msgid "<not found>"
-msgstr "Not found"
+msgstr "<未找到>"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
@@ -6606,7 +6594,7 @@ msgstr "所有 KiCad 工程檔案"
 
 #: common/wildcards_and_files_ext.cpp:235
 msgid "All KiCad schematic files"
-msgstr "所有KiCad電路圖檔案"
+msgstr "所有 KiCad 原理圖檔案"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad legacy schematic files"
@@ -8553,9 +8541,8 @@ msgstr "設定為"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:218
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:170
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:108
-#, fuzzy
 msgid "Font:"
-msgstr "字體大小:"
+msgstr "字型："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
@@ -8565,9 +8552,8 @@ msgstr "字體大小:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:174
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:112
-#, fuzzy
 msgid "KiCad Font"
-msgstr "KiCad"
+msgstr "KiCad 字型"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:191
 #: eeschema/dialogs/dialog_label_properties_base.cpp:237
@@ -8629,9 +8615,8 @@ msgstr "線條樣式："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:354
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:90
-#, fuzzy
 msgid "Fill color:"
-msgstr "線條顏色："
+msgstr "填充顏色："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:363
 msgid "Junction size:"
@@ -8644,7 +8629,7 @@ msgstr "結點顏色："
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:115
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:101
 msgid "Edit Text and Graphic Properties"
-msgstr "編輯文字和圖形屬性屬性"
+msgstr "編輯文字和圖形屬性"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
 msgid "symbol"
@@ -8722,9 +8707,8 @@ msgid "Junction Properties"
 msgstr "結點屬性"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:96
-#, fuzzy
 msgid "Pin length:"
-msgstr "引腳長度 (&P)："
+msgstr "引腳長度："
 
 #: eeschema/dialogs/dialog_label_properties.cpp:101
 msgid "Global Label Properties"
@@ -8740,23 +8724,20 @@ msgid "Label Properties"
 msgstr "標籤屬性"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:104
-#, fuzzy
 msgid "Net Class Flag Properties"
-msgstr "網路類引數"
+msgstr "網路類標記屬性"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:105
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "層次分頁引腳屬性"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:394
-#, fuzzy
 msgid "Label can not be empty."
-msgstr "網路名稱變數名不能為空。"
+msgstr "標籤不能為空。"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:574
-#, fuzzy
 msgid "The first field is mandatory."
-msgstr "首欄位 %d 是必填欄位。"
+msgstr "首欄位必填。"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:29
 #: eeschema/dialogs/dialog_label_properties_base.cpp:38
@@ -8927,13 +8908,12 @@ msgid "Passive"
 msgstr "無源"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:161
-#, fuzzy
 msgid "Dot"
 msgstr "點"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:167
 msgid "Diamond"
-msgstr ""
+msgstr "菱形"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:177
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -9135,9 +9115,8 @@ msgid "New Symbol"
 msgstr "新建符號"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
-#, fuzzy
 msgid "Set width to 0 to use Schematic default symbol line width."
-msgstr "將寬度設為 0 以使用網路類行寬。"
+msgstr "將寬度設為 0 以使用原理圖預設符號行寬度。"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:53
 msgid "Fill Style"
@@ -9156,9 +9135,8 @@ msgid "Fill with body background color"
 msgstr "填充主體背景顏色"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:69
-#, fuzzy
 msgid "Fill with:"
-msgstr "填充型別:"
+msgstr "填充物:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:81
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:167
@@ -9410,14 +9388,12 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:116
-#, fuzzy
 msgid "Horizontal text"
-msgstr "水平向左"
+msgstr "水平文字"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:121
-#, fuzzy
 msgid "Vertical text"
-msgstr "垂直"
+msgstr "垂直文字"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:146
 #: eeschema/dialogs/dialog_text_properties_base.cpp:107
@@ -9426,9 +9402,8 @@ msgid "Align left"
 msgstr "左對齊"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:151
-#, fuzzy
 msgid "Align horizontal center"
-msgstr "與水平中心對齊"
+msgstr "水平居中對齊"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:156
 #: eeschema/dialogs/dialog_text_properties_base.cpp:97
@@ -9443,9 +9418,8 @@ msgid "Align top"
 msgstr "頂部對齊"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:171
-#, fuzzy
 msgid "Align vertical center"
-msgstr "與垂直中心對齊"
+msgstr "垂直居中對齊"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:176
 #: eeschema/dialogs/dialog_text_properties_base.cpp:102
@@ -10322,19 +10296,17 @@ msgid "Filled shape"
 msgstr "填充形狀"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:110
-#, fuzzy
 msgid "Set line width to 0 to use Schematic Editor line widths."
-msgstr "將寬度設為 0 以使用網路類行寬。"
+msgstr "將行寬設為 0 以使用原理圖編輯器行寬。"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:114
-#, fuzzy
 msgid "Set line color to transparent to use Schematic Editor colors."
-msgstr "將顏色設為透明以使用原理圖編輯器顏色。"
+msgstr "將行顏色設為透明以使用原理圖編輯器顏色。"
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "屬性"
+msgstr "%s 屬性"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -10830,9 +10802,8 @@ msgid "Subcircuit"
 msgstr "支路"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:85
-#, fuzzy
 msgid "Code Model"
-msgstr "模型模式"
+msgstr "程式碼模型"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:452
 msgid ""
@@ -11564,9 +11535,8 @@ msgid "Remap Symbols"
 msgstr "重新對映符號"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:241
-#, fuzzy
 msgid "Text can not be empty."
-msgstr "網路名稱變數名不能為空。"
+msgstr "文字不能為空。"
 
 #: eeschema/dialogs/dialog_text_properties_base.h:82
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -11671,9 +11641,8 @@ msgid "Appearance"
 msgstr "外觀"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
-#, fuzzy
 msgid "Default font:"
-msgstr "預設格式"
+msgstr "預設字型："
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:46
 msgid "S&how hidden pins"
@@ -11684,28 +11653,24 @@ msgid "Show hidden fields"
 msgstr "顯示隱藏欄位"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:52
-#, fuzzy
 msgid "Show ERC errors"
-msgstr "ERC 錯誤"
+msgstr "顯示 ERC 錯誤"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:55
-#, fuzzy
 msgid "Show ERC warnings"
-msgstr "ERC 警告"
+msgstr "顯示 ERC 警告"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:58
-#, fuzzy
 msgid "Show ERC exclusions"
-msgstr "DRC 排除"
+msgstr "顯示 ERC 排除"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Show page limi&ts"
 msgstr "顯示圖框範圍 (&T)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:69
-#, fuzzy
 msgid "Selection && Highlighting"
-msgstr "選擇高亮"
+msgstr "選擇&&高亮"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
 msgid "Draw selected text items as box"
@@ -11720,19 +11685,16 @@ msgid "Fill selected shapes"
 msgstr "填充所選形狀"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:86
-#, fuzzy
 msgid "Selection thickness:"
-msgstr "預設線粗細："
+msgstr "選區厚度："
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:94
-#, fuzzy
 msgid "(selection color can be edited in the \"Colors\" page)"
-msgstr "（可以在“顏色”頁面中編輯高亮顏色）"
+msgstr "（可以在“顏色”頁面編輯選區顏色）"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:98
-#, fuzzy
 msgid "Highlight thickness:"
-msgstr "高亮粗細 (&H)："
+msgstr "高亮粗細："
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:113
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
@@ -12048,26 +12010,23 @@ msgstr "]"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:213
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:21
-#, fuzzy
 msgid "Dashed Lines"
-msgstr "閃爍的項目:"
+msgstr "虛線"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:220
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:28
-#, fuzzy
 msgid "Dash length:"
-msgstr "過孔長度："
+msgstr "Dash 長度："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:227
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:35
-#, fuzzy
 msgid "Gap length:"
-msgstr "過孔長度："
+msgstr "Gap 長度："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:237
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
 msgid "Dash and dot lengths are ratios of the line width."
-msgstr ""
+msgstr "虛線和點長度是線條寬度的比率。"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:169
 msgid "No error or warning"
@@ -12107,6 +12066,8 @@ msgid ""
 "Set to 0 to allow symbols to inherit their line widths from\n"
 "their parent Schematic"
 msgstr ""
+"設定為 0 可允許符號繼承其\n"
+"父系原理圖的線寬"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:55
 msgid "D&efault pin length:"
@@ -13413,9 +13374,8 @@ msgstr "回到先前選中的圖框"
 
 #: eeschema/sch_field.cpp:865 eeschema/sch_text.cpp:648
 #: eeschema/sch_text.cpp:1510
-#, fuzzy
 msgid "Sheet References"
-msgstr "插入圖紙頁參考"
+msgstr "圖框位號"
 
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:42
 #, c-format
@@ -15874,14 +15834,12 @@ msgid "Add a net label"
 msgstr "新增網路標籤"
 
 #: eeschema/tools/ee_actions.cpp:301
-#, fuzzy
 msgid "Add Net Class Flag"
-msgstr "網路類"
+msgstr "新增網路類標記"
 
 #: eeschema/tools/ee_actions.cpp:301
-#, fuzzy
 msgid "Add a net class flag"
-msgstr "新增網路標籤"
+msgstr "新增網路類標籤"
 
 #: eeschema/tools/ee_actions.cpp:307
 msgid "Add Hierarchical Label"
@@ -16109,14 +16067,12 @@ msgid "Change existing item to a label"
 msgstr "將現有專案更改為標籤"
 
 #: eeschema/tools/ee_actions.cpp:478
-#, fuzzy
 msgid "Change to Net Class Flag"
-msgstr "改為註釋文字"
+msgstr "改為網路類標籤"
 
 #: eeschema/tools/ee_actions.cpp:478
-#, fuzzy
 msgid "Change existing item to a net class flag"
-msgstr "將現有專案更改為標籤"
+msgstr "將現有專案更改為網路類標籤"
 
 #: eeschema/tools/ee_actions.cpp:483
 msgid "Change to Hierarchical Label"
@@ -16369,34 +16325,28 @@ msgid "Toggle display of hidden text fields"
 msgstr "切換是否顯示隱藏的文字欄位"
 
 #: eeschema/tools/ee_actions.cpp:660
-#, fuzzy
 msgid "Show ERC Warnings"
-msgstr "DRC 警告"
+msgstr "顯示 ERC 警告"
 
 #: eeschema/tools/ee_actions.cpp:660
-#, fuzzy
 msgid "Show markers for electrical rules checker warnings"
-msgstr "執行電氣規則檢查"
+msgstr "顯示電氣規則檢查警告記號"
 
 #: eeschema/tools/ee_actions.cpp:664
-#, fuzzy
 msgid "Show ERC Errors"
-msgstr "顯示外掛錯誤"
+msgstr "顯示 ERC 錯誤"
 
 #: eeschema/tools/ee_actions.cpp:664
-#, fuzzy
 msgid "Show markers for electrical rules checker errors"
-msgstr "執行電氣規則檢查"
+msgstr "顯示電氣規則檢查錯誤記號"
 
 #: eeschema/tools/ee_actions.cpp:668
-#, fuzzy
 msgid "Show ERC Exclusions"
-msgstr "DRC 排除"
+msgstr "顯示 ERC 排除"
 
 #: eeschema/tools/ee_actions.cpp:669
-#, fuzzy
 msgid "Show markers for excluded electrical rules checker violations"
-msgstr "執行電氣規則檢查"
+msgstr "顯示排除的電氣規則檢查違規的記號"
 
 #: eeschema/tools/ee_actions.cpp:673
 msgid "Force H/V Wires and Buses"
@@ -16408,11 +16358,11 @@ msgstr "切換連線和匯流排正交模式"
 
 #: eeschema/tools/ee_actions.cpp:678
 msgid "Repair Schematic"
-msgstr "修復電路圖"
+msgstr "修復原理圖"
 
 #: eeschema/tools/ee_actions.cpp:679
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr "執行各種診斷程式並嘗試修復電路圖"
+msgstr "執行各種診斷程式並嘗試修復原理圖"
 
 #: eeschema/tools/ee_actions.cpp:685 pcbnew/tools/pcb_actions.cpp:791
 msgid "Scripting Console"
@@ -16900,24 +16850,20 @@ msgid "0B Lin"
 msgstr ""
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "4B S-Curve"
-msgstr "曲線"
+msgstr "4B S-曲線"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "5B S-Curve"
-msgstr "曲線"
+msgstr "5B S-曲線"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
-#, fuzzy
 msgid "Switch"
-msgstr "切換單位"
+msgstr "切換"
 
 #: eeschema/widgets/tuner_slider_base.cpp:70
-#, fuzzy
 msgid "Characteristic Curve"
-msgstr "特性阻抗"
+msgstr "特徵曲線"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -17547,7 +17493,7 @@ msgstr "影象偏移對齊"
 #: gerbview/gerber_file_image_list.cpp:196
 #, c-format
 msgid "Graphic layer %d"
-msgstr "Graphic layer %d"
+msgstr "圖形層 %d"
 
 #: gerbview/gerbview_frame.cpp:62 gerbview/menubar.cpp:125
 msgid "Clear Recent Zip Files"
@@ -18276,7 +18222,7 @@ msgstr "壓縮全部工程檔案"
 
 #: kicad/menubar.cpp:236
 msgid "Reveal project folder in Finder"
-msgstr "在查詢器中顯示工程資料夾"
+msgstr "在“訪達”中顯示工程資料夾"
 
 #: kicad/menubar.cpp:238
 msgid "Open project directory in file explorer"
@@ -18327,14 +18273,12 @@ msgid "Uninstall"
 msgstr "解除安裝"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:130
-#, fuzzy
 msgid "Apply Pending Changes"
-msgstr "應用變更"
+msgstr "應用掛起的更改"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:131
-#, fuzzy
 msgid "Discard Pending Changes"
-msgstr "放棄變更"
+msgstr "放棄掛起的更改"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:166
 msgid ""
@@ -18424,14 +18368,12 @@ msgid "Applying Package Changes"
 msgstr "應用軟體包變更"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
-#, fuzzy
 msgid "Install Pending"
-msgstr "安裝大小"
+msgstr "待安裝"
 
 #: kicad/pcm/dialogs/panel_package.cpp:101
-#, fuzzy
 msgid "Uninstall Pending"
-msgstr "解除安裝"
+msgstr "待解除安裝"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:212
 msgid "Metadata"
@@ -18612,9 +18554,7 @@ msgid ""
 "Downloaded archive hash for package %s does not match repository entry. This "
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
-msgstr ""
-"軟體包 %s 的已下載壓縮包 HASH 與倉庫記錄不匹配。 這可能表明軟體包有問題，如果"
-"問題仍然存在，請將此報告給倉庫維護者。"
+msgstr "軟體包 %s 的已下載壓縮包 HASH 與倉庫記錄不匹配。 這可能表明軟體包有問題，如果問題仍然存在，請將此報告給倉庫維護者。"
 
 #: kicad/pcm/pcm_task_manager.cpp:97
 #, c-format
@@ -18762,11 +18702,11 @@ msgstr "建立一個新目錄"
 
 #: kicad/project_tree_pane.cpp:705 kicad/project_tree_pane.cpp:715
 msgid "Reveal in Finder"
-msgstr "在查詢器中顯示"
+msgstr "在“訪達”中顯示"
 
 #: kicad/project_tree_pane.cpp:706
 msgid "Reveals the directory in a Finder window"
-msgstr "在查詢器視窗中顯示目錄"
+msgstr "在“訪達”視窗中顯示目錄"
 
 #: kicad/project_tree_pane.cpp:708
 msgid "Open Directory in File Explorer"
@@ -18778,7 +18718,7 @@ msgstr "在預設系統檔案管理器中開啟目錄"
 
 #: kicad/project_tree_pane.cpp:716
 msgid "Reveals the directories in a Finder window"
-msgstr "在查詢器視窗中顯示目錄"
+msgstr "在“訪達”視窗中顯示目錄"
 
 #: kicad/project_tree_pane.cpp:718
 msgid "Open Directories in File Explorer"
@@ -20570,7 +20510,6 @@ msgstr ""
 "是否要退出並放棄變更？"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20597,23 +20536,21 @@ msgid ""
 msgstr ""
 "如果你指定最大電流，則會計算相應的佈線寬度。\n"
 "\n"
-"如果你指定其中一個佈線寬度，則將計算它可以處理的最大電流。然後將計算另外的同"
-"樣處理此電流的佈線寬度。\n"
+"如果你指定其中一個佈線寬度，則將計算它可以處理的最大電流。然後將計算另外的同樣處理此電流的佈線寬度。\n"
 "\n"
 "控制值以粗體顯示。\n"
 "\n"
-"計算適用於最大 35A（外部）或 17.5A（內部）的電流、高達 100 °C的溫升和最多 "
-"400mil（10mm）的寬度。\n"
+"計算適用於最大 35A（外部）或 17.5A（內部）的電流、高達 100 °C的溫升和最多 400mil（10mm）的寬度。\n"
 "\n"
-"來自 IPC 2221的該公式，為\n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
-"其中： \n"
-"__I__ = 最大電流（單位：A 安培） \n"
-"__&Delta;T__ = 環境溫度溫升（單位：°C 攝氏度） \n"
+"IPC 2221 中的公式為\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
+"其中：\n"
+"__I__ = 最大電流（單位：A 安培）\n"
+"__&Delta;T__ = 環境溫度溫升（單位：°C 攝氏度）\n"
 "__W__ = 佈線的寬度 （單位：mil 密耳）\n"
 "__H__ = 佈線的厚度 （單位：mil 密耳）\n"
-"__K__ = 0.024 用於內部佈線，0.048 用於外部佈線  \n"
+"__K__ = 0.024 用於內部佈線，0.048 用於外部佈線\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21416,24 +21353,23 @@ msgstr "黃色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
-msgstr ""
+msgstr "FR4 自然色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:79
 msgid "PTFE natural"
-msgstr ""
+msgstr "聚四氟乙烯自然色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
-#, fuzzy
 msgid "Polyimide"
-msgstr "多段線"
+msgstr "聚醯亞胺自然色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
-msgstr ""
+msgstr "酚類自然色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
-msgstr ""
+msgstr "鋁自然色"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
 msgid "Not specified"
@@ -22049,7 +21985,6 @@ msgid "Defaults"
 msgstr "預設"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
-#, fuzzy
 msgid "Fomatting"
 msgstr "格式化"
 
@@ -22874,13 +22809,12 @@ msgid "Create Array"
 msgstr "建立陣列"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:223
-#, fuzzy
 msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
-"此專案在一個不存在或禁止的層上\n"
-"它以被移動到第一個允許的層。"
+"此專案位於不存在的圖層上。\n"
+"已被移動到第一個定義層。"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:309
 msgid "Change dimension properties"
@@ -23164,14 +23098,14 @@ msgid "Done.<br><br>"
 msgstr "完成。<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
-msgstr "不再排除此違規"
+msgstr "刪除所有規則 '%s' 違規的排除項"
 
 #: pcbnew/dialogs/dialog_drc.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'"
-msgstr "排除此違規"
+msgstr "排除所有規則 '%s' 的違規項"
 
 #: pcbnew/dialogs/dialog_drc.cpp:502
 msgid "Run clearance resolution tool..."
@@ -23182,9 +23116,8 @@ msgid "Open the Board Setup... dialog"
 msgstr "開啟“電路板設定...”對話方塊"
 
 #: pcbnew/dialogs/dialog_drc.cpp:705
-#, fuzzy
 msgid "Edit ignored violations..."
-msgstr "編輯線條選項.."
+msgstr "編輯忽略的違規項…"
 
 #: pcbnew/dialogs/dialog_drc.cpp:775
 #, c-format
@@ -23248,9 +23181,9 @@ msgid "Schematic Parity (%d)"
 msgstr "與原理圖不一致 (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%d)"
-msgstr "未連線的專案 (%d)"
+msgstr "忽略的測試 (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
@@ -23328,28 +23261,26 @@ msgstr ""
 "並希望將其刪除；或者使用者對庫的封裝進行了變更，並希望將其傳播回PCB。"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Updated footprint %s (%s)"
-msgstr "更新選擇的封裝"
+msgstr "更新封裝 %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Changed footprint %s from '%s' to '%s'"
-msgstr "將封裝 %s 從“%s”替換為“%s”"
+msgstr "將封裝 %s 從“%s”更改為“%s”"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:375
-#, fuzzy
 msgid "*** library footprint not found ***"
-msgstr "***封裝沒有找到***"
+msgstr "***未找到庫封裝***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:395
-#, fuzzy
 msgid ": (no changes)"
-msgstr "撤銷變更"
+msgstr ": (無更改)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:400
 msgid ": OK"
-msgstr ""
+msgstr ": OK"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 msgid "Update all footprints on board"
@@ -23361,15 +23292,15 @@ msgstr "更新選擇的封裝"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:30
 msgid "Update footprints matching reference designator:"
-msgstr "更新封裝匹配的位號："
+msgstr "更新此位號對應的封裝："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:38
 msgid "Update footprints matching value:"
-msgstr "更新封裝匹配值："
+msgstr "更新具有此值的封裝："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:44
 msgid "Update footprints with library id:"
-msgstr "使用庫 ID 更新封裝："
+msgstr "更新具有以下庫 ID 的封裝："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:73
 msgid "New footprint library id:"
@@ -23824,14 +23755,11 @@ msgid "3D Models"
 msgstr "3D 模型"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:252
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
-msgstr ""
-"封裝已鎖定：無法在畫布上被自由移動和定位，並且只有當“鎖定專案”複選框在選擇篩"
-"選器中啟用時才能被選中。"
+msgstr "鎖定的封裝無法在畫布上自由移動和定位，並且只有當“已鎖定專案”複選框在選擇篩選器中啟用時才能被選中。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:338
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:387
@@ -23940,12 +23868,12 @@ msgstr "從 BOM 中排除"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:210
 msgid "Exempt from courtyard requirement"
-msgstr ""
+msgstr "排除外框要求"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:207
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr ""
+msgstr "不會產生“缺失外框”的 DRC 違規行為"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:223
 msgid "Update Footprint from Library..."
@@ -23990,9 +23918,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:256
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:608
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
-#, fuzzy
 msgid "Solder mask expansion:"
-msgstr "阻焊層頂部："
+msgstr "阻焊層擴充套件："
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:287
 msgid ""
@@ -24008,7 +23935,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:298
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:269
 msgid "Allow bridged solder mask apertures between pads"
-msgstr ""
+msgstr "允許焊盤之間的橋接阻焊孔徑"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
@@ -24126,9 +24053,8 @@ msgid "Footprint name:"
 msgstr "封裝名稱："
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:135
-#, fuzzy
 msgid "Private Layers"
-msgstr "列印板層"
+msgstr "私密層"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:188
 msgid "Component type:"
@@ -24632,14 +24558,12 @@ msgid "Delete Items"
 msgstr "刪除專案"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:139
-#, fuzzy
 msgid "Other text items"
-msgstr "其他專案"
+msgstr "其他文字專案"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:140
-#, fuzzy
 msgid "Graphic items"
-msgstr "PCB 圖形項"
+msgstr "圖形項"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:255
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
@@ -24901,33 +24825,28 @@ msgid "Deselect All"
 msgstr "取消所有"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:49
-#, fuzzy
 msgid "Board layers and physical stackup"
-msgstr "更新物理堆叠"
+msgstr "電路板層和物理堆疊"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:52
 msgid "Solder mask/paste defaults"
 msgstr "阻焊/錫膏預設值"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:55
-#, fuzzy
 msgid "Text && graphics default properties"
 msgstr "文字與圖形預設屬性"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
-#, fuzzy
 msgid "Text && graphics formatting"
-msgstr "文字與圖形"
+msgstr "文字與圖形格式"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
-#, fuzzy
 msgid "Design rule constraints"
-msgstr "設計規則"
+msgstr "設計規則約束"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
-#, fuzzy
 msgid "Predefined track && via dimensions"
-msgstr "預定義的佈線和通孔標註"
+msgstr "預定義的走線和過孔尺寸"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:243
 #: pcbnew/dialogs/dialog_imported_layers.cpp:251
@@ -25444,7 +25363,7 @@ msgstr "警告：測試點屬性在\"非導通孔\"(NPTH)焊盤上沒有意義�
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1393
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
-msgstr "警告：散熱片屬性在\"非導通孔\"(NPTH) 焊盤上沒有意義。"
+msgstr "警告：防散熱片屬性在\"非導通孔\"(NPTH) 焊盤上沒有意義。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1399
 msgid "Warning: Castellated property is for PTH pads."
@@ -25763,14 +25682,13 @@ msgstr "測試點焊盤"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560 pcbnew/pad.cpp:1629
 msgid "Heatsink pad"
-msgstr "散熱片焊盤"
+msgstr "防散熱片焊盤"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 msgid "Castellated pad (through hole only)"
 msgstr "郵票孔（僅限通孔）"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:582
-#, fuzzy
 msgid "Clearance Overrides"
 msgstr "間隙覆蓋"
 
@@ -25832,36 +25750,31 @@ msgstr "來自父級封裝"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
 msgid "Zone knockout:"
-msgstr ""
+msgstr "敷銅挖空："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
-#, fuzzy
 msgid "Pad shape"
-msgstr "焊盤形狀："
+msgstr "焊盤形狀"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
-#, fuzzy
 msgid "Pad convex hull"
-msgstr "使用焊盤凸包"
+msgstr "焊盤凸包"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:733
-#, fuzzy
 msgid "Thermal Relief Overrides"
-msgstr "花焊盤寬度"
+msgstr "花焊盤覆蓋"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:741
-#, fuzzy
 msgid "Relief gap:"
 msgstr "防散熱間距："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:752
 msgid "Spoke width:"
-msgstr "開口寬度:"
+msgstr "輻條 (散熱) 寬度："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:763
-#, fuzzy
 msgid "Spoke angle:"
-msgstr "圓弧角度："
+msgstr "輻條 (散熱) 角度："
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 msgid "Primitives list:"
@@ -25952,11 +25865,11 @@ msgid "Y scale constrained."
 msgstr "Y 比例限制。"
 
 #: pcbnew/dialogs/dialog_plot.cpp:718
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Width correction constrained.  The width correction value must be in the "
 "range of [%s; %s] for the current design rules."
-msgstr "寬度校正限制。目前的設計規則合理的寬度修正值必須在範圍 [%s; %s] (%s)。"
+msgstr "已限制寬度校正。目前設計規則的寬度修正值必須在範圍 [%s; %s] 內。"
 
 #: pcbnew/dialogs/dialog_plot.cpp:795
 msgid "No layer selected, Nothing to plot"
@@ -26636,7 +26549,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
 msgid "Position Relative To Reference Item"
-msgstr "相対於參考專案的位置"
+msgstr "相對於參考專案的位置"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
 msgid "Print according to objects tab of appearance manager"
@@ -27059,9 +26972,7 @@ msgid ""
 "Normally footprints on the board should be changed to match footprint "
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
-msgstr ""
-"通常應替換 PCB 上的封裝，以匹配原理圖中所做的封裝關聯變更。僅當您不想替換線路"
-"板上的現有封裝時，才取消選中此選項。"
+msgstr "通常應替換 PCB 上的封裝，以匹配原理圖中所做的封裝關聯變更。僅當您不想替換線路板上的現有封裝時，才取消選中此選項。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:53
 msgid "Update PCB from Schematic"
@@ -27523,9 +27434,7 @@ msgstr "模仿舊行為"
 msgid ""
 "Produces a slightly smoother outline at the expense of performance, some "
 "export fidelity issues, and overly aggressive higher-priority zone knockouts."
-msgstr ""
-"以犧牲效能、一些匯出保真度問題和過於激進的高優先順序區域挖空為代價，生成稍微"
-"平滑的輪廓。"
+msgstr "以犧牲效能、一些匯出保真度問題和過於激進的高優先順序敷銅挖空為代價，生成稍微平滑的輪廓。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:116
 msgid "Smoothed polygons (best performance)"
@@ -27542,9 +27451,8 @@ msgid "Allow fillets outside zone outline"
 msgstr "允許圓角超出敷銅輪廓"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:146
-#, fuzzy
 msgid "Min thermal relief spoke count:"
-msgstr "防散熱導線寬度："
+msgstr "花焊盤最小輻條 (散熱) 數目："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
 msgid "Length tuning"
@@ -27685,7 +27593,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:402
 msgid "Minimum uVia hole:"
-msgstr "最小 U 形導通孔："
+msgstr "最小微孔內徑："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:407
 msgid ""
@@ -27713,14 +27621,12 @@ msgstr ""
 "中的多個形狀。)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:459
-#, fuzzy
 msgid "Minimum text height:"
-msgstr "文字高度："
+msgstr "最低文字高度："
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:473
-#, fuzzy
 msgid "Minimum text thickness:"
-msgstr "文字線粗細："
+msgstr "最小文字厚度："
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:430
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -28315,11 +28221,10 @@ msgid "User9"
 msgstr "使用者 9"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:32
-#, fuzzy
 msgid ""
 "Use your board manufacturer's recommendations for solder mask expansion and "
 "minimum web width."
-msgstr "使用電路板廠推薦的焊膜間隙和最小網寬。"
+msgstr "使用電路板廠推薦的阻焊層擴充套件和最小網寬。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
@@ -28362,18 +28267,16 @@ msgid ""
 msgstr "阻焊層中開口之間的最小距離。小於此距離的焊盤開口將繪製為單個開口。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:84
-#, fuzzy
 msgid "Solder mask to copper clearance:"
-msgstr "阻焊間隙："
+msgstr "阻焊層到銅間隙："
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
-msgstr ""
+msgstr "允許在封裝內的焊盤之間橋接阻焊孔徑"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
-#, fuzzy
 msgid "Tent vias"
-msgstr "不允許過孔蓋油"
+msgstr "過孔蓋油"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid ""
@@ -28439,7 +28342,6 @@ msgid "Check rule syntax"
 msgstr "檢查規則語法"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -28727,7 +28629,7 @@ msgstr ""
 "#    規則語句：(rule <規則名> <規則語句> ...)\n"
 "\n"
 "\n"
-"<br><br>\n"
+"<br>\n"
 "\n"
 "### Rule Clauses\n"
 "### 規則語句\n"
@@ -28742,7 +28644,7 @@ msgstr ""
 "#    層語句：(layer \"<層名>\")\n"
 "\n"
 "\n"
-"<br><br>\n"
+"<br>\n"
 "\n"
 "### Constraint Types\n"
 "### 約束型別\n"
@@ -28763,21 +28665,44 @@ msgstr ""
 "# （與板邊的間隙）\n"
 " * length\n"
 "# （長度）\n"
-" * hole\n"
-"# （通孔）\n"
 " * hole\\_clearance\n"
 "# （與通孔的間隙）\n"
+" * hole\\_size\n"
+"# （通孔尺寸）\n"
+" * mechanical\\_clearance\n"
+"# （機械間隙）\n"
+" * mechanical\\_hole\\_clearance\n"
+"# （機械孔間隙）\n"
+" * min\\_resolved\\_spokes\n"
+"# （與輻條（散熱）最小解析）\n"
 " * silk\\_clearance\n"
 "# （與絲印的間隙）\n"
 " * skew\n"
 "# （總偏差）\n"
+" * text\\_height\n"
+"# （文字高度）\n"
+" * text\\_thickness\n"
+"# （文字寬度）\n"
+" * thermal\\_relief\\_gap\n"
+"# （散熱（花焊盤）間隙）\n"
+" * thermal\\_spoke\\_width\n"
+"# （散熱輻條寬度）\n"
 " * track\\_width\n"
 "# （佈線線寬）\n"
 " * via\\_count\n"
-"# （過孔個數）\n"
+"# （過孔計數）\n"
+" * via\\_diameter\n"
+"# （過孔直徑）\n"
+" * zone\\_connection\n"
+"# （敷銅連線）\n"
 "\n"
-"\n"
-"<br><br>\n"
+"Note: `clearance` and `hole_clearance` rules are not run against items of "
+"the same net; `mechanical_clearance` and `mechanical_hole_clearance` rules "
+"are.\n"
+"# 注：`clearance(間隙)` 和 `hole_clearance (過孔間隙)` 規則不是針對同一網中的專案執行，`"
+"mechanical_clearance (機械間隙)` 和 `mechanical_hole_clearance (機械孔間隙)` "
+"規則是針對同一網路中的專案執行的。\n"
+"<br>\n"
 "\n"
 "### Item Types\n"
 "### 電路板元素型別\n"
@@ -28800,6 +28725,32 @@ msgstr ""
 "# （過孔）\n"
 " * zone\n"
 "# （敷銅）\n"
+"\n"
+"<br>\n"
+"\n"
+"### Zone Connections\n"
+"### 敷銅連線\n"
+"\n"
+" * solid\n"
+"# （實心敷銅）\n"
+" * thermal\\_reliefs\n"
+"# （散熱（花焊盤））\n"
+" * none\n"
+"# （無）\n"
+"\n"
+"<br>\n"
+"\n"
+"### Severity Names\n"
+"### 嚴重性名稱\n"
+"\n"
+" * warning\n"
+"# （警告）\n"
+" * error\n"
+"# （錯誤）\n"
+" * exclusion\n"
+"# （拒絕）\n"
+" * ignore\n"
+"# （忽略）\n"
 "\n"
 "<br>\n"
 "\n"
@@ -28833,9 +28784,17 @@ msgstr ""
 "#    (rule 無護罩高壓線路\n"
 "       (constraint clearance (min 2mm))\n"
 "       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"# (rule 強散熱\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.NetClass == 'HV'\"))\n"
+"\n"
 "<br><br>\n"
 "\n"
-"### \n"
+"### Notes\n"
+"### 注意\n"
 "\n"
 "版本語句標誌著檔案的語法版本，所以版本語句必須是第一個語句，\n"
 "以便將來的 KiCad 解析新版本的規則檔案。版本應設為“1”。\n"
@@ -28946,7 +28905,7 @@ msgstr ""
 "\n"
 "\n"
 "    (rule \"clearance-to-1mm-cutout\"\n"
-"#    (rule \"1mm寬開槽周圍的間距\"\n"
+"#    (rule \"1mm 寬開槽周圍的間距\"\n"
 "        (constraint clearance (min 0.8mm))\n"
 "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
 "\n"
@@ -28975,6 +28934,44 @@ msgstr ""
 "#    (rule \"差分對外間距\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"\n"
+"\n"
+"    # Don't use thermal reliefs on heatsink pads\n"
+"    # 不要在散熱焊盤上使用散熱片\n"
+"    (rule heat_sink_pad\n"
+"        (constraint zone_connection solid)\n"
+"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"    # Require all four thermal relief spokes to connect to parent zone\n"
+"    # 需要所有四個散熱輻條才能連線到父系敷銅\n"
+"    (rule fully_spoked_pads\n"
+"        (constraint min_resolved_spokes 4))\n"
+"\n"
+"    # Set thermal relief gap & spoke width for all zones\n"
+"    # 設定所有敷銅的散熱間隙和輻條寬度\n"
+"    (rule defined_relief\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"    # Override thermal relief gap & spoke width for GND and PWR zones\n"
+"    # 覆蓋 GND 和 PWR 敷銅的散熱間隙和輻條寬度\n"
+"    (rule defined_relief_pwr\n"
+"        (constraint thermal_relief_gap (min 10mil))\n"
+"        (constraint thermal_spoke_width (min 12mil))\n"
+"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"    \n"
+"\n"
+"    # Prevent solder wicking from SMD pads\n"
+"    # 防止 SMD 焊盤的焊芯脫落\n"
+"    (rule holes_in_pads\n"
+"        (constraint mechanical_hole_clearance (min 0.2mm))\n"
+"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"    # Disallow solder mask margin overrides\n"
+"    # 禁止阻焊層邊距覆蓋\n"
+"    (rule \"disallow solder mask margin overrides\"\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (condition \"A.Type == 'Pad'\"))"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:72
 msgid "Default properties for new dimension objects:"
@@ -29021,7 +29018,7 @@ msgstr "沒有定義差分對間距。"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:19
 msgid "Pre-defined track and via dimensions:"
-msgstr "預定義佈線和過孔標註："
+msgstr "預定義佈線和過孔尺寸："
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:54
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:111
@@ -29057,7 +29054,6 @@ msgid "board setup constraints"
 msgstr "電路板設定約束"
 
 #: pcbnew/drc/drc_engine.cpp:180
-#, fuzzy
 msgid "default"
 msgstr "預設"
 
@@ -29107,14 +29103,14 @@ msgid "Tessellating copper zones..."
 msgstr "細分敷銅區..."
 
 #: pcbnew/drc/drc_engine.cpp:676
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved zone connection type: %s."
-msgstr "覆銅連線型別：%s。"
+msgstr "解析區域連線型別：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:694
-#, fuzzy, c-format
+#, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
-msgstr "焊盤不是金屬化孔焊盤；連線將是：%s。"
+msgstr "焊盤不是通孔焊盤；連線將是：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:754 pcbnew/drc/drc_engine.cpp:769
 #, c-format
@@ -29140,37 +29136,37 @@ msgid "Board minimum hole clearance: %s."
 msgstr "板最小孔間隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:817
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; zone connection: %s."
-msgstr "%s 上的本地替代；間隙：%s。"
+msgstr "%s 上的本地覆蓋；區域連線：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "被 %s 覆蓋；防散熱：%s。"
+msgstr "%s 上的本地覆蓋；防散熱間距：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "%s 上的本地替代；間隙：%s。"
+msgstr "%s 上的本地覆蓋；防散熱導線寬度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s min thickness: %s."
-msgstr "區域最小厚度:"
+msgstr "敷銅 %s 最小寬度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:872
-#, fuzzy, c-format
+#, c-format
 msgid "Checking assertion \"%s\"."
-msgstr "檢查規則條件 \"%s\"。"
+msgstr "檢查斷言 \"%s\"。"
 
 #: pcbnew/drc/drc_engine.cpp:876 pcbnew/drc/drc_engine.cpp:1295
 msgid "Assertion passed."
-msgstr ""
+msgstr "斷言透過。"
 
 #: pcbnew/drc/drc_engine.cpp:878 pcbnew/drc/drc_engine.cpp:1299
 msgid "--> Assertion failed. <--"
-msgstr ""
+msgstr "---> 斷言失敗。<--"
 
 #: pcbnew/drc/drc_engine.cpp:897
 #, c-format
@@ -29235,9 +29231,8 @@ msgid "Unconditional rule applied."
 msgstr "應用無條件規則。"
 
 #: pcbnew/drc/drc_engine.cpp:1083
-#, fuzzy
 msgid "Unconditional rule applied; overrides previous constraints."
-msgstr "已應用規則；覆蓋以前的約束。"
+msgstr "應用無條件的規則；覆蓋以前的約束。"
 
 #: pcbnew/drc/drc_engine.cpp:1098 pcbnew/drc/drc_engine.cpp:1323
 #, c-format
@@ -29249,9 +29244,8 @@ msgid "Constraint applied."
 msgstr "已應用約束。"
 
 #: pcbnew/drc/drc_engine.cpp:1112 pcbnew/drc/drc_engine.cpp:1328
-#, fuzzy
 msgid "Rule applied."
-msgstr "應用無條件規則。"
+msgstr "應用規則。"
 
 #: pcbnew/drc/drc_engine.cpp:1117
 msgid "Rule applied; overrides previous constraints."
@@ -29271,14 +29265,14 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "本地間隙 %s；間隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s zone connection: %s."
-msgstr "封裝選擇:"
+msgstr "封裝 %s 敷銅連線：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1226
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s pad connection: %s."
-msgstr "覆銅連線型別：%s。"
+msgstr "敷銅 %s 焊盤連線：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1230 pcbnew/drc/drc_engine.cpp:1246
 #: pcbnew/drc/drc_engine.cpp:1262 pcbnew/zone.cpp:327 pcbnew/zone.cpp:476
@@ -29286,26 +29280,25 @@ msgid "zone"
 msgstr "敷銅"
 
 #: pcbnew/drc/drc_engine.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s thermal relief gap: %s."
-msgstr "敷銅防散熱 (花焊盤)：%s。"
+msgstr "敷銅 %s 散熱間隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s thermal spoke width: %s."
-msgstr "防散熱導線寬度："
+msgstr "敷銅 %s 散熱輻條寬度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1290
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule assertion \"%s\"."
-msgstr "檢查規則條件 \"%s\"。"
+msgstr "檢查規則判斷 \"%s\"。"
 
 #: pcbnew/drc/drc_item.cpp:44
 msgid "Electrical"
 msgstr "電路"
 
 #: pcbnew/drc/drc_item.cpp:45
-#, fuzzy
 msgid "Design for Manufacturing"
 msgstr "面向製造的設計"
 
@@ -29318,9 +29311,8 @@ msgid "Signal Integrity"
 msgstr "訊號完整性"
 
 #: pcbnew/drc/drc_item.cpp:48
-#, fuzzy
 msgid "Readability"
-msgstr "只讀"
+msgstr "可讀性"
 
 #: pcbnew/drc/drc_item.cpp:52
 msgid "Missing connection between items"
@@ -29360,7 +29352,7 @@ msgstr "敷銅區沒有焊盤連線"
 
 #: pcbnew/drc/drc_item.cpp:88
 msgid "Thermal relief connection to zone incomplete"
-msgstr ""
+msgstr "與敷銅的花焊盤連線不完整"
 
 #: pcbnew/drc/drc_item.cpp:92
 msgid "Via is not connected or connected on only one layer"
@@ -29451,28 +29443,24 @@ msgid "Pad net doesn't match schematic"
 msgstr "焊盤網路與原理圖不匹配"
 
 #: pcbnew/drc/drc_item.cpp:180
-#, fuzzy
 msgid "Footprint not found in libraries"
-msgstr "在變更列表中找不到模組"
+msgstr "在庫中找不到封裝"
 
 #: pcbnew/drc/drc_item.cpp:184
-#, fuzzy
 msgid "Footprint doesn't match copy in library"
-msgstr "封裝型別與封裝焊盤不匹配"
+msgstr "封裝與庫中副本不匹配"
 
 #: pcbnew/drc/drc_item.cpp:192
-#, fuzzy
 msgid "Assertion failure"
-msgstr "截面積："
+msgstr "斷言失敗"
 
 #: pcbnew/drc/drc_item.cpp:196
-#, fuzzy
 msgid "Copper sliver"
-msgstr "銅層："
+msgstr "銅條"
 
 #: pcbnew/drc/drc_item.cpp:200
 msgid "Solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "阻焊層孔徑可橋接具有不同網路的專案"
 
 #: pcbnew/drc/drc_item.cpp:204
 msgid "Silkscreen clipped by solder mask"
@@ -29483,14 +29471,12 @@ msgid "Silkscreen overlap"
 msgstr "絲印重疊"
 
 #: pcbnew/drc/drc_item.cpp:212
-#, fuzzy
 msgid "Text height out of range"
-msgstr "佈線長度超過範圍"
+msgstr "文字高度超出範圍"
 
 #: pcbnew/drc/drc_item.cpp:216
-#, fuzzy
 msgid "Text thickness out of range"
-msgstr "電路板厚度 %s 超出範圍."
+msgstr "文字寬度超出範圍"
 
 #: pcbnew/drc/drc_item.cpp:220
 msgid "Trace length out of range"
@@ -29619,14 +29605,12 @@ msgid "Rule already has a '%s' constraint."
 msgstr "規則已經有 '%s' 約束。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:407
-#, fuzzy
 msgid "Expecting number."
-msgstr "預期 %s"
+msgstr "期望數。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:422
-#, fuzzy
 msgid "Missing assertion expression."
-msgstr "缺少條件表示式。"
+msgstr "缺少斷言表達。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:459
 msgid "Missing min value."
@@ -29650,9 +29634,8 @@ msgid "Unrecognized layer '%s'."
 msgstr "無法識別的圖層 '%s'。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:622
-#, fuzzy
 msgid "Missing severity name."
-msgstr "缺少版本號。"
+msgstr "缺少嚴重性名稱。"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:83
 msgid "Checking via annular rings..."
@@ -29819,17 +29802,15 @@ msgstr "(%s 最小 %s; 實際 %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:406
 msgid "No project loaded, skipping library parity tests."
-msgstr ""
+msgstr "沒有載入工程，跳過庫的奇偶性測試。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:410
-#, fuzzy
 msgid "Loading footprint library table..."
-msgstr "載入封裝庫表時出錯。"
+msgstr "正在載入封裝庫表..."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:420
-#, fuzzy
 msgid "Checking board footprints against library..."
-msgstr "檢查封裝..."
+msgstr "正在根據庫檢查電路板封裝..."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:113
 #, c-format
@@ -29860,14 +29841,12 @@ msgid "<unconstrained>"
 msgstr "< 無約束 >"
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:176
-#, fuzzy
 msgid "Gathering items..."
-msgstr "正在收集銅專案..."
+msgstr "正在收集專案..."
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:229
-#, fuzzy
 msgid "Checking mechanical clearances..."
-msgstr "正在檢查孔間隙..."
+msgstr "正在檢查機械間隙..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:112
 msgid "(no edges found on Edge.Cuts layer)"
@@ -29891,9 +29870,8 @@ msgid "Checking text variables..."
 msgstr "正在檢查文字變數..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:361
-#, fuzzy
 msgid "Checking assertions..."
-msgstr "正在檢查引腳..."
+msgstr "正在檢查斷言..."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
@@ -29924,9 +29902,8 @@ msgid "Checking PCB to schematic parity..."
 msgstr "正在檢查 PCB 與原理圖是否一致..."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:221
-#, fuzzy
 msgid "No netlist provided, skipping schematic parity tests."
-msgstr "沒有提供網表， 跳過 LVS。"
+msgstr "沒有提供網表，跳過原理圖奇偶性測試。"
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:99
 msgid "Checking silkscreen for overlapping items..."
@@ -29939,62 +29916,57 @@ msgstr "正在將 %d 個絲印與 %d 個電路板專案測試相交..."
 
 #: pcbnew/drc/drc_test_provider_sliver_checker.cpp:83
 msgid "Running sliver detection on copper layers..."
-msgstr ""
+msgstr "在銅層上執行銅條檢測..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:55
-#, fuzzy
 msgid "board setup solder mask min width"
-msgstr "電路板設定約束"
+msgstr "電路板設定阻焊層最小寬度"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:426
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:506
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "頂層阻焊層孔徑橋接具有不同網路的專案"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:431
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:511
 msgid "Rear solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "底層阻焊層孔徑橋接具有不同網路的專案"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:614
-#, fuzzy
 msgid "Building solder mask..."
-msgstr "構造敷銅填充..."
+msgstr "正在構造阻焊層..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:619
-#, fuzzy
 msgid "Checking solder mask to silk clearance..."
-msgstr "正在檢查通孔到通孔間隙..."
+msgstr "正在檢查阻焊層與絲印的間隙..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:624
-#, fuzzy
 msgid "Checking solder mask web integrity..."
-msgstr "正在檢查佈線寬度..."
+msgstr "正在檢查阻焊層網路的完整性..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:85
-#, fuzzy
 msgid "Checking text dimensions..."
-msgstr "正在檢查文字變數..."
+msgstr "正在檢查文字尺寸..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min height %s; actual %s)"
-msgstr "(%s 最小寬度 %s; 實際 %s)"
+msgstr "(%s 最小高度 %s；實際 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max height %s; actual %s)"
-msgstr "(%s 最大寬度 %s; 實際 %s)"
+msgstr "(%s 最大高度 %s；實際 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min thickness %s; actual %s)"
-msgstr "(%s 最小寬度 %s; 實際 %s)"
+msgstr "(%s 最小寬度 %s；實際 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max thickness %s; actual %s)"
-msgstr "(%s 最大寬度 %s; 實際 %s)"
+msgstr "(%s 最大寬度 %s；實際 %s)"
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:78
 msgid "Checking track widths..."
@@ -30015,14 +29987,13 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s 最大直徑 %s; 實際 %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:81
-#, fuzzy
 msgid "Checking thermal reliefs..."
-msgstr "正在檢查文字變數..."
+msgstr "正在檢查防散熱..."
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min spoke count %d; actual %d)"
-msgstr "(%s 最大計數：%d; 實際：%d)"
+msgstr "(%s 最小輻條數 %d；實際 %d)"
 
 #: pcbnew/edit_zone_helpers.cpp:86 pcbnew/edit_zone_helpers.cpp:151
 msgid "Modify zone properties"
@@ -30201,10 +30172,8 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果重新填充此電路板上的敷銅，則將應用銅邊緣間隙設定 （參見電路板配置 > 設計"
-"規則 > 限制）。\n"
-"老版本的 KiCad 會將電路板邊緣 (Edge Cuts 層) 的線粗細作為銅間距，因此新的填充"
-"結果可能與老版本的填充結果不同。"
+"如果重新填充此電路板上的敷銅，則將應用銅邊緣間隙設定 （參見電路板配置 > 設計規則 > 限制）。\n"
+"老版本的 KiCad 會將電路板邊緣 (Edge Cuts 層) 的線粗細作為銅間距，因此新的填充結果可能與老版本的填充結果不同。"
 
 #: pcbnew/files.cpp:549
 msgid "Edge Clearance Warning"
@@ -30392,7 +30361,7 @@ msgstr "KiCad 封裝編輯器"
 
 #: pcbnew/footprint_edit_frame.cpp:192 pcbnew/zone_settings.cpp:219
 msgid "Inner layers"
-msgstr "Inner layers"
+msgstr "內部圖層"
 
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/pcb_edit_frame.cpp:281
 msgid "Selection Filter"
@@ -31021,14 +30990,12 @@ msgid "Auto-Place Footprints"
 msgstr "自動放置封裝"
 
 #: pcbnew/menubar_pcb_editor.cpp:410
-#, fuzzy
 msgid "Add Teardrops"
-msgstr "新增引線"
+msgstr "新增淚滴"
 
 #: pcbnew/menubar_pcb_editor.cpp:412
-#, fuzzy
 msgid "Remove Teardrops"
-msgstr "刪除未使用的焊盤"
+msgstr "移除淚滴"
 
 #: pcbnew/menubar_pcb_editor.cpp:434
 msgid "External Plugins"
@@ -31492,7 +31459,7 @@ msgstr "測試點"
 
 #: pcbnew/pad.cpp:894
 msgid "Heat sink"
-msgstr "散熱片"
+msgstr "防散熱片"
 
 #: pcbnew/pad.cpp:895
 msgid "Castellated"
@@ -31612,14 +31579,12 @@ msgid "Soldermask Margin Override"
 msgstr "阻焊層邊界覆蓋"
 
 #: pcbnew/pad.cpp:1676 pcbnew/zone.cpp:1450
-#, fuzzy
 msgid "Thermal Relief Spoke Width"
-msgstr "花焊盤寬度"
+msgstr "防散熱輻條寬度"
 
 #: pcbnew/pad.cpp:1679
-#, fuzzy
 msgid "Thermal Relief Spoke Angle"
-msgstr "防散熱 (花焊盤) 間距"
+msgstr "防散熱輻條角度"
 
 #: pcbnew/pad.cpp:1682 pcbnew/zone.cpp:1447
 msgid "Thermal Relief Gap"
@@ -31725,9 +31690,9 @@ msgid "Export Hyperlynx Layout"
 msgstr "匯出 Hyperlynx 佈局"
 
 #: pcbnew/pcb_expr_evaluator.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Missing layer name argument to %s."
-msgstr "缺少 '%s' 的引數"
+msgstr "缺少對 %s 的層名引數。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:130
 #, c-format
@@ -31736,10 +31701,10 @@ msgstr "無法識別的圖層 '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:263 pcbnew/pcb_expr_evaluator.cpp:330
 #: pcbnew/pcb_expr_evaluator.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing footprint identifier argument (A, B, or reference designator) to %s."
-msgstr "使用位號連結封裝"
+msgstr "缺少封裝識別符號引數（A，B，或位號）到 %s。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:500
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -31756,22 +31721,22 @@ msgstr "封裝沒有底層外框。"
 #: pcbnew/pcb_expr_evaluator.cpp:616
 #, c-format
 msgid "Missing rule-area identifier argument (A, B, or rule-area name) to %s."
-msgstr ""
+msgstr "缺少規則區識別符號引數（A、B 或規則區名稱）到 %s。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:719
-#, fuzzy, c-format
+#, c-format
 msgid "Missing group name argument to %s."
-msgstr "缺少 '%s' 的引數"
+msgstr "缺少對 %s 的組名引數。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:829
-#, fuzzy, c-format
+#, c-format
 msgid "Missing diff-pair name argument to %s."
-msgstr "缺少 '%s' 的引數"
+msgstr "缺少對 %s 的差分對名引數。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:877
-#, fuzzy, c-format
+#, c-format
 msgid "Missing field name argument to %s."
-msgstr "缺少 '%s' 的引數"
+msgstr "缺少對 %s 的欄位名引數。"
 
 #: pcbnew/pcb_expr_evaluator.cpp:1196
 msgid "must be mm, in, or mil"
@@ -31804,9 +31769,8 @@ msgid "Violation"
 msgstr "違規"
 
 #: pcbnew/pcb_marker.cpp:143
-#, fuzzy
 msgid "Severity"
-msgstr "恢復"
+msgstr "嚴重性"
 
 #: pcbnew/pcb_marker.cpp:191
 #, c-format
@@ -33507,11 +33471,11 @@ msgstr "選擇差分對標註"
 
 #: pcbnew/router/router_tool.cpp:332
 msgid "Use differential pair dimensions from the net class"
-msgstr "使用網路類中的差分對標註"
+msgstr "使用網路類中的差分對尺寸"
 
 #: pcbnew/router/router_tool.cpp:337
 msgid "Specify custom differential pair dimensions"
-msgstr "指定自定義差分對標註"
+msgstr "指定自定義差分對尺寸"
 
 #: pcbnew/router/router_tool.cpp:354
 #, c-format
@@ -33729,22 +33693,20 @@ msgstr "一個導線_過孔指向了丟失的焊盤疊 \"%s\"。"
 #: pcbnew/teardrop/dialog_teardrop.cpp:177
 #, c-format
 msgid "%d Teardrops created"
-msgstr ""
+msgstr "%d 已建立淚滴"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:192
 #, c-format
 msgid "%d Teardrops removed."
-msgstr ""
+msgstr "%d 已移除淚滴。"
 
 #: pcbnew/teardrop/teardrop.cpp:189
-#, fuzzy
 msgid "Add teardrops"
-msgstr "新增引線"
+msgstr "新增淚滴"
 
 #: pcbnew/teardrop/teardrop.cpp:382
-#, fuzzy
 msgid "Remove teardrops"
-msgstr "刪除專案"
+msgstr "移除淚滴"
 
 #: pcbnew/toolbars_footprint_editor.cpp:92
 msgid "Load footprint from current board"
@@ -33938,17 +33900,17 @@ msgstr "無法為空組合生成間隙報告。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:397
 msgid "Zone connection resolution for:"
-msgstr "區域連線解像度，用於："
+msgstr "敷銅連線解像度，用於："
 
 #: pcbnew/tools/board_inspection_tool.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "敷銅防散熱 (花焊盤)：%s。"
+msgstr "已解決的散熱間隙：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal spoke width: %s."
-msgstr "防散熱導線寬度："
+msgstr "已解決的散熱輻條寬度：%s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:422
 #, c-format
@@ -33983,27 +33945,24 @@ msgid "Hole clearance resolution for:"
 msgstr "孔間隙解像度，用於:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:602
-#, fuzzy
 msgid "Mechanical"
-msgstr "非金屬化孔，機械的"
+msgstr "機械"
 
 #: pcbnew/tools/board_inspection_tool.cpp:611
-#, fuzzy
 msgid "Mechanical clearance resolution for:"
-msgstr "邊緣間隙解析解像度，用於:"
+msgstr "機械間隙解析為："
 
 #: pcbnew/tools/board_inspection_tool.cpp:623
 msgid "No 'mechanical_clearance' constraints defined."
-msgstr ""
+msgstr "未定義 'mechanical_clearance' (機械間隙) 約束。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:650
-#, fuzzy
 msgid "Mechanical hole clearance resolution for:"
-msgstr "孔間隙解像度，用於:"
+msgstr "機械孔間隙解析為："
 
 #: pcbnew/tools/board_inspection_tool.cpp:662
 msgid "No 'mechanical_hole_clearance' constraints defined."
-msgstr ""
+msgstr "未定義 'mechanical_hole_clearance' (機械孔間隙) 約束。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:716
 msgid "Select an item for a constraints resolution report."
@@ -34088,13 +34047,12 @@ msgid "Item allowed at current location."
 msgstr "當前位置允許的專案。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:843
-#, fuzzy
 msgid "Assertions"
-msgstr "操作"
+msgstr "斷言"
 
 #: pcbnew/tools/board_inspection_tool.cpp:844
 msgid "Assertions for:"
-msgstr ""
+msgstr "斷言："
 
 #: pcbnew/tools/convert_tool.cpp:77
 msgid "Create from Selection"
@@ -34507,14 +34465,12 @@ msgid "Add a center dimension"
 msgstr "新增中心標註"
 
 #: pcbnew/tools/pcb_actions.cpp:139
-#, fuzzy
 msgid "Add Radial Dimension"
-msgstr "新增對齊標註"
+msgstr "新增徑向標註"
 
 #: pcbnew/tools/pcb_actions.cpp:139
-#, fuzzy
 msgid "Add a radial dimension"
-msgstr "新增引線標註"
+msgstr "新增徑向標註"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add Orthogonal Dimension"
@@ -34993,11 +34949,11 @@ msgstr "重新載入所有的 Python 外掛並重新整理外掛選單"
 
 #: pcbnew/tools/pcb_actions.cpp:558
 msgid "Reveal Plugin Folder in Finder"
-msgstr "在查詢器中顯示外掛資料夾"
+msgstr "在“訪達”中顯示外掛資料夾"
 
 #: pcbnew/tools/pcb_actions.cpp:558
 msgid "Reveals the plugins folder in a Finder window"
-msgstr "在查詢器視窗中顯示外掛資料夾"
+msgstr "在“訪達”視窗中顯示外掛資料夾"
 
 #: pcbnew/tools/pcb_actions.cpp:568
 msgid "Board Setup..."
@@ -35978,7 +35934,7 @@ msgstr "垂直分佈"
 
 #: pcbnew/tools/position_relative_tool.cpp:151
 msgid "Position Relative"
-msgstr "相対位置"
+msgstr "相對位置"
 
 #: pcbnew/tools/position_relative_tool.cpp:172
 msgid "Click on reference item..."
@@ -36527,39 +36483,32 @@ msgid "Select preset:"
 msgstr "選擇預設："
 
 #: pcbnew/widgets/appearance_controls.cpp:2557
-#, fuzzy
 msgid "Save viewport..."
-msgstr "儲存預設..."
+msgstr "儲存視口..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2558
-#, fuzzy
 msgid "Delete viewport..."
-msgstr "刪除預設..."
+msgstr "刪除視口..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2605
-#, fuzzy
 msgid "Viewport name:"
-msgstr "網路名稱:"
+msgstr "視口名稱："
 
 #: pcbnew/widgets/appearance_controls.cpp:2605
-#, fuzzy
 msgid "Save Viewport"
-msgstr "儲存報告檔案"
+msgstr "儲存視口"
 
 #: pcbnew/widgets/appearance_controls.cpp:2643
-#, fuzzy
 msgid "Viewports"
-msgstr "報告"
+msgstr "視口"
 
 #: pcbnew/widgets/appearance_controls.cpp:2652
-#, fuzzy
 msgid "Delete Viewport"
-msgstr "刪除通孔"
+msgstr "刪除視口"
 
 #: pcbnew/widgets/appearance_controls.cpp:2653
-#, fuzzy
 msgid "Select viewport:"
-msgstr "選擇預設："
+msgstr "選擇視口："
 
 #: pcbnew/widgets/appearance_controls.cpp:3089
 msgid "Open Preferences"
@@ -36598,9 +36547,8 @@ msgid "Layer presets"
 msgstr "層預設"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:182
-#, fuzzy
 msgid "Viewports (Alt+Tab):"
-msgstr "預設 (Ctrl+Tab)："
+msgstr "視口 (Alt+Tab)："
 
 #: pcbnew/widgets/panel_selection_filter.cpp:146
 #, c-format
@@ -36621,7 +36569,7 @@ msgstr "規則區域"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
 msgid "Dimensions"
-msgstr "尺寸"
+msgstr "標註"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
 msgid "Other items"
@@ -36705,7 +36653,7 @@ msgstr "%s 上的敷銅挖空"
 #: pcbnew/zone.cpp:847
 #, c-format
 msgid "Rule Area on %s"
-msgstr "%s上的規則區域"
+msgstr "%s 上的規則區域"
 
 #: pcbnew/zone.cpp:849
 #, c-format
@@ -36717,9 +36665,8 @@ msgid "Inherited"
 msgstr "繼承"
 
 #: pcbnew/zone.cpp:1428
-#, fuzzy
 msgid "Thermal reliefs for PTH"
-msgstr "防散熱 (花焊盤)"
+msgstr "用於金屬化孔 (PTH) 的防散熱"
 
 #: pcbnew/zone.cpp:1442
 msgid "Min Width"
@@ -36754,28 +36701,24 @@ msgid "Performing polygon fills..."
 msgstr "執行多邊形填充..."
 
 #: pcbnew/zones.h:59
-#, fuzzy
 msgid "inherited"
 msgstr "繼承"
 
 #: pcbnew/zones.h:60
 msgid "none"
-msgstr "空"
+msgstr "無"
 
 #: pcbnew/zones.h:61
-#, fuzzy
 msgid "thermal reliefs"
 msgstr "防散熱 (花焊盤)"
 
 #: pcbnew/zones.h:62
-#, fuzzy
 msgid "solid"
 msgstr "實心"
 
 #: pcbnew/zones.h:63
-#, fuzzy
 msgid "thermal reliefs for PTH"
-msgstr "防散熱 (花焊盤)"
+msgstr "用於金屬化孔 (PTH) 的防散熱"
 
 #: plugins/3d/vrml/vrml.cpp:228
 msgid "[INFO] load failed: input line too long\n"
@@ -36871,10 +36814,9 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
-"KiCad 是一款自由、開源的 EDA 套件。 它具有原理圖編輯、電路模擬、PCB 佈局、3D "
-"渲染和圖形 / 資料匯出等功能，還包括一個高質量的元件庫，具有成千上萬的符號、封"
-"裝和 3D 模型。KiCad 對系統性能要求不高，且可在 Linux、Windows 和 macOS 系統上"
-"執行。"
+"KiCad 是一款自由、開源的 EDA 套件。 它具有原理圖編輯、電路模擬、PCB 佈局、3D 渲染和圖形 / "
+"資料匯出等功能，還包括一個高質量的元件庫，具有成千上萬的符號、封裝和 3D 模型。KiCad 對系統性能要求不高，且可在 Linux、Windows 和 "
+"macOS 系統上執行。"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:58
 msgid "KiCad Main Window"
