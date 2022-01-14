@@ -29172,20 +29172,20 @@ msgstr "%s 上的本地覆盖；防散热导线宽度：%s。"
 #: pcbnew/drc/drc_engine.cpp:858
 #, c-format
 msgid "Zone %s min thickness: %s."
-msgstr "区域 %s 最小厚度：%s。"
+msgstr "敷铜 %s 最小宽度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:872
-#, fuzzy, c-format
+#, c-format
 msgid "Checking assertion \"%s\"."
-msgstr "检查规则条件 \"%s\"。"
+msgstr "检查断言 \"%s\"。"
 
 #: pcbnew/drc/drc_engine.cpp:876 pcbnew/drc/drc_engine.cpp:1295
 msgid "Assertion passed."
-msgstr ""
+msgstr "断言通过。"
 
 #: pcbnew/drc/drc_engine.cpp:878 pcbnew/drc/drc_engine.cpp:1299
 msgid "--> Assertion failed. <--"
-msgstr ""
+msgstr "---> 断言失败。<--"
 
 #: pcbnew/drc/drc_engine.cpp:897
 #, c-format
