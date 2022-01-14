@@ -686,16 +686,10 @@ void PLOTTER::Text( const VECTOR2I&             aPos,
                 LineTo( (wxPoint) aPt2 );
                 PenFinish();
             },
-            // Triangulation callback
-            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
+            // Polygon callback
+            [&]( const SHAPE_LINE_CHAIN& aPoly )
             {
-                std::vector<VECTOR2I> cornerList;
-                cornerList.reserve( 3 );
-
-                for( const VECTOR2I& pt : { aPt1, aPt2, aPt3, aPt1 } )
-                    cornerList.emplace_back( pt );
-
-                PlotPoly( cornerList, FILL_T::FILLED_SHAPE, 0, aData );
+                PlotPoly( aPoly, FILL_T::FILLED_SHAPE, 0, aData );
             } );
 
     TEXT_ATTRIBUTES attributes;

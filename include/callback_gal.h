@@ -26,7 +26,6 @@
 
 #include <gal/graphics_abstraction_layer.h>
 
-
 class CALLBACK_GAL: public KIGFX::GAL
 {
 public:
@@ -40,6 +39,20 @@ public:
    {
         m_strokeCallback = aStrokeCallback;
         m_triangleCallback = aTriangleCallback;
+        m_outlineCallback = [](const SHAPE_LINE_CHAIN&){};
+        m_triangulate = true;
+   }
+
+    CALLBACK_GAL( KIGFX::GAL_DISPLAY_OPTIONS& aDisplayOptions,
+                  std::function<void( const VECTOR2I& aPt1,
+                                      const VECTOR2I& aPt2 )> aStrokeCallback,
+                  std::function<void( const SHAPE_LINE_CHAIN& aPoly )> aOutlineCallback ) :
+        GAL( aDisplayOptions )
+   {
+        m_strokeCallback = aStrokeCallback;
+        m_triangleCallback = []( const VECTOR2I&, const VECTOR2I&, const VECTOR2I& ){};
+        m_outlineCallback = aOutlineCallback;
+        m_triangulate = false;
    }
 
     /**
@@ -54,6 +67,10 @@ private:
     std::function<void( const VECTOR2I& aPt1,
                         const VECTOR2I& aPt2,
                         const VECTOR2I& aPt3 )> m_triangleCallback;
+
+    std::function<void( const SHAPE_LINE_CHAIN& aPoly )> m_outlineCallback;
+
+    bool m_triangulate;
 };
 
 

@@ -44,9 +44,22 @@ void CALLBACK_GAL::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTotal 
     }
     else if( aGlyph.IsOutline() )
     {
-        const KIFONT::OUTLINE_GLYPH& glyph = static_cast<const KIFONT::OUTLINE_GLYPH&>( aGlyph );
+        if( m_triangulate )
+        {
+            const KIFONT::OUTLINE_GLYPH& glyph = static_cast<const KIFONT::OUTLINE_GLYPH&>( aGlyph );
 
-        glyph.Triangulate( m_triangleCallback );
+            glyph.Triangulate( m_triangleCallback );
+        }
+        else
+        {
+            KIFONT::OUTLINE_GLYPH glyph = static_cast<const KIFONT::OUTLINE_GLYPH&>( aGlyph );
+
+            if( glyph.HasHoles() )
+                glyph.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+
+            for( int ii = 0; ii < glyph.OutlineCount(); ++ii )
+                m_outlineCallback( glyph.Outline( ii ) );
+        }
     }
 }
 
