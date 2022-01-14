@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-14 08:11+0000\n"
+"PO-Revision-Date: 2022-01-14 10:30+0000\n"
 "Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -29085,9 +29085,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "%s 上的本地覆盖；防散热导线宽度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s min thickness: %s."
-msgstr "线粗细："
+msgstr "区域 %s 最小厚度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:872
 #, fuzzy, c-format
@@ -29165,9 +29165,8 @@ msgid "Unconditional rule applied."
 msgstr "应用无条件规则。"
 
 #: pcbnew/drc/drc_engine.cpp:1083
-#, fuzzy
 msgid "Unconditional rule applied; overrides previous constraints."
-msgstr "已应用规则；覆盖以前的约束。"
+msgstr "已应用无条件的规则；覆盖以前的约束。"
 
 #: pcbnew/drc/drc_engine.cpp:1098 pcbnew/drc/drc_engine.cpp:1323
 #, c-format
@@ -29200,14 +29199,14 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "本地间隙 %s；间隙：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s zone connection: %s."
-msgstr "端口 %s 无连接。"
+msgstr "封装 %s 区域连接：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1226
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s pad connection: %s."
-msgstr "覆铜连接类型：%s。"
+msgstr "区域 %s 焊盘连接：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1230 pcbnew/drc/drc_engine.cpp:1246
 #: pcbnew/drc/drc_engine.cpp:1262 pcbnew/zone.cpp:327 pcbnew/zone.cpp:476
@@ -29215,14 +29214,14 @@ msgid "zone"
 msgstr "敷铜"
 
 #: pcbnew/drc/drc_engine.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s thermal relief gap: %s."
-msgstr "敷铜防防散热 (花焊盘)：%s。"
+msgstr "区域 %s 防散热 (花焊盘) 间距：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s thermal spoke width: %s."
-msgstr "防散热导线宽度："
+msgstr "区域 %s 防散热导线宽度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1290
 #, fuzzy, c-format
