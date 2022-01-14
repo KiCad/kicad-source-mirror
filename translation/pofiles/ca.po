@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-13 14:55+0000\n"
+"PO-Revision-Date: 2022-01-15 22:42+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
-"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
-"source/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/"
+"master-source/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1698,14 +1698,12 @@ msgid "&Yes"
 msgstr ""
 
 #: common/dialog_shim.cpp:662
-#, fuzzy
 msgid "&No"
-msgstr "No"
+msgstr "&No"
 
 #: common/dialog_shim.cpp:663
-#, fuzzy
 msgid "&Apply"
-msgstr "Aplica"
+msgstr "&Aplica"
 
 #: common/dialog_shim.cpp:664
 msgid "&Save"
@@ -3434,9 +3432,8 @@ msgstr "Ratlla-Punt"
 
 #: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1617
 #: include/stroke_params.h:74
-#, fuzzy
 msgid "Dash-Dot-Dot"
-msgstr "Ratlla-Punt"
+msgstr "Ratlla-Punt-Punt"
 
 #: common/dialogs/panel_setup_netclasses.cpp:442
 msgid "Netclass must have a name."
@@ -3930,9 +3927,8 @@ msgstr "Opcions de la pantalla"
 #: common/eda_base_frame.cpp:1007 common/eda_base_frame.cpp:1015
 #: common/eda_base_frame.cpp:1028 common/eda_base_frame.cpp:1037
 #: pcbnew/dialogs/panel_edit_options_base.cpp:24
-#, fuzzy
 msgid "Editing Options"
-msgstr "Edita les opcions de la línia"
+msgstr "Opcions d'edició"
 
 #: common/eda_base_frame.cpp:1008 common/eda_base_frame.cpp:1016
 #: common/eda_base_frame.cpp:1029 common/eda_base_frame.cpp:1038
@@ -3948,9 +3944,8 @@ msgstr "Editor d'esquemes"
 
 #: common/eda_base_frame.cpp:1017
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
-#, fuzzy
 msgid "Field Name Templates"
-msgstr "Plantilles del sistema"
+msgstr "Plantilles dels noms dels camps"
 
 #: common/eda_base_frame.cpp:1026 common/tool/actions.cpp:587
 #: kicad/tools/kicad_manager_actions.cpp:87 pcbnew/footprint_edit_frame.cpp:866
@@ -3960,9 +3955,8 @@ msgstr "Editor d'empremtes"
 
 #: common/eda_base_frame.cpp:1030
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:420
-#, fuzzy
 msgid "Default Values"
-msgstr "Valors predeterminats:"
+msgstr "Valors predeterminats"
 
 #: common/eda_base_frame.cpp:1035 common/hotkey_store.cpp:74
 #: kicad/tools/kicad_manager_actions.cpp:81 pcbnew/menubar_pcb_editor.cpp:184
@@ -3971,14 +3965,12 @@ msgid "PCB Editor"
 msgstr "Editor de PCB's"
 
 #: common/eda_base_frame.cpp:1039
-#, fuzzy
 msgid "Action Plugins"
-msgstr "Afegeix un connector"
+msgstr "Connectors d'accions"
 
 #: common/eda_base_frame.cpp:1040
-#, fuzzy
 msgid "Origins & Axes"
-msgstr "Origen"
+msgstr "Orígens i Eixos"
 
 #: common/eda_base_frame.cpp:1046
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:272
@@ -4002,14 +3994,12 @@ msgid "Raytracing Renderer"
 msgstr "Renderitzador de Raytracing"
 
 #: common/eda_base_frame.cpp:1058
-#, fuzzy
 msgid "GerbView"
-msgstr "Tanca GerbView"
+msgstr "GerbView"
 
 #: common/eda_base_frame.cpp:1060
-#, fuzzy
 msgid "Excellon Options"
-msgstr "Opcions de les icones"
+msgstr "Opcions d'Excellon"
 
 #: common/eda_base_frame.cpp:1069 common/hotkey_store.cpp:75
 #: kicad/tools/kicad_manager_actions.cpp:110 pagelayout_editor/menubar.cpp:86
@@ -4718,9 +4708,9 @@ msgid "Error loading font '%s'."
 msgstr "Error en carregar la PCB '%s'."
 
 #: common/font/fontconfig.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "No s'ha trobat l'empremta '%s'."
+msgstr "No s'ha trobat el tipus de lletra '%s'; es substituirà per '%s'."
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:884
 #: eeschema/symbol_editor/symbol_library_manager.cpp:104
@@ -5690,9 +5680,8 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "S'ha creat el fitxer Zip '%s' (%s sense comprimir, %s comprimit)."
 
 #: common/rc_item.cpp:360
-#, fuzzy
 msgid "Excluded warning: "
-msgstr "Escalament:"
+msgstr "Advertència exclosa: "
 
 #: common/rc_item.cpp:362
 #, fuzzy
@@ -10597,7 +10586,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_shape_properties_base.h:62
 #, fuzzy, c-format
 msgid "%s Properties"
-msgstr "Propietats"
+msgstr "%s Propietats"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -30163,9 +30152,8 @@ msgid "board setup constraints"
 msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:180
-#, fuzzy
 msgid "default"
-msgstr "per defecte "
+msgstr "per defecte"
 
 #: pcbnew/drc/drc_engine.cpp:186
 msgid "board setup constraints silk"
