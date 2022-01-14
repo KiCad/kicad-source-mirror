@@ -48,6 +48,7 @@ class PCB_DIM_ALIGNED;
 class PCB_DIM_ORTHOGONAL;
 class PCB_DIM_LEADER;
 class PCB_DIM_CENTER;
+class PCB_DIM_RADIAL;
 class FOOTPRINT;
 class PCB_GROUP;
 class FP_TEXT;
@@ -76,6 +77,7 @@ static PCB_DIM_ALIGNED*      Cast_to_PCB_DIM_ALIGNED( BOARD_ITEM* );
 static PCB_DIM_ORTHOGONAL*   Cast_to_PCB_DIM_ORTHOGONAL( BOARD_ITEM* );
 static PCB_DIM_LEADER*       Cast_to_PCB_DIM_LEADER( BOARD_ITEM* );
 static PCB_DIM_CENTER*       Cast_to_PCB_DIM_CENTER( BOARD_ITEM* );
+static PCB_DIM_RADIAL*       Cast_to_PCB_DIM_RADIAL( BOARD_ITEM* );
 static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* );
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* );
 static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* );
@@ -104,6 +106,7 @@ static PCB_DIM_ALIGNED*      Cast_to_PCB_DIM_ALIGNED( BOARD_ITEM* );
 static PCB_DIM_ORTHOGONAL*   Cast_to_PCB_DIM_ORTHOGONAL( BOARD_ITEM* );
 static PCB_DIM_LEADER*       Cast_to_PCB_DIM_LEADER( BOARD_ITEM* );
 static PCB_DIM_CENTER*       Cast_to_PCB_DIM_CENTER( BOARD_ITEM* );
+static PCB_DIM_RADIAL*       Cast_to_PCB_DIM_RADIAL( BOARD_ITEM* );
 static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* );
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* );
 static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* );
@@ -141,6 +144,8 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
             return Cast_to_PCB_DIM_LEADER(self)
         elif ct=="PCB_DIM_CENTER":
             return Cast_to_PCB_DIM_CENTER(self)
+        elif ct=="PCB_DIM_RADIAL":
+            return Cast_to_PCB_DIM_RADIAL(self)
         elif ct=="PCB_DIM_ORTHOGONAL":
             return Cast_to_PCB_DIM_ORTHOGONAL(self)
         elif ct=="PCB_SHAPE":
@@ -201,6 +206,7 @@ static PCB_DIM_ALIGNED*      Cast_to_PCB_DIM_ALIGNED( BOARD_ITEM* self )      { 
 static PCB_DIM_ORTHOGONAL*   Cast_to_PCB_DIM_ORTHOGONAL( BOARD_ITEM* self )   { return dynamic_cast<PCB_DIM_ORTHOGONAL *>(self);  }
 static PCB_DIM_LEADER*       Cast_to_PCB_DIM_LEADER( BOARD_ITEM* self )       { return dynamic_cast<PCB_DIM_LEADER *>(self);      }
 static PCB_DIM_CENTER*       Cast_to_PCB_DIM_CENTER( BOARD_ITEM* self )       { return dynamic_cast<PCB_DIM_CENTER *>(self);      }
+static PCB_DIM_RADIAL*       Cast_to_PCB_DIM_RADIAL( BOARD_ITEM* self )       { return dynamic_cast<PCB_DIM_RADIAL *>(self);      }
 static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* self )            { return dynamic_cast<FOOTPRINT*>(self);            }
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* self )            { return dynamic_cast<PCB_GROUP*>(self);            }
 static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* self )              { return dynamic_cast<FP_TEXT*>(self);              }

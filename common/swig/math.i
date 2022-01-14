@@ -31,6 +31,7 @@
 
 
 %rename(getWxPoint) operator wxPoint;
+%rename(getWxSize) operator wxSize;
 #include <math/vector2d.h>
 %include <math/vector2d.h>
 %template(VECTOR2I) VECTOR2<int>;

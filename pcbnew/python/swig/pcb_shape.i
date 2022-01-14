@@ -1,9 +1,11 @@
 %ignore EDA_SHAPE::getCenter;
 
 %{
+#include <geometry/eda_angle.h>
 #include <eda_shape.h>
 #include <pcb_shape.h>
 %}
+%include geometry/eda_angle.h
 %include eda_shape.h
 %include pcb_shape.h
 

@@ -489,6 +489,7 @@ add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx
     DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/kicad.i
     DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/wx.i
     DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/math.i
+    DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/shape.i
     DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/ki_exception.i
     DEPENDS ${CMAKE_SOURCE_DIR}/common/swig/netclass.i
     DEPENDS ${CMAKE_SOURCE_DIR}/scripting/kicadplugins.i

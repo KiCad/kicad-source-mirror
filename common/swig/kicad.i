@@ -143,29 +143,12 @@ typedef long time_t;
 // KiCad plugin handling
 %include "kicadplugins.i"
 
-%shared_ptr(SHAPE)
-%shared_ptr(SHAPE_BASE)
-%shared_ptr(SHAPE_POLY_SET)
-%shared_ptr(SHAPE_LINE_CHAIN_BASE)
-%shared_ptr(SHAPE_LINE_CHAIN)
-
-#include <geometry/shape.h>
-%include <geometry/shape.h>
-
 // Contains VECTOR2I
 %include math.i
 %template(VECTOR_VECTOR2I) std::vector<VECTOR2I>;
 
-#include <geometry/eda_angle.h>
-%include <geometry/eda_angle.h>
-
-// ignore warning from nested classes
-#pragma SWIG nowarn=325
-#include <geometry/shape_line_chain.h>
-%include <geometry/shape_line_chain.h>
-
-#include <geometry/shape_poly_set.h>
-%include <geometry/shape_poly_set.h>
+// Shapes/geometry
+%include shape.i
 
 // ignore warning relative to operator = and operator ++:
 #pragma SWIG nowarn=362,383
