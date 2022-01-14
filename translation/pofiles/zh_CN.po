@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
 "PO-Revision-Date: 2022-01-14 10:30+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"Last-Translator: Eric <alchemillatruth@purelymail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -29309,9 +29309,9 @@ msgid "Zone %s thermal spoke width: %s."
 msgstr "区域 %s 防散热导线宽度：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:1290
-#, fuzzy, c-format
+#, c-format
 msgid "Checking rule assertion \"%s\"."
-msgstr "检查规则条件 \"%s\"。"
+msgstr "检查规则判断 \"%s\"。"
 
 #: pcbnew/drc/drc_item.cpp:44
 msgid "Electrical"
