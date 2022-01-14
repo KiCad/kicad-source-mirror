@@ -583,8 +583,6 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
 
     aSizes.SetHoleToHole( holeToHoleMin );
 
-    aSizes.ClearLayerPairs();
-
     return true;
 }
 
