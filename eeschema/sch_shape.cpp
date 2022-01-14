@@ -117,17 +117,15 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
         aPlotter->SetColor( GetStroke().GetColor() );
 
     aPlotter->SetCurrentLineWidth( pen_size );
-    aPlotter->SetDash( GetStroke().GetPlotStyle() );
+    aPlotter->SetDash( GetEffectiveLineStyle() );
 
     switch( GetShape() )
     {
     case SHAPE_T::ARC:
-        // TODO: doesn't work for dash styles
         aPlotter->Arc( center, -endAngle, -startAngle, radius, FILL_T::NO_FILL, pen_size );
         break;
 
     case SHAPE_T::CIRCLE:
-        // TODO: doesn't work for dash styles
         aPlotter->Circle( GetStart(), GetRadius() * 2, FILL_T::NO_FILL, pen_size );
         break;
 
@@ -155,7 +153,6 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
         break;
 
     case SHAPE_T::BEZIER:
-        // TODO: doesn't work for dash styles
         aPlotter->PlotPoly( m_bezierPoints, FILL_T::NO_FILL, pen_size );
         break;
 
