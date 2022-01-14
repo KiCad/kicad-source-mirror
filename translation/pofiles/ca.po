@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-01-13 14:56+0000\n"
+"PO-Revision-Date: 2022-01-15 22:43+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v6/ca/>\n"
 "Language: ca\n"
@@ -10272,9 +10272,8 @@ msgstr "Format"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:68
 #: eeschema/eeschema_config.cpp:72
-#, fuzzy
 msgid "Field Name Templates"
-msgstr "Plantilles del sistema"
+msgstr "Plantilles dels noms dels camps"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:70
 #, fuzzy
@@ -12464,9 +12463,8 @@ msgstr "Opcions de la pantalla"
 #: gerbview/gerbview_frame.cpp:1062
 #: pcbnew/dialogs/panel_edit_options_base.cpp:24
 #: pcbnew/footprint_edit_frame.cpp:963 pcbnew/pcbnew_config.cpp:58
-#, fuzzy
 msgid "Editing Options"
-msgstr "Edita les opcions de la línia"
+msgstr "Opcions d'edició"
 
 #: eeschema/eeschema_config.cpp:99 pcbnew/pcbnew_config.cpp:81
 msgid "Error loading drawing sheet."
@@ -17866,14 +17864,12 @@ msgid "X2 attr"
 msgstr ""
 
 #: gerbview/gerbview_frame.cpp:1059
-#, fuzzy
 msgid "GerbView"
-msgstr "Tanca GerbView"
+msgstr "GerbView"
 
 #: gerbview/gerbview_frame.cpp:1064
-#, fuzzy
 msgid "Excellon Options"
-msgstr "Opcions de les icones"
+msgstr "Opcions d'Excellon"
 
 #: gerbview/job_file_reader.cpp:157
 msgid "This job file uses an outdated format. Please recreate it."
@@ -19696,9 +19692,8 @@ msgstr "Propietats de l'element"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:420
 #: pcbnew/footprint_edit_frame.cpp:965
-#, fuzzy
 msgid "Default Values"
-msgstr "Valors predeterminats:"
+msgstr "Valors predeterminats"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:456
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:351
@@ -30460,9 +30455,8 @@ msgid "Checking track widths..."
 msgstr "S'estan verificant les amplades de les pistes..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:82
-#, fuzzy
 msgid "Checking via diameters..."
-msgstr "Diàmetre mín. de la via"
+msgstr "S'estan verificant els diàmetres de les vies..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:119
 #, c-format
@@ -30766,9 +30760,8 @@ msgid "autoplaced"
 msgstr "Posiciona automàticament"
 
 #: pcbnew/footprint.cpp:969
-#, fuzzy
 msgid "not in schematic"
-msgstr "Ploteja l'esquemàtic"
+msgstr "no a l'esquemàtic"
 
 #: pcbnew/footprint.cpp:972
 #, fuzzy
@@ -32483,14 +32476,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcbnew_config.cpp:60
-#, fuzzy
 msgid "Action Plugins"
-msgstr "Afegeix un connector"
+msgstr "Connectors d'accions"
 
 #: pcbnew/pcbnew_config.cpp:61
-#, fuzzy
 msgid "Origins & Axes"
-msgstr "Origen"
+msgstr "Orígens i Eixos"
 
 #: pcbnew/pcbnew_printout.cpp:108
 msgid "Multiple Layers"
