@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-10 17:54+0000\n"
+"PO-Revision-Date: 2022-01-15 22:42+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5641,9 +5641,8 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Zip archív '%s' vytvořen (%s nekomprimováno, %s komprimováno)."
 
 #: common/rc_item.cpp:360
-#, fuzzy
 msgid "Excluded warning: "
-msgstr "Zvětšení:"
+msgstr "Vyloučené varování: "
 
 #: common/rc_item.cpp:362
 #, fuzzy
@@ -8682,9 +8681,8 @@ msgstr "Velikost písma:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:174
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:112
-#, fuzzy
 msgid "KiCad Font"
-msgstr "KiCad "
+msgstr "KiCad Písmo"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:191
 #: eeschema/dialogs/dialog_label_properties_base.cpp:237
@@ -29251,9 +29249,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Lokálně přepsat na %s; izolační mezera: %s."
 
 #: pcbnew/drc/drc_engine.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s min thickness: %s."
-msgstr "Minimální tloušťka zóny:"
+msgstr "Zóna %s min tloušťka: %s."
 
 #: pcbnew/drc/drc_engine.cpp:872
 #, fuzzy, c-format
@@ -29371,9 +29369,9 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "Místní izolační mezera na %s; izolační mezera: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s zone connection: %s."
-msgstr "Výběr pouzder:"
+msgstr "Pouzdro %s připojení zóny: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1226
 #, fuzzy, c-format
