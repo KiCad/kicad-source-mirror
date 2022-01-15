@@ -38,7 +38,8 @@ OUTLINE_DECOMPOSER::OUTLINE_DECOMPOSER( FT_Outline& aOutline ) :
 
 static VECTOR2D toVector2D( const FT_Vector* aFreeTypeVector )
 {
-    return VECTOR2D( aFreeTypeVector->x, aFreeTypeVector->y );
+    return VECTOR2D( aFreeTypeVector->x * GLYPH_SIZE_SCALER,
+                     aFreeTypeVector->y * GLYPH_SIZE_SCALER );
 }
 
 
@@ -62,8 +63,7 @@ int OUTLINE_DECOMPOSER::moveTo( const FT_Vector* aEndPoint, void* aCallbackData 
 {
     OUTLINE_DECOMPOSER* decomposer = static_cast<OUTLINE_DECOMPOSER*>( aCallbackData );
 
-    decomposer->m_lastEndPoint.x = aEndPoint->x;
-    decomposer->m_lastEndPoint.y = aEndPoint->y;
+    decomposer->m_lastEndPoint = toVector2D( aEndPoint );
 
     decomposer->newContour();
     decomposer->addContourPoint( decomposer->m_lastEndPoint );
@@ -76,8 +76,7 @@ int OUTLINE_DECOMPOSER::lineTo( const FT_Vector* aEndPoint, void* aCallbackData 
 {
     OUTLINE_DECOMPOSER* decomposer = static_cast<OUTLINE_DECOMPOSER*>( aCallbackData );
 
-    decomposer->m_lastEndPoint.x = aEndPoint->x;
-    decomposer->m_lastEndPoint.y = aEndPoint->y;
+    decomposer->m_lastEndPoint = toVector2D( aEndPoint );
 
     decomposer->addContourPoint( decomposer->m_lastEndPoint );
 
@@ -112,12 +111,10 @@ int OUTLINE_DECOMPOSER::cubicTo( const FT_Vector* aFirstControlPoint,
 
     GLYPH_POINTS result;
     decomposer->approximateBezierCurve( result, bezier );
-
     for( const VECTOR2D& p : result )
         decomposer->addContourPoint( p );
 
-    decomposer->m_lastEndPoint.x = aEndPoint->x;
-    decomposer->m_lastEndPoint.y = aEndPoint->y;
+    decomposer->m_lastEndPoint = toVector2D( aEndPoint );
 
     return 0;
 }
@@ -177,14 +174,12 @@ bool OUTLINE_DECOMPOSER::approximateCubicBezierCurve( GLYPH_POINTS&       aResul
 {
     wxASSERT( aCubicBezier.size() == 4 );
 
+    // minimumSegmentLength defines the "smoothness" of the
+    // curve-to-straight-segments conversion: the larger, the coarser
     // TODO: find out what the minimum segment length should really be!
-    static const int minimumSegmentLength = 50;
-    GLYPH_POINTS     tmp;
-    BEZIER_POLY      converter( aCubicBezier );
-    converter.GetPoly( tmp, minimumSegmentLength );
-
-    for( unsigned int i = 0; i < tmp.size(); i++ )
-        aResult.push_back( tmp[i] );
+    constexpr int minimumSegmentLength = 10;
+    BEZIER_POLY   converter( aCubicBezier );
+    converter.GetPoly( aResult, minimumSegmentLength );
 
     return true;
 }
@@ -242,19 +237,8 @@ int OUTLINE_DECOMPOSER::winding( const GLYPH_POINTS& aContour ) const
         }
     }
 
-    unsigned int i_prev_vertex;
-    unsigned int i_next_vertex;
-
-    // TODO: this should be done with modulo arithmetic for clarity
-    if( i_lowest_vertex == 0 )
-        i_prev_vertex = aContour.size() - 1;
-    else
-        i_prev_vertex = i_lowest_vertex - 1;
-
-    if( i_lowest_vertex == aContour.size() - 1 )
-        i_next_vertex = 0;
-    else
-        i_next_vertex = i_lowest_vertex + 1;
+    unsigned int i_prev_vertex = ( i_lowest_vertex + aContour.size() - 1 ) % aContour.size();
+    unsigned int i_next_vertex = ( i_lowest_vertex + 1 ) % aContour.size();
 
     const VECTOR2D& lowest = aContour[i_lowest_vertex];
     VECTOR2D        prev( aContour[i_prev_vertex] );
@@ -268,7 +252,7 @@ int OUTLINE_DECOMPOSER::winding( const GLYPH_POINTS& aContour ) const
 
         if( i_prev_vertex == i_lowest_vertex )
         {
-            // ERROR: degenerate contour (all points are equal)
+            // ERROR: degenerate contour (all points are colinear with equal Y coordinate)
             // TODO: signal error
             // for now let's just return something at random
             return cw;
