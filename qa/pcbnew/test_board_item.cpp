@@ -194,6 +194,7 @@ BOOST_AUTO_TEST_CASE( Move )
                         item->Move( aRef );
 
                         FP_SHAPE* fpShape = dynamic_cast<FP_SHAPE*>( item.get() );
+
                         if( fpShape != nullptr )
                             fpShape->SetDrawCoord();
 
@@ -247,10 +248,10 @@ BOOST_AUTO_TEST_CASE( Rotate )
 
                         // Four equivalent 90 degree rotations are an identity.
 
-                        item->Rotate( aRef, ANGLE_90 );
-                        item->Rotate( aRef, ANGLE_90 );
-                        item->Rotate( aRef, ANGLE_90 );
-                        item->Rotate( aRef, ANGLE_90 );
+                        item->Rotate( aRef, EDA_ANGLE( 90.0, DEGREES_T ) );
+                        item->Rotate( aRef, EDA_ANGLE( 90.0, DEGREES_T ) );
+                        item->Rotate( aRef, EDA_ANGLE( 90.0, DEGREES_T ) );
+                        item->Rotate( aRef, EDA_ANGLE( 90.0, DEGREES_T ) );
 
                         FP_SHAPE* fpShape = dynamic_cast<FP_SHAPE*>( aOriginalItem );
 

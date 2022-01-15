@@ -558,11 +558,11 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_clearance.ChangeValue( m_dummyPad->GetLocalClearance() );
     m_maskMargin.ChangeValue( m_dummyPad->GetLocalSolderMaskMargin() );
     m_spokeWidth.ChangeValue( m_dummyPad->GetThermalSpokeWidth() );
-    m_spokeAngle.ChangeDoubleValue( m_dummyPad->GetThermalSpokeAngle().AsTenthsOfADegree() );
+    m_spokeAngle.ChangeAngleValue( m_dummyPad->GetThermalSpokeAngle() );
     m_thermalGap.ChangeValue( m_dummyPad->GetThermalGap() );
     m_pasteMargin.ChangeValue( m_dummyPad->GetLocalSolderPasteMargin() );
     m_pasteMarginRatio.ChangeDoubleValue( m_dummyPad->GetLocalSolderPasteMarginRatio() * 100.0 );
-    m_pad_orientation.ChangeDoubleValue( m_dummyPad->GetOrientation().AsTenthsOfADegree() );
+    m_pad_orientation.ChangeAngleValue( m_dummyPad->GetOrientation() );
 
     switch( m_dummyPad->GetZoneConnection() )
     {
@@ -1717,11 +1717,11 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     aPad->SetLocalSolderPasteMargin( m_pasteMargin.GetValue() );
     aPad->SetLocalSolderPasteMarginRatio( m_pasteMarginRatio.GetDoubleValue() / 100.0 );
     aPad->SetThermalSpokeWidth( m_spokeWidth.GetValue() );
-    aPad->SetThermalSpokeAngle( EDA_ANGLE( m_spokeAngle.GetDoubleValue(), TENTHS_OF_A_DEGREE_T ) );
+    aPad->SetThermalSpokeAngle( m_spokeAngle.GetAngleValue() );
     aPad->SetThermalGap( m_thermalGap.GetValue() );
 
     // And rotation
-    aPad->SetOrientation( EDA_ANGLE( m_pad_orientation.GetDoubleValue(), TENTHS_OF_A_DEGREE_T ) );
+    aPad->SetOrientation( m_pad_orientation.GetAngleValue() );
 
     switch( m_ZoneConnectionChoice->GetSelection() )
     {

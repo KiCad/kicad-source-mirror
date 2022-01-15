@@ -907,14 +907,14 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
         aList.emplace_back( _( "Height" ), MessageTextFromValue( units, m_size.y ) );
     }
 
-    double fp_orient_degrees = parentFootprint ? parentFootprint->GetOrientationDegrees() : 0;
-    double pad_orient_degrees = GetOrientationDegrees() - fp_orient_degrees;
-    pad_orient_degrees = NormalizeAngleDegrees( pad_orient_degrees, -180.0, +180.0 );
+    EDA_ANGLE fp_orient = parentFootprint ? parentFootprint->GetOrientation() : ANGLE_0;
+    EDA_ANGLE pad_orient = GetOrientation() - fp_orient;
+    pad_orient.Normalize180();
 
-    if( fp_orient_degrees != 0.0 )
-        msg.Printf( wxT( "%g(+ %g)" ), pad_orient_degrees, fp_orient_degrees );
+    if( !fp_orient.IsZero() )
+        msg.Printf( wxT( "%g(+ %g)" ), pad_orient.AsDegrees(), fp_orient.AsDegrees() );
     else
-        msg.Printf( wxT( "%g" ), GetOrientationDegrees() );
+        msg.Printf( wxT( "%g" ), GetOrientation().AsDegrees() );
 
     aList.emplace_back( _( "Rotation" ), msg );
 

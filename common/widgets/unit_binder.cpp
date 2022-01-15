@@ -274,6 +274,15 @@ void UNIT_BINDER::SetDoubleValue( double aValue )
 }
 
 
+void UNIT_BINDER::SetAngleValue( const EDA_ANGLE& aValue )
+{
+    if( m_units == EDA_UNITS::DEGREES )
+        SetDoubleValue( aValue.AsTenthsOfADegree() );   // Historical reasons.
+    else
+        SetDoubleValue( aValue.AsDegrees() );
+}
+
+
 void UNIT_BINDER::SetValue( const wxString& aValue )
 {
     wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
@@ -313,6 +322,15 @@ void UNIT_BINDER::ChangeDoubleValue( double aValue )
         ChangeValue( wxT( "-" ) + StringFromValue( m_units, displayValue, false, m_dataType ) );
     else
         ChangeValue( StringFromValue( m_units, displayValue, false, m_dataType ) );
+}
+
+
+void UNIT_BINDER::ChangeAngleValue( const EDA_ANGLE& aValue )
+{
+    if( m_units == EDA_UNITS::DEGREES )
+        ChangeDoubleValue( aValue.AsTenthsOfADegree() );   // Historical reasons.
+    else
+        ChangeDoubleValue( aValue.AsDegrees() );
 }
 
 
@@ -403,6 +421,15 @@ double UNIT_BINDER::GetDoubleValue()
     displayValue = setPrecision( displayValue, false );
 
     return m_originTransforms.FromDisplay( displayValue, m_coordType );
+}
+
+
+EDA_ANGLE UNIT_BINDER::GetAngleValue()
+{
+    if( m_units == EDA_UNITS::DEGREES )
+        return EDA_ANGLE( GetDoubleValue(), TENTHS_OF_A_DEGREE_T );     // historical reasons
+    else
+        return EDA_ANGLE( GetDoubleValue(), DEGREES_T );
 }
 
 

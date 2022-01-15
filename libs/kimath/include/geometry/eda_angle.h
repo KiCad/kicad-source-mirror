@@ -208,7 +208,7 @@ public:
             return EDA_ANGLE( newAngle / DEGREES_T, DEGREES_T );
 
         case RADIANS_T:
-            return EDA_ANGLE( newAngle / TENTHS_OF_A_DEGREE_TO_RADIANS, RADIANS_T );
+            return EDA_ANGLE( newAngle * TENTHS_OF_A_DEGREE_TO_RADIANS, RADIANS_T );
 
         default:
         case TENTHS_OF_A_DEGREE_T:
@@ -251,6 +251,21 @@ public:
     inline EDA_ANGLE Normalize()
     {
         normalize( false );
+        return *this;
+    }
+
+    inline EDA_ANGLE Normalize90()
+    {
+        int angle = AsTenthsOfADegree();
+
+        while( angle < -900 )
+            angle += 1800;
+
+        while( angle > 900 )
+            angle -= 1800;
+
+        *this = EDA_ANGLE( angle, TENTHS_OF_A_DEGREE_T );
+
         return *this;
     }
 

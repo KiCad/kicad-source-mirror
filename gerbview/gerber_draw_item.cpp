@@ -115,10 +115,9 @@ bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, VECTOR2I& aPos, EDA_ANGLE&
     else        // this item is a line
     {
         VECTOR2I delta = m_Start - m_End;
+        EDA_ANGLE angle( delta );
 
-        double deci = RAD2DECIDEG( atan2( (double)delta.y, (double)delta.x ) );
-        NORMALIZE_ANGLE_90( deci );
-        aOrientation = EDA_ANGLE( deci, TENTHS_OF_A_DEGREE_T );
+        aOrientation = angle.Normalize90();
 
         // A reasonable size for text is size/2 because text needs margin below and above it.
         // a margin = size/4 seems good, expecting the line len is large enough to show 3 chars,
@@ -848,23 +847,26 @@ bool GERBER_DRAW_ITEM::HitTest( const VECTOR2I& aRefPos, int aAccuracy ) const
         {
             // Now check that we are within the arc angle
 
-            VECTOR2D start = VECTOR2D( m_Start ) - VECTOR2D( m_ArcCentre );
-            VECTOR2D end = VECTOR2D( m_End ) - VECTOR2D( m_ArcCentre );
+            VECTOR2D  start = VECTOR2D( m_Start ) - VECTOR2D( m_ArcCentre );
+            VECTOR2D  end = VECTOR2D( m_End ) - VECTOR2D( m_ArcCentre );
+            EDA_ANGLE start_angle( start );
+            EDA_ANGLE end_angle( end );
 
-            double start_angle = NormalizeAngleRadiansPos( start.Angle() );
-            double end_angle = NormalizeAngleRadiansPos( end.Angle() );
+            start_angle.Normalize();
+            end_angle.Normalize();
 
             if( m_Start == m_End )
             {
-                start_angle = 0;
-                end_angle = 2 * M_PI;
+                start_angle = ANGLE_0;
+                end_angle = ANGLE_360;
             }
             else if( end_angle < start_angle )
             {
-                end_angle += 2 * M_PI;
+                end_angle += ANGLE_360;
             }
 
-            double test_angle = NormalizeAngleRadiansPos( test_radius.Angle() );
+            EDA_ANGLE test_angle( test_radius );
+            test_angle.Normalize();
 
             return ( test_angle > start_angle && test_angle < end_angle );
         }

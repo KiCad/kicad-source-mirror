@@ -245,7 +245,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
         m_txtTextPosY->Disable();
     }
 
-    m_orientation.SetDoubleValue( text.GetTextAngle().AsTenthsOfADegree() );
+    m_orientation.SetAngleValue( text.GetTextAngle() );
 
     m_bold->Check( text.IsBold() );
     m_italic->Check( text.IsItalic() );
@@ -417,7 +417,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
 
     aTarget->SetKeepTextAligned( m_cbKeepAligned->GetValue() );
 
-    text.SetTextAngle( EDA_ANGLE( m_orientation.GetDoubleValue(), TENTHS_OF_A_DEGREE_T ) );
+    text.SetTextAngle( m_orientation.GetAngleValue() );
     text.SetTextWidth( m_textWidth.GetValue() );
     text.SetTextHeight( m_textHeight.GetValue() );
     text.SetTextThickness( m_textThickness.GetValue() );

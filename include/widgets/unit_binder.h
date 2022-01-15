@@ -96,6 +96,8 @@ public:
      */
     virtual void SetDoubleValue( double aValue );
 
+    virtual void SetAngleValue( const EDA_ANGLE& aValue );
+
     /**
      * Set new value (in Internal Units) for the text field, taking care of units conversion
      * WITHOUT triggering the update routine.
@@ -112,6 +114,8 @@ public:
      */
     virtual void ChangeDoubleValue( double aValue );
 
+    virtual void ChangeAngleValue( const EDA_ANGLE& aValue );
+
     /**
      * Return the current value in Internal Units.
      */
@@ -124,6 +128,8 @@ public:
      * SetPrecision() (if not <= 0)
      */
     virtual double GetDoubleValue();
+
+    virtual EDA_ANGLE GetAngleValue();
 
     /**
      * Return true if the control holds the indeterminate value (for instance, if it

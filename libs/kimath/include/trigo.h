@@ -254,20 +254,6 @@ template <class T> inline T NormalizeAngle360Max( T Angle )
     return Angle;
 }
 
-/// Normalize angle to be > -360.0 and < 360.0
-/// Angle equal to -360 or +360 are set to 0
-template <class T> inline T NormalizeAngle360Min( T Angle )
-{
-    while( Angle <= -3600 )
-        Angle += 3600;
-
-    while( Angle >= 3600 )
-        Angle -= 3600;
-
-    return Angle;
-}
-
-
 /// Normalize angle to be in the 0.0 .. -360.0 range: angle is in 1/10 degrees.
 template <class T>
 inline T NormalizeAngleNeg( T Angle )
@@ -311,23 +297,6 @@ inline double NormalizeAngleDegreesPos( double Angle )
 }
 
 
-inline void NORMALIZE_ANGLE_DEGREES_POS( double& Angle )
-{
-    Angle = NormalizeAngleDegreesPos( Angle );
-}
-
-
-inline double NormalizeAngleRadiansPos( double Angle )
-{
-    while( Angle < 0 )
-        Angle += (2 * M_PI );
-
-    while( Angle >= ( 2 * M_PI ) )
-        Angle -= ( 2 * M_PI );
-
-    return Angle;
-}
-
 /// Normalize angle to be aMin < angle <= aMax angle is in degrees.
 inline double NormalizeAngleDegrees( double Angle, double aMin, double aMax )
 {
@@ -348,43 +317,6 @@ template <class T, class T2> inline T AddAngles( T a1, T2 a2 )
     a1 += a2;
     NORMALIZE_ANGLE_POS( a1 );
     return a1;
-}
-
-
-template <class T> inline T NegateAndNormalizeAnglePos( T Angle )
-{
-    Angle = -Angle;
-
-    while( Angle < 0 )
-        Angle += 3600;
-
-    while( Angle >= 3600 )
-        Angle -= 3600;
-
-    return Angle;
-}
-
-template <class T> inline void NEGATE_AND_NORMALIZE_ANGLE_POS( T& Angle )
-{
-    Angle = NegateAndNormalizeAnglePos( Angle );
-}
-
-
-/// Normalize angle to be in the -90.0 .. 90.0 range
-template <class T> inline T NormalizeAngle90( T Angle )
-{
-    while( Angle < -900 )
-        Angle += 1800;
-
-    while( Angle > 900 )
-        Angle -= 1800;
-
-    return Angle;
-}
-
-template <class T> inline void NORMALIZE_ANGLE_90( T& Angle )
-{
-    Angle = NormalizeAngle90( Angle );
 }
 
 

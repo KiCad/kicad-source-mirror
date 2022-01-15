@@ -861,13 +861,13 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
     {
         const char*   mirror;
         const char*   flip;
-        double        fp_orient = footprint->GetOrientation().AsTenthsOfADegree();
+        EDA_ANGLE     fp_orient = footprint->GetOrientation();
 
         if( footprint->GetFlag() )
         {
             mirror = "MIRRORX";
             flip   = "FLIP";
-            NEGATE_AND_NORMALIZE_ANGLE_POS( fp_orient );
+            fp_orient = fp_orient.Invert().Normalize();
         }
         else
         {
@@ -885,7 +885,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         fprintf( aFile, "LAYER %s\n",
                  footprint->GetFlag() ? "BOTTOM" : "TOP" );
         fprintf( aFile, "ROTATION %g\n",
-                 fp_orient / 10.0 );
+                 fp_orient.AsDegrees() );
         fprintf( aFile, "SHAPE \"%s\" %s %s\n",
                  TO_UTF8( escapeString( getShapeName( footprint ) ) ),
                  mirror, flip );
