@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-05 00:19+0000\n"
+"PO-Revision-Date: 2022-01-15 22:42+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1678,14 +1678,12 @@ msgid "&Yes"
 msgstr ""
 
 #: common/dialog_shim.cpp:662
-#, fuzzy
 msgid "&No"
-msgstr "いいえ"
+msgstr "いいえ(&N)"
 
 #: common/dialog_shim.cpp:663
-#, fuzzy
 msgid "&Apply"
-msgstr "適用"
+msgstr "適用(&A)"
 
 #: common/dialog_shim.cpp:664
 msgid "&Save"
@@ -3396,9 +3394,8 @@ msgstr "一点鎖線"
 
 #: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1617
 #: include/stroke_params.h:74
-#, fuzzy
 msgid "Dash-Dot-Dot"
-msgstr "一点鎖線"
+msgstr "二点鎖線"
 
 #: common/dialogs/panel_setup_netclasses.cpp:442
 msgid "Netclass must have a name."
@@ -4659,19 +4656,18 @@ msgstr "設定ファイルの書き込みで問題"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:101
 #: eeschema/dialogs/dialog_text_properties_base.cpp:67
-#, fuzzy
 msgid "Default Font"
-msgstr "デフォルトの単位:"
+msgstr "デフォルトのフォント"
 
 #: common/font/fontconfig.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading font '%s'."
-msgstr "プリント基板'%s' のロード中のエラー。"
+msgstr "フォント '%s' のロード中のエラー。"
 
 #: common/font/fontconfig.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "フットプリント '%s' が見つかりません。"
+msgstr "フォント '%s' が見つかりません; '%s' で置き換えます。"
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:884
 #: eeschema/symbol_editor/symbol_library_manager.cpp:104
@@ -5167,9 +5163,8 @@ msgid "Symbol fields"
 msgstr "シンボルのフィールド"
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Sheet references"
-msgstr "設定を保存 (&S)"
+msgstr "シートリファレンス"
 
 #: common/layer_id.cpp:118
 #, fuzzy
@@ -9566,7 +9561,6 @@ msgid "Align left"
 msgstr "左揃え"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:151
-#, fuzzy
 msgid "Align horizontal center"
 msgstr "水平中央寄せ"
 
@@ -9583,7 +9577,6 @@ msgid "Align top"
 msgstr "上揃え"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:171
-#, fuzzy
 msgid "Align vertical center"
 msgstr "垂直中央寄せ"
 
@@ -11734,9 +11727,8 @@ msgid "Remap Symbols"
 msgstr "シンボルをリマップ"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:241
-#, fuzzy
 msgid "Text can not be empty."
-msgstr "%s は空にできません。"
+msgstr "テキストは空にできません。"
 
 #: eeschema/dialogs/dialog_text_properties_base.h:82
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -11844,9 +11836,8 @@ msgid "Appearance"
 msgstr "外観"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
-#, fuzzy
 msgid "Default font:"
-msgstr "デフォルトの出力形式に設定"
+msgstr "デフォルトのフォント:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:46
 msgid "S&how hidden pins"
@@ -11857,14 +11848,12 @@ msgid "Show hidden fields"
 msgstr "非表示フィールドを表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:52
-#, fuzzy
 msgid "Show ERC errors"
-msgstr "ERC エラー"
+msgstr "ERC エラーを表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:55
-#, fuzzy
 msgid "Show ERC warnings"
-msgstr "ERC 警告"
+msgstr "ERC 警告を表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:58
 #, fuzzy
@@ -16835,8 +16824,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s%s 位置 "
-"<b>(%.3f, %.3f)</b> (変換シンボル)"
+"<b>重複ピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> 衝突ピン%s%s 位置 <b>(%.3f, %.3f)</b> "
+"(変換シンボル)."
 
 #: eeschema/tools/ee_inspection_tool.cpp:278
 #, c-format
@@ -16844,8 +16833,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
-"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s%s 位置 "
-"<b>(%.3f, %.3f)</b> (変換シンボルのユニット %c と %c)"
+"<b>重複ピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s%s 位置 <b>(%.3f, %.3f)</b> ("
+"変換シンボルのユニット %c と %c)."
 
 #: eeschema/tools/ee_inspection_tool.cpp:297
 #, c-format
