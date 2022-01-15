@@ -1,22 +1,22 @@
 # Mark Roszko <mark.roszko@gmail.com>, 2020.
-# ZbeeGin <zbeegin@op.pl>, 2020, 2021.
+# ZbeeGin <zbeegin@op.pl>, 2020, 2021, 2022.
 # Pomian <kontakt@rapiddev.pl>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2021-12-10 22:05+0000\n"
+"PO-Revision-Date: 2022-01-15 22:43+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1679,26 +1679,22 @@ msgid "&OK"
 msgstr "OK"
 
 #: common/dialog_shim.cpp:660
-#, fuzzy
 msgid "&Cancel"
 msgstr "Anuluj"
 
 #: common/dialog_shim.cpp:661
 msgid "&Yes"
-msgstr ""
+msgstr "Tak"
 
 #: common/dialog_shim.cpp:662
-#, fuzzy
 msgid "&No"
 msgstr "Nie"
 
 #: common/dialog_shim.cpp:663
-#, fuzzy
 msgid "&Apply"
 msgstr "Zastosuj"
 
 #: common/dialog_shim.cpp:664
-#, fuzzy
 msgid "&Save"
 msgstr "Zapisz"
 
@@ -2994,7 +2990,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:171
 msgid "High-contrast mode dimming factor:"
-msgstr ""
+msgstr "Współczynnik ściemnienia w trybie wysokiego kontrastu:"
 
 #: common/dialogs/panel_common_settings_base.cpp:178
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:75
@@ -3423,9 +3419,8 @@ msgstr "Kreska-kropka"
 
 #: common/dialogs/panel_setup_netclasses.cpp:97 common/eda_shape.cpp:1617
 #: include/stroke_params.h:74
-#, fuzzy
 msgid "Dash-Dot-Dot"
-msgstr "Kreska-kropka"
+msgstr "Kreska-kropka-kropka"
 
 #: common/dialogs/panel_setup_netclasses.cpp:442
 msgid "Netclass must have a name."
@@ -4198,9 +4193,8 @@ msgstr "Etykieta"
 
 #: common/eda_item.cpp:350 eeschema/sch_text.cpp:1195
 #: eeschema/sch_text.cpp:1497
-#, fuzzy
 msgid "Net Class Flag"
-msgstr "Klasy sieci"
+msgstr "Flaga klasy sieci"
 
 #: common/eda_item.cpp:351 eeschema/sch_text.cpp:1196
 msgid "Global Label"
@@ -4690,19 +4684,18 @@ msgstr "Wystąpił problem przy zapisie pliku konfiguracyjnego"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:101
 #: eeschema/dialogs/dialog_text_properties_base.cpp:67
-#, fuzzy
 msgid "Default Font"
-msgstr "Domyślne jednostki:"
+msgstr "Domyślna czcionka"
 
 #: common/font/fontconfig.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading font '%s'."
-msgstr "Błąd podczas ładowania PCB '%s'."
+msgstr "Błąd podczas ładowania czcionki '%s'."
 
 #: common/font/fontconfig.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "Footprint '%s' nie został znaleziony."
+msgstr "Czcionka '%s' nie została znaleziona; zastosowano odpowiednik '%s'."
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:884
 #: eeschema/symbol_editor/symbol_library_manager.cpp:104
@@ -5197,14 +5190,12 @@ msgid "Symbol fields"
 msgstr "Pola symbolu"
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Sheet references"
 msgstr "Odnośniki między arkuszami"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Net class references"
-msgstr "Klasy sieci"
+msgstr "Odnośniki do klas sieci"
 
 #: common/layer_id.cpp:119
 msgid "Symbol body outlines"
@@ -5220,9 +5211,8 @@ msgid "Schematic text && graphics"
 msgstr "Teksty na schemacie oraz grafika"
 
 #: common/layer_id.cpp:122
-#, fuzzy
 msgid "Schematic text && graphics backgrounds"
-msgstr "Teksty na schemacie oraz grafika"
+msgstr "Tło tekstów na schemacie oraz grafik"
 
 #: common/layer_id.cpp:123
 msgid "Pins"
@@ -5266,9 +5256,8 @@ msgid "ERC errors"
 msgstr "Błędy ERC"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "ERC exclusions"
-msgstr "Wyjątki DRC"
+msgstr "Wyjątki ERC"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:171
 #: pcbnew/widgets/appearance_controls.cpp:354
@@ -5670,14 +5659,12 @@ msgstr ""
 "Archiwum ZIP '%s' zostało utworzone (%s nieskompresowane, %s skompresowane)."
 
 #: common/rc_item.cpp:360
-#, fuzzy
 msgid "Excluded warning: "
-msgstr "Skala:"
+msgstr "Wykluczone ostrzeżenie: "
 
 #: common/rc_item.cpp:362
-#, fuzzy
 msgid "Excluded error: "
-msgstr "Wykluczone "
+msgstr "Wykluczony błąd: "
 
 #: common/rc_item.cpp:366
 msgid "Warning: "
@@ -6436,9 +6423,8 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "Obrót wokół osi Y nie jest obecnie wspierany"
 
 #: common/widgets/font_choice.cpp:58
-#, fuzzy
 msgid "<not found>"
-msgstr "Nie znaleziono %s"
+msgstr "<nie znaleziono>"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
@@ -8739,7 +8725,7 @@ msgstr "Ustaw na"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:170
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:108
 msgid "Font:"
-msgstr ""
+msgstr "Czcionka:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
@@ -8749,9 +8735,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:174
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:112
-#, fuzzy
 msgid "KiCad Font"
-msgstr "KiCad "
+msgstr "Czcionka KiCad"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:191
 #: eeschema/dialogs/dialog_label_properties_base.cpp:237
@@ -8813,9 +8798,8 @@ msgstr "Styl linii:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:354
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:90
-#, fuzzy
 msgid "Fill color:"
-msgstr "Kolor linii:"
+msgstr "Kolor wypełnienia:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:363
 msgid "Junction size:"
@@ -8907,7 +8891,6 @@ msgid "Junction Properties"
 msgstr "Właściwości węzła"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:96
-#, fuzzy
 msgid "Pin length:"
 msgstr "Długość pinu:"
 
@@ -8925,23 +8908,20 @@ msgid "Label Properties"
 msgstr "Właściwości etykiety"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:104
-#, fuzzy
 msgid "Net Class Flag Properties"
-msgstr "Parametry klas połączeń"
+msgstr "Parametry flag klas połączeń"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:105
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "Właściwości pinów arkusza hierarchicznego"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:394
-#, fuzzy
 msgid "Label can not be empty."
-msgstr "Nazwa sieci nie może być pusta."
+msgstr "Nazwa etykiety nie może być pusta."
 
 #: eeschema/dialogs/dialog_label_properties.cpp:574
-#, fuzzy
 msgid "The first field is mandatory."
-msgstr "Pierwsze %d pól jest obowiązkowych."
+msgstr "Pierwsze pole jest obowiązkowe."
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:29
 #: eeschema/dialogs/dialog_label_properties_base.cpp:38
@@ -9112,13 +9092,12 @@ msgid "Passive"
 msgstr "Pasywny"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:161
-#, fuzzy
 msgid "Dot"
-msgstr "Kropki"
+msgstr "Kropka"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:167
 msgid "Diamond"
-msgstr ""
+msgstr "Diamenty"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:177
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -9321,10 +9300,8 @@ msgid "New Symbol"
 msgstr "Nowy symbol"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
-#, fuzzy
 msgid "Set width to 0 to use Schematic default symbol line width."
-msgstr ""
-"Ustaw szerokość na 0, aby użyć szerokości linii pochodzącej z klasy sieci."
+msgstr "Ustaw szerokość na 0, aby użyć domyślnej szerokości linii ze schematu."
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:53
 msgid "Fill Style"
@@ -9343,9 +9320,8 @@ msgid "Fill with body background color"
 msgstr "Wypełnij kolorem wypełnienia drugoplanowego"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:69
-#, fuzzy
 msgid "Fill with:"
-msgstr "Styl wypełnienia:"
+msgstr "Wypełnienie przez:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:81
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:167
@@ -9605,14 +9581,12 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:116
-#, fuzzy
 msgid "Horizontal text"
-msgstr "Poziomo w lewo"
+msgstr "Tekst poziomy"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:121
-#, fuzzy
 msgid "Vertical text"
-msgstr "Pionowo"
+msgstr "Tekst pionowy"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:146
 #: eeschema/dialogs/dialog_text_properties_base.cpp:107
@@ -9621,7 +9595,6 @@ msgid "Align left"
 msgstr "Wyrównanie do lewej"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:151
-#, fuzzy
 msgid "Align horizontal center"
 msgstr "Wyrównaj do środka w poziomie"
 
@@ -9638,7 +9611,6 @@ msgid "Align top"
 msgstr "Wyrównanie do góry"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:171
-#, fuzzy
 msgid "Align vertical center"
 msgstr "Wyrównaj do środka w pionie"
 
@@ -10548,9 +10520,9 @@ msgid "Set line color to transparent to use Schematic Editor colors."
 msgstr "Ustaw kolor przeźroczysty by użyć kolorów edytora schematów."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Właściwości"
+msgstr "Właściwości %s"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -11913,9 +11885,8 @@ msgid "Appearance"
 msgstr "Wygląd"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
-#, fuzzy
 msgid "Default font:"
-msgstr "Format domyślny"
+msgstr "Domyślna czcionka:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:46
 msgid "S&how hidden pins"
@@ -12319,7 +12290,7 @@ msgstr "Długość przelotki:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:237
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
 msgid "Dash and dot lengths are ratios of the line width."
-msgstr ""
+msgstr "Długości myślników i kropek są proporcjonalne do szerokości linii."
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:169
 msgid "No error or warning"
@@ -12359,6 +12330,8 @@ msgid ""
 "Set to 0 to allow symbols to inherit their line widths from\n"
 "their parent Schematic"
 msgstr ""
+"Ustaw na 0, aby symbole dziedziczyły szerokość linii z\n"
+"ich schematu nadrzędnego"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:55
 msgid "D&efault pin length:"
@@ -17275,31 +17248,31 @@ msgstr " X "
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10A Log"
-msgstr ""
+msgstr "10A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15A Log"
-msgstr ""
+msgstr "15A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15A Log S"
-msgstr ""
+msgstr "15A Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10C Rev Log"
-msgstr ""
+msgstr "10C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log"
-msgstr ""
+msgstr "15C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "15C Rev Log S"
-msgstr ""
+msgstr "15C Rev Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "0B Lin"
-msgstr ""
+msgstr "0B Lin"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 #, fuzzy
@@ -21021,7 +20994,6 @@ msgstr ""
 "Czy chcesz opuścić program i porzucić zmiany?"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -21056,20 +21028,20 @@ msgstr ""
 "Wartość kontrolna jest pokazywana jako pogrubiona.\n"
 "\n"
 "Obliczenia dotyczą prądów do 35A (zewnętrzne ścieżki) lub 17,5A (wewnętrzne "
-"ścieżki), przy wzroście temperatury do 100 st. C i szerokości do 400milsów "
-"(10 mm).\n"
+"ścieżki), przy wzroście temperatury do 100 st. C i szerokości do 400milsów ("
+"10 mm).\n"
 "\n"
-"Wzór z normy IPC 2221 to  \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
-"gdzie:  \n"
-"___I___ = maksymalny prąd w amperach  \n"
-"___&Delta;T___ = wzrost temperatury powyżej temperatury otoczenia w &deg;"
-"C  \n"
-"___W___ = szerokość milsach  \n"
-"___H___ = grubość (wysokość miedzi) w milsach  \n"
+"Wzór z normy IPC 2221 to\n"
+"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; H)<sup>0."
+"725</sup>___</center>\n"
+"gdzie:<br>\n"
+"___I___ = maksymalny prąd w amperach<br>\n"
+"___&Delta;T___ = wzrost temperatury powyżej temperatury otoczenia w "
+"&deg;C<br>\n"
+"___W___ = szerokość milsach<br>\n"
+"___H___ = grubość (wysokość miedzi) w milsach<br>\n"
 "___K___ = 0.024 dla ścieżek wewnętrznych lub 0.048 dla ścieżek "
-"zewnętrznych  \n"
+"zewnętrznych<br>\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21875,11 +21847,11 @@ msgstr "Żółty"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
-msgstr ""
+msgstr "Naturalny FR4"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:79
 msgid "PTFE natural"
-msgstr ""
+msgstr "Naturalny PTFE"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:80
 #, fuzzy
@@ -21888,11 +21860,11 @@ msgstr "Linia łamana"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:81
 msgid "Phenolic natural"
-msgstr ""
+msgstr "Naturalny fenolowy"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
-msgstr ""
+msgstr "Aluminium"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
 msgid "Not specified"
@@ -23667,14 +23639,14 @@ msgid "Done.<br><br>"
 msgstr "Wykonano.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
-msgstr "Usuń wykluczenia dla tego naruszenia zasad"
+msgstr "Usuń wszystkie wykluczenia dla naruszenia reguły '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'"
-msgstr "Wyklucz to naruszenie zasad"
+msgstr "Wyklucz wszystkie naruszenia reguły '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:502
 msgid "Run clearance resolution tool..."
@@ -23834,9 +23806,9 @@ msgstr ""
 "przenieść z powrotem na PCB."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Updated footprint %s (%s)"
-msgstr "Uaktualnij footprinty"
+msgstr "Uaktualniony footprint %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:365
 #, fuzzy, c-format
@@ -23855,7 +23827,7 @@ msgstr "Anuluj zmiany"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:400
 msgid ": OK"
-msgstr ""
+msgstr ": OK"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 msgid "Update all footprints on board"
@@ -24456,12 +24428,12 @@ msgstr "Wyklucz z BOM"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:206
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:210
 msgid "Exempt from courtyard requirement"
-msgstr ""
+msgstr "Zwolniony z wymogu posiadania pola zajętości"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:207
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr ""
+msgstr "Nie będzie generował naruszenia DRC o braku pola zajętości"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:223
 msgid "Update Footprint from Library..."
@@ -24528,7 +24500,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:298
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:269
 msgid "Allow bridged solder mask apertures between pads"
-msgstr ""
+msgstr "Zezwalaj na mostkowane apertury soldermaski między padami"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:272
@@ -26425,12 +26397,11 @@ msgstr "Z nadrzędnego footprintu"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:716
 msgid "Zone knockout:"
-msgstr ""
+msgstr "Strefa bezkonkurencyjna:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
-#, fuzzy
 msgid "Pad shape"
-msgstr "Kształt pola:"
+msgstr "Kształt pola"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
 #, fuzzy
@@ -26548,13 +26519,13 @@ msgid "Y scale constrained."
 msgstr "Skala Y ograniczona."
 
 #: pcbnew/dialogs/dialog_plot.cpp:718
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Width correction constrained.  The width correction value must be in the "
 "range of [%s; %s] for the current design rules."
 msgstr ""
-"Korekcja szerokości ograniczona. Prawidłowa wartość korekcji musi zawierać "
-"się w granicach  [%s; %s] (%s) dla bieżących reguł projektowych."
+"Korekcja szerokości ograniczona.  Prawidłowa wartość korekcji musi zawierać "
+"się w granicach [%s; %s] dla bieżących reguł projektowych."
 
 #: pcbnew/dialogs/dialog_plot.cpp:795
 msgid "No layer selected, Nothing to plot"
@@ -29062,6 +29033,8 @@ msgstr "Prześwit soldermaski:"
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr ""
+"Zezwalaj na mostkowane apertury soldermaski między padami w obrębie "
+"footprintów"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
 #, fuzzy
@@ -29815,9 +29788,9 @@ msgid "Local override on %s; thermal spoke width: %s."
 msgstr "Lokalne pokrycie na %s; prześwit: %s."
 
 #: pcbnew/drc/drc_engine.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s min thickness: %s."
-msgstr "Grubość linii:"
+msgstr "Strefa %s minimalna grubość: %s."
 
 #: pcbnew/drc/drc_engine.cpp:872
 #, fuzzy, c-format
@@ -29826,11 +29799,11 @@ msgstr "Sprawdzam warunek reguły \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:876 pcbnew/drc/drc_engine.cpp:1295
 msgid "Assertion passed."
-msgstr ""
+msgstr "Asercja poprawna."
 
 #: pcbnew/drc/drc_engine.cpp:878 pcbnew/drc/drc_engine.cpp:1299
 msgid "--> Assertion failed. <--"
-msgstr ""
+msgstr "--> Asercja nie powiodła się. <--"
 
 #: pcbnew/drc/drc_engine.cpp:897
 #, c-format
@@ -29933,14 +29906,14 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "Lokalny prześwit na %s; prześwit: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s zone connection: %s."
-msgstr "Port %s nie ma połączeń."
+msgstr "Footprint %s połączenie ze strefą: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1226
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s pad connection: %s."
-msgstr "Typ połączenia ze strefą: %s."
+msgstr "Strefa %s połączenie z polem: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1230 pcbnew/drc/drc_engine.cpp:1246
 #: pcbnew/drc/drc_engine.cpp:1262 pcbnew/zone.cpp:327 pcbnew/zone.cpp:476
@@ -29948,14 +29921,14 @@ msgid "zone"
 msgstr "strefa"
 
 #: pcbnew/drc/drc_engine.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s thermal relief gap: %s."
-msgstr "Połączenia termiczne ze strefą: %s."
+msgstr "Strefa %s prześwit połączenia termicznego: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s thermal spoke width: %s."
-msgstr "Szerokość poł. termicznego:"
+msgstr "Strefa %s szerokość poł. termicznego: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1290
 #, fuzzy, c-format
@@ -30022,7 +29995,7 @@ msgstr "Sieć przypisana do strefy miedzi nie ma żadnych pól lutowniczych"
 
 #: pcbnew/drc/drc_item.cpp:88
 msgid "Thermal relief connection to zone incomplete"
-msgstr ""
+msgstr "Niekompletne łączenie termiczne ze strefą"
 
 #: pcbnew/drc/drc_item.cpp:92
 msgid "Via is not connected or connected on only one layer"
@@ -30123,18 +30096,16 @@ msgid "Footprint doesn't match copy in library"
 msgstr "Typ footprintu nie odpowiada polom footprintu"
 
 #: pcbnew/drc/drc_item.cpp:192
-#, fuzzy
 msgid "Assertion failure"
-msgstr "Powierzchnia przekroju:"
+msgstr "Asercja zakończona niepowodzeniem"
 
 #: pcbnew/drc/drc_item.cpp:196
-#, fuzzy
 msgid "Copper sliver"
-msgstr "Warstwy miedzi:"
+msgstr "Płat miedzi"
 
 #: pcbnew/drc/drc_item.cpp:200
 msgid "Solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "Apertura soldermaski łączy elementy o różnych sieciach"
 
 #: pcbnew/drc/drc_item.cpp:204
 msgid "Silkscreen clipped by solder mask"
@@ -30281,9 +30252,8 @@ msgid "Rule already has a '%s' constraint."
 msgstr "Reguła aktualnie posiada ograniczenie '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:407
-#, fuzzy
 msgid "Expecting number."
-msgstr "Spodziewano się %s"
+msgstr "Spodziewano się liczby."
 
 #: pcbnew/drc/drc_rule_parser.cpp:422
 #, fuzzy
@@ -30481,7 +30451,7 @@ msgstr "(%s minimum %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:406
 msgid "No project loaded, skipping library parity tests."
-msgstr ""
+msgstr "Nie załadowano projektu, pominięto testy zgodności bibliotek."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:410
 #, fuzzy
@@ -30603,7 +30573,7 @@ msgstr "Testowanie %d funkcji opisów wobec %d elementów płytki."
 
 #: pcbnew/drc/drc_test_provider_sliver_checker.cpp:83
 msgid "Running sliver detection on copper layers..."
-msgstr ""
+msgstr "Uruchamianie wykrywania odłamków na warstwach miedzi..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:55
 #, fuzzy
@@ -30613,12 +30583,12 @@ msgstr "ograniczenia w konfiguracji płytki"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:426
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:506
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "Przednia soldermaska łączy elementy o różnych sieciach"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:431
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:511
 msgid "Rear solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "Tylna soldermaska łączy elementy o różnych sieciach"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:614
 #, fuzzy
@@ -32424,9 +32394,9 @@ msgid "Export Hyperlynx Layout"
 msgstr "Eksportuje obwód drukowany dla Hyperlynx"
 
 #: pcbnew/pcb_expr_evaluator.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Missing layer name argument to %s."
-msgstr "Brakujący argument dla '%s'"
+msgstr "Brakujący argument z nazwą warstwy dla %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:130
 #, c-format
@@ -32435,10 +32405,12 @@ msgstr "Nierozpoznana warstwa '%s'"
 
 #: pcbnew/pcb_expr_evaluator.cpp:263 pcbnew/pcb_expr_evaluator.cpp:330
 #: pcbnew/pcb_expr_evaluator.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing footprint identifier argument (A, B, or reference designator) to %s."
-msgstr "Połącz footprinty używając odnośników"
+msgstr ""
+"Brakujący argument z identyfikatorem footprintu (A, B, lub oznaczenie) dla "
+"%s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:500
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -32456,21 +32428,23 @@ msgstr "Footprint nie ma określonego pola zajętości na warstwie dolnej."
 #, c-format
 msgid "Missing rule-area identifier argument (A, B, or rule-area name) to %s."
 msgstr ""
+"Brakujący argument z identyfikatorem strefy z regułami (A, B lub nazwa "
+"strefy z regułami) dla %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:719
-#, fuzzy, c-format
+#, c-format
 msgid "Missing group name argument to %s."
-msgstr "Brakujący argument dla '%s'"
+msgstr "Brakujący argument z nazwą grupy dla %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:829
-#, fuzzy, c-format
+#, c-format
 msgid "Missing diff-pair name argument to %s."
-msgstr "Brakujący argument dla '%s'"
+msgstr "Brakujący argument z nazwą pary różnicowej dla %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:877
-#, fuzzy, c-format
+#, c-format
 msgid "Missing field name argument to %s."
-msgstr "Brakujący argument dla '%s'"
+msgstr "Brakujący argument z nawą pola dla %s."
 
 #: pcbnew/pcb_expr_evaluator.cpp:1196
 msgid "must be mm, in, or mil"
@@ -34542,12 +34516,12 @@ msgstr "Wire_via odnosi się do brakującego stosu '%s'."
 #: pcbnew/teardrop/dialog_teardrop.cpp:177
 #, c-format
 msgid "%d Teardrops created"
-msgstr ""
+msgstr "Utworzono %d łezek"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:192
 #, c-format
 msgid "%d Teardrops removed."
-msgstr ""
+msgstr "Usunięto %d łezek."
 
 #: pcbnew/teardrop/teardrop.cpp:189
 #, fuzzy
@@ -34765,9 +34739,9 @@ msgid "Resolved thermal relief gap: %s."
 msgstr "Połączenia termiczne ze strefą: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal spoke width: %s."
-msgstr "Szerokość poł. termicznego:"
+msgstr "Rozpoznana szerokość poł. termicznego: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:422
 #, c-format
@@ -34813,7 +34787,7 @@ msgstr "Analiza prześwitu dla krawędzi:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:623
 msgid "No 'mechanical_clearance' constraints defined."
-msgstr ""
+msgstr "Nie zdefiniowano ograniczenia 'mechanical_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:650
 #, fuzzy
@@ -34822,7 +34796,7 @@ msgstr "Analiza prześwitu dla otworów:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:662
 msgid "No 'mechanical_hole_clearance' constraints defined."
-msgstr ""
+msgstr "Nie zdefiniowano ograniczenia 'mechanical_hole_clearance'."
 
 #: pcbnew/tools/board_inspection_tool.cpp:716
 msgid "Select an item for a constraints resolution report."
@@ -34914,7 +34888,7 @@ msgstr "Akcje"
 
 #: pcbnew/tools/board_inspection_tool.cpp:844
 msgid "Assertions for:"
-msgstr ""
+msgstr "Asercja dla:"
 
 #: pcbnew/tools/convert_tool.cpp:77
 msgid "Create from Selection"
