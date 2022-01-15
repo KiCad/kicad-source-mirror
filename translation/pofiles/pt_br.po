@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-01-13 14:56+0000\n"
+"PO-Revision-Date: 2022-01-15 22:43+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v6/pt_BR/>\n"
@@ -126,7 +126,7 @@ msgstr "Último tempo de renderização %.0f ms"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:729
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr "Net %s\tNetClass %s\tNomeIlha %s"
+msgstr "Net %s\tNetClass %s\tPadName %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:754
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:767
