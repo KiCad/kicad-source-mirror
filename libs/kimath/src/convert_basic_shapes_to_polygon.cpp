@@ -561,15 +561,15 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
     // Rotate these 2 corners to match the start and ens points of inner and outer
     // end points of the arc appoximation outlines, build below.
     // The final shape is much better.
-    double arc_angle_start_deg = arc.GetStartAngle();
-    double arc_angle = arc.GetCentralAngle();
-    double arc_angle_end_deg = arc_angle_start_deg + arc_angle;
+    EDA_ANGLE arc_angle_start = arc.GetStartAngle();
+    EDA_ANGLE arc_angle = arc.GetCentralAngle();
+    EDA_ANGLE arc_angle_end = arc_angle_start + arc_angle;
 
-    if( arc_angle_start_deg != 0 && arc_angle_start_deg != 180.0 )
-        polyshape.Outline(0).Rotate( arc_angle_start_deg * M_PI/180.0, aStart );
+    if( arc_angle_start != ANGLE_0 && arc_angle_start != ANGLE_180 )
+        polyshape.Outline(0).Rotate( arc_angle_start.AsRadians(), aStart );
 
-    if( arc_angle_end_deg != 0 && arc_angle_end_deg != 180.0 )
-        polyshape.Outline(1).Rotate( arc_angle_end_deg * M_PI/180.0, aEnd );
+    if( arc_angle_end != ANGLE_0 && arc_angle_end != ANGLE_180 )
+        polyshape.Outline(1).Rotate( arc_angle_end.AsRadians(), aEnd );
 
     VECTOR2I center = arc.GetCenter();
     int      radius = arc.GetRadius();
@@ -587,14 +587,12 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
 
     polyshape.NewOutline();
 
-    ConvertArcToPolyline( polyshape.Outline(2), center, arc_outer_radius,
-                          EDA_ANGLE( arc_angle_start_deg, DEGREES_T ),
-                          EDA_ANGLE( arc_angle, DEGREES_T ), aError, errorLocOuter );
+    ConvertArcToPolyline( polyshape.Outline(2), center, arc_outer_radius, arc_angle_start,
+                          arc_angle, aError, errorLocOuter );
 
     if( arc_inner_radius > 0 )
-        ConvertArcToPolyline( polyshape.Outline(2), center, arc_inner_radius,
-                              EDA_ANGLE( arc_angle_end_deg, DEGREES_T ),
-                              -EDA_ANGLE( arc_angle, DEGREES_T ), aError, errorLocInner );
+        ConvertArcToPolyline( polyshape.Outline(2), center, arc_inner_radius, arc_angle_end,
+                              -arc_angle, aError, errorLocInner );
     else
         polyshape.Append( center );
 #else
@@ -610,7 +608,7 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
     std::vector<VECTOR2I> outside_pts;
 
     // delta is the effective error approximation to build a polyline from an arc
-    int segCnt360 = arcSpine.GetSegmentCount()*360.0/arc.GetCentralAngle();;
+    int segCnt360 = arcSpine.GetSegmentCount()*360.0/arc.GetCentralAngle().AsDegrees();
     int delta = CircleToEndSegmentDeltaRadius( radius+radial_offset, std::abs(segCnt360) );
 
     /// We start by making rounded ends on the arc
@@ -622,15 +620,15 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
     // Rotate these 2 corners to match the start and ens points of inner and outer
     // end points of the arc appoximation outlines, build below.
     // The final shape is much better.
-    double arc_angle_end_deg = arc.GetStartAngle();
+    EDA_ANGLE arc_angle_end = arc.GetStartAngle();
 
-    if( arc_angle_end_deg != 0 && arc_angle_end_deg != 180.0 )
-        polyshape.Outline(0).Rotate( arc_angle_end_deg * M_PI/180.0, arcSpine.GetPoint( 0 ) );
+    if( arc_angle_end != ANGLE_0 && arc_angle_end != ANGLE_180 )
+        polyshape.Outline(0).Rotate( arc_angle_end.AsRadians(), arcSpine.GetPoint( 0 ) );
 
     arc_angle_end_deg = arc.GetEndAngle();
 
-    if( arc_angle_end_deg != 0 && arc_angle_end_deg != 180.0 )
-        polyshape.Outline(1).Rotate( arc_angle_end_deg * M_PI/180.0, arcSpine.GetPoint( -1 ) );
+    if( arc_angle_end != ANGLE_0 && arc_angle_end != ANGLE_180 )
+        polyshape.Outline(1).Rotate( arc_angle_end.AsRadians(), arcSpine.GetPoint( -1 ) );
 
     if( aErrorLoc == ERROR_OUTSIDE )
         radial_offset += delta + defaultErr/2;

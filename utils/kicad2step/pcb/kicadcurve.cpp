@@ -206,7 +206,7 @@ bool KICADCURVE::Read( SEXPR::SEXPR* aEntry, CURVE_TYPE aCurveType )
         m_end.y = new_arc.GetP0().y/scale;
         m_ep.x = new_arc.GetP1().x/scale;
         m_ep.y = new_arc.GetP1().y/scale;
-        m_angle = new_arc.GetCentralAngle() / 180.0 * M_PI;
+        m_angle = new_arc.GetCentralAngle().AsRadians();
     }
 
     return true;

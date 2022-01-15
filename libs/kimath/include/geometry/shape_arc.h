@@ -190,19 +190,19 @@ public:
     }
 
     /**
-     * @return the central angle of the arc shape in degrees, normalized between 0.0, 360.0 deg.
+     * @return the central angle of the arc shape, normalized between 0..360 deg.
      */
-    double  GetCentralAngle() const;
+    EDA_ANGLE GetCentralAngle() const;
 
     /**
-     * @return the start angle of the arc shape in degrees, normalized between 0.0, 360.0 deg.
+     * @return the start angle of the arc shape, normalized between 0..360 deg.
      */
-    double  GetStartAngle() const;
+    EDA_ANGLE GetStartAngle() const;
 
     /**
-     * @return the end angle of the arc shape in degrees, normalized between 0.0, 360.0 deg.
+     * @return the end angle of the arc shape, normalized between 0..360 deg.
      */
-    double  GetEndAngle() const;
+    EDA_ANGLE GetEndAngle() const;
 
     /**
      * @return the length of the arc shape.

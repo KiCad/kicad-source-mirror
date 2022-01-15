@@ -829,22 +829,13 @@ void GERBER_PLOTTER::Arc( const VECTOR2I& aCenter, double aStAngle, double aEndA
 }
 
 
-void GERBER_PLOTTER::Arc( const SHAPE_ARC& aArc )
-{
-    SetCurrentLineWidth( aArc.GetWidth() );
-
-    // aFill is not used here.
-    plotArc( aArc, false );
-}
-
-
 void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
 {
-    VECTOR2I start( aArc.GetP0() );
-    VECTOR2I end( aArc.GetP1() );
-    VECTOR2I center( aArc.GetCenter() );
-    double start_angle = aArc.GetStartAngle();
-    double end_angle = aArc.GetEndAngle();
+    VECTOR2I  start( aArc.GetP0() );
+    VECTOR2I  end( aArc.GetP1() );
+    VECTOR2I  center( aArc.GetCenter() );
+    EDA_ANGLE start_angle = aArc.GetStartAngle();
+    EDA_ANGLE end_angle = aArc.GetEndAngle();
 
     if( !aPlotInRegion )
         MoveTo( start);

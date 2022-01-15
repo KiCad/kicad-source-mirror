@@ -305,15 +305,15 @@ void SHAPE_ARC::update_bbox()
     points.push_back( m_start );
     points.push_back( m_end );
 
-    double start_angle = GetStartAngle();
-    double end_angle = start_angle + GetCentralAngle();
+    EDA_ANGLE start_angle = GetStartAngle();
+    EDA_ANGLE end_angle = start_angle + GetCentralAngle();
 
     // we always count quadrants clockwise (increasing angle)
     if( start_angle > end_angle )
         std::swap( start_angle, end_angle );
 
-    int quad_angle_start = std::ceil( start_angle / 90.0 );
-    int quad_angle_end = std::floor( end_angle / 90.0 );
+    int quad_angle_start = std::ceil( start_angle.AsDegrees() / 90.0 );
+    int quad_angle_end = std::floor( end_angle.AsDegrees() / 90.0 );
 
     // count through quadrants included in arc
     for( int quad_angle = quad_angle_start; quad_angle <= quad_angle_end; ++quad_angle )
@@ -323,14 +323,12 @@ void SHAPE_ARC::update_bbox()
 
         switch( quad_angle % 4 )
         {
-        case 0: quad_pt += { radius, 0 }; break;
-        case 1:
-        case -3: quad_pt += { 0, radius }; break;
-        case 2:
-        case -2: quad_pt += { -radius, 0 }; break;
-        case 3:
-        case -1: quad_pt += { 0, -radius }; break;
-        default: assert( false );
+        case 0:          quad_pt += { radius, 0 };  break;
+        case 1: case -3: quad_pt += { 0, radius };  break;
+        case 2: case -2: quad_pt += { -radius, 0 }; break;
+        case 3: case -1: quad_pt += { 0, -radius }; break;
+        default:
+            assert( false );
         }
 
         points.push_back( quad_pt );
@@ -353,7 +351,7 @@ const BOX2I SHAPE_ARC::BBox( int aClearance ) const
 
 bool SHAPE_ARC::IsClockwise() const
 {
-    return GetCentralAngle() < 0;
+    return GetCentralAngle() < ANGLE_0;
 }
 
 
@@ -375,10 +373,10 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
     // If not a 360 degree arc, need to use arc angles to decide if point collides
     if( m_start != m_end )
     {
-        bool   ccw = GetCentralAngle() > 0.0;
-        double rotatedVecAngle = NormalizeAngleDegreesPos( NormalizeAngleDegreesPos( RAD2DEG( vec.Angle() ) )
-                                           - GetStartAngle() );
-        double rotatedEndAngle = NormalizeAngleDegreesPos( GetEndAngle() - GetStartAngle() );
+        bool   ccw = GetCentralAngle() > ANGLE_0;
+        EDA_ANGLE vecAngle( vec );
+        EDA_ANGLE rotatedVecAngle = ( vecAngle.Normalize() - GetStartAngle() ).Normalize();
+        EDA_ANGLE rotatedEndAngle = ( GetEndAngle() - GetStartAngle() ).Normalize();
 
         if( ( ccw && rotatedVecAngle > rotatedEndAngle )
             || ( !ccw && rotatedVecAngle < rotatedEndAngle ) )
@@ -404,23 +402,17 @@ bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
 }
 
 
-double SHAPE_ARC::GetStartAngle() const
+EDA_ANGLE SHAPE_ARC::GetStartAngle() const
 {
-    VECTOR2D d( m_start - GetCenter() );
-
-    auto ang = 180.0 / M_PI * atan2( d.y, d.x );
-
-    return NormalizeAngleDegrees( ang, 0.0, 360.0 );
+    EDA_ANGLE angle( m_start - GetCenter() );
+    return angle.Normalize();
 }
 
 
-double SHAPE_ARC::GetEndAngle() const
+EDA_ANGLE SHAPE_ARC::GetEndAngle() const
 {
-    VECTOR2D d( m_end - GetCenter() );
-
-    auto ang = 180.0 / M_PI * atan2( d.y, d.x );
-
-    return NormalizeAngleDegrees( ang, 0.0, 360.0 );
+    EDA_ANGLE angle( m_end - GetCenter() );
+    return angle.Normalize();
 }
 
 
@@ -433,19 +425,19 @@ VECTOR2I SHAPE_ARC::GetCenter() const
 double SHAPE_ARC::GetLength() const
 {
     double radius = GetRadius();
-    double includedAngle  = std::abs( GetCentralAngle() );
+    EDA_ANGLE includedAngle = GetCentralAngle();
 
-    return radius * M_PI * includedAngle / 180.0;
+    return std::abs( radius * includedAngle.AsRadians() );
 }
 
 
-double SHAPE_ARC::GetCentralAngle() const
+EDA_ANGLE SHAPE_ARC::GetCentralAngle() const
 {
     VECTOR2I  center = GetCenter();
     EDA_ANGLE angle1 = EDA_ANGLE( m_mid - center ) - EDA_ANGLE( m_start - center );
     EDA_ANGLE angle2 = EDA_ANGLE( m_end - center ) - EDA_ANGLE( m_mid - center );
 
-    return angle1.Normalize180().AsDegrees() + angle2.Normalize180().AsDegrees();
+    return angle1.Normalize180() + angle2.Normalize180();
 }
 
 
@@ -459,10 +451,10 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy,
                                                      double* aEffectiveAccuracy ) const
 {
     SHAPE_LINE_CHAIN rv;
-    double r    = GetRadius();
-    double sa   = GetStartAngle();
-    VECTOR2I c  = GetCenter();
-    double ca   = GetCentralAngle();
+    double    r    = GetRadius();
+    EDA_ANGLE sa   = GetStartAngle();
+    VECTOR2I  c    = GetCenter();
+    EDA_ANGLE ca   = GetCentralAngle();
 
     int n;
 
@@ -480,11 +472,10 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy,
     }
     else
     {
-        double arc_angle = std::abs( ca );
-        n = GetArcToSegmentCount( external_radius, aAccuracy, EDA_ANGLE( arc_angle, DEGREES_T ) );
+        n = GetArcToSegmentCount( external_radius, aAccuracy, ca );
 
         // Recalculate the effective error of approximation, that can be < aAccuracy
-        int seg360 = n * 360.0 / arc_angle;
+        int seg360 = n * 360.0 / ca.AsDegrees();
         effectiveAccuracy = CircleToEndSegmentDeltaRadius( external_radius, seg360 );
     }
 
@@ -498,13 +489,13 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy,
 
     for( int i = 1; i < n ; i += 2 )
     {
-        double a = sa;
+        EDA_ANGLE a = sa;
 
         if( n != 0 )
             a += ( ca * i ) / n;
 
-        double x = c.x + r * cos( a * M_PI / 180.0 );
-        double y = c.y + r * sin( a * M_PI / 180.0 );
+        double x = c.x + r * cos( a.AsRadians() );
+        double y = c.y + r * sin( a.AsRadians() );
 
         rv.Append( KiROUND( x ), KiROUND( y ) );
     }
@@ -589,13 +580,13 @@ SHAPE_ARC SHAPE_ARC::Reversed() const
 
 bool SHAPE_ARC::sliceContainsPoint( const VECTOR2I& p ) const
 {
-    VECTOR2I center = GetCenter();
-    double   phi = 180.0 / M_PI * atan2( p.y - center.y, p.x - center.x );
-    double   ca = GetCentralAngle();
-    double   sa = GetStartAngle();
-    double   ea;
+    VECTOR2I  center = GetCenter();
+    EDA_ANGLE phi( p - center );
+    EDA_ANGLE ca = GetCentralAngle();
+    EDA_ANGLE sa = GetStartAngle();
+    EDA_ANGLE ea;
 
-    if( ca >= 0 )
+    if( ca >= ANGLE_0 )
     {
         ea = sa + ca;
     }
@@ -605,5 +596,5 @@ bool SHAPE_ARC::sliceContainsPoint( const VECTOR2I& p ) const
         sa += ca;
     }
 
-    return alg::within_wrapped_range( phi, sa, ea, 360.0 );
+    return alg::within_wrapped_range( phi.AsDegrees(), sa.AsDegrees(), ea.AsDegrees(), 360.0 );
 }

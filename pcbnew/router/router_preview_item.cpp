@@ -186,8 +186,8 @@ void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX:
     {
         const SHAPE_ARC& arc = lineChain->CArcs()[s];
 
-        double start_angle = DEG2RAD( arc.GetStartAngle() );
-        double angle = DEG2RAD( arc.GetCentralAngle() );
+        double start_angle = arc.GetStartAngle().AsRadians();
+        double angle = arc.GetCentralAngle().AsRadians();
 
         gal->DrawArc( arc.GetCenter(), arc.GetRadius(), start_angle, start_angle + angle);
     }
@@ -356,8 +356,8 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
         const SHAPE_ARC* arc = static_cast<const SHAPE_ARC*>( aShape );
         const int        w = arc->GetWidth();
 
-        auto start_angle = DEG2RAD( arc->GetStartAngle() );
-        auto angle = DEG2RAD( arc->GetCentralAngle() );
+        double start_angle = arc->GetStartAngle().AsRadians();
+        double angle = arc->GetCentralAngle().AsRadians();
 
         gal->SetIsFill( false );
         gal->SetIsStroke( true );

@@ -67,32 +67,39 @@ static void CheckArcGeom( const SHAPE_ARC& aArc, const ARC_PROPERTIES& aProps, c
 
     BOOST_CHECK_PREDICATE( KI_TEST::IsVecWithinTol<VECTOR2I>,
             ( aProps.m_start_point )( aProps.m_start_point )( pos_tol ) );
-    BOOST_CHECK_PREDICATE(
-            KI_TEST::IsVecWithinTol<VECTOR2I>, ( aArc.GetP1() )( aProps.m_end_point )( pos_tol ) );
+
+    BOOST_CHECK_PREDICATE( KI_TEST::IsVecWithinTol<VECTOR2I>,
+            ( aArc.GetP1() )( aProps.m_end_point )( pos_tol ) );
+
     BOOST_CHECK_PREDICATE( KI_TEST::IsVecWithinTol<VECTOR2I>,
             ( aArc.GetCenter() )( aProps.m_center_point )( aSynErrIU ) );
+
     BOOST_CHECK_PREDICATE( KI_TEST::IsWithinWrapped<double>,
-            ( aArc.GetCentralAngle() )( aProps.m_center_angle )( 360.0 )( angle_tol_deg ) );
+            ( aArc.GetCentralAngle().AsDegrees() )( aProps.m_center_angle )( 360.0 )( angle_tol_deg ) );
+
     BOOST_CHECK_PREDICATE( KI_TEST::IsWithinWrapped<double>,
-            ( aArc.GetStartAngle() )( aProps.m_start_angle )( 360.0 )( angle_tol_deg ) );
+            ( aArc.GetStartAngle().AsDegrees() )( aProps.m_start_angle )( 360.0 )( angle_tol_deg ) );
+
     BOOST_CHECK_PREDICATE( KI_TEST::IsWithinWrapped<double>,
-            ( aArc.GetEndAngle() )( aProps.m_end_angle )( 360.0 )( angle_tol_deg ) );
-    BOOST_CHECK_PREDICATE(
-            KI_TEST::IsWithin<double>, ( aArc.GetRadius() )( aProps.m_radius )( aSynErrIU ) );
+            ( aArc.GetEndAngle().AsDegrees() )( aProps.m_end_angle )( 360.0 )( angle_tol_deg ) );
+
+    BOOST_CHECK_PREDICATE( KI_TEST::IsWithin<double>,
+            ( aArc.GetRadius() )( aProps.m_radius )( aSynErrIU ) );
 
     /// Check the chord agrees
     const auto chord = aArc.GetChord();
 
-    BOOST_CHECK_PREDICATE(
-            KI_TEST::IsVecWithinTol<VECTOR2I>, ( chord.A )( aProps.m_start_point )( pos_tol ) );
-    BOOST_CHECK_PREDICATE(
-            KI_TEST::IsVecWithinTol<VECTOR2I>, ( chord.B )( aProps.m_end_point )( pos_tol ) );
+    BOOST_CHECK_PREDICATE( KI_TEST::IsVecWithinTol<VECTOR2I>,
+            ( chord.A )( aProps.m_start_point )( pos_tol ) );
+
+    BOOST_CHECK_PREDICATE( KI_TEST::IsVecWithinTol<VECTOR2I>,
+            ( chord.B )( aProps.m_end_point )( pos_tol ) );
 
     /// All arcs are solid
     BOOST_CHECK_EQUAL( aArc.IsSolid(), true );
 
-    BOOST_CHECK_PREDICATE(
-            KI_TEST::IsBoxWithinTol<BOX2I>, ( aArc.BBox() )( aProps.m_bbox )( pos_tol ) );
+    BOOST_CHECK_PREDICATE( KI_TEST::IsBoxWithinTol<BOX2I>,
+            ( aArc.BBox() )( aProps.m_bbox )( pos_tol ) );
 
     /// Collisions will be checked elsewhere.
 }

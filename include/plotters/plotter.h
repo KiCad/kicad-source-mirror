@@ -222,7 +222,6 @@ public:
      */
     virtual void Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int rayon,
                       FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
-    virtual void Arc(  const SHAPE_ARC& aArc );
 
     /**
      * Generic fallback: Cubic Bezier curve rendered as a polyline

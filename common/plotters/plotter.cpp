@@ -154,13 +154,6 @@ double PLOTTER::GetDashGapLenIU() const
 }
 
 
-void PLOTTER::Arc( const SHAPE_ARC& aArc )
-{
-    Arc( VECTOR2I( aArc.GetCenter() ), aArc.GetStartAngle(), aArc.GetEndAngle(), aArc.GetRadius(),
-         FILL_T::NO_FILL, aArc.GetWidth() );
-}
-
-
 void PLOTTER::Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int radius,
                    FILL_T fill, int width )
 {

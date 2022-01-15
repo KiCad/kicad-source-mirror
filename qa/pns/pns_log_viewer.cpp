@@ -256,8 +256,8 @@ void PNS_LOG_VIEWER_OVERLAY::AnnotatedPoint( const VECTOR2I p, int size, std::st
 void PNS_LOG_VIEWER_OVERLAY::Arc( const SHAPE_ARC& arc )
 {
     double   radius = arc.GetRadius();
-    double   start_angle = DEG2RAD( arc.GetStartAngle() );
-    double   angle = DEG2RAD( arc.GetCentralAngle() );
+    double   start_angle = arc.GetStartAngle().AsRadians();
+    double   angle = arc.GetCentralAngle().AsRadians();
 
     KIGFX::VIEW_OVERLAY::SetLineWidth( arc.GetWidth() / 10 );
     KIGFX::VIEW_OVERLAY::Arc( arc.GetCenter(), radius, start_angle, start_angle + angle );
