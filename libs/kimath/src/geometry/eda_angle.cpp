@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <eda_angle.h>
+#include <geometry/eda_angle.h>
 
 
 EDA_ANGLE EDA_ANGLE::m_Angle0   = EDA_ANGLE( 0, DEGREES_T );

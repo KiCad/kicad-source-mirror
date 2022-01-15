@@ -29,10 +29,10 @@
 #include <zones.h>
 #include <board_connected_item.h>
 #include <convert_to_biu.h>
-#include <eda_angle.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_compound.h>
 #include <pad_shapes.h>
+#include <geometry/eda_angle.h>
 
 class PCB_SHAPE;
 class PARAM_CFG;

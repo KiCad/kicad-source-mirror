@@ -32,8 +32,8 @@
 
 #include <math.h>           // for copysign
 #include <stdlib.h>         // for abs
-#include <eda_angle.h>
 #include <math/vector2d.h>
+#include <geometry/eda_angle.h>
 
 class EDA_RECT;
 

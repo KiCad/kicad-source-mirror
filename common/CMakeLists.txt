@@ -336,7 +336,6 @@ set( COMMON_SRCS
     dialog_shim.cpp
     gr_text.cpp
     dsnlexer.cpp
-    eda_angle.cpp
     eda_base_frame.cpp
     eda_dde.cpp
     eda_doc.cpp

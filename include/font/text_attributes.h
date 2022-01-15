@@ -25,7 +25,7 @@
 #include <wx/log.h>
 #include <cmath>
 #include <math/vector2d.h>
-#include <eda_angle.h>
+#include "../../libs/kimath/include/geometry/eda_angle.h"
 
 class EDA_TEXT;
 

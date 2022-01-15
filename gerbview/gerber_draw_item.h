@@ -26,12 +26,12 @@
 #define GERBER_DRAW_ITEM_H
 
 #include <eda_item.h>
-#include <eda_angle.h>
 #include <layer_ids.h>
 #include <gr_basic.h>
 #include <gbr_netlist_metadata.h>
 #include <dcode.h>
 #include <geometry/shape_poly_set.h>
+#include <geometry/eda_angle.h>
 
 class GERBER_FILE_IMAGE;
 class GBR_LAYOUT;

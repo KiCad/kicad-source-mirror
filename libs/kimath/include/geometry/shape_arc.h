@@ -28,8 +28,8 @@
 
 #include <geometry/shape.h>
 #include <convert_to_biu.h>
-#include <eda_angle.h>
 #include <math/vector2d.h>   // for VECTOR2I
+#include <geometry/eda_angle.h>
 
 class SHAPE_LINE_CHAIN;
 

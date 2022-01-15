@@ -27,9 +27,9 @@
 
 #include <memory>
 #include <math/box2.h>
-#include <eda_angle.h>
 #include <geometry/shape_poly_set.h>
 #include <wx/debug.h>
+#include "../../libs/kimath/include/geometry/eda_angle.h"
 
 
 namespace KIFONT

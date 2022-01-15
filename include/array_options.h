@@ -25,8 +25,8 @@
 #define PCBNEW_ARRAY_OPTIONS__H
 
 #include <math/vector2d.h>
-#include <eda_angle.h>
 #include <array_axis.h>
+#include <geometry/eda_angle.h>
 
 /**
  * Options that govern the setup of an "array" of multiple item.

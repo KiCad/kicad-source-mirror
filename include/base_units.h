@@ -35,9 +35,9 @@
 #include <string>
 
 #include <eda_units.h>
-#include <eda_angle.h>
 #include <convert_to_biu.h>
 #include <math/vector2d.h>
+#include <geometry/eda_angle.h>
 
 //TODO: Abstract Base Units to a single class
 

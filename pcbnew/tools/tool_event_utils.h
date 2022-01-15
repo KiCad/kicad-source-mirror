@@ -25,7 +25,7 @@
 #define TOOL_EVENT_UTILS_H
 
 #include <tool/tool_interactive.h>
-#include <eda_angle.h>
+#include <geometry/eda_angle.h>
 
 
 class PCB_BASE_EDIT_FRAME;
