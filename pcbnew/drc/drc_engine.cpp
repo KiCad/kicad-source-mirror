@@ -1046,7 +1046,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     }
                 }
 
-                if( aLayer != UNDEFINED_LAYER && !c->layerTest.test( aLayer ) )
+                if( ( aLayer != UNDEFINED_LAYER && !c->layerTest.test( aLayer ) )
+                        || ( m_board->GetEnabledLayers() & c->layerTest ).count() == 0 )
                 {
                     if( implicit )
                     {
