@@ -514,7 +514,11 @@ void GRCircle( EDA_RECT* ClipBox, wxDC* DC, int xc, int yc, int r, int width, co
 
     GRSetBrush( DC, Color, NOT_FILLED );
     GRSetColorPen( DC, Color, width );
-    DC->DrawEllipse( xc - r, yc - r, r + r, r + r );
+
+    // Draw two arcs here to make a circle.  Unfortunately, the printerDC doesn't handle
+    // transparent brushes when used with circles.  It does work for for arcs, however
+    DC->DrawArc(xc + r, yc, xc - r, yc, xc, yc);
+    DC->DrawArc(xc - r, yc, xc + r, yc, xc, yc);
 }
 
 
