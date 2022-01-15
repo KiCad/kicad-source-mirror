@@ -2353,7 +2353,9 @@ void CALLBACK CombineCallback( GLdouble coords[3], GLdouble* vertex_data[4], GLf
     OPENGL_GAL::TessParams* param = static_cast<OPENGL_GAL::TessParams*>( aData );
 
     // Save the pointer so we can delete it later
-    param->intersectPoints.emplace_back( vertex );
+    // Note, we use the default_delete for an array because macOS
+    // decides to bundle an ancient libc++ that mismatches the C++17 support of clang
+    param->intersectPoints.emplace_back( vertex, std::default_delete<GLdouble[]>() );
 
     memcpy( vertex, coords, 3 * sizeof( GLdouble ) );
 
