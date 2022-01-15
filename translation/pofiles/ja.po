@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-01-05 11:54+0000\n"
+"PO-Revision-Date: 2022-01-15 22:43+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v6/ja/>\n"
 "Language: ja\n"
@@ -16555,8 +16555,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 msgstr ""
-"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s%s 位置 "
-"<b>(%.3f, %.3f)</b> (変換シンボル)"
+"<b>重複ピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> 衝突ピン%s%s 位置 <b>(%.3f, %.3f)</b> "
+"(変換シンボル)."
 
 #: eeschema/tools/ee_inspection_tool.cpp:280
 #, c-format
@@ -16564,8 +16564,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %c and %c of converted."
 msgstr ""
-"<b>重複ピン %s</b> \"%s\" 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s%s 位置 "
-"<b>(%.3f, %.3f)</b> (変換シンボルのユニット %c と %c)"
+"<b>重複ピン %s</b> %s 位置 <b>(%.3f, %.3f)</b> 衝突ピン %s%s 位置 <b>(%.3f, %.3f)</b> ("
+"変換シンボルのユニット %c と %c)."
 
 #: eeschema/tools/ee_inspection_tool.cpp:299
 #, c-format
@@ -23991,9 +23991,7 @@ msgstr ""
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
-msgstr ""
-"負のクリアランスはパッドより小さな領域を意味します。(通常はペーストのクリアラ"
-"ンス)"
+msgstr "負のクリアランスはパッドより小さな領域を意味します。(通常はペーストのクリアランス)"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:333
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:233
