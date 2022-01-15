@@ -49,7 +49,7 @@ SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint
     m_mid = aArcStartPoint;
     m_end = aArcStartPoint;
 
-    RotatePoint( m_mid, aArcCenter, -EDA_ANGLE( aCenterAngle.AsDegrees() / 2.0, DEGREES_T ) );
+    RotatePoint( m_mid, aArcCenter, -aCenterAngle / 2.0 );
     RotatePoint( m_end, aArcCenter, -aCenterAngle );
 
     update_bbox();
@@ -445,7 +445,7 @@ double SHAPE_ARC::GetCentralAngle() const
     EDA_ANGLE angle1 = EDA_ANGLE( m_mid - center ) - EDA_ANGLE( m_start - center );
     EDA_ANGLE angle2 = EDA_ANGLE( m_end - center ) - EDA_ANGLE( m_mid - center );
 
-    return ( angle1 + angle2 ).Normalize180().AsTenthsOfADegree();
+    return angle1.Normalize180().AsDegrees() + angle2.Normalize180().AsDegrees();
 }
 
 
