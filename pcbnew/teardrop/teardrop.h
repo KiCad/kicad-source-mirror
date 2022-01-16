@@ -250,10 +250,12 @@ private:
      * Pads with no net are not candidate (and have no track connected
      * Custom pads are not candidate because one cannot define a teardrop shape
      * @param aList is the list of VIAPAD to fill
+     * @param aDrilledViaPad = true to include drilled shapes
      * @param aRoundShapesOnly = true to ignore not round shapes
      * @param aIncludeNotDrilled = true to include not drilled pads like SMD
      */
     void collectPadsCandidate( std::vector< VIAPAD >& aList,
+                               bool aDrilledViaPad,
                                bool aRoundShapesOnly,
                                bool aIncludeNotDrilled ) const;
 

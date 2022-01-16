@@ -110,6 +110,7 @@ void TEARDROP_MANAGER::collectVias( std::vector< VIAPAD >& aList ) const
 
 
 void TEARDROP_MANAGER::collectPadsCandidate( std::vector< VIAPAD >& aList,
+                                             bool aDrilledViaPad,
                                              bool aRoundShapesOnly,
                                              bool aIncludeNotDrilled ) const
 {
@@ -136,6 +137,9 @@ void TEARDROP_MANAGER::collectPadsCandidate( std::vector< VIAPAD >& aList,
             }
 
             bool has_hole = pad->GetDrillSizeX() > 0 && pad->GetDrillSizeY() > 0;
+
+            if( has_hole && !aDrilledViaPad )
+                continue;
 
             if( has_hole || aIncludeNotDrilled )
                 aList.emplace_back( pad );

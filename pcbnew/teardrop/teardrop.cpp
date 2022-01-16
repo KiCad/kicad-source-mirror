@@ -102,8 +102,11 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
     // get vias, PAD_ATTRIB_PTH and others if aIncludeNotDrilled == true
     // (custom pads are not collected)
     std::vector< VIAPAD > viapad_list;
-    collectVias( viapad_list );
-    collectPadsCandidate( viapad_list, m_applyToRoundShapesOnly, m_applyToSurfacePads );
+
+    if( m_applyToViaPads )
+        collectVias( viapad_list );
+
+    collectPadsCandidate( viapad_list, m_applyToViaPads, m_applyToRoundShapesOnly, m_applyToSurfacePads );
 
     TRACK_BUFFER trackLookupList;
 
@@ -257,7 +260,7 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
     // teardrop inside a pad or via area
     std::vector< VIAPAD > viapad_list;
     collectVias( viapad_list );
-    collectPadsCandidate( viapad_list, true, true );
+    collectPadsCandidate( viapad_list, true, true, true );
     m_CurrParams = &m_Parameters[TARGET_TRACK];
 
     // Explore groups (a group is a set of tracks on the same layer and the same net):
