@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-16 16:19+0000\n"
+"PO-Revision-Date: 2022-01-16 23:13+0000\n"
 "Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -31,7 +31,7 @@ msgstr "Tüm Dosyalar"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:301
 msgid "Build board outline"
-msgstr "Kart ana hatlarını oluştur"
+msgstr "Kart sınırlarını oluştur"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:506
 msgid "Create layers"
@@ -4229,7 +4229,7 @@ msgstr "Öğe Çiz"
 
 #: common/eda_shape.cpp:62 pcbnew/pad.cpp:1110
 msgid "Rect"
-msgstr ""
+msgstr "Drtgn"
 
 #: common/eda_shape.cpp:63 common/eda_shape.cpp:557 common/eda_shape.cpp:1607
 #: gerbview/gerber_draw_item.cpp:213
@@ -6959,7 +6959,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor.cpp:194
 #: pcbnew/tools/pcb_control.cpp:1200
 msgid "Library"
-msgstr ""
+msgstr "Kütüphane"
 
 #: cvpcb/cvpcb_mainframe.cpp:747
 msgid "Search Text"
@@ -8284,7 +8284,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:91
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:202
 msgid "Messages"
-msgstr ""
+msgstr "Mesajlar"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:48
 #: pcbnew/dialogs/dialog_drc_base.cpp:99
@@ -8887,7 +8887,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:64
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:176
 msgid "Combo!"
-msgstr "Combo!"
+msgstr "Açılan!"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:47
 msgid ""
@@ -9647,7 +9647,7 @@ msgstr "E"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:428
 #: eeschema/sch_edit_frame.cpp:1003
 msgid "Schematic"
-msgstr ""
+msgstr "Şematik"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:434
 #, c-format
@@ -9956,9 +9956,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:45
-#, fuzzy
 msgid "Import:"
-msgstr "İçe Aktar"
+msgstr "İçe Aktar:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
 msgid "Formatting preferences"
@@ -10314,7 +10313,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:126
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:137
 msgid "Ohms"
-msgstr ""
+msgstr "Ohm"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:27
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:266
@@ -10373,7 +10372,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:268
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:244
 msgid "V"
-msgstr ""
+msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:103
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:109
@@ -10673,20 +10672,20 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:48
 msgid "Type:"
-msgstr ""
+msgstr "Tür:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:34
 #: eeschema/dialogs/dialog_spice_model_base.cpp:35
 msgid "Resistor"
-msgstr ""
+msgstr "Direnç"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:36
 msgid "Capacitor"
-msgstr ""
+msgstr "Kondansatör"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:37
 msgid "Inductor"
-msgstr ""
+msgstr "İndüktör"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:41
 msgid "Passive type"
@@ -10708,7 +10707,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:210
 msgid "Library:"
-msgstr ""
+msgstr "Kütüphane:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:220
 msgid "Select file..."
@@ -10716,7 +10715,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:226
 msgid "Model:"
-msgstr ""
+msgstr "Model:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
 msgid "Note:"
@@ -10724,11 +10723,11 @@ msgstr "Not:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:244
 msgid "note"
-msgstr ""
+msgstr "Not"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:294
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:302
 msgid "DC/AC Analysis"
@@ -10736,7 +10735,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:311
 msgid "DC:"
-msgstr ""
+msgstr "DC:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:320
 #: eeschema/dialogs/dialog_spice_model_base.cpp:342
@@ -10752,7 +10751,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:775
 #: eeschema/dialogs/dialog_spice_model_base.cpp:786
 msgid "Volts/Amps"
-msgstr ""
+msgstr "Volt/Amper"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:333
 msgid "AC magnitude:"
@@ -10764,7 +10763,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:355
 msgid "radians"
-msgstr ""
+msgstr "radyan"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:366
 msgid "Transient Analysis"
@@ -10798,11 +10797,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:444
 msgid "Period:"
-msgstr ""
+msgstr "Periyot:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:459
 msgid "Pulse"
-msgstr ""
+msgstr "Sinyal"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:467
 msgid "DC offset:"
@@ -10812,21 +10811,21 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:688
 #: eeschema/dialogs/dialog_spice_model_base.cpp:766
 msgid "Amplitude:"
-msgstr ""
+msgstr "Genlik:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:491
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:195
 msgid "Frequency:"
-msgstr ""
+msgstr "Frekans:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:498
 #: pcb_calculator/widgets/unit_selector.cpp:103
 msgid "Hz"
-msgstr ""
+msgstr "Hz"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:502
 msgid "Delay:"
-msgstr ""
+msgstr "Gecikme:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:513
 msgid "Damping factor:"
@@ -10834,11 +10833,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:520
 msgid "1/seconds"
-msgstr ""
+msgstr "1/saniye"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:528
 msgid "Sinusoidal"
-msgstr ""
+msgstr "Sinüzoidal"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:560
 msgid "Rise delay time:"
@@ -10859,7 +10858,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:608
 #: eeschema/dialogs/dialog_spice_model_base.cpp:854
 msgid "Exponential"
-msgstr ""
+msgstr "Üssel"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:610
 msgid "Piece-wise linear"
@@ -10867,11 +10866,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:625
 msgid "Time:"
-msgstr ""
+msgstr "Zaman:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:634
 msgid "second"
-msgstr ""
+msgstr "saniye"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:667
 msgid "Piece-wise Linear"
@@ -10889,7 +10888,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:717
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
 msgid "-"
-msgstr ""
+msgstr "-"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:721
 msgid "Signal frequency:"
@@ -10904,7 +10903,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:750
 #: eeschema/dialogs/dialog_spice_model_base.cpp:830
 msgid "degrees"
-msgstr ""
+msgstr "derece"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:743
 msgid "Signal phase:"
@@ -10912,7 +10911,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:758
 msgid "FM"
-msgstr ""
+msgstr "FM"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:790
 msgid "Modulating frequency:"
@@ -10924,7 +10923,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:838
 msgid "AM"
-msgstr ""
+msgstr "AM"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:842
 msgid "Transient noise"
@@ -10932,15 +10931,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:854
 msgid "Uniform"
-msgstr ""
+msgstr "Tekdüze"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:854
 msgid "Gaussian"
-msgstr ""
+msgstr "Gauss"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:854
 msgid "Poisson"
-msgstr ""
+msgstr "Poisson"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:863
 msgid "Individual value duration:"
@@ -10952,7 +10951,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:909
 msgid "Random"
-msgstr ""
+msgstr "Rastgele"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:913
 msgid "External data"
@@ -10961,12 +10960,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:920
 #: eeschema/sim/sim_plot_panel.cpp:366
 msgid "Voltage"
-msgstr ""
+msgstr "Gerilim"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:920
 #: eeschema/sim/sim_plot_panel.cpp:367 eeschema/sim/sim_plot_panel.cpp:440
 msgid "Current"
-msgstr ""
+msgstr "Akım"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:922
 msgid "Source Type"
@@ -10974,7 +10973,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:930
 msgid "Source"
-msgstr ""
+msgstr "Kaynak"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:937
 msgid "Disable symbol for simulation"
@@ -11404,13 +11403,13 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:429
 msgid "/path/to/sheet"
-msgstr ""
+msgstr "dosya/yolu/çizim"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:28
 #: pcbnew/footprint_edit_frame.cpp:227 pcbnew/footprint_edit_frame.cpp:792
 #: pcbnew/pcb_edit_frame.cpp:276 pcbnew/pcb_edit_frame.cpp:1258
 msgid "Appearance"
-msgstr ""
+msgstr "Görünüş"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
 msgid "Default font:"
@@ -11471,7 +11470,7 @@ msgstr "Kalınlığı vurgula:"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:113
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
 msgid "Cross-probing"
-msgstr ""
+msgstr "Çapraz yoklama"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:115
 msgid "Center view on cross-probed items"
@@ -11529,7 +11528,7 @@ msgstr ""
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:71
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:184
 msgid "Selection"
-msgstr ""
+msgstr "Seçim"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:73
 msgid "Clicking on a pin selects the symbol"
@@ -11653,7 +11652,7 @@ msgstr ""
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_display_options_base.cpp:35
 msgid "Annotations"
-msgstr ""
+msgstr "Ek açıklamalar"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "Symbol unit notation:"
@@ -11661,27 +11660,27 @@ msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".A"
-msgstr ""
+msgstr ". A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "-A"
-msgstr ""
+msgstr "-A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_A"
-msgstr ""
+msgstr "_A"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid ".1"
-msgstr ""
+msgstr ".1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "-1"
-msgstr ""
+msgstr "-1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:34
 msgid "_1"
-msgstr ""
+msgstr "_1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:55
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:44
@@ -11711,7 +11710,7 @@ msgstr ""
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:136
 #: eeschema/erc_item.cpp:41
 msgid "Connections"
-msgstr ""
+msgstr "Bağlantılar"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:141
 msgid "Junction dot size:"
@@ -11757,20 +11756,20 @@ msgstr ""
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:189
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:130
 msgid "Prefix:"
-msgstr ""
+msgstr "Önek:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:193
 msgid "["
-msgstr ""
+msgstr "["
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:196
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
 msgid "Suffix:"
-msgstr ""
+msgstr "Son ek:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:200
 msgid "]"
-msgstr ""
+msgstr "]"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:213
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:21
@@ -11853,11 +11852,11 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:110
 msgid "100"
-msgstr ""
+msgstr "100"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:110
 msgid "50"
-msgstr ""
+msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:350
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:531
@@ -11933,7 +11932,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:906
 #: pcbnew/footprint_libraries_utils.cpp:529
 msgid "Skip"
-msgstr ""
+msgstr "Atla"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:529
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:906
@@ -12076,7 +12075,7 @@ msgstr ""
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:45
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: eeschema/eeschema.cpp:361
 msgid ""
@@ -12585,7 +12584,7 @@ msgstr ""
 #: pcbnew/footprint.cpp:954 pcbnew/tools/pcb_control.cpp:1211
 #: pcbnew/zone.cpp:605
 msgid "Unknown"
-msgstr ""
+msgstr "Bilinmiyor"
 
 #: eeschema/getpart.cpp:141 pcbnew/load_select_footprint.cpp:255
 msgid "Recently Used"
@@ -12608,11 +12607,11 @@ msgstr ""
 
 #: eeschema/hierarch.cpp:88
 msgid "Navigator"
-msgstr ""
+msgstr "Gezgin"
 
 #: eeschema/hierarch.cpp:269
 msgid "Root"
-msgstr ""
+msgstr "Kök"
 
 #: eeschema/hierarch.cpp:275
 #, c-format
@@ -12629,7 +12628,7 @@ msgstr ""
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:506
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:517
 msgid "Yes"
-msgstr ""
+msgstr "Evet"
 
 #: eeschema/lib_field.cpp:474 eeschema/lib_pin.cpp:1061
 #: eeschema/sch_field.cpp:709 eeschema/sch_pin.cpp:217
@@ -12640,7 +12639,7 @@ msgstr ""
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:506
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:516
 msgid "No"
-msgstr ""
+msgstr "Hayır"
 
 #: eeschema/lib_field.cpp:488 eeschema/lib_text.cpp:374
 #: eeschema/sch_field.cpp:723
@@ -12663,19 +12662,19 @@ msgstr ""
 #: pcbnew/pcb_track.cpp:693 pcbnew/pcb_track.cpp:754
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:262 pcbnew/zone.cpp:539
 msgid "Type"
-msgstr ""
+msgstr "Tür"
 
 #: eeschema/lib_item.cpp:60 eeschema/sch_pin.cpp:204
 msgid "no"
-msgstr ""
+msgstr "Hayır"
 
 #: eeschema/lib_item.cpp:62 eeschema/sch_pin.cpp:206
 msgid "yes"
-msgstr ""
+msgstr "Evet"
 
 #: eeschema/lib_item.cpp:66 eeschema/sch_pin.cpp:210
 msgid "Converted"
-msgstr ""
+msgstr "Dönüştürülmüş"
 
 #: eeschema/lib_pin.cpp:1072 pcbnew/dialogs/dialog_pad_properties_base.cpp:1467
 msgid "Pos X"
@@ -12792,33 +12791,33 @@ msgstr ""
 #: gerbview/menubar.cpp:174 pagelayout_editor/menubar.cpp:116
 #: pcbnew/menubar_footprint_editor.cpp:138 pcbnew/menubar_pcb_editor.cpp:244
 msgid "&Units"
-msgstr ""
+msgstr "&Birimler"
 
 #: eeschema/menubar.cpp:304
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
 #: pagelayout_editor/menubar.cpp:169 pcbnew/menubar_footprint_editor.cpp:253
 #: pcbnew/menubar_pcb_editor.cpp:471
 msgid "&Place"
-msgstr ""
+msgstr "&Yerleştir"
 
 #: eeschema/menubar.cpp:305
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:182
 #: pagelayout_editor/menubar.cpp:170 pcbnew/menubar_footprint_editor.cpp:254
 #: pcbnew/menubar_pcb_editor.cpp:473
 msgid "&Inspect"
-msgstr ""
+msgstr "&İncele"
 
 #: eeschema/menubar.cpp:306 gerbview/menubar.cpp:225 kicad/menubar.cpp:191
 #: pcbnew/menubar_footprint_editor.cpp:255 pcbnew/menubar_pcb_editor.cpp:474
 msgid "&Tools"
-msgstr ""
+msgstr "&Araçlar"
 
 #: eeschema/menubar.cpp:307
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:183
 #: pagelayout_editor/menubar.cpp:171 pcbnew/menubar_footprint_editor.cpp:256
 #: pcbnew/menubar_pcb_editor.cpp:475
 msgid "P&references"
-msgstr ""
+msgstr "&Tercihler"
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:141
 #, c-format
@@ -12874,11 +12873,11 @@ msgstr "Bağlanmamış"
 
 #: eeschema/pin_type.cpp:77
 msgid "Inverted"
-msgstr ""
+msgstr "Ters çevrilmiş"
 
 #: eeschema/pin_type.cpp:78
 msgid "Clock"
-msgstr ""
+msgstr "Saat"
 
 #: eeschema/pin_type.cpp:79
 msgid "Inverted clock"
@@ -12902,7 +12901,7 @@ msgstr ""
 
 #: eeschema/pin_type.cpp:84
 msgid "NonLogic"
-msgstr ""
+msgstr "NonLogic"
 
 #: eeschema/project_rescue.cpp:194
 #, c-format
@@ -13156,7 +13155,7 @@ msgstr ""
 
 #: eeschema/sch_line.cpp:900
 msgid "Graphical"
-msgstr ""
+msgstr "Grafik"
 
 #: eeschema/sch_line.cpp:903
 msgid "Line Type"
@@ -13764,7 +13763,7 @@ msgstr ""
 
 #: eeschema/sch_symbol.cpp:1387
 msgid "flags"
-msgstr ""
+msgstr "bayraklar"
 
 #: eeschema/sch_symbol.cpp:1395
 msgid "Missing parent"
@@ -13772,11 +13771,11 @@ msgstr ""
 
 #: eeschema/sch_symbol.cpp:1410
 msgid "Undefined!!!"
-msgstr ""
+msgstr "Tanımsız!!!"
 
 #: eeschema/sch_symbol.cpp:1417
 msgid "<Unknown>"
-msgstr ""
+msgstr "<Bilinmiyor>"
 
 #: eeschema/sch_symbol.cpp:1436
 msgid "No library defined!"
@@ -13794,7 +13793,7 @@ msgstr ""
 
 #: eeschema/sch_text.cpp:440
 msgid "Tri-State"
-msgstr ""
+msgstr "Üç Durumlu"
 
 #: eeschema/sch_text.cpp:572
 msgid "Graphic Text"
@@ -14031,11 +14030,11 @@ msgstr ""
 
 #: eeschema/sch_validators.cpp:155
 msgid "tab"
-msgstr ""
+msgstr "sekme"
 
 #: eeschema/sch_validators.cpp:157
 msgid "space"
-msgstr ""
+msgstr "boşluk"
 
 #: eeschema/sch_validators.cpp:171
 msgid " or "
@@ -14179,7 +14178,7 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:173
 msgid "Probe"
-msgstr ""
+msgstr "Prob"
 
 #: eeschema/sim/sim_plot_frame.cpp:174
 msgid "Probe signals on the schematic"
@@ -14187,7 +14186,7 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:175 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
-msgstr ""
+msgstr "Ayar"
 
 #: eeschema/sim/sim_plot_frame.cpp:176
 msgid "Tune component values"
@@ -14224,7 +14223,7 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:834 eeschema/sim/sim_plot_frame.cpp:1666
 msgid "Signal"
-msgstr ""
+msgstr "Sinyal"
 
 #: eeschema/sim/sim_plot_frame.cpp:1112
 msgid "noname"
@@ -14289,7 +14288,7 @@ msgstr ""
 #: eeschema/sim/sim_plot_frame_base.cpp:52
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:24
 msgid "File"
-msgstr ""
+msgstr "Dosya"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:61
 msgid "Add Signals..."
@@ -14313,11 +14312,11 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame_base.cpp:80
 msgid "Settings..."
-msgstr ""
+msgstr "Ayarlar..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:83
 msgid "Simulation"
-msgstr ""
+msgstr "Simülasyon"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:101
 msgid "Show &Grid"
@@ -14337,28 +14336,28 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame_base.cpp:118
 msgid "View"
-msgstr ""
+msgstr "Görünüm"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:197
 msgid "Signals"
-msgstr ""
+msgstr "Sinyaller"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:225
 msgid "Cursors"
-msgstr ""
+msgstr "İmleç"
 
 #: eeschema/sim/sim_plot_panel.cpp:348 eeschema/sim/sim_plot_panel.cpp:360
 #: pcb_calculator/transline_ident.cpp:108
 msgid "Frequency"
-msgstr ""
+msgstr "Frekans"
 
 #: eeschema/sim/sim_plot_panel.cpp:349
 msgid "Gain"
-msgstr ""
+msgstr "Kazanç"
 
 #: eeschema/sim/sim_plot_panel.cpp:350
 msgid "Phase"
-msgstr ""
+msgstr "Faz"
 
 #: eeschema/sim/sim_plot_panel.cpp:361
 msgid "noise [(V or A)^2/Hz]"
@@ -14366,7 +14365,7 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_panel.cpp:365
 msgid "Time"
-msgstr ""
+msgstr "Zaman"
 
 #: eeschema/sim/sim_plot_panel.cpp:423
 msgid "Voltage (swept)"
@@ -14394,7 +14393,7 @@ msgstr ""
 
 #: eeschema/sim/spice_simulator.cpp:73
 msgid "Pole-zero"
-msgstr ""
+msgstr "Kutup-sıfır"
 
 #: eeschema/sim/spice_simulator.cpp:79
 msgid "Transfer function"
@@ -14402,7 +14401,7 @@ msgstr ""
 
 #: eeschema/sim/spice_simulator.cpp:83
 msgid "UNKNOWN!"
-msgstr ""
+msgstr "BİLİNMEYEN!"
 
 #: eeschema/sim/spice_value.cpp:42
 msgid "Spice value cannot be empty"
@@ -14477,7 +14476,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:180
 #: pcbnew/footprint_edit_frame.cpp:219 pcbnew/footprint_edit_frame.cpp:788
 msgid "Libraries"
-msgstr ""
+msgstr "kütüphaneler"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:229
 msgid "Library changes are unsaved"
@@ -14550,7 +14549,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1020
 #: pcbnew/footprint_libraries_utils.cpp:521
 msgid "Global"
-msgstr ""
+msgstr "Küresel"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1023
 #: pcbnew/footprint_libraries_utils.cpp:524
@@ -14689,7 +14688,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:476
 #: pcbnew/footprint_libraries_utils.cpp:1075
 msgid "Overwrite"
-msgstr ""
+msgstr "Üzerine yaz"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:556
 #: eeschema/tools/symbol_editor_control.cpp:507
@@ -14714,7 +14713,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:989
 #: pcbnew/footprint_libraries_utils.cpp:1249
 msgid "Nickname"
-msgstr ""
+msgstr "Takma ad"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:639
 msgid "Save Symbol As"
@@ -14805,21 +14804,21 @@ msgstr "Sembol kitaplığı dosyası '%s' kaydedildi."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1228
 msgid "Undefined!"
-msgstr ""
+msgstr "Tanımsız!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1229
 #: eeschema/symbol_viewer_frame.cpp:365 pcbnew/fp_shape.cpp:405
 #: pcbnew/fp_text.cpp:524 pcbnew/pad.cpp:1700
 msgid "Parent"
-msgstr ""
+msgstr "Ebeveyn"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1238
 msgid "Convert"
-msgstr ""
+msgstr "Dönüştür"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1242
 msgid "Body"
-msgstr ""
+msgstr "Gövde"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1245
 msgid "Power Symbol"
@@ -15069,7 +15068,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulator..."
-msgstr ""
+msgstr "Simülatör..."
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulate circuit in SPICE"
@@ -15165,7 +15164,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:168
 msgid "Export..."
-msgstr ""
+msgstr "Dışa aktar..."
 
 #: eeschema/tools/ee_actions.cpp:168
 msgid "Export a symbol to a new library file"
@@ -15462,7 +15461,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:401 pcbnew/tools/pcb_actions.cpp:333
 msgid "Properties..."
-msgstr ""
+msgstr "Özellikler..."
 
 #: eeschema/tools/ee_actions.cpp:401 pcbnew/tools/pcb_actions.cpp:333
 msgid "Displays item properties dialog"
@@ -15969,7 +15968,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:341
 #: pcbnew/tools/pcb_actions.cpp:259
 msgid "Move"
-msgstr ""
+msgstr "Taşı"
 
 #: eeschema/tools/ee_actions.cpp:773 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/tools/pcb_actions.cpp:259
@@ -15978,7 +15977,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:778 pcbnew/tools/edit_tool.cpp:1062
 msgid "Drag"
-msgstr ""
+msgstr "Sürükle"
 
 #: eeschema/tools/ee_actions.cpp:778
 msgid "Drags the selected item(s)"
@@ -16209,7 +16208,7 @@ msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:1101
 msgid "Netclasses"
-msgstr ""
+msgstr "ağ sınıfları"
 
 #: eeschema/tools/sch_editor_control.cpp:1114
 msgid "Assign Netclass"
@@ -16308,7 +16307,7 @@ msgstr ""
 
 #: eeschema/widgets/tuner_slider_base.cpp:24
 msgid " X "
-msgstr ""
+msgstr " X "
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10A Log"
@@ -16534,7 +16533,7 @@ msgstr ""
 #: pcbnew/pcb_track.cpp:699 pcbnew/pcb_track.cpp:758 pcbnew/pcb_track.cpp:1192
 #: pcbnew/tools/board_inspection_tool.cpp:188 pcbnew/zone.cpp:596
 msgid "Layer"
-msgstr ""
+msgstr "Katman"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:30
 msgid "Show D codes"
@@ -16889,7 +16888,7 @@ msgstr ""
 
 #: gerbview/gerber_draw_item.cpp:663
 msgid "Attribute"
-msgstr ""
+msgstr "Öznitelik"
 
 #: gerbview/gerber_draw_item.cpp:666 gerbview/gerber_draw_item.cpp:676
 msgid "No attribute"
@@ -16906,17 +16905,17 @@ msgstr ""
 
 #: gerbview/gerber_draw_item.cpp:695
 msgid "Clear"
-msgstr ""
+msgstr "Berrak"
 
 #: gerbview/gerber_draw_item.cpp:696 gerbview/gerber_file_image.cpp:351
 msgid "Polarity"
-msgstr ""
+msgstr "Kutup"
 
 #: gerbview/gerber_draw_item.cpp:701 pcbnew/fp_text.cpp:304
 #: pcbnew/pcb_text.cpp:130 pcbnew/tools/edit_tool.cpp:1638
 #: pcbnew/tools/pcb_actions.cpp:313
 msgid "Mirror"
-msgstr ""
+msgstr "Ayna"
 
 #: gerbview/gerber_draw_item.cpp:705
 msgid "AB axis"
@@ -16926,7 +16925,7 @@ msgstr ""
 #: gerbview/toolbars_gerber.cpp:142
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:25
 msgid "Net:"
-msgstr ""
+msgstr "Ağ:"
 
 #: gerbview/gerber_draw_item.cpp:730
 #, c-format
@@ -17094,7 +17093,7 @@ msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:155 gerbview/toolbars_gerber.cpp:158
 msgid "Attr:"
-msgstr ""
+msgstr "Özntlik:"
 
 #: gerbview/toolbars_gerber.cpp:157
 msgid "Highlight items with this aperture attribute"
@@ -17102,7 +17101,7 @@ msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:171 gerbview/toolbars_gerber.cpp:173
 msgid "DCode:"
-msgstr ""
+msgstr "DCode:"
 
 #: gerbview/toolbars_gerber.cpp:287
 msgid "<No selection>"
@@ -17303,7 +17302,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:47
 msgid "Highlight"
-msgstr ""
+msgstr "Vurgula"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:69
 #, c-format
@@ -17333,12 +17332,12 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_layers.cpp:792
 #: pcbnew/widgets/appearance_controls_base.cpp:32
 msgid "Layers"
-msgstr ""
+msgstr "Katmanlar"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:78
 #: gerbview/widgets/layer_widget.cpp:559
 msgid "Items"
-msgstr ""
+msgstr "Öğeler"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:93
 msgid "DCodes"
@@ -17441,7 +17440,7 @@ msgstr "Kitaplık Formatı"
 
 #: include/lib_table_grid.h:186
 msgid "Active"
-msgstr ""
+msgstr "Etkin"
 
 #: include/libeval_compiler/libeval_compiler.h:336
 msgid "Malformed expression"
@@ -18409,7 +18408,7 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_control.cpp:586
 msgid "Error!"
-msgstr ""
+msgstr "Hata!"
 
 #: kicad/tools/kicad_manager_control.cpp:643
 msgid "Create (or open) a project to edit a schematic."
@@ -18450,7 +18449,7 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:223
 msgid "Layout"
-msgstr ""
+msgstr "Düzen"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:227
 #, c-format
@@ -18460,7 +18459,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:232
 msgid "Count"
-msgstr ""
+msgstr "Sayım"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
@@ -18473,7 +18472,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:64
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:124
 msgid "Origin"
-msgstr ""
+msgstr "Köken"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:68
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:128
@@ -18527,7 +18526,7 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:239
 msgid "Printing"
-msgstr ""
+msgstr "Baskı"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:555
 msgid "Predefined Keywords"
@@ -18612,7 +18611,7 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:187
 msgid "Comment:"
-msgstr ""
+msgstr "Yorum:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:194
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:105
@@ -18622,7 +18621,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:224
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:277
 msgid "From:"
-msgstr ""
+msgstr "Buradan:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:247
 msgid "End Position"
@@ -18631,7 +18630,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:319
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1354
 msgid "Rotation:"
-msgstr ""
+msgstr "Döndürme:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:326
 msgid "Bitmap DPI:"
@@ -18673,7 +18672,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:404
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:564
 msgid "Apply"
-msgstr ""
+msgstr "Uygula"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:413
 msgid "Item Properties"
@@ -18700,19 +18699,19 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:505
 msgid "Left:"
-msgstr ""
+msgstr "Sol:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:519
 msgid "Right:"
-msgstr ""
+msgstr "Sağ:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:533
 msgid "Top:"
-msgstr ""
+msgstr "Üst:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:547
 msgid "Bottom:"
-msgstr ""
+msgstr "Alt:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:576
 #: pcbnew/dialogs/dialog_plot_base.cpp:68
@@ -18748,7 +18747,7 @@ msgstr ""
 
 #: pagelayout_editor/files.cpp:153
 msgid "Open"
-msgstr ""
+msgstr "Açık"
 
 #: pagelayout_editor/files.cpp:169 pagelayout_editor/files.cpp:216
 #, c-format
@@ -18782,7 +18781,7 @@ msgstr ""
 
 #: pagelayout_editor/pl_editor_frame.cpp:180
 msgid "Properties"
-msgstr ""
+msgstr "Özellikler"
 
 #: pagelayout_editor/pl_editor_frame.cpp:333
 #, c-format
@@ -18985,7 +18984,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Tee"
-msgstr ""
+msgstr "Tee"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:21
 msgid "Bridged tee"
@@ -19012,7 +19011,7 @@ msgstr "Zayıflama (a):"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:55
 msgid "dB"
-msgstr ""
+msgstr "dB"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:59
 msgid "Zin:"
@@ -19026,17 +19025,17 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:168
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:165
 msgid "Calculate"
-msgstr ""
+msgstr "Hesapla"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:108
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:85
 msgid "R1:"
-msgstr ""
+msgstr "R1:"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:119
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:99
 msgid "R2:"
-msgstr ""
+msgstr "R2:"
 
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:130
 msgid "R3:"
@@ -19045,7 +19044,7 @@ msgstr "R3:"
 #: pcb_calculator/calculator_panels/panel_attenuators_base.cpp:170
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:55
 msgid "Formula"
-msgstr ""
+msgstr "Formül"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:33
 msgid "Note: Values are minimal values"
@@ -19106,7 +19105,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:22
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:54
 msgid "Tolerance"
-msgstr ""
+msgstr "Tolerans"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:34
 msgid "1st Band"
@@ -19126,7 +19125,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:50
 msgid "Multiplier"
-msgstr ""
+msgstr "Çarpan"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:32
 msgid "Voltage > 500 V:"
@@ -19142,27 +19141,27 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:72
 msgid "B1"
-msgstr ""
+msgstr "B1"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:73
 msgid "B2"
-msgstr ""
+msgstr "B2"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:74
 msgid "B3"
-msgstr ""
+msgstr "B3"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:75
 msgid "B4"
-msgstr ""
+msgstr "B4"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:77
 msgid "A6"
-msgstr ""
+msgstr "A6"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:78
 msgid "A7"
-msgstr ""
+msgstr "A7"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:94
 msgid "0 .. 15 V"
@@ -19219,7 +19218,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:21
 msgid "Inputs"
-msgstr ""
+msgstr "Giriş"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:29
 msgid "Required resistance:"
@@ -19243,19 +19242,19 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:71
 msgid "E1"
-msgstr ""
+msgstr "E1"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:74
 msgid "E3"
-msgstr ""
+msgstr "E3"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:77
 msgid "E6"
-msgstr ""
+msgstr "E6"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:81
 msgid "E12"
-msgstr ""
+msgstr "E12"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:84
 msgid "E24"
@@ -19263,7 +19262,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:94
 msgid "Solutions"
-msgstr ""
+msgstr "Çözümler"
 
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:102
 msgid "Simple solution:"
@@ -19333,12 +19332,12 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:113
 msgid "Vout:"
-msgstr ""
+msgstr "Vout:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:127
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 msgid "Vref:"
-msgstr ""
+msgstr "Vref:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:129
 msgid ""
@@ -19349,7 +19348,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:143
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:61
 msgid "Iadj:"
-msgstr ""
+msgstr "Iadj:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:145
 msgid "For 3 terminal regulators only, the  Adjust pin current."
@@ -19358,7 +19357,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:152
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:68
 msgid "uA"
-msgstr ""
+msgstr "uA"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:185
 msgid "Regulator"
@@ -19374,7 +19373,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:204
 msgid "Browse"
-msgstr ""
+msgstr "Araştır"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:213
 msgid "Edit Regulator"
@@ -19456,7 +19455,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:248
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:224
 msgid "Resistance:"
-msgstr ""
+msgstr "Direnç:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:158
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:256
@@ -19513,7 +19512,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Stripline"
-msgstr ""
+msgstr "Şerit Çizgisi"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Twisted Pair"
@@ -19529,7 +19528,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:49
 msgid "Er:"
-msgstr ""
+msgstr "Er:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:59
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:78
@@ -19546,7 +19545,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:87
 msgid "Rho:"
-msgstr ""
+msgstr "Rho:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:89
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:126
@@ -19555,19 +19554,19 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:108
 msgid "H:"
-msgstr ""
+msgstr "H:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:120
 msgid "H_t:"
-msgstr ""
+msgstr "H_t:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:132
 msgid "T:"
-msgstr ""
+msgstr "T:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:144
 msgid "Rough:"
-msgstr ""
+msgstr "Pürüzlü:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:156
 msgid "Insulator mu:"
@@ -19587,11 +19586,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:297
 msgid "Analyze"
-msgstr ""
+msgstr "Analiz"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:300
 msgid "Synthesize"
-msgstr ""
+msgstr "Sentez"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:313
 msgid "Electrical Parameters"
@@ -19645,7 +19644,7 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
-msgstr ""
+msgstr "Z0:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:101
 msgid "Characteristic impedance of conductor"
@@ -19681,11 +19680,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:189
 msgid "ns"
-msgstr ""
+msgstr "ns"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:191
 msgid "nanoseconds"
-msgstr ""
+msgstr "nanosaniye"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:201
 msgid ""
@@ -19716,15 +19715,15 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:288
 msgid "Capacitance:"
-msgstr ""
+msgstr "Kapasite:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:296
 msgid "pF"
-msgstr ""
+msgstr "pF"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:298
 msgid "pico-Farad"
-msgstr ""
+msgstr "piko-Farad"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:302
 msgid "Rise time degradation:"
@@ -19736,27 +19735,27 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:312
 msgid "ps"
-msgstr ""
+msgstr "ps"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:314
 msgid "picoseconds"
-msgstr ""
+msgstr "pikosaniye"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:318
 msgid "Inductance:"
-msgstr ""
+msgstr "İndüktans:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:326
 msgid "nH"
-msgstr ""
+msgstr "nH"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:328
 msgid "nano-Henry"
-msgstr ""
+msgstr "nano-Henry"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:332
 msgid "Reactance:"
-msgstr ""
+msgstr "Reaktans:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:334
 msgid "Inductive reactance for given rise time and calculated inductance"
@@ -19772,7 +19771,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:44
 msgid "Volt"
-msgstr ""
+msgstr "Volt"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:52
 msgid "Separate sense pin"
@@ -19831,7 +19830,7 @@ msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:76
 msgid "Regulators"
-msgstr ""
+msgstr "Regülatörler"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:78
 msgid "RF Attenuators"
@@ -19839,7 +19838,7 @@ msgstr ""
 
 #: pcb_calculator/pcb_calculator_frame.cpp:80
 msgid "E-Series"
-msgstr ""
+msgstr "E-Serisi"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:82
 msgid "Color Code"
@@ -20054,7 +20053,6 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:343
 #: pcb_calculator/transline_ident.cpp:376
 #: pcb_calculator/transline_ident.cpp:415
-#, fuzzy
 msgid "Electrical length"
 msgstr "Elektriksel uzunluk"
 
@@ -20103,7 +20101,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:282
 #: pcb_calculator/transline_ident.cpp:403
 msgid "Din"
-msgstr ""
+msgstr "Din"
 
 #: pcb_calculator/transline_ident.cpp:283
 #: pcb_calculator/transline_ident.cpp:404
@@ -20113,7 +20111,7 @@ msgstr ""
 #: pcb_calculator/transline_ident.cpp:285
 #: pcb_calculator/transline_ident.cpp:406
 msgid "Dout"
-msgstr ""
+msgstr "Dout"
 
 #: pcb_calculator/transline_ident.cpp:286
 #: pcb_calculator/transline_ident.cpp:407
@@ -20152,7 +20150,7 @@ msgstr "Diferansiyel Empedans (Zd):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Zeven"
-msgstr ""
+msgstr "Zeven"
 
 #: pcb_calculator/transline_ident.cpp:335
 msgid "Even mode impedance (lines driven by common voltages)"
@@ -20160,7 +20158,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:338
 msgid "Zodd"
-msgstr ""
+msgstr "Zodd"
 
 #: pcb_calculator/transline_ident.cpp:339
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
@@ -20172,7 +20170,7 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:390
 msgid "Twists"
-msgstr ""
+msgstr "bükülme"
 
 #: pcb_calculator/transline_ident.cpp:391
 msgid "Number of twists per length"
@@ -20192,15 +20190,15 @@ msgstr ""
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
 msgid "um"
-msgstr ""
+msgstr "um"
 
 #: pcb_calculator/widgets/unit_selector.cpp:36
 msgid "cm"
-msgstr ""
+msgstr "cm"
 
 #: pcb_calculator/widgets/unit_selector.cpp:37
 msgid "mil"
-msgstr ""
+msgstr "mil"
 
 #: pcb_calculator/widgets/unit_selector.cpp:38
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:48
@@ -20208,15 +20206,15 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:67
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:99
 msgid "inch"
-msgstr ""
+msgstr "inç"
 
 #: pcb_calculator/widgets/unit_selector.cpp:100
 msgid "GHz"
-msgstr ""
+msgstr "Ghz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:101
 msgid "MHz"
-msgstr ""
+msgstr "Mhz"
 
 #: pcb_calculator/widgets/unit_selector.cpp:102
 msgid "kHz"
@@ -20297,11 +20295,11 @@ msgstr ""
 
 #: pcbnew/board_connected_item.cpp:178
 msgid "NetName"
-msgstr ""
+msgstr "AğAdı"
 
 #: pcbnew/board_connected_item.cpp:180
 msgid "NetClass"
-msgstr ""
+msgstr "NetSınıfı"
 
 #: pcbnew/board_item.cpp:107
 msgid "all copper layers"
@@ -20382,7 +20380,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:84
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:266
 msgid "Material"
-msgstr ""
+msgstr "Malzeme"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:94
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:105
@@ -20436,11 +20434,11 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:117
 msgid "Core"
-msgstr ""
+msgstr "Çekirdek"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:118
 msgid "PrePreg"
-msgstr ""
+msgstr "PrePreg"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:177
 #, c-format
@@ -20495,7 +20493,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:740
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:191
 msgid "Copper"
-msgstr ""
+msgstr "Bakır"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1030
 msgid ""
@@ -20604,7 +20602,7 @@ msgstr "Dielektrik Katmanı Kaldır..."
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:72
 #: pcbnew/build_BOM_from_board.cpp:110
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
 msgid "Loss Tan"
@@ -20620,11 +20618,11 @@ msgstr "Dielektrik Kalınlığı Ayarla"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:38
 msgid "ENIG"
-msgstr ""
+msgstr "ENIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:39
 msgid "ENEPIG"
-msgstr ""
+msgstr "ENEPIG"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:40
 msgid "HAL SnPb"
@@ -20656,11 +20654,11 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:47
 msgid "HT_OSP"
-msgstr ""
+msgstr "HT_OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:48
 msgid "OSP"
-msgstr ""
+msgstr "OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:50
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:69
@@ -20670,15 +20668,15 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:62
 msgid "Green"
-msgstr ""
+msgstr "Yeşil"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:63
 msgid "Red"
-msgstr ""
+msgstr "Kırmızı"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:64
 msgid "Blue"
-msgstr ""
+msgstr "Mavi"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:65
 msgid "Purple"
@@ -20686,15 +20684,15 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:66
 msgid "Black"
-msgstr ""
+msgstr "Siyah"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:67
 msgid "White"
-msgstr ""
+msgstr "Beyaz"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:68
 msgid "Yellow"
-msgstr ""
+msgstr "Sarı"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:78
 msgid "FR4 natural"
@@ -20730,7 +20728,7 @@ msgstr ""
 
 #: pcbnew/build_BOM_from_board.cpp:111
 msgid "Designator"
-msgstr ""
+msgstr "Tasarımcı"
 
 #: pcbnew/build_BOM_from_board.cpp:113
 msgid "Quantity"
@@ -21126,7 +21124,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:154
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:560
 msgid "Back"
-msgstr ""
+msgstr "Önceki"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:208
 msgid "Front reference start:"
@@ -25383,7 +25381,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:43
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:58
 msgid "u"
-msgstr ""
+msgstr "u"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
 msgid "Trace gap:"
@@ -27745,8 +27743,9 @@ msgstr "7"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:98
 #: pcbnew/microwave/microwave_polygon.cpp:136 pcbnew/pcb_target.cpp:156
 #: pcbnew/pcb_target.cpp:169
+#, fuzzy
 msgid "Size"
-msgstr ""
+msgstr "Boyut:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:99 pcbnew/pad.cpp:932
 #: pcbnew/tools/board_inspection_tool.cpp:552
@@ -29008,7 +29007,7 @@ msgstr ""
 
 #: pcbnew/footprint.cpp:994
 msgid "<none>"
-msgstr ""
+msgstr "<yok>"
 
 #: pcbnew/footprint.cpp:998 pcbnew/tools/pcb_control.cpp:1219
 #, c-format
@@ -32800,7 +32799,7 @@ msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:1491
 msgid "Rotate"
-msgstr ""
+msgstr "Döndür"
 
 #: pcbnew/tools/edit_tool.cpp:1715 pcbnew/tools/pcb_actions.cpp:308
 msgid "Change Side / Flip"
@@ -34365,7 +34364,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:204
 msgid "Don't show again"
-msgstr "Bir daha gösterme."
+msgstr "Bir daha gösterme"
 
 #: pcbnew/tools/pcb_control.cpp:218
 #, c-format
