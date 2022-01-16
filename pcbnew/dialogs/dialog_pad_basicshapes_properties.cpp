@@ -577,22 +577,12 @@ DIALOG_PAD_PRIMITIVES_TRANSFORM::DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aPar
 }
 
 
-// A helper function in geometry transform
-inline void geom_transf( VECTOR2I& aCoord, const VECTOR2I& aMove, double aScale, double aRotation )
-{
-    aCoord.x = KiROUND( aCoord.x * aScale );
-    aCoord.y = KiROUND( aCoord.y * aScale );
-    aCoord += aMove;
-    RotatePoint( aCoord, aRotation );
-}
-
-
 void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<std::shared_ptr<PCB_SHAPE>>* aList,
                                                  int aDuplicateCount )
 {
-    wxPoint move_vect( m_vectorX.GetValue(), m_vectorY.GetValue() );
-    double  rotation = m_rotation.GetValue();
-    double  scale = DoubleValueFromString( EDA_UNITS::UNSCALED, m_scaleCtrl->GetValue() );
+    VECTOR2I  move_vect( m_vectorX.GetValue(), m_vectorY.GetValue() );
+    EDA_ANGLE rotation = m_rotation.GetAngleValue();
+    double    scale = DoubleValueFromString( EDA_UNITS::UNSCALED, m_scaleCtrl->GetValue() );
 
     // Avoid too small / too large scale, which could create issues:
     if( scale < 0.01 )
@@ -606,8 +596,8 @@ void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<std::shared_ptr<PCB
     // if aList != NULL, the initial shape will be duplicated, and transform
     // applied to the duplicated shape
 
-    wxPoint currMoveVect = move_vect;
-    double curr_rotation = rotation;
+    VECTOR2I  currMoveVect = move_vect;
+    EDA_ANGLE curr_rotation = rotation;
 
     do {
         for( unsigned idx = 0; idx < m_list.size(); ++idx )
@@ -631,7 +621,7 @@ void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<std::shared_ptr<PCB
 
             shape->Move( currMoveVect );
             shape->Scale( scale );
-            shape->Rotate( VECTOR2I( 0, 0 ), EDA_ANGLE( curr_rotation, TENTHS_OF_A_DEGREE_T ) );
+            shape->Rotate( VECTOR2I( 0, 0 ), curr_rotation );
         }
 
         // Prepare new transform on duplication:
