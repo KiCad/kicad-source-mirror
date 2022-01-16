@@ -967,6 +967,19 @@ void ALTIUM_PCB::ParseComponents6Data( const CFB::CompoundFileReader& aReader,
 }
 
 
+/// Normalize angle to be aMin < angle <= aMax angle is in degrees.
+double normalizeAngleDegrees( double Angle, double aMin, double aMax )
+{
+    while( Angle < aMin )
+        Angle += 360.0;
+
+    while( Angle >= aMax )
+        Angle -= 360.0;
+
+    return Angle;
+}
+
+
 void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aReader,
                                              const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
@@ -1023,11 +1036,12 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aRea
 
         RotatePoint( &modelSettings.m_Offset.x, &modelSettings.m_Offset.y, orientation );
 
-        modelSettings.m_Rotation.x = NormalizeAngleDegrees( -elem.modelRotation.x, -180, 180 );
-        modelSettings.m_Rotation.y = NormalizeAngleDegrees( -elem.modelRotation.y, -180, 180 );
-        modelSettings.m_Rotation.z = NormalizeAngleDegrees( -elem.modelRotation.z
-                                                                + elem.rotation
-                                                                + orientation.AsDegrees(), -180, 180 );
+        modelSettings.m_Rotation.x = normalizeAngleDegrees( -elem.modelRotation.x, -180, 180 );
+        modelSettings.m_Rotation.y = normalizeAngleDegrees( -elem.modelRotation.y, -180, 180 );
+        modelSettings.m_Rotation.z = normalizeAngleDegrees( -elem.modelRotation.z
+                                                                        + elem.rotation
+                                                                        + orientation.AsDegrees(),
+                                                            -180, 180 );
         modelSettings.m_Opacity = elem.bodyOpacity;
 
         footprint->Models().push_back( modelSettings );
@@ -1920,7 +1934,7 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
 
                 shape.SetCenter( elem.center );
                 shape.SetStart( elem.center + startOffset );
-                shape.SetArcAngleAndEnd( includedAngle.Normalize().AsTenthsOfADegree(), true );
+                shape.SetArcAngleAndEnd( includedAngle.Normalize(), true );
             };
 
     ALTIUM_PARSER reader( aReader, aEntry );

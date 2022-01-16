@@ -501,13 +501,14 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             shape->SetCenter0( centre );
 
             // Pcbnew start angles are inverted and 180 degrees from Geda PCB angles.
-            double start_angle = parseInt( parameters[6], -10.0 ) + 1800.0;
+            EDA_ANGLE start_angle( (int) parseInt( parameters[6], -10.0 ), TENTHS_OF_A_DEGREE_T );
+            start_angle += ANGLE_180;
 
             // Pcbnew delta angle direction is the opposite of Geda PCB delta angles.
-            double sweep_angle = parseInt( parameters[7], -10.0 );
+            EDA_ANGLE sweep_angle( (int) parseInt( parameters[7], -10.0 ), TENTHS_OF_A_DEGREE_T );
 
             // Geda PCB does not support circles.
-            if( sweep_angle == -3600.0 )
+            if( sweep_angle == -ANGLE_360 )
                 shape->SetShape( SHAPE_T::CIRCLE );
 
             // Calculate start point coordinate of arc

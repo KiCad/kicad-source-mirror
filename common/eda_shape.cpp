@@ -523,12 +523,14 @@ EDA_ANGLE EDA_SHAPE::GetArcAngle() const
 }
 
 
-void EDA_SHAPE::SetArcAngleAndEnd( double aAngle, bool aCheckNegativeAngle )
+void EDA_SHAPE::SetArcAngleAndEnd( const EDA_ANGLE& aAngle, bool aCheckNegativeAngle )
 {
-    m_end = m_start;
-    RotatePoint( m_end, m_arcCenter, -NormalizeAngle360Max( aAngle ) );
+    EDA_ANGLE angle( aAngle );
 
-    if( aCheckNegativeAngle && aAngle < 0 )
+    m_end = m_start;
+    RotatePoint( m_end, m_arcCenter, -angle.Normalize720() );
+
+    if( aCheckNegativeAngle && aAngle < ANGLE_0 )
     {
         std::swap( m_start, m_end );
         m_endsSwapped = true;

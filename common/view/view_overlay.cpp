@@ -94,7 +94,8 @@ struct VIEW_OVERLAY::COMMAND_CIRCLE : public VIEW_OVERLAY::COMMAND
 
 struct VIEW_OVERLAY::COMMAND_ARC : public VIEW_OVERLAY::COMMAND
 {
-    COMMAND_ARC( const VECTOR2D& aCenter, double aRadius, double aStartAngle, double aEndAngle ) :
+    COMMAND_ARC( const VECTOR2D& aCenter, double aRadius, const EDA_ANGLE& aStartAngle,
+                 const EDA_ANGLE& aEndAngle ) :
         m_center( aCenter ),
         m_radius( aRadius ),
         m_startAngle( aStartAngle ),
@@ -106,10 +107,10 @@ struct VIEW_OVERLAY::COMMAND_ARC : public VIEW_OVERLAY::COMMAND
         aView->GetGAL()->DrawArc( m_center, m_radius, m_startAngle, m_endAngle );
     }
 
-    VECTOR2D m_center;
-    double m_radius;
-    double m_startAngle;
-    double m_endAngle;
+    VECTOR2D  m_center;
+    double    m_radius;
+    EDA_ANGLE m_startAngle;
+    EDA_ANGLE m_endAngle;
 };
 
 
@@ -363,8 +364,8 @@ void VIEW_OVERLAY::Circle( const VECTOR2D& aCenterPoint, double aRadius )
 }
 
 
-void VIEW_OVERLAY::Arc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
-                        double aEndAngle )
+void VIEW_OVERLAY::Arc( const VECTOR2D& aCenterPoint, double aRadius, const EDA_ANGLE& aStartAngle,
+                        const EDA_ANGLE& aEndAngle )
 {
     m_commands.push_back( new COMMAND_ARC( aCenterPoint, aRadius, aStartAngle, aEndAngle ) );
 }

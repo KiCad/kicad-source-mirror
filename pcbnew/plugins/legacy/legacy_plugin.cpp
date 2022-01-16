@@ -1333,11 +1333,11 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
             unsigned char   padchar = (unsigned char) *data++;
             int             padshape;
 
-            BIU     size_x   = biuParse( data, &data );
-            BIU     size_y   = biuParse( data, &data );
-            BIU     delta_x  = biuParse( data, &data );
-            BIU     delta_y  = biuParse( data, &data );
-            double  orient   = degParse( data );
+            BIU      size_x  = biuParse( data, &data );
+            BIU      size_y  = biuParse( data, &data );
+            BIU      delta_x = biuParse( data, &data );
+            BIU      delta_y = biuParse( data, &data );
+            EDA_ANGLE orient = degParse( data );
 
             switch( padchar )
             {
@@ -1376,7 +1376,7 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
             pad->SetShape( static_cast<PAD_SHAPE>( padshape ) );
             pad->SetSize( wxSize( size_x, size_y ) );
             pad->SetDelta( wxSize( delta_x, delta_y ) );
-            pad->SetOrientation( EDA_ANGLE( orient, TENTHS_OF_A_DEGREE_T ) );
+            pad->SetOrientation( orient );
         }
         else if( TESTLINE( "Dr" ) )         // (Dr)ill
         {
@@ -1554,11 +1554,11 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
     {
     case SHAPE_T::ARC:
     {
-        BIU     center0_x = biuParse( line + SZ( "DA" ), &data );
-        BIU     center0_y = biuParse( data, &data );
-        BIU     start0_x = biuParse( data, &data );
-        BIU     start0_y = biuParse( data, &data );
-        double  angle = degParse( data, &data );
+        BIU       center0_x = biuParse( line + SZ( "DA" ), &data );
+        BIU       center0_y = biuParse( data, &data );
+        BIU       start0_x = biuParse( data, &data );
+        BIU       start0_y = biuParse( data, &data );
+        EDA_ANGLE angle = degParse( data, &data );
 
         width = biuParse( data, &data );
         layer = intParse( data );
@@ -1668,7 +1668,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
     BIU       pos0_y  = biuParse( data, &data );
     BIU       size0_y = biuParse( data, &data );
     BIU       size0_x = biuParse( data, &data );
-    EDA_ANGLE orient  = EDA_ANGLE( degParse( data, &data ), TENTHS_OF_A_DEGREE_T );
+    EDA_ANGLE orient  = degParse( data, &data );
     BIU       thickn  = biuParse( data, &data );
 
     // read the quoted text before the first call to strtok() which introduces
@@ -1822,7 +1822,6 @@ void LEGACY_PLUGIN::loadPCB_LINE()
         {
             BIU     x = 0;
             BIU     y;
-            double  angle;
 
             data = strtok_r( line + SZ( "De" ), delims, &saveptr );
 
@@ -1846,22 +1845,25 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     ignore_unused( intParse( data ) );
                     break;
                 case 2:
-                    angle = degParse( data );
+                {
+                    EDA_ANGLE angle = degParse( data );
 
                     if( dseg->GetShape() == SHAPE_T::ARC )
                         dseg->SetArcAngleAndEnd( angle, true );    // m_Angle
 
                     break;
+                }
                 case 3:
                     const_cast<KIID&>( dseg->m_Uuid ) = KIID( data );
                     break;
                 case 4:
+                {
                     EDA_ITEM_FLAGS state;
                     state = static_cast<EDA_ITEM_FLAGS>( hexParse( data ) );
                     dseg->SetState( state, true );
                     break;
-
-                    // Bezier Control Points
+                }
+                // Bezier Control Points
                 case 5:
                     x = biuParse( data );
                     break;
@@ -1869,7 +1871,6 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     y = biuParse( data );
                     dseg->SetBezierC1( VECTOR2I( x, y ) );
                     break;
-
                 case 7:
                     x = biuParse( data );
                     break;
@@ -2015,7 +2016,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             size.y = biuParse( data, &data );
 
             BIU       thickn = biuParse( data, &data );
-            EDA_ANGLE angle = EDA_ANGLE( degParse( data ), TENTHS_OF_A_DEGREE_T );
+            EDA_ANGLE angle = degParse( data );
 
             pcbtxt->SetTextSize( size );
             pcbtxt->SetTextThickness( thickn );
@@ -2648,7 +2649,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
             BIU       width  = biuParse( data, &data );
             BIU       height = biuParse( data, &data );
             BIU       thickn = biuParse( data, &data );
-            EDA_ANGLE orient = EDA_ANGLE( degParse( data, &data ), TENTHS_OF_A_DEGREE_T );
+            EDA_ANGLE orient = degParse( data, &data );
             char*     mirror = strtok_r( (char*) data, delims, (char**) &data );
 
             dim->Text().SetTextPos( VECTOR2I( pos_x, pos_y ) );
@@ -2808,7 +2809,7 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 }
 
 
-double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
+EDA_ANGLE LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 {
     char*   nptr;
 
@@ -2839,7 +2840,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
     if( nptrptr )
         *nptrptr = nptr;
 
-    return fval;
+    return EDA_ANGLE( fval, TENTHS_OF_A_DEGREE_T );
 }
 
 

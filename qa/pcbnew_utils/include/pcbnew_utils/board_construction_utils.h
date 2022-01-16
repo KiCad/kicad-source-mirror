@@ -33,6 +33,7 @@
 
 #include <layer_ids.h>
 #include <math/vector2d.h>
+#include <geometry/eda_angle.h>
 
 class FOOTPRINT;
 class SEG;
@@ -65,12 +66,12 @@ void DrawPolyline( FOOTPRINT& aFootprint, const std::vector<VECTOR2I>& aPts, int
  * @param aMod    The footprint to add the segment to
  * @param aCentre The arc centre
  * @param aStart  The arc start point
- * @param aAngle  The arc angle (degrees, NOT deci-degrees)
+ * @param aAngle  The arc angle
  * @param aWidth  The width of the arc segment
  * @param aLayer  The layer to draw on
  */
 void DrawArc( FOOTPRINT& aFootprint, const VECTOR2I& aCentre, const VECTOR2I& aStart,
-              double aAngle, int aWidth, PCB_LAYER_ID aLayer );
+              const EDA_ANGLE& aAngle, int aWidth, PCB_LAYER_ID aLayer );
 
 /**
  * Draw a rectangle on a footprint

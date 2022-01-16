@@ -29,6 +29,7 @@
 #include <string>
 #include <layer_ids.h>
 #include <memory>
+#include <geometry/eda_angle.h>
 
 
 // FOOTPRINT_LIBRARY_HEADER_CNT gives the number of characters to compare to detect
@@ -131,18 +132,14 @@ protected:
     BIU biuParse( const char* aValue, const char** nptrptr = nullptr );
 
     /**
-     * Parse an ASCII decimal floating point value which is certainly an angle.
-     *
-     * This is a dedicated function for encapsulating support for the migration from
-     * tenths of degrees to degrees in floating point.  This function is the complement of
-     * fmtDEG().  One has to know what the other is doing.
+     * Parse an ASCII decimal floating point value which is certainly an angle in tenths of
+     * a degree.
      *
      * @param aValue is the ASCII value in C locale form with possible leading whitespace.
      * @param nptrptr may be NULL, but if not, then it tells where to put a pointer to the
      *                next unconsumed input text. See "man strtod" for more information.
-     * @return the string converted to a primitive double type
      */
-    double degParse( const char* aValue, const char** nptrptr = nullptr );
+    EDA_ANGLE degParse( const char* aValue, const char** nptrptr = nullptr );
 
     void checkVersion();
 

@@ -208,14 +208,18 @@ SHAPE_ARC& SHAPE_ARC::ConstructFromStartEndCenter( const VECTOR2I& aStart, const
     VECTOR2I startLine = aStart - aCenter;
     VECTOR2I endLine = aEnd - aCenter;
 
-    double startangle = NormalizeAnglePos(RAD2DECIDEG( startLine.Angle() ));
-    double endangle = NormalizeAnglePos(RAD2DECIDEG( endLine.Angle() ));
-    double angle = endangle - startangle;
+    EDA_ANGLE startAngle( startLine );
+    EDA_ANGLE endAngle( endLine );
+
+    startAngle.Normalize();
+    endAngle.Normalize();
+
+    EDA_ANGLE angle = endAngle - startAngle;
 
     if( aClockwise )
-        angle = NormalizeAngleNeg( angle );
+        angle = angle.Normalize() - ANGLE_360;
     else
-        angle = NormalizeAnglePos( angle );
+        angle = angle.Normalize();
 
     m_start = aStart;
     m_end = aEnd;

@@ -57,13 +57,13 @@ void DrawPolyline( FOOTPRINT& aFootprint, const std::vector<VECTOR2I>& aPts, int
 
 
 void DrawArc( FOOTPRINT& aFootprint, const VECTOR2I& aCentre, const VECTOR2I& aStart,
-              double aAngle, int aWidth, PCB_LAYER_ID aLayer )
+              const EDA_ANGLE& aAngle, int aWidth, PCB_LAYER_ID aLayer )
 {
     std::unique_ptr<FP_SHAPE>  arc = std::make_unique<FP_SHAPE>( &aFootprint, SHAPE_T::ARC );
 
     arc->SetCenter0( aCentre );
     arc->SetStart0( aStart );
-    arc->SetArcAngleAndEnd0( aAngle * 10 );
+    arc->SetArcAngleAndEnd0( aAngle );
 
     arc->SetStroke( STROKE_PARAMS( aWidth, PLOT_DASH_TYPE::SOLID ) );
     arc->SetLayer( aLayer );
@@ -100,10 +100,10 @@ void DrawRect( FOOTPRINT& aFootprint, const VECTOR2I& aPos, const VECTOR2I& aSiz
 
     if( aRadius > 0 )
     {
-        DrawArc( aFootprint, { xin_r, yin_t }, { x_r, yin_t }, 90, aWidth, aLayer );
-        DrawArc( aFootprint, { xin_l, yin_t }, { xin_l, y_t }, 90, aWidth, aLayer );
-        DrawArc( aFootprint, { xin_l, yin_b }, { x_l, yin_b }, 90, aWidth, aLayer );
-        DrawArc( aFootprint, { xin_r, yin_b }, { xin_r, y_b }, 90, aWidth, aLayer );
+        DrawArc( aFootprint, { xin_r, yin_t }, { x_r, yin_t }, ANGLE_90, aWidth, aLayer );
+        DrawArc( aFootprint, { xin_l, yin_t }, { xin_l, y_t }, ANGLE_90, aWidth, aLayer );
+        DrawArc( aFootprint, { xin_l, yin_b }, { x_l, yin_b }, ANGLE_90, aWidth, aLayer );
+        DrawArc( aFootprint, { xin_r, yin_b }, { xin_r, y_b }, ANGLE_90, aWidth, aLayer );
     }
 }
 

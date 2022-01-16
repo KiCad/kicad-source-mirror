@@ -69,7 +69,7 @@ public:
      * Sets the angle for arcs, and normalizes it within the range 0 - 360 degrees.
      * @param aAngle is tenths of degrees, but will soon be degrees.
      */
-    void SetArcAngleAndEnd0( double aAngle, bool aCheckNegativeAngle = false );
+    void SetArcAngleAndEnd0( const EDA_ANGLE& aAngle, bool aCheckNegativeAngle = false );
 
     void SetArcGeometry0( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
 

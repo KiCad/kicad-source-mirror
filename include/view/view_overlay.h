@@ -80,7 +80,8 @@ public:
     void Line( const SEG& aSeg );
     void Segment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth );
     void Circle( const VECTOR2D& aCenterPoint, double aRadius );
-    void Arc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle, double aEndAngle );
+    void Arc( const VECTOR2D& aCenterPoint, double aRadius, const EDA_ANGLE& aStartAngle,
+              const EDA_ANGLE& aEndAngle );
     void Rectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
     void Cross( const VECTOR2D& aP, int aSize );
 

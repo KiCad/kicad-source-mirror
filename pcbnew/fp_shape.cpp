@@ -184,12 +184,14 @@ VECTOR2I FP_SHAPE::GetArcMid0() const
 }
 
 
-void FP_SHAPE::SetArcAngleAndEnd0( double aAngle, bool aCheckNegativeAngle )
+void FP_SHAPE::SetArcAngleAndEnd0( const EDA_ANGLE& aAngle, bool aCheckNegativeAngle )
 {
-    m_end0 = m_start0;
-    RotatePoint( m_end0, m_arcCenter0, -NormalizeAngle360Max( aAngle ) );
+    EDA_ANGLE angle( aAngle );
 
-    if( aCheckNegativeAngle && aAngle < 0 )
+    m_end0 = m_start0;
+    RotatePoint( m_end0, m_arcCenter0, -angle.Normalize720() );
+
+    if( aCheckNegativeAngle && aAngle < ANGLE_0 )
         std::swap( m_start0, m_end0 );
 }
 

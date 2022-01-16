@@ -519,7 +519,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
         aBuffer.push_back( currpt );
 
         // Rotate rectangle and move it to the actual start point
-        double angle = ArcTangente( delta.y, delta.x );
+        EDA_ANGLE angle( delta );
 
         for( unsigned ii = 0; ii < 4; ii++ )
         {

@@ -124,38 +124,38 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int 
     {
         const SHAPE_ARC* arc = static_cast<const SHAPE_ARC*>( aShape );
 
-        double   r = arc->GetRadius();
-        double   C = 2.0 * M_PI * r;
-        VECTOR2I center = arc->GetCenter();
-        VECTOR2D startRadial( arc->GetP0() - center );
-        double   startAngle = 180.0 / M_PI * atan2( startRadial.y, startRadial.x );
-        VECTOR2D endRadial( arc->GetP1() - center );
-        double   arcEndAngle = 180.0 / M_PI * atan2( endRadial.y, endRadial.x );
+        double    r = arc->GetRadius();
+        double    C = 2.0 * M_PI * r;
+        VECTOR2I  center = arc->GetCenter();
+        VECTOR2D  startRadial( arc->GetP0() - center );
+        EDA_ANGLE startAngle( startRadial );
+        VECTOR2D  endRadial( arc->GetP1() - center );
+        EDA_ANGLE arcEndAngle( endRadial );
 
         if( arcEndAngle == startAngle )
-            arcEndAngle = startAngle + 360.0;   // ring, not null
+            arcEndAngle = startAngle + ANGLE_360;   // ring, not null
 
         if( startAngle > arcEndAngle )
         {
-            if( arcEndAngle < 0 )
-                arcEndAngle = NormalizeAngleDegrees( arcEndAngle, 0.0, 360.0 );
+            if( arcEndAngle < ANGLE_0 )
+                arcEndAngle = arcEndAngle.Normalize();
             else
-                startAngle = NormalizeAngleDegrees( startAngle, -360.0, 0.0 );
+                startAngle = startAngle.Normalize() - ANGLE_360;
         }
 
         wxASSERT( startAngle < arcEndAngle );
 
         for( size_t i = 0; i < 10000 && startAngle < arcEndAngle; ++i )
         {
-            double theta = 360.0 * strokes[ i % wrapAround ] / C;
-            double endAngle = std::min( startAngle + theta, arcEndAngle );
+            EDA_ANGLE theta = ANGLE_360 * strokes[ i % wrapAround ] / C;
+            EDA_ANGLE endAngle = std::min( startAngle + theta, arcEndAngle );
 
             if( i % 2 == 0 )
             {
-                VECTOR2I a( center.x + r * cos( startAngle * M_PI / 180.0 ),
-                            center.y + r * sin( startAngle * M_PI / 180.0 ) );
-                VECTOR2I b( center.x + r * cos( endAngle * M_PI / 180.0 ),
-                            center.y + r * sin( endAngle * M_PI / 180.0 ) );
+                VECTOR2I a( center.x + r * cos( startAngle.AsRadians() ),
+                            center.y + r * sin( startAngle.AsRadians() ) );
+                VECTOR2I b( center.x + r * cos( endAngle.AsRadians() ),
+                            center.y + r * sin( endAngle.AsRadians() ) );
 
                 aStroker( a, b );
             }

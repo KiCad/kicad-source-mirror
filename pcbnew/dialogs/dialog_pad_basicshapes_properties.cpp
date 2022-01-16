@@ -190,26 +190,26 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
     switch( m_shape->GetShape() )
     {
     case SHAPE_T::SEGMENT:
-        m_shape->SetStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
-        m_shape->SetEnd( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
+        m_shape->SetStart( VECTOR2I( m_startX.GetValue(), m_startY.GetValue() ) );
+        m_shape->SetEnd( VECTOR2I( m_endX.GetValue(), m_endY.GetValue() ) );
         break;
 
     case SHAPE_T::BEZIER:
-        m_shape->SetStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
-        m_shape->SetEnd( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
-        m_shape->SetBezierC1( wxPoint( m_ctrl1X.GetValue(), m_ctrl1Y.GetValue()));
-        m_shape->SetBezierC1( wxPoint( m_ctrl2X.GetValue(), m_ctrl2Y.GetValue()));
+        m_shape->SetStart( VECTOR2I( m_startX.GetValue(), m_startY.GetValue() ) );
+        m_shape->SetEnd( VECTOR2I( m_endX.GetValue(), m_endY.GetValue() ) );
+        m_shape->SetBezierC1( VECTOR2I( m_ctrl1X.GetValue(), m_ctrl1Y.GetValue()));
+        m_shape->SetBezierC1( VECTOR2I( m_ctrl2X.GetValue(), m_ctrl2Y.GetValue()));
         break;
 
     case SHAPE_T::ARC:
-        m_shape->SetCenter( wxPoint( m_endX.GetValue(), m_endY.GetValue() ) );
-        m_shape->SetStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
-        m_shape->SetArcAngleAndEnd( m_radius.GetValue() );
+        m_shape->SetCenter( VECTOR2I( m_endX.GetValue(), m_endY.GetValue() ) );
+        m_shape->SetStart( VECTOR2I( m_startX.GetValue(), m_startY.GetValue() ) );
+        m_shape->SetArcAngleAndEnd( m_radius.GetAngleValue() );
         break;
 
     case SHAPE_T::CIRCLE:
-        m_shape->SetStart( wxPoint( m_startX.GetValue(), m_startY.GetValue() ) );
-        m_shape->SetEnd( m_shape->GetStart() + wxPoint( m_radius.GetValue(), 0 ) );
+        m_shape->SetStart( VECTOR2I( m_startX.GetValue(), m_startY.GetValue() ) );
+        m_shape->SetEnd( m_shape->GetStart() + VECTOR2I( m_radius.GetValue(), 0 ) );
         break;
 
     case SHAPE_T::POLY:

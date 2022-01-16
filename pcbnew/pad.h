@@ -269,8 +269,8 @@ public:
     void AddPrimitiveCircle( const VECTOR2I& aCenter, int aRadius, int aThickness, bool aFilled );
     void AddPrimitiveRect( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aThickness,
                            bool aFilled );
-    void AddPrimitiveArc( const VECTOR2I& aCenter, const VECTOR2I& aStart, int aArcAngle,
-                          int aThickness );
+    void AddPrimitiveArc( const VECTOR2I& aCenter, const VECTOR2I& aStart,
+                          const EDA_ANGLE& aArcAngle, int aThickness );
     void AddPrimitiveCurve( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCtrl1,
                             const VECTOR2I& aCtrl2, int aThickness );
 

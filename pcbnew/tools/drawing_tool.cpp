@@ -1947,7 +1947,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         {
             if( arcManager.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_START )
             {
-                graphic->SetArcAngleAndEnd( 900 );
+                graphic->SetArcAngleAndEnd( ANGLE_90 );
                 frame()->OnEditItemRequest( graphic );
                 m_view->Update( &preview );
                 frame()->SetMsgPanel( graphic );

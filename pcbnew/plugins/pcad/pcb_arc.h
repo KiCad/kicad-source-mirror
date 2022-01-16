@@ -51,10 +51,10 @@ public:
     void AddToFootprint( FOOTPRINT* aFootprint ) override;
     void AddToBoard() override;
 
-    int    m_StartX;
-    int    m_StartY;
-    double m_Angle;
-    int    m_Width;
+    int       m_StartX;
+    int       m_StartY;
+    EDA_ANGLE m_Angle;
+    int       m_Width;
 
 private:
     bool IsCircle();

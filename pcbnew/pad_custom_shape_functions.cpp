@@ -80,8 +80,8 @@ void PAD::AddPrimitiveSegment( const VECTOR2I& aStart, const VECTOR2I& aEnd, int
 }
 
 
-void PAD::AddPrimitiveArc( const VECTOR2I& aCenter, const VECTOR2I& aStart, int aArcAngle,
-                           int aThickness )
+void PAD::AddPrimitiveArc( const VECTOR2I& aCenter, const VECTOR2I& aStart,
+                           const EDA_ANGLE& aArcAngle, int aThickness )
 {
     PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::ARC );
     item->SetFilled( false );

@@ -126,13 +126,12 @@ public:
     void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius ) override;
 
     /// @copydoc GAL::DrawArc()
-    void DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
-                          double aStartAngle, double aEndAngle ) override;
+    void DrawArc( const VECTOR2D& aCenterPoint, double aRadius, const EDA_ANGLE& aStartAngle,
+                  const EDA_ANGLE& aEndAngle ) override;
 
     /// @copydoc GAL::DrawArcSegment()
-    void DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
-                         double aStartAngle, double aEndAngle, double aWidth,
-                         double aMaxError ) override;
+    void DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, const EDA_ANGLE& aStartAngle,
+                         const EDA_ANGLE& aEndAngle, double aWidth, double aMaxError ) override;
 
     /// @copydoc GAL::DrawRectangle()
     void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;

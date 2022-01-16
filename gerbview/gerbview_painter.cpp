@@ -319,18 +319,18 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         m_gal->SetIsStroke( !isFilled );
         m_gal->SetLineWidth( isFilled ? width : m_gerbviewSettings.m_outlineWidth );
 
-        double startAngle = startVec.Angle();
-        double endAngle = endVec.Angle();
+        EDA_ANGLE startAngle( startVec );
+        EDA_ANGLE endAngle( endVec );
 
         // GAL fills in direction of increasing angle, so we have to convert
         // the angle from the -PI to PI domain of atan2() to ensure that
         // the arc goes in the right direction
         if( startAngle > endAngle )
-            endAngle += (2 * M_PI);
+            endAngle += ANGLE_360;
 
         // In Gerber, 360-degree arcs are stored in the file with start equal to end
         if( arcStart == arcEnd )
-            endAngle =  startAngle + 2*M_PI;
+            endAngle = startAngle + ANGLE_360;
 
         m_gal->DrawArcSegment( center, radius, startAngle, endAngle, width, ARC_HIGH_DEF );
 

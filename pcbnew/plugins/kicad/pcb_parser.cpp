@@ -541,10 +541,10 @@ void PCB_PARSER::parseRenderCache( EDA_TEXT* text )
     T token;
 
     NeedSYMBOLorNUMBER();
-    wxString cacheText = FROM_UTF8( CurText() );
-    double   cacheAngle = parseAngle( "render cache angle" );
+    wxString  cacheText = FROM_UTF8( CurText() );
+    EDA_ANGLE cacheAngle( parseDouble( "render cache angle" ), DEGREES_T );
 
-    text->SetupRenderCache( cacheText, EDA_ANGLE( cacheAngle, TENTHS_OF_A_DEGREE_T ) );
+    text->SetupRenderCache( cacheText, cacheAngle );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -2674,8 +2674,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
         Expecting( "gr_arc, gr_circle, gr_curve, gr_line, gr_poly, or gp_rect" );
     }
 
-    bool   foundFill = false;
-    double angle;
+    bool foundFill = false;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2689,7 +2688,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
         case T_angle:
             if( m_requiredVersion <= LEGACY_ARC_FORMATTING )
             {
-                angle = parseAngle( "arc angle" );
+                EDA_ANGLE angle( parseDouble( "arc angle" ), DEGREES_T );
 
                 if( shape->GetShape() == SHAPE_T::ARC )
                     shape->SetArcAngleAndEnd( angle, true );
@@ -2831,7 +2830,7 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
 
     if( token == T_NUMBER )
     {
-        text->SetTextAngle( EDA_ANGLE( parseAngle(), TENTHS_OF_A_DEGREE_T ) );
+        text->SetTextAngle( EDA_ANGLE( parseDouble(), DEGREES_T ) );
         NeedRIGHT();
     }
     else if( token != T_RIGHT )
@@ -3425,7 +3424,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
             if( token == T_NUMBER )
             {
-                footprint->SetOrientation( EDA_ANGLE( parseAngle(), TENTHS_OF_A_DEGREE_T ) );
+                footprint->SetOrientation( EDA_ANGLE( parseDouble(), DEGREES_T ) );
                 NeedRIGHT();
             }
             else if( token != T_RIGHT )
@@ -3735,7 +3734,7 @@ FP_TEXT* PCB_PARSER::parseFP_TEXT()
 
     if( CurTok() == T_NUMBER )
     {
-        text->SetTextAngle( EDA_ANGLE( parseAngle(), TENTHS_OF_A_DEGREE_T ) );
+        text->SetTextAngle( EDA_ANGLE( parseDouble(), DEGREES_T ) );
         NextTok();
     }
 
@@ -3845,7 +3844,7 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
             if( token != T_angle )
                 Expecting( T_angle );
 
-            shape->SetArcAngleAndEnd0( parseAngle( "segment angle" ), true );
+            shape->SetArcAngleAndEnd0( EDA_ANGLE( parseDouble( "arc angle" ), DEGREES_T ), true );
             NeedRIGHT();
         }
         else
@@ -4273,7 +4272,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
             if( token == T_NUMBER )
             {
-                pad->SetOrientation( EDA_ANGLE( parseAngle(), TENTHS_OF_A_DEGREE_T ) );
+                pad->SetOrientation( EDA_ANGLE( parseDouble(), DEGREES_T ) );
                 NeedRIGHT();
             }
             else if( token != T_RIGHT )
@@ -4437,7 +4436,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_thermal_bridge_angle:
-            pad->SetThermalSpokeAngle( EDA_ANGLE( parseAngle( "thermal spoke angle value" ), TENTHS_OF_A_DEGREE_T ) );
+            pad->SetThermalSpokeAngle( EDA_ANGLE( parseDouble( "thermal spoke angle" ), DEGREES_T ) );
             NeedRIGHT();
             break;
 
@@ -4513,36 +4512,14 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
                 switch( token )
                 {
-                case T_pad_prop_bga:
-                    pad->SetProperty( PAD_PROP::BGA );
-                    break;
-
-                case T_pad_prop_fiducial_glob:
-                    pad->SetProperty( PAD_PROP::FIDUCIAL_GLBL );
-                    break;
-
-                case T_pad_prop_fiducial_loc:
-                    pad->SetProperty( PAD_PROP::FIDUCIAL_LOCAL );
-                    break;
-
-                case T_pad_prop_testpoint:
-                    pad->SetProperty( PAD_PROP::TESTPOINT );
-                    break;
-
-                case T_pad_prop_castellated:
-                    pad->SetProperty( PAD_PROP::CASTELLATED );
-                    break;
-
-                case T_pad_prop_heatsink:
-                    pad->SetProperty( PAD_PROP::HEATSINK );
-                    break;
-
-                case T_none:
-                    pad->SetProperty( PAD_PROP::NONE );
-                    break;
-
-                case T_RIGHT:
-                    break;
+                case T_pad_prop_bga:           pad->SetProperty( PAD_PROP::BGA );            break;
+                case T_pad_prop_fiducial_glob: pad->SetProperty( PAD_PROP::FIDUCIAL_GLBL );  break;
+                case T_pad_prop_fiducial_loc:  pad->SetProperty( PAD_PROP::FIDUCIAL_LOCAL ); break;
+                case T_pad_prop_testpoint:     pad->SetProperty( PAD_PROP::TESTPOINT );      break;
+                case T_pad_prop_castellated:   pad->SetProperty( PAD_PROP::CASTELLATED );    break;
+                case T_pad_prop_heatsink:      pad->SetProperty( PAD_PROP::HEATSINK );       break;
+                case T_none:                   pad->SetProperty( PAD_PROP::NONE );           break;
+                case T_RIGHT:                                                                break;
 
                 default:
 #if 0   // Currently: skip unknown property
@@ -4577,8 +4554,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_gr_arc:
                     dummyShape = parsePCB_SHAPE();
                     pad->AddPrimitiveArc( dummyShape->GetCenter(), dummyShape->GetStart(),
-                                          dummyShape->GetArcAngle().AsTenthsOfADegree(),
-                                          dummyShape->GetWidth() );
+                                          dummyShape->GetArcAngle(), dummyShape->GetWidth() );
                     break;
 
                 case T_gr_line:
@@ -4609,8 +4585,8 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_gr_curve:
                     dummyShape = parsePCB_SHAPE();
                     pad->AddPrimitiveCurve( dummyShape->GetStart(), dummyShape->GetEnd(),
-                                            dummyShape->GetBezierC1(),
-                                            dummyShape->GetBezierC2(), dummyShape->GetWidth() );
+                                            dummyShape->GetBezierC1(), dummyShape->GetBezierC2(),
+                                            dummyShape->GetWidth() );
                     break;
 
                 default:

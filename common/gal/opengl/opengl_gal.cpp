@@ -803,14 +803,17 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 }
 
 
-void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
-                          double aEndAngle )
+void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
+                          const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle )
 {
     if( aRadius <= 0 )
         return;
 
+    double startAngle = aStartAngle.AsRadians();
+    double endAngle = aEndAngle.AsRadians();
+
     // Swap the angles, if start angle is greater than end angle
-    SWAP( aStartAngle, >, aEndAngle );
+    SWAP( startAngle, >, endAngle );
 
     const double alphaIncrement = calcAngleStep( aRadius );
 
@@ -824,7 +827,7 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         m_currentManager->Shader( SHADER_NONE );
 
         // Triangle fan
-        for( alpha = aStartAngle; ( alpha + alphaIncrement ) < aEndAngle; )
+        for( alpha = startAngle; ( alpha + alphaIncrement ) < endAngle; )
         {
             m_currentManager->Reserve( 3 );
             m_currentManager->Vertex( 0.0, 0.0, m_layerDepth );
@@ -836,7 +839,7 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         }
 
         // The last missing triangle
-        const VECTOR2D endPoint( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
+        const VECTOR2D endPoint( cos( endAngle ) * aRadius, sin( endAngle ) * aRadius );
 
         m_currentManager->Reserve( 3 );
         m_currentManager->Vertex( 0.0, 0.0, m_layerDepth );
@@ -849,10 +852,10 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         m_currentManager->Color( m_strokeColor.r, m_strokeColor.g, m_strokeColor.b,
                                  m_strokeColor.a );
 
-        VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
+        VECTOR2D p( cos( startAngle ) * aRadius, sin( startAngle ) * aRadius );
         double   alpha;
 
-        for( alpha = aStartAngle + alphaIncrement; alpha <= aEndAngle; alpha += alphaIncrement )
+        for( alpha = startAngle + alphaIncrement; alpha <= endAngle; alpha += alphaIncrement )
         {
             VECTOR2D p_next( cos( alpha ) * aRadius, sin( alpha ) * aRadius );
             DrawLine( p, p_next );
@@ -861,9 +864,9 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         }
 
         // Draw the last missing part
-        if( alpha != aEndAngle )
+        if( alpha != endAngle )
         {
-            VECTOR2D p_last( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
+            VECTOR2D p_last( cos( endAngle ) * aRadius, sin( endAngle ) * aRadius );
             DrawLine( p, p_last );
         }
     }
@@ -873,7 +876,7 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
 
 
 void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
-                                 double aStartAngle, double aEndAngle,
+                                 const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle,
                                  double aWidth, double aMaxError )
 {
     if( aRadius <= 0 )
@@ -885,8 +888,11 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
         return;
     }
 
+    double startAngle = aStartAngle.AsRadians();
+    double endAngle = aEndAngle.AsRadians();
+
     // Swap the angles, if start angle is greater than end angle
-    SWAP( aStartAngle, >, aEndAngle );
+    SWAP( startAngle, >, endAngle );
 
     // Calculate the seg count to approximate the arc with aMaxError or less
     int segCount360 = GetArcToSegmentCount( aRadius, aMaxError, FULL_CIRCLE );
@@ -896,14 +902,14 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
     // Refinement: Use a segment count multiple of 2, because we have a control point
     // on the middle of the arc, and the look is better if it is on a segment junction
     // because there is no approx error
-    int seg_count = KiROUND( ( aEndAngle - aStartAngle ) / alphaIncrement );
+    int seg_count = KiROUND( ( endAngle - startAngle ) / alphaIncrement );
 
     if( seg_count % 2 != 0 )
         seg_count += 1;
 
     // Recalculate alphaIncrement with a even integer number of segment
     if( seg_count )
-        alphaIncrement = ( aEndAngle - aStartAngle ) / seg_count;
+        alphaIncrement = ( endAngle - startAngle ) / seg_count;
 
     Save();
     m_currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );
@@ -914,21 +920,21 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
                                  m_strokeColor.a );
 
         double   width = aWidth / 2.0;
-        VECTOR2D startPoint( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
-        VECTOR2D endPoint( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
+        VECTOR2D startPoint( cos( startAngle ) * aRadius, sin( startAngle ) * aRadius );
+        VECTOR2D endPoint( cos( endAngle ) * aRadius, sin( endAngle ) * aRadius );
 
-        drawStrokedSemiCircle( startPoint, width, aStartAngle + M_PI );
-        drawStrokedSemiCircle( endPoint, width, aEndAngle );
+        drawStrokedSemiCircle( startPoint, width, startAngle + M_PI );
+        drawStrokedSemiCircle( endPoint, width, endAngle );
 
-        VECTOR2D pOuter( cos( aStartAngle ) * ( aRadius + width ),
-                         sin( aStartAngle ) * ( aRadius + width ) );
+        VECTOR2D pOuter( cos( startAngle ) * ( aRadius + width ),
+                         sin( startAngle ) * ( aRadius + width ) );
 
-        VECTOR2D pInner( cos( aStartAngle ) * ( aRadius - width ),
-                         sin( aStartAngle ) * ( aRadius - width ) );
+        VECTOR2D pInner( cos( startAngle ) * ( aRadius - width ),
+                         sin( startAngle ) * ( aRadius - width ) );
 
         double alpha;
 
-        for( alpha = aStartAngle + alphaIncrement; alpha <= aEndAngle; alpha += alphaIncrement )
+        for( alpha = startAngle + alphaIncrement; alpha <= endAngle; alpha += alphaIncrement )
         {
             VECTOR2D pNextOuter( cos( alpha ) * ( aRadius + width ),
                                  sin( alpha ) * ( aRadius + width ) );
@@ -943,12 +949,12 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
         }
 
         // Draw the last missing part
-        if( alpha != aEndAngle )
+        if( alpha != endAngle )
         {
-            VECTOR2D pLastOuter( cos( aEndAngle ) * ( aRadius + width ),
-                                 sin( aEndAngle ) * ( aRadius + width ) );
-            VECTOR2D pLastInner( cos( aEndAngle ) * ( aRadius - width ),
-                                 sin( aEndAngle ) * ( aRadius - width ) );
+            VECTOR2D pLastOuter( cos( endAngle ) * ( aRadius + width ),
+                                 sin( endAngle ) * ( aRadius + width ) );
+            VECTOR2D pLastInner( cos( endAngle ) * ( aRadius - width ),
+                                 sin( endAngle ) * ( aRadius - width ) );
 
             DrawLine( pOuter, pLastOuter );
             DrawLine( pInner, pLastInner );
@@ -960,10 +966,10 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
         m_currentManager->Color( m_fillColor.r, m_fillColor.g, m_fillColor.b, m_fillColor.a );
         SetLineWidth( aWidth );
 
-        VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
+        VECTOR2D p( cos( startAngle ) * aRadius, sin( startAngle ) * aRadius );
         double   alpha;
 
-        for( alpha = aStartAngle + alphaIncrement; alpha <= aEndAngle; alpha += alphaIncrement )
+        for( alpha = startAngle + alphaIncrement; alpha <= endAngle; alpha += alphaIncrement )
         {
             VECTOR2D p_next( cos( alpha ) * aRadius, sin( alpha ) * aRadius );
             DrawLine( p, p_next );
@@ -972,9 +978,9 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
         }
 
         // Draw the last missing part
-        if( alpha != aEndAngle )
+        if( alpha != endAngle )
         {
-            VECTOR2D p_last( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
+            VECTOR2D p_last( cos( endAngle ) * aRadius, sin( endAngle ) * aRadius );
             DrawLine( p, p_last );
         }
     }

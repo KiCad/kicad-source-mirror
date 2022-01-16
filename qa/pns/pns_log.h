@@ -236,7 +236,7 @@ public:
     virtual void AddBox( const BOX2I& aB, const KIGFX::COLOR4D& aColor,
                          const std::string& aName,
                          const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override;
-    virtual void Clear(){};
+    virtual void Clear() override {};
 
     int GetStageCount() const { return m_stages.size(); }
 

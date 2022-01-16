@@ -53,7 +53,7 @@ public:
         {
         case RADIANS_T:
             m_radians = aValue;
-            m_value = int( aValue / TENTHS_OF_A_DEGREE_TO_RADIANS );
+            m_value = KiROUND( aValue / TENTHS_OF_A_DEGREE_TO_RADIANS );
             break;
 
         default:
@@ -70,11 +70,55 @@ public:
         {
         case RADIANS_T:
             m_radians = aValue;
-            m_value = int( aValue / TENTHS_OF_A_DEGREE_TO_RADIANS );
+            m_value = KiROUND( aValue / TENTHS_OF_A_DEGREE_TO_RADIANS );
             break;
 
         default:
             m_value = int( aValue * aAngleType );
+        }
+    }
+
+    explicit EDA_ANGLE( const VECTOR2D& aVector ) :
+            m_value( 0 ),
+            m_radians( 0.0 ),
+            m_initial_type( TENTHS_OF_A_DEGREE_T )
+    {
+        if( aVector.x == 0.0 && aVector.y == 0.0 )
+        {
+            m_value = 0;
+        }
+        else if( aVector.y == 0.0 )
+        {
+            if( aVector.x >= 0 )
+                m_value = 0;
+            else
+                m_value = -1800;
+        }
+        else if( aVector.x == 0.0 )
+        {
+            if( aVector.y >= 0.0 )
+                m_value = 900;
+            else
+                m_value = -900;
+        }
+        else if( aVector.x == aVector.y )
+        {
+            if( aVector.x >= 0.0 )
+                m_value = 450;
+            else
+                m_value = -1800 + 450;
+        }
+        else if( aVector.x == -aVector.y )
+        {
+            if( aVector.x >= 0.0 )
+                m_value = -450;
+            else
+                m_value = 1800 - 450;
+        }
+        else
+        {
+            m_value = KiROUND( atan2( (double) aVector.y, (double) aVector.x )
+                                       / TENTHS_OF_A_DEGREE_TO_RADIANS         );
         }
     }
 
@@ -119,8 +163,8 @@ public:
         }
         else
         {
-            m_value = atan2( (double) aVector.y, (double) aVector.x )
-                        / TENTHS_OF_A_DEGREE_TO_RADIANS;
+            m_value = KiROUND( atan2( (double) aVector.y, (double) aVector.x )
+                                       / TENTHS_OF_A_DEGREE_TO_RADIANS         );
         }
     }
 

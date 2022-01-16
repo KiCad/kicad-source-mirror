@@ -40,6 +40,7 @@
 #include <newstroke_font.h>
 #include <font/stroke_font.h>
 #include <eda_rect.h>
+#include <geometry/eda_angle.h>
 
 class SHAPE_LINE_CHAIN;
 class SHAPE_POLY_SET;
@@ -134,8 +135,8 @@ public:
      * @param aStartAngle   is the start angle of the arc.
      * @param aEndAngle     is the end angle of the arc.
      */
-    virtual void DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
-                          double aEndAngle ) {};
+    virtual void DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
+                          const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle ) {};
 
     /**
      * Draw an arc segment.
@@ -155,8 +156,9 @@ public:
      * @param aMaxError     is the max allowed error to create segments to approximate a circle.
      *  It has meaning only for back ends that can't draw a true arc, and use segments to approximate.
      */
-    virtual void DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
-                                 double aEndAngle, double aWidth, double aMaxError ) {};
+    virtual void DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
+                                 const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle,
+                                 double aWidth, double aMaxError ) {};
 
     /**
      * Draw a rectangle.

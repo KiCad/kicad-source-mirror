@@ -2857,9 +2857,9 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
         // with opposite start/end points and same centre point)
 
         if( cw )
-            shape->SetArcAngleAndEnd( arcAngle.Normalize().AsTenthsOfADegree() );
+            shape->SetArcAngleAndEnd( arcAngle.Normalize() );
         else
-            shape->SetArcAngleAndEnd( -arcAngle.Normalize().AsTenthsOfADegree(), true );
+            shape->SetArcAngleAndEnd( -arcAngle.Normalize(), true );
 
         break;
     }

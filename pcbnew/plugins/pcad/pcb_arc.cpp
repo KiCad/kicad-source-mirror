@@ -43,7 +43,7 @@ PCB_ARC::PCB_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
     m_objType    = wxT( 'A' );
     m_StartX     = 0;
     m_StartY     = 0;
-    m_Angle      = 0;
+    m_Angle      = ANGLE_0;
     m_Width      = 0;
 }
 
@@ -58,8 +58,7 @@ void PCB_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
 {
     XNODE*      lNode;
     int         r = 0;
-    int         endX = 0;
-    int         endY = 0;
+    VECTOR2I    end;
 
     m_PCadLayer     = aLayer;
     m_KiCadLayer    = GetKiCadLayer();
@@ -96,19 +95,25 @@ void PCB_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
             lNode = lNode->GetNext();
 
         if( lNode )
-            SetPosition( lNode->GetNodeContent(), aDefaultUnits, &endX, &endY, aActualConversion );
-
-        if( m_StartX == endX && m_StartY == endY )
         {
-            m_Angle = 3600;
+            SetPosition( lNode->GetNodeContent(), aDefaultUnits, &end.x, &end.y,
+                         aActualConversion );
+        }
+
+        VECTOR2I position( m_positionX, m_positionY );
+        VECTOR2I start( m_StartX, m_StartY );
+
+        if( start == end )
+        {
+            m_Angle = ANGLE_360;
         }
         else
         {
-            double alpha1  = ArcTangente( m_StartY - m_positionY, m_StartX - m_positionX );
-            double alpha2  = ArcTangente( endY - m_positionY, endX - m_positionX );
+            EDA_ANGLE alpha1( start - position );
+            EDA_ANGLE alpha2( end - position );
             m_Angle = alpha1 - alpha2;
 
-            NORMALIZE_ANGLE_POS( m_Angle );
+            m_Angle.Normalize();
         }
     }
     else if( aNode->GetName() == wxT( "arc" ) )
@@ -140,7 +145,7 @@ void PCB_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
         lNode   = FindNode( aNode, wxT( "sweepAngle" ) );
 
         if( lNode )
-            m_Angle = StrToInt1Units( lNode->GetNodeContent() );
+            m_Angle = EDA_ANGLE( StrToInt1Units( lNode->GetNodeContent() ), TENTHS_OF_A_DEGREE_T );
 
         m_StartX = m_positionX + KiROUND( r * cos( a.AsRadians() ) );
         m_StartY = m_positionY - KiROUND( r * sin( a.AsRadians() ) );
@@ -204,7 +209,7 @@ void PCB_ARC::AddToBoard()
 
 bool PCB_ARC::IsCircle()
 {
-    return ( m_Angle == 3600 );
+    return ( m_Angle == ANGLE_360 );
 }
 
 } // namespace PCAD2KICAD

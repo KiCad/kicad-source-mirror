@@ -166,15 +166,15 @@ const VECTOR2I CalcArcMid( const VECTOR2I& aStart, const VECTOR2I& aEnd, const V
     VECTOR2I startVector = aStart - aCenter;
     VECTOR2I endVector = aEnd - aCenter;
 
-    double startAngle = ArcTangente( startVector.y, startVector.x );
-    double endAngle = ArcTangente( endVector.y, endVector.x );
-    double midPointRotAngleDeciDeg = NormalizeAngle180( startAngle - endAngle ) / 2;
+    EDA_ANGLE startAngle( startVector );
+    EDA_ANGLE endAngle( endVector );
+    EDA_ANGLE midPointRotAngle = ( startAngle - endAngle ).Normalize180() / 2;
 
     if( !aMinArcAngle )
-        midPointRotAngleDeciDeg += 1800.0;
+        midPointRotAngle += ANGLE_180;
 
     VECTOR2I newMid = aStart;
-    RotatePoint( newMid, aCenter, midPointRotAngleDeciDeg );
+    RotatePoint( newMid, aCenter, midPointRotAngle );
 
     return newMid;
 }

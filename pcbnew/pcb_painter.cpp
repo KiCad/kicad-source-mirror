@@ -670,8 +670,8 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         m_gal->SetIsFill( not outline_mode );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
-        m_gal->DrawArcSegment( center, radius, start_angle.AsRadians(),
-                               ( start_angle + angle ).AsRadians(), width, m_maxError );
+        m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle, width,
+                               m_maxError );
     }
 
     // Clearance lines
@@ -686,9 +686,8 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
 
-        m_gal->DrawArcSegment( center, radius, start_angle.AsRadians(),
-                               ( start_angle + angle ).AsRadians(), width + clearance * 2,
-                               m_maxError );
+        m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle,
+                               width + clearance * 2, m_maxError );
     }
 
 // Debug only: enable this code only to test the TransformArcToPolygon function
@@ -829,22 +828,22 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         if( !outline_mode )
             m_gal->SetLineWidth( ( aVia->GetWidth() - aVia->GetDrillValue() ) / 2.0 );
 
-        m_gal->DrawArc( center, radius, M_PI * -0.375, M_PI * 0.375 );
-        m_gal->DrawArc( center, radius, M_PI * 0.625, M_PI * 1.375 );
+        m_gal->DrawArc( center, radius, EDA_ANGLE( -60, DEGREES_T ), EDA_ANGLE( 60, DEGREES_T ) );
+        m_gal->DrawArc( center, radius, EDA_ANGLE( 120, DEGREES_T ), EDA_ANGLE( 240, DEGREES_T ) );
 
         if( outline_mode )
             m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerTop ) );
         else
             m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerTop ) );
 
-        m_gal->DrawArc( center, radius, M_PI * 1.375, M_PI * 1.625 );
+        m_gal->DrawArc( center, radius, EDA_ANGLE( 240, DEGREES_T ), EDA_ANGLE( 300, DEGREES_T ) );
 
         if( outline_mode )
             m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
         else
             m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
 
-        m_gal->DrawArc( center, radius, M_PI * 0.375, M_PI * 0.625 );
+        m_gal->DrawArc( center, radius, EDA_ANGLE( 60, DEGREES_T ), EDA_ANGLE( 120, DEGREES_T ) );
     }
 
     // Clearance lines
@@ -1407,18 +1406,16 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
             if( outline_mode )
             {
-                m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(),
-                                       startAngle.AsRadians(), endAngle.AsRadians(), thickness,
-                                       m_maxError );
+                m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(), startAngle,
+                                       endAngle, thickness, m_maxError );
             }
             else
             {
                 m_gal->SetIsFill( true );
                 m_gal->SetIsStroke( false );
 
-                m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(),
-                                       startAngle.AsRadians(), endAngle.AsRadians(), thickness,
-                                       m_maxError );
+                m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(), startAngle,
+                                       endAngle, thickness, m_maxError );
             }
             break;
         }

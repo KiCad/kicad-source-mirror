@@ -79,12 +79,12 @@ public:
 
     /// @copydoc GAL::DrawArc()
     void DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
-                          double aStartAngle, double aEndAngle ) override;
+                  const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle ) override;
 
     /// @copydoc GAL::DrawArcSegment()
     /// Note: aMaxError is not used in Cairo, because Cairo can draw true arcs
     void DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
-                         double aStartAngle, double aEndAngle, double aWidth,
+                         const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle, double aWidth,
                          double aMaxError ) override;
 
     /// @copydoc GAL::DrawRectangle()

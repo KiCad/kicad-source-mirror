@@ -1326,7 +1326,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
 
             arc->SetCenter( elem.center + m_sheetOffset );
             arc->SetStart( elem.center + startOffset + m_sheetOffset );
-            arc->SetArcAngleAndEnd( includedAngle.Normalize().AsTenthsOfADegree(), true );
+            arc->SetArcAngleAndEnd( includedAngle.Normalize(), true );
 
             arc->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
 

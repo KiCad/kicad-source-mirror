@@ -317,14 +317,17 @@ void CAIRO_GAL_BASE::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 }
 
 
-void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
-                              double aEndAngle )
+void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
+                              const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle )
 {
     syncLineWidth();
 
+    double startAngle = aStartAngle.AsRadians();
+    double endAngle = aEndAngle.AsRadians();
+
     // calculate start and end arc angles according to the rotation transform matrix
     // and normalize:
-    arc_angles_xform_and_normalize( aStartAngle, aEndAngle );
+    arc_angles_xform_and_normalize( startAngle, endAngle );
 
     double r = xform( aRadius );
 
@@ -342,7 +345,7 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
     if( m_isFillEnabled )
         cairo_move_to( m_currentContext, mid.x, mid.y );
 
-    cairo_arc( m_currentContext, mid.x, mid.y, r, aStartAngle, aEndAngle );
+    cairo_arc( m_currentContext, mid.x, mid.y, r, startAngle, endAngle );
 
     if( m_isFillEnabled )
         cairo_close_path( m_currentContext );
@@ -354,8 +357,8 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
 
 
 void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
-                                     double aStartAngle, double aEndAngle, double aWidth,
-                                     double aMaxError )
+                                     const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle,
+                                     double aWidth, double aMaxError )
 {
     // Note: aMaxError is not used because Cairo can draw true arcs
     if( m_isFillEnabled )
@@ -373,8 +376,8 @@ void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadiu
 
     // calculate start and end arc angles according to the rotation transform matrix
     // and normalize:
-    double startAngleS = aStartAngle;
-    double endAngleS = aEndAngle;
+    double startAngleS = aStartAngle.AsRadians();
+    double endAngleS = aEndAngle.AsRadians();
     arc_angles_xform_and_normalize( startAngleS, endAngleS );
 
     double r = xform( aRadius );

@@ -160,10 +160,8 @@ public:
 
     /**
      * Set the end point from the angle center and start.
-     *
-     * @param aAngle is tenths of degrees.
      */
-    void SetArcAngleAndEnd( double aAngle, bool aCheckNegativeAngle = false );
+    void SetArcAngleAndEnd( const EDA_ANGLE& aAngle, bool aCheckNegativeAngle = false );
 
     EDA_ANGLE GetArcAngle() const;
 
