@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,7 +101,7 @@ static wxFileName getFootprintFilenameFromUser( wxWindow* aParent, const wxStrin
  * Read a file to detect the type.
  * @param aFile - open file to be read. File pointer will be closed.
  * @param aFileName - file name to be read
- * @param aName - wxString to receive the footprint name iff type is LEGACY
+ * @param aName - wxString to receive the footprint name if type is LEGACY
  */
 static IO_MGR::PCB_FILE_T detect_file_type( FILE* aFile, const wxFileName& aFileName,
                                             wxString* aName )
@@ -257,7 +257,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
         return nullptr;
     }
 
-    cfg->m_LastImportExportPath = lastOpenedPathForLoading;
+    m_mruPath = cfg->m_LastImportExportPath = fn.GetPath();
 
     wxString footprintName;
     IO_MGR::PCB_FILE_T fileType = detect_file_type( fp, fn.GetFullPath(), &footprintName );
