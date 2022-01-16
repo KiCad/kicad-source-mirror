@@ -90,7 +90,7 @@ public:
         m_Hole_NotPlated = false;
         m_Hole_Diameter = 0;
         m_Tool_Reference = 0;
-        m_Hole_Orient = 0.0;
+        m_Hole_Orient = ANGLE_0;
         m_Hole_Shape = 0;
         m_Hole_Bottom_Layer = B_Cu;
         m_Hole_Top_Layer = F_Cu;
@@ -104,7 +104,7 @@ public:
     int          m_Tool_Reference;       // Tool reference for this hole = 1 ... n (values <=0
                                          // must not be used).
     VECTOR2I     m_Hole_Size;            // hole size for oblong holes
-    double       m_Hole_Orient;          // Hole rotation (= pad rotation) for oblong holes
+    EDA_ANGLE    m_Hole_Orient;          // Hole rotation (= pad rotation) for oblong holes
     int          m_Hole_Shape;           // hole shape: round (0) or oval (1)
     VECTOR2I     m_Hole_Pos;             // hole position
     PCB_LAYER_ID m_Hole_Bottom_Layer;    // hole ending layer (usually back layer)

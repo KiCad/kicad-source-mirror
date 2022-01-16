@@ -251,23 +251,6 @@ bool AR_AUTOPLACER::fillMatrix()
 }
 
 
-void AR_AUTOPLACER::rotateFootprint( FOOTPRINT* aFootprint, double aAngle, bool incremental )
-{
-    if( aFootprint == nullptr )
-        return;
-
-    EDA_ANGLE angle( aAngle, TENTHS_OF_A_DEGREE_T );
-
-    if( incremental )
-        aFootprint->SetOrientation( aFootprint->GetOrientation() + angle );
-    else
-        aFootprint->SetOrientation( angle );
-
-
-    m_board->GetConnectivity()->Update( aFootprint );
-}
-
-
 void AR_AUTOPLACER::addFpBody( const VECTOR2I& aStart, const VECTOR2I& aEnd, LSET aLayerMask )
 {
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack

@@ -3283,12 +3283,12 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     arc->SetPosition( center );
 
-    int radius = Mils2Iu( parseInt( aReader, line, &line ) );
-    int angle1 = parseInt( aReader, line, &line );
-    int angle2 = parseInt( aReader, line, &line );
+    int       radius = Mils2Iu( parseInt( aReader, line, &line ) );
+    EDA_ANGLE angle1( parseInt( aReader, line, &line ), TENTHS_OF_A_DEGREE_T );
+    EDA_ANGLE angle2( parseInt( aReader, line, &line ), TENTHS_OF_A_DEGREE_T );
 
-    NORMALIZE_ANGLE_POS( angle1 );
-    NORMALIZE_ANGLE_POS( angle2 );
+    angle1.Normalize();
+    angle2.Normalize();
 
     arc->SetUnit( parseInt( aReader, line, &line ) );
     arc->SetConvert( parseInt( aReader, line, &line ) );
@@ -3994,23 +3994,18 @@ void SCH_LEGACY_PLUGIN_CACHE::saveArc( LIB_SHAPE* aArc, OUTPUTFORMATTER& aFormat
 {
     wxCHECK_RET( aArc && aArc->GetShape() == SHAPE_T::ARC, "Invalid ARC object." );
 
-    int x1;
-    int x2;
+    EDA_ANGLE startAngle, endAngle;
 
-    aArc->CalcArcAngles( x1, x2 );
-
-    if( x1 > 1800 )
-        x1 -= 3600;
-
-    if( x2 > 1800 )
-        x2 -= 3600;
+    aArc->CalcArcAngles( startAngle, endAngle );
+    startAngle.Normalize180();
+    endAngle.Normalize180();
 
     aFormatter.Print( 0, "A %d %d %d %d %d %d %d %d %c %d %d %d %d\n",
                       Iu2Mils( aArc->GetPosition().x ),
                       Iu2Mils( aArc->GetPosition().y ),
                       Iu2Mils( aArc->GetRadius() ),
-                      x1,
-                      x2,
+                      startAngle.AsTenthsOfADegree(),
+                      endAngle.AsTenthsOfADegree(),
                       aArc->GetUnit(),
                       aArc->GetConvert(),
                       Iu2Mils( aArc->GetWidth() ),

@@ -11,10 +11,10 @@
 {
     double GetArcAngleStart()
     {
-        double startAngle;
-        double endAngle;
+        EDA_ANGLE startAngle;
+        EDA_ANGLE endAngle;
         $self->CalcArcAngles( startAngle, endAngle );
-        return startAngle * 10;
+        return startAngle.AsTenthsOfADegree();
     }
 
     %pythoncode

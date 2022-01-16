@@ -1401,14 +1401,14 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
         case SHAPE_T::ARC:
         {
-            double startAngle;
-            double endAngle;
+            EDA_ANGLE startAngle;
+            EDA_ANGLE endAngle;
             aShape->CalcArcAngles( startAngle, endAngle );
 
             if( outline_mode )
             {
                 m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(),
-                                       DEG2RAD( startAngle ), DEG2RAD( endAngle ), thickness,
+                                       startAngle.AsRadians(), endAngle.AsRadians(), thickness,
                                        m_maxError );
             }
             else
@@ -1417,7 +1417,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                 m_gal->SetIsStroke( false );
 
                 m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(),
-                                       DEG2RAD( startAngle ), DEG2RAD( endAngle ), thickness,
+                                       startAngle.AsRadians(), endAngle.AsRadians(), thickness,
                                        m_maxError );
             }
             break;

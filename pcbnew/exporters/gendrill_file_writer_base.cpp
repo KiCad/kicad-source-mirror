@@ -95,7 +95,7 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
                 new_hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_VIA_BURIED;
 
             new_hole.m_Tool_Reference = -1;         // Flag value for Not initialized
-            new_hole.m_Hole_Orient    = 0;
+            new_hole.m_Hole_Orient    = ANGLE_0;
             new_hole.m_Hole_Diameter  = hole_sz;
             new_hole.m_Hole_NotPlated = false;
             new_hole.m_Hole_Size.x = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
@@ -141,7 +141,7 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
                                                 ? HOLE_ATTRIBUTE::HOLE_MECHANICAL
                                                 : HOLE_ATTRIBUTE::HOLE_PAD;
                 new_hole.m_Tool_Reference = -1;         // Flag is: Not initialized
-                new_hole.m_Hole_Orient    = pad->GetOrientation().AsTenthsOfADegree();
+                new_hole.m_Hole_Orient    = pad->GetOrientation();
                 new_hole.m_Hole_Shape     = 0;           // hole shape: round
                 new_hole.m_Hole_Diameter  = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
                 new_hole.m_Hole_Size.x    = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;

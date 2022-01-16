@@ -57,7 +57,6 @@ void PCB_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
                      const wxString& aActualConversion )
 {
     XNODE*      lNode;
-    double      a = 0.0;
     int         r = 0;
     int         endX = 0;
     int         endY = 0;
@@ -133,16 +132,18 @@ void PCB_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
 
         lNode   = FindNode( aNode, wxT( "startAngle" ) );
 
+        EDA_ANGLE a = ANGLE_0;
+
         if( lNode )
-            a = StrToInt1Units( lNode->GetNodeContent() );
+            a = EDA_ANGLE( StrToInt1Units( lNode->GetNodeContent() ), TENTHS_OF_A_DEGREE_T );
 
         lNode   = FindNode( aNode, wxT( "sweepAngle" ) );
 
         if( lNode )
             m_Angle = StrToInt1Units( lNode->GetNodeContent() );
 
-        m_StartX = m_positionX + KiROUND( cosdecideg( r, a ) );
-        m_StartY = m_positionY - KiROUND( sindecideg( r, a ) );
+        m_StartX = m_positionX + KiROUND( r * cos( a.AsRadians() ) );
+        m_StartY = m_positionY - KiROUND( r * sin( a.AsRadians() ) );
     }
 }
 

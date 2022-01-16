@@ -89,11 +89,11 @@ void SCH_SHAPE::Rotate( const VECTOR2I& aCenter )
 
 void SCH_SHAPE::Plot( PLOTTER* aPlotter ) const
 {
-    int     pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
-    VECTOR2I center;
-    int     radius     = 0;
-    int     startAngle = 0;
-    int     endAngle   = 0;
+    int       pen_size = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
+    VECTOR2I  center;
+    int       radius = 0;
+    EDA_ANGLE startAngle;
+    EDA_ANGLE endAngle;
 
     static std::vector<VECTOR2I> cornerList;
 
@@ -248,11 +248,11 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     else if( GetShape() == SHAPE_T::ARC )
     {
         c = getCenter();
-        int t1, t2;
+        EDA_ANGLE t1, t2;
 
         CalcArcAngles( t1, t2 );
 
-        if( NormalizeAngle180( t1 - t2 ) > 0 )
+        if( ( t1 - t2 ).Normalize180() > ANGLE_0 )
             std::swap( pt1, pt2 );
     }
 
@@ -420,18 +420,6 @@ void SCH_SHAPE::AddPoint( const VECTOR2I& aPosition )
     {
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
-}
-
-
-void SCH_SHAPE::CalcArcAngles( int& aStartAngle, int& aEndAngle ) const
-{
-    double start;
-    double end;
-
-    EDA_SHAPE::CalcArcAngles( start, end );
-
-    aStartAngle = KiROUND( start * 10.0 );
-    aEndAngle = KiROUND( end * 10.0 );
 }
 
 

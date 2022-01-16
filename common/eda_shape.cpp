@@ -443,23 +443,23 @@ VECTOR2I EDA_SHAPE::GetArcMid() const
 }
 
 
-void EDA_SHAPE::CalcArcAngles( double& aStartAngle, double& aEndAngle ) const
+void EDA_SHAPE::CalcArcAngles( EDA_ANGLE& aStartAngle, EDA_ANGLE& aEndAngle ) const
 {
     VECTOR2D startRadial( GetStart() - getCenter() );
     VECTOR2D endRadial( GetEnd() - getCenter() );
 
-    aStartAngle = 180.0 / M_PI * atan2( startRadial.y, startRadial.x );
-    aEndAngle = 180.0 / M_PI * atan2( endRadial.y, endRadial.x );
+    aStartAngle = EDA_ANGLE( startRadial );
+    aEndAngle = EDA_ANGLE( endRadial );
 
     if( aEndAngle == aStartAngle )
-        aEndAngle = aStartAngle + 360.0;   // ring, not null
+        aEndAngle = aStartAngle + ANGLE_360;   // ring, not null
 
     if( aStartAngle > aEndAngle )
     {
-        if( aEndAngle < 0 )
-            aEndAngle = NormalizeAngleDegrees( aEndAngle, 0.0, 360.0 );
+        if( aEndAngle < ANGLE_0 )
+            aEndAngle.Normalize();
         else
-            aStartAngle = NormalizeAngleDegrees( aStartAngle, -360.0, 0.0 );
+            aStartAngle = aStartAngle.Normalize() - ANGLE_360;
     }
 }
 
@@ -514,12 +514,12 @@ void EDA_SHAPE::SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, co
 
 EDA_ANGLE EDA_SHAPE::GetArcAngle() const
 {
-    double startAngle;
-    double endAngle;
+    EDA_ANGLE startAngle;
+    EDA_ANGLE endAngle;
 
     CalcArcAngles( startAngle, endAngle );
 
-    return EDA_ANGLE( endAngle - startAngle, DEGREES_T );
+    return endAngle - startAngle;
 }
 
 
@@ -705,18 +705,18 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
         if( abs( radius - dist ) <= maxdist )
         {
-            double startAngle;
-            double endAngle;
+            EDA_ANGLE startAngle;
+            EDA_ANGLE endAngle;
             CalcArcAngles( startAngle, endAngle );
 
-            if( m_eeWinding && NormalizeAngleDegrees( startAngle - endAngle, -180.0, 180.0 ) > 0 )
+            if( m_eeWinding && ( startAngle - endAngle ).Normalize180() > ANGLE_0 )
                 std::swap( startAngle, endAngle );
 
-            double relPosAngle = 180.0 / M_PI * atan2( relPos.y, relPos.x );
+            EDA_ANGLE relPosAngle( relPos );
 
-            startAngle = NormalizeAngleDegrees( startAngle, 0.0, 360.0 );
-            endAngle = NormalizeAngleDegrees( endAngle, 0.0, 360.0 );
-            relPosAngle = NormalizeAngleDegrees( relPosAngle, 0.0, 360.0 );
+            startAngle.Normalize();
+            endAngle.Normalize();
+            relPosAngle.Normalize();
 
             if( endAngle > startAngle )
                 return relPosAngle >= startAngle && relPosAngle <= endAngle;
@@ -995,13 +995,13 @@ std::vector<VECTOR2I> EDA_SHAPE::GetRectCorners() const
 
 void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
 {
-    VECTOR2I start = m_start;
-    VECTOR2I end = m_end;
-    double  t1, t2;
+    VECTOR2I  start = m_start;
+    VECTOR2I  end = m_end;
+    EDA_ANGLE t1, t2;
 
     CalcArcAngles( t1, t2 );
 
-    if( m_eeWinding && NormalizeAngleDegrees( t1 - t2, -180.0, 180.0 ) > 0 )
+    if( m_eeWinding && ( t1 - t2 ).Normalize180() > ANGLE_0 )
         std::swap( start, end );
 
     // Do not include the center, which is not necessarily inside the BB of an arc with a small
@@ -1038,14 +1038,16 @@ void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
             quarter = 0;
     }
 
-    int      radius = GetRadius();
-    VECTOR2I startRadial = start - m_arcCenter;
-    VECTOR2I endRadial = end - m_arcCenter;
-    double   angleStart = ArcTangente( startRadial.y, startRadial.x );
-    double   arcAngle = RAD2DECIDEG( endRadial.Angle() - startRadial.Angle() );
-    int      angle = (int) NormalizeAnglePos( angleStart ) % 900 + NormalizeAnglePos( arcAngle );
+    int       radius = GetRadius();
+    VECTOR2I  startRadial = start - m_arcCenter;
+    EDA_ANGLE angle = EDA_ANGLE( startRadial ).Normalize();
 
-    while( angle > 900 )
+    while( angle >= ANGLE_90 )
+        angle -= ANGLE_90;
+
+    angle += GetArcAngle();
+
+    while( angle > ANGLE_90 )
     {
         switch( quarter )
         {
@@ -1056,7 +1058,7 @@ void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
         }
 
         ++quarter %= 4;
-        angle -= 900;
+        angle -= ANGLE_90;
     }
 }
 

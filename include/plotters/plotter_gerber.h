@@ -69,15 +69,17 @@ public:
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Arc( const VECTOR2I& aCenter, double aStAngle, double aEndAngle, int aRadius,
-                      FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
+                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     // These functions plot an item and manage X2 gerber attributes
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData ) override;
 
-    virtual void ThickArc( const VECTOR2I& centre, double StAngle, double EndAngle,
-                           int rayon, int width, OUTLINE_MODE tracemode, void* aData ) override;
+    virtual void ThickArc( const VECTOR2I& centre, const EDA_ANGLE& aStartAngle,
+                           const EDA_ANGLE& aEndAngle, int aRadius, int aWidth,
+                           OUTLINE_MODE tracemode, void* aData ) override;
     virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width,
                             OUTLINE_MODE tracemode, void* aData ) override;
     virtual void ThickCircle( const VECTOR2I& pos, int diametre, int width,
@@ -117,24 +119,28 @@ public:
     virtual void FlashPadCircle( const VECTOR2I& pos, int diametre,
                                  OUTLINE_MODE trace_mode, void* aData ) override;
 
-    virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& size, double orient,
-                               OUTLINE_MODE trace_mode, void* aData ) override;
+    virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
+                               const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
+                               void* aData ) override;
 
-    virtual void FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& size,
-                               double orient, OUTLINE_MODE trace_mode, void* aData ) override;
+    virtual void FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
+                               const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
+                               void* aData ) override;
 
     virtual void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                    int aCornerRadius, double aOrient,
+                                    int aCornerRadius, const EDA_ANGLE& aOrient,
                                     OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                 double aPadOrient, SHAPE_POLY_SET* aPolygons,
+                                 const EDA_ANGLE& aPadOrient, SHAPE_POLY_SET* aPolygons,
                                  OUTLINE_MODE aTraceMode, void* aData ) override;
 
     virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
-                            double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
+                                 const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
+                                 void* aData ) override;
 
     virtual void FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter, int aCornerCount,
-                            double aOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
+                                      const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
+                                      void* aData ) override;
 
     /**
      * Flash a chamfered round rect pad.
@@ -149,13 +155,13 @@ public:
      *  2 = TOP_RIGHT
      *  4 = BOTTOM_LEFT
      *  8 = BOTTOM_RIGHT
-     * @param aPadOrient is the rotation in 0.1 degrees of the shape.
+     * @param aPadOrient is the rotation of the shape.
      * @param aPlotMode is the drawing mode, FILLED or SKETCH.
      * @param aData is the a reference to Gerber attributes descr.
      */
     void FlashPadChamferRoundRect( const VECTOR2I& aShapePos, const VECTOR2I& aPadSize,
                                    int aCornerRadius, double aChamferRatio,
-                                   int aChamferPositions, double aPadOrient,
+                                   int aChamferPositions, const EDA_ANGLE& aPadOrient,
                                    OUTLINE_MODE aPlotMode, void* aData );
 
     /**
@@ -224,26 +230,26 @@ public:
     /**
      * @param aSize is the size of tool.
      * @param aRadius is the radius used for some shapes tool (oval, roundrect macros).
-     * @param aRotDegree is the rotation of tool (primitives round, oval rect accept only 0.0).
+     * @param aRotation is the rotation of tool (primitives round, oval rect accept only 0.0).
      * @param aType is the type ( shape ) of tool.
      * @param aApertureAttribute is an aperture attribute of the tool (a tool can have only one
      *                           attribute) 0 = no specific attribute.
      * @return an index to the aperture in aperture list which meets the size and type of tool
      *         if the aperture does not exist, it is created and entered in aperture list.
      */
-    int GetOrCreateAperture( const VECTOR2I& aSize, int aRadius, double aRotDegree,
+    int GetOrCreateAperture( const VECTOR2I& aSize, int aRadius, const EDA_ANGLE& aRotation,
                              APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
     /**
      * @param aCorners is the corner list.
-     * @param aRotDegree is the rotation of tool.
+     * @param aRotation is the rotation of tool.
      * @param aType is the type ( shape ) of tool that can manage a list of corners (polygon).
      * @param aApertureAttribute is an aperture attribute of the tool (a tool can have only one
      *        attribute) 0 = no specific attribute.
      * @return an index to the aperture in aperture list which meets the data and type of tool
      *         if the aperture does not exist, it is created and entered in aperture list.
      */
-    int GetOrCreateAperture( const std::vector<VECTOR2I>& aCorners, double aRotDegree,
+    int GetOrCreateAperture( const std::vector<VECTOR2I>& aCorners, const EDA_ANGLE& aRotation,
                              APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
 protected:
@@ -259,7 +265,7 @@ protected:
      * @param aOrient is the rotation of the rectangle.
      */
     void plotRoundRectAsRegion( const VECTOR2I& aRectCenter, const VECTOR2I& aSize,
-                                int aCornerRadius, double aOrient );
+                                int aCornerRadius, const EDA_ANGLE& aOrient );
     /**
      * Plot a Gerber arc.
      *
@@ -270,7 +276,7 @@ protected:
      * plot an usual arc item.  The line thickness is not initialized in plotArc, and must
      * be initialized before calling it if needed.
      */
-    void plotArc( const VECTOR2I& aCenter, double aStAngle, double aEndAngle,
+    void plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle,
                   int aRadius, bool aPlotInRegion );
     void plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion );
 
@@ -279,7 +285,7 @@ protected:
      *
      * Write the DCode selection on gerber file.
      */
-    void selectAperture( const VECTOR2I& aSize, int aRadius, double aRotDegree,
+    void selectAperture( const VECTOR2I& aSize, int aRadius, const EDA_ANGLE& aRotation,
                          APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
     /**
      * Pick an existing aperture or create a new one, matching the aDiameter, aPolygonRotation,
@@ -288,7 +294,7 @@ protected:
      * It apply only to apertures with type = AT_REGULAR_POLY3 to AT_REGULAR_POLY12
      * write the DCode selection on gerber file
      */
-    void selectAperture( const std::vector<VECTOR2I>& aCorners, double aPolygonRotation,
+    void selectAperture( const std::vector<VECTOR2I>& aCorners, const EDA_ANGLE& aPolygonRotation,
                          APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
     /**
@@ -299,7 +305,7 @@ protected:
      * to AT_REGULAR_POLY12 (for instance APER_MACRO_TRAPEZOID ) write the DCode selection
      * on gerber file.
      */
-    void selectAperture( int aDiameter, double aRotDegree,
+    void selectAperture( int aDiameter, const EDA_ANGLE& aRotation,
                          APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
     /**

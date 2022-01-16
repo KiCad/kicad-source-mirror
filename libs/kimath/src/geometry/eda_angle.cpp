@@ -83,7 +83,7 @@ int EDA_ANGLE::normalize( int aValue, EDA_ANGLE_T aAngleType, bool n720 ) const
      * if n720 == false, clamp between 0..full_circle_upper
      * if n720 == true, clamp between +/- full_circle_upper
      */
-    int full_circle_lower = n720 ? 0 : -full_circle_upper;
+    int full_circle_lower = n720 ? -full_circle_upper : 0;
 
     while( aValue < full_circle_lower )
         aValue += full_circle_upper;

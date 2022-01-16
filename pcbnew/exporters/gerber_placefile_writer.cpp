@@ -241,8 +241,8 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                 gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_PAD );
 
                 // Flashes a diamond at pad position:
-                plotter.FlashRegularPolygon( pad1->GetPosition(), pad1_mark_size, 4, 0.0, FILLED,
-                                             &gbr_metadata );
+                plotter.FlashRegularPolygon( pad1->GetPosition(), pad1_mark_size, 4, ANGLE_0,
+                                             FILLED, &gbr_metadata );
             }
         }
 

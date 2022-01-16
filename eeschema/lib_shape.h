@@ -92,8 +92,6 @@ public:
 
     VECTOR2I GetCenter() const { return getCenter(); }
 
-    void CalcArcAngles( int& aStartAngle, int& aEndAngle ) const;
-
     void MirrorHorizontal( const VECTOR2I& aCenter ) override;
     void MirrorVertical( const VECTOR2I& aCenter ) override;
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) override;

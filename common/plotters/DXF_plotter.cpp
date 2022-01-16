@@ -624,50 +624,52 @@ void DXF_PLOTTER::ThickSegment( const VECTOR2I& aStart, const VECTOR2I& aEnd, in
 }
 
 
-void DXF_PLOTTER::Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int radius,
-                       FILL_T fill, int width )
+void DXF_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                       const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
 {
     wxASSERT( m_outputFile );
 
-    if( radius <= 0 )
+    if( aRadius <= 0 )
         return;
 
-    // In DXF, arcs are drawn CCW.
-    // In Kicad, arcs are CW or CCW
-    // If StAngle > EndAngle, it is CW. So transform it to CCW
-    if( StAngle > EndAngle )
-    {
-        std::swap( StAngle, EndAngle );
-    }
+    EDA_ANGLE startAngle( aStartAngle );
+    EDA_ANGLE endAngle( aEndAngle );
 
-    DPOINT centre_dev = userToDeviceCoordinates( centre );
-    double radius_dev = userToDeviceSize( radius );
+    // In DXF, arcs are drawn CCW.
+    // If startAngle > endAngle, it is CW. So transform it to CCW
+    if( startAngle > endAngle )
+        std::swap( startAngle, endAngle );
+
+    VECTOR2D centre_device = userToDeviceCoordinates( aCenter );
+    double   radius_device = userToDeviceSize( aRadius );
 
     // Emit a DXF ARC entity
     wxString cname = getDXFColorName( m_currentColor );
     fprintf( m_outputFile,
              "0\nARC\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n50\n%g\n51\n%g\n",
              TO_UTF8( cname ),
-             centre_dev.x, centre_dev.y, radius_dev,
-             StAngle / 10.0, EndAngle / 10.0 );
+             centre_device.x, centre_device.y, radius_device,
+             startAngle.AsDegrees(), endAngle.AsDegrees() );
 }
 
 
-void DXF_PLOTTER::FlashPadOval( const VECTOR2I& pos, const VECTOR2I& aSize, double orient,
-                                OUTLINE_MODE trace_mode, void* aData )
+void DXF_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
+                                const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
     wxASSERT( m_outputFile );
-    VECTOR2I size( aSize );
+
+    VECTOR2I  size( aSize );
+    EDA_ANGLE orient( aOrient );
 
     /* The chip is reduced to an oval tablet with size.y > size.x
      * (Oval vertical orientation 0) */
     if( size.x > size.y )
     {
         std::swap( size.x, size.y );
-        orient = AddAngles( orient, 900 );
+        orient += ANGLE_90;
     }
 
-    sketchOval( pos, size, orient, -1 );
+    sketchOval( aPos, size, orient, -1 );
 }
 
 
@@ -679,15 +681,15 @@ void DXF_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre,
 }
 
 
-void DXF_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& padsize,
-                                double orient, OUTLINE_MODE trace_mode, void* aData )
+void DXF_PLOTTER::FlashPadRect( const VECTOR2I& aPos, const VECTOR2I& aPadSize,
+                                const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
     wxASSERT( m_outputFile );
-    VECTOR2I size;
-    int    ox, oy, fx, fy;
 
-    size.x = padsize.x / 2;
-    size.y = padsize.y / 2;
+    VECTOR2I size, start, end;
+
+    size.x = aPadSize.x / 2;
+    size.y = aPadSize.y / 2;
 
     if( size.x < 0 )
         size.x = 0;
@@ -698,61 +700,53 @@ void DXF_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& padsize,
     // If a dimension is zero, the trace is reduced to 1 line
     if( size.x == 0 )
     {
-        ox = pos.x;
-        oy = pos.y - size.y;
-        RotatePoint( &ox, &oy, pos.x, pos.y, orient );
-        fx = pos.x;
-        fy = pos.y + size.y;
-        RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-        MoveTo( VECTOR2I( ox, oy ) );
-        FinishTo( VECTOR2I( fx, fy ) );
+        start = VECTOR2I( aPos.x, aPos.y - size.y );
+        end = VECTOR2I( aPos.x, aPos.y + size.y );
+        RotatePoint( start, aPos, aOrient );
+        RotatePoint( end, aPos, aOrient );
+        MoveTo( start );
+        FinishTo( end );
         return;
     }
 
     if( size.y == 0 )
     {
-        ox = pos.x - size.x;
-        oy = pos.y;
-        RotatePoint( &ox, &oy, pos.x, pos.y, orient );
-        fx = pos.x + size.x;
-        fy = pos.y;
-        RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-        MoveTo( VECTOR2I( ox, oy ) );
-        FinishTo( VECTOR2I( fx, fy ) );
+        start = VECTOR2I( aPos.x - size.x, aPos.y );
+        end = VECTOR2I( aPos.x + size.x, aPos.y );
+        RotatePoint( start, aPos, aOrient );
+        RotatePoint( end, aPos, aOrient );
+        MoveTo( start );
+        FinishTo( end );
         return;
     }
 
-    ox = pos.x - size.x;
-    oy = pos.y - size.y;
-    RotatePoint( &ox, &oy, pos.x, pos.y, orient );
-    MoveTo( VECTOR2I( ox, oy ) );
+    start = VECTOR2I( aPos.x - size.x, aPos.y - size.y );
+    RotatePoint( start, aPos, aOrient );
+    MoveTo( start );
 
-    fx = pos.x - size.x;
-    fy = pos.y + size.y;
-    RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-    LineTo( VECTOR2I( fx, fy ) );
+    end = VECTOR2I( aPos.x - size.x, aPos.y + size.y );
+    RotatePoint( end, aPos, aOrient );
+    LineTo( end );
 
-    fx = pos.x + size.x;
-    fy = pos.y + size.y;
-    RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-    LineTo( VECTOR2I( fx, fy ) );
+    end = VECTOR2I( aPos.x + size.x, aPos.y + size.y );
+    RotatePoint( end, aPos, aOrient );
+    LineTo( end );
 
-    fx = pos.x + size.x;
-    fy = pos.y - size.y;
-    RotatePoint( &fx, &fy, pos.x, pos.y, orient );
-    LineTo( VECTOR2I( fx, fy ) );
+    end = VECTOR2I( aPos.x + size.x, aPos.y - size.y );
+    RotatePoint( end, aPos, aOrient );
+    LineTo( end );
 
-    FinishTo( VECTOR2I( ox, oy ) );
+    FinishTo( start );
 }
 
 
 void DXF_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                     int aCornerRadius, double aOrient,
+                                     int aCornerRadius, const EDA_ANGLE& aOrient,
                                      OUTLINE_MODE aTraceMode, void* aData )
 {
     SHAPE_POLY_SET outline;
-    TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient, aCornerRadius,
-                                          0.0, 0, 0, GetPlotterArcHighDef(), ERROR_INSIDE );
+    TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient, aCornerRadius, 0.0, 0,
+                                          0, GetPlotterArcHighDef(), ERROR_INSIDE );
 
     // TransformRoundRectToPolygon creates only one convex polygon
     SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
@@ -766,7 +760,7 @@ void DXF_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aS
 }
 
 void DXF_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                  double aOrient, SHAPE_POLY_SET* aPolygons,
+                                  const EDA_ANGLE& aOrient, SHAPE_POLY_SET* aPolygons,
                                   OUTLINE_MODE aTraceMode, void* aData )
 {
     for( int cnt = 0; cnt < aPolygons->OutlineCount(); ++cnt )
@@ -784,7 +778,8 @@ void DXF_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize
 
 
 void DXF_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
-                                  double aPadOrient, OUTLINE_MODE aTrace_Mode, void* aData )
+                                  const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
+                                  void* aData )
 {
     wxASSERT( m_outputFile );
     VECTOR2I coord[4]; /* coord actual corners of a trapezoidal trace */
@@ -806,7 +801,8 @@ void DXF_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorn
 
 
 void DXF_PLOTTER::FlashRegularPolygon( const VECTOR2I& aShapePos, int aRadius, int aCornerCount,
-                                       double aOrient, OUTLINE_MODE aTraceMode, void* aData )
+                                       const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
+                                       void* aData )
 {
     // Do nothing
     wxASSERT( 0 );

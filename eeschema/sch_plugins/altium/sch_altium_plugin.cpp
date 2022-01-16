@@ -1319,16 +1319,14 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
         else
         {
             SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC, SCH_LAYER_ID::LAYER_NOTES );
-
-            double includedAngle = elem.endAngle - elem.startAngle;
-            double startAngle = DEG2RAD( elem.endAngle );
-
-            VECTOR2I startOffset = VECTOR2I( KiROUND( std::cos( startAngle ) * elem.radius ),
-                                            -KiROUND( std::sin( startAngle ) * elem.radius ) );
+            EDA_ANGLE  includedAngle( elem.endAngle - elem.startAngle, DEGREES_T );
+            EDA_ANGLE  startAngle( elem.endAngle, DEGREES_T );
+            VECTOR2I   startOffset( KiROUND( elem.radius * cos( startAngle.AsRadians() ) ),
+                                   -KiROUND( elem.radius * sin( startAngle.AsRadians() ) ) );
 
             arc->SetCenter( elem.center + m_sheetOffset );
             arc->SetStart( elem.center + startOffset + m_sheetOffset );
-            arc->SetArcAngleAndEnd( NormalizeAngleDegreesPos( includedAngle ) * 10.0, true );
+            arc->SetArcAngleAndEnd( includedAngle.Normalize().AsTenthsOfADegree(), true );
 
             arc->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
 

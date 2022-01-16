@@ -141,7 +141,7 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I&
  * @param aPosition is the coordinate of the center of the rectangle.
  * @param aSize is the size of the rectangle.
  * @param aCornerRadius is the radius of rounded corners (can be 0).
- * @param aRotation is the rotation in 0.1 degrees of the rectangle.
+ * @param aRotation is the rotationof the rectangle.
  * @param aChamferRatio is the ratio between smaller rect side and chamfer value.
  * @param aChamferCorners is the identifier of the corners to chamfer:
  *  - 0 = no chamfer
@@ -156,7 +156,7 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I&
  */
 void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                            const VECTOR2I& aPosition, const VECTOR2I& aSize,
-                                           double aRotation, int aCornerRadius,
+                                           const EDA_ANGLE& aRotation, int aCornerRadius,
                                            double aChamferRatio, int aChamferCorners, int aInflate,
                                            int aError, ERROR_LOC aErrorLoc );
 

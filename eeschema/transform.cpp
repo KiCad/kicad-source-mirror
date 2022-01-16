@@ -76,63 +76,66 @@ TRANSFORM TRANSFORM::InverseTransform() const
 }
 
 
-bool TRANSFORM::MapAngles( int* aAngle1, int* aAngle2 ) const
+bool TRANSFORM::MapAngles( EDA_ANGLE* aAngle1, EDA_ANGLE* aAngle2 ) const
 {
     wxCHECK_MSG( aAngle1 != nullptr && aAngle2 != nullptr, false,
                  wxT( "Cannot map NULL point angles." ) );
 
-    int    Angle, Delta;
+    static const EDA_ANGLE epsilon( 0.1, DEGREES_T );
+
     double x, y, t;
     bool   swap = false;
 
-    Delta = *aAngle2 - *aAngle1;
+    EDA_ANGLE delta = *aAngle2 - *aAngle1;
 
-    if( Delta >= 1800 )
+    if( delta >= ANGLE_180 )
     {
-        *aAngle1 -= 1;
-        *aAngle2 += 1;
+        *aAngle1 -= epsilon;
+        *aAngle2 += epsilon;
     }
 
-    x = cos( DECIDEG2RAD( *aAngle1 ) );
-    y = sin( DECIDEG2RAD( *aAngle1 ) );
+    x = cos( aAngle1->AsRadians() );
+    y = sin( aAngle1->AsRadians() );
     t = x * x1 + y * y1;
     y = x * x2 + y * y2;
     x = t;
-    *aAngle1 = KiROUND( RAD2DECIDEG( atan2( y, x ) ) );
+    *aAngle1 = EDA_ANGLE( VECTOR2I( x, y ) );
 
-    x = cos( DECIDEG2RAD( *aAngle2 ) );
-    y = sin( DECIDEG2RAD( *aAngle2 ) );
+    x = cos( aAngle2->AsRadians() );
+    y = sin( aAngle2->AsRadians() );
     t = x * x1 + y * y1;
     y = x * x2 + y * y2;
     x = t;
-    *aAngle2 = KiROUND( RAD2DECIDEG( atan2( y, x ) ) );
+    *aAngle2 = EDA_ANGLE( VECTOR2I( x, y ) );
 
-    NORMALIZE_ANGLE_POS( *aAngle1 );
-    NORMALIZE_ANGLE_POS( *aAngle2 );
+    aAngle1->Normalize();
+    aAngle2->Normalize();
 
     if( *aAngle2 < *aAngle1 )
-        *aAngle2 += 3600;
+        *aAngle2 += ANGLE_360;
 
-    if( *aAngle2 - *aAngle1 > 1800 ) // Need to swap the two angles
+    if( *aAngle2 - *aAngle1 > ANGLE_180 ) // Need to swap the two angles
     {
-        Angle   = (*aAngle1);
-        *aAngle1 = (*aAngle2);
-        *aAngle2 = Angle;
+        EDA_ANGLE temp = *aAngle1;
+        *aAngle1 = *aAngle2;
+        *aAngle2 = temp;
 
-        NORMALIZE_ANGLE_POS( *aAngle1 );
-        NORMALIZE_ANGLE_POS( *aAngle2 );
+        aAngle1->Normalize();
+        aAngle2->Normalize();
 
         if( *aAngle2 < *aAngle1 )
-            *aAngle2 += 3600;
+            *aAngle2 += ANGLE_360;
 
         swap = true;
     }
 
-    if( Delta >= 1800 )
+    if( delta >= ANGLE_180 )
     {
-        *aAngle1 += 1;
-        *aAngle2 -= 1;
+        *aAngle1 += epsilon;
+        *aAngle2 -= epsilon;
     }
 
     return swap;
 }
+
+

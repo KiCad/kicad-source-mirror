@@ -250,16 +250,10 @@ static const char* getTextTypeToken( KICAD_T aType )
 }
 
 
-static void formatArc( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aArc, int x1, int x2,
+static void formatArc( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aArc,
                        const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor,
                        KIID aUuid = niluuid )
 {
-    if( x1 > 1800 )
-        x1 -= 3600;
-
-    if( x2 > 1800 )
-        x2 -= 3600;
-
     aFormatter->Print( aNestLevel, "(arc (start %s) (mid %s) (end %s)\n",
                        FormatInternalUnits( aArc->GetStart() ).c_str(),
                        FormatInternalUnits( aArc->GetArcMid() ).c_str(),
@@ -1345,12 +1339,7 @@ void SCH_SEXPR_PLUGIN::saveShape( SCH_SHAPE* aShape, int aNestLevel )
     switch( aShape->GetShape() )
     {
     case SHAPE_T::ARC:
-        int x1;
-        int x2;
-
-        aShape->CalcArcAngles( x1, x2 );
-
-        formatArc( m_out, aNestLevel, aShape, x1, x2, aShape->GetStroke(), aShape->GetFillMode(),
+        formatArc( m_out, aNestLevel, aShape, aShape->GetStroke(), aShape->GetFillMode(),
                    aShape->GetFillColor(), aShape->m_Uuid );
         break;
 
@@ -1975,12 +1964,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTE
         switch( shape->GetShape() )
         {
         case SHAPE_T::ARC:
-            int x1;
-            int x2;
-
-            shape->CalcArcAngles( x1, x2 );
-
-            formatArc( &aFormatter, aNestLevel, shape, x1, x2, stroke, fillMode, fillColor );
+            formatArc( &aFormatter, aNestLevel, shape, stroke, fillMode, fillColor );
             break;
 
         case SHAPE_T::CIRCLE:

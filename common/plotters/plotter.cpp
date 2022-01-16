@@ -154,24 +154,26 @@ double PLOTTER::GetDashGapLenIU() const
 }
 
 
-void PLOTTER::Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int radius,
-                   FILL_T fill, int width )
+void PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                   const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
 {
-    VECTOR2I  start, end;
-    const int delta = 50;   // increment (in 0.1 degrees) to draw circles
+    EDA_ANGLE       startAngle( aStartAngle );
+    EDA_ANGLE       endAngle( aEndAngle );
+    const EDA_ANGLE delta( 5.0, DEGREES_T ); // increment to draw arc
+    VECTOR2I        start, end;
 
-    if( StAngle > EndAngle )
-        std::swap( StAngle, EndAngle );
+    if( startAngle > endAngle )
+        std::swap( startAngle, endAngle );
 
-    SetCurrentLineWidth( width );
+    SetCurrentLineWidth( aWidth );
 
     /* Please NOTE the different sign due to Y-axis flip */
-    start.x = centre.x + KiROUND( cosdecideg( radius, -StAngle ) );
-    start.y = centre.y + KiROUND( sindecideg( radius, -StAngle ) );
+    start.x = aCenter.x + KiROUND( aRadius * cos( -startAngle.AsRadians() ) );
+    start.y = aCenter.y + KiROUND( aRadius * sin( -startAngle.AsRadians() ) );
 
-    if( fill != FILL_T::NO_FILL )
+    if( aFill != FILL_T::NO_FILL )
     {
-        MoveTo( centre );
+        MoveTo( aCenter );
         LineTo( start );
     }
     else
@@ -179,20 +181,20 @@ void PLOTTER::Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int 
         MoveTo( start );
     }
 
-    for( int ii = StAngle + delta; ii < EndAngle; ii += delta )
+    for( EDA_ANGLE ii = startAngle + delta; ii < endAngle; ii += delta )
     {
-        end.x = centre.x + KiROUND( cosdecideg( radius, -ii ) );
-        end.y = centre.y + KiROUND( sindecideg( radius, -ii ) );
+        end.x = aCenter.x + KiROUND( aRadius * cos( -ii.AsRadians() ) );
+        end.y = aCenter.y + KiROUND( aRadius * sin( -ii.AsRadians() ) );
         LineTo( end );
     }
 
-    end.x = centre.x + KiROUND( cosdecideg( radius, -EndAngle ) );
-    end.y = centre.y + KiROUND( sindecideg( radius, -EndAngle ) );
+    end.x = aCenter.x + KiROUND( aRadius * cos( -endAngle.AsRadians() ) );
+    end.y = aCenter.y + KiROUND( aRadius * sin( -endAngle.AsRadians() ) );
 
-    if( fill != FILL_T::NO_FILL )
+    if( aFill != FILL_T::NO_FILL )
     {
         LineTo( end );
-        FinishTo( centre );
+        FinishTo( aCenter );
     }
     else
     {
@@ -452,62 +454,64 @@ void PLOTTER::Marker( const VECTOR2I& position, int diametre, unsigned aShapeId 
 }
 
 
-void PLOTTER::segmentAsOval( const VECTOR2I& start, const VECTOR2I& end, int width,
-                             OUTLINE_MODE tracemode )
+void PLOTTER::segmentAsOval( const VECTOR2I& start, const VECTOR2I& end, int aWidth,
+                             OUTLINE_MODE aTraceMode )
 {
     VECTOR2I  center( ( start.x + end.x ) / 2, ( start.y + end.y ) / 2 );
     VECTOR2I  size( end.x - start.x, end.y - start.y );
     EDA_ANGLE orient( size );
 
-    size.x = KiROUND( EuclideanNorm( size ) ) + width;
-    size.y = width;
+    size.x = KiROUND( EuclideanNorm( size ) ) + aWidth;
+    size.y = aWidth;
 
-    FlashPadOval( center, size, orient.AsTenthsOfADegree(), tracemode, nullptr );
+    FlashPadOval( center, size, orient, aTraceMode, nullptr );
 }
 
 
-void PLOTTER::sketchOval( const VECTOR2I& pos, const VECTOR2I& aSize, double orient, int width )
+void PLOTTER::sketchOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA_ANGLE& aOrient,
+                          int aWidth )
 {
-    SetCurrentLineWidth( width );
-    width = m_currentPenWidth;
-    int radius, deltaxy, cx, cy;
-    VECTOR2I size( aSize );
+    SetCurrentLineWidth( aWidth );
+
+    EDA_ANGLE orient( aOrient );
+    VECTOR2I  pt;
+    VECTOR2I  size( aSize );
 
     if( size.x > size.y )
     {
         std::swap( size.x, size.y );
-        orient = AddAngles( orient, 900 );
+        orient += ANGLE_90;
     }
 
-    deltaxy = size.y - size.x;       /* distance between centers of the oval */
-    radius   = ( size.x - width ) / 2;
-    cx = -radius;
-    cy = -deltaxy / 2;
-    RotatePoint( &cx, &cy, orient );
-    MoveTo( VECTOR2I( cx + pos.x, cy + pos.y ) );
-    cx = -radius;
-    cy = deltaxy / 2;
-    RotatePoint( &cx, &cy, orient );
-    FinishTo( VECTOR2I( cx + pos.x, cy + pos.y ) );
+    int deltaxy = size.y - size.x;       /* distance between centers of the oval */
+    int radius  = ( size.x - m_currentPenWidth ) / 2;
 
-    cx = radius;
-    cy = -deltaxy / 2;
-    RotatePoint( &cx, &cy, orient );
-    MoveTo( VECTOR2I( cx + pos.x, cy + pos.y ) );
-    cx = radius;
-    cy = deltaxy / 2;
-    RotatePoint( &cx, &cy, orient );
-    FinishTo( VECTOR2I( cx + pos.x, cy + pos.y ) );
+    pt.x = -radius;
+    pt.y = -deltaxy / 2;
+    RotatePoint( pt, orient );
+    MoveTo( pt + aPos );
+    pt.x = -radius;
+    pt.y = deltaxy / 2;
+    RotatePoint( pt, orient );
+    FinishTo( pt + aPos );
 
-    cx = 0;
-    cy = deltaxy / 2;
-    RotatePoint( &cx, &cy, orient );
-    Arc( VECTOR2I( cx + pos.x, cy + pos.y ), orient + 1800, orient + 3600, radius,
-         FILL_T::NO_FILL );
-    cx = 0;
-    cy = -deltaxy / 2;
-    RotatePoint( &cx, &cy, orient );
-    Arc( VECTOR2I( cx + pos.x, cy + pos.y ), orient, orient + 1800, radius, FILL_T::NO_FILL );
+    pt.x = radius;
+    pt.y = -deltaxy / 2;
+    RotatePoint( pt, orient );
+    MoveTo( pt + aPos );
+    pt.x = radius;
+    pt.y = deltaxy / 2;
+    RotatePoint( pt, orient );
+    FinishTo( pt + aPos );
+
+    pt.x = 0;
+    pt.y = deltaxy / 2;
+    RotatePoint( pt, orient );
+    Arc( pt + aPos, orient + ANGLE_180, orient + ANGLE_360, radius, FILL_T::NO_FILL );
+    pt.x = 0;
+    pt.y = -deltaxy / 2;
+    RotatePoint( pt, orient );
+    Arc( pt + aPos, orient, orient + ANGLE_180, radius, FILL_T::NO_FILL );
 }
 
 
@@ -535,19 +539,20 @@ void PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int widt
 }
 
 
-void PLOTTER::ThickArc( const VECTOR2I& centre, double StAngle, double EndAngle,
-                        int radius, int width, OUTLINE_MODE tracemode, void* aData )
+void PLOTTER::ThickArc( const VECTOR2I& centre, const EDA_ANGLE& aStartAngle,
+                        const EDA_ANGLE& aEndAngle, int aRadius, int aWidth,
+                        OUTLINE_MODE aTraceMode, void* aData )
 {
-    if( tracemode == FILLED )
+    if( aTraceMode == FILLED )
     {
-        Arc( centre, StAngle, EndAngle, radius, FILL_T::NO_FILL, width );
+        Arc( centre, aStartAngle, aEndAngle, aRadius, FILL_T::NO_FILL, aWidth );
     }
     else
     {
         SetCurrentLineWidth( -1 );
-        Arc( centre, StAngle, EndAngle, radius - ( width - m_currentPenWidth ) / 2,
+        Arc( centre, aStartAngle, aEndAngle, aRadius - ( aWidth - m_currentPenWidth ) / 2,
              FILL_T::NO_FILL, -1 );
-        Arc( centre, StAngle, EndAngle, radius + ( width - m_currentPenWidth ) / 2,
+        Arc( centre, aStartAngle, aEndAngle, aRadius + ( aWidth - m_currentPenWidth ) / 2,
              FILL_T::NO_FILL, -1 );
     }
 }

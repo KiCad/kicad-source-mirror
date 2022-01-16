@@ -183,7 +183,7 @@ public:
      * Calc arc start and end angles such that aStartAngle < aEndAngle.  Each may be between
      * -360.0 and 360.0.
      */
-    void CalcArcAngles( double& aStartAngle, double& aEndAngle ) const;
+    void CalcArcAngles( EDA_ANGLE& aStartAngle, EDA_ANGLE& aEndAngle ) const;
 
     int GetRadius() const;
 

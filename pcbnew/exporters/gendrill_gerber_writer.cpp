@@ -231,8 +231,8 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
         {
 #if FLASH_OVAL_HOLE     // set to 1 to use flashed oblong holes,
                                     // 0 to draw them as a line.
-            plotter.FlashPadOval( hole_pos, hole_descr.m_Hole_Size,
-                                  hole_descr.m_Hole_Orient, FILLED, &gbr_metadata );
+            plotter.FlashPadOval( hole_pos, hole_descr.m_Hole_Size, hole_descr.m_Hole_Orient,
+                                  FILLED, &gbr_metadata );
 #else
             // Use routing for oblong hole (Slots)
             VECTOR2I start, end;
@@ -261,10 +261,11 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
 
 #if !FLASH_OVAL_HOLE
-void convertOblong2Segment( wxSize aSize, double aOrient, VECTOR2I& aStart, VECTOR2I& aEnd )
+void convertOblong2Segment( wxSize aSize, const EDA_ANGLE& aOrient, VECTOR2I& aStart,
+                            VECTOR2I& aEnd )
 {
-    wxSize  size( aSize );
-    double orient = aOrient;
+    wxSize    size( aSize );
+    EDA_ANGLE orient( aOrient );
 
     /* The pad will be drawn as an oblong shape with size.y > size.x
      * (Oval vertical orientation 0)
@@ -272,18 +273,15 @@ void convertOblong2Segment( wxSize aSize, double aOrient, VECTOR2I& aStart, VECT
     if( size.x > size.y )
     {
         std::swap( size.x, size.y );
-        orient = AddAngles( orient, 900 );
+        orient += ANGLE_90;
     }
 
     int deltaxy = size.y - size.x;     // distance between centers of the oval
+    aStart = VECTOR2I( 0, deltaxy / 2 );
+    RotatePoint( aStart, orient );
 
-    int cx = 0;
-    int cy = deltaxy / 2;
-    RotatePoint( &cx, &cy, orient );
-    aStart = VECTOR2I( cx, cy );
-    cx = 0; cy = -deltaxy / 2;
-    RotatePoint( &cx, &cy, orient );
-    aEnd = VECTOR2I( cx, cy );
+    aEnd = VECTOR2I( 0, -deltaxy / 2 );
+    RotatePoint( aEnd, orient );
 }
 #endif
 

@@ -221,7 +221,7 @@ static const double PLUsPERDECIMIL = 0.1016;
 
 HPGL_PLOTTER::HPGL_PLOTTER()
         : arcTargetChordLength( 0 ),
-          arcMinChordDegrees( 5.0 ),
+          arcMinChordDegrees( 5.0, DEGREES_T ),
           dashType( PLOT_DASH_TYPE::SOLID ),
           useUserCoords( false ),
           fitUserCoords( false ),
@@ -284,24 +284,28 @@ bool HPGL_PLOTTER::EndPlot()
             if( fitUserCoords )
             {
                 BOX2D bbox = m_items.front().bbox;
-                for( HPGL_ITEM const& item : m_items )
-                {
-                    bbox.Merge( item.bbox );
-                }
 
-                fprintf( m_outputFile, "SC%.0f,%.0f,%.0f,%.0f;\n", bbox.GetX(),
-                         bbox.GetX() + bbox.GetWidth(), bbox.GetY(),
+                for( HPGL_ITEM const& item : m_items )
+                    bbox.Merge( item.bbox );
+
+                fprintf( m_outputFile, "SC%.0f,%.0f,%.0f,%.0f;\n",
+                         bbox.GetX(),
+                         bbox.GetX() + bbox.GetWidth(),
+                         bbox.GetY(),
                          bbox.GetY() + bbox.GetHeight() );
             }
             else
             {
-                DPOINT pagesize_dev( m_paperSize * m_iuPerDeviceUnit );
-                fprintf( m_outputFile, "SC%.0f,%.0f,%.0f,%.0f;\n", 0., pagesize_dev.x, 0.,
-                         pagesize_dev.y );
+                VECTOR2D pagesize_device( m_paperSize * m_iuPerDeviceUnit );
+                fprintf( m_outputFile, "SC%.0f,%.0f,%.0f,%.0f;\n",
+                         0.0,
+                         pagesize_device.x,
+                         0.0,
+                         pagesize_device.y );
             }
         }
 
-        DPOINT         loc          = m_items.begin()->loc_start;
+        VECTOR2I       loc          = m_items.begin()->loc_start;
         bool           pen_up       = true;
         PLOT_DASH_TYPE current_dash = PLOT_DASH_TYPE::SOLID;
         int            current_pen  = penNumber;
@@ -383,53 +387,52 @@ void HPGL_PLOTTER::SetPenDiameter( double diameter )
 }
 
 
-void HPGL_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
+void HPGL_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T aFill, int aWidth )
 {
     wxASSERT( m_outputFile );
 
-    DPOINT p1dev = userToDeviceCoordinates( p1 );
-    DPOINT p2dev = userToDeviceCoordinates( p2 );
+    VECTOR2D p1_device = userToDeviceCoordinates( p1 );
+    VECTOR2D p2_device = userToDeviceCoordinates( p2 );
 
     MoveTo( p1 );
 
-    if( fill == FILL_T::FILLED_SHAPE )
+    if( aFill == FILL_T::FILLED_SHAPE )
     {
-        startOrAppendItem( p1dev, wxString::Format( "RA %.0f,%.0f;", p2dev.x, p2dev.y ) );
+        startOrAppendItem( p1_device, wxString::Format( "RA %.0f,%.0f;",
+                                                        p2_device.x,
+                                                        p2_device.y ) );
     }
 
-    startOrAppendItem( p1dev, wxString::Format( "EA %.0f,%.0f;", p2dev.x, p2dev.y ) );
+    startOrAppendItem( p1_device, wxString::Format( "EA %.0f,%.0f;",
+                                                    p2_device.x,
+                                                    p2_device.y ) );
 
     m_current_item->loc_end = m_current_item->loc_start;
-    m_current_item->bbox.Merge( p2dev );
+    m_current_item->bbox.Merge( p2_device );
     PenFinish();
 }
 
 
-void HPGL_PLOTTER::Circle( const VECTOR2I& centre, int diameter, FILL_T fill, int width )
+void HPGL_PLOTTER::Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFill, int aWidth )
 {
     wxASSERT( m_outputFile );
-    double radius = userToDeviceSize( diameter / 2 );
-    DPOINT center_dev = userToDeviceCoordinates( centre );
-    SetCurrentLineWidth( width );
+    double   radius = userToDeviceSize( aDiameter / 2 );
+    VECTOR2D center_dev = userToDeviceCoordinates( aCenter );
+    SetCurrentLineWidth( aWidth );
 
     double const circumf             = 2.0 * M_PI * radius;
     double const target_chord_length = arcTargetChordLength;
-    double       chord_degrees       = 360.0 * target_chord_length / circumf;
+    EDA_ANGLE    chord_angle         = ANGLE_360 * target_chord_length / circumf;
 
-    if( chord_degrees < arcMinChordDegrees )
-    {
-        chord_degrees = arcMinChordDegrees;
-    }
-    else if( chord_degrees > 45 )
-    {
-        chord_degrees = 45;
-    }
+    chord_angle = std::max( arcMinChordDegrees, std::min( chord_angle, ANGLE_45 ) );
 
-    if( fill == FILL_T::FILLED_SHAPE )
+    if( aFill == FILL_T::FILLED_SHAPE )
     {
         // Draw the filled area
-        MoveTo( centre );
-        startOrAppendItem( center_dev, wxString::Format( "PM 0;CI %g,%g;%s", radius, chord_degrees,
+        MoveTo( aCenter );
+        startOrAppendItem( center_dev, wxString::Format( "PM 0;CI %g,%g;%s",
+                                                         radius,
+                                                         chord_angle.AsDegrees(),
                                                          hpgl_end_polygon_cmd ) );
         m_current_item->lift_before = true;
         m_current_item->pen_returns = true;
@@ -440,8 +443,10 @@ void HPGL_PLOTTER::Circle( const VECTOR2I& centre, int diameter, FILL_T fill, in
 
     if( radius > 0 )
     {
-        MoveTo( centre );
-        startOrAppendItem( center_dev, wxString::Format( "CI %g,%g;", radius, chord_degrees ) );
+        MoveTo( aCenter );
+        startOrAppendItem( center_dev, wxString::Format( "CI %g,%g;",
+                                                         radius,
+                                                         chord_angle.AsDegrees() ) );
         m_current_item->lift_before = true;
         m_current_item->pen_returns = true;
         m_current_item->bbox.Merge( BOX2D( center_dev - radius,
@@ -517,8 +522,8 @@ void HPGL_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
         return;
     }
 
-    DPOINT pos_dev = userToDeviceCoordinates( pos );
-    DPOINT lastpos_dev = userToDeviceCoordinates( m_penLastpos );
+    VECTOR2D pos_dev = userToDeviceCoordinates( pos );
+    VECTOR2D lastpos_dev = userToDeviceCoordinates( m_penLastpos );
 
     if( plume == 'U' )
     {
@@ -562,86 +567,83 @@ void HPGL_PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end,
 }
 
 
-void HPGL_PLOTTER::Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int radius,
-                        FILL_T fill, int width )
+void HPGL_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                        const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
 {
     wxASSERT( m_outputFile );
-    double angle;
 
-    if( radius <= 0 )
+    if( aRadius <= 0 )
         return;
 
-    double const radius_dev          = userToDeviceSize( radius );
-    double const circumf_dev         = 2.0 * M_PI * radius_dev;
+    double const radius_device       = userToDeviceSize( aRadius );
+    double const circumf_device      = 2.0 * M_PI * radius_device;
     double const target_chord_length = arcTargetChordLength;
-    double       chord_degrees       = 360.0 * target_chord_length / circumf_dev;
+    EDA_ANGLE    chord_angle         = ANGLE_360 * target_chord_length / circumf_device;
 
-    if( chord_degrees < arcMinChordDegrees )
-    {
-        chord_degrees = arcMinChordDegrees;
-    }
-    else if( chord_degrees > 45 )
-    {
-        chord_degrees = 45;
-    }
+    chord_angle = std::max( arcMinChordDegrees, std::min( chord_angle, ANGLE_45 ) );
 
-    DPOINT centre_dev = userToDeviceCoordinates( centre );
+    VECTOR2D  centre_device = userToDeviceCoordinates( aCenter );
+    EDA_ANGLE angle;
 
     if( m_plotMirror )
-        angle = StAngle - EndAngle;
+        angle = aStartAngle - aEndAngle;
     else
-        angle = EndAngle - StAngle;
+        angle = aEndAngle - aStartAngle;
 
-    NORMALIZE_ANGLE_180( angle );
-    angle /= 10;
+    angle.Normalize180();
 
     // Calculate arc start point:
-    VECTOR2I cmap;
-    cmap.x  = centre.x + KiROUND( cosdecideg( radius, StAngle ) );
-    cmap.y  = centre.y - KiROUND( sindecideg( radius, StAngle ) );
-    DPOINT  cmap_dev = userToDeviceCoordinates( cmap );
+    VECTOR2I cmap( aCenter.x + KiROUND( aRadius * cos( aStartAngle.AsRadians() ) ),
+                   aCenter.y - KiROUND( aRadius * sin( aStartAngle.AsRadians() ) ) );
+    VECTOR2D cmap_dev = userToDeviceCoordinates( cmap );
 
-    startOrAppendItem( cmap_dev, wxString::Format( "AA %.0f,%.0f,%.0f,%g", centre_dev.x,
-                                                   centre_dev.y, angle, chord_degrees ) );
+    startOrAppendItem( cmap_dev, wxString::Format( "AA %.0f,%.0f,%.0f,%g",
+                                                   centre_device.x,
+                                                   centre_device.y,
+                                                   angle.AsDegrees(),
+                                                   chord_angle.AsDegrees() ) );
 
     // TODO We could compute the final position and full bounding box instead...
-    m_current_item->bbox.Merge( BOX2D( centre_dev - radius_dev,
-                                       VECTOR2D( radius_dev * 2, radius_dev * 2 ) ) );
+    m_current_item->bbox.Merge( BOX2D( centre_device - radius_device,
+                                       VECTOR2D( radius_device * 2, radius_device * 2 ) ) );
     m_current_item->lift_after = true;
     flushItem();
 }
 
 
-void HPGL_PLOTTER::FlashPadOval( const VECTOR2I& pos, const VECTOR2I& aSize, double orient,
-                                 OUTLINE_MODE trace_mode, void* aData )
+void HPGL_PLOTTER::FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
+                                 const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
     wxASSERT( m_outputFile );
-    int     deltaxy, cx, cy;
+
     VECTOR2I size( aSize );
+    EDA_ANGLE orient( aOrient );
 
     // The pad will be drawn as an oblong shape with size.y > size.x (Oval vertical orientation 0).
     if( size.x > size.y )
     {
         std::swap( size.x, size.y );
-        orient = AddAngles( orient, 900 );
+        orient += ANGLE_90;
     }
 
-    deltaxy = size.y - size.x;     // distance between centers of the oval
-
-    if( trace_mode == FILLED )
+    if( aTraceMode == FILLED )
     {
-        FlashPadRect( pos, VECTOR2I( size.x, deltaxy + KiROUND( penDiameter ) ),
-                      orient, trace_mode, aData );
-        cx = 0; cy = deltaxy / 2;
-        RotatePoint( &cx, &cy, orient );
-        FlashPadCircle( VECTOR2I( cx + pos.x, cy + pos.y ), size.x, trace_mode, aData );
-        cx = 0; cy = -deltaxy / 2;
-        RotatePoint( &cx, &cy, orient );
-        FlashPadCircle( VECTOR2I( cx + pos.x, cy + pos.y ), size.x, trace_mode, aData );
+        int deltaxy = size.y - size.x;     // distance between centers of the oval
+
+        FlashPadRect( aPos, VECTOR2I( size.x, deltaxy + KiROUND( penDiameter ) ), orient,
+                      aTraceMode, aData );
+
+        VECTOR2I pt( 0, deltaxy / 2 );
+        RotatePoint( pt, orient );
+        FlashPadCircle( pt + aPos, size.x, aTraceMode, aData );
+
+        pt = VECTOR2I( 0, -deltaxy / 2 );
+        RotatePoint( pt, orient );
+        FlashPadCircle( pt + aPos, size.x, aTraceMode, aData );
     }
     else    // Plot in outline mode.
     {
-        sketchOval( pos, size, orient, KiROUND( penDiameter ) );
+        sketchOval( aPos, size, orient, KiROUND( penDiameter ) );
     }
 }
 
@@ -691,16 +693,16 @@ void HPGL_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre,
 }
 
 
-void HPGL_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& padsize,
-                                 double orient, OUTLINE_MODE trace_mode, void* aData )
+void HPGL_PLOTTER::FlashPadRect( const VECTOR2I& aPos, const VECTOR2I& aPadSize,
+                                 const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode, void* aData )
 {
     // Build rect polygon:
     std::vector<VECTOR2I> corners;
 
-    int dx = padsize.x / 2;
-    int dy = padsize.y / 2;
+    int dx = aPadSize.x / 2;
+    int dy = aPadSize.y / 2;
 
-    if( trace_mode == FILLED )
+    if( aTraceMode == FILLED )
     {
         // in filled mode, the pen diameter is removed from size
         // to compensate the extra size due to this pen size
@@ -721,16 +723,16 @@ void HPGL_PLOTTER::FlashPadRect( const VECTOR2I& pos, const VECTOR2I& padsize,
 
     for( unsigned ii = 0; ii < corners.size(); ii++ )
     {
-        RotatePoint( corners[ii], orient );
-        corners[ii] += pos;
+        RotatePoint( corners[ii], aOrient );
+        corners[ii] += aPos;
     }
 
-    PlotPoly( corners, trace_mode == FILLED ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL );
+    PlotPoly( corners, aTraceMode == FILLED ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL );
 }
 
 
 void HPGL_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                      int aCornerRadius, double aOrient,
+                                      int aCornerRadius, const EDA_ANGLE& aOrient,
                                       OUTLINE_MODE aTraceMode, void* aData )
 {
     SHAPE_POLY_SET outline;
@@ -749,8 +751,8 @@ void HPGL_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& a
         aCornerRadius = std::min( aCornerRadius, std::min( size.x, size.y ) /2 );
     }
 
-    TransformRoundChamferedRectToPolygon( outline, aPadPos, size, aOrient, aCornerRadius,
-                                          0.0, 0, 0, GetPlotterArcHighDef(), ERROR_INSIDE );
+    TransformRoundChamferedRectToPolygon( outline, aPadPos, size, aOrient, aCornerRadius, 0.0, 0,
+                                          0, GetPlotterArcHighDef(), ERROR_INSIDE );
 
     // TransformRoundRectToPolygon creates only one convex polygon
     std::vector<VECTOR2I> cornerList;
@@ -767,8 +769,9 @@ void HPGL_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& a
 }
 
 
-void HPGL_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aOrient,
-                                   SHAPE_POLY_SET* aPolygons, OUTLINE_MODE aTraceMode, void* aData )
+void HPGL_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
+                                   const EDA_ANGLE& aOrient, SHAPE_POLY_SET* aPolygons,
+                                   OUTLINE_MODE aTraceMode, void* aData )
 {
     std::vector<VECTOR2I> cornerList;
 
@@ -791,7 +794,8 @@ void HPGL_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
 
 
 void HPGL_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
-                                   double aPadOrient, OUTLINE_MODE aTraceMode, void* aData )
+                                   const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
+                                   void* aData )
 {
     std::vector<VECTOR2I> cornerList;
     cornerList.reserve( 5 );
@@ -812,7 +816,8 @@ void HPGL_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCor
 
 
 void HPGL_PLOTTER::FlashRegularPolygon( const VECTOR2I& aShapePos, int aRadius, int aCornerCount,
-                                        double aOrient, OUTLINE_MODE aTraceMode, void* aData )
+                                        const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
+                                        void* aData )
 {
     // Do nothing
     wxASSERT( 0 );
@@ -857,9 +862,7 @@ bool HPGL_PLOTTER::startOrAppendItem( const DPOINT& location, wxString const& co
 void HPGL_PLOTTER::sortItems( std::list<HPGL_ITEM>& items )
 {
     if( items.size() < 2 )
-    {
         return;
-    }
 
     std::list<HPGL_ITEM> target;
 

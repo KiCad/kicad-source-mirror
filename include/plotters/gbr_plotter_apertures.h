@@ -114,17 +114,8 @@ public:
         return m_Type - AT_REGULAR_POLY3 + 3;
     }
 
-    void SetRotation( double aRotDegree )
-    {
-        // The rotation is stored in  degree
-       m_Rotation = aRotDegree;
-    }
-
-    double GetRotation()
-    {
-        // The rotation is stored in degree
-        return m_Rotation;
-    }
+    void SetRotation( const EDA_ANGLE& aRotation ) { m_Rotation = aRotation; }
+    EDA_ANGLE GetRotation() { return m_Rotation; }
 
     // Type ( Line, rect , circulaire , ovale poly 3 to 12 vertices, aperture macro )
     APERTURE_TYPE m_Type;
@@ -139,7 +130,7 @@ public:
     int           m_Radius;
 
     // Rotation in degrees
-    double        m_Rotation;
+    EDA_ANGLE     m_Rotation;
 
     // code number ( >= 10 )
     int           m_DCode;

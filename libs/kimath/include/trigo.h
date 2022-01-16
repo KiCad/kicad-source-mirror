@@ -64,7 +64,7 @@ bool SegmentIntersectsSegment( const VECTOR2I& a_p1_l1, const VECTOR2I& a_p2_l1,
  */
 void RotatePoint( int *pX, int *pY, double angle );
 
-inline void RotatePoint( int *pX, int *pY, EDA_ANGLE angle )
+inline void RotatePoint( int *pX, int *pY, const EDA_ANGLE& angle )
 {
     RotatePoint( pX, pY, angle.AsTenthsOfADegree() );
 }
@@ -75,6 +75,11 @@ inline void RotatePoint( int *pX, int *pY, EDA_ANGLE angle )
  */
 void RotatePoint( int *pX, int *pY, int cx, int cy, double angle );
 
+inline void RotatePoint( int *pX, int *pY, int cx, int cy, const EDA_ANGLE& angle )
+{
+    RotatePoint( pX, pY, cx, cy, angle.AsTenthsOfADegree() );
+}
+
 /*
  * Calculate the new coord point point for a rotation angle in (1/10 degree).
  */
@@ -83,14 +88,14 @@ inline void RotatePoint( VECTOR2I& point, double angle )
     RotatePoint( &point.x, &point.y, angle );
 }
 
-inline void RotatePoint( VECTOR2I& point, EDA_ANGLE angle )
+inline void RotatePoint( VECTOR2I& point, const EDA_ANGLE& angle )
 {
     RotatePoint( &point.x, &point.y, angle.AsTenthsOfADegree() );
 }
 
 void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, double angle );
 
-inline void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, EDA_ANGLE angle )
+inline void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, const EDA_ANGLE& angle )
 {
     RotatePoint( point, centre, angle.AsTenthsOfADegree() );
 }
@@ -101,24 +106,24 @@ inline void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, EDA_ANGLE angl
 
 void RotatePoint( double* pX, double* pY, double angle );
 
-inline void RotatePoint( double* pX, double* pY, EDA_ANGLE angle )
+inline void RotatePoint( double* pX, double* pY, const EDA_ANGLE& angle )
 {
     RotatePoint( pX, pY, angle.AsTenthsOfADegree() );
 }
 
-inline void RotatePoint( VECTOR2D& point, EDA_ANGLE angle )
+inline void RotatePoint( VECTOR2D& point, const EDA_ANGLE& angle )
 {
     RotatePoint( &point.x, &point.y, angle.AsTenthsOfADegree() );
 }
 
 void RotatePoint( double* pX, double* pY, double cx, double cy, double angle );
 
-inline void RotatePoint( double* pX, double* pY, double cx, double cy, EDA_ANGLE angle )
+inline void RotatePoint( double* pX, double* pY, double cx, double cy, const EDA_ANGLE& angle )
 {
     RotatePoint( pX, pY, cx, cy, angle.AsTenthsOfADegree() );
 }
 
-inline void RotatePoint( VECTOR2D& point, const VECTOR2D& aCenter, EDA_ANGLE angle )
+inline void RotatePoint( VECTOR2D& point, const VECTOR2D& aCenter, const EDA_ANGLE& angle )
 {
     RotatePoint( &point.x, &point.y, aCenter.x, aCenter.y, angle.AsTenthsOfADegree() );
 }
@@ -284,19 +289,6 @@ template <class T> inline void NORMALIZE_ANGLE_POS( T& Angle )
 }
 
 
-/// Normalize angle to be in the 0.0 .. 360.0 range: angle is in degrees.
-inline double NormalizeAngleDegreesPos( double Angle )
-{
-    while( Angle < 0 )
-        Angle += 360.0;
-
-    while( Angle >= 360.0 )
-        Angle -= 360.0;
-
-    return Angle;
-}
-
-
 /// Normalize angle to be aMin < angle <= aMax angle is in degrees.
 inline double NormalizeAngleDegrees( double Angle, double aMin, double aMax )
 {
@@ -309,17 +301,6 @@ inline double NormalizeAngleDegrees( double Angle, double aMin, double aMax )
     return Angle;
 }
 
-/// Add two angles (keeping the result normalized). T2 is here
-// because most of the time it's an int (and templates don't promote in
-// that way)
-template <class T, class T2> inline T AddAngles( T a1, T2 a2 )
-{
-    a1 += a2;
-    NORMALIZE_ANGLE_POS( a1 );
-    return a1;
-}
-
-
 /// Normalize angle to be in the -180.0 .. 180.0 range
 template <class T> inline T NormalizeAngle180( T Angle )
 {
@@ -330,11 +311,6 @@ template <class T> inline T NormalizeAngle180( T Angle )
         Angle -= 3600;
 
     return Angle;
-}
-
-template <class T> inline void NORMALIZE_ANGLE_180( T& Angle )
-{
-    Angle = NormalizeAngle180( Angle );
 }
 
 /**
@@ -371,24 +347,6 @@ inline bool InterceptsNegativeX( double aStartAngle, double aEndAngle )
         end += 360.0;
 
     return aStartAngle < 180.0 && end > 180.0;
-}
-
-/**
- * Circle generation utility: computes r * sin(a)
- * Where a is in decidegrees, not in radians.
- */
-inline double sindecideg( double r, double a )
-{
-    return r * sin( DECIDEG2RAD( a ) );
-}
-
-/**
- * Circle generation utility: computes r * cos(a)
- * Where a is in decidegrees, not in radians.
- */
-inline double cosdecideg( double r, double a )
-{
-    return r * cos( DECIDEG2RAD( a ) );
 }
 
 #endif

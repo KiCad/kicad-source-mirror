@@ -449,10 +449,7 @@ bool GENDRILL_WRITER_BASE::plotDrillMarks( PLOTTER* aPlotter )
         aPlotter->Marker( pos, hole.m_Hole_Diameter, hole.m_Tool_Reference - 1 );
 
         if( hole.m_Hole_Shape != 0 )
-        {
-            VECTOR2I oblong_size = hole.m_Hole_Size;
-            aPlotter->FlashPadOval( pos, oblong_size, hole.m_Hole_Orient, SKETCH, nullptr );
-        }
+            aPlotter->FlashPadOval( pos, hole.m_Hole_Size, hole.m_Hole_Orient, SKETCH, nullptr );
     }
 
     aPlotter->SetCurrentLineWidth( -1 );

@@ -462,8 +462,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     {
         SHAPE_POLY_SET outline;
 
-        TransformRoundChamferedRectToPolygon( outline, shapePos, GetSize(),
-                                              m_orient.AsTenthsOfADegree(),
+        TransformRoundChamferedRectToPolygon( outline, shapePos, GetSize(), m_orient,
                                               GetRoundRectCornerRadius(), GetChamferRectRatio(),
                                               GetChamferPositions(), 0, maxError, ERROR_INSIDE );
 
@@ -1551,8 +1550,7 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         bool doChamfer = GetShape() == PAD_SHAPE::CHAMFERED_RECT;
 
         SHAPE_POLY_SET outline;
-        TransformRoundChamferedRectToPolygon( outline, padShapePos, m_size,
-                                              m_orient.AsTenthsOfADegree(),
+        TransformRoundChamferedRectToPolygon( outline, padShapePos, m_size, m_orient,
                                               GetRoundRectCornerRadius(),
                                               doChamfer ? GetChamferRectRatio() : 0,
                                               doChamfer ? GetChamferPositions() : 0,

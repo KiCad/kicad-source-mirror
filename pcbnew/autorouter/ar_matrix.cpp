@@ -33,6 +33,26 @@
 #include <pcb_shape.h>
 #include <pad.h>
 
+
+/**
+ * Circle generation utility: computes r * sin(a)
+ * Where a is in decidegrees, not in radians.
+ */
+double sindecideg( double r, double a )
+{
+    return r * sin( DECIDEG2RAD( a ) );
+}
+
+/**
+ * Circle generation utility: computes r * cos(a)
+ * Where a is in decidegrees, not in radians.
+ */
+double cosdecideg( double r, double a )
+{
+    return r * cos( DECIDEG2RAD( a ) );
+}
+
+
 AR_MATRIX::AR_MATRIX()
 {
     m_BoardSide[0]       = nullptr;

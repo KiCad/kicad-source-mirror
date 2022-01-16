@@ -88,32 +88,32 @@ void PSLIKE_PLOTTER::SetColor( const COLOR4D& color )
 
 
 void PSLIKE_PLOTTER::FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                   double aPadOrient, OUTLINE_MODE aTraceMode, void* aData )
+                                   const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
+                                   void* aData )
 {
     wxASSERT( m_outputFile );
-    int x0, y0, x1, y1, delta;
-    VECTOR2I size( aSize );
+
+    VECTOR2I  size( aSize );
+    EDA_ANGLE orient( aPadOrient );
 
     // The pad is reduced to an oval by dy > dx
     if( size.x > size.y )
     {
         std::swap( size.x, size.y );
-        aPadOrient = AddAngles( aPadOrient, 900 );
+        orient += ANGLE_90;
     }
 
-    delta = size.y - size.x;
-    x0    = 0;
-    y0    = -delta / 2;
-    x1    = 0;
-    y1    = delta / 2;
-    RotatePoint( &x0, &y0, aPadOrient );
-    RotatePoint( &x1, &y1, aPadOrient );
+    int      delta = size.y - size.x;
+    VECTOR2I a( 0, -delta / 2 );
+    VECTOR2I b( 0, delta / 2 );
+
+    RotatePoint( a, aPadOrient );
+    RotatePoint( b, aPadOrient );
 
     if( aTraceMode == FILLED )
-        ThickSegment( VECTOR2I( aPadPos.x + x0, aPadPos.y + y0 ),
-                      VECTOR2I( aPadPos.x + x1, aPadPos.y + y1 ), size.x, aTraceMode, nullptr );
+        ThickSegment( a + aPadPos, b + aPadPos, size.x, aTraceMode, nullptr );
     else
-        sketchOval( aPadPos, size, aPadOrient, -1 );
+        sketchOval( aPadPos, size, orient, -1 );
 }
 
 
@@ -141,7 +141,8 @@ void PSLIKE_PLOTTER::FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter,
 
 
 void PSLIKE_PLOTTER::FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                   double aPadOrient, OUTLINE_MODE aTraceMode, void* aData )
+                                   const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
+                                   void* aData )
 {
     static std::vector<VECTOR2I> cornerList;
     VECTOR2I size( aSize );
@@ -179,9 +180,7 @@ void PSLIKE_PLOTTER::FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
     cornerList.push_back( corner );
 
     for( unsigned ii = 0; ii < cornerList.size(); ii++ )
-    {
         RotatePoint( cornerList[ii], aPadPos, aPadOrient );
-    }
 
     cornerList.push_back( cornerList[0] );
 
@@ -191,7 +190,7 @@ void PSLIKE_PLOTTER::FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSiz
 
 
 void PSLIKE_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                        int aCornerRadius, double aOrient,
+                                        int aCornerRadius, const EDA_ANGLE& aOrient,
                                         OUTLINE_MODE aTraceMode, void* aData )
 {
     VECTOR2I size( aSize );
@@ -210,8 +209,8 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
 
 
     SHAPE_POLY_SET outline;
-    TransformRoundChamferedRectToPolygon( outline, aPadPos, size, aOrient, aCornerRadius,
-                                          0.0, 0, 0, GetPlotterArcHighDef(), ERROR_INSIDE );
+    TransformRoundChamferedRectToPolygon( outline, aPadPos, size, aOrient, aCornerRadius, 0.0, 0,
+                                          0, GetPlotterArcHighDef(), ERROR_INSIDE );
 
     std::vector<VECTOR2I> cornerList;
 
@@ -231,7 +230,7 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
 
 
 void PSLIKE_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                     double aOrient, SHAPE_POLY_SET* aPolygons,
+                                     const EDA_ANGLE& aOrient, SHAPE_POLY_SET* aPolygons,
                                      OUTLINE_MODE aTraceMode, void* aData )
 {
     VECTOR2I size( aSize );
@@ -268,7 +267,8 @@ void PSLIKE_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aS
 
 
 void PSLIKE_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
-                                     double aPadOrient, OUTLINE_MODE aTraceMode, void* aData )
+                                     const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
+                                     void* aData )
 {
     static std::vector<VECTOR2I> cornerList;
     cornerList.clear();
@@ -315,7 +315,8 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aC
 
 
 void PSLIKE_PLOTTER::FlashRegularPolygon( const VECTOR2I& aShapePos, int aRadius, int aCornerCount,
-                                          double aOrient, OUTLINE_MODE aTraceMode, void* aData )
+                                          const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
+                                          void* aData )
 {
     // Do nothing
     wxASSERT( 0 );
@@ -586,40 +587,43 @@ void PS_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int wid
 }
 
 
-void PS_PLOTTER::Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int radius,
-                      FILL_T fill, int width )
+void PS_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
 {
     wxASSERT( m_outputFile );
 
-    if( radius <= 0 )
+    if( aRadius <= 0 )
         return;
 
-    if( StAngle > EndAngle )
-        std::swap( StAngle, EndAngle );
+    EDA_ANGLE startAngle( aStartAngle );
+    EDA_ANGLE endAngle( aEndAngle );
 
-    SetCurrentLineWidth( width );
+    if( startAngle > endAngle )
+        std::swap( startAngle, endAngle );
+
+    SetCurrentLineWidth( aWidth );
 
     // Calculate start point.
-    DPOINT centre_dev = userToDeviceCoordinates( centre );
-    double radius_dev = userToDeviceSize( radius );
+    DPOINT centre_dev = userToDeviceCoordinates( aCenter );
+    double radius_dev = userToDeviceSize( aRadius );
 
     if( m_plotMirror )
     {
         if( m_mirrorIsHorizontal )
         {
-            StAngle = 1800.0 -StAngle;
-            EndAngle = 1800.0 -EndAngle;
-            std::swap( StAngle, EndAngle );
+            startAngle = ANGLE_180 - startAngle;
+            endAngle = ANGLE_180 - endAngle;
+            std::swap( startAngle, endAngle );
         }
         else
         {
-            StAngle = -StAngle;
-            EndAngle = -EndAngle;
+            startAngle = -startAngle;
+            endAngle = -endAngle;
         }
     }
 
     fprintf( m_outputFile, "%g %g %g %g %g arc%d\n", centre_dev.x, centre_dev.y,
-             radius_dev, StAngle / 10.0, EndAngle / 10.0, getFillId( fill ) );
+             radius_dev, startAngle.AsDegrees(), endAngle.AsDegrees(), getFillId( aFill ) );
 }
 
 

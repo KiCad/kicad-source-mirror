@@ -134,8 +134,7 @@ private:
      */
     void plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const VECTOR2I& aDrillPos,
                            const VECTOR2I& aDrillSize, const VECTOR2I& aPadSize,
-                           double aOrientation,
-                           int aSmallDrill );
+                           const EDA_ANGLE& aOrientation, int aSmallDrill );
 
     PLOTTER*    m_plotter;
     BOARD*      m_board;

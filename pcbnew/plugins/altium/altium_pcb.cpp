@@ -1912,15 +1912,15 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
 
                 shape.SetShape( SHAPE_T::ARC );
 
-                double includedAngle = elem.endangle - elem.startangle;
-                double startAngle    = DEG2RAD( elem.endangle );
+                EDA_ANGLE includedAngle( elem.endangle - elem.startangle, DEGREES_T );
+                EDA_ANGLE startAngle( elem.endangle, DEGREES_T );
 
-                VECTOR2I startOffset = VECTOR2I( KiROUND( std::cos( startAngle ) * elem.radius ),
-                                                -KiROUND( std::sin( startAngle ) * elem.radius ) );
+                VECTOR2I startOffset( KiROUND( elem.radius * cos( startAngle.AsRadians() ) ),
+                                     -KiROUND( elem.radius * sin( startAngle.AsRadians() ) ) );
 
                 shape.SetCenter( elem.center );
                 shape.SetStart( elem.center + startOffset );
-                shape.SetArcAngleAndEnd( NormalizeAngleDegreesPos( includedAngle ) * 10.0, true );
+                shape.SetArcAngleAndEnd( includedAngle.Normalize().AsTenthsOfADegree(), true );
             };
 
     ALTIUM_PARSER reader( aReader, aEntry );
@@ -2134,22 +2134,23 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                 case ALTIUM_PAD_HOLE_SHAPE::SLOT:
                 {
                     pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_OBLONG );
-                    double normalizedSlotrotation =
-                            NormalizeAngleDegreesPos( elem.sizeAndShape->slotrotation );
+                    EDA_ANGLE slotRotation( elem.sizeAndShape->slotrotation, DEGREES_T );
 
-                    if( normalizedSlotrotation == 0. || normalizedSlotrotation == 180. )
+                    slotRotation.Normalize();
+
+                    if( slotRotation == ANGLE_0 || slotRotation == ANGLE_180 )
                     {
                         pad->SetDrillSize( wxSize( elem.sizeAndShape->slotsize, elem.holesize ) );
                     }
                     else
                     {
-                        if( normalizedSlotrotation != 90. && normalizedSlotrotation != 270. )
+                        if( slotRotation != ANGLE_90 && slotRotation != ANGLE_270 )
                         {
                             wxLogWarning( _( "Footprint %s pad %s has a hole-rotation of %f "
                                              "degrees. KiCad only supports 90 degree rotations." ),
                                           footprint->GetReference(),
                                           elem.name,
-                                          normalizedSlotrotation );
+                                          slotRotation.AsDegrees() );
                         }
 
                         pad->SetDrillSize( wxSize( elem.holesize, elem.sizeAndShape->slotsize ) );

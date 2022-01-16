@@ -151,8 +151,8 @@ int playground_main_func( int argc, char* argv[] )
     overlay = frame->GetOverlay();
 
 
-    overlay->SetIsFill(false);
-    overlay->SetLineWidth(10000);
+    overlay->SetIsFill( false );
+    overlay->SetLineWidth( 10000 );
 
     std::vector<SHAPE_ARC> arcs;
     int n_arcs = sizeof( test_data ) / sizeof( ARC_DATA );
@@ -164,8 +164,8 @@ int playground_main_func( int argc, char* argv[] )
         const ARC_DATA& d = test_data[i];
 
         SHAPE_ARC arc( VECTOR2D( Millimeter2iu( d.cx ), Millimeter2iu( d.cy ) ),
-                       VECTOR2D( Millimeter2iu( d.sx ), Millimeter2iu( d.sy ) ), d.ca,
-                       Millimeter2iu( d.w ) );
+                       VECTOR2D( Millimeter2iu( d.sx ), Millimeter2iu( d.sy ) ),
+                       EDA_ANGLE( d.ca, DEGREES_T ), Millimeter2iu( d.w ) );
 
         arcs.push_back( arc );
 

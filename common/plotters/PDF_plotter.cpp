@@ -261,55 +261,60 @@ void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int w
 }
 
 
-void PDF_PLOTTER::Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int radius,
-                       FILL_T fill, int width )
+void PDF_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                       const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
 {
     wxASSERT( workFile );
 
-    if( radius <= 0 )
+    if( aRadius <= 0 )
     {
-        Circle( centre, width, FILL_T::FILLED_SHAPE, 0 );
+        Circle( aCenter, aWidth, FILL_T::FILLED_SHAPE, 0 );
         return;
     }
 
-    /* Arcs are not so easily approximated by beziers (in the general case),
-       so we approximate them in the old way */
-    VECTOR2I  start, end;
-    const int delta = 50;   // increment (in 0.1 degrees) to draw circles
+    /*
+     * Arcs are not so easily approximated by beziers (in the general case), so we approximate
+     * them in the old way
+     */
+    EDA_ANGLE       startAngle( aStartAngle );
+    EDA_ANGLE       endAngle( aEndAngle );
+    VECTOR2I        start;
+    VECTOR2I        end;
+    const EDA_ANGLE delta( 5, DEGREES_T );   // increment to draw circles
 
-    if( StAngle > EndAngle )
-        std::swap( StAngle, EndAngle );
+    if( startAngle > endAngle )
+        std::swap( startAngle, endAngle );
 
-    SetCurrentLineWidth( width );
+    SetCurrentLineWidth( aWidth );
 
     // Usual trig arc plotting routine...
-    start.x = centre.x + KiROUND( cosdecideg( radius, -StAngle ) );
-    start.y = centre.y + KiROUND( sindecideg( radius, -StAngle ) );
+    start.x = aCenter.x + KiROUND( aRadius * cos( -startAngle.AsRadians() ) );
+    start.y = aCenter.y + KiROUND( aRadius * sin( -startAngle.AsRadians() ) );
     DPOINT pos_dev = userToDeviceCoordinates( start );
     fprintf( workFile, "%g %g m ", pos_dev.x, pos_dev.y );
 
-    for( int ii = StAngle + delta; ii < EndAngle; ii += delta )
+    for( EDA_ANGLE ii = startAngle + delta; ii < endAngle; ii += delta )
     {
-        end.x = centre.x + KiROUND( cosdecideg( radius, -ii ) );
-        end.y = centre.y + KiROUND( sindecideg( radius, -ii ) );
+        end.x = aCenter.x + KiROUND( aRadius * cos( -ii.AsRadians() ) );
+        end.y = aCenter.y + KiROUND( aRadius * sin( -ii.AsRadians() ) );
         pos_dev = userToDeviceCoordinates( end );
         fprintf( workFile, "%g %g l ", pos_dev.x, pos_dev.y );
     }
 
-    end.x = centre.x + KiROUND( cosdecideg( radius, -EndAngle ) );
-    end.y = centre.y + KiROUND( sindecideg( radius, -EndAngle ) );
+    end.x = aCenter.x + KiROUND( aRadius * cos( -endAngle.AsRadians() ) );
+    end.y = aCenter.y + KiROUND( aRadius * sin( -endAngle.AsRadians() ) );
     pos_dev = userToDeviceCoordinates( end );
     fprintf( workFile, "%g %g l ", pos_dev.x, pos_dev.y );
 
     // The arc is drawn... if not filled we stroke it, otherwise we finish
     // closing the pie at the center
-    if( fill == FILL_T::NO_FILL )
+    if( aFill == FILL_T::NO_FILL )
     {
         fputs( "S\n", workFile );
     }
     else
     {
-        pos_dev = userToDeviceCoordinates( centre );
+        pos_dev = userToDeviceCoordinates( aCenter );
         fprintf( workFile, "%g %g l b\n", pos_dev.x, pos_dev.y );
     }
 }

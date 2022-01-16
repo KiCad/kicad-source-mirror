@@ -224,21 +224,18 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
         break;
 
     case PAD_SHAPE::OVAL:
-        m_plotter->FlashPadOval( shape_pos, aPad->GetSize(),
-                                 aPad->GetOrientation().AsTenthsOfADegree(), aPlotMode,
+        m_plotter->FlashPadOval( shape_pos, aPad->GetSize(), aPad->GetOrientation(), aPlotMode,
                                  &gbr_metadata );
         break;
 
     case PAD_SHAPE::RECT:
-        m_plotter->FlashPadRect( shape_pos, aPad->GetSize(),
-                                 aPad->GetOrientation().AsTenthsOfADegree(), aPlotMode,
+        m_plotter->FlashPadRect( shape_pos, aPad->GetSize(), aPad->GetOrientation(), aPlotMode,
                                  &gbr_metadata );
         break;
 
     case PAD_SHAPE::ROUNDRECT:
         m_plotter->FlashPadRoundRect( shape_pos, aPad->GetSize(), aPad->GetRoundRectCornerRadius(),
-                                      aPad->GetOrientation().AsTenthsOfADegree(), aPlotMode,
-                                      &gbr_metadata );
+                                      aPad->GetOrientation(), aPlotMode, &gbr_metadata );
         break;
 
     case PAD_SHAPE::TRAPEZOID:
@@ -257,23 +254,22 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
         coord[2] = VECTOR2I( half_size.x - trap_delta.y, -half_size.y + trap_delta.x );
         coord[3] = VECTOR2I( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
 
-        m_plotter->FlashPadTrapez( shape_pos, coord, aPad->GetOrientation().AsTenthsOfADegree(),
-                                   aPlotMode, &gbr_metadata );
+        m_plotter->FlashPadTrapez( shape_pos, coord, aPad->GetOrientation(), aPlotMode,
+                                   &gbr_metadata );
     }
         break;
 
     case PAD_SHAPE::CHAMFERED_RECT:
         if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
         {
-            static_cast<GERBER_PLOTTER*>( m_plotter )->FlashPadChamferRoundRect(
-                                                        shape_pos,
-                                                        aPad->GetSize(),
-                                                        aPad->GetRoundRectCornerRadius(),
-                                                        aPad->GetChamferRectRatio(),
-                                                        aPad->GetChamferPositions(),
-                                                        aPad->GetOrientation().AsTenthsOfADegree(),
-                                                        aPlotMode,
-                                                        &gbr_metadata );
+            GERBER_PLOTTER* gerberPlotter = static_cast<GERBER_PLOTTER*>( m_plotter );
+
+            gerberPlotter->FlashPadChamferRoundRect( shape_pos, aPad->GetSize(),
+                                                     aPad->GetRoundRectCornerRadius(),
+                                                     aPad->GetChamferRectRatio(),
+                                                     aPad->GetChamferPositions(),
+                                                     aPad->GetOrientation(), aPlotMode,
+                                                     &gbr_metadata );
             break;
         }
 
@@ -286,9 +282,8 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
 
         if( polygons->OutlineCount() )
         {
-            m_plotter->FlashPadCustom( shape_pos, aPad->GetSize(),
-                                       aPad->GetOrientation().AsTenthsOfADegree(), polygons.get(),
-                                       aPlotMode, &gbr_metadata );
+            m_plotter->FlashPadCustom( shape_pos, aPad->GetSize(), aPad->GetOrientation(),
+                                       polygons.get(), aPlotMode, &gbr_metadata );
         }
     }
         break;
@@ -650,9 +645,8 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( const FP_SHAPE* aShape )
             }
             else
             {
-                m_plotter->ThickArc( aShape->GetCenter(), -endAngle.AsTenthsOfADegree(),
-                                     -startAngle.AsTenthsOfADegree(), radius, thickness,
-                                     GetPlotMode(), &gbr_metadata );
+                m_plotter->ThickArc( aShape->GetCenter(), -endAngle, -startAngle, radius,
+                                     thickness, GetPlotMode(), &gbr_metadata );
             }
         }
             break;
@@ -967,9 +961,8 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
             }
             else
             {
-                m_plotter->ThickArc( aShape->GetCenter(), -endAngle.AsTenthsOfADegree(),
-                                     -startAngle.AsTenthsOfADegree(), aShape->GetRadius(),
-                                     thickness, GetPlotMode(), &gbr_metadata );
+                m_plotter->ThickArc( aShape->GetCenter(), -endAngle, -startAngle,
+                                     aShape->GetRadius(), thickness, GetPlotMode(), &gbr_metadata );
             }
 
             break;
@@ -1066,7 +1059,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( const PCB_SHAPE* aShape )
 
 void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const VECTOR2I& aDrillPos,
                                          const VECTOR2I& aDrillSize, const VECTOR2I& aPadSize,
-                                         double aOrientation, int aSmallDrill )
+                                         const EDA_ANGLE& aOrientation, int aSmallDrill )
 {
     VECTOR2I drillSize = aDrillSize;
 
@@ -1082,6 +1075,7 @@ void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const VE
     {
         drillSize.y -= getFineWidthAdj();
         drillSize.y = Clamp( 1, drillSize.y, aPadSize.y - 1 );
+
         m_plotter->FlashPadOval( aDrillPos, drillSize, aOrientation, GetPlotMode(), nullptr );
     }
     else
@@ -1120,7 +1114,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
         {
             plotOneDrillMark( PAD_DRILL_SHAPE_CIRCLE, via->GetStart(),
                               wxSize( via->GetDrillValue(), 0 ),
-                              wxSize( via->GetWidth(), 0 ), 0, smallDrill );
+                              wxSize( via->GetWidth(), 0 ), ANGLE_0, smallDrill );
         }
     }
 
@@ -1132,8 +1126,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
                 continue;
 
             plotOneDrillMark( pad->GetDrillShape(), pad->GetPosition(), pad->GetDrillSize(),
-                              pad->GetSize(), pad->GetOrientation().AsTenthsOfADegree(),
-                              smallDrill );
+                              pad->GetSize(), pad->GetOrientation(), smallDrill );
         }
     }
 

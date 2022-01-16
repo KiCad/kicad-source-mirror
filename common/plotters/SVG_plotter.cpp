@@ -427,67 +427,69 @@ void SVG_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int wi
 }
 
 
-void SVG_PLOTTER::Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int radius,
-                       FILL_T fill, int width )
+void SVG_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                       const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
 {
-    /* Draws an arc of a circle, centered on (xc,yc), with starting point
-     *  (x1, y1) and ending at (x2, y2). The current pen is used for the outline
-     *  and the current brush for filling the shape.
+    /* Draws an arc of a circle, centered on (xc,yc), with starting point (x1, y1) and ending
+     * at (x2, y2). The current pen is used for the outline and the current brush for filling
+     * the shape.
      *
-     *  The arc is drawn in an anticlockwise direction from the start point to
-     *  the end point
+     *  The arc is drawn in an anticlockwise direction from the start point to the end point.
      */
 
-    if( radius <= 0 )
+    if( aRadius <= 0 )
     {
-        Circle( centre, width, FILL_T::FILLED_SHAPE, 0 );
+        Circle( aCenter, aWidth, FILL_T::FILLED_SHAPE, 0 );
         return;
     }
 
-    if( StAngle > EndAngle )
-        std::swap( StAngle, EndAngle );
+    EDA_ANGLE startAngle( aStartAngle );
+    EDA_ANGLE endAngle( aEndAngle );
+
+    if( startAngle > endAngle )
+        std::swap( startAngle, endAngle );
 
     // Calculate start point.
-    DPOINT  centre_dev  = userToDeviceCoordinates( centre );
-    double  radius_dev  = userToDeviceSize( radius );
+    DPOINT  centre_device  = userToDeviceCoordinates( aCenter );
+    double  radius_device  = userToDeviceSize( aRadius );
 
     if( !m_yaxisReversed )   // Should be never the case
     {
-        double tmp  = StAngle;
-        StAngle     = -EndAngle;
-        EndAngle    = -tmp;
+        std::swap( startAngle, endAngle );
+        startAngle = -startAngle;
+        endAngle = -endAngle;
     }
 
     if( m_plotMirror )
     {
         if( m_mirrorIsHorizontal )
         {
-            StAngle = 1800.0 -StAngle;
-            EndAngle = 1800.0 -EndAngle;
-            std::swap( StAngle, EndAngle );
+            std::swap( startAngle, endAngle );
+            startAngle = ANGLE_180 - startAngle;
+            endAngle = ANGLE_180 - endAngle;
         }
         else
         {
-            StAngle = -StAngle;
-            EndAngle = -EndAngle;
+            startAngle = -startAngle;
+            endAngle = -endAngle;
         }
     }
 
     DPOINT  start;
-    start.x = radius_dev;
-    RotatePoint( &start.x, &start.y, StAngle );
+    start.x = radius_device;
+    RotatePoint( start, startAngle );
     DPOINT  end;
-    end.x = radius_dev;
-    RotatePoint( &end.x, &end.y, EndAngle );
-    start += centre_dev;
-    end += centre_dev;
+    end.x = radius_device;
+    RotatePoint( end, endAngle );
+    start += centre_device;
+    end += centre_device;
 
-    double theta1 = DECIDEG2RAD( StAngle );
+    double theta1 = startAngle.AsRadians();
 
     if( theta1 < 0 )
         theta1 = theta1 + M_PI * 2;
 
-    double theta2 = DECIDEG2RAD( EndAngle );
+    double theta2 = endAngle.AsRadians();
 
     if( theta2 < 0 )
         theta2 = theta2 + M_PI * 2;
@@ -507,23 +509,23 @@ void SVG_PLOTTER::Arc( const VECTOR2I& centre, double StAngle, double EndAngle, 
     // flag arc size (0 = small arc > 180 deg, 1 = large arc > 180 deg),
     // sweep arc ( 0 = CCW, 1 = CW),
     // end point
-    if( fill != FILL_T::NO_FILL )
+    if( aFill != FILL_T::NO_FILL )
     {
         // Filled arcs (in Eeschema) consist of the pie wedge and a stroke only on the arc
         // This needs to be drawn in two steps.
-        setFillMode( fill );
+        setFillMode( aFill );
         SetCurrentLineWidth( 0 );
 
         fprintf( m_outputFile, "<path d=\"M%f %f A%f %f 0.0 %d %d %f %f L %f %f Z\" />\n",
-                 start.x, start.y, radius_dev, radius_dev,
+                 start.x, start.y, radius_device, radius_device,
                  flg_arc, flg_sweep,
-                 end.x, end.y, centre_dev.x, centre_dev.y  );
+                 end.x, end.y, centre_device.x, centre_device.y  );
     }
 
     setFillMode( FILL_T::NO_FILL );
-    SetCurrentLineWidth( width );
+    SetCurrentLineWidth( aWidth );
     fprintf( m_outputFile, "<path d=\"M%f %f A%f %f 0.0 %d %d %f %f\" />\n",
-             start.x, start.y, radius_dev, radius_dev,
+             start.x, start.y, radius_device, radius_device,
              flg_arc, flg_sweep,
              end.x, end.y  );
 }

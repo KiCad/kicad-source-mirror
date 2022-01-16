@@ -890,8 +890,8 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
 
     // Parameters for legacy format
     VECTOR2I      center( 0, 0 );
-    int           startAngle = 0;
-    int           endAngle = 900;
+    EDA_ANGLE     startAngle = ANGLE_0;
+    EDA_ANGLE     endAngle = ANGLE_90;
     bool          hasAngles = false;
 
     std::unique_ptr<LIB_SHAPE> arc = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::ARC );
@@ -946,10 +946,10 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
 
                 case T_angles:
                 {
-                    startAngle = KiROUND( parseDouble( "start radius angle" ) * 10.0 );
-                    endAngle = KiROUND( parseDouble( "end radius angle" ) * 10.0 );
-                    NORMALIZE_ANGLE_POS( startAngle );
-                    NORMALIZE_ANGLE_POS( endAngle );
+                    startAngle = EDA_ANGLE( parseDouble( "start radius angle" ), DEGREES_T );
+                    endAngle = EDA_ANGLE( parseDouble( "end radius angle" ), DEGREES_T );
+                    startAngle.Normalize();
+                    endAngle.Normalize();
                     NeedRIGHT();
                     hasAngles = true;
                     break;
@@ -2826,8 +2826,8 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchArc()
     VECTOR2I      midPoint;
     VECTOR2I      endPoint;
     VECTOR2I      pos;
-    int           startAngle;
-    int           endAngle;
+    EDA_ANGLE     startAngle;
+    EDA_ANGLE     endAngle;
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
     bool          hasMidPoint = false;
@@ -2881,10 +2881,10 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchArc()
 
                 case T_angles:
                 {
-                    startAngle = KiROUND( parseDouble( "start radius angle" ) * 10.0 );
-                    endAngle = KiROUND( parseDouble( "end radius angle" ) * 10.0 );
-                    NORMALIZE_ANGLE_POS( startAngle );
-                    NORMALIZE_ANGLE_POS( endAngle );
+                    startAngle = EDA_ANGLE( parseDouble( "start radius angle" ), DEGREES_T );
+                    endAngle = EDA_ANGLE( parseDouble( "end radius angle" ), DEGREES_T );
+                    startAngle.Normalize();
+                    endAngle.Normalize();
                     NeedRIGHT();
                     hasAngles = true;
                     break;

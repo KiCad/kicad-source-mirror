@@ -85,7 +85,6 @@ public:
 
 private:
     void drawPlacementRoutingMatrix();  // draw the working area (shows free and occupied areas)
-    void rotateFootprint( FOOTPRINT* aFootprint, double angle, bool incremental );
     int genPlacementRoutingMatrix();
 
     /**

@@ -96,10 +96,10 @@ public:
 
     virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror ) override;
-    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill,
-                       int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
-                         int width = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T aFill,
+                       int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFill,
+                         int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
 
@@ -115,29 +115,32 @@ public:
      *
      * center is the center of the arc.
      * StAngled is the start angle of the arc.
-     * EndAngle is end angle the arc.
+     * aEndAngle is end angle the arc.
      * Radius is the radius of the arc.
      */
-    virtual void Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int rayon,
-                      FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
+                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void PenTo( const VECTOR2I& pos, char plume ) override;
     virtual void FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter,
                                  OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aPadOrient,
-                               OUTLINE_MODE aTraceMode, void* aData ) override;
+    virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
+                               const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
+                               void* aData ) override;
     virtual void FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                               double aOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
+                               const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
+                               void* aData ) override;
     virtual void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                    int aCornerRadius, double aOrient,
+                                    int aCornerRadius, const EDA_ANGLE& aOrient,
                                     OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aOrient,
-                                 SHAPE_POLY_SET* aPolygons,
+    virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
+                                 const EDA_ANGLE& aOrient, SHAPE_POLY_SET* aPolygons,
                                  OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
-                                 double aPadOrient, OUTLINE_MODE aTraceMode,
+                                 const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
                                  void* aData ) override;
     virtual void FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter, int aCornerCount,
-                                      double aOrient, OUTLINE_MODE aTraceMode,
+                                      const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
                                       void* aData ) override;
 
 protected:
@@ -166,7 +169,7 @@ protected:
     int            penNumber;
     double         penDiameter;
     double         arcTargetChordLength;
-    double         arcMinChordDegrees;
+    EDA_ANGLE      arcMinChordDegrees;
     PLOT_DASH_TYPE dashType;
     bool           useUserCoords;
     bool           fitUserCoords;

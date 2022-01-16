@@ -32,8 +32,8 @@
 DIALOG_MOVE_EXACT::MOVE_EXACT_OPTIONS DIALOG_MOVE_EXACT::m_options;
 
 
-DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, wxPoint& aTranslate,
-                                      double& aRotate, ROTATION_ANCHOR& aAnchor,
+DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, VECTOR2I& aTranslate,
+                                      EDA_ANGLE& aRotate, ROTATION_ANCHOR& aAnchor,
                                       const EDA_RECT& aBbox ) :
     DIALOG_MOVE_EXACT_BASE( aParent ),
     m_translation( aTranslate ),
@@ -244,7 +244,7 @@ bool DIALOG_MOVE_EXACT::TransferDataFromWindow()
     bool ok = GetTranslationInIU( translation, m_polarCoords->IsChecked() );
     m_translation.x = KiROUND(translation.x);
     m_translation.y = KiROUND(translation.y);
-    m_rotation = m_rotate.GetDoubleValue();
+    m_rotation = m_rotate.GetAngleValue();
     m_rotationAnchor = m_menuIDs[ m_anchorOptions->GetSelection() ];
 
     // save the settings

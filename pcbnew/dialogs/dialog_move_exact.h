@@ -46,7 +46,7 @@ enum ROTATION_ANCHOR
 class DIALOG_MOVE_EXACT : public DIALOG_MOVE_EXACT_BASE
 {
 public:
-    DIALOG_MOVE_EXACT( PCB_BASE_FRAME* aParent, wxPoint& aTranslate, double& aRotate,
+    DIALOG_MOVE_EXACT( PCB_BASE_FRAME* aParent, VECTOR2I& aTranslate, EDA_ANGLE& aRotate,
                        ROTATION_ANCHOR& aAnchor, const EDA_RECT& aBbox );
     ~DIALOG_MOVE_EXACT() { };
 
@@ -111,8 +111,8 @@ private:
     static MOVE_EXACT_OPTIONS m_options;
 
 private:
-    wxPoint&          m_translation;
-    double&           m_rotation;
+    VECTOR2I&         m_translation;
+    EDA_ANGLE&        m_rotation;
     ROTATION_ANCHOR&  m_rotationAnchor;
     const EDA_RECT&   m_bbox;
 

@@ -220,8 +220,9 @@ public:
     /**
      * Generic fallback: arc rendered as a polyline.
      */
-    virtual void Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int rayon,
-                      FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
+    virtual void Arc( const VECTOR2I& aCentre, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
+                      int aWidth = USE_DEFAULT_LINE_WIDTH );
 
     /**
      * Generic fallback: Cubic Bezier curve rendered as a polyline
@@ -302,8 +303,9 @@ public:
     // Higher level primitives -- can be drawn as line, sketch or 'filled'
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData );
-    virtual void ThickArc( const VECTOR2I& centre, double StAngle, double EndAngle, int rayon,
-                           int width, OUTLINE_MODE tracemode, void* aData );
+    virtual void ThickArc( const VECTOR2I& centre, const EDA_ANGLE& StAngle,
+                           const EDA_ANGLE& EndAngle, int rayon, int width,
+                           OUTLINE_MODE tracemode, void* aData );
     virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width, OUTLINE_MODE tracemode,
                             void* aData );
     virtual void ThickCircle( const VECTOR2I& pos, int diametre, int width, OUTLINE_MODE tracemode,
@@ -330,8 +332,9 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aPadOrient,
-                               OUTLINE_MODE aTraceMode, void* aData ) = 0;
+    virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
+                               const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
+                               void* aData ) = 0;
 
     /**
      * @param aPadPos Position of the shape (center of the rectangle).
@@ -340,8 +343,9 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aPadOrient,
-                               OUTLINE_MODE aTraceMode, void* aData ) = 0;
+    virtual void FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
+                               const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
+                               void* aData ) = 0;
 
     /**
      * @param aPadPos Position of the shape (center of the rectangle.
@@ -351,8 +355,9 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize, int aCornerRadius,
-                                    double aOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0;
+    virtual void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
+                                    int aCornerRadius, const EDA_ANGLE& aOrient,
+                                    OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
      * @param aPadPos Position of the shape.
@@ -362,9 +367,9 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aPadOrient,
-                                 SHAPE_POLY_SET* aPolygons, OUTLINE_MODE aTraceMode,
-                                 void* aData ) = 0;
+    virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
+                                 const EDA_ANGLE& aPadOrient, SHAPE_POLY_SET* aPolygons,
+                                 OUTLINE_MODE aTraceMode, void* aData ) = 0;
 
     /**
      * Flash a trapezoidal pad.
@@ -376,8 +381,9 @@ public:
      * @param aTraceMode is the drawing mode, FILLED or SKETCH.
      * @param aData an auxiliary info (mainly for gerber format attributes).
      */
-    virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners, double aPadOrient,
-                                 OUTLINE_MODE aTraceMode, void* aData ) = 0;
+    virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
+                                 const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
+                                 void* aData ) = 0;
 
     /**
      * Flash a regular polygon. Useful only in Gerber files to flash a regular polygon.
@@ -385,12 +391,13 @@ public:
      * @param aShapePos is the center of the circle containing the polygon.
      * @param aRadius is the radius of the circle containing the polygon.
      * @param aCornerCount is the number of vertices.
-     * @param aOrient is the polygon rotation in degrees.
+     * @param aOrient is the polygon rotation.
      * @param aData is a auxiliary parameter used (if needed) to handle extra info
      *              specific to the plotter.
      */
     virtual void FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter, int aCornerCount,
-                                      double aOrient, OUTLINE_MODE aTraceMode, void* aData ) = 0;
+                                      const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
+                                      void* aData ) = 0;
 
     /**
      * Draw text with the plotter.
@@ -523,7 +530,8 @@ protected:
     void segmentAsOval( const VECTOR2I& start, const VECTOR2I& end, int width,
                         OUTLINE_MODE tracemode );
 
-    void sketchOval( const VECTOR2I& pos, const VECTOR2I& size, double orient, int width );
+    void sketchOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA_ANGLE& aOrient,
+                     int aWidth );
 
     // Coordinate and scaling conversion functions
 

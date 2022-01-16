@@ -435,9 +435,10 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I&
 
 
 void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aPosition,
-                                           const VECTOR2I& aSize, double aRotation, int aCornerRadius,
-                                           double aChamferRatio, int aChamferCorners, int aInflate,
-                                           int aError, ERROR_LOC aErrorLoc )
+                                           const VECTOR2I& aSize, const EDA_ANGLE& aRotation,
+                                           int aCornerRadius, double aChamferRatio,
+                                           int aChamferCorners, int aInflate, int aError,
+                                           ERROR_LOC aErrorLoc )
 {
     SHAPE_POLY_SET outline;
     VECTOR2I       size( aSize / 2 );
@@ -492,10 +493,10 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const 
 
     CornerListToPolygon( outline, corners, aInflate, aError, aErrorLoc );
 
-    if( aRotation != 0.0 )
-        outline.Rotate( DECIDEG2RAD( -aRotation ), VECTOR2I( 0, 0 ) );
+    if( !aRotation.IsZero() )
+        outline.Rotate( -aRotation.AsRadians(), VECTOR2I( 0, 0 ) );
 
-    outline.Move( VECTOR2I( aPosition ) );
+    outline.Move( aPosition );
     aCornerBuffer.Append( outline );
 }
 

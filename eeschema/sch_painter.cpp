@@ -637,14 +637,14 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer )
         {
         case SHAPE_T::ARC:
         {
-            int startAngle;
-            int endAngle;
+            EDA_ANGLE startAngle;
+            EDA_ANGLE endAngle;
             aShape->CalcArcAngles( startAngle, endAngle );
 
             TRANSFORM().MapAngles( &startAngle, &endAngle );
 
             m_gal->DrawArc( mapCoords( aShape->GetCenter() ), aShape->GetRadius(),
-                            DECIDEG2RAD( startAngle ), DECIDEG2RAD( endAngle ) );
+                            startAngle.AsRadians(), endAngle.AsRadians() );
         }
             break;
 
@@ -1352,12 +1352,12 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
                 {
                 case SHAPE_T::ARC:
                 {
-                    int startAngle;
-                    int endAngle;
+                    EDA_ANGLE startAngle;
+                    EDA_ANGLE endAngle;
                     aShape->CalcArcAngles( startAngle, endAngle );
 
                     m_gal->DrawArc( aShape->GetCenter(), aShape->GetRadius(),
-                                    DECIDEG2RAD( startAngle ), DECIDEG2RAD( endAngle ) );
+                                    startAngle.AsRadians(), endAngle.AsRadians() );
                 }
                     break;
 

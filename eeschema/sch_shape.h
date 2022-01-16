@@ -78,8 +78,6 @@ public:
 
     VECTOR2I GetCenter() const { return getCenter(); }
 
-    void CalcArcAngles( int& aStartAngle, int& aEndAngle ) const;
-
     void BeginEdit( const VECTOR2I& aStartPoint ) { beginEdit( aStartPoint ); }
     bool ContinueEdit( const VECTOR2I& aPosition ) { return continueEdit( aPosition ); }
     void CalcEdit( const VECTOR2I& aPosition ) { calcEdit( aPosition ); }

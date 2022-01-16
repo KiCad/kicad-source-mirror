@@ -63,20 +63,23 @@ public:
     // Pad routines are handled with lower level primitives
     virtual void FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter,
                                  OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aPadOrient,
-                               OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aPadOrient,
-                               OUTLINE_MODE aTraceMode, void* aData ) override;
+    virtual void FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
+                               const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
+                               void* aData ) override;
+    virtual void FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
+                               const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
+                               void* aData ) override;
     virtual void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                    int aCornerRadius, double aOrient,
+                                    int aCornerRadius, const EDA_ANGLE& aOrient,
                                     OUTLINE_MODE aTraceMode, void* aData ) override;
-    virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize, double aOrient,
-                                 SHAPE_POLY_SET* aPolygons,
+    virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
+                                 const EDA_ANGLE& aOrient, SHAPE_POLY_SET* aPolygons,
                                  OUTLINE_MODE aTraceMode, void* aData ) override;
     virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
-                                 double aPadOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
+                                 const EDA_ANGLE& aPadOrient, OUTLINE_MODE aTraceMode,
+                                 void* aData ) override;
     virtual void FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter, int aCornerCount,
-                                      double aOrient, OUTLINE_MODE aTraceMode,
+                                      const EDA_ANGLE& aOrient, OUTLINE_MODE aTraceMode,
                                       void* aData ) override;
 
     /**
@@ -201,8 +204,9 @@ public:
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int rayon,
-                      FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
+                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill,
                            int aWidth = USE_DEFAULT_LINE_WIDTH, void* aData = nullptr ) override;
@@ -321,8 +325,8 @@ public:
      * The PDF engine can't directly plot arcs, it uses the base emulation.
      * So no filled arcs (not a great loss... )
      */
-    virtual void Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int rayon,
-                      FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle, int aRadius,
+                      FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     /**
      * Polygon plotting for PDF. Everything is supported
@@ -450,8 +454,9 @@ public:
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
-    virtual void Arc( const VECTOR2I& centre, double StAngle, double EndAngle, int rayon,
-                      FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
+                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1,
                               const VECTOR2I& aControl2, const VECTOR2I& aEnd,

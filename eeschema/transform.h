@@ -31,6 +31,7 @@
 #define _TRANSFORM_H_
 
 #include <wx/gdicmn.h>
+#include <geometry/eda_angle.h>
 
 class EDA_RECT;
 
@@ -97,7 +98,7 @@ public:
     * @param aAngle2 = The second angle to transform
     * @return True if the angles were swapped during the transform.
     */
-    bool MapAngles( int* aAngle1, int* aAngle2 ) const;
+   bool MapAngles( EDA_ANGLE* aAngle1, EDA_ANGLE* aAngle2 ) const;
 };
 
 

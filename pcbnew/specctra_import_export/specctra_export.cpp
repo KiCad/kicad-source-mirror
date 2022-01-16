@@ -499,10 +499,12 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         rradius += extra_clearance;
         bool doChamfer = aPad->GetShape() == PAD_SHAPE::CHAMFERED_RECT;
 
-        TransformRoundChamferedRectToPolygon(
-                cornerBuffer, VECTOR2I( 0, 0 ), psize, 0, rradius, aPad->GetChamferRectRatio(),
-                doChamfer ? aPad->GetChamferPositions() : 0, 0,
-                aBoard->GetDesignSettings().m_MaxError, ERROR_INSIDE );
+        TransformRoundChamferedRectToPolygon( cornerBuffer, VECTOR2I( 0, 0 ), psize, ANGLE_0,
+                                              rradius, aPad->GetChamferRectRatio(),
+                                              doChamfer ? aPad->GetChamferPositions() : 0,
+                                              0, aBoard->GetDesignSettings().m_MaxError,
+                                              ERROR_INSIDE );
+
         SHAPE_LINE_CHAIN& polygonal_shape = cornerBuffer.Outline( 0 );
 
         for( int ndx = 0; ndx < reportedLayers; ++ndx )
