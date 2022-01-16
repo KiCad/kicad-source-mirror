@@ -310,19 +310,19 @@ protected:
     FILL_T                m_fill;
     COLOR4D               m_fillColor;
 
-    VECTOR2I              m_start; // Line start point or Circle center
-    VECTOR2I              m_end;   // Line end point or Circle 3 o'clock point
+    VECTOR2I              m_start;             // Line start point or Circle center
+    VECTOR2I              m_end;               // Line end point or Circle 3 o'clock point
 
-    VECTOR2I              m_arcCenter; // Used only for Arcs: arc end point
+    VECTOR2I              m_arcCenter;         // Used only for Arcs: arc end point
 
-    VECTOR2I              m_bezierC1; // Bezier Control Point 1
-    VECTOR2I              m_bezierC2; // Bezier Control Point 2
+    VECTOR2I              m_bezierC1;          // Bezier Control Point 1
+    VECTOR2I              m_bezierC2;          // Bezier Control Point 2
 
     std::vector<VECTOR2I> m_bezierPoints;
-    SHAPE_POLY_SET        m_poly;         // Stores the S_POLYGON shape
+    SHAPE_POLY_SET        m_poly;              // Stores the S_POLYGON shape
 
     int                   m_editState;
-    bool                  m_eeWinding;    // Awful hack
+    bool                  m_upsideDownCoords;  // Awful hack
 };
 
 #endif  // EDA_SHAPE_H

@@ -36,7 +36,7 @@
 
 SCH_SHAPE::SCH_SHAPE( SHAPE_T aShape, int aLineWidth, FILL_T aFillType ) :
     SCH_ITEM( nullptr, SCH_SHAPE_T ),
-    EDA_SHAPE( aShape, aLineWidth, aFillType, true )
+    EDA_SHAPE( aShape, aLineWidth, aFillType, false )
 {
     SetLayer( LAYER_NOTES );
 }

@@ -37,14 +37,14 @@
 #include <plotters/plotter.h>
 
 
-EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill, bool eeWinding ) :
-    m_endsSwapped( false ),
-    m_shape( aType ),
-    m_stroke( aLineWidth, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
-    m_fill( aFill ),
-    m_fillColor( COLOR4D::UNSPECIFIED ),
-    m_editState( 0 ),
-    m_eeWinding( eeWinding )
+EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill, bool upsideDownCoords ) :
+        m_endsSwapped( false ),
+        m_shape( aType ),
+        m_stroke( aLineWidth, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
+        m_fill( aFill ),
+        m_fillColor( COLOR4D::UNSPECIFIED ),
+        m_editState( 0 ),
+        m_upsideDownCoords( upsideDownCoords )
 {
 }
 
@@ -711,7 +711,7 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
             EDA_ANGLE endAngle;
             CalcArcAngles( startAngle, endAngle );
 
-            if( m_eeWinding && ( startAngle - endAngle ).Normalize180() > ANGLE_0 )
+            if( m_upsideDownCoords && ( startAngle - endAngle ).Normalize180() > ANGLE_0 )
                 std::swap( startAngle, endAngle );
 
             EDA_ANGLE relPosAngle( relPos );
@@ -993,70 +993,50 @@ std::vector<VECTOR2I> EDA_SHAPE::GetRectCorners() const
 
 void EDA_SHAPE::computeArcBBox( EDA_RECT& aBBox ) const
 {
-    VECTOR2I  start = m_start;
-    VECTOR2I  end = m_end;
+    int       radius = GetRadius();
     EDA_ANGLE t1, t2;
 
     CalcArcAngles( t1, t2 );
 
-    if( m_eeWinding && ( t1 - t2 ).Normalize180() > ANGLE_0 )
-        std::swap( start, end );
+    if( m_upsideDownCoords && ( t1 - t2 ).Normalize180() > ANGLE_0 )
+        std::swap( t1, t2 );
 
-    // Do not include the center, which is not necessarily inside the BB of an arc with a small
-    // included angle
-    aBBox.SetOrigin( start );
-    aBBox.Merge( end );
+    t1.Normalize();
+    t2.Normalize();
 
-    // Determine the starting quarter
-    // 0 right-bottom
-    // 1 left-bottom
-    // 2 left-top
-    // 3 right-top
-    unsigned int quarter;
+    // Start, end, and each inflection point the arc crosses will enclose the entire arc
+    // Do not include the center, which is not necessarily inside the BB of an arc with a
+    // small included angle
+    aBBox.SetOrigin( m_start );
+    aBBox.Merge( m_end );
 
-    if( start.x < m_arcCenter.x )
+    if( t2 > t1 )
     {
-        if( start.y <= m_arcCenter.y )
-            quarter = 2;
-        else
-            quarter = 1;
-    }
-    else if( start.x == m_arcCenter.x )
-    {
-        if( start.y < m_arcCenter.y )
-            quarter = 3;
-        else
-            quarter = 1;
+        if( t1 < ANGLE_0 && t2 > ANGLE_0 )
+            aBBox.Merge( VECTOR2I( m_arcCenter.x + radius, m_arcCenter.y ) ); // right
+
+        if( t1 < ANGLE_90 && t2 > ANGLE_90 )
+            aBBox.Merge( VECTOR2I( m_arcCenter.x, m_arcCenter.y + radius ) ); // down
+
+        if( t1 < ANGLE_180 && t2 > ANGLE_180 )
+            aBBox.Merge( VECTOR2I( m_arcCenter.x - radius, m_arcCenter.y ) ); // left
+
+        if( t1 < ANGLE_270 && t2 > ANGLE_270 )
+            aBBox.Merge( VECTOR2I( m_arcCenter.x, m_arcCenter.y - radius ) ); // up
     }
     else
     {
-        if( start.y < m_arcCenter.y )
-            quarter = 3;
-        else
-            quarter = 0;
-    }
+        if( t1 < ANGLE_0 || t2 > ANGLE_0 )
+            aBBox.Merge( VECTOR2I( m_arcCenter.x + radius, m_arcCenter.y ) ); // right
 
-    int       radius = GetRadius();
-    VECTOR2I  startRadial = start - m_arcCenter;
-    EDA_ANGLE angle = EDA_ANGLE( startRadial ).Normalize();
+        if( t1 < ANGLE_90 || t2 > ANGLE_90 )
+            aBBox.Merge( VECTOR2I( m_arcCenter.x, m_arcCenter.y + radius ) ); // down
 
-    while( angle >= ANGLE_90 )
-        angle -= ANGLE_90;
+        if( t1 < ANGLE_180 || t2 > ANGLE_180 )
+            aBBox.Merge( VECTOR2I( m_arcCenter.x - radius, m_arcCenter.y ) ); // left
 
-    angle += GetArcAngle();
-
-    while( angle > ANGLE_90 )
-    {
-        switch( quarter )
-        {
-        case 0: aBBox.Merge( VECTOR2I( m_arcCenter.x, m_arcCenter.y + radius ) ); break; // down
-        case 1: aBBox.Merge( VECTOR2I( m_arcCenter.x - radius, m_arcCenter.y ) ); break; // left
-        case 2: aBBox.Merge( VECTOR2I( m_arcCenter.x, m_arcCenter.y - radius ) ); break; // up
-        case 3: aBBox.Merge( VECTOR2I( m_arcCenter.x + radius, m_arcCenter.y ) ); break; // right
-        }
-
-        ++quarter %= 4;
-        angle -= ANGLE_90;
+        if( t1 < ANGLE_270 || t2 > ANGLE_270 )
+            aBBox.Merge( VECTOR2I( m_arcCenter.x, m_arcCenter.y - radius ) ); // up
     }
 }
 
@@ -1431,7 +1411,7 @@ void EDA_SHAPE::SwapShape( EDA_SHAPE* aImage )
     SWAPITEM( m_poly );
     SWAPITEM( m_fill );
     SWAPITEM( m_fillColor );
-    SWAPITEM( m_eeWinding );
+    SWAPITEM( m_upsideDownCoords );
     SWAPITEM( m_editState );
     SWAPITEM( m_endsSwapped );
     #undef SWAPITEM
