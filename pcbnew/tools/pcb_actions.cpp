@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -1239,6 +1239,12 @@ TOOL_ACTION PCB_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectCo
         _( "Select/Expand Connection" ),
         _( "Selects a connection or expands an existing selection to junctions, pads, or entire connections" ),
         BITMAPS::add_tracks );
+
+TOOL_ACTION PCB_ACTIONS::syncSelection( "pcbnew.InteractiveSelection.SyncSelection",
+        AS_GLOBAL );
+
+TOOL_ACTION PCB_ACTIONS::syncSelectionWithNets( "pcbnew.InteractiveSelection.SyncSelectionWithNets",
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
         AS_GLOBAL, 0, "",

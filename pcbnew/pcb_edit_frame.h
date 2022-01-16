@@ -122,6 +122,11 @@ public:
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
     /**
+     * Used to find items by selection synchronization spec string.
+     */
+    std::vector<BOARD_ITEM*> FindItemsFromSyncSelection( std::string syncStr );
+
+    /**
      * Show the Find dialog.
      */
     void ShowFindDialog();
@@ -781,6 +786,8 @@ public:
     bool m_show_layer_manager_tools;
 
     bool m_ZoneFillsDirty;               // Board has been modified since last zone fill.
+
+    bool m_syncingSchToPcbSelection; // Recursion guard when synchronizing selection from schematic
 
 private:
     friend struct PCB::IFACE;

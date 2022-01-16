@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -672,63 +672,14 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
     if( m_probingPcbToSch )
         return;
 
-    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    SCH_ITEM*          item = nullptr;
-    SCH_SYMBOL*        symbol = nullptr;
-
-    if( aForce )
-    {
-        EE_SELECTION& selection = selTool->RequestSelection();
-
-        if( selection.GetSize() >= 1 )
-            item = (SCH_ITEM*) selection.Front();
-    }
-    else
-    {
-        EE_SELECTION& selection = selTool->GetSelection();
-
-        if( selection.GetSize() >= 1 )
-            item = (SCH_ITEM*) selection.Front();
-    }
-
-    if( !item )
-    {
-        if( aForce )
-            m_frame->SendMessageToPCBNEW( nullptr, nullptr );
-
+    if( !aForce && !m_frame->eeconfig()->m_CrossProbing.on_selection )
         return;
-    }
 
+    EE_SELECTION_TOOL*      selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
-    switch( item->Type() )
-    {
-    case SCH_FIELD_T:
-    case LIB_FIELD_T:
-        if( item->GetParent() && item->GetParent()->Type() == SCH_SYMBOL_T )
-        {
-            symbol = (SCH_SYMBOL*) item->GetParent();
-            m_frame->SendMessageToPCBNEW( item, symbol );
-        }
-        break;
+    EE_SELECTION& selection = aForce ? selTool->RequestSelection() : selTool->GetSelection();
 
-    case SCH_SYMBOL_T:
-        symbol = (SCH_SYMBOL*) item;
-        m_frame->SendMessageToPCBNEW( item, symbol );
-        break;
-
-    case SCH_PIN_T:
-        symbol = (SCH_SYMBOL*) item->GetParent();
-        m_frame->SendMessageToPCBNEW( static_cast<SCH_PIN*>( item ), symbol );
-        break;
-
-    case SCH_SHEET_T:
-        if( aForce )
-            m_frame->SendMessageToPCBNEW( item, nullptr );
-        break;
-
-    default:
-        break;
-    }
+    m_frame->SendSelectItems( false, selection.GetItems() );
 }
 
 
@@ -2318,7 +2269,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::CrossProbeToPcb,       EVENTS::SelectedEvent );
     Go( &SCH_EDITOR_CONTROL::CrossProbeToPcb,       EVENTS::UnselectedEvent );
     Go( &SCH_EDITOR_CONTROL::CrossProbeToPcb,       EVENTS::ClearedEvent );
-    Go( &SCH_EDITOR_CONTROL::ExplicitCrossProbeToPcb, EE_ACTIONS::explicitCrossProbe.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ExplicitCrossProbeToPcb, EE_ACTIONS::selectOnPCB.MakeEvent() );
 
 #ifdef KICAD_SPICE
     Go( &SCH_EDITOR_CONTROL::SimProbe,              EE_ACTIONS::simProbe.MakeEvent() );

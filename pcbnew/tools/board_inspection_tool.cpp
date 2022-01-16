@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -866,7 +866,10 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 int BOARD_INSPECTION_TOOL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
 {
     // Don't get in an infinite loop PCB -> SCH -> PCB -> SCH -> ...
-    if( m_probingSchToPcb )
+    if( m_probingSchToPcb || m_frame->m_syncingSchToPcbSelection )
+        return 0;
+
+    if( !frame()->Settings().m_CrossProbing.on_selection )
         return 0;
 
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();

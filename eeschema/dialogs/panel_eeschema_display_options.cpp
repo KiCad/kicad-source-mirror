@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,7 @@ void PANEL_EESCHEMA_DISPLAY_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* cf
     m_selWidthCtrl->SetValue( cfg->m_Selection.selection_thickness );
     m_highlightWidthCtrl->SetValue( cfg->m_Selection.highlight_thickness );
 
+    m_checkCrossProbeOnSelection->SetValue( cfg->m_CrossProbing.on_selection );
     m_checkCrossProbeCenter->SetValue( cfg->m_CrossProbing.center_on_items );
     m_checkCrossProbeZoom->SetValue( cfg->m_CrossProbing.zoom_to_fit );
     m_checkCrossProbeAutoHighlight->SetValue( cfg->m_CrossProbing.auto_highlight );
@@ -106,9 +107,10 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     cfg->m_Selection.selection_thickness = KiROUND( m_selWidthCtrl->GetValue() );
     cfg->m_Selection.highlight_thickness = KiROUND( m_highlightWidthCtrl->GetValue() );
 
+    cfg->m_CrossProbing.on_selection = m_checkCrossProbeOnSelection->GetValue();
     cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
-    cfg->m_CrossProbing.zoom_to_fit     = m_checkCrossProbeZoom->GetValue();
-    cfg->m_CrossProbing.auto_highlight  = m_checkCrossProbeAutoHighlight->GetValue();
+    cfg->m_CrossProbing.zoom_to_fit = m_checkCrossProbeZoom->GetValue();
+    cfg->m_CrossProbing.auto_highlight = m_checkCrossProbeAutoHighlight->GetValue();
 
     m_galOptsPanel->TransferDataFromWindow();
 

@@ -62,6 +62,12 @@ SELECTION_CONDITION SELECTION_CONDITIONS::HasType( KICAD_T aType )
 }
 
 
+SELECTION_CONDITION SELECTION_CONDITIONS::HasTypes( const KICAD_T aTypes[] )
+{
+    return std::bind( &SELECTION_CONDITIONS::hasTypesFunc, _1, aTypes );
+}
+
+
 SELECTION_CONDITION SELECTION_CONDITIONS::OnlyType( KICAD_T aType )
 {
     return std::bind( &SELECTION_CONDITIONS::onlyTypeFunc, _1, aType );
@@ -94,9 +100,27 @@ SELECTION_CONDITION SELECTION_CONDITIONS::LessThan( int aNumber )
 
 bool SELECTION_CONDITIONS::hasTypeFunc( const SELECTION& aSelection, KICAD_T aType )
 {
-    for( const auto& item : aSelection )
+    if( aSelection.Empty() )
+        return false;
+
+    for( const EDA_ITEM* item : aSelection )
     {
         if( item->Type() == aType )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SELECTION_CONDITIONS::hasTypesFunc( const SELECTION& aSelection, const KICAD_T aTypes[] )
+{
+    if( aSelection.Empty() )
+        return false;
+
+    for( const EDA_ITEM* item : aSelection )
+    {
+        if( item->IsType( aTypes ) )
             return true;
     }
 
@@ -111,7 +135,7 @@ bool SELECTION_CONDITIONS::onlyTypeFunc( const SELECTION& aSelection, KICAD_T aT
 
     KICAD_T types[] = { aType, EOT };
 
-    for( const auto& item : aSelection )
+    for( const EDA_ITEM* item : aSelection )
     {
         if( !item->IsType( types ) )
             return false;
@@ -126,7 +150,7 @@ bool SELECTION_CONDITIONS::onlyTypesFunc( const SELECTION& aSelection, const KIC
     if( aSelection.Empty() )
         return false;
 
-    for( const auto& item : aSelection )
+    for( const EDA_ITEM* item : aSelection )
     {
         if( !item->IsType( aTypes ) )
             return false;

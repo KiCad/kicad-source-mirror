@@ -174,6 +174,17 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
             else
                 converted += c;
         }
+        else if( aContext == CTX_IPC )
+        {
+            if( c == '/' )
+                converted += "{slash}";
+            else if( c == ',' )
+                converted += "{comma}";
+            else if( c == '\"' )
+                converted += "{dblquote}";
+            else
+                converted += c;
+        }
         else if( aContext == CTX_QUOTED_STR )
         {
             if( c == '\"' )
@@ -276,6 +287,7 @@ wxString UnescapeString( const wxString& aSource )
             else if( token == wxS( "backslash" ) ) newbuf.append( wxS( "\\" ) );
             else if( token == wxS( "slash" ) )     newbuf.append( wxS( "/" ) );
             else if( token == wxS( "bar" ) )       newbuf.append( wxS( "|" ) );
+            else if( token == wxS( "comma" ) )     newbuf.append( wxS( "," ) );
             else if( token == wxS( "colon" ) )     newbuf.append( wxS( ":" ) );
             else if( token == wxS( "space" ) )     newbuf.append( wxS( " " ) );
             else if( token == wxS( "dollar" ) )    newbuf.append( wxS( "$" ) );

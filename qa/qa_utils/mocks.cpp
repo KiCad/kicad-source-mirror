@@ -435,8 +435,8 @@ int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
-                                                STOP_CONDITION aStopCondition )
+void PCB_SELECTION_TOOL::selectAllConnectedTracks(
+        const std::vector<BOARD_CONNECTED_ITEM*>& aStartItems, STOP_CONDITION aStopCondition )
 {
 }
 

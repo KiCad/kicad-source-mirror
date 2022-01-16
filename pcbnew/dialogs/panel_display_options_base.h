@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -45,6 +45,7 @@ class PANEL_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_OptDisplayPadNoConn;
 		wxRadioBox* m_OptDisplayTracksClearance;
 		wxCheckBox* m_OptDisplayPadClearence;
+		wxCheckBox* m_checkCrossProbeOnSelection;
 		wxCheckBox* m_checkCrossProbeCenter;
 		wxCheckBox* m_checkCrossProbeZoom;
 		wxCheckBox* m_checkCrossProbeAutoHighlight;
@@ -53,6 +54,7 @@ class PANEL_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 	public:
 
 		PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
 		~PANEL_DISPLAY_OPTIONS_BASE();
 
 };

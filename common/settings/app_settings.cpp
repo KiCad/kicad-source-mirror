@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -128,6 +128,9 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             &m_ColorTheme, "_builtin_default" ) );
 
     addParamsForWindow( &m_Window, "window" );
+
+    m_params.emplace_back( new PARAM<bool>( "cross_probing.on_selection",
+            &m_CrossProbing.on_selection, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "cross_probing.center_on_items",
             &m_CrossProbing.center_on_items, true ) );

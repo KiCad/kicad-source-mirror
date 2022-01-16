@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -641,9 +641,10 @@ TOOL_ACTION EE_ACTIONS::generateBOM( "eeschema.EditorControl.generateBOM",
         _( "Generate BOM..." ), _( "Generate a bill of materials for the current schematic" ),
         BITMAPS::post_bom );
 
-TOOL_ACTION EE_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCrossProbe",
+TOOL_ACTION EE_ACTIONS::selectOnPCB( "eeschema.EditorControl.selectOnPCB",
         AS_GLOBAL, 0, "",
-        _( "Highlight on PCB" ), _( "Highlight corresponding items in PCB editor" ),
+        _( "Select on PCB" ),
+        _( "Select corresponding items in PCB editor" ),
         BITMAPS::select_same_sheet );
 
 TOOL_ACTION EE_ACTIONS::toggleHiddenPins( "eeschema.EditorControl.showHiddenPins",

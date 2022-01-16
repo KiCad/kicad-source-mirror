@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -468,6 +468,116 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_SYMBOL* a
             // we have existing interpreter of the cross probe packet on the other
             // side in place, we use that here.
             Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_CROSS_PROBE, packet, this );
+        }
+    }
+}
+
+
+std::string FormatProbeItems( bool aSelectConnections, const std::deque<EDA_ITEM*>& aItems )
+{
+    std::string        command = "";
+    std::set<wxString> parts;
+
+    for( EDA_ITEM* item : aItems )
+    {
+        switch( item->Type() )
+        {
+        case SCH_SYMBOL_T:
+        {
+            SCH_SYMBOL* symbol = (SCH_SYMBOL*) item;
+
+            wxString ref = symbol->GetField( REFERENCE_FIELD )->GetText();
+
+            parts.insert( "F" + EscapeString( ref, CTX_IPC ) );
+
+            break;
+        }
+
+        case SCH_SHEET_T:
+        {
+            // For cross probing, we need the full path of the sheet, because
+            // in complex hierarchies the sheet uuid of not unique
+            SCH_SHEET* sheet = (SCH_SHEET*) item;
+            wxString   full_path;
+
+            SCH_SHEET* parent = sheet;
+
+            while( ( parent = dynamic_cast<SCH_SHEET*>( parent->GetParent() ) ) )
+            {
+                if( parent->GetParent() && parent->GetParent()->Type() == SCH_SHEET_T )
+                {
+                    // The root sheet has no parent sheet and path is just "/"
+
+                    full_path.Prepend( parent->m_Uuid.AsString() );
+                    full_path.Prepend( "/" );
+                }
+            }
+
+            full_path += "/" + sheet->m_Uuid.AsString();
+
+            parts.insert( "S" + full_path );
+
+            break;
+        }
+
+        case SCH_PIN_T:
+        {
+            SCH_PIN*    pin = (SCH_PIN*) item;
+            SCH_SYMBOL* symbol = pin->GetParentSymbol();
+
+            wxString ref = symbol->GetField( REFERENCE_FIELD )->GetText();
+
+            parts.insert( "P" + EscapeString( ref, CTX_IPC ) + "/"
+                          + EscapeString( pin->GetShownNumber(), CTX_IPC ) );
+
+            break;
+        }
+
+        default: break;
+        }
+    }
+
+
+    if( !parts.empty() )
+    {
+        command = "$SELECT: ";
+
+        if( aSelectConnections )
+            command += "1";
+        else
+            command += "0";
+
+        command += ",";
+
+        for( wxString part : parts )
+        {
+            command += part;
+            command += ",";
+        }
+
+        command.pop_back();
+    }
+
+    return command;
+}
+
+
+void SCH_EDIT_FRAME::SendSelectItems( bool aSelectConnections, const std::deque<EDA_ITEM*>& aItems )
+{
+    std::string packet = FormatProbeItems( aSelectConnections, aItems );
+
+    if( !packet.empty() )
+    {
+        if( Kiface().IsSingle() )
+        {
+            SendCommand( MSG_TO_PCB, packet );
+        }
+        else
+        {
+            // Typically ExpressMail is going to be s-expression packets, but since
+            // we have existing interpreter of the selection packet on the other
+            // side in place, we use that here.
+            Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, packet, this );
         }
     }
 }

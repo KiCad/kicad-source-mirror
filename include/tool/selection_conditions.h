@@ -132,6 +132,16 @@ public:
     static SELECTION_CONDITION HasType( KICAD_T aType );
 
     /**
+     * Create a functor that tests if among the selected items there is at least one of a
+     * given types.
+     *
+     * @param aTypes is an array containing types that are searched. It has to be ended with
+     *               #KICAD_T::EOT as end marker.
+     * @return Functor testing for presence of items of a given types.
+     */
+    static SELECTION_CONDITION HasTypes( const KICAD_T aTypes[] );
+
+    /**
      * Create a functor that tests if the selected items are *only* of given type.
      *
      * @param aType is the type that is searched.
@@ -178,6 +188,9 @@ public:
 private:
     ///< Helper function used by HasType()
     static bool hasTypeFunc( const SELECTION& aSelection, KICAD_T aType );
+
+    ///< Helper function used by HasTypes()
+    static bool hasTypesFunc( const SELECTION& aSelection, const KICAD_T aTypes[] );
 
     ///< Helper function used by OnlyType()
     static bool onlyTypeFunc( const SELECTION& aSelection, KICAD_T aType );

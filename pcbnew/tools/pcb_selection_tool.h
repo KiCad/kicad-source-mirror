@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -181,6 +181,9 @@ public:
     ///< Zoom the screen to center and fit the current selection.
     void zoomFitSelection();
 
+    ///< Zoom the screen to fit the bounding box for cross probing/selection sync.
+    void zoomFitCrossProbeBBox( EDA_RECT bbox );
+
     BOARD* GetBoard() const
     {
         return board();
@@ -304,7 +307,8 @@ private:
      *
      * @param aStopCondition where to stop selecting more items
      */
-    void selectConnectedTracks( BOARD_CONNECTED_ITEM& aSourceItem, STOP_CONDITION aStopCondition );
+    void selectAllConnectedTracks( const std::vector<BOARD_CONNECTED_ITEM*>& aStartItems,
+                                   STOP_CONDITION                            aStopCondition );
 
     /**
      * Select all items with the given net code.
@@ -313,6 +317,11 @@ private:
      * @param aSelect is true to add the items to the selection, false to remove them (deselect)
      */
     void selectAllItemsOnNet( int aNetCode, bool aSelect = true );
+
+    /*
+     * Select tracks and vias connected to specified board items.
+     */
+    void selectConnections( const std::vector<BOARD_ITEM*>& aItems );
 
     /**
      * Select all items with the given sheet timestamp/UUID name (the sheet path).
@@ -327,6 +336,12 @@ private:
     ///< Select all footprints belonging to same hierarchical sheet as the selected footprint
     ///< (same sheet path).
     int selectSameSheet( const TOOL_EVENT& aEvent );
+
+    ///< Set selection to items passed by parameter and connected nets (optionally).
+    ///< Zooms to fit, if enabled
+    int  syncSelection( const TOOL_EVENT& aEvent );
+    int  syncSelectionWithNets( const TOOL_EVENT& aEvent );
+    void doSyncSelection( const std::vector<BOARD_ITEM*>& aItems, bool aWithNets );
 
     ///< Invoke filter dialog and modify current selection
     int filterSelection( const TOOL_EVENT& aEvent );

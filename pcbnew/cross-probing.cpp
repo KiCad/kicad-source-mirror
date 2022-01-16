@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,7 @@
 #include <eda_dde.h>
 #include <kiface_base.h>
 #include <kiway_express.h>
+#include <string_utils.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/board_netlist_updater.h>
 #include <painter.h>
@@ -277,133 +278,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     {
         if( crossProbingSettings.zoom_to_fit )
         {
-//#define DEFAULT_PCBNEW_CODE // Un-comment for normal full zoom KiCad algorithm
- #ifdef DEFAULT_PCBNEW_CODE
-            auto bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
-            auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
-
-            // The "fabs" on x ensures the right answer when the view is flipped
-            screenSize.x = std::max( 10.0, fabs( screenSize.x ) );
-            screenSize.y = std::max( 10.0, screenSize.y );
-            double ratio = std::max( fabs( bbSize.x / screenSize.x ),
-                                     fabs( bbSize.y / screenSize.y ) );
-
-            // Try not to zoom on every cross-probe; it gets very noisy
-            if( crossProbingSettings.zoom_to_fit && ( ratio < 0.5 || ratio > 1.0 ) )
-                view->SetScale( view->GetScale() / ratio );
- #endif // DEFAULT_PCBNEW_CODE
-
-#ifndef DEFAULT_PCBNEW_CODE  // Do the scaled zoom
-            auto bbSize     = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
-            auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
-
-            // This code tries to come up with a zoom factor that doesn't simply zoom in
-            // to the cross probed component, but instead shows a reasonable amount of the
-            // circuit around it to provide context.  This reduces or eliminates the need
-            // to manually change the zoom because it's too close.
-
-            // Using the default text height as a constant to compare against, use the
-            // height of the bounding box of visible items for a footprint to figure out
-            // if this is a big footprint (like a processor) or a small footprint (like a resistor).
-            // This ratio is not useful by itself as a scaling factor.  It must be "bent" to
-            // provide good scaling at varying component sizes.  Bigger components need less
-            // scaling than small ones.
-            double currTextHeight = Millimeter2iu( DEFAULT_TEXT_SIZE );
-
-            double compRatio     = bbSize.y / currTextHeight; // Ratio of component to text height
-
-            // This will end up as the scaling factor we apply to "ratio".
-            double compRatioBent = 1.0;
-
-            // This is similar to the original KiCad code that scaled the zoom to make sure
-            // components were visible on screen.  It's simply a ratio of screen size to
-            // component size, and its job is to zoom in to make the component fullscreen.
-            // Earlier in the code the component BBox is given a 20% margin to add some
-            // breathing room. We compare the height of this enlarged component bbox to the
-            // default text height.  If a component will end up with the sides clipped, we
-            // adjust later to make sure it fits on screen.
-            //
-            // The "fabs" on x ensures the right answer when the view is flipped
-            screenSize.x = std::max( 10.0, fabs( screenSize.x ) );
-            screenSize.y = std::max( 10.0, screenSize.y );
-            double ratio = std::max( -1.0, fabs( bbSize.y / screenSize.y ) );
-
-            // Original KiCad code for how much to scale the zoom
-            double kicadRatio = std::max( fabs( bbSize.x / screenSize.x ),
-                                          fabs( bbSize.y / screenSize.y ) );
-
-            // LUT to scale zoom ratio to provide reasonable schematic context.  Must work
-            // with footprints of varying sizes (e.g. 0402 package and 200 pin BGA).
-            // "first" is used as the input and "second" as the output
-            //
-            // "first" = compRatio (footprint height / default text height)
-            // "second" = Amount to scale ratio by
-            std::vector<std::pair<double, double>> lut{
-                { 1, 8 },
-                { 1.5, 5 },
-                { 3, 3 },
-                { 4.5, 2.5 },
-                { 8, 2.0 },
-                { 12, 1.7 },
-                { 16, 1.5 },
-                { 24, 1.3 },
-                { 32, 1.0 },
-            };
-
-
-            std::vector<std::pair<double, double>>::iterator it;
-
-            compRatioBent = lut.back().second; // Large component default
-
-            if( compRatio >= lut.front().first )
-            {
-                // Use LUT to do linear interpolation of "compRatio" within "first", then
-                // use that result to linearly interpolate "second" which gives the scaling
-                // factor needed.
-
-                for( it = lut.begin(); it < lut.end() - 1; it++ )
-                {
-                    if( it->first <= compRatio && next( it )->first >= compRatio )
-                    {
-                        double diffx = compRatio - it->first;
-                        double diffn = next( it )->first - it->first;
-
-                        compRatioBent =
-                                it->second + ( next( it )->second - it->second ) * diffx / diffn;
-                        break; // We have our interpolated value
-                    }
-                }
-            }
-            else
-            {
-                compRatioBent = lut.front().second; // Small component default
-            }
-
-            // If the width of the part we're probing is bigger than what the screen width will be
-            // after the zoom, then punt and use the KiCad zoom algorithm since it guarantees the
-            // part's width will be encompassed within the screen.  This will apply to parts that
-            // are much wider than they are tall.
-
-            if( bbSize.x > screenSize.x * ratio * compRatioBent )
-            {
-                // Use standard KiCad zoom algorithm for parts too wide to fit screen/
-                ratio = kicadRatio;
-                compRatioBent = 1.0; // Reset so we don't modify the "KiCad" ratio
-                wxLogTrace( "CROSS_PROBE_SCALE",
-                            "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f",
-                            ratio );
-            }
-
-            // Now that "compRatioBent" holds our final scaling factor we apply it to the original
-            // fullscreen zoom ratio to arrive at the final ratio itself.
-            ratio *= compRatioBent;
-
-            bool alwaysZoom = false; // DEBUG - allows us to minimize zooming or not
-
-            // Try not to zoom on every cross-probe; it gets very noisy
-            if( ( ratio < 0.5 || ratio > 1.0 ) || alwaysZoom )
-                view->SetScale( view->GetScale() / ratio );
-#endif // ifndef DEFAULT_PCBNEW_CODE
+            GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->zoomFitCrossProbeBBox( bbox );
         }
 
         FocusOnLocation( (wxPoint) bbox.Centre() );
@@ -510,6 +385,77 @@ void PCB_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
 }
 
 
+std::vector<BOARD_ITEM*> PCB_EDIT_FRAME::FindItemsFromSyncSelection( std::string syncStr )
+{
+    wxArrayString syncArray = wxStringTokenize( syncStr, "," );
+
+    std::vector<BOARD_ITEM*> items;
+
+    for( FOOTPRINT* footprint : GetBoard()->Footprints() )
+    {
+        if( footprint == nullptr )
+            continue;
+
+        wxString fpSheetPath = footprint->GetPath().AsString().BeforeLast( '/' );
+        wxString fpUUID = footprint->m_Uuid.AsString();
+
+        if( fpSheetPath.IsEmpty() )
+            fpSheetPath += '/';
+
+        if( fpUUID.empty() )
+            continue;
+
+        wxString fpRefEscaped = EscapeString( footprint->GetReference(), CTX_IPC );
+
+        for( wxString syncEntry : syncArray )
+        {
+            if( syncEntry.empty() )
+                continue;
+
+            wxString syncData = syncEntry.substr( 1 );
+
+            switch( syncEntry.GetChar( 0 ).GetValue() )
+            {
+            case 'S': // Select sheet with subsheets: S<Sheet path>
+                if( fpSheetPath.StartsWith( syncData ) )
+                {
+                    items.push_back( footprint );
+                }
+                break;
+            case 'F': // Select footprint: F<Reference>
+                if( syncData == fpRefEscaped )
+                {
+                    items.push_back( footprint );
+                }
+                break;
+            case 'P': // Select pad: P<Footprint reference>/<Pad number>
+            {
+                if( syncData.StartsWith( fpRefEscaped ) )
+                {
+                    wxString selectPadNumberEscaped =
+                            syncData.substr( fpRefEscaped.size() + 1 ); // Skips the slash
+
+                    wxString selectPadNumber = UnescapeString( selectPadNumberEscaped );
+
+                    for( PAD* pad : footprint->Pads() )
+                    {
+                        if( selectPadNumber == pad->GetNumber() )
+                        {
+                            items.push_back( pad );
+                        }
+                    }
+                }
+                break;
+            }
+            default: break;
+            }
+        }
+    }
+
+    return items;
+}
+
+
 void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
     std::string& payload = mail.GetPayload();
@@ -574,6 +520,50 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     case MAIL_CROSS_PROBE:
         ExecuteRemoteCommand( payload.c_str() );
         break;
+
+    case MAIL_SELECTION:
+    {
+        // $SELECT: <mode 0 - only footprints, 1 - with connections>,<spec1>,<spec2>,<spec3>
+        std::string prefix = "$SELECT: ";
+
+        if( !payload.compare( 0, prefix.size(), prefix ) )
+        {
+            std::string del = ",";
+            std::string paramStr = payload.substr( prefix.size() );
+            int         modeEnd = paramStr.find( del );
+            bool        selectConnections = false;
+
+            try
+            {
+                if( std::stoi( paramStr.substr( 0, modeEnd ) ) == 1 )
+                    selectConnections = true;
+            }
+            catch( std::invalid_argument& )
+            {
+                wxFAIL;
+            }
+
+            std::vector<BOARD_ITEM*> items =
+                    FindItemsFromSyncSelection( paramStr.substr( modeEnd + 1 ) );
+
+            m_syncingSchToPcbSelection = true; // recursion guard
+
+            if( selectConnections )
+            {
+                GetToolManager()->RunAction( PCB_ACTIONS::syncSelectionWithNets, true,
+                                             static_cast<void*>( &items ) );
+            }
+            else
+            {
+                GetToolManager()->RunAction( PCB_ACTIONS::syncSelection, true,
+                                             static_cast<void*>( &items ) );
+            }
+
+            m_syncingSchToPcbSelection = false;
+        }
+
+        break;
+    }
 
     case MAIL_PCB_UPDATE:
         m_toolManager->RunAction( ACTIONS::updatePcbFromSchematic, true );

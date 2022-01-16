@@ -84,8 +84,7 @@ public:
     ///< Notifies pcbnew about the selected item.
     int CrossProbeToPcb( const TOOL_EVENT& aEvent );
 
-    ///< Equivalent to the above, but initiated by the user.  We also do SCH_SHEETs on this
-    ///< one (they're too slow on big projects for the auto version above).
+    ///< Equivalent to the above, but initiated by the user.
     int ExplicitCrossProbeToPcb( const TOOL_EVENT& aEvent );
 
 #ifdef KICAD_SPICE
@@ -151,7 +150,7 @@ public:
      * Find a symbol in the schematic and an item in this symbol.
      *
      * @param aPath The symbol path to find. Pass nullptr to search by aReference.
-     * @param aReference The symbol reference designator to find, or to display in 
+     * @param aReference The symbol reference designator to find, or to display in
      *                   status bar if aPath is specified
      * @param aSearchHierarchy If false, search the current sheet only.  Otherwise,
      *                         the entire hierarchy

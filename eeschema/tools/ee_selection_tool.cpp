@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -171,11 +171,14 @@ bool EE_SELECTION_TOOL::Init()
                                         SCH_PIN_T,
                                         EOT };
 
+    static KICAD_T crossProbingTypes[] = { SCH_SYMBOL_T, SCH_PIN_T, SCH_SHEET_T, EOT };
+
     auto wireSelection =      E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_ITEM_LOCATE_WIRE_T );
     auto busSelection =       E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_ITEM_LOCATE_BUS_T );
     auto wireOrBusSelection = E_C::MoreThan( 0 ) && E_C::OnlyTypes( wireOrBusTypes );
     auto connectedSelection = E_C::MoreThan( 0 ) && E_C::OnlyTypes( connectedTypes );
-    auto sheetSelection =     E_C::Count( 1 )    && E_C::OnlyType( SCH_SHEET_T );
+    auto sheetSelection = E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T );
+    auto crossProbingSelection = E_C::MoreThan( 0 ) && E_C::HasTypes( crossProbingTypes );
 
     auto schEditSheetPageNumberCondition =
             [&] ( const SELECTION& aSel )
@@ -211,7 +214,7 @@ bool EE_SELECTION_TOOL::Init()
     auto& menu = m_menu.GetMenu();
 
     menu.AddItem( EE_ACTIONS::enterSheet,         sheetSelection && EE_CONDITIONS::Idle, 1 );
-    menu.AddItem( EE_ACTIONS::explicitCrossProbe, sheetSelection && EE_CONDITIONS::Idle, 1 );
+    menu.AddItem( EE_ACTIONS::selectOnPCB,        crossProbingSelection && EE_CONDITIONS::Idle, 1 );
     menu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 1 );
 
     menu.AddSeparator( 100 );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -65,6 +65,12 @@ public:
     /// Select a list of items (specified as the event parameter)
     static TOOL_ACTION selectItems;
     static TOOL_ACTION unselectItems;
+
+    /// Sets selection to specified items, zooms to fit, if enabled
+    static TOOL_ACTION syncSelection;
+
+    /// Sets selection to specified items with connected nets, zooms to fit, if enabled
+    static TOOL_ACTION syncSelectionWithNets;
 
     /// Run a selection menu to select from a list of items
     static TOOL_ACTION selectionMenu;

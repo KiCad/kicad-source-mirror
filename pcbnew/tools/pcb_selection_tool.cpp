@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -25,6 +25,7 @@
  */
 
 #include <limits>
+#include <cmath>
 #include <functional>
 using namespace std::placeholders;
 #include <core/kicad_algo.h>
@@ -62,6 +63,7 @@ using namespace std::placeholders;
 #include <wx/event.h>
 #include <wx/timer.h>
 #include <wx/log.h>
+#include <profile.h>
 
 
 class SELECT_MENU : public ACTION_MENU
@@ -1100,33 +1102,48 @@ int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 
     for( const EDA_ITEM* item : m_selection.GetItems() )
     {
-        if( dynamic_cast<const BOARD_CONNECTED_ITEM*>( item ) )
+        if( item->Type() == PCB_FOOTPRINT_T || BOARD_CONNECTED_ITEM::ClassOf( item ) )
             initialCount++;
     }
 
     if( initialCount == 0 )
         selectCursor( true, connectedItemFilter );
 
+    m_frame->SetStatusText( _( "Select/Expand Connection..." ) );
+
     for( STOP_CONDITION stopCondition : { STOP_AT_JUNCTION, STOP_AT_PAD, STOP_NEVER } )
     {
-        // copy the selection, since we're going to iterate and modify
         std::deque<EDA_ITEM*> selectedItems = m_selection.GetItems();
 
         for( EDA_ITEM* item : selectedItems )
             item->ClearTempFlags();
 
+        std::vector<BOARD_CONNECTED_ITEM*> startItems;
+
         for( EDA_ITEM* item : selectedItems )
         {
-            PCB_TRACK* trackItem = dynamic_cast<PCB_TRACK*>( item );
+            if( item->Type() == PCB_FOOTPRINT_T )
+            {
+                FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
 
-            // Track items marked SKIP_STRUCT have already been visited
-            if( trackItem && !( trackItem->GetFlags() & SKIP_STRUCT ) )
-                selectConnectedTracks( *trackItem, stopCondition );
+                for( PAD* pad : footprint->Pads() )
+                {
+                    startItems.push_back( pad );
+                }
+            }
+            else if( BOARD_CONNECTED_ITEM::ClassOf( item ) )
+            {
+                startItems.push_back( static_cast<BOARD_CONNECTED_ITEM*>( item ) );
+            }
         }
+
+        selectAllConnectedTracks( startItems, stopCondition );
 
         if( m_selection.GetItems().size() > initialCount )
             break;
     }
+
+    m_frame->SetStatusText( wxEmptyString );
 
     // Inform other potentially interested tools
     if( m_selection.Size() > 0 )
@@ -1136,164 +1153,219 @@ int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
-                                                STOP_CONDITION aStopCondition )
+void PCB_SELECTION_TOOL::selectAllConnectedTracks(
+        const std::vector<BOARD_CONNECTED_ITEM*>& aStartItems, STOP_CONDITION aStopCondition )
 {
-    constexpr KICAD_T      types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, EOT };
-    constexpr PCB_LAYER_ID ALL_LAYERS = UNDEFINED_LAYER;
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, EOT };
+    const LSET        allCuMask = LSET::AllCuMask();
+
+    PROF_TIMER refreshTimer;
+    double     refreshIntervalMs = 500; // Refresh display with this interval to indicate progress
+    int        lastSelectionSize = m_selection.GetSize();
 
     auto connectivity = board()->GetConnectivity();
-    auto connectedItems = connectivity->GetConnectedItems( &aStartItem, types, true );
 
     std::map<VECTOR2I, std::vector<PCB_TRACK*>> trackMap;
     std::map<VECTOR2I, PCB_VIA*>                viaMap;
     std::map<VECTOR2I, PAD*>                    padMap;
+    std::set<PAD*>                              startPadSet;
+    std::vector<BOARD_CONNECTED_ITEM*>          cleanupItems;
+    std::vector<std::pair<VECTOR2I, LSET>>      activePts;
 
-    // Build maps of connected items
-    for( BOARD_CONNECTED_ITEM* item : connectedItems )
+    for( BOARD_CONNECTED_ITEM* startItem : aStartItems )
     {
-        switch( item->Type() )
+        // Track starting pads
+        if( startItem->Type() == PCB_PAD_T )
+            startPadSet.insert( static_cast<PAD*>( startItem ) );
+    }
+
+    for( BOARD_CONNECTED_ITEM* startItem : aStartItems )
+    {
+        if( startItem->HasFlag( SKIP_STRUCT ) ) // Skip already visited items
+            continue;
+
+        std::vector<BOARD_CONNECTED_ITEM*> connectedItems =
+                connectivity->GetConnectedItems( startItem, types, true );
+
+        // Build maps of connected items
+        for( BOARD_CONNECTED_ITEM* item : connectedItems )
+        {
+            switch( item->Type() )
+            {
+            case PCB_ARC_T:
+            case PCB_TRACE_T:
+            {
+                PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
+                trackMap[track->GetStart()].push_back( track );
+                trackMap[track->GetEnd()].push_back( track );
+                break;
+            }
+
+            case PCB_VIA_T:
+            {
+                PCB_VIA* via = static_cast<PCB_VIA*>( item );
+                viaMap[via->GetStart()] = via;
+                break;
+            }
+
+            case PCB_PAD_T:
+            {
+                PAD* pad = static_cast<PAD*>( item );
+                padMap[pad->GetPosition()] = pad;
+                break;
+            }
+
+            default: break;
+            }
+        }
+
+        // Set up the initial active points
+        switch( startItem->Type() )
         {
         case PCB_ARC_T:
         case PCB_TRACE_T:
         {
-            PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
-            trackMap[ track->GetStart() ].push_back( track );
-            trackMap[ track->GetEnd() ].push_back( track );
+            PCB_TRACK* track = static_cast<PCB_TRACK*>( startItem );
+
+            activePts.push_back( { track->GetStart(), track->GetLayerSet() } );
+            activePts.push_back( { track->GetEnd(), track->GetLayerSet() } );
             break;
         }
 
         case PCB_VIA_T:
-        {
-            PCB_VIA* via = static_cast<PCB_VIA*>( item );
-            viaMap[ via->GetStart() ] = via;
+            activePts.push_back( { startItem->GetPosition(), startItem->GetLayerSet() } );
             break;
-        }
 
         case PCB_PAD_T:
-        {
-            PAD* pad = static_cast<PAD*>( item );
-            padMap[ pad->GetPosition() ] = pad;
+            activePts.push_back( { startItem->GetPosition(), startItem->GetLayerSet() } );
             break;
+
+        default: break;
         }
 
-        default:
-            break;
-        }
+        bool expand = true;
+        int  failSafe = 0;
 
-        item->ClearFlags( TEMP_SELECTED );
-    }
-
-    std::vector<std::pair<VECTOR2I, PCB_LAYER_ID>> activePts;
-
-    // Set up the initial active points
-    switch( aStartItem.Type() )
-    {
-    case PCB_ARC_T:
-    case PCB_TRACE_T:
-    {
-        PCB_TRACK* track = static_cast<PCB_TRACK*>( &aStartItem );
-
-        activePts.push_back( { track->GetStart(), track->GetLayer() } );
-        activePts.push_back( { track->GetEnd(), track->GetLayer() } );
-    }
-        break;
-
-    case PCB_VIA_T:
-        activePts.push_back( { aStartItem.GetPosition(), ALL_LAYERS } );
-        break;
-
-    case PCB_PAD_T:
-        activePts.push_back( { aStartItem.GetPosition(), ALL_LAYERS } );
-        break;
-
-    default:
-        break;
-    }
-
-    bool expand = true;
-    int  failSafe = 0;
-
-    // Iterative push from all active points
-    while( expand && failSafe++ < 100000 )
-    {
-        expand = false;
-
-        for( int i = activePts.size() - 1; i >= 0; --i )
+        // Iterative push from all active points
+        while( expand && failSafe++ < 100000 )
         {
-            VECTOR2I     pt = activePts[i].first;
-            PCB_LAYER_ID layer = activePts[i].second;
-            size_t       pt_count = 0;
+            expand = false;
 
-            for( PCB_TRACK* track : trackMap[pt] )
+            for( int i = activePts.size() - 1; i >= 0; --i )
             {
-                if( layer == ALL_LAYERS || layer == track->GetLayer() )
-                    pt_count++;
-            }
+                VECTOR2I pt = activePts[i].first;
+                LSET     layerSetCu = activePts[i].second & allCuMask;
 
-            if( aStopCondition == STOP_AT_JUNCTION )
-            {
-                if( pt_count > 2
-                        || ( viaMap.count( pt ) && layer != ALL_LAYERS )
-                        || ( padMap.count( pt ) && layer != ALL_LAYERS ) )
+                auto viaIt = viaMap.find( pt );
+                auto padIt = padMap.find( pt );
+
+                bool gotVia = ( viaIt != viaMap.end() )
+                              && ( layerSetCu & ( viaIt->second->GetLayerSet() ) ).any();
+
+                bool gotPad = ( padIt != padMap.end() )
+                              && ( layerSetCu & ( padIt->second->GetLayerSet() ) ).any();
+
+                bool gotNonStartPad =
+                        gotPad && ( startPadSet.find( padIt->second ) == startPadSet.end() );
+
+                if( aStopCondition == STOP_AT_JUNCTION )
                 {
-                    activePts.erase( activePts.begin() + i );
-                    continue;
+                    size_t pt_count = 0;
+
+                    for( PCB_TRACK* track : trackMap[pt] )
+                    {
+                        if( layerSetCu.Contains( track->GetLayer() ) )
+                            pt_count++;
+                    }
+
+                    if( pt_count > 2 || gotVia || gotNonStartPad )
+                    {
+                        activePts.erase( activePts.begin() + i );
+                        continue;
+                    }
                 }
-            }
-            else if( aStopCondition == STOP_AT_PAD )
-            {
-                if( padMap.count( pt ) )
+                else if( aStopCondition == STOP_AT_PAD )
                 {
-                    activePts.erase( activePts.begin() + i );
-                    continue;
+                    if( gotNonStartPad )
+                    {
+                        activePts.erase( activePts.begin() + i );
+                        continue;
+                    }
                 }
-            }
 
-            if( padMap.count( pt ) )
-            {
-                PAD* pad = padMap[ pt ];
-
-                if( !( pad->GetFlags() & TEMP_SELECTED ) )
+                if( gotPad )
                 {
-                    pad->SetFlags( TEMP_SELECTED );
-                    activePts.push_back( { pad->GetPosition(), ALL_LAYERS } );
-                    expand = true;
+                    PAD* pad = padIt->second;
+
+                    if( !pad->HasFlag( SKIP_STRUCT ) )
+                    {
+                        pad->SetFlags( SKIP_STRUCT );
+                        cleanupItems.push_back( pad );
+
+                        activePts.push_back( { pad->GetPosition(), pad->GetLayerSet() } );
+                        expand = true;
+                    }
                 }
-            }
 
-            for( PCB_TRACK* track : trackMap[ pt ] )
-            {
-                if( layer != ALL_LAYERS && track->GetLayer() != layer )
-                    continue;
-
-                if( !track->IsSelected() )
+                for( PCB_TRACK* track : trackMap[pt] )
                 {
-                    select( track );
+                    if( !layerSetCu.Contains( track->GetLayer() ) )
+                        continue;
 
-                    if( track->GetStart() == pt )
-                        activePts.push_back( { track->GetEnd(), track->GetLayer() } );
-                    else
-                        activePts.push_back( { track->GetStart(), track->GetLayer() } );
+                    if( !track->IsSelected() )
+                        select( track );
 
-                    expand = true;
+                    if( !track->HasFlag( SKIP_STRUCT ) )
+                    {
+                        track->SetFlags( SKIP_STRUCT );
+                        cleanupItems.push_back( track );
+
+                        if( track->GetStart() == pt )
+                            activePts.push_back( { track->GetEnd(), track->GetLayerSet() } );
+                        else
+                            activePts.push_back( { track->GetStart(), track->GetLayerSet() } );
+
+                        expand = true;
+                    }
                 }
-            }
 
-            if( viaMap.count( pt ) )
-            {
-                PCB_VIA* via = viaMap[ pt ];
-
-                if( !via->IsSelected() )
+                if( viaMap.count( pt ) )
                 {
-                    select( via );
-                    activePts.push_back( { via->GetPosition(), ALL_LAYERS } );
-                    expand = true;
+                    PCB_VIA* via = viaMap[pt];
+
+                    if( !via->IsSelected() )
+                        select( via );
+
+                    if( !via->HasFlag( SKIP_STRUCT ) )
+                    {
+                        via->SetFlags( SKIP_STRUCT );
+                        cleanupItems.push_back( via );
+
+                        activePts.push_back( { via->GetPosition(), via->GetLayerSet() } );
+                        expand = true;
+                    }
                 }
+
+                activePts.erase( activePts.begin() + i );
             }
 
-            activePts.erase( activePts.begin() + i );
+            // Refresh display for the feel of progress
+            if( refreshTimer.msecs() >= refreshIntervalMs )
+            {
+                if( m_selection.Size() != lastSelectionSize )
+                {
+                    m_frame->GetCanvas()->ForceRefresh();
+                    lastSelectionSize = m_selection.Size();
+                }
+
+                refreshTimer.Start();
+            }
         }
+    }
+
+    for( BOARD_CONNECTED_ITEM* item : cleanupItems )
+    {
+        item->ClearFlags( SKIP_STRUCT );
     }
 }
 
@@ -1348,7 +1420,7 @@ int PCB_SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 
 void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 {
-    std::list<FOOTPRINT*> footprintList;
+    std::vector<BOARD_ITEM*> footprints;
 
     // store all footprints that are on that sheet path
     for( FOOTPRINT* footprint : board()->Footprints() )
@@ -1356,52 +1428,88 @@ void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
         if( footprint == nullptr )
             continue;
 
-        wxString footprint_path = footprint->GetPath().AsString().BeforeLast('/');
+        wxString footprint_path = footprint->GetPath().AsString().BeforeLast( '/' );
 
         if( aSheetPath.IsEmpty() )
             aSheetPath += '/';
 
         if( footprint_path == aSheetPath )
-            footprintList.push_back( footprint );
+            footprints.push_back( footprint );
     }
 
-    // Generate a list of all pads, and of all nets they belong to.
-    std::list<int>  netcodeList;
-    std::list<PAD*> padList;
-
-    for( FOOTPRINT* footprint : footprintList )
+    for( BOARD_ITEM* i : footprints )
     {
-        for( PAD* pad : footprint->Pads() )
+        if( i != nullptr )
+            select( i );
+    }
+
+    selectConnections( footprints );
+}
+
+
+void PCB_SELECTION_TOOL::selectConnections( const std::vector<BOARD_ITEM*>& aItems )
+{
+    // Generate a list of all pads, and of all nets they belong to.
+    std::list<int>                     netcodeList;
+    std::vector<BOARD_CONNECTED_ITEM*> padList;
+
+    for( BOARD_ITEM* item : aItems )
+    {
+        switch( item->Type() )
         {
+        case PCB_FOOTPRINT_T:
+        {
+            for( PAD* pad : static_cast<FOOTPRINT*>( item )->Pads() )
+            {
+                if( pad->IsConnected() )
+                {
+                    netcodeList.push_back( pad->GetNetCode() );
+                    padList.push_back( pad );
+                }
+            }
+
+            break;
+        }
+        case PCB_PAD_T:
+        {
+            PAD* pad = static_cast<PAD*>( item );
+
             if( pad->IsConnected() )
             {
                 netcodeList.push_back( pad->GetNetCode() );
                 padList.push_back( pad );
             }
+
+            break;
+        }
+        default: break;
         }
     }
+
+    // Sort for binary search
+    std::sort( padList.begin(), padList.end() );
 
     // remove all duplicates
     netcodeList.sort();
     netcodeList.unique();
 
-    for( PAD* pad : padList )
-        selectConnectedTracks( *pad, STOP_NEVER );
+    selectAllConnectedTracks( padList, STOP_AT_PAD );
 
     // now we need to find all footprints that are connected to each of these nets then we need
-    // to determine if these footprints are in the list of footprints belonging to this sheet
-    std::list<int> removeCodeList;
+    // to determine if these footprints are in the list of footprints
+    std::vector<int>  removeCodeList;
     constexpr KICAD_T padType[] = { PCB_PAD_T, EOT };
 
     for( int netCode : netcodeList )
     {
-        for( BOARD_CONNECTED_ITEM* mitem : board()->GetConnectivity()->GetNetItems( netCode,
-                                                                                    padType ) )
+        for( BOARD_CONNECTED_ITEM* mitem :
+             board()->GetConnectivity()->GetNetItems( netCode, padType ) )
         {
-            if( mitem->Type() == PCB_PAD_T && !alg::contains( footprintList, mitem->GetParent() ) )
+            if( mitem->Type() == PCB_PAD_T
+                && !std::binary_search( padList.begin(), padList.end(), mitem ) )
             {
-                // if we cannot find the footprint of the pad in the footprintList then we can
-                // assume that that footprint is not located in the same schematic, therefore
+                // if we cannot find the pad in the padList then we can
+                // assume that that pad should not be used, therefore
                 // invalidate this netcode.
                 removeCodeList.push_back( netCode );
                 break;
@@ -1409,29 +1517,19 @@ void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
         }
     }
 
-    // remove all duplicates
-    removeCodeList.sort();
-    removeCodeList.unique();
-
     for( int removeCode : removeCodeList )
     {
         netcodeList.remove( removeCode );
     }
 
-    std::list<BOARD_CONNECTED_ITEM*> localConnectionList;
-    constexpr KICAD_T trackViaType[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, EOT };
+    std::vector<BOARD_CONNECTED_ITEM*> localConnectionList;
+    constexpr KICAD_T                  trackViaType[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, EOT };
 
     for( int netCode : netcodeList )
     {
-        for( BOARD_CONNECTED_ITEM* item : board()->GetConnectivity()->GetNetItems( netCode,
-                                                                                   trackViaType ) )
+        for( BOARD_CONNECTED_ITEM* item :
+             board()->GetConnectivity()->GetNetItems( netCode, trackViaType ) )
             localConnectionList.push_back( item );
-    }
-
-    for( BOARD_ITEM* i : footprintList )
-    {
-        if( i != nullptr )
-            select( i );
     }
 
     for( BOARD_CONNECTED_ITEM* i : localConnectionList )
@@ -1442,27 +1540,55 @@ void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 }
 
 
-void PCB_SELECTION_TOOL::zoomFitSelection()
+int PCB_SELECTION_TOOL::syncSelection( const TOOL_EVENT& aEvent )
 {
-    // Should recalculate the view to zoom in on the selection.
-    auto selectionBox = m_selection.GetBoundingBox();
-    auto view = getView();
+    std::vector<BOARD_ITEM*>* items = aEvent.Parameter<std::vector<BOARD_ITEM*>*>();
 
-    VECTOR2D screenSize = view->ToWorld( m_frame->GetCanvas()->GetClientSize(), false );
-    screenSize.x = std::max( 10.0, screenSize.x );
-    screenSize.y = std::max( 10.0, screenSize.y );
+    if( items )
+        doSyncSelection( *items, false );
 
-    if( selectionBox.GetWidth() != 0  || selectionBox.GetHeight() != 0 )
+    return 0;
+}
+
+
+int PCB_SELECTION_TOOL::syncSelectionWithNets( const TOOL_EVENT& aEvent )
+{
+    std::vector<BOARD_ITEM*>* items = aEvent.Parameter<std::vector<BOARD_ITEM*>*>();
+
+    if( items )
+        doSyncSelection( *items, true );
+
+    return 0;
+}
+
+
+void PCB_SELECTION_TOOL::doSyncSelection( const std::vector<BOARD_ITEM*>& aItems, bool aWithNets )
+{
+    ClearSelection( true /*quiet mode*/ );
+
+    // Perform individual selection of each item before processing the event.
+    for( BOARD_ITEM* item : aItems )
+        select( item );
+
+    if( aWithNets )
+        selectConnections( aItems );
+
+    EDA_RECT bbox = m_selection.GetBoundingBox();
+
+    if( m_frame->Settings().m_CrossProbing.center_on_items )
     {
-        VECTOR2D vsize = selectionBox.GetSize();
-        double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
-                fabs( vsize.y / screenSize.y ) );
-        view->SetScale( scale );
-        view->SetCenter( selectionBox.Centre() );
-        view->Add( &m_selection );
+        if( m_frame->Settings().m_CrossProbing.zoom_to_fit )
+            zoomFitCrossProbeBBox( bbox );
+
+        m_frame->FocusOnLocation( bbox.Centre() );
     }
 
+    view()->UpdateAllLayersColor();
+
     m_frame->GetCanvas()->ForceRefresh();
+
+    if( m_selection.Size() > 0 )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 }
 
 
@@ -1516,6 +1642,158 @@ int PCB_SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     return 0;
+}
+
+
+void PCB_SELECTION_TOOL::zoomFitSelection()
+{
+    // Should recalculate the view to zoom in on the selection.
+    auto selectionBox = m_selection.GetBoundingBox();
+    auto view = getView();
+
+    VECTOR2D screenSize = view->ToWorld( m_frame->GetCanvas()->GetClientSize(), false );
+    screenSize.x = std::max( 10.0, screenSize.x );
+    screenSize.y = std::max( 10.0, screenSize.y );
+
+    if( selectionBox.GetWidth() != 0 || selectionBox.GetHeight() != 0 )
+    {
+        VECTOR2D vsize = selectionBox.GetSize();
+        double   scale = view->GetScale()
+                       / std::max( fabs( vsize.x / screenSize.x ), fabs( vsize.y / screenSize.y ) );
+        view->SetScale( scale );
+        view->SetCenter( selectionBox.Centre() );
+        view->Add( &m_selection );
+    }
+
+    m_frame->GetCanvas()->ForceRefresh();
+}
+
+
+void PCB_SELECTION_TOOL::zoomFitCrossProbeBBox( EDA_RECT bbox )
+{
+    // Should recalculate the view to zoom in on the bbox.
+    auto view = getView();
+
+    if( bbox.GetWidth() == 0 && bbox.GetHeight() != 0 )
+        return;
+
+        //#define DEFAULT_PCBNEW_CODE // Un-comment for normal full zoom KiCad algorithm
+#ifdef DEFAULT_PCBNEW_CODE
+    auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
+    auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
+
+    // The "fabs" on x ensures the right answer when the view is flipped
+    screenSize.x = std::max( 10.0, fabs( screenSize.x ) );
+    screenSize.y = std::max( 10.0, screenSize.y );
+    double ratio = std::max( fabs( bbSize.x / screenSize.x ), fabs( bbSize.y / screenSize.y ) );
+
+    // Try not to zoom on every cross-probe; it gets very noisy
+    if( crossProbingSettings.zoom_to_fit && ( ratio < 0.5 || ratio > 1.0 ) )
+        view->SetScale( view->GetScale() / ratio );
+#endif // DEFAULT_PCBNEW_CODE
+
+#ifndef DEFAULT_PCBNEW_CODE // Do the scaled zoom
+    auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
+    auto screenSize = view->ToWorld( m_frame->GetCanvas()->GetClientSize(), false );
+
+    // This code tries to come up with a zoom factor that doesn't simply zoom in
+    // to the cross probed component, but instead shows a reasonable amount of the
+    // circuit around it to provide context.  This reduces or eliminates the need
+    // to manually change the zoom because it's too close.
+
+    // Using the default text height as a constant to compare against, use the
+    // height of the bounding box of visible items for a footprint to figure out
+    // if this is a big footprint (like a processor) or a small footprint (like a resistor).
+    // This ratio is not useful by itself as a scaling factor.  It must be "bent" to
+    // provide good scaling at varying component sizes.  Bigger components need less
+    // scaling than small ones.
+    double currTextHeight = Millimeter2iu( DEFAULT_TEXT_SIZE );
+
+    double compRatio = bbSize.y / currTextHeight; // Ratio of component to text height
+
+    // This will end up as the scaling factor we apply to "ratio".
+    double compRatioBent = 1.0;
+
+    // This is similar to the original KiCad code that scaled the zoom to make sure
+    // components were visible on screen.  It's simply a ratio of screen size to
+    // component size, and its job is to zoom in to make the component fullscreen.
+    // Earlier in the code the component BBox is given a 20% margin to add some
+    // breathing room. We compare the height of this enlarged component bbox to the
+    // default text height.  If a component will end up with the sides clipped, we
+    // adjust later to make sure it fits on screen.
+    //
+    // The "fabs" on x ensures the right answer when the view is flipped
+    screenSize.x = std::max( 10.0, fabs( screenSize.x ) );
+    screenSize.y = std::max( 10.0, screenSize.y );
+    double ratio = std::max( -1.0, fabs( bbSize.y / screenSize.y ) );
+
+    // Original KiCad code for how much to scale the zoom
+    double kicadRatio =
+            std::max( fabs( bbSize.x / screenSize.x ), fabs( bbSize.y / screenSize.y ) );
+
+    // LUT to scale zoom ratio to provide reasonable schematic context.  Must work
+    // with footprints of varying sizes (e.g. 0402 package and 200 pin BGA).
+    // "first" is used as the input and "second" as the output
+    //
+    // "first" = compRatio (footprint height / default text height)
+    // "second" = Amount to scale ratio by
+    std::vector<std::pair<double, double>> lut{
+        { 1, 8 },    { 1.5, 5 },  { 3, 3 },    { 4.5, 2.5 }, { 8, 2.0 },
+        { 12, 1.7 }, { 16, 1.5 }, { 24, 1.3 }, { 32, 1.0 },
+    };
+
+
+    std::vector<std::pair<double, double>>::iterator it;
+
+    compRatioBent = lut.back().second; // Large component default
+
+    if( compRatio >= lut.front().first )
+    {
+        // Use LUT to do linear interpolation of "compRatio" within "first", then
+        // use that result to linearly interpolate "second" which gives the scaling
+        // factor needed.
+
+        for( it = lut.begin(); it < lut.end() - 1; it++ )
+        {
+            if( it->first <= compRatio && next( it )->first >= compRatio )
+            {
+                double diffx = compRatio - it->first;
+                double diffn = next( it )->first - it->first;
+
+                compRatioBent = it->second + ( next( it )->second - it->second ) * diffx / diffn;
+                break; // We have our interpolated value
+            }
+        }
+    }
+    else
+    {
+        compRatioBent = lut.front().second; // Small component default
+    }
+
+    // If the width of the part we're probing is bigger than what the screen width will be
+    // after the zoom, then punt and use the KiCad zoom algorithm since it guarantees the
+    // part's width will be encompassed within the screen.  This will apply to parts that
+    // are much wider than they are tall.
+
+    if( bbSize.x > screenSize.x * ratio * compRatioBent )
+    {
+        // Use standard KiCad zoom algorithm for parts too wide to fit screen/
+        ratio = kicadRatio;
+        compRatioBent = 1.0; // Reset so we don't modify the "KiCad" ratio
+        wxLogTrace( "CROSS_PROBE_SCALE",
+                    "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f", ratio );
+    }
+
+    // Now that "compRatioBent" holds our final scaling factor we apply it to the original
+    // fullscreen zoom ratio to arrive at the final ratio itself.
+    ratio *= compRatioBent;
+
+    bool alwaysZoom = false; // DEBUG - allows us to minimize zooming or not
+
+    // Try not to zoom on every cross-probe; it gets very noisy
+    if( ( ratio < 0.5 || ratio > 1.0 ) || alwaysZoom )
+        view->SetScale( view->GetScale() / ratio );
+#endif // ifndef DEFAULT_PCBNEW_CODE
 }
 
 
@@ -2772,6 +3050,9 @@ void PCB_SELECTION_TOOL::setTransitions()
     Go( &PCB_SELECTION_TOOL::expandConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::deselectNet.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::syncSelection, PCB_ACTIONS::syncSelection.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::syncSelectionWithNets,
+        PCB_ACTIONS::syncSelectionWithNets.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectSameSheet,     PCB_ACTIONS::selectSameSheet.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::selectSheetContents,
         PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -57,6 +57,7 @@ void PANEL_DISPLAY_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     m_OptDisplayPadNoConn->SetValue( aCfg->m_Display.m_DisplayPadNoConnects );
     m_ShowNetNamesOption->SetSelection( aCfg->m_Display.m_DisplayNetNamesMode );
     m_live3Drefresh->SetValue( aCfg->m_Display.m_Live3DRefresh );
+    m_checkCrossProbeOnSelection->SetValue( aCfg->m_CrossProbing.on_selection );
     m_checkCrossProbeCenter->SetValue( aCfg->m_CrossProbing.center_on_items );
     m_checkCrossProbeZoom->SetValue( aCfg->m_CrossProbing.zoom_to_fit );
     m_checkCrossProbeAutoHighlight->SetValue( aCfg->m_CrossProbing.auto_highlight );
@@ -99,7 +100,7 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
         cfg->m_Display.m_DisplayPadNoConnects = m_OptDisplayPadNoConn->GetValue();
         cfg->m_Display.m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
         cfg->m_Display.m_Live3DRefresh = m_live3Drefresh->GetValue();
-        cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
+        cfg->m_CrossProbing.on_selection = m_checkCrossProbeOnSelection->GetValue();
         cfg->m_CrossProbing.zoom_to_fit = m_checkCrossProbeZoom->GetValue();
         cfg->m_CrossProbing.auto_highlight = m_checkCrossProbeAutoHighlight->GetValue();
     }

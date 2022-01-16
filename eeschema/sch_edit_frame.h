@@ -308,6 +308,14 @@ public:
     void SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_SYMBOL* aPart );
 
     /**
+     * Sends items to Pcbnew for selection
+     *
+     * @param aSelectConnections - set to select connected tracks/vias too
+     * @param aElements are the items to select
+     */
+    void SendSelectItems( bool aSelectConnections, const std::deque<EDA_ITEM*>& aElements );
+
+    /**
      * Sends a net name to Pcbnew for highlighting
      *
      * @param aNetName is the name of a net, or empty string to clear highlight

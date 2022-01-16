@@ -201,7 +201,7 @@ public:
     static TOOL_ACTION toggleERCExclusions;
     static TOOL_ACTION toggleSyncedPinsMode;
     static TOOL_ACTION restartMove;
-    static TOOL_ACTION explicitCrossProbe;
+    static TOOL_ACTION selectOnPCB;
     static TOOL_ACTION pushPinLength;
     static TOOL_ACTION pushPinNameSize;
     static TOOL_ACTION pushPinNumSize;

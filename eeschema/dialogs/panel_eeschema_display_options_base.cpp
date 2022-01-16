@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -111,6 +111,10 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 
 	wxStaticBoxSizer* sbSizer31;
 	sbSizer31 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Cross-probing") ), wxVERTICAL );
+
+	m_checkCrossProbeOnSelection = new wxCheckBox( sbSizer31->GetStaticBox(), wxID_ANY, _("Cross-probe on selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCrossProbeOnSelection->SetValue(true);
+	sbSizer31->Add( m_checkCrossProbeOnSelection, 0, wxALL, 5 );
 
 	m_checkCrossProbeCenter = new wxCheckBox( sbSizer31->GetStaticBox(), wxID_ANY, _("Center view on cross-probed items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkCrossProbeCenter->SetValue(true);
