@@ -1418,11 +1418,25 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
                       FormatInternalUnits( label->GetPinLength() ).c_str() );
     }
 
+    EDA_ANGLE angle = aText->GetTextAngle();
+
     if( aText->Type() == SCH_GLOBAL_LABEL_T
             || aText->Type() == SCH_HIER_LABEL_T
             || aText->Type() == SCH_NETCLASS_FLAG_T )
     {
         m_out->Print( 0, " (shape %s)", getSheetPinShapeToken( aText->GetShape() ) );
+
+        // The angle of the text is always 0 or 90 degrees for readibility reasons,
+        // but the item itself can have more rotation (-90 and 180 deg)
+        switch( aText->GetLabelSpinStyle() )
+        {
+        default:
+        case LABEL_SPIN_STYLE::LEFT:   angle += ANGLE_180; break;
+        case LABEL_SPIN_STYLE::UP:     break;
+        case LABEL_SPIN_STYLE::RIGHT:  break;
+        case LABEL_SPIN_STYLE::BOTTOM: angle += ANGLE_180; break;
+        }
+
     }
 
     if( aText->GetText().Length() < 50 )
@@ -1430,7 +1444,7 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
         m_out->Print( 0, " (at %s %s %s)",
                       FormatInternalUnits( aText->GetPosition().x ).c_str(),
                       FormatInternalUnits( aText->GetPosition().y ).c_str(),
-                      FormatAngle( aText->GetTextAngle() ).c_str() );
+                      FormatAngle( angle ).c_str() );
     }
     else
     {
@@ -1438,7 +1452,7 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
         m_out->Print( aNestLevel + 1, "(at %s %s %s)",
                       FormatInternalUnits( aText->GetPosition().x ).c_str(),
                       FormatInternalUnits( aText->GetPosition().y ).c_str(),
-                      FormatAngle( aText->GetTextAngle() ).c_str() );
+                      FormatAngle( angle ).c_str() );
     }
 
     if( aText->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )
