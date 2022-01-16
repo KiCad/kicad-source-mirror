@@ -2127,17 +2127,18 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_I
         EDA_ANGLE angle( aElem.startangle - aElem.endangle, DEGREES_T );
         angle.Normalize();
 
-        double   startradiant = DEG2RAD( aElem.startangle );
-        VECTOR2I arcStartOffset = VECTOR2I( KiROUND( std::cos( startradiant ) * aElem.radius ),
-                                            -KiROUND( std::sin( startradiant ) * aElem.radius ) );
+        EDA_ANGLE startAngle( aElem.endangle, DEGREES_T );
+        VECTOR2I  startOffset =
+                VECTOR2I( KiROUND( std::cos( startAngle.AsRadians() ) * aElem.radius ),
+                          -KiROUND( std::sin( startAngle.AsRadians() ) * aElem.radius ) );
 
-        arcStartOffset += aElem.center;
+        startOffset += aElem.center;
 
         // If it's a circle then add two 180-degree arcs
         if( aElem.startangle == 0.0 && aElem.endangle == 360.0 )
             angle = ANGLE_180;
 
-        SHAPE_ARC shapeArc( aElem.center, arcStartOffset, angle, aElem.width );
+        SHAPE_ARC shapeArc( aElem.center, startOffset, angle, aElem.width );
         PCB_ARC*  arc = new PCB_ARC( m_board, &shapeArc );
         m_board->Add( arc, ADD_MODE::APPEND );
 
@@ -2149,7 +2150,7 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_I
         // TODO: can we remove this workaround?
         if( aElem.startangle == 0. && aElem.endangle == 360. )
         {
-            shapeArc = SHAPE_ARC( aElem.center, arcStartOffset, -angle, aElem.width );
+            shapeArc = SHAPE_ARC( aElem.center, startOffset, -angle, aElem.width );
             arc = new PCB_ARC( m_board, &shapeArc );
             m_board->Add( arc, ADD_MODE::APPEND );
 
