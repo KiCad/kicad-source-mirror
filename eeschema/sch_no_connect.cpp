@@ -129,7 +129,7 @@ void SCH_NO_CONNECT::MirrorHorizontally( int aCenter )
 
 void SCH_NO_CONNECT::Rotate( const VECTOR2I& aCenter )
 {
-    RotatePoint( m_pos, aCenter, 900 );
+    RotatePoint( m_pos, aCenter, ANGLE_90 );
 }
 
 

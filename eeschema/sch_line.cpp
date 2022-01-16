@@ -418,22 +418,22 @@ void SCH_LINE::MirrorHorizontally( int aCenter )
 void SCH_LINE::Rotate( const VECTOR2I& aCenter )
 {
     if( m_flags & STARTPOINT )
-        RotatePoint( m_start, aCenter, 900 );
+        RotatePoint( m_start, aCenter, ANGLE_90 );
 
     if( m_flags & ENDPOINT )
-        RotatePoint( m_end, aCenter, 900 );
+        RotatePoint( m_end, aCenter, ANGLE_90 );
 }
 
 
 void SCH_LINE::RotateStart( const VECTOR2I& aCenter )
 {
-    RotatePoint( m_start, aCenter, 900 );
+    RotatePoint( m_start, aCenter, ANGLE_90 );
 }
 
 
 void SCH_LINE::RotateEnd( const VECTOR2I& aCenter )
 {
-    RotatePoint( m_end, aCenter, 900 );
+    RotatePoint( m_end, aCenter, ANGLE_90 );
 }
 
 

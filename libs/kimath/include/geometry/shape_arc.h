@@ -94,7 +94,7 @@ public:
      * @return this arc.
      */
     SHAPE_ARC& ConstructFromStartEndAngle( const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                                           double aAngle, double aWidth = 0 );
+                                           const EDA_ANGLE& aAngle, double aWidth = 0 );
 
     /**
      * Constructs this arc from the given start, end and center.

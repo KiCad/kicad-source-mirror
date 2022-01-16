@@ -102,7 +102,7 @@ void LIB_SHAPE::MirrorVertical( const VECTOR2I& aCenter )
 
 void LIB_SHAPE::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
-    int rot_angle = aRotateCCW ? -900 : 900;
+    EDA_ANGLE rot_angle = aRotateCCW ? -ANGLE_90 : ANGLE_90;
 
     rotate( aCenter, rot_angle );
 }

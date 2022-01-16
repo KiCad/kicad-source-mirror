@@ -59,9 +59,6 @@ private:
 
     bool                  m_flipStartEnd;
 
-    wxFloatingPointValidator<double>    m_AngleValidator;
-    double                m_AngleValue;
-
 public:
     DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem );
     ~DIALOG_GRAPHIC_ITEM_PROPERTIES() {};
@@ -97,9 +94,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_bezierCtrl1Y( aParent, m_BezierPointC1YLabel, m_BezierC1Y_Ctrl, m_BezierPointC1YUnit ),
     m_bezierCtrl2X( aParent, m_BezierPointC2XLabel, m_BezierC2X_Ctrl, m_BezierPointC2XUnit ),
     m_bezierCtrl2Y( aParent, m_BezierPointC2YLabel, m_BezierC2Y_Ctrl, m_BezierPointC2YUnit ),
-    m_flipStartEnd( false ),
-    m_AngleValidator( 1, &m_AngleValue ),
-    m_AngleValue( 0.0 )
+    m_flipStartEnd( false )
 {
     m_parent = aParent;
     m_item = dynamic_cast<PCB_SHAPE*>( aItem );
@@ -116,9 +111,6 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_bezierCtrl2Y.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
     m_angle.SetUnits( EDA_UNITS::DEGREES );
-    m_AngleValidator.SetRange( -360.0, 360.0 );
-    m_angleCtrl->SetValidator( m_AngleValidator );
-    m_AngleValidator.SetWindow( m_angleCtrl );
 
     // Do not allow locking items in the footprint editor
     m_locked->Show( dynamic_cast<PCB_EDIT_FRAME*>( aParent ) != nullptr );
@@ -228,7 +220,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
 
     case SHAPE_T::ARC:
         SetTitle( _( "Arc Properties" ) );
-        m_AngleValue = m_item->GetArcAngle().AsDegrees();
+        m_angle.SetAngleValue( m_item->GetArcAngle() );
         m_filledCtrl->Show( false );
         break;
 
@@ -365,7 +357,10 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     }
 
     if( m_item->GetShape() == SHAPE_T::ARC )
-        m_item->SetCenter( CalcArcCenter( m_item->GetStart(), m_item->GetEnd(), m_AngleValue ) );
+    {
+        m_item->SetCenter( CalcArcCenter( m_item->GetStart(), m_item->GetEnd(),
+                                          m_angle.GetAngleValue() ) );
+    }
 
     if( m_fp_item )
     {
@@ -430,7 +425,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
     {
     case SHAPE_T::ARC:
         // Check angle of arc.
-        if( m_angle.GetValue() == 0 )
+        if( m_angle.GetAngleValue() == ANGLE_0 )
             error_msgs.Add( _( "The arc angle cannot be zero." ) );
 
         KI_FALLTHROUGH;

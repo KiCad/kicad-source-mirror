@@ -168,8 +168,8 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
     SetCurrentLineWidth( aWidth );
 
     /* Please NOTE the different sign due to Y-axis flip */
-    start.x = aCenter.x + KiROUND( aRadius * cos( -startAngle.AsRadians() ) );
-    start.y = aCenter.y + KiROUND( aRadius * sin( -startAngle.AsRadians() ) );
+    start.x = aCenter.x + KiROUND( aRadius * -startAngle.Cos() );
+    start.y = aCenter.y + KiROUND( aRadius * -startAngle.Sin() );
 
     if( aFill != FILL_T::NO_FILL )
     {
@@ -183,13 +183,13 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
 
     for( EDA_ANGLE ii = startAngle + delta; ii < endAngle; ii += delta )
     {
-        end.x = aCenter.x + KiROUND( aRadius * cos( -ii.AsRadians() ) );
-        end.y = aCenter.y + KiROUND( aRadius * sin( -ii.AsRadians() ) );
+        end.x = aCenter.x + KiROUND( aRadius * -ii.Cos() );
+        end.y = aCenter.y + KiROUND( aRadius * -ii.Sin() );
         LineTo( end );
     }
 
-    end.x = aCenter.x + KiROUND( aRadius * cos( -endAngle.AsRadians() ) );
-    end.y = aCenter.y + KiROUND( aRadius * sin( -endAngle.AsRadians() ) );
+    end.x = aCenter.x + KiROUND( aRadius * -endAngle.Cos() );
+    end.y = aCenter.y + KiROUND( aRadius * -endAngle.Sin() );
 
     if( aFill != FILL_T::NO_FILL )
     {

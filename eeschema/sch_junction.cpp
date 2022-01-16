@@ -145,7 +145,7 @@ void SCH_JUNCTION::MirrorHorizontally( int aCenter )
 
 void SCH_JUNCTION::Rotate( const VECTOR2I& aCenter )
 {
-    RotatePoint( m_pos, aCenter, 900 );
+    RotatePoint( m_pos, aCenter, ANGLE_90 );
 }
 
 

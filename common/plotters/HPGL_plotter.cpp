@@ -593,8 +593,8 @@ void HPGL_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
     angle.Normalize180();
 
     // Calculate arc start point:
-    VECTOR2I cmap( aCenter.x + KiROUND( aRadius * cos( aStartAngle.AsRadians() ) ),
-                   aCenter.y - KiROUND( aRadius * sin( aStartAngle.AsRadians() ) ) );
+    VECTOR2I cmap( aCenter.x + KiROUND( aRadius * aStartAngle.Cos() ),
+                   aCenter.y - KiROUND( aRadius * aStartAngle.Sin() ) );
     VECTOR2D cmap_dev = userToDeviceCoordinates( cmap );
 
     startOrAppendItem( cmap_dev, wxString::Format( "AA %.0f,%.0f,%.0f,%g",

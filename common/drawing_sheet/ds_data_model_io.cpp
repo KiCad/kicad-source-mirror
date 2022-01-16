@@ -341,8 +341,8 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_POLYGONS* aItem, int aNestLevel ) co
 
     formatRepeatParameters( aItem );
 
-    if( aItem->m_Orient )
-        m_out->Print( 0, " (rotate %s)", double2Str(aItem->m_Orient ).c_str() );
+    if( !aItem->m_Orient.IsZero() )
+        m_out->Print( 0, " (rotate %s)", double2Str( aItem->m_Orient.AsDegrees() ).c_str() );
 
     if( aItem->m_LineWidth )
         m_out->Print( 0, " (linewidth %s)\n", double2Str( aItem->m_LineWidth ).c_str() );

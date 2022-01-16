@@ -94,7 +94,7 @@ bool FP_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy 
     if( aContains )
         return rect.Contains( GetBoundingBox() );
     else
-        return rect.Intersects( GetTextBox(), GetDrawRotation().AsTenthsOfADegree() );
+        return rect.Intersects( GetTextBox(), GetDrawRotation() );
 }
 
 
@@ -218,10 +218,10 @@ void FP_TEXT::SetLocalCoord()
 
 const EDA_RECT FP_TEXT::GetBoundingBox() const
 {
-    double   angle = GetDrawRotation().AsTenthsOfADegree();
-    EDA_RECT text_area = GetTextBox();
+    EDA_ANGLE angle = GetDrawRotation();
+    EDA_RECT  text_area = GetTextBox();
 
-    if( angle )
+    if( !angle.IsZero() )
         text_area = text_area.GetBoundingBoxRotated( GetTextPos(), angle );
 
     return text_area;
@@ -336,10 +336,10 @@ EDA_ITEM* FP_TEXT::Clone() const
 
 const BOX2I FP_TEXT::ViewBBox() const
 {
-    double   angle = GetDrawRotation().AsTenthsOfADegree();
-    EDA_RECT text_area = GetTextBox();
+    EDA_ANGLE angle = GetDrawRotation();
+    EDA_RECT  text_area = GetTextBox();
 
-    if( angle )
+    if( !angle.IsZero() )
         text_area = text_area.GetBoundingBoxRotated( GetTextPos(), angle );
 
     return BOX2I( text_area.GetPosition(), text_area.GetSize() );

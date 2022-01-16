@@ -119,7 +119,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_endY.SetValue( m_shape->GetCenter().y );
         m_radiusLabel->SetLabel( _( "Angle:" ) );
         m_radius.SetUnits( EDA_UNITS::DEGREES );
-        m_radius.SetValue( m_shape->GetArcAngle().AsTenthsOfADegree() );
+        m_radius.SetAngleValue( m_shape->GetArcAngle() );
         m_ctrl1X.Show( false, true );
         m_ctrl1Y.Show( false, true );
         m_ctrl2X.Show( false, true );

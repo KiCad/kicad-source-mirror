@@ -1488,7 +1488,7 @@ void SCH_SYMBOL::Rotate( const VECTOR2I& aCenter )
 {
     VECTOR2I prev = m_pos;
 
-    RotatePoint( m_pos, aCenter, 900 );
+    RotatePoint( m_pos, aCenter, ANGLE_90 );
 
     SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
 

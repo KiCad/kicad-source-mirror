@@ -871,16 +871,16 @@ void GERBER_PLOTTER::plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAn
                               const EDA_ANGLE& aEndAngle, int aRadius, bool aPlotInRegion )
 {
     VECTOR2I start, end;
-    start.x = aCenter.x + KiROUND( aRadius * cos( aStartAngle.AsRadians() ) );
-    start.y = aCenter.y - KiROUND( aRadius * sin( aStartAngle.AsRadians() ) );
+    start.x = aCenter.x + KiROUND( aRadius * aStartAngle.Cos() );
+    start.y = aCenter.y - KiROUND( aRadius * aStartAngle.Sin() );
 
     if( !aPlotInRegion )
         MoveTo( start );
     else
         LineTo( start );
 
-    end.x = aCenter.x + KiROUND( aRadius * cos( aEndAngle.AsRadians() ) );
-    end.y = aCenter.y - KiROUND( aRadius * sin( aEndAngle.AsRadians() ) );
+    end.x = aCenter.x + KiROUND( aRadius * aEndAngle.Cos() );
+    end.y = aCenter.y - KiROUND( aRadius * aEndAngle.Sin() );
     DPOINT devEnd = userToDeviceCoordinates( end );
     DPOINT devCenter = userToDeviceCoordinates( aCenter ) - userToDeviceCoordinates( start );
 
@@ -1589,8 +1589,8 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const VECTOR2I& aRectCenter, const V
     // small difference, mainly for rotated pads.
     // calculate last point (end of last arc):
     VECTOR2I last_pt;
-    last_pt.x = arc_last_center.x + KiROUND( aCornerRadius * cos( arc_last_angle.AsRadians() ) );
-    last_pt.y = arc_last_center.y - KiROUND( aCornerRadius * sin( arc_last_angle.AsRadians() ) );
+    last_pt.x = arc_last_center.x + KiROUND( aCornerRadius * arc_last_angle.Cos() );
+    last_pt.y = arc_last_center.y - KiROUND( aCornerRadius * arc_last_angle.Sin() );
 
     VECTOR2I first_pt = rr_outline[0].m_start;
 

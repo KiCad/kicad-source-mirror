@@ -31,6 +31,7 @@
 
 #include <wx/gdicmn.h>
 #include <math/box2.h>
+#include <geometry/eda_angle.h>
 
 /**
  * Handle the component boundary box.
@@ -228,9 +229,9 @@ public:
      * Tests for a common area between this rectangle, and a rectangle with arbitrary rotation
      *
      * @param aRect a rectangle to test intersection with.
-     * @param aRot rectangle rotation (in 1/10 degrees).
+     * @param aRot rectangle rotation.
      */
-    bool Intersects( const EDA_RECT& aRect, double aRot ) const;
+    bool Intersects( const EDA_RECT& aRect, const EDA_ANGLE& aRotation ) const;
 
     /**
      * Test for a common area between a segment and this rectangle.
@@ -349,13 +350,12 @@ public:
     EDA_RECT Common( const EDA_RECT& aRect ) const;
 
     /**
-     * Useful to calculate bounding box of rotated items, when rotation if not k*90 degrees.
+     * Useful to calculate bounding box of rotated items, when rotation is not k*90 degrees.
      *
-     * @param aAngle the rotation angle in 0.1 deg.
-     * @param aRotCenter the rotation point.
      * @return the bounding box of this, after rotation.
      */
-    const EDA_RECT GetBoundingBoxRotated( const VECTOR2I& aRotCenter, double aAngle ) const;
+    const EDA_RECT GetBoundingBoxRotated( const VECTOR2I& aRotCenter,
+                                          const EDA_ANGLE& aAngle ) const;
 
 private:
     VECTOR2I m_pos;      // Rectangle Origin

@@ -288,21 +288,21 @@ void PDF_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
     SetCurrentLineWidth( aWidth );
 
     // Usual trig arc plotting routine...
-    start.x = aCenter.x + KiROUND( aRadius * cos( -startAngle.AsRadians() ) );
-    start.y = aCenter.y + KiROUND( aRadius * sin( -startAngle.AsRadians() ) );
+    start.x = aCenter.x + KiROUND( aRadius * -startAngle.Cos() );
+    start.y = aCenter.y + KiROUND( aRadius * -startAngle.Sin() );
     DPOINT pos_dev = userToDeviceCoordinates( start );
     fprintf( workFile, "%g %g m ", pos_dev.x, pos_dev.y );
 
     for( EDA_ANGLE ii = startAngle + delta; ii < endAngle; ii += delta )
     {
-        end.x = aCenter.x + KiROUND( aRadius * cos( -ii.AsRadians() ) );
-        end.y = aCenter.y + KiROUND( aRadius * sin( -ii.AsRadians() ) );
+        end.x = aCenter.x + KiROUND( aRadius * -ii.Cos() );
+        end.y = aCenter.y + KiROUND( aRadius * -ii.Sin() );
         pos_dev = userToDeviceCoordinates( end );
         fprintf( workFile, "%g %g l ", pos_dev.x, pos_dev.y );
     }
 
-    end.x = aCenter.x + KiROUND( aRadius * cos( -endAngle.AsRadians() ) );
-    end.y = aCenter.y + KiROUND( aRadius * sin( -endAngle.AsRadians() ) );
+    end.x = aCenter.x + KiROUND( aRadius * -endAngle.Cos() );
+    end.y = aCenter.y + KiROUND( aRadius * -endAngle.Sin() );
     pos_dev = userToDeviceCoordinates( end );
     fprintf( workFile, "%g %g l ", pos_dev.x, pos_dev.y );
 

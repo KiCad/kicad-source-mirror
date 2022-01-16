@@ -260,9 +260,8 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
             circlesegcount = std::max( 1, std::min( circlesegcount, 128 ) );
         }
 
-        transformArcToSegments( VECTOR2I( center.x, center.y ), arc->GetStart(),
-                                arc_angle.AsTenthsOfADegree(), circlesegcount, arc->GetWidth(),
-                                aDstContainer, *arc );
+        transformArcToSegments( VECTOR2I( center.x, center.y ), arc->GetStart(), arc_angle,
+                                circlesegcount, arc->GetWidth(), aDstContainer, *arc );
         break;
     }
 
@@ -532,31 +531,30 @@ void BOARD_ADAPTER::addPads( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aDs
 // based on TransformArcToPolygon function from
 // common/convert_basic_shapes_to_polygon.cpp
 void BOARD_ADAPTER::transformArcToSegments( const VECTOR2I& aCentre, const VECTOR2I& aStart,
-                                            double aArcAngle, int aCircleToSegmentsCount,
+                                            const EDA_ANGLE& aArcAngle, int aCircleToSegmentsCount,
                                             int aWidth, CONTAINER_2D_BASE* aDstContainer,
                                             const BOARD_ITEM& aBoardItem )
 {
-    VECTOR2I arc_start, arc_end;
-    int     delta = 3600 / aCircleToSegmentsCount;   // rotate angle in 0.1 degree
+    VECTOR2I  arc_start, arc_end;
+    EDA_ANGLE arcAngle( aArcAngle );
+    EDA_ANGLE delta = ANGLE_360 / aCircleToSegmentsCount;   // rotate angle
 
     arc_end = arc_start = aStart;
 
-    if( aArcAngle != 3600 )
-    {
-        RotatePoint( arc_end, aCentre, -aArcAngle );
-    }
+    if( arcAngle != ANGLE_360 )
+        RotatePoint( arc_end, aCentre, -arcAngle );
 
-    if( aArcAngle < 0 )
+    if( arcAngle < ANGLE_0 )
     {
         std::swap( arc_start, arc_end );
-        aArcAngle = -aArcAngle;
+        arcAngle = -arcAngle;
     }
 
     // Compute the ends of segments and creates poly
     VECTOR2I curr_end = arc_start;
     VECTOR2I curr_start = arc_start;
 
-    for( int ii = delta; ii < aArcAngle; ii += delta )
+    for( EDA_ANGLE ii = delta; ii < arcAngle; ii += delta )
     {
         curr_end = arc_start;
         RotatePoint( curr_end, aCentre, -ii );
@@ -659,9 +657,8 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aDstCo
     {
         unsigned int segCount = GetCircleSegmentCount( aShape->GetBoundingBox().GetSizeMax() );
 
-        transformArcToSegments( aShape->GetCenter(), aShape->GetStart(),
-                                aShape->GetArcAngle().AsTenthsOfADegree(), segCount, linewidth,
-                                aDstContainer, *aShape );
+        transformArcToSegments( aShape->GetCenter(), aShape->GetStart(), aShape->GetArcAngle(),
+                                segCount, linewidth, aDstContainer, *aShape );
     }
     break;
 

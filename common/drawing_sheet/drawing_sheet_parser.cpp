@@ -388,7 +388,7 @@ void DRAWING_SHEET_PARSER::parsePolygon( DS_DATA_ITEM_POLYGONS * aItem )
             break;
 
         case T_rotate:
-            aItem->m_Orient = parseDouble();
+            aItem->m_Orient = EDA_ANGLE( parseDouble(), DEGREES_T );
             NeedRIGHT();
             break;
 

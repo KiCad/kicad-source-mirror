@@ -1929,8 +1929,8 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
                 EDA_ANGLE includedAngle( elem.endangle - elem.startangle, DEGREES_T );
                 EDA_ANGLE startAngle( elem.endangle, DEGREES_T );
 
-                VECTOR2I startOffset( KiROUND( elem.radius * cos( startAngle.AsRadians() ) ),
-                                     -KiROUND( elem.radius * sin( startAngle.AsRadians() ) ) );
+                VECTOR2I startOffset( KiROUND( elem.radius * startAngle.Cos() ),
+                                     -KiROUND( elem.radius * startAngle.Sin() ) );
 
                 shape.SetCenter( elem.center );
                 shape.SetStart( elem.center + startOffset );

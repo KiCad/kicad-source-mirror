@@ -152,10 +152,8 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, PLOT_DASH_TYPE aLineStyle, int 
 
             if( i % 2 == 0 )
             {
-                VECTOR2I a( center.x + r * cos( startAngle.AsRadians() ),
-                            center.y + r * sin( startAngle.AsRadians() ) );
-                VECTOR2I b( center.x + r * cos( endAngle.AsRadians() ),
-                            center.y + r * sin( endAngle.AsRadians() ) );
+                VECTOR2I a( center.x + r * startAngle.Cos(), center.y + r * startAngle.Sin() );
+                VECTOR2I b( center.x + r * endAngle.Cos(),   center.y + r * endAngle.Sin() );
 
                 aStroker( a, b );
             }

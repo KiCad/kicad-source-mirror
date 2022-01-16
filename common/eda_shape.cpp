@@ -222,7 +222,7 @@ void EDA_SHAPE::scale( double aScale )
 }
 
 
-void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, double aAngle )
+void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     switch( m_shape )
     {
@@ -239,7 +239,7 @@ void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, double aAngle )
         break;
 
     case SHAPE_T::RECT:
-        if( KiROUND( aAngle ) % 900 == 0 )
+        if( aAngle.IsCardinal() )
         {
             RotatePoint( m_start, aRotCentre, aAngle );
             RotatePoint( m_end, aRotCentre, aAngle );
@@ -258,7 +258,7 @@ void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, double aAngle )
         KI_FALLTHROUGH;
 
     case SHAPE_T::POLY:
-        m_poly.Rotate( -DECIDEG2RAD( aAngle ), VECTOR2I( aRotCentre ) );
+        m_poly.Rotate( -aAngle.AsRadians(), aRotCentre );
         break;
 
     case SHAPE_T::BEZIER:
@@ -878,14 +878,10 @@ bool EDA_SHAPE::hitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
             // Polygons in footprints use coordinates relative to the footprint.
             // Therefore, instead of using m_poly, we make a copy which is translated
             // to the actual location in the board.
-            double  orientation = 0.0;
             VECTOR2I offset = getParentPosition();
 
-            if( getParentOrientation() )
-                orientation = -DECIDEG2RAD( getParentOrientation() );
-
             SHAPE_LINE_CHAIN poly = m_poly.Outline( 0 );
-            poly.Rotate( orientation );
+            poly.Rotate( -getParentOrientation().AsRadians() );
             poly.Move( offset );
 
             int count = poly.GetPointCount();
@@ -966,7 +962,7 @@ std::vector<VECTOR2I> EDA_SHAPE::GetRectCorners() const
     VECTOR2I              botRight = GetEnd();
 
     // Un-rotate rect topLeft and botRight
-    if( KiROUND( getParentOrientation() ) % 900 != 0 )
+    if( !getParentOrientation().IsCardinal() )
     {
         topLeft -= getParentPosition();
         RotatePoint( topLeft, -getParentOrientation() );
@@ -982,7 +978,7 @@ std::vector<VECTOR2I> EDA_SHAPE::GetRectCorners() const
     pts.emplace_back( topLeft.x, botRight.y );
 
     // Now re-rotate the 4 corners to get a diamond
-    if( KiROUND( getParentOrientation() ) % 900 != 0 )
+    if( !getParentOrientation().IsCardinal() )
     {
         for( VECTOR2I& pt : pts )
         {
@@ -1137,7 +1133,7 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapes( bool aEdgeOnly ) const
     {
         SHAPE_LINE_CHAIN l = GetPolyShape().COutline( 0 );
 
-        l.Rotate( -DECIDEG2RAD( getParentOrientation() ) );
+        l.Rotate( -getParentOrientation().AsRadians() );
         l.Move( getParentPosition() );
 
         if( IsFilled() && !aEdgeOnly )
@@ -1547,8 +1543,8 @@ void EDA_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
             break;
 
         // The polygon is expected to be a simple polygon; not self intersecting, no hole.
-        double  orientation = getParentOrientation();
-        VECTOR2I offset = getParentPosition();
+        EDA_ANGLE orientation = getParentOrientation();
+        VECTOR2I  offset = getParentPosition();
 
         // Build the polygon with the actual position and orientation:
         std::vector<VECTOR2I> poly;

@@ -360,29 +360,31 @@ void RotatePoint( double* pX, double* pY, double angle )
 }
 
 
-const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double aAngle )
+const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                              const EDA_ANGLE& aAngle )
 {
-    VECTOR2I start = aStart;
-    VECTOR2I end = aEnd;
+    EDA_ANGLE angle( aAngle );
+    VECTOR2I  start = aStart;
+    VECTOR2I  end = aEnd;
 
-    if( aAngle < 0 )
+    if( angle < ANGLE_0 )
     {
         std::swap( start, end );
-        aAngle = abs( aAngle );
+        angle = -angle;
     }
 
-    if( aAngle > 180 )
+    if( angle > ANGLE_180 )
     {
         std::swap( start, end );
-        aAngle = 360 - aAngle;
+        angle = ANGLE_360 - angle;
     }
 
     int chord = ( start - end ).EuclideanNorm();
-    int r = ( chord / 2 ) / sin( aAngle * M_PI / 360.0 );
+    int r = ( chord / 2 ) / angle.Sin();
 
     VECTOR2I vec = end - start;
     vec = vec.Resize( r );
-    vec = vec.Rotate( ( 180.0 - aAngle ) * M_PI / 360.0 );
+    vec = vec.Rotate( ( ANGLE_180 - angle ).AsRadians() );
 
     return (VECTOR2I) ( start + vec );
 }

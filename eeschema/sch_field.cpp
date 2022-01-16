@@ -686,7 +686,7 @@ bool SCH_FIELD::Replace( const wxFindReplaceData& aSearchData, void* aAuxData )
 void SCH_FIELD::Rotate( const VECTOR2I& aCenter )
 {
     VECTOR2I pt = GetPosition();
-    RotatePoint( pt, aCenter, 900 );
+    RotatePoint( pt, aCenter, ANGLE_90 );
     SetPosition( pt );
 }
 

@@ -1538,8 +1538,8 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         int  ddy = GetShape() == PAD_SHAPE::TRAPEZOID ? m_deltaSize.y / 2 : 0;
 
         SHAPE_POLY_SET outline;
-        TransformTrapezoidToPolygon( outline, padShapePos, m_size, m_orient.AsTenthsOfADegree(),
-                                     ddx, ddy, aClearanceValue, aError, aErrorLoc );
+        TransformTrapezoidToPolygon( outline, padShapePos, m_size, m_orient, ddx, ddy,
+                                     aClearanceValue, aError, aErrorLoc );
         aCornerBuffer.Append( outline );
         break;
     }

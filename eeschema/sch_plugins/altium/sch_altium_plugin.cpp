@@ -1321,8 +1321,8 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC, SCH_LAYER_ID::LAYER_NOTES );
             EDA_ANGLE  includedAngle( elem.endAngle - elem.startAngle, DEGREES_T );
             EDA_ANGLE  startAngle( elem.endAngle, DEGREES_T );
-            VECTOR2I   startOffset( KiROUND( elem.radius * cos( startAngle.AsRadians() ) ),
-                                   -KiROUND( elem.radius * sin( startAngle.AsRadians() ) ) );
+            VECTOR2I   startOffset( KiROUND( elem.radius * startAngle.Cos() ),
+                                   -KiROUND( elem.radius * startAngle.Sin() ) );
 
             arc->SetCenter( elem.center + m_sheetOffset );
             arc->SetStart( elem.center + startOffset + m_sheetOffset );

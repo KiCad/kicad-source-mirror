@@ -128,8 +128,8 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aSta
  * @param aErrorLoc determines if the approximation error be placed outside or inside the polygon.
  */
 void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aPosition,
-                                  const VECTOR2I& aSize, double aRotation, int aDeltaX, int aDeltaY,
-                                  int aInflate, int aError, ERROR_LOC aErrorLoc );
+                                  const VECTOR2I& aSize, const EDA_ANGLE& aRotation, int aDeltaX,
+                                  int aDeltaY, int aInflate, int aError, ERROR_LOC aErrorLoc );
 
 /**
  * Convert a rectangle with rounded corners and/or chamfered corners to a polygon.

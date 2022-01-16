@@ -138,7 +138,8 @@ inline void RotatePoint( VECTOR2D& point, const VECTOR2D& aCenter, const EDA_ANG
  */
 const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
 const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd );
-const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd, double aAngle );
+const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                              const EDA_ANGLE& aAngle );
 
 /**
  * Return the subtended angle for a given arc.

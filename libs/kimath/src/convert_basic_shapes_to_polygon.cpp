@@ -362,8 +362,8 @@ void CornerListRemoveDuplicates( std::vector<ROUNDED_CORNER>& aCorners )
 
 
 void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aPosition,
-                                  const VECTOR2I& aSize, double aRotation, int aDeltaX, int aDeltaY,
-                                  int aInflate, int aError, ERROR_LOC aErrorLoc )
+                                  const VECTOR2I& aSize, const EDA_ANGLE& aRotation, int aDeltaX,
+                                  int aDeltaY, int aInflate, int aError, ERROR_LOC aErrorLoc )
 {
     SHAPE_POLY_SET              outline;
     VECTOR2I                    size( aSize / 2 );
@@ -426,8 +426,8 @@ void TransformTrapezoidToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I&
 
     CornerListToPolygon( outline, corners, aInflate, aError, aErrorLoc );
 
-    if( aRotation != 0.0 )
-        outline.Rotate( DECIDEG2RAD( -aRotation ), VECTOR2I( 0, 0 ) );
+    if( !aRotation.IsZero() )
+        outline.Rotate( -aRotation.AsRadians(), VECTOR2I( 0, 0 ) );
 
     outline.Move( VECTOR2I( aPosition ) );
     aCornerBuffer.Append( outline );
@@ -522,8 +522,8 @@ int ConvertArcToPolyline( SHAPE_LINE_CHAIN& aPolyline, VECTOR2I aCenter, int aRa
         EDA_ANGLE rot = aStartAngle;
         rot += ( aArcAngle * i ) / n;
 
-        double x = aCenter.x + aRadius * cos( rot.AsRadians() );
-        double y = aCenter.y + aRadius * sin( rot.AsRadians() );
+        double x = aCenter.x + aRadius * rot.Cos();
+        double y = aCenter.y + aRadius * rot.Sin();
 
         aPolyline.Append( KiROUND( x ), KiROUND( y ) );
     }

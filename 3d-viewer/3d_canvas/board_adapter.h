@@ -488,8 +488,8 @@ private:
     void addSolidAreasShapes( const ZONE* aZoneContainer, CONTAINER_2D_BASE* aDstContainer,
                               PCB_LAYER_ID aLayerId );
 
-    void transformArcToSegments( const VECTOR2I& aCentre, const VECTOR2I& aStart, double aArcAngle,
-                                 int aCircleToSegmentsCount, int aWidth,
+    void transformArcToSegments( const VECTOR2I& aCentre, const VECTOR2I& aStart,
+                                 const EDA_ANGLE& aArcAngle, int aCircleToSegmentsCount, int aWidth,
                                  CONTAINER_2D_BASE* aDstContainer, const BOARD_ITEM& aBoardItem );
 
     void buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer, int aWidth );

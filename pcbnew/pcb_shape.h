@@ -160,7 +160,7 @@ public:
 #endif
 
 protected:
-    double getParentOrientation() const override;
+    EDA_ANGLE getParentOrientation() const override;
     VECTOR2I getParentPosition() const override;
 };
 

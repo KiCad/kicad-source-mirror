@@ -108,7 +108,7 @@ void PCB_SHAPE::Scale( double aScale )
 
 void PCB_SHAPE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
-    rotate( aRotCentre, aAngle.AsTenthsOfADegree() );
+    rotate( aRotCentre, aAngle );
 }
 
 
@@ -129,12 +129,12 @@ FOOTPRINT* PCB_SHAPE::GetParentFootprint() const
 }
 
 
-double PCB_SHAPE::getParentOrientation() const
+EDA_ANGLE PCB_SHAPE::getParentOrientation() const
 {
     if( GetParentFootprint() )
-        return GetParentFootprint()->GetOrientation().AsTenthsOfADegree();
+        return GetParentFootprint()->GetOrientation();
     else
-        return 0.0;
+        return ANGLE_0;
 }
 
 

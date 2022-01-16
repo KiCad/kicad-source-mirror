@@ -269,7 +269,7 @@ public:
     /**
      * @return the coordinate (in mm) of the corner \a aIdx and the repeated item \a aRepeat
      */
-    const DPOINT GetCornerPosition( unsigned aIdx, int aRepeat = 0 ) const;
+    const VECTOR2D GetCornerPosition( unsigned aIdx, int aRepeat = 0 ) const;
 
     /**
      * @return the coordinate (in draw/plot units) of the corner \a aIdx and the repeated
@@ -284,13 +284,13 @@ public:
 
     bool IsInsidePage( int ii ) const override;
 
-    double                m_Orient;         // Orientation in degrees
-    std::vector<DPOINT>   m_Corners;        // corner list
+    EDA_ANGLE             m_Orient;         // Orientation
+    std::vector<VECTOR2D> m_Corners;        // corner list
 
 private:
     std::vector<unsigned> m_polyIndexEnd;   // index of the last point of each polygon
-    DPOINT                m_minCoord;       // min coord of corners, relative to m_Pos
-    DPOINT                m_maxCoord;       // max coord of corners, relative to m_Pos
+    VECTOR2D              m_minCoord;       // min coord of corners, relative to m_Pos
+    VECTOR2D              m_maxCoord;       // max coord of corners, relative to m_Pos
 };
 
 

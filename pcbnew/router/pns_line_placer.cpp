@@ -1146,7 +1146,7 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     else if( aStartItem && aStartItem->Kind() == ITEM::SOLID_T &&
              static_cast<SOLID*>( aStartItem )->Parent()->Type() == PCB_PAD_T )
     {
-        double angle = static_cast<SOLID*>( aStartItem )->GetOrientation() / 10.0;
+        double angle = static_cast<SOLID*>( aStartItem )->GetOrientation().AsDegrees();
         angle        = ( angle + 22.5 ) / 45.0;
         initialDir   = DIRECTION_45( static_cast<DIRECTION_45::Directions>( int( angle ) ) );
     }

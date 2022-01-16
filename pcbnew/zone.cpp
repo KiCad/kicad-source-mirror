@@ -697,11 +697,11 @@ void ZONE::Rotate( const VECTOR2I& aCentre, const EDA_ANGLE& aAngle )
         for( SEG& seg : pair.second )
         {
             VECTOR2I a( seg.A );
-            RotatePoint( a, aCentre, -aAngle.AsRadians() );
+            RotatePoint( a, aCentre, -aAngle );
             seg.A = a;
 
             VECTOR2I b( seg.B );
-            RotatePoint( b, aCentre, -aAngle.AsRadians() );
+            RotatePoint( b, aCentre, -aAngle );
             seg.B = a;
         }
     }

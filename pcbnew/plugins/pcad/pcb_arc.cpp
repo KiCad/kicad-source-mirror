@@ -147,8 +147,8 @@ void PCB_ARC::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
         if( lNode )
             m_Angle = EDA_ANGLE( StrToInt1Units( lNode->GetNodeContent() ), TENTHS_OF_A_DEGREE_T );
 
-        m_StartX = m_positionX + KiROUND( r * cos( a.AsRadians() ) );
-        m_StartY = m_positionY - KiROUND( r * sin( a.AsRadians() ) );
+        m_StartX = m_positionX + KiROUND( r * a.Cos() );
+        m_StartY = m_positionY - KiROUND( r * a.Sin() );
     }
 }
 

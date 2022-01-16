@@ -181,14 +181,16 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect ) const
 }
 
 
-bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
+bool EDA_RECT::Intersects( const EDA_RECT& aRect, const EDA_ANGLE& aRotation ) const
 {
     if( !m_init )
         return false;
 
-    /* Most rectangles will be axis aligned.
-     * It is quicker to check for this case and pass the rect
-     * to the simpler intersection test
+    double rotation = aRotation.AsTenthsOfADegree();
+
+    /*
+     * Most rectangles will be axis aligned.  It is quicker to check for this case and pass
+     * the rect to the simpler intersection test.
      */
 
     // Prevent floating point comparison errors
@@ -197,21 +199,19 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
     static const double ROT_PARALLEL[]      = { -3600, -1800, 0, 1800, 3600 };
     static const double ROT_PERPENDICULAR[] = { -2700, -900, 0, 900, 2700 };
 
-    NORMALIZE_ANGLE_POS<double>( aRot );
+    NORMALIZE_ANGLE_POS<double>( rotation );
 
     // Test for non-rotated rectangle
     for( int ii = 0; ii < 5; ii++ )
     {
-        if( std::fabs( aRot - ROT_PARALLEL[ii] ) < ROT_EPS )
-        {
+        if( std::fabs( rotation - ROT_PARALLEL[ii] ) < ROT_EPS )
             return Intersects( aRect );
-        }
     }
 
     // Test for rectangle rotated by multiple of 90 degrees
     for( int jj = 0; jj < 4; jj++ )
     {
-        if( std::fabs( aRot - ROT_PERPENDICULAR[jj] ) < ROT_EPS )
+        if( std::fabs( rotation - ROT_PERPENDICULAR[jj] ) < ROT_EPS )
         {
             EDA_RECT rotRect;
 
@@ -242,13 +242,11 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
     for( int i = 0; i < 4; i++ )
     {
         VECTOR2I delta = corners[i] - rCentre;
-        RotatePoint( delta, -aRot );
+        RotatePoint( delta, -rotation );
         delta += rCentre;
 
         if( aRect.Contains( delta ) )
-        {
             return true;
-        }
     }
 
     /* Test B : Any corners of rotated rect exist in this one? */
@@ -264,13 +262,11 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
     // Rotate and test each corner
     for( int j = 0; j < 4; j++ )
     {
-        RotatePoint( corners[j], aRot );
+        RotatePoint( corners[j], rotation );
         corners[j] += rCentre;
 
         if( Contains( corners[j] ) )
-        {
             return true;
-        }
     }
 
     /* Test C : Any sides of rotated rect intersect this */
@@ -510,7 +506,8 @@ EDA_RECT EDA_RECT::Common( const EDA_RECT& aRect ) const
 }
 
 
-const EDA_RECT EDA_RECT::GetBoundingBoxRotated( const VECTOR2I& aRotCenter, double aAngle ) const
+const EDA_RECT EDA_RECT::GetBoundingBoxRotated( const VECTOR2I& aRotCenter,
+                                                const EDA_ANGLE& aAngle ) const
 {
     VECTOR2I corners[4];
 

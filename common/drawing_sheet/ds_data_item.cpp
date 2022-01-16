@@ -381,7 +381,6 @@ const wxString DS_DATA_ITEM::GetClassName() const
 DS_DATA_ITEM_POLYGONS::DS_DATA_ITEM_POLYGONS() :
         DS_DATA_ITEM( DS_POLYPOLYGON )
 {
-    m_Orient = 0.0;
 }
 
 
@@ -445,12 +444,12 @@ int DS_DATA_ITEM_POLYGONS::GetPenSizeUi()
 }
 
 
-const DPOINT DS_DATA_ITEM_POLYGONS::GetCornerPosition( unsigned aIdx, int aRepeat ) const
+const VECTOR2D DS_DATA_ITEM_POLYGONS::GetCornerPosition( unsigned aIdx, int aRepeat ) const
 {
-    DPOINT pos = m_Corners[aIdx];
+    VECTOR2D pos = m_Corners[aIdx];
 
     // Rotation:
-    RotatePoint( &pos.x, &pos.y, m_Orient * 10 );
+    RotatePoint( &pos.x, &pos.y, m_Orient );
     pos += GetStartPos( aRepeat );
     return pos;
 }
@@ -465,15 +464,15 @@ void DS_DATA_ITEM_POLYGONS::SetBoundingBox()
         return;
     }
 
-    DPOINT pos;
+    VECTOR2I pos;
     pos = m_Corners[0];
-    RotatePoint( &pos.x, &pos.y, m_Orient * 10 );
+    RotatePoint( &pos.x, &pos.y, m_Orient );
     m_minCoord = m_maxCoord = pos;
 
     for( unsigned ii = 1; ii < m_Corners.size(); ii++ )
     {
         pos = m_Corners[ii];
-        RotatePoint( &pos.x, &pos.y, m_Orient * 10 );
+        RotatePoint( &pos.x, &pos.y, m_Orient );
 
         if( m_minCoord.x > pos.x )
             m_minCoord.x = pos.x;

@@ -120,7 +120,7 @@ private:
     void print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
 
-    double getParentOrientation() const override { return 0.0; }
+    EDA_ANGLE getParentOrientation() const override { return ANGLE_0; }
     VECTOR2I getParentPosition() const override { return VECTOR2I(); }
 };
 

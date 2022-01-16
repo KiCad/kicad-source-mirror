@@ -423,14 +423,14 @@ bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance, int* aActual
 
 void SHAPE_LINE_CHAIN::Rotate( double aAngle, const VECTOR2I& aCenter )
 {
-    for( auto& pt : m_points )
+    for( VECTOR2I& pt : m_points )
     {
         pt -= aCenter;
         pt = pt.Rotate( aAngle );
         pt += aCenter;
     }
 
-    for( auto& arc : m_arcs )
+    for( SHAPE_ARC& arc : m_arcs )
         arc.Rotate( aAngle, aCenter );
 }
 

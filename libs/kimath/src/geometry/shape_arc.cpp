@@ -126,7 +126,7 @@ SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, i
         m_mid   = m_start;
 
         VECTOR2I arcCenter = aSegmentA.Center();
-        RotatePoint( m_mid, arcCenter, 900.0 ); // mid point at 90 degrees
+        RotatePoint( m_mid, arcCenter, ANGLE_90 ); // mid point at 90 degrees
     }
     else
     {
@@ -148,8 +148,8 @@ SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, i
         EDA_ANGLE angPC  = pToAangle - alpha / 2;
         VECTOR2I  arcCenter;
 
-        arcCenter.x = p.get().x + KiROUND( distPC * cos( angPC.AsRadians() ) );
-        arcCenter.y = p.get().y + KiROUND( distPC * sin( angPC.AsRadians() ) );
+        arcCenter.x = p.get().x + KiROUND( distPC * angPC.Cos() );
+        arcCenter.y = p.get().y + KiROUND( distPC * angPC.Sin() );
 
         // The end points of the arc are the orthogonal projected lines from the line segments
         // to the center of the arc
@@ -184,7 +184,7 @@ SHAPE_ARC::SHAPE_ARC( const SHAPE_ARC& aOther )
 
 
 SHAPE_ARC& SHAPE_ARC::ConstructFromStartEndAngle( const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                                                  double aAngle, double aWidth )
+                                                  const EDA_ANGLE& aAngle, double aWidth )
 {
     m_start = aStart;
     m_mid   = aStart;
@@ -193,7 +193,7 @@ SHAPE_ARC& SHAPE_ARC::ConstructFromStartEndAngle( const VECTOR2I& aStart, const 
 
     VECTOR2I center( CalcArcCenter( aStart, aEnd, aAngle ) );
 
-    RotatePoint( m_mid, center, -aAngle * 10.0 / 2.0 );
+    RotatePoint( m_mid, center, -aAngle / 2.0 );
 
     update_bbox();
 
@@ -498,8 +498,8 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy,
         if( n != 0 )
             a += ( ca * i ) / n;
 
-        double x = c.x + r * cos( a.AsRadians() );
-        double y = c.y + r * sin( a.AsRadians() );
+        double x = c.x + r * a.Cos();
+        double y = c.y + r * a.Sin();
 
         rv.Append( KiROUND( x ), KiROUND( y ) );
     }

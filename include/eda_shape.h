@@ -275,12 +275,12 @@ protected:
     VECTOR2I getPosition() const;
 
     void move( const VECTOR2I& aMoveVector );
-    void rotate( const VECTOR2I& aRotCentre, double aAngle );
+    void rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle );
     void flip( const VECTOR2I& aCentre, bool aFlipLeftRight );
     void scale( double aScale );
 
     // To be implemented by concrete classes
-    virtual double getParentOrientation() const = 0;
+    virtual EDA_ANGLE getParentOrientation() const = 0;
     virtual VECTOR2I getParentPosition() const = 0;
 
     const EDA_RECT getBoundingBox() const;

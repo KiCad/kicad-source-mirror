@@ -287,7 +287,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
         DS_DATA_ITEM_POLYGONS* item = static_cast<DS_DATA_ITEM_POLYGONS*>( aItem );
 
         // Rotation (poly and text)
-        msg.Printf( wxT("%.3f"), item->m_Orient );
+        msg.Printf( wxT("%.3f"), item->m_Orient.AsDegrees() );
         m_textCtrlRotation->SetValue( msg );
     }
 
@@ -507,7 +507,7 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( DS_DATA_ITEM* aItem )
         DS_DATA_ITEM_POLYGONS* item = static_cast<DS_DATA_ITEM_POLYGONS*>( aItem );
 
         msg = m_textCtrlRotation->GetValue();
-        item->m_Orient = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
+        item->m_Orient = EDA_ANGLE( DoubleValueFromString( EDA_UNITS::UNSCALED, msg ), DEGREES_T );
     }
 
     if( aItem->GetType() == DS_DATA_ITEM::DS_BITMAP )

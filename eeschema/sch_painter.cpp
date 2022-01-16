@@ -501,7 +501,7 @@ void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
     box.Inflate( 0, aAttrs.m_StrokeWidth * 1.5 );
 
     box.Normalize();       // Make h and v sizes always >= 0
-    box = box.GetBoundingBoxRotated( (VECTOR2I) aPosition, aAttrs.m_Angle.AsTenthsOfADegree() );
+    box = box.GetBoundingBoxRotated( (VECTOR2I) aPosition, aAttrs.m_Angle );
     box.RevertYAxis();
 
     m_gal->SetIsFill( true );

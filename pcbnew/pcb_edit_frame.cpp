@@ -1059,7 +1059,7 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     PCB_BASE_FRAME::SaveSettings( aCfg );
 
-    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
+    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
     wxASSERT( cfg );
 
     if( cfg )

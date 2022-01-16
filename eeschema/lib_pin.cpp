@@ -1004,7 +1004,7 @@ void LIB_PIN::MirrorVertical( const VECTOR2I& aCenter )
 
 void LIB_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
-    int rot_angle = aRotateCCW ? -900 : 900;
+    EDA_ANGLE rot_angle = aRotateCCW ? -ANGLE_90 : ANGLE_90;
 
     RotatePoint( m_position, aCenter, rot_angle );
 
@@ -1162,13 +1162,13 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     {
     case PIN_UP:
         // Pin is rotated and texts positions are mirrored
-        RotatePoint( begin, VECTOR2I( 0, 0 ), -900 );
-        RotatePoint( end, VECTOR2I( 0, 0 ), -900 );
+        RotatePoint( begin, VECTOR2I( 0, 0 ), -ANGLE_90 );
+        RotatePoint( end, VECTOR2I( 0, 0 ), -ANGLE_90 );
         break;
 
     case PIN_DOWN:
-        RotatePoint( begin, VECTOR2I( 0, 0 ), 900 );
-        RotatePoint( end, VECTOR2I( 0, 0 ), 900 );
+        RotatePoint( begin, VECTOR2I( 0, 0 ), ANGLE_90 );
+        RotatePoint( end, VECTOR2I( 0, 0 ), ANGLE_90 );
         begin.x = -begin.x;
         end.x = -end.x;
         break;

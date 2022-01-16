@@ -42,7 +42,6 @@ public:
     {
         m_movable = false;
         m_padToDie = 0;
-        m_orientation = 0;
     }
 
     ~SOLID()
@@ -117,8 +116,8 @@ public:
     VECTOR2I Offset() const { return m_offset; }
     void SetOffset( const VECTOR2I& aOffset ) { m_offset = aOffset; }
 
-    double GetOrientation() const { return m_orientation; }
-    void SetOrientation( double aOrientation ) { m_orientation = aOrientation; }
+    EDA_ANGLE GetOrientation() const { return m_orientation; }
+    void SetOrientation( const EDA_ANGLE& aOrientation ) { m_orientation = aOrientation; }
 
 private:
     VECTOR2I    m_pos;
@@ -126,7 +125,7 @@ private:
     SHAPE*      m_hole;
     VECTOR2I    m_offset;
     int         m_padToDie;
-    double      m_orientation;  // in 1/10 degrees, matching PAD
+    EDA_ANGLE   m_orientation;
 };
 
 }

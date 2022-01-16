@@ -144,7 +144,7 @@ void SCH_BITMAP::MirrorHorizontally( int aCenter )
 
 void SCH_BITMAP::Rotate( const VECTOR2I& aCenter )
 {
-    RotatePoint( m_pos, aCenter, 900 );
+    RotatePoint( m_pos, aCenter, ANGLE_90 );
     m_image->Rotate( false );
 }
 

@@ -95,13 +95,13 @@ bool TRANSFORM::MapAngles( EDA_ANGLE* aAngle1, EDA_ANGLE* aAngle2 ) const
         *aAngle2 += epsilon;
     }
 
-    x = cos( aAngle1->AsRadians() );
-    y = sin( aAngle1->AsRadians() );
+    x = aAngle1->Cos();
+    y = aAngle1->Sin();
     v = VECTOR2D( x * x1 + y * y1, x * x2 + y * y2 );
     *aAngle1 = EDA_ANGLE( v );
 
-    x = cos( aAngle2->AsRadians() );
-    y = sin( aAngle2->AsRadians() );
+    x = aAngle2->Cos();
+    y = aAngle2->Sin();
     v = VECTOR2D( x * x1 + y * y1, x * x2 + y * y2 );
     *aAngle2 = EDA_ANGLE( v );
 
