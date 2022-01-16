@@ -20,13 +20,13 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/spinctrl.h>
-#include <wx/statline.h>
+#include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -41,39 +41,52 @@ class TEARDROP_DIALOG_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_staticText10;
+		wxStaticText* m_staticTextRndS;
 		wxStaticBitmap* m_bitmapTdCircularInfo;
-		wxStaticText* m_staticText11;
+		wxStaticText* m_stMaxLenRound;
+		wxTextCtrl* m_tcTdMaxLenRound;
+		wxStaticText* m_stTdMaxSizeRound;
+		wxTextCtrl* m_tcMaxHeightRound;
+		wxStaticText* m_stLenUnitRound;
+		wxStaticText* m_stHsettingRound;
+		wxSpinCtrlDouble* m_spTeardropLenPercentRound;
+		wxStaticText* m_stVsettingRound;
+		wxSpinCtrlDouble* m_spTeardropSizePercentRound;
+		wxStaticText* m_stLenPercentRound;
+		wxStaticText* m_staticTextRectS;
 		wxStaticBitmap* m_bitmapTdRectangularInfo;
-		wxStaticText* m_staticText12;
+		wxStaticText* m_stMaxLenRect;
+		wxTextCtrl* m_tcTdMaxLenRect;
+		wxStaticText* m_stTdMaxSizeRect;
+		wxTextCtrl* m_tcMaxHeightRect;
+		wxStaticText* m_stLenUnitRect;
+		wxStaticText* m_stHsettingRect;
+		wxSpinCtrlDouble* m_spTeardropLenPercentRect;
+		wxStaticText* m_stVsettingRect;
+		wxSpinCtrlDouble* m_spTeardropSizePercentRect;
+		wxStaticText* m_stLenPercentRect;
+		wxStaticText* m_staticTextTrck;
 		wxStaticBitmap* m_bitmapTdTrackInfo;
-		wxStaticText* m_stMaxLen;
-		wxTextCtrl* m_tcTdMaxLen;
-		wxStaticText* m_stLenUnit;
-		wxStaticText* m_stHsetting;
-		wxSpinCtrlDouble* m_spTeardropLenPercent;
-		wxStaticText* m_stLenPercent;
-		wxStaticLine* m_staticline5;
-		wxStaticLine* m_staticline6;
-		wxStaticLine* m_staticline7;
-		wxStaticText* m_stTdMaxSize;
-		wxTextCtrl* m_tcMaxSize;
-		wxStaticText* m_stSizeUnit;
-		wxStaticText* m_stVsetting;
-		wxSpinCtrlDouble* m_spTeardropSizePercent;
-		wxStaticText* m_stTdSizePercent;
-		wxStaticLine* m_staticline51;
-		wxStaticLine* m_staticline61;
-		wxStaticLine* m_staticline71;
-		wxStaticText* m_stPoinCount;
-		wxSpinCtrl* m_spPointCount;
+		wxStaticText* m_stMaxLenTrack;
+		wxTextCtrl* m_tcTdMaxLenTrack;
+		wxStaticText* m_stTdMaxSizeTrack;
+		wxTextCtrl* m_tcMaxHeightTrack;
+		wxStaticText* m_stLenUnitTrack;
+		wxStaticText* m_stHsettingtrack;
+		wxSpinCtrlDouble* m_spTeardropLenPercentTrack;
+		wxStaticText* m_stVsettingtrack;
+		wxSpinCtrlDouble* m_spTeardropSizePercentTrack;
+		wxStaticText* m_stLenPercentTrack;
 		wxCheckBox* m_cbPadVia;
 		wxCheckBox* m_cbRoundShapesOnly;
 		wxCheckBox* m_cbSmdSimilarPads;
 		wxCheckBox* m_cbTrack2Track;
 		wxRadioBox* m_rbShapeRound;
 		wxRadioBox* m_rbShapeRect;
+		wxRadioBox* m_rbShapeTrack;
 		wxCheckBox* m_cbOptUseNextTrack;
+		wxStaticText* m_stPointCount;
+		wxSpinCtrl* m_spPointCount;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -81,7 +94,7 @@ class TEARDROP_DIALOG_BASE : public DIALOG_SHIM
 
 	public:
 
-		TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Teardrop Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 532,470 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Teardrop Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 648,479 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~TEARDROP_DIALOG_BASE();
 

@@ -59,12 +59,14 @@ struct VIAPAD
 };
 
 
-// Curved shapes options
-// The actual value is the ORed of options
-#define CURVED_OPTION_NONE 0        /* No curved teardrop shape */
-#define CURVED_OPTION_ROUND 1       /* Curved teardrop shape for vias and round pad shapes */
-#define CURVED_OPTION_RECT 2        /* Curved teardrop shape for rect pad shapes */
-
+// IDs for targets when creating teardrops
+enum TARGET_TD
+{
+    TARGET_ROUND = 0,
+    TARGET_RECT =  1,
+    TARGET_TRACK = 2,
+    TARGET_COUNT = 3
+};
 
 /**
  * TEARDROP_PARAMETARS is a helper class to handle parameters needed to build teardrops
@@ -82,8 +84,7 @@ public:
         m_lenghtRatio( 0.5),
         m_heightRatio( 1.0 ),
         m_curveSegCount( 0 ),
-        m_tolerance( Millimeter2iu( 0.01 ) ),
-        m_curveShapeOpt( CURVED_OPTION_NONE )
+        m_tolerance( Millimeter2iu( 0.01 ) )
     {
     }
 
@@ -112,12 +113,12 @@ public:
      * Set the params for teardrop using curved shape
      * note: if aCurveSegCount is < 3, the shape uses a straight line
      */
-    void SetTeardropCurvedPrms( int aCurveShapeOpt = CURVED_OPTION_NONE,
-                                int aCurveSegCount = 5 )
+    void SetTeardropCurvedPrm( int aCurveSegCount = 0 )
     {
-        m_curveShapeOpt = aCurveShapeOpt;
         m_curveSegCount = aCurveSegCount;
     }
+
+    bool IsCurved() const { return m_curveSegCount > 2; }
 
 protected:
     /// max allowed lenght for teardrops in IU. <= 0 to disable
@@ -133,11 +134,6 @@ protected:
     int     m_curveSegCount;
     /// the max distance between a track end and a padvia position to see them connected
     int     m_tolerance;
-    /// Shape of teardrops for round and rect pad shapes
-    /// 0 = straight lines
-    /// m_curveShapeOpt & CURVED_OPTION_ROUND != 0  curved for round shapes
-    /// m_curveShapeOpt & CURVED_OPTION_RECT != 0  curved for rect shapes
-    int     m_curveShapeOpt;
 };
 
 
@@ -167,6 +163,7 @@ public:
     };
 
     TEARDROP_MANAGER( BOARD* aBoard, PCB_EDIT_FRAME* aFrame ) :
+        m_CurrParams( &m_Parameters[TARGET_ROUND] ),
         m_applyToViaPads( true ),
         m_applyToRoundShapesOnly( false ),
         m_applyToSurfacePads( true ),
@@ -200,9 +197,9 @@ public:
      * Set max allowed lenght and height for teardrops in IU.
      * a value <= 0 disable the constraint
      */
-    void SetTeardropMaxSize( int aMaxLen, int aMaxHeight )
+    void SetTeardropMaxSize( TARGET_TD aTdType, int aMaxLen, int aMaxHeight )
     {
-        m_Parameters.SetTeardropMaxSize( aMaxLen, aMaxHeight );
+        m_Parameters[aTdType].SetTeardropMaxSize( aMaxLen, aMaxHeight );
     }
 
 
@@ -211,9 +208,9 @@ public:
      * the prefered lenght and height are VIAPAD width * aLenghtRatio and
      * VIAPAD width * aHeightRatio
      */
-    void SetTeardropSizeRatio( double aLenghtRatio = 0.5, double aHeightRatio = 1.0 )
+    void SetTeardropSizeRatio( TARGET_TD aTdType, double aLenghtRatio = 0.5, double aHeightRatio = 1.0 )
     {
-        m_Parameters.SetTeardropSizeRatio( aLenghtRatio, aHeightRatio );
+        m_Parameters[aTdType].SetTeardropSizeRatio( aLenghtRatio, aHeightRatio );
     }
 
 
@@ -221,10 +218,9 @@ public:
      * Set the params for teardrop using curved shape
      * note: if aSegCount is < 3, the shape uses a straight line
      */
-    void SetTeardropCurvedPrms( int aCurveShapeOpt = CURVED_OPTION_NONE,
-                                int aCurveSegCount = 5 )
+    void SetTeardropCurvedPrm( TARGET_TD aTdType, int aCurveSegCount = 0 )
     {
-        m_Parameters.SetTeardropCurvedPrms( aCurveShapeOpt, aCurveSegCount );
+        m_Parameters[aTdType].SetTeardropCurvedPrm( aCurveSegCount );
     }
 
     /**
@@ -238,13 +234,16 @@ public:
     void SetTargets( bool aApplyToPadVias, bool aApplyToRoundShapesOnly,
                      bool aApplyToSurfacePads, bool aApplyToTracks );
 
-    TEARDROP_PARAMETERS m_Parameters;
+    TEARDROP_PARAMETERS m_Parameters[TARGET_COUNT];
+
+    // A pointer to one of available m_Parameters items
+    TEARDROP_PARAMETERS* m_CurrParams;
 
 private:
     /**
      * Collect and build the list of all vias from the given board
      */
-    void collectVias( std::vector< VIAPAD >& aList );
+    void collectVias( std::vector< VIAPAD >& aList ) const;
 
     /**
      * Build a list of pads candidate for teardrops from the given board
@@ -256,13 +255,13 @@ private:
      */
     void collectPadsCandidate( std::vector< VIAPAD >& aList,
                                bool aRoundShapesOnly,
-                               bool aIncludeNotDrilled );
+                               bool aIncludeNotDrilled ) const;
 
     /**
      * Build a list of all teardrops on the current board
      * @param aList is the list to populate
      */
-    void collectTeardrops( std::vector< ZONE* >& aList );
+    void collectTeardrops( std::vector< ZONE* >& aList ) const;
 
     /**
      * Add teardrop on tracks of different sizes connected by their end
@@ -340,7 +339,7 @@ private:
      * (mainly for net info)
      */
     ZONE* createTeardrop( TEARDROP_VARIANT aTeardropVariant,
-                          std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack);
+                          std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack) const;
 
     /**
      * Set priority of created teardrops. smaller have bigger priority
@@ -408,7 +407,7 @@ public:
 
 private:
     // Build an index from the layer id and the netcode, to store a track in buffer
-    int idxFromLayNet( int aLayer, int aNetcode )
+    int idxFromLayNet( int aLayer, int aNetcode ) const
     {
         return ( aNetcode << 8 ) + ( aLayer & 0xFF );
     }

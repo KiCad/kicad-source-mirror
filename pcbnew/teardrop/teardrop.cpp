@@ -55,7 +55,7 @@ void TEARDROP_MANAGER::SetTargets( bool aApplyToPadVias, bool aApplyToRoundShape
 
 // Build a zone teardrop
 ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
-                                        std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack)
+                                        std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack) const
 {
     ZONE* teardrop = new ZONE( m_board );
 
@@ -90,7 +90,9 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
                                     bool aDiscardInSameZone, bool aFollowTracks )
 {
     // Init parameters:
-    m_Parameters.m_tolerance = Millimeter2iu( 0.01 );
+    m_Parameters[TARGET_ROUND].m_tolerance = Millimeter2iu( 0.01 );
+    m_Parameters[TARGET_RECT].m_tolerance = Millimeter2iu( 0.01 );
+    m_Parameters[TARGET_TRACK].m_tolerance = Millimeter2iu( 0.01 );
 
     int count = 0;      // Number of created teardrop
 
@@ -132,6 +134,10 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
         // if both track ends are inside or outside, one cannot build a teadrop
         for( VIAPAD& viapad: viapad_list )
         {
+            // Pad and track must be on the same layer
+            if( !viapad.IsOnLayer( track->GetLayer() ) )
+                continue;
+
             bool start_in_pad = viapad.m_Parent->HitTest( track->GetStart() );
             bool end_in_pad = viapad.m_Parent->HitTest( track->GetEnd() );
 
@@ -139,14 +145,15 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
                 // the track is inside or outside the via pad. Cannot create a teardrop
                 continue;
 
+            if( viapad.m_IsRound )
+                m_CurrParams = &m_Parameters[TARGET_ROUND];
+            else
+                m_CurrParams = &m_Parameters[TARGET_RECT];
+
             // Ensure a teardrop shape can be built:
             // The track width must be < teardrop height
-            if( track->GetWidth() >= m_Parameters.m_tdMaxHeight
-                || track->GetWidth() >= viapad.m_Width * m_Parameters.m_heightRatio )
-                continue;
-
-            // Pad and track must be on the same layer
-            if( !viapad.IsOnLayer( track->GetLayer() ) )
+            if( track->GetWidth() >= m_CurrParams->m_tdMaxHeight
+                || track->GetWidth() >= viapad.m_Width * m_CurrParams->m_heightRatio )
                 continue;
 
             // Skip case where pad/via and the track is within a copper zone with the same net
@@ -251,6 +258,7 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
     std::vector< VIAPAD > viapad_list;
     collectVias( viapad_list );
     collectPadsCandidate( viapad_list, true, true );
+    m_CurrParams = &m_Parameters[TARGET_TRACK];
 
     // Explore groups (a group is a set of tracks on the same layer and the same net):
     for( auto grp : trackLookupList.GetBuffer() )
@@ -308,12 +316,13 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
 
                 VECTOR2I roundshape_pos = candidate->GetStart();
                 ENDPOINT_T endPointCandidate = ENDPOINT_START;
-                match_points = track->IsPointOnEnds( roundshape_pos, m_Parameters.m_tolerance);
+                match_points = track->IsPointOnEnds( roundshape_pos, m_CurrParams->m_tolerance );
 
                 if( !match_points )
                 {
                     roundshape_pos = candidate->GetEnd();
-                    match_points = track->IsPointOnEnds( roundshape_pos, m_Parameters.m_tolerance);
+                    match_points = track->IsPointOnEnds( roundshape_pos,
+                                                         m_CurrParams->m_tolerance );
                     endPointCandidate = ENDPOINT_END;
                 }
 
