@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-15 22:42+0000\n"
+"PO-Revision-Date: 2022-02-01 13:56+0000\n"
 "Last-Translator: Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1675,7 +1675,7 @@ msgstr "キャンセル (&C)"
 
 #: common/dialog_shim.cpp:661
 msgid "&Yes"
-msgstr ""
+msgstr "はい(&Y)"
 
 #: common/dialog_shim.cpp:662
 msgid "&No"
@@ -4166,9 +4166,8 @@ msgstr "ネット ラベル"
 
 #: common/eda_item.cpp:350 eeschema/sch_text.cpp:1195
 #: eeschema/sch_text.cpp:1497
-#, fuzzy
 msgid "Net Class Flag"
-msgstr "ネット クラス"
+msgstr "ネットクラスフラグ"
 
 #: common/eda_item.cpp:351 eeschema/sch_text.cpp:1196
 msgid "Global Label"
@@ -5167,9 +5166,8 @@ msgid "Sheet references"
 msgstr "シートリファレンス"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Net class references"
-msgstr "ネットクラス"
+msgstr "ネットクラス リファレンス"
 
 #: common/layer_id.cpp:119
 msgid "Symbol body outlines"
@@ -5185,9 +5183,8 @@ msgid "Schematic text && graphics"
 msgstr "回路図のテキストと図形"
 
 #: common/layer_id.cpp:122
-#, fuzzy
 msgid "Schematic text && graphics backgrounds"
-msgstr "回路図のテキストと図形"
+msgstr "回路図のテキストと図形の背景"
 
 #: common/layer_id.cpp:123
 msgid "Pins"
@@ -5636,14 +5633,12 @@ msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Zip アーカイブ '%s' が作成されました (%s 未圧縮, %s 圧縮済)."
 
 #: common/rc_item.cpp:360
-#, fuzzy
 msgid "Excluded warning: "
-msgstr "除外 "
+msgstr "除外された警告: "
 
 #: common/rc_item.cpp:362
-#, fuzzy
 msgid "Excluded error: "
-msgstr "除外 "
+msgstr "除外されたエラー: "
 
 #: common/rc_item.cpp:366
 msgid "Warning: "
@@ -6396,9 +6391,8 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "Y軸でのミラーリングは未だサポートされていません"
 
 #: common/widgets/font_choice.cpp:58
-#, fuzzy
 msgid "<not found>"
-msgstr "見つかりませんでした"
+msgstr "<見つかりませんでした>"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
@@ -7849,44 +7843,35 @@ msgid ""
 msgstr ""
 "# 1 - 完全なドキュメント\n"
 "\n"
-"Eeschema ドキュメント (*eeschema.html*) には、この中間ネットリストの記述があ"
-"り、例が載っています。(章 ***カスタマイズされたネットリストと BOM (部品表) "
-"ファイルの生成***).\n"
+"Eeschema ドキュメント (*eeschema.html*) には、この中間ネットリストの記述があり、例が載っています。(章 ***"
+"カスタマイズされたネットリストと BOM (部品表) ファイルの生成***).\n"
 "\n"
 "# 2 - 中間ネットリスト ファイル\n"
 "\n"
-"BOM ファイル (及びネットリスト ファイル) は Eeschema によって作られる *中間"
-"ネットリスト ファイル* から生成することができます。\n"
+"BOM ファイル (及びネットリスト ファイル) は Eeschema によって作られる *中間ネットリスト ファイル* から生成することができます。\n"
 "\n"
-"このファイルは XML 構文を使用しており、中間ネットリストと呼ばれます。中間ネッ"
-"トリストは基板に関する大量のデータを含んでおり、これにより BOM や他のレポート"
-"を作成するためのポスト プロセスに使用することができます。\n"
+"このファイルは XML 構文を使用しており、中間ネットリストと呼ばれます。中間ネットリストは基板に関する大量のデータを含んでおり、これにより BOM "
+"や他のレポートを作成するためのポスト プロセスに使用することができます。\n"
 "\n"
-"出力 (BOM やネットリスト) の種類によって、完全な中間ネットリスト ファイルの異"
-"なったサブセットがポスト プロセスで使用されます。\n"
+"出力 (BOM やネットリスト) の種類によって、完全な中間ネットリスト ファイルの異なったサブセットがポスト プロセスで使用されます。\n"
 "\n"
 "# 3 - 新しいフォーマットへの変換\n"
 "\n"
 "中間ネットリストファイルへポスト プロセス フィルターを適用することで、BOM "
-"ファイルのような別のネットリストファイルを生成することができます。この変換は"
-"テキストからテキストへの変換なので、このポスト プロセス フィルターは "
-"*Python*、 *XSLT*、 または入力として XML を解釈できる別のツールを使って記述す"
-"ることができます。\n"
+"ファイルのような別のネットリストファイルを生成することができます。この変換はテキストからテキストへの変換なので、このポスト プロセス フィルターは "
+"*Python*、 *XSLT*、 または入力として XML を解釈できる別のツールを使って記述することができます。\n"
 "\n"
-"XSLT それ自体は XML 変換に適した XML 言語です。ダウンロードしてインストール可"
-"能な `xsltproc` と呼ばれるフリーウェアがあります。 `xsltproc` プログラムは、"
-"中間 XML ネットリスト入力ファイルを読み込んで、スタイルシートを適用して入力を"
-"変換し、結果を出力ファイルに保存するために使用することができます。 "
-"`xsltproc` の使用にあたっては、 XSLT 変換に使用するスタイルシート ファイルが"
-"必要になります。特定の方法で `xsltproc` を実行するように一度設定されれば、変"
-"換プロセス全体が Eeschema によって行われます。\n"
+"XSLT それ自体は XML 変換に適した XML 言語です。ダウンロードしてインストール可能な `xsltproc` と呼ばれるフリーウェアがあります。"
+" `xsltproc` プログラムは、中間 XML "
+"ネットリスト入力ファイルを読み込んで、スタイルシートを適用して入力を変換し、結果を出力ファイルに保存するために使用することができます。 "
+"`xsltproc` の使用にあたっては、 XSLT 変換に使用するスタイルシート ファイルが必要になります。特定の方法で `xsltproc` "
+"を実行するように一度設定されれば、変換プロセス全体が Eeschema によって行われます。\n"
 "\n"
 "Python スクリプトの方がやや簡単に作れます。\n"
 "\n"
 "# 4 - ダイアログ ウィンドウの初期化\n"
 "\n"
-"プラグインの追加ボタンをクリックして、プラグイン リストに新しいプラグイン (ス"
-"クリプト) を追加しなければなりません。\n"
+"プラグインの追加ボタンをクリックして、プラグイン リストに新しいプラグイン (スクリプト) を追加しなければなりません。\n"
 "\n"
 "## 4.1 - プラグイン設定パラメーター\n"
 "\n"
@@ -7896,33 +7881,29 @@ msgstr ""
 " * コンバーター (通常はスクリプト) を起動するためのコマンドライン\n"
 "\n"
 "***注 (Windows のみ):***\n"
-"*既定では、コマンドラインは非表示のコンソール ウィンドウで実行され、出力は "
-"\"プラグイン情報\" フィールドにリダイレクトされます。実行しているコマンドの"
-"ウィンドウを表示するには、 \"コンソール ウィンドウを表示\" のチェックボックス"
-"を有効にして下さい。*\n"
+"*既定では、コマンドラインは非表示のコンソール ウィンドウで実行され、出力は \"プラグイン情報\" "
+"フィールドにリダイレクトされます。実行しているコマンドのウィンドウを表示するには、 \"コンソール ウィンドウを表示\" "
+"のチェックボックスを有効にして下さい。*\n"
 "\n"
 "生成ボタンをクリックすると、以下のことが行われます:\n"
 "\n"
-"1. Eeschema は中間ネットリスト ファイル \\*.xml (例えば `test.xml` )を生成し"
-"ます。\n"
-"2. Eeschema は最終的な出力ファイルを生成するためにコマンドラインからスクリプ"
-"トを実行します。\n"
+"1. Eeschema は中間ネットリスト ファイル \\*.xml (例えば `test.xml` )を生成します。\n"
+"2. Eeschema は最終的な出力ファイルを生成するためにコマンドラインからスクリプトを実行します。\n"
 "\n"
 "## 4.2 - コマンドラインを使ったネットリスト ファイルの生成\n"
 "\n"
-"中間ファイルにシート スタイルを適用するために `xsltproc.exe` を使用すると仮定"
-"すると、 `xsltproc.exe` は以下のコマンドを実行します。\n"
+"中間ファイルにシート スタイルを適用するために `xsltproc.exe` を使用すると仮定すると、 `xsltproc.exe` "
+"は以下のコマンドを実行します。\n"
 "\n"
 "```\n"
-"xsltproc.exe -o <出力ファイル名> <スタイルシート ファイル名> <変換される入力 "
-"XML ファイル>\n"
+"xsltproc.exe -o <出力ファイル名> <スタイルシート ファイル名> <変換される入力 XML ファイル>\n"
 "```\n"
 "\n"
 "Windows では、以下のようなコマンドラインになります。\n"
 "\n"
 "```\n"
-"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%I"
-"\"\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
+"I\"\n"
 "```\n"
 "\n"
 "Linux では、以下のようなコマンドになります。\n"
@@ -7932,11 +7913,9 @@ msgstr ""
 "```\n"
 "ここで `myconverter.xsl` は適用したいスタイルシートです。\n"
 "\n"
-"ファイル名の前後にダブルクォーテーションを忘れないでください。これにより "
-"Eeschema が置き換えた後でも空白文字（スペース）が許容されます。\n"
+"ファイル名の前後にダブルクォーテーションを忘れないでください。これにより Eeschema が置き換えた後でも空白文字（スペース）が許容されます。\n"
 "\n"
-"Python スクリプトを使う場合、このようなコマンドラインとなります。(Python スク"
-"リプトに依存します):\n"
+"Python スクリプトを使う場合、このようなコマンドラインとなります。(Python スクリプトに依存します):\n"
 "\n"
 "```\n"
 "python f:/kicad/bin/plugins/bom-in-python/myconverter.py \"%I\" \"%O\"\n"
@@ -7945,36 +7924,30 @@ msgstr ""
 "または\n"
 "\n"
 "```\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" "
-"\"%O\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" \"%"
+"O\"\n"
 "```\n"
 "\n"
-"コマンドライン フォーマットはファイル名をパラメーターとして受け付けます。サ"
-"ポートされるフォーマット パラメーターは:\n"
+"コマンドライン フォーマットはファイル名をパラメーターとして受け付けます。サポートされるフォーマット パラメーターは:\n"
 "\n"
 " * `%B`: 選択された出力ファイルのベース ファイル名、パスと拡張子を除く。\n"
 " * `%P`: プロジェクト ディレクトリ、名前と後ろに続く '/' を含まず。\n"
 " * `%I`: 完全なファイル名と仮の入力ファイル パス\n"
 "(中間ネット ファイル)。\n"
-" * `%O`: 完全なファイル名とユーザーが選択した出力ファイルのパス (但し、拡張子"
-"含まず)。\n"
+" * `%O`: 完全なファイル名とユーザーが選択した出力ファイルのパス\n"
+" (但し、拡張子含まず)。\n"
 "\n"
-"`%I` は実際の中間ファイル名で置換されます (通常、拡張子 \".xml\" が付いている"
-"ルート シートの完全なファイル名)。\n"
-"`%O` は実際の出力ファイル名で置換されます (拡張子を除いたルート シートの完全"
-"なファイル名)。\n"
-"`%B` は実際の短い出力ファイル名で置換されます (拡張子を除いたルート シートの"
-"短いファイル名)。\n"
+"`%I` は実際の中間ファイル名で置換されます (通常、拡張子 \".xml\" が付いているルート シートの完全なファイル名)。\n"
+"`%O` は実際の出力ファイル名で置換されます (拡張子を除いたルート シートの完全なファイル名)。\n"
+"`%B` は実際の短い出力ファイル名で置換されます (拡張子を除いたルート シートの短いファイル名)。\n"
 "`%P` は実際の現行プロジェクトのパスで置換されます。\n"
 "\n"
 "## 4.3 - コマンドライン フォーマット:\n"
 "\n"
 "### 4.3.1 - 注釈:\n"
 "\n"
-"多くの場合、作成されたファイルは種類に応じた拡張子を持たなければなりませ"
-"ん。\n"
-"このため、オプション ***%O*** に正しいファイル拡張子を追加する必要がありま"
-"す。\n"
+"多くの場合、作成されたファイルは種類に応じた拡張子を持たなければなりません。\n"
+"このため、オプション ***%O*** に正しいファイル拡張子を追加する必要があります。\n"
 "\n"
 "例:\n"
 "\n"
@@ -7998,19 +7971,17 @@ msgstr ""
 "\n"
 "Linux の例:\n"
 "```\n"
-"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-"xsl \"%I\"\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"%I\"\n"
 "```\n"
 "\n"
-"上の例では、Windows の稼働している PC に `xsltproc` がインストールされてお"
-"り、xsl ファイルが `<path_to_kicad>/kicad/bin/plugins/` にあると仮定していま"
-"す。\n"
+"上の例では、Windows の稼働している PC に `xsltproc` がインストールされており、xsl ファイルが "
+"`<path_to_kicad>/kicad/bin/plugins/` にあると仮定しています。\n"
 "\n"
 "\n"
 "### 4.3.3 Python スクリプトの例:\n"
 "\n"
-"python が PC にインストールされており、python スクリプトが以下の位置にあると"
-"仮定します。\n"
+"python が PC にインストールされており、python スクリプトが以下の位置にあると仮定します。\n"
 "\n"
 " `<path_to_kicad>/kicad/bin/plugins/bom-in-python/`\n"
 "\n"
@@ -8022,8 +7993,8 @@ msgstr ""
 "\n"
 "Windows の例:\n"
 "```\n"
-"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
-"\"%O.html\"\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" \"%O"
+".html\"\n"
 "```\n"
 "\n"
 "Linux の例:\n"
@@ -8031,7 +8002,6 @@ msgstr ""
 "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
 "\"%O.csv\"\n"
 "```\n"
-"\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:37
 msgid "Bus Definitions"
@@ -8678,9 +8648,8 @@ msgstr "セットする値"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:218
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:170
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:108
-#, fuzzy
 msgid "Font:"
-msgstr "フォント サイズ:"
+msgstr "フォント:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
@@ -8690,9 +8659,8 @@ msgstr "フォント サイズ:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:174
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:112
-#, fuzzy
 msgid "KiCad Font"
-msgstr "KiCad "
+msgstr "KiCadフォント"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:191
 #: eeschema/dialogs/dialog_label_properties_base.cpp:237
@@ -8754,9 +8722,8 @@ msgstr "線のスタイル:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:354
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:90
-#, fuzzy
 msgid "Fill color:"
-msgstr "線のカラー:"
+msgstr "塗りつぶしの色:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:363
 msgid "Junction size:"
@@ -8867,23 +8834,20 @@ msgid "Label Properties"
 msgstr "ラベル プロパティ"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:104
-#, fuzzy
 msgid "Net Class Flag Properties"
-msgstr "ネット クラスのパラメーター"
+msgstr "ネットクラスフラグのプロパティ"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:105
 msgid "Hierarchical Sheet Pin Properties"
 msgstr "階層シートピン プロパティ"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:394
-#, fuzzy
 msgid "Label can not be empty."
-msgstr "ネット名は空にできません。"
+msgstr "ラベルは空にできません。"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:574
-#, fuzzy
 msgid "The first field is mandatory."
-msgstr "最初の %d フィールドは必須です。"
+msgstr "最初のフィールドは必須です。"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:29
 #: eeschema/dialogs/dialog_label_properties_base.cpp:38
@@ -9054,13 +9018,12 @@ msgid "Passive"
 msgstr "パッシブ"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:161
-#, fuzzy
 msgid "Dot"
-msgstr "ドット"
+msgstr "点"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:167
 msgid "Diamond"
-msgstr ""
+msgstr "ひし形"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:177
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -9263,9 +9226,8 @@ msgid "New Symbol"
 msgstr "新しいシンボル"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
-#, fuzzy
 msgid "Set width to 0 to use Schematic default symbol line width."
-msgstr "幅を0に設定すると、ネットクラスの幅を使用します。"
+msgstr "幅を0に設定すると、回路図シンボルのデフォルトの線幅を使用します。"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:53
 msgid "Fill Style"
@@ -9545,14 +9507,12 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:116
-#, fuzzy
 msgid "Horizontal text"
-msgstr "水平左"
+msgstr "横書き"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:121
-#, fuzzy
 msgid "Vertical text"
-msgstr "垂直"
+msgstr "縦書き"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:146
 #: eeschema/dialogs/dialog_text_properties_base.cpp:107
@@ -9562,7 +9522,7 @@ msgstr "左揃え"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:151
 msgid "Align horizontal center"
-msgstr "水平中央寄せ"
+msgstr "中央揃え"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:156
 #: eeschema/dialogs/dialog_text_properties_base.cpp:97
@@ -9578,7 +9538,7 @@ msgstr "上揃え"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:171
 msgid "Align vertical center"
-msgstr "垂直中央寄せ"
+msgstr "上下中央揃え"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:176
 #: eeschema/dialogs/dialog_text_properties_base.cpp:102
@@ -10477,9 +10437,9 @@ msgid "Set line color to transparent to use Schematic Editor colors."
 msgstr "色を透過色に設定すると、回路図エディターの色を使います。"
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "プロパティ"
+msgstr "%s プロパティ"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -11865,9 +11825,8 @@ msgid "Show page limi&ts"
 msgstr "ページの境界を表示 (&t)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:69
-#, fuzzy
 msgid "Selection && Highlighting"
-msgstr "選択部の高さ"
+msgstr "選択領域とハイライト"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
 msgid "Draw selected text items as box"
@@ -11882,19 +11841,16 @@ msgid "Fill selected shapes"
 msgstr "選択された輪郭を塗りつぶし"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:86
-#, fuzzy
 msgid "Selection thickness:"
-msgstr "デフォルトの線幅:"
+msgstr "選択領域の幅:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:94
-#, fuzzy
 msgid "(selection color can be edited in the \"Colors\" page)"
-msgstr "(ハイライトの色は \"カラー\" ページで編集可能です)"
+msgstr "(選択領域の色は \"カラー\" ページで編集可能です)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:98
-#, fuzzy
 msgid "Highlight thickness:"
-msgstr "ハイライトの太さ (&H):"
+msgstr "ハイライトの太さ:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:113
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
@@ -16132,14 +16088,12 @@ msgid "Add a net label"
 msgstr "ネット ラベルを追加"
 
 #: eeschema/tools/ee_actions.cpp:301
-#, fuzzy
 msgid "Add Net Class Flag"
-msgstr "ネット クラス"
+msgstr "ネットクラスフラグを追加"
 
 #: eeschema/tools/ee_actions.cpp:301
-#, fuzzy
 msgid "Add a net class flag"
-msgstr "ネット ラベルを追加"
+msgstr "ネットクラスフラグを追加"
 
 #: eeschema/tools/ee_actions.cpp:307
 msgid "Add Hierarchical Label"
@@ -16367,14 +16321,12 @@ msgid "Change existing item to a label"
 msgstr "既存のアイテムをラベルに変更"
 
 #: eeschema/tools/ee_actions.cpp:478
-#, fuzzy
 msgid "Change to Net Class Flag"
-msgstr "テキストに変更"
+msgstr "ネットクラスフラグに変更"
 
 #: eeschema/tools/ee_actions.cpp:478
-#, fuzzy
 msgid "Change existing item to a net class flag"
-msgstr "既存のアイテムをラベルに変更"
+msgstr "既存のアイテムをネットクラスフラグに変更"
 
 #: eeschema/tools/ee_actions.cpp:483
 msgid "Change to Hierarchical Label"
@@ -16636,9 +16588,8 @@ msgid "Toggle display of hidden text fields"
 msgstr "非表示テキスト フィールドの表示を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:660
-#, fuzzy
 msgid "Show ERC Warnings"
-msgstr "DRC 警告"
+msgstr "DRC 警告を表示"
 
 #: eeschema/tools/ee_actions.cpp:660
 #, fuzzy
@@ -16646,9 +16597,8 @@ msgid "Show markers for electrical rules checker warnings"
 msgstr "エレクトリカル ルールのチェックを実行"
 
 #: eeschema/tools/ee_actions.cpp:664
-#, fuzzy
 msgid "Show ERC Errors"
-msgstr "プラグインのエラーを表示"
+msgstr "DRC エラーを表示"
 
 #: eeschema/tools/ee_actions.cpp:664
 #, fuzzy
@@ -17145,31 +17095,37 @@ msgstr " X "
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 msgid "10A Log"
-msgstr ""
+msgstr "10A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
+#, fuzzy
 msgid "15A Log"
-msgstr ""
+msgstr "15A Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
+#, fuzzy
 msgid "15A Log S"
-msgstr ""
+msgstr "15A Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
+#, fuzzy
 msgid "10C Rev Log"
-msgstr ""
+msgstr "10C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
+#, fuzzy
 msgid "15C Rev Log"
-msgstr ""
+msgstr "15C Rev Log"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
+#, fuzzy
 msgid "15C Rev Log S"
-msgstr ""
+msgstr "15C Rev Log S"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
+#, fuzzy
 msgid "0B Lin"
-msgstr ""
+msgstr "0B Lin"
 
 #: eeschema/widgets/tuner_slider_base.cpp:66
 #, fuzzy
@@ -20886,7 +20842,6 @@ msgstr ""
 "変更を破棄して終了しますか？"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit.\n"
@@ -20913,23 +20868,22 @@ msgid ""
 msgstr ""
 "最大電流を指定した場合、トレース幅は適合するように計算されます。\n"
 "\n"
-"トレース幅の一つを指定した場合、まず扱える最大電流が計算されます。それから、"
-"この電流を扱えるように別のトレース幅が計算されます。\n"
+"いずれかのトレース幅を指定すると、扱える最大電流が計算されます。それから、この電流を扱えるようにもう一方のトレース幅が計算されます。\n"
 "\n"
 "制御する値はボールド体で表示されます。\n"
 "\n"
-"計算は、電流 35 A (外部) または 17.5 A (内部) まで、温度上昇は 100℃ まで、幅"
-"は 400mil (10mm) までの範囲で有効です。\n"
+"電流は 35 A (外部) または 17.5 A (内部) まで、温度上昇は 100℃ まで、幅は 400mil (10mm) "
+"までの範囲で計算が有効です。\n"
 "\n"
-"計算式 (IPC 2221 より) \n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
-"H)<sup>0.725</sup>___</center>  \n"
-"ここでは:  \n"
-"__I__ = 最大電流 (A)  \n"
-"__dt__ = 周囲環境からの温度上昇 (℃)  \n"
-"___W___ = 幅 (mils)  \n"
-"___H___ = 厚さ(高さ) (mils)  \n"
-"__K__ = 0.024 (内部トレース) または 0.048 (外部トレース)  \n"
+"IPC 2221 より計算式は\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
+"ここで:<br>\n"
+"__I__ = 最大電流 (A)<br>\n"
+"___&Delta;T___ = 周囲環境からの温度上昇 (&deg;C)<br>\n"
+"___W___ = 幅 (mils)<br>\n"
+"___H___ = 厚さ(高さ) (mils)<br>\n"
+"__K__ = 0.024 (内部トレース) または 0.048 (外部トレース)\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:140
 msgid "Dielectric Loss Factor"
@@ -21462,7 +21416,7 @@ msgstr "あり、傾斜付"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:48
 msgid "Options for edge card connectors."
-msgstr "エッジ カード コネクターのオプション"
+msgstr "エッジ カード コネクターのオプション."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:117
 msgid "Core"
@@ -21749,7 +21703,7 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:82
 msgid "Aluminum"
-msgstr ""
+msgstr "アルミニウム"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.h:53
 msgid "Not specified"
@@ -23504,14 +23458,14 @@ msgid "Done.<br><br>"
 msgstr "完了。<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
-msgstr "この違反のための除外を外す"
+msgstr "ルール '%s' への違反の除外をすべて削除"
 
 #: pcbnew/dialogs/dialog_drc.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'"
-msgstr "この違反を除外"
+msgstr "ルール '%s' への違反をすべて除外"
 
 #: pcbnew/dialogs/dialog_drc.cpp:502
 msgid "Run clearance resolution tool..."
@@ -23671,9 +23625,9 @@ msgstr ""
 "す。"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Updated footprint %s (%s)"
-msgstr "フットプリントを更新"
+msgstr "フットプリント %s (%s) を更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:365
 #, fuzzy, c-format
@@ -24998,14 +24952,12 @@ msgid "Delete Items"
 msgstr "アイテムを削除"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:139
-#, fuzzy
 msgid "Other text items"
-msgstr "その他のアイテム"
+msgstr "その他のテキストアイテム"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:140
-#, fuzzy
 msgid "Graphic items"
-msgstr "PCB 図形アイテム"
+msgstr "図形アイテム"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:255
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
@@ -25271,16 +25223,14 @@ msgid "Deselect All"
 msgstr "すべて選択解除"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:49
-#, fuzzy
 msgid "Board layers and physical stackup"
-msgstr "物理的スタックアップを更新"
+msgstr "基板レイヤーと物理的スタックアップ"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:52
 msgid "Solder mask/paste defaults"
 msgstr "ハンダ マスク/ペーストのデフォルト"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:55
-#, fuzzy
 msgid "Text && graphics default properties"
 msgstr "テキストと図形のデフォルト プロパティ"
 
@@ -25290,12 +25240,10 @@ msgid "Text && graphics formatting"
 msgstr "テキストと図形のデフォルト プロパティ"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
-#, fuzzy
 msgid "Design rule constraints"
-msgstr "デザイン ルール ビア:"
+msgstr "デザイン ルールの制約"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
-#, fuzzy
 msgid "Predefined track && via dimensions"
 msgstr "定義されている配線とビアの寸法"
 
@@ -26156,7 +26104,6 @@ msgid "Castellated pad (through hole only)"
 msgstr "端面スルーホール パッド (スルーホールのみ)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:582
-#, fuzzy
 msgid "Clearance Overrides"
 msgstr "クリアランスのオーバーライド"
 
@@ -26224,22 +26171,18 @@ msgid "Zone knockout:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
-#, fuzzy
 msgid "Pad shape"
-msgstr "パッド形状:"
+msgstr "パッド形状"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:720
-#, fuzzy
 msgid "Pad convex hull"
-msgstr "パッドの凸包を使用"
+msgstr "パッドの凸包"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:733
-#, fuzzy
 msgid "Thermal Relief Overrides"
-msgstr "サーマルリリーフ幅"
+msgstr "サーマルリリーフ オーバーライド"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:741
-#, fuzzy
 msgid "Relief gap:"
 msgstr "サーマルリリーフのギャップ:"
 
@@ -26248,9 +26191,8 @@ msgid "Spoke width:"
 msgstr "スポーク幅:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:763
-#, fuzzy
 msgid "Spoke angle:"
-msgstr "円弧角:"
+msgstr "スポークの角度:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 msgid "Primitives list:"
@@ -26341,13 +26283,11 @@ msgid "Y scale constrained."
 msgstr "拡大率 (Y) は制限されています。"
 
 #: pcbnew/dialogs/dialog_plot.cpp:718
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Width correction constrained.  The width correction value must be in the "
 "range of [%s; %s] for the current design rules."
-msgstr ""
-"幅の補正は制限されています。妥当な幅の補正値は、現在のデザイン ルールの設定で"
-"は  [%s; %s] (%s) の範囲でなければなりません。"
+msgstr "幅の補正は制限されています。  妥当な幅の補正値は、現在のデザイン ルールの設定では [%s; %s] の範囲でなければなりません。"
 
 #: pcbnew/dialogs/dialog_plot.cpp:795
 msgid "No layer selected, Nothing to plot"
@@ -26622,10 +26562,8 @@ msgid ""
 "(MinTrackWidth-1), +(MinClearanceValue-1)]."
 msgstr ""
 "正確な幅で PostScript 出力をするためのグローバル補正幅を設定します。\n"
-"これらの補正幅は配線幅やパッドとビアのサイズの誤差を補正するためのもので"
-"す。\n"
-"妥当な幅の補正値は次の範囲でなければなりません。 [-(最小配線幅-1), +(最小クリ"
-"アランス-1)] (0.1 mil 単位)"
+"これらの補正幅は配線幅やパッドとビアのサイズの誤差を補正するためのものです。\n"
+"妥当な幅の補正値は次の範囲でなければなりません[-(最小配線幅-1), +(最小クリアランス-1)] (0.1 mil 単位)。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:323
 msgid "Force A4 output"
@@ -26900,10 +26838,8 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
-"ルーティング中に重複部分を削除します。（例: 新しい配線が既存の配線と同じ接続"
-"であることが確実な場合、古い配線は削除されます）\n"
-"重複の削除は局所的に行われます。（現在ルーティング中の配線の始点と終点の間に"
-"あるものだけが対象です）"
+"ルーティング中に重複部分を削除します。（例: 新しい配線が既存の配線と同じ接続であることが確実な場合、古い配線は削除されます）\n"
+"重複の削除は局所的に行われます（現在ルーティング中の配線の始点と終点の間にあるものだけが対象です）。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Optimize pad connections"
@@ -26925,9 +26861,7 @@ msgstr "セグメントをスムーズに移動"
 msgid ""
 "When enabled, the router attempts to merge several jagged segments into a "
 "single straight one (dragging mode)."
-msgstr ""
-"有効の場合、ルーターはいくつかのギザギザした配線を一つの直線的な配線へマージ"
-"しようと試みます。（ドラッグモード）"
+msgstr "有効の場合、ルーターはいくつかのギザギザした配線を一つの直線的な配線へマージしようと試みます（ドラッグモード）。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
 msgid "Allow DRC violations"
@@ -28783,9 +28717,7 @@ msgstr ""
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
-msgstr ""
-"正のクリアランスはパッドより大きな領域を意味します。(通常はハンダ マスクのク"
-"リアランス)"
+msgstr "正のクリアランスはパッドより大きな領域を意味します(通常はハンダ マスクのクリアランス)。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 msgid "Solder mask minimum web width:"
@@ -28841,9 +28773,7 @@ msgstr ""
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
-msgstr ""
-"負のクリアランスはパッドより小さな領域を意味します。(通常はハンダ ペーストの"
-"クリアランス)"
+msgstr "負のクリアランスはパッドより小さな領域を意味します(通常はハンダ ペーストのクリアランス)。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 msgid ""
@@ -29519,14 +29449,14 @@ msgid "Tessellating copper zones..."
 msgstr "導体ゾーンをテッセレーションしています..."
 
 #: pcbnew/drc/drc_engine.cpp:676
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved zone connection type: %s."
-msgstr "ゾーンの接続タイプ: %s."
+msgstr "解決されたゾーンの接続タイプ: %s."
 
 #: pcbnew/drc/drc_engine.cpp:694
-#, fuzzy, c-format
+#, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
-msgstr "パッドはPTHパッドではありません。接続は %s になります。"
+msgstr "パッドはスルーホールパッドではありません。接続は %s になります。"
 
 #: pcbnew/drc/drc_engine.cpp:754 pcbnew/drc/drc_engine.cpp:769
 #, c-format
@@ -29554,22 +29484,22 @@ msgstr "基板の穴間最小クリアランス: %s."
 #: pcbnew/drc/drc_engine.cpp:817
 #, fuzzy, c-format
 msgid "Local override on %s; zone connection: %s."
-msgstr "%s のローカルで上書き; クリアランス: %s."
+msgstr "%s のローカルオーバーライド; クリアランス: %s."
 
 #: pcbnew/drc/drc_engine.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "%s でオーバーライドされます: サーマルリリーフ: %s."
+msgstr "%s のローカルオーバーライド; サーマルリリーフギャップ: %s."
 
 #: pcbnew/drc/drc_engine.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "%s のローカルで上書き; クリアランス: %s."
+msgstr "%s のローカルオーバーライド; サーマルスポーク幅: %s."
 
 #: pcbnew/drc/drc_engine.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s min thickness: %s."
-msgstr "ゾーンの最小幅:"
+msgstr "ゾーン %s の最小幅: %s."
 
 #: pcbnew/drc/drc_engine.cpp:872
 #, fuzzy, c-format
@@ -29662,9 +29592,8 @@ msgid "Constraint applied."
 msgstr "制約が適用されました。"
 
 #: pcbnew/drc/drc_engine.cpp:1112 pcbnew/drc/drc_engine.cpp:1328
-#, fuzzy
 msgid "Rule applied."
-msgstr "条件なしのルールが適用されました。"
+msgstr "ルールが適用されました。"
 
 #: pcbnew/drc/drc_engine.cpp:1117
 msgid "Rule applied; overrides previous constraints."
@@ -29684,14 +29613,14 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "%sのローカルクリアランス; クリアランス: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s zone connection: %s."
-msgstr "フットプリント選択:"
+msgstr "フットプリント %s のゾーン接続: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1226
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s pad connection: %s."
-msgstr "ゾーンの接続タイプ: %s."
+msgstr "ゾーン %s のパッド接続タイプ: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1230 pcbnew/drc/drc_engine.cpp:1246
 #: pcbnew/drc/drc_engine.cpp:1262 pcbnew/zone.cpp:327 pcbnew/zone.cpp:476
@@ -29699,14 +29628,14 @@ msgid "zone"
 msgstr "ゾーン"
 
 #: pcbnew/drc/drc_engine.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s thermal relief gap: %s."
-msgstr "ゾーンのサーマルリリーフ: %s."
+msgstr "ゾーン %s のサーマルリリーフギャップ: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1258
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s thermal spoke width: %s."
-msgstr "サーマル スポーク幅:"
+msgstr "ゾーン %s のサーマルスポーク幅: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1290
 #, fuzzy, c-format
@@ -29718,7 +29647,6 @@ msgid "Electrical"
 msgstr "電気的"
 
 #: pcbnew/drc/drc_item.cpp:45
-#, fuzzy
 msgid "Design for Manufacturing"
 msgstr "製造のための設計"
 
@@ -29731,9 +29659,8 @@ msgid "Signal Integrity"
 msgstr "信号品質"
 
 #: pcbnew/drc/drc_item.cpp:48
-#, fuzzy
 msgid "Readability"
-msgstr "ネットリストの読み込み"
+msgstr "可読性"
 
 #: pcbnew/drc/drc_item.cpp:52
 msgid "Missing connection between items"
@@ -29864,9 +29791,8 @@ msgid "Pad net doesn't match schematic"
 msgstr "パッドのネットが回路図と不一致"
 
 #: pcbnew/drc/drc_item.cpp:180
-#, fuzzy
 msgid "Footprint not found in libraries"
-msgstr "変更リスト中にシンボルが見つかりません"
+msgstr "ライブラリーにフットプリントが見つかりません"
 
 #: pcbnew/drc/drc_item.cpp:184
 #, fuzzy
@@ -29896,14 +29822,12 @@ msgid "Silkscreen overlap"
 msgstr "シルクスクリーンのオーバーラップ"
 
 #: pcbnew/drc/drc_item.cpp:212
-#, fuzzy
 msgid "Text height out of range"
-msgstr "配線長が許容範囲外"
+msgstr "文字の高さが許容範囲外"
 
 #: pcbnew/drc/drc_item.cpp:216
-#, fuzzy
 msgid "Text thickness out of range"
-msgstr "板厚 %s が範囲を超えています。"
+msgstr "文字の太さが許容範囲外"
 
 #: pcbnew/drc/drc_item.cpp:220
 msgid "Trace length out of range"
@@ -30275,9 +30199,8 @@ msgid "<unconstrained>"
 msgstr "<制約なし>"
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:176
-#, fuzzy
 msgid "Gathering items..."
-msgstr "導体のアイテムを収集しています..."
+msgstr "アイテムを収集しています..."
 
 #: pcbnew/drc/drc_test_provider_mechanical_clearance.cpp:229
 #, fuzzy
@@ -30387,27 +30310,26 @@ msgid "Checking solder mask web integrity..."
 msgstr "フットプリントをチェック..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:85
-#, fuzzy
 msgid "Checking text dimensions..."
-msgstr "テキストの値をチェック..."
+msgstr "テキストの寸法をチェック..."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min height %s; actual %s)"
-msgstr "(%s 最小幅 %s; 現状 %s)"
+msgstr "(%s 最小高さ %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max height %s; actual %s)"
-msgstr "(%s 最大幅 %s; 現状 %s)"
+msgstr "(%s 最大高さ %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min thickness %s; actual %s)"
 msgstr "(%s 最小幅 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max thickness %s; actual %s)"
 msgstr "(%s 最大幅 %s; 現状 %s)"
 
@@ -30430,14 +30352,13 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s 最大直径 %s; 現状 %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:81
-#, fuzzy
 msgid "Checking thermal reliefs..."
-msgstr "テキストの値をチェック..."
+msgstr "サーマルリリーフをチェック..."
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min spoke count %d; actual %d)"
-msgstr "(%s 最大カウント: %d; 現状 %d)"
+msgstr "(%s 最小スポーク数: %d; 現状 %d)"
 
 #: pcbnew/edit_zone_helpers.cpp:86 pcbnew/edit_zone_helpers.cpp:151
 msgid "Modify zone properties"
@@ -31455,14 +31376,12 @@ msgid "Auto-Place Footprints"
 msgstr "フットプリントを自動配置"
 
 #: pcbnew/menubar_pcb_editor.cpp:410
-#, fuzzy
 msgid "Add Teardrops"
-msgstr "引出線を追加"
+msgstr "ティアドロップを追加"
 
 #: pcbnew/menubar_pcb_editor.cpp:412
-#, fuzzy
 msgid "Remove Teardrops"
-msgstr "未使用のパッドを削除"
+msgstr "ティアドロップを削除"
 
 #: pcbnew/menubar_pcb_editor.cpp:434
 msgid "External Plugins"
@@ -31564,7 +31483,7 @@ msgstr "パッケージ内"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:138
 #, c-format
 msgid "Cannot add %s (no footprint assigned)."
-msgstr "%s を追加できません。(関連付けられたフットプリントがありません)"
+msgstr "%s を追加できません(関連付けられたフットプリントがありません)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:150
 #, c-format
@@ -31584,8 +31503,7 @@ msgstr "%s (フットプリント '%s')を追加します。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:208
 #, c-format
 msgid "Cannot update %s (no footprint assigned)."
-msgstr ""
-"%s をアップデートできません。(関連付けられたフットプリントがありません)"
+msgstr "%s をアップデートできません(関連付けられたフットプリントがありません)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:220
 #, c-format
@@ -31765,8 +31683,7 @@ msgstr "重複したフットプリントが '%s' に見つかりました。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:958
 #, c-format
 msgid "Cannot remove unused footprint %s (locked)."
-msgstr ""
-"未使用のフットプリント %s を削除することができません。(ロックされています)"
+msgstr "未使用のフットプリント %s を削除することができません(ロックされています)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:963
 #, c-format
@@ -34263,22 +34180,20 @@ msgstr "wire_via が失われたパッドスタック '%s' を参照していま
 #: pcbnew/teardrop/dialog_teardrop.cpp:177
 #, c-format
 msgid "%d Teardrops created"
-msgstr ""
+msgstr "%d 個のティアドロップが作られました"
 
 #: pcbnew/teardrop/dialog_teardrop.cpp:192
 #, c-format
 msgid "%d Teardrops removed."
-msgstr ""
+msgstr "%d 個のティアドロップが削除されました。"
 
 #: pcbnew/teardrop/teardrop.cpp:189
-#, fuzzy
 msgid "Add teardrops"
-msgstr "引出線を追加"
+msgstr "ティアドロップを追加"
 
 #: pcbnew/teardrop/teardrop.cpp:382
-#, fuzzy
 msgid "Remove teardrops"
-msgstr "アイテムを削除"
+msgstr "ティアドロップを削除"
 
 #: pcbnew/toolbars_footprint_editor.cpp:92
 msgid "Load footprint from current board"
@@ -34478,14 +34393,14 @@ msgid "Zone connection resolution for:"
 msgstr "ゾーンの接続の解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "ゾーンのサーマルリリーフ: %s."
+msgstr "解決されたサーマルリリーフギャップ: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal spoke width: %s."
-msgstr "サーマル スポーク幅:"
+msgstr "解決されたサーマルスポーク幅: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:422
 #, c-format
@@ -37072,39 +36987,32 @@ msgid "Select preset:"
 msgstr "プリセットを選択:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2557
-#, fuzzy
 msgid "Save viewport..."
-msgstr "レポート ファイルを保存..."
+msgstr "ビューポートを保存..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2558
-#, fuzzy
 msgid "Delete viewport..."
-msgstr "プリセットを削除..."
+msgstr "ビューポートを削除..."
 
 #: pcbnew/widgets/appearance_controls.cpp:2605
-#, fuzzy
 msgid "Viewport name:"
-msgstr "キープアウト(禁止)名:"
+msgstr "ビューポート名:"
 
 #: pcbnew/widgets/appearance_controls.cpp:2605
-#, fuzzy
 msgid "Save Viewport"
-msgstr "レポート ファイルを保存"
+msgstr "ビューポートを保存"
 
 #: pcbnew/widgets/appearance_controls.cpp:2643
-#, fuzzy
 msgid "Viewports"
-msgstr "下面を表示"
+msgstr "ビューポート"
 
 #: pcbnew/widgets/appearance_controls.cpp:2652
-#, fuzzy
 msgid "Delete Viewport"
-msgstr "ビアを削除"
+msgstr "ビューポートを削除"
 
 #: pcbnew/widgets/appearance_controls.cpp:2653
-#, fuzzy
 msgid "Select viewport:"
-msgstr "プリセットを選択:"
+msgstr "ビューポートを選択:"
 
 #: pcbnew/widgets/appearance_controls.cpp:3089
 msgid "Open Preferences"
@@ -37145,9 +37053,8 @@ msgid "Layer presets"
 msgstr "レイヤー プリセット"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:182
-#, fuzzy
 msgid "Viewports (Alt+Tab):"
-msgstr "プリセット (Ctrl+Tab):"
+msgstr "ビューポート(Alt+Tab):"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:146
 #, c-format
@@ -37310,7 +37217,6 @@ msgid "none"
 msgstr "なし"
 
 #: pcbnew/zones.h:61
-#, fuzzy
 msgid "thermal reliefs"
 msgstr "サーマルリリーフ"
 
