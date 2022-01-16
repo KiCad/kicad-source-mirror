@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2022-01-15 22:43+0000\n"
+"PO-Revision-Date: 2022-01-16 16:19+0000\n"
 "Last-Translator: Mustafa Selçuk ÇAVDAR <mselcuk@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -4112,7 +4112,7 @@ msgstr "Boyut"
 #: common/eda_item.cpp:325 common/eda_item.cpp:334 pcbnew/pcb_dimension.cpp:939
 #: pcbnew/pcb_dimension.cpp:1061
 msgid "Leader"
-msgstr ""
+msgstr "Klavuz"
 
 #: common/eda_item.cpp:326 common/eda_item.cpp:336
 #: pcbnew/tools/board_inspection_tool.cpp:396
@@ -4803,7 +4803,7 @@ msgstr "Kılavuza Yapışmayı Yoksay"
 
 #: common/hotkey_store.cpp:50
 msgid "Ignore Other Snaps"
-msgstr ""
+msgstr "Diğer kapmaları Yoksay"
 
 #: common/hotkey_store.cpp:57 common/tool/action_menu.cpp:227
 #: common/tool/actions.cpp:114
@@ -6013,7 +6013,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:413
 msgid "Unpin Library"
-msgstr ""
+msgstr "Kitaplığı Sabitlemeyi Geri Alın"
 
 #: common/tool/actions.cpp:414
 msgid "No longer keep the library at the top of the list"
@@ -6021,59 +6021,59 @@ msgstr ""
 
 #: common/tool/actions.cpp:419
 msgid "Pan Up"
-msgstr ""
+msgstr "Yukarı Kaydır"
 
 #: common/tool/actions.cpp:425
 msgid "Pan Down"
-msgstr ""
+msgstr "Aşağı Kaydır"
 
 #: common/tool/actions.cpp:431
 msgid "Pan Left"
-msgstr ""
+msgstr "Sola Kaydır"
 
 #: common/tool/actions.cpp:437
 msgid "Pan Right"
-msgstr ""
+msgstr "Sağa Kaydır"
 
 #: common/tool/actions.cpp:444
 msgid "Switch to Fast Grid 1"
-msgstr ""
+msgstr "Hızlı Izgara 1'e geçme"
 
 #: common/tool/actions.cpp:449
 msgid "Switch to Fast Grid 2"
-msgstr ""
+msgstr "Hızlı Izgara 2'ye geçme"
 
 #: common/tool/actions.cpp:454
 msgid "Switch to Next Grid"
-msgstr ""
+msgstr "Sonraki Kılavuza Geç"
 
 #: common/tool/actions.cpp:458
 msgid "Switch to Previous Grid"
-msgstr ""
+msgstr "Önceki Izgaraya Geç"
 
 #: common/tool/actions.cpp:463
 msgid "Set the grid origin point"
-msgstr ""
+msgstr "Kılavuz başlangıç noktasını ayarlama"
 
 #: common/tool/actions.cpp:476
 msgid "Show Grid"
-msgstr ""
+msgstr "Kılavuzu Göster"
 
 #: common/tool/actions.cpp:476
 msgid "Display grid dots or lines in the edit window"
-msgstr ""
+msgstr "Düzenleme penceresinde kılavuz noktalarını veya çizgilerini görüntüleme"
 
 #: common/tool/actions.cpp:481
 msgid "Grid Properties..."
-msgstr ""
+msgstr "Kılavuz Özellikleri..."
 
 #: common/tool/actions.cpp:481
 msgid "Set grid dimensions"
-msgstr ""
+msgstr "Kılavuz boyutlarını ayarla"
 
 #: common/tool/actions.cpp:486
 msgid "Use inches"
-msgstr ""
+msgstr "İnç kullan"
 
 #: common/tool/actions.cpp:491
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
@@ -6081,11 +6081,11 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:89
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:54
 msgid "Mils"
-msgstr ""
+msgstr "Mil"
 
 #: common/tool/actions.cpp:491
 msgid "Use mils"
-msgstr ""
+msgstr "Mil kullan"
 
 #: common/tool/actions.cpp:496
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
@@ -6096,47 +6096,47 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:89
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
 msgid "Millimeters"
-msgstr ""
+msgstr "Milimetre"
 
 #: common/tool/actions.cpp:496
 msgid "Use millimeters"
-msgstr ""
+msgstr "Milimetre kullan"
 
 #: common/tool/actions.cpp:508
 msgid "Switch units"
-msgstr ""
+msgstr "Birimleri değiştir"
 
 #: common/tool/actions.cpp:508
 msgid "Switch between imperial and metric units"
-msgstr ""
+msgstr "İngiliz ve metrik birimler arasında geçiş yapın"
 
 #: common/tool/actions.cpp:513
 msgid "Polar Coordinates"
-msgstr ""
+msgstr "Kutupsal Koordinatlar"
 
 #: common/tool/actions.cpp:513
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr ""
+msgstr "Kutupsal ve kartezyen koordinat sistemleri arasında geçiş yapın"
 
 #: common/tool/actions.cpp:519
 msgid "Reset Local Coordinates"
-msgstr ""
+msgstr "Yerel Koordinatları Sıfırla"
 
 #: common/tool/actions.cpp:525
 msgid "Always Show Cursor"
-msgstr ""
+msgstr "İmleci Her Zaman Göster"
 
 #: common/tool/actions.cpp:525
 msgid "Display crosshairs even in selection tool"
-msgstr ""
+msgstr "Seçim aracında bile artı işaretlerini göster"
 
 #: common/tool/actions.cpp:530
 msgid "Full-Window Crosshairs"
-msgstr ""
+msgstr "Tam Pencere Artıları"
 
 #: common/tool/actions.cpp:530
 msgid "Switch display of full-window crosshairs"
-msgstr ""
+msgstr "Tam pencere artı işaretinin görüntüsünü değiştir"
 
 #: common/tool/actions.cpp:536
 msgid "Inactive Layer View Mode"
@@ -6144,7 +6144,7 @@ msgstr "Etkin Olmayan Katman Görünümü Modu"
 
 #: common/tool/actions.cpp:537
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr ""
+msgstr "Etkin olmayan katmanları normal ve soluk arasında geçiş yap"
 
 #: common/tool/actions.cpp:543
 msgid "Inactive Layer View Mode (3-state)"
@@ -6156,49 +6156,49 @@ msgstr "Normal, soluk ve gizli arasında etkin olmayan katmanları döngüye ekl
 
 #: common/tool/actions.cpp:549
 msgid "Select item(s)"
-msgstr ""
+msgstr "Öge(ler) seç"
 
 #: common/tool/actions.cpp:556
 msgid "Measure Tool"
-msgstr ""
+msgstr "Ölçüm Aracı"
 
 #: common/tool/actions.cpp:556
 msgid "Interactively measure distance between points"
-msgstr ""
+msgstr "Noktalar arasındaki mesafeyi etkileşimli olarak ölç"
 
 #: common/tool/actions.cpp:567
 msgid "Show 3D viewer window"
-msgstr ""
+msgstr "3D görüntüleyici penceresini göster"
 
 #: common/tool/actions.cpp:572 eeschema/symbol_viewer_frame.cpp:101
 #: eeschema/symbol_viewer_frame.cpp:924
 msgid "Symbol Library Browser"
-msgstr ""
+msgstr "Sembol Kitaplığı Tarayıcısı"
 
 #: common/tool/actions.cpp:572
 msgid "Browse symbol libraries"
-msgstr ""
+msgstr "Sembol kitaplıklarına gözatma"
 
 #: common/tool/actions.cpp:577
 msgid "Create, delete and edit symbols"
-msgstr ""
+msgstr "Sembol oluşturma, silme ve düzenleme"
 
 #: common/tool/actions.cpp:582 pcbnew/footprint_viewer_frame.cpp:110
 #: pcbnew/footprint_viewer_frame.cpp:1001
 msgid "Footprint Library Browser"
-msgstr ""
+msgstr "Ayak İzi Kitaplığı Tarayıcısı"
 
 #: common/tool/actions.cpp:582
 msgid "Browse footprint libraries"
-msgstr ""
+msgstr "Ayak izi kitaplıklarına göz at"
 
 #: common/tool/actions.cpp:587
 msgid "Create, delete and edit footprints"
-msgstr ""
+msgstr "Ayak izleri oluşturun, silin ve düzenleyin"
 
 #: common/tool/actions.cpp:593
 msgid "Update PCB from Schematic..."
-msgstr ""
+msgstr "PCB'i Şematik'ten Güncelleştir..."
 
 #: common/tool/actions.cpp:593
 msgid "Update PCB with changes made to schematic"
@@ -6206,7 +6206,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:598
 msgid "Update Schematic from PCB..."
-msgstr ""
+msgstr "PCB'den Şematik Güncelleştir..."
 
 #: common/tool/actions.cpp:598
 msgid "Update schematic with changes made to PCB"
@@ -6215,61 +6215,62 @@ msgstr ""
 #: common/tool/actions.cpp:608
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:71
 msgid "Configure Paths..."
-msgstr ""
+msgstr "Dosya Yollarını Yapılandırın..."
 
 #: common/tool/actions.cpp:608
 msgid "Edit path configuration environment variables"
-msgstr ""
+msgstr "Dosya Yollarını yapılandırma ortamı değişkenlerini düzenleyin"
 
 #: common/tool/actions.cpp:613
 msgid "Manage Symbol Libraries..."
-msgstr ""
+msgstr "Sembol Kitaplıklarını Yönet..."
 
 #: common/tool/actions.cpp:614
 msgid "Edit the global and project symbol library lists"
-msgstr ""
+msgstr "Genel ve proje sembolü kitaplığı listelerini düzenleme"
 
 #: common/tool/actions.cpp:619
 msgid "Manage Footprint Libraries..."
-msgstr ""
+msgstr "Ayak İzi Kitaplıklarını Yönet..."
 
 #: common/tool/actions.cpp:620
 msgid "Edit the global and project footprint library lists"
-msgstr ""
+msgstr "Genel ve proje ayak izi kitaplığı listelerini düzenle"
 
 #: common/tool/actions.cpp:625
 msgid "Getting Started with KiCad"
-msgstr ""
+msgstr "KiCad'i Kullanmaya Başlayın"
 
 #: common/tool/actions.cpp:626
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr ""
+msgstr "Yeni başlayanlar için \"KiCad'e Başlarken\" kılavuzunu açın"
 
 #: common/tool/actions.cpp:631
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:31
 #: pcb_calculator/calculator_panels/panel_eserie_base.cpp:187
 msgid "Help"
-msgstr ""
+msgstr "Yardım"
 
 #: common/tool/actions.cpp:632
 msgid "Open product documentation in a web browser"
-msgstr ""
+msgstr "Ürün belgelerini web tarayıcısında açın"
 
 #: common/tool/actions.cpp:638
 msgid "List Hotkeys..."
-msgstr ""
+msgstr "Kısayol Tuşlarını Listele..."
 
 #: common/tool/actions.cpp:639
 msgid "Displays current hotkeys table and corresponding commands"
 msgstr ""
+"Geçerli kısayol tuşları tablosunu ve karşılık gelen komutları görüntüler"
 
 #: common/tool/actions.cpp:644
 msgid "Get Involved"
-msgstr ""
+msgstr "Dahil Olun"
 
 #: common/tool/actions.cpp:645
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr ""
+msgstr "Web tarayıcısında \"KiCad'e Katkıda Bulun\" ı aç"
 
 #: common/tool/actions.cpp:651
 msgid "Open \"Donate to KiCad\" in a web browser"
@@ -6277,7 +6278,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:655
 msgid "Report Bug"
-msgstr ""
+msgstr "Hata Bildir"
 
 #: common/tool/common_control.cpp:219
 #, c-format
@@ -6304,10 +6305,12 @@ msgid ""
 "Could not launch the default browser.\n"
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
+"Varsayılan tarayıcı başlatılamadı.\n"
+"KiCad projesine nasıl yardımcı olundu hakkında bilgi için %s"
 
 #: common/tool/common_control.cpp:272
 msgid "Get involved with KiCad"
-msgstr ""
+msgstr "KiCad'e dahil olun"
 
 #: common/tool/common_control.cpp:284
 #, c-format
@@ -6324,25 +6327,25 @@ msgstr ""
 #: common/tool/grid_menu.cpp:104
 #, c-format
 msgid "User grid: %s (%s)"
-msgstr ""
+msgstr "Kullanıcı kılavuzu: %s (%s)"
 
 #: common/tool/zoom_menu.cpp:49
 #, c-format
 msgid "Zoom: %.2f"
-msgstr ""
+msgstr "%.2f Yakınlaştır"
 
 #: common/validators.cpp:250
 #, c-format
 msgid "Incorrect value: %s"
-msgstr ""
+msgstr "Yanlış değer: %s"
 
 #: common/validators.cpp:294
 msgid "Entry contains trailing white space."
-msgstr ""
+msgstr "Girdi sonda boşluk içeriyor."
 
 #: common/validators.cpp:298
 msgid "Entry contains leading white space."
-msgstr ""
+msgstr "Girdi başta boşluk içeriyor."
 
 #: common/validators.cpp:302
 #, c-format
@@ -6351,23 +6354,23 @@ msgstr ""
 
 #: common/validators.cpp:309
 msgid "Library Identifier Validation Error"
-msgstr ""
+msgstr "Kitaplık Tanımlayıcı Doğrulama Hatası"
 
 #: common/validators.cpp:356
 msgid "Invalid signal name"
-msgstr ""
+msgstr "Geçersiz sinyal adı"
 
 #: common/validators.cpp:367
 msgid "Signal names cannot contain CR or LF characters"
-msgstr ""
+msgstr "Sinyal adları CR(alt satır) veya LF(satır başı) karakterleri içeremez"
 
 #: common/validators.cpp:370
 msgid "Signal names cannot contain spaces"
-msgstr ""
+msgstr "Sinyal adları boşluk içeremez"
 
 #: common/view/view.cpp:541
 msgid "Mirroring for Y axis is not supported yet"
-msgstr ""
+msgstr "Y ekseni için yansıtma henüz desteklenmiyor"
 
 #: common/widgets/font_choice.cpp:58
 msgid "<not found>"
@@ -6379,7 +6382,7 @@ msgstr ""
 
 #: common/widgets/footprint_select_widget.cpp:141
 msgid "No default footprint"
-msgstr ""
+msgstr "Varsayılan ayak izi yok"
 
 #: common/widgets/gal_options_panel.cpp:86
 msgid "Accelerated graphics"
@@ -6493,7 +6496,7 @@ msgstr "Dosya Seç"
 
 #: common/widgets/mathplot.cpp:1665
 msgid "Center plot view to this position"
-msgstr ""
+msgstr "Çizim görünümünü bu konuma ortala"
 
 #: common/widgets/mathplot.cpp:1666 eeschema/sim/sim_plot_frame_base.cpp:95
 msgid "Fit on Screen"
@@ -6501,11 +6504,11 @@ msgstr "Ekrana Sığdır"
 
 #: common/widgets/mathplot.cpp:1666
 msgid "Set plot view to show all items"
-msgstr ""
+msgstr "Çizim görünümünü tüm öğeleri gösterecek şekilde ayarla"
 
 #: common/widgets/mathplot.cpp:1667
 msgid "Zoom in plot view."
-msgstr ""
+msgstr "Çizim görünümünü yakınlaştır."
 
 #: common/widgets/mathplot.cpp:1668
 msgid "Zoom out plot view."
@@ -6513,11 +6516,11 @@ msgstr "Çizim görünümünü uzaklaştır."
 
 #: common/widgets/net_selector.cpp:58
 msgid "<no net>"
-msgstr ""
+msgstr "< ağ yok>"
 
 #: common/widgets/net_selector.cpp:59
 msgid "<create net>"
-msgstr ""
+msgstr "<ağ oluştur>"
 
 #: common/widgets/net_selector.cpp:84
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:643
@@ -6621,27 +6624,27 @@ msgstr "KiCad çizim şema dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:195
 msgid "KiCad symbol library files"
-msgstr ""
+msgstr "KiCad sembol kitaplığı dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:202
 msgid "KiCad legacy symbol library files"
-msgstr ""
+msgstr "KiCad eski sembol kitaplığı dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:208
 msgid "All KiCad symbol library files"
-msgstr ""
+msgstr "Tüm KiCad sembol kitaplığı dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:215
 msgid "KiCad project files"
-msgstr ""
+msgstr "KiCad proje dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:221
 msgid "KiCad legacy project files"
-msgstr ""
+msgstr "KiCad eski proje dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:228
 msgid "All KiCad project files"
-msgstr ""
+msgstr "Tüm KiCad proje dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:235
 msgid "All KiCad schematic files"
@@ -6649,92 +6652,92 @@ msgstr "Tüm KiCad şematik dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad legacy schematic files"
-msgstr ""
+msgstr "KiCad eski şematik dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:249
 msgid "KiCad s-expression schematic files"
-msgstr ""
+msgstr "KiCad s-expression şematik dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:256
 msgid "Altium schematic files"
-msgstr ""
+msgstr "Altium şematik dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:262
 msgid "CADSTAR Schematic Archive files"
-msgstr ""
+msgstr "CADSTAR Şematik Arşiv dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:268
 msgid "CADSTAR Archive files"
-msgstr ""
+msgstr "CADSTAR Arşiv dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:274
 msgid "Eagle XML schematic files"
-msgstr ""
+msgstr "Eagle XML şematik dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:280
 msgid "Eagle XML files"
-msgstr ""
+msgstr "Eagle XML dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:286
 msgid "KiCad netlist files"
-msgstr ""
+msgstr "KiCad netlist dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:292 gerbview/files.cpp:50
 msgid "Gerber files"
-msgstr ""
+msgstr "Gerber dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:298
 #: common/wildcards_and_files_ext.cpp:339
 msgid "KiCad printed circuit board files"
-msgstr ""
+msgstr "KiCad baskılı devre kartı dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:304
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr ""
+msgstr "Kartal ver. 6.x XML PCB dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:309
 msgid "CADSTAR PCB Archive files"
-msgstr ""
+msgstr "CADSTAR PCB Arşiv dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:314
 msgid "P-Cad 200x ASCII PCB files"
-msgstr ""
+msgstr "P-Cad 200x ASCII PCB dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:319
 msgid "Altium Designer PCB files"
-msgstr ""
+msgstr "Altium Designer PCB dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:324
 msgid "Altium Circuit Studio PCB files"
-msgstr ""
+msgstr "Altium Circuit Studio PCB dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:329
 msgid "Altium Circuit Maker PCB files"
-msgstr ""
+msgstr "Altium Circuit Maker PCB dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:334
 msgid "Fabmaster PCB files"
-msgstr ""
+msgstr "Fabmaster PCB dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:346
 msgid "KiCad footprint files"
-msgstr ""
+msgstr "KiCad ayak izi dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:353
 msgid "KiCad footprint library paths"
-msgstr ""
+msgstr "KiCad ayak izi kitaplığı yolları"
 
 #: common/wildcards_and_files_ext.cpp:360
 msgid "Legacy footprint library files"
-msgstr ""
+msgstr "Eski ayak izi kitaplığı dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:366
 msgid "Eagle ver. 6.x XML library files"
-msgstr ""
+msgstr "Eagle ver. 6.x XML kitaplık dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:372
 msgid "Geda PCB footprint library files"
-msgstr ""
+msgstr "Geda PCB ayak izi kütüphanesi dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:378
 msgid "Drawing sheet files"
@@ -6742,35 +6745,35 @@ msgstr "Çizim sayfası dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:386
 msgid "KiCad symbol footprint link files"
-msgstr ""
+msgstr "KiCad sembolü ayak izi bağlantı dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:394 gerbview/files.cpp:69
 msgid "Drill files"
-msgstr ""
+msgstr "Matkap dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:401
 msgid "SVG files"
-msgstr ""
+msgstr "SVG dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:407
 msgid "HTML files"
-msgstr ""
+msgstr "HTML dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:413
 msgid "CSV Files"
-msgstr ""
+msgstr "CSV Dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:419
 msgid "Portable document format files"
-msgstr ""
+msgstr "Taşınabilir belge biçimi dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:425
 msgid "PostScript files"
-msgstr ""
+msgstr "PostScript dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:431
 msgid "Report files"
-msgstr ""
+msgstr "Rapor dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:437
 msgid "Component placement files"
@@ -6778,19 +6781,19 @@ msgstr "Bileşen yerleştirme dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:443
 msgid "VRML and X3D files"
-msgstr ""
+msgstr "VRML ve X3D dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:449
 msgid "IDFv3 footprint files"
-msgstr ""
+msgstr "IDFv3 ayak izi dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:455
 msgid "Text files"
-msgstr ""
+msgstr "Metin dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:461
 msgid "Legacy footprint export files"
-msgstr ""
+msgstr "Eski ayak izi dışa aktarma dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:467
 msgid "Electrical rule check file"
@@ -6798,40 +6801,40 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:473
 msgid "Spice library file"
-msgstr ""
+msgstr "Spice kütüphane dosyası"
 
 #: common/wildcards_and_files_ext.cpp:479
 msgid "SPICE netlist file"
-msgstr ""
+msgstr "SPICE netlist dosyası"
 
 #: common/wildcards_and_files_ext.cpp:485
 msgid "CadStar netlist file"
-msgstr ""
+msgstr "CadStar netlist dosyası"
 
 #: common/wildcards_and_files_ext.cpp:491
 msgid "Symbol footprint association files"
-msgstr ""
+msgstr "Sembol ayak izi ilişkilendirme dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:497
 msgid "Zip file"
-msgstr ""
+msgstr "Zip dosyası"
 
 #: common/wildcards_and_files_ext.cpp:503
 msgid "GenCAD 1.4 board files"
-msgstr ""
+msgstr "GenCAD 1.4 kart dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:509
 msgid "DXF Files"
-msgstr ""
+msgstr "DXF Dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:515
 #: resources/linux/mime/kicad-gerbers.xml.in:21
 msgid "Gerber job file"
-msgstr ""
+msgstr "Gerber iş dosyası"
 
 #: common/wildcards_and_files_ext.cpp:521
 msgid "Specctra DSN file"
-msgstr ""
+msgstr "Specctra DSN dosyası"
 
 #: common/wildcards_and_files_ext.cpp:528
 msgid "Specctra Session file"
@@ -6839,19 +6842,19 @@ msgstr ""
 
 #: common/wildcards_and_files_ext.cpp:535
 msgid "IPC-D-356 Test Files"
-msgstr ""
+msgstr "IPC-D-356 Test Dosyaları"
 
 #: common/wildcards_and_files_ext.cpp:542
 msgid "Workbook file"
-msgstr ""
+msgstr "Workbook dosyası"
 
 #: common/wildcards_and_files_ext.cpp:549
 msgid "PNG file"
-msgstr ""
+msgstr "PNG dosyası"
 
 #: common/wildcards_and_files_ext.cpp:555
 msgid "Jpeg file"
-msgstr ""
+msgstr "jpeg dosyası"
 
 #: common/wildcards_and_files_ext.cpp:561
 msgid "Hotkey file"
@@ -6869,7 +6872,7 @@ msgstr "'%s' eşdeğerlik dosyası açılırken hata oluştu."
 
 #: cvpcb/auto_associate.cpp:178
 msgid "Equivalence File Load Error"
-msgstr ""
+msgstr "Denklik Dosyası Yükleme Hatası"
 
 #: cvpcb/auto_associate.cpp:185
 #, c-format
@@ -6882,10 +6885,11 @@ msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
 msgstr ""
+"Eleman %s: proje ayak izi kitaplıklarının hiçbirinde ayak izi %s bulunamadı."
 
 #: cvpcb/auto_associate.cpp:306
 msgid "CvPcb Warning"
-msgstr ""
+msgstr "CvPcb Uyarısı"
 
 #: cvpcb/cvpcb.cpp:174
 msgid ""
@@ -6908,24 +6912,24 @@ msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:63 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
-msgstr ""
+msgstr "Ayak İzleri Ata"
 
 #: cvpcb/cvpcb_mainframe.cpp:103 pcbnew/dialogs/panel_fp_lib_table.cpp:1080
 msgid "Footprint Libraries"
-msgstr ""
+msgstr "Ayak izi(Footprint) Kütüphaneleri"
 
 #: cvpcb/cvpcb_mainframe.cpp:107
 msgid "Symbol : Footprint Assignments"
-msgstr ""
+msgstr "Sembol : Ayak İzi Atamaları"
 
 #: cvpcb/cvpcb_mainframe.cpp:110
 msgid "Filtered Footprints"
-msgstr ""
+msgstr "Filtre Uygulanmış Ayak İzleri"
 
 #: cvpcb/cvpcb_mainframe.cpp:144
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:105
 msgid "Apply, Save Schematic && Continue"
-msgstr ""
+msgstr "Uygula, Şemayı Kaydet && Devam Et"
 
 #: cvpcb/cvpcb_mainframe.cpp:212
 msgid "Symbol to footprint changes are unsaved"
@@ -6996,7 +7000,7 @@ msgstr ""
 #: cvpcb/cvpcb_mainframe.cpp:819 pcbnew/footprint_edit_frame.cpp:891
 #: pcbnew/load_select_footprint.cpp:224
 msgid "Loading Footprint Libraries"
-msgstr ""
+msgstr "Ayak İzi Kitaplıkları Yükleniyor"
 
 #: cvpcb/cvpcb_mainframe.cpp:882
 #, c-format
@@ -7037,14 +7041,14 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1029
 #: pcbnew/footprint_libraries_utils.cpp:530
 msgid "Add"
-msgstr ""
+msgstr "Ekle"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_bus_manager.cpp:76
 #: eeschema/dialogs/dialog_bus_manager.cpp:110
 #: eeschema/dialogs/dialog_spice_model_base.cpp:660
 msgid "Remove"
-msgstr ""
+msgstr "Kaldır"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:42
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:62
@@ -7088,11 +7092,11 @@ msgstr "Değer"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 msgid "Absolute"
-msgstr ""
+msgstr "Mutlak"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 msgid "Relative"
-msgstr ""
+msgstr "Bağıl"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 msgid "Path Type"
@@ -7100,7 +7104,7 @@ msgstr ""
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
-msgstr ""
+msgstr "Ref"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Schematic assignment"
@@ -7422,7 +7426,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_annotate.cpp:90
 msgid "Annotate"
-msgstr ""
+msgstr "Numaralandır"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:37
 msgid "Entire schematic"
@@ -7442,7 +7446,7 @@ msgstr "Yalnızca seçim"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:25
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:28
 msgid "Scope"
-msgstr ""
+msgstr "Kapsam"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:44
 msgid "Order"
@@ -7490,7 +7494,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom.cpp:134
 msgid "Generate"
-msgstr ""
+msgstr "Oluştur"
 
 #: eeschema/dialogs/dialog_bom.cpp:216
 msgid "(file missing)"
@@ -7781,7 +7785,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_bus_manager.cpp:75
 #: eeschema/dialogs/dialog_bus_manager.cpp:109
 msgid "Rename"
-msgstr ""
+msgstr "Yeniden Adlandır"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:89
 msgid "Alias Members"
@@ -7858,13 +7862,13 @@ msgstr "Sembol özniteliklerini güncelle"
 #: eeschema/dialogs/dialog_change_symbols.cpp:154
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:158
 msgid "Change"
-msgstr ""
+msgstr "Değiştir"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:154
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:44
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:158
 msgid "Update"
-msgstr ""
+msgstr "Güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:532
 #, c-format
@@ -8058,7 +8062,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
 msgid "Symbols"
-msgstr ""
+msgstr "Semboller"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:38
 msgid "Current Library Reference"
@@ -8174,15 +8178,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:497 pcbnew/dialogs/dialog_drc.cpp:469
 msgid "errors"
-msgstr ""
+msgstr "hatalar"
 
 #: eeschema/dialogs/dialog_erc.cpp:498 pcbnew/dialogs/dialog_drc.cpp:470
 msgid "warnings"
-msgstr ""
+msgstr "uyarılar"
 
 #: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:471
 msgid "appropriate"
-msgstr ""
+msgstr "uygun"
 
 #: eeschema/dialogs/dialog_erc.cpp:504 pcbnew/dialogs/dialog_drc.cpp:476
 msgid "Remove exclusion for this violation"
@@ -8295,7 +8299,7 @@ msgstr "İhlaller"
 #: pcbnew/dialogs/dialog_drc_base.cpp:183
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:55
 msgid "Exclusions"
-msgstr ""
+msgstr "İstisnalar"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:109
 msgid "Delete Markers"
@@ -8348,7 +8352,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:76
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:53
 msgid "Filters"
-msgstr ""
+msgstr "Filtreler"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:84
 msgid "Filter other symbol fields by name:"
@@ -8422,12 +8426,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
 #: eeschema/pin_type.cpp:126
 msgid "Up"
-msgstr ""
+msgstr "Yukarı"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
 #: eeschema/pin_type.cpp:127
 msgid "Down"
-msgstr ""
+msgstr "Aşağı"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:217
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:257
@@ -8536,12 +8540,12 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 msgid "Diameter:"
-msgstr ""
+msgstr "Çap:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:38
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:44
 msgid "Color:"
-msgstr ""
+msgstr "Renk:"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:61
 msgid "Set diameter to 0 to use schematic junction dot size."
@@ -8592,7 +8596,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_label_properties_base.cpp:29
 #: eeschema/dialogs/dialog_label_properties_base.cpp:38
 msgid "Label:"
-msgstr ""
+msgstr "Etiket:"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:31
 msgid "Enter the text to be used within the schematic"
@@ -8617,7 +8621,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:24
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:27
 msgid "Fields"
-msgstr ""
+msgstr "Alanlar"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:58
@@ -8632,7 +8636,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:38
 #: pcbnew/fp_text_grid_table.cpp:99
 msgid "Show"
-msgstr ""
+msgstr "Göster"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:86
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:59
@@ -8673,7 +8677,7 @@ msgstr ""
 #: pcbnew/footprint.cpp:2473 pcbnew/fp_text_grid_table.cpp:105
 #: pcbnew/pad.cpp:1650
 msgid "Orientation"
-msgstr ""
+msgstr "Doğrultu"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:77
@@ -8731,31 +8735,31 @@ msgstr ""
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36 eeschema/pin_type.cpp:51
 #: eeschema/sch_text.cpp:437
 msgid "Input"
-msgstr ""
+msgstr "Girdi"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:149
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:37 eeschema/pin_type.cpp:52
 #: eeschema/sch_text.cpp:438
 msgid "Output"
-msgstr ""
+msgstr "Çıktı"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:152
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:38 eeschema/pin_type.cpp:53
 #: eeschema/sch_text.cpp:439
 msgid "Bidirectional"
-msgstr ""
+msgstr "Çift yönlü"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:155
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:39 eeschema/pin_type.cpp:54
 msgid "Tri-state"
-msgstr ""
+msgstr "Üç durumlu"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:158
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:40
 #: eeschema/dialogs/dialog_spice_model_base.cpp:199 eeschema/pin_type.cpp:55
 #: eeschema/sch_text.cpp:441
 msgid "Passive"
-msgstr ""
+msgstr "Pasif"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:161
 msgid "Dot"
@@ -8768,14 +8772,14 @@ msgstr ""
 #: eeschema/dialogs/dialog_label_properties_base.cpp:177
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
 msgid "Formatting"
-msgstr ""
+msgstr "Biçimlendirme"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:69
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:45
 #: eeschema/dialogs/dialog_symbol_properties.cpp:139 eeschema/lib_pin.cpp:1057
 #: eeschema/sch_pin.cpp:213
 msgid "Number"
-msgstr ""
+msgstr "Sayı"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:71
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:47
@@ -8857,7 +8861,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:88
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:131
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:70
 msgid "Pin Table"
@@ -8883,7 +8887,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:64
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:176
 msgid "Combo!"
-msgstr ""
+msgstr "Combo!"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:47
 msgid ""
@@ -8899,7 +8903,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:55
 msgid "U"
-msgstr ""
+msgstr "U"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:58
 msgid "Number of units per package:"
@@ -9044,12 +9048,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:131
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:114
 msgid "Description:"
-msgstr ""
+msgstr "Açıklama:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:138
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:121
 msgid "Keywords:"
-msgstr ""
+msgstr "Anahtar Kelimeler:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:145
 msgid "Derive from symbol:"
@@ -9057,7 +9061,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:149
 msgid "<None>"
-msgstr ""
+msgstr "<Yok>"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:150
 msgid ""
@@ -9162,7 +9166,7 @@ msgstr ""
 #: pcbnew/microwave/microwave_polygon.cpp:147
 #: pcbnew/microwave/microwave_polygon.cpp:156
 msgid "units"
-msgstr ""
+msgstr "Birimler"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:280
 msgid "Footprint filters:"
@@ -9204,7 +9208,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_text_properties.cpp:93
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:26
 msgid "Text:"
-msgstr ""
+msgstr "Metin:"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:75
 #, c-format
@@ -9280,7 +9284,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:64
 msgid "Style:"
-msgstr ""
+msgstr "Biçem:"
 
 #: eeschema/dialogs/dialog_line_wire_bus_properties_base.cpp:76
 msgid "Set width to 0 to use Netclass line widths."
@@ -9305,11 +9309,11 @@ msgstr ""
 #: pcbnew/pcb_shape.cpp:155 pcbnew/pcb_text.cpp:126 pcbnew/pcb_track.cpp:807
 #: pcbnew/zone.cpp:579
 msgid "Status"
-msgstr ""
+msgstr "Durum"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:215
 msgid "Updated"
-msgstr ""
+msgstr "Güncellendi"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:19
 msgid ""
@@ -9412,7 +9416,7 @@ msgstr ""
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/footprint_libraries_utils.cpp:1006
 msgid "Name:"
-msgstr ""
+msgstr "İsim:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:90
 msgid "Command line to run the generator:"
@@ -9533,12 +9537,12 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:176
 msgid "&Visible"
-msgstr ""
+msgstr "&Görünür"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:183
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:192
 msgid "Preview:"
-msgstr ""
+msgstr "Önizleme:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:201
 msgid "Alternate pin definitions"
@@ -9590,29 +9594,29 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic.cpp:279
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:76
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:280
 #: eeschema/dialogs/dialog_plot_schematic.cpp:295
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:59
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:281
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:282
 msgid "A2"
-msgstr ""
+msgstr "A2"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:283
 msgid "A1"
-msgstr ""
+msgstr "A1"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:284
 msgid "A0"
-msgstr ""
+msgstr "A0"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:285
 #: eeschema/dialogs/dialog_plot_schematic.cpp:296
@@ -9622,23 +9626,23 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:120
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:284
 msgid "A"
-msgstr ""
+msgstr "A"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:286
 msgid "B"
-msgstr ""
+msgstr "B"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:287
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:288
 msgid "D"
-msgstr ""
+msgstr "D"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:289
 msgid "E"
-msgstr ""
+msgstr "E"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:428
 #: eeschema/sch_edit_frame.cpp:1003
@@ -9709,31 +9713,31 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "Postscript"
-msgstr ""
+msgstr "PostScript"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "SVG"
-msgstr ""
+msgstr "SVG"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "DXF"
-msgstr ""
+msgstr "DXF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:41
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:82
 #: pcbnew/dialogs/dialog_plot_base.cpp:27
 msgid "HPGL"
-msgstr ""
+msgstr "HPGL"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:55
 msgid "Page size:"
@@ -9859,7 +9863,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:108
 msgid "Accept"
-msgstr ""
+msgstr "Kabul et"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:122
 msgid "Symbol Name"
@@ -9952,8 +9956,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:45
+#, fuzzy
 msgid "Import:"
-msgstr ""
+msgstr "İçe Aktar"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
 msgid "Formatting preferences"
@@ -9992,15 +9997,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:52
 msgid "Direction:"
-msgstr ""
+msgstr "Yön:"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:61
 msgid "F&orward"
-msgstr ""
+msgstr "İ&leri"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:66
 msgid "&Backward"
-msgstr ""
+msgstr "&Geri"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:82
 msgid "&Match case"
@@ -10009,12 +10014,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:85
 #: pcbnew/dialogs/dialog_find_base.cpp:46
 msgid "Words"
-msgstr ""
+msgstr "Kelime"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
 msgid "Wildcards"
-msgstr ""
+msgstr "Joker karakterler"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
 msgid "Search pin &names and numbers"
@@ -10034,11 +10039,11 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:115
 msgid "&Find"
-msgstr ""
+msgstr "&Bul"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
 msgid "&Replace"
-msgstr ""
+msgstr "&Değiştir"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
 msgid "Replace &All"
@@ -10061,7 +10066,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_statistics.cpp:669
 #: pcbnew/footprint_libraries_utils.cpp:522
 msgid "Project"
-msgstr ""
+msgstr "Proje"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:79
 #: pcbnew/dialogs/dialog_board_setup.cpp:110
@@ -10232,7 +10237,7 @@ msgstr ""
 #: eeschema/sch_field.cpp:711 eeschema/sch_pin.cpp:215
 #: eeschema/sch_text.cpp:576 eeschema/sch_text.cpp:1211
 msgid "Style"
-msgstr ""
+msgstr "Biçem"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:117
 msgid "Border width:"
@@ -10296,7 +10301,7 @@ msgstr "Geçerli Benzetimi Yapılandır"
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:186
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:195
 msgid "Volts"
-msgstr ""
+msgstr "Volt"
 
 #: eeschema/dialogs/dialog_sim_settings.cpp:588
 msgid "Amperes"
@@ -10314,17 +10319,17 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:27
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:266
 msgid "Decade"
-msgstr ""
+msgstr "On yıl"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:27
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:266
 msgid "Octave"
-msgstr ""
+msgstr "Oktav"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:27
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:266
 msgid "Linear"
-msgstr ""
+msgstr "Doğrusal"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:29
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:268
@@ -10346,7 +10351,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:797
 #: eeschema/dialogs/dialog_spice_model_base.cpp:808
 msgid "Hertz"
-msgstr ""
+msgstr "Herz"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:64
 msgid "Stop frequency:"
@@ -10354,7 +10359,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:85
 msgid "AC"
-msgstr ""
+msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:98
 msgid "Source 2"
@@ -10420,7 +10425,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:214
 #: eeschema/sim/spice_simulator.cpp:67
 msgid "Distortion"
-msgstr ""
+msgstr "Bozulma"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:229
 msgid "Measured node"
@@ -10453,7 +10458,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:311
 #: eeschema/sim/spice_simulator.cpp:70
 msgid "Noise"
-msgstr ""
+msgstr "Gürültü"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:319
 msgid "This tab has no settings"
@@ -10466,12 +10471,12 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:334
 msgid "Pole-Zero"
-msgstr ""
+msgstr "Kutup-Sıfır"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:338
 #: eeschema/sim/spice_simulator.cpp:76
 msgid "Sensitivity"
-msgstr ""
+msgstr "Duyarlılık"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:342
 msgid "Transfer Function"
@@ -10498,7 +10503,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:870
 #: eeschema/dialogs/dialog_spice_model_base.cpp:881
 msgid "seconds"
-msgstr ""
+msgstr "saniye"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:369
 msgid "Final time:"
@@ -10515,7 +10520,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:408
 #: eeschema/sim/spice_simulator.cpp:64
 msgid "Transient"
-msgstr ""
+msgstr "Geçiş"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:413
 msgid "Spice directives:"
@@ -10527,7 +10532,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:429 pcbnew/pad.cpp:1621
 msgid "Custom"
-msgstr ""
+msgstr "Özel"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:436
 msgid "Adjust passive symbol values (e.g. M -> Meg; 100 nF -> 100n)"
@@ -10571,23 +10576,23 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model.cpp:80
 msgid "Diode"
-msgstr ""
+msgstr "Diyot"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:81
 msgid "BJT"
-msgstr ""
+msgstr "BJT"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:82
 msgid "MOSFET"
-msgstr ""
+msgstr "MOSFET"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:83
 msgid "JFET"
-msgstr ""
+msgstr "JFET"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:84
 msgid "Subcircuit"
-msgstr ""
+msgstr "alt devre"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:85
 msgid "Code Model"
@@ -10634,7 +10639,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model.cpp:1100
 #: eeschema/dialogs/dialog_spice_model_base.cpp:885
 msgid "Range:"
-msgstr ""
+msgstr "Aralık:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1101
 #: eeschema/dialogs/dialog_spice_model.cpp:1113
@@ -10643,7 +10648,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:779
 #: eeschema/dialogs/dialog_spice_model_base.cpp:895
 msgid "Offset:"
-msgstr ""
+msgstr "Kayma:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1106
 msgid "Standard deviation:"
@@ -10652,11 +10657,11 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model.cpp:1107
 #: eeschema/dialogs/dialog_spice_model.cpp:1112
 msgid "Mean:"
-msgstr ""
+msgstr "Mutlak:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1118
 msgid "Lambda:"
-msgstr ""
+msgstr "Lamda:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1123
 msgid "type of random generator for source is invalid"
@@ -10715,7 +10720,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
 msgid "Note:"
-msgstr ""
+msgstr "Not:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:244
 msgid "note"
@@ -11011,7 +11016,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:225
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:235
 msgid "Qty"
-msgstr ""
+msgstr "Miktar"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:690
 msgid "Group By"
@@ -11067,7 +11072,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:126
 msgid "Unit:"
-msgstr ""
+msgstr "Birim:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:137
 msgid "Alternate symbol (De Morgan)"
@@ -11087,27 +11092,27 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:336
 #: pcbnew/dialogs/dialog_position_relative.cpp:163
 msgid "Angle:"
-msgstr ""
+msgstr "Açı:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
 msgid "+90"
-msgstr ""
+msgstr "+90"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:143
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:343
 msgid "-90"
-msgstr ""
+msgstr "-90"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:146
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:144
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:344
 msgid "180"
-msgstr ""
+msgstr "180"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:152
 msgid "Mirror:"
-msgstr ""
+msgstr "Ayna:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:156
 msgid "Not mirrored"
@@ -11135,7 +11140,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:192
 msgid "Attributes"
-msgstr ""
+msgstr "Öznitellikler"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:194
 msgid "Exclude from bill of materials"
@@ -12300,13 +12305,13 @@ msgstr ""
 #: eeschema/fields_grid_table.cpp:613
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:142
 msgid "Horizontal"
-msgstr ""
+msgstr "Yatay"
 
 #: eeschema/fields_grid_table.cpp:193 eeschema/fields_grid_table.cpp:499
 #: eeschema/fields_grid_table.cpp:615
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:142
 msgid "Vertical"
-msgstr ""
+msgstr "Dikey"
 
 #: eeschema/files-io.cpp:79
 msgid "Create a new project for this schematic"
@@ -16480,7 +16485,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:81
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:98
 msgid "Reset"
-msgstr ""
+msgstr "Sıfırla"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.h:79
 msgid "Layer Selection"
@@ -19533,7 +19538,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:158
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:659
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:68
 msgid "Tan delta:"
