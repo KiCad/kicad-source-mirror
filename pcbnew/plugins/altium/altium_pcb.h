@@ -169,6 +169,12 @@ private:
                                                PCB_LAYER_ID aLayer );
     void ParseTexts6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                           const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ConvertTexts6ToBoardItem( const ATEXT6& aElem );
+    void ConvertTexts6ToFootprintItem( FOOTPRINT* aFootprint, const ATEXT6& aElem );
+    void ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER_ID aLayer );
+    void ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const ATEXT6& aElem,
+                                              PCB_LAYER_ID aLayer );
+    void ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* aEdaText );
     void ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                           const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseBoardRegionsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,

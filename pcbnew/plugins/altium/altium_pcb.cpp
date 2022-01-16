@@ -665,6 +665,10 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     footprint->SetFPID( fpID );
 
     footprint->SetDescription( "Test Description for " + aFootprintName + " - " + footprintName );
+    footprint->SetReference( "UNK" ); // TODO: extract
+    footprint->SetValue( footprintName );
+    footprint->Reference().SetVisible( true ); // TODO: extract visibility information
+    footprint->Value().SetVisible( true );
 
     while( parser.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -696,6 +700,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         case ALTIUM_RECORD::TEXT:
         {
             ATEXT6 text( parser, m_unicodeStrings );
+            ConvertTexts6ToFootprintItem( footprint.get(), text );
             break;
         }
         case ALTIUM_RECORD::FILL:
@@ -2060,8 +2065,7 @@ void ALTIUM_PCB::ConvertArcs6ToPcbShape( const AARC6& aElem, PCB_SHAPE* aShape )
 }
 
 
-void ALTIUM_PCB::ConvertArcs6ToBoardItem(
-        const AARC6& aElem ) // ConvertTracks6ToBoardItem (OnLayer)
+void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem )
 {
     if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
         return;
@@ -2691,8 +2695,7 @@ void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFil
 }
 
 
-void ALTIUM_PCB::ConvertTracks6ToBoardItem(
-        const ATRACK6& aElem ) // ConvertTracks6ToBoardItem (OnLayer)
+void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem )
 {
     if( aElem.is_polygonoutline || aElem.subpolyindex != ALTIUM_POLYGON_NONE )
         return;
@@ -2821,169 +2824,14 @@ void ALTIUM_PCB::ParseTexts6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
         checkpoint();
         ATEXT6 elem( reader, m_unicodeStrings );
 
-        if( elem.fonttype == ALTIUM_TEXT_TYPE::BARCODE )
-        {
-            wxLogError( _( "Ignored barcode on Altium layer %d (not yet supported)." ),
-                        elem.layer );
-            continue;
-        }
-
-        // TODO: better approach to select if item belongs to a FOOTPRINT
-        EDA_TEXT*   tx  = nullptr;
-        BOARD_ITEM* itm = nullptr;
-
         if( elem.component == ALTIUM_COMPONENT_NONE )
         {
-            PCB_TEXT* pcbText = new PCB_TEXT( m_board );
-            tx = pcbText;
-            itm = pcbText;
-            m_board->Add( pcbText, ADD_MODE::APPEND );
+            ConvertTexts6ToBoardItem( elem );
         }
         else
         {
-            if( m_components.size() <= elem.component )
-            {
-                THROW_IO_ERROR( wxString::Format( "Texts6 stream tries to access component id %d "
-                                                  "of %d existing components",
-                                                  elem.component,
-                                                  m_components.size() ) );
-            }
-
-            FOOTPRINT* footprint = m_components.at( elem.component );
-            FP_TEXT*   fpText;
-
-            if( elem.isDesignator )
-            {
-                fpText = &footprint->Reference();
-            }
-            else if( elem.isComment )
-            {
-                fpText = &footprint->Value();
-            }
-            else
-            {
-                fpText = new FP_TEXT( footprint );
-                footprint->Add( fpText, ADD_MODE::APPEND );
-            }
-
-            fpText->SetKeepUpright( false );
-
-            tx  = fpText;
-            itm = fpText;
-        }
-
-        wxString trimmedText = elem.text.Trim();
-        if( !elem.isDesignator && trimmedText.CmpNoCase( ".Designator" ) == 0 )
-        {
-            tx->SetText( "${REFERENCE}" );
-        }
-        else if( !elem.isComment && trimmedText.CmpNoCase( ".Comment" ) == 0 )
-        {
-            tx->SetText( "${VALUE}" );
-        }
-        else if( trimmedText.CmpNoCase( ".Layer_Name" ) == 0 )
-        {
-            tx->SetText( "${LAYER}" );
-        }
-        else
-        {
-            tx->SetText( elem.text );
-        }
-
-        itm->SetPosition( elem.position );
-        tx->SetTextAngle( EDA_ANGLE( elem.rotation, DEGREES_T ) );
-
-        if( elem.component != ALTIUM_COMPONENT_NONE )
-        {
-            FP_TEXT* fpText = dynamic_cast<FP_TEXT*>( tx );
-
-            if( fpText )
-            {
-                FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( fpText->GetParent() );
-                EDA_ANGLE  orientation     = parentFootprint->GetOrientation();
-
-                fpText->SetTextAngle( fpText->GetTextAngle() - orientation );
-                fpText->SetLocalCoord();
-            }
-        }
-
-        PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
-
-        if( klayer == UNDEFINED_LAYER )
-        {
-            wxLogWarning( _( "Text found on an Altium layer (%d) with no KiCad equivalent. "
-                             "It has been moved to KiCad layer Eco1_User." ),
-                          elem.layer );
-            klayer = Eco1_User;
-        }
-
-        itm->SetLayer( klayer );
-
-        if( elem.fonttype == ALTIUM_TEXT_TYPE::TRUETYPE )
-        {
-            // TODO: why is this required? Somehow, truetype size is calculated differently
-            tx->SetTextSize( wxSize( elem.height / 2, elem.height / 2 ) );
-        }
-        else
-        {
-            tx->SetTextSize( wxSize( elem.height, elem.height ) ); // TODO: parse text width
-        }
-
-        tx->SetTextThickness( elem.strokewidth );
-        tx->SetBold( elem.isBold );
-        tx->SetItalic( elem.isItalic );
-        tx->SetMirrored( elem.isMirrored );
-
-        if( elem.isDesignator || elem.isComment ) // That's just a bold assumption
-        {
-            tx->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-            tx->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-        }
-        else
-        {
-            switch( elem.textposition )
-            {
-            case ALTIUM_TEXT_POSITION::LEFT_TOP:
-            case ALTIUM_TEXT_POSITION::LEFT_CENTER:
-            case ALTIUM_TEXT_POSITION::LEFT_BOTTOM:
-                tx->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-                break;
-            case ALTIUM_TEXT_POSITION::CENTER_TOP:
-            case ALTIUM_TEXT_POSITION::CENTER_CENTER:
-            case ALTIUM_TEXT_POSITION::CENTER_BOTTOM:
-                tx->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-                break;
-            case ALTIUM_TEXT_POSITION::RIGHT_TOP:
-            case ALTIUM_TEXT_POSITION::RIGHT_CENTER:
-            case ALTIUM_TEXT_POSITION::RIGHT_BOTTOM:
-                tx->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-                break;
-            default:
-                wxLogError( "Unexpected horizontal Text Position. This should never happen." );
-                break;
-            }
-
-            switch( elem.textposition )
-            {
-            case ALTIUM_TEXT_POSITION::LEFT_TOP:
-            case ALTIUM_TEXT_POSITION::CENTER_TOP:
-            case ALTIUM_TEXT_POSITION::RIGHT_TOP:
-                tx->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-                break;
-            case ALTIUM_TEXT_POSITION::LEFT_CENTER:
-            case ALTIUM_TEXT_POSITION::CENTER_CENTER:
-            case ALTIUM_TEXT_POSITION::RIGHT_CENTER:
-                tx->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-                break;
-            case ALTIUM_TEXT_POSITION::LEFT_BOTTOM:
-            case ALTIUM_TEXT_POSITION::CENTER_BOTTOM:
-            case ALTIUM_TEXT_POSITION::RIGHT_BOTTOM:
-                tx->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-                break;
-            default:
-                wxLogError( "Unexpected vertical text position. This should never happen." );
-                break;
-            }
+            FOOTPRINT* footprint = HelperGetFootprint( elem.component );
+            ConvertTexts6ToFootprintItem( footprint, elem );
         }
     }
 
@@ -2992,6 +2840,183 @@ void ALTIUM_PCB::ParseTexts6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
         THROW_IO_ERROR( "Texts6 stream is not fully parsed" );
     }
 }
+
+
+void ALTIUM_PCB::ConvertTexts6ToBoardItem( const ATEXT6& aElem )
+{
+    if( aElem.fonttype == ALTIUM_TEXT_TYPE::BARCODE )
+    {
+        wxLogError( _( "Ignored barcode on Altium layer %d (not yet supported)." ), aElem.layer );
+        return;
+    }
+
+    for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+    {
+        ConvertTexts6ToBoardItemOnLayer( aElem, klayer );
+    }
+}
+
+
+void ALTIUM_PCB::ConvertTexts6ToFootprintItem( FOOTPRINT* aFootprint, const ATEXT6& aElem )
+{
+    if( aElem.fonttype == ALTIUM_TEXT_TYPE::BARCODE )
+    {
+        wxLogError( _( "Ignored barcode on Altium layer %d (not yet supported)." ), aElem.layer );
+        return;
+    }
+
+    for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+    {
+        ConvertTexts6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
+    }
+}
+
+
+void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER_ID aLayer )
+{
+    PCB_TEXT* pcbText = new PCB_TEXT( m_board );
+
+    // TODO: improve parsing of variables
+    wxString trimmedText = aElem.text;
+    trimmedText.Trim();
+    if( trimmedText.CmpNoCase( ".Layer_Name" ) == 0 )
+    {
+        pcbText->SetText( "${LAYER}" );
+    }
+    else
+    {
+        pcbText->SetText( aElem.text );
+    }
+
+    pcbText->SetLayer( aLayer );
+    pcbText->SetPosition( aElem.position );
+    pcbText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
+
+    ConvertTexts6ToEdaTextSettings( aElem, pcbText );
+
+    m_board->Add( pcbText, ADD_MODE::APPEND );
+}
+
+
+void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const ATEXT6& aElem,
+                                                      PCB_LAYER_ID aLayer )
+{
+    FP_TEXT* fpText;
+    if( aElem.isDesignator )
+    {
+        fpText = &aFootprint->Reference(); // TODO: handle multiple layers
+    }
+    else if( aElem.isComment )
+    {
+        fpText = &aFootprint->Value(); // TODO: handle multiple layers
+    }
+    else
+    {
+        fpText = new FP_TEXT( aFootprint );
+        aFootprint->Add( fpText, ADD_MODE::APPEND );
+    }
+
+    // TODO: improve parsing of variables
+    wxString trimmedText = aElem.text;
+    trimmedText.Trim();
+    if( !aElem.isDesignator && trimmedText.CmpNoCase( ".Designator" ) == 0 )
+    {
+        fpText->SetText( "${REFERENCE}" );
+    }
+    else if( !aElem.isComment && trimmedText.CmpNoCase( ".Comment" ) == 0 )
+    {
+        fpText->SetText( "${VALUE}" );
+    }
+    else if( trimmedText.CmpNoCase( ".Layer_Name" ) == 0 )
+    {
+        fpText->SetText( "${LAYER}" );
+    }
+    else
+    {
+        fpText->SetText( aElem.text );
+    }
+
+    fpText->SetKeepUpright( false );
+    fpText->SetLayer( aLayer );
+    fpText->SetPosition( aElem.position );
+    fpText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) - aFootprint->GetOrientation() );
+
+    ConvertTexts6ToEdaTextSettings( aElem, fpText );
+
+    fpText->SetLocalCoord();
+}
+
+
+void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* aEdaText )
+{
+    if( aElem.fonttype == ALTIUM_TEXT_TYPE::TRUETYPE )
+    {
+        // TODO: why is this required? Somehow, truetype size is calculated differently
+        aEdaText->SetTextSize( wxSize( aElem.height / 2, aElem.height / 2 ) );
+    }
+    else
+    {
+        aEdaText->SetTextSize( wxSize( aElem.height, aElem.height ) ); // TODO: parse text width
+    }
+
+    aEdaText->SetTextThickness( aElem.strokewidth );
+    aEdaText->SetBold( aElem.isBold );
+    aEdaText->SetItalic( aElem.isItalic );
+    aEdaText->SetMirrored( aElem.isMirrored );
+
+    if( aElem.isDesignator || aElem.isComment ) // That's just a bold assumption
+    {
+        aEdaText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        aEdaText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+    }
+    else
+    {
+        switch( aElem.textposition )
+        {
+        case ALTIUM_TEXT_POSITION::LEFT_TOP:
+        case ALTIUM_TEXT_POSITION::LEFT_CENTER:
+        case ALTIUM_TEXT_POSITION::LEFT_BOTTOM:
+            aEdaText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            break;
+        case ALTIUM_TEXT_POSITION::CENTER_TOP:
+        case ALTIUM_TEXT_POSITION::CENTER_CENTER:
+        case ALTIUM_TEXT_POSITION::CENTER_BOTTOM:
+            aEdaText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+            break;
+        case ALTIUM_TEXT_POSITION::RIGHT_TOP:
+        case ALTIUM_TEXT_POSITION::RIGHT_CENTER:
+        case ALTIUM_TEXT_POSITION::RIGHT_BOTTOM:
+            aEdaText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            break;
+        default:
+            wxLogError( "Unexpected horizontal Text Position. This should never happen." );
+            break;
+        }
+
+        switch( aElem.textposition )
+        {
+        case ALTIUM_TEXT_POSITION::LEFT_TOP:
+        case ALTIUM_TEXT_POSITION::CENTER_TOP:
+        case ALTIUM_TEXT_POSITION::RIGHT_TOP:
+            aEdaText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+            break;
+        case ALTIUM_TEXT_POSITION::LEFT_CENTER:
+        case ALTIUM_TEXT_POSITION::CENTER_CENTER:
+        case ALTIUM_TEXT_POSITION::RIGHT_CENTER:
+            aEdaText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+            break;
+        case ALTIUM_TEXT_POSITION::LEFT_BOTTOM:
+        case ALTIUM_TEXT_POSITION::CENTER_BOTTOM:
+        case ALTIUM_TEXT_POSITION::RIGHT_BOTTOM:
+            aEdaText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+            break;
+        default:
+            wxLogError( "Unexpected vertical text position. This should never happen." );
+            break;
+        }
+    }
+}
+
 
 void ALTIUM_PCB::ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
