@@ -16,7 +16,7 @@
         <property name="help_provider">none</property>
         <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
-        <property name="internationalize">0</property>
+        <property name="internationalize">1</property>
         <property name="name">dialog_teardrop_base</property>
         <property name="namespace"></property>
         <property name="path">.</property>
@@ -832,7 +832,7 @@
                                                                 <property name="gripper">0</property>
                                                                 <property name="hidden">0</property>
                                                                 <property name="id">wxID_ANY</property>
-                                                                <property name="label">% of d</property>
+                                                                <property name="label">percent of d</property>
                                                                 <property name="markup">0</property>
                                                                 <property name="max_size"></property>
                                                                 <property name="maximize_button">0</property>
@@ -1591,7 +1591,7 @@
                                                                 <property name="gripper">0</property>
                                                                 <property name="hidden">0</property>
                                                                 <property name="id">wxID_ANY</property>
-                                                                <property name="label">% of d</property>
+                                                                <property name="label">percent of d</property>
                                                                 <property name="markup">0</property>
                                                                 <property name="max_size"></property>
                                                                 <property name="maximize_button">0</property>
@@ -2350,7 +2350,7 @@
                                                                 <property name="gripper">0</property>
                                                                 <property name="hidden">0</property>
                                                                 <property name="id">wxID_ANY</property>
-                                                                <property name="label">% of d</property>
+                                                                <property name="label">percent of d</property>
                                                                 <property name="markup">0</property>
                                                                 <property name="max_size"></property>
                                                                 <property name="maximize_button">0</property>
@@ -2709,7 +2709,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Round shapes teardrop style</property>
+                                        <property name="label">Style for round shapes</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -2775,7 +2775,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Rect shapes teardrop style</property>
+                                        <property name="label">Style for rect shapes</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -2841,7 +2841,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Track teardrop style</property>
+                                        <property name="label">Style for tracks</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>

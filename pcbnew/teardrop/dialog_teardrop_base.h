@@ -9,6 +9,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -94,7 +95,7 @@ class TEARDROP_DIALOG_BASE : public DIALOG_SHIM
 
 	public:
 
-		TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Teardrop Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 648,479 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		TEARDROP_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Teardrop Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 648,479 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~TEARDROP_DIALOG_BASE();
 
