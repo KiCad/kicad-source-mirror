@@ -133,6 +133,25 @@ void ALTIUM_PCB::HelperShapeSetLocalCoord( PCB_SHAPE* aShape, uint16_t aComponen
 }
 
 
+void ALTIUM_PCB::HelperShapeSetLocalCoord( FP_SHAPE* aShape )
+{
+    aShape->SetLocalCoord();
+
+    // TODO: SetLocalCoord() does not update the polygon shape!
+    // This workaround converts the poly shape into the local coordinates
+    SHAPE_POLY_SET& polyShape = aShape->GetPolyShape();
+    if( !polyShape.IsEmpty() )
+    {
+        FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aShape->GetParent() );
+        if( fp )
+        {
+            polyShape.Move( -fp->GetPosition() );
+            polyShape.Rotate( -fp->GetOrientation().AsRadians() );
+        }
+    }
+}
+
+
 void HelperShapeLineChainFromAltiumVertices( SHAPE_LINE_CHAIN& aLine,
                                              const std::vector<ALTIUM_VERTICE>& aVertices )
 {
@@ -684,11 +703,13 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         case ALTIUM_RECORD::PAD:
         {
             APAD6 pad( parser );
+            ConvertPads6ToFootprintItem( footprint.get(), pad );
             break;
         }
         case ALTIUM_RECORD::VIA:
         {
             AVIA6 via( parser );
+            // TODO: implement
             break;
         }
         case ALTIUM_RECORD::TRACK:
@@ -706,16 +727,19 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         case ALTIUM_RECORD::FILL:
         {
             AFILL6 fill( parser );
+            // TODO: implement
             break;
         }
         case ALTIUM_RECORD::REGION:
         {
             AREGION6 region( parser, false /* TODO */ );
+            // TODO: implement
             break;
         }
         case ALTIUM_RECORD::MODEL:
         {
             ACOMPONENTBODY6 componentBody( parser );
+            // Won't be supported for now, as we would need to extract the model
             break;
         }
         default:
@@ -2203,209 +2227,14 @@ void ALTIUM_PCB::ParsePads6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
         checkpoint();
         APAD6 elem( reader );
 
-        // It is possible to place altium pads on non-copper layers -> we need to interpolate them using drawings!
-        if( !IsAltiumLayerCopper( elem.layer ) && !IsAltiumLayerAPlane( elem.layer )
-                && elem.layer != ALTIUM_LAYER::MULTI_LAYER )
-        {
-            HelperParsePad6NonCopper( elem );
-            continue;
-        }
-
-        // Create Pad
-        FOOTPRINT* footprint = nullptr;
-
         if( elem.component == ALTIUM_COMPONENT_NONE )
         {
-            footprint = new FOOTPRINT( m_board ); // We cannot add a pad directly into the PCB
-            m_board->Add( footprint, ADD_MODE::APPEND );
-            footprint->SetPosition( elem.position );
+            ConvertPads6ToBoardItem( elem );
         }
         else
         {
-            if( m_components.size() <= elem.component )
-            {
-                THROW_IO_ERROR( wxString::Format( "Pads6 stream tries to access component id %d "
-                                                  "of %d existing components",
-                                                  elem.component,
-                                                  m_components.size() ) );
-            }
-            footprint = m_components.at( elem.component );
-        }
-
-        PAD* pad = new PAD( footprint );
-        footprint->Add( pad, ADD_MODE::APPEND );
-
-        pad->SetNumber( elem.name );
-        pad->SetNetCode( GetNetCode( elem.net ) );
-        pad->SetLocked( elem.is_locked );
-
-        pad->SetPosition( elem.position );
-        pad->SetOrientationDegrees( elem.direction );
-        pad->SetLocalCoord();
-
-        pad->SetSize( elem.topsize );
-
-        if( elem.holesize == 0 )
-        {
-            pad->SetAttribute( PAD_ATTRIB::SMD );
-        }
-        else
-        {
-            if( elem.layer != ALTIUM_LAYER::MULTI_LAYER )
-            {
-                // TODO: I assume other values are possible as well?
-                wxLogError( _( "Footprint %s pad %s is not marked as multilayer, but is a TH pad." ),
-                            footprint->GetReference(),
-                            elem.name );
-            }
-            pad->SetAttribute( elem.plated ? PAD_ATTRIB::PTH :
-                                             PAD_ATTRIB::NPTH );
-            if( !elem.sizeAndShape || elem.sizeAndShape->holeshape == ALTIUM_PAD_HOLE_SHAPE::ROUND )
-            {
-                pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
-                pad->SetDrillSize( wxSize( elem.holesize, elem.holesize ) );
-            }
-            else
-            {
-                switch( elem.sizeAndShape->holeshape )
-                {
-                case ALTIUM_PAD_HOLE_SHAPE::ROUND:
-                    wxFAIL_MSG( "Round holes are handled before the switch" );
-                    break;
-
-                case ALTIUM_PAD_HOLE_SHAPE::SQUARE:
-                    wxLogWarning( _( "Footprint %s pad %s has a square hole (not yet supported)." ),
-                                  footprint->GetReference(),
-                                  elem.name );
-                    pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
-                    pad->SetDrillSize( wxSize( elem.holesize, elem.holesize ) ); // Workaround
-                    // TODO: elem.sizeAndShape->slotsize was 0 in testfile. Either use holesize in this case or rect holes have a different id
-                    break;
-
-                case ALTIUM_PAD_HOLE_SHAPE::SLOT:
-                {
-                    pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_OBLONG );
-                    EDA_ANGLE slotRotation( elem.sizeAndShape->slotrotation, DEGREES_T );
-
-                    slotRotation.Normalize();
-
-                    if( slotRotation == ANGLE_0 || slotRotation == ANGLE_180 )
-                    {
-                        pad->SetDrillSize( wxSize( elem.sizeAndShape->slotsize, elem.holesize ) );
-                    }
-                    else
-                    {
-                        if( slotRotation != ANGLE_90 && slotRotation != ANGLE_270 )
-                        {
-                            wxLogWarning( _( "Footprint %s pad %s has a hole-rotation of %f "
-                                             "degrees. KiCad only supports 90 degree rotations." ),
-                                          footprint->GetReference(),
-                                          elem.name,
-                                          slotRotation.AsDegrees() );
-                        }
-
-                        pad->SetDrillSize( wxSize( elem.holesize, elem.sizeAndShape->slotsize ) );
-                    }
-                }
-                break;
-
-                default:
-                case ALTIUM_PAD_HOLE_SHAPE::UNKNOWN:
-                    wxLogError( _( "Footprint %s pad %s uses a hole of unknown kind %d." ),
-                                footprint->GetReference(),
-                                elem.name,
-                                elem.sizeAndShape->holeshape );
-                    pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
-                    pad->SetDrillSize( wxSize( elem.holesize, elem.holesize ) ); // Workaround
-                    break;
-                }
-            }
-
-            if( elem.sizeAndShape )
-            {
-                pad->SetOffset( elem.sizeAndShape->holeoffset[0] );
-            }
-        }
-
-        if( elem.padmode != ALTIUM_PAD_MODE::SIMPLE )
-        {
-            wxLogError( _( "Footprint %s pad %s uses a complex pad stack (not yet supported.)" ),
-                        footprint->GetReference(),
-                        elem.name );
-        }
-
-        switch( elem.topshape )
-        {
-        case ALTIUM_PAD_SHAPE::RECT:
-            pad->SetShape( PAD_SHAPE::RECT );
-            break;
-        case ALTIUM_PAD_SHAPE::CIRCLE:
-            if( elem.sizeAndShape
-                    && elem.sizeAndShape->alt_shape[0] == ALTIUM_PAD_SHAPE_ALT::ROUNDRECT )
-            {
-                pad->SetShape( PAD_SHAPE::ROUNDRECT ); // 100 = round, 0 = rectangular
-                double ratio = elem.sizeAndShape->cornerradius[0] / 200.;
-                pad->SetRoundRectRadiusRatio( ratio );
-            }
-            else if( elem.topsize.x == elem.topsize.y )
-            {
-                pad->SetShape( PAD_SHAPE::CIRCLE );
-            }
-            else
-            {
-                pad->SetShape( PAD_SHAPE::OVAL );
-            }
-            break;
-        case ALTIUM_PAD_SHAPE::OCTAGONAL:
-            pad->SetShape( PAD_SHAPE::CHAMFERED_RECT );
-            pad->SetChamferPositions( RECT_CHAMFER_ALL );
-            pad->SetChamferRectRatio( 0.25 );
-            break;
-        case ALTIUM_PAD_SHAPE::UNKNOWN:
-        default:
-            wxLogError( _( "Footprint %s pad %s uses an unknown pad-shape." ),
-                        footprint->GetReference(),
-                        elem.name );
-            break;
-        }
-
-        switch( elem.layer )
-        {
-        case ALTIUM_LAYER::TOP_LAYER:
-            pad->SetLayer( F_Cu );
-            pad->SetLayerSet( PAD::SMDMask() );
-            break;
-        case ALTIUM_LAYER::BOTTOM_LAYER:
-            pad->SetLayer( B_Cu );
-            pad->SetLayerSet( FlipLayerMask( PAD::SMDMask() ) );
-            break;
-        case ALTIUM_LAYER::MULTI_LAYER:
-            pad->SetLayerSet( elem.plated ? PAD::PTHMask() : PAD::UnplatedHoleMask() );
-            break;
-        default:
-            PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
-            pad->SetLayer( klayer );
-            pad->SetLayerSet( LSET( 1, klayer ) );
-            break;
-        }
-
-        if( elem.pastemaskexpansionmode == ALTIUM_PAD_RULE::MANUAL )
-        {
-            pad->SetLocalSolderPasteMargin( elem.pastemaskexpansionmanual );
-        }
-
-        if( elem.soldermaskexpansionmode == ALTIUM_PAD_RULE::MANUAL )
-        {
-            pad->SetLocalSolderMaskMargin( elem.soldermaskexpansionmanual );
-        }
-
-        if( elem.is_tent_top )
-        {
-            pad->SetLayerSet( pad->GetLayerSet().reset( F_Mask ) );
-        }
-        if( elem.is_tent_bottom )
-        {
-            pad->SetLayerSet( pad->GetLayerSet().reset( B_Mask ) );
+            FOOTPRINT* footprint = HelperGetFootprint( elem.component );
+            ConvertPads6ToFootprintItem( footprint, elem );
         }
     }
 
@@ -2416,19 +2245,259 @@ void ALTIUM_PCB::ParsePads6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
 }
 
 
-void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
+void ALTIUM_PCB::ConvertPads6ToBoardItem( const APAD6& aElem )
+{
+    // It is possible to place altium pads on non-copper layers -> we need to interpolate them using drawings!
+    if( !IsAltiumLayerCopper( aElem.layer ) && !IsAltiumLayerAPlane( aElem.layer )
+        && aElem.layer != ALTIUM_LAYER::MULTI_LAYER )
+    {
+        ConvertPads6ToBoardItemOnNonCopper( aElem );
+    }
+    else
+    {
+        // We cannot add a pad directly into the PCB
+        FOOTPRINT* footprint = new FOOTPRINT( m_board );
+        footprint->SetPosition( aElem.position );
+
+        ConvertPads6ToFootprintItemOnCopper( footprint, aElem );
+
+        m_board->Add( footprint, ADD_MODE::APPEND );
+    }
+}
+
+
+void ALTIUM_PCB::ConvertPads6ToFootprintItem( FOOTPRINT* aFootprint, const APAD6& aElem )
+{
+    // It is possible to place altium pads on non-copper layers -> we need to interpolate them using drawings!
+    if( !IsAltiumLayerCopper( aElem.layer ) && !IsAltiumLayerAPlane( aElem.layer )
+        && aElem.layer != ALTIUM_LAYER::MULTI_LAYER )
+    {
+        ConvertPads6ToFootprintItemOnNonCopper( aFootprint, aElem );
+    }
+    else
+    {
+        ConvertPads6ToFootprintItemOnCopper( aFootprint, aElem );
+    }
+}
+
+
+void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, const APAD6& aElem )
+{
+    PAD* pad = new PAD( aFootprint );
+
+    pad->SetNumber( aElem.name );
+    pad->SetNetCode( GetNetCode( aElem.net ) );
+    pad->SetLocked( aElem.is_locked );
+
+    pad->SetPosition( aElem.position );
+    pad->SetOrientationDegrees( aElem.direction );
+    pad->SetLocalCoord();
+
+    pad->SetSize( aElem.topsize );
+
+    if( aElem.holesize == 0 )
+    {
+        pad->SetAttribute( PAD_ATTRIB::SMD );
+    }
+    else
+    {
+        if( aElem.layer != ALTIUM_LAYER::MULTI_LAYER )
+        {
+            // TODO: I assume other values are possible as well?
+            wxLogError( _( "Footprint %s pad %s is not marked as multilayer, but is a TH pad." ),
+                        aFootprint->GetReference(), aElem.name );
+        }
+        pad->SetAttribute( aElem.plated ? PAD_ATTRIB::PTH : PAD_ATTRIB::NPTH );
+        if( !aElem.sizeAndShape || aElem.sizeAndShape->holeshape == ALTIUM_PAD_HOLE_SHAPE::ROUND )
+        {
+            pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
+            pad->SetDrillSize( wxSize( aElem.holesize, aElem.holesize ) );
+        }
+        else
+        {
+            switch( aElem.sizeAndShape->holeshape )
+            {
+            case ALTIUM_PAD_HOLE_SHAPE::ROUND:
+                wxFAIL_MSG( "Round holes are handled before the switch" );
+                break;
+
+            case ALTIUM_PAD_HOLE_SHAPE::SQUARE:
+                wxLogWarning( _( "Footprint %s pad %s has a square hole (not yet supported)." ),
+                              aFootprint->GetReference(), aElem.name );
+                pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
+                pad->SetDrillSize( wxSize( aElem.holesize, aElem.holesize ) ); // Workaround
+                // TODO: elem.sizeAndShape->slotsize was 0 in testfile. Either use holesize in this case or rect holes have a different id
+                break;
+
+            case ALTIUM_PAD_HOLE_SHAPE::SLOT:
+            {
+                pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_OBLONG );
+                EDA_ANGLE slotRotation( aElem.sizeAndShape->slotrotation, DEGREES_T );
+
+                slotRotation.Normalize();
+
+                if( slotRotation == ANGLE_0 || slotRotation == ANGLE_180 )
+                {
+                    pad->SetDrillSize( wxSize( aElem.sizeAndShape->slotsize, aElem.holesize ) );
+                }
+                else
+                {
+                    if( slotRotation != ANGLE_90 && slotRotation != ANGLE_270 )
+                    {
+                        wxLogWarning( _( "Footprint %s pad %s has a hole-rotation of %f "
+                                         "degrees. KiCad only supports 90 degree rotations." ),
+                                      aFootprint->GetReference(), aElem.name,
+                                      slotRotation.AsDegrees() );
+                    }
+
+                    pad->SetDrillSize( wxSize( aElem.holesize, aElem.sizeAndShape->slotsize ) );
+                }
+            }
+            break;
+
+            default:
+            case ALTIUM_PAD_HOLE_SHAPE::UNKNOWN:
+                wxLogError( _( "Footprint %s pad %s uses a hole of unknown kind %d." ),
+                            aFootprint->GetReference(), aElem.name, aElem.sizeAndShape->holeshape );
+                pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
+                pad->SetDrillSize( wxSize( aElem.holesize, aElem.holesize ) ); // Workaround
+                break;
+            }
+        }
+
+        if( aElem.sizeAndShape )
+        {
+            pad->SetOffset( aElem.sizeAndShape->holeoffset[0] );
+        }
+    }
+
+    if( aElem.padmode != ALTIUM_PAD_MODE::SIMPLE )
+    {
+        wxLogError( _( "Footprint %s pad %s uses a complex pad stack (not yet supported.)" ),
+                    aFootprint->GetReference(), aElem.name );
+    }
+
+    switch( aElem.topshape )
+    {
+    case ALTIUM_PAD_SHAPE::RECT: pad->SetShape( PAD_SHAPE::RECT ); break;
+    case ALTIUM_PAD_SHAPE::CIRCLE:
+        if( aElem.sizeAndShape
+            && aElem.sizeAndShape->alt_shape[0] == ALTIUM_PAD_SHAPE_ALT::ROUNDRECT )
+        {
+            pad->SetShape( PAD_SHAPE::ROUNDRECT ); // 100 = round, 0 = rectangular
+            double ratio = aElem.sizeAndShape->cornerradius[0] / 200.;
+            pad->SetRoundRectRadiusRatio( ratio );
+        }
+        else if( aElem.topsize.x == aElem.topsize.y )
+        {
+            pad->SetShape( PAD_SHAPE::CIRCLE );
+        }
+        else
+        {
+            pad->SetShape( PAD_SHAPE::OVAL );
+        }
+        break;
+    case ALTIUM_PAD_SHAPE::OCTAGONAL:
+        pad->SetShape( PAD_SHAPE::CHAMFERED_RECT );
+        pad->SetChamferPositions( RECT_CHAMFER_ALL );
+        pad->SetChamferRectRatio( 0.25 );
+        break;
+    case ALTIUM_PAD_SHAPE::UNKNOWN:
+    default:
+        wxLogError( _( "Footprint %s pad %s uses an unknown pad-shape." ),
+                    aFootprint->GetReference(), aElem.name );
+        break;
+    }
+
+    switch( aElem.layer )
+    {
+    case ALTIUM_LAYER::TOP_LAYER:
+        pad->SetLayer( F_Cu );
+        pad->SetLayerSet( PAD::SMDMask() );
+        break;
+    case ALTIUM_LAYER::BOTTOM_LAYER:
+        pad->SetLayer( B_Cu );
+        pad->SetLayerSet( FlipLayerMask( PAD::SMDMask() ) );
+        break;
+    case ALTIUM_LAYER::MULTI_LAYER:
+        pad->SetLayerSet( aElem.plated ? PAD::PTHMask() : PAD::UnplatedHoleMask() );
+        break;
+    default:
+        PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+        pad->SetLayer( klayer );
+        pad->SetLayerSet( LSET( 1, klayer ) );
+        break;
+    }
+
+    if( aElem.pastemaskexpansionmode == ALTIUM_PAD_RULE::MANUAL )
+    {
+        pad->SetLocalSolderPasteMargin( aElem.pastemaskexpansionmanual );
+    }
+
+    if( aElem.soldermaskexpansionmode == ALTIUM_PAD_RULE::MANUAL )
+    {
+        pad->SetLocalSolderMaskMargin( aElem.soldermaskexpansionmanual );
+    }
+
+    if( aElem.is_tent_top )
+    {
+        pad->SetLayerSet( pad->GetLayerSet().reset( F_Mask ) );
+    }
+    if( aElem.is_tent_bottom )
+    {
+        pad->SetLayerSet( pad->GetLayerSet().reset( B_Mask ) );
+    }
+
+    aFootprint->Add( pad, ADD_MODE::APPEND );
+}
+
+
+void ALTIUM_PCB::ConvertPads6ToBoardItemOnNonCopper( const APAD6& aElem )
 {
     PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
 
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( _( "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. "
-                         "It has been moved to KiCad layer Eco1_User." ),
-                      aElem.name,
-                      aElem.layer );
+        wxLogWarning(
+                _( "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. "
+                   "It has been moved to KiCad layer Eco1_User." ),
+                aElem.name, aElem.layer );
         klayer = Eco1_User;
     }
 
+    PCB_SHAPE* pad = new PCB_SHAPE( m_board );
+
+    HelperParsePad6NonCopper( aElem, klayer, pad );
+
+    m_board->Add( pad, ADD_MODE::APPEND );
+}
+
+
+void ALTIUM_PCB::ConvertPads6ToFootprintItemOnNonCopper( FOOTPRINT* aFootprint, const APAD6& aElem )
+{
+    PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+
+    if( klayer == UNDEFINED_LAYER )
+    {
+        wxLogWarning(
+                _( "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. "
+                   "It has been moved to KiCad layer Eco1_User." ),
+                aElem.name, aElem.layer );
+        klayer = Eco1_User;
+    }
+
+    FP_SHAPE* pad = new FP_SHAPE( aFootprint );
+
+    HelperParsePad6NonCopper( aElem, klayer, pad );
+
+    HelperShapeSetLocalCoord( pad );
+    aFootprint->Add( pad, ADD_MODE::APPEND );
+}
+
+
+void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem, PCB_LAYER_ID aLayer,
+                                           PCB_SHAPE* aShape )
+{
     if( aElem.net != ALTIUM_NET_UNCONNECTED )
     {
         wxLogError( _( "Non-copper pad %s is connected to a net, which is not supported." ),
@@ -2451,21 +2520,19 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
     case ALTIUM_PAD_SHAPE::RECT:
     {
         // filled rect
-        PCB_SHAPE* shape = HelperCreateAndAddShape( aElem.component );
-        shape->SetShape( SHAPE_T::POLY );
-        shape->SetFilled( true );
-        shape->SetLayer( klayer );
-        shape->SetStroke( STROKE_PARAMS( 0 ) );
+        aShape->SetShape( SHAPE_T::POLY );
+        aShape->SetFilled( true );
+        aShape->SetLayer( aLayer );
+        aShape->SetStroke( STROKE_PARAMS( 0 ) );
 
-        shape->SetPolyPoints( { aElem.position + VECTOR2I( aElem.topsize.x / 2, aElem.topsize.y / 2 ),
-                                aElem.position + VECTOR2I( aElem.topsize.x / 2, -aElem.topsize.y / 2 ),
-                                aElem.position + VECTOR2I( -aElem.topsize.x / 2, -aElem.topsize.y / 2 ),
-                                aElem.position + VECTOR2I( -aElem.topsize.x / 2, aElem.topsize.y / 2 ) } );
+        aShape->SetPolyPoints(
+                { aElem.position + VECTOR2I( aElem.topsize.x / 2, aElem.topsize.y / 2 ),
+                  aElem.position + VECTOR2I( aElem.topsize.x / 2, -aElem.topsize.y / 2 ),
+                  aElem.position + VECTOR2I( -aElem.topsize.x / 2, -aElem.topsize.y / 2 ),
+                  aElem.position + VECTOR2I( -aElem.topsize.x / 2, aElem.topsize.y / 2 ) } );
 
         if( aElem.direction != 0 )
-            shape->Rotate( aElem.position, EDA_ANGLE( aElem.direction, DEGREES_T ) );
-
-        HelperShapeSetLocalCoord( shape, aElem.component );
+            aShape->Rotate( aElem.position, EDA_ANGLE( aElem.direction, DEGREES_T ) );
     }
     break;
 
@@ -2477,9 +2544,8 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
             int cornerradius = aElem.sizeAndShape->cornerradius[0];
             int offset = ( std::min( aElem.topsize.x, aElem.topsize.y ) * cornerradius ) / 200;
 
-            PCB_SHAPE* shape = HelperCreateAndAddShape( aElem.component );
-            shape->SetLayer( klayer );
-            shape->SetStroke( STROKE_PARAMS( offset * 2, PLOT_DASH_TYPE::SOLID ) );
+            aShape->SetLayer( aLayer );
+            aShape->SetStroke( STROKE_PARAMS( offset * 2, PLOT_DASH_TYPE::SOLID ) );
 
             if( cornerradius < 100 )
             {
@@ -2491,90 +2557,82 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
                 VECTOR2I p22 = aElem.position + VECTOR2I( -offsetX, -offsetY );
                 VECTOR2I p21 = aElem.position + VECTOR2I( -offsetX, offsetY );
 
-                shape->SetShape( SHAPE_T::POLY );
-                shape->SetFilled( true );
-                shape->SetPolyPoints( { p11, p12, p22, p21 } );
+                aShape->SetShape( SHAPE_T::POLY );
+                aShape->SetFilled( true );
+                aShape->SetPolyPoints( { p11, p12, p22, p21 } );
             }
             else if( aElem.topsize.x == aElem.topsize.y )
             {
                 // circle
-                shape->SetShape( SHAPE_T::CIRCLE );
-                shape->SetFilled( true );
-                shape->SetStart( aElem.position );
-                shape->SetEnd( aElem.position - VECTOR2I( 0, aElem.topsize.x / 4 ) );
-                shape->SetStroke( STROKE_PARAMS( aElem.topsize.x / 2, PLOT_DASH_TYPE::SOLID ) );
+                aShape->SetShape( SHAPE_T::CIRCLE );
+                aShape->SetFilled( true );
+                aShape->SetStart( aElem.position );
+                aShape->SetEnd( aElem.position - VECTOR2I( 0, aElem.topsize.x / 4 ) );
+                aShape->SetStroke( STROKE_PARAMS( aElem.topsize.x / 2, PLOT_DASH_TYPE::SOLID ) );
             }
             else if( aElem.topsize.x < aElem.topsize.y )
             {
                 // short vertical line
-                shape->SetShape( SHAPE_T::SEGMENT );
+                aShape->SetShape( SHAPE_T::SEGMENT );
                 VECTOR2I pointOffset( 0, ( aElem.topsize.y - aElem.topsize.x ) / 2 );
-                shape->SetStart( aElem.position + pointOffset );
-                shape->SetEnd( aElem.position - pointOffset );
+                aShape->SetStart( aElem.position + pointOffset );
+                aShape->SetEnd( aElem.position - pointOffset );
             }
             else
             {
                 // short horizontal line
-                shape->SetShape( SHAPE_T::SEGMENT );
+                aShape->SetShape( SHAPE_T::SEGMENT );
                 VECTOR2I pointOffset( ( aElem.topsize.x - aElem.topsize.y ) / 2, 0 );
-                shape->SetStart( aElem.position + pointOffset );
-                shape->SetEnd( aElem.position - pointOffset );
+                aShape->SetStart( aElem.position + pointOffset );
+                aShape->SetEnd( aElem.position - pointOffset );
             }
 
             if( aElem.direction != 0 )
-                shape->Rotate( aElem.position, EDA_ANGLE( aElem.direction, DEGREES_T ) );
-
-            HelperShapeSetLocalCoord( shape, aElem.component );
+                aShape->Rotate( aElem.position, EDA_ANGLE( aElem.direction, DEGREES_T ) );
         }
         else if( aElem.topsize.x == aElem.topsize.y )
         {
             // filled circle
-            PCB_SHAPE* shape = HelperCreateAndAddShape( aElem.component );
-            shape->SetShape( SHAPE_T::CIRCLE );
-            shape->SetFilled( true );
-            shape->SetLayer( klayer );
-            shape->SetStart( aElem.position );
-            shape->SetEnd( aElem.position - VECTOR2I( 0, aElem.topsize.x / 4 ) );
-            shape->SetStroke( STROKE_PARAMS( aElem.topsize.x / 2, PLOT_DASH_TYPE::SOLID ) );
-            HelperShapeSetLocalCoord( shape, aElem.component );
+            aShape->SetShape( SHAPE_T::CIRCLE );
+            aShape->SetFilled( true );
+            aShape->SetLayer( aLayer );
+            aShape->SetStart( aElem.position );
+            aShape->SetEnd( aElem.position - VECTOR2I( 0, aElem.topsize.x / 4 ) );
+            aShape->SetStroke( STROKE_PARAMS( aElem.topsize.x / 2, PLOT_DASH_TYPE::SOLID ) );
         }
         else
         {
             // short line
-            PCB_SHAPE* shape = HelperCreateAndAddShape( aElem.component );
-            shape->SetShape( SHAPE_T::SEGMENT );
-            shape->SetLayer( klayer );
-            shape->SetStroke( STROKE_PARAMS( std::min( aElem.topsize.x, aElem.topsize.y ),
-                                                       PLOT_DASH_TYPE::SOLID ) );
+            aShape->SetShape( SHAPE_T::SEGMENT );
+            aShape->SetLayer( aLayer );
+            aShape->SetStroke( STROKE_PARAMS( std::min( aElem.topsize.x, aElem.topsize.y ),
+                                              PLOT_DASH_TYPE::SOLID ) );
 
             if( aElem.topsize.x < aElem.topsize.y )
             {
                 VECTOR2I offset( 0, ( aElem.topsize.y - aElem.topsize.x ) / 2 );
-                shape->SetStart( aElem.position + offset );
-                shape->SetEnd( aElem.position - offset );
+                aShape->SetStart( aElem.position + offset );
+                aShape->SetEnd( aElem.position - offset );
             }
             else
             {
                 VECTOR2I offset( ( aElem.topsize.x - aElem.topsize.y ) / 2, 0 );
-                shape->SetStart( aElem.position + offset );
-                shape->SetEnd( aElem.position - offset );
+                aShape->SetStart( aElem.position + offset );
+                aShape->SetEnd( aElem.position - offset );
             }
 
             if( aElem.direction != 0 )
-                shape->Rotate( aElem.position, EDA_ANGLE( aElem.direction, DEGREES_T ) );
-
-            HelperShapeSetLocalCoord( shape, aElem.component );
+                aShape->Rotate( aElem.position, EDA_ANGLE( aElem.direction, DEGREES_T ) );
         }
         break;
 
     case ALTIUM_PAD_SHAPE::OCTAGONAL:
     {
         // filled octagon
-        PCB_SHAPE* shape = HelperCreateAndAddShape( aElem.component );
-        shape->SetShape( SHAPE_T::POLY );
-        shape->SetFilled( true );
-        shape->SetLayer( klayer );
-        shape->SetStroke( STROKE_PARAMS( 0 ) );
+        aShape->SetShape( SHAPE_T::POLY );
+        aShape->SetFilled( true );
+        aShape->SetLayer( aLayer );
+        aShape->SetStroke( STROKE_PARAMS( 0 ) );
 
         VECTOR2I p11 = aElem.position + VECTOR2I( aElem.topsize.x / 2, aElem.topsize.y / 2 );
         VECTOR2I p12 = aElem.position + VECTOR2I( aElem.topsize.x / 2, -aElem.topsize.y / 2 );
@@ -2585,13 +2643,11 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
         VECTOR2I chamferX( chamfer, 0 );
         VECTOR2I chamferY( 0, chamfer );
 
-        shape->SetPolyPoints( { p11 - chamferX, p11 - chamferY, p12 + chamferY, p12 - chamferX,
-                                p22 + chamferX, p22 + chamferY, p21 - chamferY, p21 + chamferX } );
+        aShape->SetPolyPoints( { p11 - chamferX, p11 - chamferY, p12 + chamferY, p12 - chamferX,
+                                 p22 + chamferX, p22 + chamferY, p21 - chamferY, p21 + chamferX } );
 
         if( aElem.direction != 0. )
-            shape->Rotate( aElem.position, EDA_ANGLE( aElem.direction, DEGREES_T ) );
-
-        HelperShapeSetLocalCoord( shape, aElem.component );
+            aShape->Rotate( aElem.position, EDA_ANGLE( aElem.direction, DEGREES_T ) );
     }
         break;
 
@@ -2601,6 +2657,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
         break;
     }
 }
+
 
 void ALTIUM_PCB::ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )

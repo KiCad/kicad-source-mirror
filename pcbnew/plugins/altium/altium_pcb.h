@@ -82,6 +82,7 @@ enum class ALTIUM_PCB_DIR
 
 
 class BOARD;
+class FP_SHAPE;
 class PCB_SHAPE;
 class FOOTPRINT;
 class ZONE;
@@ -157,6 +158,11 @@ private:
                                      const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParsePads6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ConvertPads6ToBoardItem( const APAD6& aElem );
+    void ConvertPads6ToFootprintItem( FOOTPRINT* aFootprint, const APAD6& aElem );
+    void ConvertPads6ToBoardItemOnNonCopper( const APAD6& aElem );
+    void ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, const APAD6& aElem );
+    void ConvertPads6ToFootprintItemOnNonCopper( FOOTPRINT* aFootprint, const APAD6& aElem );
     void ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
@@ -193,7 +199,7 @@ private:
     void HelperParseDimensions6Datum( const ADIMENSION6& aElem );
     void HelperParseDimensions6Center( const ADIMENSION6& aElem );
 
-    void HelperParsePad6NonCopper( const APAD6& aElem );
+    void HelperParsePad6NonCopper( const APAD6& aElem, PCB_LAYER_ID aLayer, PCB_SHAPE* aShape );
 
     void HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aVertices );
 
@@ -204,6 +210,7 @@ private:
     FOOTPRINT* HelperGetFootprint( uint16_t aComponent ) const;
     PCB_SHAPE* HelperCreateAndAddShape( uint16_t aComponent );
     void HelperShapeSetLocalCoord( PCB_SHAPE* aShape, uint16_t aComponent );
+    void       HelperShapeSetLocalCoord( FP_SHAPE* aShape );
 
     BOARD*                               m_board;
     std::vector<FOOTPRINT*>              m_components;
