@@ -2157,9 +2157,8 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_I
         angle.Normalize();
 
         EDA_ANGLE startAngle( aElem.endangle, DEGREES_T );
-        VECTOR2I  startOffset =
-                VECTOR2I( KiROUND( std::cos( startAngle.AsRadians() ) * aElem.radius ),
-                          -KiROUND( std::sin( startAngle.AsRadians() ) * aElem.radius ) );
+        VECTOR2I  startOffset = VECTOR2I( KiROUND( startAngle.Cos() * aElem.radius ),
+                                          -KiROUND( startAngle.Sin() * aElem.radius ) );
 
         startOffset += aElem.center;
 
