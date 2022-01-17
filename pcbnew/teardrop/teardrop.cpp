@@ -90,9 +90,7 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
                                     bool aDiscardInSameZone, bool aFollowTracks )
 {
     // Init parameters:
-    m_Parameters[TARGET_ROUND].m_tolerance = Millimeter2iu( 0.01 );
-    m_Parameters[TARGET_RECT].m_tolerance = Millimeter2iu( 0.01 );
-    m_Parameters[TARGET_TRACK].m_tolerance = Millimeter2iu( 0.01 );
+    m_tolerance = Millimeter2iu( 0.01 );
 
     int count = 0;      // Number of created teardrop
 
@@ -148,15 +146,18 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
                 // the track is inside or outside the via pad. Cannot create a teardrop
                 continue;
 
+            // A pointer to one of available m_Parameters items
+            TEARDROP_PARAMETERS* currParams;
+
             if( viapad.m_IsRound )
-                m_CurrParams = &m_Parameters[TARGET_ROUND];
+                currParams = m_Parameters.GetParameters( TARGET_ROUND );
             else
-                m_CurrParams = &m_Parameters[TARGET_RECT];
+                currParams = m_Parameters.GetParameters( TARGET_RECT );
 
             // Ensure a teardrop shape can be built:
             // The track width must be < teardrop height
-            if( track->GetWidth() >= m_CurrParams->m_tdMaxHeight
-                || track->GetWidth() >= viapad.m_Width * m_CurrParams->m_heightRatio )
+            if( track->GetWidth() >= currParams->m_tdMaxHeight
+                || track->GetWidth() >= viapad.m_Width * currParams->m_heightRatio )
                 continue;
 
             // Skip case where pad/via and the track is within a copper zone with the same net
@@ -165,7 +166,7 @@ int TEARDROP_MANAGER::SetTeardrops( BOARD_COMMIT* aCommitter,
                 continue;
 
             std::vector<VECTOR2I> points;
-            bool success = computeTeardropPolygonPoints( points, track, viapad,
+            bool success = computeTeardropPolygonPoints( currParams, points, track, viapad,
                                                          aFollowTracks, trackLookupList );
 
             if( success )
@@ -261,7 +262,8 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
     std::vector< VIAPAD > viapad_list;
     collectVias( viapad_list );
     collectPadsCandidate( viapad_list, true, true, true );
-    m_CurrParams = &m_Parameters[TARGET_TRACK];
+
+    TEARDROP_PARAMETERS* currParams = m_Parameters.GetParameters( TARGET_TRACK );
 
     // Explore groups (a group is a set of tracks on the same layer and the same net):
     for( auto grp : trackLookupList.GetBuffer() )
@@ -319,13 +321,12 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
 
                 VECTOR2I roundshape_pos = candidate->GetStart();
                 ENDPOINT_T endPointCandidate = ENDPOINT_START;
-                match_points = track->IsPointOnEnds( roundshape_pos, m_CurrParams->m_tolerance );
+                match_points = track->IsPointOnEnds( roundshape_pos, m_tolerance );
 
                 if( !match_points )
                 {
                     roundshape_pos = candidate->GetEnd();
-                    match_points = track->IsPointOnEnds( roundshape_pos,
-                                                         m_CurrParams->m_tolerance );
+                    match_points = track->IsPointOnEnds( roundshape_pos, m_tolerance );
                     endPointCandidate = ENDPOINT_END;
                 }
 
@@ -345,7 +346,8 @@ int TEARDROP_MANAGER::addTeardropsOnTracks( BOARD_COMMIT* aCommitter )
                 {
                     VIAPAD viatrack( candidate, endPointCandidate );
                     std::vector<VECTOR2I> points;
-                    bool success = computeTeardropPolygonPoints( points, track, viatrack,
+                    bool success = computeTeardropPolygonPoints( currParams,
+                                                                 points, track, viatrack,
                                                                  false, trackLookupList );
 
                     if( success )

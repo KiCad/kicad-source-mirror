@@ -212,7 +212,7 @@ PCB_TRACK* TEARDROP_MANAGER::findTouchingTrack( EDA_ITEM_FLAGS& aMatchType, PCB_
         if( curr_track == aTrackRef )
             continue;
 
-        match = curr_track->IsPointOnEnds( aEndPoint, m_Parameters[TARGET_ROUND].m_tolerance);
+        match = curr_track->IsPointOnEnds( aEndPoint, m_tolerance);
 
         if( match )
         {
@@ -251,23 +251,24 @@ static VECTOR2D NormalizeVector( VECTOR2I aVector )
  * The Bezier curve control points are optimized for a round pad/via shape,
  * and do not give a good curve shape for other pad shapes
  */
-void TEARDROP_MANAGER::computeCurvedForRoundShape( std::vector<VECTOR2I>& aPoly,
-                                        int aTrackHalfWidth,
-                                        VECTOR2D aTrackDir, VIAPAD& aViaPad,
-                                        std::vector<VECTOR2I>& pts ) const
+void TEARDROP_MANAGER::computeCurvedForRoundShape( TEARDROP_PARAMETERS* aCurrParams,
+                                                   std::vector<VECTOR2I>& aPoly,
+                                                   int aTrackHalfWidth,
+                                                   VECTOR2D aTrackDir, VIAPAD& aViaPad,
+                                                   std::vector<VECTOR2I>& pts ) const
 {
     // in pts:
     // A and B are points on the track ( pts[0] and  pts[1] )
     // C and E are points on the aViaPad ( pts[2] and  pts[4] )
     // D is the aViaPad centre ( pts[3] )
-    double Vpercent = m_CurrParams->m_heightRatio;
+    double Vpercent = aCurrParams->m_heightRatio;
     int td_height = aViaPad.m_Width * Vpercent;
 
     // First, calculate a aVpercent equivalent to the td_height clamped by aTdMaxHeight
     // We cannot use the initial aVpercent because it gives bad shape with points
     // on aViaPad calculated for a clamped aViaPad size
-    if( m_CurrParams->m_tdMaxHeight > 0 && m_CurrParams->m_tdMaxHeight < td_height )
-         Vpercent *= (double)m_CurrParams->m_tdMaxHeight / td_height;
+    if( aCurrParams->m_tdMaxHeight > 0 && aCurrParams->m_tdMaxHeight < td_height )
+         Vpercent *= (double)aCurrParams->m_tdMaxHeight / td_height;
 
     int radius = aViaPad.m_Width / 2;
     double minVpercent = double( aTrackHalfWidth ) / radius;
@@ -287,9 +288,9 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( std::vector<VECTOR2I>& aPoly,
     VECTOR2I tangentA = VECTOR2I( pts[0].x - aTrackDir.x * biasAE, pts[0].y - aTrackDir.y * biasAE );
 
     std::vector<VECTOR2I> curve_pts;
-    curve_pts.reserve( m_CurrParams->m_curveSegCount );
+    curve_pts.reserve( aCurrParams->m_curveSegCount );
     BEZIER_POLY( pts[1], tangentB, tangentC, pts[2] ).GetPoly( curve_pts, 0,
-                                                               m_CurrParams->m_curveSegCount );
+                                                               aCurrParams->m_curveSegCount );
 
     for( VECTOR2I& corner: curve_pts )
         aPoly.push_back( corner );
@@ -298,7 +299,7 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( std::vector<VECTOR2I>& aPoly,
 
     curve_pts.clear();
     BEZIER_POLY( pts[4], tangentE, tangentA, pts[0] ).GetPoly( curve_pts, 0,
-                                                               m_CurrParams->m_curveSegCount );
+                                                               aCurrParams->m_curveSegCount );
 
     for( VECTOR2I& corner: curve_pts )
         aPoly.push_back( corner );
@@ -309,9 +310,10 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( std::vector<VECTOR2I>& aPoly,
  * Compute the curve part points for teardrops connected to a rectangular/polygonal shape
  * The Bezier curve control points are not optimized for a special shape
  */
-void TEARDROP_MANAGER::computeCurvedForRectShape( std::vector<VECTOR2I>& aPoly, int aTdHeight,
-                                        int aTrackHalfWidth, VIAPAD& aViaPad,
-                                        std::vector<VECTOR2I>& aPts ) const
+void TEARDROP_MANAGER::computeCurvedForRectShape(  TEARDROP_PARAMETERS* aCurrParams,
+                                                   std::vector<VECTOR2I>& aPoly, int aTdHeight,
+                                                   int aTrackHalfWidth, VIAPAD& aViaPad,
+                                                   std::vector<VECTOR2I>& aPts ) const
 {
     // in aPts:
     // A and B are points on the track ( pts[0] and  pts[1] )
@@ -324,7 +326,7 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( std::vector<VECTOR2I>& aPoly, 
     VECTOR2I side2( aPts[4] - aPts[0] );  // vector from track to via
 
     std::vector<VECTOR2I> curve_pts;
-    curve_pts.reserve( m_CurrParams->m_curveSegCount );
+    curve_pts.reserve( aCurrParams->m_curveSegCount );
 
     // Note: This side is from track to via
     VECTOR2I ctrl1 = ( aPts[1] + aPts[1] + aPts[2] ) / 3;
@@ -337,11 +339,11 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( std::vector<VECTOR2I>& aPoly, 
 
     delta /= 4;     // A scaling factor giving a fine shape, defined from tests.
     // However for short sides, the value of delta must be reduced, depending
-    // on the side lenght
-    // We use here a max delta value = side_lenght/8, defined from tests
+    // on the side length
+    // We use here a max delta value = side_length/8, defined from tests
 
-    int side_lenght = side1.EuclideanNorm();
-    int delta_effective = std::min( delta, side_lenght/8 );
+    int side_length = side1.EuclideanNorm();
+    int delta_effective = std::min( delta, side_length/8 );
     // The move vector depend on the quadrant: it must be always defined to create a
     // curve with a direction toward the track
     double angle1 = side1.Angle();
@@ -356,7 +358,7 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( std::vector<VECTOR2I>& aPoly, 
     ctrl2.y += bias.y;
 
     BEZIER_POLY( aPts[1], ctrl1, ctrl2, aPts[2] ).GetPoly( curve_pts, 0,
-                                                           m_CurrParams->m_curveSegCount );
+                                                           aCurrParams->m_curveSegCount );
 
     for( VECTOR2I& corner: curve_pts )
         aPoly.push_back( corner );
@@ -368,8 +370,8 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( std::vector<VECTOR2I>& aPoly, 
     ctrl1 = ( aPts[4] + aPts[4] + aPts[0] ) / 3;
     ctrl2 = ( aPts[4] + aPts[0] + aPts[0] ) / 3;
 
-    side_lenght = side2.EuclideanNorm();
-    delta_effective = std::min( delta, side_lenght/8 );
+    side_length = side2.EuclideanNorm();
+    delta_effective = std::min( delta, side_length/8 );
 
     double angle2 = side2.Angle();
     sign = std::abs( angle2 ) <= 90.0*M_PI/180 ? 1 : -1;
@@ -384,14 +386,15 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( std::vector<VECTOR2I>& aPoly, 
     ctrl2.y += bias.y;
 
     BEZIER_POLY( aPts[4], ctrl1, ctrl2, aPts[0] ).GetPoly( curve_pts, 0,
-                                                           m_CurrParams->m_curveSegCount );
+                                                           aCurrParams->m_curveSegCount );
 
     for( VECTOR2I& corner: curve_pts )
         aPoly.push_back( corner );
 }
 
 
-bool TEARDROP_MANAGER::ComputePointsOnPadVia( PCB_TRACK* aTrack,
+bool TEARDROP_MANAGER::ComputePointsOnPadVia( TEARDROP_PARAMETERS* aCurrParams,
+                                              PCB_TRACK* aTrack,
                                               VIAPAD& aViaPad,
                                               std::vector<VECTOR2I>& aPts ) const
 {
@@ -405,14 +408,14 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( PCB_TRACK* aTrack,
     // For rectangular (and similar) shapes, the preferred_height is calculated from the min
     // dim of the rectangle = aViaPad.m_Width
 
-    int preferred_height = aViaPad.m_Width * m_CurrParams->m_heightRatio;
+    int preferred_height = aViaPad.m_Width * aCurrParams->m_heightRatio;
 
     // force_clip_shape = true to force the via/pad polygon to be clipped to follow
     // contraints
     // Clipping is also needed for rectangular shapes, because the teardrop shape is
     // restricted to a polygonal area smaller than the pad area (the teardrop height
     // use the smaller value of X and Y sizes).
-    bool force_clip_shape = m_CurrParams->m_heightRatio < 1.0;
+    bool force_clip_shape = aCurrParams->m_heightRatio < 1.0;
 
     // To find the anchor points on via/pad shape, we build the polygonal shape, and clip the polygon
     // to the max size (preferred_height or m_tdMaxHeight) by a rectangle centered on the
@@ -428,7 +431,7 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( PCB_TRACK* aTrack,
         wxASSERT( pad );
         force_clip_shape = true;
 
-        preferred_height = aViaPad.m_Width * m_CurrParams->m_heightRatio;
+        preferred_height = aViaPad.m_Width * aCurrParams->m_heightRatio;
         pad->TransformShapeWithClearanceToPolygon( c_buffer, aTrack->GetLayer(), 0,
                                                    ARC_LOW_DEF, ERROR_INSIDE );
     }
@@ -436,10 +439,10 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( PCB_TRACK* aTrack,
     // Clip the pad/via shape to match the m_tdMaxHeight constraint, and for
     // not rounded pad, clip the shape at the aViaPad.m_Width, i.e. the value
     // of the smallest value between size.x and size.y values.
-    if( force_clip_shape || ( m_CurrParams->m_tdMaxHeight > 0
-        && m_CurrParams->m_tdMaxHeight < preferred_height ) )
+    if( force_clip_shape || ( aCurrParams->m_tdMaxHeight > 0
+        && aCurrParams->m_tdMaxHeight < preferred_height ) )
     {
-        int halfsize = std::min( m_CurrParams->m_tdMaxHeight, preferred_height )/2;
+        int halfsize = std::min( aCurrParams->m_tdMaxHeight, preferred_height )/2;
 
         // teardrop_axis is the line from anchor point on the track and the end point
         // of the teardrop in the pad/via
@@ -452,7 +455,7 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( PCB_TRACK* aTrack,
         int len = teardrop_axis.EuclideanNorm();
 
         // Build the constraint polygon: a rectangle with
-        // lenght = dist between the point on track and the pad/via pos
+        // length = dist between the point on track and the pad/via pos
         // height = m_tdMaxHeight or aViaPad.m_Width
         SHAPE_POLY_SET clipping_rect;
         clipping_rect.NewOutline();
@@ -575,7 +578,8 @@ bool TEARDROP_MANAGER::ComputePointsOnPadVia( PCB_TRACK* aTrack,
 }
 
 
-bool TEARDROP_MANAGER::findAnchorPointsOnTrack( VECTOR2I& aStartPoint, VECTOR2I& aEndPoint,
+bool TEARDROP_MANAGER::findAnchorPointsOnTrack( TEARDROP_PARAMETERS* aCurrParams,
+                                                VECTOR2I& aStartPoint, VECTOR2I& aEndPoint,
                                                 PCB_TRACK*& aTrack, VIAPAD& aViaPad,
                                                 int* aEffectiveTeardropLen,
                                                 bool aFollowTracks,
@@ -587,12 +591,12 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( VECTOR2I& aStartPoint, VECTOR2I&
     int radius = aViaPad.m_Width / 2;
 
     // Requested length of the teardrop:
-    int targetLength = aViaPad.m_Width * m_CurrParams->m_lenghtRatio;
+    int targetLength = aViaPad.m_Width * aCurrParams->m_lengthRatio;
 
-    if( m_CurrParams->m_tdMaxLen > 0 )
-        targetLength = std::min( m_CurrParams->m_tdMaxLen, targetLength );
+    if( aCurrParams->m_tdMaxLen > 0 )
+        targetLength = std::min( aCurrParams->m_tdMaxLen, targetLength );
 
-    int actualTdLen;    // The actual teardrop lenght, limited by the available track lenght
+    int actualTdLen;    // The actual teardrop length, limited by the available track length
 
     // ensure that start is at the via/pad end
     if( SEG( end, aViaPad.m_Pos ).Length() < radius )
@@ -618,7 +622,7 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( VECTOR2I& aStartPoint, VECTOR2I&
     outline.SetClosed( true );
 
     // Search the intersection point between the pad/via shape and the current track
-    // This this the starting point to define the teardrop lenght
+    // This this the starting point to define the teardrop length
     SHAPE_LINE_CHAIN::INTERSECTIONS pts;
     int pt_count = outline.Intersect( SEG( start, end ), pts );
 
@@ -669,7 +673,8 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( VECTOR2I& aStartPoint, VECTOR2I&
 }
 
 
-bool TEARDROP_MANAGER::computeTeardropPolygonPoints( std::vector<VECTOR2I>& aCorners,
+bool TEARDROP_MANAGER::computeTeardropPolygonPoints( TEARDROP_PARAMETERS* aCurrParams,
+                                                     std::vector<VECTOR2I>& aCorners,
                                                      PCB_TRACK* aTrack, VIAPAD& aViaPad,
                                                      bool aFollowTracks,
                                                      TRACK_BUFFER& aTrackLookupList ) const
@@ -681,7 +686,7 @@ bool TEARDROP_MANAGER::computeTeardropPolygonPoints( std::vector<VECTOR2I>& aCor
                             // on the track
 
     // Note: aTrack can be modified if the inital track is too short
-    if( !findAnchorPointsOnTrack( start, end, aTrack, aViaPad, &track_stub_len,
+    if( !findAnchorPointsOnTrack( aCurrParams, start, end, aTrack, aViaPad, &track_stub_len,
                                   aFollowTracks, aTrackLookupList ) )
         return false;
 
@@ -717,9 +722,9 @@ bool TEARDROP_MANAGER::computeTeardropPolygonPoints( std::vector<VECTOR2I>& aCor
     VECTOR2I pointC, pointE;     // Point on PADVIA outlines
     std::vector<VECTOR2I> pts = {pointA, pointB, pointC, pointD, pointE};
 
-    ComputePointsOnPadVia( aTrack, aViaPad, pts );
+    ComputePointsOnPadVia( aCurrParams, aTrack, aViaPad, pts );
 
-    if( !m_CurrParams->IsCurved() )
+    if( !aCurrParams->IsCurved() )
     {
         aCorners = pts;
         return true;
@@ -728,16 +733,16 @@ bool TEARDROP_MANAGER::computeTeardropPolygonPoints( std::vector<VECTOR2I>& aCor
     // See if we can use curved teardrop shape
     if( aViaPad.m_IsRound )
     {
-        computeCurvedForRoundShape( aCorners, track_halfwidth, vecT, aViaPad, pts );
+        computeCurvedForRoundShape( aCurrParams, aCorners, track_halfwidth, vecT, aViaPad, pts );
     }
     else
     {
-        int td_height = aViaPad.m_Width * m_CurrParams->m_heightRatio;
+        int td_height = aViaPad.m_Width * aCurrParams->m_heightRatio;
 
-        if( m_CurrParams->m_tdMaxHeight > 0 && m_CurrParams->m_tdMaxHeight < td_height )
-            td_height = m_CurrParams->m_tdMaxHeight;
+        if( aCurrParams->m_tdMaxHeight > 0 && aCurrParams->m_tdMaxHeight < td_height )
+            td_height = aCurrParams->m_tdMaxHeight;
 
-        computeCurvedForRectShape( aCorners, td_height, track_halfwidth,
+        computeCurvedForRectShape( aCurrParams, aCorners, td_height, track_halfwidth,
                                    aViaPad, pts );
     }
 
