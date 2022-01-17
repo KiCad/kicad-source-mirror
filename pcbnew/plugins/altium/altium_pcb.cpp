@@ -60,7 +60,8 @@ constexpr double BOLD_FACTOR = 1.75;    // CSS font-weight-normal is 400; bold i
 
 bool IsAltiumLayerCopper( ALTIUM_LAYER aLayer )
 {
-    return aLayer >= ALTIUM_LAYER::TOP_LAYER && aLayer <= ALTIUM_LAYER::BOTTOM_LAYER;
+    return ( aLayer >= ALTIUM_LAYER::TOP_LAYER && aLayer <= ALTIUM_LAYER::BOTTOM_LAYER )
+           || aLayer == ALTIUM_LAYER::MULTI_LAYER; // TODO: add IsAltiumLayerAPlane?
 }
 
 
@@ -727,7 +728,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         case ALTIUM_RECORD::FILL:
         {
             AFILL6 fill( parser );
-            // TODO: implement
+            ConvertFills6ToFootprintItem( footprint.get(), fill, false );
             break;
         }
         case ALTIUM_RECORD::REGION:
@@ -3088,72 +3089,14 @@ void ALTIUM_PCB::ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
         checkpoint();
         AFILL6 elem( reader );
 
-        VECTOR2I p11( elem.pos1.x, elem.pos1.y );
-        VECTOR2I p12( elem.pos1.x, elem.pos2.y );
-        VECTOR2I p22( elem.pos2.x, elem.pos2.y );
-        VECTOR2I p21( elem.pos2.x, elem.pos1.y );
-
-        VECTOR2I center( ( elem.pos1.x + elem.pos2.x ) / 2, ( elem.pos1.y + elem.pos2.y ) / 2 );
-
-        PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
-
-        if( klayer == UNDEFINED_LAYER )
+        if( elem.component == ALTIUM_COMPONENT_NONE )
         {
-            wxLogWarning( _( "Fill found on an Altium layer (%d) with no KiCad equivalent. "
-                             "It has been moved to KiCad layer Eco1_User." ),
-                          elem.layer );
-            klayer = Eco1_User;
-        }
-
-        if( elem.is_keepout || elem.net != ALTIUM_NET_UNCONNECTED )
-        {
-            ZONE* zone = new ZONE( m_board );
-            m_board->Add( zone, ADD_MODE::APPEND );
-
-            zone->SetFillVersion( 6 );
-            zone->SetNetCode( GetNetCode( elem.net ) );
-            zone->SetLayer( klayer );
-            zone->SetPosition( elem.pos1 );
-            zone->SetPriority( 1000 );
-
-            const int outlineIdx = -1; // this is the id of the copper zone main outline
-            zone->AppendCorner( p11, outlineIdx );
-            zone->AppendCorner( p12, outlineIdx );
-            zone->AppendCorner( p22, outlineIdx );
-            zone->AppendCorner( p21, outlineIdx );
-
-            // should be correct?
-            zone->SetLocalClearance( 0 );
-            zone->SetPadConnection( ZONE_CONNECTION::FULL );
-
-            if( elem.is_keepout )
-            {
-                zone->SetIsRuleArea( true );
-                zone->SetDoNotAllowTracks( false );
-                zone->SetDoNotAllowVias( false );
-                zone->SetDoNotAllowPads( false );
-                zone->SetDoNotAllowFootprints( false );
-                zone->SetDoNotAllowCopperPour( true );
-            }
-
-            if( elem.rotation != 0. )
-                zone->Rotate( center, EDA_ANGLE( elem.rotation, DEGREES_T ) );
-
-            zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                         ZONE::GetDefaultHatchPitch(), true );
+            ConvertFills6ToBoardItem( elem );
         }
         else
         {
-            PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::POLY );
-            m_board->Add( shape, ADD_MODE::APPEND );
-            shape->SetFilled( true );
-            shape->SetLayer( klayer );
-            shape->SetStroke( STROKE_PARAMS( 0 ) );
-
-            shape->SetPolyPoints( { p11, p12, p22, p21 } );
-
-            if( elem.rotation != 0. )
-                shape->Rotate( center, EDA_ANGLE( elem.rotation, DEGREES_T ) );
+            FOOTPRINT* footprint = HelperGetFootprint( elem.component );
+            ConvertFills6ToFootprintItem( footprint, elem, true );
         }
     }
 
@@ -3161,6 +3104,160 @@ void ALTIUM_PCB::ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
     {
         THROW_IO_ERROR( "Fills6 stream is not fully parsed" );
     }
+}
+
+
+void ALTIUM_PCB::ConvertFills6ToBoardItem( const AFILL6& aElem )
+{
+    if( aElem.is_keepout || aElem.net != ALTIUM_NET_UNCONNECTED )
+    {
+        ConvertFills6ToBoardItemWithNet( aElem );
+    }
+    else
+    {
+        for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+        {
+            ConvertFills6ToBoardItemOnLayer( aElem, klayer );
+        }
+    }
+}
+
+
+void ALTIUM_PCB::ConvertFills6ToFootprintItem( FOOTPRINT* aFootprint, const AFILL6& aElem,
+                                               const bool aIsBoardImport )
+{
+    if( aElem.is_keepout ) // TODO: what about plane layers?
+    {
+        // This is not the actual board item. We can use it to create the polygon for the region
+        PCB_SHAPE shape( nullptr, SHAPE_T::RECT );
+        shape.SetStart( aElem.pos1 );
+        shape.SetEnd( aElem.pos2 );
+        shape.SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
+
+        if( aElem.rotation != 0. )
+        {
+            VECTOR2I center( ( aElem.pos1.x + aElem.pos2.x ) / 2,
+                             ( aElem.pos1.y + aElem.pos2.y ) / 2 );
+            shape.Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
+        }
+
+        HelperPcpShapeAsFootprintKeepoutRegion( aFootprint, shape, aElem.layer );
+    }
+    else if( aIsBoardImport && IsAltiumLayerCopper( aElem.layer )
+             && aElem.net != ALTIUM_NET_UNCONNECTED )
+    {
+        // Special case: do to not lose net connections in footprints
+        ConvertFills6ToBoardItemWithNet( aElem );
+    }
+    else
+    {
+        for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+        {
+            ConvertFills6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
+        }
+    }
+}
+
+
+void ALTIUM_PCB::ConvertFills6ToBoardItemWithNet( const AFILL6& aElem )
+{
+    ZONE* zone = new ZONE( m_board );
+    m_board->Add( zone, ADD_MODE::APPEND );
+
+    zone->SetFillVersion( 6 );
+    zone->SetNetCode( GetNetCode( aElem.net ) );
+
+    zone->SetPosition( aElem.pos1 );
+    zone->SetPriority( 1000 );
+    if( aElem.layer == ALTIUM_LAYER::MULTI_LAYER )
+    {
+        zone->SetLayer( F_Cu );
+        zone->SetLayerSet( LSET::AllCuMask() );
+    }
+    else
+    {
+        std::vector<PCB_LAYER_ID> klayers = GetKicadLayersToIterate( aElem.layer );
+        zone->SetLayer( klayers.at( 0 ) );
+    }
+
+    VECTOR2I p11( aElem.pos1.x, aElem.pos1.y );
+    VECTOR2I p12( aElem.pos1.x, aElem.pos2.y );
+    VECTOR2I p22( aElem.pos2.x, aElem.pos2.y );
+    VECTOR2I p21( aElem.pos2.x, aElem.pos1.y );
+
+    VECTOR2I center( ( aElem.pos1.x + aElem.pos2.x ) / 2, ( aElem.pos1.y + aElem.pos2.y ) / 2 );
+
+    const int outlineIdx = -1; // this is the id of the copper zone main outline
+    zone->AppendCorner( p11, outlineIdx );
+    zone->AppendCorner( p12, outlineIdx );
+    zone->AppendCorner( p22, outlineIdx );
+    zone->AppendCorner( p21, outlineIdx );
+
+    // should be correct?
+    zone->SetLocalClearance( 0 );
+    zone->SetPadConnection( ZONE_CONNECTION::FULL );
+
+    if( aElem.is_keepout )
+    {
+        zone->SetIsRuleArea( true );
+        zone->SetDoNotAllowTracks( false );
+        zone->SetDoNotAllowVias( false );
+        zone->SetDoNotAllowPads( false );
+        zone->SetDoNotAllowFootprints( false );
+        zone->SetDoNotAllowCopperPour( true );
+    }
+
+    if( aElem.rotation != 0. )
+        zone->Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
+
+    zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                 ZONE::GetDefaultHatchPitch(), true );
+}
+
+
+void ALTIUM_PCB::ConvertFills6ToBoardItemOnLayer( const AFILL6& aElem, PCB_LAYER_ID aLayer )
+{
+    PCB_SHAPE* fill = new PCB_SHAPE( m_board, SHAPE_T::RECT );
+
+    fill->SetFilled( true );
+    fill->SetLayer( aLayer );
+    fill->SetStroke( STROKE_PARAMS( 0 ) );
+
+    fill->SetStart( aElem.pos1 );
+    fill->SetEnd( aElem.pos2 );
+
+    if( aElem.rotation != 0. )
+    {
+        // TODO: Do we need SHAPE_T::POLY for non 90° rotations?
+        VECTOR2I center( ( aElem.pos1.x + aElem.pos2.x ) / 2, ( aElem.pos1.y + aElem.pos2.y ) / 2 );
+        fill->Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
+    }
+
+    m_board->Add( fill, ADD_MODE::APPEND );
+}
+
+
+void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const AFILL6& aElem,
+                                                      PCB_LAYER_ID aLayer )
+{
+    FP_SHAPE* fill = new FP_SHAPE( aFootprint, SHAPE_T::RECT );
+
+    fill->SetFilled( true );
+    fill->SetLayer( aLayer );
+    fill->SetStroke( STROKE_PARAMS( 0 ) );
+
+    fill->SetStart( aElem.pos1 );
+    fill->SetEnd( aElem.pos2 );
+
+    if( aElem.rotation != 0. )
+    {
+        // TODO: Do we need SHAPE_T::POLY for non 90° rotations?
+        VECTOR2I center( ( aElem.pos1.x + aElem.pos2.x ) / 2, ( aElem.pos1.y + aElem.pos2.y ) / 2 );
+        fill->Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
+    }
+
+    fill->SetLocalCoord();
+    aFootprint->Add( fill, ADD_MODE::APPEND );
 }
 
 

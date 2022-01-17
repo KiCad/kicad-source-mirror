@@ -183,6 +183,13 @@ private:
     void ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* aEdaText );
     void ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                           const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ConvertFills6ToBoardItem( const AFILL6& aElem );
+    void ConvertFills6ToFootprintItem( FOOTPRINT* aFootprint, const AFILL6& aElem,
+                                       const bool aIsBoardImport );
+    void ConvertFills6ToBoardItemWithNet( const AFILL6& aElem );
+    void ConvertFills6ToBoardItemOnLayer( const AFILL6& aElem, PCB_LAYER_ID aLayer );
+    void ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const AFILL6& aElem,
+                                              PCB_LAYER_ID aLayer );
     void ParseBoardRegionsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                 const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseShapeBasedRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
