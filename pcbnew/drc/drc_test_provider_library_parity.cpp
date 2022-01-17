@@ -95,7 +95,7 @@ bool primitivesNeedUpdate( const std::shared_ptr<PCB_SHAPE>& a,
         TEST( a->GetStart(), b->GetStart() );
         TEST( a->GetEnd(), b->GetEnd() );
         TEST( a->GetCenter(), b->GetCenter() );
-        TEST( a->GetArcAngle().AsTenthsOfADegree(), b->GetArcAngle().AsTenthsOfADegree() );
+        TEST( a->GetArcAngle().AsDegrees(), b->GetArcAngle().AsDegrees() );
         break;
 
     case SHAPE_T::BEZIER:
@@ -147,8 +147,8 @@ bool padsNeedUpdate( const PAD* a, const PAD* b )
     TEST( a->GetProperty(), b->GetProperty() );
 
     // The pad orientation, for historical reasons is the pad rotation + parent rotation.
-    TEST( ( a->GetOrientation() - a->GetParent()->GetOrientation() ).Normalize().AsTenthsOfADegree(),
-          ( b->GetOrientation() - b->GetParent()->GetOrientation() ).Normalize().AsTenthsOfADegree() );
+    TEST( ( a->GetOrientation() - a->GetParent()->GetOrientation() ).Normalize().AsDegrees(),
+          ( b->GetOrientation() - b->GetParent()->GetOrientation() ).Normalize().AsDegrees() );
 
     TEST( a->GetSize(), b->GetSize() );
     TEST( a->GetDelta(), b->GetDelta() );
@@ -169,7 +169,7 @@ bool padsNeedUpdate( const PAD* a, const PAD* b )
     TEST( a->GetZoneConnection(), b->GetZoneConnection() );
     TEST( a->GetThermalGap(), b->GetThermalGap() );
     TEST( a->GetThermalSpokeWidth(), b->GetThermalSpokeWidth() );
-    TEST( a->GetThermalSpokeAngle().AsTenthsOfADegree(), b->GetThermalSpokeAngle().AsTenthsOfADegree() );
+    TEST( a->GetThermalSpokeAngle().AsDegrees(), b->GetThermalSpokeAngle().AsDegrees() );
     TEST( a->GetCustomShapeInZoneOpt(), b->GetCustomShapeInZoneOpt() );
 
     TEST( a->GetPrimitives().size(), b->GetPrimitives().size() );
@@ -198,7 +198,7 @@ bool shapesNeedUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
         TEST( a->GetStart0(), b->GetStart0() );
         TEST( a->GetEnd0(), b->GetEnd0() );
         TEST( a->GetCenter0(), b->GetCenter0() );
-        TEST( a->GetArcAngle().AsTenthsOfADegree(), b->GetArcAngle().AsTenthsOfADegree() );
+        TEST( a->GetArcAngle().AsDegrees(), b->GetArcAngle().AsDegrees() );
         break;
 
     case SHAPE_T::BEZIER:

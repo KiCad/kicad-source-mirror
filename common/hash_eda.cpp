@@ -62,7 +62,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
             hash_combine( ret, footprint->GetPosition().x, footprint->GetPosition().y );
 
         if( aFlags & HASH_ROT )
-            hash_combine( ret, footprint->GetOrientation().AsTenthsOfADegree() );
+            hash_combine( ret, footprint->GetOrientation().AsDegrees() );
 
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
             hash_combine( ret, hash_fp_item( item, aFlags ) );
@@ -96,7 +96,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         }
 
         if( aFlags & HASH_ROT )
-            hash_combine( ret, pad->GetOrientation().AsTenthsOfADegree() );
+            hash_combine( ret, pad->GetOrientation().AsDegrees() );
 
         if( aFlags & HASH_NET )
             hash_combine( ret, pad->GetNetCode() );
@@ -132,7 +132,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         }
 
         if( aFlags & HASH_ROT )
-            hash_combine( ret, text->GetTextAngle().AsTenthsOfADegree() );
+            hash_combine( ret, text->GetTextAngle().AsDegrees() );
     }
         break;
 

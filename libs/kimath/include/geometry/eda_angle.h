@@ -28,9 +28,9 @@
 
 enum EDA_ANGLE_T
 {
-    TENTHS_OF_A_DEGREE_T = 1,
-    DEGREES_T            = 10,
-    RADIANS_T                     ///< enum value does not matter
+    TENTHS_OF_A_DEGREE_T,
+    DEGREES_T,
+    RADIANS_T
 };
 
 
@@ -44,88 +44,64 @@ public:
      * Angle type must be explicitly specified at creation, because there is no other way of
      * knowing what an int or a double represents.
      */
-    EDA_ANGLE( int aValue, EDA_ANGLE_T aAngleType ) :
-            m_value( 0 ),
-            m_radians( 0.0 ),
-            m_initial_type( aAngleType )
+    EDA_ANGLE( double aValue, EDA_ANGLE_T aAngleType )
     {
         switch( aAngleType )
         {
         case RADIANS_T:
-            m_radians = aValue;
-            m_value = KiROUND( aValue / TENTHS_OF_A_DEGREE_TO_RADIANS );
+            m_value = aValue / DEGREES_TO_RADIANS;
+            break;
+
+        case TENTHS_OF_A_DEGREE_T:
+            m_value = aValue * 10.0;
             break;
 
         default:
-            m_value = aValue * aAngleType;
+            m_value = aValue;
         }
     }
 
-    EDA_ANGLE( double aValue, EDA_ANGLE_T aAngleType ) :
-            m_value( 0 ),
-            m_radians( 0.0 ),
-            m_initial_type( aAngleType )
-    {
-        switch( aAngleType )
-        {
-        case RADIANS_T:
-            m_radians = aValue;
-            m_value = KiROUND( aValue / TENTHS_OF_A_DEGREE_TO_RADIANS );
-            break;
-
-        default:
-            m_value = int( aValue * aAngleType );
-        }
-    }
-
-    explicit EDA_ANGLE( const VECTOR2D& aVector ) :
-            m_value( 0 ),
-            m_radians( 0.0 ),
-            m_initial_type( TENTHS_OF_A_DEGREE_T )
+    explicit EDA_ANGLE( const VECTOR2D& aVector )
     {
         if( aVector.x == 0.0 && aVector.y == 0.0 )
         {
-            m_value = 0;
+            m_value = 0.0;
         }
         else if( aVector.y == 0.0 )
         {
             if( aVector.x >= 0 )
-                m_value = 0;
+                m_value = 0.0;
             else
-                m_value = -1800;
+                m_value = -180.0;
         }
         else if( aVector.x == 0.0 )
         {
             if( aVector.y >= 0.0 )
-                m_value = 900;
+                m_value = 90.0;
             else
-                m_value = -900;
+                m_value = -90.0;
         }
         else if( aVector.x == aVector.y )
         {
             if( aVector.x >= 0.0 )
-                m_value = 450;
+                m_value = 45.0;
             else
-                m_value = -1800 + 450;
+                m_value = -180.0 + 45.0;
         }
         else if( aVector.x == -aVector.y )
         {
             if( aVector.x >= 0.0 )
-                m_value = -450;
+                m_value = -45.0;
             else
-                m_value = 1800 - 450;
+                m_value = 180.0 - 45.0;
         }
         else
         {
-            m_value = KiROUND( atan2( (double) aVector.y, (double) aVector.x )
-                                       / TENTHS_OF_A_DEGREE_TO_RADIANS         );
+            *this = EDA_ANGLE( atan2( aVector.y, aVector.x ), RADIANS_T );
         }
     }
 
-    explicit EDA_ANGLE( const VECTOR2I& aVector ) :
-            m_value( 0 ),
-            m_radians( 0.0 ),
-            m_initial_type( TENTHS_OF_A_DEGREE_T )
+    explicit EDA_ANGLE( const VECTOR2I& aVector )
     {
         /* gcc is surprisingly smart in optimizing these conditions in a tree! */
     
@@ -136,61 +112,46 @@ public:
         else if( aVector.y == 0 )
         {
             if( aVector.x >= 0 )
-                m_value = 0;
+                m_value = 0.0;
             else
-                m_value = -1800;
+                m_value = -180.0;
         }
         else if( aVector.x == 0 )
         {
             if( aVector.y >= 0 )
-                m_value = 900;
+                m_value = 90.0;
             else
-                m_value = -900;
+                m_value = -90.0;
         }
         else if( aVector.x == aVector.y )
         {
             if( aVector.x >= 0 )
-                m_value = 450;
+                m_value = 45.0;
             else
-                m_value = -1800 + 450;
+                m_value = -180.0 + 45.0;
         }
         else if( aVector.x == -aVector.y )
         {
             if( aVector.x >= 0 )
-                m_value = -450;
+                m_value = -45.0;
             else
-                m_value = 1800 - 450;
+                m_value = 180.0 - 45.0;
         }
         else
         {
-            m_value = KiROUND( atan2( (double) aVector.y, (double) aVector.x )
-                                       / TENTHS_OF_A_DEGREE_TO_RADIANS         );
+            *this = EDA_ANGLE( atan2( (double) aVector.y, (double) aVector.x ), RADIANS_T );
         }
     }
 
     EDA_ANGLE() :
-            m_value( 0 ),
-            m_radians( 0.0 ),
-            m_initial_type( RADIANS_T )
+            m_value( 0.0 )
     {}
 
-    inline double AsDegrees() const { return m_value / (double) DEGREES_T; }
+    inline double AsDegrees() const { return m_value; }
 
-    inline int AsTenthsOfADegree() const { return m_value; }
+    inline int AsTenthsOfADegree() const { return KiROUND( m_value * 10.0 ); }
 
-    inline double AsRadians() const
-    {
-        if( m_initial_type == RADIANS_T )
-        {
-            // if this was initialized with radians, return exact initial value
-            return m_radians;
-        }
-        else
-        {
-            // otherwise compute from value stored as 1/10ths of a degree
-            return m_value * TENTHS_OF_A_DEGREE_TO_RADIANS;
-        }
-    }
+    inline double AsRadians() const { return m_value * DEGREES_TO_RADIANS; }
 
     inline double AsAngleType( EDA_ANGLE_T aAngleType ) const
     {
@@ -199,11 +160,11 @@ public:
         case TENTHS_OF_A_DEGREE_T: return AsTenthsOfADegree();
         case DEGREES_T:            return AsDegrees();
         case RADIANS_T:            return AsRadians();
-        default: assert( 1 == 0 );
+        default: assert( false );
         }
     }
 
-    static constexpr double TENTHS_OF_A_DEGREE_TO_RADIANS = M_PI / 1800;
+    static constexpr double DEGREES_TO_RADIANS = M_PI / 180.0;
 
     /**
      * @return true if angle is one of the four cardinal directions (0/90/180/270 degrees),
@@ -211,73 +172,66 @@ public:
      */
     bool IsCardinal() const
     {
-        return AsTenthsOfADegree() % 900 == 0;
+        double test = m_value;
+
+        while( test < 0.0 )
+            test += 90.0;
+
+        while( test > 90.0 )
+            test -= 90.0;
+
+        return test == 0.0;
     }
 
     bool IsZero() const
     {
-        return AsTenthsOfADegree() == 0;
+        return m_value == 0.0;
     }
 
     bool IsHorizontal() const
     {
-        return AsTenthsOfADegree() == 0 || AsTenthsOfADegree() == 1800;
+        return m_value == 0.0 || m_value == 180.0;
     }
 
     bool IsVertical() const
     {
-        return AsTenthsOfADegree() == 900 || AsTenthsOfADegree() == 2700;
-    }
-
-    EDA_ANGLE Add( const EDA_ANGLE& aAngle ) const
-    {
-        EDA_ANGLE_T initialType = GetInitialAngleType();
-
-        // if both were given in radians, addition is exact
-        if( initialType == RADIANS_T
-            && aAngle.GetInitialAngleType() == RADIANS_T )
-        {
-            //double newAngle = normalize( AsRadians() + aAngle.AsRadians(), RADIANS_T );
-            double newAngle = AsRadians() + aAngle.AsRadians();
-            return EDA_ANGLE( newAngle, RADIANS_T );
-        }
-
-        // if both were not given in radians, addition is done using 1/10ths of a degree, then
-        // converted to original angle type
-        int newAngle = AsTenthsOfADegree() + aAngle.AsTenthsOfADegree();
-
-        switch( initialType )
-        {
-        case DEGREES_T:
-            return EDA_ANGLE( newAngle / DEGREES_T, DEGREES_T );
-
-        case RADIANS_T:
-            return EDA_ANGLE( newAngle * TENTHS_OF_A_DEGREE_TO_RADIANS, RADIANS_T );
-
-        default:
-        case TENTHS_OF_A_DEGREE_T:
-            return EDA_ANGLE( newAngle, TENTHS_OF_A_DEGREE_T );
-        }
+        return m_value == 90.0 || m_value == 270.0;
     }
 
     EDA_ANGLE Invert() const
     {
-        switch( GetInitialAngleType() )
-        {
-        case RADIANS_T:
-            return EDA_ANGLE( -m_radians, RADIANS_T );
-        default:
-            return EDA_ANGLE( -m_value / GetInitialAngleType(), GetInitialAngleType() );
-        }
+        return EDA_ANGLE( -AsDegrees(), DEGREES_T );
     }
 
-    EDA_ANGLE Subtract( const EDA_ANGLE& aAngle ) const { return Add( aAngle.Invert() ); }
+    double Sin() const
+    {
+        EDA_ANGLE test = *this;
+        test.Normalize();
 
-    inline EDA_ANGLE_T GetInitialAngleType() const { return m_initial_type; }
+        if( test.m_value == 0.0 || test.m_value == 180.0 )
+            return 0.0;
+        else if( test.m_value == 90.0 )
+            return 1.0;
+        else if( test.m_value == 270.0 )
+            return -1.0;
+        else
+            return sin( AsRadians() );
+    }
 
-    double Sin() const { return sin( AsRadians() ); }
+    double Cos() const
+    {
+        EDA_ANGLE test = *this;
+        test.Normalize();
 
-    double Cos() const { return cos( AsRadians() ); }
+        if( test.m_value == 0.0 )
+            return 1.0;
+        else if( test.m_value == 180.0 )
+            return -1.0;
+        else if( test.m_value == 90.0 || test.m_value == 270.0 )
+            return 0.0;
+        else
+            return cos( AsRadians() );
+    }
 
     double Tan() const { return tan( AsRadians() ); }
 
@@ -294,43 +248,45 @@ public:
 
     inline EDA_ANGLE Normalize()
     {
-        normalize( false );
+        while( m_value < -0.0 )
+            m_value += 360.0;
+
+        while( m_value >= 360.0 )
+            m_value -= 360.0;
+
         return *this;
     }
 
     inline EDA_ANGLE Normalize90()
     {
-        int angle = AsTenthsOfADegree();
+        while( m_value < -90.0 )
+            m_value += 180.0;
 
-        while( angle < -900 )
-            angle += 1800;
-
-        while( angle > 900 )
-            angle -= 1800;
-
-        *this = EDA_ANGLE( angle, TENTHS_OF_A_DEGREE_T );
+        while( m_value > 90.0 )
+            m_value -= 180.0;
 
         return *this;
     }
 
     inline EDA_ANGLE Normalize180()
     {
-        int angle = AsTenthsOfADegree();
+        while( m_value <= -180.0 )
+            m_value += 360.0;
 
-        while( angle <= -1800 )
-            angle += 3600;
-
-        while( angle > 1800 )
-            angle -= 3600;
-
-        *this = EDA_ANGLE( angle, TENTHS_OF_A_DEGREE_T );
+        while( m_value > 180.0 )
+            m_value -= 360.0;
 
         return *this;
     }
 
     inline EDA_ANGLE Normalize720()
     {
-        normalize( true );
+        while( m_value < -360.0 )
+            m_value += 360.0;
+
+        while( m_value >= 360.0 )
+            m_value -= 360.0;
+
         return *this;
     }
 
@@ -338,31 +294,18 @@ public:
 
     EDA_ANGLE& operator+=( const EDA_ANGLE& aAngle )
     {
-        *this = Add( aAngle );
+        *this = EDA_ANGLE( AsDegrees() + aAngle.AsDegrees(), DEGREES_T );
         return *this;
     }
 
     EDA_ANGLE& operator-=( const EDA_ANGLE& aAngle )
     {
-        EDA_ANGLE angle( aAngle );
-        *this = Add( angle.Invert() );
+        *this = EDA_ANGLE( AsDegrees() - aAngle.AsDegrees(), DEGREES_T );
         return *this;
     }
 
 private:
-    void   normalize( bool n720 = false );
-    int    normalize( int aValue, EDA_ANGLE_T aAngleType, bool n720 = false ) const;
-    double normalize( double aValue, EDA_ANGLE_T aAngleType, bool n720 = false ) const;
-
-private:
-
-    int          m_value;             ///< value is always stored in 1/10ths of a degree
-    double       m_radians;           ///< only used with as-radians constructor
-    EDA_ANGLE_T  m_initial_type;
-
-    static constexpr int    TENTHS_OF_A_DEGREE_FULL_CIRCLE = 3600;
-    static constexpr int    DEGREES_FULL_CIRCLE = 360;
-    static constexpr double RADIANS_FULL_CIRCLE = 2 * M_PI;
+    double  m_value;           ///< value in degrees
 
 public:
     static EDA_ANGLE m_Angle0;
@@ -383,70 +326,61 @@ inline EDA_ANGLE operator-( const EDA_ANGLE& aAngle )
 
 inline EDA_ANGLE operator-( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 {
-    return aAngleA.Add( aAngleB.Invert() );
+    return EDA_ANGLE( aAngleA.AsDegrees() - aAngleB.AsDegrees(), DEGREES_T );
 }
 
 
 inline EDA_ANGLE operator+( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 {
-    return aAngleA.Add( aAngleB );
+    return EDA_ANGLE( aAngleA.AsDegrees() + aAngleB.AsDegrees(), DEGREES_T );
 }
 
 
 inline EDA_ANGLE operator*( const EDA_ANGLE& aAngleA, double aOperator )
 {
-    switch( aAngleA.GetInitialAngleType() )
-    {
-    case RADIANS_T:
-        return EDA_ANGLE( aAngleA.AsRadians() * aOperator, RADIANS_T );
-    default:
-        return EDA_ANGLE( aAngleA.AsDegrees() * aOperator, DEGREES_T );
-    }
+    return EDA_ANGLE( aAngleA.AsDegrees() * aOperator, DEGREES_T );
 }
 
 
 inline EDA_ANGLE operator/( const EDA_ANGLE& aAngleA, double aOperator )
 {
-    switch( aAngleA.GetInitialAngleType() )
-    {
-    case RADIANS_T:
-        return EDA_ANGLE( aAngleA.AsRadians() / aOperator, RADIANS_T );
-    default:
-        return EDA_ANGLE( aAngleA.AsDegrees() / aOperator, DEGREES_T );
-    }
+    return EDA_ANGLE( aAngleA.AsDegrees() / aOperator, DEGREES_T );
 }
 
 
 inline bool operator==( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 {
-    return aAngleA.AsTenthsOfADegree() == aAngleB.AsTenthsOfADegree();
+    return aAngleA.AsDegrees() == aAngleB.AsDegrees();
 }
 
 
 inline bool operator!=( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 {
-    return aAngleA.AsTenthsOfADegree() != aAngleB.AsTenthsOfADegree();
+    return aAngleA.AsDegrees() != aAngleB.AsDegrees();
 }
 
 
 inline bool operator>( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 {
-    return aAngleA.AsTenthsOfADegree() > aAngleB.AsTenthsOfADegree();
+    return aAngleA.AsDegrees() > aAngleB.AsDegrees();
 }
+
 
 inline bool operator<( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 {
-    return aAngleA.AsTenthsOfADegree() < aAngleB.AsTenthsOfADegree();
+    return aAngleA.AsDegrees() < aAngleB.AsDegrees();
 }
+
 
 inline bool operator<=( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 {
-    return aAngleA.AsTenthsOfADegree() <= aAngleB.AsTenthsOfADegree();
+    return aAngleA.AsDegrees() <= aAngleB.AsDegrees();
 }
+
 
 inline bool operator>=( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 {
-    return aAngleA.AsTenthsOfADegree() >= aAngleB.AsTenthsOfADegree();
+    return aAngleA.AsDegrees() >= aAngleB.AsDegrees();
 }
 
 

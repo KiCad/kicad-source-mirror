@@ -550,7 +550,7 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
     // and arc inner to polyline and merge shapes.
     int              radial_offset = ( aWidth + 1 ) / 2;
 
-    SHAPE_POLY_SET   polyshape;
+    SHAPE_POLY_SET        polyshape;
     std::vector<VECTOR2I> outside_pts;
 
     /// We start by making rounded ends on the arc
@@ -626,7 +626,7 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
     if( arc_angle_end != ANGLE_0 && arc_angle_end != ANGLE_180 )
         polyshape.Outline(0).Rotate( arc_angle_end.AsRadians(), arcSpine.GetPoint( 0 ) );
 
-    arc_angle_end_deg = arc.GetEndAngle();
+    arc_angle_end = arc.GetEndAngle();
 
     if( arc_angle_end != ANGLE_0 && arc_angle_end != ANGLE_180 )
         polyshape.Outline(1).Rotate( arc_angle_end.AsRadians(), arcSpine.GetPoint( -1 ) );
