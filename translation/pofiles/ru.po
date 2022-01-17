@@ -5,22 +5,23 @@
 # Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>, 2020, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 # Дмитрий Дёмин <dmitrodem@gmail.com>, 2021.
+# dsa-t <dudesuchamazing@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2021-12-10 00:39+0000\n"
-"Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2022-02-01 13:57+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1692,26 +1693,22 @@ msgid "&OK"
 msgstr "&OK"
 
 #: common/dialog_shim.cpp:660
-#, fuzzy
 msgid "&Cancel"
 msgstr "Отмена"
 
 #: common/dialog_shim.cpp:661
 msgid "&Yes"
-msgstr ""
+msgstr "Да"
 
 #: common/dialog_shim.cpp:662
-#, fuzzy
 msgid "&No"
 msgstr "Нет"
 
 #: common/dialog_shim.cpp:663
-#, fuzzy
 msgid "&Apply"
 msgstr "Применить"
 
 #: common/dialog_shim.cpp:664
-#, fuzzy
 msgid "&Save"
 msgstr "Сохранить"
 
@@ -4711,19 +4708,18 @@ msgstr "Проблемы записи файла конфигурации"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:101
 #: eeschema/dialogs/dialog_text_properties_base.cpp:67
-#, fuzzy
 msgid "Default Font"
-msgstr "Ед.изм. по умолчанию:"
+msgstr "Шрифт по умолчанию"
 
 #: common/font/fontconfig.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading font '%s'."
-msgstr "Ошибка загрузки платы '%s'."
+msgstr "Ошибка загрузки шрифта '%s'."
 
 #: common/font/fontconfig.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Font '%s' not found; substituting '%s'."
-msgstr "Посад.место '%s' не найдено."
+msgstr "Шрифт '%s' не найден; заменяется '%s'."
 
 #: common/footprint_info.cpp:99 cvpcb/cvpcb_mainframe.cpp:884
 #: eeschema/symbol_editor/symbol_library_manager.cpp:104
@@ -5287,9 +5283,8 @@ msgid "ERC errors"
 msgstr "Ошибки ERС"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "ERC exclusions"
-msgstr "Исключения DRC"
+msgstr "Исключения ERC"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:171
 #: pcbnew/widgets/appearance_controls.cpp:354
@@ -6454,9 +6449,8 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "Отражение по оси Y пока не доступно"
 
 #: common/widgets/font_choice.cpp:58
-#, fuzzy
 msgid "<not found>"
-msgstr "%s не найдено"
+msgstr "<не найдено>"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found."
@@ -8730,7 +8724,7 @@ msgstr "Новые значения"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:170
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:108
 msgid "Font:"
-msgstr ""
+msgstr "Шрифт:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:173
 #: eeschema/dialogs/dialog_label_properties_base.cpp:188
@@ -8740,9 +8734,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:222
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:174
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:112
-#, fuzzy
 msgid "KiCad Font"
-msgstr "KiCad "
+msgstr "Шрифт KiCad"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:191
 #: eeschema/dialogs/dialog_label_properties_base.cpp:237
@@ -8804,9 +8797,8 @@ msgstr "Стиль линии:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:354
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:90
-#, fuzzy
 msgid "Fill color:"
-msgstr "Цвет линии:"
+msgstr "Цвет заливки:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:363
 msgid "Junction size:"
@@ -8931,9 +8923,8 @@ msgid "Label can not be empty."
 msgstr "Имя цепи не может быть пустым."
 
 #: eeschema/dialogs/dialog_label_properties.cpp:574
-#, fuzzy
 msgid "The first field is mandatory."
-msgstr "Первые %d полей - обязательны."
+msgstr "Первое поле - обязательное."
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:29
 #: eeschema/dialogs/dialog_label_properties_base.cpp:38
@@ -9104,9 +9095,8 @@ msgid "Passive"
 msgstr "Пассивный"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:161
-#, fuzzy
 msgid "Dot"
-msgstr "Точки"
+msgstr "Точка"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:167
 msgid "Diamond"
@@ -9333,9 +9323,8 @@ msgid "Fill with body background color"
 msgstr "Залить цветом фона"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:69
-#, fuzzy
 msgid "Fill with:"
-msgstr "Тип заливки:"
+msgstr "Залить цветом:"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:81
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:167
@@ -9591,14 +9580,12 @@ msgid "(%s)"
 msgstr "(%s)"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:116
-#, fuzzy
 msgid "Horizontal text"
-msgstr "Гориз. влево"
+msgstr "Горизонтальное расположение текста"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:121
-#, fuzzy
 msgid "Vertical text"
-msgstr "Верт."
+msgstr "Вертикальное расположение текста"
 
 #: eeschema/dialogs/dialog_lib_text_properties_base.cpp:146
 #: eeschema/dialogs/dialog_text_properties_base.cpp:107
@@ -10528,9 +10515,9 @@ msgid "Set line color to transparent to use Schematic Editor colors."
 msgstr "Установите цвет прозрачным для использования цвета по умолчанию."
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:62
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Свойства"
+msgstr "Свойства %s"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:66
 msgid "Connection type:"
@@ -11028,9 +11015,8 @@ msgid "Subcircuit"
 msgstr "Подсхема"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:85
-#, fuzzy
 msgid "Code Model"
-msgstr "Тип моделей"
+msgstr "Модель из кода"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:452
 msgid ""
@@ -11775,9 +11761,8 @@ msgid "Remap Symbols"
 msgstr "Переопределить символы"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:241
-#, fuzzy
 msgid "Text can not be empty."
-msgstr "Имя цепи не может быть пустым."
+msgstr "Текстовое поле не может быть пустым."
 
 #: eeschema/dialogs/dialog_text_properties_base.h:82
 #: pcbnew/dialogs/dialog_text_properties.cpp:104
@@ -11886,9 +11871,8 @@ msgid "Appearance"
 msgstr "Внешний вид"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
-#, fuzzy
 msgid "Default font:"
-msgstr "Формат по умолчанию"
+msgstr "Шрифт по умолчанию:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:46
 msgid "S&how hidden pins"
@@ -11899,28 +11883,24 @@ msgid "Show hidden fields"
 msgstr "Показать скрытые поля"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:52
-#, fuzzy
 msgid "Show ERC errors"
-msgstr "Ошибки ERС"
+msgstr "Отображать ошибки ERС"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:55
-#, fuzzy
 msgid "Show ERC warnings"
-msgstr "Предупреждения ERC"
+msgstr "Отображать предупреждения ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:58
-#, fuzzy
 msgid "Show ERC exclusions"
-msgstr "Исключения DRC"
+msgstr "Отображать исключения DRC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:61
 msgid "Show page limi&ts"
 msgstr "Показать границы страницы"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:69
-#, fuzzy
 msgid "Selection && Highlighting"
-msgstr "Выделение"
+msgstr "Выделение и подсветка"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
 msgid "Draw selected text items as box"
@@ -11937,7 +11917,7 @@ msgstr "Заполнять выделенные фигуры"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:86
 #, fuzzy
 msgid "Selection thickness:"
-msgstr "Толщина линий по умолчанию:"
+msgstr "Толщина выделения:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:94
 #, fuzzy
@@ -12268,21 +12248,18 @@ msgstr "]"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:213
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:21
-#, fuzzy
 msgid "Dashed Lines"
-msgstr "Добавить линии"
+msgstr "Штриховые линии"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:220
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:28
-#, fuzzy
 msgid "Dash length:"
-msgstr "Длина перех.отв.:"
+msgstr "Длина штриха:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:227
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:35
-#, fuzzy
 msgid "Gap length:"
-msgstr "Длина перех.отв.:"
+msgstr "Интервал:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:237
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
@@ -16674,24 +16651,20 @@ msgid "Show ERC Warnings"
 msgstr "Предупреждения"
 
 #: eeschema/tools/ee_actions.cpp:660
-#, fuzzy
 msgid "Show markers for electrical rules checker warnings"
-msgstr "Выполнить проверку электрических правил"
+msgstr "Отображать маркеры предупреждений ERC"
 
 #: eeschema/tools/ee_actions.cpp:664
-#, fuzzy
 msgid "Show ERC Errors"
-msgstr "Показать ошибки плагинов"
+msgstr "Отображать ошибки ERC"
 
 #: eeschema/tools/ee_actions.cpp:664
-#, fuzzy
 msgid "Show markers for electrical rules checker errors"
-msgstr "Выполнить проверку электрических правил"
+msgstr "Отображать маркеры ошибок ERC"
 
 #: eeschema/tools/ee_actions.cpp:668
-#, fuzzy
 msgid "Show ERC Exclusions"
-msgstr "Исключения"
+msgstr "Отображать исключения ERC"
 
 #: eeschema/tools/ee_actions.cpp:669
 #, fuzzy
@@ -17233,7 +17206,7 @@ msgstr "Переключить ед.изм."
 #: eeschema/widgets/tuner_slider_base.cpp:70
 #, fuzzy
 msgid "Characteristic Curve"
-msgstr "Волновое сопротивление"
+msgstr "Функциональная характеристика (IEC 60393-1:2008)"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -18729,7 +18702,7 @@ msgstr "Прерывание оставшихся задач."
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:137
 #, c-format
 msgid "Downloaded %lld/%lld Kb"
-msgstr "Загружено %lld/%lld кбит"
+msgstr "Загружено %lld/%lld КБ"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.cpp:21
 msgid "Download Progress"
@@ -18749,7 +18722,7 @@ msgstr "Подробности"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress_base.h:58
 msgid "Applying Package Changes"
-msgstr "Применение изменений пакета"
+msgstr "Применение изменений в пакетах"
 
 #: kicad/pcm/dialogs/panel_package.cpp:97
 #, fuzzy
@@ -18822,7 +18795,7 @@ msgid ""
 "This package version is incompatible with your kicad version or platform. "
 "Are you sure you want to install it anyway?"
 msgstr ""
-"Версия этого пакета не совпадает с установленной версией KiCad или "
+"Версия этого пакета не совместима с установленной версией KiCad или "
 "операционной системой. Всё равно установить?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:560
@@ -18862,12 +18835,12 @@ msgstr "Ошибка загрузки схемы: %s"
 #: kicad/pcm/pcm.cpp:119
 #, c-format
 msgid "Error loading installed packages list: %s"
-msgstr "Ошибка загрузки списка цепей: %s"
+msgstr "Ошибка загрузки списка установленных пакетов: %s"
 
 #: kicad/pcm/pcm.cpp:206
 #, c-format
 msgid "Downloading %lld/%lld Kb"
-msgstr "Загрузка %lld/%lld кбит"
+msgstr "Загрузка %lld/%lld КБ"
 
 #: kicad/pcm/pcm.cpp:231
 msgid "Download is too large."
@@ -18965,7 +18938,7 @@ msgstr "Удаление загруженного архива '%s'."
 #: kicad/pcm/pcm_task_manager.cpp:150
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr "Загрузка пакета URL: '%s'"
+msgstr "Загрузка пакета по URL: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:163
 #, c-format
@@ -23263,12 +23236,11 @@ msgid "Create Array"
 msgstr "Создать массив"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:223
-#, fuzzy
 msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
-"Этот элемент был на несуществующем или запрещённом слое.\n"
+"Этот элемент был на несуществующем слое.\n"
 "Он был перемещён на первый доступный слой."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:309
@@ -23561,14 +23533,14 @@ msgid "Done.<br><br>"
 msgstr "Готово.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
-msgstr "Удалить исключение для этого нарушения"
+msgstr "Удалить все исключения правила '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'"
-msgstr "Исключить это нарушение"
+msgstr "Исключить все нарушения правила '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:502
 msgid "Run clearance resolution tool..."
@@ -23728,24 +23700,22 @@ msgstr ""
 "хочет применить изменения к посад.местам на плате."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Updated footprint %s (%s)"
-msgstr "Обновить посад.места"
+msgstr "Обновлено посад.место %s (%s)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Changed footprint %s from '%s' to '%s'"
-msgstr "Заменить посад.место %s с '%s' на '%s'"
+msgstr "Посад.место %s изменено с '%s' на '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:375
-#, fuzzy
 msgid "*** library footprint not found ***"
-msgstr "*** посад.место не найдено ***"
+msgstr "*** посад.место не найдено в библиотеке ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:395
-#, fuzzy
 msgid ": (no changes)"
-msgstr "Отменить изменения"
+msgstr ": (нет изменений)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:400
 msgid ": OK"
@@ -25071,9 +25041,8 @@ msgid "Delete Items"
 msgstr "Удалить элементы"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:139
-#, fuzzy
 msgid "Other text items"
-msgstr "Прочие элементы"
+msgstr "Другие текстовые элементы"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:140
 #, fuzzy
@@ -25357,7 +25326,7 @@ msgstr "Значения по умолчанию для текста и граф
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 #, fuzzy
 msgid "Text && graphics formatting"
-msgstr "Текст и графика"
+msgstr "Формат текста и графики"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:61
 #, fuzzy
@@ -26329,14 +26298,12 @@ msgid "Relief gap:"
 msgstr "Зазор терморазгрузки:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:752
-#, fuzzy
 msgid "Spoke width:"
-msgstr "Толщина линий:"
+msgstr "Толщина мостиков терморазгр.:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:763
-#, fuzzy
 msgid "Spoke angle:"
-msgstr "Угол дуги:"
+msgstr "Угол мостиков терморазгр.:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 msgid "Primitives list:"
@@ -28072,7 +28039,7 @@ msgstr "Разрешить заполнение за пределами зоны
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:146
 #, fuzzy
 msgid "Min thermal relief spoke count:"
-msgstr "Мостик терморазгрузки:"
+msgstr "Мин. кол-во мостиков терморазгрузки:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:165
 msgid "Length tuning"
@@ -28256,14 +28223,12 @@ msgstr ""
 "значения для частей одного посад.места)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:459
-#, fuzzy
 msgid "Minimum text height:"
-msgstr "Высота текста:"
+msgstr "Минимальная высота текста:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:473
-#, fuzzy
 msgid "Minimum text thickness:"
-msgstr "Толщина текста:"
+msgstr "Минимальная толщина текста:"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:430
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -28924,9 +28889,8 @@ msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
-#, fuzzy
 msgid "Tent vias"
-msgstr "Не закрывать перех.отв."
+msgstr "Закрывать перех.отв. маской"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid ""
@@ -29574,9 +29538,8 @@ msgid "board setup constraints"
 msgstr "заданные ограничения платы"
 
 #: pcbnew/drc/drc_engine.cpp:180
-#, fuzzy
 msgid "default"
-msgstr "По умолчанию"
+msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:186
 msgid "board setup constraints silk"
@@ -29674,7 +29637,7 @@ msgstr "Локально переопределено на %s; зазор: %s."
 #: pcbnew/drc/drc_engine.cpp:858
 #, fuzzy, c-format
 msgid "Zone %s min thickness: %s."
-msgstr "Толщина линии:"
+msgstr "Зона %s, мин. толщина: %s."
 
 #: pcbnew/drc/drc_engine.cpp:872
 #, fuzzy, c-format
@@ -29790,12 +29753,12 @@ msgstr "Локальные зазор на %s; зазор: %s."
 #: pcbnew/drc/drc_engine.cpp:1211
 #, fuzzy, c-format
 msgid "Footprint %s zone connection: %s."
-msgstr "Порт %s не имеет подключений."
+msgstr "Посад.место %s, соединение зоны: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1226
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s pad connection: %s."
-msgstr "Тип соединения с зоной: %s."
+msgstr "Зона %s, соединение с конт.пл.: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1230 pcbnew/drc/drc_engine.cpp:1246
 #: pcbnew/drc/drc_engine.cpp:1262 pcbnew/zone.cpp:327 pcbnew/zone.cpp:476
@@ -30136,9 +30099,8 @@ msgid "Rule already has a '%s' constraint."
 msgstr "Правило уже имеет ограничение '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:407
-#, fuzzy
 msgid "Expecting number."
-msgstr "Ожидается %s"
+msgstr "Ожидалось число."
 
 #: pcbnew/drc/drc_rule_parser.cpp:422
 #, fuzzy
