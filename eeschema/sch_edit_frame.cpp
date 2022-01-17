@@ -499,6 +499,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::toggleERCWarnings,   CHECK( showERCWarningsCond ) );
     mgr->SetConditions( EE_ACTIONS::toggleERCExclusions, CHECK( showERCExclusionsCond ) );
     mgr->SetConditions( EE_ACTIONS::toggleForceHV,       CHECK( forceHVCond ) );
+    mgr->SetConditions( ACTIONS::toggleBoundingBoxes,    CHECK( cond.BoundingBoxes() ) );
 
 
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )

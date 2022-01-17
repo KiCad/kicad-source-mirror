@@ -185,6 +185,9 @@ public:
     void SetHighContrast( bool aEnabled ) { m_hiContrastEnabled = aEnabled; }
     bool GetHighContrast() const { return m_hiContrastEnabled; }
 
+    void SetDrawBoundingBoxes( bool aEnabled ) { m_drawBoundingBoxes = aEnabled; }
+    bool GetDrawBoundingBoxes() const { return m_drawBoundingBoxes; }
+
     /**
      * Returns the color that should be used to draw the specific VIEW_ITEM on the specific layer
      * using currently used render settings.
@@ -308,6 +311,8 @@ protected:
     bool          m_highlightEnabled;     // Highlight display mode on/off
     std::set<int> m_highlightNetcodes;    // Set of net cods to be highlighted
     float         m_highlightFactor;      // Factor used for computing highlight color
+
+    bool          m_drawBoundingBoxes;    // Visual aid for debugging
 
     float         m_selectFactor;         // Specifies how color of selected items is changed
     float         m_outlineWidth;         // Line width used when drawing outlines

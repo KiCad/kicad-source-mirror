@@ -118,6 +118,8 @@ public:
      */
     SELECTION_CONDITION FullscreenCursor();
 
+    SELECTION_CONDITION BoundingBoxes();
+
     /**
      * Create a functor testing if the python scripting console window is visible.
      *
@@ -155,6 +157,9 @@ protected:
 
     ///< Helper function used by FullscreenCursor().
     static bool cursorFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
+
+    ///< Helper function used by DrawBoundingBoxes().
+    static bool bboxesFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
 
     ///< Helper function used by ScriptingConsoleVisible().
     static bool consoleVisibleFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );

@@ -25,6 +25,7 @@
 
 #include <base_screen.h>
 #include <base_units.h>
+#include <painter.h>
 #include <bitmaps.h>
 #include <class_draw_panel_gal.h>
 #include <dialogs/dialog_configure_paths.h>
@@ -32,14 +33,12 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <id.h>
 #include <kiface_base.h>
-#include <project.h>
 #include <settings/app_settings.h>
 #include <tool/actions.h>
 #include <tool/common_tools.h>
 #include <tool/tool_manager.h>
 #include <view/view.h>
 #include <view/view_controls.h>
-#include <zoom_defines.h>
 
 
 COMMON_TOOLS::COMMON_TOOLS() :
@@ -579,62 +578,81 @@ int COMMON_TOOLS::ToggleCursorStyle( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_TOOLS::ToggleBoundingBoxes( const TOOL_EVENT& aEvent )
+{
+    EDA_DRAW_PANEL_GAL* canvas = m_frame->GetCanvas();
+
+    if( canvas )
+    {
+        KIGFX::RENDER_SETTINGS* rs = canvas->GetView()->GetPainter()->GetSettings();
+
+        rs->SetDrawBoundingBoxes( !rs->GetDrawBoundingBoxes() );
+
+        canvas->GetView()->UpdateAllItems( KIGFX::ALL );
+        canvas->ForceRefresh();
+    }
+
+    return 0;
+}
+
+
 void COMMON_TOOLS::setTransitions()
 {
-    Go( &COMMON_TOOLS::SelectionTool,      ACTIONS::selectionTool.MakeEvent() );
+    Go( &COMMON_TOOLS::SelectionTool,       ACTIONS::selectionTool.MakeEvent() );
 
     // Cursor control
-    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorUp.MakeEvent() );
-    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorDown.MakeEvent() );
-    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorLeft.MakeEvent() );
-    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorRight.MakeEvent() );
-    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorUpFast.MakeEvent() );
-    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorDownFast.MakeEvent() );
-    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorLeftFast.MakeEvent() );
-    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorRightFast.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,       ACTIONS::cursorUp.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,       ACTIONS::cursorDown.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,       ACTIONS::cursorLeft.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,       ACTIONS::cursorRight.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,       ACTIONS::cursorUpFast.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,       ACTIONS::cursorDownFast.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,       ACTIONS::cursorLeftFast.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,       ACTIONS::cursorRightFast.MakeEvent() );
 
-    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorClick.MakeEvent() );
-    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorDblClick.MakeEvent() );
-    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::showContextMenu.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,       ACTIONS::cursorClick.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,       ACTIONS::cursorDblClick.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,       ACTIONS::showContextMenu.MakeEvent() );
 
     // Pan control
-    Go( &COMMON_TOOLS::PanControl,         ACTIONS::panUp.MakeEvent() );
-    Go( &COMMON_TOOLS::PanControl,         ACTIONS::panDown.MakeEvent() );
-    Go( &COMMON_TOOLS::PanControl,         ACTIONS::panLeft.MakeEvent() );
-    Go( &COMMON_TOOLS::PanControl,         ACTIONS::panRight.MakeEvent() );
+    Go( &COMMON_TOOLS::PanControl,          ACTIONS::panUp.MakeEvent() );
+    Go( &COMMON_TOOLS::PanControl,          ACTIONS::panDown.MakeEvent() );
+    Go( &COMMON_TOOLS::PanControl,          ACTIONS::panLeft.MakeEvent() );
+    Go( &COMMON_TOOLS::PanControl,          ACTIONS::panRight.MakeEvent() );
 
     // Zoom control
-    Go( &COMMON_TOOLS::ZoomRedraw,         ACTIONS::zoomRedraw.MakeEvent() );
-    Go( &COMMON_TOOLS::ZoomInOut,          ACTIONS::zoomIn.MakeEvent() );
-    Go( &COMMON_TOOLS::ZoomInOut,          ACTIONS::zoomOut.MakeEvent() );
-    Go( &COMMON_TOOLS::ZoomInOutCenter,    ACTIONS::zoomInCenter.MakeEvent() );
-    Go( &COMMON_TOOLS::ZoomInOutCenter,    ACTIONS::zoomOutCenter.MakeEvent() );
-    Go( &COMMON_TOOLS::ZoomCenter,         ACTIONS::zoomCenter.MakeEvent() );
-    Go( &COMMON_TOOLS::ZoomFitScreen,      ACTIONS::zoomFitScreen.MakeEvent() );
-    Go( &COMMON_TOOLS::ZoomFitObjects,     ACTIONS::zoomFitObjects.MakeEvent() );
-    Go( &COMMON_TOOLS::ZoomPreset,         ACTIONS::zoomPreset.MakeEvent() );
-    Go( &COMMON_TOOLS::CenterContents,     ACTIONS::centerContents.MakeEvent() );
+    Go( &COMMON_TOOLS::ZoomRedraw,          ACTIONS::zoomRedraw.MakeEvent() );
+    Go( &COMMON_TOOLS::ZoomInOut,           ACTIONS::zoomIn.MakeEvent() );
+    Go( &COMMON_TOOLS::ZoomInOut,           ACTIONS::zoomOut.MakeEvent() );
+    Go( &COMMON_TOOLS::ZoomInOutCenter,     ACTIONS::zoomInCenter.MakeEvent() );
+    Go( &COMMON_TOOLS::ZoomInOutCenter,     ACTIONS::zoomOutCenter.MakeEvent() );
+    Go( &COMMON_TOOLS::ZoomCenter,          ACTIONS::zoomCenter.MakeEvent() );
+    Go( &COMMON_TOOLS::ZoomFitScreen,       ACTIONS::zoomFitScreen.MakeEvent() );
+    Go( &COMMON_TOOLS::ZoomFitObjects,      ACTIONS::zoomFitObjects.MakeEvent() );
+    Go( &COMMON_TOOLS::ZoomPreset,          ACTIONS::zoomPreset.MakeEvent() );
+    Go( &COMMON_TOOLS::CenterContents,      ACTIONS::centerContents.MakeEvent() );
 
     // Grid control
-    Go( &COMMON_TOOLS::GridNext,           ACTIONS::gridNext.MakeEvent() );
-    Go( &COMMON_TOOLS::GridPrev,           ACTIONS::gridPrev.MakeEvent() );
-    Go( &COMMON_TOOLS::GridPreset,         ACTIONS::gridPreset.MakeEvent() );
-    Go( &COMMON_TOOLS::GridFast1,          ACTIONS::gridFast1.MakeEvent() );
-    Go( &COMMON_TOOLS::GridFast2,          ACTIONS::gridFast2.MakeEvent() );
-    Go( &COMMON_TOOLS::ToggleGrid,         ACTIONS::toggleGrid.MakeEvent() );
-    Go( &COMMON_TOOLS::GridProperties,     ACTIONS::gridProperties.MakeEvent() );
+    Go( &COMMON_TOOLS::GridNext,            ACTIONS::gridNext.MakeEvent() );
+    Go( &COMMON_TOOLS::GridPrev,            ACTIONS::gridPrev.MakeEvent() );
+    Go( &COMMON_TOOLS::GridPreset,          ACTIONS::gridPreset.MakeEvent() );
+    Go( &COMMON_TOOLS::GridFast1,           ACTIONS::gridFast1.MakeEvent() );
+    Go( &COMMON_TOOLS::GridFast2,           ACTIONS::gridFast2.MakeEvent() );
+    Go( &COMMON_TOOLS::ToggleGrid,          ACTIONS::toggleGrid.MakeEvent() );
+    Go( &COMMON_TOOLS::GridProperties,      ACTIONS::gridProperties.MakeEvent() );
 
     // Units and coordinates
-    Go( &COMMON_TOOLS::SwitchUnits,        ACTIONS::inchesUnits.MakeEvent() );
-    Go( &COMMON_TOOLS::SwitchUnits,        ACTIONS::milsUnits.MakeEvent() );
-    Go( &COMMON_TOOLS::SwitchUnits,        ACTIONS::millimetersUnits.MakeEvent() );
-    Go( &COMMON_TOOLS::ToggleUnits,        ACTIONS::toggleUnits.MakeEvent() );
-    Go( &COMMON_TOOLS::TogglePolarCoords,  ACTIONS::togglePolarCoords.MakeEvent() );
-    Go( &COMMON_TOOLS::ResetLocalCoords,   ACTIONS::resetLocalCoords.MakeEvent() );
+    Go( &COMMON_TOOLS::SwitchUnits,         ACTIONS::inchesUnits.MakeEvent() );
+    Go( &COMMON_TOOLS::SwitchUnits,         ACTIONS::milsUnits.MakeEvent() );
+    Go( &COMMON_TOOLS::SwitchUnits,         ACTIONS::millimetersUnits.MakeEvent() );
+    Go( &COMMON_TOOLS::ToggleUnits,         ACTIONS::toggleUnits.MakeEvent() );
+    Go( &COMMON_TOOLS::TogglePolarCoords,   ACTIONS::togglePolarCoords.MakeEvent() );
+    Go( &COMMON_TOOLS::ResetLocalCoords,    ACTIONS::resetLocalCoords.MakeEvent() );
 
     // Misc
-    Go( &COMMON_TOOLS::ToggleCursor,       ACTIONS::toggleCursor.MakeEvent() );
-    Go( &COMMON_TOOLS::ToggleCursorStyle,  ACTIONS::toggleCursorStyle.MakeEvent() );
+    Go( &COMMON_TOOLS::ToggleCursor,        ACTIONS::toggleCursor.MakeEvent() );
+    Go( &COMMON_TOOLS::ToggleCursorStyle,   ACTIONS::toggleCursorStyle.MakeEvent() );
+    Go( &COMMON_TOOLS::ToggleBoundingBoxes, ACTIONS::toggleBoundingBoxes.MakeEvent() );
 }
 
 

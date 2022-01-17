@@ -369,6 +369,9 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( PCB_ACTIONS::viaDisplayMode,       ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::trackDisplayMode,     ACTION_TOOLBAR::TOGGLE );
 
+    if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
+        m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes,  ACTION_TOOLBAR::TOGGLE );
+
     // Tools to show/hide toolbars:
     m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( PCB_ACTIONS::showLayersManager,    ACTION_TOOLBAR::TOGGLE  );

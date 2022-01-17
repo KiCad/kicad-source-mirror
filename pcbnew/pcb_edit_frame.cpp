@@ -638,13 +638,19 @@ void PCB_EDIT_FRAME::setupUIConditions()
         };
 
     mgr->SetConditions( PCB_ACTIONS::zoneDisplayFilled,
-                        ENABLE( enableZoneControlConition ).Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED ) ) );
+                        ENABLE( enableZoneControlConition )
+                        .Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED ) ) );
     mgr->SetConditions( PCB_ACTIONS::zoneDisplayOutline,
-                        ENABLE( enableZoneControlConition ).Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE ) ) );
+                        ENABLE( enableZoneControlConition )
+                        .Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE ) ) );
     mgr->SetConditions( PCB_ACTIONS::zoneDisplayFractured,
-                        ENABLE( enableZoneControlConition ).Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FRACTURE_BORDERS ) ) );
+                        ENABLE( enableZoneControlConition )
+                        .Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FRACTURE_BORDERS ) ) );
     mgr->SetConditions( PCB_ACTIONS::zoneDisplayTriangulated,
-                        ENABLE( enableZoneControlConition ).Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_TRIANGULATION ) ) );
+                        ENABLE( enableZoneControlConition )
+                        .Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_TRIANGULATION ) ) );
+
+    mgr->SetConditions( ACTIONS::toggleBoundingBoxes, CHECK( cond.BoundingBoxes() ) );
 
     auto enableBoardSetupCondition =
         [this] ( const SELECTION& )
@@ -704,10 +710,9 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::showLayersManager,    CHECK( layerManagerCond ) );
     mgr->SetConditions( PCB_ACTIONS::showRatsnest,         CHECK( globalRatsnestCond ) );
     mgr->SetConditions( PCB_ACTIONS::ratsnestLineMode,     CHECK( curvedRatsnestCond ) );
-    mgr->SetConditions( PCB_ACTIONS::toggleNetHighlight,
-                        CHECK( netHighlightCond ).Enable( enableNetHighlightCond ) );
-    mgr->SetConditions( PCB_ACTIONS::boardSetup ,          ENABLE( enableBoardSetupCondition ) );
-
+    mgr->SetConditions( PCB_ACTIONS::toggleNetHighlight,   CHECK( netHighlightCond )
+                                                           .Enable( enableNetHighlightCond ) );
+    mgr->SetConditions( PCB_ACTIONS::boardSetup,           ENABLE( enableBoardSetupCondition ) );
 
     auto isHighlightMode =
         [this]( const SELECTION& )

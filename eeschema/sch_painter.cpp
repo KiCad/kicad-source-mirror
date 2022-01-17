@@ -197,7 +197,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 
 #endif
 
-    if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
+    if( m_schSettings.GetDrawBoundingBoxes() )
     {
         BOX2I box = item->GetBoundingBox();
 

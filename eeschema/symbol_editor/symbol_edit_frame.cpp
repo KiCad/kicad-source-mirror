@@ -429,7 +429,8 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
             };
 
     mgr->SetConditions( EE_ACTIONS::showElectricalTypes, CHECK( pinTypeCond ) );
-    mgr->SetConditions( EE_ACTIONS::showSymbolTree, CHECK( showCompTreeCond ) );
+    mgr->SetConditions( ACTIONS::toggleBoundingBoxes,    CHECK( cond.BoundingBoxes() ) );
+    mgr->SetConditions( EE_ACTIONS::showSymbolTree,      CHECK( showCompTreeCond ) );
 
     auto demorganCond =
             [this]( const SELECTION& )

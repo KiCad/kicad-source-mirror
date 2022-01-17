@@ -504,7 +504,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     }
 
     // Draw bounding boxes after drawing objects so they can be seen.
-    if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
+    if( m_pcbSettings.GetDrawBoundingBoxes() )
     {
         // Show bounding boxes of painted objects for debugging.
         EDA_RECT box = item->GetBoundingBox();

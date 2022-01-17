@@ -1122,6 +1122,8 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::highContrastMode,          CHECK( highContrastCond ) );
     mgr->SetConditions( PCB_ACTIONS::flipBoard,             CHECK( boardFlippedCond ) );
+    mgr->SetConditions( ACTIONS::toggleBoundingBoxes,       CHECK( cond.BoundingBoxes() ) );
+
     mgr->SetConditions( PCB_ACTIONS::showFootprintTree,     CHECK( footprintTreeCond ) );
     mgr->SetConditions( PCB_ACTIONS::showLayersManager,     CHECK( layerManagerCond ) );
 

@@ -21,6 +21,7 @@
  */
 
 
+#include <advanced_config.h>
 #include <macros.h>
 #include <bitmaps.h>
 #include <tool/action_toolbar.h>
@@ -136,6 +137,9 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,     ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::textOutlines,       ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::graphicsOutlines,   ACTION_TOOLBAR::TOGGLE );
+
+    if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
+        m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes, ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->KiRealize();
 }

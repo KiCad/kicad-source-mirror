@@ -28,6 +28,7 @@ using namespace KIGFX;
 
 RENDER_SETTINGS::RENDER_SETTINGS() :
         m_highlightNetcodes(),
+        m_drawBoundingBoxes( false ),
         m_dashLengthRatio( 12 ), // From ISO 128-2
         m_gapLengthRatio( 3 ),   // From ISO 128-2
         m_printDC( nullptr )

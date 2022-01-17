@@ -31,6 +31,7 @@
 #include <pcb_layer_box_selector.h>
 #include <wx/choice.h>
 #include <wx/wupdlock.h>
+#include <advanced_config.h>
 
 void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 {
@@ -223,6 +224,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( PCB_ACTIONS::graphicsOutlines,    ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::textOutlines,        ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::highContrastMode,        ACTION_TOOLBAR::TOGGLE );
+
+    if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
+        m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes, ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( PCB_ACTIONS::showFootprintTree,   ACTION_TOOLBAR::TOGGLE );

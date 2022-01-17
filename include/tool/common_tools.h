@@ -64,6 +64,8 @@ public:
     int ToggleCursor( const TOOL_EVENT& aEvent );
     int ToggleCursorStyle( const TOOL_EVENT& aEvent );
 
+    int ToggleBoundingBoxes( const TOOL_EVENT& aEvent );
+
     // Units control
     int SwitchUnits( const TOOL_EVENT& aEvent );
     int ToggleUnits( const TOOL_EVENT& aEvent );

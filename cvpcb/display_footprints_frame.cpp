@@ -203,13 +203,10 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::inchesUnits,       CHECK( cond.Units( EDA_UNITS::INCHES ) ) );
     mgr->SetConditions( ACTIONS::milsUnits,         CHECK( cond.Units( EDA_UNITS::MILS ) ) );
 
-
-    mgr->SetConditions( PCB_ACTIONS::showPadNumbers,
-                        CHECK( cond.PadNumbersDisplay() ) );
-    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,             CHECK( !cond.PadFillDisplay() ) );
-    mgr->SetConditions( PCB_ACTIONS::textOutlines,               CHECK( !cond.TextFillDisplay() ) );
-    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines,
-                        CHECK( !cond.GraphicsFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::showPadNumbers,   CHECK( cond.PadNumbersDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::padDisplayMode,   CHECK( !cond.PadFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::textOutlines,     CHECK( !cond.TextFillDisplay() ) );
+    mgr->SetConditions( PCB_ACTIONS::graphicsOutlines, CHECK( !cond.GraphicsFillDisplay() ) );
 
 #undef CHECK
 }

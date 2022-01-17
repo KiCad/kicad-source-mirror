@@ -102,6 +102,7 @@ public:
     static TOOL_ACTION toggleCursorStyle;
     static TOOL_ACTION highContrastMode;
     static TOOL_ACTION highContrastModeCycle;
+    static TOOL_ACTION toggleBoundingBoxes;
 
     static TOOL_ACTION refreshPreview;      // Similar to a synthetic mouseMoved event, but also
                                             // used after a rotate, mirror, etc.

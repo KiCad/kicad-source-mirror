@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <eeschema_id.h>
 #include <symbol_edit_frame.h>
 #include <sch_painter.h>
@@ -159,6 +160,11 @@ void SYMBOL_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( ACTIONS::millimetersUnits,       ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,      ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( EE_ACTIONS::showElectricalTypes, ACTION_TOOLBAR::TOGGLE );
+
+    if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
+        m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes,  ACTION_TOOLBAR::TOGGLE );
+
+    m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( EE_ACTIONS::showSymbolTree,      ACTION_TOOLBAR::TOGGLE );
 
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();

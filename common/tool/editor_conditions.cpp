@@ -23,6 +23,8 @@
  */
 
 
+#include <view/view.h>
+#include <painter.h>
 #include <class_draw_panel_gal.h>
 #include <eda_base_frame.h>
 #include <eda_draw_frame.h>
@@ -104,6 +106,16 @@ SELECTION_CONDITION EDITOR_CONDITIONS::FullscreenCursor()
 }
 
 
+SELECTION_CONDITION EDITOR_CONDITIONS::BoundingBoxes()
+{
+    EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
+
+    wxASSERT( drwFrame );
+
+    return std::bind( &EDITOR_CONDITIONS::bboxesFunc, _1, drwFrame );
+}
+
+
 SELECTION_CONDITION EDITOR_CONDITIONS::ScriptingConsoleVisible()
 {
     EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
@@ -167,6 +179,12 @@ bool EDITOR_CONDITIONS::polarCoordFunc( const SELECTION& aSelection, EDA_DRAW_FR
 bool EDITOR_CONDITIONS::cursorFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame )
 {
     return aFrame->GetGalDisplayOptions().m_fullscreenCursor;
+}
+
+
+bool EDITOR_CONDITIONS::bboxesFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame )
+{
+    return aFrame->GetCanvas()->GetView()->GetPainter()->GetSettings()->GetDrawBoundingBoxes();
 }
 
 

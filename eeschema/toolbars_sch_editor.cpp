@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <kiface_base.h>
@@ -191,6 +192,9 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,   ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( EE_ACTIONS::toggleHiddenPins, ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( EE_ACTIONS::toggleForceHV,    ACTION_TOOLBAR::TOGGLE );
+
+    if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
+        m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes,    ACTION_TOOLBAR::TOGGLE );
 
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
