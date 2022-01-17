@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -491,6 +491,12 @@ void DRAWING_SHEET_PARSER::parseBitmap( DS_DATA_ITEM_BITMAP * aItem )
 
         case T_scale:
             aItem->m_ImageBitmap->SetScale( parseDouble() );
+            NeedRIGHT();
+            break;
+
+        case T_comment:
+            NeedSYMBOLorNUMBER();
+            aItem->m_Info = FromUTF8();
             NeedRIGHT();
             break;
 
