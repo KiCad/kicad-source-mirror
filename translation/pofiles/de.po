@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-09 08:58-0800\n"
-"PO-Revision-Date: 2022-01-08 22:35+0000\n"
+"PO-Revision-Date: 2022-02-01 13:57+0000\n"
 "Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v6/de/>\n"
 "Language: de\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3499,7 +3499,7 @@ msgstr "Punkt"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:318
 #: eeschema/dialogs/dialog_line_wire_bus_properties.cpp:48
 msgid "Dash-Dot"
-msgstr "Strichpunkt"
+msgstr "Strich-Punkt"
 
 #: common/dialogs/panel_setup_netclasses.cpp:417
 msgid "Netclass must have a name."
@@ -3539,7 +3539,7 @@ msgstr "Leiterbahnbreite Differentialpaar"
 
 #: common/dialogs/panel_setup_netclasses.cpp:494
 msgid "Differential pair gap"
-msgstr "Abstand Differentialpaar"
+msgstr "Differentialpaar-Abstand"
 
 #: common/dialogs/panel_setup_netclasses.cpp:495
 msgid "Schematic wire thickness"
@@ -5309,7 +5309,7 @@ msgstr "SMD-Pads unten"
 
 #: common/layer_id.cpp:151
 msgid "Through-hole pads"
-msgstr "Durchsteckpads"
+msgstr "Durchlochpads"
 
 #: common/layer_id.cpp:152
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
@@ -6756,7 +6756,7 @@ msgstr "KiCad Footprintbibliotheken Verzeichnisse"
 
 #: common/wildcards_and_files_ext.cpp:360
 msgid "Legacy footprint library files"
-msgstr "Alte Footprint-Bibliotheksdateien"
+msgstr "Ältere Footprint-Bibliotheksdateien"
 
 #: common/wildcards_and_files_ext.cpp:366
 msgid "Eagle ver. 6.x XML library files"
@@ -9008,7 +9008,7 @@ msgid ""
 msgstr ""
 "Symbol der aktuellen Bibliothek als Elternsymbol auswählen.\n"
 "\n"
-"Dies war früher als Alias bekannt.  Kein existierendes\n"
+"Dies war früher als Alias bekannt.  Kein bestehendes\n"
 "Symbol wählen, um ein neues Wurzelsymbol zu erstellen."
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:51
@@ -9085,7 +9085,7 @@ msgstr "Auf 0 setzen um Vorgabe zu benutzen"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:43
 msgid "Do not fill"
-msgstr "Nicht ausfüllen"
+msgstr "Nicht füllen"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:43
 msgid "Fill with body outline color"
@@ -12162,7 +12162,7 @@ msgstr "Querverweise zwischen Schaltplanblättern"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:166
 msgid "Show inter-sheet references"
-msgstr "Querverweise zu weiteren Schaltplanblättern anzeigen"
+msgstr "Querverweise zu Schaltplanblättern anzeigen"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:172
 msgid "Show own page reference"
@@ -16072,7 +16072,7 @@ msgstr "Symbolanker verschieben"
 
 #: eeschema/tools/ee_actions.cpp:250
 msgid "Specify a new location for the symbol anchor"
-msgstr "Spezifizieren Sie eine neue Position für den Anker des Bausteils"
+msgstr "Bestimmen Sie eine neue Position für den Symbolanker"
 
 #: eeschema/tools/ee_actions.cpp:255
 msgid "Finish drawing shape"
@@ -16156,7 +16156,7 @@ msgstr "Hierarchische Bezeichner hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:317
 msgid "Add a hierarchical label"
-msgstr "Hierarchischen Bezeichner hinzufügen"
+msgstr "Einen hierarchischen Bezeichner hinzufügen"
 
 #: eeschema/tools/ee_actions.cpp:323
 msgid "Add Sheet"
@@ -16277,7 +16277,7 @@ msgstr "Anzeige des Dialogs für die Footprintfelder"
 
 #: eeschema/tools/ee_actions.cpp:420
 msgid "Autoplace Fields"
-msgstr "Felder autoplatzieren"
+msgstr "Felder automatisch platzieren"
 
 #: eeschema/tools/ee_actions.cpp:420
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
@@ -16352,7 +16352,7 @@ msgstr "Zu Bezeichner ändern"
 
 #: eeschema/tools/ee_actions.cpp:468
 msgid "Change existing item to a label"
-msgstr "Existierendes Element zu einem Bezeichner ändern"
+msgstr "Bestehendes Element zu einem Bezeichner ändern"
 
 #: eeschema/tools/ee_actions.cpp:473
 msgid "Change to Hierarchical Label"
@@ -16360,7 +16360,7 @@ msgstr "Zu hierarchischem Bezeichner ändern"
 
 #: eeschema/tools/ee_actions.cpp:473
 msgid "Change existing item to a hierarchical label"
-msgstr "Existierendes Element zu einem hierarchischen Bezeichner ändern"
+msgstr "Bestehendes Element zu einem hierarchischen Bezeichner ändern"
 
 #: eeschema/tools/ee_actions.cpp:478
 msgid "Change to Global Label"
@@ -16368,7 +16368,7 @@ msgstr "Zu globalem Bezeichner ändern"
 
 #: eeschema/tools/ee_actions.cpp:478
 msgid "Change existing item to a global label"
-msgstr "Existierendes Element zu einem globalen Bezeichner ändern"
+msgstr "Bestehendes Element zu einem globalen Bezeichner ändern"
 
 #: eeschema/tools/ee_actions.cpp:483
 msgid "Change to Text"
@@ -16376,7 +16376,7 @@ msgstr "Zu Text ändern"
 
 #: eeschema/tools/ee_actions.cpp:483
 msgid "Change existing item to a text comment"
-msgstr "Existierendes Element zu einem Textkommentar ändern"
+msgstr "Bestehendes Element zu einem Textkommentar ändern"
 
 #: eeschema/tools/ee_actions.cpp:488
 msgid "Cleanup Sheet Pins"
@@ -16489,7 +16489,7 @@ msgstr "Bearbeitet die Zuordnung zwischen Schaltplan- und Bibliothekssymbolen"
 
 #: eeschema/tools/ee_actions.cpp:572
 msgid "Assign Footprints..."
-msgstr "Symbolfootprints zuweisen..."
+msgstr "Footprints zuweisen..."
 
 #: eeschema/tools/ee_actions.cpp:572
 msgid "Run footprint assignment tool"
@@ -16541,7 +16541,7 @@ msgstr "Alte Symbole im Projekt finden und diese umbenennen/wiederherstellen"
 
 #: eeschema/tools/ee_actions.cpp:605
 msgid "Remap Legacy Library Symbols..."
-msgstr "Legacy-Bibliothekssymbole neu zuordnen..."
+msgstr "Symbole aus veralteten Bibliotheken neu zuordnen..."
 
 #: eeschema/tools/ee_actions.cpp:606
 msgid ""
@@ -19543,7 +19543,7 @@ msgstr "Linienstärke:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:470
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:206
 msgid "Text thickness:"
-msgstr "Schrift Stärke:"
+msgstr "Schriftstärke:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:490
 msgid "Set to Default"
@@ -20542,7 +20542,7 @@ msgstr "Via-Länge:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
-msgstr "Via-Länge ist die Dicke der Platine für Durchkontaktierungen"
+msgstr "Via-Länge ist die Dicke der Platine für Durchloch-Vias"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 msgid "Via pad diameter:"
@@ -21042,7 +21042,7 @@ msgstr "Elektrische Länge"
 #: pcb_calculator/transline_ident.cpp:212
 #: pcb_calculator/transline_ident.cpp:329
 msgid "Gap width"
-msgstr "Abstandsweite"
+msgstr "Spaltbreite"
 
 #: pcb_calculator/transline_ident.cpp:229
 msgid "ZF(H10) = Ey / Hx:"
@@ -22311,7 +22311,7 @@ msgstr "Voreinstellungen"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:102
 msgid "Design Rules"
-msgstr "Design-Regeln"
+msgstr "Designregeln"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:103 pcbnew/router/router_tool.cpp:870
 #: pcbnew/router/router_tool.cpp:891
@@ -22600,7 +22600,7 @@ msgstr "&Entferne redundante Vias"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:28
 msgid "remove vias on through hole pads and superimposed vias"
-msgstr "Entferne Vias auf Durchsteckpads und übereinanderliegende Vias"
+msgstr "Entferne Vias auf Durchlochpads und übereinanderliegenden Vias"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:32
 msgid "Delete vias connected on only one layer"
@@ -22649,7 +22649,7 @@ msgstr "Abfasungsabstand:"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:362
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:101
 msgid "Fillet radius:"
-msgstr "Auskehlungsradius:"
+msgstr "Abrundungsradius:"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:503
 msgid "Thermal spoke width cannot be smaller than the minimum width."
@@ -22744,7 +22744,7 @@ msgstr "Abschrägung"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:150
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:82
 msgid "Fillet"
-msgstr "Auskehlung"
+msgstr "Abrundung"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:179
 msgid "Electrical Properties"
@@ -22791,7 +22791,7 @@ msgstr "Entlastungen für PTH"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:227
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:735
 msgid "Thermal relief gap:"
-msgstr "Radius der thermischen Entlastung:"
+msgstr "Thermischer Entlastungsspalt:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:229
 msgid ""
@@ -22811,7 +22811,7 @@ msgstr "Speichenbreite der thermischen Entlastung:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:247
 msgid "Width of copper in thermal reliefs."
-msgstr "Kupferbreite der thermischen Entlastung."
+msgstr "Kupferbreite in thermischen Entlastungen."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:264
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:108
@@ -23452,8 +23452,8 @@ msgstr "Starte DRC"
 #: pcbnew/dialogs/dialog_drc.cpp:226
 msgid "DRC incomplete: could not compile custom design rules.  "
 msgstr ""
-"DRC unvollständig: Benutzerdefinierte Entwurfsregeln konnten nicht "
-"kompiliert werden.  "
+"DRC unvollständig: Benutzerdefinierte Designregeln konnten nicht kompiliert "
+"werden.  "
 
 #: pcbnew/dialogs/dialog_drc.cpp:228 pcbnew/tools/board_inspection_tool.cpp:133
 msgid "Show design rules."
@@ -24632,7 +24632,7 @@ msgstr "Nur SMD-Footprints einbeziehen"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:77
 msgid "Exclude all footprints with through hole pads"
-msgstr "Alle Footprints mit Durchsteckpads ausschließen"
+msgstr "Alle Footprints mit Durchlochpads ausschließen"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:80
 msgid "Include board edge layer"
@@ -25036,7 +25036,7 @@ msgstr "Texthöhe"
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:126
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:47
 msgid "Text Thickness"
-msgstr "Textstärke"
+msgstr "Schriftstärke"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:253
 msgid "Upright"
@@ -25254,7 +25254,7 @@ msgstr "Vorgaben für Text- und Grafikeigenschaften"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:55
 msgid "Design rules"
-msgstr "Design-Regeln"
+msgstr "Designregeln"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:58
 msgid "Predefined track and via dimensions"
@@ -25782,7 +25782,7 @@ msgstr "Zu großer Wert für das Pad-Delta."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1343
 msgid "Warning: Through hole pad has no hole."
-msgstr "Warnung: Durchsteck-Pad hat kein Loch."
+msgstr "Warnung: Durchlochpad hat kein Loch."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1350
 msgid ""
@@ -25840,7 +25840,7 @@ msgstr "Pad-Eigenschaften Warnungen"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1654
 msgid "Modify pad"
-msgstr "Pad modifizieren"
+msgstr "Pad verändern"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2038
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2181
@@ -26139,7 +26139,7 @@ msgstr "Wärmeabführungspad"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:560
 msgid "Castellated pad (through hole only)"
-msgstr "Halbloch-Pad (castellated, nur durchgehende Bohrung)"
+msgstr "Halbloch-Pad (castellated; nur durchgehende Bohrung)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:585
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -26720,7 +26720,7 @@ msgstr "Via-Abstand:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
-msgstr "Via-Zwischenraum identisch zu Leiterbahn-Zwischenraum"
+msgstr "Via-Abstand gleich Leiterbahn-Abstand"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 msgid "Differential Pair Dimensions"
@@ -26760,7 +26760,7 @@ msgstr "Beschränkung:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:68
 msgid "From Design Rules"
-msgstr "Aus Design-Regeln"
+msgstr "Aus Designregeln"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:80
 msgid "Target length:"
@@ -27092,19 +27092,19 @@ msgstr "Ändere Pads an gleichen Footprints"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:25
 msgid "Do not modify pads having a different shape"
-msgstr "Pads mit unterschiedlicher Form nicht modifizieren"
+msgstr "Pads mit unterschiedlicher Form nicht verändern"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:28
 msgid "Do not modify pads having different layers"
-msgstr "Pads auf unterschiedlichen Lagen nicht modifizieren"
+msgstr "Pads auf unterschiedlichen Lagen nicht verändern"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:31
 msgid "Do not modify pads having a different orientation"
-msgstr "Pads mit unterschiedlicher Ausrichtung nicht modifizieren"
+msgstr "Pads mit unterschiedlicher Ausrichtung nicht verändern"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:34
 msgid "Do not modify pads having a different type"
-msgstr "Pads unterschiedlicher ypen nicht modifizieren"
+msgstr "Pads unterschiedlicher Typen nicht verändern"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 msgid "Push Pad Properties"
@@ -27246,8 +27246,8 @@ msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
 msgstr ""
-"Die Schriftdicke ist zu groß für die Textgröße.\n"
-"Schriftdicke wird begrenzt."
+"Die Schriftstärke ist zu groß für die Schriftgröße.\n"
+"Schriftstärke wird begrenzt."
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:368
 msgid "Change text properties"
@@ -27605,7 +27605,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:97
 #: pcbnew/dialogs/panel_edit_options_base.cpp:168
 msgid "No modifier"
-msgstr "Kein Modifikator"
+msgstr "Kein Modifizierer"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:102
 #: pcbnew/dialogs/panel_edit_options_base.cpp:173
@@ -27745,8 +27745,8 @@ msgid ""
 "Text will not be readable with a thickness greater than\n"
 "1/4 its width or height."
 msgstr ""
-"Text wird nicht mehr lesbar sein bei einer Linienstärke größer\n"
-"1/4 der Weite oder Höhe."
+"Text wird nicht lesbar sein bei einer Schriftstärke größer als\n"
+"1/4 der Schriftbreite oder -höhe."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:22
 msgid "Default text items for new footprints:"
@@ -28087,7 +28087,7 @@ msgstr "Löcher"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:313
 msgid "Minimum through hole:"
-msgstr "Minimales Durchgangsloch:"
+msgstr "Minimales Durchloch:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:318
 msgid ""
@@ -28878,7 +28878,7 @@ msgstr "FEHLER:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:490
 msgid "Design rules cannot be added without a project"
-msgstr "Entwurfsregeln können ohne Projekt nicht hinzugefügt werden"
+msgstr "Designregeln können ohne Projekt nicht hinzugefügt werden"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:26
 msgid "DRC rules:"
@@ -29638,7 +29638,7 @@ msgstr "Ringbreite"
 
 #: pcbnew/drc/drc_item.cpp:114
 msgid "Drill out of range"
-msgstr "Bohrung außerhalb des Bereichs"
+msgstr "Bohrung außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:118
 msgid "Via diameter"
@@ -29650,7 +29650,7 @@ msgstr "Padstapel ist ungültig"
 
 #: pcbnew/drc/drc_item.cpp:126
 msgid "Micro via drill out of range"
-msgstr "Mikro-Via-Bohrung außerhalb des Bereichs"
+msgstr "Mikro-Via-Bohrung außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:130
 msgid "Courtyards overlap"
@@ -29706,11 +29706,11 @@ msgstr "Bestückungsdrucküberlappung"
 
 #: pcbnew/drc/drc_item.cpp:186
 msgid "Trace length out of range"
-msgstr "Leiterbahnlänge außerhalb des Bereichs"
+msgstr "Leiterbahnlänge außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:190
 msgid "Skew between traces out of range"
-msgstr "Versatz zwischen Leiterbahnen außerhalb des Bereichs"
+msgstr "Versatz zwischen Leiterbahnen außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:194
 msgid "Too many vias on a connection"
@@ -29718,7 +29718,7 @@ msgstr "Zu viele Vias in einer Verbindung"
 
 #: pcbnew/drc/drc_item.cpp:198
 msgid "Differential pair gap out of range"
-msgstr "Abstand Differentialpaar außerhalb des Bereichs"
+msgstr "Differentialpaar-Abstand außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:202
 msgid "Differential uncoupled length too long"
@@ -29730,7 +29730,7 @@ msgstr "Footprint-Typ passt nicht zu Footprint-Pads"
 
 #: pcbnew/drc/drc_item.cpp:210
 msgid "Through hole pad has no hole"
-msgstr "Durchsteck-Pad hat kein Loch"
+msgstr "Durchlochpad hat kein Loch"
 
 #: pcbnew/drc/drc_item.cpp:334
 #, c-format
@@ -29945,12 +29945,12 @@ msgstr "(%s maximale entkoppelte Länge: %s; tatsächliche: %s)"
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:494
 #, c-format
 msgid "minimum gap: %s; "
-msgstr "minimale Lücke: %s; "
+msgstr "minimaler Zwischenraum: %s; "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:498
 #, c-format
 msgid "maximum gap: %s; "
-msgstr "maximale Lücke: %s; "
+msgstr "maximaler Zwischenraum: %s; "
 
 #: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:501
 #, c-format
@@ -30271,7 +30271,7 @@ msgid ""
 "Creating a project will enable features such as design rules, net classes, "
 "and layer presets"
 msgstr ""
-"Durch das Erstellen eines Projekts werden Funktionen wie Entwurfsregeln, "
+"Durch das Erstellen eines Projekts werden Funktionen wie Designregeln, "
 "Netzklassen und Lagenvoreinstellungen aktiviert"
 
 #: pcbnew/files.cpp:256
@@ -30311,8 +30311,8 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "Wenn die Zonen auf dieser Platine neu gefüllt werden, wird die Einstellung "
-"'Kupfer-Randabstand' verwendet (siehe Platinenkonfiguration... > Design-"
-"Regeln > Einschränkungen).\n"
+"'Kupfer-Randabstand' verwendet (siehe Platinenkonfiguration... > "
+"Designregeln > Einschränkungen).\n"
 "Dies kann zu anderen Füllungen als in früheren KiCad-Versionen führen, bei "
 "denen die Linienstärke der Platinenbegrenzung auf der Edge-Cuts-Lage "
 "verwendet wurde."
@@ -30466,17 +30466,17 @@ msgstr "Footprint %s"
 #: pcbnew/footprint.cpp:2109
 #, c-format
 msgid "Expected \"Through hole\" type but set to \"%s\""
-msgstr "Typ \"Durchsteckmontage\" erwartet, aber war \"%s\""
+msgstr "Typ \"Durchsteckmontage\" erwartet, jedoch gesetzt auf \"%s\""
 
 #: pcbnew/footprint.cpp:2113
 #, c-format
 msgid "Expected \"SMD\" type but set to \"%s\""
-msgstr "Typ \"SMD\" erwartet, aber war \"%s\""
+msgstr "Typ \"SMD\" erwartet, jedoch gesetzt auf \"%s\""
 
 #: pcbnew/footprint.cpp:2117
 #, c-format
 msgid "Expected \"Other\" type but set to \"%s\""
-msgstr "Typ \"Sonstige\" erwartet, aber war \"%s\""
+msgstr "Typ \"Sonstige\" erwartet, jedoch gesetzt auf \"%s\""
 
 #: pcbnew/footprint.cpp:2143
 #, c-format
@@ -30497,11 +30497,11 @@ msgstr "Überschreibung des Lötpasten-Rand-Verhältnisses"
 
 #: pcbnew/footprint.cpp:2400 pcbnew/pad.cpp:1708 pcbnew/zone.cpp:1490
 msgid "Thermal Relief Width"
-msgstr "Breite der thermischen Entlastung"
+msgstr "Thermische Entlastung Speichenbreite"
 
 #: pcbnew/footprint.cpp:2404 pcbnew/pad.cpp:1711 pcbnew/zone.cpp:1487
 msgid "Thermal Relief Gap"
-msgstr "Spalt der thermischen Entlastung"
+msgstr "Thermische Entlastung Spalt"
 
 #: pcbnew/footprint.h:216
 #, c-format
@@ -31715,7 +31715,7 @@ msgstr "Pad %s auf %s von %s"
 #: pcbnew/pad.cpp:1179 pcbnew/pad.cpp:1185 pcbnew/pad.cpp:1202
 #, c-format
 msgid "Through hole pad %s of %s"
-msgstr "Durchsteckpad %s von %s"
+msgstr "Durchlochpad %s von %s"
 
 #: pcbnew/pad.cpp:1194
 #, c-format
@@ -31725,7 +31725,7 @@ msgstr "Pad %s %s von %s auf %s"
 #: pcbnew/pad.cpp:1208
 #, c-format
 msgid "Through hole pad %s %s of %s"
-msgstr "Durchkontaktierungspad %s %s von %s"
+msgstr "Durchlochpad %s %s von %s"
 
 #: pcbnew/pad.cpp:1643
 msgid "Edge connector"
@@ -31870,11 +31870,11 @@ msgstr "Eeschema konnte nicht geladen werden."
 
 #: pcbnew/pcb_edit_frame.cpp:1711
 msgid "Edit design rules"
-msgstr "Design-Regeln bearbeiten"
+msgstr "Designregeln bearbeiten"
 
 #: pcbnew/pcb_edit_frame.cpp:1723
 msgid "Could not compile custom design rules."
-msgstr "Benutzerdefinierte Entwurfsregeln konnten nicht kompiliert werden."
+msgstr "Benutzerdefinierte Designregeln konnten nicht kompiliert werden."
 
 #: pcbnew/pcb_edit_frame.cpp:1758
 msgid "Export Hyperlynx Layout"
@@ -32435,9 +32435,9 @@ msgid ""
 "design rules were imported. It is recommended that you review the design "
 "rules that have been applied."
 msgstr ""
-"KiCad-Entwurfsregeln unterscheiden sich von CADSTAR-Regeln. Es wurden nur "
-"die kompatiblen Entwurfsregeln importiert. Es wird empfohlen, die "
-"angewandten Entwurfsregeln zu überprüfen."
+"KiCad-Designregeln unterscheiden sich von CADSTAR-Regeln. Es wurden nur die "
+"kompatiblen Designregeln importiert. Es wird empfohlen, die angewandten "
+"Designregeln zu überprüfen."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:900
 #, c-format
@@ -32781,7 +32781,7 @@ msgid ""
 msgstr ""
 "Das CADSTAR-Design enthält Netze mit einer zugewiesenen Abstandsklasse. "
 "KiCad hat kein Äquivalent zur CADSTAR-Abstandsklasse, daher wurden diese "
-"Elemente nicht importiert. Bitte überprüfen Sie die Konstruktionsregeln, da "
+"Elemente nicht importiert. Bitte überprüfen Sie die Designregeln, da "
 "Kupfergüsse davon betroffen sind."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:377
@@ -33811,14 +33811,14 @@ msgid ""
 "Blind/buried vias must first be enabled in Board Setup > Design Rules > "
 "Constraints."
 msgstr ""
-"Blinde/vergrabene Vias müssen in 'Platinenkonfiguration > Design-Regeln > "
+"Blinde/vergrabene Vias müssen in 'Platinenkonfiguration > Designregeln > "
 "Einschränkungen' aktiviert werden."
 
 #: pcbnew/router/router_tool.cpp:897
 msgid ""
 "Microvias must first be enabled in Board Setup > Design Rules > Constraints."
 msgstr ""
-"Mikro-Vias müssen in 'Platinenkonfiguration > Design-Regeln > "
+"Mikro-Vias müssen in 'Platinenkonfiguration > Designregeln > "
 "Einschränkungen' aktiviert werden."
 
 #: pcbnew/router/router_tool.cpp:981
@@ -34138,7 +34138,7 @@ msgstr "[Netzklasse %s]"
 #: pcbnew/tools/board_inspection_tool.cpp:132
 msgid "Report incomplete: could not compile custom design rules.  "
 msgstr ""
-"Bericht unvollständig: Benutzerdefinierte Entwurfsregeln konnten nicht "
+"Bericht unvollständig: Benutzerdefinierte Designregeln konnten nicht "
 "kompiliert werden.  "
 
 #: pcbnew/tools/board_inspection_tool.cpp:170
@@ -34509,7 +34509,7 @@ msgstr "Es müssen mindestens zwei gerade Leiterbahnsegmente ausgewählt werden.
 
 #: pcbnew/tools/edit_tool.cpp:1171
 msgid "Enter fillet radius:"
-msgstr "Auskehlungsradius eingeben:"
+msgstr "Abrundungsradius eingeben:"
 
 #: pcbnew/tools/edit_tool.cpp:1171 pcbnew/tools/edit_tool.cpp:1333
 #: pcbnew/tools/pcb_actions.cpp:317
@@ -35152,7 +35152,7 @@ msgstr "Mikrowellen-Linie hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:489
 msgid "Create line of specified length for microwave applications"
-msgstr "Linie spezifischer Länge für Mikrowellen-Applikationen erstellen"
+msgstr "Leitung mit bestimmter Länge für Mikrowellen-Anwendungen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:497
 msgid "Copy Pad Properties to Default"
@@ -36324,11 +36324,11 @@ msgstr "Zeige Footprints, welche sich auf der Platinenrückseite befinden"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Through-hole Pads"
-msgstr "Durchkontaktierungspads"
+msgstr "Durchlochpads"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Show through-hole pads"
-msgstr "Durchsteckpads anzeigen"
+msgstr "Durchlochpads anzeigen"
 
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "Show footprint values"
