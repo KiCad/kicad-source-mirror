@@ -1389,7 +1389,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
                 double   scaling = EuclideanNorm( dirVec ) / aElem.arrowsize;
                 VECTOR2I arrVec =
                         VECTOR2I( KiROUND( dirVec.x / scaling ), KiROUND( dirVec.y / scaling ) );
-                RotatePoint( arrVec, 200. );
+                RotatePoint( arrVec, EDA_ANGLE( 20.0, DEGREES_T ) );
 
                 PCB_SHAPE* shape1 = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
                 m_board->Add( shape1, ADD_MODE::APPEND );
@@ -1398,7 +1398,7 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
                 shape1->SetStart( referencePoint0 );
                 shape1->SetEnd( referencePoint0 + arrVec );
 
-                RotatePoint( arrVec, -400. );
+                RotatePoint( arrVec, EDA_ANGLE( -40.0, DEGREES_T ) );
 
                 PCB_SHAPE* shape2 = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
                 m_board->Add( shape2, ADD_MODE::APPEND );
@@ -1465,7 +1465,7 @@ void ALTIUM_PCB::HelperParseDimensions6Center( const ADIMENSION6& aElem )
     }
 
     VECTOR2I vec = VECTOR2I( 0, aElem.height / 2 );
-    RotatePoint( vec, aElem.angle * 10. );
+    RotatePoint( vec, EDA_ANGLE( aElem.angle, DEGREES_T ) );
 
     PCB_DIM_CENTER* dimension = new PCB_DIM_CENTER( m_board );
     m_board->Add( dimension, ADD_MODE::APPEND );

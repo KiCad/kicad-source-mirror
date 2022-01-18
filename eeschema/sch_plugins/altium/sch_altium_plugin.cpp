@@ -1344,12 +1344,12 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             arc->SetCenter( GetRelativePosition( elem.center + m_sheetOffset, symbol ) );
 
             VECTOR2I arcStart( elem.radius, 0 );
-            RotatePoint( &arcStart.x, &arcStart.y, -elem.startAngle * 10.0 );
+            RotatePoint( arcStart, -EDA_ANGLE( elem.startAngle, DEGREES_T ) );
             arcStart += arc->GetCenter();
             arc->SetStart( arcStart );
 
             VECTOR2I arcEnd( elem.radius, 0 );
-            RotatePoint( &arcEnd.x, &arcEnd.y, -elem.endAngle * 10.0 );
+            RotatePoint( arcEnd, -EDA_ANGLE( elem.endAngle, DEGREES_T ) );
             arcEnd += arc->GetCenter();
             arc->SetEnd( arcEnd );
 
