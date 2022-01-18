@@ -1051,13 +1051,14 @@ FABMASTER::GRAPHIC_ARC* FABMASTER::processArc( const FABMASTER::GRAPHIC_DATA& aD
 
     new_arc->clockwise = ( aData.graphic_data9 != "COUNTERCLOCKWISE" );
 
-    double startangle = NormalizeAnglePos( RAD2DECIDEG(
-                    atan2( new_arc->start_y - new_arc->center_y,
-                           new_arc->start_x - new_arc->center_x ) ) );
-    double endangle = NormalizeAnglePos( RAD2DECIDEG(
-            atan2( new_arc->end_y - new_arc->center_y,
-                   new_arc->end_x - new_arc->center_x ) ) );
-    double angle;
+    EDA_ANGLE startangle( VECTOR2I( new_arc->start_x, new_arc->start_y )
+                            - VECTOR2I( new_arc->center_x, new_arc->center_y ) );
+    EDA_ANGLE endangle( VECTOR2I( new_arc->end_x, new_arc->end_y )
+                            - VECTOR2I( new_arc->center_x, new_arc->center_y ) );
+    EDA_ANGLE angle;
+
+    startangle.Normalize();
+    endangle.Normalize();
 
     VECTOR2I center( new_arc->center_x, new_arc->center_y );
     VECTOR2I start( new_arc->start_x, new_arc->start_y );
@@ -1066,13 +1067,13 @@ FABMASTER::GRAPHIC_ARC* FABMASTER::processArc( const FABMASTER::GRAPHIC_DATA& aD
 
     angle = endangle - startangle;
 
-    if( new_arc->clockwise && angle < 0.0 )
-        angle += 3600.0;
-    if( !new_arc->clockwise && angle > 0.0 )
-        angle -= 3600.0;
+    if( new_arc->clockwise && angle < ANGLE_0 )
+        angle += ANGLE_360;
+    if( !new_arc->clockwise && angle > ANGLE_0 )
+        angle -= ANGLE_360;
 
     if( start == end )
-        angle = -3600.0;
+        angle = -ANGLE_360;
 
     RotatePoint( mid, center, -angle / 2.0 );
 
