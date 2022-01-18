@@ -1,11 +1,8 @@
-/**
- * @file convert_basic_shapes_to_polygon.cpp
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +25,6 @@
 #include <algorithm>                    // for max, min
 #include <bitset>                       // for bitset::count
 #include <math.h>                       // for atan2
-#include <type_traits>                  // for swap
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
@@ -53,8 +49,8 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, const VECTOR2I& 
     if( numSegs & 1 )
         numSegs++;
 
-    int     delta = 3600 / numSegs;           // rotate angle in 0.1 degree
-    int     radius = aRadius;
+    EDA_ANGLE delta = ANGLE_360 / numSegs;
+    int       radius = aRadius;
 
     if( aErrorLoc == ERROR_OUTSIDE )
     {
@@ -65,10 +61,10 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aCornerBuffer, const VECTOR2I& 
         radius += GetCircleToPolyCorrection( actual_delta_radius );
     }
 
-    for( int angle = 0; angle < 3600; angle += delta )
+    for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += delta )
     {
-        corner_position.x   = radius;
-        corner_position.y   = 0;
+        corner_position.x = radius;
+        corner_position.y = 0;
         RotatePoint( corner_position, angle );
         corner_position += aCenter;
         aCornerBuffer.Append( corner_position.x, corner_position.y );
@@ -92,8 +88,8 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aC
     if( numSegs & 1 )
         numSegs++;
 
-    int     delta = 3600 / numSegs;           // rotate angle in 0.1 degree
-    int     radius = aRadius;
+    EDA_ANGLE delta = ANGLE_360 / numSegs;
+    int       radius = aRadius;
 
     if( aErrorLoc == ERROR_OUTSIDE )
     {
@@ -106,7 +102,7 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aC
 
     aCornerBuffer.NewOutline();
 
-    for( int angle = 0; angle < 3600; angle += delta )
+    for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += delta )
     {
         corner_position.x = radius;
         corner_position.y = 0;
@@ -136,7 +132,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aSta
     int numSegs = GetArcToSegmentCount( radius, aError, FULL_CIRCLE );
     numSegs = std::max( aMinSegCount, numSegs );
 
-    int delta = 3600 / numSegs;   // rotate angle in 0.1 degree
+    EDA_ANGLE delta = ANGLE_360 / numSegs;
 
     if( aErrorLoc == ERROR_OUTSIDE )
     {
@@ -164,9 +160,8 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aSta
         startp  = aEnd;
     }
 
-    // delta_angle is in radian
-    double delta_angle = atan2( (double)endp.y, (double)endp.x );
-    int    seg_len     = KiROUND( EuclideanNorm( endp ) );
+    EDA_ANGLE delta_angle( endp );
+    int       seg_len = KiROUND( EuclideanNorm( endp ) );
 
     // Compute the outlines of the segment, and creates a polygon
     // Note: the polygonal shape is built from the equivalent horizontal
@@ -174,7 +169,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aSta
 
     // add right rounded end:
 
-    for( int angle = 0; angle < 1800; angle += delta )
+    for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_180; angle += delta )
     {
         corner = VECTOR2I( 0, radius );
         RotatePoint( corner, angle );
@@ -187,7 +182,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aSta
     polyshape.Append( corner.x, corner.y );
 
     // add left rounded end:
-    for( int angle = 0; angle < 1800; angle += delta )
+    for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_180; angle += delta )
     {
         corner = VECTOR2I( 0, -radius );
         RotatePoint( corner, angle );
@@ -221,7 +216,7 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aSta
     // due to the shape of initial polygons
 
     // Rotate and move the polygon to its right location
-    polyshape.Rotate( delta_angle, VECTOR2I( 0, 0 ) );
+    polyshape.Rotate( delta_angle.AsRadians(), VECTOR2I( 0, 0 ) );
     polyshape.Move( startp );
 
     aCornerBuffer.Append( polyshape);
@@ -252,16 +247,19 @@ void CornerListToPolygon( SHAPE_POLY_SET& outline, std::vector<ROUNDED_CORNER>& 
         VECTOR2I        outgoing = next.m_position - cur.m_position;
 
         if( !( aInflate || cur.m_radius ) )
+        {
             outline.Append( cur.m_position );
+        }
         else
         {
-            VECTOR2I cornerPosition = cur.m_position;
-            int      endAngle, radius = cur.m_radius;
-            double   tanAngle2;
+            VECTOR2I  cornerPosition = cur.m_position;
+            int       radius = cur.m_radius;
+            EDA_ANGLE endAngle;
+            double    tanAngle2;
 
             if( ( incoming.x == 0 && outgoing.y == 0 ) || ( incoming.y == 0 && outgoing.x == 0 ) )
             {
-                endAngle = 900;
+                endAngle = ANGLE_90;
                 tanAngle2 = 1.0;
             }
             else
@@ -270,7 +268,7 @@ void CornerListToPolygon( SHAPE_POLY_SET& outline, std::vector<ROUNDED_CORNER>& 
                 double cosDen = (double) incoming.EuclideanNorm() * outgoing.EuclideanNorm();
                 double angle = acos( cosNum / cosDen );
                 tanAngle2 = tan( ( M_PI - angle ) / 2 );
-                endAngle = RAD2DECIDEG( angle );
+                endAngle = EDA_ANGLE( angle, RADIANS_T );
             }
 
             if( aInflate )
@@ -281,10 +279,22 @@ void CornerListToPolygon( SHAPE_POLY_SET& outline, std::vector<ROUNDED_CORNER>& 
             }
 
             // Ensure 16+ segments per 360deg and ensure first & last segment are the same size
-            int numSegs = std::max( 16, GetArcToSegmentCount( radius, aError, FULL_CIRCLE ) );
-            int angDelta = 3600 / numSegs;
-            int lastSegLen = endAngle % angDelta; // or 0 if last seg length is angDelta
-            int angPos = lastSegLen ? ( angDelta + lastSegLen ) / 2 : angDelta;
+            int       numSegs = std::max( 16, GetArcToSegmentCount( radius, aError, FULL_CIRCLE ) );
+            EDA_ANGLE angDelta = ANGLE_360 / numSegs;
+            EDA_ANGLE lastSeg = endAngle;
+
+            if( lastSeg > ANGLE_0 )
+            {
+                while( lastSeg > angDelta )
+                    lastSeg -= angDelta;
+            }
+            else
+            {
+                while( lastSeg < -angDelta )
+                    lastSeg += angDelta;
+            }
+
+            EDA_ANGLE angPos = lastSeg.IsZero() ? angDelta : ( angDelta + lastSeg ) / 2;
 
             double   arcTransitionDistance = radius / tanAngle2;
             VECTOR2I arcStart = cornerPosition - incoming.Resize( arcTransitionDistance );
@@ -536,7 +546,7 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
                             const VECTOR2I& aMid, const VECTOR2I& aEnd, int aWidth,
                             int aError, ERROR_LOC aErrorLoc )
 {
-    SHAPE_ARC        arc( aStart, aMid, aEnd, aWidth );
+    SHAPE_ARC             arc( aStart, aMid, aEnd, aWidth );
     // Currentlye have currently 2 algos:
     // the first approximates the thick arc from its outlines
     // the second approximates the thick arc from segments given by SHAPE_ARC
@@ -548,7 +558,7 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aStar
 #if 1
     // This appproximation convert the 2 ends to polygons, arc outer to polyline
     // and arc inner to polyline and merge shapes.
-    int              radial_offset = ( aWidth + 1 ) / 2;
+    int                   radial_offset = ( aWidth + 1 ) / 2;
 
     SHAPE_POLY_SET        polyshape;
     std::vector<VECTOR2I> outside_pts;
@@ -672,7 +682,8 @@ void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, const VECTOR2I& aCen
     int outer_radius = inner_radius + aWidth;
 
     if( inner_radius <= 0 )
-    {   //In this case, the ring is just a circle (no hole inside)
+    {
+        //In this case, the ring is just a circle (no hole inside)
         TransformCircleToPolygon( aCornerBuffer, aCentre, aRadius + ( aWidth / 2 ), aError,
                                   aErrorLoc );
         return;
