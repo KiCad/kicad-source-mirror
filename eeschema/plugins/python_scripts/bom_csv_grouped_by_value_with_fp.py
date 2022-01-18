@@ -46,7 +46,7 @@ except IOError:
     f = sys.stdout
 
 # Create a new csv writer object to use as the output formatter
-out = csv.writer(f, delimiter=',', quotechar='\"', quoting=csv.QUOTE_ALL)
+out = csv.writer(f, lineterminator='\n', delimiter=',', quotechar='\"', quoting=csv.QUOTE_ALL)
 
 # Output a set of rows for a header providing general information
 out.writerow(['Source:', net.getSource()])
