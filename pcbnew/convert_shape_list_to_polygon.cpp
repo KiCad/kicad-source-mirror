@@ -589,7 +589,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         {
             // make a circle by segments;
             VECTOR2I center = graphic->GetCenter();
-            double   angle   = 3600.0;
             VECTOR2I start = center;
             int      radius  = graphic->GetRadius();
             int      steps   = GetArcToSegmentCount( radius, aErrorMax, FULL_CIRCLE );
@@ -599,9 +598,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
 
             for( int step = 0; step < steps; ++step )
             {
-                double rotation = ( angle * step ) / steps;
                 nextPt = start;
-                RotatePoint( nextPt, center, rotation );
+                RotatePoint( nextPt, center, ANGLE_360 * step / steps );
                 aPolygons.Append( nextPt, -1, hole );
 
                 if( firstPt )

@@ -441,16 +441,20 @@ bool VRML_LAYER::AppendCircle( double aXpos, double aYpos, double aRadius, int a
         fail |= !AddVertex( aContourID, aXpos + aRadius, aYpos );
 
         for( double angle = da; angle < M_PI * 2; angle += da )
+        {
             fail |= !AddVertex( aContourID, aXpos + aRadius * cos( angle ),
-                                aYpos - aRadius * sin( angle ) );
+                                            aYpos - aRadius * sin( angle ) );
+        }
     }
     else
     {
         fail |= !AddVertex( aContourID, aXpos + aRadius, aYpos );
 
         for( double angle = da; angle < M_PI * 2; angle += da )
+        {
             fail |= !AddVertex( aContourID, aXpos + aRadius * cos( angle ),
-                                aYpos + aRadius * sin( angle ) );
+                                            aYpos + aRadius * sin( angle ) );
+        }
     }
 
     return !fail;
@@ -577,7 +581,7 @@ bool VRML_LAYER::AddPolygon( const std::vector< wxRealPoint >& aPolySet, double 
     for( auto corner : aPolySet )
     {
         // The sense of polygon rotations is reversed
-        RotatePoint( &corner.x, &corner.y, -aAngle );
+        RotatePoint( &corner.x, &corner.y, -EDA_ANGLE( aAngle, DEGREES_T ) );
         AddVertex( pad, aCenterX + corner.x, aCenterY + corner.y );
     }
 
@@ -610,16 +614,22 @@ bool VRML_LAYER::AppendArc( double aCenterX, double aCenterY, double aRadius,
     if( aAngle > 0 )
     {
         aAngle += aStartAngle;
+
         for( double ang = aStartAngle; ang < aAngle; ang += da )
+        {
             fail |= !AddVertex( aContourID, aCenterX + aRadius * cos( ang ),
-                                aCenterY + aRadius * sin( ang ) );
+                                            aCenterY + aRadius * sin( ang ) );
+        }
     }
     else
     {
         aAngle += aStartAngle;
+
         for( double ang = aStartAngle; ang > aAngle; ang += da )
+        {
             fail |= !AddVertex( aContourID, aCenterX + aRadius * cos( ang ),
-                                aCenterY + aRadius * sin( ang ) );
+                                            aCenterY + aRadius * sin( ang ) );
+        }
     }
 
     return !fail;

@@ -97,7 +97,7 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 
             // Thermal spokes on circular pads form an 'X' instead of a '+'
             if( pad->GetShape() == PAD_SHAPE::CIRCLE )
-                RotatePoint( pt1, pad->ShapePos(), 450 );
+                RotatePoint( pt1, pad->ShapePos(), ANGLE_45 );
 
             return pt1;
 

@@ -1431,10 +1431,10 @@ void SCH_NETCLASS_FLAG::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettin
         switch( GetLabelSpinStyle() )
         {
         default:
-        case LABEL_SPIN_STYLE::LEFT:                                 break;
-        case LABEL_SPIN_STYLE::UP:     RotatePoint( aPoint, -900 ); break;
-        case LABEL_SPIN_STYLE::RIGHT:  RotatePoint( aPoint, 1800 ); break;
-        case LABEL_SPIN_STYLE::BOTTOM: RotatePoint( aPoint, 900 );  break;
+        case LABEL_SPIN_STYLE::LEFT:                                     break;
+        case LABEL_SPIN_STYLE::UP:     RotatePoint( aPoint, -ANGLE_90 ); break;
+        case LABEL_SPIN_STYLE::RIGHT:  RotatePoint( aPoint, ANGLE_180 ); break;
+        case LABEL_SPIN_STYLE::BOTTOM: RotatePoint( aPoint, ANGLE_90 );  break;
         }
 
         aPoint += aPos;
@@ -1753,10 +1753,10 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
         switch( GetLabelSpinStyle() )
         {
         default:
-        case LABEL_SPIN_STYLE::LEFT:                                 break;
-        case LABEL_SPIN_STYLE::UP:     RotatePoint( aPoint, -900 ); break;
-        case LABEL_SPIN_STYLE::RIGHT:  RotatePoint( aPoint, 1800 ); break;
-        case LABEL_SPIN_STYLE::BOTTOM: RotatePoint( aPoint, 900 );  break;
+        case LABEL_SPIN_STYLE::LEFT:                                     break;
+        case LABEL_SPIN_STYLE::UP:     RotatePoint( aPoint, -ANGLE_90 ); break;
+        case LABEL_SPIN_STYLE::RIGHT:  RotatePoint( aPoint, ANGLE_180 ); break;
+        case LABEL_SPIN_STYLE::BOTTOM: RotatePoint( aPoint, ANGLE_90 );  break;
         }
 
         aPoint += aPos;

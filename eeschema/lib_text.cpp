@@ -226,7 +226,7 @@ void LIB_TEXT::MirrorVertical( const VECTOR2I& center )
 void LIB_TEXT::Rotate( const VECTOR2I& center, bool aRotateCCW )
 {
     NormalizeJustification( false );
-    int rot_angle = aRotateCCW ? -900 : 900;
+    EDA_ANGLE rot_angle = aRotateCCW ? -ANGLE_90 : ANGLE_90;
 
     VECTOR2I pt = GetTextPos();
     RotatePoint( pt, center, rot_angle );
