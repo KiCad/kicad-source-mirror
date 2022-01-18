@@ -43,8 +43,7 @@ DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, VEC
     m_yOffset( aParent, m_yLabel, m_yEntry, m_yUnit ),
     m_stateX( 0.0 ),
     m_stateY( 0.0 ),
-    m_stateRadius( 0.0 ),
-    m_stateTheta( 0.0 )
+    m_stateRadius( 0.0 )
 {
     // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
     // implementation on MSW
@@ -74,12 +73,12 @@ DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, VEC
 }
 
 
-void DIALOG_POSITION_RELATIVE::ToPolarDeg( double x, double y, double& r, double& q )
+void DIALOG_POSITION_RELATIVE::ToPolarDeg( double x, double y, double& r, EDA_ANGLE& q )
 {
     // convert to polar coordinates
     r = hypot( x, y );
 
-    q = ( r != 0) ? RAD2DEG( atan2( y, x ) ) : 0;
+    q = ( r != 0) ? EDA_ANGLE( VECTOR2D( x, y ) ) : ANGLE_0;
 }
 
 
@@ -87,11 +86,11 @@ bool DIALOG_POSITION_RELATIVE::GetTranslationInIU( wxRealPoint& val, bool polar 
 {
     if( polar )
     {
-        const double r = m_xOffset.GetDoubleValue();
-        const double q = m_yOffset.GetDoubleValue();
+        const double    r = m_xOffset.GetDoubleValue();
+        const EDA_ANGLE q = m_yOffset.GetAngleValue();
 
-        val.x = r * cos( DEG2RAD( q / 10.0 ) );
-        val.y = r * sin( DEG2RAD( q / 10.0 ) );
+        val.x = r * q.Cos();
+        val.y = r * q.Sin();
     }
     else
     {
@@ -119,27 +118,26 @@ void DIALOG_POSITION_RELATIVE::OnPolarChanged( wxCommandEvent& event )
             m_stateX = xOffset;
             m_stateY = yOffset;
             ToPolarDeg( m_stateX, m_stateY, m_stateRadius, m_stateTheta );
-            m_stateTheta *= 10.0;
 
             m_xOffset.SetDoubleValue( m_stateRadius );
             m_stateRadius = m_xOffset.GetDoubleValue();
-            m_yOffset.SetDoubleValue( m_stateTheta );
-            m_stateTheta = m_yOffset.GetDoubleValue();
+            m_yOffset.SetAngleValue( m_stateTheta );
+            m_stateTheta = m_yOffset.GetAngleValue();
         }
         else
         {
             m_xOffset.SetDoubleValue( m_stateRadius );
-            m_yOffset.SetDoubleValue( m_stateTheta );
+            m_yOffset.SetAngleValue( m_stateTheta );
         }
     }
     else
     {
-        if( xOffset != m_stateRadius || yOffset != m_stateTheta )
+        if( xOffset != m_stateRadius || yOffset != m_stateTheta.AsDegrees() )
         {
             m_stateRadius = xOffset;
-            m_stateTheta = yOffset;
-            m_stateX = m_stateRadius * cos( DEG2RAD( m_stateTheta / 10.0 ) );
-            m_stateY = m_stateRadius * sin( DEG2RAD( m_stateTheta / 10.0 ) );
+            m_stateTheta = EDA_ANGLE( yOffset, DEGREES_T );
+            m_stateX = m_stateRadius * m_stateTheta.Cos();
+            m_stateY = m_stateRadius * m_stateTheta.Sin();
 
             m_xOffset.SetDoubleValue( m_stateX );
             m_stateX = m_xOffset.GetDoubleValue();
@@ -182,8 +180,9 @@ void DIALOG_POSITION_RELATIVE::OnClear( wxCommandEvent& event )
     POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
     wxASSERT( posrelTool );
 
-    VECTOR2I offset = posrelTool->GetSelectionAnchorPosition() - m_anchor_position;
-    double  r, q;
+    VECTOR2I  offset = posrelTool->GetSelectionAnchorPosition() - m_anchor_position;
+    double    r;
+    EDA_ANGLE q;
     ToPolarDeg( offset.x, offset.y, r, q );
 
 
@@ -194,28 +193,20 @@ void DIALOG_POSITION_RELATIVE::OnClear( wxCommandEvent& event )
         m_stateRadius = m_xOffset.GetDoubleValue();
 
         if( m_polarCoords->IsChecked() )
-        {
             m_xOffset.SetDoubleValue( m_stateRadius );
-        }
         else
-        {
             m_xOffset.SetValue( m_stateX );
-        }
     }
     else if( obj == m_clearY )
     {
         m_stateY = offset.y;
-        m_yOffset.SetDoubleValue( q * 10 );
-        m_stateTheta = m_yOffset.GetDoubleValue();
+        m_yOffset.SetAngleValue( q );
+        m_stateTheta = m_yOffset.GetAngleValue();
 
         if( m_polarCoords->IsChecked() )
-        {
-            m_yOffset.SetDoubleValue( m_stateTheta );
-        }
+            m_yOffset.SetAngleValue( m_stateTheta );
         else
-        {
             m_yOffset.SetValue( m_stateY );
-        }
     }
 }
 

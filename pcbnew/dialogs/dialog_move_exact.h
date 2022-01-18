@@ -67,10 +67,9 @@ private:
     /**
      * Convert a given Cartesian point into a polar representation.
      *
-     * Linear units are not considered, the answer is in the same units as given
-     * Angle is returned in degrees
+     * Linear units are not considered, the answer is in the same units as given.
      */
-    void ToPolarDeg( double x, double y, double& r, double& q );
+    void ToPolarDeg( double x, double y, double& r, EDA_ANGLE& q );
 
     /**
      * Get the (Cartesian) translation described by the text entries.
@@ -111,21 +110,21 @@ private:
     static MOVE_EXACT_OPTIONS m_options;
 
 private:
-    VECTOR2I&         m_translation;
-    EDA_ANGLE&        m_rotation;
-    ROTATION_ANCHOR&  m_rotationAnchor;
-    const EDA_RECT&   m_bbox;
+    VECTOR2I&        m_translation;
+    EDA_ANGLE&       m_rotation;
+    ROTATION_ANCHOR& m_rotationAnchor;
+    const EDA_RECT&  m_bbox;
 
-    UNIT_BINDER       m_moveX;
-    UNIT_BINDER       m_moveY;
-    UNIT_BINDER       m_rotate;
+    UNIT_BINDER      m_moveX;
+    UNIT_BINDER      m_moveY;
+    UNIT_BINDER      m_rotate;
 
     std::vector<ROTATION_ANCHOR> m_menuIDs;
 
-    double m_stateX;
-    double m_stateY;
-    double m_stateRadius;
-    double m_stateTheta;
+    double           m_stateX;
+    double           m_stateY;
+    double           m_stateRadius;
+    EDA_ANGLE        m_stateTheta;
 };
 
 #endif      //  __DIALOG_MOVE_EXACT__

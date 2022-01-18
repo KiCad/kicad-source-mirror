@@ -45,8 +45,7 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, VECTOR2I& aTransl
     m_rotate( aParent, m_rotLabel, m_rotEntry, m_rotUnit ),
     m_stateX( 0.0 ),
     m_stateY( 0.0 ),
-    m_stateRadius( 0.0 ),
-    m_stateTheta( 0.0 )
+    m_stateRadius( 0.0 )
 {
     // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
     // implementation on MSW
@@ -115,12 +114,12 @@ void DIALOG_MOVE_EXACT::buildRotationAnchorMenu()
 }
 
 
-void DIALOG_MOVE_EXACT::ToPolarDeg( double x, double y, double& r, double& q )
+void DIALOG_MOVE_EXACT::ToPolarDeg( double x, double y, double& r, EDA_ANGLE& q )
 {
     // convert to polar coordinates
     r = hypot( x, y );
 
-    q = ( r != 0) ? RAD2DEG( atan2( y, x ) ) : 0;
+    q = ( r != 0) ? EDA_ANGLE( VECTOR2D( x, y ) ) : ANGLE_0;
 }
 
 
@@ -128,11 +127,11 @@ bool DIALOG_MOVE_EXACT::GetTranslationInIU( wxRealPoint& val, bool polar )
 {
     if( polar )
     {
-        const double r = m_moveX.GetDoubleValue();
-        const double q = m_moveY.GetDoubleValue();
+        const double    r = m_moveX.GetDoubleValue();
+        const EDA_ANGLE q = m_moveY.GetAngleValue();
 
-        val.x = r * cos( DEG2RAD( q / 10.0 ) );
-        val.y = r * sin( DEG2RAD( q / 10.0 ) );
+        val.x = r * q.Cos();
+        val.y = r * q.Sin();
     }
     else
     {
@@ -160,27 +159,26 @@ void DIALOG_MOVE_EXACT::OnPolarChanged( wxCommandEvent& event )
             m_stateX = moveX;
             m_stateY = moveY;
             ToPolarDeg( m_stateX, m_stateY, m_stateRadius, m_stateTheta );
-            m_stateTheta *= 10.0;
 
             m_moveX.SetDoubleValue( m_stateRadius );
             m_stateRadius = m_moveX.GetDoubleValue();
-            m_moveY.SetDoubleValue( m_stateTheta );
-            m_stateTheta = m_moveY.GetDoubleValue();
+            m_moveY.SetAngleValue( m_stateTheta );
+            m_stateTheta = m_moveY.GetAngleValue();
         }
         else
         {
             m_moveX.SetDoubleValue( m_stateRadius );
-            m_moveY.SetDoubleValue( m_stateTheta );
+            m_moveY.SetAngleValue( m_stateTheta );
         }
     }
     else
     {
-        if( moveX != m_stateRadius || moveY != m_stateTheta )
+        if( moveX != m_stateRadius || moveY != m_stateTheta.AsDegrees() )
         {
             m_stateRadius = moveX;
-            m_stateTheta = moveY;
-            m_stateX = m_stateRadius * cos( DEG2RAD( m_stateTheta / 10.0 ) );
-            m_stateY = m_stateRadius * sin( DEG2RAD( m_stateTheta / 10.0 ) );
+            m_stateTheta = EDA_ANGLE( moveY, DEGREES_T );
+            m_stateX = m_stateRadius * m_stateTheta.Cos();
+            m_stateY = m_stateRadius * m_stateTheta.Sin();
 
             m_moveX.SetDoubleValue( m_stateX );
             m_stateX = m_moveX.GetDoubleValue();
@@ -229,7 +227,7 @@ void DIALOG_MOVE_EXACT::OnClear( wxCommandEvent& event )
     }
     else if( obj == m_clearRot )
     {
-        m_rotate.SetValue( 0 );
+        m_rotate.SetAngleValue( ANGLE_0 );
     }
 
     // Keep m_stdButtonsOK focused to allow enter key actiavte the OK button

@@ -109,27 +109,28 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         // draw the radius guide circle
         preview_ctx.DrawCircle( origin, m_constructMan.GetRadius(), true );
 
-        double degs = getNormDeciDegFromRad( initAngle );
+        EDA_ANGLE angle( initAngle, RADIANS_T );
+        angle.Normalize();
 
         cursorStrings.push_back( DimensionLabel( "r", m_constructMan.GetRadius(), m_units ) );
-        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs,
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), angle.AsDegrees(),
                                                  EDA_UNITS::DEGREES ) );
     }
     else
     {
         preview_ctx.DrawLineWithAngleHighlight( origin, m_constructMan.GetEndRadiusEnd(), false );
 
-        double start        = m_constructMan.GetStartAngle();
-        double subtended    = m_constructMan.GetSubtended();
-        double subtendedDeg = getNormDeciDegFromRad( subtended );
-        double endAngleDeg  = getNormDeciDegFromRad( start + subtended );
+        double    start = m_constructMan.GetStartAngle();
+        double    subtended = m_constructMan.GetSubtended();
+        EDA_ANGLE incAngle( subtended, RADIANS_T );
+        EDA_ANGLE endAngle( start + subtended, RADIANS_T );
 
         // draw dimmed extender line to cursor
         preview_ctx.DrawLineWithAngleHighlight( origin, m_constructMan.GetLastPoint(), true );
 
-        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "Δθ" ), subtendedDeg,
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "Δθ" ), incAngle.AsDegrees(),
                                                  EDA_UNITS::DEGREES ) );
-        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), endAngleDeg,
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), endAngle.AsDegrees(),
                                                  EDA_UNITS::DEGREES ) );
     }
 

@@ -886,14 +886,13 @@ void GERBVIEW_FRAME::UpdateStatusBar()
 
     if( GetShowPolarCoords() )  // display relative polar coordinates
     {
-        double   dx = cursorPos.x - GetScreen()->m_LocalOrigin.x;
-        double   dy = cursorPos.y - GetScreen()->m_LocalOrigin.y;
-        double   theta = RAD2DEG( atan2( -dy, dx ) );
-        double   ro = hypot( dx, dy );
+        VECTOR2D  v = cursorPos - GetScreen()->m_LocalOrigin;
+        EDA_ANGLE theta( VECTOR2D( v.x, -v.y ) );
+        double    ro = hypot( v.x, v.y );
 
         line.Printf( wxT( "r %s  theta %s" ),
                      MessageTextFromValue( GetUserUnits(), ro, false ),
-                     MessageTextFromValue( EDA_UNITS::DEGREES, theta, false ) );
+                     MessageTextFromValue( EDA_UNITS::DEGREES, theta.AsDegrees(), false ) );
 
         SetStatusText( line, 3 );
     }

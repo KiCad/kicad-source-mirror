@@ -196,6 +196,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_pad_orientation.SetPrecision( 3 );
 
     m_spokeAngle.SetUnits( EDA_UNITS::DEGREES );
+    m_spokeAngle.SetPrecision( 3 );
 
     m_pasteMargin.SetNegativeZero();
 
@@ -858,13 +859,13 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     // what the last shape was.
     if( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CIRCLE )
     {
-        if( m_sizeYCtrl->IsEnabled() && m_spokeAngle.GetDoubleValue() == 900.0 )
-            m_spokeAngle.SetDoubleValue( 450.0 );
+        if( m_sizeYCtrl->IsEnabled() && m_spokeAngle.GetAngleValue() == ANGLE_90 )
+            m_spokeAngle.SetAngleValue( ANGLE_45 );
     }
     else
     {
-        if( !m_sizeYCtrl->IsEnabled() && m_spokeAngle.GetDoubleValue() == 450.0 )
-            m_spokeAngle.SetDoubleValue( 900.0 );
+        if( !m_sizeYCtrl->IsEnabled() && m_spokeAngle.GetAngleValue() == ANGLE_45 )
+            m_spokeAngle.SetAngleValue( ANGLE_90 );
     }
 
     // Readjust props book size

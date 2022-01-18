@@ -78,7 +78,7 @@ double To_User_Unit( EDA_UNITS aUnit, double aValue )
         return IU_TO_IN( aValue );
 
     case EDA_UNITS::DEGREES:
-        return aValue / 10.0f;
+        return aValue;
 
     default:
         return aValue;
@@ -260,11 +260,8 @@ double From_User_Unit( EDA_UNITS aUnits, double aValue )
     case EDA_UNITS::INCHES:
         return IN_TO_IU( aValue );
 
-    case EDA_UNITS::DEGREES:
-        // Convert to "decidegrees"
-        return aValue * 10;
-
     default:
+    case EDA_UNITS::DEGREES:
     case EDA_UNITS::UNSCALED:
     case EDA_UNITS::PERCENT:
         return aValue;
@@ -329,9 +326,7 @@ double DoubleValueFromString( EDA_UNITS aUnits, const wxString& aTextValue, EDA_
     else if( aUnits == EDA_UNITS::DEGREES )
     {
         if( unit == wxT( "ra" ) ) // Radians
-        {
             dtmp *= 180.0f / M_PI;
-        }
     }
 
     switch( aType )

@@ -75,6 +75,11 @@ void WIDGET_SAVE_RESTORE::Add( UNIT_BINDER& ctrl, long& dest )
 }
 
 
+void WIDGET_SAVE_RESTORE::Add( UNIT_BINDER& ctrl, EDA_ANGLE& dest )
+{
+    m_ctrls.emplace_back( WIDGET_CTRL_TYPE_T::UNIT_BINDER_ANGLE, ctrl, dest );
+}
+
 void WIDGET_SAVE_RESTORE::Add( wxChoice& ctrl, long& dest )
 {
     m_ctrls.emplace_back( WIDGET_CTRL_TYPE_T::CHOICE, ctrl, dest );
@@ -115,6 +120,10 @@ void WIDGET_SAVE_RESTORE::ReadConfigFromControls()
 
         case WIDGET_CTRL_TYPE_T::UNIT_BINDER:
             *ctrl.m_dest.m_long = ctrl.m_control.m_unit_binder->GetValue();
+            break;
+
+        case WIDGET_CTRL_TYPE_T::UNIT_BINDER_ANGLE:
+            *ctrl.m_dest.m_angle = ctrl.m_control.m_unit_binder->GetAngleValue();
             break;
 
         case WIDGET_CTRL_TYPE_T::CHOICE:
@@ -166,6 +175,10 @@ void WIDGET_SAVE_RESTORE::RestoreConfigToControls()
 
         case WIDGET_CTRL_TYPE_T::UNIT_BINDER:
             ctrl.m_control.m_unit_binder->SetValue( *ctrl.m_dest.m_long );
+            break;
+
+        case WIDGET_CTRL_TYPE_T::UNIT_BINDER_ANGLE:
+            ctrl.m_control.m_unit_binder->SetAngleValue( *ctrl.m_dest.m_angle );
             break;
 
         case WIDGET_CTRL_TYPE_T::CHOICE:

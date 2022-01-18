@@ -63,7 +63,6 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
             m_GridSecondaryAxisStep( 1 ),
             m_CircCentreX( 0 ),
             m_CircCentreY( 0 ),
-            m_CircAngle( 0.0 ),
             m_CircCount( 4 ),
             m_CircNumStartSet( 1 ),           // use specified start
             m_GridCircNumScheme( 0 ),
@@ -76,40 +75,40 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
     {
     }
 
-    bool     m_OptionsSet;
+    bool      m_OptionsSet;
 
-    long     m_GridNx;
-    long     m_GridNy;
-    long     m_GridDx;
-    long     m_GridDy;
-    long     m_GridOffsetX;
-    long     m_GridOffsetY;
-    long     m_GridStagger;
+    long      m_GridNx;
+    long      m_GridNy;
+    long      m_GridDx;
+    long      m_GridDy;
+    long      m_GridOffsetX;
+    long      m_GridOffsetY;
+    long      m_GridStagger;
 
-    long     m_GridStaggerType;
-    long     m_GridNumberingAxis;
-    bool     m_GridNumReverseAlt;
-    long     m_GridNumStartSet;
-    long     m_Grid2dArrayNumbering;
-    long     m_GridPrimaryAxisScheme;
-    long     m_GridSecondaryAxisScheme;
-    wxString m_GridPrimaryNumOffset;
-    wxString m_GridSecondaryNumOffset;
-    long     m_GridPrimaryAxisStep;
-    long     m_GridSecondaryAxisStep;
+    long      m_GridStaggerType;
+    long      m_GridNumberingAxis;
+    bool      m_GridNumReverseAlt;
+    long      m_GridNumStartSet;
+    long      m_Grid2dArrayNumbering;
+    long      m_GridPrimaryAxisScheme;
+    long      m_GridSecondaryAxisScheme;
+    wxString  m_GridPrimaryNumOffset;
+    wxString  m_GridSecondaryNumOffset;
+    long      m_GridPrimaryAxisStep;
+    long      m_GridSecondaryAxisStep;
 
-    long     m_CircCentreX;
-    long     m_CircCentreY;
-    long     m_CircAngle;
-    long     m_CircCount;
-    long     m_CircNumStartSet;
-    long     m_GridCircNumScheme;
-    wxString m_CircNumberingOffset;
-    long     m_CircNumberingStep;
-    bool     m_CircRotatationStep;
-    long     m_ArrayTypeTab;
-    bool     m_FootprintKeepAnnotations;
-    bool     m_FootprintReannotate;
+    long      m_CircCentreX;
+    long      m_CircCentreY;
+    EDA_ANGLE m_CircAngle;
+    long      m_CircCount;
+    long      m_CircNumStartSet;
+    long      m_GridCircNumScheme;
+    wxString  m_CircNumberingOffset;
+    long      m_CircNumberingStep;
+    bool      m_CircRotatationStep;
+    long      m_ArrayTypeTab;
+    bool      m_FootprintKeepAnnotations;
+    bool      m_FootprintReannotate;
 };
 
 // Persistent options settings

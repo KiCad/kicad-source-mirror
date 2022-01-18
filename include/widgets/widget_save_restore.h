@@ -35,6 +35,7 @@ class wxString;
 class wxTextCtrl;
 
 class UNIT_BINDER;
+class EDA_ANGLE;
 
 class WIDGET_SAVE_RESTORE
 {
@@ -83,6 +84,11 @@ public:
     void Add( UNIT_BINDER& ctrl, long& dest );
 
     /**
+     * Bind a control managed by a #UNIT_BINDER into an angle
+     */
+    void Add( UNIT_BINDER& ctrl, EDA_ANGLE& dest );
+
+    /**
      * Bind a choice control into a choice (agnostic to the actual
      * meaning of the choice)
      */
@@ -116,6 +122,7 @@ private:
         TEXT_INTEGER,
         TEXT_DOUBLE,
         UNIT_BINDER,
+        UNIT_BINDER_ANGLE,
         CHECKBOX,
         RADIOBUTTON,
         RADIOBOX,
@@ -189,10 +196,16 @@ private:
         {
         }
 
-        long*     m_long;
-        bool*     m_bool;
-        wxString* m_str;
-        double*   m_double;
+        DATA( EDA_ANGLE* aDest ) :
+            m_angle( aDest )
+        {
+        }
+
+        long*      m_long;
+        bool*      m_bool;
+        wxString*  m_str;
+        double*    m_double;
+        EDA_ANGLE* m_angle;
     };
 
     /**

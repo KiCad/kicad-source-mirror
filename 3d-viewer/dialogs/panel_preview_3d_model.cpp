@@ -220,7 +220,7 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
  */
 static double rotationFromString( const wxString& aValue )
 {
-    double rotation = DoubleValueFromString( EDA_UNITS::DEGREES, aValue ) / 10.0;
+    double rotation = DoubleValueFromString( EDA_UNITS::DEGREES, aValue );
 
     if( rotation > MAX_ROTATION )
     {
@@ -376,7 +376,7 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementRotation( wxSpinEvent& aEvent, double aS
     else if( spinCtrl == m_spinZrot )
         textCtrl = zrot;
 
-    double curr_value = DoubleValueFromString( EDA_UNITS::DEGREES, textCtrl->GetValue() ) / 10.0;
+    double curr_value = DoubleValueFromString( EDA_UNITS::DEGREES, textCtrl->GetValue() );
 
     curr_value += ( ROTATION_INCREMENT * aSign );
     curr_value = std::max( -MAX_ROTATION, curr_value );
@@ -447,7 +447,7 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelRot( wxMouseEvent& event )
     if( event.GetWheelRotation() >= 0 )
         step = -step;
 
-    double curr_value = DoubleValueFromString( EDA_UNITS::DEGREES, textCtrl->GetValue() ) / 10.0;
+    double curr_value = DoubleValueFromString( EDA_UNITS::DEGREES, textCtrl->GetValue() );
 
     curr_value += step;
     curr_value = std::max( -MAX_ROTATION, curr_value );
