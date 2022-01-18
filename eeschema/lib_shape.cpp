@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-20212KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,7 +255,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 
         CalcArcAngles( t1, t2 );
 
-        if( aTransform.MapAngles( &t1, &t2 ) == ( t1 - t2 ).Normalize180() > ANGLE_0 )
+        if( aTransform.MapAngles( &t1, &t2 ) == ( ( t1 - t2 ).Normalize180() > ANGLE_0 ) )
             std::swap( pt1, pt2 );
     }
 
