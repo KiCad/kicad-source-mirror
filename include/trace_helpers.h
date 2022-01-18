@@ -149,6 +149,13 @@ extern const wxChar* const tracePathsAndFiles;
 extern const wxChar* const traceLocale;
 
 /**
+ * Flag to enable locale debug output.
+ *
+ * Use "KICAD_FONTS" to enable.
+ */
+extern const wxChar* const traceFonts;
+
+/**
  * Flag to enable debug output of #BASE_SCREEN and it's derivatives.
  *
  * Use "KICAD_SCREEN" to enable.

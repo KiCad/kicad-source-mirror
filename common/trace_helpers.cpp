@@ -45,6 +45,7 @@ const wxChar* const tracePrinting = wxT( "KICAD_PRINT" );
 const wxChar* const traceAutoSave = wxT( "KICAD_AUTOSAVE" );
 const wxChar* const tracePathsAndFiles = wxT( "KICAD_PATHS_AND_FILES" );
 const wxChar* const traceLocale = wxT( "KICAD_LOCALE" );
+const wxChar* const traceFonts = wxT( "KICAD_FONTS" );
 const wxChar* const traceScreen = wxT( "KICAD_SCREEN" );
 const wxChar* const traceZoomScroll = wxT( "KICAD_ZOOM_SCROLL" );
 const wxChar* const traceSymbolResolver = wxT( "KICAD_SYM_RESOLVE" );

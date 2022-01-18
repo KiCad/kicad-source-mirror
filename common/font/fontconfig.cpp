@@ -21,6 +21,7 @@
 #include <font/fontconfig.h>
 #include <pgm_base.h>
 #include <wx/log.h>
+#include <trace_helpers.h>
 
 using namespace fontconfig;
 
@@ -147,6 +148,8 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
                 FcStrList* langStrList = FcStrListCreate( langStrSet );
                 FcChar8*   langStr = FcStrListNext( langStrList );
 
+                std::string theFamily( reinterpret_cast<char *>( family ) );
+
                 if( !langStr )
                 {
                     // Symbol fonts (Wingdings, etc.) have no language
@@ -162,6 +165,11 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
                         langSupported = true;
                         break;
                     }
+                    else
+                    {
+                        wxLogTrace( traceFonts, "Font '%s' language '%s' not supported by OS.",
+                                    theFamily, langWxStr );
+                    }
 
                     langStr = FcStrListNext( langStrList );
                 }
@@ -173,7 +181,6 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
                     continue;
 
                 std::string theFile( reinterpret_cast<char *>( file ) );
-                std::string theFamily( reinterpret_cast<char *>( family ) );
                 std::string theStyle( reinterpret_cast<char *>( style ) );
                 FONTINFO    fontInfo( theFile, theStyle, theFamily );
 
