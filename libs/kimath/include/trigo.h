@@ -196,7 +196,6 @@ inline double DEG2RAD( double deg ) { return deg * M_PI / 180.0; }
 inline double RAD2DEG( double rad ) { return rad * 180.0 / M_PI; }
 
 // These are the same *but* work with the internal 'decidegrees' unit
-inline double DECIDEG2RAD( double deg ) { return deg * M_PI / 1800.0; }
 inline double RAD2DECIDEG( double rad ) { return rad * 1800.0 / M_PI; }
 
 /* These are templated over T (and not simply double) because Eeschema

@@ -909,7 +909,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             // Keep the size ratio for the font, but make it smaller
             if( padsize.x < padsize.y )
             {
-                m_gal->Rotate( DECIDEG2RAD( -900.0 ) );
+                m_gal->Rotate( -ANGLE_90.AsRadians() );
                 size = padsize.x;
                 std::swap( padsize.x, padsize.y );
             }

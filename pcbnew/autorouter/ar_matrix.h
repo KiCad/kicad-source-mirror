@@ -131,8 +131,8 @@ private:
     void traceFilledCircle( int cx, int cy, int radius, LSET aLayerMask, int color,
                             AR_MATRIX::CELL_OP op_logic );
 
-    void traceArc( int ux0, int uy0, int ux1, int uy1, double ArcAngle, int lg, int layer,
-                   int color, AR_MATRIX::CELL_OP op_logic );
+    void traceArc( int ux0, int uy0, int ux1, int uy1, const EDA_ANGLE& arcAngle, int lg,
+                   int layer, int color, AR_MATRIX::CELL_OP op_logic );
 
 public:
     MATRIX_CELL* m_BoardSide[AR_MAX_ROUTING_LAYERS_COUNT]; // the image map of 2 board sides
