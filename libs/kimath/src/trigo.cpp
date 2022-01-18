@@ -318,13 +318,13 @@ const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd,
     }
 
     int chord = ( start - end ).EuclideanNorm();
-    int r = ( chord / 2 ) / angle.Sin();
+    int r = ( chord / 2 ) / ( angle / 2 ).Sin();
 
     VECTOR2I vec = end - start;
     vec = vec.Resize( r );
-    vec = vec.Rotate( ( ANGLE_180 - angle ).AsRadians() );
+    RotatePoint( vec, -( ANGLE_180 - angle ) / 2 );
 
-    return (VECTOR2I) ( start + vec );
+    return VECTOR2I( start + vec );
 }
 
 
