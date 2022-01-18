@@ -508,7 +508,6 @@ void EDA_SHAPE::SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, co
         std::swap( m_start, m_end );
         m_endsSwapped = true;
     }
-
 }
 
 
@@ -600,8 +599,8 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         const double deg = RAD2DEG( atan2( (double)( GetStart().y - GetEnd().y ),
                                            (double)( GetEnd().x - GetStart().x ) ) );
         aList.emplace_back( _( "Angle" ), wxString::Format( "%.1f", deg ) );
-    }
         break;
+    }
 
     default:
         aList.emplace_back( shape, _( "Unrecognized" ) );

@@ -987,6 +987,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
     }
     else if( hasAngles )
     {
+        arc->SetCenter( center );
         /**
          * This accounts for an oddity in the old library format, where the symbol is overdefined.
          * The previous draw (based on wxwidgets) used start point and end point and always drew
@@ -994,13 +995,9 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
          * these points were stored in the file, so we need to mimic the swapping of start/end
          * points rather than using the stored angles in order to properly map edge cases.
          */
-        if( !TRANSFORM().MapAngles( &startAngle, &endAngle ) )
-        {
-            VECTOR2I temp = arc->GetStart();
-            arc->SetStart( arc->GetEnd() );
-            arc->SetEnd( temp );
-        }
-        arc->SetCenter( center );
+        VECTOR2I temp = arc->GetStart();
+        arc->SetStart( arc->GetEnd() );
+        arc->SetEnd( temp );
     }
     else
     {
