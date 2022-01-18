@@ -156,6 +156,9 @@ typedef long time_t;
 %include math.i
 %template(VECTOR_VECTOR2I) std::vector<VECTOR2I>;
 
+#include <geometry/eda_angle.h>
+%include <geometry/eda_angle.h>
+
 // ignore warning from nested classes
 #pragma SWIG nowarn=325
 #include <geometry/shape_line_chain.h>
