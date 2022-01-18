@@ -133,12 +133,12 @@ void BuildConvexHull( std::vector<VECTOR2I>& aResult, const std::vector<VECTOR2I
 
 void BuildConvexHull( std::vector<VECTOR2I>& aResult, const SHAPE_POLY_SET& aPolygons )
 {
-    BuildConvexHull( aResult, aPolygons, VECTOR2I( 0, 0 ), 0.0 );
+    BuildConvexHull( aResult, aPolygons, VECTOR2I( 0, 0 ), ANGLE_0 );
 }
 
 
 void BuildConvexHull( std::vector<VECTOR2I>& aResult, const SHAPE_POLY_SET& aPolygons,
-                      const VECTOR2I& aPosition, double aRotation )
+                      const VECTOR2I& aPosition, const EDA_ANGLE& aRotation )
 {
     // Build the convex hull of the SHAPE_POLY_SET
     std::vector<VECTOR2I> buf;

@@ -28,6 +28,7 @@
 
 #include <vector>
 #include <math/vector2d.h>
+#include <geometry/eda_angle.h>
 
 class SHAPE_POLY_SET;
 
@@ -57,6 +58,6 @@ void BuildConvexHull( std::vector<VECTOR2I>& aResult, const SHAPE_POLY_SET& aPol
  * @param aRotation is the rotation of the convex hull.
  */
 void BuildConvexHull( std::vector<VECTOR2I>& aResult, const SHAPE_POLY_SET& aPolygons,
-                      const VECTOR2I& aPosition, double aRotation );
+                      const VECTOR2I& aPosition, const EDA_ANGLE& aRotation );
 
 #endif // __CONVEX_HULL_H

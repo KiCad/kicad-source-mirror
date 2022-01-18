@@ -622,7 +622,7 @@ void AR_MATRIX::traceArc( int ux0, int uy0, int ux1, int uy1, double ArcAngle, i
 
 
 void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, double angle,
-        LSET aLayerMask, int color, AR_MATRIX::CELL_OP op_logic )
+                                      LSET aLayerMask, int color, AR_MATRIX::CELL_OP op_logic )
 {
     int row, col;
     int cx, cy; // Center of rectangle
@@ -685,7 +685,7 @@ void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, double
         {
             rotrow = row * m_GridRouting;
             rotcol = col * m_GridRouting;
-            RotatePoint( &rotcol, &rotrow, cx, cy, -angle );
+            RotatePoint( &rotcol, &rotrow, cx, cy, -EDA_ANGLE( angle, TENTHS_OF_A_DEGREE_T ) );
 
             if( rotrow <= uy0 )
                 continue;
@@ -710,7 +710,7 @@ void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, double
 
 
 void AR_MATRIX::TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, LSET aLayerMask,
-        int color, AR_MATRIX::CELL_OP op_logic )
+                                      int color, AR_MATRIX::CELL_OP op_logic )
 {
     int row, col;
     int row_min, row_max, col_min, col_max;

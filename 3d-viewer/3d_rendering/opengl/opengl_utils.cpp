@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -144,14 +144,14 @@ void DrawHalfOpenCylinder( unsigned int aNrSidesPerCircle )
     if( aNrSidesPerCircle > 1 )
     {
         const float radius = 0.5f;
-        const int delta = 3600 / aNrSidesPerCircle;
+        const EDA_ANGLE delta = ANGLE_360 / aNrSidesPerCircle;
 
         // Generate bottom
         glNormal3f( 0.0f, 0.0f,-1.0f );
         glBegin( GL_TRIANGLE_FAN );
         glVertex3f( 0.0, 0.0, 0.0 );  // This is the V0 of the FAN
 
-        for( int ii = 0; ii < 1800; ii += delta )
+        for( EDA_ANGLE ii = ANGLE_0; ii < ANGLE_180; ii += delta )
         {
             SFVEC2D corner = SFVEC2D( 0.0, radius );
             RotatePoint( &corner.x, &corner.y, ii );
@@ -166,7 +166,7 @@ void DrawHalfOpenCylinder( unsigned int aNrSidesPerCircle )
         glBegin( GL_TRIANGLE_FAN );
         glVertex3f( 0.0, 0.0, 1.0 );  // This is the V0 of the FAN
 
-        for( int ii = 1800; ii > 0; ii -= delta )
+        for( EDA_ANGLE ii = ANGLE_180; ii > ANGLE_0; ii -= delta )
         {
             SFVEC2D corner = SFVEC2D( 0.0, radius );
 
@@ -180,7 +180,7 @@ void DrawHalfOpenCylinder( unsigned int aNrSidesPerCircle )
         // Generate contours
         glBegin( GL_QUAD_STRIP );
 
-        for( int ii = 1800; ii > 0; ii -= delta )
+        for( EDA_ANGLE ii = ANGLE_180; ii > ANGLE_0; ii -= delta )
         {
             SFVEC2D corner = SFVEC2D( 0.0, radius );
 

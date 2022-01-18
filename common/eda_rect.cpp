@@ -242,7 +242,7 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, const EDA_ANGLE& aRotation ) c
     for( int i = 0; i < 4; i++ )
     {
         VECTOR2I delta = corners[i] - rCentre;
-        RotatePoint( delta, -rotation );
+        RotatePoint( delta, -EDA_ANGLE( rotation, TENTHS_OF_A_DEGREE_T ) );
         delta += rCentre;
 
         if( aRect.Contains( delta ) )
@@ -262,7 +262,7 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, const EDA_ANGLE& aRotation ) c
     // Rotate and test each corner
     for( int j = 0; j < 4; j++ )
     {
-        RotatePoint( corners[j], rotation );
+        RotatePoint( corners[j], EDA_ANGLE( rotation, TENTHS_OF_A_DEGREE_T ) );
         corners[j] += rCentre;
 
         if( Contains( corners[j] ) )

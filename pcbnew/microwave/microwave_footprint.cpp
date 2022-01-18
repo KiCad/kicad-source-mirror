@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
     wxString   msg;
     wxString   cmp_name;
     int        pad_count = 2;
-    int        angle     = 0;
+    EDA_ANGLE  angle     = ANGLE_0;
 
     PCB_EDIT_FRAME& editFrame  = *getEditFrame<PCB_EDIT_FRAME>();
 
@@ -89,8 +89,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
 
     if( aFootprintShape == MICROWAVE_FOOTPRINT_SHAPE::STUB_ARC )
     {
-        double            fcoeff = 10.0, fval;
-        msg.Printf( wxT( "%3.1f" ), angle / fcoeff );
+        msg = wxT( "0.0" );
         WX_TEXT_ENTRY_DIALOG angledlg( &editFrame, _( "Angle in degrees:" ),
                                        _( "Create Microwave Footprint" ), msg );
 
@@ -99,16 +98,21 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
 
         msg = angledlg.GetValue();
 
+        double fval;
+
         if( !msg.ToDouble( &fval ) )
         {
             DisplayError( &editFrame, _( "Incorrect number, abort" ) );
             abort = true;
         }
 
-        angle = std::abs( KiROUND( fval * fcoeff ) );
+        angle = EDA_ANGLE( fval, DEGREES_T );
 
-        if( angle > 1800 )
-            angle = 1800;
+        if( angle < ANGLE_0 )
+            angle = -angle;
+
+        if( angle > ANGLE_180 )
+            angle = ANGLE_180;
     }
 
     if( abort )
@@ -145,13 +149,13 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
         pad->SetShape( PAD_SHAPE::CUSTOM );
         pad->SetAnchorPadShape( PAD_SHAPE::RECT );
 
-        int numPoints = ( angle / 50 ) + 3;       // Note: angles are in 0.1 degrees
+        int numPoints = ( angle.AsDegrees() / 5.0 ) + 3;
         std::vector<VECTOR2I> polyPoints;
         polyPoints.reserve( numPoints );
 
         polyPoints.emplace_back( wxPoint( 0, 0 ) );
 
-        int theta = -angle / 2;
+        EDA_ANGLE theta = -angle / 2;
 
         for( int ii = 1; ii < numPoints - 1; ii++ )
         {
@@ -159,7 +163,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
             RotatePoint( &pt.x, &pt.y, theta );
             polyPoints.push_back( pt );
 
-            theta += 50;
+            theta += EDA_ANGLE( 5.0, DEGREES_T );
 
             if( theta > angle / 2 )
                 theta = angle / 2;
