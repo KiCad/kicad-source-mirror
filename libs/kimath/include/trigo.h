@@ -59,73 +59,44 @@ bool SegmentIntersectsSegment( const VECTOR2I& a_p1_l1, const VECTOR2I& a_p2_l1,
                                VECTOR2I* aIntersectionPoint = nullptr );
 
 /*
- * Calculate the new point of coord coord pX, pY,
- * for a rotation center 0, 0, and angle in (1/10 degree)
+ * Calculate the new point of coord coord pX, pY, for a rotation center 0, 0
  */
-void RotatePoint( int *pX, int *pY, double angle );
+void RotatePoint( int *pX, int *pY, const EDA_ANGLE& aAngle );
 
-inline void RotatePoint( int *pX, int *pY, const EDA_ANGLE& angle )
+inline void RotatePoint( VECTOR2I& point, const EDA_ANGLE& aAngle )
 {
-    RotatePoint( pX, pY, angle.AsTenthsOfADegree() );
+    RotatePoint( &point.x, &point.y, aAngle );
 }
+
 
 /*
- * Calculate the new point of coord coord pX, pY,
- * for a rotation center cx, cy, and angle in (1/10 degree)
+ * Calculate the new point of coord coord pX, pY, for a rotation center cx, cy
  */
-void RotatePoint( int *pX, int *pY, int cx, int cy, double angle );
+void RotatePoint( int *pX, int *pY, int cx, int cy, const EDA_ANGLE& aAngle );
 
-inline void RotatePoint( int *pX, int *pY, int cx, int cy, const EDA_ANGLE& angle )
+inline void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, const EDA_ANGLE& aAngle )
 {
-    RotatePoint( pX, pY, cx, cy, angle.AsTenthsOfADegree() );
+    RotatePoint( &point.x, &point.y, centre.x, centre.y, aAngle );
 }
+
 
 /*
- * Calculate the new coord point point for a rotation angle in (1/10 degree).
- */
-inline void RotatePoint( VECTOR2I& point, double angle )
-{
-    RotatePoint( &point.x, &point.y, angle );
-}
-
-inline void RotatePoint( VECTOR2I& point, const EDA_ANGLE& angle )
-{
-    RotatePoint( &point.x, &point.y, angle.AsTenthsOfADegree() );
-}
-
-void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, double angle );
-
-inline void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, const EDA_ANGLE& angle )
-{
-    RotatePoint( point, centre, angle.AsTenthsOfADegree() );
-}
-
-/*
- * Calculate the new coord point point for a center rotation center and angle in (1/10 degree).
+ * Calculate the new coord point point for a rotation center 0, 0
  */
 
-void RotatePoint( double* pX, double* pY, double angle );
+void RotatePoint( double* pX, double* pY, const EDA_ANGLE& aAngle );
 
-inline void RotatePoint( double* pX, double* pY, const EDA_ANGLE& angle )
+inline void RotatePoint( VECTOR2D& point, const EDA_ANGLE& aAngle )
 {
-    RotatePoint( pX, pY, angle.AsTenthsOfADegree() );
+    RotatePoint( &point.x, &point.y, aAngle );
 }
 
-inline void RotatePoint( VECTOR2D& point, const EDA_ANGLE& angle )
-{
-    RotatePoint( &point.x, &point.y, angle.AsTenthsOfADegree() );
-}
 
-void RotatePoint( double* pX, double* pY, double cx, double cy, double angle );
+void RotatePoint( double* pX, double* pY, double cx, double cy, const EDA_ANGLE& aAngle );
 
-inline void RotatePoint( double* pX, double* pY, double cx, double cy, const EDA_ANGLE& angle )
+inline void RotatePoint( VECTOR2D& point, const VECTOR2D& aCenter, const EDA_ANGLE& aAngle )
 {
-    RotatePoint( pX, pY, cx, cy, angle.AsTenthsOfADegree() );
-}
-
-inline void RotatePoint( VECTOR2D& point, const VECTOR2D& aCenter, const EDA_ANGLE& angle )
-{
-    RotatePoint( &point.x, &point.y, aCenter.x, aCenter.y, angle.AsTenthsOfADegree() );
+    RotatePoint( &point.x, &point.y, aCenter.x, aCenter.y, aAngle );
 }
 
 /**
@@ -155,16 +126,6 @@ const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd,
 const VECTOR2I CalcArcMid( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCenter,
                            bool aMinArcAngle = true );
 
-/* Return the arc tangent of 0.1 degrees coord vector dx, dy
- * between -1800 and 1800
- * Equivalent to atan2 (but faster for calculations if
- * the angle is 0 to -1800, or + - 900)
- * Lorenzo: In fact usually atan2 already has to do these optimizations
- * (due to the discontinuity in tan) but this function also returns
- * in decidegrees instead of radians, so it's handier
- */
-double ArcTangente( int dy, int dx );
-
 inline double EuclideanNorm( const VECTOR2I& vector )
 {
     // this is working with doubles
@@ -179,10 +140,9 @@ inline double EuclideanNorm( const VECTOR2I& vector )
 inline double DistanceLinePoint( const VECTOR2I& linePointA, const VECTOR2I& linePointB,
                                  const VECTOR2I& referencePoint )
 {
-    // Some of the multiple double casts are redundant. However in the previous
-    // definition the cast was (implicitly) done too late, just before
-    // the division (EuclideanNorm gives a double so from int it would
-    // be promoted); that means that the whole expression were
+    // Some of the multiple double casts are redundant. However in the previous definition
+    // the cast was (implicitly) done too late, just before the division (EuclideanNorm gives
+    // a double so from int it would be promoted); that means that the whole expression were
     // vulnerable to overflow during int multiplications
     return fabs( ( static_cast<double>( linePointB.x - linePointA.x ) *
                    static_cast<double>( linePointA.y - referencePoint.y ) -
@@ -200,8 +160,8 @@ inline bool HitTestPoints( const VECTOR2I& pointA, const VECTOR2I& pointB, doubl
 {
     VECTOR2I vectorAB = pointB - pointA;
 
-    // Compare the distances squared. The double is needed to avoid
-    // overflow during int multiplication
+    // Compare the distances squared. The double is needed to avoid overflow during int
+    // multiplication
     double sqdistance = (double)vectorAB.x * vectorAB.x + (double)vectorAB.y * vectorAB.y;
 
     return sqdistance < threshold * threshold;

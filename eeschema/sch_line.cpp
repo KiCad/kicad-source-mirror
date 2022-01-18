@@ -446,7 +446,7 @@ int SCH_LINE::GetAngleFrom( const VECTOR2I& aPoint ) const
     else
         vec = m_start - aPoint;
 
-    return KiROUND( ArcTangente( vec.y, vec.x ) );
+    return KiROUND( EDA_ANGLE( vec ).AsDegrees() );
 }
 
 
@@ -459,7 +459,7 @@ int SCH_LINE::GetReverseAngleFrom( const VECTOR2I& aPoint ) const
     else
         vec = m_end - aPoint;
 
-    return KiROUND( ArcTangente( vec.y, vec.x ) );
+    return KiROUND( EDA_ANGLE( vec ).AsDegrees() );
 }
 
 

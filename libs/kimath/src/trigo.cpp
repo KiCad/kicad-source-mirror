@@ -180,93 +180,45 @@ const VECTOR2I CalcArcMid( const VECTOR2I& aStart, const VECTOR2I& aEnd, const V
 }
 
 
-double ArcTangente( int dy, int dx )
+void RotatePoint( int* pX, int* pY, const EDA_ANGLE& aAngle )
 {
+    VECTOR2I  pt;
+    EDA_ANGLE angle = aAngle;
 
-    /* gcc is surprisingly smart in optimizing these conditions in
-       a tree! */
-
-    if( dx == 0 && dy == 0 )
-        return 0;
-
-    if( dy == 0 )
-    {
-        if( dx >= 0 )
-            return 0;
-        else
-            return -1800;
-    }
-
-    if( dx == 0 )
-    {
-        if( dy >= 0 )
-            return 900;
-        else
-            return -900;
-    }
-
-    if( dx == dy )
-    {
-        if( dx >= 0 )
-            return 450;
-        else
-            return -1800 + 450;
-    }
-
-    if( dx == -dy )
-    {
-        if( dx >= 0 )
-            return -450;
-        else
-            return 1800 - 450;
-    }
-
-    // Of course dy and dx are treated as double
-    return RAD2DECIDEG( std::atan2( (double) dy, (double) dx ) );
-}
-
-
-void RotatePoint( int* pX, int* pY, double angle )
-{
-    int tmp;
-
-    NORMALIZE_ANGLE_POS( angle );
+    angle.Normalize();
 
     // Cheap and dirty optimizations for 0, 90, 180, and 270 degrees.
-    if( angle == 0 )
-        return;
-
-    if( angle == 900 )          /* sin = 1, cos = 0 */
+    if( angle == ANGLE_0 )
     {
-        tmp = *pX;
-        *pX = *pY;
-        *pY = -tmp;
+        pt = VECTOR2I( *pX, *pY );
     }
-    else if( angle == 1800 )    /* sin = 0, cos = -1 */
+    else if( angle == ANGLE_90 )          /* sin = 1, cos = 0 */
     {
-        *pX = -*pX;
-        *pY = -*pY;
+        pt = VECTOR2I( *pY, -*pX );
     }
-    else if( angle == 2700 )    /* sin = -1, cos = 0 */
+    else if( angle == ANGLE_180 )    /* sin = 0, cos = -1 */
     {
-        tmp = *pX;
-        *pX = -*pY;
-        *pY = tmp;
+        pt = VECTOR2I( -*pX, -*pY );
+    }
+    else if( angle == ANGLE_270 )    /* sin = -1, cos = 0 */
+    {
+        pt = VECTOR2I( -*pY, *pX );
     }
     else
     {
-        double fangle = DECIDEG2RAD( angle );
-        double sinus = sin( fangle );
-        double cosinus = cos( fangle );
-        double fpx = (*pY * sinus ) + (*pX * cosinus );
-        double fpy = (*pY * cosinus ) - (*pX * sinus );
-        *pX = KiROUND( fpx );
-        *pY = KiROUND( fpy );
+        double sinus = angle.Sin();
+        double cosinus = angle.Cos();
+
+        pt.x = KiROUND( ( *pY * sinus ) + ( *pX * cosinus ) );
+        pt.y = KiROUND( ( *pY * cosinus ) - ( *pX * sinus ) );
     }
+
+    *pX = pt.x;
+    *pY = pt.y;
 }
 
 
-void RotatePoint( int* pX, int* pY, int cx, int cy, double angle )
+void RotatePoint( int* pX, int* pY, int cx, int cy, const EDA_ANGLE& angle )
 {
     int ox, oy;
 
@@ -280,7 +232,7 @@ void RotatePoint( int* pX, int* pY, int cx, int cy, double angle )
 }
 
 
-void RotatePoint( wxPoint* point, const wxPoint& centre, double angle )
+void RotatePoint( wxPoint* point, const wxPoint& centre, const EDA_ANGLE& angle )
 {
     int ox, oy;
 
@@ -288,24 +240,13 @@ void RotatePoint( wxPoint* point, const wxPoint& centre, double angle )
     oy = point->y - centre.y;
 
     RotatePoint( &ox, &oy, angle );
+
     point->x = ox + centre.x;
     point->y = oy + centre.y;
 }
 
-void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, double angle )
-{
-    int ox, oy;
 
-    ox = point.x - centre.x;
-    oy = point.y - centre.y;
-
-    RotatePoint( &ox, &oy, angle );
-    point.x = ox + centre.x;
-    point.y = oy + centre.y;
-}
-
-
-void RotatePoint( double* pX, double* pY, double cx, double cy, double angle )
+void RotatePoint( double* pX, double* pY, double cx, double cy, const EDA_ANGLE& angle )
 {
     double ox, oy;
 
@@ -319,44 +260,41 @@ void RotatePoint( double* pX, double* pY, double cx, double cy, double angle )
 }
 
 
-void RotatePoint( double* pX, double* pY, double angle )
+void RotatePoint( double* pX, double* pY, const EDA_ANGLE& aAngle )
 {
-    double tmp;
+    EDA_ANGLE angle = aAngle;
+    VECTOR2D  pt;
 
-    NORMALIZE_ANGLE_POS( angle );
+    angle.Normalize();
 
     // Cheap and dirty optimizations for 0, 90, 180, and 270 degrees.
-    if( angle == 0 )
-        return;
-
-    if( angle == 900 )          /* sin = 1, cos = 0 */
+    if( angle == ANGLE_0 )
     {
-        tmp = *pX;
-        *pX = *pY;
-        *pY = -tmp;
+        pt = VECTOR2D( *pX, *pY );
     }
-    else if( angle == 1800 )    /* sin = 0, cos = -1 */
+    else if( angle == ANGLE_90 )          /* sin = 1, cos = 0 */
     {
-        *pX = -*pX;
-        *pY = -*pY;
+        pt = VECTOR2D( *pY, -*pX );
     }
-    else if( angle == 2700 )    /* sin = -1, cos = 0 */
+    else if( angle == ANGLE_180 )    /* sin = 0, cos = -1 */
     {
-        tmp = *pX;
-        *pX = -*pY;
-        *pY = tmp;
+        pt = VECTOR2D( -*pX, -*pY );
+    }
+    else if( angle == ANGLE_270 )    /* sin = -1, cos = 0 */
+    {
+        pt = VECTOR2D( -*pY, *pX );
     }
     else
     {
-        double fangle = DECIDEG2RAD( angle );
-        double sinus = sin( fangle );
-        double cosinus = cos( fangle );
+        double sinus = angle.Sin();
+        double cosinus = angle.Cos();
 
-        double fpx = (*pY * sinus ) + (*pX * cosinus );
-        double fpy = (*pY * cosinus ) - (*pX * sinus );
-        *pX = fpx;
-        *pY = fpy;
+        pt.x = ( *pY * sinus ) + ( *pX * cosinus );
+        pt.y = ( *pY * cosinus ) - ( *pX * sinus );
     }
+
+    *pX = pt.x;
+    *pY = pt.y;
 }
 
 

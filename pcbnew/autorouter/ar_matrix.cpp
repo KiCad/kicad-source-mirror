@@ -591,7 +591,7 @@ void AR_MATRIX::traceArc( int ux0, int uy0, int ux1, int uy1, double ArcAngle, i
 
     x0 = ux1 - ux0;
     y0 = uy1 - uy0;
-    StAngle = ArcTangente( uy1 - uy0, ux1 - ux0 );
+    StAngle = EDA_ANGLE( VECTOR2I( ux1, uy1 ) - VECTOR2I( ux0, uy0 ) ).AsTenthsOfADegree();
 
     if( lg < 1 )
         lg = 1;
