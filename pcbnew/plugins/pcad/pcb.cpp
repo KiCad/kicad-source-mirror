@@ -303,7 +303,7 @@ void PCB::DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxString&
                 {
                     str = tNode->GetNodeContent();
                     str.Trim( false );
-                    fp->m_rotation = StrToInt1Units( str );
+                    fp->m_rotation = EDA_ANGLE( StrToInt1Units( str ), TENTHS_OF_A_DEGREE_T );
                 }
 
                 str = FindNodeGetContent( lNode, wxT( "isFlipped" ) );

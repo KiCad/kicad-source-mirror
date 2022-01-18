@@ -71,7 +71,7 @@ void PCB_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultUnits,
     {
         str = lNode->GetNodeContent();
         str.Trim( false );
-        m_rotation = StrToInt1Units( str );
+        m_rotation = EDA_ANGLE( StrToInt1Units( str ), TENTHS_OF_A_DEGREE_T );
     }
 
     aNode->GetAttribute( wxT( "Name" ), &m_name.text );
@@ -122,9 +122,9 @@ void PCB_TEXT::AddToBoard()
     pcbtxt->SetMirrored( m_name.mirror );
 
     if( pcbtxt->IsMirrored() )
-        pcbtxt->SetTextAngle( ANGLE_360 - EDA_ANGLE( m_name.textRotation, TENTHS_OF_A_DEGREE_T ) );
+        pcbtxt->SetTextAngle( ANGLE_360 - m_name.textRotation );
     else
-        pcbtxt->SetTextAngle( EDA_ANGLE( m_name.textRotation, TENTHS_OF_A_DEGREE_T ) );
+        pcbtxt->SetTextAngle( m_name.textRotation );
 
     pcbtxt->SetLayer( m_KiCadLayer );
 }

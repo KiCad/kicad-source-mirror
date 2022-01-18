@@ -45,7 +45,7 @@ PCB_COMPONENT::PCB_COMPONENT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
     m_KiCadLayer      = F_Cu; // It *has* to be somewhere...
     m_positionX       = 0;
     m_positionY       = 0;
-    m_rotation        = 0;
+    m_rotation        = ANGLE_0;
     InitTTextValue( &m_name );
     m_net             = wxEmptyString;
     m_netCode         = 0;

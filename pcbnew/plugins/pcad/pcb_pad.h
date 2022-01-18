@@ -48,10 +48,10 @@ public:
 
     void AddToFootprint( FOOTPRINT* aFootprint ) override
     {
-        AddToFootprint( aFootprint, 0, true );
+        AddToFootprint( aFootprint, ANGLE_0, true );
     }
 
-    void AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncapsulatedPad );
+    void AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation, bool aEncapsulatedPad );
 
     void AddToBoard() override;
 

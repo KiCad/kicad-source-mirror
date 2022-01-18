@@ -495,21 +495,21 @@ wxString PCB_FOOTPRINT::ModuleLayer( int aMirror )
 void PCB_FOOTPRINT::AddToBoard()
 {
     int i;
-    int r;
+    EDA_ANGLE r;
 
     // transform text positions
     CorrectTextPosition( &m_name );
-    RotatePoint( &m_name.correctedPositionX, &m_name.correctedPositionY, (double) -m_rotation );
+    RotatePoint( &m_name.correctedPositionX, &m_name.correctedPositionY, -m_rotation );
 
     CorrectTextPosition( &m_Value );
-    RotatePoint( &m_Value.correctedPositionX, &m_Value.correctedPositionY, (double) -m_rotation );
+    RotatePoint( &m_Value.correctedPositionX, &m_Value.correctedPositionY, -m_rotation );
 
     FOOTPRINT* footprint = new FOOTPRINT( m_board );
     m_board->Add( footprint, ADD_MODE::APPEND );
 
     footprint->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
     footprint->SetLayer( m_Mirror ? B_Cu : F_Cu );
-    footprint->SetOrientation( EDA_ANGLE( m_rotation, TENTHS_OF_A_DEGREE_T ) );
+    footprint->SetOrientation( m_rotation );
     footprint->SetLastEditTime( 0 );
 
     LIB_ID fpID;
@@ -530,7 +530,7 @@ void PCB_FOOTPRINT::AddToBoard()
         SetTextSizeFromStrokeFontHeight( ref_text, m_name.textHeight );
 
     r = m_name.textRotation - m_rotation;
-    ref_text->SetTextAngle( EDA_ANGLE( r, TENTHS_OF_A_DEGREE_T ) );
+    ref_text->SetTextAngle( r );
     ref_text->SetKeepUpright( false );
 
     ref_text->SetItalic( m_name.isItalic );
@@ -558,7 +558,7 @@ void PCB_FOOTPRINT::AddToBoard()
         SetTextSizeFromStrokeFontHeight( val_text, m_Value.textHeight );
 
     r = m_Value.textRotation - m_rotation;
-    val_text->SetTextAngle( EDA_ANGLE( r, TENTHS_OF_A_DEGREE_T ) );
+    val_text->SetTextAngle( r );
     val_text->SetKeepUpright( false );
 
     val_text->SetItalic( m_Value.isItalic );

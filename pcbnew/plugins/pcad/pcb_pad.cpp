@@ -67,7 +67,7 @@ void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     wxString        propValue, str, emsg;
     PCB_PAD_SHAPE*  padShape;
 
-    m_rotation = 0;
+    m_rotation = ANGLE_0;
     lNode = FindNode( aNode, wxT( "padNum" ) );
 
     if( lNode )
@@ -99,7 +99,7 @@ void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     {
         str = lNode->GetNodeContent();
         str.Trim( false );
-        m_rotation = StrToInt1Units( str );
+        m_rotation = EDA_ANGLE( StrToInt1Units( str ), TENTHS_OF_A_DEGREE_T );
     }
 
     lNode = FindNode( aNode, wxT( "netNameRef" ) );
@@ -191,7 +191,8 @@ void PCB_PAD::Flip()
 }
 
 
-void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncapsulatedPad )
+void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation,
+                              bool aEncapsulatedPad )
 {
     PCB_PAD_SHAPE*  padShape;
     wxString        padShapeName = wxT( "Ellipse" );
@@ -288,7 +289,7 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
 
         pad->SetSize( VECTOR2I( width, height ) );
         pad->SetDelta( VECTOR2I( 0, 0 ) );
-        pad->SetOrientation( EDA_ANGLE( m_rotation + aRotation, TENTHS_OF_A_DEGREE_T ) );
+        pad->SetOrientation( m_rotation + aRotation );
 
         pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
         pad->SetOffset( VECTOR2I( 0, 0 ) );
@@ -378,7 +379,7 @@ void PCB_PAD::AddToBoard()
         m_name.text = m_defaultPinDes;
 
         footprint->SetPosition( VECTOR2I( m_positionX, m_positionY ) );
-        AddToFootprint( footprint, 0, true );
+        AddToFootprint( footprint, ANGLE_0, true );
     }
 }
 

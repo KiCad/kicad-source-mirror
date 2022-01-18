@@ -67,7 +67,7 @@ public:
     KIID         m_uuid;
     int          m_positionX;
     int          m_positionY;
-    int          m_rotation;
+    EDA_ANGLE    m_rotation;
     TTEXTVALUE   m_name;             // name has also private positions, rotations and so on....
     wxString     m_net;
     int          m_netCode;

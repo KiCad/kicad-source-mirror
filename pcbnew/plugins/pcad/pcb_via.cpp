@@ -52,7 +52,7 @@ void PCB_VIA::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     wxString        propValue;
     PCB_VIA_SHAPE*  viaShape;
 
-    m_rotation = 0;
+    m_rotation = ANGLE_0;
     lNode = FindNode( aNode, wxT( "viaStyleRef" ) );
 
     if( lNode )

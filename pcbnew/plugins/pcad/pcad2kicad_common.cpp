@@ -345,11 +345,11 @@ void SetTextParameters( XNODE* aNode, TTEXTVALUE* aTextValue,
     {
         str = tNode->GetNodeContent();
         str.Trim( false );
-        aTextValue->textRotation = StrToInt1Units( str );
+        aTextValue->textRotation = EDA_ANGLE( StrToInt1Units( str ), TENTHS_OF_A_DEGREE_T );
     }
     else
     {
-        aTextValue->textRotation = 0;
+        aTextValue->textRotation = ANGLE_0;
     }
 
     str = FindNodeGetContent( aNode, wxT( "isVisible" ) );
@@ -594,7 +594,7 @@ void InitTTextValue( TTEXTVALUE* aTextValue )
     aTextValue->text = wxEmptyString;
     aTextValue->textPositionX   = 0;
     aTextValue->textPositionY   = 0;
-    aTextValue->textRotation    = 0;
+    aTextValue->textRotation    = ANGLE_0;
     aTextValue->textHeight      = 0;
     aTextValue->textstrokeWidth = 0;
     aTextValue->textIsVisible   = 0;

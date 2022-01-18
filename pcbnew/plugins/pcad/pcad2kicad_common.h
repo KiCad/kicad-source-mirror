@@ -56,8 +56,9 @@ enum TTEXT_JUSTIFY
 struct TTEXTVALUE
 {
     wxString      text;
-    int           textPositionX, textPositionY,
-                  textRotation, textHeight, textstrokeWidth;
+    int           textPositionX, textPositionY;
+    int           textHeight, textstrokeWidth;
+    EDA_ANGLE     textRotation;
     int           textIsVisible, mirror, textUnit;
     int           correctedPositionX, correctedPositionY;
     TTEXT_JUSTIFY justify;
