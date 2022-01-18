@@ -143,9 +143,9 @@ VECTOR2I GERBER_DRAW_ITEM::GetABPosition( const VECTOR2I& aXYPosition ) const
     abPos  += m_layerOffset + m_GerberImageFile->m_ImageOffset;
     abPos.x = KiROUND( abPos.x * m_drawScale.x );
     abPos.y = KiROUND( abPos.y * m_drawScale.y );
-    double rotation = m_lyrRotation * 10 + m_GerberImageFile->m_ImageRotation * 10;
+    EDA_ANGLE rotation( m_lyrRotation + m_GerberImageFile->m_ImageRotation, DEGREES_T );
 
-    if( rotation )
+    if( !rotation.IsZero() )
         RotatePoint( abPos, -rotation );
 
     // Negate A axis if mirrored
@@ -171,9 +171,9 @@ VECTOR2I GERBER_DRAW_ITEM::GetXYPosition( const VECTOR2I& aABPosition ) const
     if( !m_mirrorB )
         xyPos.y = -xyPos.y;
 
-    double rotation = m_lyrRotation * 10 + m_GerberImageFile->m_ImageRotation * 10;
+    EDA_ANGLE rotation( m_lyrRotation + m_GerberImageFile->m_ImageRotation, DEGREES_T );
 
-    if( rotation )
+    if( !rotation.IsZero() )
         RotatePoint( xyPos, rotation );
 
     xyPos.x = KiROUND( xyPos.x / m_drawScale.x );

@@ -354,7 +354,7 @@ void D_CODE::ConvertShapeToPolygon()
         for( ; ii <= SEGS_CNT / 2; ii++ )
         {
             currpos = initialpos;
-            RotatePoint( currpos, ii * 3600.0 / SEGS_CNT );
+            RotatePoint( currpos, ANGLE_360 * ii / SEGS_CNT );
             currpos.x += delta;
             m_Polygon.Append( VECTOR2I( currpos ) );
         }
@@ -363,12 +363,12 @@ void D_CODE::ConvertShapeToPolygon()
         for( ii = SEGS_CNT / 2; ii <= SEGS_CNT; ii++ )
         {
             currpos = initialpos;
-            RotatePoint( currpos, ii * 3600.0 / SEGS_CNT );
+            RotatePoint( currpos, ANGLE_360 * ii / SEGS_CNT );
             currpos.x -= delta;
-            m_Polygon.Append( VECTOR2I( currpos ) );
+            m_Polygon.Append( currpos );
         }
 
-        m_Polygon.Append( VECTOR2I( initialpos ) );      // close outline
+        m_Polygon.Append( initialpos );      // close outline
 
         if( m_Size.y > m_Size.x )                   // vertical oval, rotate polygon.
             m_Polygon.Rotate( -M_PI / 2 );
@@ -393,8 +393,8 @@ void D_CODE::ConvertShapeToPolygon()
         for( int ii = 0; ii < m_EdgesCount; ii++ )
         {
             currpos = initialpos;
-            RotatePoint( currpos, ii * 3600.0 / m_EdgesCount );
-            m_Polygon.Append( VECTOR2I( currpos ) );
+            RotatePoint( currpos, ANGLE_360 * ii / m_EdgesCount );
+            m_Polygon.Append( currpos );
         }
 
         addHoleToPolygon( &m_Polygon, m_DrillShape, m_Drill, initialpos );

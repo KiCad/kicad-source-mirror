@@ -117,7 +117,6 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
 
     VECTOR2I curPos = aShapePos;
     D_CODE* tool   = aParent->GetDcodeDescr();
-    double rotation;
 
     switch( primitive_id )
     {
@@ -134,9 +133,9 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         // shape rotation (if any):
         if( params.size() >= 5 )
         {
-            rotation = params[4].GetValue( tool ) * 10.0;
+            EDA_ANGLE rotation( params[4].GetValue( tool ), DEGREES_T );
 
-            if( rotation != 0)
+            if( !rotation.IsZero() )
             {
                 for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
                     RotatePoint( polybuffer[ii], -rotation );
@@ -170,9 +169,9 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = params[6].GetValue( tool ) * 10.0;
+        EDA_ANGLE rotation( params[6].GetValue( tool ), DEGREES_T );
 
-        if( rotation != 0)
+        if( !rotation.IsZero() )
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
                 RotatePoint( polybuffer[ii], -rotation );
@@ -202,9 +201,9 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = params[5].GetValue( tool ) * 10.0;
+        EDA_ANGLE rotation( params[5].GetValue( tool ), DEGREES_T );
 
-        if( rotation != 0 )
+        if( !rotation.IsZero() )
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
                 RotatePoint( polybuffer[ii], -rotation );
@@ -231,8 +230,9 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // shape rotation:
-        rotation = params[5].GetValue( tool ) * 10.0;
-        if( rotation != 0)
+        EDA_ANGLE rotation( params[5].GetValue( tool ), DEGREES_T );
+
+        if( !rotation.IsZero() )
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
                 RotatePoint( polybuffer[ii], -rotation );
@@ -264,14 +264,14 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         ConvertShapeToPolygon( aParent, subshape_poly );
 
         // shape rotation:
-        rotation = params[5].GetValue( tool ) * 10.0;
+        EDA_ANGLE rotation( params[5].GetValue( tool ), DEGREES_T );
 
         // Because a thermal shape has 4 identical sub-shapes, only one is created in subshape_poly.
         // We must draw 4 sub-shapes rotated by 90 deg
         for( int ii = 0; ii < 4; ii++ )
         {
             polybuffer = subshape_poly;
-            double sub_rotation = rotation + 900 * ii;
+            EDA_ANGLE sub_rotation = rotation + ANGLE_90 * ii;
 
             for( unsigned jj = 0; jj < polybuffer.size(); jj++ )
                 RotatePoint( polybuffer[jj], -sub_rotation );
@@ -337,7 +337,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         // Draw the cross:
         ConvertShapeToPolygon( aParent, polybuffer );
 
-        rotation = params[8].GetValue( tool ) * 10.0;
+        EDA_ANGLE rotation( params[8].GetValue( tool ), DEGREES_T );
 
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
@@ -375,9 +375,9 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         int numCorners = (int) params[1].GetValue( tool );
 
         // the shape rotation is the last param of list, after corners
-        int last_prm = params.size() - 1;
-        rotation  = params[last_prm].GetValue( tool ) * 10.0;
-        VECTOR2I pos;
+        int       last_prm = params.size() - 1;
+        EDA_ANGLE rotation( params[last_prm].GetValue( tool ), DEGREES_T );
+        VECTOR2I  pos;
 
         // Read points.
         // Note: numCorners is the polygon corner count, following the first corner
@@ -418,6 +418,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
     }
 
     case AMP_POLYGON:
+    {
         /* Polygon, Primitive Code 5
          * A polygon primitive is a regular polygon defined by the number of vertices n, the
          * center point and the diameter of the circumscribed circle
@@ -433,7 +434,8 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         ConvertShapeToPolygon( aParent, polybuffer );
 
         // rotate polygon and move it to the actual position
-        rotation  = params[5].GetValue( tool ) * 10.0;
+        EDA_ANGLE rotation( params[5].GetValue( tool ), DEGREES_T );
+
         for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
         {
             RotatePoint( polybuffer[ii], -rotation );
@@ -444,6 +446,7 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent, SHAPE_POLY_S
         TO_POLY_SHAPE;
 
         break;
+    }
 
     case AMP_EOF:
         // not yet supported, waiting for you.
@@ -478,12 +481,12 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
         if( radius <= 0 )
             break;
 
-        VECTOR2I center =
-                mapPt( params[2].GetValue( tool ), params[3].GetValue( tool ), m_GerbMetric );
+        VECTOR2I  center = mapPt( params[2].GetValue( tool ), params[3].GetValue( tool ),
+                                  m_GerbMetric );
         VECTOR2I  corner;
-        const int delta = 3600 / seg_per_circle;    // rot angle in 0.1 degree
+        EDA_ANGLE delta = ANGLE_360 / seg_per_circle;    // rot angle in 0.1 degree
 
-        for( int angle = 0; angle < 3600; angle += delta )
+        for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += delta )
         {
             corner.x   = radius;
             corner.y   = 0;
@@ -581,17 +584,17 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
         outerRadius = std::max( 1, outerRadius );
         innerRadius = std::max( 1, innerRadius );
 
-        int halfthickness  = scaletoIU( params[4].GetValue( tool ), m_GerbMetric ) / 2;
-        double angle_start = RAD2DECIDEG( asin( (double) halfthickness / innerRadius ) );
+        int       halfthickness  = scaletoIU( params[4].GetValue( tool ), m_GerbMetric ) / 2;
+        EDA_ANGLE angle_start( asin( (double) halfthickness / innerRadius ), RADIANS_T );
 
         // Draw shape in the first quadrant (X and Y > 0)
-        VECTOR2I pos, startpos;
+        VECTOR2I  pos, startpos;
 
         // Inner arc
         startpos.x = innerRadius;
-        double angle_end = 900 - angle_start;
+        EDA_ANGLE angle_end = ANGLE_90 - angle_start;
 
-        for( double angle = angle_start; angle < angle_end; angle += 100 )
+        for( EDA_ANGLE angle = angle_start; angle < angle_end; angle += EDA_ANGLE( 10, DEGREES_T ) )
         {
             pos = startpos;
             RotatePoint( pos, angle );
@@ -606,11 +609,11 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
         // outer arc
         startpos.x  = outerRadius;
         startpos.y  = 0;
-        angle_start = RAD2DECIDEG( asin( (double) halfthickness / outerRadius ) );
-        angle_end   = 900 - angle_start;
+        angle_start = EDA_ANGLE( asin( (double) halfthickness / outerRadius ), RADIANS_T );
+        angle_end   = ANGLE_90 - angle_start;
 
         // First point, near Y axis, outer arc
-        for( double angle = angle_end; angle > angle_start; angle -= 100 )
+        for( EDA_ANGLE angle = angle_end; angle > angle_start; angle -= EDA_ANGLE( 10, DEGREES_T ) )
         {
             pos = startpos;
             RotatePoint( pos, angle );
@@ -650,7 +653,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
             for( int ii = 0; ii < 4; ii++ )
             {
                 pos = aBuffer[ii];
-                RotatePoint( pos, jj*900 );
+                RotatePoint( pos, ANGLE_90 * jj );
                 aBuffer.push_back( pos );
             }
         }
@@ -677,7 +680,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
         for( int ii = 0; ii <= vertexcount; ii++ )
         {
             VECTOR2I pos( radius, 0 );
-            RotatePoint( pos, ii * 3600 / vertexcount );
+            RotatePoint( pos, ANGLE_360 * ii / vertexcount );
             aBuffer.push_back( pos );
         }
 

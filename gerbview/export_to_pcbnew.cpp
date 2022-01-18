@@ -367,7 +367,7 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( const GERBER_DRAW_ITEM* aGb
     {
         seg_start = curr_start;
         VECTOR2I curr_end = start;
-        RotatePoint( curr_end, aGbrItem->m_ArcCentre, -RAD2DECIDEG( DELTA_ANGLE * ii ) );
+        RotatePoint( curr_end, aGbrItem->m_ArcCentre, -EDA_ANGLE( DELTA_ANGLE, RADIANS_T ) * ii );
         seg_end = curr_end;
 
         // Reverse Y axis:

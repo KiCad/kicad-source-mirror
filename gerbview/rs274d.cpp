@@ -327,7 +327,7 @@ void fillArcGBRITEM( GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, const VECTOR2I
  */
 static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const VECTOR2I& aStart, const VECTOR2I& aEnd,
                          const VECTOR2I& rel_center, bool aClockwise, bool aMultiquadrant,
-                          bool aLayerNegative )
+                         bool aLayerNegative )
 {
     /* in order to calculate arc parameters, we use fillArcGBRITEM
      * so we muse create a dummy track and use its geometric parameters
@@ -349,12 +349,11 @@ static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const VECTOR2I& aStart, con
     VECTOR2I end = dummyGbrItem.m_End - center;
 
     /* Calculate angle arc
-     * angles are in 0.1 deg
      * angle is trigonometrical (counter-clockwise),
      * and axis is the X,Y gerber coordinates
      */
-    double start_angle = ArcTangente( start.y, start.x );
-    double end_angle   = ArcTangente( end.y, end.x );
+    EDA_ANGLE start_angle( start );
+    EDA_ANGLE end_angle( end );
 
     // dummyTrack has right geometric parameters, but
     // fillArcGBRITEM calculates arc parameters for a draw function that expects
@@ -362,13 +361,13 @@ static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const VECTOR2I& aStart, con
     // Due to the fact atan2 returns angles between -180 to + 180 degrees,
     // this is not always the case ( a modulo 360.0 degrees can be lost )
     if( start_angle > end_angle )
-        end_angle += 3600;
+        end_angle += ANGLE_360;
 
-    double arc_angle = start_angle - end_angle;
+    EDA_ANGLE arc_angle = start_angle - end_angle;
 
     // Approximate arc by 36 segments per 360 degree
-    const int increment_angle = 3600 / 36;
-    int count = std::abs( arc_angle / increment_angle );
+    EDA_ANGLE increment_angle = ANGLE_360 / 36;
+    int count = std::abs( arc_angle.AsDegrees() / increment_angle.AsDegrees() );
 
     if( aGbrItem->m_Polygon.OutlineCount() == 0 )
         aGbrItem->m_Polygon.NewOutline();
@@ -378,13 +377,13 @@ static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const VECTOR2I& aStart, con
     // and we must always create a polygon from start to end.
     for( int ii = 0; ii <= count; ii++ )
     {
-        double rot;
-        VECTOR2I end_arc = start;
+        EDA_ANGLE rot;
+        VECTOR2I  end_arc = start;
 
         if( aClockwise )
-            rot = ii * increment_angle;              // rot is in 0.1 deg
+            rot = increment_angle * ii;
         else
-            rot = ( count - ii ) * increment_angle;  // rot is in 0.1 deg
+            rot = increment_angle * ( count - ii );
 
         if( ii < count )
             RotatePoint( end_arc, -rot );
