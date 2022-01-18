@@ -150,13 +150,13 @@ private:
 
     //Helper Functions for loading symbols in schematic
     SCH_SYMBOL* loadSchematicSymbol( const SYMBOL& aCadstarSymbol, const LIB_SYMBOL& aKiCadPart,
-            double& aComponentOrientationDeciDeg );
+                                     EDA_ANGLE& aComponentOrientation );
 
     void loadSymbolFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
-                                   double aComponentOrientationDeciDeg, bool aIsMirrored,
+                                   const EDA_ANGLE& aComponentOrientation, bool aIsMirrored,
                                    SCH_FIELD* aKiCadField );
 
-    int getComponentOrientation( double aOrientAngleDeciDeg, double& aReturnedOrientationDeciDeg );
+    int getComponentOrientation( const EDA_ANGLE& aOrientAngle, EDA_ANGLE& aReturnedOrientation );
 
     //Helper functions for loading nets
     POINT getLocationOfNetElement( const NET_SCH& aNet, const NETELEMENT_ID& aNetElementID );
@@ -164,24 +164,27 @@ private:
     wxString getNetName( const NET_SCH& aNet );
 
     //Helper functions for loading figures / graphical items
-    void loadGraphicStaightSegment(
-            const VECTOR2I& aStartPoint, const VECTOR2I& aEndPoint,
-            const LINECODE_ID& aCadstarLineCodeID, const LAYER_ID& aCadstarSheetID,
-            const SCH_LAYER_ID& aKiCadSchLayerID, const VECTOR2I& aMoveVector = { 0, 0 },
-            const double& aRotationAngleDeciDeg = 0.0, const double& aScalingFactor = 1.0,
-            const VECTOR2I& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
+    void loadGraphicStaightSegment( const VECTOR2I& aStartPoint, const VECTOR2I& aEndPoint,
+                                    const LINECODE_ID& aCadstarLineCodeID,
+                                    const LAYER_ID& aCadstarSheetID,
+                                    const SCH_LAYER_ID& aKiCadSchLayerID,
+                                    const VECTOR2I& aMoveVector = { 0, 0 },
+                                    const EDA_ANGLE& aRotation = ANGLE_0,
+                                    const double& aScalingFactor = 1.0,
+                                    const VECTOR2I& aTransformCentre = { 0, 0 },
+                                    const bool& aMirrorInvert = false );
 
     void loadShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
                             LINECODE_ID aCadstarLineCodeID, LAYER_ID aCadstarSheetID,
                             SCH_LAYER_ID aKiCadSchLayerID, const VECTOR2I& aMoveVector = { 0, 0 },
-                            const double&   aRotationAngleDeciDeg = 0.0,
-                            const double&   aScalingFactor = 1.0,
-                            const VECTOR2I& aTransformCentre = { 0, 0 },
-                            const bool&     aMirrorInvert = false );
+                            const EDA_ANGLE& aRotation = ANGLE_0,
+                            const double&    aScalingFactor = 1.0,
+                            const VECTOR2I&  aTransformCentre = { 0, 0 },
+                            const bool&      aMirrorInvert = false );
 
     void loadFigure( const FIGURE& aCadstarFigure, const LAYER_ID& aCadstarSheetIDOverride,
                      SCH_LAYER_ID aKiCadSchLayerID, const VECTOR2I& aMoveVector = { 0, 0 },
-                     const double& aRotationAngleDeciDeg = 0.0, const double& aScalingFactor = 1.0,
+                     const EDA_ANGLE& aRotation = ANGLE_0, const double& aScalingFactor = 1.0,
                      const VECTOR2I& aTransformCentre = { 0, 0 },
                      const bool&     aMirrorInvert = false );
 
@@ -216,7 +219,7 @@ private:
 
     int              getKiCadUnitNumberFromGate( const GATE_ID& aCadstarGateID );
     LABEL_SPIN_STYLE getSpinStyle( const long long& aCadstarOrientation, bool aMirror );
-    LABEL_SPIN_STYLE getSpinStyleDeciDeg( const double& aOrientationDeciDeg );
+    LABEL_SPIN_STYLE getSpinStyle( const EDA_ANGLE& aOrientation );
     ALIGNMENT        mirrorX( const ALIGNMENT& aCadstarAlignment );
     ALIGNMENT        rotate180( const ALIGNMENT& aCadstarAlignment );
 
@@ -234,10 +237,10 @@ private:
     wxPoint getKiCadLibraryPoint( const wxPoint& aCadstarPoint, const wxPoint& aCadstarCentre );
 
     VECTOR2I applyTransform( const VECTOR2I& aPoint, const VECTOR2I& aMoveVector = { 0, 0 },
-                            const double&   aRotationAngleDeciDeg = 0.0,
-                            const double&   aScalingFactor = 1.0,
-                            const VECTOR2I& aTransformCentre = { 0, 0 },
-                            const bool&     aMirrorInvert = false );
+                             const EDA_ANGLE& aRotation = ANGLE_0,
+                             const double&    aScalingFactor = 1.0,
+                             const VECTOR2I&  aTransformCentre = { 0, 0 },
+                             const bool&      aMirrorInvert = false );
 
     int getKiCadLength( long long aCadstarLength )
     {
@@ -252,41 +255,34 @@ private:
         return ( aCadstarLength / KiCadUnitDivider ) + offset;
     }
 
-    /**
-     * @brief
-     * @param aCadstarAngle
-     * @return
-    */
-    double getAngleTenthDegree( const long long& aCadstarAngle )
+    EDA_ANGLE getAngle( const long long& aCadstarAngle )
     {
         // CADSTAR v6 (which outputted Schematic Format Version 8) and earlier used 1/10 degree
         // as the unit for angles/orientations. It is assumed that CADSTAR version 7 (i.e. Schematic
         // Format Version 9 and later) is the version that introduced 1/1000 degree for angles.
         if( Header.Format.Version > 8 )
         {
-            return (double) aCadstarAngle / 100.0;
+            return EDA_ANGLE( (double) aCadstarAngle / 1000.0, DEGREES_T );
         }
         else
         {
-            return (double) aCadstarAngle;
+            return EDA_ANGLE( (double) aCadstarAngle, TENTHS_OF_A_DEGREE_T );
         }
     }
 
-    /**
-     * @brief
-     * @param aCadstarAngle
-     * @return
-     */
-    double getAngleDegrees( const long long& aCadstarAngle )
+    long long getCadstarAngle( const EDA_ANGLE& aAngle )
     {
-        return getAngleTenthDegree( aCadstarAngle ) / 10.0;
-    }
-
-
-    long long getCadstarAngle( const double& aAngleTenthDegree )
-    {
-        return KiROUND( ( aAngleTenthDegree / getAngleTenthDegree( aAngleTenthDegree ) )
-                        * aAngleTenthDegree );
+        // CADSTAR v6 (which outputted Schematic Format Version 8) and earlier used 1/10 degree
+        // as the unit for angles/orientations. It is assumed that CADSTAR version 7 (i.e. Schematic
+        // Format Version 9 and later) is the version that introduced 1/1000 degree for angles.
+        if( Header.Format.Version > 8 )
+        {
+            return KiROUND( aAngle.AsDegrees() * 1000.0 );
+        }
+        else
+        {
+            return aAngle.AsTenthsOfADegree();
+        }
     }
 
     /**

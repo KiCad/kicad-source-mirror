@@ -469,8 +469,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
             LIB_SYMBOL* scaledPart = getScaledLibPart( kiPart, sym.ScaleRatioNumerator,
                                                        sym.ScaleRatioDenominator );
 
-            double      symOrientDeciDeg = 0.0;
-            SCH_SYMBOL* symbol = loadSchematicSymbol( sym, *scaledPart, symOrientDeciDeg );
+            EDA_ANGLE   symOrient = ANGLE_0;
+            SCH_SYMBOL* symbol = loadSchematicSymbol( sym, *scaledPart, symOrient );
 
             delete scaledPart;
 
@@ -485,8 +485,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
             sym.ComponentRef.Designator.Replace( wxT( " " ), wxT( "_" ) );
 
             refField->SetText( sym.ComponentRef.Designator );
-            loadSymbolFieldAttribute( sym.ComponentRef.AttrLoc, symOrientDeciDeg, sym.Mirror,
-                                      refField );
+            loadSymbolFieldAttribute( sym.ComponentRef.AttrLoc, symOrient, sym.Mirror, refField );
 
             if( sym.HasPartRef )
             {
@@ -495,8 +494,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 if( !partField )
                 {
                     int fieldID = symbol->GetFieldCount();
-                    partField = symbol->AddField(
-                            SCH_FIELD( VECTOR2I(), fieldID, symbol, PartNameFieldName ) );
+                    partField = symbol->AddField( SCH_FIELD( VECTOR2I(), fieldID, symbol,
+                                                             PartNameFieldName ) );
                 }
 
                 wxASSERT( partField->GetName() == PartNameFieldName );
@@ -507,8 +506,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 partname.Replace( wxT( "\t" ), wxT( "\\t" ) );
                 partField->SetText( partname );
 
-                loadSymbolFieldAttribute( sym.PartRef.AttrLoc, symOrientDeciDeg, sym.Mirror,
-                                          partField );
+                loadSymbolFieldAttribute( sym.PartRef.AttrLoc, symOrient, sym.Mirror, partField );
 
                 partField->SetVisible( SymbolPartNameColor.IsVisible );
             }
@@ -536,8 +534,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     attrVal.Value.Replace( wxT( "\t" ), wxT( "\\t" ) );
                     attrField->SetText( attrVal.Value );
 
-                    loadSymbolFieldAttribute( attrVal.AttributeLocation, symOrientDeciDeg,
-                                              sym.Mirror, attrField );
+                    loadSymbolFieldAttribute( attrVal.AttributeLocation, symOrient, sym.Mirror,
+                                              attrField );
                     attrField->SetVisible( isAttributeVisible( attrVal.AttributeID ) );
                 }
             }
@@ -631,7 +629,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 LIB_SYMBOL* scaledPart = getScaledLibPart( kiPart, sym.ScaleRatioNumerator,
                                                            sym.ScaleRatioDenominator );
 
-                double returnedOrient = 0.0;
+                EDA_ANGLE   returnedOrient = ANGLE_0;
                 SCH_SYMBOL* symbol = loadSchematicSymbol( sym, *scaledPart, returnedOrient );
                 m_powerSymMap.insert( { sym.ID, symbol } );
 
@@ -642,12 +640,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 // There should only be one pin and we'll use that to set the position
                 TERMINAL& symbolTerminal = libSymDef.Terminals.begin()->second;
                 VECTOR2I  terminalPosOffset = symbolTerminal.Position - libSymDef.Origin;
-                double    rotateDeciDegree = getAngleTenthDegree( sym.OrientAngle );
+                EDA_ANGLE rotate = getAngle( sym.OrientAngle );
 
                 if( sym.Mirror )
-                    rotateDeciDegree += 1800.0;
+                    rotate += ANGLE_180;
 
-                RotatePoint( terminalPosOffset, -rotateDeciDegree );
+                RotatePoint( terminalPosOffset, -rotate );
 
                 SCH_GLOBALLABEL* netLabel = new SCH_GLOBALLABEL;
                 netLabel->SetPosition( getKiCadPoint( (VECTOR2I)sym.Origin + terminalPosOffset ) );
@@ -1064,9 +1062,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             }
 
             auto fixNetLabelsAndSheetPins =
-                    [&]( double aWireAngleDeciDeg, NETELEMENT_ID& aNetEleID )
+                    [&]( const EDA_ANGLE& aWireAngle, NETELEMENT_ID& aNetEleID )
                     {
-                        LABEL_SPIN_STYLE spin = getSpinStyleDeciDeg( aWireAngleDeciDeg );
+                        LABEL_SPIN_STYLE spin = getSpinStyle( aWireAngle );
 
                         if( netlabels.find( aNetEleID ) != netlabels.end() )
                             netlabels.at( aNetEleID )->SetLabelSpinStyle( spin.MirrorY() );
@@ -1093,7 +1091,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                     secondPt = false;
 
                     EDA_ANGLE wireAngle( last - pt );
-                    fixNetLabelsAndSheetPins( wireAngle.AsTenthsOfADegree(), conn.StartNode );
+                    fixNetLabelsAndSheetPins( wireAngle, conn.StartNode );
                 }
 
                 wire = new SCH_LINE();
@@ -1114,7 +1112,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             if( wire )
             {
                 EDA_ANGLE wireAngle( wire->GetEndPoint() - wire->GetStartPoint() );
-                fixNetLabelsAndSheetPins( wireAngle.AsTenthsOfADegree(), conn.EndNode );
+                fixNetLabelsAndSheetPins( wireAngle, conn.EndNode );
             }
         }
 
@@ -1136,8 +1134,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                 label->SetPosition( getKiCadPoint( junc.Location ) );
                 label->SetVisible( true );
 
-                double labelAngleDeciDeg = getAngleTenthDegree( junc.NetLabel.OrientAngle );
-                LABEL_SPIN_STYLE spin = getSpinStyleDeciDeg( labelAngleDeciDeg );
+                EDA_ANGLE        labelAngle = getAngle( junc.NetLabel.OrientAngle );
+                LABEL_SPIN_STYLE spin = getSpinStyle( labelAngle );
                 label->SetLabelSpinStyle( spin );
 
                 m_sheetMap.at( junc.LayerID )->GetScreen()->Append( label );
@@ -1190,7 +1188,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadDocumentationSymbols()
 
         SYMDEF_SCM docSymDef  = Library.SymbolDefinitions.at( docSym.SymdefID );
         VECTOR2I   moveVector = getKiCadPoint( docSym.Origin ) - getKiCadPoint( docSymDef.Origin );
-        double     rotationAngle     = getAngleTenthDegree( docSym.OrientAngle );
+        EDA_ANGLE  rotationAngle     = getAngle( docSym.OrientAngle );
         double     scalingFactor     = (double) docSym.ScaleRatioNumerator
                                         / (double) docSym.ScaleRatioDenominator;
         VECTOR2I   centreOfTransform = getKiCadPoint( docSymDef.Origin );
@@ -1700,7 +1698,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyToLibraryFieldAttribute(
 
 SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCadstarSymbol,
                                                              const LIB_SYMBOL& aKiCadPart,
-                                                             double& aComponentOrientationDeciDeg )
+                                                             EDA_ANGLE& aComponentOrientation )
 {
     LIB_ID  libId( m_libraryFileName.GetName(), aKiCadPart.GetName() );
     int     unit = getKiCadUnitNumberFromGate( aCadstarSymbol.GateID );
@@ -1718,18 +1716,20 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
 
     symbol->SetPosition( getKiCadPoint( aCadstarSymbol.Origin ) );
 
-    double compAngleDeciDeg = getAngleTenthDegree( aCadstarSymbol.OrientAngle );
-    int    compOrientation = 0;
+    EDA_ANGLE compAngle = getAngle( aCadstarSymbol.OrientAngle );
+    int       compOrientation = 0;
 
     if( aCadstarSymbol.Mirror )
     {
-        compAngleDeciDeg = -compAngleDeciDeg;
+        compAngle = -compAngle;
         compOrientation += SYMBOL_ORIENTATION_T::SYM_MIRROR_Y;
     }
 
-    compOrientation += getComponentOrientation( compAngleDeciDeg, aComponentOrientationDeciDeg );
+    compOrientation += getComponentOrientation( compAngle, aComponentOrientation );
+    EDA_ANGLE test1( compAngle );
+    EDA_ANGLE test2( aComponentOrientation );
 
-    if( NormalizeAngle180( compAngleDeciDeg ) != NormalizeAngle180( aComponentOrientationDeciDeg ) )
+    if( test1.Normalize180() != test2.Normalize180() )
     {
         m_reporter->Report( wxString::Format( _( "Symbol '%s' is rotated by an angle of %.1f "
                                                  "degrees in the original CADSTAR design but "
@@ -1737,7 +1737,7 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
                                                  "of 90 degrees. The connecting wires will need "
                                                  "manual fixing." ),
                                               aCadstarSymbol.ComponentRef.Designator,
-                                              compAngleDeciDeg / 10.0 ),
+                                              compAngle.AsDegrees() ),
                             RPT_SEVERITY_ERROR );
     }
 
@@ -1770,7 +1770,7 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
         {
             wxString pinNum = term.second;
             pinNumToLibPinMap.insert( { pinNum,
-                    symbol->GetLibSymbolRef()->GetPin( term.second ) } );
+                                        symbol->GetLibSymbolRef()->GetPin( term.second ) } );
         }
 
         auto replacePinNumber =
@@ -1809,7 +1809,7 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
 
 
 void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
-                                                           double aComponentOrientationDeciDeg,
+                                                           const EDA_ANGLE& aComponentOrientation,
                                                            bool aIsMirrored,
                                                            SCH_FIELD* aKiCadField )
 {
@@ -1817,16 +1817,14 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolFieldAttribute( const ATTRIBUTE_LOCAT
     aKiCadField->SetVisible( true );
 
     ALIGNMENT alignment = aCadstarAttrLoc.Alignment;
-
-    double textAngle = getAngleTenthDegree( aCadstarAttrLoc.OrientAngle );
-    long long cadstarAngle = getCadstarAngle( textAngle - aComponentOrientationDeciDeg );
+    EDA_ANGLE textAngle = getAngle( aCadstarAttrLoc.OrientAngle );
 
     if( aIsMirrored )
     {
         // We need to change the aligment when the symbol is mirrored based on the text orientation
         // To ensure the anchor point is the same in KiCad.
 
-        int textIsVertical = KiROUND( textAngle / 900.0 ) % 2;
+        int textIsVertical = KiROUND( textAngle.AsDegrees() / 90.0 ) % 2;
 
         if( textIsVertical )
             alignment = rotate180( alignment );
@@ -1838,37 +1836,38 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolFieldAttribute( const ATTRIBUTE_LOCAT
                        aCadstarAttrLoc.TextCodeID,
                        alignment,
                        aCadstarAttrLoc.Justification,
-                       cadstarAngle,
+                       getCadstarAngle( textAngle - aComponentOrientation ),
                        aCadstarAttrLoc.Mirror );
 }
 
 
-int CADSTAR_SCH_ARCHIVE_LOADER::getComponentOrientation( double  aOrientAngleDeciDeg,
-                                                         double& aReturnedOrientationDeciDeg )
+int CADSTAR_SCH_ARCHIVE_LOADER::getComponentOrientation( const EDA_ANGLE& aOrientAngle,
+                                                         EDA_ANGLE& aReturnedOrientation )
 {
     int compOrientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_0;
 
-    int oDeg = (int) NormalizeAngle180( aOrientAngleDeciDeg );
+    EDA_ANGLE oDeg = aOrientAngle;
+    oDeg.Normalize180();
 
-    if( oDeg >= -450 && oDeg <= 450 )
+    if( oDeg >= -ANGLE_45 && oDeg <= ANGLE_45 )
     {
-        compOrientation             = SYMBOL_ORIENTATION_T::SYM_ORIENT_0;
-        aReturnedOrientationDeciDeg = 0.0;
+        compOrientation      = SYMBOL_ORIENTATION_T::SYM_ORIENT_0;
+        aReturnedOrientation = ANGLE_0;
     }
-    else if( oDeg >= 450 && oDeg <= 1350 )
+    else if( oDeg >= ANGLE_45 && oDeg <= ANGLE_135 )
     {
-        compOrientation             = SYMBOL_ORIENTATION_T::SYM_ORIENT_90;
-        aReturnedOrientationDeciDeg = 900.0;
+        compOrientation      = SYMBOL_ORIENTATION_T::SYM_ORIENT_90;
+        aReturnedOrientation = ANGLE_90;
     }
-    else if( oDeg >= 1350 || oDeg <= -1350 )
+    else if( oDeg >= ANGLE_135 || oDeg <= -ANGLE_135 )
     {
-        compOrientation             = SYMBOL_ORIENTATION_T::SYM_ORIENT_180;
-        aReturnedOrientationDeciDeg = 1800.0;
+        compOrientation      = SYMBOL_ORIENTATION_T::SYM_ORIENT_180;
+        aReturnedOrientation = ANGLE_180;
     }
     else
     {
-        compOrientation             = SYMBOL_ORIENTATION_T::SYM_ORIENT_270;
-        aReturnedOrientationDeciDeg = 2700.0;
+        compOrientation      = SYMBOL_ORIENTATION_T::SYM_ORIENT_270;
+        aReturnedOrientation = ANGLE_270;
     }
 
     return compOrientation;
@@ -1927,17 +1926,16 @@ CADSTAR_SCH_ARCHIVE_LOADER::getLocationOfNetElement( const NET_SCH&       aNet,
         pinOffset.x = ( pinOffset.x * sym.ScaleRatioNumerator ) / sym.ScaleRatioDenominator;
         pinOffset.y = ( pinOffset.y * sym.ScaleRatioNumerator ) / sym.ScaleRatioDenominator;
 
-        VECTOR2I pinPosition = symbolOrigin + pinOffset;
-
-        double compAngleDeciDeg = getAngleTenthDegree( sym.OrientAngle );
+        VECTOR2I  pinPosition = symbolOrigin + pinOffset;
+        EDA_ANGLE compAngle = getAngle( sym.OrientAngle );
 
         if( sym.Mirror )
             pinPosition.x = ( 2 * symbolOrigin.x ) - pinPosition.x;
 
-        double adjustedOrientationDecideg;
-        getComponentOrientation( compAngleDeciDeg, adjustedOrientationDecideg );
+        EDA_ANGLE adjustedOrientation;
+        getComponentOrientation( compAngle, adjustedOrientation );
 
-        RotatePoint( pinPosition, symbolOrigin, -adjustedOrientationDecideg );
+        RotatePoint( pinPosition, symbolOrigin, -adjustedOrientation );
 
         POINT retval;
         retval.x = pinPosition.x;
@@ -1992,12 +1990,16 @@ wxString CADSTAR_SCH_ARCHIVE_LOADER::getNetName( const NET_SCH& aNet )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::loadGraphicStaightSegment(
-        const VECTOR2I& aStartPoint, const VECTOR2I& aEndPoint,
-        const LINECODE_ID& aCadstarLineCodeID, const LAYER_ID& aCadstarSheetID,
-        const SCH_LAYER_ID& aKiCadSchLayerID, const VECTOR2I& aMoveVector,
-        const double& aRotationAngleDeciDeg, const double& aScalingFactor,
-        const VECTOR2I& aTransformCentre, const bool& aMirrorInvert )
+void CADSTAR_SCH_ARCHIVE_LOADER::loadGraphicStaightSegment( const VECTOR2I& aStartPoint,
+                                                            const VECTOR2I& aEndPoint,
+                                                            const LINECODE_ID& aCadstarLineCodeID,
+                                                            const LAYER_ID& aCadstarSheetID,
+                                                            const SCH_LAYER_ID& aKiCadSchLayerID,
+                                                            const VECTOR2I& aMoveVector,
+                                                            const EDA_ANGLE& aRotation,
+                                                            const double& aScalingFactor,
+                                                            const VECTOR2I& aTransformCentre,
+                                                            const bool& aMirrorInvert )
 {
     SCH_LINE* segment = new SCH_LINE();
 
@@ -2006,10 +2008,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadGraphicStaightSegment(
     segment->SetLineStyle( getLineStyle( aCadstarLineCodeID ) );
 
     //Apply transforms
-    VECTOR2I startPoint = applyTransform( aStartPoint, aMoveVector, aRotationAngleDeciDeg,
-                                         aScalingFactor, aTransformCentre, aMirrorInvert );
-    VECTOR2I endPoint = applyTransform( aEndPoint, aMoveVector, aRotationAngleDeciDeg,
-                                       aScalingFactor, aTransformCentre, aMirrorInvert );
+    VECTOR2I startPoint = applyTransform( aStartPoint, aMoveVector, aRotation, aScalingFactor,
+                                          aTransformCentre, aMirrorInvert );
+    VECTOR2I endPoint = applyTransform( aEndPoint, aMoveVector, aRotation, aScalingFactor,
+                                        aTransformCentre, aMirrorInvert );
 
     segment->SetStartPoint( startPoint );
     segment->SetEndPoint( endPoint );
@@ -2018,11 +2020,15 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadGraphicStaightSegment(
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices(
-        const std::vector<VERTEX>& aCadstarVertices, LINECODE_ID aCadstarLineCodeID,
-        LAYER_ID aCadstarSheetID, SCH_LAYER_ID aKiCadSchLayerID, const VECTOR2I& aMoveVector,
-        const double& aRotationAngleDeciDeg, const double& aScalingFactor,
-        const VECTOR2I& aTransformCentre, const bool& aMirrorInvert )
+void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
+                                                    LINECODE_ID aCadstarLineCodeID,
+                                                    LAYER_ID aCadstarSheetID,
+                                                    SCH_LAYER_ID aKiCadSchLayerID,
+                                                    const VECTOR2I& aMoveVector,
+                                                    const EDA_ANGLE& aRotation,
+                                                    const double& aScalingFactor,
+                                                    const VECTOR2I& aTransformCentre,
+                                                    const bool& aMirrorInvert )
 {
     const VERTEX* prev = &aCadstarVertices.at( 0 );
     const VERTEX* cur;
@@ -2076,16 +2082,16 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices(
                 VECTOR2I segEnd = (wxPoint) arcSegments.Segment( jj ).B;
 
                 loadGraphicStaightSegment( segStart, segEnd, aCadstarLineCodeID, aCadstarSheetID,
-                                           aKiCadSchLayerID, aMoveVector, aRotationAngleDeciDeg,
-                                           aScalingFactor, aTransformCentre, aMirrorInvert );
+                                           aKiCadSchLayerID, aMoveVector, aRotation, aScalingFactor,
+                                           aTransformCentre, aMirrorInvert );
             }
         }
             break;
 
         case VERTEX_TYPE::POINT:
             loadGraphicStaightSegment( startPoint, endPoint, aCadstarLineCodeID, aCadstarSheetID,
-                                       aKiCadSchLayerID, aMoveVector, aRotationAngleDeciDeg,
-                                       aScalingFactor, aTransformCentre, aMirrorInvert );
+                                       aKiCadSchLayerID, aMoveVector, aRotation, aScalingFactor,
+                                       aTransformCentre, aMirrorInvert );
             break;
 
         default:
@@ -2098,20 +2104,23 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices(
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::loadFigure(
-        const FIGURE& aCadstarFigure, const LAYER_ID& aCadstarSheetIDOverride,
-        SCH_LAYER_ID aKiCadSchLayerID, const VECTOR2I& aMoveVector,
-        const double& aRotationAngleDeciDeg, const double& aScalingFactor,
-        const VECTOR2I& aTransformCentre, const bool& aMirrorInvert )
+void CADSTAR_SCH_ARCHIVE_LOADER::loadFigure( const FIGURE& aCadstarFigure,
+                                             const LAYER_ID& aCadstarSheetIDOverride,
+                                             SCH_LAYER_ID aKiCadSchLayerID,
+                                             const VECTOR2I& aMoveVector,
+                                             const EDA_ANGLE& aRotation,
+                                             const double& aScalingFactor,
+                                             const VECTOR2I& aTransformCentre,
+                                             const bool& aMirrorInvert )
 {
     loadShapeVertices( aCadstarFigure.Shape.Vertices, aCadstarFigure.LineCodeID,
-                       aCadstarSheetIDOverride, aKiCadSchLayerID, aMoveVector,
-                       aRotationAngleDeciDeg, aScalingFactor, aTransformCentre, aMirrorInvert );
+                       aCadstarSheetIDOverride, aKiCadSchLayerID, aMoveVector, aRotation,
+                       aScalingFactor, aTransformCentre, aMirrorInvert );
 
     for( CUTOUT cutout : aCadstarFigure.Shape.Cutouts )
     {
         loadShapeVertices( cutout.Vertices, aCadstarFigure.LineCodeID, aCadstarSheetIDOverride,
-                           aKiCadSchLayerID, aMoveVector, aRotationAngleDeciDeg, aScalingFactor,
+                           aKiCadSchLayerID, aMoveVector, aRotation, aScalingFactor,
                            aTransformCentre, aMirrorInvert );
     }
 }
@@ -2508,8 +2517,8 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getKiCadUnitNumberFromGate( const GATE_ID& aCads
 LABEL_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyle( const long long& aCadstarOrientation,
                                                            bool aMirror )
 {
-    double           orientationDeciDegree = getAngleTenthDegree( aCadstarOrientation );
-    LABEL_SPIN_STYLE spinStyle             = getSpinStyleDeciDeg( orientationDeciDegree );
+    EDA_ANGLE        orientation = getAngle( aCadstarOrientation );
+    LABEL_SPIN_STYLE spinStyle   = getSpinStyle( orientation );
 
     if( aMirror )
     {
@@ -2521,19 +2530,19 @@ LABEL_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyle( const long long& aCad
 }
 
 
-LABEL_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyleDeciDeg(
-        const double& aOrientationDeciDeg )
+LABEL_SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyle( const EDA_ANGLE& aOrientation )
 {
     LABEL_SPIN_STYLE spinStyle = LABEL_SPIN_STYLE::LEFT;
 
-    int oDeg = (int) NormalizeAngle180( aOrientationDeciDeg );
+    EDA_ANGLE oDeg = aOrientation;
+    oDeg.Normalize180();
 
-    if( oDeg >= -450 && oDeg <= 450 )
-        spinStyle = LABEL_SPIN_STYLE::RIGHT; // 0deg
-    else if( oDeg >= 450 && oDeg <= 1350 )
-        spinStyle = LABEL_SPIN_STYLE::UP; // 90deg
-    else if( oDeg >= 1350 || oDeg <= -1350 )
-        spinStyle = LABEL_SPIN_STYLE::LEFT; // 180deg
+    if( oDeg >= -ANGLE_45 && oDeg <= ANGLE_45 )
+        spinStyle = LABEL_SPIN_STYLE::RIGHT;  // 0deg
+    else if( oDeg >= ANGLE_45 && oDeg <= ANGLE_135 )
+        spinStyle = LABEL_SPIN_STYLE::UP;     // 90deg
+    else if( oDeg >= ANGLE_135 || oDeg <= -ANGLE_135 )
+        spinStyle = LABEL_SPIN_STYLE::LEFT;   // 180deg
     else
         spinStyle = LABEL_SPIN_STYLE::BOTTOM; // 270deg
 
@@ -2617,7 +2626,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
     aKiCadTextItem->SetTextWidth( textWidth );
     aKiCadTextItem->SetTextHeight( textHeight );
     aKiCadTextItem->SetTextThickness( getKiCadLength( textCode.LineWidth ) );
-    aKiCadTextItem->SetTextAngle( EDA_ANGLE( getAngleDegrees( aCadstarOrientAngle ), DEGREES_T ) );
+    aKiCadTextItem->SetTextAngle( getAngle( aCadstarOrientAngle ) );
     aKiCadTextItem->SetBold( textCode.Font.Modifier1 == FONT_BOLD );
     aKiCadTextItem->SetItalic( textCode.Font.Italic );
 
@@ -3019,9 +3028,12 @@ wxPoint CADSTAR_SCH_ARCHIVE_LOADER::getKiCadLibraryPoint( const wxPoint& aCadsta
 }
 
 
-VECTOR2I CADSTAR_SCH_ARCHIVE_LOADER::applyTransform(
-        const VECTOR2I& aPoint, const VECTOR2I& aMoveVector, const double& aRotationAngleDeciDeg,
-        const double& aScalingFactor, const VECTOR2I& aTransformCentre, const bool& aMirrorInvert )
+VECTOR2I CADSTAR_SCH_ARCHIVE_LOADER::applyTransform( const VECTOR2I& aPoint,
+                                                     const VECTOR2I& aMoveVector,
+                                                     const EDA_ANGLE& aRotation,
+                                                     const double& aScalingFactor,
+                                                     const VECTOR2I& aTransformCentre,
+                                                     const bool& aMirrorInvert )
 {
     VECTOR2I retVal = aPoint;
 
@@ -3035,19 +3047,13 @@ VECTOR2I CADSTAR_SCH_ARCHIVE_LOADER::applyTransform(
     }
 
     if( aMirrorInvert )
-    {
         MIRROR( retVal.x, aTransformCentre.x );
-    }
 
-    if( aRotationAngleDeciDeg != 0.0 )
-    {
-        RotatePoint( retVal, aTransformCentre, aRotationAngleDeciDeg );
-    }
+    if( !aRotation.IsZero() )
+        RotatePoint( retVal, aTransformCentre, aRotation );
 
     if( aMoveVector != wxPoint{ 0, 0 } )
-    {
         retVal += aMoveVector;
-    }
 
     return retVal;
 }
