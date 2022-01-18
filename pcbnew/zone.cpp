@@ -1347,7 +1347,7 @@ FP_ZONE::FP_ZONE( BOARD_ITEM_CONTAINER* aParent ) :
 
 
 FP_ZONE::FP_ZONE( const FP_ZONE& aZone ) :
-        ZONE( aZone.GetParent(), true )
+        ZONE( aZone )
 {
     InitDataFromSrcInCopyCtor( aZone );
 }
