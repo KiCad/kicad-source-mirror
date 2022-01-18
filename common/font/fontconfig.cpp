@@ -133,7 +133,6 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
             FcChar8*   family;
             FcLangSet* langSet;
             FcBool     outline;
-            bool       langSupported = false;
 
             if( FcPatternGetString( font, FC_FILE, 0, &file ) == FcResultMatch
                 && FcPatternGetString( font, FC_FAMILY, 0, &family ) == FcResultMatch
@@ -149,6 +148,16 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
                 FcChar8*   langStr = FcStrListNext( langStrList );
 
                 std::string theFamily( reinterpret_cast<char *>( family ) );
+
+#ifdef __WXMAC__
+                // On Mac (at least) some of the font names are in their own language.  If
+                // the OS doesn't support this language then we get a bunch of garbage names
+                // in the font menu.
+                //
+                // GTK, on the other hand, doesn't appear to support wxLocale::IsAvailable(),
+                // so we can't run these checks.
+
+                bool langSupported = false;
 
                 if( !langStr )
                 {
@@ -179,6 +188,7 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts )
 
                 if( !langSupported )
                     continue;
+#endif
 
                 std::string theFile( reinterpret_cast<char *>( file ) );
                 std::string theStyle( reinterpret_cast<char *>( style ) );
