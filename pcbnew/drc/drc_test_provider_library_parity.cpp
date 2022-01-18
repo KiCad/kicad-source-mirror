@@ -76,6 +76,8 @@ public:
 #define TEST_ZONES( a, b ) { if( zonesNeedUpdate( a, b ) ) return true; }
 #define TEST_MODELS( a, b ) { if( modelsNeedUpdate( a, b ) ) return true; }
 
+#define EPSILON 0.000001
+#define TEST_D( a, b ) { if( abs( a - b ) > EPSILON ) return true; }
 
 bool primitivesNeedUpdate( const std::shared_ptr<PCB_SHAPE>& a,
                            const std::shared_ptr<PCB_SHAPE>& b )
@@ -95,7 +97,7 @@ bool primitivesNeedUpdate( const std::shared_ptr<PCB_SHAPE>& a,
         TEST( a->GetStart(), b->GetStart() );
         TEST( a->GetEnd(), b->GetEnd() );
         TEST( a->GetCenter(), b->GetCenter() );
-        TEST( a->GetArcAngle().AsDegrees(), b->GetArcAngle().AsDegrees() );
+        TEST_D( a->GetArcAngle().AsDegrees(), b->GetArcAngle().AsDegrees() );
         break;
 
     case SHAPE_T::BEZIER:
@@ -147,14 +149,14 @@ bool padsNeedUpdate( const PAD* a, const PAD* b )
     TEST( a->GetProperty(), b->GetProperty() );
 
     // The pad orientation, for historical reasons is the pad rotation + parent rotation.
-    TEST( ( a->GetOrientation() - a->GetParent()->GetOrientation() ).Normalize().AsDegrees(),
-          ( b->GetOrientation() - b->GetParent()->GetOrientation() ).Normalize().AsDegrees() );
+    TEST_D(( a->GetOrientation() - a->GetParent()->GetOrientation() ).Normalize().AsDegrees(),
+           ( b->GetOrientation() - b->GetParent()->GetOrientation() ).Normalize().AsDegrees() );
 
     TEST( a->GetSize(), b->GetSize() );
     TEST( a->GetDelta(), b->GetDelta() );
     TEST( a->GetRoundRectCornerRadius(), b->GetRoundRectCornerRadius() );
-    TEST( a->GetRoundRectRadiusRatio(), b->GetRoundRectRadiusRatio() );
-    TEST( a->GetChamferRectRatio(), b->GetChamferRectRatio() );
+    TEST_D( a->GetRoundRectRadiusRatio(), b->GetRoundRectRadiusRatio() );
+    TEST_D( a->GetChamferRectRatio(), b->GetChamferRectRatio() );
     TEST( a->GetChamferPositions(), b->GetChamferPositions() );
     TEST( a->GetOffset(), b->GetOffset() );
 
@@ -164,12 +166,12 @@ bool padsNeedUpdate( const PAD* a, const PAD* b )
     TEST( a->GetLocalClearance(), b->GetLocalClearance() );
     TEST( a->GetLocalSolderMaskMargin(), b->GetLocalSolderMaskMargin() );
     TEST( a->GetLocalSolderPasteMargin(), b->GetLocalSolderPasteMargin() );
-    TEST( a->GetLocalSolderPasteMarginRatio(), b->GetLocalSolderPasteMarginRatio() );
+    TEST_D( a->GetLocalSolderPasteMarginRatio(), b->GetLocalSolderPasteMarginRatio() );
 
     TEST( a->GetZoneConnection(), b->GetZoneConnection() );
     TEST( a->GetThermalGap(), b->GetThermalGap() );
     TEST( a->GetThermalSpokeWidth(), b->GetThermalSpokeWidth() );
-    TEST( a->GetThermalSpokeAngle().AsDegrees(), b->GetThermalSpokeAngle().AsDegrees() );
+    TEST_D( a->GetThermalSpokeAngle().AsDegrees(), b->GetThermalSpokeAngle().AsDegrees() );
     TEST( a->GetCustomShapeInZoneOpt(), b->GetCustomShapeInZoneOpt() );
 
     TEST( a->GetPrimitives().size(), b->GetPrimitives().size() );
@@ -198,7 +200,7 @@ bool shapesNeedUpdate( const FP_SHAPE* a, const FP_SHAPE* b )
         TEST( a->GetStart0(), b->GetStart0() );
         TEST( a->GetEnd0(), b->GetEnd0() );
         TEST( a->GetCenter0(), b->GetCenter0() );
-        TEST( a->GetArcAngle().AsDegrees(), b->GetArcAngle().AsDegrees() );
+        TEST_D( a->GetArcAngle().AsDegrees(), b->GetArcAngle().AsDegrees() );
         break;
 
     case SHAPE_T::BEZIER:
@@ -283,7 +285,7 @@ bool zonesNeedUpdate( const FP_ZONE* a, const FP_ZONE* b )
     TEST( a->GetFillMode(), b->GetFillMode() );
     TEST( a->GetHatchThickness(), b->GetHatchThickness() );
     TEST( a->GetHatchGap(), b->GetHatchGap() );
-    TEST( a->GetHatchOrientation(), b->GetHatchOrientation() );
+    TEST_D( a->GetHatchOrientation(), b->GetHatchOrientation() );
     TEST( a->GetHatchSmoothingLevel(), b->GetHatchSmoothingLevel() );
     TEST( a->GetHatchSmoothingValue(), b->GetHatchSmoothingValue() );
     TEST( a->GetHatchBorderAlgorithm(), b->GetHatchBorderAlgorithm() );
@@ -303,11 +305,7 @@ bool zonesNeedUpdate( const FP_ZONE* a, const FP_ZONE* b )
 
 bool modelsNeedUpdate( const FP_3DMODEL& a, const FP_3DMODEL& b )
 {
-#define EPSILON 0.000001
-#define TEST_V3D( a, b ) { if( abs( a.x - b.x ) > EPSILON    \
-                            || abs( a.y - b.y ) > EPSILON    \
-                            || abs( a.z - b.z ) > EPSILON )  \
-                               return true;                  }
+#define TEST_V3D( a, b ) { TEST_D( a.x, b.x ); TEST_D( a.y, b.y ); TEST_D( a.z, b.z ); }
 
     TEST_V3D( a.m_Scale, b.m_Scale );
     TEST_V3D( a.m_Rotation, b.m_Rotation );
@@ -338,7 +336,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint )
     TEST( GetLocalClearance(), aLibFootprint->GetLocalClearance() );
     TEST( GetLocalSolderMaskMargin(), aLibFootprint->GetLocalSolderMaskMargin() );
     TEST( GetLocalSolderPasteMargin(), aLibFootprint->GetLocalSolderPasteMargin() );
-    TEST( GetLocalSolderPasteMarginRatio(), aLibFootprint->GetLocalSolderPasteMarginRatio() );
+    TEST_D( GetLocalSolderPasteMarginRatio(), aLibFootprint->GetLocalSolderPasteMarginRatio() );
 
     TEST( GetZoneConnection(), aLibFootprint->GetZoneConnection() );
 
