@@ -873,14 +873,16 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
                 setKeepoutSettingsToZone( zone, c.layer );
 
-                // approximate circle as polygon with a edge every 10 degree
-                VECTOR2I center( kicad_x( c.x ), kicad_y( c.y ) );
-                int     outlineRadius = radius + ( width / 2 );
+                // approximate circle as polygon
+                VECTOR2I  center( kicad_x( c.x ), kicad_y( c.y ) );
+                int       outlineRadius = radius + ( width / 2 );
+                int       segsInCircle = GetArcToSegmentCount( outlineRadius, ARC_HIGH_DEF, FULL_CIRCLE );
+                EDA_ANGLE delta = ANGLE_360 / segsInCircle;
 
-                for( int angle = 0; angle < 360; angle += 10 )
+                for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += delta )
                 {
                     VECTOR2I rotatedPoint( outlineRadius, 0 );
-                    RotatePoint( rotatedPoint, angle * 10. );
+                    RotatePoint( rotatedPoint, angle );
                     zone->AppendCorner( center + rotatedPoint, -1 );
                 }
 
@@ -888,11 +890,13 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 {
                     zone->NewHole();
                     int innerRadius = radius - ( width / 2 );
+                    segsInCircle = GetArcToSegmentCount( innerRadius, ARC_HIGH_DEF, FULL_CIRCLE );
+                    delta = ANGLE_360 / segsInCircle;
 
-                    for( int angle = 0; angle < 360; angle += 10 )
+                    for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += delta )
                     {
                         VECTOR2I rotatedPoint( innerRadius, 0 );
-                        RotatePoint( rotatedPoint, angle * 10. );
+                        RotatePoint( rotatedPoint, angle );
                         zone->AppendCorner( center + rotatedPoint, 0 );
                     }
                 }
@@ -2220,14 +2224,16 @@ void EAGLE_PLUGIN::packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) cons
 
         setKeepoutSettingsToZone( zone, e.layer );
 
-        // approximate circle as polygon with a edge every 10 degree
-        VECTOR2I center( kicad_x( e.x ), kicad_y( e.y ) );
-        int     outlineRadius = radius + ( width / 2 );
+        // approximate circle as polygon
+        VECTOR2I  center( kicad_x( e.x ), kicad_y( e.y ) );
+        int       outlineRadius = radius + ( width / 2 );
+        int       segsInCircle = GetArcToSegmentCount( outlineRadius, ARC_HIGH_DEF, FULL_CIRCLE );
+        EDA_ANGLE delta = ANGLE_360 / segsInCircle;
 
-        for( int angle = 0; angle < 360; angle += 10 )
+        for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += delta )
         {
             VECTOR2I rotatedPoint( outlineRadius, 0 );
-            RotatePoint( rotatedPoint, angle * 10. );
+            RotatePoint( rotatedPoint, angle );
             zone->AppendCorner( center + rotatedPoint, -1 );
         }
 
@@ -2235,11 +2241,13 @@ void EAGLE_PLUGIN::packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) cons
         {
             zone->NewHole();
             int innerRadius = radius - ( width / 2 );
+            segsInCircle = GetArcToSegmentCount( innerRadius, ARC_HIGH_DEF, FULL_CIRCLE );
+            delta = ANGLE_360 / segsInCircle;
 
-            for( int angle = 0; angle < 360; angle += 10 )
+            for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += delta )
             {
                 VECTOR2I rotatedPoint( innerRadius, 0 );
-                RotatePoint( rotatedPoint, angle * 10. );
+                RotatePoint( rotatedPoint, angle );
                 zone->AppendCorner( center + rotatedPoint, 0 );
             }
         }

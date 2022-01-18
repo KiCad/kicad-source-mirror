@@ -1783,8 +1783,8 @@ LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& a
         VECTOR2I end( rectangle->GetEnd() );
         VECTOR2I center( rectangle->GetCenter() );
 
-        RotatePoint( pos, center, rect.rot->degrees * 10 );
-        RotatePoint( end,  center, rect.rot->degrees * 10 );
+        RotatePoint( pos, center, EDA_ANGLE( rect.rot->degrees, DEGREES_T ) );
+        RotatePoint( end,  center, EDA_ANGLE( rect.rot->degrees, DEGREES_T ) );
 
         rectangle->SetPosition( pos );
         rectangle->SetEnd( end );
