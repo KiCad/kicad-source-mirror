@@ -129,8 +129,15 @@ void DIALOG_FIND::search( bool aDirection )
     bool        endIsReached = false;
     bool        isFirstSearch = false;
 
-    // Add/move the search string to the top of the list if it isn't already there
     searchString = m_searchCombo->GetValue();
+
+    if( searchString.IsEmpty() )
+    {
+        Show();
+        return;
+    }
+
+    // Add/move the search string to the top of the list if it isn't already there
     index = m_searchCombo->FindString( searchString, true );
 
     if( index == wxNOT_FOUND )
