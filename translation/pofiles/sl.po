@@ -1,21 +1,22 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2021.
 # radix <neutrino@gmx.co.uk>, 2021.
+# Dejan Smole <dejko1@hotmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-13 10:05-0800\n"
-"PO-Revision-Date: 2021-11-21 21:17+0000\n"
-"Last-Translator: radix <neutrino@gmx.co.uk>\n"
-"Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/master-"
-"source/sl/>\n"
+"PO-Revision-Date: 2022-02-01 13:57+0000\n"
+"Last-Translator: Dejan Smole <dejko1@hotmail.com>\n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/"
+"master-source/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
 "%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.11-dev\n"
 "X-Poedit-Keywords: _\n"
 "X-Poedit-Basepath: c:\\kicad\\kicad-dev\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -31,11 +32,11 @@ msgstr "Vse datoteke"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:301
 msgid "Build board outline"
-msgstr "Zgradite oris plošče"
+msgstr "Grajenje obrisa plošče"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:506
 msgid "Create layers"
-msgstr "Ustvari plasti"
+msgstr "Ustvarjanje plasti"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:655
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:100
@@ -47,8 +48,8 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Obris odtisa manjka ali je neustrezen. Za popolno analizo zaženite "
-"Checkprint Checker."
+"Obris podnožja manjka ali je neustrezen. Za popolno analizo zaženite "
+"Footprint Checker."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:680
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
@@ -62,26 +63,24 @@ msgstr "Ustvari povezave in skoznike"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:675
 msgid "Create zones"
-msgstr "Ustvari cone"
+msgstr "Ustvari poligone"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:744
 msgid "Simplifying copper layers polygons"
-msgstr "Poenostavitev poligonov bakrenih plasti"
+msgstr "Poenostavljanje poligonov bakrenih plasti"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:753
-#, fuzzy
 msgid "Simplifying polygons on F_Cu"
-msgstr "Poenostavitev poligonov bakrenih plasti"
+msgstr "Poenostavljanje poligonov na F_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:764
-#, fuzzy
 msgid "Simplifying polygons on B_Cu"
-msgstr "Poenostavitev poligonov bakrenih plasti"
+msgstr "Poenostavljanje poligonov na B_Cu"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:794
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Poenostavitev %d bakrenih slojev"
+msgstr "Poenostavljanje %d bakrenih slojev"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:834
 msgid "Simplify holes contours"
@@ -92,23 +91,22 @@ msgid "Build Tech layers"
 msgstr "Zgradite tehnične sloje"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:897
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "Zgradite tehnične sloje"
+msgstr "Gradnja tehničnega sloja %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1039
 msgid "Build BVH for holes and vias"
 msgstr "Zgradi BVH za luknje in skoznike"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:410
-#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr "Vaša različica OpenGL ni podprta. Minimalno zahteva 1,5"
+msgstr "Vaša različica OpenGL ni podprta. Minimalna zahtevana verzija je 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:538
-#, fuzzy, c-format
+#, c-format
 msgid "Last render time %.0f ms"
-msgstr "Čas upodabljanja %.3f s"
+msgstr "Čas prikaza %.0f s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:728
 #, c-format
@@ -140,9 +138,8 @@ msgstr "Naloži OpenGL sloj %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:650
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:784
-#, fuzzy
 msgid "Loading 3D models..."
-msgstr "Nalaganje 3D modelov"
+msgstr "Nalaganje 3D modelov..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:659
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:942
@@ -158,9 +155,9 @@ msgstr "Čas polnjenja %.3f s"
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:75
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2180
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
-msgstr "Nalaganje %s"
+msgstr "Nalaganje %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:561
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:175
@@ -294,11 +291,9 @@ msgstr "Ime datoteke 3D slike"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:519
 #: common/eda_base_frame.cpp:1111 common/eda_base_frame.cpp:1116
 #: pcbnew/plugins/altium/altium_pcb.cpp:1449
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr ""
-"Za shranjevanje datoteke potrebujete nezadostna dovoljenja\n"
-"%s"
+msgstr "Za shranjevanje datoteke '%s' nimate ustreznih dovoljenj."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:520 common/confirm.cpp:130
 #: common/confirm.cpp:296 common/dialogs/panel_setup_severities.cpp:43
@@ -437,27 +432,24 @@ msgid "3D Grid 1mm"
 msgstr "3D mreža 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
-#, fuzzy
 msgid "Render Realistic Materials"
-msgstr "Dielektrični materiali"
+msgstr "Prikaži realistične materiale"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
 msgstr "Uporabite vse lastnosti materiala iz vsake datoteke 3D modela"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
-#, fuzzy
 msgid "Render Solid Colors"
-msgstr "Render Shadows"
+msgstr "Prikaži polne barve"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
 msgstr "Uporabite samo lastnost difuzne barve iz datoteke 3D modela modela"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
-#, fuzzy
 msgid "Render CAD Colors"
-msgstr "Določene barve"
+msgstr "Prikaži CAD barve"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
