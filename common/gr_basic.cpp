@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -618,91 +618,6 @@ void GRFilledArc1( EDA_RECT* ClipBox, wxDC* DC, const VECTOR2I& aStart, const VE
     GRSetBrush( DC, BgColor, FILLED );
     GRSetColorPen( DC, Color, width );
     DC->DrawArc( aStart.x, aStart.y, aEnd.x, aEnd.y, aCenter.x, aCenter.y );
-}
-
-
-void GRArc( EDA_RECT* ClipBox, wxDC* DC, int xc, int yc, double StAngle, double EndAngle, int r,
-            const COLOR4D& Color )
-{
-    int x1, y1, x2, y2;
-
-    /* Clip arcs off screen */
-    if( ClipBox )
-    {
-        int radius = r + 1;
-        int x0, y0, xm, ym, x, y;
-        x0 = ClipBox->GetX();
-        y0 = ClipBox->GetY();
-        xm = ClipBox->GetRight();
-        ym = ClipBox->GetBottom();
-        x = xc;
-        y = yc;
-
-        if( x < ( x0 - radius ) )
-            return;
-
-        if( y < ( y0 - radius ) )
-            return;
-
-        if( x > ( xm + radius ) )
-            return;
-
-        if( y > ( ym + radius ) )
-            return;
-    }
-
-    x1 = r;
-    y1 = 0;
-    RotatePoint( &x1, &y1, EndAngle );
-
-    x2 = r;
-    y2 = 0;
-    RotatePoint( &x2, &y2, StAngle );
-
-    GRSetBrush( DC, Color, NOT_FILLED );
-    GRSetColorPen( DC, Color );
-    DC->DrawArc( xc + x1, yc - y1, xc + x2, yc - y2, xc, yc );
-}
-
-
-void GRArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle, double EndAngle, int r,
-            int width, const COLOR4D& Color )
-{
-    int x1, y1, x2, y2;
-
-    /* Clip arcs off screen. */
-    if( ClipBox )
-    {
-        int x0, y0, xm, ym;
-        x0 = ClipBox->GetX();
-        y0 = ClipBox->GetY();
-        xm = ClipBox->GetRight();
-        ym = ClipBox->GetBottom();
-
-        if( x < ( x0 - r - width ) )
-            return;
-
-        if( y < ( y0 - r - width ) )
-            return;
-
-        if( x > ( r + xm + width ) )
-            return;
-
-        if( y > ( r + ym + width ) )
-            return;
-    }
-
-    x1 = r;
-    y1 = 0;
-    RotatePoint( &x1, &y1, EndAngle );
-
-    x2 = r;
-    y2 = 0;
-    RotatePoint( &x2, &y2, StAngle );
-
-    GRSetBrush( DC, Color );
-    GRSetColorPen( DC, Color, width );
-    DC->DrawArc( x + x1, y - y1, x + x2, y - y2, x, y );
 }
 
 

@@ -475,30 +475,3 @@ const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, cons
 }
 
 
-double CalcArcAngle( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
-{
-    VECTOR2I center = CalcArcCenter( aStart, aMid, aEnd );
-
-    // Check if the new arc is CW or CCW
-    VECTOR2D startLine = aStart - center;
-    VECTOR2D endLine   = aEnd - center;
-    double angle       = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
-
-    VECTOR2D v1, v2;
-    v1           = aStart - aMid;
-    v2           = aEnd - aMid;
-    double theta = RAD2DECIDEG( v1.Angle() );
-
-    RotatePoint( &( v1.x ), &( v1.y ), theta );
-    RotatePoint( &( v2.x ), &( v2.y ), theta );
-
-    bool clockwise = ( ( v1.Angle() - v2.Angle() ) > 0 );
-
-    // Normalize the angle
-    if( clockwise && angle < 0.0 )
-        angle += 3600.0;
-    else if( !clockwise && angle > 0.0 )
-        angle -= 3600.0;
-
-    return angle;
-}

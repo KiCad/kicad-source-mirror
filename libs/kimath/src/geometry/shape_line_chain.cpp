@@ -33,12 +33,10 @@
 #include <clipper.hpp>
 #include <core/kicad_algo.h> // for alg::run_on_pair
 #include <geometry/seg.h>    // for SEG, OPT_VECTOR2I
-#include <geometry/circle.h>    // for CIRCLE
 #include <geometry/shape_line_chain.h>
 #include <math/box2.h>       // for BOX2I
 #include <math/util.h>       // for rescale
 #include <math/vector2d.h>   // for VECTOR2, VECTOR2I
-#include <trigo.h>  // for RAD2DECIDEG, CalcArcAngle
 
 class SHAPE;
 

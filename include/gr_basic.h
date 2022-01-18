@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,10 +17,6 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @file gr_basic.h
  */
 
 #ifndef GR_BASIC
@@ -153,10 +149,6 @@ void GRFilledCircle( EDA_RECT* aClipBox, wxDC* aDC, const VECTOR2I& aPos, int aR
 void GRCircle( EDA_RECT* aClipBox, wxDC* aDC, const VECTOR2I& aPos, int aRadius, int aWidth,
                const COLOR4D& aColor );
 
-void GRArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle,
-            double EndAngle, int r, const COLOR4D& Color );
-void GRArc( EDA_RECT* ClipBox, wxDC* DC, int x, int y, double StAngle,
-            double EndAngle, int r, int width, const COLOR4D& Color );
 void GRArc1( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
              int xc, int yc, int width, const COLOR4D& Color );
 void GRArc1( EDA_RECT* aClipBox, wxDC* aDC, const VECTOR2I& aStart, const VECTOR2I& aEnd,

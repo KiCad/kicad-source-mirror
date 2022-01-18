@@ -142,11 +142,6 @@ const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aEnd,
                               const EDA_ANGLE& aAngle );
 
 /**
- * Return the subtended angle for a given arc.
- */
-double CalcArcAngle( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
-
-/**
  * Return the middle point of an arc, half-way between aStart and aEnd. There are two possible
  * solutions which can be found by toggling aMinArcAngle. The behaviour is undefined for
  * semicircles (i.e. 180 degree arcs).
