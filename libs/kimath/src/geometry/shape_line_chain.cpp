@@ -1503,8 +1503,6 @@ int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP, int aIndex ) const
     for( int i = 0; i < SegmentCount(); i++ )
     {
         const SEG seg = CSegment( i );
-        int d = seg.Distance( aP );
-
         bool indexMatch = true;
 
         if( aIndex >= 0 )
