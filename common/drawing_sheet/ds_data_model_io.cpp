@@ -361,8 +361,8 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_POLYGONS* aItem, int aNestLevel ) co
 
         while( ist <= iend )
         {
-            DPOINT pos = aItem->m_Corners[ist++];
-            int nestLevel = 0;
+            VECTOR2D pos = aItem->m_Corners[ist++];
+            int      nestLevel = 0;
 
             if( ii++ > 4)
             {

@@ -102,13 +102,13 @@ void DS_DATA_MODEL::SetupDrawEnvironment( const PAGE_INFO& aPageInfo, double aMi
     m_WSunits2Iu = aMilsToIU / MILS_TO_MM;
 
     // Left top corner position
-    DPOINT lt_corner;
+    VECTOR2D lt_corner;
     lt_corner.x = GetLeftMargin();
     lt_corner.y = GetTopMargin();
     m_LT_Corner = lt_corner;
 
     // Right bottom corner position
-    DPOINT rb_corner;
+    VECTOR2D rb_corner;
     rb_corner.x = ( aPageInfo.GetSizeMils().x * MILS_TO_MM ) - GetRightMargin();
     rb_corner.y = ( aPageInfo.GetSizeMils().y * MILS_TO_MM ) - GetBottomMargin();
     m_RB_Corner = rb_corner;

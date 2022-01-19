@@ -174,29 +174,29 @@ public:
      */
     static const wxString ResolvePath( const wxString& aPath, const wxString& aProjectPath );
 
-    double m_WSunits2Iu;            // conversion factor between
-                                    // ws units (mils) and draw/plot units
-    DPOINT m_RB_Corner;             // coordinates of the right bottom corner (in mm)
-    DPOINT m_LT_Corner;             // coordinates of the left top corner (in mm)
-    double m_DefaultLineWidth;      // Used when object line width is 0
-    DSIZE  m_DefaultTextSize;       // Used when object text size is 0
-    double m_DefaultTextThickness;  // Used when object text stroke width is 0
-    bool   m_EditMode;              // Used in drawing sheet editor to toggle variable substitution
-                                    // In normal mode (m_EditMode = false) the %format is
-                                    // replaced by the corresponding text.
-                                    // In edit mode (m_EditMode = true) the %format is
-                                    // displayed "as this"
+    double   m_WSunits2Iu;            // conversion factor between
+                                      // ws units (mils) and draw/plot units
+    VECTOR2D m_RB_Corner;             // coordinates of the right bottom corner (in mm)
+    VECTOR2D m_LT_Corner;             // coordinates of the left top corner (in mm)
+    double   m_DefaultLineWidth;      // Used when object line width is 0
+    DSIZE    m_DefaultTextSize;       // Used when object text size is 0
+    double   m_DefaultTextThickness;  // Used when object text stroke width is 0
+    bool     m_EditMode;              // Used in drawing sheet editor to toggle variable substitution
+                                      // In normal mode (m_EditMode = false) the %format is
+                                      // replaced by the corresponding text.
+                                      // In edit mode (m_EditMode = true) the %format is
+                                      // displayed "as this"
 
 private:
     std::vector <DS_DATA_ITEM*> m_list;
-    bool   m_allowVoidList;         // If false, the default drawing sheet will be loaded the
-                                    // first time DS_DRAW_ITEM_LIST::BuildDrawItemsList is run
-                                    // (useful mainly for drawing sheet editor)
-    int m_fileFormatVersionAtLoad;
-    double m_leftMargin;            // the left page margin in mm
-    double m_rightMargin;           // the right page margin in mm
-    double m_topMargin;             // the top page margin in mm
-    double m_bottomMargin;          // the bottom page margin in mm
+    bool     m_allowVoidList;         // If false, the default drawing sheet will be loaded the
+                                      // first time DS_DRAW_ITEM_LIST::BuildDrawItemsList is run
+                                      // (useful mainly for drawing sheet editor)
+    int      m_fileFormatVersionAtLoad;
+    double   m_leftMargin;            // the left page margin in mm
+    double   m_rightMargin;           // the right page margin in mm
+    double   m_topMargin;             // the top page margin in mm
+    double   m_bottomMargin;          // the bottom page margin in mm
 };
 
 #endif      // DS_DATA_MODEL_H

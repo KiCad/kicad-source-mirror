@@ -423,7 +423,7 @@ void DRAWING_SHEET_PARSER::parsePolygon( DS_DATA_ITEM_POLYGONS * aItem )
 
 void DRAWING_SHEET_PARSER::parsePolyOutline( DS_DATA_ITEM_POLYGONS * aItem )
 {
-    DPOINT corner;
+    VECTOR2D corner;
 
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {

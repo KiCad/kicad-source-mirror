@@ -71,13 +71,13 @@ class POINT_COORD
 public:
     POINT_COORD() { m_Anchor = RB_CORNER; }
 
-    POINT_COORD( const DPOINT& aPos, enum CORNER_ANCHOR aAnchor = RB_CORNER )
+    POINT_COORD( const VECTOR2D& aPos, enum CORNER_ANCHOR aAnchor = RB_CORNER )
     {
         m_Pos = aPos;
         m_Anchor = aAnchor;
     }
 
-    DPOINT            m_Pos;
+    VECTOR2D          m_Pos;
     int               m_Anchor;
 };
 
@@ -136,8 +136,8 @@ public:
     // Coordinate handling
     const VECTOR2I GetStartPosUi( int ii = 0 ) const;
     const VECTOR2I GetEndPosUi( int ii = 0 ) const;
-    const DPOINT GetStartPos( int ii = 0 ) const;
-    const DPOINT GetEndPos( int ii = 0 ) const;
+    const VECTOR2D GetStartPos( int ii = 0 ) const;
+    const VECTOR2D GetEndPos( int ii = 0 ) const;
 
     virtual int GetPenSizeUi();
 
@@ -146,7 +146,7 @@ public:
      *
      * @param aPosition the new position of item, in mm.
      */
-    void MoveTo( const DPOINT& aPosition );
+    void MoveTo( const VECTOR2D& aPosition );
 
     /**
      * Move item to a new position.
@@ -160,7 +160,7 @@ public:
      *
      * @param aPosition the new position of the starting point, in mm.
      */
-    void MoveStartPointTo( const DPOINT& aPosition );
+    void MoveStartPointTo( const VECTOR2D& aPosition );
 
     /**
      * Move the starting point of the item to a new position.
@@ -177,7 +177,7 @@ public:
      *
      * @param aPosition is the new position of the ending point, in mm.
      */
-    void MoveEndPointTo( const DPOINT& aPosition );
+    void MoveEndPointTo( const VECTOR2D& aPosition );
 
     /**
      * Move the ending point of the item to a new position.
@@ -201,7 +201,7 @@ public:
     POINT_COORD    m_End;
     double         m_LineWidth;
     int            m_RepeatCount;        // repeat count for duplicate items
-    DPOINT         m_IncrementVector;    // for duplicate items: move vector for position increment
+    VECTOR2D       m_IncrementVector;    // for duplicate items: move vector for position increment
     int            m_IncrementLabel;
 
 protected:
@@ -226,7 +226,7 @@ public:
      *
      * @param aCorner is the item to append.
      */
-    void AppendCorner( const DPOINT& aCorner )
+    void AppendCorner( const VECTOR2D& aCorner )
     {
         m_Corners.push_back( aCorner );
     }

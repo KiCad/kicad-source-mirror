@@ -145,7 +145,7 @@ int DS_DATA_ITEM::GetPenSizeUi()
 
 void DS_DATA_ITEM::MoveToUi( const VECTOR2I& aPosition )
 {
-    DPOINT pos_mm;
+    VECTOR2D pos_mm;
     pos_mm.x = aPosition.x / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
     pos_mm.y = aPosition.y / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
 
@@ -153,10 +153,10 @@ void DS_DATA_ITEM::MoveToUi( const VECTOR2I& aPosition )
 }
 
 
-void DS_DATA_ITEM::MoveTo( const DPOINT& aPosition )
+void DS_DATA_ITEM::MoveTo( const VECTOR2D& aPosition )
 {
-    DPOINT vector = aPosition - GetStartPos();
-    DPOINT endpos = vector + GetEndPos();
+    VECTOR2D vector = aPosition - GetStartPos();
+    VECTOR2D endpos = vector + GetEndPos();
 
     MoveStartPointTo( aPosition );
     MoveEndPointTo( endpos );
@@ -169,10 +169,10 @@ void DS_DATA_ITEM::MoveTo( const DPOINT& aPosition )
 }
 
 
-void DS_DATA_ITEM::MoveStartPointTo( const DPOINT& aPosition )
+void DS_DATA_ITEM::MoveStartPointTo( const VECTOR2D& aPosition )
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
-    DPOINT         position;
+    VECTOR2D       position;
 
     // Calculate the position of the starting point
     // relative to the reference corner
@@ -204,17 +204,17 @@ void DS_DATA_ITEM::MoveStartPointTo( const DPOINT& aPosition )
 
 void DS_DATA_ITEM::MoveStartPointToUi( const VECTOR2I& aPosition )
 {
-    DPOINT pos_mm( aPosition.x / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu,
-                   aPosition.y / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
+    VECTOR2D pos_mm( aPosition.x / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu,
+                     aPosition.y / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
 
     MoveStartPointTo( pos_mm );
 }
 
 
-void DS_DATA_ITEM::MoveEndPointTo( const DPOINT& aPosition )
+void DS_DATA_ITEM::MoveEndPointTo( const VECTOR2D& aPosition )
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
-    DPOINT         position;
+    VECTOR2D       position;
 
     // Calculate the position of the starting point
     // relative to the reference corner
@@ -256,7 +256,7 @@ void DS_DATA_ITEM::MoveEndPointTo( const DPOINT& aPosition )
 
 void DS_DATA_ITEM::MoveEndPointToUi( const VECTOR2I& aPosition )
 {
-    DPOINT pos_mm;
+    VECTOR2D pos_mm;
     pos_mm.x = aPosition.x / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
     pos_mm.y = aPosition.y / DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
 
@@ -264,10 +264,10 @@ void DS_DATA_ITEM::MoveEndPointToUi( const VECTOR2I& aPosition )
 }
 
 
-const DPOINT DS_DATA_ITEM::GetStartPos( int ii ) const
+const VECTOR2D DS_DATA_ITEM::GetStartPos( int ii ) const
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
-    DPOINT         pos( m_Pos.m_Pos.x + ( m_IncrementVector.x * ii ),
+    VECTOR2D       pos( m_Pos.m_Pos.x + ( m_IncrementVector.x * ii ),
                         m_Pos.m_Pos.y + ( m_IncrementVector.y * ii ) );
 
     switch( m_Pos.m_Anchor )
@@ -297,15 +297,15 @@ const DPOINT DS_DATA_ITEM::GetStartPos( int ii ) const
 
 const VECTOR2I DS_DATA_ITEM::GetStartPosUi( int ii ) const
 {
-    DPOINT pos = GetStartPos( ii ) * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
+    VECTOR2D pos = GetStartPos( ii ) * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
     return VECTOR2I( KiROUND( pos.x ), KiROUND( pos.y ) );
 }
 
 
-const DPOINT DS_DATA_ITEM::GetEndPos( int ii ) const
+const VECTOR2D DS_DATA_ITEM::GetEndPos( int ii ) const
 {
-    DPOINT pos( m_End.m_Pos.x + ( m_IncrementVector.x * ii ),
-                m_End.m_Pos.y + ( m_IncrementVector.y * ii ) );
+    VECTOR2D pos( m_End.m_Pos.x + ( m_IncrementVector.x * ii ),
+                  m_End.m_Pos.y + ( m_IncrementVector.y * ii ) );
 
     switch( m_End.m_Anchor )
     {
@@ -334,7 +334,7 @@ const DPOINT DS_DATA_ITEM::GetEndPos( int ii ) const
 
 const VECTOR2I DS_DATA_ITEM::GetEndPosUi( int ii ) const
 {
-    DPOINT pos = GetEndPos( ii );
+    VECTOR2D pos = GetEndPos( ii );
     pos = pos * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
     return VECTOR2I( KiROUND( pos.x ), KiROUND( pos.y ) );
 }
@@ -344,7 +344,7 @@ bool DS_DATA_ITEM::IsInsidePage( int ii ) const
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 
-    DPOINT pos = GetStartPos( ii );
+    VECTOR2D pos = GetStartPos( ii );
 
     for( int kk = 0; kk < 1; kk++ )
     {
@@ -493,7 +493,7 @@ bool DS_DATA_ITEM_POLYGONS::IsInsidePage( int ii ) const
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 
-    DPOINT pos = GetStartPos( ii );
+    VECTOR2D pos = GetStartPos( ii );
     pos += m_minCoord;  // left top pos of bounding box
 
     if( model.m_LT_Corner.x > pos.x || model.m_LT_Corner.y > pos.y )
@@ -511,7 +511,7 @@ bool DS_DATA_ITEM_POLYGONS::IsInsidePage( int ii ) const
 
 const VECTOR2I DS_DATA_ITEM_POLYGONS::GetCornerPositionUi( unsigned aIdx, int aRepeat ) const
 {
-    DPOINT pos = GetCornerPosition( aIdx, aRepeat );
+    VECTOR2D pos = GetCornerPosition( aIdx, aRepeat );
     pos = pos * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
     return VECTOR2I( int( pos.x ), int( pos.y ) );
 }
