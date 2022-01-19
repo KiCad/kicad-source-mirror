@@ -479,7 +479,7 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy,
         n = GetArcToSegmentCount( external_radius, aAccuracy, ca );
 
         // Recalculate the effective error of approximation, that can be < aAccuracy
-        int seg360 = n * 360.0 / ca.AsDegrees();
+        int seg360 = n * 360.0 / fabs( ca.AsDegrees() );
         effectiveAccuracy = CircleToEndSegmentDeltaRadius( external_radius, seg360 );
     }
 
