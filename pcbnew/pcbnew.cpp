@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcbnew.cpp
- * @brief Pcbnew main program.
- */
-
 #include <pcbnew_scripting_helpers.h>
 #include <pgm_base.h>
 #include <kiface_base.h>
@@ -42,7 +37,6 @@
 #include <pcbnew_settings.h>
 #include <footprint_editor_settings.h>
 #include <settings/settings_manager.h>
-#include <class_draw_panel_gal.h>
 #include <fp_lib_table.h>
 #include <footprint_edit_frame.h>
 #include <footprint_viewer_frame.h>
@@ -151,8 +145,6 @@ static struct IFACE : public KIFACE_BASE
         }
 
         case PANEL_FP_EDIT_OPTIONS:
-            return new PANEL_EDIT_OPTIONS( aParent, true );
-
         case PANEL_FP_DEFAULT_VALUES:
         {
             EDA_BASE_FRAME* unitsProvider = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
@@ -177,7 +169,10 @@ static struct IFACE : public KIFACE_BASE
                 unitsProvider = static_cast<EDA_BASE_FRAME*>( manager );
             }
 
-            return new PANEL_FP_EDITOR_DEFAULTS( aParent, unitsProvider );
+            if( aClassId == PANEL_FP_EDIT_OPTIONS )
+                return new PANEL_EDIT_OPTIONS( aParent, unitsProvider, true );
+            else
+                return new PANEL_FP_EDITOR_DEFAULTS( aParent, unitsProvider );
         }
 
         case PANEL_FP_COLORS:
@@ -192,7 +187,31 @@ static struct IFACE : public KIFACE_BASE
         }
 
         case PANEL_PCB_EDIT_OPTIONS:
-            return new PANEL_EDIT_OPTIONS( aParent, false );
+        {
+            EDA_BASE_FRAME* unitsProvider = aKiway->Player( FRAME_PCB_EDITOR, false );
+
+            if( !unitsProvider )
+                unitsProvider = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
+
+            if( !unitsProvider )
+                unitsProvider = aKiway->Player( FRAME_FOOTPRINT_VIEWER, false );
+
+            if( !unitsProvider )
+            {
+                // If we can't find an eeschema frame we'll have to make do with the units
+                // defined in whatever FRAME we _can_ find.
+                for( unsigned i = 0; !unitsProvider && i < KIWAY_PLAYER_COUNT;  ++i )
+                    unitsProvider = aKiway->Player( (FRAME_T) i, false );
+            }
+
+            if( !unitsProvider )
+            {
+                wxWindow* manager = wxFindWindowByName( KICAD_MANAGER_FRAME_NAME );
+                unitsProvider = static_cast<EDA_BASE_FRAME*>( manager );
+            }
+
+            return new PANEL_EDIT_OPTIONS( aParent, unitsProvider, false );
+        }
 
         case PANEL_PCB_COLORS:
         {

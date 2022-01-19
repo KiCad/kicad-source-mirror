@@ -1054,7 +1054,7 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     if( cfg )
     {
-        m_rotationAngle            = EDA_ANGLE( cfg->m_RotationAngle, TENTHS_OF_A_DEGREE_T );
+        m_rotationAngle            = cfg->m_RotationAngle;
         m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
     }
 }
@@ -1069,7 +1069,7 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     if( cfg )
     {
-        cfg->m_RotationAngle                  = m_rotationAngle.AsTenthsOfADegree();
+        cfg->m_RotationAngle                  = m_rotationAngle;
         cfg->m_AuiPanels.show_layer_manager   = m_show_layer_manager_tools;
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
         cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();

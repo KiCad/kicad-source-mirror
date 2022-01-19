@@ -25,17 +25,19 @@
 #ifndef PANEL_EDIT_OPTIONS_H
 #define PANEL_EDIT_OPTIONS_H
 
+#include <widgets/unit_binder.h>
 #include "panel_edit_options_base.h"
 
 
 class FOOTPRINT_EDITOR_SETTINGS;
 class PCBNEW_SETTINGS;
+class EDA_BASE_FRAME;
 
 
 class PANEL_EDIT_OPTIONS : public PANEL_EDIT_OPTIONS_BASE
 {
 public:
-    PANEL_EDIT_OPTIONS( wxWindow* aParent, bool isFootprintEditor );
+    PANEL_EDIT_OPTIONS( wxWindow* aParent, EDA_BASE_FRAME* aUnitsProvider, bool isFootprintEditor );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -47,7 +49,9 @@ private:
     void loadPCBSettings( PCBNEW_SETTINGS* aCfg );
 
 private:
-    bool m_isFootprintEditor;
+    bool        m_isFootprintEditor;
+
+    UNIT_BINDER m_rotationAngle;
 };
 
 

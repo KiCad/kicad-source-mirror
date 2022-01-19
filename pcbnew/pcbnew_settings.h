@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,6 +21,7 @@
 #ifndef PCBNEW_SETTINGS_H_
 #define PCBNEW_SETTINGS_H_
 
+#include <geometry/eda_angle.h>
 #include <settings/app_settings.h>
 #include <pcb_display_options.h>
 
@@ -331,7 +332,7 @@ public:
 
     bool m_PolarCoords;
 
-    int m_RotationAngle;
+    EDA_ANGLE m_RotationAngle;
 
     bool m_ShowPageLimits;
 

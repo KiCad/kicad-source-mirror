@@ -186,7 +186,8 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, const EDA_ANGLE& aRotation ) c
     if( !m_init )
         return false;
 
-    double rotation = aRotation.AsTenthsOfADegree();
+    EDA_ANGLE rotation = aRotation;
+    rotation.Normalize();
 
     /*
      * Most rectangles will be axis aligned.  It is quicker to check for this case and pass
@@ -196,22 +197,20 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, const EDA_ANGLE& aRotation ) c
     // Prevent floating point comparison errors
     static const double ROT_EPS = 0.000000001;
 
-    static const double ROT_PARALLEL[]      = { -3600, -1800, 0, 1800, 3600 };
-    static const double ROT_PERPENDICULAR[] = { -2700, -900, 0, 900, 2700 };
-
-    NORMALIZE_ANGLE_POS<double>( rotation );
+    static const double ROT_PARALLEL[]      = { 0.0, 180.0, 360.0 };
+    static const double ROT_PERPENDICULAR[] = { 0.0, 90.0, 270.0 };
 
     // Test for non-rotated rectangle
-    for( int ii = 0; ii < 5; ii++ )
+    for( double ii : ROT_PARALLEL )
     {
-        if( std::fabs( rotation - ROT_PARALLEL[ii] ) < ROT_EPS )
+        if( std::fabs( rotation.AsDegrees() - ii ) < ROT_EPS )
             return Intersects( aRect );
     }
 
     // Test for rectangle rotated by multiple of 90 degrees
-    for( int jj = 0; jj < 4; jj++ )
+    for( double jj : ROT_PERPENDICULAR )
     {
-        if( std::fabs( rotation - ROT_PERPENDICULAR[jj] ) < ROT_EPS )
+        if( std::fabs( rotation.AsDegrees() - jj ) < ROT_EPS )
         {
             EDA_RECT rotRect;
 
@@ -242,7 +241,7 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, const EDA_ANGLE& aRotation ) c
     for( int i = 0; i < 4; i++ )
     {
         VECTOR2I delta = corners[i] - rCentre;
-        RotatePoint( delta, -EDA_ANGLE( rotation, TENTHS_OF_A_DEGREE_T ) );
+        RotatePoint( delta, -rotation );
         delta += rCentre;
 
         if( aRect.Contains( delta ) )
@@ -262,7 +261,7 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, const EDA_ANGLE& aRotation ) c
     // Rotate and test each corner
     for( int j = 0; j < 4; j++ )
     {
-        RotatePoint( corners[j], EDA_ANGLE( rotation, TENTHS_OF_A_DEGREE_T ) );
+        RotatePoint( corners[j], rotation );
         corners[j] += rCentre;
 
         if( Contains( corners[j] ) )
@@ -275,7 +274,6 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, const EDA_ANGLE& aRotation ) c
     {
         return true;
     }
-
 
     return false;
 }

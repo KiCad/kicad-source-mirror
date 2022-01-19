@@ -50,19 +50,19 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerRotationStep;
 	bSizerRotationStep = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextRotationAngle = new wxStaticText( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Step for &rotate commands:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextRotationAngle->Wrap( -1 );
-	bSizerRotationStep->Add( m_staticTextRotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	m_rotationAngleLabel = new wxStaticText( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Step for &rotate commands:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rotationAngleLabel->Wrap( -1 );
+	bSizerRotationStep->Add( m_rotationAngleLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_rotationAngle = new wxTextCtrl( bOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_rotationAngle->SetToolTip( _("Set increment (in degrees) for context menu and hotkey rotation.") );
-	m_rotationAngle->SetMinSize( wxSize( 60,-1 ) );
+	m_rotationAngleCtrl = new wxTextCtrl( bOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_rotationAngleCtrl->SetToolTip( _("Set increment (in degrees) for context menu and hotkey rotation.") );
+	m_rotationAngleCtrl->SetMinSize( wxSize( 60,-1 ) );
 
-	bSizerRotationStep->Add( m_rotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizerRotationStep->Add( m_rotationAngleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_staticText32 = new wxStaticText( bOptionsSizer->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText32->Wrap( -1 );
-	bSizerRotationStep->Add( m_staticText32, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_rotationAngleUnits = new wxStaticText( bOptionsSizer->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rotationAngleUnits->Wrap( -1 );
+	bSizerRotationStep->Add( m_rotationAngleUnits, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizerUniversal->Add( bSizerRotationStep, 0, wxEXPAND, 5 );

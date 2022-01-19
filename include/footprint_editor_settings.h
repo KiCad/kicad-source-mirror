@@ -65,7 +65,7 @@ public:
 
     bool m_PolarCoords;
 
-    int m_RotationAngle;
+    EDA_ANGLE m_RotationAngle;
 
     bool m_Use45Limit;
 

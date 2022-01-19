@@ -44,7 +44,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
         m_Display(),
         m_UserGrid(),
         m_PolarCoords( false ),
-        m_RotationAngle( 900 ),
+        m_RotationAngle( ANGLE_90 ),
         m_Use45Limit( true ),
         m_LibWidth( 250 ),
         m_LastImportExportPath(),
@@ -86,8 +86,16 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "editing.polar_coords",
             &m_PolarCoords, false ) );
 
-    m_params.emplace_back( new PARAM<int>( "editing.rotation_angle",
-            &m_RotationAngle, 900, 1, 900 ) );
+    m_params.emplace_back( new PARAM_LAMBDA<int>( "editing.rotation_angle",
+            [this] () -> int
+            {
+                return m_RotationAngle.AsTenthsOfADegree();
+            },
+            [this] ( int aVal )
+            {
+                m_RotationAngle = EDA_ANGLE( aVal, TENTHS_OF_A_DEGREE_T );
+            },
+            900 ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.fp_use_45_degree_limit",
             &m_Use45Limit, false ) );

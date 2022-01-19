@@ -30,9 +30,12 @@
 #include <panel_edit_options.h>
 
 
-PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, bool isFootprintEditor ) :
+PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, EDA_BASE_FRAME* aUnitsProvider,
+                                        bool isFootprintEditor ) :
         PANEL_EDIT_OPTIONS_BASE( aParent ),
-        m_isFootprintEditor( isFootprintEditor )
+        m_isFootprintEditor( isFootprintEditor ),
+        m_rotationAngle( aUnitsProvider, m_rotationAngleLabel, m_rotationAngleCtrl,
+                         m_rotationAngleUnits )
 {
     m_magneticPads->Show( m_isFootprintEditor );
     m_magneticGraphics->Show( m_isFootprintEditor );
@@ -53,7 +56,7 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, bool isFootprintEdito
 
 void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
 {
-    m_rotationAngle->SetValue( AngleToStringDegrees( (double) aCfg->m_RotationAngle ) );
+    m_rotationAngle.SetAngleValue( aCfg->m_RotationAngle );
     m_magneticPadChoice->SetSelection( static_cast<int>( aCfg->m_MagneticItems.pads ) );
     m_magneticTrackChoice->SetSelection( static_cast<int>( aCfg->m_MagneticItems.tracks ) );
     m_magneticGraphicsChoice->SetSelection( !aCfg->m_MagneticItems.graphics );
@@ -79,7 +82,7 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
 
 void PANEL_EDIT_OPTIONS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
 {
-    m_rotationAngle->SetValue( AngleToStringDegrees( (double) aCfg->m_RotationAngle ) );
+    m_rotationAngle.SetAngleValue( aCfg->m_RotationAngle );
     m_magneticPads->SetValue( aCfg->m_MagneticItems.pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
     m_magneticGraphics->SetValue( aCfg->m_MagneticItems.graphics );
     m_cbFpGraphic45Mode->SetValue( aCfg->m_Use45Limit );
@@ -115,7 +118,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
     {
         FOOTPRINT_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 
-        cfg->m_RotationAngle = wxRound( 10.0 * wxAtof( m_rotationAngle->GetValue() ) );
+        cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
 
         cfg->m_MagneticItems.pads = m_magneticPads->GetValue() ? MAGNETIC_OPTIONS::CAPTURE_ALWAYS
                                                                : MAGNETIC_OPTIONS::NO_EFFECT;
@@ -130,7 +133,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         cfg->m_Display.m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
         cfg->m_Display.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
 
-        cfg->m_RotationAngle = wxRound( 10.0 * wxAtof( m_rotationAngle->GetValue() ) );
+        cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
 
         cfg->m_MagneticItems.pads = static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );
         cfg->m_MagneticItems.tracks = static_cast<MAGNETIC_OPTIONS>( m_magneticTrackChoice->GetSelection() );

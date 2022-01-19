@@ -40,9 +40,9 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_magneticPads;
 		wxCheckBox* m_magneticGraphics;
 		wxCheckBox* m_flipLeftRight;
-		wxStaticText* m_staticTextRotationAngle;
-		wxTextCtrl* m_rotationAngle;
-		wxStaticText* m_staticText32;
+		wxStaticText* m_rotationAngleLabel;
+		wxTextCtrl* m_rotationAngleCtrl;
+		wxStaticText* m_rotationAngleUnits;
 		wxCheckBox* m_allowFreePads;
 		wxStaticBoxSizer* m_mouseCmdsWinLin;
 		wxStaticText* m_staticText181;
