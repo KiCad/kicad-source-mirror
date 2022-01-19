@@ -1815,8 +1815,17 @@ void LEGACY_PLUGIN::loadPCB_LINE()
             dseg->SetShape( static_cast<SHAPE_T>( shape ) );
             dseg->SetFilled( false );
             dseg->SetStroke( STROKE_PARAMS( width, PLOT_DASH_TYPE::SOLID ) );
-            dseg->SetStart( VECTOR2I( start_x, start_y ) );
-            dseg->SetEnd( VECTOR2I( end_x, end_y ) );
+
+            if( dseg->GetShape() == SHAPE_T::ARC )
+            {
+                dseg->SetCenter( VECTOR2I( start_x, start_y ) );
+                dseg->SetStart( VECTOR2I( end_x, end_y ) );
+            }
+            else
+            {
+                dseg->SetStart( VECTOR2I( start_x, start_y ) );
+                dseg->SetEnd( VECTOR2I( end_x, end_y ) );
+            }
         }
         else if( TESTLINE( "De" ) )
         {
@@ -1849,7 +1858,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     EDA_ANGLE angle = degParse( data );
 
                     if( dseg->GetShape() == SHAPE_T::ARC )
-                        dseg->SetArcAngleAndEnd( angle, true );    // m_Angle
+                        dseg->SetArcAngleAndEnd( angle );
 
                     break;
                 }
