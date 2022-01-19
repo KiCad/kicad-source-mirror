@@ -984,16 +984,29 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
     if( hasMidPoint )
     {
         arc->SetCenter( CalcArcCenter( arc->GetStart(), midPoint, arc->GetEnd() ) );
+
+        /**
+         * Current file format stores start-mid-end and so doesn't care about winding.  We
+         * store start-end with an implied winding internally though, so we need to swap the
+         * ends if they don't match what we're expecting.
+         */
+        EDA_ANGLE start, end;
+        arc->CalcArcAngles( start, end );
+
+        if( start < end )
+        {
+            VECTOR2I temp = arc->GetStart();
+            arc->SetStart( arc->GetEnd() );
+            arc->SetEnd( temp );
+        }
     }
     else if( hasAngles )
     {
         arc->SetCenter( center );
-        /**
-         * This accounts for an oddity in the old library format, where the symbol is overdefined.
-         * The previous draw (based on wxwidgets) used start point and end point and always drew
-         * counter-clockwise.  The new GAL draw takes center, radius and start/end angles.  All of
-         * these points were stored in the file, so we need to mimic the swapping of start/end
-         * points rather than using the stored angles in order to properly map edge cases.
+        /*
+         * Older versions stored start-end with an implied winding, but the winding was different
+         * between LibEdit and PCBNew.  Since we now use a common class (EDA_SHAPE) for both we
+         * need to flip one of them.  LibEdit drew the short straw.
          */
         VECTOR2I temp = arc->GetStart();
         arc->SetStart( arc->GetEnd() );
@@ -2822,13 +2835,8 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchArc()
     VECTOR2I      startPoint;
     VECTOR2I      midPoint;
     VECTOR2I      endPoint;
-    VECTOR2I      pos;
-    EDA_ANGLE     startAngle;
-    EDA_ANGLE     endAngle;
     STROKE_PARAMS stroke( Mils2iu( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
-    bool          hasMidPoint = false;
-    bool          hasAngles = false;
     std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
@@ -2848,50 +2856,11 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchArc()
         case T_mid:
             midPoint = parseXY();
             NeedRIGHT();
-            hasMidPoint = true;
             break;
 
         case T_end:
             endPoint = parseXY();
             NeedRIGHT();
-            break;
-
-        case T_radius:
-            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
-            {
-                if( token != T_LEFT )
-                    Expecting( T_LEFT );
-
-                token = NextTok();
-
-                switch( token )
-                {
-                case T_at:
-                    pos = parseXY();
-                    NeedRIGHT();
-                    break;
-
-                case T_length:
-                    parseInternalUnits( "radius length" );
-                    NeedRIGHT();
-                    break;
-
-                case T_angles:
-                {
-                    startAngle = EDA_ANGLE( parseDouble( "start radius angle" ), DEGREES_T );
-                    endAngle = EDA_ANGLE( parseDouble( "end radius angle" ), DEGREES_T );
-                    startAngle.Normalize();
-                    endAngle.Normalize();
-                    NeedRIGHT();
-                    hasAngles = true;
-                    break;
-                }
-
-                default:
-                    Expecting( "at, length, or angle" );
-                }
-            }
-
             break;
 
         case T_stroke:
@@ -2912,38 +2881,29 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchArc()
             break;
 
         default:
-            Expecting( "start, mid, end, radius, stroke, fill or uuid" );
+            Expecting( "start, mid, end, stroke, fill or uuid" );
         }
     }
 
     arc->SetStart( startPoint );
     arc->SetEnd( endPoint );
+    arc->SetCenter( CalcArcCenter( arc->GetStart(), midPoint, arc->GetEnd() ) );
 
-    if( hasMidPoint )
-    {
-        VECTOR2I center = CalcArcCenter( arc->GetStart(), midPoint, arc->GetEnd() );
+    /**
+     * Current file format stores start-mid-end and so doesn't care about winding.  We store
+     * start-end with an implied winding internally though, so we need to swap the ends if they
+     * don't match what we're expecting.  (Note that what we're expecting is backwards from the
+     * LIB_SHAPE case because LibEdit has an upside-down coordinate system.)
+     */
+    EDA_ANGLE start, end;
+    arc->CalcArcAngles( start, end );
 
-        arc->SetCenter( center );
-    }
-    else if( hasAngles )
+    if( start > end )
     {
-        arc->SetCenter( pos );
-        /**
-         * This accounts for an oddity in the old library format, where the symbol is overdefined.
-         * The previous draw (based on wxwidgets) used start point and end point and always drew
-         * counter-clockwise.  The new GAL draw takes center, radius and start/end angles.  All of
-         * these points were stored in the file, so we need to mimic the swapping of start/end
-         * points rather than using the stored angles in order to properly map edge cases.
-         */
-        if( !TRANSFORM().MapAngles( &startAngle, &endAngle ) )
-        {
-            VECTOR2I temp = arc->GetStart();
-            arc->SetStart( arc->GetEnd() );
-            arc->SetEnd( temp );
-        }
+        VECTOR2I temp = arc->GetStart();
+        arc->SetStart( arc->GetEnd() );
+        arc->SetEnd( temp );
     }
-    else
-        wxFAIL_MSG( "Setting arc without either midpoint or angles not implemented." );
 
     return arc.release();
 }

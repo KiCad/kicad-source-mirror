@@ -494,10 +494,10 @@ void EDA_SHAPE::SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, co
     m_arcCenter = CalcArcCenter( aStart, aMid, aEnd );
     m_endsSwapped = false;
 
-    /**
-     * If the input winding doesn't match our internal winding, the calculated midpoint will end up
-     * on the other side of the arc.  In this case, we need to flip the start/end points and flag this
-     * change for the system
+    /*
+     * If the input winding doesn't match our internal winding, the calculated midpoint will end
+     * up on the other side of the arc.  In this case, we need to flip the start/end points and
+     * flag this change for the system.
      */
     VECTOR2I new_mid = GetArcMid();
     VECTOR2D dist( new_mid - aMid );
