@@ -139,7 +139,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             },
             [this] ( int aVal )
             {
-                m_RotationAngle = EDA_ANGLE( aVal, TENTHS_OF_A_DEGREE_T );
+                if( aVal )
+                    m_RotationAngle = EDA_ANGLE( aVal, TENTHS_OF_A_DEGREE_T );
             },
             900 ) );
 

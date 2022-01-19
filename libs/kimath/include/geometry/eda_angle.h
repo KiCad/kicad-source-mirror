@@ -52,7 +52,7 @@ public:
             break;
 
         case TENTHS_OF_A_DEGREE_T:
-            m_value = aValue * 10.0;
+            m_value = aValue / 10.0;
             break;
 
         default:

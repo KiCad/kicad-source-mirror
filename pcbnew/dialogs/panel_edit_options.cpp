@@ -42,6 +42,8 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, EDA_BASE_FRAME* aUnit
     m_flipLeftRight->Show( !m_isFootprintEditor );
     m_allowFreePads->Show( !m_isFootprintEditor );
 
+    m_rotationAngle.SetUnits( EDA_UNITS::DEGREES );
+
 #ifdef __WXOSX_MAC__
     m_mouseCmdsOSX->Show( true );
     m_mouseCmdsWinLin->Show( false );
