@@ -32,6 +32,7 @@
 
 #include <layer_ids.h>
 #include <zones.h>
+#include <geometry/eda_angle.h>
 
 class wxDataViewListCtrl;
 
@@ -83,7 +84,7 @@ public:
     int             m_ZoneMinThickness;      // Min thickness value in filled areas
     int             m_HatchThickness;        // HatchBorder thickness of lines (if 0 -> solid shape)
     int             m_HatchGap;              // HatchBorder clearance between lines (0 -> solid shape)
-    double          m_HatchOrientation;      // HatchBorder orientation of grid lines in degrees
+    EDA_ANGLE       m_HatchOrientation;      // HatchBorder orientation of grid lines
     int             m_HatchSmoothingLevel;   // HatchBorder smoothing type, similar to corner smoothing type
                                              // 0 = no smoothing, 1 = fillet, >= 2 = arc
     double          m_HatchSmoothingValue;   // HatchBorder chamfer/fillet size as a ratio of hole size

@@ -1494,7 +1494,7 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
         zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
         zone->SetHatchThickness( p.width.ToPcbUnits() );
         zone->SetHatchGap( spacing - p.width.ToPcbUnits() );
-        zone->SetHatchOrientation( 0 );
+        zone->SetHatchOrientation( ANGLE_0 );
     }
 
     // We divide the thickness by half because we are tracing _inside_ the zone outline

@@ -2077,7 +2077,7 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
         m_out->Print( aNestLevel+2, "(hatch_thickness %s) (hatch_gap %s) (hatch_orientation %s)",
                       FormatInternalUnits( aZone->GetHatchThickness() ).c_str(),
                       FormatInternalUnits( aZone->GetHatchGap() ).c_str(),
-                      Double2Str( aZone->GetHatchOrientation() ).c_str() );
+                      Double2Str( aZone->GetHatchOrientation().AsDegrees() ).c_str() );
 
         if( aZone->GetHatchSmoothingLevel() > 0 )
         {

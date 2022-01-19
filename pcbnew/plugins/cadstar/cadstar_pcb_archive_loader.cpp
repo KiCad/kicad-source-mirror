@@ -1900,7 +1900,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
             zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
             zone->SetHatchGap( getKiCadHatchCodeGap( csTemplate.Pouring.HatchCodeID ) );
             zone->SetHatchThickness( getKiCadHatchCodeThickness( csTemplate.Pouring.HatchCodeID ) );
-            zone->SetHatchOrientation( getHatchCodeAngleDegrees( csTemplate.Pouring.HatchCodeID ) );
+            zone->SetHatchOrientation( getHatchCodeAngle( csTemplate.Pouring.HatchCodeID ) );
         }
         else
         {
@@ -2134,7 +2134,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
                 zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
                 zone->SetHatchGap( getKiCadHatchCodeGap( csCopper.Shape.HatchCodeID ) );
                 zone->SetHatchThickness( getKiCadHatchCodeThickness( csCopper.Shape.HatchCodeID ) );
-                zone->SetHatchOrientation( getHatchCodeAngleDegrees( csCopper.Shape.HatchCodeID ) );
+                zone->SetHatchOrientation( getHatchCodeAngle( csCopper.Shape.HatchCodeID ) );
             }
             else
             {
@@ -3470,8 +3470,7 @@ CADSTAR_PCB_ARCHIVE_LOADER::HATCHCODE CADSTAR_PCB_ARCHIVE_LOADER::getHatchCode(
 }
 
 
-double CADSTAR_PCB_ARCHIVE_LOADER::getHatchCodeAngleDegrees(
-        const HATCHCODE_ID& aCadstarHatchcodeID )
+EDA_ANGLE CADSTAR_PCB_ARCHIVE_LOADER::getHatchCodeAngle( const HATCHCODE_ID& aCadstarHatchcodeID )
 {
     checkAndLogHatchCode( aCadstarHatchcodeID );
     HATCHCODE hcode = getHatchCode( aCadstarHatchcodeID );
@@ -3479,7 +3478,7 @@ double CADSTAR_PCB_ARCHIVE_LOADER::getHatchCodeAngleDegrees(
     if( hcode.Hatches.size() < 1 )
         return m_board->GetDesignSettings().GetDefaultZoneSettings().m_HatchOrientation;
     else
-        return getAngle( hcode.Hatches.at( 0 ).OrientAngle ).AsDegrees();
+        return getAngle( hcode.Hatches.at( 0 ).OrientAngle );
 }
 
 

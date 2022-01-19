@@ -414,7 +414,7 @@ private:
     LAYER_TYPE getLayerType( const LAYER_ID aCadstarLayerID );
 
     // Helper Functions for obtaining individual elements as KiCad elements:
-    double     getHatchCodeAngleDegrees( const HATCHCODE_ID& aCadstarHatchcodeID );
+    EDA_ANGLE  getHatchCodeAngle( const HATCHCODE_ID& aCadstarHatchcodeID );
     PAD*       getKiCadPad( const COMPONENT_PAD& aCadstarPad, FOOTPRINT* aParent );
     PAD*&      getPadReference( FOOTPRINT* aFootprint, const PAD_ID aCadstarPadID );
     FOOTPRINT* getFootprintFromCadstarID( const COMPONENT_ID& aCadstarComponentID );

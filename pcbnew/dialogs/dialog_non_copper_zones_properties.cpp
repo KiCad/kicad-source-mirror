@@ -130,7 +130,7 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
     }
 
     m_hatchRotation.SetUnits( EDA_UNITS::DEGREES );
-    m_hatchRotation.SetAngleValue( EDA_ANGLE( m_settings.m_HatchOrientation, DEGREES_T ) );
+    m_hatchRotation.SetAngleValue( m_settings.m_HatchOrientation );
 
     // Gives a reasonable value to grid style parameters, if currently there are no defined
     // parameters for grid pattern thickness and gap (if the value is 0)
@@ -224,7 +224,7 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
     }
 
 
-    m_settings.m_HatchOrientation = m_hatchRotation.GetAngleValue().AsDegrees();
+    m_settings.m_HatchOrientation = m_hatchRotation.GetAngleValue();
     m_settings.m_HatchThickness = m_hatchWidth.GetValue();
     m_settings.m_HatchGap = m_hatchGap.GetValue();
     m_settings.m_HatchSmoothingLevel = m_spinCtrlSmoothLevel->GetValue();

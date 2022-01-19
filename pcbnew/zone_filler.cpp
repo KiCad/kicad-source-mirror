@@ -1431,13 +1431,12 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
 
     int linethickness = thickness - aZone->GetMinThickness();
     int gridsize = thickness + aZone->GetHatchGap();
-    double orientation = aZone->GetHatchOrientation();
 
     SHAPE_POLY_SET filledPolys = aRawPolys;
-    // Use a area that contains the rotated bbox by orientation,
-    // and after rotate the result by -orientation.
-    if( orientation != 0.0 )
-        filledPolys.Rotate( M_PI / 180.0 * orientation, VECTOR2I( 0, 0 ) );
+    // Use a area that contains the rotated bbox by orientation, and after rotate the result
+    // by -orientation.
+    if( !aZone->GetHatchOrientation().IsZero() )
+        filledPolys.Rotate( aZone->GetHatchOrientation().AsRadians(), VECTOR2I( 0, 0 ) );
 
     BOX2I bbox = filledPolys.BBox( 0 );
 
@@ -1542,8 +1541,8 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
 
     holes.Move( bbox.GetPosition() );
 
-    if( orientation != 0.0 )
-        holes.Rotate( -M_PI/180.0 * orientation, VECTOR2I( 0,0 ) );
+    if( !aZone->GetHatchOrientation().IsZero() )
+        holes.Rotate( -aZone->GetHatchOrientation().AsRadians(), VECTOR2I( 0, 0 ) );
 
     DUMP_POLYS_TO_COPPER_LAYER( holes, In10_Cu, "hatch-holes" );
 

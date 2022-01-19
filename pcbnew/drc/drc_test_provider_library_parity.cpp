@@ -285,7 +285,7 @@ bool zonesNeedUpdate( const FP_ZONE* a, const FP_ZONE* b )
     TEST( a->GetFillMode(), b->GetFillMode() );
     TEST( a->GetHatchThickness(), b->GetHatchThickness() );
     TEST( a->GetHatchGap(), b->GetHatchGap() );
-    TEST_D( a->GetHatchOrientation(), b->GetHatchOrientation() );
+    TEST_D( a->GetHatchOrientation().AsDegrees(), b->GetHatchOrientation().AsDegrees() );
     TEST( a->GetHatchSmoothingLevel(), b->GetHatchSmoothingLevel() );
     TEST( a->GetHatchSmoothingValue(), b->GetHatchSmoothingValue() );
     TEST( a->GetHatchBorderAlgorithm(), b->GetHatchBorderAlgorithm() );

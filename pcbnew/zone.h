@@ -282,8 +282,8 @@ public:
     int GetHatchGap() const { return m_hatchGap; }
     void SetHatchGap( int aStep ) { m_hatchGap = aStep; }
 
-    double GetHatchOrientation() const { return m_hatchOrientation; }
-    void SetHatchOrientation( double aStep ) { m_hatchOrientation = aStep; }
+    EDA_ANGLE GetHatchOrientation() const { return m_hatchOrientation; }
+    void SetHatchOrientation( const EDA_ANGLE& aStep ) { m_hatchOrientation = aStep; }
 
     int GetHatchSmoothingLevel() const { return m_hatchSmoothingLevel; }
     void SetHatchSmoothingLevel( int aLevel ) { m_hatchSmoothingLevel = aLevel; }
@@ -931,7 +931,7 @@ protected:
     ZONE_FILL_MODE   m_fillMode;
     int              m_hatchThickness;          // thickness of lines (if 0 -> solid shape)
     int              m_hatchGap;                // gap between lines (0 -> solid shape
-    double           m_hatchOrientation;        // orientation in degrees of grid lines
+    EDA_ANGLE        m_hatchOrientation;        // orientation of grid lines
     int              m_hatchSmoothingLevel;     // 0 = no smoothing
                                                 // 1 = fillet
                                                 // 2 = arc low def

@@ -48,14 +48,14 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_ZoneClearance = Mils2iu( ZONE_CLEARANCE_MIL );
     // Min thickness value in filled areas (this is the minimum width of copper to fill solid areas) :
     m_ZoneMinThickness = Mils2iu( ZONE_THICKNESS_MIL );
-    m_HatchThickness = 0;        // good value of grid line thickness if m_FillMode = ZFM_GRID_PATTERN
-    m_HatchGap = 0;              // good value  of grid line gap if m_FillMode = ZFM_GRID_PATTERN
-    m_HatchOrientation = 0.0;    // Grid style: orientation of grid lines in degrees
-    m_HatchSmoothingLevel = 0;   // Grid pattern smoothing type. 0 = no smoothing
-    m_HatchSmoothingValue = 0.1; // Grid pattern chamfer value relative to the gap value
-    m_HatchHoleMinArea = 0.3;    // Min size before holes are dropped (ratio of hole size)
-    m_HatchBorderAlgorithm = 1;  // 0 = use zone min thickness; 1 = use hatch width
-    m_NetcodeSelection = 0;      // Net code selection for the current zone
+    m_HatchThickness = 0;           // good value of grid line thickness for ZFM_GRID_PATTERN
+    m_HatchGap = 0;                 // good value of grid line gap for ZFM_GRID_PATTERN
+    m_HatchOrientation = ANGLE_0;   // Grid style: orientation of grid lines
+    m_HatchSmoothingLevel = 0;      // Grid pattern smoothing type. 0 = no smoothing
+    m_HatchSmoothingValue = 0.1;    // Grid pattern chamfer value relative to the gap value
+    m_HatchHoleMinArea = 0.3;       // Min size before holes are dropped (ratio of hole size)
+    m_HatchBorderAlgorithm = 1;     // 0 = use zone min thickness; 1 = use hatch width
+    m_NetcodeSelection = 0;         // Net code selection for the current zone
     m_ZoneBorderDisplayStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE; // Option to show the zone
                                                                          // outlines only, short
                                                                          // hatches or full hatches

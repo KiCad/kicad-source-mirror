@@ -1753,7 +1753,8 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
                 zone->SetHatchGap( elem.gridsize - elem.trackwidth );
             }
 
-            zone->SetHatchOrientation( elem.hatchstyle == ALTIUM_POLYGON_HATCHSTYLE::DEGREE_45 ? 45 : 0 );
+            if( elem.hatchstyle == ALTIUM_POLYGON_HATCHSTYLE::DEGREE_45 )
+                zone->SetHatchOrientation( ANGLE_45 );
         }
 
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,

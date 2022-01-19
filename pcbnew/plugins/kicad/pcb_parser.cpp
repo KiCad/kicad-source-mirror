@@ -5256,9 +5256,12 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     break;
 
                 case T_hatch_orientation:
-                    zone->SetHatchOrientation( parseDouble( T_hatch_orientation ) );
+                {
+                    EDA_ANGLE orientation( parseDouble( T_hatch_orientation ), DEGREES_T );
+                    zone->SetHatchOrientation( orientation );
                     NeedRIGHT();
                     break;
+                }
 
                 case T_hatch_smoothing_level:
                     zone->SetHatchSmoothingLevel( parseDouble( T_hatch_smoothing_level ) );
