@@ -253,12 +253,16 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
     bool useTransform = aDC->CanUseTransformMatrix();
     wxAffineMatrix2D init_matrix = aDC->GetTransformMatrix();
 
+    wxPoint clipAreaPos;
+
     if( useTransform )
     {
         wxAffineMatrix2D matrix = aDC->GetTransformMatrix();
         matrix.Translate( pos.x, pos.y );
         matrix.Scale( GetScalingFactor(), GetScalingFactor() );
         aDC->SetTransformMatrix( matrix );
+        clipAreaPos.x = pos.x;
+        clipAreaPos.y = pos.y;
         pos.x = pos.y = 0;
     }
     else
@@ -271,10 +275,12 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
         pos.y  = KiROUND( pos.y / GetScalingFactor() );
         size.x = KiROUND( size.x / GetScalingFactor() );
         size.y = KiROUND( size.y / GetScalingFactor() );
+        clipAreaPos.x = pos.x;
+        clipAreaPos.y = pos.y;
     }
 
     aDC->DestroyClippingRegion();
-    aDC->SetClippingRegion( wxPoint( pos.x, pos.y ), size );
+    aDC->SetClippingRegion( clipAreaPos, size );
 
     if( GetGRForceBlackPenState() )
     {
