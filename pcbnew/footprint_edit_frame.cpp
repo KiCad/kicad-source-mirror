@@ -591,7 +591,7 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 EDA_ANGLE FOOTPRINT_EDIT_FRAME::GetRotationAngle() const
 {
-    FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
+    FOOTPRINT_EDITOR_SETTINGS* cfg = const_cast<FOOTPRINT_EDIT_FRAME*>( this )->GetSettings();
 
     return cfg ? cfg->m_RotationAngle : ANGLE_90;
 }
