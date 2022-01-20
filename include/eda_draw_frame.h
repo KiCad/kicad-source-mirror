@@ -247,11 +247,6 @@ public:
     void UpdateZoomSelectBox();
 
     /**
-     * Update the checked item in the zoom combobox.
-     */
-    void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
-
-    /**
      * Return a human readable value for display in dialogs.
      */
     const wxString GetZoomLevelIndicator() const;
