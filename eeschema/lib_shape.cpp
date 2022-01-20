@@ -315,10 +315,12 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
             break;
 
         case SHAPE_T::POLY:
+
+            GRPoly( nullptr, DC, ptCount, buffer, true, 0, fillColor, fillColor );
+
             if( penWidth > 0 )
-                GRPoly( nullptr, DC, ptCount, buffer, true, penWidth, color, fillColor );
-            else
-                GRPoly( nullptr, DC, ptCount, buffer, true, 0, fillColor, fillColor );
+                GRPoly( nullptr, DC, ptCount, buffer, false, penWidth, color, fillColor );
+
             break;
 
         case SHAPE_T::BEZIER:
