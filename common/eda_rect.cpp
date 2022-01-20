@@ -195,22 +195,22 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, const EDA_ANGLE& aRotation ) c
      */
 
     // Prevent floating point comparison errors
-    static const double ROT_EPS = 0.000000001;
+    static const EDA_ANGLE ROT_EPSILON( 0.000000001, DEGREES_T );
 
-    static const double ROT_PARALLEL[]      = { 0.0, 180.0, 360.0 };
-    static const double ROT_PERPENDICULAR[] = { 0.0, 90.0, 270.0 };
+    static const EDA_ANGLE ROT_PARALLEL[]      = { ANGLE_0, ANGLE_180, ANGLE_360 };
+    static const EDA_ANGLE ROT_PERPENDICULAR[] = { ANGLE_0, ANGLE_90,  ANGLE_270 };
 
     // Test for non-rotated rectangle
-    for( double ii : ROT_PARALLEL )
+    for( EDA_ANGLE ii : ROT_PARALLEL )
     {
-        if( std::fabs( rotation.AsDegrees() - ii ) < ROT_EPS )
+        if( std::abs( rotation - ii ) < ROT_EPSILON )
             return Intersects( aRect );
     }
 
     // Test for rectangle rotated by multiple of 90 degrees
-    for( double jj : ROT_PERPENDICULAR )
+    for( EDA_ANGLE jj : ROT_PERPENDICULAR )
     {
-        if( std::fabs( rotation.AsDegrees() - jj ) < ROT_EPS )
+        if( std::abs( rotation - jj ) < ROT_EPSILON )
         {
             EDA_RECT rotRect;
 
