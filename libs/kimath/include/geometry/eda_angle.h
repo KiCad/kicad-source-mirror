@@ -347,6 +347,12 @@ inline EDA_ANGLE operator/( const EDA_ANGLE& aAngleA, double aOperator )
 }
 
 
+inline double operator/( const EDA_ANGLE& aAngleA, EDA_ANGLE& aOperator )
+{
+    return aAngleA.AsDegrees() / aOperator.AsDegrees();
+}
+
+
 inline bool operator==( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 {
     return aAngleA.AsDegrees() == aAngleB.AsDegrees();
@@ -380,6 +386,21 @@ inline bool operator<=( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 inline bool operator>=( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aAngleB )
 {
     return aAngleA.AsDegrees() >= aAngleB.AsDegrees();
+}
+
+
+inline std::ostream& operator<<( std::ostream& aStream, const EDA_ANGLE& aAngle )
+{
+    return aStream << aAngle.AsDegrees();
+}
+
+
+namespace std
+{
+inline EDA_ANGLE abs( const EDA_ANGLE& aAngle )
+{
+    return EDA_ANGLE( std::abs( aAngle.AsDegrees() ), DEGREES_T );
+}
 }
 
 

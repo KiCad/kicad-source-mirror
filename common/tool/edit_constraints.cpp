@@ -27,9 +27,7 @@
 #include "tool/edit_points.h"
 
 #include <geometry/seg.h>
-#include <math/util.h>      // for KiROUND
-
-#include <common.h>
+#include <trigo.h>
 
 #include <utility>
 #include <geometry/geometry_utils.h>
@@ -82,11 +80,11 @@ void EC_CIRCLE::Apply( EDIT_POINT& aHandle )
     VECTOR2I centerToEnd = m_end.GetPosition() - m_center.GetPosition();
     VECTOR2I centerToPoint = aHandle.GetPosition() - m_center.GetPosition();
 
-    int radius = centerToEnd.EuclideanNorm();
-    double angle = centerToPoint.Angle();
+    int       radius = centerToEnd.EuclideanNorm();
+    EDA_ANGLE angle( centerToPoint );
 
     VECTOR2I newLine( radius, 0 );
-    newLine = newLine.Rotate( angle );
+    RotatePoint( newLine, -angle );
 
     aHandle.SetPosition( m_center.GetPosition() + newLine );
 }

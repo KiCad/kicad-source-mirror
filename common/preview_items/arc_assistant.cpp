@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,27 +57,6 @@ const BOX2I ARC_ASSISTANT::ViewBBox() const
 }
 
 
-/**
- * Get deci-degrees from radians, normalised to +/- 360.
- *
- * The normalisation is such that a negative angle will stay
- * negative.
- */
-double getNormDeciDegFromRad( double aRadians )
-{
-    double degs = RAD2DECIDEG( aRadians );
-
-    // normalise to +/- 360
-    while( degs < -3600.0 )
-        degs += 3600.0;
-
-    while( degs > 3600.0 )
-        degs -= 3600.0;
-
-    return degs;
-}
-
-
 void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     KIGFX::GAL& gal = *aView->GetGAL();
@@ -104,31 +83,29 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     {
         // haven't started the angle selection phase yet
 
-        double initAngle = m_constructMan.GetStartAngle();
+        EDA_ANGLE initAngle = m_constructMan.GetStartAngle();
 
         // draw the radius guide circle
         preview_ctx.DrawCircle( origin, m_constructMan.GetRadius(), true );
 
-        EDA_ANGLE angle( initAngle, RADIANS_T );
-        angle.Normalize();
+        initAngle.Normalize720();
 
         cursorStrings.push_back( DimensionLabel( "r", m_constructMan.GetRadius(), m_units ) );
-        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), angle.AsDegrees(),
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), initAngle.AsDegrees(),
                                                  EDA_UNITS::DEGREES ) );
     }
     else
     {
         preview_ctx.DrawLineWithAngleHighlight( origin, m_constructMan.GetEndRadiusEnd(), false );
 
-        double    start = m_constructMan.GetStartAngle();
-        double    subtended = m_constructMan.GetSubtended();
-        EDA_ANGLE incAngle( subtended, RADIANS_T );
-        EDA_ANGLE endAngle( start + subtended, RADIANS_T );
+        EDA_ANGLE start = m_constructMan.GetStartAngle();
+        EDA_ANGLE subtended = m_constructMan.GetSubtended();
+        EDA_ANGLE endAngle = start + subtended;
 
         // draw dimmed extender line to cursor
         preview_ctx.DrawLineWithAngleHighlight( origin, m_constructMan.GetLastPoint(), true );
 
-        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "Δθ" ), incAngle.AsDegrees(),
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "Δθ" ), subtended.AsDegrees(),
                                                  EDA_UNITS::DEGREES ) );
         cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), endAngle.AsDegrees(),
                                                  EDA_UNITS::DEGREES ) );

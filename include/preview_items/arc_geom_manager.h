@@ -25,6 +25,7 @@
 #define PREVIEW_ITEMS_ARC_GEOMETRY_MANAGER_H
 
 #include <preview_items/multistep_geom_manager.h>
+#include <geometry/eda_angle.h>
 
 namespace KIGFX {
 namespace PREVIEW {
@@ -97,10 +98,10 @@ public:
     double GetRadius() const;
 
     ///< Get the angle of the vector leading to the start point (valid if step >= SET_START)
-    double GetStartAngle() const;
+    EDA_ANGLE GetStartAngle() const;
 
     ///< Get the angle of the vector leading to the end point (valid if step >= SET_ANGLE)
-    double GetSubtended() const;
+    EDA_ANGLE GetSubtended() const;
 
 private:
 
@@ -120,11 +121,11 @@ private:
     /*
      * Arc geometry
      */
-    bool m_clockwise  = true;
-    VECTOR2I m_origin;
-    double m_radius = 0.0;
-    double m_startAngle = 0.0;
-    double m_endAngle = 0.0;
+    bool      m_clockwise  = true;
+    VECTOR2I  m_origin;
+    double    m_radius = 0.0;
+    EDA_ANGLE m_startAngle;
+    EDA_ANGLE m_endAngle;
 
     /*
      * construction parameters

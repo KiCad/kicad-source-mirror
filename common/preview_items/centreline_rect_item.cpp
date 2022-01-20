@@ -25,6 +25,7 @@
 #include <preview_items/two_point_geom_manager.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
+#include <trigo.h>
 
 using namespace KIGFX::PREVIEW;
 
@@ -54,7 +55,9 @@ static SHAPE_POLY_SET getRectangleAlongCentreLine( const VECTOR2D& aClStart,
 
     // the "side" of the rectangle is the centre line rotated by 90 deg
     // and scaled by the aspect ratio
-    VECTOR2D side = cl.Rotate( M_PI / 2.0 ) * aAspect;
+    VECTOR2D side = cl;
+    RotatePoint( side, -ANGLE_90 );
+    side = side * aAspect;
 
     VECTOR2D pt = aClStart + ( side / 2.0 );
     poly.Append( pt );

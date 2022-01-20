@@ -24,14 +24,16 @@
 #include <preview_items/arc_geom_manager.h>
 
 #include <math/util.h>      // for KiROUND
+#include <geometry/eda_angle.h>
+#include <trigo.h>
 
 using namespace KIGFX::PREVIEW;
 
 
 ///< Snap an angle to the nearest 45 degrees
-static double snapAngle( double aAngle )
+static EDA_ANGLE snapAngle( const EDA_ANGLE& aAngle )
 {
-    return KiROUND( aAngle / M_PI_4 ) * M_PI_4;
+    return ANGLE_45 * KiROUND( aAngle / ANGLE_45 );
 }
 
 
@@ -73,13 +75,17 @@ VECTOR2I ARC_GEOM_MANAGER::GetOrigin() const
 
 VECTOR2I ARC_GEOM_MANAGER::GetStartRadiusEnd() const
 {
-    return m_origin + VECTOR2I( m_radius, 0 ).Rotate( m_startAngle );
+    VECTOR2I vec( m_radius, 0 );
+    RotatePoint( vec, -m_startAngle );
+    return m_origin +vec;
 }
 
 
 VECTOR2I ARC_GEOM_MANAGER::GetEndRadiusEnd() const
 {
-    return m_origin + VECTOR2I( m_radius, 0 ).Rotate( m_endAngle );
+    VECTOR2I vec( m_radius, 0 );
+    RotatePoint( vec, -m_endAngle );
+    return m_origin + vec;
 }
 
 
@@ -89,26 +95,26 @@ double ARC_GEOM_MANAGER::GetRadius() const
 }
 
 
-double ARC_GEOM_MANAGER::GetStartAngle() const
+EDA_ANGLE ARC_GEOM_MANAGER::GetStartAngle() const
 {
-    double angle = m_startAngle;
+    EDA_ANGLE angle = m_startAngle;
 
     if( m_clockwise )
-        angle -= 2 * M_PI;
+        angle -= ANGLE_360;
 
     return -angle;
 }
 
 
-double ARC_GEOM_MANAGER::GetSubtended() const
+EDA_ANGLE ARC_GEOM_MANAGER::GetSubtended() const
 {
-    double angle = m_endAngle - m_startAngle;
+    EDA_ANGLE angle = m_endAngle - m_startAngle;
 
     if( m_endAngle <= m_startAngle )
-        angle += 2 * M_PI;
+        angle += ANGLE_360;
 
     if( m_clockwise )
-        angle -= 2 * M_PI;
+        angle -= ANGLE_360;
 
     return -angle;
 }
@@ -116,9 +122,9 @@ double ARC_GEOM_MANAGER::GetSubtended() const
 
 bool ARC_GEOM_MANAGER::setOrigin( const VECTOR2I& aOrigin )
 {
-    m_origin    = aOrigin;
-    m_startAngle = 0.0;
-    m_endAngle = 0.0;
+    m_origin     = aOrigin;
+    m_startAngle = ANGLE_0;
+    m_endAngle   = ANGLE_0;
 
     return true;
 }
@@ -129,14 +135,14 @@ bool ARC_GEOM_MANAGER::setStart( const VECTOR2I& aEnd )
     const VECTOR2I radVec = aEnd - m_origin;
 
     m_radius = radVec.EuclideanNorm();
-    m_startAngle = radVec.Angle();
+    m_startAngle = EDA_ANGLE( radVec );
 
     if( m_angleSnap )
         m_startAngle = snapAngle( m_startAngle );
 
-    // normalise into 0-2Pi
-    while( m_startAngle < 0 )
-        m_startAngle += M_PI * 2;
+    // normalise to 0..360
+    while( m_startAngle < ANGLE_0 )
+        m_startAngle += ANGLE_360;
 
     m_endAngle = m_startAngle;
 
@@ -148,30 +154,30 @@ bool ARC_GEOM_MANAGER::setEnd( const VECTOR2I& aCursor )
 {
     const VECTOR2I radVec = aCursor - m_origin;
 
-    m_endAngle = radVec.Angle();
+    m_endAngle = EDA_ANGLE( radVec );
 
     if( m_angleSnap )
         m_endAngle = snapAngle( m_endAngle );
 
-    // normalise into 0-2Pi
-    while( m_endAngle < 0 )
-        m_endAngle += M_PI * 2;
+    // normalise to 0..360
+    while( m_endAngle < ANGLE_0 )
+        m_endAngle += ANGLE_360;
 
     if( !m_directionLocked )
     {
-        double ccwAngle = m_endAngle - m_startAngle;
+        EDA_ANGLE ccwAngle = m_endAngle - m_startAngle;
 
         if( m_endAngle <= m_startAngle )
-            ccwAngle += 2 * M_PI;
+            ccwAngle += ANGLE_360;
 
-        double cwAngle = std::abs( ccwAngle - 2 * M_PI );
+        EDA_ANGLE cwAngle = std::abs( ccwAngle - ANGLE_360 );
 
-        if( std::min( ccwAngle, cwAngle ) >= M_PI_2 )
+        if( std::min( ccwAngle, cwAngle ) >= ANGLE_90 )
             m_directionLocked = true;
         else
             m_clockwise = cwAngle < ccwAngle;
     }
-    else if( std::abs( GetSubtended() ) < M_PI_2 )
+    else if( std::abs( GetSubtended() ) < ANGLE_90 )
     {
         m_directionLocked = false;
     }
