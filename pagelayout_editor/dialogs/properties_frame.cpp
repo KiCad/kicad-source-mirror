@@ -390,7 +390,7 @@ void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 
-    model.m_DefaultTextSize = DSIZE( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE );
+    model.m_DefaultTextSize = VECTOR2D( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE );
     model.m_DefaultLineWidth = 0.15;
     model.m_DefaultTextThickness = 0.15;
 

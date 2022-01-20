@@ -314,7 +314,7 @@ protected:
      *
      * For n decimal positions, see header generation in start_plot.
      */
-    void emitDcode( const DPOINT& pt, int dcode );
+    void emitDcode( const VECTOR2D& pt, int dcode );
 
     /**
      * Print a Gerber net attribute object record.

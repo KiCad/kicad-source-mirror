@@ -152,7 +152,7 @@ void GERBER_PLOTTER::SetGerberCoordinatesFormat( int aResolution, bool aUseInche
 }
 
 
-void GERBER_PLOTTER::emitDcode( const DPOINT& pt, int dcode )
+void GERBER_PLOTTER::emitDcode( const VECTOR2D& pt, int dcode )
 {
 
     fprintf( m_outputFile, "X%dY%dD%02d*\n", KiROUND( pt.x ), KiROUND( pt.y ), dcode );
@@ -781,7 +781,7 @@ void GERBER_PLOTTER::writeApertureList()
 void GERBER_PLOTTER::PenTo( const VECTOR2I& aPos, char plume )
 {
     wxASSERT( m_outputFile );
-    DPOINT pos_dev = userToDeviceCoordinates( aPos );
+    VECTOR2D pos_dev = userToDeviceCoordinates( aPos );
 
     switch( plume )
     {
@@ -849,8 +849,8 @@ void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
     else
         LineTo( start );
 
-    DPOINT devEnd = userToDeviceCoordinates( end );
-    DPOINT devCenter = userToDeviceCoordinates( center ) - userToDeviceCoordinates( start );
+    VECTOR2D devEnd = userToDeviceCoordinates( end );
+    VECTOR2D devCenter = userToDeviceCoordinates( center ) - userToDeviceCoordinates( start );
 
     fprintf( m_outputFile, "G75*\n" );        // Multiquadrant (360 degrees) mode
 
@@ -881,8 +881,8 @@ void GERBER_PLOTTER::plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAn
 
     end.x = aCenter.x + KiROUND( aRadius * aEndAngle.Cos() );
     end.y = aCenter.y - KiROUND( aRadius * aEndAngle.Sin() );
-    DPOINT devEnd = userToDeviceCoordinates( end );
-    DPOINT devCenter = userToDeviceCoordinates( aCenter ) - userToDeviceCoordinates( start );
+    VECTOR2D devEnd = userToDeviceCoordinates( end );
+    VECTOR2D devCenter = userToDeviceCoordinates( aCenter ) - userToDeviceCoordinates( start );
 
     fprintf( m_outputFile, "G75*\n" );        // Multiquadrant (360 degrees) mode
 
@@ -1243,7 +1243,7 @@ void GERBER_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre, OUTLINE_
     }
     else
     {
-        DPOINT pos_dev = userToDeviceCoordinates( pos );
+        VECTOR2D pos_dev = userToDeviceCoordinates( pos );
 
         int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
         selectAperture( size, 0, ANGLE_0, APERTURE::AT_CIRCLE, aperture_attrib );
@@ -1453,8 +1453,8 @@ void GERBER_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
         {
             m_hasApertureRoundRect = true;
 
-            DPOINT pos_dev = userToDeviceCoordinates( aPadPos );
-            int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
+            VECTOR2D pos_dev = userToDeviceCoordinates( aPadPos );
+            int      aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
             selectAperture( aSize, aCornerRadius, aOrient, APERTURE::AM_ROUND_RECT,
                             aperture_attrib );
 
@@ -1678,7 +1678,7 @@ void GERBER_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aS
                     RotatePoint( cornerList[ii], -aOrient );
                 }
 
-                DPOINT pos_dev = userToDeviceCoordinates( aPadPos );
+                VECTOR2D pos_dev = userToDeviceCoordinates( aPadPos );
                 selectAperture( cornerList, aOrient, APERTURE::AM_FREE_POLYGON,
                                 gbr_metadata.GetApertureAttrib() );
                 formatNetAttribute( &gbr_metadata.m_NetlistMetadata );
@@ -1853,7 +1853,7 @@ void GERBER_PLOTTER::FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aC
     #endif
     {
         m_hasApertureOutline4P = true;
-        DPOINT pos_dev = userToDeviceCoordinates( aPadPos );
+        VECTOR2D pos_dev = userToDeviceCoordinates( aPadPos );
         // polygon corners list
         std::vector<VECTOR2I> corners = { aCorners[0], aCorners[1], aCorners[2], aCorners[3] };
         int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
@@ -1904,9 +1904,8 @@ void GERBER_PLOTTER::FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiamet
     }
     else
     {
-        DPOINT pos_dev = userToDeviceCoordinates( aShapePos );
-
-        int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
+        VECTOR2D pos_dev = userToDeviceCoordinates( aShapePos );
+        int      aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
 
         APERTURE::APERTURE_TYPE apert_type =
                 (APERTURE::APERTURE_TYPE)(APERTURE::AT_REGULAR_POLY3 + aCornerCount - 3);

@@ -89,7 +89,7 @@ bool PLOTTER::OpenFile( const wxString& aFullFilename )
 }
 
 
-DPOINT PLOTTER::userToDeviceCoordinates( const VECTOR2I& aCoordinate )
+VECTOR2D PLOTTER::userToDeviceCoordinates( const VECTOR2I& aCoordinate )
 {
     VECTOR2I pos = aCoordinate - m_plotOffset;
 
@@ -116,14 +116,14 @@ DPOINT PLOTTER::userToDeviceCoordinates( const VECTOR2I& aCoordinate )
     x *= m_iuPerDeviceUnit;
     y *= m_iuPerDeviceUnit;
 
-    return DPOINT( x, y );
+    return VECTOR2D( x, y );
 }
 
 
-DPOINT PLOTTER::userToDeviceSize( const VECTOR2I& size )
+VECTOR2D PLOTTER::userToDeviceSize( const VECTOR2I& size )
 {
-    return DPOINT( size.x * m_plotScale * m_iuPerDeviceUnit,
-                   size.y * m_plotScale * m_iuPerDeviceUnit );
+    return VECTOR2D( size.x * m_plotScale * m_iuPerDeviceUnit,
+                     size.y * m_plotScale * m_iuPerDeviceUnit );
 }
 
 

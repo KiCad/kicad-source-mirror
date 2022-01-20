@@ -662,9 +662,4 @@ namespace std
     };
 }
 
-/* Compatibility typedefs */
-// FIXME should be removed to avoid multiple typedefs for the same type
-typedef VECTOR2<double> DPOINT;
-typedef DPOINT          DSIZE;
-
 #endif    // VECTOR2D_H_

@@ -57,7 +57,7 @@ EDA_RECT PL_EDITOR_LAYOUT::ComputeBoundingBox()
 
 void PL_EDITOR_LAYOUT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    DSIZE size = GetPageSettings().GetSizeIU();
+    VECTOR2D size = GetPageSettings().GetSizeIU();
 
     aList.emplace_back( _( "Page Width" ), MessageTextFromValue( aFrame->GetUserUnits(), size.x ) );
 

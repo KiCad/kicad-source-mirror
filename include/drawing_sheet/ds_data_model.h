@@ -179,7 +179,7 @@ public:
     VECTOR2D m_RB_Corner;             // coordinates of the right bottom corner (in mm)
     VECTOR2D m_LT_Corner;             // coordinates of the left top corner (in mm)
     double   m_DefaultLineWidth;      // Used when object line width is 0
-    DSIZE    m_DefaultTextSize;       // Used when object text size is 0
+    VECTOR2D m_DefaultTextSize;       // Used when object text size is 0
     double   m_DefaultTextThickness;  // Used when object text stroke width is 0
     bool     m_EditMode;              // Used in drawing sheet editor to toggle variable substitution
                                       // In normal mode (m_EditMode = false) the %format is

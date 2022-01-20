@@ -480,8 +480,8 @@ void PSLIKE_PLOTTER::computeTextParameters( const VECTOR2I&          aPos,
     RotatePoint( &tw, &th, aOrient );
     start_pos.x += dx;
     start_pos.y += dy;
-    DPOINT pos_dev = userToDeviceCoordinates( start_pos );
-    DPOINT sz_dev = userToDeviceSize( aSize );
+    VECTOR2D pos_dev = userToDeviceCoordinates( start_pos );
+    VECTOR2D sz_dev = userToDeviceSize( aSize );
 
     // Now returns the final values... the widening factor
     *wideningFactor = sz_dev.x / sz_dev.y;
@@ -567,8 +567,8 @@ void PS_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 
 void PS_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
 {
-    DPOINT p1_dev = userToDeviceCoordinates( p1 );
-    DPOINT p2_dev = userToDeviceCoordinates( p2 );
+    VECTOR2D p1_dev = userToDeviceCoordinates( p1 );
+    VECTOR2D p2_dev = userToDeviceCoordinates( p2 );
 
     SetCurrentLineWidth( width );
     fprintf( m_outputFile, "%g %g %g %g rect%d\n", p1_dev.x, p1_dev.y,
@@ -579,8 +579,8 @@ void PS_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int 
 void PS_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
-    DPOINT pos_dev = userToDeviceCoordinates( pos );
-    double radius = userToDeviceSize( diametre / 2.0 );
+    VECTOR2D pos_dev = userToDeviceCoordinates( pos );
+    double   radius = userToDeviceSize( diametre / 2.0 );
 
     SetCurrentLineWidth( width );
     fprintf( m_outputFile, "%g %g %g cir%d\n", pos_dev.x, pos_dev.y, radius, getFillId( fill ) );
@@ -604,8 +604,8 @@ void PS_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
     SetCurrentLineWidth( aWidth );
 
     // Calculate start point.
-    DPOINT centre_dev = userToDeviceCoordinates( aCenter );
-    double radius_dev = userToDeviceSize( aRadius );
+    VECTOR2D centre_dev = userToDeviceCoordinates( aCenter );
+    double   radius_dev = userToDeviceSize( aRadius );
 
     if( m_plotMirror )
     {
@@ -635,7 +635,7 @@ void PS_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFil
 
     SetCurrentLineWidth( aWidth );
 
-    DPOINT pos = userToDeviceCoordinates( aCornerList[0] );
+    VECTOR2D pos = userToDeviceCoordinates( aCornerList[0] );
     fprintf( m_outputFile, "newpath\n%g %g moveto\n", pos.x, pos.y );
 
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
@@ -654,8 +654,8 @@ void PS_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double 
     VECTOR2I pix_size; // size of the bitmap in pixels
     pix_size.x = aImage.GetWidth();
     pix_size.y = aImage.GetHeight();
-    DPOINT drawsize( aScaleFactor * pix_size.x,
-                     aScaleFactor * pix_size.y ); // requested size of image
+    VECTOR2D drawsize( aScaleFactor * pix_size.x,
+                       aScaleFactor * pix_size.y ); // requested size of image
 
     // calculate the bottom left corner position of bitmap
     VECTOR2I start = aPos;
@@ -671,13 +671,14 @@ void PS_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double 
     fprintf( m_outputFile, "/pix %d string def\n", pix_size.x );
 
     // Locate lower-left corner of image
-    DPOINT start_dev = userToDeviceCoordinates( start );
+    VECTOR2D start_dev = userToDeviceCoordinates( start );
     fprintf( m_outputFile, "%g %g translate\n", start_dev.x, start_dev.y );
 
     // Map image size to device
-    DPOINT end_dev = userToDeviceCoordinates( end );
+    VECTOR2D end_dev = userToDeviceCoordinates( end );
     fprintf( m_outputFile, "%g %g scale\n",
-             std::abs(end_dev.x - start_dev.x), std::abs(end_dev.y - start_dev.y));
+             std::abs( end_dev.x - start_dev.x ),
+             std::abs( end_dev.y - start_dev.y ) );
 
     // Dimensions of source image (in pixels
     fprintf( m_outputFile, "%d %d 8", pix_size.x, pix_size.y );
@@ -780,7 +781,7 @@ void PS_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 
     if( m_penState != plume || pos != m_penLastpos )
     {
-        DPOINT pos_dev = userToDeviceCoordinates( pos );
+        VECTOR2D pos_dev = userToDeviceCoordinates( pos );
         fprintf( m_outputFile, "%g %g %sto\n",
                  pos_dev.x, pos_dev.y,
                  ( plume=='D' ) ? "line" : "move" );
@@ -986,7 +987,7 @@ void PS_PLOTTER::Text( const VECTOR2I&             aPos,
     if( m_textMode == PLOT_TEXT_MODE::PHANTOM )
     {
         std::string ps_test = encodeStringForPlotter( aText );
-        DPOINT pos_dev = userToDeviceCoordinates( aPos );
+        VECTOR2D pos_dev = userToDeviceCoordinates( aPos );
         fprintf( m_outputFile, "%s %g %g phantomshow\n", ps_test.c_str(), pos_dev.x, pos_dev.y );
     }
 

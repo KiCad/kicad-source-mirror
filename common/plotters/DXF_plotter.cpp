@@ -428,8 +428,8 @@ void DXF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
 void DXF_PLOTTER::Circle( const VECTOR2I& centre, int diameter, FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
-    double radius = userToDeviceSize( diameter / 2 );
-    DPOINT centre_dev = userToDeviceCoordinates( centre );
+    double   radius = userToDeviceSize( diameter / 2 );
+    VECTOR2D centre_dev = userToDeviceCoordinates( centre );
 
     if( radius > 0 )
     {
@@ -568,8 +568,8 @@ void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
         return;
     }
 
-    DPOINT pos_dev = userToDeviceCoordinates( pos );
-    DPOINT pen_lastpos_dev = userToDeviceCoordinates( m_penLastpos );
+    VECTOR2D pos_dev = userToDeviceCoordinates( pos );
+    VECTOR2D pen_lastpos_dev = userToDeviceCoordinates( m_penLastpos );
 
     if( m_penLastpos != pos && plume == 'D' )
     {
@@ -861,10 +861,10 @@ void DXF_PLOTTER::Text( const VECTOR2I&             aPos,
     {
         /* Emit text as a text entity. This loses formatting and shape but it's
            more useful as a CAD object */
-        DPOINT origin_dev = userToDeviceCoordinates( aPos );
+        VECTOR2D origin_dev = userToDeviceCoordinates( aPos );
         SetColor( aColor );
         wxString cname = getDXFColorName( m_currentColor );
-        DPOINT size_dev = userToDeviceSize( aSize );
+        VECTOR2D size_dev = userToDeviceSize( aSize );
         int h_code = 0, v_code = 0;
 
         switch( aH_justify )

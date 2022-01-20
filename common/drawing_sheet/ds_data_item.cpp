@@ -699,7 +699,7 @@ void DS_DATA_ITEM_TEXT::SetConstrainedTextSize()
         dummy.SetTextAngle( EDA_ANGLE( m_Orient, DEGREES_T ) );
 
         EDA_RECT rect = dummy.GetTextBox();
-        DSIZE size;
+        VECTOR2D size;
         size.x = rect.GetWidth() / FSCALE;
         size.y = rect.GetHeight() / FSCALE;
 

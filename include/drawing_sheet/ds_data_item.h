@@ -339,11 +339,11 @@ public:
     GR_TEXT_V_ALIGN_T   m_Vjustify;
     bool                m_Italic;
     bool                m_Bold;
-    DSIZE               m_TextSize;
-    DSIZE               m_BoundingBoxSize;      // When not null, this is the max size of the
+    VECTOR2D            m_TextSize;
+    VECTOR2D            m_BoundingBoxSize;      // When not null, this is the max size of the
                                                 // full text.  The text size will be modified
                                                 // to keep the full text inside this bound.
-    DSIZE               m_ConstrainedTextSize;  // Actual text size, if constrained by
+    VECTOR2D            m_ConstrainedTextSize;  // Actual text size, if constrained by
                                                 // the m_BoundingBoxSize constraint
 };
 

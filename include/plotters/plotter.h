@@ -537,15 +537,15 @@ protected:
 
     /**
      * Modify coordinates according to the orientation, scale factor, and offsets trace. Also
-     * convert from a VECTOR2I to DPOINT, since some output engines needs floating point
+     * convert from a VECTOR2I to VECTOR2D, since some output engines needs floating point
      * coordinates.
      */
-    virtual DPOINT userToDeviceCoordinates( const VECTOR2I& aCoordinate );
+    virtual VECTOR2D userToDeviceCoordinates( const VECTOR2I& aCoordinate );
 
     /**
-     * Modify size according to the plotter scale factors (VECTOR2I version, returns a DPOINT).
+     * Modify size according to the plotter scale factors (VECTOR2I version, returns a VECTOR2D).
      */
-    virtual DPOINT userToDeviceSize( const VECTOR2I& size );
+    virtual VECTOR2D userToDeviceSize( const VECTOR2I& size );
 
     /**
      * Modify size according to the plotter scale factors (simple double version).

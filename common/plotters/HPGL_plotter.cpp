@@ -203,8 +203,8 @@
 #include <plotters/plotter_hpgl.h>
 
 
-/// Compute the distance between two DPOINT points.
-static double dpoint_dist( const DPOINT& a, const DPOINT& b );
+/// Compute the distance between two VECTOR2D points.
+static double dpoint_dist( const VECTOR2D& a, const VECTOR2D& b );
 
 
 // The hpgl command to close a polygon def, fill it and plot outline:
@@ -652,9 +652,8 @@ void HPGL_PLOTTER::FlashPadCircle( const VECTOR2I& pos, int diametre,
                                    OUTLINE_MODE trace_mode, void* aData )
 {
     wxASSERT( m_outputFile );
-    DPOINT  pos_dev = userToDeviceCoordinates( pos );
-
-    int     radius  = diametre / 2;
+    VECTOR2D pos_dev = userToDeviceCoordinates( pos );
+    int      radius  = diametre / 2;
 
     if( trace_mode == FILLED )
     {
@@ -824,7 +823,7 @@ void HPGL_PLOTTER::FlashRegularPolygon( const VECTOR2I& aShapePos, int aRadius, 
 }
 
 
-bool HPGL_PLOTTER::startItem( const DPOINT& location )
+bool HPGL_PLOTTER::startItem( const VECTOR2D& location )
 {
     return startOrAppendItem( location, wxEmptyString );
 }
@@ -836,7 +835,7 @@ void HPGL_PLOTTER::flushItem()
 }
 
 
-bool HPGL_PLOTTER::startOrAppendItem( const DPOINT& location, wxString const& content )
+bool HPGL_PLOTTER::startOrAppendItem( const VECTOR2D& location, wxString const& content )
 {
     if( m_current_item == nullptr )
     {
@@ -935,8 +934,8 @@ const char* HPGL_PLOTTER::lineTypeCommand( PLOT_DASH_TYPE linetype )
 }
 
 
-static double dpoint_dist( const DPOINT& a, const DPOINT& b )
+static double dpoint_dist( const VECTOR2D& a, const VECTOR2D& b )
 {
-    DPOINT diff = a - b;
+    VECTOR2D diff = a - b;
     return sqrt( diff.x * diff.x + diff.y * diff.y );
 }

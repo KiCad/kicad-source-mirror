@@ -150,7 +150,7 @@ protected:
      * @param location is the location of the item.
      * @return whether a new item was made.
      */
-    bool startItem( const DPOINT& location );
+    bool startItem( const VECTOR2D& location );
 
     /// Flush the current HPGL_ITEM and clear out the current item pointer.
     void flushItem();
@@ -163,7 +163,7 @@ protected:
      * @param content is the content substring.
      * @return whether a new item was made.
      */
-    bool startOrAppendItem( const DPOINT& location, const wxString& content );
+    bool startOrAppendItem( const VECTOR2D& location, const wxString& content );
 
     int            penSpeed;
     int            penNumber;
@@ -184,11 +184,11 @@ protected:
             dashType( PLOT_DASH_TYPE::SOLID ) {}
 
         /// Location the pen should start at
-        DPOINT         loc_start;
+        VECTOR2D       loc_start;
 
         /// Location the pen will be at when it finishes. If this is not known,
         /// leave it equal to loc_start and set lift_after.
-        DPOINT         loc_end;
+        VECTOR2D       loc_end;
 
         /// Bounding box of this item
         BOX2D          bbox;
@@ -205,14 +205,9 @@ protected:
         /// the pen is assumed to be down following the command.
         bool           pen_returns;
 
-        /// Pen number for this command
-        int            pen;
-
-        /// Line style for this command
-        PLOT_DASH_TYPE dashType;
-
-        /// Text of the command
-        wxString       content;
+        int            pen;            /// Pen number for this command
+        PLOT_DASH_TYPE dashType;       /// Line style for this command
+        wxString       content;        /// Text of the command
     };
 
     /// Sort a list of HPGL items to improve plotting speed on mechanical plotters.

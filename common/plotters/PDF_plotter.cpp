@@ -199,8 +199,8 @@ void PDF_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width )
 {
     wxASSERT( workFile );
-    DPOINT p1_dev = userToDeviceCoordinates( p1 );
-    DPOINT p2_dev = userToDeviceCoordinates( p2 );
+    VECTOR2D p1_dev = userToDeviceCoordinates( p1 );
+    VECTOR2D p2_dev = userToDeviceCoordinates( p2 );
 
     SetCurrentLineWidth( width );
     fprintf( workFile, "%g %g %g %g re %c\n", p1_dev.x, p1_dev.y,
@@ -211,8 +211,8 @@ void PDF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
 void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int width )
 {
     wxASSERT( workFile );
-    DPOINT pos_dev = userToDeviceCoordinates( pos );
-    double radius = userToDeviceSize( diametre / 2.0 );
+    VECTOR2D pos_dev = userToDeviceCoordinates( pos );
+    double   radius = userToDeviceSize( diametre / 2.0 );
 
     /* OK. Here's a trick. PDF doesn't support circles or circular angles, that's
        a fact. You'll have to do with cubic beziers. These *can't* represent
@@ -290,7 +290,7 @@ void PDF_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
     // Usual trig arc plotting routine...
     start.x = aCenter.x + KiROUND( aRadius * -startAngle.Cos() );
     start.y = aCenter.y + KiROUND( aRadius * -startAngle.Sin() );
-    DPOINT pos_dev = userToDeviceCoordinates( start );
+    VECTOR2D pos_dev = userToDeviceCoordinates( start );
     fprintf( workFile, "%g %g m ", pos_dev.x, pos_dev.y );
 
     for( EDA_ANGLE ii = startAngle + delta; ii < endAngle; ii += delta )
@@ -330,7 +330,7 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 
     SetCurrentLineWidth( aWidth );
 
-    DPOINT pos = userToDeviceCoordinates( aCornerList[0] );
+    VECTOR2D pos = userToDeviceCoordinates( aCornerList[0] );
     fprintf( workFile, "%g %g m\n", pos.x, pos.y );
 
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
@@ -363,7 +363,7 @@ void PDF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
 
     if( m_penState != plume || pos != m_penLastpos )
     {
-        DPOINT pos_dev = userToDeviceCoordinates( pos );
+        VECTOR2D pos_dev = userToDeviceCoordinates( pos );
         fprintf( workFile, "%g %g %c\n",
                  pos_dev.x, pos_dev.y,
                  ( plume=='D' ) ? 'l' : 'm' );
@@ -380,12 +380,11 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
     VECTOR2I pix_size( aImage.GetWidth(), aImage.GetHeight() );
 
     // Requested size (in IUs)
-    DPOINT drawsize( aScaleFactor * pix_size.x, aScaleFactor * pix_size.y );
+    VECTOR2D drawsize( aScaleFactor * pix_size.x, aScaleFactor * pix_size.y );
 
     // calculate the bitmap start position
     VECTOR2I start( aPos.x - drawsize.x / 2, aPos.y + drawsize.y / 2 );
-
-    DPOINT dev_start = userToDeviceCoordinates( start );
+    VECTOR2D dev_start = userToDeviceCoordinates( start );
 
     /* PDF has an uhm... simplified coordinate system handling. There is
        *one* operator to do everything (the PS concat equivalent). At least
