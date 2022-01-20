@@ -1846,7 +1846,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             {
                 VECTOR2I offset = m_endSnapPoint - p;
                 BOARD_ITEM* previewItem;
-                wxPoint fp_offset = wxPoint( offset.Rotate( footprint->GetOrientation().AsRadians() ) );
+
+                VECTOR2I fp_offset( offset );
+                RotatePoint( fp_offset, -footprint->GetOrientation() );
 
                 view()->ClearPreview();
 

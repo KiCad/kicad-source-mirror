@@ -750,15 +750,17 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::circleBreakouts( int aWidth, const SHAPE* aS
 {
     BREAKOUT_LIST breakouts;
 
-    for( int angle = 0; angle < 360; angle += 45 )
+    for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += ANGLE_45 )
     {
         const SHAPE_CIRCLE* cir = static_cast<const SHAPE_CIRCLE*>( aShape );
         SHAPE_LINE_CHAIN    l;
         VECTOR2I            p0 = cir->GetCenter();
         VECTOR2I            v0( cir->GetRadius() * M_SQRT2, 0 );
 
+        RotatePoint( v0, -angle );
+
         l.Append( p0 );
-        l.Append( p0 + v0.Rotate( angle * M_PI / 180.0 ) );
+        l.Append( p0 + v0 );
         breakouts.push_back( l );
     }
 
@@ -776,11 +778,14 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::customBreakouts( int aWidth, const ITEM* aIt
     VECTOR2I p0 = static_cast<const SOLID*>( aItem )->Pos();
     // must be large enough to guarantee intersecting the convex polygon
     int length = std::max( bbox.GetWidth(), bbox.GetHeight() ) / 2 + 5;
+    EDA_ANGLE increment = ( aPermitDiagonal ? ANGLE_45 : ANGLE_90 );
 
-    for( int angle = 0; angle < 360; angle += ( aPermitDiagonal ? 45 : 90 ) )
+    for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += increment )
     {
         SHAPE_LINE_CHAIN l;
-        VECTOR2I v0( p0 + VECTOR2I( length, 0 ).Rotate( angle * M_PI / 180.0 ) );
+        VECTOR2I v0( p0 + VECTOR2I( length, 0 ) );
+        RotatePoint( v0, p0, -angle );
+
         SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
         int n = convex->Vertices().Intersect( SEG( p0, v0 ), intersections );
 

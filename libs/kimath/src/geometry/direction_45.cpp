@@ -18,6 +18,7 @@
  */
 
 #include <geometry/direction45.h>
+#include <trigo.h>
 
 
 const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, const VECTOR2I& aP1,
@@ -168,8 +169,10 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
         }
         else
         {
-            int      rotationSign = ( w > h ) ? ( sw * sh ) : ( sw * sh * -1 );
-            VECTOR2D centerDir( mp0.Rotate( M_PI_2 * rotationSign ) );
+            int      rotationSign = ( w > h ) ? ( sw * sh * -1 ) : ( sw * sh );
+            VECTOR2D centerDir( mp0 );
+
+            RotatePoint( centerDir, ANGLE_90 * rotationSign );
 
             if( tangentLength >= 0 )
             {

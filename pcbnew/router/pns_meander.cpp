@@ -276,9 +276,9 @@ void MEANDER_SHAPE::forward( int aLength )
 }
 
 
-void MEANDER_SHAPE::turn( int aAngle )
+void MEANDER_SHAPE::turn( const EDA_ANGLE& aAngle )
 {
-    m_currentDir = m_currentDir.Rotate( (double) aAngle * M_PI / 180.0 );
+    RotatePoint( m_currentDir, aAngle );
 }
 
 
@@ -286,7 +286,7 @@ void MEANDER_SHAPE::miter( int aRadius, bool aSide )
 {
     if( aRadius <= 0 )
     {
-        turn( aSide ? -90 : 90 );
+        turn( aSide ? ANGLE_90 : -ANGLE_90 );
         return;
     }
 
@@ -294,7 +294,7 @@ void MEANDER_SHAPE::miter( int aRadius, bool aSide )
     SHAPE_LINE_CHAIN lc = makeMiterShape( m_currentPos, dir, aSide );
 
     m_currentPos = lc.CPoint( -1 );
-    m_currentDir = dir.Rotate( aSide ? -M_PI / 2.0 : M_PI / 2.0 );
+    turn( aSide ? ANGLE_90 : -ANGLE_90 );
 
     m_currentTarget->Append( lc );
 }
@@ -359,7 +359,7 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
     case MT_FINISH:
     {
         start( &lc, aP - dir_u_b, aDir );
-        turn( 90 );
+        turn( -ANGLE_90 );
         forward( std::min( cr - offset, cr + offset ) );
         forward( std::abs( offset ) );
         uShape( aAmpl - 2 * cr + std::abs( offset ), cr + offset, spc - 2 * cr );
@@ -370,7 +370,7 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
     case MT_TURN:
     {
         start( &lc, aP - dir_u_b, aDir );
-        turn( 90 );
+        turn( -ANGLE_90 );
         forward( std::abs( offset ) );
         uShape( aAmpl - cr, cr + offset, spc - 2 * cr );
         forward( std::abs( offset ) );

@@ -53,7 +53,9 @@ void TRACK_BUFFER::AddTrack( PCB_TRACK* aTrack, int aLayer, int aNetcode )
         m_map_tracks[idxFromLayNet( aLayer, aNetcode )] = buffer;
     }
     else
+    {
         buffer = (*item).second;
+    }
 
     buffer->push_back( aTrack );
 }
@@ -72,7 +74,7 @@ VIAPAD::VIAPAD( PCB_VIA* aVia ) :
 
 
 VIAPAD::VIAPAD( PAD* aPad ) :
-            m_Parent( aPad )
+        m_Parent( aPad )
 {
     m_Pos = aPad->GetPosition();
     m_Width = std::min( aPad->GetSize().x, aPad->GetSize().y );
@@ -86,7 +88,7 @@ VIAPAD::VIAPAD( PAD* aPad ) :
 
 
 VIAPAD::VIAPAD( PCB_TRACK* aTrack, ENDPOINT_T aEndPoint ) :
-            m_Parent( aTrack )
+        m_Parent( aTrack )
 {
     m_Pos = aEndPoint == ENDPOINT_START ? aTrack->GetStart() : aTrack->GetEnd();
     m_Width =aTrack->GetWidth();
@@ -153,9 +155,7 @@ void TEARDROP_MANAGER::collectTeardrops( std::vector< ZONE* >& aList ) const
     for( ZONE* zone : m_board->Zones() )
     {
         if( zone->IsTeardropArea() )
-        {
             aList.push_back( zone );
-        }
     }
 }
 
@@ -183,7 +183,9 @@ bool TEARDROP_MANAGER::isViaAndTrackInSameZone( VIAPAD& aViapad, PCB_TRACK* aTra
 
                     if( zone->GetPadConnection() == ZONE_CONNECTION::NONE
                         || pad->GetZoneConnection() == ZONE_CONNECTION::NONE )
+                    {
                         return false;
+                    }
                 }
 
                 return true;
@@ -205,7 +207,7 @@ PCB_TRACK* TEARDROP_MANAGER::findTouchingTrack( EDA_ITEM_FLAGS& aMatchType, PCB_
     PCB_TRACK* candidate = nullptr;     // a reference to the track connected
 
     std::vector<PCB_TRACK*>* currlist = aTrackLookupList.GetTrackList( aTrackRef->GetLayer(),
-                                                                   aTrackRef->GetNetCode() );
+                                                                       aTrackRef->GetNetCode() );
 
     for( PCB_TRACK* curr_track: *currlist )
     {
@@ -346,11 +348,11 @@ void TEARDROP_MANAGER::computeCurvedForRectShape(  TEARDROP_PARAMETERS* aCurrPar
     int delta_effective = std::min( delta, side_length/8 );
     // The move vector depend on the quadrant: it must be always defined to create a
     // curve with a direction toward the track
-    double angle1 = side1.Angle();
-    int sign = std::abs( angle1 ) >= 90.0*M_PI/180 ? 1 : -1;
-    VECTOR2I bias( 0, sign * delta_effective );
+    EDA_ANGLE angle1( side1 );
+    int       sign = std::abs( angle1 ) >= ANGLE_90 ? 1 : -1;
+    VECTOR2I  bias( 0, sign * delta_effective );
 
-    bias.Rotate( angle1 );
+    RotatePoint( bias, -angle1 );
 
     ctrl1.x += bias.x;
     ctrl1.y += bias.y;
@@ -694,9 +696,9 @@ bool TEARDROP_MANAGER::computeTeardropPolygonPoints( TEARDROP_PARAMETERS* aCurrP
     // find the 2 points on the track, sharp end of the teardrop
     int track_halfwidth = aTrack->GetWidth() / 2;
     VECTOR2I pointB = start + VECTOR2I( vecT.x * track_stub_len + vecT.y * track_halfwidth,
-                                      vecT.y * track_stub_len - vecT.x * track_halfwidth );
+                                        vecT.y * track_stub_len - vecT.x * track_halfwidth );
     VECTOR2I pointA = start + VECTOR2I( vecT.x * track_stub_len - vecT.y * track_halfwidth,
-                                      vecT.y * track_stub_len + vecT.x * track_halfwidth );
+                                        vecT.y * track_stub_len + vecT.x * track_halfwidth );
 
     // To build a polygonal valid shape pointA and point B must be outside the pad
     // It can be inside with some pad shapes having very different X and X sizes

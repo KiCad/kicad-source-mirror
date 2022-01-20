@@ -305,7 +305,7 @@ private:
     void forward( int aLength );
 
     ///< Turn the turtle by \a aAngle
-    void turn( int aAngle );
+    void turn( const EDA_ANGLE& aAngle );
 
     ///< Tell the turtle to draw a mitered corner of given radius and turn direction.
     void miter( int aRadius, bool aSide );

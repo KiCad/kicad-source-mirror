@@ -410,7 +410,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testShapeLineChain( const SHAPE_LIN
 
         if( seg.SquaredLength() > SEG::Square( epsilon * 2 ) )
         {
-            angles.push_back( ( seg.B - seg.A ).Angle() );
+            angles.push_back( EDA_ANGLE( seg.B - seg.A ).AsRadians() );
         }
         else if( ii > 0 )
         {
@@ -424,7 +424,7 @@ void DRC_TEST_PROVIDER_MECHANICAL_CLEARANCE::testShapeLineChain( const SHAPE_LIN
 
                 if( following.SquaredLength() > SEG::Square( epsilon * 2 ) || jj == count - 1 )
                 {
-                    angles.push_back( ( following.B - following.A ).Angle() );
+                    angles.push_back( EDA_ANGLE( following.B - following.A ).AsRadians() );
                     break;
                 }
             }
